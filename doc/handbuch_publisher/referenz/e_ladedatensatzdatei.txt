@@ -1,0 +1,31 @@
+#title "LadeDatensatzdatei"
+#format "textile"
+
+h1. Elementname: @LadeDatensatzdatei@
+
+h2. Beschreibung
+
+Lädt eine Datensatzdatei, die in einem vorherigen Durchlauf des Publishers erzeugt wurde. Die »normale« Verarbeitung des Layoutregelwerks wird unterbrochen und mit dem Inhalt der Datensatzdatei fortgeführt. Nachdem die Verarbeitung der neu geladenen Datensatzdatei beendet ist, wird die Verarbeitung des Layoutregelwerks mit dem ursprünglichen Datensatz fortgesetzt. Eine ausführlichere Erläuterung findet sich im Abschnitt über "automatisch generierte Verzeichnisse":verzeichnisse.
+
+Erlaubte Attribute: @name@
+Kindelemente: -
+Elternelemente: "Datensatz":e_datensatz
+
+h3. Attribute
+
+- @name@ (Text) := Name der Dateisatzdatei. Beispiel: @toc@
+
+
+h2. Beispiel
+
+pre(xml). <Datensatz element="planeten">
+  <Zuweisung variable="spalte" auswahl="2" />
+  <LadeDatensatzdatei name="toc"/>
+  <Zuweisung variable="Inhalt" auswahl="''"/>
+  <NeueSeite/>
+  <BearbeiteKnoten auswahl="planet"/>
+</Datensatz>
+
+h2. Siehe auch
+
+"Element":e_element, "Attribut":e_attribut, "SpeichereDatensatzdatei":e_speicheredatensatzdatei, "Wie werden automatische Verzeichnisse erstellt?":verzeichnisse

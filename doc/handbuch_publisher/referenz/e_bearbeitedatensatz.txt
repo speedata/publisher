@@ -1,0 +1,28 @@
+#title "BearbeiteDatensatz"
+#format "textile"
+
+h1. Elementname: @BearbeiteDatensatz@
+
+h2. Beschreibung
+
+Dieser Befehl erlaubt es, eine Liste aus Elementen/Attributen zu verarbeiten.
+
+Erlaubte Attribute: @auswahl@
+Kindelemente: -
+Elternelemente: "Datensatz":e_datensatz
+
+h3. Attribute
+
+- @auswahl@ ("XPath-Ausdruck":xpath) := Datensatz, der bearbeitet werden soll
+
+h3. Bemerkung
+
+
+
+h2. Beispiel
+
+pre(xml). <BearbeiteDatensatz auswahl="$artikelnummern"/>
+
+h2. Siehe auch
+
+"BearbeiteKnoten":e_bearbeiteknoten

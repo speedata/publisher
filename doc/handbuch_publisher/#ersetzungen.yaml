@@ -1,0 +1,6 @@
+--- 
+textile: 
+  textwerte: "\"B\":e_b, \"Bild\":e_bild, \"Fallunterscheidung\":e_fallunterscheidung, \"I\":e_i, \"Schriftart\":e_schriftart, \"Sub\":e_sub, \"Sup\":e_sup, \"U\":e_u, \"URL\":e_url, \"Wert\":e_wert "
+  textwerte_eltern: " \"Absatz\":e_absatz, \"B\":e_b, \"Fall\":e_fall, \"Sonst\":e_sonst,  \"I\":e_i, \"Schriftart\":e_schriftart, \"Sub\":e_sub, \"Sup\":e_sup, \"U\":e_u, \"URL\":e_url "
+markdown: 
+  textwerte: "[B](e_b), [Bild](e_bild), [Fallunterscheidung](e_fallunterscheidung), [I](e_i), [Schriftart](e_schriftart), [Sub](e_sub), [Sup](e_sup), [U](e_u), [URL](e_url), [Wert](e_wert) "

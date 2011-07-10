@@ -1,0 +1,32 @@
+#title "BeiSeitenErzeugung"
+#format "textile"
+
+h1. Elementname: @BeiSeitenErzeugung@
+
+h2. Beschreibung
+
+Erlaubte Attribute: -
+Kindelemente: alle Layoutanweisungen
+Elternelemente: "Seitentyp":e_seitentyp
+
+
+h3. Bemerkung
+
+Die Inhalte des Elements »BeiSeitenErzeugung« werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird.
+
+h2. Beispiel
+
+pre(xml). <BeiSeitenErzeugung>
+  <ObjektAusgeben spalte="1">
+    <Textblock breite="20">
+      <Absatz>
+        <Wert auswahl="sd:aktuelle-seite()"/>
+      </Absatz>
+    </Textblock>
+  </ObjektAusgeben>
+</BeiSeitenErzeugung>
+
+
+h2. Siehe auch
+
+"BeiSeitenAusgabe":e_beiseitenausgabe, "Seitentyp":e_seitentyp

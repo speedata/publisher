@@ -1,0 +1,81 @@
+#title "Fallunterscheidung"
+#format "textile"
+
+h1. Elementname: @Fallunterscheidung@
+
+h2. Beschreibung
+
+Erzeugt eine „Wenn-Dann-Abfrage“. Das heißt, für jedes Kindelement "Fall":e_fall wird überprüft, ob die Bedingung erfüllt ist. Wenn ja, dann wird der Inhalt des Kindelements Fall ausgeführt und die Verarbeitung hinter der Fallunterscheidung fortgesetzt. Wenn keine Bedingung erfüllt wurde und ein Element "Sonst":e_sonst gefunden wurde, wird der Inhalt des Elements "Sonst":e_sonst ausgeführt. Durch das frühzeitige Abbrechen werden nachfolgende Fälle nicht weiter untersucht (siehe Beispiel).
+
+Erlaubte Attribute: -
+Kindelemente: "Fall":e_fall, "Sonst":e_sonst
+Elternelemente: (beliebig)
+
+h3. Attribute
+
+(keine Attribute erlaubt)
+
+
+
+h2. Beispiel
+
+Folgendes Beispiel gibt den Satz „Kleiner als 5“ aus. Durch den frühzeitigen Abbruch wird der zweite Fall (und das Element Sonst) nicht beachtet.
+
+pre(xml). <Datensatz element="...">
+  <Zuweisung variable="zähler" auswahl="3"/>
+  <Fallunterscheidung>
+    <Fall bedingung=" $zähler &lt; 5">
+      <Zuweisung variable="text" auswahl="'Kleiner als 5'" />
+    </Fall>
+    <Fall bedingung=" $zähler &lt; 20">
+      <Zuweisung variable="text" auswahl="'Kleiner als 20'" />
+    </Fall>
+    <Sonst>
+      <Zuweisung variable="text" auswahl="'Größer als oder gleich 20'" />
+    </Sonst>
+  </Fallunterscheidung>
+  <ObjektAusgeben spalte="1">
+    <Textblock breite="20">
+      <Absatz><Wert auswahl="$text" /></Absatz>
+    </Textblock>
+  </ObjektAusgeben>
+</Datensatz>
+
+h2. Bemerkung
+
+»Größer« und »kleiner« Vergleiche müssen nach den Regeln von XML kodiert werden. Für »größer« kann das @>@ Zeichen oder @&gt;@ benutzt werden,  »kleiner« muss zwingend als @&lt;@ ausgeschrieben sein, da das Zeichen @<@ nicht in einem XML Attribut vorkommen darf.
+
+Eine Fallunterscheidung kann in fast allen Elementen vorkommen. Das Ergebnis der Fallunterscheidung (also vom benutzten Element "Fall":e_fall  oder "Sonst":e_sonst) wird an das umgebende Element zurückgegeben. So wird beispielsweise aus
+
+pre(xml). <Td>
+  <Absatz>
+    <Fallunterscheidung>
+      <Fall bedingung=" $zeile > 10 ">
+       <Wert>Zeile ist größer als 10</Wert>
+      </Fall>
+      <Sonst>
+        <Wert>Zeile ist kleiner oder gleich 10</Wert>
+      </Sonst>
+    </Fallunterscheidung>
+  </Absatz>
+</Td>
+
+pre(xml). <Td>
+  <Absatz>
+    <Wert>Zeile ist größer als 10</Wert>
+  </Absatz>
+</Td>
+
+oder
+
+pre(xml). <Td>
+  <Absatz>
+    <Wert>Zeile ist kleiner oder gleich 10</Wert>
+  </Absatz>
+</Td>
+
+je nach Inhalt der Variable. 
+
+h2. Siehe auch
+
+"Fall":e_fall und "Sonst":e_sonst.

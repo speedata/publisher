@@ -1,0 +1,26 @@
+#title "speedata Publisher Dokumentation"
+#format "textile"
+
+<img src="images/publisher.png" style="float:right;" alt="speedata Publisher"/>
+
+
+h1. speedata Publisher Dokumentation
+
+
+
+h2. Referenz
+
+* "Elementreferenz":e_layout
+* "Kommandozeile":kommandozeile
+* "XPath-Ausdrücke":xpath
+* "Hotfolder/Watchdog":hotfolder
+* "Liste der Änderungen":changelog
+
+h2. Weiterführende Themen
+
+* "Einbinden von Schriftarten":fonts
+* "Automatisch generierte Verzeichnisse":verzeichnisse
+* "Benutzung des Publishers":benutzung
+* "Bearbeiten des Layoutregelwerks":xmlbearbeitung
+* "Benutzung und Administration der virtuellen Maschine (VM)":vmbenutzung
+* "Schnittmarken und Beschnittzugabe":schnittmarken

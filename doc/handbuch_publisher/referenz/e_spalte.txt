@@ -1,0 +1,37 @@
+#title "Spalte"
+#format "textile"
+
+h1. Elementname: @Spalte@
+
+h2. Beschreibung
+
+Gibt die Eigenschaften einer Spalte in einer Tabelle an.
+
+Erlaubte Attribute: @align@, @breite@, @hintergrundfarbe@, @valign@
+Kindelemente: -
+Elternelemente: "Spalten":e_spalten
+
+h3. Attribute
+
+- @breite@ (Zahl, "Maßangabe":massangabe oder @*@-Angaben, optional) := Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm) oder in @*@-Angaben (z.B. @4*@) angegeben werden.
+- @align@ ("right","left","center", optional) := Die horizontale Ausrichtung des Tabelleninhalts. Kann in einer Zelle ("Td":e_td) überschrieben werden.
+- @valign@ ("top","center","bottom", optional) := Die vertikale Ausrichtung des Tabelleninhalts. Kann in einer Zelle ("Td":e_td) überschrieben werden.
+- @hintergrundfarbe@ (Text, optional) := Farbe der Tabellenspalte.
+
+
+
+h2. Beispiel
+
+pre(xml). <Tabelle>
+  <Spalten>
+    <Spalte breite="14mm" />
+    <Spalte breite="2" />
+    <Spalte breite="1*" align="right" valign="top" />
+    <Spalte breite="5*" />
+    <Spalte breite="5mm" hintergrundfarbe="grau" />
+  </Spalten>
+</Tabelle>
+
+h2. Siehe auch
+
+"Spalten":e_spalten

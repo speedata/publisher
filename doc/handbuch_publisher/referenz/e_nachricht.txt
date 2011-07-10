@@ -1,0 +1,29 @@
+#title "Nachricht"
+#format "textile"
+
+h1. Elementname: @Nachricht@
+
+h2. Beschreibung
+
+Gibt eine Textmeldung auf der Konsole und in der Protokolldatei aus.
+
+Erlaubte Attribute: @auswahl@
+Kindelemente: "Wert":e_wert
+Elternelemente: "Datensatz":e_datensatz
+
+h3. Attribute
+
+- @auswahl@ ("XPath-Ausdruck":xpath) := Inhalt der Nachricht. Alternativ dazu: Kindelemente "Wert":e_wert innerhalb des Elements »Nachricht«
+
+
+h2. Beispiel
+
+pre(xml). <Datensatz element="Datensatz">
+  <Nachricht>
+    <Wert>Attribut Preis: </Wert>
+    <Wert auswahl="@Preis"></Wert>
+  </Nachricht>
+</Datensatz>
+
+
+h2. Siehe auch

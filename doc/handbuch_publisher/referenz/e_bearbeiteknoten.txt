@@ -1,0 +1,30 @@
+#title "BearbeiteKnoten"
+#format "textile"
+
+h1. Elementname: @BearbeiteKnoten@
+
+h2. Beschreibung
+
+Ruft einen Datensatz auf. Das Element, für das die Regeln ausgeführt werden sollen, wird mit dem Attribut @auswahl@ angegeben.
+
+Erlaubte Attribute: @auswahl@, @modus@
+Kindelemente: -
+Elternelemente: "Datensatz":e_datensatz
+
+h3. Attribute
+
+- @auswahl@ (Text) := Name der Kindelemente, die verarbeitet werden sollen.
+- @modus@ (Text, optional) := Name des Modus. Dieser muss bei "Datensatz":e_datensatz exakt übereinstimmen. Damit ist es möglich für dasselbe Element unterschiedliche Regeln aufzurufen.
+
+h3. Bemerkung
+
+Derzeit gibt es auch "BearbeiteDatensatz":e_bearbeitedatensatz, das auf eine Liste arbeitet.
+
+h2. Beispiel
+
+pre(xml). <BearbeiteKnoten auswahl="artikel" modus="summe" />
+
+
+h2. Siehe auch
+
+"Datensatz":e_datensatz, "BearbeiteDatensatz":e_bearbeitedatensatz

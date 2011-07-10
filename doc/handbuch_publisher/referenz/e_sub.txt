@@ -1,0 +1,25 @@
+#title "Sub"
+#format "textile"
+
+h1. Elementname: @Sub@
+
+h2. Beschreibung
+
+Erzeugt tiefgestellten Text.
+
+Erlaubte Attribute: -
+Kindelemente: "Wert":e_wert
+Elternelemente: "Absatz":e_absatz
+
+
+h2. Beispiel
+
+pre(xml). <ObjektAusgeben spalte="1">
+  <Textblock breite="20">
+    <Absatz><Wert>Text</Wert><Sub><Wert>tief</Wert></Sub></Absatz>
+  </Textblock>
+</ObjektAusgeben>
+
+h2. Siehe auch
+
+"Sup":e_sup, "Absatz":e_absatz

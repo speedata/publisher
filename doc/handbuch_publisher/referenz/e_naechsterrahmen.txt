@@ -1,0 +1,28 @@
+#title "NächsterRahmen"
+#format "textile"
+
+h1. Elementname: @NächsterRahmen@
+
+h2. Beschreibung
+
+Erlaubte Attribute: @bereich@
+Kindelemente: -
+Elternelemente: {{anweisungen_eltern}}
+
+h3. Attribute
+
+- @bereich@ (Text) := Name des Platzierungsbereich, in dem der nächste Rahmen gesucht werden soll.
+
+h3. Bemerkung
+
+
+
+h2. Beispiel
+
+pre(xml). <Datensatz element="artikel">
+  <NächsterRahmen bereich="Titel" />
+</Datensatz>
+
+h2. Siehe auch
+
+"Platzierungsbereich":e_platzierungsbereich, "Platzierungsrahmen":e_platzierungsrahmen

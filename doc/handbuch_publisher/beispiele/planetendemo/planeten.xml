@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<planeten>
+  <planet name="Merkur" symbol="☿">
+    <url>http://pds.jpl.nasa.gov/planets/special/mercury.htm</url>
+    <bild>mercury.jpg</bild>
+    <beschreibung>Der Merkur ist mit einem Durchmesser von knapp 4800 km der kleinste und mit einer
+      durchschnittlichen Sonnenentfernung von etwa 58 Millionen km der gleichzeitig sonnennächste
+      Planet unseres Sonnensystems. Aufgrund seiner Größe und chemischen Zusammensetzung zählt er zu
+      den erdähnlichen (terrestrischen) Planeten. Wegen seiner Sonnennähe ist er von der Erde aus
+      nur schwer zu beobachten, obwohl er mehrmals im Jahr etwa 20° Winkelabstand östlich oder
+      westlich von ihr erreicht.</beschreibung>
+  </planet>
+  <planet name="Venus" symbol="♀">
+    <url>http://pds.jpl.nasa.gov/planets/special/venus.htm</url>
+    <bild>bluvenus.jpg</bild>
+    <beschreibung>Die Venus ist mit einer durchschnittlichen Sonnenentfernung von 108 Millionen km
+      der zweitinnerste sowie der drittkleinste Planet des Sonnensystems. Sie zählt zu den vier
+      erdähnlichen Planeten, die auch terrestrische oder Gesteinsplaneten genannt werden. Venus ist
+      der Planet, der auf seiner Umlaufbahn der Erdbahn mit einem minimalen Abstand von 38 Mio. km
+      am nächsten kommt. Sie hat fast die gleiche Größe wie die Erde, unterscheidet sich aber in
+      Bezug auf die Geologie und vor allem hinsichtlich ihrer Atmosphäre. Nach dem Mond ist sie das
+      hellste natürliche Objekt am Dämmerungs- oder nächtlichen Sternhimmel. Da die Venus als einer
+      der unteren Planeten morgens oder abends am besten sichtbar ist und bei uns nie gegen
+      Mitternacht, wird sie auch Morgen- beziehungsweise Abendstern genannt. Sie ist auch gut am
+      Taghimmel beobachtbar, schon mit kleinen Fernrohren – und öfter sogar mit freiem Auge. Näheres
+      dazu im Hauptartikel Tagbeobachtung. Das astronomische Symbol des Planeten Venus gilt als
+      stilisierte Repräsentation des Handspiegels der namensgebenden römischen Liebesgöttin
+      Venus.</beschreibung>
+  </planet>
+  <planet name="Erde" symbol="♁">
+    <bild>earth.jpg</bild>
+    <url>http://pds.jpl.nasa.gov/planets/special/earth.htm</url>
+    <beschreibung>Die Erde (von urgermanisch *erþō; altgr. ἔρα éra) ist mit einer durchschnittlichen
+      Entfernung von 149,6 Millionen km zur Sonne der dritte Planet im Sonnensystem. Ihr Durchmesser
+      beträgt über 12.700 km. Sie ist etwa 4,6 Milliarden Jahre alt und der einzige bekannte belebte
+      Himmelskörper. Nach der vorherrschenden chemischen Beschaffenheit der Erde wird der Begriff
+      der erdartigen (terrestrischen) oder auch erdähnlichen Planeten definiert.</beschreibung>
+    <monde>
+      <mond>Erde</mond>
+    </monde>
+  </planet>
+  <planet name="Mars" symbol="♂">
+    <url>http://pds.jpl.nasa.gov/planets/special/mars.htm</url>
+    <bild>mars.jpg</bild>
+    <beschreibung>Der Mars ist, von der Sonne aus gesehen, der vierte Planet in unserem Sonnensystem
+      und der äußere Nachbar der Erde. Er zählt zu den erdähnlichen (terrestrischen) Planeten. Der
+      Mars ist mit einem Durchmesser von knapp 6800 km etwa halb so groß wie die Erde und nach
+      Merkur der zweitkleinste Planet des Sonnensystems. Mit einer durchschnittlichen Entfernung von
+      knapp 228 Millionen km ist er rund 1,5 mal so weit von der Sonne entfernt wie die Erde. Wegen
+      seiner orange- bis blutroten Farbe wurde er nach dem römischen Kriegsgott Mars benannt und
+      wird oft auch als der Rote Planet bezeichnet. Diese Färbung geht auf Eisen(III)-oxid-Staub
+      (Rost) zurück, der sich auf der Oberfläche und in der Atmosphäre verteilt hat. Er besitzt zwei
+      kleine, unregelmäßig geformte Monde: Phobos und Deimos (griechisch für Furcht und Schrecken). </beschreibung>
+    <monde>
+      <mond>Phobos</mond>
+      <mond>Deimos</mond>
+    </monde>
+  </planet>
+  <planet name="Jupiter" symbol="♃">
+    <bild>jupiter.jpg</bild>
+    <url>http://pds.jpl.nasa.gov/planets/special/jupiter.htm</url>
+    <beschreibung>Jupiter ist mit einem Äquatordurchmesser von 142.800 Kilometern der größte Planet
+      des Sonnensystems. Er ist mit einer durchschnittlichen Entfernung von 778 Millionen Kilometern
+      von der Sonne aus gesehen der fünfte Planet. Aufgrund seiner chemischen Zusammensetzung zählt
+      er zu den Gasplaneten („Gasriesen“) und hat keine sichtbare feste Oberfläche. Diese Gasriesen
+      werden nach ihm auch als jupiterähnliche (jovianische) Planeten bezeichnet, die im
+      Sonnensystem auch die Gruppe der äußeren Planeten darstellen. In dieser Gruppe ist er der
+      innerste und läuft in äußerer Nachbarschaft des Asteroidengürtels um die Sonne. Er weist eine
+      relativ starke Abplattung auf. Der scheinbare Winkeldurchmesser beträgt je nach Erdentfernung
+      32–48″. In einer Wolkenschicht südlich des Äquators befindet sich der größte Wirbelsturm des
+      Sonnensystems, der Große Rote Fleck (GRF), der schon vor 300 Jahren beobachtet werden konnte.
+      Außerdem besitzt Jupiter ein kleines Ringsystem und 63 bekannte Monde, von denen die vier
+      größten, die Galileischen Monde Ganymed, Kallisto, Europa und Io, auch mit kleinen Fernrohren
+      wahrgenommen werden können. Auch die bis zu fünf Äquatorstreifen können mit einfachen
+      Fernrohren beobachtet werden. Als eines der hellsten Objekte des Nachthimmels ist er nach dem
+      römischen Hauptgott Jupiter benannt. In Babylonien galt er wegen seines goldgelben Lichts als
+      Königsstern (siehe auch Stern von Betlehem).</beschreibung>
+    <monde>
+      <mond>Ganymed</mond>
+      <mond>Kallisto</mond>
+      <mond>Io</mond>
+      <mond>Europa</mond>
+      <mond>Metis</mond>
+      <mond>...</mond>
+    </monde>
+  </planet>
+  <planet name="Saturn" symbol="♄">
+    <bild>saturn.jpg</bild>
+    <url>http://pds.jpl.nasa.gov/planets/special/saturn.htm</url>
+    <beschreibung>Der Saturn ist mit einem Äquatordurchmesser von etwa 120.500 km der zweitgrößte
+      Planet des Sonnensystems und wird in seiner Größe nur von Jupiter übertroffen. Saturn ist mit
+      einer durchschnittlichen Entfernung zur Sonne von knapp 1,43 Milliarden km der sechste Planet
+      des Sonnensystems, seine Bahn verläuft zwischen der von Jupiter und der des sonnenferneren
+      Uranus. Er ist der äußerste Planet, der mit bloßem Auge problemlos erkennbar ist und war daher
+      schon Jahrtausende vor der Erfindung des Fernrohrs bekannt. Er ist ein Gasplanet, dessen
+      untersuchte obere Schichten zu etwa 96% Stoffanteil aus Wasserstoff bestehen, und der von
+      allen Planeten des Sonnensystems die geringste mittlere Dichte (etwa 0,69 g/cm³) aufweist. Von
+      den anderen Planeten hebt sich der Saturn durch seine besonders ausgeprägten und schon in
+      kleinen Fernrohren sichtbaren Ringe ab, die zu großen Teilen aus Wassereis und Gesteinsbrocken
+      bestehen. Sein scheinbarer Winkeldurchmesser beträgt je nach Erdentfernung zwischen 15" und
+      20", jener der Ringe zwischen 37" und 46". Die sogenannten Äquatorstreifen von Saturns
+      Wolkenschichten sind weniger deutlich als bei Jupiter, was wahrscheinlich mit einer
+      hochlagernden Dunstschicht zusammenhängt. Bis zum Jahr 2007 wurden 60 Saturnmonde entdeckt,
+      der größte davon ist Titan mit 5150 km Durchmesser.</beschreibung>
+    <monde>
+      <mond>Titan</mond>
+      <mond>Rhea</mond>
+      <mond>Iapetus</mond>
+      <mond>Dione</mond>
+      <mond>Tethys</mond>
+      <mond>Enceladus</mond>
+      <mond>Mimas</mond>
+      <mond>...</mond>
+    </monde>
+  </planet>
+  <planet name="Uranus" symbol="♅">
+    <url>http://pds.jpl.nasa.gov/planets/special/uranus.htm</url>
+    <bild>uranus.jpg</bild>
+    <beschreibung>Uranus (latinisiert, altgr. οὐρανός [uranós], „Himmel“) ist von der Sonne aus mit
+      einer durchschnittlichen Sonnenentfernung von 2,9 Milliarden km der siebte Planet im
+      Sonnensystem und wird zu den äußeren, jupiterähnlichen (jovianischen) Planeten gerechnet. Er
+      wurde 1781 von Wilhelm Herschel entdeckt und ist nach dem griechischen Himmelsgott Uranos
+      benannt. Der Gasplanet ist mit einem Durchmesser von über 51.000 km viermal so groß wie die
+      Erde und nur unter günstigen Umständen freiäugig sichtbar. Sein blassgrünes Scheibchen von
+      etwa 3,5" ist in Fernrohren ab 10cm Öffnung zu erkennen. Physikalisch ist er mit dem Neptun
+      vergleichbar und nimmt nach ihm mit rund 14 Erdmassen in der Massenrangfolge im Sonnensystem
+      den vierten Platz unter den Planeten ein. Hinsichtlich des Durchmessers liegt er knapp vor
+      Neptun auf Rang drei – nach Jupiter und Saturn. Aufgrund von Eisvorkommen im Inneren werden
+      Uranus und Neptun auch „Eisriesen“ genannt. Das astronomische Symbol des Uranus ist dem
+      Marssymbol ähnlich. Im Unterschied zu diesem hat der Kreis einen Zentralpunkt, und der Pfeil
+      auf dem Kreis steht senkrecht</beschreibung>
+    <monde>
+      <mond>Titania</mond>
+      <mond>Oberon</mond>
+      <mond>Ariel</mond>
+      <mond>Umbriel</mond>
+      <mond>Miranda</mond>
+      <mond>...</mond>
+    </monde>
+  </planet>
+  <planet name="Neptun" symbol="♆">
+    <url>http://pds.jpl.nasa.gov/planets/special/neptune.htm</url>
+    <bild>neptun.jpg</bild>
+    <monde>
+      <mond>Triton</mond>
+      <mond>Proteus</mond>
+      <mond>Nereid</mond>
+      <mond>Naiad</mond>
+      <mond>Neso</mond>
+      <mond>...</mond>
+    </monde>
+    <beschreibung>Neptun ist von der Sonne aus gezählt mit einer Entfernung von durchschnittlich 4,5
+      Milliarden km der achte und äußerste Planet im Sonnensystem. Er wurde im Jahr 1846 aus
+      Bahnstörungen des Uranus entdeckt und zeigt ein Scheibchen von nur 2". Dennoch ist er mit
+      einem Durchmesser von fast 50.000 km (4 × Erde) nach Uranus der viertgrößte Planet des
+      Sonnensystems. Neptun bildet zusammen mit dem Uranus die Untergruppe der „Eisriesen“. Neptun
+      dominiert durch seine Größe die Außenzone des Planetensystems, was sich z. B. an der
+      Umlaufzeit einiger „Transneptune“ wie Pluto und der Plutino-Gruppe zeigt, die genau das
+      1,5-fache der Umlaufzeit von Neptun beträgt. Bei der Suche nach Exoplaneten werden solche
+      entdeckten Objekte, die eine ähnliche Masse wie Neptun aufweisen, von Astronomen analog zu den
+      extrasolaren „Jupiters“ oder „Hot Jupiters“ manchmal als Planet der „Neptun-Klasse“ oder als
+      „Hot Neptun“ bezeichnet. Von Neptun sind derzeit 13 Monde bekannt. Der mit Abstand größte
+      unter ihnen ist Triton mit 2700 km Durchmesser. Der Gasplanet ist nach Neptun, dem römischen
+      Gott des Meeres und der Fließgewässer, benannt. Sein Zeichen ♆ ist ein stilisierter Dreizack,
+      die Waffe des Meeresgottes.</beschreibung>
+  </planet>
+</planeten>

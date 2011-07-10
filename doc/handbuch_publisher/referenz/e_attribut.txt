@@ -1,0 +1,35 @@
+#title "Attribut"
+#format "textile"
+
+h1. Elementname: @Attribut@
+
+h2. Beschreibung
+
+Erzeugt eine Datenstruktur, die mithilfe von "SpeichereDatensatzdatei":e_speicheredatensatzdatei auf Festplatte gespeichert werden kann.
+
+Erlaubte Attribute: @name@, @auswahl@
+Kindelemente: -
+Elternelemente: "Element":e_element, "Zuweisung":e_zuweisung
+
+h3. Attribute
+
+- @name@ (Text) := Name des Attributs, das erzeugt wird.
+- @auswahl@ ("XPath-Ausdruck":xpath) := Inahlt des Attributs, das erzeugt wird.
+
+
+h2. Beispiel
+
+pre(xml). <Element name="Planetenverzeichnis">
+  <Attribut name="name" auswahl=" @name "/>
+  <Attribut name="seite" auswahl=" sd:aktuelle-seite()"/>
+</Element>
+
+Erzeugt diese Datenstruktur:
+
+pre(xml). <Planetenverzeichnis name=" (Inhalt von @name) " seite=" (aktuelle Seitennummer) " />
+
+
+
+h2. Siehe auch
+
+"Element":e_element, "LadeDatensatzdatei":e_ladedatensatzdatei, "SpeichereDatensatzdatei":e_speicheredatensatzdatei, "Wie werden automatische Verzeichnisse erstellt?":verzeichnisse

@@ -1,0 +1,22 @@
+#title "Seitenformat"
+
+
+#Elementname: `Seitenformat`
+
+##Beschreibung
+
+Legt die Größe des Ausgabemediums (z.B. DIN A4) fest.
+
+Erlaubte Attribute: `breite`, `höhe`  
+Kindelemente: -  
+Elternelemente: [Layout](e_layout)
+
+###Attribute
+
+* `breite` ([Maßangabe](massangabe)): Breite des Ausgabemediums.
+* `höhe` ([Maßangabe](massangabe)): Höhe des Ausgabemediums.
+
+##Beispiel
+
+      <Seitenformat breite="150mm" höhe="150mm" />
+

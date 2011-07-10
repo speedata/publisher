@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/de">
+  <Optionen
+     zeige_rasterbelegung="ja"
+     zeichne_raster="ja"
+    />
+ 
+  <LadeSchriftdatei name="Helvetica" randausgleich="100" dateiname="texgyreheros-regular.otf" />
+  <LadeSchriftdatei name="Helvetica Fett" dateiname="texgyreheros-bold.otf" />
+  <LadeSchriftdatei name="Helvetica Kursiv" dateiname="texgyreheros-italic.otf" />
+  <LadeSchriftdatei name="Helvetica Fett Kursiv" dateiname="texgyreheros-bolditalic.otf" />
+
+  <DefiniereSchriftfamilie name="Überschrift" schriftgröße="12" zeilenabstand="16">
+    <Normal schriftart="Helvetica Fett" />
+  </DefiniereSchriftfamilie>
+
+  <DefiniereSchriftfamilie name="text" schriftgröße="12" zeilenabstand="14">
+    <Normal schriftart="Helvetica"/>
+    <Fett schriftart="Helvetica Fett"/>
+  </DefiniereSchriftfamilie>
+
+  <Seitenformat breite="150mm" höhe="200mm" />
+  <SetzeRaster breite="4mm" höhe="14pt" />
+
+  <DefiniereTextformat name="text" ausrichtung="blocksatz" />
+  <DefiniereTextformat name="Text mit Einrückung" ausrichtung="blocksatz" einrückung="2em" />
+
+  <Seitentyp name="rechte Seite">
+    <Bedingung>
+      <Ungerade>
+        <Seitennummer />
+      </Ungerade>
+    </Bedingung>
+    <Rand links="2cm" rechts="1cm" oben="1cm" unten="1cm" />
+  </Seitentyp>
+
+  <Seitentyp name="linke Seite">
+    <Bedingung>
+      <Gerade>
+        <Seitennummer />
+      </Gerade>
+    </Bedingung>
+    <Rand links="1cm" rechts="2cm" oben="1cm" unten="1cm" />
+  </Seitentyp>
+
+  <Datensatz element="planet">
+    <Zuweisung variable="spalte" auswahl="2" />
+    <BearbeiteKnoten auswahl="url" />
+    <BearbeiteKnoten auswahl="bild" />
+    <BearbeiteKnoten auswahl="monde"/>
+    <BearbeiteKnoten auswahl="beschreibung"/>
+    <NeueSeite />
+  </Datensatz>
+
+  <Datensatz element="url">
+    <ObjektAusgeben spalte="$spalte">
+      <Textblock breite="29" textformat="text" schriftart="Überschrift">
+        <Absatz>
+          <Wert>URL: </Wert>
+          <URL>
+            <Wert auswahl="." />
+          </URL>
+        </Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+  </Datensatz>
+
+  <Datensatz element="bild">
+    <NeueZeile/>
+    <NeueZeile/>
+    <ObjektAusgeben spalte="$spalte">
+      <Bild breite="10" datei="."/> 
+    </ObjektAusgeben>
+  </Datensatz>
+  
+  <Datensatz element="monde">
+    <ObjektAusgeben spalte="18">
+      <Textblock breite="7">
+        <Absatz>
+          <B>
+            <Wert>Monde</Wert>
+          </B>
+        </Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <Zuweisung variable="mondliste" auswahl="''"/>
+    <BearbeiteKnoten auswahl="mond"/>
+    <ObjektAusgeben spalte="18">
+      <Textblock breite="7">
+        <Absatz>
+          <Wert auswahl=" $mondliste " />
+        </Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <NeueZeile/>
+    <NeueZeile/>
+  </Datensatz>
+  
+  <Datensatz element="mond">
+    <Zuweisung variable="mondliste">
+      <Wert auswahl="$mondliste"/>
+      <Absatz>
+        <Wert>• </Wert><Wert auswahl="." />
+      </Absatz>
+    </Zuweisung>
+  </Datensatz>
+  
+  <Datensatz element="beschreibung">
+    <ObjektAusgeben spalte=" $spalte ">
+      <Textblock breite="28" schriftart="text" textformat="Text mit Einrückung">
+        <Absatz>
+          <Wert auswahl="." />
+        </Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+  </Datensatz>
+
+</Layout>

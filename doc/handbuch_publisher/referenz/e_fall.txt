@@ -1,0 +1,23 @@
+#title "Fall"
+#format "textile"
+
+h1. Elementname: @Fall@
+
+h2. Beschreibung
+
+Erlaubte Attribute: @bedingung@
+Kindelemente: {{textwerte}}, "Zuweisung":e_zuweisung
+Elternelemente: "Fallunterscheidung":e_fallunterscheidung
+
+h3. Attribute
+
+- @bedingung@ ("XPath-Ausdruck":xpath) := Für jeden Fall in einer "Fallunterscheidung":e_fallunterscheidung wird überprüft, ob die Bedingung erfüllt ist und bei Übereinstimmung die Kindelemente ausgeführt.
+
+
+h2. Beispiel
+
+Siehe das Beispiel bei "Fallunterscheidung":e_fallunterscheidung.
+
+h2. Siehe auch
+
+"Fallunterscheidung":e_fallunterscheidung und "Sonst":e_sonst.

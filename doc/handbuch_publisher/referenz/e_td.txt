@@ -1,0 +1,51 @@
+#title "Td"
+#format "textile"
+
+h1. Elementname: @Td@
+
+h2. Beschreibung
+
+Erstellt eine Tabellenzelle
+
+Erlaubte Attribute: @align@, @border-left@, @border-right@, @border-top@, @border-bottom@, @border-left-color@, @border-right-color@, @border-top-color@, @border-bottom-color@, @colspan@, @padding@, @padding-left@, @padding-right@, @padding-top@, @padding-bottom@, @rowspan@, @valign@
+Kindelemente: "Absatz":e_absatz, "Bild":e_bild, "Tabelle":e_tabelle
+Elternelemente: "Tr":e_tr
+
+h3. Attribute
+
+- @border-left@ ("Maßeinheit":masseinheit, optional) := Die Breite der Linie links. Die Linie liegt innerhalb der Zelle.
+- @border-right@ ("Maßeinheit":masseinheit, optional) := Die Breite der Linie rechts. Die Linie liegt innerhalb der Zelle.
+- @border-top@ ("Maßeinheit":masseinheit, optional) := Die Breite der Linie oben. Die Linie liegt innerhalb der Zelle.
+- @border-bottom@ ("Maßeinheit":masseinheit, optional) := Die Breite der Linie unten. Die Linie liegt innerhalb der Zelle.
+- @border-left-color@ (Text, optional) := Die Farbe der Linie links.
+- @border-right-color@ (Text, optional) := Die Farbe der Linie rechts.
+- @border-top-color@ (Text, optional) := Die Farbe der Linie oben.
+- @border-bottom-color@ (Text, optional) := Die Farbe der Linie unten.
+- @colspan@ (Zahl, optional) := Die Anzahl der Spalten, die die Zelle überdecken soll. Voreinstellung ist 1.
+- @rowspan@ (Zahl, optional) := Die Anzahl der Zeilen, die die Zelle überdecken soll. Voreinstellung ist 1.
+- @align@ ("right","left","center", optional) := Die horizontale Ausrichtung des Tabelleninhalts.
+- @valign@ ("top","center","bottom", optional) := Die vertikale Ausrichtung des Tabelleninhalts.
+- @padding@ ("Maßeinheit":masseinheit, optional) := Kurzform für die Bestimmung von @padding-top@ und den anderen drei Werden mit derselben Maßangabe
+- @padding-top@ ("Maßeinheit":masseinheit, optional) := Bestimmt den Innenabstand einer Tabelle (oben)
+- @padding-bottom@ ("Maßeinheit":masseinheit, optional) := Bestimmt den Innenabstand einer Tabelle (unten)
+- @padding-left@ ("Maßeinheit":masseinheit, optional) := Bestimmt den Innenabstand einer Tabelle (links)
+- @padding-right@ ("Maßeinheit":masseinheit, optional) := Bestimmt den Innenabstand einer Tabelle (rechts)
+
+
+h2. Bemerkung
+
+Das Attribut @align@ erzeugt implizit ein Textformat (nur in Bezug auf Ausrichtung) für alle Kindelemente "Absatz":e_absatz, sofern dort kein Textformat angegeben ist.
+
+Tabellen dürfen wiederum Tabellen enthalten.
+
+h2. Beispiel
+
+pre(xml). <Tr>
+  <Td colspan="2" align="right"><Absatz><Wert>Text</Wert></Absatz></Td>
+  <Td rowspan="3"><Bild breite="3" datei="bildname.jpg"/></Td>
+</Tr>
+
+
+h2. Siehe auch
+
+"Tabelle":e_tabelle, "Tr":e_tr, "Absatz":e_absatz, "Bild":e_bild

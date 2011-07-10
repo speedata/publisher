@@ -1,0 +1,44 @@
+#title "Solange"
+#format "textile"
+
+h1. Elementname: @Solange@
+
+h2. Beschreibung
+
+Erzeugt eine Schleife, die wiederholt durchlaufen wird. Die Kindelemente werden so oft ausgeführt, solange die Bedingung im Attribut @bedingung@ wahr ergibt. 
+
+Erlaubte Attribute: bedingung
+Kindelemente: Wert, Zuweisung
+Elternelemente: Datensatz
+
+h3. Attribute
+
+- @bedingung@ ("XPath-Ausdruck":xpath) := Für jedes Mal, das die Schleife durchlaufen werden soll, muss die Bedingung im Attribut erfüllt sein.
+
+
+
+h2. Beispiel
+
+Folgendes Beispiel erzeugt einen Textblock mit dem Inhalt „Text Text Text“.
+
+pre(xml). <Datensatz element="url">
+  <Zuweisung variable="zaehler" auswahl="1"/>
+  <Zuweisung variable="text" auswahl="''"/>
+  <Solange bedingung=" $zaehler &lt;= 3 "> <!-- kleiner oder gleich -->
+    <Zuweisung variable="zaehler" auswahl=" $zaehler + 1"/>
+    <Zuweisung variable="text">
+      <Wert auswahl="$text"/>
+      <Wert auswahl="'Text '"/>
+    </Zuweisung>
+  </Solange>
+  <ObjektAusgeben spalte="1">
+    <Textblock breite="10">
+      <Absatz><Wert auswahl="$text"></Wert></Absatz>
+    </Textblock>
+  </ObjektAusgeben>
+</Datensatz>
+
+
+h2. Siehe auch
+
+"Fallunterscheidung":e_fallunterscheidung, "Zuweisung":e_zuweisung

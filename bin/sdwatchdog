@@ -1,0 +1,164 @@
+#!/usr/bin/texlua
+--
+--  Hotfolder / Watchdog für speedata
+--
+--
+--  Created by Patrick Gundlach on 2010-12-06.
+--  Copyright 2010 Patrick Gundlach. All rights reserved.
+--
+
+require "socket"
+
+local installdir=os.selfdir:gsub("^(.+)/bin$","%1")
+local srcdir,inifile
+version = nil
+
+if installdir == "/usr" then
+  version = "Version 0.1"
+  srcdir = "/usr/share/speedata-publisher/sw"
+  package.path = srcdir .. "/lua/?.lua;" .. srcdir .. "/lua/common/?.lua;"
+else
+  version = "Version <lokal>"
+  srcdir = installdir .. "/src"
+  package.path = srcdir .. "/lua/?.lua;" .. installdir .. "/lib/?.lua;" .. srcdir .. "/lua/common/?.lua;"
+end
+
+require "fileutils" -- erst laden, wenn package.path gesetzt ist!
+
+function fehler( ... )
+  print(string.format(...))
+end
+function log( ... )
+  os.spawn("logger -p local4.notice -i -t watchdog " .. string.format("%q",string.format(...)))
+end
+
+log("Starte speedata watchdog (sdwatchdog)")
+
+function w( ... )
+  print(string.format(...))
+end
+function printtable (ind,tbl_to_print,level)
+  level = level or 0
+  local k,l
+  local key
+  if level > 0 then
+    if type(ind) == "number" then
+      key = string.format("[%d]",ind)
+    else
+      key = string.format("[%q]",ind)
+    end
+  else
+    key = ind
+  end
+  w(string.rep("  ",level) .. tostring(key) .. " = {")
+  level=level+1
+
+  for k,l in pairs(tbl_to_print) do
+    if (type(l)=="table") then
+      printtable(k,l,level)
+    else
+      if type(k) == "number" then
+        key = string.format("[%d]",k)
+      else
+        key = string.format("[%q]",k)
+      end
+      w("%s%s = %q", string.rep("  ",level), key,tostring(l))
+    end
+  end
+  w(string.rep("  ",level-1) .. "},")
+end
+function sleep(sec)
+  socket.select(nil, nil, sec)
+end
+
+
+local pathname = {}
+
+function pathname.expand( path )
+  return path:gsub("~",os.getenv("HOME"))
+end
+
+local function lese_eintraege( path, pattern )
+  local ret = {}
+  for entry in lfs.dir(path) do
+    if not entry:match("^%.") then
+      if entry:match(pattern) then
+        ret[#ret + 1] = entry
+      end
+    end
+  end
+  return ret
+end
+
+optionen_intern = {}
+
+for _,v in ipairs({"/etc/speedata/watchdog.lua" ,"~/.speedata/watchdog.lua", "~/sdwatchdog.lua" }) do
+  local path = pathname.expand(v)
+  if lfs.isfile(path) then
+    ok,msg = pcall(dofile,path)
+    if not ok then
+      fehler("Syntaxfehler in der Konfigurationsdatei:\n%s",msg)
+      os.exit(-1)
+    end
+  end
+  if optionen then
+    -- table.merge:
+    for k,v in pairs(optionen) do optionen_intern[k] = v end
+  end
+end
+
+require("optionparser")
+local op = optionparser:new()
+op.banner = string.format("Benutzung: sdwatchdog <optionen>")
+op:on("--showconfig","Zeigt die benutzte Konfiguration", function() printtable("Konfiguration",optionen_intern) os.exit(0) end)
+op.start = 30
+
+ok, msg = op:parse(arg)
+if not ok then
+  print(msg)
+  os.exit(-1)
+end
+
+local hotfolder = pathname.expand(optionen_intern.Hotfolder)
+
+if not lfs.isdir(hotfolder) then
+  fehler("%q ist kein Verzeichnis. Abbruch.",hotfolder)
+end
+
+local pattern = optionen_intern.Dateimuster
+local binpath
+if optionen_intern.Programmverzeichnis then
+  binpath = pathname.expand(optionen_intern.Programmverzeichnis)
+else
+  binpath = ""
+end
+
+fileutils.cd(hotfolder,function()
+  while true do
+    local eintraege = lese_eintraege(hotfolder,pattern)
+    local aktuelle_datei = eintraege[1]
+    if not aktuelle_datei then
+      sleep(1)
+    else
+      log("Verarbeite Datei %q",aktuelle_datei)
+      
+      for k,v in pairs(optionen_intern.Ereignisse) do
+        log("Pruefe auf Muster %q",k)
+        if aktuelle_datei:match(k) then
+          log("Uebereinstimmung. Programm %q wird aufgerufen.",v)
+          local cmdline = string.format("%s/%s %q", binpath, v, aktuelle_datei)
+          log("Kommandozeile: %s",cmdline)
+          os.spawn(cmdline)
+          log("Ausfuehrung beendet.")
+          break
+        else
+          log("Keine Uebereinstimmung")
+        end
+      end
+      log("Ereignisverarbeitung beendet. Loesche die Datei %q",aktuelle_datei)
+      fileutils.rm(aktuelle_datei)
+    end
+  end
+end)
+
+log("Stoppe speedata Publisher watchdog (sdwatchdog)")

@@ -1,0 +1,29 @@
+#title "Kommandozeile"
+#format "textile"
+
+h1. Aufruf des Publishers über Kommandozeile
+
+pre. speedata Publisher, Version 1.1
+-h , --help                      Diese Hilfe
+     --autoopen                  Öffnet die erzeugte PDF-Datei (zur Zeit nur MacOS X und Linux)
+     --ausgabename=NAME          Bestimmt den Namen der PDF-Datei, Voreinstellung ist 'publisher.pdf'
+     --datenname=NAME            Lädt Daten-XML mit dem Namen. Ohne diesen Parameter wird 'daten.xml' geladen.
+     --doc                       Öffnet die Online-Hilfe
+     --filter=FILTER             Führt den XPROC Filter aus, bevor die Verarbeitung startet
+     --layoutname=NAME           Lädt Layoutregelwerk mit dem Namen. Ohne diesen Parameter wird 'layout.xml' geladen.
+     --list-fonts                Zeigt alle verfügbaren Schriftarten
+     --raster=WERT               Bestimmt, ob das Raster angezeigt werden soll ('ja' oder 'nein')
+     --startseite=NUM            Legt die Startseite fest
+-x , --extra-dir=VERZEICHNIS     Extra Verzeichnisse für die Dateisuche
+     --xml                       Ausgabe als (Pseudo-)XML
+
+h2. Erklärung der Kommandozeilenparameter
+
+- @-x@, @--extra-dir@ := Bindet zusätzliche Verzeichnisse in den Publisherlauf ein. In diesen Verzeichnissen werden alle Daten gesucht: Bilddaten, Regelwerke, Datendateien und Schriftdateien. Dieses Argument kann mehrfach angegeben werden und per "Konfigurationsdatei":konfiguration mit Werten vorbelegt werden.
+- @--list-fonts@ := Listet alle Schriftdateien auf, die in den Publisher-Verzeichnissen gefunden werden. Zusammen mit @--xml@ erlaubt dieses Kommando die Ausgabe per Copy&Paste in das Layoutregelwerk zu übernehmen.
+- @--xml@:= Die Ausgaben mancher Kommandos werden als (Pseudo-)XML dargestellt, um sie in das Layoutregelwerk zu übernehmen.
+- @--autoopen@:= Öffnet die PDF-Datei nach dem Publisher-Durchlauf. Kann auch in der "Konfigurationsdatei":konfiguration eingestellt werden.
+- @--filter=FILTER@ := Führt die angegebene XPROC-Datei aus.
+- @--layoutname=NAME@:= Gibt den Namen des Layoutregelwerks an. Voreinstellung ist @layout.xml@. Ebenfalls "konfigurierbar":konfiguration.
+- @--datenname=NAME@:= Gibt den Namen der XML-Daten an. Voreinstellung ist @daten.xml@. Ebenfalls "konfigurierbar":konfiguration.
+

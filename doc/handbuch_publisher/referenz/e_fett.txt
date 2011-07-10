@@ -1,0 +1,28 @@
+#title "Fett"
+
+
+#Elementname: `Fett`
+
+##Beschreibung
+
+Dient als Festlegung des Schriftschnittes, wenn Formatierung [B](e_b) (Fett) angegeben ist.
+
+Erlaubte Attribute: `schriftart`  
+Kindelemente: -  
+Elternelemente: [DefiniereSchriftfamilie](e_definiereschriftfamilie)
+
+
+##Beispiel
+
+    <LadeSchriftdatei name="Helvetica" dateiname="helvetica-regular.otf" />
+    ...
+    
+    <DefiniereSchriftfamilie name="text" schriftgröße="12" zeilenabstand="14">
+      <Normal     schriftart="Helvetica"/>
+      <Fett       schriftart="Helvetica Fett"/>
+      <Kursiv     schriftart="Helvetica Kursiv"/>
+      <FettKursiv schriftart="Helvetica Fett Kursiv"/>
+    </DefiniereSchriftfamilie>
+
+##Siehe auch
+[B](e_b), [FettKursiv](e_fettkursiv), [Normal](e_normal), [Kursiv](e_kursiv)

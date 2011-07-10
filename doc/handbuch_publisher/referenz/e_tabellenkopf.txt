@@ -1,0 +1,23 @@
+#title "Tabellenkopf"
+#format "textile"
+
+h1. Elementname: @Tabellenkopf@
+
+h2. Beschreibung
+
+Erlaubte Attribute: -
+Kindelemente: "Tlinie":e_tlinie, "Tr":e_tr
+Elternelemente: "Tabelle":e_tabelle
+
+h3. Bemerkung
+
+Der Inhalt von Tabellenkopf wird auf jeder Seite einer automatisch umbrochenen Tabelle wiederholt.
+
+
+h2. Beispiel
+
+Siehe Erläuterung zu "Tabelle":e_tabelle
+
+h2. Siehe auch
+
+"Tabellenfuß":e_tabellenfuß

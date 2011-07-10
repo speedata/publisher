@@ -1,0 +1,47 @@
+#title "Gruppe"
+#format "textile"
+
+h1. Elementname: @Gruppe@
+
+h2. Beschreibung
+
+Erzeugt einen virtuellen Bereich, in dem Elemente platziert werden können. Ausgegeben werden die Gruppen anschließend mit "ObjektAusgeben":e_objektausgeben
+
+Erlaubte Attribute: @name@
+Kindelemente: "Inhalt":e_inhalt
+Elternelemente: "Datensatz":e_datensatz
+
+h3. Attribute
+
+- @name@ (Text) := der Name der anzulegenden Gruppe.
+
+h3. Bemerkung
+
+Das Inhalt-Element wird voraussichtlich in zukünftigen Versionen wegfallen.
+
+h2. Beispiel
+
+pre(xml). <Gruppe name="Beispielgruppe">
+  <Inhalt>
+    <ObjektAusgeben spalte="3" zeile="2">
+      <Textblock breite="14">
+        <Absatz>
+          <Wert>Text</Wert>
+        </Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <ObjektAusgeben spalte="2" zeile="4">
+      <Textblock breite="14">
+        <Absatz>
+          <Wert>Nächster Text</Wert>
+        </Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+  </Inhalt>
+</Gruppe>
+<ObjektAusgeben gruppenname="Beispielgruppe" spalte="1" zeile="1" />
+
+h2. Siehe auch
+
+"ObjektAusgeben":e_objektausgeben, "Inhalt":e_inhalt
+

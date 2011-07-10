@@ -1,0 +1,33 @@
+#title "Linie"
+#format "textile"
+
+h1. Elementname: @Linie@
+
+h2. Beschreibung
+
+Zeichnet eine horizontale oder vertikale Linie im Raster.
+
+Erlaubte Attribute: @länge@, @linienstärke@, @richtung@
+Kindelemente: -
+Elternelemente: "ObjektAusgeben":e_objektausgeben
+
+h3. Attribute
+
+- @länge@ (Zahl oder "Maßangabe":massangabe) := Länge der Linie in Rasterzellen oder als absolute Angabe.
+- @linienstärke@ (Zahl oder "Maßangabe":massangabe, optional) := Dicke der Linie in Rasterzellen oder als absolute Angabe.
+- @richtung@ ("horizontal","vertikal") := Bestimmt die Ausrichtung der Linie.
+
+h3. Bemerkung
+
+
+
+h2. Beispiel
+
+pre(xml). <ObjektAusgeben spalte="1" zeile="3" belegen="nein">
+  <Linie länge="10" richtung="horizontal" linienstärke="1mm" />
+</ObjektAusgeben>
+
+
+h2. Siehe auch
+
+"ObjektAusgeben":e_objektausgeben

@@ -1,0 +1,29 @@
+#title "Box"
+#format "textile"
+
+h1. Elementname: @Box@
+
+h2. Beschreibung
+
+Erzeugt einen rechteckigen gefärbten Bereich. Die Fläche muss mit den Rasterzellen übereinstimmen.
+
+Erlaubte Attribute:@breite@, @hintergrundfarbe@ @höhe@
+Kindelemente: -
+Elternelemente: "ObjektAusgeben":e_objektausgeben
+
+h3. Attribute
+
+- @breite@ (Zahl) := Breite der Box in Rasterzellen.
+- @höhe@ (Zahl) := Höhe der Box in Rasterzellen.
+- @hintergrundfarbe@ (Text) := Farbe der Box. 
+
+
+
+h2. Beispiel
+
+pre(xml). <Box breite="5" höhe="2" hintergrundfarbe="Dunkelblau" />
+
+
+h2. Siehe auch
+
+"DefiniereFarbe":e_definierefarbe, "ObjektAusgeben":e_objektausgeben

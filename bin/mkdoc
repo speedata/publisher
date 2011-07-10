@@ -1,0 +1,232 @@
+#!/usr/bin/env ruby
+
+require "yaml"
+require "fileutils"
+require "erb"
+require "pathname"
+require "rubygems"
+require "RedCloth"
+
+BASE_SRC  = Pathname.new(File.dirname(__FILE__) + "/../doc/handbuch_publisher").cleanpath
+BASE_DEST = Pathname.new(File.dirname(__FILE__) + "/../build/handbuch_publisher").cleanpath
+MARKDOWN  = File.dirname(__FILE__) + "/Markdown.pl"
+
+class Page
+  attr_accessor :titel
+  def initialize(site,directory,file)
+    @site = site
+    @directory = directory
+    @filepath  = file
+
+    @relpath    = file.relative_path_from(site.src_dir)
+    @seitenname = @relpath.basename.to_s.chomp(".txt")
+    @destrel    = @relpath.to_s.chomp(".txt") + ".html" 
+    @dest       = @site.dest_dir + @destrel
+  end
+  
+  def build
+    puts @destrel
+    opt = @directory.prefs.dup
+    seite = []
+    
+    File.open(@filepath) do |f|
+      while ( line = f.gets ) =~ /^#/
+        # #Text: "Wert"
+        line.match(/#(\w+) "?(.*?)"?\s*$/)
+        opt[$1]=$2
+      end
+      while line = f.gets 
+        seite << line
+      end
+    end
+    @titel  = opt["title"]
+    @format = opt["format"]
+
+    @site.autoglossary[@seitenname] = { :rel => @destrel, :title => opt["title"] }
+
+    seitentext = seite.join("")
+    seitentext = ERB.new(seitentext).result(binding)
+
+    ersetzungen = @site.ersetzungen[@format]
+    puts @format
+    case @format
+    when "markdown"
+      seitentext.gsub!(/\[\[(\w+)\]\]/) do |match|
+        ersetzungen[$1]
+      end
+      seitentext.gsub!(/\[(.*?)\]\((.*?)\)/) do |match|
+        vis = $1
+        link = $2
+        remote = link.match(/^http:/) ? link : mklink(link)
+        "[#{vis}](#{remote})"
+      end
+
+      IO.popen(MARKDOWN, "r+") do |io|
+        io.write seitentext
+        io.close_write
+        File.open(@dest,"w") do |f|
+          f << @directory.kopf.result(binding)
+          f << io.read.gsub(/<pre><code>/,"<pre class=\"syntax xml\" name=\"code\">").gsub(/<\/code><\/pre>/,"</pre>").gsub(/<code>/,%q{<code class="syntax xml">})
+          f << @directory.fuss.result(binding)
+        end
+      end
+    when "textile"
+        
+      seitentext.gsub!(/\{\{(\w+)\}\}/) do |match|
+        ersetzungen[$1]
+      end
+      seitentext.gsub!(/"([^"]*)":([^\s,.:)]*)/) do |match|
+        vis = $1
+        link = $2
+        remote = link.match(/^http:/) ? link : mklink(link)
+        "\"#{vis}\":#{remote}"
+      end
+      
+      File.open(@dest,"w") do |f|
+        f << @directory.kopf.result(binding)
+        f << RedCloth.new(seitentext).to_html.gsub(/<pre class="xml"/,%q{<pre class="syntax xml" name="code"}).gsub(/<code>/,%q{<code class="syntax xml">})
+        f << @directory.fuss.result(binding)
+      end
+    end # case
+    
+  end # build
+
+  def mklink(link)
+    if @site.autoglossary[link]
+      return (@site.dest_dir + @site.autoglossary[link][:rel]).relative_path_from(@dest.dirname)
+    else
+      return "seite_nicht_gefunden.html"
+    end
+  end
+
+  def stylesheet_link_tag
+    rel = @directory.css_path
+    %Q{<link rel="stylesheet" href="#{rel}/normal.css" type="text/css" />}
+  end
+  def javascript_link_tag
+     %Q{}
+  end
+  def imageref(image,alt = "",dest="")
+    rel = @directory.images_path
+    link = %Q{<img src="#{rel}/#{image}" alt="#{alt}">}
+    if dest
+      destlink = mklink(dest)
+      return %Q{<a href="#{destlink}">#{link}</a>}
+    else
+      return link
+    end
+  end
+  def element_list
+    list = []
+    @site.autoglossary.sort.each do |k,v|
+      next unless k =~ /^e_/
+      if @seitenname == k
+        list << "<li class='active'>#{v[:title]}</li>"
+      else
+        list << %Q{<li><a href="#{mklink(k)}">#{v[:title]}</a></li>}
+      end
+    end
+    %Q{<ul>#{list.join("\n")}</ul>}
+  end
+end # Page
+
+class Directory
+  attr_reader :kopf
+  attr_reader :fuss
+  attr_reader :template
+  attr_reader :css_path
+  attr_reader :javascript_path
+  attr_reader :images_path
+  attr_reader :prefs
+  
+  def initialize(site,parent_dir,dir)
+    @site = site
+    @dir = dir
+    @parent_dir = parent_dir
+    @dest_dir = @site.dest_dir + dir.relative_path_from(site.src_dir)
+    FileUtils.mkdir(@dest_dir) unless test(?d,@dest_dir)
+    
+    @css_path        = (parent_dir.src_dir + "css").relative_path_from(dir)
+    @javascript_path = (parent_dir.src_dir + "javascript").relative_path_from(dir)
+    @images_path     = (parent_dir.src_dir + "images").relative_path_from(dir)
+    
+    @kopf = ERB.new( (@dir + "#kopf.txt").exist? ? File.read(@dir + "#kopf.txt") : @parent_dir.kopf )
+    @fuss = ERB.new( (@dir + "#fuss.txt").exist? ? File.read(@dir + "#fuss.txt") : @parent_dir.fuss )
+    
+    @prefs = (@dir + "#prefs.yaml").exist? ? YAML.load_file(@dir + "#prefs.yaml") : @parent_dir.prefs
+  end
+  
+  def build
+    @dir.each_entry do |entry|
+      next if entry.to_s =~  /^(#|\.|\.\.$)/
+      path = @dir + entry
+      if path.directory?
+        Directory.new(@site,@parent_dir,path).build
+      else
+        if entry.to_s =~ /\.txt$/
+          Page.new(@site,self,path).build
+        else
+          # kopieren
+          FileUtils.cp(@dir + entry,@dest_dir + entry)
+        end
+      end
+    end
+  end # build
+end # Directory
+
+class Site
+  attr_reader :src_dir
+  attr_reader :dest_dir
+  attr_accessor :autoglossary
+  attr_reader :prefs
+  attr_reader :ersetzungen
+  
+  def initialize(src,dest)
+    @src_dir  = src
+    @dest_dir = dest
+    @autoglossary_file = @src_dir + "#autoglossary"
+    @autoglossary = YAML.load_file(@autoglossary_file) if test(?f,@autoglossary_file)
+    @autoglossary = {} unless @autoglossary
+    @javascripts_dir = @src_dir + "#javascripts"
+    @css_dir  = @src_dir + "#css"
+    @prefs = (@src_dir + "#prefs.yaml").exist? ? YAML.load_file(@src_dir + "#prefs.yaml") : raise("#prefs.yaml nicht gefunden")
+    @ersetzungen = (@src_dir + "#ersetzungen.yaml").exist? ? YAML.load_file(@src_dir + "#ersetzungen.yaml") : raise("#ersetzungen.yaml nicht gefunden")
+  end
+  
+  def kopf
+    if (@src_dir + "#kopf.txt").exist?
+      return File.read(@src_dir + "#kopf.txt")
+    else
+      raise "#kopf.txt nicht gefunden"
+    end
+  end
+
+  def fuss
+    if (@src_dir + "#fuss.txt").exist?
+      return File.read(@src_dir + "#fuss.txt")
+    else
+      raise "#fuss.txt nicht gefunden"
+    end
+  end
+    
+  def build
+    # make directory
+    FileUtils.mkdir_p(@dest_dir) unless test(?d,@dest_dir)
+    # copy javascript und css
+    @css_dest_dir         = @dest_dir + "css"
+    @javascripts_dest_dir = @dest_dir + "javascript"
+    FileUtils.mkdir_p([@javascripts_dest_dir, @css_dest_dir])
+    FileUtils.cp_r(Dir.glob(@javascripts_dir + "*") ,@javascripts_dest_dir)
+    FileUtils.cp_r(Dir.glob(@css_dir + "*")         ,@css_dest_dir)
+    # Jetzt durch die Verzeichnisse iterieren
+    d=Directory.new(self,self,@src_dir)
+    d.build
+    
+    File.open(@autoglossary_file,"w") do |f|
+      f << @autoglossary.to_yaml
+    end
+  end
+end # site
+
+s=Site.new(BASE_SRC,BASE_DEST).build
+

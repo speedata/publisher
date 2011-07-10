@@ -1,0 +1,36 @@
+#title "LadeSchriftdatei"
+#format "textile"
+
+h1. Elementname: @LadeSchriftdatei@
+
+h2. Beschreibung
+
+Das Element @LadeSchriftdatei@  weist einer physikalischen Schriftdatei einem internen Namen zu  
+
+Erlaubte Attribute: @name@, @dateiname@,@leerraum@, @randausgleich@,@kapitälchen@
+Kindelemente: -
+Elternelemente: "Layout":e_layout
+
+h3. Attribute
+
+- @name@ (Text)  := der interne Name, unter dem die Schriftart im Element "DefiniereSchriftfamilie":e_definiereschriftfamilie angesprochen wird.
+- @dateiname@ (Text) := der Dateiname mit Endung, ohne Pfad.
+- @leerraum@ (0-100, optional) := Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25.
+- @randausgleich@ (0-100, optional) := Angabe in Prozent, um wie viel die Zeichen @-@, @.@ und @,@ über den Rand herausragen. Stark Schriftartabhängig.
+- @kapitälchen@ (@ja@, @nein@, optional) :=  Schalter, ob die Schriftart als Kapitälchen dargestellt werden soll.
+
+h3. Bemerkung
+
+
+
+h2. Beispiel
+
+pre(xml). <LadeSchriftdatei name="Helvetica" dateiname="texgyreheros-regular.otf" />
+<LadeSchriftdatei name="Helvetica Fett" dateiname="texgyreheros-bold.otf" />
+<LadeSchriftdatei name="Helvetica Kursiv" dateiname="texgyreheros-italic.otf" />
+<LadeSchriftdatei name="Helvetica Fett Kursiv" dateiname="texgyreheros-bolditalic.otf" />
+
+
+h2. Siehe auch
+
+"DefiniereSchriftfamilie":e_definiereschriftfamilie, "Einbinden von Schriftarten":fonts

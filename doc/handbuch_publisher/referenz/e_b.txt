@@ -1,0 +1,24 @@
+#title "B"
+#format "markdown"
+
+#Elementname: `B`
+
+##Beschreibung
+
+Schaltet auf »Fett« um.
+
+Erlaubte Attribute: -    
+Kindelemente: [[textwerte]]  
+Elternelemente: [Absatz](e_absatz)
+
+
+##Beispiel
+
+    <Textblock spalte="3" breite="10">
+      <Absatz>
+        <B><Wert>Text in Fett</Wert></B>
+      </Absatz>
+    </Textblock>
+
+##Siehe auch
+[I](e_i)

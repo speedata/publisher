@@ -1,0 +1,24 @@
+#title "I"
+
+
+#Elementname: `I`
+
+##Beschreibung
+
+Schaltet auf »Kursiv« um.
+
+Erlaubte Attribute: -    
+Kindelemente: [[textwerte]]  
+Elternelemente: [Absatz](e_absatz)
+
+
+##Beispiel
+
+    <Textblock spalte="3" breite="10">
+      <Absatz>
+        <I><Wert>Kursiver Text</Wert></I>
+      </Absatz>
+    </Textblock>
+
+##Siehe auch
+[B](e_b)

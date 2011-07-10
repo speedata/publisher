@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<%= stylesheet_link_tag() %>
+<%= javascript_link_tag() %>
+<script src="../javascript/jquery-1.4.4.min.js" type="text/javascript"></script>
+<script src="../javascript/jquery.syntax.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    // This function is executed when the page has finished loading.
+    jQuery(function($) {
+        // This function highlights (by default) pre and code tags which are annotated correctly.
+        $.syntax();
+    });
+</script>
+<title><%= titel %></title>
+</head>
+<body>
+<div id="logo"><%= imageref("publisher_logo.png","Startseite","index")%></div>

@@ -1,0 +1,45 @@
+#title "DefiniereTextformat"
+#format "textile"
+
+h1. Elementname: @DefiniereTextformat@
+
+h2. Beschreibung
+
+Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen "Absatz":e_absatz und "Textblock":e_textblock) zurückgegriffen werden.
+
+Erlaubte Attribute: @ausrichtung@, @einrückung@, @name@
+Kindelemente: -
+Elternelemente: "Layout":e_layout
+
+h3. Attribute
+
+- @name@ (Text) := Name des Textformats, unter dem es später im Layoutregelwerk angesprochen wird.
+- @ausrichtung@ (@blocksatz@, @linksbündig@, @rechtsbündig@, @zentriert@) := Bestimmt die Formatierung des Textes.
+- @einrückung@ (Maßangabe) := Absatzeinzug.
+
+
+h3. Bemerkung
+
+In Tabellenzellen ("Td":e_td) wird das Textformat durch das Attribut @align@ gesetzt, sofern es nicht angegeben wurde.
+
+h2. Beispiel
+
+pre(xml). <Layout>
+  <DefiniereTextformat name="Text mit Einrückung" ausrichtung="blocksatz" einrückung="1cm" />
+  ...
+  <Datensatz element="...">
+    <Textblock breite="10" spalte="1" textformat="Text mit Einrückung">
+      <Absatz>
+        <Wert>Text ...</Wert>
+      </Absatz>
+    </Textblock>
+  </Datensatz>
+</Layout>
+
+Auf dieses Textformat (»Text mit Einrückung«) kann später im Element "Textblock":e_textblock oder im Element "Absatz":e_absatz zurückgegriffen werden. Das Standard-Textformat ist @text@. Dieses wird benutzt, wenn im "Textblock":e_textblock oder "Absatz":e_absatz kein Textformat angegeben wird.
+
+
+h2. Siehe auch
+
+"Textblock":e_textblock, "Absatz":e_absatz
+

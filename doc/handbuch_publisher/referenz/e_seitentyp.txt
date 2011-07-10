@@ -1,0 +1,56 @@
+#title "Seitentyp"
+#format "textile"
+
+h1. Elementname: @Seitentyp@
+
+h2. Beschreibung
+
+Definiert eine Seitenvorlage. Anhand der Kriterien, die im Attribut @bedingung@ angegeben werden, wählt
+das System eine Seitenvorlage aus.
+
+Erlaubte Attribute: @bedingung@, @name@
+Kindelemente: "Rand":e_rand, "BeiSeitenErzeugung":e_beiseitenerzeugung, "BeiSeitenAusgabe":e_beiseitenausgabe, "Raster":e_raster, "Platzierungsbereich":e_platzierungsbereich
+Elternelemente: "Layout":e_layout
+
+h3. Attribute
+
+- @bedingung@ ("XPath-Ausdruck":xpath) := Wenn der XPath-Ausdruck »wahr« ergibt, dann wird diese Seite als Vorlage genommen.
+- @name@ (Text) := Name der Seitenvorlage. Bisher wird der Name nur intern benötigt.
+
+h3. Bemerkung
+
+Die Inhalte des Elements "BeiSeitenErzeugung":e_beiseitenerzeugung werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird, bei "BeiSeitenAusgabe":e_beiseitenausgabe werden die Inhalte ausgeführt, sobald beispielsweise "NeueSeite":e_neueseite aufgerufen wird.
+
+Wenn eine neue Seite erzeugt wird, werden die Seitentypen in umgekehrter Reihenfolge geprüft. Das bedeutet, dass die allgemeineren Seitentypen zuerst definiert werden müssen, später die speziellen. Das ist nur dann wichtig, wenn mehrere Bedingungen »wahr« ergeben würden.
+
+h2. Beispiel
+
+pre(xml). <Seitentyp name="rechte Seite" bedingung=" sd:ungerade( sd:aktuelle-seite() ) ">
+
+pre(xml). <Seitentyp name="linke Seite" bedingung=" sd:gerade( sd:aktuelle-seite() ) ">
+
+pre(xml). <Seitentyp name="Hauptteil rechte Seite" bedingung=" sd:ungerade( sd:aktuelle-seite() )  and $kapitel='hauptteil' ">
+
+pre(xml). <Seitentyp name="rechte Seite" bedingung="sd:ungerade( sd:aktuelle-seite() )">
+  <Rand links="1cm" rechts="1cm" oben="1cm" unten="1cm"/>
+  <BeiSeitenErzeugung>
+    <ObjektAusgeben spalte="1">
+      ...
+    </ObjektAusgeben>
+  </BeiSeitenErzeugung>
+  <BeiSeitenAusgabe>
+    <ObjektAusgeben spalte="1">
+      ....
+    </ObjektAusgeben>
+  </BeiSeitenAusgabe>
+  <Platzierungsbereich name="rahmen1">
+    <Platzierungsrahmen breite="12" höhe="30" spalte="2" zeile="2"/>
+    <Platzierungsrahmen breite="12" höhe="30" spalte="16" zeile="2"/>
+  </Platzierungsbereich>
+</Seitentyp>
+
+h2. Siehe auch
+
+"XPath-Ausdruck":xpath, "BeiSeitenErzeugung":e_beiseitenerzeugung, "BeiSeitenAusgabe":e_beiseitenausgabe, "Platzierungsbereich":e_platzierungsbereich
+
+

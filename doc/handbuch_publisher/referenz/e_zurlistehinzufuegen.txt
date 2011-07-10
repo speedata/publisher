@@ -1,0 +1,41 @@
+#title "ZurListeHinzufügen"
+#format "textile"
+
+h1. Elementname: @ZurListeHinzufügen@
+
+h2. Beschreibung
+
+Dieses Kommando kann innerhalb von Aktion benutzt werden. Wenn es ausgeführt wird, wird eine Schlüssel/Wert-Kombination in eine Liste eingefügt.
+
+Erlaubte Attribute: @auswahl@, @liste@, @schlüssel@
+Kindelemente: -
+Elternelemente: "Aktion":e_aktion
+
+h3. Attribute
+
+- @auswahl@ ("XPath-Ausdruck":xpath) := Wert, der in der Liste gespeichert werden soll.
+- @liste@ (Text) := Die Liste, in der der Schlüssel bzw. Wert gespeichert wird.
+- @schlüssel@ (Text) := Name des Schlüssels, unter der der Wert abrufbar ist.
+
+h3. Bemerkung
+
+Die Liste wird erzeugt, falls sie noch nicht existiert.
+
+h2. Beispiel
+
+pre(xml). <ObjektAusgeben spalte="1">
+  <Textblock breite="40">
+    <Absatz>
+      <Textwert>Artikel: </Textwert><Textwert auswahl="@name" />
+    </Absatz>
+    <Aktion>
+      <ZurListeHinzufügen liste="inhalt" schlüssel="{@name}" auswahl="sd:aktuelle-seite()" />
+    </Aktion>
+  </Textblock>
+</ObjektAusgeben>
+
+Hier wird der Text ausgegeben und gleichzeitig ein Schlüssel/Wertepaar erzeugt mit dem Inhalt des Attributs @name@ des aktuellen Datensatzes und der aktuellen Seite und in die Liste @inhalt@ eingefügt. 
+
+h2. Siehe auch
+
+"Aktion":e_aktion

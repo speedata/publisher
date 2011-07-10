@@ -1,0 +1,52 @@
+#title "Bild"
+#format "textile"
+
+h1. Elementname: @Bild@
+
+h2. Beschreibung
+
+Bindet eine externe Grafik ein. Erlaubte Grafikformate sind PDF (@.pdf@), PNG (@.png@) und JPEG (@.jpg@).
+
+Erlaubte Attribute: @breite@, @datei@, @höhe@, @seite@, @natürliche-größe@, @maximale-größe@
+Kindelemente: -
+Elternelemente: "ObjektAusgeben":e_objektausgeben
+
+h3. Attribute
+
+- @breite@ (Zahl oder "Maßangabe":massangabe) := Die Breite in Rasterzellen, den das Bild im Raster belegt.
+- @höhe@ (Zahl oder "Maßangabe":massangabe, optional) := Die maximale Höhe, die das Bild im Raster belegt.
+- @datei@ (Text) := Dateiname des Bildes.
+- @seite@ (Zahl, optional) := Die Seitenzahl aus dem PDF. Voreinstellung ist 1.
+- @natürliche-größe@ (Text, optional) := Die PDF-Box, die den sichtbaren Bereich angibt. Voreinstellung ist »cropbox«.
+- @maximale-größe@ (Text, optional) := Die PDF-Box, die die maximale Größe angibt. Voreinstellung ist »cropbox«.
+
+Die Werte der Attribute @natürliche-größe@ und @maximale-größe@ können @artbox@, @bleedbox@, @cropbox@, @mediabox@ und @trimbox@  sein. Diese beiden Angaben werden dafür benutzt, um das eingebundene Bild für den Anschnitt zu vergrößern. Im zweiten Beispiel unten ist der gewünschte Bildausschnitt in der »artbox« definiert, die Grafik in der PDF-Datei hat aber noch eine Beschnittzugabe, deren Ausmaß hier in der »cropbox« beschrieben ist. Die im zweiten Beispiel angegebene Breite entspricht der Papierbreite, so dass das der Inhalt der »artbox« 21cm breit dargestellt wird, der Anschnitt um das Bild herum aber weiterhin existiert.
+
+
+h2. Beispiel
+
+pre(xml). <Datensatz element="produktbild">
+  <ObjektAusgeben spalte="{ $spalte }">
+    <Bild breite="10" datei="{string(.)}" />
+  </ObjektAusgeben>
+</Datensatz>
+
+Nimmt den Dateinamen des Bildes aus dem Elementinhalt »produktbild« aus der Datensatzdatei, z.B.
+
+pre(xml). <produktbild>grafik.pdf</produktbild>
+
+Folgendes Beispiel nimmt eine Seite aus einer PDF Datei:
+
+pre(xml). <ObjektAusgeben spalte="0mm" zeile="0mm">
+  <Bild breite="210mm" datei="katalog.pdf" seite="132" natürliche-größe="artbox" />
+</ObjektAusgeben>
+
+In diesem Beispiel entspricht die Breite »210mm« der Breite der Seite, so dass das Bild links oben (0mm,0mm) ausgegeben wird und durch den (hier nicht sichtbaren) Größenunterschied der »artbox« und der »cropbox« ein Anschnitt entsteht.
+
+h2. Hinweis
+
+Die Anzahl der Seiten in einer PDF-Datei kann mit der "XPath-Funktion":xpath @sd:anzahl-seiten(<dateiname>)@ ermittelt werden.
+
+h2. Siehe auch
+
+"ObjektAusgeben":e_objektausgeben

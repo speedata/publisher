@@ -1,0 +1,48 @@
+#title "Wert"
+#format "textile"
+
+h1. Elementname: @Wert@
+
+h2. Beschreibung
+
+Erlaubte Attribute: @auswahl@
+Kindelemente: -
+Elternelemente: {{textwerte_eltern}}
+
+h3. Attribute
+
+- @auswahl@ ("XPath-Ausdruck":xpath) := Wert, der zum umgebenden Element übergeben wird.
+
+h3. Bemerkung
+
+Der Inhalt kann entweder als ("XPath-Ausdruck":xpath) im Attribut @auswahl@ oder als Elementinhalt angegeben werden.
+
+h2. Beispiel
+
+pre(xml). <Textblock breite="14" schriftart="text">
+  <Absatz>
+    <Wert auswahl="@name"/><Wert>, Symbol=</Wert><Wert auswahl="@symbol" />
+  </Absatz>
+</Textblock>
+
+Nimmt die Werte aus den Attributen @name@ und @symbol@ aus dem aktuellen Datensatz.
+
+pre(xml). <Datensatz element="url">
+	<ObjektAusgeben spalte="2">
+    <Textblock breite="27" textformat="text">
+      <Absatz>
+        <Wert>URL: </Wert>
+        <URL>
+          <Wert auswahl="string(.)" />
+        </URL>
+      </Absatz>
+    </Textblock>
+  </ObjektAusgeben>
+</Datensatz>
+
+Nimmt den Inhalt des aktuellen Elements (@url@) als Wert.
+
+
+h2. Siehe auch
+
+"Kopie-von":e_kopievon, "XPath-Ausdruck":xpath, "Zuweisung":e_zuweisung

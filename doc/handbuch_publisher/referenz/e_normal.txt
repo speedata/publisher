@@ -1,0 +1,28 @@
+#title "Normal"
+
+
+#Elementname: `Normal`
+
+##Beschreibung
+
+Dient als Festlegung des Schriftschnittes, wenn keine Formatierung angegeben ist.
+
+Erlaubte Attribute: `schriftart`  
+Kindelemente: -  
+Elternelemente: [DefiniereSchriftfamilie](e_definiereschriftfamilie)
+
+
+##Beispiel
+
+    <LadeSchriftdatei name="Helvetica" dateiname="helvetica-regular.otf" />
+    ...
+    
+    <DefiniereSchriftfamilie name="text" schriftgröße="12" zeilenabstand="14">
+      <Normal     schriftart="Helvetica"/>
+      <Fett       schriftart="Helvetica Fett"/>
+      <Kursiv     schriftart="Helvetica Kursiv"/>
+      <FettKursiv schriftart="Helvetica Fett Kursiv"/>
+    </DefiniereSchriftfamilie>
+
+##Siehe auch
+[Fett](e_fett), [FettKursiv](e_fettkursiv), [Kursiv](e_kursiv)

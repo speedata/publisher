@@ -1,0 +1,49 @@
+#title "DefiniereSchriftfamilie"
+#format "textile"
+
+h1. Elementname: @DefiniereSchriftfamilie@
+
+h2. Beschreibung
+
+
+Das Element @DefiniereSchriftfamilie@ definiert eine Schriftfamilie, auf in den Elementen "Absatz":e_absatz, "Textblock":e_textblock, "Schriftart":e_schriftart und "Tabelle":e_tabelle mit dem Attribut @schriftart@ zugegriffen werden kann.
+
+Erlaubte Attribute: @name@, @schriftgröße@, @zeilenabstand@
+Kindelemente: "Normal":e_normal, "Kursiv":e_kursiv, "Fett":e_fett, "Fettkursiv":e_fettkursiv
+Elternelemente: "Layout":e_layout
+
+h3. Attribute
+
+- @name@ (Text) := Interner Name, unter dem die Schriftfamilie später angesprochen wird.
+- @schriftgröße@ (Maßangabe in Punkt, 0-...)  :=  Schriftgröße in pt (PostScript-Punkte, DTP-Punkte).
+- @zeilenabstand@ (Maßangabe in Punkt, 0-...) := Abstand zwischen zwei Grundlinien in pt (PostScript-Punkte).
+
+
+h3. Bemerkung
+
+
+
+h2. Beispiel
+
+pre(xml). <DefiniereSchriftfamilie name="Helvetica" schriftgröße="12" zeilenabstand="14">
+  <Normal schriftart="Helvetica Normal"/>
+  <Fett schriftart="Helvetica Fett"/>
+  <Kursiv schriftart="Helvetica Kursiv"/>
+  <FettKursiv schriftart="Helvetica Fett Kursiv"/>
+</DefiniereSchriftfamilie>
+
+Anschließend kann im Text auf diese Schriftfamilie zugegriffen werden:
+
+pre(xml). <Textblock breite="18" spalte="1" schriftart="Helvetica">
+  <Absatz>
+   ...
+
+Wird keine Schriftart angegeben, dann wird auf die Schriftfamilie @text@ (kleines 't') zurückgegriffen.
+
+Die Schnitte @Fett@, @Kursiv@ und @FettKursiv@ müssen nur dann angegeben werden, wenn sie auch benutzt werden. Es wird aber empfohlen, diese anzugeben, damit nicht unbemerkt auf die Standardschriftart umgeschaltet wird.
+
+
+h2. Siehe auch
+
+"LadeSchriftdatei":e_ladeschriftdatei, "Einbinden von Schriftdateien":fonts
+

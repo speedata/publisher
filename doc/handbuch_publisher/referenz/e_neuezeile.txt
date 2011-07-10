@@ -1,0 +1,31 @@
+#title "NeueZeile"
+#format "textile"
+
+h1. Elementname: @NeueZeile@
+
+h2. Beschreibung
+
+Der virtuelle Cursor wird auf die nächste freie Zeile gesetzt.
+
+Erlaubte Attribute: @bereich@
+Kindelemente: -
+Elternelemente: "Datensatz":e_datensatz
+
+h3. Attribute
+
+- @bereich@ := Name des Bereichs, in dem eine neue Zeile erzeugt wird.
+
+
+h2. Beispiel
+
+pre(xml). <Datensatz element="bild">
+  <NeueZeile />
+  <ObjektAusgeben spalte="{$spalte}">
+    <Bild breite="10" datei="{.}" />
+  </ObjektAusgeben>
+</Datensatz>
+
+
+h2. Siehe auch
+
+"Platzierungsbereich":e_platzierungsbereich

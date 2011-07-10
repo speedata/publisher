@@ -1,0 +1,35 @@
+#title "Raster"
+#format "textile"
+
+h1. Elementname: @Raster@
+
+h2. Beschreibung
+
+Erlaubte Attribute: @breite@, @höhe@
+Kindelemente: -
+Elternelemente: "Seitentyp":e_seitentyp 
+
+h3. Attribute
+
+- @breite@ ("Maßangabe":massangabe) := Breite einer Rasterzelle
+- @höhe@ ("Maßangabe":massangabe) := Höhe einer Rasterzelle
+
+h3. Bemerkung
+
+Überschreibt das allgemeine Raster aus "SetzeRaster":e_setzeraster.
+
+h2. Beispiel
+
+pre(xml). <SetzeRaster breite="5mm" höhe="14pt" />
+ 
+<Seitentyp name="Seite breit"  bedingung=" $var > 10 ">
+  <Rand links="1cm" rechts="2cm" oben="1cm" unten="1cm" />
+  <Raster breite="10mm" höhe="14pt" />
+</Seitentyp>
+
+Wenn diese Seite ausgewählt wird, gilt das dort angegebene Raster.
+
+
+h2. Siehe auch
+
+"SetzeRaster":e_setzeraster, "Seitentyp":e_seitentyp

@@ -1,0 +1,32 @@
+#title "Platzierungsrahmen"
+#format "textile"
+
+h1. Elementname: @Platzierungsrahmen@
+
+h2. Beschreibung
+
+Erlaubte Attribute: @breite@, @höhe@, @spalte@, @zeile@
+Kindelemente: -
+Elternelemente: "Platzierungsbereich":e_platzierungsbereich
+
+h3. Attribute
+
+- @breite@ (Zahl) := Breite des Rahmens in Rasterkästen
+- @höhe@ (Zahl) := Höhe des Rahmens in Rasterkästen
+- @spalte@ (Zahl) := Erste Spalte des Rahmens
+- @zeile@ (Zahl) := Erste Zeile des Rahmens
+
+h3. Bemerkung
+
+Es können mehrere Rahmen in einem "Platzierungsbereich":e_platzierungsbereich definiert werden.
+
+h2. Beispiel
+
+pre(xml). <Platzierungsbereich name="rahmen1">
+  <Platzierungsrahmen breite="12" höhe="30" spalte="2" zeile="2"/>
+  <Platzierungsrahmen breite="12" höhe="30" spalte="16" zeile="2"/>
+</Platzierungsbereich>
+
+h2. Siehe auch
+
+"Platzierungsbereich":e_platzierungsbereich

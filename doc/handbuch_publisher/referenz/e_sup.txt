@@ -1,0 +1,26 @@
+#title "Sup"
+#format "textile"
+
+h1. Elementname: @Sup@
+
+h2. Beschreibung
+
+Erzeugt hochgestellten Text.
+
+Erlaubte Attribute: -
+Kindelemente: "Wert":e_wert
+Elternelemente: "Absatz":e_absatz
+
+
+
+h2. Beispiel
+
+pre(xml). <ObjektAusgeben spalte="1">
+  <Textblock breite="20">
+    <Absatz><Wert>Text</Wert><Sup><Wert>hoch</Wert></Sup></Absatz>
+  </Textblock>
+</ObjektAusgeben>
+
+h2. Siehe auch
+
+"Sub":e_sub, "Absatz":e_absatz
