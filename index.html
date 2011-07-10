@@ -2,70 +2,55 @@
 <html>
 <head>
   <meta charset='utf-8'>
-
-  <title>pgundlach/sdpublisher @ GitHub</title>
-
-  <style type="text/css">
-    body {
-      margin-top: 1.0em;
-      background-color: #0b253e;
-      font-family: Helvetica, Arial, FreeSans, san-serif;
-      color: #ffffff;
-    }
-    #container {
-      margin: 0 auto;
-      width: 700px;
-    }
-    h1 { font-size: 3.8em; color: #f4dac1; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #f4dac1; }
-    h3 { text-align: center; color: #f4dac1; }
-    a { color: #f4dac1; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
-  </style>
+  <title>speedata Publisher</title>
+  <link rel="stylesheet" href="css/normal.css" type="text/css">
 </head>
 
 <body>
-  <a href="http://github.com/pgundlach/sdpublisher"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+<p><a href="http://github.com/pgundlach/sdpublisher"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a></p>
+<div id="logo">
+  <a href="index.html"><img src="images/publisher_logo.png" alt="Startseite"></a>
+</div>
 
-  <div id="container">
-
+<!--
     <div class="download">
       <a href="http://github.com/pgundlach/sdpublisher/zipball/master">
         <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
       <a href="http://github.com/pgundlach/sdpublisher/tarball/master">
         <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
     </div>
-
-    <h1><a href="http://github.com/pgundlach/sdpublisher">sdpublisher</a>
+-->
+    <h1><a href="http://github.com/pgundlach/sdpublisher">speedata Publisher</a>
       <span class="small">by <a href="http://github.com/pgundlach">pgundlach</a></span></h1>
 
     <div class="description">
-      The speedata Publisher is a full featured database publishing software. It has a built-in layout description language which allows you to arbitrary complex layouts.
+      The speedata Publisher is a full featured database publishing software. It has a built-in layout description language which allows you to create arbitrary complex layouts.
     </div>
 
-    <p>The speedata Publisher is a full featured database publishing software. It has a built-in layout description language which allows you to arbitrary complex layouts.</p><h2>Dependencies</h2>
-<p>The Publisher is based on sdluatex, a LuaTeX binary with libxml2 support built in. It should be OK if you add the libxml2 bindings yourself.</p>
-<h2>Install</h2>
-<p>Put the sdluatex binary in the bin/ directory and run "sprun".</p>
-<h2>License</h2>
-<p>GPL version 2</p>
-<h2>Authors</h2>
-<p>Patrick Gundlach (gundlach@speedata.de)<br/><br/>      </p>
-<h2>Contact</h2>
-<p>Patrick Gundlach (gundlach@speedata.de)<br/>      </p>
+    <h2>Requirements</h2>
+	<p>The speedata Publisher needs a <a href="http://www.luatex.org">LuaTeX</a> binary with the Lua libxml2 bindings from <a href="http://asbradbury.org/projects/lua-xmlreader/">asbradbury.org</a>.
+	    You can at your choice create a single binary or load the Lua bindings at runtime.
+	    <a href="https://github.com/pgundlach/LuaTeX/tree/xmlreader">There is a github repository</a> with a patched version of LuaTeX.
+	    That is what I use. You can compile it if you have the libxml2 headers installed.</p>
+
+   <h2>Install</h2>
+   <p>The contents of this repository is mostly ready to run. Put the sdluatex binary (see section requirements) in the <tt>bin/</tt> directory and run "sprun" in your terminal window.</p>
+
+   <h2>License</h2>
+   <p>GPL version 2</p>
+
+   <h2>Authors</h2>
+   <p><a href="mailto:gundlach@speedata.de">Patrick Gundlach</a></p>
+
+   <h2>Contact</h2>
+   <p><a href="mailto:gundlach@speedata.de">Patrick Gundlach (gundlach@speedata.de)</a></p>
 
 
     <h2>Download</h2>
     <p>
-      You can download this project in either
-      <a href="http://github.com/pgundlach/sdpublisher/zipball/master">zip</a> or
-      <a href="http://github.com/pgundlach/sdpublisher/tarball/master">tar</a> formats.
+      You can download the development code of this project in either
+      <a href="http://github.com/pgundlach/sdpublisher/zipball/develop">zip</a> or
+      <a href="http://github.com/pgundlach/sdpublisher/tarball/develop">tar</a> formats.
     </p>
     <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
       by running:
@@ -76,8 +61,10 @@
       get the source code on GitHub : <a href="http://github.com/pgundlach/sdpublisher">pgundlach/sdpublisher</a>
     </div>
 
-  </div>
 
-  
+
+<div class='speedataline'></div>
+
+<a href="http://www.speedata.de/">www.speedata.de</a>
 </body>
 </html>

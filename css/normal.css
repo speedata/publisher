@@ -1,0 +1,27 @@
+body{font-size:100%; font-family:Frutiger,Geneva; color:#2a2a2a; background:white; background:url(../images/head.png) repeat-x; padding:22px 80px 10px 80px;}
+img{border:0px;}
+h1{font-size:1.4em; margin:0 0 10px 0; padding:0px;}
+h2{font-size:1.2em; margin:10px 0 10px 0; padding:0px;}
+h3{font-size:1.0em; margin:0px; padding:0px;}
+h1 code{font-size:1.2em; color:#424242;}
+code{color:#424242;}
+a{color:#8c0e1c; text-decoration:none;}
+a:hover{text-decoration:underline;}
+p{font-size:0.85em;}
+pre{background-color: #f0f0f0; border:1px solid #e0e0e0; padding: 15px; color:#424242;}
+#logo{width:100%;float:left; margin-bottom:35px;}
+#elementdesc{float: left; width: 75%; margin:0 0 10px 0;}
+#elementdesc ul, ul{padding:0px; margin:2px 0 2px 25px; font-size:0.85em; list-style-image:url(../images/li.jpg);}
+#elementref{float: right; width: 20%; padding:10px 0 10px 10px;}
+#elementref h1{font-size: 1.1em;}
+#elementref ul{list-style-type:none; list-style-image:none; padding:0px; margin:0px; font-size:0.85em;}
+#elementref ul .active{font-weight:bold; list-style-image:url(../images/li.jpg); padding:5px 0;}
+.speedataline{width:100%; border-bottom:1px solid #e0e0e0; clear: both; margin:8px 0;}
+
+table { border-left-width:0px; border-right-width:0px; margin: 0px; padding: 0px;}
+tr { vertical-align:top; }
+th { background-color: #0F2B49; color: white; font-weight: normal;}
+
+pre.syntax, .syntax-container {
+	font-size: 10pt;
+}
