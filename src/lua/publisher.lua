@@ -377,7 +377,7 @@ function seite_einrichten()
   -- aktuelle_seite ist eine globale Variable
   aktuelle_seite, err = seite:new(optionen.seitenbreite,optionen.seitenhoehe, extra_rand, beschnittzugabe)
   if not aktuelle_seite then
-    fehler(err)
+    fehler("Konnte keine Seite anlegen. Ist ein entsprechender Seitentyp definiert?")
     exit()
   end
   aktuelles_raster = aktuelle_seite.raster
