@@ -10,6 +10,9 @@
 -- 
 
 -- datei_start("spinit.lua")
+
+require("i18n")
+
 if status.luatex_version < 61 then
   print("\nBenötigt LuaTeX Version ≥ 0.61")
   os.exit(-1)
@@ -30,15 +33,19 @@ starttime = os.gettimeofday()
 font.cache = 'no'
 
 function warning(...)
-  errorlog:write("Warning: " .. string.format(...) .. "\n")
-  texio.write_nl("Warning: " .. string.format(...))
+  local text = { ... }
+  text[1] = gettext(text[1])
+  errorlog:write("Warning: " .. string.format(unpack(text)) .. "\n")
+  texio.write_nl("Warning: " .. string.format(unpack(text)))
 end
 
 local fehlerzahl=0
 function err(...)
   fehlerzahl =  fehlerzahl + 1
-  errorlog:write("Error: " .. string.format(...) .. "\n")
-  texio.write_nl("Error: " .. string.format(...))
+  local text = { ... }
+  text[1] = gettext(text[1])
+  errorlog:write("Error: " .. string.format(unpack(text)) .. "\n")
+  texio.write_nl("Error: " .. string.format(unpack(text)))
 end
 
 function call(...)
@@ -51,7 +58,9 @@ function call(...)
 end
 
 function log(...)
-  local res = call(string.format,...)
+  local text = { ... }
+  text[1] = gettext(text[1])
+  local res = call(string.format,unpack(text))
   texio.write_nl(res)
   if io.type(errorlog) == "file" then
     errorlog:write(res .. "\n")
