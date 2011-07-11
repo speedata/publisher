@@ -1,0 +1,36 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/de">
+  <Optionen
+    trace="nein"
+    zeichne_raster="nein"
+    zeige_rasterbelegung="nein"
+  />
+
+  <LadeSchriftdatei name="Sans" dateiname="texgyreheros-regular.otf" />
+
+  <DefiniereSchriftfamilie name="text" schriftgröße="10" zeilenabstand="12">
+    <Normal schriftart="Sans"/>
+  </DefiniereSchriftfamilie>
+
+  <Seitenformat breite="210mm" höhe="297mm"/>
+  <SetzeRaster breite="5mm" höhe="5mm"/>
+
+  <Seitentyp name="Seite" bedingung="true()">
+    <Rand links="1cm" rechts="1cm" oben="1cm" unten="1cm"/>
+  </Seitentyp>
+
+
+  <Datensatz element="foo">
+    <BearbeiteKnoten auswahl="elt"/>
+  </Datensatz>
+  
+  <Datensatz element="elt">
+    <ObjektAusgeben>
+      <Textblock breite="10">
+        <Absatz>
+          <Wert auswahl="@greeting" />
+        </Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+  </Datensatz>
+
+</Layout>
