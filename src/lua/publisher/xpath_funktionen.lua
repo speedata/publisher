@@ -59,7 +59,7 @@ local function _string(dataxml, arg  )
   elseif arg == nil then
     ret = 'nil'
   else
-    warnung("Unbekannter Typ in XPath-Funktion 'string()': %s",type(arg))
+    warning("Unbekannter Typ in XPath-Funktion 'string()': %s",type(arg))
     ret = tostring(arg)
   end
   return ret

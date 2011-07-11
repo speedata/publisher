@@ -29,22 +29,22 @@ starttime = os.gettimeofday()
 
 font.cache = 'no'
 
-function warnung(...)
-  errorlog:write("Warnung: " .. string.format(...) .. "\n")
-  texio.write_nl("Warnung: " .. string.format(...))
+function warning(...)
+  errorlog:write("Warning: " .. string.format(...) .. "\n")
+  texio.write_nl("Warning: " .. string.format(...))
 end
 
 local fehlerzahl=0
-function fehler(...)
+function err(...)
   fehlerzahl =  fehlerzahl + 1
-  errorlog:write("Fehler: " .. string.format(...) .. "\n")
-  texio.write_nl("Fehler: " .. string.format(...))
+  errorlog:write("Error: " .. string.format(...) .. "\n")
+  texio.write_nl("Error: " .. string.format(...))
 end
 
 function call(...)
   local ret = { pcall(...) }
   if ret[1]==false then
-    fehler(tostring(ret[2])  .. debug.traceback())
+    err(tostring(ret[2])  .. debug.traceback())
     exit()
   end
   return unpack(ret,2)
@@ -102,7 +102,7 @@ function tex.sp( zahl_oder_string )
     local tmp = string.gsub(zahl_oder_string,"(%d)pt","%1bp"):gsub("(%d)pp","%1pt")
     local ret = { pcall(orig_texsp,tmp) }
     if ret[1]==false then
-      fehler("Konvertierung der Maßeinheit %q fehlgeschlagen",zahl_oder_string)
+      err("Konvertierung der Maßeinheit %q fehlgeschlagen",zahl_oder_string)
       return nil
     end
     return unpack(ret,2)

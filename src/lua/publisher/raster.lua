@@ -172,11 +172,11 @@ function belege_zellen(self,x,y,b,h,zeichne_markierung_p,bereichname)
   self:setze_aktuelle_zeile(y,bereichname)
   local rasterkonflikt = false
   if  x + b - 1 > self:anzahl_spalten(bereichname) then
-    warnung("Objekt ragt über den rechten Rand hinaus")
+    warning("Objekt ragt über den rechten Rand hinaus")
     rasterkonflikt = true
   end
   if y + h - 1 > self:anzahl_zeilen(bereichname) then
-    warnung("Objekt ragt über die untere Zeile hinaus")
+    warning("Objekt ragt über die untere Zeile hinaus")
     rasterkonflikt = true
   end
   local rahmen_rand_links, rahmen_rand_oben
@@ -200,7 +200,7 @@ function belege_zellen(self,x,y,b,h,zeichne_markierung_p,bereichname)
     end
   end
   if rasterkonflikt then
-    fehler("Rasterkonflikt")
+    err("Rasterkonflikt")
   end
   if zeichne_markierung_p then
     local px,py

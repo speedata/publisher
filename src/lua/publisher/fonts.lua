@@ -74,7 +74,7 @@ function erzeuge_fontinstanz( name,groesse )
   -- w("Erzeuge Instanz '%s' in %dbp",name,groesse)
   if not lookup_fontname_dateiname[name] then
     local msg = string.format("Instanz '%s' ist nicht definiert!", name)
-    fehler(msg)
+    err(msg)
     return false, msg
   end
   local dateiname,parameter = unpack(lookup_fontname_dateiname[name])

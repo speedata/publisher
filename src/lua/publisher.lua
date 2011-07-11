@@ -168,7 +168,7 @@ function dispatch(layoutxml,datenxml,optionen)
           ret[#ret + 1] =   { elementname = eltname, inhalt = tmp }
         end
       else
-        fehler("Unbekanntes Element in Layoutdatei gefunden: '%s'", eltname or "???")
+        err("Unbekanntes Element in Layoutdatei gefunden: '%s'", eltname or "???")
         printtable("j",j)
       end
     end
@@ -201,7 +201,7 @@ function dothings()
       tex.count[0] = num - 1
       log("Setze Seitennummer auf %d",num)
     else
-      fehler("Konnte Startseitenzahl %q nicht erkennen",optionen.startseite)
+      err("Konnte Startseitenzahl %q nicht erkennen",optionen.startseite)
     end
   end
 
@@ -237,14 +237,14 @@ end
 function lade_xml(dateiname,dateityp)
   local pfad = kpse.find_file(dateiname)
   if not pfad then
-    fehler("Konnte XML Datei %q nicht finden. Abbruch.\n",dateiname or "?")
+    err("Konnte XML Datei %q nicht finden. Abbruch.\n",dateiname or "?")
     os.exit(-1)
   end
   log("Lade %s %q",dateityp or "Datei",pfad)
 
   local layoutfile = io.open(pfad,"r")
   if not layoutfile then
-    fehler("Konnte XML Datei nicht öffnen. Abbruch.")
+    err("Konnte XML Datei nicht öffnen. Abbruch.")
     os.exit(-1)
   end
   local text = layoutfile:read("*all")
@@ -279,7 +279,7 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich )
   local r = aktuelles_raster
   local delta_x, delta_y = r:position_rasterzelle_mass_tex(x,y,bereich)
   if not delta_x then
-    fehler(delta_y)
+    err(delta_y)
     exit()
   end
   if aktuelle_gruppe then
@@ -357,7 +357,7 @@ function ermittle_seitentyp()
       return ret
     end
   end
-  fehler("Seitentyp konnte nicht ermittelt werden!")
+  err("Seitentyp konnte nicht ermittelt werden!")
   return false
 end
 
@@ -377,7 +377,7 @@ function seite_einrichten()
   -- aktuelle_seite ist eine globale Variable
   aktuelle_seite, err = seite:new(optionen.seitenbreite,optionen.seitenhoehe, extra_rand, beschnittzugabe)
   if not aktuelle_seite then
-    fehler("Konnte keine Seite anlegen. Ist ein entsprechender Seitentyp definiert?")
+    err("Konnte keine Seite anlegen. Ist ein entsprechender Seitentyp definiert?")
     exit()
   end
   aktuelles_raster = aktuelle_seite.raster
@@ -410,12 +410,12 @@ function seite_einrichten()
         aktueller_platzierungsbereich[#aktueller_platzierungsbereich + 1] = inhalt(k)
       end
     else
-      fehler("Elementname %q unbekannt (seite_einrichten())",elementname(j))
+      err("Elementname %q unbekannt (seite_einrichten())",elementname(j))
     end
   end
 
   if not rasterbreite then
-    fehler("Raster nicht gesetzt!")
+    err("Raster nicht gesetzt!")
     exit()
   end
   assert(rasterbreite)
@@ -465,7 +465,7 @@ end
 -- Zeichnet einen farbigen Hintergrund hinter ein rechteckickges Objekt (box)
 function hintergrund( box, farbname )
   if not farben[farbname] then
-    warnung("Hintergrund: Farbe %q nicht definiert",farbname)
+    warning("Hintergrund: Farbe %q nicht definiert",farbname)
     return box
   end
   local pdffarbstring = farben[farbname].pdfstring
@@ -578,7 +578,7 @@ function lese_attribut_jit( layoutxml,datenxml,attname,typ )
       elseif typ=="length" then
         return val
       else
-        warnung("lese_attribut: unbekannter typ: %s",type(val))
+        warning("lese_attribut: unbekannter typ: %s",type(val))
       end
       return val
     end
@@ -592,7 +592,7 @@ function lese_attribut_jit( layoutxml,datenxml,attname,typ )
       elseif typ=="length" then
         return val
       else
-        warnung("lese_attribut (2): unbekannter typ: %s",type(val))
+        warning("lese_attribut (2): unbekannter typ: %s",type(val))
       end
       return val
     end
@@ -715,7 +715,7 @@ function mknodes(str,fontfamilie,parameter)
       n.lang = sprachcode
     else
       if n.lang == 0 then
-        fehler("Sprachcode nicht gesetzt und lang==0")
+        err("Sprachcode nicht gesetzt und lang==0")
       end
     end
 
@@ -999,7 +999,7 @@ function bildinfo( dateiname,seite,box )
   end
 
   if not kpse.filelist[dateiname] then
-    fehler("Bild %q nicht gefunden!",dateiname or "???")
+    err("Bild %q nicht gefunden!",dateiname or "???")
     dateiname = "filenotfound.pdf"
     seite = 1
   end
@@ -1081,7 +1081,7 @@ end
 function farbbalken( wd,ht,dp,farbe )
   local farbname = farbe or "Schwarz"
   if not farben[farbname] then
-    fehler("Farbe %q nicht gefunden",farbe)
+    err("Farbe %q nicht gefunden",farbe)
     farbname = "Schwarz"
   end
   local rule_start = node.new("whatsit","pdf_colorstack")

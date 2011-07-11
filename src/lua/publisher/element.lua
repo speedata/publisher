@@ -24,7 +24,7 @@ function absatz( layoutxml,datenxml )
     local schriftartname = publisher.lese_attribut_jit(layoutxml,datenxml,"schriftart","string")
     schriftfamilie = publisher.fonts.lookup_schriftfamilie_name_nummer[schriftartname]
     if schriftfamilie == nil then
-      fehler("Schriftfamilie %q wurde nicht gefunden.",layoutxml.schriftart)
+      err("Schriftfamilie %q wurde nicht gefunden.",layoutxml.schriftart)
       schriftfamilie = 0
     end
   else
@@ -46,7 +46,7 @@ function absatz( layoutxml,datenxml )
   local farbindex
   if farbname then
     if not publisher.farben[farbname] then
-      fehler("Farbe %q ist nicht defniert.",farbname)
+      error("Farbe %q ist nicht defniert.",farbname)
     else
       farbindex = publisher.farben[farbname].index
     end
@@ -70,7 +70,7 @@ function absatz( layoutxml,datenxml )
   end
   if #objekte == 0 then
     -- irgendwie ist da nichts durchgekommen.
-    warnung("Keinen Inhalt in Absatz gefunden.")
+    warning("Keinen Inhalt in Absatz gefunden.")
     a:anhaengen("",{schriftfamilie = schriftfamilie,sprachcode = sprachcode})
   end
 
@@ -270,7 +270,7 @@ function definiere_farbe( layoutxml,datenxml )
     farbe.b = tonumber(layoutxml.b)
     farbe.pdfstring = string.format("%g %g %g rg %g %g %g RG", farbe.r/100, farbe.g/100, farbe.b/100, farbe.r/100,farbe.g/100, farbe.b/100)
   else
-    fehler("Unbekanntes Farbmodell: %s",modell or "?")
+    err("Unbekanntes Farbmodell: %s",modell or "?")
   end
   publisher.farbindex[#publisher.farbindex + 1] = name
   farbe.index = #publisher.farbindex
@@ -310,7 +310,7 @@ function definiere_schriftfamilie( layoutxml,datenxml )
   fam.scriptshift   = fam.size * 0.3
 
   if not fam.size then
-    fehler("DefiniereSchriftfamilie: keine Größe angegeben.")
+    err("DefiniereSchriftfamilie: keine Größe angegeben.")
     return
   end
   local ok,tmp
@@ -323,7 +323,7 @@ function definiere_schriftfamilie( layoutxml,datenxml )
         fam.normal = tmp
       else
         fam.normal = 1
-        fehler("Fontinstanz 'normal' konnte für %q nicht erzeugt werden.",tostring(v.schriftart))
+        err("Fontinstanz 'normal' konnte für %q nicht erzeugt werden.",tostring(v.schriftart))
       end
       ok,tmp=fonts.erzeuge_fontinstanz(v.schriftart,fam.scriptsize)
       if ok then
@@ -359,7 +359,7 @@ function definiere_schriftfamilie( layoutxml,datenxml )
     end
     if type(v) == "table" and not ok then
       local msg = string.format("Fehler beim Erzeugen der Fontinstanz '%s': %s", v[".__name"] or "??", tmp or "??")
-      fehler(msg)
+      err(msg)
     end
   end
   fonts.lookup_schriftfamilie_nummer_instanzen[#fonts.lookup_schriftfamilie_nummer_instanzen + 1] = fam
@@ -564,7 +564,7 @@ function linie( layoutxml,datenxml )
     elseif richtung == "vertikal" then
       laenge = publisher.aktuelles_raster.rasterhoehe * laenge
     else
-      fehler("Attribut »richtung« bei »Linie«: unbekannte Richtung: %q",richtung)
+      err("Attribut »richtung« bei »Linie«: unbekannte Richtung: %q",richtung)
     end
   else
     laenge = tex.sp(laenge)
@@ -629,7 +629,7 @@ function nachricht( layoutxml, datenxml )
         elseif type(contents) == "nil" then
           -- ignorieren
         else
-          fehler("unbekannter Typ: %q",type(contents))
+          err("unbekannter Typ: %q",type(contents))
           ret = nil
         end
       end
@@ -706,7 +706,7 @@ function objekt_ausgeben( layoutxml,datenxml )
 
   if absolute_positionierung then
     if not ( zeile and spalte ) then
-      fehler("Spalte und Zeile muss bei absoluter Positionierung angegeben werden (ObjektAusgeben).")
+      err("Spalte und Zeile muss bei absoluter Positionierung angegeben werden (ObjektAusgeben).")
       return
     end
   end
@@ -772,7 +772,7 @@ function objekt_ausgeben( layoutxml,datenxml )
       -- local aktuelle_zeile = raster:aktuelle_zeile(bereich)
       trace("ObjektAusgeben: Breitenberechnung")
       if not node.has_field(objekt,"width") then
-        warnung("Achtung, kann keine Breitenberechnung vornehmen!")
+        warning("Achtung, kann keine Breitenberechnung vornehmen!")
       end
       local breite_in_rasterzellen = raster:breite_in_rasterzellen_sp(objekt.width)
       local hoehe_in_rasterzellen  = raster:hoehe_in_rasterzellen_sp (objekt.height + objekt.depth)
@@ -795,7 +795,7 @@ function objekt_ausgeben( layoutxml,datenxml )
         end
         aktuelle_zeile = raster:finde_passende_zeile(aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen,bereich)
         if not aktuelle_zeile then
-          warnung("Keine passende Zeile für das Objekt gefunden")
+          warning("Keine passende Zeile für das Objekt gefunden")
           publisher.naechster_rahmen(bereich)
           publisher.seite_einrichten()
           raster = publisher.aktuelles_raster
@@ -879,7 +879,7 @@ function schriftart( layoutxml,datenxml )
   local schriftfamilie = publisher.lese_attribut_jit(layoutxml,datenxml,"schriftfamilie","string")
   local familiennummer = publisher.fonts.lookup_schriftfamilie_name_nummer[schriftfamilie]
   if not familiennummer then
-    fehler("Schriftart: Familie %q unbekannt",schriftfamilie)
+    err("Schriftart: Familie %q unbekannt",schriftfamilie)
   else
     local a = publisher.Absatz:new()
     local tab = publisher.dispatch(layoutxml,datenxml)
@@ -907,7 +907,7 @@ function seitentyp(layoutxml,datenxml)
     if eltname=="Rand" or eltname == "BeiSeitenAusgabe" or eltname == "BeiSeitenErzeugung" or eltname=="Raster" or eltname=="Platzierungsbereich" then
       tmp_tab [#tmp_tab + 1] = j
     else
-      fehler("Element %q in Seitentyp unbekannt",eltname)
+      err("Element %q in Seitentyp unbekannt",eltname)
       tmp_tab [#tmp_tab + 1] = j
     end
   end
@@ -1070,7 +1070,7 @@ function tabelle( layoutxml,datenxml,optionen )
   schriftfamilie = publisher.fonts.lookup_schriftfamilie_name_nummer[schriftartname]
 
   if schriftfamilie == nil then
-    fehler("Schriftfamilie %q wurde nicht gefunden.",schriftartname or "???")
+    err("Schriftfamilie %q wurde nicht gefunden.",schriftartname or "???")
     schriftfamilie = 1
   end
 
@@ -1195,20 +1195,20 @@ function textblock( layoutxml,datenxml )
   if not schriftartname then schriftartname = "text" end
   schriftfamilie = publisher.fonts.lookup_schriftfamilie_name_nummer[schriftartname]
   if schriftfamilie == nil then
-    fehler("Schriftfamilie %q wurde nicht gefunden.",schriftartname or "???")
+    err("Schriftfamilie %q wurde nicht gefunden.",schriftartname or "???")
     schriftfamilie = 1
   end
 
   local textformat = layoutxml.textformat or "text"
   if not textformat then
-    fehler("<Textblock> Textformat '%s' unbekannt!",tmp or "??")
+    err("<Textblock> Textformat '%s' unbekannt!",tmp or "??")
   end
 
   local farbindex
   if farbname then
     if not publisher.farben[farbname] then
       -- Farbe ist nicht definiert
-      fehler("Farbe %q ist nicht defniert.",farbname)
+      err("Farbe %q ist nicht defniert.",farbname)
     else
       farbindex = publisher.farben[farbname].index
     end
@@ -1249,7 +1249,7 @@ function textblock( layoutxml,datenxml )
       nodes[#nodes + 1] = j
     -- elseif not j.nodelist then
     --   -- ignorier
-    --   warnung("Achtung, keine Nodelist!, Typ(j)==%s",type(j))
+    --   warning("Achtung, keine Nodelist!, Typ(j)==%s",type(j))
     else
       nodelist = j.nodelist
       assert(nodelist)
@@ -1286,7 +1286,7 @@ function textblock( layoutxml,datenxml )
   end -- alle Objekte
   -- debug
   if #objekte == 0 then
-    warnung("Textblock: keine Objekte gefunden!")
+    warning("Textblock: keine Objekte gefunden!")
     local vrule = {  width = 10 * 2^16, height = -1073741824}
     nodes[1] = publisher.add_rule(nil,"head",vrule)
   end
@@ -1373,7 +1373,7 @@ function zuweisung( layoutxml,datenxml )
 
   trace("Zuweisung, Variable = %q",varname or "???")
   if not varname then
-    fehler("Variablenname in der Zuweisung konnte nicht ermittelt werden")
+    err("Variablenname in der Zuweisung konnte nicht ermittelt werden")
     return
   end
   local inhalt
@@ -1407,7 +1407,7 @@ function zuweisung( layoutxml,datenxml )
         elseif type(contents) == "nil" then
           -- ignorieren
         else
-          fehler("unbekannter Typ: %q",type(contents))
+          err("unbekannter Typ: %q",type(contents))
           ret = nil
         end
       elseif eltname == "Elementstruktur" then
