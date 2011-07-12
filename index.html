@@ -24,14 +24,34 @@
       <span class="small">by <a href="http://github.com/pgundlach">pgundlach</a></span></h1>
 
     <div class="description">
-      The speedata Publisher is a full featured database publishing software. It has a built-in layout description language which allows you to create arbitrary complex layouts.
+      <p>The speedata Publisher is a full featured professional database publishing software. It has a built-in layout description language which allows you to create arbitrary complex layouts.
+      It reads data in XML format and outputs PDF. Other data formats need to be converted to XML before hand.</p>
+      <img src="images/schema.png" width="400" alt="Schema">
     </div>
+
+    <h2>Features of the layout description language</h2>
+    <ul>
+        <li>100% automatic generation of high quality PDF files</li>
+        <li>Fully fledged programming language</li>
+        <li>Based on standards like XPath and HTML where possible</li>
+        <li>Place elements (texts, images, tables, rules, ...) on a grid or with absolute dimensions</li>
+        <li>Virtual typesetting. You can typeset anything on a virtual page and measure the dimensions of the result.</li>
+        <li>Output of print-ready or “online” PDF</li>
+        <li>Support for most languages built in</li>
+        <li>High quality typesetting due to a TeX-based line breaking algorithm including margin kerning and font expansion</li>
+        <li>Native support for OpenType fonts, XML, Unicode and other up to date technologies</li>
+        <li>Built-in multi-pass solution for automatic table of contents, index pages etc.</li>
+        <li>Typesetting of complex tables</li>
+        <li>Strict XML Schema file (RelaxNG) to prevent syntax errors in the input</li>
+        <li>High performance. Many documents take less then a second to generate</li>
+    </ul>
+
 
     <h2>Requirements</h2>
 	<p>The speedata Publisher needs a <a href="http://www.luatex.org">LuaTeX</a> binary with the Lua libxml2 bindings from <a href="http://asbradbury.org/projects/lua-xmlreader/">asbradbury.org</a>.
 	    You can at your choice create a single binary or load the Lua bindings at runtime.
 	    <a href="https://github.com/pgundlach/LuaTeX/tree/xmlreader">There is a github repository</a> with a patched version of LuaTeX.
-	    That is what I use. You can compile it if you have the libxml2 headers installed.</p>
+	    That is what we use. You can compile it if you have the libxml2 headers installed.</p>
 
    <h2>Install</h2>
    <p>The contents of this repository is mostly ready to run. Put the sdluatex binary (see section requirements) in the <code>bin/</code> directory and run "sprun" in your terminal window.</p>
@@ -43,7 +63,7 @@
    <p><a href="mailto:gundlach@speedata.de">Patrick Gundlach</a></p>
 
    <h2>Contact</h2>
-   <p><a href="mailto:gundlach@speedata.de">Patrick Gundlach (gundlach@speedata.de)</a></p>
+   <p><a href="mailto:gundlach@speedata.de">Patrick Gundlach (gundlach@speedata.de)</a>. We also offer commercial support, just contact us.</p>
 
 
     <h2>Download</h2>
@@ -58,7 +78,7 @@
 
 
     <div class="footer">
-      get the source code on GitHub : <a href="http://github.com/pgundlach/sdpublisher">pgundlach/sdpublisher</a>
+      get the source code on GitHub: <a href="http://github.com/pgundlach/sdpublisher">pgundlach/sdpublisher</a>
     </div>
 
 
