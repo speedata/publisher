@@ -23,7 +23,7 @@ License / Contributing
 
 The license is GPLv2 for now, see the file COPYING in the root directory. This is not set in stone, we might choose a more liberal license in the future.
 
-We welcome contributions. Just follow the github procedure (fork, pull requests). Please note, as we might choose a more liberal license in the future, we appreciate patches under a MIT like license.
+We welcome contributions. Just [follow the github procedure (fork, pull requests)](http://help.github.com/send-pull-requests/). Please note, as we might choose a more liberal license in the future, we appreciate patches under a MIT like license.
 
 Contact
 -------
@@ -38,5 +38,5 @@ We offer commercial support for the speedata Publisher. Contact us at [info@spee
 
 
 --------
-URL: <http://speedata.github.com/publisher/> 
+URL: <http://speedata.github.com/publisher/> <br />
 Source: <https://github.com/speedata/publisher/> 
