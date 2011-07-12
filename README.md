@@ -9,14 +9,14 @@ The speedata Publisher is a full featured database publishing software. It has a
 Status of this source code
 --------------------------
 
-The code is fully functional. See [the requirements section on the github page](http://pgundlach.github.com/sdpublisher/index.html) on how to get the software running.
+The code is fully functional. See [the requirements section on the github page](http://speedata.github.com/publisher/) on how to get the software running.
 
 Most of the source is currently in German, one of the first things we change is that we translate it into english.
 
 Bugs
 ----
 
-Please use the [github bug tracker](https://github.com/pgundlach/sdpublisher/issues) for reporting bugs.
+Please use the [github bug tracker](https://github.com/speedata/publisher/issues) for reporting bugs.
 
 License / Contributing
 ----------------------
@@ -38,5 +38,5 @@ We offer commercial support for the speedata Publisher. Contact us at [info@spee
 
 
 --------
-URL: <http://pgundlach.github.com/sdpublisher/index.html>
-Source: <https://github.com/pgundlach/sdpublisher/>  
+URL: <http://speedata.github.com/publisher/> 
+Source: <https://github.com/speedata/publisher/> 
