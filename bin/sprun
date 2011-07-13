@@ -110,7 +110,7 @@ elseif command=="run" then
   local run = 1
    repeat
     os.setenv("PUBLISHER_LAUF",run)
-    local cmdline = string.format("%s/bin/sdluatex --jobname=%q --ini --lua=%s  publisher.tex %s %q %q",installdir,optionen["jobname"],inifile,optionen["layoutname"],optionen["datenname"], table.concat(layoutoptionen,","))
+    local cmdline = string.format("%s/bin/sdluatex --interaction nonstopmode --jobname=%q --ini --lua=%s  publisher.tex %s %q %q",installdir,optionen["jobname"],inifile,optionen["layoutname"],optionen["datenname"], table.concat(layoutoptionen,","))
     -- print(cmdline)
     local ok,err = os.spawn(cmdline)
     if ok==nil then
