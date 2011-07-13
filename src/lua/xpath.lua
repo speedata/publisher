@@ -363,7 +363,7 @@ function textvalue( tab )
   end
   if type(tab)=="table" then
     if #tab ~= 1 then
-      err("Sequenz darf nur ein Item haben")
+      err("Sequenz must only contain one item")
     end
     tab = tab[1]
   end
@@ -518,7 +518,7 @@ function _funcall( ... )
     fun = publisher.orig_xpath_funktionen[name]
   end
   if fun==nil then
-    err("Unbekannte Funktion %q", name or "???")
+    err("Unknown function %q", name or "???")
     return nil
   end
   local ret = fun(dataxml, unpack({...},2))

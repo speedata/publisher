@@ -25,15 +25,10 @@ The license is GPLv2 for now, see the file COPYING in the root directory. This i
 
 We welcome contributions. Just [follow the github procedure (fork, pull requests)](http://help.github.com/send-pull-requests/). Please note, as we might choose a more liberal license in the future, we appreciate patches under a MIT like license.
 
-Contact
--------
+Contact / Support
+-----------------
 
-Follow us on twitter [English](https://twitter.com/#!/speedata/) or [German](https://twitter.com/#!/speedata_de/).
-
-Support
--------
-
-We offer commercial support for the speedata Publisher. Contact us at [info@speedata.de](mailto:info@speedata.de).
+We offer commercial support for the speedata Publisher. Contact us at [info@speedata.de](mailto:info@speedata.de). See the [project page](http://speedata.github.com/publisher/) for other means of contacting us.
 
 
 

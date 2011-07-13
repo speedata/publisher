@@ -3,24 +3,21 @@
 --  speedata publisher
 --
 --  Created by Patrick Gundlach on 2010-03-27.
---  Copyright 2010 Patrick Gundlach. All rights reserved.
---
+--  Copyright 2010 Patrick Gundlach.
 
--- == Hauptdatei ==
--- 
+--  See file COPYING in the root directory for license details.
 
 -- datei_start("spinit.lua")
 
 require("i18n")
 
 if status.luatex_version < 61 then
-  print("\nBenötigt LuaTeX Version ≥ 0.61")
+  texio.write_nl("Requires LuaTeX version ≥ 0.61. Abort\n")
   os.exit(-1)
 end
 
-
 if type(xmlreader) ~= "table" then
-  print("\nxmlwriter-Patch nicht gefunden. Abbruch.")
+  texio.write_nl("xmlwriter-patch not found. See http://speedata.github.com/publisher. Abort.\n")
   os.exit(-1)
 end
 
@@ -106,23 +103,23 @@ end
 
 -- pt -> bp, pp -> pt
 local orig_texsp = tex.sp
-function tex.sp( zahl_oder_string )
-  if type(zahl_oder_string) == "string" then
-    local tmp = string.gsub(zahl_oder_string,"(%d)pt","%1bp"):gsub("(%d)pp","%1pt")
+function tex.sp( number_or_string )
+  if type(number_or_string) == "string" then
+    local tmp = string.gsub(number_or_string,"(%d)pt","%1bp"):gsub("(%d)pp","%1pt")
     local ret = { pcall(orig_texsp,tmp) }
     if ret[1]==false then
-      err("Konvertierung der Maßeinheit %q fehlgeschlagen",zahl_oder_string)
+      err("Could not convert dimension %q",number_or_string)
       return nil
     end
     return unpack(ret,2)
   end
-  return orig_texsp(zahl_oder_string)
+  return orig_texsp(number_or_string)
 end
 
 local _assert = assert
 function assert( what,msg)
   if not what then
-    texio.write_nl("Es ist ein Fehler aufgetreten: " .. (msg or "") )
+    texio.write_nl("An error occurred: " .. (msg or "") )
     texio.write_nl(debug.traceback())
   end
   return what
@@ -157,10 +154,10 @@ tex.definefont("dummyfont",num)
 -- kann nach dem Aufruf von publisher.exit() stattfinden.
 function exit()
   log("Stop processing data")
-  log("%d Fehler aufgetreten",fehlerzahl)
-  log("Dauer: %3f Sekunden",os.gettimeofday() - starttime)
+  log("%d errors occurred",fehlerzahl)
+  log("Duration: %3f seconds",os.gettimeofday() - starttime)
   errorlog:write("---------------------------------------------\n")
-  errorlog:write(string.format("Dauer: %3f Sekunden\n",os.gettimeofday() - starttime))
+  errorlog:write(string.format("Duration: %3f seconds\n",os.gettimeofday() - starttime))
   errorlog:close()
   publisher.dostats()
 end
@@ -239,7 +236,7 @@ local function setup()
 end
 
 function main_loop()
-  log("Beginne mit der Verarbeitung")
+  log("Start processing")
   setup()
   call(publisher.dothings)
   exit()

@@ -24,7 +24,7 @@ function absatz( layoutxml,datenxml )
     local schriftartname = publisher.lese_attribut_jit(layoutxml,datenxml,"schriftart","string")
     schriftfamilie = publisher.fonts.lookup_schriftfamilie_name_nummer[schriftartname]
     if schriftfamilie == nil then
-      err("Schriftfamilie %q wurde nicht gefunden.",layoutxml.schriftart)
+      err("Fontfamily %q not found.",layoutxml.schriftart)
       schriftfamilie = 0
     end
   else
@@ -70,7 +70,7 @@ function absatz( layoutxml,datenxml )
   end
   if #objekte == 0 then
     -- irgendwie ist da nichts durchgekommen.
-    warning("Keinen Inhalt in Absatz gefunden.")
+    warning("No contents found in paragraph.")
     a:anhaengen("",{schriftfamilie = schriftfamilie,sprachcode = sprachcode})
   end
 
@@ -119,7 +119,7 @@ function bearbeite_datensatz( layoutxml,datenxml )
   for i=1,umfang do
     local eltname = datensatz[i]["inhalt"][".__name"]
     layoutknoten=publisher.datensatz_verteiler[""][eltname]
-    log("Bearbeite Knoten: %q",eltname or "???")
+    log("Selecting node: %q",eltname or "???")
     publisher.variablen.__position = i
     publisher.dispatch(layoutknoten,publisher.inhalt(datensatz[i]))
   end
@@ -134,7 +134,7 @@ function bearbeite_knoten(layoutxml,datenxml)
   if type(layoutknoten)=="table" then
     for i,j in ipairs(datenxml) do
       if j[".__name"]==layoutxml.auswahl then
-        log("Bearbeite Knoten: %q, Modus=%q, pos=%d",layoutxml.auswahl,modus, pos)
+        log("Selecting node: %q, mode=%q, pos=%d",layoutxml.auswahl,modus, pos)
         publisher.variablen.__position = pos
         publisher.dispatch(layoutknoten,j)
         pos = pos + 1
@@ -214,7 +214,7 @@ function bild( layoutxml,datenxml )
   bild.width  = bild.width  * skalierungsfaktor
   bild.height = bild.height * skalierungsfaktor
 
-  log("Lade Bild %q mit Skalierung %g",dateiname,skalierungsfaktor)
+  log("Load image %q with scaling %g",dateiname,skalierungsfaktor)
   local hbox = node.hpack(img.node(bild))
   node.set_attribute(hbox, publisher.att_shift_left, shift_left)
   node.set_attribute(hbox, publisher.att_shift_up  , shift_up  )
@@ -255,7 +255,7 @@ end
 -- Definiert eine Farbe
 function definiere_farbe( layoutxml,datenxml )
   local name   = layoutxml.name
-  log("Definiere Farbe %q",name)
+  log("Defining color %q",name)
   local modell = layoutxml.modell
   local farbe = { modell = modell }
   if modell=="cmyk" then
@@ -270,7 +270,7 @@ function definiere_farbe( layoutxml,datenxml )
     farbe.b = tonumber(layoutxml.b)
     farbe.pdfstring = string.format("%g %g %g rg %g %g %g RG", farbe.r/100, farbe.g/100, farbe.b/100, farbe.r/100,farbe.g/100, farbe.b/100)
   else
-    err("Unbekanntes Farbmodell: %s",modell or "?")
+    err("Unknown color model: %s",modell or "?")
   end
   publisher.farbindex[#publisher.farbindex + 1] = name
   farbe.index = #publisher.farbindex
@@ -310,7 +310,7 @@ function definiere_schriftfamilie( layoutxml,datenxml )
   fam.scriptshift   = fam.size * 0.3
 
   if not fam.size then
-    err("DefiniereSchriftfamilie: keine Größe angegeben.")
+    err("»DefiniereSchriftfamilie«: no size given.")
     return
   end
   local ok,tmp
@@ -323,7 +323,7 @@ function definiere_schriftfamilie( layoutxml,datenxml )
         fam.normal = tmp
       else
         fam.normal = 1
-        err("Fontinstanz 'normal' konnte für %q nicht erzeugt werden.",tostring(v.schriftart))
+        err("Fontinstance 'normal' could not be created for %q.",tostring(v.schriftart))
       end
       ok,tmp=fonts.erzeuge_fontinstanz(v.schriftart,fam.scriptsize)
       if ok then
@@ -358,13 +358,12 @@ function definiere_schriftfamilie( layoutxml,datenxml )
       end
     end
     if type(v) == "table" and not ok then
-      local msg = string.format("Fehler beim Erzeugen der Fontinstanz '%s': %s", v[".__name"] or "??", tmp or "??")
-      err(msg)
+      err("Error creating font instance %q: %s", v[".__name"] or "??", tmp or "??")
     end
   end
   fonts.lookup_schriftfamilie_nummer_instanzen[#fonts.lookup_schriftfamilie_nummer_instanzen + 1] = fam
   fonts.lookup_schriftfamilie_name_nummer[layoutxml.name]=#fonts.lookup_schriftfamilie_nummer_instanzen
-  log("DefiniereSchriftfamilie, Familie=%d, Name=%q",#fonts.lookup_schriftfamilie_nummer_instanzen,layoutxml.name)
+  log("»DefiniereSchriftfamilie«, family=%d, name=%q",#fonts.lookup_schriftfamilie_nummer_instanzen,layoutxml.name)
 end
 
 -- Erzeugt ein Element für die XML-Struktur
@@ -439,7 +438,7 @@ function gruppe( layoutxml,datenxml )
   local gruppenname = layoutxml.name
 
   if publisher.gruppen[gruppenname] == nil then
-    log("Lege Gruppe %s an.",gruppenname)
+    log("Create »Gruppe« %s an.",gruppenname)
   else
     node.flush_list(publisher.gruppen[gruppenname].inhalt)
     publisher.gruppen[gruppenname] = nil
@@ -536,7 +535,7 @@ function lade_datensatzdatei( layoutxml,datenxml )
   local tmp_daten = publisher.lade_xml(dateiname)
   local root_name = tmp_daten[".__name"]
 
-  log("Bearbeite Knoten: %q, modus=%q",root_name,"")
+  log("»Bearbeite Knoten«: %q, modus=%q",root_name,"")
   publisher.dispatch(publisher.datensatz_verteiler[""][root_name],tmp_daten)
 end
 
@@ -564,7 +563,7 @@ function linie( layoutxml,datenxml )
     elseif richtung == "vertikal" then
       laenge = publisher.aktuelles_raster.rasterhoehe * laenge
     else
-      err("Attribut »richtung« bei »Linie«: unbekannte Richtung: %q",richtung)
+      err("Attribute »richtung« with »Linie«: unknown direction: %q",richtung)
     end
   else
     laenge = tex.sp(laenge)
@@ -629,7 +628,7 @@ function nachricht( layoutxml, datenxml )
         elseif type(contents) == "nil" then
           -- ignorieren
         else
-          err("unbekannter Typ: %q",type(contents))
+          err("Unknown type: %q",type(contents))
           ret = nil
         end
       end
@@ -638,7 +637,7 @@ function nachricht( layoutxml, datenxml )
       inhalt = ret
     end
   end
-  log("Nachricht: %q", tostring(inhalt) or "?")
+  log("Message: %q", tostring(inhalt) or "?")
 end
 
 function naechster_rahmen( layoutxml,datenxml )
@@ -706,7 +705,7 @@ function objekt_ausgeben( layoutxml,datenxml )
 
   if absolute_positionierung then
     if not ( zeile and spalte ) then
-      err("Spalte und Zeile muss bei absoluter Positionierung angegeben werden (ObjektAusgeben).")
+      err("»Spalte« and »Zeile« must be given with absolute positioning (»ObjektAusgeben«).")
       return
     end
   end
@@ -772,7 +771,7 @@ function objekt_ausgeben( layoutxml,datenxml )
       -- local aktuelle_zeile = raster:aktuelle_zeile(bereich)
       trace("ObjektAusgeben: Breitenberechnung")
       if not node.has_field(objekt,"width") then
-        warning("Achtung, kann keine Breitenberechnung vornehmen!")
+        warning("Can't calculate with object's width!")
       end
       local breite_in_rasterzellen = raster:breite_in_rasterzellen_sp(objekt.width)
       local hoehe_in_rasterzellen  = raster:hoehe_in_rasterzellen_sp (objekt.height + objekt.depth)
@@ -795,15 +794,15 @@ function objekt_ausgeben( layoutxml,datenxml )
         end
         aktuelle_zeile = raster:finde_passende_zeile(aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen,bereich)
         if not aktuelle_zeile then
-          warning("Keine passende Zeile für das Objekt gefunden")
+          warning("No suitable row found for object")
           publisher.naechster_rahmen(bereich)
           publisher.seite_einrichten()
           raster = publisher.aktuelles_raster
         end
       end
 
-      log("ObjektAusgeben: %s in Zeile %d und Spalte %d, Breite=%d, Höhe=%d", objekttyp, aktuelle_zeile, aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen)
-      trace("ObjektAusgeben: objekt ausgeben bei (%d,%d)",aktuelle_spalte_start,aktuelle_zeile)
+      log("»ObjektAusgeben«: %s in row %d and column %d, width=%d, height=%d", objekttyp, aktuelle_zeile, aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen)
+      trace("»ObjektAusgeben«: objekt placed at (%d,%d)",aktuelle_spalte_start,aktuelle_zeile)
       publisher.ausgabe_bei(objekt,aktuelle_spalte_start,aktuelle_zeile,belegen ~= "nein",bereich)
       trace("Objekt ausgegeben.")
       zeile = nil -- die Zeile ist nicht mehr gültig, da schon ein Objekt ausgegeben wurde
@@ -879,7 +878,7 @@ function schriftart( layoutxml,datenxml )
   local schriftfamilie = publisher.lese_attribut_jit(layoutxml,datenxml,"schriftfamilie","string")
   local familiennummer = publisher.fonts.lookup_schriftfamilie_name_nummer[schriftfamilie]
   if not familiennummer then
-    err("Schriftart: Familie %q unbekannt",schriftfamilie)
+    err("font: family %q unknown",schriftfamilie)
   else
     local a = publisher.Absatz:new()
     local tab = publisher.dispatch(layoutxml,datenxml)
@@ -907,7 +906,7 @@ function seitentyp(layoutxml,datenxml)
     if eltname=="Rand" or eltname == "BeiSeitenAusgabe" or eltname == "BeiSeitenErzeugung" or eltname=="Raster" or eltname=="Platzierungsbereich" then
       tmp_tab [#tmp_tab + 1] = j
     else
-      err("Element %q in Seitentyp unbekannt",eltname)
+      err("Element %q in »Seitentyp« unknown",eltname)
       tmp_tab [#tmp_tab + 1] = j
     end
   end
@@ -1070,7 +1069,7 @@ function tabelle( layoutxml,datenxml,optionen )
   schriftfamilie = publisher.fonts.lookup_schriftfamilie_name_nummer[schriftartname]
 
   if schriftfamilie == nil then
-    err("Schriftfamilie %q wurde nicht gefunden.",schriftartname or "???")
+    err("Fontfamily %q not found.",schriftartname or "???")
     schriftfamilie = 1
   end
 
@@ -1195,20 +1194,20 @@ function textblock( layoutxml,datenxml )
   if not schriftartname then schriftartname = "text" end
   schriftfamilie = publisher.fonts.lookup_schriftfamilie_name_nummer[schriftartname]
   if schriftfamilie == nil then
-    err("Schriftfamilie %q wurde nicht gefunden.",schriftartname or "???")
+    err("Fontfamily %q not found.",schriftartname or "???")
     schriftfamilie = 1
   end
 
   local textformat = layoutxml.textformat or "text"
   if not textformat then
-    err("<Textblock> Textformat '%s' unbekannt!",tmp or "??")
+    err("»Textblock« textformat %q unknown!",tmp or "??")
   end
 
   local farbindex
   if farbname then
     if not publisher.farben[farbname] then
       -- Farbe ist nicht definiert
-      err("Farbe %q ist nicht defniert.",farbname)
+      err("Color %q is not defined.",farbname)
     else
       farbindex = publisher.farben[farbname].index
     end
@@ -1247,9 +1246,6 @@ function textblock( layoutxml,datenxml )
     -- jeden <Absatz>, <Bild> oder so durchgehen, jetzt nur <Absatz>
     if j.id == 8 then -- whatsit
       nodes[#nodes + 1] = j
-    -- elseif not j.nodelist then
-    --   -- ignorier
-    --   warning("Achtung, keine Nodelist!, Typ(j)==%s",type(j))
     else
       nodelist = j.nodelist
       assert(nodelist)
@@ -1286,7 +1282,7 @@ function textblock( layoutxml,datenxml )
   end -- alle Objekte
   -- debug
   if #objekte == 0 then
-    warning("Textblock: keine Objekte gefunden!")
+    warning("Textblock: no objects found!")
     local vrule = {  width = 10 * 2^16, height = -1073741824}
     nodes[1] = publisher.add_rule(nil,"head",vrule)
   end
@@ -1373,7 +1369,7 @@ function zuweisung( layoutxml,datenxml )
 
   trace("Zuweisung, Variable = %q",varname or "???")
   if not varname then
-    err("Variablenname in der Zuweisung konnte nicht ermittelt werden")
+    err("Variable name in »Zuweisung« not recognized")
     return
   end
   local inhalt
@@ -1407,7 +1403,7 @@ function zuweisung( layoutxml,datenxml )
         elseif type(contents) == "nil" then
           -- ignorieren
         else
-          err("unbekannter Typ: %q",type(contents))
+          err("Unknown type: %q",type(contents))
           ret = nil
         end
       elseif eltname == "Elementstruktur" then
@@ -1425,7 +1421,7 @@ function zuweisung( layoutxml,datenxml )
     end
   end
   if layoutxml.trace=="ja" then
-    log("Zuweisung, Variable = %q, wert = %q",varname or "???", tostring(inhalt))
+    log("»Zuweisung«, variable name = %q, value = %q",varname or "???", tostring(inhalt))
     printtable("Zuweisung",inhalt)
   end
 

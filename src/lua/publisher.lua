@@ -168,7 +168,7 @@ function dispatch(layoutxml,datenxml,optionen)
           ret[#ret + 1] =   { elementname = eltname, inhalt = tmp }
         end
       else
-        err("Unbekanntes Element in Layoutdatei gefunden: '%s'", eltname or "???")
+        err("Unknown element found in layoutfile: %q", eltname or "???")
         printtable("j",j)
       end
     end
@@ -199,9 +199,9 @@ function dothings()
     local num = tonumber(optionen.startseite)
     if num then
       tex.count[0] = num - 1
-      log("Setze Seitennummer auf %d",num)
+      log("Set pagenumber to %d",num)
     else
-      err("Konnte Startseitenzahl %q nicht erkennen",optionen.startseite)
+      err("Can't recognize starting pagenumber %q",optionen.startseite)
     end
   end
 
@@ -234,17 +234,17 @@ function dothings()
 
 end
 
-function lade_xml(dateiname,dateityp)
-  local pfad = kpse.find_file(dateiname)
+function lade_xml(filename,dateityp)
+  local pfad = kpse.find_file(filename)
   if not pfad then
-    err("Konnte XML Datei %q nicht finden. Abbruch.\n",dateiname or "?")
+    err("Can't find XML file %q. Abort.\n",filename or "?")
     os.exit(-1)
   end
-  log("Lade %s %q",dateityp or "Datei",pfad)
+  log("Loading %s %q",dateityp or "file",pfad)
 
   local layoutfile = io.open(pfad,"r")
   if not layoutfile then
-    err("Konnte XML Datei nicht öffnen. Abbruch.")
+    err("Can't open XML file. Abort.")
     os.exit(-1)
   end
   local text = layoutfile:read("*all")
@@ -352,12 +352,12 @@ function ermittle_seitentyp()
   for i=#seitentypen,1,-1 do
     local seitentyp = seitentypen[i]
     if xpath.parse(nil,seitentyp.ist_seitentyp) == true then
-      log("Seite vom Typ %q wird erzeugt",seitentyp.name or "")
+      log("Page of type %q created",seitentyp.name or "")
       ret = seitentyp.res
       return ret
     end
   end
-  err("Seitentyp konnte nicht ermittelt werden!")
+  err("Can't find correct page type!")
   return false
 end
 
@@ -377,7 +377,7 @@ function seite_einrichten()
   -- aktuelle_seite ist eine globale Variable
   aktuelle_seite, err = seite:new(optionen.seitenbreite,optionen.seitenhoehe, extra_rand, beschnittzugabe)
   if not aktuelle_seite then
-    err("Konnte keine Seite anlegen. Ist ein entsprechender Seitentyp definiert?")
+    err("Can't create a new page. Is the page type (»Seitentyp«) defined?")
     exit()
   end
   aktuelles_raster = aktuelle_seite.raster
@@ -410,12 +410,12 @@ function seite_einrichten()
         aktueller_platzierungsbereich[#aktueller_platzierungsbereich + 1] = inhalt(k)
       end
     else
-      err("Elementname %q unbekannt (seite_einrichten())",elementname(j))
+      err("Element name %q unknown (seite_einrichten())",elementname(j))
     end
   end
 
   if not rasterbreite then
-    err("Raster nicht gesetzt!")
+    err("Grid is not set!")
     exit()
   end
   assert(rasterbreite)
@@ -465,7 +465,7 @@ end
 -- Zeichnet einen farbigen Hintergrund hinter ein rechteckickges Objekt (box)
 function hintergrund( box, farbname )
   if not farben[farbname] then
-    warning("Hintergrund: Farbe %q nicht definiert",farbname)
+    warning("Background: Color %q is not defined",farbname)
     return box
   end
   local pdffarbstring = farben[farbname].pdfstring
@@ -578,7 +578,7 @@ function lese_attribut_jit( layoutxml,datenxml,attname,typ )
       elseif typ=="length" then
         return val
       else
-        warning("lese_attribut: unbekannter typ: %s",type(val))
+        warning("lese_attribut: unknown type: %s",type(val))
       end
       return val
     end
@@ -592,7 +592,7 @@ function lese_attribut_jit( layoutxml,datenxml,attname,typ )
       elseif typ=="length" then
         return val
       else
-        warning("lese_attribut (2): unbekannter typ: %s",type(val))
+        warning("lese_attribut (2): unknown type: %s",type(val))
       end
       return val
     end
@@ -715,7 +715,7 @@ function mknodes(str,fontfamilie,parameter)
       n.lang = sprachcode
     else
       if n.lang == 0 then
-        err("Sprachcode nicht gesetzt und lang==0")
+        err("Language code is not set and lang==0")
       end
     end
 
@@ -984,28 +984,28 @@ function boxit( box )
 end
 
 local images = {}
-function neues_bild( dateiname,seite,box)
-  return img.copy(bildinfo(dateiname,seite,box))
+function neues_bild( filename,seite,box)
+  return img.copy(bildinfo(filename,seite,box))
 end
 
 -- Box ist none, media, crop, bleed, trim, art
-function bildinfo( dateiname,seite,box )
-  seite = seite or 1
+function bildinfo( filename,page,box )
+  page = page or 1
   box = box or "crop"
-  local neuer_name = dateiname .. tostring(seite) .. tostring(box)
+  local neuer_name = filename .. tostring(page) .. tostring(box)
 
   if images[neuer_name] then
     return images[neuer_name]
   end
 
-  if not kpse.filelist[dateiname] then
-    err("Bild %q nicht gefunden!",dateiname or "???")
-    dateiname = "filenotfound.pdf"
-    seite = 1
+  if not kpse.filelist[filename] then
+    err("Image %q not found!",filename or "???")
+    filename = "filenotfound.pdf"
+    page = 1
   end
 
   if not images[neuer_name] then
-    images[neuer_name] = img.scan{filename = dateiname, pagebox = box, page=seite }
+    images[neuer_name] = img.scan{filename = filename, pagebox = box, page=page }
   end
   return images[neuer_name]
 end
@@ -1081,7 +1081,7 @@ end
 function farbbalken( wd,ht,dp,farbe )
   local farbname = farbe or "Schwarz"
   if not farben[farbname] then
-    err("Farbe %q nicht gefunden",farbe)
+    err("Color %q not found",farbe)
     farbname = "Schwarz"
   end
   local rule_start = node.new("whatsit","pdf_colorstack")
@@ -1161,7 +1161,7 @@ function hole_sprachcode( sprache_intern )
     return publisher.sprachen[sprache_intern]
   end
   local filename = string.format("hyph-%s.pat.txt",sprache_intern)
-  log("Lade Trennmuster %q.",filename)
+  log("Loading hyphenation patterns %q.",filename)
   local pfad = kpse.find_file(filename)
   local trennmuster_datei = io.open(pfad)
   local muster = trennmuster_datei:read("*all")
@@ -1169,7 +1169,7 @@ function hole_sprachcode( sprache_intern )
   local l = lang.new()
   l:patterns(muster)
   local id = l:id()
-  log("Sprach_id: %d",id)
+  log("Language id: %d",id)
   trennmuster_datei:close()
   publisher.sprachen[sprache_intern] = id
   return id

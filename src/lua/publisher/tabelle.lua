@@ -72,7 +72,7 @@ function berechne_spaltenbreite_fuer_zeile(self, tr_inhalt,aktuelle_zeile,colspa
         -- FIXME: Bild sollte auch ein "Objekt" sein
         objekte[#objekte + 1] = publisher.inhalt(j)[1]
       else
-        warning("Objekt nicht erkannt: %s",publisher.elementname(j) or "???")
+        warning("Object not recognized: %s",publisher.elementname(j) or "???")
       end
     end
     td_inhalt.objekte = objekte
@@ -110,7 +110,7 @@ function berechne_spaltenbreite_fuer_zeile(self, tr_inhalt,aktuelle_zeile,colspa
           max_wd = objekt.width + padding_left  + padding_right + td_randlinks + td_randrechts
           trace("Tabelle: Breite (Bild) = %gpt",min_wd / 2^16)
         else
-          warning("Achtung, konnte min_wd und max_wd nicht erkennen")
+          warning("Could not determine min_wd and max_wd")
           assert(false)
         end
       end
@@ -431,7 +431,7 @@ function berechne_zeilenhoehe( self,tr_inhalt, aktuelle_zeile )
           -- FIXME: Bild sollte auch ein "Objekt" sein
           objekte[#objekte + 1] = publisher.inhalt(j)[1]
         else
-          warning("Objekt nicht erkannt: %s",publisher.elementname(j) or "???")
+          warning("Object not recognized: %s",publisher.elementname(j) or "???")
         end
       end
       -- trace("Tabelle: Objekte für die Tabellenzelle eingelesen (berechne_zeilenhoehen)")
@@ -450,7 +450,7 @@ function berechne_zeilenhoehe( self,tr_inhalt, aktuelle_zeile )
           parameter = nil
           if objekt.textformat then
             if not publisher.textformate[objekt.textformat] then
-              err("Textformat %q nicht definiert!",objekt.textformat)
+              err("Textformat %q not defined!",objekt.textformat)
             else
               if publisher.textformate[objekt.textformat]["ausrichtung"] == "linksbündig" then
                 parameter = { rightskip = publisher.rightskip }
@@ -565,7 +565,7 @@ function berechne_zeilenhoehen(self)
       self.zeilenhoehen[aktuelle_zeile] = zeilenhoehe
       rowspans = table.__concat(rowspans,_rowspans)
     else
-      warning("Unbekannter Inhalt in <Tabelle>")
+      warning("Unknown contents in »Tabelle«")
     end -- wenn es nicht eine <Tlinie> ist
   end -- für alle Zeilen
 
@@ -676,7 +676,7 @@ function setze_zeile(self, tr_inhalt, aktuelle_zeile )
     for _,objekt in ipairs(td_inhalt.objekte) do
       if type(objekt) == "table" then
         if not (objekt and objekt.nodelist) then
-          warning("Achtung, keine Nodeliste gefunden!")
+          warning("No nodelist found!")
         end
         v = node.copy_list(objekt.nodelist)
       elseif type(objekt) == "userdata" then
@@ -688,7 +688,7 @@ function setze_zeile(self, tr_inhalt, aktuelle_zeile )
         local parameter = nil
         if objekt.textformat then
           if not publisher.textformate[objekt.textformat] then
-            err("Textformat %q nicht definiert!",objekt.textformat)
+            err("Textformat %q not defined!",objekt.textformat)
           else
             if publisher.textformate[objekt.textformat]["ausrichtung"] == "linksbündig" then
               parameter = { rightskip = publisher.rightskip }
@@ -844,7 +844,7 @@ function setze_zeile(self, tr_inhalt, aktuelle_zeile )
     end
     zeile = node.hpack(zelle_start)
   else
-    err("(Interner Fehler) Tabelle ist nicht vollständig.")
+    err("(Internal error) Table is not complete.")
   end
   return zeile
 end
@@ -900,7 +900,7 @@ function setze_tabelle(self)
       aktuelle_zeile = aktuelle_zeile + 1
       zeilen[#zeilen + 1] = self:setze_zeile(tr_inhalt,aktuelle_zeile)
     else
-      warning("Unbekannter Inhalt in <Tabelle>")
+      warning("Unknown contents in »Tabelle«")
     end -- wenn es eine Tabellenzelle ist
   end
 
@@ -984,7 +984,7 @@ function setze_tabelle(self)
 
   -- Jetzt sind alle Zeilen zu einer Nodelist verbunden
   if not zeilen[1] then
-    err("Keine Zeile in der Tabelle gefunden")
+    err("No row found in table")
     zeilen[1] = publisher.erzeuge_leere_hbox_mit_breite(100)
   end
 
