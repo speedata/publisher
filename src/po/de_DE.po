@@ -1,0 +1,307 @@
+# German translations for PACKAGE package
+# German messages for PACKAGE.
+# Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Patrick Gundlach <patrick@vienna.local>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.5.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-07-13 16:26+0200\n"
+"PO-Revision-Date: 2011-07-11 20:05+0200\n"
+"Last-Translator: Patrick Gundlach <gundlach@speedata.de>\n"
+"Language-Team: German\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: lua/publisher/spinit.lua:157
+#, c-format
+msgid "%d errors occurred"
+msgstr ""
+
+#: lua/publisher/tabelle.lua:847
+msgid "(Internal error) Table is not complete."
+msgstr ""
+
+#: lua/publisher/element.lua:566
+msgid "Attribute »richtung« with »Linie«: unknown direction: %q"
+msgstr ""
+
+#: lua/publisher.lua:468
+msgid "Background: Color %q is not defined"
+msgstr "Hintergrundfarbe %q ist nicht definiert"
+
+#: lua/publisher/element.lua:774
+msgid "Can't calculate with object's width!"
+msgstr ""
+
+#: lua/publisher.lua:380
+msgid "Can't create a new page. Is the page type (»Seitentyp«) defined?"
+msgstr ""
+
+#: lua/publisher.lua:240
+msgid "Can't find XML file %q. Abort.\n"
+msgstr ""
+
+#: lua/publisher.lua:360
+msgid "Can't find correct page type!"
+msgstr ""
+
+#: lua/publisher.lua:247
+msgid "Can't open XML file. Abort."
+msgstr ""
+
+#: lua/publisher.lua:204
+msgid "Can't recognize starting pagenumber %q"
+msgstr ""
+
+#: lua/publisher/element.lua:1210
+msgid "Color %q is not defined."
+msgstr ""
+
+#: lua/publisher.lua:1084
+msgid "Color %q not found"
+msgstr ""
+
+#: lua/publisher/raster.lua:203
+msgid "Conflict in grid"
+msgstr ""
+
+#: lua/publisher/spinit.lua:111
+msgid "Could not convert dimension %q"
+msgstr ""
+
+#: lua/publisher/tabelle.lua:113
+msgid "Could not determine min_wd and max_wd"
+msgstr ""
+
+#: lua/publisher/element.lua:441
+#, c-format
+msgid "Create »Gruppe« %s an."
+msgstr ""
+
+#: lua/publisher/element.lua:258
+msgid "Defining color %q"
+msgstr ""
+
+#: lua/publisher/spinit.lua:158
+#, c-format
+msgid "Duration: %3f seconds"
+msgstr ""
+
+#: lua/publisher/element.lua:909
+msgid "Element %q in »Seitentyp« unknown"
+msgstr ""
+
+#: lua/publisher.lua:413
+msgid "Element name %q unknown (seite_einrichten())"
+msgstr ""
+
+#: lua/publisher/element.lua:361
+msgid "Error creating font instance %q: %s"
+msgstr ""
+
+#: lua/publisher/element.lua:27 lua/publisher/element.lua:1072
+#: lua/publisher/element.lua:1197
+msgid "Fontfamily %q not found."
+msgstr ""
+
+#: lua/publisher/element.lua:326
+msgid "Fontinstance 'normal' could not be created for %q."
+msgstr ""
+
+#: lua/publisher.lua:418
+msgid "Grid is not set!"
+msgstr ""
+
+#: lua/publisher.lua:1002
+msgid "Image %q not found!"
+msgstr ""
+
+#: lua/sdini.lua:25
+msgid "Lade Datei: %q ..."
+msgstr ""
+
+#: lua/sdini.lua:30
+msgid "Lade Datei: %q ... fertig"
+msgstr ""
+
+#: lua/publisher.lua:718
+msgid "Language code is not set and lang==0"
+msgstr ""
+
+#: lua/publisher.lua:1172
+#, c-format
+msgid "Language id: %d"
+msgstr ""
+
+#: lua/publisher/element.lua:217
+msgid "Load image %q with scaling %g"
+msgstr "Lade Bild %q mit Skalierung %g"
+
+#: lua/publisher.lua:243
+msgid "Loading %s %q"
+msgstr ""
+
+#: lua/publisher.lua:1164
+msgid "Loading hyphenation patterns %q."
+msgstr "Lade Trennmuster %q."
+
+#: lua/publisher/element.lua:640
+msgid "Message: %q"
+msgstr "Nachricht: %q"
+
+#: lua/publisher/element.lua:73
+msgid "No contents found in paragraph."
+msgstr "Keinen Inhalt in Absatz gefunden."
+
+#: lua/publisher/tabelle.lua:679
+msgid "No nodelist found!"
+msgstr "Keine Nodeliste gefunden!"
+
+#: lua/publisher/tabelle.lua:987
+msgid "No row found in table"
+msgstr ""
+
+#: lua/publisher/element.lua:797
+msgid "No suitable row found for object"
+msgstr ""
+
+#: lua/publisher/raster.lua:368
+#, c-format
+msgid "Number of rows: %d, number of columns = %d"
+msgstr ""
+
+#: lua/publisher/tabelle.lua:75 lua/publisher/tabelle.lua:434
+#, c-format
+msgid "Object not recognized: %s"
+msgstr ""
+
+#: lua/publisher/raster.lua:179
+msgid "Object protrudes below the last lineor the page"
+msgstr ""
+
+#: lua/publisher/raster.lua:175
+msgid "Object protrueds into the right margin"
+msgstr ""
+
+#: lua/publisher.lua:355
+msgid "Page of type %q created"
+msgstr "Seite vom Typ %q wird erzeugt"
+
+#: lua/publisher/element.lua:122
+msgid "Selecting node: %q"
+msgstr ""
+
+#: lua/publisher/element.lua:137
+msgid "Selecting node: %q, mode=%q, pos=%d"
+msgstr ""
+
+#: lua/xpath.lua:366
+msgid "Sequenz must only contain one item"
+msgstr ""
+
+#: lua/publisher.lua:202
+#, c-format
+msgid "Set pagenumber to %d"
+msgstr ""
+
+#: lua/publisher/spinit.lua:239
+msgid "Start processing"
+msgstr ""
+
+#: lua/publisher/spinit.lua:156
+msgid "Stop processing data"
+msgstr ""
+
+#: lua/publisher/element.lua:1285
+msgid "Textblock: no objects found!"
+msgstr ""
+
+#: lua/publisher/tabelle.lua:453 lua/publisher/tabelle.lua:691
+msgid "Textformat %q not defined!"
+msgstr ""
+
+#: lua/publisher/raster.lua:375
+#, c-format
+msgid "Trimbox = %g %g %g %g, bleedbox =  %g %g %g %g"
+msgstr ""
+
+#: lua/publisher/xpath_funktionen.lua:62
+#, c-format
+msgid "Unbekannter Typ in XPath-Funktion 'string()': %s"
+msgstr ""
+
+#: lua/publisher/element.lua:273
+#, c-format
+msgid "Unknown color model: %s"
+msgstr ""
+
+#: lua/publisher/tabelle.lua:568 lua/publisher/tabelle.lua:903
+msgid "Unknown contents in »Tabelle«"
+msgstr ""
+
+#: lua/publisher.lua:171
+msgid "Unknown element found in layoutfile: %q"
+msgstr ""
+
+#: lua/xpath.lua:521
+msgid "Unknown function %q"
+msgstr ""
+
+#: lua/publisher/element.lua:631 lua/publisher/element.lua:1406
+msgid "Unknown type: %q"
+msgstr ""
+
+#: lua/publisher/element.lua:1372
+msgid "Variable name in »Zuweisung« not recognized"
+msgstr ""
+
+#: lua/publisher/element.lua:881
+msgid "font: family %q unknown"
+msgstr ""
+
+#: lua/publisher.lua:595
+#, c-format
+msgid "lese_attribut (2): unknown type: %s"
+msgstr "lese_attribut(2): unbekannter typ: %s"
+
+#: lua/publisher.lua:581
+#, c-format
+msgid "lese_attribut: unknown type: %s"
+msgstr "lese_attribut: unbekannter typ: %s"
+
+#: lua/publisher/element.lua:538
+msgid "»Bearbeite Knoten«: %q, modus=%q"
+msgstr ""
+
+#: lua/publisher/element.lua:366
+msgid "»DefiniereSchriftfamilie«, family=%d, name=%q"
+msgstr ""
+
+#: lua/publisher/element.lua:313
+msgid "»DefiniereSchriftfamilie«: no size given."
+msgstr ""
+
+#: lua/publisher/element.lua:804
+#, c-format
+msgid "»ObjektAusgeben«: %s in row %d and column %d, width=%d, height=%d"
+msgstr "ObjektAusgeben: %s in Zeile %d und Spalte %d, Breite=%d, Höhe=%d"
+
+#: lua/publisher/element.lua:708
+msgid ""
+"»Spalte« and »Zeile« must be given with absolute positioning "
+"(»ObjektAusgeben«)."
+msgstr ""
+
+#: lua/publisher/element.lua:1203
+msgid "»Textblock« textformat %q unknown!"
+msgstr ""
+
+#: lua/publisher/element.lua:1424
+msgid "»Zuweisung«, variable name = %q, value = %q"
+msgstr ""
