@@ -11,12 +11,7 @@ a:hover{text-decoration:underline;}
 p{font-size:0.85em;}
 pre{background-color: #f0f0f0; border:1px solid #e0e0e0; padding: 15px; color:#424242;}
 #logo{width:100%;float:left; margin-bottom:35px;}
-#elementdesc{float: left; width: 75%; margin:0 0 10px 0;}
 ul{padding:0px; margin:2px 0 2px 25px; font-size:0.85em; list-style-image:url(../images/li.jpg);}
-#elementref{float: right; width: 20%; padding:10px 0 10px 10px;}
-#elementref h1{font-size: 1.1em;}
-#elementref ul{list-style-type:none; list-style-image:none; padding:0px; margin:0px; font-size:0.85em;}
-#elementref ul .active{font-weight:bold; list-style-image:url(../images/li.jpg); padding:5px 0;}
 .speedataline{width:100%; border-bottom:1px solid #e0e0e0; clear: both; margin:8px 0;}
 
 table { border-left-width:0px; border-right-width:0px; margin: 0px; padding: 0px;}
@@ -25,4 +20,24 @@ th { background-color: #0F2B49; color: white; font-weight: normal;}
 
 pre.syntax, .syntax-container {
 	font-size: 10pt;
+}
+a.document { 
+  display:inline-block;
+    overflow:visible;
+    background:transparent url(../images/document_icon.gif) center left no-repeat;
+    padding:0 0 0 15px;
+    }
+    
+a.webpage { 
+  display:inline-block;
+  overflow:visible;
+  background:transparent url(../images/dok.gif) center left no-repeat;
+  padding:0 0 0 17px;
+}
+
+a.mail {
+  display:inline-block;
+  overflow:visible;
+  background:transparent url(../images/mail.jpeg) center left no-repeat;
+  padding:0 0 0 18px;
 }
