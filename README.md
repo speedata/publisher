@@ -21,7 +21,7 @@ Please use the [github bug tracker](https://github.com/speedata/publisher/issues
 License / Contributing
 ----------------------
 
-The license is GPLv2 for now, see the file COPYING in the root directory. This is not set in stone, we might choose a more liberal license in the future.
+The license is AGPLv3 for now, see the file COPYING in the root directory. This is not set in stone, we might choose a more liberal license in the future.
 
 We welcome contributions. Just [follow the github procedure (fork, pull requests)](http://help.github.com/send-pull-requests/). Please note, as we might choose a more liberal license in the future, we appreciate patches under a MIT like license.
 
