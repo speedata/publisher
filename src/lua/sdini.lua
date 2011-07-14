@@ -2,8 +2,8 @@
 --  sdini.lua
 --  speedata publisher
 --
---  Created by Patrick Gundlach on 2010-03-27.
---  Copyright 2010 Patrick Gundlach. All rights reserved.
+--  Copyright 2010-2011 Patrick Gundlach. All rights reserved.
+--  See file COPYING in the root directory for license info.
 --
 
 -- errorlog:write("Lade Datei sdini.lua ...")
@@ -22,12 +22,12 @@ kpse = {}
 
 function datei_start( dateiname )
   if log then
-    log("Lade Datei: %q ...",dateiname)
+    log("Load file: %q ...",dateiname)
   end
 end
 function datei_ende( dateiname )
   if log then
-    log("Lade Datei: %q ... fertig",dateiname)
+    log("Load file: %q ... done",dateiname)
   end
 end
 

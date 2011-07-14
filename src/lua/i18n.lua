@@ -1,8 +1,7 @@
 --
 --  i18n.lua
---  publisher
+--  speedata publisher
 --
---  Created by Patrick Gundlach on 2011-07-11.
 --  Copyright 2011 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 --

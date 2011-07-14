@@ -241,5 +241,3 @@ function main_loop()
   call(publisher.dothings)
   exit()
 end
-
-texio.write(")")

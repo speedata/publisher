@@ -1,4 +1,12 @@
--- publisher/fonts
+--
+--  fonts.lua
+--  publisher
+--
+--  Created by Patrick Gundlach on 2011-07-14.
+--  Copyright 2011 Patrick Gundlach. All rights reserved.
+--
+--  See file COPYING in the root directory for license details.
+
 
 require("fonts.fontloader")
 module(...,package.seeall)
@@ -266,7 +274,7 @@ function pre_linebreak( head )
       end -- f.otffeatures.smcp == true
 		end -- schriftfamilie?
 	else
-	  w("Achtung, unbekanntes Node: %s",head.id)
+	  warning("Unknown node: %q",head.id)
 	end
 	head = head.next
 	end

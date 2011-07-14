@@ -438,7 +438,7 @@ function gruppe( layoutxml,datenxml )
   local gruppenname = layoutxml.name
 
   if publisher.gruppen[gruppenname] == nil then
-    log("Create »Gruppe« %s an.",gruppenname)
+    log("Create »Gruppe« %q.",gruppenname)
   else
     node.flush_list(publisher.gruppen[gruppenname].inhalt)
     publisher.gruppen[gruppenname] = nil
@@ -535,7 +535,7 @@ function lade_datensatzdatei( layoutxml,datenxml )
   local tmp_daten = publisher.lade_xml(dateiname)
   local root_name = tmp_daten[".__name"]
 
-  log("»Bearbeite Knoten«: %q, modus=%q",root_name,"")
+  log("»Selecting node: %q, mode=%q",root_name,"")
   publisher.dispatch(publisher.datensatz_verteiler[""][root_name],tmp_daten)
 end
 

@@ -3,8 +3,9 @@
 --  speedata publisher
 --
 --  Created by Patrick Gundlach on 2010-03-27.
---  Copyright 2010 Patrick Gundlach. All rights reserved.
+--  Copyright 2010-2011 Patrick Gundlach. All rights reserved.
 --
+--  See file COPYING in the root directory for license details.
 datei_start("xpath_funktionen.lua")
 
 module(...,package.seeall)
@@ -59,7 +60,7 @@ local function _string(dataxml, arg  )
   elseif arg == nil then
     ret = 'nil'
   else
-    warning("Unbekannter Typ in XPath-Funktion 'string()': %s",type(arg))
+    warning("Unknown type in XPath-function 'string()': %s",type(arg))
     ret = tostring(arg)
   end
   return ret

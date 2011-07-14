@@ -1,5 +1,9 @@
--- optionparser.lua
--- speedata 2009
+--
+--  optionparser.lua
+--  speedata publisher
+--
+--  Copyright 2009-2011 Patrick Gundlach.
+--  See file COPYING in the root directory for license info.
 
 local setmetatable,ipairs,type,print,assert = setmetatable,ipairs,type,print,assert
 local string,table,io,os = string,table,io,os

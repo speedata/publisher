@@ -1,3 +1,10 @@
+--
+--  fileutils.lua
+--  speedata publisher
+--
+--  Copyright 2011 Patrick Gundlach.
+--  See file COPYING in the root directory for license info.
+--
 
 local lfs,os,io=lfs,os,io
 local type = type

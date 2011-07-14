@@ -5,6 +5,8 @@
 --  Created by Patrick Gundlach on 2010-03-26.
 --  Copyright 2010-2011 Patrick Gundlach. All rights reserved.
 --
+--  See file COPYING in the root directory for license details.
+
 datei_start("raster.lua")
 
 local helper = require("publisher.helper")
@@ -172,11 +174,11 @@ function belege_zellen(self,x,y,b,h,zeichne_markierung_p,bereichname)
   self:setze_aktuelle_zeile(y,bereichname)
   local rasterkonflikt = false
   if  x + b - 1 > self:anzahl_spalten(bereichname) then
-    warning("Object protrueds into the right margin")
+    warning("Object protrudes into the right margin")
     rasterkonflikt = true
   end
   if y + h - 1 > self:anzahl_zeilen(bereichname) then
-    warning("Object protrudes below the last lineor the page")
+    warning("Object protrudes below the last line of the page")
     rasterkonflikt = true
   end
   local rahmen_rand_links, rahmen_rand_oben

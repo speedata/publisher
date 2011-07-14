@@ -2,8 +2,8 @@
 --  publisher/src/lua/publisher.lua
 --  speedata publisher
 --
---  Created by Patrick Gundlach on 2010-03-10.
---  Copyright 2010 Patrick Gundlach. All rights reserved.
+--  Copyright 2010-2011 Patrick Gundlach. All rights reserved.
+--  See file COPYING in the root directory for license info.
 --
 
 datei_start("publisher.lua")
@@ -199,9 +199,9 @@ function dothings()
     local num = tonumber(optionen.startseite)
     if num then
       tex.count[0] = num - 1
-      log("Set pagenumber to %d",num)
+      log("Set page number to %d",num)
     else
-      err("Can't recognize starting pagenumber %q",optionen.startseite)
+      err("Can't recognize starting page number %q",optionen.startseite)
     end
   end
 

@@ -1,3 +1,10 @@
+--
+--  xpath.lua
+--  speedata publisher
+--
+--  Copyright 2010-2011 Patrick Gundlach. All rights reserved.
+--  See file COPYING in the root directory for license info.
+--
 
 
 module(...,package.seeall)

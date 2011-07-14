@@ -5,6 +5,8 @@
 --  Created by Patrick Gundlach on 2010-03-07.
 --  Copyright 2010-2011 Patrick Gundlach. All rights reserved.
 --
+--  See file COPYING in the root directory for license details.
+
 
 datei_start("tabelle.lua")
 require("xpath")
@@ -231,7 +233,7 @@ function berechne_spaltenbreite( self )
         end
       end
     else
-      w("unbekanntes Element: %q",tr_elementname)
+      warning("Unknown Element: %q",tr_elementname)
     end -- wenn es auch wirklich eine Zeile ist
   end -- ∀ Zeilen / Linien
 

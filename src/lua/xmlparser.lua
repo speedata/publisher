@@ -1,4 +1,10 @@
--- xml parser
+--
+--  xmlparser.lua
+--  publisher
+--
+--  Copyright 2011 Patrick Gundlach. All rights reserved.
+--
+--  See file COPYING in the root directory for license details.
 
 local xmlreader = xmlreader
 local w = w
@@ -45,7 +51,7 @@ function read_element(r)
     elseif r:node_type() == "comment" then
       -- ignorieren
     else
-      w("xmlparser: unbekannter nodetyp gefunden: %s",r:node_type())
+      warning("xmlparser: unknown node type found: %s",r:node_type())
     end
   end
   return ret
@@ -53,7 +59,7 @@ end
 
 function parse(r)
   local ret
-  -- Kommentare etc. überspringen
+  -- jump over comments
   while r:read() do
     if (r:node_type() == 'element') then
       ret = read_element(r)
@@ -74,4 +80,3 @@ function parse_xml(txt)
   local r = xmlreader.from_string(txt,nil,nil,{"nocdata","xinclude","nonet"})
   return parse(r)
 end
-

@@ -1,3 +1,12 @@
+--
+--  viznodelist.lua
+--  speedata publisher
+--
+--  Copyright 2010-2011 Patrick Gundlach. All rights reserved.
+--  See file COPYING in the root directory for license info.
+--
+-- visualizes nodelists using graphviz
+
 -- usage example:
 
 -- \setbox0\hbox{\vbox{\hbox{abc}}\vbox{x}}
