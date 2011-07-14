@@ -2,7 +2,7 @@ body{font-size:100%; font-family:Frutiger,Geneva; color:#2a2a2a; background:whit
 img{border:0px;}
 h1{font-size:1.4em; margin:0 0 10px 0; padding:0px;}
 h2{font-size:1.2em; margin:10px 0 10px 0; padding:0px;}
-h2 a:hover { text-decoration: none;}
+a[name] { text-decoration: none; color:black; }
 h3{font-size:1.0em; margin:0px; padding:0px;}
 h1 code{font-size:1.2em; color:#424242;}
 code{color:#424242;}
