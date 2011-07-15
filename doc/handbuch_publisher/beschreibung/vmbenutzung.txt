@@ -1,27 +1,33 @@
 #title "Benutzung der VM"
+#format "textile"
 
-# Benutzung der virtuellen Maschine (VM)
 
-Der speedata Publisher ist in einer virtuellen Maschine vorinstalliert. Diese virtuelle Maschine kann mit verschieden VMware Produkten ausgeführt werden, darunter:
+h1. Benutzung der virtuellen Maschine (VM)
 
-* [VMware Player](http://www.vmware.com/de/products/player/)
-* [VMware Fusion](http://www.vmware.com/de/products/fusion/)
-* [VMware Server](http://www.vmware.com/de/products/server/)
+Der speedata Publisher wird in verschiedenen Varianten ausgeliefert. Entweder als Installationspaket für das gewünschte Betriebssystem oder als vorkonfigurierte virtuelle Maschine. Diese virtuelle Maschine kann mit verschieden VMware Produkten ausgeführt werden, darunter:
 
-# Aktualisierung der Software
+* "VMware Player":http://www.vmware.com/de/products/player/
+* "VMware Fusion":http://www.vmware.com/de/products/fusion/
+* "VMware Server":http://www.vmware.com/de/products/server/
+
+Dieser Abschnitt behandelt die Installation von Updates in dieser VM-Umgebung.
+
+
+h1. Aktualisierung der Software
 
 Der speedata Publisher wird als Softwarepaket in der VM installiert. Das bedeutet, dass er über dieselben Mechanismen aktualisiert wird, wie der Rest des Betriebssystems. Der Publisher kann über die Kommandozeile oder über das Programm „Synaptic“ aktualisiert werden.
 
-## Aktualisierung über die Kommandozeile
+h2. Aktualisierung über die Kommandozeile
 
 Dazu geben Sie im Terminalfenster die folgenden Befehle ein:
 
-    sudo apt-get update
-    sudo apt-get install speedata-publisher
+pre. sudo apt-get update
+sudo apt-get install speedata-publisher
 
-Das Programm „sudo“ fragt nach dem Benutzerpasswort: `speedata`. Diese Befehle aktualisieren die internen Listen mit den verfügbaren Programmen und installieren das Softwarepaket „speedata-publisher“ in der neusten zur Verfügung stehenden Version.
 
-## Aktualisierung über Synaptic
+Das Programm „sudo“ fragt nach dem Benutzerpasswort: @speedata@. Diese Befehle aktualisieren die internen Listen mit den verfügbaren Programmen und installieren das Softwarepaket „speedata-publisher“ in der neusten zur Verfügung stehenden Version.
+
+h2. Aktualisierung über Synaptic
 
 Die Paketverwaltung Synaptic ist über das Menü System -> Systemverwaltung -> Synaptic-Paketverwaltung zu erreichen. 
 
@@ -29,6 +35,5 @@ Sollte einer der Befehle fehlschlagen, so setzen Sie sich bitte mit Ihrem System
 
 <%= imageref("synaptic-menu.tiff") %>
 
-Das System fragt Sie nach dem Benutzerpasswort: `speedata`. Geben Sie in dem Suchfeld das Wort `speedata` ein.
+Das System fragt Sie nach dem Benutzerpasswort: @speedata@. Geben Sie in dem Suchfeld das Wort @speedata@ ein.
 
-*FIXME* Beschreibung.

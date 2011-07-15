@@ -1,20 +1,20 @@
 #title "SetzeRaster"
+#format "textile"
 
+h1. Elementname: @SetzeRaster@
 
-#Elementname: `SetzeRaster`
+h2. Beschreibung
 
-##Beschreibung
-
-Erlaubte Attribute: `breite`, `höhe`  
+Erlaubte Attribute: @breite@, @höhe@  
 Kindelemente: -  
-Elternelemente: [Layout](e_layout)  
+Elternelemente: "Layout":e_layout  
 
-###Attribute
+h3. Attribute
 
-* `breite` ([Maßangabe](massangabe)): Breite einer Rasterzelle
-* `höhe` ([Maßangabe](massangabe)): Höhe einer Rasterzelle
+* @breite@ ("Maßangabe":massangabe): Breite einer Rasterzelle
+* @höhe@ ("Maßangabe":massangabe): Höhe einer Rasterzelle
 
-##Beispiel
+h2. Beispiel
 
     <SetzeRaster breite="4mm" höhe="14pt" />
 
