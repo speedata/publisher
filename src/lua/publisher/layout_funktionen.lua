@@ -5,7 +5,7 @@
 --  Created by Patrick Gundlach on 2010-03-27.
 --  Copyright 2010 Patrick Gundlach. All rights reserved.
 --
-datei_start("layout_funktionen.lua")
+file_start("layout_funktionen.lua")
 
 module(...,package.seeall)
 
@@ -104,7 +104,7 @@ local function variable(dataxml, arg )
   return publisher.variablen[arg]
 end
 
-datei_ende("layout_funktionen.lua")
+file_end("layout_funktionen.lua")
 
 return {
   aktuelle_seite     = aktuelle_seite,

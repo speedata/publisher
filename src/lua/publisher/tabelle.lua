@@ -8,7 +8,7 @@
 --  See file COPYING in the root directory for license details.
 
 
-datei_start("tabelle.lua")
+file_start("tabelle.lua")
 require("xpath")
 
 module(...,package.seeall)
@@ -1004,4 +1004,4 @@ function tabelle( self )
   return setze_tabelle(self)
 end
 
-datei_ende("tabelle.lua")
+file_end("tabelle.lua")

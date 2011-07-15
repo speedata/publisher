@@ -6,8 +6,7 @@
 --  See file COPYING in the root directory for license info.
 --
 
--- errorlog:write("Lade Datei sdini.lua ...")
-texio.write_nl("Lade Datei sdini.lua ...")
+texio.write_nl("Loading file sdini.lua ...")
 
 callback.register('start_run',function() return true end)
 
@@ -20,14 +19,14 @@ local basedir=os.getenv("PUBLISHER_BASE_PATH")
 local extra_dirs = os.getenv("SD_EXTRA_DIRS")
 kpse = {}
 
-function datei_start( dateiname )
+function file_start( filename )
   if log then
-    log("Load file: %q ...",dateiname)
+    log("Load file: %q ...",filename)
   end
 end
-function datei_ende( dateiname )
+function file_end( filename )
   if log then
-    log("Load file: %q ... done",dateiname)
+    log("Load file: %q ... done",filename)
   end
 end
 
@@ -82,12 +81,10 @@ end
 
 function do_luafile(filename)
   local a = kpse.find_file(filename)
-  assert(a,string.format("Konnte Datei %q nicht finden",filename))
+  assert(a,string.format("Can't find file %q",filename))
   dofile(a)
 end
 
 do_luafile("sd-debug.lua")
 do_luafile("sd-callbacks.lua")
 
-------
--- datei_ende("sdini.lua")

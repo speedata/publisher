@@ -7,7 +7,7 @@
 
 --  See file COPYING in the root directory for license details.
 
--- datei_start("spinit.lua")
+-- file_start("spinit.lua")
 
 require("i18n")
 
@@ -238,6 +238,9 @@ end
 function main_loop()
   log("Start processing")
   setup()
+  -- for k,v in pairs(callback.list()) do
+  --   print(k,v)
+  -- end
   call(publisher.dothings)
   exit()
 end

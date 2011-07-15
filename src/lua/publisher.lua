@@ -6,7 +6,7 @@
 --  See file COPYING in the root directory for license info.
 --
 
-datei_start("publisher.lua")
+file_start("publisher.lua")
 
 local element = require("publisher.element")
 local seite   = require("publisher.seite")
@@ -1132,12 +1132,7 @@ function rotiere( nodelist,winkel )
   return tmp
 end
 
--- Wird aufgerufen von xml_to_string und soll ein gültiges XML erzeugen & < ' " ersetzen
-function xml_attribut_bereinigen( str )
-  -- FIXME: todo!
-end
-
--- Welche Datenstruktur wird erwartet? FIXME
+-- FIXME: document the data structure that is expected
 function xml_to_string( xml_element, level )
   level = level or 0
   local str = ""
@@ -1312,4 +1307,4 @@ function Absatz:anhaengen( whatever,parameter )
   end
 end
 
-datei_ende("publisher.lua")
+file_end("publisher.lua")

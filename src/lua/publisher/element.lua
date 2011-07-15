@@ -6,7 +6,7 @@
 --  Copyright 2010 Patrick Gundlach. All rights reserved.
 -- 
 
-datei_start("element.lua")
+file_start("element.lua")
 require("publisher.fonts")
 require("publisher.tabelle")
 require("xpath")
@@ -535,7 +535,7 @@ function lade_datensatzdatei( layoutxml,datenxml )
   local tmp_daten = publisher.lade_xml(dateiname)
   local root_name = tmp_daten[".__name"]
 
-  log("»Selecting node: %q, mode=%q",root_name,"")
+  log("Selecting node: %q, mode=%q",root_name,"")
   publisher.dispatch(publisher.datensatz_verteiler[""][root_name],tmp_daten)
 end
 
@@ -1454,4 +1454,4 @@ function zur_liste_hinzufuegen( layoutxml,datenxml )
   return udef.last
 end
 
-datei_ende("element.lua")
+file_end("element.lua")

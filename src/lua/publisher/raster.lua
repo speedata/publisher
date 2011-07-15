@@ -7,7 +7,7 @@
 --
 --  See file COPYING in the root directory for license details.
 
-datei_start("raster.lua")
+file_start("raster.lua")
 
 local helper = require("publisher.helper")
 
@@ -416,4 +416,4 @@ function beschnittmarken( self, laenge, abstand, dicke )
   return table.concat(ret,"\n")
 end
 
-datei_ende("raster.lua")
+file_end("raster.lua")

@@ -1,14 +1,14 @@
-# German translations for PACKAGE package
+# German translations for the speedata Publisher
 # German messages for PACKAGE.
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Patrick Gundlach <patrick@vienna.local>, 2011.
+# Patrick Gundlach <gundlach@speedata.de>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-14 15:01+0200\n"
+"POT-Creation-Date: 2011-07-15 13:12+0200\n"
 "PO-Revision-Date: 2011-07-11 20:05+0200\n"
 "Last-Translator: Patrick Gundlach <gundlach@speedata.de>\n"
 "Language-Team: German\n"
@@ -126,16 +126,16 @@ msgstr "Bild %q nicht gefunden!"
 msgid "Language code is not set and lang==0"
 msgstr "Sprachcode nicht gesetzt und lang==0"
 
-#: lua/publisher.lua:1172
+#: lua/publisher.lua:1167
 #, c-format
 msgid "Language id: %d"
 msgstr "Sprach-Id: %d"
 
-#: lua/sdini.lua:25
+#: lua/sdini.lua:24
 msgid "Load file: %q ..."
 msgstr "Lade Datei: %q ..."
 
-#: lua/sdini.lua:30
+#: lua/sdini.lua:29
 msgid "Load file: %q ... done"
 msgstr "Lade Datei: %q ... fertig"
 
@@ -147,7 +147,7 @@ msgstr "Lade Bild %q mit Skalierung %g"
 msgid "Loading %s %q"
 msgstr "Lade %s %q"
 
-#: lua/publisher.lua:1164
+#: lua/publisher.lua:1159
 msgid "Loading hyphenation patterns %q."
 msgstr "Lade Trennmuster %q."
 
@@ -197,11 +197,15 @@ msgstr "Seite vom Typ %q wird erzeugt"
 msgid "Selecting node: %q"
 msgstr "Bearbeite Knoten %q"
 
+#: lua/publisher/element.lua:538
+msgid "Selecting node: %q, mode=%q"
+msgstr "Bearbeite Knoten %q, Modus=%q"
+
 #: lua/publisher/element.lua:137
 msgid "Selecting node: %q, mode=%q, pos=%d"
 msgstr "Bearbeite Knoten %q, Modus=%q, Position=%d"
 
-#: lua/xpath.lua:366
+#: lua/xpath.lua:373
 msgid "Sequenz must only contain one item"
 msgstr "Sequenz darf nur ein Item haben"
 
@@ -248,7 +252,7 @@ msgstr "Unbekannter Inhalt in »Tabelle«"
 msgid "Unknown element found in layoutfile: %q"
 msgstr "Unbekanntes Element in Layoutdatei gefunden: %q"
 
-#: lua/xpath.lua:521
+#: lua/xpath.lua:528
 msgid "Unknown function %q"
 msgstr "Unbekannte Funktion %q"
 
@@ -283,7 +287,7 @@ msgstr "lese_attribut(2): unbekannter typ: %s"
 msgid "lese_attribut: unknown type: %s"
 msgstr "lese_attribut: unbekannter typ: %s"
 
-#: lua/xmlparser.lua:55
+#: lua/xmlparser.lua:54
 #, c-format
 msgid "xmlparser: unknown node type found: %s"
 msgstr "lese_attribut: unbekannter typ: %s"
@@ -300,10 +304,6 @@ msgstr "DefiniereSchriftfamilie: keine Größe angegeben."
 #, c-format
 msgid "»ObjektAusgeben«: %s in row %d and column %d, width=%d, height=%d"
 msgstr "ObjektAusgeben: %s in Zeile %d und Spalte %d, Breite=%d, Höhe=%d"
-
-#: lua/publisher/element.lua:538
-msgid "»Selecting node: %q, mode=%q"
-msgstr "Bearbeite Knoten %q, Modus=%q"
 
 #: lua/publisher/element.lua:708
 msgid ""
