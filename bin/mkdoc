@@ -5,7 +5,7 @@ require "fileutils"
 require "erb"
 require "pathname"
 require "rubygems"
-require "RedCloth"
+require "redcloth"
 
 BASE_SRC  = Pathname.new(File.dirname(__FILE__) + "/../doc/handbuch_publisher").cleanpath
 BASE_DEST = Pathname.new(File.dirname(__FILE__) + "/../build/handbuch_publisher").cleanpath

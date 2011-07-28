@@ -39,12 +39,19 @@ function new_language(lang)
 	os.execute(cmdline)
 end
 
+function update_manual( lang )
+  cmdline = string.format("mkdoc")
+  os.execute(cmdline)
+  os.execute(cmdline)
+end
+
 
 local op = optionparser:new()
 op.banner = string.format("Usage: sdcontrol <options>")
 op.start = 30
-op:on("-u","--update-translations LANG","Update translation files for source code (gettext). Example: de_DE",update_translation_files)
 op:on("--new-language LANG","Add a new langauge for messages. Example: de_DE",new_language)
+op:on("--create-manual [LANG]","-m","Create (update) manual in language LANG. Defaults to 'all', which is currently only 'de'",update_manual)
+op:on("-u","--update-translations LANG","Update translation files for source code (gettext). Example: de_DE",update_translation_files)
 local ok, msg = op:parse(arg)
 if not ok then
   print(msg)
