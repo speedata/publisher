@@ -11,7 +11,7 @@ Status of this source code
 
 The code is fully functional. See [the requirements section on the github page](http://speedata.github.com/publisher/) on how to get the software running.
 
-Most of the source is currently in German, one of the first things we change is that we translate it into english.
+Most of the source is currently in German, one of the first things we change is that we translate it into English.
 
 Bugs
 ----
