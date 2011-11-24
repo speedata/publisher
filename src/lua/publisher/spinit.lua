@@ -49,7 +49,7 @@ function call(...)
   local ret = { pcall(...) }
   if ret[1]==false then
     err(tostring(ret[2])  .. debug.traceback())
-    exit()
+    return
   end
   return unpack(ret,2)
 end
