@@ -9,8 +9,6 @@
 
 file_start("raster.lua")
 
-local helper = require("publisher.helper")
-
 module(...,package.seeall)
 
 _M.__index = _M
@@ -207,9 +205,9 @@ function belege_zellen(self,x,y,b,h,zeichne_markierung_p,bereichname)
   if zeichne_markierung_p then
     local px,py
     -- in bp:
-    px = helper.sp_to_bp((x + rahmen_rand_links - 1) * self.rasterbreite + self.rand_links + self.extra_rand )
-    py = helper.sp_to_bp(tex.pageheight - (y + rahmen_rand_oben - 1) * self.rasterhoehe - self.rand_oben - self.extra_rand)
-    local breite, hoehe = helper.sp_to_bp(self.rasterbreite * b), helper.sp_to_bp(self.rasterhoehe * h)
+    px = sp_to_bp((x + rahmen_rand_links - 1) * self.rasterbreite + self.rand_links + self.extra_rand )
+    py = sp_to_bp(tex.pageheight - (y + rahmen_rand_oben - 1) * self.rasterhoehe - self.rand_oben - self.extra_rand)
+    local breite, hoehe = sp_to_bp(self.rasterbreite * b), sp_to_bp(self.rasterhoehe * h)
     self.belegung_pdf[#self.belegung_pdf + 1] = string.format(" q 0 0 1 0 k 0 0 1 0 K  1 0 0 1 %g %g cm 0 0 %g %g re f Q ",px ,py - hoehe,breite,hoehe)
   end
 end
@@ -292,12 +290,12 @@ function zeichne_raster(self)
   local farbe
   local ret = {}
   ret[#ret + 1] = "q 0.2 w [2] 1 d "
-  local papierhoehe  = helper.sp_to_bp(tex.pageheight)
-  local papierbreite = helper.sp_to_bp(tex.pagewidth  - self.extra_rand)
+  local papierhoehe  = sp_to_bp(tex.pageheight)
+  local papierbreite = sp_to_bp(tex.pagewidth  - self.extra_rand)
   local x, y, breite, hoehe
   for i=0,self:anzahl_spalten() do
-    x = helper.sp_to_bp(i * self.rasterbreite + self.rand_links + self.extra_rand)
-    y = helper.sp_to_bp ( self.extra_rand )
+    x = sp_to_bp(i * self.rasterbreite + self.rand_links + self.extra_rand)
+    y = sp_to_bp ( self.extra_rand )
     -- alle 5 Rasterkästchen einen dunkleren Strich machen
     if (i % 5 == 0) then farbe = "0.6" else farbe = "0.8" end
     -- alle 10 Rasterkästchen einen schwarzen Strich machen
@@ -309,17 +307,17 @@ function zeichne_raster(self)
     if (i % 5 == 0) then farbe = "0.6" else farbe = "0.8" end
     -- alle 10 Rasterkästchen einen schwarzen Strich machen
     if (i % 10 == 0) then farbe = "0.2" end
-    y = helper.sp_to_bp( i * self.rasterhoehe  + self.rand_oben + self.extra_rand)
-    x = helper.sp_to_bp(self.extra_rand)
+    y = sp_to_bp( i * self.rasterhoehe  + self.rand_oben + self.extra_rand)
+    x = sp_to_bp(self.extra_rand)
     ret[#ret + 1] = string.format("%g G %g %g m %g %g l S", farbe, math.round(x,2), math.round(papierhoehe - y,2), math.round(papierbreite,2), math.round(papierhoehe - y,2))
   end
   ret[#ret + 1] = "Q"
   for name,bereich in pairs(self.platzierungsbereiche) do
     for i,rahmen in ipairs(bereich) do
-      x      = helper.sp_to_bp(( rahmen.spalte - 1) * self.rasterbreite + self.extra_rand + self.rand_links)
-      y      = helper.sp_to_bp( (rahmen.zeile - 1)  * self.rasterhoehe  + self.extra_rand + self.rand_oben )
-      breite = helper.sp_to_bp(rahmen.breite * self.rasterbreite)
-      hoehe  = helper.sp_to_bp(rahmen.hoehe  * self.rasterhoehe )
+      x      = sp_to_bp(( rahmen.spalte - 1) * self.rasterbreite + self.extra_rand + self.rand_links)
+      y      = sp_to_bp( (rahmen.zeile - 1)  * self.rasterhoehe  + self.extra_rand + self.rand_oben )
+      breite = sp_to_bp(rahmen.breite * self.rasterbreite)
+      hoehe  = sp_to_bp(rahmen.hoehe  * self.rasterhoehe )
       ret[#ret + 1] = string.format("q %s %g w %g %g %g %g re S Q", "1 0 0  RG",0.5, x,math.round(papierhoehe - y,2),breite,-hoehe)
     end
   end
@@ -372,31 +370,31 @@ end
 
 function trimbox( self )
   assert(self)
-  local x,y,wd,ht =  helper.sp_to_bp(self.extra_rand), helper.sp_to_bp(self.extra_rand) , helper.sp_to_bp(tex.pagewidth - self.extra_rand), helper.sp_to_bp(tex.pageheight - self.extra_rand)
-  local b_x,b_y,b_wd,b_ht = helper.sp_to_bp(self.extra_rand - self.beschnittzugabe), helper.sp_to_bp(self.extra_rand - self.beschnittzugabe) , helper.sp_to_bp(tex.pagewidth - self.extra_rand + self.beschnittzugabe), helper.sp_to_bp(tex.pageheight - self.extra_rand + self.beschnittzugabe)
+  local x,y,wd,ht =  sp_to_bp(self.extra_rand), sp_to_bp(self.extra_rand) , sp_to_bp(tex.pagewidth - self.extra_rand), sp_to_bp(tex.pageheight - self.extra_rand)
+  local b_x,b_y,b_wd,b_ht = sp_to_bp(self.extra_rand - self.beschnittzugabe), sp_to_bp(self.extra_rand - self.beschnittzugabe) , sp_to_bp(tex.pagewidth - self.extra_rand + self.beschnittzugabe), sp_to_bp(tex.pageheight - self.extra_rand + self.beschnittzugabe)
   -- log("Trimbox = %g %g %g %g, bleedbox =  %g %g %g %g", x,y,wd,ht,b_x,b_y,b_wd,b_ht)
   pdf.pageattributes = string.format("/TrimBox [ %g %g %g %g] /BleedBox [%g %g %g %g]",x,y,wd,ht,b_x,b_y,b_wd,b_ht)
 end
 
 function beschnittmarken( self, laenge, abstand, dicke )
-  local x,y,wd,ht =  helper.sp_to_bp(self.extra_rand), helper.sp_to_bp(self.extra_rand) , helper.sp_to_bp(tex.pagewidth - self.extra_rand), helper.sp_to_bp(tex.pageheight - self.extra_rand)
+  local x,y,wd,ht =  sp_to_bp(self.extra_rand), sp_to_bp(self.extra_rand) , sp_to_bp(tex.pagewidth - self.extra_rand), sp_to_bp(tex.pageheight - self.extra_rand)
   local ret = {}
   local abstand_bp, laenge_bp, dicke_bp
   if not abstand then
-    abstand_bp = helper.sp_to_bp(self.beschnittzugabe)
+    abstand_bp = sp_to_bp(self.beschnittzugabe)
   else
-    abstand_bp = helper.sp_to_bp(abstand)
+    abstand_bp = sp_to_bp(abstand)
   end
   if abstand_bp < 5 then abstand_bp = 5 end
   if not laenge then
     laenge_bp = 20
   else
-    laenge_bp = helper.sp_to_bp(laenge)
+    laenge_bp = sp_to_bp(laenge)
   end
   if not dicke then
     dicke_bp = 0.5
   else
-    dicke_bp = helper.sp_to_bp(dicke)
+    dicke_bp = sp_to_bp(dicke)
   end
   
   -- unten links

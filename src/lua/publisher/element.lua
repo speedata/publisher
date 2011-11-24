@@ -11,7 +11,6 @@ require("publisher.fonts")
 require("publisher.tabelle")
 require("xpath")
 require("fileutils")
-require("publisher.helper")
 
 -- Dieses Modul enthält die Einstiegspunkte der Layout-Tags.
 module(...,package.seeall)
@@ -227,8 +226,8 @@ function box( layoutxml,datenxml )
   local hf_string = publisher.lese_attribut_jit(layoutxml,datenxml,"hintergrundfarbe","string")
 
   local aktuelles_raster = publisher.aktuelles_raster
-  local _breite = publisher.helper.sp_to_bp(aktuelles_raster.rasterbreite * breite)
-  local _hoehe  = publisher.helper.sp_to_bp(aktuelles_raster.rasterhoehe  * hoehe)
+  local _breite = sp_to_bp(aktuelles_raster.rasterbreite * breite)
+  local _hoehe  = sp_to_bp(aktuelles_raster.rasterhoehe  * hoehe)
   local n = publisher.box(_breite,_hoehe,hf_string)
   n = node.hpack(n)
   return n
@@ -568,7 +567,7 @@ function linie( layoutxml,datenxml )
   else
     laenge = tex.sp(laenge)
   end
-  laenge = publisher.helper.sp_to_bp(laenge)
+  laenge = sp_to_bp(laenge)
 
   linienstaerke = linienstaerke or "1pt"
   if tonumber(linienstaerke) then
@@ -580,7 +579,7 @@ function linie( layoutxml,datenxml )
   else
     linienstaerke = tex.sp(linienstaerke)
   end
-  linienstaerke = publisher.helper.sp_to_bp(linienstaerke)
+  linienstaerke = sp_to_bp(linienstaerke)
 
   local farbname = "Schwarz"
 

@@ -64,6 +64,13 @@ function log(...)
   end
 end
 
+
+-- Convert scaled point to postscript points,
+-- rounded to three digits after decimal point
+function sp_to_bp( sp )
+  return math.round(sp / 65782 , 3)
+end
+
 -- start und ende sind optional
 function table.sum( tbl, start, ende )
   sum = 0
@@ -98,7 +105,7 @@ function math.round(num, idp)
   end
   return math.floor(num + 0.5)
 end
--- aus: http://lua-users.org/wiki/SimpleRound
+-- from: http://lua-users.org/wiki/SimpleRound
 
 
 -- pt -> bp, pp -> pt
@@ -127,8 +134,6 @@ end
 
 require("publisher")
 
-
-require("publisher.helper")
 require("publisher.element")
 require("xmlparser")
 require("fonts.fontloader")

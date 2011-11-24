@@ -469,7 +469,7 @@ function hintergrund( box, farbname )
     return box
   end
   local pdffarbstring = farben[farbname].pdfstring
-  local wd, ht, dp = helper.sp_to_bp(box.width),helper.sp_to_bp(box.height),helper.sp_to_bp(box.depth)
+  local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
   n = node.new(whatsit_node,pdf_literal_node)
   n.data = string.format("q %s 0 -%g %g %g re f Q",pdffarbstring,dp,wd,ht + dp)
   n.mode = 0
@@ -489,7 +489,7 @@ end
 
 function rahmen( box, farbname )
   local pdffarbstring = farben[farbname].pdfstring
-  local wd, ht, dp = helper.sp_to_bp(box.width),helper.sp_to_bp(box.height),helper.sp_to_bp(box.depth)
+  local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
   local w = 3 -- Strichbreite 
   local hw = 0.5 * w -- halbe Strichbreite
   n = node.new(whatsit_node,pdf_literal_node)
@@ -1113,8 +1113,8 @@ function rotiere( nodelist,winkel )
   local cos = math.round(math.cos(winkel_rad),3)
   local q = node.new("whatsit","pdf_literal")
   q.mode = 0
-  local shift_x = math.round(math.min(0,math.sin(winkel_rad) * helper.sp_to_bp(ht)) + math.min(0,     math.cos(winkel_rad) * helper.sp_to_bp(wd)),3)
-  local shift_y = math.round(math.max(0,math.sin(winkel_rad) * helper.sp_to_bp(wd)) + math.max(0,-1 * math.cos(winkel_rad) * helper.sp_to_bp(ht)),3)
+  local shift_x = math.round(math.min(0,math.sin(winkel_rad) * sp_to_bp(ht)) + math.min(0,     math.cos(winkel_rad) * sp_to_bp(wd)),3)
+  local shift_y = math.round(math.max(0,math.sin(winkel_rad) * sp_to_bp(wd)) + math.max(0,-1 * math.cos(winkel_rad) * sp_to_bp(ht)),3)
   q.data = string.format("q %g %g %g %g %g %g cm",cos,sin, -1 * sin,cos, -1 * shift_x ,-1 * shift_y )
   q.next = nodelist
   local tail = node.tail(nodelist)
@@ -1165,6 +1165,9 @@ function hole_sprachcode( sprache_intern )
   publisher.sprachen[sprache_intern] = id
   return id
 end
+
+
+
 ------------------------------------------------------------------------------
 
 Absatz = {}
