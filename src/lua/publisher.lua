@@ -554,10 +554,6 @@ function dothingsbeforeoutput(  )
   end
 end
 
-function dostats(  )
-  print(string.format("\nnode_mem_usage=%s",status.node_mem_usage))
-  print(string.format("luastate_bytes=%d",status.luastate_bytes / 1024))
-end
 
 function lese_attribut_jit( layoutxml,datenxml,attname,typ )
   local funcname = ".__func" .. attname

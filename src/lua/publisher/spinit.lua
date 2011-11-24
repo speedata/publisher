@@ -148,18 +148,19 @@ tex.definefont("dummyfont",num)
 --   I/O, Kontrollfluss
 ------------------------------------------------------------
 
-
-
 -- Beendet die Verarbeitung und schreibt das PDF. Keine Aktion im Publisher
 -- kann nach dem Aufruf von publisher.exit() stattfinden.
 function exit()
   log("Stop processing data")
   log("%d errors occurred",fehlerzahl)
   log("Duration: %3f seconds",os.gettimeofday() - starttime)
+  log("node_mem_usage=%s",status.node_mem_usage)
+  log("luastate_bytes=%d",status.luastate_bytes / 1024)
   errorlog:write("---------------------------------------------\n")
   errorlog:write(string.format("Duration: %3f seconds\n",os.gettimeofday() - starttime))
+  errorlog:write(string.format("\nnode_mem_usage=%s",status.node_mem_usage))
+  errorlog:write(string.format("luastate_bytes=%d",status.luastate_bytes / 1024))
   errorlog:close()
-  publisher.dostats()
 end
 
 local function setup()
@@ -238,9 +239,6 @@ end
 function main_loop()
   log("Start processing")
   setup()
-  -- for k,v in pairs(callback.list()) do
-  --   print(k,v)
-  -- end
   call(publisher.dothings)
   exit()
 end
