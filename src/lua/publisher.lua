@@ -16,20 +16,18 @@ orig_xpath_funktionen    = require("publisher.xpath_funktionen")
 local xmlparser = require("xmlparser")
 
 
-att_schriftfamilie = 1
-att_kursiv         = 2
-att_fett           = 3
+att_fontfamily     = 1
+att_italic         = 2
+att_bold           = 3
 att_script         = 4
-att_unterstreichen = 5
+att_underline      = 5
 
--- Für die Ausrichtung der Bilder
+-- For image shifting
 att_shift_left     = 100
 att_shift_up       = 101
 
 -- tie glue (U+00A0)
 att_tie_glue       = 201
-
-require("viznodelist")
 
 module(...,package.seeall)
 
@@ -134,7 +132,7 @@ local dispatch_table = {
   Tlinie                  = element.tlinie,
   Tr                      = element.tr,
   Td                      = element.td,
-  U                       = element.unterstreichen,
+  U                       = element.underline,
   URL                     = element.url,
   Variable                = element.variable,
   Wert                    = element.wert,
@@ -607,23 +605,23 @@ end
 
 -- <b> und <i> in Text
 function parse_html( elt )
-  local a = Absatz:new()
-  local fett,kursiv,unterstreichen
+  local a = Paragraph:new()
+  local fett,kursiv,underline
   if elt[".__name"] then
     if elt[".__name"] == "b" then
       fett = 1
     elseif elt[".__name"] == "i" then
       kursiv = 1
     elseif elt[".__name"] == "u" then
-      unterstreichen = 1
+      underline = 1
     end
   end
 
   for i=1,#elt do
     if type(elt[i]) == "string" then
-      a:anhaengen(elt[i],{schriftfamilie = 0, fett = fett, kursiv = kursiv, unterstreichen = unterstreichen })
+      a:append(elt[i],{schriftfamilie = 0, fett = fett, kursiv = kursiv, underline = underline })
     elseif type(elt[i]) == "table" then
-      a:anhaengen(parse_html(elt[i]),{schriftfamilie = 0, fett = fett, kursiv = kursiv, unterstreichen = unterstreichen})
+      a:append(parse_html(elt[i]),{schriftfamilie = 0, fett = fett, kursiv = kursiv, underline = underline})
     end
   end
 
@@ -648,11 +646,6 @@ function finde_user_defined_whatsits( head )
     end
     head = head.next
   end
-  -- for n in node.traverse_id(8, head) do
-  --   if n.subtype==44 then
-  --   end
-  -- end
-  -- viznodelist.nodelist_visualize(head,"head.gv")
 end
 
 rightskip = node.new(glue_spec_node)
@@ -671,7 +664,7 @@ function mknodes(str,fontfamilie,parameter)
   -- instanz ist die interne Fontnummer
   local instanz
   local instanzname
-  local sprachcode = parameter.sprachcode
+  local languagecode = parameter.languagecode
   if parameter.fett == 1 then
     if parameter.kursiv == 1 then
       instanzname = "fettkursiv"
@@ -700,28 +693,28 @@ function mknodes(str,fontfamilie,parameter)
   local head, last, n
   local char
 
-  -- falls ein leerer String übergeben wurde, machen wir ein Leerzeichen daraus. Experimentell
+  -- if it's an empty string, we make it a space character (experimental)
   if string.len(str) == 0 then
     n = node.new(glyph_node)
     n.char = 32
     n.font = instanz
     n.subtype = 1
     n.char = s
-    if sprachcode then
-      n.lang = sprachcode
+    if languagecode then
+      n.lang = languagecode
     else
       if n.lang == 0 then
         err("Language code is not set and lang==0")
       end
     end
 
-    node.set_attribute(n,att_schriftfamilie,fontfamilie)
+    node.set_attribute(n,att_fontfamily,fontfamilie)
     return n
   end
   for s in string.utfvalues(str) do
     local char = unicode.utf8.char(s)
     if match(char,"%s") and last and last.id == glue_node and not node.has_attribute(last,att_tie_glue,1) then
-      -- doppeltes Leerzeichen, nichts machen
+      -- double space, don't do anything
     elseif s == 160 then -- non breaking space
       n = node.new(penalty_node)
       n.penalty = 10000
@@ -743,10 +736,10 @@ function mknodes(str,fontfamilie,parameter)
       last.next = n
       last = n
 
-      if parameter.unterstreichen == 1 then
-        node.set_attribute(n,att_unterstreichen,1)
+      if parameter.underline == 1 then
+        node.set_attribute(n,att_underline,1)
       end
-      node.set_attribute(n,att_schriftfamilie,fontfamilie)
+      node.set_attribute(n,att_fontfamily,fontfamilie)
 
 
     elseif match(char,"%s") then -- Leerzeichen
@@ -756,10 +749,10 @@ function mknodes(str,fontfamilie,parameter)
       n.spec.shrink  = shrink 
       n.spec.stretch = stretch
 
-      if parameter.unterstreichen == 1 then
-        node.set_attribute(n,att_unterstreichen,1)
+      if parameter.underline == 1 then
+        node.set_attribute(n,att_underline,1)
       end
-      node.set_attribute(n,att_schriftfamilie,fontfamilie)
+      node.set_attribute(n,att_fontfamily,fontfamilie)
 
       if head then
         last.next = n
@@ -773,19 +766,19 @@ function mknodes(str,fontfamilie,parameter)
       n.font = instanz
       n.subtype = 1
       n.char = s
-      n.lang = sprachcode
+      n.lang = languagecode
       n.uchyph = 1
       n.left = tex.lefthyphenmin
       n.right = tex.righthyphenmin
-      node.set_attribute(n,att_schriftfamilie,fontfamilie)
+      node.set_attribute(n,att_fontfamily,fontfamilie)
       if parameter.fett == 1 then
-        node.set_attribute(n,att_fett,1)
+        node.set_attribute(n,att_bold,1)
       end
       if parameter.kursiv == 1 then
-        node.set_attribute(n,att_kursiv,1)
+        node.set_attribute(n,att_italic,1)
       end
-      if parameter.unterstreichen == 1 then
-        node.set_attribute(n,att_unterstreichen,1)
+      if parameter.underline == 1 then
+        node.set_attribute(n,att_underline,1)
       end
 
       if head then
@@ -934,7 +927,7 @@ function do_linebreak( nodelist,hsize,parameters )
     if head.id == 0 then -- hlist
       maxskip = 0
       for glyf in node.traverse_id(glyph_node,head.list) do
-        local fam = node.has_attribute(glyf,att_schriftfamilie)
+        local fam = node.has_attribute(glyf,att_fontfamily)
         maxskip = math.max(fonts.lookup_schriftfamilie_nummer_instanzen[fam].zeilenabstand,maxskip)
       end
       head.height = 0.75 * maxskip
@@ -980,12 +973,12 @@ function boxit( box )
 end
 
 local images = {}
-function neues_bild( filename,seite,box)
-  return img.copy(bildinfo(filename,seite,box))
+function new_image( filename,seite,box)
+  return img.copy(imageinfo(filename,seite,box))
 end
 
 -- Box ist none, media, crop, bleed, trim, art
-function bildinfo( filename,page,box )
+function imageinfo( filename,page,box )
   page = page or 1
   box = box or "crop"
   local neuer_name = filename .. tostring(page) .. tostring(box)
@@ -1006,7 +999,7 @@ function bildinfo( filename,page,box )
   return images[neuer_name]
 end
 
-function setze_farbe_wenn_notwendig( nodelist,farbe )
+function set_color_if_necessary( nodelist,farbe )
   if not farbe then return nodelist end
 
   local farbname
@@ -1040,9 +1033,9 @@ function setze_fontfamilie_wenn_notwendig(nodelist,fontfamilie)
     if nodelist.id==0 or nodelist.id==1 then
       setze_fontfamilie_wenn_notwendig(nodelist.list,fontfamilie)
     else
-      fam = node.has_attribute(nodelist,att_schriftfamilie)
+      fam = node.has_attribute(nodelist,att_fontfamily)
       if fam == 0 then
-        node.set_attribute(nodelist,att_schriftfamilie,fontfamilie)
+        node.set_attribute(nodelist,att_fontfamily,fontfamilie)
       end
     end
     nodelist=nodelist.next
@@ -1147,7 +1140,7 @@ function xml_to_string( xml_element, level )
 end
 
 
-function hole_sprachcode( sprache_intern )
+function get_languagecode( sprache_intern )
   if publisher.sprachen[sprache_intern] then
     return publisher.sprachen[sprache_intern]
   end
@@ -1170,8 +1163,8 @@ end
 
 ------------------------------------------------------------------------------
 
-Absatz = {}
-function Absatz:new( textformat  )
+Paragraph = {}
+function Paragraph:new( textformat  )
   local instance = {
     nodelist,
     textformat = textformat,
@@ -1184,35 +1177,35 @@ function Absatz:new( textformat  )
   return instance
 end
 
-function Absatz:fuege_kursiv_fett_hinzu( nodelist,parameter )
+function Paragraph:add_italic_bold( nodelist,parameter )
   -- FIXME: rekursiv durchgehen, traverse bleibt an hlists hängen
   for i in node.traverse_id(glyph_node,nodelist) do
     if parameter.fett == 1 then
-      node.set_attribute(i,att_fett,1)
+      node.set_attribute(i,att_bold,1)
     end
     if parameter.kursiv == 1 then
-      node.set_attribute(i,att_kursiv,1)
+      node.set_attribute(i,att_italic,1)
     end
-    if parameter.unterstreichen == 1 then
-      node.set_attribute(i,att_unterstreichen,1)
+    if parameter.underline == 1 then
+      node.set_attribute(i,att_underline,1)
     end
-    if parameter.sprachcode then
-      i.lang = parameter.sprachcode
+    if languagecodeuagecode then
+      i.lang = languagecodeuagecode
     end
   end
 end
 
-function Absatz:fuege_zur_nodelist_hinzu( neue_nodes )
+function Paragraph:add_to_nodelist( new_nodes )
   if self.nodelist == nil then
-    self.nodelist = neue_nodes
+    self.nodelist = new_nodes
   else
     local tail = node.tail(self.nodelist)
-    tail.next = neue_nodes
-    neue_nodes.prev = tail
+    tail.next = new_nodes
+    new_nodes.prev = tail
   end
 end
 
-function Absatz:setze_farbe( farbe )
+function Paragraph:set_color( farbe )
   if not farbe then return end
 
   local farbname
@@ -1238,7 +1231,7 @@ function Absatz:setze_farbe( farbe )
 end
 
 -- Textformat Name
-function Absatz:textformat_anwenden( textformat )
+function Paragraph:apply_textformat( textformat )
   if not textformat or self.textformat then return self.nodelist end
   if textformate[textformat] and textformate[textformat].indent then
     self.nodelist = add_glue(self.nodelist,"head",{ width = textformate[textformat].indent })
@@ -1246,33 +1239,32 @@ function Absatz:textformat_anwenden( textformat )
   return self.nodelist
 end
 
--- Gibt die Breite des längsten Wortes zurück. FIXME: hier müsste eigentlich die Möglichkeit der Trennung berücksichtigt
--- werden.
-function Absatz:min_breite()
+-- Return the width of the longest word. FIXME: check for hypenation
+function Paragraph:min_width()
   assert(self)
   local wd = 0
   local last_glue = self.nodelist
   local dimen
-  -- Einfach den Abstand zwischen zwei Glue-Nodes messen, und das Maximum davon nehmen
+  -- Just measure the distance between two glue nodes and take the maximum of that
   for n in node.traverse_id(glue_node,self.nodelist) do
     dimen = node.dimensions(last_glue,n)
     wd = math.max(wd,dimen)
     last_glue = n
   end
-  -- Es gibt zwei Fälle, entweder gibt es nur ein Wort (= kein glue), dann ist last_glue auf dem Anfang der Nodeliste
-  -- Oder wir sind am letzten glue, dann gibt es ja noch ein Wort nach dem glue. last_glue ist das letzte glue-Element.
+  -- There are two cases here, either there is only one word (= no glue), then last_glue is at the beginning of the
+  -- node list. Or we are at the last glue, then there is a word after that glue. last_glue is the last glue element.
   dimen = node.dimensions(last_glue,node.tail(n))
   wd = math.max(wd,dimen)
   return wd
 end
 
-function Absatz:max_breite()
+function Paragraph:max_width()
   assert(self)
   local wd = node.dimensions(self.nodelist)
   return wd
 end
 
-function Absatz:script( whatever,scr,parameter )
+function Paragraph:script( whatever,scr,parameter )
   local nl
   if type(whatever)=="string" or type(whatever)=="number" then
     nl = mknodes(whatever,parameter.schriftfamilie,parameter)
@@ -1281,28 +1273,28 @@ function Absatz:script( whatever,scr,parameter )
   end
   setze_script(nl,scr)
   nl = node.hpack(nl)
-  -- Vorsicht! Diese Breite ist noch falsch (es ist die Breite der "normalen") Zeichen
-  -- Daher muss die Breite in pre_linebreak noch korrigiert werden
+  -- Beware! This width is still incorrect (it is the width of the mormal characters)
+  -- Therefore we have to correct the width in pre_linebreak
   node.set_attribute(nl,att_script,scr)
-  self:fuege_zur_nodelist_hinzu(nl)
+  self:add_to_nodelist(nl)
 end
 
-function Absatz:anhaengen( whatever,parameter )
+function Paragraph:append( whatever,parameter )
   if type(whatever)=="string" or type(whatever)=="number" then
-    self:fuege_zur_nodelist_hinzu(mknodes(whatever,parameter.schriftfamilie,parameter))
+    self:add_to_nodelist(mknodes(whatever,parameter.schriftfamilie,parameter))
   elseif type(whatever)=="table" and whatever.nodelist then
-    self:fuege_kursiv_fett_hinzu(whatever.nodelist,parameter)
-    self:fuege_zur_nodelist_hinzu(whatever.nodelist)
+    self:add_italic_bold(whatever.nodelist,parameter)
+    self:add_to_nodelist(whatever.nodelist)
     setze_fontfamilie_wenn_notwendig(whatever.nodelist,parameter.schriftfamilie)
   elseif type(whatever)=="function" then
-    self:fuege_zur_nodelist_hinzu(mknodes(whatever(),parameter.schriftfamilie,parameter))
+    self:add_to_nodelist(mknodes(whatever(),parameter.schriftfamilie,parameter))
   elseif type(whatever)=="userdata" then -- node.is_node in einer späteren Version
-    self:fuege_zur_nodelist_hinzu(whatever)
+    self:add_to_nodelist(whatever)
   elseif type(whatever)=="table" and not whatever.nodelist then
-    self:fuege_zur_nodelist_hinzu(mknodes("",parameter.schriftfamilie,parameter))
+    self:add_to_nodelist(mknodes("",parameter.schriftfamilie,parameter))
   else
-    if type(whatever)=="table" then printtable("Absatz:anhaengen",whatever) end
-    assert(false,string.format("Interner Fehler bei Absatz:anhaengen, type(arg)=%s",type(whatever)))
+    if type(whatever)=="table" then printtable("Paragraph:append",whatever) end
+    assert(false,string.format("Interner Fehler bei Paragraph:append, type(arg)=%s",type(whatever)))
   end
 end
 

@@ -92,16 +92,16 @@ function berechne_spaltenbreite_fuer_zeile(self, tr_inhalt,aktuelle_zeile,colspa
 
         if objekt.nodelist then
           -- FIXME: dynamisches Textformat
-          objekt:textformat_anwenden("text")
+          objekt:apply_textformat("text")
           publisher.setze_fontfamilie_wenn_notwendig(objekt.nodelist,self.schriftfamilie)
           publisher.fonts.pre_linebreak(objekt.nodelist)
         end
 
-        if objekt.min_breite then
-          min_wd = math.max(objekt:min_breite() + padding_left  + padding_right + td_randlinks + td_randrechts, min_wd or 0)
+        if objekt.min_width then
+          min_wd = math.max(objekt:min_width() + padding_left  + padding_right + td_randlinks + td_randrechts, min_wd or 0)
         end
-        if objekt.max_breite then
-          max_wd = math.max(objekt:max_breite() + padding_left  + padding_right + td_randlinks + td_randrechts, max_wd or 0)
+        if objekt.max_width then
+          max_wd = math.max(objekt:max_width() + padding_left  + padding_right + td_randlinks + td_randrechts, max_wd or 0)
         end
         trace("Tabelle: min_wd, max_wd gesetzt (%gpt,%gpt)",min_wd / 2^16, max_wd / 2^16)
       end
@@ -448,7 +448,7 @@ function berechne_zeilenhoehe( self,tr_inhalt, aktuelle_zeile )
 
         if objekt.nodelist then
           -- FIXME: dynamisches Textformat
-          -- objekt:textformat_anwenden("text")
+          -- objekt:apply_textformat("text")
           parameter = nil
           if objekt.textformat then
             if not publisher.textformate[objekt.textformat] then

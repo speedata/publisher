@@ -50,13 +50,13 @@ end
 
 local function anzahl_seiten( dataxml,... )
   dateiname=select(1,...)
-  local img = publisher.bildinfo(dateiname)
+  local img = publisher.imageinfo(dateiname)
   return img.pages
 end
 
 local function bildbreite(dataxml, ... )
   dateiname=select(1,...)
-  local img = publisher.bildinfo(dateiname)
+  local img = publisher.imageinfo(dateiname)
   publisher.seite_einrichten()
   return publisher.aktuelles_raster:breite_in_rasterzellen_sp(img.width)
 end

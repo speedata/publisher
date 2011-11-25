@@ -17,9 +17,9 @@ local schriftinstanzen={}
 local benutzte_fonts={}
 
 
-local att_schriftfamilie = 1
-local att_kursiv         = 2
-local att_fett           = 3
+local att_fontfamily     = 1
+local att_italic         = 2
+local att_bold           = 3
 local att_script         = 4
 
 -- Liste der Schriftfamilien. Schlüssel ist ein Wert wie `Überschrift`, die
@@ -148,15 +148,15 @@ function pre_linebreak( head )
 	  if gluespec then
       -- w("glue: g.width=%s",tostring(gluespec.width / 2^16))
       -- w("head.attribute=%s",tostring(node.has_attribute(head,1)))
-	    if node.has_attribute(head,att_schriftfamilie) then
-		    local fontfamilie=node.has_attribute(head,att_schriftfamilie)
+	    if node.has_attribute(head,att_fontfamily) then
+		    local fontfamilie=node.has_attribute(head,att_fontfamily)
 		    -- w("Fontfamilie=%d",fontfamilie)
         local instanz = lookup_schriftfamilie_nummer_instanzen[fontfamilie]
         -- w("Instanz=%s",tostring(instanz.normal))
         local f
         -- w("Font=%s",tostring(f))
-  		  local kursiv = node.has_attribute(head,att_kursiv)
-  		  local fett   = node.has_attribute(head,att_fett)
+  		  local kursiv = node.has_attribute(head,att_italic)
+  		  local fett   = node.has_attribute(head,att_bold)
   		  if kursiv == 1 and fett ~= 1 then
   		    f = benutzte_fonts[instanz.kursiv]
   		  elseif kursiv == 1 and fett == 1 then
@@ -184,7 +184,7 @@ function pre_linebreak( head )
       -- FIXME: wie kann es sein, dass kein gluespec vorhanden ist???
       -- kein gluespec vorhanden.
       gluespec = node.new("glue_spec",0)
-	    local fontfamilie=node.has_attribute(head,att_schriftfamilie)
+	    local fontfamilie=node.has_attribute(head,att_fontfamily)
 	    -- w("Fontfamilie=%s",tostring(fontfamilie))
       local instanz = lookup_schriftfamilie_nummer_instanzen[fontfamilie]
       -- w("Instanz=%s",tostring(instanz.normal))
@@ -199,16 +199,16 @@ function pre_linebreak( head )
 	  -- assert(false) -- test
 	elseif head.id == 12 then -- penalty
 	elseif head.id == 37 then  -- glyph
-		if node.has_attribute(head,att_schriftfamilie) then
+		if node.has_attribute(head,att_fontfamily) then
 		  -- nicht local, damit ich auf fontfamilie zugreifen kann
-		  fontfamilie=node.has_attribute(head,att_schriftfamilie)
+		  fontfamilie=node.has_attribute(head,att_fontfamily)
 
 		  -- Letzte Lösung.
 		  if fontfamilie == 0 then fontfamilie = 1 end
 
 		  local instanz = lookup_schriftfamilie_nummer_instanzen[fontfamilie]
-		  local kursiv = node.has_attribute(head,att_kursiv)
-		  local fett   = node.has_attribute(head,att_fett)
+		  local kursiv = node.has_attribute(head,att_italic)
+		  local fett   = node.has_attribute(head,att_bold)
 
 		  local instanzname = nil
 		  if kursiv == 1 and fett ~= 1 then
@@ -324,7 +324,7 @@ function post_linebreak( head, list_head)
         head = n
       end
 		elseif head.id == 10 then -- glue
-	    local att_underline = node.has_attribute(head, publisher.att_unterstreichen)
+	    local att_underline = node.has_attribute(head, publisher.att_underline)
 	    -- bei rightskip muss auf jeden Fall unterstrichen werden (sofern start existiert)
       if att_underline ~= 1 or head.subtype == 9 then
         if start then
@@ -333,7 +333,7 @@ function post_linebreak( head, list_head)
 	      end
 	    end
 		elseif head.id == 37 then -- glyph
-		  local att_underline = node.has_attribute(head, publisher.att_unterstreichen)
+		  local att_underline = node.has_attribute(head, publisher.att_underline)
 		  if att_underline == 1 then
         if not start then
           start = head

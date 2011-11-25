@@ -30,7 +30,7 @@ function absatz( layoutxml,datenxml )
     schriftfamilie = 0
   end
 
-  local sprachcode  = publisher.optionen.defaultsprache or 0
+  local languagecode  = publisher.optionen.defaultsprache or 0
   local sprache_de  = publisher.lese_attribut_jit(layoutxml,datenxml,"sprache","string")
   sprache_de_internal = {
      ["Deutsch"]                        = "de-1996",
@@ -38,7 +38,7 @@ function absatz( layoutxml,datenxml )
      ["Französisch"]                    = "fr",
      }
   if sprache_de then
-    sprachcode = publisher.hole_sprachcode(sprache_de_internal[sprache_de])
+    languagecode = publisher.get_languagecode(sprache_de_internal[sprache_de])
   end
 
   local farbname = publisher.lese_attribut_jit(layoutxml,datenxml,"farbe","string")
@@ -52,12 +52,12 @@ function absatz( layoutxml,datenxml )
   end
 
 
-  local a = publisher.Absatz:new(textformat)
+  local a = publisher.Paragraph:new(textformat)
   local objekte = {}
   local tab = publisher.dispatch(layoutxml,datenxml)
 
   for i,j in ipairs(tab) do
-    trace("Absatz Elementname = %q",tostring(publisher.elementname(j)))
+    trace("Paragraph Elementname = %q",tostring(publisher.elementname(j)))
     if publisher.elementname(j) == "Wert" and type(publisher.inhalt(j)) == "table" then
       objekte[#objekte + 1] = publisher.parse_html(publisher.inhalt(j))
     else
@@ -65,15 +65,15 @@ function absatz( layoutxml,datenxml )
     end
   end
   for _,j in ipairs(objekte) do
-    a:anhaengen(j,{schriftfamilie = schriftfamilie, sprachcode = sprachcode})
+    a:append(j,{schriftfamilie = schriftfamilie, languagecode = languagecode})
   end
   if #objekte == 0 then
-    -- irgendwie ist da nichts durchgekommen.
+    -- nothing got through, why?? check
     warning("No contents found in paragraph.")
-    a:anhaengen("",{schriftfamilie = schriftfamilie,sprachcode = sprachcode})
+    a:append("",{schriftfamilie = schriftfamilie,languagecode = languagecode})
   end
 
-  a:setze_farbe(farbindex)
+  a:set_color(farbindex)
   return a
 end
 
@@ -190,7 +190,7 @@ function bild( layoutxml,datenxml )
     end
   end
 
-  local bild = publisher.neues_bild(dateiname,seite,max_box_intern)
+  local bild = publisher.new_image(dateiname,seite,max_box_intern)
   local skalierungsfaktor_wd = breite_sp / bild.width
   local skalierungsfaktor = skalierungsfaktor_wd
   if hoehe_sp then
@@ -202,7 +202,7 @@ function bild( layoutxml,datenxml )
 
   if nat_box_intern ~= max_box_intern then
     -- Das Bild muss vergrößert und dann nach links und oben verschoben werden
-    local img_min = publisher.bildinfo(dateiname,seite,nat_box_intern)
+    local img_min = publisher.imageinfo(dateiname,seite,nat_box_intern)
     shift_left = ( bild.width  - img_min.width )  / 2
     shift_up =   ( bild.height - img_min.height ) / 2
     skalierungsfaktor = skalierungsfaktor * ( bild.width / img_min.width )
@@ -413,7 +413,7 @@ end
 
 -- Text in fetter Schrift
 function fett( layoutxml,datenxml )
-  local a = publisher.Absatz:new()
+  local a = publisher.Paragraph:new()
 
   local objekte = {}
   local tab = publisher.dispatch(layoutxml,datenxml)
@@ -426,7 +426,7 @@ function fett( layoutxml,datenxml )
     end
   end
   for _,j in ipairs(objekte) do
-    a:anhaengen(j,{schriftfamilie = 0, fett = 1})
+    a:append(j,{schriftfamilie = 0, fett = 1})
   end
 
   return a
@@ -474,7 +474,7 @@ end
 
 -- Text in kursiver Schrift
 function kursiv( layoutxml,datenxml )
-  local a = publisher.Absatz:new()
+  local a = publisher.Paragraph:new()
   local objekte = {}
   local tab = publisher.dispatch(layoutxml,datenxml)
 
@@ -486,7 +486,7 @@ function kursiv( layoutxml,datenxml )
     end
   end
   for _,j in ipairs(objekte) do
-    a:anhaengen(j,{schriftfamilie = 0, kursiv = 1})
+    a:append(j,{schriftfamilie = 0, kursiv = 1})
   end
   return a
 end
@@ -667,10 +667,10 @@ end
 
 -- Formatiert die angegebene URL etwas besser für den Satz.
 function url(layoutxml,datenxml)
-  local a = publisher.Absatz:new()
+  local a = publisher.Paragraph:new()
   local tab = publisher.dispatch(layoutxml,datenxml)
   for i,j in ipairs(tab) do
-    a:anhaengen(xpath.textvalue(publisher.inhalt(j)),{})
+    a:append(xpath.textvalue(publisher.inhalt(j)),{})
     a.nodelist = publisher.umbreche_url(a.nodelist)
   end
   return a
@@ -879,10 +879,10 @@ function schriftart( layoutxml,datenxml )
   if not familiennummer then
     err("font: family %q unknown",schriftfamilie)
   else
-    local a = publisher.Absatz:new()
+    local a = publisher.Paragraph:new()
     local tab = publisher.dispatch(layoutxml,datenxml)
     for i,j in ipairs(tab) do
-      a:anhaengen(publisher.inhalt(j),{schriftfamilie = familiennummer})
+      a:append(publisher.inhalt(j),{schriftfamilie = familiennummer})
     end
     return a
   end
@@ -1032,7 +1032,7 @@ function speichere_datensatzdatei( layoutxml,datenxml )
 end
 
 function sub( layoutxml,datenxml )
-  local a = publisher.Absatz:new()
+  local a = publisher.Paragraph:new()
   local tab = publisher.dispatch(layoutxml,datenxml)
   for i,j in ipairs(tab) do
     a:script(publisher.inhalt(j),1,{schriftfamilie = 0})
@@ -1041,7 +1041,7 @@ function sub( layoutxml,datenxml )
 end
 
 function sup( layoutxml,datenxml )
-  local a = publisher.Absatz:new()
+  local a = publisher.Paragraph:new()
   local tab = publisher.dispatch(layoutxml,datenxml)
   for i,j in ipairs(tab) do
     a:script(publisher.inhalt(j),2,{schriftfamilie = 0})
@@ -1249,8 +1249,8 @@ function textblock( layoutxml,datenxml )
       nodelist = j.nodelist
       assert(nodelist)
       publisher.setze_fontfamilie_wenn_notwendig(nodelist,schriftfamilie)
-      j.nodelist = publisher.setze_farbe_wenn_notwendig(nodelist,farbindex)
-      nodelist = j:textformat_anwenden(textformat)
+      j.nodelist = publisher.set_color_if_necessary(nodelist,farbindex)
+      nodelist = j:apply_textformat(textformat)
       node.slide(nodelist)
       publisher.fonts.pre_linebreak(nodelist)
       if j.textformat and publisher.textformate[j.textformat] then
@@ -1276,7 +1276,7 @@ function textblock( layoutxml,datenxml )
       end
       nodelist = publisher.do_linebreak(nodelist,breite_sp,parameter)
       nodes[#nodes + 1] = nodelist
-      -- hier könnte ich ein Absatz:textformat_anwenden einfügen
+      -- hier könnte ich ein Paragraph:apply_textformat einfügen
     end -- wenn's wirklich ein node ist
   end -- alle Objekte
   -- debug
@@ -1321,8 +1321,8 @@ function textblock( layoutxml,datenxml )
     nodes=neue_nodes
   end
 
-  trace("Textbock: nodes verbinden")
-  -- nodes[i] verbinden
+  trace("Textbock: connect nodes")
+  -- connect nodes[i]
   local tail
   for i=2,#nodes do
     tail = node.tail(nodes[i-1])
@@ -1335,16 +1335,17 @@ function textblock( layoutxml,datenxml )
   if winkel then
     nodelist = publisher.rotiere(nodelist,winkel)
   end
-  trace("Textbock: Ende")
+  trace("Textbock: end")
   return nodelist
 end
 
 function trennvorschlag( layoutxml,datenxml )
   lang.hyphenation(publisher.languages.de,layoutxml[1])
 end
--- Text unterstreichen
-function unterstreichen( layoutxml,datenxml )
-  local a = publisher.Absatz:new()
+
+-- Underline text
+function underline( layoutxml,datenxml )
+  local a = publisher.Paragraph:new()
   local objekte = {}
   local tab = publisher.dispatch(layoutxml,datenxml)
 
@@ -1356,7 +1357,7 @@ function unterstreichen( layoutxml,datenxml )
     end
   end
   for _,j in ipairs(objekte) do
-    a:anhaengen(j,{schriftfamilie = 0, unterstreichen = 1})
+    a:append(j,{schriftfamilie = 0, underline = 1})
   end
   return a
 end
