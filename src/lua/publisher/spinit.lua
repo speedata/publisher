@@ -2,10 +2,10 @@
 --  spinit.lua
 --  speedata publisher
 --
---  Created by Patrick Gundlach on 2010-03-27.
 --  Copyright 2010-2011 Patrick Gundlach.
-
 --  See file COPYING in the root directory for license details.
+
+
 
 -- file_start("spinit.lua")
 

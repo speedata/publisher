@@ -2,7 +2,7 @@
 --  sdscripts.lua
 --  speedata publisher
 --
---  Copyright 2010-2011 Patrick Gundlach. All rights reserved.
+--  Copyright 2010-2011 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 --
 

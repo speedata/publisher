@@ -2,10 +2,8 @@
 --  sd-debug.lua
 --  publisher
 --
---  Created by Patrick Gundlach on 2010-09-21.
---  Copyright 2010 Patrick Gundlach. All rights reserved.
---
-
+--  Copyright 2010 Patrick Gundlach.
+--  See file COPYING in the root directory for license info.
 
 -- fürs Debugging...
 function w( ... )

@@ -2,9 +2,9 @@
 --  sd-callbacks.lua
 --  speedata publisher
 --
---  Created by Patrick Gundlach on 2010-09-21.
---  Copyright 2010-2011 Patrick Gundlach. All rights reserved.
---
+--  Copyright 2010-2011 Patrick Gundlach.
+--  See file COPYING in the root directory for license info.
+
 
 -- necessary callbacks if we want to use LuaTeX without kpathsea
 

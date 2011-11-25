@@ -1,10 +1,9 @@
--- 
---  src/lua/element.lua
+--
+--  element.lua
 --  speedata publisher
---  
---  Created by Patrick Gundlach on 2010-03-10.
---  Copyright 2010 Patrick Gundlach. All rights reserved.
--- 
+--
+--  Copyright 2010-2011 Patrick Gundlach.
+--  See file COPYING in the root directory for license info.
 
 file_start("element.lua")
 require("publisher.fonts")
@@ -1180,9 +1179,9 @@ function textblock( layoutxml,datenxml )
   local farbname       = publisher.lese_attribut_jit(layoutxml,datenxml,"farbe","string")
   local breite         = publisher.lese_attribut_jit(layoutxml,datenxml,"breite","number")
   local winkel         = publisher.lese_attribut_jit(layoutxml,datenxml,"winkel","number")
-  local spalten        = publisher.lese_attribut_jit(layoutxml,datenxml,"spalten","number")
+  local columns        = publisher.lese_attribut_jit(layoutxml,datenxml,"spalten","number")
   local spaltenabstand = publisher.lese_attribut_jit(layoutxml,datenxml,"spaltenabstand","string")
-  spalten = spalten or 1
+  columns = columns or 1
   if not spaltenabstand then spaltenabstand = "3mm" end
   if tonumber(spaltenabstand) then
     spaltenabstand = publisher.aktuelles_raster.rasterbreite * spaltenabstand
@@ -1238,8 +1237,8 @@ function textblock( layoutxml,datenxml )
     end
   end
   trace("Textblock: #objekte=%d",#objekte)
-  if spalten > 1 then
-    breite_sp = math.floor(  (breite_sp - spaltenabstand * ( spalten - 1 ) )   / spalten)
+  if columns > 1 then
+    breite_sp = math.floor(  (breite_sp - spaltenabstand * ( columns - 1 ) )   / columns)
   end
   for i,j in ipairs(objekte) do
     -- jeden <Absatz>, <Bild> oder so durchgehen, jetzt nur <Absatz>
@@ -1286,7 +1285,7 @@ function textblock( layoutxml,datenxml )
     nodes[1] = publisher.add_rule(nil,"head",vrule)
   end
 
-  if spalten > 1 then
+  if columns > 1 then
     local zeilen = {}
     local zeilenanzahl = 0
     local neue_nodes = {}
@@ -1297,12 +1296,12 @@ function textblock( layoutxml,datenxml )
       end
     end
 
-    local zeilenanzahl_mehrspaltiger_satz = math.ceil(zeilenanzahl / spalten)
+    local zeilenanzahl_mehrspaltiger_satz = math.ceil(zeilenanzahl / columns)
     for i=1,zeilenanzahl_mehrspaltiger_satz do
       local aktuelle_zeile,hbox_aktuelle_zeile
       hbox_aktuelle_zeile = zeilen[i] -- erste Spalte
       local tail = hbox_aktuelle_zeile
-      for j=2,spalten do -- zweite und folgende Spalten
+      for j=2,columns do -- zweite und folgende columns
         local g1 = node.new("glue")
         g1.spec = node.new("glue_spec")
         g1.spec.width = spaltenabstand

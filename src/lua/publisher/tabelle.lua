@@ -2,9 +2,7 @@
 --  publisher/src/lua/tabelle.lua
 --  speedata publisher
 --
---  Created by Patrick Gundlach on 2010-03-07.
---  Copyright 2010-2011 Patrick Gundlach. All rights reserved.
---
+--  Copyright 2010-2011 Patrick Gundlach.
 --  See file COPYING in the root directory for license details.
 
 

@@ -2,9 +2,7 @@
 --  fonts.lua
 --  publisher
 --
---  Created by Patrick Gundlach on 2011-07-14.
---  Copyright 2011 Patrick Gundlach. All rights reserved.
---
+--  Copyright 2011 Patrick Gundlach.
 --  See file COPYING in the root directory for license details.
 
 

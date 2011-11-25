@@ -2,8 +2,7 @@
 --  xmlparser.lua
 --  publisher
 --
---  Copyright 2011 Patrick Gundlach. All rights reserved.
---
+--  Copyright 2011 Patrick Gundlach.
 --  See file COPYING in the root directory for license details.
 
 local xmlreader = xmlreader
