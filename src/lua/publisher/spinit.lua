@@ -36,9 +36,9 @@ function warning(...)
   texio.write_nl("Warning: " .. string.format(unpack(text)))
 end
 
-local fehlerzahl=0
+local errcount=0
 function err(...)
-  fehlerzahl =  fehlerzahl + 1
+  errcount =  errcount + 1
   local text = { ... }
   text[1] = gettext(text[1])
   errorlog:write("Error: " .. string.format(unpack(text)) .. "\n")
@@ -157,7 +157,7 @@ tex.definefont("dummyfont",num)
 -- kann nach dem Aufruf von publisher.exit() stattfinden.
 function exit()
   log("Stop processing data")
-  log("%d errors occurred",fehlerzahl)
+  log("%d errors occurred",errcount)
   log("Duration: %3f seconds",os.gettimeofday() - starttime)
   log("node_mem_usage=%s",status.node_mem_usage)
   log("luastate_bytes=%d",status.luastate_bytes / 1024)
