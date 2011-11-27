@@ -23,8 +23,8 @@
         <entry en="Fontface" de="Schriftart" />
         <entry en="Grid" de="Raster" />
         <entry en="Group" de="Gruppe" />
-        <entry en="HandleNode" de="BearbeiteKnoten" />
-        <entry en="HandleRecord" de="BearbeiteDatensatz" />
+        <entry en="ProcessNode" de="BearbeiteKnoten" />
+        <entry en="ProcessRecord" de="BearbeiteDatensatz" />
         <entry en="Hyphenation" de="Trennvorschlag" />
         <entry en="I" de="I" />
         <entry en="Image" de="Bild" />
@@ -269,45 +269,45 @@
             <en />
             <de>Schaltet auf den Schnitt »Fett« um</de>
         </documentation>
-        <documentation docid="handlerecord">
+        <documentation docid="processrecord">
             <en />
             <de>Führt eine Regel aus mit dem Inhalt einer Liste (im Attribut ›auswahl‹).</de>
         </documentation>
-        <documentation docid="handlerecord/select">
+        <documentation docid="processrecord/select">
             <en />
             <de>Bestimmt die Liste, die per »Datensatz« aufgerufen bearbeitet werden soll.</de>
         </documentation>
-        <documentation docid="handlenode">
+        <documentation docid="processnode">
             <en />
             <de>Ruft alle Kindelemente eines bestimmten Namens auf. Gegenstück ist »Datensatz«</de>
         </documentation>
-        <documentation docid="handlenode/select">
+        <documentation docid="processnode/select">
             <en />
             <de>Bestimmt die Datensätze, die ausgeführt werden sollen.</de>
         </documentation>
-        <documentation docid="handlenode/mode">
+        <documentation docid="processnode/mode">
             <en />
             <de>Wird ein Modus angegeben, werden nur »Datensatz« Elemente ausgeführt, die diesem Modus entsprechen.
                 (Text)</de>
         </documentation>
         <documentation docid="atpageshipout">
-            <en />
+            <en>When a page gets finished, the child elements are executed.</en>
             <de>Wenn eine Seite ausgegeben wird, werden die Kindelemente ausgeführt.</de>
         </documentation>
         <documentation docid="atpagecreation">
-            <en />
+            <en>When a new page gets created, the child elements are executed.</en>
             <de>Wenn eine Seite erzeugt wird, werden die Kindelemente ausgeführt.</de>
         </documentation>
         <documentation docid="image">
-            <en />
+            <en>Include an external image.</en>
             <de>Bindet eine externe Grafik ein.</de>
         </documentation>
         <documentation docid="image/file">
-            <en />
+            <en>Filename of the image. (text)</en>
             <de>Dateiname der Bilddatei. (Text)</de>
         </documentation>
         <documentation docid="image/width">
-            <en />
+            <en>Width of the image in grid cells or in aboslute size</en>
             <de>Breite des Bildes in Rasterzellen oder in absoluten Maßangaben.</de>
         </documentation>
         <documentation docid="image/height">

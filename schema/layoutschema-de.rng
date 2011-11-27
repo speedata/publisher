@@ -7,75 +7,75 @@
     <ref name="e_Layout"/>
   </start>
   
-  <define name="t_nullbishundert">
+  <define name="t_zerotohundred">
     <data type="nonNegativeInteger">
       <param name="pattern">(100|[0-9]?[0-9])</param>
     </data>
   </define>
 
   <define name="t_Toplevel">
-    <optional><ref name="e_Datensatz"/></optional>
-    <optional><ref name="e_LadeSchriftdatei"/></optional>
-    <optional><ref name="e_DefiniereFarbe"/></optional>
-    <optional><ref name="e_DefiniereSchriftfamilie"/></optional>
-    <optional><ref name="e_DefiniereTextformat"/></optional>
-    <optional><ref name="e_Seitenformat"/></optional>
-    <optional><ref name="e_Optionen"/></optional>
-    <optional><ref name="e_Seitentyp"/></optional>
-    <optional><ref name="e_SetzeRaster"/></optional>
-    <optional><ref name="e_Trennvorschlag"/></optional>
-    <optional><ref name="e_Zuweisung"/></optional>
+    <optional><ref name="e_Dataset"/></optional>
+    <optional><ref name="e_LoadFontfile"/></optional>
+    <optional><ref name="e_DefineColor"/></optional>
+    <optional><ref name="e_DefineFontfamily"/></optional>
+    <optional><ref name="e_DefineTextformat"/></optional>
+    <optional><ref name="e_Pageformat"/></optional>
+    <optional><ref name="e_Options"/></optional>
+    <optional><ref name="e_Pagetype"/></optional>
+    <optional><ref name="e_SetGrid"/></optional>
+    <optional><ref name="e_Hyphenation"/></optional>
+    <optional><ref name="e_SetVariable"/></optional>
   </define>
 
-  <define name="t_Fallinhalt">
-    <ref name="t_Anweisungen"/>
+  <define name="t_Switchcontents">
+    <ref name="t_Commands"/>
     <optional><ref name="e_Td"/></optional>
-    <optional><ref name="e_Wert"/></optional>
-    <optional><ref name="e_Bild"/></optional>
-    <optional><ref name="e_Absatz"/></optional>
+    <optional><ref name="e_Value"/></optional>
+    <optional><ref name="e_Image"/></optional>
+    <optional><ref name="e_Paragraph"/></optional>
     <optional><ref name="e_Sup"/></optional>
     <optional><ref name="e_Sub"/></optional>
   </define>
 
-  <define name="t_Anweisungen">
-    <optional><ref name="e_LadeDatensatzdatei"/></optional>
-    <optional><ref name="e_SpeichereDatensatzdatei"/></optional>
-    <optional><ref name="e_ObjektAusgeben"/></optional>
-    <optional><ref name="e_Fallunterscheidung"/></optional>
-    <optional><ref name="e_Solange"/></optional>
-    <optional><ref name="e_BearbeiteDatensatz"/></optional>
-    <optional><ref name="e_BearbeiteKnoten"/></optional>
-    <optional><ref name="e_Nachricht"/></optional>
-    <optional><ref name="e_NächsterRahmen"/></optional>
-    <optional><ref name="e_NeueSeite"/></optional>
-    <optional><ref name="e_NeueZeile"/></optional>
-    <optional><ref name="e_Leerzeile"/></optional>
-    <optional><ref name="e_Gruppe"/></optional>
-    <optional><ref name="e_SortiereSequenz"/></optional>
-    <optional><ref name="e_Trennvorschlag"/></optional>
-    <optional><ref name="e_Zuweisung"/></optional>
+  <define name="t_Commands">
+    <optional><ref name="e_LoadDataset"/></optional>
+    <optional><ref name="e_SaveDataset"/></optional>
+    <optional><ref name="e_PlaceObject"/></optional>
+    <optional><ref name="e_Switch"/></optional>
+    <optional><ref name="e_While"/></optional>
+    <optional><ref name="e_ProcessRecord"/></optional>
+    <optional><ref name="e_ProcessNode"/></optional>
+    <optional><ref name="e_Message"/></optional>
+    <optional><ref name="e_NextFrame"/></optional>
+    <optional><ref name="e_NewPage"/></optional>
+    <optional><ref name="e_NewRow"/></optional>
+    <optional><ref name="e_EmptyLine"/></optional>
+    <optional><ref name="e_Group"/></optional>
+    <optional><ref name="e_SortSequence"/></optional>
+    <optional><ref name="e_Hyphenation"/></optional>
+    <optional><ref name="e_SetVariable"/></optional>
   </define>
 
-  <define name="t_Werte">
+  <define name="t_values">
     <oneOrMore>
       <optional>
-        <ref name="t_Textwerte"/>
+        <ref name="t_textvalues"/>
       </optional>
     </oneOrMore>
   </define>
 
-  <define name="t_Textwerte">
+  <define name="t_textvalues">
     <choice>
       <ref name="e_I"/>
       <ref name="e_B"/>
       <ref name="e_U"/>
-      <ref name="e_Schriftart"/>
-      <ref name="e_Bild"/>
+      <ref name="e_FontFace"/>
+      <ref name="e_Image"/>
       <ref name="e_Sub"/>
       <ref name="e_Sup"/>
       <ref name="e_URL"/>
-      <ref name="e_Wert"/>
-      <ref name="e_Fallunterscheidung"/>
+      <ref name="e_Value"/>
+      <ref name="e_Switch"/>
     </choice>
   </define>
 
@@ -89,7 +89,7 @@
     </choice>
   </define>
 
-  <define name="t_Sprachen">
+  <define name="t_languages">
     <choice>
       <value>Deutsch</value>
       <value>Englisch (Großbritannien)</value>
@@ -97,7 +97,7 @@
     </choice>
   </define>
 
-  <define name="a_ausrichtung">
+  <define name="a_alignment">
     <attribute name="ausrichtung">
       <a:documentation docid="alignment">Bestimmt den Rand der Zeilen</a:documentation>
       <choice>
@@ -113,7 +113,7 @@
     </attribute>
   </define>
 
-  <define name="a_belegen">
+  <define name="a_allocate">
     <attribute name="belegen">
       <a:documentation docid="allocate">Gibt an, ob das Objekt den Platz auf der Seite (im Raster) belegen soll. Dadurch ist der Platz für andere Objekte gesperrt.</a:documentation>
       <choice>
@@ -125,12 +125,12 @@
     </attribute>
   </define>
 
-  <define name="e_Absatz">
+  <define name="e_Paragraph">
     <element name="Absatz">
-      <ref name="t_Werte"/>
+      <ref name="t_values"/>
       <optional>
         <attribute name="sprache">
-          <ref name="t_Sprachen"/>
+          <ref name="t_languages"/>
         </attribute>
       </optional>
       <optional>
@@ -148,7 +148,7 @@
     </element>
   </define>
 
-  <define name="e_Aktion">
+  <define name="e_Action">
     <element name="Aktion">
       <a:documentation docid="action">Assoziiert eine Anweisung (Aktion) mit dem umgebenden Text.</a:documentation>
       <element name="ZurListeHinzufügen">
@@ -164,7 +164,7 @@
     </element>
   </define>
 
-  <define name="e_Attribut">
+  <define name="e_Attribute">
     <element name="Attribut">
       <a:documentation docid="attribute">Erzeugt ein Attribut, das in ein »Element« geschachtelt werden kann.</a:documentation>
       <attribute name="name"><data type="string"/></attribute>
@@ -177,49 +177,49 @@
   <define name="e_B">
     <element name="B">
       <a:documentation docid="b">Schaltet auf den Schnitt »Fett« um</a:documentation>
-      <ref name="t_Werte"/>
+      <ref name="t_values"/>
     </element>
   </define>
 
-  <define name="e_BearbeiteDatensatz">
+  <define name="e_ProcessRecord">
     <element name="BearbeiteDatensatz">
-      <a:documentation docid="handlerecord">Führt eine Regel aus mit dem Inhalt einer Liste (im Attribut ›auswahl‹).</a:documentation>
+      <a:documentation docid="processrecord">Führt eine Regel aus mit dem Inhalt einer Liste (im Attribut ›auswahl‹).</a:documentation>
       <attribute name="auswahl"/>
-      <a:documentation docid="handlerecord/select">Bestimmt die Liste, die per »Datensatz« aufgerufen bearbeitet werden soll.</a:documentation>
+      <a:documentation docid="processrecord/select">Bestimmt die Liste, die per »Datensatz« aufgerufen bearbeitet werden soll.</a:documentation>
     </element>
   </define>
 
-  <define name="e_BearbeiteKnoten">
+  <define name="e_ProcessNode">
     <element name="BearbeiteKnoten">
-      <a:documentation docid="handlenode">Ruft alle Kindelemente eines bestimmten Namens auf. Gegenstück ist »Datensatz«</a:documentation>
+      <a:documentation docid="processnode">Ruft alle Kindelemente eines bestimmten Namens auf. Gegenstück ist »Datensatz«</a:documentation>
       <attribute name="auswahl"/>
-      <a:documentation docid="handlenode/select">Bestimmt die Datensätze, die ausgeführt werden sollen.</a:documentation>
+      <a:documentation docid="processnode/select">Bestimmt die Datensätze, die ausgeführt werden sollen.</a:documentation>
       <optional>
         <attribute name="modus"/>
-        <a:documentation docid="handlenode/mode">Wird ein Modus angegeben, werden nur »Datensatz« Elemente ausgeführt, die diesem Modus entsprechen. (Text)</a:documentation>
+        <a:documentation docid="processnode/mode">Wird ein Modus angegeben, werden nur »Datensatz« Elemente ausgeführt, die diesem Modus entsprechen. (Text)</a:documentation>
       </optional>
     </element>
   </define>
 
-  <define name="e_BeiSeitenAusgabe">
+  <define name="e_AtPageShipout">
     <element name="BeiSeitenAusgabe">
       <a:documentation docid="atpageshipout">Wenn eine Seite ausgegeben wird, werden die Kindelemente ausgeführt.</a:documentation>
       <oneOrMore>
-        <ref name="t_Anweisungen"/>
+        <ref name="t_Commands"/>
       </oneOrMore>
     </element>
   </define>
 
-  <define name="e_BeiSeitenErzeugung">
+  <define name="e_AtPageCreation">
     <element name="BeiSeitenErzeugung">
       <a:documentation docid="atpagecreation">Wenn eine Seite erzeugt wird, werden die Kindelemente ausgeführt.</a:documentation>
       <oneOrMore>
-        <ref name="t_Anweisungen"/>
+        <ref name="t_Commands"/>
       </oneOrMore>
     </element>
   </define>
 
-  <define name="e_Bild">
+  <define name="e_Image">
     <element name="Bild">
       <a:documentation docid="image">Bindet eine externe Grafik ein.</a:documentation>
       <attribute name="datei">
@@ -266,11 +266,11 @@
     </element>
   </define>
 
-  <define name="e_Datensatz">
+  <define name="e_Dataset">
     <element name="Datensatz">
       <a:documentation docid="record">Führt für jedes angegebene Element (im Attribut ›element‹) die Anweisungen in den Kindelementen aus.</a:documentation>
       <oneOrMore>
-        <ref name="t_Anweisungen"/>
+        <ref name="t_Commands"/>
       </oneOrMore>
       <attribute name="element"/>
       <a:documentation docid="record/element">Jedes dieser Elemente wird mit den Anweisungen ausgeführt.</a:documentation>
@@ -281,7 +281,7 @@
     </element>
   </define>
 
-  <define name="e_DefiniereFarbe">
+  <define name="e_DefineColor">
      <element name="DefiniereFarbe">
        <a:documentation docid="definecolor">Definiert eine Farbe mit dem Namen aus dem Attribut »name«. Es gibt
        zwei zulässige Modelle, »rgb« und »cmyk«. Die Wertangaben liegen zwischen 0 und 100.</a:documentation>
@@ -292,34 +292,34 @@
              <a:documentation docid="definecolor/model">Es gibt zwei zulässige Modelle: ›cmyk‹ und ›rgb‹.</a:documentation><value>rgb</value></attribute>
            <attribute name="r">
              <a:documentation docid="definecolor/r">Wert für Rot (zwischen 0 und 100)</a:documentation>
-             <ref name="t_nullbishundert"/></attribute>
+             <ref name="t_zerotohundred"/></attribute>
            <attribute name="g">
              <a:documentation docid="definecolor/g">Wert für Grün (zwischen 0 und 100)</a:documentation>
-             <ref name="t_nullbishundert"/></attribute>
+             <ref name="t_zerotohundred"/></attribute>
            <attribute name="b">
              <a:documentation docid="definecolor/b">Wert für Blau (zwischen 0 und 100)</a:documentation>
-             <ref name="t_nullbishundert"/></attribute>
+             <ref name="t_zerotohundred"/></attribute>
          </group>
          <group>
            <attribute name="modell"><value>cmyk</value></attribute>
            <attribute name="c">
              <a:documentation docid="definecolor/c">Wert für Türkis (cyan, zwischen 0 und 100)</a:documentation>
-             <ref name="t_nullbishundert"/></attribute>
+             <ref name="t_zerotohundred"/></attribute>
            <attribute name="m">
              <a:documentation docid="definecolor/m">Wert für Magenta (zwischen 0 und 100)</a:documentation>
-             <ref name="t_nullbishundert"/></attribute>
+             <ref name="t_zerotohundred"/></attribute>
            <attribute name="y">
              <a:documentation docid="definecolor/y">Wert für Gelb (yellow, zwischen 0 und 100)</a:documentation>
-             <ref name="t_nullbishundert"/></attribute>
+             <ref name="t_zerotohundred"/></attribute>
            <attribute name="k">
              <a:documentation docid="definecolor/k">Wert für Schwarz (key, zwischen 0 und 100)</a:documentation>
-             <ref name="t_nullbishundert"/></attribute>
+             <ref name="t_zerotohundred"/></attribute>
          </group>
        </choice>
      </element>
     </define>
 
-  <define name="e_DefiniereSchriftfamilie">
+  <define name="e_DefineFontfamily">
     <element name="DefiniereSchriftfamilie">
       <a:documentation docid="definefontfamily">Definiert eine Schriftfamilie bestehend aus den Schnitten »Normal«, »Kursiv«, »Fett« und »Fett Kursiv«. Die Familien werden benötigt, wenn 
       innerhalb eines Textes auf einen anderen Schnitt umgeschaltet wird. Die Schriftarten müssen vorher mit »LadeSchriftdatei« geladen werden. Die Familie mit dem Namen »Text« wird immer dann
@@ -357,10 +357,10 @@
     </element>
   </define>
 
-  <define name="e_DefiniereTextformat">
+  <define name="e_DefineTextformat">
     <element name="DefiniereTextformat">
       <attribute name="name"/>
-      <optional><ref name="a_ausrichtung"/></optional>
+      <optional><ref name="a_alignment"/></optional>
       <optional><attribute name="einrückung"/></optional>
     </element>
   </define>
@@ -374,14 +374,14 @@
       <oneOrMore>
         <interleave>
           <optional><ref name="e_Element"/></optional>
-          <optional><ref name="e_Attribut"/></optional>
-          <optional><ref name="e_Kopievon"/></optional>
+          <optional><ref name="e_Attribute"/></optional>
+          <optional><ref name="e_CopyOf"/></optional>
         </interleave>
       </oneOrMore>
     </element>
   </define>
 
-  <define name="e_Fallunterscheidung">
+  <define name="e_Switch">
     <element name="Fallunterscheidung">
       <a:documentation docid="switch">Enthält eine Wenn-Dann-Abfrage. Die Kindelemente »Fall« werden ausgeführt, wenn die Bedingung erfüllt ist. Wenn keine Bedingung erfüllt ist, wird das Element »Sonst« ausgeführt, sofern es vorhanden ist.</a:documentation>
       <oneOrMore>
@@ -390,7 +390,7 @@
           <attribute name="bedingung"><data type="string"/></attribute>
           <a:documentation docid="switch/test">Enthält einen XPath-Ausdruck für die Bedingung</a:documentation>
           <oneOrMore>
-            <ref name="t_Fallinhalt"/>
+            <ref name="t_Switchcontents"/>
           </oneOrMore>
         </element>
       </oneOrMore>
@@ -398,19 +398,19 @@
         <element name="Sonst">
           <a:documentation docid="switch/otherwise">Wird ausgeführt, falls keine Bedingung zutrifft</a:documentation>
           <oneOrMore>
-            <ref name="t_Fallinhalt"/>
+            <ref name="t_Switchcontents"/>
           </oneOrMore>
         </element>
       </optional>
     </element>
   </define>
 
-  <define name="e_Gruppe">
+  <define name="e_Group">
     <element name="Gruppe">
       <attribute name="name"><data type="string"/></attribute>
       <element name="Inhalt">
         <oneOrMore>
-          <ref name="t_Anweisungen"/>
+          <ref name="t_Commands"/>
         </oneOrMore>
       </element>
     </element>
@@ -419,11 +419,11 @@
   <define name="e_I">
     <element name="I">
       <a:documentation docid="i">Schaltet auf Kursiv um</a:documentation>
-      <ref name="t_Werte"/>
+      <ref name="t_values"/>
     </element>
   </define>
 
-  <define name="e_Kopievon">
+  <define name="e_CopyOf">
     <element name="Kopie-von">
       <a:documentation docid="copyof">Fügt eine Menge von Elementen ein.</a:documentation>
       <attribute name="auswahl">
@@ -432,7 +432,7 @@
     </element>
   </define>
 
-  <define name="e_LadeDatensatzdatei">
+  <define name="e_LoadDataset">
     <element name="LadeDatensatzdatei">
       <a:documentation docid="loaddataset">Lädt eine zuvor gespeicherte Datensatzdatei. Existiert die angegebene Datei nicht, wird dieser Befehl übersprungen.</a:documentation>
       <attribute name="name"><data type="string"/></attribute>
@@ -441,7 +441,7 @@
     </element>
   </define>
 
-  <define name="e_LadeSchriftdatei">
+  <define name="e_LoadFontfile">
     <element name="LadeSchriftdatei">
       <a:documentation docid="loadfontfile">Lädt eine Schriftdatei. Erlaubt sind Type1, TrueType und OpenType Schriftarten.</a:documentation>
       <attribute name="name"><data type="string"/></attribute>
@@ -453,13 +453,13 @@
         <attribute name="randausgleich">
           <a:documentation docid="loadfontfile/marginprotrusion">Optischer Randausgleich (Trennstrich, Komma und Punkt ragen in den
             Rand). Erlaubt sind Werte zwischen 0 (kein Randausgleich) und 100 (vollständig).</a:documentation>
-          <ref name="t_nullbishundert"/>
+          <ref name="t_zerotohundred"/>
         </attribute>
       </optional>
       <optional>
         <attribute name="leerraum">
           <a:documentation docid="loadfontfile/space">Natürliche Breite des Leeraums zwischen den Wörtern (in Prozent der Schriftgröße). Voreingestellt ist 25.</a:documentation>
-          <ref name="t_nullbishundert"/>
+          <ref name="t_zerotohundred"/>
         </attribute>
       </optional>
       <optional>
@@ -491,7 +491,7 @@
     </element>
   </define>
 
-  <define name="e_Leerzeile">
+  <define name="e_EmptyLine">
     <element name="Leerzeile">
       <a:documentation docid="emptyline">Der virtuelle Cursor wird auf die übernächste freie Zeile gesetzt.</a:documentation>
       <empty/>
@@ -517,20 +517,20 @@
     </element>
   </define>
 
-  <define name="e_Nachricht">
+  <define name="e_Message">
     <element name="Nachricht">
       <a:documentation docid="message">Erzeugt eine Meldung auf der Konsole und im Protokoll. Die Nachricht wird durch das Attribut ›auswahl‹ oder durch Kindelemente »Wert« angegeben.</a:documentation>
       <choice>
         <attribute name="auswahl"><data type="string"/></attribute>
         <a:documentation docid="message/select">Nachricht, die ausgegeben werden soll (als XPath-Ausdruck)</a:documentation>
         <oneOrMore>
-          <ref name="e_Wert"/>
+          <ref name="e_Value"/>
         </oneOrMore>
       </choice>
     </element>
   </define>
 
-  <define name="e_NächsterRahmen">
+  <define name="e_NextFrame">
     <element name="NächsterRahmen">
       <a:documentation docid="nextframe">Wechselt auf den nächsten Rahmen im angegebenen Platzierungsbereich. Ist kein
         Rahmen mehr auf der Seite vorhanden, wird eine neue Seite erzeugt.</a:documentation>
@@ -540,14 +540,14 @@
     </element>
   </define>
 
-  <define name="e_NeueSeite">
+  <define name="e_NewPage">
     <element name="NeueSeite">
       <a:documentation docid="newpage">Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn später Text o.ä. ausgegeben wird.</a:documentation>
       <empty/>
     </element>
   </define>
 
-  <define name="e_NeueZeile">
+  <define name="e_NewRow">
     <element name="NeueZeile">
       <a:documentation docid="newrow">Der virtuelle Cursor wird auf die nächste freie Zeile gesetzt.</a:documentation>
       <optional>
@@ -558,7 +558,7 @@
     </element>
   </define>
 
-  <define name="e_ObjektAusgeben">
+  <define name="e_PlaceObject">
     <element name="ObjektAusgeben">
       <a:documentation docid="placeobject">Gibt ein Objekt (Bild,..) aus.</a:documentation>
       <optional>
@@ -568,14 +568,7 @@
           die nächste freie Zeile.</a:documentation>
       </optional>
       <optional>
-        <attribute name="belegen">
-          <a:documentation docid="placeobject/allocate">Wenn »nein«, nimmt das Objekt keinen Platz im Raster
-            ein.</a:documentation>
-          <choice>
-            <value>ja</value>
-            <value>nein</value>
-          </choice>
-        </attribute>
+        <ref name="a_allocate"/>
       </optional>
       <optional>
         <attribute name="bereich">
@@ -635,7 +628,7 @@
         </attribute>
         <interleave>
           <optional>
-            <ref name="e_Bild"/>
+            <ref name="e_Image"/>
           </optional>
           <optional>
             <ref name="e_Box"/>
@@ -647,14 +640,14 @@
             <ref name="e_Textblock"/>
           </optional>
           <optional>
-            <ref name="e_Tabelle"/>
+            <ref name="e_Table"/>
           </optional>
         </interleave>
       </choice>
     </element>
   </define>
 
-  <define name="e_Optionen">
+  <define name="e_Options">
     <element name="Optionen">
       <optional>
         <attribute name="zeige_rasterbelegung">
@@ -730,7 +723,7 @@
     </element>
   </define>
 
-  <define name="e_Platzierungsbereich">
+  <define name="e_PositioningArea">
     <element name="Platzierungsbereich">
       <a:documentation docid="positioningarea">Platzierungsbereiche enthalten Platzierungsrahmen, die unter einem Namen
         angesprochen werden (Attribut »name«). Die Rahmen sind in der Reihenfolge ihrer Definition
@@ -753,7 +746,7 @@
     </element>
   </define>
 
-  <define name="e_Rand">
+  <define name="e_Margin">
     <element name="Rand">
       <attribute name="links"/>
       <attribute name="rechts"/>
@@ -762,22 +755,22 @@
     </element>
   </define>
 
-  <define name="e_Schriftart">
+  <define name="e_FontFace">
     <element name="Schriftart">
       <a:documentation docid="fontface">Schaltet auf eine andere Schriftfamilie um</a:documentation>
       <attribute name="schriftfamilie"/>
-      <ref name="t_Werte"/>
+      <ref name="t_values"/>
     </element>
   </define>
 
-  <define name="e_Seitenformat">
+  <define name="e_Pageformat">
     <element name="Seitenformat">
       <attribute name="breite"/>
       <attribute name="höhe"/>
     </element>
   </define>
 
-  <define name="e_SpeichereDatensatzdatei">
+  <define name="e_SaveDataset">
     <element name="SpeichereDatensatzdatei">
       <a:documentation docid="savedataset">Speichert eine Datei unter dem angegebenen Namen. Die Datei kann mit »LadeDatensatzdatei« wieder geladen (und ausgeführt) werden. Der Inhalt ist eine Sequenz, z.B. aus 
         den Befehlen »Element« und »Attribut« oder »Sequenz«.</a:documentation>
@@ -790,22 +783,22 @@
         <a:documentation docid="savedataset/select">Inhalt der Datensatzdatei</a:documentation>
         <oneOrMore>
           <optional><ref name="e_Element"/></optional>
-          <optional><ref name="e_SortiereSequenz"/></optional>
-          <optional><ref name="e_Sequenz"/></optional>
-          <optional><ref name="e_Kopievon"/></optional>
+          <optional><ref name="e_SortSequence"/></optional>
+          <optional><ref name="e_Sequence"/></optional>
+          <optional><ref name="e_CopyOf"/></optional>
         </oneOrMore>
       </choice>
     </element>
   </define>
 
-  <define name="e_Seitentyp">
+  <define name="e_Pagetype">
     <element name="Seitentyp">
       <attribute name="name"/>
       <a:documentation docid="pagetype">Name der Seite. Derzeit wird der Name nicht weiter benutzt. Beliebig.</a:documentation>
       <attribute name="bedingung"/>
       <a:documentation docid="pagetype/test">XPath-Audruck, der »wahr« oder »falsch« zurückgibt. Bestimmt, ob diese Seite als Seitentyp gewählt wird</a:documentation>
-      <ref name="e_Rand"/>
-      <optional><ref name="e_Platzierungsbereich"/></optional>
+      <ref name="e_Margin"/>
+      <optional><ref name="e_PositioningArea"/></optional>
       <interleave>
         <optional>
           <element name="Raster">
@@ -817,15 +810,16 @@
           </element>
         </optional>
         <optional>
-          <ref name="e_BeiSeitenErzeugung"/>
+          <ref name="e_AtPageCreation"/>
         </optional>
         <optional>
-          <ref name="e_BeiSeitenAusgabe"/>
+          <ref name="e_AtPageShipout"/>
         </optional>
-      </interleave>    </element>
+      </interleave>
+    </element>
   </define>
 
-  <define name="e_Sequenz">
+  <define name="e_Sequence">
     <element name="Sequenz">
       <a:documentation docid="sequence">Wählt Daten aus der Datendatei aus.</a:documentation>
       <attribute name="auswahl">
@@ -834,27 +828,27 @@
     </element>
   </define>
 
-  <define name="e_SetzeRaster">
+  <define name="e_SetGrid">
     <element name="SetzeRaster">
       <attribute name="breite"/>
       <attribute name="höhe"/>
     </element>
   </define>
 
-  <define name="e_Solange">
+  <define name="e_While">
     <element name="Solange">
       <a:documentation docid="while">Führt die Kindelemente solange aus, wie die Bedingung ›wahr‹ ist.</a:documentation>
       <attribute name="bedingung"><data type="string"/></attribute>
       <a:documentation docid="while/test">XPath-Ausdruck für die Bedingung</a:documentation>
       <oneOrMore>
         <interleave>
-          <ref name="t_Fallinhalt"/>
+          <ref name="t_Switchcontents"/>
         </interleave>
       </oneOrMore>
     </element>
   </define>
 
-  <define name="e_SortiereSequenz">
+  <define name="e_SortSequence">
     <element name="SortiereSequenz">
       <a:documentation docid="sortsequence">Sortiert die angegebene Sequenz. Die zu sortierende Sequenz sollte in einer Variablen gespeichert sein, da der Inhalt verändert wird.</a:documentation>
       <attribute name="auswahl">
@@ -873,18 +867,18 @@
   <define name="e_Sup">
     <element name="Sup">
       <a:documentation docid="sup">Hochgestellter Text</a:documentation>
-      <ref name="t_Werte"/>
+      <ref name="t_values"/>
     </element>
   </define>
 
   <define name="e_Sub">
     <element name="Sub">
       <a:documentation docid="sub">Tiefgestellter Text</a:documentation>
-      <ref name="t_Werte"/>
+      <ref name="t_values"/>
     </element>
   </define>
 
-  <define name="e_Tabelle">
+  <define name="e_Table">
     <element name="Tabelle">
       <a:documentation docid="table">Erzeugt eine Tabelle</a:documentation>
       <attribute name="breite"/>
@@ -924,8 +918,8 @@
               <a:documentation docid="table/head">Wird auf jeder Seite wiederholt.</a:documentation>
               <oneOrMore>
                 <interleave>
-                  <optional><ref name="e_Tlinie"/></optional>
-                  <optional><ref name="e_Kopievon"/></optional>
+                  <optional><ref name="e_Tablerule"/></optional>
+                  <optional><ref name="e_CopyOf"/></optional>
                   <optional><ref name="e_Tr"/></optional>
                 </interleave>
               </oneOrMore>
@@ -936,24 +930,24 @@
               <a:documentation docid="table/foot">Wird auf jeder Seite wiederholt.</a:documentation>
               <oneOrMore>
                 <interleave>
-                  <optional><ref name="e_Tlinie"/></optional>
-                  <optional><ref name="e_Kopievon"/></optional>
+                  <optional><ref name="e_Tablerule"/></optional>
+                  <optional><ref name="e_CopyOf"/></optional>
                   <optional><ref name="e_Tr"/></optional>
                 </interleave>
               </oneOrMore>
             </element>
           </optional>
-          <optional><ref name="e_Spalten"/></optional>
+          <optional><ref name="e_Columns"/></optional>
           <optional><ref name="e_Tr"/></optional>
-          <optional><ref name="e_Kopievon"/></optional>
-          <optional><ref name="e_Tlinie"/></optional>
-          <optional><ref name="e_Nachricht"/></optional>
+          <optional><ref name="e_CopyOf"/></optional>
+          <optional><ref name="e_Tablerule"/></optional>
+          <optional><ref name="e_Message"/></optional>
         </interleave>
       </oneOrMore>
     </element>
   </define>
 
-  <define name="e_Tlinie">
+  <define name="e_Tablerule">
     <element name="Tlinie">
       <a:documentation docid="tablerule">Erzeugt eine durchgehende horizontale Linie in der Tabelle</a:documentation>
       <optional>
@@ -1068,11 +1062,11 @@
       </optional>
       <zeroOrMore>
         <choice>
-          <ref name="e_Absatz"/>
-          <ref name="e_Tabelle"/>
-          <ref name="e_Bild"/>
-          <ref name="e_Kopievon"/>
-          <ref name="e_Fallunterscheidung"/>
+          <ref name="e_Paragraph"/>
+          <ref name="e_Table"/>
+          <ref name="e_Image"/>
+          <ref name="e_CopyOf"/>
+          <ref name="e_Switch"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -1119,29 +1113,29 @@
       </optional>
       <oneOrMore>
         <optional>
-          <ref name="e_Nachricht"/>
+          <ref name="e_Message"/>
         </optional>
         <optional>
           <ref name="e_Td"/>
         </optional>
         <optional>
-          <ref name="e_Kopievon"/>
+          <ref name="e_CopyOf"/>
         </optional>
         <optional>
-          <ref name="e_Fallunterscheidung"/>
+          <ref name="e_Switch"/>
         </optional>
       </oneOrMore>
     </element>
   </define>
 
-  <define name="e_Trennvorschlag">
+  <define name="e_Hyphenation">
     <element name="Trennvorschlag">
       <a:documentation docid="hyphenation">Korrigiert fehlerhafte automatische Silbentrennung. Beispiel: Au-to-bahn</a:documentation>
       <text/>
     </element>
   </define>
 
-  <define name="e_Spalten">
+  <define name="e_Columns">
     <element name="Spalten">
       <a:documentation docid="columns">Fasst »Spalte«-Elemente zusammen. Die Anzahl der »Spalte« Elemente muss mit der Anzahl der Tabellenzellen übereinstimmen.</a:documentation>
       <oneOrMore>
@@ -1193,9 +1187,9 @@
       <attribute name="breite"/>
       <oneOrMore>
         <choice>
-          <ref name="e_Absatz"/>
-          <ref name="e_Kopievon"/>
-          <ref name="e_Aktion"/>
+          <ref name="e_Paragraph"/>
+          <ref name="e_CopyOf"/>
+          <ref name="e_Action"/>
         </choice>
       </oneOrMore>
       <optional><attribute name="textformat"/></optional>
@@ -1222,7 +1216,7 @@
     </element>
   </define>
 
-  <define name="e_Wert">
+  <define name="e_Value">
     <element name="Wert">
       <a:documentation docid="value">Fügt die textuelle Reprästentation des Wertes (XPath-Ausdruck) ein.</a:documentation>
       <choice>
@@ -1237,18 +1231,18 @@
   <define name="e_U">
     <element name="U">
       <a:documentation docid="u">Schaltet »Unterstreichen« ein</a:documentation>
-      <ref name="t_Werte"/>
+      <ref name="t_values"/>
     </element>
   </define>
 
   <define name="e_URL">
     <element name="URL">
       <a:documentation docid="url">Umbricht eine angegebene URL besser.</a:documentation>
-      <ref name="t_Werte"/>
+      <ref name="t_values"/>
     </element>
   </define>
 
-  <define name="e_Zuweisung">
+  <define name="e_SetVariable">
     <element name="Zuweisung">
       <a:documentation docid="setvariable">Weist einer Variablen einen Inhalt zu. Der Inhalt wird entweder über das Attribut
       auswahl oder über den Inhalt des Elements bestimmt.</a:documentation>
@@ -1268,18 +1262,18 @@
         <a:documentation docid="setvariable/select">XPath-Ausdruck für den Inhalt der Variablen. Alternativ dazu: der Inhalt des Elements Zuweisung</a:documentation>
         <oneOrMore>
           <interleave>
-            <optional><ref name="e_Absatz"/></optional>
-            <optional><ref name="e_Wert"/></optional>
-            <optional><ref name="e_Kopievon"/></optional>
-            <optional><ref name="e_Sequenz"/></optional>
+            <optional><ref name="e_Paragraph"/></optional>
+            <optional><ref name="e_Value"/></optional>
+            <optional><ref name="e_CopyOf"/></optional>
+            <optional><ref name="e_Sequence"/></optional>
             <optional><ref name="e_Element"/></optional>
-            <optional><ref name="e_Attribut"/></optional>
-            <optional><ref name="e_Fallunterscheidung"/></optional>
+            <optional><ref name="e_Attribute"/></optional>
+            <optional><ref name="e_Switch"/></optional>
             <optional><ref name="e_Tr"/></optional>
             <optional><ref name="e_Td"/></optional>
-            <optional><ref name="e_Spalten"/></optional>
-            <optional><ref name="e_Tlinie"/></optional>
-            <optional><ref name="e_SortiereSequenz"/></optional>
+            <optional><ref name="e_Columns"/></optional>
+            <optional><ref name="e_Tablerule"/></optional>
+            <optional><ref name="e_SortSequence"/></optional>
           </interleave>
         </oneOrMore>
       </choice>
