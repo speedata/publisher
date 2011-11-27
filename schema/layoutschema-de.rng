@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar 
-  xmlns="http://relaxng.org/ns/structure/1.0"
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
   xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
   datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
   ns="urn:speedata.de:2009/publisher/de">
@@ -24,7 +23,7 @@
     <optional><ref name="e_Optionen"/></optional>
     <optional><ref name="e_Seitentyp"/></optional>
     <optional><ref name="e_SetzeRaster"/></optional>
-    <optional><ref name="e_Trennvorschlag"></ref></optional>
+    <optional><ref name="e_Trennvorschlag"/></optional>
     <optional><ref name="e_Zuweisung"/></optional>
   </define>
 
@@ -42,16 +41,16 @@
     <optional><ref name="e_LadeDatensatzdatei"/></optional>
     <optional><ref name="e_SpeichereDatensatzdatei"/></optional>
     <optional><ref name="e_ObjektAusgeben"/></optional>
-    <optional><ref name="e_Fallunterscheidung" /></optional>
+    <optional><ref name="e_Fallunterscheidung"/></optional>
     <optional><ref name="e_Solange"/></optional>
     <optional><ref name="e_BearbeiteDatensatz"/></optional>
     <optional><ref name="e_BearbeiteKnoten"/></optional>
     <optional><ref name="e_Nachricht"/></optional>
     <optional><ref name="e_NächsterRahmen"/></optional>
-    <optional><ref name="e_NeueSeite" /></optional>
+    <optional><ref name="e_NeueSeite"/></optional>
     <optional><ref name="e_NeueZeile"/></optional>
     <optional><ref name="e_Leerzeile"/></optional>
-    <optional><ref name="e_Gruppe" /></optional>
+    <optional><ref name="e_Gruppe"/></optional>
     <optional><ref name="e_SortiereSequenz"/></optional>
     <optional><ref name="e_Trennvorschlag"/></optional>
     <optional><ref name="e_Zuweisung"/></optional>
@@ -100,111 +99,111 @@
 
   <define name="a_ausrichtung">
     <attribute name="ausrichtung">
-      <a:documentation>Bestimmt den Rand der Zeilen</a:documentation>
+      <a:documentation docid="alignment">Bestimmt den Rand der Zeilen</a:documentation>
       <choice>
         <value>blocksatz</value>
-        <a:documentation>Alle Zeilen haben dieselbe Breite</a:documentation>
+        <a:documentation docid="alignment/justification">Alle Zeilen haben dieselbe Breite</a:documentation>
         <value>linksbündig</value>
-        <a:documentation>Alle Zeilen haben einen festen linken Rand</a:documentation>
+        <a:documentation docid="alignment/leftaligned">Alle Zeilen haben einen festen linken Rand</a:documentation>
         <value>rechtsbündig</value>
-        <a:documentation>Alle Zeilen haben einen festen rechten Rand</a:documentation>
+        <a:documentation docid="alignment/rightaligned">Alle Zeilen haben einen festen rechten Rand</a:documentation>
         <value>zentriert</value>
-        <a:documentation>Alle Zeilen haben einen Flatterrand rechts und links</a:documentation>
+        <a:documentation docid="alignment/centered">Alle Zeilen haben einen Flatterrand rechts und links</a:documentation>
       </choice>
     </attribute>
   </define>
 
   <define name="a_belegen">
     <attribute name="belegen">
-      <a:documentation>Gibt an, ob das Objekt den Platz auf der Seite (im Raster) belegen soll. Dadurch ist der Platz für andere Objekte gesperrt.</a:documentation>
+      <a:documentation docid="allocate">Gibt an, ob das Objekt den Platz auf der Seite (im Raster) belegen soll. Dadurch ist der Platz für andere Objekte gesperrt.</a:documentation>
       <choice>
         <value>ja</value>
-        <a:documentation>Das Objekt nimmt den Platz im Raster fest ein und kann nicht von anderen Objekten überlagert werden.</a:documentation>
+        <a:documentation docid="allocate/yes">Das Objekt nimmt den Platz im Raster fest ein und kann nicht von anderen Objekten überlagert werden.</a:documentation>
         <value>nein</value>
-        <a:documentation>Das Objekt nimmt keinen Platz im Raster ein und kann von anderen Objekten überlagert werden.</a:documentation>
+        <a:documentation docid="allocate/no">Das Objekt nimmt keinen Platz im Raster ein und kann von anderen Objekten überlagert werden.</a:documentation>
       </choice>
     </attribute>
   </define>
 
   <define name="e_Absatz">
     <element name="Absatz">
-      <ref name="t_Werte" />
+      <ref name="t_Werte"/>
       <optional>
         <attribute name="sprache">
-          <ref name="t_Sprachen" />
+          <ref name="t_Sprachen"/>
         </attribute>
       </optional>
       <optional>
-        <attribute name="textformat" />
+        <attribute name="textformat"/>
       </optional>
-      <a:documentation>Name des Textformats (optional)</a:documentation>
+      <a:documentation docid="paragraph/textformat">Name des Textformats (optional)</a:documentation>
       <optional>
-        <attribute name="farbe" />
-        <a:documentation>Bestimmt die Farbe des Absatzes (Text)</a:documentation>
+        <attribute name="farbe"/>
+        <a:documentation docid="paragraph/color">Bestimmt die Farbe des Absatzes (Text)</a:documentation>
       </optional>
       <optional>
-        <attribute name="schriftart" />
-        <a:documentation>Bestimmt die Schriftart für den Absatz. (Text)</a:documentation>
+        <attribute name="schriftart"/>
+        <a:documentation docid="paragraph/fontface">Bestimmt die Schriftart für den Absatz. (Text)</a:documentation>
       </optional>
     </element>
   </define>
 
   <define name="e_Aktion">
     <element name="Aktion">
-      <a:documentation>Assoziiert eine Anweisung (Aktion) mit dem umgebenden Text.</a:documentation>
+      <a:documentation docid="action">Assoziiert eine Anweisung (Aktion) mit dem umgebenden Text.</a:documentation>
       <element name="ZurListeHinzufügen">
-        <a:documentation>Fügt ein Schlüssel/Wert-Paar zu einer Variablen hinzu.</a:documentation>
+        <a:documentation docid="action/addtolist">Fügt ein Schlüssel/Wert-Paar zu einer Variablen hinzu.</a:documentation>
         <attribute name="liste"/>
-        <a:documentation>Liste (Variable) zu der der Inhalt hinzugefügt werden soll.
+        <a:documentation docid="action/list">Liste (Variable) zu der der Inhalt hinzugefügt werden soll.
           Diese Variable muss noch nicht existieren.</a:documentation>
         <attribute name="schlüssel"/>
-        <a:documentation>Name des Schlüssels, unter dem der Wert in ›auswahl‹ gespeichert wird.</a:documentation>
+        <a:documentation docid="action/key">Name des Schlüssels, unter dem der Wert in ›auswahl‹ gespeichert wird.</a:documentation>
         <attribute name="auswahl"/>
-        <a:documentation>Wert, der gepeichert wird (XPath-Ausdruck)</a:documentation>
+        <a:documentation docid="action/select">Wert, der gepeichert wird (XPath-Ausdruck)</a:documentation>
       </element>
     </element>
   </define>
 
   <define name="e_Attribut">
     <element name="Attribut">
-      <a:documentation>Erzeugt ein Attribut, das in ein »Element« geschachtelt werden kann.</a:documentation>
+      <a:documentation docid="attribute">Erzeugt ein Attribut, das in ein »Element« geschachtelt werden kann.</a:documentation>
       <attribute name="name"><data type="string"/></attribute>
-      <a:documentation>Name des zu erzeugenden Attributs. (Text)</a:documentation>
+      <a:documentation docid="attribute/name">Name des zu erzeugenden Attributs. (Text)</a:documentation>
       <attribute name="auswahl"><data type="string"/></attribute>
-      <a:documentation>Inhalt des Attributs als XPath-Ausdruck. Zeichenketten müssen in Anführungszeichen stehen!</a:documentation>
+      <a:documentation docid="attribute/select">Inhalt des Attributs als XPath-Ausdruck. Zeichenketten müssen in Anführungszeichen stehen!</a:documentation>
     </element>
   </define>
 
   <define name="e_B">
     <element name="B">
-      <a:documentation>Schaltet auf den Schnitt »Fett« um</a:documentation>
+      <a:documentation docid="b">Schaltet auf den Schnitt »Fett« um</a:documentation>
       <ref name="t_Werte"/>
     </element>
   </define>
 
   <define name="e_BearbeiteDatensatz">
     <element name="BearbeiteDatensatz">
-      <a:documentation>Führt eine Regel aus mit dem Inhalt einer Liste (im Attribut ›auswahl‹).</a:documentation>
+      <a:documentation docid="handlerecord">Führt eine Regel aus mit dem Inhalt einer Liste (im Attribut ›auswahl‹).</a:documentation>
       <attribute name="auswahl"/>
-      <a:documentation>Bestimmt die Liste, die per »Datensatz« aufgerufen bearbeitet werden soll.</a:documentation>
+      <a:documentation docid="handlerecord/select">Bestimmt die Liste, die per »Datensatz« aufgerufen bearbeitet werden soll.</a:documentation>
     </element>
   </define>
 
   <define name="e_BearbeiteKnoten">
     <element name="BearbeiteKnoten">
-      <a:documentation>Ruft alle Kindelemente eines bestimmten Namens auf. Gegenstück ist »Datensatz«</a:documentation>
+      <a:documentation docid="handlenode">Ruft alle Kindelemente eines bestimmten Namens auf. Gegenstück ist »Datensatz«</a:documentation>
       <attribute name="auswahl"/>
-      <a:documentation>Bestimmt die Datensätze, die ausgeführt werden sollen.</a:documentation>
+      <a:documentation docid="handlenode/select">Bestimmt die Datensätze, die ausgeführt werden sollen.</a:documentation>
       <optional>
         <attribute name="modus"/>
-        <a:documentation>Wird ein Modus angegeben, werden nur »Datensatz« Elemente ausgeführt, die diesem Modus entsprechen. (Text)</a:documentation>
+        <a:documentation docid="handlenode/mode">Wird ein Modus angegeben, werden nur »Datensatz« Elemente ausgeführt, die diesem Modus entsprechen. (Text)</a:documentation>
       </optional>
     </element>
   </define>
 
   <define name="e_BeiSeitenAusgabe">
     <element name="BeiSeitenAusgabe">
-      <a:documentation>Wenn eine Seite ausgegeben wird, werden die Kindelemente ausgeführt.</a:documentation>
+      <a:documentation docid="atpageshipout">Wenn eine Seite ausgegeben wird, werden die Kindelemente ausgeführt.</a:documentation>
       <oneOrMore>
         <ref name="t_Anweisungen"/>
       </oneOrMore>
@@ -213,7 +212,7 @@
 
   <define name="e_BeiSeitenErzeugung">
     <element name="BeiSeitenErzeugung">
-      <a:documentation>Wenn eine Seite erzeugt wird, werden die Kindelemente ausgeführt.</a:documentation>
+      <a:documentation docid="atpagecreation">Wenn eine Seite erzeugt wird, werden die Kindelemente ausgeführt.</a:documentation>
       <oneOrMore>
         <ref name="t_Anweisungen"/>
       </oneOrMore>
@@ -222,34 +221,34 @@
 
   <define name="e_Bild">
     <element name="Bild">
-      <a:documentation>Bindet eine externe Grafik ein.</a:documentation>
+      <a:documentation docid="image">Bindet eine externe Grafik ein.</a:documentation>
       <attribute name="datei">
-        <a:documentation>Dateiname der Bilddatei. (Text)</a:documentation>
-        <data type="string" />
+        <a:documentation docid="image/file">Dateiname der Bilddatei. (Text)</a:documentation>
+        <data type="string"/>
       </attribute>
       <attribute name="breite">
-        <a:documentation>Breite des Bildes in Rasterzellen oder in absoluten Maßangaben.</a:documentation>
+        <a:documentation docid="image/width">Breite des Bildes in Rasterzellen oder in absoluten Maßangaben.</a:documentation>
       </attribute>
       <optional>
         <attribute name="höhe">
-          <a:documentation>Gibt die maximale Höhe des Bildes an in Rasterzellen oder in absoluten Maßangaben (z.B. 210mm).</a:documentation>
+          <a:documentation docid="image/height">Gibt die maximale Höhe des Bildes an in Rasterzellen oder in absoluten Maßangaben (z.B. 210mm).</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="seite">
-          <a:documentation>Bindet die angegebene Seite aus einer PDF-Datei ein. Voreinstellung: 1</a:documentation>
+          <a:documentation docid="image/page">Bindet die angegebene Seite aus einer PDF-Datei ein. Voreinstellung: 1</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="natürliche-größe">
-          <a:documentation>Die natürliche Größe des Bildes. Voreinstellung ist die »cropbox«. </a:documentation>
-          <ref name="t_PDFBOX" />
+          <a:documentation docid="image/natural-height">Die natürliche Größe des Bildes. Voreinstellung ist die »cropbox«. </a:documentation>
+          <ref name="t_PDFBOX"/>
         </attribute>
       </optional>
       <optional>
         <attribute name="maximale-größe">
-          <a:documentation>Die maximale Größe des Bildes. Voreinstellung ist die »cropbox«. </a:documentation>
-          <ref name="t_PDFBOX" />
+          <a:documentation docid="image/maxheight">Die maximale Größe des Bildes. Voreinstellung ist die »cropbox«. </a:documentation>
+          <ref name="t_PDFBOX"/>
         </attribute>
       </optional>
     </element>
@@ -257,63 +256,63 @@
 
   <define name="e_Box">
     <element name="Box">
-      <a:documentation>Erzeugt einen rechteckigen farbigen Bereich.</a:documentation>
-      <attribute name="breite" />
-      <a:documentation>Breite der Box in Rasterzellen</a:documentation>
-      <attribute name="höhe" />
-      <a:documentation>Höhe der Box (in Rasterzellen)</a:documentation>
-      <attribute name="hintergrundfarbe" />
-      <a:documentation>Farbe der Box</a:documentation>
+      <a:documentation docid="box">Erzeugt einen rechteckigen farbigen Bereich.</a:documentation>
+      <attribute name="breite"/>
+      <a:documentation docid="box/width">Breite der Box in Rasterzellen</a:documentation>
+      <attribute name="höhe"/>
+      <a:documentation docid="box/height">Höhe der Box (in Rasterzellen)</a:documentation>
+      <attribute name="hintergrundfarbe"/>
+      <a:documentation docid="box/backgroundcolor">Farbe der Box</a:documentation>
     </element>
   </define>
 
   <define name="e_Datensatz">
     <element name="Datensatz">
-      <a:documentation>Führt für jedes angegebene Element (im Attribut ›element‹) die Anweisungen in den Kindelementen aus.</a:documentation>
+      <a:documentation docid="record">Führt für jedes angegebene Element (im Attribut ›element‹) die Anweisungen in den Kindelementen aus.</a:documentation>
       <oneOrMore>
-        <ref name="t_Anweisungen"></ref>
+        <ref name="t_Anweisungen"/>
       </oneOrMore>
       <attribute name="element"/>
-      <a:documentation>Jedes dieser Elemente wird mit den Anweisungen ausgeführt.</a:documentation>
+      <a:documentation docid="record/element">Jedes dieser Elemente wird mit den Anweisungen ausgeführt.</a:documentation>
       <optional>
         <attribute name="modus"/>
-        <a:documentation>Wird ein Datensatz zusammen mit einem Modus definiert, dann wird er nur dann ausgeführt, wenn »BearbeiteKnoten« ebenfalls mit diesem Modus aufgerufen wurde.</a:documentation>
+        <a:documentation docid="record/mode">Wird ein Datensatz zusammen mit einem Modus definiert, dann wird er nur dann ausgeführt, wenn »BearbeiteKnoten« ebenfalls mit diesem Modus aufgerufen wurde.</a:documentation>
       </optional>
     </element>
   </define>
 
   <define name="e_DefiniereFarbe">
      <element name="DefiniereFarbe">
-       <a:documentation>Definiert eine Farbe mit dem Namen aus dem Attribut »name«. Es gibt
+       <a:documentation docid="definecolor">Definiert eine Farbe mit dem Namen aus dem Attribut »name«. Es gibt
        zwei zulässige Modelle, »rgb« und »cmyk«. Die Wertangaben liegen zwischen 0 und 100.</a:documentation>
        <attribute name="name"><data type="string"/></attribute>
        <choice>
          <group>
            <attribute name="modell">
-             <a:documentation>Es gibt zwei zulässige Modelle: ›cmyk‹ und ›rgb‹.</a:documentation><value>rgb</value></attribute>
+             <a:documentation docid="definecolor/model">Es gibt zwei zulässige Modelle: ›cmyk‹ und ›rgb‹.</a:documentation><value>rgb</value></attribute>
            <attribute name="r">
-             <a:documentation>Wert für Rot (zwischen 0 und 100)</a:documentation>
+             <a:documentation docid="definecolor/r">Wert für Rot (zwischen 0 und 100)</a:documentation>
              <ref name="t_nullbishundert"/></attribute>
            <attribute name="g">
-             <a:documentation>Wert für Grün (zwischen 0 und 100)</a:documentation>
+             <a:documentation docid="definecolor/g">Wert für Grün (zwischen 0 und 100)</a:documentation>
              <ref name="t_nullbishundert"/></attribute>
            <attribute name="b">
-             <a:documentation>Wert für Blau (zwischen 0 und 100)</a:documentation>
+             <a:documentation docid="definecolor/b">Wert für Blau (zwischen 0 und 100)</a:documentation>
              <ref name="t_nullbishundert"/></attribute>
          </group>
          <group>
            <attribute name="modell"><value>cmyk</value></attribute>
            <attribute name="c">
-             <a:documentation>Wert für Türkis (cyan, zwischen 0 und 100)</a:documentation>
+             <a:documentation docid="definecolor/c">Wert für Türkis (cyan, zwischen 0 und 100)</a:documentation>
              <ref name="t_nullbishundert"/></attribute>
            <attribute name="m">
-             <a:documentation>Wert für Magenta (zwischen 0 und 100)</a:documentation>
+             <a:documentation docid="definecolor/m">Wert für Magenta (zwischen 0 und 100)</a:documentation>
              <ref name="t_nullbishundert"/></attribute>
            <attribute name="y">
-             <a:documentation>Wert für Gelb (yellow, zwischen 0 und 100)</a:documentation>
+             <a:documentation docid="definecolor/y">Wert für Gelb (yellow, zwischen 0 und 100)</a:documentation>
              <ref name="t_nullbishundert"/></attribute>
            <attribute name="k">
-             <a:documentation>Wert für Schwarz (key, zwischen 0 und 100)</a:documentation>
+             <a:documentation docid="definecolor/k">Wert für Schwarz (key, zwischen 0 und 100)</a:documentation>
              <ref name="t_nullbishundert"/></attribute>
          </group>
        </choice>
@@ -322,36 +321,36 @@
 
   <define name="e_DefiniereSchriftfamilie">
     <element name="DefiniereSchriftfamilie">
-      <a:documentation>Definiert eine Schriftfamilie bestehend aus den Schnitten »Normal«, »Kursiv«, »Fett« und »Fett Kursiv«. Die Familien werden benötigt, wenn 
+      <a:documentation docid="definefontfamily">Definiert eine Schriftfamilie bestehend aus den Schnitten »Normal«, »Kursiv«, »Fett« und »Fett Kursiv«. Die Familien werden benötigt, wenn 
       innerhalb eines Textes auf einen anderen Schnitt umgeschaltet wird. Die Schriftarten müssen vorher mit »LadeSchriftdatei« geladen werden. Die Familie mit dem Namen »Text« wird immer dann
       verwendet, wenn keine bei Textausgabe (Element »Absatz«, ...) keine Schriftfamilie angegeben wird.</a:documentation>
       <attribute name="name"/>
       <attribute name="schriftgröße"/>
-      <a:documentation>Schriftgröße in Punkt (0-...)</a:documentation>
+      <a:documentation docid="definefontfamily/fontsize">Schriftgröße in Punkt (0-...)</a:documentation>
       <attribute name="zeilenabstand"/>
-      <a:documentation>Zeilenabstand in Punkt (0-...)</a:documentation>
+      <a:documentation docid="definefontfamily/rowdistance">Zeilenabstand in Punkt (0-...)</a:documentation>
       <interleave>
         <element name="Normal">
-          <a:documentation>Wählt die Schriftart für den »normalen« Schriftschnitt
+          <a:documentation docid="definefontfamily/regular">Wählt die Schriftart für den »normalen« Schriftschnitt
             aus</a:documentation>
-          <attribute name="schriftart" />
+          <attribute name="schriftart"/>
         </element>
         <optional>
           <element name="Fett">
-            <a:documentation>Schriftart, wenn innerhalb eines Textes auf »Fett« (&lt;b>...&lt;/b>) umgeschaltet wird.</a:documentation>
-            <attribute name="schriftart" />
+            <a:documentation docid="definefontfamily/bold">Schriftart, wenn innerhalb eines Textes auf »Fett« (&lt;b&gt;...&lt;/b&gt;) umgeschaltet wird.</a:documentation>
+            <attribute name="schriftart"/>
           </element>
         </optional>
         <optional>
           <element name="Kursiv">
-            <a:documentation>Schriftart, wenn innerhalb eines Textes auf »Kursiv« (&lt;i>...&lt;/i>) umgeschaltet wird.</a:documentation>
-            <attribute name="schriftart" />
+            <a:documentation docid="definefontfamily/italic">Schriftart, wenn innerhalb eines Textes auf »Kursiv« (&lt;i&gt;...&lt;/i&gt;) umgeschaltet wird.</a:documentation>
+            <attribute name="schriftart"/>
           </element>
         </optional>
         <optional>
           <element name="FettKursiv">
-            <a:documentation>Schriftart, wenn innerhalb eines Textes auf »Fett« und »Kursiv« (&lt;b>&lt;i>...&lt;/i>&lt;/b>) umgeschaltet wird.</a:documentation>
-            <attribute name="schriftart" />
+            <a:documentation docid="definefontfamily/bolditalic">Schriftart, wenn innerhalb eines Textes auf »Fett« und »Kursiv« (&lt;b&gt;&lt;i&gt;...&lt;/i&gt;&lt;/b&gt;) umgeschaltet wird.</a:documentation>
+            <attribute name="schriftart"/>
           </element>
         </optional>
       </interleave>
@@ -368,9 +367,9 @@
 
   <define name="e_Element">
     <element name="Element">
-      <a:documentation>Erzeugt ein XML-Element, das in eine Datei geschrieben werden kann (»SpeichereDatensatzdatei«).</a:documentation>
+      <a:documentation docid="element">Erzeugt ein XML-Element, das in eine Datei geschrieben werden kann (»SpeichereDatensatzdatei«).</a:documentation>
       <attribute name="name"><data type="string"/></attribute>
-      <a:documentation>Name des Elements.</a:documentation>
+      <a:documentation docid="element/name">Name des Elements.</a:documentation>
       
       <oneOrMore>
         <interleave>
@@ -384,12 +383,12 @@
 
   <define name="e_Fallunterscheidung">
     <element name="Fallunterscheidung">
-      <a:documentation>Enthält eine Wenn-Dann-Abfrage. Die Kindelemente »Fall« werden ausgeführt, wenn die Bedingung erfüllt ist. Wenn keine Bedingung erfüllt ist, wird das Element »Sonst« ausgeführt, sofern es vorhanden ist.</a:documentation>
+      <a:documentation docid="switch">Enthält eine Wenn-Dann-Abfrage. Die Kindelemente »Fall« werden ausgeführt, wenn die Bedingung erfüllt ist. Wenn keine Bedingung erfüllt ist, wird das Element »Sonst« ausgeführt, sofern es vorhanden ist.</a:documentation>
       <oneOrMore>
         <element name="Fall">
-          <a:documentation>Wenn die Bedingung im Attribut ›bedingung‹ zutrifft, wird der Inhalt dieses Elements ausgeführt und die Verarbeitung hinter der Fallunterscheidung fortgesetzt.</a:documentation>
+          <a:documentation docid="switch/case">Wenn die Bedingung im Attribut ›bedingung‹ zutrifft, wird der Inhalt dieses Elements ausgeführt und die Verarbeitung hinter der Fallunterscheidung fortgesetzt.</a:documentation>
           <attribute name="bedingung"><data type="string"/></attribute>
-          <a:documentation>Enthält einen XPath-Ausdruck für die Bedingung</a:documentation>
+          <a:documentation docid="switch/test">Enthält einen XPath-Ausdruck für die Bedingung</a:documentation>
           <oneOrMore>
             <ref name="t_Fallinhalt"/>
           </oneOrMore>
@@ -397,7 +396,7 @@
       </oneOrMore>
       <optional>
         <element name="Sonst">
-          <a:documentation>Wird ausgeführt, falls keine Bedingung zutrifft</a:documentation>
+          <a:documentation docid="switch/otherwise">Wird ausgeführt, falls keine Bedingung zutrifft</a:documentation>
           <oneOrMore>
             <ref name="t_Fallinhalt"/>
           </oneOrMore>
@@ -419,58 +418,58 @@
 
   <define name="e_I">
     <element name="I">
-      <a:documentation>Schaltet auf Kursiv um</a:documentation>
+      <a:documentation docid="i">Schaltet auf Kursiv um</a:documentation>
       <ref name="t_Werte"/>
     </element>
   </define>
 
   <define name="e_Kopievon">
     <element name="Kopie-von">
-      <a:documentation>Fügt eine Menge von Elementen ein.</a:documentation>
+      <a:documentation docid="copyof">Fügt eine Menge von Elementen ein.</a:documentation>
       <attribute name="auswahl">
-        <a:documentation>XPath Ausdruck um den Inhalt zu ermitteln.</a:documentation>
+        <a:documentation docid="copyof/select">XPath Ausdruck um den Inhalt zu ermitteln.</a:documentation>
       </attribute>
     </element>
   </define>
 
   <define name="e_LadeDatensatzdatei">
     <element name="LadeDatensatzdatei">
-      <a:documentation>Lädt eine zuvor gespeicherte Datensatzdatei. Existiert die angegebene Datei nicht, wird dieser Befehl übersprungen.</a:documentation>
+      <a:documentation docid="loaddataset">Lädt eine zuvor gespeicherte Datensatzdatei. Existiert die angegebene Datei nicht, wird dieser Befehl übersprungen.</a:documentation>
       <attribute name="name"><data type="string"/></attribute>
-      <a:documentation>Name der Datensatzdatei.</a:documentation>
+      <a:documentation docid="loaddataset/name">Name der Datensatzdatei.</a:documentation>
       <empty/>
     </element>
   </define>
 
   <define name="e_LadeSchriftdatei">
     <element name="LadeSchriftdatei">
-      <a:documentation>Lädt eine Schriftdatei. Erlaubt sind Type1, TrueType und OpenType Schriftarten.</a:documentation>
+      <a:documentation docid="loadfontfile">Lädt eine Schriftdatei. Erlaubt sind Type1, TrueType und OpenType Schriftarten.</a:documentation>
       <attribute name="name"><data type="string"/></attribute>
-      <a:documentation>Der Name, unter dem die Schriftart später angesprochen
+      <a:documentation docid="loadfontfile/name">Der Name, unter dem die Schriftart später angesprochen
         werden kann</a:documentation>
       <attribute name="dateiname"><data type="string"/></attribute>
-      <a:documentation>Der Dateiname ohne Pfadangabe. Beispiel: »helvetica.ttf«</a:documentation>
+      <a:documentation docid="loadfontfile/filename">Der Dateiname ohne Pfadangabe. Beispiel: »helvetica.ttf«</a:documentation>
       <optional>
         <attribute name="randausgleich">
-          <a:documentation>Optischer Randausgleich (Trennstrich, Komma und Punkt ragen in den
+          <a:documentation docid="loadfontfile/marginprotrusion">Optischer Randausgleich (Trennstrich, Komma und Punkt ragen in den
             Rand). Erlaubt sind Werte zwischen 0 (kein Randausgleich) und 100 (vollständig).</a:documentation>
           <ref name="t_nullbishundert"/>
         </attribute>
       </optional>
       <optional>
         <attribute name="leerraum">
-          <a:documentation>Natürliche Breite des Leeraums zwischen den Wörtern (in Prozent der Schriftgröße). Voreingestellt ist 25.</a:documentation>
+          <a:documentation docid="loadfontfile/space">Natürliche Breite des Leeraums zwischen den Wörtern (in Prozent der Schriftgröße). Voreingestellt ist 25.</a:documentation>
           <ref name="t_nullbishundert"/>
         </attribute>
       </optional>
       <optional>
         <attribute name="kapitälchen">
-          <a:documentation>Kapitälchen aus der Schriftdatei benutzen (nur manche OpenType/TrueType Schriftarten)</a:documentation>
+          <a:documentation docid="smallcaps">Kapitälchen aus der Schriftdatei benutzen (nur manche OpenType/TrueType Schriftarten)</a:documentation>
           <choice>
             <value>ja</value>
-            <a:documentation>Kapitälchen aktivieren</a:documentation>
+            <a:documentation docid="loadfontfile/smallcaps/yes">Kapitälchen aktivieren</a:documentation>
             <value>nein</value>
-            <a:documentation>Keine Kapitälchen</a:documentation>
+            <a:documentation docid="loadfontfile/smallcaps/no">Keine Kapitälchen</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -494,18 +493,18 @@
 
   <define name="e_Leerzeile">
     <element name="Leerzeile">
-      <a:documentation>Der virtuelle Cursor wird auf die übernächste freie Zeile gesetzt.</a:documentation>
+      <a:documentation docid="emptyline">Der virtuelle Cursor wird auf die übernächste freie Zeile gesetzt.</a:documentation>
       <empty/>
     </element>
   </define>
 
   <define name="e_Linie">
     <element name="Linie">
-      <a:documentation>Zeichnet eine Linie</a:documentation>
+      <a:documentation docid="rule">Zeichnet eine Linie</a:documentation>
       <attribute name="länge"/>
-      <a:documentation>Länge der Linie in Rasterzellen (Zahl) oder als Maß (z.B. 4cm)</a:documentation>
+      <a:documentation docid="rule/length">Länge der Linie in Rasterzellen (Zahl) oder als Maß (z.B. 4cm)</a:documentation>
       <attribute name="richtung">
-        <a:documentation>Ausrichtung der Linie</a:documentation>
+        <a:documentation docid="rule/direction">Ausrichtung der Linie</a:documentation>
         <choice>
           <value>horizontal</value>
           <value>vertikal</value>
@@ -513,19 +512,19 @@
       </attribute>
       <optional>
         <attribute name="linienstärke"/>
-        <a:documentation>Dicke der Linie in Rasterzellen (Zahl) oder als Maß (z.B. 4pt)</a:documentation>
+        <a:documentation docid="rule/thickness">Dicke der Linie in Rasterzellen (Zahl) oder als Maß (z.B. 4pt)</a:documentation>
       </optional>
     </element>
   </define>
 
   <define name="e_Nachricht">
     <element name="Nachricht">
-      <a:documentation>Erzeugt eine Meldung auf der Konsole und im Protokoll. Die Nachricht wird durch das Attribut ›auswahl‹ oder durch Kindelemente »Wert« angegeben.</a:documentation>
+      <a:documentation docid="message">Erzeugt eine Meldung auf der Konsole und im Protokoll. Die Nachricht wird durch das Attribut ›auswahl‹ oder durch Kindelemente »Wert« angegeben.</a:documentation>
       <choice>
         <attribute name="auswahl"><data type="string"/></attribute>
-        <a:documentation>Nachricht, die ausgegeben werden soll (als XPath-Ausdruck)</a:documentation>
+        <a:documentation docid="message/select">Nachricht, die ausgegeben werden soll (als XPath-Ausdruck)</a:documentation>
         <oneOrMore>
-          <ref name="e_Wert" />
+          <ref name="e_Wert"/>
         </oneOrMore>
       </choice>
     </element>
@@ -533,27 +532,27 @@
 
   <define name="e_NächsterRahmen">
     <element name="NächsterRahmen">
-      <a:documentation>Wechselt auf den nächsten Rahmen im angegebenen Platzierungsbereich. Ist kein
+      <a:documentation docid="nextframe">Wechselt auf den nächsten Rahmen im angegebenen Platzierungsbereich. Ist kein
         Rahmen mehr auf der Seite vorhanden, wird eine neue Seite erzeugt.</a:documentation>
-      <attribute name="bereich" >
-        <a:documentation>Innheralb dieses Bereichs wird auf den nächsten Rahmen gewechselt.</a:documentation>
+      <attribute name="bereich">
+        <a:documentation docid="nextframe/area">Innheralb dieses Bereichs wird auf den nächsten Rahmen gewechselt.</a:documentation>
       </attribute>
     </element>
   </define>
 
   <define name="e_NeueSeite">
     <element name="NeueSeite">
-      <a:documentation>Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn später Text o.ä. ausgegeben wird.</a:documentation>
+      <a:documentation docid="newpage">Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn später Text o.ä. ausgegeben wird.</a:documentation>
       <empty/>
     </element>
   </define>
 
   <define name="e_NeueZeile">
     <element name="NeueZeile">
-      <a:documentation>Der virtuelle Cursor wird auf die nächste freie Zeile gesetzt.</a:documentation>
+      <a:documentation docid="newrow">Der virtuelle Cursor wird auf die nächste freie Zeile gesetzt.</a:documentation>
       <optional>
-        <attribute name="bereich" />
-        <a:documentation>Name des Bereichs, in dem der Cursor versetzt wird.</a:documentation>
+        <attribute name="bereich"/>
+        <a:documentation docid="newrow/area">Name des Bereichs, in dem der Cursor versetzt wird.</a:documentation>
       </optional>
       <empty/>
     </element>
@@ -561,16 +560,16 @@
 
   <define name="e_ObjektAusgeben">
     <element name="ObjektAusgeben">
-      <a:documentation>Gibt ein Objekt (Bild,..) aus.</a:documentation>
+      <a:documentation docid="placeobject">Gibt ein Objekt (Bild,..) aus.</a:documentation>
       <optional>
-        <attribute name="spalte" />
-        <a:documentation>Spalte in der das Objekt ausgegeben werden soll (Zahl). Wird keine Spalte
+        <attribute name="spalte"/>
+        <a:documentation docid="placeobject/colun">Spalte in der das Objekt ausgegeben werden soll (Zahl). Wird keine Spalte
           angegeben, so nimmt der Publisher die aktuelle Spalte, bzw. wenn das Objekt zu breit ist,
           die nächste freie Zeile.</a:documentation>
       </optional>
       <optional>
         <attribute name="belegen">
-          <a:documentation>Wenn »nein«, nimmt das Objekt keinen Platz im Raster
+          <a:documentation docid="placeobject/allocate">Wenn »nein«, nimmt das Objekt keinen Platz im Raster
             ein.</a:documentation>
           <choice>
             <value>ja</value>
@@ -580,75 +579,75 @@
       </optional>
       <optional>
         <attribute name="bereich">
-          <a:documentation>Der Platzierungsbereich, in dem das Objekt ausgegeben werden soll. Die
+          <a:documentation docid="placeobject/area">Der Platzierungsbereich, in dem das Objekt ausgegeben werden soll. Die
             Angabe von Zeile und Spalte bezieht sich auf den angegebenen Platzierungsbereich. Der
             voreingestellte Platzierungsbereich ist »Seite«.</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="zeile">
-          <a:documentation>Zeile, in der das Objekt ausgegeben werden soll (optional, Zahl). Wird
+          <a:documentation docid="placeobject/row">Zeile, in der das Objekt ausgegeben werden soll (optional, Zahl). Wird
             die Zeile nicht mit angegeben, so sucht sich das System selbständig eine freie
             Zeile</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="rahmen">
-          <a:documentation>Rahmen um das Objekt</a:documentation>
+          <a:documentation docid="placeobject/frame">Rahmen um das Objekt</a:documentation>
           <choice>
             <value>ohne</value>
-            <a:documentation>Das Objekt wird nicht umrahmt</a:documentation>
+            <a:documentation docid="placeobject/frame/without">Das Objekt wird nicht umrahmt</a:documentation>
             <value>durchgezogen</value>
-            <a:documentation>Erzeugt einen durchgezogenen Rahmen um das Objekt</a:documentation>
+            <a:documentation docid="placeobject/frame/solid">Erzeugt einen durchgezogenen Rahmen um das Objekt</a:documentation>
           </choice>
         </attribute>
         <attribute name="rahmenfarbe">
-          <data type="string" />
+          <data type="string"/>
         </attribute>
-        <a:documentation>Farbe des Rahmens, der gezeichnet werden soll. (Text)</a:documentation>
+        <a:documentation docid="placeobject/framecolor">Farbe des Rahmens, der gezeichnet werden soll. (Text)</a:documentation>
       </optional>
       <optional>
         <attribute name="hintergrund">
-          <a:documentation>Fläche hinter dem Objekt</a:documentation>
+          <a:documentation docid="placeobject/background">Fläche hinter dem Objekt</a:documentation>
           <choice>
             <value>ohne</value>
-            <a:documentation>Das Objekt erhält keinen Hintergrund</a:documentation>
+            <a:documentation docid="placeobject/background/without">Das Objekt erhält keinen Hintergrund</a:documentation>
             <value>vollständig</value>
-            <a:documentation>Ein rechteckiger Hintergrund wird hinter das Objekt
+            <a:documentation docid="placeobject/background/full">Ein rechteckiger Hintergrund wird hinter das Objekt
               gelegt</a:documentation>
           </choice>
         </attribute>
         <attribute name="hintergrundfarbe">
-          <data type="string" />
+          <data type="string"/>
         </attribute>
-        <a:documentation>Farbe des Hintergrunds, der gezeichnet werden soll.
+        <a:documentation docid="placeobject/backgroundcolor">Farbe des Hintergrunds, der gezeichnet werden soll.
           (Text)</a:documentation>
       </optional>
       <optional>
         <attribute name="maxhöhe">
-          <a:documentation>Gibt die maximale Höhe der auszugebenden Objekte an. Wird für
+          <a:documentation docid="placeobject/maxheight">Gibt die maximale Höhe der auszugebenden Objekte an. Wird für
             automatischen Tabellenumbruch benötigt</a:documentation>
         </attribute>
       </optional>
       <choice>
         <attribute name="gruppenname">
-          <a:documentation>Name der Gruppe, die ausgegeben werden soll (Text).</a:documentation>
+          <a:documentation docid="placeobject/groupname">Name der Gruppe, die ausgegeben werden soll (Text).</a:documentation>
         </attribute>
         <interleave>
           <optional>
-            <ref name="e_Bild" />
+            <ref name="e_Bild"/>
           </optional>
           <optional>
-            <ref name="e_Box" />
+            <ref name="e_Box"/>
           </optional>
           <optional>
-            <ref name="e_Linie" />
+            <ref name="e_Linie"/>
           </optional>
           <optional>
-            <ref name="e_Textblock" />
+            <ref name="e_Textblock"/>
           </optional>
           <optional>
-            <ref name="e_Tabelle" />
+            <ref name="e_Tabelle"/>
           </optional>
         </interleave>
       </choice>
@@ -659,73 +658,73 @@
     <element name="Optionen">
       <optional>
         <attribute name="zeige_rasterbelegung">
-          <a:documentation>Bestimmt, ob die Rasterbelegung angezeigt wird.</a:documentation>
+          <a:documentation docid="options/showgridallocation">Bestimmt, ob die Rasterbelegung angezeigt wird.</a:documentation>
           <choice>
             <value>ja</value>
-            <a:documentation>Rasterbelegung wird farblich markiert</a:documentation>
+            <a:documentation docid="options/showgridalllocation/yes">Rasterbelegung wird farblich markiert</a:documentation>
             <value>nein</value>
-            <a:documentation>Rasterbelegung wird nicht markiert</a:documentation>
+            <a:documentation docid="options/showgridallocation/no">Rasterbelegung wird nicht markiert</a:documentation>
           </choice>
         </attribute>
       </optional>
       <optional>
         <attribute name="zeichne_raster">
-          <a:documentation>Bestimmt, ob das zugrunde liegende Raster gezeichnet wird.</a:documentation>
+          <a:documentation docid="options/showgrid">Bestimmt, ob das zugrunde liegende Raster gezeichnet wird.</a:documentation>
           <choice>
             <value>ja</value>
-            <a:documentation>Raster wird gezeichnet</a:documentation>
+            <a:documentation docid="options/showgrid/yes">Raster wird gezeichnet</a:documentation>
             <value>nein</value>
-            <a:documentation>Raster wird nicht gezeichnet</a:documentation>
+            <a:documentation docid="options/showgrid/yes">Raster wird nicht gezeichnet</a:documentation>
           </choice>
         </attribute>
       </optional>
       <optional>
         <attribute name="läufe">
-          <a:documentation>Anzahl der Durchläufe des Publishers. Mehr als ein Durchlauf wird benötigt, wenn automatische Verzeichnisse erstellt werden.</a:documentation>
-          <data type="integer" />
+          <a:documentation docid="options/runs">Anzahl der Durchläufe des Publishers. Mehr als ein Durchlauf wird benötigt, wenn automatische Verzeichnisse erstellt werden.</a:documentation>
+          <data type="integer"/>
         </attribute>
       </optional>
       <optional>
         <attribute name="zeige_silbentrennung">
-          <a:documentation>Zeichnet kleine Markierungen an den Stellen, an denen Wörter getrennt werden können.</a:documentation>
+          <a:documentation docid="options/showhyphenation">Zeichnet kleine Markierungen an den Stellen, an denen Wörter getrennt werden können.</a:documentation>
           <choice>
             <value>ja</value>
-            <a:documentation>Kleine Markierungen werden an Trennstellen gezeigt</a:documentation>
+            <a:documentation docid="options/showhyphenation/yes">Kleine Markierungen werden an Trennstellen gezeigt</a:documentation>
             <value>nein</value>
-            <a:documentation>Normaler Text ohne Markierungen</a:documentation>
+            <a:documentation docid="options/showhyphenation/no">Normaler Text ohne Markierungen</a:documentation>
           </choice>
         </attribute>
       </optional>
       <optional>
         <attribute name="trace">
-          <a:documentation>Gibt detaillierte Informationen auf der Konsole (und im Log) aus.</a:documentation>
+          <a:documentation docid="options/trace">Gibt detaillierte Informationen auf der Konsole (und im Log) aus.</a:documentation>
           <choice>
             <value>ja</value>
-            <a:documentation>Detaillierte Informationen</a:documentation>
+            <a:documentation docid="options/trace/yes">Detaillierte Informationen</a:documentation>
             <value>nein</value>
-            <a:documentation>Nur die wichtigsten Informationen werden ausgegeben</a:documentation>
+            <a:documentation docid="options/trace/no">Nur die wichtigsten Informationen werden ausgegeben</a:documentation>
           </choice>
         </attribute>
       </optional>
       <optional>
         <attribute name="beschnittmarken">
-          <a:documentation>Erzeugt Schnittmarken</a:documentation>
+          <a:documentation docid="options/cutmarks">Erzeugt Schnittmarken</a:documentation>
           <choice>
             <value>ja</value>
-            <a:documentation>Schnittmarken werden angezeigt</a:documentation>
+            <a:documentation docid="options/cutmarks/yes">Schnittmarken werden angezeigt</a:documentation>
             <value>nein</value>
-            <a:documentation>Schnittmarken werden nicht angezeigt</a:documentation>
+            <a:documentation docid="options/cutmarks/no">Schnittmarken werden nicht angezeigt</a:documentation>
           </choice>
         </attribute>
       </optional>
       <optional>
         <attribute name="beschnittzugabe">
-          <a:documentation>Größe der Beschnittzugabe (»bleed«, Längenangabe mit Einheit, bspw. 3mm)</a:documentation>
+          <a:documentation docid="options/trim">Größe der Beschnittzugabe (»bleed«, Längenangabe mit Einheit, bspw. 3mm)</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="startseite">
-          <a:documentation>Gibt die Startseite an. Voreinstellung ist 1</a:documentation>
+          <a:documentation docid="options/startpage">Gibt die Startseite an. Voreinstellung ist 1</a:documentation>
         </attribute>
       </optional>
     </element>
@@ -733,22 +732,22 @@
 
   <define name="e_Platzierungsbereich">
     <element name="Platzierungsbereich">
-      <a:documentation>Platzierungsbereiche enthalten Platzierungsrahmen, die unter einem Namen
+      <a:documentation docid="positioningarea">Platzierungsbereiche enthalten Platzierungsrahmen, die unter einem Namen
         angesprochen werden (Attribut »name«). Die Rahmen sind in der Reihenfolge ihrer Definition
         miteinander verbunden. D.h. kann ein Objekt nicht mehr im Rahmen n dargestellt werden, wird
         Rahmen n+1 ausgewählt (bzw. auf der nächsten Seite der erste Rahmen, wenn es keinen Rahmen
         n+1 gibt).</a:documentation>
-      <attribute name="name" >
-        <a:documentation>Der Name des Platzierungsbereichs.</a:documentation>
+      <attribute name="name">
+        <a:documentation docid="positioningarea/name">Der Name des Platzierungsbereichs.</a:documentation>
       </attribute>
       <oneOrMore>
         <element name="Platzierungsrahmen">
-          <a:documentation>Platzierungsrahmen sind rechteckig, daher müssen alle vier Attribute
+          <a:documentation docid="positioningframe">Platzierungsrahmen sind rechteckig, daher müssen alle vier Attribute
             angegeben werden.</a:documentation>
-          <attribute name="spalte" />
-          <attribute name="zeile" />
-          <attribute name="höhe" />
-          <attribute name="breite" />
+          <attribute name="spalte"/>
+          <attribute name="zeile"/>
+          <attribute name="höhe"/>
+          <attribute name="breite"/>
         </element>
       </oneOrMore>
     </element>
@@ -756,16 +755,16 @@
 
   <define name="e_Rand">
     <element name="Rand">
-      <attribute name="links" />
-      <attribute name="rechts" />
-      <attribute name="oben" />
-      <attribute name="unten" />
+      <attribute name="links"/>
+      <attribute name="rechts"/>
+      <attribute name="oben"/>
+      <attribute name="unten"/>
     </element>
   </define>
 
   <define name="e_Schriftart">
     <element name="Schriftart">
-      <a:documentation>Schaltet auf eine andere Schriftfamilie um</a:documentation>
+      <a:documentation docid="fontface">Schaltet auf eine andere Schriftfamilie um</a:documentation>
       <attribute name="schriftfamilie"/>
       <ref name="t_Werte"/>
     </element>
@@ -780,20 +779,20 @@
 
   <define name="e_SpeichereDatensatzdatei">
     <element name="SpeichereDatensatzdatei">
-      <a:documentation>Speichert eine Datei unter dem angegebenen Namen. Die Datei kann mit »LadeDatensatzdatei« wieder geladen (und ausgeführt) werden. Der Inhalt ist eine Sequenz, z.B. aus 
+      <a:documentation docid="savedataset">Speichert eine Datei unter dem angegebenen Namen. Die Datei kann mit »LadeDatensatzdatei« wieder geladen (und ausgeführt) werden. Der Inhalt ist eine Sequenz, z.B. aus 
         den Befehlen »Element« und »Attribut« oder »Sequenz«.</a:documentation>
       <attribute name="dateiname"><data type="string"/></attribute>
-      <a:documentation>Name der Datensatzdatei</a:documentation>
+      <a:documentation docid="savedataset/filename">Name der Datensatzdatei</a:documentation>
       <attribute name="elementname"><data type="string"/></attribute>
-      <a:documentation>Name des Wurzelelements</a:documentation>
+      <a:documentation docid="savedataset/elementname">Name des Wurzelelements</a:documentation>
       <choice>
         <attribute name="auswahl"><data type="string"/></attribute>
-        <a:documentation>Inhalt der Datensatzdatei</a:documentation>
+        <a:documentation docid="savedataset/select">Inhalt der Datensatzdatei</a:documentation>
         <oneOrMore>
           <optional><ref name="e_Element"/></optional>
-          <optional><ref name="e_SortiereSequenz"></ref></optional>
+          <optional><ref name="e_SortiereSequenz"/></optional>
           <optional><ref name="e_Sequenz"/></optional>
-          <optional><ref name="e_Kopievon" /></optional>
+          <optional><ref name="e_Kopievon"/></optional>
         </oneOrMore>
       </choice>
     </element>
@@ -802,19 +801,19 @@
   <define name="e_Seitentyp">
     <element name="Seitentyp">
       <attribute name="name"/>
-      <a:documentation>Name der Seite. Derzeit wird der Name nicht weiter benutzt. Beliebig.</a:documentation>
+      <a:documentation docid="pagetype">Name der Seite. Derzeit wird der Name nicht weiter benutzt. Beliebig.</a:documentation>
       <attribute name="bedingung"/>
-      <a:documentation>XPath-Audruck, der »wahr« oder »falsch« zurückgibt. Bestimmt, ob diese Seite als Seitentyp gewählt wird</a:documentation>
-      <ref name="e_Rand" />
-      <optional><ref name="e_Platzierungsbereich" /></optional>
+      <a:documentation docid="pagetype/test">XPath-Audruck, der »wahr« oder »falsch« zurückgibt. Bestimmt, ob diese Seite als Seitentyp gewählt wird</a:documentation>
+      <ref name="e_Rand"/>
+      <optional><ref name="e_Platzierungsbereich"/></optional>
       <interleave>
         <optional>
           <element name="Raster">
-            <a:documentation>Bestimmt ein seitentspezifisches Raster</a:documentation>
+            <a:documentation docid="pagetype/grid">Bestimmt ein seitentspezifisches Raster</a:documentation>
             <attribute name="breite"/>
-            <a:documentation>Breite einer Rasterzelle (Maßeinheit), z.B. 10mm</a:documentation>
+            <a:documentation docid="pagetype/grid/width">Breite einer Rasterzelle (Maßeinheit), z.B. 10mm</a:documentation>
             <attribute name="höhe"/>
-            <a:documentation>Höhe einer Rasterzelle (Maßeinheit), z.B. 10mm</a:documentation>
+            <a:documentation docid="pagetype/grid/height">Höhe einer Rasterzelle (Maßeinheit), z.B. 10mm</a:documentation>
           </element>
         </optional>
         <optional>
@@ -828,9 +827,9 @@
 
   <define name="e_Sequenz">
     <element name="Sequenz">
-      <a:documentation>Wählt Daten aus der Datendatei aus.</a:documentation>
+      <a:documentation docid="sequence">Wählt Daten aus der Datendatei aus.</a:documentation>
       <attribute name="auswahl">
-        <a:documentation>XPath-Ausdruck für die Sequenz.</a:documentation>
+        <a:documentation docid="sequence/test">XPath-Ausdruck für die Sequenz.</a:documentation>
       </attribute>
     </element>
   </define>
@@ -844,9 +843,9 @@
 
   <define name="e_Solange">
     <element name="Solange">
-      <a:documentation>Führt die Kindelemente solange aus, wie die Bedingung ›wahr‹ ist.</a:documentation>
-      <attribute name="bedingung"><data type="string"></data></attribute>
-      <a:documentation>XPath-Ausdruck für die Bedingung</a:documentation>
+      <a:documentation docid="while">Führt die Kindelemente solange aus, wie die Bedingung ›wahr‹ ist.</a:documentation>
+      <attribute name="bedingung"><data type="string"/></attribute>
+      <a:documentation docid="while/test">XPath-Ausdruck für die Bedingung</a:documentation>
       <oneOrMore>
         <interleave>
           <ref name="t_Fallinhalt"/>
@@ -857,72 +856,72 @@
 
   <define name="e_SortiereSequenz">
     <element name="SortiereSequenz">
-      <a:documentation>Sortiert die angegebene Sequenz. Die zu sortierende Sequenz sollte in einer Variablen gespeichert sein, da der Inhalt verändert wird.</a:documentation>
-      <attribute name="auswahl" >
-        <a:documentation>Bestimmt die Sequenz (XML-Elemente), die sortiert werden soll. (XPath-Ausdruck)</a:documentation>
+      <a:documentation docid="sortsequence">Sortiert die angegebene Sequenz. Die zu sortierende Sequenz sollte in einer Variablen gespeichert sein, da der Inhalt verändert wird.</a:documentation>
+      <attribute name="auswahl">
+        <a:documentation docid="sortsequence/select">Bestimmt die Sequenz (XML-Elemente), die sortiert werden soll. (XPath-Ausdruck)</a:documentation>
       </attribute>
       <attribute name="kriterium">
-        <a:documentation>Das Attribut, nachdem sortiert werden soll.</a:documentation>
+        <a:documentation docid="sortsequence/criterium">Das Attribut, nachdem sortiert werden soll.</a:documentation>
       </attribute>
       <optional>
         <attribute name="duplikatelöschen"/>
-        <a:documentation>Entfernt Duplikate. Name des Attributs, auf das geprüft werden soll.</a:documentation>
+        <a:documentation docid="sortsequence/removeduplicates">Entfernt Duplikate. Name des Attributs, auf das geprüft werden soll.</a:documentation>
       </optional>
     </element>
   </define>
 
   <define name="e_Sup">
     <element name="Sup">
-      <a:documentation>Hochgestellter Text</a:documentation>
+      <a:documentation docid="sup">Hochgestellter Text</a:documentation>
       <ref name="t_Werte"/>
     </element>
   </define>
 
   <define name="e_Sub">
     <element name="Sub">
-      <a:documentation>Tiefgestellter Text</a:documentation>
+      <a:documentation docid="sub">Tiefgestellter Text</a:documentation>
       <ref name="t_Werte"/>
     </element>
   </define>
 
   <define name="e_Tabelle">
     <element name="Tabelle">
-      <a:documentation>Erzeugt eine Tabelle</a:documentation>
+      <a:documentation docid="table">Erzeugt eine Tabelle</a:documentation>
       <attribute name="breite"/>
-      <a:documentation>Die Breite der Tabelle im Raster. (Zahl)</a:documentation>
+      <a:documentation docid="table/width">Die Breite der Tabelle im Raster. (Zahl)</a:documentation>
       <optional>
         <attribute name="padding"/>
-        <a:documentation>Abstand innerhalb einer Zelle (Maßangabe)</a:documentation>
+        <a:documentation docid="table/padding">Abstand innerhalb einer Zelle (Maßangabe)</a:documentation>
       </optional>
       <optional>
-        <attribute name="spaltenabstand" />
-        <a:documentation>Abstand zwischen zwei Spalten (Maßangabe)</a:documentation>
+        <attribute name="spaltenabstand"/>
+        <a:documentation docid="table/columndistance">Abstand zwischen zwei Spalten (Maßangabe)</a:documentation>
       </optional>
       <optional>
-        <attribute name="zeilenabstand" />
-        <a:documentation>Abstand zwischen zwei Zeilen (Maßangabe)</a:documentation>
+        <attribute name="zeilenabstand"/>
+        <a:documentation docid="table/rowdistance">Abstand zwischen zwei Zeilen (Maßangabe)</a:documentation>
       </optional>
       <optional>
         <attribute name="dehnen">
-          <a:documentation>Bei kurzen Inhalten könnte die Tabelle schmaler sein als die angegebene Breite. Dieses Attribut gibt an, ob
+          <a:documentation docid="table/stretch">Bei kurzen Inhalten könnte die Tabelle schmaler sein als die angegebene Breite. Dieses Attribut gibt an, ob
           die Tabelle ggf. auf die angegebene Breite gedehnt wird.</a:documentation>
           <choice>
             <value>max</value>
-            <a:documentation>Die Tabelle wird auf die angegebene Breite gedehent, wenn der Inhalt eine schmalere Tabelle erzeugen würde.</a:documentation>
+            <a:documentation docid="table/stretch/max">Die Tabelle wird auf die angegebene Breite gedehent, wenn der Inhalt eine schmalere Tabelle erzeugen würde.</a:documentation>
             <value>nein</value>
-            <a:documentation>Die Tabelle wird nicht gedehnt.</a:documentation>
+            <a:documentation docid="table/stretch/no">Die Tabelle wird nicht gedehnt.</a:documentation>
           </choice>
         </attribute>
       </optional>
       <optional>
         <attribute name="schriftart">
-          <a:documentation>Schriftart, die vorher mit »DefiniereSchriftfamilie« definiert wurde, wird als Standardschriftart für die Tabelle benutzt (Instanz: ›Normal‹)</a:documentation>
+          <a:documentation docid="table/fontface">Schriftart, die vorher mit »DefiniereSchriftfamilie« definiert wurde, wird als Standardschriftart für die Tabelle benutzt (Instanz: ›Normal‹)</a:documentation>
         </attribute></optional>
       <oneOrMore>
         <interleave>
           <optional>
             <element name="Tabellenkopf">
-              <a:documentation>Wird auf jeder Seite wiederholt.</a:documentation>
+              <a:documentation docid="table/head">Wird auf jeder Seite wiederholt.</a:documentation>
               <oneOrMore>
                 <interleave>
                   <optional><ref name="e_Tlinie"/></optional>
@@ -934,7 +933,7 @@
           </optional>
           <optional>
             <element name="Tabellenfuß">
-              <a:documentation>Wird auf jeder Seite wiederholt.</a:documentation>
+              <a:documentation docid="table/foot">Wird auf jeder Seite wiederholt.</a:documentation>
               <oneOrMore>
                 <interleave>
                   <optional><ref name="e_Tlinie"/></optional>
@@ -956,14 +955,14 @@
 
   <define name="e_Tlinie">
     <element name="Tlinie">
-      <a:documentation>Erzeugt eine durchgehende horizontale Linie in der Tabelle</a:documentation>
+      <a:documentation docid="tablerule">Erzeugt eine durchgehende horizontale Linie in der Tabelle</a:documentation>
       <optional>
-        <attribute name="linienstärke" />
-        <a:documentation>Gibt die »Dicke« der Linie an. Beispiel: linienstärke="3pt"</a:documentation>
+        <attribute name="linienstärke"/>
+        <a:documentation docid="tablerule/rulewidth">Gibt die »Dicke« der Linie an. Beispiel: linienstärke="3pt"</a:documentation>
       </optional>
       <optional>
         <attribute name="farbe">
-          <a:documentation>Farbe der Linie.</a:documentation>
+          <a:documentation docid="tablerule/color">Farbe der Linie.</a:documentation>
         </attribute>
       </optional>
     </element>
@@ -973,107 +972,107 @@
     <element name="Td">
       <optional>
         <attribute name="colspan">
-          <a:documentation>Gibt an, über wie viele Spalten sich der Inhalt erstreckt.
+          <a:documentation docid="td/colspan">Gibt an, über wie viele Spalten sich der Inhalt erstreckt.
             Voreinstellung: 1</a:documentation>
-          <data type="integer" />
+          <data type="integer"/>
         </attribute>
       </optional>
       <optional>
         <attribute name="rowspan">
-          <a:documentation>Gibt an, über wie viele Zeilen sich der Inhalt erstreckt.
+          <a:documentation docid="td/rowspan">Gibt an, über wie viele Zeilen sich der Inhalt erstreckt.
             Voreinstellung: 1</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="align">
-          <a:documentation>Horizontale Ausrichtung</a:documentation>
+          <a:documentation docid="td/align">Horizontale Ausrichtung</a:documentation>
           <choice>
             <value>left</value>
-            <a:documentation>Linksbündig ausgeben</a:documentation>
+            <a:documentation docid="td/align/left">Linksbündig ausgeben</a:documentation>
             <value>center</value>
-            <a:documentation>Zentriert ausgeben</a:documentation>
+            <a:documentation docid="td/align/center">Zentriert ausgeben</a:documentation>
             <value>right</value>
-            <a:documentation>Rechtsbündig ausgeben</a:documentation>
+            <a:documentation docid="td/align/right">Rechtsbündig ausgeben</a:documentation>
           </choice>
         </attribute>
       </optional>
       <optional>
         <attribute name="hintergrundfarbe">
-          <a:documentation>Farbe der Tabellenzelle</a:documentation>
+          <a:documentation docid="td/backgroundcolor">Farbe der Tabellenzelle</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="valign">
-          <a:documentation>Vertikale Ausrichtung</a:documentation>
+          <a:documentation docid="td/valign">Vertikale Ausrichtung</a:documentation>
           <choice>
             <value>top</value>
-            <a:documentation>Oben ausgeben</a:documentation>
+            <a:documentation docid="td/valign/top">Oben ausgeben</a:documentation>
             <value>center</value>
-            <a:documentation>Vertikal zentriert ausgeben</a:documentation>
+            <a:documentation docid="td/valign/center">Vertikal zentriert ausgeben</a:documentation>
             <value>bottom</value>
-            <a:documentation>Unten ausgeben</a:documentation>
+            <a:documentation docid="td/valign/bottom">Unten ausgeben</a:documentation>
           </choice>
         </attribute>
       </optional>
       <optional>
-        <attribute name="border-left" />
-        <a:documentation>Breite des linken Rahmens</a:documentation>
+        <attribute name="border-left"/>
+        <a:documentation docid="td/borderleft">Breite des linken Rahmens</a:documentation>
       </optional>
       <optional>
-        <attribute name="border-right" />
-        <a:documentation>Breite des rechten Rahmens</a:documentation>
+        <attribute name="border-right"/>
+        <a:documentation docid="td/borderright">Breite des rechten Rahmens</a:documentation>
       </optional>
       <optional>
-        <attribute name="border-top" />
-        <a:documentation>Breite des oberen Rahmens</a:documentation>
+        <attribute name="border-top"/>
+        <a:documentation docid="td/bordertop">Breite des oberen Rahmens</a:documentation>
       </optional>
       <optional>
-        <attribute name="border-bottom" />
-        <a:documentation>Breite des unteren Rahmens</a:documentation>
+        <attribute name="border-bottom"/>
+        <a:documentation docid="td/borderbottom">Breite des unteren Rahmens</a:documentation>
       </optional>
       <optional>
-        <attribute name="border-left-color" />
-        <a:documentation>Farbe des linken Rahmens</a:documentation>
+        <attribute name="border-left-color"/>
+        <a:documentation docid="td/borderleftcolor">Farbe des linken Rahmens</a:documentation>
       </optional>
       <optional>
-        <attribute name="border-right-color" />
-        <a:documentation>Farbe des rechten Rahmens</a:documentation>
+        <attribute name="border-right-color"/>
+        <a:documentation docid="td/borderrightcolor">Farbe des rechten Rahmens</a:documentation>
       </optional>
       <optional>
-        <attribute name="border-top-color" />
-        <a:documentation>Farbe des oberen Rahmens</a:documentation>
+        <attribute name="border-top-color"/>
+        <a:documentation docid="td/bordertopcolor">Farbe des oberen Rahmens</a:documentation>
       </optional>
       <optional>
-        <attribute name="border-bottom-color" />
-        <a:documentation>Farbe des unteren Rahmens</a:documentation>
+        <attribute name="border-bottom-color"/>
+        <a:documentation docid="td/borderbottomcolor">Farbe des unteren Rahmens</a:documentation>
       </optional>
       <optional>
         <attribute name="padding"/>
-        <a:documentation>Kurzform für die Angabe von ›padding-*‹</a:documentation>
+        <a:documentation docid="td/padding">Kurzform für die Angabe von ›padding-*‹</a:documentation>
       </optional>
       <optional>
         <attribute name="padding-left"/>
-        <a:documentation>Bestimmt den Innenrand links (Maßangabe)</a:documentation>
+        <a:documentation docid="td/paddingleft">Bestimmt den Innenrand links (Maßangabe)</a:documentation>
       </optional>
       <optional>
         <attribute name="padding-right"/>
-        <a:documentation>Bestimmt den Innenrand rechts (Maßangabe)</a:documentation>
+        <a:documentation docid="td/paddingright">Bestimmt den Innenrand rechts (Maßangabe)</a:documentation>
       </optional>
       <optional>
         <attribute name="padding-top"/>
-        <a:documentation>Bestimmt den Innenrand oben (Maßangabe)</a:documentation>
+        <a:documentation docid="td/paddingtop">Bestimmt den Innenrand oben (Maßangabe)</a:documentation>
       </optional>
       <optional>
         <attribute name="padding-bottom"/>
-        <a:documentation>Bestimmt den Innenrand unten (Maßangabe)</a:documentation>
+        <a:documentation docid="td/paddingbottom">Bestimmt den Innenrand unten (Maßangabe)</a:documentation>
       </optional>
       <zeroOrMore>
         <choice>
           <ref name="e_Absatz"/>
-          <ref name="e_Tabelle" />
+          <ref name="e_Tabelle"/>
           <ref name="e_Bild"/>
           <ref name="e_Kopievon"/>
-          <ref name="e_Fallunterscheidung"></ref>
+          <ref name="e_Fallunterscheidung"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -1081,40 +1080,40 @@
 
   <define name="e_Tr">
     <element name="Tr">
-      <a:documentation>Erzeugt eine Tabellenzeile</a:documentation>
+      <a:documentation docid="tr">Erzeugt eine Tabellenzeile</a:documentation>
       <optional>
-        <attribute name="hintergrundfarbe" >
-          <a:documentation>Farbe des Zeilenhintergrundes. (Text)</a:documentation>
+        <attribute name="hintergrundfarbe">
+          <a:documentation docid="tr/backgroundcolor">Farbe des Zeilenhintergrundes. (Text)</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="minhöhe">
-          <a:documentation>Minimale Höhe in Rasterzellen</a:documentation>
+          <a:documentation docid="tr/minheight">Minimale Höhe in Rasterzellen</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="align">
-          <a:documentation>Bestimmt die horizonatale Ausrichtung für alle Zellen dieser Zeile</a:documentation>
+          <a:documentation docid="tr/align">Bestimmt die horizonatale Ausrichtung für alle Zellen dieser Zeile</a:documentation>
           <choice>
             <value>left</value>
-            <a:documentation>Linksbündig ausgeben</a:documentation>
+            <a:documentation docid="tr/align/left">Linksbündig ausgeben</a:documentation>
             <value>center</value>
-            <a:documentation>Zentriert ausgeben</a:documentation>
+            <a:documentation docid="tr/align/center">Zentriert ausgeben</a:documentation>
             <value>right</value>
-            <a:documentation>Rechtsbündig ausgeben</a:documentation>
+            <a:documentation docid="tr/align/right">Rechtsbündig ausgeben</a:documentation>
           </choice>
         </attribute>
       </optional>
       <optional>
         <attribute name="valign">
-          <a:documentation>Vertikale Ausrichtung für alle Zellen dieser Zeile</a:documentation>
+          <a:documentation docid="tr/valign">Vertikale Ausrichtung für alle Zellen dieser Zeile</a:documentation>
           <choice>
             <value>top</value>
-            <a:documentation>Oben ausgeben</a:documentation>
+            <a:documentation docid="tr/valign/top">Oben ausgeben</a:documentation>
             <value>center</value>
-            <a:documentation>Vertikal zentriert ausgeben</a:documentation>
+            <a:documentation docid="tr/valign/center">Vertikal zentriert ausgeben</a:documentation>
             <value>bottom</value>
-            <a:documentation>Unten ausgeben</a:documentation>
+            <a:documentation docid="tr/valign/bottom">Unten ausgeben</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -1137,48 +1136,48 @@
 
   <define name="e_Trennvorschlag">
     <element name="Trennvorschlag">
-      <a:documentation>Korrigiert fehlerhafte automatische Silbentrennung. Beispiel: Au-to-bahn</a:documentation>
+      <a:documentation docid="hyphenation">Korrigiert fehlerhafte automatische Silbentrennung. Beispiel: Au-to-bahn</a:documentation>
       <text/>
     </element>
   </define>
 
   <define name="e_Spalten">
     <element name="Spalten">
-      <a:documentation>Fasst »Spalte«-Elemente zusammen. Die Anzahl der »Spalte« Elemente muss mit der Anzahl der Tabellenzellen übereinstimmen.</a:documentation>
+      <a:documentation docid="columns">Fasst »Spalte«-Elemente zusammen. Die Anzahl der »Spalte« Elemente muss mit der Anzahl der Tabellenzellen übereinstimmen.</a:documentation>
       <oneOrMore>
         <element name="Spalte">
-          <a:documentation>Bestimmt die Eigenschaften einer Spalte hinsichtlich Breite, Farbe und Ausrichtung</a:documentation>
+          <a:documentation docid="column">Bestimmt die Eigenschaften einer Spalte hinsichtlich Breite, Farbe und Ausrichtung</a:documentation>
           <optional>
             <attribute name="breite"/>
-            <a:documentation>Erlaubt sind absolute Angaben (z.B. 12mm) oder *-Angaben (z.B. 3*). Die *-Angaben werden auf die „Restbreite“ aufgeteilt.</a:documentation>
+            <a:documentation docid="column/width">Erlaubt sind absolute Angaben (z.B. 12mm) oder *-Angaben (z.B. 3*). Die *-Angaben werden auf die „Restbreite“ aufgeteilt.</a:documentation>
           </optional>
           <optional>
             <attribute name="hintergrundfarbe"/>
-            <a:documentation>Bestimmt die Farbe der Spalte</a:documentation>
+            <a:documentation docid="column/backgroundcolor">Bestimmt die Farbe der Spalte</a:documentation>
           </optional>
           <optional>
             <attribute name="align">
-            <a:documentation>Bestimmt die horizonatale Ausrichtung für alle Zellen dieser Spalte</a:documentation>
+              <a:documentation docid="column/align">Bestimmt die horizonatale Ausrichtung für alle Zellen dieser Spalte</a:documentation>
             <choice>
               <value>left</value>
-              <a:documentation>Linksbündig ausgeben</a:documentation>
+              <a:documentation docid="column/align/left">Linksbündig ausgeben</a:documentation>
               <value>center</value>
-              <a:documentation>Zentriert ausgeben</a:documentation>
+              <a:documentation docid="column/align/center">Zentriert ausgeben</a:documentation>
               <value>right</value>
-              <a:documentation>Rechtsbündig ausgeben</a:documentation>
+              <a:documentation docid="column/align/right">Rechtsbündig ausgeben</a:documentation>
             </choice>
             </attribute>
           </optional>
           <optional>
             <attribute name="valign">
-              <a:documentation>Vertikale Ausrichtung für alle Zellen dieser Spalte</a:documentation>
+              <a:documentation docid="column/valign">Vertikale Ausrichtung für alle Zellen dieser Spalte</a:documentation>
               <choice>
                 <value>top</value>
-                <a:documentation>Oben ausgeben</a:documentation>
+                <a:documentation docid="column/valign/top">Oben ausgeben</a:documentation>
                 <value>center</value>
-                <a:documentation>Vertikal zentriert ausgeben</a:documentation>
+                <a:documentation docid="column/valign/center">Vertikal zentriert ausgeben</a:documentation>
                 <value>bottom</value>
-                <a:documentation>Unten ausgeben</a:documentation>
+                <a:documentation docid="column/valign/bottom">Unten ausgeben</a:documentation>
               </choice>
             </attribute>
           </optional>
@@ -1189,7 +1188,7 @@
 
   <define name="e_Textblock">
     <element name="Textblock">
-      <a:documentation>Erstellt einen rechteckigen Bereich mit Text. Der Text
+      <a:documentation docid="textblock">Erstellt einen rechteckigen Bereich mit Text. Der Text
       kann aus mehreren Absätzen bestehen und wird mit »Absatz« gekennzeichnet.</a:documentation>
       <attribute name="breite"/>
       <oneOrMore>
@@ -1201,34 +1200,34 @@
       </oneOrMore>
       <optional><attribute name="textformat"/></optional>
       <optional>
-        <attribute name="schriftart" />
-        <a:documentation>Bestimmt die Schriftart für den Textblock, wenn die Absätze keine Schriftart angegeben haben. (Text)</a:documentation>
+        <attribute name="schriftart"/>
+        <a:documentation docid="textblock/fontface">Bestimmt die Schriftart für den Textblock, wenn die Absätze keine Schriftart angegeben haben. (Text)</a:documentation>
       </optional>
       <optional>
-        <attribute name="farbe" />
-        <a:documentation>Bestimmt die Farbe des Textblocks. Kann in den Absätzen überschrieben werden. (Text)</a:documentation>
+        <attribute name="farbe"/>
+        <a:documentation docid="textblock/color">Bestimmt die Farbe des Textblocks. Kann in den Absätzen überschrieben werden. (Text)</a:documentation>
       </optional>
       <optional>
         <attribute name="winkel"/>
-        <a:documentation>Dreht den Text um den angegebenen Winkel (gegen den Uhrzeigersinn). Beispiel: winkel="45"</a:documentation>
+        <a:documentation docid="textblock/angle">Dreht den Text um den angegebenen Winkel (gegen den Uhrzeigersinn). Beispiel: winkel="45"</a:documentation>
       </optional>
       <optional>
         <attribute name="spalten"/>
-        <a:documentation>Anzahl der Spalten</a:documentation>
+        <a:documentation docid="textblock/columns">Anzahl der Spalten</a:documentation>
       </optional>
       <optional>
         <attribute name="spaltenabstand"/>
-        <a:documentation>Abstand zwischen den Spalten. Entweder eine Maßangabe (z.B. 3mm) oder eine Zahl (Anzahl in Rasterzellen)</a:documentation>
+        <a:documentation docid="textblock/columndistance">Abstand zwischen den Spalten. Entweder eine Maßangabe (z.B. 3mm) oder eine Zahl (Anzahl in Rasterzellen)</a:documentation>
       </optional>
     </element>
   </define>
 
   <define name="e_Wert">
     <element name="Wert">
-      <a:documentation>Fügt die textuelle Reprästentation des Wertes (XPath-Ausdruck) ein.</a:documentation>
+      <a:documentation docid="value">Fügt die textuelle Reprästentation des Wertes (XPath-Ausdruck) ein.</a:documentation>
       <choice>
         <attribute name="auswahl">
-          <a:documentation>XPath Ausdruck um den Inhalt zu ermitteln.</a:documentation>
+          <a:documentation docid="value/select">XPath Ausdruck um den Inhalt zu ermitteln.</a:documentation>
         </attribute>
         <text/>
       </choice>
@@ -1237,21 +1236,21 @@
 
   <define name="e_U">
     <element name="U">
-      <a:documentation>Schaltet »Unterstreichen« ein</a:documentation>
+      <a:documentation docid="u">Schaltet »Unterstreichen« ein</a:documentation>
       <ref name="t_Werte"/>
     </element>
   </define>
 
   <define name="e_URL">
     <element name="URL">
-      <a:documentation>Umbricht eine angegebene URL besser.</a:documentation>
+      <a:documentation docid="url">Umbricht eine angegebene URL besser.</a:documentation>
       <ref name="t_Werte"/>
     </element>
   </define>
 
   <define name="e_Zuweisung">
     <element name="Zuweisung">
-      <a:documentation>Weist einer Variablen einen Inhalt zu. Der Inhalt wird entweder über das Attribut
+      <a:documentation docid="setvariable">Weist einer Variablen einen Inhalt zu. Der Inhalt wird entweder über das Attribut
       auswahl oder über den Inhalt des Elements bestimmt.</a:documentation>
       <optional>
         <attribute name="trace">
@@ -1260,16 +1259,16 @@
             <value>nein</value>
           </choice>
         </attribute>
-        <a:documentation>Gibt die interne Information über die Zuweisung in der Logdatei aus.</a:documentation>
+        <a:documentation docid="setvariable/trace">Gibt die interne Information über die Zuweisung in der Logdatei aus.</a:documentation>
       </optional>
-      <attribute name="variable" />
-      <a:documentation>Name der Variablen, der etwas zugewiesen werden soll (Text).</a:documentation>
+      <attribute name="variable"/>
+      <a:documentation docid="setvariable/variable">Name der Variablen, der etwas zugewiesen werden soll (Text).</a:documentation>
       <choice>
-        <attribute name="auswahl" />
-        <a:documentation>XPath-Ausdruck für den Inhalt der Variablen. Alternativ dazu: der Inhalt des Elements Zuweisung</a:documentation>
+        <attribute name="auswahl"/>
+        <a:documentation docid="setvariable/select">XPath-Ausdruck für den Inhalt der Variablen. Alternativ dazu: der Inhalt des Elements Zuweisung</a:documentation>
         <oneOrMore>
           <interleave>
-            <optional><ref name="e_Absatz" /></optional>
+            <optional><ref name="e_Absatz"/></optional>
             <optional><ref name="e_Wert"/></optional>
             <optional><ref name="e_Kopievon"/></optional>
             <optional><ref name="e_Sequenz"/></optional>

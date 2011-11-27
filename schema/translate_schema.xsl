@@ -1,6 +1,7 @@
 <xsl:stylesheet version="2.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns="http://relaxng.org/ns/structure/1.0">
+    xmlns="http://relaxng.org/ns/structure/1.0"
+    xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
     <xsl:output omit-xml-declaration="yes" indent="yes"/>
     <xsl:strip-space elements="*"/>
     
@@ -16,6 +17,8 @@
     <xsl:key name="en-attributes" match="translations/attributes/attribute" use="@en"/>
     <xsl:key name="de-attributes" match="translations/attributes/attribute" use="@de"/>
 
+    <xsl:key name="doc" match="translations/doc/documentation" use="@docid" />
+
     <xsl:variable name="translations" select="document('translations.xml')"/>
     
 
@@ -25,7 +28,8 @@
         </xsl:copy>
     </xsl:template>
     <xsl:template match="grammar" xpath-default-namespace="http://relaxng.org/ns/structure/1.0">
-        <xsl:element name="grammar" >
+        <xsl:element name="grammar">
+            <xsl:namespace name="a" select="'http://relaxng.org/ns/compatibility/annotations/1.0'"></xsl:namespace>
             <xsl:copy-of select="@*" />
             <xsl:attribute name="ns" select="concat('urn:speedata.de:2009/publisher/',$pTo)" />
             <xsl:apply-templates />
@@ -68,6 +72,14 @@
                 <xsl:attribute name="name" select="$replace" />
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+
+
+    <xsl:template match="a:documentation">
+        <xsl:element name="a:documentation">
+            <xsl:attribute name="docid" select="@docid" />
+            <xsl:value-of select="key('doc',@docid,$translations)/node()[local-name()=$pTo]" />
+        </xsl:element>
     </xsl:template>
     
 </xsl:stylesheet>
