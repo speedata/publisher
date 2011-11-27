@@ -186,214 +186,214 @@
         <attribute en="y" de="y"/>
     </attributes>
     <doc>
-        <documentation xml:id="alignment">
+        <documentation docid="alignment">
             <en />
             <de>Bestimmt den Rand der Zeilen</de>
         </documentation>
-        <documentation xml:id="alignment/justification">
+        <documentation docid="alignment/justification">
             <en>All lines have the same width</en>
             <de>Alle Zeilen haben dieselbe Breite</de>
         </documentation>
-        <documentation xml:id="alignment/leftaligned">
+        <documentation docid="alignment/leftaligned">
             <en>All lines have the same left border</en>
             <de>Alle Zeilen haben einen festen linken Rand</de>
         </documentation>
-        <documentation xml:id="alignment/rightaligned">
+        <documentation docid="alignment/rightaligned">
             <en>All lines have the same right border</en>
             <de>Alle Zeilen haben einen festen rechten Rand</de>
         </documentation>
-        <documentation xml:id="alignment/centered">
+        <documentation docid="alignment/centered">
             <en>All lines are ragged right and left</en>
             <de>Alle Zeilen haben einen Flatterrand rechts und links</de>
         </documentation>
-        <documentation xml:id="allocate">
+        <documentation docid="allocate">
             <en />
             <de>Gibt an, ob das Objekt den Platz auf der Seite (im Raster) belegen soll. Dadurch ist der Platz für
                 andere Objekte gesperrt.</de>
         </documentation>
-        <documentation xml:id="allocate/yes">
+        <documentation docid="allocate/yes">
             <en />
             <de>Das Objekt nimmt den Platz im Raster fest ein und kann nicht von anderen Objekten überlagert
                 werden.</de>
         </documentation>
-        <documentation xml:id="allocate/no">
+        <documentation docid="allocate/no">
             <en />
             <de>Das Objekt nimmt keinen Platz im Raster ein und kann von anderen Objekten überlagert werden.</de>
         </documentation>
-        <documentation xml:id="paragraph/textformat">
+        <documentation docid="paragraph/textformat">
             <en />
             <de>Name des Textformats (optional)</de>
         </documentation>
-        <documentation xml:id="paragraph/color">
+        <documentation docid="paragraph/color">
             <en />
             <de>Bestimmt die Farbe des Absatzes (Text)</de>
         </documentation>
-        <documentation xml:id="paragraph/fontface">
+        <documentation docid="paragraph/fontface">
             <en />
             <de>Bestimmt die Schriftart für den Absatz. (Text)</de>
         </documentation>
-        <documentation xml:id="action">
+        <documentation docid="action">
             <en />
             <de>Assoziiert eine Anweisung (Aktion) mit dem umgebenden Text.</de>
         </documentation>
-        <documentation xml:id="action/addtolist">
+        <documentation docid="action/addtolist">
             <en />
             <de>Fügt ein Schlüssel/Wert-Paar zu einer Variablen hinzu.</de>
         </documentation>
-        <documentation xml:id="action/list">
+        <documentation docid="action/list">
             <en />
             <de>Liste (Variable) zu der der Inhalt hinzugefügt werden soll. Diese Variable muss noch nicht
                 existieren.</de>
         </documentation>
-        <documentation xml:id="action/key">
+        <documentation docid="action/key">
             <en />
             <de>Name des Schlüssels, unter dem der Wert in ›auswahl‹ gespeichert wird.</de>
         </documentation>
-        <documentation xml:id="action/select">
+        <documentation docid="action/select">
             <en />
             <de>Wert, der gepeichert wird (XPath-Ausdruck)</de>
         </documentation>
-        <documentation xml:id="attribute">
+        <documentation docid="attribute">
             <en />
             <de>Erzeugt ein Attribut, das in ein »Element« geschachtelt werden kann.</de>
         </documentation>
-        <documentation xml:id="attribute/name">
+        <documentation docid="attribute/name">
             <en />
             <de>Name des zu erzeugenden Attributs. (Text)</de>
         </documentation>
-        <documentation xml:id="attribute/select">
+        <documentation docid="attribute/select">
             <en />
             <de>Inhalt des Attributs als XPath-Ausdruck. Zeichenketten müssen in Anführungszeichen stehen!</de>
         </documentation>
-        <documentation xml:id="b">
+        <documentation docid="b">
             <en />
             <de>Schaltet auf den Schnitt »Fett« um</de>
         </documentation>
-        <documentation xml:id="handlerecord">
+        <documentation docid="handlerecord">
             <en />
             <de>Führt eine Regel aus mit dem Inhalt einer Liste (im Attribut ›auswahl‹).</de>
         </documentation>
-        <documentation xml:id="handlerecord/select">
+        <documentation docid="handlerecord/select">
             <en />
             <de>Bestimmt die Liste, die per »Datensatz« aufgerufen bearbeitet werden soll.</de>
         </documentation>
-        <documentation xml:id="handlenode">
+        <documentation docid="handlenode">
             <en />
             <de>Ruft alle Kindelemente eines bestimmten Namens auf. Gegenstück ist »Datensatz«</de>
         </documentation>
-        <documentation xml:id="handlenode/select">
+        <documentation docid="handlenode/select">
             <en />
             <de>Bestimmt die Datensätze, die ausgeführt werden sollen.</de>
         </documentation>
-        <documentation xml:id="handlenode/mode">
+        <documentation docid="handlenode/mode">
             <en />
             <de>Wird ein Modus angegeben, werden nur »Datensatz« Elemente ausgeführt, die diesem Modus entsprechen.
                 (Text)</de>
         </documentation>
-        <documentation xml:id="atpageshipout">
+        <documentation docid="atpageshipout">
             <en />
             <de>Wenn eine Seite ausgegeben wird, werden die Kindelemente ausgeführt.</de>
         </documentation>
-        <documentation xml:id="atpagecreation">
+        <documentation docid="atpagecreation">
             <en />
             <de>Wenn eine Seite erzeugt wird, werden die Kindelemente ausgeführt.</de>
         </documentation>
-        <documentation xml:id="image">
+        <documentation docid="image">
             <en />
             <de>Bindet eine externe Grafik ein.</de>
         </documentation>
-        <documentation xml:id="image/file">
+        <documentation docid="image/file">
             <en />
             <de>Dateiname der Bilddatei. (Text)</de>
         </documentation>
-        <documentation xml:id="image/width">
+        <documentation docid="image/width">
             <en />
             <de>Breite des Bildes in Rasterzellen oder in absoluten Maßangaben.</de>
         </documentation>
-        <documentation xml:id="image/height">
+        <documentation docid="image/height">
             <en />
             <de>Gibt die maximale Höhe des Bildes an in Rasterzellen oder in absoluten Maßangaben (z.B. 210mm).</de>
         </documentation>
-        <documentation xml:id="image/page">
+        <documentation docid="image/page">
             <en />
             <de>Bindet die angegebene Seite aus einer PDF-Datei ein. Voreinstellung: 1</de>
         </documentation>
-        <documentation xml:id="image/natural-height">
+        <documentation docid="image/natural-height">
             <en />
             <de>Die natürliche Größe des Bildes. Voreinstellung ist die »cropbox«. </de>
         </documentation>
-        <documentation xml:id="image/maxheight">
+        <documentation docid="image/maxheight">
             <en />
             <de>Die maximale Größe des Bildes. Voreinstellung ist die »cropbox«. </de>
         </documentation>
-        <documentation xml:id="box">
+        <documentation docid="box">
             <en />
             <de>Erzeugt einen rechteckigen farbigen Bereich.</de>
         </documentation>
-        <documentation xml:id="box/width">
+        <documentation docid="box/width">
             <en />
             <de>Breite der Box in Rasterzellen</de>
         </documentation>
-        <documentation xml:id="box/height">
+        <documentation docid="box/height">
             <en />
             <de>Höhe der Box (in Rasterzellen)</de>
         </documentation>
-        <documentation xml:id="box/backgroundcolor">
+        <documentation docid="box/backgroundcolor">
             <en />
             <de>Farbe der Box</de>
         </documentation>
-        <documentation xml:id="record">
+        <documentation docid="record">
             <en />
             <de>Führt für jedes angegebene Element (im Attribut ›element‹) die Anweisungen in den Kindelementen
                 aus.</de>
         </documentation>
-        <documentation xml:id="record/element">
+        <documentation docid="record/element">
             <en />
             <de>Jedes dieser Elemente wird mit den Anweisungen ausgeführt.</de>
         </documentation>
-        <documentation xml:id="record/mode">
+        <documentation docid="record/mode">
             <en />
             <de>Wird ein Datensatz zusammen mit einem Modus definiert, dann wird er nur dann ausgeführt, wenn
                 »BearbeiteKnoten« ebenfalls mit diesem Modus aufgerufen wurde.</de>
         </documentation>
-        <documentation xml:id="definecolor">
+        <documentation docid="definecolor">
             <en />
             <de>Definiert eine Farbe mit dem Namen aus dem Attribut »name«. Es gibt zwei zulässige Modelle, »rgb« und
                 »cmyk«. Die Wertangaben liegen zwischen 0 und 100.</de>
         </documentation>
-        <documentation xml:id="definecolor/model">
+        <documentation docid="definecolor/model">
             <en />
             <de>Es gibt zwei zulässige Modelle: ›cmyk‹ und ›rgb‹.</de>
         </documentation>
-        <documentation xml:id="definecolor/r">
+        <documentation docid="definecolor/r">
             <en />
             <de>Wert für Rot (zwischen 0 und 100)</de>
         </documentation>
-        <documentation xml:id="definecolor/g">
+        <documentation docid="definecolor/g">
             <en />
             <de>Wert für Grün (zwischen 0 und 100)</de>
         </documentation>
-        <documentation xml:id="definecolor/b">
+        <documentation docid="definecolor/b">
             <en />
             <de>Wert für Blau (zwischen 0 und 100)</de>
         </documentation>
-        <documentation xml:id="definecolor/c">
+        <documentation docid="definecolor/c">
             <en />
             <de>Wert für Türkis (cyan, zwischen 0 und 100)</de>
         </documentation>
-        <documentation xml:id="definecolor/m">
+        <documentation docid="definecolor/m">
             <en />
             <de>Wert für Magenta (zwischen 0 und 100)</de>
         </documentation>
-        <documentation xml:id="definecolor/y">
+        <documentation docid="definecolor/y">
             <en />
             <de>Wert für Gelb (yellow, zwischen 0 und 100)</de>
         </documentation>
-        <documentation xml:id="definecolor/k">
+        <documentation docid="definecolor/k">
             <en />
             <de>Wert für Schwarz (key, zwischen 0 und 100)</de>
         </documentation>
-        <documentation xml:id="definefontfamily">
+        <documentation docid="definefontfamily">
             <en />
             <de>Definiert eine Schriftfamilie bestehend aus den Schnitten »Normal«, »Kursiv«, »Fett« und »Fett Kursiv«.
                 Die Familien werden benötigt, wenn innerhalb eines Textes auf einen anderen Schnitt umgeschaltet wird.
@@ -401,711 +401,711 @@
                 wird immer dann verwendet, wenn keine bei Textausgabe (Element »Absatz«, ...) keine Schriftfamilie
                 angegeben wird.</de>
         </documentation>
-        <documentation xml:id="definefontfamily/fontsize">
+        <documentation docid="definefontfamily/fontsize">
             <en />
             <de>Schriftgröße in Punkt (0-...)</de>
         </documentation>
-        <documentation xml:id="definefontfamily/rowdistance">
+        <documentation docid="definefontfamily/rowdistance">
             <en />
             <de>Zeilenabstand in Punkt (0-...)</de>
         </documentation>
-        <documentation xml:id="definefontfamily/regular">
+        <documentation docid="definefontfamily/regular">
             <en />
             <de>Wählt die Schriftart für den »normalen« Schriftschnitt aus</de>
         </documentation>
-        <documentation xml:id="definefontfamily/bold">
+        <documentation docid="definefontfamily/bold">
             <en />
             <de>Schriftart, wenn innerhalb eines Textes auf »Fett« (&lt;b&gt;...&lt;/b&gt;) umgeschaltet wird.</de>
         </documentation>
-        <documentation xml:id="definefontfamily/italic">
+        <documentation docid="definefontfamily/italic">
             <en />
             <de>Schriftart, wenn innerhalb eines Textes auf »Kursiv« (&lt;i&gt;...&lt;/i&gt;) umgeschaltet wird.</de>
         </documentation>
-        <documentation xml:id="definefontfamily/bolditalic">
+        <documentation docid="definefontfamily/bolditalic">
             <en />
             <de>Schriftart, wenn innerhalb eines Textes auf »Fett« und »Kursiv«
                 (&lt;b&gt;&lt;i&gt;...&lt;/i&gt;&lt;/b&gt;) umgeschaltet wird.</de>
         </documentation>
-        <documentation xml:id="element">
+        <documentation docid="element">
             <en />
             <de>Erzeugt ein XML-Element, das in eine Datei geschrieben werden kann (»SpeichereDatensatzdatei«).</de>
         </documentation>
-        <documentation xml:id="element/name">
+        <documentation docid="element/name">
             <en />
             <de>Name des Elements.</de>
         </documentation>
-        <documentation xml:id="switch">
+        <documentation docid="switch">
             <en />
             <de>Enthält eine Wenn-Dann-Abfrage. Die Kindelemente »Fall« werden ausgeführt, wenn die Bedingung erfüllt
                 ist. Wenn keine Bedingung erfüllt ist, wird das Element »Sonst« ausgeführt, sofern es vorhanden
                 ist.</de>
         </documentation>
-        <documentation xml:id="switch/case">
+        <documentation docid="switch/case">
             <en />
             <de>Wenn die Bedingung im Attribut ›bedingung‹ zutrifft, wird der Inhalt dieses Elements ausgeführt und die
                 Verarbeitung hinter der Fallunterscheidung fortgesetzt.</de>
         </documentation>
-        <documentation xml:id="switch/test">
+        <documentation docid="switch/test">
             <en />
             <de>Enthält einen XPath-Ausdruck für die Bedingung</de>
         </documentation>
-        <documentation xml:id="switch/otherwise">
+        <documentation docid="switch/otherwise">
             <en />
             <de>Wird ausgeführt, falls keine Bedingung zutrifft</de>
         </documentation>
-        <documentation xml:id="i">
+        <documentation docid="i">
             <en />
             <de>Schaltet auf Kursiv um</de>
         </documentation>
-        <documentation xml:id="copyof">
+        <documentation docid="copyof">
             <en />
             <de>Fügt eine Menge von Elementen ein.</de>
         </documentation>
-        <documentation xml:id="copyof/select">
+        <documentation docid="copyof/select">
             <en />
             <de>XPath Ausdruck um den Inhalt zu ermitteln.</de>
         </documentation>
-        <documentation xml:id="loaddataset">
+        <documentation docid="loaddataset">
             <en />
             <de>Lädt eine zuvor gespeicherte Datensatzdatei. Existiert die angegebene Datei nicht, wird dieser Befehl
                 übersprungen.</de>
         </documentation>
-        <documentation xml:id="loaddataset/name">
+        <documentation docid="loaddataset/name">
             <en />
             <de>Name der Datensatzdatei.</de>
         </documentation>
-        <documentation xml:id="loadfontfile">
+        <documentation docid="loadfontfile">
             <en />
             <de>Lädt eine Schriftdatei. Erlaubt sind Type1, TrueType und OpenType Schriftarten.</de>
         </documentation>
-        <documentation xml:id="loadfontfile/name">
+        <documentation docid="loadfontfile/name">
             <en />
             <de>Der Name, unter dem die Schriftart später angesprochen werden kann</de>
         </documentation>
-        <documentation xml:id="loadfontfile/filename">
+        <documentation docid="loadfontfile/filename">
             <en />
             <de>Der Dateiname ohne Pfadangabe. Beispiel: »helvetica.ttf«</de>
         </documentation>
-        <documentation xml:id="loadfontfile/marginprotrusion">
+        <documentation docid="loadfontfile/marginprotrusion">
             <en />
             <de>Optischer Randausgleich (Trennstrich, Komma und Punkt ragen in den Rand). Erlaubt sind Werte zwischen 0
                 (kein Randausgleich) und 100 (vollständig).</de>
         </documentation>
-        <documentation xml:id="loadfontfile/space">
+        <documentation docid="loadfontfile/space">
             <en />
             <de>Natürliche Breite des Leeraums zwischen den Wörtern (in Prozent der Schriftgröße). Voreingestellt ist
                 25.</de>
         </documentation>
-        <documentation xml:id="smallcaps">
+        <documentation docid="smallcaps">
             <en />
             <de>Kapitälchen aus der Schriftdatei benutzen (nur manche OpenType/TrueType Schriftarten)</de>
         </documentation>
-        <documentation xml:id="loadfontfile/smallcaps/yes">
+        <documentation docid="loadfontfile/smallcaps/yes">
             <en />
             <de>Kapitälchen aktivieren</de>
         </documentation>
-        <documentation xml:id="loadfontfile/smallcaps/no">
+        <documentation docid="loadfontfile/smallcaps/no">
             <en />
             <de>Keine Kapitälchen</de>
         </documentation>
-        <documentation xml:id="emptyline">
+        <documentation docid="emptyline">
             <en />
             <de>Der virtuelle Cursor wird auf die übernächste freie Zeile gesetzt.</de>
         </documentation>
-        <documentation xml:id="rule">
+        <documentation docid="rule">
             <en />
             <de>Zeichnet eine Linie</de>
         </documentation>
-        <documentation xml:id="rule/length">
+        <documentation docid="rule/length">
             <en />
             <de>Länge der Linie in Rasterzellen (Zahl) oder als Maß (z.B. 4cm)</de>
         </documentation>
-        <documentation xml:id="rule/direction">
+        <documentation docid="rule/direction">
             <en />
             <de>Ausrichtung der Linie</de>
         </documentation>
-        <documentation xml:id="rule/thickness">
+        <documentation docid="rule/thickness">
             <en />
             <de>Dicke der Linie in Rasterzellen (Zahl) oder als Maß (z.B. 4pt)</de>
         </documentation>
-        <documentation xml:id="message">
+        <documentation docid="message">
             <en />
             <de>Erzeugt eine Meldung auf der Konsole und im Protokoll. Die Nachricht wird durch das Attribut ›auswahl‹
                 oder durch Kindelemente »Wert« angegeben.</de>
         </documentation>
-        <documentation xml:id="message/select">
+        <documentation docid="message/select">
             <en />
             <de>Nachricht, die ausgegeben werden soll (als XPath-Ausdruck)</de>
         </documentation>
-        <documentation xml:id="nextframe">
+        <documentation docid="nextframe">
             <en />
             <de>Wechselt auf den nächsten Rahmen im angegebenen Platzierungsbereich. Ist kein Rahmen mehr auf der Seite
                 vorhanden, wird eine neue Seite erzeugt.</de>
         </documentation>
-        <documentation xml:id="nextframe/area">
+        <documentation docid="nextframe/area">
             <en />
             <de>Innheralb dieses Bereichs wird auf den nächsten Rahmen gewechselt.</de>
         </documentation>
-        <documentation xml:id="newpage">
+        <documentation docid="newpage">
             <en />
             <de>Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn
                 später Text o.ä. ausgegeben wird.</de>
         </documentation>
-        <documentation xml:id="newrow">
+        <documentation docid="newrow">
             <en />
             <de>Der virtuelle Cursor wird auf die nächste freie Zeile gesetzt.</de>
         </documentation>
-        <documentation xml:id="newrow/area">
+        <documentation docid="newrow/area">
             <en />
             <de>Name des Bereichs, in dem der Cursor versetzt wird.</de>
         </documentation>
-        <documentation xml:id="placeobject">
+        <documentation docid="placeobject">
             <en />
             <de>Gibt ein Objekt (Bild,..) aus.</de>
         </documentation>
-        <documentation xml:id="placeobject/colun">
+        <documentation docid="placeobject/colun">
             <en />
             <de>Spalte in der das Objekt ausgegeben werden soll (Zahl). Wird keine Spalte angegeben, so nimmt der
                 Publisher die aktuelle Spalte, bzw. wenn das Objekt zu breit ist, die nächste freie Zeile.</de>
         </documentation>
-        <documentation xml:id="placeobject/allocate">
+        <documentation docid="placeobject/allocate">
             <en />
             <de>Wenn »nein«, nimmt das Objekt keinen Platz im Raster ein.</de>
         </documentation>
-        <documentation xml:id="placeobject/area">
+        <documentation docid="placeobject/area">
             <en />
             <de>Der Platzierungsbereich, in dem das Objekt ausgegeben werden soll. Die Angabe von Zeile und Spalte
                 bezieht sich auf den angegebenen Platzierungsbereich. Der voreingestellte Platzierungsbereich ist
                 »Seite«.</de>
         </documentation>
-        <documentation xml:id="placeobject/row">
+        <documentation docid="placeobject/row">
             <en />
             <de>Zeile, in der das Objekt ausgegeben werden soll (optional, Zahl). Wird die Zeile nicht mit angegeben, so
                 sucht sich das System selbständig eine freie Zeile</de>
         </documentation>
-        <documentation xml:id="placeobject/frame">
+        <documentation docid="placeobject/frame">
             <en />
             <de>Rahmen um das Objekt</de>
         </documentation>
-        <documentation xml:id="placeobject/frame/without">
+        <documentation docid="placeobject/frame/without">
             <en />
             <de>Das Objekt wird nicht umrahmt</de>
         </documentation>
-        <documentation xml:id="placeobject/frame/solid">
+        <documentation docid="placeobject/frame/solid">
             <en />
             <de>Erzeugt einen durchgezogenen Rahmen um das Objekt</de>
         </documentation>
-        <documentation xml:id="placeobject/framecolor">
+        <documentation docid="placeobject/framecolor">
             <en />
             <de>Farbe des Rahmens, der gezeichnet werden soll. (Text)</de>
         </documentation>
-        <documentation xml:id="placeobject/background">
+        <documentation docid="placeobject/background">
             <en />
             <de>Fläche hinter dem Objekt</de>
         </documentation>
-        <documentation xml:id="placeobject/background/without">
+        <documentation docid="placeobject/background/without">
             <en />
             <de>Das Objekt erhält keinen Hintergrund</de>
         </documentation>
-        <documentation xml:id="placeobject/background/full">
+        <documentation docid="placeobject/background/full">
             <en />
             <de>Ein rechteckiger Hintergrund wird hinter das Objekt gelegt</de>
         </documentation>
-        <documentation xml:id="placeobject/backgroundcolor">
+        <documentation docid="placeobject/backgroundcolor">
             <en />
             <de>Farbe des Hintergrunds, der gezeichnet werden soll. (Text)</de>
         </documentation>
-        <documentation xml:id="placeobject/maxheight">
+        <documentation docid="placeobject/maxheight">
             <en />
             <de>Gibt die maximale Höhe der auszugebenden Objekte an. Wird für automatischen Tabellenumbruch
                 benötigt</de>
         </documentation>
-        <documentation xml:id="placeobject/groupname">
+        <documentation docid="placeobject/groupname">
             <en />
             <de>Name der Gruppe, die ausgegeben werden soll (Text).</de>
         </documentation>
-        <documentation xml:id="options/showgridallocation">
+        <documentation docid="options/showgridallocation">
             <en />
             <de>Bestimmt, ob die Rasterbelegung angezeigt wird.</de>
         </documentation>
-        <documentation xml:id="options/showgridalllocation/yes">
+        <documentation docid="options/showgridalllocation/yes">
             <en />
             <de>Rasterbelegung wird farblich markiert</de>
         </documentation>
-        <documentation xml:id="options/showgridallocation/no">
+        <documentation docid="options/showgridallocation/no">
             <en />
             <de>Rasterbelegung wird nicht markiert</de>
         </documentation>
-        <documentation xml:id="options/showgrid">
+        <documentation docid="options/showgrid">
             <en />
             <de>Bestimmt, ob das zugrunde liegende Raster gezeichnet wird.</de>
         </documentation>
-        <documentation xml:id="options/showgrid/yes">
+        <documentation docid="options/showgrid/yes">
             <en />
             <de>Raster wird gezeichnet</de>
         </documentation>
-        <documentation xml:id="options/showgrid/yes">
+        <documentation docid="options/showgrid/yes">
             <en />
             <de>Raster wird nicht gezeichnet</de>
         </documentation>
-        <documentation xml:id="options/runs">
+        <documentation docid="options/runs">
             <en />
             <de>Anzahl der Durchläufe des Publishers. Mehr als ein Durchlauf wird benötigt, wenn automatische
                 Verzeichnisse erstellt werden.</de>
         </documentation>
-        <documentation xml:id="options/showhyphenation">
+        <documentation docid="options/showhyphenation">
             <en />
             <de>Zeichnet kleine Markierungen an den Stellen, an denen Wörter getrennt werden können.</de>
         </documentation>
-        <documentation xml:id="options/showhyphenation/yes">
+        <documentation docid="options/showhyphenation/yes">
             <en />
             <de>Kleine Markierungen werden an Trennstellen gezeigt</de>
         </documentation>
-        <documentation xml:id="options/showhyphenation/no">
+        <documentation docid="options/showhyphenation/no">
             <en />
             <de>Normaler Text ohne Markierungen</de>
         </documentation>
-        <documentation xml:id="options/trace">
+        <documentation docid="options/trace">
             <en />
             <de>Gibt detaillierte Informationen auf der Konsole (und im Log) aus.</de>
         </documentation>
-        <documentation xml:id="options/trace/yes">
+        <documentation docid="options/trace/yes">
             <en />
             <de>Detaillierte Informationen</de>
         </documentation>
-        <documentation xml:id="options/trace/no">
+        <documentation docid="options/trace/no">
             <en />
             <de>Nur die wichtigsten Informationen werden ausgegeben</de>
         </documentation>
-        <documentation xml:id="options/cutmarks">
+        <documentation docid="options/cutmarks">
             <en />
             <de>Erzeugt Schnittmarken</de>
         </documentation>
-        <documentation xml:id="options/cutmarks/yes">
+        <documentation docid="options/cutmarks/yes">
             <en />
             <de>Schnittmarken werden angezeigt</de>
         </documentation>
-        <documentation xml:id="options/cutmarks/no">
+        <documentation docid="options/cutmarks/no">
             <en />
             <de>Schnittmarken werden nicht angezeigt</de>
         </documentation>
-        <documentation xml:id="options/trim">
+        <documentation docid="options/trim">
             <en />
             <de>Größe der Beschnittzugabe (»bleed«, Längenangabe mit Einheit, bspw. 3mm)</de>
         </documentation>
-        <documentation xml:id="options/startpage">
+        <documentation docid="options/startpage">
             <en />
             <de>Gibt die Startseite an. Voreinstellung ist 1</de>
         </documentation>
-        <documentation xml:id="positioningarea">
+        <documentation docid="positioningarea">
             <en />
             <de>Platzierungsbereiche enthalten Platzierungsrahmen, die unter einem Namen angesprochen werden (Attribut
                 »name«). Die Rahmen sind in der Reihenfolge ihrer Definition miteinander verbunden. D.h. kann ein Objekt
                 nicht mehr im Rahmen n dargestellt werden, wird Rahmen n+1 ausgewählt (bzw. auf der nächsten Seite der
                 erste Rahmen, wenn es keinen Rahmen n+1 gibt).</de>
         </documentation>
-        <documentation xml:id="positioningarea/name">
+        <documentation docid="positioningarea/name">
             <en />
             <de>Der Name des Platzierungsbereichs.</de>
         </documentation>
-        <documentation xml:id="positioningframe">
+        <documentation docid="positioningframe">
             <en />
             <de>Platzierungsrahmen sind rechteckig, daher müssen alle vier Attribute angegeben werden.</de>
         </documentation>
-        <documentation xml:id="fontface">
+        <documentation docid="fontface">
             <en />
             <de>Schaltet auf eine andere Schriftfamilie um</de>
         </documentation>
-        <documentation xml:id="savedataset">
+        <documentation docid="savedataset">
             <en />
             <de>Speichert eine Datei unter dem angegebenen Namen. Die Datei kann mit »LadeDatensatzdatei« wieder geladen
                 (und ausgeführt) werden. Der Inhalt ist eine Sequenz, z.B. aus den Befehlen »Element« und »Attribut«
                 oder »Sequenz«.</de>
         </documentation>
-        <documentation xml:id="savedataset/filename">
+        <documentation docid="savedataset/filename">
             <en />
             <de>Name der Datensatzdatei</de>
         </documentation>
-        <documentation xml:id="savedataset/elementname">
+        <documentation docid="savedataset/elementname">
             <en />
             <de>Name des Wurzelelements</de>
         </documentation>
-        <documentation xml:id="savedataset/select">
+        <documentation docid="savedataset/select">
             <en />
             <de>Inhalt der Datensatzdatei</de>
         </documentation>
-        <documentation xml:id="pagetype">
+        <documentation docid="pagetype">
             <en />
             <de>Name der Seite. Derzeit wird der Name nicht weiter benutzt. Beliebig.</de>
         </documentation>
-        <documentation xml:id="pagetype/test">
+        <documentation docid="pagetype/test">
             <en />
             <de>XPath-Audruck, der »wahr« oder »falsch« zurückgibt. Bestimmt, ob diese Seite als Seitentyp gewählt
                 wird</de>
         </documentation>
-        <documentation xml:id="pagetype/grid">
+        <documentation docid="pagetype/grid">
             <en />
             <de>Bestimmt ein seitentspezifisches Raster</de>
         </documentation>
-        <documentation xml:id="pagetype/grid/width">
+        <documentation docid="pagetype/grid/width">
             <en />
             <de>Breite einer Rasterzelle (Maßeinheit), z.B. 10mm</de>
         </documentation>
-        <documentation xml:id="pagetype/grid/height">
+        <documentation docid="pagetype/grid/height">
             <en />
             <de>Höhe einer Rasterzelle (Maßeinheit), z.B. 10mm</de>
         </documentation>
-        <documentation xml:id="sequence">
+        <documentation docid="sequence">
             <en />
             <de>Wählt Daten aus der Datendatei aus.</de>
         </documentation>
-        <documentation xml:id="sequence/test">
+        <documentation docid="sequence/test">
             <en />
             <de>XPath-Ausdruck für die Sequenz.</de>
         </documentation>
-        <documentation xml:id="while">
+        <documentation docid="while">
             <en />
             <de>Führt die Kindelemente solange aus, wie die Bedingung ›wahr‹ ist.</de>
         </documentation>
-        <documentation xml:id="while/test">
+        <documentation docid="while/test">
             <en />
             <de>XPath-Ausdruck für die Bedingung</de>
         </documentation>
-        <documentation xml:id="sortsequence">
+        <documentation docid="sortsequence">
             <en />
             <de>Sortiert die angegebene Sequenz. Die zu sortierende Sequenz sollte in einer Variablen gespeichert sein,
                 da der Inhalt verändert wird.</de>
         </documentation>
-        <documentation xml:id="sortsequence/select">
+        <documentation docid="sortsequence/select">
             <en />
             <de>Bestimmt die Sequenz (XML-Elemente), die sortiert werden soll. (XPath-Ausdruck)</de>
         </documentation>
-        <documentation xml:id="sortsequence/criterium">
+        <documentation docid="sortsequence/criterium">
             <en />
             <de>Das Attribut, nachdem sortiert werden soll.</de>
         </documentation>
-        <documentation xml:id="sortsequence/removeduplicates">
+        <documentation docid="sortsequence/removeduplicates">
             <en />
             <de>Entfernt Duplikate. Name des Attributs, auf das geprüft werden soll.</de>
         </documentation>
-        <documentation xml:id="sup">
+        <documentation docid="sup">
             <en />
             <de>Hochgestellter Text</de>
         </documentation>
-        <documentation xml:id="sub">
+        <documentation docid="sub">
             <en />
             <de>Tiefgestellter Text</de>
         </documentation>
-        <documentation xml:id="table">
+        <documentation docid="table">
             <en />
             <de>Erzeugt eine Tabelle</de>
         </documentation>
-        <documentation xml:id="table/width">
+        <documentation docid="table/width">
             <en />
             <de>Die Breite der Tabelle im Raster. (Zahl)</de>
         </documentation>
-        <documentation xml:id="table/padding">
+        <documentation docid="table/padding">
             <en />
             <de>Abstand innerhalb einer Zelle (Maßangabe)</de>
         </documentation>
-        <documentation xml:id="table/columndistance">
+        <documentation docid="table/columndistance">
             <en />
             <de>Abstand zwischen zwei Spalten (Maßangabe)</de>
         </documentation>
-        <documentation xml:id="table/rowdistance">
+        <documentation docid="table/rowdistance">
             <en />
             <de>Abstand zwischen zwei Zeilen (Maßangabe)</de>
         </documentation>
-        <documentation xml:id="table/stretch">
+        <documentation docid="table/stretch">
             <en />
             <de>Bei kurzen Inhalten könnte die Tabelle schmaler sein als die angegebene Breite. Dieses Attribut gibt an,
                 ob die Tabelle ggf. auf die angegebene Breite gedehnt wird.</de>
         </documentation>
-        <documentation xml:id="table/stretch/max">
+        <documentation docid="table/stretch/max">
             <en />
             <de>Die Tabelle wird auf die angegebene Breite gedehent, wenn der Inhalt eine schmalere Tabelle erzeugen
                 würde.</de>
         </documentation>
-        <documentation xml:id="table/stretch/no">
+        <documentation docid="table/stretch/no">
             <en />
             <de>Die Tabelle wird nicht gedehnt.</de>
         </documentation>
-        <documentation xml:id="table/fontface">
+        <documentation docid="table/fontface">
             <en />
             <de>Schriftart, die vorher mit »DefiniereSchriftfamilie« definiert wurde, wird als Standardschriftart für
                 die Tabelle benutzt (Instanz: ›Normal‹)</de>
         </documentation>
-        <documentation xml:id="table/head">
+        <documentation docid="table/head">
             <en />
             <de>Wird auf jeder Seite wiederholt.</de>
         </documentation>
-        <documentation xml:id="table/foot">
+        <documentation docid="table/foot">
             <en />
             <de>Wird auf jeder Seite wiederholt.</de>
         </documentation>
-        <documentation xml:id="tablerule">
+        <documentation docid="tablerule">
             <en />
             <de>Erzeugt eine durchgehende horizontale Linie in der Tabelle</de>
         </documentation>
-        <documentation xml:id="tablerule/rulewidth">
+        <documentation docid="tablerule/rulewidth">
             <en />
             <de>Gibt die »Dicke« der Linie an. Beispiel: linienstärke="3pt"</de>
         </documentation>
-        <documentation xml:id="tablerule/color">
+        <documentation docid="tablerule/color">
             <en />
             <de>Farbe der Linie.</de>
         </documentation>
-        <documentation xml:id="td/colspan">
+        <documentation docid="td/colspan">
             <en />
             <de>Gibt an, über wie viele Spalten sich der Inhalt erstreckt. Voreinstellung: 1</de>
         </documentation>
-        <documentation xml:id="td/rowspan">
+        <documentation docid="td/rowspan">
             <en />
             <de>Gibt an, über wie viele Zeilen sich der Inhalt erstreckt. Voreinstellung: 1</de>
         </documentation>
-        <documentation xml:id="td/align">
+        <documentation docid="td/align">
             <en />
             <de>Horizontale Ausrichtung</de>
         </documentation>
-        <documentation xml:id="td/align/left">
+        <documentation docid="td/align/left">
             <en />
             <de>Linksbündig ausgeben</de>
         </documentation>
-        <documentation xml:id="td/align/center">
+        <documentation docid="td/align/center">
             <en />
             <de>Zentriert ausgeben</de>
         </documentation>
-        <documentation xml:id="td/align/right">
+        <documentation docid="td/align/right">
             <en />
             <de>Rechtsbündig ausgeben</de>
         </documentation>
-        <documentation xml:id="td/backgroundcolor">
+        <documentation docid="td/backgroundcolor">
             <en />
             <de>Farbe der Tabellenzelle</de>
         </documentation>
-        <documentation xml:id="td/valign">
+        <documentation docid="td/valign">
             <en />
             <de>Vertikale Ausrichtung</de>
         </documentation>
-        <documentation xml:id="td/valign/top">
+        <documentation docid="td/valign/top">
             <en />
             <de>Oben ausgeben</de>
         </documentation>
-        <documentation xml:id="td/valign/center">
+        <documentation docid="td/valign/center">
             <en />
             <de>Vertikal zentriert ausgeben</de>
         </documentation>
-        <documentation xml:id="td/valign/bottom">
+        <documentation docid="td/valign/bottom">
             <en />
             <de>Unten ausgeben</de>
         </documentation>
-        <documentation xml:id="td/borderleft">
+        <documentation docid="td/borderleft">
             <en />
             <de>Breite des linken Rahmens</de>
         </documentation>
-        <documentation xml:id="td/borderright">
+        <documentation docid="td/borderright">
             <en />
             <de>Breite des rechten Rahmens</de>
         </documentation>
-        <documentation xml:id="td/bordertop">
+        <documentation docid="td/bordertop">
             <en />
             <de>Breite des oberen Rahmens</de>
         </documentation>
-        <documentation xml:id="td/borderbottom">
+        <documentation docid="td/borderbottom">
             <en />
             <de>Breite des unteren Rahmens</de>
         </documentation>
-        <documentation xml:id="td/borderleftcolor">
+        <documentation docid="td/borderleftcolor">
             <en />
             <de>Farbe des linken Rahmens</de>
         </documentation>
-        <documentation xml:id="td/borderrightcolor">
+        <documentation docid="td/borderrightcolor">
             <en />
             <de>Farbe des rechten Rahmens</de>
         </documentation>
-        <documentation xml:id="td/bordertopcolor">
+        <documentation docid="td/bordertopcolor">
             <en />
             <de>Farbe des oberen Rahmens</de>
         </documentation>
-        <documentation xml:id="td/borderbottomcolor">
+        <documentation docid="td/borderbottomcolor">
             <en />
             <de>Farbe des unteren Rahmens</de>
         </documentation>
-        <documentation xml:id="td/padding">
+        <documentation docid="td/padding">
             <en />
             <de>Kurzform für die Angabe von ›padding-*‹</de>
         </documentation>
-        <documentation xml:id="td/paddingleft">
+        <documentation docid="td/paddingleft">
             <en />
             <de>Bestimmt den Innenrand links (Maßangabe)</de>
         </documentation>
-        <documentation xml:id="td/paddingright">
+        <documentation docid="td/paddingright">
             <en />
             <de>Bestimmt den Innenrand rechts (Maßangabe)</de>
         </documentation>
-        <documentation xml:id="td/paddingtop">
+        <documentation docid="td/paddingtop">
             <en />
             <de>Bestimmt den Innenrand oben (Maßangabe)</de>
         </documentation>
-        <documentation xml:id="td/paddingbottom">
+        <documentation docid="td/paddingbottom">
             <en />
             <de>Bestimmt den Innenrand unten (Maßangabe)</de>
         </documentation>
-        <documentation xml:id="tr">
+        <documentation docid="tr">
             <en />
             <de>Erzeugt eine Tabellenzeile</de>
         </documentation>
-        <documentation xml:id="tr/backgroundcolor">
+        <documentation docid="tr/backgroundcolor">
             <en />
             <de>Farbe des Zeilenhintergrundes. (Text)</de>
         </documentation>
-        <documentation xml:id="tr/minheight">
+        <documentation docid="tr/minheight">
             <en />
             <de>Minimale Höhe in Rasterzellen</de>
         </documentation>
-        <documentation xml:id="tr/align">
+        <documentation docid="tr/align">
             <en />
             <de>Bestimmt die horizonatale Ausrichtung für alle Zellen dieser Zeile</de>
         </documentation>
-        <documentation xml:id="tr/align/left">
+        <documentation docid="tr/align/left">
             <en />
             <de>Linksbündig ausgeben</de>
         </documentation>
-        <documentation xml:id="tr/align/center">
+        <documentation docid="tr/align/center">
             <en />
             <de>Zentriert ausgeben</de>
         </documentation>
-        <documentation xml:id="tr/align/right">
+        <documentation docid="tr/align/right">
             <en />
             <de>Rechtsbündig ausgeben</de>
         </documentation>
-        <documentation xml:id="tr/valign">
+        <documentation docid="tr/valign">
             <en />
             <de>Vertikale Ausrichtung für alle Zellen dieser Zeile</de>
         </documentation>
-        <documentation xml:id="tr/valign/top">
+        <documentation docid="tr/valign/top">
             <en />
             <de>Oben ausgeben</de>
         </documentation>
-        <documentation xml:id="tr/valign/center">
+        <documentation docid="tr/valign/center">
             <en />
             <de>Vertikal zentriert ausgeben</de>
         </documentation>
-        <documentation xml:id="tr/valign/bottom">
+        <documentation docid="tr/valign/bottom">
             <en />
             <de>Unten ausgeben</de>
         </documentation>
-        <documentation xml:id="hyphenation">
+        <documentation docid="hyphenation">
             <en />
             <de>Korrigiert fehlerhafte automatische Silbentrennung. Beispiel: Au-to-bahn</de>
         </documentation>
-        <documentation xml:id="columns">
+        <documentation docid="columns">
             <en />
             <de>Fasst »Spalte«-Elemente zusammen. Die Anzahl der »Spalte« Elemente muss mit der Anzahl der
                 Tabellenzellen übereinstimmen.</de>
         </documentation>
-        <documentation xml:id="column">
+        <documentation docid="column">
             <en />
             <de>Bestimmt die Eigenschaften einer Spalte hinsichtlich Breite, Farbe und Ausrichtung</de>
         </documentation>
-        <documentation xml:id="column/width">
+        <documentation docid="column/width">
             <en />
             <de>Erlaubt sind absolute Angaben (z.B. 12mm) oder *-Angaben (z.B. 3*). Die *-Angaben werden auf die
                 „Restbreite“ aufgeteilt.</de>
         </documentation>
-        <documentation xml:id="column/backgroundcolor">
+        <documentation docid="column/backgroundcolor">
             <en />
             <de>Bestimmt die Farbe der Spalte</de>
         </documentation>
-        <documentation xml:id="column/align">
+        <documentation docid="column/align">
             <en />
             <de>Bestimmt die horizonatale Ausrichtung für alle Zellen dieser Spalte</de>
         </documentation>
-        <documentation xml:id="column/align/left">
+        <documentation docid="column/align/left">
             <en />
             <de>Linksbündig ausgeben</de>
         </documentation>
-        <documentation xml:id="column/align/center">
+        <documentation docid="column/align/center">
             <en />
             <de>Zentriert ausgeben</de>
         </documentation>
-        <documentation xml:id="column/align/right">
+        <documentation docid="column/align/right">
             <en />
             <de>Rechtsbündig ausgeben</de>
         </documentation>
-        <documentation xml:id="column/valign">
+        <documentation docid="column/valign">
             <en />
             <de>Vertikale Ausrichtung für alle Zellen dieser Spalte</de>
         </documentation>
-        <documentation xml:id="column/valign/top">
+        <documentation docid="column/valign/top">
             <en />
             <de>Oben ausgeben</de>
         </documentation>
-        <documentation xml:id="column/valign/center">
+        <documentation docid="column/valign/center">
             <en />
             <de>Vertikal zentriert ausgeben</de>
         </documentation>
-        <documentation xml:id="column/valign/bottom">
+        <documentation docid="column/valign/bottom">
             <en />
             <de>Unten ausgeben</de>
         </documentation>
-        <documentation xml:id="textblock">
+        <documentation docid="textblock">
             <en />
             <de>Erstellt einen rechteckigen Bereich mit Text. Der Text kann aus mehreren Absätzen bestehen und wird mit
                 »Absatz« gekennzeichnet.</de>
         </documentation>
-        <documentation xml:id="textblock/fontface">
+        <documentation docid="textblock/fontface">
             <en />
             <de>Bestimmt die Schriftart für den Textblock, wenn die Absätze keine Schriftart angegeben haben.
                 (Text)</de>
         </documentation>
-        <documentation xml:id="textblock/color">
+        <documentation docid="textblock/color">
             <en />
             <de>Bestimmt die Farbe des Textblocks. Kann in den Absätzen überschrieben werden. (Text)</de>
         </documentation>
-        <documentation xml:id="textblock/angle">
+        <documentation docid="textblock/angle">
             <en />
             <de>Dreht den Text um den angegebenen Winkel (gegen den Uhrzeigersinn). Beispiel: winkel="45"</de>
         </documentation>
-        <documentation xml:id="textblock/columns">
+        <documentation docid="textblock/columns">
             <en />
             <de>Anzahl der Spalten</de>
         </documentation>
-        <documentation xml:id="textblock/columndistance">
+        <documentation docid="textblock/columndistance">
             <en />
             <de>Abstand zwischen den Spalten. Entweder eine Maßangabe (z.B. 3mm) oder eine Zahl (Anzahl in
                 Rasterzellen)</de>
         </documentation>
-        <documentation xml:id="value">
+        <documentation docid="value">
             <en />
             <de>Fügt die textuelle Reprästentation des Wertes (XPath-Ausdruck) ein.</de>
         </documentation>
-        <documentation xml:id="value/select">
+        <documentation docid="value/select">
             <en />
             <de>XPath Ausdruck um den Inhalt zu ermitteln.</de>
         </documentation>
-        <documentation xml:id="u">
+        <documentation docid="u">
             <en />
             <de>Schaltet »Unterstreichen« ein</de>
         </documentation>
-        <documentation xml:id="url">
+        <documentation docid="url">
             <en />
             <de>Umbricht eine angegebene URL besser.</de>
         </documentation>
-        <documentation xml:id="setvariable">
+        <documentation docid="setvariable">
             <en />
             <de>Weist einer Variablen einen Inhalt zu. Der Inhalt wird entweder über das Attribut auswahl oder über den
                 Inhalt des Elements bestimmt.</de>
         </documentation>
-        <documentation xml:id="setvariable/trace">
+        <documentation docid="setvariable/trace">
             <en />
             <de>Gibt die interne Information über die Zuweisung in der Logdatei aus.</de>
         </documentation>
-        <documentation xml:id="setvariable/variable">
+        <documentation docid="setvariable/variable">
             <en />
             <de>Name der Variablen, der etwas zugewiesen werden soll (Text).</de>
         </documentation>
-        <documentation xml:id="setvariable/select">
+        <documentation docid="setvariable/select">
             <en />
             <de>XPath-Ausdruck für den Inhalt der Variablen. Alternativ dazu: der Inhalt des Elements Zuweisung</de>
         </documentation>
