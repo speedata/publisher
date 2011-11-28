@@ -23,8 +23,6 @@
         <entry en="Fontface" de="Schriftart" />
         <entry en="Grid" de="Raster" />
         <entry en="Group" de="Gruppe" />
-        <entry en="ProcessNode" de="BearbeiteKnoten" />
-        <entry en="ProcessRecord" de="BearbeiteDatensatz" />
         <entry en="Hyphenation" de="Trennvorschlag" />
         <entry en="I" de="I" />
         <entry en="Image" de="Bild" />
@@ -46,6 +44,8 @@
         <entry en="PlaceObject" de="ObjektAusgeben" />
         <entry en="PositioningArea" de="Platzierungsbereich" />
         <entry en="PositioningFrame" de="Platzierungsrahmen" />
+        <entry en="ProcessNode" de="BearbeiteKnoten" />
+        <entry en="ProcessRecord" de="BearbeiteDatensatz" />
         <entry en="Record" de="Datensatz" />
         <entry en="Regular" de="Normal" />
         <entry en="Rule" de="Linie" />
@@ -147,12 +147,12 @@
         <attribute en="m" de="m"/>
         <attribute en="marginprotrusion" de="randausgleich"/>
         <attribute en="maxheight" de="maxhöhe"/>
-        <attribute en="maxheight" de="maximale-größe"/>
+        <attribute en="maxsize" de="maximale-größe"/>
         <attribute en="minheight" de="minhöhe"/>
         <attribute en="mode" de="modus"/>
         <attribute en="model" de="modell"/>
         <attribute en="name" de="name"/>
-        <attribute en="naturalheight" de="natürliche-größe"/>
+        <attribute en="naturalsize" de="natürliche-größe"/>
         <attribute en="padding" de="padding"/>
         <attribute en="padding-bottom" de="padding-bottom"/>
         <attribute en="padding-left" de="padding-left"/>
@@ -163,7 +163,7 @@
         <attribute en="removeduplicates" de="duplikatelöschen"/>
         <attribute en="right" de="rechts"/>
         <attribute en="row" de="zeile"/>
-        <attribute en="rowdistance" de="zeilenabstand"/>
+        <attribute en="leading" de="zeilenabstand"/>
         <attribute en="rowspan" de="rowspan"/>
         <attribute en="rulewidth" de="linienstärke"/>
         <attribute en="runs" de="läufe"/>
@@ -187,7 +187,7 @@
     </attributes>
     <doc>
         <documentation docid="alignment">
-            <en />
+            <en>Determines the text appearance</en>
             <de>Bestimmt den Rand der Zeilen</de>
         </documentation>
         <documentation docid="alignment/justification">
@@ -207,86 +207,86 @@
             <de>Alle Zeilen haben einen Flatterrand rechts und links</de>
         </documentation>
         <documentation docid="allocate">
-            <en />
+            <en>When yes, the space (in the grid) the objects use are allocated, so no other object can be placed there.</en>
             <de>Gibt an, ob das Objekt den Platz auf der Seite (im Raster) belegen soll. Dadurch ist der Platz für
                 andere Objekte gesperrt.</de>
         </documentation>
         <documentation docid="allocate/yes">
-            <en />
+            <en>The object are placed on the grid and no other ojbect can overlap</en>
             <de>Das Objekt nimmt den Platz im Raster fest ein und kann nicht von anderen Objekten überlagert
                 werden.</de>
         </documentation>
         <documentation docid="allocate/no">
-            <en />
+            <en>The object does not allocate any space so other objects can overlap.</en>
             <de>Das Objekt nimmt keinen Platz im Raster ein und kann von anderen Objekten überlagert werden.</de>
         </documentation>
         <documentation docid="paragraph/textformat">
-            <en />
-            <de>Name des Textformats (optional)</de>
+            <en>Name of the textformat (optional).</en>
+            <de>Name des Textformats (optional).</de>
         </documentation>
         <documentation docid="paragraph/color">
-            <en />
+            <en>Textcolor of the paragraph (text)</en>
             <de>Bestimmt die Farbe des Absatzes (Text)</de>
         </documentation>
         <documentation docid="paragraph/fontface">
-            <en />
+            <en>Font used for the paragraph. (text)</en>
             <de>Bestimmt die Schriftart für den Absatz. (Text)</de>
         </documentation>
         <documentation docid="action">
-            <en />
+            <en>Connects an Command (»Action«) with the surrounding text.</en>
             <de>Assoziiert eine Anweisung (Aktion) mit dem umgebenden Text.</de>
         </documentation>
         <documentation docid="action/addtolist">
-            <en />
+            <en>Adds a key/value pair to the contents of a variable.</en>
             <de>Fügt ein Schlüssel/Wert-Paar zu einer Variablen hinzu.</de>
         </documentation>
         <documentation docid="action/list">
-            <en />
+            <en>List (variable) to which the contents gets added. This variable does not need to exist.</en>
             <de>Liste (Variable) zu der der Inhalt hinzugefügt werden soll. Diese Variable muss noch nicht
                 existieren.</de>
         </documentation>
         <documentation docid="action/key">
-            <en />
+            <en>Name of the key for the key/value pair.</en>
             <de>Name des Schlüssels, unter dem der Wert in ›auswahl‹ gespeichert wird.</de>
         </documentation>
         <documentation docid="action/select">
-            <en />
+            <en>The value that is accociated with the key. (XPath expression)</en>
             <de>Wert, der gepeichert wird (XPath-Ausdruck)</de>
         </documentation>
         <documentation docid="attribute">
-            <en />
+            <en>Creates an attribute which can be wrapped in an »Element«.</en>
             <de>Erzeugt ein Attribut, das in ein »Element« geschachtelt werden kann.</de>
         </documentation>
         <documentation docid="attribute/name">
-            <en />
+            <en>Name of the attribute that gets creted. (text)</en>
             <de>Name des zu erzeugenden Attributs. (Text)</de>
         </documentation>
         <documentation docid="attribute/select">
-            <en />
+            <en>Contents of the attribute as an XPath expression. Character strings must be put in quotation marks!</en>
             <de>Inhalt des Attributs als XPath-Ausdruck. Zeichenketten müssen in Anführungszeichen stehen!</de>
         </documentation>
         <documentation docid="b">
-            <en />
+            <en>Switch to boldface</en>
             <de>Schaltet auf den Schnitt »Fett« um</de>
         </documentation>
         <documentation docid="processrecord">
-            <en />
+            <en>Processes a record which is the contents of the list (in the attribute ›select‹.</en>
             <de>Führt eine Regel aus mit dem Inhalt einer Liste (im Attribut ›auswahl‹).</de>
         </documentation>
         <documentation docid="processrecord/select">
-            <en />
+            <en>The list that will be processed by matching »Record« commands.</en>
             <de>Bestimmt die Liste, die per »Datensatz« aufgerufen bearbeitet werden soll.</de>
         </documentation>
         <documentation docid="processnode">
-            <en />
+            <en>Processes all child nodes of the current data element. The matching command is »Record«</en>
             <de>Ruft alle Kindelemente eines bestimmten Namens auf. Gegenstück ist »Datensatz«</de>
         </documentation>
         <documentation docid="processnode/select">
-            <en />
+            <en>The child child elements that should be processed (currently this is not an XPath expression but the name of the child elements).</en>
             <de>Bestimmt die Datensätze, die ausgeführt werden sollen.</de>
         </documentation>
         <documentation docid="processnode/mode">
-            <en />
+            <en>If a mode is supplied, only »Record« commands with the same mode are called.</en>
             <de>Wird ein Modus angegeben, werden nur »Datensatz« Elemente ausgeführt, die diesem Modus entsprechen.
                 (Text)</de>
         </documentation>
@@ -311,90 +311,87 @@
             <de>Breite des Bildes in Rasterzellen oder in absoluten Maßangaben.</de>
         </documentation>
         <documentation docid="image/height">
-            <en />
+            <en>The height of the image (in absolute values, e.g. 210mm)</en>
             <de>Gibt die maximale Höhe des Bildes an in Rasterzellen oder in absoluten Maßangaben (z.B. 210mm).</de>
         </documentation>
         <documentation docid="image/page">
-            <en />
+            <en>The page in the PDF file that gets included</en>
             <de>Bindet die angegebene Seite aus einer PDF-Datei ein. Voreinstellung: 1</de>
         </documentation>
         <documentation docid="image/natural-height">
-            <en />
-            <de>Die natürliche Größe des Bildes. Voreinstellung ist die »cropbox«. </de>
+            <en>The natural size of the image. Default is the »cropbox«.</en>
+            <de>Die natürliche Größe des Bildes. Voreinstellung ist die »cropbox«.</de>
         </documentation>
         <documentation docid="image/maxheight">
-            <en />
+            <en>The maximum size of the image. Defautl is the »cropbox«</en>
             <de>Die maximale Größe des Bildes. Voreinstellung ist die »cropbox«. </de>
         </documentation>
         <documentation docid="box">
-            <en />
+            <en>Create a rectangular colored area.</en>
             <de>Erzeugt einen rechteckigen farbigen Bereich.</de>
         </documentation>
         <documentation docid="box/width">
-            <en />
+            <en>Width of the box in grid cells.</en>
             <de>Breite der Box in Rasterzellen</de>
         </documentation>
         <documentation docid="box/height">
-            <en />
+            <en>Heigt of the box in grid cells.</en>
             <de>Höhe der Box (in Rasterzellen)</de>
         </documentation>
         <documentation docid="box/backgroundcolor">
-            <en />
+            <en>Color of the box</en>
             <de>Farbe der Box</de>
         </documentation>
         <documentation docid="record">
-            <en />
-            <de>Führt für jedes angegebene Element (im Attribut ›element‹) die Anweisungen in den Kindelementen
-                aus.</de>
+            <en>Executes the child commands for every element given in the attribute ›element‹. Matches »ProcessNode« and »ProcesRecord«.</en>
+            <de>Führt für jedes angegebene Element (im Attribut ›element‹) die Anweisungen in den Kindelementen aus.</de>
         </documentation>
         <documentation docid="record/element">
-            <en />
+            <en>The name of the elements that are processed by the child commands.</en>
             <de>Jedes dieser Elemente wird mit den Anweisungen ausgeführt.</de>
         </documentation>
         <documentation docid="record/mode">
-            <en />
-            <de>Wird ein Datensatz zusammen mit einem Modus definiert, dann wird er nur dann ausgeführt, wenn
-                »BearbeiteKnoten« ebenfalls mit diesem Modus aufgerufen wurde.</de>
+            <en>When called with a ›mode‹, the matching »ProcessRecord« must have the same mode. With this, you can select the »Record« command to be processed.</en>
+            <de>Wird ein Datensatz zusammen mit einem Modus definiert, dann wird er nur dann ausgeführt, wenn »BearbeiteKnoten« ebenfalls mit diesem Modus aufgerufen wurde.</de>
         </documentation>
         <documentation docid="definecolor">
-            <en />
-            <de>Definiert eine Farbe mit dem Namen aus dem Attribut »name«. Es gibt zwei zulässige Modelle, »rgb« und
-                »cmyk«. Die Wertangaben liegen zwischen 0 und 100.</de>
+            <en>Defines a color with the given name in the attribute ›name‹. Supported are two different models: »rgb« and »cmyk«. Values must be between 0 adn 100.</en>
+            <de>Definiert eine Farbe mit dem Namen aus dem Attribut »name«. Es gibt zwei zulässige Modelle, »rgb« und »cmyk«. Die Wertangaben liegen zwischen 0 und 100.</de>
         </documentation>
         <documentation docid="definecolor/model">
-            <en />
+            <en>The color model: ›cmyk‹ or ›rgb‹.</en>
             <de>Es gibt zwei zulässige Modelle: ›cmyk‹ und ›rgb‹.</de>
         </documentation>
         <documentation docid="definecolor/r">
-            <en />
+            <en>Value for red (between 0 and 100)</en>
             <de>Wert für Rot (zwischen 0 und 100)</de>
         </documentation>
         <documentation docid="definecolor/g">
-            <en />
+            <en>Value for green (between 0 and 100)</en>
             <de>Wert für Grün (zwischen 0 und 100)</de>
         </documentation>
         <documentation docid="definecolor/b">
-            <en />
+            <en>Value for blue (between 0 and 100)</en>
             <de>Wert für Blau (zwischen 0 und 100)</de>
         </documentation>
         <documentation docid="definecolor/c">
-            <en />
+            <en>Value for cyan (between 0 and 100)</en>
             <de>Wert für Türkis (cyan, zwischen 0 und 100)</de>
         </documentation>
         <documentation docid="definecolor/m">
-            <en />
+            <en>Value for magenta (between 0 and 100)</en>
             <de>Wert für Magenta (zwischen 0 und 100)</de>
         </documentation>
         <documentation docid="definecolor/y">
-            <en />
+            <en>Value for yellow (between 0 and 100)</en>
             <de>Wert für Gelb (yellow, zwischen 0 und 100)</de>
         </documentation>
         <documentation docid="definecolor/k">
-            <en />
+            <en>Value for black (key, between 0 and 100)</en>
             <de>Wert für Schwarz (key, zwischen 0 und 100)</de>
         </documentation>
         <documentation docid="definefontfamily">
-            <en />
+            <en>Define a font family with the faces »Regular«, »Bold«, »BoldItalic« and »Italic«. Families are needed when you switch to another face in running text with »B« for example.</en>
             <de>Definiert eine Schriftfamilie bestehend aus den Schnitten »Normal«, »Kursiv«, »Fett« und »Fett Kursiv«.
                 Die Familien werden benötigt, wenn innerhalb eines Textes auf einen anderen Schnitt umgeschaltet wird.
                 Die Schriftarten müssen vorher mit »LadeSchriftdatei« geladen werden. Die Familie mit dem Namen »Text«
@@ -402,712 +399,657 @@
                 angegeben wird.</de>
         </documentation>
         <documentation docid="definefontfamily/fontsize">
-            <en />
+            <en>Fontsize in points (1/72in), range is 0 to ...</en>
             <de>Schriftgröße in Punkt (0-...)</de>
         </documentation>
         <documentation docid="definefontfamily/rowdistance">
-            <en />
+            <en>Distance between baselines of two adjacent lines. Should be larger then the font size.</en>
             <de>Zeilenabstand in Punkt (0-...)</de>
         </documentation>
         <documentation docid="definefontfamily/regular">
-            <en />
+            <en>The font face of the text when none of bold, italic or bolditalic is used.</en>
             <de>Wählt die Schriftart für den »normalen« Schriftschnitt aus</de>
         </documentation>
         <documentation docid="definefontfamily/bold">
-            <en />
+            <en>The font face to be used when switching to bold (&lt;B&gt;...&lt;/B&gt;). The name must be an alias given by »LoadFontfile«</en>
             <de>Schriftart, wenn innerhalb eines Textes auf »Fett« (&lt;b&gt;...&lt;/b&gt;) umgeschaltet wird.</de>
         </documentation>
         <documentation docid="definefontfamily/italic">
-            <en />
+            <en>The font face to be used when switching to italic (&lt;I&gt;...&lt;/I&gt;). The name must be an alias given by »LoadFontfile«</en>
             <de>Schriftart, wenn innerhalb eines Textes auf »Kursiv« (&lt;i&gt;...&lt;/i&gt;) umgeschaltet wird.</de>
         </documentation>
         <documentation docid="definefontfamily/bolditalic">
-            <en />
+            <en>The font face to be used when switching to bold and italic (&lt;B&gt;&lt;I&gt;...&lt;/I&gt;&lt;/B&gt;). The name must be an alias given by »LoadFontfile«</en>
             <de>Schriftart, wenn innerhalb eines Textes auf »Fett« und »Kursiv«
                 (&lt;b&gt;&lt;i&gt;...&lt;/i&gt;&lt;/b&gt;) umgeschaltet wird.</de>
         </documentation>
         <documentation docid="element">
-            <en />
+            <en>Create an XML-element that can be written to an external file (»SaveDataset«).</en>
             <de>Erzeugt ein XML-Element, das in eine Datei geschrieben werden kann (»SpeichereDatensatzdatei«).</de>
         </documentation>
         <documentation docid="element/name">
-            <en />
+            <en>Name of the element.</en>
             <de>Name des Elements.</de>
         </documentation>
         <documentation docid="switch">
-            <en />
+            <en>Contains a if-then-else clause. The child elements »Case« are executed until the tests are true. If none of the tests evaluate to true, the child element »Otherwise« gets executed.</en>
             <de>Enthält eine Wenn-Dann-Abfrage. Die Kindelemente »Fall« werden ausgeführt, wenn die Bedingung erfüllt
                 ist. Wenn keine Bedingung erfüllt ist, wird das Element »Sonst« ausgeführt, sofern es vorhanden
                 ist.</de>
         </documentation>
         <documentation docid="switch/case">
-            <en />
-            <de>Wenn die Bedingung im Attribut ›bedingung‹ zutrifft, wird der Inhalt dieses Elements ausgeführt und die
-                Verarbeitung hinter der Fallunterscheidung fortgesetzt.</de>
+            <en>If the condition in the attribte ›test‹ evaluates to 'true', the contents of this element is executed and the processing continues after the »Switch« command.</en>
+            <de>Wenn die Bedingung im Attribut ›bedingung‹ zutrifft, wird der Inhalt dieses Elements ausgeführt und die Verarbeitung hinter der Fallunterscheidung fortgesetzt.</de>
         </documentation>
         <documentation docid="switch/test">
-            <en />
+            <en>The XPath-expression for the test.</en>
             <de>Enthält einen XPath-Ausdruck für die Bedingung</de>
         </documentation>
         <documentation docid="switch/otherwise">
-            <en />
+            <en>Gets executed if no tests evaluate to true.</en>
             <de>Wird ausgeführt, falls keine Bedingung zutrifft</de>
         </documentation>
         <documentation docid="i">
-            <en />
+            <en>Switch to italic font face.</en>
             <de>Schaltet auf Kursiv um</de>
         </documentation>
         <documentation docid="copyof">
-            <en />
+            <en>Inserts the given elements (currently no copy is performed despite the name).</en>
             <de>Fügt eine Menge von Elementen ein.</de>
         </documentation>
         <documentation docid="copyof/select">
-            <en />
+            <en>The XPath expression to determine the contents to be copied.</en>
             <de>XPath Ausdruck um den Inhalt zu ermitteln.</de>
         </documentation>
         <documentation docid="loaddataset">
-            <en />
+            <en>Loads and executes a data XML file from the disk. It is fine if the given file does not exist (no error is raised).</en>
             <de>Lädt eine zuvor gespeicherte Datensatzdatei. Existiert die angegebene Datei nicht, wird dieser Befehl
                 übersprungen.</de>
         </documentation>
         <documentation docid="loaddataset/name">
-            <en />
+            <en>The name of the data XML file</en>
             <de>Name der Datensatzdatei.</de>
         </documentation>
         <documentation docid="loadfontfile">
-            <en />
+            <en>Loads a font file. Supported are Type1, TrueType and OpenType fonts.</en>
             <de>Lädt eine Schriftdatei. Erlaubt sind Type1, TrueType und OpenType Schriftarten.</de>
         </documentation>
         <documentation docid="loadfontfile/name">
-            <en />
-            <de>Der Name, unter dem die Schriftart später angesprochen werden kann</de>
+            <en>The name of the font file, to be used by »DefineFontface«.</en>
+            <de>Der Name, unter dem die Schriftart später angesprochen werden kann.</de>
         </documentation>
         <documentation docid="loadfontfile/filename">
-            <en />
+            <en>The filename without path. Example: »helvetica.ttf«</en>
             <de>Der Dateiname ohne Pfadangabe. Beispiel: »helvetica.ttf«</de>
         </documentation>
         <documentation docid="loadfontfile/marginprotrusion">
-            <en />
-            <de>Optischer Randausgleich (Trennstrich, Komma und Punkt ragen in den Rand). Erlaubt sind Werte zwischen 0
-                (kein Randausgleich) und 100 (vollständig).</de>
+            <en>Margin protrusion (hyphen, comma and period stick into the right margin). Valid range is between 0 (no margin protrusion) and 100 (full).</en>
+            <de>Optischer Randausgleich (Trennstrich, Komma und Punkt ragen in den Rand). Erlaubt sind Werte zwischen 0 (kein Randausgleich) und 100 (vollständig).</de>
         </documentation>
         <documentation docid="loadfontfile/space">
-            <en />
-            <de>Natürliche Breite des Leeraums zwischen den Wörtern (in Prozent der Schriftgröße). Voreingestellt ist
-                25.</de>
+            <en>The natural width of a space between two words (in percent of the font size). Default ist 25.</en>
+            <de>Natürliche Breite des Leeraums zwischen den Wörtern (in Prozent der Schriftgröße). Voreingestellt ist 25.</de>
         </documentation>
         <documentation docid="smallcaps">
-            <en />
+            <en>Use small caps from the font file (only some OpenType / TrueType fonts)</en>
             <de>Kapitälchen aus der Schriftdatei benutzen (nur manche OpenType/TrueType Schriftarten)</de>
         </documentation>
         <documentation docid="loadfontfile/smallcaps/yes">
-            <en />
+            <en>Use small caps</en>
             <de>Kapitälchen aktivieren</de>
         </documentation>
         <documentation docid="loadfontfile/smallcaps/no">
-            <en />
+            <en>Don't use small caps.</en>
             <de>Keine Kapitälchen</de>
         </documentation>
         <documentation docid="emptyline">
-            <en />
+            <en>The virtual cursor is placed on the second next free line.</en>
             <de>Der virtuelle Cursor wird auf die übernächste freie Zeile gesetzt.</de>
         </documentation>
         <documentation docid="rule">
-            <en />
+            <!-- fixme -->
+            <en>Draw a rule.</en>
             <de>Zeichnet eine Linie</de>
         </documentation>
         <documentation docid="rule/length">
-            <en />
+            <en>The length of the rule in grid cells (number) or as a dimension (e.g. 4cm)</en>
             <de>Länge der Linie in Rasterzellen (Zahl) oder als Maß (z.B. 4cm)</de>
         </documentation>
         <documentation docid="rule/direction">
-            <en />
+            <en>The direction of the rule</en>
             <de>Ausrichtung der Linie</de>
         </documentation>
         <documentation docid="rule/thickness">
-            <en />
+            <en>The thickness of the rule in grid cells (number) or as a dimension (e.g. 4pt)</en>
             <de>Dicke der Linie in Rasterzellen (Zahl) oder als Maß (z.B. 4pt)</de>
         </documentation>
         <documentation docid="message">
-            <en />
-            <de>Erzeugt eine Meldung auf der Konsole und im Protokoll. Die Nachricht wird durch das Attribut ›auswahl‹
-                oder durch Kindelemente »Wert« angegeben.</de>
+            <en>Writes a message to the console and to the log file. The message itself can be given with the attribute ›select‹ or the child element »Value«.</en>
+            <de>Erzeugt eine Meldung auf der Konsole und im Protokoll. Die Nachricht wird durch das Attribut ›auswahl‹ oder durch Kindelemente »Wert« angegeben.</de>
         </documentation>
         <documentation docid="message/select">
-            <en />
+            <en>Message to be printed (XPath expression).</en>
             <de>Nachricht, die ausgegeben werden soll (als XPath-Ausdruck)</de>
         </documentation>
         <documentation docid="nextframe">
-            <en />
-            <de>Wechselt auf den nächsten Rahmen im angegebenen Platzierungsbereich. Ist kein Rahmen mehr auf der Seite
-                vorhanden, wird eine neue Seite erzeugt.</de>
+            <en>Switch to the next frame in the given positioning area. If no frame is available on the current page, a new page gets generated.</en>
+            <de>Wechselt auf den nächsten Rahmen im angegebenen Platzierungsbereich. Ist kein Rahmen mehr auf der Seite vorhanden, wird eine neue Seite erzeugt.</de>
         </documentation>
         <documentation docid="nextframe/area">
-            <en />
+            <en>The area in which the next frame is selected.</en>
             <de>Innheralb dieses Bereichs wird auf den nächsten Rahmen gewechselt.</de>
         </documentation>
         <documentation docid="newpage">
-            <en />
-            <de>Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn
-                später Text o.ä. ausgegeben wird.</de>
+            <en>Ships out the current page into the PDF file. As soon as new contents is placed, a new page gets created.</en>
+            <de>Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn später Text o.ä. ausgegeben wird.</de>
         </documentation>
         <documentation docid="newrow">
-            <en />
+            <en>The virtual cursor is placed on the next free line.</en>
             <de>Der virtuelle Cursor wird auf die nächste freie Zeile gesetzt.</de>
         </documentation>
         <documentation docid="newrow/area">
-            <en />
+            <en>Name of the area in which the cursor is placed.</en>
             <de>Name des Bereichs, in dem der Cursor versetzt wird.</de>
         </documentation>
         <documentation docid="placeobject">
-            <en />
+            <en>Puts an object (image, text,... ) onto the page or into a group.</en>
             <de>Gibt ein Objekt (Bild,..) aus.</de>
         </documentation>
-        <documentation docid="placeobject/colun">
-            <en />
+        <documentation docid="placeobject/column">
+            <en>The column in the grid where the object is placed (number). If no column is given the publisher takes
+                the current column, or, if not enough space available, the first column in the next free row.</en>
             <de>Spalte in der das Objekt ausgegeben werden soll (Zahl). Wird keine Spalte angegeben, so nimmt der
                 Publisher die aktuelle Spalte, bzw. wenn das Objekt zu breit ist, die nächste freie Zeile.</de>
         </documentation>
         <documentation docid="placeobject/allocate">
-            <en />
+            <en>If ›no‹, the space of the object can be shared with other objects.</en>
             <de>Wenn »nein«, nimmt das Objekt keinen Platz im Raster ein.</de>
         </documentation>
         <documentation docid="placeobject/area">
-            <en />
+            <en>The positioning area in which the object should be placed. The given column and row is relative to the area. The default area is »Page«.</en>
             <de>Der Platzierungsbereich, in dem das Objekt ausgegeben werden soll. Die Angabe von Zeile und Spalte
                 bezieht sich auf den angegebenen Platzierungsbereich. Der voreingestellte Platzierungsbereich ist
                 »Seite«.</de>
         </documentation>
         <documentation docid="placeobject/row">
-            <en />
+            <en>The row where the object is to be placed (optional, number). If not given, the system looks for the next free row.</en>
             <de>Zeile, in der das Objekt ausgegeben werden soll (optional, Zahl). Wird die Zeile nicht mit angegeben, so
                 sucht sich das System selbständig eine freie Zeile</de>
         </documentation>
         <documentation docid="placeobject/frame">
-            <en />
+            <en>Draw a frame around the object.</en>
             <de>Rahmen um das Objekt</de>
         </documentation>
         <documentation docid="placeobject/frame/without">
-            <en />
+            <en>No frame</en>
             <de>Das Objekt wird nicht umrahmt</de>
         </documentation>
         <documentation docid="placeobject/frame/solid">
-            <en />
+            <en>Draw a solid frame around the object</en>
             <de>Erzeugt einen durchgezogenen Rahmen um das Objekt</de>
         </documentation>
         <documentation docid="placeobject/framecolor">
-            <en />
+            <en>Color of the frame that is drawn around the object. (text)</en>
             <de>Farbe des Rahmens, der gezeichnet werden soll. (Text)</de>
         </documentation>
         <documentation docid="placeobject/background">
-            <en />
+            <en>Background behind the object</en>
             <de>Fläche hinter dem Objekt</de>
         </documentation>
         <documentation docid="placeobject/background/without">
-            <en />
+            <en>The object gets no special background</en>
             <de>Das Objekt erhält keinen Hintergrund</de>
         </documentation>
         <documentation docid="placeobject/background/full">
-            <en />
+            <en>A rectangular background gets placed behind the object</en>
             <de>Ein rechteckiger Hintergrund wird hinter das Objekt gelegt</de>
         </documentation>
         <documentation docid="placeobject/backgroundcolor">
-            <en />
+            <en>Color of the background behind the object. (text)</en>
             <de>Farbe des Hintergrunds, der gezeichnet werden soll. (Text)</de>
         </documentation>
         <documentation docid="placeobject/maxheight">
-            <en />
-            <de>Gibt die maximale Höhe der auszugebenden Objekte an. Wird für automatischen Tabellenumbruch
-                benötigt</de>
+            <en>The maximum height of the objects (optional). Used for automatic table splitting.</en>
+            <de>Gibt die maximale Höhe der auszugebenden Objekte an. Wird für automatischen Tabellenumbruch benötigt</de>
         </documentation>
         <documentation docid="placeobject/groupname">
-            <en />
+            <en>Name of the group to be placed. (text)</en>
             <de>Name der Gruppe, die ausgegeben werden soll (Text).</de>
         </documentation>
         <documentation docid="options/showgridallocation">
-            <en />
+            <en>Determins if the grid allocation should be shown.</en>
             <de>Bestimmt, ob die Rasterbelegung angezeigt wird.</de>
         </documentation>
         <documentation docid="options/showgridalllocation/yes">
-            <en />
+            <en>Used grid cells are colored</en>
             <de>Rasterbelegung wird farblich markiert</de>
         </documentation>
         <documentation docid="options/showgridallocation/no">
-            <en />
+            <en>Grid cells are not colored</en>
             <de>Rasterbelegung wird nicht markiert</de>
         </documentation>
         <documentation docid="options/showgrid">
-            <en />
+            <en>Determines if the grid is shown.</en>
             <de>Bestimmt, ob das zugrunde liegende Raster gezeichnet wird.</de>
         </documentation>
         <documentation docid="options/showgrid/yes">
-            <en />
+            <en>Grid get drawn on the page</en>
             <de>Raster wird gezeichnet</de>
         </documentation>
         <documentation docid="options/showgrid/yes">
-            <en />
+            <en>No grid is drawn.</en>
             <de>Raster wird nicht gezeichnet</de>
         </documentation>
         <documentation docid="options/runs">
-            <en />
-            <de>Anzahl der Durchläufe des Publishers. Mehr als ein Durchlauf wird benötigt, wenn automatische
-                Verzeichnisse erstellt werden.</de>
+            <en>Number of runs the publisher uses. More then one run is needed for automatic table of contents generation.</en>
+            <de>Anzahl der Durchläufe des Publishers. Mehr als ein Durchlauf wird benötigt, wenn automatische Verzeichnisse erstellt werden.</de>
         </documentation>
         <documentation docid="options/showhyphenation">
-            <en />
+            <en>Mark all possible hyphenation points. Use to trace language usage.</en>
             <de>Zeichnet kleine Markierungen an den Stellen, an denen Wörter getrennt werden können.</de>
         </documentation>
         <documentation docid="options/showhyphenation/yes">
-            <en />
+            <en>Small marks are drawn on every possible hyphenation point</en>
             <de>Kleine Markierungen werden an Trennstellen gezeigt</de>
         </documentation>
         <documentation docid="options/showhyphenation/no">
-            <en />
+            <en>Regular text without any marks</en>
             <de>Normaler Text ohne Markierungen</de>
         </documentation>
         <documentation docid="options/trace">
-            <en />
+            <en>Determines the level of trace messages.</en>
             <de>Gibt detaillierte Informationen auf der Konsole (und im Log) aus.</de>
         </documentation>
         <documentation docid="options/trace/yes">
-            <en />
+            <en>Detailed inforation</en>
             <de>Detaillierte Informationen</de>
         </documentation>
         <documentation docid="options/trace/no">
-            <en />
+            <en>Only the most important information are given</en>
             <de>Nur die wichtigsten Informationen werden ausgegeben</de>
         </documentation>
         <documentation docid="options/cutmarks">
-            <en />
+            <en>Cutmarks</en>
             <de>Erzeugt Schnittmarken</de>
         </documentation>
         <documentation docid="options/cutmarks/yes">
-            <en />
+            <en>Cutmarks are shown</en>
             <de>Schnittmarken werden angezeigt</de>
         </documentation>
         <documentation docid="options/cutmarks/no">
-            <en />
+            <en>No cutmarks are put on the page</en>
             <de>Schnittmarken werden nicht angezeigt</de>
         </documentation>
         <documentation docid="options/trim">
-            <en />
+            <en>The amount of the bleed (dimension, e.g 3mm). </en>
             <de>Größe der Beschnittzugabe (»bleed«, Längenangabe mit Einheit, bspw. 3mm)</de>
         </documentation>
         <documentation docid="options/startpage">
-            <en />
+            <en>The first page number. Default is 1.</en>
             <de>Gibt die Startseite an. Voreinstellung ist 1</de>
         </documentation>
         <documentation docid="positioningarea">
-            <en />
+            <en>Positioning areas contain positioning frames, that can be accessed with a name (attribute ›name‹). The
+                frames are connected in the order of their definitions. That means if an object cannot be placed in a
+                frame, the next frame will automatically chosen. If no next frame is available, a page break is
+                inserted. </en>
             <de>Platzierungsbereiche enthalten Platzierungsrahmen, die unter einem Namen angesprochen werden (Attribut
                 »name«). Die Rahmen sind in der Reihenfolge ihrer Definition miteinander verbunden. D.h. kann ein Objekt
                 nicht mehr im Rahmen n dargestellt werden, wird Rahmen n+1 ausgewählt (bzw. auf der nächsten Seite der
                 erste Rahmen, wenn es keinen Rahmen n+1 gibt).</de>
         </documentation>
         <documentation docid="positioningarea/name">
-            <en />
+            <en>The name of the positioning area</en>
             <de>Der Name des Platzierungsbereichs.</de>
         </documentation>
         <documentation docid="positioningframe">
-            <en />
+            <en>Positioning frames are rectengular areas, all four attributes must be given.</en>
             <de>Platzierungsrahmen sind rechteckig, daher müssen alle vier Attribute angegeben werden.</de>
         </documentation>
         <documentation docid="fontface">
-            <en />
+            <en>Switch to a different font family.</en>
             <de>Schaltet auf eine andere Schriftfamilie um</de>
         </documentation>
         <documentation docid="savedataset">
-            <en />
+            <en>Save an XML file under the given name. Load (and execute) the file with »LoadDataset«. The contents is a
+                sequence, for example from the commands »Element« and »Attribute«.</en>
             <de>Speichert eine Datei unter dem angegebenen Namen. Die Datei kann mit »LadeDatensatzdatei« wieder geladen
                 (und ausgeführt) werden. Der Inhalt ist eine Sequenz, z.B. aus den Befehlen »Element« und »Attribut«
                 oder »Sequenz«.</de>
         </documentation>
         <documentation docid="savedataset/filename">
-            <en />
+            <en>Name of the data file</en>
             <de>Name der Datensatzdatei</de>
         </documentation>
         <documentation docid="savedataset/elementname">
-            <en />
+            <en>Name of the root element</en>
             <de>Name des Wurzelelements</de>
         </documentation>
         <documentation docid="savedataset/select">
-            <en />
+            <en>Contents of the data file</en>
             <de>Inhalt der Datensatzdatei</de>
         </documentation>
-        <documentation docid="pagetype">
-            <en />
+        <documentation docid="pagetype/name">
+            <en>Name of the page type. Not used currently. (text)</en>
             <de>Name der Seite. Derzeit wird der Name nicht weiter benutzt. Beliebig.</de>
         </documentation>
         <documentation docid="pagetype/test">
-            <en />
-            <de>XPath-Audruck, der »wahr« oder »falsch« zurückgibt. Bestimmt, ob diese Seite als Seitentyp gewählt
-                wird</de>
+            <en>XPath expression that needs to resolve to true or false. If true, this page type gets used.</en>
+            <de>XPath-Audruck, der »wahr« oder »falsch« zurückgibt. Bestimmt, ob diese Seite als Seitentyp gewählt wird</de>
         </documentation>
         <documentation docid="pagetype/grid">
-            <en />
+            <en>Use a page specific grid.</en>
             <de>Bestimmt ein seitentspezifisches Raster</de>
         </documentation>
         <documentation docid="pagetype/grid/width">
-            <en />
+            <en>Width of a grid cell (length, e.g. 10mm)</en>
             <de>Breite einer Rasterzelle (Maßeinheit), z.B. 10mm</de>
         </documentation>
         <documentation docid="pagetype/grid/height">
-            <en />
+            <en>Height of a grid cell (lenght, e.g. 10mm)</en>
             <de>Höhe einer Rasterzelle (Maßeinheit), z.B. 10mm</de>
         </documentation>
         <documentation docid="sequence">
-            <en />
+            <!-- fixme: needs documentation -->
+            <en>Selects a subsequence of data from the XML.</en>
             <de>Wählt Daten aus der Datendatei aus.</de>
         </documentation>
         <documentation docid="sequence/test">
-            <en />
-            <de>XPath-Ausdruck für die Sequenz.</de>
+            <en>The name of the child elements for the selection.</en>
+            <de>Name der Kindelemente für die Sequenz.</de>
         </documentation>
         <documentation docid="while">
-            <en />
+            <en>Executes child elements until the condition (test) evaluates to false.</en>
             <de>Führt die Kindelemente solange aus, wie die Bedingung ›wahr‹ ist.</de>
         </documentation>
         <documentation docid="while/test">
-            <en />
+            <en>XPath expression for the while loop.</en>
             <de>XPath-Ausdruck für die Bedingung</de>
         </documentation>
         <documentation docid="sortsequence">
-            <en />
-            <de>Sortiert die angegebene Sequenz. Die zu sortierende Sequenz sollte in einer Variablen gespeichert sein,
-                da der Inhalt verändert wird.</de>
+            <en>Sort the given sequence. The sequence should be stored in a variable because it's contents gets changed.</en>
+            <de>Sortiert die angegebene Sequenz. Die zu sortierende Sequenz sollte in einer Variablen gespeichert sein, da der Inhalt verändert wird.</de>
         </documentation>
         <documentation docid="sortsequence/select">
-            <en />
+            <en>The sequence (XML elements) that will be sorted. (XPath expression)</en>
             <de>Bestimmt die Sequenz (XML-Elemente), die sortiert werden soll. (XPath-Ausdruck)</de>
         </documentation>
         <documentation docid="sortsequence/criterium">
-            <en />
+            <en>The attribute that is used as a key for the sort. (text)</en>
             <de>Das Attribut, nachdem sortiert werden soll.</de>
         </documentation>
         <documentation docid="sortsequence/removeduplicates">
-            <en />
+            <en>Remove duplicates. Name of the attribute that should be tested.</en>
             <de>Entfernt Duplikate. Name des Attributs, auf das geprüft werden soll.</de>
         </documentation>
         <documentation docid="sup">
-            <en />
+            <en>Superscript text</en>
             <de>Hochgestellter Text</de>
         </documentation>
         <documentation docid="sub">
-            <en />
+            <en>Subscript text</en>
             <de>Tiefgestellter Text</de>
         </documentation>
         <documentation docid="table">
-            <en />
+            <en>Create a table</en>
             <de>Erzeugt eine Tabelle</de>
         </documentation>
         <documentation docid="table/width">
-            <en />
+            <en>The width of the table in grid units. (number)</en>
             <de>Die Breite der Tabelle im Raster. (Zahl)</de>
         </documentation>
         <documentation docid="table/padding">
-            <en />
+            <en>Distance from the edge to the contents in a table cell. (length)</en>
             <de>Abstand innerhalb einer Zelle (Maßangabe)</de>
         </documentation>
         <documentation docid="table/columndistance">
-            <en />
+            <en>Distance between two table columns. (length)</en>
             <de>Abstand zwischen zwei Spalten (Maßangabe)</de>
         </documentation>
         <documentation docid="table/rowdistance">
-            <en />
+            <en>Distance between two rows. (length)</en>
             <de>Abstand zwischen zwei Zeilen (Maßangabe)</de>
         </documentation>
         <documentation docid="table/stretch">
-            <en />
+            <en>Stretch the table to the given width if necessary. Tables could be narrower than the given width. This attribute determines what to do in this case.</en>
             <de>Bei kurzen Inhalten könnte die Tabelle schmaler sein als die angegebene Breite. Dieses Attribut gibt an,
                 ob die Tabelle ggf. auf die angegebene Breite gedehnt wird.</de>
         </documentation>
         <documentation docid="table/stretch/max">
-            <en />
-            <de>Die Tabelle wird auf die angegebene Breite gedehent, wenn der Inhalt eine schmalere Tabelle erzeugen
-                würde.</de>
+            <en>Stretch the table to the given width if necessary.</en>
+            <de>Die Tabelle wird auf die angegebene Breite gedehent, wenn der Inhalt eine schmalere Tabelle erzeugen würde.</de>
         </documentation>
         <documentation docid="table/stretch/no">
-            <en />
+            <en>Do not stretch the table even if it is narrower than the given width.</en>
             <de>Die Tabelle wird nicht gedehnt.</de>
         </documentation>
         <documentation docid="table/fontface">
-            <en />
+            <en>Fontfamily to be used for the table. Must be defined with »DefineFontfamily«.</en>
             <de>Schriftart, die vorher mit »DefiniereSchriftfamilie« definiert wurde, wird als Standardschriftart für
                 die Tabelle benutzt (Instanz: ›Normal‹)</de>
         </documentation>
         <documentation docid="table/head">
-            <en />
+            <en>Table head that gets repeated on every page.</en>
             <de>Wird auf jeder Seite wiederholt.</de>
         </documentation>
         <documentation docid="table/foot">
-            <en />
+            <en>Table foot that gets repeated on every page.</en>
             <de>Wird auf jeder Seite wiederholt.</de>
         </documentation>
         <documentation docid="tablerule">
-            <en />
+            <en>Create a horizontal rule between two rows.</en>
             <de>Erzeugt eine durchgehende horizontale Linie in der Tabelle</de>
         </documentation>
         <documentation docid="tablerule/rulewidth">
-            <en />
+            <!-- fixme: width or thicknes? -->
+            <en>The thickness of the horizontal rule. Example: 3pt</en>
             <de>Gibt die »Dicke« der Linie an. Beispiel: linienstärke="3pt"</de>
         </documentation>
         <documentation docid="tablerule/color">
-            <en />
+            <en>Color of the rule.</en>
             <de>Farbe der Linie.</de>
         </documentation>
         <documentation docid="td/colspan">
-            <en />
+            <en>The number of columns the cell spans. Default: 1</en>
             <de>Gibt an, über wie viele Spalten sich der Inhalt erstreckt. Voreinstellung: 1</de>
         </documentation>
         <documentation docid="td/rowspan">
-            <en />
+            <en>The number of rows the table cell spans. Default: 1</en>
             <de>Gibt an, über wie viele Zeilen sich der Inhalt erstreckt. Voreinstellung: 1</de>
         </documentation>
         <documentation docid="td/align">
-            <en />
+            <en>Horizontal alignment</en>
             <de>Horizontale Ausrichtung</de>
         </documentation>
         <documentation docid="td/align/left">
-            <en />
+            <en>Left aligned (ragged right)</en>
             <de>Linksbündig ausgeben</de>
         </documentation>
         <documentation docid="td/align/center">
-            <en />
+            <en>Centered</en>
             <de>Zentriert ausgeben</de>
         </documentation>
         <documentation docid="td/align/right">
-            <en />
+            <en>Right aligned (ragged left).</en>
             <de>Rechtsbündig ausgeben</de>
         </documentation>
         <documentation docid="td/backgroundcolor">
-            <en />
+            <en>Background color of the table cell.</en>
             <de>Farbe der Tabellenzelle</de>
         </documentation>
         <documentation docid="td/valign">
-            <en />
+            <en>Vertical alignment</en>
             <de>Vertikale Ausrichtung</de>
         </documentation>
         <documentation docid="td/valign/top">
-            <en />
+            <en>Top aligned</en>
             <de>Oben ausgeben</de>
         </documentation>
         <documentation docid="td/valign/center">
-            <en />
+            <en>Vertically centered</en>
             <de>Vertikal zentriert ausgeben</de>
         </documentation>
         <documentation docid="td/valign/bottom">
-            <en />
+            <en>Bottom alignment</en>
             <de>Unten ausgeben</de>
         </documentation>
         <documentation docid="td/borderleft">
-            <en />
+            <en>Width of the left frame</en>
             <de>Breite des linken Rahmens</de>
         </documentation>
         <documentation docid="td/borderright">
-            <en />
+            <en>Width of the right frame</en>
             <de>Breite des rechten Rahmens</de>
         </documentation>
         <documentation docid="td/bordertop">
-            <en />
+            <en>Width of the top frame</en>
             <de>Breite des oberen Rahmens</de>
         </documentation>
         <documentation docid="td/borderbottom">
-            <en />
+            <en>Width of the bottom frame</en>
             <de>Breite des unteren Rahmens</de>
         </documentation>
         <documentation docid="td/borderleftcolor">
-            <en />
+            <en>Color of the left frame</en>
             <de>Farbe des linken Rahmens</de>
         </documentation>
         <documentation docid="td/borderrightcolor">
-            <en />
+            <en>Color of the right frame</en>
             <de>Farbe des rechten Rahmens</de>
         </documentation>
         <documentation docid="td/bordertopcolor">
-            <en />
+            <en>Color of the top frame</en>
             <de>Farbe des oberen Rahmens</de>
         </documentation>
         <documentation docid="td/borderbottomcolor">
-            <en />
+            <en>Color of the bottom frame</en>
             <de>Farbe des unteren Rahmens</de>
         </documentation>
         <documentation docid="td/padding">
-            <en />
+            <en>Shorthand for the padding-* attributes</en>
             <de>Kurzform für die Angabe von ›padding-*‹</de>
         </documentation>
         <documentation docid="td/paddingleft">
-            <en />
+            <en>Left inner distance between the frame and the contents of the cell. (length)</en>
             <de>Bestimmt den Innenrand links (Maßangabe)</de>
         </documentation>
         <documentation docid="td/paddingright">
-            <en />
+            <en>Right inner distance between the frame and the contents of the cell. (length)</en>
             <de>Bestimmt den Innenrand rechts (Maßangabe)</de>
         </documentation>
         <documentation docid="td/paddingtop">
-            <en />
+            <en>Top inner distance between the frame and the contents of the cell. (length)</en>
             <de>Bestimmt den Innenrand oben (Maßangabe)</de>
         </documentation>
         <documentation docid="td/paddingbottom">
-            <en />
+            <en>Bottom inner distance between the frame and the contents of the cell. (length)</en>
             <de>Bestimmt den Innenrand unten (Maßangabe)</de>
         </documentation>
         <documentation docid="tr">
-            <en />
+            <en>Create a table row</en>
             <de>Erzeugt eine Tabellenzeile</de>
         </documentation>
         <documentation docid="tr/backgroundcolor">
-            <en />
+            <en>Background color of th table row. (text)</en>
             <de>Farbe des Zeilenhintergrundes. (Text)</de>
         </documentation>
         <documentation docid="tr/minheight">
-            <en />
+            <en>Minimal height of the table row in grid cells</en>
             <de>Minimale Höhe in Rasterzellen</de>
         </documentation>
         <documentation docid="tr/align">
-            <en />
+            <en>Determines the horizontal alignment of all cells of this row.</en>
             <de>Bestimmt die horizonatale Ausrichtung für alle Zellen dieser Zeile</de>
         </documentation>
-        <documentation docid="tr/align/left">
-            <en />
-            <de>Linksbündig ausgeben</de>
-        </documentation>
-        <documentation docid="tr/align/center">
-            <en />
-            <de>Zentriert ausgeben</de>
-        </documentation>
-        <documentation docid="tr/align/right">
-            <en />
-            <de>Rechtsbündig ausgeben</de>
-        </documentation>
         <documentation docid="tr/valign">
-            <en />
+            <en>Vertical alignment of all cells of this row.</en>
             <de>Vertikale Ausrichtung für alle Zellen dieser Zeile</de>
         </documentation>
-        <documentation docid="tr/valign/top">
-            <en />
-            <de>Oben ausgeben</de>
-        </documentation>
-        <documentation docid="tr/valign/center">
-            <en />
-            <de>Vertikal zentriert ausgeben</de>
-        </documentation>
-        <documentation docid="tr/valign/bottom">
-            <en />
-            <de>Unten ausgeben</de>
-        </documentation>
         <documentation docid="hyphenation">
-            <en />
+            <en>Gives hyphenation correction for the automatic hyphenation algorithm. Example: per-spec-tive</en>
             <de>Korrigiert fehlerhafte automatische Silbentrennung. Beispiel: Au-to-bahn</de>
         </documentation>
         <documentation docid="columns">
-            <en />
-            <de>Fasst »Spalte«-Elemente zusammen. Die Anzahl der »Spalte« Elemente muss mit der Anzahl der
-                Tabellenzellen übereinstimmen.</de>
+            <en>Contains »Column« elements. The number of »Column« elements must coincide with the table.</en>
+            <de>Fasst »Spalte«-Elemente zusammen. Die Anzahl der »Spalte« Elemente muss mit der Anzahl der Tabellenzellen übereinstimmen.</de>
         </documentation>
         <documentation docid="column">
-            <en />
+            <en>Determines the Properties of a table column.</en>
             <de>Bestimmt die Eigenschaften einer Spalte hinsichtlich Breite, Farbe und Ausrichtung</de>
         </documentation>
         <documentation docid="column/width">
-            <en />
-            <de>Erlaubt sind absolute Angaben (z.B. 12mm) oder *-Angaben (z.B. 3*). Die *-Angaben werden auf die
-                „Restbreite“ aufgeteilt.</de>
+            <en>Valid input are length values (e.g 12mm) or *-multipliers (e.g. 3*). The *-multipliers are spread proportionally across the remaining width of the table.</en>
+            <de>Erlaubt sind absolute Angaben (z.B. 12mm) oder *-Angaben (z.B. 3*). Die *-Angaben werden auf die „Restbreite“ aufgeteilt.</de>
         </documentation>
         <documentation docid="column/backgroundcolor">
-            <en />
+            <en>Color of the table column</en>
             <de>Bestimmt die Farbe der Spalte</de>
         </documentation>
         <documentation docid="column/align">
-            <en />
+            <en>Horizontal alignment of all cells in this column.</en>
             <de>Bestimmt die horizonatale Ausrichtung für alle Zellen dieser Spalte</de>
         </documentation>
-        <documentation docid="column/align/left">
-            <en />
-            <de>Linksbündig ausgeben</de>
-        </documentation>
-        <documentation docid="column/align/center">
-            <en />
-            <de>Zentriert ausgeben</de>
-        </documentation>
-        <documentation docid="column/align/right">
-            <en />
-            <de>Rechtsbündig ausgeben</de>
-        </documentation>
         <documentation docid="column/valign">
-            <en />
+            <en>Vertical alignment of all cells in this column</en>
             <de>Vertikale Ausrichtung für alle Zellen dieser Spalte</de>
         </documentation>
-        <documentation docid="column/valign/top">
-            <en />
-            <de>Oben ausgeben</de>
-        </documentation>
-        <documentation docid="column/valign/center">
-            <en />
-            <de>Vertikal zentriert ausgeben</de>
-        </documentation>
-        <documentation docid="column/valign/bottom">
-            <en />
-            <de>Unten ausgeben</de>
-        </documentation>
         <documentation docid="textblock">
-            <en />
-            <de>Erstellt einen rechteckigen Bereich mit Text. Der Text kann aus mehreren Absätzen bestehen und wird mit
-                »Absatz« gekennzeichnet.</de>
+            <en>Create a rectengular area with text. The text can contain several paragraphs denoted as »Paragraph«.</en>
+            <de>Erstellt einen rechteckigen Bereich mit Text. Der Text kann aus mehreren Absätzen bestehen und wird mit »Absatz« gekennzeichnet.</de>
         </documentation>
         <documentation docid="textblock/fontface">
-            <en />
-            <de>Bestimmt die Schriftart für den Textblock, wenn die Absätze keine Schriftart angegeben haben.
-                (Text)</de>
+            <en>Determine the default fontfamily of the text block. (text)</en>
+            <de>Bestimmt die Schriftart für den Textblock, wenn die Absätze keine Schriftart angegeben haben. (Text)</de>
         </documentation>
         <documentation docid="textblock/color">
-            <en />
+            <en>Default color of the textblock. (text)</en>
             <de>Bestimmt die Farbe des Textblocks. Kann in den Absätzen überschrieben werden. (Text)</de>
         </documentation>
         <documentation docid="textblock/angle">
-            <en />
+            <en>Rotate the text by the angle given (counterclockwise). Example: angle="45"</en>
             <de>Dreht den Text um den angegebenen Winkel (gegen den Uhrzeigersinn). Beispiel: winkel="45"</de>
         </documentation>
         <documentation docid="textblock/columns">
-            <en />
+            <en>The number of columns.</en>
             <de>Anzahl der Spalten</de>
         </documentation>
         <documentation docid="textblock/columndistance">
-            <en />
-            <de>Abstand zwischen den Spalten. Entweder eine Maßangabe (z.B. 3mm) oder eine Zahl (Anzahl in
-                Rasterzellen)</de>
+            <en>The distance between two columns. The value must be either a lenght (e.g. 3mm) or a number of grid cells.</en>
+            <de>Abstand zwischen den Spalten. Entweder eine Maßangabe (z.B. 3mm) oder eine Zahl (Anzahl in Rasterzellen)</de>
         </documentation>
         <documentation docid="value">
-            <en />
+            <en>Insert a textual representation of the value (XPath expression).</en>
             <de>Fügt die textuelle Reprästentation des Wertes (XPath-Ausdruck) ein.</de>
         </documentation>
         <documentation docid="value/select">
-            <en />
+            <en>XPath expression to determine the contents.</en>
             <de>XPath Ausdruck um den Inhalt zu ermitteln.</de>
         </documentation>
         <documentation docid="u">
-            <en />
+            <en>Turn on underlining.</en>
             <de>Schaltet »Unterstreichen« ein</de>
         </documentation>
         <documentation docid="url">
-            <en />
+            <en>Marks up a URL.</en>
             <de>Umbricht eine angegebene URL besser.</de>
         </documentation>
         <documentation docid="setvariable">
-            <en />
+            <en>Sets a variable to a given value. The contents is either determined by the attribute »select« as an
+                XPath expression or the contents of the element itself.</en>
             <de>Weist einer Variablen einen Inhalt zu. Der Inhalt wird entweder über das Attribut auswahl oder über den
                 Inhalt des Elements bestimmt.</de>
         </documentation>
         <documentation docid="setvariable/trace">
-            <en />
+            <en>Inserts internal information of the »Setvariable« command in the logfile.</en>
             <de>Gibt die interne Information über die Zuweisung in der Logdatei aus.</de>
         </documentation>
         <documentation docid="setvariable/variable">
-            <en />
+            <en>Name of the variable that gets the contents. (text)</en>
             <de>Name der Variablen, der etwas zugewiesen werden soll (Text).</de>
         </documentation>
         <documentation docid="setvariable/select">
-            <en />
-            <de>XPath-Ausdruck für den Inhalt der Variablen. Alternativ dazu: der Inhalt des Elements Zuweisung</de>
+            <en>XPath-Expression for the variable contents. Otherwise the contents of the command »SetVariable« gets taken as the contents of the variable.</en>
+            <de>XPath-Ausdruck für den Inhalt der Variablen. Alternativ dazu: der Inhalt des Elements Zuweisung.</de>
         </documentation>
     </doc>
 </translations>

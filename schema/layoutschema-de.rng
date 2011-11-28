@@ -563,7 +563,7 @@
       <a:documentation docid="placeobject">Gibt ein Objekt (Bild,..) aus.</a:documentation>
       <optional>
         <attribute name="spalte"/>
-        <a:documentation docid="placeobject/colun">Spalte in der das Objekt ausgegeben werden soll (Zahl). Wird keine Spalte
+        <a:documentation docid="placeobject/column">Spalte in der das Objekt ausgegeben werden soll (Zahl). Wird keine Spalte
           angegeben, so nimmt der Publisher die aktuelle Spalte, bzw. wenn das Objekt zu breit ist,
           die nächste freie Zeile.</a:documentation>
       </optional>
@@ -794,7 +794,7 @@
   <define name="e_Pagetype">
     <element name="Seitentyp">
       <attribute name="name"/>
-      <a:documentation docid="pagetype">Name der Seite. Derzeit wird der Name nicht weiter benutzt. Beliebig.</a:documentation>
+      <a:documentation docid="pagetype/name">Name der Seite. Derzeit wird der Name nicht weiter benutzt. Beliebig.</a:documentation>
       <attribute name="bedingung"/>
       <a:documentation docid="pagetype/test">XPath-Audruck, der »wahr« oder »falsch« zurückgibt. Bestimmt, ob diese Seite als Seitentyp gewählt wird</a:documentation>
       <ref name="e_Margin"/>
@@ -1090,11 +1090,11 @@
           <a:documentation docid="tr/align">Bestimmt die horizonatale Ausrichtung für alle Zellen dieser Zeile</a:documentation>
           <choice>
             <value>left</value>
-            <a:documentation docid="tr/align/left">Linksbündig ausgeben</a:documentation>
+            <a:documentation docid="td/align/left">Linksbündig ausgeben</a:documentation>
             <value>center</value>
-            <a:documentation docid="tr/align/center">Zentriert ausgeben</a:documentation>
+            <a:documentation docid="td/align/center">Zentriert ausgeben</a:documentation>
             <value>right</value>
-            <a:documentation docid="tr/align/right">Rechtsbündig ausgeben</a:documentation>
+            <a:documentation docid="td/align/right">Rechtsbündig ausgeben</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -1103,11 +1103,11 @@
           <a:documentation docid="tr/valign">Vertikale Ausrichtung für alle Zellen dieser Zeile</a:documentation>
           <choice>
             <value>top</value>
-            <a:documentation docid="tr/valign/top">Oben ausgeben</a:documentation>
+            <a:documentation docid="td/valign/top">Oben ausgeben</a:documentation>
             <value>center</value>
-            <a:documentation docid="tr/valign/center">Vertikal zentriert ausgeben</a:documentation>
+            <a:documentation docid="td/valign/center">Vertikal zentriert ausgeben</a:documentation>
             <value>bottom</value>
-            <a:documentation docid="tr/valign/bottom">Unten ausgeben</a:documentation>
+            <a:documentation docid="td/valign/bottom">Unten ausgeben</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -1154,11 +1154,11 @@
               <a:documentation docid="column/align">Bestimmt die horizonatale Ausrichtung für alle Zellen dieser Spalte</a:documentation>
             <choice>
               <value>left</value>
-              <a:documentation docid="column/align/left">Linksbündig ausgeben</a:documentation>
+              <a:documentation docid="td/align/left">Linksbündig ausgeben</a:documentation>
               <value>center</value>
-              <a:documentation docid="column/align/center">Zentriert ausgeben</a:documentation>
+              <a:documentation docid="td/align/center">Zentriert ausgeben</a:documentation>
               <value>right</value>
-              <a:documentation docid="column/align/right">Rechtsbündig ausgeben</a:documentation>
+              <a:documentation docid="td/align/right">Rechtsbündig ausgeben</a:documentation>
             </choice>
             </attribute>
           </optional>
@@ -1167,11 +1167,11 @@
               <a:documentation docid="column/valign">Vertikale Ausrichtung für alle Zellen dieser Spalte</a:documentation>
               <choice>
                 <value>top</value>
-                <a:documentation docid="column/valign/top">Oben ausgeben</a:documentation>
+                <a:documentation docid="td/valign/top">Oben ausgeben</a:documentation>
                 <value>center</value>
-                <a:documentation docid="column/valign/center">Vertikal zentriert ausgeben</a:documentation>
+                <a:documentation docid="td/valign/center">Vertikal zentriert ausgeben</a:documentation>
                 <value>bottom</value>
-                <a:documentation docid="column/valign/bottom">Unten ausgeben</a:documentation>
+                <a:documentation docid="td/valign/bottom">Unten ausgeben</a:documentation>
               </choice>
             </attribute>
           </optional>

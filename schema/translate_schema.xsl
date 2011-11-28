@@ -78,7 +78,15 @@
     <xsl:template match="a:documentation">
         <xsl:element name="a:documentation">
             <xsl:attribute name="docid" select="@docid" />
-            <xsl:value-of select="key('doc',@docid,$translations)/node()[local-name()=$pTo]" />
+            <xsl:variable name="doc" select="key('doc',@docid,$translations)/node()[local-name()=$pTo]"/>
+            <xsl:choose>
+                <xsl:when test="empty($doc)">
+                    <xsl:message select="concat('Empty documentation for ',@docid)"></xsl:message>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$doc" />
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:element>
     </xsl:template>
     
