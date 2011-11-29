@@ -8,8 +8,8 @@
     <xsl:param name="pFrom" select="'de'"/>
     <xsl:param name="pTo"   select="'en'"/>
     
-    <xsl:key name="en-elements" match="translations/elements/entry" use="@en"/>
-    <xsl:key name="de-elements" match="translations/elements/entry" use="@de"/>
+    <xsl:key name="en-elements" match="translations/elements/element" use="@en"/>
+    <xsl:key name="de-elements" match="translations/elements/element" use="@de"/>
     
     <xsl:key name="en-values" match="translations/values/value" use="@en"/>
     <xsl:key name="de-values" match="translations/values/value" use="@de"/>
