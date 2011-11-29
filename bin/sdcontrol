@@ -27,6 +27,18 @@ function update_translation_files(lang)
   os.execute(cmdline)
 end
 
+function update_schema_files()
+  local cmdline
+  -- generate the lua translation
+  cmdline = string.format("java -jar %s/lib/saxon9he.jar -s:%s/schema/translations.xml -o:%s/src/lua/translations.lua -xsl:%s/schema/genluatranslations.xsl",installdir,installdir,installdir,installdir)
+  print(cmdline)
+  os.execute(cmdline)
+  -- generate german schema
+  cmdline = string.format("java -jar %s/lib/saxon9he.jar -s:%s/schema/layoutschema-en.rng -o:%s/src/lua/layoutschema-de.rng -xsl:%s/schema/translate_schema.xsl pFrom=en pTo=de",installdir,installdir,installdir,installdir)
+  print(cmdline)
+  os.execute(cmdline)
+end
+
 function new_language(lang)
 	assert(lang,"No language given")
 	local cmdline
@@ -52,6 +64,7 @@ op.start = 30
 op:on("--new-language LANG","Add a new langauge for messages. Example: de_DE",new_language)
 op:on("--create-manual [LANG]","-m","Create (update) manual in language LANG. Defaults to 'all', which is currently only 'de'",update_manual)
 op:on("-u","--update-translations LANG","Update translation files for source code (gettext). Example: de_DE",update_translation_files)
+op:on("--update-schemafiles","Update all files that depend on the RelaxNG schema 'layoutschema-en.rng'",update_schema_files)
 local ok, msg = op:parse(arg)
 if not ok then
   print(msg)

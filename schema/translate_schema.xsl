@@ -2,8 +2,6 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns="http://relaxng.org/ns/structure/1.0"
     xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
-    <xsl:output omit-xml-declaration="yes" indent="yes"/>
-    <xsl:strip-space elements="*"/>
     
     <xsl:param name="pFrom" select="'de'"/>
     <xsl:param name="pTo"   select="'en'"/>

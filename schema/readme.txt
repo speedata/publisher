@@ -1,7 +1,13 @@
-To create the translation of other schema files:
+README for the schema directory
+===============================
+
+The english RelaxNG schema is now the official one, although the element names 
+and attributes are still subject to change (there are probably better translation 
+then the ones I came up with).
+
+Don't edit the other Schema files. Edit the translation file (translation.xml) 
+and run the transformation given below.
+
+sdcontrol --update-schemafiles
 
 
-FROM=de
-TO=en
-PUBLISHER_ROOT=/path/to/the/directory/with/lib/and/schema
-java -jar $PUBLISHER_ROOT/lib/saxon9he.jar -s:$PUBLISHER_ROOT/schema/layoutschema-$FROM.rng -o:$PUBLISHER_ROOT/schema/$TO.rng -xsl:$PUBLISHER_ROOT/schema/translate_schema.xsl pTo=$TO
