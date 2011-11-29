@@ -63,12 +63,12 @@ function berechne_spaltenbreite_fuer_zeile(self, tr_inhalt,aktuelle_zeile,colspa
     local objekte = {}
 
     for i,j in ipairs(td_inhalt) do
-      if publisher.elementname(j) == "Absatz" then
+      if publisher.elementname(j,true) == "Paragraph" then
         objekte[#objekte + 1] = publisher.inhalt(j)
-      elseif publisher.elementname(j) == "Bild" then
+      elseif publisher.elementname(j,true) == "Image" then
         -- FIXME: Bild sollte auch ein "Objekt" sein
         objekte[#objekte + 1] = publisher.inhalt(j)
-      elseif publisher.elementname(j) == "Tabelle" then
+      elseif publisher.elementname(j,true) == "Table" then
         -- FIXME: Bild sollte auch ein "Objekt" sein
         objekte[#objekte + 1] = publisher.inhalt(j)[1]
       else
@@ -139,9 +139,9 @@ function berechne_spaltenbreite( self )
 
   for _,tr in ipairs(self.tab) do
     local tr_inhalt      = publisher.inhalt(tr)
-    local tr_elementname = publisher.elementname(tr)
+    local tr_elementname = publisher.elementname(tr,true)
 
-    if tr_elementname == "Spalten" then
+    if tr_elementname == "Columns" then
       local wd
       local i = 0
       local summe_sternchen = 0
@@ -149,7 +149,7 @@ function berechne_spaltenbreite( self )
       local anzahl_spalten = 0
       local patt = "([0-9]+)\*"
       for _,spalte in ipairs(tr_inhalt) do
-        if publisher.elementname(spalte)=="Spalte" then
+        if publisher.elementname(spalte,true)=="Column" then
           local spalte_inhalt = publisher.inhalt(spalte)
           i = i + 1
           self.align[i] =  spalte_inhalt.align
@@ -187,7 +187,7 @@ function berechne_spaltenbreite( self )
 
         i = 0
         for _,spalte in ipairs(tr_inhalt) do
-          if publisher.elementname(spalte)=="Spalte" then
+          if publisher.elementname(spalte,true)=="Column" then
             local spalte_inhalt = publisher.inhalt(spalte)
             i = i + 1
             local breite_sternchen = string.match(spalte_inhalt.breite,patt)
@@ -205,26 +205,26 @@ function berechne_spaltenbreite( self )
   -- Phase I: max_wd, min_wd berechnen
   for _,tr in ipairs(self.tab) do
     local tr_inhalt      = publisher.inhalt(tr)
-    local tr_elementname = publisher.elementname(tr)
+    local tr_elementname = publisher.elementname(tr,true)
 
     if tr_elementname == "Tr" then
       aktuelle_zeile = aktuelle_zeile + 1
       self:berechne_spaltenbreite_fuer_zeile(tr_inhalt,aktuelle_zeile,colspans,colmin,colmax)
-    elseif tr_elementname == "Tlinie" then
+    elseif tr_elementname == "Tablerule" then
       --ignorieren
-    elseif tr_elementname == "Tabellenkopf" then
+    elseif tr_elementname == "Tablehead" then
       for _,zeile in ipairs(tr_inhalt) do
         local zeile_inhalt  = publisher.inhalt(zeile)
-        local zeile_eltname = publisher.elementname(zeile)
+        local zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
           aktuelle_zeile = aktuelle_zeile + 1
           self:berechne_spaltenbreite_fuer_zeile(zeile_inhalt,aktuelle_zeile,colspans,colmin,colmax)
         end
       end
-    elseif tr_elementname == "Tabellenfuß" then
+    elseif tr_elementname == "Tablefoot" then
       for _,zeile in ipairs(tr_inhalt) do
         local zeile_inhalt  = publisher.inhalt(zeile)
-        local zeile_eltname = publisher.elementname(zeile)
+        local zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
           aktuelle_zeile = aktuelle_zeile + 1
           self:berechne_spaltenbreite_fuer_zeile(zeile_inhalt,aktuelle_zeile,colspans,colmin,colmax)
@@ -422,16 +422,16 @@ function berechne_zeilenhoehe( self,tr_inhalt, aktuelle_zeile )
       local objekte = {}
 
       for i,j in ipairs(td_inhalt) do
-        if publisher.elementname(j) == "Absatz" then
+        if publisher.elementname(j,true) == "Paragraph" then
           objekte[#objekte + 1] = publisher.inhalt(j)
-        elseif publisher.elementname(j) == "Bild" then
+        elseif publisher.elementname(j,true) == "Image" then
           -- FIXME: Bild sollte auch ein "Objekt" sein
           objekte[#objekte + 1] = publisher.inhalt(j)
-        elseif publisher.elementname(j) == "Tabelle" then
+        elseif publisher.elementname(j,true) == "Table" then
           -- FIXME: Bild sollte auch ein "Objekt" sein
           objekte[#objekte + 1] = publisher.inhalt(j)[1]
         else
-          warning("Object not recognized: %s",publisher.elementname(j) or "???")
+          warning("Object not recognized: %s",publisher.elementname(j,true) or "???")
         end
       end
       -- trace("Tabelle: Objekte für die Tabellenzelle eingelesen (berechne_zeilenhoehen)")
@@ -531,15 +531,15 @@ function berechne_zeilenhoehen(self)
 
   for _,tr in ipairs(self.tab) do
     local tr_inhalt = publisher.inhalt(tr)
-    local eltname = publisher.elementname(tr)
+    local eltname = publisher.elementname(tr,true)
 
-    if eltname == "Tlinie" or eltname == "Spalten" then
+    if eltname == "Tablerule" or eltname == "Columns" then
       -- ignorieren
 
-    elseif eltname == "Tabellenkopf" then
+    elseif eltname == "Tablehead" then
       for _,zeile in ipairs(tr_inhalt) do
         local zeile_inhalt  = publisher.inhalt(zeile)
-        local zeile_eltname = publisher.elementname(zeile)
+        local zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
           aktuelle_zeile = aktuelle_zeile + 1
           zeilenhoehe, _rowspans = self:berechne_zeilenhoehe(zeile_inhalt,aktuelle_zeile)
@@ -547,10 +547,10 @@ function berechne_zeilenhoehen(self)
           rowspans = table.__concat(rowspans,_rowspans)
         end
       end
-    elseif eltname == "Tabellenfuß" then
+    elseif eltname == "Tablefoot" then
       for _,zeile in ipairs(tr_inhalt) do
         local zeile_inhalt  = publisher.inhalt(zeile)
-        local zeile_eltname = publisher.elementname(zeile)
+        local zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
           aktuelle_zeile = aktuelle_zeile + 1
           zeilenhoehe, _rowspans = self:berechne_zeilenhoehe(zeile_inhalt,aktuelle_zeile)
@@ -565,8 +565,8 @@ function berechne_zeilenhoehen(self)
       self.zeilenhoehen[aktuelle_zeile] = zeilenhoehe
       rowspans = table.__concat(rowspans,_rowspans)
     else
-      warning("Unknown contents in »Tabelle«")
-    end -- wenn es nicht eine <Tlinie> ist
+      warning("Unknown contents in »Tabelle« %s",eltname)
+    end -- wenn es nicht eine <Tablerule> ist
   end -- für alle Zeilen
 
   -- Zeilenhöhen anpassen. Erst müssen alle möglichen Verschiebungen in den Zeilenhöhen
@@ -861,36 +861,36 @@ function setze_tabelle(self)
   aktuelle_zeile = 0
   for _,tr in ipairs(self.tab) do
     local tr_inhalt = publisher.inhalt(tr)
-    local eltname   = publisher.elementname(tr)
+    local eltname   = publisher.elementname(tr,true)
     local tmp
 
-    if eltname == "Spalten" then
+    if eltname == "Columns" then
       -- ignorieren
-    elseif eltname == "Tlinie" then
+    elseif eltname == "Tablerule" then
       tmp = publisher.farbbalken(self.tabellenbreite_soll,tex.sp(tr_inhalt.linienstaerke or "0.25pt"),0,tr_inhalt.farbe)
       zeilen[#zeilen + 1] = node.hpack(tmp)
 
-    elseif eltname == "Tabellenkopf" then
+    elseif eltname == "Tablehead" then
       for _,zeile in ipairs(tr_inhalt) do
         zeile_inhalt = publisher.inhalt(zeile)
-        zeile_eltname = publisher.elementname(zeile)
+        zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
           aktuelle_zeile = aktuelle_zeile + 1
           kopfzeilen[#kopfzeilen + 1] = self:setze_zeile(zeile_inhalt,aktuelle_zeile)
-        elseif zeile_eltname == "Tlinie" then
+        elseif zeile_eltname == "Tablerule" then
           tmp = publisher.farbbalken(self.tabellenbreite_soll,tex.sp(zeile_inhalt.linienstaerke or "0.25pt"),0,zeile_inhalt.farbe)
           kopfzeilen[#kopfzeilen + 1] = node.hpack(tmp)
         end
       end
 
-    elseif eltname == "Tabellenfuß" then
+    elseif eltname == "Tablefoot" then
       for _,zeile in ipairs(tr_inhalt) do
         zeile_inhalt = publisher.inhalt(zeile)
-        zeile_eltname = publisher.elementname(zeile)
+        zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
           aktuelle_zeile = aktuelle_zeile + 1
           fusszeilen[#fusszeilen + 1] = self:setze_zeile(zeile_inhalt,aktuelle_zeile)
-        elseif zeile_eltname == "Tlinie" then
+        elseif zeile_eltname == "Tablerule" then
           tmp = publisher.farbbalken(self.tabellenbreite_soll,tex.sp(zeile_inhalt.linienstaerke or "0.25pt"),0,zeile_inhalt.farbe)
           fusszeilen[#fusszeilen + 1] = node.hpack(tmp)
         end
@@ -900,13 +900,13 @@ function setze_tabelle(self)
       aktuelle_zeile = aktuelle_zeile + 1
       zeilen[#zeilen + 1] = self:setze_zeile(tr_inhalt,aktuelle_zeile)
     else
-      warning("Unknown contents in »Tabelle«")
+      warning("Unknown contents in »Tabelle« %s",eltname )
     end -- wenn es eine Tabellenzelle ist
   end
 
   local ht_kopfzeilen = 0
   for z = 1,#kopfzeilen - 1 do
-    ht_kopfzeilen = ht_kopfzeilen + kopfzeilen[z].height  -- Tr oder TLinie
+    ht_kopfzeilen = ht_kopfzeilen + kopfzeilen[z].height  -- Tr oder Tablerule
     _,tmp = publisher.add_glue(kopfzeilen[z],"tail",{ width = self.rowsep })
     tmp.next = kopfzeilen[z+1]
     kopfzeilen[z+1].prev = tmp
@@ -918,7 +918,7 @@ function setze_tabelle(self)
 
   local ht_fusszeilen = 0
   for z = 1,#fusszeilen - 1 do
-    ht_fusszeilen = ht_fusszeilen + fusszeilen[z].height  -- Tr oder TLinie
+    ht_fusszeilen = ht_fusszeilen + fusszeilen[z].height  -- Tr oder Tablerule
     _,tmp = publisher.add_glue(fusszeilen[z],"tail",{ width = self.rowsep })
     tmp.next = fusszeilen[z+1]
     fusszeilen[z+1].prev = tmp

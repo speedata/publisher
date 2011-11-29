@@ -86,11 +86,11 @@ local dispatch_table = {
   Aktion                  = element.aktion,
   Attribut                = element.attribut,
   B                       = element.fett,
-  BearbeiteKnoten         = element.bearbeite_knoten,
+  ProcessNode             = element.bearbeite_knoten,
   BearbeiteDatensatz      = element.bearbeite_datensatz,
-  BeiSeitenAusgabe        = element.beiseitenausgabe,
-  BeiSeitenErzeugung      = element.beiseitenerzeugung,
-  Image                    = element.bild,
+  AtPageShipout           = element.beiseitenausgabe,
+  AtPageCreation          = element.beiseitenerzeugung,
+  Image                   = element.bild,
   Box                     = element.box,
   Record                  = element.datensatz,
   DefineColor             = element.definiere_farbe,
@@ -101,21 +101,21 @@ local dispatch_table = {
   Gruppe                  = element.gruppe,
   I                       = element.kursiv,
   Include                 = element.include,
-  ["Kopie-von"]           = element.kopie_von,
+  ["Copy-of"]             = element.kopie_von,
   LadeDatensatzdatei      = element.lade_datensatzdatei,
   LoadFontfile            = element.lade_schriftdatei,
-  Leerzeile               = element.leerzeile,
+  EmptyLine               = element.leerzeile,
   Linie                   = element.linie,
   Nachricht               = element.nachricht,
   ["NächsterRahmen"]      = element.naechster_rahmen,
-  NeueSeite               = element.neue_seite,
+  NewPage                 = element.neue_seite,
   NeueZeile               = element.neue_zeile,
   Options                 = element.optionen,
   PlaceObject             = element.objekt_ausgeben,
-  Platzierungsbereich     = element.platzierungsbereich,
-  Platzierungsrahmen      = element.platzierungsrahmen,
+  PositioningArea         = element.platzierungsbereich,
+  PositioningFrame        = element.platzierungsrahmen,
   Margin                  = element.rand,
-  Raster                  = element.raster,
+  Grid                    = element.raster,
   Schriftart              = element.schriftart,
   Pagetype                = element.seitentyp,
   Pageformat              = element.seitenformat,
@@ -124,23 +124,23 @@ local dispatch_table = {
   Solange                 = element.solange,
   SortiereSequenz         = element.sortiere_sequenz,
   SpeichereDatensatzdatei = element.speichere_datensatzdatei,
-  Spalte                  = element.spalte,
-  Spalten                 = element.spalten,
+  Column                  = element.spalte,
+  Columns                 = element.spalten,
   Sub                     = element.sub,
   Sup                     = element.sup,
-  Tabelle                 = element.tabelle,
-  ["Tabellenfuß"]         = element.tabellenfuss,
-  Tabellenkopf            = element.tabellenkopf,
+  Table                   = element.tabelle,
+  Tablefoot              = element.tabellenfuss,
+  Tablehead               = element.tabellenkopf,
   Textblock               = element.textblock,
   Trennvorschlag          = element.trennvorschlag,
-  Tlinie                  = element.tlinie,
+  Tablerule                  = element.tlinie,
   Tr                      = element.tr,
   Td                      = element.td,
   U                       = element.underline,
   URL                     = element.url,
   Variable                = element.variable,
   Value                    = element.wert,
-  Zuweisung               = element.zuweisung,
+  SetVariable               = element.zuweisung,
   ["ZurListeHinzufügen"] = element.zur_liste_hinzufuegen,
 }
 
@@ -160,7 +160,7 @@ function dispatch(layoutxml,datenxml,optionen)
         tmp = dispatch_table[eltname](j,datenxml,optionen)
 
         -- Kopie-von-Elemente können sofort aufgelöst werden
-        if eltname == "Kopie-von" or eltname == "Fallunterscheidung" then
+        if eltname == "Copy-of" or eltname == "Switch" then
           if type(tmp)=="table" then
             for i=1,#tmp do
               if tmp[i].inhalt then
@@ -428,10 +428,10 @@ function seite_einrichten()
   local rasterhoehe  = optionen.rasterhoehe
 
 
-  local ret_tbl = ermittle_seitentyp()
-  if ret_tbl == false then return false end
+  local pagetype = ermittle_seitentyp()
+  if pagetype == false then return false end
 
-  for _,j in ipairs(ret_tbl) do
+  for _,j in ipairs(pagetype) do
     local eltname = elementname(j,true)
     if type(inhalt(j))=="function" and eltname=="Margin" then
       inhalt(j)(aktuelle_seite)
@@ -442,7 +442,7 @@ function seite_einrichten()
       aktuelle_seite.beiseitenerzeugung = inhalt(j)
     elseif eltname=="AtPageShipout" then
       aktuelle_seite.beiseitenausgabe = inhalt(j)
-    elseif eltname=="Positioningarea" then
+    elseif eltname=="PositioningArea" then
       local name = inhalt(j).name
       aktuelles_raster.platzierungsbereiche[name] = {}
       local aktueller_platzierungsbereich = aktuelles_raster.platzierungsbereiche[name]
@@ -462,7 +462,7 @@ function seite_einrichten()
   assert(rasterhoehe,"Rasterhöhe")
 
 
-  aktuelle_seite.raster:setze_breite_hoehe(tex.sp(rasterbreite),tex.sp(rasterhoehe))
+  aktuelle_seite.raster:setze_breite_hoehe(rasterbreite,rasterhoehe)
 
 
   if aktuelle_seite.beiseitenerzeugung then
@@ -594,14 +594,21 @@ function dothingsbeforeoutput(  )
   end
 end
 
-
-function lese_attribut_jit( layoutxml,datenxml,attname,typ )
-  local funcname = ".__func" .. attname
-  if layoutxml[funcname] then return layoutxml[funcname](datenxml) end
+-- First time we call the function on an attribute we prepare
+-- a caching function (.__func .. <attribute name>).
+-- 
+-- If present, we call the function, else we create a function.
+function read_attribute( layoutxml,datenxml,attname,typ )
   if layoutxml[attname] == nil then
-    layoutxml[funcname] = function() return nil end
     return nil
   end
+
+  local funcname = ".__func" .. attname
+  if layoutxml[funcname] then return layoutxml[funcname](datenxml) end
+  -- first time called, create a function
+
+  -- if the string contains { }, we use the contents of it and
+  -- parse it as an xpath expression
   local str = string.match(layoutxml[attname],"{(.-)}")
   local func
   if str then
@@ -619,6 +626,7 @@ function lese_attribut_jit( layoutxml,datenxml,attname,typ )
       return val
     end
   else
+    -- not an xpath expression in {...}.
     func = function()
       local val = layoutxml[attname]
       if typ=="string" then
@@ -633,6 +641,7 @@ function lese_attribut_jit( layoutxml,datenxml,attname,typ )
       return val
     end
   end
+  -- function
   layoutxml[funcname] = func
   return func(datenxml)
 end
