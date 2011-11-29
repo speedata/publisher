@@ -155,7 +155,7 @@ tex.definefont("dummyfont",num)
 
 -- Beendet die Verarbeitung und schreibt das PDF. Keine Aktion im Publisher
 -- kann nach dem Aufruf von publisher.exit() stattfinden.
-function exit()
+function exit(graceful)
   log("Stop processing data")
   log("%d errors occurred",errcount)
   log("Duration: %3f seconds",os.gettimeofday() - starttime)
@@ -166,6 +166,9 @@ function exit()
   errorlog:write(string.format("\nnode_mem_usage=%s",status.node_mem_usage))
   errorlog:write(string.format("luastate_bytes=%d",status.luastate_bytes / 1024))
   errorlog:close()
+  if not graceful then
+    os.exit()
+  end
 end
 
 local function setup()
@@ -245,5 +248,5 @@ function main_loop()
   log("Start processing")
   setup()
   call(publisher.dothings)
-  exit()
+  exit(true)
 end
