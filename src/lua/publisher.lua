@@ -9,6 +9,8 @@ file_start("publisher.lua")
 
 local element = require("publisher.element")
 local seite   = require("publisher.seite")
+local translations = require("translations")
+
 sd_xpath_funktionen      = require("publisher.layout_funktionen")
 orig_xpath_funktionen    = require("publisher.xpath_funktionen")
 
@@ -41,6 +43,9 @@ hlist_node     = node.id("hlist")
 pdf_literal_node = node.subtype("pdf_literal")
 
 default_bereichname = "__seite"
+
+-- the language of the layout instructions ('en' or 'de')
+current_layoutlanguage = nil
 
 seiten   = {}
 optionen = {}
@@ -77,7 +82,7 @@ sprachen = {}
 
 
 local dispatch_table = {
-  Absatz                  = element.absatz,
+  Paragraph               = element.absatz,
   Aktion                  = element.aktion,
   Attribut                = element.attribut,
   B                       = element.fett,
@@ -85,12 +90,12 @@ local dispatch_table = {
   BearbeiteDatensatz      = element.bearbeite_datensatz,
   BeiSeitenAusgabe        = element.beiseitenausgabe,
   BeiSeitenErzeugung      = element.beiseitenerzeugung,
-  Bild                    = element.bild,
+  Image                    = element.bild,
   Box                     = element.box,
-  Datensatz               = element.datensatz,
-  DefiniereFarbe          = element.definiere_farbe,
-  DefiniereSchriftfamilie = element.definiere_schriftfamilie,
-  DefiniereTextformat     = element.definiere_textformat,
+  Record                  = element.datensatz,
+  DefineColor             = element.definiere_farbe,
+  DefineFontfamily        = element.definiere_schriftfamilie,
+  DefineTextformat        = element.definiere_textformat,
   Element                 = element.element,
   Fallunterscheidung      = element.fallunterscheidung,
   Gruppe                  = element.gruppe,
@@ -98,23 +103,23 @@ local dispatch_table = {
   Include                 = element.include,
   ["Kopie-von"]           = element.kopie_von,
   LadeDatensatzdatei      = element.lade_datensatzdatei,
-  LadeSchriftdatei        = element.lade_schriftdatei,
+  LoadFontfile            = element.lade_schriftdatei,
   Leerzeile               = element.leerzeile,
   Linie                   = element.linie,
   Nachricht               = element.nachricht,
   ["NächsterRahmen"]      = element.naechster_rahmen,
   NeueSeite               = element.neue_seite,
   NeueZeile               = element.neue_zeile,
-  Optionen                = element.optionen,
-  ObjektAusgeben          = element.objekt_ausgeben,
+  Options                 = element.optionen,
+  PlaceObject             = element.objekt_ausgeben,
   Platzierungsbereich     = element.platzierungsbereich,
   Platzierungsrahmen      = element.platzierungsrahmen,
-  Rand                    = element.rand,
+  Margin                  = element.rand,
   Raster                  = element.raster,
   Schriftart              = element.schriftart,
-  Seitentyp               = element.seitentyp,
-  Seitenformat            = element.seitenformat,
-  SetzeRaster             = element.setze_raster,
+  Pagetype                = element.seitentyp,
+  Pageformat              = element.seitenformat,
+  SetGrid                 = element.setze_raster,
   Sequenz                 = element.sequenz,
   Solange                 = element.solange,
   SortiereSequenz         = element.sortiere_sequenz,
@@ -134,10 +139,15 @@ local dispatch_table = {
   U                       = element.underline,
   URL                     = element.url,
   Variable                = element.variable,
-  Wert                    = element.wert,
+  Value                    = element.wert,
   Zuweisung               = element.zuweisung,
   ["ZurListeHinzufügen"] = element.zur_liste_hinzufuegen,
 }
+
+-- Return the localized eltname as an english string.
+function translate_element( eltname )
+  return translations[current_layoutlanguage].elements[eltname]
+end
 
 function dispatch(layoutxml,datenxml,optionen)
   local ret = {}
@@ -145,9 +155,8 @@ function dispatch(layoutxml,datenxml,optionen)
   for _,j in ipairs(layoutxml) do
     -- j ist genau dann eine Tabelle, wenn es ein Element im layoutxml ist.
     if type(j)=="table" then
-      local eltname = j[".__name"]
+      local eltname = translate_element(j[".__name"])
       if dispatch_table[eltname] ~= nil then
-
         tmp = dispatch_table[eltname](j,datenxml,optionen)
 
         -- Kopie-von-Elemente können sofort aufgelöst werden
@@ -174,14 +183,16 @@ function dispatch(layoutxml,datenxml,optionen)
 end
 
 function dothings()
-  seite_initialisiert=false
+  page_initialized=false
 
-  local layoutxml = lade_xml(arg[2],"Layoutregelwerk")
-  local datenxml  = lade_xml(arg[3],"Datendatei")
-
+  local layoutxml = load_xml(arg[2],"layout instructions")
+  local datenxml  = load_xml(arg[3],"data file")
+  current_layoutlanguage = string.gsub(layoutxml.xmlns,"urn:speedata.de:2009/publisher/","")
+  if not (current_layoutlanguage=='de' or current_layoutlanguage=='en') then
+    err("Cannot determine the language of the layout file.")
+    exit()
+  end
   dispatch(layoutxml)
-
-  local externe_optionen = {}
 
   for _,extopt in ipairs(string.explode(arg[4],",")) do
     if string.len(extopt) > 0 then
@@ -221,7 +232,7 @@ function dothings()
   pdf.info    = [[ /Creator	(speedata Publisher) /Producer(speedata Publisher, www.speedata.de) ]]
 
   -- letzte Seite ausgeben, wenn notwendig
-  if seite_initialisiert then
+  if page_initialized then
     dothingsbeforeoutput()
     local n = node.vpack(publisher.global_pagebox)
 
@@ -231,15 +242,46 @@ function dothings()
 
 end
 
-function lade_xml(filename,dateityp)
-  local pfad = kpse.find_file(filename)
-  if not pfad then
+-- Load an XML file from the harddrive. filename is without path but including extension,
+-- filetype is a string representing the type of file read, such as "layout" or "data".
+-- The return value is a lua table representing the XML file.
+--
+-- The XML file
+--
+--     <?xml version="1.0" encoding="UTF-8"?>
+--     <data>
+--       <element attribute="whatever">
+--         <subelement>text in subelement</subelement>
+--       </element>
+--     </data>
+--
+-- is represented by this Lua table:
+--     XML = {
+--       [1] = " "
+--       [2] = {
+--         [1] = " "
+--         [2] = {
+--           [1] = "text in subelement"
+--           [".__parent"] = (pointer to the "element" tree, which is the second entry in the top level)
+--           [".__name"] = "subelement"
+--         },
+--         [3] = " "
+--         [".__parent"] = (pointer to the root element)
+--         [".__name"] = "element"
+--         ["attribute"] = "whatever"
+--       },
+--       [3] = " "
+--       [".__name"] = "data"
+--     },
+function load_xml(filename,filetype)
+  local path = kpse.find_file(filename)
+  if not path then
     err("Can't find XML file %q. Abort.\n",filename or "?")
     os.exit(-1)
   end
-  log("Loading %s %q",dateityp or "file",pfad)
+  log("Loading %s %q",filetype or "file",path)
 
-  local layoutfile = io.open(pfad,"r")
+  local layoutfile = io.open(path,"r")
   if not layoutfile then
     err("Can't open XML file. Abort.")
     os.exit(-1)
@@ -349,7 +391,7 @@ function ermittle_seitentyp()
   for i=#seitentypen,1,-1 do
     local seitentyp = seitentypen[i]
     if xpath.parse(nil,seitentyp.ist_seitentyp) == true then
-      log("Page of type %q created",seitentyp.name or "")
+      log("Page of type %q created",seitentyp.name or "<detect_pagetype>")
       ret = seitentyp.res
       return ret
     end
@@ -360,8 +402,8 @@ end
 
 -- Muss aufgerufen werden, bevor auf eine neue Seite etwas ausgegeben wird.
 function seite_einrichten()
-  if seite_initialisiert then return end
-  seite_initialisiert=true
+  if page_initialized then return end
+  page_initialized=true
   publisher.global_pagebox = node.new("vlist")
   local beschnittzugabe = tex.sp(optionen.beschnittzugabe or 0)
   local extra_rand
@@ -370,11 +412,11 @@ function seite_einrichten()
   elseif beschnittzugabe > 0 then
     extra_rand = beschnittzugabe
   end
-  local err
+  local errorstring
   -- aktuelle_seite ist eine globale Variable
-  aktuelle_seite, err = seite:new(optionen.seitenbreite,optionen.seitenhoehe, extra_rand, beschnittzugabe)
+  aktuelle_seite, errorstring = seite:new(optionen.seitenbreite,optionen.seitenhoehe, extra_rand, beschnittzugabe)
   if not aktuelle_seite then
-    err("Can't create a new page. Is the page type (»Seitentyp«) defined?")
+    err("Can't create a new page. Is the page type (»Seitentyp«) defined? %s",errorstring)
     exit()
   end
   aktuelles_raster = aktuelle_seite.raster
@@ -390,16 +432,17 @@ function seite_einrichten()
   if ret_tbl == false then return false end
 
   for _,j in ipairs(ret_tbl) do
-    if type(inhalt(j))=="function" and elementname(j)=="Rand" then
+    local eltname = elementname(j,true)
+    if type(inhalt(j))=="function" and eltname=="Margin" then
       inhalt(j)(aktuelle_seite)
-    elseif elementname(j)=="Raster" then
+    elseif eltname=="Grid" then
       rasterbreite = inhalt(j).breite
       rasterhoehe  = inhalt(j).hoehe
-    elseif elementname(j)=="BeiSeitenErzeugung" then
+    elseif eltname=="AtPageCreation" then
       aktuelle_seite.beiseitenerzeugung = inhalt(j)
-    elseif elementname(j)=="BeiSeitenAusgabe" then
+    elseif eltname=="AtPageShipout" then
       aktuelle_seite.beiseitenausgabe = inhalt(j)
-    elseif elementname(j)=="Platzierungsbereich" then
+    elseif eltname=="Positioningarea" then
       local name = inhalt(j).name
       aktuelles_raster.platzierungsbereiche[name] = {}
       local aktueller_platzierungsbereich = aktuelles_raster.platzierungsbereiche[name]
@@ -407,7 +450,7 @@ function seite_einrichten()
         aktueller_platzierungsbereich[#aktueller_platzierungsbereich + 1] = inhalt(k)
       end
     else
-      err("Element name %q unknown (seite_einrichten())",elementname(j))
+      err("Element name %q unknown (seite_einrichten())",eltname or "<create_page>")
     end
   end
 
@@ -443,7 +486,7 @@ function neue_seite()
   end
   if not aktuelle_seite then
     -- es wurde neue_seite() aufgerufen, ohne, dass was ausgegeben wurde bisher
-    seite_initialisiert=false
+    page_initialized=false
     seite_einrichten()
   end
   if aktuelle_seite.beiseitenausgabe then
@@ -451,7 +494,7 @@ function neue_seite()
     dispatch(aktuelle_seite.beiseitenausgabe)
     seitenumbruch_unmoeglich = false
   end
-  seite_initialisiert=false
+  page_initialized=false
   dothingsbeforeoutput()
 
   local n = node.vpack(publisher.global_pagebox)
@@ -594,8 +637,11 @@ function lese_attribut_jit( layoutxml,datenxml,attname,typ )
   return func(datenxml)
 end
 
-function elementname( elt )
-  return elt.elementname
+function elementname( elt ,raw)
+  trace("elementname = %q",elt.elementname or "?")
+  if raw then return elt.elementname end
+  trace("translated = %q",translate_element(elt.elementname) or "?")
+  return translate_element(elt.elementname)
 end
 
 function inhalt( elt )
@@ -1145,8 +1191,8 @@ function get_languagecode( sprache_intern )
   end
   local filename = string.format("hyph-%s.pat.txt",sprache_intern)
   log("Loading hyphenation patterns %q.",filename)
-  local pfad = kpse.find_file(filename)
-  local trennmuster_datei = io.open(pfad)
+  local path = kpse.find_file(filename)
+  local trennmuster_datei = io.open(path)
   local muster = trennmuster_datei:read("*all")
 
   local l = lang.new()

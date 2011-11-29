@@ -56,8 +56,8 @@ function absatz( layoutxml,datenxml )
   local tab = publisher.dispatch(layoutxml,datenxml)
 
   for i,j in ipairs(tab) do
-    trace("Paragraph Elementname = %q",tostring(publisher.elementname(j)))
-    if publisher.elementname(j) == "Wert" and type(publisher.inhalt(j)) == "table" then
+    trace("Paragraph Elementname = %q",tostring(publisher.elementname(j,true)))
+    if publisher.elementname(j,true) == "Value" and type(publisher.inhalt(j)) == "table" then
       objekte[#objekte + 1] = publisher.parse_html(publisher.inhalt(j))
     else
       objekte[#objekte + 1] = publisher.inhalt(j)
@@ -277,6 +277,7 @@ end
 
 -- Definiert ein Textformat
 function definiere_textformat(layoutxml)
+  trace("DefineTextformat")
   local fmt = {}
 
   if layoutxml.ausrichtung=="linksbündig" then
@@ -418,7 +419,7 @@ function fett( layoutxml,datenxml )
   local tab = publisher.dispatch(layoutxml,datenxml)
 
   for i,j in ipairs(tab) do
-    if publisher.elementname(j) == "Wert" and type(publisher.inhalt(j)) == "table" then
+    if publisher.elementname(j,true) == "Value" and type(publisher.inhalt(j)) == "table" then
       objekte[#objekte + 1] = publisher.parse_html(publisher.inhalt(j))
     else
       objekte[#objekte + 1] = publisher.inhalt(j)
@@ -471,14 +472,14 @@ function include( layoutxml,datenxml )
   return publisher.dispatch(layoutxml,datenxml)
 end
 
--- Text in kursiver Schrift
+-- Italic text
 function kursiv( layoutxml,datenxml )
+  trace("Italic")
   local a = publisher.Paragraph:new()
   local objekte = {}
   local tab = publisher.dispatch(layoutxml,datenxml)
-
   for i,j in ipairs(tab) do
-    if publisher.elementname(j) == "Wert" and type(publisher.inhalt(j)) == "table" then
+    if publisher.elementname(j,true) == "Value" and type(publisher.inhalt(j)) == "table" then
       objekte[#objekte + 1] = publisher.parse_html(publisher.inhalt(j))
     else
       objekte[#objekte + 1] = publisher.inhalt(j)
@@ -506,6 +507,8 @@ function lade_schriftdatei( layoutxml,datenxml )
   local randausgleich = publisher.lese_attribut_jit(layoutxml,datenxml,"randausgleich","number")
   local leerraum      = publisher.lese_attribut_jit(layoutxml,datenxml,"leerraum","number")
   local smcp          = publisher.lese_attribut_jit(layoutxml,datenxml,"kapitälchen","string")
+  local filename = publisher.lese_attribut_jit(layoutxml,datenxml,"dateiname","string")
+  local name     = publisher.lese_attribut_jit(layoutxml,datenxml,"name","string")
 
   local extra_parameter = {
     leerraum      = leerraum      or 25,
@@ -514,8 +517,8 @@ function lade_schriftdatei( layoutxml,datenxml )
       smcp = smcp == "ja",
     },
   }
-
-  publisher.fonts.lade_schriftdatei(layoutxml.name,layoutxml.dateiname,extra_parameter)
+  log("Dateiname = %q",filename or "?")
+  publisher.fonts.lade_schriftdatei(name,filename,extra_parameter)
 end
 
 -- Lädt eine Datensatzdatei (XML) und startet die Verarbeitung 
@@ -607,10 +610,10 @@ function nachricht( layoutxml, datenxml )
   if type(inhalt)=="table" then
     local ret
     for i=1,#inhalt do
-      local eltname = publisher.elementname(inhalt[i])
+      local eltname = publisher.elementname(inhalt[i],true)
       local contents = publisher.inhalt(inhalt[i])
 
-      if eltname == "Sequenz" or eltname == "Wert" then
+      if eltname == "Sequence" or eltname == "Value" then
         if type(contents) == "table" then
           ret = ret or {}
           if getmetatable(ret) == nil then
@@ -677,6 +680,7 @@ end
 
 -- Gibt ein rechteckiges Objekt (derzeit nur Bild) aus
 function objekt_ausgeben( layoutxml,datenxml )
+  trace("Command: PlaceObject")
   local absolute_positionierung = false
   local spalte           = publisher.lese_attribut_jit(layoutxml,datenxml,"spalte",          "string")
   local zeile            = publisher.lese_attribut_jit(layoutxml,datenxml,"zeile",           "string")
@@ -736,7 +740,7 @@ function objekt_ausgeben( layoutxml,datenxml )
   else
     for i,j in ipairs(tab) do
       objekt = publisher.inhalt(j)
-      objekttyp = publisher.elementname(j)
+      objekttyp = publisher.elementname(j,true)
       if type(objekt)=="table" then
         for i=1,#objekt do
           objekte[#objekte + 1] = {objekt = objekt[i], objekttyp = objekttyp }
@@ -850,6 +854,7 @@ end
 
 -- Setzt das Papierformat.
 function seitenformat(layoutxml)
+  trace("Pageformat")
   publisher.optionen.seitenbreite = tex.sp(layoutxml["breite"])
   publisher.optionen.seitenhoehe  = tex.sp(layoutxml["höhe"])
   tex.pdfpagewidth =  publisher.optionen.seitenbreite
@@ -889,22 +894,24 @@ end
 
 -- Speichert intern die Rasterweite (`breite` und `höhe` im Layoutxml).
 function setze_raster(layoutxml)
+  trace("Set grid")
   publisher.optionen.rasterbreite = layoutxml["breite"]
   publisher.optionen.rasterhoehe  = layoutxml["höhe"]
 end
 
 -- Erstellt eine Liste der Seitentypen
 function seitentyp(layoutxml,datenxml)
+  trace("Pagetype")
   local tmp_tab = {}
   local bedingung = layoutxml.bedingung
   local tab = publisher.dispatch(layoutxml,datenxml)
 
   for i,j in ipairs(tab) do
-    local eltname = publisher.elementname(j)
-    if eltname=="Rand" or eltname == "BeiSeitenAusgabe" or eltname == "BeiSeitenErzeugung" or eltname=="Raster" or eltname=="Platzierungsbereich" then
+    local eltname = publisher.elementname(j,true)
+    if eltname=="Margin" or eltname == "AtPageShipout" or eltname == "AtPageCreation" or eltname=="Grid" or eltname=="PositioningArea" then
       tmp_tab [#tmp_tab + 1] = j
     else
-      err("Element %q in »Seitentyp« unknown",eltname)
+      err("Element %q in »Seitentyp« unknown",tostring(eltname))
       tmp_tab [#tmp_tab + 1] = j
     end
   end
@@ -1227,12 +1234,13 @@ function textblock( layoutxml,datenxml )
   local tab = publisher.dispatch(layoutxml,datenxml)
 
   for i,j in ipairs(tab) do
-    trace("Textblock: Element = %q",tostring(publisher.elementname(j)))
-    if publisher.elementname(j) == "Absatz" then
+    local eltname = publisher.elementname(j,true)
+    trace("Textblock: Element = %q",tostring(eltname))
+    if eltname == "Paragraph" then
       objekte[#objekte + 1] = publisher.inhalt(j)
     elseif publisher.elementname(j) == "Text" then
       -- assert(false)
-    elseif publisher.elementname(j) == "Aktion" then
+    elseif publisher.elementname(j) == "Action" then
       objekte[#objekte + 1] = publisher.inhalt(j)
     end
   end
@@ -1344,12 +1352,13 @@ end
 
 -- Underline text
 function underline( layoutxml,datenxml )
+  trace("Underline")
   local a = publisher.Paragraph:new()
   local objekte = {}
   local tab = publisher.dispatch(layoutxml,datenxml)
 
   for i,j in ipairs(tab) do
-    if publisher.elementname(j) == "Wert" and type(publisher.inhalt(j)) == "table" then
+    if publisher.elementname(j,true) == "Value" and type(publisher.inhalt(j)) == "table" then
       objekte[#objekte + 1] = publisher.parse_html(publisher.inhalt(j))
     else
       objekte[#objekte + 1] = publisher.inhalt(j)
@@ -1384,9 +1393,9 @@ function zuweisung( layoutxml,datenxml )
   if type(inhalt)=="table" then
     local ret
     for i=1,#inhalt do
-      local eltname = publisher.elementname(inhalt[i])
+      local eltname = publisher.elementname(inhalt[i],true)
       local contents = publisher.inhalt(inhalt[i])
-      if eltname == "Sequenz" or eltname == "Wert" or eltname == "SortiereSequenz" then
+      if eltname == "Sequence" or eltname == "Value" or eltname == "SortSequence" then
         if type(contents) == "table" then
           ret = ret or {}
           if getmetatable(ret) == nil then
