@@ -34,7 +34,7 @@ function update_schema_files()
   print(cmdline)
   os.execute(cmdline)
   -- generate german schema
-  cmdline = string.format("java -jar %s/lib/saxon9he.jar -s:%s/schema/layoutschema-en.rng -o:%s/src/lua/layoutschema-de.rng -xsl:%s/schema/translate_schema.xsl pFrom=en pTo=de",installdir,installdir,installdir,installdir)
+  cmdline = string.format("java -jar %s/lib/saxon9he.jar -s:%s/schema/layoutschema-en.rng -o:%s/schema/layoutschema-de.rng -xsl:%s/schema/translate_schema.xsl pFrom=en pTo=de",installdir,installdir,installdir,installdir)
   print(cmdline)
   os.execute(cmdline)
 end
