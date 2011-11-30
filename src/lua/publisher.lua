@@ -48,9 +48,8 @@ default_bereichname = "__seite"
 current_layoutlanguage = nil
 
 seiten   = {}
-optionen = {}
 
--- the same as before only in english language
+-- The defaults (set in the layout instructions file)
 options = {}
 
 -- Liste der Gruppen. Schlüssel sind inhalt (Nodeliste) und raster 
@@ -212,20 +211,20 @@ function dothings()
   end
 
   -- Optionen verarbeiten
-  if optionen.startseite then
-    local num = tonumber(optionen.startseite)
+  if options.startpage then
+    local num = options.startpage
     if num then
       tex.count[0] = num - 1
       log("Set page number to %d",num)
     else
-      err("Can't recognize starting page number %q",optionen.startseite)
+      err("Can't recognize starting page number %q",options.startpage)
     end
   end
 
-  -- Die Anzahl der Läufe in eine extra Datei schreiben, damit die Steuerdatei
-  -- darauf reagieren kann.
+  -- Put the number of runs into an extra file so that the control file can
+  -- act on that
   -- FIXME. tex.jobname auch in sprun ändern
-  local runs = optionen["läufe"]
+  local runs = options.runs
   if runs then
     -- erstelle Datei mit dieser Zahl
     local datei = io.open(string.format("%s.runs",tex.jobname),"w")
@@ -367,14 +366,14 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich )
     if belegen then
       local breite_in_rasterzellen = r:breite_in_rasterzellen_sp(nodelist.width)
       local hoehe_in_rasterzellen  = r:hoehe_in_rasterzellen_sp (nodelist.height + nodelist.depth)
-      r:belege_zellen(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,optionen.zeige_rasterbelegung=="ja")
+      r:belege_zellen(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,options.showgridallocation)
     end
   else
     -- auf der aktuellen Seite einfügen
     if belegen then
       local breite_in_rasterzellen = r:breite_in_rasterzellen_sp(nodelist.width)
       local hoehe_in_rasterzellen  = r:hoehe_in_rasterzellen_sp(nodelist.height + nodelist.depth)
-      r:belege_zellen(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,optionen.zeige_rasterbelegung=="ja",bereich)
+      r:belege_zellen(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,options.showgridallocation,bereich)
     end
 
     local n = add_glue( nodelist ,"head",{ width = delta_x })
@@ -414,16 +413,16 @@ function seite_einrichten()
   if page_initialized then return end
   page_initialized=true
   publisher.global_pagebox = node.new("vlist")
-  local beschnittzugabe = tex.sp(optionen.beschnittzugabe or 0)
+  local beschnittzugabe = tex.sp(options.trim or 0)
   local extra_rand
-  if optionen.beschnittmarken=="ja" then
+  if options.cutmarks then
     extra_rand = tex.sp("1cm") + beschnittzugabe
   elseif beschnittzugabe > 0 then
     extra_rand = beschnittzugabe
   end
   local errorstring
   -- aktuelle_seite ist eine globale Variable
-  aktuelle_seite, errorstring = seite:new(optionen.seitenbreite,optionen.seitenhoehe, extra_rand, beschnittzugabe)
+  aktuelle_seite, errorstring = seite:new(options.seitenbreite,options.seitenhoehe, extra_rand, beschnittzugabe)
   if not aktuelle_seite then
     err("Can't create a new page. Is the page type (»Seitentyp«) defined? %s",errorstring)
     exit()
@@ -433,8 +432,8 @@ function seite_einrichten()
   tex.count[0] = tex.count[0] + 1
   seiten[tex.count[0]] = aktuelle_seite
 
-  local rasterbreite = optionen.rasterbreite
-  local rasterhoehe  = optionen.rasterhoehe
+  local rasterbreite = options.rasterbreite
+  local rasterhoehe  = options.rasterhoehe
 
 
   local pagetype = ermittle_seitentyp()
@@ -570,7 +569,7 @@ function dothingsbeforeoutput(  )
     firstbox = lit
   end
 
-  if optionen.zeichne_raster=="ja" then
+  if options.showgrid then
     local lit = node.new("whatsit","pdf_literal")
     lit.mode = 1
     lit.data = r:zeichne_raster()
@@ -583,7 +582,7 @@ function dothingsbeforeoutput(  )
     end
   end
   r:trimbox()
-  if optionen.beschnittmarken == "ja" then
+  if options.cutmarks then
     local lit = node.new("whatsit","pdf_literal")
     lit.mode = 1
     lit.data = r:beschnittmarken()
@@ -603,13 +602,10 @@ function dothingsbeforeoutput(  )
   end
 end
 
--- First time we call the function on an attribute we prepare
--- a caching function (.__func .. <attribute name>).
--- 
--- If present, we call the function, else we create a function.
-function read_attribute( layoutxml,datenxml,attname_english,typ )
+--Read the contents of the attribute attname_englisch. type is one of
+-- "string", "number", "length" and "boolean".
+function read_attribute( layoutxml,datenxml,attname_english,type )
   local attname = translate_attribute(attname_english)
-  w("translate %s = %s",attname_english or "(??)",attname or "??")
 
   if layoutxml[attname] == nil then
     return nil
@@ -623,13 +619,13 @@ function read_attribute( layoutxml,datenxml,attname_english,typ )
     val = layoutxml[attname]
   end
 
-  if typ=="string" then
+  if type=="string" then
     return tostring(val)
-  elseif typ=="number" then
+  elseif type=="number" then
     return tonumber(val)
-  elseif typ=="length" then
+  elseif type=="length" then
     return val
-  elseif typ=="boolean" then
+  elseif type=="boolean" then
     if val=="yes" or val=="ja" then
       return true
     end
@@ -640,9 +636,11 @@ function read_attribute( layoutxml,datenxml,attname_english,typ )
   return val
 end
 
-function elementname( elt ,raw)
+-- Return the element name of the given element (elt) and translate it
+-- into english, unless raw_p is true.
+function elementname( elt ,raw_p)
   trace("elementname = %q",elt.elementname or "?")
-  if raw then return elt.elementname end
+  if raw_p then return elt.elementname end
   trace("translated = %q",translate_element(elt.elementname) or "?")
   return translate_element(elt.elementname)
 end

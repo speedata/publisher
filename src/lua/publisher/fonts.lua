@@ -166,7 +166,7 @@ function pre_linebreak( head )
         end
         -- eigentlich: fallback auf defaultfont!
         -- assert(f,"Instanz nicht defniert!")
-        if not f then f=publisher.optionen.defaultfont
+        if not f then f=publisher.options.defaultfont
           -- w("Fontinstanz nicht gefunden")
         end
         if gluespec.stretch_order == 0 and gluespec.writable then
@@ -226,7 +226,7 @@ function pre_linebreak( head )
 		  tmp_fontnum = instanz[instanzname]
 
       if not tmp_fontnum then
-        head.font = publisher.optionen.defaultfontnumber
+        head.font = publisher.options.defaultfontnumber
       else
         head.font = tmp_fontnum
       end
@@ -312,7 +312,7 @@ function post_linebreak( head, list_head)
 	  elseif head.id == 1 then -- vlist
 		  post_linebreak(head.list,head)
 		elseif head.id == 7 then -- disc
-      if publisher.optionen.zeige_silbentrennung=="ja" then
+      if publisher.options.showhyphenation then
         local n = node.new("whatsit","pdf_literal")
         n.mode = 0
         n.data = "q 0.3 w 0 2 m 0 7 l S Q"

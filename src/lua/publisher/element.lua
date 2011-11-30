@@ -30,7 +30,9 @@ function absatz( layoutxml,datenxml )
     schriftfamilie = 0
   end
 
-  local languagecode  = publisher.optionen.defaultsprache or 0
+  -- local languagecode  = publisher.options.defaultlanguage or 0 -- not there yet
+  local languagecode  = 0
+
   local sprache_de  = publisher.read_attribute(layoutxml,datenxml,"language","string")
   sprache_de_internal = {
      ["Deutsch"]                        = "de-1996",
@@ -328,52 +330,54 @@ function definiere_schriftfamilie( layoutxml,datenxml )
     err("»DefiniereSchriftfamilie«: no size given.")
     return
   end
-  local ok,tmp
+  local ok,tmp,elementname,fontface
   for i,v in ipairs(layoutxml) do
+    elementname = publisher.translate_element(v[".__name"])
+    fontface    = publisher.read_attribute(v,dataxml,"fontface","string")
     if type(v) ~= "table" then
      -- ignorieren
-    elseif v[".__name"]=="Normal" then
-      ok,tmp=fonts.erzeuge_fontinstanz(v.schriftart,fam.size)
+    elseif elementname=="Regular" then
+      ok,tmp=fonts.erzeuge_fontinstanz(fontface,fam.size)
       if ok then
         fam.normal = tmp
       else
         fam.normal = 1
         err("Fontinstance 'normal' could not be created for %q.",tostring(v.schriftart))
       end
-      ok,tmp=fonts.erzeuge_fontinstanz(v.schriftart,fam.scriptsize)
+      ok,tmp=fonts.erzeuge_fontinstanz(fontface,fam.scriptsize)
       if ok then
         fam.normalscript = tmp
       end
-    elseif v[".__name"]=="Fett" then
-      ok,tmp=fonts.erzeuge_fontinstanz(v.schriftart,fam.size)
+    elseif elementname=="Bold" then
+      ok,tmp=fonts.erzeuge_fontinstanz(fontface,fam.size)
       if ok then
         fam.fett = tmp
       end
-      ok,tmp=fonts.erzeuge_fontinstanz(v.schriftart,fam.scriptsize)
+      ok,tmp=fonts.erzeuge_fontinstanz(fontface,fam.scriptsize)
       if ok then
         fam.fettscript = tmp
       end
-    elseif v[".__name"] =="Kursiv" then
-      ok,tmp=fonts.erzeuge_fontinstanz(v.schriftart,fam.size)
+    elseif elementname =="Italic" then
+      ok,tmp=fonts.erzeuge_fontinstanz(fontface,fam.size)
       if ok then
         fam.kursiv = tmp
       end
-      ok,tmp=fonts.erzeuge_fontinstanz(v.schriftart,fam.scriptsize)
+      ok,tmp=fonts.erzeuge_fontinstanz(fontface,fam.scriptsize)
       if ok then
         fam.kursivscript = tmp
       end
-    elseif v[".__name"] =="FettKursiv" then
-      ok,tmp=fonts.erzeuge_fontinstanz(v.schriftart,fam.size)
+    elseif elementname =="BoldItalic" then
+      ok,tmp=fonts.erzeuge_fontinstanz(fontface,fam.size)
       if ok then
         fam.fettkursiv = tmp
       end
-      ok,tmp=fonts.erzeuge_fontinstanz(v.schriftart,fam.scriptsize)
+      ok,tmp=fonts.erzeuge_fontinstanz(fontface,fam.scriptsize)
       if ok then
         fam.fettkursivscript = tmp
       end
     end
     if type(v) == "table" and not ok then
-      err("Error creating font instance %q: %s", v[".__name"] or "??", tmp or "??")
+      err("Error creating font instance %q: %s", elementname or "??", tmp or "??")
     end
   end
   fonts.lookup_schriftfamilie_nummer_instanzen[#fonts.lookup_schriftfamilie_nummer_instanzen + 1] = fam
@@ -407,16 +411,17 @@ end
 -- Fallunterscheidung
 function fallunterscheidung( layoutxml,datenxml )
   local fall_ausgefuehrt = false
-  local sonst,ret
+  local sonst,ret,elementname
   for i,v in ipairs(layoutxml) do
-    if type(v)=="table" and v[".__name"]=="Fall" and fall_ausgefuehrt ~= true then
+    elementname = publisher.translate_element(v[".__name"])
+    if type(v)=="table" and elementname=="Case" and fall_ausgefuehrt ~= true then
       local fall = v
       assert(fall.bedingung)
       if xpath.parse(datenxml,fall.bedingung) then
         fall_ausgefuehrt = true
         ret = publisher.dispatch(fall,datenxml)
       end
-    elseif type(v)=="table" and v[".__name"]=="Sonst" then
+    elseif type(v)=="table" and elementname=="Otherwise" then
       sonst = v
     end -- fall/sonst
   end
@@ -474,9 +479,11 @@ function gruppe( layoutxml,datenxml )
 
   publisher.aktuelle_gruppe=gruppenname
   publisher.aktuelles_raster = r
+  local elementname
 
   for _,v in ipairs(layoutxml) do
-    if type(v)=="table" and v[".__name"]=="Inhalt" then
+    elementname=publisher.translate_element(v[".__name"])
+    if type(v)=="table" and elementname=="Contents" then
       publisher.dispatch(v,datenxml)
     end
   end
@@ -704,16 +711,16 @@ end
 function objekt_ausgeben( layoutxml,datenxml )
   trace("Command: PlaceObject")
   local absolute_positionierung = false
-  local spalte           = publisher.read_attribute(layoutxml,datenxml,"column",          "string")
-  local zeile            = publisher.read_attribute(layoutxml,datenxml,"row",           "string")
-  local bereich          = publisher.read_attribute(layoutxml,datenxml,"area",         "string")
-  local belegen          = publisher.read_attribute(layoutxml,datenxml,"allocate",         "string")
+  local spalte           = publisher.read_attribute(layoutxml,datenxml,"column",         "string")
+  local zeile            = publisher.read_attribute(layoutxml,datenxml,"row",            "string")
+  local bereich          = publisher.read_attribute(layoutxml,datenxml,"area",           "string")
+  local belegen          = publisher.read_attribute(layoutxml,datenxml,"allocate",       "boolean")
   local rahmenfarbe      = publisher.read_attribute(layoutxml,datenxml,"framecolor",     "string")
   local hintergrundfarbe = publisher.read_attribute(layoutxml,datenxml,"backgroundcolor","string")
-  local maxhoehe         = publisher.read_attribute(layoutxml,datenxml,"maxheight",         "number")
+  local maxhoehe         = publisher.read_attribute(layoutxml,datenxml,"maxheight",      "number")
   local rahmen           = publisher.read_attribute(layoutxml,datenxml,"frame",          "string")
   local hintergrund      = publisher.read_attribute(layoutxml,datenxml,"background",     "string")
-  local gruppenname      = publisher.read_attribute(layoutxml,datenxml,"groupname",     "number")
+  local gruppenname      = publisher.read_attribute(layoutxml,datenxml,"groupname",      "number")
 
   bereich = bereich or publisher.default_bereichname
 
@@ -791,7 +798,7 @@ function objekt_ausgeben( layoutxml,datenxml )
     end
 
     if absolute_positionierung then
-      publisher.ausgabe_bei_absolut(objekt,spalte + raster.extra_rand,zeile + raster.extra_rand,belegen ~= "nein")
+      publisher.ausgabe_bei_absolut(objekt,spalte + raster.extra_rand,zeile + raster.extra_rand,belegen)
     else
       -- Platz muss gesucht werden
       -- local aktuelle_zeile = raster:aktuelle_zeile(bereich)
@@ -829,7 +836,7 @@ function objekt_ausgeben( layoutxml,datenxml )
 
       log("»ObjektAusgeben«: %s in row %d and column %d, width=%d, height=%d", objekttyp, aktuelle_zeile, aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen)
       trace("»ObjektAusgeben«: objekt placed at (%d,%d)",aktuelle_spalte_start,aktuelle_zeile)
-      publisher.ausgabe_bei(objekt,aktuelle_spalte_start,aktuelle_zeile,belegen ~= "nein",bereich)
+      publisher.ausgabe_bei(objekt,aktuelle_spalte_start,aktuelle_zeile,belegen,bereich)
       trace("Objekt ausgegeben.")
       zeile = nil -- die Zeile ist nicht mehr gültig, da schon ein Objekt ausgegeben wurde
       if i < #objekte then
@@ -837,24 +844,22 @@ function objekt_ausgeben( layoutxml,datenxml )
       end
     end -- keine absolute Positionierung
   end
-  if belegen=="nein" then
+  if not belegen then
     publisher.aktuelles_raster:setze_aktuelle_zeile(aktuelle_zeile_start)
   end
   trace("Objekte ausgegeben.")
 end
 
-    -- if not trace_objekt_counter then  trace_objekt_counter = 0 end
-    --   trace_objekt_counter = trace_objekt_counter + 1
-    --   viznodelist.nodelist_visualize(objekt,string.format("viz%d.gv",trace_objekt_counter))
-
-
--- Speichert Optionen ab
+-- Saves the options given in the layout file
 function optionen( layoutxml,datenxml )
-  publisher.options.trace = publisher.read_attribute(layoutxml,datenxml,"trace","boolean")
-
-  for k,v in pairs(layoutxml) do
-    publisher.optionen[k]=v
-  end
+  publisher.options.cutmarks           = publisher.read_attribute(layoutxml,datenxml,"cutmarks",    "boolean")
+  publisher.options.runs               = publisher.read_attribute(layoutxml,datenxml,"runs",        "number")
+  publisher.options.showgrid           = publisher.read_attribute(layoutxml,datenxml,"show-grid",   "boolean")
+  publisher.options.showgridallocation = publisher.read_attribute(layoutxml,datenxml,"show-gridallocation","boolean")
+  publisher.options.showhyphenation    = publisher.read_attribute(layoutxml,datenxml,"show-hyphenation","boolean")
+  publisher.options.startpage          = publisher.read_attribute(layoutxml,datenxml,"startpage",   "number")
+  publisher.options.trace              = publisher.read_attribute(layoutxml,datenxml,"trace",       "boolean")
+  publisher.options.trim               = publisher.read_attribute(layoutxml,datenxml,"trim",        "length")
 end
 
 function platzierungsrahmen( layoutxml, datenxml )
@@ -884,15 +889,15 @@ function seitenformat(layoutxml)
   local width  = publisher.read_attribute(layoutxml,datenxml,"width","length")
   local height = publisher.read_attribute(layoutxml,datenxml,"height","length")
 
-  publisher.optionen.seitenbreite = tex.sp(width)
-  publisher.optionen.seitenhoehe  = tex.sp(height)
-  tex.pdfpagewidth =  publisher.optionen.seitenbreite
-  tex.pdfpageheight = publisher.optionen.seitenhoehe
+  publisher.options.seitenbreite = tex.sp(width)
+  publisher.options.seitenhoehe  = tex.sp(height)
+  tex.pdfpagewidth =  publisher.options.seitenbreite
+  tex.pdfpageheight = publisher.options.seitenhoehe
   tex.pdfpagewidth  = tex.pdfpagewidth   + tex.sp("2cm")
   tex.pdfpageheight = tex.pdfpageheight  + tex.sp("2cm")
 
-  tex.hsize = publisher.optionen.seitenbreite
-  tex.vsize = publisher.optionen.seitenhoehe
+  tex.hsize = publisher.options.seitenbreite
+  tex.vsize = publisher.options.seitenhoehe
 end
 
 -- Setzt den Rand für diese Seite
@@ -929,8 +934,8 @@ end
 -- Remember (internally) the grid size (`width` und `height` in layout xml).
 function setze_raster(layoutxml)
   trace("Command: SetGrid")
-  publisher.optionen.rasterbreite = tex.sp(publisher.read_attribute(layoutxml,datenxml,"width","length"))
-  publisher.optionen.rasterhoehe  = tex.sp(publisher.read_attribute(layoutxml,datenxml,"height","length"))
+  publisher.options.rasterbreite = tex.sp(publisher.read_attribute(layoutxml,datenxml,"width","length"))
+  publisher.options.rasterhoehe  = tex.sp(publisher.read_attribute(layoutxml,datenxml,"height","length"))
 end
 
 -- Create a list of page types in publisher.seitentypen
@@ -1417,7 +1422,7 @@ end
 
 -- Weist einer Variablen einen Wert zu
 function zuweisung( layoutxml,datenxml )
-  local trace_p = publisher.read_attribute(layoutxml,datenxml,"trace","string")
+  local trace_p = publisher.read_attribute(layoutxml,datenxml,"trace","boolean")
   local auswahl = publisher.read_attribute(layoutxml,datenxml,"select","string")
 
   -- FIXME: wenn in der Variablen schon nodelisten sind, dann müssen diese gefreed werden!
@@ -1475,7 +1480,7 @@ function zuweisung( layoutxml,datenxml )
       inhalt = ret
     end
   end
-  if trace_p=="ja" then
+  if trace_p then
     log("»Zuweisung«, variable name = %q, value = %q",varname or "???", tostring(inhalt))
     printtable("Zuweisung",inhalt)
   end

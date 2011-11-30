@@ -142,8 +142,8 @@ require("fonts.fontloader")
 -- LuaTeX bug: es darf der Font nicht doppelt existieren, daher 12.1 (siehe tracker #559)
 local ok,f = fonts.fontloader.define_font("texgyreheros-regular.otf",65782 * 12.1)
 local num = font.define(f)
-publisher.optionen.defaultfont=f
-publisher.optionen.defaultfontnumber=num
+publisher.options.defaultfont=f
+publisher.options.defaultfontnumber=num
 tex.definefont("dummyfont",num)
 
 
