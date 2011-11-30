@@ -50,6 +50,9 @@ current_layoutlanguage = nil
 seiten   = {}
 optionen = {}
 
+-- the same as before only in english language
+options = {}
+
 -- Liste der Gruppen. Schlüssel sind inhalt (Nodeliste) und raster 
 gruppen   = {}
 
@@ -83,11 +86,11 @@ sprachen = {}
 
 local dispatch_table = {
   Paragraph               = element.absatz,
-  Aktion                  = element.aktion,
-  Attribut                = element.attribut,
+  Action                  = element.aktion,
+  Attribute               = element.attribut,
   B                       = element.fett,
   ProcessNode             = element.bearbeite_knoten,
-  BearbeiteDatensatz      = element.bearbeite_datensatz,
+  ProcessRecord           = element.bearbeite_datensatz,
   AtPageShipout           = element.beiseitenausgabe,
   AtPageCreation          = element.beiseitenerzeugung,
   Image                   = element.bild,
@@ -97,57 +100,63 @@ local dispatch_table = {
   DefineFontfamily        = element.definiere_schriftfamilie,
   DefineTextformat        = element.definiere_textformat,
   Element                 = element.element,
-  Fallunterscheidung      = element.fallunterscheidung,
-  Gruppe                  = element.gruppe,
+  Switch                  = element.fallunterscheidung,
+  Group                   = element.gruppe,
   I                       = element.kursiv,
   Include                 = element.include,
   ["Copy-of"]             = element.kopie_von,
   LadeDatensatzdatei      = element.lade_datensatzdatei,
   LoadFontfile            = element.lade_schriftdatei,
   EmptyLine               = element.leerzeile,
-  Linie                   = element.linie,
-  Nachricht               = element.nachricht,
-  ["NächsterRahmen"]      = element.naechster_rahmen,
+  Rule                    = element.linie,
+  Message                 = element.nachricht,
+  NextFrame               = element.naechster_rahmen,
   NewPage                 = element.neue_seite,
-  NeueZeile               = element.neue_zeile,
+  NextRow                 = element.neue_zeile,
   Options                 = element.optionen,
   PlaceObject             = element.objekt_ausgeben,
   PositioningArea         = element.platzierungsbereich,
   PositioningFrame        = element.platzierungsrahmen,
   Margin                  = element.rand,
   Grid                    = element.raster,
-  Schriftart              = element.schriftart,
+  Fontface                = element.schriftart,
   Pagetype                = element.seitentyp,
   Pageformat              = element.seitenformat,
   SetGrid                 = element.setze_raster,
-  Sequenz                 = element.sequenz,
-  Solange                 = element.solange,
-  SortiereSequenz         = element.sortiere_sequenz,
-  SpeichereDatensatzdatei = element.speichere_datensatzdatei,
+  Sequence                = element.sequenz,
+  While                   = element.solange,
+  SortSequence            = element.sortiere_sequenz,
+  SaveDataset             = element.speichere_datensatzdatei,
   Column                  = element.spalte,
   Columns                 = element.spalten,
   Sub                     = element.sub,
   Sup                     = element.sup,
   Table                   = element.tabelle,
-  Tablefoot              = element.tabellenfuss,
+  Tablefoot               = element.tabellenfuss,
   Tablehead               = element.tabellenkopf,
   Textblock               = element.textblock,
-  Trennvorschlag          = element.trennvorschlag,
-  Tablerule                  = element.tlinie,
+  Hyphenation             = element.trennvorschlag,
+  Tablerule               = element.tlinie,
   Tr                      = element.tr,
   Td                      = element.td,
   U                       = element.underline,
   URL                     = element.url,
   Variable                = element.variable,
-  Value                    = element.wert,
-  SetVariable               = element.zuweisung,
-  ["ZurListeHinzufügen"] = element.zur_liste_hinzufuegen,
+  Value                   = element.wert,
+  SetVariable             = element.zuweisung,
+  AddToList               = element.zur_liste_hinzufuegen,
 }
 
 -- Return the localized eltname as an english string.
 function translate_element( eltname )
   return translations[current_layoutlanguage].elements[eltname]
 end
+
+-- Return the localized attribute name as an english string.
+function translate_attribute( attname )
+  return translations.attributes[attname][current_layoutlanguage]
+end
+
 
 function dispatch(layoutxml,datenxml,optionen)
   local ret = {}
@@ -598,52 +607,37 @@ end
 -- a caching function (.__func .. <attribute name>).
 -- 
 -- If present, we call the function, else we create a function.
-function read_attribute( layoutxml,datenxml,attname,typ )
+function read_attribute( layoutxml,datenxml,attname_english,typ )
+  local attname = translate_attribute(attname_english)
+  w("translate %s = %s",attname_english or "(??)",attname or "??")
+
   if layoutxml[attname] == nil then
     return nil
   end
 
-  local funcname = ".__func" .. attname
-  if layoutxml[funcname] then return layoutxml[funcname](datenxml) end
-  -- first time called, create a function
-
-  -- if the string contains { }, we use the contents of it and
-  -- parse it as an xpath expression
-  local str = string.match(layoutxml[attname],"{(.-)}")
-  local func
-  if str then
-    func = function(d)
-      local val = xpath.textvalue(xpath.parse(d,str))
-      if typ=="string" then
-        return tostring(val)
-      elseif typ=="number" then
-        return tonumber(val)
-      elseif typ=="length" then
-        return val
-      else
-        warning("lese_attribut: unknown type: %s",type(val))
-      end
-      return val
-    end
+  local val
+  local xpathstring = string.match(layoutxml[attname],"{(.-)}")
+  if xpathstring then 
+    val = xpath.textvalue(xpath.parse(datenxml,xpathstring))
   else
-    -- not an xpath expression in {...}.
-    func = function()
-      local val = layoutxml[attname]
-      if typ=="string" then
-        return tostring(val)
-      elseif typ=="number" then
-        return tonumber(val)
-      elseif typ=="length" then
-        return val
-      else
-        warning("lese_attribut (2): unknown type: %s",type(val))
-      end
-      return val
-    end
+    val = layoutxml[attname]
   end
-  -- function
-  layoutxml[funcname] = func
-  return func(datenxml)
+
+  if typ=="string" then
+    return tostring(val)
+  elseif typ=="number" then
+    return tonumber(val)
+  elseif typ=="length" then
+    return val
+  elseif typ=="boolean" then
+    if val=="yes" or val=="ja" then
+      return true
+    end
+    return false
+  else
+    warning("lese_attribut (2): unknown type: %s",type(val))
+  end
+  return val
 end
 
 function elementname( elt ,raw)

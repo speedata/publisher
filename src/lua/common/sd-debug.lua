@@ -103,12 +103,12 @@ end
 
 
 function trace( ... )
-  if publisher.optionen.trace == "ja" then
+  if publisher.options.trace then
     log(...)
   end
 end
 function tracetable( name,tbl )
-  if publisher.optionen and publisher.optionen.trace == "ja" and type(tbl)=="table" then
+  if publisher.options and publisher.options.trace and type(tbl)=="table" then
     printtable(name,tbl)
   end
 end

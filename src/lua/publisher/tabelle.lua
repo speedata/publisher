@@ -711,7 +711,7 @@ function setze_zeile(self, tr_inhalt, aktuelle_zeile )
           end
         end
         v = publisher.do_linebreak(v, aktuelle_spaltenbreite - padding_left - padding_right - td_randlinks - td_randrechts, parameter)
-        if publisher.optionen.trace == "ja" then
+        if publisher.options.trace then
           v = publisher.boxit(v)
         end
       elseif type(objekt) == "userdata" then
@@ -815,7 +815,7 @@ function setze_zeile(self, tr_inhalt, aktuelle_zeile )
 
     hlist = node.vpack(head,self.zeilenhoehen[aktuelle_zeile],"exactly")
 
-    if publisher.optionen.trace == "ja" then
+    if publisher.options.trace then
       publisher.boxit(hlist)
     end
 

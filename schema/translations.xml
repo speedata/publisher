@@ -144,6 +144,7 @@
         <attribute en="left" de="links"/>
         <attribute en="length" de="länge"/>
         <attribute en="list" de="liste"/>
+    <attribute en="limit" de="umfang" />
         <attribute en="m" de="m"/>
         <attribute en="marginprotrusion" de="randausgleich"/>
         <attribute en="maxheight" de="maxhöhe"/>
@@ -277,6 +278,10 @@
             <en>The list that will be processed by matching »Record« commands.</en>
             <de>Bestimmt die Liste, die per »Datensatz« aufgerufen bearbeitet werden soll.</de>
         </documentation>
+      <documentation docid="processrecord/limit">
+        <en>Limits the number of nodes to be processed (number).</en>
+        <de>Schränkt die Anzahl der Knoten ein, die verarbeitet werden.</de>
+      </documentation>
         <documentation docid="processnode">
             <en>Processes all child nodes of the current data element. The matching command is »Record«</en>
             <de>Ruft alle Kindelemente eines bestimmten Namens auf. Gegenstück ist »Datensatz«</de>

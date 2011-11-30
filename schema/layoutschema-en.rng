@@ -185,6 +185,8 @@
       <a:documentation docid="processrecord">Processes a record which is the contents of the list (in the attribute ›select‹.</a:documentation>
       <attribute name="select"/>
       <a:documentation docid="processrecord/select">The list that will be processed by matching »Record« commands.</a:documentation>
+      <attribute name="limit" />
+      <a:documentation docid="processrecord/limit">Limits the number of nodes to be processed (number).</a:documentation>
     </element>
   </define>
 

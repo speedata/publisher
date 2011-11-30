@@ -186,6 +186,8 @@
       <a:documentation docid="processrecord">Führt eine Regel aus mit dem Inhalt einer Liste (im Attribut ›auswahl‹).</a:documentation>
       <attribute name="auswahl"/>
       <a:documentation docid="processrecord/select">Bestimmt die Liste, die per »Datensatz« aufgerufen bearbeitet werden soll.</a:documentation>
+      <attribute name="umfang"/>
+      <a:documentation docid="processrecord/limit">Schränkt die Anzahl der Knoten ein, die verarbeitet werden.</a:documentation>
     </element>
   </define>
 
