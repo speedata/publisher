@@ -104,7 +104,7 @@ local dispatch_table = {
   I                       = element.kursiv,
   Include                 = element.include,
   ["Copy-of"]             = element.kopie_von,
-  LadeDatensatzdatei      = element.lade_datensatzdatei,
+  LoadDataset             = element.lade_datensatzdatei,
   LoadFontfile            = element.lade_schriftdatei,
   EmptyLine               = element.leerzeile,
   Rule                    = element.linie,
@@ -628,8 +628,10 @@ function read_attribute( layoutxml,datenxml,attname_english,type )
   elseif type=="boolean" then
     if val=="yes" or val=="ja" then
       return true
+    elseif val=="no" or val=="nein" then
+      return false
     end
-    return false
+    return nil
   else
     warning("lese_attribut (2): unknown type: %s",type(val))
   end

@@ -560,7 +560,7 @@ function lade_datensatzdatei( layoutxml,datenxml )
     return
   end
   
-  local tmp_daten = publisher.lade_xml(dateiname)
+  local tmp_daten = publisher.load_xml(dateiname)
   local root_name = tmp_daten[".__name"]
 
   log("Selecting node: %q, mode=%q",root_name,"")
@@ -723,6 +723,7 @@ function objekt_ausgeben( layoutxml,datenxml )
   local gruppenname      = publisher.read_attribute(layoutxml,datenxml,"groupname",      "number")
 
   bereich = bereich or publisher.default_bereichname
+  belegen = belegen or true
 
   if spalte and not tonumber(spalte) then
     -- spalte scheint ein String zu sein
