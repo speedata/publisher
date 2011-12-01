@@ -1,0 +1,32 @@
+#title "Lesezeichen"
+#format "textile"
+
+h1. Elementname: @Lesezeichen@
+
+h2. Beschreibung
+
+Erstellt ein Lesezeichen für den PDF Betrachter (z.B. Adobe Reader). Wenn der Leser auf das Lesezeichen klickt, springt der PDF Betrachter an diese Stelle im Dokument.
+
+Erlaubte Attribute: @auswahl@, @ebene@, @offen@
+Kindelemente: -
+Elternelemente: "Textblock":e_textblock
+
+h3. Attribute
+
+- @auswahl@ ("XPath-Ausdruck":xpath) := Titel des Lesezeichens
+- @ebene@ (Zahl) := Hierarchieebene. 1 ist die höchste Ebene, zwei die nächst tiefere Ebene etc.
+- @offen@ ('ja', 'nein', optional) := Bestimmt, ob die Kind-Lesezeichen dargestellt werden sollen oder nicht.
+
+h3. Bemerkung
+
+
+
+h2. Beispiel
+
+pre(xml). <Lesezeichen ebene="1" auswahl="$titel" offen='nein'/>
+
+Erzeugt ein Lesezeichen der Stufe 1 (höchste Stufe) mit dem Titel, der in der Variablen @titel@ steht.
+
+h2. Siehe auch
+
+"textblock":e_textblock

@@ -5,6 +5,8 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* PDF "Lesezeichen":e_lesezeichen.
+* Zusätzlich auch englischsprachige Regelwerke
 * Sprache kann je "Absatz":e_absatz ausgewählt werden (Silbentrennung).
 * Änderungen bei "SpeichereDatensatzdatei":e_speicheredatensatzdatei
 

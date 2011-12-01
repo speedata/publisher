@@ -10,6 +10,7 @@
         <element en="Bold" de="Fett" />
         <element en="BoldItalic" de="FettKursiv" />
         <element en="Box" de="Box" />
+      <element en="Bookmark" de="Lesezeichen" />
         <element en="Case" de="Fall" />
         <element en="Column" de="Spalte" />
         <element en="Columns" de="Spalten" />
@@ -143,6 +144,7 @@
         <attribute en="language" de="sprache"/>
         <attribute en="left" de="links"/>
         <attribute en="length" de="länge"/>
+      <attribute en="level" de="ebene" />
         <attribute en="list" de="liste"/>
     <attribute en="limit" de="umfang" />
         <attribute en="m" de="m"/>
@@ -154,6 +156,7 @@
         <attribute en="model" de="modell"/>
         <attribute en="name" de="name"/>
         <attribute en="naturalsize" de="natürliche-größe"/>
+    <attribute en="open" de="offen" />
         <attribute en="padding" de="padding"/>
         <attribute en="padding-bottom" de="padding-bottom"/>
         <attribute en="padding-left" de="padding-left"/>
@@ -303,7 +306,32 @@
             <en>When a new page gets created, the child elements are executed.</en>
             <de>Wenn eine Seite erzeugt wird, werden die Kindelemente ausgeführt.</de>
         </documentation>
-        <documentation docid="image">
+      <documentation docid="bookmark">
+        <en>Create a PDF bookmark</en>
+        <de>PDF Lesezeichen erstellen</de>
+      </documentation>
+      <documentation docid="bookmark/level">
+        <en>The level of the bookmark. 1 = top level, 2 = second level ...</en>
+        <de>Die Ebene des Lesezeichens. 1 = oberste Stufe, 2 zweitoberste Stufe ...</de>
+      </documentation>
+      <documentation docid="bookmark/select">
+        <en>The title of the bookmark as an XPath expression</en>
+        <de>Der Titel des Lesezeichens als XPath-Ausdruck</de>
+      </documentation>
+      <documentation docid="bookmark/open">
+        <en>The bookmark hierarchy displayed in the pdf viewer</en>
+        <de>Die Lesezeichenhierarchie wie sie im PDF viewer angezeigt wird</de>
+      </documentation>
+    <documentation docid="bookmark/open/yes">
+      <en>Displayed with sublevels shown</en>
+      <de>Unterebenen sichtbar</de>
+    </documentation>
+    <documentation docid="bookmark/open/no">
+      <en>Displayed with sublevels hidden</en>
+      <de>Unterebenen versteckt</de>
+    </documentation>
+
+      <documentation docid="image">
             <en>Include an external image.</en>
             <de>Bindet eine externe Grafik ein.</de>
         </documentation>

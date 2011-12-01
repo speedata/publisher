@@ -85,9 +85,10 @@ function aktion( layoutxml,datenxml)
   local ret = {}
 
   for _,j in ipairs(tab) do
-    if publisher.elementname(j) == "ZurListeHinzufügen" then
+    if publisher.elementname(j,true) == "AddToList" then
       local n = node.new("whatsit","user_defined")
-      n.type = 100 -- number
+      n.user_id = 1 -- a magic number
+      n.type = 100 -- type 100: "value is a number"
       n.value = publisher.inhalt(j) -- Zeiger auf die Funktion (int)
       ret[#ret + 1] = n
     end
@@ -239,6 +240,26 @@ function box( layoutxml,datenxml )
   local n = publisher.box(_breite,_hoehe,hf_string)
   n = node.hpack(n)
   return n
+end
+
+-- create a PDF bookmark. Currently does not work
+-- if in multi column text
+function bookmark( layoutxml,dataxml )
+  trace("Command: Bookmark")
+  -- For bookmarks, we need two things: 1) a destination and 
+  -- 2) the bookmark itself that points to the destination. So 
+  -- we can safely insert the destination in our text flow but save
+  -- the destination code (a number) for later. There is a slight problem
+  -- now: as the text flow is asynchronous, we evaluate the bookmark
+  -- during page shipout. Then we have the correct order (hopefully)
+  local title  = publisher.read_attribute(layoutxml,datenxml,"select","xpath")
+  local level  = publisher.read_attribute(layoutxml,datenxml,"level", "number")
+  local open_p = publisher.read_attribute(layoutxml,datenxml,"open",  "boolean") 
+
+  local hlist = publisher.mkbookmarknodes(level,open_p,title)
+  local p = publisher.Paragraph:new()
+  p:append(hlist)
+  return p
 end
 
 -- Anweisung im Layoutxml, dass für ein bestimmtes Element diese
@@ -1288,9 +1309,11 @@ function textblock( layoutxml,datenxml )
     trace("Textblock: Element = %q",tostring(eltname))
     if eltname == "Paragraph" then
       objekte[#objekte + 1] = publisher.inhalt(j)
-    elseif publisher.elementname(j) == "Text" then
-      -- assert(false)
-    elseif publisher.elementname(j) == "Action" then
+    elseif eltname == "Text" then
+      assert(false)
+    elseif eltname == "Action" then
+      objekte[#objekte + 1] = publisher.inhalt(j)
+    elseif eltname == "Bookmark" then
       objekte[#objekte + 1] = publisher.inhalt(j)
     end
   end

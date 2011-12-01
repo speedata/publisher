@@ -269,6 +269,27 @@
     </element>
   </define>
 
+  <define name="e_Bookmark">
+    <element name="Lesezeichen">
+      <a:documentation docid="bookmark">PDF Lesezeichen erstellen</a:documentation>
+      <attribute name="ebene"/>
+      <a:documentation docid="bookmark/level">Die Ebene des Lesezeichens. 1 = oberste Stufe, 2 zweitoberste Stufe ...</a:documentation>
+      <attribute name="auswahl"/>
+      <a:documentation docid="bookmark/select">Der Titel des Lesezeichens als XPath-Ausdruck</a:documentation>
+      <optional>
+        <attribute name="offen">
+          <a:documentation docid="bookmark/open">Die Lesezeichenhierarchie wie sie im PDF viewer angezeigt wird</a:documentation>
+          <choice>
+            <value>ja</value>
+            <a:documentation docid="bookmark/open/yes">Unterebenen sichtbar</a:documentation>
+            <value>nein</value>
+            <a:documentation docid="bookmark/open/no">Unterebenen versteckt</a:documentation>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+
   <define name="e_Dataset">
     <element name="Datensatz">
       <a:documentation docid="record">Führt für jedes angegebene Element (im Attribut ›element‹) die Anweisungen in den Kindelementen aus.</a:documentation>
@@ -1186,6 +1207,7 @@
           <ref name="e_Paragraph"/>
           <ref name="e_CopyOf"/>
           <ref name="e_Action"/>
+          <ref name="e_Bookmark"/>
         </choice>
       </oneOrMore>
       <optional><attribute name="textformat"/></optional>

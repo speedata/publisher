@@ -8,7 +8,7 @@ h2. Beschreibung
 Erzeugt einen rechteckigen Bereich mit Text.
 
 Erlaubte Attribute: @breite@, @farbe@, @schriftart@, @spalten@, @spaltenabstand@, @textformat@, @winkel@
-Kindelemente: {{textwerte}}
+Kindelemente: {{textblock_werte}}
 Elternelemente: "ObjektAusgeben":e_objektausgeben
 
 h3. Attribute

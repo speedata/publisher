@@ -82,6 +82,22 @@ textformate = {} -- tmp. Textformate. Tabelle mit Schlüsseln: indent, ausrichtu
 
 sprachen = {}
 
+-- bookmarks = {
+--   { --- first bookmark
+--     name = "outline 1" destination = "..." open = true,
+--      { name = "outline 1.1", destination = "..." },
+--      { name = "outline 1.2", destination = "..." }
+--   },
+--   { -- second bookmark
+--     name = "outline 2" destination = "..." open = false,
+--      { name = "outline 2.1", destination = "..." },
+--      { name = "outline 2.2", destination = "..." }
+--
+--   }
+-- }
+bookmarks = {}
+
+
 
 local dispatch_table = {
   Paragraph               = element.absatz,
@@ -94,6 +110,7 @@ local dispatch_table = {
   AtPageCreation          = element.beiseitenerzeugung,
   Image                   = element.bild,
   Box                     = element.box,
+  Bookmark                = element.bookmark,
   Record                  = element.datensatz,
   DefineColor             = element.definiere_farbe,
   DefineFontfamily        = element.definiere_schriftfamilie,
@@ -190,6 +207,28 @@ function dispatch(layoutxml,datenxml,optionen)
   return ret
 end
 
+function bookmarkstotex( tbl )
+  local countstring
+  local open_string
+  if #tbl == 0 then
+    countstring = ""
+  else
+    if tbl.open == "true" then
+      open_string = ""
+        else
+      open_string = "-"
+    end
+    countstring = string.format("count %s%d",open_string,#tbl)
+  end
+  if tbl.destination then
+    tex.sprint(string.format("\\pdfoutline goto num %s %s {%s}",tbl.destination, countstring ,tbl.name ))
+  end
+  for i,v in ipairs(tbl) do
+    bookmarkstotex(v)
+  end
+end
+
+
 function dothings()
   page_initialized=false
 
@@ -236,16 +275,25 @@ function dothings()
 
   element.datenverarbeitung(datenxml)
 
-  -- printtable("Am Ende (inhalt)",variablen.inhalt)
-  pdf.info    = [[ /Creator	(speedata Publisher) /Producer(speedata Publisher, www.speedata.de) ]]
-
-  -- letzte Seite ausgeben, wenn notwendig
+  -- emit last page if necessary
   if page_initialized then
     dothingsbeforeoutput()
     local n = node.vpack(publisher.global_pagebox)
 
     tex.box[666] = n
     tex.shipout(666)
+  end
+  -- at this point, all pages are in the PDF
+
+
+  -- printtable("Am Ende (inhalt)",variablen.inhalt)
+  pdf.catalog = [[ /PageMode /UseOutlines ]]
+  pdf.info    = [[ /Creator	(speedata Publisher) /Producer(speedata Publisher, www.speedata.de) ]]
+
+  -- Now put the bookmarks in the pdf
+  -- tex.sprint([[\pdfoutline...]])
+  for i,v in ipairs(bookmarks) do
+    bookmarkstotex(v)
   end
 
 end
@@ -560,7 +608,7 @@ end
 function dothingsbeforeoutput(  )
   local r = aktuelle_seite.raster
   local str
-  -- finde_user_defined_whatsits(publisher.global_pagebox)
+  finde_user_defined_whatsits(publisher.global_pagebox)
   local firstbox
   if #aktuelle_seite.raster.belegung_pdf > 0 then
     local lit = node.new("whatsit","pdf_literal")
@@ -604,7 +652,7 @@ end
 
 --Read the contents of the attribute attname_englisch. type is one of
 -- "string", "number", "length" and "boolean".
-function read_attribute( layoutxml,datenxml,attname_english,type )
+function read_attribute( layoutxml,datenxml,attname_english,typ )
   local attname = translate_attribute(attname_english)
 
   if layoutxml[attname] == nil then
@@ -619,13 +667,15 @@ function read_attribute( layoutxml,datenxml,attname_english,type )
     val = layoutxml[attname]
   end
 
-  if type=="string" then
+  if typ=="xpath" then
+    return xpath.textvalue(xpath.parse(datenxml,val))
+  elseif typ=="string" then
     return tostring(val)
-  elseif type=="number" then
+  elseif typ=="number" then
     return tonumber(val)
-  elseif type=="length" then
+  elseif typ=="length" then
     return val
-  elseif type=="boolean" then
+  elseif typ=="boolean" then
     if val=="yes" or val=="ja" then
       return true
     elseif val=="no" or val=="nein" then
@@ -675,6 +725,7 @@ function parse_html( elt )
 
   return a
 end
+
 -- sucht am Ende der Seite (shipout) nach den user_defined whatsits und führt die
 -- Aktionen dadrin aus.
 function finde_user_defined_whatsits( head )
@@ -685,11 +736,36 @@ function finde_user_defined_whatsits( head )
       finde_user_defined_whatsits(head.list) 
     elseif typ == "whatsit" then
       if head.subtype == 44 then
-        -- der Wert ist der Index für die Funktion unter user_defined_funktionen.
-        fun = user_defined_funktionen[head.value]
-        fun()
-        -- use and forget
-        user_defined_funktionen[head.value] = nil
+        -- action
+        if head.user_id == 1 then
+          -- der Wert ist der Index für die Funktion unter user_defined_funktionen.
+          fun = user_defined_funktionen[head.value]
+          fun()
+          -- use and forget
+          user_defined_funktionen[head.value] = nil
+        -- bookmark
+        elseif head.user_id == 2 then
+          local level,openclose,dest,str =  string.match(head.value,"([^+]*)+([^+]*)+([^+]*)+(.*)")
+          level = tonumber(level)
+          local open_p
+          if openclose == "1" then
+            open_p = true
+          else
+            open_p = false
+          end
+          local i = 1
+          local current_bookmark_table = bookmarks -- level 1 == top level
+          -- create levels if necessary
+          while i < level do
+            if #current_bookmark_table == 0 then
+              current_bookmark_table[1] = {}
+              err("No bookmark given for this level (%d)!",level)
+            end
+            current_bookmark_table = current_bookmark_table[#current_bookmark_table]
+            i = i + 1
+          end
+          current_bookmark_table[#current_bookmark_table + 1] = {name = str, destination = dest, open = open_p}
+        end
       end
     end
     head = head.next
@@ -1000,6 +1076,39 @@ function erzeuge_leere_hbox_mit_breite( wd )
   return n
 end
 
+do
+  local destcounter = 0
+  -- Create a pdf anchor (dest object). It returns a whatsit node and the 
+  -- number of the anchor, so it can be used in a pdf link or an outline.
+  function mkdest()
+    destcounter = destcounter + 1
+    local d = node.new("whatsit","pdf_dest")
+    d.named_id = 0
+    d.dest_id = destcounter
+    d.dest_type = 3
+    return d, destcounter
+  end
+end
+
+-- Generate a hlist with necessary nodes for the bookmarks. To be inserted into a vlist that gets shipped out
+function mkbookmarknodes(level,open_p,title)
+  -- The bookmarks need three values, the level, the name and if it is 
+  -- open or closed
+  local openclosed 
+  if open_p then openclosed = 1 else openclosed = 2 end
+  level = level or 1
+  title = title or "no title for bookmark given"
+
+  n,counter = mkdest()
+  local udw = node.new("whatsit","user_defined")
+  udw.user_id = 2
+  udw.type = 115 -- a string
+  udw.value = string.format("%d+%d+%d+%s",level,openclosed,counter,title)
+  n.next = udw
+  udw.prev = n
+  local hlist = node.hpack(n)
+  return hlist
+end
 
 function boxit( box )
   local box = node.hpack(box)

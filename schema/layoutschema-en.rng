@@ -267,6 +267,27 @@
     </element>
   </define>
 
+  <define name="e_Bookmark">
+    <element name="Bookmark">
+      <a:documentation docid="bookmark">Create a PDF bookmark</a:documentation>
+      <attribute name="level"/>
+      <a:documentation docid="bookmark/level">The level of the bookmark. 1 = top level, 2 = second level ...</a:documentation>
+      <attribute name="select" />
+      <a:documentation docid="bookmark/select">The title of the bookmark as an XPath expression</a:documentation>
+      <optional>
+        <attribute name="open">
+          <a:documentation docid="bookmark/open">The bookmark hierarchy displayed in the pdf viewer</a:documentation>
+          <choice>
+            <value>yes</value>
+            <a:documentation docid="bookmark/open/yes">Displayed with sublevels shown</a:documentation>
+            <value>no</value>
+            <a:documentation docid="bookmark/open/no">Displayed with sublevels hidden</a:documentation>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+
   <define name="e_Dataset">
     <element name="Record">
       <a:documentation docid="record">Executes the child commands for every element given in the attribute ›element‹. Matches »ProcessNode« and »ProcesRecord«.</a:documentation>
@@ -1170,6 +1191,7 @@
           <ref name="e_Paragraph"/>
           <ref name="e_CopyOf"/>
           <ref name="e_Action"/>
+          <ref name="e_Bookmark"/>
         </choice>
       </oneOrMore>
       <optional><attribute name="textformat"/></optional>
