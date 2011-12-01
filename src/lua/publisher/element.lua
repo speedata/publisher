@@ -252,9 +252,9 @@ function bookmark( layoutxml,dataxml )
   -- the destination code (a number) for later. There is a slight problem
   -- now: as the text flow is asynchronous, we evaluate the bookmark
   -- during page shipout. Then we have the correct order (hopefully)
-  local title  = publisher.read_attribute(layoutxml,datenxml,"select","xpath")
-  local level  = publisher.read_attribute(layoutxml,datenxml,"level", "number")
-  local open_p = publisher.read_attribute(layoutxml,datenxml,"open",  "boolean") 
+  local title  = publisher.read_attribute(layoutxml,dataxml,"select","xpath")
+  local level  = publisher.read_attribute(layoutxml,dataxml,"level", "number")
+  local open_p = publisher.read_attribute(layoutxml,dataxml,"open",  "boolean")
 
   local hlist = publisher.mkbookmarknodes(level,open_p,title)
   local p = publisher.Paragraph:new()
