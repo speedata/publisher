@@ -7,6 +7,8 @@
   <xsl:strip-space elements="*"/>
   <xsl:output method="html" indent="yes"></xsl:output>
   <xsl:param name="lang" select="'de'"/>
+  
+  <xsl:param name="builddir" select="'../../../build/manual/'"></xsl:param>
 
   <xsl:template match="/">
     <xsl:apply-templates/>
@@ -14,15 +16,17 @@
 
   <xsl:template match="commands">
     <xsl:for-each select="command">
-      <xsl:result-document href="{concat(@name,'.html')}">
+      <xsl:result-document href="{concat($builddir,'/commands/',@name,'.html')}">
         <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
         <html>
           <head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-              <title><xsl:value-of select="@name"></xsl:value-of></title>
+            <link rel="stylesheet" href="../css/normal.css" type="text/css" />
+            <title><xsl:value-of select="@name"></xsl:value-of></title>
           </head>
           <body>
-            <xsl:apply-templates select="." />
+            <div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Startseite"/></a></div>
+              <xsl:apply-templates select="." />
           </body>
         </html>
       </xsl:result-document>
@@ -30,7 +34,8 @@
   </xsl:template>
   
   <xsl:template match="command">
-    <h1>Elementname: <code class="syntax xml"><xsl:value-of select="@name"/></code></h1>
+    <div id="elementdesc">
+      <h1>Elementname: <code class="syntax xml"><xsl:value-of select="@name"/></code></h1>
     <h2>Beschreibung</h2>
     <xsl:for-each select="description[@xml:lang = $lang]/para">
       <p><xsl:value-of select="."></xsl:value-of></p>
@@ -65,11 +70,16 @@
     <xsl:apply-templates select="remark[@xml:lang = $lang]"/>
     <xsl:apply-templates select="example[@xml:lang = $lang]"/>
     <xsl:apply-templates select="seealso" />
-    <ul>
-      <xsl:apply-templates select=" parent::node()" mode="commandlist">
-        <xsl:with-param name="currentcommand" select="@name"/>
-      </xsl:apply-templates>
-    </ul>
+    </div>
+    <div id="elementref">
+      <ul>
+        <xsl:apply-templates select=" parent::node()" mode="commandlist">
+          <xsl:with-param name="currentcommand" select="@name" />
+        </xsl:apply-templates>
+      </ul>
+    </div>
+    <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
+    <a href="../index.html">Startseite</a> | <a href="../referenz/e_layout.html">Elementreferenz</a>
   </xsl:template>
 
   <xsl:template match="remark">
@@ -99,7 +109,7 @@
           <xsl:attribute name="class" select="'active'"></xsl:attribute>
         </xsl:when>
       </xsl:choose>
-        <xsl:value-of select="@name"></xsl:value-of>
+        <a href="{concat(@name,'.html')}"><xsl:value-of select="@name"/></a>
       </li>
     </xsl:for-each>
   </xsl:template>
