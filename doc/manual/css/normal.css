@@ -25,3 +25,5 @@ th { background-color: #0F2B49; color: white; font-weight: normal;}
 pre.syntax, .syntax-container {
 	font-size: 10pt;
 }
+
+.tt { font-family: monospace;}

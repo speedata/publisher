@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <commands xmlns="urn:speedata.de:2011/publisher/documentation">
-  <command name="bookmark">
+  <command name="Bookmark">
     <description xml:lang="en">
       <para>Create a bookmark for the PDF viewer (e.g. Adobe Reader). When the user clicks on a bookmark, the PDF viewer
           <quote>jumps</quote> to that place in the document.</para>
@@ -37,7 +37,7 @@
       <cmd name="Textblock" />
     </seealso>
   </command>
-  <command name="textblock">
+  <command name="Textblock">
     <description xml:lang="de">
       <para>Erzeugt einen rechteckigen Bereich mit Text.</para>
     </description>
