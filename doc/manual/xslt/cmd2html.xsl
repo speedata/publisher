@@ -49,7 +49,7 @@
   
   <xsl:template match="command">
     <div id="elementdesc">
-      <h1>Elementname: <code class="syntax xml"><xsl:value-of select="@name" /></code></h1>
+      <h1>Elementname: <code class="syntax xml"><xsl:value-of select="sd:translate-command(@name)" /></code></h1>
       <h2>Beschreibung</h2>
       <xsl:for-each select="description[@xml:lang = $lang]/para">
         <p>
@@ -61,8 +61,22 @@
           <span class="tt"><a href="#{@name}"><xsl:value-of select="key('en-attributes',@name, $translations)/@de"
                /></a></span>
           <xsl:if test=" position() &lt; last()">, </xsl:if>
+        </xsl:for-each><br/>
+        Kindelemente:
+        <xsl:for-each select="childelements/cmd">
+          <xsl:sort select="sd:translate-command(@name)"/>
+          <a href="{sd:makelink(@name)}"><xsl:value-of select="sd:translate-command(@name)"/></a>
+          <xsl:if test="position() &lt; last()">, </xsl:if>
+        </xsl:for-each>
+        <br/>
+        Elternelemente:
+        <xsl:for-each select="parentelements/cmd">
+          <xsl:sort select="sd:translate-command(@name)"/>
+          <a href="{sd:makelink(@name)}"><xsl:value-of select="sd:translate-command(@name)"/></a>
+          <xsl:if test="position() &lt; last()">, </xsl:if>
         </xsl:for-each>
       </p>
+      <h3>Attribute</h3>
       <dl>
         <xsl:for-each select="attribute">
           <xsl:sort select="key('en-attributes',@name, $translations)/@de" />
@@ -90,6 +104,7 @@
       <xsl:apply-templates select="seealso" />
     </div>
     <div id="elementref">
+      <h1>Befehlsübersicht</h1>
       <ul>
         <xsl:apply-templates select=" parent::node()" mode="commandlist">
           <xsl:with-param name="currentcommand" select="@name" />
@@ -127,7 +142,7 @@
           <xsl:attribute name="class" select="'active'"></xsl:attribute>
         </xsl:when>
       </xsl:choose>
-        <a href="{sd:makelink(@name)}"><xsl:value-of select="key('en-commands',@name, $translations)/@de"/></a>
+        <a href="{sd:makelink(@name)}"><xsl:value-of select="sd:translate-command(@name)"/></a>
       </li>
     </xsl:for-each>
   </xsl:template>
@@ -138,7 +153,7 @@
   </xsl:template>
 
   <xsl:template match="cmd">
-    <a href="{sd:makelink(@name)}"><xsl:value-of select="key('en-commands',@name, $translations)/@de"/></a>
+    <a href="{sd:makelink(@name)}"><xsl:value-of select="sd:translate-command(@name)"/></a>
   </xsl:template>
 
   <xsl:function name="sd:makelink">
@@ -146,6 +161,11 @@
     <xsl:value-of select="concat(encode-for-uri(lower-case($name)),'.html')"/>
   </xsl:function>
   
+  <xsl:function name="sd:translate-command">
+    <xsl:param name="name"/>
+    <xsl:value-of select="key('en-commands',$name, $translations)/@de"/>
+  </xsl:function>
+
   <xsl:function name="sd:translate-value">
     <xsl:param name="type"/>
     <xsl:value-of select="$values/*[@type = $type]/@de"/>
