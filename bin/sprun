@@ -1,5 +1,11 @@
 #!/usr/bin/env texlua
 
+-- If called with texlua from texlive, the require path is mangled.
+-- Therefore we call our own binary in lua mode.
+if arg[-1] == "texlua" then
+  os.exec(string.format("sdluatex --luaonly %s", arg[0]))
+end
+
 local installdir=os.selfdir:gsub("^(.+)/bin$","%1")
 local srcdir,inifile
 version = nil
