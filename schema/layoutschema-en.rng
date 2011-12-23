@@ -113,6 +113,20 @@
     </attribute>
   </define>
 
+  <define name="a_valign">
+    <attribute name="valign">
+      <a:documentation docid="valign">Vertical alignment</a:documentation>
+      <choice>
+        <value>top</value>
+        <a:documentation docid="valign/top">Top aligned</a:documentation>
+        <value>middle</value>
+        <a:documentation docid="valign/middle">Vertically centered</a:documentation>
+        <value>bottom</value>
+        <a:documentation docid="valign/bottom">Bottom alignment</a:documentation>
+      </choice>
+    </attribute>
+  </define>
+
   <define name="a_allocate">
     <attribute name="allocate">
       <a:documentation docid="allocate">When yes, the space (in the grid) the objects use are allocated, so no other object can be placed there.</a:documentation>
@@ -585,6 +599,9 @@
         <ref name="a_allocate"/>
       </optional>
       <optional>
+        <ref name="a_valign"/>
+      </optional>
+      <optional>
         <attribute name="area">
           <a:documentation docid="placeobject/area">The positioning area in which the object should be placed. The given column and row is relative to the area. The default area is »Page«.</a:documentation>
         </attribute>
@@ -998,17 +1015,7 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="valign">
-          <a:documentation docid="td/valign">Vertical alignment</a:documentation>
-          <choice>
-            <value>top</value>
-            <a:documentation docid="td/valign/top">Top aligned</a:documentation>
-            <value>center</value>
-            <a:documentation docid="td/valign/center">Vertically centered</a:documentation>
-            <value>bottom</value>
-            <a:documentation docid="td/valign/bottom">Bottom alignment</a:documentation>
-          </choice>
-        </attribute>
+        <ref name="a_valign"></ref>
       </optional>
       <optional>
         <attribute name="border-left"/>
@@ -1101,17 +1108,7 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="valign">
-          <a:documentation docid="tr/valign">Vertical alignment of all cells of this row.</a:documentation>
-          <choice>
-            <value>top</value>
-            <a:documentation docid="td/valign/top">Top aligned</a:documentation>
-            <value>center</value>
-            <a:documentation docid="td/valign/center">Vertically centered</a:documentation>
-            <value>bottom</value>
-            <a:documentation docid="td/valign/bottom">Bottom alignment</a:documentation>
-          </choice>
-        </attribute>
+        <ref name="a_valign"/>
       </optional>
       <oneOrMore>
         <optional>
@@ -1165,17 +1162,7 @@
             </attribute>
           </optional>
           <optional>
-            <attribute name="valign">
-              <a:documentation docid="column/valign">Vertical alignment of all cells in this column</a:documentation>
-              <choice>
-                <value>top</value>
-                <a:documentation docid="td/valign/top">Top aligned</a:documentation>
-                <value>center</value>
-                <a:documentation docid="td/valign/center">Vertically centered</a:documentation>
-                <value>bottom</value>
-                <a:documentation docid="td/valign/bottom">Bottom alignment</a:documentation>
-              </choice>
-            </attribute>
+            <ref name="a_valign"/>
           </optional>
         </element>
       </oneOrMore>

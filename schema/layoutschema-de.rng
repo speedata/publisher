@@ -111,6 +111,20 @@
     </attribute>
   </define>
 
+  <define name="a_valign">
+    <attribute name="valign">
+      <a:documentation docid="valign">Vertikale Ausrichtung</a:documentation>
+      <choice>
+        <value>top</value>
+        <a:documentation docid="valign/top">Oben ausgeben</a:documentation>
+        <value>middle</value>
+        <a:documentation docid="valign/middle">Vertikal zentriert ausgeben</a:documentation>
+        <value>bottom</value>
+        <a:documentation docid="valign/bottom">Unten ausgeben</a:documentation>
+      </choice>
+    </attribute>
+  </define>
+
   <define name="a_allocate">
     <attribute name="belegen">
       <a:documentation docid="allocate">Gibt an, ob das Objekt den Platz auf der Seite (im Raster) belegen soll. Dadurch ist der Platz für
@@ -595,6 +609,9 @@
         <ref name="a_allocate"/>
       </optional>
       <optional>
+        <ref name="a_valign"/>
+      </optional>
+      <optional>
         <attribute name="bereich">
           <a:documentation docid="placeobject/area">Der Platzierungsbereich, in dem das Objekt ausgegeben werden soll. Die Angabe von Zeile und Spalte
                 bezieht sich auf den angegebenen Platzierungsbereich. Der voreingestellte Platzierungsbereich ist
@@ -1014,17 +1031,7 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="valign">
-          <a:documentation docid="td/valign">Vertikale Ausrichtung</a:documentation>
-          <choice>
-            <value>top</value>
-            <a:documentation docid="td/valign/top">Oben ausgeben</a:documentation>
-            <value>center</value>
-            <a:documentation docid="td/valign/center">Vertikal zentriert ausgeben</a:documentation>
-            <value>bottom</value>
-            <a:documentation docid="td/valign/bottom">Unten ausgeben</a:documentation>
-          </choice>
-        </attribute>
+        <ref name="a_valign"/>
       </optional>
       <optional>
         <attribute name="border-left"/>
@@ -1117,17 +1124,7 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="valign">
-          <a:documentation docid="tr/valign">Vertikale Ausrichtung für alle Zellen dieser Zeile</a:documentation>
-          <choice>
-            <value>top</value>
-            <a:documentation docid="td/valign/top">Oben ausgeben</a:documentation>
-            <value>center</value>
-            <a:documentation docid="td/valign/center">Vertikal zentriert ausgeben</a:documentation>
-            <value>bottom</value>
-            <a:documentation docid="td/valign/bottom">Unten ausgeben</a:documentation>
-          </choice>
-        </attribute>
+        <ref name="a_valign"/>
       </optional>
       <oneOrMore>
         <optional>
@@ -1181,17 +1178,7 @@
             </attribute>
           </optional>
           <optional>
-            <attribute name="valign">
-              <a:documentation docid="column/valign">Vertikale Ausrichtung für alle Zellen dieser Spalte</a:documentation>
-              <choice>
-                <value>top</value>
-                <a:documentation docid="td/valign/top">Oben ausgeben</a:documentation>
-                <value>center</value>
-                <a:documentation docid="td/valign/center">Vertikal zentriert ausgeben</a:documentation>
-                <value>bottom</value>
-                <a:documentation docid="td/valign/bottom">Unten ausgeben</a:documentation>
-              </choice>
-            </attribute>
+            <ref name="a_valign"/>
           </optional>
         </element>
       </oneOrMore>

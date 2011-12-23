@@ -742,6 +742,7 @@ function objekt_ausgeben( layoutxml,datenxml )
   local rahmen           = publisher.read_attribute(layoutxml,datenxml,"frame",          "string")
   local hintergrund      = publisher.read_attribute(layoutxml,datenxml,"background",     "string")
   local gruppenname      = publisher.read_attribute(layoutxml,datenxml,"groupname",      "number")
+  local valign           = publisher.read_attribute(layoutxml,datenxml,"valign",         "string")
 
   bereich = bereich or publisher.default_bereichname
   belegen = belegen or true
@@ -858,7 +859,7 @@ function objekt_ausgeben( layoutxml,datenxml )
 
       log("»ObjektAusgeben«: %s in row %d and column %d, width=%d, height=%d", objekttyp, aktuelle_zeile, aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen)
       trace("»ObjektAusgeben«: objekt placed at (%d,%d)",aktuelle_spalte_start,aktuelle_zeile)
-      publisher.ausgabe_bei(objekt,aktuelle_spalte_start,aktuelle_zeile,belegen,bereich)
+      publisher.ausgabe_bei(objekt,aktuelle_spalte_start,aktuelle_zeile,belegen,bereich,valign)
       trace("Objekt ausgegeben.")
       zeile = nil -- die Zeile ist nicht mehr gültig, da schon ein Objekt ausgegeben wurde
       if i < #objekte then
