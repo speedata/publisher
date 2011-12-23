@@ -5,6 +5,8 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* @valign@ in "Td":e_td, "Tr":e_tr: @middle@ statt @center@
+* @valign@ in "ObjektAusgeben":e_objektAusgeben
 * PDF "Lesezeichen":e_lesezeichen.
 * Zusätzlich auch englischsprachige Regelwerke
 * Sprache kann je "Absatz":e_absatz ausgewählt werden (Silbentrennung).

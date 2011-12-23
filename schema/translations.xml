@@ -76,6 +76,7 @@
         <value en="justified" de="blocksatz"/>
         <value en="bottom" de="bottom"/>
         <value en="center" de="center"/>
+      <value en="middle" de="middle"/>
         <value en="cmyk" de="cmyk"/>
         <value en="cropbox" de="cropbox"/>
         <value en="German" de="Deutsch"/>
@@ -910,19 +911,19 @@
             <en>Background color of the table cell.</en>
             <de>Farbe der Tabellenzelle</de>
         </documentation>
-        <documentation docid="td/valign">
+        <documentation docid="valign">
             <en>Vertical alignment</en>
             <de>Vertikale Ausrichtung</de>
         </documentation>
-        <documentation docid="td/valign/top">
+        <documentation docid="valign/top">
             <en>Top aligned</en>
             <de>Oben ausgeben</de>
         </documentation>
-        <documentation docid="td/valign/center">
+        <documentation docid="valign/middle">
             <en>Vertically centered</en>
             <de>Vertikal zentriert ausgeben</de>
         </documentation>
-        <documentation docid="td/valign/bottom">
+        <documentation docid="valign/bottom">
             <en>Bottom alignment</en>
             <de>Unten ausgeben</de>
         </documentation>
