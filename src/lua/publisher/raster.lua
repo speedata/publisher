@@ -323,10 +323,11 @@ function zeichne_raster(self)
 end
 
 -- Gibt die Position der Rasterzelle in sp vom linken und oberen Rand.
-function position_rasterzelle_mass_tex(self,x,y,bereichname)
+function position_rasterzelle_mass_tex(self,x,y,bereichname,wd,ht,valign)
   local x_sp, y_sp
   if not self.rand_links then return nil, "Linker Rand nicht definiert. Fehlt das <Rand> Tag in Seitenformat?" end
   local rahmen_rand_links, rahmen_rand_oben
+
   if bereichname == publisher.default_bereichname then
     rahmen_rand_links, rahmen_rand_oben = 0,0
   else
@@ -341,6 +342,17 @@ function position_rasterzelle_mass_tex(self,x,y,bereichname)
   end
   x_sp = (rahmen_rand_links + x - 1) * self.rasterbreite + self.rand_links + self.extra_rand
   y_sp = (rahmen_rand_oben  + y - 1) * self.rasterhoehe  + self.rand_oben  + self.extra_rand
+  if valign then
+    -- height mod cellheight = "overshoot"
+    local overshoot = ht % self.rasterhoehe
+    if valign == "bottom" then
+      -- cellheight - "overshoot" = shift_down
+      y_sp = y_sp + self.rasterhoehe - overshoot
+    elseif valign == "middle" then
+      -- ( cellheight - "overshoot") / 2 = shift_down
+      y_sp = y_sp + ( self.rasterhoehe - overshoot ) / 2
+    end
+  end
   return x_sp,y_sp
 end
 

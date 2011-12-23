@@ -369,10 +369,15 @@ function ausgabe_bei_absolut( nodelist,x,y,belegen,bereich )
 end
 
 -- Gibt die nodelist bei Rasterzelle (x,y) aus. Wenn belegen==true dann die Zellen als belegt markieren.
-function ausgabe_bei( nodelist, x,y,belegen,bereich )
+function ausgabe_bei( nodelist, x,y,belegen,bereich,valign)
   bereich = bereich or default_bereichname
   local r = aktuelles_raster
-  local delta_x, delta_y = r:position_rasterzelle_mass_tex(x,y,bereich)
+  local wd = nodelist.width
+  local ht = nodelist.height + nodelist.depth
+  local breite_in_rasterzellen = r:breite_in_rasterzellen_sp(wd)
+  local hoehe_in_rasterzellen  = r:hoehe_in_rasterzellen_sp (ht)
+
+  local delta_x, delta_y = r:position_rasterzelle_mass_tex(x,y,bereich,wd,ht,valign)
   if not delta_x then
     err(delta_y)
     exit()
@@ -381,7 +386,6 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich )
     -- Den Inhalt der Nodeliste in die aktuelle Gruppe ausgeben. 
     local gruppe = gruppen[aktuelle_gruppe]
     assert(gruppe)
-
 
     local n = add_glue( nodelist ,"head",{ width = delta_x })
     n = node.hpack(n)
@@ -412,15 +416,11 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich )
       gruppe.inhalt = n
     end
     if belegen then
-      local breite_in_rasterzellen = r:breite_in_rasterzellen_sp(nodelist.width)
-      local hoehe_in_rasterzellen  = r:hoehe_in_rasterzellen_sp (nodelist.height + nodelist.depth)
       r:belege_zellen(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,options.showgridallocation)
     end
   else
     -- auf der aktuellen Seite einfügen
     if belegen then
-      local breite_in_rasterzellen = r:breite_in_rasterzellen_sp(nodelist.width)
-      local hoehe_in_rasterzellen  = r:hoehe_in_rasterzellen_sp(nodelist.height + nodelist.depth)
       r:belege_zellen(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,options.showgridallocation,bereich)
     end
 
@@ -654,7 +654,6 @@ end
 -- "string", "number", "length" and "boolean".
 function read_attribute( layoutxml,datenxml,attname_english,typ )
   local attname = translate_attribute(attname_english)
-
   if layoutxml[attname] == nil then
     return nil
   end
