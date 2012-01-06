@@ -169,8 +169,8 @@ function berechne_spaltenbreite( self )
               summe_echte_breiten = summe_echte_breiten + self.spaltenbreiten[i]
             end
           end
-          if spalte_inhalt.hintergrundfarbe then
-            self.spaltenfarben[i] = spalte_inhalt.hintergrundfarbe
+          if spalte_inhalt.backgroundcolor then
+            self.spaltenfarben[i] = spalte_inhalt.backgroundcolor
           end
         end
         anzahl_spalten = i
@@ -782,11 +782,11 @@ function setze_zeile(self, tr_inhalt, aktuelle_zeile )
     hlist = node.hpack(zelle_start,aktuelle_spaltenbreite,"exactly")
 
     -- So, jetzt ist die Zelle vollständig (bis auf die top/bottom rule). Hier kann jetzt die Hintergrundfarbe gesetzt werden.
-    if tr_inhalt.hintergrundfarbe or td_inhalt.hintergrundfarbe or self.spaltenfarben[aktuelle_spalte] then
-      -- prio: Td.hintergrundfarbe, dann Tr.hintergrundfarbe, dann Spalte.hintergrundfarbe
+    if tr_inhalt.backgroundcolor or td_inhalt.backgroundcolor or self.spaltenfarben[aktuelle_spalte] then
+      -- prio: Td.backgroundcolor, dann Tr.backgroundcolor, dann Spalte.backgroundcolor
       local farbe = self.spaltenfarben[aktuelle_spalte]
-      farbe = tr_inhalt.hintergrundfarbe or farbe
-      farbe = td_inhalt.hintergrundfarbe or farbe
+      farbe = tr_inhalt.backgroundcolor or farbe
+      farbe = td_inhalt.backgroundcolor or farbe
       hlist = publisher.hintergrund(hlist,farbe)
     end
 
