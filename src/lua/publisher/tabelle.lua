@@ -376,8 +376,8 @@ function berechne_zeilenhoehe( self,tr_inhalt, aktuelle_zeile )
   local fam = publisher.fonts.lookup_schriftfamilie_nummer_instanzen[self.schriftfamilie]
   local min_lineheight = fam.zeilenabstand
 
-  if tr_inhalt.minhoehe then
-    zeilenhoehe = math.max(publisher.aktuelles_raster.rasterhoehe * tr_inhalt.minhoehe, min_lineheight)
+  if tr_inhalt.minheight then
+    zeilenhoehe = math.max(publisher.aktuelles_raster.rasterhoehe * tr_inhalt.minheight, min_lineheight)
   else
     zeilenhoehe = min_lineheight
   end
