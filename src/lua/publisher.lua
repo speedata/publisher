@@ -234,6 +234,12 @@ function dothings()
 
   local layoutxml = load_xml(arg[2],"layout instructions")
   local datenxml  = load_xml(arg[3],"data file")
+
+  local vars = loadfile("publisher.vars")()
+  for k,v in pairs(vars) do
+    variablen[k]=v
+  end
+
   current_layoutlanguage = string.gsub(layoutxml.xmlns,"urn:speedata.de:2009/publisher/","")
   if not (current_layoutlanguage=='de' or current_layoutlanguage=='en') then
     err("Cannot determine the language of the layout file.")

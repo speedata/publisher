@@ -5,6 +5,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* @-v@, @--variable@ in "sprun":kommandozeile
 * @valign@ in "Td":e_td, "Tr":e_tr: @middle@ statt @center@
 * @valign@ in "ObjektAusgeben":e_objektAusgeben
 * PDF "Lesezeichen":e_lesezeichen.

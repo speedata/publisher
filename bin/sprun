@@ -32,7 +32,7 @@ elseif lfs.isfile(os.getenv("HOME") .. "/" .. rcfile) then
   dofile(os.getenv("HOME") .. "/" .. rcfile)
 end
 
-
+local variables = {}
 local optionen = optionen or {}
 optionen["layoutoptionen"] = {}
 optionen["extra_dirs"] = optionen["extra_dirs"] or {}
@@ -58,10 +58,18 @@ function opendoc(  )
 end
 
 package.path = os.getenv("LUA_PATH")
+
+function save_variables()
+  local vars = io.open(optionen.jobname .. ".vars", "w")
+  vars:write("return { ")
+  for k,v in pairs(variables) do
+    vars:write(string.format("[%q] = %q, ",k,v ))
+  end
+  vars:write("}")
+  vars:close()
+end
+
 require("optionparser")
-
-
-
 local op = optionparser:new()
 op.banner = string.format("Benutzung: sprun <optionen>")
 op.start = 30
@@ -76,6 +84,7 @@ op:on("--layoutname NAME","Lädt Layoutregelwerk mit dem Namen. Ohne diesen Para
 op:on("--list-fonts","Zeigt alle verfügbaren Schriftarten", function() command = "list-fonts" end)
 op:on("--raster WERT","Bestimmt, ob das Raster angezeigt werden soll ('ja' oder 'nein')",function(x) local j = optionen["layoutoptionen"];  if x:lower()=="ja" then j["zeichne_raster"]='ja' else j["zeichne_raster"]='nein' end; end )
 op:on("--startseite NUM","Legt die Startseite fest", function(x) optionen["layoutoptionen"]["startseite"]=x end)
+op:on("-v","--var VAR=VALUE","Setzt eine Variable für den Layoutprozess", function (x) local tab = string.explode(x,"="); if tab[1] and tab[2] then variables[tab[1]] = tab[2] end end )
 op:on("-x", "--extra-dir VERZEICHNIS", function (x) optionen.extra_dirs[#optionen.extra_dirs + 1]=x  end, "Extra Verzeichnisse für die Dateisuche")
 op:on("--xml","Ausgabe als (Pseudo-)XML", function() optionen["xml"] = true end)
 ok, msg = op:parse(arg)
@@ -95,6 +104,7 @@ if command=="list-fonts" then
   local cmdline = string.format("%s/bin/sdluatex --luaonly %s/lua/sdscripts.lua %s list-fonts %s",installdir,srcdir,inifile,optionen.xml and "xml" or "")
   os.spawn(cmdline)
 elseif command=="run" then
+  save_variables()
   if optionen["filter"] then
     local filtername = optionen["filter"]
     if string.sub(filtername,-4) ~= ".xpl" then
