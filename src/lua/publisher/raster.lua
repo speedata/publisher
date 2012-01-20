@@ -58,12 +58,12 @@ function new( self )
 	return r
 end
 
-function aktuelle_zeile( self,bereichname )
+function current_row( self,bereichname )
   assert(self)
   local bereichname = bereichname or publisher.default_bereichname
   bereich = self.platzierungsbereiche[bereichname]
   assert(bereich,string.format("Area %q not known",tostring(bereichname)))
-  return bereich.aktuelle_zeile or 1
+  return bereich.current_row or 1
 end
 
 function aktuelle_spalte( self,bereich )
@@ -73,12 +73,12 @@ function aktuelle_spalte( self,bereich )
   return self.platzierungsbereiche[bereich].aktuelle_spalte or 1
 end
 
-function setze_aktuelle_zeile( self,zeile,bereichname )
+function set_current_row( self,zeile,bereichname )
   assert(self)
   local bereichname = bereichname or publisher.default_bereichname
   local bereich = self.platzierungsbereiche[bereichname]
   assert(bereich,string.format("Area %q not known",tostring(bereichname)))
-  bereich.aktuelle_zeile = zeile
+  bereich.current_row = zeile
 end
 
 function setze_aktuelle_spalte( self,spalte,bereichname )
@@ -151,12 +151,12 @@ function setze_rahmennummer( self,bereichname, nummer )
   bereich.aktueller_rahmen = nummer
 end
 
--- Setzt die Rasterbreite und Rasterhöhe auf die Werte @b@ und @h@. 
+-- Setzt die gridwidth und Rasterhöhe auf die Werte @b@ und @h@. 
 function setze_breite_hoehe(self, b,h )
   assert(b)
   assert(h)
-  self.rasterbreite = b
-  self.rasterhoehe  = h
+  self.gridwidth = b
+  self.gridheight  = h
   berechne_anzahl_rasterzellen(self)
 end
 
@@ -167,7 +167,7 @@ function belege_zellen(self,x,y,b,h,zeichne_markierung_p,bereichname)
   bereichname = bereichname or publisher.default_bereichname
   self:setze_aktuelle_spalte(x + b,bereichname)
   -- Todo: neuer Bereich, wenn der herunter rausragt
-  self:setze_aktuelle_zeile(y,bereichname)
+  self:set_current_row(y,bereichname)
   local rasterkonflikt = false
   if  x + b - 1 > self:anzahl_spalten(bereichname) then
     warning("Object protrudes into the right margin")
@@ -183,7 +183,7 @@ function belege_zellen(self,x,y,b,h,zeichne_markierung_p,bereichname)
   else
     local bereich = self.platzierungsbereiche[bereichname]
     assert(bereich,string.format("Area %q not known",tostring(bereichname)))
-    local aktuelle_zeile = self:aktuelle_zeile(bereichname)
+    local current_row = self:current_row(bereichname)
     local block = bereich[self:rahmennummer(bereichname)]
     rahmen_rand_links = block.spalte - 1
     rahmen_rand_oben = block.zeile - 1
@@ -203,9 +203,9 @@ function belege_zellen(self,x,y,b,h,zeichne_markierung_p,bereichname)
   if zeichne_markierung_p then
     local px,py
     -- in bp:
-    px = sp_to_bp((x + rahmen_rand_links - 1) * self.rasterbreite + self.rand_links + self.extra_rand )
-    py = sp_to_bp(tex.pageheight - (y + rahmen_rand_oben - 1) * self.rasterhoehe - self.rand_oben - self.extra_rand)
-    local breite, hoehe = sp_to_bp(self.rasterbreite * b), sp_to_bp(self.rasterhoehe * h)
+    px = sp_to_bp((x + rahmen_rand_links - 1) * self.gridwidth + self.rand_links + self.extra_rand )
+    py = sp_to_bp(tex.pageheight - (y + rahmen_rand_oben - 1) * self.gridheight - self.rand_oben - self.extra_rand)
+    local breite, hoehe = sp_to_bp(self.gridwidth * b), sp_to_bp(self.gridheight * h)
     self.belegung_pdf[#self.belegung_pdf + 1] = string.format(" q 0 0 1 0 k 0 0 1 0 K  1 0 0 1 %g %g cm 0 0 %g %g re f Q ",px ,py - hoehe,breite,hoehe)
   end
 end
@@ -241,16 +241,16 @@ function finde_passende_zeile( self,spalte,breite,hoehe,bereichname)
 
   -- FIXME: überlegen, was hier sinnvoll ist!?! - noch ein ziemlich ineffizienter Algorithmus! sieht aus wie O(n^2)
   -- bei n Zeilen Höhe
-  if self:anzahl_zeilen(bereichname) < self:aktuelle_zeile(bereichname) + hoehe - 1 then return nil end
-  for z = self:aktuelle_zeile(bereichname) + rahmen_rand_oben, self:anzahl_zeilen(bereichname) do
+  if self:anzahl_zeilen(bereichname) < self:current_row(bereichname) + hoehe - 1 then return nil end
+  for z = self:current_row(bereichname) + rahmen_rand_oben, self:anzahl_zeilen(bereichname) do
     if self:passt_x_in_zeile(spalte + rahmen_rand_links,breite,z) then
 
       if self:anzahl_zeilen(bereichname) < z - rahmen_rand_oben + hoehe then
         return nil
       else
         local passt = true
-        for aktuelle_zeile = z, z + hoehe do
-          if not self:passt_x_in_zeile(spalte + rahmen_rand_links,breite,aktuelle_zeile) then
+        for current_row = z, z + hoehe do
+          if not self:passt_x_in_zeile(spalte + rahmen_rand_links,breite,current_row) then
             passt = false
           end
         end
@@ -269,12 +269,12 @@ end
 -- Gibt die Anzahl der Rasterzellen zurück, die das Objekt belegt (x-Richtung).
 function breite_in_rasterzellen_sp(self,breite_sp)
   assert(self)
-  return math.ceil(breite_sp / self.rasterbreite)
+  return math.ceil(breite_sp / self.gridwidth)
 end
 
 -- Gibt die Anzahl der Rasterzellen zurück, die das Objekt belegt (y-Richtung).
 function hoehe_in_rasterzellen_sp(self,hoehe_sp)
-  local ht =  hoehe_sp / self.rasterhoehe
+  local ht =  hoehe_sp / self.gridheight
   -- Durch die Umwandlung von bp/sp gibt es Rundungsfehler. Die versuche ich hier
   -- zu vermeiden. Problem: wenn ich zwei Tabellenzeilen mit Höhe 9,5bp habe ist das
   -- um wenige sp größer als 4 Rasterzellen à 4,5bp.
@@ -292,7 +292,7 @@ function zeichne_raster(self)
   local papierbreite = sp_to_bp(tex.pagewidth  - self.extra_rand)
   local x, y, breite, hoehe
   for i=0,self:anzahl_spalten() do
-    x = sp_to_bp(i * self.rasterbreite + self.rand_links + self.extra_rand)
+    x = sp_to_bp(i * self.gridwidth + self.rand_links + self.extra_rand)
     y = sp_to_bp ( self.extra_rand )
     -- alle 5 Rasterkästchen einen dunkleren Strich machen
     if (i % 5 == 0) then farbe = "0.6" else farbe = "0.8" end
@@ -305,17 +305,17 @@ function zeichne_raster(self)
     if (i % 5 == 0) then farbe = "0.6" else farbe = "0.8" end
     -- alle 10 Rasterkästchen einen schwarzen Strich machen
     if (i % 10 == 0) then farbe = "0.2" end
-    y = sp_to_bp( i * self.rasterhoehe  + self.rand_oben + self.extra_rand)
+    y = sp_to_bp( i * self.gridheight  + self.rand_oben + self.extra_rand)
     x = sp_to_bp(self.extra_rand)
     ret[#ret + 1] = string.format("%g G %g %g m %g %g l S", farbe, math.round(x,2), math.round(papierhoehe - y,2), math.round(papierbreite,2), math.round(papierhoehe - y,2))
   end
   ret[#ret + 1] = "Q"
   for name,bereich in pairs(self.platzierungsbereiche) do
     for i,rahmen in ipairs(bereich) do
-      x      = sp_to_bp(( rahmen.spalte - 1) * self.rasterbreite + self.extra_rand + self.rand_links)
-      y      = sp_to_bp( (rahmen.zeile - 1)  * self.rasterhoehe  + self.extra_rand + self.rand_oben )
-      breite = sp_to_bp(rahmen.breite * self.rasterbreite)
-      hoehe  = sp_to_bp(rahmen.hoehe  * self.rasterhoehe )
+      x      = sp_to_bp(( rahmen.spalte - 1) * self.gridwidth + self.extra_rand + self.rand_links)
+      y      = sp_to_bp( (rahmen.zeile - 1)  * self.gridheight  + self.extra_rand + self.rand_oben )
+      breite = sp_to_bp(rahmen.breite * self.gridwidth)
+      hoehe  = sp_to_bp(rahmen.hoehe  * self.gridheight )
       ret[#ret + 1] = string.format("q %s %g w %g %g %g %g re S Q", "1 0 0  RG",0.5, x,math.round(papierhoehe - y,2),breite,-hoehe)
     end
   end
@@ -334,23 +334,23 @@ function position_rasterzelle_mass_tex(self,x,y,bereichname,wd,ht,valign)
     local bereich = self.platzierungsbereiche[bereichname]
     assert(bereich,string.format("Area %q not known",tostring(bereichname)))
     local aktueller_rahmen = bereich.aktueller_rahmen or 1
-    local aktuelle_zeile = self:aktuelle_zeile(bereichname)
+    local current_row = self:current_row(bereichname)
     -- todo: den richtigen Block finden, da die Blöcke / Rahmen unterschiedlich breit/hoch sein können!
     local block = bereich[aktueller_rahmen]
     rahmen_rand_links = block.spalte - 1
     rahmen_rand_oben = block.zeile - 1
   end
-  x_sp = (rahmen_rand_links + x - 1) * self.rasterbreite + self.rand_links + self.extra_rand
-  y_sp = (rahmen_rand_oben  + y - 1) * self.rasterhoehe  + self.rand_oben  + self.extra_rand
+  x_sp = (rahmen_rand_links + x - 1) * self.gridwidth + self.rand_links + self.extra_rand
+  y_sp = (rahmen_rand_oben  + y - 1) * self.gridheight  + self.rand_oben  + self.extra_rand
   if valign then
     -- height mod cellheight = "overshoot"
-    local overshoot = ht % self.rasterhoehe
+    local overshoot = ht % self.gridheight
     if valign == "bottom" then
       -- cellheight - "overshoot" = shift_down
-      y_sp = y_sp + self.rasterhoehe - overshoot
+      y_sp = y_sp + self.gridheight - overshoot
     elseif valign == "middle" then
       -- ( cellheight - "overshoot") / 2 = shift_down
-      y_sp = y_sp + ( self.rasterhoehe - overshoot ) / 2
+      y_sp = y_sp + ( self.gridheight - overshoot ) / 2
     end
   end
   return x_sp,y_sp
@@ -371,10 +371,10 @@ end
 function berechne_anzahl_rasterzellen(self)
   assert(self)
   assert(self.rand_links,  "Rand noch nicht gesetzt!")
-  assert(self.rasterbreite,"Rasterbreite noch nicht gesetzt!")
+  assert(self.gridwidth,"gridwidth noch nicht gesetzt!")
   self.seitengroesse_bekannt = true
-  self:setze_anzahl_spalten(math.ceil(math.round( (tex.pagewidth  - self.rand_links - self.rand_rechts - 2 * self.extra_rand) / self.rasterbreite,4)))
-  self:setze_anzahl_zeilen(math.ceil(math.round( (tex.pageheight - self.rand_oben  - self.rand_unten  - 2 * self.extra_rand) /  self.rasterhoehe ,4)))
+  self:setze_anzahl_spalten(math.ceil(math.round( (tex.pagewidth  - self.rand_links - self.rand_rechts - 2 * self.extra_rand) / self.gridwidth,4)))
+  self:setze_anzahl_zeilen(math.ceil(math.round( (tex.pageheight - self.rand_oben  - self.rand_unten  - 2 * self.extra_rand) /  self.gridheight ,4)))
   log("Number of rows: %d, number of columns = %d",self:anzahl_zeilen(), self:anzahl_spalten())
 end
 

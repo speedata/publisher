@@ -43,13 +43,13 @@ function absatz( layoutxml,datenxml )
     languagecode = publisher.get_languagecode(sprache_de_internal[sprache_de])
   end
 
-  local farbname = publisher.read_attribute(layoutxml,datenxml,"color","string")
+  local colorname = publisher.read_attribute(layoutxml,datenxml,"color","string")
   local farbindex
-  if farbname then
-    if not publisher.farben[farbname] then
-      error("Farbe %q ist nicht defniert.",farbname)
+  if colorname then
+    if not publisher.farben[colorname] then
+      error("Farbe %q ist nicht defniert.",colorname)
     else
-      farbindex = publisher.farben[farbname].index
+      farbindex = publisher.farben[colorname].index
     end
   end
 
@@ -176,7 +176,7 @@ function bild( layoutxml,datenxml )
   local seite     = publisher.read_attribute(layoutxml,datenxml,"page","number")
   local nat_box   = publisher.read_attribute(layoutxml,datenxml,"naturalsize","string")
   local max_box   = publisher.read_attribute(layoutxml,datenxml,"maxsize","string")
-  local dateiname = publisher.read_attribute(layoutxml,datenxml,"file","string")
+  local filename = publisher.read_attribute(layoutxml,datenxml,"file","string")
 
   local nat_box_intern = box_lookup[nat_box] or "crop"
   local max_box_intern = box_lookup[max_box] or "crop"
@@ -188,18 +188,18 @@ function bild( layoutxml,datenxml )
     -- breite ist keine Zahl, sondern eine Maßangabe
     breite_sp = tex.sp(breite)
   else
-    breite_sp = breite * publisher.aktuelles_raster.rasterbreite
+    breite_sp = breite * publisher.current_grid.gridwidth
   end
 
   if hoehe then
     if tonumber(hoehe) then
-      hoehe_sp  = hoehe * publisher.aktuelles_raster.rasterhoehe
+      hoehe_sp  = hoehe * publisher.current_grid.gridheight
     else
       hoehe_sp = tex.sp(hoehe)
     end
   end
 
-  local bild = publisher.new_image(dateiname,seite,max_box_intern)
+  local bild = publisher.new_image(filename,seite,max_box_intern)
   local skalierungsfaktor_wd = breite_sp / bild.width
   local skalierungsfaktor = skalierungsfaktor_wd
   if hoehe_sp then
@@ -211,7 +211,7 @@ function bild( layoutxml,datenxml )
 
   if nat_box_intern ~= max_box_intern then
     -- Das Bild muss vergrößert und dann nach links und oben verschoben werden
-    local img_min = publisher.imageinfo(dateiname,seite,nat_box_intern)
+    local img_min = publisher.imageinfo(filename,seite,nat_box_intern)
     shift_left = ( bild.width  - img_min.width )  / 2
     shift_up =   ( bild.height - img_min.height ) / 2
     skalierungsfaktor = skalierungsfaktor * ( bild.width / img_min.width )
@@ -222,7 +222,7 @@ function bild( layoutxml,datenxml )
   bild.width  = bild.width  * skalierungsfaktor
   bild.height = bild.height * skalierungsfaktor
 
-  log("Load image %q with scaling %g",dateiname,skalierungsfaktor)
+  log("Load image %q with scaling %g",filename,skalierungsfaktor)
   local hbox = node.hpack(img.node(bild))
   node.set_attribute(hbox, publisher.att_shift_left, shift_left)
   node.set_attribute(hbox, publisher.att_shift_up  , shift_up  )
@@ -234,9 +234,9 @@ function box( layoutxml,datenxml )
   local hoehe  = publisher.read_attribute(layoutxml,datenxml,"height","number")
   local hf_string = publisher.read_attribute(layoutxml,datenxml,"backgroundcolor","string")
 
-  local aktuelles_raster = publisher.aktuelles_raster
-  local _breite = sp_to_bp(aktuelles_raster.rasterbreite * breite)
-  local _hoehe  = sp_to_bp(aktuelles_raster.rasterhoehe  * hoehe)
+  local current_grid = publisher.current_grid
+  local _breite = sp_to_bp(current_grid.gridwidth * breite)
+  local _hoehe  = sp_to_bp(current_grid.gridheight  * hoehe)
   local n = publisher.box(_breite,_hoehe,hf_string)
   n = node.hpack(n)
   return n
@@ -318,13 +318,13 @@ function definiere_textformat(layoutxml)
   local fmt = {}
 
   if alignment=="linksbündig" then
-    fmt.ausrichtung = "linksbündig"
+    fmt.alignment = "linksbündig"
   elseif alignment=="rechtsbündig" then
-    fmt.ausrichtung = "rechtsbündig"
+    fmt.alignment = "rechtsbündig"
   elseif alignment=="zentriert" then
-    fmt.ausrichtung = "zentriert"
+    fmt.alignment = "zentriert"
   else
-    fmt.ausrichtung = "blocksatz"
+    fmt.alignment = "blocksatz"
   end
   if indentation then
     fmt.indent = tex.sp(indentation)
@@ -489,17 +489,17 @@ function gruppe( layoutxml,datenxml )
   
   local r = publisher.raster:new()
   r:setze_rand(0,0,0,0)
-  r:setze_breite_hoehe(publisher.aktuelle_seite.raster.rasterbreite,publisher.aktuelle_seite.raster.rasterhoehe)
+  r:setze_breite_hoehe(publisher.aktuelle_seite.raster.gridwidth,publisher.aktuelle_seite.raster.gridheight)
   publisher.gruppen[gruppenname] = { 
     inhalt = inhalt,
     raster  = r,
   }
   
-  local merke_raster      = publisher.aktuelles_raster
+  local merke_raster      = publisher.current_grid
   local merke_gruppenname = publisher.aktuelle_gruppe
 
   publisher.aktuelle_gruppe=gruppenname
-  publisher.aktuelles_raster = r
+  publisher.current_grid = r
   local elementname
 
   for _,v in ipairs(layoutxml) do
@@ -510,7 +510,7 @@ function gruppe( layoutxml,datenxml )
   end
 
   publisher.aktuelle_gruppe  = merke_gruppenname
-  publisher.aktuelles_raster = merke_raster
+  publisher.current_grid = merke_raster
 end
 
 -- Dummy-Element fürs Einbinden von xi:include-Dateien
@@ -565,80 +565,81 @@ function lade_schriftdatei( layoutxml,datenxml )
       smcp = smcp == "ja",
     },
   }
-  log("Dateiname = %q",filename or "?")
+  log("filename = %q",filename or "?")
   publisher.fonts.lade_schriftdatei(name,filename,extra_parameter)
 end
 
--- Lädt eine Datensatzdatei (XML) und startet die Verarbeitung 
+-- Lädt eine Datensatzdatei (XML) und startet die Verarbeitung
 function lade_datensatzdatei( layoutxml,datenxml )
-  local name = publisher.read_attribute(layoutxml,datenxml,"name",       "string")
-  local tmp_daten
+  local name = publisher.read_attribute(layoutxml,datenxml,"name", "string")
   assert(name)
-  local dateiname = "datensatzdatei." .. name
+  local filename = "datensatzdatei." .. name
 
-  if fileutils.test("x",dateiname)==false then
-    -- Beim ersten Lauf gibt es die Datei nicht. Das ist nicht schlimm.
+  if fileutils.test("x",filename)==false then
+    -- at the first run, the file does not exist. That's ok
     return
   end
-  
-  local tmp_daten = publisher.load_xml(dateiname)
-  local root_name = tmp_daten[".__name"]
+
+  local tmp_data = publisher.load_xml(filename)
+  local root_name = tmp_data[".__name"]
 
   log("Selecting node: %q, mode=%q",root_name,"")
-  publisher.dispatch(publisher.datensatz_verteiler[""][root_name],tmp_daten)
+  publisher.dispatch(publisher.datensatz_verteiler[""][root_name],tmp_data)
 end
 
 function leerzeile( layoutxml,datenxml )
-  trace("Leerzeile, aktuelle Zeile = %d",publisher.aktuelles_raster:aktuelle_zeile())
+  trace("Leerzeile, aktuelle Zeile = %d",publisher.current_grid:current_row())
   local bereichname = publisher.read_attribute(layoutxml,datenxml,"area","string")
   local bereichname = bereichname or publisher.default_bereichname
-  local aktuelles_raster = publisher.aktuelles_raster
-  local aktuelle_zeile = aktuelles_raster:finde_passende_zeile(1,aktuelles_raster:anzahl_spalten(),1,bereichname)
-  if not aktuelle_zeile then
-    aktuelles_raster:setze_aktuelle_zeile(1)
+  local current_grid = publisher.current_grid
+  local current_row = current_grid:finde_passende_zeile(1,current_grid:anzahl_spalten(),1,bereichname)
+  if not current_row then
+    current_grid:set_current_row(1)
   else
-    aktuelles_raster:setze_aktuelle_zeile(aktuelle_zeile + 1)
+    current_grid:set_current_row(current_row + 1)
   end
 end
 
 function linie( layoutxml,datenxml )
-  local richtung      = publisher.read_attribute(layoutxml,datenxml,"direction",    "string")
-  local laenge        = publisher.read_attribute(layoutxml,datenxml,"length",       "string")
-  local linienstaerke = publisher.read_attribute(layoutxml,datenxml,"rulewidth","string")
+  local direction     = publisher.read_attribute(layoutxml,datenxml,"direction",  "string")
+  local length        = publisher.read_attribute(layoutxml,datenxml,"length",     "string")
+  local rulewidth     = publisher.read_attribute(layoutxml,datenxml,"rulewidth",  "string")
 
-  if tonumber(laenge) then
-    if richtung == "horizontal" then
-      laenge = publisher.aktuelles_raster.rasterbreite * laenge
-    elseif richtung == "vertikal" then
-      laenge = publisher.aktuelles_raster.rasterhoehe * laenge
+  w("direction = %s",direction)
+  if tonumber(length) then
+    if direction == "horizontal" then
+      length = publisher.current_grid.gridwidth * length
+    -- FIXME: vertical / vertikal should be handled in publisher.read_attribute()
+    elseif direction == "vertical" or direction == "vertikal" then
+      length = publisher.current_grid.gridheight * length
     else
-      err("Attribute »richtung« with »Linie«: unknown direction: %q",richtung)
+      err("Attribute »direction« with »Linie«: unknown direction: %q",direction)
     end
   else
-    laenge = tex.sp(laenge)
+    length = tex.sp(length)
   end
-  laenge = sp_to_bp(laenge)
+  length = sp_to_bp(length)
 
-  linienstaerke = linienstaerke or "1pt"
-  if tonumber(linienstaerke) then
-    if richtung == "horizontal" then
-      linienstaerke = publisher.aktuelles_raster.rasterbreite * linienstaerke
-    elseif richtung == "vertikal" then
-      linienstaerke = publisher.aktuelles_raster.rasterhoehe * linienstaerke
+  rulewidth = rulewidth or "1pt"
+  if tonumber(rulewidth) then
+    if direction == "horizontal" then
+      rulewidth = publisher.current_grid.gridwidth * rulewidth
+    elseif direction == "vertical" or direction == "vertikal" then
+      rulewidth = publisher.current_grid.gridheight * rulewidth
     end
   else
-    linienstaerke = tex.sp(linienstaerke)
+    rulewidth = tex.sp(rulewidth)
   end
-  linienstaerke = sp_to_bp(linienstaerke)
+  rulewidth = sp_to_bp(rulewidth)
 
-  local farbname = "Schwarz"
+  local colorname = "Schwarz"
 
   local n = node.new("whatsit","pdf_literal")
   n.mode = 0
-  if richtung == "horizontal" then
-    n.data = string.format("q %d w %s 0 0 m %g 0 l S Q",linienstaerke,publisher.farben[farbname].pdfstring,laenge)
-  elseif richtung == "vertikal" then
-    n.data = string.format("q %d w %s 0 0 m 0 %g l S Q",linienstaerke,publisher.farben[farbname].pdfstring,-laenge)
+  if direction == "horizontal" then
+    n.data = string.format("q %d w %s 0 0 m %g 0 l S Q",rulewidth,publisher.farben[colorname].pdfstring,length)
+  elseif direction == "vertikal" or direction == "vertikal" then
+    n.data = string.format("q %d w %s 0 0 m 0 %g l S Q",rulewidth,publisher.farben[colorname].pdfstring,-length)
   else
     --
   end
@@ -700,15 +701,15 @@ function neue_zeile( layoutxml,datenxml )
   publisher.seite_einrichten()
   local bereichname = publisher.read_attribute(layoutxml,datenxml,"area","string")
   local bereichname = bereichname or publisher.default_bereichname
-  local raster = publisher.aktuelles_raster
-  local aktuelle_zeile = raster:finde_passende_zeile(1,raster:anzahl_spalten(),1,bereichname)
-  if not aktuelle_zeile then
+  local raster = publisher.current_grid
+  local current_row = raster:finde_passende_zeile(1,raster:anzahl_spalten(),1,bereichname)
+  if not current_row then
     neue_seite()
     publisher.seite_einrichten()
     raster = publisher.aktuelle_seite.raster
-    raster:setze_aktuelle_zeile(1)
+    raster:set_current_row(1)
   else
-    raster:setze_aktuelle_zeile(aktuelle_zeile)
+    raster:set_current_row(current_row)
   end
 end
 
@@ -771,17 +772,17 @@ function objekt_ausgeben( layoutxml,datenxml )
   trace("Spalte = %q",tostring(spalte))
   trace("Zeile = %q",tostring(zeile))
 
-  local aktuelle_zeile_start  = publisher.aktuelles_raster:aktuelle_zeile(bereich)
-  local aktuelle_spalte_start = spalte or publisher.aktuelles_raster:aktuelle_spalte(bereich)
+  local current_row_start  = publisher.current_grid:current_row(bereich)
+  local aktuelle_spalte_start = spalte or publisher.current_grid:aktuelle_spalte(bereich)
 
   -- Die Höhe auf dieser Seite ist entweder das Minimum von verbleibende Platz oder maxhöhe
-  local max_ht_aktuell =  math.min(publisher.aktuelles_raster:anzahl_zeilen(bereich) - ( zeile or publisher.aktuelles_raster:aktuelle_zeile(bereich) ) + 1, maxhoehe or publisher.aktuelles_raster:anzahl_zeilen(bereich))
+  local max_ht_aktuell =  math.min(publisher.current_grid:anzahl_zeilen(bereich) - ( zeile or publisher.current_grid:current_row(bereich) ) + 1, maxhoehe or publisher.current_grid:anzahl_zeilen(bereich))
   local optionen = {
-    ht_aktuell = publisher.aktuelles_raster.rasterhoehe * max_ht_aktuell,
-    ht_max     = publisher.aktuelles_raster.rasterhoehe * ( maxhoehe or publisher.aktuelles_raster:anzahl_zeilen(bereich) ),
+    ht_aktuell = publisher.current_grid.gridheight * max_ht_aktuell,
+    ht_max     = publisher.current_grid.gridheight * ( maxhoehe or publisher.current_grid:anzahl_zeilen(bereich) ),
   }
 
-  local raster = publisher.aktuelles_raster
+  local raster = publisher.current_grid
   local tab    = publisher.dispatch(layoutxml,datenxml,optionen)
 
   local objekte = {}
@@ -805,7 +806,7 @@ function objekt_ausgeben( layoutxml,datenxml )
     end
   end
   for i=1,#objekte do
-    raster = publisher.aktuelles_raster
+    raster = publisher.current_grid
     objekt    = objekte[i].objekt
     objekttyp = objekte[i].objekttyp
 
@@ -824,7 +825,7 @@ function objekt_ausgeben( layoutxml,datenxml )
       publisher.ausgabe_bei_absolut(objekt,spalte + raster.extra_rand,zeile + raster.extra_rand,belegen)
     else
       -- Platz muss gesucht werden
-      -- local aktuelle_zeile = raster:aktuelle_zeile(bereich)
+      -- local current_row = raster:current_row(bereich)
       trace("ObjektAusgeben: Breitenberechnung")
       if not node.has_field(objekt,"width") then
         warning("Can't calculate with object's width!")
@@ -833,33 +834,33 @@ function objekt_ausgeben( layoutxml,datenxml )
       local hoehe_in_rasterzellen  = raster:hoehe_in_rasterzellen_sp (objekt.height + objekt.depth)
       trace("ObjektAusgeben: Breitenberechnung abgeschlossen: wd=%d,ht=%d",breite_in_rasterzellen,hoehe_in_rasterzellen)
 
-      trace("ObjektAusgeben: finde passende Zeile für das Objekt, aktuelle_zeile = %d",zeile or raster:aktuelle_zeile(bereich) or "-1")
+      trace("ObjektAusgeben: finde passende Zeile für das Objekt, current_row = %d",zeile or raster:current_row(bereich) or "-1")
       if zeile then
-        aktuelle_zeile = zeile
+        current_row = zeile
       else
-        aktuelle_zeile = nil
+        current_row = nil
       end
 
       -- Solange auf den nächsten Rahmen schalten, bis eine freie Fläche gefunden werden kann.
-      while aktuelle_zeile == nil do
+      while current_row == nil do
         if not spalte then
           -- Keine Zeile und keine Spalte angegeben. Dann suche ich mir doch die richtigen Werte selbst.
           if aktuelle_spalte_start + breite_in_rasterzellen - 1 > raster:anzahl_spalten() then
             aktuelle_spalte_start = 1
           end
         end
-        aktuelle_zeile = raster:finde_passende_zeile(aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen,bereich)
-        if not aktuelle_zeile then
+        current_row = raster:finde_passende_zeile(aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen,bereich)
+        if not current_row then
           warning("No suitable row found for object")
           publisher.naechster_rahmen(bereich)
           publisher.seite_einrichten()
-          raster = publisher.aktuelles_raster
+          raster = publisher.current_grid
         end
       end
 
-      log("»ObjektAusgeben«: %s in row %d and column %d, width=%d, height=%d", objekttyp, aktuelle_zeile, aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen)
-      trace("»ObjektAusgeben«: objekt placed at (%d,%d)",aktuelle_spalte_start,aktuelle_zeile)
-      publisher.ausgabe_bei(objekt,aktuelle_spalte_start,aktuelle_zeile,belegen,bereich,valign)
+      log("»ObjektAusgeben«: %s in row %d and column %d, width=%d, height=%d", objekttyp, current_row, aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen)
+      trace("»ObjektAusgeben«: objekt placed at (%d,%d)",aktuelle_spalte_start,current_row)
+      publisher.ausgabe_bei(objekt,aktuelle_spalte_start,current_row,belegen,bereich,valign)
       trace("Objekt ausgegeben.")
       zeile = nil -- die Zeile ist nicht mehr gültig, da schon ein Objekt ausgegeben wurde
       if i < #objekte then
@@ -868,7 +869,7 @@ function objekt_ausgeben( layoutxml,datenxml )
     end -- keine absolute Positionierung
   end
   if not belegen then
-    publisher.aktuelles_raster:setze_aktuelle_zeile(aktuelle_zeile_start)
+    publisher.current_grid:set_current_row(current_row_start)
   end
   trace("Objekte ausgegeben.")
 end
@@ -912,14 +913,14 @@ function seitenformat(layoutxml)
   local width  = publisher.read_attribute(layoutxml,datenxml,"width","length")
   local height = publisher.read_attribute(layoutxml,datenxml,"height","length")
 
-  publisher.options.seitenbreite = tex.sp(width)
+  publisher.options.pagewidth = tex.sp(width)
   publisher.options.seitenhoehe  = tex.sp(height)
-  tex.pdfpagewidth =  publisher.options.seitenbreite
+  tex.pdfpagewidth =  publisher.options.pagewidth
   tex.pdfpageheight = publisher.options.seitenhoehe
   tex.pdfpagewidth  = tex.pdfpagewidth   + tex.sp("2cm")
   tex.pdfpageheight = tex.pdfpageheight  + tex.sp("2cm")
 
-  tex.hsize = publisher.options.seitenbreite
+  tex.hsize = publisher.options.pagewidth
   tex.vsize = publisher.options.seitenhoehe
 end
 
@@ -957,8 +958,8 @@ end
 -- Remember (internally) the grid size (`width` und `height` in layout xml).
 function setze_raster(layoutxml)
   trace("Command: SetGrid")
-  publisher.options.rasterbreite = tex.sp(publisher.read_attribute(layoutxml,datenxml,"width","length"))
-  publisher.options.rasterhoehe  = tex.sp(publisher.read_attribute(layoutxml,datenxml,"height","length"))
+  publisher.options.gridwidth = tex.sp(publisher.read_attribute(layoutxml,datenxml,"width","length"))
+  publisher.options.gridheight  = tex.sp(publisher.read_attribute(layoutxml,datenxml,"height","length"))
 end
 
 -- Create a list of page types in publisher.seitentypen
@@ -1055,11 +1056,11 @@ end
 
 function speichere_datensatzdatei( layoutxml,datenxml )
   local towrite, tmp,tab
-  local dateiname   = publisher.read_attribute(layoutxml,datenxml,"filename",  "string")
+  local filename   = publisher.read_attribute(layoutxml,datenxml,"filename",  "string")
   local elementname = publisher.read_attribute(layoutxml,datenxml,"elementname","string")
   local auswahl     = publisher.read_attribute(layoutxml,datenxml,"select","string")
 
-  assert(dateiname)
+  assert(filename)
   assert(elementname)
 
   if auswahl then
@@ -1100,7 +1101,7 @@ function speichere_datensatzdatei( layoutxml,datenxml )
   -- },
 
   tmp[".__name"] = elementname
-  local datei = io.open(string.format("datensatzdatei.%s",dateiname),"w")
+  local datei = io.open(string.format("datensatzdatei.%s",filename),"w")
   towrite = publisher.xml_to_string(tmp)
   datei:write(towrite)
   datei:close()
@@ -1126,18 +1127,18 @@ end
 
 
 function tabelle( layoutxml,datenxml,optionen )
-  local breite         = publisher.read_attribute(layoutxml,datenxml,"width",        "number")
-  local hoehe          = publisher.read_attribute(layoutxml,datenxml,"height",          "number")
+  local breite         = publisher.read_attribute(layoutxml,datenxml,"width",         "number")
+  local hoehe          = publisher.read_attribute(layoutxml,datenxml,"height",        "number")
   local padding        = publisher.read_attribute(layoutxml,datenxml,"padding",       "length")
-  local spaltenabstand = publisher.read_attribute(layoutxml,datenxml,"columndistance","length")
-  local zeilenabstand  = publisher.read_attribute(layoutxml,datenxml,"leading", "length")
-  local schriftartname = publisher.read_attribute(layoutxml,datenxml,"fontface",    "string")
-  local dehnen         = publisher.read_attribute(layoutxml,datenxml,"stretch",        "string")
+  local columndistance = publisher.read_attribute(layoutxml,datenxml,"columndistance","length")
+  local zeilenabstand  = publisher.read_attribute(layoutxml,datenxml,"leading",       "length")
+  local schriftartname = publisher.read_attribute(layoutxml,datenxml,"fontface",      "string")
+  local autostretch    = publisher.read_attribute(layoutxml,datenxml,"stretch",       "string")
 
   padding        = tex.sp(padding        or "0pt")
-  spaltenabstand = tex.sp(spaltenabstand or "0pt")
+  columndistance = tex.sp(columndistance or "0pt")
   zeilenabstand  = tex.sp(zeilenabstand  or "0pt")
-  breite = publisher.aktuelles_raster.rasterbreite * breite
+  breite = publisher.current_grid.gridwidth * breite
 
 
   if not schriftartname then schriftartname = "text" end
@@ -1162,9 +1163,9 @@ function tabelle( layoutxml,datenxml,optionen )
   tabelle.padding_top    = padding
   tabelle.padding_right  = padding
   tabelle.padding_bottom = padding
-  tabelle.colsep = spaltenabstand
+  tabelle.colsep = columndistance
   tabelle.rowsep = zeilenabstand
-  tabelle.autostretch = dehnen
+  tabelle.autostretch = autostretch
 
 
   local n = tabelle:tabelle()
@@ -1182,9 +1183,9 @@ function tabellenkopf( layoutxml,datenxml )
 end
 
 function tlinie( layoutxml,datenxml )
-  local linienstaerke = publisher.read_attribute(layoutxml,datenxml,"rulewidth","length")
+  local rulewidth = publisher.read_attribute(layoutxml,datenxml,"rulewidth","length")
   local farbe = publisher.read_attribute(layoutxml,datenxml,"color","string")
-  return { linienstaerke = linienstaerke, farbe = farbe }
+  return { rulewidth = rulewidth, farbe = farbe }
 end
 
 function tr( layoutxml,datenxml )
@@ -1253,19 +1254,19 @@ function textblock( layoutxml,datenxml )
   trace("Textblock")
   local schriftfamilie
   local schriftartname = publisher.read_attribute(layoutxml,datenxml,"fontface","string")
-  local farbname       = publisher.read_attribute(layoutxml,datenxml,"color","string")
+  local colorname       = publisher.read_attribute(layoutxml,datenxml,"color","string")
   local breite         = publisher.read_attribute(layoutxml,datenxml,"width","number")
-  local winkel         = publisher.read_attribute(layoutxml,datenxml,"angle","number")
+  local angle          = publisher.read_attribute(layoutxml,datenxml,"angle","number")
   local columns        = publisher.read_attribute(layoutxml,datenxml,"columns","number")
-  local spaltenabstand = publisher.read_attribute(layoutxml,datenxml,"columndistance","string")
+  local columndistance = publisher.read_attribute(layoutxml,datenxml,"columndistance","string")
   local textformat     = publisher.read_attribute(layoutxml,datenxml,"textformat","string")
 
   columns = columns or 1
-  if not spaltenabstand then spaltenabstand = "3mm" end
-  if tonumber(spaltenabstand) then
-    spaltenabstand = publisher.aktuelles_raster.rasterbreite * spaltenabstand
+  if not columndistance then columndistance = "3mm" end
+  if tonumber(columndistance) then
+    columndistance = publisher.current_grid.gridwidth * columndistance
   else
-    spaltenabstand = tex.sp(spaltenabstand)
+    columndistance = tex.sp(columndistance)
   end
 
   if not schriftartname then schriftartname = "text" end
@@ -1281,12 +1282,12 @@ function textblock( layoutxml,datenxml )
   end
 
   local farbindex
-  if farbname then
-    if not publisher.farben[farbname] then
+  if colorname then
+    if not publisher.farben[colorname] then
       -- Farbe ist nicht definiert
-      err("Color %q is not defined.",farbname)
+      err("Color %q is not defined.",colorname)
     else
-      farbindex = publisher.farben[farbname].index
+      farbindex = publisher.farben[colorname].index
     end
   end
 
@@ -1294,14 +1295,14 @@ function textblock( layoutxml,datenxml )
     breite = xpath.get_number_value(breite)
   end
 
-  local breite_rasterzellen = breite
+  local width_gridcells = breite
 
-  local breite_sp           = breite_rasterzellen * publisher.aktuelles_raster.rasterbreite
+  local breite_sp           = width_gridcells * publisher.current_grid.gridwidth
 
   local objekte, nodes = {},{}
   local nodelist,parameter
 
-  local aktuelles_textformat
+  local current_textformat
 
   local tab = publisher.dispatch(layoutxml,datenxml)
 
@@ -1320,7 +1321,7 @@ function textblock( layoutxml,datenxml )
   end
   trace("Textblock: #objekte=%d",#objekte)
   if columns > 1 then
-    breite_sp = math.floor(  (breite_sp - spaltenabstand * ( columns - 1 ) )   / columns)
+    breite_sp = math.floor(  (breite_sp - columndistance * ( columns - 1 ) )   / columns)
   end
   for i,j in ipairs(objekte) do
     -- jeden <Absatz>, <Bild> oder so durchgehen, jetzt nur <Absatz>
@@ -1335,17 +1336,17 @@ function textblock( layoutxml,datenxml )
       node.slide(nodelist)
       publisher.fonts.pre_linebreak(nodelist)
       if j.textformat and publisher.textformate[j.textformat] then
-        aktuelles_textformat = publisher.textformate[j.textformat]
+        current_textformat = publisher.textformate[j.textformat]
       else
-        aktuelles_textformat = publisher.textformate[textformat]
+        current_textformat = publisher.textformate[textformat]
       end
-      if aktuelles_textformat then
+      if current_textformat then
         trace("Textblock: wende Textformate an")
-        local ausrichtung = aktuelles_textformat.ausrichtung
-        if ausrichtung == "linksbündig"  then parameter = { rightskip = publisher.rightskip } end
-        if ausrichtung == "rechtsbündig" then parameter = { leftskip  = publisher.leftskip  } end
-        if ausrichtung == "zentriert"    then parameter = { leftskip  = publisher.leftskip, rightskip = publisher.rightskip } end
-        if ausrichtung == "linksbündig" or ausrichtung == "rechtsbündig" or ausrichtung == "zentriert" then
+        local alignment = current_textformat.alignment
+        if alignment == "linksbündig"  then parameter = { rightskip = publisher.rightskip } end
+        if alignment == "rechtsbündig" then parameter = { leftskip  = publisher.leftskip  } end
+        if alignment == "zentriert"    then parameter = { leftskip  = publisher.leftskip, rightskip = publisher.rightskip } end
+        if alignment == "linksbündig" or alignment == "rechtsbündig" or alignment == "zentriert" then
           for i in node.traverse_id(publisher.glue_node,nodelist) do
             spec = i.spec
             if not spec.stretch_order or spec.stretch_order == 0 then
@@ -1380,24 +1381,24 @@ function textblock( layoutxml,datenxml )
 
     local zeilenanzahl_mehrspaltiger_satz = math.ceil(zeilenanzahl / columns)
     for i=1,zeilenanzahl_mehrspaltiger_satz do
-      local aktuelle_zeile,hbox_aktuelle_zeile
-      hbox_aktuelle_zeile = zeilen[i] -- erste Spalte
-      local tail = hbox_aktuelle_zeile
+      local current_row,hbox_current_row
+      hbox_current_row = zeilen[i] -- erste Spalte
+      local tail = hbox_current_row
       for j=2,columns do -- zweite und folgende columns
         local g1 = node.new("glue")
         g1.spec = node.new("glue_spec")
-        g1.spec.width = spaltenabstand
+        g1.spec.width = columndistance
         tail.next = g1
         g1.prev = tail
-        aktuelle_zeile = (j - 1) * zeilenanzahl_mehrspaltiger_satz + i
-        if aktuelle_zeile <= zeilenanzahl then
-          tail = zeilen[aktuelle_zeile]
+        current_row = (j - 1) * zeilenanzahl_mehrspaltiger_satz + i
+        if current_row <= zeilenanzahl then
+          tail = zeilen[current_row]
           g1.next = tail
           tail.prev = g1
         end
       end
       tail.next = nil
-      neue_nodes[#neue_nodes + 1] = node.hpack(hbox_aktuelle_zeile)
+      neue_nodes[#neue_nodes + 1] = node.hpack(hbox_current_row)
     end
     nodes=neue_nodes
   end
@@ -1413,8 +1414,8 @@ function textblock( layoutxml,datenxml )
 
   trace("Textbock: vpack()")
   nodelist = node.vpack(nodes[1])
-  if winkel then
-    nodelist = publisher.rotiere(nodelist,winkel)
+  if angle then
+    nodelist = publisher.rotiere(nodelist,angle)
   end
   trace("Textbock: end")
   return nodelist
