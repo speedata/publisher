@@ -336,14 +336,14 @@ end
 -- Definiert eine Schriftfamilie
 function definiere_schriftfamilie( layoutxml,datenxml )
   -- hier müssen die konkreten Instanzen erzeugt werden. Schriftgröße
-  -- und Zeilenabstand sind bekannt.
+  -- und baselineskip sind bekannt.
   local name        = publisher.read_attribute(layoutxml,datenxml,"name",       "string")
 
   local fonts = publisher.fonts
   local fam={}
-  -- Schriftgröße, Zeilenabstand sind in big points (1 bp ≈ 65782 sp)
+  -- Schriftgröße, baselineskip sind in big points (1 bp ≈ 65782 sp)
   fam.size          = publisher.read_attribute(layoutxml,datenxml,"fontsize","number")  * 65782
-  fam.zeilenabstand = publisher.read_attribute(layoutxml,datenxml,"leading","number") * 65782
+  fam.baselineskip = publisher.read_attribute(layoutxml,datenxml,"leading","number") * 65782
   fam.scriptsize    = fam.size * 0.8 -- subscript / superscript
   fam.scriptshift   = fam.size * 0.3
 
@@ -478,28 +478,28 @@ function gruppe( layoutxml,datenxml )
   publisher.seite_einrichten()
   local name        = publisher.read_attribute(layoutxml,datenxml,"name",       "string")
 
-  local gruppenname = name
+  local groupname = name
 
-  if publisher.gruppen[gruppenname] == nil then
-    log("Create »Gruppe« %q.",gruppenname)
+  if publisher.gruppen[groupname] == nil then
+    log("Create »Gruppe« %q.",groupname)
   else
-    node.flush_list(publisher.gruppen[gruppenname].inhalt)
-    publisher.gruppen[gruppenname] = nil
+    node.flush_list(publisher.gruppen[groupname].inhalt)
+    publisher.gruppen[groupname] = nil
   end
-  
+
   local r = publisher.raster:new()
   r:setze_rand(0,0,0,0)
   r:setze_breite_hoehe(publisher.aktuelle_seite.raster.gridwidth,publisher.aktuelle_seite.raster.gridheight)
-  publisher.gruppen[gruppenname] = { 
+  publisher.gruppen[groupname] = {
     inhalt = inhalt,
     raster  = r,
   }
-  
-  local merke_raster      = publisher.current_grid
-  local merke_gruppenname = publisher.aktuelle_gruppe
 
-  publisher.aktuelle_gruppe=gruppenname
-  publisher.current_grid = r
+  local save_grid      = publisher.current_grid
+  local save_groupname = publisher.current_group
+
+  publisher.current_group = groupname
+  publisher.current_grid  = r
   local elementname
 
   for _,v in ipairs(layoutxml) do
@@ -509,8 +509,8 @@ function gruppe( layoutxml,datenxml )
     end
   end
 
-  publisher.aktuelle_gruppe  = merke_gruppenname
-  publisher.current_grid = merke_raster
+  publisher.current_group  = save_groupname
+  publisher.current_grid = save_grid
 end
 
 -- Dummy-Element fürs Einbinden von xi:include-Dateien
@@ -566,7 +566,7 @@ function lade_schriftdatei( layoutxml,datenxml )
     },
   }
   log("filename = %q",filename or "?")
-  publisher.fonts.lade_schriftdatei(name,filename,extra_parameter)
+  publisher.fonts.load_fontfile(name,filename,extra_parameter)
 end
 
 -- Lädt eine Datensatzdatei (XML) und startet die Verarbeitung
@@ -589,10 +589,10 @@ end
 
 function leerzeile( layoutxml,datenxml )
   trace("Leerzeile, aktuelle Zeile = %d",publisher.current_grid:current_row())
-  local bereichname = publisher.read_attribute(layoutxml,datenxml,"area","string")
-  local bereichname = bereichname or publisher.default_bereichname
+  local areaname = publisher.read_attribute(layoutxml,datenxml,"area","string")
+  local areaname = areaname or publisher.default_areaname
   local current_grid = publisher.current_grid
-  local current_row = current_grid:finde_passende_zeile(1,current_grid:anzahl_spalten(),1,bereichname)
+  local current_row = current_grid:finde_passende_zeile(1,current_grid:anzahl_spalten(),1,areaname)
   if not current_row then
     current_grid:set_current_row(1)
   else
@@ -693,16 +693,16 @@ function nachricht( layoutxml, datenxml )
 end
 
 function naechster_rahmen( layoutxml,datenxml )
-  local bereichname = publisher.read_attribute(layoutxml,datenxml,"area","string")
-  publisher.naechster_rahmen(bereichname)
+  local areaname = publisher.read_attribute(layoutxml,datenxml,"area","string")
+  publisher.naechster_rahmen(areaname)
 end
 
 function neue_zeile( layoutxml,datenxml )
   publisher.seite_einrichten()
-  local bereichname = publisher.read_attribute(layoutxml,datenxml,"area","string")
-  local bereichname = bereichname or publisher.default_bereichname
+  local areaname = publisher.read_attribute(layoutxml,datenxml,"area","string")
+  local areaname = areaname or publisher.default_areaname
   local raster = publisher.current_grid
-  local current_row = raster:finde_passende_zeile(1,raster:anzahl_spalten(),1,bereichname)
+  local current_row = raster:finde_passende_zeile(1,raster:anzahl_spalten(),1,areaname)
   if not current_row then
     neue_seite()
     publisher.seite_einrichten()
@@ -732,7 +732,7 @@ end
 -- Gibt ein rechteckiges Objekt (derzeit nur Bild) aus
 function objekt_ausgeben( layoutxml,datenxml )
   trace("Command: PlaceObject")
-  local absolute_positionierung = false
+  local absolute_positioning = false
   local spalte           = publisher.read_attribute(layoutxml,datenxml,"column",         "string")
   local zeile            = publisher.read_attribute(layoutxml,datenxml,"row",            "string")
   local bereich          = publisher.read_attribute(layoutxml,datenxml,"area",           "string")
@@ -742,25 +742,25 @@ function objekt_ausgeben( layoutxml,datenxml )
   local maxhoehe         = publisher.read_attribute(layoutxml,datenxml,"maxheight",      "number")
   local rahmen           = publisher.read_attribute(layoutxml,datenxml,"frame",          "string")
   local hintergrund      = publisher.read_attribute(layoutxml,datenxml,"background",     "string")
-  local gruppenname      = publisher.read_attribute(layoutxml,datenxml,"groupname",      "number")
+  local groupname      = publisher.read_attribute(layoutxml,datenxml,"groupname",      "number")
   local valign           = publisher.read_attribute(layoutxml,datenxml,"valign",         "string")
 
-  bereich = bereich or publisher.default_bereichname
+  bereich = bereich or publisher.default_areaname
   belegen = belegen or true
 
   if spalte and not tonumber(spalte) then
     -- spalte scheint ein String zu sein
-    absolute_positionierung = true
+    absolute_positioning = true
     spalte = tex.sp(spalte)
   end
 
   if zeile and not tonumber(zeile) then
     -- zeile scheint ein String zu sein
-    absolute_positionierung = true
+    absolute_positioning = true
     zeile = tex.sp(zeile)
   end
 
-  if absolute_positionierung then
+  if absolute_positioning then
     if not ( zeile and spalte ) then
       err("»Spalte« and »Zeile« must be given with absolute positioning (»ObjektAusgeben«).")
       return
@@ -788,10 +788,9 @@ function objekt_ausgeben( layoutxml,datenxml )
   local objekte = {}
   local objekt, objekttyp
 
-  if gruppenname then
-    local gruppenname = gruppenname
-    objekte[1] = { objekt = node.copy(publisher.gruppen[gruppenname].inhalt), 
-      objekttyp = string.format("Gruppe (%s)", gruppenname)}
+  if groupname then
+    objekte[1] = { objekt = node.copy(publisher.gruppen[groupname].inhalt),
+      objekttyp = string.format("Gruppe (%s)", groupname)}
   else
     for i,j in ipairs(tab) do
       objekt = publisher.inhalt(j)
@@ -821,7 +820,7 @@ function objekt_ausgeben( layoutxml,datenxml )
       publisher.boxit(objekt)
     end
 
-    if absolute_positionierung then
+    if absolute_positioning then
       publisher.ausgabe_bei_absolut(objekt,spalte + raster.extra_rand,zeile + raster.extra_rand,belegen)
     else
       -- Platz muss gesucht werden
@@ -1126,18 +1125,19 @@ function sup( layoutxml,datenxml )
 end
 
 
+-- FIXME: leading -> rowdistance or so
 function tabelle( layoutxml,datenxml,optionen )
   local breite         = publisher.read_attribute(layoutxml,datenxml,"width",         "number")
   local hoehe          = publisher.read_attribute(layoutxml,datenxml,"height",        "number")
   local padding        = publisher.read_attribute(layoutxml,datenxml,"padding",       "length")
   local columndistance = publisher.read_attribute(layoutxml,datenxml,"columndistance","length")
-  local zeilenabstand  = publisher.read_attribute(layoutxml,datenxml,"leading",       "length")
+  local rowdistance    = publisher.read_attribute(layoutxml,datenxml,"leading",       "length")
   local schriftartname = publisher.read_attribute(layoutxml,datenxml,"fontface",      "string")
   local autostretch    = publisher.read_attribute(layoutxml,datenxml,"stretch",       "string")
 
   padding        = tex.sp(padding        or "0pt")
   columndistance = tex.sp(columndistance or "0pt")
-  zeilenabstand  = tex.sp(zeilenabstand  or "0pt")
+  rowdistance    = tex.sp(rowdistance    or "0pt")
   breite = publisher.current_grid.gridwidth * breite
 
 
@@ -1164,7 +1164,7 @@ function tabelle( layoutxml,datenxml,optionen )
   tabelle.padding_right  = padding
   tabelle.padding_bottom = padding
   tabelle.colsep = columndistance
-  tabelle.rowsep = zeilenabstand
+  tabelle.rowsep = rowdistance
   tabelle.autostretch = autostretch
 
 

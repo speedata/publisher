@@ -52,100 +52,100 @@ function new( self )
     belegung_pdf      = {}, -- wird vor der Seitenausgabe (output-Routine) abgefragt
     extra_rand        = 0,  -- für Beschnittmarken, in sp
     beschnittzugabe   = 0,  -- bleed, in sp
-    platzierungsbereiche = { [publisher.default_bereichname] = { { zeile = 1, spalte = 1} } },  -- Platzierungsrahmen
+    platzierungsbereiche = { [publisher.default_areaname] = { { zeile = 1, spalte = 1} } },  -- Platzierungsrahmen
   }
 	setmetatable(r, self)
 	return r
 end
 
-function current_row( self,bereichname )
+function current_row( self,areaname )
   assert(self)
-  local bereichname = bereichname or publisher.default_bereichname
-  bereich = self.platzierungsbereiche[bereichname]
-  assert(bereich,string.format("Area %q not known",tostring(bereichname)))
+  local areaname = areaname or publisher.default_areaname
+  bereich = self.platzierungsbereiche[areaname]
+  assert(bereich,string.format("Area %q not known",tostring(areaname)))
   return bereich.current_row or 1
 end
 
 function aktuelle_spalte( self,bereich )
   assert(self)
-  local bereich = bereich or publisher.default_bereichname
+  local bereich = bereich or publisher.default_areaname
   assert(self.platzierungsbereiche[bereich],string.format("Area %q not known",tostring(bereich)))
   return self.platzierungsbereiche[bereich].aktuelle_spalte or 1
 end
 
-function set_current_row( self,zeile,bereichname )
+function set_current_row( self,zeile,areaname )
   assert(self)
-  local bereichname = bereichname or publisher.default_bereichname
-  local bereich = self.platzierungsbereiche[bereichname]
-  assert(bereich,string.format("Area %q not known",tostring(bereichname)))
+  local areaname = areaname or publisher.default_areaname
+  local bereich = self.platzierungsbereiche[areaname]
+  assert(bereich,string.format("Area %q not known",tostring(areaname)))
   bereich.current_row = zeile
 end
 
-function setze_aktuelle_spalte( self,spalte,bereichname )
+function setze_aktuelle_spalte( self,spalte,areaname )
   assert(self)
-  local bereichname = bereichname or publisher.default_bereichname
-  local bereich = self.platzierungsbereiche[bereichname]
-  assert(bereich,string.format("Area %q not known",tostring(bereichname)))
+  local areaname = areaname or publisher.default_areaname
+  local bereich = self.platzierungsbereiche[areaname]
+  assert(bereich,string.format("Area %q not known",tostring(areaname)))
   bereich.aktuelle_spalte = spalte
 end
 
-function anzahl_zeilen(self,bereichname)
+function anzahl_zeilen(self,areaname)
   assert(self)
-  local bereichname = bereichname or publisher.default_bereichname
-  local aktueller_rahmen = self:rahmennummer(bereichname)
-  local bereich = self.platzierungsbereiche[bereichname]
-  assert(bereich,string.format("Area %q not known",tostring(bereichname)))
+  local areaname = areaname or publisher.default_areaname
+  local aktueller_rahmen = self:rahmennummer(areaname)
+  local bereich = self.platzierungsbereiche[areaname]
+  assert(bereich,string.format("Area %q not known",tostring(areaname)))
   local hoehe = bereich[aktueller_rahmen].hoehe
   return hoehe
 end
 
-function anzahl_spalten(self,bereichname)
+function anzahl_spalten(self,areaname)
   assert(self)
-  local bereichname = bereichname or publisher.default_bereichname
-  local aktueller_rahmen = self:rahmennummer(bereichname)
-  local bereich = self.platzierungsbereiche[bereichname]
-  assert(bereich,string.format("Area %q not known",tostring(bereichname)))
+  local areaname = areaname or publisher.default_areaname
+  local aktueller_rahmen = self:rahmennummer(areaname)
+  local bereich = self.platzierungsbereiche[areaname]
+  assert(bereich,string.format("Area %q not known",tostring(areaname)))
   local breite = bereich[aktueller_rahmen].breite
   return breite
 end
 
 function setze_anzahl_zeilen( self,zeilen )
   assert(self)
-  local bereichname = publisher.default_bereichname
-  local bereich = self.platzierungsbereiche[bereichname]
-  assert(bereich,string.format("Area %q not known",tostring(bereichname)))
-  local aktueller_rahmen = self:rahmennummer(bereichname)
+  local areaname = publisher.default_areaname
+  local bereich = self.platzierungsbereiche[areaname]
+  assert(bereich,string.format("Area %q not known",tostring(areaname)))
+  local aktueller_rahmen = self:rahmennummer(areaname)
   bereich[aktueller_rahmen].hoehe = zeilen
 end
 
 function setze_anzahl_spalten(self,spalten)
   assert(self)
-  local bereich = publisher.default_bereichname
+  local bereich = publisher.default_areaname
   assert(self.platzierungsbereiche[bereich],string.format("Area %q not known",tostring(bereich)))
   for i,v in ipairs(self.platzierungsbereiche[bereich]) do
     v.breite = spalten
   end
 end
 
-function anzahl_rahmen( self,bereichname )
-  local bereichname = bereichname or publisher.default_bereichname
-  local bereich = self.platzierungsbereiche[bereichname]
+function anzahl_rahmen( self,areaname )
+  local areaname = areaname or publisher.default_areaname
+  local bereich = self.platzierungsbereiche[areaname]
   assert(bereich,string.format("Area %q not known",tostring(bereichame)))
   local anzahl_rahmen = #bereich
   return anzahl_rahmen
 end
 
-function rahmennummer( self,bereichname )
-  local bereichname = bereichname or publisher.default_bereichname
-  local bereich = self.platzierungsbereiche[bereichname]
+function rahmennummer( self,areaname )
+  local areaname = areaname or publisher.default_areaname
+  local bereich = self.platzierungsbereiche[areaname]
   assert(bereich,string.format("Area %q not known",tostring(bereichame)))
   local anzahl_rahmen = #bereich
   return bereich.aktueller_rahmen or 1
 end
 
-function setze_rahmennummer( self,bereichname, nummer )
-  local bereichname = bereichname or publisher.default_bereichname
-  local bereich = self.platzierungsbereiche[bereichname]
+function setze_rahmennummer( self,areaname, nummer )
+  local areaname = areaname or publisher.default_areaname
+  local bereich = self.platzierungsbereiche[areaname]
   assert(bereich,string.format("Area %q not known",tostring(bereichame)))
   local anzahl_rahmen = #bereich
   bereich.aktueller_rahmen = nummer
@@ -162,29 +162,29 @@ end
 
 -- Markiert (intern) den rechteckigen Bereich durch `x`, `y` (linke obere Ecke)
 -- und der Breite `b` und Höhe `h` als belegt. 
-function belege_zellen(self,x,y,b,h,zeichne_markierung_p,bereichname)
+function belege_zellen(self,x,y,b,h,zeichne_markierung_p,areaname)
   if not x then return false end
-  bereichname = bereichname or publisher.default_bereichname
-  self:setze_aktuelle_spalte(x + b,bereichname)
+  areaname = areaname or publisher.default_areaname
+  self:setze_aktuelle_spalte(x + b,areaname)
   -- Todo: neuer Bereich, wenn der herunter rausragt
-  self:set_current_row(y,bereichname)
+  self:set_current_row(y,areaname)
   local rasterkonflikt = false
-  if  x + b - 1 > self:anzahl_spalten(bereichname) then
+  if  x + b - 1 > self:anzahl_spalten(areaname) then
     warning("Object protrudes into the right margin")
     rasterkonflikt = true
   end
-  if y + h - 1 > self:anzahl_zeilen(bereichname) then
+  if y + h - 1 > self:anzahl_zeilen(areaname) then
     warning("Object protrudes below the last line of the page")
     rasterkonflikt = true
   end
   local rahmen_rand_links, rahmen_rand_oben
-  if bereichname == publisher.default_bereichname then
+  if areaname == publisher.default_areaname then
     rahmen_rand_links, rahmen_rand_oben = 0,0
   else
-    local bereich = self.platzierungsbereiche[bereichname]
-    assert(bereich,string.format("Area %q not known",tostring(bereichname)))
-    local current_row = self:current_row(bereichname)
-    local block = bereich[self:rahmennummer(bereichname)]
+    local bereich = self.platzierungsbereiche[areaname]
+    assert(bereich,string.format("Area %q not known",tostring(areaname)))
+    local current_row = self:current_row(areaname)
+    local block = bereich[self:rahmennummer(areaname)]
     rahmen_rand_links = block.spalte - 1
     rahmen_rand_oben = block.zeile - 1
   end
@@ -225,27 +225,27 @@ end
 -- Anfangsspalte ist @spalte@. Wenn die Seitengröße noch nicht gesetzt wurde
 -- (z.B. durch @setze_rand()@), dann wird die nächste freie Zeile ausgegeben.
 -- Ist die Seite voll, dann ist der Rückgabewert nil.
-function finde_passende_zeile( self,spalte,breite,hoehe,bereichname)
+function finde_passende_zeile( self,spalte,breite,hoehe,areaname)
   if not spalte then return false end
   local rahmen_rand_links, rahmen_rand_oben
-  if bereichname == publisher.default_bereichname then
+  if areaname == publisher.default_areaname then
     rahmen_rand_links, rahmen_rand_oben = 0,0
   else
-    local bereich = self.platzierungsbereiche[bereichname]
-    assert(bereich,string.format("Area %q not known",tostring(bereichname)))
+    local bereich = self.platzierungsbereiche[areaname]
+    assert(bereich,string.format("Area %q not known",tostring(areaname)))
     -- todo: den richtigen Block finden, da die Blöcke / Rahmen unterschiedlich breit/hoch sein können!
-    local block = bereich[self:rahmennummer(bereichname)]
+    local block = bereich[self:rahmennummer(areaname)]
     rahmen_rand_links = block.spalte - 1
     rahmen_rand_oben = block.zeile - 1
   end
 
   -- FIXME: überlegen, was hier sinnvoll ist!?! - noch ein ziemlich ineffizienter Algorithmus! sieht aus wie O(n^2)
   -- bei n Zeilen Höhe
-  if self:anzahl_zeilen(bereichname) < self:current_row(bereichname) + hoehe - 1 then return nil end
-  for z = self:current_row(bereichname) + rahmen_rand_oben, self:anzahl_zeilen(bereichname) do
+  if self:anzahl_zeilen(areaname) < self:current_row(areaname) + hoehe - 1 then return nil end
+  for z = self:current_row(areaname) + rahmen_rand_oben, self:anzahl_zeilen(areaname) do
     if self:passt_x_in_zeile(spalte + rahmen_rand_links,breite,z) then
 
-      if self:anzahl_zeilen(bereichname) < z - rahmen_rand_oben + hoehe then
+      if self:anzahl_zeilen(areaname) < z - rahmen_rand_oben + hoehe then
         return nil
       else
         local passt = true
@@ -261,7 +261,7 @@ function finde_passende_zeile( self,spalte,breite,hoehe,bereichname)
     end
   end
   if self.seitengroesse_bekannt == false then
-    return self:anzahl_zeilen(bereichname) + 1
+    return self:anzahl_zeilen(areaname) + 1
   end
   return nil
 end
@@ -323,18 +323,18 @@ function zeichne_raster(self)
 end
 
 -- Gibt die Position der Rasterzelle in sp vom linken und oberen Rand.
-function position_rasterzelle_mass_tex(self,x,y,bereichname,wd,ht,valign)
+function position_rasterzelle_mass_tex(self,x,y,areaname,wd,ht,valign)
   local x_sp, y_sp
   if not self.rand_links then return nil, "Linker Rand nicht definiert. Fehlt das <Rand> Tag in Seitenformat?" end
   local rahmen_rand_links, rahmen_rand_oben
 
-  if bereichname == publisher.default_bereichname then
+  if areaname == publisher.default_areaname then
     rahmen_rand_links, rahmen_rand_oben = 0,0
   else
-    local bereich = self.platzierungsbereiche[bereichname]
-    assert(bereich,string.format("Area %q not known",tostring(bereichname)))
+    local bereich = self.platzierungsbereiche[areaname]
+    assert(bereich,string.format("Area %q not known",tostring(areaname)))
     local aktueller_rahmen = bereich.aktueller_rahmen or 1
-    local current_row = self:current_row(bereichname)
+    local current_row = self:current_row(areaname)
     -- todo: den richtigen Block finden, da die Blöcke / Rahmen unterschiedlich breit/hoch sein können!
     local block = bereich[aktueller_rahmen]
     rahmen_rand_links = block.spalte - 1

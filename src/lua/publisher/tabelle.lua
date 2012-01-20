@@ -374,7 +374,7 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
   local rowspans = {}
 
   local fam = publisher.fonts.lookup_schriftfamilie_nummer_instanzen[self.schriftfamilie]
-  local min_lineheight = fam.zeilenabstand
+  local min_lineheight = fam.baselineskip
 
   if tr_contents.minheight then
     zeilenhoehe = math.max(publisher.current_grid.gridheight * tr_contents.minheight, min_lineheight)

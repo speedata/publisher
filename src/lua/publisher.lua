@@ -42,7 +42,7 @@ hlist_node     = node.id("hlist")
 
 pdf_literal_node = node.subtype("pdf_literal")
 
-default_bereichname = "__seite"
+default_areaname = "__seite"
 
 -- the language of the layout instructions ('en' or 'de')
 current_layoutlanguage = nil
@@ -62,7 +62,7 @@ datensatz_verteiler = {}
 user_defined_funktionen = { last = 0}
 
 -- die aktuelle Gruppe
-aktuelle_gruppe = nil
+current_group = nil
 current_grid = nil
 
 -- Die Tabelle Seitentypen enthält als Schlüssel den Seitentypnamen und
@@ -376,7 +376,7 @@ end
 
 -- Gibt die nodelist bei Rasterzelle (x,y) aus. Wenn belegen==true dann die Zellen als belegt markieren.
 function ausgabe_bei( nodelist, x,y,belegen,bereich,valign)
-  bereich = bereich or default_bereichname
+  bereich = bereich or default_areaname
   local r = current_grid
   local wd = nodelist.width
   local ht = nodelist.height + nodelist.depth
@@ -388,9 +388,9 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich,valign)
     err(delta_y)
     exit()
   end
-  if aktuelle_gruppe then
+  if current_group then
     -- Den Inhalt der Nodeliste in die aktuelle Gruppe ausgeben. 
-    local gruppe = gruppen[aktuelle_gruppe]
+    local gruppe = gruppen[current_group]
     assert(gruppe)
 
     local n = add_glue( nodelist ,"head",{ width = delta_x })
@@ -532,14 +532,14 @@ function seite_einrichten()
   end
 end
 
-function naechster_rahmen( bereichname )
-  local aktuelle_nummer = current_grid:rahmennummer(bereichname)
-  if aktuelle_nummer >= current_grid:anzahl_rahmen(bereichname) then
+function naechster_rahmen( areaname )
+  local aktuelle_nummer = current_grid:rahmennummer(areaname)
+  if aktuelle_nummer >= current_grid:anzahl_rahmen(areaname) then
     neue_seite()
   else
-    current_grid:setze_rahmennummer(bereichname, aktuelle_nummer + 1)
+    current_grid:setze_rahmennummer(areaname, aktuelle_nummer + 1)
   end
-  current_grid:set_current_row(1,bereichname)
+  current_grid:set_current_row(1,areaname)
 end
 
 function neue_seite()
@@ -1057,7 +1057,7 @@ function do_linebreak( nodelist,hsize,parameters )
       maxskip = 0
       for glyf in node.traverse_id(glyph_node,head.list) do
         local fam = node.has_attribute(glyf,att_fontfamily)
-        maxskip = math.max(fonts.lookup_schriftfamilie_nummer_instanzen[fam].zeilenabstand,maxskip)
+        maxskip = math.max(fonts.lookup_schriftfamilie_nummer_instanzen[fam].baselineskip,maxskip)
       end
       head.height = 0.75 * maxskip
       head.depth  = 0.25 * maxskip

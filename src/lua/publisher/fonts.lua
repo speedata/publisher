@@ -35,12 +35,12 @@ lookup_schriftfamilie_name_nummer={}
 --   fettkursiv
 --   kursiv
 --   fett
---   zeilenabstand
+--   baselineskip
 --   size
 lookup_schriftfamilie_nummer_instanzen={}
 
 
-function lade_schriftdatei( name, dateiname,parameter_tab)
+function load_fontfile( name, dateiname,parameter_tab)
   assert(dateiname)
   assert(name)
   -- w("Lade Schriftdatei '%s' mit dem Dateinamen '%s'",name,dateiname)
