@@ -22,7 +22,7 @@ if type(xmlreader) ~= "table" then
 end
 
 
-errorlog = io.open(string.format("%s.protokoll",tex.jobname),"a")
+errorlog = io.open(string.format("%s.protocol",tex.jobname),"a")
 errorlog:write("---------------------------------------------\n")
 
 starttime = os.gettimeofday()
