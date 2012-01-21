@@ -60,22 +60,22 @@ function calculate_spaltenbreite_fuer_zeile(self, tr_contents,current_row,colspa
       end
     end
 
-    local objekte = {}
+    local objects = {}
 
     for i,j in ipairs(td_contents) do
       if publisher.elementname(j,true) == "Paragraph" then
-        objekte[#objekte + 1] = publisher.inhalt(j)
+        objects[#objects + 1] = publisher.inhalt(j)
       elseif publisher.elementname(j,true) == "Image" then
         -- FIXME: Bild sollte auch ein "Objekt" sein
-        objekte[#objekte + 1] = publisher.inhalt(j)
+        objects[#objects + 1] = publisher.inhalt(j)
       elseif publisher.elementname(j,true) == "Table" then
         -- FIXME: Bild sollte auch ein "Objekt" sein
-        objekte[#objekte + 1] = publisher.inhalt(j)[1]
+        objects[#objects + 1] = publisher.inhalt(j)[1]
       else
         warning("Object not recognized: %s",publisher.elementname(j) or "???")
       end
     end
-    td_contents.objekte = objekte
+    td_contents.objects = objects
 
     local td_randlinks  = tex.sp(td_contents["border-left"]  or 0)
     local td_randrechts = tex.sp(td_contents["border-right"] or 0)
@@ -83,31 +83,31 @@ function calculate_spaltenbreite_fuer_zeile(self, tr_contents,current_row,colspa
     local padding_left  = td_contents.padding_left  or self.padding_left
     local padding_right = td_contents.padding_right or self.padding_right
 
-    for _,objekt in ipairs(objekte) do
+    for _,object in ipairs(objects) do
       -- FIXME: (Default-)Textformate für Absätze
-      if type(objekt)=="table" then
-        trace("Tabelle: überprüfe auf Nodeliste (%s)",tostring(objekt.nodelist ~= nil))
+      if type(object)=="table" then
+        trace("Tabelle: überprüfe auf Nodeliste (%s)",tostring(object.nodelist ~= nil))
 
-        if objekt.nodelist then
+        if object.nodelist then
           -- FIXME: dynamisches Textformat
-          objekt:apply_textformat("text")
-          publisher.setze_fontfamilie_wenn_notwendig(objekt.nodelist,self.schriftfamilie)
-          publisher.fonts.pre_linebreak(objekt.nodelist)
+          object:apply_textformat("text")
+          publisher.setze_fontfamilie_wenn_notwendig(object.nodelist,self.schriftfamilie)
+          publisher.fonts.pre_linebreak(object.nodelist)
         end
 
-        if objekt.min_width then
-          min_wd = math.max(objekt:min_width() + padding_left  + padding_right + td_randlinks + td_randrechts, min_wd or 0)
+        if object.min_width then
+          min_wd = math.max(object:min_width() + padding_left  + padding_right + td_randlinks + td_randrechts, min_wd or 0)
         end
-        if objekt.max_width then
-          max_wd = math.max(objekt:max_width() + padding_left  + padding_right + td_randlinks + td_randrechts, max_wd or 0)
+        if object.max_width then
+          max_wd = math.max(object:max_width() + padding_left  + padding_right + td_randlinks + td_randrechts, max_wd or 0)
         end
         trace("Tabelle: min_wd, max_wd gesetzt (%gpt,%gpt)",min_wd / 2^16, max_wd / 2^16)
       end
       if not ( min_wd and max_wd) then
-        trace("min_wd und max_wd noch nicht gesetzt. Typ(objekt)==%s",type(objekt))
-        if objekt.width then
-          min_wd = objekt.width + padding_left  + padding_right + td_randlinks + td_randrechts
-          max_wd = objekt.width + padding_left  + padding_right + td_randlinks + td_randrechts
+        trace("min_wd und max_wd noch nicht gesetzt. Typ(object)==%s",type(object))
+        if object.width then
+          min_wd = object.width + padding_left  + padding_right + td_randlinks + td_randrechts
+          max_wd = object.width + padding_left  + padding_right + td_randlinks + td_randrechts
           trace("Tabelle: Breite (Bild) = %gpt",min_wd / 2^16)
         else
           warning("Could not determine min_wd and max_wd")
@@ -414,51 +414,51 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
     -- in der Höhenberechnung auch border-top und border-bottom! FIXME
     local zelle
 
-    -- Die Objekte wurden in der Spaltenbreitenbestimmung
+    -- Die objects wurden in der Spaltenbreitenbestimmung
     -- hinzugefügt. Falls die Spaltenbreiten vogegeben wurden,
     -- dann wurde die Spaltenbreitenbestimmung ja gar nicht aufgerufen
-    -- und die Objekte müssen hier hinzugefügt werden (not DRY!)
-    if not td_contents.objekte then
-      local objekte = {}
+    -- und die objects müssen hier hinzugefügt werden (not DRY!)
+    if not td_contents.objects then
+      local objects = {}
 
       for i,j in ipairs(td_contents) do
         if publisher.elementname(j,true) == "Paragraph" then
-          objekte[#objekte + 1] = publisher.inhalt(j)
+          objects[#objects + 1] = publisher.inhalt(j)
         elseif publisher.elementname(j,true) == "Image" then
-          -- FIXME: Bild sollte auch ein "Objekt" sein
-          objekte[#objekte + 1] = publisher.inhalt(j)
+          -- FIXME: Bild sollte auch ein "object" sein
+          objects[#objects + 1] = publisher.inhalt(j)
         elseif publisher.elementname(j,true) == "Table" then
-          -- FIXME: Bild sollte auch ein "Objekt" sein
-          objekte[#objekte + 1] = publisher.inhalt(j)[1]
+          -- FIXME: Bild sollte auch ein "object" sein
+          objects[#objects + 1] = publisher.inhalt(j)[1]
         else
           warning("Object not recognized: %s",publisher.elementname(j,true) or "???")
         end
       end
-      -- trace("Tabelle: Objekte für die Tabellenzelle eingelesen (calculate_rowheights)")
-      td_contents.objekte = objekte
+      -- trace("Tabelle: objects für die Tabellenzelle eingelesen (calculate_rowheights)")
+      td_contents.objects = objects
     end
 
-    for _,objekt in ipairs(td_contents.objekte) do
-      if type(objekt)=="table" then
-        if not (objekt and objekt.nodelist) then
+    for _,object in ipairs(td_contents.objects) do
+      if type(object)=="table" then
+        if not (object and object.nodelist) then
           w("Achtung, keine Nodeliste gefunden!")
         end
 
-        if objekt.nodelist then
+        if object.nodelist then
           -- FIXME: dynamisches Textformat
-          -- objekt:apply_textformat("text")
+          -- object:apply_textformat("text")
           parameter = nil
-          if objekt.textformat then
-            if not publisher.textformate[objekt.textformat] then
-              err("Textformat %q not defined!",objekt.textformat)
+          if object.textformat then
+            if not publisher.textformate[object.textformat] then
+              err("Textformat %q not defined!",object.textformat)
             else
-              if publisher.textformate[objekt.textformat]["alignment"] == "linksbündig" then
+              if publisher.textformate[object.textformat]["alignment"] == "linksbündig" then
                 parameter = { rightskip = publisher.rightskip }
               end
-              if publisher.textformate[objekt.textformat]["alignment"] == "rechtsbündig" then
+              if publisher.textformate[object.textformat]["alignment"] == "rechtsbündig" then
                 parameter = { leftskip = publisher.leftskip }
               end
-              if publisher.textformate[objekt.textformat]["alignment"] == "zentriert" then
+              if publisher.textformate[object.textformat]["alignment"] == "zentriert" then
                 parameter = { leftskip = publisher.leftskip, rightskip = publisher.rightskip }
               end
             end
@@ -472,10 +472,10 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
               parameter = { leftskip = publisher.leftskip }
             end
           end
-          publisher.setze_fontfamilie_wenn_notwendig(objekt.nodelist,self.schriftfamilie)
-          publisher.fonts.pre_linebreak(objekt.nodelist)
+          publisher.setze_fontfamilie_wenn_notwendig(object.nodelist,self.schriftfamilie)
+          publisher.fonts.pre_linebreak(object.nodelist)
         end
-        tmp = node.copy_list(objekt.nodelist)
+        tmp = node.copy_list(object.nodelist)
         local align = td_contents.align or tr_contents.align or self.align[current_column]
         if align=="center" then
           tmp = publisher.add_glue(tmp,"head", fill)
@@ -490,16 +490,16 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
         else
           zelle = v
         end
-      elseif (type(objekt)=="userdata" and node.has_field(objekt,"width")) then
+      elseif (type(object)=="userdata" and node.has_field(object,"width")) then
         if zelle then
-          node.tail(zelle).next = objekt
+          node.tail(zelle).next = object
         else
-          zelle = objekt
+          zelle = object
         end
       end
     end
-    -- wenn keine Objekte in einer Zeile sind, dann erzeugen wir
-    -- ein dummy-Objekt, damit die Zeile erzeugt werden kann (und vpack nicht)
+    -- wenn keine objects in einer Zeile sind, dann erzeugen wir
+    -- ein dummy-object, damit die Zeile erzeugt werden kann (und vpack nicht)
     -- über ein nil stolpert.
     if not zelle then
       zelle = node.new("hlist")
@@ -673,30 +673,30 @@ function setze_zeile(self, tr_contents, current_row )
     local current = node.tail(zelle_start)
 
 
-    for _,objekt in ipairs(td_contents.objekte) do
-      if type(objekt) == "table" then
-        if not (objekt and objekt.nodelist) then
+    for _,object in ipairs(td_contents.objects) do
+      if type(object) == "table" then
+        if not (object and object.nodelist) then
           warning("No nodelist found!")
         end
-        v = node.copy_list(objekt.nodelist)
-      elseif type(objekt) == "userdata" then
-        v = node.copy_list(objekt)
+        v = node.copy_list(object.nodelist)
+      elseif type(object) == "userdata" then
+        v = node.copy_list(object)
       end
 
-      if type(objekt) == "table" then
+      if type(object) == "table" then
         -- Absatz mit Nodeliste
         local parameter = nil
-        if objekt.textformat then
-          if not publisher.textformate[objekt.textformat] then
-            err("Textformat %q not defined!",objekt.textformat)
+        if object.textformat then
+          if not publisher.textformate[object.textformat] then
+            err("Textformat %q not defined!",object.textformat)
           else
-            if publisher.textformate[objekt.textformat]["alignment"] == "linksbündig" then
+            if publisher.textformate[object.textformat]["alignment"] == "linksbündig" then
               parameter = { rightskip = publisher.rightskip }
             end
-            if publisher.textformate[objekt.textformat]["alignment"] == "rechtsbündig" then
+            if publisher.textformate[object.textformat]["alignment"] == "rechtsbündig" then
               parameter = { leftskip = publisher.leftskip }
             end
-            if publisher.textformate[objekt.textformat]["alignment"] == "zentriert" then
+            if publisher.textformate[object.textformat]["alignment"] == "zentriert" then
               parameter = { leftskip = publisher.leftskip, rightskip = publisher.rightskip }
             end
           end
@@ -714,7 +714,7 @@ function setze_zeile(self, tr_contents, current_row )
         if publisher.options.trace then
           v = publisher.boxit(v)
         end
-      elseif type(objekt) == "userdata" then
+      elseif type(object) == "userdata" then
         v = node.hpack(v)
       else
         assert(false)
@@ -935,7 +935,6 @@ function setze_tabelle(self)
   local aktuelle_tabelle
   local anzahl_zeilen_in_der_aktuellen_tabelle = 0
   local tmp
-  if not trace_objekt_counter then  trace_objekt_counter = 0 end
 
   if not kopfzeilen[1] then
     kopfzeilen[1] = node.new("hlist") -- dummy-Kopfzeile

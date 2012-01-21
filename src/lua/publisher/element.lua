@@ -55,21 +55,21 @@ function absatz( layoutxml,datenxml )
 
 
   local a = publisher.Paragraph:new(textformat)
-  local objekte = {}
+  local objects = {}
   local tab = publisher.dispatch(layoutxml,datenxml)
 
   for i,j in ipairs(tab) do
     trace("Paragraph Elementname = %q",tostring(publisher.elementname(j,true)))
     if publisher.elementname(j,true) == "Value" and type(publisher.inhalt(j)) == "table" then
-      objekte[#objekte + 1] = publisher.parse_html(publisher.inhalt(j))
+      objects[#objects + 1] = publisher.parse_html(publisher.inhalt(j))
     else
-      objekte[#objekte + 1] = publisher.inhalt(j)
+      objects[#objects + 1] = publisher.inhalt(j)
     end
   end
-  for _,j in ipairs(objekte) do
+  for _,j in ipairs(objects) do
     a:append(j,{schriftfamilie = schriftfamilie, languagecode = languagecode})
   end
-  if #objekte == 0 then
+  if #objects == 0 then
     -- nothing got through, why?? check
     warning("No contents found in paragraph.")
     a:append("",{schriftfamilie = schriftfamilie,languagecode = languagecode})
@@ -230,14 +230,14 @@ function bild( layoutxml,datenxml )
 end
 
 function box( layoutxml,datenxml )
-  local breite = publisher.read_attribute(layoutxml,datenxml,"width","number")
-  local hoehe  = publisher.read_attribute(layoutxml,datenxml,"height","number")
+  local width     = publisher.read_attribute(layoutxml,datenxml,"width","number")
+  local height    = publisher.read_attribute(layoutxml,datenxml,"height","number")
   local hf_string = publisher.read_attribute(layoutxml,datenxml,"backgroundcolor","string")
 
   local current_grid = publisher.current_grid
-  local _breite = sp_to_bp(current_grid.gridwidth * breite)
-  local _hoehe  = sp_to_bp(current_grid.gridheight  * hoehe)
-  local n = publisher.box(_breite,_hoehe,hf_string)
+  local _width   = sp_to_bp(current_grid.gridwidth  * width)
+  local _height  = sp_to_bp(current_grid.gridheight * height)
+  local n = publisher.box(_width,_height,hf_string)
   n = node.hpack(n)
   return n
 end
@@ -246,8 +246,8 @@ end
 -- if in multi column text
 function bookmark( layoutxml,dataxml )
   trace("Command: Bookmark")
-  -- For bookmarks, we need two things: 1) a destination and 
-  -- 2) the bookmark itself that points to the destination. So 
+  -- For bookmarks, we need two things: 1) a destination and
+  -- 2) the bookmark itself that points to the destination. So
   -- we can safely insert the destination in our text flow but save
   -- the destination code (a number) for later. There is a slight problem
   -- now: as the text flow is asynchronous, we evaluate the bookmark
@@ -287,41 +287,41 @@ function definiere_farbe( layoutxml,datenxml )
   local model = publisher.read_attribute(layoutxml,datenxml,"model","string")
 
   log("Defining color %q",name)
-  local farbe = { modell = model }
+  local color = { modell = model }
 
   if model=="cmyk" then
-    farbe.c = publisher.read_attribute(layoutxml,datenxml,"c","number")
-    farbe.m = publisher.read_attribute(layoutxml,datenxml,"m","number")
-    farbe.y = publisher.read_attribute(layoutxml,datenxml,"y","number")
-    farbe.k = publisher.read_attribute(layoutxml,datenxml,"k","number")
-    farbe.pdfstring = string.format("%g %g %g %g k %g %g %g %g K", farbe.c/100, farbe.m/100, farbe.y/100, farbe.k/100,farbe.c/100, farbe.m/100, farbe.y/100, farbe.k/100)
+    color.c = publisher.read_attribute(layoutxml,datenxml,"c","number")
+    color.m = publisher.read_attribute(layoutxml,datenxml,"m","number")
+    color.y = publisher.read_attribute(layoutxml,datenxml,"y","number")
+    color.k = publisher.read_attribute(layoutxml,datenxml,"k","number")
+    color.pdfstring = string.format("%g %g %g %g k %g %g %g %g K", color.c/100, color.m/100, color.y/100, color.k/100,color.c/100, color.m/100, color.y/100, color.k/100)
   elseif model=="rgb" then
-    farbe.r = publisher.read_attribute(layoutxml,datenxml,"r","number")
-    farbe.g = publisher.read_attribute(layoutxml,datenxml,"g","number")
-    farbe.b = publisher.read_attribute(layoutxml,datenxml,"b","number")
-    farbe.pdfstring = string.format("%g %g %g rg %g %g %g RG", farbe.r/100, farbe.g/100, farbe.b/100, farbe.r/100,farbe.g/100, farbe.b/100)
+    color.r = publisher.read_attribute(layoutxml,datenxml,"r","number")
+    color.g = publisher.read_attribute(layoutxml,datenxml,"g","number")
+    color.b = publisher.read_attribute(layoutxml,datenxml,"b","number")
+    color.pdfstring = string.format("%g %g %g rg %g %g %g RG", color.r/100, color.g/100, color.b/100, color.r/100,color.g/100, color.b/100)
   else
     err("Unknown color model: %s",model or "?")
   end
   publisher.farbindex[#publisher.farbindex + 1] = name
-  farbe.index = #publisher.farbindex
-  publisher.farben[name]=farbe
+  color.index = #publisher.farbindex
+  publisher.farben[name]=color
 end
 
 -- Definiert ein Textformat
 function definiere_textformat(layoutxml)
   trace("Command: DefineTextformat")
-  local alignment   = publisher.read_attribute(layoutxml,datenxml,"alignment","string")
+  local alignment   = publisher.read_attribute(layoutxml,datenxml,"alignment",   "string")
   local indentation = publisher.read_attribute(layoutxml,datenxml,"indentation", "length")
-  local name        = publisher.read_attribute(layoutxml,datenxml,"name",       "string")
+  local name        = publisher.read_attribute(layoutxml,datenxml,"name",        "string")
 
   local fmt = {}
 
-  if alignment=="linksbündig" then
+  if alignment=="linksbündig" or alignment == "leftaligned" then
     fmt.alignment = "linksbündig"
-  elseif alignment=="rechtsbündig" then
+  elseif alignment=="rechtsbündig" or alignment == "rightaligned"then
     fmt.alignment = "rechtsbündig"
-  elseif alignment=="zentriert" then
+  elseif alignment=="zentriert" or alignment == "centered" then
     fmt.alignment = "zentriert"
   else
     fmt.alignment = "blocksatz"
@@ -457,17 +457,17 @@ end
 function fett( layoutxml,datenxml )
   local a = publisher.Paragraph:new()
 
-  local objekte = {}
+  local objects = {}
   local tab = publisher.dispatch(layoutxml,datenxml)
 
   for i,j in ipairs(tab) do
     if publisher.elementname(j,true) == "Value" and type(publisher.inhalt(j)) == "table" then
-      objekte[#objekte + 1] = publisher.parse_html(publisher.inhalt(j))
+      objects[#objects + 1] = publisher.parse_html(publisher.inhalt(j))
     else
-      objekte[#objekte + 1] = publisher.inhalt(j)
+      objects[#objects + 1] = publisher.inhalt(j)
     end
   end
-  for _,j in ipairs(objekte) do
+  for _,j in ipairs(objects) do
     a:append(j,{schriftfamilie = 0, fett = 1})
   end
 
@@ -522,16 +522,16 @@ end
 function kursiv( layoutxml,datenxml )
   trace("Italic")
   local a = publisher.Paragraph:new()
-  local objekte = {}
+  local objects = {}
   local tab = publisher.dispatch(layoutxml,datenxml)
   for i,j in ipairs(tab) do
     if publisher.elementname(j,true) == "Value" and type(publisher.inhalt(j)) == "table" then
-      objekte[#objekte + 1] = publisher.parse_html(publisher.inhalt(j))
+      objects[#objects + 1] = publisher.parse_html(publisher.inhalt(j))
     else
-      objekte[#objekte + 1] = publisher.inhalt(j)
+      objects[#objects + 1] = publisher.inhalt(j)
     end
   end
-  for _,j in ipairs(objekte) do
+  for _,j in ipairs(objects) do
     a:append(j,{schriftfamilie = 0, kursiv = 1})
   end
   return a
@@ -785,55 +785,55 @@ function objekt_ausgeben( layoutxml,datenxml )
   local raster = publisher.current_grid
   local tab    = publisher.dispatch(layoutxml,datenxml,optionen)
 
-  local objekte = {}
-  local objekt, objekttyp
+  local objects = {}
+  local object, objecttype
 
   if groupname then
-    objekte[1] = { objekt = node.copy(publisher.gruppen[groupname].inhalt),
-      objekttyp = string.format("Gruppe (%s)", groupname)}
+    objects[1] = { object = node.copy(publisher.gruppen[groupname].inhalt),
+      objecttype = string.format("Gruppe (%s)", groupname)}
   else
     for i,j in ipairs(tab) do
-      objekt = publisher.inhalt(j)
-      objekttyp = publisher.elementname(j,true)
-      if type(objekt)=="table" then
-        for i=1,#objekt do
-          objekte[#objekte + 1] = {objekt = objekt[i], objekttyp = objekttyp }
+      object = publisher.inhalt(j)
+      objecttype = publisher.elementname(j,true)
+      if type(object)=="table" then
+        for i=1,#object do
+          objects[#objects + 1] = {object = object[i], objecttype = objecttype }
         end
       else
-        objekte[#objekte + 1] = {objekt = objekt, objekttyp = objekttyp }
+        objects[#objects + 1] = {object = object, objecttype = objecttype }
       end
     end
   end
-  for i=1,#objekte do
+  for i=1,#objects do
     raster = publisher.current_grid
-    objekt    = objekte[i].objekt
-    objekttyp = objekte[i].objekttyp
+    object    = objects[i].object
+    objecttype = objects[i].objecttype
 
     if hintergrund == "vollständig" then
-      objekt = publisher.hintergrund(objekt,hintergrundfarbe)
+      object = publisher.hintergrund(object,hintergrundfarbe)
     end
     if rahmen == "durchgezogen" then
-      objekt = publisher.rahmen(objekt,rahmenfarbe)
+      object = publisher.rahmen(object,rahmenfarbe)
     end
 
     if publisher.options.trace then
-      publisher.boxit(objekt)
+      publisher.boxit(object)
     end
 
     if absolute_positioning then
-      publisher.ausgabe_bei_absolut(objekt,spalte + raster.extra_rand,zeile + raster.extra_rand,belegen)
+      publisher.ausgabe_bei_absolut(object,spalte + raster.extra_rand,zeile + raster.extra_rand,belegen)
     else
       -- Platz muss gesucht werden
       -- local current_row = raster:current_row(bereich)
-      trace("ObjektAusgeben: Breitenberechnung")
-      if not node.has_field(objekt,"width") then
+      trace("objectAusgeben: Breitenberechnung")
+      if not node.has_field(object,"width") then
         warning("Can't calculate with object's width!")
       end
-      local breite_in_rasterzellen = raster:breite_in_rasterzellen_sp(objekt.width)
-      local hoehe_in_rasterzellen  = raster:hoehe_in_rasterzellen_sp (objekt.height + objekt.depth)
-      trace("ObjektAusgeben: Breitenberechnung abgeschlossen: wd=%d,ht=%d",breite_in_rasterzellen,hoehe_in_rasterzellen)
+      local breite_in_rasterzellen = raster:breite_in_rasterzellen_sp(object.width)
+      local hoehe_in_rasterzellen  = raster:hoehe_in_rasterzellen_sp (object.height + object.depth)
+      trace("objectAusgeben: Breitenberechnung abgeschlossen: wd=%d,ht=%d",breite_in_rasterzellen,hoehe_in_rasterzellen)
 
-      trace("ObjektAusgeben: finde passende Zeile für das Objekt, current_row = %d",zeile or raster:current_row(bereich) or "-1")
+      trace("objectAusgeben: finde passende Zeile für das object, current_row = %d",zeile or raster:current_row(bereich) or "-1")
       if zeile then
         current_row = zeile
       else
@@ -857,12 +857,12 @@ function objekt_ausgeben( layoutxml,datenxml )
         end
       end
 
-      log("»ObjektAusgeben«: %s in row %d and column %d, width=%d, height=%d", objekttyp, current_row, aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen)
-      trace("»ObjektAusgeben«: objekt placed at (%d,%d)",aktuelle_spalte_start,current_row)
-      publisher.ausgabe_bei(objekt,aktuelle_spalte_start,current_row,belegen,bereich,valign)
-      trace("Objekt ausgegeben.")
-      zeile = nil -- die Zeile ist nicht mehr gültig, da schon ein Objekt ausgegeben wurde
-      if i < #objekte then
+      log("»objectAusgeben«: %s in row %d and column %d, width=%d, height=%d", objecttype, current_row, aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen)
+      trace("»objectAusgeben«: object placed at (%d,%d)",aktuelle_spalte_start,current_row)
+      publisher.ausgabe_bei(object,aktuelle_spalte_start,current_row,belegen,bereich,valign)
+      trace("object ausgegeben.")
+      zeile = nil -- die Zeile ist nicht mehr gültig, da schon ein object ausgegeben wurde
+      if i < #objects then
         neue_zeile(layoutxml,datenxml)
       end
     end -- keine absolute Positionierung
@@ -870,7 +870,7 @@ function objekt_ausgeben( layoutxml,datenxml )
   if not belegen then
     publisher.current_grid:set_current_row(current_row_start)
   end
-  trace("Objekte ausgegeben.")
+  trace("objects ausgegeben.")
 end
 
 -- Saves the options given in the layout file
@@ -1299,7 +1299,7 @@ function textblock( layoutxml,datenxml )
 
   local breite_sp           = width_gridcells * publisher.current_grid.gridwidth
 
-  local objekte, nodes = {},{}
+  local objects, nodes = {},{}
   local nodelist,parameter
 
   local current_textformat
@@ -1310,20 +1310,20 @@ function textblock( layoutxml,datenxml )
     local eltname = publisher.elementname(j,true)
     trace("Textblock: Element = %q",tostring(eltname))
     if eltname == "Paragraph" then
-      objekte[#objekte + 1] = publisher.inhalt(j)
+      objects[#objects + 1] = publisher.inhalt(j)
     elseif eltname == "Text" then
       assert(false)
     elseif eltname == "Action" then
-      objekte[#objekte + 1] = publisher.inhalt(j)
+      objects[#objects + 1] = publisher.inhalt(j)
     elseif eltname == "Bookmark" then
-      objekte[#objekte + 1] = publisher.inhalt(j)
+      objects[#objects + 1] = publisher.inhalt(j)
     end
   end
-  trace("Textblock: #objekte=%d",#objekte)
+  trace("Textblock: #objects=%d",#objects)
   if columns > 1 then
     breite_sp = math.floor(  (breite_sp - columndistance * ( columns - 1 ) )   / columns)
   end
-  for i,j in ipairs(objekte) do
+  for i,j in ipairs(objects) do
     -- jeden <Absatz>, <Bild> oder so durchgehen, jetzt nur <Absatz>
     if j.id == 8 then -- whatsit
       nodes[#nodes + 1] = j
@@ -1360,9 +1360,9 @@ function textblock( layoutxml,datenxml )
       nodes[#nodes + 1] = nodelist
       -- hier könnte ich ein Paragraph:apply_textformat einfügen
     end -- wenn's wirklich ein node ist
-  end -- alle Objekte
+  end -- alle objects
   -- debug
-  if #objekte == 0 then
+  if #objects == 0 then
     warning("Textblock: no objects found!")
     local vrule = {  width = 10 * 2^16, height = -1073741824}
     nodes[1] = publisher.add_rule(nil,"head",vrule)
@@ -1430,17 +1430,17 @@ function underline( layoutxml,datenxml )
   trace("Underline")
 
   local a = publisher.Paragraph:new()
-  local objekte = {}
+  local objects = {}
   local tab = publisher.dispatch(layoutxml,datenxml)
 
   for i,j in ipairs(tab) do
     if publisher.elementname(j,true) == "Value" and type(publisher.inhalt(j)) == "table" then
-      objekte[#objekte + 1] = publisher.parse_html(publisher.inhalt(j))
+      objects[#objects + 1] = publisher.parse_html(publisher.inhalt(j))
     else
-      objekte[#objekte + 1] = publisher.inhalt(j)
+      objects[#objects + 1] = publisher.inhalt(j)
     end
   end
-  for _,j in ipairs(objekte) do
+  for _,j in ipairs(objects) do
     a:append(j,{schriftfamilie = 0, underline = 1})
   end
   return a
