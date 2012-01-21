@@ -398,8 +398,15 @@ end
 
 
 function parse( data_xml, str )
-  -- str = str:gsub("&lt;","<")
+
   if str==nil then return nil end
+
+  -- shortcut for variables "$foo" / huge speed gain
+  local cap = string.match(str,"^%s*%$([^%s]+)%s*$")
+  if cap then
+    return publisher.variablen[cap]
+  end
+
   dataxml = data_xml
   local space = S("\010\013\032")^1
   local xpath = P{
