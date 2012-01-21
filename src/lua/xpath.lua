@@ -118,7 +118,7 @@ local basechar =
     P("\132") * R("\133\172") ) +
   P("\234") * R("\176\191") * R("\128\191") +
   R("\235\236") * R("\128\191") * R("\128\191") +
-  P("237") * ( R("\128\157") * R("\128\191") + P("158") * R("\128\163") ) 
+  P("237") * ( R("\128\157") * R("\128\191") + P("158") * R("\128\163") )
 
 local ideographic =
   P("\227") * P("\128") * ( P("\135") + R("\161\169") ) +
@@ -226,7 +226,7 @@ function normalize_space( str )
 end
 
 
-function get_value( v )
+local function get_value( v )
   if type(v)=="string" then return v end
   if type(v)=="number" then return v end
   if type(v)=="function" then return v()  end
@@ -236,7 +236,7 @@ function get_value( v )
   assert(false,string.format("get_value, type(v)==%s, v=%s",type(v),tostring(v)))
 end
 
-function get_number_value( v )
+local function get_number_value( v )
   -- w("get_number_value, type=%s",type(v))
   if type(v)=="number" then return v end
   if type(v)=="function" then return tonumber(v())  end
@@ -246,7 +246,7 @@ function get_number_value( v )
   assert(false,string.format("get_number_value, type(v)==%s, v=%s",type(v),tostring(v)))
 end
 
-function _add( ... )
+local function _add( ... )
   -- w("_add: %d",select('#',...))
   -- printtable("add",{...})
   if select('#',...) == 1 then return ... end
@@ -262,7 +262,7 @@ function _add( ... )
   return function() return ret end
 end
 
-function _mult( ... )
+local function _mult( ... )
   -- w("_mult: %d",select('#',...))
   -- printtable('mult',{...})
   -- printtable("dataxml",dataxml)
@@ -281,19 +281,19 @@ function _mult( ... )
   return function() return ret end
 end
 
-function _variable( ... )
---  printtable("variable",{...})
-  local varname = ...
-  return function() return publisher.variablen[varname] end
+local function _variable( ... )
+  -- printtable("variable",{...})
+  -- local varname = ...
+  return publisher.variablen[select(1,...)]
 end
 
-function _mkfunc( ... )
+local function _mkfunc( ... )
   -- w("_mkfunc: (%d) %s",select('#',...),table.concat({...}," - "))
   local tmp = select(1,...)
   return function() return tmp end
 end
 
-function _verbose( ... )
+local function _verbose( ... )
   w("_verbose, %s\n",select('#',...))
   for i,v in ipairs({...}) do
     print(i,v)
@@ -301,18 +301,18 @@ function _verbose( ... )
   return ...
 end
 
-function _curr_data_tbl( ... )
+local function _curr_data_tbl( ... )
   -- w("_curr_data_tbl, %d",select('#',...))
   return { dataxml }
 end
 
-function _paren( ... )
+local function _paren( ... )
   -- printtable("_paren",{...})
   -- print(select(1,...)())
   return select(1,...)
 end
 
-function _nodetest( ... )
+local function _nodetest( ... )
   -- printtable("_nodetest",{...})
   if select(1,...)=="@" then return dataxml[select(2,...)] end
   local ret = {}
@@ -324,7 +324,7 @@ function _nodetest( ... )
   return ret
 end
 
-function _funcall( ... )
+local function _funcall( ... )
   -- printtable("_funcall",{...})
   local name=select(1,...)
   local fun
@@ -348,7 +348,7 @@ end
 local function _comparison( ... )
   -- printtable("comparison",{...})
   if select('#',...) == 1 then
-   return ... 
+   return ...
   end
   -- P"=" + P"!=" + P"<" + P"<=" + P">" + P">="
   -- w("comparison: %s",get_number_value(select(1,...)))
@@ -373,7 +373,7 @@ local function _comp( ... )
   return ...
 end
 
-function _orexpr( ... )
+local function _orexpr( ... )
    -- printtable("orexpr",{...})
   for i=1,select("#",...) do
     if select(i,...) == true then return true end
@@ -382,7 +382,7 @@ function _orexpr( ... )
   return false
 end
 
-function _andexpr( ... )
+local function _andexpr( ... )
   -- printtable("_andexpr",{...})
   local x
   for i=1,select("#",...) do
