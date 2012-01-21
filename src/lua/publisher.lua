@@ -79,7 +79,6 @@ textformate = {} -- tmp. Textformate. Tabelle mit Schlüsseln: indent, alignment
 -- der Eintrag dann `texgyreheros-regular.otf`
 -- schrifttabelle = {}
 
-
 sprachen = {}
 
 -- bookmarks = {
@@ -97,7 +96,8 @@ sprachen = {}
 -- }
 bookmarks = {}
 
-
+-- table with key namespace prefix and value namespace
+namespaces_layout = nil
 
 local dispatch_table = {
   Paragraph               = element.absatz,
@@ -240,11 +240,17 @@ function dothings()
     variablen[k]=v
   end
 
-  current_layoutlanguage = string.gsub(layoutxml.xmlns,"urn:speedata.de:2009/publisher/","")
+  namespaces_layout = layoutxml["__namespace"]
+  local nsprefix = string.match(layoutxml[".__name"],"^(.*):") or ""
+  local ns = layoutxml["__namespace"][nsprefix]
+
+
+  current_layoutlanguage = string.gsub(ns,"urn:speedata.de:2009/publisher/","")
   if not (current_layoutlanguage=='de' or current_layoutlanguage=='en') then
     err("Cannot determine the language of the layout file.")
     exit()
   end
+
   dispatch(layoutxml)
 
   for _,extopt in ipairs(string.explode(arg[4],",")) do

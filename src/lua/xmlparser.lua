@@ -8,11 +8,14 @@
 local xmlreader = xmlreader
 local w = w
 local setmetatable,tostring = setmetatable,tostring
-local table = table
+local table,string = table,string
 
 module(...)
 
--- Liefert den Textwert eines Elements zurück (tostring(xml))
+-- the root node for additional namespace information (the function prefix)
+local root = nil
+
+-- Return the textvalue of an element (tostring(xml))
 local function xml_to_string( self )
   local ret = {}
   for i=1,#self do
@@ -27,16 +30,26 @@ local mt = {
 
 function read_element(r)
   local ret = {}
+  -- we set the global root element if unset to store ns info
+  root = root or ret
+
   setmetatable(ret,mt)
   ret[".__name"] = r:local_name()
 
-  while (r:move_to_next_attribute()) do ret[r:name()] = r:value() end
+  while (r:move_to_next_attribute()) do
+    if r:is_namespace_declaration() then
+      root["__namespace"] = root["__namespace"] or {}
+      root["__namespace"][string.gsub(r:name(),"^xmlns:?","")] = r:value()
+    else
+      ret[r:name()] = r:value()
+    end
+  end
   r:move_to_element()
 
   if r:is_empty_element() then
     return ret
   end
-  
+
   while (r:read()) do
     if r:node_type() == 'element' then
       ret[#ret + 1] = read_element(r)

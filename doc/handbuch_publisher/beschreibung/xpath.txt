@@ -23,7 +23,7 @@ h2. Folgende XPath-Ausdrücke erkennt das System:
 * Zugriff auf Attribute im aktuellen Knoten. Beispiel @@a@
 * Boolesche Ausdrücke: @<@, @>@, @<=@, @>=@, @=@, @!=@. Vorsicht, das Zeichen @<@ muss in XML als @&lt;@ geschrieben werden, das Zeichen @>@ kann als @&gt;@ geschrieben werden. Beispiel: @$zahl > 6@. Kann in Bedingungen benutzt werden.
 
-h2. Folgende XPath-Funktionen stehen bereit:
+h2. Folgende XPath-Funktionen stehen bereit (im Namensraum @urn:speedata:2009/publisher/functions/de@):
 
 
 - sd:aktuelle-seite() := Gibt die Seitennummer zurück.

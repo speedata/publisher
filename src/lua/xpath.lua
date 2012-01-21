@@ -325,15 +325,21 @@ local function _nodetest( ... )
 end
 
 local function _funcall( ... )
-  -- printtable("_funcall",{...})
   local name=select(1,...)
   local fun
-  if name:sub(1,3)=="sd:" then
-    -- speedata (sd:)-Funktion
-    name = name:sub(4,-1):gsub("-","_")
-    fun = publisher.sd_xpath_funktionen[name]
+  local prefix,rest = string.match(name,"^(.*):(.*)$")
+  rest = rest or name
+  if prefix then
+    -- a special publisher xpath function
+    local ns = publisher.namespaces_layout[prefix]
+    if not ns then
+      err("Cannot resolve namespace for prefix %q in function %q",prefix or "?",name or "?")
+    else
+      local lang = string.gsub(ns,"urn:speedata:2009/publisher/functions/","")
+      fun = publisher.sd_xpath_funktionen[lang][rest:gsub("-","_")]
+    end
   else
-    -- normale XPath-Funktion
+    -- regular XPath function
     name = name:gsub("-","_")
     fun = publisher.orig_xpath_funktionen[name]
   end
