@@ -6,7 +6,7 @@
 --  See file COPYING in the root directory for license info.
 
 
-file_start("layout_funktionen.lua")
+file_start("layout_functions.lua")
 
 module(...,package.seeall)
 
@@ -105,7 +105,7 @@ local function variable(dataxml, arg )
   return publisher.variablen[arg]
 end
 
-file_end("layout_funktionen.lua")
+file_end("layout_functions.lua")
 
 return {
   aktuelle_seite     = aktuelle_seite,

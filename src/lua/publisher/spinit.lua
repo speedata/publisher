@@ -134,7 +134,7 @@ end
 
 require("publisher")
 
-require("publisher.element")
+require("publisher.commands")
 require("xmlparser")
 require("fonts.fontloader")
 

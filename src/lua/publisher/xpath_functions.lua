@@ -5,7 +5,7 @@
 --  Copyright 2010-2011 Patrick Gundlach.
 --
 --  See file COPYING in the root directory for license details.
-file_start("xpath_funktionen.lua")
+file_start("xpath_functions.lua")
 
 module(...,package.seeall)
 
@@ -73,7 +73,7 @@ local function _false()
   return false
 end
 
-file_end("xpath_funktionen.lua")
+file_end("xpath_functions.lua")
 
 
 return {

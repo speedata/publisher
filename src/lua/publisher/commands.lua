@@ -5,9 +5,9 @@
 --  Copyright 2010-2011 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 
-file_start("element.lua")
+file_start("commands.lua")
 require("publisher.fonts")
-require("publisher.tabelle")
+require("publisher.table")
 require("xpath")
 require("fileutils")
 
@@ -1151,7 +1151,7 @@ function tabelle( layoutxml,datenxml,optionen )
 
   local tab = publisher.dispatch(layoutxml,datenxml)
 
-  local tabelle = publisher.tabelle:new()
+  local tabelle = publisher.table:new()
 
   tabelle.tab = tab
   tabelle.optionen = optionen or { ht_aktuell=100*2^16 } -- FIXME! Test - das ist für Tabelle in Tabelle
@@ -1544,4 +1544,4 @@ function zur_liste_hinzufuegen( layoutxml,datenxml )
   return udef.last
 end
 
-file_end("element.lua")
+file_end("commands.lua")

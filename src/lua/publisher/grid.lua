@@ -5,7 +5,7 @@
 --  Copyright 2010-2011 Patrick Gundlach.
 --  See file COPYING in the root directory for license details.
 
-file_start("raster.lua")
+file_start("grid.lua")
 
 module(...,package.seeall)
 
@@ -406,7 +406,7 @@ function beschnittmarken( self, laenge, abstand, dicke )
   else
     dicke_bp = sp_to_bp(dicke)
   end
-  
+
   -- unten links
   ret[#ret + 1] = string.format("q 0 G %g w %g %g m %g %g l S Q",dicke_bp, x, y - abstand_bp, x, y - laenge_bp - abstand_bp)  -- v
   ret[#ret + 1] = string.format("q 0 G %g w %g %g m %g %g l S Q",dicke_bp, x - abstand_bp, y, x - laenge_bp - abstand_bp, y)  -- h
@@ -419,9 +419,9 @@ function beschnittmarken( self, laenge, abstand, dicke )
   -- oben links
   ret[#ret + 1] = string.format("q 0 G %g w %g %g m %g %g l S Q",dicke_bp, x, ht + abstand_bp, x, ht + abstand_bp + laenge_bp)
   ret[#ret + 1] = string.format("q 0 G %g w %g %g m %g %g l S Q",dicke_bp, x - abstand_bp, ht, x - laenge_bp - abstand_bp, ht)
-  
-  
+
+
   return table.concat(ret,"\n")
 end
 
-file_end("raster.lua")
+file_end("grid.lua")

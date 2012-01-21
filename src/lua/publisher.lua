@@ -7,12 +7,12 @@
 
 file_start("publisher.lua")
 
-local element = require("publisher.element")
-local seite   = require("publisher.seite")
+local element = require("publisher.commands")
+local seite   = require("publisher.page")
 local translations = require("translations")
 
-sd_xpath_funktionen      = require("publisher.layout_funktionen")
-orig_xpath_funktionen    = require("publisher.xpath_funktionen")
+sd_xpath_funktionen      = require("publisher.layout_functions")
+orig_xpath_funktionen    = require("publisher.xpath_functions")
 
 local xmlparser = require("xmlparser")
 

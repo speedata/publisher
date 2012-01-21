@@ -6,7 +6,7 @@
 --  See file COPYING in the root directory for license info.
 
 
-local raster = require("publisher.raster")
+local raster = require("publisher.grid")
 
 local assert,setmetatable = assert,setmetatable
 local tex = tex
