@@ -42,7 +42,7 @@ hlist_node     = node.id("hlist")
 
 pdf_literal_node = node.subtype("pdf_literal")
 
-default_bereichname = "__seite"
+default_areaname = "__seite"
 
 -- the language of the layout instructions ('en' or 'de')
 current_layoutlanguage = nil
@@ -62,8 +62,8 @@ datensatz_verteiler = {}
 user_defined_funktionen = { last = 0}
 
 -- die aktuelle Gruppe
-aktuelle_gruppe = nil
-aktuelles_raster = nil
+current_group = nil
+current_grid = nil
 
 -- Die Tabelle Seitentypen enthält als Schlüssel den Seitentypnamen und
 -- als Wert eine Tabelle mit den Schlüsseln `ist_seitentyp` und `res`, wobei
@@ -73,7 +73,7 @@ aktuelles_raster = nil
 seitentypen = {}
 
 
-textformate = {} -- tmp. Textformate. Tabelle mit Schlüsseln: indent, ausrichtung
+textformate = {} -- tmp. Textformate. Tabelle mit Schlüsseln: indent, alignment
 
 -- Liste der Schriftarten und deren Synonyme. Beispielsweise könnte ein Schlüssel `Helvetica` sein,
 -- der Eintrag dann `texgyreheros-regular.otf`
@@ -376,8 +376,8 @@ end
 
 -- Gibt die nodelist bei Rasterzelle (x,y) aus. Wenn belegen==true dann die Zellen als belegt markieren.
 function ausgabe_bei( nodelist, x,y,belegen,bereich,valign)
-  bereich = bereich or default_bereichname
-  local r = aktuelles_raster
+  bereich = bereich or default_areaname
+  local r = current_grid
   local wd = nodelist.width
   local ht = nodelist.height + nodelist.depth
   local breite_in_rasterzellen = r:breite_in_rasterzellen_sp(wd)
@@ -388,9 +388,9 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich,valign)
     err(delta_y)
     exit()
   end
-  if aktuelle_gruppe then
+  if current_group then
     -- Den Inhalt der Nodeliste in die aktuelle Gruppe ausgeben. 
-    local gruppe = gruppen[aktuelle_gruppe]
+    local gruppe = gruppen[current_group]
     assert(gruppe)
 
     local n = add_glue( nodelist ,"head",{ width = delta_x })
@@ -476,18 +476,18 @@ function seite_einrichten()
   end
   local errorstring
   -- aktuelle_seite ist eine globale Variable
-  aktuelle_seite, errorstring = seite:new(options.seitenbreite,options.seitenhoehe, extra_rand, beschnittzugabe)
+  aktuelle_seite, errorstring = seite:new(options.pagewidth,options.seitenhoehe, extra_rand, beschnittzugabe)
   if not aktuelle_seite then
     err("Can't create a new page. Is the page type (»Seitentyp«) defined? %s",errorstring)
     exit()
   end
-  aktuelles_raster = aktuelle_seite.raster
+  current_grid = aktuelle_seite.raster
   seiten[tex.count[0]] = nil
   tex.count[0] = tex.count[0] + 1
   seiten[tex.count[0]] = aktuelle_seite
 
-  local rasterbreite = options.rasterbreite
-  local rasterhoehe  = options.rasterhoehe
+  local gridwidth = options.gridwidth
+  local gridheight  = options.gridheight
 
 
   local pagetype = ermittle_seitentyp()
@@ -498,16 +498,16 @@ function seite_einrichten()
     if type(inhalt(j))=="function" and eltname=="Margin" then
       inhalt(j)(aktuelle_seite)
     elseif eltname=="Grid" then
-      rasterbreite = inhalt(j).breite
-      rasterhoehe  = inhalt(j).hoehe
+      gridwidth = inhalt(j).breite
+      gridheight  = inhalt(j).hoehe
     elseif eltname=="AtPageCreation" then
       aktuelle_seite.beiseitenerzeugung = inhalt(j)
     elseif eltname=="AtPageShipout" then
       aktuelle_seite.beiseitenausgabe = inhalt(j)
     elseif eltname=="PositioningArea" then
       local name = inhalt(j).name
-      aktuelles_raster.platzierungsbereiche[name] = {}
-      local aktueller_platzierungsbereich = aktuelles_raster.platzierungsbereiche[name]
+      current_grid.platzierungsbereiche[name] = {}
+      local aktueller_platzierungsbereich = current_grid.platzierungsbereiche[name]
       for _,k in ipairs(inhalt(j)) do
         aktueller_platzierungsbereich[#aktueller_platzierungsbereich + 1] = inhalt(k)
       end
@@ -516,15 +516,15 @@ function seite_einrichten()
     end
   end
 
-  if not rasterbreite then
+  if not gridwidth then
     err("Grid is not set!")
     exit()
   end
-  assert(rasterbreite)
-  assert(rasterhoehe,"Rasterhöhe")
+  assert(gridwidth)
+  assert(gridheight,"Rasterhöhe")
 
 
-  aktuelle_seite.raster:setze_breite_hoehe(rasterbreite,rasterhoehe)
+  aktuelle_seite.raster:setze_breite_hoehe(gridwidth,gridheight)
 
 
   if aktuelle_seite.beiseitenerzeugung then
@@ -532,14 +532,14 @@ function seite_einrichten()
   end
 end
 
-function naechster_rahmen( bereichname )
-  local aktuelle_nummer = aktuelles_raster:rahmennummer(bereichname)
-  if aktuelle_nummer >= aktuelles_raster:anzahl_rahmen(bereichname) then
+function naechster_rahmen( areaname )
+  local aktuelle_nummer = current_grid:rahmennummer(areaname)
+  if aktuelle_nummer >= current_grid:anzahl_rahmen(areaname) then
     neue_seite()
   else
-    aktuelles_raster:setze_rahmennummer(bereichname, aktuelle_nummer + 1)
+    current_grid:setze_rahmennummer(areaname, aktuelle_nummer + 1)
   end
-  aktuelles_raster:setze_aktuelle_zeile(1,bereichname)
+  current_grid:set_current_row(1,areaname)
 end
 
 function neue_seite()
@@ -666,7 +666,7 @@ function read_attribute( layoutxml,datenxml,attname_english,typ )
 
   local val
   local xpathstring = string.match(layoutxml[attname],"{(.-)}")
-  if xpathstring then 
+  if xpathstring then
     val = xpath.textvalue(xpath.parse(datenxml,xpathstring))
   else
     val = layoutxml[attname]
@@ -688,7 +688,7 @@ function read_attribute( layoutxml,datenxml,attname_english,typ )
     end
     return nil
   else
-    warning("lese_attribut (2): unknown type: %s",type(val))
+    warning("read_attribut (2): unknown type: %s",type(val))
   end
   return val
 end
@@ -1057,7 +1057,7 @@ function do_linebreak( nodelist,hsize,parameters )
       maxskip = 0
       for glyf in node.traverse_id(glyph_node,head.list) do
         local fam = node.has_attribute(glyf,att_fontfamily)
-        maxskip = math.max(fonts.lookup_schriftfamilie_nummer_instanzen[fam].zeilenabstand,maxskip)
+        maxskip = math.max(fonts.lookup_schriftfamilie_nummer_instanzen[fam].baselineskip,maxskip)
       end
       head.height = 0.75 * maxskip
       head.depth  = 0.25 * maxskip

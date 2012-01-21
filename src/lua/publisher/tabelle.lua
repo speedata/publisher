@@ -2,7 +2,7 @@
 --  publisher/src/lua/tabelle.lua
 --  speedata publisher
 --
---  Copyright 2010-2011 Patrick Gundlach.
+--  Copyright 2010-2012 Patrick Gundlach.
 --  See file COPYING in the root directory for license details.
 
 
@@ -16,98 +16,98 @@ function new( self )
   assert(self)
   local t = {
 
-   zeilenhoehen   = {},
-   spaltenbreiten = {},
+   rowheights     = {},
+   colwidths      = {},
    align          = {},
    valign         = {},
-   skip   = {},
-   tabellenbreite_soll,
-   spaltenfarben  = {},
+   skip           = {},
+   tablewidth_target,
+   columncolors  = {},
    -- Der Abstand zwischen Spalte i und i+1, derzeit nicht benutzt
    spaltenabstaende = {},
    anzahl_zeilen_im_kopf = 0,
   }
-  
+
 	setmetatable(t, self)
 	self.__index = self
 	return t
 end
 
 --------------------------------------------------------------------------
-function berechne_spaltenbreite_fuer_zeile(self, tr_inhalt,aktuelle_zeile,colspans,colmin,colmax )
-  local aktuelle_spalte
+function calculate_spaltenbreite_fuer_zeile(self, tr_contents,current_row,colspans,colmin,colmax )
+  local current_column
   local max_wd, min_wd -- maximale Breite und minimale Breite einer Tabellenzelle (Td)
   -- als erstes die einzelnen Zeilen/Zellen durchgehen und schauen, wie breit die 
   -- Spalten sein müssen. Wenn es colspans gibt, müssen diese entsprechend
   -- berücksichtigt werden.
-  aktuelle_spalte = 0
+  current_column = 0
 
-  for _,td in ipairs(tr_inhalt) do
-    local td_inhalt = publisher.inhalt(td)
+  for _,td in ipairs(tr_contents) do
+    local td_contents = publisher.inhalt(td)
     -- alle Spalten durchgehen
     -- skip, colspan und colmax-Tabellen ausfüllen für diese Tabellenzelle:
-    aktuelle_spalte = aktuelle_spalte + 1
+    current_column = current_column + 1
     min_wd,max_wd = nil,nil
-    local rowspan = tonumber(td_inhalt.rowspan) or 1
-    local colspan = tonumber(td_inhalt.colspan) or 1
+    local rowspan = tonumber(td_contents.rowspan) or 1
+    local colspan = tonumber(td_contents.colspan) or 1
 
     -- Wenn ich auf einer Skip-Spalte bin (durch einen Rowspan), dann überspringe ich die Spalte einfach
-    while self.skip[aktuelle_zeile] and self.skip[aktuelle_zeile][aktuelle_spalte] do aktuelle_spalte = aktuelle_spalte + 1 end
+    while self.skip[current_row] and self.skip[current_row][current_column] do current_column = current_column + 1 end
     -- rowspan?
-    for z = aktuelle_zeile + 1, aktuelle_zeile + rowspan - 1 do
-      for y = aktuelle_spalte, aktuelle_spalte + colspan - 1 do
+    for z = current_row + 1, current_row + rowspan - 1 do
+      for y = current_column, current_column + colspan - 1 do
         self.skip[z] = self.skip[z] or {}  self.skip[z][y] = true
       end
     end
 
-    local objekte = {}
+    local objects = {}
 
-    for i,j in ipairs(td_inhalt) do
+    for i,j in ipairs(td_contents) do
       if publisher.elementname(j,true) == "Paragraph" then
-        objekte[#objekte + 1] = publisher.inhalt(j)
+        objects[#objects + 1] = publisher.inhalt(j)
       elseif publisher.elementname(j,true) == "Image" then
         -- FIXME: Bild sollte auch ein "Objekt" sein
-        objekte[#objekte + 1] = publisher.inhalt(j)
+        objects[#objects + 1] = publisher.inhalt(j)
       elseif publisher.elementname(j,true) == "Table" then
         -- FIXME: Bild sollte auch ein "Objekt" sein
-        objekte[#objekte + 1] = publisher.inhalt(j)[1]
+        objects[#objects + 1] = publisher.inhalt(j)[1]
       else
         warning("Object not recognized: %s",publisher.elementname(j) or "???")
       end
     end
-    td_inhalt.objekte = objekte
+    td_contents.objects = objects
 
-    local td_randlinks  = tex.sp(td_inhalt["border-left"]  or 0)
-    local td_randrechts = tex.sp(td_inhalt["border-right"] or 0)
+    local td_randlinks  = tex.sp(td_contents["border-left"]  or 0)
+    local td_randrechts = tex.sp(td_contents["border-right"] or 0)
 
-    local padding_left  = td_inhalt.padding_left  or self.padding_left
-    local padding_right = td_inhalt.padding_right or self.padding_right
+    local padding_left  = td_contents.padding_left  or self.padding_left
+    local padding_right = td_contents.padding_right or self.padding_right
 
-    for _,objekt in ipairs(objekte) do
+    for _,object in ipairs(objects) do
       -- FIXME: (Default-)Textformate für Absätze
-      if type(objekt)=="table" then
-        trace("Tabelle: überprüfe auf Nodeliste (%s)",tostring(objekt.nodelist ~= nil))
+      if type(object)=="table" then
+        trace("Tabelle: überprüfe auf Nodeliste (%s)",tostring(object.nodelist ~= nil))
 
-        if objekt.nodelist then
+        if object.nodelist then
           -- FIXME: dynamisches Textformat
-          objekt:apply_textformat("text")
-          publisher.setze_fontfamilie_wenn_notwendig(objekt.nodelist,self.schriftfamilie)
-          publisher.fonts.pre_linebreak(objekt.nodelist)
+          object:apply_textformat("text")
+          publisher.setze_fontfamilie_wenn_notwendig(object.nodelist,self.schriftfamilie)
+          publisher.fonts.pre_linebreak(object.nodelist)
         end
 
-        if objekt.min_width then
-          min_wd = math.max(objekt:min_width() + padding_left  + padding_right + td_randlinks + td_randrechts, min_wd or 0)
+        if object.min_width then
+          min_wd = math.max(object:min_width() + padding_left  + padding_right + td_randlinks + td_randrechts, min_wd or 0)
         end
-        if objekt.max_width then
-          max_wd = math.max(objekt:max_width() + padding_left  + padding_right + td_randlinks + td_randrechts, max_wd or 0)
+        if object.max_width then
+          max_wd = math.max(object:max_width() + padding_left  + padding_right + td_randlinks + td_randrechts, max_wd or 0)
         end
         trace("Tabelle: min_wd, max_wd gesetzt (%gpt,%gpt)",min_wd / 2^16, max_wd / 2^16)
       end
       if not ( min_wd and max_wd) then
-        trace("min_wd und max_wd noch nicht gesetzt. Typ(objekt)==%s",type(objekt))
-        if objekt.width then
-          min_wd = objekt.width + padding_left  + padding_right + td_randlinks + td_randrechts
-          max_wd = objekt.width + padding_left  + padding_right + td_randlinks + td_randrechts
+        trace("min_wd und max_wd noch nicht gesetzt. Typ(object)==%s",type(object))
+        if object.width then
+          min_wd = object.width + padding_left  + padding_right + td_randlinks + td_randrechts
+          max_wd = object.width + padding_left  + padding_right + td_randlinks + td_randrechts
           trace("Tabelle: Breite (Bild) = %gpt",min_wd / 2^16)
         else
           warning("Could not determine min_wd and max_wd")
@@ -118,27 +118,27 @@ function berechne_spaltenbreite_fuer_zeile(self, tr_inhalt,aktuelle_zeile,colspa
     trace("Tabelle: Colspan=%d",colspan)
     -- colspan?
     if colspan > 1 then
-      colspans[#colspans + 1] = { start = aktuelle_spalte, ende = aktuelle_spalte + colspan - 1, max_wd = max_wd, min_wd = min_wd }
-      aktuelle_spalte = aktuelle_spalte + colspan - 1
+      colspans[#colspans + 1] = { start = current_column, ende = current_column + colspan - 1, max_wd = max_wd, min_wd = min_wd }
+      current_column = current_column + colspan - 1
     else
-      colmax[aktuelle_spalte] = math.max(colmax[aktuelle_spalte] or 0,max_wd)
-      colmin[aktuelle_spalte] = math.max(colmin[aktuelle_spalte] or 0,min_wd)
+      colmax[current_column] = math.max(colmax[current_column] or 0,max_wd)
+      colmin[current_column] = math.max(colmin[current_column] or 0,min_wd)
     end
   end  -- ∀ Spalten
 end
 
 
-function berechne_spaltenbreite( self )
+function calculate_spaltenbreite( self )
   trace("Tabelle: berechne Spaltenbreiten")
   local colspans = {}
   local colmax,colmin = {},{}
 
-  local aktuelle_zeile = 0
-  self.tabellenbreite_soll = self.breite
-  local spaltenbreiten_vorgegeben = false
+  local current_row = 0
+  self.tablewidth_target = self.breite
+  local columnwidths_given = false
 
   for _,tr in ipairs(self.tab) do
-    local tr_inhalt      = publisher.inhalt(tr)
+    local tr_contents      = publisher.inhalt(tr)
     local tr_elementname = publisher.elementname(tr,true)
 
     if tr_elementname == "Columns" then
@@ -148,7 +148,7 @@ function berechne_spaltenbreite( self )
       local summe_echte_breiten = 0
       local anzahl_spalten = 0
       local patt = "([0-9]+)\*"
-      for _,spalte in ipairs(tr_inhalt) do
+      for _,spalte in ipairs(tr_contents) do
         if publisher.elementname(spalte,true)=="Column" then
           local spalte_inhalt = publisher.inhalt(spalte)
           i = i + 1
@@ -156,43 +156,43 @@ function berechne_spaltenbreite( self )
           self.valign[i] = spalte_inhalt.valign
           if spalte_inhalt.breite then
             -- wenn ich eine Angabe bei "Spalte" habe, dann brauche ich ja die Spaltenbreite nicht mehr zu berechnen:
-            spaltenbreiten_vorgegeben = true
+            columnwidths_given = true
             local breite_sternchen = string.match(spalte_inhalt.breite,patt)
             if breite_sternchen then
               summe_sternchen = summe_sternchen + breite_sternchen
             else
               if tonumber(spalte_inhalt.breite) then
-                self.spaltenbreiten[i] = publisher.aktuelles_raster.rasterbreite * spalte_inhalt.breite
+                self.colwidths[i] = publisher.current_grid.gridwidth * spalte_inhalt.breite
               else
-                self.spaltenbreiten[i] = tex.sp(spalte_inhalt.breite)
+                self.colwidths[i] = tex.sp(spalte_inhalt.breite)
               end
-              summe_echte_breiten = summe_echte_breiten + self.spaltenbreiten[i]
+              summe_echte_breiten = summe_echte_breiten + self.colwidths[i]
             end
           end
           if spalte_inhalt.backgroundcolor then
-            self.spaltenfarben[i] = spalte_inhalt.backgroundcolor
+            self.columncolors[i] = spalte_inhalt.backgroundcolor
           end
         end
         anzahl_spalten = i
       end
 
-      if spaltenbreiten_vorgegeben and summe_sternchen == 0 then return end
+      if columnwidths_given and summe_sternchen == 0 then return end
 
       if summe_sternchen > 0 then
         trace("Tabelle: Platz bei *-Spalten verteilen (Summe = %d)",summe_sternchen)
 
         -- nun sind die *-Spalten bekannt und die Summe der fixen-Spalten, so dass ich
         -- den zu verteilenden Platz verteilen kann.
-        local zu_verteilen =  self.tabellenbreite_soll - summe_echte_breiten - table.sum(self.spaltenabstaende,1,anzahl_spalten - 1)
+        local zu_verteilen =  self.tablewidth_target - summe_echte_breiten - table.sum(self.spaltenabstaende,1,anzahl_spalten - 1)
 
         i = 0
-        for _,spalte in ipairs(tr_inhalt) do
+        for _,spalte in ipairs(tr_contents) do
           if publisher.elementname(spalte,true)=="Column" then
             local spalte_inhalt = publisher.inhalt(spalte)
             i = i + 1
             local breite_sternchen = string.match(spalte_inhalt.breite,patt)
             if breite_sternchen then
-              self.spaltenbreiten[i] = math.round( zu_verteilen *  breite_sternchen / summe_sternchen ,0)
+              self.colwidths[i] = math.round( zu_verteilen *  breite_sternchen / summe_sternchen ,0)
             end
           end
         end
@@ -200,34 +200,34 @@ function berechne_spaltenbreite( self )
     end
   end
 
-  if spaltenbreiten_vorgegeben then return end
+  if columnwidths_given then return end
 
   -- Phase I: max_wd, min_wd berechnen
   for _,tr in ipairs(self.tab) do
-    local tr_inhalt      = publisher.inhalt(tr)
+    local tr_contents      = publisher.inhalt(tr)
     local tr_elementname = publisher.elementname(tr,true)
 
     if tr_elementname == "Tr" then
-      aktuelle_zeile = aktuelle_zeile + 1
-      self:berechne_spaltenbreite_fuer_zeile(tr_inhalt,aktuelle_zeile,colspans,colmin,colmax)
+      current_row = current_row + 1
+      self:calculate_spaltenbreite_fuer_zeile(tr_contents,current_row,colspans,colmin,colmax)
     elseif tr_elementname == "Tablerule" then
       --ignorieren
     elseif tr_elementname == "Tablehead" then
-      for _,zeile in ipairs(tr_inhalt) do
+      for _,zeile in ipairs(tr_contents) do
         local zeile_inhalt  = publisher.inhalt(zeile)
         local zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
-          aktuelle_zeile = aktuelle_zeile + 1
-          self:berechne_spaltenbreite_fuer_zeile(zeile_inhalt,aktuelle_zeile,colspans,colmin,colmax)
+          current_row = current_row + 1
+          self:calculate_spaltenbreite_fuer_zeile(zeile_inhalt,current_row,colspans,colmin,colmax)
         end
       end
     elseif tr_elementname == "Tablefoot" then
-      for _,zeile in ipairs(tr_inhalt) do
+      for _,zeile in ipairs(tr_contents) do
         local zeile_inhalt  = publisher.inhalt(zeile)
         local zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
-          aktuelle_zeile = aktuelle_zeile + 1
-          self:berechne_spaltenbreite_fuer_zeile(zeile_inhalt,aktuelle_zeile,colspans,colmin,colmax)
+          current_row = current_row + 1
+          self:calculate_spaltenbreite_fuer_zeile(zeile_inhalt,current_row,colspans,colmin,colmax)
         end
       end
     else
@@ -297,7 +297,7 @@ function berechne_spaltenbreite( self )
   -- ---------------------------------------------
   -- FIXME: hier statt self.colsep die spaltenabstaende[i] berücksichtigen
   local colsep = (#colmax - 1) * self.colsep
-  local tabellenbreite_ist = table.sum(colmax) + colsep
+  local tablewidth_is = table.sum(colmax) + colsep
 
   -- 1) natürliche (max) Breite / Gesamtbreite für jede Spalte berechnen
 
@@ -305,31 +305,31 @@ function berechne_spaltenbreite( self )
   -- dann muss sie gestaucht werden.
 
   -- unwahrscheinlicher Fall, dass es exakt passt:
-  if tabellenbreite_ist == self.tabellenbreite_soll then
+  if tablewidth_is == self.tablewidth_target then
     for i=1,#colmax do
-      self.spaltenbreiten[i] = colmax[i]
+      self.colwidths[i] = colmax[i]
     end
     return
   end
 
   -- Wenn die Tabelle zu breit ist, dann müssen manche Spalten verkleinert werden.
-  if tabellenbreite_ist > self.tabellenbreite_soll then
+  if tablewidth_is > self.tablewidth_target then
     local col_r = {} -- temporäre Spaltenbreite nach der Stauchung
     local schrumpf_faktor = {}
     local summe_schrumpffaktor = 0
     local ueberschuss = 0
-    local r = ( self.tabellenbreite_soll - colsep )  / ( tabellenbreite_ist - colsep)
+    local r = ( self.tablewidth_target - colsep )  / ( tablewidth_is - colsep)
     for i=1,#colmax do
       -- eigentlich:
-      -- r[i] = colmax[i] / tabellenbreite_ist
-      -- aber um auf die Zellenbreite zu kommen muss ich mit tabellenbreite_soll multiplizieren
+      -- r[i] = colmax[i] / tablewidth_is
+      -- aber um auf die Zellenbreite zu kommen muss ich mit tablewidth_target multiplizieren
       col_r[i] = colmax[i] * r
 
       -- Wenn nun die errechnete Breite kleiner ist als die minimale Breite, dann muss die 
       -- Zelle vergrößert werden und die Gesamtbreite um den Überschuss verringert werden
       if col_r[i] < colmin[i] then
         ueberschuss = ueberschuss + colmin[i] - col_r[i]
-        self.spaltenbreiten[i] = colmin[i]
+        self.colwidths[i] = colmin[i]
       end
       if col_r[i] > colmin[i] then
         -- diese Spalte kann wenn nötig verkleinert werden. Der Faktor ist col_r[i] / colmin[i]
@@ -341,7 +341,7 @@ function berechne_spaltenbreite( self )
     for i=1,#colmax do
       --
       if schrumpf_faktor[i] then
-        self.spaltenbreiten[i] = col_r[i] -  schrumpf_faktor[i] / summe_schrumpffaktor * ueberschuss
+        self.colwidths[i] = col_r[i] -  schrumpf_faktor[i] / summe_schrumpffaktor * ueberschuss
       end
     end
     return
@@ -349,64 +349,64 @@ function berechne_spaltenbreite( self )
 
   -- Wenn dehnen="nein" ist, dann brauchen wir nicht zu Strecken/stauchen
   if self.autostretch ~= "max" then
-    self.tabellenbreite_soll = tabellenbreite_ist
+    self.tablewidth_target = tablewidth_is
     for i=1,#colmax do
-      self.spaltenbreiten[i] = colmax[i]
+      self.colwidths[i] = colmax[i]
     end
     return
   end
 
 
   -- Wenn die Tabelle zu schmal für den Text ist, dann muss sie breiter werden.
-  if tabellenbreite_ist < self.tabellenbreite_soll then
+  if tablewidth_is < self.tablewidth_target then
     -- die Tabelle muss breiter werden
-    local r = ( self.tabellenbreite_soll - colsep ) / ( tabellenbreite_ist - colsep )
+    local r = ( self.tablewidth_target - colsep ) / ( tablewidth_is - colsep )
     for i=1,#colmax do
-      self.spaltenbreiten[i] = colmax[i] * r
+      self.colwidths[i] = colmax[i] * r
     end
   end
 end
 
-function berechne_zeilenhoehe( self,tr_inhalt, aktuelle_zeile )
+function calculate_zeilenhoehe( self,tr_contents, current_row )
   local zeilenhoehe
   local rowspan,colspan
   local wd,parameter
   local rowspans = {}
 
   local fam = publisher.fonts.lookup_schriftfamilie_nummer_instanzen[self.schriftfamilie]
-  local min_lineheight = fam.zeilenabstand
+  local min_lineheight = fam.baselineskip
 
-  if tr_inhalt.minheight then
-    zeilenhoehe = math.max(publisher.aktuelles_raster.rasterhoehe * tr_inhalt.minheight, min_lineheight)
+  if tr_contents.minheight then
+    zeilenhoehe = math.max(publisher.current_grid.gridheight * tr_contents.minheight, min_lineheight)
   else
     zeilenhoehe = min_lineheight
   end
 
-  aktuelle_spalte = 0
+  current_column = 0
 
-  for _,td in ipairs(tr_inhalt) do
-    local td_inhalt = publisher.inhalt(td)
-    aktuelle_spalte = aktuelle_spalte + 1
+  for _,td in ipairs(tr_contents) do
+    local td_contents = publisher.inhalt(td)
+    current_column = current_column + 1
 
 
-    local td_randlinks  = tex.sp(td_inhalt["border-left"]   or 0)
-    local td_randrechts = tex.sp(td_inhalt["border-right"]  or 0)
-    local td_randoben   = tex.sp(td_inhalt["border-top"]    or 0)
-    local td_randunten  = tex.sp(td_inhalt["border-bottom"] or 0)
+    local td_randlinks  = tex.sp(td_contents["border-left"]   or 0)
+    local td_randrechts = tex.sp(td_contents["border-right"]  or 0)
+    local td_randoben   = tex.sp(td_contents["border-top"]    or 0)
+    local td_randunten  = tex.sp(td_contents["border-bottom"] or 0)
 
-    local padding_left   = td_inhalt.padding_left   or self.padding_left
-    local padding_right  = td_inhalt.padding_right  or self.padding_right
-    local padding_top    = td_inhalt.padding_top    or self.padding_top
-    local padding_bottom = td_inhalt.padding_bottom or self.padding_bottom
+    local padding_left   = td_contents.padding_left   or self.padding_left
+    local padding_right  = td_contents.padding_right  or self.padding_right
+    local padding_top    = td_contents.padding_top    or self.padding_top
+    local padding_bottom = td_contents.padding_bottom or self.padding_bottom
 
-    rowspan = tonumber(td_inhalt.rowspan) or 1
-    colspan = tonumber(td_inhalt.colspan) or 1
+    rowspan = tonumber(td_contents.rowspan) or 1
+    colspan = tonumber(td_contents.colspan) or 1
 
     wd = 0
-    for s = aktuelle_spalte,aktuelle_spalte + colspan - 1 do
-      wd = wd + self.spaltenbreiten[s]
+    for s = current_column,current_column + colspan - 1 do
+      wd = wd + self.colwidths[s]
     end
-    aktuelle_spalte = aktuelle_spalte + colspan - 1
+    current_column = current_column + colspan - 1
 
     -- FIXME: hier statt self.colsep die spaltenabstaende[i] berücksichtigen
     wd = wd + ( colspan - 1 ) * self.colsep
@@ -414,56 +414,56 @@ function berechne_zeilenhoehe( self,tr_inhalt, aktuelle_zeile )
     -- in der Höhenberechnung auch border-top und border-bottom! FIXME
     local zelle
 
-    -- Die Objekte wurden in der Spaltenbreitenbestimmung
+    -- Die objects wurden in der Spaltenbreitenbestimmung
     -- hinzugefügt. Falls die Spaltenbreiten vogegeben wurden,
     -- dann wurde die Spaltenbreitenbestimmung ja gar nicht aufgerufen
-    -- und die Objekte müssen hier hinzugefügt werden (not DRY!)
-    if not td_inhalt.objekte then
-      local objekte = {}
+    -- und die objects müssen hier hinzugefügt werden (not DRY!)
+    if not td_contents.objects then
+      local objects = {}
 
-      for i,j in ipairs(td_inhalt) do
+      for i,j in ipairs(td_contents) do
         if publisher.elementname(j,true) == "Paragraph" then
-          objekte[#objekte + 1] = publisher.inhalt(j)
+          objects[#objects + 1] = publisher.inhalt(j)
         elseif publisher.elementname(j,true) == "Image" then
-          -- FIXME: Bild sollte auch ein "Objekt" sein
-          objekte[#objekte + 1] = publisher.inhalt(j)
+          -- FIXME: Bild sollte auch ein "object" sein
+          objects[#objects + 1] = publisher.inhalt(j)
         elseif publisher.elementname(j,true) == "Table" then
-          -- FIXME: Bild sollte auch ein "Objekt" sein
-          objekte[#objekte + 1] = publisher.inhalt(j)[1]
+          -- FIXME: Bild sollte auch ein "object" sein
+          objects[#objects + 1] = publisher.inhalt(j)[1]
         else
           warning("Object not recognized: %s",publisher.elementname(j,true) or "???")
         end
       end
-      -- trace("Tabelle: Objekte für die Tabellenzelle eingelesen (berechne_zeilenhoehen)")
-      td_inhalt.objekte = objekte
+      -- trace("Tabelle: objects für die Tabellenzelle eingelesen (calculate_rowheights)")
+      td_contents.objects = objects
     end
 
-    for _,objekt in ipairs(td_inhalt.objekte) do
-      if type(objekt)=="table" then
-        if not (objekt and objekt.nodelist) then
+    for _,object in ipairs(td_contents.objects) do
+      if type(object)=="table" then
+        if not (object and object.nodelist) then
           w("Achtung, keine Nodeliste gefunden!")
         end
 
-        if objekt.nodelist then
+        if object.nodelist then
           -- FIXME: dynamisches Textformat
-          -- objekt:apply_textformat("text")
+          -- object:apply_textformat("text")
           parameter = nil
-          if objekt.textformat then
-            if not publisher.textformate[objekt.textformat] then
-              err("Textformat %q not defined!",objekt.textformat)
+          if object.textformat then
+            if not publisher.textformate[object.textformat] then
+              err("Textformat %q not defined!",object.textformat)
             else
-              if publisher.textformate[objekt.textformat]["ausrichtung"] == "linksbündig" then
+              if publisher.textformate[object.textformat]["alignment"] == "linksbündig" then
                 parameter = { rightskip = publisher.rightskip }
               end
-              if publisher.textformate[objekt.textformat]["ausrichtung"] == "rechtsbündig" then
+              if publisher.textformate[object.textformat]["alignment"] == "rechtsbündig" then
                 parameter = { leftskip = publisher.leftskip }
               end
-              if publisher.textformate[objekt.textformat]["ausrichtung"] == "zentriert" then
+              if publisher.textformate[object.textformat]["alignment"] == "zentriert" then
                 parameter = { leftskip = publisher.leftskip, rightskip = publisher.rightskip }
               end
             end
           else
-            local align = td_inhalt.align or tr_inhalt.align or self.align[aktuelle_spalte]
+            local align = td_contents.align or tr_contents.align or self.align[current_column]
             if align=="center" then
               parameter = { leftskip = publisher.leftskip, rightskip = publisher.rightskip }
             elseif align=="left" then
@@ -472,11 +472,11 @@ function berechne_zeilenhoehe( self,tr_inhalt, aktuelle_zeile )
               parameter = { leftskip = publisher.leftskip }
             end
           end
-          publisher.setze_fontfamilie_wenn_notwendig(objekt.nodelist,self.schriftfamilie)
-          publisher.fonts.pre_linebreak(objekt.nodelist)
+          publisher.setze_fontfamilie_wenn_notwendig(object.nodelist,self.schriftfamilie)
+          publisher.fonts.pre_linebreak(object.nodelist)
         end
-        tmp = node.copy_list(objekt.nodelist)
-        local align = td_inhalt.align or tr_inhalt.align or self.align[aktuelle_spalte]
+        tmp = node.copy_list(object.nodelist)
+        local align = td_contents.align or tr_contents.align or self.align[current_column]
         if align=="center" then
           tmp = publisher.add_glue(tmp,"head", fill)
           tmp = publisher.add_glue(tmp,"tail", fill)
@@ -490,16 +490,16 @@ function berechne_zeilenhoehe( self,tr_inhalt, aktuelle_zeile )
         else
           zelle = v
         end
-      elseif (type(objekt)=="userdata" and node.has_field(objekt,"width")) then
+      elseif (type(object)=="userdata" and node.has_field(object,"width")) then
         if zelle then
-          node.tail(zelle).next = objekt
+          node.tail(zelle).next = object
         else
-          zelle = objekt
+          zelle = object
         end
       end
     end
-    -- wenn keine Objekte in einer Zeile sind, dann erzeugen wir
-    -- ein dummy-Objekt, damit die Zeile erzeugt werden kann (und vpack nicht)
+    -- wenn keine objects in einer Zeile sind, dann erzeugen wir
+    -- ein dummy-object, damit die Zeile erzeugt werden kann (und vpack nicht)
     -- über ein nil stolpert.
     if not zelle then
       zelle = node.new("hlist")
@@ -508,8 +508,8 @@ function berechne_zeilenhoehe( self,tr_inhalt, aktuelle_zeile )
 
     tmp = v.height + v.depth +  padding_top + padding_bottom + td_randunten + td_randoben
     if rowspan > 1 then
-      rowspans[#rowspans + 1] =  { start = aktuelle_zeile, ende = aktuelle_zeile + rowspan - 1, ht = tmp }
-      td_inhalt.rowspan_internal = rowspans[#rowspans]
+      rowspans[#rowspans + 1] =  { start = current_row, ende = current_row + rowspan - 1, ht = tmp }
+      td_contents.rowspan_internal = rowspans[#rowspans]
     else
       zeilenhoehe = math.max(zeilenhoehe,tmp)
     end
@@ -522,47 +522,47 @@ end
 
 
 --------------------------------------------------------------------------
-function berechne_zeilenhoehen(self)
+function calculate_rowheights(self)
   trace("Tabelle: berechne Zeilenhöhen")
-  local aktuelle_zeile = 0
+  local current_row = 0
   local rowspans = {}
   local _rowspans
 
 
   for _,tr in ipairs(self.tab) do
-    local tr_inhalt = publisher.inhalt(tr)
+    local tr_contents = publisher.inhalt(tr)
     local eltname = publisher.elementname(tr,true)
 
     if eltname == "Tablerule" or eltname == "Columns" then
       -- ignorieren
 
     elseif eltname == "Tablehead" then
-      for _,zeile in ipairs(tr_inhalt) do
+      for _,zeile in ipairs(tr_contents) do
         local zeile_inhalt  = publisher.inhalt(zeile)
         local zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
-          aktuelle_zeile = aktuelle_zeile + 1
-          zeilenhoehe, _rowspans = self:berechne_zeilenhoehe(zeile_inhalt,aktuelle_zeile)
-          self.zeilenhoehen[aktuelle_zeile] = zeilenhoehe
+          current_row = current_row + 1
+          zeilenhoehe, _rowspans = self:calculate_zeilenhoehe(zeile_inhalt,current_row)
+          self.rowheights[current_row] = zeilenhoehe
           rowspans = table.__concat(rowspans,_rowspans)
         end
       end
     elseif eltname == "Tablefoot" then
-      for _,zeile in ipairs(tr_inhalt) do
+      for _,zeile in ipairs(tr_contents) do
         local zeile_inhalt  = publisher.inhalt(zeile)
         local zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
-          aktuelle_zeile = aktuelle_zeile + 1
-          zeilenhoehe, _rowspans = self:berechne_zeilenhoehe(zeile_inhalt,aktuelle_zeile)
-          self.zeilenhoehen[aktuelle_zeile] = zeilenhoehe
+          current_row = current_row + 1
+          zeilenhoehe, _rowspans = self:calculate_zeilenhoehe(zeile_inhalt,current_row)
+          self.rowheights[current_row] = zeilenhoehe
           rowspans = table.__concat(rowspans,_rowspans)
         end
       end
 
     elseif eltname == "Tr" then
-      aktuelle_zeile = aktuelle_zeile + 1
-      zeilenhoehe, _rowspans = self:berechne_zeilenhoehe(tr_inhalt,aktuelle_zeile)
-      self.zeilenhoehen[aktuelle_zeile] = zeilenhoehe
+      current_row = current_row + 1
+      zeilenhoehe, _rowspans = self:calculate_zeilenhoehe(tr_contents,current_row)
+      self.rowheights[current_row] = zeilenhoehe
       rowspans = table.__concat(rowspans,_rowspans)
     else
       warning("Unknown contents in »Tabelle« %s",eltname)
@@ -576,8 +576,8 @@ function berechne_zeilenhoehen(self)
     local sum_ht = 0
     trace("Tabelle: rowspan.start = %d, rowspan.ende = %d. self.rowsep = %gpt",rowspan.start,rowspan.ende,self.rowsep)
     for j=rowspan.start,rowspan.ende do
-      trace("Tabelle: füge %gpt hinzu (Zeile %d)",self.zeilenhoehen[j] / 2^16,j)
-      sum_ht = sum_ht + self.zeilenhoehen[j]
+      trace("Tabelle: füge %gpt hinzu (Zeile %d)",self.rowheights[j] / 2^16,j)
+      sum_ht = sum_ht + self.rowheights[j]
     end
     sum_ht = sum_ht + self.rowsep * ( rowspan.ende - rowspan.start )
     trace("Tabelle: Rowspan (%d) > Zeilenhöhen %gpt > %gpt?",rowspan.ende - rowspan.start + 1 ,rowspan.ht / 2^16 ,sum_ht / 2^16)
@@ -585,74 +585,74 @@ function berechne_zeilenhoehen(self)
       local ueberschuss_je_zeile = (rowspan.ht - sum_ht) / (rowspan.ende - rowspan.start + 1)
       trace("Tabelle: Überschuss je Zeile = %gpt",ueberschuss_je_zeile / 2^16)
       for j=rowspan.start,rowspan.ende do
-        self.zeilenhoehen[j] = self.zeilenhoehen[j] + ueberschuss_je_zeile
+        self.rowheights[j] = self.rowheights[j] + ueberschuss_je_zeile
       end
     end
   end
 
   -- erst jetzt sind alle Zeilenhöhen berechnet. Dadurch können die rowspans angepasst werden.
   for i,rowspan in pairs(rowspans) do
-    rowspan.sum_ht = table.sum(self.zeilenhoehen,rowspan.start, rowspan.ende) + self.rowsep * ( rowspan.ende - rowspan.start )
+    rowspan.sum_ht = table.sum(self.rowheights,rowspan.start, rowspan.ende) + self.rowsep * ( rowspan.ende - rowspan.start )
   end
 end
 
-function setze_zeile(self, tr_inhalt, aktuelle_zeile )
-  local aktuelle_spalte
-  local aktuelle_spaltenbreite, ht
+function setze_zeile(self, tr_contents, current_row )
+  local current_column
+  local current_columnnbreite, ht
   local zeile = {}
   local rowspan, colspan
   local v,vlist,hlist
   local fill = { width = 0, stretch = 2^16, stretch_order = 3}
 
-  aktuelle_spalte = 0
-  for _,td in ipairs(tr_inhalt) do
+  current_column = 0
+  for _,td in ipairs(tr_contents) do
 
-    aktuelle_spalte = aktuelle_spalte + 1
+    current_column = current_column + 1
 
-    td_inhalt = publisher.inhalt(td)
-    rowspan = tonumber(td_inhalt.rowspan) or 1
-    colspan = tonumber(td_inhalt.colspan) or 1
+    td_contents = publisher.inhalt(td)
+    rowspan = tonumber(td_contents.rowspan) or 1
+    colspan = tonumber(td_contents.colspan) or 1
 
     -- FIXME: bin ich sicher, das ich in der richtigen Spalte bin (colspan...)?
-    local td_randlinks  = tex.sp(td_inhalt["border-left"]   or 0)
-    local td_randrechts = tex.sp(td_inhalt["border-right"]  or 0)
-    local td_randoben   = tex.sp(td_inhalt["border-top"]    or 0)
-    local td_randunten  = tex.sp(td_inhalt["border-bottom"] or 0)
+    local td_randlinks  = tex.sp(td_contents["border-left"]   or 0)
+    local td_randrechts = tex.sp(td_contents["border-right"]  or 0)
+    local td_randoben   = tex.sp(td_contents["border-top"]    or 0)
+    local td_randunten  = tex.sp(td_contents["border-bottom"] or 0)
 
-    local padding_left   = td_inhalt.padding_left   or self.padding_left
-    local padding_right  = td_inhalt.padding_right  or self.padding_right
-    local padding_top    = td_inhalt.padding_top    or self.padding_top
-    local padding_bottom = td_inhalt.padding_bottom or self.padding_bottom
+    local padding_left   = td_contents.padding_left   or self.padding_left
+    local padding_right  = td_contents.padding_right  or self.padding_right
+    local padding_top    = td_contents.padding_top    or self.padding_top
+    local padding_bottom = td_contents.padding_bottom or self.padding_bottom
 
 
     -- Wenn ich auf einer Skip-Spalte bin (durch einen Rowspan), dann
     -- muss eine leere hbox erzeugt werden
-    while self.skip[aktuelle_zeile] and self.skip[aktuelle_zeile][aktuelle_spalte] do
-      v = publisher.erzeuge_leere_hbox_mit_breite(self.spaltenbreiten[aktuelle_spalte])
+    while self.skip[current_row] and self.skip[current_row][current_column] do
+      v = publisher.erzeuge_leere_hbox_mit_breite(self.colwidths[current_column])
       v = publisher.add_glue(v,"head",fill) -- sonst gäb's ne underfull vbox
-      zeile[aktuelle_spalte] = node.vpack(v,self.zeilenhoehen[aktuelle_zeile],"exactly")
-      aktuelle_spalte = aktuelle_spalte + 1
+      zeile[current_column] = node.vpack(v,self.rowheights[current_row],"exactly")
+      current_column = current_column + 1
     end
 
-    -- rowspan? - nicht DRY: dasselbe wurde schon in berechne_spaltenbreite gemacht
-    for z = aktuelle_zeile + 1, aktuelle_zeile + rowspan - 1 do
-      for y = aktuelle_spalte, aktuelle_spalte + colspan - 1 do
+    -- rowspan? - nicht DRY: dasselbe wurde schon in calculate_spaltenbreite gemacht
+    for z = current_row + 1, current_row + rowspan - 1 do
+      for y = current_column, current_column + colspan - 1 do
         self.skip[z] = self.skip[z] or {}  self.skip[z][y] = true
       end
     end
 
-    aktuelle_spaltenbreite = 0
-    for s = aktuelle_spalte,aktuelle_spalte + colspan - 1 do
-       aktuelle_spaltenbreite = aktuelle_spaltenbreite + self.spaltenbreiten[s]
+    current_columnnbreite = 0
+    for s = current_column,current_column + colspan - 1 do
+       current_columnnbreite = current_columnnbreite + self.colwidths[s]
     end
     -- FIXME: hier statt self.colsep die spaltenabstaende[i] berücksichtigen
-    aktuelle_spaltenbreite = aktuelle_spaltenbreite + ( colspan - 1 ) * self.colsep
-    aktuelle_spalte = aktuelle_spalte + colspan - 1
+    current_columnnbreite = current_columnnbreite + ( colspan - 1 ) * self.colsep
+    current_column = current_column + colspan - 1
 
     if rowspan > 1 then
-      ht = td_inhalt.rowspan_internal.sum_ht
+      ht = td_contents.rowspan_internal.sum_ht
     else
-      ht = self.zeilenhoehen[aktuelle_zeile]
+      ht = self.rowheights[current_row]
     end
     -- FIXME: muss ich wirklich hier noch einmal alles setzen? Ich habe doch schon im
     -- vorherigen Anlauf (Zeilenhöhe bestimmen) alles in einen absatz gepackt!?!?
@@ -661,7 +661,7 @@ function setze_zeile(self, tr_inhalt, aktuelle_zeile )
     g.spec = node.new("glue_spec")
     g.spec.width = padding_top
 
-    local valign = td_inhalt.valign or tr_inhalt.valign or self.valign[aktuelle_spalte]
+    local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
     if valign ~= "top" then
       g.spec.stretch = 2^16
       g.spec.stretch_order = 2
@@ -673,35 +673,35 @@ function setze_zeile(self, tr_inhalt, aktuelle_zeile )
     local current = node.tail(zelle_start)
 
 
-    for _,objekt in ipairs(td_inhalt.objekte) do
-      if type(objekt) == "table" then
-        if not (objekt and objekt.nodelist) then
+    for _,object in ipairs(td_contents.objects) do
+      if type(object) == "table" then
+        if not (object and object.nodelist) then
           warning("No nodelist found!")
         end
-        v = node.copy_list(objekt.nodelist)
-      elseif type(objekt) == "userdata" then
-        v = node.copy_list(objekt)
+        v = node.copy_list(object.nodelist)
+      elseif type(object) == "userdata" then
+        v = node.copy_list(object)
       end
 
-      if type(objekt) == "table" then
+      if type(object) == "table" then
         -- Absatz mit Nodeliste
         local parameter = nil
-        if objekt.textformat then
-          if not publisher.textformate[objekt.textformat] then
-            err("Textformat %q not defined!",objekt.textformat)
+        if object.textformat then
+          if not publisher.textformate[object.textformat] then
+            err("Textformat %q not defined!",object.textformat)
           else
-            if publisher.textformate[objekt.textformat]["ausrichtung"] == "linksbündig" then
+            if publisher.textformate[object.textformat]["alignment"] == "linksbündig" then
               parameter = { rightskip = publisher.rightskip }
             end
-            if publisher.textformate[objekt.textformat]["ausrichtung"] == "rechtsbündig" then
+            if publisher.textformate[object.textformat]["alignment"] == "rechtsbündig" then
               parameter = { leftskip = publisher.leftskip }
             end
-            if publisher.textformate[objekt.textformat]["ausrichtung"] == "zentriert" then
+            if publisher.textformate[object.textformat]["alignment"] == "zentriert" then
               parameter = { leftskip = publisher.leftskip, rightskip = publisher.rightskip }
             end
           end
         else
-          local align = td_inhalt.align or tr_inhalt.align or self.align[aktuelle_spalte]
+          local align = td_contents.align or tr_contents.align or self.align[current_column]
           if align=="center" then
             parameter = { leftskip = publisher.leftskip, rightskip = publisher.rightskip }
           elseif align=="left" then
@@ -710,11 +710,11 @@ function setze_zeile(self, tr_inhalt, aktuelle_zeile )
             parameter = { leftskip = publisher.leftskip }
           end
         end
-        v = publisher.do_linebreak(v, aktuelle_spaltenbreite - padding_left - padding_right - td_randlinks - td_randrechts, parameter)
+        v = publisher.do_linebreak(v, current_columnnbreite - padding_left - padding_right - td_randlinks - td_randrechts, parameter)
         if publisher.options.trace then
           v = publisher.boxit(v)
         end
-      elseif type(objekt) == "userdata" then
+      elseif type(object) == "userdata" then
         v = node.hpack(v)
       else
         assert(false)
@@ -727,7 +727,7 @@ function setze_zeile(self, tr_inhalt, aktuelle_zeile )
     g.spec = node.new("glue_spec")
     g.spec.width = padding_bottom
 
-    local valign = td_inhalt.valign or tr_inhalt.valign or self.valign[aktuelle_spalte]
+    local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
     if valign ~= "bottom" then
       g.spec.stretch = 2^16
       g.spec.stretch_order = 2
@@ -743,7 +743,7 @@ function setze_zeile(self, tr_inhalt, aktuelle_zeile )
     g.spec.width = padding_left
 
 
-    local align = td_inhalt.align or tr_inhalt.align or self.align[aktuelle_spalte]
+    local align = td_contents.align or tr_contents.align or self.align[current_column]
     if align ~= "left" then
       g.spec.stretch = 2^16
       g.spec.stretch_order = 2
@@ -751,8 +751,8 @@ function setze_zeile(self, tr_inhalt, aktuelle_zeile )
 
     zelle_start = g
 
-    if td_inhalt["border-left"] then
-      local start, stop = publisher.farbbalken(tex.sp(td_inhalt["border-left"]),-1073741824,-1073741824,td_inhalt["border-left-color"])
+    if td_contents["border-left"] then
+      local start, stop = publisher.farbbalken(tex.sp(td_contents["border-left"]),-1073741824,-1073741824,td_contents["border-left-color"])
       stop.next = g
       zelle_start = start
     end
@@ -765,7 +765,7 @@ function setze_zeile(self, tr_inhalt, aktuelle_zeile )
     g.spec = node.new("glue_spec")
     g.spec.width = padding_right
 
-    local align = td_inhalt.align or tr_inhalt.align or self.align[aktuelle_spalte]
+    local align = td_contents.align or tr_contents.align or self.align[current_column]
     if align ~= "right" then
       g.spec.stretch = 2^16
       g.spec.stretch_order = 2
@@ -774,38 +774,38 @@ function setze_zeile(self, tr_inhalt, aktuelle_zeile )
     current.next = g
     current = g
 
-    if td_inhalt["border-right"] then
-      local rule = publisher.farbbalken(tex.sp(td_inhalt["border-right"]),-1073741824,-1073741824,td_inhalt["border-right-color"])
+    if td_contents["border-right"] then
+      local rule = publisher.farbbalken(tex.sp(td_contents["border-right"]),-1073741824,-1073741824,td_contents["border-right-color"])
       g.next = rule
     end
 
-    hlist = node.hpack(zelle_start,aktuelle_spaltenbreite,"exactly")
+    hlist = node.hpack(zelle_start,current_columnnbreite,"exactly")
 
     -- So, jetzt ist die Zelle vollständig (bis auf die top/bottom rule). Hier kann jetzt die Hintergrundfarbe gesetzt werden.
-    if tr_inhalt.backgroundcolor or td_inhalt.backgroundcolor or self.spaltenfarben[aktuelle_spalte] then
+    if tr_contents.backgroundcolor or td_contents.backgroundcolor or self.columncolors[current_column] then
       -- prio: Td.backgroundcolor, dann Tr.backgroundcolor, dann Spalte.backgroundcolor
-      local farbe = self.spaltenfarben[aktuelle_spalte]
-      farbe = tr_inhalt.backgroundcolor or farbe
-      farbe = td_inhalt.backgroundcolor or farbe
+      local farbe = self.columncolors[current_column]
+      farbe = tr_contents.backgroundcolor or farbe
+      farbe = td_contents.backgroundcolor or farbe
       hlist = publisher.hintergrund(hlist,farbe)
     end
 
     local head = hlist
-    if td_inhalt["border-top"] then
-      local rule = publisher.farbbalken(-1073741824,tex.sp(td_inhalt["border-top"]),0,td_inhalt["border-top-color"])
+    if td_contents["border-top"] then
+      local rule = publisher.farbbalken(-1073741824,tex.sp(td_contents["border-top"]),0,td_contents["border-top-color"])
       -- rule besteht aus whatsit, rule, whatsit
       node.tail(rule).next = hlist
       head = rule
     end
 
-    if td_inhalt["border-bottom"] then
-      local rule = publisher.farbbalken(-1073741824,tex.sp(td_inhalt["border-bottom"]),0,td_inhalt["border-bottom-color"])
+    if td_contents["border-bottom"] then
+      local rule = publisher.farbbalken(-1073741824,tex.sp(td_contents["border-bottom"]),0,td_contents["border-bottom-color"])
       hlist.next = rule
     end
 
 
-    -- vlist.height = self.zeilenhoehen[aktuelle_zeile]
-    -- hlist.height = self.zeilenhoehen[aktuelle_zeile]
+    -- vlist.height = self.rowheights[current_row]
+    -- hlist.height = self.rowheights[current_row]
     local gl = node.new("glue")
     gl.spec = node.new("glue_spec")
     gl.spec.width = 0
@@ -813,7 +813,7 @@ function setze_zeile(self, tr_inhalt, aktuelle_zeile )
     gl.spec.shrink_order = 2
     node.slide(head).next = gl
 
-    hlist = node.vpack(head,self.zeilenhoehen[aktuelle_zeile],"exactly")
+    hlist = node.vpack(head,self.rowheights[current_row],"exactly")
 
     if publisher.options.trace then
       publisher.boxit(hlist)
@@ -823,12 +823,12 @@ function setze_zeile(self, tr_inhalt, aktuelle_zeile )
 
   end -- ende td
 
-  if aktuelle_spalte == 0 then
+  if current_column == 0 then
     trace("Tabelle: keine Td-Zellen in dieser Spalte gefunden")
-    v = publisher.erzeuge_leere_hbox_mit_breite(self.tabellenbreite_soll)
+    v = publisher.erzeuge_leere_hbox_mit_breite(self.tablewidth_target)
     trace("Tabelle: leere hbox erzeugt")
     v = publisher.add_glue(v,"head",fill) -- sonst gäb's ne underfull vbox
-    zeile[1] = node.vpack(v,self.zeilenhoehen[aktuelle_zeile],"exactly")
+    zeile[1] = node.vpack(v,self.rowheights[current_row],"exactly")
   end
 
   local zelle, zelle_start,current
@@ -853,54 +853,54 @@ end
 
 function setze_tabelle(self)
   trace("Tabelle: setze Tabelle")
-  local aktuelle_zeile
+  local current_row
   local kopfzeilen = {}
   local fusszeilen = {}
   local zeilen = {}
 
-  aktuelle_zeile = 0
+  current_row = 0
   for _,tr in ipairs(self.tab) do
-    local tr_inhalt = publisher.inhalt(tr)
+    local tr_contents = publisher.inhalt(tr)
     local eltname   = publisher.elementname(tr,true)
     local tmp
 
     if eltname == "Columns" then
       -- ignorieren
     elseif eltname == "Tablerule" then
-      tmp = publisher.farbbalken(self.tabellenbreite_soll,tex.sp(tr_inhalt.linienstaerke or "0.25pt"),0,tr_inhalt.farbe)
+      tmp = publisher.farbbalken(self.tablewidth_target,tex.sp(tr_contents.rulewidth or "0.25pt"),0,tr_contents.farbe)
       zeilen[#zeilen + 1] = node.hpack(tmp)
 
     elseif eltname == "Tablehead" then
-      for _,zeile in ipairs(tr_inhalt) do
+      for _,zeile in ipairs(tr_contents) do
         zeile_inhalt = publisher.inhalt(zeile)
         zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
-          aktuelle_zeile = aktuelle_zeile + 1
-          kopfzeilen[#kopfzeilen + 1] = self:setze_zeile(zeile_inhalt,aktuelle_zeile)
+          current_row = current_row + 1
+          kopfzeilen[#kopfzeilen + 1] = self:setze_zeile(zeile_inhalt,current_row)
         elseif zeile_eltname == "Tablerule" then
-          tmp = publisher.farbbalken(self.tabellenbreite_soll,tex.sp(zeile_inhalt.linienstaerke or "0.25pt"),0,zeile_inhalt.farbe)
+          tmp = publisher.farbbalken(self.tablewidth_target,tex.sp(zeile_inhalt.rulewidth or "0.25pt"),0,zeile_inhalt.farbe)
           kopfzeilen[#kopfzeilen + 1] = node.hpack(tmp)
         end
       end
 
     elseif eltname == "Tablefoot" then
-      for _,zeile in ipairs(tr_inhalt) do
+      for _,zeile in ipairs(tr_contents) do
         zeile_inhalt = publisher.inhalt(zeile)
         zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
-          aktuelle_zeile = aktuelle_zeile + 1
-          fusszeilen[#fusszeilen + 1] = self:setze_zeile(zeile_inhalt,aktuelle_zeile)
+          current_row = current_row + 1
+          fusszeilen[#fusszeilen + 1] = self:setze_zeile(zeile_inhalt,current_row)
         elseif zeile_eltname == "Tablerule" then
-          tmp = publisher.farbbalken(self.tabellenbreite_soll,tex.sp(zeile_inhalt.linienstaerke or "0.25pt"),0,zeile_inhalt.farbe)
+          tmp = publisher.farbbalken(self.tablewidth_target,tex.sp(zeile_inhalt.rulewidth or "0.25pt"),0,zeile_inhalt.farbe)
           fusszeilen[#fusszeilen + 1] = node.hpack(tmp)
         end
       end
 
     elseif eltname == "Tr" then
-      aktuelle_zeile = aktuelle_zeile + 1
-      zeilen[#zeilen + 1] = self:setze_zeile(tr_inhalt,aktuelle_zeile)
+      current_row = current_row + 1
+      zeilen[#zeilen + 1] = self:setze_zeile(tr_contents,current_row)
     else
-      warning("Unknown contents in »Tabelle« %s",eltname )
+      warning("Unknown contents in »Table« %s",eltname )
     end -- wenn es eine Tabellenzelle ist
   end
 
@@ -935,7 +935,6 @@ function setze_tabelle(self)
   local aktuelle_tabelle
   local anzahl_zeilen_in_der_aktuellen_tabelle = 0
   local tmp
-  if not trace_objekt_counter then  trace_objekt_counter = 0 end
 
   if not kopfzeilen[1] then
     kopfzeilen[1] = node.new("hlist") -- dummy-Kopfzeile
@@ -997,8 +996,8 @@ end
 
 function tabelle( self )
   setmetatable(self.spaltenabstaende,{ __index = function() return self.colsep or 0 end })
-  berechne_spaltenbreite(self)
-  berechne_zeilenhoehen(self)
+  calculate_spaltenbreite(self)
+  calculate_rowheights(self)
   return setze_tabelle(self)
 end
 

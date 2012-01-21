@@ -15,9 +15,9 @@ local function aktuelle_seite(  )
   return  tex.count[0]
 end
 
-local function aktuelle_zeile(dataxml,...)
+local function current_row(dataxml,...)
   publisher.seite_einrichten()
-  return publisher.aktuelles_raster:aktuelle_zeile(select(1,...))
+  return publisher.current_grid:current_row(select(1,...))
 end
 
 local function alternierend(dataxml, ... )
@@ -41,12 +41,12 @@ end
 
 local function anzahl_spalten(dataxml,...)
   publisher.seite_einrichten()
-  return publisher.aktuelles_raster:anzahl_spalten(select(1,...))
+  return publisher.current_grid:anzahl_spalten(select(1,...))
 end
 
 local function anzahl_zeilen(dataxml,...)
   publisher.seite_einrichten()
-  return publisher.aktuelles_raster:anzahl_zeilen(select(1,...))
+  return publisher.current_grid:anzahl_zeilen(select(1,...))
 end
 
 local function anzahl_seiten( dataxml,... )
@@ -59,7 +59,7 @@ local function bildbreite(dataxml, ... )
   dateiname=select(1,...)
   local img = publisher.imageinfo(dateiname)
   publisher.seite_einrichten()
-  return publisher.aktuelles_raster:breite_in_rasterzellen_sp(img.width)
+  return publisher.current_grid:breite_in_rasterzellen_sp(img.width)
 end
 
 local function datei_vorhanden(dataxml, ... )
@@ -78,9 +78,9 @@ end
 local function gruppenbreite(dataxml, ... )
   -- printtable("Gruppenbreite",{...})
   publisher.seite_einrichten()
-  local gruppenname=select(1,...)
-  local gruppeninhalt=publisher.gruppen[gruppenname].inhalt
-  local raster = publisher.aktuelles_raster
+  local groupname=select(1,...)
+  local gruppeninhalt=publisher.gruppen[groupname].inhalt
+  local raster = publisher.current_grid
   local breite = raster:breite_in_rasterzellen_sp(gruppeninhalt.width)
   return breite
 end
@@ -88,11 +88,11 @@ end
 local function gruppenhoehe(dataxml, ... )
   -- printtable("Gruppenhöhe",{...})
   publisher.seite_einrichten()
-  local gruppenname=select(1,...)
+  local groupname=select(1,...)
   -- FIXME: Fehlermeldung, wenn Gruppe nicht gefunden
-  -- printtable("publisher.gruppen[gruppenname]",publisher.gruppen[gruppenname])
-  local _raster = publisher.gruppen[gruppenname].raster
-  local _inhalt = publisher.gruppen[gruppenname].inhalt
+  -- printtable("publisher.gruppen[groupname]",publisher.gruppen[groupname])
+  local _raster = publisher.gruppen[groupname].raster
+  local _inhalt = publisher.gruppen[groupname].inhalt
   local hoehe = _raster:hoehe_in_rasterzellen_sp(_inhalt.height)
   return hoehe
 end
@@ -109,7 +109,7 @@ file_end("layout_funktionen.lua")
 
 return {
   aktuelle_seite     = aktuelle_seite,
-  aktuelle_zeile     = aktuelle_zeile,
+  current_row     = current_row,
   alternierend       = alternierend,
   anzahl_datensaetze = anzahl_datensaetze,
   ["anzahl_datensätze"] = anzahl_datensaetze,
