@@ -234,7 +234,14 @@ end
 
 function dothings()
   page_initialized=false
+
+  -- defaults
   set_pageformat(tex.sp("210mm"),tex.sp("297mm"))
+
+  fonts.load_fontfile("TeXGyreHeros-Regular",   "texgyreheros-regular.otf")
+  fonts.load_fontfile("TeXGyreHeros-Bold",      "texgyreheros-bold.otf")
+  fonts.load_fontfile("TeXGyreHeros-Italic",    "texgyreheros-italic.otf")
+  fonts.load_fontfile("TeXGyreHeros-BoldItalic","texgyreheros-bolditalic.otf")
 
   local layoutxml = load_xml(arg[2],"layout instructions")
   local datenxml  = load_xml(arg[3],"data file")
