@@ -911,16 +911,7 @@ function seitenformat(layoutxml)
   trace("Pageformat")
   local width  = publisher.read_attribute(layoutxml,datenxml,"width","length")
   local height = publisher.read_attribute(layoutxml,datenxml,"height","length")
-
-  publisher.options.pagewidth = tex.sp(width)
-  publisher.options.seitenhoehe  = tex.sp(height)
-  tex.pdfpagewidth =  publisher.options.pagewidth
-  tex.pdfpageheight = publisher.options.seitenhoehe
-  tex.pdfpagewidth  = tex.pdfpagewidth   + tex.sp("2cm")
-  tex.pdfpageheight = tex.pdfpageheight  + tex.sp("2cm")
-
-  tex.hsize = publisher.options.pagewidth
-  tex.vsize = publisher.options.seitenhoehe
+  publisher.set_pageformat(tex.sp(width),tex.sp(height))
 end
 
 -- Setzt den Rand für diese Seite

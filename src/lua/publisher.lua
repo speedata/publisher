@@ -231,6 +231,7 @@ end
 
 function dothings()
   page_initialized=false
+  set_pageformat(tex.sp("210mm"),tex.sp("297mm"))
 
   local layoutxml = load_xml(arg[2],"layout instructions")
   local datenxml  = load_xml(arg[3],"data file")
@@ -1327,6 +1328,19 @@ function get_languagecode( sprache_intern )
   return id
 end
 
+function set_pageformat( wd,ht )
+  options.pagewidth    = wd
+  options.seitenhoehe  = ht
+  tex.pdfpagewidth =  wd
+  tex.pdfpageheight = ht
+  -- why the + 2cm? is this for the trim-/art-/bleedbox? FIXME: document
+  tex.pdfpagewidth  = tex.pdfpagewidth   + tex.sp("2cm")
+  tex.pdfpageheight = tex.pdfpageheight  + tex.sp("2cm")
+
+  -- necessary? FIXME: check if necessary.
+  tex.hsize = wd
+  tex.vsize = ht
+end
 
 
 ------------------------------------------------------------------------------
