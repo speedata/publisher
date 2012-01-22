@@ -50,7 +50,10 @@ current_layoutlanguage = nil
 seiten   = {}
 
 -- The defaults (set in the layout instructions file)
-options = {}
+options = {
+  gridwidth = tex.sp("10mm"),
+  gridheight = tex.sp("10mm"),
+}
 
 -- Liste der Gruppen. Schlüssel sind inhalt (Nodeliste) und raster 
 gruppen   = {}
@@ -231,6 +234,18 @@ end
 
 function dothings()
   page_initialized=false
+
+  -- defaults
+  set_pageformat(tex.sp("210mm"),tex.sp("297mm"))
+
+  fonts.load_fontfile("TeXGyreHeros-Regular",   "texgyreheros-regular.otf")
+  fonts.load_fontfile("TeXGyreHeros-Bold",      "texgyreheros-bold.otf")
+  fonts.load_fontfile("TeXGyreHeros-Italic",    "texgyreheros-italic.otf")
+  fonts.load_fontfile("TeXGyreHeros-BoldItalic","texgyreheros-bolditalic.otf")
+
+  define_default_fontfamily()
+  local onecm=tex.sp("1cm")
+  seitentypen[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", inhalt = function(_seite) _seite.raster:setze_rand(onecm,onecm,onecm,onecm) end }}, name = "Seite" }
 
   local layoutxml = load_xml(arg[2],"layout instructions")
   local datenxml  = load_xml(arg[3],"data file")
@@ -1327,6 +1342,51 @@ function get_languagecode( sprache_intern )
   return id
 end
 
+function set_pageformat( wd,ht )
+  options.pagewidth    = wd
+  options.seitenhoehe  = ht
+  tex.pdfpagewidth =  wd
+  tex.pdfpageheight = ht
+  -- why the + 2cm? is this for the trim-/art-/bleedbox? FIXME: document
+  tex.pdfpagewidth  = tex.pdfpagewidth   + tex.sp("2cm")
+  tex.pdfpageheight = tex.pdfpageheight  + tex.sp("2cm")
+
+  -- necessary? FIXME: check if necessary.
+  tex.hsize = wd
+  tex.vsize = ht
+end
+
+function define_default_fontfamily()
+  -- we assume that TeXGyreHeros is available. If not, !?!?
+  local fam={
+    size         = 10 * 65782,
+    baselineskip = 12 * 65782,
+    scriptsize   = 10 * 65782 * 0.8,
+    scriptshift  = 10 * 65782 * 0.3,
+  }
+  local ok,tmp
+  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Regular",fam.size)
+  fam.normal = tmp
+  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Regular",fam.scriptsize)
+  fam.normalscript = tmp
+
+  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Bold",fam.size)
+  fam.fett = tmp
+  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Bold",fam.scriptsize)
+  fam.fettscript = tmp
+
+  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Italic",fam.size)
+  fam.kursiv = tmp
+  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Italic",fam.scriptsize)
+  fam.kursivscript = tmp
+
+  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-BoldItalic",fam.size)
+  fam.fettkursiv = tmp
+  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-BoldItalic",fam.scriptsize)
+  fam.fettkursivscript = tmp
+  fonts.lookup_schriftfamilie_nummer_instanzen[#fonts.lookup_schriftfamilie_nummer_instanzen + 1] = fam
+  fonts.lookup_schriftfamilie_name_nummer["text"]=#fonts.lookup_schriftfamilie_nummer_instanzen
+end
 
 
 ------------------------------------------------------------------------------
