@@ -244,6 +244,8 @@ function dothings()
   fonts.load_fontfile("TeXGyreHeros-BoldItalic","texgyreheros-bolditalic.otf")
 
   define_default_fontfamily()
+  local onecm=tex.sp("1cm")
+  seitentypen[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", inhalt = function(_seite) _seite.raster:setze_rand(onecm,onecm,onecm,onecm) end }}, name = "Seite" }
 
   local layoutxml = load_xml(arg[2],"layout instructions")
   local datenxml  = load_xml(arg[3],"data file")
