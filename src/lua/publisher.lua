@@ -243,6 +243,8 @@ function dothings()
   fonts.load_fontfile("TeXGyreHeros-Italic",    "texgyreheros-italic.otf")
   fonts.load_fontfile("TeXGyreHeros-BoldItalic","texgyreheros-bolditalic.otf")
 
+  define_default_fontfamily()
+
   local layoutxml = load_xml(arg[2],"layout instructions")
   local datenxml  = load_xml(arg[3],"data file")
 
@@ -1350,6 +1352,38 @@ function set_pageformat( wd,ht )
   -- necessary? FIXME: check if necessary.
   tex.hsize = wd
   tex.vsize = ht
+end
+
+function define_default_fontfamily()
+  -- we assume that TeXGyreHeros is available. If not, !?!?
+  local fam={
+    size         = 10 * 65782,
+    baselineskip = 12 * 65782,
+    scriptsize   = 10 * 65782 * 0.8,
+    scriptshift  = 10 * 65782 * 0.3,
+  }
+  local ok,tmp
+  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Regular",fam.size)
+  fam.normal = tmp
+  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Regular",fam.scriptsize)
+  fam.normalscript = tmp
+
+  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Bold",fam.size)
+  fam.fett = tmp
+  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Bold",fam.scriptsize)
+  fam.fettscript = tmp
+
+  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Italic",fam.size)
+  fam.kursiv = tmp
+  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Italic",fam.scriptsize)
+  fam.kursivscript = tmp
+
+  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-BoldItalic",fam.size)
+  fam.fettkursiv = tmp
+  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-BoldItalic",fam.scriptsize)
+  fam.fettkursivscript = tmp
+  fonts.lookup_schriftfamilie_nummer_instanzen[#fonts.lookup_schriftfamilie_nummer_instanzen + 1] = fam
+  fonts.lookup_schriftfamilie_name_nummer["text"]=#fonts.lookup_schriftfamilie_nummer_instanzen
 end
 
 

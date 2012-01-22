@@ -332,7 +332,6 @@ function definiere_textformat(layoutxml)
   publisher.textformate[name] = fmt
 end
 
-
 -- Definiert eine Schriftfamilie
 function definiere_schriftfamilie( layoutxml,datenxml )
   -- hier müssen die konkreten Instanzen erzeugt werden. Schriftgröße
@@ -343,7 +342,7 @@ function definiere_schriftfamilie( layoutxml,datenxml )
   local fam={}
   -- Schriftgröße, baselineskip sind in big points (1 bp ≈ 65782 sp)
   fam.size          = publisher.read_attribute(layoutxml,datenxml,"fontsize","number")  * 65782
-  fam.baselineskip = publisher.read_attribute(layoutxml,datenxml,"leading","number") * 65782
+  fam.baselineskip  = publisher.read_attribute(layoutxml,datenxml,"leading","number") * 65782
   fam.scriptsize    = fam.size * 0.8 -- subscript / superscript
   fam.scriptshift   = fam.size * 0.3
 

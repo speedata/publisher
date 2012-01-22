@@ -90,7 +90,7 @@ function erzeuge_fontinstanz( name,groesse )
   -- lookup für die schriftinstanzen Tabelle
   local k = {dateiname = dateiname, groesse = groesse}
   local fontnummer = table.find(schriftinstanzen,k)
-  
+
   if fontnummer then
     return true,fontnummer
   else
