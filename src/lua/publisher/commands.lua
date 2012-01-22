@@ -948,7 +948,7 @@ end
 -- Remember (internally) the grid size (`width` und `height` in layout xml).
 function setze_raster(layoutxml)
   trace("Command: SetGrid")
-  publisher.options.gridwidth = tex.sp(publisher.read_attribute(layoutxml,datenxml,"width","length"))
+  publisher.options.gridwidth   = tex.sp(publisher.read_attribute(layoutxml,datenxml,"width","length"))
   publisher.options.gridheight  = tex.sp(publisher.read_attribute(layoutxml,datenxml,"height","length"))
 end
 

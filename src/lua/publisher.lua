@@ -50,7 +50,10 @@ current_layoutlanguage = nil
 seiten   = {}
 
 -- The defaults (set in the layout instructions file)
-options = {}
+options = {
+  gridwidth = tex.sp("10mm"),
+  gridheight = tex.sp("10mm"),
+}
 
 -- Liste der Gruppen. Schlüssel sind inhalt (Nodeliste) und raster 
 gruppen   = {}
