@@ -7,7 +7,7 @@
 
 file_start("commands.lua")
 require("publisher.fonts")
-require("publisher.table")
+require("publisher.tabular")
 require("xpath")
 require("fileutils")
 
@@ -1149,7 +1149,7 @@ function tabelle( layoutxml,datenxml,optionen )
 
   local tab = publisher.dispatch(layoutxml,datenxml)
 
-  local tabelle = publisher.table:new()
+  local tabelle = publisher.tabular:new()
 
   tabelle.tab = tab
   tabelle.optionen = optionen or { ht_aktuell=100*2^16 } -- FIXME! Test - das ist für Tabelle in Tabelle
