@@ -231,6 +231,7 @@ local function get_value( v )
   if type(v)=="number" then return v end
   if type(v)=="function" then return v()  end
   if type(v)=="table" then return v end
+  if type(v)=="boolean" then return v end
   if type(v)=="nil" then return nil end
   w(debug.traceback())
   assert(false,string.format("get_value, type(v)==%s, v=%s",type(v),tostring(v)))
