@@ -10,6 +10,7 @@ file_start("publisher.lua")
 local element = require("publisher.commands")
 local seite   = require("publisher.page")
 local translations = require("translations")
+local fontloader = require("fonts.fontloader")
 
 sd_xpath_funktionen      = require("publisher.layout_functions")
 orig_xpath_funktionen    = require("publisher.xpath_functions")
@@ -210,6 +211,15 @@ function dispatch(layoutxml,datenxml,optionen)
   return ret
 end
 
+function utf8_to_utf16_string_pdf( str )
+  local ret = {}
+  for s in string.utfvalues(str) do
+    ret[#ret + 1] = fontloader.to_utf16(s)
+  end
+  local utf16str = "<feff" .. table.concat(ret) .. ">"
+  return utf16str
+end
+
 function bookmarkstotex( tbl )
   local countstring
   local open_string
@@ -224,7 +234,7 @@ function bookmarkstotex( tbl )
     countstring = string.format("count %s%d",open_string,#tbl)
   end
   if tbl.destination then
-    tex.sprint(string.format("\\pdfoutline goto num %s %s {%s}",tbl.destination, countstring ,tbl.name ))
+    tex.sprint(string.format("\\pdfoutline goto num %s %s {%s}",tbl.destination, countstring ,utf8_to_utf16_string_pdf(tbl.name) ))
   end
   for i,v in ipairs(tbl) do
     bookmarkstotex(v)
@@ -839,7 +849,7 @@ function mknodes(str,fontfamilie,parameter)
   local shrink  = tbl.parameters.space_shrink
   local stretch = tbl.parameters.space_stretch
   local match = unicode.utf8.match
-    
+
   local head, last, n
   local char
 
