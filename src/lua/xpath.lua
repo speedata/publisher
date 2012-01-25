@@ -333,7 +333,8 @@ local function _funcall( ... )
     -- a special publisher xpath function
     local ns = publisher.namespaces_layout[prefix]
     if not ns then
-      err("Cannot resolve namespace for prefix %q in function %q",prefix or "?",name or "?")
+      err("Cannot resolve namespace for prefix %q in function %q\nPlease use urn:speedata:2009/publisher/functions/en (or .../de)",prefix or "?",name or "?")
+      exit()
     else
       local lang = string.gsub(ns,"urn:speedata:2009/publisher/functions/","")
       fun = publisher.sd_xpath_funktionen[lang][rest:gsub("-","_")]
