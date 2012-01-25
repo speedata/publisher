@@ -590,6 +590,10 @@
     <element name="NeueZeile">
       <a:documentation docid="newrow">Der virtuelle Cursor wird auf die nächste freie Zeile gesetzt.</a:documentation>
       <optional>
+        <attribute name="zeile"/>
+        <a:documentation docid="newrow/row">Zeile für den virtuellen Cursor (Zahl). Wenn nicht angegeben, nimmt der Publisher die nächste freie Zeile.</a:documentation>
+      </optional>
+      <optional>
         <attribute name="bereich"/>
         <a:documentation docid="newrow/area">Name des Bereichs, in dem der Cursor versetzt wird.</a:documentation>
       </optional>

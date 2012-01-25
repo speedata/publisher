@@ -7,19 +7,20 @@ h2. Beschreibung
 
 Der virtuelle Cursor wird auf die nächste freie Zeile gesetzt.
 
-Erlaubte Attribute: @bereich@
+Erlaubte Attribute: @bereich@, @zeile@
 Kindelemente: -
 Elternelemente: "Datensatz":e_datensatz
 
 h3. Attribute
 
-- @bereich@ := Name des Bereichs, in dem eine neue Zeile erzeugt wird.
+- @bereich@ (optional) := Name des Bereichs, in dem eine neue Zeile erzeugt wird.
+- @zeile@ (optional, Zahl) := Zeile für den virtuellen Cursor. Wird keine Zeile angegeben, dann sucht sich der Publisher selbständig eine freie Zeile (ggf. auf einer neuen Seite oder in einem neuen Platzierungsrahmen).
 
 
 h2. Beispiel
 
 pre(xml). <Datensatz element="bild">
-  <NeueZeile />
+  <NeueZeile zeile="5" />
   <ObjektAusgeben spalte="{$spalte}">
     <Bild breite="10" datei="{.}" />
   </ObjektAusgeben>

@@ -698,17 +698,25 @@ end
 
 function neue_zeile( layoutxml,datenxml )
   publisher.seite_einrichten()
-  local areaname = publisher.read_attribute(layoutxml,datenxml,"area","string")
+  local rownumber = publisher.read_attribute(layoutxml,datenxml,"row","number")
+  local areaname  = publisher.read_attribute(layoutxml,datenxml,"area","string")
   local areaname = areaname or publisher.default_areaname
-  local raster = publisher.current_grid
-  local current_row = raster:finde_passende_zeile(1,raster:anzahl_spalten(),1,areaname)
+  local grid = publisher.current_grid
+
+  if rownumber then
+    grid:set_current_row(rownumber)
+    return
+  end
+
+  local current_row
+  current_row = grid:finde_passende_zeile(1,grid:anzahl_spalten(),1,areaname)
   if not current_row then
     neue_seite()
     publisher.seite_einrichten()
-    raster = publisher.aktuelle_seite.raster
+    grid = publisher.aktuelle_seite.raster
     raster:set_current_row(1)
   else
-    raster:set_current_row(current_row)
+    grid:set_current_row(current_row)
   end
 end
 

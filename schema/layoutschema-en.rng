@@ -580,6 +580,10 @@
     <element name="NextRow">
       <a:documentation docid="newrow">The virtual cursor is placed on the next free line.</a:documentation>
       <optional>
+        <attribute name="row"/>
+        <a:documentation docid="newrow/row">Number of the row for the virtual cursor. If not given, the publisher uses the next free row.</a:documentation>
+      </optional>
+      <optional>
         <attribute name="area"/>
         <a:documentation docid="newrow/area">Name of the area in which the cursor is placed.</a:documentation>
       </optional>

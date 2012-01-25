@@ -581,6 +581,10 @@
             <en>The virtual cursor is placed on the next free line.</en>
             <de>Der virtuelle Cursor wird auf die nächste freie Zeile gesetzt.</de>
         </documentation>
+      <documentation docid="newrow/row">
+        <en>Number of the row for the virtual cursor. If not given, the publisher uses the next free row.</en>
+        <de>Zeile für den virtuellen Cursor (Zahl). Wenn nicht angegeben, nimmt der Publisher die nächste freie Zeile.</de>
+      </documentation>
         <documentation docid="newrow/area">
             <en>Name of the area in which the cursor is placed.</en>
             <de>Name des Bereichs, in dem der Cursor versetzt wird.</de>
