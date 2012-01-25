@@ -282,7 +282,7 @@ function dothings()
     if string.len(extopt) > 0 then
       local k,v = extopt:match("^(.+)=(.+)$")
       v = v:gsub("^\"(.*)\"$","%1")
-      optionen[k]=v
+      options[k]=v
     end
   end
 

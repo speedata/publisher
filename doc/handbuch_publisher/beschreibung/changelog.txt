@@ -5,6 +5,8 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* @--laeufe=...@-Option bei @sprun@
+* @Zeilennummer@ in "NeueZeile":e_neuezeile
 * Defaults: Seitengröße: 210mm x 297mm, Raster: 10mm x 10mm, Schriftdateien: TeXGyreHeros, Schriftgröße 10pt/12pt, Seitentyp (Rand 1cm überall)
 * XPath-Funktionen nun übersetzt (de/en). Benötigt Namensraumpräfix @urn:speedata:2009/publisher/functions/de@
 * @-v@, @--variable@ in "sprun":kommandozeile

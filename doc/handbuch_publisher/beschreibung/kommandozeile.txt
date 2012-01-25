@@ -19,6 +19,8 @@ Benutzung: sprun <optionen>
      --layoutname=NAME        Lädt Layoutregelwerk mit dem Namen. Ohne diesen
                               Parameter wird 'layout.xml' geladen.
      --list-fonts             Zeigt alle verfügbaren Schriftarten
+     --laeufe=LAEUFE          So oft soll der Publisher die Eingabedatei
+                              verarbeiten
      --raster=WERT            Bestimmt, ob das Raster angezeigt werden soll
                               ('ja' oder 'nein')
      --startseite=NUM         Legt die Startseite fest
@@ -34,5 +36,6 @@ h2. Erklärung der Kommandozeilenparameter
 - @--autoopen@:= Öffnet die PDF-Datei nach dem Publisher-Durchlauf. Kann auch in der "Konfigurationsdatei":konfiguration eingestellt werden.
 - @--filter=FILTER@ := Führt die angegebene XPROC-Datei aus.
 - @--layoutname=NAME@:= Gibt den Namen des Layoutregelwerks an. Voreinstellung ist @layout.xml@. Ebenfalls "konfigurierbar":konfiguration.
+- @--laeufe = LÄUFE@ := Überschreibt die Anzahl der Durchläufe des Publishers
 - @--datenname=NAME@:= Gibt den Namen der XML-Daten an. Voreinstellung ist @daten.xml@. Ebenfalls "konfigurierbar":konfiguration.
 - @-v@, @--var=value@ := Übergibt zusätzliche Variablen an den Publisher-Lauf. Diese können wie üblich mit @auswahl="$variable"@ benutzt werden.
