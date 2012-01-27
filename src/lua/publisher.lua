@@ -531,19 +531,6 @@ function seite_einrichten()
     elseif eltname=="Grid" then
       gridwidth = inhalt(j).breite
       gridheight  = inhalt(j).hoehe
-    elseif eltname=="AtPageCreation" then
-      aktuelle_seite.beiseitenerzeugung = inhalt(j)
-    elseif eltname=="AtPageShipout" then
-      aktuelle_seite.beiseitenausgabe = inhalt(j)
-    elseif eltname=="PositioningArea" then
-      local name = inhalt(j).name
-      current_grid.platzierungsbereiche[name] = {}
-      local aktueller_platzierungsbereich = current_grid.platzierungsbereiche[name]
-      for _,k in ipairs(inhalt(j)) do
-        aktueller_platzierungsbereich[#aktueller_platzierungsbereich + 1] = inhalt(k)
-      end
-    else
-      err("Element name %q unknown (seite_einrichten())",eltname or "<create_page>")
     end
   end
 
@@ -552,10 +539,34 @@ function seite_einrichten()
     exit()
   end
   assert(gridwidth)
-  assert(gridheight,"Rasterhöhe")
-
-
+  assert(gridheight,"Gridheight!")
   aktuelle_seite.raster:setze_breite_hoehe(gridwidth,gridheight)
+
+  for _,j in ipairs(pagetype) do
+    local eltname = elementname(j,true)
+    w("eltname = %q",eltname)
+    w("-----")
+    if type(inhalt(j))=="function" and eltname=="Margin" then
+      -- do nothing, done before
+    elseif eltname=="Grid" then
+      -- do nothing, done before
+    elseif eltname=="AtPageCreation" then
+      aktuelle_seite.beiseitenerzeugung = inhalt(j)
+    elseif eltname=="AtPageShipout" then
+      aktuelle_seite.beiseitenausgabe = inhalt(j)
+    elseif eltname=="PositioningArea" then
+      local name = inhalt(j).name
+      current_grid.platzierungsbereiche[name] = {}
+      local aktueller_platzierungsbereich = current_grid.platzierungsbereiche[name]
+      -- we eveluate now, because the attributes in PositioningFrame can be page dependent.
+      local tab  = publisher.dispatch(inhalt(j).layoutxml,datenxml)
+      for i,k in ipairs(tab) do
+        aktueller_platzierungsbereich[#aktueller_platzierungsbereich + 1] = inhalt(k)
+      end
+    else
+      err("Element name %q unknown (seite_einrichten())",eltname or "<create_page>")
+    end
+  end
 
 
   if aktuelle_seite.beiseitenerzeugung then

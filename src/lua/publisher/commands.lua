@@ -760,7 +760,6 @@ function objekt_ausgeben( layoutxml,datenxml )
     absolute_positioning = true
     spalte = tex.sp(spalte)
   end
-
   if zeile and not tonumber(zeile) then
     -- zeile scheint ein String zu sein
     absolute_positioning = true
@@ -905,9 +904,11 @@ function platzierungsrahmen( layoutxml, datenxml )
     }
 end
 
--- enthält einen oder mehrere Platzierungsrahmen
+-- Contains one or more positioning frames
 function platzierungsbereich( layoutxml,datenxml )
-  local tab = publisher.dispatch(layoutxml,datenxml)
+  -- Warning: if we call publisher.dispatch now, the xpath functions might depend on values on the _current_ page, which is not set!
+  local tab = {}
+  tab.layoutxml = layoutxml
   local name = publisher.read_attribute(layoutxml,datenxml,"name","string")
   tab.name = name
   return tab
