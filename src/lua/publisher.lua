@@ -544,8 +544,6 @@ function seite_einrichten()
 
   for _,j in ipairs(pagetype) do
     local eltname = elementname(j,true)
-    w("eltname = %q",eltname)
-    w("-----")
     if type(inhalt(j))=="function" and eltname=="Margin" then
       -- do nothing, done before
     elseif eltname=="Grid" then

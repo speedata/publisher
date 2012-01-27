@@ -221,12 +221,12 @@ function passt_x_in_zeile(self,spalte,breite,zeile)
   return true
 end
 
--- Gibt die Zeile zurück, in die das Objekt der Breite @breite@ hinein passt.
--- Anfangsspalte ist @spalte@. Wenn die Seitengröße noch nicht gesetzt wurde
--- (z.B. durch @setze_rand()@), dann wird die nächste freie Zeile ausgegeben.
--- Ist die Seite voll, dann ist der Rückgabewert nil.
-function finde_passende_zeile( self,spalte,breite,hoehe,areaname)
-  if not spalte then return false end
+-- Return the row in which the object of the width "breite" can be placed.
+-- Starting column is @column@, If the page size is not know yet, the next free
+-- row will be given. Is the page full (the object cannot be placed), the
+-- function returns nil.
+function finde_passende_zeile( self,column, breite,hoehe,areaname)
+  if not column then return false end
   local rahmen_rand_links, rahmen_rand_oben
   if areaname == publisher.default_areaname then
     rahmen_rand_links, rahmen_rand_oben = 0,0
@@ -238,19 +238,18 @@ function finde_passende_zeile( self,spalte,breite,hoehe,areaname)
     rahmen_rand_links = block.spalte - 1
     rahmen_rand_oben = block.zeile - 1
   end
-
   -- FIXME: überlegen, was hier sinnvoll ist!?! - noch ein ziemlich ineffizienter Algorithmus! sieht aus wie O(n^2)
   -- bei n Zeilen Höhe
   if self:anzahl_zeilen(areaname) < self:current_row(areaname) + hoehe - 1 then return nil end
   for z = self:current_row(areaname) + rahmen_rand_oben, self:anzahl_zeilen(areaname) do
-    if self:passt_x_in_zeile(spalte + rahmen_rand_links,breite,z) then
+    if self:passt_x_in_zeile(column + rahmen_rand_links,breite,z) then
 
       if self:anzahl_zeilen(areaname) < z - rahmen_rand_oben + hoehe then
         return nil
       else
         local passt = true
         for current_row = z, z + hoehe do
-          if not self:passt_x_in_zeile(spalte + rahmen_rand_links,breite,current_row) then
+          if not self:passt_x_in_zeile(column + rahmen_rand_links,breite,current_row) then
             passt = false
           end
         end
