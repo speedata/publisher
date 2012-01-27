@@ -1,10 +1,12 @@
 #!/usr/bin/env texlua
 
+
 -- If called with texlua from texlive, the require path is mangled.
 -- Therefore we call our own binary in lua mode.
 if arg[-1] == "texlua" then
   os.exec(string.format("sdluatex --luaonly %s %s", arg[0],table.concat(arg," ")))
 end
+
 
 local installdir=os.selfdir:gsub("^(.+)/bin$","%1")
 local srcdir,inifile
@@ -116,7 +118,7 @@ elseif command=="run" then
     local cmdline="java com.xmlcalabash.drivers.Main pipe.xpl"
     os.spawn(cmdline)
   end
-  local protokolldatei = string.format("%s.protokoll",optionen["jobname"])
+  local protokolldatei = string.format("%s.protocol",optionen["jobname"])
   os.remove(string.format("%s.runs",optionen["jobname"]))
   os.remove(protokolldatei)
   errorlog = io.open(protokolldatei,"w")
