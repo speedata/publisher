@@ -1334,28 +1334,41 @@ function textblock( layoutxml,datenxml )
       nodelist = j:apply_textformat(textformat)
       node.slide(nodelist)
       publisher.fonts.pre_linebreak(nodelist)
+
       if j.textformat and publisher.textformate[j.textformat] then
         current_textformat = publisher.textformate[j.textformat]
       else
         current_textformat = publisher.textformate[textformat]
       end
+
+      local ragged_shape = false
       if current_textformat then
-        trace("Textblock: wende Textformate an")
         local alignment = current_textformat.alignment
-        if alignment == "linksbündig"  then parameter = { rightskip = publisher.rightskip } end
-        if alignment == "rechtsbündig" then parameter = { leftskip  = publisher.leftskip  } end
-        if alignment == "zentriert"    then parameter = { leftskip  = publisher.leftskip, rightskip = publisher.rightskip } end
-        if alignment == "linksbündig" or alignment == "rechtsbündig" or alignment == "zentriert" then
-          for i in node.traverse_id(publisher.glue_node,nodelist) do
-            spec = i.spec
-            if not spec.stretch_order or spec.stretch_order == 0 then
-              spec.shrink = nil
-              spec.stretch = nil
-            end
-          end
+        if alignment == "linksbündig"  then alignment = "leftaligned" end
+        if alignment == "rechtsbündig" then alignment = "rightaligned" end
+        if alignment == "zentriert"    then alignment = "centered" end
+        if alignment == "leftaligned" or alignment == "rightaligned" or alignment == "centered" then
+          ragged_shape = true
         end
       end
-      nodelist = publisher.do_linebreak(nodelist,breite_sp,parameter)
+
+      if ragged_shape then
+        nodelist = publisher.do_linebreak(nodelist,breite_sp,{tolerance = 5000,hyphenpenalty = 100,doublehyphendemerits=100000,})
+      else
+        nodelist = publisher.do_linebreak(nodelist,breite_sp,parameter)
+      end
+
+      if current_textformat then
+        trace("Textblock: apply textformats")
+        -- FIXME: should be translated earlier
+        local alignment = current_textformat.alignment
+        if alignment == "linksbündig"  then alignment = "leftaligned" end
+        if alignment == "rechtsbündig" then alignment = "rightaligned" end
+        if alignment == "zentriert"    then alignment = "centered" end
+        if ragged_shape then
+          publisher.fix_justification(nodelist,alignment)
+        end
+      end
       nodes[#nodes + 1] = nodelist
       -- hier könnte ich ein Paragraph:apply_textformat einfügen
     end -- wenn's wirklich ein node ist

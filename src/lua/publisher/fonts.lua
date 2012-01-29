@@ -12,7 +12,7 @@ module(...,package.seeall)
 local lookup_fontname_dateiname={}
 local schriftinstanzen={}
 -- Ersatz für fonts
-local benutzte_fonts={}
+benutzte_fonts={}
 
 
 local att_fontfamily     = 1

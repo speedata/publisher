@@ -1065,6 +1065,42 @@ function finish_par( nodelist,hsize )
   n,last = add_glue(n,"tail",{ subtype = 15, width = 0.4 * hsize, stretch = 0.1 * hsize, stretch_order = 0, shrink = 0.1 * hsize, shrink_order = 0})
 end
 
+function fix_justification( nodelist,textformat,parent)
+  local head = nodelist
+  while head do
+    -- w("heead.id=%d",head.id)
+    if head.id == 0 then -- hlist
+      -- we are on a line now. We assume that the spacing needs correction.
+      -- The goal depends on the current line (parshape!)
+      local goal,_,_ = node.dimensions(head.glue_set, head.glue_sign, head.glue_order, head.head)
+      local font_before_glue
+      for n in node.traverse_id(10,head.head) do
+        -- calculate the font before this id.
+        if n.prev.id == 37 then -- glyph
+          font_before_glue = n.prev.font
+        elseif n.prev.id == 7 then -- disc
+          local font_node = n.prev
+          while font_node.id ~= 37 do
+            font_node = font_node.prev
+          end
+          font_before_glue = nil
+        end
+        if n.subtype==0 and font_before_glue then
+
+          n.spec.width = font.fonts[font_before_glue].parameters.space
+          n.spec.shrink_order = head.glue_order
+          n.spec.stretch_order = 0
+          n.spec.stretch = 0
+        end
+      end
+    elseif head.id == 1 then -- vlist
+      fix_justification(head.head,textformat,head)
+    end
+    head = head.next
+  end
+  return nodelist
+end
+
 function do_linebreak( nodelist,hsize,parameters )
   assert(nodelist,"Keine nodeliste für einen Absatzumbruch gefunden.")
   parameters = parameters or {}
