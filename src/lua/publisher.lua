@@ -1047,7 +1047,7 @@ function add_glue( nodelist,head_or_tail,parameter)
   assert(false,"never reached")
 end
 
-function finish_par( nodelist )
+function finish_par( nodelist,hsize )
   assert(nodelist)
   node.slide(nodelist)
   lang.hyphenate(nodelist)
@@ -1062,13 +1062,13 @@ function finish_par( nodelist )
   n = node.kerning(nodelist)
   n = node.ligaturing(n)
 
-  n,last = add_glue(n,"tail",{ subtype = 15, width = 0, stretch = 2^16, stretch_order = 2})
+  n,last = add_glue(n,"tail",{ subtype = 15, width = 0.4 * hsize, stretch = 0.1 * hsize, stretch_order = 0, shrink = 0.1 * hsize, shrink_order = 0})
 end
 
 function do_linebreak( nodelist,hsize,parameters )
   assert(nodelist,"Keine nodeliste für einen Absatzumbruch gefunden.")
   parameters = parameters or {}
-  finish_par(nodelist)
+  finish_par(nodelist,hsize)
 
   local pdfignoreddimen
   pdfignoreddimen    = -65536000
