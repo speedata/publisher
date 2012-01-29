@@ -185,7 +185,7 @@ local function setup()
   tex.righthyphenmin = 3
   tex.hfuzz = 6554
   tex.vfuzz = 6554
-  tex.hbadness=1000
+  tex.hbadness=10000
   tex.vbadness=1000
   for _,i in ipairs
     {181,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,248,249,250,251,252,
