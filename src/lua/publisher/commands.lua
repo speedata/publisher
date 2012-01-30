@@ -1342,8 +1342,9 @@ function textblock( layoutxml,datenxml )
       end
 
       local ragged_shape = false
+      local alignment
       if current_textformat then
-        local alignment = current_textformat.alignment
+        alignment = current_textformat.alignment
         if alignment == "linksbündig"  then alignment = "leftaligned" end
         if alignment == "rechtsbündig" then alignment = "rightaligned" end
         if alignment == "zentriert"    then alignment = "centered" end
@@ -1353,7 +1354,9 @@ function textblock( layoutxml,datenxml )
       end
 
       if ragged_shape then
-        nodelist = publisher.do_linebreak(nodelist,breite_sp,{tolerance = 5000,hyphenpenalty = 100,doublehyphendemerits=100000,})
+        tex.pdfadjustspacing = 0
+        nodelist = publisher.do_linebreak(nodelist,breite_sp,{tolerance = 5000})
+        tex.pdfadjustspacing = 2
       else
         nodelist = publisher.do_linebreak(nodelist,breite_sp,parameter)
       end

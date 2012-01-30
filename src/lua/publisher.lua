@@ -1031,9 +1031,9 @@ function add_glue( nodelist,head_or_tail,parameter)
   n.spec.width         = parameter.width
   n.spec.stretch       = parameter.stretch
   n.spec.stretch_order = parameter.stretch_order
-  
+
   if nodelist == nil then return n end
-  
+
   if head_or_tail=="head" then
     n.next = nodelist
     nodelist.prev = n
@@ -1076,17 +1076,18 @@ function fix_justification( nodelist,textformat,parent)
       local font_before_glue
       for n in node.traverse_id(10,head.head) do
         -- calculate the font before this id.
-        if n.prev.id == 37 then -- glyph
+        if n.prev and n.prev.id == 37 then -- glyph
           font_before_glue = n.prev.font
-        elseif n.prev.id == 7 then -- disc
+        elseif n.prev and n.prev.id == 7 then -- disc
           local font_node = n.prev
           while font_node.id ~= 37 do
             font_node = font_node.prev
           end
           font_before_glue = nil
+        else
+          font_before_glue = nil
         end
         if n.subtype==0 and font_before_glue then
-
           n.spec.width = font.fonts[font_before_glue].parameters.space
           n.spec.shrink_order = head.glue_order
           n.spec.stretch_order = 0
