@@ -1068,7 +1068,6 @@ end
 function fix_justification( nodelist,textformat,parent)
   local head = nodelist
   while head do
-    -- w("heead.id=%d",head.id)
     if head.id == 0 then -- hlist
       -- we are on a line now. We assume that the spacing needs correction.
       -- The goal depends on the current line (parshape!)
@@ -1087,7 +1086,10 @@ function fix_justification( nodelist,textformat,parent)
         else
           font_before_glue = nil
         end
-        if n.subtype==0 and font_before_glue then
+
+        -- n.spec.width > 0 because we insert a glue after a hyphen in
+        -- compund words mailing-[glue]list and that glue's width is 0pt
+        if n.subtype==0 and font_before_glue and n.spec.width > 0 then
           n.spec.width = font.fonts[font_before_glue].parameters.space
           n.spec.shrink_order = head.glue_order
           n.spec.stretch_order = 0
