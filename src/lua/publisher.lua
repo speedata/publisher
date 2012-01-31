@@ -1031,9 +1031,9 @@ function add_glue( nodelist,head_or_tail,parameter)
   n.spec.width         = parameter.width
   n.spec.stretch       = parameter.stretch
   n.spec.stretch_order = parameter.stretch_order
-  
+
   if nodelist == nil then return n end
-  
+
   if head_or_tail=="head" then
     n.next = nodelist
     nodelist.prev = n
@@ -1047,7 +1047,7 @@ function add_glue( nodelist,head_or_tail,parameter)
   assert(false,"never reached")
 end
 
-function finish_par( nodelist )
+function finish_par( nodelist,hsize )
   assert(nodelist)
   node.slide(nodelist)
   lang.hyphenate(nodelist)
@@ -1065,10 +1065,98 @@ function finish_par( nodelist )
   n,last = add_glue(n,"tail",{ subtype = 15, width = 0, stretch = 2^16, stretch_order = 2})
 end
 
+function fix_justification( nodelist,textformat,parent)
+  local head = nodelist
+  while head do
+    if head.id == 0 then -- hlist
+      -- we are on a line now. We assume that the spacing needs correction.
+      -- The goal depends on the current line (parshape!)
+      local goal,_,_ = node.dimensions(head.glue_set, head.glue_sign, head.glue_order, head.head)
+      local font_before_glue
+      for n in node.traverse_id(10,head.head) do
+        -- calculate the font before this id.
+        if n.prev and n.prev.id == 37 then -- glyph
+          font_before_glue = n.prev.font
+        elseif n.prev and n.prev.id == 7 then -- disc
+          local font_node = n.prev
+          while font_node.id ~= 37 do
+            font_node = font_node.prev
+          end
+          font_before_glue = nil
+        else
+          font_before_glue = nil
+        end
+
+        -- n.spec.width > 0 because we insert a glue after a hyphen in
+        -- compund words mailing-[glue]list and that glue's width is 0pt
+        if n.subtype==0 and font_before_glue and n.spec.width > 0 then
+          n.spec.width = font.fonts[font_before_glue].parameters.space
+          n.spec.shrink_order = head.glue_order
+          n.spec.stretch_order = 0
+          n.spec.stretch = 0
+        end
+      end
+
+      if textformat == "rightaligned" then
+        local wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)
+        local list_start = head.head
+        local leftskip_node = node.new("glue")
+        leftskip_node.spec = node.new("glue_spec")
+        leftskip_node.spec.width = goal - wd
+        leftskip_node.next = list_start
+        list_start.prev = leftskip_node
+        head.head = leftskip_node
+        local tail = node.tail(head.head)
+
+        if tail.prev.id == 10 and tail.prev.subtype==15 then -- parfillskip
+          local parfillskip = tail.prev
+          tail.prev = parfillskip.prev
+          parfillskip.prev.next = tail
+          parfillskip.next = head.head
+          head.head = parfillskip
+        end
+      end
+
+      if textformat == "centered" then
+        local list_start = head.head
+        local rightskip = node.tail(head.head)
+        local leftskip_node = node.new("glue")
+        leftskip_node.spec = node.new("glue_spec")
+        local wd
+
+        if rightskip.prev.id == 10 and rightskip.prev.subtype==15 then -- parfillskip
+          local parfillskip = rightskip.prev
+
+          wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head,parfillskip.prev)
+
+          -- remove parfillksip and insert half width in rightskip
+          parfillskip.prev.next = rightskip
+          rightskip.prev = parfillskip.prev
+          rightskip.spec = node.new("glue_spec")
+          rightskip.spec.width = (goal - wd) / 2
+          node.free(parfillskip)
+        else
+          wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)
+        end
+        -- insert half width in front of the row
+        leftskip_node.spec.width = ( goal - wd ) / 2
+        leftskip_node.next = list_start
+        list_start.prev = leftskip_node
+        head.head = leftskip_node
+      end
+
+    elseif head.id == 1 then -- vlist
+      fix_justification(head.head,textformat,head)
+    end
+    head = head.next
+  end
+  return nodelist
+end
+
 function do_linebreak( nodelist,hsize,parameters )
   assert(nodelist,"Keine nodeliste für einen Absatzumbruch gefunden.")
   parameters = parameters or {}
-  finish_par(nodelist)
+  finish_par(nodelist,hsize)
 
   local pdfignoreddimen
   pdfignoreddimen    = -65536000
