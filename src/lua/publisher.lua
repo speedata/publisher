@@ -1094,6 +1094,55 @@ function fix_justification( nodelist,textformat,parent)
           n.spec.stretch = 0
         end
       end
+
+      if textformat == "rightaligned" then
+        local wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)
+        local list_start = head.head
+        local leftskip_node = node.new("glue")
+        leftskip_node.spec = node.new("glue_spec")
+        leftskip_node.spec.width = goal - wd
+        leftskip_node.next = list_start
+        list_start.prev = leftskip_node
+        head.head = leftskip_node
+        local tail = node.tail(head.head)
+
+        if tail.prev.id == 10 and tail.prev.subtype==15 then -- parfillskip
+          local parfillskip = tail.prev
+          tail.prev = parfillskip.prev
+          parfillskip.prev.next = tail
+          parfillskip.next = head.head
+          head.head = parfillskip
+        end
+      end
+
+      if textformat == "centered" then
+        local list_start = head.head
+        local rightskip = node.tail(head.head)
+        local leftskip_node = node.new("glue")
+        leftskip_node.spec = node.new("glue_spec")
+        local wd
+
+        if rightskip.prev.id == 10 and rightskip.prev.subtype==15 then -- parfillskip
+          local parfillskip = rightskip.prev
+
+          wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head,parfillskip.prev)
+
+          -- remove parfillksip and insert half width in rightskip
+          parfillskip.prev.next = rightskip
+          rightskip.prev = parfillskip.prev
+          rightskip.spec = node.new("glue_spec")
+          rightskip.spec.width = (goal - wd) / 2
+          node.free(parfillskip)
+        else
+          wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)
+        end
+        -- insert half width in front of the row
+        leftskip_node.spec.width = ( goal - wd ) / 2
+        leftskip_node.next = list_start
+        list_start.prev = leftskip_node
+        head.head = leftskip_node
+      end
+
     elseif head.id == 1 then -- vlist
       fix_justification(head.head,textformat,head)
     end
