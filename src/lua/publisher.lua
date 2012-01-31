@@ -1062,7 +1062,7 @@ function finish_par( nodelist,hsize )
   n = node.kerning(nodelist)
   n = node.ligaturing(n)
 
-  n,last = add_glue(n,"tail",{ subtype = 15, width = 0.4 * hsize, stretch = 0.1 * hsize, stretch_order = 0, shrink = 0.1 * hsize, shrink_order = 0})
+  n,last = add_glue(n,"tail",{ subtype = 15, width = 0, stretch = 2^16, stretch_order = 2})
 end
 
 function fix_justification( nodelist,textformat,parent)
