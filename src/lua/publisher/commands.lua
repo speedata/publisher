@@ -1356,7 +1356,7 @@ function textblock( layoutxml,datenxml )
       if ragged_shape then
         local adjspace = tex.pdfadjustspacing
         tex.pdfadjustspacing = 0
-        nodelist = publisher.do_linebreak(nodelist,breite_sp,{tolerance = 5000})
+        nodelist = publisher.do_linebreak(nodelist,breite_sp,{tolerance = 5000,hyphenpenalty=200})
         tex.pdfadjustspacing = adjspace
       else
         nodelist = publisher.do_linebreak(nodelist,breite_sp,parameter)
