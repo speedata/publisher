@@ -198,8 +198,9 @@ function bild( layoutxml,datenxml )
       hoehe_sp = tex.sp(hoehe)
     end
   end
-
-  local bild = publisher.new_image(filename,seite,max_box_intern)
+  local imageinfo = publisher.new_image(filename,seite,max_box_intern)
+  local bild = img.copy(imageinfo.img)
+  local allocate = imageinfo.allocate
   local skalierungsfaktor_wd = breite_sp / bild.width
   local skalierungsfaktor = skalierungsfaktor_wd
   if hoehe_sp then
@@ -226,7 +227,7 @@ function bild( layoutxml,datenxml )
   local hbox = node.hpack(img.node(bild))
   node.set_attribute(hbox, publisher.att_shift_left, shift_left)
   node.set_attribute(hbox, publisher.att_shift_up  , shift_up  )
-  return hbox
+  return {hbox,allocate}
 end
 
 function box( layoutxml,datenxml )
@@ -743,17 +744,18 @@ function objekt_ausgeben( layoutxml,datenxml )
   local spalte           = publisher.read_attribute(layoutxml,datenxml,"column",         "string")
   local zeile            = publisher.read_attribute(layoutxml,datenxml,"row",            "string")
   local bereich          = publisher.read_attribute(layoutxml,datenxml,"area",           "string")
-  local belegen          = publisher.read_attribute(layoutxml,datenxml,"allocate",       "boolean", "yes")
+  local belegen          = publisher.read_attribute(layoutxml,datenxml,"allocate",       "string", "yes")
   local rahmenfarbe      = publisher.read_attribute(layoutxml,datenxml,"framecolor",     "string")
   local hintergrundfarbe = publisher.read_attribute(layoutxml,datenxml,"backgroundcolor","string")
   local maxhoehe         = publisher.read_attribute(layoutxml,datenxml,"maxheight",      "number")
   local rahmen           = publisher.read_attribute(layoutxml,datenxml,"frame",          "string")
   local hintergrund      = publisher.read_attribute(layoutxml,datenxml,"background",     "string")
-  local groupname      = publisher.read_attribute(layoutxml,datenxml,"groupname",      "number")
+  local groupname        = publisher.read_attribute(layoutxml,datenxml,"groupname",      "number")
   local valign           = publisher.read_attribute(layoutxml,datenxml,"valign",         "string")
 
   bereich = bereich or publisher.default_areaname
 
+  w("belegen=%s",belegen) -- !!
   if spalte and not tonumber(spalte) then
     -- spalte scheint ein String zu sein
     absolute_positioning = true
@@ -800,12 +802,18 @@ function objekt_ausgeben( layoutxml,datenxml )
     for i,j in ipairs(tab) do
       object = publisher.inhalt(j)
       objecttype = publisher.elementname(j,true)
-      if type(object)=="table" then
-        for i=1,#object do
-          objects[#objects + 1] = {object = object[i], objecttype = objecttype }
-        end
+      w(objecttype)
+      if objecttype == "Image" then
+        -- return value is a table, #1 is the image, #2 is the allocation grid
+        objects[#objects + 1] = {object = object[1], objecttype = objecttype, allocate_matrix = object[2] }
       else
-        objects[#objects + 1] = {object = object, objecttype = objecttype }
+        if type(object)=="table" then
+          for i=1,#object do
+            objects[#objects + 1] = {object = object[i], objecttype = objecttype }
+          end
+        else
+          objects[#objects + 1] = {object = object, objecttype = objecttype }
+        end
       end
     end
   end
@@ -826,7 +834,7 @@ function objekt_ausgeben( layoutxml,datenxml )
     end
 
     if absolute_positioning then
-      publisher.ausgabe_bei_absolut(object,spalte + raster.extra_rand,zeile + raster.extra_rand,belegen)
+      publisher.ausgabe_bei_absolut(object,spalte + raster.extra_rand,zeile + raster.extra_rand,belegen,objects[i].allocate_matrix)
     else
       -- Platz muss gesucht werden
       -- local current_row = raster:current_row(bereich)
@@ -864,7 +872,7 @@ function objekt_ausgeben( layoutxml,datenxml )
 
       log("»objectAusgeben«: %s in row %d and column %d, width=%d, height=%d", objecttype, current_row, aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen)
       trace("»objectAusgeben«: object placed at (%d,%d)",aktuelle_spalte_start,current_row)
-      publisher.ausgabe_bei(object,aktuelle_spalte_start,current_row,belegen,bereich,valign)
+      publisher.ausgabe_bei(object,aktuelle_spalte_start,current_row,belegen,bereich,valign,objects[i].allocate_matrix)
       trace("object ausgegeben.")
       zeile = nil -- die Zeile ist nicht mehr gültig, da schon ein object ausgegeben wurde
       if i < #objects then
@@ -1358,7 +1366,7 @@ function textblock( layoutxml,datenxml )
         nodelist = publisher.do_linebreak(nodelist,breite_sp,{tolerance = 5000,hyphenpenalty=200})
         tex.pdfadjustspacing = adjspace
       else
-        nodelist = publisher.do_linebreak(nodelist,breite_sp,parameter)
+        nodelist = publisher.do_linebreak(nodelist,breite_sp)
       end
 
       if current_textformat then

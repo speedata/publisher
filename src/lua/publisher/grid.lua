@@ -161,9 +161,10 @@ function setze_breite_hoehe(self, b,h )
 end
 
 -- Markiert (intern) den rechteckigen Bereich durch `x`, `y` (linke obere Ecke)
--- und der Breite `b` und Höhe `h` als belegt. 
-function belege_zellen(self,x,y,b,h,zeichne_markierung_p,areaname)
+-- und der Breite `b` und Höhe `h` als belegt.
+function belege_zellen(self,x,y,b,h,allocate_matrix,zeichne_markierung_p,areaname)
   if not x then return false end
+  -- printtable("grid/allocate_matrix",allocate_matrix)
   areaname = areaname or publisher.default_areaname
   self:setze_aktuelle_spalte(x + b,areaname)
   -- Todo: neuer Bereich, wenn der herunter rausragt
@@ -188,25 +189,35 @@ function belege_zellen(self,x,y,b,h,zeichne_markierung_p,areaname)
     rahmen_rand_links = block.spalte - 1
     rahmen_rand_oben = block.zeile - 1
   end
-  for _x = x + rahmen_rand_links,x + rahmen_rand_links + b - 1 do
-    for _y = y + rahmen_rand_oben, y + rahmen_rand_oben + h - 1 do
-      if self.belegung_x[_x][_y] == true then
-        rasterkonflikt = true
-      else
-        self.belegung_x[_x][_y] = true
+  if allocate_matrix then
+    -- special handling for the non rectangular shape
+    local grid_step_x = math.floor(100 * b / allocate_matrix.max_x) / 100
+    local grid_step_y = math.floor(100 * h / allocate_matrix.max_y) / 100
+    w("mini-zelle x = %g, y = %g",grid_step_x,grid_step_y)
+    local cur_x, cur_y
+
+    for _y=1,allocate_matrix.max_y do
+      cur_y = math.ceil(_y * grid_step_y)
+      for _x=1,allocate_matrix.max_x do
+        cur_x = math.ceil(_x * grid_step_x)
+        if allocate_matrix[_y][_x] == 1 then
+          self.belegung_x[cur_x + x - 1][cur_y  + y - 1] = true
+        end
+      end
+    end
+  else
+    for _x = x + rahmen_rand_links,x + rahmen_rand_links + b - 1 do
+      for _y = y + rahmen_rand_oben, y + rahmen_rand_oben + h - 1 do
+        if self.belegung_x[_x][_y] == true then
+          rasterkonflikt = true
+        else
+          self.belegung_x[_x][_y] = true
+        end
       end
     end
   end
   if rasterkonflikt then
     err("Conflict in grid")
-  end
-  if zeichne_markierung_p then
-    local px,py
-    -- in bp:
-    px = sp_to_bp((x + rahmen_rand_links - 1) * self.gridwidth + self.rand_links + self.extra_rand )
-    py = sp_to_bp(tex.pageheight - (y + rahmen_rand_oben - 1) * self.gridheight - self.rand_oben - self.extra_rand)
-    local breite, hoehe = sp_to_bp(self.gridwidth * b), sp_to_bp(self.gridheight * h)
-    self.belegung_pdf[#self.belegung_pdf + 1] = string.format(" q 0 0 1 0 k 0 0 1 0 K  1 0 0 1 %g %g cm 0 0 %g %g re f Q ",px ,py - hoehe,breite,hoehe)
   end
 end
 
@@ -319,6 +330,37 @@ function zeichne_raster(self)
     end
   end
   return table.concat(ret,"\n")
+end
+
+function draw_gridallocation(self)
+  local pdf_literals = {}
+  local paperheight  = sp_to_bp(tex.pageheight)
+  -- where the yellow rectangle should be drawn
+  local re_wd, re_ht, re_x, re_y
+  re_ht = sp_to_bp(self.gridheight)
+  for y=1,self:anzahl_zeilen() do
+    local alloc_found = nil
+    for x=1,self:anzahl_spalten() do
+      if self.belegung_x[x][y] == true  then
+        alloc_found = alloc_found or x
+      else
+        if alloc_found then
+          local last_cell = x - 1
+          for i=alloc_found,last_cell do
+            -- OK, let's draw a rectangle. Height is 1 grid cell, width is x - alloc_found + 1
+            re_wd = sp_to_bp( (last_cell - alloc_found + 1) * self.gridwidth  )
+            re_x = sp_to_bp (self.rand_links) +  (alloc_found - 1) * sp_to_bp(self.gridwidth)
+            re_y = paperheight - sp_to_bp(self.rand_oben) - y * sp_to_bp(self.gridheight)
+            pdf_literals[#pdf_literals + 1]  = string.format("q 0 0 1 0 k 0 0 1 0 K 1 0 0 1 %g %g cm 0 0 %g %g re f Q ",re_x, re_y, re_wd,re_ht)
+          end
+          alloc_found = false
+        else
+        end
+      end
+    end
+    alloc_found=nil
+  end
+  return table.concat(pdf_literals,"\n")
 end
 
 -- Gibt die Position der Rasterzelle in sp vom linken und oberen Rand.
