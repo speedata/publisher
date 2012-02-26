@@ -714,7 +714,7 @@ function neue_zeile( layoutxml,datenxml )
     neue_seite()
     publisher.seite_einrichten()
     grid = publisher.aktuelle_seite.raster
-    raster:set_current_row(1)
+    grid:set_current_row(1)
   else
     grid:set_current_row(current_row,areaname)
   end
