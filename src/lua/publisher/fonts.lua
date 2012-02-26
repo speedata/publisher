@@ -53,7 +53,7 @@ function table.find(tab,key)
   local found
   for k_tab,v_tab in pairs(tab) do
     if type(key)=="table" then
-      gefunden = true
+      found = true
       for k_key,v_key in pairs(key) do
         if k_tab[k_key]~= v_key then found = false end
       end
