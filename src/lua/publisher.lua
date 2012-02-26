@@ -696,12 +696,17 @@ function dothingsbeforeoutput(  )
   end
 end
 
---Read the contents of the attribute attname_englisch. type is one of
+-- Read the contents of the attribute attname_englisch. type is one of
 -- "string", "number", "length" and "boolean".
-function read_attribute( layoutxml,datenxml,attname_english,typ )
+-- Default provides, well, a default.
+function read_attribute( layoutxml,datenxml,attname_english,typ,default)
   local attname = translate_attribute(attname_english)
   if layoutxml[attname] == nil then
-    return nil
+    if default then
+      layoutxml[attname] = default
+    else
+      return nil
+    end
   end
 
   local val
@@ -1263,18 +1268,18 @@ function boxit( box )
 end
 
 local images = {}
-function new_image( filename,seite,box)
-  return img.copy(imageinfo(filename,seite,box))
+function new_image( filename, page, box)
+  return img.copy(imageinfo(filename,page,box).img)
 end
 
--- Box ist none, media, crop, bleed, trim, art
+-- Box is none, media, crop, bleed, trim, art
 function imageinfo( filename,page,box )
   page = page or 1
   box = box or "crop"
-  local neuer_name = filename .. tostring(page) .. tostring(box)
+  local new_name = filename .. tostring(page) .. tostring(box)
 
-  if images[neuer_name] then
-    return images[neuer_name]
+  if images[new_name] then
+    return images[new_name]
   end
 
   if not kpse.filelist[filename] then

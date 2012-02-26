@@ -23,12 +23,12 @@ class Page
     @destrel    = @relpath.to_s.chomp(".txt") + ".html" 
     @dest       = @site.dest_dir + @destrel
   end
-  
+
   def build
     puts @destrel
     opt = @directory.prefs.dup
     seite = []
-    
+
     File.open(@filepath) do |f|
       while ( line = f.gets ) =~ /^#/
         # #Text: "Wert"

@@ -743,7 +743,7 @@ function objekt_ausgeben( layoutxml,datenxml )
   local spalte           = publisher.read_attribute(layoutxml,datenxml,"column",         "string")
   local zeile            = publisher.read_attribute(layoutxml,datenxml,"row",            "string")
   local bereich          = publisher.read_attribute(layoutxml,datenxml,"area",           "string")
-  local belegen          = publisher.read_attribute(layoutxml,datenxml,"allocate",       "boolean")
+  local belegen          = publisher.read_attribute(layoutxml,datenxml,"allocate",       "boolean", "yes")
   local rahmenfarbe      = publisher.read_attribute(layoutxml,datenxml,"framecolor",     "string")
   local hintergrundfarbe = publisher.read_attribute(layoutxml,datenxml,"backgroundcolor","string")
   local maxhoehe         = publisher.read_attribute(layoutxml,datenxml,"maxheight",      "number")
@@ -753,7 +753,6 @@ function objekt_ausgeben( layoutxml,datenxml )
   local valign           = publisher.read_attribute(layoutxml,datenxml,"valign",         "string")
 
   bereich = bereich or publisher.default_areaname
-  belegen = belegen or true
 
   if spalte and not tonumber(spalte) then
     -- spalte scheint ein String zu sein
