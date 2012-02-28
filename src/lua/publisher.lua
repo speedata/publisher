@@ -656,11 +656,22 @@ function dothingsbeforeoutput(  )
   local str
   finde_user_defined_whatsits(publisher.global_pagebox)
   local firstbox
+  -- white background -- temporary? FIXME This is only A4 FIXME!!!!
+  firstbox = node.new("whatsit","pdf_literal")
+  firstbox.data = string.format("q 0 0 0 0 k  1 0 0 1 0 0 cm 0 0 %g %g re f Q",595 ,842)
+  firstbox.mode = 1
+
   if #aktuelle_seite.raster.belegung_pdf > 0 then
     local lit = node.new("whatsit","pdf_literal")
     lit.mode = 1
     lit.data = string.format("%s",table.concat(aktuelle_seite.raster.belegung_pdf,"\n"))
-    firstbox = lit
+    if firstbox then
+      local tail = node.tail(firstbox)
+      tail.next = lit
+      lit.prev = tail
+    else
+      firstbox = lit
+    end
   end
 
   if options.showgrid then
