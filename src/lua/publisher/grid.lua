@@ -351,8 +351,8 @@ function draw_gridallocation(self)
             re_wd = sp_to_bp( (last_cell - alloc_found + 1) * self.gridwidth  )
             re_x = sp_to_bp (self.rand_links) +  (alloc_found - 1) * sp_to_bp(self.gridwidth)
             re_y = paperheight - sp_to_bp(self.rand_oben) - y * sp_to_bp(self.gridheight)
-            pdf_literals[#pdf_literals + 1]  = string.format("q 0 0 1 0 k 0 0 1 0 K 1 0 0 1 %g %g cm 0 0 %g %g re f Q ",re_x, re_y, re_wd,re_ht)
           end
+          pdf_literals[#pdf_literals + 1]  = string.format("q 0 0 1 0 k 0 0 1 0 K 1 0 0 1 %g %g cm 0 0 %g %g re f Q ",re_x, re_y, re_wd,re_ht)
           alloc_found = false
         else
         end
