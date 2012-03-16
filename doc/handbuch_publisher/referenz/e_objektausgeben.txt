@@ -15,7 +15,7 @@ h3. Attribute
 
 
 |_. Attributname   |_. Optional?      |_. Wert       |_. Beschreibung|
-{background:#ddd}.|@belegen@         |  ja  |("ja", "nein")  | Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei @belegen@="nein" wird auch die aktuelle Zeile im Raster nicht verändert.|
+{background:#ddd}.|@belegen@         |  ja  |("ja", "nein", "auto")  | Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei @belegen@="nein" wird auch die aktuelle Zeile im Raster nicht verändert. Bei "auto" wird bei Bildern der Bildumriss beachtet, sofern eine Umrissdatei vorliegt. Siehe die Beschreibung bei "Bild":e_bild |
 |@bereich@         |  ja  |(Text) | Name des Bereichs ("Platzierungsbereich":e_platzierungsbereich), in dem das Objekt ausgegeben werden soll. Wird kein Bereich angegeben, so wird das Objekt auf der »Seite« (dem Bereich, der alle Rasterkästen beinhaltet) ausgegeben. |
 {background:#ddd}.|@gruppenname@     |  ja  |(Text) | Wenn eine Gruppe ausgegeben werden soll, muss der Name hier angegeben werden.|
 |@hintergrund@     |  ja  |"vollständig" | Es wird ein Hintergrund in der Farbe des Attributs @hintergrundfarbe@ hinter das Objekt gelegt. Die Größe des Hintergrunds entspricht genau angegebenen Größe. Zusätzlich muss die Hintergrundfarbe angegeben werden.|

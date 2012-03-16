@@ -1330,8 +1330,9 @@ function imageinfo( filename,page,box )
   --    <segment x1='1' y1='16' x2='28' y2='16' />
   --  </imageinfo>
   local xmlfilename = string.gsub(filename,"(%..*)$",".xml")
-  local mt = {}
+  local mt
   if kpse.filelist[xmlfilename] then
+    mt = {}
     local xmltab = load_xml(xmlfilename,"Imageinfo")
     local segments = {}
     local cells_x,cells_y

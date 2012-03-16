@@ -71,8 +71,9 @@
         <element en="While" de="Solange" />
     </elements>
     <values>
-        <value en="artbox" de="artbox"/>
-        <value en="bleedbox" de="bleedbox"/>
+      <value en="artbox" de="artbox"/>
+      <value en="auto" de="auto"/>
+      <value en="bleedbox" de="bleedbox"/>
         <value en="justified" de="blocksatz"/>
         <value en="bottom" de="bottom"/>
         <value en="center" de="center"/>
@@ -106,7 +107,7 @@
         <attribute en="allocate" de="belegen"/>
         <attribute en="angle" de="winkel"/>
         <attribute en="area" de="bereich"/>
-        <attribute en="b" de="b"/>
+      <attribute en="b" de="b"/>
         <attribute en="backgroundcolor" de="hintergrundfarbe"/>
         <attribute en="background" de="hintergrund"/>
         <attribute en="border-bottom" de="border-bottom"/>
@@ -225,7 +226,11 @@
             <en>The object does not allocate any space so other objects can overlap.</en>
             <de>Das Objekt nimmt keinen Platz im Raster ein und kann von anderen Objekten überlagert werden.</de>
         </documentation>
-        <documentation docid="paragraph/textformat">
+      <documentation docid="allocate/auto">
+        <en>The object's shape is considered when allocating cells.</en>
+        <de>Die Form des Objekts wird beim Belegen der Rasterzellen beachtet.</de>
+      </documentation>
+      <documentation docid="paragraph/textformat">
             <en>Name of the textformat (optional).</en>
             <de>Name des Textformats (optional).</de>
         </documentation>
