@@ -135,6 +135,8 @@
                 werden.</a:documentation>
         <value>nein</value>
         <a:documentation docid="allocate/no">Das Objekt nimmt keinen Platz im Raster ein und kann von anderen Objekten überlagert werden.</a:documentation>
+        <value>auto</value>
+        <a:documentation docid="allocate/auto">Die Form des Objekts wird beim Belegen der Rasterzellen beachtet.</a:documentation>
       </choice>
     </attribute>
   </define>

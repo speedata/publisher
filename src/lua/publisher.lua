@@ -406,7 +406,9 @@ function ausgabe_bei_absolut( nodelist,x,y,belegen,bereich )
 end
 
 -- Gibt die nodelist bei Rasterzelle (x,y) aus. Wenn belegen==true dann die Zellen als belegt markieren.
-function ausgabe_bei( nodelist, x,y,belegen,bereich,valign)
+function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
+  -- printtable("ausgabe_bei/allocate_matrix",allocate_matrix)
+
   bereich = bereich or default_areaname
   local r = current_grid
   local wd = nodelist.width
@@ -453,12 +455,12 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich,valign)
       gruppe.inhalt = n
     end
     if belegen then
-      r:belege_zellen(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,options.showgridallocation)
+      r:belege_zellen(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,allocate_matrix,options.showgridallocation)
     end
   else
     -- auf der aktuellen Seite einfügen
     if belegen then
-      r:belege_zellen(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,options.showgridallocation,bereich)
+      r:belege_zellen(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,allocate_matrix,options.showgridallocation,bereich)
     end
 
     local n = add_glue( nodelist ,"head",{ width = delta_x })
@@ -664,10 +666,11 @@ function dothingsbeforeoutput(  )
   firstbox.data = string.format("q 0 0 0 0 k  1 0 0 1 0 0 cm 0 0 %g %g re f Q",wd ,ht)
   firstbox.mode = 1
 
-  if #aktuelle_seite.raster.belegung_pdf > 0 then
+  if options.showgridallocation then
     local lit = node.new("whatsit","pdf_literal")
     lit.mode = 1
-    lit.data = string.format("%s",table.concat(aktuelle_seite.raster.belegung_pdf,"\n"))
+    lit.data = r:draw_gridallocation()
+
     if firstbox then
       local tail = node.tail(firstbox)
       tail.next = lit
@@ -676,6 +679,11 @@ function dothingsbeforeoutput(  )
       firstbox = lit
     end
   end
+  -- if #aktuelle_seite.raster.belegung_pdf > 0 then
+  --   local lit = node.new("whatsit","pdf_literal")
+  --   lit.mode = 1
+  --   lit.data = string.format("%s",table.concat(aktuelle_seite.raster.belegung_pdf,"\n"))
+  -- end
 
   if options.showgrid then
     local lit = node.new("whatsit","pdf_literal")
@@ -710,12 +718,17 @@ function dothingsbeforeoutput(  )
   end
 end
 
---Read the contents of the attribute attname_englisch. type is one of
+-- Read the contents of the attribute attname_englisch. type is one of
 -- "string", "number", "length" and "boolean".
-function read_attribute( layoutxml,datenxml,attname_english,typ )
+-- Default provides, well, a default.
+function read_attribute( layoutxml,datenxml,attname_english,typ,default)
   local attname = translate_attribute(attname_english)
   if layoutxml[attname] == nil then
-    return nil
+    if default then
+      layoutxml[attname] = default
+    else
+      return nil
+    end
   end
 
   local val
@@ -1277,18 +1290,18 @@ function boxit( box )
 end
 
 local images = {}
-function new_image( filename,seite,box)
-  return img.copy(imageinfo(filename,seite,box))
+function new_image( filename, page, box)
+  return imageinfo(filename,page,box)
 end
 
--- Box ist none, media, crop, bleed, trim, art
+-- Box is none, media, crop, bleed, trim, art
 function imageinfo( filename,page,box )
   page = page or 1
   box = box or "crop"
-  local neuer_name = filename .. tostring(page) .. tostring(box)
+  local new_name = filename .. tostring(page) .. tostring(box)
 
-  if images[neuer_name] then
-    return images[neuer_name]
+  if images[new_name] then
+    return images[new_name]
   end
 
   if not kpse.filelist[filename] then
@@ -1297,10 +1310,68 @@ function imageinfo( filename,page,box )
     page = 1
   end
 
-  if not images[neuer_name] then
-    images[neuer_name] = img.scan{filename = filename, pagebox = box, page=page }
+  -- <?xml version="1.0" ?>
+  -- <imageinfo>
+  --    <cells_x>30</cells_x>
+  --    <cells_y>21</cells_y>
+  --    <segment x1='13' y1='0' x2='16' y2='0' />
+  --    <segment x1='13' y1='1' x2='16' y2='1' />
+  --    <segment x1='11' y1='2' x2='18' y2='2' />
+  --    <segment x1='10' y1='3' x2='18' y2='3' />
+  --    <segment x1='10' y1='4' x2='18' y2='4' />
+  --    <segment x1='9' y1='5' x2='20' y2='5' />
+  --    <segment x1='8' y1='6' x2='20' y2='6' />
+  --    <segment x1='8' y1='7' x2='20' y2='7' />
+  --    <segment x1='7' y1='8' x2='21' y2='8' />
+  --    <segment x1='6' y1='9' x2='21' y2='9' />
+  --    <segment x1='5' y1='10' x2='24' y2='10' />
+  --    <segment x1='5' y1='11' x2='24' y2='11' />
+  --    <segment x1='4' y1='12' x2='25' y2='12' />
+  --    <segment x1='3' y1='13' x2='25' y2='13' />
+  --    <segment x1='3' y1='14' x2='27' y2='14' />
+  --    <segment x1='2' y1='15' x2='27' y2='15' />
+  --    <segment x1='1' y1='16' x2='28' y2='16' />
+  --  </imageinfo>
+  local xmlfilename = string.gsub(filename,"(%..*)$",".xml")
+  local mt
+  if kpse.filelist[xmlfilename] then
+    mt = {}
+    local xmltab = load_xml(xmlfilename,"Imageinfo")
+    local segments = {}
+    local cells_x,cells_y
+    for _,v in ipairs(xmltab) do
+      if v[".__name"] == "cells_x" then
+        cells_x = v[1]
+      elseif v[".__name"] == "cells_y" then
+        cells_y = v[1]
+      elseif v[".__name"] == "segment" then
+        -- 0 based segments
+        segments[#segments + 1] = {v.x1 + 1,v.y1 + 1,v.x2 + 1,v.y2 + 1}
+      end
+    end
+    -- we have parsed the file, let's build a beautiful 2dim array
+    mt.max_x = cells_x
+    mt.max_y = cells_y
+    for i=1,cells_y do
+      mt[i] = {}
+      for j=1,cells_x do
+        mt[i][j] = 0
+      end
+    end
+    for i,v in ipairs(segments) do
+      for x=v[1],v[3] do
+        for y=v[2],v[4] do
+          mt[y][x] = 1
+        end
+      end
+    end
   end
-  return images[neuer_name]
+
+  if not images[new_name] then
+    local image_info = img.scan{filename = filename, pagebox = box, page=page }
+    images[new_name] = { img = image_info, allocate = mt }
+  end
+  return images[new_name]
 end
 
 function set_color_if_necessary( nodelist,farbe )

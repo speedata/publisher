@@ -135,6 +135,8 @@
         <a:documentation docid="allocate/yes">The object are placed on the grid and no other ojbect can overlap</a:documentation>
         <value>no</value>
         <a:documentation docid="allocate/no">The object does not allocate any space so other objects can overlap.</a:documentation>
+        <value>auto</value>
+        <a:documentation docid="allocate/auto">The object's shape is considered when allocating cells.</a:documentation>
       </choice>
     </attribute>
   </define>

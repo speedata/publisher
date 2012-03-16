@@ -42,15 +42,15 @@ end
 
 function cp( src,dest )
   local src_io,dest_io
-  
+
   src_io  = io.open(src,"r")
-  
+
   if lfs.isdir(dest) then
     dest_io = io.open(dest .. "/" .. src,"w+")
   else
     dest_io = io.open(dest,"w+")
   end
-  
+
   local j
   while true do
     j = src_io:read(2^13)
@@ -82,7 +82,7 @@ end
 
 function rm_r( entry , dir )
   if lfs.isfile(entry) then
-    rm(entry) 
+    rm(entry)
   elseif lfs.isdir(entry) then
     for e in lfs.dir(entry) do
       if e ~= ".." and e ~= "." then
