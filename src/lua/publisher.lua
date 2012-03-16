@@ -656,9 +656,12 @@ function dothingsbeforeoutput(  )
   local str
   finde_user_defined_whatsits(publisher.global_pagebox)
   local firstbox
-  -- white background -- temporary? FIXME This is only A4 FIXME!!!!
+
+  -- White background on page. Todo: Make color customizable and background optional.
+  local wd = sp_to_bp(aktuelle_seite.width)
+  local ht = sp_to_bp(aktuelle_seite.height)
   firstbox = node.new("whatsit","pdf_literal")
-  firstbox.data = string.format("q 0 0 0 0 k  1 0 0 1 0 0 cm 0 0 %g %g re f Q",595 ,842)
+  firstbox.data = string.format("q 0 0 0 0 k  1 0 0 1 0 0 cm 0 0 %g %g re f Q",wd ,ht)
   firstbox.mode = 1
 
   if #aktuelle_seite.raster.belegung_pdf > 0 then

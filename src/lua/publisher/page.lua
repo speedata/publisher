@@ -16,21 +16,25 @@ module(...)
 
 _M.__index = _M
 
-function new( self,breite,hoehe,extra_rand,beschnittzugabe )
+function new( self,width,height,additional_margin, trim )
   assert(self)
-  if not breite then return nil,"Keine Breiteninformation in der Seite gefunden. Wurde das Element <Seitenformat> angegeben?" end
-  assert(breite)
-  assert(hoehe)
-  local extra_rand      = extra_rand or 0
-  local beschnittzugabe = beschnittzugabe or 0
-  local s = {
-    raster = raster:new()
-  }
-  s.raster.extra_rand = extra_rand
-  s.raster.beschnittzugabe = beschnittzugabe
+  if not width then return nil,"No information about page width found. Did you give the command <Pageformat>?" end
+  assert(height)
 
-  tex.pagewidth  = breite + extra_rand * 2
-  tex.pageheight = hoehe  + extra_rand * 2
+  additional_margin = additional_margin or 0
+  trim              = trim              or 0
+
+  local s = {
+    raster = raster:new(),
+    width  = width,
+    height = height,
+  }
+
+  s.raster.extra_rand      = additional_margin
+  s.raster.beschnittzugabe = trim
+
+  tex.pagewidth  = width   + additional_margin * 2
+  tex.pageheight = height  + additional_margin * 2
 
 	setmetatable(s, self)
 	return s
