@@ -426,7 +426,7 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
           objects[#objects + 1] = publisher.inhalt(j)
         elseif publisher.elementname(j,true) == "Image" then
           -- FIXME: Bild sollte auch ein "object" sein
-          objects[#objects + 1] = publisher.inhalt(j)
+          objects[#objects + 1] = publisher.inhalt(j)[1]
         elseif publisher.elementname(j,true) == "Table" then
           -- FIXME: Bild sollte auch ein "object" sein
           objects[#objects + 1] = publisher.inhalt(j)[1]
