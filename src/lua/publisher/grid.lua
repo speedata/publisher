@@ -349,8 +349,8 @@ function draw_gridallocation(self)
           for i=alloc_found,last_cell do
             -- OK, let's draw a rectangle. Height is 1 grid cell, width is x - alloc_found + 1
             re_wd = sp_to_bp( (last_cell - alloc_found + 1) * self.gridwidth  )
-            re_x = sp_to_bp (self.rand_links) +  (alloc_found - 1) * sp_to_bp(self.gridwidth)
-            re_y = paperheight - sp_to_bp(self.rand_oben) - y * sp_to_bp(self.gridheight)
+            re_x = sp_to_bp (self.rand_links + self.extra_rand) +  (alloc_found - 1) * sp_to_bp(self.gridwidth)
+            re_y = paperheight - sp_to_bp(self.rand_oben + self.extra_rand) - y * sp_to_bp(self.gridheight)
           end
           pdf_literals[#pdf_literals + 1]  = string.format("q 0 0 1 0 k 0 0 1 0 K 1 0 0 1 %g %g cm 0 0 %g %g re f Q ",re_x, re_y, re_wd,re_ht)
           alloc_found = false
