@@ -718,6 +718,7 @@ function neue_zeile( layoutxml,datenxml )
     grid:set_current_row(1)
   else
     grid:set_current_row(current_row,areaname)
+    grid:setze_aktuelle_spalte(1,areaname)
   end
 end
 
