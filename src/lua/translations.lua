@@ -209,6 +209,7 @@ de = {  elements = {
     ["removeduplicates"] = {en = "removeduplicates", de = "duplikatelöschen", },
     ["right"] = {en = "right", de = "rechts", },
     ["row"] = {en = "row", de = "zeile", },
+    ["rows"] = {en = "rows", de = "zeilen", },
     ["leading"] = {en = "leading", de = "zeilenabstand", },
     ["rowspan"] = {en = "rowspan", de = "rowspan", },
     ["rulewidth"] = {en = "rulewidth", de = "linienstärke", },

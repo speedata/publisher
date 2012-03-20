@@ -169,6 +169,7 @@
         <attribute en="removeduplicates" de="duplikatelöschen"/>
         <attribute en="right" de="rechts"/>
         <attribute en="row" de="zeile"/>
+      <attribute en="rows" de="zeilen"/>
         <attribute en="leading" de="zeilenabstand"/>
         <attribute en="rowspan" de="rowspan"/>
         <attribute en="rulewidth" de="linienstärke"/>
@@ -593,6 +594,10 @@
       <documentation docid="newrow/row">
         <en>Number of the row for the virtual cursor. If not given, the publisher uses the next free row.</en>
         <de>Zeile für den virtuellen Cursor (Zahl). Wenn nicht angegeben, nimmt der Publisher die nächste freie Zeile.</de>
+      </documentation>
+      <documentation docid="newrow/rows">
+        <en>Number of free rows. Defaults to 1.</en>
+        <de>Anzahl der Zeilen, die frei gehalten werden sollen. Vorgabe: 1.</de>
       </documentation>
         <documentation docid="newrow/area">
             <en>Name of the area in which the cursor is placed.</en>

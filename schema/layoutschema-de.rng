@@ -598,6 +598,10 @@
         <a:documentation docid="newrow/row">Zeile für den virtuellen Cursor (Zahl). Wenn nicht angegeben, nimmt der Publisher die nächste freie Zeile.</a:documentation>
       </optional>
       <optional>
+        <attribute name="zeilen"/>
+        <a:documentation docid="newrow/rows">Anzahl der Zeilen, die frei gehalten werden sollen. Vorgabe: 1.</a:documentation>
+      </optional>
+      <optional>
         <attribute name="bereich"/>
         <a:documentation docid="newrow/area">Name des Bereichs, in dem der Cursor versetzt wird.</a:documentation>
       </optional>

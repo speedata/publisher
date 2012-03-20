@@ -700,8 +700,10 @@ end
 
 function neue_zeile( layoutxml,datenxml )
   publisher.seite_einrichten()
-  local rownumber = publisher.read_attribute(layoutxml,datenxml,"row","number")
+  local rownumber = publisher.read_attribute(layoutxml,datenxml,"row", "number")
   local areaname  = publisher.read_attribute(layoutxml,datenxml,"area","string")
+  local rows      = publisher.read_attribute(layoutxml,datenxml,"rows","number")
+  rows = rows or 1
   local areaname = areaname or publisher.default_areaname
   local grid = publisher.current_grid
 
@@ -711,14 +713,14 @@ function neue_zeile( layoutxml,datenxml )
   end
 
   local current_row
-  current_row = grid:finde_passende_zeile(1,grid:anzahl_spalten(),1,areaname)
+  current_row = grid:finde_passende_zeile(1,grid:anzahl_spalten(),rows,areaname)
   if not current_row then
     neue_seite()
     publisher.seite_einrichten()
     grid = publisher.aktuelle_seite.raster
     grid:set_current_row(1)
   else
-    grid:set_current_row(current_row,areaname)
+    grid:set_current_row(current_row + rows - 1,areaname)
     grid:setze_aktuelle_spalte(1,areaname)
   end
 end

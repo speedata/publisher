@@ -5,6 +5,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* Zeilenangabe in "NeueZeile":e_neuezeile.
 * Linienfarbe veränderbar. "Linie":e_linie.
 * Bildumrisse können angegeben werden. Siehe "Bild":e_bild und "ObjektAusgeben":e_objektausgeben
 * @--laeufe=...@-Option bei @sprun@
