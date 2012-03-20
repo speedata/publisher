@@ -540,11 +540,13 @@
     </element>
   </define>
 
-  <define name="e_Linie">
+  <define name="e_Rule">
     <element name="Linie">
       <a:documentation docid="rule">Zeichnet eine Linie</a:documentation>
       <attribute name="länge"/>
       <a:documentation docid="rule/length">Länge der Linie in Rasterzellen (Zahl) oder als Maß (z.B. 4cm)</a:documentation>
+      <attribute name="farbe"/>
+      <a:documentation docid="rule/color">Die Farbe der Linie</a:documentation>
       <attribute name="richtung">
         <a:documentation docid="rule/direction">Ausrichtung der Linie</a:documentation>
         <choice>
@@ -677,7 +679,7 @@
             <ref name="e_Box"/>
           </optional>
           <optional>
-            <ref name="e_Linie"/>
+            <ref name="e_Rule"/>
           </optional>
           <optional>
             <ref name="e_Textblock"/>

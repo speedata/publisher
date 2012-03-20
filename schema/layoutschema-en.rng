@@ -530,11 +530,13 @@
     </element>
   </define>
 
-  <define name="e_Linie">
+  <define name="e_Rule">
     <element name="Rule">
       <a:documentation docid="rule">Draw a rule.</a:documentation>
       <attribute name="length"/>
       <a:documentation docid="rule/length">The length of the rule in grid cells (number) or as a dimension (e.g. 4cm)</a:documentation>
+      <attribute name="color"/>
+      <a:documentation docid="rule/color">The color of the rule (default: black)</a:documentation>
       <attribute name="direction">
         <a:documentation docid="rule/direction">The direction of the rule</a:documentation>
         <choice>
@@ -664,7 +666,7 @@
             <ref name="e_Box"/>
           </optional>
           <optional>
-            <ref name="e_Linie"/>
+            <ref name="e_Rule"/>
           </optional>
           <optional>
             <ref name="e_Textblock"/>

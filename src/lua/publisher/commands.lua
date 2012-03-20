@@ -604,8 +604,10 @@ function linie( layoutxml,datenxml )
   local direction     = publisher.read_attribute(layoutxml,datenxml,"direction",  "string")
   local length        = publisher.read_attribute(layoutxml,datenxml,"length",     "string")
   local rulewidth     = publisher.read_attribute(layoutxml,datenxml,"rulewidth",  "string")
+  local color         = publisher.read_attribute(layoutxml,datenxml,"color",  "string")
 
-  w("direction = %s",direction)
+  local colorname = color or "Schwarz"
+
   if tonumber(length) then
     if direction == "horizontal" then
       length = publisher.current_grid.gridwidth * length
@@ -632,7 +634,6 @@ function linie( layoutxml,datenxml )
   end
   rulewidth = sp_to_bp(rulewidth)
 
-  local colorname = "Schwarz"
 
   local n = node.new("whatsit","pdf_literal")
   n.mode = 0

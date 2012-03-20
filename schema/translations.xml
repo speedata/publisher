@@ -554,7 +554,11 @@
             <en>The length of the rule in grid cells (number) or as a dimension (e.g. 4cm)</en>
             <de>Länge der Linie in Rasterzellen (Zahl) oder als Maß (z.B. 4cm)</de>
         </documentation>
-        <documentation docid="rule/direction">
+      <documentation docid="rule/color">
+        <en>The color of the rule (default: black)</en>
+        <de>Die Farbe der Linie</de>
+      </documentation>
+      <documentation docid="rule/direction">
             <en>The direction of the rule</en>
             <de>Ausrichtung der Linie</de>
         </documentation>
