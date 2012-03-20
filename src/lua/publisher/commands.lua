@@ -212,7 +212,7 @@ function bild( layoutxml,datenxml )
 
   if nat_box_intern ~= max_box_intern then
     -- Das Bild muss vergrößert und dann nach links und oben verschoben werden
-    local img_min = publisher.imageinfo(filename,seite,nat_box_intern)
+    local img_min = publisher.imageinfo(filename,seite,nat_box_intern).img
     shift_left = ( bild.width  - img_min.width )  / 2
     shift_up =   ( bild.height - img_min.height ) / 2
     skalierungsfaktor = skalierungsfaktor * ( bild.width / img_min.width )
