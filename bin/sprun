@@ -1,4 +1,4 @@
-#!/usr/bin/env texlua
+#!/usr/bin/env sdtexlua
 
 
 -- If called with texlua from texlive, the require path is mangled.

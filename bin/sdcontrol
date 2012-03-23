@@ -1,4 +1,4 @@
-#!/usr/bin/env texlua
+#!/usr/bin/env sdtexlua
 
 -- 
 -- See file COPYING in the root directory for license details.
