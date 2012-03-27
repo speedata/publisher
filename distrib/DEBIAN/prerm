@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+if which invoke-rc.d >/dev/null 2>&1; then
+  invoke-rc.d sdwatchdog stop
+else
+  /etc/init.d/sdwatchdog stop
+fi
+
+exit 0

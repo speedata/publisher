@@ -1,0 +1,7 @@
+# defaults for sdwatchdog
+# speedata publisher watchdog (hotfolder)
+
+# http://www.speedata.de
+
+SDWATCHDOG_ENABLE=false
+

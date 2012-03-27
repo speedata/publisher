@@ -1,11 +1,11 @@
-#!/usr/bin/texlua
+#!/usr/bin/env sdtexlua
+
+--  sdwatchdog
+--  hotfolder / watchdog for speedata publisher
 --
---  Hotfolder / Watchdog für speedata
---
---
---  Created by Patrick Gundlach on 2010-12-06.
---  Copyright 2010 Patrick Gundlach. All rights reserved.
---
+--  Copyright 2010-2011 Patrick Gundlach.
+--  See file COPYING in the root directory for license info.
+
 
 require "socket"
 
@@ -23,7 +23,7 @@ else
   package.path = srcdir .. "/lua/?.lua;" .. installdir .. "/lib/?.lua;" .. srcdir .. "/lua/common/?.lua;"
 end
 
-require "fileutils" -- erst laden, wenn package.path gesetzt ist!
+require "fileutils" -- load after package.path is set
 
 function fehler( ... )
   print(string.format(...))
@@ -32,7 +32,7 @@ function log( ... )
   os.spawn("logger -p local4.notice -i -t watchdog " .. string.format("%q",string.format(...)))
 end
 
-log("Starte speedata watchdog (sdwatchdog)")
+log("Starting speedata watchdog (sdwatchdog)")
 
 function w( ... )
   print(string.format(...))
@@ -141,7 +141,7 @@ fileutils.cd(hotfolder,function()
       sleep(1)
     else
       log("Verarbeite Datei %q",aktuelle_datei)
-      
+
       for k,v in pairs(optionen_intern.Ereignisse) do
         log("Pruefe auf Muster %q",k)
         if aktuelle_datei:match(k) then

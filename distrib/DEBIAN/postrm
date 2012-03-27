@@ -1,0 +1,8 @@
+#!/bin/sh
+
+
+if [ "$1" = purge ]; then
+  update-rc.d sdwatchdog remove
+fi
+
+exit 0
