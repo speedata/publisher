@@ -1,5 +1,5 @@
 --
---  publisher/src/lua/tabelle.lua
+--  publisher/src/lua/tabular.lua
 --  speedata publisher
 --
 --  Copyright 2010-2012 Patrick Gundlach.

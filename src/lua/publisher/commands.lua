@@ -1,8 +1,8 @@
 --
---  element.lua
+--  commands.lua
 --  speedata publisher
 --
---  Copyright 2010-2011 Patrick Gundlach.
+--  Copyright 2010-2012 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 
 file_start("commands.lua")
