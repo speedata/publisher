@@ -11,12 +11,12 @@ file_start("layout_functions.lua")
 module(...,package.seeall)
 
 local function aktuelle_seite(  )
-  publisher.seite_einrichten()
+  publisher.setup_page()
   return  tex.count[0]
 end
 
 local function current_row(dataxml,...)
-  publisher.seite_einrichten()
+  publisher.setup_page()
   return publisher.current_grid:current_row(select(1,...))
 end
 
@@ -40,12 +40,12 @@ local function anzahl_datensaetze(dataxml,d)
 end
 
 local function anzahl_spalten(dataxml,...)
-  publisher.seite_einrichten()
+  publisher.setup_page()
   return publisher.current_grid:anzahl_spalten(select(1,...))
 end
 
 local function anzahl_zeilen(dataxml,...)
-  publisher.seite_einrichten()
+  publisher.setup_page()
   return publisher.current_grid:anzahl_zeilen(select(1,...))
 end
 
@@ -58,7 +58,7 @@ end
 local function bildbreite(dataxml, ... )
   dateiname=select(1,...)
   local img = publisher.imageinfo(dateiname)
-  publisher.seite_einrichten()
+  publisher.setup_page()
   return publisher.current_grid:breite_in_rasterzellen_sp(img.width)
 end
 
@@ -77,7 +77,7 @@ end
 
 local function gruppenbreite(dataxml, ... )
   -- printtable("Gruppenbreite",{...})
-  publisher.seite_einrichten()
+  publisher.setup_page()
   local groupname=select(1,...)
   local gruppeninhalt=publisher.gruppen[groupname].inhalt
   local raster = publisher.current_grid
@@ -87,7 +87,7 @@ end
 
 local function gruppenhoehe(dataxml, ... )
   -- printtable("Gruppenhöhe",{...})
-  publisher.seite_einrichten()
+  publisher.setup_page()
   local groupname=select(1,...)
   -- FIXME: Fehlermeldung, wenn Gruppe nicht gefunden
   -- printtable("publisher.gruppen[groupname]",publisher.gruppen[groupname])

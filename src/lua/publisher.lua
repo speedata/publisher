@@ -496,7 +496,7 @@ function ermittle_seitentyp()
 end
 
 -- Muss aufgerufen werden, bevor auf eine neue Seite etwas ausgegeben wird.
-function seite_einrichten()
+function setup_page()
   if page_initialized then return end
   page_initialized=true
   publisher.global_pagebox = node.new("vlist")
@@ -564,7 +564,7 @@ function seite_einrichten()
         aktueller_platzierungsbereich[#aktueller_platzierungsbereich + 1] = inhalt(k)
       end
     else
-      err("Element name %q unknown (seite_einrichten())",eltname or "<create_page>")
+      err("Element name %q unknown (setup_page())",eltname or "<create_page>")
     end
   end
 
@@ -574,7 +574,7 @@ function seite_einrichten()
   end
 end
 
-function naechster_rahmen( areaname )
+function next_area( areaname )
   local aktuelle_nummer = current_grid:rahmennummer(areaname)
   if aktuelle_nummer >= current_grid:anzahl_rahmen(areaname) then
     neue_seite()
@@ -591,7 +591,7 @@ function neue_seite()
   if not aktuelle_seite then
     -- es wurde neue_seite() aufgerufen, ohne, dass was ausgegeben wurde bisher
     page_initialized=false
-    seite_einrichten()
+    setup_page()
   end
   if aktuelle_seite.beiseitenausgabe then
     seitenumbruch_unmoeglich = true

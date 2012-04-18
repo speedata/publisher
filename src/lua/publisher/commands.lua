@@ -181,7 +181,7 @@ function bild( layoutxml,datenxml )
   local nat_box_intern = box_lookup[nat_box] or "crop"
   local max_box_intern = box_lookup[max_box] or "crop"
 
-  publisher.seite_einrichten()
+  publisher.setup_page()
 
   local breite_sp, hoehe_sp
   if breite and not tonumber(breite) then
@@ -475,7 +475,7 @@ function fett( layoutxml,datenxml )
 end
 
 function gruppe( layoutxml,datenxml )
-  publisher.seite_einrichten()
+  publisher.setup_page()
   local name        = publisher.read_attribute(layoutxml,datenxml,"name",       "string")
 
   local groupname = name
@@ -695,11 +695,11 @@ end
 
 function naechster_rahmen( layoutxml,datenxml )
   local areaname = publisher.read_attribute(layoutxml,datenxml,"area","string")
-  publisher.naechster_rahmen(areaname)
+  publisher.next_area(areaname)
 end
 
 function neue_zeile( layoutxml,datenxml )
-  publisher.seite_einrichten()
+  publisher.setup_page()
   local rownumber = publisher.read_attribute(layoutxml,datenxml,"row", "number")
   local areaname  = publisher.read_attribute(layoutxml,datenxml,"area","string")
   local rows      = publisher.read_attribute(layoutxml,datenxml,"rows","number")
@@ -716,7 +716,7 @@ function neue_zeile( layoutxml,datenxml )
   current_row = grid:finde_passende_zeile(1,grid:anzahl_spalten(),rows,areaname)
   if not current_row then
     neue_seite()
-    publisher.seite_einrichten()
+    publisher.setup_page()
     grid = publisher.aktuelle_seite.raster
     grid:set_current_row(1)
   else
@@ -778,7 +778,7 @@ function objekt_ausgeben( layoutxml,datenxml )
     end
   end
 
-  publisher.seite_einrichten()
+  publisher.setup_page()
 
   trace("Spalte = %q",tostring(spalte))
   trace("Zeile = %q",tostring(zeile))
@@ -868,8 +868,8 @@ function objekt_ausgeben( layoutxml,datenxml )
         current_row = raster:finde_passende_zeile(aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen,bereich)
         if not current_row then
           warning("No suitable row found for object")
-          publisher.naechster_rahmen(bereich)
-          publisher.seite_einrichten()
+          publisher.next_area(bereich)
+          publisher.setup_page()
           raster = publisher.current_grid
         end
       end
