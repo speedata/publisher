@@ -84,11 +84,13 @@ function parse(r)
 end
 
 function parse_xml_file( filename )
+  root = nil
   local r = xmlreader.from_file(filename,nil,{"nocdata","xinclude","nonet"})
   return parse(r)
 end
 
 function parse_xml(txt)
+  root = nil
   local r = xmlreader.from_string(txt,nil,nil,{"nocdata","xinclude","nonet"})
   return parse(r)
 end

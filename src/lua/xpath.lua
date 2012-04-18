@@ -338,6 +338,9 @@ local function _funcall( ... )
       exit()
     else
       local lang = string.gsub(ns,"urn:speedata:2009/publisher/functions/","")
+      if not publisher.sd_xpath_funktionen[lang] then
+        err("Language %q unknown!",lang)
+      end
       fun = publisher.sd_xpath_funktionen[lang][rest:gsub("-","_")]
     end
   else
