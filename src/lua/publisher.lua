@@ -600,6 +600,7 @@ function neue_seite()
   end
   page_initialized=false
   dothingsbeforeoutput()
+  aktuelle_seite = nil
 
   local n = node.vpack(publisher.global_pagebox)
   tex.box[666] = n
