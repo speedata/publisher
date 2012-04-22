@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 // missing: 
-// * xproc filter
 // * installation in system check!
 // * more open commands on other platforms
 
@@ -69,8 +68,8 @@ function openpdf () {
 function run_publisher_core (command,cmdary,runs,callback) {
     if ( runs >= 1 ) {
         var pubrun = spawn(command,cmdary)
-        pubrun.stdout.on('data',function  (data) { console.log(data.toString())})
-        pubrun.stderr.on('data',function  (data) { console.log(data.toString())})
+        pubrun.stdout.on('data',function  (data) { process.stdout.write(data)})
+        pubrun.stderr.on('data',function  (data) { process.stderr.write(data)})
 
         pubrun.on('exit',function (error) {
             if (error != 0) {
@@ -157,17 +156,22 @@ switch(argumentr.cmd) {
         cfg.options = options
         cfg.read("publisher.cfg")
         save_variables()
-        // if optionen["filter"] then
-        //   local filtername = optionen["filter"]
-        //   if string.sub(filtername,-4) ~= ".xpl" then
-        //     filtername = filtername .. ".xpl"
-        //   end
-        //   print(string.format("Starte Filter %s",filtername))
-        //   os.setenv("CLASSPATH",installdir .. "/lib/calabash.jar:" .. installdir .. "/lib/saxon9he.jar")
-        //   local cmdline="java com.xmlcalabash.drivers.Main pipe.xpl"
-        //   os.spawn(cmdline)
-        // end
-        run_publisher(cfg)
+        if (options.filter) {
+            var filtername = path.basename(options.filter,".xpl")  + ".xpl"
+            console.log("Run filter " + filtername)
+            process.env["CLASSPATH"] = installdir + "/lib/calabash.jar:" + installdir + "/lib/saxon9he.jar"
+            var cmdline = "java com.xmlcalabash.drivers.Main " + filtername
+            exec(cmdline,function(err,stdout,stderr) {
+                console.log(stdout); console.log(stderr)
+                if (err) {
+                    console.log(err)
+                } else {
+                    run_publisher(cfg)
+                }
+            })
+        } else {
+            run_publisher(cfg)
+        }
         break
     default:
         console.log("unknown command!")

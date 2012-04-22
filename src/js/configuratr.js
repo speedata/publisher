@@ -12,7 +12,7 @@ function Configuratr() {
 			kv = lines[i].split(/\s*=\s*/)
 			if (kv.length == 2) {
 				if (this.options[kv[0]]) {
-					if (typeof(this.options[kv[0]]) == "string" ) {
+					if (typeof(this.options[kv[0]]) == "string" || typeof(this.options[kv[0]]) == "number" ) {
 						this.options[kv[0]] = new Array(this.options[kv[0]],kv[1])
 					} else {
 						this.options[kv[0]].push(kv[1])
