@@ -1,26 +1,25 @@
 #!/usr/bin/env node
 
 // missing: 
-// * config reading
-// * layoutoptions for sdluatex
 // * xproc filter
+// * installation in system check!
+// * more open commands on other platforms
 
 var argumentr     = require("../src/js/argumentr"),
-    configuratr   = require("../src/js/configuratr"),
     child_process = require('child_process'),
     sprintf       = require("../src/js/sprintf.js").sprintf,
     path          = require("path"),
     fs            = require("fs"),
-    exec  = child_process.exec,
-    spawn = child_process.spawn,
-    starttime = new Date()
+    exec          = child_process.exec,
+    spawn         = child_process.spawn,
+    starttime     = new Date(),
+    installdir    = path.join(path.dirname(process.argv[1]),".."),
+    options       = { jobname: "publisher",layout: "layout.xml", data: "data.xml",runs: 1},
+    layoutoptions = {},
+    variables     = {},
+	version,srcdir,inifile
 
-
-
-var	installdir  = path.join(path.dirname(process.argv[1]),".."),
-	version,srcdir,inifile,
-    options   = { jobname: "publisher",layout: "layout.xml", data: "data.xml",runs: 1},
-    variables = {}
+console.time("Total time")
 
 if (installdir == "/usr") {
 	console.log("Installed in system")
@@ -61,13 +60,10 @@ function open_file (filename) {
             console.log("Can't open file: unknown operating system: " + process.platform)
             process.exit(-1)
     }
-
 }
 
 function openpdf () {
-    if (options.autoopen) {
-        open_file(options.jobname + "*pdf")
-    }
+    if (options.autoopen) { open_file(options.jobname + "*pdf") }
 }
 
 function run_publisher_core (command,cmdary,runs,callback) {
@@ -89,42 +85,44 @@ function run_publisher_core (command,cmdary,runs,callback) {
         var errlog = fs.createWriteStream(options.jobname  +".protocol",{encoding: 'utf8',flags: 'a'})
         errlog.write(sprintf("\nDuration: %.2d:%.2d\n",duration.getMinutes(),duration.getSeconds()))
         errlog.end()
+        console.timeEnd("Total time")
 
     }
 }
 
-function run_publisher () {
+function run_publisher (cfg) {
     var errlog = fs.createWriteStream(options.jobname  +".protocol",{encoding: 'utf8'})
     errlog.write(sprintf("Protocol file for speedata Publisher (%s)\nTime: %s\n",version,starttime))
     errlog.end()
+    var layoutoptions_ary = []
 
-    var maxruns = parseInt(options.runs)
-    var run = 1
-    var runs_file = options.jobname + ".runs"
-
-    // make sure we start without a runs file
-    if (path.existsSync(runs_file)) {
-        fs.unlinkSync(runs_file)   
+    if (layoutoptions.startpage) {
+        layoutoptions_ary.push("startpage=\"" + parseInt(layoutoptions.startpage) + "\"")
     }
-    var runscfg = new configuratr()
-    var layoutoptions = "" // join array with ",""
-    var cmdline = sprintf("%s/bin/sdluatex --interaction nonstopmode --jobname=%s --ini --lua=%s  publisher.tex %s %s %s",installdir,options["jobname"],inifile,options["layout"],options["data"], layoutoptions)
-    var cmdary = cmdline.split(/\s+/),
+    if (layoutoptions.grid == true || layoutoptions.grid == false) {
+         layoutoptions_ary.push("showgrid=\"" + ( layoutoptions.grid ? "true" : "false") + '"')
+    }
+
+    var jobname    = cfg.getString("jobname"),
+        layoutname = cfg.getString("layout"),
+        dataname   = cfg.getString("data"),
+        runs       = cfg.getNumber("runs")
+        cmdline = sprintf("%s/bin/sdluatex --interaction nonstopmode --jobname=%s --ini --lua=%s  publisher.tex %s %s %s",installdir,jobname,inifile,layoutname,dataname, layoutoptions_ary.join(",")),
+        cmdary = cmdline.split(/\s+/),
         command = cmdary.shift()
 
-    run_publisher_core(command,cmdary,maxruns,openpdf)
+    run_publisher_core(command,cmdary,runs,openpdf)
 }
-
 
 argumentr.start = 25
 argumentr.on("--autoopen",           "Open the PDF file (MacOS X and Linux only)", options)
 argumentr.on("--data NAME",          "Name of the XML data file. Defaults to 'data.xml'",options)
 argumentr.on("--filter FILTER",      "Run XPROC filter before publishing starts", options)
-argumentr.on("--grid",               "Display background grid. Disable with --no-grid",options)
+argumentr.on("--grid",               "Display background grid. Disable with --no-grid",layoutoptions)
 argumentr.on("--layout NAME",        "Name of the layout file. Defaults to 'layout.xml'",options)
 argumentr.on("--jobname NAME",       "The name of the resulting PDF file, default is 'publisher.pdf'",options)
 argumentr.on("--runs NUM",           "Number of publishing runs ", options)
-argumentr.on("--startpage NUM",      "The first page number", options )
+argumentr.on("--startpage NUM",      "The first page number", layoutoptions )
 argumentr.on("-v","--var VAR=VALUE", "Set a variable for the publishing run", setvariable)
 argumentr.on("--version",            "Show version information",getversioninfo)
 argumentr.on("-x", "--extra-dir DIR","Additional directory for file search", options)
@@ -146,21 +144,18 @@ options.jobname = path.basename(options.jobname,".pdf")
 
 switch(argumentr.cmd) {
     case 'doc':
-        switch (process.platform) {
-            case 'darwin':
-                exec(sprintf("open %s/build/handbuch_publisher/index.html",installdir))
-                break
-            default:
-                console.log("Can't open documentation: unknown operating system: " + process.platform)
-                process.exit(-1)
-        }
+        open_file(path.join(installdir,"/build/handbuch_publisher/index.html"))
         break
     case 'list-fonts':
         var cmdline = sprintf("%s/bin/sdluatex --luaonly %s/lua/sdscripts.lua %s list-fonts %s",installdir,srcdir,inifile,options.xml ? "xml" : "")
-        exec(cmdline,function (err,stdout,stderr) { console.log(stdout) })
+        exec(cmdline,function (err,stdout,stderr) { console.log(stdout); console.timeEnd("Total time") })
         break
     case 'run':
-        console.log("run")
+        var configuratr   = require("../src/js/configuratr"),
+            cfg = new configuratr()
+
+        cfg.options = options
+        cfg.read("publisher.cfg")
         save_variables()
         // if optionen["filter"] then
         //   local filtername = optionen["filter"]
@@ -172,7 +167,7 @@ switch(argumentr.cmd) {
         //   local cmdline="java com.xmlcalabash.drivers.Main pipe.xpl"
         //   os.spawn(cmdline)
         // end
-        run_publisher()
+        run_publisher(cfg)
         break
     default:
         console.log("unknown command!")

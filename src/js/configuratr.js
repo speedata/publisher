@@ -23,6 +23,30 @@ function Configuratr() {
 			}
 		};
 	}
+	this.getString = function (key) {
+		var tmp = this.options[key]
+		if (typeof(tmp) == "string") {
+			return tmp
+		} else if (typeof(tmp) == "object") {
+			return tmp.pop()
+		} else {
+			console.log(typeof(tmp))
+		}
+	}
+
+	this.getNumber = function (key) {
+		var tmp = this.options[key]
+		if (typeof(tmp) == "string") {
+			return parseInt(tmp)
+		} else if (typeof(tmp) == "number") {
+			return tmp
+		} else if (typeof(tmp) == "object") {
+			return parseInt(tmp.pop())
+		} else {
+			console.log(typeof(tmp))
+		}
+	}
+
 }
 
 // var cf = new Configuratr()
