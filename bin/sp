@@ -3,6 +3,8 @@
 // missing: 
 // * installation in system check!
 // * more open commands on other platforms
+// * watchdog
+// * webserver for process control
 
 var argumentr     = require("../src/js/argumentr"),
     child_process = require('child_process'),
@@ -90,6 +92,8 @@ function run_publisher_core (command,cmdary,runs,callback) {
 }
 
 function run_publisher (cfg) {
+    process.env["SD_EXTRA_DIRS"] = cfg.getArray("extra-dir").join(":")
+    save_variables()
     var errlog = fs.createWriteStream(options.jobname  +".protocol",{encoding: 'utf8'})
     errlog.write(sprintf("Protocol file for speedata Publisher (%s)\nTime: %s\n",version,starttime))
     errlog.end()
@@ -150,12 +154,12 @@ switch(argumentr.cmd) {
         exec(cmdline,function (err,stdout,stderr) { console.log(stdout); console.timeEnd("Total time") })
         break
     case 'run':
-        var configuratr   = require("../src/js/configuratr"),
-            cfg = new configuratr()
+        var configuratr = require("../src/js/configuratr"),
+            cfg         = new configuratr()
 
         cfg.options = options
         cfg.read("publisher.cfg")
-        save_variables()
+
         if (options.filter) {
             var filtername = path.basename(options.filter,".xpl")  + ".xpl"
             console.log("Run filter " + filtername)

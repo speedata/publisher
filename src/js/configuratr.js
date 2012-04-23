@@ -1,6 +1,6 @@
 
-fs = require("fs")
-
+var fs = require("fs"),
+    util = require('util')
 
 function Configuratr() {
 	this.options = {}
@@ -45,6 +45,15 @@ function Configuratr() {
 		} else {
 			console.log(typeof(tmp))
 		}
+	}
+
+	this.getArray = function(key) {
+		var tmp = this.options[key]
+		if (util.isArray(tmp)) {
+            return tmp
+        } else {
+            return new Array(tmp)
+        }
 	}
 
 }
