@@ -86,7 +86,7 @@
         <value en="French" de="Französisch"/>
         <value en="horizontal" de="horizontal"/>
         <value en="yes" de="ja"/>
-        <value en="left" de="left"/>
+        <value en="left" de="links"/>
         <value en="leftaligned" de="linksbündig"/>
         <value en="max" de="max"/>
         <value en="mediabox" de="mediabox"/>
@@ -94,7 +94,7 @@
         <value en="without" de="ohne"/>
         <value en="rightaligned" de="rechtsbündig"/>
         <value en="rgb" de="rgb"/>
-        <value en="right" de="right"/>
+        <value en="right" de="rechts"/>
         <value en="top" de="top"/>
         <value en="trimbox" de="trimbox"/>
         <value en="vertical" de="vertikal"/>
@@ -140,6 +140,7 @@
         <attribute en="g" de="g"/>
         <attribute en="groupname" de="gruppenname"/>
         <attribute en="height" de="höhe"/>
+      <attribute en="hreference" de="hreferenz"/>
         <attribute en="indentation" de="einrückung"/>
         <attribute en="k" de="k"/>
         <attribute en="key" de="schlüssel"/>
@@ -623,7 +624,19 @@
                 bezieht sich auf den angegebenen Platzierungsbereich. Der voreingestellte Platzierungsbereich ist
                 »Seite«.</de>
         </documentation>
-        <documentation docid="placeobject/row">
+      <documentation docid="placeobject/hreference">
+        <en>The object is placed at the given column. The hreference (horizontal) determines the edge that is taken into account.</en>
+        <de>Das Objekt wird an der gewählten Spalte platziert. Mit hreferenz (horizontal) kann man die Kante bestimmen, die für die Platzierung gewählt wird.</de>
+      </documentation>
+      <documentation docid="placeobject/hreference/left">
+        <en>The given column is the left border of the object to be placed.</en>
+        <de>Die Spalte gibt die linke Kante des Objekts an.</de>
+      </documentation>
+      <documentation docid="placeobject/hreference/right">
+        <en>The given column is the right border of the object to be placed.</en>
+        <de>Die Spalte gibt die rechte Kante des Objekts an.</de>
+      </documentation>
+      <documentation docid="placeobject/row">
             <en>The row where the object is to be placed (optional, number). If not given, the system looks for the next free row.</en>
             <de>Zeile, in der das Objekt ausgegeben werden soll (optional, Zahl). Wird die Zeile nicht mit angegeben, so
                 sucht sich das System selbständig eine freie Zeile</de>

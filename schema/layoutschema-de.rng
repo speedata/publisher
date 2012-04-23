@@ -624,6 +624,17 @@
         <ref name="a_valign"/>
       </optional>
       <optional>
+        <attribute name="hreferenz">
+          <a:documentation docid="placeobject/hreference">Das Objekt wird an der gewählten Spalte platziert. Mit hreferenz (horizontal) kann man die Kante bestimmen, die für die Platzierung gewählt wird.</a:documentation>
+          <choice>
+            <value>links</value>
+            <a:documentation docid="placeobject/hreference/left">Die Spalte gibt die linke Kante des Objekts an.</a:documentation>
+            <value>rechts</value>
+            <a:documentation docid="placeobject/hreference/right">Die Spalte gibt die rechte Kante des Objekts an.</a:documentation>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="bereich">
           <a:documentation docid="placeobject/area">Der Platzierungsbereich, in dem das Objekt ausgegeben werden soll. Die Angabe von Zeile und Spalte
                 bezieht sich auf den angegebenen Platzierungsbereich. Der voreingestellte Platzierungsbereich ist
@@ -1028,11 +1039,11 @@
         <attribute name="align">
           <a:documentation docid="td/align">Horizontale Ausrichtung</a:documentation>
           <choice>
-            <value>left</value>
+            <value>links</value>
             <a:documentation docid="td/align/left">Linksbündig ausgeben</a:documentation>
             <value>center</value>
             <a:documentation docid="td/align/center">Zentriert ausgeben</a:documentation>
-            <value>right</value>
+            <value>rechts</value>
             <a:documentation docid="td/align/right">Rechtsbündig ausgeben</a:documentation>
           </choice>
         </attribute>
@@ -1126,11 +1137,11 @@
         <attribute name="align">
           <a:documentation docid="tr/align">Bestimmt die horizonatale Ausrichtung für alle Zellen dieser Zeile</a:documentation>
           <choice>
-            <value>left</value>
+            <value>links</value>
             <a:documentation docid="td/align/left">Linksbündig ausgeben</a:documentation>
             <value>center</value>
             <a:documentation docid="td/align/center">Zentriert ausgeben</a:documentation>
-            <value>right</value>
+            <value>rechts</value>
             <a:documentation docid="td/align/right">Rechtsbündig ausgeben</a:documentation>
           </choice>
         </attribute>
@@ -1180,11 +1191,11 @@
             <attribute name="align">
               <a:documentation docid="column/align">Bestimmt die horizonatale Ausrichtung für alle Zellen dieser Spalte</a:documentation>
             <choice>
-              <value>left</value>
+              <value>links</value>
               <a:documentation docid="td/align/left">Linksbündig ausgeben</a:documentation>
               <value>center</value>
               <a:documentation docid="td/align/center">Zentriert ausgeben</a:documentation>
-              <value>right</value>
+              <value>rechts</value>
               <a:documentation docid="td/align/right">Rechtsbündig ausgeben</a:documentation>
             </choice>
             </attribute>

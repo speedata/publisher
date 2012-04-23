@@ -756,6 +756,7 @@ function objekt_ausgeben( layoutxml,datenxml )
   local hintergrund      = publisher.read_attribute(layoutxml,datenxml,"background",     "string")
   local groupname        = publisher.read_attribute(layoutxml,datenxml,"groupname",      "number")
   local valign           = publisher.read_attribute(layoutxml,datenxml,"valign",         "string")
+  local hreference       = publisher.read_attribute(layoutxml,datenxml,"hreference",     "string")
 
   bereich = bereich or publisher.default_areaname
 
@@ -806,7 +807,6 @@ function objekt_ausgeben( layoutxml,datenxml )
     for i,j in ipairs(tab) do
       object = publisher.inhalt(j)
       objecttype = publisher.elementname(j,true)
-      w(objecttype)
       if objecttype == "Image" then
         -- return value is a table, #1 is the image, #2 is the allocation grid
         objects[#objects + 1] = {object = object[1], objecttype = objecttype, allocate_matrix = object[2] }
@@ -837,7 +837,14 @@ function objekt_ausgeben( layoutxml,datenxml )
       publisher.boxit(object)
     end
 
+    local breite_in_rasterzellen = raster:breite_in_rasterzellen_sp(object.width)
+    local hoehe_in_rasterzellen  = raster:hoehe_in_rasterzellen_sp (object.height + object.depth)
+
+
     if absolute_positioning then
+      if hreference == "rechts" then
+        spalte = spalte - breite_in_rasterzellen + 1
+      end
       publisher.ausgabe_bei_absolut(object,spalte + raster.extra_rand,zeile + raster.extra_rand,belegen,objects[i].allocate_matrix)
     else
       -- Platz muss gesucht werden
@@ -846,8 +853,6 @@ function objekt_ausgeben( layoutxml,datenxml )
       if not node.has_field(object,"width") then
         warning("Can't calculate with object's width!")
       end
-      local breite_in_rasterzellen = raster:breite_in_rasterzellen_sp(object.width)
-      local hoehe_in_rasterzellen  = raster:hoehe_in_rasterzellen_sp (object.height + object.depth)
       trace("objectAusgeben: Breitenberechnung abgeschlossen: wd=%d,ht=%d",breite_in_rasterzellen,hoehe_in_rasterzellen)
 
       trace("objectAusgeben: finde passende Zeile für das object, current_row = %d",zeile or raster:current_row(bereich) or "-1")
@@ -876,6 +881,9 @@ function objekt_ausgeben( layoutxml,datenxml )
 
       log("»objectAusgeben«: %s in row %d and column %d, width=%d, height=%d", objecttype, current_row, aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen)
       trace("»objectAusgeben«: object placed at (%d,%d)",aktuelle_spalte_start,current_row)
+      if hreference == "rechts" then
+        aktuelle_spalte_start = aktuelle_spalte_start - breite_in_rasterzellen + 1
+      end
       publisher.ausgabe_bei(object,aktuelle_spalte_start,current_row,belegen,bereich,valign,objects[i].allocate_matrix)
       trace("object ausgegeben.")
       zeile = nil -- die Zeile ist nicht mehr gültig, da schon ein object ausgegeben wurde

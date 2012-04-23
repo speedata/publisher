@@ -614,6 +614,17 @@
         <ref name="a_valign"/>
       </optional>
       <optional>
+        <attribute name="hreference">
+          <a:documentation docid="placeobject/hreference">The object is placed at the given column. The hreference (horizontal) determines the edge that is taken into account.</a:documentation>
+          <choice>
+            <value>left</value>
+            <a:documentation docid="placeobject/hreference/left">The given column is the left border of the object to be placed</a:documentation>
+            <value>right</value>
+            <a:documentation docid="placeobject/hreference/right">The given column is the right border of the object to be placed</a:documentation>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="area">
           <a:documentation docid="placeobject/area">The positioning area in which the object should be placed. The given column and row is relative to the area. The default area is »Page«.</a:documentation>
         </attribute>
