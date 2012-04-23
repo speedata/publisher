@@ -5,6 +5,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* @sprun@ durch @sp@ ersetzt. Siehe "Kommandozeile":kommandozeile
 * @hreferenz@ bei "ObjektAusgeben":e_objektausgeben.
 * Neue XPath-Funktion "empty()":xpath
 * Zeilenangabe in "NeueZeile":e_neuezeile.
