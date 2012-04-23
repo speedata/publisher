@@ -21,6 +21,13 @@ local function concat(dataxml, ... )
   return ret
 end
 
+local function empty( dataxml,arg )
+  if arg then
+    return false
+  end
+  return true
+end
+
 local function last( dataxml )
   local datensatzname = dataxml[".__name"]
   local elternelement = dataxml[".__parent"]
@@ -77,11 +84,12 @@ file_end("xpath_functions.lua")
 
 
 return {
-  ["true"]       =  _true,
-  ["false"]      =  _false,
-  ["string"]     = _string,
-  concat         = concat,
-  last           = last,
-  node           = node,
-  position       = position,
+  ["true"]   =  _true,
+  ["false"]  =  _false,
+  ["string"] = _string,
+  concat     = concat,
+  empty      = empty,
+  last       = last,
+  node       = node,
+  position   = position,
 }

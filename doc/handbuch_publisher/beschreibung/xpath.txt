@@ -41,9 +41,10 @@ h2. Folgende XPath-Funktionen stehen bereit (im Namensraum @urn:speedata:2009/pu
 - sd:gruppenhöhe(&lt;string>) := Gibt die Höhe in Rasterzellen für die Gruppe im ersten Argument an. Beispiel: @sd:gruppenbreite('Beispielgruppe')@
 - sd:variable(&lt;Name>) := ist dasselbe wie $Name, nur mit der Möglichkeit den Namen auch dynamisch (z.B. mit @concat()@) zu erzeugen.
 
-- true() := Gibt „Wahr“ zurück.
-- false() := Gibt „Falsch“ zurück.
 - concat( &lt;Wert>,&lt;Wert>, ... ) := Erzeugt einen neuen Text aus der Verkettung der einzelnen Werte.
+- empty(&lt;Attribut>) := Prüft, ob ein Attribut (nicht) vorhanden ist.
+- false() := Gibt „Falsch“ zurück.
 - last() := Gibt die Anzahl der Datensätze der gleichnamigen Geschwister-Elemente zurück. *Achtung: noch nicht XPath-konform.*
 - position() := Ermittelt die Position des aktuellen Datensatzes.
 - string(&lt;Sequenz>) := Gibt den Textwert der Sequenz zurück, d.h. den Inhalt der Elemente.
+- true() := Gibt „Wahr“ zurück.
