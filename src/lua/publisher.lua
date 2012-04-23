@@ -785,11 +785,11 @@ function parse_html( elt )
   local a = Paragraph:new()
   local fett,kursiv,underline
   if elt[".__name"] then
-    if elt[".__name"] == "b" then
+    if elt[".__name"] == "b" or elt[".__name"] == "B" then
       fett = 1
-    elseif elt[".__name"] == "i" then
+    elseif elt[".__name"] == "i" or elt[".__name"] == "I" then
       kursiv = 1
-    elseif elt[".__name"] == "u" then
+    elseif elt[".__name"] == "u" or elt[".__name"] == "U" then
       underline = 1
     end
   end
