@@ -84,7 +84,7 @@ function run_publisher_core (command,cmdary,runs,callback) {
         callback()
         var duration = new Date(new Date() - starttime)
         var errlog = fs.createWriteStream(options.jobname  +".protocol",{encoding: 'utf8',flags: 'a'})
-        errlog.write(sprintf("\nDuration: %.2d:%.2d\n",duration.getMinutes(),duration.getSeconds()))
+        errlog.write(sprintf("\nDuration: %02d:%02d:%02d.%03d\n",duration.getUTCHours(),duration.getMinutes(),duration.getSeconds(),duration.getMilliseconds()))
         errlog.end()
         console.timeEnd("Total time")
 
