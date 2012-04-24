@@ -780,7 +780,7 @@ function inhalt( elt )
   return elt.inhalt
 end
 
--- <b> und <i> in Text
+-- <b>, <u> and <i> in text
 function parse_html( elt )
   local a = Paragraph:new()
   local fett,kursiv,underline
@@ -916,7 +916,34 @@ function mknodes(str,fontfamilie,parameter)
   end
   for s in string.utfvalues(str) do
     local char = unicode.utf8.char(s)
-    if match(char,"%s") and last and last.id == glue_node and not node.has_attribute(last,att_tie_glue,1) then
+    if s == 10 then
+      local p1,g,p2
+      p1 = node.new(penalty_node)
+      p1.penalty = 10000
+
+      g = node.new(glue_node)
+      g.spec = node.new(glue_spec_node)
+      g.spec.stretch = 2^16
+      g.spec.stretch_order = 2
+
+      p2 = node.new(penalty_node)
+      p2.penalty = -10000
+
+      -- rs = node.new(glue_node)
+      -- rs.spec = node.new(glue_spec_node)
+
+      p1.next = g
+      g.next  = p2
+      p2.next = rs
+
+      if head then
+        last.next = p1
+      else
+        head = p1
+      end
+      last = p2
+
+    elseif match(char,"%s") and last and last.id == glue_node and not node.has_attribute(last,att_tie_glue,1) then
       -- double space, don't do anything
     elseif s == 160 then -- non breaking space
       n = node.new(penalty_node)

@@ -221,11 +221,6 @@ function textvalue( tab )
 end
 
 
-function normalize_space( str )
-  return str:gsub("^%s*(.-)%s*$","%1")
-end
-
-
 local function get_value( v )
   if type(v)=="string" then return v end
   if type(v)=="number" then return v end

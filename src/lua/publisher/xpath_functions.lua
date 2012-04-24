@@ -43,6 +43,12 @@ local function last( dataxml )
   return count
 end
 
+function normalize_space(dataxml, str )
+  if type(str) == "string" then
+    return str:gsub("^%s*(.-)%s*$","%1")
+  end
+end
+
 local function node(dataxml)
   local tab={}
   for i=1,#dataxml do
@@ -91,5 +97,6 @@ return {
   empty      = empty,
   last       = last,
   node       = node,
+  normalize_space = normalize_space,
   position   = position,
 }
