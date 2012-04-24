@@ -27,6 +27,8 @@
 
   <define name="t_Switchcontents">
     <ref name="t_Commands"/>
+    <optional><ref name="e_Tablerule"/></optional>
+    <optional><ref name="e_Tr"/></optional>
     <optional><ref name="e_Td"/></optional>
     <optional><ref name="e_Value"/></optional>
     <optional><ref name="e_Image"/></optional>
