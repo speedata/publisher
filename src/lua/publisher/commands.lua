@@ -234,12 +234,35 @@ function box( layoutxml,datenxml )
   local width     = publisher.read_attribute(layoutxml,datenxml,"width","number")
   local height    = publisher.read_attribute(layoutxml,datenxml,"height","number")
   local hf_string = publisher.read_attribute(layoutxml,datenxml,"backgroundcolor","string")
+  local bleed     = publisher.read_attribute(layoutxml,datenxml,"bleed","string")
 
   local current_grid = publisher.current_grid
-  local _width   = sp_to_bp(current_grid.gridwidth  * width)
-  local _height  = sp_to_bp(current_grid.gridheight * height)
+
+  width  = current_grid.gridwidth  * width
+  height = current_grid.gridheight * height
+
+  local shift_left,shift_up = 0,0
+
+  if bleed then
+    local trim = publisher.options.trim
+    local positions = string.explode(bleed,",")
+    for i,v in ipairs(positions) do
+      print(i,v)
+      if v == "oben" then
+        height = height + trim
+        shift_up = trim
+      elseif v == "rechts" then
+        width = width + trim
+      end
+    end
+  end
+
+  local _width   = sp_to_bp(width)
+  local _height  = sp_to_bp(height)
   local n = publisher.box(_width,_height,hf_string)
   n = node.hpack(n)
+  node.set_attribute(n, publisher.att_shift_left, shift_left)
+  node.set_attribute(n, publisher.att_shift_up  , shift_up )
   return n
 end
 
@@ -907,6 +930,9 @@ function optionen( layoutxml,datenxml )
   publisher.options.startpage          = publisher.read_attribute(layoutxml,datenxml,"startpage",   "number")
   publisher.options.trace              = publisher.read_attribute(layoutxml,datenxml,"trace",       "boolean")
   publisher.options.trim               = publisher.read_attribute(layoutxml,datenxml,"trim",        "length")
+  if publisher.options.trim then
+    publisher.options.trim = tex.sp(publisher.options.trim)
+  end
 end
 
 function platzierungsrahmen( layoutxml, datenxml )

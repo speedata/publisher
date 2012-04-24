@@ -100,6 +100,7 @@
         <value en="vertical" de="vertikal"/>
         <value en="full" de="vollständig"/>
         <value en="centered" de="zentriert"/>
+      <value en="top,right" de="oben,rechts"></value>
     </values>
     <attributes>
         <attribute en="align" de="align"/>
@@ -110,6 +111,7 @@
       <attribute en="b" de="b"/>
         <attribute en="backgroundcolor" de="hintergrundfarbe"/>
         <attribute en="background" de="hintergrund"/>
+      <attribute en="bleed" de="beschnitt"/>
         <attribute en="border-bottom" de="border-bottom"/>
         <attribute en="border-bottom-color" de="border-bottom-color"/>
         <attribute en="border-left" de="border-left"/>

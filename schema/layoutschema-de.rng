@@ -282,6 +282,13 @@
       <a:documentation docid="box/height">Höhe der Box (in Rasterzellen)</a:documentation>
       <attribute name="hintergrundfarbe"/>
       <a:documentation docid="box/backgroundcolor">Farbe der Box</a:documentation>
+      <optional>
+        <attribute name="beschnitt">
+          <choice>
+            <value>oben,rechts</value>
+          </choice>
+        </attribute>
+      </optional>
     </element>
   </define>
 

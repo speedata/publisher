@@ -280,6 +280,13 @@
       <a:documentation docid="box/height">Heigt of the box in grid cells.</a:documentation>
       <attribute name="backgroundcolor"/>
       <a:documentation docid="box/backgroundcolor">Color of the box</a:documentation>
+      <optional>
+        <attribute name="bleed">
+          <choice>
+            <value>top,right</value>
+          </choice>
+        </attribute>
+      </optional>
     </element>
   </define>
 

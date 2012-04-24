@@ -150,6 +150,7 @@ de = {  elements = {
     ["b"] = {en = "b", de = "b", },
     ["backgroundcolor"] = {en = "backgroundcolor", de = "hintergrundfarbe", },
     ["background"] = {en = "background", de = "hintergrund", },
+    ["bleed"] = {en = "bleed", de = "beschnitt", },
     ["border-bottom"] = {en = "border-bottom", de = "border-bottom", },
     ["border-bottom-color"] = {en = "border-bottom-color", de = "border-bottom-color", },
     ["border-left"] = {en = "border-left", de = "border-left", },

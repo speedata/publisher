@@ -427,6 +427,13 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
     err(delta_y)
     exit()
   end
+
+  if node.has_attribute(nodelist,att_shift_left) then
+    delta_x = delta_x - node.has_attribute(nodelist,att_shift_left)
+    delta_y = delta_y - node.has_attribute(nodelist,att_shift_up)
+  end
+
+
   if current_group then
     -- Den Inhalt der Nodeliste in die aktuelle Gruppe ausgeben. 
     local gruppe = gruppen[current_group]
