@@ -760,7 +760,6 @@ function objekt_ausgeben( layoutxml,datenxml )
 
   bereich = bereich or publisher.default_areaname
 
-  w("belegen=%s",belegen) -- !!
   if spalte and not tonumber(spalte) then
     -- spalte scheint ein String zu sein
     absolute_positioning = true
@@ -911,15 +910,15 @@ function optionen( layoutxml,datenxml )
 end
 
 function platzierungsrahmen( layoutxml, datenxml )
-  local spalte = publisher.read_attribute(layoutxml,datenxml,"column","number")
-  local zeile  = publisher.read_attribute(layoutxml,datenxml,"row" ,"number")
-  local breite = publisher.read_attribute(layoutxml,datenxml,"width","number")
-  local hoehe  = publisher.read_attribute(layoutxml,datenxml,"height"  ,"number")
+  local column = publisher.read_attribute(layoutxml,datenxml,"column","number")
+  local row    = publisher.read_attribute(layoutxml,datenxml,"row" ,"number")
+  local width  = publisher.read_attribute(layoutxml,datenxml,"width","number")
+  local height = publisher.read_attribute(layoutxml,datenxml,"height"  ,"number")
   return {
-    spalte = spalte,
-    zeile = zeile,
-    breite = breite,
-    hoehe = hoehe
+    spalte = column,
+    zeile  = row,
+    breite = width,
+    hoehe  = height
     }
 end
 
@@ -1315,7 +1314,7 @@ function textblock( layoutxml,datenxml )
 
   local width_gridcells = breite
 
-  local breite_sp           = width_gridcells * publisher.current_grid.gridwidth
+  local breite_sp = width_gridcells * publisher.current_grid.gridwidth
 
   local objects, nodes = {},{}
   local nodelist,parameter
