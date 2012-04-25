@@ -18,7 +18,8 @@ var argumentr     = require("../src/js/argumentr"),
     options       = { jobname: "publisher",layout: "layout.xml", data: "data.xml",runs: 1},
     layoutoptions = {},
     variables     = {},
-	version,srcdir,inifile
+	version,srcdir,inifile,
+    children      = []
 
 console.time("Total time")
 
@@ -72,6 +73,7 @@ function run_publisher_core (command,cmdary,runs,callback) {
         var pubrun = spawn(command,cmdary)
         pubrun.stdout.on('data',function  (data) { process.stdout.write(data)})
         pubrun.stderr.on('data',function  (data) { process.stderr.write(data)})
+        children.push(pubrun.pid)
 
         pubrun.on('exit',function (error) {
             if (error != 0) {
@@ -142,9 +144,16 @@ if (! ret.ok) {
     process.exit(-1)
 }
 
-
 // fix jobname
 options.jobname = path.basename(options.jobname,".pdf")
+
+process.on('SIGINT', function () {
+    for (var i = 0; i < children.length; i++) {
+        process.kill(children[i])
+    };
+    process.exit(0)
+});
+
 
 switch(argumentr.cmd) {
     case 'doc':
@@ -202,7 +211,7 @@ switch(argumentr.cmd) {
         for (var i = 0; i < matched_files.length; i++) {
             console.log("Watching: " + matched_files[i])
             var cmd = cfg["watchdog-patterns"][matched_files[i]]
-            fs.watchFile(matched_files[i], function  (curr,prev) {
+            fs.watchFile(matched_files[i],{ persistent: true, interval: 100 }, function  (curr,prev) {
                 // we need to compare the times, I don't know why
                 if (curr.mtime > prev.mtime ) {
                     exec(cmd,function (err,stdout,stderr) { console.log(stdout);console.log(stderr); if(err) { console.log(err)} } )
