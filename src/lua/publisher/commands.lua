@@ -510,7 +510,7 @@ function gruppe( layoutxml,datenxml )
     publisher.gruppen[groupname] = nil
   end
 
-  local r = publisher.raster:new()
+  local r = publisher.grid:new()
   r:setze_rand(0,0,0,0)
   r:setze_breite_hoehe(publisher.aktuelle_seite.raster.gridwidth,publisher.aktuelle_seite.raster.gridheight)
   publisher.gruppen[groupname] = {
@@ -777,7 +777,7 @@ function objekt_ausgeben( layoutxml,datenxml )
   local maxhoehe         = publisher.read_attribute(layoutxml,datenxml,"maxheight",      "number")
   local rahmen           = publisher.read_attribute(layoutxml,datenxml,"frame",          "string")
   local hintergrund      = publisher.read_attribute(layoutxml,datenxml,"background",     "string")
-  local groupname        = publisher.read_attribute(layoutxml,datenxml,"groupname",      "number")
+  local groupname        = publisher.read_attribute(layoutxml,datenxml,"groupname",      "string")
   local valign           = publisher.read_attribute(layoutxml,datenxml,"valign",         "string")
   local hreference       = publisher.read_attribute(layoutxml,datenxml,"hreference",     "string")
 
@@ -892,12 +892,18 @@ function objekt_ausgeben( layoutxml,datenxml )
             aktuelle_spalte_start = 1
           end
         end
-        current_row = raster:finde_passende_zeile(aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen,bereich)
-        if not current_row then
-          warning("No suitable row found for object")
-          publisher.next_area(bereich)
-          publisher.setup_page()
-          raster = publisher.current_grid
+        -- This is not correct! Todo: fixme!
+        if publisher.current_group then
+          current_row = 1
+        else
+          -- the current grid is different when in a group
+          current_row = raster:finde_passende_zeile(aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen,bereich)
+          if not current_row then
+            warning("No suitable row found for object")
+            publisher.next_area(bereich)
+            publisher.setup_page()
+            raster = publisher.current_grid
+          end
         end
       end
 
