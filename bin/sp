@@ -133,6 +133,7 @@ argumentr.on("--xml",                "Output as (pseudo-)XML (for list-fonts)", 
 
 argumentr.command("list-fonts",      "List installed fonts (use together with --xml for copy/paste)")
 argumentr.command("doc",             "Open documentation")
+argumentr.command("watch",           "Start watchdog / hotfolder")
 argumentr.command("run",             "Start publishing (default)",true)
 
 var ret = argumentr.parse()
@@ -176,6 +177,38 @@ switch(argumentr.cmd) {
         } else {
             run_publisher(cfg)
         }
+        break
+    case 'watch':
+        console.log("start watchdog")
+        var configuratr = require("../src/js/configuratr"),
+            cfg         = new configuratr()
+
+        if (path.existsSync("publisher.cfg")) {
+            cfg.read("publisher.cfg")
+        }
+        var files = fs.readdirSync(process.cwd())
+        var events_patterns = Object.keys(cfg["watchdog-patterns"])
+
+
+        var matched_files = files.filter(function (file) {
+            for (var i = 0; i < events_patterns.length; i++) {
+                var regexp = new RegExp(events_patterns[i])
+                if (file.match(regexp)) {
+                    return true
+                }
+            }
+            return false
+        })
+        for (var i = 0; i < matched_files.length; i++) {
+            console.log("Watching: " + matched_files[i])
+            var cmd = cfg["watchdog-patterns"][matched_files[i]]
+            fs.watchFile(matched_files[i], function  (curr,prev) {
+                // we need to compare the times, I don't know why
+                if (curr.mtime > prev.mtime ) {
+                    exec(cmd,function (err,stdout,stderr) { console.log(stdout);console.log(stderr); if(err) { console.log(err)} } )
+                }
+            })
+        };
         break
     default:
         console.log("unknown command!")
