@@ -676,8 +676,20 @@ function dothingsbeforeoutput(  )
   -- White background on page. Todo: Make color customizable and background optional.
   local wd = sp_to_bp(aktuelle_seite.width)
   local ht = sp_to_bp(aktuelle_seite.height)
+
+  local x = 0 + aktuelle_seite.raster.extra_rand
+  local y = 0 + aktuelle_seite.raster.extra_rand + aktuelle_seite.raster.rand_oben
+
+  if options.trim then
+    local trim_bp = sp_to_bp(options.trim)
+    wd = wd + trim_bp * 2
+    ht = ht + trim_bp * 2
+    x = x - options.trim
+    y = y - options.trim
+  end
+
   firstbox = node.new("whatsit","pdf_literal")
-  firstbox.data = string.format("q 0 0 0 0 k  1 0 0 1 0 0 cm 0 0 %g %g re f Q",wd ,ht)
+  firstbox.data = string.format("q 0 0 0 0 k  1 0 0 1 0 0 cm %g %g %g %g re f Q",sp_to_bp(x), sp_to_bp(y),wd ,ht)
   firstbox.mode = 1
 
   if options.showgridallocation then
