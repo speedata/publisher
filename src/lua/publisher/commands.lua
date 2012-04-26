@@ -247,11 +247,10 @@ function box( layoutxml,datenxml )
     local trim = publisher.options.trim
     local positions = string.explode(bleed,",")
     for i,v in ipairs(positions) do
-      print(i,v)
-      if v == "oben" then
+      if v == "top" then
         height = height + trim
         shift_up = trim
-      elseif v == "rechts" then
+      elseif v == "right" then
         width = width + trim
       end
     end
@@ -341,15 +340,12 @@ function definiere_textformat(layoutxml)
 
   local fmt = {}
 
-  if alignment=="linksbündig" or alignment == "leftaligned" then
-    fmt.alignment = "linksbündig"
-  elseif alignment=="rechtsbündig" or alignment == "rightaligned"then
-    fmt.alignment = "rechtsbündig"
-  elseif alignment=="zentriert" or alignment == "centered" then
-    fmt.alignment = "zentriert"
-  else
-    fmt.alignment = "blocksatz"
+  if     alignment == "leftaligned"  then fmt.alignment = "linksbündig"
+  elseif alignment == "rightaligned" then fmt.alignment = "rechtsbündig"
+  elseif alignment == "centered"     then fmt.alignment = "zentriert"
+  else                                    fmt.alignment = "blocksatz"
   end
+
   if indentation then
     fmt.indent = tex.sp(indentation)
   end
@@ -864,7 +860,7 @@ function objekt_ausgeben( layoutxml,datenxml )
 
 
     if absolute_positioning then
-      if hreference == "rechts" then
+      if hreference == "right" then
         spalte = spalte - breite_in_rasterzellen + 1
       end
       publisher.ausgabe_bei_absolut(object,spalte + raster.extra_rand,zeile + raster.extra_rand,belegen,objects[i].allocate_matrix)
@@ -909,7 +905,7 @@ function objekt_ausgeben( layoutxml,datenxml )
 
       log("»objectAusgeben«: %s in row %d and column %d, width=%d, height=%d", objecttype, current_row, aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen)
       trace("»objectAusgeben«: object placed at (%d,%d)",aktuelle_spalte_start,current_row)
-      if hreference == "rechts" then
+      if hreference == "right" then
         aktuelle_spalte_start = aktuelle_spalte_start - breite_in_rasterzellen + 1
       end
       publisher.ausgabe_bei(object,aktuelle_spalte_start,current_row,belegen,bereich,valign,objects[i].allocate_matrix)
@@ -1395,9 +1391,6 @@ function textblock( layoutxml,datenxml )
       local alignment
       if current_textformat then
         alignment = current_textformat.alignment
-        if alignment == "linksbündig"  then alignment = "leftaligned" end
-        if alignment == "rechtsbündig" then alignment = "rightaligned" end
-        if alignment == "zentriert"    then alignment = "centered" end
         if alignment == "leftaligned" or alignment == "rightaligned" or alignment == "centered" then
           ragged_shape = true
         end
@@ -1416,9 +1409,6 @@ function textblock( layoutxml,datenxml )
         trace("Textblock: apply textformats")
         -- FIXME: should be translated earlier
         local alignment = current_textformat.alignment
-        if alignment == "linksbündig"  then alignment = "leftaligned" end
-        if alignment == "rechtsbündig" then alignment = "rightaligned" end
-        if alignment == "zentriert"    then alignment = "centered" end
         if ragged_shape then
           publisher.fix_justification(nodelist,alignment)
         end

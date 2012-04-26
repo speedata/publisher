@@ -27,6 +27,9 @@
       <xsl:apply-templates select="$root/translations/elements" >
         <xsl:with-param name="current_language" select="." />
       </xsl:apply-templates>
+      <xsl:apply-templates select="$root/translations/values" >
+        <xsl:with-param name="current_language" select="." />
+      </xsl:apply-templates>
       <xsl:text>},</xsl:text>
     </xsl:for-each>
     <xsl:apply-templates select="translations/attributes" />
@@ -74,4 +77,25 @@
     </xsl:for-each>
     <xsl:text>},&#x0a;</xsl:text>
   </xsl:template>
+
+  <xsl:template match="values">
+    <xsl:param name="current_language" />
+    <xsl:text>  </xsl:text><xsl:value-of select="local-name()"/><xsl:text> = {&#x0a;</xsl:text>
+    <xsl:apply-templates >
+      <xsl:with-param name="type" select="local-name()"/>
+      <xsl:with-param name="current_language" select="$current_language" />
+    </xsl:apply-templates>
+    <xsl:text>  },&#x0a;</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="value">
+    <xsl:param name="type" />
+    <xsl:param name="current_language" />
+    <xsl:text>    ["</xsl:text>
+    <xsl:value-of select="key(concat('en-',$type),@en)/@*[local-name() = $current_language]" />
+    <xsl:text>"] = "</xsl:text>
+    <xsl:value-of select="@en" />
+    <xsl:text>",&#x0a;</xsl:text>
+  </xsl:template>
+
 </xsl:stylesheet>

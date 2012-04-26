@@ -172,6 +172,12 @@ function translate_element( eltname )
   return translations[current_layoutlanguage].elements[eltname]
 end
 
+-- return the localized value as an english string-
+function translate_value( value )
+  local tmp = translations[current_layoutlanguage].values[value]
+  return tmp
+end
+
 -- Return the localized attribute name as an english string.
 function translate_attribute( attname )
   return translations.attributes[attname][current_layoutlanguage]
@@ -762,6 +768,10 @@ function read_attribute( layoutxml,datenxml,attname_english,typ,default)
   else
     val = layoutxml[attname]
   end
+  local val_english = translate_value(val)
+  if val_english then
+    val = val_english
+  end
 
   if typ=="xpath" then
     return xpath.textvalue(xpath.parse(datenxml,val))
@@ -772,9 +782,9 @@ function read_attribute( layoutxml,datenxml,attname_english,typ,default)
   elseif typ=="length" then
     return val
   elseif typ=="boolean" then
-    if val=="yes" or val=="ja" then
+    if val=="yes" then
       return true
-    elseif val=="no" or val=="nein" then
+    elseif val=="no" then
       return false
     end
     return nil
