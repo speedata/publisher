@@ -170,8 +170,8 @@ local box_lookup = {
 
 -- Erzeugt eine hbox mit einem Bild
 function bild( layoutxml,datenxml )
-  local breite = publisher.read_attribute(layoutxml,datenxml,"width","string")
-  local hoehe  = publisher.read_attribute(layoutxml,datenxml,"height",  "string")
+  local width = publisher.read_attribute(layoutxml,datenxml,"width","string")
+  local height  = publisher.read_attribute(layoutxml,datenxml,"height",  "string")
 
   local seite     = publisher.read_attribute(layoutxml,datenxml,"page","number")
   local nat_box   = publisher.read_attribute(layoutxml,datenxml,"naturalsize","string")
@@ -183,28 +183,28 @@ function bild( layoutxml,datenxml )
 
   publisher.setup_page()
 
-  local breite_sp, hoehe_sp
-  if breite and not tonumber(breite) then
-    -- breite ist keine Zahl, sondern eine Maßangabe
-    breite_sp = tex.sp(breite)
+  local width_sp, height_sp
+  if width and not tonumber(width) then
+    -- width ist keine Zahl, sondern eine Maßangabe
+    width_sp = tex.sp(width)
   else
-    breite_sp = breite * publisher.current_grid.gridwidth
+    width_sp = width * publisher.current_grid.gridwidth
   end
 
-  if hoehe then
-    if tonumber(hoehe) then
-      hoehe_sp  = hoehe * publisher.current_grid.gridheight
+  if height then
+    if tonumber(height) then
+      height_sp  = height * publisher.current_grid.gridheight
     else
-      hoehe_sp = tex.sp(hoehe)
+      height_sp = tex.sp(height)
     end
   end
   local imageinfo = publisher.new_image(filename,seite,max_box_intern)
   local bild = img.copy(imageinfo.img)
   local allocate = imageinfo.allocate
-  local skalierungsfaktor_wd = breite_sp / bild.width
+  local skalierungsfaktor_wd = width_sp / bild.width
   local skalierungsfaktor = skalierungsfaktor_wd
-  if hoehe_sp then
-    local skalierungsfaktor_ht = hoehe_sp / bild.height
+  if height_sp then
+    local skalierungsfaktor_ht = height_sp / bild.height
     skalierungsfaktor = math.min(skalierungsfaktor_ht,skalierungsfaktor_wd)
   end
 
@@ -512,7 +512,7 @@ function gruppe( layoutxml,datenxml )
 
   local r = publisher.grid:new()
   r:setze_rand(0,0,0,0)
-  r:setze_breite_hoehe(publisher.aktuelle_seite.raster.gridwidth,publisher.aktuelle_seite.raster.gridheight)
+  r:setze_breite_hoehe(publisher.current_page.raster.gridwidth,publisher.current_page.raster.gridheight)
   publisher.gruppen[groupname] = {
     inhalt = inhalt,
     raster  = r,
@@ -740,7 +740,7 @@ function neue_zeile( layoutxml,datenxml )
   if not current_row then
     neue_seite()
     publisher.setup_page()
-    grid = publisher.aktuelle_seite.raster
+    grid = publisher.current_page.raster
     grid:set_current_row(1)
   else
     grid:set_current_row(current_row + rows - 1,areaname)
@@ -1120,7 +1120,7 @@ function speichere_datensatzdatei( layoutxml,datenxml )
   for i=1,#tab do
     if tab[i].elementname=="Element" then
       tmp[#tmp + 1] = publisher.inhalt(tab[i])
-    elseif tab[i].elementname=="SortiereSequenz" or tab[i].elementname=="Sequenz" or tab[i].elementname=="Elementstruktur" then
+    elseif tab[i].elementname=="SortiereSequenz" or tab[i].elementname=="Sequenz" or tab[i].elementname=="elementstructure" then
       for j=1,#publisher.inhalt(tab[i]) do
         tmp[#tmp + 1] = publisher.inhalt(tab[i])[j]
       end
@@ -1481,7 +1481,7 @@ function textblock( layoutxml,datenxml )
   trace("Textbock: vpack()")
   nodelist = node.vpack(nodes[1])
   if angle then
-    nodelist = publisher.rotiere(nodelist,angle)
+    nodelist = publisher.rotate(nodelist,angle)
   end
   trace("Textbock: end")
   return nodelist
@@ -1558,7 +1558,7 @@ function zuweisung( layoutxml,datenxml )
           err("Unknown type: %q",type(contents))
           ret = nil
         end
-      elseif eltname == "Elementstruktur" then
+      elseif eltname == "elementstructure" then
         for j=1,#contents do
           ret = ret or {}
           ret[#ret + 1] = contents[j]

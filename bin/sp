@@ -73,6 +73,7 @@ function run_publisher_core (command,cmdary,runs,callback) {
         var pubrun = spawn(command,cmdary)
         pubrun.stdout.on('data',function  (data) { process.stdout.write(data)})
         pubrun.stderr.on('data',function  (data) { process.stderr.write(data)})
+        // for job control / signal handling (ctrl-c)
         children.push(pubrun.pid)
 
         pubrun.on('exit',function (error) {

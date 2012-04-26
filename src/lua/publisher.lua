@@ -83,7 +83,7 @@ textformate = {} -- tmp. Textformate. Tabelle mit Schlüsseln: indent, alignment
 -- der Eintrag dann `texgyreheros-regular.otf`
 -- schrifttabelle = {}
 
-sprachen = {}
+languages = {}
 
 -- bookmarks = {
 --   { --- first bookmark
@@ -182,20 +182,20 @@ function dispatch(layoutxml,datenxml,optionen)
   local ret = {}
   local tmp
   for _,j in ipairs(layoutxml) do
-    -- j ist genau dann eine Tabelle, wenn es ein Element im layoutxml ist.
+    -- j a table, if it is an element in layoutxml
     if type(j)=="table" then
       local eltname = translate_element(j[".__name"])
       if dispatch_table[eltname] ~= nil then
         tmp = dispatch_table[eltname](j,datenxml,optionen)
 
-        -- Kopie-von-Elemente können sofort aufgelöst werden
+        -- Copy-of-elements can be resolveld immediately 
         if eltname == "Copy-of" or eltname == "Switch" then
           if type(tmp)=="table" then
             for i=1,#tmp do
               if tmp[i].inhalt then
                 ret[#ret + 1] = { elementname = tmp[i].elementname, inhalt = tmp[i].inhalt }
               else
-                ret[#ret + 1] = { elementname = "Elementstruktur" , inhalt = { tmp[i] } }
+                ret[#ret + 1] = { elementname = "elementstructure" , inhalt = { tmp[i] } }
               end
             end
           end
@@ -292,7 +292,7 @@ function dothings()
     options.showgrid = true
   end
 
-  -- Optionen verarbeiten
+  -- do things with options
   if options.startpage then
     local num = options.startpage
     if num then
@@ -411,9 +411,8 @@ function ausgabe_bei_absolut( nodelist,x,y,belegen,bereich )
   n.prev = tail
 end
 
--- Gibt die nodelist bei Rasterzelle (x,y) aus. Wenn belegen==true dann die Zellen als belegt markieren.
+-- Put the nodelist on grid cell (x,y). If allocate==true then mark cells as occupied.
 function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
-  -- printtable("ausgabe_bei/allocate_matrix",allocate_matrix)
 
   bereich = bereich or default_areaname
   local r = current_grid
@@ -435,43 +434,43 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
 
 
   if current_group then
-    -- Den Inhalt der Nodeliste in die aktuelle Gruppe ausgeben. 
-    local gruppe = gruppen[current_group]
-    assert(gruppe)
+    -- Put the contents of the nodelist into the current group
+    local group = gruppen[current_group]
+    assert(group)
 
     local n = add_glue( nodelist ,"head",{ width = delta_x })
     n = node.hpack(n)
     n = add_glue(n, "head", {width = delta_y})
     n = node.vpack(n)
 
-    if gruppe.inhalt then
+    if group.inhalt then
       -- Die Gruppe hat schon einen Inhalt, wir müssen die neue Nodeliste dazufügen
       -- Maß der neuen Gruppe: maximum(Maß der alten Gruppe, Maß der Nodeliste)
       local neue_breite, neue_hoehe
-      neue_breite = math.max(n.width, gruppe.inhalt.width)
-      neue_hoehe  = math.max(n.height + n.depth, gruppe.inhalt.height + gruppe.inhalt.depth)
+      neue_breite = math.max(n.width, group.inhalt.width)
+      neue_hoehe  = math.max(n.height + n.depth, group.inhalt.height + group.inhalt.depth)
 
-      gruppe.inhalt.width  = 0
-      gruppe.inhalt.height = 0
-      gruppe.inhalt.depth  = 0
+      group.inhalt.width  = 0
+      group.inhalt.height = 0
+      group.inhalt.depth  = 0
 
-      local tail = node.tail(gruppe.inhalt)
+      local tail = node.tail(group.inhalt)
       tail.next = n
       n.prev = tail
 
-      gruppe.inhalt = node.vpack(gruppe.inhalt)
-      gruppe.inhalt.width  = neue_breite
-      gruppe.inhalt.height = neue_hoehe
-      gruppe.inhalt.depth  = 0
+      group.inhalt = node.vpack(group.inhalt)
+      group.inhalt.width  = neue_breite
+      group.inhalt.height = neue_hoehe
+      group.inhalt.depth  = 0
     else
-      -- Die Gruppe ist noch leer
-      gruppe.inhalt = n
+      -- group is empty
+      group.inhalt = n
     end
     if belegen then
       r:belege_zellen(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,allocate_matrix,options.showgridallocation)
     end
   else
-    -- auf der aktuellen Seite einfügen
+    -- Put it on the current page
     if belegen then
       r:belege_zellen(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,allocate_matrix,options.showgridallocation,bereich)
     end
@@ -490,11 +489,10 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
   end
 end
 
--- Gibt das Layoutxml zurück, das unter <Seitentyp> deklariert wurde. Für jeden
--- Seitentyp in der Tabelle `seitentypen` wird die Funktion
--- `ist_seitentyp()` der Tabelle aufgerufen. Für jede neue Seite
--- wird diese Funktion aufgerufen.
-function ermittle_seitentyp()
+-- Return the XML structure taht is stored at <pagetype>. For every pagetype
+-- in the table "seitentypen" the function ist_seitentyp() gets called
+
+function detect_pagetype()
   local ret = nil
   for i=#seitentypen,1,-1 do
     local seitentyp = seitentypen[i]
@@ -513,36 +511,36 @@ function setup_page()
   if page_initialized then return end
   page_initialized=true
   publisher.global_pagebox = node.new("vlist")
-  local beschnittzugabe = tex.sp(options.trim or 0)
-  local extra_rand
+  local trim_amount = tex.sp(options.trim or 0)
+  local extra_margin
   if options.cutmarks then
-    extra_rand = tex.sp("1cm") + beschnittzugabe
-  elseif beschnittzugabe > 0 then
-    extra_rand = beschnittzugabe
+    extra_margin = tex.sp("1cm") + trim_amount
+  elseif trim_amount > 0 then
+    extra_margin = trim_amount
   end
   local errorstring
-  -- aktuelle_seite ist eine globale Variable
-  aktuelle_seite, errorstring = seite:new(options.pagewidth,options.seitenhoehe, extra_rand, beschnittzugabe)
-  if not aktuelle_seite then
+
+  current_page, errorstring = seite:new(options.pagewidth,options.seitenhoehe, extra_margin, trim_amount)
+  if not current_page then
     err("Can't create a new page. Is the page type (»Seitentyp«) defined? %s",errorstring)
     exit()
   end
-  current_grid = aktuelle_seite.raster
+  current_grid = current_page.raster
   seiten[tex.count[0]] = nil
   tex.count[0] = tex.count[0] + 1
-  seiten[tex.count[0]] = aktuelle_seite
+  seiten[tex.count[0]] = current_page
 
   local gridwidth = options.gridwidth
   local gridheight  = options.gridheight
 
 
-  local pagetype = ermittle_seitentyp()
+  local pagetype = detect_pagetype()
   if pagetype == false then return false end
 
   for _,j in ipairs(pagetype) do
     local eltname = elementname(j,true)
     if type(inhalt(j))=="function" and eltname=="Margin" then
-      inhalt(j)(aktuelle_seite)
+      inhalt(j)(current_page)
     elseif eltname=="Grid" then
       gridwidth = inhalt(j).breite
       gridheight  = inhalt(j).hoehe
@@ -555,7 +553,7 @@ function setup_page()
   end
   assert(gridwidth)
   assert(gridheight,"Gridheight!")
-  aktuelle_seite.raster:setze_breite_hoehe(gridwidth,gridheight)
+  current_page.raster:setze_breite_hoehe(gridwidth,gridheight)
 
   for _,j in ipairs(pagetype) do
     local eltname = elementname(j,true)
@@ -564,9 +562,9 @@ function setup_page()
     elseif eltname=="Grid" then
       -- do nothing, done before
     elseif eltname=="AtPageCreation" then
-      aktuelle_seite.beiseitenerzeugung = inhalt(j)
+      current_page.atpagecreation = inhalt(j)
     elseif eltname=="AtPageShipout" then
-      aktuelle_seite.beiseitenausgabe = inhalt(j)
+      current_page.AtPageShipout = inhalt(j)
     elseif eltname=="PositioningArea" then
       local name = inhalt(j).name
       current_grid.platzierungsbereiche[name] = {}
@@ -582,8 +580,8 @@ function setup_page()
   end
 
 
-  if aktuelle_seite.beiseitenerzeugung then
-    publisher.dispatch(aktuelle_seite.beiseitenerzeugung,nil)
+  if current_page.atpagecreation then
+    publisher.dispatch(current_page.atpagecreation,nil)
   end
 end
 
@@ -601,19 +599,19 @@ function neue_seite()
   if seitenumbruch_unmoeglich then
     return
   end
-  if not aktuelle_seite then
+  if not current_page then
     -- es wurde neue_seite() aufgerufen, ohne, dass was ausgegeben wurde bisher
     page_initialized=false
     setup_page()
   end
-  if aktuelle_seite.beiseitenausgabe then
+  if current_page.AtPageShipout then
     seitenumbruch_unmoeglich = true
-    dispatch(aktuelle_seite.beiseitenausgabe)
+    dispatch(current_page.AtPageShipout)
     seitenumbruch_unmoeglich = false
   end
   page_initialized=false
   dothingsbeforeoutput()
-  aktuelle_seite = nil
+  current_page = nil
 
   local n = node.vpack(publisher.global_pagebox)
   tex.box[666] = n
@@ -668,17 +666,17 @@ function box( breite,hoehe,farbname )
 end
 
 function dothingsbeforeoutput(  )
-  local r = aktuelle_seite.raster
+  local r = current_page.raster
   local str
   finde_user_defined_whatsits(publisher.global_pagebox)
   local firstbox
 
   -- White background on page. Todo: Make color customizable and background optional.
-  local wd = sp_to_bp(aktuelle_seite.width)
-  local ht = sp_to_bp(aktuelle_seite.height)
+  local wd = sp_to_bp(current_page.width)
+  local ht = sp_to_bp(current_page.height)
 
-  local x = 0 + aktuelle_seite.raster.extra_rand
-  local y = 0 + aktuelle_seite.raster.extra_rand + aktuelle_seite.raster.rand_oben
+  local x = 0 + current_page.raster.extra_rand
+  local y = 0 + current_page.raster.extra_rand + current_page.raster.rand_oben
 
   if options.trim then
     local trim_bp = sp_to_bp(options.trim)
@@ -705,10 +703,10 @@ function dothingsbeforeoutput(  )
       firstbox = lit
     end
   end
-  -- if #aktuelle_seite.raster.belegung_pdf > 0 then
+  -- if #current_page.raster.belegung_pdf > 0 then
   --   local lit = node.new("whatsit","pdf_literal")
   --   lit.mode = 1
-  --   lit.data = string.format("%s",table.concat(aktuelle_seite.raster.belegung_pdf,"\n"))
+  --   lit.data = string.format("%s",table.concat(current_page.raster.belegung_pdf,"\n"))
   -- end
 
   if options.showgrid then
@@ -1523,19 +1521,18 @@ function farbbalken( wd,ht,dp,farbe )
   return rule_start, rule_stop
 end
 
-function rotiere( nodelist,winkel )
+function rotate( nodelist,angle )
   local wd,ht = nodelist.width, nodelist.height + nodelist.depth
   nodelist.width = 0
   nodelist.height = 0
   nodelist.depth = 0
-  local winkel_rad = math.rad(winkel)
-  w("Winkel_rad = %g",winkel_rad)
-  local sin = math.round(math.sin(winkel_rad),3)
-  local cos = math.round(math.cos(winkel_rad),3)
+  local angle_rad = math.rad(angle)
+  local sin = math.round(math.sin(angle_rad),3)
+  local cos = math.round(math.cos(angle_rad),3)
   local q = node.new("whatsit","pdf_literal")
   q.mode = 0
-  local shift_x = math.round(math.min(0,math.sin(winkel_rad) * sp_to_bp(ht)) + math.min(0,     math.cos(winkel_rad) * sp_to_bp(wd)),3)
-  local shift_y = math.round(math.max(0,math.sin(winkel_rad) * sp_to_bp(wd)) + math.max(0,-1 * math.cos(winkel_rad) * sp_to_bp(ht)),3)
+  local shift_x = math.round(math.min(0,math.sin(angle_rad) * sp_to_bp(ht)) + math.min(0,     math.cos(angle_rad) * sp_to_bp(wd)),3)
+  local shift_y = math.round(math.max(0,math.sin(angle_rad) * sp_to_bp(wd)) + math.max(0,-1 * math.cos(angle_rad) * sp_to_bp(ht)),3)
   q.data = string.format("q %g %g %g %g %g %g cm",cos,sin, -1 * sin,cos, -1 * shift_x ,-1 * shift_y )
   q.next = nodelist
   local tail = node.tail(nodelist)
@@ -1543,8 +1540,8 @@ function rotiere( nodelist,winkel )
   Q.data = "Q"
   tail.next = Q
   local tmp = node.vpack(q)
-  tmp.width  = math.abs(wd * cos) + math.abs(ht * math.cos(math.rad(90 - winkel)))
-  tmp.height = math.abs(ht * math.sin(math.rad(90 - winkel))) + math.abs(wd * sin)
+  tmp.width  = math.abs(wd * cos) + math.abs(ht * math.cos(math.rad(90 - angle)))
+  tmp.height = math.abs(ht * math.sin(math.rad(90 - angle))) + math.abs(wd * sin)
   tmp.depth = 0
   return tmp
 end
@@ -1568,22 +1565,22 @@ function xml_to_string( xml_element, level )
 end
 
 
-function get_languagecode( sprache_intern )
-  if publisher.sprachen[sprache_intern] then
-    return publisher.sprachen[sprache_intern]
+function get_languagecode( language_internal )
+  if publisher.languages[language_internal] then
+    return publisher.languages[language_internal]
   end
-  local filename = string.format("hyph-%s.pat.txt",sprache_intern)
+  local filename = string.format("hyph-%s.pat.txt",language_internal)
   log("Loading hyphenation patterns %q.",filename)
   local path = kpse.find_file(filename)
-  local trennmuster_datei = io.open(path)
-  local muster = trennmuster_datei:read("*all")
+  local pattern_file = io.open(path)
+  local pattern = pattern_file:read("*all")
 
   local l = lang.new()
-  l:patterns(muster)
+  l:patterns(pattern)
   local id = l:id()
   log("Language id: %d",id)
-  trennmuster_datei:close()
-  publisher.sprachen[sprache_intern] = id
+  pattern_file:close()
+  publisher.languages[language_internal] = id
   return id
 end
 
