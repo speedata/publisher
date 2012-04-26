@@ -340,16 +340,16 @@ function definiere_textformat(layoutxml)
 
   local fmt = {}
 
-  if     alignment == "leftaligned"  then fmt.alignment = "linksbündig"
-  elseif alignment == "rightaligned" then fmt.alignment = "rechtsbündig"
-  elseif alignment == "centered"     then fmt.alignment = "zentriert"
-  else                                    fmt.alignment = "blocksatz"
+  if alignment == "leftaligned" or alignment == "rightaligned" or alignment == "centered" then
+    fmt.alignment = alignment
+  else
+    fmt.alignment = "blocksatz"
   end
 
   if indentation then
     fmt.indent = tex.sp(indentation)
   end
-  publisher.textformate[name] = fmt
+  publisher.textformats[name] = fmt
 end
 
 -- Definiert eine Schriftfamilie
@@ -1006,7 +1006,7 @@ function setze_raster(layoutxml)
   publisher.options.gridheight  = tex.sp(publisher.read_attribute(layoutxml,datenxml,"height","length"))
 end
 
--- Create a list of page types in publisher.seitentypen
+-- Create a list of page types in publisher.masterpages
 function seitentyp(layoutxml,datenxml)
   trace("Command: Pagetype")
   local tmp_tab = {}
@@ -1024,7 +1024,7 @@ function seitentyp(layoutxml,datenxml)
     end
   end
   -- assert(type(test())=="boolean")
-  publisher.seitentypen[#publisher.seitentypen + 1] = { ist_seitentyp = test, res = tmp_tab, name = pagetypename }
+  publisher.masterpages[#publisher.masterpages + 1] = { ist_seitentyp = test, res = tmp_tab, name = pagetypename }
 end
 
 function sequenz( layoutxml,datenxml )
@@ -1375,16 +1375,16 @@ function textblock( layoutxml,datenxml )
     else
       nodelist = j.nodelist
       assert(nodelist)
-      publisher.setze_fontfamilie_wenn_notwendig(nodelist,schriftfamilie)
+      publisher.set_fontfamily_if_necessary(nodelist,schriftfamilie)
       j.nodelist = publisher.set_color_if_necessary(nodelist,farbindex)
       nodelist = j:apply_textformat(textformat)
       node.slide(nodelist)
       publisher.fonts.pre_linebreak(nodelist)
 
-      if j.textformat and publisher.textformate[j.textformat] then
-        current_textformat = publisher.textformate[j.textformat]
+      if j.textformat and publisher.textformats[j.textformat] then
+        current_textformat = publisher.textformats[j.textformat]
       else
-        current_textformat = publisher.textformate[textformat]
+        current_textformat = publisher.textformats[textformat]
       end
 
       local ragged_shape = false

@@ -69,15 +69,19 @@ user_defined_funktionen = { last = 0}
 current_group = nil
 current_grid = nil
 
--- Die Tabelle Seitentypen enthält als Schlüssel den Seitentypnamen und
--- als Wert eine Tabelle mit den Schlüsseln `ist_seitentyp` und `res`, wobei
--- ersteres eine Funktion ist, die wenn sie aufgerufen wird und "wahr" zurückgibt
--- diesen Seitentyp festlegt und `res` ist das Ergebnis des Dispatchers ohne dem 
--- Element Bedingung.
-seitentypen = {}
+
+-- The array 'masterpages' has tables similar to these:
+-- { ist_seitentyp = test, res = tab, name = pagetypename }
+-- where `ist_seitentyp` is an xpath expression to be evaluated,
+-- `res` is a table with layoutxml instructions 
+-- `name` is a string.
+masterpages = {}
 
 
-textformate = {} -- tmp. Textformate. Tabelle mit Schlüsseln: indent, alignment
+-- Text formats is a hash with arbitrary names as keys and the values
+-- are tables with alignment and indent. indent is the amount of 
+-- indentation in sp.
+textformats = {}
 
 -- Liste der Schriftarten und deren Synonyme. Beispielsweise könnte ein Schlüssel `Helvetica` sein,
 -- der Eintrag dann `texgyreheros-regular.otf`
@@ -261,7 +265,7 @@ function dothings()
 
   define_default_fontfamily()
   local onecm=tex.sp("1cm")
-  seitentypen[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", inhalt = function(_seite) _seite.raster:setze_rand(onecm,onecm,onecm,onecm) end }}, name = "Seite" }
+  masterpages[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", inhalt = function(_seite) _seite.raster:setze_rand(onecm,onecm,onecm,onecm) end }}, name = "Seite" }
 
   local layoutxml = load_xml(arg[2],"layout instructions")
   local datenxml  = load_xml(arg[3],"data file")
@@ -496,12 +500,12 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
 end
 
 -- Return the XML structure taht is stored at <pagetype>. For every pagetype
--- in the table "seitentypen" the function ist_seitentyp() gets called
+-- in the table "masterpages" the function ist_seitentyp() gets called
 
 function detect_pagetype()
   local ret = nil
-  for i=#seitentypen,1,-1 do
-    local seitentyp = seitentypen[i]
+  for i=#masterpages,1,-1 do
+    local seitentyp = masterpages[i]
     if xpath.parse(nil,seitentyp.ist_seitentyp) == true then
       log("Page of type %q created",seitentyp.name or "<detect_pagetype>")
       ret = seitentyp.res
@@ -1463,11 +1467,11 @@ function set_color_if_necessary( nodelist,farbe )
   return colstart
 end
 
-function setze_fontfamilie_wenn_notwendig(nodelist,fontfamilie)
+function set_fontfamily_if_necessary(nodelist,fontfamilie)
   local fam
   while nodelist do
     if nodelist.id==0 or nodelist.id==1 then
-      setze_fontfamilie_wenn_notwendig(nodelist.list,fontfamilie)
+      set_fontfamily_if_necessary(nodelist.list,fontfamilie)
     else
       fam = node.has_attribute(nodelist,att_fontfamily)
       if fam == 0 then
@@ -1478,7 +1482,7 @@ function setze_fontfamilie_wenn_notwendig(nodelist,fontfamilie)
   end
 end
 
-function setze_script( nodelist,script )
+function set_sub_supscript( nodelist,script )
   for glyf in node.traverse_id(glyph_node,nodelist) do
     node.set_attribute(glyf,att_script,script)
   end
@@ -1503,7 +1507,7 @@ function umbreche_url( nodelist )
   return nodelist
 end
 
-function farbbalken( wd,ht,dp,farbe )
+function colorbar( wd,ht,dp,farbe )
   local farbname = farbe or "Schwarz"
   if not farben[farbname] then
     err("Color %q not found",farbe)
@@ -1649,8 +1653,8 @@ function Paragraph:new( textformat  )
     nodelist,
     textformat = textformat,
   }
-  if textformat and textformate[textformat] and textformate[textformat].indent then
-    instance.nodelist = add_glue(nil,"head",{ width = textformate[textformat].indent })
+  if textformat and textformats[textformat] and textformats[textformat].indent then
+    instance.nodelist = add_glue(nil,"head",{ width = textformats[textformat].indent })
   end
   setmetatable(instance, self)
   self.__index = self
@@ -1713,8 +1717,8 @@ end
 -- Textformat Name
 function Paragraph:apply_textformat( textformat )
   if not textformat or self.textformat then return self.nodelist end
-  if textformate[textformat] and textformate[textformat].indent then
-    self.nodelist = add_glue(self.nodelist,"head",{ width = textformate[textformat].indent })
+  if textformats[textformat] and textformats[textformat].indent then
+    self.nodelist = add_glue(self.nodelist,"head",{ width = textformats[textformat].indent })
   end
   return self.nodelist
 end
@@ -1751,7 +1755,7 @@ function Paragraph:script( whatever,scr,parameter )
   else
     assert(false,string.format("superscript, type()=%s",type(whatever)))
   end
-  setze_script(nl,scr)
+  set_sub_supscript(nl,scr)
   nl = node.hpack(nl)
   -- Beware! This width is still incorrect (it is the width of the mormal characters)
   -- Therefore we have to correct the width in pre_linebreak
@@ -1765,7 +1769,7 @@ function Paragraph:append( whatever,parameter )
   elseif type(whatever)=="table" and whatever.nodelist then
     self:add_italic_bold(whatever.nodelist,parameter)
     self:add_to_nodelist(whatever.nodelist)
-    setze_fontfamilie_wenn_notwendig(whatever.nodelist,parameter.schriftfamilie)
+    set_fontfamily_if_necessary(whatever.nodelist,parameter.schriftfamilie)
   elseif type(whatever)=="function" then
     self:add_to_nodelist(mknodes(whatever(),parameter.schriftfamilie,parameter))
   elseif type(whatever)=="userdata" then -- node.is_node in einer späteren Version
