@@ -18,6 +18,7 @@
   <xsl:variable name="translations" select="document('../../../schema/translations.xml')" />
   <xsl:variable name="values">
     <value type="xpath" de="XPath-Ausdruck" en="XPath expression"/>
+    <value type="languages" de="Sprache" en="language"/>
     <value type="number" de="Zahl" en="number"/>
     <value type="yesno" de="ja/nein" en="yes/no"/>
     <value type="text"  de="Text" en="string" />
@@ -53,7 +54,7 @@
       <h2>Beschreibung</h2>
       <xsl:for-each select="description[@xml:lang = $lang]/para">
         <p>
-          <xsl:value-of select="." />
+          <xsl:apply-templates />
         </p>
       </xsl:for-each>
       <p>Erlaubte Attribute: <xsl:for-each select="attribute">
@@ -136,6 +137,7 @@
   <xsl:template match="commands" mode="commandlist">
     <xsl:param name="currentcommand"/>
     <xsl:for-each select="command">
+      <xsl:sort select="sd:translate-command(@name)"></xsl:sort>
       <li>
       <xsl:choose>
         <xsl:when test="@name = $currentcommand">

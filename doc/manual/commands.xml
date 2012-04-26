@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <commands xmlns="urn:speedata.de:2011/publisher/documentation">
+  <command name="Action">
+    <description xml:lang="de">
+      <para>Assoziiert eine Aktion mit einem Text. Sobald der Text auf einer Seite platziert wird, wird die dazugehörige Aktion ausgeführt. Die Aktion kann man sich als unsichtbares Zeichen vorstellen. Wenn der Publisher das unsichtbare Zeichen ausgibt, werden die Anweisungen in Aktion ausgeführt.</para>
+    </description>
+    <childelements><cmd name="AddToList"/></childelements>
+    <parentelements><cmd name="Textblock"/></parentelements>
+    <example xml:lang="de">
+      <listing><![CDATA[<ObjektAusgeben spalte="1">
+  <Textblock breite="40">
+    <Absatz>
+      <Textwert>Artikel: </Textwert><Textwert auswahl="@name" />
+    </Absatz>
+    <Aktion>
+      <ZurListeHinzufügen liste="inhalt" schlüssel="{@name}" auswahl="sd:aktuelle-seite()" />
+    </Aktion>
+  </Textblock>
+</ObjektAusgeben>]]></listing>
+    </example>
+    <seealso><cmd name="Textblock"/></seealso>
+  </command>
   <command name="Bookmark">
     <description xml:lang="en">
       <para>Create a bookmark for the PDF viewer (e.g. Adobe Reader). When the user clicks on a bookmark, the PDF viewer
@@ -9,10 +29,10 @@
       <para>Erstellt ein Lesezeichen für den PDF Betrachter (z.B. Adobe Reader). Wenn der Leser auf das Lesezeichen
         klickt, springt der PDF Betrachter an diese Stelle im Dokument.</para>
     </description>
+    <childelements/>
     <parentelements>
       <cmd name="Textblock"/>
     </parentelements>
-    <childelements/>
     <attribute name="select" type="xpath" optional="no">
       <description xml:lang="de">
         <para>Titel des Lesezeichens</para>
@@ -41,13 +61,13 @@
     <description xml:lang="de">
       <para>Erzeugt einen rechteckigen Bereich mit Text.</para>
     </description>
-    <parentelements><cmd name="PlaceObject"/></parentelements>
     <childelements>
       <cmd name="Paragraph"/>
       <cmd name="Action"/>
       <cmd name="Copy-of" />
       <cmd name="Bookmark" />
     </childelements>
+    <parentelements><cmd name="PlaceObject"/></parentelements>
     <attribute name="angle" type="number" optional="yes">
       <description xml:lang="de">
         <para>Winkel (Drehrichtung gegen den Uhrzeigersinn), um der der Text gedreht wird. Die Spalte und die Zeile, in
@@ -66,7 +86,7 @@
       </description>
     </attribute>
     <attribute name="fontface" type="text" optional="yes">
-      <description xml:lang="">
+      <description xml:lang="de">
         <para>Name der Schriftfamilie, die benutzt werden soll.</para>
       </description>
     </attribute>
@@ -104,5 +124,106 @@
       <cmd name="DefineTextformat" />, <cmd name="DefineColor" />, <cmd name="Paragraph" />, <cmd name="PlaceObject" />
     </seealso>
   </command>
-
+  <command name="Paragraph">
+    <description xml:lang="de">
+      <para>Erzeugt einen Absatz innerhalb eines Textblocks.</para>
+    </description>
+    <childelements>
+      <!-- Textwerte -->
+      <cmd name="B" />
+      <cmd name="Image"/>
+      <cmd name="Switch"/>
+      <cmd name="I"/>
+      <cmd name="Fontface"/>
+      <cmd name="Sub"/>
+      <cmd name="Sup"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Textblock"/>
+    </parentelements>
+    <attribute name="color" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Farbe des Absatzes. Muss vorher mit <cmd name="DefineColor"/> definiert worden sein.</para>
+      </description>
+    </attribute>
+    <attribute name="textformat" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Name des zu benutzenden Textformats. Wird kein Textformat angegeben, nimmt das System das Textformat <tt>text</tt></para>
+      </description>
+    </attribute>
+    <attribute name="fontface" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Name der Schriftart.</para>
+      </description>
+    </attribute>
+    <attribute name="language" type="languages" optional="yes">
+      <description xml:lang="de">
+        <para>Name der Sprache für die Silbentrennung. Gültige Werte: @Deutsch@, @Englisch (Großbritannien)@, @Französisch@.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<Textblock breite="27">
+  <Absatz schriftart="Überschrift">
+    <Wert>Hallo Welt</Wert>
+  </Absatz>
+</Textblock>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Textblock breite="27">
+  <Absatz schriftart="Überschrift" sprache="Deutsch">
+    <Wert auswahl="node()"/>
+  </Absatz>
+  </Textblock>]]></listing>
+      <para>wobei in den Daten ein Text steht, beispielsweise falls der aktuelle Knoten das Element <cmd name="Record"/> ist:</para>
+      <listing><![CDATA[<datensatz>Produktbeschreibung: die Artikelnummer <i>1234</i> setzt sich aus ... </datensatz>]]></listing>
+    </example>
+    <seealso><cmd name="Textblock"/>, <ref name="fontusage">Einbinden von Schriftarten</ref></seealso>
+  </command>
+  <command name="Attribute">
+    <description xml:lang="de">
+      <para>Erzeugt eine Datenstruktur, die mithilfe von <cmd name="SaveDataset"/> auf Festplatte gespeichert werden kann.</para>
+    </description>
+    <childelements />
+    <parentelements><cmd name="Element"/><cmd name="SetVariable"/></parentelements>
+    <attribute name="name" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Name des Attributs, das erzeugt wird.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de"><listing><![CDATA[<Element name="Planetenverzeichnis">
+  <Attribut name="name" auswahl=" @name "/>
+  <Attribut name="seite" auswahl=" sd:aktuelle-seite()"/>
+  </Element>]]></listing>
+      <para>Erzeugt diese Datenstruktur:</para>
+      <listing><![CDATA[<Planetenverzeichnis name=" (Inhalt von @name) " seite=" (aktuelle Seitennummer) " />]]></listing>
+    </example>
+    <seealso><cmd name="Element"/>, <cmd name="SaveDataset"/>, <ref name="lists">Wie werden automatische Verzeichnisse erstellt?</ref></seealso>
+  </command>
+  <command name="B">
+    <description xml:lang="de">
+      <para>Schaltet auf »Fett« um.</para>
+    </description>
+    <childelements>      <!-- Textwerte -->
+      <cmd name="B" />
+      <cmd name="Image"/>
+      <cmd name="Switch"/>
+      <cmd name="I"/>
+      <cmd name="Fontface"/>
+      <cmd name="Sub"/>
+      <cmd name="Sup"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Paragraph"/>
+    </parentelements>
+    <example xml:lang="de">
+      <listing><![CDATA[<Textblock spalte="3" breite="10">
+  <Absatz>
+    <B><Wert>Text in Fett</Wert></B>
+  </Absatz>
+</Textblock>
+]]></listing>
+    </example>
+    <seealso><cmd name="I"/></seealso>
+  </command>
 </commands>

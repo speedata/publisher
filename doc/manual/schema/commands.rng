@@ -13,7 +13,7 @@
           <element name="quote">
             <text />
           </element>
-          <element name="cmd"><text /></element>
+           <ref name="cmd"/>
           <element name="tt"><text/></element>
           <ref name="cmd"></ref>
         </choice>
@@ -25,6 +25,7 @@
   <define name="cmd">
     <element name="cmd">
       <attribute name="name" />
+      <empty />
     </element>
   </define>
   
@@ -38,9 +39,7 @@
               <element name="quote">
                 <text />
               </element>
-              <element name="cmd">
-                <text />
-              </element>
+              <ref name="cmd"/>
             </choice>
           </oneOrMore>
           <text />
@@ -54,7 +53,12 @@
   <define name="descriptions">
     <oneOrMore>
       <element name="description">
-        <attribute name="xml:lang" />
+        <attribute name="xml:lang">
+          <choice>
+            <value>de</value>
+            <value>en</value>
+          </choice>
+        </attribute>
         <ref name="para"></ref>
       </element>
     </oneOrMore>
@@ -66,17 +70,17 @@
         <element name="command">
           <attribute name="name" />
           <ref name="descriptions" />
-          <element name="parentelements">
-            <zeroOrMore>
-              <ref name="cmd"/>
-            </zeroOrMore>
-          </element>
           <element name="childelements">
             <zeroOrMore>
               <ref name="cmd"/>
             </zeroOrMore>
           </element>
-          <oneOrMore>
+          <element name="parentelements">
+            <zeroOrMore>
+              <ref name="cmd"/>
+            </zeroOrMore>
+          </element>
+          <zeroOrMore>
             <element name="attribute">
               <attribute name="name" />
               <attribute name="type">
@@ -86,6 +90,7 @@
                   <value>numberorlength</value>
                   <value>yesno</value>
                   <value>text</value>
+                  <value>languages</value>
                 </choice>
               </attribute>
               <attribute name="optional" >
@@ -96,16 +101,20 @@
               </attribute>
               <ref name="descriptions" />
             </element>
-          </oneOrMore>
+          </zeroOrMore>
           <zeroOrMore>
             <element name="remark">
-              <attribute name="xml:lang"/>
+              <attribute name="xml:lang">
+                <choice>
+                  <value>de</value>
+                </choice>
+              </attribute>
               <ref name="para"/>
             </element>
           </zeroOrMore>
           <oneOrMore>
             <element name="example">
-              <attribute name="xml:lang"/>
+              <attribute name="xml:lang"><value>de</value></attribute>
               <ref name="paraorlisting"></ref>
             </element>
           </oneOrMore>
@@ -115,6 +124,12 @@
                 <interleave>
                   <text />
                   <ref name="cmd"/>
+                  <optional>
+                    <element name="ref">
+                      <attribute name="name" />
+                      <text />
+                    </element>
+                  </optional>
                 </interleave>
               </zeroOrMore>
             </element>
