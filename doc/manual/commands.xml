@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<commands xmlns="urn:speedata.de:2011/publisher/documentation">
+  <command name="Bookmark">
+    <description xml:lang="en">
+      <para>Create a bookmark for the PDF viewer (e.g. Adobe Reader). When the user clicks on a bookmark, the PDF viewer
+          <quote>jumps</quote> to that place in the document.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Erstellt ein Lesezeichen für den PDF Betrachter (z.B. Adobe Reader). Wenn der Leser auf das Lesezeichen
+        klickt, springt der PDF Betrachter an diese Stelle im Dokument.</para>
+    </description>
+    <parentelements>
+      <cmd name="Textblock"/>
+    </parentelements>
+    <childelements/>
+    <attribute name="select" type="xpath" optional="no">
+      <description xml:lang="de">
+        <para>Titel des Lesezeichens</para>
+      </description>
+    </attribute>
+    <attribute name="level" type="number" optional="no">
+      <description xml:lang="de">
+        <para>Hierarchieebene. 1 ist die höchste Ebene, zwei die nächst tiefere Ebene etc.</para>
+      </description>
+    </attribute>
+    <attribute name="open" type="yesno" optional="yes">
+      <description xml:lang="de">
+        <para>Bestimmt, ob die Kind-Lesezeichen dargestellt werden sollen oder nicht.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing>&lt;Lesezeichen ebene="1" auswahl="$titel" offen='nein'/></listing>
+      <para>Erzeugt ein Lesezeichen der Stufe 1 (höchste Stufe) mit dem Titel, der in der Variablen @titel@
+        steht.</para>
+    </example>
+    <seealso>
+      <cmd name="Textblock" />
+    </seealso>
+  </command>
+  <command name="Textblock">
+    <description xml:lang="de">
+      <para>Erzeugt einen rechteckigen Bereich mit Text.</para>
+    </description>
+    <parentelements><cmd name="PlaceObject"/></parentelements>
+    <childelements>
+      <cmd name="Paragraph"/>
+      <cmd name="Action"/>
+      <cmd name="Copy-of" />
+      <cmd name="Bookmark" />
+    </childelements>
+    <attribute name="angle" type="number" optional="yes">
+      <description xml:lang="de">
+        <para>Winkel (Drehrichtung gegen den Uhrzeigersinn), um der der Text gedreht wird. Die Spalte und die Zeile, in
+          der der Text ausgegeben wird, bleibt gleich, die Breite und die Höhe des Textes ändert sich gegenüber dem
+          ursprünglichen Text.</para>
+      </description>
+    </attribute>
+    <attribute name="color" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Name der Farbe im Textblock.</para>
+      </description>
+    </attribute>
+    <attribute name="width" type="number" optional="no">
+      <description xml:lang="de">
+        <para>Anzahl der Spalten, die der Text einnehmen soll.</para>
+      </description>
+    </attribute>
+    <attribute name="fontface" type="text" optional="yes">
+      <description xml:lang="">
+        <para>Name der Schriftfamilie, die benutzt werden soll.</para>
+      </description>
+    </attribute>
+    <attribute name="textformat" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Name des zu benutzenden Textformats. Wird kein Textformat angegeben, nimmt das System das Textformat
+          <tt>text</tt>.</para>
+      </description>
+    </attribute>
+    <attribute name="columns" type="number" optional="yes">
+      <description xml:lang="de">
+        <para>Anzahl der Spalten in dem Textblock</para>
+      </description>
+    </attribute>
+    <attribute name="columndistance" type="numberorlength" optional="yes">
+      <description xml:lang="de">
+        <para>Abstand zwischen zwei Spalten. Voreinstellung: 3mm.</para>
+      </description>
+    </attribute>
+    <remark xml:lang="de">
+      <para>Durch die Angabe eines Textformats wird das Aussehen der Absätze beeinflusst. Textformate müssen vorher mit
+        <cmd name="DefiniereTextformat"/>  festgelegt werden. Wenn kein Textformat angegeben wird, nimmt das
+        System das Textformat <tt>text</tt>.</para>
+    </remark>
+    <example xml:lang="de">
+      <listing><![CDATA[<ObjektAusgeben spalte="3">
+  <Textblock breite="10" winkel="-20">
+    <Absatz>
+      <B><Wert>Text in Fett</Wert></B>
+    </Absatz>
+  </Textblock>
+</ObjektAusgeben>]]></listing>
+    </example>
+    <seealso>
+      <cmd name="DefineTextformat" />, <cmd name="DefineColor" />, <cmd name="Paragraph" />, <cmd name="PlaceObject" />
+    </seealso>
+  </command>
+
+</commands>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar 
+  xmlns="http://relaxng.org/ns/structure/1.0"
+  xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+  ns="urn:speedata.de:2011/publisher/documentation">
+  
+  <define name="para">
+    <element name="para">
+      <oneOrMore>
+        <choice>
+          <text />
+          <element name="quote">
+            <text />
+          </element>
+          <element name="cmd"><text /></element>
+          <element name="tt"><text/></element>
+          <ref name="cmd"></ref>
+        </choice>
+      </oneOrMore>
+      <text />
+    </element>
+  </define>
+  
+  <define name="cmd">
+    <element name="cmd">
+      <attribute name="name" />
+    </element>
+  </define>
+  
+  <define name="paraorlisting">
+    <oneOrMore>
+      <choice>
+        <element name="para">
+          <oneOrMore>
+            <choice>
+              <text />
+              <element name="quote">
+                <text />
+              </element>
+              <element name="cmd">
+                <text />
+              </element>
+            </choice>
+          </oneOrMore>
+          <text />
+        </element>
+        <element name="listing">
+          <text />
+        </element>
+      </choice>
+    </oneOrMore>
+  </define>
+  <define name="descriptions">
+    <oneOrMore>
+      <element name="description">
+        <attribute name="xml:lang" />
+        <ref name="para"></ref>
+      </element>
+    </oneOrMore>
+  </define>
+
+  <start>
+    <element name="commands">
+      <oneOrMore>
+        <element name="command">
+          <attribute name="name" />
+          <ref name="descriptions" />
+          <element name="parentelements">
+            <zeroOrMore>
+              <ref name="cmd"/>
+            </zeroOrMore>
+          </element>
+          <element name="childelements">
+            <zeroOrMore>
+              <ref name="cmd"/>
+            </zeroOrMore>
+          </element>
+          <oneOrMore>
+            <element name="attribute">
+              <attribute name="name" />
+              <attribute name="type">
+                <choice>
+                  <value>xpath</value>
+                  <value>number</value>
+                  <value>numberorlength</value>
+                  <value>yesno</value>
+                  <value>text</value>
+                </choice>
+              </attribute>
+              <attribute name="optional" >
+                <choice>
+                  <value>yes</value>
+                  <value>no</value>
+                </choice>
+              </attribute>
+              <ref name="descriptions" />
+            </element>
+          </oneOrMore>
+          <zeroOrMore>
+            <element name="remark">
+              <attribute name="xml:lang"/>
+              <ref name="para"/>
+            </element>
+          </zeroOrMore>
+          <oneOrMore>
+            <element name="example">
+              <attribute name="xml:lang"/>
+              <ref name="paraorlisting"></ref>
+            </element>
+          </oneOrMore>
+          <oneOrMore>
+            <element name="seealso">
+              <zeroOrMore>
+                <interleave>
+                  <text />
+                  <ref name="cmd"/>
+                </interleave>
+              </zeroOrMore>
+            </element>
+          </oneOrMore>
+        </element>
+      </oneOrMore>
+    </element>
+
+  </start>
+</grammar>
