@@ -34,10 +34,11 @@ function absatz( layoutxml,datenxml )
   local languagecode  = 0
 
   local sprache_de  = publisher.read_attribute(layoutxml,datenxml,"language","string")
+
   sprache_de_internal = {
-     ["Deutsch"]                        = "de-1996",
-     ["Englisch (Großbritannien)"]      = "en-gb",
-     ["Französisch"]                    = "fr",
+     ["German"]                       = "de-1996",
+     ["Englisch (Great Britan)"]      = "en-gb",
+     ["French"]                       = "fr",
      }
   if sprache_de then
     languagecode = publisher.get_languagecode(sprache_de_internal[sprache_de])
