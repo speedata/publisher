@@ -11,7 +11,7 @@ function w( ... )
   if ok == false then
     texio.write_nl(string.format("Fehler: %q, %s",err, debug.traceback()))
   else
-    texio.write_nl(err)
+    texio.write_nl("-----> " .. err)
   end
 end
 
