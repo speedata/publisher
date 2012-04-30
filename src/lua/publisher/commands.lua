@@ -735,7 +735,7 @@ function neue_zeile( layoutxml,datenxml )
   local current_row
   current_row = grid:finde_passende_zeile(1,grid:anzahl_spalten(),rows,areaname)
   if not current_row then
-    neue_seite()
+    publisher.next_area(areaname)
     publisher.setup_page()
     grid = publisher.current_page.raster
     grid:set_current_row(1)
@@ -845,10 +845,10 @@ function objekt_ausgeben( layoutxml,datenxml )
     object    = objects[i].object
     objecttype = objects[i].objecttype
 
-    if hintergrund == "vollständig" then
+    if hintergrund == "full" then
       object = publisher.hintergrund(object,hintergrundfarbe)
     end
-    if rahmen == "durchgezogen" then
+    if rahmen == "solid" then
       object = publisher.rahmen(object,rahmenfarbe)
     end
 
@@ -866,22 +866,22 @@ function objekt_ausgeben( layoutxml,datenxml )
       end
       publisher.ausgabe_bei_absolut(object,spalte + raster.extra_rand,zeile + raster.extra_rand,belegen,objects[i].allocate_matrix)
     else
-      -- Platz muss gesucht werden
+      -- Look for a place for the object
       -- local current_row = raster:current_row(bereich)
-      trace("objectAusgeben: Breitenberechnung")
+      trace("PlaceObject: Breitenberechnung")
       if not node.has_field(object,"width") then
         warning("Can't calculate with object's width!")
       end
-      trace("objectAusgeben: Breitenberechnung abgeschlossen: wd=%d,ht=%d",breite_in_rasterzellen,hoehe_in_rasterzellen)
+      trace("PlaceObject: Breitenberechnung abgeschlossen: wd=%d,ht=%d",breite_in_rasterzellen,hoehe_in_rasterzellen)
 
-      trace("objectAusgeben: finde passende Zeile für das object, current_row = %d",zeile or raster:current_row(bereich) or "-1")
+      trace("PlaceObject: finde passende Zeile für das object, current_row = %d",zeile or raster:current_row(bereich) or "-1")
       if zeile then
         current_row = zeile
       else
         current_row = nil
       end
 
-      -- Solange auf den nächsten Rahmen schalten, bis eine freie Fläche gefunden werden kann.
+      -- While (not found a free area) switch to next frame
       while current_row == nil do
         if not spalte then
           -- Keine Zeile und keine Spalte angegeben. Dann suche ich mir doch die richtigen Werte selbst.
@@ -899,13 +899,14 @@ function objekt_ausgeben( layoutxml,datenxml )
             warning("No suitable row found for object")
             publisher.next_area(bereich)
             publisher.setup_page()
+            current_row = publisher.current_grid:current_row(bereich)
             raster = publisher.current_grid
           end
         end
       end
 
-      log("»objectAusgeben«: %s in row %d and column %d, width=%d, height=%d", objecttype, current_row, aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen)
-      trace("»objectAusgeben«: object placed at (%d,%d)",aktuelle_spalte_start,current_row)
+      log("PlaceObject: %s in row %d and column %d, width=%d, height=%d", objecttype, current_row, aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen)
+      trace("PlaceObject: object placed at (%d,%d)",aktuelle_spalte_start,current_row)
       if hreference == "right" then
         aktuelle_spalte_start = aktuelle_spalte_start - breite_in_rasterzellen + 1
       end
