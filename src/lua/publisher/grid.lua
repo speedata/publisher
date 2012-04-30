@@ -255,7 +255,7 @@ function finde_passende_zeile( self,column, breite,hoehe,areaname)
   for z = self:current_row(areaname) + rahmen_rand_oben, self:anzahl_zeilen(areaname) do
     if self:passt_x_in_zeile(column + rahmen_rand_links,breite,z) then
 
-      if self:anzahl_zeilen(areaname) < z - rahmen_rand_oben + hoehe then
+      if self:anzahl_zeilen(areaname) < z - rahmen_rand_oben + hoehe  - 1 then
         return nil
       else
         local passt = true

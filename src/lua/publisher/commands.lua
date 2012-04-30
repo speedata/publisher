@@ -899,8 +899,8 @@ function objekt_ausgeben( layoutxml,datenxml )
             warning("No suitable row found for object")
             publisher.next_area(bereich)
             publisher.setup_page()
-            current_row = publisher.current_grid:current_row(bereich)
             raster = publisher.current_grid
+            current_row = publisher.current_grid:current_row(bereich)
           end
         end
       end
