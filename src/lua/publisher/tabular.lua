@@ -411,7 +411,8 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
     wd = wd + ( colspan - 1 ) * self.colsep
     -- hier unbedingt(!!) border-left und border-right beachten FIXME
     -- in der Höhenberechnung auch border-top und border-bottom! FIXME
-    local zelle
+    local cell
+
 
     -- Die objects wurden in der Spaltenbreitenbestimmung
     -- hinzugefügt. Falls die Spaltenbreiten vogegeben wurden,
@@ -433,77 +434,52 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
           warning("Object not recognized: %s",publisher.elementname(j,true) or "???")
         end
       end
-      -- trace("tabular: objects für die Tabellenzelle eingelesen (calculate_rowheights)")
       td_contents.objects = objects
     end
 
     for _,object in ipairs(td_contents.objects) do
       if type(object)=="table" then
         if not (object and object.nodelist) then
-          w("Achtung, keine Nodeliste gefunden!")
+          err("No nodelist found!")
         end
 
         if object.nodelist then
-          -- FIXME: dynamisches Textformat
-          -- object:apply_textformat("text")
-          parameter = nil
           if object.textformat then
-            if not publisher.textformats[object.textformat] then
-              err("Textformat %q not defined!",object.textformat)
-            else
-              if publisher.textformats[object.textformat]["alignment"] == "leftaligned" then
-                parameter = { rightskip = publisher.rightskip }
-              end
-              if publisher.textformats[object.textformat]["alignment"] == "rightaligned" then
-                parameter = { leftskip = publisher.leftskip }
-              end
-              if publisher.textformats[object.textformat]["alignment"] == "centered" then
-                parameter = { leftskip = publisher.leftskip, rightskip = publisher.rightskip }
-              end
-            end
+            default_textformat_name = object.textformat
           else
             local align = td_contents.align or tr_contents.align or self.align[current_column]
             if align=="center" then
-              parameter = { leftskip = publisher.leftskip, rightskip = publisher.rightskip }
+              default_textformat_name = "__centered"
             elseif align=="left" then
-              parameter = { rightskip = publisher.rightskip }
+              default_textformat_name = "__leftaligned"
             elseif align=="right" then
-              parameter = { leftskip = publisher.leftskip }
+              default_textformat_name = "__rightaligned"
             end
           end
           publisher.set_fontfamily_if_necessary(object.nodelist,self.fontfamily)
-          publisher.fonts.pre_linebreak(object.nodelist)
-        end
-        tmp = node.copy_list(object.nodelist)
-        local align = td_contents.align or tr_contents.align or self.align[current_column]
-        if align=="center" then
-          tmp = publisher.add_glue(tmp,"head", fill)
-          tmp = publisher.add_glue(tmp,"tail", fill)
-        elseif align == "right" then
-          tmp = publisher.add_glue(tmp,"head", fill)
         end
 
-        local v = publisher.do_linebreak(tmp,wd - padding_left - padding_right - td_randlinks - td_randrechts, parameter)
-        if zelle then
-          node.tail(zelle).next = v
+        local v = publisher.make_paragraph(object,wd - padding_left - padding_right - td_randlinks - td_randrechts,default_textformat_name)
+        if cell then
+          node.tail(cell).next = v
         else
-          zelle = v
+          cell = v
         end
       elseif (type(object)=="userdata" and node.has_field(object,"width")) then
-        if zelle then
-          node.tail(zelle).next = object
+        if cell then
+          node.tail(cell).next = object
         else
-          zelle = object
+          cell = object
         end
       end
     end
-    -- wenn keine objects in einer Zeile sind, dann erzeugen wir
-    -- ein dummy-object, damit die Zeile erzeugt werden kann (und vpack nicht)
-    -- über ein nil stolpert.
-    if not zelle then
-      zelle = node.new("hlist")
+
+    -- if there are no objects in a row, we create a dummy object
+    -- so the row can be created and vpack does not fall over a nil
+    if not cell then
+      cell = node.new("hlist")
     end
-    v=node.vpack(zelle)
+    v=node.vpack(cell)
 
     tmp = v.height + v.depth +  padding_top + padding_bottom + td_randunten + td_randoben
     if rowspan > 1 then
@@ -683,33 +659,21 @@ function setze_zeile(self, tr_contents, current_row )
       end
 
       if type(object) == "table" then
-        -- Absatz mit Nodeliste
-        local parameter = nil
+        -- Paragraph with a node list
+        local default_textformat_name
         if object.textformat then
-          if not publisher.textformats[object.textformat] then
-            err("Textformat %q not defined!",object.textformat)
-          else
-            if publisher.textformats[object.textformat]["alignment"] == "leftaligned" then
-              parameter = { rightskip = publisher.rightskip }
-            end
-            if publisher.textformats[object.textformat]["alignment"] == "rightaligned" then
-              parameter = { leftskip = publisher.leftskip }
-            end
-            if publisher.textformats[object.textformat]["alignment"] == "centered" then
-              parameter = { leftskip = publisher.leftskip, rightskip = publisher.rightskip }
-            end
-          end
+          default_textformat_name = object.textformat
         else
           local align = td_contents.align or tr_contents.align or self.align[current_column]
           if align=="center" then
-            parameter = { leftskip = publisher.leftskip, rightskip = publisher.rightskip }
+            default_textformat_name = "__centered"
           elseif align=="left" then
-            parameter = { rightskip = publisher.rightskip }
+            default_textformat_name = "__leftaligned"
           elseif align=="right" then
-            parameter = { leftskip = publisher.leftskip }
+            default_textformat_name = "__rightaligned"
           end
         end
-        v = publisher.do_linebreak(v, current_columnnbreite - padding_left - padding_right - td_randlinks - td_randrechts, parameter)
+        v = publisher.make_paragraph( object,current_columnnbreite - padding_left - padding_right - td_randlinks - td_randrechts, default_textformat_name)
         if publisher.options.trace then
           v = publisher.boxit(v)
         end

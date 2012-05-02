@@ -1648,7 +1648,9 @@ function define_default_fontfamily()
   fonts.lookup_fontfamily_name_number["text"]=#fonts.lookup_fontfamily_number_instance
 end
 
+-- This should be part of the paragraph class! FIXME
 function make_paragraph( paragraph,width_sp, default_textformat_name)
+  local nodelist = node.copy_list(paragraph.nodelist)
   local current_textformat_name,current_textformat
   if paragraph.textformat then
     current_textformat_name = paragraph.textformat
@@ -1662,7 +1664,6 @@ function make_paragraph( paragraph,width_sp, default_textformat_name)
     current_textformat = textformats["text"]
   end
 
-  local nodelist = paragraph.nodelist
   fonts.pre_linebreak(nodelist)
 
   local parameter = {}
