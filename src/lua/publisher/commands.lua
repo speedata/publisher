@@ -450,31 +450,31 @@ function element( layoutxml,dataxml )
   return ret
 end
 
--- Fallunterscheidung
+-- case / switch
 function fallunterscheidung( layoutxml,dataxml )
-  local fall_ausgefuehrt = false
-  local sonst,ret,elementname
+  local case_matched = false
+  local otherwise,ret,elementname
   for i,v in ipairs(layoutxml) do
     elementname = publisher.translate_element(v[".__name"])
-    if type(v)=="table" and elementname=="Case" and fall_ausgefuehrt ~= true then
+    if type(v)=="table" and elementname=="Case" and case_matched ~= true then
       local fall = v
       assert(fall.bedingung)
       if xpath.parse(dataxml,fall.bedingung) then
-        fall_ausgefuehrt = true
+        case_matched = true
         ret = publisher.dispatch(fall,dataxml)
       end
     elseif type(v)=="table" and elementname=="Otherwise" then
-      sonst = v
-    end -- fall/sonst
+      otherwise = v
+    end -- fall/otherwise
   end
-  if sonst and fall_ausgefuehrt==false then
-    ret = publisher.dispatch(sonst,dataxml)
+  if otherwise and case_matched==false then
+    ret = publisher.dispatch(otherwise,dataxml)
   end
   if not ret then return {} end
   return ret
 end
 
--- Text in fetter Schrift
+-- Bold text
 function fett( layoutxml,dataxml )
   local a = publisher.Paragraph:new()
 
@@ -495,25 +495,24 @@ function fett( layoutxml,dataxml )
   return a
 end
 
+-- Create a virtual area
 function gruppe( layoutxml,dataxml )
   publisher.setup_page()
-  local name        = publisher.read_attribute(layoutxml,dataxml,"name",       "string")
+  local groupname = publisher.read_attribute(layoutxml,dataxml,"name", "string")
 
-  local groupname = name
-
-  if publisher.gruppen[groupname] == nil then
+  if publisher.groups[groupname] == nil then
     log("Create »Gruppe« %q.",groupname)
   else
-    node.flush_list(publisher.gruppen[groupname].contents)
-    publisher.gruppen[groupname] = nil
+    node.flush_list(publisher.groups[groupname].contents)
+    publisher.groups[groupname] = nil
   end
 
   local r = publisher.grid:new()
   r:setze_rand(0,0,0,0)
   r:setze_breite_hoehe(publisher.current_page.raster.gridwidth,publisher.current_page.raster.gridheight)
-  publisher.gruppen[groupname] = {
+  publisher.groups[groupname] = {
     contents = contents,
-    raster  = r,
+    grid     = r,
   }
 
   local save_grid      = publisher.current_grid
@@ -821,7 +820,7 @@ function objekt_ausgeben( layoutxml,dataxml )
   local object, objecttype
 
   if groupname then
-    objects[1] = { object = node.copy(publisher.gruppen[groupname].contents),
+    objects[1] = { object = node.copy(publisher.groups[groupname].contents),
       objecttype = string.format("Gruppe (%s)", groupname)}
   else
     for i,j in ipairs(tab) do

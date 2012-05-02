@@ -56,8 +56,9 @@ options = {
   gridheight = tex.sp("10mm"),
 }
 
--- Liste der Gruppen. Schlüssel sind inhalt (Nodeliste) und raster 
-gruppen   = {}
+-- List of virtual areas. Key is the group name and value is
+-- a hash with keys contents (a nodelist) and raster (grid).
+groups   = {}
 
 variablen = {}
 colors    = { Schwarz = { modell="grau", g = "0", pdfstring = " 0 G 0 g " } }
@@ -445,7 +446,7 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
 
   if current_group then
     -- Put the contents of the nodelist into the current group
-    local group = gruppen[current_group]
+    local group = groups[current_group]
     assert(group)
 
     local n = add_glue( nodelist ,"head",{ width = delta_x })
