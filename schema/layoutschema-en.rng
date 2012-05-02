@@ -286,6 +286,8 @@
         <attribute name="bleed">
           <choice>
             <value>top,right</value>
+            <value>bottom,right</value>
+            <value>right</value>
           </choice>
         </attribute>
       </optional>

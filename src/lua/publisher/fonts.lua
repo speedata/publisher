@@ -26,7 +26,7 @@ local att_script         = 4
 
 -- Every fontface ("text", "Chapter"), that is defined by DefineFontface gets an internal
 -- number. This number is stored here.
-lookup_schriftfamilie_name_nummer={}
+lookup_fontfamily_name_number={}
 
 -- Every fontface (given by number) has variants like italic, bold etc.
 -- These are stored as a table in this table.
@@ -37,7 +37,7 @@ lookup_schriftfamilie_name_nummer={}
 --   fett
 --   baselineskip
 --   size
-lookup_schriftfamilie_nummer_instanzen={}
+lookup_fontfamily_number_instance={}
 
 
 function load_fontfile( name, dateiname,parameter_tab)
@@ -109,7 +109,7 @@ function pre_linebreak( head )
 		pre_linebreak(head.list)
     if node.has_attribute(head,att_script) then
       local sub_sup = node.has_attribute(head,att_script)
-      local fam = lookup_schriftfamilie_nummer_instanzen[fontfamilie]
+      local fam = lookup_fontfamily_number_instance[fontfamilie]
       if sub_sup == 1 then
         head.shift = fam.scriptshift
       else
@@ -140,7 +140,7 @@ function pre_linebreak( head )
       if node.has_attribute(head,att_fontfamily) then
         local fontfamilie=node.has_attribute(head,att_fontfamily)
 		    -- w("Fontfamilie=%d",fontfamilie)
-        local instanz = lookup_schriftfamilie_nummer_instanzen[fontfamilie]
+        local instanz = lookup_fontfamily_number_instance[fontfamilie]
         -- w("Instanz=%s",tostring(instanz.normal))
         local f
         -- w("Font=%s",tostring(f))
@@ -174,7 +174,7 @@ function pre_linebreak( head )
       -- no glue_spec found.
       gluespec = node.new("glue_spec",0)
       local fontfamilie=node.has_attribute(head,att_fontfamily)
-      local instanz = lookup_schriftfamilie_nummer_instanzen[fontfamilie]
+      local instanz = lookup_fontfamily_number_instance[fontfamilie]
       local f = benutzte_fonts[instanz.normal]
       gluespec.width=f.parameters.space
       gluespec.stretch=f.parameters.space_stretch
@@ -192,7 +192,7 @@ function pre_linebreak( head )
 		  -- Letzte Lösung.
       if fontfamilie == 0 then fontfamilie = 1 end
 
-      local instanz = lookup_schriftfamilie_nummer_instanzen[fontfamilie]
+      local instanz = lookup_fontfamily_number_instance[fontfamilie]
       local kursiv = node.has_attribute(head,att_italic)
       local fett   = node.has_attribute(head,att_bold)
 

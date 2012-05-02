@@ -102,6 +102,7 @@ de = {  elements = {
     ["vollständig"] = "full",
     ["zentriert"] = "centered",
     ["oben,rechts"] = "top,right",
+    ["unten,rechts"] = "bottom,right",
   },
 },en = {  elements = {
     ["Action"] = "Action",
@@ -204,6 +205,7 @@ de = {  elements = {
     ["full"] = "full",
     ["centered"] = "centered",
     ["top,right"] = "top,right",
+    ["bottom,right"] = "bottom,right",
   },
 },attributes = {
     ["align"] = {en = "align", de = "align", },

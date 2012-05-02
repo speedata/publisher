@@ -288,6 +288,8 @@
         <attribute name="beschnitt">
           <choice>
             <value>oben,rechts</value>
+            <value>unten,rechts</value>
+            <value>rechts</value>
           </choice>
         </attribute>
       </optional>

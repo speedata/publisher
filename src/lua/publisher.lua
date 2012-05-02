@@ -2,7 +2,7 @@
 --  publisher.lua
 --  speedata publisher
 --
---  Copyright 2010-2011 Patrick Gundlach.
+--  Copyright 2010-2012 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 
 file_start("publisher.lua")
@@ -60,9 +60,9 @@ options = {
 gruppen   = {}
 
 variablen = {}
-farben    = { Schwarz = { modell="grau", g = "0", pdfstring = " 0 G 0 g " } }
-farbindex = {}
-datensatz_verteiler = {}
+colors    = { Schwarz = { modell="grau", g = "0", pdfstring = " 0 G 0 g " } }
+colortable = {}
+data_dispatcher = {}
 user_defined_funktionen = { last = 0}
 
 -- die aktuelle Gruppe
@@ -188,7 +188,7 @@ function translate_attribute( attname )
 end
 
 
-function dispatch(layoutxml,datenxml,optionen)
+function dispatch(layoutxml,dataxml,optionen)
   local ret = {}
   local tmp
   for _,j in ipairs(layoutxml) do
@@ -196,21 +196,21 @@ function dispatch(layoutxml,datenxml,optionen)
     if type(j)=="table" then
       local eltname = translate_element(j[".__name"])
       if dispatch_table[eltname] ~= nil then
-        tmp = dispatch_table[eltname](j,datenxml,optionen)
+        tmp = dispatch_table[eltname](j,dataxml,optionen)
 
         -- Copy-of-elements can be resolveld immediately 
         if eltname == "Copy-of" or eltname == "Switch" then
           if type(tmp)=="table" then
             for i=1,#tmp do
-              if tmp[i].inhalt then
-                ret[#ret + 1] = { elementname = tmp[i].elementname, inhalt = tmp[i].inhalt }
+              if tmp[i].contents then
+                ret[#ret + 1] = { elementname = tmp[i].elementname, contents = tmp[i].contents }
               else
-                ret[#ret + 1] = { elementname = "elementstructure" , inhalt = { tmp[i] } }
+                ret[#ret + 1] = { elementname = "elementstructure" , contents = { tmp[i] } }
               end
             end
           end
         else
-          ret[#ret + 1] =   { elementname = eltname, inhalt = tmp }
+          ret[#ret + 1] =   { elementname = eltname, contents = tmp }
         end
       else
         err("Unknown element found in layoutfile: %q", eltname or "???")
@@ -265,10 +265,10 @@ function dothings()
 
   define_default_fontfamily()
   local onecm=tex.sp("1cm")
-  masterpages[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", inhalt = function(_seite) _seite.raster:setze_rand(onecm,onecm,onecm,onecm) end }}, name = "Seite" }
+  masterpages[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", contents = function(_seite) _seite.raster:setze_rand(onecm,onecm,onecm,onecm) end }}, name = "Seite" }
 
   local layoutxml = load_xml(arg[2],"layout instructions")
-  local datenxml  = load_xml(arg[3],"data file")
+  local dataxml  = load_xml(arg[3],"data file")
 
   local vars = loadfile("publisher.vars")()
   for k,v in pairs(vars) do
@@ -326,7 +326,7 @@ function dothings()
   end
 
 
-  element.datenverarbeitung(datenxml)
+  element.start_data_processing(dataxml)
 
   -- emit last page if necessary
   if page_initialized then
@@ -453,28 +453,28 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
     n = add_glue(n, "head", {width = delta_y})
     n = node.vpack(n)
 
-    if group.inhalt then
-      -- Die Gruppe hat schon einen Inhalt, wir müssen die neue Nodeliste dazufügen
+    if group.contents then
+      -- Die Gruppe hat schon einen contents, wir müssen die neue Nodeliste dazufügen
       -- Maß der neuen Gruppe: maximum(Maß der alten Gruppe, Maß der Nodeliste)
       local neue_breite, neue_hoehe
-      neue_breite = math.max(n.width, group.inhalt.width)
-      neue_hoehe  = math.max(n.height + n.depth, group.inhalt.height + group.inhalt.depth)
+      neue_breite = math.max(n.width, group.contents.width)
+      neue_hoehe  = math.max(n.height + n.depth, group.contents.height + group.contents.depth)
 
-      group.inhalt.width  = 0
-      group.inhalt.height = 0
-      group.inhalt.depth  = 0
+      group.contents.width  = 0
+      group.contents.height = 0
+      group.contents.depth  = 0
 
-      local tail = node.tail(group.inhalt)
+      local tail = node.tail(group.contents)
       tail.next = n
       n.prev = tail
 
-      group.inhalt = node.vpack(group.inhalt)
-      group.inhalt.width  = neue_breite
-      group.inhalt.height = neue_hoehe
-      group.inhalt.depth  = 0
+      group.contents = node.vpack(group.contents)
+      group.contents.width  = neue_breite
+      group.contents.height = neue_hoehe
+      group.contents.depth  = 0
     else
       -- group is empty
-      group.inhalt = n
+      group.contents = n
     end
     if belegen then
       r:belege_zellen(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,allocate_matrix,options.showgridallocation)
@@ -549,11 +549,11 @@ function setup_page()
 
   for _,j in ipairs(pagetype) do
     local eltname = elementname(j,true)
-    if type(inhalt(j))=="function" and eltname=="Margin" then
-      inhalt(j)(current_page)
+    if type(element_contents(j))=="function" and eltname=="Margin" then
+      element_contents(j)(current_page)
     elseif eltname=="Grid" then
-      gridwidth = inhalt(j).breite
-      gridheight  = inhalt(j).hoehe
+      gridwidth = element_contents(j).breite
+      gridheight  = element_contents(j).hoehe
     end
   end
 
@@ -567,22 +567,22 @@ function setup_page()
 
   for _,j in ipairs(pagetype) do
     local eltname = elementname(j,true)
-    if type(inhalt(j))=="function" and eltname=="Margin" then
+    if type(element_contents(j))=="function" and eltname=="Margin" then
       -- do nothing, done before
     elseif eltname=="Grid" then
       -- do nothing, done before
     elseif eltname=="AtPageCreation" then
-      current_page.atpagecreation = inhalt(j)
+      current_page.atpagecreation = element_contents(j)
     elseif eltname=="AtPageShipout" then
-      current_page.AtPageShipout = inhalt(j)
+      current_page.AtPageShipout = element_contents(j)
     elseif eltname=="PositioningArea" then
-      local name = inhalt(j).name
+      local name = element_contents(j).name
       current_grid.platzierungsbereiche[name] = {}
       local aktueller_platzierungsbereich = current_grid.platzierungsbereiche[name]
       -- we eveluate now, because the attributes in PositioningFrame can be page dependent.
-      local tab  = publisher.dispatch(inhalt(j).layoutxml,datenxml)
+      local tab  = publisher.dispatch(element_contents(j).layoutxml,dataxml)
       for i,k in ipairs(tab) do
-        aktueller_platzierungsbereich[#aktueller_platzierungsbereich + 1] = inhalt(k)
+        aktueller_platzierungsbereich[#aktueller_platzierungsbereich + 1] = element_contents(k)
       end
     else
       err("Element name %q unknown (setup_page())",eltname or "<create_page>")
@@ -630,11 +630,11 @@ end
 
 -- Zeichnet einen farbigen Hintergrund hinter ein rechteckickges Objekt (box)
 function hintergrund( box, farbname )
-  if not farben[farbname] then
+  if not colors[farbname] then
     warning("Background: Color %q is not defined",farbname)
     return box
   end
-  local pdffarbstring = farben[farbname].pdfstring
+  local pdffarbstring = colors[farbname].pdfstring
   local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
   n = node.new(whatsit_node,pdf_literal_node)
   n.data = string.format("q %s 0 -%g %g %g re f Q",pdffarbstring,dp,wd,ht + dp)
@@ -654,7 +654,7 @@ function hintergrund( box, farbname )
 end
 
 function rahmen( box, farbname )
-  local pdffarbstring = farben[farbname].pdfstring
+  local pdffarbstring = colors[farbname].pdfstring
   local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
   local w = 3 -- Strichbreite 
   local hw = 0.5 * w -- halbe Strichbreite
@@ -670,7 +670,7 @@ end
 -- Erzeugt eine farbige Fläche. Die Maße breite und hoehe sind in BP!
 function box( breite,hoehe,farbname )
   local n = node.new(whatsit_node,pdf_literal_node)
-  n.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",farben[farbname].pdfstring,breite,hoehe)
+  n.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colors[farbname].pdfstring,breite,hoehe)
   n.mode = 0
   return n
 end
@@ -755,7 +755,7 @@ end
 -- Read the contents of the attribute attname_englisch. type is one of
 -- "string", "number", "length" and "boolean".
 -- Default provides, well, a default.
-function read_attribute( layoutxml,datenxml,attname_english,typ,default)
+function read_attribute( layoutxml,dataxml,attname_english,typ,default)
   local attname = translate_attribute(attname_english)
   if layoutxml[attname] == nil then
     if default then
@@ -768,7 +768,7 @@ function read_attribute( layoutxml,datenxml,attname_english,typ,default)
   local val
   local xpathstring = string.match(layoutxml[attname],"{(.-)}")
   if xpathstring then
-    val = xpath.textvalue(xpath.parse(datenxml,xpathstring))
+    val = xpath.textvalue(xpath.parse(dataxml,xpathstring))
   else
     val = layoutxml[attname]
   end
@@ -778,7 +778,7 @@ function read_attribute( layoutxml,datenxml,attname_english,typ,default)
   end
 
   if typ=="xpath" then
-    return xpath.textvalue(xpath.parse(datenxml,val))
+    return xpath.textvalue(xpath.parse(dataxml,val))
   elseif typ=="string" then
     return tostring(val)
   elseif typ=="number" then
@@ -807,8 +807,8 @@ function elementname( elt ,raw_p)
   return translate_element(elt.elementname)
 end
 
-function inhalt( elt )
-  return elt.inhalt
+function element_contents( elt )
+  return elt.contents
 end
 
 -- <b>, <u> and <i> in text
@@ -912,7 +912,7 @@ function mknodes(str,fontfamilie,parameter)
   end
 
   if fontfamilie and fontfamilie > 0 then
-    instanz = fonts.lookup_schriftfamilie_nummer_instanzen[fontfamilie][instanzname]
+    instanz = fonts.lookup_fontfamily_number_instance[fontfamilie][instanzname]
   else
     instanz = 1
   end
@@ -1277,7 +1277,7 @@ function do_linebreak( nodelist,hsize,parameters )
       maxskip = 0
       for glyf in node.traverse_id(glyph_node,head.list) do
         local fam = node.has_attribute(glyf,att_fontfamily)
-        maxskip = math.max(fonts.lookup_schriftfamilie_nummer_instanzen[fam].baselineskip,maxskip)
+        maxskip = math.max(fonts.lookup_fontfamily_number_instance[fam].baselineskip,maxskip)
       end
       head.height = 0.75 * maxskip
       head.depth  = 0.25 * maxskip
@@ -1446,11 +1446,11 @@ function set_color_if_necessary( nodelist,farbe )
   if farbe == -1 then
     farbname = "Schwarz"
   else
-    farbname = farbindex[farbe]
+    farbname = colortable[farbe]
   end
 
   local colstart = node.new(8,39)
-  colstart.data  = farben[farbname].pdfstring
+  colstart.data  = colors[farbname].pdfstring
   colstart.cmd   = 1
   colstart.stack = 1
   colstart.next = nodelist
@@ -1509,13 +1509,13 @@ end
 
 function colorbar( wd,ht,dp,farbe )
   local farbname = farbe or "Schwarz"
-  if not farben[farbname] then
+  if not colors[farbname] then
     err("Color %q not found",farbe)
     farbname = "Schwarz"
   end
   local rule_start = node.new("whatsit","pdf_colorstack")
   rule_start.stack = 1
-  rule_start.data = farben[farbname].pdfstring
+  rule_start.data = colors[farbname].pdfstring
   rule_start.cmd = 1
 
   local rule = node.new("rule")
@@ -1640,8 +1640,8 @@ function define_default_fontfamily()
   fam.fettkursiv = tmp
   ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-BoldItalic",fam.scriptsize)
   fam.fettkursivscript = tmp
-  fonts.lookup_schriftfamilie_nummer_instanzen[#fonts.lookup_schriftfamilie_nummer_instanzen + 1] = fam
-  fonts.lookup_schriftfamilie_name_nummer["text"]=#fonts.lookup_schriftfamilie_nummer_instanzen
+  fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
+  fonts.lookup_fontfamily_name_number["text"]=#fonts.lookup_fontfamily_number_instance
 end
 
 
@@ -1696,10 +1696,10 @@ function Paragraph:set_color( farbe )
   if farbe == -1 then
     farbname = "Schwarz" 
   else
-    farbname = farbindex[farbe]
+    farbname = colortable[farbe]
   end
   local colstart = node.new(8,39)
-  colstart.data  = farben[farbname].pdfstring
+  colstart.data  = colors[farbname].pdfstring
   colstart.cmd   = 1
   colstart.stack = 1
   colstart.next = self.nodelist

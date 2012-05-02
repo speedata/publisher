@@ -2,7 +2,7 @@
 --  raster.lua
 --  speedata publisher
 --
---  Copyright 2010-2011 Patrick Gundlach.
+--  Copyright 2010-2012 Patrick Gundlach.
 --  See file COPYING in the root directory for license details.
 
 file_start("grid.lua")

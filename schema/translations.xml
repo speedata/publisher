@@ -100,7 +100,8 @@
         <value en="vertical" de="vertikal"/>
         <value en="full" de="vollständig"/>
         <value en="centered" de="zentriert"/>
-      <value en="top,right" de="oben,rechts"></value>
+      <value en="top,right" de="oben,rechts"/>
+      <value en="bottom,right" de="unten,rechts"/>
     </values>
     <attributes>
         <attribute en="align" de="align"/>

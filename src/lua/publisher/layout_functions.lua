@@ -79,7 +79,7 @@ local function gruppenbreite(dataxml, ... )
   -- printtable("Gruppenbreite",{...})
   publisher.setup_page()
   local groupname=select(1,...)
-  local gruppeninhalt=publisher.gruppen[groupname].inhalt
+  local gruppeninhalt=publisher.gruppen[groupname].contents
   local raster = publisher.current_grid
   local breite = raster:breite_in_rasterzellen_sp(gruppeninhalt.width)
   return breite
@@ -92,7 +92,7 @@ local function gruppenhoehe(dataxml, ... )
   -- FIXME: Fehlermeldung, wenn Gruppe nicht gefunden
   -- printtable("publisher.gruppen[groupname]",publisher.gruppen[groupname])
   local _raster = publisher.gruppen[groupname].raster
-  local _inhalt = publisher.gruppen[groupname].inhalt
+  local _inhalt = publisher.gruppen[groupname].contents
   local hoehe = _raster:hoehe_in_rasterzellen_sp(_inhalt.height)
   return hoehe
 end

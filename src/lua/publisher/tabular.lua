@@ -42,7 +42,7 @@ function calculate_columnwidth_for_row(self, tr_contents,current_row,colspans,co
   current_column = 0
 
   for _,td in ipairs(tr_contents) do
-    local td_contents = publisher.inhalt(td)
+    local td_contents = publisher.element_contents(td)
     -- alle Spalten durchgehen
     -- skip, colspan und colmax-Tabellen ausfüllen für diese Tabellenzelle:
     current_column = current_column + 1
@@ -63,13 +63,13 @@ function calculate_columnwidth_for_row(self, tr_contents,current_row,colspans,co
 
     for i,j in ipairs(td_contents) do
       if publisher.elementname(j,true) == "Paragraph" then
-        objects[#objects + 1] = publisher.inhalt(j)
+        objects[#objects + 1] = publisher.element_contents(j)
       elseif publisher.elementname(j,true) == "Image" then
         -- FIXME: Bild sollte auch ein "Objekt" sein
-        objects[#objects + 1] = publisher.inhalt(j)[1]
+        objects[#objects + 1] = publisher.element_contents(j)[1]
       elseif publisher.elementname(j,true) == "Table" then
         -- FIXME: Bild sollte auch ein "Objekt" sein
-        objects[#objects + 1] = publisher.inhalt(j)[1]
+        objects[#objects + 1] = publisher.element_contents(j)[1]
       else
         warning("Object not recognized: %s",publisher.elementname(j) or "???")
       end
@@ -90,7 +90,7 @@ function calculate_columnwidth_for_row(self, tr_contents,current_row,colspans,co
         if object.nodelist then
           -- FIXME: dynamic textformat
           object:apply_textformat("text")
-          publisher.set_fontfamily_if_necessary(object.nodelist,self.schriftfamilie)
+          publisher.set_fontfamily_if_necessary(object.nodelist,self.fontfamily)
           publisher.fonts.pre_linebreak(object.nodelist)
         end
 
@@ -137,7 +137,7 @@ function calculate_spaltenbreite( self )
   local columnwidths_given = false
 
   for _,tr in ipairs(self.tab) do
-    local tr_contents      = publisher.inhalt(tr)
+    local tr_contents      = publisher.element_contents(tr)
     local tr_elementname = publisher.elementname(tr,true)
 
     if tr_elementname == "Columns" then
@@ -149,7 +149,7 @@ function calculate_spaltenbreite( self )
       local pattern = "([0-9]+)\*"
       for _,spalte in ipairs(tr_contents) do
         if publisher.elementname(spalte,true)=="Column" then
-          local column_contents = publisher.inhalt(spalte)
+          local column_contents = publisher.element_contents(spalte)
           i = i + 1
           self.align[i] =  column_contents.align
           self.valign[i] = column_contents.valign
@@ -187,7 +187,7 @@ function calculate_spaltenbreite( self )
         i = 0
         for _,column in ipairs(tr_contents) do
           if publisher.elementname(column,true)=="Column" then
-            local column_contents = publisher.inhalt(column)
+            local column_contents = publisher.element_contents(column)
             i = i + 1
             local width_stars = string.match(column_contents.breite,pattern)
             if width_stars then
@@ -203,7 +203,7 @@ function calculate_spaltenbreite( self )
 
   -- Phase I: max_wd, min_wd berechnen
   for _,tr in ipairs(self.tab) do
-    local tr_contents      = publisher.inhalt(tr)
+    local tr_contents      = publisher.element_contents(tr)
     local tr_elementname = publisher.elementname(tr,true)
 
     if tr_elementname == "Tr" then
@@ -213,7 +213,7 @@ function calculate_spaltenbreite( self )
       --ignorieren
     elseif tr_elementname == "Tablehead" then
       for _,row in ipairs(tr_contents) do
-        local row_contents    = publisher.inhalt(row)
+        local row_contents    = publisher.element_contents(row)
         local row_elementname = publisher.elementname(row,true)
         if row_elementname == "Tr" then
           current_row = current_row + 1
@@ -222,7 +222,7 @@ function calculate_spaltenbreite( self )
       end
     elseif tr_elementname == "Tablefoot" then
       for _,row in ipairs(tr_contents) do
-        local row_contents  = publisher.inhalt(row)
+        local row_contents  = publisher.element_contents(row)
         local row_elementname = publisher.elementname(row,true)
         if row_elementname == "Tr" then
           current_row = current_row + 1
@@ -372,7 +372,7 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
   local wd,parameter
   local rowspans = {}
 
-  local fam = publisher.fonts.lookup_schriftfamilie_nummer_instanzen[self.schriftfamilie]
+  local fam = publisher.fonts.lookup_fontfamily_number_instance[self.fontfamily]
   local min_lineheight = fam.baselineskip
 
   if tr_contents.minheight then
@@ -384,7 +384,7 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
   current_column = 0
 
   for _,td in ipairs(tr_contents) do
-    local td_contents = publisher.inhalt(td)
+    local td_contents = publisher.element_contents(td)
     current_column = current_column + 1
 
 
@@ -422,13 +422,13 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
 
       for i,j in ipairs(td_contents) do
         if publisher.elementname(j,true) == "Paragraph" then
-          objects[#objects + 1] = publisher.inhalt(j)
+          objects[#objects + 1] = publisher.element_contents(j)
         elseif publisher.elementname(j,true) == "Image" then
           -- FIXME: Bild sollte auch ein "object" sein
-          objects[#objects + 1] = publisher.inhalt(j)[1]
+          objects[#objects + 1] = publisher.element_contents(j)[1]
         elseif publisher.elementname(j,true) == "Table" then
           -- FIXME: Bild sollte auch ein "object" sein
-          objects[#objects + 1] = publisher.inhalt(j)[1]
+          objects[#objects + 1] = publisher.element_contents(j)[1]
         else
           warning("Object not recognized: %s",publisher.elementname(j,true) or "???")
         end
@@ -471,7 +471,7 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
               parameter = { leftskip = publisher.leftskip }
             end
           end
-          publisher.set_fontfamily_if_necessary(object.nodelist,self.schriftfamilie)
+          publisher.set_fontfamily_if_necessary(object.nodelist,self.fontfamily)
           publisher.fonts.pre_linebreak(object.nodelist)
         end
         tmp = node.copy_list(object.nodelist)
@@ -529,7 +529,7 @@ function calculate_rowheights(self)
 
 
   for _,tr in ipairs(self.tab) do
-    local tr_contents = publisher.inhalt(tr)
+    local tr_contents = publisher.element_contents(tr)
     local eltname = publisher.elementname(tr,true)
 
     if eltname == "Tablerule" or eltname == "Columns" then
@@ -537,7 +537,7 @@ function calculate_rowheights(self)
 
     elseif eltname == "Tablehead" then
       for _,zeile in ipairs(tr_contents) do
-        local zeile_inhalt  = publisher.inhalt(zeile)
+        local zeile_inhalt  = publisher.element_contents(zeile)
         local zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
           current_row = current_row + 1
@@ -548,7 +548,7 @@ function calculate_rowheights(self)
       end
     elseif eltname == "Tablefoot" then
       for _,zeile in ipairs(tr_contents) do
-        local zeile_inhalt  = publisher.inhalt(zeile)
+        local zeile_inhalt  = publisher.element_contents(zeile)
         local zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
           current_row = current_row + 1
@@ -608,7 +608,7 @@ function setze_zeile(self, tr_contents, current_row )
 
     current_column = current_column + 1
 
-    td_contents = publisher.inhalt(td)
+    td_contents = publisher.element_contents(td)
     rowspan = tonumber(td_contents.rowspan) or 1
     colspan = tonumber(td_contents.colspan) or 1
 
@@ -859,7 +859,7 @@ function setze_tabelle(self)
 
   current_row = 0
   for _,tr in ipairs(self.tab) do
-    local tr_contents = publisher.inhalt(tr)
+    local tr_contents = publisher.element_contents(tr)
     local eltname   = publisher.elementname(tr,true)
     local tmp
 
@@ -871,7 +871,7 @@ function setze_tabelle(self)
 
     elseif eltname == "Tablehead" then
       for _,zeile in ipairs(tr_contents) do
-        zeile_inhalt = publisher.inhalt(zeile)
+        zeile_inhalt = publisher.element_contents(zeile)
         zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
           current_row = current_row + 1
@@ -884,7 +884,7 @@ function setze_tabelle(self)
 
     elseif eltname == "Tablefoot" then
       for _,zeile in ipairs(tr_contents) do
-        zeile_inhalt = publisher.inhalt(zeile)
+        zeile_inhalt = publisher.element_contents(zeile)
         zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
           current_row = current_row + 1
