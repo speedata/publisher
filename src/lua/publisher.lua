@@ -81,7 +81,7 @@ masterpages = {}
 
 -- Text formats is a hash with arbitrary names as keys and the values
 -- are tables with alignment and indent. indent is the amount of 
--- indentation in sp. alignment is one of "raggedright", "raggedleft", 
+-- indentation in sp. alignment is one of "leftaligned", "rightaligned", 
 -- "centered" and "justified"
 textformats = {
   text = {indent = 0, alignment="justified", rows = 1}
