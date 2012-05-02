@@ -434,6 +434,10 @@
             <en>Value for black (key, between 0 and 100)</en>
             <de>Wert für Schwarz (key, zwischen 0 und 100)</de>
         </documentation>
+      <documentation docid="definetextformat/rows">
+        <en>Number of rows for indentation or (if negative) number of rows not indented lines</en>
+        <de>Anzahl der Zeilen mit Einzug oder (wenn negativ) Anzahl der nicht eingezogenen Zeilen</de>
+      </documentation>
         <documentation docid="definefontfamily">
             <en>Define a font family with the faces »Regular«, »Bold«, »BoldItalic« and »Italic«. Families are needed when you switch to another face in running text with »B« for example.</en>
             <de>Definiert eine Schriftfamilie bestehend aus den Schnitten »Normal«, »Kursiv«, »Fett« und »Fett Kursiv«.

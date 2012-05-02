@@ -414,6 +414,10 @@
       <attribute name="name"/>
       <optional><ref name="a_alignment"/></optional>
       <optional><attribute name="einrückung"/></optional>
+      <optional>
+        <attribute name="zeilen">
+          <a:documentation docid="definetextformat/rows">Anzahl der Zeilen mit Einzug oder (wenn negativ) Anzahl der nicht eingezogenen Zeilen</a:documentation>
+        </attribute></optional>
     </element>
   </define>
 

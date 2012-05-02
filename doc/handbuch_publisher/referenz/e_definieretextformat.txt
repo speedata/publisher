@@ -7,7 +7,7 @@ h2. Beschreibung
 
 Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen "Absatz":e_absatz und "Textblock":e_textblock) zurückgegriffen werden.
 
-Erlaubte Attribute: @ausrichtung@, @einrückung@, @name@
+Erlaubte Attribute: @ausrichtung@, @einrückung@, @name@, @zeilen@
 Kindelemente: -
 Elternelemente: "Layout":e_layout
 
@@ -16,6 +16,7 @@ h3. Attribute
 - @name@ (Text) := Name des Textformats, unter dem es später im Layoutregelwerk angesprochen wird.
 - @ausrichtung@ (@blocksatz@, @linksbündig@, @rechtsbündig@, @zentriert@) := Bestimmt die Formatierung des Textes.
 - @einrückung@ (Maßangabe) := Absatzeinzug.
+- @zeilen@ (Zahl) := Anzahl der Zeilen, die eingezogen werden (wenn @einrückung@ angegeben ist) bzw. falls die Zahl negativ ist, die Anzahl der Zeilen, die _nicht_ eingerückt werden.
 
 
 h3. Bemerkung

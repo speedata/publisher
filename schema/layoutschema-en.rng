@@ -407,6 +407,10 @@
       <attribute name="name"/>
       <optional><ref name="a_alignment"/></optional>
       <optional><attribute name="indentation"/></optional>
+      <optional>
+        <attribute name="rows">
+          <a:documentation docid="definetextformat/rows">Number of rows for indentation or (if negative) number of rows not indented lines</a:documentation>
+        </attribute></optional>
     </element>
   </define>
 

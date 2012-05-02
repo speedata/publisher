@@ -81,8 +81,11 @@ masterpages = {}
 
 -- Text formats is a hash with arbitrary names as keys and the values
 -- are tables with alignment and indent. indent is the amount of 
--- indentation in sp.
-textformats = {}
+-- indentation in sp. alignment is one of "raggedright", "raggedleft", 
+-- "centered" and "justified"
+textformats = {
+  text = {indent = 0, alignment="justified", rows = 1}
+}
 
 -- Liste der Schriftarten und deren Synonyme. Beispielsweise könnte ein Schlüssel `Helvetica` sein,
 -- der Eintrag dann `texgyreheros-regular.otf`
@@ -1645,6 +1648,56 @@ function define_default_fontfamily()
   fonts.lookup_fontfamily_name_number["text"]=#fonts.lookup_fontfamily_number_instance
 end
 
+function make_paragraph( paragraph,width_sp, default_textformat_name)
+  local current_textformat_name,current_textformat
+  if paragraph.textformat then
+    current_textformat_name = paragraph.textformat
+  else
+    current_textformat_name = default_textformat_name
+  end
+
+  if textformats[current_textformat_name] then
+    current_textformat = textformats[current_textformat_name]
+  else
+    current_textformat = textformats["text"]
+  end
+
+  local nodelist = paragraph.nodelist
+  fonts.pre_linebreak(nodelist)
+
+  local parameter = {}
+
+  if current_textformat.indent then
+    parameter.hangindent = current_textformat.indent
+    parameter.hangafter  = -current_textformat.rows
+  end
+
+  local ragged_shape
+  if current_textformat then
+    if current_textformat.alignment == "leftaligned" or current_textformat.alignment == "rightaligned" or current_textformat.alignment == "centered" then
+      ragged_shape = true
+    else
+      ragged_shape = false
+    end
+  end
+
+  -- If there is ragged shape (i.e. not a rectangle of text) then we should turn off
+  -- font expansion. This is done by setting tex.pdfadjustspacing to 0 temporarily
+  if ragged_shape then
+    parameter.tolerance     = 5000
+    parameter.hyphenpenalty = 200
+
+    local adjspace = tex.pdfadjustspacing
+    tex.pdfadjustspacing = 0
+    nodelist = do_linebreak(nodelist,width_sp,parameter)
+    tex.pdfadjustspacing = adjspace
+    fix_justification(nodelist,current_textformat.alignment)
+  else
+    nodelist = do_linebreak(nodelist,width_sp,parameter)
+  end
+  return nodelist
+end
+
 
 ------------------------------------------------------------------------------
 
@@ -1654,9 +1707,9 @@ function Paragraph:new( textformat  )
     nodelist,
     textformat = textformat,
   }
-  if textformat and textformats[textformat] and textformats[textformat].indent then
-    instance.nodelist = add_glue(nil,"head",{ width = textformats[textformat].indent })
-  end
+  -- if textformat and textformats[textformat] and textformats[textformat].indent then
+  --   instance.nodelist = add_glue(nil,"head",{ width = textformats[textformat].indent })
+  -- end
   setmetatable(instance, self)
   self.__index = self
   return instance
@@ -1716,13 +1769,13 @@ function Paragraph:set_color( farbe )
 end
 
 -- Textformat Name
-function Paragraph:apply_textformat( textformat )
-  if not textformat or self.textformat then return self.nodelist end
-  if textformats[textformat] and textformats[textformat].indent then
-    self.nodelist = add_glue(self.nodelist,"head",{ width = textformats[textformat].indent })
-  end
-  return self.nodelist
-end
+-- function Paragraph:apply_textformat( textformat )
+--   if not textformat or self.textformat then return self.nodelist end
+--   if textformats[textformat] and textformats[textformat].indent then
+--     self.nodelist = add_glue(self.nodelist,"head",{ width = textformats[textformat].indent })
+--   end
+--   return self.nodelist
+-- end
 
 -- Return the width of the longest word. FIXME: check for hypenation
 function Paragraph:min_width()

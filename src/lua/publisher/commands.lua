@@ -340,6 +340,7 @@ function definiere_textformat(layoutxml)
   local alignment   = publisher.read_attribute(layoutxml,dataxml,"alignment",   "string")
   local indentation = publisher.read_attribute(layoutxml,dataxml,"indentation", "length")
   local name        = publisher.read_attribute(layoutxml,dataxml,"name",        "string")
+  local rows        = publisher.read_attribute(layoutxml,dataxml,"rows",        "number")
 
   local fmt = {}
 
@@ -352,6 +353,12 @@ function definiere_textformat(layoutxml)
   if indentation then
     fmt.indent = tex.sp(indentation)
   end
+  if rows then
+    fmt.rows = rows
+  else
+    fmt.rows = 1
+  end
+
   publisher.textformats[name] = fmt
 end
 
@@ -1308,6 +1315,11 @@ function textblock( layoutxml,dataxml )
   local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","string")
   local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","string")
 
+  -- The rules for textformat: 
+  --  * if the paragraph has a textformat then use it, end
+  --  * if the textblock has a textformat then use it, end
+  --  * use the textformat "text" end
+
   columns = columns or 1
   if not columndistance then columndistance = "3mm" end
   if tonumber(columndistance) then
@@ -1323,11 +1335,6 @@ function textblock( layoutxml,dataxml )
     fontfamily = 1
   end
 
-  local textformat = textformat or "text"
-  if not textformat then
-    err("»Textblock« textformat %q unknown!",tmp or "??")
-  end
-
   local colortable
   if colorname then
     if not publisher.colors[colorname] then
@@ -1338,18 +1345,10 @@ function textblock( layoutxml,dataxml )
     end
   end
 
-  if type(width)=="table" then
-    width = xpath.get_number_value(width)
-  end
-
-  local width_gridcells = width
-
-  local breite_sp = width_gridcells * publisher.current_grid.gridwidth
+  local width_sp = width * publisher.current_grid.gridwidth
 
   local objects, nodes = {},{}
   local nodelist,parameter
-
-  local current_textformat
 
   local tab = publisher.dispatch(layoutxml,dataxml)
 
@@ -1367,58 +1366,27 @@ function textblock( layoutxml,dataxml )
     end
   end
   trace("Textblock: #objects=%d",#objects)
+
   if columns > 1 then
-    breite_sp = math.floor(  (breite_sp - columndistance * ( columns - 1 ) )   / columns)
+    width_sp = math.floor(  (width_sp - columndistance * ( columns - 1 ) )   / columns)
   end
-  for i,j in ipairs(objects) do
-    if j.id == 8 then -- whatsit
-      nodes[#nodes + 1] = j
+
+  for _,paragraph in ipairs(objects) do
+    if paragraph.id == 8 then -- whatsit
+      -- todo: document how this can be!
+      nodes[#nodes + 1] = paragraph
     else
-      nodelist = j.nodelist
+      nodelist = paragraph.nodelist
       assert(nodelist)
       publisher.set_fontfamily_if_necessary(nodelist,fontfamily)
-      j.nodelist = publisher.set_color_if_necessary(nodelist,colortable)
-      nodelist = j:apply_textformat(textformat)
+      paragraph.nodelist = publisher.set_color_if_necessary(nodelist,colortable)
       node.slide(nodelist)
-      publisher.fonts.pre_linebreak(nodelist)
+      nodelist = publisher.make_paragraph(paragraph,width_sp,textformat)
 
-      if j.textformat and publisher.textformats[j.textformat] then
-        current_textformat = publisher.textformats[j.textformat]
-      else
-        current_textformat = publisher.textformats[textformat]
-      end
-
-      local ragged_shape = false
-      local alignment
-      if current_textformat then
-        alignment = current_textformat.alignment
-        if alignment == "leftaligned" or alignment == "rightaligned" or alignment == "centered" then
-          ragged_shape = true
-        end
-      end
-
-      if ragged_shape then
-        -- If there is ragged shape (i.e. not a rectangle of text) then we should turn off
-        -- font expansion. This is done by setting tex.pdfadjustspacing to 0 temporarily
-        local adjspace = tex.pdfadjustspacing
-        tex.pdfadjustspacing = 0
-        nodelist = publisher.do_linebreak(nodelist,breite_sp,{tolerance = 5000,hyphenpenalty=200})
-        tex.pdfadjustspacing = adjspace
-      else
-        nodelist = publisher.do_linebreak(nodelist,breite_sp)
-      end
-
-      if current_textformat then
-        trace("Textblock: apply textformat")
-        if ragged_shape then
-          publisher.fix_justification(nodelist,current_textformat.alignment)
-        end
-      end
       nodes[#nodes + 1] = nodelist
-      -- hier könnte ich ein Paragraph:apply_textformat einfügen
-    end -- wenn's wirklich ein node ist
-  end -- alle objects
-  -- debug
+    end
+  end
+
   if #objects == 0 then
     warning("Textblock: no objects found!")
     local vrule = {  width = 10 * 2^16, height = -1073741824}

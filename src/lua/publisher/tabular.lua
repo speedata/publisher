@@ -89,7 +89,7 @@ function calculate_columnwidth_for_row(self, tr_contents,current_row,colspans,co
 
         if object.nodelist then
           -- FIXME: dynamic textformat
-          object:apply_textformat("text")
+          -- object:apply_textformat("text")
           publisher.set_fontfamily_if_necessary(object.nodelist,self.fontfamily)
           publisher.fonts.pre_linebreak(object.nodelist)
         end
