@@ -45,7 +45,7 @@ end
 
 function normalize_space(dataxml, str )
   if type(str) == "string" then
-    return str:gsub("^%s*(.-)%s*$","%1")
+    return str:gsub("^%s*(.-)%s*$","%1"):gsub("%s+"," ")
   end
 end
 
