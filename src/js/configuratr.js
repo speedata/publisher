@@ -17,6 +17,8 @@ function Configuratr() {
 			}
 			kv = lines[i].split(/\s*=\s*/)
 			if (kv.length == 2) {
+				// we don't need quotation marks around it, so we remove 'em
+				kv[1] = kv[1].replace(/^"(.*)"$/,"$1")
 				if (this[current_section][kv[0]]) {
 					if (typeof(this[current_section][kv[0]]) == "string" || typeof(this[current_section][kv[0]]) == "number" ) {
 						this[current_section][kv[0]] = new Array(this[current_section][kv[0]],kv[1])

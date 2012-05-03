@@ -170,7 +170,12 @@ switch(argumentr.cmd) {
             cfg         = new configuratr()
 
         cfg.options = options
-        cfg.read("publisher.cfg")
+        try {
+           cfg.read("publisher.cfg")
+        } catch (e) {
+            console.log("Error: can't read / find publisher.cfg")
+            process.exit(-1)
+        }
 
         if (options.filter) {
             var filtername = path.basename(options.filter,".xpl")  + ".xpl"
