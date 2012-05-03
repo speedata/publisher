@@ -439,33 +439,34 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
 
     for _,object in ipairs(td_contents.objects) do
       if type(object)=="table" then
-        if not (object and object.nodelist) then
+        -- Its a regular paragraph!?!?
+
+        if not (object.nodelist) then
           err("No nodelist found!")
         end
 
-        if object.nodelist then
-          if object.textformat then
-            default_textformat_name = object.textformat
-          else
-            local align = td_contents.align or tr_contents.align or self.align[current_column]
-            if align=="center" then
-              default_textformat_name = "__centered"
-            elseif align=="left" then
-              default_textformat_name = "__leftaligned"
-            elseif align=="right" then
-              default_textformat_name = "__rightaligned"
-            end
+        if object.textformat then
+          default_textformat_name = object.textformat
+        else
+          local align = td_contents.align or tr_contents.align or self.align[current_column]
+          if align=="center" then
+            default_textformat_name = "__centered"
+          elseif align=="left" then
+            default_textformat_name = "__leftaligned"
+          elseif align=="right" then
+            default_textformat_name = "__rightaligned"
           end
-          publisher.set_fontfamily_if_necessary(object.nodelist,self.fontfamily)
         end
+        publisher.set_fontfamily_if_necessary(object.nodelist,self.fontfamily)
 
-        local v = publisher.make_paragraph(object,wd - padding_left - padding_right - td_randlinks - td_randrechts,default_textformat_name)
+        local v = object:format(wd - padding_left - padding_right - td_randlinks - td_randrechts,default_textformat_name)
         if cell then
           node.tail(cell).next = v
         else
           cell = v
         end
       elseif (type(object)=="userdata" and node.has_field(object,"width")) then
+        -- an image or a box!?!
         if cell then
           node.tail(cell).next = object
         else
@@ -673,7 +674,7 @@ function setze_zeile(self, tr_contents, current_row )
             default_textformat_name = "__rightaligned"
           end
         end
-        v = publisher.make_paragraph( object,current_columnnbreite - padding_left - padding_right - td_randlinks - td_randrechts, default_textformat_name)
+        v = object:format(current_columnnbreite - padding_left - padding_right - td_randlinks - td_randrechts, default_textformat_name)
         if publisher.options.trace then
           v = publisher.boxit(v)
         end

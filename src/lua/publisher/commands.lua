@@ -1381,7 +1381,7 @@ function textblock( layoutxml,dataxml )
       publisher.set_fontfamily_if_necessary(nodelist,fontfamily)
       paragraph.nodelist = publisher.set_color_if_necessary(nodelist,colortable)
       node.slide(nodelist)
-      nodelist = publisher.make_paragraph(paragraph,width_sp,textformat)
+      nodelist = paragraph:format(width_sp,textformat)
 
       nodes[#nodes + 1] = nodelist
     end
