@@ -82,7 +82,7 @@ end
 function do_luafile(filename)
   local a = kpse.find_file(filename)
   assert(a,string.format("Can't find file %q",filename))
-  dofile(a)
+  return dofile(a)
 end
 
 do_luafile("sd-debug.lua")

@@ -7,10 +7,10 @@
 
 file_start("publisher.lua")
 
-local element = require("publisher.commands")
-local seite   = require("publisher.page")
+local commands     = require("publisher.commands")
+local seite        = require("publisher.page")
 local translations = require("translations")
-local fontloader = require("fonts.fontloader")
+local fontloader   = require("fonts.fontloader")
 
 sd_xpath_funktionen      = require("publisher.layout_functions")
 orig_xpath_funktionen    = require("publisher.xpath_functions")
@@ -115,67 +115,67 @@ bookmarks = {}
 namespaces_layout = nil
 
 local dispatch_table = {
-  Paragraph               = element.absatz,
-  Action                  = element.aktion,
-  Attribute               = element.attribut,
-  B                       = element.fett,
-  ProcessNode             = element.bearbeite_knoten,
-  ProcessRecord           = element.bearbeite_datensatz,
-  AtPageShipout           = element.beiseitenausgabe,
-  AtPageCreation          = element.beiseitenerzeugung,
-  Image                   = element.bild,
-  Box                     = element.box,
-  Bookmark                = element.bookmark,
-  Record                  = element.datensatz,
-  DefineColor             = element.definiere_farbe,
-  DefineFontfamily        = element.definiere_schriftfamilie,
-  DefineTextformat        = element.definiere_textformat,
-  Element                 = element.element,
-  Switch                  = element.fallunterscheidung,
-  Group                   = element.gruppe,
-  I                       = element.kursiv,
-  Include                 = element.include,
-  ["Copy-of"]             = element.kopie_von,
-  LoadDataset             = element.lade_datensatzdatei,
-  LoadFontfile            = element.lade_schriftdatei,
-  EmptyLine               = element.leerzeile,
-  Rule                    = element.linie,
-  Message                 = element.nachricht,
-  NextFrame               = element.naechster_rahmen,
-  NewPage                 = element.neue_seite,
-  NextRow                 = element.neue_zeile,
-  Options                 = element.optionen,
-  PlaceObject             = element.objekt_ausgeben,
-  PositioningArea         = element.platzierungsbereich,
-  PositioningFrame        = element.platzierungsrahmen,
-  Margin                  = element.rand,
-  Grid                    = element.raster,
-  Fontface                = element.schriftart,
-  Pagetype                = element.seitentyp,
-  Pageformat              = element.seitenformat,
-  SetGrid                 = element.setze_raster,
-  Sequence                = element.sequenz,
-  While                   = element.solange,
-  SortSequence            = element.sortiere_sequenz,
-  SaveDataset             = element.speichere_datensatzdatei,
-  Column                  = element.spalte,
-  Columns                 = element.spalten,
-  Sub                     = element.sub,
-  Sup                     = element.sup,
-  Table                   = element.tabelle,
-  Tablefoot               = element.tabellenfuss,
-  Tablehead               = element.tabellenkopf,
-  Textblock               = element.textblock,
-  Hyphenation             = element.trennvorschlag,
-  Tablerule               = element.tlinie,
-  Tr                      = element.tr,
-  Td                      = element.td,
-  U                       = element.underline,
-  URL                     = element.url,
-  Variable                = element.variable,
-  Value                   = element.wert,
-  SetVariable             = element.zuweisung,
-  AddToList               = element.zur_liste_hinzufuegen,
+  Paragraph               = commands.absatz,
+  Action                  = commands.aktion,
+  Attribute               = commands.attribut,
+  B                       = commands.fett,
+  ProcessNode             = commands.bearbeite_knoten,
+  ProcessRecord           = commands.bearbeite_datensatz,
+  AtPageShipout           = commands.beiseitenausgabe,
+  AtPageCreation          = commands.beiseitenerzeugung,
+  Image                   = commands.bild,
+  Box                     = commands.box,
+  Bookmark                = commands.bookmark,
+  Record                  = commands.datensatz,
+  DefineColor             = commands.definiere_farbe,
+  DefineFontfamily        = commands.definiere_schriftfamilie,
+  DefineTextformat        = commands.definiere_textformat,
+  Element                 = commands.element,
+  Switch                  = commands.fallunterscheidung,
+  Group                   = commands.gruppe,
+  I                       = commands.kursiv,
+  Include                 = commands.include,
+  ["Copy-of"]             = commands.kopie_von,
+  LoadDataset             = commands.lade_datensatzdatei,
+  LoadFontfile            = commands.lade_schriftdatei,
+  EmptyLine               = commands.leerzeile,
+  Rule                    = commands.linie,
+  Message                 = commands.nachricht,
+  NextFrame               = commands.naechster_rahmen,
+  NewPage                 = commands.neue_seite,
+  NextRow                 = commands.neue_zeile,
+  Options                 = commands.optionen,
+  PlaceObject             = commands.objekt_ausgeben,
+  PositioningArea         = commands.platzierungsbereich,
+  PositioningFrame        = commands.platzierungsrahmen,
+  Margin                  = commands.rand,
+  Grid                    = commands.raster,
+  Fontface                = commands.schriftart,
+  Pagetype                = commands.seitentyp,
+  Pageformat              = commands.seitenformat,
+  SetGrid                 = commands.setze_raster,
+  Sequence                = commands.sequenz,
+  While                   = commands.solange,
+  SortSequence            = commands.sortiere_sequenz,
+  SaveDataset             = commands.speichere_datensatzdatei,
+  Column                  = commands.spalte,
+  Columns                 = commands.spalten,
+  Sub                     = commands.sub,
+  Sup                     = commands.sup,
+  Table                   = commands.tabelle,
+  Tablefoot               = commands.tabellenfuss,
+  Tablehead               = commands.tabellenkopf,
+  Textblock               = commands.textblock,
+  Hyphenation             = commands.trennvorschlag,
+  Tablerule               = commands.tlinie,
+  Tr                      = commands.tr,
+  Td                      = commands.td,
+  U                       = commands.underline,
+  URL                     = commands.url,
+  Variable                = commands.variable,
+  Value                   = commands.wert,
+  SetVariable             = commands.zuweisung,
+  AddToList               = commands.zur_liste_hinzufuegen,
 }
 
 -- Return the localized eltname as an english string.
@@ -332,8 +332,12 @@ function dothings()
     datei:close()
   end
 
+  -- start data processing
+  local tmp
+  local name = dataxml[".__name"]
+  tmp = data_dispatcher[""][name] -- default-Modus
+  if tmp then publisher.dispatch(tmp,dataxml) end
 
-  element.start_data_processing(dataxml)
 
   -- emit last page if necessary
   if page_initialized then

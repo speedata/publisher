@@ -2,21 +2,15 @@
 --  seite.lua
 --  speedata publisher
 --
---  Copyright 2010-2011 Patrick Gundlach.
+--  Copyright 2010-2012 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 
 
 local raster = require("publisher.grid")
 
-local assert,setmetatable = assert,setmetatable
-local tex = tex
+page = {}
 
-
-module(...)
-
-_M.__index = _M
-
-function new( self,width,height,additional_margin, trim )
+function page.new( self,width,height,additional_margin, trim )
   assert(self)
   if not width then return nil,"No information about page width found. Did you give the command <Pageformat>?" end
   assert(height)
@@ -39,3 +33,5 @@ function new( self,width,height,additional_margin, trim )
 	setmetatable(s, self)
 	return s
 end
+
+return page

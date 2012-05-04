@@ -6,16 +6,17 @@
 --  See file COPYING in the root directory for license info.
 
 file_start("commands.lua")
+
 require("publisher.fonts")
 require("publisher.tabular")
 require("xpath")
 require("fileutils")
 
--- Dieses Modul enthält die Einstiegspunkte der Layout-Tags.
-module(...,package.seeall)
+-- This module contains the commands in the layout file (the tags)
+commands = {}
 
 -- Setzt den Text im XML-Element "Absatz".
-function absatz( layoutxml,dataxml )
+function commands.absatz( layoutxml,dataxml )
   local textformat = publisher.read_attribute(layoutxml,dataxml,"textformat","string")
   local fontname   = publisher.read_attribute(layoutxml,dataxml,"fontface","string")
 
@@ -81,7 +82,7 @@ function absatz( layoutxml,dataxml )
 end
 
 -- Erzeugt ein 44er whatsit node (user_defined)
-function aktion( layoutxml,dataxml)
+function commands.aktion( layoutxml,dataxml)
   local tab = publisher.dispatch(layoutxml,dataxml)
   local ret = {}
 
@@ -98,7 +99,7 @@ function aktion( layoutxml,dataxml)
 end
 
 -- Erzeugt ein Attribut für die XML-Struktur
-function attribut( layoutxml,dataxml )
+function commands.attribut( layoutxml,dataxml )
   local auswahl = publisher.read_attribute(layoutxml,dataxml,"select","string")
   local attname  = publisher.read_attribute(layoutxml,dataxml,"name","string")
   local attvalue = xpath.textvalue(xpath.parse(dataxml,auswahl))
@@ -106,7 +107,7 @@ function attribut( layoutxml,dataxml )
   return ret
 end
 
-function bearbeite_datensatz( layoutxml,dataxml )
+function commands.bearbeite_datensatz( layoutxml,dataxml )
   trace("BearbeiteDatensatz")
   local auswahl = publisher.read_attribute(layoutxml,dataxml,"select","string")
   local umfang  = publisher.read_attribute(layoutxml,dataxml,"limit","string")
@@ -133,7 +134,7 @@ function bearbeite_datensatz( layoutxml,dataxml )
 end
 
 -- Ruft das Layoutxml für einen bestimmten Unterdatensatz (Element) auf.
-function bearbeite_knoten(layoutxml,dataxml)
+function commands.bearbeite_knoten(layoutxml,dataxml)
   local auswahl = publisher.read_attribute(layoutxml,dataxml,"select","string")
 
   local letzte_position = publisher.variablen.__position
@@ -153,11 +154,11 @@ function bearbeite_knoten(layoutxml,dataxml)
   publisher.variablen.__position = letzte_position
 end
 
-function beiseitenausgabe( layoutxml,dataxml )
+function commands.beiseitenausgabe( layoutxml,dataxml )
   return layoutxml
 end
 
-function beiseitenerzeugung( layoutxml,dataxml )
+function commands.beiseitenerzeugung( layoutxml,dataxml )
   return layoutxml
 end
 
@@ -170,7 +171,7 @@ local box_lookup = {
 }
 
 -- Erzeugt eine hbox mit einem Bild
-function bild( layoutxml,dataxml )
+function commands.bild( layoutxml,dataxml )
   local width = publisher.read_attribute(layoutxml,dataxml,"width","string")
   local height  = publisher.read_attribute(layoutxml,dataxml,"height",  "string")
 
@@ -231,7 +232,7 @@ function bild( layoutxml,dataxml )
   return {hbox,allocate}
 end
 
-function box( layoutxml,dataxml )
+function commands.box( layoutxml,dataxml )
   local width     = publisher.read_attribute(layoutxml,dataxml,"width","number")
   local height    = publisher.read_attribute(layoutxml,dataxml,"height","number")
   local hf_string = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string")
@@ -270,7 +271,7 @@ end
 
 -- create a PDF bookmark. Currently does not work
 -- if in multi column text
-function bookmark( layoutxml,dataxml )
+function commands.bookmark( layoutxml,dataxml )
   trace("Command: Bookmark")
   -- For bookmarks, we need two things: 1) a destination and
   -- 2) the bookmark itself that points to the destination. So
@@ -290,7 +291,7 @@ end
 
 -- Anweisung im Layoutxml, dass für ein bestimmtes Element diese
 -- Layoutregel aufgerufen werden soll.
-function datensatz( layoutxml )
+function commands.datensatz( layoutxml )
   local elementname = publisher.read_attribute(layoutxml,dataxml,"element","string")
   local mode        = publisher.read_attribute(layoutxml,dataxml,"mode","string")
 
@@ -299,16 +300,8 @@ function datensatz( layoutxml )
   publisher.data_dispatcher[mode][elementname] = layoutxml
 end
 
--- First function to be called when starting the data processing
-function start_data_processing(dataxml)
-  local tmp
-  local name = dataxml[".__name"]
-  tmp = publisher.data_dispatcher[""][name] -- default-Modus
-  if tmp then publisher.dispatch(tmp,dataxml) end
-end
-
 -- Definiert eine Farbe
-function definiere_farbe( layoutxml,dataxml )
+function commands.definiere_farbe( layoutxml,dataxml )
   local name  = publisher.read_attribute(layoutxml,dataxml,"name","string")
   local model = publisher.read_attribute(layoutxml,dataxml,"model","string")
 
@@ -335,7 +328,7 @@ function definiere_farbe( layoutxml,dataxml )
 end
 
 -- Define a textformat
-function definiere_textformat(layoutxml)
+function commands.definiere_textformat(layoutxml)
   trace("Command: DefineTextformat")
   local alignment   = publisher.read_attribute(layoutxml,dataxml,"alignment",   "string")
   local indentation = publisher.read_attribute(layoutxml,dataxml,"indentation", "length")
@@ -363,7 +356,7 @@ function definiere_textformat(layoutxml)
 end
 
 -- Definiert eine Schriftfamilie
-function definiere_schriftfamilie( layoutxml,dataxml )
+function commands.definiere_schriftfamilie( layoutxml,dataxml )
   local fonts = publisher.fonts
   local fam={}
   -- fontsize and baselineskip are in dtp points (bp, 1 bp ≈ 65782 sp)
@@ -434,7 +427,7 @@ function definiere_schriftfamilie( layoutxml,dataxml )
 end
 
 -- Create an element for use with attribute and savedataset
-function element( layoutxml,dataxml )
+function commands.element( layoutxml,dataxml )
   local elementname = publisher.read_attribute(layoutxml,dataxml,"name","string")
 
   local ret = { [".__name"] = elementname }
@@ -458,7 +451,7 @@ function element( layoutxml,dataxml )
 end
 
 -- case / switch
-function fallunterscheidung( layoutxml,dataxml )
+function commands.fallunterscheidung( layoutxml,dataxml )
   local case_matched = false
   local otherwise,ret,elementname
   for i,v in ipairs(layoutxml) do
@@ -482,7 +475,7 @@ function fallunterscheidung( layoutxml,dataxml )
 end
 
 -- Bold text
-function fett( layoutxml,dataxml )
+function commands.fett( layoutxml,dataxml )
   local a = publisher.Paragraph:new()
 
   local objects = {}
@@ -503,7 +496,7 @@ function fett( layoutxml,dataxml )
 end
 
 -- Create a virtual area
-function gruppe( layoutxml,dataxml )
+function commands.gruppe( layoutxml,dataxml )
   publisher.setup_page()
   local groupname = publisher.read_attribute(layoutxml,dataxml,"name", "string")
 
@@ -541,12 +534,12 @@ function gruppe( layoutxml,dataxml )
 end
 
 -- Dummy-Element fürs Einbinden von xi:include-Dateien
-function include( layoutxml,dataxml )
+function commands.include( layoutxml,dataxml )
   return publisher.dispatch(layoutxml,dataxml)
 end
 
 -- Italic text
-function kursiv( layoutxml,dataxml )
+function commands.kursiv( layoutxml,dataxml )
   trace("Italic")
   local a = publisher.Paragraph:new()
   local objects = {}
@@ -565,7 +558,7 @@ function kursiv( layoutxml,dataxml )
 end
 
 -- XPath Ausdruck um einen Wert aus den Daten zu extrahieren. Gibt eine Sequenz zurück
-function kopie_von( layoutxml,dataxml )
+function commands.kopie_von( layoutxml,dataxml )
   local auswahl = publisher.read_attribute(layoutxml,dataxml,"select", "string")
 
   if layoutxml[1] and #layoutxml[1] > 0 then
@@ -578,7 +571,7 @@ function kopie_von( layoutxml,dataxml )
 end
 
 -- Lädt eine Schriftdatei
-function lade_schriftdatei( layoutxml,dataxml )
+function commands.lade_schriftdatei( layoutxml,dataxml )
   local randausgleich = publisher.read_attribute(layoutxml,dataxml,"marginprotrusion","number")
   local leerraum      = publisher.read_attribute(layoutxml,dataxml,"space","number")
   local smcp          = publisher.read_attribute(layoutxml,dataxml,"smallcaps","string")
@@ -597,7 +590,7 @@ function lade_schriftdatei( layoutxml,dataxml )
 end
 
 -- Lädt eine Datensatzdatei (XML) und startet die Verarbeitung
-function lade_datensatzdatei( layoutxml,dataxml )
+function commands.lade_datensatzdatei( layoutxml,dataxml )
   local name = publisher.read_attribute(layoutxml,dataxml,"name", "string")
   assert(name)
   local filename = "datensatzdatei." .. name
@@ -614,7 +607,7 @@ function lade_datensatzdatei( layoutxml,dataxml )
   publisher.dispatch(publisher.data_dispatcher[""][root_name],tmp_data)
 end
 
-function leerzeile( layoutxml,dataxml )
+function commands.leerzeile( layoutxml,dataxml )
   trace("Leerzeile, aktuelle Zeile = %d",publisher.current_grid:current_row())
   local areaname = publisher.read_attribute(layoutxml,dataxml,"area","string")
   local areaname = areaname or publisher.default_areaname
@@ -627,7 +620,7 @@ function leerzeile( layoutxml,dataxml )
   end
 end
 
-function linie( layoutxml,dataxml )
+function commands.linie( layoutxml,dataxml )
   local direction     = publisher.read_attribute(layoutxml,dataxml,"direction",  "string")
   local length        = publisher.read_attribute(layoutxml,dataxml,"length",     "string")
   local rulewidth     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",  "string")
@@ -676,7 +669,7 @@ function linie( layoutxml,dataxml )
 end
 
 -- Schreibt eine Meldung in Terminal
-function nachricht( layoutxml, dataxml )
+function commands.nachricht( layoutxml, dataxml )
   local contents
   local auswahl = publisher.read_attribute(layoutxml,dataxml,"select","string")
 
@@ -720,12 +713,12 @@ function nachricht( layoutxml, dataxml )
   log("Message: %q", tostring(contents) or "?")
 end
 
-function naechster_rahmen( layoutxml,dataxml )
+function commands.naechster_rahmen( layoutxml,dataxml )
   local areaname = publisher.read_attribute(layoutxml,dataxml,"area","string")
   publisher.next_area(areaname)
 end
 
-function neue_zeile( layoutxml,dataxml )
+function commands.neue_zeile( layoutxml,dataxml )
   publisher.setup_page()
   local rownumber = publisher.read_attribute(layoutxml,dataxml,"row", "number")
   local areaname  = publisher.read_attribute(layoutxml,dataxml,"area","string")
@@ -753,12 +746,12 @@ function neue_zeile( layoutxml,dataxml )
 end
 
 -- Erzeugt eine neue Seite
-function neue_seite( )
+function commands.neue_seite( )
   publisher.neue_seite()
 end
 
 -- Formatiert die angegebene URL etwas besser für den Satz.
-function url(layoutxml,dataxml)
+function commands.url(layoutxml,dataxml)
   local a = publisher.Paragraph:new()
   local tab = publisher.dispatch(layoutxml,dataxml)
   for i,j in ipairs(tab) do
@@ -769,7 +762,7 @@ function url(layoutxml,dataxml)
 end
 
 -- Gibt ein rechteckiges Objekt (derzeit nur Bild) aus
-function objekt_ausgeben( layoutxml,dataxml )
+function commands.objekt_ausgeben( layoutxml,dataxml )
   trace("Command: PlaceObject")
   local absolute_positioning = false
   local spalte           = publisher.read_attribute(layoutxml,dataxml,"column",         "string")
@@ -921,7 +914,7 @@ function objekt_ausgeben( layoutxml,dataxml )
       trace("object ausgegeben.")
       zeile = nil -- die Zeile ist nicht mehr gültig, da schon ein object ausgegeben wurde
       if i < #objects then
-        neue_zeile(layoutxml,dataxml)
+        commands.neue_zeile(layoutxml,dataxml)
       end
     end -- keine absolute Positionierung
   end
@@ -932,7 +925,7 @@ function objekt_ausgeben( layoutxml,dataxml )
 end
 
 -- Saves the options given in the layout file
-function optionen( layoutxml,dataxml )
+function commands.optionen( layoutxml,dataxml )
   publisher.options.cutmarks           = publisher.read_attribute(layoutxml,dataxml,"cutmarks",    "boolean")
   publisher.options.runs               = publisher.read_attribute(layoutxml,dataxml,"runs",        "number")
   publisher.options.showgrid           = publisher.read_attribute(layoutxml,dataxml,"show-grid",   "boolean")
@@ -946,7 +939,7 @@ function optionen( layoutxml,dataxml )
   end
 end
 
-function platzierungsrahmen( layoutxml, dataxml )
+function commands.platzierungsrahmen( layoutxml, dataxml )
   local column = publisher.read_attribute(layoutxml,dataxml,"column","number")
   local row    = publisher.read_attribute(layoutxml,dataxml,"row" ,"number")
   local width  = publisher.read_attribute(layoutxml,dataxml,"width","number")
@@ -960,7 +953,7 @@ function platzierungsrahmen( layoutxml, dataxml )
 end
 
 -- Contains one or more positioning frames
-function platzierungsbereich( layoutxml,dataxml )
+function commands.platzierungsbereich( layoutxml,dataxml )
   -- Warning: if we call publisher.dispatch now, the xpath functions might depend on values on the _current_ page, which is not set!
   local tab = {}
   tab.layoutxml = layoutxml
@@ -970,7 +963,7 @@ function platzierungsbereich( layoutxml,dataxml )
 end
 
 -- Setzt das Papierformat.
-function seitenformat(layoutxml)
+function commands.seitenformat(layoutxml)
   trace("Pageformat")
   local width  = publisher.read_attribute(layoutxml,dataxml,"width","length")
   local height = publisher.read_attribute(layoutxml,dataxml,"height","length")
@@ -978,7 +971,7 @@ function seitenformat(layoutxml)
 end
 
 -- Setzt den Rand für diese Seite
-function rand( layoutxml,dataxml )
+function commands.rand( layoutxml,dataxml )
   local left   = publisher.read_attribute(layoutxml,dataxml,"left", "length")
   local right  = publisher.read_attribute(layoutxml,dataxml,"right","length")
   local top    = publisher.read_attribute(layoutxml,dataxml,"top",  "length")
@@ -987,13 +980,13 @@ function rand( layoutxml,dataxml )
   return function(_seite) _seite.raster:setze_rand(left,top,right,bottom) end
 end
 
-function raster( layoutxml,dataxml )
+function commands.raster( layoutxml,dataxml )
   local breite = publisher.read_attribute(layoutxml,dataxml,"width","length")
   local hoehe  = publisher.read_attribute(layoutxml,dataxml,"height"  ,"length")
   return { breite = tex.sp(breite), hoehe = tex.sp(hoehe) }
 end
 
-function schriftart( layoutxml,dataxml )
+function commands.schriftart( layoutxml,dataxml )
   local fontfamily   = publisher.read_attribute(layoutxml,dataxml,"fontfamily","string")
   local familynumber = publisher.fonts.lookup_fontfamily_name_number[fontfamily]
   if not familynumber then
@@ -1009,14 +1002,14 @@ function schriftart( layoutxml,dataxml )
 end
 
 -- Remember (internally) the grid size (`width` und `height` in layout xml).
-function setze_raster(layoutxml)
+function commands.setze_raster(layoutxml)
   trace("Command: SetGrid")
   publisher.options.gridwidth   = tex.sp(publisher.read_attribute(layoutxml,dataxml,"width","length"))
   publisher.options.gridheight  = tex.sp(publisher.read_attribute(layoutxml,dataxml,"height","length"))
 end
 
 -- Create a list of page types in publisher.masterpages
-function seitentyp(layoutxml,dataxml)
+function commands.seitentyp(layoutxml,dataxml)
   trace("Command: Pagetype")
   local tmp_tab = {}
   local test         = publisher.read_attribute(layoutxml,dataxml,"test","string")
@@ -1036,7 +1029,7 @@ function seitentyp(layoutxml,dataxml)
   publisher.masterpages[#publisher.masterpages + 1] = { ist_seitentyp = test, res = tmp_tab, name = pagetypename }
 end
 
-function sequenz( layoutxml,dataxml )
+function commands.sequenz( layoutxml,dataxml )
   local auswahl = publisher.read_attribute(layoutxml,dataxml,"select","string")
   trace("Command: Sequence: %s, auswahl = %s",layoutxml[".__name"], auswahl )
   local ret = {}
@@ -1048,7 +1041,7 @@ function sequenz( layoutxml,dataxml )
   return ret
 end
 
-function solange( layoutxml,dataxml )
+function commands.solange( layoutxml,dataxml )
   local test = publisher.read_attribute(layoutxml,dataxml,"test","string")
   assert(test)
 
@@ -1058,7 +1051,7 @@ function solange( layoutxml,dataxml )
 end
 
 -- Verändert die Reihenfolge in der Variable!
-function sortiere_sequenz( layoutxml,dataxml )
+function commands.sortiere_sequenz( layoutxml,dataxml )
   local auswahl             = publisher.read_attribute(layoutxml,dataxml,"select","string")
   local duplikate_entfernen = publisher.read_attribute(layoutxml,dataxml,"removeduplicates","string")
   local criterium           = publisher.read_attribute(layoutxml,dataxml,"criterium","string")
@@ -1092,7 +1085,7 @@ function sortiere_sequenz( layoutxml,dataxml )
   return tmp
 end
 
-function spalte( layoutxml,dataxml )
+function commands.spalte( layoutxml,dataxml )
   local ret = {}
   ret.breite           = publisher.read_attribute(layoutxml,dataxml,"width","string")
   ret.hintergrundfarbe = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string")
@@ -1102,12 +1095,12 @@ function spalte( layoutxml,dataxml )
   return ret
 end
 
-function spalten( layoutxml,dataxml )
+function commands.spalten( layoutxml,dataxml )
   local tab = publisher.dispatch(layoutxml,dataxml)
   return tab
 end
 
-function speichere_datensatzdatei( layoutxml,dataxml )
+function commands.speichere_datensatzdatei( layoutxml,dataxml )
   local towrite, tmp,tab
   local filename   = publisher.read_attribute(layoutxml,dataxml,"filename",  "string")
   local elementname = publisher.read_attribute(layoutxml,dataxml,"elementname","string")
@@ -1160,7 +1153,7 @@ function speichere_datensatzdatei( layoutxml,dataxml )
   datei:close()
 end
 
-function sub( layoutxml,dataxml )
+function commands.sub( layoutxml,dataxml )
   local a = publisher.Paragraph:new()
   local tab = publisher.dispatch(layoutxml,dataxml)
   for i,j in ipairs(tab) do
@@ -1169,7 +1162,7 @@ function sub( layoutxml,dataxml )
   return a
 end
 
-function sup( layoutxml,dataxml )
+function commands.sup( layoutxml,dataxml )
   local a = publisher.Paragraph:new()
   local tab = publisher.dispatch(layoutxml,dataxml)
   for i,j in ipairs(tab) do
@@ -1180,7 +1173,7 @@ end
 
 
 -- FIXME: leading -> rowdistance or so
-function tabelle( layoutxml,dataxml,optionen )
+function commands.tabelle( layoutxml,dataxml,optionen )
   local width          = publisher.read_attribute(layoutxml,dataxml,"width",         "number")
   local hoehe          = publisher.read_attribute(layoutxml,dataxml,"height",        "number")
   local padding        = publisher.read_attribute(layoutxml,dataxml,"padding",       "length")
@@ -1228,23 +1221,23 @@ function tabelle( layoutxml,dataxml,optionen )
   return n
 end
 
-function tabellenfuss( layoutxml,dataxml )
+function commands.tabellenfuss( layoutxml,dataxml )
   local tab = publisher.dispatch(layoutxml,dataxml)
   return tab
 end
 
-function tabellenkopf( layoutxml,dataxml )
+function commands.tabellenkopf( layoutxml,dataxml )
   local tab = publisher.dispatch(layoutxml,dataxml)
   return tab
 end
 
-function tlinie( layoutxml,dataxml )
+function commands.tlinie( layoutxml,dataxml )
   local rulewidth = publisher.read_attribute(layoutxml,dataxml,"rulewidth","length")
   local farbe = publisher.read_attribute(layoutxml,dataxml,"color","string")
   return { rulewidth = rulewidth, farbe = farbe }
 end
 
-function tr( layoutxml,dataxml )
+function commands.tr( layoutxml,dataxml )
   local tab = publisher.dispatch(layoutxml,dataxml)
 
   local attribute = {
@@ -1263,7 +1256,7 @@ function tr( layoutxml,dataxml )
   return tab
 end
 
-function td( layoutxml,dataxml )
+function commands.td( layoutxml,dataxml )
   local tab = publisher.dispatch(layoutxml,dataxml)
 
   local attribute = {
@@ -1306,7 +1299,7 @@ function td( layoutxml,dataxml )
 end
 
 -- Erzeugt einen rechteckigen Textblock. Rückgabe ist eine vlist.
-function textblock( layoutxml,dataxml )
+function commands.textblock( layoutxml,dataxml )
   trace("Textblock")
   local fontfamily
   local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface","string")
@@ -1448,12 +1441,12 @@ function textblock( layoutxml,dataxml )
   return nodelist
 end
 
-function trennvorschlag( layoutxml,dataxml )
+function commands.trennvorschlag( layoutxml,dataxml )
   lang.hyphenation(publisher.languages.de,layoutxml[1])
 end
 
 -- Underline text
-function underline( layoutxml,dataxml )
+function commands.underline( layoutxml,dataxml )
   trace("Underline")
 
   local a = publisher.Paragraph:new()
@@ -1474,7 +1467,7 @@ function underline( layoutxml,dataxml )
 end
 
 -- Weist einer Variablen einen Wert zu
-function zuweisung( layoutxml,dataxml )
+function commands.zuweisung( layoutxml,dataxml )
   local trace_p = publisher.read_attribute(layoutxml,dataxml,"trace","boolean")
   local auswahl = publisher.read_attribute(layoutxml,dataxml,"select","string")
 
@@ -1541,7 +1534,7 @@ function zuweisung( layoutxml,dataxml )
   publisher.variablen[varname] = contents
 end
 
-function wert( layoutxml,dataxml )
+function commands.wert( layoutxml,dataxml )
   local auswahl = publisher.read_attribute(layoutxml,dataxml,"select","string")
 
   local tab
@@ -1555,7 +1548,7 @@ end
 
 -- Gibt eine Nummer zurück. Unter dieser Nummer ist in der Tabelle @publisher.user_defined_funktionen@
 -- eine Funktion gespeichert, die zu einer Tabelle eine Schlüssel/Wert-Kombination hinzufügt.
-function zur_liste_hinzufuegen( layoutxml,dataxml )
+function commands.zur_liste_hinzufuegen( layoutxml,dataxml )
   local schluessel = publisher.read_attribute(layoutxml,dataxml,"key","string")
   local listenname = publisher.read_attribute(layoutxml,dataxml,"liste","string")
   local auswahl    = publisher.read_attribute(layoutxml,dataxml,"select","string")
@@ -1572,3 +1565,4 @@ function zur_liste_hinzufuegen( layoutxml,dataxml )
 end
 
 file_end("commands.lua")
+return commands
