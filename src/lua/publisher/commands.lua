@@ -1188,6 +1188,7 @@ function tabelle( layoutxml,dataxml,optionen )
   local rowdistance    = publisher.read_attribute(layoutxml,dataxml,"leading",       "length")
   local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",      "string")
   local autostretch    = publisher.read_attribute(layoutxml,dataxml,"stretch",       "string")
+  local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",    "string")
 
   padding        = tex.sp(padding        or "0pt")
   columndistance = tex.sp(columndistance or "0pt")
@@ -1210,7 +1211,7 @@ function tabelle( layoutxml,dataxml,optionen )
   tabular.tab = tab
   tabular.optionen       = optionen or { ht_aktuell=100*2^16 } -- FIXME! Test - das ist für tabular in tabular
   tabular.layoutxml      = layoutxml
-  tabular.dataxml       = dataxml
+  tabular.dataxml        = dataxml
   tabular.breite         = width
   tabular.fontfamily     = fontfamily
   tabular.padding_left   = padding
@@ -1220,6 +1221,7 @@ function tabelle( layoutxml,dataxml,optionen )
   tabular.colsep         = columndistance
   tabular.rowsep         = rowdistance
   tabular.autostretch    = autostretch
+  tabular.textformat     = textformat
 
 
   local n = tabular:tabelle()

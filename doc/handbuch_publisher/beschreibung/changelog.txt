@@ -5,7 +5,8 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
-* @zeilen@-Angabe bei Textformaten. Siehe "DefiniereTextformat":e_definieretextformat
+* Default Textformat bei "Tabellen":e_tabelle.
+* @zeilen@-Angabe bei Textformaten (inkl hängender Einzug). Siehe "DefiniereTextformat":e_definieretextformat
 * @sprun@ durch @sp@ ersetzt. Siehe "Kommandozeile":kommandozeile
 * @hreferenz@ bei "ObjektAusgeben":e_objektausgeben.
 * Neue XPath-Funktion "empty()":xpath

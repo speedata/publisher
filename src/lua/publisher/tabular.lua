@@ -83,13 +83,10 @@ function calculate_columnwidth_for_row(self, tr_contents,current_row,colspans,co
     local padding_right = td_contents.padding_right or self.padding_right
 
     for _,object in ipairs(objects) do
-      -- FIXME: (Default-)textformats für Absätze
       if type(object)=="table" then
         trace("tabular: check for nodelist (%s)",tostring(object.nodelist ~= nil))
 
         if object.nodelist then
-          -- FIXME: dynamic textformat
-          -- object:apply_textformat("text")
           publisher.set_fontfamily_if_necessary(object.nodelist,self.fontfamily)
           publisher.fonts.pre_linebreak(object.nodelist)
         end
@@ -447,6 +444,8 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
 
         if object.textformat then
           default_textformat_name = object.textformat
+        elseif self.textformat then
+          default_textformat_name = self.textformat
         else
           local align = td_contents.align or tr_contents.align or self.align[current_column]
           if align=="center" then
@@ -669,6 +668,8 @@ function setze_zeile(self, tr_contents, current_row )
         local default_textformat_name
         if object.textformat then
           default_textformat_name = object.textformat
+        elseif self.textformat then
+          default_textformat_name = self.textformat
         else
           local align = td_contents.align or tr_contents.align or self.align[current_column]
           if align=="center" then

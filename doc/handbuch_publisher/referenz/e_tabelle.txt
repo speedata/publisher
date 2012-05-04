@@ -16,6 +16,7 @@ h3. Attribute
 - @padding@  ("Maßangabe":massangabe, optional) := Der Innenabstand innerhalb einer Tabellenzelle.
 - @schriftart@ (Name) := Name der Schriftfamilie, die benutzt werden soll. Wenn keine Schriftart angegeben ist, wird auf die Schriftart ›text‹ umgeschaltet.
 - @spaltenabstand@  ("Maßangabe":massangabe, optional) := Der Abstand zwischen zwei Spalten.
+- @textformat@ (Text,optional) := Das Textformat, das benutzt wird, wenn kein anderes angegeben wird.
 - @zeilenabstand@  ("Maßangabe":massangabe, optional) := Der Abstand zwischen zwei Zeilen.
 
 h3. Bemerkung

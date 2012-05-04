@@ -970,6 +970,10 @@
         <a:documentation docid="table/rowdistance">Abstand zwischen zwei Zeilen (Maßangabe)</a:documentation>
       </optional>
       <optional>
+        <attribute name="textformat"/>
+        <a:documentation docid="table/textformat">Textformat für die Tabelle, falls die Zellen kein eigenes angegeben haben</a:documentation>
+      </optional>
+      <optional>
         <attribute name="dehnen">
           <a:documentation docid="table/stretch">Bei kurzen Inhalten könnte die Tabelle schmaler sein als die angegebene Breite. Dieses Attribut gibt an,
                 ob die Tabelle ggf. auf die angegebene Breite gedehnt wird.</a:documentation>

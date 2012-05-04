@@ -887,6 +887,10 @@
             <de>Bei kurzen Inhalten könnte die Tabelle schmaler sein als die angegebene Breite. Dieses Attribut gibt an,
                 ob die Tabelle ggf. auf die angegebene Breite gedehnt wird.</de>
         </documentation>
+      <documentation docid="table/textformat">
+        <en>Default textformat for all text in the table</en>
+        <de>Textformat für die Tabelle, falls die Zellen kein eigenes angegeben haben</de>
+      </documentation>
         <documentation docid="table/stretch/max">
             <en>Stretch the table to the given width if necessary.</en>
             <de>Die Tabelle wird auf die angegebene Breite gedehent, wenn der Inhalt eine schmalere Tabelle erzeugen würde.</de>
