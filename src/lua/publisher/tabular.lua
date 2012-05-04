@@ -654,9 +654,14 @@ function setze_zeile(self, tr_contents, current_row )
         if not (object and object.nodelist) then
           warning("No nodelist found!")
         end
-        v = node.copy_list(object.nodelist)
+        -- Unsure why I copied the list. It seems
+        -- to work when I just assign it
+        -- v = node.copy_list(object.nodelist)
+        v = object.nodelist
       elseif type(object) == "userdata" then
-        v = node.copy_list(object)
+        -- Same here. Why did I copy the list?
+        -- v = node.copy_list(object)
+        v = object
       end
 
       if type(object) == "table" then

@@ -1172,29 +1172,13 @@ function fix_justification( nodelist,textformat,parent)
       -- The goal depends on the current line (parshape!)
       local goal,_,_ = node.dimensions(head.glue_set, head.glue_sign, head.glue_order, head.head)
       local font_before_glue
-      for n in node.traverse_id(10,head.head) do
-        -- calculate the font before this id.
-        if n.prev and n.prev.id == 37 then -- glyph
-          font_before_glue = n.prev.font
-        elseif n.prev and n.prev.id == 7 then -- disc
-          local font_node = n.prev
-          while font_node.id ~= 37 do
-            font_node = font_node.prev
-          end
-          font_before_glue = nil
-        else
-          font_before_glue = nil
-        end
 
-        -- n.spec.width > 0 because we insert a glue after a hyphen in
-        -- compund words mailing-[glue]list and that glue's width is 0pt
-        if n.subtype==0 and font_before_glue and n.spec.width > 0 then
-          n.spec.width = font.fonts[font_before_glue].parameters.space
-          n.spec.shrink_order = head.glue_order
-          n.spec.stretch_order = 0
-          n.spec.stretch = 0
-        end
-      end
+      -- There was code here (39826d4c5 and before) that changed
+      -- the glue depending on the font before that glue. That
+      -- was problematic, because LuaTeX does not copy the 
+      -- altered glue_spec node on copy_list (in Paragraph:format())
+      -- which, when reformatted, gets a complaint by LuaTeX about
+      -- infinite shrinkage in a paragraph
 
       if textformat == "rightaligned" then
         local wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)
