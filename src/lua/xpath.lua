@@ -312,6 +312,10 @@ local function _nodetest( ... )
   -- printtable("_nodetest",{...})
   if select(1,...)=="@" then return dataxml[select(2,...)] end
   local ret = {}
+  if not dataxml then
+    warning("Empty sequence")
+    return nil
+  end
   for i,v in ipairs(dataxml) do
     if type(v)=="table" and v[".__name"] == ... then
       ret[#ret + 1] = v
