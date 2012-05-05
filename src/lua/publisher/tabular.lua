@@ -887,28 +887,24 @@ function setze_tabelle(self)
   -- Let's add the glue inbetween
   local ht_header, ht_footer = 0, 0
 
-  if self.rowsep > 0 then
-    for z = 1,#tablehead - 1 do
-      ht_header = ht_header + tablehead[z].height  -- Tr oder Tablerule
-      _,tmp = publisher.add_glue(tablehead[z],"tail",{ width = self.rowsep })
-      tmp.next = tablehead[z+1]
-      tablehead[z+1].prev = tmp
-    end
-
-    ht_header = ht_header + self.rowsep * ( #tablehead - 1 )
-    ht_header = ht_header + tablehead[#tablehead].height
-
-
-    for z = 1,#tablefoot - 1 do
-      ht_footer = ht_footer + tablefoot[z].height  -- Tr oder Tablerule
-      -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
-      _,tmp = publisher.add_glue(tablefoot[z],"tail",{ width = self.rowsep })
-      tmp.next = tablefoot[z+1]
-      tablefoot[z+1].prev = tmp
-    end
-    ht_footer = ht_footer + ( #tablefoot - 1 ) * self.rowsep
-    ht_footer = ht_footer + tablefoot[#tablefoot].height
+  for z = 1,#tablehead - 1 do
+    ht_header = ht_header + tablehead[z].height  -- Tr oder Tablerule
+    _,tmp = publisher.add_glue(tablehead[z],"tail",{ width = self.rowsep })
+    tmp.next = tablehead[z+1]
+    tablehead[z+1].prev = tmp
   end
+  ht_header = ht_header + self.rowsep * ( #tablehead - 1 )
+  ht_header = ht_header + tablehead[#tablehead].height
+
+  for z = 1,#tablefoot - 1 do
+    ht_footer = ht_footer + tablefoot[z].height  -- Tr oder Tablerule
+    -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
+    _,tmp = publisher.add_glue(tablefoot[z],"tail",{ width = self.rowsep })
+    tmp.next = tablefoot[z+1]
+    tablefoot[z+1].prev = tmp
+  end
+  ht_footer = ht_footer + ( #tablefoot - 1 ) * self.rowsep
+  ht_footer = ht_footer + tablefoot[#tablefoot].height
 
   if not tablehead[1] then
     tablehead[1] = node.new("hlist") -- dummy-Kopfzeile
