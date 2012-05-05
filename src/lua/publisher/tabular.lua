@@ -36,7 +36,7 @@ end
 function calculate_columnwidth_for_row(self, tr_contents,current_row,colspans,colmin,colmax )
   local current_column
   local max_wd, min_wd -- maximale Breite und minimale Breite einer Tabellenzelle (Td)
-  -- als erstes die einzelnen Zeilen/Zellen durchgehen und schauen, wie breit die 
+  -- als erstes die einzelnen rows/Zellen durchgehen und schauen, wie breit die 
   -- Spalten sein müssen. Wenn es colspans gibt, müssen diese entsprechend
   -- berücksichtigt werden.
   current_column = 0
@@ -824,9 +824,9 @@ end
 function setze_tabelle(self)
   trace("tabular: setze Tabelle")
   local current_row
-  local kopfzeilen = {}
-  local fusszeilen = {}
-  local zeilen = {}
+  local tablehead = {}
+  local tablefoot = {}
+  local rows = {}
 
   current_row = 0
   for _,tr in ipairs(self.tab) do
@@ -838,7 +838,7 @@ function setze_tabelle(self)
       -- ignorieren
     elseif eltname == "Tablerule" then
       tmp = publisher.colorbar(self.tablewidth_target,tex.sp(tr_contents.rulewidth or "0.25pt"),0,tr_contents.farbe)
-      zeilen[#zeilen + 1] = node.hpack(tmp)
+      rows[#rows + 1] = node.hpack(tmp)
 
     elseif eltname == "Tablehead" then
       for _,zeile in ipairs(tr_contents) do
@@ -846,10 +846,10 @@ function setze_tabelle(self)
         zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
           current_row = current_row + 1
-          kopfzeilen[#kopfzeilen + 1] = self:setze_zeile(zeile_inhalt,current_row)
+          tablehead[#tablehead + 1] = self:setze_zeile(zeile_inhalt,current_row)
         elseif zeile_eltname == "Tablerule" then
           tmp = publisher.colorbar(self.tablewidth_target,tex.sp(zeile_inhalt.rulewidth or "0.25pt"),0,zeile_inhalt.farbe)
-          kopfzeilen[#kopfzeilen + 1] = node.hpack(tmp)
+          tablehead[#tablehead + 1] = node.hpack(tmp)
         end
       end
 
@@ -859,10 +859,10 @@ function setze_tabelle(self)
         zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
           current_row = current_row + 1
-          fusszeilen[#fusszeilen + 1] = self:setze_zeile(zeile_inhalt,current_row)
+          tablefoot[#tablefoot + 1] = self:setze_zeile(zeile_inhalt,current_row)
         elseif zeile_eltname == "Tablerule" then
           tmp = publisher.colorbar(self.tablewidth_target,tex.sp(zeile_inhalt.rulewidth or "0.25pt"),0,zeile_inhalt.farbe)
-          fusszeilen[#fusszeilen + 1] = node.hpack(tmp)
+          tablefoot[#tablefoot + 1] = node.hpack(tmp)
         end
       end
 
@@ -874,106 +874,101 @@ function setze_tabelle(self)
       --   r.height = tr_contents["top-distance"]
       --   local h = node.hpack(r)
       --   node.set_attribute(h,publisher.att_space_prio,1)
-      --   zeilen[#zeilen + 1] = h
+      --   rows[#rows + 1] = h
       -- end
 
-      zeilen[#zeilen + 1] = self:setze_zeile(tr_contents,current_row)
+      rows[#rows + 1] = self:setze_zeile(tr_contents,current_row)
     else
       warning("Unknown contents in »Table« %s",eltname )
     end -- wenn es eine Tabellenzelle ist
   end
 
-  -- We now have kopfzeilen and fusszeilen arrays with the contents
+  -- We now have tablehead and tablefoot arrays with the contents
   -- Let's add the glue inbetween
-  local ht_kopfzeilen, ht_fusszeilen = 0, 0
+  local ht_header, ht_footer = 0, 0
 
   if self.rowsep > 0 then
-    for z = 1,#kopfzeilen - 1 do
-      ht_kopfzeilen = ht_kopfzeilen + kopfzeilen[z].height  -- Tr oder Tablerule
-      _,tmp = publisher.add_glue(kopfzeilen[z],"tail",{ width = self.rowsep })
-      tmp.next = kopfzeilen[z+1]
-      kopfzeilen[z+1].prev = tmp
+    for z = 1,#tablehead - 1 do
+      ht_header = ht_header + tablehead[z].height  -- Tr oder Tablerule
+      _,tmp = publisher.add_glue(tablehead[z],"tail",{ width = self.rowsep })
+      tmp.next = tablehead[z+1]
+      tablehead[z+1].prev = tmp
     end
 
-    ht_kopfzeilen = ht_kopfzeilen + self.rowsep * ( #kopfzeilen - 1 )
-    ht_kopfzeilen = ht_kopfzeilen + kopfzeilen[#kopfzeilen].height
+    ht_header = ht_header + self.rowsep * ( #tablehead - 1 )
+    ht_header = ht_header + tablehead[#tablehead].height
 
 
-    for z = 1,#fusszeilen - 1 do
-      ht_fusszeilen = ht_fusszeilen + fusszeilen[z].height  -- Tr oder Tablerule
+    for z = 1,#tablefoot - 1 do
+      ht_footer = ht_footer + tablefoot[z].height  -- Tr oder Tablerule
       -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
-      _,tmp = publisher.add_glue(fusszeilen[z],"tail",{ width = self.rowsep })
-      tmp.next = fusszeilen[z+1]
-      fusszeilen[z+1].prev = tmp
+      _,tmp = publisher.add_glue(tablefoot[z],"tail",{ width = self.rowsep })
+      tmp.next = tablefoot[z+1]
+      tablefoot[z+1].prev = tmp
     end
-    ht_fusszeilen = ht_fusszeilen + ( #fusszeilen - 1 ) * self.rowsep
-    ht_fusszeilen = ht_fusszeilen + fusszeilen[#fusszeilen].height
+    ht_footer = ht_footer + ( #tablefoot - 1 ) * self.rowsep
+    ht_footer = ht_footer + tablefoot[#tablefoot].height
   end
 
-  if not kopfzeilen[1] then
-    kopfzeilen[1] = node.new("hlist") -- dummy-Kopfzeile
+  if not tablehead[1] then
+    tablehead[1] = node.new("hlist") -- dummy-Kopfzeile
   end
-  if not fusszeilen[1] then
-    fusszeilen[1] = node.new("hlist") -- dummy-Fußzeile
+  if not tablefoot[1] then
+    tablefoot[1] = node.new("hlist") -- dummy-Fußzeile
   end
 
   -- The maximum heights are saved here for each table. Currently all tables must have the same height (see the metatable)
-  local pagegoals = setmetatable({}, { __index = function() return self.optionen.ht_max - ht_kopfzeilen - ht_fusszeilen end})
+  local pagegoals = setmetatable({}, { __index = function() return self.optionen.ht_max - ht_header - ht_footer end})
 
-  -- durch einen split werden mehrere Tabellen zurück gegeben
-  local tabellen = {}
-  local aktuelle_tabelle
+  -- When we split the current table we return an array:
+  local final_split_tables = {}
+  local current_table
   local tmp
   local pagegoal = 0
 
-  -- aktuelle_tabelle = node.copy_list(kopfzeilen[1]) -- später löschen
-  -- tabellen[#tabellen + 1] = aktuelle_tabelle
+  local ht_row
+  for z=1,#rows do
+    ht_row = rows[z].height + rows[z].depth
 
-  -- local pagegoal = pagegoals[1]
-
-  local ht_zeile
-  for z=1,#zeilen do
-    ht_zeile = zeilen[z].height + zeilen[z].depth
-
-    if ht_zeile + self.rowsep + ht_fusszeilen >= pagegoal then
+    if ht_row + self.rowsep + ht_footer >= pagegoal then
       -- if current table exists then put it into the array + foot
-      if aktuelle_tabelle then
-        local last = node.tail(aktuelle_tabelle)
-        local tmp_fuss = node.copy_list(fusszeilen[1])
-        last.next = tmp_fuss
-        tmp_fuss.prev = last
+      if current_table then
+        local last = node.tail(current_table)
+        local tmp_foot = node.copy_list(tablefoot[1])
+        last.next = tmp_foot
+        tmp_foot.prev = last
       end
       -- create a new table and add the head
-      aktuelle_tabelle = node.copy_list(kopfzeilen[1]) -- später löschen
-      tabellen[#tabellen + 1] = aktuelle_tabelle
-      pagegoal = pagegoals[#tabellen]
+      current_table = node.copy_list(tablehead[1]) -- später löschen
+      final_split_tables[#final_split_tables + 1] = current_table
+      pagegoal = pagegoals[#final_split_tables]
     end
 
-    _,aktuelle_tabelle = publisher.add_glue(aktuelle_tabelle,"tail",{ width = self.rowsep })
+    _,current_table = publisher.add_glue(current_table,"tail",{ width = self.rowsep })
     pagegoal = pagegoal - self.rowsep
 
-    aktuelle_tabelle.next = zeilen[z]
-    zeilen[z].prev = aktuelle_tabelle
-    aktuelle_tabelle = zeilen[z]
+    current_table.next = rows[z]
+    rows[z].prev = current_table
+    current_table = rows[z]
 
-    pagegoal = pagegoal - ht_zeile
+    pagegoal = pagegoal - ht_row
   end
 
-  local last = node.tail(aktuelle_tabelle)
-  local tmp_fuss = node.copy_list(fusszeilen[1])
-  last.next = tmp_fuss
-  tmp_fuss.prev = last
+  local last = node.tail(current_table)
+  local tmp_foot = node.copy_list(tablefoot[1])
+  last.next = tmp_foot
+  tmp_foot.prev = last
 
-  -- Jetzt sind alle Zeilen zu einer Nodelist verbunden
-  if not zeilen[1] then
+  -- now all rows are connected to form a nodelist
+  if not rows[1] then
     err("No row found in table")
-    zeilen[1] = publisher.erzeuge_leere_hbox_mit_breite(100)
+    rows[1] = publisher.erzeuge_leere_hbox_mit_breite(100)
   end
 
-  for i=1,#tabellen do
-    tabellen[i] = node.vpack(tabellen[i])
+  for i=1,#final_split_tables do
+    final_split_tables[i] = node.vpack(final_split_tables[i])
   end
-  return tabellen
+  return final_split_tables
 end
 
 
