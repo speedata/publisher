@@ -930,13 +930,15 @@ function setze_tabelle(self)
   for z=1,#rows do
     ht_row = rows[z].height + rows[z].depth
 
-    if ht_row + self.rowsep + ht_footer >= pagegoal then
+    if ht_row + ht_footer >= pagegoal then
       -- if current table exists then put it into the array + foot
       if current_table then
-        local last = node.tail(current_table)
+
+        _,current_table = publisher.add_glue(current_table,"tail",{ width = self.rowsep })
+
         local tmp_foot = node.copy_list(tablefoot[1])
-        last.next = tmp_foot
-        tmp_foot.prev = last
+        current_table.next = tmp_foot
+        tmp_foot.prev = current_table
       end
       -- create a new table and add the head
       current_table = node.copy_list(tablehead[1]) -- später löschen
@@ -954,10 +956,11 @@ function setze_tabelle(self)
     pagegoal = pagegoal - ht_row
   end
 
-  local last = node.tail(current_table)
+  _,current_table = publisher.add_glue(current_table,"tail",{ width = self.rowsep })
+
   local tmp_foot = node.copy_list(tablefoot[1])
-  last.next = tmp_foot
-  tmp_foot.prev = last
+  current_table.next = tmp_foot
+  tmp_foot.prev = current_table
 
   -- now all rows are connected to form a nodelist
   if not rows[1] then
