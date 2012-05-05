@@ -362,8 +362,8 @@ function commands.definiere_schriftfamilie( layoutxml,dataxml )
   -- fontsize and baselineskip are in dtp points (bp, 1 bp ≈ 65782 sp)
   -- Concrete font instances are created here. fontsize and baselineskip are known
   local name        = publisher.read_attribute(layoutxml,dataxml,"name",   "string" )
-  fam.size          = publisher.read_attribute(layoutxml,dataxml,"fontsize","number")  * 65782
-  fam.baselineskip  = publisher.read_attribute(layoutxml,dataxml,"leading", "number") * 65782
+  fam.size          = publisher.read_attribute(layoutxml,dataxml,"fontsize","number")  * publisher.factor
+  fam.baselineskip  = publisher.read_attribute(layoutxml,dataxml,"leading", "number")  * publisher.factor
   fam.scriptsize    = fam.size * 0.8 -- subscript / superscript
   fam.scriptshift   = fam.size * 0.3
 

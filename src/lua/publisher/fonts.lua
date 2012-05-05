@@ -273,9 +273,9 @@ function insert_underline( list_head, head, start)
 	local ht = list_head.height
 	local dp = list_head.depth
 
-  wd = wd / 65782
-  ht = ht / 65782
-  dp = dp / 65782
+  wd = wd / publisher.factor
+  ht = ht / publisher.factor
+  dp = dp / publisher.factor
 
   local rule = node.new("whatsit","pdf_literal")
   -- thickness: ht / ...

@@ -20,6 +20,8 @@ local xmlparser = require("xmlparser")
 
 module(...,package.seeall)
 
+factor = 65781  -- big points vs. TeX points
+
 att_fontfamily     = 1
 att_italic         = 2
 att_bold           = 3
@@ -1335,8 +1337,6 @@ end
 function boxit( box )
   local box = node.hpack(box)
 
-  local factor = 65782  -- big points vs. TeX points
-
   local rule_width = 0.1
   local wd = box.width                 / factor - rule_width
   local ht = (box.height + box.depth)  / factor - rule_width
@@ -1612,10 +1612,10 @@ end
 function define_default_fontfamily()
   -- we assume that TeXGyreHeros is available. If not, !?!?
   local fam={
-    size         = 10 * 65782,
-    baselineskip = 12 * 65782,
-    scriptsize   = 10 * 65782 * 0.8,
-    scriptshift  = 10 * 65782 * 0.3,
+    size         = 10 * factor,
+    baselineskip = 12 * factor,
+    scriptsize   = 10 * factor * 0.8,
+    scriptshift  = 10 * factor * 0.3,
   }
   local ok,tmp
   ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Regular",fam.size)
