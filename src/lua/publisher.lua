@@ -36,6 +36,7 @@ att_shift_up       = 101
 att_tie_glue       = 201
 
 att_space_prio     = 300
+att_space_amount   = 301
 
 glue_spec_node = node.id("glue_spec")
 glue_node      = node.id("glue")

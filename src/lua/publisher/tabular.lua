@@ -868,16 +868,12 @@ function setze_tabelle(self)
 
     elseif eltname == "Tr" then
       current_row = current_row + 1
-      -- if tr_contents["top-distance"] then
-      --   local r = node.new("rule")
-      --   r.width=0
-      --   r.height = tr_contents["top-distance"]
-      --   local h = node.hpack(r)
-      --   node.set_attribute(h,publisher.att_space_prio,1)
-      --   rows[#rows + 1] = h
-      -- end
-
       rows[#rows + 1] = self:setze_zeile(tr_contents,current_row)
+
+      if tr_contents["top-distance"] ~= 0 then
+        node.set_attribute(rows[#rows],publisher.att_space_amount,tr_contents["top-distance"])
+      end
+
     else
       warning("Unknown contents in »Table« %s",eltname )
     end -- wenn es eine Tabellenzelle ist
@@ -922,14 +918,16 @@ function setze_tabelle(self)
   local tmp
   local pagegoal = 0
 
-  local ht_row
+  local ht_row,space_above,too_high
   for z=1,#rows do
     ht_row = rows[z].height + rows[z].depth
+    space_above = node.has_attribute(rows[z],publisher.att_space_amount) or 0
 
     -- pagegoal includes the height of head and footer, so
     -- we only need to remove the rows
-    if ht_row + self.rowsep > pagegoal then
+    too_high = ht_row + self.rowsep + space_above > pagegoal
 
+    if too_high then
       -- if current table exists then put it into the array + foot
       if current_table then
 
@@ -947,6 +945,11 @@ function setze_tabelle(self)
 
     _,current_table = publisher.add_glue(current_table,"tail",{ width = self.rowsep })
     pagegoal = pagegoal - self.rowsep
+
+    if not too_high then
+      _,current_table = publisher.add_glue(current_table,"tail",{ width = space_above })
+      pagegoal = pagegoal - space_above
+    end
 
     current_table.next = rows[z]
     rows[z].prev = current_table
