@@ -18,6 +18,8 @@ orig_xpath_funktionen    = require("publisher.xpath_functions")
 local xmlparser = require("xmlparser")
 
 
+module(...,package.seeall)
+
 att_fontfamily     = 1
 att_italic         = 2
 att_bold           = 3
@@ -31,7 +33,6 @@ att_shift_up       = 101
 -- tie glue (U+00A0)
 att_tie_glue       = 201
 
-module(...,package.seeall)
 
 glue_spec_node = node.id("glue_spec")
 glue_node      = node.id("glue")
