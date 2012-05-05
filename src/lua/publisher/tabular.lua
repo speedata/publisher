@@ -926,7 +926,10 @@ function setze_tabelle(self)
   for z=1,#rows do
     ht_row = rows[z].height + rows[z].depth
 
-    if ht_row + ht_footer >= pagegoal then
+    -- pagegoal includes the height of head and footer, so
+    -- we only need to remove the rows
+    if ht_row + self.rowsep > pagegoal then
+
       -- if current table exists then put it into the array + foot
       if current_table then
 
