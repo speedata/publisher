@@ -1128,6 +1128,14 @@
       <a:documentation docid="tr">Create a table row</a:documentation>
       <optional>
         <attribute name="top-distance"/>
+        <a:documentation docid="tr/topdistance">Amount of spacing above the row, unless at the top of the table</a:documentation>
+      </optional>
+      <optional>
+        <attribute name="break-below">
+          <choice>
+            <value>no</value>
+          </choice>
+        </attribute>
       </optional>
       <optional>
         <attribute name="backgroundcolor">

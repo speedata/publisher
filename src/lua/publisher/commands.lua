@@ -1246,6 +1246,7 @@ function commands.tr( layoutxml,dataxml )
     ["backgroundcolor"] = "string",
     ["minheight"]       = "number",
     ["top-distance"]    = "string",
+    ["break-below"]     = "string",
   }
 
   for attname,atttyp in pairs(attribute) do

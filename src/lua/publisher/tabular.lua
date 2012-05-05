@@ -827,12 +827,15 @@ function setze_tabelle(self)
   local tablehead = {}
   local tablefoot = {}
   local rows = {}
+  local break_above = true
 
   current_row = 0
   for _,tr in ipairs(self.tab) do
     local tr_contents = publisher.element_contents(tr)
     local eltname   = publisher.elementname(tr,true)
     local tmp
+    -- If this row is allowed to break above
+    -- Will be set to false if break_below is "no"
 
     if eltname == "Columns" then
       -- ignorieren
@@ -869,9 +872,19 @@ function setze_tabelle(self)
     elseif eltname == "Tr" then
       current_row = current_row + 1
       rows[#rows + 1] = self:setze_zeile(tr_contents,current_row)
+      node.set_attribute(rows[#rows],publisher.att_is_table_row,1)
+
+      if break_above == false then
+        node.set_attribute(rows[#rows],publisher.att_break_above,1)
+        break_above = true
+      end
 
       if tr_contents["top-distance"] ~= 0 then
         node.set_attribute(rows[#rows],publisher.att_space_amount,tr_contents["top-distance"])
+      end
+      if tr_contents["break-below"] == "no" then
+        node.set_attribute(rows[#rows],publisher.att_break_below,1)
+        break_above = false
       end
 
     else
@@ -890,7 +903,9 @@ function setze_tabelle(self)
     tablehead[z+1].prev = tmp
   end
   ht_header = ht_header + self.rowsep * ( #tablehead - 1 )
-  ht_header = ht_header + tablehead[#tablehead].height
+  if #tablehead > 0 then
+    ht_header = ht_header + tablehead[#tablehead].height
+  end
 
   for z = 1,#tablefoot - 1 do
     ht_footer = ht_footer + tablefoot[z].height  -- Tr oder Tablerule
@@ -900,7 +915,9 @@ function setze_tabelle(self)
     tablefoot[z+1].prev = tmp
   end
   ht_footer = ht_footer + ( #tablefoot - 1 ) * self.rowsep
-  ht_footer = ht_footer + tablefoot[#tablefoot].height
+  if #tablefoot > 0 then
+    ht_footer = ht_footer + tablefoot[#tablefoot].height
+  end
 
   if not tablehead[1] then
     tablehead[1] = node.new("hlist") -- dummy-Kopfzeile
@@ -920,11 +937,11 @@ function setze_tabelle(self)
 
   local ht_row,space_above,too_high
   for z=1,#rows do
+
     ht_row = rows[z].height + rows[z].depth
     space_above = node.has_attribute(rows[z],publisher.att_space_amount) or 0
 
-    -- pagegoal includes the height of head and footer, so
-    -- we only need to remove the rows
+    -- pagegoal includes the height of head and footer
     too_high = ht_row + self.rowsep + space_above > pagegoal
 
     if too_high then

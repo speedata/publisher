@@ -38,6 +38,12 @@ att_tie_glue       = 201
 att_space_prio     = 300
 att_space_amount   = 301
 
+att_break_below    = 400
+att_break_above    = 401
+
+-- if it is a regular table row, not a spacer
+att_is_table_row   = 500
+
 glue_spec_node = node.id("glue_spec")
 glue_node      = node.id("glue")
 glyph_node     = node.id("glyph")

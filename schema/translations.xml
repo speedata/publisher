@@ -122,6 +122,7 @@
         <attribute en="border-top" de="border-top"/>
         <attribute en="border-top-color" de="border-top-color"/>
         <attribute en="bottom" de="unten"/>
+      <attribute en="break-below" de="umbruch-unten"/>
         <attribute en="c" de="c"/>
         <attribute en="color" de="farbe"/>
         <attribute en="colspan" de="colspan"/>
@@ -1042,6 +1043,10 @@
             <en>Vertical alignment of all cells of this row.</en>
             <de>Vertikale Ausrichtung für alle Zellen dieser Zeile</de>
         </documentation>
+      <documentation docid="tr/topdistance">
+        <en>Amount of spacing above the row, unless at the top of the table</en>
+        <de>Abstand oberhalb der Zeile, wenn sie nicht die erste in der Tabelle ist</de>
+      </documentation>
         <documentation docid="hyphenation">
             <en>Gives hyphenation correction for the automatic hyphenation algorithm. Example: per-spec-tive</en>
             <de>Korrigiert fehlerhafte automatische Silbentrennung. Beispiel: Au-to-bahn</de>

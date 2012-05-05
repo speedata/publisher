@@ -226,6 +226,7 @@ de = {  elements = {
     ["border-top"] = {en = "border-top", de = "border-top", },
     ["border-top-color"] = {en = "border-top-color", de = "border-top-color", },
     ["bottom"] = {en = "bottom", de = "unten", },
+    ["break-below"] = {en = "break-below", de = "umbruch-unten", },
     ["c"] = {en = "c", de = "c", },
     ["color"] = {en = "color", de = "farbe", },
     ["colspan"] = {en = "colspan", de = "colspan", },

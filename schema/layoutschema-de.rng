@@ -1144,6 +1144,14 @@
       <a:documentation docid="tr">Erzeugt eine Tabellenzeile</a:documentation>
       <optional>
         <attribute name="abstand-oben"/>
+        <a:documentation docid="tr/topdistance">Abstand oberhalb der Zeile, wenn sie nicht die erste in der Tabelle ist</a:documentation>
+      </optional>
+      <optional>
+        <attribute name="umbruch-unten">
+          <choice>
+            <value>nein</value>
+          </choice>
+        </attribute>
       </optional>
       <optional>
         <attribute name="hintergrundfarbe">
