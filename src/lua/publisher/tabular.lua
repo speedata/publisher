@@ -868,14 +868,14 @@ function setze_tabelle(self)
 
     elseif eltname == "Tr" then
       current_row = current_row + 1
-      if tr_contents["top-distance"] then
-        local r = node.new("rule")
-        r.width=0
-        r.height = tr_contents["top-distance"]
-        local h = node.hpack(r)
-        node.set_attribute(h,publisher.att_space_prio,1)
-        zeilen[#zeilen + 1] = h
-      end
+      -- if tr_contents["top-distance"] then
+      --   local r = node.new("rule")
+      --   r.width=0
+      --   r.height = tr_contents["top-distance"]
+      --   local h = node.hpack(r)
+      --   node.set_attribute(h,publisher.att_space_prio,1)
+      --   zeilen[#zeilen + 1] = h
+      -- end
 
       zeilen[#zeilen + 1] = self:setze_zeile(tr_contents,current_row)
     else
@@ -883,39 +883,32 @@ function setze_tabelle(self)
     end -- wenn es eine Tabellenzelle ist
   end
 
-  local ht_kopfzeilen = 0
-  for z = 1,#kopfzeilen - 1 do
-    ht_kopfzeilen = ht_kopfzeilen + kopfzeilen[z].height  -- Tr oder Tablerule
-    _,tmp = publisher.add_glue(kopfzeilen[z],"tail",{ width = self.rowsep })
-    tmp.next = kopfzeilen[z+1]
-    kopfzeilen[z+1].prev = tmp
+  -- We now have kopfzeilen and fusszeilen arrays with the contents
+  -- Let's add the glue inbetween
+  local ht_kopfzeilen, ht_fusszeilen = 0, 0
+
+  if self.rowsep > 0 then
+    for z = 1,#kopfzeilen - 1 do
+      ht_kopfzeilen = ht_kopfzeilen + kopfzeilen[z].height  -- Tr oder Tablerule
+      _,tmp = publisher.add_glue(kopfzeilen[z],"tail",{ width = self.rowsep })
+      tmp.next = kopfzeilen[z+1]
+      kopfzeilen[z+1].prev = tmp
+    end
+
+    ht_kopfzeilen = ht_kopfzeilen + self.rowsep * ( #kopfzeilen - 1 )
+    ht_kopfzeilen = ht_kopfzeilen + kopfzeilen[#kopfzeilen].height
+
+
+    for z = 1,#fusszeilen - 1 do
+      ht_fusszeilen = ht_fusszeilen + fusszeilen[z].height  -- Tr oder Tablerule
+      -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
+      _,tmp = publisher.add_glue(fusszeilen[z],"tail",{ width = self.rowsep })
+      tmp.next = fusszeilen[z+1]
+      fusszeilen[z+1].prev = tmp
+    end
+    ht_fusszeilen = ht_fusszeilen + ( #fusszeilen - 1 ) * self.rowsep
+    ht_fusszeilen = ht_fusszeilen + fusszeilen[#fusszeilen].height
   end
-  -- publisher.add_glue(kopfzeilen[#kopfzeilen],"tail",{ width = self.rowsep })
-
-  ht_kopfzeilen = ht_kopfzeilen + ( self.rowsep - 1 ) * #kopfzeilen
-  ht_kopfzeilen = ht_kopfzeilen + kopfzeilen[#kopfzeilen].height
-
-
-  local ht_fusszeilen = 0
-  for z = 1,#fusszeilen - 1 do
-    ht_fusszeilen = ht_fusszeilen + fusszeilen[z].height  -- Tr oder Tablerule
-    -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
-    _,tmp = publisher.add_glue(fusszeilen[z],"tail",{ width = self.rowsep })
-    tmp.next = fusszeilen[z+1]
-    fusszeilen[z+1].prev = tmp
-  end
-  ht_fusszeilen = ht_fusszeilen + ( self.rowsep - 1 ) * #fusszeilen
-  ht_fusszeilen = ht_fusszeilen + fusszeilen[#fusszeilen].height
-
-  -- The maximum heights are saved here for each table. Currently all tables must have the same height (see the metatable)
-  local pagegoals = setmetatable({}, { __index = function() return self.optionen.ht_max - ht_kopfzeilen - ht_fusszeilen end})
-
-
-  -- durch einen split werden mehrere Tabellen zurück gegeben
-  local tabellen = {}
-  local aktuelle_tabelle
-  local anzahl_zeilen_in_der_aktuellen_tabelle = 0
-  local tmp
 
   if not kopfzeilen[1] then
     kopfzeilen[1] = node.new("hlist") -- dummy-Kopfzeile
@@ -924,39 +917,48 @@ function setze_tabelle(self)
     fusszeilen[1] = node.new("hlist") -- dummy-Fußzeile
   end
 
-  aktuelle_tabelle = node.copy_list(kopfzeilen[1]) -- später löschen
-  tabellen[#tabellen + 1] = aktuelle_tabelle
+  -- The maximum heights are saved here for each table. Currently all tables must have the same height (see the metatable)
+  local pagegoals = setmetatable({}, { __index = function() return self.optionen.ht_max - ht_kopfzeilen - ht_fusszeilen end})
 
-  local pagegoal = pagegoals[1]
+  -- durch einen split werden mehrere Tabellen zurück gegeben
+  local tabellen = {}
+  local aktuelle_tabelle
+  local tmp
+  local pagegoal = 0
 
-  for z = 1,#zeilen do
-    local ht_zeile = zeilen[z].height + zeilen[z].depth
+  -- aktuelle_tabelle = node.copy_list(kopfzeilen[1]) -- später löschen
+  -- tabellen[#tabellen + 1] = aktuelle_tabelle
 
-    if ht_zeile  + ht_fusszeilen  < pagegoal then
-      _,tmp = publisher.add_glue(aktuelle_tabelle,"tail",{ width = self.rowsep })
-      tmp.next = zeilen[z]
-      anzahl_zeilen_in_der_aktuellen_tabelle = anzahl_zeilen_in_der_aktuellen_tabelle + 1
-      pagegoal = pagegoal - ht_zeile
-    else
-      if anzahl_zeilen_in_der_aktuellen_tabelle > 0 then
+  -- local pagegoal = pagegoals[1]
+
+  local ht_zeile
+  for z=1,#zeilen do
+    ht_zeile = zeilen[z].height + zeilen[z].depth
+
+    if ht_zeile + self.rowsep + ht_fusszeilen >= pagegoal then
+      -- if current table exists then put it into the array + foot
+      if aktuelle_tabelle then
         local last = node.tail(aktuelle_tabelle)
         local tmp_fuss = node.copy_list(fusszeilen[1])
         last.next = tmp_fuss
         tmp_fuss.prev = last
-
-        aktuelle_tabelle = node.copy_list(kopfzeilen[1]) -- später löschen
-        tabellen[#tabellen + 1] = aktuelle_tabelle
-        anzahl_zeilen_in_der_aktuellen_tabelle = 0
-        pagegoal = pagegoals[#tabellen]
-        _,tmp = publisher.add_glue(aktuelle_tabelle,"tail",{ width = self.rowsep })
-        tmp.next = zeilen[z]
-        pagegoal = pagegoal - ht_zeile
-      else
-        -- keine Zeile eingefügt
-        pagegoal = pagegoals[#tabellen + 1]
       end
+      -- create a new table and add the head
+      aktuelle_tabelle = node.copy_list(kopfzeilen[1]) -- später löschen
+      tabellen[#tabellen + 1] = aktuelle_tabelle
+      pagegoal = pagegoals[#tabellen]
     end
+
+    _,aktuelle_tabelle = publisher.add_glue(aktuelle_tabelle,"tail",{ width = self.rowsep })
+    pagegoal = pagegoal - self.rowsep
+
+    aktuelle_tabelle.next = zeilen[z]
+    zeilen[z].prev = aktuelle_tabelle
+    aktuelle_tabelle = zeilen[z]
+
+    pagegoal = pagegoal - ht_zeile
   end
+
   local last = node.tail(aktuelle_tabelle)
   local tmp_fuss = node.copy_list(fusszeilen[1])
   last.next = tmp_fuss
