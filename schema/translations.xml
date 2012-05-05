@@ -189,6 +189,7 @@
         <attribute en="test" de="bedingung"/>
         <attribute en="textformat" de="textformat"/>
         <attribute en="top" de="oben"/>
+      <attribute en="top-distance" de="abstand-oben"/>
         <attribute en="trace" de="trace"/>
         <attribute en="trim" de="beschnittzugabe"/>
         <attribute en="valign" de="valign"/>

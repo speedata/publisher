@@ -1241,17 +1241,23 @@ function commands.tr( layoutxml,dataxml )
   local tab = publisher.dispatch(layoutxml,dataxml)
 
   local attribute = {
-    ["align"]   = "string",
-    ["valign"]  = "string",
+    ["align"]           = "string",
+    ["valign"]          = "string",
     ["backgroundcolor"] = "string",
-    ["minheight"] = "number",
+    ["minheight"]       = "number",
+    ["top-distance"]    = "string",
   }
 
   for attname,atttyp in pairs(attribute) do
     tab[attname] = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
   end
-
-  tab.minhoehe = tab["minhöhe"]
+  if tab["top-distance"] then
+    if tonumber(tab["top-distance"]) then
+      tab["top-distance"] = publisher.current_grid.gridheight * tab["top-distance"]
+    else
+      tab["top-distance"] = tex.sp(tab["top-distance"])
+    end
+  end
 
   return tab
 end

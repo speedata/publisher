@@ -293,6 +293,7 @@ de = {  elements = {
     ["test"] = {en = "test", de = "bedingung", },
     ["textformat"] = {en = "textformat", de = "textformat", },
     ["top"] = {en = "top", de = "oben", },
+    ["top-distance"] = {en = "top-distance", de = "abstand-oben", },
     ["trace"] = {en = "trace", de = "trace", },
     ["trim"] = {en = "trim", de = "beschnittzugabe", },
     ["valign"] = {en = "valign", de = "valign", },

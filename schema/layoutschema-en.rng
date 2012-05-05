@@ -1127,6 +1127,9 @@
     <element name="Tr">
       <a:documentation docid="tr">Create a table row</a:documentation>
       <optional>
+        <attribute name="top-distance"/>
+      </optional>
+      <optional>
         <attribute name="backgroundcolor">
           <a:documentation docid="tr/backgroundcolor">Background color of th table row. (text)</a:documentation>
         </attribute>

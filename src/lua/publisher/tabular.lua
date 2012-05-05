@@ -868,6 +868,15 @@ function setze_tabelle(self)
 
     elseif eltname == "Tr" then
       current_row = current_row + 1
+      if tr_contents["top-distance"] then
+        local r = node.new("rule")
+        r.width=0
+        r.height = tr_contents["top-distance"]
+        local h = node.hpack(r)
+        node.set_attribute(h,publisher.att_space_prio,1)
+        zeilen[#zeilen + 1] = h
+      end
+
       zeilen[#zeilen + 1] = self:setze_zeile(tr_contents,current_row)
     else
       warning("Unknown contents in »Table« %s",eltname )
@@ -884,20 +893,22 @@ function setze_tabelle(self)
   -- publisher.add_glue(kopfzeilen[#kopfzeilen],"tail",{ width = self.rowsep })
 
   ht_kopfzeilen = ht_kopfzeilen + ( self.rowsep - 1 ) * #kopfzeilen
+  ht_kopfzeilen = ht_kopfzeilen + kopfzeilen[#kopfzeilen].height
 
 
   local ht_fusszeilen = 0
   for z = 1,#fusszeilen - 1 do
     ht_fusszeilen = ht_fusszeilen + fusszeilen[z].height  -- Tr oder Tablerule
+    -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
     _,tmp = publisher.add_glue(fusszeilen[z],"tail",{ width = self.rowsep })
     tmp.next = fusszeilen[z+1]
     fusszeilen[z+1].prev = tmp
   end
   ht_fusszeilen = ht_fusszeilen + ( self.rowsep - 1 ) * #fusszeilen
+  ht_fusszeilen = ht_fusszeilen + fusszeilen[#fusszeilen].height
 
-  -- Hier sind die maximalen Höhen gespeichert, [1] für die erste Tabelle, [2] für die zweite Tabelle, ...
-  local pagegoals = { self.optionen.ht_aktuell - ht_kopfzeilen - ht_fusszeilen  }
-  setmetatable(pagegoals, { __index = function() return self.optionen.ht_max - ht_kopfzeilen - ht_fusszeilen end})
+  -- The maximum heights are saved here for each table. Currently all tables must have the same height (see the metatable)
+  local pagegoals = setmetatable({}, { __index = function() return self.optionen.ht_max - ht_kopfzeilen - ht_fusszeilen end})
 
 
   -- durch einen split werden mehrere Tabellen zurück gegeben
@@ -921,7 +932,7 @@ function setze_tabelle(self)
   for z = 1,#zeilen do
     local ht_zeile = zeilen[z].height + zeilen[z].depth
 
-    if ht_zeile < pagegoal then
+    if ht_zeile  + ht_fusszeilen  < pagegoal then
       _,tmp = publisher.add_glue(aktuelle_tabelle,"tail",{ width = self.rowsep })
       tmp.next = zeilen[z]
       anzahl_zeilen_in_der_aktuellen_tabelle = anzahl_zeilen_in_der_aktuellen_tabelle + 1

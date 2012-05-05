@@ -1143,6 +1143,9 @@
     <element name="Tr">
       <a:documentation docid="tr">Erzeugt eine Tabellenzeile</a:documentation>
       <optional>
+        <attribute name="abstand-oben"/>
+      </optional>
+      <optional>
         <attribute name="hintergrundfarbe">
           <a:documentation docid="tr/backgroundcolor">Farbe des Zeilenhintergrundes. (Text)</a:documentation>
         </attribute>
