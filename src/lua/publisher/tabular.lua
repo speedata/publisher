@@ -971,7 +971,11 @@ function setze_tabelle(self)
       accumulated_height = extra_height
       extra_height = self.rowsep
     else
-      extra_height = extra_height + space_above
+      -- if it is not the first row in a table,
+      -- add space_above
+      if i ~= splits[#splits] + 1 then
+        extra_height = extra_height + space_above
+      end
     end
   end
   splits[#splits + 1] = #rows
@@ -986,7 +990,11 @@ function setze_tabelle(self)
     thissplittable[#thissplittable + 1] = node.copy(tablehead[1])
 
     for i = first_row_in_new_table ,splits[s]  do
-      space_above = node.has_attribute(rows[i],publisher.att_space_amount) or 0
+      if i > first_row_in_new_table then
+        space_above = node.has_attribute(rows[i],publisher.att_space_amount) or 0
+      else
+        space_above = 0
+      end
       thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep + space_above})
       thissplittable[#thissplittable + 1] = rows[i]
     end
