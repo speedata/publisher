@@ -1161,6 +1161,15 @@ function add_glue( nodelist,head_or_tail,parameter)
   assert(false,"never reached")
 end
 
+function make_glue( parameter )
+  local n = node.new("glue")
+  n.spec = node.new("glue_spec")
+  n.spec.width         = parameter.width
+  n.spec.stretch       = parameter.stretch
+  n.spec.stretch_order = parameter.stretch_order
+  return n
+end
+
 function finish_par( nodelist,hsize )
   assert(nodelist)
   node.slide(nodelist)

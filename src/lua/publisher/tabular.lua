@@ -955,36 +955,50 @@ function setze_tabelle(self)
     ht_row = rows[i].height + rows[i].depth
     break_above = node.has_attribute(rows[i],publisher.att_break_above) or -1
     space_above = node.has_attribute(rows[i],publisher.att_space_amount) or 0
+
     local break_above_allowed = break_above ~= 1
 
     if break_above_allowed then
       last_possible_split_is_after_line = i - 1
       accumulated_height = accumulated_height + extra_height
-      extra_height = 0
+      extra_height = self.rowsep
     end
 
-    extra_height = extra_height + ht_row
-    local fits_in_table = accumulated_height + extra_height < pagegoal
+    extra_height = extra_height + ht_row + self.rowsep
+    local fits_in_table = accumulated_height + extra_height + space_above < pagegoal
     if not fits_in_table then
       splits[#splits + 1] = last_possible_split_is_after_line
       accumulated_height = extra_height
-      extra_height = 0
+      extra_height = self.rowsep
+    else
+      extra_height = extra_height + space_above
     end
   end
   splits[#splits + 1] = #rows
 
   local first_row_in_new_table
+
   for s=2,#splits do
     first_row_in_new_table = splits[s-1] + 1
-    final_split_tables[#final_split_tables + 1] = rows[first_row_in_new_table]
-    for i = first_row_in_new_table ,splits[s] - 1 do
-      rows[i].next   = rows[i+1]
-      rows[i+1].prev = rows[i]
+
+    thissplittable = {}
+    final_split_tables[#final_split_tables + 1] = thissplittable
+    thissplittable[#thissplittable + 1] = node.copy(tablehead[1])
+
+    for i = first_row_in_new_table ,splits[s]  do
+      space_above = node.has_attribute(rows[i],publisher.att_space_amount) or 0
+      thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep + space_above})
+      thissplittable[#thissplittable + 1] = rows[i]
     end
   end
 
+  -- now connect the entries in the split_tables
   for i=1,#final_split_tables do
-    final_split_tables[i] = node.vpack(final_split_tables[i])
+    for j=1,#final_split_tables[i] - 1 do
+      final_split_tables[i][j].next = final_split_tables[i][j+1]
+      final_split_tables[i][j+1].prev = final_split_tables[i][j]
+    end
+    final_split_tables[i] = node.vpack(final_split_tables[i][1])
   end
   return final_split_tables
 end
