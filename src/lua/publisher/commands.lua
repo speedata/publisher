@@ -733,7 +733,7 @@ function commands.neue_zeile( layoutxml,dataxml )
   end
 
   local current_row
-  current_row = grid:finde_passende_zeile(1,grid:anzahl_spalten(),rows,areaname)
+  current_row = grid:finde_passende_zeile(1,grid:anzahl_spalten(areaname),rows,areaname)
   if not current_row then
     publisher.next_area(areaname)
     publisher.setup_page()
@@ -913,9 +913,6 @@ function commands.objekt_ausgeben( layoutxml,dataxml )
       publisher.ausgabe_bei(object,aktuelle_spalte_start,current_row,belegen,bereich,valign,objects[i].allocate_matrix)
       trace("object ausgegeben.")
       zeile = nil -- die Zeile ist nicht mehr gültig, da schon ein object ausgegeben wurde
-      if i < #objects then
-        commands.neue_zeile(layoutxml,dataxml)
-      end
     end -- keine absolute Positionierung
   end
   if not belegen then

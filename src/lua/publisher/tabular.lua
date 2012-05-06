@@ -936,57 +936,55 @@ function setze_tabelle(self)
   local pagegoal = 0
 
   local ht_row,space_above,too_high
-  for z=1,#rows do
+  local accumulated_height = 0
+  local extra_height = 0
+  local break_above
+  local splits = {0}
+  -- We need to take into acccount:
+  -- * the head
+  -- * the foot
+  -- * the row height
+  -- * row sep
+  -- * distance above
+  -- * break_above?
 
-    ht_row = rows[z].height + rows[z].depth
-    space_above = node.has_attribute(rows[z],publisher.att_space_amount) or 0
+  local last_possible_split_is_after_line = 0
 
-    -- pagegoal includes the height of head and footer
-    too_high = ht_row + self.rowsep + space_above > pagegoal
+  pagegoal = pagegoals[1]
+  for i=1,#rows do
+    ht_row = rows[i].height + rows[i].depth
+    break_above = node.has_attribute(rows[i],publisher.att_break_above) or -1
+    space_above = node.has_attribute(rows[i],publisher.att_space_amount) or 0
+    local break_above_allowed = break_above ~= 1
 
-    if too_high then
-      -- if current table exists then put it into the array + foot
-      if current_table then
-
-        _,current_table[#current_table  + 1] = publisher.add_glue(current_table[#current_table],"tail",{ width = self.rowsep })
-        current_table[#current_table  + 1] = node.copy_list(tablefoot[1])
-        final_split_tables[#final_split_tables + 1] = current_table
-      end
-      -- create a new table and add the head
-      current_table = {}
-      current_table[#current_table  + 1] =  node.copy_list(tablehead[1]) -- später löschen
-      pagegoal = pagegoals[#final_split_tables]
+    if break_above_allowed then
+      last_possible_split_is_after_line = i - 1
+      accumulated_height = accumulated_height + extra_height
+      extra_height = 0
     end
 
-    _,current_table[#current_table  + 1] = publisher.add_glue(current_table[#current_table],"tail",{ width = self.rowsep })
-    pagegoal = pagegoal - self.rowsep
-
-    if not too_high then
-      _,current_table[#current_table  + 1] = publisher.add_glue(current_table[#current_table],"tail",{ width = space_above })
-      pagegoal = pagegoal - space_above
+    extra_height = extra_height + ht_row
+    local fits_in_table = accumulated_height + extra_height < pagegoal
+    if not fits_in_table then
+      splits[#splits + 1] = last_possible_split_is_after_line
+      accumulated_height = extra_height
+      extra_height = 0
     end
-    current_table[#current_table  + 1] = rows[z]
+  end
+  splits[#splits + 1] = #rows
 
-    pagegoal = pagegoal - ht_row
+  local first_row_in_new_table
+  for s=2,#splits do
+    first_row_in_new_table = splits[s-1] + 1
+    final_split_tables[#final_split_tables + 1] = rows[first_row_in_new_table]
+    for i = first_row_in_new_table ,splits[s] - 1 do
+      rows[i].next   = rows[i+1]
+      rows[i+1].prev = rows[i]
+    end
   end
 
-   _,current_table[#current_table  + 1] = publisher.add_glue(current_table[#current_table],"tail",{ width = self.rowsep })
-   final_split_tables[#final_split_tables + 1] = current_table
-
-  -- now all rows are connected to form a nodelist
-  if not rows[1] then
-    err("No row found in table")
-    rows[1] = publisher.erzeuge_leere_hbox_mit_breite(100)
-  end
-
-  local thistable
   for i=1,#final_split_tables do
-    thistable = final_split_tables[i]
-    for j=1,#thistable - 1 do
-      thistable[j].next = thistable[j + 1]
-      thistable[j + 1].prev = thistable[j]
-    end
-    final_split_tables[i] = node.vpack(final_split_tables[i][1])
+    final_split_tables[i] = node.vpack(final_split_tables[i])
   end
   return final_split_tables
 end
