@@ -5,32 +5,33 @@ h1.  Konfiguration des Publishers
 
 Der Publisher ist auf verschiedene Weisen zu konfigurieren:
 
-# Die Datei @publisher.conf@ im Homeverzeichnis bzw. im aktuellen Verzeichnis
+# Die Datei @publisher.cfg@ in @/etc/speedata/@, im Homeverzeichnis (mit Punkt davor) bzw. im aktuellen Verzeichnis
 # Die Parameter auf der Kommandozeile
 # Die Angaben in der Layoutdatei
 
-h2.  Die Datei @publisher.conf@ im Homeverzeichnis und im aktuellen Verzeichnis.
+h2.  Die Datei @publisher.cfg@ in @/etc/speedata/@, im Homeverzeichnis und im aktuellen Verzeichnis.
 
-Die Datei @publisher.conf@ (@/home/speedata/publisher.conf@) sowie im aktuellen Verzeichnis ist eine Textdatei, die beim Starten des Publishers eingelesen wird. Im Auslieferungszustand sieht sie wie folgt aus:
+Die Datei @publisher.cfg@ (@/etc/speedata/publisher.cfg@, @/home/speedata/.publisher.cfg@) sowie im aktuellen Verzeichnis ist eine Textdatei, die beim Starten des Publishers eingelesen wird. Im Auslieferungszustand sieht sie wie folgt aus:
 
-pre. optionen = {
-  datenname = "layout.xml",
-  layoutname = "daten.xml",
-  autoopen = false,
-  extra_dirs = {
-      "/home/speedata/Desktop/speedata"
-  }
-}
+pre. data      = data.xml
+layout    = layout.xml
+autoopen  = false
+extra_dir = "/home/speedata/Desktop/speedata"
 
 Das Format muss eingehalten werden, sonst wird die Datei nicht richtig erkannt. Folgende Optionen werden unterstützt:
 
 - @autoopen@ := wenn hier @true@ anstelle von @false@ steht, wird das PDF nach dem Publisher Durchlauf automatisch geöffnet. Derselbe Effekt lässt sich über die Kommandozeile mit @--autoopen@ erreichen.
 - @extra_dirs@ := eine Liste von Verzeichnissen (in Anführungszeichen und mit Komma getrennt), in denen der Publisher die notwendigen Dateien sucht. Dazu gehören die Schriftdateien, die XML-Dateien (Daten und Layoutregelwerk) sowie die einzubindenden Bilddateien.
-- @filter@ := Führt die angegebene Datei als XPROC-Filter aus.
-- @layoutname@ := Name des Layoutregelwerks. @layout.xml@ ist der voreingestellte Name.
-- @datenname@:= Name der XML-Daten. Wenn nicht vorhanden, wird die Datei @daten.xml@ geladen.
+- @filter@  := Führt die angegebene Datei als XPROC-Filter aus.
+- @layout@  := Name des Layoutregelwerks. @layout.xml@ ist der voreingestellte Name.
+- @data@    := Name der XML-Daten. Wenn nicht vorhanden, wird die Datei @daten.xml@ geladen.
+- @jobname@ := Name der Ausgabedatei
+- @startpage@ := Nummer der ersten Seite
+- @grid@    := Bestimmt, ob das Raster angezeigt wird.
+- @opencommand@ := Kommando für das automatische Öffnen der Dokumentation bzw. PDF-Datei. Für MacOS X sollte das @open@ sein, für Linux @xdg-open@ oder @exo-open@  (xfce).
 
-Alle Angaben in dieser Konfigurationsdatei sind optional. Wenn die Konfigurationsdatei im aktuellen Verzeichnis nicht gefunden wird, sucht der Publisher die Datei im Homeverzeichnis.
+Alle Angaben in dieser Konfigurationsdatei sind optional. Alle folgenden Konfigurationsdateienwerden nin dieser Reihenfolge eingelesen: @/etc/speedata/publisher.cfg@, @~/.publisher.cfg@ und im aktuellen Verzeichnis @publisher.cfg@.
+
 
 h2.  Parameter auf der Kommandozeile
 

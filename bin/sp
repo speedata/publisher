@@ -19,7 +19,10 @@ var argumentr     = require("../src/js/argumentr"),
     layoutoptions = {},
     variables     = {},
 	version,srcdir,inifile,
-    children      = []
+    children      = [],
+    open_command  = "xdg-open",
+    home_cfg      = path.join(process.env["HOME"],".publisher.cfg"),
+    etc_cfg       = "/etc/speedata/publisher.cfg"
 
 console.time("Total time")
 
@@ -54,14 +57,12 @@ function save_variables () {
 }
 
 function open_file (filename) {
-    switch (process.platform) {
-        case 'darwin':
-            exec("open " + filename)
-            break
-        default:
-            console.log("Can't open file: unknown operating system: " + process.platform)
-            process.exit(-1)
-    }
+    var commandline = open_command + " " + filename
+    console.log(commandline)
+    exec(commandline,function (error, stdout, stderr) {
+        if (error !== null) {
+            console.log('exec error: ' + error);
+        }})
 }
 
 function openpdf () {
@@ -120,6 +121,21 @@ function run_publisher (cfg) {
     run_publisher_core(command,cmdary,runs,openpdf)
 }
 
+function read_config (cfg,ignore_error) {
+    if (! ( cfg.read_ignore_errors(etc_cfg,home_cfg,"publisher.cfg") || ignore_error) )  {
+        console.log("No configuration file found. This is what I have tried:")
+        console.log(" " + etc_cfg)
+        console.log(" " + home_cfg)
+        console.log(" " + path.join(process.cwd(),"publisher.cfg"))
+        console.log("See `sp doc' for details. Exit.")
+        process.exit(-1)
+    }
+    if (cfg.options.opencommand) {
+        open_command = cfg.options.opencommand
+    }
+}
+
+
 argumentr.start = 25
 argumentr.on("--autoopen",           "Open the PDF file (MacOS X and Linux only)", options)
 argumentr.on("--data NAME",          "Name of the XML data file. Defaults to 'data.xml'",options)
@@ -156,9 +172,13 @@ process.on('SIGINT', function () {
     process.exit(0)
 });
 
+var configuratr = require("../src/js/configuratr"),
+    cfg         = new configuratr()
 
 switch(argumentr.cmd) {
     case 'doc':
+        cfg.options = options
+        read_config(cfg,true)
         open_file(path.join(installdir,"/build/handbuch_publisher/index.html"))
         break
     case 'list-fonts':
@@ -166,17 +186,8 @@ switch(argumentr.cmd) {
         exec(cmdline,function (err,stdout,stderr) { console.log(stdout); console.timeEnd("Total time") })
         break
     case 'run':
-        var configuratr = require("../src/js/configuratr"),
-            cfg         = new configuratr()
-
         cfg.options = options
-        try {
-           cfg.read("publisher.cfg")
-        } catch (e) {
-            console.log("Error: can't read / find publisher.cfg")
-            process.exit(-1)
-        }
-
+        read_config(cfg)
         if (options.filter) {
             var filtername = path.basename(options.filter,".xpl")  + ".xpl"
             console.log("Run filter " + filtername)
@@ -199,9 +210,8 @@ switch(argumentr.cmd) {
         var configuratr = require("../src/js/configuratr"),
             cfg         = new configuratr()
 
-        if (path.existsSync("publisher.cfg")) {
-            cfg.read("publisher.cfg")
-        }
+        read_config(cfg)
+
         var files = fs.readdirSync(process.cwd())
         var events_patterns = Object.keys(cfg["watchdog-patterns"])
 

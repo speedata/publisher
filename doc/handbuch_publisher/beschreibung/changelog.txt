@@ -5,6 +5,8 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* @opencommand@ Konfigurierbar (Programm zum Öffnen der Dokumentation / PDF-Dateien)
+* Konfigurationsdatei in @/etc/speedata@ und im Homeverzeichnis @~/.publisher.cfg@ werden eingelesen.
 * Default Textformat bei "Tabellen":e_tabelle.
 * @zeilen@-Angabe bei Textformaten (inkl hängender Einzug). Siehe "DefiniereTextformat":e_definieretextformat
 * @sprun@ durch @sp@ ersetzt. Siehe "Kommandozeile":kommandozeile
@@ -25,7 +27,7 @@ h2. Version 1.6
 * Sprache kann je "Absatz":e_absatz ausgewählt werden (Silbentrennung).
 * Änderungen bei "SpeichereDatensatzdatei":e_speicheredatensatzdatei
 
-h2. Version 1.4 (2011-06-9)
+h2. Version 1.4 (2011-06-09)
 
 * Absolute Angaben von Breite und Höhe bei "Bildern":e_bild
 * "Tabellen":e_tabelle dürfen "Tabellen":e_tabelle enthalten
