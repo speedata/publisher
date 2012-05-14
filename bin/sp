@@ -48,6 +48,7 @@ var argumentr   = require(path.join(srcdir, "js/argumentr")),
 // -----------------------
 function getversioninfo () {
     console.log(version)
+    process.exit(0)
 }
 function setvariable (argument) {
     var a = argument.split(/=/)
@@ -75,7 +76,7 @@ function open_file (filename) {
 }
 
 function openpdf () {
-    if (options.autoopen) { open_file(options.jobname + "*pdf") }
+    if (options.autoopen == 'true') { open_file(options.jobname + "*pdf") }
 }
 
 function run_publisher_core (command,cmdary,runs,callback) {
@@ -185,7 +186,11 @@ switch(argumentr.cmd) {
     case 'doc':
         cfg.options = options
         read_config(cfg,true)
-        open_file(path.join(installdir,"/build/handbuch_publisher/index.html"))
+        if (installdir == '/usr') {
+            open_file('/usr/share/doc/speedata-publisher/index.html')
+        } else {
+            open_file(path.join(installdir,"/build/handbuch_publisher/index.html"))
+        }
         break
     case 'list-fonts':
         var cmdline = sprintf("%s/bin/sdluatex --luaonly %s/lua/sdscripts.lua %s list-fonts %s",installdir,srcdir,inifile,options.xml ? "xml" : "")
