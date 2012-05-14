@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Layout xmlns="urn:speedata.de:2009/publisher/de">
+<Layout xmlns="urn:speedata.de:2009/publisher/de"
+  xmlns:sd="urn:speedata:2009/publisher/functions/de">
   <Optionen 
     zeige_rasterbelegung="nein"
     zeichne_raster="nein"
@@ -38,11 +39,6 @@
   <DefiniereTextformat name="text" ausrichtung="blocksatz" />
   <DefiniereTextformat name="Text mit Einrückung" ausrichtung="blocksatz" einrückung="2em" />
 
-  <DefiniereFarbe name="Weiß" modell="rgb" r="100" g="100" b="100" />
-  <DefiniereFarbe name="Gelb" modell="cmyk" c="0" m="0" y="100" k="0" />
-  <DefiniereFarbe name="Rot" modell="rgb" r="100" g="0" b="0" />
-  <DefiniereFarbe name="Grün" modell="rgb" r="0" g="100" b="0" />
-  <DefiniereFarbe name="Dunkelblau" modell="cmyk" c="93" m="78" y="0" k="0" />
 
   <Seitentyp name="rechte Seite" bedingung="sd:ungerade( sd:aktuelle-seite() )">
     <Rand links="2cm" rechts="1cm" oben="1cm" unten="1cm" />
@@ -194,7 +190,7 @@
     <ObjektAusgeben spalte="{ $spalte }">
       <Textblock breite="28" schriftart="text" textformat="Text mit Einrückung">
         <Absatz>
-          <Wert auswahl="string(.)" />
+          <Wert auswahl="normalize-space(string(.))" />
         </Absatz>
       </Textblock>
     </ObjektAusgeben>
