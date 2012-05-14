@@ -21,7 +21,7 @@ extra_dir = "/home/speedata/Desktop/speedata"
 Das Format muss eingehalten werden, sonst wird die Datei nicht richtig erkannt. Folgende Optionen werden unterstützt:
 
 - @autoopen@ := wenn hier @true@ anstelle von @false@ steht, wird das PDF nach dem Publisher Durchlauf automatisch geöffnet. Derselbe Effekt lässt sich über die Kommandozeile mit @--autoopen@ erreichen.
-- @extra_dirs@ := eine Liste von Verzeichnissen (in Anführungszeichen und mit Komma getrennt), in denen der Publisher die notwendigen Dateien sucht. Dazu gehören die Schriftdateien, die XML-Dateien (Daten und Layoutregelwerk) sowie die einzubindenden Bilddateien.
+- @extra_dir@ := Ein Verzeichnis im Dateisystem, das Dateien für den Publisherlauf enthält. Dazu gehören die Schriftdateien, die XML-Dateien (Daten und Layoutregelwerk) sowie die einzubindenden Bilddateien. Kann mehrfach angegeben werden. Das aktuelle Verzeichnis wird automatisch eingebunden.
 - @filter@  := Führt die angegebene Datei als XPROC-Filter aus.
 - @layout@  := Name des Layoutregelwerks. @layout.xml@ ist der voreingestellte Name.
 - @data@    := Name der XML-Daten. Wenn nicht vorhanden, wird die Datei @daten.xml@ geladen.
