@@ -6,9 +6,7 @@
 // * watchdog
 // * webserver for process control
 
-var argumentr     = require("../src/js/argumentr"),
-    child_process = require('child_process'),
-    sprintf       = require("../src/js/sprintf.js").sprintf,
+var child_process = require('child_process'),
     path          = require("path"),
     fs            = require("fs"),
     exec          = child_process.exec,
@@ -39,6 +37,13 @@ if (installdir == "/usr") {
     process.env["PUBLISHER_BASE_PATH"] = installdir
     process.env["LUA_PATH"] = srcdir + "/lua/?.lua;" + installdir + "/lib/?.lua;" + srcdir + "/lua/common/?.lua;"
 }
+
+var argumentr   = require(path.join(srcdir, "js/argumentr")),
+    sprintf     = require(path.join(srcdir, "js/sprintf.js")).sprintf,
+    configuratr = require(path.join(srcdir, "js/configuratr")),
+    cfg         = new configuratr()
+
+
 
 // -----------------------
 function getversioninfo () {
@@ -175,9 +180,6 @@ process.on('SIGINT', function () {
     console.log("\nExit")
     process.exit(0)
 });
-
-var configuratr = require("../src/js/configuratr"),
-    cfg         = new configuratr()
 
 switch(argumentr.cmd) {
     case 'doc':
