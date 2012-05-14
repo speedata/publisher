@@ -1,6 +1,6 @@
 #!/usr/bin/env sdtexlua
 
-
+print("Warning: this script (sprun) is obsolete and will be removed in future publisher versions\nUse 'sp' instead")
 -- If called with texlua from texlive, the require path is mangled.
 -- Therefore we call our own binary in lua mode.
 if arg[-1] == "texlua" then
