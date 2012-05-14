@@ -68,7 +68,6 @@ function save_variables () {
 
 function open_file (filename) {
     var commandline = open_command + " " + filename
-    console.log(commandline)
     exec(commandline,function (error, stdout, stderr) {
         if (error !== null) {
             console.log('exec error: ' + error);
@@ -76,7 +75,7 @@ function open_file (filename) {
 }
 
 function openpdf () {
-    if (options.autoopen == 'true') { open_file(options.jobname + "*pdf") }
+    if (! ( options.autoopen == 'false' || options.autoopen == false) ) { open_file(options.jobname + ".pdf") }
 }
 
 function run_publisher_core (command,cmdary,runs,callback) {
@@ -145,6 +144,10 @@ function read_config (cfg,ignore_error) {
     }
 }
 
+cfg.options = options
+read_config(cfg)
+
+
 
 argumentr.start = 25
 argumentr.on("--autoopen",           "Open the PDF file (MacOS X and Linux only)", options)
@@ -184,8 +187,6 @@ process.on('SIGINT', function () {
 
 switch(argumentr.cmd) {
     case 'doc':
-        cfg.options = options
-        read_config(cfg,true)
         if (installdir == '/usr') {
             open_file('/usr/share/doc/speedata-publisher/index.html')
         } else {
@@ -197,8 +198,6 @@ switch(argumentr.cmd) {
         exec(cmdline,function (err,stdout,stderr) { console.log(stdout); console.timeEnd("Total time") })
         break
     case 'run':
-        cfg.options = options
-        read_config(cfg)
         if (options.filter) {
             var filtername = path.basename(options.filter,".xpl")  + ".xpl"
             console.log("Run filter " + filtername)
@@ -218,10 +217,6 @@ switch(argumentr.cmd) {
         break
     case 'watch':
         console.log("start watchdog")
-        var configuratr = require("../src/js/configuratr"),
-            cfg         = new configuratr()
-
-        read_config(cfg)
 
         var files = fs.readdirSync(process.cwd())
         var events_patterns = Object.keys(cfg["watchdog-patterns"])
