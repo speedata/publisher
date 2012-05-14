@@ -36,7 +36,7 @@ function Configuratr() {
 				// we don't need quotation marks around it, so we remove 'em
 				kv[1] = kv[1].replace(/^"(.*)"$/,"$1")
 				if (this[current_section][kv[0]]) {
-					if (typeof(this[current_section][kv[0]]) == "string" || typeof(this[current_section][kv[0]]) == "number" ) {
+					if (typeof(this[current_section][kv[0]]) == "string" || typeof(this[current_section][kv[0]]) == "number" || typeof(this[current_section][kv[0]]) == "boolean" ) {
 						this[current_section][kv[0]] = new Array(this[current_section][kv[0]],kv[1])
 					} else {
 						this[current_section][kv[0]].push(kv[1])
