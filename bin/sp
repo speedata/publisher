@@ -27,7 +27,11 @@ var argumentr     = require("../src/js/argumentr"),
 console.time("Total time")
 
 if (installdir == "/usr") {
-	console.log("Installed in system")
+    version = "Version <system>"
+    srcdir = "/usr/share/speedata-publisher/sw"
+    inifile = path.join(srcdir,"lua/sdini.lua")
+    process.env["PUBLISHER_BASE_PATH"] = "/usr/share/speedata-publisher"
+    process.env["LUA_PATH"]            = srcdir + "/lua/?.lua;" + srcdir + "/lua/common/?.lua;"
 } else {
 	version = "Version <lokal>"
     srcdir  = path.join(installdir,"src")
