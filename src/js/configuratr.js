@@ -1,9 +1,25 @@
 
 var fs = require("fs"),
-    util = require('util')
+    util = require('util'),
+    path = require('path')
+
 
 function Configuratr() {
 	this.options = {}
+
+	// Read multiple files (pass in multiple strings)
+	// and ignore if the file does not exist.
+	this.read_ignore_errors = function() {
+		var config_read = false
+		for (var i = 0, j = arguments.length; i < j; i++) {
+        	if (path.existsSync(arguments[i])) {
+        		config_read = true
+            	this.read(arguments[i])
+	        }
+		}
+		return config_read
+	}
+
 	this.read = function(filename) {
 		var current_section = "options"
 		var contents = fs.readFileSync(filename,'utf8').replace(/(\s*#.*|\s*)$/gm,""),
