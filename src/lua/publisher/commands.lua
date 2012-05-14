@@ -1199,7 +1199,7 @@ function commands.tabelle( layoutxml,dataxml,optionen )
   local tabular = publisher.tabular:new()
 
   tabular.tab = tab
-  tabular.optionen       = optionen or { ht_aktuell=100*2^16 } -- FIXME! Test - das ist für tabular in tabular
+  tabular.optionen       = optionen or { ht_aktuell=100*2^16 } -- FIXME! Test - this is for tabular in tabular
   tabular.layoutxml      = layoutxml
   tabular.dataxml        = dataxml
   tabular.breite         = width
