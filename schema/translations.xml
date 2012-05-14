@@ -714,10 +714,6 @@
             <en>No grid is drawn.</en>
             <de>Raster wird nicht gezeichnet</de>
         </documentation>
-        <documentation docid="options/runs">
-            <en>Number of runs the publisher uses. More then one run is needed for automatic table of contents generation.</en>
-            <de>Anzahl der Durchläufe des Publishers. Mehr als ein Durchlauf wird benötigt, wenn automatische Verzeichnisse erstellt werden.</de>
-        </documentation>
         <documentation docid="options/showhyphenation">
             <en>Mark all possible hyphenation points. Use to trace language usage.</en>
             <de>Zeichnet kleine Markierungen an den Stellen, an denen Wörter getrennt werden können.</de>

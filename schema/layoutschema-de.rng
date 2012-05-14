@@ -747,12 +747,6 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="läufe">
-          <a:documentation docid="options/runs">Anzahl der Durchläufe des Publishers. Mehr als ein Durchlauf wird benötigt, wenn automatische Verzeichnisse erstellt werden.</a:documentation>
-          <data type="integer"/>
-        </attribute>
-      </optional>
-      <optional>
         <attribute name="zeige_silbentrennung">
           <a:documentation docid="options/showhyphenation">Zeichnet kleine Markierungen an den Stellen, an denen Wörter getrennt werden können.</a:documentation>
           <choice>

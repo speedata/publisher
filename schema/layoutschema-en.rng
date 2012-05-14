@@ -734,12 +734,6 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="runs">
-          <a:documentation docid="options/runs">Number of runs the publisher uses. More then one run is needed for automatic table of contents generation.</a:documentation>
-          <data type="integer"/>
-        </attribute>
-      </optional>
-      <optional>
         <attribute name="show-hyphenation">
           <a:documentation docid="options/showhyphenation">Mark all possible hyphenation points. Use to trace language usage.</a:documentation>
           <choice>
