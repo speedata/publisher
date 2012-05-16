@@ -12,7 +12,7 @@ Es öffnet sich das Terminal-Fenster in dem die Kommandos eingegeben werden kön
 
 <%= imageref("terminal.png") %>
 
-Das Kommando, mit dem der Publisher gestartet wird, lautet @sprun@. Die Beschreibung des Kommandos lesen Sie im "Abschnitt  über die Kommandozeile":kommandozeile.
+Das Kommando, mit dem der Publisher gestartet wird, lautet @sp@. Die Beschreibung des Kommandos lesen Sie im "Abschnitt  über die Kommandozeile":kommandozeile.
 
-Derzeit erwartet der Publisher die Daten in der Datei @daten.xml@ und die Layoutbeschreibung in der Datei @layout.xml@ in einem Verzeichnis, das vom Publisher durchsucht wird. Das ist in der Standardeinstellung das Verzeichnis @speedata@ auf dem Schreibtisch in der VM (Verzeichnis @/home/speedata/Desktop/speedata@). Wie Sie dieses Verzeichnis ändern können, lesen Sie im Abschnitt über die "Konfiguration":konfiguration.
+Derzeit erwartet der Publisher die Daten in der Datei @data.xml@ und die Layoutbeschreibung in der Datei @layout.xml@ in einem Verzeichnis, das vom Publisher durchsucht wird. Das ist in der Standardeinstellung das Verzeichnis @speedata@ auf dem Schreibtisch in der VM (Verzeichnis @/home/speedata/Desktop/speedata@). Wie Sie dieses Verzeichnis ändern können, lesen Sie im Abschnitt über die "Konfiguration":konfiguration.
 

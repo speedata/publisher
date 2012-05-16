@@ -1,1 +1,1 @@
-Call 'sprun' from the command line in this directory.
+Call 'sp' from the command line in this directory.

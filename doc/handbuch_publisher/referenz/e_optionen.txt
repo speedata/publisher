@@ -27,7 +27,6 @@ h2. Beispiel
 pre(xml). <Optionen
    zeige_rasterbelegung="nein"
    zeichne_raster="ja"
-   läufe="3"
    beschnittmarken="ja"
    beschnittzugabe="3mm"
   />

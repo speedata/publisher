@@ -5,7 +5,7 @@ h1. Automatisch erstellte Verzeichnisse
 
 Der speedata Publisher kann beliebige Verzeichnistypen erstellen. Ob Inhaltsverzeichnis, Artikelliste oder Stichwortindex - alle Listen funktionieren nach demselben Prinzip: die notwendigen Daten (z.B. Seitenzahlen, Artikelnummern) werden in einer eigenen Datenstruktur gespeichert, auf Festplatte geschrieben und beim nächsten Lauf des Publishers werden diese Daten eingelesen und stehen sofort zur Verfügung.
 
-Damit der Publisher mehrfach durchläuft, muss die Option @läufe@ im Layoutregelwerk gesetzt werden. Diese Option wird im Layoutbefehl "Optionen":e_optionen gesetzt.
+Damit der Publisher mehrfach durchläuft, muss der Parameter @runs@ auf der Kommandozeile bzw. in der Konfigurationsdatei gesetzt werden, beispielsweise mit @sp --runs=2@ (Kommandozeile) bzw. @runs = 2@ (Optionen).
 
 h2. Schritt 1: Sammeln der Informationen
 
