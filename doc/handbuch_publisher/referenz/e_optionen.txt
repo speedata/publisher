@@ -8,7 +8,7 @@ h2. Beschreibung
 
 Setzt Publisher-spezifische Optionen.
 
-Erlaubte Attribute:  @beschnittmarken@, @beschnittzugabe@, @läufe@, @trace@, @startseite@, @zeichne_raster@, @zeige_rasterbelegung@, @zeige_silbentrennung@
+Erlaubte Attribute:  @beschnittmarken@, @beschnittzugabe@, @trace@, @startseite@, @zeichne_raster@, @zeige_rasterbelegung@, @zeige_silbentrennung@
 Kindelemente: -
 Elternelemente: "Layout":e_layout
 
@@ -16,7 +16,6 @@ h3. Attribute
 
 - @beschnittmarken@ (@ja@,@nein@) := Beschnittmarken (crop marks) werden ausgegeben. Der Abstand der Schnittmarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die Länge der Schnittmarke ist 1cm. Voreinstellung ist @nein@, d.h. es werden keine Schnittmarken ausgegeben.
 - @beschnittzugabe@  (Längengangabe + Einheit) := Die Größe des Beschnitts (bleed). Voreinstellung ist 0mm.
-- @läufe@ (Zahl, Voreinstellung: 1) := Anzahl der Durchläufe des Publishers. Das wird für automatische Verzeichnisse benötigt. Siehe dazu die Beschreibung für "Verzeichnisse":verzeichnisse. Hier sollte @2@ oder @3@ eingetragen werden, je nach Anforderungen im Layoutregelwerk.
 - @startseite@ := Gibt den Nummer der ersten Seite an.
 - @trace@ (@ja@,@nein@) := Erzeugt zusätzliche Ausgaben in der Protokolldatei und optische Hilfen im PDF.
 - @zeichne_raster@ (@ja@,@nein@) :=  Wenn @ja@, dann zeichnet der Publisher das zugrunde liegende Raster auf die Seiten.

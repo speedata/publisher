@@ -5,6 +5,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* Anzahl der Läufe kann nur noch über Kommandozeile bzw. Konfigurationsdatei angegeben werden.
 * @opencommand@ Konfigurierbar (Programm zum Öffnen der Dokumentation / PDF-Dateien)
 * Konfigurationsdatei in @/etc/speedata@ und im Homeverzeichnis @~/.publisher.cfg@ werden eingelesen.
 * Default Textformat bei "Tabellen":e_tabelle.

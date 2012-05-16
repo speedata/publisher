@@ -23,7 +23,14 @@ pre. <?xml version="1.0" encoding="UTF-8"?>
  ...
 </Layout>
 
-Die erste Zeile mit der XML-Deklaration ist optional.
+Die erste Zeile mit der XML-Deklaration ist optional. Falls, was wahrscheinlich ist, Layoutspezifische XPath-Funktionen benutzt werden, muss der Namensraum @urn:speedata:2009/publisher/functions/de@ bzw. für englische Funktionen @urn:speedata:2009/publisher/functions/en@ angegeben werden:
+
+pre. <?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/de"
+        xmlns:sd="urn:speedata:2009/publisher/functions/de">
+ ...
+</Layout>
+
 
 h2. Verknüpfung von Layoutregelwerk und RelaxNG Schema im XML-Editor
 

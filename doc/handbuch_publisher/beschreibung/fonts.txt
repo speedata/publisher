@@ -41,7 +41,7 @@ h2. Tipp
 Die @LadeSchriftdatei@- Anweisungen lassen sich mithilfe der Befehlszeile leicht erzeugen. Dazu muss
 der Publisher mit folgenden Anweisungen aufgerufen werden:
 
-pre. sprun --list-fonts --xml --extra-dir=...
+pre. sp --xml [--extra-dir=...] list-fonts
 
 Die Ausgabe enthält alle Schriftdateien, die im angegebenen Verzeichnis zu finden sind. Der Wert im Attribut @name@ wird
 mit dem PostScript Namen der Schriftart vorbelegt, sie kann im Layoutregelwerk später geändert werden.
