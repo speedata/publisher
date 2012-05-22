@@ -145,7 +145,7 @@ function read_config (cfg,ignore_error) {
 }
 
 cfg.options = options
-read_config(cfg)
+read_config(cfg,true)
 
 
 
