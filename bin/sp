@@ -13,7 +13,7 @@ var child_process = require('child_process'),
     spawn         = child_process.spawn,
     starttime     = new Date(),
     installdir    = path.join(path.dirname(process.argv[1]),".."),
-    options       = { jobname: "publisher",layout: "layout.xml", data: "data.xml",runs: 1, "extra-dir" : process.cwd() },
+    options       = { jobname: "publisher",layout: "layout.xml", data: "data.xml",runs: 1, "extra-dir" : [process.cwd()] },
     layoutoptions = {},
     variables     = {},
 	version,srcdir,inifile,
@@ -34,9 +34,12 @@ if (installdir == "/usr") {
 	version = "Version <lokal>"
     srcdir  = path.join(installdir,"src")
     inifile = path.join(srcdir,"lua/sdini.lua")
-    process.env["PUBLISHER_BASE_PATH"] = installdir
+    process.env["PUBLISHER_BASE_PATH"] = srcdir
+    options["extra-dir"].push(installdir + "/fonts")
+    options["extra-dir"].push(installdir + "/img")
     process.env["LUA_PATH"] = srcdir + "/lua/?.lua;" + installdir + "/lib/?.lua;" + srcdir + "/lua/common/?.lua;"
 }
+
 
 var argumentr   = require(path.join(srcdir, "js/argumentr")),
     sprintf     = require(path.join(srcdir, "js/sprintf.js")).sprintf,

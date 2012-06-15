@@ -59,7 +59,11 @@ function set(obj,negate,arg) {
     } else if (obj.hash) {
         var objname = (obj.long ? obj.long : obj.short)
         if (arg) {
-            obj.hash[objname] = arg
+            if (typeof(obj.hash[objname]) == "object") {
+                obj.hash[objname].push(arg)
+            } else {
+                obj.hash[objname] = arg
+        }
         } else {
             obj.hash[objname] = negate ? false : true 
         }
