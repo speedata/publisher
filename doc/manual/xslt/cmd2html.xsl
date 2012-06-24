@@ -102,6 +102,7 @@
       </dl>
       <xsl:apply-templates select="remark[@xml:lang = $lang]" />
       <xsl:apply-templates select="example[@xml:lang = $lang]" />
+      <xsl:apply-templates select="info[@xml:lang = $lang]" />
       <xsl:apply-templates select="seealso" />
     </div>
     <div id="elementref">
@@ -119,6 +120,11 @@
   <xsl:template match="remark">
     <h3>Bemerkungen</h3>
     <xsl:apply-templates/>
+  </xsl:template>
+  
+  <xsl:template match="info">
+    <h2>Hinweise</h2>
+    <xsl:apply-templates />
   </xsl:template>
 
   <xsl:template match="example">

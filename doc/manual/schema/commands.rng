@@ -13,15 +13,14 @@
           <element name="quote">
             <text />
           </element>
-           <ref name="cmd"/>
+          <ref name="cmd"/>
           <element name="tt"><text/></element>
-          <ref name="cmd"></ref>
         </choice>
       </oneOrMore>
       <text />
     </element>
   </define>
-  
+
   <define name="cmd">
     <element name="cmd">
       <attribute name="name" />
@@ -40,6 +39,7 @@
                 <text />
               </element>
               <ref name="cmd"/>
+              <element name="tt"><text/></element>
             </choice>
           </oneOrMore>
           <text />
@@ -118,6 +118,12 @@
               <ref name="paraorlisting"></ref>
             </element>
           </oneOrMore>
+          <optional>
+            <element name="info">
+              <attribute name="xml:lang"><value>de</value></attribute>
+              <ref name="para"></ref>
+            </element>
+          </optional>
           <oneOrMore>
             <element name="seealso">
               <zeroOrMore>

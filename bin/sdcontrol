@@ -66,11 +66,20 @@ function update_manual( lang )
   print(cmdline)
   os.execute(cmdline)
 end
+function create_doc()
+  local cmdline
+  -- generate the lua translation
+  cmdline = string.format("java -jar %s/lib/saxon9he.jar -s:%s/doc/manual/commands.xml -xsl:%s/doc/manual/xslt/cmd2html.xsl builddir=%s",installdir,installdir,installdir,installdir .. "/build/manual")
+  print(cmdline)
+  os.execute(cmdline)
+
+end
 
 
 local op = optionparser:new()
 op.banner = string.format("Usage: sdcontrol <options>")
 op.start = 30
+op:on("-d","create multi lang documentation",create_doc)
 op:on("--new-language LANG","Add a new langauge for messages. Example: de_DE",new_language)
 op:on("--create-manual [LANG]","-m","Create (update) manual in language LANG. Defaults to 'all', which is currently only 'de'",update_manual)
 op:on("-u","--update-translations LANG","Update translation files for source code (gettext). Example: de_DE",update_translation_files)
