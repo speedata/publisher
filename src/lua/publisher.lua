@@ -209,18 +209,21 @@ local dispatch_table = {
   AddToList               = commands.zur_liste_hinzufuegen,
 }
 
--- Return the localized eltname as an english string.
+--- Return the element name as an english string. The argument is in the
+--- current language of the layout file (currently English and German).
 function translate_element( eltname )
   return translations[current_layoutlanguage].elements[eltname]
 end
 
--- return the localized value as an english string-
+--- Return the value as an english string. The argument is in the
+--- current language of the layout file (currently English and German).
 function translate_value( value )
   local tmp = translations[current_layoutlanguage].values[value]
   return tmp
 end
 
--- Return the localized attribute name as an english string.
+--- Return the attribute name as an english string. The argument is in the
+--- current language of the layout file (currently English and German).
 function translate_attribute( attname )
   return translations.attributes[attname][current_layoutlanguage]
 end
@@ -259,6 +262,7 @@ function dispatch(layoutxml,dataxml,optionen)
   return ret
 end
 
+--- Convert the argument `str` (in UTF-8) to a string suitable for writing into the PDF file. The returned string starts with `<feff` and ends with `>`
 function utf8_to_utf16_string_pdf( str )
   local ret = {}
   for s in string.utfvalues(str) do
@@ -342,7 +346,7 @@ function dothings()
     options.showgrid = true
   end
 
-  -- do things with options
+  -- Set the starting page (which must be a number)
   if options.startpage then
     local num = options.startpage
     if num then
@@ -353,14 +357,14 @@ function dothings()
     end
   end
 
-  -- start data processing
+  -- Start data processing in the default mode (`""`)
   local tmp
   local name = dataxml[".__name"]
-  tmp = data_dispatcher[""][name] -- default-Modus
+  tmp = data_dispatcher[""][name]
   if tmp then publisher.dispatch(tmp,dataxml) end
 
 
-  -- emit last page if necessary
+  --- emit last page if necessary
   if page_initialized then
     dothingsbeforeoutput()
     local n = node.vpack(publisher.global_pagebox)
@@ -368,52 +372,49 @@ function dothings()
     tex.box[666] = n
     tex.shipout(666)
   end
-  -- at this point, all pages are in the PDF
 
-
-  -- printtable("Am Ende (inhalt)",variablen.inhalt)
+  --- At this point, all pages are in the PDF
   pdf.catalog = [[ /PageMode /UseOutlines ]]
   pdf.info    = [[ /Creator	(speedata Publisher) /Producer(speedata Publisher, www.speedata.de) ]]
 
-  -- Now put the bookmarks in the pdf
-  -- tex.sprint([[\pdfoutline...]])
+  --- Now put the bookmarks in the pdf
   for i,v in ipairs(bookmarks) do
     bookmarkstotex(v)
   end
 
 end
 
--- Load an XML file from the harddrive. filename is without path but including extension,
--- filetype is a string representing the type of file read, such as "layout" or "data".
--- The return value is a lua table representing the XML file.
---
--- The XML file
---
---     <?xml version="1.0" encoding="UTF-8"?>
---     <data>
---       <element attribute="whatever">
---         <subelement>text in subelement</subelement>
---       </element>
---     </data>
---
--- is represented by this Lua table:
---     XML = {
---       [1] = " "
---       [2] = {
---         [1] = " "
---         [2] = {
---           [1] = "text in subelement"
---           [".__parent"] = (pointer to the "element" tree, which is the second entry in the top level)
---           [".__name"] = "subelement"
---         },
---         [3] = " "
---         [".__parent"] = (pointer to the root element)
---         [".__name"] = "element"
---         ["attribute"] = "whatever"
---       },
---       [3] = " "
---       [".__name"] = "data"
---     },
+--- Load an XML file from the harddrive. filename is without path but including extension,
+--- filetype is a string representing the type of file read, such as "layout" or "data".
+--- The return value is a lua table representing the XML file.
+---
+--- The XML file
+---
+---     <?xml version="1.0" encoding="UTF-8"?>
+---     <data>
+---       <element attribute="whatever">
+---         <subelement>text in subelement</subelement>
+---       </element>
+---     </data>
+---
+--- is represented by this Lua table:
+---     XML = {
+---       [1] = " "
+---       [2] = {
+---         [1] = " "
+---         [2] = {
+---           [1] = "text in subelement"
+---           [".__parent"] = (pointer to the "element" tree, which is the second entry in the top level)
+---           [".__name"] = "subelement"
+---         },
+---         [3] = " "
+---         [".__parent"] = (pointer to the root element)
+---         [".__name"] = "element"
+---         ["attribute"] = "whatever"
+---       },
+---       [3] = " "
+---       [".__name"] = "data"
+---     },
 function load_xml(filename,filetype)
   local path = kpse.find_file(filename)
   if not path then
@@ -434,6 +435,7 @@ function load_xml(filename,filetype)
   return xmltab
 end
 
+--- Place an object at a position given in scaled points (_x_ and _y_).
 function ausgabe_bei_absolut( nodelist,x,y,belegen,bereich )
 
   if node.has_attribute(nodelist,att_shift_left) then
@@ -453,7 +455,8 @@ function ausgabe_bei_absolut( nodelist,x,y,belegen,bereich )
   n.prev = tail
 end
 
--- Put the nodelist on grid cell (x,y). If allocate==true then mark cells as occupied.
+--- Put the object (nodelist) on grid cell (x,y). If `allocate==true` then
+--- mark cells as occupied.
 function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
 
   bereich = bereich or default_areaname
