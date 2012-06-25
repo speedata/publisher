@@ -34,15 +34,10 @@ function commands.absatz( layoutxml,dataxml )
   -- local languagecode  = publisher.options.defaultlanguage or 0 -- not there yet
   local languagecode  = 0
 
-  local sprache_de  = publisher.read_attribute(layoutxml,dataxml,"language","string")
+  local language_name  = publisher.read_attribute(layoutxml,dataxml,"language","string")
 
-  sprache_de_internal = {
-     ["German"]                       = "de-1996",
-     ["Englisch (Great Britan)"]      = "en-gb",
-     ["French"]                       = "fr",
-     }
-  if sprache_de then
-    languagecode = publisher.get_languagecode(sprache_de_internal[sprache_de])
+  if language_name then
+    languagecode = publisher.get_languagecode(language_name)
   end
 
   local colorname = publisher.read_attribute(layoutxml,dataxml,"color","string")

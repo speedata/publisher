@@ -109,6 +109,17 @@ textformats = {
 -- der Eintrag dann `texgyreheros-regular.otf`
 -- schrifttabelle = {}
 
+--- We map from sybolic names to (part of) file names. The hyphenation pattern files are 
+--- in the format `hyph-XXX.pat.txt` and we need to find out that `XXX` part.
+language_mapping = {
+     ["German"]                       = "de-1996",
+     ["Englisch (Great Britan)"]      = "en-gb",
+     ["French"]                       = "fr",
+}
+
+--- Once a hyphenation pattern file is loaded, we only need the _id_ of it. This is stored in the
+--- `languages` table. Key is the filename part (such as `de-1996`) and the value is the internal
+--- language id.
 languages = {}
 
 --- The bookmarks table has the format
@@ -1625,8 +1636,10 @@ function xml_to_string( xml_element, level )
   return str
 end
 
-
-function get_languagecode( language_internal )
+--- The language name is something like `German` and needs to be mapped to an internal name.
+--- 
+function get_languagecode( language_name )
+  local language_internal = language_mapping[language_name]
   if publisher.languages[language_internal] then
     return publisher.languages[language_internal]
   end
