@@ -20,9 +20,12 @@ local xmlparser = require("xmlparser")
 
 module(...,package.seeall)
 
---- There are 65781 big points in a TeX point
+--- One big point (DTP point, PostScript point) is approx. 65781 scaled points.
 factor = 65781 
 
+--- We use a lot of attributes to delay the processing of font shapes, ... to
+--- a later time. These attributes have have any number, they just need to be
+--- constant across the whole source.
 att_fontfamily     = 1
 att_italic         = 2
 att_bold           = 3
@@ -34,9 +37,10 @@ att_underline      = 5
 att_shift_left     = 100
 att_shift_up       = 101
 
--- tie glue (U+00A0)
+--- A tie glue (U+00A0) is a non-breaking space
 att_tie_glue       = 201
 
+--- These attributes are used in tabular material
 att_space_prio     = 300
 att_space_amount   = 301
 
@@ -264,6 +268,8 @@ function utf8_to_utf16_string_pdf( str )
   return utf16str
 end
 
+--- Bookmarks are collected and later processed. This function (recursively)
+--- creates TeX code from the generated tables.
 function bookmarkstotex( tbl )
   local countstring
   local open_string
@@ -285,7 +291,7 @@ function bookmarkstotex( tbl )
   end
 end
 
-
+--- Start function. 
 function dothings()
   page_initialized=false
 

@@ -15,10 +15,17 @@ require("fileutils")
 -- This module contains the commands in the layout file (the tags)
 commands = {}
 
--- Setzt den Text im XML-Element "Absatz".
+--- paragraph
+--- ---------
+--- A paragraph is just a bunch of text that is not yet typeset.
+--- It can have a font face, color,... but these can be also given
+--- On the surrounding element (`Textblock`).
 function commands.absatz( layoutxml,dataxml )
-  local textformat = publisher.read_attribute(layoutxml,dataxml,"textformat","string")
-  local fontname   = publisher.read_attribute(layoutxml,dataxml,"fontface","string")
+  local textformat    = publisher.read_attribute(layoutxml,dataxml,"textformat","string")
+  local fontname      = publisher.read_attribute(layoutxml,dataxml,"fontface","string")
+  local colorname     = publisher.read_attribute(layoutxml,dataxml,"color","string")
+  local language_name = publisher.read_attribute(layoutxml,dataxml,"language","string")
+
 
   local fontfamily
   if fontname then
@@ -31,16 +38,14 @@ function commands.absatz( layoutxml,dataxml )
     fontfamily = 0
   end
 
-  -- local languagecode  = publisher.options.defaultlanguage or 0 -- not there yet
-  local languagecode  = 0
-
-  local language_name  = publisher.read_attribute(layoutxml,dataxml,"language","string")
+  local languagecode
 
   if language_name then
     languagecode = publisher.get_languagecode(language_name)
+  else
+    languagecode = 0
   end
 
-  local colorname = publisher.read_attribute(layoutxml,dataxml,"color","string")
   local colortable
   if colorname then
     if not publisher.colors[colorname] then
@@ -76,7 +81,14 @@ function commands.absatz( layoutxml,dataxml )
   return a
 end
 
--- Erzeugt ein 44er whatsit node (user_defined)
+--- Action
+--- ------
+--- Create a whatsit node of type 44 (`user_defined`). The only action
+--- currently defined is `AddToList` and not well tested. Actions are
+--- processed  after page shipout. The idea behind that is that we don't
+--- really know in advance which elements are put on a page and which are
+--- broken to the next page. This way we can find out exactly where something
+--- is  placed.
 function commands.aktion( layoutxml,dataxml)
   local tab = publisher.dispatch(layoutxml,dataxml)
   local ret = {}
@@ -93,7 +105,10 @@ function commands.aktion( layoutxml,dataxml)
   return ret
 end
 
--- Erzeugt ein Attribut für die XML-Struktur
+--- Attribute
+--- ---------
+--- Create an attribute to be used in a XML structure. The XML structure can be formed via 
+--- Element and Attribute commands and writen to disk with SaveDataset.
 function commands.attribut( layoutxml,dataxml )
   local auswahl = publisher.read_attribute(layoutxml,dataxml,"select","string")
   local attname  = publisher.read_attribute(layoutxml,dataxml,"name","string")
@@ -102,8 +117,16 @@ function commands.attribut( layoutxml,dataxml )
   return ret
 end
 
+
+--- ProcessRecord
+--- -------------
+--- This command takes the contents from the given attribute `select` (an
+--- XPath- expresseion) and process this. If you feed garbage in, well,
+--- probably nothing useful comes out. (This should be the only command to
+--- process data, but at the moment there is the _static_ ProcessNode).
+
 function commands.bearbeite_datensatz( layoutxml,dataxml )
-  trace("BearbeiteDatensatz")
+  trace("ProcessRecord")
   local auswahl = publisher.read_attribute(layoutxml,dataxml,"select","string")
   local umfang  = publisher.read_attribute(layoutxml,dataxml,"limit","string")
 
@@ -128,11 +151,17 @@ function commands.bearbeite_datensatz( layoutxml,dataxml )
   end
 end
 
--- Ruft das Layoutxml für einen bestimmten Unterdatensatz (Element) auf.
+--- ProcessNode
+--- -----------
+--- Call the given (in attribute `select`) names of elements in the data file.
+--- The optional attribute `mode` must mach, if given. Since the attribute `select` is a fixed
+--- string, this function is rather stupid but nevertheless currently the main
+--- function for processing data.
 function commands.bearbeite_knoten(layoutxml,dataxml)
   local auswahl = publisher.read_attribute(layoutxml,dataxml,"select","string")
 
-  local letzte_position = publisher.variablen.__position
+  --- To restore the current value of `__position`, we save it. The value of `__position` is available from xpath.
+  local current_position = publisher.variablen.__position
   local modus = publisher.read_attribute(layoutxml,dataxml,"mode","string") or ""
   local layoutknoten = publisher.data_dispatcher[modus][auswahl]
   local pos = 1
@@ -146,9 +175,15 @@ function commands.bearbeite_knoten(layoutxml,dataxml)
       end
     end
   end
-  publisher.variablen.__position = letzte_position
+  --- Now restore the value for the parent element
+  publisher.variablen.__position = current_position
 end
 
+--- AtPageShipout
+--- -------------
+--- Run these commands when a page is ready to be put in 
+--- the PDF. You can add header/footer. These commands are 
+--- not executed when encountered, rather in `publisher#setup_page()`.
 function commands.beiseitenausgabe( layoutxml,dataxml )
   return layoutxml
 end
@@ -264,16 +299,20 @@ function commands.box( layoutxml,dataxml )
   return n
 end
 
--- create a PDF bookmark. Currently does not work
--- if in multi column text
+--- Bookmark
+--- --------
+--- PDF bookmarks (for the PDF viewer)
 function commands.bookmark( layoutxml,dataxml )
   trace("Command: Bookmark")
-  -- For bookmarks, we need two things: 1) a destination and
-  -- 2) the bookmark itself that points to the destination. So
-  -- we can safely insert the destination in our text flow but save
-  -- the destination code (a number) for later. There is a slight problem
-  -- now: as the text flow is asynchronous, we evaluate the bookmark
-  -- during page shipout. Then we have the correct order (hopefully)
+  --- For bookmarks, we need two things:
+  ---
+  --- 1) a destination and
+  --- 2) the bookmark itself that points to the destination.
+  ---
+  --- So we can safely insert the destination in our text flow but save the
+  --- destination code (a number) for later. There is a slight problem now: as
+  --- the text flow is asynchronous, we evaluate the bookmark during page
+  --- shipout. Then we have the correct order (hopefully)
   local title  = publisher.read_attribute(layoutxml,dataxml,"select","xpath")
   local level  = publisher.read_attribute(layoutxml,dataxml,"level", "number")
   local open_p = publisher.read_attribute(layoutxml,dataxml,"open",  "boolean")
@@ -284,8 +323,9 @@ function commands.bookmark( layoutxml,dataxml )
   return p
 end
 
--- Anweisung im Layoutxml, dass für ein bestimmtes Element diese
--- Layoutregel aufgerufen werden soll.
+--- Record
+--- ------
+--- Matches an element name of the data file. To be called from ProcessNodes
 function commands.datensatz( layoutxml )
   local elementname = publisher.read_attribute(layoutxml,dataxml,"element","string")
   local mode        = publisher.read_attribute(layoutxml,dataxml,"mode","string")
@@ -295,7 +335,10 @@ function commands.datensatz( layoutxml )
   publisher.data_dispatcher[mode][elementname] = layoutxml
 end
 
--- Definiert eine Farbe
+
+--- DefineColor
+--- -----------
+--- Colors can be in model cmyk or rgb.
 function commands.definiere_farbe( layoutxml,dataxml )
   local name  = publisher.read_attribute(layoutxml,dataxml,"name","string")
   local model = publisher.read_attribute(layoutxml,dataxml,"model","string")
@@ -322,7 +365,16 @@ function commands.definiere_farbe( layoutxml,dataxml )
   publisher.colors[name]=color
 end
 
--- Define a textformat
+--- Textformat
+--- ----------
+--- A text format defines the alignment and indentation of a paragraph. 
+---
+--- The rules for textformat:
+--- 
+--- * if a paragraph has a textformat then use it, end
+--- * if the textblock has a textformat then use it, end
+--- * use the textformat `text` end
+
 function commands.definiere_textformat(layoutxml)
   trace("Command: DefineTextformat")
   local alignment   = publisher.read_attribute(layoutxml,dataxml,"alignment",   "string")
@@ -1092,6 +1144,9 @@ function commands.spalten( layoutxml,dataxml )
   return tab
 end
 
+--- SaveDataset
+--- -----------
+--- Write a Lua table representing an XML file to the disk.
 function commands.speichere_datensatzdatei( layoutxml,dataxml )
   local towrite, tmp,tab
   local filename   = publisher.read_attribute(layoutxml,dataxml,"filename",  "string")
@@ -1119,24 +1174,24 @@ function commands.speichere_datensatzdatei( layoutxml,dataxml )
     end
   end
 
-  -- tmp hat nun die Struktur:
-  -- tmp = {
-  --   [1] = {
-  --     [".__parent"] =
-  --     [".__name"] = "bar"
-  --     ["att1"] = "1"
-  --   },
-  --   [2] = {
-  --     [".__parent"] =
-  --     [".__name"] = "bar"
-  --     ["att2"] = "2"
-  --   },
-  --   [3] = {
-  --     [".__parent"] =
-  --     [".__name"] = "bar"
-  --     ["att3"] = "3"
-  --   },
-  -- },
+  --- tmp has now this structure:
+  ---    tmp = {
+  ---      [1] = {
+  ---        [".__parent"] =
+  ---        [".__name"] = "bar"
+  ---        ["att1"] = "1"
+  ---      },
+  ---      [2] = {
+  ---        [".__parent"] =
+  ---        [".__name"] = "bar"
+  ---        ["att2"] = "2"
+  ---      },
+  ---      [3] = {
+  ---        [".__parent"] =
+  ---        [".__name"] = "bar"
+  ---        ["att3"] = "3"
+  ---      },
+  ---    },
 
   tmp[".__name"] = elementname
   local datei = io.open(string.format("datensatzdatei.%s",filename),"w")
@@ -1145,6 +1200,9 @@ function commands.speichere_datensatzdatei( layoutxml,dataxml )
   datei:close()
 end
 
+--- Sub
+--- ---
+--- Subscript. The contents of this Element should be written in subscript (smaller, lower)
 function commands.sub( layoutxml,dataxml )
   local a = publisher.Paragraph:new()
   local tab = publisher.dispatch(layoutxml,dataxml)
@@ -1309,10 +1367,6 @@ function commands.textblock( layoutxml,dataxml )
   local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","string")
   local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","string")
 
-  -- The rules for textformat: 
-  --  * if the paragraph has a textformat then use it, end
-  --  * if the textblock has a textformat then use it, end
-  --  * use the textformat "text" end
 
   columns = columns or 1
   if not columndistance then columndistance = "3mm" end
