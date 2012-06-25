@@ -971,7 +971,6 @@ end
 -- Saves the options given in the layout file
 function commands.optionen( layoutxml,dataxml )
   publisher.options.cutmarks           = publisher.read_attribute(layoutxml,dataxml,"cutmarks",    "boolean")
-  publisher.options.runs               = publisher.read_attribute(layoutxml,dataxml,"runs",        "number")
   publisher.options.showgrid           = publisher.read_attribute(layoutxml,dataxml,"show-grid",   "boolean")
   publisher.options.showgridallocation = publisher.read_attribute(layoutxml,dataxml,"show-gridallocation","boolean")
   publisher.options.showhyphenation    = publisher.read_attribute(layoutxml,dataxml,"show-hyphenation","boolean")

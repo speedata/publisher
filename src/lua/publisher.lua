@@ -353,18 +353,6 @@ function dothings()
     end
   end
 
-  -- Put the number of runs into an extra file so that the control file can
-  -- act on that
-  -- FIXME. tex.jobname auch in sprun ändern
-  local runs = options.runs
-  if runs then
-    -- erstelle Datei mit dieser Zahl
-    local datei = io.open(string.format("%s.runs",tex.jobname),"w")
-    datei:write("runs = " .. runs)
-    datei:write("\n")
-    datei:close()
-  end
-
   -- start data processing
   local tmp
   local name = dataxml[".__name"]
