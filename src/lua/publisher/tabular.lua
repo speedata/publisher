@@ -236,20 +236,20 @@ function calculate_spaltenbreite( self )
   -- dann kann sein, dass wir manche Spaltenbreiten erhöhen müssen!
   --
   -- Beispiel (fake):
-  -- <Tabelle breite="30">
-  --   <Tr><Td>A</Td><Td>A</Td></Tr>
-  --   <Tr><Td colspan="2">Ein ganz schön langer Text</Td></Tr>
-  -- </Tabelle>
-  -- ----------------------------
-  -- |A           |A            |
-  -- |Ein ganz schön langer Text|
-  -- ----------------------------
+  --     <Tabelle breite="30">
+  --       <Tr><Td>A</Td><Td>A</Td></Tr>
+  --       <Tr><Td colspan="2">Ein ganz schön langer Text</Td></Tr>
+  --     </Tabelle>
+  --     ----------------------------
+  --     |A           |A            |
+  --     |Ein ganz schön langer Text|
+  --     ----------------------------
   --
-  -- In diesem Fall ist sum_min in etwa die Läne von "langer" und sum_max ist die Länge des Textes.
+  -- In diesem Fall ist sum<sub>min</sub> in etwa die Läne von "langer" und sum<sub>max</sub> ist die Länge des Textes.
   -- colmax[i] ist die Breite von "A", colmin[i] ebenfalls
-
+  -- 
   -- Phase II: Colspan einbeziehen
-
+  --
   trace("tabular: colmin/colmax anpassen")
   -- colmin/colmax anpassen (wenn wir colspans haben)
   for i,colspan in pairs(colspans) do

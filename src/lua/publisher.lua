@@ -20,7 +20,8 @@ local xmlparser = require("xmlparser")
 
 module(...,package.seeall)
 
-factor = 65781  -- big points vs. TeX points
+--- There are 65781 big points in a TeX point
+factor = 65781 
 
 att_fontfamily     = 1
 att_italic         = 2
@@ -28,7 +29,8 @@ att_bold           = 3
 att_script         = 4
 att_underline      = 5
 
--- For image shifting
+--- These attributes are for image shifting. The amount of shift up/left can
+--- be negative and is counted in scaled points.
 att_shift_left     = 100
 att_shift_up       = 101
 
@@ -41,7 +43,9 @@ att_space_amount   = 301
 att_break_below    = 400
 att_break_above    = 401
 
--- if it is a regular table row, not a spacer
+--- `att_is_table_row` is used in `tabular.lua` and if set to 1, it denotes
+--- a regular table row, and not a spacer. Spacers must not appear
+--- at the top or the bottom of a table, unless forced to.
 att_is_table_row   = 500
 
 glue_spec_node = node.id("glue_spec")
@@ -90,10 +94,10 @@ current_grid = nil
 masterpages = {}
 
 
--- Text formats is a hash with arbitrary names as keys and the values
--- are tables with alignment and indent. indent is the amount of 
--- indentation in sp. alignment is one of "leftaligned", "rightaligned", 
--- "centered" and "justified"
+--- Text formats is a hash with arbitrary names as keys and the values
+--- are tables with alignment and indent. indent is the amount of 
+--- indentation in sp. alignment is one of "leftaligned", "rightaligned", 
+--- "centered" and "justified"
 textformats = {
   text           = { indent = 0, alignment="justified",   rows = 1},
   __centered     = { indent = 0, alignment="centered",    rows = 1},
@@ -107,22 +111,23 @@ textformats = {
 
 languages = {}
 
--- bookmarks = {
---   { --- first bookmark
---     name = "outline 1" destination = "..." open = true,
---      { name = "outline 1.1", destination = "..." },
---      { name = "outline 1.2", destination = "..." }
---   },
---   { -- second bookmark
---     name = "outline 2" destination = "..." open = false,
---      { name = "outline 2.1", destination = "..." },
---      { name = "outline 2.2", destination = "..." }
---
---   }
--- }
+--- The bookmarks table has the format
+---     bookmarks = {
+---       { --- first bookmark
+---         name = "outline 1" destination = "..." open = true,
+---          { name = "outline 1.1", destination = "..." },
+---          { name = "outline 1.2", destination = "..." }
+---       },
+---       { -- second bookmark
+---         name = "outline 2" destination = "..." open = false,
+---          { name = "outline 2.1", destination = "..." },
+---          { name = "outline 2.2", destination = "..." }
+---    
+---       }
+---     }
 bookmarks = {}
 
--- table with key namespace prefix and value namespace
+--- A table with key namespace prefix (`de` or `en`) and value namespace
 namespaces_layout = nil
 
 local dispatch_table = {
@@ -1824,7 +1829,7 @@ function Paragraph:append( whatever,parameter )
   end
 end
 
--- Turn a node list into a shaped block of text
+--- Turn a node list into a shaped block of text
 function Paragraph:format(width_sp, default_textformat_name)
   local nodelist = node.copy_list(self.nodelist)
   local current_textformat_name,current_textformat

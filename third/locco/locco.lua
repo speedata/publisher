@@ -1,4 +1,4 @@
-#!/usr/bin/lua
+#!/usr/bin/env sdtexlua
 -- __Locco__ is a Lua port of [Docco](http://jashkenas.github.com/docco/),
 -- the quick-and-dirty, hundred-line-long, literate-programming-style
 -- documentation generator. It produces HTML that displays your comments
@@ -63,7 +63,7 @@ function parse(source)
   local has_code = false
   local docs_text, code_text = '', ''
   for line in io.lines(source) do
-    if line:match('^%s*%-%-') then
+    if line:match('^%s*%-%-%-') then
       if has_code then
         code_text = code_text:gsub('\n\n$', '\n') -- remove empty trailing line
         sections[#sections + 1] = { ['docs_text'] = docs_text,
@@ -71,7 +71,7 @@ function parse(source)
         has_code = false
         docs_text, code_text = '', ''
       end
-      docs_text = docs_text..line:gsub('%s*(%-%-%s?)', '', 1)..'\n'
+      docs_text = docs_text..line:gsub('%s*(%-%-%-%s?)', '', 1)..'\n'
     else
       if not line:match('^#!') then -- ignore #!/usr/bin/lua
         has_code = true
