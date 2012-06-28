@@ -957,12 +957,12 @@ function commands.objekt_ausgeben( layoutxml,dataxml )
       if hreference == "right" then
         aktuelle_spalte_start = aktuelle_spalte_start - breite_in_rasterzellen + 1
       end
-      publisher.ausgabe_bei(object,aktuelle_spalte_start,current_row,belegen,bereich,valign,objects[i].allocate_matrix)
+      publisher.ausgabe_bei(object,aktuelle_spalte_start,current_row,belegen == "yes",bereich,valign,objects[i].allocate_matrix)
       trace("object ausgegeben.")
       zeile = nil -- die Zeile ist nicht mehr gültig, da schon ein object ausgegeben wurde
     end -- keine absolute Positionierung
   end
-  if not belegen then
+  if not belegen == "yes" then
     publisher.current_grid:set_current_row(current_row_start)
   end
   trace("objects ausgegeben.")
