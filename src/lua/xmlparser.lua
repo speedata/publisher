@@ -7,7 +7,7 @@
 
 local xmlreader = xmlreader
 local w = w
-local setmetatable,tostring = setmetatable,tostring
+local setmetatable,tostring,print = setmetatable,tostring,print
 local table,string = table,string
 
 module(...)
