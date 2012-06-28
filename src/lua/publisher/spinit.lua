@@ -1,3 +1,5 @@
+--- The initialization file. The first file to be calles from the TeX file. Be aware that `sdini.lua` is 
+--- called from `luatex --lua ...` before this file.
 --
 --  spinit.lua
 --  speedata publisher
@@ -11,6 +13,7 @@
 
 require("i18n")
 
+--- I don't remember what made LuaTeX 0.61 so interesting. But there was a reason, I guess. So we 
 if status.luatex_version < 61 then
   texio.write_nl("Requires LuaTeX version ≥ 0.61. Abort\n")
   os.exit(-1)
@@ -65,18 +68,18 @@ function log(...)
 end
 
 
--- Convert scaled point to postscript points,
--- rounded to three digits after decimal point
+--- Convert scaled point to postscript points,
+--- rounded to three digits after decimal point
 function sp_to_bp( sp )
   return math.round(sp / 65782 , 3)
 end
 
--- start und ende sind optional
-function table.sum( tbl, start, ende )
-  sum = 0
-  local start = start or 1
-  local ende  = ende or #tbl
-  for i=start,ende do
+--- Sum up the contents of the array entries. `first` and `last` are optional.
+function table.sum( tbl, first, last )
+  local sum = 0
+  first = first or 1
+  last  = last  or #tbl
+  for i=first,last do
     sum = sum + tbl[i]
   end
   return sum
@@ -97,7 +100,7 @@ function table.__concat( tbl, other )
   return ret
 end
 
--- Rundet die übergebene Zahl `num` auf `idp` Stellen.
+--- Round the given `numb` to `idp` digits. From [the Lua wiki](http://lua-users.org/wiki/SimpleRound)
 function math.round(num, idp)
   if idp and idp>0 then
     local mult = 10^idp
@@ -105,10 +108,10 @@ function math.round(num, idp)
   end
   return math.floor(num + 0.5)
 end
--- from: http://lua-users.org/wiki/SimpleRound
 
 
--- pt -> bp, pp -> pt
+--- This is like the original `tex.sp` except that it changes `pt` to `bp` and `pp` to `pt`.
+--- We do that because in the dtp world when we say 12pt, we always mean 12*1/72 inch.
 local orig_texsp = tex.sp
 function tex.sp( number_or_string )
   if type(number_or_string) == "string" then
@@ -132,29 +135,12 @@ function assert( what,msg)
   return what
 end
 
-require("publisher")
 
-require("publisher.commands")
-require("xmlparser")
-require("fonts.fontloader")
+---   I/O, Control flow
+--- -------------------
 
---erst einmal einen dummy font erzeugen.
--- LuaTeX bug: es darf der Font nicht doppelt existieren, daher 12.1 (siehe tracker #559)
-local ok,f = fonts.fontloader.define_font("texgyreheros-regular.otf",65782 * 12.1)
-local num = font.define(f)
-publisher.options.defaultfont=f
-publisher.options.defaultfontnumber=num
-tex.definefont("dummyfont",num)
-
-
-
-
-------------------------------------------------------------
---   I/O, Kontrollfluss
-------------------------------------------------------------
-
--- Beendet die Verarbeitung und schreibt das PDF. Keine Aktion im Publisher
--- kann nach dem Aufruf von publisher.exit() stattfinden.
+--- Stop the data processing and write PDF. If `graceful` is not given or `false` then
+--- `os.exit()` gets called. This is the last function to be called.
 function exit(graceful)
   log("Stop processing data")
   log("%d errors occurred",errcount)
@@ -187,6 +173,8 @@ local function setup()
   tex.vfuzz = 6554
   tex.hbadness= 1000
   tex.vbadness=1000
+  --- The `lccode` is used for hyphenation. TeX sets the lccode for a-z to itself and A-Z to its lower correspondent. 
+  --- The code for all other characters are not set and thus they don't hyhenate unless set like this.
   for _,i in ipairs
     {181,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,248,249,250,251,252,
     253,254,255,257,259,261,263,265,267,269,271,273,275,277,279,281,283,285,287,289,291,293,295,297,299,301,303,305,307,309,
@@ -243,6 +231,9 @@ local function setup()
     tex.lccode[i[1]]=i[2]
   end
 end
+
+--- This is the entry point in the publishing run and called from the TeX file (`publisher.tex`). 
+require("publisher")
 
 function main_loop()
   log("Start processing")

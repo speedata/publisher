@@ -757,7 +757,7 @@ function setze_zeile(self, tr_contents, current_row )
       local farbe = self.columncolors[current_column]
       farbe = tr_contents.backgroundcolor or farbe
       farbe = td_contents.backgroundcolor or farbe
-      hlist = publisher.hintergrund(hlist,farbe)
+      hlist = publisher.background(hlist,farbe)
     end
 
     local head = hlist

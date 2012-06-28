@@ -1,4 +1,7 @@
---
+--- Here goes everything that does not belong anywhere else. Other parts are font handling, the command
+--- list, page and gridsetup, debugging and initialization. We start with the function `dothings()` that
+--- initializes some variables and starts processing (`dispatch())
+-- 
 --  publisher.lua
 --  speedata publisher
 --
@@ -142,9 +145,15 @@ languages = {}
 ---     }
 bookmarks = {}
 
---- A table with key namespace prefix (`de` or `en`) and value namespace
+--- A table with key namespace prefix (`de` or `en`) and value namespace. Example:
+---
+---    {
+---      [""] = "urn:speedata.de:2009/publisher/de"
+---      sd = "urn:speedata:2009/publisher/functions/de"
+---    }
 namespaces_layout = nil
 
+--- The dispatch table maps every element in the layout xml to a command in the `commands.lua` file.
 local dispatch_table = {
   Paragraph               = commands.paragraph,
   Action                  = commands.action,
@@ -228,7 +237,16 @@ function translate_attribute( attname )
   return translations.attributes[attname][current_layoutlanguage]
 end
 
-
+--- The returned table is an array with hashes. The keys of these
+--- hashes are `elementname` and `contents`. For example:
+---    {
+---      [1] = {
+---        ["elementname"] = "Paragraph"
+---        ["contents"] = {
+---          ["nodelist"] = "<node    nil <  58515 >    nil : glyph 1>"
+---        },
+---      },
+---    },
 function dispatch(layoutxml,dataxml,optionen)
   local ret = {}
   local tmp
@@ -295,35 +313,46 @@ function bookmarkstotex( tbl )
   end
 end
 
---- Start function. 
+--- Start the processing (`dothings()`)
+--- -------------------------------
+--- This is the entry point of the processing. It is called from `spinit.lua`/`main_loop()`.
 function dothings()
   page_initialized=false
 
-  -- defaults
+  --- First we set some defaults.
+  --- A4 paper is 210x297 mm
   set_pageformat(tex.sp("210mm"),tex.sp("297mm"))
 
+  --- The free font family `TeXGyreHeros` is a Helvetica clone and is part of the 
+  --- [The TeX Gyre Collection of Fonts](http://www.gust.org.pl/projects/e-foundry/tex-gyre).
+  --- We ship it in the distribution.
   fonts.load_fontfile("TeXGyreHeros-Regular",   "texgyreheros-regular.otf")
   fonts.load_fontfile("TeXGyreHeros-Bold",      "texgyreheros-bold.otf")
   fonts.load_fontfile("TeXGyreHeros-Italic",    "texgyreheros-italic.otf")
   fonts.load_fontfile("TeXGyreHeros-BoldItalic","texgyreheros-bolditalic.otf")
-
+  --- Define a basic font family with name `text`:
   define_default_fontfamily()
+
+  --- The default page type has 1cm margin
   local onecm=tex.sp("1cm")
   masterpages[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", contents = function(_seite) _seite.raster:setze_rand(onecm,onecm,onecm,onecm) end }}, name = "Seite" }
 
+--- Both the data and the layout instructions are written in XML.
   local layoutxml = load_xml(arg[2],"layout instructions")
-  local dataxml  = load_xml(arg[3],"data file")
+  local dataxml   = load_xml(arg[3],"data file")
 
+--- The `vars` file hold a lua document holding table 
   local vars = loadfile("publisher.vars")()
   for k,v in pairs(vars) do
     variablen[k]=v
   end
 
+  --- Used in `xpath.lua` to find out which language the function is in.
   namespaces_layout = layoutxml["__namespace"]
   local nsprefix = string.match(layoutxml[".__name"],"^(.*):") or ""
   local ns = layoutxml["__namespace"][nsprefix]
 
-
+  --- The currently active layout language. One of `de` or `en`.
   current_layoutlanguage = string.gsub(ns,"urn:speedata.de:2009/publisher/","")
   if not (current_layoutlanguage=='de' or current_layoutlanguage=='en') then
     err("Cannot determine the language of the layout file.")
@@ -332,7 +361,7 @@ function dothings()
 
   dispatch(layoutxml)
 
-  -- override options set in the <Options> element
+  --- override options set in the `<Options>` element
   for _,extopt in ipairs(string.explode(arg[4],",")) do
     if string.len(extopt) > 0 then
       local k,v = extopt:match("^(.+)=(.+)$")
@@ -346,7 +375,7 @@ function dothings()
     options.showgrid = true
   end
 
-  -- Set the starting page (which must be a number)
+  --- Set the starting page (which must be a number)
   if options.startpage then
     local num = options.startpage
     if num then
@@ -357,7 +386,7 @@ function dothings()
     end
   end
 
-  -- Start data processing in the default mode (`""`)
+  --- Start data processing in the default mode (`""`)
   local tmp
   local name = dataxml[".__name"]
   tmp = data_dispatcher[""][name]
@@ -378,7 +407,7 @@ function dothings()
   pdf.info    = [[ /Creator	(speedata Publisher) /Producer(speedata Publisher, www.speedata.de) ]]
 
   --- Now put the bookmarks in the pdf
-  for i,v in ipairs(bookmarks) do
+  for _,v in ipairs(bookmarks) do
     bookmarkstotex(v)
   end
 
@@ -455,7 +484,7 @@ function ausgabe_bei_absolut( nodelist,x,y,belegen,bereich )
   n.prev = tail
 end
 
---- Put the object (nodelist) on grid cell (x,y). If `allocate==true` then
+--- Put the object (nodelist) on grid cell (x,y). If `allocate`=`true` then
 --- mark cells as occupied.
 function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
 
@@ -477,7 +506,7 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
     delta_y = delta_y - node.has_attribute(nodelist,att_shift_up)
   end
 
-
+  --- We don't necessarily ouput things on a page, we can output them in a virtual page, called _group_.
   if current_group then
     -- Put the contents of the nodelist into the current group
     local group = groups[current_group]
@@ -489,11 +518,11 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
     n = node.vpack(n)
 
     if group.contents then
-      -- Die Gruppe hat schon einen contents, wir müssen die neue Nodeliste dazufügen
-      -- Maß der neuen Gruppe: maximum(Maß der alten Gruppe, Maß der Nodeliste)
-      local neue_breite, neue_hoehe
-      neue_breite = math.max(n.width, group.contents.width)
-      neue_hoehe  = math.max(n.height + n.depth, group.contents.height + group.contents.depth)
+      -- There is already something in the group, we must add the new nodelist. 
+      -- The size of the new group: max(size of old group, size of new nodelist)
+      local new_width, new_height
+      new_width  = math.max(n.width, group.contents.width)
+      new_height = math.max(n.height + n.depth, group.contents.height + group.contents.depth)
 
       group.contents.width  = 0
       group.contents.height = 0
@@ -504,8 +533,8 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
       n.prev = tail
 
       group.contents = node.vpack(group.contents)
-      group.contents.width  = neue_breite
-      group.contents.height = neue_hoehe
+      group.contents.width  = new_width
+      group.contents.height = new_height
       group.contents.depth  = 0
     else
       -- group is empty
@@ -534,9 +563,8 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
   end
 end
 
--- Return the XML structure taht is stored at <pagetype>. For every pagetype
--- in the table "masterpages" the function ist_seitentyp() gets called
-
+--- Return the XML structure taht is stored at <pagetype>. For every pagetype
+--- in the table "masterpages" the function ist_seitentyp() gets called-
 function detect_pagetype()
   local ret = nil
   for i=#masterpages,1,-1 do
@@ -551,7 +579,7 @@ function detect_pagetype()
   return false
 end
 
--- Muss aufgerufen werden, bevor auf eine neue Seite etwas ausgegeben wird.
+--- _Must_ be called before something can be put on the page. Looks for hooks to be run before page creation.
 function setup_page()
   if page_initialized then return end
   page_initialized=true
@@ -630,6 +658,7 @@ function setup_page()
   end
 end
 
+--- Switch to the next frame in the given are. 
 function next_area( areaname )
   local aktuelle_nummer = current_grid:rahmennummer(areaname)
   if aktuelle_nummer >= current_grid:anzahl_rahmen(areaname) then
@@ -640,8 +669,10 @@ function next_area( areaname )
   current_grid:set_current_row(1,areaname)
 end
 
+--- Switch to a new page and shipout the current page. 
+--- This new page is only created if something is typeset on it.
 function new_page()
-  if seitenumbruch_unmoeglich then
+  if pagebreak_impossible then
     return
   end
   if not current_page then
@@ -650,9 +681,9 @@ function new_page()
     setup_page()
   end
   if current_page.AtPageShipout then
-    seitenumbruch_unmoeglich = true
+    pagebreak_impossible = true
     dispatch(current_page.AtPageShipout)
-    seitenumbruch_unmoeglich = false
+    pagebreak_impossible = false
   end
   page_initialized=false
   dothingsbeforeoutput()
@@ -663,19 +694,19 @@ function new_page()
   tex.shipout(666)
 end
 
--- Zeichnet einen farbigen Hintergrund hinter ein rechteckickges Objekt (box)
-function hintergrund( box, farbname )
-  if not colors[farbname] then
-    warning("Background: Color %q is not defined",farbname)
+--- Draw a background behind the rectangular (box) object.
+function background( box, colorname )
+  if not colors[colorname] then
+    warning("Background: Color %q is not defined",colorname)
     return box
   end
-  local pdffarbstring = colors[farbname].pdfstring
+  local pdfcolorstring = colors[colorname].pdfstring
   local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
   n = node.new(whatsit_node,pdf_literal_node)
-  n.data = string.format("q %s 0 -%g %g %g re f Q",pdffarbstring,dp,wd,ht + dp)
+  n.data = string.format("q %s 0 -%g %g %g re f Q",pdfcolorstring,dp,wd,ht + dp)
   n.mode = 0
   if node.type(box.id) == "hlist" then
-    -- Da das pdfliteral keinen Platz verbraucht, können wir die in die schon gepackte Box hinzufügen
+    -- pdfliteral does not use up any space, so we can add it to the already packed box.
     n.next = box.list
     box.list.prev = n
     box.list = n
@@ -688,13 +719,14 @@ function hintergrund( box, farbname )
   end
 end
 
-function rahmen( box, farbname )
-  local pdffarbstring = colors[farbname].pdfstring
+--- Draw a frame around the given TeX box with color `colorname`.
+function frame( box, colorname )
+  local pdfcolorstring = colors[colorname].pdfstring
   local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
-  local w = 3 -- Strichbreite 
-  local hw = 0.5 * w -- halbe Strichbreite
+  local w = 3 -- width of stroke 
+  local hw = 0.5 * w -- half width of stroke
   n = node.new(whatsit_node,pdf_literal_node)
-  n.data = string.format("q %s %g w -%g -%g %g %g re S Q",pdffarbstring, w , hw ,dp + hw ,wd + w,ht + dp + w)
+  n.data = string.format("q %s %g w -%g -%g %g %g re S Q",pdfcolorstring, w , hw ,dp + hw ,wd + w,ht + dp + w)
   n.mode = 0
   n.next = box
   box.prev = n
@@ -702,14 +734,15 @@ function rahmen( box, farbname )
   return n
 end
 
--- Erzeugt eine farbige Fläche. Die Maße breite und hoehe sind in BP!
-function box( breite,hoehe,farbname )
+--- Create a colored area. width and height are in dtp points.
+function box( width,height,colorname )
   local n = node.new(whatsit_node,pdf_literal_node)
-  n.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colors[farbname].pdfstring,breite,hoehe)
+  n.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colors[colorname].pdfstring,width,height)
   n.mode = 0
   return n
 end
 
+--- After everything is ready for page shipout, we add debug output and crop marks if necessary
 function dothingsbeforeoutput(  )
   local r = current_page.raster
   local str
@@ -748,11 +781,6 @@ function dothingsbeforeoutput(  )
       firstbox = lit
     end
   end
-  -- if #current_page.raster.belegung_pdf > 0 then
-  --   local lit = node.new("whatsit","pdf_literal")
-  --   lit.mode = 1
-  --   lit.data = string.format("%s",table.concat(current_page.raster.belegung_pdf,"\n"))
-  -- end
 
   if options.showgrid then
     local lit = node.new("whatsit","pdf_literal")
@@ -787,10 +815,10 @@ function dothingsbeforeoutput(  )
   end
 end
 
--- Read the contents of the attribute attname_englisch. type is one of
--- "string", "number", "length" and "boolean".
--- Default provides, well, a default.
-function read_attribute( layoutxml,dataxml,attname_english,typ,default)
+--- Read the contents of the attribute `attname_english.` `type` is one of
+--- `string`, `number`, `length` and `boolean`.
+--- `default` gives something that is to be returned if no attribute with this name is present.
+function read_attribute( layoutxml,dataxml,attname_english,type,default)
   local attname = translate_attribute(attname_english)
   if layoutxml[attname] == nil then
     if default then
@@ -812,15 +840,15 @@ function read_attribute( layoutxml,dataxml,attname_english,typ,default)
     val = val_english
   end
 
-  if typ=="xpath" then
+  if type=="xpath" then
     return xpath.textvalue(xpath.parse(dataxml,val))
-  elseif typ=="string" then
+  elseif type=="string" then
     return tostring(val)
-  elseif typ=="number" then
+  elseif type=="number" then
     return tonumber(val)
-  elseif typ=="length" then
+  elseif type=="length" then
     return val
-  elseif typ=="boolean" then
+  elseif type=="boolean" then
     if val=="yes" then
       return true
     elseif val=="no" then
@@ -842,11 +870,12 @@ function elementname( elt ,raw_p)
   return translate_element(elt.elementname)
 end
 
+--- Return the contents of an entry from the `dispatch()` function call.
 function element_contents( elt )
   return elt.contents
 end
 
--- <b>, <u> and <i> in text
+--- Convert `<b>`, `<u>` and `<i>` in text to publisher recognized elements.
 function parse_html( elt )
   local a = Paragraph:new()
   local fett,kursiv,underline
@@ -871,8 +900,7 @@ function parse_html( elt )
   return a
 end
 
--- sucht am Ende der Seite (shipout) nach den user_defined whatsits und führt die
--- Aktionen dadrin aus.
+--- Look for `user_defined` at end of page (shipout) and runs actions encoded in them.
 function finde_user_defined_whatsits( head )
   local typ,fun
   while head do
@@ -927,10 +955,14 @@ leftskip.width = 0
 leftskip.stretch = 1 * 2^16
 leftskip.stretch_order = 3
 
--- Erzeugt eine \hbox{}. Rückgabe ist eine gepackte Nodeliste, die an eine Box zugewiesen werden könnte.
--- Instanzname ist "normal", "fett" etc.
+--- Create a `\hbox`. Return a nodelist. Parameter is one of
+--- 
+--- * languagecode
+--- * fett (bold)
+--- * kursiv (italic)
+--- * underline
 function mknodes(str,fontfamilie,parameter)
-  -- instanz ist die interne Fontnummer
+  -- instanz is the internal fontnumber
   local instanz
   local instanzname
   local languagecode = parameter.languagecode
@@ -1590,6 +1622,7 @@ function colorbar( wd,ht,dp,farbe )
   return rule_start, rule_stop
 end
 
+--- Rotate a text on a given angle. 
 function rotate( nodelist,angle )
   local wd,ht = nodelist.width, nodelist.height + nodelist.depth
   nodelist.width = 0
@@ -1615,7 +1648,7 @@ function rotate( nodelist,angle )
   return tmp
 end
 
--- FIXME: document the data structure that is expected
+--- See `commands#save_dataset()` for  documention on the data structure for `xml_element`.
 function xml_to_string( xml_element, level )
   level = level or 0
   local str = ""
@@ -1669,8 +1702,10 @@ function set_pageformat( wd,ht )
   tex.vsize = ht
 end
 
+--- This function is only called once from `dothings()` during startup phase. We define
+--- a family with regular, bold, italic and bolditalic font with size 10pt (we always
+--- measure font size in dtp points)
 function define_default_fontfamily()
-  -- we assume that TeXGyreHeros is available. If not, !?!?
   local fam={
     size         = 10 * factor,
     baselineskip = 12 * factor,

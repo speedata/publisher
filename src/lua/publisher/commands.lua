@@ -930,10 +930,10 @@ function commands.place_object( layoutxml,dataxml )
     objecttype = objects[i].objecttype
 
     if hintergrund == "full" then
-      object = publisher.hintergrund(object,hintergrundfarbe)
+      object = publisher.background(object,hintergrundfarbe)
     end
     if rahmen == "solid" then
-      object = publisher.rahmen(object,rahmenfarbe)
+      object = publisher.frame(object,rahmenfarbe)
     end
 
     if publisher.options.trace then
@@ -1209,7 +1209,6 @@ function commands.save_dataset( layoutxml,dataxml )
   ---        ["att3"] = "3"
   ---      },
   ---    },
-
   tmp[".__name"] = elementname
   local datei = io.open(string.format("datensatzdatei.%s",filename),"w")
   towrite = publisher.xml_to_string(tmp)
