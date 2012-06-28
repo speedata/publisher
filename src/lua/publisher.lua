@@ -83,7 +83,7 @@ variablen = {}
 colors    = { Schwarz = { modell="grau", g = "0", pdfstring = " 0 G 0 g " } }
 colortable = {}
 data_dispatcher = {}
-user_defined_funktionen = { last = 0}
+user_defined_functions = { last = 0}
 
 -- die aktuelle Gruppe
 current_group = nil
@@ -146,67 +146,67 @@ bookmarks = {}
 namespaces_layout = nil
 
 local dispatch_table = {
-  Paragraph               = commands.absatz,
-  Action                  = commands.aktion,
-  Attribute               = commands.attribut,
-  B                       = commands.fett,
-  ProcessNode             = commands.bearbeite_knoten,
-  ProcessRecord           = commands.bearbeite_datensatz,
-  AtPageShipout           = commands.beiseitenausgabe,
-  AtPageCreation          = commands.beiseitenerzeugung,
-  Image                   = commands.bild,
+  Paragraph               = commands.paragraph,
+  Action                  = commands.action,
+  Attribute               = commands.attribute,
+  B                       = commands.bold,
+  ProcessNode             = commands.process_node,
+  ProcessRecord           = commands.process_record,
+  AtPageShipout           = commands.atpageshipout,
+  AtPageCreation          = commands.atpagecreation,
+  Image                   = commands.image,
   Box                     = commands.box,
   Bookmark                = commands.bookmark,
-  Record                  = commands.datensatz,
-  DefineColor             = commands.definiere_farbe,
-  DefineFontfamily        = commands.definiere_schriftfamilie,
-  DefineTextformat        = commands.definiere_textformat,
+  Record                  = commands.record,
+  DefineColor             = commands.define_color,
+  DefineFontfamily        = commands.define_fontfamily,
+  DefineTextformat        = commands.define_textformat,
   Element                 = commands.element,
-  Switch                  = commands.fallunterscheidung,
-  Group                   = commands.gruppe,
-  I                       = commands.kursiv,
+  Switch                  = commands.switch,
+  Group                   = commands.group,
+  I                       = commands.italic,
   Include                 = commands.include,
-  ["Copy-of"]             = commands.kopie_von,
-  LoadDataset             = commands.lade_datensatzdatei,
-  LoadFontfile            = commands.lade_schriftdatei,
-  EmptyLine               = commands.leerzeile,
-  Rule                    = commands.linie,
-  Message                 = commands.nachricht,
-  NextFrame               = commands.naechster_rahmen,
-  NewPage                 = commands.neue_seite,
-  NextRow                 = commands.neue_zeile,
-  Options                 = commands.optionen,
-  PlaceObject             = commands.objekt_ausgeben,
-  PositioningArea         = commands.platzierungsbereich,
-  PositioningFrame        = commands.platzierungsrahmen,
-  Margin                  = commands.rand,
-  Grid                    = commands.raster,
-  Fontface                = commands.schriftart,
-  Pagetype                = commands.seitentyp,
-  Pageformat              = commands.seitenformat,
-  SetGrid                 = commands.setze_raster,
-  Sequence                = commands.sequenz,
-  While                   = commands.solange,
-  SortSequence            = commands.sortiere_sequenz,
-  SaveDataset             = commands.speichere_datensatzdatei,
-  Column                  = commands.spalte,
-  Columns                 = commands.spalten,
+  ["Copy-of"]             = commands.copy_of,
+  LoadDataset             = commands.load_dataset,
+  LoadFontfile            = commands.load_fontfile,
+  EmptyLine               = commands.emptyline,
+  Rule                    = commands.rule,
+  Message                 = commands.message,
+  NextFrame               = commands.next_frame,
+  NewPage                 = commands.new_page,
+  NextRow                 = commands.next_row,
+  Options                 = commands.options,
+  PlaceObject             = commands.place_object,
+  PositioningArea         = commands.positioning_area,
+  PositioningFrame        = commands.positioning_frame,
+  Margin                  = commands.margin,
+  Grid                    = commands.grid,
+  Fontface                = commands.fontface,
+  Pagetype                = commands.pagetype,
+  Pageformat              = commands.page_format,
+  SetGrid                 = commands.set_grid,
+  Sequence                = commands.sequence,
+  While                   = commands.while_do,
+  SortSequence            = commands.sort_sequence,
+  SaveDataset             = commands.save_dataset,
+  Column                  = commands.column,
+  Columns                 = commands.columns,
   Sub                     = commands.sub,
   Sup                     = commands.sup,
-  Table                   = commands.tabelle,
-  Tablefoot               = commands.tabellenfuss,
-  Tablehead               = commands.tabellenkopf,
+  Table                   = commands.table,
+  Tablefoot               = commands.tablefoot,
+  Tablehead               = commands.tablehead,
   Textblock               = commands.textblock,
-  Hyphenation             = commands.trennvorschlag,
-  Tablerule               = commands.tlinie,
+  Hyphenation             = commands.hyphenation,
+  Tablerule               = commands.tablerule,
   Tr                      = commands.tr,
   Td                      = commands.td,
   U                       = commands.underline,
   URL                     = commands.url,
   Variable                = commands.variable,
-  Value                   = commands.wert,
-  SetVariable             = commands.zuweisung,
-  AddToList               = commands.zur_liste_hinzufuegen,
+  Value                   = commands.value,
+  SetVariable             = commands.setvariable,
+  AddToList               = commands.add_to_list,
 }
 
 --- Return the element name as an english string. The argument is in the
@@ -633,19 +633,19 @@ end
 function next_area( areaname )
   local aktuelle_nummer = current_grid:rahmennummer(areaname)
   if aktuelle_nummer >= current_grid:anzahl_rahmen(areaname) then
-    neue_seite()
+    new_page()
   else
     current_grid:setze_rahmennummer(areaname, aktuelle_nummer + 1)
   end
   current_grid:set_current_row(1,areaname)
 end
 
-function neue_seite()
+function new_page()
   if seitenumbruch_unmoeglich then
     return
   end
   if not current_page then
-    -- es wurde neue_seite() aufgerufen, ohne, dass was ausgegeben wurde bisher
+    -- es wurde new_page() aufgerufen, ohne, dass was ausgegeben wurde bisher
     page_initialized=false
     setup_page()
   end
@@ -883,11 +883,11 @@ function finde_user_defined_whatsits( head )
       if head.subtype == 44 then
         -- action
         if head.user_id == 1 then
-          -- der Wert ist der Index für die Funktion unter user_defined_funktionen.
-          fun = user_defined_funktionen[head.value]
+          -- der Wert ist der Index für die Funktion unter user_defined_functions.
+          fun = user_defined_functions[head.value]
           fun()
           -- use and forget
-          user_defined_funktionen[head.value] = nil
+          user_defined_functions[head.value] = nil
         -- bookmark
         elseif head.user_id == 2 then
           local level,openclose,dest,str =  string.match(head.value,"([^+]*)+([^+]*)+([^+]*)+(.*)")
