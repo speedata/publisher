@@ -10,6 +10,7 @@ file_start("commands.lua")
 
 require("publisher.fonts")
 require("publisher.tabular")
+local paragraph = require("paragraph")
 require("xpath")
 require("fileutils")
 
@@ -97,7 +98,7 @@ end
 --- -------------------
 --- Set the contents of this element in boldface
 function commands.bold( layoutxml,dataxml )
-  local a = publisher.Paragraph:new()
+  local a = paragraph:new()
 
   local objects = {}
   local tab = publisher.dispatch(layoutxml,dataxml)
@@ -176,7 +177,7 @@ function commands.bookmark( layoutxml,dataxml )
   local open_p = publisher.read_attribute(layoutxml,dataxml,"open",  "boolean")
 
   local hlist = publisher.mkbookmarknodes(level,open_p,title)
-  local p = publisher.Paragraph:new()
+  local p = paragraph:new()
   p:append(hlist)
   return p
 end
@@ -397,7 +398,7 @@ function commands.fontface( layoutxml,dataxml )
   if not familynumber then
     err("font: family %q unknown",fontfamily)
   else
-    local a = publisher.Paragraph:new()
+    local a = paragraph:new()
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
       a:append(publisher.element_contents(j),{schriftfamilie = familynumber})
@@ -550,7 +551,7 @@ end
 --- Set the contents of this element in italic text
 function commands.italic( layoutxml,dataxml )
   trace("Italic")
-  local a = publisher.Paragraph:new()
+  local a = paragraph:new()
   local objects = {}
   local tab = publisher.dispatch(layoutxml,dataxml)
   for i,j in ipairs(tab) do
@@ -816,7 +817,7 @@ function commands.paragraph( layoutxml,dataxml )
   end
 
 
-  local a = publisher.Paragraph:new(textformat)
+  local a = paragraph:new(textformat)
   local objects = {}
   local tab = publisher.dispatch(layoutxml,dataxml)
 
@@ -1354,7 +1355,7 @@ end
 --- ---
 --- Subscript. The contents of this element should be written in subscript (smaller, lower)
 function commands.sub( layoutxml,dataxml )
-  local a = publisher.Paragraph:new()
+  local a = paragraph:new()
   local tab = publisher.dispatch(layoutxml,dataxml)
   for i,j in ipairs(tab) do
     a:script(publisher.element_contents(j),1,{schriftfamilie = 0})
@@ -1366,7 +1367,7 @@ end
 --- ---
 --- Superscript. The contents of this element should be written in superscript (smaller, higher)
 function commands.sup( layoutxml,dataxml )
-  local a = publisher.Paragraph:new()
+  local a = paragraph:new()
   local tab = publisher.dispatch(layoutxml,dataxml)
   for i,j in ipairs(tab) do
     a:script(publisher.element_contents(j),2,{schriftfamilie = 0})
@@ -1699,7 +1700,7 @@ end
 function commands.underline( layoutxml,dataxml )
   trace("Underline")
 
-  local a = publisher.Paragraph:new()
+  local a = paragraph:new()
   local objects = {}
   local tab = publisher.dispatch(layoutxml,dataxml)
 
@@ -1721,7 +1722,7 @@ end
 --- ---
 --- Format the current URL. It should make the URL active.
 function commands.url(layoutxml,dataxml)
-  local a = publisher.Paragraph:new()
+  local a = paragraph:new()
   local tab = publisher.dispatch(layoutxml,dataxml)
   for i,j in ipairs(tab) do
     a:append(xpath.textvalue(publisher.element_contents(j)),{})
