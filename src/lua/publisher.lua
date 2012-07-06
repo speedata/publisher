@@ -390,6 +390,11 @@ function dothings()
   --- Start data processing in the default mode (`""`)
   local tmp
   local name = dataxml[".__name"]
+  --- The rare case that the user has not any `Record` commands in the layout file:
+  if not data_dispatcher[""] then
+    err("Can't find »Record« command for the root node.")
+    exit()
+  end
   tmp = data_dispatcher[""][name]
   if tmp then publisher.dispatch(tmp,dataxml) end
 
