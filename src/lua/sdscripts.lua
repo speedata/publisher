@@ -18,12 +18,12 @@ local cmd = arg[2]
 
 if cmd=="list-fonts" then
   local is_xml = arg[3]=="xml"
-  w("\n")
+  texio.write_nl("\n")
   if is_xml then
   
   else
-    w("%-40s %s","Dateiname","PostScript Name")
-    w("%-40s %s","-----------------------------------","---------------")
+    texio.write_nl(string.format("%-40s %s","Dateiname","PostScript Name"))
+    texio.write_nl(string.format("%-40s %s","-----------------------------------","---------------"))
   end
   local l
   local dateinamen_sortiert = {}
@@ -40,8 +40,17 @@ if cmd=="list-fonts" then
     if is_xml then
       print(string.format('<LadeSchriftdatei name="%s" dateiname="%s" />',psname,v))
     else
-      w("%-40s %s",v,psname)
+      texio.write_nl(string.format("%-40s %s",v,psname))
     end
   end
-  w("")
+  texio.write_nl("----------------------------\n")
+  for i,v in ipairs(dateinamen_sortiert) do
+    psname = get_ps_name(kpse.filelist[v])
+    if is_xml then
+      print(string.format('<LoadFontfile name="%s" filename="%s" />',psname,v))
+    else
+      texio.write_nl(string.format("%-40s %s",v,psname))
+    end
+  end
+  texio.write_nl("")
 end
