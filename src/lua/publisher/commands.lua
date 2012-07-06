@@ -581,7 +581,7 @@ function commands.load_fontfile( layoutxml,dataxml )
     leerraum      = leerraum      or 25,
     randausgleich = randausgleich or 0,
     otfeatures    = {
-      smcp = smcp == "ja",
+      smcp = smcp == "yes",
     },
   }
   log("filename = %q",filename or "?")
