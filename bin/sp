@@ -197,6 +197,7 @@ switch(argumentr.cmd) {
         }
         break
     case 'list-fonts':
+        process.env["SD_EXTRA_DIRS"] = cfg.getArray("extra-dir").join(":")
         var cmdline = sprintf("%s/bin/sdluatex --luaonly %s/lua/sdscripts.lua %s list-fonts %s",installdir,srcdir,inifile,options.xml ? "xml" : "")
         exec(cmdline,function (err,stdout,stderr) { console.log(stdout); console.timeEnd("Total time") })
         break
