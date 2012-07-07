@@ -62,7 +62,7 @@ end
 
 --- Return the string that is responsible for the OpenType feature `featurename`.
 --- Currently only lookups are for script `latn` and language `dflt`.
-function finde_feature_string(f,featurename)
+function find_feature_string(f,featurename)
   local ret = {}
   if f.gsub==nil then
     return ret
@@ -171,7 +171,7 @@ function define_font(name, size,extra_parameter)
   f.characters    = { }
   f.fontloader    = fonttable
   if extra_parameter and extra_parameter.otfeatures and extra_parameter.otfeatures.smcp then
-    f.smcp = finde_feature_string(fonttable,"smcp")
+    f.smcp = find_feature_string(fonttable,"smcp")
   end
   f.otfeatures    = extra_parameter.otfeatures             -- OpenType Features (smcp,...)
   f.name          = fonttable.fontname
