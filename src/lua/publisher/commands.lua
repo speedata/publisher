@@ -578,8 +578,8 @@ function commands.load_fontfile( layoutxml,dataxml )
   local name          = publisher.read_attribute(layoutxml,dataxml,"name","string")
 
   local extra_parameter = {
-    leerraum      = leerraum      or 25,
-    randausgleich = randausgleich or 0,
+    space            = leerraum      or 25,
+    marginprotrusion = randausgleich or 0,
     otfeatures    = {
       smcp = smcp == "yes",
     },

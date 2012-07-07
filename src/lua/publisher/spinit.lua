@@ -162,7 +162,7 @@ local function setup()
   tex.voffset       = tex.hoffset
   tex.pdfpageheight = tex.sp("29.7cm")
   tex.pdfpagewidth  = tex.sp("21cm")
-  tex.pdfprotrudechars = 2
+  tex.pdfprotrudechars = 2 -- margin protrusion
   tex.pdfadjustspacing = 2
   tex.pdfcompresslevel = 5
   tex.pdfoutput=1

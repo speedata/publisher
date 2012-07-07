@@ -1,3 +1,6 @@
+--- The fontloader uses the LuaTeX internal fontforge library (called
+--- fontloader) to inspect an OpenType, a TrueType or a Type1 font. It
+--- converts this font to a font structure  TeX uses internally.
 --
 --  fontloader.lua
 --  speedata publisher
@@ -8,25 +11,29 @@
 
 module(...,package.seeall)
 
-
--- Gibt `truetype`, `opentype` oder `type1` zurück, je nach `dateiname`. Wenn der Typ nicht
--- erkannt wurde, wird ''nil'' zurückgegeben.
-function guess_fonttype( dateiname )
-  local f=dateiname:lower()
-  if f:match(".*%.ttf") then return "truetype"
-  elseif f:match(".*%.otf") then return "opentype"
-  elseif f:match(".*%.pfb") then return "type1"
+--- Return `truetype`, `opentype` or `type1` depending on the string
+--- `filename`. If not recognized form  the file name, return _nil_.
+--- This function simply looks at the last three letters.
+function guess_fonttype( filename )
+  local f=filename:lower()
+  if f:match(".*%.ttf$") then return "truetype"
+  elseif f:match(".*%.otf$") then return "opentype"
+  elseif f:match(".*%.pfb$") then return "type1"
   else return nil
   end
 end
 
--- Gibt `true` zurück, wenn diese Featuretabelle (Untertabelle scripts) 
--- einen passenden Eintrag für `script` und `lang` hat.
--- Beispielaufruf: 
--- <pre>
--- if features_scripts_matches(gsub[i].features.script,"latn","dflt") then...
--- end
--- </pre>
+--- Return `true` if the this feature table `tab` has an entry for the
+--- given `script` and `lang`. The table is something like:
+---
+---     [1] = {
+---       ["langs"] = {
+---         [1] = "AZE "
+---         [2] = "CRT "
+---         [3] = "TRK "
+---       },
+---       ["script"] = "latn"
+---     },
 function features_scripts_matches( tab,script,lang )
   local lang   = string.lower(lang)
   local script = string.lower(script)
@@ -43,7 +50,7 @@ function features_scripts_matches( tab,script,lang )
   return false
 end
 
-
+--- Convert codepoint to a UTF-16 string. 
 function to_utf16(codepoint)
   assert(codepoint)
   if codepoint < 65536 then
@@ -53,7 +60,8 @@ function to_utf16(codepoint)
   end
 end
 
--- Gibt den String zurück, der für das OT-Feature `featurename` zuständig ist.
+--- Return the string that is responsible for the OpenType feature `featurename`.
+--- Currently only lookups are for script `latn` and language `dflt`.
 function finde_feature_string(f,featurename)
   local ret = {}
   if f.gsub==nil then
@@ -66,7 +74,7 @@ function finde_feature_string(f,featurename)
         local gtf = gsub_tabelle.features[j]
         if gtf.tag==featurename and features_scripts_matches(gtf.scripts,"latn","dflt") then
           if #gsub_tabelle.subtables ~= 1 then
-            w("Achtung: #subtalbes in gpos != 1")
+            -- w("warning: #subtables in gpos != 1")
           end
           ret[#ret + 1] = gsub_tabelle.subtables[1].name
         end
@@ -76,86 +84,102 @@ function finde_feature_string(f,featurename)
   return ret
 end
 
+--- LuaTeX's fontloader (function `to_table()`) returns a rather complex table
+--- with all kinds of information. Loading this table is expensive (_todo:
+--- measure it_), so we  don't load it over and over agin if the user
+--- requests the same font in a different size. We also cache  the `to_unicode` mapping.
+--- Only the size dependent values are computed.
+local lookup_fonttable_from_filename = {}
 
--- Hier werden die Fontstrukturen aus dem fontloader gespeichert, damit sie später bei demselben Font
--- (in einer anderen Größe) nicht erneut von Festplatte geladen werden müssen (und auch die Unicode
--- Mappings müssen nicht erneut erstellt werden).
-local lookup_dateiname_ttffont = {}
-
--- `name` ist der Dateiname, `size` ist eine Zahl in sp, `...` sind OpenType Features
--- Rückkabe sind zwei Werte. Wenn der erste Wert `false` ist, dann ist im zweiten Wert
--- eine Fehlermeldung, wenn der erste Wert `true` ist, dann ist im zweiten Wert eine
--- TeX-Tabelle mit dem Font.
+--- Return a TeX usable font table, or _nil_ plus an error message.
+--- The parameter `name` is the filename (without path), `size` is 
+--- given in scaled points, `extra_parameter` is a table such as:
+---     {
+---       ["space"] = "25"
+---       ["marginprotrusion"] = "100"
+---       ["otfeatures"] = {
+---         ["smcp"] = "true"
+---       },
+---     },
 function define_font(name, size,extra_parameter)
   local extra_parameter = extra_parameter or {}
-  local ttffont
+  local fonttable
 
-  if lookup_dateiname_ttffont[name] then
-    ttffont=lookup_dateiname_ttffont[name]
-    assert(ttffont)
+  if lookup_fonttable_from_filename[name] then
+    fonttable=lookup_fonttable_from_filename[name]
+    assert(fonttable)
   else
-    -- diese werden in ttffonts gespeichert
-    local dateiname_mit_pfad
+    -- These are stored in the cached fonttable table
+    local filename_with_path
     local lookup_codepoint_by_name   = {}
     local lookup_codepoint_by_number = {}
 
-    dateiname_mit_pfad = kpse.find_file(name)
-    if not dateiname_mit_pfad then return false, string.format("Fontdatei '%s' nicht gefunden.",dateiname_mit_pfad or name) end
+    filename_with_path = kpse.find_file(name)
+    if not filename_with_path then return false, string.format("Fontfile '%s' not found.",filename_with_path or name) end
 
-    ttffont = fontloader.to_table(fontloader.open(dateiname_mit_pfad))
-    if ttffont == nil then return false, string.format("Problem beim Laden des Fonts '%s'",tostring(dateiname_mit_pfad))  end
+    fonttable = fontloader.to_table(fontloader.open(filename_with_path))
+    if fonttable == nil then return false, string.format("Problem while loading font '%s'",tostring(filename_with_path))  end
 
-    lookup_dateiname_ttffont[name]=ttffont
+    -- Store the table for quicker lookup later.
+    lookup_fonttable_from_filename[name]=fonttable
 
-    ttffont.dateiname_mit_pfad = dateiname_mit_pfad
-    local is_unicode = (ttffont.pfminfo.unicoderanges ~= nil)
+    fonttable.filename_with_path = filename_with_path
+    local is_unicode = (fonttable.pfminfo.unicoderanges ~= nil)
     
-    -- Es wird ein Mapping Zeichennummer -> codepoint benötigt, damit wir beim Durchgehen der 
-    -- Zeichen die direkt an die richtige Stelle (codepoint) geben können. 
-    -- Das Problem ist, dass TTF/OTF und Type1 unterschiedlich behandelt werden müssen.
-    -- TTF/OTF haben ein Unicode Mapping, das mit map.backmap (key: glyph, value: Codepoint)
-    -- durchgegangen werden kann. Type1 benötigt die Information aus glyph.unicode.
-    
-    -- Ebenso wird fürs Kerning ein Mapping Zeichenname -> codepoint benötigt.
+    --- We require a mapping glyph number -> unicode codepoint. The problem is
+    --- that TTF/OTF fonts have a different encoding mechanism. TTF/OTF can be
+    --- accessed via the table `fonttable.map.backmap` (the key is the glyph
+    --- number, the value is glyph name). For Type 1 fonts we use
+    --- `glyph.unicode` and `glyph.name` for the codepoint and the name.
+    ---
+    --- For kerning a mapping glyphname -> codepoint is needed.
     if is_unicode then
-      -- TTF/OTF, benutze map.backmap
-      for i = 1,#ttffont.glyphs do
-        local g=ttffont.glyphs[i]
-        -- w("Name: %s, codepoint=%d, glyph#=%d",g.name,ttffont.map.backmap[i],i)
-        lookup_codepoint_by_name[g.name] = ttffont.map.backmap[i]
-        lookup_codepoint_by_number[i]    = ttffont.map.backmap[i]
+      -- TTF/OTF, use map.backmap
+      for i = 1,#fonttable.glyphs do
+        local g=fonttable.glyphs[i]
+        lookup_codepoint_by_name[g.name] = fonttable.map.backmap[i]
+        lookup_codepoint_by_number[i]    = fonttable.map.backmap[i]
       end
     else
-      -- Type1, benutze glyph.unicode
-      for i = 1,#ttffont.glyphs do
-        local g=ttffont.glyphs[i]
-        -- w("Name: %s, codepoint=%d, glyph#=%d",g.name,g.unicode,i)
+      -- Type1, use glyph.unicode
+      for i = 1,#fonttable.glyphs do
+        local g=fonttable.glyphs[i]
         lookup_codepoint_by_name[g.name] = g.unicode
         lookup_codepoint_by_number[i]    = g.unicode
       end
     end -- is unicode
-    ttffont.lookup_codepoint_by_name   = lookup_codepoint_by_name
-    ttffont.lookup_codepoint_by_number = lookup_codepoint_by_number
-  end -- initialisiere ttffont Struktur
+    fonttable.lookup_codepoint_by_name   = lookup_codepoint_by_name
+    fonttable.lookup_codepoint_by_number = lookup_codepoint_by_number
+  end
+
+  --- A this point we have taken the `fonttable` from memory or from `fontloader#to_table()`. The next
+  --- part is mostly size/features dependent. 
 
   if (size < 0) then size = (- 655.36) * size end
-  if ttffont.units_per_em == 0 then ttffont.units_per_em = 1000 end  -- manche type1 fonts haben u_p_em=0
-  local mag = size / ttffont.units_per_em                  -- magnification
+  -- Some fonts have `units_per_em` set to 0. I am not sure if setting this to
+  -- 1000 in that case has any drawbacks.
+  if fonttable.units_per_em == 0 then fonttable.units_per_em = 1000 end
+  local mag = size / fonttable.units_per_em
 
+  --- The table `f` is the font structure that TeX can use, see chapter 7 of the LuaTeX manual for a detailed description. This is returned from 
+  --- the function. It is safe to store additional data here.
+  local f = { }
 
-  local f = { }                                            -- Fontstruktur für TeX (Kap. 7 LuaTeX)
-  f.characters    = { }                                    -- alle Zeichen für TeX, Index ist der Unicode Codepoint
-  f.fontloader    = ttffont
+  -- The index of the characters table must match the glyphs in the
+  -- "document". It is wise to have everything in unicode, so we do keep that
+  -- in mind when filling the characters subtable.
+  f.characters    = { }
+  f.fontloader    = fonttable
   if extra_parameter and extra_parameter.otfeatures and extra_parameter.otfeatures.smcp then
-    f.smcp = finde_feature_string(ttffont,"smcp")
+    f.smcp = finde_feature_string(fonttable,"smcp")
   end
   f.otfeatures    = extra_parameter.otfeatures             -- OpenType Features (smcp,...)
-  f.name          = ttffont.fontname
-  f.fullname      = ttffont.fontname
+  f.name          = fonttable.fontname
+  f.fullname      = fonttable.fontname
   f.designsize    = size
   f.size          = size
   f.direction     = 0
-  f.filename      = ttffont.dateiname_mit_pfad
+  f.filename      = fonttable.filename_with_path
   f.type          = 'real'
   f.encodingbytes = 2
   f.tounicode     = 1
@@ -166,7 +190,7 @@ function define_font(name, size,extra_parameter)
 
   f.parameters    = {
     slant         = 0,
-    space         = ( extra_parameter.leerraum or 25 ) / 100  * size,
+    space         = ( extra_parameter.space or 25 ) / 100  * size,
     space_stretch = 0.3  * size,
     space_shrink  = 0.1  * size,
     x_height      = 0.4  * size,
@@ -175,19 +199,19 @@ function define_font(name, size,extra_parameter)
   }
 
   f.format = guess_fonttype(name)
-  if f.format==nil then return false,"Konnte Fontformat der Datei '".. ttffont.dateiname_mit_pfad .."' nicht bestimmen." end
+  if f.format==nil then return false,"Could not determine the type of the font '".. fonttable.filename_with_path .."'." end
 
   f.embedding = "subset"
-  f.cidinfo = ttffont.cidinfo
+  f.cidinfo = fonttable.cidinfo
 
 
-  for i=1,#ttffont.glyphs do
-    local glyph     = ttffont.glyphs[i]
-    local codepoint = ttffont.lookup_codepoint_by_number[i]
-    -- w("Aktueller glyph=%s,codepoint=%d, Breite=%d",glyph.name,codepoint or -1,glyph.width or -1 )
+  for i=1,#fonttable.glyphs do
+    local glyph     = fonttable.glyphs[i]
+    local codepoint = fonttable.lookup_codepoint_by_number[i]
 
-    -- TeX benutzt U+002D HYPHEN-MINUS als Trennstrich, korrekt wäre U+2010 HYPHEN. Da
-    -- aber die Fonthersteller alles Taugenichtse sind, mappen wir alle HYPHEN auf 0x2D (dez. 45)
+    -- TeX uses U+002D HYPHEN-MINUS for hyphen, correct would be U+2012 HYPHEN.
+    -- Because font vendors all have different ideas of hyphen, we just map all
+    -- occurrences of *HYPHEN* to 0x2D (decimal 45) 
     if glyph.name:lower():match("^hyphen$") then codepoint=45  end
 
     f.characters[codepoint] = {
@@ -197,32 +221,33 @@ function define_font(name, size,extra_parameter)
         expansion_factor = 1000,
       }
 
-    -- Höhe und Tiefe des Zeichens
+    -- Height and depth of the glyph
     if glyph.boundingbox[4] then f.characters[codepoint].height = glyph.boundingbox[4] * mag  end
     if glyph.boundingbox[2] then f.characters[codepoint].depth = -glyph.boundingbox[2] * mag  end
 
-    -- tounicode setzen. Damit bei Kapitälchen etc. auch copy und paste funktioniert.
+    --- We change the `tounicode` entry for entries with a period. Sometimes fonts
+    --- have entries like `a.sc` or `a.c2sc` for smallcaps letter a. We are
+    --- only interested in the part before the period.
+    --- _This solution might not be perfect_. 
     if glyph.name:match("%.") then
-      -- Bsp: Kapitälchen a hat a.sc oder a.c2sc als Name. Wir interessieren uns nur für den Teil vor dem Punkt.
-      -- ziemlich billig, sollte mal sorgfältiger mit Tabelle gemacht werden
       local destname = glyph.name:gsub("^([^%.]*)%..*$","%1")
-      local cp = ttffont.lookup_codepoint_by_name[destname]
+      local cp = fonttable.lookup_codepoint_by_name[destname]
       if cp then
         f.characters[codepoint].tounicode=to_utf16(cp)
       end
     end
 
 
-    -- optischer Randausgleich
-    -- \pdfprotrudechars=2
-    if (glyph.name=="hyphen" or glyph.name=="period" or glyph.name=="comma") and extra_parameter and type(extra_parameter.randausgleich) == "number" then
-      f.characters[codepoint]["right_protruding"] = glyph.width * extra_parameter.randausgleich / 100
+    --- Margin protrusion is enabled in `spinit.lua`.
+    if (glyph.name=="hyphen" or glyph.name=="period" or glyph.name=="comma") and extra_parameter and type(extra_parameter.marginprotrusion) == "number" then
+      f.characters[codepoint]["right_protruding"] = glyph.width * extra_parameter.marginprotrusion / 100
     end
-    -- Kerning machen wir erstmal grundsätzlich. Wer will das schon abschalten? Das wäre was für später
+
+    --- We do kerning by default. In the future we could turn it off.
     local kerns={}
     if glyph.kerns then
       for _,kern in pairs(glyph.kerns) do
-        local ziel = ttffont.lookup_codepoint_by_name[kern.char]
+        local ziel = fonttable.lookup_codepoint_by_name[kern.char]
         if ziel and ziel > 0 then
           kerns[ziel] = kern.off * mag
         else
@@ -235,3 +260,4 @@ function define_font(name, size,extra_parameter)
   return true,f
 end
 
+-- End of file 
