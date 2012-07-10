@@ -61,7 +61,7 @@ function Paragraph:set_color( color )
     colorname = publisher.colortable[color]
   end
   local colstart = node.new(8,39)
-  colstart.data  = colors[colorname].pdfstring
+  colstart.data  = publisher.colors[colorname].pdfstring
   colstart.cmd   = 1
   colstart.stack = 1
   colstart.next = self.nodelist
