@@ -1010,9 +1010,7 @@ function mknodes(str,fontfamilie,parameter)
     if languagecode then
       n.lang = languagecode
     else
-      if n.lang == 0 then
-        err("Language code is not set and lang==0")
-      end
+      n.lang = 0
     end
 
     node.set_attribute(n,att_fontfamily,fontfamilie)
