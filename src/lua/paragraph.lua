@@ -25,7 +25,7 @@ end
 
 function Paragraph:add_italic_bold( nodelist,parameter )
   -- FIXME: rekursiv durchgehen, traverse bleibt an hlists hängen
-  for i in node.traverse_id(glyph_node,nodelist) do
+  for i in node.traverse_id(37,nodelist) do
     if parameter.fett == 1 then
       node.set_attribute(i,att_bold,1)
     end
@@ -92,7 +92,7 @@ function Paragraph:min_width()
   local last_glue = self.nodelist
   local dimen
   -- Just measure the distance between two glue nodes and take the maximum of that
-  for n in node.traverse_id(glue_node,self.nodelist) do
+  for n in node.traverse_id(37,self.nodelist) do
     dimen = node.dimensions(last_glue,n)
     wd = math.max(wd,dimen)
     last_glue = n
