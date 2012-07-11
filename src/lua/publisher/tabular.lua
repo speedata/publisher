@@ -113,6 +113,8 @@ function calculate_columnwidth_for_row(self, tr_contents,current_row,colspans,co
     end
     trace("tabular: Colspan=%d",colspan)
     -- colspan?
+    min_wd = min_wd or 0
+    max_wd = max_wd or 0
     if colspan > 1 then
       colspans[#colspans + 1] = { start = current_column, ende = current_column + colspan - 1, max_wd = max_wd, min_wd = min_wd }
       current_column = current_column + colspan - 1
