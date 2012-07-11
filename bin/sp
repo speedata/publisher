@@ -25,12 +25,14 @@ var child_process = require('child_process'),
 console.time("Total time")
 
 if (installdir == "/usr") {
+    libdir  = "/usr/share/speedata-publisher/lib"
     version = "Version <system>"
-    srcdir = "/usr/share/speedata-publisher/sw"
+    srcdir  = "/usr/share/speedata-publisher/sw"
     inifile = path.join(srcdir,"lua/sdini.lua")
     process.env["PUBLISHER_BASE_PATH"] = "/usr/share/speedata-publisher"
     process.env["LUA_PATH"]            = srcdir + "/lua/?.lua;" + srcdir + "/lua/common/?.lua;"
 } else {
+    libdir = path.join(installdir,"lib")
 	version = "Version <lokal>"
     srcdir  = path.join(installdir,"src")
     inifile = path.join(srcdir,"lua/sdini.lua")
@@ -205,7 +207,7 @@ switch(argumentr.cmd) {
         if (options.filter) {
             var filtername = path.basename(options.filter,".xpl")  + ".xpl"
             console.log("Run filter " + filtername)
-            process.env["CLASSPATH"] = installdir + "/lib/calabash.jar:" + installdir + "/lib/saxon9he.jar"
+            process.env["CLASSPATH"] = libdir + "/calabash.jar:" + libdir + "/saxon9he.jar"
             var cmdline = "java com.xmlcalabash.drivers.Main " + filtername
             exec(cmdline,function(err,stdout,stderr) {
                 console.log(stdout); console.log(stderr)
