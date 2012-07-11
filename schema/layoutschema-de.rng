@@ -725,6 +725,12 @@
   <define name="e_Options">
     <element name="Optionen">
       <optional>
+        <attribute name="hauptsprache">
+          <a:documentation docid="options/defaultlanguage">Die voreingestellte Sprache für die Textausgabe (für Silbentrennung)</a:documentation>
+          <ref name="t_languages"/>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="zeige_rasterbelegung">
           <a:documentation docid="options/showgridallocation">Bestimmt, ob die Rasterbelegung angezeigt wird.</a:documentation>
           <choice>

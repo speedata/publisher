@@ -712,6 +712,12 @@
   <define name="e_Options">
     <element name="Options">
       <optional>
+        <attribute name="mainlanguage">
+          <a:documentation docid="options/defaultlanguage">The default language of the printed text (used for hyphenation)</a:documentation>
+          <ref name="t_languages"/>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="show-gridallocation">
           <a:documentation docid="options/showgridallocation">Determins if the grid allocation should be shown.</a:documentation>
           <choice>

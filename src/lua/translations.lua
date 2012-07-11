@@ -236,6 +236,7 @@ de = {  elements = {
     ["criterium"] = {en = "criterium", de = "kriterium", },
     ["cutmarks"] = {en = "cutmarks", de = "beschnittmarken", },
     ["direction"] = {en = "direction", de = "richtung", },
+    ["mainlanguage"] = {en = "mainlanguage", de = "hauptsprache", },
     ["element"] = {en = "element", de = "element", },
     ["elementname"] = {en = "elementname", de = "elementname", },
     ["file"] = {en = "file", de = "datei", },

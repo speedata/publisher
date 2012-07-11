@@ -738,6 +738,11 @@ function commands.options( layoutxml,dataxml )
   publisher.options.startpage          = publisher.read_attribute(layoutxml,dataxml,"startpage",   "number")
   publisher.options.trace              = publisher.read_attribute(layoutxml,dataxml,"trace",       "boolean")
   publisher.options.trim               = publisher.read_attribute(layoutxml,dataxml,"trim",        "length")
+  local mainlanguage                   = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","Englisch (Great Britan)")
+
+  log("Setting default language to %q",mainlanguage)
+  publisher.get_languagecode(mainlanguage)
+
   if publisher.options.trim then
     publisher.options.trim = tex.sp(publisher.options.trim)
   end

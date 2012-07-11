@@ -132,6 +132,7 @@
         <attribute en="criterium" de="kriterium"/>
         <attribute en="cutmarks" de="beschnittmarken"/>
         <attribute en="direction" de="richtung"/>
+      <attribute en="mainlanguage" de="hauptsprache"></attribute>
         <attribute en="element" de="element"/>
         <attribute en="elementname" de="elementname"/>
         <attribute en="file" de="datei"/>
@@ -690,6 +691,10 @@
             <en>Name of the group to be placed. (text)</en>
             <de>Name der Gruppe, die ausgegeben werden soll (Text).</de>
         </documentation>
+      <documentation docid="options/defaultlanguage">
+        <en>The default language of the printed text (used for hyphenation)</en>
+        <de>Die voreingestellte Sprache für die Textausgabe (für Silbentrennung)</de>
+      </documentation>
         <documentation docid="options/showgridallocation">
             <en>Determins if the grid allocation should be shown.</en>
             <de>Bestimmt, ob die Rasterbelegung angezeigt wird.</de>
