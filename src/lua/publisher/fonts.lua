@@ -302,13 +302,13 @@ function post_linebreak( head, list_head)
       post_linebreak(head.list,head)
 		elseif head.id == 7 then -- disc
       if publisher.options.showhyphenation then
+        -- Insert a small tick where the disc node is
         local n = node.new("whatsit","pdf_literal")
         n.mode = 0
         n.data = "q 0.3 w 0 2 m 0 7 l S Q"
-        n.next = head.next
-        n.prev = head
-        head.next = n
-        head = n
+        -- We don't assign back the list head as we assume(!?!) that
+        -- hyphenation does not start right at the beginning of the list...
+        node.insert_before(list_head,head,n)
       end
 		elseif head.id == 10 then -- glue
       local att_underline = node.has_attribute(head, publisher.att_underline)

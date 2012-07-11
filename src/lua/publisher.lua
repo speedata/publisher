@@ -1016,8 +1016,11 @@ function mknodes(str,fontfamilie,parameter)
     node.set_attribute(n,att_fontfamily,fontfamilie)
     return n
   end
+
+  -- There is a string with utf8 chars
   for s in string.utfvalues(str) do
     local char = unicode.utf8.char(s)
+    -- If the next char is a newline (&amp;#x0A;) a \\ is inserted
     if s == 10 then
       local p1,g,p2
       p1 = node.new(penalty_node)
@@ -1031,31 +1034,17 @@ function mknodes(str,fontfamilie,parameter)
       p2 = node.new(penalty_node)
       p2.penalty = -10000
 
-      -- rs = node.new(glue_node)
-      -- rs.spec = node.new(glue_spec_node)
-
-      p1.next = g
-      g.next  = p2
-      p2.next = rs
-
-      if head then
-        last.next = p1
-      else
-        head = p1
-      end
-      last = p2
+      head,last = node.insert_after(head,last,p1)
+      head,last = node.insert_after(head,last,g)
+      head,last = node.insert_after(head,last,p2)
 
     elseif match(char,"%s") and last and last.id == glue_node and not node.has_attribute(last,att_tie_glue,1) then
       -- double space, don't do anything
     elseif s == 160 then -- non breaking space
       n = node.new(penalty_node)
       n.penalty = 10000
-      if head then
-        last.next = n
-      else
-        head = n
-      end
-      last = n
+
+      head,last = node.insert_after(head,last,n)
 
       n = node.new(glue_node)
       n.spec = node.new(glue_spec_node)
@@ -1065,8 +1054,7 @@ function mknodes(str,fontfamilie,parameter)
 
       node.set_attribute(n,att_tie_glue,1)
 
-      last.next = n
-      last = n
+      head,last = node.insert_after(head,last,n)
 
       if parameter.underline == 1 then
         node.set_attribute(n,att_underline,1)
@@ -1074,7 +1062,7 @@ function mknodes(str,fontfamilie,parameter)
       node.set_attribute(n,att_fontfamily,fontfamilie)
 
 
-    elseif match(char,"%s") then -- Leerzeichen
+    elseif match(char,"%s") then -- Space
       n = node.new(glue_node)
       n.spec = node.new(glue_spec_node)
       n.spec.width   = space
@@ -1086,14 +1074,9 @@ function mknodes(str,fontfamilie,parameter)
       end
       node.set_attribute(n,att_fontfamily,fontfamilie)
 
-      if head then
-        last.next = n
-      else
-        head = n
-      end
-      last = n
-
+      head,last = node.insert_after(head,last,n)
     else
+      -- A regular character?!?
       n = node.new(glyph_node)
       n.font = instanz
       n.subtype = 1
@@ -1112,47 +1095,34 @@ function mknodes(str,fontfamilie,parameter)
       if parameter.underline == 1 then
         node.set_attribute(n,att_underline,1)
       end
-
-      if head then
-        last.next = n
-      else
-        head = n
-      end
-      n.prev = last
-      last = n
-
+      head,last = node.insert_after(head,last,n)
+      -- We have a character but some characters must be treated in a special
+      -- way.
+      -- Hyphens must be sepearated from words:
       if n.char == 45 then
         local pen = node.new("penalty")
         pen.penalty = 10000
 
-        if n.prev then
-          n.prev = pen
-          pen.next = n
-        end
+        head = node.insert_before(head,last,pen)
 
         local glue = node.new("glue")
         glue.spec = node.new("glue_spec")
         glue.spec.width = 0
 
-        n.next = glue
-        last = glue
-        glue.prev = n
-
+        head,last = node.insert_after(head,last,glue)
         node.set_attribute(glue,att_tie_glue,1)
-      end
-
-      if match(char,"[;:]") then
+      elseif match(char,"[;:]") then
+        -- and ;: should have the posibility to break easily after.
         n = node.new(penalty_node)
         n.penalty = 0
-        n.prev = last
-        last.next = n
-        last = n
+        head,last = node.insert_after(head,last,n)
       end
-
     end
   end
 
   if not head then
+    -- This should never happen.
+    warning("No head found")
     return node.new("hlist")
   end
   return head

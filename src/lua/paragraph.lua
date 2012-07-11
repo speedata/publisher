@@ -119,7 +119,7 @@ function Paragraph:script( whatever,scr,parameter )
   end
   set_sub_supscript(nl,scr)
   nl = node.hpack(nl)
-  -- Beware! This width is still incorrect (it is the width of the mormal characters)
+  -- Beware! This width is still incorrect (it is the width of the normal glyphs)
   -- Therefore we have to correct the width in pre_linebreak
   node.set_attribute(nl,att_script,scr)
   self:add_to_nodelist(nl)
