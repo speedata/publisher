@@ -15,21 +15,18 @@ function Paragraph:new( textformat  )
     nodelist,
     textformat = textformat,
   }
-  -- if textformat and publisher.textformats[textformat] and publisher.textformats[textformat].indent then
-  --   instance.nodelist = add_glue(nil,"head",{ width = publisher.textformats[textformat].indent })
-  -- end
   setmetatable(instance, self)
   self.__index = self
   return instance
 end
 
 function Paragraph:add_italic_bold( nodelist,parameter )
-  -- FIXME: rekursiv durchgehen, traverse bleibt an hlists hängen
+  -- FIXME(?): recurse, node.traverse() stops at hlists
   for i in node.traverse_id(37,nodelist) do
-    if parameter.fett == 1 then
+    if parameter.bold == 1 then
       node.set_attribute(i,att_bold,1)
     end
-    if parameter.kursiv == 1 then
+    if parameter.italic == 1 then
       node.set_attribute(i,att_italic,1)
     end
     if parameter.underline == 1 then
@@ -113,7 +110,7 @@ end
 function Paragraph:script( whatever,scr,parameter )
   local nl
   if type(whatever)=="string" or type(whatever)=="number" then
-    nl = publisher.mknodes(whatever,parameter.schriftfamilie,parameter)
+    nl = publisher.mknodes(whatever,parameter.fontfamily,parameter)
   else
     assert(false,string.format("superscript, type()=%s",type(whatever)))
   end
@@ -127,17 +124,17 @@ end
 
 function Paragraph:append( whatever,parameter )
   if type(whatever)=="string" or type(whatever)=="number" then
-    self:add_to_nodelist(publisher.mknodes(whatever,parameter.schriftfamilie,parameter))
+    self:add_to_nodelist(publisher.mknodes(whatever,parameter.fontfamily,parameter))
   elseif type(whatever)=="table" and whatever.nodelist then
     self:add_italic_bold(whatever.nodelist,parameter)
     self:add_to_nodelist(whatever.nodelist)
-    publisher.set_fontfamily_if_necessary(whatever.nodelist,parameter.schriftfamilie)
+    publisher.set_fontfamily_if_necessary(whatever.nodelist,parameter.fontfamily)
   elseif type(whatever)=="function" then
-    self:add_to_nodelist(publisher.mknodes(whatever(),parameter.schriftfamilie,parameter))
+    self:add_to_nodelist(publisher.mknodes(whatever(),parameter.fontfamily,parameter))
   elseif type(whatever)=="userdata" then -- node.is_node in einer späteren Version
     self:add_to_nodelist(whatever)
   elseif type(whatever)=="table" and not whatever.nodelist then
-    self:add_to_nodelist(publisher.mknodes("",parameter.schriftfamilie,parameter))
+    self:add_to_nodelist(publisher.mknodes("",parameter.fontfamily,parameter))
   else
     if type(whatever)=="table" then printtable("Paragraph:append",whatever) end
     assert(false,string.format("Interner Fehler bei Paragraph:append, type(arg)=%s",type(whatever)))

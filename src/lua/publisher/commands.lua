@@ -33,8 +33,8 @@ function commands.action( layoutxml,dataxml)
     if publisher.elementname(j,true) == "AddToList" then
       local n = node.new("whatsit","user_defined")
       n.user_id = 1 -- a magic number
-      n.type = 100 -- type 100: "value is a number"
-      n.value = publisher.element_contents(j) -- Zeiger auf die Funktion (int)
+      n.type = 100  -- type 100: "value is a number"
+      n.value = publisher.element_contents(j) -- pointer to the function (int)
       ret[#ret + 1] = n
     end
   end
@@ -111,7 +111,7 @@ function commands.bold( layoutxml,dataxml )
     end
   end
   for _,j in ipairs(objects) do
-    a:append(j,{schriftfamilie = 0, fett = 1})
+    a:append(j,{fontfamily = 0, bold = 1})
   end
 
   return a
@@ -313,43 +313,43 @@ function commands.define_fontfamily( layoutxml,dataxml )
     if type(v) ~= "table" then
      -- ignorieren
     elseif elementname=="Regular" then
-      ok,tmp=fonts.erzeuge_fontinstanz(fontface,fam.size)
+      ok,tmp=fonts.make_font_instance(fontface,fam.size)
       if ok then
         fam.normal = tmp
       else
         fam.normal = 1
         err("Fontinstance 'normal' could not be created for %q.",tostring(v.schriftart))
       end
-      ok,tmp=fonts.erzeuge_fontinstanz(fontface,fam.scriptsize)
+      ok,tmp=fonts.make_font_instance(fontface,fam.scriptsize)
       if ok then
         fam.normalscript = tmp
       end
     elseif elementname=="Bold" then
-      ok,tmp=fonts.erzeuge_fontinstanz(fontface,fam.size)
+      ok,tmp=fonts.make_font_instance(fontface,fam.size)
       if ok then
-        fam.fett = tmp
+        fam.bold = tmp
       end
-      ok,tmp=fonts.erzeuge_fontinstanz(fontface,fam.scriptsize)
+      ok,tmp=fonts.make_font_instance(fontface,fam.scriptsize)
       if ok then
-        fam.fettscript = tmp
+        fam.boldscript = tmp
       end
     elseif elementname =="Italic" then
-      ok,tmp=fonts.erzeuge_fontinstanz(fontface,fam.size)
+      ok,tmp=fonts.make_font_instance(fontface,fam.size)
       if ok then
-        fam.kursiv = tmp
+        fam.italic = tmp
       end
-      ok,tmp=fonts.erzeuge_fontinstanz(fontface,fam.scriptsize)
+      ok,tmp=fonts.make_font_instance(fontface,fam.scriptsize)
       if ok then
-        fam.kursivscript = tmp
+        fam.italicscript = tmp
       end
     elseif elementname =="BoldItalic" then
-      ok,tmp=fonts.erzeuge_fontinstanz(fontface,fam.size)
+      ok,tmp=fonts.make_font_instance(fontface,fam.size)
       if ok then
-        fam.fettkursiv = tmp
+        fam.bolditalic = tmp
       end
-      ok,tmp=fonts.erzeuge_fontinstanz(fontface,fam.scriptsize)
+      ok,tmp=fonts.make_font_instance(fontface,fam.scriptsize)
       if ok then
-        fam.fettkursivscript = tmp
+        fam.bolditalicscript = tmp
       end
     end
     if type(v) == "table" and not ok then
@@ -401,7 +401,7 @@ function commands.fontface( layoutxml,dataxml )
     local a = paragraph:new()
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
-      a:append(publisher.element_contents(j),{schriftfamilie = familynumber})
+      a:append(publisher.element_contents(j),{fontfamily = familynumber})
     end
     return a
   end
@@ -562,7 +562,7 @@ function commands.italic( layoutxml,dataxml )
     end
   end
   for _,j in ipairs(objects) do
-    a:append(j,{schriftfamilie = 0, kursiv = 1})
+    a:append(j,{fontfamily = 0, italic = 1})
   end
   return a
 end
@@ -835,12 +835,12 @@ function commands.paragraph( layoutxml,dataxml )
     end
   end
   for _,j in ipairs(objects) do
-    a:append(j,{schriftfamilie = fontfamily, languagecode = languagecode})
+    a:append(j,{fontfamily = fontfamily, languagecode = languagecode})
   end
   if #objects == 0 then
     -- nothing got through, why?? check
     warning("No contents found in paragraph.")
-    a:append("",{schriftfamilie = fontfamily,languagecode = languagecode})
+    a:append("",{fontfamily = fontfamily,languagecode = languagecode})
   end
 
   a:set_color(colortable)
@@ -1363,7 +1363,7 @@ function commands.sub( layoutxml,dataxml )
   local a = paragraph:new()
   local tab = publisher.dispatch(layoutxml,dataxml)
   for i,j in ipairs(tab) do
-    a:script(publisher.element_contents(j),1,{schriftfamilie = 0})
+    a:script(publisher.element_contents(j),1,{fontfamily = 0})
   end
   return a
 end
@@ -1375,7 +1375,7 @@ function commands.sup( layoutxml,dataxml )
   local a = paragraph:new()
   local tab = publisher.dispatch(layoutxml,dataxml)
   for i,j in ipairs(tab) do
-    a:script(publisher.element_contents(j),2,{schriftfamilie = 0})
+    a:script(publisher.element_contents(j),2,{fontfamily = 0})
   end
   return a
 end
@@ -1717,7 +1717,7 @@ function commands.underline( layoutxml,dataxml )
     end
   end
   for _,j in ipairs(objects) do
-    a:append(j,{schriftfamilie = 0, underline = 1})
+    a:append(j,{fontfamily = 0, underline = 1})
   end
   return a
 end

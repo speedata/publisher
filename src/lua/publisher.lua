@@ -884,12 +884,12 @@ end
 --- Convert `<b>`, `<u>` and `<i>` in text to publisher recognized elements.
 function parse_html( elt )
   local a = paragraph:new()
-  local fett,kursiv,underline
+  local bold,italic,underline
   if elt[".__name"] then
     if elt[".__name"] == "b" or elt[".__name"] == "B" then
-      fett = 1
+      bold = 1
     elseif elt[".__name"] == "i" or elt[".__name"] == "I" then
-      kursiv = 1
+      italic = 1
     elseif elt[".__name"] == "u" or elt[".__name"] == "U" then
       underline = 1
     end
@@ -897,9 +897,9 @@ function parse_html( elt )
 
   for i=1,#elt do
     if type(elt[i]) == "string" then
-      a:append(elt[i],{schriftfamilie = 0, fett = fett, kursiv = kursiv, underline = underline })
+      a:append(elt[i],{fontfamily = 0, bold = bold, italic = italic, underline = underline })
     elseif type(elt[i]) == "table" then
-      a:append(parse_html(elt[i]),{schriftfamilie = 0, fett = fett, kursiv = kursiv, underline = underline})
+      a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
     end
   end
 
@@ -964,22 +964,22 @@ leftskip.stretch_order = 3
 --- Create a `\hbox`. Return a nodelist. Parameter is one of
 --- 
 --- * languagecode
---- * fett (bold)
---- * kursiv (italic)
+--- * bold (bold)
+--- * italic (italic)
 --- * underline
 function mknodes(str,fontfamilie,parameter)
   -- instanz is the internal fontnumber
   local instanz
   local instanzname
   local languagecode = parameter.languagecode
-  if parameter.fett == 1 then
-    if parameter.kursiv == 1 then
-      instanzname = "fettkursiv"
+  if parameter.bold == 1 then
+    if parameter.italic == 1 then
+      instanzname = "bolditalic"
     else
-      instanzname = "fett"
+      instanzname = "bold"
     end
-  elseif parameter.kursiv == 1 then
-    instanzname = "kursiv"
+  elseif parameter.italic == 1 then
+    instanzname = "italic"
   else
     instanzname = "normal"
   end
@@ -1086,10 +1086,10 @@ function mknodes(str,fontfamilie,parameter)
       n.left = tex.lefthyphenmin
       n.right = tex.righthyphenmin
       node.set_attribute(n,att_fontfamily,fontfamilie)
-      if parameter.fett == 1 then
+      if parameter.bold == 1 then
         node.set_attribute(n,att_bold,1)
       end
-      if parameter.kursiv == 1 then
+      if parameter.italic == 1 then
         node.set_attribute(n,att_italic,1)
       end
       if parameter.underline == 1 then
@@ -1687,25 +1687,25 @@ function define_default_fontfamily()
     scriptshift  = 10 * factor * 0.3,
   }
   local ok,tmp
-  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Regular",fam.size)
+  ok,tmp = fonts.make_font_instance("TeXGyreHeros-Regular",fam.size)
   fam.normal = tmp
-  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Regular",fam.scriptsize)
+  ok,tmp = fonts.make_font_instance("TeXGyreHeros-Regular",fam.scriptsize)
   fam.normalscript = tmp
 
-  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Bold",fam.size)
-  fam.fett = tmp
-  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Bold",fam.scriptsize)
-  fam.fettscript = tmp
+  ok,tmp = fonts.make_font_instance("TeXGyreHeros-Bold",fam.size)
+  fam.bold = tmp
+  ok,tmp = fonts.make_font_instance("TeXGyreHeros-Bold",fam.scriptsize)
+  fam.boldscript = tmp
 
-  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Italic",fam.size)
-  fam.kursiv = tmp
-  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-Italic",fam.scriptsize)
-  fam.kursivscript = tmp
+  ok,tmp = fonts.make_font_instance("TeXGyreHeros-Italic",fam.size)
+  fam.italic = tmp
+  ok,tmp = fonts.make_font_instance("TeXGyreHeros-Italic",fam.scriptsize)
+  fam.italicscript = tmp
 
-  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-BoldItalic",fam.size)
-  fam.fettkursiv = tmp
-  ok,tmp = fonts.erzeuge_fontinstanz("TeXGyreHeros-BoldItalic",fam.scriptsize)
-  fam.fettkursivscript = tmp
+  ok,tmp = fonts.make_font_instance("TeXGyreHeros-BoldItalic",fam.size)
+  fam.bolditalic = tmp
+  ok,tmp = fonts.make_font_instance("TeXGyreHeros-BoldItalic",fam.scriptsize)
+  fam.bolditalicscript = tmp
   fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
   fonts.lookup_fontfamily_name_number["text"]=#fonts.lookup_fontfamily_number_instance
 end
