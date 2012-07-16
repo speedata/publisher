@@ -1731,7 +1731,7 @@ function commands.url(layoutxml,dataxml)
   local tab = publisher.dispatch(layoutxml,dataxml)
   for i,j in ipairs(tab) do
     a:append(xpath.textvalue(publisher.element_contents(j)),{})
-    a.nodelist = publisher.umbreche_url(a.nodelist)
+    a.nodelist = publisher.break_url(a.nodelist)
   end
   return a
 end

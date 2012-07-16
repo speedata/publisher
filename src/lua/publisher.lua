@@ -967,31 +967,31 @@ leftskip.stretch_order = 3
 --- * bold (bold)
 --- * italic (italic)
 --- * underline
-function mknodes(str,fontfamilie,parameter)
-  -- instanz is the internal fontnumber
-  local instanz
-  local instanzname
+function mknodes(str,fontfamily,parameter)
+  -- instance is the internal fontnumber
+  local instance
+  local instancename
   local languagecode = parameter.languagecode
   if parameter.bold == 1 then
     if parameter.italic == 1 then
-      instanzname = "bolditalic"
+      instancename = "bolditalic"
     else
-      instanzname = "bold"
+      instancename = "bold"
     end
   elseif parameter.italic == 1 then
-    instanzname = "italic"
+    instancename = "italic"
   else
-    instanzname = "normal"
+    instancename = "normal"
   end
 
-  if fontfamilie and fontfamilie > 0 then
-    instanz = fonts.lookup_fontfamily_number_instance[fontfamilie][instanzname]
+  if fontfamily and fontfamily > 0 then
+    instance = fonts.lookup_fontfamily_number_instance[fontfamily][instancename]
   else
-    instanz = 1
+    instance = 1
   end
-  assert(instanz, string.format("Instanzname %q, keine Fontinstanz gefunden",instanzname or "nil"))
+  assert(instance, string.format("Instanzname %q, keine Fontinstance gefunden",instancename or "nil"))
 
-  local tbl = font.getfont(instanz)
+  local tbl = font.getfont(instance)
   local space   = tbl.parameters.space
   local shrink  = tbl.parameters.space_shrink
   local stretch = tbl.parameters.space_stretch
@@ -1004,7 +1004,7 @@ function mknodes(str,fontfamilie,parameter)
   if string.len(str) == 0 then
     n = node.new(glyph_node)
     n.char = 32
-    n.font = instanz
+    n.font = instance
     n.subtype = 1
     n.char = s
     if languagecode then
@@ -1013,7 +1013,7 @@ function mknodes(str,fontfamilie,parameter)
       n.lang = 0
     end
 
-    node.set_attribute(n,att_fontfamily,fontfamilie)
+    node.set_attribute(n,att_fontfamily,fontfamily)
     return n
   end
 
@@ -1059,7 +1059,7 @@ function mknodes(str,fontfamilie,parameter)
       if parameter.underline == 1 then
         node.set_attribute(n,att_underline,1)
       end
-      node.set_attribute(n,att_fontfamily,fontfamilie)
+      node.set_attribute(n,att_fontfamily,fontfamily)
 
 
     elseif match(char,"%s") then -- Space
@@ -1072,20 +1072,20 @@ function mknodes(str,fontfamilie,parameter)
       if parameter.underline == 1 then
         node.set_attribute(n,att_underline,1)
       end
-      node.set_attribute(n,att_fontfamily,fontfamilie)
+      node.set_attribute(n,att_fontfamily,fontfamily)
 
       head,last = node.insert_after(head,last,n)
     else
       -- A regular character?!?
       n = node.new(glyph_node)
-      n.font = instanz
+      n.font = instance
       n.subtype = 1
       n.char = s
       n.lang = languagecode
       n.uchyph = 1
       n.left = tex.lefthyphenmin
       n.right = tex.righthyphenmin
-      node.set_attribute(n,att_fontfamily,fontfamilie)
+      node.set_attribute(n,att_fontfamily,fontfamily)
       if parameter.bold == 1 then
         node.set_attribute(n,att_bold,1)
       end
@@ -1154,8 +1154,10 @@ function add_rule( nodelist,head_or_tail,parameters)
   assert(false,"never reached")
 end
 
--- parameter sind width, stretch und stretch_order. Wenn nodelist noch nicht existiert, dann wird einfach ein
--- glue_node erzeugt.
+-- Add a glue to the front or tail of the given nodelist. `head_or_tail` is
+-- either the string `head` or `tail`. `parameter` is a table with the keys
+-- `width`, `stretch` and `stretch_order`. If the nodelist is nil, a simple
+-- node list consisting of a glue will be created.
 function add_glue( nodelist,head_or_tail,parameter)
   parameter = parameter or {}
 
@@ -1309,7 +1311,7 @@ function fix_justification( nodelist,textformat,parent)
 end
 
 function do_linebreak( nodelist,hsize,parameters )
-  assert(nodelist,"Keine nodeliste für einen Absatzumbruch gefunden.")
+  assert(nodelist,"No nodelist found for line breaking.")
   parameters = parameters or {}
   finish_par(nodelist,hsize)
 
@@ -1332,7 +1334,7 @@ function do_linebreak( nodelist,hsize,parameters )
   setmetatable(parameters,{__index=default_parameters})
   local j = tex.linebreak(nodelist,parameters)
 
-  -- Zeilenhöhen anpassen. Immer die größte Schriftart in einer Zeile beachten
+  -- Adjust line heights. Always take the largest font in a row.
   local head = j
   local maxskip
   while head do
@@ -1349,12 +1351,11 @@ function do_linebreak( nodelist,hsize,parameters )
   end
 
   fonts.post_linebreak(j)
-  -- Zeilenhöhen anpassen. Immer die größte Schriftart in einer Zeile beachten
 
   return node.vpack(j)
 end
 
-function erzeuge_leere_hbox_mit_breite( wd )
+function create_empty_hbox_with_width( wd )
   local n=node.new(glue_node,0)
   n.spec = node.new(glue_spec_node)
   n.spec.width         = 0
@@ -1409,7 +1410,7 @@ function boxit( box )
   local wbox = node.new("whatsit","pdf_literal")
   wbox.data = string.format("q 0.1 G %g w %g %g %g %g re s Q", rule_width, rule_width / 2, -dp, -wd, ht)
   wbox.mode = 0
-  -- die Box muss zum Schluss gezeichnet werden, sonst wird sie vom Inhalt überlappt
+  -- Draw box at the end so its contents gets "below" it.
   local tmp = node.tail(box.list)
   tmp.next = wbox
   return box
@@ -1500,18 +1501,18 @@ function imageinfo( filename,page,box )
   return images[new_name]
 end
 
-function set_color_if_necessary( nodelist,farbe )
-  if not farbe then return nodelist end
+function set_color_if_necessary( nodelist,color )
+  if not color then return nodelist end
 
-  local farbname
-  if farbe == -1 then
-    farbname = "Schwarz"
+  local colorname
+  if color == -1 then
+    colorname = "Schwarz"
   else
-    farbname = colortable[farbe]
+    colorname = colortable[color]
   end
 
   local colstart = node.new(8,39)
-  colstart.data  = colors[farbname].pdfstring
+  colstart.data  = colors[colorname].pdfstring
   colstart.cmd   = 1
   colstart.stack = 1
   colstart.next = nodelist
@@ -1528,15 +1529,15 @@ function set_color_if_necessary( nodelist,farbe )
   return colstart
 end
 
-function set_fontfamily_if_necessary(nodelist,fontfamilie)
+function set_fontfamily_if_necessary(nodelist,fontfamily)
   local fam
   while nodelist do
     if nodelist.id==0 or nodelist.id==1 then
-      set_fontfamily_if_necessary(nodelist.list,fontfamilie)
+      set_fontfamily_if_necessary(nodelist.list,fontfamily)
     else
       fam = node.has_attribute(nodelist,att_fontfamily)
       if fam == 0 then
-        node.set_attribute(nodelist,att_fontfamily,fontfamilie)
+        node.set_attribute(nodelist,att_fontfamily,fontfamily)
       end
     end
     nodelist=nodelist.next
@@ -1549,7 +1550,7 @@ function set_sub_supscript( nodelist,script )
   end
 end
 
-function umbreche_url( nodelist )
+function break_url( nodelist )
   local p
 
   local slash = string.byte("/")
@@ -1569,14 +1570,14 @@ function umbreche_url( nodelist )
 end
 
 function colorbar( wd,ht,dp,farbe )
-  local farbname = farbe or "Schwarz"
-  if not colors[farbname] then
+  local colorname = farbe or "Schwarz"
+  if not colors[colorname] then
     err("Color %q not found",farbe)
-    farbname = "Schwarz"
+    colorname = "Schwarz"
   end
   local rule_start = node.new("whatsit","pdf_colorstack")
   rule_start.stack = 1
-  rule_start.data = colors[farbname].pdfstring
+  rule_start.data = colors[colorname].pdfstring
   rule_start.cmd = 1
 
   local rule = node.new("rule")
@@ -1622,7 +1623,7 @@ function rotate( nodelist,angle )
   return tmp
 end
 
---- See `commands#save_dataset()` for  documention on the data structure for `xml_element`.
+--- See `commands#save_dataset()` for  documentation on the data structure for `xml_element`.
 function xml_to_string( xml_element, level )
   level = level or 0
   local str = ""

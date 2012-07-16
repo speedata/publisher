@@ -605,7 +605,7 @@ function setze_zeile(self, tr_contents, current_row )
     -- Wenn ich auf einer Skip-Spalte bin (durch einen Rowspan), dann
     -- muss eine leere hbox erzeugt werden
     while self.skip[current_row] and self.skip[current_row][current_column] do
-      v = publisher.erzeuge_leere_hbox_mit_breite(self.colwidths[current_column])
+      v = publisher.create_empty_hbox_with_width(self.colwidths[current_column])
       v = publisher.add_glue(v,"head",fill) -- sonst gäb's ne underfull vbox
       zeile[current_column] = node.vpack(v,self.rowheights[current_row],"exactly")
       current_column = current_column + 1
@@ -797,7 +797,7 @@ function setze_zeile(self, tr_contents, current_row )
 
   if current_column == 0 then
     trace("tabular: keine Td-Zellen in dieser Spalte gefunden")
-    v = publisher.erzeuge_leere_hbox_mit_breite(self.tablewidth_target)
+    v = publisher.create_empty_hbox_with_width(self.tablewidth_target)
     trace("tabular: leere hbox erzeugt")
     v = publisher.add_glue(v,"head",fill) -- sonst gäb's ne underfull vbox
     zeile[1] = node.vpack(v,self.rowheights[current_row],"exactly")
