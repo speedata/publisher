@@ -569,7 +569,7 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
   end
 end
 
---- Return the XML structure taht is stored at <pagetype>. For every pagetype
+--- Return the XML structure that is stored at &lt;pagetype>. For every pagetype
 --- in the table "masterpages" the function ist_seitentyp() gets called-
 function detect_pagetype()
   local ret = nil
@@ -1621,6 +1621,18 @@ function rotate( nodelist,angle )
   tmp.height = math.abs(ht * math.sin(math.rad(90 - angle))) + math.abs(wd * sin)
   tmp.depth = 0
   return tmp
+end
+
+--- Make a string XML safe
+function xml_escape( str )
+  local replace = {
+    [">"] = "&gt;",
+    ["<"] = "&lt;",
+    ["\""] = "&quote;",
+    ["&"] = "&amp;",
+  }
+  local ret = str.gsub(str,".",replace)
+  return ret
 end
 
 --- See `commands#save_dataset()` for  documentation on the data structure for `xml_element`.

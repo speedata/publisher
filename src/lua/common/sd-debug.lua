@@ -1,3 +1,4 @@
+--- For debugging help
 --
 --  sd-debug.lua
 --  publisher
@@ -5,14 +6,8 @@
 --  Copyright 2010 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 
--- fürs Debugging...
 function w( ... )
-  local ok,err = pcall(string.format,...)
-  if ok == false then
-    texio.write_nl(string.format("Fehler: %q, %s",err, debug.traceback()))
-  else
-    texio.write_nl("-----> " .. err)
-  end
+  texio.write_nl("-----> " .. string.format(...))
 end
 
 if not log then

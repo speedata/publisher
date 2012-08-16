@@ -72,7 +72,7 @@ function commands.attribute( layoutxml,dataxml )
   local selection = publisher.read_attribute(layoutxml,dataxml,"select","string")
   local attname   = publisher.read_attribute(layoutxml,dataxml,"name","string")
   local attvalue  = xpath.textvalue(xpath.parse(dataxml,selection))
-  local ret = { [".__type"]="attribute", [attname] = attvalue }
+  local ret = { [".__type"]="attribute", [attname] = publisher.xml_escape(attvalue) }
   return ret
 end
 
