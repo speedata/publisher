@@ -4,44 +4,54 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"optionparser"
 	"os"
 	"os/exec"
+	"os/signal"
 	"path"
 	"path/filepath"
+	"runtime"
 	"strings"
+	"syscall"
 	"time"
 )
 
 var (
-	options       map[string]string
-	layoutoptions map[string]string
-	installdir    string
-	libdir        string
-	srcdir        string
-	inifile       string
-	dest          string // The platform which this script runs on. 
-	version       string
-	homecfg       string
-	systemcfg     string
-	starttime     time.Time
+	options            map[string]string
+	layoutoptions      map[string]string
+	variables          map[string]string
+	installdir, libdir string
+	srcdir             string
+	inifile            string
+	dest               string // The platform which this script runs on. 
+	version            string
+	homecfg            string
+	systemcfg          string
+	pwd                string
+	open_command       string
+	extra_dir          []string
+	starttime          time.Time
 )
 
 func init() {
+	var err error
 	log.SetFlags(0)
 	starttime = time.Now()
-	pwd, err := os.Getwd()
+	go signalCatcher()
+	pwd, err = os.Getwd()
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	variables = make(map[string]string)
+
 	options = map[string]string{
-		"layout":    "layout.xml",
-		"jobname":   "publisher",
-		"data":      "data.xml",
-		"runs":      "1",
-		"extra-dir": pwd,
+		"layout":  "layout.xml",
+		"jobname": "publisher",
+		"data":    "data.xml",
+		"runs":    "1",
 	}
 	installdir, err = filepath.Abs(path.Join(path.Dir(os.Args[0]), ".."))
 	if err != nil {
@@ -50,7 +60,17 @@ func init() {
 	if version == "" {
 		version = "local"
 	}
+	extra_dir = append(extra_dir, pwd)
 	// log.Print("Built for platform: ",dest)
+	switch os := runtime.GOOS; os {
+	case "darwin":
+		open_command = "open"
+	case "linux":
+		open_command = "xdg-open"
+	case "windows":
+		open_command = "/Programme/Internet Explorer/iexplore.exe"
+	}
+
 	switch dest {
 	case "linux":
 		libdir = "/usr/share/speedata-publisher/lib"
@@ -67,24 +87,91 @@ func init() {
 		inifile = path.Join(srcdir, "lua/sdini.lua")
 		os.Setenv("PUBLISHER_BASE_PATH", srcdir)
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
-		// options["extra-dir"].push(installdir + "/fonts")
-		// options["extra-dir"].push(installdir + "/img")
+		extra_dir = append(extra_dir, path.Join(installdir, "fonts"))
+		extra_dir = append(extra_dir, path.Join(installdir, "img"))
 	}
 }
 
-func set_variable(str string) {
-	fmt.Println("function called", str)
+// Open the given file with the system's default program
+func openFile(filename string) {
+	fmt.Println("open_command", open_command, filename)
+	cmd := exec.Command(open_command, filename)
+	err := cmd.Start()
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = cmd.Wait()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+// Put string a=b into the variabls map
+func setVariable(str string) {
+	a := strings.Split(str, "=")
+	variables[a[0]] = a[1]
 }
 
 func showDuration() {
-	fmt.Printf("Duration: %v\n", time.Now().Sub(starttime))
+	log.Printf("Duration: %v\n", time.Now().Sub(starttime))
+}
+
+func signalCatcher() {
+	ch := make(chan os.Signal)
+	signal.Notify(ch, syscall.SIGINT)
+	sig := <-ch
+	log.Printf("Signal received: %v", sig)
+	showDuration()
+	os.Exit(0)
+}
+
+// Run the given command line
+func run(cmdline string) {
+	return
+	cmdline_array := strings.Split(cmdline, " ")
+	cmd := exec.Command(cmdline_array[0])
+	cmd.Args = cmdline_array
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		log.Fatal(err)
+	}
+	stderr, err := cmd.StderrPipe()
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = cmd.Start()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// fmt.Printf("%v\n", cmd)
+	go io.Copy(os.Stdout, stdout)
+	go io.Copy(os.Stderr, stderr)
+	err = cmd.Wait()
+	if err != nil {
+		showDuration()
+		log.Print(err)
+	}
+}
+
+func save_variables() {
+	f, err := os.Create(options["jobname"] + ".vars")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Fprintln(f, "return { ")
+	for key, value := range variables {
+		fmt.Fprintf(f, `["%s"] = "%s", `+"\n", key, value)
+	}
+	fmt.Fprintln(f, "} ")
+	f.Close()
 }
 
 func runPublisher() {
-	fmt.Println("installdir",installdir)
+	fmt.Println("installdir", installdir)
 	log.Print("run speedata publisher")
-	// process.env["SD_EXTRA_DIRS"] = cfg.getArray("extra-dir").join(":")
-	// save_variables()
+	os.Setenv("SD_EXTRA_DIRS", strings.Join(extra_dir, ":"))
+
+	save_variables()
 
 	f, err := os.Create(options["jobname"] + ".protocol")
 	if err != nil {
@@ -104,23 +191,11 @@ func runPublisher() {
 	}
 	layoutoptions_cmdline := strings.Join(layoutoptions_ary, ",")
 	jobname := options["jobname"]
-	layoutname := options["layoutname"]
-	dataname := options["dataname"]
-	// inifile ,layoutname,dataname, 
+	layoutname := options["layout"]
+	dataname := options["data"]
 
-	cmd := exec.Command(installdir+"/bin/sdluatex", "--interaction", "nonstopmode", "--jobname="+jobname, "--ini", "--lua="+inifile, "publisher.tex", layoutname, dataname, layoutoptions_cmdline)
-	fmt.Printf("%v\n", cmd)
-	// cmdline:= fmt.Sprintf("%s/bin/sdluatex --interaction nonstopmode --jobname=%s --ini --lua=%s  publisher.tex %s %s %s",installdir,jobname,inifile,layoutname,dataname, layoutoptions_cmdline)
-
-	// var jobname    = cfg.getString("jobname"),
-	//     layoutname = cfg.getString("layout"),
-	//     dataname   = cfg.getString("data"),
-	//     runs       = cfg.getNumber("runs")
-	//     cmdline = sprintf("%s/bin/sdluatex --interaction nonstopmode --jobname=%s --ini --lua=%s  publisher.tex %s %s %s",installdir,jobname,inifile,layoutname,dataname, layoutoptions_ary.join(",")),
-	//     cmdary = cmdline.split(/\s+/),
-	//     command = cmdary.shift()
-
-	// run_publisher_core(command,cmdary,runs,openpdf)
+	run(fmt.Sprintf("%s/bin/sdluatex --interaction nonstopmode --jobname=%s --ini --lua=%s publisher.tex %s %s %s", installdir, jobname, inifile, layoutname, dataname, layoutoptions_cmdline))
+	fmt.Println("run finished")
 }
 
 func main() {
@@ -134,7 +209,7 @@ func main() {
 	op.On("--jobname NAME", "The name of the resulting PDF file, default is 'publisher.pdf'", options)
 	op.On("--runs NUM", "Number of publishing runs ", options)
 	op.On("--startpage NUM", "The first page number", layoutoptions)
-	op.On("-v", "--var VAR=VALUE", "Set a variable for the publishing run", set_variable)
+	op.On("-v", "--var VAR=VALUE", "Set a variable for the publishing run", setVariable)
 	op.On("--version", "Show version information", options)
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", options)
 	op.On("--xml", "Output as (pseudo-)XML (for list-fonts)", options)
@@ -172,13 +247,16 @@ func main() {
 			log.Fatal("Running xproc filter not implemented")
 		}
 		runPublisher()
+		// open PDF if necessary
+		if options["autoopen"] == "true" {
+			openFile(options["jobname"] + ".pdf")
+		}
 	case "doc":
-		// if (installdir == '/usr') {
-		//     open_file('/usr/share/doc/speedata-publisher/index.html')
-		// } else {
-		//     open_file(path.join(installdir,"/build/handbuch_publisher/index.html"))
-		// }
-		log.Fatal("not implemented yet.")
+		if installdir == "/usr" {
+			openFile("/usr/share/doc/speedata-publisher/index.html")
+		} else {
+			openFile(path.Join(installdir, "/build/handbuch_publisher/index.html"))
+		}
 	case "list-fonts":
 		log.Fatal("not implemented yet.")
 	case "watch":
