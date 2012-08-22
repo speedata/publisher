@@ -3,6 +3,7 @@
 package main
 
 import (
+	"configurator"
 	"fmt"
 	"io"
 	"log"
@@ -20,6 +21,7 @@ import (
 
 var (
 	options            map[string]string
+	defaults           map[string]string
 	layoutoptions      map[string]string
 	variables          map[string]string
 	installdir, libdir string
@@ -33,6 +35,7 @@ var (
 	open_command       string
 	extra_dir          []string
 	starttime          time.Time
+	cfg                *configurator.ConfigData
 )
 
 func init() {
@@ -44,10 +47,10 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	variables = make(map[string]string)
-
-	options = map[string]string{
+	layoutoptions = make(map[string]string)
+	options = make(map[string]string)
+	defaults = map[string]string{
 		"layout":  "layout.xml",
 		"jobname": "publisher",
 		"data":    "data.xml",
@@ -90,6 +93,24 @@ func init() {
 		extra_dir = append(extra_dir, path.Join(installdir, "fonts"))
 		extra_dir = append(extra_dir, path.Join(installdir, "img"))
 	}
+	cfg, err = configurator.ReadFiles("/Users/patrick/.publisher.cfg", path.Join(pwd, "publisher.cfg"))
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func getOption(optionname string) string {
+	fmt.Println("getOption", optionname)
+	if options[optionname] != "" {
+		return options[optionname]
+	}
+	if cfg.String("DEFAULT", optionname) != "" {
+		return cfg.String("DEFAULT", optionname)
+	}
+	if defaults[optionname] != "" {
+		return defaults[optionname]
+	}
+	return ""
 }
 
 // Open the given file with the system's default program
@@ -127,7 +148,7 @@ func signalCatcher() {
 
 // Run the given command line
 func run(cmdline string) {
-	return
+	fmt.Println(cmdline)
 	cmdline_array := strings.Split(cmdline, " ")
 	cmd := exec.Command(cmdline_array[0])
 	cmd.Args = cmdline_array
@@ -154,7 +175,9 @@ func run(cmdline string) {
 }
 
 func save_variables() {
-	f, err := os.Create(options["jobname"] + ".vars")
+	jobname := getOption("jobname")
+	fmt.Println("getOption", jobname)
+	f, err := os.Create(jobname + ".vars")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -169,11 +192,10 @@ func save_variables() {
 func runPublisher() {
 	fmt.Println("installdir", installdir)
 	log.Print("run speedata publisher")
-	os.Setenv("SD_EXTRA_DIRS", strings.Join(extra_dir, ":"))
 
 	save_variables()
 
-	f, err := os.Create(options["jobname"] + ".protocol")
+	f, err := os.Create(getOption("jobname") + ".protocol")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -190,16 +212,15 @@ func runPublisher() {
 		layoutoptions_ary = append(layoutoptions_ary, `startpage="`+layoutoptions["startpage"]+`"`)
 	}
 	layoutoptions_cmdline := strings.Join(layoutoptions_ary, ",")
-	jobname := options["jobname"]
-	layoutname := options["layout"]
-	dataname := options["data"]
+	jobname := getOption("jobname")
+	layoutname := getOption("layout")
+	dataname := getOption("data")
 
 	run(fmt.Sprintf("%s/bin/sdluatex --interaction nonstopmode --jobname=%s --ini --lua=%s publisher.tex %s %s %s", installdir, jobname, inifile, layoutname, dataname, layoutoptions_cmdline))
 	fmt.Println("run finished")
 }
 
 func main() {
-	layoutoptions = make(map[string]string)
 	op := optionparser.NewOptionParser()
 	op.On("--autoopen", "Open the PDF file (MacOS X and Linux only)", options)
 	op.On("--data NAME", "Name of the XML data file. Defaults to 'data.xml'", options)
@@ -239,17 +260,19 @@ func main() {
 	fmt.Printf("%v\n", options)
 	fmt.Printf("%v\n", layoutoptions)
 
+	os.Setenv("SD_EXTRA_DIRS", strings.Join(extra_dir, ":"))
+
 	switch command {
 	case "run":
-		filter := options["filter"]
+		filter := getOption("filter")
 		if filter != "" {
 			// run xproc filter
 			log.Fatal("Running xproc filter not implemented")
 		}
 		runPublisher()
 		// open PDF if necessary
-		if options["autoopen"] == "true" {
-			openFile(options["jobname"] + ".pdf")
+		if getOption("autoopen") == "true" {
+			openFile(getOption("jobname") + ".pdf")
 		}
 	case "doc":
 		if installdir == "/usr" {
@@ -258,7 +281,12 @@ func main() {
 			openFile(path.Join(installdir, "/build/handbuch_publisher/index.html"))
 		}
 	case "list-fonts":
-		log.Fatal("not implemented yet.")
+		var xml string
+		if getOption("xml") == "true" {
+			xml = "xml"
+		}
+		cmdline := fmt.Sprintf("%s/bin/sdluatex --luaonly %s/lua/sdscripts.lua %s list-fonts %s", installdir, srcdir, inifile, xml)
+		run(cmdline)
 	case "watch":
 		log.Fatal("not implemented yet.")
 	default:
