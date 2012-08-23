@@ -14,28 +14,30 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 	"syscall"
 	"time"
 )
 
 var (
-	options            map[string]string
-	defaults           map[string]string
-	layoutoptions      map[string]string
-	variables          map[string]string
-	installdir, libdir string
-	srcdir             string
-	inifile            string
-	dest               string // The platform which this script runs on. 
-	version            string
-	homecfg            string
-	systemcfg          string
-	pwd                string
-	open_command       string
-	extra_dir          []string
-	starttime          time.Time
-	cfg                *configurator.ConfigData
+	options               map[string]string
+	defaults              map[string]string
+	layoutoptions         map[string]string
+	variables             map[string]string
+	inifile               string
+	libdir                string
+	srcdir                string
+	path_to_documentation string // Where the documentation (index.html) is
+	inifile               string
+	dest                  string // The platform which this script runs on.
+	version               string
+	homecfg               string
+	systemcfg             string
+	pwd                   string
+	extra_dir             []string
+	starttime             time.Time
+	cfg                   *configurator.ConfigData
 )
 
 func init() {
@@ -67,22 +69,24 @@ func init() {
 	// log.Print("Built for platform: ",dest)
 	switch os := runtime.GOOS; os {
 	case "darwin":
-		open_command = "open"
+		defaults["opencommand"] = "open"
 	case "linux":
-		open_command = "xdg-open"
+		defaults["opencommand"] = "xdg-open"
 	case "windows":
-		open_command = "/Programme/Internet Explorer/iexplore.exe"
+		defaults["opencommand"] = "cmd /C start"
 	}
 
 	switch dest {
-	case "linux":
+	case "linux-usr":
 		libdir = "/usr/share/speedata-publisher/lib"
 		srcdir = "/usr/share/speedata-publisher/sw"
 		inifile = path.Join(srcdir, "lua/sdini.lua")
 		os.Setenv("PUBLISHER_BASE_PATH", "/usr/share/speedata-publisher")
 		os.Setenv("LUA_PATH", fmt.Sprintf("%s/lua/?.lua;%s/lua/common/?.lua;", srcdir, srcdir))
-	case "windows":
+		path_to_documentation = "/usr/share/doc/speedata-publisher/index.html"
+	case "directory":
 		log.Fatal("Platform not supported yet!")
+		path_to_documentation = path.Join(installdir, "/build/handbuch_publisher/index.html")
 	default:
 		// local git installation
 		libdir = path.Join(installdir, "lib")
@@ -92,15 +96,16 @@ func init() {
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
 		extra_dir = append(extra_dir, path.Join(installdir, "fonts"))
 		extra_dir = append(extra_dir, path.Join(installdir, "img"))
+		path_to_documentation = path.Join(installdir, "/build/handbuch_publisher/index.html")
 	}
-	cfg, err = configurator.ReadFiles("/Users/patrick/.publisher.cfg", path.Join(pwd, "publisher.cfg"))
+	// cfg, err = configurator.ReadFiles("/Users/patrick/.publisher.cfg", path.Join(pwd, "publisher.cfg"))
+	cfg, err = configurator.ReadFiles(path.Join(pwd, "publisher.cfg"), "/Users/patrick/.publisher.cfg")
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
 func getOption(optionname string) string {
-	fmt.Println("getOption", optionname)
 	if options[optionname] != "" {
 		return options[optionname]
 	}
@@ -115,8 +120,10 @@ func getOption(optionname string) string {
 
 // Open the given file with the system's default program
 func openFile(filename string) {
-	fmt.Println("open_command", open_command, filename)
-	cmd := exec.Command(open_command, filename)
+	opencommand := getOption("opencommand")
+	cmdname := strings.SplitN(opencommand+" "+filename, " ", 2)
+	// fmt.Printf("%#v\n", cmdname)
+	cmd := exec.Command(cmdname[0], cmdname[1])
 	err := cmd.Start()
 	if err != nil {
 		log.Fatal(err)
@@ -148,7 +155,6 @@ func signalCatcher() {
 
 // Run the given command line
 func run(cmdline string) {
-	fmt.Println(cmdline)
 	cmdline_array := strings.Split(cmdline, " ")
 	cmd := exec.Command(cmdline_array[0])
 	cmd.Args = cmdline_array
@@ -176,7 +182,6 @@ func run(cmdline string) {
 
 func save_variables() {
 	jobname := getOption("jobname")
-	fmt.Println("getOption", jobname)
 	f, err := os.Create(jobname + ".vars")
 	if err != nil {
 		log.Fatal(err)
@@ -216,8 +221,13 @@ func runPublisher() {
 	layoutname := getOption("layout")
 	dataname := getOption("data")
 
-	run(fmt.Sprintf("%s/bin/sdluatex --interaction nonstopmode --jobname=%s --ini --lua=%s publisher.tex %s %s %s", installdir, jobname, inifile, layoutname, dataname, layoutoptions_cmdline))
-	fmt.Println("run finished")
+	runs, err := strconv.Atoi(getOption("runs"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	for i := 1; i <= runs; i++ {
+		run(fmt.Sprintf("%s/bin/sdluatex --interaction nonstopmode --jobname=%s --ini --lua=%s publisher.tex %s %s %s", installdir, jobname, inifile, layoutname, dataname, layoutoptions_cmdline))
+	}
 }
 
 func main() {
@@ -257,9 +267,6 @@ func main() {
 		command = op.Extra[0]
 	}
 
-	fmt.Printf("%v\n", options)
-	fmt.Printf("%v\n", layoutoptions)
-
 	os.Setenv("SD_EXTRA_DIRS", strings.Join(extra_dir, ":"))
 
 	switch command {
@@ -275,11 +282,7 @@ func main() {
 			openFile(getOption("jobname") + ".pdf")
 		}
 	case "doc":
-		if installdir == "/usr" {
-			openFile("/usr/share/doc/speedata-publisher/index.html")
-		} else {
-			openFile(path.Join(installdir, "/build/handbuch_publisher/index.html"))
-		}
+		openFile(path_to_documentation)
 	case "list-fonts":
 		var xml string
 		if getOption("xml") == "true" {
@@ -290,8 +293,7 @@ func main() {
 	case "watch":
 		log.Fatal("not implemented yet.")
 	default:
-		fmt.Println("unknown command:", command)
-		os.Exit(-1)
+		log.Fatal("unknown command:", command)
 	}
 	showDuration()
 }
