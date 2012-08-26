@@ -11,7 +11,6 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
-	"path"
 	"path/filepath"
 	"runtime"
 	"strconv"
@@ -25,7 +24,7 @@ var (
 	defaults              map[string]string
 	layoutoptions         map[string]string
 	variables             map[string]string
-	inifile               string
+	installdir            string
 	libdir                string
 	srcdir                string
 	path_to_documentation string // Where the documentation (index.html) is
@@ -58,13 +57,33 @@ func init() {
 		"data":    "data.xml",
 		"runs":    "1",
 	}
-	installdir, err = filepath.Abs(path.Join(path.Dir(os.Args[0]), ".."))
-	if err != nil {
-		log.Fatal(err)
+
+	// The problem now is that we don't know where the executable file is
+	// if it's in the PATH, it has no ../ prefix
+	// if it is relative, make an absolute path from it.
+
+	executable_name := filepath.Base(os.Args[0])
+	var bindir string
+	if executable_name == os.Args[0] {
+		// most likely an absolute path
+		bindir, err = exec.LookPath(executable_name)
+		if err != nil {
+			log.Fatal(err)
+		}
+		bindir = filepath.Dir(bindir)
+	} else {
+		// a relative path hopefully
+		bindir,err = filepath.Abs(filepath.Dir(os.Args[0]))
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
+	installdir = filepath.Join(bindir,"..")
+
 	if version == "" {
 		version = "local"
 	}
+
 	extra_dir = append(extra_dir, pwd)
 	// log.Print("Built for platform: ",dest)
 	switch os := runtime.GOOS; os {
@@ -80,26 +99,26 @@ func init() {
 	case "linux-usr":
 		libdir = "/usr/share/speedata-publisher/lib"
 		srcdir = "/usr/share/speedata-publisher/sw"
-		inifile = path.Join(srcdir, "lua/sdini.lua")
+		inifile = filepath.Join(srcdir, "lua/sdini.lua")
 		os.Setenv("PUBLISHER_BASE_PATH", "/usr/share/speedata-publisher")
 		os.Setenv("LUA_PATH", fmt.Sprintf("%s/lua/?.lua;%s/lua/common/?.lua;", srcdir, srcdir))
 		path_to_documentation = "/usr/share/doc/speedata-publisher/index.html"
 	case "directory":
 		log.Fatal("Platform not supported yet!")
-		path_to_documentation = path.Join(installdir, "/build/handbuch_publisher/index.html")
+		path_to_documentation = filepath.Join(installdir, "/build/handbuch_publisher/index.html")
 	default:
 		// local git installation
-		libdir = path.Join(installdir, "lib")
-		srcdir = path.Join(installdir, "src")
-		inifile = path.Join(srcdir, "lua/sdini.lua")
+		libdir = filepath.Join(installdir, "lib")
+		srcdir = filepath.Join(installdir, "src")
+		inifile = filepath.Join(srcdir, "lua/sdini.lua")
 		os.Setenv("PUBLISHER_BASE_PATH", srcdir)
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
-		extra_dir = append(extra_dir, path.Join(installdir, "fonts"))
-		extra_dir = append(extra_dir, path.Join(installdir, "img"))
-		path_to_documentation = path.Join(installdir, "/build/handbuch_publisher/index.html")
+		extra_dir = append(extra_dir, filepath.Join(installdir, "fonts"))
+		extra_dir = append(extra_dir, filepath.Join(installdir, "img"))
+		path_to_documentation = filepath.Join(installdir, "/build/handbuch_publisher/index.html")
 	}
 	// cfg, err = configurator.ReadFiles("/Users/patrick/.publisher.cfg", path.Join(pwd, "publisher.cfg"))
-	cfg, err = configurator.ReadFiles(path.Join(pwd, "publisher.cfg"), "/Users/patrick/.publisher.cfg")
+	cfg, err = configurator.ReadFiles(filepath.Join(pwd, "publisher.cfg"), "/Users/patrick/.publisher.cfg")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -122,7 +141,6 @@ func getOption(optionname string) string {
 func openFile(filename string) {
 	opencommand := getOption("opencommand")
 	cmdname := strings.SplitN(opencommand+" "+filename, " ", 2)
-	// fmt.Printf("%#v\n", cmdname)
 	cmd := exec.Command(cmdname[0], cmdname[1])
 	err := cmd.Start()
 	if err != nil {
@@ -141,7 +159,7 @@ func setVariable(str string) {
 }
 
 func showDuration() {
-	log.Printf("Duration: %v\n", time.Now().Sub(starttime))
+	log.Printf("Total run time: %v\n", time.Now().Sub(starttime))
 }
 
 func signalCatcher() {
@@ -170,7 +188,6 @@ func run(cmdline string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// fmt.Printf("%v\n", cmd)
 	go io.Copy(os.Stdout, stdout)
 	go io.Copy(os.Stderr, stderr)
 	err = cmd.Wait()
@@ -195,7 +212,6 @@ func save_variables() {
 }
 
 func runPublisher() {
-	fmt.Println("installdir", installdir)
 	log.Print("run speedata publisher")
 
 	save_variables()
