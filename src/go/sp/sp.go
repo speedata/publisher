@@ -271,10 +271,14 @@ func main() {
 
 	switch command {
 	case "run":
-		filter := getOption("filter")
-		if filter != "" {
-			// run xproc filter
-			log.Fatal("Running xproc filter not implemented")
+		if filter := getOption("filter"); filter != "" {
+			if filepath.Ext(filter) != ".xpl" {
+				filter = filter + ".xpl"
+			}
+			log.Println("Run filter: ", filter)
+			os.Setenv("CLASSPATH", libdir+"/calabash.jar:"+libdir+"/saxon9he.jar")
+			cmdline := "java com.xmlcalabash.drivers.Main " + filter
+			run(cmdline)
 		}
 		runPublisher()
 		// open PDF if necessary
