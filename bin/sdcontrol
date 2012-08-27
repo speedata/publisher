@@ -82,10 +82,20 @@ function create_source_doc()
   os.execute(cmdline)
 end
 
+function compile()
+  os.setenv("GOPATH",string.format("%s/go/sp",srcdir))
+  lfs.chdir(srcdir .. "/go/sp")
+  cmdline = 'go build -ldflags "-X main.dest git -X main.version local"  sp.go'
+  os.execute(cmdline)
+  cmdline = string.format("cp sp %s/bin",installdir)
+  os.execute(cmdline)
+end
+
 
 local op = optionparser:new()
 op.banner = string.format("Usage: sdcontrol <options>")
 op.start = 30
+op:on("-c","compile and install necessary software",compile)
 op:on("-d","create multi lang documentation",create_doc)
 op:on("-s","create source documentation",create_source_doc)
 op:on("--new-language LANG","Add a new langauge for messages. Example: de_DE",new_language)
