@@ -193,19 +193,25 @@ local extender =
     P("\130") * R("\157\158") +
     P("\131") * R("\188\190"))
 
--- lpeg.print(extender)
 
-local function c_return_self_unless_empty(...)
-  local a =...
-  --if not string.match(a,"^%s+$") then
-    return a
-  --end
+
+-- If it's a namespace, extract it
+local function _attribute(...)
+  local attr = select(1,...)
+  if string.sub(attr,1,5) == "xmlns" then
+    local prefix = string.match(select(1,...),"^xmlns:?(.*)")
+    if prefix then
+      namespaces[prefix] = select(2,...)
+    end
+  end
+  return ...
 end
+
 local function c_return_self(...)
   return ...
 end
 local function c_stag(...)
-  local ret = { __name=select(1,...)}
+  local ret = { [".__name"]=select(1,...)}
   for i=2,select('#',...),2 do 
     ret[select(i,...)] = select(i+1,...)
   end
@@ -216,7 +222,7 @@ local function c_attvalue(...)
   return ret
 end
 local function c_empty_elem_tag(...)
-  local ret = {__name = select(1,...),__type="element"}
+  local ret = {[".__name"]= select(1,...),[".__type"]="element"}
   for i=2, select('#', ...),2 do
     ret[select(i,...)] = select(i+1,...)
   end
@@ -225,7 +231,7 @@ end
 local function c_element(...)
   local number_of_args=select('#',...)
   local ret = select(1,...)
-  ret.__type="element"
+  ret[".__type"]="element"
   if number_of_args > 1 then
     for i=2,select('#',...) do
       if type(select(i,...)) == "string" and type(select(i-1,...)) == "string" then
@@ -293,7 +299,7 @@ xml = P {
 -- 10 * 
    AttValue = (	Quote * C( ( non_Att + V"Reference" )^0 ) * Quote + quote * C( ( non_att + V"Reference" )^0 ) * quote ) /c_attvalue,
 -- 14
-   CharData = (chardata)^0 / c_return_self_unless_empty,
+   CharData = (chardata)^0 / c_return_self,
 -- 15
    Comment = "<!--" * (  char_without_minus  + ( minus * char_without_minus)  )^0  *  "-->",
 -- 16 ?
@@ -319,7 +325,7 @@ xml = P {
 -- 40
    STag = ( lt * V"Name" * ( space * V"Attribute" )^0 * (space)^0 * gt) / c_stag,
 -- 41
-   Attribute = ( V"Name" * V"Eq" * V"AttValue" )  / c_return_self,
+   Attribute = ( V"Name" * V"Eq" * V"AttValue" )  / _attribute,
 -- 42
    ETag = lts * V"Name" * (space)^0 * gt / c_gobble,
 -- 43 *
@@ -352,6 +358,9 @@ xml = P {
 }
 
 function parse_xml(txt)
-  return lpeg.match(xml,txt)
+  namespaces = {}
+  local root = lpeg.match(xml,txt)
+  root["__namespace"] = namespaces
+  return root
 end
 
