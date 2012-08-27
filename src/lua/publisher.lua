@@ -19,7 +19,6 @@ local paragraph    = require("paragraph")
 sd_xpath_funktionen      = require("publisher.layout_functions")
 orig_xpath_funktionen    = require("publisher.xpath_functions")
 
-local xmlparser = require("xmlparser")
 
 
 module(...,package.seeall)
@@ -351,7 +350,8 @@ function dothings()
   --- Used in `xpath.lua` to find out which language the function is in.
   namespaces_layout = layoutxml["__namespace"]
   local nsprefix = string.match(layoutxml[".__name"],"^(.*):") or ""
-  local ns = layoutxml["__namespace"][nsprefix]
+  -- the namespace of the root element (Layout)
+  local ns = namespaces_layout[nsprefix]
 
   --- The currently active layout language. One of `de` or `en`.
   current_layoutlanguage = string.gsub(ns,"urn:speedata.de:2009/publisher/","")
