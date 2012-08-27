@@ -97,7 +97,7 @@ func (self *Config) read(buf *bufio.Reader) (err error) {
 			case i > 0:
 				i := strings.IndexAny(l, "=:")
 				option = strings.TrimSpace(l[0:i])
-				value := strings.TrimSpace(stripComments(l[i+1:]))
+				value := stripQuotes(strings.TrimSpace(stripComments(l[i+1:])))
 				self.AddOption(section, option, value)
 			// Continuation of multi-line value
 			case section != "" && option != "":

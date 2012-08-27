@@ -337,11 +337,11 @@ function dothings()
   local onecm=tex.sp("1cm")
   masterpages[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", contents = function(_seite) _seite.raster:setze_rand(onecm,onecm,onecm,onecm) end }}, name = "Seite" }
 
---- Both the data and the layout instructions are written in XML.
+  --- Both the data and the layout instructions are written in XML.
   local layoutxml = load_xml(arg[2],"layout instructions")
   local dataxml   = load_xml(arg[3],"data file")
 
---- The `vars` file hold a lua document holding table 
+  --- The `vars` file hold a lua document holding table
   local vars = loadfile("publisher.vars")()
   for k,v in pairs(vars) do
     variablen[k]=v

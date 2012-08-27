@@ -123,6 +123,19 @@ func NewDefault() *Config {
 // === Utility
 // ===
 
+// pgu: remove "quotes around text"
+func stripQuotes(l string) string {
+	var quote uint8
+	// if the first character is a quote ' or ", check if the last character is the same quote char
+	if l[0] == '"' ||  l[0] == '\'' {
+		quote = l[0]
+	}
+	if l[len(l) - 1] == quote {
+		return l[1:len(l) - 1]
+	}
+	return l
+}
+
 func stripComments(l string) string {
 	// Comments are preceded by space or TAB
 	for _, c := range []string{" ;", "\t;", " #", "\t#"} {

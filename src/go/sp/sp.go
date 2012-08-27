@@ -177,6 +177,7 @@ func signalCatcher() {
 
 // Run the given command line
 func run(cmdline string) {
+	// Todo: don't split quoted commands
 	cmdline_array := strings.Split(cmdline, " ")
 	cmd := exec.Command(cmdline_array[0])
 	cmd.Args = cmdline_array
@@ -299,7 +300,8 @@ func runPublisher() {
 		log.Fatal(err)
 	}
 	for i := 1; i <= runs; i++ {
-		run(fmt.Sprintf("%s --interaction nonstopmode --jobname=%s --ini --lua=%s publisher.tex %s %s %s", exec_name, jobname, inifile, layoutname, dataname, layoutoptions_cmdline))
+		cmdline := fmt.Sprintf("%s --interaction nonstopmode --jobname=%s --ini --lua=%s publisher.tex %s %s %s", exec_name, jobname, inifile, layoutname, dataname, layoutoptions_cmdline)
+		run(cmdline)
 	}
 }
 
