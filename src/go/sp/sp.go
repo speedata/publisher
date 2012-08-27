@@ -261,6 +261,12 @@ func getExecutablePath() string {
 	return ""
 }
 
+// Print version information
+func versioninfo() {
+	log.Println("Version: ",version)
+	os.Exit(0)
+}
+
 func runPublisher() {
 	log.Print("run speedata publisher")
 
@@ -308,7 +314,7 @@ func main() {
 	op.On("--runs NUM", "Number of publishing runs ", options)
 	op.On("--startpage NUM", "The first page number", layoutoptions)
 	op.On("-v", "--var VAR=VALUE", "Set a variable for the publishing run", setVariable)
-	op.On("--version", "Show version information", options)
+	op.On("--version", "Show version information", versioninfo)
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", options)
 	op.On("--xml", "Output as (pseudo-)XML (for list-fonts)", options)
 
