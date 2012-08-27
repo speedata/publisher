@@ -34,6 +34,7 @@ var (
 	homecfg               string
 	systemcfg             string
 	pwd                   string
+	exe_suffix            string
 	extra_dir             []string
 	starttime             time.Time
 	cfg                   *configurator.ConfigData
@@ -73,12 +74,12 @@ func init() {
 		bindir = filepath.Dir(bindir)
 	} else {
 		// a relative path hopefully
-		bindir,err = filepath.Abs(filepath.Dir(os.Args[0]))
+		bindir, err = filepath.Abs(filepath.Dir(os.Args[0]))
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
-	installdir = filepath.Join(bindir,"..")
+	installdir = filepath.Join(bindir, "..")
 
 	if version == "" {
 		version = "local"
@@ -89,10 +90,13 @@ func init() {
 	switch os := runtime.GOOS; os {
 	case "darwin":
 		defaults["opencommand"] = "open"
+		exe_suffix = ""
 	case "linux":
 		defaults["opencommand"] = "xdg-open"
+		exe_suffix = ""
 	case "windows":
 		defaults["opencommand"] = "cmd /C start"
+		exe_suffix = ".exe"
 	}
 
 	switch dest {
@@ -211,6 +215,52 @@ func save_variables() {
 	f.Close()
 }
 
+// We don't know where the executable is and we don't know
+// if we should run sdluatex (with libxml2 parser) or simple
+// luatex
+func getExecutablePath() string {
+	// 1 check the installdir/bin for sdluatex(.exe)
+	// 2 check PATH for sdluatex(.exe)
+	// 3 assume simple installation and take luatex(.exe)
+	// 4 check then installdir/bin for luatex(.exe)
+	// 5 check PATH for luatex(.exe)
+	// 6 panic!
+	executable_name := "sdluatex" + exe_suffix
+	var p string
+
+	// 1 check the installdir/bin for sdluatex(.exe)
+	p = fmt.Sprintf("%s/bin/%s", installdir, executable_name)
+	fi, _ := os.Stat(p)
+	if fi != nil {
+		return p
+	}
+
+	// 2 check PATH for sdluatex(.exe)
+	p, _ = exec.LookPath(executable_name)
+	if p != "" {
+		return p
+	}
+
+	// 3 assume simple installation and take luatex(.exe)
+	executable_name = "luatex" + exe_suffix
+
+	// 4 check then installdir/bin for luatex(.exe)
+	p = fmt.Sprintf("%s/bin/%s", installdir, executable_name)
+	fi, _ = os.Stat(p)
+	if fi != nil {
+		return p
+	}
+	// 5 check PATH for luatex(.exe)
+	p, _ = exec.LookPath(executable_name)
+	if p != "" {
+		return p
+	}
+
+	// 6 panic!
+	log.Fatal("Can't find sdluatex or luatex binary")
+	return ""
+}
+
 func runPublisher() {
 	log.Print("run speedata publisher")
 
@@ -236,13 +286,14 @@ func runPublisher() {
 	jobname := getOption("jobname")
 	layoutname := getOption("layout")
 	dataname := getOption("data")
+	exec_name := getExecutablePath()
 
 	runs, err := strconv.Atoi(getOption("runs"))
 	if err != nil {
 		log.Fatal(err)
 	}
 	for i := 1; i <= runs; i++ {
-		run(fmt.Sprintf("%s/bin/sdluatex --interaction nonstopmode --jobname=%s --ini --lua=%s publisher.tex %s %s %s", installdir, jobname, inifile, layoutname, dataname, layoutoptions_cmdline))
+		run(fmt.Sprintf("%s --interaction nonstopmode --jobname=%s --ini --lua=%s publisher.tex %s %s %s", exec_name, jobname, inifile, layoutname, dataname, layoutoptions_cmdline))
 	}
 }
 
