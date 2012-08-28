@@ -103,24 +103,26 @@ func init() {
 	case "linux-usr":
 		libdir = "/usr/share/speedata-publisher/lib"
 		srcdir = "/usr/share/speedata-publisher/sw"
-		inifile = filepath.Join(srcdir, "lua/sdini.lua")
 		os.Setenv("PUBLISHER_BASE_PATH", "/usr/share/speedata-publisher")
 		os.Setenv("LUA_PATH", fmt.Sprintf("%s/lua/?.lua;%s/lua/common/?.lua;", srcdir, srcdir))
 		path_to_documentation = "/usr/share/doc/speedata-publisher/index.html"
 	case "directory":
-		log.Fatal("Platform not supported yet!")
+		libdir = filepath.Join(installdir, "lib")
+		srcdir = filepath.Join(installdir, "sw")
 		path_to_documentation = filepath.Join(installdir, "/build/handbuch_publisher/index.html")
+		os.Setenv("PUBLISHER_BASE_PATH",installdir)
+		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
 	default:
 		// local git installation
 		libdir = filepath.Join(installdir, "lib")
 		srcdir = filepath.Join(installdir, "src")
-		inifile = filepath.Join(srcdir, "lua/sdini.lua")
 		os.Setenv("PUBLISHER_BASE_PATH", srcdir)
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
 		extra_dir = append(extra_dir, filepath.Join(installdir, "fonts"))
 		extra_dir = append(extra_dir, filepath.Join(installdir, "img"))
 		path_to_documentation = filepath.Join(installdir, "/build/handbuch_publisher/index.html")
 	}
+	inifile = filepath.Join(srcdir, "lua/sdini.lua")
 	// cfg, err = configurator.ReadFiles("/Users/patrick/.publisher.cfg", path.Join(pwd, "publisher.cfg"))
 	cfg, err = configurator.ReadFiles(filepath.Join(pwd, "publisher.cfg"), "/Users/patrick/.publisher.cfg")
 	if err != nil {
