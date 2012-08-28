@@ -109,7 +109,7 @@ func init() {
 	case "directory":
 		libdir = filepath.Join(installdir, "lib")
 		srcdir = filepath.Join(installdir, "sw")
-		path_to_documentation = filepath.Join(installdir, "/build/handbuch_publisher/index.html")
+		path_to_documentation = filepath.Join(installdir, "share/doc/index.html")
 		os.Setenv("PUBLISHER_BASE_PATH",installdir)
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
 	default:

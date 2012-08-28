@@ -1,6 +1,7 @@
 -- xml parser
 
-local require,lpeg,io,select,string,type,tonumber,tostring=require,lpeg,io,select,string,type,tonumber,tostring
+local require,lpeg,io,select,string,type,tonumber,tostring,setmetatable=require,lpeg,io,select,string,type,tonumber,tostring,setmetatable
+local table = table
 local w = w
 local printtable=printtable
 module(...)
@@ -194,6 +195,19 @@ local extender =
     P("\131") * R("\188\190"))
 
 
+-- Return the textvalue of an element (tostring(xml))
+local function xml_to_string( self )
+  local ret = {}
+  for i=1,#self do
+    ret[#ret + 1] = tostring(self[i])
+  end
+  return table.concat(ret)
+end
+
+local mt = {
+  __tostring = xml_to_string
+}
+
 
 -- If it's a namespace, extract it
 local function _attribute(...)
@@ -222,7 +236,7 @@ local function c_attvalue(...)
   return ret
 end
 local function c_empty_elem_tag(...)
-  local ret = {[".__name"]= select(1,...),[".__type"]="element"}
+  local ret = {[".__name"]= select(1,...)}
   for i=2, select('#', ...),2 do
     ret[select(i,...)] = select(i+1,...)
   end
@@ -231,7 +245,6 @@ end
 local function c_element(...)
   local number_of_args=select('#',...)
   local ret = select(1,...)
-  ret[".__type"]="element"
   if number_of_args > 1 then
     for i=2,select('#',...) do
       if type(select(i,...)) == "string" and type(select(i-1,...)) == "string" then
@@ -241,6 +254,7 @@ local function c_element(...)
       end
     end
   end
+  setmetatable(ret,mt)
   return ret
 end
 local function c_gobble(...)
