@@ -218,6 +218,11 @@ func save_variables() {
 	f.Close()
 }
 
+// add the command line argument (extra-dir) into the slice
+func extradir(arg string) {
+	extra_dir = append(extra_dir,arg)
+}
+
 // We don't know where the executable is and we don't know
 // if we should run sdluatex (with libxml2 parser) or simple
 // luatex
@@ -319,7 +324,7 @@ func main() {
 	op.On("--startpage NUM", "The first page number", layoutoptions)
 	op.On("-v", "--var VAR=VALUE", "Set a variable for the publishing run", setVariable)
 	op.On("--version", "Show version information", versioninfo)
-	op.On("-x", "--extra-dir DIR", "Additional directory for file search", options)
+	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
 	op.On("--xml", "Output as (pseudo-)XML (for list-fonts)", options)
 
 	op.Command("list-fonts", "List installed fonts (use together with --xml for copy/paste)")
@@ -364,6 +369,7 @@ func main() {
 		}
 	case "doc":
 		openFile(path_to_documentation)
+		os.Exit(0)
 	case "list-fonts":
 		var xml string
 		if getOption("xml") == "true" {
