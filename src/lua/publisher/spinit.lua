@@ -13,31 +13,6 @@
 
 require("i18n")
 
---- I don't remember what made LuaTeX 0.61 so interesting. But there was a reason, I guess.
-if status.luatex_version < 61 then
-  texio.write_nl("Requires LuaTeX version ≥ 0.61. Abort\n")
-  os.exit(-1)
-end
-
-
-
-errorlog = io.open(string.format("%s.protocol",tex.jobname),"a")
-errorlog:write("---------------------------------------------\n")
-
---- The most reliable way to run the publisher is with the libxml2 enhanced LuaTeX.
---- But we also allow regular (texlive) LuaTeX with our own (lpeg) XML parser.
-if type(xmlreader) ~= "table" then
-  texio.write_nl("Using lpeg xml parser")
-  errorlog:write("Using lpeg xml parser\n")
-  xmlparser = require("xmlparser-lpeg")
-else
-  xmlparser = require("xmlparser")
-end
-
-starttime = os.gettimeofday()
-
-font.cache = 'no'
-
 function warning(...)
   local text = { ... }
   text[1] = gettext(text[1])
@@ -247,3 +222,31 @@ function main_loop()
   call(publisher.dothings)
   exit(true)
 end
+
+
+
+--- I don't remember what made LuaTeX 0.61 so interesting. But there was a reason, I guess.
+if status.luatex_version < 61 then
+  texio.write_nl("Requires LuaTeX version ≥ 0.61. Abort\n")
+  os.exit(-1)
+end
+
+
+
+errorlog = io.open(string.format("%s.protocol",tex.jobname),"a")
+errorlog:write("---------------------------------------------\n")
+
+--- The most reliable way to run the publisher is with the libxml2 enhanced LuaTeX.
+--- But we also allow regular (texlive) LuaTeX with our own (lpeg) XML parser.
+if type(xmlreader) ~= "table" then
+  texio.write_nl("Using lpeg xml parser")
+  errorlog:write("Using lpeg xml parser\n")
+  xmlparser = require("xmlparser-lpeg")
+else
+  xmlparser = require("xmlparser")
+end
+
+starttime = os.gettimeofday()
+
+font.cache = 'no'
+

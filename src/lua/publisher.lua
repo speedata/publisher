@@ -339,6 +339,10 @@ function dothings()
 
   --- Both the data and the layout instructions are written in XML.
   local layoutxml = load_xml(arg[2],"layout instructions")
+  if not layoutxml then
+    err("Without a valid layout-XML file, I can't really do anything.")
+    exit()
+  end
   local dataxml   = load_xml(arg[3],"data file")
 
   --- The `vars` file hold a lua document holding table

@@ -1,6 +1,8 @@
 -- xml parser
 
+
 local require,lpeg,io,select,string,type,tonumber,tostring,setmetatable=require,lpeg,io,select,string,type,tonumber,tostring,setmetatable
+local err = err
 local table = table
 local w = w
 local printtable=printtable
@@ -374,6 +376,10 @@ xml = P {
 function parse_xml(txt)
   namespaces = {}
   local root = lpeg.match(xml,txt)
+  if not root then
+    err("Can't parsing XML file.")
+    return nil
+  end
   root["__namespace"] = namespaces
   return root
 end
