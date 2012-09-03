@@ -377,7 +377,7 @@ function parse_xml(txt)
   namespaces = {}
   local root = lpeg.match(xml,txt)
   if not root then
-    err("Can't parsing XML file.")
+    err("Can't parse XML file.")
     return nil
   end
   root["__namespace"] = namespaces

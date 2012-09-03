@@ -296,6 +296,9 @@ func runPublisher() {
 	if layoutoptions["startpage"] != "" {
 		layoutoptions_ary = append(layoutoptions_ary, `startpage="`+layoutoptions["startpage"]+`"`)
 	}
+	if layoutoptions["trace"] != "" {
+		layoutoptions_ary = append(layoutoptions_ary, `trace="`+layoutoptions["trace"]+`"`)
+	}
 	layoutoptions_cmdline := strings.Join(layoutoptions_ary, ",")
 	jobname := getOption("jobname")
 	layoutname := getOption("layout")
@@ -322,6 +325,7 @@ func main() {
 	op.On("--jobname NAME", "The name of the resulting PDF file, default is 'publisher.pdf'", options)
 	op.On("--runs NUM", "Number of publishing runs ", options)
 	op.On("--startpage NUM", "The first page number", layoutoptions)
+	op.On("--trace","Show debug messages and some tracing PDF output",layoutoptions)
 	op.On("-v", "--var VAR=VALUE", "Set a variable for the publishing run", setVariable)
 	op.On("--version", "Show version information", versioninfo)
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
