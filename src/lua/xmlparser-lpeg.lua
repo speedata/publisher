@@ -20,7 +20,7 @@ local Quote = P('"')
 local quote = P("'")
 local lts = P"</"
 local sgt = P"/>"
-local space = S("\010\013\032")^1
+local space = S("\09\010\013\032")^1
 local non_att = P( 1 - ( lt + amp + quote)  )
 local non_Att = P( 1 - ( lt + amp + Quote)  )
 local dot,minus,underscore,colon= P"." ,P"-", P"_", P":"
@@ -375,9 +375,17 @@ xml = P {
 
 function parse_xml(txt)
   namespaces = {}
+  if string.byte(txt) ~= 60 then
+  -- Skip everything until the first appearance of < (either an XML instruction or a start-tag)
+  -- This is probably a bom
+    local count = string.find(txt,"<",1,true)
+    txt = string.sub(txt,count,-1)
+  end
+
   local root = lpeg.match(xml,txt)
   if not root then
     err("Can't parse XML file.")
+    err("%q",txt)
     return nil
   end
   root["__namespace"] = namespaces
