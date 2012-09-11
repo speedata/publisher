@@ -91,6 +91,11 @@
                   <value>yesno</value>
                   <value>text</value>
                   <value>languages</value>
+                  <value>zerotohundred</value>
+                  <value>colormodel</value>
+                  <value>alignment</value>
+                  <value>length</value>
+                  <value>horizontalvertical</value>
                 </choice>
               </attribute>
               <attribute name="optional" >
@@ -121,7 +126,9 @@
           <optional>
             <element name="info">
               <attribute name="xml:lang"><value>de</value></attribute>
-              <ref name="para"></ref>
+              <oneOrMore>
+                <ref name="paraorlisting"/>
+              </oneOrMore>
             </element>
           </optional>
           <oneOrMore>

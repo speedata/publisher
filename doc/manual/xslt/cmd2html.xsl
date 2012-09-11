@@ -6,10 +6,10 @@
   xpath-default-namespace="urn:speedata.de:2011/publisher/documentation"
   version="2.0">
   <xsl:strip-space elements="*"/>
-  <xsl:output method="html" indent="yes"></xsl:output>
+  <xsl:output method="html" indent="yes" encoding="UTF-8"/>
 
   <xsl:param name="lang" select="'de'"/>
-  
+
   <xsl:param name="builddir" select="'../../../build/manual/'"></xsl:param>
 
   <xsl:key name="en-commands"   match="translations/elements/element"     use="@en" xpath-default-namespace="" />
@@ -22,7 +22,12 @@
     <value type="number" de="Zahl" en="number"/>
     <value type="yesno" de="ja/nein" en="yes/no"/>
     <value type="text"  de="Text" en="string" />
+    <value type="zerotohundred" de="0 bis 100" en="0 up to 100"/>
+    <value type="colormodel" de="rgb oder cmyk" en="rgb or cmyk"/>
     <value type="numberorlength" de="Zahl oder Längenangabe" en="number or length" />
+    <value type="alignment" de="blocksatz, linksbündig, rechtsbündig, zentriert" en="justified, leftaligned, rightaligned, centered"/>
+    <value type="length" de="Längenangabe (mm,cm,pt)" en="Length (mm,in,cm,pt)"/>
+    <value type="horizontalvertical" de="horizontal oder vertikal" en="horizontal or vertical"/>
   </xsl:variable>
   
   <xsl:template match="/">
@@ -31,7 +36,7 @@
 
   <xsl:template match="commands">
     <xsl:for-each select="command">
-      <xsl:result-document href="{concat($builddir,'/commands-de/',@name,'.html')}">
+      <xsl:result-document href="{concat($builddir,'/commands-',$lang,'/',@name,'.html')}">
         <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
         <html>
           <head>
@@ -58,8 +63,8 @@
         </p>
       </xsl:for-each>
       <p>Erlaubte Attribute: <xsl:for-each select="attribute">
-          <xsl:sort select="key('en-attributes',@name, $translations)/@de" />
-          <span class="tt"><a href="#{@name}"><xsl:value-of select="key('en-attributes',@name, $translations)/@de"
+          <xsl:sort select="sd:translate-attribute(@name)" />
+          <span class="tt"><a href="#{@name}"><xsl:value-of select="sd:translate-attribute(@name)"
                /></a></span>
           <xsl:if test=" position() &lt; last()">, </xsl:if>
         </xsl:for-each><br/>
@@ -80,11 +85,11 @@
       <h3>Attribute</h3>
       <dl>
         <xsl:for-each select="attribute">
-          <xsl:sort select="key('en-attributes',@name, $translations)/@de" />
+          <xsl:sort select="sd:translate-attribute(@name)" />
           <dt>
             <a name="{@name}" />
             <span class="tt">
-              <xsl:value-of select="key('en-attributes',@name, $translations)/@de" />
+              <xsl:value-of select="sd:translate-attribute(@name)" />
             </span>
             <xsl:text> (</xsl:text>
             <xsl:value-of select="sd:translate-value(@type)" />
@@ -96,7 +101,7 @@
             <xsl:text>)</xsl:text>
           </dt>
           <dd>
-            <xsl:apply-templates select="." />
+            <xsl:apply-templates select="description[@xml:lang = $lang]" />
           </dd>
         </xsl:for-each>
       </dl>
@@ -154,7 +159,7 @@
       </li>
     </xsl:for-each>
   </xsl:template>
-  
+
   <xsl:template match="para"><p><xsl:apply-templates/></p></xsl:template>
   <xsl:template match="tt">
     <span class="tt"><xsl:apply-templates/></span>
@@ -168,14 +173,19 @@
     <xsl:param name="name"/>
     <xsl:value-of select="concat(encode-for-uri(lower-case($name)),'.html')"/>
   </xsl:function>
+
+  <xsl:function name="sd:translate-attribute">
+    <xsl:param name="name"/>
+    <xsl:value-of select="key('en-attributes',$name, $translations)/@*[local-name() = $lang]"/>
+  </xsl:function>
   
   <xsl:function name="sd:translate-command">
     <xsl:param name="name"/>
-    <xsl:value-of select="key('en-commands',$name, $translations)/@de"/>
+    <xsl:value-of select="key('en-commands',$name, $translations)/@*[local-name() = $lang]"/>
   </xsl:function>
 
   <xsl:function name="sd:translate-value">
     <xsl:param name="type"/>
-    <xsl:value-of select="$values/*[@type = $type]/@de"/>
+    <xsl:value-of select="$values/*[@type = $type]/@*[local-name() = $lang]"/>
   </xsl:function>
 </xsl:stylesheet>

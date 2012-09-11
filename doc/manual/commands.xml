@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<commands xmlns="urn:speedata.de:2011/publisher/documentation">
+<commands xmlns="urn:speedata.de:2011/publisher/documentation"
+  xmlns:de="urn:speedata.de:2009/publisher/de">
   <command name="Action">
     <description xml:lang="de">
       <para>Assoziiert eine Aktion mit einem Text. Sobald der Text auf einer Seite platziert wird, wird die dazugehörige Aktion ausgeführt. Die Aktion kann man sich als unsichtbares Zeichen vorstellen. Wenn der Publisher das unsichtbare Zeichen ausgibt, werden die Anweisungen in Aktion ausgeführt.</para>
@@ -108,7 +109,7 @@
     </attribute>
     <remark xml:lang="de">
       <para>Durch die Angabe eines Textformats wird das Aussehen der Absätze beeinflusst. Textformate müssen vorher mit
-        <cmd name="DefiniereTextformat"/>  festgelegt werden. Wenn kein Textformat angegeben wird, nimmt das
+        <cmd name="DefineTextformat"/>  festgelegt werden. Wenn kein Textformat angegeben wird, nimmt das
         System das Textformat <tt>text</tt>.</para>
     </remark>
     <example xml:lang="de">
@@ -455,209 +456,820 @@
     <seealso><cmd name="DefineColor"/>, <cmd name="PlaceObject"/></seealso>
   </command>
   <command name="Record">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Enthält die Anweisungen, die bei dem angegebenen Datensatz ausgeführt werden sollen. Der oberste Datensatz
+        (d.h. direkt unterhalb des Wurzelelements) wird vom Publisher aufgerufen, alle nachfolgenden Datensätze müssen
+        über das Element BearbeiteKnoten aufgerufen werden.</para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <childelements>
+      <cmd name="ProcessNode"/>
+      <cmd name="Switch"/>
+      <cmd name="Group"/>
+      <cmd name="LoadDataset"/>
+      <cmd name="Message"/>
+      <cmd name="NewPage"/>
+      <cmd name="SetVariable"/>
+      <cmd name="SaveDataset"/>
+      <cmd name="While"/>
+      <cmd name="PlaceObject"/>
+      <cmd name="NewRow"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Layout"/>
+    </parentelements>
+    <example xml:lang="de">
+      <listing>
+&lt;Datensatz element="url" modus="ausgabe">
+  &lt;Textblock breite="27" spalte="2" textformat="text">
+    &lt;Absatz>
+      &lt;Wert>URL: &lt;Wert>
+      &lt;URL>
+        &lt;Wert auswahl="." />
+      &lt;URL>
+    &lt;Absatz>
+  &lt;Textblock>
+&lt;Datensatz></listing>
+    </example>
+    <seealso>
+      <cmd name="ProcessNode"/>
+    </seealso>
   </command>
   <command name="DefineColor">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Definiert Farben, die später im Layout benutzt werden können</para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
-    <example xml:lang=""></example>
+    <description xml:lang="en">
+      <para>Colors defined with DefineColors can be referenced later by their name.</para>
+    </description>
+    <childelements/>
+    <parentelements>
+      <cmd name="Layout"/>
+    </parentelements>
+    <attribute name="model" type="colormodel" optional="no">
+      <description xml:lang="de">
+        <para>Das Farbmodell, das benutzt werden soll. Derzeit werdern nur RGB und CMYK unterstützt. Weitere Farbräume auf Anfrage.</para>
+      </description>
+    </attribute>
+    <attribute name="r" type="zerotohundred" optional="no">
+      <description xml:lang="de">
+        <para>Rot Anteil bei RGB</para>
+      </description>
+    </attribute>
+    <attribute name="g" type="zerotohundred" optional="no">
+      <description xml:lang="de">
+        <para>Grün Anteil bei RGB</para>
+      </description>
+    </attribute>
+    <attribute name="b" type="zerotohundred" optional="no">
+      <description xml:lang="de">
+        <para>Blau Anteil bei RGB</para>
+      </description>
+    </attribute>
+    <attribute name="c" type="zerotohundred" optional="no">
+      <description xml:lang="de">
+        <para>Cyan Anteil bei CMYK</para>
+      </description>
+    </attribute>
+    <attribute name="m" type="zerotohundred" optional="no">
+      <description xml:lang="de">
+        <para>Magenta Anteil bei CMYK</para>
+      </description>
+    </attribute>
+    <attribute name="y" type="zerotohundred" optional="no">
+      <description xml:lang="de">
+        <para>Gelb Anteil bei CMYK</para>
+      </description>
+    </attribute>
+    <attribute name="k" type="zerotohundred" optional="no">
+      <description xml:lang="de">
+        <para>Schwarz (key) Anteil bei CMYK</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing>&lt;DefiniereFarbe name="Schwarz" modell="cmyk" c="0" m="0" y="0" k="100"/>
+&lt;DefiniereFarbe name="Weiß" modell="rgb" r="100" g="100" b="100"/>
+      </listing>
+    </example>
     <seealso></seealso>
   </command>
   <command name="DefineFontfamily">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Das Element <cmd name="DefiniereSchriftfamilie"/> definiert eine Schriftfamilie, auf in den Elementen <cmd name="Absatz"/>, 
+        <cmd name="Textblock"/>, <cmd name="Schriftart "/> und <cmd name="Tabelle "/> mit dem Attribut <tt>schriftart</tt> zugegriffen werden kann.</para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <childelements>
+      <cmd name="Regular"/>
+      <cmd name="Italic"/>
+      <cmd name="Bold"/>
+      <cmd name="BoldItalic"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Layout"/>
+    </parentelements>
+    <attribute name="name" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Interner Name, unter dem die Schriftfamilie später angesprochen wird.</para>
+      </description>
+    </attribute>
+    <attribute name="fontsize" type="number" optional="no">
+      <description xml:lang="de">
+        <para>Schriftgröße in pt (PostScript-Punkte, DTP-Punkte).</para>
+      </description>
+    </attribute>
+    <attribute name="leading" type="number" optional="no">
+      <description xml:lang="de">
+        <para>Abstand zwischen zwei Grundlinien in pt (PostScript-Punkte).</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing>
+&lt;DefiniereSchriftfamilie name="Times" schriftgröße="12" zeilenabstand="14">
+  &lt;Normal schriftart="Times Normal"/>
+  &lt;Fett schriftart="Times Fett"/>
+  &lt;Kursiv schriftart="Times Kursiv"/>
+  &lt;FettKursiv schriftart="Times Fett Kursiv"/>
+&lt;/DefiniereSchriftfamilie>        
+      </listing>
+    </example>
+    <seealso>
+      <cmd name="LoadFontfile"/>
+    </seealso>
   </command>
   <command name="DefineTextformat">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen Absatz und Textblock) zurückgegriffen werden.</para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <childelements/>
+    <parentelements><cmd name="Layout"/></parentelements>
+    <attribute name="name" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Name des Textformats, unter dem es später im Layoutregelwerk angesprochen wird.</para>
+      </description>
+    </attribute>
+    <attribute name="alignment" type="alignment" optional="yes">
+      <description xml:lang="de">
+        <para>Bestimmt die Formatierung des Textes.</para>
+      </description>
+    </attribute>
+    <attribute name="indentation" type="length" optional="yes">
+      <description xml:lang="de">
+        <para>Absatzeinzug.</para>
+      </description>
+    </attribute>
+    <attribute name="rows" type="number" optional="yes">
+      <description xml:lang="de">
+        <para>Anzahl der Zeilen, die eingezogen werden (wenn <tt>einrückung</tt> angegeben ist) bzw. falls die Zahl negativ ist, die Anzahl der Zeilen, die <quote>nicht</quote> eingerückt werden.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+     <listing>
+&lt;Layout>
+  &lt;DefiniereTextformat name="Text mit Einrückung" ausrichtung="blocksatz" einrückung="1cm" />
+  ...
+  &lt;Datensatz element="...">
+    &lt;ObjektAusgeben>
+      &lt;Textblock breite="10" spalte="1" textformat="Text mit Einrückung">
+        &lt;Absatz>
+          &lt;Wert>Text ...&lt;/Wert>
+        &lt;/Absatz>
+      &lt;/Textblock>
+    &lt;/ObjektAusgeben>
+  &lt;/Datensatz>
+&lt;/Layout>       
+     </listing>
+    </example>
+    <seealso>
+      <cmd name="Textblock"/>
+      <cmd name="Paragraph"/>
+    </seealso>
   </command>
   <command name="Element">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Erzeugt eine Datenstruktur, die mithilfe von <cmd name="SaveDataset"/> auf Festplatte gespeichert werden kann.</para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <childelements>
+      <cmd name="Element"/>
+      <cmd name="Attribute"/>
+      <cmd name="Value"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Element"/>
+      <cmd name="SetVariable"/>
+    </parentelements>
+    <attribute name="name" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Name des Elements, das erzeugt wird</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing>
+&lt;Element name="Planetenverzeichnis">
+  &lt;Attribut name="name" auswahl=" @name "/>
+  &lt;Attribut name="seite" auswahl=" sd:aktuelle-seite()"/>
+&lt;/Element>
+      </listing>
+    </example>
+    <seealso>
+      <cmd name="Attribute"/>
+      <cmd name="LoadDataset"/>
+      <cmd name="SaveDataset"/>
+    </seealso>
   </command>
   <command name="Case">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Stellt einen Fall einer <cmd name="Switch"/> dar. Der erste <cmd name="Case"/>, der zutrifft, wird ausgeführt. Weitere Fälle werden nicht betrachtet. Wird kein Fall erfüllt, dann wird, falls vorhanden, das Element <cmd name="Otherwise"/> ausgeführt.</para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <childelements>
+      <cmd name="B"/>
+      <cmd name="Image"/>
+      <cmd name="Switch"/>
+      <cmd name="I"/>
+      <cmd name="Fontface"/>
+      <cmd name="Sub"/>
+      <cmd name="Sup"/>
+      <cmd name="U"/>
+      <cmd name="URL"/>
+      <cmd name="Value"/>
+      <cmd name="SetVariable"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Switch"/>
+    </parentelements>
+    <attribute name="test" type="xpath" optional="no">
+      <description xml:lang="de">
+        <para>Für jeden Fall in einer Fallunterscheidung wird überprüft, ob die Bedingung erfüllt ist und bei Übereinstimmung die Kindelemente ausgeführt.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <para>Siehe das Beispiel bei <cmd name="Switch"/> </para>
+    </example>
+    <seealso>
+      <cmd name="Switch"/>, <cmd name="Otherwise"/>
+    </seealso>
   </command>
   <command name="Switch">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Erzeugt eine „Wenn-Dann-Abfrage“. Das heißt, für jedes Kindelement <cmd name="Case"/> wird überprüft, ob die Bedingung erfüllt ist. Wenn ja, dann wird der Inhalt des Kindelements <cmd name="Case"/> ausgeführt und die Verarbeitung hinter der Fallunterscheidung fortgesetzt. Wenn keine Bedingung erfüllt wurde und ein Element <cmd name="Otherwise"/> gefunden wurde, wird der Inhalt des Elements <cmd name="Otherwise"/> ausgeführt. Durch das frühzeitige Abbrechen werden nachfolgende Fälle nicht weiter untersucht (siehe Beispiel).</para>
     </description>
-    <childelements></childelements>
+    <childelements>
+      <cmd name="Case"/>
+      <cmd name="Otherwise"/>
+    </childelements>
     <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <example xml:lang="de">
+      <listing>
+&lt;Datensatz element="...">
+  &lt;Zuweisung variable="zähler" auswahl="3"/>
+  &lt;Fallunterscheidung>
+    &lt;Fall bedingung=" $zähler &lt; 5">
+      &lt;Zuweisung variable="text" auswahl="'Kleiner als 5'" />
+    &lt;/Fall>
+    &lt;Fall bedingung=" $zähler &lt; 20">
+      &lt;Zuweisung variable="text" auswahl="'Kleiner als 20'" />
+    &lt;/Fall>
+    &lt;Sonst>
+      &lt;Zuweisung variable="text" auswahl="'Größer als oder gleich 20'" />
+    &lt;/Sonst>
+  &lt;/Fallunterscheidung>
+  &lt;ObjektAusgeben spalte="1">
+    &lt;Textblock breite="20">
+      &lt;Absatz>&lt;Wert auswahl="$text" />&lt;/Absatz>
+    &lt;/Textblock>
+  &lt;/ObjektAusgeben>
+&lt;/Datensatz></listing>
+    </example>
+    <info xml:lang="de">
+      <para>»Größer« und »kleiner« Vergleiche müssen nach den Regeln von XML kodiert werden. Für »größer« kann das > Zeichen oder &amp;gt; benutzt werden, »kleiner« muss zwingend als &amp;lt; ausgeschrieben sein, da das Zeichen &lt; nicht in einem XML Attribut vorkommen darf.</para>
+      <para>Eine Fallunterscheidung kann in fast allen Elementen vorkommen. Das Ergebnis der Fallunterscheidung (also vom benutzten Element Fall oder Sonst) wird an das umgebende Element zurückgegeben. So wird beispielsweise aus</para>
+      <listing>
+&lt;Td>
+  &lt;Absatz>
+    &lt;Fallunterscheidung>
+      &lt;Fall bedingung=" $zeile > 10 ">
+        &lt;Wert>Zeile ist größer als 10&lt;/Wert>
+      &lt;/Fall>
+      &lt;Sonst>
+        &lt;Wert>Zeile ist kleiner oder gleich 10&lt;/Wert>
+      &lt;/Sonst>
+    &lt;/Fallunterscheidung>
+  &lt;/Absatz>
+&lt;/Td></listing>
+      <listing>
+&lt;Td>
+  &lt;Absatz>
+    &lt;Wert>Zeile ist größer als 10&lt;/Wert>
+  &lt;/Absatz>
+&lt;/Td></listing>
+      <para>oder</para>
+      <listing>
+&lt;Td>
+  &lt;Absatz>
+    &lt;Wert>Zeile ist kleiner oder gleich 10&lt;/Wert>
+  &lt;/Absatz>
+&lt;/Td></listing>
+      <para>je nach Inhalt der Variablen.</para>
+    </info>
+    <seealso>
+      <cmd name="Case"/>
+      <cmd name="Otherwise"/>
+    </seealso>
   </command>
   <command name="Bold">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Name der Schriftart, die für den Schriftschrift Fett benutzt werden soll.</para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <parentelements><cmd name="DefineFontfamily"/></parentelements>
+    <attribute name="fontface" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Name der Schriftart, die für eine fette Schrift benutzt werden soll.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<LadeSchriftdatei name="Helvetica" dateiname="helvetica-regular.otf" />
+...
+
+<DefiniereSchriftfamilie name="text" schriftgröße="12" zeilenabstand="14">
+  <Normal     schriftart="Times"/>
+  <Fett       schriftart="Times Fett"/>
+  <Kursiv     schriftart="Times Kursiv"/>
+  <FettKursiv schriftart="Times Fett Kursiv"/>
+</DefiniereSchriftfamilie>]]></listing>
+    </example>
+    <seealso>
+      <cmd name="B"/>, 
+      <cmd name="BoldItalic"/>, 
+      <cmd name="Regular"/>, 
+      <cmd name="Italic"/>
+    </seealso>
   </command>
   <command name="BoldItalic">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Name der Schriftart, die für den Schriftschrift Fett-Kursiv benutzt werden soll.</para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <parentelements><cmd name="DefineFontfamily"/></parentelements>
+    <attribute name="fontface" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Name der Schriftart, die für eine Fett/Kursive Schrift benutzt werden soll.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<LadeSchriftdatei name="Helvetica" dateiname="helvetica-regular.otf" />
+...
+
+<DefiniereSchriftfamilie name="text" schriftgröße="12" zeilenabstand="14">
+  <Normal     schriftart="Times"/>
+  <Fett       schriftart="Times Fett"/>
+  <Kursiv     schriftart="Times Kursiv"/>
+  <FettKursiv schriftart="Times Fett Kursiv"/>
+</DefiniereSchriftfamilie>]]></listing>
+    </example>
+    <seealso>
+      <cmd name="B"/>
+      <cmd name="I"/>
+      <cmd name="BoldItalic"/>
+      <cmd name="Regular"/>
+      <cmd name="Bold"/>
+    </seealso>
   </command>
   <command name="Group">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Erzeugt einen virtuellen Bereich, in dem Elemente platziert werden können. Ausgegeben werden die Gruppen anschließend mit <cmd name="PlaceObject"/>.</para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <childelements>
+      <cmd name="Contents"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Record"/>
+    </parentelements>
+    <attribute name="name" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Der Name der anzulegenden Gruppe.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<Gruppe name="Beispielgruppe">
+  <Inhalt>
+    <ObjektAusgeben spalte="3" zeile="2">
+      <Textblock breite="14">
+        <Absatz>
+          <Wert>Text</Wert>
+        </Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <ObjektAusgeben spalte="2" zeile="4">
+      <Textblock breite="14">
+        <Absatz>
+          <Wert>Nächster Text</Wert>
+        </Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+  </Inhalt>
+</Gruppe>
+<ObjektAusgeben gruppenname="Beispielgruppe" spalte="1" zeile="1" />]]></listing>
+    </example>
+    <seealso>
+      <cmd name="PlaceObject"/>
+      <cmd name="Contents"/>
+    </seealso>
   </command>
   <command name="I">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Schaltet auf »Kursiv« um.</para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <childelements>
+      <cmd name="B" />
+      <cmd name="Image"/>
+      <cmd name="Switch"/>
+      <cmd name="I"/>
+      <cmd name="Fontface"/>
+      <cmd name="Sub"/>
+      <cmd name="Sup"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Paragraph"/>
+    </parentelements>
+    <example xml:lang="de">
+      <listing><![CDATA[<Textblock spalte="3" breite="10">
+  <Absatz>
+    <I><Wert>Kursiver Text</Wert></I>
+  </Absatz>
+</Textblock>]]></listing>
+    </example>
+    <seealso><cmd name="B"/></seealso>
   </command>
   <command name="Include">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Bindet andere Layoutregelwerke ein.</para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <childelements>
+      <cmd name="Record"/>
+      <cmd name="SetVariable"/>
+      <cmd name="Hyphenation"/>
+      <cmd name="SetGrid"/>
+      <cmd name="Pagetype"/>
+      <cmd name="Options"/>
+      <cmd name="LoadFontfile"/>
+      <cmd name="DefineColor"/>
+      <cmd name="DefineFontfamily"/>
+      <cmd name="Pageformat"/>
+      <cmd name="DefineTextformat"/>
+    </childelements>
+    <parentelements><cmd name="Layout"/></parentelements>
+    <example xml:lang="de">
+      <para>Die Hauptdatei</para>
+      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/de"
+       xmlns:xi="http://www.w3.org/2001/XInclude">
+ <xi:include href="fontdefinitionen.xml" />
+ ...]]></listing>
+      <para>Die Datei <tt>fontdefinitionen.xml</tt>:</para>
+      <listing><![CDATA[<Include xmlns="urn:speedata.de:2009/publisher/de">
+  <LadeSchriftdatei name="Helvetica" 
+                    dateiname="texgyreheros-regular.otf"/>
+  <LadeSchriftdatei name="Helvetica Fett"
+                    dateiname="texgyreheros-bold.otf"/>
+  <LadeSchriftdatei name="Helvetica Kursiv"
+                    dateiname="texgyreheros-italic.otf"/>
+  <LadeSchriftdatei name="Helvetica Fett Kursiv"
+                    dateiname="texgyreheros-bolditalic.otf"/>
+</Include>]]></listing>
+    </example>
+    <seealso>
+      <cmd name="Layout"/>
+    </seealso>
   </command>
   <command name="Contents">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Kennzeichnet den Inhalt einer <cmd name="Group"/>.</para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <childelements>
+      <cmd name="PlaceObject"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Group"/>
+    </parentelements>
+    <remark xml:lang="de">
+      <para>Der Inhalt wird in einem extra Element gekapselt, damit die Gruppe später noch andere Elemente (z.B. Raster) beinhalten kann, ohne, dass die Angaben zu unübersichtlich werden. Das Inhalt-Element wird voraussichtlich in zukünftigen Versionen wegfallen.</para>
+    </remark>
+    <example xml:lang="de">
+      <listing><![CDATA[<Gruppe name="Beispielgruppe">
+  <Inhalt>
+    <ObjektAusgeben spalte="3" zeile="2">
+      <Textblock breite="14">
+        <Absatz>
+          <Wert>Text</Wert>
+        </Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <ObjektAusgeben spalte="2" zeile="4">
+      <Textblock breite="14">
+        <Absatz>
+          <Wert>Nächster Text</Wert>
+        </Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+  </Inhalt>
+</Gruppe>
+<ObjektAusgeben gruppenname="Beispielgruppe" spalte="1" zeile="1"/>]]></listing>
+    </example>
+    <seealso><cmd name="Group"/></seealso>
   </command>
   <command name="Copy-of">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Ersetzt das Element Kopie-von mit Inhalt von <tt>auswahl</tt> als Elementstruktur. Dient zum „Zusammenbauen“ von Texten und Tabellen.</para>
     </description>
     <childelements></childelements>
     <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <example xml:lang="de">
+      <listing><![CDATA[<Zuweisung variable="$meinabsatz" >
+  <Absatz>
+    <Wert auswahl="@name"/><Wert>, Symbol=</Wert><Wert auswahl="@symbol" />
+  </Absatz>
+</Zuweisung>
+  
+<Textblock breite="14" schriftart="text">
+    <Kopie-von auswahl="$meinabsatz" />
+</Textblock>]]></listing>
+      <para>Ist dasselbe wie</para>
+      <listing><![CDATA[<Textblock breite="14" schriftart="text">
+  <Absatz>
+    <Wert auswahl="@name"/><Wert>, Symbol=</Wert><Wert auswahl="@symbol" />
+  </Absatz>
+</Textblock>]]></listing>
+      <para>nur mit dem Unterschied, dass der Inhalt vom Absatz (<tt>@name</tt>, <tt>@symbol</tt>) ermittelt werden kann, bevor der Text ausgegeben wird. Die Zuweisung und die Textausgabe können in verschiedenen Regeln stehen.</para>
+    </example>
+    <seealso><cmd name="Value"/>, XPath-Expression <cmd name="SetVariable"/></seealso>
   </command>
   <command name="Italic">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Dient als Festlegung des Schriftschnittes, wenn Formatierung I (Kursiv) angegeben ist.</para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <parentelements>
+      <cmd name="DefineFontfamily"/>
+    </parentelements>
+    <attribute name="fontface" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Name der Schriftart, die für eine kursive Schrift benutzt werden soll.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<LadeSchriftdatei name="Helvetica" dateiname="helvetica-regular.otf" />
+...
+
+<DefiniereSchriftfamilie name="text" schriftgröße="12" zeilenabstand="14">
+  <Normal     schriftart="Helvetica"/>
+  <Fett       schriftart="Helvetica Fett"/>
+  <Kursiv     schriftart="Helvetica Kursiv"/>
+  <FettKursiv schriftart="Helvetica Fett Kursiv"/>
+</DefiniereSchriftfamilie>]]></listing>
+    </example>
+    <seealso>
+      <cmd name="Bold"/>
+      <cmd name="Regular"/>
+      <cmd name="I"/>
+      <cmd name="BoldItalic"/>
+    </seealso>
   </command>
   <command name="LoadDataset">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Lädt eine Datensatzdatei, die in einem vorherigen Durchlauf des Publishers erzeugt wurde. Die »normale« Verarbeitung des Layoutregelwerks wird unterbrochen und mit dem Inhalt der Datensatzdatei fortgeführt. Nachdem die Verarbeitung der neu geladenen Datensatzdatei beendet ist, wird die Verarbeitung des Layoutregelwerks mit dem ursprünglichen Datensatz fortgesetzt. Eine ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <parentelements>
+      <cmd name="Record"/>
+    </parentelements>
+    <attribute name="name" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Name der Dateisatzdatei. Beispiel: toc</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<Datensatz element="planeten">
+  <Zuweisung variable="spalte" auswahl="2" />
+  <LadeDatensatzdatei name="toc"/>
+  <Zuweisung variable="Inhalt" auswahl="''"/>
+  <NeueSeite/>
+  <BearbeiteKnoten auswahl="planet"/>
+</Datensatz>]]></listing>
+    </example>
+    <seealso>
+      <cmd name="Element"/>
+      <cmd name="Attribute"/>
+      <cmd name="SaveDataset"/>
+          Wie werden automatische Verzeichnisse erstellt?
+    </seealso>
   </command>
   <command name="LoadFontfile">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Das Element LadeSchriftdatei weist einer physikalischen Schriftdatei einem internen Namen zu.</para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <parentelements>
+      <cmd name="Layout"/>
+    </parentelements>
+    <attribute name="name" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Der interne Name, unter dem die Schriftart im Element DefiniereSchriftfamilie angesprochen wird.</para>
+      </description>
+    </attribute>
+    <attribute name="filename" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Der Dateiname mit Endung, ohne Pfad.</para>
+      </description>
+    </attribute>
+    <attribute name="space" type="zerotohundred" optional="yes">
+      <description xml:lang="de">
+        <para>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25.</para>
+      </description>
+    </attribute>
+    <attribute name="marginprotrusion" type="zerotohundred" optional="yes">
+      <description xml:lang="de">
+        <para>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark Schriftartabhängig.</para>
+      </description>
+    </attribute>
+    <attribute name="smallcaps" type="yesno" optional="yes">
+      <description xml:lang="de">
+        <para>Schalter, ob die Schriftart als Kapitälchen dargestellt werden soll.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<LadeSchriftdatei name="Helvetica" dateiname="texgyreheros-regular.otf" />
+<LadeSchriftdatei name="Helvetica Fett" dateiname="texgyreheros-bold.otf" />
+<LadeSchriftdatei name="Helvetica Kursiv" dateiname="texgyreheros-italic.otf" />
+<LadeSchriftdatei name="Helvetica Fett Kursiv" dateiname="texgyreheros-bolditalic.otf" />]]></listing>
+    </example>
+    <seealso>
+      <cmd name="DefineFontfamily"/> Einbinden von Schriftarten
+    </seealso>
   </command>
   <command name="Layout">
     <description xml:lang="de">
-      <para>Das <cmd>layout</cmd> Element ist das Wurzelelement im Regelwerk.</para>
+      <para>Das <cmd name="Layout"/>Element ist das Wurzelelement im Regelwerk.</para>
     </description>
-    <childelements><cmd name="Dataset"/></childelements>
+    <childelements>
+      <cmd name="Dataset"/>
+      <cmd name="LoadFontfile"/>
+      <cmd name="DefineColor"/>
+      <cmd name="DefineFontfamily"/>
+      <cmd name="DefineTextformat"/>
+      <cmd name="Include"/>
+      <cmd name="Pageformat"/>
+      <cmd name="Options"/>
+      <cmd name="Pagetype"/>
+      <cmd name="SetGrid"/>
+      <cmd name="Hyphenation"/>
+      <cmd name="SetVariable"/>
+    </childelements>
     <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <example xml:lang="de">
+      <para>Nachfolgend ein vollständiges Beispiel für ein Layoutregelwerk.</para>
+      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/de">
+  <Optionen
+     zeige_rasterbelegung="nein"
+     zeichne_raster="ja"
+    />
+ 
+  <LadeSchriftdatei name="Helvetica Fett" dateiname="texgyreheros-bold.otf" />
+   
+  <DefiniereSchriftfamilie name="Überschrift" schriftgröße="12"
+                           zeilenabstand="16">
+    <Normal schriftart="Helvetica Fett" />
+  </DefiniereSchriftfamilie>
+   
+  <Seitenformat breite="150mm" höhe="200mm" />
+  <SetzeRaster breite="4mm" höhe="14pt" />
+  
+  <DefiniereTextformat name="text" ausrichtung="blocksatz" />
+  
+  <Seitentyp name="rechte Seite" bedingung="sd:ungerade(sd:aktuelle-seite())">
+    <Rand links="2cm" rechts="1cm" oben="1cm" unten="1cm" />
+  </Seitentyp>
+  
+  <Seitentyp name="linke Seite" bedingung="sd:gerade(sd:aktuelle-seite())">
+    <Rand links="1cm" rechts="2cm" oben="1cm" unten="1cm" />
+  </Seitentyp>
+  
+  <Datensatz element="Produkt">
+    <Zuweisung variable="spalte" wert="2" />
+    <ObjektAusgeben spalte="1">
+      <Textblock breite="14" schriftart="Überschrift">
+        <Absatz>
+          <Wert auswahl="@name"/>
+        </Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <BearbeiteKnoten auswahl="produktbild" />
+    <NeueSeite />
+  </Datensatz>
+  
+  <Datensatz element="produktbild">
+    <NeueZeile/>
+    <NeueZeile/>
+    <ObjektAusgeben spalte="1">
+      <Bild breite="10" datei="{string(.)}"/>
+    </ObjektAusgeben>
+  </Datensatz>
+</Layout>]]></listing>
+    </example>
+    <seealso>
+      <cmd name="Include"/>
+    </seealso>
   </command>
   <command name="EmptyLine">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Erzeugt eine leere (Raster-)Zeile. Ausgehend von der aktuellen Zeile wird die nächste freie Zeile gesucht. Das nächste Objekt
+        wird in der nächsten Zeile ausgegeben.</para>
     </description>
     <childelements></childelements>
     <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <example xml:lang="de">
+      <listing><![CDATA[<ObjektAusgeben spalte="1">
+  <Bild breite="5" datei="cow.pdf"/>
+</ObjektAusgeben>
+<Leerzeile />
+<ObjektAusgeben spalte="2">
+  <Bild breite="3" datei="cow.pdf"/>
+</ObjektAusgeben>]]></listing>
+    </example>
+    <seealso>
+      <cmd name="NewRow"/>
+    </seealso>
   </command>
   <command name="Rule">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Zeichnet eine horizontale oder vertikale Linie im Raster.</para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <parentelements>
+      <cmd name="PlaceObject"/>
+    </parentelements>    
+    <attribute name="direction" type="horizontalvertical" optional="no">
+      <description xml:lang="de">
+        <para>Bestimmt die Ausrichtung der Linie.</para>
+      </description>
+    </attribute>
+    <attribute name="rulewidth" type="numberorlength" optional="yes">
+      <description xml:lang="de">
+        <para>Dicke der Linie in Rasterzellen oder als absolute Angabe.</para>
+      </description>
+    </attribute>
+    <attribute name="length" type="numberorlength" optional="no">
+      <description xml:lang="de">
+        <para>Länge der Linie in Rasterzellen oder als absolute Angabe.</para>
+      </description>
+    </attribute>
+    <attribute name="color" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Farbe der Linie. Vorgabe: Schwarz</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[]]></listing>
+    </example>
+    <seealso>
+      <cmd name="PlaceObject"/>
+    </seealso>
   </command>
-  <command name="Message">
+ <!-- <command name="Message">
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="Value"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Record"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+    </seealso>
   </command>
   <command name="NextFrame">
     <description xml:lang="">
       <para></para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
+    <parentelements>
+      <cmd name="AtPageShipout"/>
+      <cmd name="AtPageCreation"/>
+      <cmd name="Record"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="PositioningArea"/>
+      <cmd name="PositioningFrame"/>
+    </seealso>
   </command>
   <command name="NewPage">
     <description xml:lang="">
       <para></para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
+    <parentelements>
+      <cmd name="Record"/>
+    </parentelements>
     <example xml:lang=""></example>
     <seealso></seealso>
   </command>  
@@ -666,61 +1278,103 @@
       <para></para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
+    <parentelements>
+      <cmd name="Record"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Leerzeile"/>
+    </seealso>
   </command>
   <command name="Regular">
     <description xml:lang="">
       <para></para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
+    <parentelements>
+      <cmd name="DefineFontfamily"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Bold"/>
+      <cmd name="Italic"/>
+      <cmd name="BoldItalic"/>
+    </seealso>
   </command>
   <command name="PlaceObject">
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="Image"/>
+      <cmd name="Box"/>
+      <cmd name="Tablerule"/>
+      <cmd name="Table"/>
+      <cmd name="Textblock"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Record"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Image"/>
+      <cmd name="Box"/>
+      <cmd name="Tablerule"/>
+      <cmd name="Table"/>
+      <cmd name="Textblock"/>
+      <cmd name="DefineColor"/>
+    </seealso>
   </command>
   <command name="Options">
     <description xml:lang="">
       <para></para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
+    <parentelements>
+      <cmd name="Layout"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      Schnittmarken und Beschnittzugabe
+    </seealso>
   </command>
   <command name="PositioningArea">
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="PositioningFrame"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Pagetype"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="PositioningFrame"/>
+      <cmd name="PlaceObject"/>
+    </seealso>
   </command>
   <command name="PositioningFrame">
     <description xml:lang="">
       <para></para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
+    <parentelements>
+      <cmd name="PositioningArea"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="PositioningArea"/>
+    </seealso>
   </command>
   <command name="Margin">
     <description xml:lang="">
       <para></para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
+    <parentelements>
+      <cmd name="Pagetype"/>
+    </parentelements>
     <example xml:lang=""></example>
     <seealso></seealso>
   </command>
@@ -729,25 +1383,52 @@
       <para></para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
+    <parentelements>
+      <cmd name="Pagetype"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="SetGrid"/>
+      <cmd name="Pagetype"/>
+    </seealso>
   </command>
   <command name="Fontface">
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <childelements>
+        <cmd name="B"/>
+        <cmd name="Image"/>
+        <cmd name="Switch"/>
+        <cmd name="I"/>
+        <cmd name="Fontface"/>
+        <cmd name="Sub"/>
+        <cmd name="Sup"/>
+        <cmd name="U"/>
+        <cmd name="URL"/>
+        <cmd name="Value"/>
+        <cmd name="SetVariable"/>
+      </childelements>
+    </childelements>
+    <parentelements>
+      <cmd name="Paragraph"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Paragraph"/>
+      <cmd name="I"/>
+      <cmd name="B"/>
+    </seealso>
   </command>
   <command name="Pageformat">
     <description xml:lang="">
       <para></para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
+    <parentelements>
+      <cmd name="Layout"/>
+    </parentelements>
     <example xml:lang=""></example>
     <seealso></seealso>
   </command>
@@ -755,17 +1436,32 @@
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="Margin"/>
+      <cmd name="AtPageCreation"/>
+      <cmd name="AtPageShipout"/>
+      <cmd name="Grid"/>
+      <cmd name="PositioningArea"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Layout"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      XPath-Expression, 
+      <cmd name="AtPageCreation"/>
+      <cmd name="AtPageShipout"/>
+      <cmd name="PositioningArea"/>
+    </seealso>
   </command>
   <command name="SetGrid">
     <description xml:lang="">
       <para></para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
+    <parentelements>
+      <cmd name="Layout"/>
+    </parentelements>
     <example xml:lang=""></example>
     <seealso></seealso>
   </command>
@@ -773,26 +1469,58 @@
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="Value"/>
+      <cmd name="SetVariable"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Record"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Switch"/>
+      <cmd name="SetVariable"/>
+    </seealso>
   </command>
   <command name="Otherwise">
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="LoadDataset"/>
+      <cmd name="SaveDataset"/>
+      <cmd name="PlaceObject"/>
+      <cmd name="Switch"/>
+      <cmd name="While"/>
+      <cmd name="ProcessRecord"/>
+      <cmd name="ProcessNode"/>
+      <cmd name="Message"/>
+      <cmd name="NextFrame"/>
+      <cmd name="NewPage"/>
+      <cmd name="NewRow"/>
+      <cmd name="EmptyLine"/>
+      <cmd name="Group"/>
+      <cmd name="SortSequence"/>
+      <cmd name="Hyphenation"/>
+      <cmd name="SetVariable"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Switch"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Switch "/>, <cmd name="Case"/>
+    </seealso>
   </command>
   <command name="SortSequence">
     <description xml:lang="">
       <para></para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
+    <parentelements>
+      <cmd name="Case"/>
+      <cmd name="Record"/>
+    </parentelements>
     <example xml:lang=""></example>
     <seealso></seealso>
   </command>
@@ -801,106 +1529,196 @@
       <para></para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
+    <parentelements>
+      <cmd name="Columns"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Table"/>
+      <cmd name="Columns"/>
+    </seealso>
   </command>
   <command name="Columns">
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="Column"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Table"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Table"/>,
+      <cmd name="Column"/>
+    </seealso>
   </command>
   <command name="SaveDataset">
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="Element"/>
+      <cmd name="Copy-of"/>
+      <cmd name="SortSequence"/>
+      <cmd name="Sequence"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Record"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Element"/>
+      <cmd name="Attribute"/>
+      <cmd name="LoadDataset"/>
+      Wie werden automatische Verzeichnisse erstellt?</seealso>
   </command>
   <command name="Sub">
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="Value"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Paragraph"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Sup"/>, <cmd name="Paragraph"/>
+    </seealso>
   </command>
   <command name="Sup">
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="Value"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Paragraph"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Paragraph"/>
+      <cmd name="Sub"/>
+    </seealso>
   </command>
   <command name="Table">
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="Columns"/>
+      <cmd name="Tr"/>
+      <cmd name="Tablerule"/>
+      <cmd name="Tablefoot"/>
+      <cmd name="Tablehead"/>
+    </childelements>
+    <parentelements>
+      <cmd name="PlaceObject"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Tr"/>
+      <cmd name="Td"/>
+      <cmd name="Tablerule"/>
+      <cmd name="PlaceObject"/>
+    </seealso>
   </command>
   <command name="Tablefoot">
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="Tablerule"/>
+      <cmd name="Tr"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Table"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Tablehead"/>
+    </seealso>
   </command>
   <command name="Tablehead">
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="Tablerule"/>
+      <cmd name="Tr"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Table"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Tablefoot"/>
+    </seealso>
   </command>
   <command name="Td">
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="Paragraph"/>
+      <cmd name="Image"/>
+      <cmd name="Table"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Tr"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Table"/>
+      <cmd name="Tr"/>
+      <cmd name="Paragraph"/>
+      <cmd name="Image" />
+    </seealso>
   </command>
   <command name="Tablerule">
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements />
+    <parentelements>
+      <cmd name="Table"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Table"/>
+    </seealso>
   </command>
   <command name="Tr">
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="Td"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Table"/>
+      <cmd name="Tablehead"/> 
+      <cmd name="Tablefoot"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Td"/>
+      <cmd name="Table"/>
+    </seealso>
   </command>
   <command name="Hyphenation">
     <description xml:lang="">
       <para></para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
+    <parentelements>
+      <cmd name="Record"/>
+      <cmd name="Layout"/>
+    </parentelements>
     <example xml:lang=""></example>
     <seealso></seealso>
   </command>
@@ -908,17 +1726,56 @@
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="B"/>
+      <cmd name="Image"/>
+      <cmd name="Switch"/>
+      <cmd name="I"/>
+      <cmd name="Fontface"/>
+      <cmd name="Sub"/>
+      <cmd name="Sup"/>
+      <cmd name="U"/>
+      <cmd name="URL"/>
+      <cmd name="Value"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Paragraph"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="B"/>
+      <cmd name="I"/>
+      <cmd name="Paragraph"/>
+    </seealso>
   </command>
   <command name="URL">
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+      <cmd name="B"/>
+      <cmd name="Image"/>
+      <cmd name="Switch"/>
+      <cmd name="I"/>
+      <cmd name="Fontface"/>
+      <cmd name="Sub"/>
+      <cmd name="Sup"/>
+      <cmd name="U"/>
+      <cmd name="URL"/>
+      <cmd name="Value"/>
+    </childelements>
+    <parentelements>
+      <cmd name="B"/>
+      <cmd name="Image"/>
+      <cmd name="Switch"/>
+      <cmd name="I"/>
+      <cmd name="Fontface"/>
+      <cmd name="Sub"/>
+      <cmd name="Sup"/>
+      <cmd name="U"/>
+      <cmd name="URL"/>
+      <cmd name="Value"/>
+    </parentelements>
     <example xml:lang=""></example>
     <seealso></seealso>
   </command>
@@ -926,18 +1783,38 @@
     <description xml:lang="">
       <para></para>
     </description>
-    <childelements></childelements>
-    <parentelements></parentelements>
+    <childelements>
+    </childelements>
+    <parentelements>
+      <cmd name="B"/>
+      <cmd name="Image"/>
+      <cmd name="Switch"/>
+      <cmd name="I"/>
+      <cmd name="Fontface"/>
+      <cmd name="Sub"/>
+      <cmd name="Sup"/>
+      <cmd name="U"/>
+      <cmd name="URL"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Copy-of"/>
+      <ref name="XPath-Expression"/>
+      <cmd name="SetVariable"/>
+    </seealso>
   </command>
   <command name="SetVariable">
     <description xml:lang="">
       <para></para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
+    <parentelements>
+      <cmd name="Record"/>
+    </parentelements>
     <example xml:lang=""></example>
-    <seealso></seealso>
+    <seealso>
+      <cmd name="Value"/>
+    </seealso>
   </command>
+   -->
 </commands>
