@@ -296,11 +296,24 @@ function commands.define_fontfamily( layoutxml,dataxml )
   local fam={}
   -- fontsize and baselineskip are in dtp points (bp, 1 bp ≈ 65782 sp)
   -- Concrete font instances are created here. fontsize and baselineskip are known
-  local name        = publisher.read_attribute(layoutxml,dataxml,"name",   "string" )
-  fam.size          = publisher.read_attribute(layoutxml,dataxml,"fontsize","number")  * publisher.factor
-  fam.baselineskip  = publisher.read_attribute(layoutxml,dataxml,"leading", "number")  * publisher.factor
-  fam.scriptsize    = fam.size * 0.8 -- subscript / superscript
-  fam.scriptshift   = fam.size * 0.3
+  local name         = publisher.read_attribute(layoutxml,dataxml,"name",   "string" )
+  local size         = publisher.read_attribute(layoutxml,dataxml,"fontsize","number")
+  local baselineskip = publisher.read_attribute(layoutxml,dataxml,"leading", "number")
+
+  if type(size) ~= "number" then
+    err("DefineFontfamily: fontsize is not a number. Using default '10'")
+    size = 10
+  end
+
+  if type(baselineskip) ~= "number" then
+    err("DefineFontfamily: leading is not a number. Using default '12'")
+    baselineskip = 12
+  end
+
+  fam.size         = size         * publisher.factor
+  fam.baselineskip = baselineskip * publisher.factor
+  fam.scriptsize   = fam.size * 0.8 -- subscript / superscript
+  fam.scriptshift  = fam.size * 0.3
 
   if not fam.size then
     err("DefineFontfamily: no size given.")
