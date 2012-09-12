@@ -346,7 +346,7 @@ function dothings()
   local dataxml   = load_xml(arg[3],"data file")
 
   --- The `vars` file hold a lua document holding table
-  local vars = loadfile("publisher.vars")()
+  local vars = loadfile(tex.jobname .. ".vars")()
   for k,v in pairs(vars) do
     variablen[k]=v
   end
