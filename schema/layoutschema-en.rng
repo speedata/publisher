@@ -393,9 +393,9 @@
       <a:documentation docid="definefontfamily">Define a font family with the faces »Regular«, »Bold«, »BoldItalic« and »Italic«. Families are needed when you switch to another face in running text with »B« for example.</a:documentation>
       <ref name="a_id"/>
       <attribute name="name"/>
-      <attribute name="fontsize"/>
+      <attribute name="fontsize"><data type="double"/></attribute>
       <a:documentation docid="definefontfamily/fontsize">Fontsize in points (1/72in), range is 0 to ...</a:documentation>
-      <attribute name="leading"/>
+      <attribute name="leading"><data type="double"/></attribute>
       <a:documentation docid="definefontfamily/rowdistance">Distance between baselines of two adjacent lines. Should be larger then the font size.</a:documentation>
       <interleave>
         <element name="Regular">

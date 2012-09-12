@@ -831,10 +831,10 @@ function dothingsbeforeoutput(  )
   end
 end
 
---- Read the contents of the attribute `attname_english.` `type` is one of
+--- Read the contents of the attribute `attname_english.` `typ` is one of
 --- `string`, `number`, `length` and `boolean`.
 --- `default` gives something that is to be returned if no attribute with this name is present.
-function read_attribute( layoutxml,dataxml,attname_english,type,default)
+function read_attribute( layoutxml,dataxml,attname_english,typ,default)
   local attname = translate_attribute(attname_english)
   if layoutxml[attname] == nil then
     if default then
@@ -856,15 +856,15 @@ function read_attribute( layoutxml,dataxml,attname_english,type,default)
     val = val_english
   end
 
-  if type=="xpath" then
+  if typ=="xpath" then
     return xpath.textvalue(xpath.parse(dataxml,val))
-  elseif type=="string" then
+  elseif typ=="string" then
     return tostring(val)
-  elseif type=="number" then
+  elseif typ=="number" then
     return tonumber(val)
-  elseif type=="length" then
+  elseif typ=="length" then
     return val
-  elseif type=="boolean" then
+  elseif typ=="boolean" then
     if val=="yes" then
       return true
     elseif val=="no" then

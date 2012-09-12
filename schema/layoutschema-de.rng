@@ -399,9 +399,9 @@
                 angegeben wird.</a:documentation>
       <ref name="a_id"/>
       <attribute name="name"/>
-      <attribute name="schriftgröße"/>
+      <attribute name="schriftgröße"><data type="double"/></attribute>
       <a:documentation docid="definefontfamily/fontsize">Schriftgröße in Punkt (0-...)</a:documentation>
-      <attribute name="zeilenabstand"/>
+      <attribute name="zeilenabstand"><data type="double"/></attribute>
       <a:documentation docid="definefontfamily/rowdistance">Zeilenabstand in Punkt (0-...)</a:documentation>
       <interleave>
         <element name="Normal">
