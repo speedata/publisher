@@ -250,6 +250,7 @@ de = {  elements = {
     ["groupname"] = {en = "groupname", de = "gruppenname", },
     ["height"] = {en = "height", de = "höhe", },
     ["hreference"] = {en = "hreference", de = "hreferenz", },
+    ["xml:id"] = {en = "xml:id", de = "xml:id", },
     ["indentation"] = {en = "indentation", de = "einrückung", },
     ["k"] = {en = "k", de = "k", },
     ["key"] = {en = "key", de = "schlüssel", },

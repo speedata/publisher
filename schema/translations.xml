@@ -146,6 +146,7 @@
         <attribute en="groupname" de="gruppenname"/>
         <attribute en="height" de="höhe"/>
       <attribute en="hreference" de="hreferenz"/>
+      <attribute en="xml:id" de="xml:id"/>
         <attribute en="indentation" de="einrückung"/>
         <attribute en="k" de="k"/>
         <attribute en="key" de="schlüssel"/>
@@ -344,6 +345,10 @@
       <en>Displayed with sublevels hidden</en>
       <de>Unterebenen versteckt</de>
     </documentation>
+      <documentation docid="xmlid">
+        <en>Free to use unique identifier</en>
+        <de>Frei benuztbarer eindeutiger Marker</de>
+      </documentation>
 
       <documentation docid="image">
             <en>Include an external image.</en>
