@@ -5,6 +5,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* @sp@: @--dummy@ benutzt @<data />@ als Eingabedatei (Daten-XML)
 * @sp@ nodejs durch @sp@ in Go ersetzt für Cross-Plattform Ausführung
 * Keine Default-Sprache mehr, wird nun in "Optionen":e_optionen festgelegt.
 * Schemadateien im Verzeichnis /usr/share/speedata-publisher/schema

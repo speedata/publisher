@@ -304,6 +304,10 @@ func runPublisher() {
 	layoutname := getOption("layout")
 	dataname := getOption("data")
 	exec_name := getExecutablePath()
+	dummy_data := getOption("dummy")
+	if dummy_data == "true" {
+		dataname = "-dummy"
+	}
 
 	runs, err := strconv.Atoi(getOption("runs"))
 	if err != nil {
@@ -319,6 +323,7 @@ func main() {
 	op := optionparser.NewOptionParser()
 	op.On("--autoopen", "Open the PDF file (MacOS X and Linux only)", options)
 	op.On("--data NAME", "Name of the XML data file. Defaults to 'data.xml'", options)
+	op.On("--dummy","Don't read a data file, use '<data />' as input",options)
 	op.On("--filter FILTER", "Run XPROC filter before publishing starts", options)
 	op.On("--grid", "Display background grid. Disable with --no-grid", layoutoptions)
 	op.On("--layout NAME", "Name of the layout file. Defaults to 'layout.xml'", options)

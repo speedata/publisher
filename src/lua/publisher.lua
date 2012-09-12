@@ -343,7 +343,13 @@ function dothings()
     err("Without a valid layout-XML file, I can't really do anything.")
     exit()
   end
-  local dataxml   = load_xml(arg[3],"data file")
+  -- We allow the use of a dummy xml file for testing purpose
+  local dataxml
+  if arg[3] == "-dummy" then
+    dataxml = xmlparser.parse_xml("<data />")
+  else
+    dataxml = load_xml(arg[3],"data file")
+  end
 
   --- The `vars` file hold a lua document holding table
   local vars = loadfile(tex.jobname .. ".vars")()
