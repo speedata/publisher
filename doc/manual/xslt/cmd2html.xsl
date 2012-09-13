@@ -5,15 +5,32 @@
   exclude-result-prefixes="#all"
   xpath-default-namespace="urn:speedata.de:2011/publisher/documentation"
   version="2.0">
-  <xsl:strip-space elements="*"/>
   <xsl:output method="html" indent="yes" encoding="UTF-8"/>
 
-  <xsl:param name="lang" select="'de'"/>
+  <xsl:param name="lang" select="'en'"/>
+  <xsl:variable name="all-languages" select="('en','de')"/>
+  <xsl:variable name="other-languages" select="('en')"/>
 
   <xsl:param name="builddir" select="'../../../build/manual/'"></xsl:param>
 
+  <xsl:key name="en-texts"      match="text" use="@key" xpath-default-namespace=""/>
   <xsl:key name="en-commands"   match="translations/elements/element"     use="@en" xpath-default-namespace="" />
   <xsl:key name="en-attributes" match="translations/attributes/attribute" use="@en" xpath-default-namespace="" />
+
+  <xsl:variable name="text-translations">
+    <text key="Allowed attributes" en="Allowed attributes" de="Erlaubte Attribute" />
+    <text key="Child elements" en="Child elements"  de="Kindelemente" />
+    <text key="Description" en="Description"     de="Beschreibung"/>
+    <text key="Parent elements" en="Parent elements" de="Elternelemente" />
+    <text key="Attributes" en="Attributes" de="Attribute" />
+    <text key="See also" en="See also" de="Siehe auch"/>
+    <text key="Commands" en="Commands" de="Befehlsübersicht" />
+    <text key="Startpage" en="Startpage" de="Startseite" />
+    <text key="Command reference" en="Command reference" de="Befehlsreferenz" />
+    <text key="Other languages" en="Other languages" de="Andere Sprachen" />
+    <text key="de" en="German" de="Deutsch" />
+    <text key="en" en="English" de="Englisch" />
+  </xsl:variable>
 
   <xsl:variable name="translations" select="document('../../../schema/translations.xml')" />
   <xsl:variable name="values">
@@ -44,7 +61,7 @@
 
   <xsl:template match="commands">
     <xsl:for-each select="command">
-      <xsl:result-document href="{concat($builddir,'/commands-',$lang,'/',@name,'.html')}">
+      <xsl:result-document href="{concat($builddir,'/commands-',$lang,'/',lower-case(@name),'.html')}">
         <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
         <html>
           <head>
@@ -64,33 +81,33 @@
   <xsl:template match="command">
     <div id="elementdesc">
       <h1>Elementname: <code class="syntax xml"><xsl:value-of select="sd:translate-command(@name)" /></code></h1>
-      <h2>Beschreibung</h2>
+      <h2><xsl:value-of select="sd:translate-text('Description')"></xsl:value-of></h2>
       <xsl:for-each select="description[@xml:lang = $lang]/para">
         <p>
           <xsl:apply-templates />
         </p>
       </xsl:for-each>
-      <p>Erlaubte Attribute: <xsl:for-each select="attribute">
+      <p><xsl:value-of select="sd:translate-text('Allowed attributes')"></xsl:value-of><xsl:text>: </xsl:text> <xsl:for-each select="attribute">
           <xsl:sort select="sd:translate-attribute(@name)" />
           <span class="tt"><a href="#{@name}"><xsl:value-of select="sd:translate-attribute(@name)"
                /></a></span>
           <xsl:if test=" position() &lt; last()">, </xsl:if>
         </xsl:for-each><br/>
-        Kindelemente:
+        <xsl:value-of select="sd:translate-text('Child elements')"/><xsl:text>: </xsl:text>
         <xsl:for-each select="childelements/cmd">
           <xsl:sort select="sd:translate-command(@name)"/>
           <a href="{sd:makelink(@name)}"><xsl:value-of select="sd:translate-command(@name)"/></a>
           <xsl:if test="position() &lt; last()">, </xsl:if>
         </xsl:for-each>
         <br/>
-        Elternelemente:
+        <xsl:value-of select="sd:translate-text('Parent elements')"/><xsl:text>: </xsl:text>
         <xsl:for-each select="parentelements/cmd">
           <xsl:sort select="sd:translate-command(@name)"/>
           <a href="{sd:makelink(@name)}"><xsl:value-of select="sd:translate-command(@name)"/></a>
           <xsl:if test="position() &lt; last()">, </xsl:if>
         </xsl:for-each>
       </p>
-      <h3>Attribute</h3>
+      <h3><xsl:value-of select="sd:translate-text('Attributes')"/></h3>
       <dl>
         <xsl:for-each select="attribute">
           <xsl:sort select="sd:translate-attribute(@name)" />
@@ -119,15 +136,22 @@
       <xsl:apply-templates select="seealso" />
     </div>
     <div id="elementref">
-      <h1>Befehlsübersicht</h1>
+      <h1><xsl:value-of select="sd:translate-text('Commands')"/></h1>
       <ul>
         <xsl:apply-templates select=" parent::node()" mode="commandlist">
           <xsl:with-param name="currentcommand" select="@name" />
         </xsl:apply-templates>
       </ul>
     </div>
+    <xsl:variable name="commandname" select="@name"/>
     <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
-    <a href="../index.html">Startseite</a> | <a href="../referenz/e_layout.html">Elementreferenz</a>
+    <a href="../index.html">
+      <xsl:value-of select="sd:translate-text('Startpage')"/></a> |
+    <a href="../commands-{$lang}/layout.html"><xsl:value-of select="sd:translate-text('Command reference')"/></a> |
+      <xsl:value-of select="sd:translate-text('Other languages')"/><xsl:text>: </xsl:text>
+    <xsl:for-each select="$other-languages">
+      <a href="../commands-{.}/{sd:makelink($commandname)}"><xsl:value-of select="sd:translate-text(.)"></xsl:value-of></a>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="remark">
@@ -149,7 +173,7 @@
   </xsl:template>
 
   <xsl:template match="seealso">
-    <h2>Siehe auch</h2>
+    <h2><xsl:value-of select="sd:translate-text('See also')"/></h2>
     <xsl:apply-templates />
   </xsl:template>
 
@@ -196,4 +220,10 @@
     <xsl:param name="type"/>
     <xsl:value-of select="$values/*[@type = $type]/@*[local-name() = $lang]"/>
   </xsl:function>
+
+  <xsl:function name="sd:translate-text">
+    <xsl:param name="name"/>
+    <xsl:value-of select="key('en-texts',$name,$text-translations)/@*[local-name() = $lang]"></xsl:value-of>
+  </xsl:function>
+
 </xsl:stylesheet>

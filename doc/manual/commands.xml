@@ -332,7 +332,7 @@
       <cmd name="Message" />
       <cmd name="NextFrame" />
       <cmd name="NewPage" />
-      <cmd name="NewRow" />
+      <cmd name="NextRow" />
       <cmd name="EmptyLine" />
       <cmd name="Group" />
       <cmd name="SortSequence" />
@@ -370,7 +370,7 @@
       <cmd name="Message" />
       <cmd name="NextFrame" />
       <cmd name="NewPage" />
-      <cmd name="NewRow" />
+      <cmd name="NextRow" />
       <cmd name="EmptyLine" />
       <cmd name="Group" />
       <cmd name="SortSequence" />
@@ -499,7 +499,7 @@
       <cmd name="SaveDataset" />
       <cmd name="While" />
       <cmd name="PlaceObject" />
-      <cmd name="NewRow" />
+      <cmd name="NextRow" />
     </childelements>
     <parentelements>
       <cmd name="Layout" />
@@ -527,30 +527,48 @@
       <description xml:lang="de">
         <para>Das Farbmodell, das benutzt werden soll. Derzeit werdern nur RGB und CMYK unterstützt. Weitere Farbräume auf Anfrage.</para>
       </description>
+      <description xml:lang="en">
+        <para>Color model to be used for the color. Currently only RGB and CMYK are supported. Send mail for more.</para>
+      </description>
     </attribute>
     <attribute name="r" type="zerotohundred" optional="no">
       <description xml:lang="de">
         <para>Rot Anteil bei RGB</para>
+      </description>
+      <description xml:lang="en">
+        <para>Red part with RGB</para>
       </description>
     </attribute>
     <attribute name="g" type="zerotohundred" optional="no">
       <description xml:lang="de">
         <para>Grün Anteil bei RGB</para>
       </description>
+      <description xml:lang="en">
+        <para>Green part with RGB</para>
+      </description>
     </attribute>
     <attribute name="b" type="zerotohundred" optional="no">
       <description xml:lang="de">
         <para>Blau Anteil bei RGB</para>
+      </description>
+      <description xml:lang="en">
+        <para>Blue part with RGB</para>
       </description>
     </attribute>
     <attribute name="c" type="zerotohundred" optional="no">
       <description xml:lang="de">
         <para>Cyan Anteil bei CMYK</para>
       </description>
+      <description xml:lang="en">
+        <para>Cyan part with CMYK</para>
+      </description>
     </attribute>
     <attribute name="m" type="zerotohundred" optional="no">
       <description xml:lang="de">
         <para>Magenta Anteil bei CMYK</para>
+      </description>
+      <description xml:lang="en">
+        <para>Magenta part with CMYK</para>
       </description>
     </attribute>
     <attribute name="y" type="zerotohundred" optional="no">
@@ -562,9 +580,13 @@
       <description xml:lang="de">
         <para>Schwarz (key) Anteil bei CMYK</para>
       </description>
+      <description xml:lang="en">
+        <para>Black part with CMYK</para>
+      </description>
     </attribute>
     <example xml:lang="de">
-      <listing>&lt;DefiniereFarbe name="Schwarz" modell="cmyk" c="0" m="0" y="0" k="100"/> &lt;DefiniereFarbe name="Weiß" modell="rgb" r="100" g="100" b="100"/> </listing>
+      <listing><![CDATA[<DefiniereFarbe name="Schwarz" modell="cmyk" c="0" m="0" y="0" k="100"/>
+<DefiniereFarbe name="Weiß" modell="rgb" r="100" g="100" b="100"/>]]></listing>
     </example>
     <seealso />
   </command>
@@ -1165,7 +1187,7 @@
 </ObjektAusgeben>]]></listing>
     </example>
     <seealso>
-      <cmd name="NewRow" />
+      <cmd name="NextRow" />
     </seealso>
   </command>
   <command name="Rule">
@@ -1419,7 +1441,7 @@
   </ObjektAusgeben>
 </Datensatz>]]></listing>
       <para>Absolute Platzierung:</para>
-      <listing><![CDATA[ <Datensatz element="bild">
+      <listing><![CDATA[<Datensatz element="bild">
   <ObjektAusgeben spalte="1cm" zeile="4cm" rahmen="durchgezogen" rahmenfarbe="Rot">
     <Bild breite="10" datei="." />
   </ObjektAusgeben>
@@ -1655,11 +1677,13 @@
       </description>
     </attribute>
     <example xml:lang="de">
-      <listing>
-        <![CDATA[<ObjektAusgeben spalte="1">
+      <listing><![CDATA[<ObjektAusgeben spalte="1">
   <Textblock breite="20">
     <Absatz schriftart="Groß">
-      <Wert>Groß</Wert><Schriftart schriftfamilie="text"><Wert>normal</Wert><B><Wert>fett</Wert></B></Schriftart>
+      <Wert>Groß</Wert>
+      <Schriftart schriftfamilie="text">
+        <Wert>normal</Wert><B><Wert>fett</Wert></B>
+      </Schriftart>
     </Absatz>
   </Textblock>
 </ObjektAusgeben>]]>
@@ -1829,7 +1853,7 @@
       <cmd name="Message" />
       <cmd name="NextFrame" />
       <cmd name="NewPage" />
-      <cmd name="NewRow" />
+      <cmd name="NextRow" />
       <cmd name="EmptyLine" />
       <cmd name="Group" />
       <cmd name="SortSequence" />
