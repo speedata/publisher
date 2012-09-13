@@ -903,6 +903,9 @@
     <description xml:lang="de">
       <para>Bindet andere Layoutregelwerke ein.</para>
     </description>
+    <description xml:lang="en">
+      <para>Includes other layout files.</para>
+    </description>
     <childelements>
       <cmd name="Record"/>
       <cmd name="SetVariable"/>
@@ -1232,9 +1235,9 @@
       <cmd name="PlaceObject"/>
     </seealso>
   </command>
- <!-- <command name="Message">
-    <description xml:lang="">
-      <para></para>
+ <command name="Message">
+    <description xml:lang="de">
+      <para>Gibt eine Textmeldung auf der Konsole und in der Protokolldatei aus.</para>
     </description>
     <childelements>
       <cmd name="Value"/>
@@ -1242,13 +1245,25 @@
     <parentelements>
       <cmd name="Record"/>
     </parentelements>
-    <example xml:lang=""></example>
+   <attribute name="select" type="xpath" optional="yes">
+     <description xml:lang="de">
+       <para>Inhalt der Nachricht. Alternativ dazu: Kindelemente Wert innerhalb des Elements »<cmd name="Message"/>«</para>
+     </description>
+   </attribute>
+   <example xml:lang="de">
+      <listing><![CDATA[<Datensatz element="Datensatz">
+  <Nachricht>
+    <Wert>Attribut Preis: </Wert>
+    <Wert auswahl="@Preis"></Wert>
+  </Nachricht>
+</Datensatz>]]></listing>
+    </example>
     <seealso>
     </seealso>
   </command>
   <command name="NextFrame">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Schaltet auf den nächsten freien Rahmen eines Platzierungsbereichs um</para>
     </description>
     <childelements></childelements>
     <parentelements>
@@ -1256,45 +1271,103 @@
       <cmd name="AtPageCreation"/>
       <cmd name="Record"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="area" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Name des Platzierungsbereich, in dem der nächste Rahmen gesucht werden soll.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<Datensatz element="artikel">
+  <NächsterRahmen bereich="Titel" />
+</Datensatz>]]></listing>
+    </example>
     <seealso>
       <cmd name="PositioningArea"/>
       <cmd name="PositioningFrame"/>
     </seealso>
   </command>
   <command name="NewPage">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn später Text o.ä. ausgegeben wird.</para>
     </description>
     <childelements></childelements>
     <parentelements>
       <cmd name="Record"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <example xml:lang="de">
+      <listing><![CDATA[
+<Datensatz element="Produktbeschreibung">
+  <Textblock breite="10" spalte="1">
+    <Absatz>
+      <Wert>Text ...</Wert>
+    </Absatz>
+  </Textblock>
+  
+  <NeueSeite />
+  
+</Datensatz>]]></listing>
+    </example>
     <seealso></seealso>
   </command>  
   <command name="NextRow">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Der virtuelle Cursor wird auf die nächste freie Zeile gesetzt.</para>
     </description>
     <childelements></childelements>
     <parentelements>
       <cmd name="Record"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="area" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Name des Bereichs, in dem der Cursor bewegt wird.</para>
+      </description>
+    </attribute>
+    <attribute name="row" type="number" optional="yes">
+      <description xml:lang="de">
+        <para>Zeile für den virtuellen Cursor. Wird keine Zeile angegeben, dann sucht sich der Publisher selbständig eine freie Zeile (ggf. auf einer neuen Seite oder in einem neuen Platzierungsrahmen).</para>
+      </description>
+    </attribute>
+    <attribute name="rows" type="number" optional="yes">
+      <description xml:lang="de">
+        <para>Anzahl der Zeilen, die frei gehalten werden sollen. Vorgabe: 1.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<Datensatz element="bild">
+  <NeueZeile zeile="5" />
+  <ObjektAusgeben spalte="{$spalte}">
+    <Bild breite="10" datei="{.}" />
+  </ObjektAusgeben>
+</Datensatz>]]></listing>
+    </example>
     <seealso>
       <cmd name="Leerzeile"/>
     </seealso>
   </command>
   <command name="Regular">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Dient als Festlegung des Schriftschnittes, wenn keine Formatierung angegeben ist.</para>
     </description>
     <childelements></childelements>
     <parentelements>
       <cmd name="DefineFontfamily"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="fontface" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Name der Schriftdatei, die geladen werden soll.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<LadeSchriftdatei name="Helvetica" dateiname="helvetica-regular.otf" />
+...
+
+<DefiniereSchriftfamilie name="text" schriftgröße="12" zeilenabstand="14">
+  <Normal     schriftart="Helvetica"/>
+  <Fett       schriftart="Helvetica Fett"/>
+  <Kursiv     schriftart="Helvetica Kursiv"/>
+  <FettKursiv schriftart="Helvetica Fett Kursiv"/>
+</DefiniereSchriftfamilie>]]></listing>
+    </example>
     <seealso>
       <cmd name="Bold"/>
       <cmd name="Italic"/>
@@ -1302,8 +1375,8 @@
     </seealso>
   </command>
   <command name="PlaceObject">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Gibt ein rechteckiges Objekt (Bild, Tabelle, Box oder Textblock) aus.</para>
     </description>
     <childelements>
       <cmd name="Image"/>
@@ -1315,7 +1388,71 @@
     <parentelements>
       <cmd name="Record"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="allocate" type="yesnoauto" optional="yes">
+      <description xml:lang="de">
+        <para>Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei belegen=“nein” wird auch die aktuelle Zeile im Raster nicht verändert. Bei “auto” wird bei Bildern der Bildumriss beachtet, sofern eine Umrissdatei vorliegt. Siehe die Beschreibung bei Bild</para>
+      </description>
+    </attribute>
+    <attribute name="area" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Name des Bereichs (Platzierungsbereich), in dem das Objekt ausgegeben werden soll. Wird kein Bereich angegeben, so wird das Objekt auf der »Seite« (dem Bereich, der alle Rasterkästen beinhaltet) ausgegeben.</para>
+      </description>
+    </attribute>
+    <attribute name="groupname" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Wenn eine Gruppe ausgegeben werden soll, muss der Name hier angegeben werden.</para>
+      </description>
+    </attribute>
+    <attribute name="background" type="solidwithout" optional="yes">
+      <description xml:lang="de">
+        <para>Es wird ein durchgezogener Rahmen um das Objekt gezeichnet. Zusätzlich muss die Rahmenfarbe angegeben werden.
+          “ohne”:	 Es wird kein Rahmen gezeichnet.</para>
+      </description>
+    </attribute>
+    <attribute name="framecolor" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Die Farbe des Rahmens, wenn ein Rahmen ausgegeben wird (feste Werte müssen in Hochkommata eingeschlossen sein, siehe Beispiel). Nur möglich zusammen mit dem Attribut rahmen.</para>
+      </description>
+    </attribute>
+    <attribute name="column" type="numberorlength" optional="yes">
+      <description xml:lang="de">
+        <para>Zahl: Die Zeile im Raster, in der das Objekt ausgegeben wird. Wird die Zeile nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe: die Position von der oberen Blattkante.</para>
+      </description>
+    </attribute>
+    <attribute name="row" type="numberorlength" optional="yes">
+      <description xml:lang="de">
+        <para>Zahl: Die Zeile im Raster, in der das Objekt ausgegeben wird. Wird die Zeile nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe: die Position von der oberen Blattkante.</para>
+      </description>
+    </attribute>
+    <attribute name="maxheight" type="number" optional="yes">
+      <description xml:lang="de">
+        <para>Die maximale Höhe in Rasterzellen, die das Objekt belegen darf. Wird nur für den automatischen Tabellenumbruch benötigt. Die umbrochenen Tabellen auf den Folgeseiten haben maximal die angegebene Höhe.</para>
+      </description>
+    </attribute>
+    <attribute name="valign" type="topmiddlebottom" optional="yes">
+      <description xml:lang="de">
+        <para>Wird ein Objekt ausgegeben, das kein Vielfaches der Rasterhöhe ist, dann gibt das Attribut die vertikale Ausrichtung an. Bottom beispielsweise bedeutet, dass der freie Platz oberhalb des Objekts bleibt. Voreinstellung ist “top”.</para>
+      </description>
+    </attribute>
+    <attribute name="hreference" type="leftright" optional="yes">
+      <description xml:lang="de">
+        <para>Bestimmt, ob die angegebene Spalte die linke oder die rechte Kante vom Objekt bezeichnet.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<Datensatz element="bild">
+  <ObjektAusgeben spalte="$spalte" rahmen="durchgezogen" rahmenfarbe="Rot">
+    <Bild breite="10" datei="." />
+  </ObjektAusgeben>
+</Datensatz>]]></listing>
+      <para>Absolute Platzierung:</para>
+      <listing><![CDATA[ <Datensatz element="bild">
+  <ObjektAusgeben spalte="1cm" zeile="4cm" rahmen="durchgezogen" rahmenfarbe="Rot">
+    <Bild breite="10" datei="." />
+  </ObjektAusgeben>
+</Datensatz>]]></listing>
+    </example>
+    <info xml:lang="de"><para>Die Ausgabe kann entweder im Raster erfolgen (Angabe bei zeile und spalte ist eine Zahl) oder als absolute Positionierung (die Angaben bei zeile und spalte müssen beide vorhanden sein und eine Maßgangabe sein).</para></info>
     <seealso>
       <cmd name="Image"/>
       <cmd name="Box"/>
@@ -1326,21 +1463,70 @@
     </seealso>
   </command>
   <command name="Options">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Setzt Publisher-spezifische Optionen.</para>
     </description>
     <childelements></childelements>
     <parentelements>
       <cmd name="Layout"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="cutmarks" type="yesno" optional="yes">
+      <description xml:lang="de">
+        <para>Beschnittmarken (crop marks) werden ausgegeben. Der Abstand der Schnittmarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Schnittmarken ausgegeben.</para>
+      </description>
+    </attribute>
+    <attribute name="trim" type="length" optional="yes">
+      <description xml:lang="de">
+        <para>Die Größe des Beschnitts (bleed). Voreinstellung ist 0mm.</para>
+      </description>
+    </attribute>
+    <attribute name="mainlanguage" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Die Sprache (Silbentrennung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist.</para>
+      </description>
+    </attribute>
+    <attribute name="trace" type="yesno" optional="yes">
+      <description xml:lang="de">
+        <para>Erzeugt zusätzliche Ausgaben in der Protokolldatei und optische Hilfen im PDF.</para>
+      </description>
+    </attribute>
+    <attribute name="startpage" type="number" optional="yes">
+      <description xml:lang="de">
+        <para>Gibt den Nummer der ersten Seite an.</para>
+      </description>
+    </attribute>
+    <attribute name="show-grid" type="yesno" optional="yes">
+      <description xml:lang="de">
+        <para>Wenn ja, dann zeichnet der Publisher das zugrunde liegende Raster auf die Seiten.</para>
+      </description>
+    </attribute>
+    <attribute name="show-gridallocation" type="yesno" optional="yes">
+      <description xml:lang="de">
+        <para>Wenn ja, dann markiert der Publisher die belegten Rasterzellen mit einer Hintergrundfarbe.</para>
+      </description>
+    </attribute>
+    <attribute name="show-hyphenation" type="yesno" optional="yes">
+      <description xml:lang="de">
+        <para>Bei ja markiert der speedata Publisher die möglichen Trennstellen für die Silbentrennung.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing>
+        <![CDATA[<Optionen
+   zeige_rasterbelegung="nein"
+   zeichne_raster="ja"
+   beschnittmarken="ja"
+   beschnittzugabe="3mm"
+  />]]>
+      </listing>
+    </example>
     <seealso>
       Schnittmarken und Beschnittzugabe
     </seealso>
   </command>
   <command name="PositioningArea">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Beschreibt einen Platzierungsbereich, der mehrere Platzierungsrahmen beinhalten kann. In diesen Rahmen können Elemente platziert werden</para>
     </description>
     <childelements>
       <cmd name="PositioningFrame"/>
@@ -1348,73 +1534,161 @@
     <parentelements>
       <cmd name="Pagetype"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="name" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Name des Platzierungsbereichs</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<Platzierungsbereich name="rahmen1">
+  <Platzierungsrahmen breite="12" höhe="30" spalte="2" zeile="2"/>
+  <Platzierungsrahmen breite="12" höhe="30" spalte="16" zeile="2"/>
+</Platzierungsbereich>]]></listing>
+    </example>
     <seealso>
       <cmd name="PositioningFrame"/>
       <cmd name="PlaceObject"/>
     </seealso>
   </command>
   <command name="PositioningFrame">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Beschreibt einen rechteckigen Bereich, in dem Elemente platziert werden können. Inhalte in diesen Bereichen werden bei Platzmangel automatisch in den nächsten Rahmen deselben Bereichs platziert.</para>
     </description>
     <childelements></childelements>
     <parentelements>
       <cmd name="PositioningArea"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="width" type="number" optional="no">
+      <description xml:lang="de">
+        <para>Breite des Rahmens in Rasterkästen</para>
+      </description>
+    </attribute>
+    <attribute name="height" type="number" optional="no">
+      <description xml:lang="de">
+        <para>Höhe des Rahmens in Rasterkästen</para>
+      </description>
+    </attribute>
+    <attribute name="row" type="number" optional="no">
+      <description xml:lang="de">
+        <para>Erste Spalte des Rahmens</para>
+      </description>
+    </attribute>
+    <attribute name="column" type="number" optional="no">
+      <description xml:lang="de">
+        <para>Erste Zeile des Rahmens</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<Platzierungsbereich name="rahmen1">
+  <Platzierungsrahmen breite="12" höhe="30" spalte="2" zeile="2"/>
+  <Platzierungsrahmen breite="12" höhe="30" spalte="16" zeile="2"/>
+</Platzierungsbereich>]]></listing>
+    </example>
     <seealso>
       <cmd name="PositioningArea"/>
     </seealso>
   </command>
   <command name="Margin">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Enthält die Angaben über den Seitenrand des zu druckbaren Bereich.</para>
     </description>
     <childelements></childelements>
     <parentelements>
       <cmd name="Pagetype"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="left" type="length" optional="no">
+      <description xml:lang="de">
+        <para>Rand links</para>
+      </description>
+    </attribute>
+    <attribute name="right" type="length" optional="no">
+      <description xml:lang="de">
+        <para>Rand rechts</para>
+      </description>
+    </attribute>
+    <attribute name="top" type="length" optional="no">
+      <description xml:lang="de">
+        <para>Rand oben</para>
+      </description>
+    </attribute>
+    <attribute name="bottom" type="length" optional="no">
+      <description xml:lang="de">
+        <para>Rand unten</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<Rand links="2cm" rechts="1cm" oben="1cm" unten="1cm" />]]></listing>
+    </example>
     <seealso></seealso>
   </command>
   <command name="Grid">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Überschreibt das allgemeine Raster aus <cmd name="SetGrid"/>.</para>
     </description>
     <childelements></childelements>
     <parentelements>
       <cmd name="Pagetype"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="width" type="length" optional="no">
+      <description xml:lang="de">
+        <para>Breite einer Rasterzelle</para>
+      </description>
+    </attribute>
+    <attribute name="height" type="length" optional="no">
+      <description xml:lang="de">
+        <para>Höhe einer Rasterzelle</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<SetzeRaster breite="5mm" höhe="14pt" />
+ 
+<Seitentyp name="Seite breit"  bedingung=" $var > 10 ">
+  <Rand links="1cm" rechts="2cm" oben="1cm" unten="1cm" />
+  <Raster breite="10mm" höhe="14pt" />
+</Seitentyp>]]></listing>
+      <para>Wenn diese Seite ausgewählt wird, gilt das dort angegebene Raster.</para>
+    </example>
     <seealso>
       <cmd name="SetGrid"/>
       <cmd name="Pagetype"/>
     </seealso>
   </command>
   <command name="Fontface">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Schaltet vorübergehend auf eine andere Schriftfamilie um.</para>
     </description>
     <childelements>
-      <childelements>
-        <cmd name="B"/>
-        <cmd name="Image"/>
-        <cmd name="Switch"/>
-        <cmd name="I"/>
-        <cmd name="Fontface"/>
-        <cmd name="Sub"/>
-        <cmd name="Sup"/>
-        <cmd name="U"/>
-        <cmd name="URL"/>
-        <cmd name="Value"/>
-        <cmd name="SetVariable"/>
-      </childelements>
+      <cmd name="B"/>
+      <cmd name="Image"/>
+      <cmd name="Switch"/>
+      <cmd name="I"/>
+      <cmd name="Fontface"/>
+      <cmd name="Sub"/>
+      <cmd name="Sup"/>
+      <cmd name="U"/>
+      <cmd name="URL"/>
+      <cmd name="Value"/>
+      <cmd name="SetVariable"/>
     </childelements>
     <parentelements>
       <cmd name="Paragraph"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="fontfamily" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Schaltet auf die angegebene Schriftfamilie um.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing>
+        <![CDATA[<ObjektAusgeben spalte="1">
+  <Textblock breite="20">
+    <Absatz schriftart="Groß">
+      <Wert>Groß</Wert><Schriftart schriftfamilie="text"><Wert>normal</Wert><B><Wert>fett</Wert></B></Schriftart>
+    </Absatz>
+  </Textblock>
+</ObjektAusgeben>]]>
+      </listing>
+    </example>
     <seealso>
       <cmd name="Paragraph"/>
       <cmd name="I"/>
@@ -1422,19 +1696,32 @@
     </seealso>
   </command>
   <command name="Pageformat">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Legt die Größe des Ausgabemediums (z.B. DIN A4) fest.</para>
     </description>
     <childelements></childelements>
     <parentelements>
       <cmd name="Layout"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="width" type="length" optional="no">
+      <description xml:lang="de">
+        <para>Breite des Ausgabemediums.</para>
+      </description>
+    </attribute>
+    <attribute name="height" type="length" optional="no">
+      <description xml:lang="de">
+        <para>Höhe des Ausgabemediums.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[ <Seitenformat breite="150mm" höhe="150mm" />]]></listing>
+    </example>
     <seealso></seealso>
   </command>
   <command name="Pagetype">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Definiert eine Seitenvorlage. Anhand der Kriterien, die im Attribut bedingung angegeben werden, wählt
+        das System eine Seitenvorlage aus.</para>
     </description>
     <childelements>
       <cmd name="Margin"/>
@@ -1446,7 +1733,43 @@
     <parentelements>
       <cmd name="Layout"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="test" type="xpath" optional="no">
+      <description xml:lang="de">
+        <para>Wenn der XPath-Ausdruck »wahr« ergibt, dann wird diese Seite als Vorlage genommen.</para>
+      </description>
+    </attribute>
+    <attribute name="name" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Name der Seitenvorlage. Bisher wird der Name nur für interne Zwecke benötigt.</para>
+      </description>
+    </attribute>
+    <remark xml:lang="de">
+      <para>Die Inhalte des Elements BeiSeitenErzeugung werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird, bei BeiSeitenAusgabe werden die Inhalte ausgeführt, sobald beispielsweise NeueSeite aufgerufen wird.</para>
+      <para>Wenn eine neue Seite erzeugt wird, werden die Seitentypen in umgekehrter Reihenfolge geprüft. Das bedeutet, dass die allgemeineren Seitentypen zuerst definiert werden müssen, später die speziellen. Das ist nur dann wichtig, wenn mehrere Bedingungen »wahr« ergeben würden.
+      </para>
+    </remark>
+    <example xml:lang="de">
+      <listing><![CDATA[<Seitentyp name="rechte Seite" bedingung=" sd:ungerade( sd:aktuelle-seite() ) ">]]></listing>
+      <listing><![CDATA[<Seitentyp name="linke Seite" bedingung=" sd:gerade( sd:aktuelle-seite() ) ">]]></listing>
+      <listing><![CDATA[<Seitentyp name="Hauptteil rechte Seite" bedingung=" sd:ungerade( sd:aktuelle-seite() )  and $kapitel='hauptteil' ">]]></listing>
+      <listing><![CDATA[<Seitentyp name="rechte Seite" bedingung="sd:ungerade( sd:aktuelle-seite() )">
+  <Rand links="1cm" rechts="1cm" oben="1cm" unten="1cm"/>
+  <BeiSeitenErzeugung>
+    <ObjektAusgeben spalte="1">
+      ...
+    </ObjektAusgeben>
+  </BeiSeitenErzeugung>
+  <BeiSeitenAusgabe>
+    <ObjektAusgeben spalte="1">
+      ....
+    </ObjektAusgeben>
+  </BeiSeitenAusgabe>
+  <Platzierungsbereich name="rahmen1">
+    <Platzierungsrahmen breite="12" höhe="30" spalte="2" zeile="2"/>
+    <Platzierungsrahmen breite="12" höhe="30" spalte="16" zeile="2"/>
+  </Platzierungsbereich>
+</Seitentyp>]]></listing>
+    </example>
     <seealso>
       XPath-Expression, 
       <cmd name="AtPageCreation"/>
@@ -1455,19 +1778,31 @@
     </seealso>
   </command>
   <command name="SetGrid">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Setzt die Größe und Höhe eines Rasterkästchens. In dem Seitenraster können Elemente platziert werden</para>
     </description>
     <childelements></childelements>
     <parentelements>
       <cmd name="Layout"/>
     </parentelements>
-    <example xml:lang=""></example>
-    <seealso></seealso>
+    <attribute name="width" type="length" optional="no">
+      <description xml:lang="de">
+        <para>Breite einer Rasterzelle</para>
+      </description>
+    </attribute>
+    <attribute name="height" type="length" optional="no">
+      <description xml:lang="de">
+        <para>Höhe einer Rasterzelle</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<SetzeRaster breite=“4mm” höhe=“14pt” />]]></listing>
+    </example>
+    <seealso><cmd name="Grid"/></seealso>
   </command>
   <command name="While">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Erzeugt eine Schleife, die wiederholt durchlaufen wird. Die Kindelemente werden so oft ausgeführt, solange die Bedingung im Attribut bedingung wahr ergibt.</para>
     </description>
     <childelements>
       <cmd name="Value"/>
@@ -1476,15 +1811,38 @@
     <parentelements>
       <cmd name="Record"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="test" type="xpath" optional="no">
+      <description xml:lang="de">
+        <para>Für jedes Mal, das die Schleife durchlaufen werden soll, muss die Bedingung im Attribut erfüllt sein.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <para>Folgendes Beispiel erzeugt einen Textblock mit dem Inhalt „Text Text Text“.</para>
+      <listing><![CDATA[<Datensatz element="url">
+  <Zuweisung variable="zaehler" auswahl="1"/>
+  <Zuweisung variable="text" auswahl="''"/>
+  <Solange bedingung=" $zaehler &lt;= 3 "> <!-- kleiner oder gleich -->
+    <Zuweisung variable="zaehler" auswahl=" $zaehler + 1"/>
+    <Zuweisung variable="text">
+      <Wert auswahl="$text"/>
+      <Wert auswahl="'Text '"/>
+    </Zuweisung>
+  </Solange>
+  <ObjektAusgeben spalte="1">
+    <Textblock breite="10">
+      <Absatz><Wert auswahl="$text"></Wert></Absatz>
+    </Textblock>
+  </ObjektAusgeben>
+</Datensatz>]]></listing>
+    </example>
     <seealso>
       <cmd name="Switch"/>
       <cmd name="SetVariable"/>
     </seealso>
   </command>
   <command name="Otherwise">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Zweig, der bei <cmd name="Switch"/> ausgeführt wird, wenn kein <cmd name="Case"/> wahr ist.</para>
     </description>
     <childelements>
       <cmd name="LoadDataset"/>
@@ -1507,40 +1865,92 @@
     <parentelements>
       <cmd name="Switch"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <example xml:lang="de">
+      <para>Siehe das Beispiel bei <cmd name="Switch"/>.</para>
+    </example>
     <seealso>
       <cmd name="Switch "/>, <cmd name="Case"/>
     </seealso>
   </command>
   <command name="SortSequence">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Sortiert eine Liste.</para>
     </description>
     <childelements></childelements>
     <parentelements>
       <cmd name="Case"/>
       <cmd name="Record"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="select" type="xpath" optional="no">
+      <description xml:lang="de">
+        <para>Datensatz, der sortiert werden soll</para>
+      </description>
+    </attribute>
+    <attribute name="removeduplicates" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Wenn Duplikate gelöscht werden sollen, steht hier das Attribut mit dem Inhalt.</para>
+      </description>
+    </attribute>
+    <attribute name="criterium" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Attributname, nach dem sortiert werden soll</para>
+      </description>
+    </attribute>
+    <remark xml:lang="de">
+      <para>Die Liste (im Beispiel $artikelnummern) wird verändert.</para>
+    </remark>
+    <example xml:lang="de">
+      <listing><![CDATA[<SortiereSequenz auswahl=" $artikelnummern " kriterium="prio" duplikatelöschen="seriennummer" />]]></listing>
+    </example>
     <seealso></seealso>
   </command>
   <command name="Column">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Gibt die Eigenschaften einer Spalte in einer Tabelle an.</para>
     </description>
     <childelements></childelements>
     <parentelements>
       <cmd name="Columns"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="width" type="numberlengthorstar" optional="yes">
+      <description xml:lang="de">
+        <para>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm) oder in *-Angaben (z.B. 4*) angegeben werden.</para>
+      </description>
+    </attribute>
+    <attribute name="align" type="align" optional="yes">
+      <description xml:lang="de">
+        <para>Die horizontale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (Td) überschrieben werden.</para>
+      </description>
+    </attribute>
+    <attribute name="valign" type="valign" optional="yes">
+      <description xml:lang="de">
+        <para>Die vertikale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (Td) überschrieben werden.</para>
+      </description>
+    </attribute>
+    <attribute name="backgroundcolor" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Farbe der Tabellenspalte.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<Tabelle>
+  <Spalten>
+    <Spalte breite="14mm" />
+    <Spalte breite="2" />
+    <Spalte breite="1*" align="right" valign="top" />
+    <Spalte breite="5*" />
+    <Spalte breite="5mm" hintergrundfarbe="grau" />
+  </Spalten>
+</Tabelle>]]></listing>
+    </example>
     <seealso>
       <cmd name="Table"/>
       <cmd name="Columns"/>
     </seealso>
   </command>
   <command name="Columns">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Legt die Spaltenbreiten in einer Tabelle fest.</para>
     </description>
     <childelements>
       <cmd name="Column"/>
@@ -1548,15 +1958,28 @@
     <parentelements>
       <cmd name="Table"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <remark xml:lang="de">
+      <para>Die *-Breitenangaben im Element »Spalte« ermöglicht eine dynamische Aufteilung der Spaltenbreite. Dazu muss die Tabellenbreite vorgegeben sein und das Attribut dehnen bei Tabelle auf max stehen. Die Spaltenbreiten berechnen sich wie folgt: erst werden die fixen Breitenangaben berücksichtigt. Anschließend werden die *-Spalten auf den verbleibenden Platz verteilt. Die Angaben vor den Sternchen dienen der Verteilung innerhalb der *-Spalten. Im Beispiel unten nimmt die vierte Spalte in etwa den fünffachen Platz der dritten Spalte ein. Angenommen die Tabelle sollte 32mm breit werden. Die fixen Spalten nehmen davon 20mm in Anspruch, übrig bleiben 12 mm. Diese 12mm werden auf die beiden Spalten verteilt, 2mm entfallen auf die 1*-Spalte (1/6 von 12mm), 10mm auf die 5*-Spalte (5/6 von 12mm).</para>
+    </remark>
+    <example xml:lang="de">
+      <listing><![CDATA[<Tabelle>
+  <Spalten>
+    <Spalte breite="14mm" />
+    <Spalte breite="2" />
+    <Spalte breite="1*" align="right" valign="top" />
+    <Spalte breite="5*" />
+    <Spalte breite="5mm" hintergrundfarbe="grau" />
+  </Spalten>
+</Tabelle>]]></listing>
+    </example>
     <seealso>
       <cmd name="Table"/>,
       <cmd name="Column"/>
     </seealso>
   </command>
   <command name="SaveDataset">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Speichert eine XML-Datei auf Festplatte. Diese Datei muss als Kindelement hierarchische Struktur, zum Beispiel aus den Befehlen Element und Attribut enthalten, wahlweise zusammengesetzt durch Variablen. Eine ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</para>
     </description>
     <childelements>
       <cmd name="Element"/>
@@ -1567,7 +1990,28 @@
     <parentelements>
       <cmd name="Record"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="filename" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Name der Dateisatzdatei. Beispiel: toc</para>
+      </description>
+    </attribute>
+    <attribute name="elementname" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Name des Wurzelelements, das erzeugt wird.</para>
+      </description>
+    </attribute>
+    <attribute name="select" type="xpath" optional="yes">
+      <description xml:lang="de">
+        <para>Alternativ zur Angabe des Datensatzes im Kindelement.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<SpeichereDatensatzdatei dateiname="toc" elementname="Inhalt">
+   <KopieVon auswahl="$Inhalt"/>
+</SpeichereDatensatzdatei>]]></listing>
+      <para>Äquivalent dazu ist:</para>
+      <listing><![CDATA[<SpeichereDatensatzdatei dateiname="toc" elementname="Inhalt" auswahl="$Inhalt" />]]></listing>
+    </example>
     <seealso>
       <cmd name="Element"/>
       <cmd name="Attribute"/>
@@ -1575,8 +2019,8 @@
       Wie werden automatische Verzeichnisse erstellt?</seealso>
   </command>
   <command name="Sub">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Erzeugt tiefgestellten Text.</para>
     </description>
     <childelements>
       <cmd name="Value"/>
@@ -1584,14 +2028,20 @@
     <parentelements>
       <cmd name="Paragraph"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <example xml:lang="de">
+      <listing><![CDATA[<ObjektAusgeben spalte="1">
+  <Textblock breite="20">
+    <Absatz><Wert>Text</Wert><Sub><Wert>tief</Wert></Sub></Absatz>
+  </Textblock>
+</ObjektAusgeben>]]></listing>
+    </example>
     <seealso>
       <cmd name="Sup"/>, <cmd name="Paragraph"/>
     </seealso>
   </command>
   <command name="Sup">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Erzeugt hochgestellten Text.</para>
     </description>
     <childelements>
       <cmd name="Value"/>
@@ -1599,15 +2049,21 @@
     <parentelements>
       <cmd name="Paragraph"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <example xml:lang="de">
+      <listing><![CDATA[<ObjektAusgeben spalte="1">
+  <Textblock breite="20">
+    <Absatz><Wert>Text</Wert><Sup><Wert>hoch</Wert></Sup></Absatz>
+  </Textblock>
+</ObjektAusgeben>]]></listing>
+    </example>
     <seealso>
       <cmd name="Paragraph"/>
       <cmd name="Sub"/>
     </seealso>
   </command>
   <command name="Table">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Erzeugt eine Tabelle, die in etwa dem HTML Tabellenmodell entspricht</para>
     </description>
     <childelements>
       <cmd name="Columns"/>
@@ -1619,7 +2075,90 @@
     <parentelements>
       <cmd name="PlaceObject"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="stretch" type="maxno" optional="yes">
+      <description xml:lang="de">
+        <para>Wenn der Tabelleninhalt schmal ist und dehnen den Wert nein hat, dann nimmt die Tabelle nur den benötigten Platz ein. Wenn der Tabelleninhalt breit ist oder dehnen den Wert max hat, dann nimmt die Tabelle den Wert aus dem Attribut breite ein.</para>
+      </description>
+    </attribute>
+    <attribute name="width" type="number" optional="yes">
+      <description xml:lang="de">
+        <para>Der Bereich, den die Tabelle (maximal) im Raster belegt.</para>
+      </description>
+    </attribute>
+    <attribute name="padding" type="length" optional="yes">
+      <description xml:lang="de">
+        <para>Der Innenabstand innerhalb einer Tabellenzelle.</para>
+      </description>
+    </attribute>
+    <attribute name="fontface" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Name der Schriftfamilie, die benutzt werden soll. Wenn keine Schriftart angegeben ist, wird auf die Schriftart ›text‹ umgeschaltet.</para>
+      </description>
+    </attribute>
+    <attribute name="columndistance" type="length" optional="yes">
+      <description xml:lang="de">
+        <para>Der Abstand zwischen zwei Spalten.</para>
+      </description>
+    </attribute>
+    <attribute name="textformat" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Das Textformat, das benutzt wird, wenn kein anderes angegeben wird. Voreinstellung ist ›text‹'</para>
+      </description>
+    </attribute>
+    <attribute name="leading" type="length" optional="yes">
+      <description xml:lang="de">
+        <para>Der Abstand zwischen zwei Zeilen.</para>
+      </description>
+    </attribute>
+    <remark xml:lang="de">
+      <para>Die Tabellenzellen dürfen Absätze (Absatz), Bilder (Bild) und wiederum Tabellen enthalten.</para>
+    </remark>
+    <example xml:lang="de">
+      <listing><![CDATA[<ObjektAusgeben spalte="1">
+  <Tabelle breite="29" padding="1mm" zeilenabstand="0mm" spaltenabstand="0pt" dehnen="max">
+    <Tabellenkopf>
+      <Tlinie linienstärke="1pt" />
+      <Tr>
+        <Td align="center"><Absatz><Wert>Platz</Wert></Absatz></Td>
+        <Td align="center"><Absatz><Wert>Club</Wert></Absatz></Td>
+        <Td align="center"><Absatz><Wert>Punkte</Wert></Absatz></Td>
+        <Td align="center"><Absatz><Wert>Differenz</Wert></Absatz></Td>
+      </Tr>
+      <Tlinie linienstärke="0.6pt" />
+    </Tabellenkopf>
+    <Tr>
+      <Td align="center"><Absatz><Wert>1</Wert></Absatz></Td>
+      <Td><Absatz><Wert>FC Bayern München</Wert></Absatz></Td>
+      <Td align="center"><Absatz><Wert>56</Wert></Absatz></Td>
+      <Td align="center"><Absatz><Wert>+31</Wert></Absatz></Td>
+      <Td rowspan="2"><Absatz><Wert>CL</Wert></Absatz></Td>
+    </Tr>
+    <Tr>
+      <Td align="center"><Absatz><Wert>2</Wert></Absatz></Td>
+      <Td><Absatz><Wert>FC Schalke 04</Wert></Absatz></Td>
+      <Td align="center"><Absatz><Wert>54</Wert></Absatz></Td>
+      <Td align="center"><Absatz><Wert>+22</Wert></Absatz></Td>
+    </Tr>
+    <Tr>
+      <Td align="center"><Absatz><Wert>3</Wert></Absatz></Td>
+      <Td><Absatz><Wert>Bayer 04 Leverkusen</Wert></Absatz></Td>
+      <Td align="center"><Absatz><Wert>53</Wert></Absatz></Td>
+      <Td align="center"><Absatz><Wert>+31</Wert></Absatz></Td>
+      <Td><Absatz><Wert>CL Qual.</Wert></Absatz></Td>
+    </Tr>
+    <Tr>
+      <Td align="center"><Absatz><Wert>4</Wert></Absatz></Td>
+      <Td><Absatz><Wert>Borussia Dortmund</Wert></Absatz></Td>
+      <Td align="center"><Absatz><Wert>45</Wert></Absatz></Td>
+      <Td align="center"><Absatz><Wert>+10</Wert></Absatz></Td>
+      <Td><Absatz><Wert>EL Qual.</Wert></Absatz></Td>
+    </Tr>
+    <Tabellenfuß>
+      <Tlinie linienstärke="1pt" />
+    </Tabellenfuß>
+  </Tabelle>
+</ObjektAusgeben>]]></listing>
+    </example>
     <seealso>
       <cmd name="Tr"/>
       <cmd name="Td"/>
@@ -1628,8 +2167,8 @@
     </seealso>
   </command>
   <command name="Tablefoot">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Gibt den Tabellenfuß an.</para>
     </description>
     <childelements>
       <cmd name="Tablerule"/>
@@ -1638,14 +2177,19 @@
     <parentelements>
       <cmd name="Table"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <remark xml:lang="de">
+      <para>Der Inhalt von Tabellenfuß wird auf jeder Seite einer automatisch umbrochenen Tabelle wiederholt.</para>
+    </remark>
+    <example xml:lang="de">
+      <para>Siehe Erläuterung zu <cmd name="Table"/></para>
+    </example>
     <seealso>
       <cmd name="Tablehead"/>
     </seealso>
   </command>
   <command name="Tablehead">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Gibt den Tabellenkopf an.</para>
     </description>
     <childelements>
       <cmd name="Tablerule"/>
@@ -1654,14 +2198,19 @@
     <parentelements>
       <cmd name="Table"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <remark xml:lang="de">
+      <para>Der Inhalt von Tabellenkopf wird auf jeder Seite einer automatisch umbrochenen Tabelle wiederholt.</para>
+    </remark>
+    <example xml:lang="de">
+      <para>Siehe Erläuterung zu <cmd name="Table"/></para>
+    </example>
     <seealso>
       <cmd name="Tablefoot"/>
     </seealso>
   </command>
   <command name="Td">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Erstellt eine Tabellenzelle</para>
     </description>
     <childelements>
       <cmd name="Paragraph"/>
@@ -1671,7 +2220,101 @@
     <parentelements>
       <cmd name="Tr"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="border-left" type="length" optional="yes">
+      <description xml:lang="de">
+        <para>Die Breite der Linie links. Die Linie liegt innerhalb der Zelle.</para>
+      </description>
+    </attribute>
+    <attribute name="border-right" type="length" optional="yes">
+      <description xml:lang="de">
+        <para>Die Breite der Linie rechts. Die Linie liegt innerhalb der Zelle.</para>
+      </description>
+    </attribute>
+    <attribute name="border-top" type="length" optional="yes">
+      <description xml:lang="de">
+        <para>Die Breite der Linie oben. Die Linie liegt innerhalb der Zelle.</para>
+      </description>
+    </attribute>
+    <attribute name="border-bottom" type="length" optional="yes">
+      <description xml:lang="de">
+        <para>Die Breite der Linie unten. Die Linie liegt innerhalb der Zelle.</para>
+      </description>
+    </attribute>
+    <attribute name="border-left-color" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Die Farbe der Linie links.</para>
+      </description>
+    </attribute>
+    <attribute name="border-right-color" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Die Farbe der Linie rechts.</para>
+      </description>
+    </attribute>
+    <attribute name="border-top-color" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Die Farbe der Linie oben.</para>
+      </description>
+    </attribute>
+    <attribute name="border-bottom-color" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Die Farbe der Linie unten.</para>
+      </description>
+    </attribute>
+    <attribute name="colspan" type="number" optional="yes">
+      <description xml:lang="de">
+        <para>Die Anzahl der Spalten, die die Zelle überdecken soll. Voreinstellung ist 1.</para>
+      </description>
+    </attribute>
+    <attribute name="rowspan" type="number" optional="yes">
+      <description xml:lang="de">
+        <para>Die Anzahl der Zeilen, die die Zelle überdecken soll. Voreinstellung ist 1.</para>
+      </description>
+    </attribute>
+    <attribute name="align" type="align" optional="yes">
+      <description xml:lang="de">
+        <para>Die horizontale Ausrichtung des Tabelleninhalts</para>
+      </description>
+    </attribute>
+    <attribute name="valign" type="valign" optional="yes">
+      <description xml:lang="de">
+        <para>Die vertikale Ausrichtung des Tabelleninhalts.</para>
+      </description>
+    </attribute>
+    <attribute name="padding" type="length" optional="yes">
+      <description xml:lang="de">
+        <para>Kurzform für die Bestimmung von padding-top und den anderen drei Werden mit derselben Maßangabe</para>
+      </description>
+    </attribute>
+    <attribute name="padding-top" type="length" optional="yes">
+      <description xml:lang="de">
+        <para>Bestimmt den Innenabstand einer Tabelle (oben)</para>
+      </description>
+    </attribute>
+    <attribute name="padding-bottom" type="length" optional="yes">
+      <description xml:lang="de">
+        <para>Bestimmt den Innenabstand einer Tabelle (unten)</para>
+      </description>
+    </attribute>
+    <attribute name="padding-left" type="length" optional="yes">
+      <description xml:lang="de">
+        <para>Bestimmt den Innenabstand einer Tabelle (links)</para>
+      </description>
+    </attribute>
+    <attribute name="padding-right" type="length" optional="yes">
+      <description xml:lang="de">
+        <para>Bestimmt den Innenabstand einer Tabelle (rechts)</para>
+      </description>
+    </attribute>
+    <remark xml:lang="de">
+      <para>Das Attribut align erzeugt implizit ein Textformat (nur in Bezug auf Ausrichtung) für alle Kindelemente Absatz, sofern dort kein Textformat angegeben ist.</para>
+      <para>Tabellen dürfen wiederum Tabellen enthalten.</para>
+    </remark>
+    <example xml:lang="de">
+      <listing><![CDATA[<Tr>
+  <Td colspan="2" align="right"><Absatz><Wert>Text</Wert></Absatz></Td>
+  <Td rowspan="3"><Bild breite="3" datei="bildname.jpg"/></Td>
+</Tr>]]></listing>
+    </example>
     <seealso>
       <cmd name="Table"/>
       <cmd name="Tr"/>
@@ -1680,21 +2323,44 @@
     </seealso>
   </command>
   <command name="Tablerule">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Erzeugt eine horizontale Linie in einer Tabelle</para>
     </description>
     <childelements />
     <parentelements>
       <cmd name="Table"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="rulewidth" type="length" optional="yes">
+      <description xml:lang="de">
+        <para>Die »Dicke« der Linie. Voreinstellung ist 0.4 Punkt.</para>
+      </description>
+    </attribute>
+    <attribute name="color" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Farbe der Linie. (Default: Schwarz)</para>
+      </description>
+    </attribute>
+    <remark xml:lang="de">
+      <para>Die Linie geht über die gesamte Breite der Tabelle und verschiebt nachfolgende Zeilen nach unten.</para>
+    </remark>
+    <example xml:lang="de">
+      <listing><![CDATA[<Tlinie linienstärke="1pt" />
+<Tr>
+  <Td align="center">Platz</Td>
+  <Td align="center">Club</Td>
+  <Td align="center">Punkte</Td>
+  <Td align="center">Differenz</Td>
+</Tr>
+<Tlinie linienstärke="0.6pt" />
+...]]></listing>
+    </example>
     <seealso>
       <cmd name="Table"/>
     </seealso>
   </command>
   <command name="Tr">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Erstellt eine Tabellenzeile</para>
     </description>
     <childelements>
       <cmd name="Td"/>
@@ -1704,27 +2370,60 @@
       <cmd name="Tablehead"/> 
       <cmd name="Tablefoot"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="align" type="align" optional="yes">
+      <description xml:lang="de">
+        <para>Die horizontale Ausrichtung des Tabelleninhalts (gilt für die gesamte Zeile).</para>
+      </description>
+    </attribute>
+    <attribute name="valign" type="valign" optional="yes">
+      <description xml:lang="de">
+        <para>Die vertikale Ausrichtung des Tabelleninhalts (gilt für die gesamte Zeile).</para>
+      </description>
+    </attribute>
+    <attribute name="minheight" type="number" optional="yes">
+      <description xml:lang="de">
+        <para>Die Mindesthöhe der Zeile in Rasterzellen.</para>
+      </description>
+    </attribute>
+    <attribute name="backgroundcolor" type="text" optional="yes">
+      <description xml:lang="de">
+        <para>Die Farbe der Zellen in der Zeile.</para>
+      </description>
+    </attribute>
+    <remark xml:lang="de">
+      <para>Das Attribut minhöhe war in einer vorigen Version minhoehe.</para>
+    </remark>
+    <example xml:lang="de">
+      <listing><![CDATA[<Tr minhöhe="8mm" hintergrundfarbe="gelb">
+  <Td align="center"><Absatz><Wert>4</Wert></Absatz></Td>
+  <Td><Absatz><Wert>Borussia Dortmund</Wert></Absatz></Td>
+  <Td align="center"><Absatz><Wert>45</Wert></Absatz></Td>
+  <Td align="center"><Absatz><Wert>+10</Wert></Absatz></Td>
+  <Td><Absatz><Wert>EL Qual.</Wert></Absatz></Td>
+</Tr>]]></listing>
+    </example>
     <seealso>
       <cmd name="Td"/>
       <cmd name="Table"/>
     </seealso>
   </command>
   <command name="Hyphenation">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Erzeugt einen Trennvorschlag für die automatische Silbentrennung. Die Trennvorschläge werden dann benutzt, wenn die automatische Silbentrennung fehlerhaft trennt. Alle Trennstellen müssen mit eine Bindestrich (-) markiert werden (s. Beispiel).</para>
     </description>
     <childelements></childelements>
     <parentelements>
       <cmd name="Record"/>
       <cmd name="Layout"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Trennvorschlag>Au-to-bahn</Trennvorschlag>]]></listing>
+    </example>
     <seealso></seealso>
   </command>
   <command name="U">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Schaltet »Unterstreichen« ein.</para>
     </description>
     <childelements>
       <cmd name="B"/>
@@ -1741,7 +2440,18 @@
     <parentelements>
       <cmd name="Paragraph"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <remark xml:lang="de">
+      <para>Funktioniert derzeit nicht zusammen mit optischen Randausgleich.</para>
+    </remark>
+    <example xml:lang="de">
+      <listing><![CDATA[<ObjektAusgeben spalte="1" zeile="1">
+  <Textblock breite="18">
+    <Absatz>
+      <U><Wert>Unterstrichener Text</Wert></U>
+    </Absatz>
+  </Textblock>
+</ObjektAusgeben>]]></listing>
+    </example>
     <seealso>
       <cmd name="B"/>
       <cmd name="I"/>
@@ -1749,8 +2459,8 @@
     </seealso>
   </command>
   <command name="URL">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Ermöglicht ein sinnvolles Umbrechen einer URL.</para>
     </description>
     <childelements>
       <cmd name="B"/>
@@ -1776,12 +2486,19 @@
       <cmd name="URL"/>
       <cmd name="Value"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Textblock breite="27" spalte="2" textformat="text">
+  <Absatz>
+    <Wert>URL: </Wert>
+    <URL><Wert>http://www.speedata.de/publisher</Wert></URL>
+  </Absatz>
+</Textblock>]]></listing>
+    </example>
     <seealso></seealso>
   </command>
   <command name="Value">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Beschreibt einen Textinhalt</para>
     </description>
     <childelements>
     </childelements>
@@ -1796,7 +2513,21 @@
       <cmd name="U"/>
       <cmd name="URL"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="select" type="xpath" optional="yes">
+      <description xml:lang="de">
+        <para>Wert, der zum umgebenden Element übergeben wird.</para>
+      </description>
+    </attribute>
+    <remark xml:lang="de">
+      <para>Der Inhalt kann entweder als XPath-Ausdruck im Attribut auswahl oder als Elementinhalt angegeben werden.</para>
+    </remark>
+    <example xml:lang="de">
+      <listing><![CDATA[<Textblock breite="14" schriftart="text">
+  <Absatz>
+    <Wert auswahl="@name"/><Wert>, Symbol=</Wert><Wert auswahl="@symbol" />
+  </Absatz>
+</Textblock>]]></listing>
+    </example>
     <seealso>
       <cmd name="Copy-of"/>
       <ref name="XPath-Expression"/>
@@ -1804,17 +2535,56 @@
     </seealso>
   </command>
   <command name="SetVariable">
-    <description xml:lang="">
-      <para></para>
+    <description xml:lang="de">
+      <para>Weist einer Variablen einen Wert zu. Der Wert kann aus mehreren Elementen bestehen (siehe zweites Beispiel).</para>
     </description>
     <childelements></childelements>
     <parentelements>
       <cmd name="Record"/>
     </parentelements>
-    <example xml:lang=""></example>
+    <attribute name="variable" type="text" optional="no">
+      <description xml:lang="de">
+        <para>Name der Variablen, der etwas zugewiesen werden soll.</para>
+      </description>
+    </attribute>
+    <attribute name="select" type="xpath" optional="yes">
+      <description xml:lang="de">
+        <para>Inhalt, der der Variablen zugewiesen wird.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<Datensatz element="produkt">
+  <Zuweisung variable="Textbreite" auswahl=" 5 "/>
+  <ObjektAusgeben spalte="1">
+    <Textblock breite="{ $Textbreite }">
+      <Absatz>
+        <Variable name="Artikelnummer"/>
+      </Absatz>
+    </Textblock>
+  </ObjektAusgeben>
+</Datensatz>]]></listing>
+      <para>Folgendes Beispiel zeigt, wie mehrere Absätze in einer Variablen gespeichert werden, um sie anschließend in einem Textblock auszugeben.</para>
+      <listing><![CDATA[<Datensatz element="produkte">
+  <Zuweisung variable="Artikeltext" auswahl="''"/>
+  <BearbeiteKnoten auswahl="artikel"/>
+  <ObjektAusgeben spalte="1">
+    <Textblock breite="10">
+      <Wert auswahl=" $Artikeltext "/>
+    </Textblock>
+  </ObjektAusgeben>
+</Datensatz>
+
+<Datensatz element="artikel">
+  <Zuweisung variable="Artikeltext">
+    <Wert auswahl="$Artikeltext"/>
+    <Absatz>
+      <Wert auswahl=" @beschreibung " />
+    </Absatz>
+  </Zuweisung>
+</Datensatz>]]></listing>
+    </example>
     <seealso>
       <cmd name="Value"/>
     </seealso>
   </command>
-   -->
 </commands>

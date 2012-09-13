@@ -28,6 +28,14 @@
     <value type="alignment" de="blocksatz, linksbündig, rechtsbündig, zentriert" en="justified, leftaligned, rightaligned, centered"/>
     <value type="length" de="Längenangabe (mm,cm,pt)" en="Length (mm,in,cm,pt)"/>
     <value type="horizontalvertical" de="horizontal oder vertikal" en="horizontal or vertical"/>
+    <value type="yesnoauto" de="›ja‹, ›nein‹ oder ›auto‹" en="'yes', 'no' or 'auto'"/>
+    <value type="solidwithout" de="›durchgezogen‹, ›ohne‹" en="'solid' or 'without'" />
+    <value type="topmiddlebottom" de="'top', 'middle' oder 'bottom'" en="'top', 'middle' or 'bottom'" />
+    <value type="leftright" de="'links' oder 'rechts'" en="'left' or 'right'" />
+    <value type="numberlengthorstar" de="Zahl, Maßangabe oder *-Angaben" en="Number, length or *-numbers" />
+    <value type="align" de="“right”,“left”,“center”" en="“right”,“left”,“center”" />
+    <value type="valign" de="“top”,“center”,“bottom”" en="“top”,“center”,“bottom”" />
+    <value type="maxno" de="'max', 'nein'" en="'max', 'no'" />
   </xsl:variable>
   
   <xsl:template match="/">

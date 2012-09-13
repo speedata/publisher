@@ -96,6 +96,14 @@
                   <value>alignment</value>
                   <value>length</value>
                   <value>horizontalvertical</value>
+                  <value>yesnoauto</value>
+                  <value>solidwithout</value>
+                  <value>topmiddlebottom</value>
+                  <value>leftright</value>
+                  <value>numberlengthorstar</value>
+                  <value>align</value>
+                  <value>valign</value>
+                  <value>maxno</value>
                 </choice>
               </attribute>
               <attribute name="optional" >
@@ -114,7 +122,7 @@
                   <value>de</value>
                 </choice>
               </attribute>
-              <ref name="para"/>
+              <oneOrMore><ref name="para"/></oneOrMore>
             </element>
           </zeroOrMore>
           <oneOrMore>
@@ -136,7 +144,7 @@
               <zeroOrMore>
                 <interleave>
                   <text />
-                  <ref name="cmd"/>
+                  <optional><ref name="cmd"/></optional>
                   <optional>
                     <element name="ref">
                       <attribute name="name" />

@@ -132,7 +132,6 @@
         <attribute en="criterium" de="kriterium"/>
         <attribute en="cutmarks" de="beschnittmarken"/>
         <attribute en="direction" de="richtung"/>
-      <attribute en="mainlanguage" de="hauptsprache"></attribute>
         <attribute en="element" de="element"/>
         <attribute en="elementname" de="elementname"/>
         <attribute en="file" de="datei"/>
@@ -157,7 +156,8 @@
         <attribute en="list" de="liste"/>
     <attribute en="limit" de="umfang" />
         <attribute en="m" de="m"/>
-        <attribute en="marginprotrusion" de="randausgleich"/>
+      <attribute en="mainlanguage" de="hauptsprache"/>
+      <attribute en="marginprotrusion" de="randausgleich"/>
         <attribute en="maxheight" de="maxhöhe"/>
         <attribute en="maxsize" de="maximale-größe"/>
         <attribute en="minheight" de="minhöhe"/>
