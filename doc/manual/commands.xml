@@ -52,7 +52,7 @@
       </description>
     </attribute>
     <example xml:lang="de">
-      <listing>&lt;Lesezeichen ebene="1" auswahl="$titel" offen='nein'/></listing>
+      <listing><![CDATA[<Lesezeichen ebene="1" auswahl="$titel" offen='nein'/>]]></listing>
       <para>Erzeugt ein Lesezeichen der Stufe 1 (höchste Stufe) mit dem Titel, der in der Variablen @titel@ steht.</para>
     </example>
     <seealso>
@@ -505,8 +505,16 @@
       <cmd name="Layout" />
     </parentelements>
     <example xml:lang="de">
-      <listing> &lt;Datensatz element="url" modus="ausgabe"> &lt;Textblock breite="27" spalte="2" textformat="text"> &lt;Absatz> &lt;Wert>URL: &lt;Wert> &lt;URL> &lt;Wert auswahl="." /> &lt;URL>
-        &lt;Absatz> &lt;Textblock> &lt;Datensatz></listing>
+      <listing><![CDATA[<Datensatz element="url" modus="ausgabe">
+  <Textblock breite="27" spalte="2" textformat="text">
+    <Absatz>
+      <Wert>URL: </Wert>
+      <URL>
+        <Wert auswahl="." />
+      </URL>
+    </Absatz>
+  </Textblock>
+</Datensatz>]]></listing>
     </example>
     <seealso>
       <cmd name="ProcessNode" />
@@ -619,9 +627,21 @@
         <para>Abstand zwischen zwei Grundlinien in pt (PostScript-Punkte).</para>
       </description>
     </attribute>
+    <remark xml:lang="de">
+      <para>Wird keine Schriftart angegeben, dann wird auf die Schriftfamilie text (kleines ‘t’) zurückgegriffen.</para>
+      <para>Die Schnitte Fett, Kursiv und FettKursiv müssen nur dann angegeben werden, wenn sie auch benutzt werden. Es wird aber empfohlen, diese anzugeben, damit nicht unbemerkt auf die Standardschriftart umgeschaltet wird.</para>
+    </remark>
     <example xml:lang="de">
-      <listing> &lt;DefiniereSchriftfamilie name="Times" schriftgröße="12" zeilenabstand="14"> &lt;Normal schriftart="Times Normal"/> &lt;Fett schriftart="Times Fett"/> &lt;Kursiv schriftart="Times
-        Kursiv"/> &lt;FettKursiv schriftart="Times Fett Kursiv"/> &lt;/DefiniereSchriftfamilie> </listing>
+      <listing><![CDATA[<DefiniereSchriftfamilie name="Helvetica" schriftgröße="12" zeilenabstand="14">
+  <Normal schriftart="Helvetica Normal"/>
+  <Fett schriftart="Helvetica Fett"/>
+  <Kursiv schriftart="Helvetica Kursiv"/>
+  <FettKursiv schriftart="Helvetica Fett Kursiv"/>
+</DefiniereSchriftfamilie>]]></listing>
+      <para>Anschließend kann im Text auf diese Schriftfamilie zugegriffen werden:</para>
+      <listing><![CDATA[<Textblock breite="18" spalte="1" schriftart="Helvetica">
+  <Absatz>
+   ...]]></listing>
     </example>
     <seealso>
       <cmd name="LoadFontfile" />
@@ -658,8 +678,17 @@
       </description>
     </attribute>
     <example xml:lang="de">
-      <listing> &lt;Layout> &lt;DefiniereTextformat name="Text mit Einrückung" ausrichtung="blocksatz" einrückung="1cm" /> ... &lt;Datensatz element="..."> &lt;ObjektAusgeben> &lt;Textblock
-        breite="10" spalte="1" textformat="Text mit Einrückung"> &lt;Absatz> &lt;Wert>Text ...&lt;/Wert> &lt;/Absatz> &lt;/Textblock> &lt;/ObjektAusgeben> &lt;/Datensatz> &lt;/Layout> </listing>
+      <listing><![CDATA[<Layout>
+  <DefiniereTextformat name="Text mit Einrückung" ausrichtung="blocksatz" einrückung="1cm" />
+  ...
+  <Datensatz element="...">
+    <Textblock breite="10" spalte="1" textformat="Text mit Einrückung">
+      <Absatz>
+        <Wert>Text ...</Wert>
+      </Absatz>
+    </Textblock>
+  </Datensatz>
+</Layout>]]></listing>
     </example>
     <seealso>
       <cmd name="Textblock" />
@@ -685,7 +714,10 @@
       </description>
     </attribute>
     <example xml:lang="de">
-      <listing> &lt;Element name="Planetenverzeichnis"> &lt;Attribut name="name" auswahl=" @name "/> &lt;Attribut name="seite" auswahl=" sd:aktuelle-seite()"/> &lt;/Element> </listing>
+      <listing><![CDATA[<Element name="Planetenverzeichnis">
+  <Attribut name="name" auswahl=" @name "/>
+  <Attribut name="seite" auswahl=" sd:aktuelle-seite()"/>
+</Element>]]></listing>
     </example>
     <seealso>
       <cmd name="Attribute" />
@@ -739,21 +771,55 @@
     </childelements>
     <parentelements />
     <example xml:lang="de">
-      <listing> &lt;Datensatz element="..."> &lt;Zuweisung variable="zähler" auswahl="3"/> &lt;Fallunterscheidung> &lt;Fall bedingung=" $zähler &lt; 5"> &lt;Zuweisung variable="text" auswahl="'Kleiner
-        als 5'" /> &lt;/Fall> &lt;Fall bedingung=" $zähler &lt; 20"> &lt;Zuweisung variable="text" auswahl="'Kleiner als 20'" /> &lt;/Fall> &lt;Sonst> &lt;Zuweisung variable="text" auswahl="'Größer
-        als oder gleich 20'" /> &lt;/Sonst> &lt;/Fallunterscheidung> &lt;ObjektAusgeben spalte="1"> &lt;Textblock breite="20"> &lt;Absatz>&lt;Wert auswahl="$text" />&lt;/Absatz> &lt;/Textblock>
-        &lt;/ObjektAusgeben> &lt;/Datensatz></listing>
+      <listing><![CDATA[<Datensatz element="...">
+  <Zuweisung variable="zähler" auswahl="3"/>
+  <Fallunterscheidung>
+    <Fall bedingung=" $zähler &lt; 5">
+      <Zuweisung variable="text" auswahl="'Kleiner als 5'" />
+    </Fall>
+    <Fall bedingung=" $zähler &lt; 20">
+      <Zuweisung variable="text" auswahl="'Kleiner als 20'" />
+    </Fall>
+    <Sonst>
+      <Zuweisung variable="text" auswahl="'Größer als oder gleich 20'" />
+    </Sonst>
+  </Fallunterscheidung>
+  <ObjektAusgeben spalte="1">
+    <Textblock breite="20">
+      <Absatz><Wert auswahl="$text" /></Absatz>
+    </Textblock>
+  </ObjektAusgeben>
+</Datensatz>]]></listing>
     </example>
     <info xml:lang="de">
       <para>»Größer« und »kleiner« Vergleiche müssen nach den Regeln von XML kodiert werden. Für »größer« kann das > Zeichen oder &amp;gt; benutzt werden, »kleiner« muss zwingend als &amp;lt;
         ausgeschrieben sein, da das Zeichen &lt; nicht in einem XML Attribut vorkommen darf.</para>
       <para>Eine Fallunterscheidung kann in fast allen Elementen vorkommen. Das Ergebnis der Fallunterscheidung (also vom benutzten Element Fall oder Sonst) wird an das umgebende Element
         zurückgegeben. So wird beispielsweise aus</para>
-      <listing> &lt;Td> &lt;Absatz> &lt;Fallunterscheidung> &lt;Fall bedingung=" $zeile > 10 "> &lt;Wert>Zeile ist größer als 10&lt;/Wert> &lt;/Fall> &lt;Sonst> &lt;Wert>Zeile ist kleiner oder gleich
-        10&lt;/Wert> &lt;/Sonst> &lt;/Fallunterscheidung> &lt;/Absatz> &lt;/Td></listing>
-      <listing> &lt;Td> &lt;Absatz> &lt;Wert>Zeile ist größer als 10&lt;/Wert> &lt;/Absatz> &lt;/Td></listing>
+      <listing><![CDATA[<Td>
+  <Absatz>
+    <Fallunterscheidung>
+      <Fall bedingung=" $zeile > 10 ">
+       <Wert>Zeile ist größer als 10</Wert>
+      </Fall>
+      <Sonst>
+        <Wert>Zeile ist kleiner oder gleich 10</Wert>
+      </Sonst>
+    </Fallunterscheidung>
+  </Absatz>
+</Td>]]></listing>
+      <listing><![CDATA[<Td>
+  <Absatz>
+    <Wert>Zeile ist größer als 10</Wert>
+  </Absatz>
+</Td>
+]]></listing>
       <para>oder</para>
-      <listing> &lt;Td> &lt;Absatz> &lt;Wert>Zeile ist kleiner oder gleich 10&lt;/Wert> &lt;/Absatz> &lt;/Td></listing>
+      <listing><![CDATA[<Td>
+  <Absatz>
+    <Wert>Zeile ist kleiner oder gleich 10</Wert>
+  </Absatz>
+</Td>]]></listing>
       <para>je nach Inhalt der Variablen.</para>
     </info>
     <seealso>
