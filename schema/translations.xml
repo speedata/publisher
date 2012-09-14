@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <translations>
    <elements>
-      <element key="Action" en="Action" de="Aktion"/>
-      <element key="AddToList" en="AddToList" de="ZurListeHinzufügen"/>
+     <element key="Action" en="Action" de="Aktion"/>
+     <element key="AddToList" en="AddToList" de="ZurListeHinzufügen"/>
       <element key="AtPageCreation" en="AtPageCreation" de="BeiSeitenErzeugung"/>
       <element key="AtPageShipout" en="AtPageShipout" de="BeiSeitenAusgabe"/>
       <element key="Attribute" en="Attribute" de="Attribut"/>
@@ -192,7 +192,8 @@
       <attribute key="row" en="row" de="zeile"/>
       <attribute key="rows" en="rows" de="zeilen"/>
       <attribute key="leading" en="leading" de="zeilenabstand"/>
-      <attribute key="rowspan" en="rowspan" de="rowspan"/>
+     <attribute key="rowdistance" en="rowdistance" de="zeilenabstand"/>
+     <attribute key="rowspan" en="rowspan" de="rowspan"/>
       <attribute key="rulewidth" en="rulewidth" de="linienstärke"/>
       <attribute key="runs" en="runs" de="läufe"/>
       <attribute key="select" en="select" de="auswahl"/>

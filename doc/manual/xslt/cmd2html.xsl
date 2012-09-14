@@ -9,7 +9,7 @@
 
   <xsl:param name="lang" select="'en'"/>
   <xsl:variable name="all-languages" select="('en','de')"/>
-  <xsl:variable name="other-languages" select="('en')"/>
+  <xsl:variable name="other-languages" select="remove($all-languages, index-of($all-languages, $lang))"/>
 
   <xsl:param name="builddir" select="'../../../build/manual/'"></xsl:param>
 
