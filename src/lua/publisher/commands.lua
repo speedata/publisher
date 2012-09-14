@@ -1336,29 +1336,29 @@ end
 --- ------------
 --- Sort a sequence. Warning: it changes the order in the variable.
 function commands.sort_sequence( layoutxml,dataxml )
-  local selection             = publisher.read_attribute(layoutxml,dataxml,"select","string")
-  local duplikate_entfernen = publisher.read_attribute(layoutxml,dataxml,"removeduplicates","string")
-  local criterium           = publisher.read_attribute(layoutxml,dataxml,"criterium","string")
+  local selection        = publisher.read_attribute(layoutxml,dataxml,"select","string")
+  local removeduplicates = publisher.read_attribute(layoutxml,dataxml,"removeduplicates","string")
+  local criterium        = publisher.read_attribute(layoutxml,dataxml,"criterium","string")
 
-  local sequenz = xpath.parse(dataxml,selection)
-  trace("SortiereSequenz: Datensatz = %q, Kriterium = %q",selection,criterium or "???")
+  local sequence = xpath.parse(dataxml,selection)
+  trace("SortSequence: Record = %q, criterium = %q",selection,criterium or "???")
   local sortkey = criterium
   local tmp = {}
-  for i,v in ipairs(sequenz) do
-    tmp[i] = sequenz[i]
+  for i,v in ipairs(sequence) do
+    tmp[i] = sequence[i]
   end
 
   table.sort(tmp, function(a,b) return a[sortkey]  < b[sortkey] end)
-  if duplikate_entfernen then
+  if removeduplicates then
     local ret = {}
     local deleteme = {}
-    local letzter_eintrag = {}
+    local last_entry = {}
     for i,v in ipairs(tmp) do
       local contents = publisher.element_contents(v)
-      if contents[duplikate_entfernen] == letzter_eintrag[duplikate_entfernen] then
+      if contents[removeduplicates] == last_entry[removeduplicates] then
         deleteme[#deleteme + 1] = i
       end
-      letzter_eintrag = contents
+      last_entry = contents
     end
 
     for i=#deleteme,1,-1 do
