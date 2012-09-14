@@ -38,6 +38,7 @@ var (
 	extra_dir             []string
 	starttime             time.Time
 	cfg                   *configurator.ConfigData
+	running_processes     []*os.Process
 )
 
 func init() {
@@ -110,7 +111,7 @@ func init() {
 		libdir = filepath.Join(installdir, "lib")
 		srcdir = filepath.Join(installdir, "sw")
 		path_to_documentation = filepath.Join(installdir, "share/doc/index.html")
-		os.Setenv("PUBLISHER_BASE_PATH",installdir)
+		os.Setenv("PUBLISHER_BASE_PATH", installdir)
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
 	default:
 		// local git installation
@@ -173,6 +174,12 @@ func signalCatcher() {
 	signal.Notify(ch, syscall.SIGINT)
 	sig := <-ch
 	log.Printf("Signal received: %v", sig)
+	for _, proc := range running_processes {
+		err := proc.Kill()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 	showDuration()
 	os.Exit(0)
 }
@@ -195,6 +202,7 @@ func run(cmdline string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	running_processes = append(running_processes, cmd.Process)
 	go io.Copy(os.Stdout, stdout)
 	go io.Copy(os.Stderr, stderr)
 	err = cmd.Wait()
@@ -220,7 +228,7 @@ func save_variables() {
 
 // add the command line argument (extra-dir) into the slice
 func extradir(arg string) {
-	extra_dir = append(extra_dir,arg)
+	extra_dir = append(extra_dir, arg)
 }
 
 // We don't know where the executable is and we don't know
@@ -271,7 +279,7 @@ func getExecutablePath() string {
 
 // Print version information
 func versioninfo() {
-	log.Println("Version: ",version)
+	log.Println("Version: ", version)
 	os.Exit(0)
 }
 
@@ -323,14 +331,14 @@ func main() {
 	op := optionparser.NewOptionParser()
 	op.On("--autoopen", "Open the PDF file (MacOS X and Linux only)", options)
 	op.On("--data NAME", "Name of the XML data file. Defaults to 'data.xml'", options)
-	op.On("--dummy","Don't read a data file, use '<data />' as input",options)
+	op.On("--dummy", "Don't read a data file, use '<data />' as input", options)
 	op.On("--filter FILTER", "Run XPROC filter before publishing starts", options)
 	op.On("--grid", "Display background grid. Disable with --no-grid", layoutoptions)
 	op.On("--layout NAME", "Name of the layout file. Defaults to 'layout.xml'", options)
 	op.On("--jobname NAME", "The name of the resulting PDF file, default is 'publisher.pdf'", options)
 	op.On("--runs NUM", "Number of publishing runs ", options)
 	op.On("--startpage NUM", "The first page number", layoutoptions)
-	op.On("--trace","Show debug messages and some tracing PDF output",layoutoptions)
+	op.On("--trace", "Show debug messages and some tracing PDF output", layoutoptions)
 	op.On("-v", "--var VAR=VALUE", "Set a variable for the publishing run", setVariable)
 	op.On("--version", "Show version information", versioninfo)
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
