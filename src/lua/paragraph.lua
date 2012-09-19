@@ -114,7 +114,7 @@ function Paragraph:script( whatever,scr,parameter )
   else
     assert(false,string.format("superscript, type()=%s",type(whatever)))
   end
-  set_sub_supscript(nl,scr)
+  publisher.set_sub_supscript(nl,scr)
   nl = node.hpack(nl)
   -- Beware! This width is still incorrect (it is the width of the normal glyphs)
   -- Therefore we have to correct the width in pre_linebreak
