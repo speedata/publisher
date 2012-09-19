@@ -124,7 +124,7 @@ func init() {
 		path_to_documentation = filepath.Join(installdir, "/build/handbuch_publisher/index.html")
 	}
 	inifile = filepath.Join(srcdir, "lua/sdini.lua")
-	// cfg, err = configurator.ReadFiles("/Users/patrick/.publisher.cfg", path.Join(pwd, "publisher.cfg"))
+	// FIXME!!
 	cfg, err = configurator.ReadFiles(filepath.Join(pwd, "publisher.cfg"), "/Users/patrick/.publisher.cfg")
 	if err != nil {
 		log.Fatal(err)
@@ -366,7 +366,7 @@ func main() {
 		command = op.Extra[0]
 	}
 
-	os.Setenv("SD_EXTRA_DIRS", strings.Join(extra_dir, ":"))
+	os.Setenv("SD_EXTRA_DIRS", cfg.String("DEFAULT", "extra-dir") + ":" + strings.Join(extra_dir, ":"))
 
 	switch command {
 	case "run":
