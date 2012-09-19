@@ -923,8 +923,12 @@ function commands.place_object( layoutxml,dataxml )
   local object, objecttype
 
   if groupname then
-    objects[1] = { object = node.copy(publisher.groups[groupname].contents),
-      objecttype = string.format("Gruppe (%s)", groupname)}
+    if not publisher.groups[groupname] then
+      err("Unknown group %q in PlaceObject",groupname)
+    else
+      objects[1] = { object = node.copy(publisher.groups[groupname].contents),
+        objecttype = string.format("Gruppe (%s)", groupname)}
+    end
   else
     for i,j in ipairs(tab) do
       object = publisher.element_contents(j)
