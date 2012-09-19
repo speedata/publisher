@@ -91,7 +91,7 @@ local function gruppenhoehe(dataxml, ... )
   local groupname=select(1,...)
   local gruppeninhalt=publisher.groups[groupname].contents
   local raster = publisher.current_grid
-  local height = raster:hoehe_in_rasterzellen_sp(gruppeninhalt.width)
+  local height = raster:hoehe_in_rasterzellen_sp(gruppeninhalt.height)
   return height
 end
 
