@@ -828,7 +828,7 @@ function commands.paragraph( layoutxml,dataxml )
   local colortable
   if colorname then
     if not publisher.colors[colorname] then
-      error("Farbe %q ist nicht defniert.",colorname)
+      err("Color %q is not defined yet.",colorname)
     else
       colortable = publisher.colors[colorname].index
     end
