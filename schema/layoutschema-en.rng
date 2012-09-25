@@ -47,6 +47,7 @@
   </define>
 
   <define name="t_Commands">
+    <optional><ref name="e_DefineColor"/></optional>
     <optional><ref name="e_LoadDataset"/></optional>
     <optional><ref name="e_SaveDataset"/></optional>
     <optional><ref name="e_PlaceObject"/></optional>
@@ -361,28 +362,28 @@
              <a:documentation docid="definecolor/model">The color model: ›cmyk‹ or ›rgb‹.</a:documentation><value>rgb</value></attribute>
            <attribute name="r">
              <a:documentation docid="definecolor/r">Value for red (between 0 and 100)</a:documentation>
-             <ref name="t_zerotohundred"/></attribute>
+           </attribute>
            <attribute name="g">
              <a:documentation docid="definecolor/g">Value for green (between 0 and 100)</a:documentation>
-             <ref name="t_zerotohundred"/></attribute>
+           </attribute>
            <attribute name="b">
              <a:documentation docid="definecolor/b">Value for blue (between 0 and 100)</a:documentation>
-             <ref name="t_zerotohundred"/></attribute>
+           </attribute>
          </group>
          <group>
            <attribute name="model"><value>cmyk</value></attribute>
            <attribute name="c">
              <a:documentation docid="definecolor/c">Value for cyan (between 0 and 100)</a:documentation>
-             <ref name="t_zerotohundred"/></attribute>
+           </attribute>
            <attribute name="m">
              <a:documentation docid="definecolor/m">Value for magenta (between 0 and 100)</a:documentation>
-             <ref name="t_zerotohundred"/></attribute>
+           </attribute>
            <attribute name="y">
              <a:documentation docid="definecolor/y">Value for yellow (between 0 and 100)</a:documentation>
-             <ref name="t_zerotohundred"/></attribute>
+           </attribute>
            <attribute name="k">
              <a:documentation docid="definecolor/k">Value for black (key, between 0 and 100)</a:documentation>
-             <ref name="t_zerotohundred"/></attribute>
+           </attribute>
          </group>
        </choice>
      </element>

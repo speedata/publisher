@@ -45,6 +45,7 @@
   </define>
 
   <define name="t_Commands">
+    <optional><ref name="e_DefineColor"/></optional>
     <optional><ref name="e_LoadDataset"/></optional>
     <optional><ref name="e_SaveDataset"/></optional>
     <optional><ref name="e_PlaceObject"/></optional>
@@ -363,28 +364,28 @@
              <a:documentation docid="definecolor/model">Es gibt zwei zulässige Modelle: ›cmyk‹ und ›rgb‹.</a:documentation><value>rgb</value></attribute>
            <attribute name="r">
              <a:documentation docid="definecolor/r">Wert für Rot (zwischen 0 und 100)</a:documentation>
-             <ref name="t_zerotohundred"/></attribute>
+           </attribute>
            <attribute name="g">
              <a:documentation docid="definecolor/g">Wert für Grün (zwischen 0 und 100)</a:documentation>
-             <ref name="t_zerotohundred"/></attribute>
+           </attribute>
            <attribute name="b">
              <a:documentation docid="definecolor/b">Wert für Blau (zwischen 0 und 100)</a:documentation>
-             <ref name="t_zerotohundred"/></attribute>
+           </attribute>
          </group>
          <group>
            <attribute name="modell"><value>cmyk</value></attribute>
            <attribute name="c">
              <a:documentation docid="definecolor/c">Wert für Türkis (cyan, zwischen 0 und 100)</a:documentation>
-             <ref name="t_zerotohundred"/></attribute>
+           </attribute>
            <attribute name="m">
              <a:documentation docid="definecolor/m">Wert für Magenta (zwischen 0 und 100)</a:documentation>
-             <ref name="t_zerotohundred"/></attribute>
+           </attribute>
            <attribute name="y">
              <a:documentation docid="definecolor/y">Wert für Gelb (yellow, zwischen 0 und 100)</a:documentation>
-             <ref name="t_zerotohundred"/></attribute>
+           </attribute>
            <attribute name="k">
              <a:documentation docid="definecolor/k">Wert für Schwarz (key, zwischen 0 und 100)</a:documentation>
-             <ref name="t_zerotohundred"/></attribute>
+           </attribute>
          </group>
        </choice>
      </element>
