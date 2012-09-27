@@ -28,7 +28,7 @@ We welcome contributions. Just [follow the github procedure (fork, pull requests
 Contact / Support
 -----------------
 
-We offer commercial support for the speedata Publisher. Contact us at [info@speedata.de](mailto:info@speedata.de). See the [project page](http://speedata.github.com/publisher/) for other means of contacting us.
+We offer commercial support for the speedata Publisher. You can find the contact information [on the wiki](https://github.com/speedata/publisher/wiki/contact).
 
 
 
