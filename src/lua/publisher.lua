@@ -373,11 +373,13 @@ function dothings()
   dispatch(layoutxml)
 
   --- override options set in the `<Options>` element
-  for _,extopt in ipairs(string.explode(arg[4],",")) do
-    if string.len(extopt) > 0 then
-      local k,v = extopt:match("^(.+)=(.+)$")
-      v = v:gsub("^\"(.*)\"$","%1")
-      options[k]=v
+  if arg[4] then
+    for _,extopt in ipairs(string.explode(arg[4],",")) do
+      if string.len(extopt) > 0 then
+        local k,v = extopt:match("^(.+)=(.+)$")
+        v = v:gsub("^\"(.*)\"$","%1")
+        options[k]=v
+      end
     end
   end
   if options.showgrid == "false" then

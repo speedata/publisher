@@ -9,6 +9,7 @@ import (
 	"log"
 	"optionparser"
 	"os"
+	"regexp"
 	"os/exec"
 	"os/signal"
 	"path/filepath"
@@ -186,8 +187,16 @@ func signalCatcher() {
 
 // Run the given command line
 func run(cmdline string) {
-	// Todo: don't split quoted commands
-	cmdline_array := strings.Split(cmdline, " ")
+	var cmdline_array []string
+	j := regexp.MustCompile("([^ \"]+)|\"([^\"]+)\"")
+	ret := j.FindAllStringSubmatch(cmdline, -1)
+	for _, m := range ret {
+		if m[2] != "" {
+			cmdline_array = append(cmdline_array, m[2])
+		} else {
+			cmdline_array = append(cmdline_array, m[0])
+		}
+	}
 	cmd := exec.Command(cmdline_array[0])
 	cmd.Args = cmdline_array
 	stdout, err := cmd.StdoutPipe()
@@ -299,13 +308,13 @@ func runPublisher() {
 	// layoutoptions are passed as a command line argument to the publisher
 	var layoutoptions_ary []string
 	if layoutoptions["grid"] != "" {
-		layoutoptions_ary = append(layoutoptions_ary, `showgrid="`+layoutoptions["grid"]+`"`)
+		layoutoptions_ary = append(layoutoptions_ary, `showgrid=`+layoutoptions["grid"])
 	}
 	if layoutoptions["startpage"] != "" {
-		layoutoptions_ary = append(layoutoptions_ary, `startpage="`+layoutoptions["startpage"]+`"`)
+		layoutoptions_ary = append(layoutoptions_ary, `startpage=`+layoutoptions["startpage"])
 	}
 	if layoutoptions["trace"] != "" {
-		layoutoptions_ary = append(layoutoptions_ary, `trace="`+layoutoptions["trace"]+`"`)
+		layoutoptions_ary = append(layoutoptions_ary, `trace=`+layoutoptions["trace"])
 	}
 	layoutoptions_cmdline := strings.Join(layoutoptions_ary, ",")
 	jobname := getOption("jobname")
@@ -322,7 +331,7 @@ func runPublisher() {
 		log.Fatal(err)
 	}
 	for i := 1; i <= runs; i++ {
-		cmdline := fmt.Sprintf("%s --interaction nonstopmode --jobname=%s --ini --lua=%s publisher.tex %s %s %s", exec_name, jobname, inifile, layoutname, dataname, layoutoptions_cmdline)
+		cmdline := fmt.Sprintf("%s --interaction nonstopmode --jobname=%s --ini --lua=%s publisher.tex %q %q %q", exec_name, jobname, inifile, layoutname, dataname, layoutoptions_cmdline)
 		run(cmdline)
 	}
 }
