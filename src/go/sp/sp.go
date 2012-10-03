@@ -9,10 +9,10 @@ import (
 	"log"
 	"optionparser"
 	"os"
-	"regexp"
 	"os/exec"
 	"os/signal"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"strconv"
 	"strings"
@@ -188,6 +188,9 @@ func signalCatcher() {
 // Run the given command line
 func run(cmdline string) {
 	var cmdline_array []string
+	// The cmdline can have quoted strings. We remove the quotation marks
+	// by this ugly construct. That way strings such as "--data=foo\ bar" can
+	// be passed to the subprocess.
 	j := regexp.MustCompile("([^ \"]+)|\"([^\"]+)\"")
 	ret := j.FindAllStringSubmatch(cmdline, -1)
 	for _, m := range ret {
@@ -292,6 +295,30 @@ func versioninfo() {
 	os.Exit(0)
 }
 
+// copy a file from srcpath to destpath and make
+// directory if necessary
+func copy_file(srcpath, destpath string) error {
+
+	dir := filepath.Dir(destpath)
+	err := os.MkdirAll(dir, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	src, err := os.Open(srcpath)
+	if err != nil {
+		return err
+	}
+	dest, err := os.Create(destpath)
+	if err != nil {
+		return err
+	}
+	_, err = io.Copy(dest, src)
+	if err != nil {
+		return err
+	}
+	return nil // no error
+}
+
 func runPublisher() {
 	log.Print("run speedata publisher")
 
@@ -334,6 +361,23 @@ func runPublisher() {
 		cmdline := fmt.Sprintf("%s --interaction nonstopmode --jobname=%s --ini --lua=%s publisher.tex %q %q %q", exec_name, jobname, inifile, layoutname, dataname, layoutoptions_cmdline)
 		run(cmdline)
 	}
+
+	// If user supplied an outpath, copy the PDF and the protocol to that path
+	p := getOption("outputdir")
+	if p != "" {
+		pdffilename := jobname + ".pdf"
+		protocolfilename := jobname + ".protocol"
+		err = copy_file(pdffilename,filepath.Join(p,pdffilename))
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		err = copy_file(protocolfilename,filepath.Join(p,protocolfilename))
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}
 }
 
 func main() {
@@ -341,16 +385,17 @@ func main() {
 	op.On("--autoopen", "Open the PDF file (MacOS X and Linux only)", options)
 	op.On("--data NAME", "Name of the XML data file. Defaults to 'data.xml'", options)
 	op.On("--dummy", "Don't read a data file, use '<data />' as input", options)
+	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
 	op.On("--filter FILTER", "Run XPROC filter before publishing starts", options)
 	op.On("--grid", "Display background grid. Disable with --no-grid", layoutoptions)
 	op.On("--layout NAME", "Name of the layout file. Defaults to 'layout.xml'", options)
 	op.On("--jobname NAME", "The name of the resulting PDF file, default is 'publisher.pdf'", options)
+	op.On("--outputdir=DIR", "Copy PDF and protocol to this directory", options)
 	op.On("--runs NUM", "Number of publishing runs ", options)
 	op.On("--startpage NUM", "The first page number", layoutoptions)
 	op.On("--trace", "Show debug messages and some tracing PDF output", layoutoptions)
 	op.On("-v", "--var VAR=VALUE", "Set a variable for the publishing run", setVariable)
 	op.On("--version", "Show version information", versioninfo)
-	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
 	op.On("--xml", "Output as (pseudo-)XML (for list-fonts)", options)
 
 	op.Command("list-fonts", "List installed fonts (use together with --xml for copy/paste)")
@@ -375,7 +420,7 @@ func main() {
 		command = op.Extra[0]
 	}
 
-	os.Setenv("SD_EXTRA_DIRS", cfg.String("DEFAULT", "extra-dir") + ":" + strings.Join(extra_dir, ":"))
+	os.Setenv("SD_EXTRA_DIRS", cfg.String("DEFAULT", "extra-dir")+":"+strings.Join(extra_dir, ":"))
 
 	switch command {
 	case "run":

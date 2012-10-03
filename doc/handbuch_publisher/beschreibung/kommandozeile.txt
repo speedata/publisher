@@ -5,36 +5,43 @@ h1. Aufruf des Publishers über Kommandozeile
 
 pre. sp --help
 Usage: sp [parameter] command 
--h, --help              Show this help
-    --autoopen          Open the PDF file (MacOS X and Linux only)
-    --data=NAME         Name of the XML data file. Defaults to 'data.xml'
-    --filter=FILTER     Run XPROC filter before publishing starts
-    --grid              Display background grid. Disable with --no-grid
-    --layout=NAME       Name of the layout file. Defaults to 'layout.xml'
-    --jobname=NAME      The name of the resulting PDF file, default is
-                        'publisher.pdf'
-    --runs=NUM          Number of publishing runs
-    --startpage=NUM     The first page number
--v, --var=VAR=VALUE     Set a variable for the publishing run
-    --version           Show version information
--x, --extra-dir=DIR     Additional directory for file search
-    --xml               Output as (pseudo-)XML (for list-fonts)
-      
+-h, --help                   Show this help
+    --autoopen               Open the PDF file (MacOS X and Linux only)
+    --data =NAME             Name of the XML data file. Defaults to 'data.xml'
+    --dummy                  Don't read a data file, use '<data />' as input
+-x, --extra-dir =DIR         Additional directory for file search
+    --filter =FILTER         Run XPROC filter before publishing starts
+    --grid                   Display background grid. Disable with --no-grid
+    --layout =NAME           Name of the layout file. Defaults to 'layout.xml'
+    --jobname =NAME          The name of the resulting PDF file, default is
+                             'publisher.pdf'
+    --outputdir=DIR          Copy PDF and protocol to this directory
+    --runs =NUM              Number of publishing runs
+    --startpage =NUM         The first page number
+    --trace                  Show debug messages and some tracing PDF output
+-v, --var =VAR=VALUE         Set a variable for the publishing run
+    --version                Show version information
+    --xml                    Output as (pseudo-)XML (for list-fonts)
+
 Commands
-      list-fonts        List installed fonts (use together with --xml for
-                        copy/paste)
-      doc               Open documentation
-      run               Start publishing (default)
+      list-fonts             List installed fonts (use together with --xml
+                             for copy/paste)
+      doc                    Open documentation
+      watch                  Start watchdog / hotfolder
+      run                    Start publishing (default)
 
 
 h2. Erklärung der Kommandozeilenparameter
 
 - @--autoopen@:= Öffnet die PDF-Datei nach dem Publisher-Durchlauf. Kann auch in der "Konfigurationsdatei":konfiguration eingestellt werden.
 - @--data=NAME@:= Gibt den Namen der XML-Daten an. Voreinstellung ist @daten.xml@. Ebenfalls "konfigurierbar":konfiguration.
+- @--dummy@ := Führt nur das Regelwerk aus. Als Dateninhalt wird @<data />@ angenommen. Dient zum schnellen Testen von Regelwerken
+- @--extra-dir=DIR@ := Erweitert den Suchpfad
 - @--filter=FILTER@ := Führt die angegebene XPROC-Datei aus.
 - @--grid@ := Zeichnet das Raster. Mit @--no-grid@ wird es ausgeschaltet.  Konfigurierbar auch im "Layout":e_optionen.
 - @--layout=NAME@:= Gibt den Namen des Layoutregelwerks an. Voreinstellung ist @layout.xml@. Ebenfalls "konfigurierbar":konfiguration.
 - @--jobname=NAME@ := Bestimmt den Ausgabenamen. Voreinstellung ist @publisher.pdf@.
+- @--outputdir=VERZEICHNIS@ := Die resultierende PDF-Datei und Protokolldatei wird in das angegebene Verzeichnis kopiert. Das Verzeichnis wird erstellt, falls es noch nicht existiert.
 - @--runs = NUM@ := Überschreibt die Anzahl der Durchläufe des Publishers.
 - @--startpage = NUM@ := Die Seitennummer der ersten Seite.
 - @-v@, @--var=value@ := Übergibt zusätzliche Variablen an den Publisher-Lauf. Diese können wie üblich mit @auswahl="$variable"@ benutzt werden- @-x@, @--extra-dir@ := Bindet zusätzliche Verzeichnisse in den Publisherlauf ein. In diesen Verzeichnissen werden alle Daten gesucht: Bilddaten, Regelwerke, Datendateien und Schriftdateien. Dieses Argument kann mehrfach angegeben werden und per "Konfigurationsdatei":konfiguration mit Werten vorbelegt werden.
