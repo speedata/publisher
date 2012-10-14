@@ -70,6 +70,10 @@ local function datei_vorhanden(dataxml, ... )
   return false
 end
 
+function format_number( dataxml,arg1,arg2 )
+  return string.format(arg2,arg1)
+end
+
 
 local function gerade(dataxml, arg )
   return math.fmod(arg,2) == 0
@@ -117,6 +121,7 @@ return {
     anzahl_zeilen      = anzahl_zeilen,
     bildbreite         = bildbreite,
     datei_vorhanden    = datei_vorhanden,
+    formatiere_zahl    = format_number,
     gerade             = gerade,
     gruppenbreite      = gruppenbreite,
     ["gruppenhöhe"]    = gruppenhoehe,
@@ -131,6 +136,7 @@ return {
     file_exists        = datei_vorhanden,
     groupheight        = gruppenhoehe,
     groupwidth         = gruppenbreite,
+    format_number      = format_number,
     imagewidth         = bildbreite,
     number_of_columns  = anzahl_spalten,
     number_of_datasets = anzahl_datensaetze,

@@ -1,35 +1,35 @@
---[[---------------
-LuaBit v0.4
--------------------
-a bitwise operation lib for lua.
+--- LuaBit v0.4
+--- -----------
 
-http://luaforge.net/projects/bit/
+--- a bitwise operation lib for lua.
+---
+--- http://luaforge.net/projects/bit/
+---
+--- How to use:
+--- -------------------
 
-How to use:
--------------------
- bit.bnot(n) -- bitwise not (~n)
- bit.band(m, n) -- bitwise and (m & n)
- bit.bor(m, n) -- bitwise or (m | n)
- bit.bxor(m, n) -- bitwise xor (m ^ n)
- bit.brshift(n, bits) -- right shift (n >> bits)
- bit.blshift(n, bits) -- left shift (n << bits)
- bit.blogic_rshift(n, bits) -- logic right shift(zero fill >>>)
- 
-Please note that bit.brshift and bit.blshift only support number within
-32 bits.
+---  bit.bnot(n) -- bitwise not (~n)
+---  bit.band(m, n) -- bitwise and (m & n)
+---  bit.bor(m, n) -- bitwise or (m | n)
+---  bit.bxor(m, n) -- bitwise xor (m ^ n)
+---  bit.brshift(n, bits) -- right shift (n >> bits)
+---  bit.blshift(n, bits) -- left shift (n << bits)
+---  bit.blogic_rshift(n, bits) -- logic right shift(zero fill >>>)
 
-2 utility functions are provided too:
- bit.tobits(n) -- convert n into a bit table(which is a 1/0 sequence)
-               -- high bits first
- bit.tonumb(bit_tbl) -- convert a bit table into a number 
--------------------
+--- Please note that bit.brshift and bit.blshift only support number within
+--- 32 bits.
+---
+--- 2 utility functions are provided too:
+---  bit.tobits(n) -- convert n into a bit table(which is a 1/0 sequence)
+---                -- high bits first
+---  bit.tonumb(bit_tbl) -- convert a bit table into a number
+--- -------------------
+---
+--- Under the MIT license.
+---
+--- copyright(c) 2006~2007 hanzhao (abrash_han@hotmail.com)
 
-Under the MIT license.
 
-copyright(c) 2006~2007 hanzhao (abrash_han@hotmail.com)
---]]---------------
-
-------------------------
 -- bit lib implementions
 local math,table=math,table
 module(...)
