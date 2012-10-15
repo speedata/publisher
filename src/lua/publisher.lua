@@ -764,7 +764,7 @@ end
 function dothingsbeforeoutput(  )
   local r = current_page.raster
   local str
-  finde_user_defined_whatsits(publisher.global_pagebox)
+  find_user_defined_whatsits(publisher.global_pagebox)
   local firstbox
 
   -- White background on page. Todo: Make color customizable and background optional.
@@ -919,12 +919,12 @@ function parse_html( elt )
 end
 
 --- Look for `user_defined` at end of page (shipout) and runs actions encoded in them.
-function finde_user_defined_whatsits( head )
+function find_user_defined_whatsits( head )
   local typ,fun
   while head do
     typ = node.type(head.id)
     if typ == "vlist" or typ=="hlist" then
-      finde_user_defined_whatsits(head.list) 
+      find_user_defined_whatsits(head.list)
     elseif typ == "whatsit" then
       if head.subtype == 44 then
         -- action
