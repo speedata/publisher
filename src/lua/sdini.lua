@@ -6,6 +6,10 @@
 --  See file COPYING in the root directory for license info.
 --
 
+-- BUG on windows: http://lua-users.org/lists/lua-l/2012-08/msg00052.html
+-- ! in LUA_PATH gets replaced by $PWD
+package.path=os.getenv("LUA_PATH")
+
 texio.write_nl("Loading file sdini.lua ...")
 
 callback.register('start_run',function() return true end)
