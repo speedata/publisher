@@ -359,7 +359,7 @@ func runPublisher() {
 		log.Fatal(err)
 	}
 	for i := 1; i <= runs; i++ {
-		cmdline := fmt.Sprintf("%s --interaction nonstopmode --jobname=%s --ini --lua=%s publisher.tex %q %q %q", exec_name, jobname, inifile, layoutname, dataname, layoutoptions_cmdline)
+		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, exec_name, jobname, inifile, layoutname, dataname, layoutoptions_cmdline)
 		run(cmdline)
 	}
 
@@ -459,7 +459,7 @@ func main() {
 		if getOption("xml") == "true" {
 			xml = "xml"
 		}
-		cmdline := fmt.Sprintf("%s/bin/sdluatex --luaonly %s/lua/sdscripts.lua %s list-fonts %s", installdir, srcdir, inifile, xml)
+		cmdline := fmt.Sprintf(`"%s/bin/sdluatex" --luaonly %s/lua/sdscripts.lua %s list-fonts %s`, installdir, srcdir, inifile, xml)
 		run(cmdline)
 	case "watch":
 		log.Fatal("not implemented yet.")
