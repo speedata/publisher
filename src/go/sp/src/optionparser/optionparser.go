@@ -35,12 +35,11 @@ type argumentDescription struct {
 }
 
 type allowedOptions struct {
-	counter          int
 	optional         bool
-	optional_set     bool
 	param            string
 	short            string
 	long             string
+	bool_parameter   bool
 	function         func(string)
 	function_no_args func()
 	boolvalue        *bool
@@ -161,7 +160,7 @@ func format_and_output(start int, stop int, dash_short string, short string, com
 }
 
 func set(obj *allowedOptions, has_no_prefix bool, param string) {
-	// fmt.Printf("set: %+v",obj)
+	// fmt.Printf("set: %+v\n", obj)
 	if obj.function != nil {
 		obj.function(param)
 	}
@@ -191,7 +190,12 @@ func set(obj *allowedOptions, has_no_prefix bool, param string) {
 		obj.function_no_args()
 	}
 	if obj.boolvalue != nil {
-		*obj.boolvalue = true
+		if has_no_prefix {
+			*obj.boolvalue = false
+		} else {
+			*obj.boolvalue = true
+		}
+
 	}
 }
 
@@ -223,6 +227,9 @@ func (op *optionParser) On(a ...interface{}) {
 				}
 				if ret.param != "" {
 					option.param = ret.param
+				}
+				if ret.negate {
+					option.bool_parameter = true
 				}
 			} else {
 				// a string, probably the help text
@@ -312,21 +319,24 @@ func (op *optionParser) Help() {
 	for _, o := range op.options {
 		short := o.short
 		long := o.long
+		if o.bool_parameter {
+			long = "[no-]" + o.long
+		}
 		if o.long != "" {
 			if o.param != "" {
 				if o.optional {
-					long = fmt.Sprintf("%s [=%s]", o.long, o.param)
+					long = fmt.Sprintf("%s[=%s]", o.long, o.param)
 				} else {
-					long = fmt.Sprintf("%s =%s", o.long, o.param)
+					long = fmt.Sprintf("%s=%s", o.long, o.param)
 				}
 			}
 		} else {
 			// short
 			if o.param != "" {
 				if o.optional {
-					long = fmt.Sprintf("%s [=%s]", o.long, o.param)
+					long = fmt.Sprintf("%s[=%s]", o.long, o.param)
 				} else {
-					long = fmt.Sprintf("%s =%s", o.long, o.param)
+					long = fmt.Sprintf("%s=%s", o.long, o.param)
 				}
 			}
 		}
@@ -362,6 +372,6 @@ func NewOptionParser() *optionParser {
 	a.short = map[string]*allowedOptions{}
 	a.long = map[string]*allowedOptions{}
 	a.commands = make([]command, 0, 10)
-	a.On("-h", "--help", "Show this help Show this help Show this help Show this help Show this", func() { a.Help(); os.Exit(0) })
+	a.On("-h", "--help", "Show this help", func() { a.Help(); os.Exit(0) })
 	return &a
 }

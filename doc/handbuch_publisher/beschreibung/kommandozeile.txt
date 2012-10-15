@@ -13,6 +13,7 @@ Usage: sp [parameter] command
     --filter =FILTER         Run XPROC filter before publishing starts
     --grid                   Display background grid. Disable with --no-grid
     --layout =NAME           Name of the layout file. Defaults to 'layout.xml'
+    --[no-]local             Add local directory to the search path
     --jobname =NAME          The name of the resulting PDF file, default is
                              'publisher.pdf'
     --outputdir=DIR          Copy PDF and protocol to this directory
@@ -41,11 +42,13 @@ h2. Erklärung der Kommandozeilenparameter
 - @--filter=FILTER@ := Führt die angegebene XPROC-Datei aus.
 - @--grid@ := Zeichnet das Raster. Mit @--no-grid@ wird es ausgeschaltet.  Konfigurierbar auch im "Layout":e_optionen.
 - @--layout=NAME@:= Gibt den Namen des Layoutregelwerks an. Voreinstellung ist @layout.xml@. Ebenfalls "konfigurierbar":konfiguration.
+- @--[no-]local@ := Das aktuelle Verzeichnis wird (nicht) rekursiv dem Suchpfad hinzugefügt. Voreingestellt ist, dass das aktuelle Verzeichnis und seine Unterverzeichnisse beachtet werden.
 - @--jobname=NAME@ := Bestimmt den Ausgabenamen. Voreinstellung ist @publisher.pdf@.
 - @--outputdir=VERZEICHNIS@ := Die resultierende PDF-Datei und Protokolldatei wird in das angegebene Verzeichnis kopiert. Das Verzeichnis wird erstellt, falls es noch nicht existiert.
 - @--runs = NUM@ := Überschreibt die Anzahl der Durchläufe des Publishers.
 - @--startpage = NUM@ := Die Seitennummer der ersten Seite.
 - @-v@, @--var=value@ := Übergibt zusätzliche Variablen an den Publisher-Lauf. Diese können wie üblich mit @auswahl="$variable"@ benutzt werden- @-x@, @--extra-dir@ := Bindet zusätzliche Verzeichnisse in den Publisherlauf ein. In diesen Verzeichnissen werden alle Daten gesucht: Bilddaten, Regelwerke, Datendateien und Schriftdateien. Dieses Argument kann mehrfach angegeben werden und per "Konfigurationsdatei":konfiguration mit Werten vorbelegt werden.
+- @--verbose@ := Gibt mehr Informationen aus, also notwendig.
 - @--xml@:= Die Ausgaben mancher Kommandos werden als (Pseudo-)XML dargestellt, um sie in das Layoutregelwerk zu übernehmen.
 
 

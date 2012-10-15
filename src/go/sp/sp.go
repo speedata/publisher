@@ -36,6 +36,7 @@ var (
 	systemcfg             string
 	pwd                   string
 	exe_suffix            string
+	add_local_path        bool // Add pwd recursively to extra-dir
 	extra_dir             []string
 	starttime             time.Time
 	cfg                   *configurator.ConfigData
@@ -87,7 +88,6 @@ func init() {
 		version = "local"
 	}
 
-	extra_dir = append(extra_dir, pwd)
 	// log.Print("Built for platform: ",dest)
 	switch os := runtime.GOOS; os {
 	case "darwin":
@@ -100,6 +100,7 @@ func init() {
 		defaults["opencommand"] = "cmd /C start"
 		exe_suffix = ".exe"
 	}
+	add_local_path = true
 
 	switch dest {
 	case "linux-usr":
@@ -367,12 +368,12 @@ func runPublisher() {
 	if p != "" {
 		pdffilename := jobname + ".pdf"
 		protocolfilename := jobname + ".protocol"
-		err = copy_file(pdffilename,filepath.Join(p,pdffilename))
+		err = copy_file(pdffilename, filepath.Join(p, pdffilename))
 		if err != nil {
 			log.Println(err)
 			return
 		}
-		err = copy_file(protocolfilename,filepath.Join(p,protocolfilename))
+		err = copy_file(protocolfilename, filepath.Join(p, protocolfilename))
 		if err != nil {
 			log.Println(err)
 			return
@@ -388,6 +389,7 @@ func main() {
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
 	op.On("--filter FILTER", "Run XPROC filter before publishing starts", options)
 	op.On("--grid", "Display background grid. Disable with --no-grid", layoutoptions)
+	op.On("--no-local", "Add local directory to the search path. Default is true", &add_local_path)
 	op.On("--layout NAME", "Name of the layout file. Defaults to 'layout.xml'", options)
 	op.On("--jobname NAME", "The name of the resulting PDF file, default is 'publisher.pdf'", options)
 	op.On("--outputdir=DIR", "Copy PDF and protocol to this directory", options)
@@ -395,7 +397,7 @@ func main() {
 	op.On("--startpage NUM", "The first page number", layoutoptions)
 	op.On("--trace", "Show debug messages and some tracing PDF output", layoutoptions)
 	op.On("-v", "--var VAR=VALUE", "Set a variable for the publishing run", setVariable)
-	op.On("--verbose","Print a bit of debugging output",options)
+	op.On("--verbose", "Print a bit of debugging output", options)
 	op.On("--version", "Show version information", versioninfo)
 	op.On("--xml", "Output as (pseudo-)XML (for list-fonts)", options)
 
@@ -421,13 +423,17 @@ func main() {
 		command = op.Extra[0]
 	}
 
+	if add_local_path {
+		extra_dir = append(extra_dir, pwd)
+	}
+
 	ed := cfg.String("DEFAULT", "extra-dir")
 	if ed != "" {
 		extra_dir = append(extra_dir, ed)
 	}
 	os.Setenv("SD_EXTRA_DIRS", strings.Join(extra_dir, string(filepath.ListSeparator)))
 	if getOption("verbose") != "" {
-		fmt.Println("SD_EXTRA_DIRS:",os.Getenv("SD_EXTRA_DIRS"))
+		fmt.Println("SD_EXTRA_DIRS:", os.Getenv("SD_EXTRA_DIRS"))
 	}
 
 	switch command {

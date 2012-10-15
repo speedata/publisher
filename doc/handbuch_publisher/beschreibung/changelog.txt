@@ -5,6 +5,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* @sp@: @--[no-]local@ um das lokale Verzeichnis nicht zu beachten
 * @sp@: @--verbose@ erzeugt zusätzliche Informationen
 * Neue XPath-Funktion "sd:formatiere-zahl()":xpath
 * @sp@: @--outputdir=VERZEICHNIS@ kopiert das resultierende PDF und die Protokolldatei in das angegebene Verzeichnis
