@@ -64,9 +64,14 @@ local function add_dir( dir )
 end
 
 add_dir(basedir)
+if os.type == "windows" then
+  path_separator = ";"
+else
+  path_separator = ":"
+end
 
 if extra_dirs then
-  for _,d in ipairs(string.explode(extra_dirs,":")) do
+  for _,d in ipairs(string.explode(extra_dirs,path_separator)) do
     if lfs.attributes(d,"mode")=="directory" then
       add_dir(d)
     end

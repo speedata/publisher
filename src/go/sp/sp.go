@@ -421,7 +421,14 @@ func main() {
 		command = op.Extra[0]
 	}
 
-	os.Setenv("SD_EXTRA_DIRS", cfg.String("DEFAULT", "extra-dir")+":"+strings.Join(extra_dir, ":"))
+	ed := cfg.String("DEFAULT", "extra-dir")
+	if ed != "" {
+		extra_dir = append(extra_dir, ed)
+	}
+	os.Setenv("SD_EXTRA_DIRS", strings.Join(extra_dir, string(filepath.ListSeparator)))
+	if getOption("verbose") != "" {
+		fmt.Println("SD_EXTRA_DIRS:",os.Getenv("SD_EXTRA_DIRS"))
+	}
 
 	switch command {
 	case "run":
