@@ -427,8 +427,7 @@ func main() {
 		extra_dir = append(extra_dir, pwd)
 	}
 
-	ed := cfg.String("DEFAULT", "extra-dir")
-	if ed != "" {
+	if ed := cfg.String("DEFAULT", "extra-dir"); ed != "" {
 		extra_dir = append(extra_dir, ed)
 	}
 	os.Setenv("SD_EXTRA_DIRS", strings.Join(extra_dir, string(filepath.ListSeparator)))
