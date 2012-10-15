@@ -20,6 +20,7 @@ Usage: sp [parameter] command
     --startpage =NUM         The first page number
     --trace                  Show debug messages and some tracing PDF output
 -v, --var =VAR=VALUE         Set a variable for the publishing run
+    --verbose                Print a bit of debugging output
     --version                Show version information
     --xml                    Output as (pseudo-)XML (for list-fonts)
   

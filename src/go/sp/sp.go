@@ -395,6 +395,7 @@ func main() {
 	op.On("--startpage NUM", "The first page number", layoutoptions)
 	op.On("--trace", "Show debug messages and some tracing PDF output", layoutoptions)
 	op.On("-v", "--var VAR=VALUE", "Set a variable for the publishing run", setVariable)
+	op.On("--verbose","Print a bit of debugging output",options)
 	op.On("--version", "Show version information", versioninfo)
 	op.On("--xml", "Output as (pseudo-)XML (for list-fonts)", options)
 
