@@ -941,6 +941,14 @@ function setze_tabelle(self)
   local accumulated_height = 0
   local extra_height = 0
   local break_above
+  --- splits is a table which includes the number of the rows each page has in a multi-page table
+  ---
+  ---     splits = {
+  ---       [1] = "0"
+  ---       [2] = "26"
+  ---       [3] = "44"
+  ---     }
+
   local splits = {0}
   -- We need to take into acccount:
   -- * the head
@@ -1000,6 +1008,7 @@ function setze_tabelle(self)
       thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep + space_above})
       thissplittable[#thissplittable + 1] = rows[i]
     end
+    thissplittable[#thissplittable + 1] = node.copy_list(tablefoot[1])
   end
 
   -- now connect the entries in the split_tables
