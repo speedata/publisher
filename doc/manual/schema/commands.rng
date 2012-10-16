@@ -85,6 +85,8 @@
               <attribute name="name" />
               <attribute name="type">
                 <choice>
+                  <value>all_last</value>
+                  <value>all_first</value>
                   <value>xpath</value>
                   <value>number</value>
                   <value>numberorlength</value>

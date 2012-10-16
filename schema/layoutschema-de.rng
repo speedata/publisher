@@ -1059,6 +1059,17 @@
             <element name="Tabellenkopf">
               <a:documentation docid="table/head">Wird auf jeder Seite wiederholt.</a:documentation>
               <ref name="a_id"/>
+              <optional>
+                <attribute name="seite">
+                  <a:documentation docid="table/head/page">Seitenauswahl für den Tabellenkopf</a:documentation>
+                  <choice>
+                    <value>alle</value>
+                    <a:documentation docid="table/head/page/all">Dieser Tabellenkopf erscheint auf allen Seiten (default)</a:documentation>
+                    <value>erste</value>
+                    <a:documentation docid="table/head/page/first">Dieser Tabellenkopf erscheint auf der ersten Seite</a:documentation>
+                  </choice>
+                </attribute>
+              </optional>
               <oneOrMore>
                 <interleave>
                   <optional><ref name="e_Tablerule"/></optional>
@@ -1072,6 +1083,17 @@
             <element name="Tabellenfuß">
               <a:documentation docid="table/foot">Wird auf jeder Seite wiederholt.</a:documentation>
               <ref name="a_id"/>
+              <optional>
+                <attribute name="seite">
+                  <a:documentation docid="table/foot/page">Seitenauswahl für den Tabellenfuß</a:documentation>
+                  <choice>
+                    <value>alle</value>
+                    <a:documentation docid="table/foot/page/all">Dieser Tabellenfuß erscheint auf allen Seiten (default)</a:documentation>
+                    <value>letzte</value>
+                    <a:documentation docid="table/foot/page/last">Dieser Tabellenfuß erscheint auf der letzten Seite</a:documentation>
+                  </choice>
+                </attribute>
+              </optional>
               <oneOrMore>
                 <interleave>
                   <optional><ref name="e_Tablerule"/></optional>
@@ -1086,6 +1108,7 @@
           <optional><ref name="e_CopyOf"/></optional>
           <optional><ref name="e_Tablerule"/></optional>
           <optional><ref name="e_Message"/></optional>
+          <optional><ref name="e_Switch"/></optional>
         </interleave>
       </oneOrMore>
     </element>

@@ -2245,6 +2245,14 @@
     <parentelements>
       <cmd name="Table" />
     </parentelements>
+    <attribute name="page" type="all_last" optional="yes">
+      <description xml:lang="en">
+        <para>This command is only valid for the given pages. The default is to place the foot on all pages.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Tabellenfuß wird nur auf den angegebenen Seiten platziert. Voreinstellung ist, dass er auf jeder Seite erscheint.</para>
+      </description>
+    </attribute>
     <remark xml:lang="de">
       <para>Der Inhalt von Tabellenfuß wird auf jeder Seite einer automatisch umbrochenen Tabelle wiederholt.</para>
     </remark>

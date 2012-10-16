@@ -5,9 +5,14 @@ h1. Elementname: @Tabellenkopf@
 
 h2. Beschreibung
 
-Erlaubte Attribute: -
+Erlaubte Attribute: @seite@
 Kindelemente: "Tlinie":e_tlinie, "Tr":e_tr
 Elternelemente: "Tabelle":e_tabelle
+
+h3. Attribute
+
+- @seite@ ("erste","alle", optional) := Seite, auf der der Tabellenkopf erscheinen soll. Voreinstellung ist "alle".
+
 
 h3. Bemerkung
 

@@ -35,6 +35,8 @@
   <xsl:variable name="translations" select="document('../../../schema/translations.xml')" />
   <xsl:variable name="values">
     <value type="xpath" de="XPath-Ausdruck" en="XPath expression"/>
+    <value type="all_last" de="alle / letzte" en="all / last"/>
+    <value type="all_first" de="alle / erste" en="all / first" />
     <value type="languages" de="Sprache" en="language"/>
     <value type="number" de="Zahl" en="number"/>
     <value type="yesno" de="ja/nein" en="yes/no"/>

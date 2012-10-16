@@ -5,9 +5,13 @@ h1. Elementname: @Tabellenfuß@
 
 h2. Beschreibung
 
-Erlaubte Attribute: -
+Erlaubte Attribute: @seite@
 Kindelemente: "Tlinie":e_tlinie, "Tr":e_tr
 Elternelemente: "Tabelle":e_tabelle
+
+h3. Attribute
+
+- @seite@ ("letzte","alle", optional) := Seite, auf der der Tabellenfuß erscheinen soll. Voreinstellung ist "alle".
 
 h3. Bemerkung
 

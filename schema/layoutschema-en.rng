@@ -1043,6 +1043,17 @@
             <element name="Tablehead">
               <a:documentation docid="table/head">Table head that gets repeated on every page.</a:documentation>
               <ref name="a_id"/>
+              <optional>
+                <attribute name="page">
+                  <a:documentation docid="table/head/page">The page selector for the table head.</a:documentation>
+                  <choice>
+                    <value>all</value>
+                    <a:documentation docid="table/head/page/all">This table head appears on all pages (default).</a:documentation>
+                    <value>first</value>
+                    <a:documentation docid="table/head/page/first">This table head appears on the first page.</a:documentation>
+                  </choice>
+                </attribute>
+              </optional>
               <oneOrMore>
                 <interleave>
                   <optional><ref name="e_Tablerule"/></optional>
@@ -1056,6 +1067,17 @@
             <element name="Tablefoot">
               <a:documentation docid="table/foot">Table foot that gets repeated on every page.</a:documentation>
               <ref name="a_id"/>
+              <optional>
+                <attribute name="page">
+                  <a:documentation docid="table/foot/page">The page selector for the table foot.</a:documentation>
+                  <choice>
+                    <value>all</value>
+                    <a:documentation docid="table/foot/page/all">This table foot appears on all pages (default).</a:documentation>
+                    <value>last</value>
+                    <a:documentation docid="table/foot/page/last">This table foot appears on the last page.</a:documentation>
+                  </choice>
+                </attribute>
+              </optional>
               <oneOrMore>
                 <interleave>
                   <optional><ref name="e_Tablerule"/></optional>

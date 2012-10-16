@@ -826,7 +826,9 @@ end
 function setze_tabelle(self)
   trace("tabular: setze Tabelle")
   local current_row
+  local tablehead_first = {}
   local tablehead = {}
+  local tablefoot_last = {}
   local tablefoot = {}
   local rows = {}
   local break_above = true
@@ -846,28 +848,40 @@ function setze_tabelle(self)
       rows[#rows + 1] = node.hpack(tmp)
 
     elseif eltname == "Tablehead" then
+      local foo
+      if tr_contents.page == "first" then
+        foo = tablehead_first
+      else
+        foo = tablehead
+      end
       for _,zeile in ipairs(tr_contents) do
         zeile_inhalt = publisher.element_contents(zeile)
         zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
           current_row = current_row + 1
-          tablehead[#tablehead + 1] = self:setze_zeile(zeile_inhalt,current_row)
+          foo[#foo + 1] = self:setze_zeile(zeile_inhalt,current_row)
         elseif zeile_eltname == "Tablerule" then
           tmp = publisher.colorbar(self.tablewidth_target,tex.sp(zeile_inhalt.rulewidth or "0.25pt"),0,zeile_inhalt.farbe)
-          tablehead[#tablehead + 1] = node.hpack(tmp)
+          foo[#foo + 1] = node.hpack(tmp)
         end
       end
 
     elseif eltname == "Tablefoot" then
+      local foo
+      if tr_contents.page == "last" then
+        foo = tablefoot_last
+      else
+        foo = tablefoot
+      end
       for _,zeile in ipairs(tr_contents) do
         zeile_inhalt = publisher.element_contents(zeile)
         zeile_eltname = publisher.elementname(zeile,true)
         if zeile_eltname == "Tr" then
           current_row = current_row + 1
-          tablefoot[#tablefoot + 1] = self:setze_zeile(zeile_inhalt,current_row)
+          foo[#foo + 1] = self:setze_zeile(zeile_inhalt,current_row)
         elseif zeile_eltname == "Tablerule" then
           tmp = publisher.colorbar(self.tablewidth_target,tex.sp(zeile_inhalt.rulewidth or "0.25pt"),0,zeile_inhalt.farbe)
-          tablefoot[#tablefoot + 1] = node.hpack(tmp)
+          foo[#foo + 1] = node.hpack(tmp)
         end
       end
 
@@ -896,7 +910,14 @@ function setze_tabelle(self)
 
   -- We now have tablehead and tablefoot arrays with the contents
   -- Let's add the glue inbetween
-  local ht_header, ht_footer = 0, 0
+  local ht_header, ht_first_header, ht_footer, ht_footer_last = 0, 0, 0, 0
+
+  for z = 1,#tablehead_first - 1 do
+    ht_first_header = ht_first_header + tablehead_first[z].height  -- Tr oder Tablerule
+    _,tmp = publisher.add_glue(tablehead_first[z],"tail",{ width = self.rowsep })
+    tmp.next = tablehead_first[z+1]
+    tablehead_first[z+1].prev = tmp
+  end
 
   for z = 1,#tablehead - 1 do
     ht_header = ht_header + tablehead[z].height  -- Tr oder Tablerule
@@ -904,6 +925,12 @@ function setze_tabelle(self)
     tmp.next = tablehead[z+1]
     tablehead[z+1].prev = tmp
   end
+
+  ht_first_header = ht_first_header + self.rowsep * ( #tablehead_first - 1 )
+  if #tablehead_first > 0 then
+    ht_first_header = ht_first_header + tablehead_first[#tablehead_first].height
+  end
+
   ht_header = ht_header + self.rowsep * ( #tablehead - 1 )
   if #tablehead > 0 then
     ht_header = ht_header + tablehead[#tablehead].height
@@ -916,20 +943,42 @@ function setze_tabelle(self)
     tmp.next = tablefoot[z+1]
     tablefoot[z+1].prev = tmp
   end
+
+  for z = 1,#tablefoot_last - 1 do
+    ht_footer_last = ht_footer_last + tablefoot_last[z].height  -- Tr oder Tablerule
+    -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
+    _,tmp = publisher.add_glue(tablefoot_last[z],"tail",{ width = self.rowsep })
+    tmp.next = tablefoot_last[z+1]
+    tablefoot_last[z+1].prev = tmp
+  end
+
   ht_footer = ht_footer + ( #tablefoot - 1 ) * self.rowsep
   if #tablefoot > 0 then
     ht_footer = ht_footer + tablefoot[#tablefoot].height
   end
 
+  ht_footer_last = ht_footer_last + ( #tablefoot_last - 1 ) * self.rowsep
+  if #tablefoot_last > 0 then
+    ht_footer_last = ht_footer_last + tablefoot_last[#tablefoot_last].height
+  end
+
   if not tablehead[1] then
     tablehead[1] = node.new("hlist") -- dummy-Kopfzeile
+  end
+  if not tablehead_first[1] then
+    tablehead_first[1] = node.copy_list(tablehead[1])
   end
   if not tablefoot[1] then
     tablefoot[1] = node.new("hlist") -- dummy-Fußzeile
   end
+  if not tablefoot_last[1] then
+    tablefoot_last[1] = node.copy_list(tablefoot[1])
+  end
 
   -- The maximum heights are saved here for each table. Currently all tables must have the same height (see the metatable)
   local pagegoals = setmetatable({}, { __index = function() return self.optionen.ht_aktuell - ht_header - ht_footer end})
+  pagegoals[1] = self.optionen.ht_aktuell - ht_first_header - ht_footer
+  pagegoals[-1] = self.optionen.ht_aktuell - ht_header - ht_footer_last
 
   -- When we split the current table we return an array:
   local final_split_tables = {}
@@ -960,8 +1009,9 @@ function setze_tabelle(self)
 
   local last_possible_split_is_after_line = 0
 
-  pagegoal = pagegoals[1]
+  local current_page = 1
   for i=1,#rows do
+    pagegoal = pagegoals[current_page]
     ht_row = rows[i].height + rows[i].depth
     break_above = node.has_attribute(rows[i],publisher.att_break_above) or -1
     space_above = node.has_attribute(rows[i],publisher.att_space_amount) or 0
@@ -980,6 +1030,7 @@ function setze_tabelle(self)
       splits[#splits + 1] = last_possible_split_is_after_line
       accumulated_height = extra_height
       extra_height = self.rowsep
+      current_page = current_page + 1
     else
       -- if it is not the first row in a table,
       -- add space_above
@@ -997,7 +1048,13 @@ function setze_tabelle(self)
 
     thissplittable = {}
     final_split_tables[#final_split_tables + 1] = thissplittable
-    thissplittable[#thissplittable + 1] = node.copy(tablehead[1])
+    if s == 2 then
+      -- first page
+      thissplittable[#thissplittable + 1] = tablehead_first[1]
+    else
+      -- page > 1
+      thissplittable[#thissplittable + 1] = node.copy(tablehead[1])
+    end
 
     for i = first_row_in_new_table ,splits[s]  do
       if i > first_row_in_new_table then
@@ -1008,7 +1065,11 @@ function setze_tabelle(self)
       thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep + space_above})
       thissplittable[#thissplittable + 1] = rows[i]
     end
-    thissplittable[#thissplittable + 1] = node.copy_list(tablefoot[1])
+    if s < #splits then
+      thissplittable[#thissplittable + 1] = node.copy_list(tablefoot[1])
+    else
+      thissplittable[#thissplittable + 1] = node.copy_list(tablefoot_last[1])
+    end
   end
 
   -- now connect the entries in the split_tables
