@@ -1403,18 +1403,17 @@ end
 function commands.switch( layoutxml,dataxml )
   local case_matched = false
   local otherwise,ret,elementname
-  for i,v in ipairs(layoutxml) do
-    elementname = publisher.translate_element(v[".__name"])
-    if type(v)=="table" and elementname=="Case" and case_matched ~= true then
-      local fall = v
-      assert(fall.bedingung)
-      if xpath.parse(dataxml,fall.bedingung) then
+  for _,case_or_otherwise_element in ipairs(layoutxml) do
+    elementname = publisher.translate_element(case_or_otherwise_element[".__name"])
+    if type(case_or_otherwise_element)=="table" and elementname=="Case" and case_matched ~= true then
+      local test = publisher.read_attribute(case_or_otherwise_element,dataxml,"test","string")
+      if xpath.parse(dataxml,test) then
         case_matched = true
-        ret = publisher.dispatch(fall,dataxml)
+        ret = publisher.dispatch(case_or_otherwise_element,dataxml)
       end
-    elseif type(v)=="table" and elementname=="Otherwise" then
-      otherwise = v
-    end -- fall/otherwise
+    elseif type(case_or_otherwise_element)=="table" and elementname=="Otherwise" then
+      otherwise = case_or_otherwise_element
+    end -- case/otherwise
   end
   if otherwise and case_matched==false then
     ret = publisher.dispatch(otherwise,dataxml)
