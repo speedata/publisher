@@ -821,6 +821,47 @@ function setze_zeile(self, tr_contents, current_row )
   return zeile
 end
 
+local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current_row)
+  local current_tablehead_type
+  if tr_contents.page == "first" then
+    current_tablehead_type = tablehead_first
+  else
+    current_tablehead_type = tablehead
+  end
+  for _,row in ipairs(tr_contents) do
+    row_contents = publisher.element_contents(row)
+    row_elementname = publisher.elementname(row,true)
+    if row_elementname == "Tr" then
+      current_row = current_row + 1
+      current_tablehead_type[#current_tablehead_type + 1] = self:setze_zeile(row_contents,current_row)
+    elseif row_elementname == "Tablerule" then
+      tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.farbe)
+      current_tablehead_type[#current_tablehead_type + 1] = node.hpack(tmp)
+    end
+  end
+  return current_row
+end
+
+local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_row)
+  local current_tablefoot_type
+  if tr_contents.page == "last" then
+    current_tablefoot_type = tablefoot_last
+  else
+    current_tablefoot_type = tablefoot
+  end
+  for _,row in ipairs(tr_contents) do
+    row_contents = publisher.element_contents(row)
+    row_elementname = publisher.elementname(row,true)
+    if row_elementname == "Tr" then
+      current_row = current_row + 1
+      current_tablefoot_type[#current_tablefoot_type + 1] = self:setze_zeile(row_contents,current_row)
+    elseif row_elementname == "Tablerule" then
+      tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.farbe)
+      current_tablefoot_type[#current_tablefoot_type + 1] = node.hpack(tmp)
+    end
+  end
+  return current_row
+end
 --------------------------------------------------------------------------
 
 function setze_tabelle(self)
@@ -848,42 +889,10 @@ function setze_tabelle(self)
       rows[#rows + 1] = node.hpack(tmp)
 
     elseif eltname == "Tablehead" then
-      local foo
-      if tr_contents.page == "first" then
-        foo = tablehead_first
-      else
-        foo = tablehead
-      end
-      for _,zeile in ipairs(tr_contents) do
-        zeile_inhalt = publisher.element_contents(zeile)
-        zeile_eltname = publisher.elementname(zeile,true)
-        if zeile_eltname == "Tr" then
-          current_row = current_row + 1
-          foo[#foo + 1] = self:setze_zeile(zeile_inhalt,current_row)
-        elseif zeile_eltname == "Tablerule" then
-          tmp = publisher.colorbar(self.tablewidth_target,tex.sp(zeile_inhalt.rulewidth or "0.25pt"),0,zeile_inhalt.farbe)
-          foo[#foo + 1] = node.hpack(tmp)
-        end
-      end
+      current_row = make_tablehead(self,tr_contents,tablehead_first,tablehead,current_row)
 
     elseif eltname == "Tablefoot" then
-      local foo
-      if tr_contents.page == "last" then
-        foo = tablefoot_last
-      else
-        foo = tablefoot
-      end
-      for _,zeile in ipairs(tr_contents) do
-        zeile_inhalt = publisher.element_contents(zeile)
-        zeile_eltname = publisher.elementname(zeile,true)
-        if zeile_eltname == "Tr" then
-          current_row = current_row + 1
-          foo[#foo + 1] = self:setze_zeile(zeile_inhalt,current_row)
-        elseif zeile_eltname == "Tablerule" then
-          tmp = publisher.colorbar(self.tablewidth_target,tex.sp(zeile_inhalt.rulewidth or "0.25pt"),0,zeile_inhalt.farbe)
-          foo[#foo + 1] = node.hpack(tmp)
-        end
-      end
+      current_row = make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_row)
 
     elseif eltname == "Tr" then
       current_row = current_row + 1
