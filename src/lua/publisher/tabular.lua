@@ -32,6 +32,43 @@ function new( self )
 	return t
 end
 
+function attach_objects_row( tab )
+  local td_elementname
+  local td_contents
+  for _,td in ipairs(tab) do
+    td_elementname = publisher.elementname(td)
+    td_contents    = publisher.element_contents(td)
+    if td_elementname == "Td" then
+      local objects = {}
+      for i,j in ipairs(td_contents) do
+        if publisher.elementname(j,true) == "Paragraph" then
+          objects[#objects + 1] = publisher.element_contents(j)
+        elseif publisher.elementname(j,true) == "Image" then
+          -- FIXME: Image should be an object
+          objects[#objects + 1] = publisher.element_contents(j)[1]
+        elseif publisher.elementname(j,true) == "Table" then
+          objects[#objects + 1] = publisher.element_contents(j)[1]
+        else
+          warning("Object not recognized: %s",publisher.elementname(j) or "???")
+        end
+      end
+      td_contents.objects = objects
+    elseif td_elementname == "Tr" then -- probably from tablefoot/head
+      attach_objects_row(td_contents)
+    elseif td_elementname == "Column" then 
+      -- ignore, they don't have objects
+    else
+      w("unknown element name %s",td_elementname)
+    end
+  end
+end
+
+function attach_objects( tab )
+  for _,tr in ipairs(tab) do
+    attach_objects_row(publisher.element_contents(tr))
+  end
+end
+
 --------------------------------------------------------------------------
 function calculate_columnwidth_for_row(self, tr_contents,current_row,colspans,colmin,colmax )
   local current_column
@@ -59,30 +96,13 @@ function calculate_columnwidth_for_row(self, tr_contents,current_row,colspans,co
       end
     end
 
-    local objects = {}
-
-    for i,j in ipairs(td_contents) do
-      if publisher.elementname(j,true) == "Paragraph" then
-        objects[#objects + 1] = publisher.element_contents(j)
-      elseif publisher.elementname(j,true) == "Image" then
-        -- FIXME: Bild sollte auch ein "Objekt" sein
-        objects[#objects + 1] = publisher.element_contents(j)[1]
-      elseif publisher.elementname(j,true) == "Table" then
-        -- FIXME: Bild sollte auch ein "Objekt" sein
-        objects[#objects + 1] = publisher.element_contents(j)[1]
-      else
-        warning("Object not recognized: %s",publisher.elementname(j) or "???")
-      end
-    end
-    td_contents.objects = objects
-
     local td_randlinks  = tex.sp(td_contents["border-left"]  or 0)
     local td_randrechts = tex.sp(td_contents["border-right"] or 0)
 
     local padding_left  = td_contents.padding_left  or self.padding_left
     local padding_right = td_contents.padding_right or self.padding_right
 
-    for _,object in ipairs(objects) do
+    for _,object in ipairs(td_contents.objects) do
       if type(object)=="table" then
         trace("tabular: check for nodelist (%s)",tostring(object.nodelist ~= nil))
 
@@ -412,29 +432,6 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
     -- in der Höhenberechnung auch border-top und border-bottom! FIXME
     local cell
 
-
-    -- Die objects wurden in der Spaltenbreitenbestimmung
-    -- hinzugefügt. Falls die Spaltenbreiten vogegeben wurden,
-    -- dann wurde die Spaltenbreitenbestimmung ja gar nicht aufgerufen
-    -- und die objects müssen hier hinzugefügt werden (not DRY!)
-    if not td_contents.objects then
-      local objects = {}
-
-      for i,j in ipairs(td_contents) do
-        if publisher.elementname(j,true) == "Paragraph" then
-          objects[#objects + 1] = publisher.element_contents(j)
-        elseif publisher.elementname(j,true) == "Image" then
-          -- FIXME: Bild sollte auch ein "object" sein
-          objects[#objects + 1] = publisher.element_contents(j)[1]
-        elseif publisher.elementname(j,true) == "Table" then
-          -- FIXME: Bild sollte auch ein "object" sein
-          objects[#objects + 1] = publisher.element_contents(j)[1]
-        else
-          warning("Object not recognized: %s",publisher.elementname(j,true) or "???")
-        end
-      end
-      td_contents.objects = objects
-    end
 
     for _,object in ipairs(td_contents.objects) do
       if type(object)=="table" then
@@ -1095,6 +1092,7 @@ end
 
 function tabelle( self )
   setmetatable(self.column_distances,{ __index = function() return self.colsep or 0 end })
+  attach_objects(self.tab)
   calculate_spaltenbreite(self)
   calculate_rowheights(self)
   return setze_tabelle(self)
