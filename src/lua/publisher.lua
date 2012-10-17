@@ -54,6 +54,7 @@ att_break_above    = 401
 --- a regular table row, and not a spacer. Spacers must not appear
 --- at the top or the bottom of a table, unless forced to.
 att_is_table_row   = 500
+att_tr_dynamic_data = 501
 
 glue_spec_node = node.id("glue_spec")
 glue_node      = node.id("glue")

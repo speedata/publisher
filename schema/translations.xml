@@ -149,6 +149,7 @@
       <attribute key="columns" en="columns" de="spalten"/>
       <attribute key="criterium" en="criterium" de="kriterium"/>
       <attribute key="cutmarks" en="cutmarks" de="beschnittmarken"/>
+     <attribute key="data" en="data" de="daten"></attribute>
       <attribute key="direction" en="direction" de="richtung"/>
       <attribute key="element" en="element" de="element"/>
       <attribute key="elementname" en="elementname" de="elementname"/>
@@ -1081,6 +1082,10 @@
          <en>Background color of th table row. (text)</en>
          <de>Farbe des Zeilenhintergrundes. (Text)</de>
       </documentation>
+     <documentation docid="tr/data">
+       <en>Data attached to a table row. Can be accessed in the tablehead and tablefoot.</en>
+       <de>Daten einer Tabellenzeile zuweisen. Diese Daten können später im Tabellenkopf und -fuß ausgelesen werden.</de>
+     </documentation>
       <documentation docid="tr/minheight">
          <en>Minimal height of the table row in grid cells</en>
          <de>Minimale Höhe in Rasterzellen</de>

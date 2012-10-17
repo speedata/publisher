@@ -1240,6 +1240,11 @@
         </attribute>
       </optional>
       <optional>
+        <attribute name="data">
+          <a:documentation docid="tr/data">Data attached to a table row. Can be accessed in the tablehead and tablefoot.</a:documentation>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="minheight">
           <a:documentation docid="tr/minheight">Minimal height of the table row in grid cells</a:documentation>
         </attribute>

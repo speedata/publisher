@@ -137,6 +137,7 @@ function pre_linebreak( head )
       if node.has_attribute(head,att_fontfamily) then
         local fontfamily=node.has_attribute(head,att_fontfamily)
         local instance = lookup_fontfamily_number_instance[fontfamily]
+        assert(instance)
         local f
         local italic = node.has_attribute(head,att_italic)
         local bold   = node.has_attribute(head,att_bold)

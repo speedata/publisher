@@ -255,6 +255,7 @@ values = {
     ["columns"] = {de = "spalten", en = "columns", },
     ["criterium"] = {de = "kriterium", en = "criterium", },
     ["cutmarks"] = {de = "beschnittmarken", en = "cutmarks", },
+    ["data"] = {de = "daten", en = "data", },
     ["direction"] = {de = "richtung", en = "direction", },
     ["element"] = {de = "element", en = "element", },
     ["elementname"] = {de = "elementname", en = "elementname", },

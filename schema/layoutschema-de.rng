@@ -1258,6 +1258,11 @@
         </attribute>
       </optional>
       <optional>
+        <attribute name="daten">
+          <a:documentation docid="tr/data">Daten einer Tabellenzeile zuweisen. Diese Daten können später im Tabellenkopf und -fuß ausgelesen werden.</a:documentation>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="minhöhe">
           <a:documentation docid="tr/minheight">Minimale Höhe in Rasterzellen</a:documentation>
         </attribute>

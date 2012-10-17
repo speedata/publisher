@@ -11,16 +11,18 @@ require("xpath")
 
 module(...,package.seeall)
 
+local dynamic_data = {}
 
 function new( self )
   assert(self)
   local t = {
-
    rowheights     = {},
    colwidths      = {},
    align          = {},
    valign         = {},
    skip           = {},
+   tablefoot_last_contents,
+   tablefoot_contents,
    tablewidth_target,
    columncolors  = {},
    -- Der Abstand zwischen Spalte i und i+1, derzeit nicht benutzt
@@ -844,12 +846,18 @@ local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current
   return current_row
 end
 
-local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_row)
+local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_row,second_run)
   local current_tablefoot_type
   if tr_contents.page == "last" then
     current_tablefoot_type = tablefoot_last
+    if second_run ~= true then
+      self.tablefoot_last_contents = {tr_contents,current_row}
+    end
   else
     current_tablefoot_type = tablefoot
+    if second_run ~= true then
+      self.tablefoot_contents = {tr_contents,current_row}
+    end
   end
   for _,row in ipairs(tr_contents) do
     row_contents = publisher.element_contents(row)
@@ -899,6 +907,11 @@ function setze_tabelle(self)
     elseif eltname == "Tr" then
       current_row = current_row + 1
       rows[#rows + 1] = self:setze_zeile(tr_contents,current_row)
+      -- We allow data to be attached to a table row.
+      if tr_contents.data then
+        dynamic_data[#dynamic_data + 1] = tr_contents.data
+        node.set_attribute(rows[#rows],publisher.att_tr_dynamic_data,#dynamic_data)
+      end
       node.set_attribute(rows[#rows],publisher.att_is_table_row,1)
 
       if break_above == false then
@@ -1056,7 +1069,9 @@ function setze_tabelle(self)
 
   local first_row_in_new_table
 
+  local last_tr_data
   for s=2,#splits do
+    publisher.variablen["_last_tr_data"] = nil
     first_row_in_new_table = splits[s-1] + 1
 
     thissplittable = {}
@@ -1078,10 +1093,23 @@ function setze_tabelle(self)
       thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep + space_above})
       thissplittable[#thissplittable + 1] = rows[i]
     end
-    if s < #splits then
-      thissplittable[#thissplittable + 1] = node.copy_list(tablefoot[1])
+    local last_tr_data = node.has_attribute(thissplittable[#thissplittable],publisher.att_tr_dynamic_data)
+    if last_tr_data then 
+      -- we have some data attached to table rows, so we re-format the footer
+      publisher.variablen["_last_tr_data"] = last_tr_data
+      if s < #splits then
+        local tmp = reformat_foot(self,s - 1)
+        thissplittable[#thissplittable + 1] = node.copy_list(tmp)
+      else
+        thissplittable[#thissplittable + 1] = node.copy_list(tablefoot_last[1])
+      end
     else
-      thissplittable[#thissplittable + 1] = node.copy_list(tablefoot_last[1])
+      -- no dynamic data, no re-formatting
+      if s < #splits then
+        thissplittable[#thissplittable + 1] = node.copy_list(tablefoot[1])
+      else
+        thissplittable[#thissplittable + 1] = node.copy_list(tablefoot_last[1])
+      end
     end
   end
 
@@ -1094,6 +1122,16 @@ function setze_tabelle(self)
     final_split_tables[i] = node.vpack(final_split_tables[i][1])
   end
   return final_split_tables
+end
+
+function reformat_foot( self,pagenumber)
+  local y = self.tablefoot_contents[1]
+  local rownumber = self.tablefoot_contents[2]
+  local x = publisher.dispatch(y._layoutxml,y._dataxml)
+  attach_objects(x)
+  local tmp = {}
+  make_tablefoot(self,x,tmp,tmp,rownumber,true)
+  return tmp[1]
 end
 
 
