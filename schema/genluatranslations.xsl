@@ -6,8 +6,8 @@
 
 
   <xsl:key name="en-elements" match="translations/elements/element" use="@key"/>
-  <xsl:key name="en-values" match="translations/values/value" use="@en"/>
-  <xsl:key name="en-attributes" match="translations/attributes/attribute" use="@en"/>
+  <xsl:key name="en-values" match="translations/values/value" use="@key"/>
+  <xsl:key name="en-attributes" match="translations/attributes/attribute" use="@key"/>
 
   <xsl:variable name="languages" select="('de','en')" />
 

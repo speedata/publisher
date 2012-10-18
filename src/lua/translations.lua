@@ -72,6 +72,8 @@ de = {  elements = {
     ["Solange"] = "While",
   },
   values = {
+    ["links"] = "left",
+    ["rechts"] = "right",
     ["alle"] = "all",
     ["artbox"] = "artbox",
     ["auto"] = "auto",
@@ -178,6 +180,8 @@ de = {  elements = {
     ["While"] = "While",
   },
   values = {
+    ["left"] = "left",
+    ["right"] = "right",
     ["all"] = "all",
     ["artbox"] = "artbox",
     ["auto"] = "auto",

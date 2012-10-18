@@ -6,14 +6,9 @@
     <xsl:param name="pFrom" select="'en'"/>
     <xsl:param name="pTo"   select="'de'"/>
     
-    <xsl:key name="en-elements" match="translations/elements/element" use="@en"/>
-    <xsl:key name="de-elements" match="translations/elements/element" use="@de"/>
-    
-    <xsl:key name="en-values" match="translations/values/value" use="@en"/>
-    <xsl:key name="de-values" match="translations/values/value" use="@de"/>
-
-    <xsl:key name="en-attributes" match="translations/attributes/attribute" use="@en"/>
-    <xsl:key name="de-attributes" match="translations/attributes/attribute" use="@de"/>
+    <xsl:key name="en-elements" match="translations/elements/element" use="@key"/>
+    <xsl:key name="en-values" match="translations/values/value" use="@key"/>
+    <xsl:key name="en-attributes" match="translations/attributes/attribute" use="@key"/>
 
     <xsl:key name="doc" match="translations/doc/documentation" use="@docid" />
 
@@ -52,7 +47,7 @@
     </xsl:template>
     
     <xsl:template match="value" xpath-default-namespace="http://relaxng.org/ns/structure/1.0">
-        <xsl:variable name="replace" select="key(concat($pFrom,'-values'), current(), $translations)/@*[local-name() = $pTo]" />
+        <xsl:variable name="replace" select="key('en-values', current(), $translations)/@*[local-name() = $pTo]" />
         <xsl:choose>
             <xsl:when test="empty($replace)">
                 <xsl:message select="concat('No translation found for ',current())"></xsl:message>

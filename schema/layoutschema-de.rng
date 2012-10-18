@@ -1148,11 +1148,11 @@
         <attribute name="align">
           <a:documentation docid="td/align">Horizontale Ausrichtung</a:documentation>
           <choice>
-            <value>links</value>
+            <value>left</value>
             <a:documentation docid="td/align/left">Linksbündig ausgeben</a:documentation>
             <value>center</value>
             <a:documentation docid="td/align/center">Zentriert ausgeben</a:documentation>
-            <value>rechts</value>
+            <value>right</value>
             <a:documentation docid="td/align/right">Rechtsbündig ausgeben</a:documentation>
           </choice>
         </attribute>

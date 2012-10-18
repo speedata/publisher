@@ -77,6 +77,8 @@
       <element key="While" en="While" de="Solange"/>
    </elements>
    <values>
+     <value key="alignleft" en="left" de="left"/>
+     <value key="alignright" en="right" de="right"/>
      <value key="all" en="all" de="alle"/>
       <value key="artbox" en="artbox" de="artbox"/>
       <value key="auto" en="auto" de="auto"/>
