@@ -441,18 +441,19 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
           err("No nodelist found!")
         end
 
-        if object.textformat then
-          default_textformat_name = object.textformat
-        elseif self.textformat then
-          default_textformat_name = self.textformat
-        else
-          local align = td_contents.align or tr_contents.align or self.align[current_column]
-          if align=="center" then
-            default_textformat_name = "__centered"
-          elseif align=="left" then
-            default_textformat_name = "__leftaligned"
-          elseif align=="right" then
-            default_textformat_name = "__rightaligned"
+        local align = td_contents.align or tr_contents.align or self.align[current_column]
+        if align=="center" then
+          default_textformat_name = "__centered"
+        elseif align=="left" then
+          default_textformat_name = "__leftaligned"
+        elseif align=="right" then
+          default_textformat_name = "__rightaligned"
+        end
+        if not default_textformat_name then
+          if object.textformat then
+            default_textformat_name = object.textformat
+          elseif self.textformat then
+            default_textformat_name = self.textformat
           end
         end
         publisher.set_fontfamily_if_necessary(object.nodelist,self.fontfamily)
@@ -664,19 +665,19 @@ function setze_zeile(self, tr_contents, current_row )
 
       if type(object) == "table" then
         -- Paragraph with a node list
-        local default_textformat_name
-        if object.textformat then
-          default_textformat_name = object.textformat
-        elseif self.textformat then
-          default_textformat_name = self.textformat
-        else
-          local align = td_contents.align or tr_contents.align or self.align[current_column]
-          if align=="center" then
-            default_textformat_name = "__centered"
-          elseif align=="left" then
-            default_textformat_name = "__leftaligned"
-          elseif align=="right" then
-            default_textformat_name = "__rightaligned"
+        local align = td_contents.align or tr_contents.align or self.align[current_column]
+        if align=="center" then
+          default_textformat_name = "__centered"
+        elseif align=="left" then
+          default_textformat_name = "__leftaligned"
+        elseif align=="right" then
+          default_textformat_name = "__rightaligned"
+        end
+        if not default_textformat_name then
+          if object.textformat then
+            default_textformat_name = object.textformat
+          elseif self.textformat then
+            default_textformat_name = self.textformat
           end
         end
         v = object:format(current_columnnbreite - padding_left - padding_right - td_randlinks - td_randrechts, default_textformat_name)

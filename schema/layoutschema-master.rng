@@ -1242,11 +1242,11 @@
         <attribute name="align">
           <a:documentation docid="tr/align">Determines the horizontal alignment of all cells of this row.</a:documentation>
           <choice>
-            <value>left</value>
+            <value>alignleft</value>
             <a:documentation docid="td/align/left">Left aligned (ragged right)</a:documentation>
-            <value>center</value>
+            <value>aligncenter</value>
             <a:documentation docid="td/align/center">Centered</a:documentation>
-            <value>right</value>
+            <value>alignright</value>
             <a:documentation docid="td/align/right">Right aligned (ragged left).</a:documentation>
           </choice>
         </attribute>
