@@ -33,8 +33,11 @@ function update_schema_files()
   cmdline = string.format("java -jar %s/lib/saxon9he.jar -s:%s/schema/translations.xml -o:%s/src/lua/translations.lua -xsl:%s/schema/genluatranslations.xsl",installdir,installdir,installdir,installdir)
   print(cmdline)
   os.execute(cmdline)
-  -- generate german schema
-  cmdline = string.format("java -jar %s/lib/saxon9he.jar -s:%s/schema/layoutschema-en.rng -o:%s/schema/layoutschema-de.rng -xsl:%s/schema/translate_schema.xsl pFrom=en pTo=de",installdir,installdir,installdir,installdir)
+  -- generate english + german schema
+  cmdline = string.format("java -jar %s/lib/saxon9he.jar -s:%s/schema/layoutschema-master.rng -o:%s/schema/layoutschema-en.rng -xsl:%s/schema/translate_schema.xsl pFrom=en pTo=en",installdir,installdir,installdir,installdir)
+  print(cmdline)
+  os.execute(cmdline)
+  cmdline = string.format("java -jar %s/lib/saxon9he.jar -s:%s/schema/layoutschema-master.rng -o:%s/schema/layoutschema-de.rng -xsl:%s/schema/translate_schema.xsl pFrom=en pTo=de",installdir,installdir,installdir,installdir)
   print(cmdline)
   os.execute(cmdline)
 end
