@@ -71,18 +71,22 @@ de = {  elements = {
     ["Wert"] = "Value",
     ["Solange"] = "While",
   },
-  values = {
-    ["links"] = "left",
-    ["rechts"] = "right",
+values = {
+["align"] = {
+    ["left"] = "left",
+    ["right"] = "right",
+    ["center"] = "center",
+},
+["*"] = {
     ["alle"] = "all",
     ["artbox"] = "artbox",
     ["auto"] = "auto",
     ["bleedbox"] = "bleedbox",
     ["blocksatz"] = "justified",
     ["bottom"] = "bottom",
-    ["center"] = "center",
     ["middle"] = "middle",
     ["cmyk"] = "cmyk",
+    ["zentriert"] = "center",
     ["cropbox"] = "cropbox",
     ["Deutsch"] = "German",
     ["erste"] = "first",
@@ -108,7 +112,8 @@ de = {  elements = {
     ["zentriert"] = "centered",
     ["oben,rechts"] = "top,right",
     ["unten,rechts"] = "bottom,right",
-  },
+},
+},
 },en = {  elements = {
     ["Action"] = "Action",
     ["AddToList"] = "AddToList",
@@ -179,18 +184,22 @@ de = {  elements = {
     ["Value"] = "Value",
     ["While"] = "While",
   },
-  values = {
+values = {
+["align"] = {
     ["left"] = "left",
     ["right"] = "right",
+    ["center"] = "center",
+},
+["*"] = {
     ["all"] = "all",
     ["artbox"] = "artbox",
     ["auto"] = "auto",
     ["bleedbox"] = "bleedbox",
     ["justified"] = "justified",
     ["bottom"] = "bottom",
-    ["center"] = "center",
     ["middle"] = "middle",
     ["cmyk"] = "cmyk",
+    ["center"] = "center",
     ["cropbox"] = "cropbox",
     ["German"] = "German",
     ["first"] = "first",
@@ -216,7 +225,8 @@ de = {  elements = {
     ["centered"] = "centered",
     ["top,right"] = "top,right",
     ["bottom,right"] = "bottom,right",
-  },
+},
+},
 },attributes = {
     ["align"] = {de = "align", en = "align", },
     ["alignment"] = {de = "ausrichtung", en = "alignment", },
@@ -314,5 +324,5 @@ de = {  elements = {
     ["variable"] = {de = "variable", en = "variable", },
     ["width"] = {de = "breite", en = "width", },
     ["y"] = {de = "y", en = "y", },
-}
+},
 }

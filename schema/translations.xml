@@ -76,46 +76,45 @@
       <element key="Value" en="Value" de="Wert"/>
       <element key="While" en="While" de="Solange"/>
    </elements>
-   <values>
-     <value key="alignleft" en="left" de="left"/>
-     <value key="alignright" en="right" de="right"/>
-     <value key="all" en="all" de="alle"/>
-      <value key="artbox" en="artbox" de="artbox"/>
-      <value key="auto" en="auto" de="auto"/>
-      <value key="bleedbox" en="bleedbox" de="bleedbox"/>
-      <value key="justified" en="justified" de="blocksatz"/>
-      <value key="bottom" en="bottom" de="bottom"/>
-      <value key="center" en="center" de="center"/>
-      <value key="middle" en="middle" de="middle"/>
-      <value key="cmyk" en="cmyk" de="cmyk"/>
-      <value key="cropbox" en="cropbox" de="cropbox"/>
-      <value key="German" en="German" de="Deutsch"/>
-     <value key="first" en="first" de="erste"/>
-      <value key="solid" en="solid" de="durchgezogen"/>
-      <value key="Englisch (Great Britan)"
-             en="Englisch (Great Britan)"
-             de="Englisch (Großbritannien)"/>
-      <value key="French" en="French" de="Französisch"/>
-      <value key="horizontal" en="horizontal" de="horizontal"/>
-      <value key="yes" en="yes" de="ja"/>
-     <value key="last" en="last" de="letzte"/>
-     <value key="left" en="left" de="links"/>
-      <value key="leftaligned" en="leftaligned" de="linksbündig"/>
-      <value key="max" en="max" de="max"/>
-      <value key="mediabox" en="mediabox" de="mediabox"/>
-      <value key="no" en="no" de="nein"/>
-      <value key="without" en="without" de="ohne"/>
-      <value key="rightaligned" en="rightaligned" de="rechtsbündig"/>
-      <value key="rgb" en="rgb" de="rgb"/>
-      <value key="right" en="right" de="rechts"/>
-      <value key="top" en="top" de="top"/>
-      <value key="trimbox" en="trimbox" de="trimbox"/>
-      <value key="vertical" en="vertical" de="vertikal"/>
-      <value key="full" en="full" de="vollständig"/>
-      <value key="centered" en="centered" de="zentriert"/>
-      <value key="top,right" en="top,right" de="oben,rechts"/>
-      <value key="bottom,right" en="bottom,right" de="unten,rechts"/>
-   </values>
+  <values>
+    <value key="alignleft"  context="align" en="left" de="left"/>
+    <value key="alignright" context="align" en="right" de="right"/>
+    <value key="aligncenter" context="align" en="center" de="center"/>
+    <value key="all" context="*" en="all" de="alle"/>
+    <value key="artbox" context="*" en="artbox" de="artbox"/>
+    <value key="auto" context="*" en="auto" de="auto"/>
+    <value key="bleedbox" context="*" en="bleedbox" de="bleedbox"/>
+    <value key="justified" context="*" en="justified" de="blocksatz"/>
+    <value key="bottom" context="*" en="bottom" de="bottom"/>
+    <value key="middle" context="*" en="middle" de="middle"/>
+    <value key="cmyk" context="*" en="cmyk" de="cmyk"/>
+    <value key="center" context="*" en="center" de="zentriert"/>
+    <value key="cropbox" context="*" en="cropbox" de="cropbox"/>
+    <value key="German" context="*" en="German" de="Deutsch"/>
+    <value key="first" context="*" en="first" de="erste"/>
+    <value key="solid" context="*" en="solid" de="durchgezogen"/>
+    <value key="Englisch (Great Britan)" context="*" en="Englisch (Great Britan)" de="Englisch (Großbritannien)"/>
+    <value key="French" context="*" en="French" de="Französisch"/>
+    <value key="horizontal" context="*" en="horizontal" de="horizontal"/>
+    <value key="yes" context="*" en="yes" de="ja"/>
+    <value key="last" context="*" en="last" de="letzte"/>
+    <value key="left" context="*" en="left" de="links"/>
+    <value key="leftaligned" context="*" en="leftaligned" de="linksbündig"/>
+    <value key="max" context="*" en="max" de="max"/>
+    <value key="mediabox" context="*" en="mediabox" de="mediabox"/>
+    <value key="no" context="*" en="no" de="nein"/>
+    <value key="without" context="*" en="without" de="ohne"/>
+    <value key="rightaligned" context="*" en="rightaligned" de="rechtsbündig"/>
+    <value key="rgb" context="*" en="rgb" de="rgb"/>
+    <value key="right" context="*" en="right" de="rechts"/>
+    <value key="top" context="*" en="top" de="top"/>
+    <value key="trimbox" context="*" en="trimbox" de="trimbox"/>
+    <value key="vertical" context="*" en="vertical" de="vertikal"/>
+    <value key="full" context="*" en="full" de="vollständig"/>
+    <value key="centered" context="*" en="centered" de="zentriert"/>
+    <value key="top,right" context="*" en="top,right" de="oben,rechts"/>
+    <value key="bottom,right" context="*" en="bottom,right" de="unten,rechts"/>
+  </values>
    <attributes>
       <attribute key="align" en="align" de="align"/>
       <attribute key="alignment" en="alignment" de="ausrichtung"/>

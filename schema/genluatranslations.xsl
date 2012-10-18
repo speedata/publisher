@@ -59,7 +59,7 @@
   <xsl:template match="attributes">
     <xsl:text>attributes = {&#x0A;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>}&#x0A;</xsl:text>
+    <xsl:text>},&#x0A;</xsl:text>
   </xsl:template>
 
   <xsl:template match="attribute">
@@ -75,21 +75,21 @@
 
   <xsl:template match="values">
     <xsl:param name="current_language" />
-    <xsl:text>  </xsl:text><xsl:value-of select="local-name()"/><xsl:text> = {&#x0a;</xsl:text>
-    <xsl:apply-templates >
-      <xsl:with-param name="type" select="local-name()"/>
-      <xsl:with-param name="current_language" select="$current_language" />
-    </xsl:apply-templates>
-    <xsl:text>  },&#x0a;</xsl:text>
+    <xsl:text>values = {&#x0A;</xsl:text>
+    <xsl:for-each-group select="value" group-by="@context">
+      <xsl:text>["</xsl:text><xsl:value-of select="current-grouping-key()"/><xsl:text>"] = {&#x0A;</xsl:text>
+      <xsl:apply-templates select="../value[@context=current-grouping-key()]">
+        <xsl:with-param name="current_language" select="$current_language"/>
+      </xsl:apply-templates>
+      <xsl:text>},&#x0A;</xsl:text>
+    </xsl:for-each-group>
+    <xsl:text>},&#x0A;</xsl:text>
   </xsl:template>
 
   <xsl:template match="value">
-    <xsl:param name="type" />
-    <xsl:param name="current_language" />
-    <xsl:text>    ["</xsl:text>
-    <xsl:value-of select="key(concat('en-',$type),@en)/@*[local-name() = $current_language]" />
-    <xsl:text>"] = "</xsl:text>
-    <xsl:value-of select="@en" />
+    <xsl:param name="current_language"/>
+    <xsl:text>    ["</xsl:text><xsl:value-of select="@*[local-name()=$current_language]"></xsl:value-of><xsl:text>"] = "</xsl:text>
+    <xsl:value-of select="@en"></xsl:value-of>
     <xsl:text>",&#x0a;</xsl:text>
   </xsl:template>
 

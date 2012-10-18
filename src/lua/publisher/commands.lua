@@ -48,9 +48,9 @@ end
 --- Return a number. This number is an index to the table `publisher.user_defined_functions` and the value
 --- is a function that sets a key of another table.
 function commands.add_to_list( layoutxml,dataxml )
-  local schluessel = publisher.read_attribute(layoutxml,dataxml,"key","string")
-  local listenname = publisher.read_attribute(layoutxml,dataxml,"liste","string")
-  local selection    = publisher.read_attribute(layoutxml,dataxml,"select","string")
+  local schluessel = publisher.read_attribute(layoutxml,dataxml,"key","rawstring")
+  local listenname = publisher.read_attribute(layoutxml,dataxml,"list","rawstring")
+  local selection    = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
 
   local wert = xpath.parse(dataxml,selection)
   if not publisher.variablen[listenname] then
@@ -69,8 +69,8 @@ end
 --- Create an attribute to be used in a XML structure. The XML structure can be formed via 
 --- Element and Attribute commands and writen to disk with SaveDataset.
 function commands.attribute( layoutxml,dataxml )
-  local selection = publisher.read_attribute(layoutxml,dataxml,"select","string")
-  local attname   = publisher.read_attribute(layoutxml,dataxml,"name","string")
+  local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
+  local attname   = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
   local attvalue  = xpath.textvalue(xpath.parse(dataxml,selection))
   local ret = { [".__type"]="attribute", [attname] = publisher.xml_escape(attvalue) }
   return ret
@@ -124,7 +124,7 @@ end
 function commands.box( layoutxml,dataxml )
   local width     = publisher.read_attribute(layoutxml,dataxml,"width","number")
   local height    = publisher.read_attribute(layoutxml,dataxml,"height","number")
-  local hf_string = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string")
+  local hf_string = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
   local bleed     = publisher.read_attribute(layoutxml,dataxml,"bleed","string")
 
   local current_grid = publisher.current_grid
@@ -189,8 +189,8 @@ end
 --- Set defintions for a specific column of a table.
 function commands.column( layoutxml,dataxml )
   local ret = {}
-  ret.breite           = publisher.read_attribute(layoutxml,dataxml,"width","string")
-  ret.hintergrundfarbe = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string")
+  ret.breite           = publisher.read_attribute(layoutxml,dataxml,"width","rawstring")
+  ret.hintergrundfarbe = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
   ret.align            = publisher.read_attribute(layoutxml,dataxml,"align","string")
   ret.valign           = publisher.read_attribute(layoutxml,dataxml,"valign","string")
 
@@ -211,7 +211,7 @@ end
 --- ------
 --- Return the contents of a variable. Warning: this function does not acutally copy the contents, so the name is a bit misleading.
 function commands.copy_of( layoutxml,dataxml )
-  local selection = publisher.read_attribute(layoutxml,dataxml,"select", "string")
+  local selection = publisher.read_attribute(layoutxml,dataxml,"select", "rawstring")
 
   if layoutxml[1] and #layoutxml[1] > 0 then
     return table.concat(layoutxml)
@@ -226,7 +226,7 @@ end
 --- -----------
 --- Colors can be in model cmyk or rgb.
 function commands.define_color( layoutxml,dataxml )
-  local name  = publisher.read_attribute(layoutxml,dataxml,"name","string")
+  local name  = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
   local model = publisher.read_attribute(layoutxml,dataxml,"model","string")
 
   log("Defining color %q",name)
@@ -264,7 +264,7 @@ function commands.define_textformat(layoutxml)
   trace("Command: DefineTextformat")
   local alignment   = publisher.read_attribute(layoutxml,dataxml,"alignment",   "string")
   local indentation = publisher.read_attribute(layoutxml,dataxml,"indentation", "length")
-  local name        = publisher.read_attribute(layoutxml,dataxml,"name",        "string")
+  local name        = publisher.read_attribute(layoutxml,dataxml,"name",        "rawstring")
   local rows        = publisher.read_attribute(layoutxml,dataxml,"rows",        "number")
 
   local fmt = {}
@@ -296,7 +296,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
   local fam={}
   -- fontsize and baselineskip are in dtp points (bp, 1 bp ≈ 65782 sp)
   -- Concrete font instances are created here. fontsize and baselineskip are known
-  local name         = publisher.read_attribute(layoutxml,dataxml,"name",   "string" )
+  local name         = publisher.read_attribute(layoutxml,dataxml,"name",   "rawstring" )
   local size         = publisher.read_attribute(layoutxml,dataxml,"fontsize","number")
   local baselineskip = publisher.read_attribute(layoutxml,dataxml,"leading", "number")
 
@@ -322,7 +322,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
   local ok,tmp,elementname,fontface
   for i,v in ipairs(layoutxml) do
     elementname = publisher.translate_element(v[".__name"])
-    fontface    = publisher.read_attribute(v,dataxml,"fontface","string")
+    fontface    = publisher.read_attribute(v,dataxml,"fontface","rawstring")
     if type(v) ~= "table" then
      -- ignorieren
     elseif elementname=="Regular" then
@@ -379,7 +379,7 @@ end
 --- -------
 --- Create an element for use with Attribute and SaveDataset
 function commands.element( layoutxml,dataxml )
-  local elementname = publisher.read_attribute(layoutxml,dataxml,"name","string")
+  local elementname = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
 
   local ret = { [".__name"] = elementname }
 
@@ -406,7 +406,7 @@ end
 --- --------
 --- Set the font face (family) of the enclosed text.
 function commands.fontface( layoutxml,dataxml )
-  local fontfamily   = publisher.read_attribute(layoutxml,dataxml,"fontfamily","string")
+  local fontfamily   = publisher.read_attribute(layoutxml,dataxml,"fontfamily","rawstring")
   local familynumber = publisher.fonts.lookup_fontfamily_name_number[fontfamily]
   if not familynumber then
     err("font: family %q unknown",fontfamily)
@@ -434,7 +434,7 @@ end
 --- Create a virtual area
 function commands.group( layoutxml,dataxml )
   publisher.setup_page()
-  local groupname = publisher.read_attribute(layoutxml,dataxml,"name", "string")
+  local groupname = publisher.read_attribute(layoutxml,dataxml,"name", "rawstring")
 
   if publisher.groups[groupname] == nil then
     log("Create »Gruppe« %q.",groupname)
@@ -498,13 +498,12 @@ local box_lookup = {
 --- -----
 --- Load an image from a file. To be used in a table cell and PlaceObject.
 function commands.image( layoutxml,dataxml )
-  local width = publisher.read_attribute(layoutxml,dataxml,"width","string")
-  local height  = publisher.read_attribute(layoutxml,dataxml,"height",  "string")
-
-  local seite     = publisher.read_attribute(layoutxml,dataxml,"page","number")
+  local width     = publisher.read_attribute(layoutxml,dataxml,"width",      "rawstring")
+  local height    = publisher.read_attribute(layoutxml,dataxml,"height",     "rawstring")
+  local seite     = publisher.read_attribute(layoutxml,dataxml,"page",       "number")
   local nat_box   = publisher.read_attribute(layoutxml,dataxml,"naturalsize","string")
-  local max_box   = publisher.read_attribute(layoutxml,dataxml,"maxsize","string")
-  local filename = publisher.read_attribute(layoutxml,dataxml,"file","string")
+  local max_box   = publisher.read_attribute(layoutxml,dataxml,"maxsize",    "rawstring")
+  local filename  = publisher.read_attribute(layoutxml,dataxml,"file",       "rawstring")
 
   local nat_box_intern = box_lookup[nat_box] or "crop"
   local max_box_intern = box_lookup[max_box] or "crop"
@@ -585,10 +584,10 @@ end
 --- Load a given font file (`name`). Actually the font file is not loaded yet, only stored in a table. See `publisher.font#load_fontfile()`.
 function commands.load_fontfile( layoutxml,dataxml )
   local randausgleich = publisher.read_attribute(layoutxml,dataxml,"marginprotrusion","number")
-  local leerraum      = publisher.read_attribute(layoutxml,dataxml,"space","number")
-  local smcp          = publisher.read_attribute(layoutxml,dataxml,"smallcaps","string")
-  local filename      = publisher.read_attribute(layoutxml,dataxml,"filename","string")
-  local name          = publisher.read_attribute(layoutxml,dataxml,"name","string")
+  local leerraum      = publisher.read_attribute(layoutxml,dataxml,"space",           "number")
+  local smcp          = publisher.read_attribute(layoutxml,dataxml,"smallcaps",       "string")
+  local filename      = publisher.read_attribute(layoutxml,dataxml,"filename",        "rawstring")
+  local name          = publisher.read_attribute(layoutxml,dataxml,"name",            "rawstring")
 
   local extra_parameter = {
     space            = leerraum      or 25,
@@ -606,7 +605,7 @@ end
 --- Load a data file (XML) and start processing its contents by calling the `Record`
 --- elements in the layout file.
 function commands.load_dataset( layoutxml,dataxml )
-  local name = publisher.read_attribute(layoutxml,dataxml,"name", "string")
+  local name = publisher.read_attribute(layoutxml,dataxml,"name", "rawstring")
   assert(name)
   local filename = "datensatzdatei." .. name
 
@@ -624,7 +623,7 @@ end
 
 function commands.emptyline( layoutxml,dataxml )
   trace("Leerzeile, aktuelle Zeile = %d",publisher.current_grid:current_row())
-  local areaname = publisher.read_attribute(layoutxml,dataxml,"area","string")
+  local areaname = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
   local areaname = areaname or publisher.default_areaname
   local current_grid = publisher.current_grid
   local current_row = current_grid:finde_passende_zeile(1,current_grid:anzahl_spalten(),1,areaname)
@@ -653,7 +652,7 @@ end
 --- Write a message to the terminal
 function commands.message( layoutxml, dataxml )
   local contents
-  local selection = publisher.read_attribute(layoutxml,dataxml,"select","string")
+  local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
 
   if selection then
     contents = xpath.parse(dataxml,selection)
@@ -699,7 +698,7 @@ end
 --- ---------
 --- Switch to the next frame of the given positioning area.
 function commands.next_frame( layoutxml,dataxml )
-  local areaname = publisher.read_attribute(layoutxml,dataxml,"area","string")
+  local areaname = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
   publisher.next_area(areaname)
 end
 
@@ -709,7 +708,7 @@ end
 function commands.next_row( layoutxml,dataxml )
   publisher.setup_page()
   local rownumber = publisher.read_attribute(layoutxml,dataxml,"row", "number")
-  local areaname  = publisher.read_attribute(layoutxml,dataxml,"area","string")
+  local areaname  = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
   local rows      = publisher.read_attribute(layoutxml,dataxml,"rows","number")
   rows = rows or 1
   local areaname = areaname or publisher.default_areaname
@@ -777,8 +776,8 @@ end
 function commands.pagetype(layoutxml,dataxml)
   trace("Command: Pagetype")
   local tmp_tab = {}
-  local test         = publisher.read_attribute(layoutxml,dataxml,"test","string")
-  local pagetypename = publisher.read_attribute(layoutxml,dataxml,"name","string")
+  local test         = publisher.read_attribute(layoutxml,dataxml,"test","rawstring")
+  local pagetypename = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
   local tab = publisher.dispatch(layoutxml,dataxml)
 
   for i,j in ipairs(tab) do
@@ -800,9 +799,9 @@ end
 --- It can have a font face, color,... but these can be also given
 --- On the surrounding element (`Textblock`).
 function commands.paragraph( layoutxml,dataxml )
-  local textformat    = publisher.read_attribute(layoutxml,dataxml,"textformat","string")
-  local fontname      = publisher.read_attribute(layoutxml,dataxml,"fontface","string")
-  local colorname     = publisher.read_attribute(layoutxml,dataxml,"color","string")
+  local textformat    = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
+  local fontname      = publisher.read_attribute(layoutxml,dataxml,"fontface","rawstring")
+  local colorname     = publisher.read_attribute(layoutxml,dataxml,"color","rawstring")
   local language_name = publisher.read_attribute(layoutxml,dataxml,"language","string")
 
 
@@ -868,16 +867,16 @@ end
 function commands.place_object( layoutxml,dataxml )
   trace("Command: PlaceObject")
   local absolute_positioning = false
-  local spalte           = publisher.read_attribute(layoutxml,dataxml,"column",         "string")
-  local zeile            = publisher.read_attribute(layoutxml,dataxml,"row",            "string")
-  local bereich          = publisher.read_attribute(layoutxml,dataxml,"area",           "string")
+  local spalte           = publisher.read_attribute(layoutxml,dataxml,"column",         "rawstring")
+  local zeile            = publisher.read_attribute(layoutxml,dataxml,"row",            "rawstring")
+  local bereich          = publisher.read_attribute(layoutxml,dataxml,"area",           "rawstring")
   local belegen          = publisher.read_attribute(layoutxml,dataxml,"allocate",       "string", "yes")
-  local rahmenfarbe      = publisher.read_attribute(layoutxml,dataxml,"framecolor",     "string")
-  local hintergrundfarbe = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string")
+  local rahmenfarbe      = publisher.read_attribute(layoutxml,dataxml,"framecolor",     "rawstring")
+  local hintergrundfarbe = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
   local maxhoehe         = publisher.read_attribute(layoutxml,dataxml,"maxheight",      "number")
   local rahmen           = publisher.read_attribute(layoutxml,dataxml,"frame",          "string")
   local hintergrund      = publisher.read_attribute(layoutxml,dataxml,"background",     "string")
-  local groupname        = publisher.read_attribute(layoutxml,dataxml,"groupname",      "string")
+  local groupname        = publisher.read_attribute(layoutxml,dataxml,"groupname",      "rawstring")
   local valign           = publisher.read_attribute(layoutxml,dataxml,"valign",         "string")
   local hreference       = publisher.read_attribute(layoutxml,dataxml,"hreference",     "string")
 
@@ -1037,16 +1036,16 @@ end
 
 function commands.process_record( layoutxml,dataxml )
   trace("ProcessRecord")
-  local selection = publisher.read_attribute(layoutxml,dataxml,"select","string")
-  local limit     = publisher.read_attribute(layoutxml,dataxml,"limit","string")
+  local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
+  local limit     = publisher.read_attribute(layoutxml,dataxml,"limit","number")
 
-  local datensatz = xpath.parse(dataxml,selection)
+  local record = xpath.parse(dataxml,selection)
 
   if limit then
-    limit = math.min(#datensatz,tonumber(limit))
+    limit = math.min(#record,limit)
   else
-    if datensatz then
-      limit = #datensatz or 0
+    if record then
+      limit = #record or 0
     else
       limit = 0
     end
@@ -1068,11 +1067,11 @@ end
 --- string, this function is rather stupid but nevertheless currently the main
 --- function for processing data.
 function commands.process_node(layoutxml,dataxml)
-  local selection = publisher.read_attribute(layoutxml,dataxml,"select","string")
+  local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
 
   --- To restore the current value of `__position`, we save it. The value of `__position` is available from xpath.
   local current_position = publisher.variablen.__position
-  local modus = publisher.read_attribute(layoutxml,dataxml,"mode","string") or ""
+  local modus = publisher.read_attribute(layoutxml,dataxml,"mode","rawstring") or ""
   local layoutknoten = publisher.data_dispatcher[modus][selection]
   local pos = 1
   if type(layoutknoten)=="table" then
@@ -1114,7 +1113,7 @@ function commands.positioning_area( layoutxml,dataxml )
   -- might depend on values on the _current_ page, which is not set!
   local tab = {}
   tab.layoutxml = layoutxml
-  local name = publisher.read_attribute(layoutxml,dataxml,"name","string")
+  local name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
   tab.name = name
   return tab
 end
@@ -1124,8 +1123,8 @@ end
 --- ------
 --- Matches an element name of the data file. To be called from ProcessNodes
 function commands.record( layoutxml )
-  local elementname = publisher.read_attribute(layoutxml,dataxml,"element","string")
-  local mode        = publisher.read_attribute(layoutxml,dataxml,"mode","string")
+  local elementname = publisher.read_attribute(layoutxml,dataxml,"element","rawstring")
+  local mode        = publisher.read_attribute(layoutxml,dataxml,"mode","rawstring")
 
   mode = mode or ""
   publisher.data_dispatcher[mode] = publisher.data_dispatcher[mode] or {}
@@ -1138,9 +1137,9 @@ end
 --- Draw a horizontal or vertical rule
 function commands.rule( layoutxml,dataxml )
   local direction     = publisher.read_attribute(layoutxml,dataxml,"direction",  "string")
-  local length        = publisher.read_attribute(layoutxml,dataxml,"length",     "string")
-  local rulewidth     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",  "string")
-  local color         = publisher.read_attribute(layoutxml,dataxml,"color",  "string")
+  local length        = publisher.read_attribute(layoutxml,dataxml,"length",     "rawstring")
+  local rulewidth     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",  "rawstring")
+  local color         = publisher.read_attribute(layoutxml,dataxml,"color",      "rawstring")
 
   local colorname = color or "Schwarz"
 
@@ -1189,9 +1188,9 @@ end
 --- Write a Lua table representing an XML file to the disk. See `#load_dataset` for the opposite.
 function commands.save_dataset( layoutxml,dataxml )
   local towrite, tmp,tab
-  local filename    = publisher.read_attribute(layoutxml,dataxml,"filename",  "string")
-  local elementname = publisher.read_attribute(layoutxml,dataxml,"elementname","string")
-  local selection   = publisher.read_attribute(layoutxml,dataxml,"select","string")
+  local filename    = publisher.read_attribute(layoutxml,dataxml,"filename",  "rawstring")
+  local elementname = publisher.read_attribute(layoutxml,dataxml,"elementname","rawstring")
+  local selection   = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
 
   assert(filename)
   assert(elementname)
@@ -1255,7 +1254,7 @@ end
 --- --------
 --- Todo: document, what does it?
 function commands.sequence( layoutxml,dataxml )
-  local selection = publisher.read_attribute(layoutxml,dataxml,"select","string")
+  local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
   trace("Command: Sequence: %s, selection = %s",layoutxml[".__name"], selection )
   local ret = {}
   for i,v in ipairs(dataxml) do
@@ -1271,10 +1270,10 @@ end
 --- Assign a value to a variable.
 function commands.setvariable( layoutxml,dataxml )
   local trace_p = publisher.read_attribute(layoutxml,dataxml,"trace","boolean")
-  local selection = publisher.read_attribute(layoutxml,dataxml,"select","string")
+  local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
 
   -- FIXME: wenn in der Variablen schon nodelisten sind, dann müssen diese gefreed werden!
-  local varname = publisher.read_attribute(layoutxml,dataxml,"variable","string")
+  local varname = publisher.read_attribute(layoutxml,dataxml,"variable","rawstring")
 
   trace("Zuweisung, Variable = %q",varname or "???")
   if not varname then
@@ -1340,9 +1339,9 @@ end
 --- ------------
 --- Sort a sequence. Warning: it changes the order in the variable.
 function commands.sort_sequence( layoutxml,dataxml )
-  local selection        = publisher.read_attribute(layoutxml,dataxml,"select","string")
+  local selection        = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
   local removeduplicates = publisher.read_attribute(layoutxml,dataxml,"removeduplicates","string")
-  local criterium        = publisher.read_attribute(layoutxml,dataxml,"criterium","string")
+  local criterium        = publisher.read_attribute(layoutxml,dataxml,"criterium","rawstring")
 
   local sequence = xpath.parse(dataxml,selection)
   trace("SortSequence: Record = %q, criterium = %q",selection,criterium or "???")
@@ -1406,7 +1405,7 @@ function commands.switch( layoutxml,dataxml )
   for _,case_or_otherwise_element in ipairs(layoutxml) do
     elementname = publisher.translate_element(case_or_otherwise_element[".__name"])
     if type(case_or_otherwise_element)=="table" and elementname=="Case" and case_matched ~= true then
-      local test = publisher.read_attribute(case_or_otherwise_element,dataxml,"test","string")
+      local test = publisher.read_attribute(case_or_otherwise_element,dataxml,"test","rawstring")
       if xpath.parse(dataxml,test) then
         case_matched = true
         ret = publisher.dispatch(case_or_otherwise_element,dataxml)
@@ -1432,9 +1431,9 @@ function commands.table( layoutxml,dataxml,optionen )
   local padding        = publisher.read_attribute(layoutxml,dataxml,"padding",       "length")
   local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","length")
   local rowdistance    = publisher.read_attribute(layoutxml,dataxml,"leading",       "length")
-  local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",      "string")
+  local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",      "rawstring")
   local autostretch    = publisher.read_attribute(layoutxml,dataxml,"stretch",       "string")
-  local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",    "string")
+  local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",    "rawstring")
   -- FIXME: leading -> rowdistance or so
 
   padding        = tex.sp(padding        or "0pt")
@@ -1510,7 +1509,7 @@ end
 --- A horizontal rule that is placed between two rows.
 function commands.tablerule( layoutxml,dataxml )
   local rulewidth = publisher.read_attribute(layoutxml,dataxml,"rulewidth","length")
-  local color     = publisher.read_attribute(layoutxml,dataxml,"color","string")
+  local color     = publisher.read_attribute(layoutxml,dataxml,"color","rawstring")
   return { rulewidth = rulewidth, farbe = color }
 end
 
@@ -1523,9 +1522,9 @@ function commands.tr( layoutxml,dataxml )
   local attribute = {
     ["align"]           = "string",
     ["valign"]          = "string",
-    ["backgroundcolor"] = "string",
+    ["backgroundcolor"] = "rawstring",
     ["minheight"]       = "number",
-    ["top-distance"]    = "string",
+    ["top-distance"]    = "rawstring",
     ["break-below"]     = "string",
   }
 
@@ -1552,26 +1551,31 @@ function commands.td( layoutxml,dataxml )
   local attribute = {
     ["colspan"]          = "number",
     ["rowspan"]          = "number",
-    ["align"]            = "string",
     ["padding"]          = "length",
     ["padding-top"]      = "length",
     ["padding-right"]    = "length",
     ["padding-bottom"]   = "length",
     ["padding-left"]     = "length",
-    ["backgroundcolor"] = "string",
+    ["backgroundcolor"]  = "rawstring",
     ["valign"]           = "string",
     ["border-left"]      = "length",
     ["border-right"]     = "length",
     ["border-top"]       = "length",
     ["border-bottom"]    = "length",
-    ["border-left-color"]      = "string",
-    ["border-right-color"]     = "string",
-    ["border-top-color"]       = "string",
-    ["border-bottom-color"]    = "string",
+    ["border-left-color"]      = "rawstring",
+    ["border-right-color"]     = "rawstring",
+    ["border-top-color"]       = "rawstring",
+    ["border-bottom-color"]    = "rawstring",
   }
 
   for attname,atttyp in pairs(attribute) do
     tab[attname] = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
+  end
+
+  tab.align = publisher.read_attribute(layoutxml,dataxml,"align","string",nil,"align")
+  -- Remove this err in 2014
+  if layoutxml.align == "links" or layoutxml.align == "rechts" then
+    err("Td, attribute align. Values 'links' and 'right' should be 'left' and 'right'")
   end
 
   if tab.padding then
@@ -1594,13 +1598,13 @@ end
 function commands.textblock( layoutxml,dataxml )
   trace("Textblock")
   local fontfamily
-  local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface","string")
-  local colorname      = publisher.read_attribute(layoutxml,dataxml,"color","string")
-  local width          = publisher.read_attribute(layoutxml,dataxml,"width","number")
-  local angle          = publisher.read_attribute(layoutxml,dataxml,"angle","number")
-  local columns        = publisher.read_attribute(layoutxml,dataxml,"columns","number")
-  local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","string")
-  local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","string")
+  local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface","rawstring")
+  local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",   "rawstring")
+  local width          = publisher.read_attribute(layoutxml,dataxml,"width",   "number")
+  local angle          = publisher.read_attribute(layoutxml,dataxml,"angle",   "number")
+  local columns        = publisher.read_attribute(layoutxml,dataxml,"columns", "number")
+  local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","rawstring")
+  local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
 
 
   columns = columns or 1
@@ -1771,7 +1775,7 @@ end
 --- -----
 --- Get the value of an xpath expression (attribute `select`) or of the literal string.
 function commands.value( layoutxml,dataxml )
-  local selection = publisher.read_attribute(layoutxml,dataxml,"select","string")
+  local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
 
   local tab
   if selection then
@@ -1786,7 +1790,7 @@ end
 --- -----
 --- A while loop. Use the condition in `test` to determine if the loop should be entered
 function commands.while_do( layoutxml,dataxml )
-  local test = publisher.read_attribute(layoutxml,dataxml,"test","string")
+  local test = publisher.read_attribute(layoutxml,dataxml,"test","rawstring")
   assert(test)
 
   while xpath.parse(dataxml,test) do

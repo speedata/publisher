@@ -1260,7 +1260,7 @@
           <choice>
             <value>links</value>
             <a:documentation docid="td/align/left">Linksbündig ausgeben</a:documentation>
-            <value>center</value>
+            <value>zentriert</value>
             <a:documentation docid="td/align/center">Zentriert ausgeben</a:documentation>
             <value>rechts</value>
             <a:documentation docid="td/align/right">Rechtsbündig ausgeben</a:documentation>
@@ -1317,7 +1317,7 @@
             <choice>
               <value>links</value>
               <a:documentation docid="td/align/left">Linksbündig ausgeben</a:documentation>
-              <value>center</value>
+              <value>zentriert</value>
               <a:documentation docid="td/align/center">Zentriert ausgeben</a:documentation>
               <value>rechts</value>
               <a:documentation docid="td/align/right">Rechtsbündig ausgeben</a:documentation>

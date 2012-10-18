@@ -226,8 +226,11 @@ end
 
 --- Return the value as an english string. The argument is in the
 --- current language of the layout file (currently English and German).
-function translate_value( value )
-  local tmp = translations[current_layoutlanguage].values[value]
+--- All translations are only valid in a context which defaults to the
+--- _global_ context.
+function translate_value( value,context )
+  context = context or "*"
+  local tmp = translations[current_layoutlanguage].values[context][value]
   return tmp
 end
 
@@ -836,7 +839,7 @@ end
 --- Read the contents of the attribute `attname_english.` `typ` is one of
 --- `string`, `number`, `length` and `boolean`.
 --- `default` gives something that is to be returned if no attribute with this name is present.
-function read_attribute( layoutxml,dataxml,attname_english,typ,default)
+function read_attribute( layoutxml,dataxml,attname_english,typ,default,context)
   local attname = translate_attribute(attname_english)
   if layoutxml[attname] == nil then
     if default then
@@ -853,20 +856,19 @@ function read_attribute( layoutxml,dataxml,attname_english,typ,default)
   else
     val = layoutxml[attname]
   end
-  local val_english = translate_value(val)
-  if val_english then
-    val = val_english
-  end
 
   if typ=="xpath" then
     return xpath.textvalue(xpath.parse(dataxml,val))
-  elseif typ=="string" then
+  elseif typ=="rawstring" then
     return tostring(val)
+  elseif typ=="string" then
+    return tostring(translate_value(val,context) or default)
   elseif typ=="number" then
     return tonumber(val)
   elseif typ=="length" then
     return val
   elseif typ=="boolean" then
+    val = translate_value(val,context)
     if val=="yes" then
       return true
     elseif val=="no" then

@@ -5,6 +5,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* "Td":e_td Attribut @align@ darf (wie im Handbuch beschrieben) nur noch 'left', 'right' oder 'center' als Werte enthalten.
 * "Tabellenfuß":e_tabellenfuss und "Tabellenkopf":e_tabellenkopf erlauben eine Seitenangabe
 * @sp@: @--[no-]local@ um das lokale Verzeichnis nicht zu beachten
 * @sp@: @--verbose@ erzeugt zusätzliche Informationen
