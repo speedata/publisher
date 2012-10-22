@@ -350,6 +350,9 @@ function dothings()
   local dataxml
   if arg[3] == "-dummy" then
     dataxml = xmlparser.parse_xml("<data />")
+  elseif arg[3] == "-" then
+    log("Reading from stdin")
+    dataxml = xmlparser.parse_xml(io.stdin:read("*a"))
   else
     dataxml = load_xml(arg[3],"data file")
   end

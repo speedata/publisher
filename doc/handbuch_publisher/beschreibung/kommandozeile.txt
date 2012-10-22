@@ -7,20 +7,21 @@ pre. sp --help
 Usage: sp [parameter] command 
 -h, --help                   Show this help
     --autoopen               Open the PDF file (MacOS X and Linux only)
-    --data =NAME             Name of the XML data file. Defaults to 'data.xml'
+    --data=NAME              Name of the XML data file. Defaults to 'data.xml'
     --dummy                  Don't read a data file, use '<data />' as input
--x, --extra-dir =DIR         Additional directory for file search
-    --filter =FILTER         Run XPROC filter before publishing starts
+-x, --extra-dir=DIR          Additional directory for file search
+    --filter=FILTER          Run XPROC filter before publishing starts
     --grid                   Display background grid. Disable with --no-grid
-    --layout =NAME           Name of the layout file. Defaults to 'layout.xml'
-    --[no-]local             Add local directory to the search path
-    --jobname =NAME          The name of the resulting PDF file, default is
+    --[no-]local             Add local directory to the search path. Default
+                             is true
+    --layout=NAME            Name of the layout file. Defaults to 'layout.xml'
+    --jobname=NAME           The name of the resulting PDF file, default is
                              'publisher.pdf'
     --outputdir=DIR          Copy PDF and protocol to this directory
-    --runs =NUM              Number of publishing runs
-    --startpage =NUM         The first page number
+    --runs=NUM               Number of publishing runs 
+    --startpage=NUM          The first page number
     --trace                  Show debug messages and some tracing PDF output
--v, --var =VAR=VALUE         Set a variable for the publishing run
+-v, --var=VAR=VALUE          Set a variable for the publishing run
     --verbose                Print a bit of debugging output
     --version                Show version information
     --xml                    Output as (pseudo-)XML (for list-fonts)
@@ -36,7 +37,7 @@ Commands
 h2. Erklärung der Kommandozeilenparameter
 
 - @--autoopen@:= Öffnet die PDF-Datei nach dem Publisher-Durchlauf. Kann auch in der "Konfigurationsdatei":konfiguration eingestellt werden.
-- @--data=NAME@:= Gibt den Namen der XML-Daten an. Voreinstellung ist @daten.xml@. Ebenfalls "konfigurierbar":konfiguration.
+- @--data=NAME@:= Gibt den Namen der XML-Daten an. Voreinstellung ist @daten.xml@. Ebenfalls "konfigurierbar":konfiguration. Wird als Dateiname ein Strich (@-@) angegeben, liest der Publisher die XML-Daten aus der Standard-Eingabe (STDIN).
 - @--dummy@ := Führt nur das Regelwerk aus. Als Dateninhalt wird @<data />@ angenommen. Dient zum schnellen Testen von Regelwerken
 - @--extra-dir=DIR@ := Erweitert den Suchpfad
 - @--filter=FILTER@ := Führt die angegebene XPROC-Datei aus.

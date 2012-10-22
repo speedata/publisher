@@ -203,6 +203,10 @@ func run(cmdline string) {
 	}
 	cmd := exec.Command(cmdline_array[0])
 	cmd.Args = cmdline_array
+	stdin, err := cmd.StdinPipe()
+	if err != nil {
+		log.Fatal(err)
+	}
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		log.Fatal(err)
@@ -218,6 +222,13 @@ func run(cmdline string) {
 	running_processes = append(running_processes, cmd.Process)
 	go io.Copy(os.Stdout, stdout)
 	go io.Copy(os.Stderr, stderr)
+	// We can read from stdin if data name = "-". But we should only
+	// wait on stdin if we really want to.
+	if 	dataname := getOption("data") ; dataname ==  "-" {
+		io.Copy(stdin,os.Stdin)
+		stdin.Close()
+	}
+
 	err = cmd.Wait()
 	if err != nil {
 		showDuration()
@@ -384,7 +395,7 @@ func runPublisher() {
 func main() {
 	op := optionparser.NewOptionParser()
 	op.On("--autoopen", "Open the PDF file (MacOS X and Linux only)", options)
-	op.On("--data NAME", "Name of the XML data file. Defaults to 'data.xml'", options)
+	op.On("--data NAME", "Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN", options)
 	op.On("--dummy", "Don't read a data file, use '<data />' as input", options)
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
 	op.On("--filter FILTER", "Run XPROC filter before publishing starts", options)

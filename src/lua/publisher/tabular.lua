@@ -281,6 +281,10 @@ function calculate_spaltenbreite( self )
 
     -- erst einmal berechnen, wie breit die Spalten sind, die mit dem colspan überdeckt werden,
     -- aber ohne den colspan eingerechnet.
+    if #colmax < colspan.ende then
+      err("Not enough columns found for colspan")
+      return -1
+    end
     sum_max = table.sum(colmax,colspan.start,colspan.ende)
     sum_min = table.sum(colmin,colspan.start,colspan.ende)
 
@@ -1094,7 +1098,11 @@ end
 function tabelle( self )
   setmetatable(self.column_distances,{ __index = function() return self.colsep or 0 end })
   attach_objects(self.tab)
-  calculate_spaltenbreite(self)
+  if calculate_spaltenbreite(self) ~= nil then
+    err("Cannot print table")
+    local x = node.new("vlist")
+    return x
+  end
   calculate_rowheights(self)
   return setze_tabelle(self)
 end
