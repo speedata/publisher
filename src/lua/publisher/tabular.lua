@@ -983,9 +983,9 @@ function setze_tabelle(self)
   end
 
   -- The maximum heights are saved here for each table. Currently all tables must have the same height (see the metatable)
-  local pagegoals = setmetatable({}, { __index = function() return self.optionen.ht_aktuell - ht_header - ht_footer end})
+  local pagegoals = setmetatable({}, { __index = function() return self.optionen.ht_max - ht_header - ht_footer end})
   pagegoals[1] = self.optionen.ht_aktuell - ht_first_header - ht_footer
-  pagegoals[-1] = self.optionen.ht_aktuell - ht_header - ht_footer_last
+  pagegoals[-1] = self.optionen.ht_max - ht_header - ht_footer_last
 
   -- When we split the current table we return an array:
   local final_split_tables = {}
