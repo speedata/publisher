@@ -20,6 +20,12 @@ local function current_row(dataxml,...)
   return publisher.current_grid:current_row(select(1,...))
 end
 
+
+local function current_column(dataxml,...)
+  publisher.setup_page()
+  return publisher.current_grid:aktuelle_spalte(select(1,...))
+end
+
 local function alternierend(dataxml, ... )
   if not publisher.alternierend then
     publisher.alternierend = 1
@@ -113,6 +119,7 @@ return {
   de = {
     aktuelle_seite     = aktuelle_seite,
     aktuelle_zeile     = current_row,
+    aktuelle_spalte    = current_column,
     alternierend       = alternierend,
     anzahl_datensaetze = anzahl_datensaetze,
     ["anzahl_datensätze"] = anzahl_datensaetze,
@@ -132,6 +139,7 @@ return {
     alternating        = alternierend,
     current_page       = aktuelle_seite,
     current_row        = current_row,
+    current_column     = current_column,
     even               = gerade,
     file_exists        = datei_vorhanden,
     groupheight        = gruppenhoehe,

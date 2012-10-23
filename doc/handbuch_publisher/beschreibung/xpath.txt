@@ -28,6 +28,7 @@ h2. Folgende XPath-Funktionen stehen bereit (im Namensraum @urn:speedata:2009/pu
 
 - sd:aktuelle-seite() := Gibt die Seitennummer zurück.
 - sd:aktuelle-zeile() := Gibt die aktuelle Zeile zurück.
+- sd:aktuelle-spalte() := Gibt die aktuelle Spalte zurück.
 - sd:alternierend(&lt;text>,&lt;text>,.. ) := Bei jedem Aufruf wird das nächste Argument zurück gegeben. Beispiel: @sd:alternierend("Weiß","Grau")@ könnte für die Hintergrundfarbe von Tabellen benutzt werden. Derzeit gibt es keine Möglichkeit, den Wert wieder am Anfang starten zu lassen.
 - sd:anzahl-datensätze(&lt;Sequenz>) := Gibt die Anzahl der Datensätze der Sequenz zurück.
 - sd:anzahl-seiten(&lt;Dateiname>) := Ermittelt die Anzahl der Seiten der angegebenen (PDF-)Datei.
