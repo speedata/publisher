@@ -36,7 +36,7 @@ function attach_objects_row( tab )
   local td_elementname
   local td_contents
   for _,td in ipairs(tab) do
-    td_elementname = publisher.elementname(td)
+    td_elementname = publisher.elementname(td,true)
     td_contents    = publisher.element_contents(td)
     if td_elementname == "Td" then
       local objects = {}
@@ -249,7 +249,7 @@ function calculate_spaltenbreite( self )
         end
       end
     else
-      warning("Unknown Element: %q",tr_elementname)
+      warning("Unknown Element: %q",tr_elementname or "?")
     end -- if it's really a row
   end -- ∀ rows / rules
 
@@ -544,7 +544,7 @@ function calculate_rowheights(self)
       self.rowheights[current_row] = zeilenhoehe
       rowspans = table.__concat(rowspans,_rowspans)
     else
-      warning("Unknown contents in »Tabelle« %s",eltname)
+      warning("Unknown contents in »Tabelle« %s",eltname or "?")
     end -- wenn es nicht eine <Tablerule> ist
   end -- für alle Zeilen
 
@@ -915,7 +915,7 @@ function setze_tabelle(self)
       end
 
     else
-      warning("Unknown contents in »Table« %s",eltname )
+      warning("Unknown contents in »Table« %s",eltname or "?" )
     end -- wenn es eine Tabellenzelle ist
   end
 
