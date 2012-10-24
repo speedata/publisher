@@ -873,6 +873,7 @@ function commands.place_object( layoutxml,dataxml )
   local belegen          = publisher.read_attribute(layoutxml,dataxml,"allocate",       "string", "yes")
   local rahmenfarbe      = publisher.read_attribute(layoutxml,dataxml,"framecolor",     "rawstring")
   local hintergrundfarbe = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
+  local rulewidth_sp     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",      "length_sp")
   local maxhoehe         = publisher.read_attribute(layoutxml,dataxml,"maxheight",      "number")
   local rahmen           = publisher.read_attribute(layoutxml,dataxml,"frame",          "string")
   local hintergrund      = publisher.read_attribute(layoutxml,dataxml,"background",     "string")
@@ -881,6 +882,7 @@ function commands.place_object( layoutxml,dataxml )
   local hreference       = publisher.read_attribute(layoutxml,dataxml,"hreference",     "string")
 
   bereich = bereich or publisher.default_areaname
+  rahmenfarbe = rahmenfarbe or "Schwarz"
 
   if spalte and not tonumber(spalte) then
     -- spalte scheint ein String zu sein
@@ -955,7 +957,7 @@ function commands.place_object( layoutxml,dataxml )
       object = publisher.background(object,hintergrundfarbe)
     end
     if rahmen == "solid" then
-      object = publisher.frame(object,rahmenfarbe)
+      object = publisher.frame(object,rahmenfarbe,rulewidth_sp)
     end
 
     if publisher.options.trace then

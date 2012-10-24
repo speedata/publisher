@@ -30,6 +30,7 @@ h3. Attribute
 |@maxhöhe@         |  ja  | (Zahl) | Die maximale Höhe in Rasterzellen, die das Objekt belegen darf. Wird nur für den automatischen Tabellenumbruch benötigt. Die umbrochenen Tabellen auf den Folgeseiten haben maximal die angegebene Höhe. |
 {background:#ddd}.|@valign@           |  ja  | ("top","middle","bottom") | Wird ein Objekt ausgegeben, das kein Vielfaches der Rasterhöhe ist, dann gibt das Attribut die vertikale Ausrichtung an. Bottom beispielsweise bedeutet, dass der freie Platz oberhalb des Objekts bleibt. Voreinstellung ist "top".|
 |@hreferenz@        | ja   |  ("links","rechts")       | Bestimmt, ob die angegebene Spalte die linke oder die rechte Kante vom Objekt bezeichnet.|
+{background:#ddd}.|@linienstärke@     |  ja  | ("Maßangabe":massangabe) | Gibt die Dicke der Linie an, die um ein Objekt gezeichnet wird (nur bei 'rahmen="durchgezogen"')|
 
 h3. Bemerkung
 

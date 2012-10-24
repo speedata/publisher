@@ -719,10 +719,18 @@
             <a:documentation docid="placeobject/frame/solid">Erzeugt einen durchgezogenen Rahmen um das Objekt</a:documentation>
           </choice>
         </attribute>
+      </optional>
+      <optional>
         <attribute name="rahmenfarbe">
           <data type="string"/>
         </attribute>
         <a:documentation docid="placeobject/framecolor">Farbe des Rahmens, der gezeichnet werden soll. (Text)</a:documentation>
+      </optional>
+      <optional>
+        <attribute name="linienstärke">
+          <data type="string"/>
+        </attribute>
+        <a:documentation docid="placeobject/rulewidth">Dicke der Rahmenlinie die gezeichnet wird.</a:documentation>
       </optional>
       <optional>
         <attribute name="hintergrund">

@@ -744,10 +744,10 @@ function background( box, colorname )
 end
 
 --- Draw a frame around the given TeX box with color `colorname`.
-function frame( box, colorname )
+function frame( box, colorname, width )
   local pdfcolorstring = colors[colorname].pdfstring
   local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
-  local w = 3 -- width of stroke 
+  local w = width / factor -- width of stroke
   local hw = 0.5 * w -- half width of stroke
   n = node.new(whatsit_node,pdf_literal_node)
   n.data = string.format("q %s %g w -%g -%g %g %g re S Q",pdfcolorstring, w , hw ,dp + hw ,wd + w,ht + dp + w)
@@ -870,6 +870,8 @@ function read_attribute( layoutxml,dataxml,attname_english,typ,default,context)
     return tonumber(val)
   elseif typ=="length" then
     return val
+  elseif typ=="length_sp" then
+    return tex.sp(val)
   elseif typ=="boolean" then
     val = translate_value(val,context)
     if val=="yes" then

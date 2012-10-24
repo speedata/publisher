@@ -704,10 +704,18 @@
             <a:documentation docid="placeobject/frame/solid">Draw a solid frame around the object</a:documentation>
           </choice>
         </attribute>
+      </optional>
+      <optional>
         <attribute name="framecolor">
           <data type="string"/>
         </attribute>
         <a:documentation docid="placeobject/framecolor">Color of the frame that is drawn around the object. (text)</a:documentation>
+      </optional>
+      <optional>
+        <attribute name="rulewidth">
+          <data type="string"/>
+        </attribute>
+        <a:documentation docid="placeobject/rulewidth">Width of the frame that is drawn around the box. (length)</a:documentation>
       </optional>
       <optional>
         <attribute name="background">

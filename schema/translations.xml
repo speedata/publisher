@@ -692,6 +692,10 @@
          <en>Color of the frame that is drawn around the object. (text)</en>
          <de>Farbe des Rahmens, der gezeichnet werden soll. (Text)</de>
       </documentation>
+     <documentation docid="placeobject/rulewidth">
+       <en>Width of the frame that is drawn around the box. (length)</en>
+       <de>Dicke der Rahmenlinie die gezeichnet wird.</de>
+     </documentation>
       <documentation docid="placeobject/background">
          <en>Background behind the object</en>
          <de>Fläche hinter dem Objekt</de>

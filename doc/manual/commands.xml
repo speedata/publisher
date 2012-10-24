@@ -1434,6 +1434,9 @@
     <description xml:lang="de">
       <para>Gibt ein rechteckiges Objekt (Bild, Tabelle, Box oder Textblock) aus.</para>
     </description>
+    <description xml:lang="en">
+      <para>Outputs a rectangular object (image, table, box or textblock).</para>
+    </description>
     <childelements>
       <cmd name="Image" />
       <cmd name="Box" />
@@ -1449,11 +1452,17 @@
         <para>Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei belegen=“nein” wird auch die aktuelle Zeile im Raster nicht verändert. Bei “auto” wird bei Bildern der
           Bildumriss beachtet, sofern eine Umrissdatei vorliegt. Siehe die Beschreibung bei Bild</para>
       </description>
+      <description xml:lang="en">
+        <para>Determines if the area of the object is marked as »allocated«. With allocate="no", the cursor position is not changed.</para>
+      </description>
     </attribute>
     <attribute name="area" type="text" optional="yes">
       <description xml:lang="de">
         <para>Name des Bereichs (Platzierungsbereich), in dem das Objekt ausgegeben werden soll. Wird kein Bereich angegeben, so wird das Objekt auf der »Seite« (dem Bereich, der alle Rasterkästen
           beinhaltet) ausgegeben.</para>
+      </description>
+      <description xml:lang="en">
+        <para>Name of the (positioning) area, the ojbect is placed in. If no area is given, the object is placed on the main area, the page (this is the area that contains all grid cells).</para>
       </description>
     </attribute>
     <attribute name="groupname" type="text" optional="yes">
@@ -1465,10 +1474,24 @@
       <description xml:lang="de">
         <para>Es wird ein durchgezogener Rahmen um das Objekt gezeichnet. Zusätzlich muss die Rahmenfarbe angegeben werden. “ohne”: Es wird kein Rahmen gezeichnet.</para>
       </description>
+      <description xml:lang="en">
+        <para>Draw a solid frame around the object.</para>
+      </description>
     </attribute>
     <attribute name="framecolor" type="text" optional="yes">
       <description xml:lang="de">
-        <para>Die Farbe des Rahmens, wenn ein Rahmen ausgegeben wird (feste Werte müssen in Hochkommata eingeschlossen sein, siehe Beispiel). Nur möglich zusammen mit dem Attribut rahmen.</para>
+        <para>Die Farbe des Rahmens, wenn ein Rahmen ausgegeben wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
+      </description>
+      <description xml:lang="en">
+        <para>The color of the frame around the object. Only makes sense in combination with the attribute 'frame'.</para>
+      </description>
+    </attribute>
+    <attribute name="rulewidth" type="length" optional="yes">
+      <description xml:lang="de">
+        <para>Die Dicke des Rahmnes, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
+      </description>
+      <description xml:lang="en">
+        <para>The thickness of the frame that is drawn around the object. Only makes sense in combination with the attribute 'frame'.</para>
       </description>
     </attribute>
     <attribute name="column" type="numberorlength" optional="yes">
