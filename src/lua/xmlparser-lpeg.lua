@@ -20,6 +20,7 @@ local Quote = P('"')
 local quote = P("'")
 local lts = P"</"
 local sgt = P"/>"
+local cdataend = P"]]>"
 local space = S("\09\010\013\032")^1
 local non_att = P( 1 - ( lt + amp + quote)  )
 local non_Att = P( 1 - ( lt + amp + Quote)  )
@@ -322,6 +323,15 @@ xml = P {
    PI = ( P'<?' * V"PITarget" * space * (V"Char" - questionmarkgt )^0   * questionmarkgt ),
 -- 17
    PITarget = V"Name",
+-- 18
+   CDSect = V"CDStart" * V"CData" * V"CDEnd",
+-- 19
+   CDStart = P"<![CDATA[",
+-- [20]    CData    ::=    (Char* - (Char* ']]>' Char*))
+-- 20
+   CData = ( (char - cdataend)^0 )/ c_return_self,
+-- 21
+   CDEnd = cdataend,
 -- 22 - 	XMLDecl? Misc* (doctypedecl Misc*)?
    prolog = V"XMLDecl"^-1 *  ( V"Misc" )^0 ,
 -- 23
@@ -345,7 +355,8 @@ xml = P {
 -- 42
    ETag = lts * V"Name" * (space)^0 * gt / c_gobble,
 -- 43 *
-   content = ( (V"CharData")^-1 * ( (V"element" + V"Reference" + V"Comment" + V"PI" ) * (V"CharData")^-1 )^0  ) / c_return_self,
+-- [43]    content    ::=    CharData? ((element | Reference | CDSect | PI | Comment) CharData?)*  /* */
+   content = ( (V"CharData")^-1 * ( (V"element" + V"Reference" + V"CDSect" + V"PI" + V"Comment") * (V"CharData")^-1 )^0  ) / c_return_self,
 -- 44
    EmptyElemTag	= ( lt * V"Name" * (space * V"Attribute")^0 * space^-1 * sgt ) /c_empty_elem_tag,
 -- 66

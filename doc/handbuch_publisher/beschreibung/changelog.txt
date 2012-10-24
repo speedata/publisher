@@ -5,6 +5,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* CDATA Abschnitte im lpeg-XML-Parser sind erlaubt
 * Neue XPath-Funktion "sd:aktuelle-spalte()":xpath 
 * @sp@ liest Daten von STDIN wenn der Datenname @-@ ist.
 * "Td":e_td Attribut @align@ darf (wie im Handbuch beschrieben) nur noch 'left', 'right' oder 'center' als Werte enthalten.
