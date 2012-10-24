@@ -48,17 +48,17 @@ end
 --- Return a number. This number is an index to the table `publisher.user_defined_functions` and the value
 --- is a function that sets a key of another table.
 function commands.add_to_list( layoutxml,dataxml )
-  local schluessel = publisher.read_attribute(layoutxml,dataxml,"key","rawstring")
-  local listenname = publisher.read_attribute(layoutxml,dataxml,"list","rawstring")
-  local selection    = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
+  local key        = publisher.read_attribute(layoutxml,dataxml,"key","rawstring")
+  local listname   = publisher.read_attribute(layoutxml,dataxml,"list","rawstring")
+  local selection  = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
 
-  local wert = xpath.parse(dataxml,selection)
-  if not publisher.variablen[listenname] then
-    publisher.variablen[listenname] = {}
+  local value = xpath.parse(dataxml,selection)
+  if not publisher.variablen[listname] then
+    publisher.variablen[listname] = {}
   end
   local udef = publisher.user_defined_functions
-  local var  = publisher.variablen[listenname]
-  udef[udef.last + 1] = function() var[#var + 1] = { schluessel , wert } end
+  local var  = publisher.variablen[listname]
+  udef[udef.last + 1] = function() var[#var + 1] = { key , value } end
   udef.last = udef.last + 1
   return udef.last
 end
@@ -189,8 +189,8 @@ end
 --- Set defintions for a specific column of a table.
 function commands.column( layoutxml,dataxml )
   local ret = {}
-  ret.breite           = publisher.read_attribute(layoutxml,dataxml,"width","rawstring")
-  ret.hintergrundfarbe = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
+  ret.width            = publisher.read_attribute(layoutxml,dataxml,"width","rawstring")
+  ret.backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
   ret.align            = publisher.read_attribute(layoutxml,dataxml,"align","string")
   ret.valign           = publisher.read_attribute(layoutxml,dataxml,"valign","string")
 
@@ -217,7 +217,6 @@ function commands.copy_of( layoutxml,dataxml )
     return table.concat(layoutxml)
   else
     selection = xpath.parse(dataxml,selection)
-    trace("Kopie-von: type(selection)=%q",type(selection))
     return selection
   end
 end
@@ -315,6 +314,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
   fam.scriptsize   = fam.size * 0.8 -- subscript / superscript
   fam.scriptshift  = fam.size * 0.3
 
+  -- Not used anymore?
   if not fam.size then
     err("DefineFontfamily: no size given.")
     return
@@ -324,7 +324,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
     elementname = publisher.translate_element(v[".__name"])
     fontface    = publisher.read_attribute(v,dataxml,"fontface","rawstring")
     if type(v) ~= "table" then
-     -- ignorieren
+     -- ignore
     elseif elementname=="Regular" then
       ok,tmp=fonts.make_font_instance(fontface,fam.size)
       if ok then
@@ -424,9 +424,9 @@ end
 --- -----
 --- Set the grid (in a pagetype?)
 function commands.grid( layoutxml,dataxml )
-  local breite = publisher.read_attribute(layoutxml,dataxml,"width","length")
-  local hoehe  = publisher.read_attribute(layoutxml,dataxml,"height"  ,"length")
-  return { breite = tex.sp(breite), hoehe = tex.sp(hoehe) }
+  local width  = publisher.read_attribute(layoutxml,dataxml,"width",  "length_sp")
+  local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp")
+  return { breite = width, hoehe = height }
 end
 
 --- Group
@@ -437,15 +437,15 @@ function commands.group( layoutxml,dataxml )
   local groupname = publisher.read_attribute(layoutxml,dataxml,"name", "rawstring")
 
   if publisher.groups[groupname] == nil then
-    log("Create »Gruppe« %q.",groupname)
+    log("Create »Group« %q.",groupname)
   else
     node.flush_list(publisher.groups[groupname].contents)
     publisher.groups[groupname] = nil
   end
 
   local r = publisher.grid:new()
-  r:setze_rand(0,0,0,0)
-  r:setze_breite_hoehe(publisher.current_page.raster.gridwidth,publisher.current_page.raster.gridheight)
+  r:set_margin(0,0,0,0)
+  r:set_width_height(publisher.current_page.raster.gridwidth,publisher.current_page.raster.gridheight)
   publisher.groups[groupname] = {
     contents = contents,
     grid     = r,
@@ -626,7 +626,7 @@ function commands.emptyline( layoutxml,dataxml )
   local areaname = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
   local areaname = areaname or publisher.default_areaname
   local current_grid = publisher.current_grid
-  local current_row = current_grid:finde_passende_zeile(1,current_grid:anzahl_spalten(),1,areaname)
+  local current_row = current_grid:find_suitable_row(1,current_grid:number_of_columns(),1,areaname)
   if not current_row then
     current_grid:set_current_row(1)
   else
@@ -643,7 +643,7 @@ function commands.margin( layoutxml,dataxml )
   local top    = publisher.read_attribute(layoutxml,dataxml,"top",  "length")
   local bottom = publisher.read_attribute(layoutxml,dataxml,"bottom", "length")
 
-  return function(_seite) _seite.raster:setze_rand(left,top,right,bottom) end
+  return function(_seite) _seite.raster:set_margin(left,top,right,bottom) end
 end
 
 
@@ -720,7 +720,7 @@ function commands.next_row( layoutxml,dataxml )
   end
 
   local current_row
-  current_row = grid:finde_passende_zeile(1,grid:anzahl_spalten(areaname),rows,areaname)
+  current_row = grid:find_suitable_row(1,grid:number_of_columns(areaname),rows,areaname)
   if not current_row then
     publisher.next_area(areaname)
     publisher.setup_page()
@@ -728,7 +728,7 @@ function commands.next_row( layoutxml,dataxml )
     grid:set_current_row(1)
   else
     grid:set_current_row(current_row + rows - 1,areaname)
-    grid:setze_aktuelle_spalte(1,areaname)
+    grid:set_current_column(1,areaname)
   end
 end
 
@@ -869,20 +869,20 @@ function commands.place_object( layoutxml,dataxml )
   local absolute_positioning = false
   local spalte           = publisher.read_attribute(layoutxml,dataxml,"column",         "rawstring")
   local zeile            = publisher.read_attribute(layoutxml,dataxml,"row",            "rawstring")
-  local bereich          = publisher.read_attribute(layoutxml,dataxml,"area",           "rawstring")
-  local belegen          = publisher.read_attribute(layoutxml,dataxml,"allocate",       "string", "yes")
-  local rahmenfarbe      = publisher.read_attribute(layoutxml,dataxml,"framecolor",     "rawstring")
-  local hintergrundfarbe = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
+  local area             = publisher.read_attribute(layoutxml,dataxml,"area",           "rawstring")
+  local allocate         = publisher.read_attribute(layoutxml,dataxml,"allocate",       "string", "yes")
+  local framecolor       = publisher.read_attribute(layoutxml,dataxml,"framecolor",     "rawstring")
+  local backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
   local rulewidth_sp     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",      "length_sp")
-  local maxhoehe         = publisher.read_attribute(layoutxml,dataxml,"maxheight",      "number")
-  local rahmen           = publisher.read_attribute(layoutxml,dataxml,"frame",          "string")
-  local hintergrund      = publisher.read_attribute(layoutxml,dataxml,"background",     "string")
+  local maxheight        = publisher.read_attribute(layoutxml,dataxml,"maxheight",      "number")
+  local frame            = publisher.read_attribute(layoutxml,dataxml,"frame",          "string")
+  local background       = publisher.read_attribute(layoutxml,dataxml,"background",     "string")
   local groupname        = publisher.read_attribute(layoutxml,dataxml,"groupname",      "rawstring")
   local valign           = publisher.read_attribute(layoutxml,dataxml,"valign",         "string")
   local hreference       = publisher.read_attribute(layoutxml,dataxml,"hreference",     "string")
 
-  bereich = bereich or publisher.default_areaname
-  rahmenfarbe = rahmenfarbe or "Schwarz"
+  area = area or publisher.default_areaname
+  framecolor = framecolor or "Schwarz"
 
   if spalte and not tonumber(spalte) then
     -- spalte scheint ein String zu sein
@@ -897,24 +897,24 @@ function commands.place_object( layoutxml,dataxml )
 
   if absolute_positioning then
     if not ( zeile and spalte ) then
-      err("»Spalte« and »Zeile« must be given with absolute positioning (»ObjektAusgeben«).")
+      err("»Column« and »Row« must be given with absolute positioning (PlaceObject).")
       return
     end
   end
 
   publisher.setup_page()
 
-  trace("Spalte = %q",tostring(spalte))
-  trace("Zeile = %q",tostring(zeile))
+  trace("Column = %q",tostring(spalte))
+  trace("Row = %q",tostring(zeile))
 
-  local current_row_start  = publisher.current_grid:current_row(bereich)
-  local aktuelle_spalte_start = spalte or publisher.current_grid:aktuelle_spalte(bereich)
+  local current_row_start  = publisher.current_grid:current_row(area)
+  local current_column_start = spalte or publisher.current_grid:current_column(area)
 
-  -- Die Höhe auf dieser Seite ist entweder das Minimum von verbleibende Platz oder maxhöhe
-  local max_ht_aktuell =  math.min(publisher.current_grid:anzahl_zeilen(bereich) - ( zeile or publisher.current_grid:current_row(bereich) ) + 1, maxhoehe or publisher.current_grid:anzahl_zeilen(bereich))
+  -- The height of this page is the minimum of the remaining space or maxheight
+  local this_page_max_height = math.min(publisher.current_grid:number_of_rows(area) - ( zeile or publisher.current_grid:current_row(area) ) + 1, maxheight or publisher.current_grid:number_of_rows(area))
   local optionen = {
-    ht_aktuell = publisher.current_grid.gridheight * max_ht_aktuell,
-    ht_max     = publisher.current_grid.gridheight * ( maxhoehe or publisher.current_grid:anzahl_zeilen(bereich) ),
+    ht_aktuell = publisher.current_grid.gridheight * this_page_max_height,
+    ht_max     = publisher.current_grid.gridheight * ( maxheight or publisher.current_grid:number_of_rows(area) ),
   }
 
   local raster = publisher.current_grid
@@ -949,40 +949,40 @@ function commands.place_object( layoutxml,dataxml )
     end
   end
   for i=1,#objects do
-    raster = publisher.current_grid
-    object    = objects[i].object
+    current_grid = publisher.current_grid
+    object     = objects[i].object
     objecttype = objects[i].objecttype
 
-    if hintergrund == "full" then
-      object = publisher.background(object,hintergrundfarbe)
+    if background  == "full" then
+      object = publisher.background(object,backgroundcolor)
     end
-    if rahmen == "solid" then
-      object = publisher.frame(object,rahmenfarbe,rulewidth_sp)
+    if frame  == "solid" then
+      object = publisher.frame(object,framecolor,rulewidth_sp)
     end
 
     if publisher.options.trace then
       publisher.boxit(object)
     end
 
-    local breite_in_rasterzellen = raster:breite_in_rasterzellen_sp(object.width)
-    local hoehe_in_rasterzellen  = raster:hoehe_in_rasterzellen_sp (object.height + object.depth)
+    local width_in_gridcells   = current_grid:width_in_gridcells_sp(object.width)
+    local height_in_gridcells  = current_grid:height_in_gridcells_sp (object.height + object.depth)
 
 
     if absolute_positioning then
       if hreference == "right" then
-        spalte = spalte - breite_in_rasterzellen + 1
+        spalte = spalte - width_in_gridcells + 1
       end
-      publisher.ausgabe_bei_absolut(object,spalte + raster.extra_rand,zeile + raster.extra_rand,belegen,objects[i].allocate_matrix)
+      publisher.output_absolute_position(object,spalte + current_grid.extra_rand,zeile + current_grid.extra_rand,allocate,objects[i].allocate_matrix)
     else
       -- Look for a place for the object
-      -- local current_row = raster:current_row(bereich)
+      -- local current_row = current_grid:current_row(area)
       trace("PlaceObject: Breitenberechnung")
       if not node.has_field(object,"width") then
         warning("Can't calculate with object's width!")
       end
-      trace("PlaceObject: Breitenberechnung abgeschlossen: wd=%d,ht=%d",breite_in_rasterzellen,hoehe_in_rasterzellen)
+      trace("PlaceObject: finished calculating width: wd=%d,ht=%d",width_in_gridcells,height_in_gridcells)
 
-      trace("PlaceObject: finde passende Zeile für das object, current_row = %d",zeile or raster:current_row(bereich) or "-1")
+      trace("PlaceObject: find suitable row for object, current_row = %d",zeile or current_grid:current_row(area) or "-1")
       if zeile then
         current_row = zeile
       else
@@ -993,8 +993,8 @@ function commands.place_object( layoutxml,dataxml )
       while current_row == nil do
         if not spalte then
           -- Keine Zeile und keine Spalte angegeben. Dann suche ich mir doch die richtigen Werte selbst.
-          if aktuelle_spalte_start + breite_in_rasterzellen - 1 > raster:anzahl_spalten() then
-            aktuelle_spalte_start = 1
+          if current_column_start + width_in_gridcells - 1 > current_grid:number_of_columns() then
+            current_column_start = 1
           end
         end
         -- This is not correct! Todo: fixme!
@@ -1002,28 +1002,28 @@ function commands.place_object( layoutxml,dataxml )
           current_row = 1
         else
           -- the current grid is different when in a group
-          current_row = raster:finde_passende_zeile(aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen,bereich)
+          current_row = current_grid:find_suitable_row(current_column_start,width_in_gridcells,height_in_gridcells,area)
           if not current_row then
             warning("No suitable row found for object")
-            publisher.next_area(bereich)
+            publisher.next_area(area)
             publisher.setup_page()
-            raster = publisher.current_grid
-            current_row = publisher.current_grid:current_row(bereich)
+            current_grid = publisher.current_grid
+            current_row = publisher.current_grid:current_row(area)
           end
         end
       end
 
-      log("PlaceObject: %s in row %d and column %d, width=%d, height=%d", objecttype, current_row, aktuelle_spalte_start,breite_in_rasterzellen,hoehe_in_rasterzellen)
-      trace("PlaceObject: object placed at (%d,%d)",aktuelle_spalte_start,current_row)
+      log("PlaceObject: %s in row %d and column %d, width=%d, height=%d", objecttype, current_row, current_column_start,width_in_gridcells,height_in_gridcells)
+      trace("PlaceObject: object placed at (%d,%d)",current_column_start,current_row)
       if hreference == "right" then
-        aktuelle_spalte_start = aktuelle_spalte_start - breite_in_rasterzellen + 1
+        current_column_start = current_column_start - width_in_gridcells + 1
       end
-      publisher.ausgabe_bei(object,aktuelle_spalte_start,current_row,belegen == "yes",bereich,valign,objects[i].allocate_matrix)
+      publisher.ausgabe_bei(object,current_column_start,current_row,allocate == "yes",area,valign,objects[i].allocate_matrix)
       trace("object ausgegeben.")
-      zeile = nil -- die Zeile ist nicht mehr gültig, da schon ein object ausgegeben wurde
-    end -- keine absolute Positionierung
+      zeile = nil -- the current rows is not valid anymore because an object is already rendered
+    end -- no absolute positioning
   end
-  if not belegen == "yes" then
+  if not allocate == "yes" then
     publisher.current_grid:set_current_row(current_row_start)
   end
   trace("objects ausgegeben.")
@@ -1457,7 +1457,7 @@ function commands.table( layoutxml,dataxml,optionen )
   local tabular = publisher.tabular:new()
 
   tabular.tab = tab
-  tabular.optionen       = optionen or { ht_aktuell=100*2^16 } -- FIXME! Test - this is for tabular in tabular
+  tabular.optionen       = optionen or { ht_max=99999*2^16 } -- FIXME! Test - this is for tabular in tabular
   tabular.layoutxml      = layoutxml
   tabular.dataxml        = dataxml
   tabular.breite         = width

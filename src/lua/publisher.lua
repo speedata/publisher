@@ -338,7 +338,7 @@ function dothings()
 
   --- The default page type has 1cm margin
   local onecm=tex.sp("1cm")
-  masterpages[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", contents = function(_seite) _seite.raster:setze_rand(onecm,onecm,onecm,onecm) end }}, name = "Seite" }
+  masterpages[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", contents = function(_seite) _seite.raster:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Seite" }
 
   --- Both the data and the layout instructions are written in XML.
   local layoutxml = load_xml(arg[2],"layout instructions")
@@ -488,8 +488,8 @@ function load_xml(filename,filetype)
   return xmltab
 end
 
---- Place an object at a position given in scaled points (_x_ and _y_).
-function ausgabe_bei_absolut( nodelist,x,y,belegen,bereich )
+--- Place an object at a position given in scaled points (_x_ and _y_). `allocate` is ignored at at the moment.
+function output_absolute_position( nodelist,x,y,allocate,bereich )
 
   if node.has_attribute(nodelist,att_shift_left) then
     x = x - node.has_attribute(nodelist,att_shift_left)
@@ -510,14 +510,14 @@ end
 
 --- Put the object (nodelist) on grid cell (x,y). If `allocate`=`true` then
 --- mark cells as occupied.
-function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
+function ausgabe_bei( nodelist, x,y,allocate,bereich,valign,allocate_matrix)
 
   bereich = bereich or default_areaname
   local r = current_grid
   local wd = nodelist.width
   local ht = nodelist.height + nodelist.depth
-  local breite_in_rasterzellen = r:breite_in_rasterzellen_sp(wd)
-  local hoehe_in_rasterzellen  = r:hoehe_in_rasterzellen_sp (ht)
+  local breite_in_rasterzellen = r:width_in_gridcells_sp(wd)
+  local hoehe_in_rasterzellen  = r:height_in_gridcells_sp (ht)
 
   local delta_x, delta_y = r:position_rasterzelle_mass_tex(x,y,bereich,wd,ht,valign)
   if not delta_x then
@@ -564,13 +564,13 @@ function ausgabe_bei( nodelist, x,y,belegen,bereich,valign,allocate_matrix)
       -- group is empty
       group.contents = n
     end
-    if belegen then
-      r:belege_zellen(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,allocate_matrix,options.showgridallocation)
+    if allocate then
+      r:allocate_cells(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,allocate_matrix,options.showgridallocation)
     end
   else
     -- Put it on the current page
-    if belegen then
-      r:belege_zellen(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,allocate_matrix,options.showgridallocation,bereich)
+    if allocate then
+      r:allocate_cells(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,allocate_matrix,options.showgridallocation,bereich)
     end
 
     local n = add_glue( nodelist ,"head",{ width = delta_x })
@@ -619,7 +619,7 @@ function setup_page()
 
   current_page, errorstring = seite:new(options.pagewidth,options.seitenhoehe, extra_margin, trim_amount)
   if not current_page then
-    err("Can't create a new page. Is the page type (»Seitentyp«) defined? %s",errorstring)
+    err("Can't create a new page. Is the page type (»PageType«) defined? %s",errorstring)
     exit()
   end
   current_grid = current_page.raster
@@ -650,7 +650,7 @@ function setup_page()
   end
   assert(gridwidth)
   assert(gridheight,"Gridheight!")
-  current_page.raster:setze_breite_hoehe(gridwidth,gridheight)
+  current_page.raster:set_width_height(gridwidth,gridheight)
 
   for _,j in ipairs(pagetype) do
     local eltname = elementname(j,true)
@@ -664,12 +664,12 @@ function setup_page()
       current_page.AtPageShipout = element_contents(j)
     elseif eltname=="PositioningArea" then
       local name = element_contents(j).name
-      current_grid.platzierungsbereiche[name] = {}
-      local aktueller_platzierungsbereich = current_grid.platzierungsbereiche[name]
-      -- we eveluate now, because the attributes in PositioningFrame can be page dependent.
+      current_grid.positioning_frames[name] = {}
+      local current_positioning_area = current_grid.positioning_frames[name]
+      -- we evaluate now, because the attributes in PositioningFrame can be page dependent.
       local tab  = publisher.dispatch(element_contents(j).layoutxml,dataxml)
       for i,k in ipairs(tab) do
-        aktueller_platzierungsbereich[#aktueller_platzierungsbereich + 1] = element_contents(k)
+        current_positioning_area[#current_positioning_area + 1] = element_contents(k)
       end
     else
       err("Element name %q unknown (setup_page())",eltname or "<create_page>")
@@ -688,7 +688,7 @@ function next_area( areaname )
   if aktuelle_nummer >= current_grid:anzahl_rahmen(areaname) then
     new_page()
   else
-    current_grid:setze_rahmennummer(areaname, aktuelle_nummer + 1)
+    current_grid:set_framenumber(areaname, aktuelle_nummer + 1)
   end
   current_grid:set_current_row(1,areaname)
 end

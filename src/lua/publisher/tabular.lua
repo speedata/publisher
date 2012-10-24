@@ -172,17 +172,17 @@ function calculate_spaltenbreite( self )
           i = i + 1
           self.align[i] =  column_contents.align
           self.valign[i] = column_contents.valign
-          if column_contents.breite then
+          if column_contents.width then
             -- if I have something written in <column> I don't need to calculate column width:
             columnwidths_given = true
-            local width_stars = string.match(column_contents.breite,pattern)
+            local width_stars = string.match(column_contents.width,pattern)
             if width_stars then
               count_stars = count_stars + width_stars
             else
-              if tonumber(column_contents.breite) then
-                self.colwidths[i] = publisher.current_grid.gridwidth * column_contents.breite
+              if tonumber(column_contents.width) then
+                self.colwidths[i] = publisher.current_grid.gridwidth * column_contents.width
               else
-                self.colwidths[i] = tex.sp(column_contents.breite)
+                self.colwidths[i] = tex.sp(column_contents.width)
               end
               summe_echte_breiten = summe_echte_breiten + self.colwidths[i]
             end
@@ -208,7 +208,7 @@ function calculate_spaltenbreite( self )
           if publisher.elementname(column,true)=="Column" then
             local column_contents = publisher.element_contents(column)
             i = i + 1
-            local width_stars = string.match(column_contents.breite,pattern)
+            local width_stars = string.match(column_contents.width,pattern)
             if width_stars then
               self.colwidths[i] = math.round( to_distribute *  width_stars / count_stars ,0)
             end
@@ -986,10 +986,12 @@ function setze_tabelle(self)
     tablefoot_last[1] = node.copy_list(tablefoot[1])
   end
 
+  local ht_current = self.optionen.ht_aktuell or self.optionen.ht_max
+  local ht_max     = self.optionen.ht_max
   -- The maximum heights are saved here for each table. Currently all tables must have the same height (see the metatable)
-  local pagegoals = setmetatable({}, { __index = function() return self.optionen.ht_max - ht_header - ht_footer end})
-  pagegoals[1] = self.optionen.ht_aktuell - ht_first_header - ht_footer
-  pagegoals[-1] = self.optionen.ht_max - ht_header - ht_footer_last
+  local pagegoals = setmetatable({}, { __index = function() return ht_max - ht_header - ht_footer end})
+  pagegoals[1]  = ht_current - ht_first_header - ht_footer
+  pagegoals[-1] = ht_max - ht_header - ht_footer_last
 
   -- When we split the current table we return an array:
   local final_split_tables = {}

@@ -23,7 +23,7 @@ end
 
 local function current_column(dataxml,...)
   publisher.setup_page()
-  return publisher.current_grid:aktuelle_spalte(select(1,...))
+  return publisher.current_grid:current_column(select(1,...))
 end
 
 local function alternierend(dataxml, ... )
@@ -45,14 +45,14 @@ local function anzahl_datensaetze(dataxml,d)
   return count
 end
 
-local function anzahl_spalten(dataxml,...)
+local function number_of_columns(dataxml,...)
   publisher.setup_page()
-  return publisher.current_grid:anzahl_spalten(select(1,...))
+  return publisher.current_grid:number_of_columns(select(1,...))
 end
 
 local function anzahl_zeilen(dataxml,...)
   publisher.setup_page()
-  return publisher.current_grid:anzahl_zeilen(select(1,...))
+  return publisher.current_grid:number_of_rows(select(1,...))
 end
 
 local function anzahl_seiten( dataxml,... )
@@ -65,7 +65,7 @@ local function bildbreite(dataxml, ... )
   dateiname=select(1,...)
   local img = publisher.imageinfo(dateiname)
   publisher.setup_page()
-  return publisher.current_grid:breite_in_rasterzellen_sp(img.width)
+  return publisher.current_grid:width_in_gridcells_sp(img.width)
 end
 
 local function datei_vorhanden(dataxml, ... )
@@ -91,7 +91,7 @@ local function gruppenbreite(dataxml, ... )
   local groupname=select(1,...)
   local gruppeninhalt=publisher.groups[groupname].contents
   local raster = publisher.current_grid
-  local breite = raster:breite_in_rasterzellen_sp(gruppeninhalt.width)
+  local breite = raster:width_in_gridcells_sp(gruppeninhalt.width)
   return breite
 end
 
@@ -101,7 +101,7 @@ local function gruppenhoehe(dataxml, ... )
   local groupname=select(1,...)
   local gruppeninhalt=publisher.groups[groupname].contents
   local raster = publisher.current_grid
-  local height = raster:hoehe_in_rasterzellen_sp(gruppeninhalt.height)
+  local height = raster:height_in_gridcells_sp(gruppeninhalt.height)
   return height
 end
 
@@ -124,7 +124,7 @@ return {
     anzahl_datensaetze = anzahl_datensaetze,
     ["anzahl_datensätze"] = anzahl_datensaetze,
     anzahl_seiten      = anzahl_seiten,
-    anzahl_spalten     = anzahl_spalten,
+    anzahl_spalten     = number_of_columns,
     anzahl_zeilen      = anzahl_zeilen,
     bildbreite         = bildbreite,
     datei_vorhanden    = datei_vorhanden,
@@ -146,7 +146,7 @@ return {
     groupwidth         = gruppenbreite,
     format_number      = format_number,
     imagewidth         = bildbreite,
-    number_of_columns  = anzahl_spalten,
+    number_of_columns  = number_of_columns,
     number_of_datasets = anzahl_datensaetze,
     number_of_pages    = anzahl_seiten,
     number_of_rows     = anzahl_zeilen,
