@@ -1323,11 +1323,11 @@
             <attribute name="align">
               <a:documentation docid="column/align">Bestimmt die horizonatale Ausrichtung für alle Zellen dieser Spalte</a:documentation>
             <choice>
-              <value>links</value>
+              <value>left</value>
               <a:documentation docid="td/align/left">Linksbündig ausgeben</a:documentation>
-              <value>zentriert</value>
+              <value>center</value>
               <a:documentation docid="td/align/center">Zentriert ausgeben</a:documentation>
-              <value>rechts</value>
+              <value>right</value>
               <a:documentation docid="td/align/right">Rechtsbündig ausgeben</a:documentation>
             </choice>
             </attribute>
