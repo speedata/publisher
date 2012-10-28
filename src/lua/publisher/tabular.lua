@@ -825,12 +825,18 @@ function setze_zeile(self, tr_contents, current_row )
   return zeile
 end
 
-local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current_row)
+local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current_row,second_run)
   local current_tablehead_type
   if tr_contents.page == "first" then
     current_tablehead_type = tablehead_first
+    if second_run ~= true then
+      self.tablehead_first_contents = {tr_contents,current_row}
+    end
   else
     current_tablehead_type = tablehead
+    if second_run ~= true then
+      self.tablehead_contents = {tr_contents,current_row}
+    end
   end
   for _,row in ipairs(tr_contents) do
     row_contents = publisher.element_contents(row)
@@ -1076,14 +1082,28 @@ function setze_tabelle(self)
 
     thissplittable = {}
     final_split_tables[#final_split_tables + 1] = thissplittable
-    if s == 2 then
-      -- first page
-      thissplittable[#thissplittable + 1] = tablehead_first[1]
-    else
-      -- page > 1
-      thissplittable[#thissplittable + 1] = node.copy(tablehead[1])
-    end
 
+    if last_tr_data then
+      -- we have some data attached to table rows, so we re-format the header
+      local val = dynamic_data[last_tr_data]
+      publisher.variablen["_last_tr_data"] = val
+      local tmp = reformat_head(self,s - 1)
+      if s == 2 then
+        -- first page
+        thissplittable[#thissplittable + 1] = node.copy_list(tmp)
+      else
+        -- page > 1
+        thissplittable[#thissplittable + 1] = node.copy_list(tmp)
+      end
+    else
+      if s == 2 then
+        -- first page
+        thissplittable[#thissplittable + 1] = tablehead_first[1]
+      else
+        -- page > 1
+        thissplittable[#thissplittable + 1] = node.copy_list(tablehead[1])
+      end
+    end
     for i = first_row_in_new_table ,splits[s]  do
       if i > first_row_in_new_table then
         space_above = node.has_attribute(rows[i],publisher.att_space_amount) or 0
@@ -1093,15 +1113,16 @@ function setze_tabelle(self)
       thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep + space_above})
       thissplittable[#thissplittable + 1] = rows[i]
     end
-    local last_tr_data = node.has_attribute(thissplittable[#thissplittable],publisher.att_tr_dynamic_data)
+    last_tr_data = node.has_attribute(thissplittable[#thissplittable],publisher.att_tr_dynamic_data)
     if last_tr_data then 
       -- we have some data attached to table rows, so we re-format the footer
-      publisher.variablen["_last_tr_data"] = last_tr_data
+      local val = dynamic_data[last_tr_data]
+      publisher.variablen["_last_tr_data"] = val
+      local tmp = reformat_foot(self,s - 1,#splits - 1)
       if s < #splits then
-        local tmp = reformat_foot(self,s - 1)
         thissplittable[#thissplittable + 1] = node.copy_list(tmp)
       else
-        thissplittable[#thissplittable + 1] = node.copy_list(tablefoot_last[1])
+        thissplittable[#thissplittable + 1] = node.copy_list(tmp)
       end
     else
       -- no dynamic data, no re-formatting
@@ -1124,13 +1145,29 @@ function setze_tabelle(self)
   return final_split_tables
 end
 
-function reformat_foot( self,pagenumber)
-  local y = self.tablefoot_contents[1]
-  local rownumber = self.tablefoot_contents[2]
+function reformat_foot( self,pagenumber,max_splits)
+  local rownumber,y
+  if pagenumber == max_splits then
+    y         = self.tablefoot_last_contents[1]
+    rownumber = self.tablefoot_last_contents[2]
+  else
+    y         = self.tablefoot_contents[1]
+    rownumber = self.tablefoot_contents[2]
+  end
   local x = publisher.dispatch(y._layoutxml,y._dataxml)
   attach_objects(x)
   local tmp = {}
   make_tablefoot(self,x,tmp,tmp,rownumber,true)
+  return tmp[1]
+end
+
+function reformat_head( self,pagenumber)
+  local y = self.tablehead_contents[1]
+  local rownumber = self.tablehead_contents[2]
+  local x = publisher.dispatch(y._layoutxml,y._dataxml)
+  attach_objects(x)
+  local tmp = {}
+  make_tablehead(self,x,tmp,tmp,rownumber,true)
   return tmp[1]
 end
 

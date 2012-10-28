@@ -1505,6 +1505,8 @@ function commands.tablehead( layoutxml,dataxml )
   for attname,atttyp in pairs(attribute) do
     tab[attname] = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
   end
+  tab._layoutxml = layoutxml
+  tab._dataxml = dataxml
   return tab
 end
 
