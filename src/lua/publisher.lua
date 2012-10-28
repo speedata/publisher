@@ -10,11 +10,15 @@
 
 file_start("publisher.lua")
 
+barcodes = do_luafile("barcodes.lua")
+
 local commands     = require("publisher.commands")
 local seite        = require("publisher.page")
 local translations = require("translations")
 local fontloader   = require("fonts.fontloader")
 local paragraph    = require("paragraph")
+local fonts        = require("publisher.fonts")
+
 
 sd_xpath_funktionen      = require("publisher.layout_functions")
 orig_xpath_funktionen    = require("publisher.xpath_functions")
@@ -160,6 +164,7 @@ local dispatch_table = {
   Action                  = commands.action,
   Attribute               = commands.attribute,
   B                       = commands.bold,
+  Barcode                 = commands.barcode,
   ProcessNode             = commands.process_node,
   ProcessRecord           = commands.process_record,
   AtPageShipout           = commands.atpageshipout,
@@ -376,7 +381,6 @@ function dothings()
     err("Cannot determine the language of the layout file.")
     exit()
   end
-
   dispatch(layoutxml)
 
   --- override options set in the `<Options>` element
@@ -845,15 +849,12 @@ end
 --- `default` gives something that is to be returned if no attribute with this name is present.
 function read_attribute( layoutxml,dataxml,attname_english,typ,default,context)
   local attname = translate_attribute(attname_english)
-  if layoutxml[attname] == nil then
-    if default then
-      layoutxml[attname] = default
-    else
-      return nil
-    end
+
+  if not layoutxml[attname] then
+    return default -- can be nil
   end
 
-  local val
+  local val,num,ret
   local xpathstring = string.match(layoutxml[attname],"{(.-)}")
   if xpathstring then
     val = xpath.textvalue(xpath.parse(dataxml,xpathstring))
@@ -869,12 +870,24 @@ function read_attribute( layoutxml,dataxml,attname_english,typ,default,context)
     return tostring(translate_value(val,context) or default)
   elseif typ=="number" then
     return tonumber(val)
+  -- something like "3pt"
   elseif typ=="length" then
     return val
+  -- same as before, just changed to scaled points
   elseif typ=="length_sp" then
-    return tex.sp(val)
+    num = tonumber(val or default)
+    if num then -- most likely really a number, we need to multiply with grid width
+      ret = current_page.raster.gridwidth * num
+    else
+      ret = val
+    end
+    return tex.sp(ret)
   elseif typ=="boolean" then
-    val = translate_value(val,context)
+    if val then
+      val = translate_value(val,context)
+    else
+      val = default
+    end
     if val=="yes" then
       return true
     elseif val=="no" then

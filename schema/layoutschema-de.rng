@@ -770,6 +770,9 @@
             <ref name="e_Textblock"/>
           </optional>
           <optional>
+            <ref name="e_Barcode"/>
+          </optional>
+          <optional>
             <ref name="e_Table"/>
           </optional>
         </interleave>
@@ -1342,6 +1345,56 @@
           </optional>
         </element>
       </oneOrMore>
+    </element>
+  </define>
+
+  <define name="e_Barcode">
+    <element name="Strichcode">
+      <a:documentation docid="barcode">Erzeugt einen ein- oder zweidimensionalen Strichcode (Barcode)</a:documentation>
+      <attribute name="auswahl">
+        <a:documentation docid="barcode/select">Der Inhalt der als Strichcode erscheinen soll.</a:documentation>
+      </attribute>
+      <optional>
+        <attribute name="schriftart">
+          <a:documentation docid="barcode/fontface">Die Schriftart für den Text unterhalb des Strichcodes.</a:documentation>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="höhe">
+          <a:documentation docid="barcode/height">Höhe des Strichcodes (Zahl oder Maßangabe).</a:documentation>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="breite">
+          <a:documentation docid="barcode/width">Breite des Strichcodes (Zahl oder Maßangabe)</a:documentation>
+        </attribute>
+      </optional>
+      <choice>
+        <group>
+          <attribute name="typ">
+            <a:documentation docid="barcode/type">Bestimmt den Typ des Strichcodes</a:documentation>
+            <value>EAN13</value>
+            <a:documentation docid="barcode/type/ean13">Europäische Artikelnummerierung</a:documentation>
+          </attribute>
+          <optional>
+            <attribute name="zeigetext">
+              <a:documentation docid="barcode/ean13/showtext">Zeige Ziffern unterhalb des Strichcodes</a:documentation>
+              <choice>
+                <value>ja</value>
+                <a:documentation docid="barcode/ean13/showtext/yes">Zeige Ziffern unterhalb des Codes</a:documentation>
+                <value>nein</value>
+                <a:documentation docid="barcode/ean13/showtext/no">Zeige nur den Strichcode, keinen Text</a:documentation>
+              </choice>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="übersteigen">
+              <a:documentation docid="barcode/overshoot">Zeichne verlängerte Linien (0-100)</a:documentation>
+            </attribute>
+          </optional>
+        </group>
+      </choice>
+      <empty/>
     </element>
   </define>
 

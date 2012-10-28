@@ -757,6 +757,9 @@
             <ref name="e_Textblock"/>
           </optional>
           <optional>
+            <ref name="e_Barcode"/>
+          </optional>
+          <optional>
             <ref name="e_Table"/>
           </optional>
         </interleave>
@@ -1321,6 +1324,56 @@
           </optional>
         </element>
       </oneOrMore>
+    </element>
+  </define>
+
+  <define name="e_Barcode">
+    <element name="Barcode">
+      <a:documentation docid="barcode">Insert 1d or 2d barcode</a:documentation>
+      <attribute name="select">
+        <a:documentation docid="barcode/select"></a:documentation>
+      </attribute>
+      <optional>
+        <attribute name="fontface">
+          <a:documentation docid="barcode/fontface">The fontface to be used if text is written beneath the barcode</a:documentation>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="height">
+          <a:documentation docid="barcode/height">Height of the barcode (number or length)</a:documentation>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="width">
+          <a:documentation docid="barcode/width">Width of the barcode (number or length)</a:documentation>
+        </attribute>
+      </optional>
+      <choice>
+        <group>
+          <attribute name="type">
+            <a:documentation docid="barcode/type">Determines the type of the barcode</a:documentation>
+            <value>EAN13</value>
+            <a:documentation docid="barcode/type/ean13">European article number</a:documentation>
+          </attribute>
+          <optional>
+            <attribute name="showtext">
+              <a:documentation docid="barcode/ean13/showtext">Show the digits of the barcode in plain text</a:documentation>
+              <choice>
+                <value>yes</value>
+                <a:documentation docid="barcode/ean13/showtext/yes">Show digits beneath barcode</a:documentation>
+                <value>no</value>
+                <a:documentation docid="barcode/ean13/showtext/no">Only show barcode, not text</a:documentation>
+              </choice>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="overshoot">
+              <a:documentation docid="barcode/overshoot">Draw line extensions</a:documentation>
+            </attribute>
+          </optional>
+        </group>
+      </choice>
+      <empty/>
     </element>
   </define>
 

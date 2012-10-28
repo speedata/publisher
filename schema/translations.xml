@@ -7,6 +7,7 @@
       <element key="AtPageShipout" en="AtPageShipout" de="BeiSeitenAusgabe"/>
       <element key="Attribute" en="Attribute" de="Attribut"/>
       <element key="B" en="B" de="B"/>
+      <element key="Barcode" en="Barcode" de="Strichcode"/>
       <element key="Bold" en="Bold" de="Fett"/>
       <element key="BoldItalic" en="BoldItalic" de="FettKursiv"/>
       <element key="Box" en="Box" de="Box"/>
@@ -93,6 +94,7 @@
     <value key="German" context="*" en="German" de="Deutsch"/>
     <value key="first" context="*" en="first" de="erste"/>
     <value key="solid" context="*" en="solid" de="durchgezogen"/>
+    <value key="EAN13" en="EAN13" de="EAN13"/>
     <value key="Englisch (Great Britan)" context="*" en="Englisch (Great Britan)" de="Englisch (Großbritannien)"/>
     <value key="French" context="*" en="French" de="Französisch"/>
     <value key="horizontal" context="*" en="horizontal" de="horizontal"/>
@@ -150,7 +152,8 @@
       <attribute key="criterium" en="criterium" de="kriterium"/>
       <attribute key="cutmarks" en="cutmarks" de="beschnittmarken"/>
      <attribute key="data" en="data" de="daten"></attribute>
-      <attribute key="direction" en="direction" de="richtung"/>
+     <attribute key="direction" en="direction" de="richtung"/>
+     <attribute key="digits" en="digits" de="ziffern"/>
       <attribute key="element" en="element" de="element"/>
       <attribute key="elementname" en="elementname" de="elementname"/>
       <attribute key="file" en="file" de="datei"/>
@@ -185,6 +188,7 @@
       <attribute key="name" en="name" de="name"/>
       <attribute key="naturalsize" en="naturalsize" de="natürliche-größe"/>
       <attribute key="open" en="open" de="offen"/>
+     <attribute key="overshoot" en="overshoot" de="übersteigen"/>
       <attribute key="padding" en="padding" de="padding"/>
       <attribute key="padding-bottom" en="padding-bottom" de="padding-bottom"/>
       <attribute key="padding-left" en="padding-left" de="padding-left"/>
@@ -203,6 +207,7 @@
       <attribute key="runs" en="runs" de="läufe"/>
       <attribute key="select" en="select" de="auswahl"/>
       <attribute key="show-grid" en="show-grid" de="zeichne_raster"/>
+     <attribute key="showtext" en="showtext" de="zeigetext"/>
       <attribute key="show-gridallocation"
                  en="show-gridallocation"
                  de="zeige_rasterbelegung"/>
@@ -219,6 +224,7 @@
       <attribute key="top-distance" en="top-distance" de="abstand-oben"/>
       <attribute key="trace" en="trace" de="trace"/>
       <attribute key="trim" en="trim" de="beschnittzugabe"/>
+      <attribute key="type" en="type" de="typ" />
       <attribute key="valign" en="valign" de="valign"/>
       <attribute key="variable" en="variable" de="variable"/>
       <attribute key="width" en="width" de="breite"/>
@@ -263,7 +269,51 @@
          <en>The object's shape is considered when allocating cells.</en>
          <de>Die Form des Objekts wird beim Belegen der Rasterzellen beachtet.</de>
       </documentation>
-      <documentation docid="paragraph/textformat">
+     <documentation docid="barcode">
+       <en>Insert 1d or 2d barcode</en>
+       <de>Erzeugt einen ein- oder zweidimensionalen Strichcode (Barcode)</de>
+     </documentation>
+     <documentation docid="barcode/select">
+       <en>The contents that should be encoded in the barcode.</en>
+       <de>Der Inhalt der als Strichcode erscheinen soll.</de>
+     </documentation>
+     <documentation docid="barcode/fontface">
+       <en>The fontface to be used if text is written beneath the barcode.</en>
+       <de>Die Schriftart für den Text unterhalb des Strichcodes.</de>
+     </documentation>
+     <documentation docid="barcode/height">
+       <en>Height of the barcode (number or length)</en>
+       <de>Höhe des Strichcodes (Zahl oder Maßangabe).</de>
+     </documentation>
+     <documentation docid="barcode/width">
+       <en>Width of the barcode (number or length)</en>
+       <de>Breite des Strichcodes (Zahl oder Maßangabe)</de>
+     </documentation>
+     <documentation docid="barcode/type">
+       <en>Determines the type of the barcode</en>
+       <de>Bestimmt den Typ des Strichcodes</de>
+     </documentation>
+     <documentation docid="barcode/type/ean13">
+       <en>European article number</en>
+       <de>Europäische Artikelnummerierung</de>
+     </documentation>
+     <documentation docid="barcode/ean13/showtext">
+       <en>Show the digits of the barcode in plain text</en>
+       <de>Zeige Ziffern unterhalb des Strichcodes</de>
+     </documentation>
+     <documentation docid="barcode/ean13/showtext/yes">
+       <en>Show digits beneath barcode</en>
+       <de>Zeige Ziffern unterhalb des Codes</de>
+     </documentation>
+     <documentation docid="barcode/ean13/showtext/no">
+       <en>Only show barcode, not text</en>
+       <de>Zeige nur den Strichcode, keinen Text</de>
+     </documentation>
+     <documentation docid="barcode/overshoot">
+       <en>Draw line extensions (0-100)</en>
+       <de>Zeichne verlängerte Linien (0-100)</de>
+     </documentation>
+     <documentation docid="paragraph/textformat">
          <en>Name of the textformat (optional).</en>
          <de>Name des Textformats (optional).</de>
       </documentation>

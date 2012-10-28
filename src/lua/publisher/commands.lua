@@ -94,6 +94,36 @@ function commands.atpageshipout( layoutxml,dataxml )
   return layoutxml
 end
 
+--- Barcode
+--- -------
+--- Create a EAN 13 barcode. The width of the barcode depends on the font
+--- given in `fontface` (or the default `text`).
+function commands.barcode( layoutxml,dataxml )
+  trace("Command: Bookmark")
+  local width     = publisher.read_attribute(layoutxml,dataxml,"width"    ,"length_sp"     )
+  local height    = publisher.read_attribute(layoutxml,dataxml,"height"   ,"length_sp"     )
+  local typ       = publisher.read_attribute(layoutxml,dataxml,"type"     ,"rawstring"     )
+  local selection = publisher.read_attribute(layoutxml,dataxml,"select"   ,"xpath"         )
+  local fontname  = publisher.read_attribute(layoutxml,dataxml,"fontface" ,"rawstring"     )
+  local showtext  = publisher.read_attribute(layoutxml,dataxml,"showtext" ,"boolean", "yes")
+  local overshoot = publisher.read_attribute(layoutxml,dataxml,"overshoot","number"        )
+
+  local fontfamily
+  if fontname then
+    fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+    if not fontfamily then
+      err("Fontfamily %q not found.",fontname or "???")
+      fontfamily = 0
+    end
+  else
+    fontfamily = 0
+  end
+
+  return barcodes.ean13(width,height,fontfamily,selection,showtext,overshoot)
+
+
+end
+
 --- Bold text (`<B>`)
 --- -------------------
 --- Set the contents of this element in boldface
@@ -752,7 +782,7 @@ function commands.options( layoutxml,dataxml )
   publisher.options.trim               = publisher.read_attribute(layoutxml,dataxml,"trim",        "length")
   local mainlanguage                   = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","Englisch (Great Britan)")
 
-  log("Setting default language to %q",mainlanguage)
+  log("Setting default language to %q",mainlanguage or "?")
   publisher.get_languagecode(mainlanguage)
 
   if publisher.options.trim then
