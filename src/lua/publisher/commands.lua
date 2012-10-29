@@ -1526,7 +1526,7 @@ function commands.tr( layoutxml,dataxml )
   local tab = publisher.dispatch(layoutxml,dataxml)
 
   local attribute = {
-    ["data"]            = "rawstring",
+    ["data"]            = "xpath",
     ["valign"]          = "string",
     ["backgroundcolor"] = "rawstring",
     ["minheight"]       = "number",
