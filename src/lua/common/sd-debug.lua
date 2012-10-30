@@ -99,7 +99,7 @@ end
 
 function trace( ... )
   if publisher.options.trace then
-    log(...)
+    texio.write_nl("   |" .. string.format(...))
   end
 end
 function tracetable( name,tbl )

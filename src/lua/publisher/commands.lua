@@ -1498,13 +1498,8 @@ end
 --- The foot gets repeated on every page.
 function commands.tablehead( layoutxml,dataxml )
   local tab = publisher.dispatch(layoutxml,dataxml)
-  local attribute = {
-    ["page"]           = "string",
-  }
-
-  for attname,atttyp in pairs(attribute) do
-    tab[attname] = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
-  end
+  local page = publisher.read_attribute(layoutxml,dataxml,"page","string","all")
+  tab.page = page
   tab._layoutxml = layoutxml
   tab._dataxml = dataxml
   return tab

@@ -826,6 +826,7 @@ function setze_zeile(self, tr_contents, current_row )
 end
 
 local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current_row,second_run)
+  trace("make_tablehead, page = %s",tr_contents.page or "not defined")
   local current_tablehead_type
   if tr_contents.page == "first" then
     current_tablehead_type = tablehead_first
@@ -942,6 +943,7 @@ function setze_tabelle(self)
   -- Let's add the glue inbetween
   local ht_header, ht_first_header, ht_footer, ht_footer_last = 0, 0, 0, 0
 
+  -- We connect all but the last row with the next row and remember the height in ht_header
   for z = 1,#tablehead_first - 1 do
     ht_first_header = ht_first_header + tablehead_first[z].height  -- Tr oder Tablerule
     _,tmp = publisher.add_glue(tablehead_first[z],"tail",{ width = self.rowsep })
@@ -949,25 +951,28 @@ function setze_tabelle(self)
     tablehead_first[z+1].prev = tmp
   end
 
+
   for z = 1,#tablehead - 1 do
-    ht_header = ht_header + tablehead[z].height  -- Tr oder Tablerule
+    ht_header = ht_header + tablehead[z].height  -- Tr or Tablerule
     _,tmp = publisher.add_glue(tablehead[z],"tail",{ width = self.rowsep })
     tmp.next = tablehead[z+1]
     tablehead[z+1].prev = tmp
   end
 
-  ht_first_header = ht_first_header + self.rowsep * ( #tablehead_first - 1 )
-  if #tablehead_first > 0 then
-    ht_first_header = ht_first_header + tablehead_first[#tablehead_first].height
+  -- perhaps there is a last row, that is connected but its height is not
+  -- taken into account yet.
+  if #tablehead > 0 then
+    ht_header = ht_header + tablehead[#tablehead].height + self.rowsep  * ( #tablehead - 1 )
   end
 
-  ht_header = ht_header + self.rowsep * ( #tablehead - 1 )
-  if #tablehead > 0 then
-    ht_header = ht_header + tablehead[#tablehead].height
+  if #tablehead_first > 0 then
+    ht_first_header = ht_first_header + tablehead_first[#tablehead_first].height + self.rowsep * (#tablehead_first - 1)
+  else
+    ht_first_header = ht_header
   end
 
   for z = 1,#tablefoot - 1 do
-    ht_footer = ht_footer + tablefoot[z].height  -- Tr oder Tablerule
+    ht_footer = ht_footer + tablefoot[z].height  -- Tr or Tablerule
     -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
     _,tmp = publisher.add_glue(tablefoot[z],"tail",{ width = self.rowsep })
     tmp.next = tablefoot[z+1]
@@ -975,7 +980,7 @@ function setze_tabelle(self)
   end
 
   for z = 1,#tablefoot_last - 1 do
-    ht_footer_last = ht_footer_last + tablefoot_last[z].height  -- Tr oder Tablerule
+    ht_footer_last = ht_footer_last + tablefoot_last[z].height  -- Tr or Tablerule
     -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
     _,tmp = publisher.add_glue(tablefoot_last[z],"tail",{ width = self.rowsep })
     tmp.next = tablefoot_last[z+1]
@@ -993,13 +998,13 @@ function setze_tabelle(self)
   end
 
   if not tablehead[1] then
-    tablehead[1] = node.new("hlist") -- dummy-Kopfzeile
+    tablehead[1] = node.new("hlist") -- empty tablehead
   end
   if not tablehead_first[1] then
     tablehead_first[1] = node.copy_list(tablehead[1])
   end
   if not tablefoot[1] then
-    tablefoot[1] = node.new("hlist") -- dummy-Fußzeile
+    tablefoot[1] = node.new("hlist") -- empty tablefoot
   end
   if not tablefoot_last[1] then
     tablefoot_last[1] = node.copy_list(tablefoot[1])
@@ -1135,10 +1140,12 @@ function setze_tabelle(self)
   end
 
   -- now connect the entries in the split_tables
+  local tail
   for i=1,#final_split_tables do
     for j=1,#final_split_tables[i] - 1 do
-      final_split_tables[i][j].next = final_split_tables[i][j+1]
-      final_split_tables[i][j+1].prev = final_split_tables[i][j]
+      tail = node.tail(final_split_tables[i][j])
+      tail.next = final_split_tables[i][j+1]
+      final_split_tables[i][j+1].prev = tail
     end
     final_split_tables[i] = node.vpack(final_split_tables[i][1])
   end
@@ -1146,6 +1153,7 @@ function setze_tabelle(self)
 end
 
 function reformat_foot( self,pagenumber,max_splits)
+  trace("reformat_foot")
   local rownumber,y
   if pagenumber == max_splits then
     y         = self.tablefoot_last_contents[1]
@@ -1162,6 +1170,7 @@ function reformat_foot( self,pagenumber,max_splits)
 end
 
 function reformat_head( self,pagenumber)
+  trace("reformat_head")
   local y = self.tablehead_contents[1]
   local rownumber = self.tablehead_contents[2]
   local x = publisher.dispatch(y._layoutxml,y._dataxml)
