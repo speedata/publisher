@@ -1393,6 +1393,24 @@
             </attribute>
           </optional>
         </group>
+        <group>
+          <attribute name="typ">
+            <a:documentation docid="barcode/type">Bestimmt den Typ des Strichcodes</a:documentation>
+            <value>Code 128</value>
+            <a:documentation docid="barcode/type/code128">Code 128 für Text und Ziffern</a:documentation>
+          </attribute>
+          <optional>
+            <attribute name="zeigetext">
+              <a:documentation docid="barcode/code128/showtext">Zeige Text unterhalb des Strichcodes</a:documentation>
+              <choice>
+                <value>ja</value>
+                <a:documentation docid="barcode/code128/showtext/yes">Zeige Text unterhalb des Codes</a:documentation>
+                <value>nein</value>
+                <a:documentation docid="barcode/code128/showtext/no">Zeige nur den Strichcode, keinen Text</a:documentation>
+              </choice>
+            </attribute>
+          </optional>
+        </group>
       </choice>
       <empty/>
     </element>

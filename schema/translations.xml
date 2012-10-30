@@ -95,6 +95,7 @@
     <value key="first" context="*" en="first" de="erste"/>
     <value key="solid" context="*" en="solid" de="durchgezogen"/>
     <value key="EAN13" en="EAN13" de="EAN13"/>
+    <value key="Code 128" en="Code 128" de="Code 128"/>
     <value key="Englisch (Great Britan)" context="*" en="Englisch (Great Britan)" de="Englisch (Großbritannien)"/>
     <value key="French" context="*" en="French" de="Französisch"/>
     <value key="horizontal" context="*" en="horizontal" de="horizontal"/>
@@ -297,6 +298,10 @@
        <en>European article number</en>
        <de>Europäische Artikelnummerierung</de>
      </documentation>
+     <documentation docid="barcode/type/code128">
+       <en>Code 128 for text and digits</en>
+       <de>Code 128 für Text und Ziffern</de>
+     </documentation>
      <documentation docid="barcode/ean13/showtext">
        <en>Show the digits of the barcode in plain text</en>
        <de>Zeige Ziffern unterhalb des Strichcodes</de>
@@ -306,6 +311,18 @@
        <de>Zeige Ziffern unterhalb des Codes</de>
      </documentation>
      <documentation docid="barcode/ean13/showtext/no">
+       <en>Only show barcode, not text</en>
+       <de>Zeige nur den Strichcode, keinen Text</de>
+     </documentation>
+     <documentation docid="barcode/code128/showtext">
+       <en>Show the text of the barcode</en>
+       <de>Zeige Text unterhalb des Strichcodes</de>
+     </documentation>
+     <documentation docid="barcode/code128/showtext/yes">
+       <en>Show text beneath barcode</en>
+       <de>Zeige Text unterhalb des Codes</de>
+     </documentation>
+     <documentation docid="barcode/code128/showtext/no">
        <en>Only show barcode, not text</en>
        <de>Zeige nur den Strichcode, keinen Text</de>
      </documentation>

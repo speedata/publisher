@@ -119,9 +119,13 @@ function commands.barcode( layoutxml,dataxml )
     fontfamily = 0
   end
 
-  return barcodes.ean13(width,height,fontfamily,selection,showtext,overshoot)
-
-
+  if typ=="Code 128" then
+    return barcodes.code128(selection)
+  elseif typ=="EAN13" then
+    return barcodes.ean13(width,height,fontfamily,selection,showtext,overshoot)
+  else
+    err("Unknown barcode type %q", typ or "?")
+  end
 end
 
 --- Bold text (`<B>`)

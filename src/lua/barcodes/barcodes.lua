@@ -6,7 +6,6 @@
 --  Copyright 2012 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 
-require('lpeg')
 
 barcodes = {}
 
@@ -194,16 +193,40 @@ local function ean13(width,height,fontfamily,digits,showtext,overshoot_factor)
 	end
     return bc
 end
+--- ----------------------------
+local code128encoding = {
+    [0] = "212222", "222122", "222221", "121223", "121322", --  0 -  4
+    "131222", "122213", "122312", "132212", "221213",
+    "221312", "231212", "112232", "122132", "122231", -- 10 - 14
+    "113222", "123122", "123221", "223211", "221132",
+    "221231", "213212", "223112", "312131", "311222",  -- 20 - 24
+    "321122", "321221", "312212", "322112", "322211",
+    "212123", "212321", "232121", "111323", "131123",  -- 30 - 34
+    "131321", "112313", "132113", "132311", "211313",
+    "231113", "231311", "112133", "112331", "132131",  -- 40 - 44
+    "113123", "113321", "133121", "313121", "211331",
+    "231131", "213113", "213311", "213131", "311123",  -- 50 - 54
+    "311321", "331121", "312113", "312311", "332111",
+    "314111", "221411", "431111", "111224", "111422",  -- 60 - 64
+    "121124", "121421", "141122", "141221", "112214",
+    "112412", "122114", "122411", "142112", "142211",  -- 70 - 74
+    "241211", "221114", "413111", "241112", "134111",
+    "111242", "121142", "121241", "114212", "124112",  -- 80 - 84
+    "124211", "411212", "421112", "421211", "212141",
+    "214121", "412121", "111143", "111341", "131141",  -- 90 - 94
+    "114113", "114311", "411113", "411311", "113141",
+    "114131", "311141", "411131", "211412", "211214",  -- 100 - 104
+    "211232", "2331112"
+}
 
-local function code128_switch_mode(current_mode, future_mode)
-	w("switch from mode %q to mode %q",current_mode or "nil",future_mode or "nil")
+local function code128_switch_mode(current_mode, future_mode,pattern)
 	if current_mode == future_mode then return current_mode end
 	if not current_mode then
 		-- starting
 		if future_mode == "128C" then
-			w("start with 128C")
+      pattern[#pattern + 1] = 105
 		elseif future_mode == "128B" then
-			w("start with 128B")
+      pattern[#pattern + 1] = 104
 		else
 			assert(false,"code128: start mode unknown")
 		end
@@ -211,40 +234,91 @@ local function code128_switch_mode(current_mode, future_mode)
 	end
 	if current_mode == "128C" then
 		if future_mode == "128B" then
-			w("128C -> 128B")
+      pattern[#pattern + 1] = 100
 		else
 			assert(false, "128C -> ??")
 		end
 	elseif current_mode == "128B" then
 		if future_mode == "128C" then
-			w("128B -> 128C")
+      pattern[#pattern + 1] = 99
 		else
 			assert(false, "128B -> ??")
 		end
-	end		
+	end
 
 	return future_mode
 end
 
+local function code128_push( text,pattern)
+  if unicode.utf8.len(text) == 1 then
+    local cp = unicode.utf8.byte(text)
+    if cp <= 128 then
+      pattern[#pattern + 1] = string.byte(text) - 32
+    else
+      -- not supported by any commercial barcode decoder?!?
+      pattern[#pattern + 1] = 100 -- FNC4
+      pattern[#pattern + 1] = cp - 128 - 32
+    end
+  elseif string.len(text) == 2 then
+    -- hopefully two digits
+    pattern[#pattern + 1] = tonumber(text)
+  end
+
+end
+
+local function code128_calculate_checksum_and_add_stop_pattern(pattern)
+  local sum = pattern[1]
+  for i=2,#pattern do
+    sum = sum + ( i - 1 ) * pattern[i]
+  end
+  pattern[#pattern + 1] = sum % 103
+  pattern[#pattern + 1] = 106
+end
+
+local function code128_make_nodelist(pattern)
+  local wd,ht,dp = tex.sp("1pt"),tex.sp("1cm"),0
+  local rule,kern
+  local nodelist,pat,m
+  m = 0
+  for i=1,#pattern do
+    pat = code128encoding[pattern[i]]
+    string.gsub(pat,".", function(c)
+      if m % 2 == 1 then
+        -- gap
+        kern = mkkern(tonumber(c) * wd)
+        nodelist = add_to_nodelist(nodelist,kern)
+      else
+        -- bar
+        rule = mkrule(tonumber(c) * wd,ht,dp)
+        nodelist = add_to_nodelist(nodelist,rule)
+      end
+      m = m + 1
+    end)
+  end
+  local hbox = node.hpack(nodelist)
+  return hbox
+end
+
 local function code128(text)
-	text="1y23"
-	w("Code128, text=%q",text or "???")
+  local pattern = {}
 	local mode,output
 	while string.len(text) > 0 do
     	if string.match(text,"^%d%d") then
-    		mode =  code128_switch_mode(mode,"128C")
+    		mode = code128_switch_mode(mode,"128C",pattern)
     		output = string.sub(text,1,2)
-    		w("output: two digits in 128C %q",output or "???")
     		text = string.sub(text,3,-1)
-    		w("text is now %q",text or "???")
     	else
-    		mode =  code128_switch_mode(mode,"128B")
-    		output = string.sub(text,1,1)
-    		w("output: one char in 128B %q",output or "???")
-    		text = string.sub(text,2,-1)
-    		w("text is now %q",text or "???")
+    		mode = code128_switch_mode(mode,"128B",pattern)
+    		output = unicode.utf8.sub(text,1,1)
+    		text = unicode.utf8.sub(text,2,-1)
     	end
-    end
+      code128_push(output,pattern)
+  end
+  code128_calculate_checksum_and_add_stop_pattern (pattern)
+  local hbox = code128_make_nodelist(pattern)
+  local vbox = node.vpack(hbox)
+  return vbox
+
 end
 
 

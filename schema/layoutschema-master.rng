@@ -1372,6 +1372,24 @@
             </attribute>
           </optional>
         </group>
+        <group>
+          <attribute name="type">
+            <a:documentation docid="barcode/type">Determines the type of the barcode</a:documentation>
+            <value>Code 128</value>
+            <a:documentation docid="barcode/type/code128">Code 128 for text and digits</a:documentation>
+          </attribute>
+          <optional>
+            <attribute name="showtext">
+              <a:documentation docid="barcode/code128/showtext">Show the text of the barcode</a:documentation>
+              <choice>
+                <value>yes</value>
+                <a:documentation docid="barcode/code128/showtext/yes">Show text beneath barcode</a:documentation>
+                <value>no</value>
+                <a:documentation docid="barcode/code128/showtext/no">Only show barcode, not text</a:documentation>
+              </choice>
+            </attribute>
+          </optional>
+        </group>
       </choice>
       <empty/>
     </element>
