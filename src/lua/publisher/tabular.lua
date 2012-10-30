@@ -987,14 +987,14 @@ function setze_tabelle(self)
     tablefoot_last[z+1].prev = tmp
   end
 
-  ht_footer = ht_footer + ( #tablefoot - 1 ) * self.rowsep
   if #tablefoot > 0 then
-    ht_footer = ht_footer + tablefoot[#tablefoot].height
+    ht_footer = ht_footer + tablefoot[#tablefoot].height + ( #tablefoot - 1 ) * self.rowsep
   end
 
-  ht_footer_last = ht_footer_last + ( #tablefoot_last - 1 ) * self.rowsep
   if #tablefoot_last > 0 then
-    ht_footer_last = ht_footer_last + tablefoot_last[#tablefoot_last].height
+    ht_footer_last = ht_footer_last + tablefoot_last[#tablefoot_last].height + ( #tablefoot_last - 1 ) * self.rowsep
+  else
+    ht_footer_last = ht_footer
   end
 
   if not tablehead[1] then
@@ -1118,6 +1118,8 @@ function setze_tabelle(self)
       thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep + space_above})
       thissplittable[#thissplittable + 1] = rows[i]
     end
+
+    thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep})
     last_tr_data = node.has_attribute(thissplittable[#thissplittable],publisher.att_tr_dynamic_data)
     if last_tr_data then 
       -- we have some data attached to table rows, so we re-format the footer
