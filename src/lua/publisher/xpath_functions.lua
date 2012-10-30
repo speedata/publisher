@@ -21,6 +21,11 @@ local function concat(dataxml, ... )
   return ret
 end
 
+function count(dataxml, ... )
+  local tocount = select(1,...)
+  return #tocount
+end
+
 local function empty( dataxml,arg )
   if arg then
     return false
@@ -94,6 +99,7 @@ return {
   ["false"]  =  _false,
   ["string"] = _string,
   concat     = concat,
+  count      = count,
   empty      = empty,
   last       = last,
   node       = node,

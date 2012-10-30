@@ -44,6 +44,7 @@ h2. Folgende XPath-Funktionen stehen bereit (im Namensraum @urn:speedata:2009/pu
 - sd:variable(&lt;Name>) := ist dasselbe wie $Name, nur mit der Möglichkeit den Namen auch dynamisch (z.B. mit @concat()@) zu erzeugen.
 
 - concat( &lt;Wert>,&lt;Wert>, ... ) := Erzeugt einen neuen Text aus der Verkettung der einzelnen Werte.
+- count() := Zählt alle Kindelemente mit dem angegebenen Namen. Beispiel: @count(eintrag)@ zählt, wie viele Kindelemente mit den Namen @eintrag@ existieren.
 - empty(&lt;Attribut>) := Prüft, ob ein Attribut (nicht) vorhanden ist.
 - false() := Gibt „Falsch“ zurück.
 - last() := Gibt die Anzahl der Datensätze der gleichnamigen Geschwister-Elemente zurück. *Achtung: noch nicht XPath-konform.*

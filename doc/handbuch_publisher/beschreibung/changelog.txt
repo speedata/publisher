@@ -5,6 +5,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* XPath-Funktion "count()":xpath
 * Linienstärke bei "ObjektAusgeben":e_objektausgeben
 * CDATA Abschnitte im lpeg-XML-Parser sind erlaubt
 * Neue XPath-Funktion "sd:aktuelle-spalte()":xpath 
