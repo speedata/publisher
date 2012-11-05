@@ -129,7 +129,12 @@
           </zeroOrMore>
           <oneOrMore>
             <element name="example">
-              <attribute name="xml:lang"><value>de</value></attribute>
+              <attribute name="xml:lang">
+                <choice>
+                  <value>en</value>
+                  <value>de</value>
+                </choice>
+              </attribute>
               <ref name="paraorlisting"></ref>
             </element>
           </oneOrMore>

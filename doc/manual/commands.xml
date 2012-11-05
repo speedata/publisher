@@ -25,6 +25,84 @@
     </example>
     <seealso><cmd name="Textblock" /></seealso>
   </command>
+<command name="Barcode">
+  <description xml:lang="de">
+    <para>Erzeugt einen Strichcode (barcode), der in <cmd name="PlaceObject"/> ausgegeben werden kann.</para>
+  </description>
+  <description xml:lang="en">
+    <para>Print a barcode. To be used in <cmd name="PlaceObject"/>.</para>
+  </description>
+  <childelements/>
+  <parentelements>
+    <cmd name="PlaceObject"/>
+  </parentelements>
+  <attribute name="select" type="xpath" optional="no">
+    <description xml:lang="de">
+      <para>Wert, der als Strichcode kodiert werden soll.</para>
+    </description>
+    <description xml:lang="en">
+      <para>The data to be encoded in the barcode.</para>
+    </description>
+  </attribute>
+  <attribute name="fontface" type="text" optional="yes">
+    <description xml:lang="en">
+      <para>Name of the fontface of the text that can be placed beneath the barcode.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Name der Schriftart des Textes, der ggf. unterhalb des Strichcodes ausgegeben wird.</para>
+    </description>
+  </attribute>
+  <attribute name="type" type="text" optional="no">
+    <description xml:lang="en">
+      <para>Type of the barcode. One of <tt>EAN13</tt> or <tt>Code128</tt>.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Typ des Strichcodes. Kann <tt>EAN13</tt> oder <tt>Code128</tt> sein.</para>
+    </description>
+  </attribute>
+  <attribute name="width" type="numberorlength" optional="yes">
+    <description xml:lang="en">
+      <para>Width of the barcode</para>
+    </description>
+    <description xml:lang="de">
+      <para>Breite des Strichcodes</para>
+    </description>
+  </attribute>
+  <attribute name="height" type="numberorlength" optional="yes">
+    <description xml:lang="en">
+      <para>Height of the barcode.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Höhe des Strichcodes.</para>
+    </description>
+  </attribute>
+  <attribute name="showtext" type="yesno" optional="yes">
+    <description xml:lang="en">
+      <para>Should the text be written under the barcode?</para>
+    </description>
+    <description xml:lang="de">
+      <para>Bestimmt, ob unterhalb des Barcodes der Text erscheint.</para>
+    </description>
+  </attribute>
+
+  <example xml:lang="en">
+    <listing><![CDATA[<PlaceObject>
+  <Barcode select="'speedata Publisher'" type="Code 128" showtext="nein"/>
+</PlaceObject>]]></listing>
+    <listing><![CDATA[<PlaceObject>
+  <Barcode select="4242002518169" type="EAN13"/>
+</PlaceObject>]]></listing>
+  </example>
+  <example xml:lang="de">
+    <listing><![CDATA[<ObjektAusgeben>
+  <Strichcode auswahl="'speedata Publisher'" typ="Code 128" zeigetext="nein"/>
+</ObjektAusgeben>]]></listing>
+    <listing><![CDATA[<ObjektAusgeben>
+  <Strichcode auswahl="4242002518169" typ="EAN13"/>
+</ObjektAusgeben>]]></listing>
+  </example>
+  <seealso></seealso>
+</command>
   <command name="Bookmark">
     <description xml:lang="en">
       <para>Create a bookmark for the PDF viewer (e.g. Adobe Reader). When the user clicks on a bookmark, the PDF viewer <quote>jumps</quote> to that place in the document.</para>
@@ -1443,6 +1521,7 @@
       <cmd name="Tablerule" />
       <cmd name="Table" />
       <cmd name="Textblock" />
+      <cmd name="Barcode"/>
     </childelements>
     <parentelements>
       <cmd name="Record" />

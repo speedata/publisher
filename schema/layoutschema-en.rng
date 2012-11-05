@@ -1378,7 +1378,7 @@
         <group>
           <attribute name="type">
             <a:documentation docid="barcode/type">Determines the type of the barcode</a:documentation>
-            <value>Code 128</value>
+            <value>Code128</value>
             <a:documentation docid="barcode/type/code128">Code 128 for text and digits</a:documentation>
           </attribute>
           <optional>

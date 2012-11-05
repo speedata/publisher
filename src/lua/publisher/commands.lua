@@ -113,13 +113,13 @@ function commands.barcode( layoutxml,dataxml )
     fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
     if not fontfamily then
       err("Fontfamily %q not found.",fontname or "???")
-      fontfamily = 0
+      fontfamily = 1
     end
   else
-    fontfamily = 0
+    fontfamily = 1
   end
 
-  if typ=="Code 128" then
+  if typ=="Code128" then
     return barcodes.code128(selection)
   elseif typ=="EAN13" then
     return barcodes.ean13(width,height,fontfamily,selection,showtext,overshoot)

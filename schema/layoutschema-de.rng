@@ -1396,7 +1396,7 @@
         <group>
           <attribute name="typ">
             <a:documentation docid="barcode/type">Bestimmt den Typ des Strichcodes</a:documentation>
-            <value>Code 128</value>
+            <value>Code128</value>
             <a:documentation docid="barcode/type/code128">Code 128 für Text und Ziffern</a:documentation>
           </attribute>
           <optional>

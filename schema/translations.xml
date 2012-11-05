@@ -95,7 +95,7 @@
     <value key="first" context="*" en="first" de="erste"/>
     <value key="solid" context="*" en="solid" de="durchgezogen"/>
     <value key="EAN13" en="EAN13" de="EAN13"/>
-    <value key="Code 128" en="Code 128" de="Code 128"/>
+    <value key="Code128" en="Code128" de="Code128"/>
     <value key="Englisch (Great Britan)" context="*" en="Englisch (Great Britan)" de="Englisch (Großbritannien)"/>
     <value key="French" context="*" en="French" de="Französisch"/>
     <value key="horizontal" context="*" en="horizontal" de="horizontal"/>

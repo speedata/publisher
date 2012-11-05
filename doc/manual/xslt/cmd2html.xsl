@@ -21,6 +21,7 @@
     <text key="Allowed attributes" en="Allowed attributes" de="Erlaubte Attribute" />
     <text key="Child elements" en="Child elements"  de="Kindelemente" />
     <text key="Description" en="Description"     de="Beschreibung"/>
+    <text key="Example" en="Example" de="Beispiel"></text>
     <text key="Parent elements" en="Parent elements" de="Elternelemente" />
     <text key="Attributes" en="Attributes" de="Attribute" />
     <text key="See also" en="See also" de="Siehe auch"/>
@@ -167,7 +168,7 @@
   </xsl:template>
 
   <xsl:template match="example">
-    <h2>Beispiel</h2>
+    <h2><xsl:value-of select="sd:translate-text('Example')"/></h2>
     <xsl:apply-templates/>
   </xsl:template>
   <xsl:template match="listing">
