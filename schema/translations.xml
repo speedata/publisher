@@ -62,6 +62,7 @@
       <element key="SetGrid" en="SetGrid" de="SetzeRaster"/>
       <element key="SetVariable" en="SetVariable" de="Zuweisung"/>
       <element key="SortSequence" en="SortSequence" de="SortiereSequenz"/>
+      <element key="Stylesheet" en="Stylesheet" de="Stylesheet" />
       <element key="Sub" en="Sub" de="Sub"/>
       <element key="Sup" en="Sup" de="Sup"/>
       <element key="Switch" en="Switch" de="Fallunterscheidung"/>
@@ -952,6 +953,14 @@
          <en>Remove duplicates. Name of the attribute that should be tested.</en>
          <de>Entfernt Duplikate. Name des Attributs, auf das geprüft werden soll.</de>
       </documentation>
+     <documentation docid="stylesheet">
+       <en>Insert a CSS stylesheet to change the appearance of the elements</en>
+       <de>CSS Stylesheet einbinden um das Aussehen der Elemente zu verändern</de>
+     </documentation>
+     <documentation docid="stylesheet/filename">
+       <en>Filename of the stylesheet to insert</en>
+       <de>Dateiname des Stylesheets</de>
+     </documentation>
       <documentation docid="sup">
          <en>Superscript text</en>
          <de>Hochgestellter Text</de>

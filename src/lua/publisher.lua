@@ -77,6 +77,9 @@ current_layoutlanguage = nil
 
 seiten   = {}
 
+-- CSS properties. Key is the selector, value is the table of properties
+css = {}
+
 -- The defaults (set in the layout instructions file)
 options = {
   gridwidth = tex.sp("10mm"),
@@ -208,6 +211,7 @@ local dispatch_table = {
   Columns                 = commands.columns,
   Sub                     = commands.sub,
   Sup                     = commands.sup,
+  Stylesheet              = commands.stylesheet,
   Table                   = commands.table,
   Tablefoot               = commands.tablefoot,
   Tablehead               = commands.tablehead,

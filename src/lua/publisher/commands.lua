@@ -12,6 +12,7 @@ require("publisher.fonts")
 require("publisher.tabular")
 local paragraph = require("paragraph")
 require("xpath")
+do_luafile("css.lua")
 require("fileutils")
 
 -- This module contains the commands in the layout file (the tags)
@@ -1406,6 +1407,26 @@ function commands.sort_sequence( layoutxml,dataxml )
     end
   end
   return tmp
+end
+
+--- Stylesheet
+--- ----------
+--- Load a CSS file
+function commands.stylesheet( layoutxml,dataxml )
+  local filename = publisher.read_attribute(layoutxml,dataxml,"filename","rawstring")
+  if not filename then
+    warning("CSS: no filename given")
+    return
+  end
+  local ret = css.parse(filename)
+  if not ret then
+    err("could not parse CSS file")
+    return
+  end
+  for k,v in pairs(ret) do
+    publisher.css[k] = v
+  end
+  -- printtable("publisher.css",publisher.css)
 end
 
 --- Sub

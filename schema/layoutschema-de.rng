@@ -30,6 +30,7 @@
     <optional><ref name="e_SetGrid"/></optional>
     <optional><ref name="e_Hyphenation"/></optional>
     <optional><ref name="e_SetVariable"/></optional>
+    <optional><ref name="e_Stylesheet"/></optional>
   </define>
 
   <define name="t_Switchcontents">
@@ -930,6 +931,15 @@
     </element>
   </define>
 
+  <define name="e_Stylesheet">
+    <element name="Stylesheet">
+      <a:documentation docid="stylesheet">CSS Stylesheet einbinden um das Aussehen der Elemente zu verändern</a:documentation>
+      <attribute name="dateiname">
+        <a:documentation docid="stylesheet/filename">Dateiname des Stylesheets</a:documentation>
+      </attribute>
+    </element>
+  </define>
+
   <define name="e_Pagetype">
     <element name="Seitentyp">
       <ref name="a_id"/>
@@ -1258,11 +1268,6 @@
       <optional>
         <attribute name="hintergrundfarbe">
           <a:documentation docid="tr/backgroundcolor">Farbe des Zeilenhintergrundes. (Text)</a:documentation>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="daten">
-          <a:documentation docid="tr/data">Daten einer Tabellenzeile zuweisen. Diese Daten können später im Tabellenkopf und -fuß ausgelesen werden.</a:documentation>
         </attribute>
       </optional>
       <optional>

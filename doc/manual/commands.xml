@@ -2230,6 +2230,33 @@
       <cmd name="Sub" />
     </seealso>
   </command>
+  <command name="Stylesheet">
+    <description xml:lang="en">
+      <para>Load a CSS file</para>
+    </description>
+    <description xml:lang="de">
+      <para>Lädt eine CSS-Datei</para>
+    </description>
+    <childelements/>
+    <parentelements>
+      <cmd name="Layout"/>
+    </parentelements>
+    <attribute name="filename" type="text" optional="no">
+      <description xml:lang="en">
+        <para>The filename of the CSS stylesheet including the file extension.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Dateiname der CSS Datei (inklusive Dateiendung).</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Stylesheet filename="style.css" />]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Stylesheet dateiname="style.css" />]]></listing>
+    </example>
+    <seealso></seealso>
+  </command>
   <command name="Table">
     <description xml:lang="de">
       <para>Erzeugt eine Tabelle, die in etwa dem HTML Tabellenmodell entspricht</para>

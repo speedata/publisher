@@ -32,6 +32,7 @@
     <optional><ref name="e_SetGrid"/></optional>
     <optional><ref name="e_Hyphenation"/></optional>
     <optional><ref name="e_SetVariable"/></optional>
+    <optional><ref name="e_Stylesheet"/></optional>
   </define>
 
   <define name="t_Switchcontents">
@@ -913,6 +914,15 @@
           <optional><ref name="e_CopyOf"/></optional>
         </oneOrMore>
       </choice>
+    </element>
+  </define>
+
+  <define name="e_Stylesheet">
+    <element name="Stylesheet">
+      <a:documentation docid="stylesheet">Insert a CSS stylesheet to change the appearance of the elements</a:documentation>
+      <attribute name="filename">
+        <a:documentation docid="stylesheet/filename">Filename of the stylesheet to insert</a:documentation>
+      </attribute>
     </element>
   </define>
 

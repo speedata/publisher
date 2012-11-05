@@ -5,6 +5,8 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* "CSS Stylesheets":e_stylesheet
+* "Barcodes (EAN13 und Code128)":e_strichcode
 * XPath-Funktion "count()":xpath
 * Linienstärke bei "ObjektAusgeben":e_objektausgeben
 * CDATA Abschnitte im lpeg-XML-Parser sind erlaubt

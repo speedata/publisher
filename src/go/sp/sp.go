@@ -224,8 +224,8 @@ func run(cmdline string) {
 	go io.Copy(os.Stderr, stderr)
 	// We can read from stdin if data name = "-". But we should only
 	// wait on stdin if we really want to.
-	if 	dataname := getOption("data") ; dataname ==  "-" {
-		io.Copy(stdin,os.Stdin)
+	if dataname := getOption("data"); dataname == "-" {
+		io.Copy(stdin, os.Stdin)
 		stdin.Close()
 	}
 
