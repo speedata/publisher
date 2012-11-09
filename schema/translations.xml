@@ -146,6 +146,7 @@
       <attribute key="bottom" en="bottom" de="unten"/>
       <attribute key="break-below" en="break-below" de="umbruch-unten"/>
       <attribute key="c" en="c" de="c"/>
+     <attribute key="class" en="class" de="class"/>
       <attribute key="color" en="color" de="farbe"/>
       <attribute key="colspan" en="colspan" de="colspan"/>
       <attribute key="column" en="column" de="spalte"/>
@@ -169,8 +170,9 @@
       <attribute key="groupname" en="groupname" de="gruppenname"/>
       <attribute key="height" en="height" de="höhe"/>
       <attribute key="hreference" en="hreference" de="hreferenz"/>
-      <attribute key="xml:id" en="xml:id" de="xml:id"/>
-      <attribute key="indentation" en="indentation" de="einrückung"/>
+     <attribute key="xml:id" en="xml:id" de="xml:id"/>
+     <attribute key="id" en="id" de="id"/>
+     <attribute key="indentation" en="indentation" de="einrückung"/>
       <attribute key="k" en="k" de="k"/>
       <attribute key="key" en="key" de="schlüssel"/>
       <attribute key="language" en="language" de="sprache"/>
@@ -441,6 +443,14 @@
          <en>Free to use unique identifier</en>
          <de>Frei benuztbarer eindeutiger Marker</de>
       </documentation>
+     <documentation docid="id">
+       <en>Unique identifier to be referenced from a CSS style</en>
+       <de>Eindeutiger Bezeichner für Referenzen aus CSS Styles</de>
+     </documentation>
+     <documentation docid="class">
+       <en>Class name to be referenced from a CSS style</en>
+       <de>Klassenname für Referenzen aus CSS Styles</de>
+     </documentation>
       <documentation docid="image">
          <en>Include an external image.</en>
          <de>Bindet eine externe Grafik ein.</de>

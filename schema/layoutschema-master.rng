@@ -13,10 +13,22 @@
     </data>
   </define>
 
-  <define name="a_id">
+  <define name="a_xmlid">
     <optional>
       <attribute name="xml:id"><data type="ID"></data></attribute>
       <a:documentation docid="xmlid">Free to use unique identifier</a:documentation>
+    </optional>
+  </define>
+
+  <define name="a_classid">
+    <optional>
+      <attribute name="id"><data type="ID"></data></attribute>
+      <a:documentation docid="id">Unique identifier to be referenced from a CSS style</a:documentation>
+    </optional>
+    <optional>
+      <attribute name="class">
+        <a:documentation docid="class">Class name to be referenced from a CSS style</a:documentation>
+      </attribute>
     </optional>
   </define>
 
@@ -155,7 +167,8 @@
   <define name="e_Paragraph">
     <element name="Paragraph">
       <ref name="t_values"/>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
+      <ref name="a_classid"/>
       <optional>
         <attribute name="language">
           <ref name="t_languages"/>
@@ -179,10 +192,10 @@
   <define name="e_Action">
     <element name="Action">
       <a:documentation docid="action">Connects an Command (»Action«) with the surrounding text.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <element name="AddToList">
         <a:documentation docid="action/addtolist">Adds a key/value pair to the contents of a variable.</a:documentation>
-        <ref name="a_id"/>
+        <ref name="a_xmlid"/>
         <attribute name="list"/>
         <a:documentation docid="action/list">List (variable) to which the contents gets added. This variable does not need to exist.</a:documentation>
         <attribute name="key"/>
@@ -196,7 +209,7 @@
   <define name="e_Attribute">
     <element name="Attribute">
       <a:documentation docid="attribute">Creates an attribute which can be wrapped in an »Element«.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="name"><data type="string"/></attribute>
       <a:documentation docid="attribute/name">Name of the attribute that gets creted. (text)</a:documentation>
       <attribute name="select"><data type="string"/></attribute>
@@ -207,7 +220,7 @@
   <define name="e_B">
     <element name="B">
       <a:documentation docid="b">Switch to boldface</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <ref name="t_values"/>
     </element>
   </define>
@@ -215,7 +228,7 @@
   <define name="e_ProcessRecord">
     <element name="ProcessRecord">
       <a:documentation docid="processrecord">Processes a record which is the contents of the list (in the attribute ›select‹.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="select"/>
       <a:documentation docid="processrecord/select">The list that will be processed by matching »Record« commands.</a:documentation>
       <attribute name="limit" />
@@ -226,7 +239,7 @@
   <define name="e_ProcessNode">
     <element name="ProcessNode">
       <a:documentation docid="processnode">Processes all child nodes of the current data element. The matching command is »Record«</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="select"/>
       <a:documentation docid="processnode/select">The child child elements that should be processed (currently this is not an XPath expression but the name of the child elements).</a:documentation>
       <optional>
@@ -239,7 +252,7 @@
   <define name="e_AtPageShipout">
     <element name="AtPageShipout">
       <a:documentation docid="atpageshipout">When a page gets finished, the child elements are executed.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <oneOrMore>
         <ref name="t_Commands"/>
       </oneOrMore>
@@ -249,7 +262,7 @@
   <define name="e_AtPageCreation">
     <element name="AtPageCreation">
       <a:documentation docid="atpagecreation">When a new page gets created, the child elements are executed.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <oneOrMore>
         <ref name="t_Commands"/>
       </oneOrMore>
@@ -259,7 +272,7 @@
   <define name="e_Image">
     <element name="Image">
       <a:documentation docid="image">Include an external image.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="file">
         <a:documentation docid="image/file">Filename of the image. (text)</a:documentation>
         <data type="string"/>
@@ -295,7 +308,7 @@
   <define name="e_Box">
     <element name="Box">
       <a:documentation docid="box">Create a rectangular colored area.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="width"/>
       <a:documentation docid="box/width">Width of the box in grid cells.</a:documentation>
       <attribute name="height"/>
@@ -317,7 +330,7 @@
   <define name="e_Bookmark">
     <element name="Bookmark">
       <a:documentation docid="bookmark">Create a PDF bookmark</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="level"/>
       <a:documentation docid="bookmark/level">The level of the bookmark. 1 = top level, 2 = second level ...</a:documentation>
       <attribute name="select" />
@@ -339,7 +352,7 @@
   <define name="e_Dataset">
     <element name="Record">
       <a:documentation docid="record">Executes the child commands for every element given in the attribute ›element‹. Matches »ProcessNode« and »ProcesRecord«.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <oneOrMore>
         <ref name="t_Commands"/>
       </oneOrMore>
@@ -355,7 +368,7 @@
   <define name="e_DefineColor">
      <element name="DefineColor">
        <a:documentation docid="definecolor">Defines a color with the given name in the attribute ›name‹. Supported are two different models: »rgb« and »cmyk«. Values must be between 0 adn 100.</a:documentation>
-       <ref name="a_id"/>
+       <ref name="a_xmlid"/>
        <attribute name="name"><data type="string"/></attribute>
        <choice>
          <group>
@@ -393,7 +406,7 @@
   <define name="e_DefineFontfamily">
     <element name="DefineFontfamily">
       <a:documentation docid="definefontfamily">Define a font family with the faces »Regular«, »Bold«, »BoldItalic« and »Italic«. Families are needed when you switch to another face in running text with »B« for example.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="name"/>
       <attribute name="fontsize"><data type="double"/></attribute>
       <a:documentation docid="definefontfamily/fontsize">Fontsize in points (1/72in), range is 0 to ...</a:documentation>
@@ -402,27 +415,27 @@
       <interleave>
         <element name="Regular">
           <a:documentation docid="definefontfamily/regular">The font face of the text when none of bold, italic or bolditalic is used.</a:documentation>
-          <ref name="a_id"/>
+          <ref name="a_xmlid"/>
           <attribute name="fontface"/>
         </element>
         <optional>
           <element name="Bold">
             <a:documentation docid="definefontfamily/bold">The font face to be used when switching to bold (&lt;B&gt;...&lt;/B&gt;). The name must be an alias given by »LoadFontfile«</a:documentation>
-            <ref name="a_id"/>
+            <ref name="a_xmlid"/>
             <attribute name="fontface"/>
           </element>
         </optional>
         <optional>
           <element name="Italic">
             <a:documentation docid="definefontfamily/italic">The font face to be used when switching to italic (&lt;I&gt;...&lt;/I&gt;). The name must be an alias given by »LoadFontfile«</a:documentation>
-            <ref name="a_id"/>
+            <ref name="a_xmlid"/>
             <attribute name="fontface"/>
           </element>
         </optional>
         <optional>
           <element name="BoldItalic">
             <a:documentation docid="definefontfamily/bolditalic">The font face to be used when switching to bold and italic (&lt;B&gt;&lt;I&gt;...&lt;/I&gt;&lt;/B&gt;). The name must be an alias given by »LoadFontfile«</a:documentation>
-            <ref name="a_id"/>
+            <ref name="a_xmlid"/>
             <attribute name="fontface"/>
           </element>
         </optional>
@@ -432,7 +445,7 @@
 
   <define name="e_DefineTextformat">
     <element name="DefineTextformat">
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="name"/>
       <optional><ref name="a_alignment"/></optional>
       <optional><attribute name="indentation"/></optional>
@@ -446,7 +459,7 @@
   <define name="e_Element">
     <element name="Element">
       <a:documentation docid="element">Create an XML-element that can be written to an external file (»SaveDataset«).</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="name"><data type="string"/></attribute>
       <a:documentation docid="element/name">Name of the element.</a:documentation>
       
@@ -463,11 +476,11 @@
   <define name="e_Switch">
     <element name="Switch">
       <a:documentation docid="switch">Contains a if-then-else clause. The child elements »Case« are executed until the tests are true. If none of the tests evaluate to true, the child element »Otherwise« gets executed.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <oneOrMore>
         <element name="Case">
           <a:documentation docid="switch/case">If the condition in the attribte ›test‹ evaluates to 'true', the contents of this element is executed and the processing continues after the »Switch« command.</a:documentation>
-          <ref name="a_id"/>
+          <ref name="a_xmlid"/>
           <attribute name="test"><data type="string"/></attribute>
           <a:documentation docid="switch/test">The XPath-expression for the test.</a:documentation>
           <oneOrMore>
@@ -478,7 +491,7 @@
       <optional>
         <element name="Otherwise">
           <a:documentation docid="switch/otherwise">Gets executed if no tests evaluate to true.</a:documentation>
-          <ref name="a_id"/>
+          <ref name="a_xmlid"/>
           <oneOrMore>
             <ref name="t_Switchcontents"/>
           </oneOrMore>
@@ -490,9 +503,9 @@
   <define name="e_Group">
     <element name="Group">
       <attribute name="name"><data type="string"/></attribute>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <element name="Contents">
-        <ref name="a_id"/>
+        <ref name="a_xmlid"/>
         <oneOrMore>
           <ref name="t_Commands"/>
         </oneOrMore>
@@ -503,7 +516,7 @@
   <define name="e_I">
     <element name="I">
       <a:documentation docid="i">Switch to italic font face.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <ref name="t_values"/>
     </element>
   </define>
@@ -511,7 +524,7 @@
   <define name="e_CopyOf">
     <element name="Copy-of">
       <a:documentation docid="copyof">Inserts the given elements (currently no copy is performed despite the name).</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="select">
         <a:documentation docid="copyof/select">The XPath expression to determine the contents to be copied.</a:documentation>
       </attribute>
@@ -521,7 +534,7 @@
   <define name="e_LoadDataset">
     <element name="LoadDataset">
       <a:documentation docid="loaddataset">Loads and executes a data XML file from the disk. It is fine if the given file does not exist (no error is raised).</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="name"><data type="string"/></attribute>
       <a:documentation docid="loaddataset/name">The name of the data XML file</a:documentation>
       <empty/>
@@ -531,7 +544,7 @@
   <define name="e_LoadFontfile">
     <element name="LoadFontfile">
       <a:documentation docid="loadfontfile">Loads a font file. Supported are Type1, TrueType and OpenType fonts.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="name"><data type="string"/></attribute>
       <a:documentation docid="loadfontfile/name">The name of the font file, to be used by »DefineFontface«.</a:documentation>
       <attribute name="filename"><data type="string"/></attribute>
@@ -564,7 +577,7 @@
 
   <define name="e_Layout">
     <element name="Layout">
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <oneOrMore>
         <ref name="t_Toplevel"/>
         <optional><ref name="e_Include"/></optional>
@@ -574,7 +587,7 @@
 
   <define name="e_Include">
     <element name="Include">
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <oneOrMore><ref name="t_Toplevel"/></oneOrMore>
     </element>
   </define>
@@ -582,7 +595,7 @@
   <define name="e_EmptyLine">
     <element name="EmptyLine">
       <a:documentation docid="emptyline">The virtual cursor is placed on the second next free line.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <empty/>
     </element>
   </define>
@@ -590,7 +603,7 @@
   <define name="e_Rule">
     <element name="Rule">
       <a:documentation docid="rule">Draw a rule.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="length"/>
       <a:documentation docid="rule/length">The length of the rule in grid cells (number) or as a dimension (e.g. 4cm)</a:documentation>
       <attribute name="color"/>
@@ -612,7 +625,7 @@
   <define name="e_Message">
     <element name="Message">
       <a:documentation docid="message">Writes a message to the console and to the log file. The message itself can be given with the attribute ›select‹ or the child element »Value«.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <choice>
         <attribute name="select"><data type="string"/></attribute>
         <a:documentation docid="message/select">Message to be printed (XPath expression).</a:documentation>
@@ -626,7 +639,7 @@
   <define name="e_NextFrame">
     <element name="NextFrame">
       <a:documentation docid="nextframe">Switch to the next frame in the given positioning area. If no frame is available on the current page, a new page gets generated.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="area">
         <a:documentation docid="nextframe/area">The area in which the next frame is selected.</a:documentation>
       </attribute>
@@ -636,7 +649,7 @@
   <define name="e_NewPage">
     <element name="NewPage">
       <a:documentation docid="newpage">Ships out the current page into the PDF file. As soon as new contents is placed, a new page gets created.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <empty/>
     </element>
   </define>
@@ -644,7 +657,7 @@
   <define name="e_NewRow">
     <element name="NextRow">
       <a:documentation docid="newrow">The virtual cursor is placed on the next free line.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <optional>
         <attribute name="row"/>
         <a:documentation docid="newrow/row">Number of the row for the virtual cursor. If not given, the publisher uses the next free row.</a:documentation>
@@ -664,7 +677,7 @@
   <define name="e_PlaceObject">
     <element name="PlaceObject">
       <a:documentation docid="placeobject">Puts an object (image, text,... ) onto the page or into a group.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <optional>
         <attribute name="column"/>
         <a:documentation docid="placeobject/column">The column in the grid where the object is placed (number). If no column is given the publisher takes
@@ -770,7 +783,7 @@
 
   <define name="e_Options">
     <element name="Options">
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <optional>
         <attribute name="mainlanguage">
           <a:documentation docid="options/defaultlanguage">The default language of the printed text (used for hyphenation)</a:documentation>
@@ -851,14 +864,14 @@
                 frames are connected in the order of their definitions. That means if an object cannot be placed in a
                 frame, the next frame will automatically chosen. If no next frame is available, a page break is
                 inserted. </a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="name">
         <a:documentation docid="positioningarea/name">The name of the positioning area</a:documentation>
       </attribute>
       <oneOrMore>
         <element name="PositioningFrame">
           <a:documentation docid="positioningframe">Positioning frames are rectengular areas, all four attributes must be given.</a:documentation>
-          <ref name="a_id"/>
+          <ref name="a_xmlid"/>
           <attribute name="column"/>
           <attribute name="row"/>
           <attribute name="height"/>
@@ -870,7 +883,7 @@
 
   <define name="e_Margin">
     <element name="Margin">
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="left"/>
       <attribute name="right"/>
       <attribute name="top"/>
@@ -881,7 +894,7 @@
   <define name="e_FontFace">
     <element name="Fontface">
       <a:documentation docid="fontface">Switch to a different font family.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="fontfamily"/>
       <ref name="t_values"/>
     </element>
@@ -889,7 +902,7 @@
 
   <define name="e_Pageformat">
     <element name="Pageformat">
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="width"/>
       <attribute name="height"/>
     </element>
@@ -899,7 +912,7 @@
     <element name="SaveDataset">
       <a:documentation docid="savedataset">Save an XML file under the given name. Load (and execute) the file with »LoadDataset«. The contents is a
                 sequence, for example from the commands »Element« and »Attribute«.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="filename"><data type="string"/></attribute>
       <a:documentation docid="savedataset/filename">Name of the data file</a:documentation>
       <attribute name="elementname"><data type="string"/></attribute>
@@ -928,7 +941,7 @@
 
   <define name="e_Pagetype">
     <element name="Pagetype">
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="name"/>
       <a:documentation docid="pagetype/name">Name of the page type. Not used currently. (text)</a:documentation>
       <attribute name="test"/>
@@ -939,7 +952,7 @@
         <optional>
           <element name="Grid">
             <a:documentation docid="pagetype/grid">Use a page specific grid.</a:documentation>
-            <ref name="a_id"/>
+            <ref name="a_xmlid"/>
             <attribute name="width"/>
             <a:documentation docid="pagetype/grid/width">Width of a grid cell (length, e.g. 10mm)</a:documentation>
             <attribute name="height"/>
@@ -959,7 +972,7 @@
   <define name="e_Sequence">
     <element name="Sequence">
       <a:documentation docid="sequence">Selects a subsequence of data from the XML.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="select">
         <a:documentation docid="sequence/test">The name of the child elements for the selection.</a:documentation>
       </attribute>
@@ -968,7 +981,7 @@
 
   <define name="e_SetGrid">
     <element name="SetGrid">
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="width"/>
       <attribute name="height"/>
     </element>
@@ -977,7 +990,7 @@
   <define name="e_While">
     <element name="While">
       <a:documentation docid="while">Executes child elements until the condition (test) evaluates to false.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="test"><data type="string"/></attribute>
       <a:documentation docid="while/test">XPath expression for the while loop.</a:documentation>
       <oneOrMore>
@@ -991,7 +1004,7 @@
   <define name="e_SortSequence">
     <element name="SortSequence">
       <a:documentation docid="sortsequence">Sort the given sequence. The sequence should be stored in a variable because it's contents gets changed.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="select">
         <a:documentation docid="sortsequence/select">The sequence (XML elements) that will be sorted. (XPath expression)</a:documentation>
       </attribute>
@@ -1008,7 +1021,7 @@
   <define name="e_Sup">
     <element name="Sup">
       <a:documentation docid="sup">Superscript text</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <ref name="t_values"/>
     </element>
   </define>
@@ -1016,7 +1029,7 @@
   <define name="e_Sub">
     <element name="Sub">
       <a:documentation docid="sub">Subscript text</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <ref name="t_values"/>
     </element>
   </define>
@@ -1024,7 +1037,7 @@
   <define name="e_Table">
     <element name="Table">
       <a:documentation docid="table">Create a table</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="width"/>
       <a:documentation docid="table/width">The width of the table in grid units. (number)</a:documentation>
       <optional>
@@ -1063,7 +1076,7 @@
           <optional>
             <element name="Tablehead">
               <a:documentation docid="table/head">Table head that gets repeated on every page.</a:documentation>
-              <ref name="a_id"/>
+              <ref name="a_xmlid"/>
               <optional>
                 <attribute name="page">
                   <a:documentation docid="table/head/page">The page selector for the table head.</a:documentation>
@@ -1087,7 +1100,7 @@
           <optional>
             <element name="Tablefoot">
               <a:documentation docid="table/foot">Table foot that gets repeated on every page.</a:documentation>
-              <ref name="a_id"/>
+              <ref name="a_xmlid"/>
               <optional>
                 <attribute name="page">
                   <a:documentation docid="table/foot/page">The page selector for the table foot.</a:documentation>
@@ -1122,7 +1135,7 @@
   <define name="e_Tablerule">
     <element name="Tablerule">
       <a:documentation docid="tablerule">Create a horizontal rule between two rows.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <optional>
         <attribute name="rulewidth"/>
         <a:documentation docid="tablerule/rulewidth">The thickness of the horizontal rule. Example: 3pt</a:documentation>
@@ -1137,7 +1150,8 @@
 
   <define name="e_Td">
     <element name="Td">
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
+      <ref name="a_classid"/>
       <optional>
         <attribute name="colspan">
           <a:documentation docid="td/colspan">The number of columns the cell spans. Default: 1</a:documentation>
@@ -1237,7 +1251,7 @@
   <define name="e_Tr">
     <element name="Tr">
       <a:documentation docid="tr">Create a table row</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <optional>
         <attribute name="top-distance"/>
         <a:documentation docid="tr/topdistance">Amount of spacing above the row, unless at the top of the table</a:documentation>
@@ -1295,7 +1309,7 @@
   <define name="e_Hyphenation">
     <element name="Hyphenation">
       <a:documentation docid="hyphenation">Gives hyphenation correction for the automatic hyphenation algorithm. Example: per-spec-tive</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <text/>
     </element>
   </define>
@@ -1303,11 +1317,11 @@
   <define name="e_Columns">
     <element name="Columns">
       <a:documentation docid="columns">Contains »Column« elements. The number of »Column« elements must coincide with the table.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <oneOrMore>
         <element name="Column">
           <a:documentation docid="column">Determines the Properties of a table column.</a:documentation>
-          <ref name="a_id"/>
+          <ref name="a_xmlid"/>
           <optional>
             <attribute name="width"/>
             <a:documentation docid="column/width">Valid input are length values (e.g 12mm) or *-multipliers (e.g. 3*). The *-multipliers are spread proportionally across the remaining width of the table.</a:documentation>
@@ -1408,7 +1422,7 @@
   <define name="e_Textblock">
     <element name="Textblock">
       <a:documentation docid="textblock">Create a rectengular area with text. The text can contain several paragraphs denoted as »Paragraph«.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <attribute name="width"/>
       <oneOrMore>
         <choice>
@@ -1445,7 +1459,7 @@
   <define name="e_Value">
     <element name="Value">
       <a:documentation docid="value">Insert a textual representation of the value (XPath expression).</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <choice>
         <attribute name="select">
           <a:documentation docid="value/select">XPath expression to determine the contents.</a:documentation>
@@ -1458,7 +1472,7 @@
   <define name="e_U">
     <element name="U">
       <a:documentation docid="u">Turn on underlining.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <ref name="t_values"/>
     </element>
   </define>
@@ -1466,7 +1480,7 @@
   <define name="e_URL">
     <element name="URL">
       <a:documentation docid="url">Marks up a URL.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <ref name="t_values"/>
     </element>
   </define>
@@ -1475,7 +1489,7 @@
     <element name="SetVariable">
       <a:documentation docid="setvariable">Sets a variable to a given value. The contents is either determined by the attribute »select« as an
                 XPath expression or the contents of the element itself.</a:documentation>
-      <ref name="a_id"/>
+      <ref name="a_xmlid"/>
       <optional>
         <attribute name="trace">
           <choice>

@@ -834,12 +834,18 @@ end
 --- It can have a font face, color,... but these can be also given
 --- On the surrounding element (`Textblock`).
 function commands.paragraph( layoutxml,dataxml )
+  local class = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
+  local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
+
+  local css_rules = publisher.css:matches({element = 'paragraph', class=class,id=id}) or {}
+
   local textformat    = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
-  local fontname      = publisher.read_attribute(layoutxml,dataxml,"fontface","rawstring")
-  local colorname     = publisher.read_attribute(layoutxml,dataxml,"color","rawstring")
-  local language_name = publisher.read_attribute(layoutxml,dataxml,"language","string")
+  local fontname      = publisher.read_attribute(layoutxml,dataxml,"fontface",  "rawstring")
+  local colorname     = publisher.read_attribute(layoutxml,dataxml,"color",     "rawstring")
+  local language_name = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
 
-
+  colorname = colorname or css_rules["color"]
+  fontname  = fontname  or css_rules["fontface"]
   local fontfamily
   if fontname then
     fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
@@ -1418,15 +1424,7 @@ function commands.stylesheet( layoutxml,dataxml )
     warning("CSS: no filename given")
     return
   end
-  local ret = css.parse(filename)
-  if not ret then
-    err("could not parse CSS file")
-    return
-  end
-  for k,v in pairs(ret) do
-    publisher.css[k] = v
-  end
-  -- printtable("publisher.css",publisher.css)
+  publisher.css:parse(filename)
 end
 
 --- Sub
@@ -1611,6 +1609,17 @@ end
 function commands.td( layoutxml,dataxml )
   local tab = publisher.dispatch(layoutxml,dataxml)
 
+  local class = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
+  local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
+
+  local css_rules = publisher.css:matches({element = "td", class=class,id=id})
+
+  if css_rules and type(css_rules) == "table" then
+    for k,v in pairs(css_rules) do
+      tab[k] = v
+    end
+  end
+
   local attribute = {
     ["colspan"]          = "number",
     ["rowspan"]          = "number",
@@ -1631,8 +1640,12 @@ function commands.td( layoutxml,dataxml )
     ["border-bottom-color"]    = "rawstring",
   }
 
+  local tmpattr
   for attname,atttyp in pairs(attribute) do
-    tab[attname] = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
+    tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
+    if tmpattr then
+      tab[attname] = tmpattr
+    end
   end
 
   tab.align = publisher.read_attribute(layoutxml,dataxml,"align","string",nil,"align")
@@ -1651,7 +1664,6 @@ function commands.td( layoutxml,dataxml )
   if tab["padding-bottom"] then tab.padding_bottom = tex.sp(tab["padding-bottom"]) end
   if tab["padding-left"]   then tab.padding_left   = tex.sp(tab["padding-left"])   end
   if tab["padding-right"]  then tab.padding_right  = tex.sp(tab["padding-right"])  end
-
   return tab
 end
 

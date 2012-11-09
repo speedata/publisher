@@ -77,8 +77,8 @@ current_layoutlanguage = nil
 
 seiten   = {}
 
--- CSS properties. Key is the selector, value is the table of properties
-css = {}
+-- CSS properties. Use `:matches(tbl)` to find a matching rule. `tbl` has the following structure: `{element=..., id=..., class=... }`
+css = do_luafile("css.lua"):new()
 
 -- The defaults (set in the layout instructions file)
 options = {
@@ -1759,7 +1759,6 @@ function define_default_fontfamily()
   fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
   fonts.lookup_fontfamily_name_number["text"]=#fonts.lookup_fontfamily_number_instance
 end
-
 
 
 file_end("publisher.lua")
