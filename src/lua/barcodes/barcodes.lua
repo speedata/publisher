@@ -9,6 +9,21 @@
 
 barcodes = {}
 
+local function scalebox(scalefactor,box)
+    local a = node.new("whatsit","pdf_literal")
+    a.data = string.format("q %.4g 0 0 %.4g 0 0 cm",scalefactor,scalefactor)
+    a.next = box
+    box.prev = a
+    local b = node.new("whatsit","pdf_literal")
+    b.data = "Q"
+    box.next = b
+    b.prev = box
+    box = node.vpack(a)
+    box.width = width
+    return box
+end
+
+
 local function mkpattern( str )
   -- These are the digits represented by the bars. 3211 for example means a gap of three units,
   -- a bar two units wide, another gap of width one and a bar of width one.
@@ -179,18 +194,8 @@ local function ean13(width,height,fontfamily,digits,showtext,overshoot_factor)
 
     local bc = node.vpack(barcode_top)
     if scalefactor ~= 1 then -- we need to scale the resulting barcode
-		local a = node.new("whatsit","pdf_literal")
-		a.data = string.format("q %.4g 0 0 %.4g 0 0 cm",scalefactor,scalefactor)
-		a.next = bc
-		bc.prev = a
-		local b = node.new("whatsit","pdf_literal")
-		b.data = "Q"
-		bc.next = b
-		b.prev = bc
-		bc = node.vpack(a)
-		bc.width = width
-		return bc
-	end
+      bc = scalebox(scalefactor,bc)
+    end
     return bc
 end
 --- ----------------------------
@@ -275,8 +280,7 @@ local function code128_calculate_checksum_and_add_stop_pattern(pattern)
   pattern[#pattern + 1] = 106
 end
 
-local function code128_make_nodelist(pattern)
-  local wd,ht,dp = tex.sp("1pt"),tex.sp("1cm"),0
+local function code128_make_nodelist(pattern,wd,ht)
   local rule,kern
   local nodelist,pat,m
   m = 0
@@ -289,7 +293,7 @@ local function code128_make_nodelist(pattern)
         nodelist = add_to_nodelist(nodelist,kern)
       else
         -- bar
-        rule = mkrule(tonumber(c) * wd,ht,dp)
+        rule = mkrule(tonumber(c) * wd,ht,0)
         nodelist = add_to_nodelist(nodelist,rule)
       end
       m = m + 1
@@ -299,7 +303,11 @@ local function code128_make_nodelist(pattern)
   return hbox
 end
 
-local function code128(text)
+local function code128(width,height,fontfamily,text,showtext)
+  local textnodelist
+  if showtext then
+    textnodelist = publisher.mknodes(text,fontfamily,{})
+  end
   local pattern = {}
 	local mode,output
 	while string.len(text) > 0 do
@@ -315,8 +323,60 @@ local function code128(text)
       code128_push(output,pattern)
   end
   code128_calculate_checksum_and_add_stop_pattern (pattern)
-  local hbox = code128_make_nodelist(pattern)
-  local vbox = node.vpack(hbox)
+
+
+
+  -- At this point we have the text in a nodelist and the
+  -- pattern of the barcode. We can easily calculate the
+  -- width of the barcode. Each pattern entry has bars
+  -- and spaces of total width 11, the stop pattern has
+  -- two more.
+  wd_pattern_units = #pattern * 11 + 2
+  local unit_width, barcode_height
+  if width then
+    unit_width = width / wd_pattern_units
+  else
+    unit_width = tex.sp("1pt")
+  end
+  if height then
+    if showtext then
+      local fontsize = publisher.fonts.lookup_fontfamily_number_instance[fontfamily].size
+      barcode_height = height - 2*2^16 - fontsize
+    else
+      barcode_height = height
+    end
+  else
+    barcode_height = tex.sp("1cm")
+  end
+
+
+  local code_hbox = code128_make_nodelist(pattern,unit_width,barcode_height)
+  local vbox
+  if showtext then
+    local textbox,vkern,hglue_left,hglue_right
+
+    hglue_right = node.new("glue")
+    hglue_right.spec = node.new("glue_spec")
+    hglue_right.spec.width = 0
+    hglue_right.spec.stretch = 2^16
+    hglue_right.spec.stretch_order = 2
+
+    hglue_left=node.copy(hglue_right)
+    hglue_left.next=textnodelist
+    node.tail(textnodelist).next = hglue_right
+    textbox = node.hpack(hglue_left,code_hbox.width,"exactly")
+
+    vkern = mkkern(2*2^16)
+    code_hbox.next = vkern
+
+    vkern.next = textbox
+    vbox = node.vpack(code_hbox)
+  else
+    vbox = node.vpack(code_hbox)
+  end
+
+
+
   return vbox
 
 end

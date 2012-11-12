@@ -886,6 +886,14 @@ function read_attribute( layoutxml,dataxml,attname_english,typ,default,context)
       ret = val
     end
     return tex.sp(ret)
+  elseif typ=="height_sp" then
+    num = tonumber(val or default)
+    if num then -- most likely really a number, we need to multiply with grid height
+      ret = current_page.raster.gridheight * num
+    else
+      ret = val
+    end
+    return tex.sp(ret)
   elseif typ=="boolean" then
     if val then
       val = translate_value(val,context)
@@ -1008,7 +1016,7 @@ function mknodes(str,fontfamily,parameter)
   -- instance is the internal fontnumber
   local instance
   local instancename
-  local languagecode = parameter.languagecode
+  local languagecode = parameter.languagecode or 0
   if parameter.bold == 1 then
     if parameter.italic == 1 then
       instancename = "bolditalic"
@@ -1053,7 +1061,6 @@ function mknodes(str,fontfamily,parameter)
     node.set_attribute(n,att_fontfamily,fontfamily)
     return n
   end
-
   -- There is a string with utf8 chars
   for s in string.utfvalues(str) do
     local char = unicode.utf8.char(s)

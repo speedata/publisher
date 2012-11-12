@@ -102,7 +102,7 @@ end
 function commands.barcode( layoutxml,dataxml )
   trace("Command: Bookmark")
   local width     = publisher.read_attribute(layoutxml,dataxml,"width"    ,"length_sp"     )
-  local height    = publisher.read_attribute(layoutxml,dataxml,"height"   ,"length_sp"     )
+  local height    = publisher.read_attribute(layoutxml,dataxml,"height"   ,"height_sp"     )
   local typ       = publisher.read_attribute(layoutxml,dataxml,"type"     ,"rawstring"     )
   local selection = publisher.read_attribute(layoutxml,dataxml,"select"   ,"xpath"         )
   local fontname  = publisher.read_attribute(layoutxml,dataxml,"fontface" ,"rawstring"     )
@@ -119,9 +119,8 @@ function commands.barcode( layoutxml,dataxml )
   else
     fontfamily = 1
   end
-
   if typ=="Code128" then
-    return barcodes.code128(selection)
+    return barcodes.code128(width,height,fontfamily,selection,showtext)
   elseif typ=="EAN13" then
     return barcodes.ean13(width,height,fontfamily,selection,showtext,overshoot)
   else
@@ -460,7 +459,7 @@ end
 --- Set the grid (in a pagetype?)
 function commands.grid( layoutxml,dataxml )
   local width  = publisher.read_attribute(layoutxml,dataxml,"width",  "length_sp")
-  local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp")
+  local height = publisher.read_attribute(layoutxml,dataxml,"height", "height")
   return { breite = width, hoehe = height }
 end
 
