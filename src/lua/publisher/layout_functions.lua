@@ -58,14 +58,14 @@ end
 local function anzahl_seiten( dataxml,... )
   dateiname=select(1,...)
   local img = publisher.imageinfo(dateiname)
-  return img.pages
+  return img.img.pages
 end
 
 local function bildbreite(dataxml, ... )
   dateiname=select(1,...)
   local img = publisher.imageinfo(dateiname)
   publisher.setup_page()
-  return publisher.current_grid:width_in_gridcells_sp(img.width)
+  return publisher.current_grid:width_in_gridcells_sp(img.img.width)
 end
 
 local function datei_vorhanden(dataxml, ... )
