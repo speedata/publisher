@@ -48,7 +48,8 @@ h2. Erklärung der Kommandozeilenparameter
 - @--outputdir=VERZEICHNIS@ := Die resultierende PDF-Datei und Protokolldatei wird in das angegebene Verzeichnis kopiert. Das Verzeichnis wird erstellt, falls es noch nicht existiert.
 - @--runs = NUM@ := Überschreibt die Anzahl der Durchläufe des Publishers.
 - @--startpage = NUM@ := Die Seitennummer der ersten Seite.
-- @-v@, @--var=value@ := Übergibt zusätzliche Variablen an den Publisher-Lauf. Diese können wie üblich mit @auswahl="$variable"@ benutzt werden- @-x@, @--extra-dir@ := Bindet zusätzliche Verzeichnisse in den Publisherlauf ein. In diesen Verzeichnissen werden alle Daten gesucht: Bilddaten, Regelwerke, Datendateien und Schriftdateien. Dieses Argument kann mehrfach angegeben werden und per "Konfigurationsdatei":konfiguration mit Werten vorbelegt werden.
+- @-v@, @--var=value@ := Übergibt zusätzliche Variablen an den Publisher-Lauf. Diese können wie üblich mit @auswahl="$variable"@ benutzt werden.
+- @-x@, @--extra-dir@ := Bindet zusätzliche Verzeichnisse in den Publisherlauf ein. In diesen Verzeichnissen werden alle Daten gesucht: Bilddaten, Regelwerke, Datendateien und Schriftdateien. Dieses Argument kann mehrfach angegeben werden und per "Konfigurationsdatei":konfiguration mit Werten vorbelegt werden.
 - @--verbose@ := Gibt mehr Informationen aus, also notwendig.
 - @--xml@:= Die Ausgaben mancher Kommandos werden als (Pseudo-)XML dargestellt, um sie in das Layoutregelwerk zu übernehmen.
 
@@ -58,3 +59,13 @@ h2. Befehle
 - @list-fonts@ := Listet alle Schriftdateien auf, die in den Publisher-Verzeichnissen gefunden werden. Zusammen mit @--xml@ erlaubt dieses Kommando die Ausgabe per Copy&Paste in das Layoutregelwerk zu übernehmen.
 - @doc@ := Öffnet die Onlinehilfe.
 - @run@ := Startet den Publisher Lauf.
+- @watch@ := Startet den internen Hotfolder
+
+h3. Beispiel für die Hotfolder Konfiguration
+
+pre. [hotfolder]
+hotfolder = /home/speedata/hotfolder
+events = layout\.xml:run(runpublisher);data\.xml:run(runpublisher)
+
+- @hotfolder@ := Verzeichnis, das überwacht werden soll.
+- @events@ := Einträge (mit Semikolon getrennt) in der Form @Muster:Befehl@. Das @Muster@ ist ein Regulärer Ausdruck. Wenn dieser auf die Datei _passt_, dann wird das Programm unter @Befehl@ ausgeführt. Derzeit können nur externe Programme ausgeführt werden. Diese werden in den Klammern angegeben. Die Programme erhalten als erstes Argument den Pfad zur gefundenen Datei. Der Hotfolder wartet, bis das Programm beendet wurde und löscht anschließend die Datei.

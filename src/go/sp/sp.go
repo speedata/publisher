@@ -5,6 +5,7 @@ package main
 import (
 	"configurator"
 	"fmt"
+	"hotfolder"
 	"io"
 	"log"
 	"optionparser"
@@ -131,6 +132,19 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func getOptionSection(optionname string, section string) string {
+	if options[optionname] != "" {
+		return options[optionname]
+	}
+	if cfg.String(section, optionname) != "" {
+		return cfg.String(section, optionname)
+	}
+	if defaults[optionname] != "" {
+		return defaults[optionname]
+	}
+	return ""
 }
 
 func getOption(optionname string) string {
@@ -473,7 +487,23 @@ func main() {
 		cmdline := fmt.Sprintf(`"%s/bin/sdluatex" --luaonly %s/lua/sdscripts.lua %s list-fonts %s`, installdir, srcdir, inifile, xml)
 		run(cmdline)
 	case "watch":
-		log.Fatal("not implemented yet.")
+		watch_dir := getOptionSection("hotfolder", "hotfolder")
+		events := getOptionSection("events", "hotfolder")
+		var hotfolder_events []hotfolder.Event
+		// hotfolder_events := make([]hotfolder.Event, 0, 4)
+		for _, v := range strings.Split(events, ";") {
+			pattern_command := strings.Split(v, ":")
+			hotfolder_event := new(hotfolder.Event)
+			hotfolder_event.Pattern = regexp.MustCompile(pattern_command[0])
+			hotfolder_event.Command = &pattern_command[1]
+			hotfolder_events = append(hotfolder_events, *hotfolder_event)
+		}
+
+		if watch_dir != "" {
+			hotfolder.Watch(watch_dir, hotfolder_events)
+		} else {
+			log.Fatal("Problem with watch dir in section [hotfolder].")
+		}
 	default:
 		log.Fatal("unknown command:", command)
 	}

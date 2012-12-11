@@ -5,6 +5,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* sp based hotfolder (@sp watch@)
 * "CSS Stylesheets":e_stylesheet
 * "Barcodes (EAN13 und Code128)":e_strichcode
 * XPath-Funktion "count()":xpath
