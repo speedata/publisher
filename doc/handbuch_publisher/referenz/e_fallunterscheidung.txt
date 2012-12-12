@@ -78,4 +78,4 @@ je nach Inhalt der Variable.
 
 h2. Siehe auch
 
-"Fall":e_fall und "Sonst":e_sonst.
+"Fall":e_fall und "Sonst":e_sonst, "FürAlle":e_fueralle

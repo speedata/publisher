@@ -546,7 +546,7 @@ function calculate_rowheights(self)
       self.rowheights[current_row] = zeilenhoehe
       rowspans = table.__concat(rowspans,_rowspans)
     else
-      warning("Unknown contents in »Tabelle« %s",eltname or "?")
+      warning("Unknown contents in »Table« %s",eltname or "?")
     end -- wenn es nicht eine <Tablerule> ist
   end -- für alle Zeilen
 

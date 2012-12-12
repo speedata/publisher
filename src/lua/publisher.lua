@@ -180,6 +180,7 @@ local dispatch_table = {
   DefineFontfamily        = commands.define_fontfamily,
   DefineTextformat        = commands.define_textformat,
   Element                 = commands.element,
+  ForAll                  = commands.forall,
   Switch                  = commands.switch,
   Group                   = commands.group,
   I                       = commands.italic,
@@ -271,7 +272,7 @@ function dispatch(layoutxml,dataxml,optionen)
         tmp = dispatch_table[eltname](j,dataxml,optionen)
 
         -- Copy-of-elements can be resolveld immediately 
-        if eltname == "Copy-of" or eltname == "Switch" then
+        if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" then
           if type(tmp)=="table" then
             for i=1,#tmp do
               if tmp[i].contents then
@@ -868,6 +869,8 @@ function read_attribute( layoutxml,dataxml,attname_english,typ,default,context)
 
   if typ=="xpath" then
     return xpath.textvalue(xpath.parse(dataxml,val))
+  elseif typ=="xpathraw" then
+    return xpath.parse(dataxml,val)
   elseif typ=="rawstring" then
     return tostring(val)
   elseif typ=="string" then

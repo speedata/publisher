@@ -27,6 +27,7 @@
       <element key="Element" en="Element" de="Element"/>
       <element key="EmptyLine" en="EmptyLine" de="Leerzeile"/>
       <element key="Fontface" en="Fontface" de="Schriftart"/>
+     <element key="ForAll" en="ForAll" de="FürAlle"/>
       <element key="Grid" en="Grid" de="Raster"/>
       <element key="Group" en="Group" de="Gruppe"/>
       <element key="Hyphenation" en="Hyphenation" de="Trennvorschlag"/>
@@ -588,6 +589,14 @@
          <en>Name of the element.</en>
          <de>Name des Elements.</de>
       </documentation>
+     <documentation docid="forall">
+       <en>Run the containing commands for all elements in the selection</en>
+       <de>Die enthaltenen Anweisungen für alle Kindelemente aus dem Attribut »auswahl« aufrufen</de>
+     </documentation>
+     <documentation docid="forall/select">
+       <en>The name of the sub elements</en>
+       <de>Der Name der Elemente, für die die Befehle ausgeführt werden sollen</de>
+     </documentation>
       <documentation docid="switch">
          <en>Contains a if-then-else clause. The child elements »Case« are executed until the tests are true. If none of the tests evaluate to true, the child element »Otherwise« gets executed.</en>
          <de>Enthält eine Wenn-Dann-Abfrage. Die Kindelemente »Fall« werden ausgeführt, wenn die Bedingung erfüllt

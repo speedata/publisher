@@ -5,7 +5,8 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
-* sp based hotfolder (@sp watch@)
+* Neues Element "FürAlle":e_fueralle, um für alle Kindelemente Befehle auszuführen. (1.5.27)
+* sp based hotfolder (@sp watch@) (1.5.26)
 * "CSS Stylesheets":e_stylesheet
 * "Barcodes (EAN13 und Code128)":e_strichcode
 * XPath-Funktion "count()":xpath

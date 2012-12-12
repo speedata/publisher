@@ -65,6 +65,7 @@
     <optional><ref name="e_SaveDataset"/></optional>
     <optional><ref name="e_PlaceObject"/></optional>
     <optional><ref name="e_Switch"/></optional>
+    <optional><ref name="e_ForAll"/></optional>
     <optional><ref name="e_While"/></optional>
     <optional><ref name="e_ProcessRecord"/></optional>
     <optional><ref name="e_ProcessNode"/></optional>
@@ -99,6 +100,7 @@
       <ref name="e_URL"/>
       <ref name="e_Value"/>
       <ref name="e_Switch"/>
+      <ref name="e_ForAll"/>
     </choice>
   </define>
 
@@ -470,6 +472,16 @@
           <optional><ref name="e_CopyOf"/></optional>
         </interleave>
       </oneOrMore>
+    </element>
+  </define>
+
+  <define name="e_ForAll">
+    <element name="ForAll">
+      <a:documentation docid="forall">Run the sub commands for the elements in the selection</a:documentation>
+      <ref name="a_xmlid"></ref>
+      <attribute name="select"></attribute>
+      <a:documentation docid="forall/select">The name of the sub elements</a:documentation>
+      <ref name="t_Switchcontents"></ref>
     </element>
   </define>
 
@@ -1127,6 +1139,7 @@
           <optional><ref name="e_Tablerule"/></optional>
           <optional><ref name="e_Message"/></optional>
           <optional><ref name="e_Switch"/></optional>
+          <optional><ref name="e_ForAll"/></optional>
         </interleave>
       </oneOrMore>
     </element>
@@ -1243,6 +1256,7 @@
           <ref name="e_Image"/>
           <ref name="e_CopyOf"/>
           <ref name="e_Switch"/>
+          <ref name="e_ForAll"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -1301,6 +1315,9 @@
         </optional>
         <optional>
           <ref name="e_Switch"/>
+        </optional>
+        <optional>
+          <ref name="e_ForAll"/>
         </optional>
       </oneOrMore>
     </element>
@@ -1513,6 +1530,7 @@
             <optional><ref name="e_Element"/></optional>
             <optional><ref name="e_Attribute"/></optional>
             <optional><ref name="e_Switch"/></optional>
+            <optional><ref name="e_ForAll"/></optional>
             <optional><ref name="e_Tr"/></optional>
             <optional><ref name="e_Td"/></optional>
             <optional><ref name="e_Columns"/></optional>

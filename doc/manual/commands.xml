@@ -837,6 +837,73 @@
       <cmd name="Switch" />, <cmd name="Otherwise" />
     </seealso>
   </command>
+  <command name="ForAll">
+    <description xml:lang="en">
+      <para>Executes the given commands for all elements in the data XML file that match the contents of the attribute <tt>select</tt>.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Ruft die Kindelemente für alle Daten-Elemente auf, die auf das Muster bei <tt>auswahl</tt> passen.</para>
+    </description>
+    <childelements>
+      <cmd name="B" />
+      <cmd name="Image" />
+      <cmd name="Switch" />
+      <cmd name="I" />
+      <cmd name="Fontface" />
+      <cmd name="Sub" />
+      <cmd name="Sup" />
+      <cmd name="U" />
+      <cmd name="URL" />
+      <cmd name="Value" />
+      <cmd name="SetVariable" />
+    </childelements>
+    <parentelements>
+      <cmd name="Table"/>
+    </parentelements>
+    <attribute name="select" type="xpath" optional="no">
+      <description xml:lang="en">
+        <para>Selects the child elements from the data XML</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wählt die Kindelemente aus.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<Datensatz element="data">
+  <ObjektAusgeben>
+    <Tabelle breite="10">
+      <FürAlle auswahl="eintrag">
+        <Tr><Td><Absatz><Wert auswahl="string(.)"></Wert></Absatz></Td></Tr>
+      </FürAlle>
+    </Tabelle>
+  </ObjektAusgeben>
+</Datensatz>]]></listing>
+      <para>Erzeugt eine Tabellenzeile für alle Elemente <tt>eintrag</tt> im Datensatz <tt>data</tt>. So müsste in etwa ein entsprechender Eintrag in den Daten aussehen:</para>
+      <listing><![CDATA[<data>
+  <eintrag>a</eintrag>
+  <eintrag>b</eintrag>
+  <eintrag>c</eintrag>
+</data>]]></listing>
+    </example>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject>
+    <Table breite="10">
+      <ForAll select="entry">
+        <Tr><Td><Paragraph><Value select="string(.)"/></Paragraph></Td></Tr>
+      </ForAll>
+    </Table>
+  </PlaceObject>
+</Record>]]></listing>
+      <para>Creates a table row for all elements <tt>entry</tt> in the data element <tt>data</tt>. The data XML should look similar to this:</para>
+      <listing><![CDATA[<data>
+  <entry>a</entry>
+  <entry>b</entry>
+  <entry>c</entry>
+</data>]]></listing>
+    </example>
+    <seealso><cmd name="Switch"/></seealso>
+  </command>
   <command name="Switch">
     <description xml:lang="de">
       <para>Erzeugt eine „Wenn-Dann-Abfrage“. Das heißt, für jedes Kindelement <cmd name="Case" /> wird überprüft, ob die Bedingung erfüllt ist. Wenn ja, dann wird der Inhalt des Kindelements <cmd
