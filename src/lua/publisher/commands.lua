@@ -964,10 +964,9 @@ function commands.place_object( layoutxml,dataxml )
   local current_row_start  = publisher.current_grid:current_row(area)
   local current_column_start = spalte or publisher.current_grid:current_column(area)
 
-  -- The height of this page is the minimum of the remaining space or maxheight
-  local this_page_max_height = math.min(publisher.current_grid:number_of_rows(area) - ( zeile or publisher.current_grid:current_row(area) ) + 1, maxheight or publisher.current_grid:number_of_rows(area))
+  -- ht_aktuell is the remaining space on the current page in sp
   local optionen = {
-    ht_aktuell = publisher.current_grid.gridheight * this_page_max_height,
+    ht_aktuell = math.min(publisher.current_grid:remaining_height_sp(zeile,area),( maxheight or publisher.current_grid:number_of_rows(area) ) * publisher.current_grid.gridwidth),
     ht_max     = publisher.current_grid.gridheight * ( maxheight or publisher.current_grid:number_of_rows(area) ),
   }
 

@@ -58,6 +58,15 @@ function new( self )
 	return r
 end
 
+-- Return the remaining height in the area in scaled points
+function remaining_height_sp( self,row,areaname )
+  row = row or self:current_row(areaname)
+  local thisframe = self.positioning_frames[areaname][self:rahmennummer(areaname)]
+  local overshoot = math.max( (thisframe["hoehe"] - thisframe["zeile"] + 1)  * self.gridheight - tex.pageheight ,0)
+  local remaining_rows = self:number_of_rows(areaname) - row + 1
+  return self.gridheight * remaining_rows - overshoot
+end
+
 function current_row( self,areaname )
   assert(self)
   local areaname = areaname or publisher.default_areaname
