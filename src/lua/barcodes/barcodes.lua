@@ -7,8 +7,6 @@
 --  See file COPYING in the root directory for license info.
 
 
-barcodes = {}
-
 local function scalebox(scalefactor,box)
     local a = node.new("whatsit","pdf_literal")
     a.data = string.format("q %.4g 0 0 %.4g 0 0 cm",scalefactor,scalefactor)
@@ -375,14 +373,79 @@ local function code128(width,height,fontfamily,text,showtext)
     vbox = node.vpack(code_hbox)
   end
 
-
-
   return vbox
+end
 
+-- -------------------------------------------------------
+-- ------- QR Codes  -------------------------------------
+-- -------------------------------------------------------
+
+barcodes_qrencode = nil
+
+-- size is in scaled points
+local function make_code(size,matrix)
+  local size_bp = size / publisher.factor
+  local dark_bits
+  local white_bits
+  local unit = math.round(size_bp / #matrix,3)
+  local bc = {}
+  bc[#bc + 1] = "q"
+  for x=1,#matrix do
+    last_bit = "-"
+    dark_bits = 0
+    white_bits = 0
+
+    for y=1,#matrix do
+      if matrix[x][y] > 0 then -- black
+        if last_bit == "white" then
+          white_bits = 0
+          dark_bits = 1
+        else
+          dark_bits = dark_bits + 1
+        end
+        last_bit = "black"
+      else -- white
+        if last_bit == "white" then
+          white_bits = white_bits + 1
+        else
+          -- draw black
+          bc[#bc + 1] = string.format("%g %g %g %g re f",( x - 1) * unit,( y - 1 ) * -unit, unit * 1.02, dark_bits * unit)
+          dark_bits = 0
+          white_bits = 1
+        end
+        last_bit = "white"
+      end
+    end
+    if last_bit == "black" then
+      bc[#bc + 1] = string.format("%g %g %g %g re f",(x - 1) * unit,( #matrix ) * -unit, unit * 1.02, dark_bits * unit)
+    end
+  end
+  bc[#bc + 1] = "Q"
+  local n = node.new("whatsit","pdf_literal")
+  n.data = table.concat(bc," ")
+  n.mode = 0
+  -- Avoid underfull boxes message:
+  n = publisher.add_glue(n,"tail",{width = 0, stretch = 1, stretch_order = 3})
+  local h = node.hpack(n,size,"exactly")
+  h = publisher.add_glue(h,"tail",{stretch = 1, stretch_order = 3})
+  local v = node.vpack(h,size,"exactly")
+  return v
+end
+
+local function qrcode(width,height,codeword)
+  if not barcodes_qrencode then barcodes_qrencode = do_luafile("qrencode.lua") end
+  local ok, tab_or_message =  barcodes_qrencode.qrcode(codeword)
+  if not ok then
+    err(tab_or_message)
+    return nil
+  else
+    return make_code(width,tab_or_message)
+  end
 end
 
 
 return {
 	ean13 = ean13,
-	code128 = code128
+	code128 = code128,
+	qrcode = qrcode,
 }

@@ -100,7 +100,7 @@ end
 --- Create a EAN 13 barcode. The width of the barcode depends on the font
 --- given in `fontface` (or the default `text`).
 function commands.barcode( layoutxml,dataxml )
-  trace("Command: Bookmark")
+  trace("Command: Barcode")
   local width     = publisher.read_attribute(layoutxml,dataxml,"width"    ,"length_sp"     )
   local height    = publisher.read_attribute(layoutxml,dataxml,"height"   ,"height_sp"     )
   local typ       = publisher.read_attribute(layoutxml,dataxml,"type"     ,"rawstring"     )
@@ -123,6 +123,8 @@ function commands.barcode( layoutxml,dataxml )
     return barcodes.code128(width,height,fontfamily,selection,showtext)
   elseif typ=="EAN13" then
     return barcodes.ean13(width,height,fontfamily,selection,showtext,overshoot)
+  elseif typ=="QRCode" then
+    return barcodes.qrcode(width,height,selection)
   else
     err("Unknown barcode type %q", typ or "?")
   end

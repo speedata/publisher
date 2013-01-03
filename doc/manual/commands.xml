@@ -27,10 +27,10 @@
   </command>
 <command name="Barcode">
   <description xml:lang="de">
-    <para>Erzeugt einen Strichcode (barcode), der in <cmd name="PlaceObject"/> ausgegeben werden kann.</para>
+    <para>Erzeugt einen 1D oder 2D Strichcode (barcode), der in <cmd name="PlaceObject"/> ausgegeben werden kann.</para>
   </description>
   <description xml:lang="en">
-    <para>Print a barcode. To be used in <cmd name="PlaceObject"/>.</para>
+    <para>Print a 1d or 2d barcode. To be used in <cmd name="PlaceObject"/>.</para>
   </description>
   <childelements/>
   <parentelements>
@@ -46,18 +46,18 @@
   </attribute>
   <attribute name="fontface" type="text" optional="yes">
     <description xml:lang="en">
-      <para>Name of the fontface of the text that can be placed beneath the barcode.</para>
+      <para>Name of the fontface of the text that can be placed beneath the barcode. Not used in all codes.</para>
     </description>
     <description xml:lang="de">
-      <para>Name der Schriftart des Textes, der ggf. unterhalb des Strichcodes ausgegeben wird.</para>
+      <para>Name der Schriftart des Textes, der ggf. unterhalb des Strichcodes ausgegeben wird. Nicht in allen Codes verwendet.</para>
     </description>
   </attribute>
   <attribute name="type" type="text" optional="no">
     <description xml:lang="en">
-      <para>Type of the barcode. One of <tt>EAN13</tt> or <tt>Code128</tt>.</para>
+      <para>Type of the barcode. One of <tt>EAN13</tt>, <tt>Code128</tt> or <tt>QRCode</tt>.</para>
     </description>
     <description xml:lang="de">
-      <para>Typ des Strichcodes. Kann <tt>EAN13</tt> oder <tt>Code128</tt> sein.</para>
+      <para>Typ des Strichcodes. Kann <tt>EAN13</tt>, <tt>Code128</tt> oder <tt>QRCode</tt> sein.</para>
     </description>
   </attribute>
   <attribute name="width" type="numberorlength" optional="yes">

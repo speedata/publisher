@@ -15,7 +15,7 @@ h3. Attribute
 
 - @auswahl@ ("XPath Ausdruck":xpath) := Wert, der als Strichcode kodiert werden soll.
 - @schriftart@ (Text, optional) := Name der Schriftart des Textes, der ggf. unterhalb des Strichcodes ausgegeben wird.
-- @typ@ (@EAN13@, @Code128@) := Typ des Strichcodes.
+- @typ@ (@EAN13@, @Code128@, @QRCode@) := Typ des Strichcodes.
 - @breite@ (Zahl oder Maßangabe, optional) := Breite des Strichcodes.
 - @höhe@ (Zahl oder Maßangabe, optional) := Höhe des Strichcodes.
 - @zeigetext@ (ja/nein, optional) := Bestimmt, ob unterhalb des Barcodes der Text erscheint.

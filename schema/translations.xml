@@ -98,6 +98,7 @@
     <value key="solid" context="*" en="solid" de="durchgezogen"/>
     <value key="EAN13" en="EAN13" de="EAN13"/>
     <value key="Code128" en="Code128" de="Code128"/>
+    <value key="QRCode" en="QRCode" de="QRCode"/>
     <value key="Englisch (Great Britan)" context="*" en="Englisch (Great Britan)" de="Englisch (Großbritannien)"/>
     <value key="French" context="*" en="French" de="Französisch"/>
     <value key="horizontal" context="*" en="horizontal" de="horizontal"/>
@@ -305,6 +306,10 @@
      <documentation docid="barcode/type/code128">
        <en>Code 128 for text and digits</en>
        <de>Code 128 für Text und Ziffern</de>
+     </documentation>
+     <documentation docid="barcode/type/qrcode">
+       <en>QRCode for text and digits</en>
+       <de>QRCode für Text und Ziffern</de>
      </documentation>
      <documentation docid="barcode/ean13/showtext">
        <en>Show the digits of the barcode in plain text</en>

@@ -1431,6 +1431,13 @@
             </attribute>
           </optional>
         </group>
+        <group>
+          <attribute name="type">
+            <a:documentation docid="barcode/type">Determines the type of the barcode</a:documentation>
+            <value>QRCode</value>
+            <a:documentation docid="barcode/type/qrcode">QRCode for text and digits</a:documentation>
+          </attribute>
+        </group>
       </choice>
       <empty/>
     </element>
