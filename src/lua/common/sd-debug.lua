@@ -7,7 +7,13 @@
 --  See file COPYING in the root directory for license info.
 
 function w( ... )
-  texio.write_nl("-----> " .. string.format(...))
+  local ok,fmt = pcall(string.format,...)
+  if ok == false then
+    texio.write_nl("-(e)-> " .. fmt)
+    texio.write_nl(debug.traceback())
+  else
+    texio.write_nl("-----> " .. fmt)
+  end
 end
 
 if not log then

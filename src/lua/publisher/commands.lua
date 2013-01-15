@@ -456,13 +456,13 @@ function commands.fontface( layoutxml,dataxml )
   end
 end
 
+--- ForAll
+--- --------
+--- Execute the child elements for all elements given by the `select` attribute.
 function commands.forall( layoutxml,dataxml )
   local tab = {}
-  w("forall!")
   local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
-  w("selection = %q",tostring(selection))
   -- printtable("dataxml",dataxml)
-  printtable("selection",selection)
   for i=1,#selection do
     tab[#tab + 1] = publisher.dispatch(layoutxml,selection[i])[1]
   end

@@ -167,7 +167,7 @@ function calculate_spaltenbreite( self )
       local count_stars = 0
       local summe_echte_breiten = 0
       local count_columns = 0
-      local pattern = "([0-9]+)\*"
+      local pattern = "([0-9]+)\\*"
       for _,spalte in ipairs(tr_contents) do
         if publisher.elementname(spalte,true)=="Column" then
           local column_contents = publisher.element_contents(spalte)
