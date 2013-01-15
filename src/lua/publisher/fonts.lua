@@ -136,6 +136,8 @@ function pre_linebreak( head )
     if gluespec then
       if node.has_attribute(head,att_fontfamily) then
         local fontfamily=node.has_attribute(head,att_fontfamily)
+        -- FIXME: safety net
+        if fontfamily == 0 then fontfamily = 1 end
         local instance = lookup_fontfamily_number_instance[fontfamily]
         assert(instance)
         local f

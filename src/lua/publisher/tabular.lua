@@ -1088,7 +1088,8 @@ function setze_tabelle(self)
     thissplittable = {}
     final_split_tables[#final_split_tables + 1] = thissplittable
 
-    if last_tr_data then
+    -- only reformat head when we have a head
+    if last_tr_data and self.tablehead_contents then
       -- we have some data attached to table rows, so we re-format the header
       local val = dynamic_data[last_tr_data]
       publisher.variablen["_last_tr_data"] = val
@@ -1119,9 +1120,11 @@ function setze_tabelle(self)
       thissplittable[#thissplittable + 1] = rows[i]
     end
 
-    thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep})
     last_tr_data = node.has_attribute(thissplittable[#thissplittable],publisher.att_tr_dynamic_data)
-    if last_tr_data then 
+    thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep})
+
+    -- only refomat the foot when we have dynamic data _and_ have a foot to reformat.
+    if last_tr_data and self.tablefoot_contents then
       -- we have some data attached to table rows, so we re-format the footer
       local val = dynamic_data[last_tr_data]
       publisher.variablen["_last_tr_data"] = val
@@ -1157,7 +1160,7 @@ end
 function reformat_foot( self,pagenumber,max_splits)
   trace("reformat_foot")
   local rownumber,y
-  if pagenumber == max_splits then
+  if pagenumber == max_splits and self.tablefoot_last_contents then
     y         = self.tablefoot_last_contents[1]
     rownumber = self.tablefoot_last_contents[2]
   else

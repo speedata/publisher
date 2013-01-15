@@ -1389,6 +1389,7 @@ function do_linebreak( nodelist,hsize,parameters )
       maxskip = 0
       for glyf in node.traverse_id(glyph_node,head.list) do
         local fam = node.has_attribute(glyf,att_fontfamily)
+        if fam == 0 then fam = 1 end
         maxskip = math.max(fonts.lookup_fontfamily_number_instance[fam].baselineskip,maxskip)
       end
       head.height = 0.75 * maxskip
