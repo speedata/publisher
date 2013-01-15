@@ -295,6 +295,8 @@ local function c_entityref(...)
     ret = "'"
   elseif ...=="lt" then
     ret = "<"
+  elseif ...=="gt" then
+    ret = ">"
   elseif ...=="quot" then
     ret = '"'
   elseif ...=="amp" then
