@@ -356,20 +356,38 @@ local function _funcall( ... )
 end
 
 local function _comparison( ... )
-  -- printtable("comparison",{...})
   if select('#',...) == 1 then
    return ...
   end
-  -- P"=" + P"!=" + P"<" + P"<=" + P">" + P">="
-  -- w("comparison: %s",get_number_value(select(1,...)))
+  if not (select(1,...) and select(2,...) and select(3,...)) then
+    return false
+  end
+  local value1, value2 = select(1,...), select(3,...)
+  local operator = select(2,...)
   local ret
-  if select(2,...)=="<"  then ret = get_number_value(select(1,...)) <  get_number_value(select(3,...)) end
-  if select(2,...)=="<=" then ret = get_number_value(select(1,...)) <= get_number_value(select(3,...)) end
-  if select(2,...)=="!=" then ret = get_value(select(1,...)) ~= get_value(select(3,...)) end
-  if select(2,...)=="="  then ret = get_value(select(1,...)) == get_value(select(3,...)) end
-  if select(2,...)==">"  then ret = get_number_value(select(1,...)) >  get_number_value(select(3,...)) end
-  if select(2,...)==">=" then ret = get_number_value(select(1,...)) >= get_number_value(select(3,...)) end
-  -- w("ret=%s",tostring(ret))
+  -- See http://www.w3.org/TR/xpath/#booleans
+  if type(value1) == "number" or type(value2) == "number" then
+    value1 = get_number_value(value1)
+    value2 = get_number_value(value2)
+  else
+    value1 = get_value(value1)
+    value2 = get_value(value2)
+  end
+  if operator == "<" then
+    ret = value1 < value2
+  elseif operator == "<=" then
+    ret = value1 <= value2
+  elseif operator == "!=" then
+    ret = value1 ~= value2
+  elseif operator == "=" then
+    ret = value1 == value2
+  elseif operator == ">" then
+    ret = value1 > value2
+  elseif operator == ">=" then
+    ret = value1 >= value2
+  else
+    assert(false,"unknown operator %s",operator)
+  end
   return ret
 end
 
