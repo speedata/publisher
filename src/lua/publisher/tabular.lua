@@ -825,9 +825,12 @@ function setze_zeile(self, tr_contents, current_row )
   return zeile
 end
 
+-- Gets called for each <Tablehead> element
 local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current_row,second_run)
   trace("make_tablehead, page = %s",tr_contents.page or "not defined")
+
   local current_tablehead_type
+
   if tr_contents.page == "first" then
     current_tablehead_type = tablehead_first
     if second_run ~= true then
@@ -839,6 +842,7 @@ local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current
       self.tablehead_contents = {tr_contents,current_row}
     end
   end
+
   for _,row in ipairs(tr_contents) do
     row_contents = publisher.element_contents(row)
     row_elementname = publisher.elementname(row,true)
@@ -880,6 +884,38 @@ local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_
   return current_row
 end
 --------------------------------------------------------------------------
+local function calculate_height_and_connect_tablehead(self,tablehead_first,tablehead)
+  local ht_header, ht_first_header = 0, 0
+  -- We connect all but the last row with the next row and remember the height in ht_header
+  for z = 1,#tablehead_first - 1 do
+    ht_first_header = ht_first_header + tablehead_first[z].height  -- Tr oder Tablerule
+    _,tmp = publisher.add_glue(tablehead_first[z],"tail",{ width = self.rowsep })
+    tmp.next = tablehead_first[z+1]
+    tablehead_first[z+1].prev = tmp
+  end
+
+
+  for z = 1,#tablehead - 1 do
+    ht_header = ht_header + tablehead[z].height  -- Tr or Tablerule
+    _,tmp = publisher.add_glue(tablehead[z],"tail",{ width = self.rowsep })
+    tmp.next = tablehead[z+1]
+    tablehead[z+1].prev = tmp
+  end
+
+  -- perhaps there is a last row, that is connected but its height is not
+  -- taken into account yet.
+  if #tablehead > 0 then
+    ht_header = ht_header + tablehead[#tablehead].height + self.rowsep  * ( #tablehead - 1 )
+  end
+
+  if #tablehead_first > 0 then
+    ht_first_header = ht_first_header + tablehead_first[#tablehead_first].height + self.rowsep * (#tablehead_first - 1)
+  else
+    ht_first_header = ht_header
+  end
+
+  return ht_first_header,ht_header
+end
 
 function setze_tabelle(self)
   trace("tabular: setze Tabelle")
@@ -941,35 +977,10 @@ function setze_tabelle(self)
 
   -- We now have tablehead and tablefoot arrays with the contents
   -- Let's add the glue inbetween
-  local ht_header, ht_first_header, ht_footer, ht_footer_last = 0, 0, 0, 0
+  local ht_header, ht_first_header
+  local ht_footer, ht_footer_last = 0, 0
 
-  -- We connect all but the last row with the next row and remember the height in ht_header
-  for z = 1,#tablehead_first - 1 do
-    ht_first_header = ht_first_header + tablehead_first[z].height  -- Tr oder Tablerule
-    _,tmp = publisher.add_glue(tablehead_first[z],"tail",{ width = self.rowsep })
-    tmp.next = tablehead_first[z+1]
-    tablehead_first[z+1].prev = tmp
-  end
-
-
-  for z = 1,#tablehead - 1 do
-    ht_header = ht_header + tablehead[z].height  -- Tr or Tablerule
-    _,tmp = publisher.add_glue(tablehead[z],"tail",{ width = self.rowsep })
-    tmp.next = tablehead[z+1]
-    tablehead[z+1].prev = tmp
-  end
-
-  -- perhaps there is a last row, that is connected but its height is not
-  -- taken into account yet.
-  if #tablehead > 0 then
-    ht_header = ht_header + tablehead[#tablehead].height + self.rowsep  * ( #tablehead - 1 )
-  end
-
-  if #tablehead_first > 0 then
-    ht_first_header = ht_first_header + tablehead_first[#tablehead_first].height + self.rowsep * (#tablehead_first - 1)
-  else
-    ht_first_header = ht_header
-  end
+  ht_first_header, ht_header = calculate_height_and_connect_tablehead(self,tablehead_first,tablehead)
 
   for z = 1,#tablefoot - 1 do
     ht_footer = ht_footer + tablefoot[z].height  -- Tr or Tablerule
@@ -1093,13 +1104,13 @@ function setze_tabelle(self)
       -- we have some data attached to table rows, so we re-format the header
       local val = dynamic_data[last_tr_data]
       publisher.variablen["_last_tr_data"] = val
-      local tmp = reformat_head(self,s - 1)
+      local tmp1,tmp2 = reformat_head(self,s - 1)
       if s == 2 then
         -- first page
-        thissplittable[#thissplittable + 1] = node.copy_list(tmp)
+        thissplittable[#thissplittable + 1] = node.copy_list(tmp1)
       else
         -- page > 1
-        thissplittable[#thissplittable + 1] = node.copy_list(tmp)
+        thissplittable[#thissplittable + 1] = node.copy_list(tmp2)
       end
     else
       if s == 2 then
@@ -1180,9 +1191,10 @@ function reformat_head( self,pagenumber)
   local rownumber = self.tablehead_contents[2]
   local x = publisher.dispatch(y._layoutxml,y._dataxml)
   attach_objects(x)
-  local tmp = {}
-  make_tablehead(self,x,tmp,tmp,rownumber,true)
-  return tmp[1]
+  local tmp1,tmp2 = {}, {}
+  make_tablehead(self,x,tmp1,tmp2,rownumber,true)
+  ht_first_header, ht_header = calculate_height_and_connect_tablehead(self,tmp1,tmp2)
+  return tmp1[1],tmp2[1]
 end
 
 
