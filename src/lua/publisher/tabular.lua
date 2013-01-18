@@ -917,6 +917,38 @@ local function calculate_height_and_connect_tablehead(self,tablehead_first,table
   return ht_first_header,ht_header
 end
 
+local function calculate_height_and_connect_tablefoot(self,tablefoot,tablefoot_last)
+  local ht_footer, ht_footer_last = 0, 0
+  for z = 1,#tablefoot - 1 do
+    ht_footer = ht_footer + tablefoot[z].height  -- Tr or Tablerule
+    -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
+    _,tmp = publisher.add_glue(tablefoot[z],"tail",{ width = self.rowsep })
+    tmp.next = tablefoot[z+1]
+    tablefoot[z+1].prev = tmp
+  end
+
+  for z = 1,#tablefoot_last - 1 do
+    ht_footer_last = ht_footer_last + tablefoot_last[z].height  -- Tr or Tablerule
+    -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
+    _,tmp = publisher.add_glue(tablefoot_last[z],"tail",{ width = self.rowsep })
+    tmp.next = tablefoot_last[z+1]
+    tablefoot_last[z+1].prev = tmp
+  end
+
+  if #tablefoot > 0 then
+    ht_footer = ht_footer + tablefoot[#tablefoot].height + ( #tablefoot - 1 ) * self.rowsep
+  end
+
+  if #tablefoot_last > 0 then
+    ht_footer_last = ht_footer_last + tablefoot_last[#tablefoot_last].height + ( #tablefoot_last - 1 ) * self.rowsep
+  else
+    ht_footer_last = ht_footer
+  end
+  return ht_footer, ht_footer_last
+end
+
+--------
+
 function setze_tabelle(self)
   trace("tabular: setze Tabelle")
   local current_row
@@ -975,38 +1007,8 @@ function setze_tabelle(self)
     end -- wenn es eine Tabellenzelle ist
   end
 
-  -- We now have tablehead and tablefoot arrays with the contents
-  -- Let's add the glue inbetween
-  local ht_header, ht_first_header
-  local ht_footer, ht_footer_last = 0, 0
-
-  ht_first_header, ht_header = calculate_height_and_connect_tablehead(self,tablehead_first,tablehead)
-
-  for z = 1,#tablefoot - 1 do
-    ht_footer = ht_footer + tablefoot[z].height  -- Tr or Tablerule
-    -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
-    _,tmp = publisher.add_glue(tablefoot[z],"tail",{ width = self.rowsep })
-    tmp.next = tablefoot[z+1]
-    tablefoot[z+1].prev = tmp
-  end
-
-  for z = 1,#tablefoot_last - 1 do
-    ht_footer_last = ht_footer_last + tablefoot_last[z].height  -- Tr or Tablerule
-    -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
-    _,tmp = publisher.add_glue(tablefoot_last[z],"tail",{ width = self.rowsep })
-    tmp.next = tablefoot_last[z+1]
-    tablefoot_last[z+1].prev = tmp
-  end
-
-  if #tablefoot > 0 then
-    ht_footer = ht_footer + tablefoot[#tablefoot].height + ( #tablefoot - 1 ) * self.rowsep
-  end
-
-  if #tablefoot_last > 0 then
-    ht_footer_last = ht_footer_last + tablefoot_last[#tablefoot_last].height + ( #tablefoot_last - 1 ) * self.rowsep
-  else
-    ht_footer_last = ht_footer
-  end
+  local ht_first_header, ht_header = calculate_height_and_connect_tablehead(self,tablehead_first,tablehead)
+  local ht_footer,  ht_footer_last = calculate_height_and_connect_tablefoot(self,tablefoot_last,tablefoot)
 
   if not tablehead[1] then
     tablehead[1] = node.new("hlist") -- empty tablehead
@@ -1139,11 +1141,11 @@ function setze_tabelle(self)
       -- we have some data attached to table rows, so we re-format the footer
       local val = dynamic_data[last_tr_data]
       publisher.variablen["_last_tr_data"] = val
-      local tmp = reformat_foot(self,s - 1,#splits - 1)
+      local tmp1,tmp2 = reformat_foot(self,s - 1,#splits - 1)
       if s < #splits then
-        thissplittable[#thissplittable + 1] = node.copy_list(tmp)
+        thissplittable[#thissplittable + 1] = node.copy_list(tmp2)
       else
-        thissplittable[#thissplittable + 1] = node.copy_list(tmp)
+        thissplittable[#thissplittable + 1] = node.copy_list(tmp2)
       end
     else
       -- no dynamic data, no re-formatting
@@ -1180,9 +1182,10 @@ function reformat_foot( self,pagenumber,max_splits)
   end
   local x = publisher.dispatch(y._layoutxml,y._dataxml)
   attach_objects(x)
-  local tmp = {}
-  make_tablefoot(self,x,tmp,tmp,rownumber,true)
-  return tmp[1]
+  local tmp1,tmp2 = {},{}
+  make_tablefoot(self,x,tmp1,tmp2,rownumber,true)
+  calculate_height_and_connect_tablefoot(self,tmp1,tmp2)
+  return tmp1[1],tmp2[1]
 end
 
 function reformat_head( self,pagenumber)
@@ -1193,7 +1196,7 @@ function reformat_head( self,pagenumber)
   attach_objects(x)
   local tmp1,tmp2 = {}, {}
   make_tablehead(self,x,tmp1,tmp2,rownumber,true)
-  ht_first_header, ht_header = calculate_height_and_connect_tablehead(self,tmp1,tmp2)
+  calculate_height_and_connect_tablehead(self,tmp1,tmp2)
   return tmp1[1],tmp2[1]
 end
 
