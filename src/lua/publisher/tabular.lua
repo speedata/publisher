@@ -1008,7 +1008,7 @@ function setze_tabelle(self)
   end
 
   local ht_first_header, ht_header = calculate_height_and_connect_tablehead(self,tablehead_first,tablehead)
-  local ht_footer,  ht_footer_last = calculate_height_and_connect_tablefoot(self,tablefoot_last,tablefoot)
+  local ht_footer,  ht_footer_last = calculate_height_and_connect_tablefoot(self,tablefoot,tablefoot_last)
 
   if not tablehead[1] then
     tablehead[1] = node.new("hlist") -- empty tablehead

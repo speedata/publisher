@@ -466,7 +466,7 @@ function commands.forall( layoutxml,dataxml )
   for i=1,#selection do
     tab[#tab + 1] = publisher.dispatch(layoutxml,selection[i])[1]
   end
-   printtable("whatever",tab)
+   -- printtable("whatever",tab)
    return tab
 end
 
