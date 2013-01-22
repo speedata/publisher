@@ -371,27 +371,42 @@
   </command>
   <command name="ProcessNode">
     <description xml:lang="de">
-      <para>Ruft einen Datensatz auf. Das Element, für das die Regeln ausgeführt werden sollen, wird mit dem Attribut auswahl angegeben.</para>
+      <para>Bearbeitet alle angegebenen Datensätze. Die Elemente, für die die Regeln ausgeführt werden sollen, werden mit dem Attribut auswahl angegeben.</para>
+    </description>
+    <description xml:lang="en">
+      <para>Executes all given nodes. The elements, that are to be executed, are given with the attribute <tt>selection</tt>.</para>
     </description>
     <childelements />
     <parentelements>
       <cmd name="Record" />
     </parentelements>
-    <attribute name="select" type="text" optional="no">
+    <attribute name="select" type="xpath" optional="no">
       <description xml:lang="de">
-        <para>Name der Kindelemente, die verarbeitet werden sollen.</para>
+        <para>Auswahl der Kindelemente, die verarbeitet werden sollen.</para>
+      </description>
+      <description xml:lang="en">
+        <para>Selection of child elements, that are to be processed.</para>
       </description>
     </attribute>
     <attribute name="mode" type="text" optional="yes">
       <description xml:lang="de">
-        <para>Name des Modus. Dieser muss bei Datensatz exakt übereinstimmen. Damit ist es möglich für dasselbe Element unterschiedliche Regeln aufzurufen.</para>
+        <para>Name des Modus. Dieser muss bei <cmd name="Record"/> exakt übereinstimmen. Damit ist es möglich für dasselbe Element unterschiedliche Regeln aufzurufen.</para>
+      </description>
+      <description xml:lang="en">
+        <para>Name of the mode. This must match the mode at the corresponding <cmd name="Record"/> element. With this it is possible to have different rules for the same element.</para>
       </description>
     </attribute>
+    <remark xml:lang="en">
+      <para>Currently there also exists <cmd name="ProcessRecord"/> that works on a list.</para>
+    </remark>
     <remark xml:lang="de">
       <para>Derzeit gibt es auch BearbeiteDatensatz, das auf eine Liste arbeitet.</para>
     </remark>
+    <example xml:lang="en">
+      <listing><![CDATA[<ProcessNode select="*" mode="sum" />]]></listing>
+    </example>
     <example xml:lang="de">
-      <listing><![CDATA[<BearbeiteKnoten auswahl="artikel" modus="summe" />]]></listing>
+      <listing><![CDATA[<BearbeiteKnoten auswahl="*" modus="summe" />]]></listing>
     </example>
     <seealso><cmd name="Record" />, <cmd name="ProcessRecord" /></seealso>
   </command>

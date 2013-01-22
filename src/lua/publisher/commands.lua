@@ -1097,6 +1097,7 @@ function commands.process_record( layoutxml,dataxml )
   local limit     = publisher.read_attribute(layoutxml,dataxml,"limit","number")
 
   local record = xpath.parse(dataxml,selection)
+  local layoutknoten
 
   if limit then
     limit = math.min(#record,limit)
@@ -1124,23 +1125,27 @@ end
 --- string, this function is rather stupid but nevertheless currently the main
 --- function for processing data.
 function commands.process_node(layoutxml,dataxml)
-  local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
+  local dataxml_selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
+  local mode              = publisher.read_attribute(layoutxml,dataxml,"mode","rawstring") or ""
 
-  --- To restore the current value of `__position`, we save it. The value of `__position` is available from xpath.
+  -- To restore the current value of `__position`, we save it.
+  -- The value of `__position` is available from xpath (function position()).
   local current_position = publisher.variablen.__position
-  local modus = publisher.read_attribute(layoutxml,dataxml,"mode","rawstring") or ""
-  local layoutknoten = publisher.data_dispatcher[modus][selection]
+  local element_name
+  local layoutnode
   local pos = 1
-  if type(layoutknoten)=="table" then
-    for i,j in ipairs(dataxml) do
-      if j[".__name"]==selection then
-        log("Selecting node: %q, mode=%q, pos=%d",selection,modus, pos)
-        publisher.variablen.__position = pos
-        publisher.dispatch(layoutknoten,j)
-        pos = pos + 1
-      end
+
+  for i=1,#dataxml_selection do
+    element_name = dataxml_selection[i][".__name"]
+    layoutnode = publisher.data_dispatcher[mode][element_name]
+    if layoutnode then
+      log("Selecting node: %q, mode=%q, pos=%d",element_name,mode,pos)
+      publisher.variablen.__position = pos
+      publisher.dispatch(layoutnode,dataxml_selection[i])
+      pos = pos + 1
     end
   end
+
   --- Now restore the value for the parent element
   publisher.variablen.__position = current_position
 end

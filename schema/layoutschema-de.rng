@@ -244,7 +244,7 @@
       <a:documentation docid="processnode">Ruft alle Kindelemente eines bestimmten Namens auf. Gegenstück ist »Datensatz«</a:documentation>
       <ref name="a_xmlid"/>
       <attribute name="auswahl"/>
-      <a:documentation docid="processnode/select">Bestimmt die Datensätze, die ausgeführt werden sollen.</a:documentation>
+      <a:documentation docid="processnode/select">Bestimmt die Datensätze, die ausgeführt werden sollen. Erlaubt ist eine Zeichenkette z.B. Artikelnummer oder das Joker-Zeichen * für alle Kindelemente</a:documentation>
       <optional>
         <attribute name="modus"/>
         <a:documentation docid="processnode/mode">Wird ein Modus angegeben, werden nur »Datensatz« Elemente ausgeführt, die diesem Modus entsprechen.

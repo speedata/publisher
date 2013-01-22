@@ -5,6 +5,8 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* Wildcard (@*@) als "XPath-Ausdruck":xpath (1.5.32)
+* "BearbeiteKnoten":e_bearbeiteknoten erlaubt "XPath-Ausdrücke":xpath (1.5.32)
 * "QR Codes":e_strichcode (1.5.28)
 * Neues Element "FürAlle":e_fueralle, um für alle Kindelemente Befehle auszuführen. (1.5.27)
 * sp based hotfolder (@sp watch@) (1.5.26)

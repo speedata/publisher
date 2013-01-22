@@ -241,7 +241,7 @@
       <a:documentation docid="processnode">Processes all child nodes of the current data element. The matching command is »Record«</a:documentation>
       <ref name="a_xmlid"/>
       <attribute name="select"/>
-      <a:documentation docid="processnode/select">The child child elements that should be processed (currently this is not an XPath expression but the name of the child elements).</a:documentation>
+      <a:documentation docid="processnode/select">The child elements that should be processed. Allowed is a string such as 'subentry' or the wildcard * for all child elements.</a:documentation>
       <optional>
         <attribute name="mode"/>
         <a:documentation docid="processnode/mode">If a mode is supplied, only »Record« commands with the same mode are called.</a:documentation>

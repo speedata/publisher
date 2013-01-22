@@ -311,10 +311,18 @@ end
 local function _nodetest( ... )
   -- printtable("_nodetest",{...})
   if select(1,...)=="@" then return dataxml[select(2,...)] end
-  local ret = {}
   if not dataxml then
     warning("Empty sequence")
     return nil
+  end
+  local ret = {}
+  if select(1,...)=="*" then
+    for i,v in ipairs(dataxml) do
+      if type(v)=="table" then
+        ret[#ret + 1] = v
+      end
+    end
+    return ret
   end
   for i,v in ipairs(dataxml) do
     if type(v)=="table" and v[".__name"] == ... then
@@ -482,8 +490,10 @@ function parse( data_xml, str )
     AbbrevForwardStep = space^0 * C( P"@" )^-1 * V"NodeTest",
     -- [35]      NodeTest    ::=     KindTest | NameTest
     NodeTest = space^0 * V"NameTest" * space^0, 
-    -- [36]      NameTest    ::=     QName | Wildcard
-    NameTest = V"QName",
+    -- [36]
+    NameTest = V"QName" + V"Wildcard",
+    -- [37]      Wildcard    ::=    "*" | (NCName ":" "*") | ("*" ":" NCName) /* ws: explicit */
+    Wildcard = P"*",
     -- [38]      FilterExpr    ::=     PrimaryExpr PredicateList
     FilterExpr = V"PrimaryExpr",
     -- [41]

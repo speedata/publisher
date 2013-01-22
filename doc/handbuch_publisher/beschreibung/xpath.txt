@@ -19,7 +19,7 @@ h2. Folgende XPath-Ausdrücke erkennt das System:
 * Rechenoperationen (@*@, @div@, @+@, @-@, @mod@). Beispiel: @( 6 + 4.5 ) * 2@
 * Zugriff auf Variablen. Beispiel: @$spalte + 2@
 * Zugriff auf den aktuellen Knoten (Punkt-Operator). Beispiel: @. + 2@
-* Zugriff auf Unterelemente. Beispiel: @produktdaten@, @node()@
+* Zugriff auf Unterelemente. Beispiel: @produktdaten@, @node()@, @*@
 * Zugriff auf Attribute im aktuellen Knoten. Beispiel @@a@
 * Boolesche Ausdrücke: @<@, @>@, @<=@, @>=@, @=@, @!=@. Vorsicht, das Zeichen @<@ muss in XML als @&lt;@ geschrieben werden, das Zeichen @>@ kann als @&gt;@ geschrieben werden. Beispiel: @$zahl > 6@. Kann in Bedingungen benutzt werden.
 

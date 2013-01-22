@@ -405,8 +405,8 @@
          <de>Ruft alle Kindelemente eines bestimmten Namens auf. Gegenstück ist »Datensatz«</de>
       </documentation>
       <documentation docid="processnode/select">
-         <en>The child child elements that should be processed (currently this is not an XPath expression but the name of the child elements).</en>
-         <de>Bestimmt die Datensätze, die ausgeführt werden sollen.</de>
+         <en>The child elements that should be processed. Allowed is a string such as 'subentry' or the wildcard * for all child elements.</en>
+         <de>Bestimmt die Datensätze, die ausgeführt werden sollen. Erlaubt ist eine Zeichenkette z.B. Artikelnummer oder das Joker-Zeichen * für alle Kindelemente</de>
       </documentation>
       <documentation docid="processnode/mode">
          <en>If a mode is supplied, only »Record« commands with the same mode are called.</en>
