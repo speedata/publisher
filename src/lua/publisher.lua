@@ -485,17 +485,7 @@ function load_xml(filename,filetype)
     os.exit(-1)
   end
   log("Loading %s %q",filetype or "file",path)
-
-  local layoutfile = io.open(path,"r")
-  if not layoutfile then
-    err("Can't open XML file. Abort.")
-    os.exit(-1)
-  end
-  local text = layoutfile:read("*all")
-  layoutfile:close()
-  local xmltab = xmlparser.parse_xml(text)
-  -- printtable("XML",xmltab)
-  return xmltab
+  return xmlparser.parse_xml_file(path)
 end
 
 --- Place an object at a position given in scaled points (_x_ and _y_). `allocate` is ignored at at the moment.

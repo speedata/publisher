@@ -386,6 +386,17 @@ xml = P {
    Extender = extender,
 }
 
+function parse_xml_file( path )
+  local xmlfile = io.open(path,"r")
+  if not xmlfile then
+    err("Can't open XML file. Abort.")
+    os.exit(-1)
+  end
+  local text = xmlfile:read("*all")
+  xmlfile:close()
+  return parse_xml(text)
+end
+
 function parse_xml(txt)
   namespaces = {}
   if string.byte(txt) ~= 60 then
