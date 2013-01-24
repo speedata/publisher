@@ -3,6 +3,9 @@ layout: subdir
 title: "Hotfolder/Watchdog"
 ---
 
+h1. The english translation is work-in-progess and may not be finished
+
+
 h1. speedata Watchdog / Hotfolder
 
 Der speedata Watchdog bzw. Hotfolder ist Bestandteil der speedata Installation. Er eignet sich dafür, den Publisher zu starten, wenn eine Datei in ein bestimmtes Verzeichnis gelegt wird. In der Regel handelt es sich um die XML-Datendatei, die aus einem Programm automatisch erzeugt und in ein vorher definiertes Verzeichnis gelegt wird.

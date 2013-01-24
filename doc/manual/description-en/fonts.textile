@@ -3,6 +3,8 @@ layout: subdir
 title: "Font inclusion"
 ---
 
+h1. The english translation is work-in-progess and may not be finished
+
 h1. Font inclusion
 
 h2. Formats

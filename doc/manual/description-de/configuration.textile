@@ -32,13 +32,13 @@ Das Format muss eingehalten werden, sonst wird die Datei nicht richtig erkannt. 
 - @grid@    := Bestimmt, ob das Raster angezeigt wird.
 - @opencommand@ := Kommando für das automatische Öffnen der Dokumentation bzw. PDF-Datei. Für MacOS X sollte das @open@ sein, für Linux @xdg-open@ oder @exo-open@  (xfce).
 
-Alle Angaben in dieser Konfigurationsdatei sind optional. Alle folgenden Konfigurationsdateienwerden nin dieser Reihenfolge eingelesen: @/etc/speedata/publisher.cfg@, @~/.publisher.cfg@ und im aktuellen Verzeichnis @publisher.cfg@.
+Alle Angaben in dieser Konfigurationsdatei sind optional. Alle folgenden Konfigurationsdateien werden in dieser Reihenfolge eingelesen: @/etc/speedata/publisher.cfg@, @~/.publisher.cfg@ und im aktuellen Verzeichnis @publisher.cfg@.
 
 
 h2.  Parameter auf der Kommandozeile
 
-Die erlaubten Parameter auf der Kommandozeile werden in einem "eigenen Abschnitt":kommandozeile aufgeführt. 
+Die erlaubten Parameter auf der Kommandozeile werden in einem "eigenen Abschnitt":commandline.html aufgeführt. 
 
 h2.  Angaben in der Layoutdatei
 
-Das Layoutregelwerk erlaubt manche Parameter zu setzen. Dazu gehören die Angaben, die im Element "Optionen":e_optionen gesetzt werden.
+Das Layoutregelwerk erlaubt manche Parameter zu setzen. Dazu gehören die Angaben, die im Element "Optionen":../commands-de/options.html gesetzt werden.

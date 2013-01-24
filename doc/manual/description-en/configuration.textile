@@ -3,6 +3,8 @@ layout: subdir
 title: "Konfiguration des Publishers"
 ---
 
+h1. The english translation is work-in-progess and may not be finished
+
 h1.  Konfiguration des Publishers
 
 Der Publisher ist auf verschiedene Weisen zu konfigurieren:
@@ -37,8 +39,8 @@ Alle Angaben in dieser Konfigurationsdatei sind optional. Alle folgenden Konfigu
 
 h2.  Parameter auf der Kommandozeile
 
-Die erlaubten Parameter auf der Kommandozeile werden in einem "eigenen Abschnitt":kommandozeile aufgeführt. 
+Die erlaubten Parameter auf der Kommandozeile werden in einem "eigenen Abschnitt":commandline.html aufgeführt. 
 
 h2.  Angaben in der Layoutdatei
 
-Das Layoutregelwerk erlaubt manche Parameter zu setzen. Dazu gehören die Angaben, die im Element "Optionen":e_optionen gesetzt werden.
+Das Layoutregelwerk erlaubt manche Parameter zu setzen. Dazu gehören die Angaben, die im Element "Optionen":../commands-en/options.html gesetzt werden.

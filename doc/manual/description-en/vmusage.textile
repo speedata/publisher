@@ -3,6 +3,9 @@ layout: subdir
 title: "Benutzung der VM"
 ---
 
+h1. The english translation is work-in-progess and may not be finished
+
+
 h1. Benutzung der virtuellen Maschine (VM)
 
 Der speedata Publisher wird in verschiedenen Varianten ausgeliefert. Entweder als Installationspaket für das gewünschte Betriebssystem oder als vorkonfigurierte virtuelle Maschine. Diese virtuelle Maschine kann mit verschieden VMware Produkten ausgeführt werden, darunter:

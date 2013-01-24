@@ -6,116 +6,116 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
-* Wildcard (@*@) als "XPath-Ausdruck":xpath (1.5.32)
-* "BearbeiteKnoten":e_bearbeiteknoten erlaubt "XPath-Ausdrücke":xpath (1.5.32)
-* "QR Codes":e_strichcode (1.5.28)
-* Neues Element "FürAlle":e_fueralle, um für alle Kindelemente Befehle auszuführen. (1.5.27)
+* Wildcard (@*@) als "XPath-Ausdruck":xpath.html (1.5.32)
+* "BearbeiteKnoten":../commands-de/processnode.html erlaubt "XPath-Ausdrücke":xpath.html (1.5.32)
+* "QR Codes":../commands-de/barcode.html (1.5.28)
+* Neues Element "FürAlle":../commands-de/forall.html, um für alle Kindelemente Befehle auszuführen. (1.5.27)
 * sp based hotfolder (@sp watch@) (1.5.26)
-* "CSS Stylesheets":e_stylesheet
-* "Barcodes (EAN13 und Code128)":e_strichcode
-* XPath-Funktion "count()":xpath
-* Linienstärke bei "ObjektAusgeben":e_objektausgeben
+* "CSS Stylesheets":../commands-de/stylesheet.html
+* "Barcodes (EAN13 und Code128)":../commands-de/barcode.html
+* XPath-Funktion "count()":xpath.html
+* Linienstärke bei "ObjektAusgeben":../commands-de/placeobject.html
 * CDATA Abschnitte im lpeg-XML-Parser sind erlaubt
-* Neue XPath-Funktion "sd:aktuelle-spalte()":xpath 
+* Neue XPath-Funktion "sd:aktuelle-spalte()":xpath.html 
 * @sp@ liest Daten von STDIN wenn der Datenname @-@ ist.
-* "Td":e_td Attribut @align@ darf (wie im Handbuch beschrieben) nur noch 'left', 'right' oder 'center' als Werte enthalten.
-* "Tabellenfuß":e_tabellenfuss und "Tabellenkopf":e_tabellenkopf erlauben eine Seitenangabe
+* "Td":../commands-de/td.html Attribut @align@ darf (wie im Handbuch beschrieben) nur noch 'left', 'right' oder 'center' als Werte enthalten.
+* "Tabellenfuß":../commands-de/tablefoot.html und "Tabellenkopf":../commands-de/tablehead.html erlauben eine Seitenangabe
 * @sp@: @--[no-]local@ um das lokale Verzeichnis nicht zu beachten
 * @sp@: @--verbose@ erzeugt zusätzliche Informationen
-* Neue XPath-Funktion "sd:formatiere-zahl()":xpath
+* Neue XPath-Funktion "sd:formatiere-zahl()":xpath.html
 * @sp@: @--outputdir=VERZEICHNIS@ kopiert das resultierende PDF und die Protokolldatei in das angegebene Verzeichnis
 * @sp@: @--dummy@ benutzt @<data />@ als Eingabedatei (Daten-XML)
 * @sp@ nodejs durch @sp@ in Go ersetzt für Cross-Plattform Ausführung
-* Keine Default-Sprache mehr, wird nun in "Optionen":e_optionen festgelegt.
+* Keine Default-Sprache mehr, wird nun in "Optionen":../commands-de/options.html festgelegt.
 * Schemadateien im Verzeichnis /usr/share/speedata-publisher/schema
 * Anzahl der Läufe kann nur noch über Kommandozeile bzw. Konfigurationsdatei angegeben werden.
 * @opencommand@ Konfigurierbar (Programm zum Öffnen der Dokumentation / PDF-Dateien)
 * Konfigurationsdatei in @/etc/speedata@ und im Homeverzeichnis @~/.publisher.cfg@ werden eingelesen.
-* Default Textformat bei "Tabellen":e_tabelle.
-* @zeilen@-Angabe bei Textformaten (inkl hängender Einzug). Siehe "DefiniereTextformat":e_definieretextformat
-* @sprun@ durch @sp@ ersetzt. Siehe "Kommandozeile":kommandozeile
-* @hreferenz@ bei "ObjektAusgeben":e_objektausgeben.
-* Neue XPath-Funktion "empty()":xpath
-* Zeilenangabe in "NeueZeile":e_neuezeile.
-* Linienfarbe veränderbar. "Linie":e_linie.
-* Bildumrisse können angegeben werden. Siehe "Bild":e_bild und "ObjektAusgeben":e_objektausgeben
+* Default Textformat bei "Tabellen"../commands-de/table.html.
+* @zeilen@-Angabe bei Textformaten (inkl hängender Einzug). Siehe "DefiniereTextformat":../commands-de/definetextformat.html
+* @sprun@ durch @sp@ ersetzt. Siehe "Kommandozeile":commandline.html
+* @hreferenz@ bei "ObjektAusgeben":../commands-de/placeobject.html.
+* Neue XPath-Funktion "empty()":xpath.html
+* Zeilenangabe in "NeueZeile":../commands-de/nextrow.html.
+* Linienfarbe veränderbar. "Linie":../commands-de/rule.html.
+* Bildumrisse können angegeben werden. Siehe "Bild":../commands-de/image.html und "ObjektAusgeben":../commands-de/placeobject.html
 * @--laeufe=...@-Option bei @sprun@
-* @Zeilennummer@ in "NeueZeile":e_neuezeile
+* @Zeilennummer@ in "NeueZeile":../commands-de/nextrow.html
 * Defaults: Seitengröße: 210mm x 297mm, Raster: 10mm x 10mm, Schriftdateien: TeXGyreHeros, Schriftgröße 10pt/12pt, Seitentyp (Rand 1cm überall)
 * XPath-Funktionen nun übersetzt (de/en). Benötigt Namensraumpräfix @urn:speedata:2009/publisher/functions/de@
-* @-v@, @--variable@ in "sprun":kommandozeile
-* @valign@ in "Td":e_td, "Tr":e_tr: @middle@ statt @center@
-* @valign@ in "ObjektAusgeben":e_objektAusgeben
-* PDF "Lesezeichen":e_lesezeichen.
+* @-v@, @--variable@ in "sprun":commandline.html
+* @valign@ in "Td":../commands-de/td.html, "Tr":../commands-de/tr.html: @middle@ statt @center@
+* @valign@ in "ObjektAusgeben":../commands-de/placeobject.html
+* PDF "Lesezeichen":../commands-de/bookmark.html.
 * Zusätzlich auch englischsprachige Regelwerke
-* Sprache kann je "Absatz":e_absatz ausgewählt werden (Silbentrennung).
-* Änderungen bei "SpeichereDatensatzdatei":e_speicheredatensatzdatei
+* Sprache kann je "Absatz":../commands-de/paragraph.html ausgewählt werden (Silbentrennung).
+* Änderungen bei "SpeichereDatensatzdatei":../commands-de/savedataset.html
 
 h2. Version 1.4 (2011-06-09)
 
-* Absolute Angaben von Breite und Höhe bei "Bildern":e_bild
-* "Tabellen":e_tabelle dürfen "Tabellen":e_tabelle enthalten
-* Anschnitt bei "Bildern":e_bild (@natürliche-größe@, @maximale-größe@)
-* Seitenzahl bei "Bild":e_bild
+* Absolute Angaben von Breite und Höhe bei "Bildern":../commands-de/image.html
+* "Tabellen":../commands-de/table.html dürfen "Tabellen":../commands-de/table.html enthalten
+* Anschnitt bei "Bildern":../commands-de/image.html (@natürliche-größe@, @maximale-größe@)
+* Seitenzahl bei "Bild":../commands-de/image.html
 * @sd:anzahl-seiten(<Dateiname>)@
-* Spalte bei "ObjektAusgeben":e_objektausgeben optional
-* "Platzierungsbereich":e_platzierungsbereich
-* (X)"Include":e_include
-* @zeige_silbentrennung@ bei "Optionen":e_optionen
-* "Trennvorschlag":e_trennvorschlag
+* Spalte bei "ObjektAusgeben":../commands-de/placeobject.html optional
+* "Platzierungsbereich":../commands-de/positioningarea.html
+* (X)"Include":../commands-de/include.html
+* @zeige_silbentrennung@ bei "Optionen":../commands-de/options.html
+* "Trennvorschlag":../commands-de/hyphenation.html
 * Microtype (HZ-Programm)
-* Leerraum als Parameter in "LadeSchriftdatei":e_ladeschriftdatei
-* "XPath-Funktion":xpath @last()@
-* "Tabellenkopf":e_tabellenkopf und "Tabellenfuß":e_tabellenfuss
-* "ObjektAusgeben":e_objektausgeben: @belegen@="ja"/"nein"
-* "Linie":e_linie zum Zeichnen von Linien
-* Mehrspaltigkeit im "Textblock":e_textblock
+* Leerraum als Parameter in "LadeSchriftdatei":../commands-de/../commands-de/loadfontfile.html
+* "XPath-Funktion":xpath.html @last()@
+* "Tabellenkopf":../commands-de/tablehead.html und "Tabellenfuß":../commands-de/tablefoot.html
+* "ObjektAusgeben":../commands-de/placeobject.html: @belegen@="ja"/"nein"
+* "Linie":../commands-de/rule.html zum Zeichnen von Linien
+* Mehrspaltigkeit im "Textblock":../commands-de/textblock.html
 * @luatex@ -> @sdluatex@ zwecks besserer Unterscheidung zum Original
-* "Hotfolder / Watchdog":hotfolder 
-* Unterstreichen von Texten "U":e_u
-* Inhalt von "Absatz":e_absatz darf &lt;i> und &lt;b> enthalten.
+* "Hotfolder / Watchdog":hotfolder.html
+* Unterstreichen von Texten "U":../commands-de/u.html
+* Inhalt von "Absatz":../commands-de/paragraph.html darf &lt;i> und &lt;b> enthalten.
 * Mit @node()@ kann auf Kindelemente zugegriffen werden.
-* "Spalte":e_spalte: Breitenangabe auch in Rasterzellen möglich.
+* "Spalte":../commands-de/column.html: Breitenangabe auch in Rasterzellen möglich.
 * @sd:datei-vorhanden( <Dateiname> )@, @sd:bildbreite(<Dateiname> )@, @sd:variable( <Name>)@, @concat(...)@
-* "Leerzeile":e_leerzeile
-* Absolute Positionierung bei "ObjektAusgeben":e_objektausgeben
+* "Leerzeile":../commands-de/emptyline.html
+* Absolute Positionierung bei "ObjektAusgeben":../commands-de/placeobject.html
 * Automatischer Tabellenumbruch
-* Winkel in "Textblock":e_textblock
-* Neues Element: "Schriftart":e_schriftart
+* Winkel in "Textblock":../commands-de/textblock.html
+* Neues Element: "Schriftart":../commands-de/fontface.html
 * Tabellen: die minimale Zeilenhöhe bestimmt sich nun durch den Zeilenabstand der größten verwendeten Schriftart.
-* "Maßangaben":massangabe: Die Einheit Pica-Punkt muss nun als @pp@ angegeben werden, ein DTP-Punkt als @pt@.
-* "Bild":e_bild in "Absatz":e_absatz.
-* @align@ und @valign@ für "Td":e_td kann auch in "Spalte":e_spalte bzw. "Tr":e_tr gesetzt werden.
-* Farbige Rahmen in Tabellenzellen ("Td":e_td).
-* Padding in Tabellenzellen ("Td":e_td)
-* "Sub":e_sub, "Sup":e_sup (hoch- und tiefgestellter Text)
-* Seitenspezifisches Raster bei "Seitentyp":e_seitentyp.
-* "Seitentyp":e_seitentyp Deklarationen werden in umgekehrter Reihenfolge abgearbeitet.
-* "BearbeiteKnoten":e_bearbeiteknoten und "Datensatz":e_datensatz erlauben die Angabe eines Modus.
-* "Seitentyp":e_seitentyp neu gestaltet: Bedingungen werden nun im Attribut @bedingung@ anstelle von einem Kindelement bestimmt.
-* @*@-Breitenangaben in "Spalten":e_spalten für dynamischen Breiten.
-* "Td":e_td: @border-left@, @border-right@, @border-top@ und @border-bottom@ beachtet.
+* "Maßangaben":lengths.html: Die Einheit Pica-Punkt muss nun als @pp@ angegeben werden, ein DTP-Punkt als @pt@.
+* "Bild":../commands-de/image.html in "Absatz":../commands-de/paragraph.html.
+* @align@ und @valign@ für "Td":../commands-de/td.html kann auch in "Spalte":../commands-de/column.html bzw. "Tr":../commands-de/tr.html gesetzt werden.
+* Farbige Rahmen in Tabellenzellen ("Td":../commands-de/td.html).
+* Padding in Tabellenzellen ("Td":../commands-de/td.html)
+* "Sub":../commands-de/sub.html, "Sup":../commands-de/sup.html (hoch- und tiefgestellter Text)
+* Seitenspezifisches Raster bei "Seitentyp":../commands-de/pagetype.html.
+* "Seitentyp":../commands-de/pagetype.html Deklarationen werden in umgekehrter Reihenfolge abgearbeitet.
+* "BearbeiteKnoten":../commands-de/processnode.html und "Datensatz":../commands-de/record.html erlauben die Angabe eines Modus.
+* "Seitentyp":../commands-de/pagetype.html neu gestaltet: Bedingungen werden nun im Attribut @bedingung@ anstelle von einem Kindelement bestimmt.
+* @*@-Breitenangaben in "Spalten":../commands-de/columns.html für dynamischen Breiten.
+* "Td":../commands-de/td.html: @border-left@, @border-right@, @border-top@ und @border-bottom@ beachtet.
 * @sprun -h@ gibt keine Versionsinformation aus, das macht jetzt @sprun --version@.
 
 h2. Version 1.2 (2010-09-28)
 
-* Attribut @minhoehe@ in "Tr":e_tr in @minhöhe@ umbenannt.
+* Attribut @minhoehe@ in "Tr":../commands-de/tr.html in @minhöhe@ umbenannt.
 * Xproc-Filter
-* Aktionen ("Aktion":e_aktion)
+* Aktionen ("Aktion":../commands-de/action.html)
 * Element Variable gelöscht
-* "SortiereSequenz":e_sortiereSequenz
-* "BearbeiteDatensatz":e_bearbeiteDatensatz
-* "Kopie-von":e_kopievon ersetzt XML-Konstrukte
-* "Fallunterscheidung":e_fallunterscheidung kann in beliebigen Elementen vorkommen.
-* "XPath-Ausdrücke":xpath nur noch in den Attributen @bedingung@ und @auswahl@. Ansonsten können "XPath-Ausdrücke":xpath durch geschweifte Klammern  (@"{@...@}"@) erzwungen werden.
-* "XPath-Funktionen":xpath aufgeteilt. Alle "XPath-Funktionen":xpath, die auch im XPath 2.0 Standard enthalten sind, haben keinen Namensraum.
-* Weitere "XPath-Ausdrücke":xpath sind hinzu gekommen.
+* "SortiereSequenz":../commands-de/sortsequence.html
+* "BearbeiteDatensatz":../commands-de/processrecord.html
+* "Kopie-von":../commands-de/copy-of.html ersetzt XML-Konstrukte
+* "Fallunterscheidung":../commands-de/switch.html kann in beliebigen Elementen vorkommen.
+* "XPath-Ausdrücke":xpath.html nur noch in den Attributen @bedingung@ und @auswahl@. Ansonsten können "XPath-Ausdrücke":xpath.html durch geschweifte Klammern  (@"{@...@}"@) erzwungen werden.
+* "XPath-Funktionen":xpath.html aufgeteilt. Alle "XPath-Funktionen":xpath.html, die auch im XPath 2.0 Standard enthalten sind, haben keinen Namensraum.
+* Weitere "XPath-Ausdrücke":xpath.html sind hinzu gekommen.
 
 h2. Version 1.0 (2010-03-30)
 
-* GruppeAusgeben ist in "ObjektAusgeben":e_objektausgeben aufgegangen.
-* (Erneut): Rahmen und Hintergrund bei "ObjektAusgeben":e_objektausgeben.
-* "Zuweisung":e_zuweisung: Variablenname nun "XPath-Ausdruck":xpath.
+* GruppeAusgeben ist in "ObjektAusgeben":../commands-de/placeobject.html aufgegangen.
+* (Erneut): Rahmen und Hintergrund bei "ObjektAusgeben":../commands-de/placeobject.
+* "Zuweisung"../commands-de/setvariable.html: Variablenname nun "XPath-Ausdruck":xpath.html.
 * Bild in Tabelle
 
 "Änderungen vor Version 1.0":changelogpre1

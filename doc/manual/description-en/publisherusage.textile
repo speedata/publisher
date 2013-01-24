@@ -2,6 +2,10 @@
 layout: subdir
 title: "Benutzung des Publishers"
 ---
+
+h1. The english translation is work-in-progess and may not be finished
+
+
 h1.  Benutzung des Publishers
 
 Der Publisher ist ein Server-basiertes Programm und wird über die Kommandozeile gestartet. Dazu muss in der virtuellen Maschine (VM) das Terminalfenster geöffnet werden.

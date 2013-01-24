@@ -43,7 +43,7 @@ h2. Erklärung der Kommandozeilenparameter
 - @--dummy@ := Führt nur das Regelwerk aus. Als Dateninhalt wird @<data />@ angenommen. Dient zum schnellen Testen von Regelwerken
 - @--extra-dir=DIR@ := Erweitert den Suchpfad
 - @--filter=FILTER@ := Führt die angegebene XPROC-Datei aus.
-- @--grid@ := Zeichnet das Raster. Mit @--no-grid@ wird es ausgeschaltet.  Konfigurierbar auch im "Layout":e_optionen.
+- @--grid@ := Zeichnet das Raster. Mit @--no-grid@ wird es ausgeschaltet.  Konfigurierbar auch im "Layout":../commands-de/options.html.
 - @--layout=NAME@:= Gibt den Namen des Layoutregelwerks an. Voreinstellung ist @layout.xml@. Ebenfalls "konfigurierbar":configuration.html.
 - @--[no-]local@ := Das aktuelle Verzeichnis wird (nicht) rekursiv dem Suchpfad hinzugefügt. Voreingestellt ist, dass das aktuelle Verzeichnis und seine Unterverzeichnisse beachtet werden.
 - @--jobname=NAME@ := Bestimmt den Ausgabenamen. Voreinstellung ist @publisher.pdf@.

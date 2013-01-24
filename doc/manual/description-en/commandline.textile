@@ -3,6 +3,8 @@ layout: subdir
 title: "Kommandozeile"
 ---
 
+h1. The english translation is work-in-progess and may not be finished
+
 h1. Aufruf des Publishers über Kommandozeile
 
 pre. sp --help
@@ -43,7 +45,7 @@ h2. Erklärung der Kommandozeilenparameter
 - @--dummy@ := Führt nur das Regelwerk aus. Als Dateninhalt wird @<data />@ angenommen. Dient zum schnellen Testen von Regelwerken
 - @--extra-dir=DIR@ := Erweitert den Suchpfad
 - @--filter=FILTER@ := Führt die angegebene XPROC-Datei aus.
-- @--grid@ := Zeichnet das Raster. Mit @--no-grid@ wird es ausgeschaltet.  Konfigurierbar auch im "Layout":e_optionen.
+- @--grid@ := Zeichnet das Raster. Mit @--no-grid@ wird es ausgeschaltet.  Konfigurierbar auch im "Layout":../commands-en/options.html.
 - @--layout=NAME@:= Gibt den Namen des Layoutregelwerks an. Voreinstellung ist @layout.xml@. Ebenfalls "konfigurierbar":konfiguration.
 - @--[no-]local@ := Das aktuelle Verzeichnis wird (nicht) rekursiv dem Suchpfad hinzugefügt. Voreingestellt ist, dass das aktuelle Verzeichnis und seine Unterverzeichnisse beachtet werden.
 - @--jobname=NAME@ := Bestimmt den Ausgabenamen. Voreinstellung ist @publisher.pdf@.

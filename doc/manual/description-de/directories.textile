@@ -11,7 +11,7 @@ Damit der Publisher mehrfach durchläuft, muss der Parameter @runs@ auf der Komm
 
 h2. Schritt 1: Sammeln der Informationen
 
-Die beiden Befehle "Element":e_element und "Attribut":e_attribut dienen zur Strukturierung von Daten, die während der Verarbeitung gelesen werden. Mit diesen Befehlen lassen sich neue XML Datensatzdateien erzeugen. Die Datensatzdatei sollte eine Struktur haben, die sich für die automatische Verarbeitung mit dem Publisher eignet. Folgende Struktur könnte für eine Artikelliste sinnvoll sein:
+Die beiden Befehle "Element":../commands-de/element.html und "Attribut":../commands-de/attributes.html dienen zur Strukturierung von Daten, die während der Verarbeitung gelesen werden. Mit diesen Befehlen lassen sich neue XML Datensatzdateien erzeugen. Die Datensatzdatei sollte eine Struktur haben, die sich für die automatische Verarbeitung mit dem Publisher eignet. Folgende Struktur könnte für eine Artikelliste sinnvoll sein:
 
 pre(xml). <Artikelverzeichnis>
   <Artikel nummer="1" seite="10"/>
@@ -19,7 +19,7 @@ pre(xml). <Artikelverzeichnis>
   <Artikel nummer="3" seite="14"/>
 </Artikelverzeichnis>
 
-Um diese Struktur im Layoutregelwerk zu erstellen, muss sie aus den Befehlen "Element":e_element und "Attribut":e_attribut wie folgt zusammengesetzt werden:
+Um diese Struktur im Layoutregelwerk zu erstellen, muss sie aus den Befehlen "Element":../commands-de/element.html und "Attribut":../commands-de/attributes.html wie folgt zusammengesetzt werden:
 
 
 pre(xml). <Element name="Artikelverzeichnis">
@@ -37,11 +37,11 @@ pre(xml). <Element name="Artikelverzeichnis">
   </Element>
 </Element>
 
-Anstelle der Befehle "Element":e_element und "Attribut":e_attribut können auch Variablen als Speicher benutzt werden (siehe Beispiel unten).
+Anstelle der Befehle "Element":../commands-de/element.html und "Attribut":../commands-de/attributes.html können auch Variablen als Speicher benutzt werden (siehe Beispiel unten).
 
 h2. Schritt 2: Speichern und Laden der Informationen
 
-Mit dem Befehl "SpeichereDatensatzdatei":e_speicheredatensatzdatei wird die Struktur auf Festplatte gespeichert und mit "LadeDatensatzdatei":e_ladedatensatzdatei wird sie wieder geladen. Existiert die Datei nicht, so wird kein Fehler gemeldet, da es sich um den ersten Durchlauf handeln könnte, wo die Datei naturgemäß noch nicht existiert.
+Mit dem Befehl "SpeichereDatensatzdatei":../commands-de/savedataset.html wird die Struktur auf Festplatte gespeichert und mit "LadeDatensatzdatei":../commands-de/loaddataset.html wird sie wieder geladen. Existiert die Datei nicht, so wird kein Fehler gemeldet, da es sich um den ersten Durchlauf handeln könnte, wo die Datei naturgemäß noch nicht existiert.
 
 h2. Schritt 3: Verarbeiten der Informationen
 
@@ -51,7 +51,7 @@ pre(xml). <Datensatz element="Artikelverzeichnis">
   ...
 </Datensatz>
 
-Das heißt, dass die eigentliche Datenverarbeitung zeitweilig unterbrochen und mit dem neuen Datensatz aus "LadeDatensatzdatei":e_ladedatensatzdatei fortgeführt wird.
+Das heißt, dass die eigentliche Datenverarbeitung zeitweilig unterbrochen und mit dem neuen Datensatz aus "LadeDatensatzdatei":../commands-de/loaddataset.html fortgeführt wird.
 
 h2. Beispiel
 

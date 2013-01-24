@@ -1728,6 +1728,9 @@
     </seealso>
   </command>
   <command name="Options">
+    <description xml:lang="en">
+      <para>Set publisher specific options</para>
+    </description>
     <description xml:lang="de">
       <para>Setzt Publisher-spezifische Optionen.</para>
     </description>
@@ -1736,6 +1739,13 @@
       <cmd name="Layout" />
     </parentelements>
     <attribute name="cutmarks" type="yesno" optional="yes">
+      <description xml:lang="en">
+        <para>Cut marks / crop marks will be placed in the PDF. The distance
+          of the marks from the imaginary center is determined by the attribute <tt>trim</tt>,
+          but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute
+          is <tt>no</tt>, that means no cut marks will be displayed.
+        </para>
+      </description>
       <description xml:lang="de">
         <para>Beschnittmarken (crop marks) werden ausgegeben. Der Abstand der Schnittmarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die
           Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Schnittmarken ausgegeben.</para>
@@ -1777,8 +1787,7 @@
       </description>
     </attribute>
     <example xml:lang="de">
-      <listing>
-        <![CDATA[<Optionen
+      <listing><![CDATA[<Optionen
    zeige_rasterbelegung="nein"
    zeichne_raster="ja"
    beschnittmarken="ja"

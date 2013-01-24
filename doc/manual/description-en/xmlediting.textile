@@ -3,6 +3,9 @@ layout: subdir
 title: "Bearbeitung des Layoutregelwerks"
 ---
 
+h1. The english translation is work-in-progess and may not be finished
+
+
 h1. Bearbeitung des Layoutregelwerks
 
 Durch die Benutzung von Standard XML (utf-8) lässt sich das Layoutregelwerk mit jedem Texteditor bearbeiten. Mithilfe des mitgelieferten RelaxNG-Schemas wird die Eingabe des Layoutregelwerks deutlich erleichtert. Dazu muss ein XML-Editor benutzt werden, der RelaxNG Schemas verarbeiten kann:
