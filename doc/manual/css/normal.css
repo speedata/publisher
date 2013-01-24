@@ -26,4 +26,7 @@ pre.syntax, .syntax-container {
 	font-size: 10pt;
 }
 
-.tt { font-family: monospace;}
+tt,code {
+	font-family: monospace;
+	font-size: 130%;
+}

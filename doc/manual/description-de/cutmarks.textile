@@ -7,10 +7,12 @@ h1. Schnittmarken und Beschnittzugabe
 
 Wird keine gesonderte Einstellung vorgenommen, so erzeugt der speedata Publisher ein PDF, das genau der Größe der angegebenen Seiten hat. Um Beschnittzugabe oder Schnittmarken einzuschalten, müssen diese im Element "Optionen":../commands-de/options.html.html aktiviert werden:
 
-pre(xml). <Optionen
+{% highlight xml %}
+<Optionen
    beschnittmarken="ja"
    beschnittzugabe="3mm"
   />
+{% endhighlight %}
 
 Diese Anweisungen erzeugen Schnittmarken, die eine Länge von 1cm haben und 3mm vom inneren Seitenrand (TrimBox) entfernt sind. Der Abstand ergibt sich aus der Beschnittzugabe. Ist die Beschnittzugabe kleiner als 5pt, werden die Schnittmarken mit einem Abstand von 5pt vom Rand gesetzt.
 

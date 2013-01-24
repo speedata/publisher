@@ -7,11 +7,13 @@ h1. XPath Ausdrücke
 
 Der Publisher akzeptiert in den den entsprechend markierten Attributen (zumeist @auswahl@) XPath Ausdrücke. In allen anderen Attributen kann durch die geschweiften Klammern (@{@ und @}@) ein XPath Ausdruck erzwungen werden). In diesem Beispiel werden im Attribut @breite@ und im Element @Wert@ die Werte dynamisch erzeugt, d.h. für die Angabe der Breite wird auf den Inhalt der Variablen @breite@ zurückgegriffen, der Inhalt des Absatzes ist der Inhalt (Textwert) des gerade aktuellen Datenknotens.
 
-pre(xml). <Textblock breite="{$breite}" schriftart="text" textformat="Text mit Einrückung">
+{% highlight xml %}
+<Textblock breite="{$breite}" schriftart="text" textformat="Text mit Einrückung">
   <Absatz>
     <Wert auswahl="."/>
   </Absatz>
 </Textblock>
+{% endhighlight %}
 
 
 h2. Folgende XPath-Ausdrücke erkennt das System:

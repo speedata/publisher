@@ -118,5 +118,5 @@ h2. Version 1.0 (2010-03-30)
 * "Zuweisung"../commands-de/setvariable.html: Variablenname nun "XPath-Ausdruck":xpath.html.
 * Bild in Tabelle
 
-"Änderungen vor Version 1.0":changelogpre1
+"Änderungen vor Version 1.0":changelogpre1.html
 

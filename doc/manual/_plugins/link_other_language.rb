@@ -30,7 +30,7 @@ module Jekyll
       lang = pagename.match(/description-(..)/)[1]
       case lang
       when "de"
-        %Q!<a href="../index.html">Startseite</a>!
+        %Q!<a href="../index-de.html">Startseite</a>!
       when "en"
         %Q!<a href="../index.html">Start page</a>!
       end
