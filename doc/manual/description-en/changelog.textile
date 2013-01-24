@@ -1,0 +1,122 @@
+---
+layout: subdir
+title: "Changelog"
+---
+h1. Changelog
+
+h2. Version 1.6
+
+* Wildcard (@*@) als "XPath-Ausdruck":xpath (1.5.32)
+* "BearbeiteKnoten":e_bearbeiteknoten erlaubt "XPath-Ausdrücke":xpath (1.5.32)
+* "QR Codes":e_strichcode (1.5.28)
+* Neues Element "FürAlle":e_fueralle, um für alle Kindelemente Befehle auszuführen. (1.5.27)
+* sp based hotfolder (@sp watch@) (1.5.26)
+* "CSS Stylesheets":e_stylesheet
+* "Barcodes (EAN13 und Code128)":e_strichcode
+* XPath-Funktion "count()":xpath
+* Linienstärke bei "ObjektAusgeben":e_objektausgeben
+* CDATA Abschnitte im lpeg-XML-Parser sind erlaubt
+* Neue XPath-Funktion "sd:aktuelle-spalte()":xpath 
+* @sp@ liest Daten von STDIN wenn der Datenname @-@ ist.
+* "Td":e_td Attribut @align@ darf (wie im Handbuch beschrieben) nur noch 'left', 'right' oder 'center' als Werte enthalten.
+* "Tabellenfuß":e_tabellenfuss und "Tabellenkopf":e_tabellenkopf erlauben eine Seitenangabe
+* @sp@: @--[no-]local@ um das lokale Verzeichnis nicht zu beachten
+* @sp@: @--verbose@ erzeugt zusätzliche Informationen
+* Neue XPath-Funktion "sd:formatiere-zahl()":xpath
+* @sp@: @--outputdir=VERZEICHNIS@ kopiert das resultierende PDF und die Protokolldatei in das angegebene Verzeichnis
+* @sp@: @--dummy@ benutzt @<data />@ als Eingabedatei (Daten-XML)
+* @sp@ nodejs durch @sp@ in Go ersetzt für Cross-Plattform Ausführung
+* Keine Default-Sprache mehr, wird nun in "Optionen":e_optionen festgelegt.
+* Schemadateien im Verzeichnis /usr/share/speedata-publisher/schema
+* Anzahl der Läufe kann nur noch über Kommandozeile bzw. Konfigurationsdatei angegeben werden.
+* @opencommand@ Konfigurierbar (Programm zum Öffnen der Dokumentation / PDF-Dateien)
+* Konfigurationsdatei in @/etc/speedata@ und im Homeverzeichnis @~/.publisher.cfg@ werden eingelesen.
+* Default Textformat bei "Tabellen":e_tabelle.
+* @zeilen@-Angabe bei Textformaten (inkl hängender Einzug). Siehe "DefiniereTextformat":e_definieretextformat
+* @sprun@ durch @sp@ ersetzt. Siehe "Kommandozeile":kommandozeile
+* @hreferenz@ bei "ObjektAusgeben":e_objektausgeben.
+* Neue XPath-Funktion "empty()":xpath
+* Zeilenangabe in "NeueZeile":e_neuezeile.
+* Linienfarbe veränderbar. "Linie":e_linie.
+* Bildumrisse können angegeben werden. Siehe "Bild":e_bild und "ObjektAusgeben":e_objektausgeben
+* @--laeufe=...@-Option bei @sprun@
+* @Zeilennummer@ in "NeueZeile":e_neuezeile
+* Defaults: Seitengröße: 210mm x 297mm, Raster: 10mm x 10mm, Schriftdateien: TeXGyreHeros, Schriftgröße 10pt/12pt, Seitentyp (Rand 1cm überall)
+* XPath-Funktionen nun übersetzt (de/en). Benötigt Namensraumpräfix @urn:speedata:2009/publisher/functions/de@
+* @-v@, @--variable@ in "sprun":kommandozeile
+* @valign@ in "Td":e_td, "Tr":e_tr: @middle@ statt @center@
+* @valign@ in "ObjektAusgeben":e_objektAusgeben
+* PDF "Lesezeichen":e_lesezeichen.
+* Zusätzlich auch englischsprachige Regelwerke
+* Sprache kann je "Absatz":e_absatz ausgewählt werden (Silbentrennung).
+* Änderungen bei "SpeichereDatensatzdatei":e_speicheredatensatzdatei
+
+h2. Version 1.4 (2011-06-09)
+
+* Absolute Angaben von Breite und Höhe bei "Bildern":e_bild
+* "Tabellen":e_tabelle dürfen "Tabellen":e_tabelle enthalten
+* Anschnitt bei "Bildern":e_bild (@natürliche-größe@, @maximale-größe@)
+* Seitenzahl bei "Bild":e_bild
+* @sd:anzahl-seiten(<Dateiname>)@
+* Spalte bei "ObjektAusgeben":e_objektausgeben optional
+* "Platzierungsbereich":e_platzierungsbereich
+* (X)"Include":e_include
+* @zeige_silbentrennung@ bei "Optionen":e_optionen
+* "Trennvorschlag":e_trennvorschlag
+* Microtype (HZ-Programm)
+* Leerraum als Parameter in "LadeSchriftdatei":e_ladeschriftdatei
+* "XPath-Funktion":xpath @last()@
+* "Tabellenkopf":e_tabellenkopf und "Tabellenfuß":e_tabellenfuss
+* "ObjektAusgeben":e_objektausgeben: @belegen@="ja"/"nein"
+* "Linie":e_linie zum Zeichnen von Linien
+* Mehrspaltigkeit im "Textblock":e_textblock
+* @luatex@ -> @sdluatex@ zwecks besserer Unterscheidung zum Original
+* "Hotfolder / Watchdog":hotfolder 
+* Unterstreichen von Texten "U":e_u
+* Inhalt von "Absatz":e_absatz darf &lt;i> und &lt;b> enthalten.
+* Mit @node()@ kann auf Kindelemente zugegriffen werden.
+* "Spalte":e_spalte: Breitenangabe auch in Rasterzellen möglich.
+* @sd:datei-vorhanden( <Dateiname> )@, @sd:bildbreite(<Dateiname> )@, @sd:variable( <Name>)@, @concat(...)@
+* "Leerzeile":e_leerzeile
+* Absolute Positionierung bei "ObjektAusgeben":e_objektausgeben
+* Automatischer Tabellenumbruch
+* Winkel in "Textblock":e_textblock
+* Neues Element: "Schriftart":e_schriftart
+* Tabellen: die minimale Zeilenhöhe bestimmt sich nun durch den Zeilenabstand der größten verwendeten Schriftart.
+* "Maßangaben":massangabe: Die Einheit Pica-Punkt muss nun als @pp@ angegeben werden, ein DTP-Punkt als @pt@.
+* "Bild":e_bild in "Absatz":e_absatz.
+* @align@ und @valign@ für "Td":e_td kann auch in "Spalte":e_spalte bzw. "Tr":e_tr gesetzt werden.
+* Farbige Rahmen in Tabellenzellen ("Td":e_td).
+* Padding in Tabellenzellen ("Td":e_td)
+* "Sub":e_sub, "Sup":e_sup (hoch- und tiefgestellter Text)
+* Seitenspezifisches Raster bei "Seitentyp":e_seitentyp.
+* "Seitentyp":e_seitentyp Deklarationen werden in umgekehrter Reihenfolge abgearbeitet.
+* "BearbeiteKnoten":e_bearbeiteknoten und "Datensatz":e_datensatz erlauben die Angabe eines Modus.
+* "Seitentyp":e_seitentyp neu gestaltet: Bedingungen werden nun im Attribut @bedingung@ anstelle von einem Kindelement bestimmt.
+* @*@-Breitenangaben in "Spalten":e_spalten für dynamischen Breiten.
+* "Td":e_td: @border-left@, @border-right@, @border-top@ und @border-bottom@ beachtet.
+* @sprun -h@ gibt keine Versionsinformation aus, das macht jetzt @sprun --version@.
+
+h2. Version 1.2 (2010-09-28)
+
+* Attribut @minhoehe@ in "Tr":e_tr in @minhöhe@ umbenannt.
+* Xproc-Filter
+* Aktionen ("Aktion":e_aktion)
+* Element Variable gelöscht
+* "SortiereSequenz":e_sortiereSequenz
+* "BearbeiteDatensatz":e_bearbeiteDatensatz
+* "Kopie-von":e_kopievon ersetzt XML-Konstrukte
+* "Fallunterscheidung":e_fallunterscheidung kann in beliebigen Elementen vorkommen.
+* "XPath-Ausdrücke":xpath nur noch in den Attributen @bedingung@ und @auswahl@. Ansonsten können "XPath-Ausdrücke":xpath durch geschweifte Klammern  (@"{@...@}"@) erzwungen werden.
+* "XPath-Funktionen":xpath aufgeteilt. Alle "XPath-Funktionen":xpath, die auch im XPath 2.0 Standard enthalten sind, haben keinen Namensraum.
+* Weitere "XPath-Ausdrücke":xpath sind hinzu gekommen.
+
+h2. Version 1.0 (2010-03-30)
+
+* GruppeAusgeben ist in "ObjektAusgeben":e_objektausgeben aufgegangen.
+* (Erneut): Rahmen und Hintergrund bei "ObjektAusgeben":e_objektausgeben.
+* "Zuweisung":e_zuweisung: Variablenname nun "XPath-Ausdruck":xpath.
+* Bild in Tabelle
+
+"Änderungen vor Version 1.0":changelogpre1
+

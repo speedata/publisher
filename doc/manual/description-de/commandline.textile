@@ -1,0 +1,73 @@
+---
+layout: subdir
+title: "Kommandozeile"
+---
+
+h1. Aufruf des Publishers über Kommandozeile
+
+pre. sp --help
+Usage: sp [parameter] command 
+-h, --help                   Show this help
+    --autoopen               Open the PDF file (MacOS X and Linux only)
+    --data=NAME              Name of the XML data file. Defaults to 'data.xml'
+    --dummy                  Don't read a data file, use '<data />' as input
+-x, --extra-dir=DIR          Additional directory for file search
+    --filter=FILTER          Run XPROC filter before publishing starts
+    --grid                   Display background grid. Disable with --no-grid
+    --[no-]local             Add local directory to the search path. Default
+                             is true
+    --layout=NAME            Name of the layout file. Defaults to 'layout.xml'
+    --jobname=NAME           The name of the resulting PDF file, default is
+                             'publisher.pdf'
+    --outputdir=DIR          Copy PDF and protocol to this directory
+    --runs=NUM               Number of publishing runs 
+    --startpage=NUM          The first page number
+    --trace                  Show debug messages and some tracing PDF output
+-v, --var=VAR=VALUE          Set a variable for the publishing run
+    --verbose                Print a bit of debugging output
+    --version                Show version information
+    --xml                    Output as (pseudo-)XML (for list-fonts)
+  
+Commands
+      list-fonts             List installed fonts (use together with --xml
+                             for copy/paste)
+      doc                    Open documentation
+      watch                  Start watchdog / hotfolder
+      run                    Start publishing (default)
+
+
+h2. Erklärung der Kommandozeilenparameter
+
+- @--autoopen@:= Öffnet die PDF-Datei nach dem Publisher-Durchlauf. Kann auch in der "Konfigurationsdatei":configuration.html eingestellt werden.
+- @--data=NAME@:= Gibt den Namen der XML-Daten an. Voreinstellung ist @daten.xml@. Ebenfalls "konfigurierbar":configuration.html. Wird als Dateiname ein Strich (@-@) angegeben, liest der Publisher die XML-Daten aus der Standard-Eingabe (STDIN).
+- @--dummy@ := Führt nur das Regelwerk aus. Als Dateninhalt wird @<data />@ angenommen. Dient zum schnellen Testen von Regelwerken
+- @--extra-dir=DIR@ := Erweitert den Suchpfad
+- @--filter=FILTER@ := Führt die angegebene XPROC-Datei aus.
+- @--grid@ := Zeichnet das Raster. Mit @--no-grid@ wird es ausgeschaltet.  Konfigurierbar auch im "Layout":e_optionen.
+- @--layout=NAME@:= Gibt den Namen des Layoutregelwerks an. Voreinstellung ist @layout.xml@. Ebenfalls "konfigurierbar":configuration.html.
+- @--[no-]local@ := Das aktuelle Verzeichnis wird (nicht) rekursiv dem Suchpfad hinzugefügt. Voreingestellt ist, dass das aktuelle Verzeichnis und seine Unterverzeichnisse beachtet werden.
+- @--jobname=NAME@ := Bestimmt den Ausgabenamen. Voreinstellung ist @publisher.pdf@.
+- @--outputdir=VERZEICHNIS@ := Die resultierende PDF-Datei und Protokolldatei wird in das angegebene Verzeichnis kopiert. Das Verzeichnis wird erstellt, falls es noch nicht existiert.
+- @--runs = NUM@ := Überschreibt die Anzahl der Durchläufe des Publishers.
+- @--startpage = NUM@ := Die Seitennummer der ersten Seite.
+- @-v@, @--var=value@ := Übergibt zusätzliche Variablen an den Publisher-Lauf. Diese können wie üblich mit @auswahl="$variable"@ benutzt werden.
+- @-x@, @--extra-dir@ := Bindet zusätzliche Verzeichnisse in den Publisherlauf ein. In diesen Verzeichnissen werden alle Daten gesucht: Bilddaten, Regelwerke, Datendateien und Schriftdateien. Dieses Argument kann mehrfach angegeben werden und per "Konfigurationsdatei":configuration.html mit Werten vorbelegt werden.
+- @--verbose@ := Gibt mehr Informationen aus, also notwendig.
+- @--xml@:= Die Ausgaben mancher Kommandos werden als (Pseudo-)XML dargestellt, um sie in das Layoutregelwerk zu übernehmen.
+
+
+h2. Befehle
+
+- @list-fonts@ := Listet alle Schriftdateien auf, die in den Publisher-Verzeichnissen gefunden werden. Zusammen mit @--xml@ erlaubt dieses Kommando die Ausgabe per Copy&Paste in das Layoutregelwerk zu übernehmen.
+- @doc@ := Öffnet die Onlinehilfe.
+- @run@ := Startet den Publisher Lauf.
+- @watch@ := Startet den internen Hotfolder
+
+h3. Beispiel für die Hotfolder Konfiguration
+
+pre. [hotfolder]
+hotfolder = /home/speedata/hotfolder
+events = layout\.xml:run(runpublisher);data\.xml:run(runpublisher)
+
+- @hotfolder@ := Verzeichnis, das überwacht werden soll.
+- @events@ := Einträge (mit Semikolon getrennt) in der Form @Muster:Befehl@. Das @Muster@ ist ein Regulärer Ausdruck. Wenn dieser auf die Datei _passt_, dann wird das Programm unter @Befehl@ ausgeführt. Derzeit können nur externe Programme ausgeführt werden. Diese werden in den Klammern angegeben. Die Programme erhalten als erstes Argument den Pfad zur gefundenen Datei. Der Hotfolder wartet, bis das Programm beendet wurde und löscht anschließend die Datei.

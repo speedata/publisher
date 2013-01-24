@@ -1,5 +1,0 @@
-<div class='speedataline'></div>
-
-<a href="http://www.speedata.de/">www.speedata.de</a>
-</body>
-</html>

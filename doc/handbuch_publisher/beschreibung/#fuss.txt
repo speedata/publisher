@@ -1,4 +1,0 @@
-<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
-<a href="../index.html">Startseite</a> | <a href="../referenz/e_layout.html">Elementreferenz</a>
-</body>
-</html>

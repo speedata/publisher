@@ -103,17 +103,26 @@ func init() {
 	}
 	add_local_path = true
 
+	// LC_ALL is something like "de_DE.UTF-8"
+	re := regexp.MustCompile("^(d|D)(e|E)")
+	var indexpage string
+	if re.MatchString(os.Getenv("LC_ALL")) {
+		indexpage = "index-de.html"
+	} else {
+		indexpage = "index.html"
+	}
+
 	switch dest {
 	case "linux-usr":
 		libdir = "/usr/share/speedata-publisher/lib"
 		srcdir = "/usr/share/speedata-publisher/sw"
 		os.Setenv("PUBLISHER_BASE_PATH", "/usr/share/speedata-publisher")
 		os.Setenv("LUA_PATH", fmt.Sprintf("%s/lua/?.lua;%s/lua/common/?.lua;", srcdir, srcdir))
-		path_to_documentation = "/usr/share/doc/speedata-publisher/index.html"
+		path_to_documentation = "/usr/share/doc/speedata-publisher/" + indexpage
 	case "directory":
 		libdir = filepath.Join(installdir, "lib")
 		srcdir = filepath.Join(installdir, "sw")
-		path_to_documentation = filepath.Join(installdir, "share/doc/index.html")
+		path_to_documentation = filepath.Join(installdir, "share/doc/"+indexpage)
 		os.Setenv("PUBLISHER_BASE_PATH", installdir)
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
 	default:
@@ -124,7 +133,7 @@ func init() {
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
 		extra_dir = append(extra_dir, filepath.Join(installdir, "fonts"))
 		extra_dir = append(extra_dir, filepath.Join(installdir, "img"))
-		path_to_documentation = filepath.Join(installdir, "/build/handbuch_publisher/index.html")
+		path_to_documentation = filepath.Join(installdir, "/build/manual/"+indexpage)
 	}
 	inifile = filepath.Join(srcdir, "lua/sdini.lua")
 	// FIXME!!
