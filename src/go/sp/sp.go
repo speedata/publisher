@@ -136,8 +136,7 @@ func init() {
 		path_to_documentation = filepath.Join(installdir, "/build/manual/"+indexpage)
 	}
 	inifile = filepath.Join(srcdir, "lua/sdini.lua")
-	// FIXME!!
-	cfg, err = configurator.ReadFiles(filepath.Join(pwd, "publisher.cfg"), "/Users/patrick/.publisher.cfg")
+	cfg, err = configurator.ReadFiles(filepath.Join(pwd, "publisher.cfg"), filepath.Join(os.Getenv("HOME"), ".publisher.cfg"), "/etc/speedata/publisher.cfg")
 	if err != nil {
 		log.Fatal(err)
 	}
