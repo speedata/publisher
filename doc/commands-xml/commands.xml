@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <commands xmlns="urn:speedata.de:2011/publisher/documentation" xmlns:de="urn:speedata.de:2009/publisher/de">
   <command name="Action">
+    <description xml:lang="en">
+      <para>Associates an action with a text. Once the text is placed on the page, the associated action will be executed. The action
+      can be compared to an invisible character. When the publisher outputs the character, the corresponding instructions will be run.</para>
+    </description>
     <description xml:lang="de">
-      <para>Assoziiert eine Aktion mit einem Text. Sobald der Text auf einer Seite platziert wird, wird die dazugehörige Aktion ausgeführt. Die Aktion kann man sich als unsichtbares Zeichen
+      <para>Assoziiert eine Aktion mit einem Text. Sobald der Text auf einer Seite platziert wird, wird die dazugehörige Aktion ausgeführt.
+        Die Aktion kann man sich als unsichtbares Zeichen
         vorstellen. Wenn der Publisher das unsichtbare Zeichen ausgibt, werden die Anweisungen in Aktion ausgeführt.</para>
     </description>
     <childelements>
@@ -67,6 +72,9 @@
     <seealso><cmd name="Action" /></seealso>
   </command>
   <command name="AtPageShipout">
+    <description xml:lang="en">
+      <para>The enclosed instructions will be executed when the page is placed into the PDF file.</para>
+    </description>
     <description xml:lang="de">
       <para>Die innerhalb dieses Befehls definierten Anweisungen werden ausgeführt, sobald die Seite ins PDF ausgegeben wird.</para>
     </description>
@@ -91,6 +99,18 @@
     <parentelements>
       <cmd name="Pagetype" />
     </parentelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<AtPageShipout>
+  <PlaceObject column="1" row="20">
+    <Textblock width="20">
+      <Paragraph>
+        <Value select="sd:current-page()"/>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</AtPageShipout>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<BeiSeitenAusgabe>
   <ObjektAusgeben spalte="1">
@@ -105,6 +125,9 @@
     <seealso><cmd name="AtPageCreation" />, <cmd name="Pagetype" /></seealso>
   </command>
   <command name="AtPageCreation">
+    <description xml:lang="en">
+      <para>The contents of the element <cmd name="AtPageCreation"/> are executed the first time the page is accessed.</para>
+    </description>
     <description xml:lang="de">
       <para>Die Inhalte des Elements »BeiSeitenErzeugung« werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird.</para>
     </description>
@@ -129,6 +152,18 @@
     <parentelements>
       <cmd name="Pagetype" />
     </parentelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<AtPageCreation>
+  <PlaceObject column="1" row="1">
+    <Textblock width="20">
+      <Paragraph>
+        <Value select="$pageheader"/>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</AtPageCreation>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<BeiSeitenErzeugung>
   <ObjektAusgeben spalte="1">
@@ -143,6 +178,9 @@
     <seealso><cmd name="Pagetype" />, <cmd name="AtPageShipout" /></seealso>
   </command>
   <command name="Attribute">
+    <description xml:lang="en">
+      <para>Create a data structure that can be saved to the harddrive with <cmd name="SaveDataset"/>.</para>
+    </description>
     <description xml:lang="de">
       <para>Erzeugt eine Datenstruktur, die mithilfe von <cmd name="SaveDataset" /> auf Festplatte gespeichert werden kann.</para>
     </description>
@@ -152,21 +190,41 @@
       <cmd name="SetVariable" />
     </parentelements>
     <attribute name="name" type="text" optional="no">
+      <description xml:lang="en">
+        <para>Name of the attribute that is created.</para>
+      </description>
       <description xml:lang="de">
         <para>Name des Attributs, das erzeugt wird.</para>
       </description>
     </attribute>
+    <attribute name="select" type="xpath" optional="no">
+      <description xml:lang="en">
+        <para>The contents of the attribute</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Inhalt des Attributs</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Element name="planets">
+  <Attribute name="name" select=" @name "/>
+  <Attribute name="page" select=" sd:current-page()"/>
+</Element>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Element name="Planetenverzeichnis">
   <Attribut name="name" auswahl=" @name "/>
   <Attribut name="seite" auswahl=" sd:aktuelle-seite()"/>
-  </Element>]]></listing>
+</Element>]]></listing>
       <para>Erzeugt diese Datenstruktur:</para>
       <listing><![CDATA[<Planetenverzeichnis name=" (Inhalt von @name) " seite=" (aktuelle Seitennummer) " />]]></listing>
     </example>
-    <seealso><cmd name="Element" />, <cmd name="SaveDataset" />, <ref name="lists">Wie werden automatische Verzeichnisse erstellt?</ref></seealso>
+    <seealso><cmd name="Element" />, <cmd name="SaveDataset" />, <ref name="directories"/></seealso>
   </command>
   <command name="B">
+    <description xml:lang="en">
+      <para>Switch to fontface »bold«</para>
+    </description>
     <description xml:lang="de">
       <para>Schaltet auf »Fett« um.</para>
     </description>
@@ -183,15 +241,23 @@
     <parentelements>
       <cmd name="Paragraph" />
     </parentelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<Textblock width="10">
+  <Paragraph>
+    <B><Value>Bold text</Value></B>
+  </Paragraph>
+</Textblock>
+]]></listing>
+    </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Textblock spalte="3" breite="10">
+      <listing><![CDATA[<Textblock breite="10">
   <Absatz>
     <B><Wert>Text in Fett</Wert></B>
   </Absatz>
 </Textblock>
 ]]></listing>
     </example>
-    <seealso><cmd name="I" /></seealso>
+    <seealso><cmd name="I" />, <ref name="fonts"/></seealso>
   </command>
   <command name="Barcode">
   <description xml:lang="de">
@@ -272,6 +338,9 @@
   <seealso></seealso>
 </command>
   <command name="Bold">
+    <description xml:lang="en">
+      <para>Name of the font face that should be used when switching to »bold«.</para>
+    </description>
     <description xml:lang="de">
       <para>Name der Schriftart, die für den Schriftschrift Fett benutzt werden soll.</para>
     </description>
@@ -280,12 +349,33 @@
       <cmd name="DefineFontfamily" />
     </parentelements>
     <attribute name="fontface" type="text" optional="no">
+      <description xml:lang="en">
+        <para>Name of the fontface for bold.</para>
+      </description>
       <description xml:lang="de">
         <para>Name der Schriftart, die für eine fette Schrift benutzt werden soll.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<LoadFontfile name="Times" filename="timesregular.otf"/>
+<LoadFontfile name="Times bold" filename="timesbold.otf"/>
+<LoadFontfile name="Times italic" filename="timesitalic.otf"/>
+<LoadFontfile name="Times bold italic" filename="timesbolditalic.otf"/>
+
+<DefineFontfamily name="text" fontsize="12" leading="14">
+  <Regular fontface="Times"/>
+  <Bold fontface="Times bold"/>
+  <Italic fontface="Times italic"/>
+  <BoldItalic fontface="Times bold italic" />
+</DefineFontfamily>
+]]></listing>
+    </example>
     <example xml:lang="de">
-      <listing><![CDATA[<LadeSchriftdatei name="Helvetica" dateiname="helvetica-regular.otf" />
+      <listing><![CDATA[<LadeSchriftdatei name="Times" dateiname="timesregular.otf" />
+<LadeSchriftdatei name="Times Fett" dateiname="timesbold.otf" />
+<LadeSchriftdatei name="Times Fett" dateiname="timesbold.otf" />
+<LadeSchriftdatei name="Times Kursiv" dateiname="timesitalic.otf" />
+<LadeSchriftdatei name="Times Fett Kursiv" dateiname="timesbolditalic.otf" />
 ...
 
 <DefiniereSchriftfamilie name="text" schriftgröße="12" zeilenabstand="14">
@@ -300,6 +390,9 @@
     </seealso>
   </command>
   <command name="BoldItalic">
+    <description xml:lang="en">
+      <para>Name of the font face that should be used when switching to »bold italic«. </para>
+    </description>
     <description xml:lang="de">
       <para>Name der Schriftart, die für den Schriftschrift Fett-Kursiv benutzt werden soll.</para>
     </description>
@@ -308,12 +401,33 @@
       <cmd name="DefineFontfamily" />
     </parentelements>
     <attribute name="fontface" type="text" optional="no">
+      <description xml:lang="en">
+        <para>Name of the fontface for bold italic.</para>
+      </description>
       <description xml:lang="de">
         <para>Name der Schriftart, die für eine Fett/Kursive Schrift benutzt werden soll.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<LoadFontfile name="Times" filename="timesregular.otf"/>
+<LoadFontfile name="Times bold" filename="timesbold.otf"/>
+<LoadFontfile name="Times italic" filename="timesitalic.otf"/>
+<LoadFontfile name="Times bold italic" filename="timesbolditalic.otf"/>
+
+<DefineFontfamily name="text" fontsize="12" leading="14">
+  <Regular fontface="Times"/>
+  <Bold fontface="Times bold"/>
+  <Italic fontface="Times italic"/>
+  <BoldItalic fontface="Times bold italic" />
+</DefineFontfamily>
+]]></listing>
+    </example>
     <example xml:lang="de">
-      <listing><![CDATA[<LadeSchriftdatei name="Helvetica" dateiname="helvetica-regular.otf" />
+      <listing><![CDATA[<LadeSchriftdatei name="Times" dateiname="timesregular.otf" />
+<LadeSchriftdatei name="Times Fett" dateiname="timesbold.otf" />
+<LadeSchriftdatei name="Times Fett" dateiname="timesbold.otf" />
+<LadeSchriftdatei name="Times Kursiv" dateiname="timesitalic.otf" />
+<LadeSchriftdatei name="Times Fett Kursiv" dateiname="timesbolditalic.otf" />
 ...
 
 <DefiniereSchriftfamilie name="text" schriftgröße="12" zeilenabstand="14">
@@ -324,11 +438,11 @@
 </DefiniereSchriftfamilie>]]></listing>
     </example>
     <seealso>
-      <cmd name="B" />
-      <cmd name="I" />
-      <cmd name="BoldItalic" />
-      <cmd name="Regular" />
-      <cmd name="Bold" />
+      <cmd name="B" />,
+      <cmd name="I" />,
+      <cmd name="BoldItalic" />,
+      <cmd name="Regular" />,
+      <cmd name="Bold" />, <ref name="fonts"/>
     </seealso>
   </command>
   <command name="Bookmark">
@@ -343,29 +457,45 @@
       <cmd name="Textblock" />
     </parentelements>
     <attribute name="select" type="xpath" optional="no">
+      <description xml:lang="en">
+        <para>Title of the bookmark</para>
+      </description>
       <description xml:lang="de">
         <para>Titel des Lesezeichens</para>
       </description>
     </attribute>
     <attribute name="level" type="number" optional="no">
+      <description xml:lang="en">
+        <para>1 is the top level, 2 is the next level, etc.</para>
+      </description>
       <description xml:lang="de">
         <para>Hierarchieebene. 1 ist die höchste Ebene, zwei die nächst tiefere Ebene etc.</para>
       </description>
     </attribute>
     <attribute name="open" type="yesno" optional="yes">
+      <description xml:lang="en">
+        <para>If yes, the child elements are shown. If no, the child elements are hidden.</para>
+      </description>
       <description xml:lang="de">
         <para>Bestimmt, ob die Kind-Lesezeichen dargestellt werden sollen oder nicht.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Bookmark level="1" select="$title" open="no" />]]></listing>
+      <para>Create a bookmark on level 1 (top level) with the title stored in the variable <tt>title</tt>.</para>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Lesezeichen ebene="1" auswahl="$titel" offen='nein'/>]]></listing>
-      <para>Erzeugt ein Lesezeichen der Stufe 1 (höchste Stufe) mit dem Titel, der in der Variablen @titel@ steht.</para>
+      <para>Erzeugt ein Lesezeichen der Stufe 1 (höchste Stufe) mit dem Titel, der in der Variablen <tt>titel</tt> steht.</para>
     </example>
     <seealso>
       <cmd name="Textblock" />
     </seealso>
   </command>
   <command name="Box">
+    <description xml:lang="en">
+      <para>create a rectangular colored area. The area must fit the grid cells.</para>
+    </description>
     <description xml:lang="de">
       <para>Erzeugt einen rechteckigen gefärbten Bereich. Die Fläche muss mit den Rasterzellen übereinstimmen.</para>
     </description>
@@ -374,20 +504,36 @@
       <cmd name="PlaceObject" />
     </parentelements>
     <attribute name="width" type="number" optional="no">
+      <description xml:lang="en">
+        <para>Width of the box in grid cells.</para>
+      </description>
       <description xml:lang="de">
         <para>Breite der Box in Rasterzellen.</para>
       </description>
     </attribute>
     <attribute name="height" type="number" optional="no">
+      <description xml:lang="en">
+        <para>Height of the box in grid cells.</para>
+      </description>
       <description xml:lang="de">
         <para>Höhe der Box in Rasterzellen.</para>
       </description>
     </attribute>
     <attribute name="backgroundcolor" type="text" optional="no">
+      <description xml:lang="en">
+        <para>Color of the box.</para>
+      </description>
       <description xml:lang="de">
         <para>Farbe der Box.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<DefineColor name="green" model="cmyk" c="22" m="0" y="55" k="0"/>
+<PlaceObject row="10" column="5">
+  <Box width="10" height="5" backgroundcolor="green"/>
+</PlaceObject>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Box breite="5" höhe="2" hintergrundfarbe="Dunkelblau" />]]></listing>
     </example>
@@ -1524,7 +1670,7 @@
   />]]>
       </listing>
     </example>
-    <seealso> Schnittmarken und Beschnittzugabe </seealso>
+    <seealso><ref name="cutmarks"/></seealso>
   </command>
   <command name="Otherwise">
     <description xml:lang="de">
@@ -1592,7 +1738,7 @@
     </attribute>
     <attribute name="language" type="languages" optional="yes">
       <description xml:lang="de">
-        <para>Name der Sprache für die Silbentrennung. Gültige Werte: @Deutsch@, @Englisch (Großbritannien)@, @Französisch@.</para>
+        <para>Name der Sprache für die Silbentrennung. Gültige Werte: <tt>Deutsch</tt>, <tt>Englisch (Großbritannien)</tt>, <tt>Französisch</tt>.</para>
       </description>
     </attribute>
     <example xml:lang="de">
@@ -1612,7 +1758,7 @@
       <para>wobei in den Daten ein Text steht, beispielsweise falls der aktuelle Knoten das Element <cmd name="Record" /> ist:</para>
       <listing><![CDATA[<datensatz>Produktbeschreibung: die Artikelnummer <i>1234</i> setzt sich aus ... </datensatz>]]></listing>
     </example>
-    <seealso><cmd name="Textblock" />, <ref name="fontusage">Einbinden von Schriftarten</ref></seealso>
+    <seealso><cmd name="Textblock" />, <ref name="fonts"/></seealso>
   </command>
   <command name="Pageformat">
     <description xml:lang="de">
@@ -1702,12 +1848,12 @@
       <para>Outputs a rectangular object (image, table, box or textblock).</para>
     </description>
     <childelements>
-      <cmd name="Image" />
+      <cmd name="Barcode"/>
       <cmd name="Box" />
+      <cmd name="Image" />
       <cmd name="Tablerule" />
       <cmd name="Table" />
       <cmd name="Textblock" />
-      <cmd name="Barcode"/>
     </childelements>
     <parentelements>
       <cmd name="Record" />

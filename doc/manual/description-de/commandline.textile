@@ -39,9 +39,8 @@ Commands
 h2. Erklärung der Kommandozeilenparameter
 
 - @--autoopen@:= Öffnet die PDF-Datei nach dem Publisher-Durchlauf. Kann auch in der "Konfigurationsdatei":configuration.html eingestellt werden.
-- @--data=NAME@:= Gibt den Namen der XML-Daten an. Voreinstellung ist @daten.xml@. Ebenfalls "konfigurierbar":configuration.html. Wird als Dateiname ein Strich (@-@) angegeben, liest der Publisher die XML-Daten aus der Standard-Eingabe (STDIN).
+- @--data=NAME@:= Gibt den Namen der XML-Daten an. Voreinstellung ist @data.xml@. Ebenfalls "konfigurierbar":configuration.html. Wird als Dateiname ein Strich (@-@) angegeben, liest der Publisher die XML-Daten aus der Standard-Eingabe (STDIN).
 - @--dummy@ := Führt nur das Regelwerk aus. Als Dateninhalt wird @<data />@ angenommen. Dient zum schnellen Testen von Regelwerken
-- @--extra-dir=DIR@ := Erweitert den Suchpfad
 - @--filter=FILTER@ := Führt die angegebene XPROC-Datei aus.
 - @--grid@ := Zeichnet das Raster. Mit @--no-grid@ wird es ausgeschaltet.  Konfigurierbar auch im "Layout":../commands-de/options.html.
 - @--layout=NAME@:= Gibt den Namen des Layoutregelwerks an. Voreinstellung ist @layout.xml@. Ebenfalls "konfigurierbar":configuration.html.

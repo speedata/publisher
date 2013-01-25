@@ -424,7 +424,7 @@ func main() {
 	op.On("--grid", "Display background grid. Disable with --no-grid", layoutoptions)
 	op.On("--no-local", "Add local directory to the search path. Default is true", &add_local_path)
 	op.On("--layout NAME", "Name of the layout file. Defaults to 'layout.xml'", options)
-	op.On("--jobname NAME", "The name of the resulting PDF file, default is 'publisher.pdf'", options)
+	op.On("--jobname NAME", "The name of the resulting PDF file (without extension), default is 'publisher'", options)
 	op.On("--outputdir=DIR", "Copy PDF and protocol to this directory", options)
 	op.On("--runs NUM", "Number of publishing runs ", options)
 	op.On("--startpage NUM", "The first page number", layoutoptions)

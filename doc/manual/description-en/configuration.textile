@@ -1,46 +1,44 @@
 ---
 layout: subdir
-title: "Konfiguration des Publishers"
+title: "speedata publisher configuration"
 ---
 
-h1. The english translation is work-in-progess and may not be finished
+h1.  How to configure the speedata publisher
 
-h1.  Konfiguration des Publishers
+The speedata publisher can be configured in several ways:
 
-Der Publisher ist auf verschiedene Weisen zu konfigurieren:
+# The file @publisher.cfg@ in @/etc/speedata/@, in the home directory (with a leading dot) and in the current working directory
+# Parameters given on the command line
+# Options given in the layout file
 
-# Die Datei @publisher.cfg@ in @/etc/speedata/@, im Homeverzeichnis (mit Punkt davor) bzw. im aktuellen Verzeichnis
-# Die Parameter auf der Kommandozeile
-# Die Angaben in der Layoutdatei
+h2.  The file @publisher.cfg@
 
-h2.  Die Datei @publisher.cfg@ in @/etc/speedata/@, im Homeverzeichnis und im aktuellen Verzeichnis.
-
-Die Datei @publisher.cfg@ (@/etc/speedata/publisher.cfg@, @/home/speedata/.publisher.cfg@) sowie im aktuellen Verzeichnis ist eine Textdatei, die beim Starten des Publishers eingelesen wird. Im Auslieferungszustand sieht sie wie folgt aus:
+The file @publisher.cfg@ (@/etc/speedata/publisher.cfg@, @$HOME/.publisher.cfg@ and in the current working directory) is a text file, that is read at the beginning of the publisher run. The default file looks like this:
 
 pre. data      = data.xml
 layout    = layout.xml
 autoopen  = false
-extra_dir = "/home/speedata/Desktop/speedata"
 
-Das Format muss eingehalten werden, sonst wird die Datei nicht richtig erkannt. Folgende Optionen werden unterstützt:
+The format of the file is important, otherwise it won't be recognized. The following options are supported:
 
-- @autoopen@ := wenn hier @true@ anstelle von @false@ steht, wird das PDF nach dem Publisher Durchlauf automatisch geöffnet. Derselbe Effekt lässt sich über die Kommandozeile mit @--autoopen@ erreichen.
-- @extra_dir@ := Ein Verzeichnis im Dateisystem, das Dateien für den Publisherlauf enthält. Dazu gehören die Schriftdateien, die XML-Dateien (Daten und Layoutregelwerk) sowie die einzubindenden Bilddateien. Kann mehrfach angegeben werden. Das aktuelle Verzeichnis wird automatisch eingebunden.
-- @filter@  := Führt die angegebene Datei als XPROC-Filter aus.
-- @layout@  := Name des Layoutregelwerks. @layout.xml@ ist der voreingestellte Name.
-- @data@    := Name der XML-Daten. Wenn nicht vorhanden, wird die Datei @daten.xml@ geladen.
-- @jobname@ := Name der Ausgabedatei
-- @startpage@ := Nummer der ersten Seite
-- @grid@    := Bestimmt, ob das Raster angezeigt wird.
-- @opencommand@ := Kommando für das automatische Öffnen der Dokumentation bzw. PDF-Datei. Für MacOS X sollte das @open@ sein, für Linux @xdg-open@ oder @exo-open@  (xfce).
+- @autoopen@ := if @true@, the publisher opens the PDF file. Default: @false@. The same effect can be achieved if you run  @sp --autoopen@.
+- @extra_dir@ := A list of directories in the file system separated by @;@ (Windows) or @:@ (Mac, Linux). These directories contain the images, fonts, source files and other assets that are used during the publisher run.
+- @filter@  := Run the given file as an XPROC-Filter.
+- @layout@  := Name of the layout rule set (XML). The default name is @layout.xml@.
+- @data@    := Name of the data file (XML). If not given, the system uses @data.xml@.
+- @dummy@   := If @true@, the system won't read the data file, instead it uses the single element @<data />@ as its input.
+- @jobname@ := Name of the output file. Default is @publisher@.
+- @startpage@ := Number of the first page.
+- @grid@    := If @true@, the underlying grid is shown in the PDF file. For debugging purpose only.
+- @opencommand@ := Command that will be run to open the documentation and the PDF file. For MacOS X this should be @open@, for Linux @xdg-open@ or @exo-open@  (xfce).
 
-Alle Angaben in dieser Konfigurationsdatei sind optional. Alle folgenden Konfigurationsdateienwerden nin dieser Reihenfolge eingelesen: @/etc/speedata/publisher.cfg@, @~/.publisher.cfg@ und im aktuellen Verzeichnis @publisher.cfg@.
+All entries in the configuration file are optional. The configuration files are read in the following order: @/etc/speedata/publisher.cfg@, @~/.publisher.cfg@ and in the current directory @publisher.cfg@.
 
 
-h2.  Parameter auf der Kommandozeile
+h2.  Command line parameters
 
-Die erlaubten Parameter auf der Kommandozeile werden in einem "eigenen Abschnitt":commandline.html aufgeführt. 
+The valid command line parameters are written on a "separate page":commandline.html. 
 
-h2.  Angaben in der Layoutdatei
+h2.  Options given in the layout file
 
-Das Layoutregelwerk erlaubt manche Parameter zu setzen. Dazu gehören die Angaben, die im Element "Optionen":../commands-en/options.html gesetzt werden.
+The XML layout file has a command called "Options":../commands-en/options.html that allows to set some parameters (tracing, default language, ...)

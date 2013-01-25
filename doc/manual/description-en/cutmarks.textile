@@ -1,33 +1,29 @@
 ---
 layout: subdir
-title: "Schnittmarken und Beschnittzugabe"
+title: "Crop marks and bleed"
 ---
 
-h1. The english translation is work-in-progess and may not be finished
+h1. Crop marks
 
-
-h1. Schnittmarken und Beschnittzugabe
-
-Wird keine gesonderte Einstellung vorgenommen, so erzeugt der speedata Publisher ein PDF, das genau der Größe der angegebenen Seiten hat. Um Beschnittzugabe oder Schnittmarken einzuschalten, müssen diese im Element "Optionen":../commands-de/options.html aktiviert werden:
+With no special settings, the speedata publisher creates a PDF that has exactly the size of the given pages. If you need to add trim space or crop marks, you need to set them in the "Options":../commands-en/options.html:
 
 {% highlight xml %}
-<Optionen
-   beschnittmarken="ja"
-   beschnittzugabe="3mm"
-  />
+<Options
+  cutmarks="yes"
+  trim="3mm"/>
 {% endhighlight %}
 
-Diese Anweisungen erzeugen Schnittmarken, die eine Länge von 1cm haben und 3mm vom inneren Seitenrand (TrimBox) entfernt sind. Der Abstand ergibt sich aus der Beschnittzugabe. Ist die Beschnittzugabe kleiner als 5pt, werden die Schnittmarken mit einem Abstand von 5pt vom Rand gesetzt.
+This instruction creates crop marks that have a length of 1cm and are 3mm from the inner page border apart (TrimBox). The distance is denoted by the trim parameter above. The trim parameter has a minimum value of 5pt if given.
 
-Die erzeugte PDF-Datei enthält immer die folgenden Boxen: außen ist die __MediaBox__, die Beschnittzugabe wird durch die __BleedBox__ markiert und die eigentliche Seite durch die __TrimBox__. Wenn keine Beschnittzugabe angegeben ist, fallen die __BleedBox__ und die __TrimBox__ aufeinander. Werden keine Schnittmarken erzeugt, so fällt die __MediaBox__ mit der __TrimBox__ zusammen, so dass ohne Angaben von Schnittmarken und Beschnittzugabe alle drei Boxen dieselben Ausmaße haben.
+The generated PDF file always contains the following PDF boxes: the surrounding box is the __MediaBox__, the given trim is marked by the __BleedBox__ and the page itself is surrounded tightly by the __TrimBox__. If no trim is given, the __BleedBox__ and the __TrimBox__ have the same size. If no crop marks are output, the __MediaBox__ is the same as the __TrimBox__. That way, in neither @cutmarks@ are displayed nor @trim@ has a size greater than 0, all three boxes have the same size.
 
-h2. Beispiel
+h2. Example
 
-Im folgenden Beispiel gehen die Schnittmarken bis zur blauen Linie, die die Beschnittzugabe kennzeichnet. Die grüne Linie zeigt das Endformat der Seite (Screenshot aus dem Adobe Acrobat).
+In the following example the crop marks go to the blue line, that has the dimensions of the trim length. The green line shows the regular page dimensions (screenshot from Adobe Acrobat).
 
 !../images/schnittmarken2.png!
 
 
-h2. Siehe auch
+h2. See also
 
-"Optionen":../commands-de/options.html
+"Options":../commands-en/options.html

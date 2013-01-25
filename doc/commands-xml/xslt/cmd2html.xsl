@@ -11,11 +11,17 @@
   <xsl:variable name="all-languages" select="('en','de')"/>
   <xsl:variable name="other-languages" select="remove($all-languages, index-of($all-languages, $lang))"/>
 
-  <xsl:param name="builddir" select="'../../../build/manual/'"></xsl:param>
+  <xsl:param name="builddir" select="'/tmp/manual/'"></xsl:param>
 
   <xsl:key name="en-texts"      match="text" use="@key" xpath-default-namespace=""/>
   <xsl:key name="en-commands"   match="translations/elements/element"     use="@en" xpath-default-namespace="" />
   <xsl:key name="en-attributes" match="translations/attributes/attribute" use="@en" xpath-default-namespace="" />
+
+  <xsl:variable name="refs-translations">
+    <text key="directories" en="How to generate a table of contents and other directories" de="Wie werden Verzeichnisse erstellt?" />
+    <text key="fonts" en="How to use fonts" de="Einbinden von Schriftarten" />
+    <text key="cutmarks" en="Cutmarks and bleed" de="Schnittmarken und Beschnittzugabe" />
+  </xsl:variable>
 
   <xsl:variable name="text-translations">
     <text key="Allowed attributes" en="Allowed attributes" de="Erlaubte Attribute" />
@@ -231,6 +237,10 @@
     <a href="{sd:makelink(@name)}"><xsl:value-of select="sd:translate-command(@name)"/></a>
   </xsl:template>
 
+  <xsl:template match="ref">
+    <a href="../description-{$lang}/{@name}.html"><xsl:value-of select="sd:translate-ref(@name)"/></a>
+  </xsl:template>
+
   <xsl:function name="sd:makelink">
     <xsl:param name="name"/>
     <xsl:value-of select="concat(encode-for-uri(lower-case($name)),'.html')"/>
@@ -240,7 +250,7 @@
     <xsl:param name="name"/>
     <xsl:value-of select="key('en-attributes',$name, $translations)/@*[local-name() = $lang]"/>
   </xsl:function>
-  
+
   <xsl:function name="sd:translate-command">
     <xsl:param name="name"/>
     <xsl:value-of select="key('en-commands',$name, $translations)/@*[local-name() = $lang]"/>
@@ -254,6 +264,11 @@
   <xsl:function name="sd:translate-text">
     <xsl:param name="name"/>
     <xsl:value-of select="key('en-texts',$name,$text-translations)/@*[local-name() = $lang]"></xsl:value-of>
+  </xsl:function>
+
+  <xsl:function name="sd:translate-ref">
+    <xsl:param name="name"/>
+    <xsl:value-of select="key('en-texts',$name,$refs-translations)/@*[local-name() = $lang]"></xsl:value-of>
   </xsl:function>
 
 </xsl:stylesheet>
