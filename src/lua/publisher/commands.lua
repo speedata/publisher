@@ -1337,9 +1337,9 @@ function commands.setvariable( layoutxml,dataxml )
   -- FIXME: wenn in der Variablen schon nodelisten sind, dann müssen diese gefreed werden!
   local varname = publisher.read_attribute(layoutxml,dataxml,"variable","rawstring")
 
-  trace("Zuweisung, Variable = %q",varname or "???")
+  trace("SetVariable, Variable = %q",varname or "???")
   if not varname then
-    err("Variable name in »Zuweisung« not recognized")
+    err("Variable name in »SetVariable« not recognized")
     return
   end
   local contents
@@ -1390,8 +1390,8 @@ function commands.setvariable( layoutxml,dataxml )
     end
   end
   if trace_p then
-    log("»Zuweisung«, variable name = %q, value = %q",varname or "???", tostring(contents))
-    printtable("Zuweisung",contents)
+    log("SetVariable, variable name = %q, value = %q",varname or "???", tostring(contents))
+    printtable("SetVariable",contents)
   end
 
   publisher.variablen[varname] = contents
