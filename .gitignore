@@ -1,2 +1,3 @@
 build
 temp*
+.rake_t_cache

@@ -30,3 +30,19 @@ pre.syntax, .syntax-container {
 	font-family: monospace;
 	font-size: 130%;
 }
+
+.note {
+	margin: 20px;
+	border: 1pt solid red;
+	padding: 10px;
+}
+
+.shadow {
+	box-shadow: 10px 10px 5px #888;
+	-moz-box-shadow: 10px 10px 5px #888;
+	-webkit-box-shadow: 10px 10px 5px #888;
+}
+
+.screenshot {
+	max-width: 60%;
+}

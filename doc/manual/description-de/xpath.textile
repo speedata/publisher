@@ -27,8 +27,9 @@ h2. Folgende XPath-Ausdrücke erkennt das System:
 * Zugriff auf Attribute im aktuellen Knoten. Beispiel @@a@
 * Boolesche Ausdrücke: @<@, @>@, @<=@, @>=@, @=@, @!=@. Vorsicht, das Zeichen @<@ muss in XML als @&lt;@ geschrieben werden, das Zeichen @>@ kann als @&gt;@ geschrieben werden. Beispiel: @$zahl > 6@. Kann in Bedingungen benutzt werden.
 
-h2. Folgende XPath-Funktionen stehen bereit (im Namensraum @urn:speedata:2009/publisher/functions/de@):
+h2. Folgende XPath-Funktionen stehen bereit:
 
+Es gibt zwei Klassen von XPath Funktionen: standardkonforme und speedata Publisher spezifische Funktionen. Die spezifischen Funktionen sind im Namensraum @urn:speedata:2009/publisher/functions/de@ (im Folgenden mit @sd:@ gekennzeichnet). Die Standard Funktionen sollten sich wie XPath 2.0 verhalten.
 
 - sd:aktuelle-seite() := Gibt die Seitennummer zurück.
 - sd:aktuelle-zeile() := Gibt die aktuelle Zeile zurück.
@@ -42,7 +43,7 @@ h2. Folgende XPath-Funktionen stehen bereit (im Namensraum @urn:speedata:2009/pu
 - sd:datei-vorhanden(&lt;Dateiname>) := Wahr, wenn der Dateiname im Suchpfad existiert, ansonsten false.
 - sd:formatiere-zahl(Zahl,Formartierungsangaben) := Gibt eine Zeichenkette zurück, die die gegebene Zahl mit den im zweiten Argument gegebenen Formatierungsanweisungen darstellt. Die Formatierungsanweisungen entsprechen der aus der Programmiersprache C bekannten @printf()@-Funktion.
 - sd:gerade(&lt;zahl>) := Wahr, wenn die angegebene Zahl gerade ist. Beispiel: @sd:gerade(sd:aktuelle-seite())@
-- sd:ungerade(&lt;zahl>) := Wahr, wenn die angegebene Zahl unggerade ist.
+- sd:ungerade(&lt;zahl>) := Wahr, wenn die angegebene Zahl ungerade ist.
 - sd:gruppenbreite(&lt;string>) := Gibt die Breite in Rasterzellen für die Gruppe im ersten Argument an. Beispiel: @sd:gruppenbreite('Beispielgruppe')@
 - sd:gruppenhöhe(&lt;string>) := Gibt die Höhe in Rasterzellen für die Gruppe im ersten Argument an. Beispiel: @sd:gruppenbreite('Beispielgruppe')@
 - sd:variable(&lt;Name>) := ist dasselbe wie $Name, nur mit der Möglichkeit den Namen auch dynamisch (z.B. mit @concat()@) zu erzeugen.

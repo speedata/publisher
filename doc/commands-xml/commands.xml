@@ -1385,7 +1385,7 @@
 <LadeSchriftdatei name="Helvetica Fett Kursiv" dateiname="texgyreheros-bolditalic.otf" />]]></listing>
     </example>
     <seealso>
-      <cmd name="DefineFontfamily" /> Einbinden von Schriftarten </seealso>
+      <cmd name="DefineFontfamily" />, <ref name="fonts" /></seealso>
   </command>
   <command name="Layout">
     <description xml:lang="de">
@@ -2201,20 +2201,37 @@
       <cmd name="Record" />
     </parentelements>
     <attribute name="filename" type="text" optional="no">
+      <description xml:lang="en">
+        <para>Name of the file. Example: toc</para>
+      </description>
       <description xml:lang="de">
         <para>Name der Dateisatzdatei. Beispiel: toc</para>
       </description>
     </attribute>
     <attribute name="elementname" type="text" optional="no">
+      <description xml:lang="en">
+        <para>Name of the root element that surrounds the elements given by the child elements.</para>
+      </description>
       <description xml:lang="de">
         <para>Name des Wurzelelements, das erzeugt wird.</para>
       </description>
     </attribute>
     <attribute name="select" type="xpath" optional="yes">
+      <description xml:lang="en">
+        <para>Alternative to giving the data structure in the child elements.</para>
+      </description>
       <description xml:lang="de">
         <para>Alternativ zur Angabe des Datensatzes im Kindelement.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<SaveDataset filename="toc" elementname="Contents">
+  <Copy-of select="$contents"/>
+</SaveDataset>
+]]></listing>
+      <para>is equivalent to</para>
+      <listing><![CDATA[<SaveDataset filename="toc" elementname="Contents" select="$contents"/>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<SpeichereDatensatzdatei dateiname="toc" elementname="Inhalt">
    <KopieVon auswahl="$Inhalt"/>
@@ -2223,9 +2240,8 @@
       <listing><![CDATA[<SpeichereDatensatzdatei dateiname="toc" elementname="Inhalt" auswahl="$Inhalt" />]]></listing>
     </example>
     <seealso>
-      <cmd name="Element" />
-      <cmd name="Attribute" />
-      <cmd name="LoadDataset" /> Wie werden automatische Verzeichnisse erstellt?</seealso>
+      <cmd name="Element" />, <cmd name="Attribute" />, <cmd name="LoadDataset" />, <ref name="directories"/>
+    </seealso>
   </command>
   <command name="SetGrid">
     <description xml:lang="de">

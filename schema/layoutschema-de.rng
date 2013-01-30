@@ -1470,6 +1470,7 @@
           <ref name="e_CopyOf"/>
           <ref name="e_Action"/>
           <ref name="e_Bookmark"/>
+          <ref name="e_Value"/>
         </choice>
       </oneOrMore>
       <optional><attribute name="textformat"/></optional>

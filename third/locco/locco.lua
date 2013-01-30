@@ -1,4 +1,7 @@
 #!/usr/bin/env sdtexlua
+-- This version is modified from the original. It takes the output path as 
+-- the first argument 1. All other arguments are the source files to translate
+
 -- __Locco__ is a Lua port of [Docco](http://jashkenas.github.com/docco/),
 -- the quick-and-dirty, hundred-line-long, literate-programming-style
 -- documentation generator. It produces HTML that displays your comments
@@ -107,7 +110,7 @@ end
 -- _sections_: A table with the original sections and rendered as HTML.<br>
 -- _jump\_to_: A HTML chunk with links to other documentation files.
 function generate_html(source, path, filename, sections, jump_to)
-  f, err = io.open(path..'/'..'docs/'..filename:gsub('lua$', 'html'), 'wb')
+  f, err = io.open(path..'/'..filename:gsub('lua$', 'html'), 'wb')
   if err then print(err) end
   local h = template.header:gsub('%%title%%', source)
   h = h:gsub('%%jump%%', jump_to)
@@ -137,16 +140,6 @@ require 'markdown'
 lb = require('luabalanced')
 -- Load HTML templates.
 require 'template'
-
--- Ensure the `docs` directory exists and return the _path_ of the source file.<br>
--- Parameter:<br>
--- _source_: The source file for which documentation is generated.<br>
-function ensure_directory(source)
-  local path = source:match('(.+)/.+$')
-  if not path then path = '.' end
-  os.execute('mkdir -p '..path..'/docs')
-  return path
-end
 
 -- Insert HTML entities in a string.<br>
 -- Parameter:<br>
@@ -231,9 +224,9 @@ function highlight_lua(code)
 
 -- Generate HTML links to other files in the documentation.
 local jump_to = ''
-if #arg > 1 then
+if #arg > 2 then
   jump_to = template.jump_start
-  for i=1, #arg do
+  for i=2, #arg do
     local link = arg[i]:gsub('lua$', 'html')
     link = link:match('.+/(.+)$') or link
     local t = template.jump:gsub('%%jump_html%%', link)
@@ -245,10 +238,11 @@ end
 
 -- Make sure the output directory exists, generate the HTML files for each
 -- source file, print what's happening and copy the style sheet.
-local path = ensure_directory(arg[1])
-for i=1, #arg do
+local path = arg[1]
+os.execute('mkdir -p ' .. path)
+for i=2, #arg do
   local filename = arg[i]:match('.+/(.+)$') or arg[i]
   generate_documentation(arg[i], path, filename, jump_to)
-  print(arg[i]..' --> '..path..'/docs/'..filename:gsub('lua$', 'html'))
+  print(arg[i]..' --> '..path..'/'..filename:gsub('lua$', 'html'))
 end
-os.execute('cp '..script_path..'/locco.css '..path..'/docs')
+os.execute('cp '..script_path..'/locco.css '..path)

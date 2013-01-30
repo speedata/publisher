@@ -1,155 +1,151 @@
 ---
 layout: subdir
-title: "Automatisch erstellte Verzeichnisse"
+title: "Automatically generated lists"
 ---
 
-h1. The english translation is work-in-progess and may not be finished
+h1. Automatically generated lists / directories
 
-h1. Automatisch erstellte Verzeichnisse
+The speedata Publisher can create arbitrary types of directories. All lists: table of contents, list of articles or keyword index, are created by the same principle. The necessary data for the list (e.g. page number, article number) are saved in its own XML data structure, saved to the harddrive and used in the next publishing run. 
 
-Der speedata Publisher kann beliebige Verzeichnistypen erstellen. Ob Inhaltsverzeichnis, Artikelliste oder Stichwortindex - alle Listen funktionieren nach demselben Prinzip: die notwendigen Daten (z.B. Seitenzahlen, Artikelnummern) werden in einer eigenen Datenstruktur gespeichert, auf Festplatte geschrieben und beim nächsten Lauf des Publishers werden diese Daten eingelesen und stehen sofort zur Verfügung.
+To make the speedata publisher run more than once, it needs to be instructed by a switch on the "command line":commandline.html (@sp --runs=2@) or in the "configuration file":configuration.html with @runs=2@. You can give any number, but normally two or three runs are sufficient to generate the list.
 
-Damit der Publisher mehrfach durchläuft, muss der Parameter @runs@ auf der Kommandozeile bzw. in der Konfigurationsdatei gesetzt werden, beispielsweise mit @sp --runs=2@ (Kommandozeile) bzw. @runs = 2@ (Optionen).
+h2. Step 1: Collection the information
 
-h2. Schritt 1: Sammeln der Informationen
-
-Die beiden Befehle "Element":../commands-en/element.html und "Attribut":../commands-en/attribute.html dienen zur Strukturierung von Daten, die während der Verarbeitung gelesen werden. Mit diesen Befehlen lassen sich neue XML Datensatzdateien erzeugen. Die Datensatzdatei sollte eine Struktur haben, die sich für die automatische Verarbeitung mit dem Publisher eignet. Folgende Struktur könnte für eine Artikelliste sinnvoll sein:
+Both commands "Element":../commands-en/element.html and "Attribute":../commands-en/attribute.html are used to structure the data, that are to be read on the next publishing run. You can create XML data structures with the information for the list that you need to generate. The data should have a structure that is suited for processing with the speedata Publisher. The following is an example of a suitable data structure:
 
 {% highlight xml %}
-<Artikelverzeichnis>
-  <Artikel nummer="1" seite="10"/>
-  <Artikel nummer="2" seite="12"/>
-  <Artikel nummer="3" seite="14"/>
-</Artikelverzeichnis>
+<articlelist>
+  <article nummer="1" page="10"/>
+  <article nummer="2" page="12"/>
+  <article nummer="3" page="14"/>
+</articlelist>
 {% endhighlight %}
 
-Um diese Struktur im Layoutregelwerk zu erstellen, muss sie aus den Befehlen "Element":../commands-en/element.html und "Attribut":../commands-en/attribute.html wie folgt zusammengesetzt werden:
-
+To create this structure in the layout rules, you need to apply the commands "Element":../commands-en/element.html and "Attribute":../commands-en/attribute.html as follows:
 
 {% highlight xml %}
-<Element name="Artikelverzeichnis">
-  <Element name="Artikel">
-    <Attribut name="nummer" auswahl="1"/>
-    <Attribut name="seite" auswahl="10"/>
+<Element name="articlelist">
+  <Element name="article">
+    <Attribute name="nummer" select="1"/>
+    <Attribute name="page" select="10"/>
   </Element>
-  <Element name="Artikel">
-    <Attribut name="nummer" auswahl="2"/>
-    <Attribut name="seite" auswahl="12"/>
+  <Element name="article">
+    <Attribute name="nummer" select="2"/>
+    <Attribute name="page" select="12"/>
   </Element>
-  <Element name="Artikel">
-    <Attribut name="nummer" auswahl="3"/>
-    <Attribut name="seite" auswahl="14"/>
+  <Element name="article">
+    <Attribute name="nummer" select="3"/>
+    <Attribute name="page" select="14"/>
   </Element>
 </Element>
 {% endhighlight %}
 
-Anstelle der Befehle "Element":../commands-en/element.html und "Attribut":../commands-en/attribute.html können auch Variablen als Speicher benutzt werden (siehe Beispiel unten).
+Instead of using the commands "Element":../commands-en/element.html and "Attribute":../commands-en/attribute.html in one place you can create the construct by using variables to save the data. See the example below.
 
-h2. Schritt 2: Speichern und Laden der Informationen
+h2. Step 2: Save and load the list information
 
-Mit dem Befehl "SpeichereDatensatzdatei":../commands-en/savedataset.html wird die Struktur auf Festplatte gespeichert und mit "LadeDatensatzdatei":../commands-en/loaddataset.html wird sie wieder geladen. Existiert die Datei nicht, so wird kein Fehler gemeldet, da es sich um den ersten Durchlauf handeln könnte, wo die Datei naturgemäß noch nicht existiert.
+The command "SaveDataset":../commands-en/savedataset.html saves the given structure to the harddrive which can be loaded again (in the next run) with "LoadDataset":../commands-en/loaddataset.html. If the file does not exist when loading it with "LoadDataset":../commands-en/loaddataset.html it will be silently ignored, because it could be the first run which means the file does not exist yet.
 
-h2. Schritt 3: Verarbeiten der Informationen
+h2. Step 3: Process the information
 
-Direkt nach dem Laden wird die XML-Verarbeitung mit dem ersten Element der gerade geladenen Struktur fortgesetzt, im Beispiel oben würde nach dem folgenden Befehl im Layoutregelwerk gesucht:
+Right after using "LoadDataset":../commands-en/loaddataset.html, data processing continues with the matching rule for the
+data set file. In the example above, a rule that maches @articlelist@ will be applied ("Record":../commands-en/record.html element="articlelist"). When this rule finishes, the layout continues right after @LoadDataset@. 
+
+
+h2. Example
+
+The following example (planets) is included in the distribution. It creates a table of contents for the following pages. The data processing starts at the element  @planets@ (about the middle of the file). We load the data file @toc@ (it could be any name). In the first run, this file is not found and the command "LoadDataset":../commands-en/loaddataset.html does not execute anything. The data processing continues with the command after the @LoadDataset@ (here: @>SetVariable>@).  During the first run data which has the following  structure is written on the disk (with the name @toc@):
 
 {% highlight xml %}
-<Datensatz element="Artikelverzeichnis">
-  ...
-</Datensatz>
+<tableofcontents>
+  <planetlisting name="Mercury" pagenumber="2"/>
+  <planetlisting name="Venus" pagenumber="3"/>
+  <planetlisting name="Earth" pagenumber="4"/>
+  <planetlisting name="Mars" pagenumber="5"/>
+  <planetlisting name="Jupiter" pagenumber="6"/>
+  <planetlisting name="Saturn" pagenumber="7"/>
+  <planetlisting name="Uranus" pagenumber="8"/>
+  <planetlisting name="Neptune" pagenumber="9"/>
+</tableofcontents>
 {% endhighlight %}
 
-Das heißt, dass die eigentliche Datenverarbeitung zeitweilig unterbrochen und mit dem neuen Datensatz aus "LadeDatensatzdatei":../commands-en/loaddataset.html fortgeführt wird.
-
-h2. Beispiel
-
-Das folgende Beispiel reichert die »Planetenliste« um ein Inhaltsverzeichnis an. Die Verarbeitung beginnt beim Wurzelelement @planeten@ (in der Mitte der Datei). Hier wird die Datensatzdatei @toc@ (für: table of contents) geladen. Im ersten Durchlauf wird die Datei nicht gefunden, daher wird die Datensatzdatei »planeten« normal weiter verarbeitet. Während des Durchlaufs wird eine Liste erstellt, die folgende XML-Struktur hat:
+In the layout XML file, the data structure must have this format:
 
 {% highlight xml %}
-<Inhaltsverzeichnis>
-  <Planetenverzeichnis name="Merkur" seite="2" />
-  <Planetenverzeichnis name="Venus" seite="3" />
-  <Planetenverzeichnis name="Erde" seite="4" />
-  <Planetenverzeichnis name="Mars" seite="5" />
-  <Planetenverzeichnis name="Jupiter" seite="6" />
-  <Planetenverzeichnis name="Saturn" seite="7" />
-  <Planetenverzeichnis name="Uranus" seite="8" />
-  <Planetenverzeichnis name="Neptun" seite="9" />
-</Inhaltsverzeichnis>
-{% endhighlight %}
-
-Im Layoutregelwerk muss diese den folgenden Aufbau haben:
-
-{% highlight xml %}
-<Element name="Inhaltsverzeichnis">
-  <Element name="Planetenverzeichnis">
-    <Attribut name="name" auswahl="'Merkur'"/>
-    <Attribut name="seite" auswahl="2"/>
+<Element name="tableofcontents">
+  <Element name="planetlisting">
+    <Attribute name="name" select="'Mercury'"/>
+    <Attribute name="pagenumber" select="2"/>
   </Element>
-  <Element name="Planetenverzeichnis">
-    <Attribut name="name" auswahl="'Venus'"/>
-    <Attribut name="seite" auswahl="3"/>
+  <Element name="planetlisting">
+    <Attribute name="name" select="'Venus'"/>
+    <Attribute name="pagenumber" select="3"/>
   </Element>
   ...
-  <Element name="Planetenverzeichnis">
-    <Attribut name="name" auswahl="'Uranus'"/>
-    <Attribut name="seite" auswahl="9"/>
+  <Element name="planetlisting">
+    <Attribute name="name" select="'Uranus'"/>
+    <Attribute name="pagenumber" select="9"/>
   </Element>
 </Element>
 {% endhighlight %}
 
-Natürlich soll die Information in den Attributen dynamisch erzeugt werden, dafür werden der XPath-Ausdruck @@name@ und die XPath-Funktion @sd:aktuelle-seite()@ benutzt.
+The information in the attributes should be created dynamically. We use the XPath expression @@name@ and the XPath function @sd:current-page()@.
 
-Im zweiten Durchlauf wird die Datei erfolgreich eingelesen und die Verarbeitung »springt« zum Datensatz @Inhaltsverzeichnis@, da es das Wurzelelement der neuen Datei ist. Hier wird im Layoutregelwerk das Inhaltsverzeichnis erstellt.
+In the second run the file @toc@ will be read by @LoadDataset@. The layout XML processing jumps to the @<Record element=tableofcontents">@ at the beginning of the file, since @tableofcontents@ is the root element of the data set.
+
 
 {% highlight xml %}
-<Datensatz element="Inhaltsverzeichnis">
-  <Zuweisung variable="Inhaltsverzeichnis" auswahl="''"/>
-  <BearbeiteKnoten auswahl="Planetenverzeichnis"/>
-  <Textblock breite="20" spalte="3" schriftart="Überschrift">
-    <Absatz><Wert>Inhalt</Wert></Absatz>
-  </Textblock>
-  <Textblock breite="20" spalte="3">
-    <Wert auswahl="$Inhaltsverzeichnis"/>
-  </Textblock>
-</Datensatz>
+<Record element="tableofcontents">
+  <SetVariable variable="tableofcontents" select="''"/>
+  <ProcessNode select="planetlisting"/>
+  <PlaceObject column="3">
+    <Textblock width="20" fontface="Header">
+      <Paragraph><Value>Contents</Value></Paragraph>
+    </Textblock>
+  </PlaceObject>
+  <PlaceObject column="3">
+    <Textblock width="20">
+      <Value select="$tableofcontents"/>
+    </Textblock>
+  </PlaceObject>
+</Record>
  
-<Datensatz element="Planetenverzeichnis">
-  <Zuweisung variable="Inhaltsverzeichnis">
-    <Wert auswahl="$Inhaltsverzeichnis"/>
-    <Absatz>
-      <Wert auswahl="@name"/>
-      <Wert>, Seite </Wert>
-      <Wert auswahl="@seite"/>
-    </Absatz>
-  </Zuweisung>
-</Datensatz>
+<Record element="planetlisting">
+  <SetVariable variable="tableofcontents">
+    <Value select="$tableofcontents"/>
+    <Paragraph>
+      <Value select="@name"/>
+      <Value>, page </Value>
+      <Value select="@page"/>
+    </Paragraph>
+  </SetVariable>
+</Record>
  
-<!-- Wurzelelement -->
-<Datensatz element="planeten">
-  <Zuweisung variable="spalte" auswahl="2" />
-  <LadeDatensatzdatei name="toc"/>
-  <Zuweisung variable="Inhalt" auswahl="''"/>
-  <NeueSeite/>
-  <BearbeiteKnoten auswahl="planet"/>
-</Datensatz>
+<!-- Root element -->
+<Record element="planets">
+  <SetVariable variable="column" select="2" />
+  <LoadDataset name="toc"/>
+  <SetVariable variable="Contents" select="''"/>
+  <NewPage/>
+  <ProcessNode select="planet"/>
+</Record>
  
-<Datensatz element="planet">
-  <Zuweisung variable="Inhalt">
-    <Wert auswahl="$Inhalt"/>
-    <Element name="Planetenverzeichnis">
-      <Attribut name="name" auswahl=" @name "/>
-      <Attribut name="seite" auswahl=" sd:aktuelle-seite()"/>
+<Record element="planet">
+  <SetVariable variable="Contents">
+    <Value select="$Contents"/>
+    <Element name="planetlisting">
+      <Attribute name="name" select=" @name "/>
+      <Attribute name="page" select=" sd:current-page()"/>
     </Element>
-  </Zuweisung>
+  </SetVariable>
  
-  <BearbeiteKnoten auswahl="url" />
+  <ProcessNode select="url" />
   ...
-  <NeueSeite />
-  <SpeichereDatensatzdatei dateiname="toc" elementname="Inhaltsverzeichnis" auswahl="$Inhalt"/>
-</Datensatz>
+  <NewPage />
+  <SaveDataset filename="toc" elementname="tableofcontents" select="$Contents"/>
+</Record>
  
-<Datensatz element="url">
+<Record element="url">
   ...
-</Datensatz>
+</Record>
 {% endhighlight %}

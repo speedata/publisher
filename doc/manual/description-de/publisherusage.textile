@@ -15,5 +15,5 @@ Es öffnet sich das Terminal-Fenster in dem die Kommandos eingegeben werden kön
 
 Das Kommando, mit dem der Publisher gestartet wird, lautet @sp@. Die Beschreibung des Kommandos lesen Sie im "Abschnitt  über die Kommandozeile":commandline.html.
 
-Derzeit erwartet der Publisher die Daten in der Datei @data.xml@ und die Layoutbeschreibung in der Datei @layout.xml@ in einem Verzeichnis, das vom Publisher durchsucht wird. Das ist in der Standardeinstellung das Verzeichnis @speedata@ auf dem Schreibtisch in der VM (Verzeichnis @/home/speedata/Desktop/speedata@). Wie Sie dieses Verzeichnis ändern können, lesen Sie im Abschnitt über die "Konfiguration":configuration.html.
+Der Publisher erwartet die Daten in der Datei @data.xml@ und die Layoutbeschreibung in der Datei @layout.xml@ in einem Verzeichnis, das vom Publisher durchsucht wird. Das ist in der Standardeinstellung das Verzeichnis @speedata@ auf dem Schreibtisch in der VM (Verzeichnis @/home/speedata/Desktop/speedata@). Wie Sie dieses Verzeichnis ändern können, lesen Sie im Abschnitt über die "Konfiguration":configuration.html.
 

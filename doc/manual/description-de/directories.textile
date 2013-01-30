@@ -104,12 +104,16 @@ Im zweiten Durchlauf wird die Datei erfolgreich eingelesen und die Verarbeitung 
 <Datensatz element="Inhaltsverzeichnis">
   <Zuweisung variable="Inhaltsverzeichnis" auswahl="''"/>
   <BearbeiteKnoten auswahl="Planetenverzeichnis"/>
-  <Textblock breite="20" spalte="3" schriftart="Überschrift">
-    <Absatz><Wert>Inhalt</Wert></Absatz>
-  </Textblock>
-  <Textblock breite="20" spalte="3">
-    <Wert auswahl="$Inhaltsverzeichnis"/>
-  </Textblock>
+  <ObjektAusgeben spalte="3">
+    <Textblock breite="20" schriftart="Überschrift">
+      <Absatz><Wert>Inhalt</Wert></Absatz>
+    </Textblock>
+  </ObjektAusgeben>
+  <ObjektAusgeben spalte="3">
+    <Textblock breite="20">
+      <Wert auswahl="$Inhaltsverzeichnis"/>
+    </Textblock>
+  </ObjektAusgeben>
 </Datensatz>
  
 <Datensatz element="Planetenverzeichnis">
