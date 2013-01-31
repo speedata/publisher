@@ -20,44 +20,47 @@ h2. Hinweis
 Der XML-Namensraum des Layoutregelwerks ist @urn:speedata.de:2009/publisher/de@. Daher muss das Layoutregelwerk, sofern es
 gegen das RelaxNG Schema validiert wird, wie folgt aussehen:
 
-pre. <?xml version="1.0" encoding="UTF-8"?>
+{% highlight xml %}
+<?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="urn:speedata.de:2009/publisher/de">
  ...
 </Layout>
+{% endhighlight %}
 
 Die erste Zeile mit der XML-Deklaration ist optional. Falls, was wahrscheinlich ist, Layoutspezifische XPath-Funktionen benutzt werden, muss der Namensraum @urn:speedata:2009/publisher/functions/de@ bzw. für englische Funktionen @urn:speedata:2009/publisher/functions/en@ angegeben werden:
 
-pre. <?xml version="1.0" encoding="UTF-8"?>
+{% highlight xml %}
+<?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="urn:speedata.de:2009/publisher/de"
         xmlns:sd="urn:speedata:2009/publisher/functions/de">
  ...
 </Layout>
+{% endhighlight %}
 
 
 h2. Verknüpfung von Layoutregelwerk und RelaxNG Schema im XML-Editor
 
 Beispielhaft soll hier anhand des OxygenXML Editors gezeigt werden, wie das Schema den Dokumenten zugewiesen werden kann. Neben der Möglichkeit, das Schema jedem Dokument einzeln zuzuweisen:
 
-!../images/oxygen-schemazuweisen.png!
+{% figure :shadow oxygen-schemazuweisen.png %}
 
 
 gibt es die dauerhafte Lösung, allen Dokumenten im Namensraum @urn:speedata.de:2009/publisher/de@ das RelaxNG Schema zuzuweisen.
 
 Dazu erstellt man in den Einstellungen unter „Dokumenttypen Zuordnung“ eine neue Regel.
 
-!../images/oxygen-doczuordnung1.png!
+{% figure oxygen-doczuordnung1.png %}
 
 Füllen Sie den Dialog wie in der nächsten Abbildung aus:
 
-!../images/oxygen-doczuordnung.png!
+{% figure oxygen-doczuordnung.png %}
 
 und klicken Sie auf auf den @+@-Button und erstellen die Regel wie in dieser Abbildung:
 
-!../images/namensraumzuordnung.png!
+{% figure namensraumzuordnung.png %}
 
 Anschließend muss noch der Pfad zur Schemadatei angegeben werden (@/usr/share/speedata-publisher/schema/layoutschema-de.rng@):
 
-!../images/schemazuweisung-oxygen.png!
-
+{% figure schemazuweisung-oxygen.png %}
 
 Die Dialoge müssen mit @OK@ bestätigt werden. Sobald Sie ein Layoutregelwerk öffnen, wird das Schema dem Dokument automatisch zugeordnet und Sie erhalten die volle Editorunterstützung.

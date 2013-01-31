@@ -14,7 +14,7 @@ module Jekyll
     	else
     		cls = "screenshot"
     	end
-    	"<a href='../images/#{str[0]}'><img src='../images/#{str[0]}' class='#{cls}'/></a>"
+    	"<a  class='figure cboxElement' href='../images/#{str[0]}'><img src='../images/#{str[0]}' class='#{cls}'/></a>"
     end
   end
 

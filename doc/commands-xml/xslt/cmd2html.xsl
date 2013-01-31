@@ -78,7 +78,7 @@
           <head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             <link rel="stylesheet" href="../css/normal.css" type="text/css" />
-            <script src="../javascript/jquery-1.4.4.min.js" type="text/javascript"></script>
+            <script src="../javascript/jquery.min.js" type="text/javascript"></script>
             <script src="../javascript/jquery.syntax.min.js" type="text/javascript"></script>
             <script type="text/javascript">
                // This function is executed when the page has finished loading.
