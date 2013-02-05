@@ -2,10 +2,11 @@
 require "pathname"
 require 'rake/clean'
 
-CLOBBER.include("build/sourcedoc")
+CLOBBER.include("build/sourcedoc","src/go/sp/sp","src/go/sp/docgo", "src/go/sp/bin","src/go/sp/pkg")
 
 installdir = Pathname.new(__FILE__).join("..")
-srcdir = installdir.join("src")
+srcdir   = installdir.join("src")
+builddir = installdir.join("build")
 
 
 desc "Compile and install necessary software"
@@ -25,8 +26,8 @@ task :doc do
 		sh "jekyll"
 	end
 	print "Now generating command reference from XML..."
-	sh "java -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=en builddir=#{installdir}/build/manual"
-	sh "java -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=de builddir=#{installdir}/build/manual"
+	sh "java -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=en builddir=#{builddir}/manual"
+	sh "java -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=de builddir=#{builddir}/manual"
 	puts "done"
 end
 
@@ -42,9 +43,17 @@ end
 desc "Source documentation"
 task :sourcedoc do
 	Dir.chdir("#{srcdir}/lua") do
-		sh "#{installdir}/third/locco/locco.lua #{installdir}/build/sourcedoc *lua publisher/*lua common/*lua fonts/*.lua barcodes/*lua"
-		puts "Generated source documentation in \n#{installdir}/build/sourcedoc"
+		sh "#{installdir}/third/locco/locco.lua #{builddir}/sourcedoc *lua publisher/*lua common/*lua fonts/*.lua barcodes/*lua"
 	end
+	ENV['GOPATH'] = "#{srcdir}/go/sp"
+	Dir.chdir(srcdir.join("go","sp")) do
+		puts "Building docgo..."
+  		sh 'go build github.com/pgundlach/docgo'
+  		puts "...done"
+  		sh "./docgo -outdir #{builddir}/sourcedoc -resdir #{srcdir}/go/sp/src/github.com/pgundlach/docgo/ sp.go"
+	end
+	puts "done"
+	puts "Generated source documentation in \n#{builddir}/sourcedoc"
 end
 
 desc "Update program messages"
