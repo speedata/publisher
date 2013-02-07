@@ -83,3 +83,8 @@ task :newmsglang, :lang do |t,args|
 	end
 end
 
+desc "Update gh-pages"
+task :ghpages => [:doc] do
+	cp_r "#{builddir}/manual","webpage"
+end
+
