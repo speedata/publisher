@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/de"
+  xmlns:sd="urn:speedata:2009/publisher/functions/de">
+  <Optionen 
+    zeige_rasterbelegung="nein"
+    zeichne_raster="nein"
+    trace="nein"
+  />
+ 
+  <LadeSchriftdatei name="Helvetica" randausgleich="100" dateiname="texgyreheros-regular.otf" />
+  <LadeSchriftdatei name="Helvetica Fett" dateiname="texgyreheros-bold.otf" />
+  <LadeSchriftdatei name="Helvetica Kursiv" dateiname="texgyreheros-italic.otf" />
+  <LadeSchriftdatei name="Helvetica Fett Kursiv" dateiname="texgyreheros-bolditalic.otf" />
+
+  
+  <DefiniereSchriftfamilie name="Überschrift" schriftgröße="12" zeilenabstand="16">
+    <Normal schriftart="Helvetica" />
+    <Fett schriftart="Helvetica Fett" />
+    <FettKursiv schriftart="Helvetica Fett Kursiv"/>
+    <Kursiv schriftart="Helvetica Kursiv"/>
+  </DefiniereSchriftfamilie>
+
+  <DefiniereSchriftfamilie name="text" schriftgröße="12" zeilenabstand="13">
+    <Normal schriftart="Helvetica" />
+    <Fett schriftart="Helvetica Fett" />
+    <FettKursiv schriftart="Helvetica Fett Kursiv"/>
+    <Kursiv schriftart="Helvetica Kursiv"/>
+  </DefiniereSchriftfamilie>
+  
+  <DefiniereSchriftfamilie name="Tabelle" schriftgröße="10" zeilenabstand="12">
+    <Normal schriftart="Helvetica"/>
+  </DefiniereSchriftfamilie>
+
+  <Seitenformat breite="150mm" höhe="200mm" />
+  <SetzeRaster breite="4mm" höhe="14pt" />
+
+  <DefiniereTextformat name="Seitenzahl rechts" ausrichtung="rechtsbündig"/>
+  <DefiniereTextformat name="text" ausrichtung="blocksatz" />
+  <DefiniereTextformat name="Text mit Einrückung" ausrichtung="blocksatz" einrückung="2em" />
+
+
+  <Seitentyp name="rechte Seite" bedingung="sd:ungerade( sd:aktuelle-seite() )">
+    <Rand links="2cm" rechts="1cm" oben="1cm" unten="1cm" />
+    <BeiSeitenAusgabe>
+      <ObjektAusgeben spalte="{ sd:anzahl-spalten() - 3 }" zeile="{ sd:anzahl-zeilen() - 1}">
+        <Textblock breite="3">
+          <Absatz schriftart="text" textformat="Seitenzahl rechts"><Wert auswahl="sd:aktuelle-seite()"/></Absatz>
+        </Textblock>
+      </ObjektAusgeben>
+      <Nachricht auswahl="sd:aktuelle-seite()" />
+    </BeiSeitenAusgabe>
+  </Seitentyp>
+
+  <Seitentyp name="linke Seite" bedingung="sd:gerade( sd:aktuelle-seite() )">
+    <Rand links="1cm" rechts="2cm" oben="1cm" unten="1cm" />
+    <BeiSeitenAusgabe>
+      <ObjektAusgeben spalte="1" zeile="{ sd:anzahl-zeilen() - 1 }">
+        <Textblock breite="3">
+          <Absatz schriftart="text" textformat="rechtsbündig"><Wert auswahl="sd:aktuelle-seite()"/></Absatz>
+        </Textblock>
+      </ObjektAusgeben>
+      <Nachricht auswahl="sd:aktuelle-seite()" />
+    </BeiSeitenAusgabe>
+  </Seitentyp>
+
+
+  <Datensatz element="Inhaltsverzeichnis">
+    <Zuweisung variable="Inhaltsverzeichnis" auswahl="''" />
+    <BearbeiteKnoten auswahl="Planetenverzeichnis" />
+    <ObjektAusgeben spalte="3" belegen="ja">
+      <Textblock breite="20" schriftart="Überschrift">
+        <Absatz>
+          <Wert>Inhalt</Wert>
+        </Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <NeueZeile />
+    <ObjektAusgeben spalte="3">
+      <Textblock breite="20">
+        <Kopie-von auswahl="$Inhaltsverzeichnis" />
+      </Textblock>
+    </ObjektAusgeben>
+  </Datensatz>
+
+
+  <Datensatz element="Planetenverzeichnis">
+    <Zuweisung variable="Inhaltsverzeichnis">
+      <Kopie-von auswahl="$Inhaltsverzeichnis" />
+      <Absatz>
+        <Wert auswahl="@name" />
+        <Wert>, Seite </Wert>
+        <Wert auswahl="@seite" />
+      </Absatz>
+    </Zuweisung>
+  </Datensatz>
+
+  <!-- Wurzelelement -->
+  <Datensatz element="planeten">
+    <Zuweisung variable="spalte" auswahl="2" />
+    <LadeDatensatzdatei name="toc" />
+    <Zuweisung variable="Inhalt"/>
+    <NeueSeite />
+    
+    <BearbeiteKnoten auswahl="planet" />
+
+    <SpeichereDatensatzdatei dateiname="toc" elementname="Inhaltsverzeichnis" auswahl="$Inhalt" />
+
+  </Datensatz>
+
+  <Datensatz element="planet">
+    <Zuweisung variable="Inhalt">
+      <Kopie-von auswahl="$Inhalt" />
+      <Element name="Planetenverzeichnis">
+        <Attribut name="name" auswahl=" @name " />
+        <Attribut name="seite" auswahl=" sd:aktuelle-seite()" />
+      </Element>
+    </Zuweisung>
+
+    <ObjektAusgeben spalte="1">
+      <Textblock breite="20">
+        <Lesezeichen auswahl="@name" ebene="1"/>
+        <Absatz>
+          <Wert auswahl="@name" />
+        </Absatz>
+        <!--<Aktion>
+          <ZurListeHinzufügen liste="inhalt" schlüssel="{@name}" auswahl="sd:aktuelle-seite()" />
+        </Aktion>-->
+      </Textblock>
+    </ObjektAusgeben>
+
+    <BearbeiteKnoten auswahl="url" />
+    <BearbeiteKnoten auswahl="bild" />
+    <BearbeiteKnoten auswahl="monde" />
+    <BearbeiteKnoten auswahl="beschreibung" />
+    
+    <NeueSeite />
+  </Datensatz>
+
+  <Datensatz element="url">
+    <ObjektAusgeben spalte="{ $spalte }">
+      <Textblock breite="29" textformat="text" schriftart="Überschrift">
+        <Absatz>
+          <Wert>URL: </Wert>
+          <URL>
+            <Wert auswahl="string(.)" />
+          </URL>
+        </Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    
+  </Datensatz>
+
+  <Datensatz element="bild">
+    <NeueZeile />
+    <NeueZeile />
+    <ObjektAusgeben spalte="{ $spalte }">
+      <Bild breite="10" datei="{.}" />
+    </ObjektAusgeben>
+  </Datensatz>
+
+  <Datensatz element="monde">
+    <Zuweisung variable="mondliste"/>
+    <BearbeiteKnoten auswahl="mond" />
+    <ObjektAusgeben spalte="18">
+      <Textblock breite="7">
+        <Absatz>
+          <B>
+            <Wert>Monde</Wert>
+          </B>
+        </Absatz>
+        <Kopie-von auswahl=" $mondliste " />
+      </Textblock>
+    </ObjektAusgeben>
+    <NeueZeile />
+    <NeueZeile />
+  </Datensatz>
+
+  <Datensatz element="mond">
+    <Zuweisung variable="mondliste">
+      <Kopie-von auswahl="$mondliste" />
+      <Absatz>
+        <Wert>• </Wert>
+        <Wert auswahl="string(.)" />
+      </Absatz>
+    </Zuweisung>
+  </Datensatz>
+
+  <Datensatz element="beschreibung">
+    <ObjektAusgeben spalte="{ $spalte }">
+      <Textblock breite="28" schriftart="text" textformat="Text mit Einrückung">
+        <Absatz>
+          <Wert auswahl="normalize-space(string(.))" />
+        </Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+  </Datensatz>
+
+</Layout>

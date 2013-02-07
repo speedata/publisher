@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../css/normal.css" type="text/css" />
+<link rel="stylesheet" href="../css/pygments.css" type="text/css" />
+<link rel="stylesheet" href="../css/colorbox.css" type="text/css" />
+<script src="../javascript/jquery.min.js" ></script>
+<script src="../javascript/jquery.colorbox-min.js" ></script>
+<script>
+  $(document).ready(function(){
+     $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+  });
+</script>
+<title>speedata publisher configuration</title>
+</head>
+<body>
+<div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"></a></div>
+	<h1>How to configure the speedata publisher</h1>
+<p>The speedata publisher can be configured in several ways:</p>
+<ol>
+	<li>The file <code>publisher.cfg</code> in <code>/etc/speedata/</code>, in the home directory (with a leading dot) and in the current working directory</li>
+	<li>Parameters given on the command line</li>
+	<li>Options given in the layout file</li>
+</ol>
+<h2>The file <code>publisher.cfg</code></h2>
+<p>The file <code>publisher.cfg</code> (<code>/etc/speedata/publisher.cfg</code>, <code>$HOME/.publisher.cfg</code> and in the current working directory) is a text file, that is read at the beginning of the publisher run. The default file looks like this:</p>
+<pre>data      = data.xml
+layout    = layout.xml
+autoopen  = false</pre>
+<p>The format of the file is important, otherwise it won&#8217;t be recognized. The following options are supported:</p>
+<dl>
+	<dt><code>autoopen</code></dt>
+	<dd>if <code>true</code>, the publisher opens the <span class="caps">PDF</span> file. Default: <code>false</code>. The same effect can be achieved if you run  <code>sp --autoopen</code>.</dd>
+	<dt><code>extra_dir</code></dt>
+	<dd>A list of directories in the file system separated by <code>;</code> (Windows) or <code>:</code> (Mac, Linux). These directories contain the images, fonts, source files and other assets that are used during the publisher run.</dd>
+	<dt><code>filter</code></dt>
+	<dd>Run the given file as an <span class="caps">XPROC</span>-Filter.</dd>
+	<dt><code>layout</code></dt>
+	<dd>Name of the layout rule set (<span class="caps">XML</span>). The default name is <code>layout.xml</code>.</dd>
+	<dt><code>data</code></dt>
+	<dd>Name of the data file (<span class="caps">XML</span>). If not given, the system uses <code>data.xml</code>.</dd>
+	<dt><code>dummy</code></dt>
+	<dd>If <code>true</code>, the system won&#8217;t read the data file, instead it uses the single element <code>&lt;data /&gt;</code> as its input.</dd>
+	<dt><code>jobname</code></dt>
+	<dd>Name of the output file. Default is <code>publisher</code>.</dd>
+	<dt><code>startpage</code></dt>
+	<dd>Number of the first page.</dd>
+	<dt><code>grid</code></dt>
+	<dd>If <code>true</code>, the underlying grid is shown in the <span class="caps">PDF</span> file. For debugging purpose only.</dd>
+	<dt><code>opencommand</code></dt>
+	<dd>Command that will be run to open the documentation and the <span class="caps">PDF</span> file. For MacOS X this should be <code>open</code>, for Linux <code>xdg-open</code> or <code>exo-open</code>  (xfce).</dd>
+</dl>
+<p>All entries in the configuration file are optional. The configuration files are read in the following order: <code>/etc/speedata/publisher.cfg</code>, <code>~/.publisher.cfg</code> and in the current directory <code>publisher.cfg</code>.</p>
+<h2>Command line parameters</h2>
+<p>The valid command line parameters are written on a <a href="commandline.html">separate page</a>.</p>
+<h2>Options given in the layout file</h2>
+<p>The <span class="caps">XML</span> layout file has a command called <a href="../commands-en/options.html">Options</a> that allows to set some parameters (tracing, default language, &#8230;)</p>
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
+<a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language: <a href="../description-de/configuration.html">German</a> 
+</body>
+</html>

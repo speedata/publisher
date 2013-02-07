@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../css/normal.css" type="text/css" />
+<link rel="stylesheet" href="../css/pygments.css" type="text/css" />
+<link rel="stylesheet" href="../css/colorbox.css" type="text/css" />
+<script src="../javascript/jquery.min.js" ></script>
+<script src="../javascript/jquery.colorbox-min.js" ></script>
+<script>
+  $(document).ready(function(){
+     $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+  });
+</script>
+<title>Font inclusion</title>
+</head>
+<body>
+<div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"></a></div>
+	<h1>Font inclusion</h1>
+<h2>Formats</h2>
+<p>The speedata Publisher can use fonts in the followig formats:</p>
+<ul>
+	<li>PostScript Type1 (<code>.afm</code>, <code>.pfb</code>)</li>
+	<li>OpenType (<code>.otf</code>)</li>
+	<li>TrueType (<code>.ttf</code>)</li>
+</ul>
+<h2>How to include a font</h2>
+<p>In the layout rules the name of the font file must be connected to an internal name. This internal name is then used in the command <a href="../commands-en/definefontfamily.html">DefineFontfamily</a> which groups up to four fonts in a <em>family</em> (regular, bold, italic and bolditalic). The first step is accomplished with <a href="../commands-en/loadfontfile.html">LoadFontfile</a>:</p>
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;LoadFontfile</span> <span class="na">name=</span><span class="s">&quot;Helvetica&quot;</span> <span class="na">filename=</span><span class="s">&quot;helvetica-regular.otf&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;LoadFontfile</span> <span class="na">name=</span><span class="s">&quot;Helvetica Bold&quot;</span> <span class="na">filename=</span><span class="s">&quot;helvetica-bold.otf&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;LoadFontfile</span> <span class="na">name=</span><span class="s">&quot;Helvetica Italic&quot;</span> <span class="na">filename=</span><span class="s">&quot;helvetica-italic.otf&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;LoadFontfile</span> <span class="na">name=</span><span class="s">&quot;Helvetica BoldItalic&quot;</span> <span class="na">filename=</span><span class="s">&quot;helvetica-bolditalic.otf&quot;</span> <span class="nt">/&gt;</span>
+</code></pre>
+</div>
+
+<p>After executing these commands, the font files are known as <code>Helvetica</code>, <code>Helvetica Bold</code> etc. In the second step they are used by the command <a href="../commands-en/definefontfamily.html">DefineFontfamily</a>:</p>
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;DefineFontfamily</span> <span class="na">name=</span><span class="s">&quot;heading&quot;</span> <span class="na">fontsize=</span><span class="s">&quot;12&quot;</span> <span class="na">leading=</span><span class="s">&quot;14&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;Regular</span> <span class="na">fontface=</span><span class="s">&quot;Helvetica&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;Bold</span> <span class="na">fontface=</span><span class="s">&quot;Helvetica Bold&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;Italic</span> <span class="na">fontface=</span><span class="s">&quot;Helvetica Italic&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;BoldItalic</span> <span class="na">fontface=</span><span class="s">&quot;Helvetica BoldItalic&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/DefineFontfamily&gt;</span>
+</code></pre>
+</div>
+
+<p>The font family <code>heading</code> is composed by the four given font files. Now you can use the font family in commands such as <a href="../commands-en/textblock.html">Textblock</a> or <a href="../commands-en/table.html">Table</a>.</p>
+<h2>Note</h2>
+<p>The <code>LoadFontfile</code> instructions can be auto generated on the command line. You need to run the <code>sp</code> program with the command <code>list-fonts</code>, such as</p>
+<pre>sp --xml [--extra-dir=...] list-fonts</pre>
+<p>The output contains all font files that are found in the current directory (and its subdirectories). Additional directories can be supplied by the shown command line option <code>--extra-dir=&lt;dirname&gt;</code>. The value for the <code>name</code> attribute in the <code>LoadFontfile</code> command defaults to the postscript name of the font but can be changed to any other value.</p>
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
+<a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language: <a href="../description-de/fonts.html">German</a> 
+</body>
+</html>

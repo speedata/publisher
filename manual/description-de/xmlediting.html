@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../css/normal.css" type="text/css" />
+<link rel="stylesheet" href="../css/pygments.css" type="text/css" />
+<link rel="stylesheet" href="../css/colorbox.css" type="text/css" />
+<script src="../javascript/jquery.min.js" ></script>
+<script src="../javascript/jquery.colorbox-min.js" ></script>
+<script>
+  $(document).ready(function(){
+     $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+  });
+</script>
+<title>Bearbeitung des Layoutregelwerks</title>
+</head>
+<body>
+<div id="logo"><a href="../index-de.html"><img src="../images/publisher_logo.png" alt="Startseite"></a></div>
+	<h1>Bearbeitung des Layoutregelwerks</h1>
+<p>Durch die Benutzung von Standard <span class="caps">XML</span> (utf-8) lässt sich das Layoutregelwerk mit jedem Texteditor bearbeiten. Mithilfe des mitgelieferten RelaxNG-Schemas wird die Eingabe des Layoutregelwerks deutlich erleichtert. Dazu muss ein <span class="caps">XML</span>-Editor benutzt werden, der RelaxNG Schemas verarbeiten kann:</p>
+<ul>
+	<li><a href="http://www.oxygenxml.com">OxygenXML</a> (Mac, Windows, Linux)</li>
+	<li><a href="http://www.altova.com/xml-editor/">XMLSpy</a> (Windows)</li>
+	<li><a href="http://www.gnu.org/software/emacs/"><span class="caps">GNU</span> Emacs</a> mit <a href="http://www.thaiopensource.com/nxml-mode/">nxml-mode</a> (alle Betriebssysteme)</li>
+	<li><a href="http://www.xmlblueprint.com/"><span class="caps">XML</span> Blueprint</a> (nur Windows)</li>
+</ul>
+<p>Das RelaxNG-Schema für das Layoutregelwerk liegt in der virtuellen Maschine (VM) im Verzeichnis <code>/usr/share/speedata-publisher/schema/</code> unter dem Dateinamen <code>layoutschema-de.rng</code>.</p>
+<h2>Hinweis</h2>
+<p>Der <span class="caps">XML</span>-Namensraum des Layoutregelwerks ist <code>urn:speedata.de:2009/publisher/de</code>. Daher muss das Layoutregelwerk, sofern es<br />
+gegen das RelaxNG Schema validiert wird, wie folgt aussehen:</p>
+<div class="highlight"><pre><code class="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;Layout</span> <span class="na">xmlns=</span><span class="s">&quot;urn:speedata.de:2009/publisher/de&quot;</span><span class="nt">&gt;</span>
+ ...
+<span class="nt">&lt;/Layout&gt;</span>
+</code></pre>
+</div>
+<p>Die erste Zeile mit der <span class="caps">XML</span>-Deklaration ist optional. Falls, was wahrscheinlich ist, Layoutspezifische XPath-Funktionen benutzt werden, muss der Namensraum <code>urn:speedata:2009/publisher/functions/de</code> bzw. für englische Funktionen <code>urn:speedata:2009/publisher/functions/en</code> angegeben werden:</p>
+<div class="highlight"><pre><code class="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;Layout</span> <span class="na">xmlns=</span><span class="s">&quot;urn:speedata.de:2009/publisher/de&quot;</span>
+        <span class="na">xmlns:sd=</span><span class="s">&quot;urn:speedata:2009/publisher/functions/de&quot;</span><span class="nt">&gt;</span>
+ ...
+<span class="nt">&lt;/Layout&gt;</span>
+</code></pre>
+</div>
+<h2>Verknüpfung von Layoutregelwerk und RelaxNG Schema im <span class="caps">XML</span>-Editor</h2>
+<p>Beispielhaft soll hier anhand des OxygenXML Editors gezeigt werden, wie das Schema den Dokumenten zugewiesen werden kann. Neben der Möglichkeit, das Schema jedem Dokument einzeln zuzuweisen:</p>
+<p><a  class='figure cboxElement' href='../images/oxygen-schemazuweisen.png'><img src='../images/oxygen-schemazuweisen.png' class='screenshot shadow'/></a></p>
+<p>gibt es die dauerhafte Lösung, allen Dokumenten im Namensraum <code>urn:speedata.de:2009/publisher/de</code> das RelaxNG Schema zuzuweisen.</p>
+<p>Dazu erstellt man in den Einstellungen unter „Dokumenttypen Zuordnung“ eine neue Regel.</p>
+<p><a  class='figure cboxElement' href='../images/oxygen-doczuordnung1.png'><img src='../images/oxygen-doczuordnung1.png' class='screenshot'/></a></p>
+<p>Füllen Sie den Dialog wie in der nächsten Abbildung aus:</p>
+<p><a  class='figure cboxElement' href='../images/oxygen-doczuordnung.png'><img src='../images/oxygen-doczuordnung.png' class='screenshot'/></a></p>
+<p>und klicken Sie auf auf den <code>+</code>-Button und erstellen die Regel wie in dieser Abbildung:</p>
+<p><a  class='figure cboxElement' href='../images/namensraumzuordnung.png'><img src='../images/namensraumzuordnung.png' class='screenshot'/></a></p>
+<p>Anschließend muss noch der Pfad zur Schemadatei angegeben werden (<code>/usr/share/speedata-publisher/schema/layoutschema-de.rng</code>):</p>
+<p><a  class='figure cboxElement' href='../images/schemazuweisung-oxygen.png'><img src='../images/schemazuweisung-oxygen.png' class='screenshot'/></a></p>
+<p>Die Dialoge müssen mit <code>OK</code> bestätigt werden. Sobald Sie ein Layoutregelwerk öffnen, wird das Schema dem Dokument automatisch zugeordnet und Sie erhalten die volle Editorunterstützung.</p>
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
+<a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache: <a href="../description-en/xmlediting.html">Englisch</a> 
+</body>
+</html>

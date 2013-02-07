@@ -7,75 +7,62 @@
 </head>
 
 <body>
-<a href="http://github.com/speedata/publisher"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/4c7dc970b89fd04b81c8e221ba88ff99a06c6b61/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" /></a>
+<a href="https://github.com/speedata/publisher"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>
 <div id="logo">
   <a href="index.html"><img src="images/publisher_logo.png" alt="Startseite"></a>
 </div>
 
-<!--
-    <div class="download">
-      <a href="http://github.com/speedata/publisher/zipball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a href="http://github.com/speedata/publisher/tarball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
-    </div>
--->
-    <h1><a href="http://github.com/speedata/publisher">speedata Publisher</a>
-      <span class="small">by <a href="http://github.com/speedata">speedata</a></span></h1>
+<h1><a href="http://github.com/speedata/publisher">speedata Publisher</a></h1>
 
     <div class="description">
       <p>The speedata Publisher is a full featured professional database publishing software. It has a built-in layout description language which allows you to create arbitrary complex layouts.
-      It reads data in XML format and outputs PDF. Other data formats need to be converted to XML before hand.</p>
+      It reads data in XML format and outputs PDF. The software is OpenSource and released under the terms of the <a class="webpage" href="http://www.gnu.org/licenses/agpl.txt">AGPL version 3</a>.</p>
       <div align="center"><img src="images/schema.png" width="400" alt="Schema" ></div>
     </div>
 
-    <h2><a name="Features">Features of the layout description language</a></h2>
+    <h2><a name="Features">speedata Publisher features</a></h2>
     <ul>
-        <li>100% automatic generation of high quality PDF files</li>
-        <li>Fully fledged programming language</li>
-        <li>Based on standards like XPath and HTML where possible</li>
-        <li>Place elements (texts, images, tables, rules, ...) on a grid or with absolute dimensions</li>
-        <li>Virtual typesetting. You can typeset anything on a virtual page and measure the dimensions of the result.</li>
-        <li>Output of print-ready or “online” PDF</li>
-        <li>Support for most languages built in</li>
-        <li>High quality typesetting due to a TeX-based line breaking algorithm including margin kerning and font expansion</li>
-        <li>Native support for OpenType fonts, XML, Unicode and other up to date technologies</li>
+        <li>100% automatic generation of high quality PDF files.</li>
+        <li>Fully fledged programming language.</li>
+        <li>Based on standards like XPath and HTML.</li>
+        <li>Grid based object placement for optimal space usage.</li>
+        <li>Dynamic layout optimization. Copyfitting taken to an extreme – following your exact needs.</li>
+        <li>Output of print-ready or “online” PDF.</li>
+        <li>Support for most languages built in (hyphenation).</li>
+        <li>High quality typesetting based on TeX's optimum fit line breaking algorithm including margin kerning and font expansion.</li>
+        <li>Native support for OpenType fonts, XML, Unicode and other up to date technologies.</li>
         <li>Built-in multi-pass solution for automatic table of contents, index pages etc.</li>
-        <li>Typesetting of complex tables</li>
-        <li>Strict XML Schema file (RelaxNG) to prevent syntax errors in the input</li>
-        <li>High performance. Many documents take less then a second to generate</li>
+        <li>Typesetting of complex tables: multi page tables with repeating header/fooder, fixed or flexible columns, HTML features such as padding, borders and alike.</li>
+        <li>Strict XML Schema file (RelaxNG) to prevent syntax errors and proide online help while editing the layout instructions.</li>
+        <li>High performance. Many documents take less than half a second to generate, up to 300 pages per second.</li>
+        <li>Easy generation of QR codes, EAN-13 or Code 128 barcodes.</li>
+        <li>Small footprint. The complete installation is only ~15 MB.</li>
+        <li>Active development and many installations in commercial projects.</li>
     </ul>
 
-
-    <h2><a name="Requirements">Requirements</a></h2>
-	<p>The speedata Publisher comes in two flavors: as a pre-built package and as a D.I.Y. source code. If you check out the source code, you need a <a class="webpage" href="http://www.luatex.org">LuaTeX</a> binary with the Lua libxml2 bindings from <a class="webpage" href="http://asbradbury.org/projects/lua-xmlreader/">asbradbury.org</a>.
-	    You can at your choice create a single binary or load the Lua bindings at runtime.
-	    <a class="webpage" href="https://github.com/pgundlach/LuaTeX/tree/xmlreader">There is a github repository</a> with a patched version of LuaTeX.
-	    That is what we use. You can compile it if you have the libxml2 headers installed.</p>
-
-   <h2><a name="Install">Install</a></h2>
-   <p>The contents of this repository is mostly ready to run. Put the sdluatex binary (see section requirements) in the <code>bin/</code> directory and run "sprun" in your terminal window.</p>
-
-   <h2><a name="License">License</a></h2>
-   <p><a class="webpage" href="http://www.gnu.org/licenses/agpl.txt">AGPL version 3</a></p>
-
-   <h2><a name="Contact">Author / Contact</a></h2>
-   <p>The software is written by Patrick Gundlach, speedata. Contact us at <a class="mail" href="mailto:info@speedata.de">info@speedata.de</a>. We also offer commercial support.
-       Follow us on twitter (<a href="https://twitter.com/#!/speedata/">English</a> and <a href="https://twitter.com/#!/speedata_de/">German</a>).</p>
-
     <h2><a name="Download">Download</a></h2>
-    <p>
-      You can download the development code of this project in either
-      <a class="document" href="http://github.com/speedata/publisher/zipball/develop">zip</a> or
-      <a class="document" href="http://github.com/speedata/publisher/tarball/develop">tar</a> format.
-    </p>
+    <p>We provide ready to use ZIP archives for download. See <a class="webpage" href="https://github.com/speedata/publisher/wiki/Installation-instructions">the wiki page</a> for installation instructions.</p>
 
-    <p>You can also clone the project with <a class="webpage" href="http://git-scm.com">Git</a>  by running:</p>
-      <pre>$ git clone git://github.com/speedata/publisher</pre>
-    <p>  to get the source code on GitHub: <a href="http://github.com/speedata/publisher">speedata/publisher</a></p>
+    <h2><a name="documentation">Documentation</a></h2>
+    <p><a class="webpage" href="manual/index.html">Yes, we do have documentation.</a> The english version is work in progress and should be completed soon. You get the same (but more up to date) when you run <code>sp doc</code> on the command line.</p>
 
-    <h2>Help needed</h2>
-    <p>We need your help. There are lots of things to do, you can participate even just by spreading the word. <a href="https://trello.com/board/spedata-publisher/4edd09130cc428fea30d0122">We are using Trello to organize the development. Join us!</a></p>
+    <h2>Development version (source code)</h2>
+  	<p>Warning: this is only for the brave! If you check out the git source code, you need a few prerequisites to run the publisher.</p>
+    <ul>
+      <li>A LuaTeX binary. You can download it for the <a class="webpage" href="http://www.luatex.org/download.html">LuaTeX homepage</a>. The slightly more robust solution would be a binary with libxml2 support. We maintain a <a href="https://github.com/pgundlach/luatex/tree/xmlreader" class="webpage">LuaTeX fork</a> with libxml2 support if you want to compile it yourself. Otherwise you can take the binary from one of our packages. See the download section above.</li>
+      <li>A Go compiler for creating the start script</li>
+      <li>Ruby with <a class="webpage" href="http://rake.rubyforge.org/">Rake</a> (the popular build system) and <a class="webpage" href="https://github.com/mojombo/jekyll">Jekyll</a> for generating the documentation.</li>
+      <li>Probably some more that I've forgotten</li>
+    </ul>
+
+    <p>After running <code>rake build</code> and <code>rake doc</code> you can head over to the <a href="#documentation">documentation section</a> and read the manual. 
+
+
+   
+   <h2><a name="Contact">Contact</a></h2>
+   <p>The software is written by speedata, a young company with office in Berlin, Germany. We offer commercial support and help with projects involving our products. You can contact us at <a class="mail" href="mailto:info@speedata.de">info@speedata.de</a> or follow us on twitter (<a href="https://twitter.com/#!/speedata/">English</a> and <a href="https://twitter.com/#!/speedata_de/">German</a>).</p>
+
+
 
     <div class='speedataline'></div>
     <a href="http://www.speedata.de/">www.speedata.de</a>

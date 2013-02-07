@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../css/normal.css" type="text/css" />
+<link rel="stylesheet" href="../css/pygments.css" type="text/css" />
+<link rel="stylesheet" href="../css/colorbox.css" type="text/css" />
+<script src="../javascript/jquery.min.js" ></script>
+<script src="../javascript/jquery.colorbox-min.js" ></script>
+<script>
+  $(document).ready(function(){
+     $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+  });
+</script>
+<title>Benutzung der VM</title>
+</head>
+<body>
+<div id="logo"><a href="../index-de.html"><img src="../images/publisher_logo.png" alt="Startseite"></a></div>
+	<h1>Benutzung der virtuellen Maschine (VM)</h1>
+<p>Der speedata Publisher wird in verschiedenen Varianten ausgeliefert. Entweder als Installationspaket für das gewünschte Betriebssystem oder als vorkonfigurierte virtuelle Maschine. Diese virtuelle Maschine kann mit verschieden VMware Produkten ausgeführt werden, darunter:</p>
+<ul>
+	<li><a href="http://www.vmware.com/de/products/player/">VMware Player</a></li>
+	<li><a href="http://www.vmware.com/de/products/fusion/">VMware Fusion</a></li>
+	<li><a href="http://www.vmware.com/de/products/server/">VMware Server</a></li>
+</ul>
+<p>Dieser Abschnitt behandelt die Installation von Updates in dieser VM-Umgebung.</p>
+<h1>Aktualisierung der Software</h1>
+<p>Der speedata Publisher wird als Softwarepaket in der VM installiert. Das bedeutet, dass er über dieselben Mechanismen aktualisiert wird, wie der Rest des Betriebssystems. Der Publisher kann über die Kommandozeile oder über das Programm „Synaptic“ aktualisiert werden.</p>
+<h2>Aktualisierung über die Kommandozeile</h2>
+<p>Dazu geben Sie im Terminalfenster die folgenden Befehle ein:</p>
+<pre>sudo apt-get update
+sudo apt-get install speedata-publisher</pre>
+<p>Das Programm „sudo“ fragt nach dem Benutzerpasswort: <code>speedata</code>. Diese Befehle aktualisieren die internen Listen mit den verfügbaren Programmen und installieren das Softwarepaket „speedata-publisher“ in der neusten zur Verfügung stehenden Version.</p>
+<h2>Aktualisierung über Synaptic</h2>
+<p>Die Paketverwaltung Synaptic ist über das Menü System &#8594; Systemverwaltung &#8594; Synaptic-Paketverwaltung zu erreichen.</p>
+<p>Sollte einer der Befehle fehlschlagen, so setzen Sie sich bitte mit Ihrem Systemadministrator in Verbindung.</p>
+<p><img src="../images/synaptic-menu.tiff" alt="" /></p>
+<p>Das System fragt Sie nach dem Benutzerpasswort: <code>speedata</code>. Geben Sie in dem Suchfeld das Wort <code>speedata</code> ein.</p>
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
+<a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache: <a href="../description-en/vmusage.html">Englisch</a> 
+</body>
+</html>

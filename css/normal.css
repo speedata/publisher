@@ -41,3 +41,9 @@ a.mail {
   background:transparent url(../images/mail.jpeg) center left no-repeat;
   padding:0 0 0 18px;
 }
+
+.tt, tt,code {
+  font-family: monospace;
+  font-size: 130%;
+}
+
