@@ -1,5 +1,5 @@
 ---
-layout: subdir
+layout: main
 title: "Liste der Änderungen bis Version 1.0"
 ---
 h1. Liste der Änderungen vor Version 1.0

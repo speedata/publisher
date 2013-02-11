@@ -1,5 +1,5 @@
 ---
-layout: subdir
+layout: main
 title: "Command line options"
 ---
 

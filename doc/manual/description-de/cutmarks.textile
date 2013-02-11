@@ -1,5 +1,5 @@
 ---
-layout: subdir
+layout: main
 title: "Schnittmarken und Beschnittzugabe"
 ---
 

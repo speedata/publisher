@@ -1,5 +1,5 @@
 ---
-layout: subdir
+layout: main
 title: "Liste der Änderungen"
 ---
 h1. Liste der Änderungen

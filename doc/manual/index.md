@@ -7,12 +7,12 @@ title: speedata Publisher documentation
 speedata Publisher documentation
 ================================
 
-Other languages: [German](index-de.html). This translation is work-in-progress.
+Other languages: [German](index-de.html). This translation is work in progress.
 
 Reference
 ---------
 
- * [Element reference](commands-en/layout.html) (WIP)
+ * [Element reference](commands-en/layout.html) (work in progress)
  * [Command line](description-en/commandline.html)
  * [XPath expressions](description-en/xpath.html)
  * [Changelog](description-en/changelog.html)
@@ -27,4 +27,4 @@ Advanced topics
  * [Editing the XML layout rules](description-en/xmlediting.html)
  * [Cutmarks and bleed](description-en/cutmarks.html)
  * [Configuring the speedata Publisher](description-en/configuration.html)
-
+ * [Examples](examples-en/index.html)
