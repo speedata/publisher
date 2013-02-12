@@ -2,11 +2,20 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="css/normal.css" type="text/css" />
+<link rel="stylesheet" href="./css/normal.css" type="text/css" />
+<link rel="stylesheet" href="./css/pygments.css" type="text/css" />
+<link rel="stylesheet" href="./css/colorbox.css" type="text/css" />
+<script src="./javascript/jquery.min.js" ></script>
+<script src="./javascript/jquery.colorbox-min.js" ></script>
+<script>
+  $(document).ready(function(){
+     $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+  });
+</script>
 <title>Main page</title>
 </head>
 <body>
-<div id="logo"><a href="index-de.html"><img src="images/publisher_logo.png" alt="Startseite"></a></div>
+<div id="logo"><a href="./index-de.html"><img src="./images/publisher_logo.png" alt="Startseite"></a></div>
 	<p><img alt='speedata Publisher' src='images/publisher.png' style='float:right;' /></p>
 <h1 id='speedata_publisher_dokumentation'>speedata Publisher Dokumentation</h1>
 
@@ -42,8 +51,10 @@
 <li><a href='description-de/cutmarks.html'>Schnittmarken und Beschnittzugabe</a></li>
 
 <li><a href='description-de/configuration.html'>Konfiguration des Publishers</a></li>
+
+<li><a href='examples-de/index.html'>Beispiele</a></li>
 </ul>
-<div class='speedataline'></div>
-<a href="http://www.speedata.de/">www.speedata.de</a>
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
+<a href="./index-de.html">Startseite</a> | <a href="./commands-de/layout.html">Elementreferenz</a> | Andere Sprache: <a href="index.html">Englisch</a> 
 </body>
 </html>
