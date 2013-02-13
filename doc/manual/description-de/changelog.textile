@@ -6,6 +6,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* "Bild":../commands-de/image.html kann auch ein URI (@file://...@) als Argument für den Dateinamen erhalten. Ebenso die "XPath-Ausdrücke":xpath.html @sd:anzahl-seiten()@, @sd:bildbreite()@ und @sd:datei-vorhanden()@. (1.5.33)
 * Wildcard (@*@) als "XPath-Ausdruck":xpath.html (1.5.32)
 * "BearbeiteKnoten":../commands-de/processnode.html erlaubt "XPath-Ausdrücke":xpath.html (1.5.32)
 * "QR Codes":../commands-de/barcode.html (1.5.28)

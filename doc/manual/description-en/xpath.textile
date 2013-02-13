@@ -53,11 +53,11 @@ There are two classes of XPath functions: standard XPath functions and speedata 
 - sd:current-column() := Return the current column.
 - sd:alternating(&lt;text>,&lt;text>,.. ) := On each call the next element will be returned. Example: @sd:alternating("White","Gray")@ can be used for alternating color of table rules. Currently there is no means of resetting the state of @sd:alternating()@.
 - sd:number-of-datasets(&lt;Sequence>) := Return the number of records of the sequence.
-- sd:number-of-pages(&lt;filename>) := Determines the number of pages of a (PDF-)file.
+- sd:number-of-pages(&lt;filename or URI schema>) := Determines the number of pages of a (PDF-)file.
 - sd:number-of-columns() := Number of columns in the current grid.
 - sd:number-of-rows() := Number of rows in the current grid.
-- sd:imagewidth(&lt;filename>) := Natural width of the image in grid cells. Attention: if the image is not found, the width of the file-not-found placeholder will be returned. Therefore you need to check in advance if the image exists.
-- sd:file-exists(&lt;filename>) := True if file exists in the current search path. Otherwise it returns false.
+- sd:imagewidth(&lt;filename or URI schema>) := Natural width of the image in grid cells. Attention: if the image is not found, the width of the file-not-found placeholder will be returned. Therefore you need to check in advance if the image exists.
+- sd:file-exists(&lt;filename or URI schema>) := True if file exists in the current search path. Otherwise it returns false.
 - sd:format-number(Number,formatting instructions) :=  Return a text string with the number formatted as given by the formatting instructions. These instructions are the same as the instructions by the C function @printf()@.
 - sd:even(&lt;number>) := True if number is even. Example: @sd:even(sd:current-page())@
 - sd:odd(&lt;number>) := True if number is odd.

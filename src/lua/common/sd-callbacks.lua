@@ -8,6 +8,8 @@
 
 -- necessary callbacks if we want to use LuaTeX without kpathsea
 
+local url = require("socket.url")
+
 local function reader( asked_name )
   local tab = { }
   tab.file = io.open(asked_name)
@@ -20,8 +22,24 @@ local function reader( asked_name )
               end
   return tab
 end
+
+
+function find_file_location( filename_or_uri )
+  local p = kpse.filelist[filename_or_uri]
+  if p then return p end
+  -- not in the search path or its subdirectories
+  local url_table = url.parse(filename_or_uri)
+  -- If we didn't find a file:// or something similar,
+  -- we don't try to find the file.
+  if not url_table.scheme then
+    return nil
+  end
+  local decoded_path = url.unescape(url_table.path)
+  return decoded_path
+end
+
 local function find_xxx_file( asked_name )
-  local file = kpse.find_file(asked_name)
+  local file = find_file_location(asked_name)
   return file
 end
 local function return_asked_name( asked_name )

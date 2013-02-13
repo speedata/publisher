@@ -70,7 +70,7 @@ end
 
 local function datei_vorhanden(dataxml, ... )
   local dateiname=select(1,...)
-  if kpse.find_file(dateiname) then
+  if find_file_location(dateiname) then
     return true
   end
   return false

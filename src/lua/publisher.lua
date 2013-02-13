@@ -1469,7 +1469,7 @@ function imageinfo( filename,page,box )
     return images[new_name]
   end
 
-  if not kpse.filelist[filename] then
+  if not find_file_location(filename) then
     err("Image %q not found!",filename or "???")
     filename = "filenotfound.pdf"
     page = 1

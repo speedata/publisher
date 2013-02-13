@@ -1221,6 +1221,9 @@
     </seealso>
   </command>
   <command name="Image">
+    <description xml:lang="en">
+      <para>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg).</para>
+    </description>
     <description xml:lang="de">
       <para>Bindet eine externe Grafik ein. Erlaubte Grafikformate sind PDF (.pdf), PNG (.png) und JPEG (.jpg).</para>
     </description>
@@ -1229,41 +1232,84 @@
       <cmd name="PlaceObject" />
     </parentelements>
     <attribute name="width" type="numberorlength" optional="no">
+      <description xml:lang="en">
+        <para>Numer of grid cells that the image will use (horizontally).</para>
+      </description>
       <description xml:lang="de">
         <para>Die Breite in Rasterzellen, den das Bild im Raster belegt.</para>
       </description>
     </attribute>
     <attribute name="height" type="numberorlength" optional="yes">
+      <description xml:lang="en">
+        <para>Maximum height of the image in the grid.</para>
+      </description>
       <description xml:lang="de">
         <para>Die maximale Höhe, die das Bild im Raster belegt.</para>
       </description>
     </attribute>
     <attribute name="file" type="text" optional="no">
+      <description xml:lang="en">
+        <para>Filename of the image. Can be a file in the search path or a URI for absolute paths (e.g. <tt>file:///path/to/image.pdf</tt>).</para>
+      </description>
       <description xml:lang="de">
-        <para>Dateiname des Bildes.</para>
+        <para>Dateiname des Bildes. Kann entweder eine Datei im Suchpfad sein oder ein URI-Schema (z.B. <tt>file:///pfad/zum/bild.pdf</tt>).</para>
       </description>
     </attribute>
     <attribute name="page" type="number" optional="yes">
+      <description xml:lang="en">
+        <para>The page number from the PDF. Default is 1 (include the first page).</para>
+      </description>
       <description xml:lang="de">
         <para>Die Seitenzahl aus dem PDF. Voreinstellung ist 1.</para>
       </description>
     </attribute>
     <attribute name="naturalsize" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The PDF box that represents the visible area. Default is “cropbox”.</para>
+      </description>
       <description xml:lang="de">
         <para>Die PDF-Box, die den sichtbaren Bereich angibt. Voreinstellung ist »cropbox«.</para>
       </description>
     </attribute>
     <attribute name="maxsize" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The PDF box that represents the maximum width. Default is “cropbox”.</para>
+      </description>
       <description xml:lang="de">
         <para>Die PDF-Box, die die maximale Größe angibt. Voreinstellung ist »cropbox«.</para>
       </description>
     </attribute>
+    <remark xml:lang="en">
+      <para>The values of the attributes naturalsize and maxsize can be ‘artbox’, ‘bleedbox’, ‘cropbox’, ‘mediabox’ and ‘trimbox’. These two values are used to 
+      enlarge the image for the bleed. In the second example below the designated view port of the image is defined in the artbox, but the image has a larger
+      area (the cropbox) that is used for bleeding.</para>
+    </remark>
     <remark xml:lang="de">
       <para>Die Werte der Attribute natürliche-größe und maximale-größe können artbox, bleedbox, cropbox, mediabox und trimbox sein. Diese beiden Angaben werden dafür benutzt, um das eingebundene Bild
         für den Anschnitt zu vergrößern. Im zweiten Beispiel unten ist der gewünschte Bildausschnitt in der »artbox« definiert, die Grafik in der PDF-Datei hat aber noch eine Beschnittzugabe, deren
         Ausmaß hier in der »cropbox« beschrieben ist. Die im zweiten Beispiel angegebene Breite entspricht der Papierbreite, so dass das der Inhalt der »artbox« 21cm breit dargestellt wird, der
         Anschnitt um das Bild herum aber weiterhin existiert.</para>
     </remark>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="productdata">
+  <PlaceObject column="{ $column }">
+    <Image width="10" file="{ string(.) }"/>
+  </PlaceObject>
+</Record>
+]]></listing>
+      <para>Takes the file name of the image from the contents of the current element in the data file (here: productdata). Sample data XML:</para>
+      <listing><![CDATA[<productdata>image.pdf</productdata>]]></listing>
+    </example>
+    <example xml:lang="en">
+      <para>The following example reads a pdf file, extracts a page and make the given artbox (should be set in the pdf file) the width of 210mm.
+        If we have an area in the pdf that is larger than the artbox, it will be larger than the given size.</para>
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject column="0mm" row="0mm">
+    <Image width="210mm" file="catalog.pdf" page="132" naturalsize="artbox"/>
+  </PlaceObject>
+</Record>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Datensatz element="produktbild">
   <ObjektAusgeben spalte="{ $spalte }">
@@ -1278,10 +1324,10 @@
 </ObjektAusgeben>]]></listing>
     </example>
     <info xml:lang="de">
-      <para>Die Anzahl der Seiten in einer PDF-Datei kann mit der XPath-Funktion <tt>sd:anzahl-seiten(&lt;dateiname&gt;)</tt> ermittelt werden.</para>
+      <para>Die Anzahl der Seiten in einer PDF-Datei kann mit der XPath-Funktion <tt>sd:anzahl-seiten(&lt;dateiname oder URI&gt;)</tt> ermittelt werden.</para>
     </info>
     <info xml:lang="en">
-      <para>The number of pages in a PDF file can be determined with the XPath function <tt>sd:number-of-pages(&lt;filename&gt;).</tt></para>
+      <para>The number of pages in a PDF file can be determined with the XPath function <tt>sd:number-of-pages(&lt;filename or URI&gt;).</tt></para>
     </info>
     <seealso><cmd name="PlaceObject" /></seealso>
   </command>
