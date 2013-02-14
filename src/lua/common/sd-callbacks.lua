@@ -28,6 +28,7 @@ function find_file_location( filename_or_uri )
   if filename_or_uri == "" then return nil end
   local p = kpse.filelist[filename_or_uri]
   if p then return p end
+  if filename_or_uri == "pdftex.map" then return nil end
   -- not in the search path or its subdirectories
   local url_table = url.parse(filename_or_uri)
   -- If we didn't find a file:// or something similar,
@@ -36,7 +37,7 @@ function find_file_location( filename_or_uri )
     return nil
   end
   if url_table.scheme ~= "file" then
-    err("Locating file -- scheme %q not supported.",url_table.scheme or "(unable to parse scheme)")
+    err("Locating file -- scheme %q not supported. Requested file: %q",url_table.scheme or "(unable to parse scheme)",filename_or_uri or "(none)")
     return nil
   end
   local decoded_path = url.unescape(url_table.path)

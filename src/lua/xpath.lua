@@ -184,11 +184,10 @@ local colon      = P":"
 
 function textvalue( tab )
   if type(tab)=="table" then
-    tracetable("textvalue",tab)
-  end
-  if type(tab)=="table" then
-    if #tab ~= 1 then
-      err("Sequenz must only contain one item")
+    if #tab == 0 then
+      return ""
+    elseif #tab > 1 then
+      err("Sequence must not contain more than one item")
     end
     tab = tab[1]
   end
@@ -203,7 +202,7 @@ function textvalue( tab )
   end
   if type(tab)=="string" then return tab end
   if type(tab)=="number" then return tostring(tab) end
-  -- das erste Argument könnte eine Funktion sein (XPath-Funktion)
+  -- The first argument can be a function (XPath function)
   if type(tab[1])=="function" then
     table.insert(tab,2,dataxml)
     local ok,value = pcall(unpack(tab))

@@ -2,6 +2,7 @@
 require "pathname"
 require 'rake/clean'
 
+CLEAN.include("publisher.pdf","publisher.log","publisher.protocol","publisher.vars")
 CLOBBER.include("build/sourcedoc","src/go/sp/sp","src/go/sp/docgo", "src/go/sp/bin","src/go/sp/pkg")
 
 installdir = Pathname.new(__FILE__).join("..")
