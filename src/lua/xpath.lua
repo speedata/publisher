@@ -11,6 +11,7 @@ module(...,package.seeall)
 
 local C,P,R,S,V = lpeg.C,lpeg.P,lpeg.R,lpeg.S,lpeg.V
 local dataxml
+local namespaces
 
 local char =
   P("\009") +
@@ -338,17 +339,18 @@ local function _funcall( ... )
   rest = rest or name
   if prefix then
     -- a special publisher xpath function
-    local ns = publisher.namespaces_layout[prefix]
+    local ns = namespaces[prefix]
+    local lang
     if not ns then
       err("Cannot resolve namespace for prefix %q in function %q\nPlease use urn:speedata:2009/publisher/functions/en (or .../de)",prefix or "?",name or "?")
-      exit()
+      lang="en"
     else
-      local lang = string.gsub(ns,"urn:speedata:2009/publisher/functions/","")
+      lang = string.gsub(ns,"urn:speedata:2009/publisher/functions/","")
       if not publisher.sd_xpath_funktionen[lang] then
         err("Language %q unknown!",lang)
       end
-      fun = publisher.sd_xpath_funktionen[lang][rest:gsub("-","_")]
     end
+    fun = publisher.sd_xpath_funktionen[lang][rest:gsub("-","_")]
   else
     -- regular XPath function
     name = name:gsub("-","_")
@@ -432,7 +434,7 @@ local function _andexpr( ... )
 end
 
 
-function parse( data_xml, str )
+function parse( data_xml, str, ns )
 
   if str==nil then return nil end
 
@@ -442,7 +444,8 @@ function parse( data_xml, str )
     return publisher.variablen[cap]
   end
 
-  dataxml = data_xml
+  dataxml    = data_xml
+  namespaces = ns
   local space = S("\010\013\032")^1
   local xpath = P{
     "xpath",

@@ -11,7 +11,7 @@
 file_start("publisher.lua")
 
 barcodes = do_luafile("barcodes.lua")
-
+local luxor = do_luafile("luxor.lua")
 local commands     = require("publisher.commands")
 local seite        = require("publisher.page")
 local translations = require("translations")
@@ -349,7 +349,7 @@ function dothings()
 
   --- The default page type has 1cm margin
   local onecm=tex.sp("1cm")
-  masterpages[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", contents = function(_seite) _seite.raster:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Seite" }
+  masterpages[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", contents = function(_seite) _seite.raster:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Seite",ns={} }
 
   --- Both the data and the layout instructions are written in XML.
   local layoutxml = load_xml(arg[2],"layout instructions")
@@ -360,10 +360,10 @@ function dothings()
   -- We allow the use of a dummy xml file for testing purpose
   local dataxml
   if arg[3] == "-dummy" then
-    dataxml = xmlparser.parse_xml("<data />")
+    dataxml = luxor.parse_xml("<data />")
   elseif arg[3] == "-" then
     log("Reading from stdin")
-    dataxml = xmlparser.parse_xml(io.stdin:read("*a"))
+    dataxml = luxor.parse_xml(io.stdin:read("*a"))
   else
     dataxml = load_xml(arg[3],"data file")
   end
@@ -375,10 +375,7 @@ function dothings()
   end
 
   --- Used in `xpath.lua` to find out which language the function is in.
-  namespaces_layout = layoutxml["__namespace"]
-  local nsprefix = string.match(layoutxml[".__name"],"^(.*):") or ""
-  -- the namespace of the root element (Layout)
-  local ns = namespaces_layout[nsprefix]
+  local ns = layoutxml[".__namespace"]
 
   --- The currently active layout language. One of `de` or `en`.
   current_layoutlanguage = string.gsub(ns,"urn:speedata.de:2009/publisher/","")
@@ -485,7 +482,7 @@ function load_xml(filename,filetype)
     os.exit(-1)
   end
   log("Loading %s %q",filetype or "file",path)
-  return xmlparser.parse_xml_file(path)
+  return luxor.parse_xml_file(path)
 end
 
 --- Place an object at a position given in scaled points (_x_ and _y_). `allocate` is ignored at at the moment.
@@ -593,7 +590,7 @@ function detect_pagetype()
   local ret = nil
   for i=#masterpages,1,-1 do
     local seitentyp = masterpages[i]
-    if xpath.parse(nil,seitentyp.ist_seitentyp) == true then
+    if xpath.parse(nil,seitentyp.ist_seitentyp,seitentyp.ns) == true then
       log("Page of type %q created",seitentyp.name or "<detect_pagetype>")
       ret = seitentyp.res
       return ret
@@ -843,6 +840,7 @@ end
 --- `string`, `number`, `length` and `boolean`.
 --- `default` gives something that is to be returned if no attribute with this name is present.
 function read_attribute( layoutxml,dataxml,attname_english,typ,default,context)
+  local namespaces = layoutxml[".__ns"]
   local attname = translate_attribute(attname_english)
 
   if not layoutxml[attname] then
@@ -852,15 +850,15 @@ function read_attribute( layoutxml,dataxml,attname_english,typ,default,context)
   local val,num,ret
   local xpathstring = string.match(layoutxml[attname],"{(.-)}")
   if xpathstring then
-    val = xpath.textvalue(xpath.parse(dataxml,xpathstring))
+    val = xpath.textvalue(xpath.parse(dataxml,xpathstring,namespaces))
   else
     val = layoutxml[attname]
   end
 
   if typ=="xpath" then
-    return xpath.textvalue(xpath.parse(dataxml,val))
+    return xpath.textvalue(xpath.parse(dataxml,val,namespaces))
   elseif typ=="xpathraw" then
-    return xpath.parse(dataxml,val)
+    return xpath.parse(dataxml,val,namespaces)
   elseif typ=="rawstring" then
     return tostring(val)
   elseif typ=="string" then

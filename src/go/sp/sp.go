@@ -281,44 +281,25 @@ func extradir(arg string) {
 // if we should run sdluatex (with libxml2 parser) or simple
 // luatex
 func getExecutablePath() string {
-	// 1 check the installdir/bin for sdluatex(.exe)
-	// 2 check PATH for sdluatex(.exe)
-	// 3 assume simple installation and take luatex(.exe)
-	// 4 check then installdir/bin for luatex(.exe)
-	// 5 check PATH for luatex(.exe)
-	// 6 panic!
-	executable_name := "sdluatex" + exe_suffix
-	var p string
+	// 1 check the installdir/bin for luatex(.exe)
+	// 2 check PATH for luatex(.exe)
+	// 3 panic!
 
-	// 1 check the installdir/bin for sdluatex(.exe)
-	p = fmt.Sprintf("%s/bin/%s", installdir, executable_name)
+	executable_name := "luatex" + exe_suffix
+
+	// 1 check installdir/bin for luatex(.exe)
+	p := fmt.Sprintf("%s/bin/%s", installdir, executable_name)
 	fi, _ := os.Stat(p)
 	if fi != nil {
 		return p
 	}
-
-	// 2 check PATH for sdluatex(.exe)
+	// 2 check PATH for luatex(.exe)
 	p, _ = exec.LookPath(executable_name)
 	if p != "" {
 		return p
 	}
 
-	// 3 assume simple installation and take luatex(.exe)
-	executable_name = "luatex" + exe_suffix
-
-	// 4 check then installdir/bin for luatex(.exe)
-	p = fmt.Sprintf("%s/bin/%s", installdir, executable_name)
-	fi, _ = os.Stat(p)
-	if fi != nil {
-		return p
-	}
-	// 5 check PATH for luatex(.exe)
-	p, _ = exec.LookPath(executable_name)
-	if p != "" {
-		return p
-	}
-
-	// 6 panic!
+	// 3 panic!
 	log.Fatal("Can't find sdluatex or luatex binary")
 	return ""
 }

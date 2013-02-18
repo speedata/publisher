@@ -265,16 +265,6 @@ end
 errorlog = io.open(string.format("%s.protocol",tex.jobname),"a")
 errorlog:write("---------------------------------------------\n")
 
---- The most reliable way to run the publisher is with the libxml2 enhanced LuaTeX.
---- But we also allow regular (texlive) LuaTeX with our own (lpeg) XML parser.
-if type(xmlreader) ~= "table" then
-  texio.write_nl("Using lpeg xml parser")
-  errorlog:write("Using lpeg xml parser\n")
-  xmlparser = require("xmlparser-lpeg")
-else
-  xmlparser = require("xmlparser")
-end
-
 starttime = os.gettimeofday()
 
 font.cache = 'no'

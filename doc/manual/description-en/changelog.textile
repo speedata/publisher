@@ -6,6 +6,7 @@ h1. Changelog
 
 h2. Version 1.6
 
+* New XML parser - no special binary needed anymore (1.5.35)
 * "Image":../commands-en/image.html accepts an URI (@file://...@) as an argument for @file@. Similar the "XPath expressions":xpath.html @sd:number-of-pages()@, @sd:imagewidth()@ and @sd:file-exists()@. (1.5.33)
 
 (Changelog until 1.5.32 is available in German only. See "../description-de/changelog.html":../description-de/changelog.html)

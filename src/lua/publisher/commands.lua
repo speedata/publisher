@@ -53,7 +53,7 @@ function commands.add_to_list( layoutxml,dataxml )
   local listname   = publisher.read_attribute(layoutxml,dataxml,"list","rawstring")
   local selection  = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
 
-  local value = xpath.parse(dataxml,selection)
+  local value = xpath.parse(dataxml,selection,layoutxml[".__ns"])
   if not publisher.variablen[listname] then
     publisher.variablen[listname] = {}
   end
@@ -72,7 +72,7 @@ end
 function commands.attribute( layoutxml,dataxml )
   local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
   local attname   = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
-  local attvalue  = xpath.textvalue(xpath.parse(dataxml,selection))
+  local attvalue  = xpath.textvalue(xpath.parse(dataxml,selection,layoutxml[".__ns"]))
   local ret = { [".__type"]="attribute", [attname] = publisher.xml_escape(attvalue) }
   return ret
 end
@@ -252,7 +252,7 @@ function commands.copy_of( layoutxml,dataxml )
   if layoutxml[1] and #layoutxml[1] > 0 then
     return table.concat(layoutxml)
   else
-    selection = xpath.parse(dataxml,selection)
+    selection = xpath.parse(dataxml,selection,layoutxml[".__ns"])
     return selection
   end
 end
@@ -705,7 +705,7 @@ function commands.message( layoutxml, dataxml )
   local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
 
   if selection then
-    contents = xpath.parse(dataxml,selection)
+    contents = xpath.parse(dataxml,selection,layoutxml[".__ns"])
   else
     local tab = publisher.dispatch(layoutxml,dataxml)
     contents = tab
@@ -840,7 +840,7 @@ function commands.pagetype(layoutxml,dataxml)
     end
   end
   -- assert(type(test())=="boolean")
-  publisher.masterpages[#publisher.masterpages + 1] = { ist_seitentyp = test, res = tmp_tab, name = pagetypename }
+  publisher.masterpages[#publisher.masterpages + 1] = { ist_seitentyp = test, res = tmp_tab, name = pagetypename,ns=layoutxml[".__ns"] }
 end
 
 --- Paragraph
@@ -1096,7 +1096,7 @@ function commands.process_record( layoutxml,dataxml )
   local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
   local limit     = publisher.read_attribute(layoutxml,dataxml,"limit","number")
 
-  local record = xpath.parse(dataxml,selection)
+  local record = xpath.parse(dataxml,selection,layoutxml[".__ns"])
   local layoutknoten
 
   if limit then
@@ -1134,7 +1134,6 @@ function commands.process_node(layoutxml,dataxml)
   local element_name
   local layoutnode
   local pos = 1
-
   for i=1,#dataxml_selection do
     element_name = dataxml_selection[i][".__name"]
     layoutnode = publisher.data_dispatcher[mode][element_name]
@@ -1258,7 +1257,7 @@ function commands.save_dataset( layoutxml,dataxml )
   assert(elementname)
 
   if selection then
-    tab = xpath.parse(dataxml,selection)
+    tab = xpath.parse(dataxml,selection,layoutxml[".__ns"])
   else
     tab = publisher.dispatch(layoutxml,dataxml)
   end
@@ -1345,7 +1344,7 @@ function commands.setvariable( layoutxml,dataxml )
   local contents
 
   if selection then
-    contents = xpath.parse(dataxml,selection)
+    contents = xpath.parse(dataxml,selection,layoutxml[".__ns"])
   else
     local tab = publisher.dispatch(layoutxml,dataxml)
     contents = tab
@@ -1405,7 +1404,7 @@ function commands.sort_sequence( layoutxml,dataxml )
   local removeduplicates = publisher.read_attribute(layoutxml,dataxml,"removeduplicates","string")
   local criterium        = publisher.read_attribute(layoutxml,dataxml,"criterium","rawstring")
 
-  local sequence = xpath.parse(dataxml,selection)
+  local sequence = xpath.parse(dataxml,selection,layoutxml[".__ns"])
   trace("SortSequence: Record = %q, criterium = %q",selection,criterium or "???")
   local sortkey = criterium
   local tmp = {}
@@ -1480,7 +1479,7 @@ function commands.switch( layoutxml,dataxml )
     elementname = publisher.translate_element(case_or_otherwise_element[".__name"])
     if type(case_or_otherwise_element)=="table" and elementname=="Case" and case_matched ~= true then
       local test = publisher.read_attribute(case_or_otherwise_element,dataxml,"test","rawstring")
-      if xpath.parse(dataxml,test) then
+      if xpath.parse(dataxml,test,layoutxml[".__ns"]) then
         case_matched = true
         ret = publisher.dispatch(case_or_otherwise_element,dataxml)
       end
@@ -1873,7 +1872,7 @@ function commands.value( layoutxml,dataxml )
 
   local tab
   if selection then
-    tab = xpath.parse(dataxml,selection)
+    tab = xpath.parse(dataxml,selection,layoutxml[".__ns"])
   else
     tab = table.concat(layoutxml)
   end
@@ -1887,7 +1886,7 @@ function commands.while_do( layoutxml,dataxml )
   local test = publisher.read_attribute(layoutxml,dataxml,"test","rawstring")
   assert(test)
 
-  while xpath.parse(dataxml,test) do
+  while xpath.parse(dataxml,test,layoutxml[".__ns"]) do
     publisher.dispatch(layoutxml,dataxml)
   end
 end
