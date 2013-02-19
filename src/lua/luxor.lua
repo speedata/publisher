@@ -1,5 +1,9 @@
--- Luxor, a non-validating namespace aware xml parser
--- Requires lpeg, slnunicode
+--  luxor.lua
+--  speedata publisher
+--
+--  Copyright 2013 Patrick Gundlach.
+--  See file COPYING in the root directory for license info.
+
 
 -- TODO:
 --  * xinclude
@@ -10,13 +14,32 @@ local P,S = lpeg.P, lpeg.S
 local string = unicode.utf8
 local current_element
 
-
 local function decode_xmlstring( txt )
-	txt = string.gsub(txt,"&#(%d+);",string.char)
-	txt = string.gsub(txt,"&#x(%x+);",function(num) return string.char(tonumber(num,16)) end)
-	txt = string.gsub(txt,"&(.-);",{lt = "<",gt = ">", amp = "&", quot = '"', apos = "'"})
-	return txt
+	return string.gsub(txt,"&(.-);",function (arg)
+		if arg == "lt" then
+			return "<"
+		elseif arg == "gt" then
+			return ">"
+		elseif arg == "amp" then
+			return "&"
+		elseif arg == "quot" then
+			return '"'
+		elseif arg == "apos" then
+			return "'"
+		elseif string.find(arg,"^#x") then
+			return string.char(tonumber(string.sub(arg,3,-1),16))
+		elseif string.find(arg,"^#") then
+			return string.char(string.sub(arg,2,-1))
+		end
+	end)
 end
+
+-- local function decode_xmlstring( txt )
+-- 	txt = string.gsub(txt,"&#(%d+);",string.char)
+-- 	txt = string.gsub(txt,"&#x(%x+);",function(num) return string.char(tonumber(num,16)) end)
+-- 	txt = string.gsub(txt,"&(.-);",{lt = "<",gt = ">", amp = "&", quot = '"', apos = "'"})
+-- 	return txt
+-- end
 
 local function _att_value( ... )
 	return decode_xmlstring(select(1,...))
@@ -52,19 +75,18 @@ local function read_attributes(txt,pos,namespaces)
 	current_element = setmetatable({[".__ns"] = {}},mt)
 	local ns,prefix
 	ns = current_element[".__ns"]
-	for k,v in pairs(namespaces) do
-		ns[k] = v
+	for key,value in next,namespaces,nil do
+		ns[key] = value
 	end
 	pos = lpeg.match(attributes,txt,pos)
-	for k,v in pairs(current_element) do
-		if string.match(k,"^xmlns$") then
-			ns[".__default"] = v
-			current_element[k] = nil
-		end
-		prefix = string.match(k,"^xmlns:(.*)")
-		if prefix then
-			ns[prefix] = v
-			current_element[k] = nil
+	for key,value in next,current_element,nil do
+		if key == "xmlns" then
+			ns[".__default"] = value
+			current_element[key] = nil
+		elseif string.match(key,"^xmlns:(.*)$") then
+			prefix = string.match(key,"^xmlns:(.*)")
+			ns[prefix] = value
+			current_element[key] = nil
 		end
 	end
 	current_element[".__type"]="element"
