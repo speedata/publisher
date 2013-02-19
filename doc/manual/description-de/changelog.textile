@@ -6,6 +6,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* File uri hat nun @file:///c:/foo/bar.baz@ als Format (drei Schrägstriche am Anfang) (siehe http://en.wikipedia.org/wiki/File_URI_scheme#Windows_2)
 * Neuer XML-Parser. Benötigt kein spezielles Binary (1.5.35)
 * "Bild":../commands-de/image.html kann auch ein URI (@file://...@) als Argument für den Dateinamen erhalten. Ebenso die "XPath-Ausdrücke":xpath.html @sd:anzahl-seiten()@, @sd:bildbreite()@ und @sd:datei-vorhanden()@. (1.5.33)
 * Wildcard (@*@) als "XPath-Ausdruck":xpath.html (1.5.32)

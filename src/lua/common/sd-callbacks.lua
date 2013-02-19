@@ -41,6 +41,11 @@ function find_file_location( filename_or_uri )
     return nil
   end
   local decoded_path = url.unescape(url_table.path)
+  -- remove first slash if on windows (/c:/foo/bar.png -> c:/foo/bar.png)
+  local _,_, windows_path = string.find(decoded_path,"^/(.:.*)$")
+  if windows_path then
+    decoded_path = windows_path
+  end
   x = lfs.attributes(decoded_path)
   if not lfs.attributes(decoded_path) then
     return nil
