@@ -89,3 +89,11 @@ task :ghpages => [:doc] do
 	cp_r "#{builddir}/manual","webpage"
 end
 
+# For now: only a small test
+desc "Test source code"
+task :test do
+	ENV["LUA_PATH"] = "#{srcdir}/lua/?.lua;#{installdir}/lib/?.lua;#{installdir}/test/?.lua"
+	ENV["PUBLISHER_BASE_PATH"] = installdir.to_s
+	inifile = srcdir.join("sdini.lua")
+	sh "texlua --lua=#{inifile} #{installdir}/bin/luatest tc_xpath.lua"
+end

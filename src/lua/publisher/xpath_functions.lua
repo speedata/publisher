@@ -48,7 +48,7 @@ local function last( dataxml )
   return count
 end
 
-function normalize_space(dataxml, str )
+local function normalize_space(dataxml, str )
   if type(str) == "string" then
     return str:gsub("^%s*(.-)%s*$","%1"):gsub("%s+"," ")
   end
