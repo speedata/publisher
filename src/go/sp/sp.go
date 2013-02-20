@@ -277,29 +277,49 @@ func extradir(arg string) {
 	extra_dir = append(extra_dir, arg)
 }
 
-// We don't know where the executable is and we don't know
-// if we should run sdluatex (with libxml2 parser) or simple
-// luatex
+/// We don't know where the executable is. On systems where we have
+/// LuaTeX, we don't want to interfere with the binary so we
+/// install a binary called sdluatex (linux package). Therefore
+/// we check for `sdluatex` and `luatex`, of the former is not found.
 func getExecutablePath() string {
-	// 1 check the installdir/bin for luatex(.exe)
-	// 2 check PATH for luatex(.exe)
-	// 3 panic!
+	// 1 check the installdir/bin for sdluatex(.exe)
+	// 2 check PATH for sdluatex(.exe)
+	// 3 assume simple installation and take luatex(.exe)
+	// 4 check then installdir/bin for luatex(.exe)
+	// 5 check PATH for luatex(.exe)
+	// 6 panic!
+	executable_name := "sdluatex" + exe_suffix
+	var p string
 
-	executable_name := "luatex" + exe_suffix
-
-	// 1 check installdir/bin for luatex(.exe)
-	p := fmt.Sprintf("%s/bin/%s", installdir, executable_name)
+	// 1 check the installdir/bin for sdluatex(.exe)
+	p = fmt.Sprintf("%s/bin/%s", installdir, executable_name)
 	fi, _ := os.Stat(p)
 	if fi != nil {
 		return p
 	}
-	// 2 check PATH for luatex(.exe)
+
+	// 2 check PATH for sdluatex(.exe)
 	p, _ = exec.LookPath(executable_name)
 	if p != "" {
 		return p
 	}
 
-	// 3 panic!
+	// 3 assume simple installation and take luatex(.exe)
+	executable_name = "luatex" + exe_suffix
+
+	// 4 check then installdir/bin for luatex(.exe)
+	p = fmt.Sprintf("%s/bin/%s", installdir, executable_name)
+	fi, _ = os.Stat(p)
+	if fi != nil {
+		return p
+	}
+	// 5 check PATH for luatex(.exe)
+	p, _ = exec.LookPath(executable_name)
+	if p != "" {
+		return p
+	}
+
+	// 6 panic!
 	log.Fatal("Can't find sdluatex or luatex binary")
 	return ""
 }
@@ -473,7 +493,8 @@ func main() {
 		if getOption("xml") == "true" {
 			xml = "xml"
 		}
-		cmdline := fmt.Sprintf(`"%s/bin/sdluatex" --luaonly %s/lua/sdscripts.lua %s list-fonts %s`, installdir, srcdir, inifile, xml)
+
+		cmdline := fmt.Sprintf(`"%s" --luaonly %s/lua/sdscripts.lua %s list-fonts %s`, getExecutablePath(), srcdir, inifile, xml)
 		run(cmdline)
 	case "watch":
 		watch_dir := getOptionSection("hotfolder", "hotfolder")
