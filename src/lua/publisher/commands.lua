@@ -1700,6 +1700,12 @@ function commands.textblock( layoutxml,dataxml )
   local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","rawstring")
   local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
 
+  if not width then
+    err("Can't evaluate width in textblock")
+    rule = publisher.add_rule(nil,"head",{height=100*2^16,width=100*2^16})
+    local v = node.vpack(rule)
+    return v
+  end
 
   columns = columns or 1
   if not columndistance then columndistance = "3mm" end

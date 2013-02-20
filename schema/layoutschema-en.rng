@@ -1088,28 +1088,7 @@
       <oneOrMore>
         <interleave>
           <optional>
-            <element name="Tablehead">
-              <a:documentation docid="table/head">Table head that gets repeated on every page.</a:documentation>
-              <ref name="a_xmlid"/>
-              <optional>
-                <attribute name="page">
-                  <a:documentation docid="table/head/page">The page selector for the table head.</a:documentation>
-                  <choice>
-                    <value>all</value>
-                    <a:documentation docid="table/head/page/all">This table head appears on all pages (default)</a:documentation>
-                    <value>first</value>
-                    <a:documentation docid="table/head/page/first">This table head appears on the first page</a:documentation>
-                  </choice>
-                </attribute>
-              </optional>
-              <oneOrMore>
-                <interleave>
-                  <optional><ref name="e_Tablerule"/></optional>
-                  <optional><ref name="e_CopyOf"/></optional>
-                  <optional><ref name="e_Tr"/></optional>
-                </interleave>
-              </oneOrMore>
-            </element>
+            <ref name="e_Tablehead"/>
           </optional>
           <optional>
             <element name="Tablefoot">
@@ -1142,6 +1121,31 @@
           <optional><ref name="e_Message"/></optional>
           <optional><ref name="e_Switch"/></optional>
           <optional><ref name="e_ForAll"/></optional>
+        </interleave>
+      </oneOrMore>
+    </element>
+  </define>
+
+  <define name="e_Tablehead">
+    <element name="Tablehead">
+      <a:documentation docid="table/head">Table head that gets repeated on every page.</a:documentation>
+      <ref name="a_xmlid"/>
+      <optional>
+        <attribute name="page">
+          <a:documentation docid="table/head/page">The page selector for the table head.</a:documentation>
+          <choice>
+            <value>all</value>
+            <a:documentation docid="table/head/page/all">This table head appears on all pages (default)</a:documentation>
+            <value>first</value>
+            <a:documentation docid="table/head/page/first">This table head appears on the first page</a:documentation>
+          </choice>
+        </attribute>
+      </optional>
+      <oneOrMore>
+        <interleave>
+          <optional><ref name="e_Tablerule"/></optional>
+          <optional><ref name="e_CopyOf"/></optional>
+          <optional><ref name="e_Tr"/></optional>
         </interleave>
       </oneOrMore>
     </element>
@@ -1546,6 +1550,7 @@
             <optional><ref name="e_Columns"/></optional>
             <optional><ref name="e_Tablerule"/></optional>
             <optional><ref name="e_SortSequence"/></optional>
+            <optional><ref name="e_Tablehead"/></optional>
           </interleave>
         </oneOrMore>
       </choice>
