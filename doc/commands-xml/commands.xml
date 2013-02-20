@@ -2536,8 +2536,11 @@
     <seealso></seealso>
   </command>
   <command name="Table">
+    <description xml:lang="en">
+      <para>Create a table that is similar to the HTML table model.</para>
+    </description>
     <description xml:lang="de">
-      <para>Erzeugt eine Tabelle, die in etwa dem HTML Tabellenmodell entspricht</para>
+      <para>Erzeugt eine Tabelle, die in etwa dem HTML Tabellenmodell entspricht.</para>
     </description>
     <childelements>
       <cmd name="Columns" />
@@ -2549,45 +2552,143 @@
     <parentelements>
       <cmd name="PlaceObject" />
     </parentelements>
+    <attribute name="eval" type="xpath" optional="yes">
+      <description xml:lang="en">
+        <para>Evaluates the given XPath expression and discards its output.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wertet den angegebenen XPath-Ausdruck aus und ignoriert dessen Ausgabe.</para>
+      </description>
+    </attribute>
     <attribute name="stretch" type="maxno" optional="yes">
+      <description xml:lang="en">
+        <para>If the table contents is narrow and stretch has the value no, the table only uses the minimal width. If the table
+          contents is wider than the value width or stretch has the value max, the table's width is the size given in the width attribute.</para>
+      </description>
       <description xml:lang="de">
         <para>Wenn der Tabelleninhalt schmal ist und dehnen den Wert nein hat, dann nimmt die Tabelle nur den benötigten Platz ein. Wenn der Tabelleninhalt breit ist oder dehnen den Wert max hat, dann
           nimmt die Tabelle den Wert aus dem Attribut breite ein.</para>
       </description>
     </attribute>
     <attribute name="width" type="number" optional="yes">
+      <description xml:lang="en">
+        <para>The maximum width of the table (in grid cells).</para>
+      </description>
       <description xml:lang="de">
         <para>Der Bereich, den die Tabelle (maximal) im Raster belegt.</para>
       </description>
     </attribute>
     <attribute name="padding" type="length" optional="yes">
+      <description xml:lang="en">
+        <para>The distance between the table border and the table contents.</para>
+      </description>
       <description xml:lang="de">
         <para>Der Innenabstand innerhalb einer Tabellenzelle.</para>
       </description>
     </attribute>
     <attribute name="fontface" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>Name of the font family for the table. If not given, the font face ‘text’ is used.</para>
+      </description>
       <description xml:lang="de">
         <para>Name der Schriftfamilie, die benutzt werden soll. Wenn keine Schriftart angegeben ist, wird auf die Schriftart ›text‹ umgeschaltet.</para>
       </description>
     </attribute>
     <attribute name="columndistance" type="length" optional="yes">
+      <description xml:lang="en">
+        <para>Distance between two table columns.</para>
+      </description>
       <description xml:lang="de">
         <para>Der Abstand zwischen zwei Spalten.</para>
       </description>
     </attribute>
     <attribute name="textformat" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The name of the textformat to be applied to all texts. Default is ‘text’.</para>
+      </description>
       <description xml:lang="de">
-        <para>Das Textformat, das benutzt wird, wenn kein anderes angegeben wird. Voreinstellung ist ›text‹'</para>
+        <para>Das Textformat, das benutzt wird, wenn kein anderes angegeben wird. Voreinstellung ist ›text‹.</para>
       </description>
     </attribute>
     <attribute name="leading" type="length" optional="yes">
+      <description xml:lang="en">
+        <para>The distance between two rows.</para>
+      </description>
       <description xml:lang="de">
         <para>Der Abstand zwischen zwei Zeilen.</para>
       </description>
     </attribute>
+    <remark xml:lang="en">
+      <para>The table cells may contain Paragraphs, Images and other objects that are allowed in <cmd name="PlaceObject"/>.</para>
+    </remark>
     <remark xml:lang="de">
       <para>Die Tabellenzellen dürfen Absätze (Absatz), Bilder (Bild) und wiederum Tabellen enthalten.</para>
     </remark>
+    <example xml:lang="en">
+      <listing><![CDATA[<DefineColor name="gray" model="cmyk" c="20" m="20" y="20" k="0"/>
+<DefineColor name="white" model="cmyk" c="0" m="0" y="0" k="0"/>
+
+<Record element="data">
+  <PlaceObject column="1">
+    <Table width="14" stretch="max" padding="1pt">
+      <Tablehead>
+        <Tr backgroundcolor="gray">
+          <Td colspan="3"/>
+          <Td border-left="0.2pt" border-left-color="white" colspan="6" align="center">
+            <Paragraph><B><Value>Total</Value></B></Paragraph></Td>
+          <Td border-left="0.2pt" border-left-color="white"/>
+        </Tr>
+        <Tr backgroundcolor="gray">
+          <Td/>
+          <Td><Paragraph><B><Value>Clubs</Value></B></Paragraph></Td>
+          <Td><Paragraph><B><Value>P</Value></B></Paragraph></Td>
+          <Td border-left="0.2pt" border-left-color="white">
+            <Paragraph><B><Value>W</Value></B></Paragraph>
+          </Td>
+          <Td><Paragraph><B><Value>D</Value></B></Paragraph></Td>
+          <Td><Paragraph><B><Value>L</Value></B></Paragraph></Td>
+          <Td><Paragraph><B><Value>F</Value></B></Paragraph></Td>
+          <Td><Paragraph><B><Value>A</Value></B></Paragraph></Td>
+          <Td><Paragraph><B><Value>+/-</Value></B></Paragraph></Td>
+          <Td border-left="0.2pt" border-left-color="white">
+            <Paragraph><B><Value>Pts</Value></B></Paragraph>
+          </Td>
+        </Tr>
+      </Tablehead>
+      <ForAll select="entry">
+        <Tr>
+          <Td align="left"><Paragraph><Value select="@pos"/></Paragraph></Td>
+          <Td align="left"><Paragraph><Value select="@name"/></Paragraph></Td>
+          <Td align="center"><Paragraph><Value select="@p"/></Paragraph></Td>
+          <Td align="center" border-left="0.2pt" border-left-color="gray">
+            <Paragraph><Value select="@tw"/></Paragraph>
+          </Td>
+          <Td align="center"><Paragraph><Value select="@td"/></Paragraph></Td>
+          <Td align="center"><Paragraph><Value select="@tl"/></Paragraph></Td>
+          <Td align="center"><Paragraph><Value select="@ta"/></Paragraph></Td>
+          <Td align="center"><Paragraph><Value select="@tf"/></Paragraph></Td>
+          <Td align="center"><Paragraph><Value select="@tpm"/></Paragraph></Td>
+          <Td align="center" border-left="0.2pt" border-left-color="gray">
+            <Paragraph><Value select="@pts"/></Paragraph>
+          </Td>
+        </Tr>
+      </ForAll>
+    </Table>
+  </PlaceObject>
+</Record>
+]]></listing>
+      <para>Using the following data:</para>
+      <listing><![CDATA[<data>
+  <entry pos="1" name="Paris Saint-Germain FC" p="6"
+  	  tw="5" td="0" tl="1" tf="14" ta="3" tpm="11" pts="15" />
+  <entry pos="2" name="FC Porto" p="6"
+  	  tw="4" td="1" tl="1" tf="10" ta="4" tpm="6" pts="13" />
+  <entry pos="3" name="FC Dynamo Kyiv" p="6"
+  	  tw="1" td="2" tl="3" tf="6"  ta="10" tpm="-4" pts="5" />
+  <entry pos="4" name="GNK Dinamo Zagreb" p="6"
+  	  tw="0" td="1" tl="5" tf="1"  ta="14" tpm="-13" pts="1" />
+</data>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben spalte="1">
   <Tabelle breite="29" padding="1mm" zeilenabstand="0mm" spaltenabstand="0pt" dehnen="max">
@@ -2635,10 +2736,7 @@
 </ObjektAusgeben>]]></listing>
     </example>
     <seealso>
-      <cmd name="Tr" />
-      <cmd name="Td" />
-      <cmd name="Tablerule" />
-      <cmd name="PlaceObject" />
+      <cmd name="Tr" />,  <cmd name="Td" />, <cmd name="Tablerule" />, <cmd name="PlaceObject" />
     </seealso>
   </command>
   <command name="Tablefoot">

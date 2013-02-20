@@ -1507,6 +1507,7 @@ function commands.table( layoutxml,dataxml,optionen )
   local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",      "rawstring")
   local autostretch    = publisher.read_attribute(layoutxml,dataxml,"stretch",       "string")
   local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",    "rawstring")
+  local eval           = publisher.read_attribute(layoutxml,dataxml,"eval",          "xpath")
   -- FIXME: leading -> rowdistance or so
 
   padding        = tex.sp(padding        or "0pt")

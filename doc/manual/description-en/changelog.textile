@@ -6,7 +6,8 @@ h1. Changelog
 
 h2. Version 1.6
 
-* File uri now uses three slashes for file access: @file:///c:/foo/bar.baz@ (cf. http://en.wikipedia.org/wiki/File_URI_scheme#Windows_2)
+* Attribute @eval@ in "Table":../commands-en/table.html for XPath expression execution. (1.5.35)
+* File uri now uses three slashes for file access: @file:///c:/foo/bar.baz@ (cf. "File URI scheme":http://en.wikipedia.org/wiki/File_URI_scheme#Windows_2) (1.5.35)
 * New XML parser - no special binary needed anymore (1.5.35)
 * "Image":../commands-en/image.html accepts an URI (@file://...@) as an argument for @file@. Similar the "XPath expressions":xpath.html @sd:number-of-pages()@, @sd:imagewidth()@ and @sd:file-exists()@. (1.5.33)
 

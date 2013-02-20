@@ -161,6 +161,7 @@
      <attribute key="digits" en="digits" de="ziffern"/>
       <attribute key="element" en="element" de="element"/>
       <attribute key="elementname" en="elementname" de="elementname"/>
+     <attribute key="eval" en="eval" de="auswerten"/>
       <attribute key="file" en="file" de="datei"/>
       <attribute key="filename" en="filename" de="dateiname"/>
       <attribute key="fontface" en="fontface" de="schriftart"/>
@@ -1018,6 +1019,10 @@
          <de>Bei kurzen Inhalten könnte die Tabelle schmaler sein als die angegebene Breite. Dieses Attribut gibt an,
                 ob die Tabelle ggf. auf die angegebene Breite gedehnt wird.</de>
       </documentation>
+     <documentation docid="table/eval">
+       <en>Executes the given XPath expression, discarding the output.</en>
+       <de>Führt den angegebenen XPath-Ausdruck aus und ignoriert die Ausgabe.</de>
+     </documentation>
       <documentation docid="table/textformat">
          <en>Default textformat for all text in the table</en>
          <de>Textformat für die Tabelle, falls die Zellen kein eigenes angegeben haben</de>

@@ -1067,6 +1067,10 @@
         <a:documentation docid="table/textformat">Default textformat for all text in the table</a:documentation>
       </optional>
       <optional>
+        <attribute name="eval"/>
+        <a:documentation docid="table/eval">Executes the given XPath expression, discarding the output.</a:documentation>
+      </optional>
+      <optional>
         <attribute name="stretch">
           <a:documentation docid="table/stretch">Stretch the table to the given width if necessary. Tables could be narrower than the given width. This attribute determines what to do in this case.</a:documentation>
           <choice>
