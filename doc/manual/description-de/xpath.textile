@@ -34,7 +34,8 @@ Es gibt zwei Klassen von XPath Funktionen: standardkonforme und speedata Publish
 - sd:aktuelle-seite() := Gibt die Seitennummer zurück.
 - sd:aktuelle-zeile() := Gibt die aktuelle Zeile zurück.
 - sd:aktuelle-spalte() := Gibt die aktuelle Spalte zurück.
-- sd:alternierend(&lt;text>,&lt;text>,.. ) := Bei jedem Aufruf wird das nächste Argument zurück gegeben. Beispiel: @sd:alternierend("Weiß","Grau")@ könnte für die Hintergrundfarbe von Tabellen benutzt werden. Derzeit gibt es keine Möglichkeit, den Wert wieder am Anfang starten zu lassen.
+- sd:alternierend(&lt;typ>, &lt;text>,&lt;text>,.. ) := Bei jedem Aufruf wird das nächste Argument zurück gegeben. Wert des Typs ist beliebig, muss aber eindeutig sein. Beispiel: @sd:alternierend("tbl", "Weiß","Grau")@ könnte für die Hintergrundfarbe von Tabellen benutzt werden. 
+- sd:alternierend-zurücksetzen(&lt;typ>) := Setzt den Zustand für @sd:alternierend()@ für den angegebenen Typ zurück.
 - sd:anzahl-datensätze(&lt;Sequenz>) := Gibt die Anzahl der Datensätze der Sequenz zurück.
 - sd:anzahl-seiten(&lt;Dateiname oder URI-Schema>) := Ermittelt die Anzahl der Seiten der angegebenen (PDF-)Datei.
 - sd:anzahl-spalten() := Gibt die Anzahl der Spalten im aktuellen Raster.

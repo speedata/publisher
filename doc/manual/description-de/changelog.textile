@@ -6,6 +6,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* "XPath-Funktion":xpath.html @sd:alternierend()@ geändert und @sd:alternierend-zurücksetzen()@ eingeführt. (1.5.35)
 * Attribut @auswerten@ in "Tabelle":../commands-de/table.html um XPath Ausdrücke auszuführen. (1.5.35)
 * File uri hat nun @file:///c:/foo/bar.baz@ als Format (drei Schrägstriche am Anfang) (siehe "File URI scheme":http://en.wikipedia.org/wiki/File_URI_scheme#Windows_2) (1.5.35)
 * Neuer XML-Parser. Benötigt kein spezielles Binary (1.5.35)

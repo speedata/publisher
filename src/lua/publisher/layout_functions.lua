@@ -26,13 +26,19 @@ local function current_column(dataxml,...)
   return publisher.current_grid:current_column(select(1,...))
 end
 
-local function alternierend(dataxml, ... )
-  if not publisher.alternierend then
-    publisher.alternierend = 1
+local function alternating(dataxml, ... )
+  local alt_type = select(1,...)
+  if not publisher.alternating[alt_type] then
+    publisher.alternating[alt_type] = 1
   else
-    publisher.alternierend = math.fmod( publisher.alternierend, select("#",...) ) + 1
+    publisher.alternating[alt_type] = math.fmod( publisher.alternating[alt_type], select("#",...) - 1 ) + 1
   end
-  return select(publisher.alternierend,...)
+  return select(publisher.alternating[alt_type] + 1 ,...)
+end
+
+local function reset_alternating( dataxml,... )
+  local alt_type = select(1,...)
+  publisher.alternating[alt_type] = 0
 end
 
 local function anzahl_datensaetze(dataxml,d)
@@ -120,7 +126,8 @@ return {
     aktuelle_seite     = aktuelle_seite,
     aktuelle_zeile     = current_row,
     aktuelle_spalte    = current_column,
-    alternierend       = alternierend,
+    alternierend       = alternating,
+    ["alternierend_zurücksetzen"] = reset_alternating,
     anzahl_datensaetze = anzahl_datensaetze,
     ["anzahl_datensätze"] = anzahl_datensaetze,
     anzahl_seiten      = anzahl_seiten,
@@ -136,7 +143,7 @@ return {
     ungerade           = ungerade,
   },
   en = {
-    alternating        = alternierend,
+    alternating        = alternating,
     current_page       = aktuelle_seite,
     current_row        = current_row,
     current_column     = current_column,
@@ -151,6 +158,7 @@ return {
     number_of_pages    = anzahl_seiten,
     number_of_rows     = anzahl_zeilen,
     odd                = ungerade,
+    reset_alternating  = reset_alternating,
     variable           = variable,
   }
 }

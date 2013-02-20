@@ -70,6 +70,8 @@ hlist_node     = node.id("hlist")
 
 pdf_literal_node = node.subtype("pdf_literal")
 
+publisher.alternating = {}
+
 default_areaname = "__seite"
 
 -- the language of the layout instructions ('en' or 'de')
