@@ -436,6 +436,7 @@ func main() {
 	op.On("--xml", "Output as (pseudo-)XML (for list-fonts)", options)
 
 	op.Command("list-fonts", "List installed fonts (use together with --xml for copy/paste)")
+	op.Command("clean", "Remove publisher generated files")
 	op.Command("doc", "Open documentation")
 	op.Command("watch", "Start watchdog / hotfolder")
 	op.Command("run", "Start publishing (default)")
@@ -484,6 +485,22 @@ func main() {
 		// open PDF if necessary
 		if getOption("autoopen") == "true" {
 			openFile(getOption("jobname") + ".pdf")
+		}
+	case "clean":
+		jobname := getOption("jobname")
+		files, err := filepath.Glob(jobname + "*")
+		if err != nil {
+			log.Fatal(err)
+		}
+		for _, v := range files {
+			switch filepath.Ext(v) {
+			case ".vars", ".log", ".protocol", ".dataxml":
+				log.Printf("Removing %s", v)
+				err = os.Remove(v)
+				if err != nil {
+					log.Println(err)
+				}
+			}
 		}
 	case "doc":
 		openFile(path_to_documentation)

@@ -32,6 +32,7 @@ Usage: [parameter] command
 Commands
       list-fonts             List installed fonts (use together with --xml
                              for copy/paste)
+      clean                  Remove publisher generated files
       doc                    Open documentation
       watch                  Start watchdog / hotfolder
       run                    Start publishing (default)
@@ -59,6 +60,7 @@ h2. Description of the command line parameters
 h2. Commands
 
 - @list-fonts@ := Lists all fonts that are found in the search path. Together with @--xml@ the output format can re used in the layout XML.
+- @clean@ := Remove temporary files from the publisher run. Keeps the PDF file.
 - @doc@ := Opens the HTML documentation.
 - @run@ := Starts the pseedata publisher (this is the default command).
 - @watch@ := Runs in internal hotfolder mode.

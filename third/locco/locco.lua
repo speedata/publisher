@@ -1,4 +1,4 @@
-#!/usr/bin/env sdtexlua
+#!/usr/bin/env texlua
 -- This version is modified from the original. It takes the output path as 
 -- the first argument 1. All other arguments are the source files to translate
 

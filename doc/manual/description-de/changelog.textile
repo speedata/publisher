@@ -6,6 +6,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* Neuer Befehl: @sp clean@ zum „Aufräumen“. Siehe "Kommandozeile":commandline.html (1.5.35)
 * "XPath-Funktion":xpath.html @sd:alternierend()@ geändert und @sd:alternierend-zurücksetzen()@ eingeführt. (1.5.35)
 * Attribut @auswerten@ in "Tabelle":../commands-de/table.html um XPath Ausdrücke auszuführen. (1.5.35)
 * File uri hat nun @file:///c:/foo/bar.baz@ als Format (drei Schrägstriche am Anfang) (siehe "File URI scheme":http://en.wikipedia.org/wiki/File_URI_scheme#Windows_2) (1.5.35)
@@ -36,7 +37,7 @@ h2. Version 1.6
 * Anzahl der Läufe kann nur noch über Kommandozeile bzw. Konfigurationsdatei angegeben werden.
 * @opencommand@ Konfigurierbar (Programm zum Öffnen der Dokumentation / PDF-Dateien)
 * Konfigurationsdatei in @/etc/speedata@ und im Homeverzeichnis @~/.publisher.cfg@ werden eingelesen.
-* Default Textformat bei "Tabellen"../commands-de/table.html.
+* Default Textformat bei "Tabellen":../commands-de/table.html.
 * @zeilen@-Angabe bei Textformaten (inkl hängender Einzug). Siehe "DefiniereTextformat":../commands-de/definetextformat.html
 * @sprun@ durch @sp@ ersetzt. Siehe "Kommandozeile":commandline.html
 * @hreferenz@ bei "ObjektAusgeben":../commands-de/placeobject.html.
@@ -120,7 +121,7 @@ h2. Version 1.0 (2010-03-30)
 
 * GruppeAusgeben ist in "ObjektAusgeben":../commands-de/placeobject.html aufgegangen.
 * (Erneut): Rahmen und Hintergrund bei "ObjektAusgeben":../commands-de/placeobject.
-* "Zuweisung"../commands-de/setvariable.html: Variablenname nun "XPath-Ausdruck":xpath.html.
+* "Zuweisung":../commands-de/setvariable.html: Variablenname nun "XPath-Ausdruck":xpath.html.
 * Bild in Tabelle
 
 "Änderungen vor Version 1.0":changelogpre1.html

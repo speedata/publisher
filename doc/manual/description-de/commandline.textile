@@ -31,6 +31,7 @@ Usage: sp [parameter] command
 Commands
       list-fonts             List installed fonts (use together with --xml
                              for copy/paste)
+      clean                  Remove publisher generated files
       doc                    Open documentation
       watch                  Start watchdog / hotfolder
       run                    Start publishing (default)
@@ -58,6 +59,7 @@ h2. Erklärung der Kommandozeilenparameter
 h2. Befehle
 
 - @list-fonts@ := Listet alle Schriftdateien auf, die in den Publisher-Verzeichnissen gefunden werden. Zusammen mit @--xml@ erlaubt dieses Kommando die Ausgabe per Copy&Paste in das Layoutregelwerk zu übernehmen.
+- @clean@ := Entfernt temporäre Dateien aus dem Publisher-Lauf. Behält die PDF Datei.
 - @doc@ := Öffnet die Onlinehilfe.
 - @run@ := Startet den Publisher Lauf.
 - @watch@ := Startet den internen Hotfolder

@@ -657,7 +657,7 @@ end
 function commands.load_dataset( layoutxml,dataxml )
   local name = publisher.read_attribute(layoutxml,dataxml,"name", "rawstring")
   assert(name)
-  local filename = "datensatzdatei." .. name
+  local filename = tex.jobname .. "-" .. name .. ".dataxml"
 
   if fileutils.test("x",filename)==false then
     -- at the first run, the file does not exist. That's ok
@@ -1293,7 +1293,8 @@ function commands.save_dataset( layoutxml,dataxml )
   ---      },
   ---    },
   tmp[".__name"] = elementname
-  local datei = io.open(string.format("datensatzdatei.%s",filename),"w")
+  local full_filename = tex.jobname .. "-" .. filename .. ".dataxml"
+  local datei = io.open(full_filename,"w")
   towrite = publisher.xml_to_string(tmp)
   datei:write(towrite)
   datei:close()
