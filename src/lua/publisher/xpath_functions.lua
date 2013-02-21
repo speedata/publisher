@@ -13,6 +13,10 @@ local function position()
   return publisher.variablen.__position
 end
 
+local function ceiling( dataxml,arg )
+  return math.ceil(arg)
+end
+
 local function concat(dataxml, ... )
   local ret = ""
   for i=1,select("#",...) do
@@ -31,6 +35,10 @@ local function empty( dataxml,arg )
     return false
   end
   return true
+end
+
+local function floor(dataxml, arg)
+  return math.floor(arg)
 end
 
 local function last( dataxml )
@@ -98,9 +106,11 @@ return {
   ["true"]   =  _true,
   ["false"]  =  _false,
   ["string"] = _string,
+  ceiling    = ceiling,
   concat     = concat,
   count      = count,
   empty      = empty,
+  floor      = floor,
   last       = last,
   node       = node,
   normalize_space = normalize_space,

@@ -51,8 +51,10 @@ Es gibt zwei Klassen von XPath Funktionen: standardkonforme und speedata Publish
 
 - concat( &lt;Wert>,&lt;Wert>, ... ) := Erzeugt einen neuen Text aus der Verkettung der einzelnen Werte.
 - count() := Zählt alle Kindelemente mit dem angegebenen Namen. Beispiel: @count(eintrag)@ zählt, wie viele Kindelemente mit den Namen @eintrag@ existieren.
+- ceiling() := Gibt den aufgerundeten Wert einer Zahl zurück.
 - empty(&lt;Attribut>) := Prüft, ob ein Attribut (nicht) vorhanden ist.
 - false() := Gibt „Falsch“ zurück.
+- floor() := Gibt den abgerundeten Wert einer Zahl zurück.
 - last() := Gibt die Anzahl der Datensätze der gleichnamigen Geschwister-Elemente zurück. *Achtung: noch nicht XPath-konform.*
 - position() := Ermittelt die Position des aktuellen Datensatzes.
 - string(&lt;Sequenz>) := Gibt den Textwert der Sequenz zurück, d.h. den Inhalt der Elemente.

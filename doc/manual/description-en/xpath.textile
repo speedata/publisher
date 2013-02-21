@@ -68,8 +68,10 @@ There are two classes of XPath functions: standard XPath functions and speedata 
 
 - concat( &lt;value>,&lt;value>, ... ) := Create a new text value by concatinating the 
 - count(&lt;text>) := Counts all child elements with the given name. Example: @count(article)@ counts, how many child elements with the name @article@ exists.
+- ceiling() :=  Returns the smallest number with no fractional part that is not less than the value of the given argument.
 - empty(&lt;attribute>) := Checks, if an attribute is (not) available.
 - false() := Return __false__.
+- floor() := Returns the largest number with no fractional part that is not greater than the value of the argument.
 - last() := Return the number of elements of the same named sibling elements. *Not yet XPath conform.*
 - position() := Return the position of the current node.
 - string(&lt;sequence>) := Return the text value of the sequence e.g. the contents of the elemements.
