@@ -13,6 +13,64 @@ local P,S = lpeg.P, lpeg.S
 
 local string = unicode.utf8
 local current_element
+local decoder
+
+local html5entities = { apos = "'",
+	["Aacute"] = "Á", ["aacute"] = "á",  ["acirc"] = "â",   ["Acirc"] = "Â",   ["acute"] = "´",  ["AElig"] = "Æ",
+	["aelig"] = "æ",  ["agrave"] = "à",  ["Agrave"] = "À",  ["alefsym"] = "ℵ", ["Alpha"] = "Α",  ["alpha"] = "α",
+	["amp"] = "&",    ["and"] = "∧",     ["ang"] = "∠",     ["Aring"] = "Å",   ["aring"] = "å",  ["asymp"] = "≈",
+	["atilde"] = "ã", ["Atilde"] = "Ã",  ["auml"] = "ä",    ["Auml"] = "Ä",    ["bdquo"] = "„",  ["beta"] = "β",
+	["Beta"] = "Β",   ["brvbar"] = "¦",  ["bull"] = "•",    ["cap"] = "∩",     ["Ccedil"] = "Ç", ["ccedil"] = "ç",
+	["cedil"] = "¸",  ["cent"] = "¢",    ["Chi"] = "Χ",     ["chi"] = "χ",     ["circ"] = "ˆ",   ["clubs"] = "♣",
+	["cong"] = "≅",   ["copy"] = "©",    ["crarr"] = "↵",  ["cup"] = "∪",
+	["curren"] = "¤", ["dagger"] = "†",  ["Dagger"] = "‡",  ["darr"] = "↓",    ["dArr"] = "⇓",   ["deg"] = "°",
+	["delta"] = "δ",  ["Delta"] = "Δ",   ["diams"] = "♦",  ["divide"] = "÷",  ["Eacute"] = "É",  ["eacute"] = "é",
+	["ecirc"] = "ê",  ["Ecirc"] = "Ê",   ["egrave"] = "è",  ["Egrave"] = "È",  ["empty"] = "∅",   ["emsp"] = " ",
+	["ensp"] = " ",   ["epsilon"] = "ε", ["Epsilon"] = "Ε", ["equiv"] = "≡",   ["eta"] = "η",     ["Eta"] = "Η",
+	["ETH"] = "Ð",    ["eth"] = "ð",     ["Euml"] = "Ë",    ["euml"] = "ë",    ["euro"] = "€",    ["exist"] = "∃",
+	["fnof"] = "ƒ",   ["forall"] = "∀",  ["frac12"] = "½",  ["frac14"] = "¼",  ["frac34"] = "¾",  ["frasl"] = "⁄",
+	["Gamma"] = "Γ",  ["gamma"] = "γ",   ["ge"] = "≥",      ["gt"] = ">",      ["harr"] = "↔",   ["hArr"] = "⇔",
+	["hearts"] = "♥",["hellip"] = "…",  ["iacute"] = "í",  ["Iacute"] = "Í",  ["icirc"] = "î",   ["Icirc"] = "Î",
+	["iexcl"] = "¡",  ["igrave"] = "ì",  ["Igrave"] = "Ì",  ["image"] = "ℑ",   ["infin"] = "∞",  ["int"] = "∫",
+	["Iota"] = "Ι",   ["iota"] = "ι",    ["iquest"] = "¿",  ["isin"] = "∈",    ["Iuml"] = "Ï",    ["iuml"] = "ï",
+	["kappa"] = "κ",  ["Kappa"] = "Κ",   ["Lambda"] = "Λ",  ["lambda"] = "λ",  ["lang"] = "〈",   ["laquo"] = "«",
+	["larr"] = "←",  ["lArr"] = "⇐",   ["lceil"] = "⌈",    ["ldquo"] = "“",  ["le"] = "≤",      ["lfloor"] = "⌊",
+	["lowast"] = "∗", ["loz"] = "◊",     ["lrm"] = "‎",        ["lsaquo"] = "‹", ["lsquo"] = "‘",  ["lt"] = "<",
+	["macr"] = "¯",   ["mdash"] = "—",   ["micro"] = "µ",    ["middot"] = "·", ["minus"] = "−",  ["mu"] = "μ",
+	["Mu"] = "Μ",     ["nabla"] = "∇",   ["nbsp"] = " ",    ["ndash"] = "–",   ["ne"] = "≠",     ["ni"] = "∋",
+	["not"] = "¬",    ["notin"] = "∉",   ["nsub"] = "⊄",    ["Ntilde"] = "Ñ",  ["ntilde"] = "ñ", ["nu"] = "ν",
+	["Nu"] = "Ν",     ["Oacute"] = "Ó",  ["oacute"] = "ó",  ["ocirc"] = "ô",   ["Ocirc"] = "Ô",  ["OElig"] = "Œ",
+	["oelig"] = "œ",  ["ograve"] = "ò",  ["Ograve"] = "Ò",  ["oline"] = "‾",   ["Omega"] = "Ω",  ["omega"] = "ω",
+	["omicron"] = "ο",["Omicron"] = "Ο", ["oplus"] = "⊕",   ["or"] = "∨",      ["ordf"] = "ª",   ["ordm"] = "º",
+	["oslash"] = "ø", ["Oslash"] = "Ø",  ["Otilde"] = "Õ",  ["otilde"] = "õ",  ["otimes"] = "⊗", ["Ouml"] = "Ö",
+	["ouml"] = "ö",   ["para"] = "¶",    ["part"] = "∂",    ["permil"] = "‰",  ["perp"] = "⊥",   ["phi"] = "φ",
+	["Phi"] = "Φ",    ["Pi"] = "Π",      ["pi"] = "π",      ["piv"] = "ϖ",     ["plusmn"] = "±", ["pound"] = "£",
+	["prime"] = "′",  ["Prime"] = "″",   ["prod"] = "∏",     ["prop"] = "∝",   ["Psi"] = "Ψ",      ["psi"] = "ψ",
+	["quot"] = "\"",  ["radic"] = "√",   ["rang"] = "〉",    ["raquo"] = "»",  ["rarr"] = "→",     ["rArr"] = "⇒",
+	["rceil"] = "⌉",  ["rdquo"] = "”",   ["real"] = "ℜ",    ["reg"] = "®",     ["rfloor"] = "⌋",  ["Rho"] = "Ρ",
+	["rho"] = "ρ",    ["rlm"] = "‏",      ["rsaquo"] = "›",   ["rsquo"] = "’",  ["sbquo"] = "‚",    ["Scaron"] = "Š",
+	["scaron"] = "š", ["sdot"] = "⋅",    ["sect"] = "§",     ["shy"] = "­",     ["sigma"] = "σ",    ["Sigma"] = "Σ",
+	["sigmaf"] = "ς", ["sim"] = "∼",     ["spades"] = "♠",  ["sub"] = "⊂",    ["sube"] = "⊆",     ["sum"] = "∑",
+	["sup"] = "⊃",    ["sup1"] = "¹",    ["sup2"] = "²",     ["sup3"] = "³",   ["supe"] = "⊇",     ["szlig"] = "ß",
+	["Tau"] = "Τ",    ["tau"] = "τ",     ["there4"] = "∴",   ["theta"] = "θ",  ["Theta"] = "Θ",    ["thetasym"] = "ϑ",
+	["thinsp"] = " ", ["THORN"] = "Þ",   ["thorn"] = "þ",    ["tilde"] = "˜",   ["times"] = "×",   ["trade"] = "™",
+	["Uacute"] = "Ú", ["uacute"] = "ú",  ["uarr"] = "↑",     ["uArr"] = "⇑",    ["Ucirc"] = "Û",   ["ucirc"] = "û",
+	["ugrave"] = "ù", ["Ugrave"] = "Ù",  ["uml"] = "¨",      ["upsih"] = "ϒ",   ["upsilon"] = "υ", ["Upsilon"] = "Υ",
+	["uuml"] = "ü",   ["Uuml"] = "Ü",    ["weierp"] = "℘",   ["xi"] = "ξ",      ["Xi"] = "Ξ",      ["Yacute"] = "Ý",
+	["yacute"] = "ý", ["yen"] = "¥",     ["Yuml"] = "Ÿ",     ["yuml"] = "ÿ",    ["zeta"] = "ζ",    ["Zeta"] = "Ζ",
+	["zwj"] = "‍",     ["zwnj"] = "‌",
+}
+
+local function decode_xmlstring_html(txt)
+	return string.gsub(txt,"&(.-);",function(arg)
+		if html5entities[arg] then return html5entities[arg]
+		elseif string.find(arg,"^#x") then
+			return string.char(tonumber(string.sub(arg,3,-1),16))
+		elseif string.find(arg,"^#") then
+			return string.char(string.sub(arg,2,-1))
+		end
+	end)
+end
 
 local function decode_xmlstring( txt )
 	return string.gsub(txt,"&(.-);",function (arg)
@@ -34,15 +92,9 @@ local function decode_xmlstring( txt )
 	end)
 end
 
--- local function decode_xmlstring( txt )
--- 	txt = string.gsub(txt,"&#(%d+);",string.char)
--- 	txt = string.gsub(txt,"&#x(%x+);",function(num) return string.char(tonumber(num,16)) end)
--- 	txt = string.gsub(txt,"&(.-);",{lt = "<",gt = ">", amp = "&", quot = '"', apos = "'"})
--- 	return txt
--- end
 
 local function _att_value( ... )
-	return decode_xmlstring(select(1,...))
+	return decoder(select(1,...))
 end
 
 local function _attribute( ... )
@@ -169,9 +221,9 @@ local function parse_element( txt,pos,namespaces )
 			contents = string.match(txt,"(.-)<",pos + 1)
 			if contents ~= "" then
 				if type(elt[#elt]) == "string" then
-					elt[#elt] = elt[#elt] .. decode_xmlstring(contents)
+					elt[#elt] = elt[#elt] .. decoder(contents)
 				else
-					elt[#elt + 1] = decode_xmlstring(contents)
+					elt[#elt + 1] = decoder(contents)
 				end
 			end
 			contents, pos = parse_element(txt,start,elt[".__ns"])
@@ -179,9 +231,9 @@ local function parse_element( txt,pos,namespaces )
 				if type(contents) == "string" then
 					if contents ~= "" then
 						if type(elt[#elt]) == "string" then
-							elt[#elt] = elt[#elt] .. decode_xmlstring(contents)
+							elt[#elt] = elt[#elt] .. decoder(contents)
 						else
-							elt[#elt + 1] = decode_xmlstring(contents)
+							elt[#elt + 1] = decoder(contents)
 						end
 					end
 				else
@@ -195,11 +247,17 @@ local function parse_element( txt,pos,namespaces )
 	end
 end
 
-local function parse_xml(txt)
+local function parse_xml(txt,options)
+	options = options or {}
 	local pos = 1
 	local line = 1
 	if string.byte(txt) ~= 60 then
 		_,_,txt = string.find(txt,"(<.*)$",pos)
+	end
+	if options.htmlentities then
+		decoder = decode_xmlstring_html
+	else
+		decoder = decode_xmlstring
 	end
 	txt = txt.gsub(txt,"\13\n?","\n")
 	if string.match(txt,"<%?xml",pos) then
@@ -209,7 +267,8 @@ local function parse_xml(txt)
 	return ret
 end
 
-local function parse_xml_file( path )
+local function parse_xml_file( path, options)
+	options = options or {}
   local xmlfile = io.open(path,"r")
   if not xmlfile then
     err("Can't open XML file. Abort.")
@@ -217,7 +276,7 @@ local function parse_xml_file( path )
   end
   local text = xmlfile:read("*all")
   xmlfile:close()
-  return parse_xml(text)
+  return parse_xml(text,options)
 end
 
 

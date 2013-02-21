@@ -365,7 +365,7 @@ function dothings()
     dataxml = luxor.parse_xml("<data />")
   elseif arg[3] == "-" then
     log("Reading from stdin")
-    dataxml = luxor.parse_xml(io.stdin:read("*a"))
+    dataxml = luxor.parse_xml(io.stdin:read("*a"),{htmlentities = true})
   else
     dataxml = load_xml(arg[3],"data file")
   end
@@ -484,7 +484,7 @@ function load_xml(filename,filetype)
     os.exit(-1)
   end
   log("Loading %s %q",filetype or "file",path)
-  return luxor.parse_xml_file(path)
+  return luxor.parse_xml_file(path, { htmlentities = true })
 end
 
 --- Place an object at a position given in scaled points (_x_ and _y_). `allocate` is ignored at at the moment.
