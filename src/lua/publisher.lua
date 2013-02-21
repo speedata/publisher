@@ -1666,7 +1666,7 @@ function xml_escape( str )
   local replace = {
     [">"] = "&gt;",
     ["<"] = "&lt;",
-    ["\""] = "&quote;",
+    ["\""] = "&quot;",
     ["&"] = "&amp;",
   }
   local ret = str.gsub(str,".",replace)
