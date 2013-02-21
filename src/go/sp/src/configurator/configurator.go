@@ -10,12 +10,21 @@ type ConfigData struct {
 
 func (cd *ConfigData) String(section string, str string) string {
 	for i := 0; i < len(cd.cfg); i++ {
-		s,_ := cd.cfg[i].String(section,str)
+		s, _ := cd.cfg[i].String(section, str)
 		if s != "" {
 			return s
 		}
 	}
 	return ""
+}
+
+func (cd *ConfigData) ReadFile(f string) error {
+	c, err := config.ReadDefault(f)
+	if c != nil {
+		cd.cfg = append(cd.cfg, c)
+		return nil
+	}
+	return err
 }
 
 func ReadFiles(a ...string) (*ConfigData, error) {

@@ -27,6 +27,7 @@ Usage: [parameter] command
 -v, --var=VAR=VALUE          Set a variable for the publishing run
     --verbose                Print a bit of debugging output
     --version                Show version information
+    --wd=DIR                 Change working directory
     --xml                    Output as (pseudo-)XML (for list-fonts)
   
 Commands
@@ -54,6 +55,7 @@ h2. Description of the command line parameters
 - @-v@, @--var=value@ := Passes additional variables to the publisher run. The variables can be accessed as usual with @select="$variable"@.
 - @-x@, @--extra-dir@ := Puts the given directory into the search path. All assets (images, fonts, XML data and layout rules) must be found in the seach path, which will be traversed recursively. This parameter can be given multiple times and preset in the "configuration file":configuration.html.
 - @--verbose@ := More inforation than necessary.
+- @--wd=DIR@ := Change working directory. Exactly the same as if you'd cd into that directory before running @sp@.
 - @--xml@:= The output of some commands (currently only @list-fonts@) will be printed in (pseudo) XML. That way the output can be re-used in the layout XML.
 
 

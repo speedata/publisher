@@ -6,6 +6,7 @@ h1. Changelog
 
 h2. Version 1.6
 
+* New options: @sp --wd DIR@ to set the working directory. See "command line":commandline.html (1.5.36)
 * New command: @sp clean@ to clean up. See "command line":commandline.html (1.5.35)
 * Changed "XPath-function":xpath.html @sd:alternating()@ and introduced @sd:reset-alternating()@. (1.5.35)
 * Attribute @eval@ in "Table":../commands-en/table.html for XPath expression execution. (1.5.35)

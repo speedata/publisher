@@ -136,10 +136,6 @@ func init() {
 		path_to_documentation = filepath.Join(installdir, "/build/manual/"+indexpage)
 	}
 	inifile = filepath.Join(srcdir, "lua/sdini.lua")
-	cfg, err = configurator.ReadFiles(filepath.Join(pwd, "publisher.cfg"), filepath.Join(os.Getenv("HOME"), ".publisher.cfg"), "/etc/speedata/publisher.cfg")
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 func getOptionSection(optionname string, section string) string {
@@ -433,6 +429,7 @@ func main() {
 	op.On("-v", "--var VAR=VALUE", "Set a variable for the publishing run", setVariable)
 	op.On("--verbose", "Print a bit of debugging output", options)
 	op.On("--version", "Show version information", versioninfo)
+	op.On("--wd DIR", "Change working directory", options)
 	op.On("--xml", "Output as (pseudo-)XML (for list-fonts)", options)
 
 	op.Command("list-fonts", "List installed fonts (use together with --xml for copy/paste)")
@@ -457,6 +454,25 @@ func main() {
 		// more than one command given, what should I do?
 		command = op.Extra[0]
 	}
+
+	cfg, _ = configurator.ReadFiles(filepath.Join(os.Getenv("HOME"), ".publisher.cfg"), "/etc/speedata/publisher.cfg")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// When the user requests another working directory, we should
+	// change into the given wd first, before reading the local
+	// options
+	if wd := getOption("wd"); wd != "" {
+		err := os.Chdir(wd)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Printf("Working directory now: %s", wd)
+		pwd = wd
+	}
+
+	cfg.ReadFile(filepath.Join(pwd, "publisher.cfg"))
 
 	if add_local_path {
 		extra_dir = append(extra_dir, pwd)

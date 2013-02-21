@@ -6,6 +6,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* Neue Option: @sp --wd DIR@. Damit lässt sich das aktuelle Verzeichnis festlegen. Siehe "Kommandozeile":commandline.html (1.5.36)
 * Neuer Befehl: @sp clean@ zum „Aufräumen“. Siehe "Kommandozeile":commandline.html (1.5.35)
 * "XPath-Funktion":xpath.html @sd:alternierend()@ geändert und @sd:alternierend-zurücksetzen()@ eingeführt. (1.5.35)
 * Attribut @auswerten@ in "Tabelle":../commands-de/table.html um XPath Ausdrücke auszuführen. (1.5.35)
