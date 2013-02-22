@@ -168,6 +168,7 @@
 
   <define name="e_Paragraph">
     <element name="Absatz">
+      <a:documentation docid="paragraph">Erstellt einen rechteckigen Textbereich mit Einrückung, Ausrichtung und Silbentrennung.</a:documentation>
       <ref name="t_values"/>
       <ref name="a_xmlid"/>
       <ref name="a_classid"/>
@@ -195,17 +196,24 @@
     <element name="Aktion">
       <a:documentation docid="action">Assoziiert eine Anweisung (Aktion) mit dem umgebenden Text.</a:documentation>
       <ref name="a_xmlid"/>
-      <element name="ZurListeHinzufügen">
-        <a:documentation docid="action/addtolist">Fügt ein Schlüssel/Wert-Paar zu einer Variablen hinzu.</a:documentation>
-        <ref name="a_xmlid"/>
-        <attribute name="liste"/>
-        <a:documentation docid="action/list">Liste (Variable) zu der der Inhalt hinzugefügt werden soll. Diese Variable muss noch nicht
+      <choice>
+        <element name="ZurListeHinzufügen">
+          <a:documentation docid="action/addtolist">Fügt ein Schlüssel/Wert-Paar zu einer Variablen hinzu.</a:documentation>
+          <ref name="a_xmlid"/>
+          <attribute name="liste"/>
+          <a:documentation docid="action/list">Liste (Variable) zu der der Inhalt hinzugefügt werden soll. Diese Variable muss noch nicht
                 existieren.</a:documentation>
-        <attribute name="schlüssel"/>
-        <a:documentation docid="action/key">Name des Schlüssels, unter dem der Wert in ›auswahl‹ gespeichert wird.</a:documentation>
-        <attribute name="auswahl"/>
-        <a:documentation docid="action/select">Wert, der gepeichert wird (XPath-Ausdruck)</a:documentation>
-      </element>
+          <attribute name="schlüssel"/>
+          <a:documentation docid="action/key">Name des Schlüssels, unter dem der Wert in ›auswahl‹ gespeichert wird.</a:documentation>
+          <attribute name="auswahl"/>
+          <a:documentation docid="action/select">Wert, der gepeichert wird (XPath-Ausdruck)</a:documentation>
+        </element>
+        <element name="Marke">
+          <a:documentation docid="action/mark">Eine unsichtbare Markierung setzen. Kann benutzt werden, um die Seitenzahl zu ermitteln, auf der der Marker ausgegeben wurde.</a:documentation>
+          <attribute name="auswahl"/>
+          <a:documentation docid="action/mark/select">Der Name des Markers (XPath-Ausdruck)</a:documentation>
+        </element>
+      </choice>
     </element>
   </define>
 

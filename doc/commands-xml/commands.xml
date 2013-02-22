@@ -12,6 +12,7 @@
     </description>
     <childelements>
       <cmd name="AddToList" />
+      <cmd name="Mark"/>
     </childelements>
     <parentelements>
       <cmd name="Textblock" />
@@ -28,7 +29,13 @@
   </Textblock>
 </ObjektAusgeben>]]></listing>
     </example>
-    <seealso><cmd name="Textblock" /></seealso>
+    <info xml:lang="en">
+      <para>See also the example at <cmd name="Mark"/>.</para>
+    </info>
+    <info xml:lang="de">
+      <para>Siehe auch das Beispiel bei <cmd name="Mark"/>.</para>
+    </info>
+    <seealso><cmd name="Textblock" />, <cmd name="AddToList"/>, <cmd name="Mark"/></seealso>
   </command>
   <command name="AddToList">
     <description xml:lang="de">
@@ -1538,6 +1545,85 @@
       <listing><![CDATA[<Rand links="2cm" rechts="1cm" oben="1cm" unten="1cm" />]]></listing>
     </example>
     <seealso />
+  </command>
+  <command name="Mark">
+    <description xml:lang="en">
+      <para>Sets an invisible mark into the output. This is helpful when you want to know on which page the mark is placed on.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Setzt eine unsichtbare Markierung in die Ausgabe. Das ist hilfreich, um die Seitenzahl zu bestimmen, auf der die Marke gelandet ist.</para>
+    </description>
+    <childelements/>
+    <parentelements>
+      <cmd name="Action"/>
+    </parentelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<Pageformat width="210mm" height="4cm"/>
+
+<Record element="data">
+  <PlaceObject>
+    <Textblock width="10">
+      <Paragraph>
+        <Value>
+          Row
+          Row
+          Row
+          Row
+        </Value>
+      </Paragraph>
+    </Textblock>
+    <Textblock width="10">
+      <Action>
+        <Mark select="'textstart'"/>
+      </Action>
+      <Paragraph>
+        <Value>
+          Row
+          Row
+          Row
+        </Value>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+  <NewPage/>
+  <Message select="sd:pagenumber('textstart')"></Message>
+</Record>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Seitenformat breite="210mm" höhe="4cm"/>
+
+<Datensatz element="data">
+  <ObjektAusgeben>
+    <Textblock breite="10">
+      <Absatz>
+        <Wert>
+        Zeile
+        Zeile
+        Zeile
+        Zeile
+        </Wert>
+      </Absatz>
+    </Textblock>
+    <Textblock breite="10">
+      <Aktion>
+        <Marke auswahl="'Textanfang'"/>
+      </Aktion>
+      <Absatz>
+        <Wert>
+          Zeile
+          Zeile
+          Zeile
+        </Wert>
+      </Absatz>
+    </Textblock>
+  </ObjektAusgeben>
+  <NeueSeite/>
+  <Nachricht auswahl="sd:seitennummer('Textanfang')"></Nachricht>
+</Datensatz>
+]]></listing>
+    </example>
+    <seealso><cmd name="Action"/></seealso>
   </command>
   <command name="Message">
     <description xml:lang="de">

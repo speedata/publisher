@@ -28,18 +28,25 @@ commands = {}
 --- is  placed.
 function commands.action( layoutxml,dataxml)
   local tab = publisher.dispatch(layoutxml,dataxml)
-  local ret = {}
+  p = paragraph:new()
 
   for _,j in ipairs(tab) do
-    if publisher.elementname(j,true) == "AddToList" then
+    local eltname = publisher.elementname(j,true)
+    if eltname == "AddToList" then
       local n = node.new("whatsit","user_defined")
       n.user_id = 1 -- a magic number
       n.type = 100  -- type 100: "value is a number"
       n.value = publisher.element_contents(j) -- pointer to the function (int)
-      ret[#ret + 1] = n
+      p:append(n)
+    elseif eltname == "Mark" then
+      local n = node.new("whatsit","user_defined")
+      n.user_id = 3 -- a magic number
+      n.type = 115  -- type 115: "value is a string"
+      n.value = publisher.element_contents(j)
+      p:append(n)
     end
   end
-  return ret
+  return p
 end
 
 
@@ -696,6 +703,13 @@ function commands.margin( layoutxml,dataxml )
   return function(_seite) _seite.raster:set_margin(left,top,right,bottom) end
 end
 
+--- Mark
+--- ----
+--- Set an invisible marker into the output (whatsit/user_defined)
+function commands.mark( layoutxml,dataxml )
+  local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpath")
+  return selection
+end
 
 --- Message
 --- -------

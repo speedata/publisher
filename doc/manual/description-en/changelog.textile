@@ -6,6 +6,8 @@ h1. Changelog
 
 h2. Version 1.6
 
+* New "XPath function":xpath.html @sd:pagenumber(<mark>)@ to obtain the page number of a mark (1.5.36).
+* New command "Mark":../commands-en/mark.html to create invisible markers. (1.5.36)
 * New "XPath functions":xpath.html @ceiling()@ and @floor()@ (1.5.36).
 * New options: @sp --wd DIR@ to set the working directory. See "command line":commandline.html (1.5.36)
 * New command: @sp clean@ to clean up. See "command line":commandline.html (1.5.35)

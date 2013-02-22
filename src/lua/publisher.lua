@@ -97,6 +97,7 @@ colors    = { Schwarz = { modell="grau", g = "0", pdfstring = " 0 G 0 g " } }
 colortable = {}
 data_dispatcher = {}
 user_defined_functions = { last = 0}
+markers = {}
 
 -- die aktuelle Gruppe
 current_group = nil
@@ -192,6 +193,7 @@ local dispatch_table = {
   LoadFontfile            = commands.load_fontfile,
   EmptyLine               = commands.emptyline,
   Rule                    = commands.rule,
+  Mark                    = commands.mark,
   Message                 = commands.message,
   NextFrame               = commands.next_frame,
   NewPage                 = commands.new_page,
@@ -982,6 +984,9 @@ function find_user_defined_whatsits( head )
             i = i + 1
           end
           current_bookmark_table[#current_bookmark_table + 1] = {name = str, destination = dest, open = open_p}
+        elseif head.user_id == 3 then
+          local marker = head.value
+          publisher.markers[marker] = { page = tex.count[0] }
         end
       end
     end

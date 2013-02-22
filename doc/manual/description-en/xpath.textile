@@ -64,6 +64,7 @@ There are two classes of XPath functions: standard XPath functions and speedata 
 - sd:odd(&lt;number>) := True if number is odd.
 - sd:groupwidth(&lt;string>) := Return the number of gridcells of the given group's width. The argument must be the name of an existing group. Example: @sd:groupwidth('My group')@
 - sd:groupheight(&lt;string>) := Return the given group's height (in gridcells). See @sd:groupwidth(...)@
+- sd:pagenumber(&lt;string>) := Get the number of the page where the given mark is placed on. See the command "Mark":../commands-en/mark.html.
 - sd:variable(&lt;name>) := The same as $name. This function allows variable names to be constructed dynamically. Example: @sd:variable(concat('myvar',$num))@ - if @$num@ contains the number 3, the resulting variable is @myvar3@.
 
 - concat( &lt;value>,&lt;value>, ... ) := Create a new text value by concatinating the 

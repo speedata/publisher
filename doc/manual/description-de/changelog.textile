@@ -6,6 +6,8 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* Neue "XPath-Funktionen":xpath.html @sd:seitennummer(<marke>)@ um die Seitennummer einer Marke zu bestimmen (1.5.36).
+* Neuer Befehl "Marke":../commands-de/mark.html um unsichtbare Markierungen zu erstellen. (1.5.36)
 * Neue "XPath-Funktionen":xpath.html @ceiling()@ und @floor()@ (1.5.36).
 * Neue Option: @sp --wd DIR@. Damit lässt sich das aktuelle Verzeichnis festlegen. Siehe "Kommandozeile":commandline.html (1.5.36)
 * Neuer Befehl: @sp clean@ zum „Aufräumen“. Siehe "Kommandozeile":commandline.html (1.5.35)

@@ -39,6 +39,7 @@
       <element key="LoadDataset" en="LoadDataset" de="LadeDatensatzdatei"/>
       <element key="LoadFontfile" en="LoadFontfile" de="LadeSchriftdatei"/>
       <element key="Margin" en="Margin" de="Rand"/>
+     <element key="Mark" en="Mark" de="Marke"></element>
       <element key="Message" en="Message" de="Nachricht"/>
       <element key="NewPage" en="NewPage" de="NeueSeite"/>
       <element key="NextFrame" en="NextFrame" de="NächsterRahmen"/>
@@ -340,6 +341,10 @@
        <en>Draw line extensions (0-100)</en>
        <de>Zeichne verlängerte Linien (0-100)</de>
      </documentation>
+     <documentation docid="paragraph">
+       <en>Create a rectangular shaped text area with indentation, justification and hyphenation.</en>
+       <de>Erstellt einen rechteckigen Textbereich mit Einrückung, Ausrichtung und Silbentrennung.</de>
+     </documentation>
      <documentation docid="paragraph/textformat">
          <en>Name of the textformat (optional).</en>
          <de>Name des Textformats (optional).</de>
@@ -373,6 +378,14 @@
          <en>The value that is accociated with the key. (XPath expression)</en>
          <de>Wert, der gepeichert wird (XPath-Ausdruck)</de>
       </documentation>
+     <documentation docid="action/mark">
+       <en>Set an invisble marker into the output. Can be used to obtain the page number where this marker gets.</en>
+       <de>Eine unsichtbare Markierung setzen. Kann benutzt werden, um die Seitenzahl zu ermitteln, auf der der Marker ausgegeben wurde.</de>
+     </documentation>
+     <documentation docid="action/mark/select">
+       <en>Name of the marker (XPath expression)</en>
+       <de>Der Name des Markers (XPath-Ausdruck)</de>
+     </documentation>
       <documentation docid="attribute">
          <en>Creates an attribute which can be wrapped in an »Element«.</en>
          <de>Erzeugt ein Attribut, das in ein »Element« geschachtelt werden kann.</de>

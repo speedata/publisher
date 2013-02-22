@@ -20,6 +20,15 @@ local function current_row(dataxml,...)
   return publisher.current_grid:current_row(select(1,...))
 end
 
+--- Get the page number of a marker
+local function pagenumber(dataxml,...)
+  local m = publisher.markers[select(1,...)]
+  if m then
+    return m.page
+  else
+    return nil
+  end
+end
 
 local function current_column(dataxml,...)
   publisher.setup_page()
@@ -139,6 +148,7 @@ return {
     gerade             = gerade,
     gruppenbreite      = gruppenbreite,
     ["gruppenhöhe"]    = gruppenhoehe,
+    seitennummer       = pagenumber,
     variable           = variable,
     ungerade           = ungerade,
   },
@@ -158,6 +168,7 @@ return {
     number_of_pages    = anzahl_seiten,
     number_of_rows     = anzahl_zeilen,
     odd                = ungerade,
+    pagenumber         = pagenumber,
     reset_alternating  = reset_alternating,
     variable           = variable,
   }

@@ -168,6 +168,7 @@
 
   <define name="e_Paragraph">
     <element name="Paragraph">
+      <a:documentation docid="paragraph"/>
       <ref name="t_values"/>
       <ref name="a_xmlid"/>
       <ref name="a_classid"/>
@@ -195,16 +196,23 @@
     <element name="Action">
       <a:documentation docid="action">Connects an Command (»Action«) with the surrounding text.</a:documentation>
       <ref name="a_xmlid"/>
-      <element name="AddToList">
-        <a:documentation docid="action/addtolist">Adds a key/value pair to the contents of a variable.</a:documentation>
-        <ref name="a_xmlid"/>
-        <attribute name="list"/>
-        <a:documentation docid="action/list">List (variable) to which the contents gets added. This variable does not need to exist.</a:documentation>
-        <attribute name="key"/>
-        <a:documentation docid="action/key">Name of the key for the key/value pair.</a:documentation>
-        <attribute name="select"/>
-        <a:documentation docid="action/select">The value that is accociated with the key. (XPath expression)</a:documentation>
-      </element>
+      <choice>
+        <element name="AddToList">
+          <a:documentation docid="action/addtolist">Adds a key/value pair to the contents of a variable.</a:documentation>
+          <ref name="a_xmlid"/>
+          <attribute name="list"/>
+          <a:documentation docid="action/list">List (variable) to which the contents gets added. This variable does not need to exist.</a:documentation>
+          <attribute name="key"/>
+          <a:documentation docid="action/key">Name of the key for the key/value pair.</a:documentation>
+          <attribute name="select"/>
+          <a:documentation docid="action/select">The value that is accociated with the key. (XPath expression)</a:documentation>
+        </element>
+        <element name="Mark">
+          <a:documentation docid="action/mark"/>
+          <attribute name="select"/>
+          <a:documentation docid="action/mark/select"/>
+        </element>
+      </choice>
     </element>
   </define>
 
