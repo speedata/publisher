@@ -71,7 +71,10 @@ function current_row( self,areaname )
   assert(self)
   local areaname = areaname or publisher.default_areaname
   area = self.positioning_frames[areaname]
-  assert(area,string.format("Area %q not known",tostring(areaname)))
+  if not area then
+    err("Area %q not known",tostring(areaname))
+    return nil
+  end
   return area.current_row or 1
 end
 

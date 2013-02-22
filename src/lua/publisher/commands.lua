@@ -77,10 +77,11 @@ end
 --- Create an attribute to be used in a XML structure. The XML structure can be formed via 
 --- Element and Attribute commands and writen to disk with SaveDataset.
 function commands.attribute( layoutxml,dataxml )
-  local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
+  local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpath")
   local attname   = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
-  local attvalue  = xpath.textvalue(xpath.parse(dataxml,selection,layoutxml[".__ns"]))
-  local ret = { [".__type"]="attribute", [attname] = publisher.xml_escape(attvalue) }
+
+  if not selection then return { [".__type"]="attribute", [attname] = "" } end
+  local ret = { [".__type"]="attribute", [attname] = publisher.xml_escape(xpath.textvalue(selection)) }
   return ret
 end
 
@@ -951,6 +952,9 @@ function commands.place_object( layoutxml,dataxml )
   local valign           = publisher.read_attribute(layoutxml,dataxml,"valign",         "string")
   local hreference       = publisher.read_attribute(layoutxml,dataxml,"hreference",     "string")
 
+  if publisher.current_group and area then
+    err("Areas can't be combined with groups")
+  end
   area = area or publisher.default_areaname
   framecolor = framecolor or "Schwarz"
 
@@ -978,6 +982,9 @@ function commands.place_object( layoutxml,dataxml )
   trace("Row = %q",tostring(zeile))
 
   local current_row_start  = publisher.current_grid:current_row(area)
+  if not current_row_start then
+    return nil
+  end
   local current_column_start = spalte or publisher.current_grid:current_column(area)
 
   -- ht_aktuell is the remaining space on the current page in sp
@@ -1528,6 +1535,12 @@ function commands.table( layoutxml,dataxml,optionen )
   padding        = tex.sp(padding        or "0pt")
   columndistance = tex.sp(columndistance or "0pt")
   rowdistance    = tex.sp(rowdistance    or "0pt")
+  if not width then
+    err("Can't get the width of the table!")
+    rule = publisher.add_rule(nil,"head",{height=100*2^16,width=100*2^16})
+    local v = node.vpack(rule)
+    return v
+  end
   width = publisher.current_grid.gridwidth * width
 
 
