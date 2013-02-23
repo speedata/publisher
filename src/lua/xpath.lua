@@ -401,17 +401,14 @@ local function _comparison( ... )
 end
 
 local function _unaryexpr( ... )
-  printtable("foo",{...})
   return get_number_value(select(1,...))
 end
 
 local function _comp( ... )
-  printtable("comp",{...})
   return ...
 end
 
 local function _orexpr( ... )
-   -- printtable("orexpr",{...})
   for i=1,select("#",...) do
     if select(i,...) == true then return true end
     if select(i,...) ~= false then return get_value(select(i,...)) end
@@ -420,7 +417,6 @@ local function _orexpr( ... )
 end
 
 local function _andexpr( ... )
-  -- printtable("_andexpr",{...})
   local x
   for i=1,select("#",...) do
     x = select(i,...)
@@ -431,6 +427,28 @@ local function _andexpr( ... )
     end
   end
   return true
+end
+
+local function _castable( ... )
+  local num = select(1,...)
+  if not num then return false end
+  if select(2,...) == "castable" then
+    local typ = select(3,...)
+    if typ == "xs:double" then
+      if tonumber(num) then
+        return true
+      end
+    else
+      err("not implemented yet: castable as %q",typ)
+    end
+    return false
+  else
+    return num
+  end
+end
+
+local function _debug(...)
+  printtable("debug",{...})
 end
 
 
@@ -466,12 +484,13 @@ function parse( data_xml, str, ns )
     -- [12]
     AdditiveExpr = V"MultiplicativeExpr" * ( space^0 * C( P"+" + P"-") * space^0 * V"MultiplicativeExpr")^0 / _add,
     -- [13]      MultiplicativeExpr    ::=     UnionExpr ( ("*" | "div" | "idiv" | "mod") UnionExpr )*
-    MultiplicativeExpr = V"StepExpr" *  (space^0 * C(P"*" + P"div" + P"idiv" + P"mod") * space^0 * V"StepExpr" )^0 / _mult,
+    MultiplicativeExpr =  V"CastableExpr" * (space^0 * C(P"*" + P"div" + P"idiv" + P"mod") * space^0 * V"StepExpr" )^0 / _mult,
     -- [14]      UnionExpr     ::=     IntersectExceptExpr ( ("union" | "|") IntersectExceptExpr )*
     -- [15]      IntersectExceptExpr     ::=     InstanceofExpr ( ("intersect" | "except") InstanceofExpr )*
     -- [16]      InstanceofExpr    ::=     TreatExpr ( "instance" "of" SequenceType )?
     -- [17]      TreatExpr     ::=     CastableExpr ( "treat" "as" SequenceType )?
     -- [18]      CastableExpr    ::=     CastExpr ( "castable" "as" SingleType )?
+    CastableExpr = V"StepExpr" * space^0 * ( C( P"castable") * space^1  * P"as" * space^1 * V"SingleType" )^-1 / _castable,
     -- [19]      CastExpr    ::=     UnaryExpr ( "cast" "as" SingleType )?
     -- [20]      UnaryExpr     ::=    ("-" | "+")* ValueExpr
 -- UnaryExpr =  space^0 * C(  ( P"-" + P"+")^0 *  V"ValueExpr" )  / _unaryexpr ,
@@ -514,6 +533,10 @@ function parse( data_xml, str, ns )
     ParenthesizedExpr = space^0 * P"(" *  space^0 * ( V"Expr")^-1  * space^0 * P")" * space^0  / _paren ,
     -- [48]
     FunctionCall = space^0 *  V"QName" * P"(" * space^0 * (V"ExprSingle" * (P"," * V"ExprSingle")^0 )^-1 * space^0 * P")"/ _funcall,
+    -- [49]      SingleType    ::=     AtomicType "?"?
+    SingleType = V"AtomicType" * ( P"?" )^-1 ,
+    -- [53]      AtomicType    ::=     QName
+    AtomicType = V"QName",
     -- [71]
     IntegerLiteral = V"Digits",
     -- [72]
