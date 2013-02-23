@@ -65,6 +65,15 @@ local function number_of_columns(dataxml,...)
   return publisher.current_grid:number_of_columns(select(1,...))
 end
 
+--- Merge numbers like '1-5, 8, 9,10,11' into '1-5, 8-10'
+-- Very simple implementation, not to be used in other cases than 1-3!
+local function merge_pagenumbers(dataxml,arg )
+  local a,b
+  _,_, a, b = string.find(arg,"^(%d).(%d)$")
+  if a == b then return a end
+  return arg
+end
+
 local function anzahl_zeilen(dataxml,...)
   publisher.setup_page()
   return publisher.current_grid:number_of_rows(select(1,...))
@@ -149,6 +158,7 @@ return {
     gruppenbreite      = gruppenbreite,
     ["gruppenhöhe"]    = gruppenhoehe,
     seitennummer       = pagenumber,
+    seitenzahlen_zusammenfassen = merge_pagenumbers,
     variable           = variable,
     ungerade           = ungerade,
   },
@@ -167,6 +177,7 @@ return {
     number_of_datasets = anzahl_datensaetze,
     number_of_pages    = anzahl_seiten,
     number_of_rows     = anzahl_zeilen,
+    merge_pagenumbers  = merge_pagenumbers,
     odd                = ungerade,
     pagenumber         = pagenumber,
     reset_alternating  = reset_alternating,
