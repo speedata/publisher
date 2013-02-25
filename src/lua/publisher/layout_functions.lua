@@ -69,7 +69,7 @@ end
 -- Very simple implementation, not to be used in other cases than 1-3!
 local function merge_pagenumbers(dataxml,arg )
   local a,b
-  _,_, a, b = string.find(arg,"^(%d).(%d)$")
+  _,_, a, b = unicode.utf8.find(arg,"^(%d+).(%d+)$")
   if a == b then return a end
   return arg
 end
