@@ -270,7 +270,7 @@ function find_suitable_row( self,column, breite,hoehe,areaname)
   -- FIXME: überlegen, was hier sinnvoll ist!?! - noch ein ziemlich ineffizienter Algorithmus! sieht aus wie O(n^2)
   -- bei n Zeilen Höhe
   if self:number_of_rows(areaname) < self:current_row(areaname) + hoehe - 1 then return nil end
-  for z = self:current_row(areaname) + rahmen_rand_oben, self:number_of_rows(areaname) do
+  for z = self:current_row(areaname) + rahmen_rand_oben, self:number_of_rows(areaname) + rahmen_rand_oben do
     if self:passt_x_in_zeile(column + rahmen_rand_links,breite,z) then
 
       if self:number_of_rows(areaname) < z - rahmen_rand_oben + hoehe  - 1 then
