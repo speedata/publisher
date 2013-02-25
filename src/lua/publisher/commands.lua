@@ -1155,6 +1155,7 @@ function commands.process_node(layoutxml,dataxml)
   local element_name
   local layoutnode
   local pos = 1
+  if not dataxml_selection then return nil end
   for i=1,#dataxml_selection do
     element_name = dataxml_selection[i][".__name"]
     layoutnode = publisher.data_dispatcher[mode][element_name]
