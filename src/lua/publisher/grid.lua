@@ -142,7 +142,10 @@ end
 function anzahl_rahmen( self,areaname )
   local areaname = areaname or publisher.default_areaname
   local area = self.positioning_frames[areaname]
-  assert(area,string.format("Area %q not known",tostring(areaname)))
+  if not area then
+    err("Area %q is not known on this page. Using the default area (page)",areaname)
+    area = self.positioning_frames[publisher.default_areaname]
+  end
   local anzahl_rahmen = #area
   return anzahl_rahmen
 end
@@ -150,7 +153,10 @@ end
 function rahmennummer( self,areaname )
   local areaname = areaname or publisher.default_areaname
   local area = self.positioning_frames[areaname]
-  assert(area,string.format("Area %q not known",tostring(areaame)))
+  if not area then
+    err("Area %q is not known on this page.",areaname)
+    return nil
+  end
   local anzahl_rahmen = #area
   return area.aktueller_rahmen or 1
 end

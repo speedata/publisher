@@ -686,6 +686,10 @@ end
 --- Switch to the next frame in the given are. 
 function next_area( areaname )
   local aktuelle_nummer = current_grid:rahmennummer(areaname)
+  if not aktuelle_nummer then
+    err("Cannot determine current area number (areaname=%q)",areaname or "(undefined)")
+    return
+  end
   if aktuelle_nummer >= current_grid:anzahl_rahmen(areaname) then
     new_page()
   else
