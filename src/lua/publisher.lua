@@ -1157,7 +1157,9 @@ function mknodes(str,fontfamily,parameter)
         local glue = node.new("glue")
         glue.spec = node.new("glue_spec")
         glue.spec.width = 0
-
+        if parameter.underline == 1 then
+          node.set_attribute(glue,att_underline,1)
+        end
         head,last = node.insert_after(head,last,glue)
         node.set_attribute(glue,att_tie_glue,1)
       elseif match(char,"[;:]") then
