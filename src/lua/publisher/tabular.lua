@@ -1077,7 +1077,10 @@ function setze_tabelle(self)
     extra_height = extra_height + ht_row + self.rowsep
     local fits_in_table = accumulated_height + extra_height + space_above < pagegoal
     if not fits_in_table then
-      splits[#splits + 1] = last_possible_split_is_after_line
+      -- ==0 can happen when there's not enough room for table head + first line
+      if last_possible_split_is_after_line ~= 0 then
+        splits[#splits + 1] = last_possible_split_is_after_line
+      end
       accumulated_height = extra_height
       extra_height = self.rowsep
       current_page = current_page + 1
