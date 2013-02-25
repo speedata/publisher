@@ -431,9 +431,9 @@ end
 
 local function _castable( ... )
   local num = select(1,...)
-  if not num then return false end
-  if select(2,...) == "castable" then
-    local typ = select(3,...)
+  local typ = select(2,...)
+  if typ then
+    if not num then return false end
     if typ == "xs:double" then
       if tonumber(num) then
         return true
@@ -490,7 +490,7 @@ function parse( data_xml, str, ns )
     -- [16]      InstanceofExpr    ::=     TreatExpr ( "instance" "of" SequenceType )?
     -- [17]      TreatExpr     ::=     CastableExpr ( "treat" "as" SequenceType )?
     -- [18]      CastableExpr    ::=     CastExpr ( "castable" "as" SingleType )?
-    CastableExpr = V"StepExpr" * space^0 * ( C( P"castable") * space^1  * P"as" * space^1 * V"SingleType" )^-1 / _castable,
+    CastableExpr = V"StepExpr" * space^0 * ( P"castable" * space^1  * P"as" * space^1 * V"SingleType" )^-1 / _castable,
     -- [19]      CastExpr    ::=     UnaryExpr ( "cast" "as" SingleType )?
     -- [20]      UnaryExpr     ::=    ("-" | "+")* ValueExpr
 -- UnaryExpr =  space^0 * C(  ( P"-" + P"+")^0 *  V"ValueExpr" )  / _unaryexpr ,

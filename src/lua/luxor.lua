@@ -103,8 +103,8 @@ end
 
 local quote = P'"'
 local apos  = P"'"
-local non_att_quote = P( 1 - quote)^1
-local non_att_apos  = P( 1 - apos)^1
+local non_att_quote = P( 1 - quote)^0
+local non_att_apos  = P( 1 - apos)^0
 local space = S("\09\010\013\032")^1
 local name = P(1 - ( space + "="))^1
 local att_value = ( quote * lpeg.C(non_att_quote) * quote + apos * lpeg.C(non_att_apos) * apos ) / _att_value
