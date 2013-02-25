@@ -1036,7 +1036,6 @@ function mknodes(str,fontfamily,parameter)
   else
     instance = 1
   end
-  assert(instance, string.format("Instanzname %q, keine Fontinstance gefunden",instancename or "nil"))
 
   local tbl = font.getfont(instance)
   local space   = tbl.parameters.space
@@ -1068,6 +1067,10 @@ function mknodes(str,fontfamily,parameter)
     local char = unicode.utf8.char(s)
     -- If the next char is a newline (&amp;#x0A;) a \\ is inserted
     if s == 10 then
+      local strut
+      strut = add_rule(nil,"head",{height = 8 * publisher.factor, depth = 3 * publisher.factor, width = 0 })
+      head,last = node.insert_after(head,last,strut)
+
       local p1,g,p2
       p1 = node.new(penalty_node)
       p1.penalty = 10000
@@ -1388,10 +1391,15 @@ function do_linebreak( nodelist,hsize,parameters )
   while head do
     if head.id == 0 then -- hlist
       maxskip = 0
-      for glyf in node.traverse_id(glyph_node,head.list) do
-        local fam = node.has_attribute(glyf,att_fontfamily)
-        if fam == 0 then fam = 1 end
-        maxskip = math.max(fonts.lookup_fontfamily_number_instance[fam].baselineskip,maxskip)
+      local head_list = head.list
+      while head_list do
+        local fam = node.has_attribute(head_list,att_fontfamily)
+        if fam then
+          -- Is this necessary anymore? FIXME
+          if fam == 0 then fam = 1 end
+          maxskip = math.max(fonts.lookup_fontfamily_number_instance[fam].baselineskip,maxskip)
+        end
+        head_list = head_list.next
       end
       head.height = 0.75 * maxskip
       head.depth  = 0.25 * maxskip
@@ -1579,13 +1587,15 @@ function set_color_if_necessary( nodelist,color )
 end
 
 function set_fontfamily_if_necessary(nodelist,fontfamily)
+  -- todo: test this FIXME
+  -- if fontfamily == 0 then return end
   local fam
   while nodelist do
     if nodelist.id==0 or nodelist.id==1 then
       set_fontfamily_if_necessary(nodelist.list,fontfamily)
     else
       fam = node.has_attribute(nodelist,att_fontfamily)
-      if fam == 0 then
+      if fam == 0 or ( fam == nil and nodelist.id == 2) then
         node.set_attribute(nodelist,att_fontfamily,fontfamily)
       end
     end
