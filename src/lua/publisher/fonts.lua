@@ -301,7 +301,7 @@ function post_linebreak( head, list_head)
       end
     elseif head.id == 10 then -- glue
       local att_underline = node.has_attribute(head, publisher.att_underline)
-      -- ati rightskip we must underline (if start exists)
+      -- at rightskip we must underline (if start exists)
       if att_underline ~= 1 or head.subtype == 9 then
         if start then
           insert_underline(list_head, head, start)

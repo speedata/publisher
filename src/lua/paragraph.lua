@@ -189,6 +189,7 @@ function Paragraph:format(width_sp, default_textformat_name)
   else
     nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
   end
+  publisher.fonts.post_linebreak(nodelist)
   return nodelist
 end
 

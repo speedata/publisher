@@ -1408,8 +1408,6 @@ function do_linebreak( nodelist,hsize,parameters )
     head = head.next
   end
 
-  fonts.post_linebreak(j)
-
   return node.vpack(j)
 end
 
