@@ -1256,7 +1256,7 @@ function commands.rule( layoutxml,dataxml )
     if direction == "horizontal" then
       length = publisher.current_grid.gridwidth * length
     -- FIXME: vertical / vertikal should be handled in publisher.read_attribute()
-    elseif direction == "vertical" or direction == "vertikal" then
+    elseif direction == "vertical" then
       length = publisher.current_grid.gridheight * length
     else
       err("Attribute »direction« with »Linie«: unknown direction: %q",direction)
@@ -1283,7 +1283,7 @@ function commands.rule( layoutxml,dataxml )
   n.mode = 0
   if direction == "horizontal" then
     n.data = string.format("q %d w %s 0 0 m %g 0 l S Q",rulewidth,publisher.colors[colorname].pdfstring,length)
-  elseif direction == "vertikal" or direction == "vertikal" then
+  elseif direction == "vertical" then
     n.data = string.format("q %d w %s 0 0 m 0 %g l S Q",rulewidth,publisher.colors[colorname].pdfstring,-length)
   else
     --
