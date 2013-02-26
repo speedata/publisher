@@ -57,6 +57,7 @@
     <optional><ref name="e_Paragraph"/></optional>
     <optional><ref name="e_Sup"/></optional>
     <optional><ref name="e_Sub"/></optional>
+    <optional><ref name="e_Action"/></optional>
   </define>
 
   <define name="t_Commands">
@@ -67,6 +68,7 @@
     <optional><ref name="e_Switch"/></optional>
     <optional><ref name="e_ForAll"/></optional>
     <optional><ref name="e_While"/></optional>
+    <optional><ref name="e_Loop"/></optional>
     <optional><ref name="e_ProcessRecord"/></optional>
     <optional><ref name="e_ProcessNode"/></optional>
     <optional><ref name="e_Message"/></optional>
@@ -100,6 +102,7 @@
       <ref name="e_URL"/>
       <ref name="e_Value"/>
       <ref name="e_Switch"/>
+      <ref name="e_Loop"/>
       <ref name="e_ForAll"/>
     </choice>
   </define>
@@ -911,6 +914,24 @@
     </element>
   </define>
 
+  <define name="e_Loop">
+    <element name="Loop">
+      <a:documentation docid="loop"/>
+      <ref name="a_xmlid"/>
+      <attribute name="select"/>
+      <a:documentation docid="loop/select"/>
+      <optional>
+        <attribute name="variable"/>
+        <a:documentation docid="loop/variable"/>
+      </optional>
+      <oneOrMore>
+        <interleave>
+          <ref name="t_Switchcontents"/>
+        </interleave>
+      </oneOrMore>
+    </element>
+  </define>
+
   <define name="e_FontFace">
     <element name="Fontface">
       <a:documentation docid="fontface">Switch to a different font family.</a:documentation>
@@ -1130,6 +1151,7 @@
           <optional><ref name="e_Tablerule"/></optional>
           <optional><ref name="e_Message"/></optional>
           <optional><ref name="e_Switch"/></optional>
+          <optional><ref name="e_Loop"></ref></optional>
           <optional><ref name="e_ForAll"/></optional>
         </interleave>
       </oneOrMore>
@@ -1273,6 +1295,7 @@
           <ref name="e_CopyOf"/>
           <ref name="e_Switch"/>
           <ref name="e_ForAll"/>
+          <ref name="e_Loop"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -1335,6 +1358,7 @@
         <optional>
           <ref name="e_ForAll"/>
         </optional>
+        <optional><ref name="e_Loop"/></optional>
       </oneOrMore>
     </element>
   </define>
@@ -1554,6 +1578,7 @@
             <optional><ref name="e_Element"/></optional>
             <optional><ref name="e_Attribute"/></optional>
             <optional><ref name="e_Switch"/></optional>
+            <optional><ref name="e_Loop"/></optional>
             <optional><ref name="e_ForAll"/></optional>
             <optional><ref name="e_Tr"/></optional>
             <optional><ref name="e_Td"/></optional>

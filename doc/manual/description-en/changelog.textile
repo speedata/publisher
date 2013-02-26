@@ -6,6 +6,7 @@ h1. Changelog
 
 h2. Version 1.6
 
+* New command "Loop":../commands-en/loop.html to repeat the contents of the element for a given number. (1.5.38)
 * New "XPath function":xpath.html @sd:pagenumber(<mark>)@ to obtain the page number of a mark (1.5.36).
 * New command "Mark":../commands-en/mark.html to create invisible markers. (1.5.36)
 * New "XPath functions":xpath.html @ceiling()@ and @floor()@ (1.5.36).

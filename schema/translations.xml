@@ -38,6 +38,7 @@
       <element key="Layout" en="Layout" de="Layout"/>
       <element key="LoadDataset" en="LoadDataset" de="LadeDatensatzdatei"/>
       <element key="LoadFontfile" en="LoadFontfile" de="LadeSchriftdatei"/>
+     <element key="Loop" en="Loop" de="Schleife"/>
       <element key="Margin" en="Margin" de="Rand"/>
      <element key="Mark" en="Mark" de="Marke"></element>
       <element key="Message" en="Message" de="Nachricht"/>
@@ -746,6 +747,18 @@
          <en>Name of the area in which the cursor is placed.</en>
          <de>Name des Bereichs, in dem der Cursor versetzt wird.</de>
       </documentation>
+     <documentation docid="loop">
+       <en>Repeat the contents of the element by the amount given in the attribute ‘select’.</en>
+       <de>Wiederhole den Inhalt des Elements sooft wie die Angabe im Attribut ›auswahl‹ angibt.</de>
+     </documentation>
+     <documentation docid="loop/select">
+       <en>The amount of repetitions in the loop.</en>
+       <de>Die Anhahl der Schleifendurchläufe</de>
+     </documentation>
+     <documentation docid="loop/variable">
+       <en>This variable gets the loop value. If not set, the variable is _loopcounter.</en>
+       <de>Diese Variable erhält den aktuellen Schleifenwert. Wenn nicht gesetzt, wird die Variable _loopcounter genommen.</de>
+     </documentation>
       <documentation docid="placeobject">
          <en>Puts an object (image, text,... ) onto the page or into a group.</en>
          <de>Gibt ein Objekt (Bild,..) aus.</de>

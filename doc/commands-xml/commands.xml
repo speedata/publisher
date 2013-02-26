@@ -1513,6 +1513,64 @@
       <cmd name="Include" />
     </seealso>
   </command>
+  <command name="Loop">
+    <description xml:lang="en">
+      <para>Repeat the contents of this element several times.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Wiederhole den Inhalt dieses Elements mehrfach.</para>
+    </description>
+    <childelements>
+      <cmd name="Tablerule"/>
+      <cmd name="Tr"/>
+      <cmd name="Td"/>
+      <cmd name="Value"/>
+      <cmd name="Image"/>
+      <cmd name="Paragraph"/>
+      <cmd name="Sub"/>
+      <cmd name="Sup"/>
+    </childelements>
+    <parentelements></parentelements>
+    <attribute name="select" type="xpath" optional="no">
+      <description xml:lang="en">
+        <para>The number of loops. Must be a number or castable as a number.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Anzahl der Schleifendurchläufe. Muss eine Zahl oder in eine Zahl konvertierbar sein.</para>
+      </description>
+    </attribute>
+    <attribute name="variable" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>If given, store the current loop value in this variable. If omitted, the loop value is stored in the variable <tt>_loopcounter</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn angegeben, wird die Nummer des Schleifendurchlaufs in dieser Variablen gespeichert, ansonsten in <tt>_loopcounter</tt>.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<ObjektAusgeben>
+  <Tabelle breite="10">
+    <Schleife auswahl="5" variable="i">
+      <Tr><Td><Absatz><Wert auswahl="$i"/></Absatz></Td></Tr>
+    </Schleife>
+  </Tabelle>
+</ObjektAusgeben>
+]]></listing>
+    </example>
+    <example xml:lang="en">
+      <listing><![CDATA[<PlaceObject>
+  <Table width="10">
+    <Loop select="5" variable="i">
+      <Tr>
+        <Td><Paragraph><Value select="$i"/></Paragraph></Td>
+      </Tr>
+    </Loop>
+  </Table>
+</PlaceObject>
+]]></listing>
+    </example>
+    <seealso><cmd name="ForAll"/></seealso>
+  </command>
   <command name="Margin">
     <description xml:lang="de">
       <para>Enthält die Angaben über den Seitenrand des zu druckbaren Bereich.</para>

@@ -191,6 +191,7 @@ local dispatch_table = {
   ["Copy-of"]             = commands.copy_of,
   LoadDataset             = commands.load_dataset,
   LoadFontfile            = commands.load_fontfile,
+  Loop                    = commands.loop,
   EmptyLine               = commands.emptyline,
   Rule                    = commands.rule,
   Mark                    = commands.mark,
@@ -276,7 +277,7 @@ function dispatch(layoutxml,dataxml,optionen)
         tmp = dispatch_table[eltname](j,dataxml,optionen)
 
         -- Copy-of-elements can be resolveld immediately 
-        if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" then
+        if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" then
           if type(tmp)=="table" then
             for i=1,#tmp do
               if tmp[i].contents then

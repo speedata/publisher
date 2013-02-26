@@ -679,6 +679,32 @@ function commands.load_dataset( layoutxml,dataxml )
   publisher.dispatch(publisher.data_dispatcher[""][root_name],tmp_data)
 end
 
+
+--- Loop
+--- ----
+--- Repeat the contents several times (given by the attribute select). If the attribute
+--- `variable` is given, store the current loop value there, if not, it is stored
+--- in the variable `_loopcounter`.
+function commands.loop( layoutxml, dataxml )
+  local num = tonumber(publisher.read_attribute(layoutxml,dataxml,"select","xpath"))
+  if not num then
+    err("loop: can't parse number given in the attribute select: %q",tostring(num))
+    return
+  end
+  local var = publisher.read_attribute(layoutxml,dataxml,"variable","rawstring")
+  var = var or "_loopcounter"
+  local ret = {}
+  local tab
+  for i=1,num do
+    publisher.variablen[var] = i
+    tab = publisher.dispatch(layoutxml,dataxml)
+    for j=1,#tab do
+      ret[#ret + 1] = tab[j]
+    end
+  end
+  return ret
+end
+
 function commands.emptyline( layoutxml,dataxml )
   trace("Leerzeile, aktuelle Zeile = %d",publisher.current_grid:current_row())
   local areaname = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
