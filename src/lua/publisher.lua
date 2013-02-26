@@ -1333,9 +1333,7 @@ function fix_justification( nodelist,textformat,parent)
         leftskip_node.spec = node.new("glue_spec")
         local wd
 
-        -- temp bugfix. was: FIXME
-        -- if rightskip.prev.id == 10 and rightskip.prev.subtype==15 then -- parfillskip
-        if rightskip.prev and rightskip.prev.id == 10 and rightskip.prev.subtype==15 then -- parfillskip
+        if rightskip.prev.id == 10 and rightskip.prev.subtype==15 then -- parfillskip
           local parfillskip = rightskip.prev
 
           wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head,parfillskip.prev)
