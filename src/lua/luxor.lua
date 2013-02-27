@@ -211,7 +211,7 @@ local function parse_element( txt,pos,namespaces )
 		_,rangle = string.find(txt,">",pos)
 		_,_,pre_rangle = string.find(txt,"(.)",rangle - 1)
 		if pre_rangle == "/" then
-			return elt,rangle + 1
+			return elt,rangle
 		end
 		pos = rangle
 		-- "Regular" (non-empty) element. Now parse it
