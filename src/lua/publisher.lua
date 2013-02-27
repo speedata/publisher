@@ -937,6 +937,8 @@ function parse_html( elt )
       italic = 1
     elseif elt[".__name"] == "u" or elt[".__name"] == "U" then
       underline = 1
+    elseif string.match(elt[".__name"],"^[bB][rR]$") then
+      a:append("\n",{})
     end
   end
 
