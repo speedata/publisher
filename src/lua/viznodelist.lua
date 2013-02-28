@@ -2,7 +2,7 @@
 --  viznodelist.lua
 --  speedata publisher
 --
---  Copyright 2010-2011 Patrick Gundlach.
+--  Copyright 2010-2013 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 
 --
@@ -38,10 +38,6 @@ local tex,texio,node,unicode,font=tex,texio,node,unicode,font
 
 module(...)
 
-local function w( ... )
-  texio.write_nl(string.format(...))
-end
-
 -- tostring(a_node) looks like "<node    nil <    172 >    nil : hlist 2>", so we can
 -- grab the number in the middle (172 here) as a unique id. So the node
 -- is named "node172"
@@ -61,8 +57,8 @@ local function link_to( n,nodename,label )
       -- TODO: this should be more clever: ignore prev pointers of the first nodes in a list.
       if not n.next then return end
       ret = string.format("%s:%s:w -> %s:title\n",nodename,label,get_nodename(n))
-    elseif label=="list" then
-      ret = string.format("%s:%s:s -> %s:title\n",nodename,label,get_nodename(n))
+    elseif label=="head" then
+      ret = string.format("%s:%s -> %s:title\n",nodename,label,get_nodename(n))
     else
       ret = string.format("%s:%s -> %s:title\n",nodename,label,get_nodename(n)) 
     end
@@ -164,6 +160,26 @@ local function draw_node( n,tab )
   return table.concat(ret)
 end
 
+local function draw_action( n )
+  local nodename = get_nodename(n)
+  local ret = string.format("%s [ label = \"<title> name: %s ", nodename, "action")
+  local tab = {
+    {"action_type", string.format("action_type: %s", tostring(n.action_type))},
+    {"action_id" ,  string.format("action_id: %s",tostring(n.action_id))},
+    {"named_id",    string.format("named_id: %s",tostring(n.named_id))},
+    {"file",        string.format("file: %s",tostring(n.file))},
+    {"new_window" , string.format("new_window: %s",tostring(n.new_window))},
+    {"data",        string.format("data: %s",tostring(n.data):gsub(">","\\>"):gsub("<","\\<"))},
+    {"refcount" ,   string.format("ref_count: %s",tostring(n.ref_count))},
+  }
+  for i=1,#tab do
+    if tab[i][1] then
+      ret = ret .. string.format("|<%s> %s",tab[i][1],tab[i][2])
+    end
+  end
+  return ret .. "\"]\n"
+end
+
 local function dot_analyze_nodelist( head, options )
   local ret = {}
   local typ,nodename
@@ -201,11 +217,11 @@ local function dot_analyze_nodelist( head, options )
   	    local shift = string.format("shift %gpt",head.shift / 2^16)
         tmp[#tmp + 1] = {"shift",shift }
       end
-      tmp[#tmp + 1] = {"list", "list"}
+      tmp[#tmp + 1] = {"head", "head"}
       ret[#ret + 1] = draw_node(head, tmp)
-  	  if head.list then
-	      ret[#ret + 1] = link_to(head.list,nodename,"list")
-  	    ret[#ret + 1] = dot_analyze_nodelist(head.list,options)
+  	  if head.head then
+	      ret[#ret + 1] = link_to(head.head,nodename,"head")
+  	    ret[#ret + 1] = dot_analyze_nodelist(head.head,options)
   	  end
   	elseif typ == "vlist" then
       local tmp = {}
@@ -237,11 +253,11 @@ local function dot_analyze_nodelist( head, options )
   	    local shift = string.format("shift %gpt",head.shift / 2^16)
         tmp[#tmp + 1] = {"shift",shift }
       end
-      tmp[#tmp + 1] = {"list", "list"}
+      tmp[#tmp + 1] = {"head", "head"}
       ret[#ret + 1] = draw_node(head, tmp)
-  	  if head.list then
-	      ret[#ret + 1] = link_to(head.list,nodename,"list")
-  	    ret[#ret + 1] = dot_analyze_nodelist(head.list,options)
+  	  if head.head then
+	      ret[#ret + 1] = link_to(head.head,nodename,"head")
+  	    ret[#ret + 1] = dot_analyze_nodelist(head.head,options)
   	  end
   	elseif typ == "glue" then
   	  local subtype = get_subtype(head)
@@ -296,13 +312,12 @@ local function dot_analyze_nodelist( head, options )
 	      ret[#ret + 1] = draw_node(head, { } )
       end
   	elseif typ == "glyph" then
-  	  local ch = string.format("%d",head.char)
       local ch = string.format("char: %q",unicode.utf8.char(head.char)):gsub("\"","\\\"")
   	  local lng = string.format("lang: %d",head.lang)
   	  local fnt = string.format("font: %d",head.font)
-  	  local wd  = string.format("width: %gpt", head.width / 2^16)
+      local wd  = string.format("width: %gpt", head.width / 2^16)
   	  local comp
-  	  if options.showdisc then
+      if options.showdisc then
   	    comp = {"comp","components"}
   	  else
   	    comp = {}
@@ -312,14 +327,32 @@ local function dot_analyze_nodelist( head, options )
         ret[#ret + 1] = dot_analyze_nodelist(head.components,options)
 	      ret[#ret + 1] = link_to(head.components,nodename,"comp")
       end
+    elseif typ == "math" then
+      ret[#ret + 1] = draw_node(head, { "math", head.subtype == 0 and "on" or "off" })
+    elseif typ == "whatsit" and head.subtype == 7 then
+      ret[#ret + 1] = draw_node(head, { { "dir", head.dir } })
+    elseif typ == "whatsit" and head.subtype == 16 then
+      local wd  = string.format("width (pt): %gpt",  head.width / 2^16)
+      local ht  = string.format("height: %gpt", head.height / 2^16)
+      local dp  = string.format("depth %gpt",  head.depth / 2^16)
+      local objnum = string.format("objnum %d",head.objnum)
+      ret[#ret + 1] = draw_action(head.action)
+      ret[#ret + 1] = link_to(head.action,nodename,"action")
+      ret[#ret + 1] = draw_node(head, {{ "subtype", "pdf_start_link"}, {"width", wd},{"widthraw",head.width}, {"height" , ht}, {"depth",dp}, {"objnum", objnum}, {"action", "action"}})
     elseif typ == "whatsit" and head.subtype == 39 then
       local stack,cmd,data
       stack = string.format("stack: %d",head.stack)
       cmd   = string.format("cmd: %d", head.cmd)
       data  = string.format("data: %s", head.data)
       ret[#ret + 1] = draw_node(head,{ {"subtype", "colorstack"},{"stack",stack},{"cmd",cmd},{"data",data} })
-	  else
-      ret[#ret + 1] = draw_node(head)
+    elseif typ == "whatsit" and head.subtype == 44 then
+      local uid,t, val
+      uid = string.format("user_id= %s",tostring(head.user_id))
+      t   = string.format("type = %s",tostring(head.type))
+      val  = string.format("value = %s", tostring(head.value))
+      ret[#ret + 1] = draw_node(head,{ {"subtype", "user_defined"},{"userid",uid},{"type",t},{"value",val} })
+    else
+      ret[#ret + 1] = draw_node(head, { })
     end
     
     head = head.next
