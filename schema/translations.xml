@@ -6,8 +6,10 @@
       <element key="AtPageCreation" en="AtPageCreation" de="BeiSeitenErzeugung"/>
       <element key="AtPageShipout" en="AtPageShipout" de="BeiSeitenAusgabe"/>
       <element key="Attribute" en="Attribute" de="Attribut"/>
-      <element key="B" en="B" de="B"/>
-      <element key="Barcode" en="Barcode" de="Strichcode"/>
+     <element key="B" en="B" de="B"/>
+     <element key="br" en="br" de="br"/>
+     <element key="Br" en="Br" de="Br"/>
+     <element key="Barcode" en="Barcode" de="Strichcode"/>
       <element key="Bold" en="Bold" de="Fett"/>
       <element key="BoldItalic" en="BoldItalic" de="FettKursiv"/>
       <element key="Box" en="Box" de="Box"/>
@@ -278,6 +280,10 @@
          <en>The object's shape is considered when allocating cells.</en>
          <de>Die Form des Objekts wird beim Belegen der Rasterzellen beachtet.</de>
       </documentation>
+     <documentation docid="br">
+       <en>Insert a newline</en>
+       <de>Zeilenumbruch einfügen</de>
+     </documentation>
      <documentation docid="barcode">
        <en>Insert 1d or 2d barcode</en>
        <de>Erzeugt einen ein- oder zweidimensionalen Strichcode (Barcode)</de>

@@ -546,6 +546,40 @@
     </example>
     <seealso><cmd name="DefineColor" />, <cmd name="PlaceObject" /></seealso>
   </command>
+  <command name="Br">
+    <description xml:lang="en">
+      <para>Insert a newline</para>
+    </description>
+    <description xml:lang="de">
+      <para>Fügt einen Zeilenumbruch ein</para>
+    </description>
+    <childelements></childelements>
+    <parentelements><cmd name="Value"/></parentelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject>
+   <Textblock width="10">
+     <Paragraph>
+       <Value>Hello</Value><Br/><Value>world</Value>
+     </Paragraph>
+   </Textblock>
+  </PlaceObject>
+</Record>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Datensatz element="data">
+  <ObjektAusgeben spalte="1">
+    <Textblock breite="10">
+      <Absatz><Wert>Hallo</Wert><Br/><Wert>Welt</Wert>
+      </Absatz>
+    </Textblock>
+  </ObjektAusgeben>
+</Datensatz>
+]]></listing>
+    </example>
+    <seealso></seealso>
+  </command>
   <command name="Case">
     <description xml:lang="de">
       <para>Stellt einen Fall einer <cmd name="Switch" /> dar. Der erste <cmd name="Case" />, der zutrifft, wird ausgeführt. Weitere Fälle werden nicht betrachtet. Wird kein Fall erfüllt, dann wird,
@@ -3274,10 +3308,13 @@
     <seealso />
   </command>
   <command name="Value">
-    <description xml:lang="de">
-      <para>Beschreibt einen Textinhalt</para>
+    <description xml:lang="en">
+      <para>Contains a text value that is passed to the surrounding element.</para>
     </description>
-    <childelements> </childelements>
+    <description xml:lang="de">
+      <para>Beinhaltet einen Textinhalt, der an das umgebende Element übergeben wird.</para>
+    </description>
+    <childelements><cmd name="Br"/></childelements>
     <parentelements>
       <cmd name="B" />
       <cmd name="Image" />
@@ -3290,13 +3327,33 @@
       <cmd name="URL" />
     </parentelements>
     <attribute name="select" type="xpath" optional="yes">
+      <description xml:lang="en">
+        <para>Value to be passed to the outer element.</para>
+      </description>
       <description xml:lang="de">
         <para>Wert, der zum umgebenden Element übergeben wird.</para>
       </description>
     </attribute>
+    <remark xml:lang="en">
+      <para>The value can be passed to the outer elment either as an XPath expression or as the contents of this element.</para>
+      <para>Containing Br-tags will be interpreted as newlines.</para>
+    </remark>
     <remark xml:lang="de">
       <para>Der Inhalt kann entweder als XPath-Ausdruck im Attribut auswahl oder als Elementinhalt angegeben werden.</para>
+      <para>Innenliegende Br-Tags werden als Zeilenumbruch interpretiert.</para>
     </remark>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject>
+   <Textblock width="10">
+     <Paragraph>
+       <Value select="@name"/><Value>, symbol=</Value><Value select="@symbol"/>
+     </Paragraph>
+   </Textblock>
+  </PlaceObject>
+</Record>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Textblock breite="14" schriftart="text">
   <Absatz>

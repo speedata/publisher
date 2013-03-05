@@ -94,6 +94,7 @@
     <choice>
       <ref name="e_I"/>
       <ref name="e_B"/>
+      <ref name="e_Br"/>
       <ref name="e_U"/>
       <ref name="e_FontFace"/>
       <ref name="e_Image"/>
@@ -235,6 +236,13 @@
       <a:documentation docid="b">Switch to boldface</a:documentation>
       <ref name="a_xmlid"/>
       <ref name="t_values"/>
+    </element>
+  </define>
+
+  <define name="e_Br">
+    <element name="Br">
+      <a:documentation docid="br"/>
+      <empty/>
     </element>
   </define>
 
@@ -1529,7 +1537,16 @@
         <attribute name="select">
           <a:documentation docid="value/select">XPath expression to determine the contents.</a:documentation>
         </attribute>
-        <text/>
+        <interleave>
+          <zeroOrMore>
+            <text/>
+          </zeroOrMore>
+          <zeroOrMore>
+            <element name="br">
+              <empty/>
+            </element>
+          </zeroOrMore>
+        </interleave>
       </choice>
     </element>
   </define>

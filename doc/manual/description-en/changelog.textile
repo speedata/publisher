@@ -6,6 +6,7 @@ h1. Changelog
 
 h2. Version 1.6
 
+* New command "Br":../commands-en/br.html that inserts a newline. Br tags also allowed in "Value":../commmands-en/value.html. (1.5.41)
 * New "XPath-function":xpath.html @sd:format-number()@ to add thousand's separator to numbers (1.5.41)
 * Rename "XPath-function":xpath.html function @sd:format-number()@ in @sd:format-string()@ (1.5.41)
 * New command "Loop":../commands-en/loop.html to repeat the contents of the element for a given number. (1.5.38)

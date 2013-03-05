@@ -170,6 +170,7 @@ local dispatch_table = {
   Action                  = commands.action,
   Attribute               = commands.attribute,
   B                       = commands.bold,
+  Br                      = commands.br,
   Barcode                 = commands.barcode,
   ProcessNode             = commands.process_node,
   ProcessRecord           = commands.process_record,

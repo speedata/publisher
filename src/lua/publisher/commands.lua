@@ -161,6 +161,14 @@ function commands.bold( layoutxml,dataxml )
   return a
 end
 
+--- Br
+--- ---
+--- Insert a newline
+function commands.br( layoutxml,dataxml )
+  a = paragraph:new()
+  a:append("\n",{})
+  return a
+end
 
 --- Box
 --- ----
@@ -1936,6 +1944,12 @@ function commands.value( layoutxml,dataxml )
   if selection then
     tab = xpath.parse(dataxml,selection,layoutxml[".__ns"])
   else
+    -- Change all br elements to \n
+    for i=1,#layoutxml do
+      if type(layoutxml[i]) == "table" and string.match(layoutxml[i][".__name"],"^[bB][rR]$") then
+        layoutxml[i] = "\n"
+      end
+    end
     tab = table.concat(layoutxml)
   end
   return tab
