@@ -6,6 +6,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* Neue "XPath-Funktion":xpath.html @sd:formatiere-zahl()@ zum „Tausender formatieren“ (1.5.41)
 * "XPath-Funktion":xpath.html @sd:formatiere-zahl()@ in @sd:formatiere-string()@ umbenannt (1.5.41)
 * Neuer Befehl "Schleife":../commands-de/loop.html um den Inhalt des Elements mehrfach zu wiederholen. (1.5.38)
 * Neue "XPath-Funktionen":xpath.html @sd:seitennummer(<marke>)@ um die Seitennummer einer Marke zu bestimmen (1.5.36).

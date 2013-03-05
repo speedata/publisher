@@ -100,6 +100,26 @@ local function datei_vorhanden(dataxml, ... )
   return false
 end
 
+--- Insert 1000's separator and comma separator
+local function format_number(dataxml, num, thousandssep,commasep)
+  local sign,digits,commadigits = string.match(tostring(num),"([%-%+]?)(%d*)%.?(%d*)")
+  local first_digits = math.mod(#digits,3)
+  local ret = {}
+  if first_digits > 0 then
+    ret[1] = string.sub(digits,0,first_digits)
+  end
+  for i=1, ( #digits - first_digits) / 3 do
+    ret[#ret + 1] = string.sub(digits,first_digits + ( i - 1) * 3 + 1 ,first_digits + i * 3 )
+  end
+  ret = table.concat(ret, thousandssep)
+  if commadigits and #commadigits > 0 then
+    return  sign .. ret .. commasep .. commadigits
+  else
+    return sign .. ret
+  end
+end
+
+
 local function format_string( dataxml,arg1,arg2 )
   return string.format(arg2,arg1)
 end
@@ -154,6 +174,7 @@ return {
     bildbreite         = bildbreite,
     datei_vorhanden    = datei_vorhanden,
     formatiere_string  = format_string,
+    formatiere_zahl    = format_number,
     gerade             = gerade,
     gruppenbreite      = gruppenbreite,
     ["gruppenhöhe"]    = gruppenhoehe,
@@ -171,6 +192,7 @@ return {
     file_exists        = datei_vorhanden,
     groupheight        = gruppenhoehe,
     groupwidth         = gruppenbreite,
+    format_number      = format_number,
     format_string      = format_string,
     imagewidth         = bildbreite,
     number_of_columns  = number_of_columns,
