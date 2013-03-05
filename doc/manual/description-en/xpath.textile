@@ -59,7 +59,7 @@ There are two classes of XPath functions: standard XPath functions and speedata 
 - sd:number-of-rows() := Number of rows in the current grid.
 - sd:imagewidth(&lt;filename or URI schema>) := Natural width of the image in grid cells. Attention: if the image is not found, the width of the file-not-found placeholder will be returned. Therefore you need to check in advance if the image exists.
 - sd:file-exists(&lt;filename or URI schema>) := True if file exists in the current search path. Otherwise it returns false.
-- sd:format-number(Number,formatting instructions) :=  Return a text string with the number formatted as given by the formatting instructions. These instructions are the same as the instructions by the C function @printf()@.
+- sd:format-string(Number or string,formatting instructions) :=  Return a text string with the number formatted as given by the formatting instructions. These instructions are the same as the instructions by the C function @printf()@.
 - sd:even(&lt;number>) := True if number is even. Example: @sd:even(sd:current-page())@
 - sd:odd(&lt;number>) := True if number is odd.
 - sd:groupwidth(&lt;string>) := Return the number of gridcells of the given group's width. The argument must be the name of an existing group. Example: @sd:groupwidth('My group')@
