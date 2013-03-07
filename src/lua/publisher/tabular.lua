@@ -854,6 +854,10 @@ local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current
       current_tablehead_type[#current_tablehead_type + 1] = node.hpack(tmp)
     end
   end
+  if self.rowsep ~= 0 then
+    publisher.add_glue(current_tablehead_type[#current_tablehead_type], "tail", {width=self.rowsep})
+  end
+
   return current_row
 end
 
@@ -905,11 +909,11 @@ local function calculate_height_and_connect_tablehead(self,tablehead_first,table
   -- perhaps there is a last row, that is connected but its height is not
   -- taken into account yet.
   if #tablehead > 0 then
-    ht_header = ht_header + tablehead[#tablehead].height + self.rowsep  * ( #tablehead - 1 )
+    ht_header = ht_header + tablehead[#tablehead].height + self.rowsep  * ( #tablehead )
   end
 
   if #tablehead_first > 0 then
-    ht_first_header = ht_first_header + tablehead_first[#tablehead_first].height + self.rowsep * (#tablehead_first - 1)
+    ht_first_header = ht_first_header + tablehead_first[#tablehead_first].height + self.rowsep * (#tablehead_first)
   else
     ht_first_header = ht_header
   end
@@ -1073,15 +1077,14 @@ function setze_tabelle(self)
       accumulated_height = accumulated_height + extra_height
       extra_height = self.rowsep
     end
-
-    extra_height = extra_height + ht_row + self.rowsep
+    extra_height = extra_height + ht_row
     local fits_in_table = accumulated_height + extra_height + space_above < pagegoal
     if not fits_in_table then
       -- ==0 can happen when there's not enough room for table head + first line
       if last_possible_split_is_after_line ~= 0 then
         splits[#splits + 1] = last_possible_split_is_after_line
       end
-      accumulated_height = extra_height
+      accumulated_height = ht_row
       extra_height = self.rowsep
       current_page = current_page + 1
     else
@@ -1132,12 +1135,12 @@ function setze_tabelle(self)
       else
         space_above = 0
       end
-      thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep + space_above})
+      thissplittable[#thissplittable + 1] = publisher.make_glue({space_above})
       thissplittable[#thissplittable + 1] = rows[i]
+      thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep})
     end
 
-    last_tr_data = node.has_attribute(thissplittable[#thissplittable],publisher.att_tr_dynamic_data)
-    thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep})
+    last_tr_data = node.has_attribute(thissplittable[#thissplittable - 1],publisher.att_tr_dynamic_data)
 
     -- only refomat the foot when we have dynamic data _and_ have a foot to reformat.
     if last_tr_data and self.tablefoot_contents then
