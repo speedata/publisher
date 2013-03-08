@@ -429,10 +429,13 @@ func runComparison(info os.FileInfo) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	sum := 0.0
-	for _, sourceFile := range sourceFiles {
-		destFile := strings.Replace(sourceFile, "source", "reference", 1)
-		res, err := exec.Command("compare", "-metric", "mae", sourceFile, destFile, "dummy.png").CombinedOutput()
+
+	badPages := make([]int, 0, len(sourceFiles))
+	for i := 0; i < len(sourceFiles); i++ {
+		sourceFile := fmt.Sprintf("source-%d.png", i)
+		referenceFile := fmt.Sprintf("reference-%d.png", i)
+		dummyFile := fmt.Sprintf("pagediff-%d.png", i)
+		res, err := exec.Command("compare", "-metric", "mae", sourceFile, referenceFile, dummyFile).CombinedOutput()
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -440,10 +443,13 @@ func runComparison(info os.FileInfo) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		sum = sum + delta
+		if delta > 0.4 {
+			badPages = append(badPages, i)
+		}
+
 	}
-	if sum > 1 {
-		log.Println("Comparison failed")
+	if len(badPages) > 0 {
+		log.Println("Comparison failed. Bad pages are:", badPages)
 	} else {
 		log.Println("OK")
 	}
