@@ -97,3 +97,8 @@ task :test do
 	inifile = srcdir.join("sdini.lua")
 	sh "texlua --lua=#{inifile} #{installdir}/bin/luatest tc_xpath.lua"
 end
+
+desc "Run quality assurance"
+task :qa do
+	sh "#{installdir}/bin/sp compare #{installdir}/qa"
+end

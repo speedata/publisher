@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<Layout
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en">
+  
+  <Options show-grid="yes" mainlanguage="Englisch (Great Britan)" show-gridallocation="no" trace="no"/>
+  
+  
+  <DefineColor name="gray" model="cmyk" c="38" m="30" y="26" k="0"/>
+  <DefineColor name="red"  model="cmyk" c="9" m="80" y="69" k="6"/>
+
+  <DefineTextformat name="text" alignment="leftaligned"/>
+  <SetGrid width="1cm" height="12pt"/>
+  <Pageformat width="21cm" height="12cm"/>
+
+  <Record element="data">
+    <PlaceObject column="1">
+      <Table width="10" leading="12pt" stretch="max">
+        <Tablefoot>
+          <Tr backgroundcolor="red"><Td><Paragraph><B><Value>bla<br/> foo bar</Value></B></Paragraph></Td><Td><Paragraph><B><Value>bla bla bla</Value></B></Paragraph></Td></Tr>
+        </Tablefoot>
+        <Tablehead>
+          <Tr backgroundcolor="red"><Td><Paragraph><B><Value>bla bla bla</Value></B></Paragraph></Td><Td><Paragraph><B><Value>bla bla bla</Value></B></Paragraph></Td></Tr>
+        </Tablehead>
+        <Loop select="10" variable="foo">
+          <Tr backgroundcolor="gray"><Td><Paragraph><Value select="$foo"></Value></Paragraph></Td><Td><Paragraph><Value>bla bla bla</Value></Paragraph></Td></Tr>
+        </Loop>
+          <Tr backgroundcolor="gray"><Td><Paragraph><Value>bla bla bla<br/>bla bla bla <br/>bla <br/> bla <br/>sdfasdf <br/>asdfas </Value></Paragraph></Td><Td><Paragraph><Value>bla bla bla</Value></Paragraph></Td></Tr>
+        <Loop select="9" variable="foo">
+          <Tr backgroundcolor="gray"><Td><Paragraph><Value select="$foo"></Value></Paragraph></Td><Td><Paragraph><Value>bla bla bla</Value></Paragraph></Td></Tr>
+        </Loop>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>

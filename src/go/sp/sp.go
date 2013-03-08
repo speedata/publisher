@@ -411,6 +411,21 @@ func runPublisher() {
 	}
 }
 
+func compareTwoPages(sourcefile, referencefile, dummyfile string) bool {
+	res, err := exec.Command("compare", "-metric", "mae", sourcefile, referencefile, dummyfile).CombinedOutput()
+	if err != nil {
+		log.Fatal(err)
+	}
+	delta, err := strconv.ParseFloat(strings.Split(string(res), " ")[0], 32)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if delta > 0.4 {
+		return false
+	}
+	return true
+}
+
 func runComparison(info os.FileInfo) {
 	log.Println("Run comparison in directory", info.Name())
 	err := exec.Command("sp").Run()
@@ -425,29 +440,27 @@ func runComparison(info os.FileInfo) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	sourceFiles, err := filepath.Glob("source-*.png")
+	sourceFiles, err := filepath.Glob("source*.png")
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	badPages := make([]int, 0, len(sourceFiles))
-	for i := 0; i < len(sourceFiles); i++ {
-		sourceFile := fmt.Sprintf("source-%d.png", i)
-		referenceFile := fmt.Sprintf("reference-%d.png", i)
-		dummyFile := fmt.Sprintf("pagediff-%d.png", i)
-		res, err := exec.Command("compare", "-metric", "mae", sourceFile, referenceFile, dummyFile).CombinedOutput()
-		if err != nil {
-			log.Fatal(err)
+	number_of_sourcefiles := len(sourceFiles)
+	badPages := make([]int, 0, number_of_sourcefiles)
+	if number_of_sourcefiles == 1 {
+		if !compareTwoPages("source.png", "reference.png", "pagediff.png") {
+			badPages = append(badPages, 1)
 		}
-		delta, err := strconv.ParseFloat(strings.Split(string(res), " ")[0], 32)
-		if err != nil {
-			log.Fatal(err)
+	} else {
+		for i := 0; i < number_of_sourcefiles; i++ {
+			sourceFile := fmt.Sprintf("source-%d.png", i)
+			referenceFile := fmt.Sprintf("reference-%d.png", i)
+			dummyFile := fmt.Sprintf("pagediff-%d.png", i)
+			if !compareTwoPages(sourceFile, referenceFile, dummyFile) {
+				badPages = append(badPages, i)
+			}
 		}
-		if delta > 0.4 {
-			badPages = append(badPages, i)
-		}
-
 	}
+
 	if len(badPages) > 0 {
 		log.Println("Comparison failed. Bad pages are:", badPages)
 	} else {
