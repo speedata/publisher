@@ -411,6 +411,61 @@ func runPublisher() {
 	}
 }
 
+func runComparison(info os.FileInfo) {
+	log.Println("Run comparison in directory", info.Name())
+	err := exec.Command("sp").Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = exec.Command("convert", "publisher.pdf", "+adjoin", "source.png").Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = exec.Command("convert", "reference.pdf", "+adjoin", "reference.png").Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+	sourceFiles, err := filepath.Glob("source-*.png")
+	if err != nil {
+		log.Fatal(err)
+	}
+	sum := 0.0
+	for _, sourceFile := range sourceFiles {
+		destFile := strings.Replace(sourceFile, "source", "reference", 1)
+		res, err := exec.Command("compare", "-metric", "mae", sourceFile, destFile, "dummy.png").CombinedOutput()
+		if err != nil {
+			log.Fatal(err)
+		}
+		delta, err := strconv.ParseFloat(strings.Split(string(res), " ")[0], 32)
+		if err != nil {
+			log.Fatal(err)
+		}
+		sum = sum + delta
+	}
+	if sum > 1 {
+		log.Println("Comparison failed")
+	} else {
+		log.Println("OK")
+	}
+}
+
+func compare(path string, info os.FileInfo, err error) error {
+	if info.IsDir() {
+		if err := os.Chdir(path); err != nil {
+			log.Println(err)
+			return err
+		}
+		if _, err := os.Stat("publisher.cfg"); err == nil {
+			// publisher.cfg exists, run comparison here
+			runComparison(info)
+		} else if _, err := os.Stat("layout.xml"); err == nil {
+			runComparison(info)
+		}
+		return nil
+	}
+	return nil
+}
+
 func main() {
 	op := optionparser.NewOptionParser()
 	op.On("--autoopen", "Open the PDF file (MacOS X and Linux only)", options)
@@ -432,11 +487,12 @@ func main() {
 	op.On("--wd DIR", "Change working directory", options)
 	op.On("--xml", "Output as (pseudo-)XML (for list-fonts)", options)
 
-	op.Command("list-fonts", "List installed fonts (use together with --xml for copy/paste)")
 	op.Command("clean", "Remove publisher generated files")
+	op.Command("compare", "Compare files for quality assurance")
 	op.Command("doc", "Open documentation")
-	op.Command("watch", "Start watchdog / hotfolder")
+	op.Command("list-fonts", "List installed fonts (use together with --xml for copy/paste)")
 	op.Command("run", "Start publishing (default)")
+	op.Command("watch", "Start watchdog / hotfolder")
 	err := op.Parse()
 	if err != nil {
 		log.Fatal("Parse error: ", err)
@@ -501,6 +557,25 @@ func main() {
 		// open PDF if necessary
 		if getOption("autoopen") == "true" {
 			openFile(getOption("jobname") + ".pdf")
+		}
+	case "compare":
+		if len(op.Extra) > 1 {
+			dir := op.Extra[1]
+			fi, err := os.Stat(dir)
+			if err != nil {
+				log.Fatal(err)
+			}
+			if !fi.IsDir() {
+				log.Fatalf("%q must be a directory", dir)
+			}
+			absDir, err := filepath.Abs(dir)
+			if err != nil {
+				log.Fatal(err)
+			}
+			filepath.Walk(absDir, compare)
+
+		} else {
+			log.Println("Please give one directory")
 		}
 	case "clean":
 		jobname := getOption("jobname")
