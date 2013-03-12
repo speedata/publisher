@@ -28,4 +28,5 @@ Weiterführende Themen
  * [Benutzung und Administration der virtuellen Maschine](description-de/vmusage.html)
  * [Schnittmarken und Beschnittzugabe](description-de/cutmarks.html)
  * [Konfiguration des Publishers](description-de/configuration.html)
+ * [Qualitätssicherung](description-de/qualityassurance.html)
  * [Beispiele](examples-de/index.html)
