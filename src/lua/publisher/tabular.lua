@@ -962,6 +962,8 @@ function setze_tabelle(self)
   local tablefoot = {}
   local rows = {}
   local break_above = true
+  local filter = {}
+  local startpage = tex.count[0]
 
   current_row = 0
   for _,tr in ipairs(self.tab) do
@@ -979,6 +981,11 @@ function setze_tabelle(self)
 
     elseif eltname == "Tablehead" then
       current_row = make_tablehead(self,tr_contents,tablehead_first,tablehead,current_row)
+      if tr_contents.page == "first" then
+        filter.tablehead_force_first = true
+      elseif tr_contents.page == "odd" or tr_contents.page == "even" then
+        filter.tablehead = tr_contents.page
+      end
 
     elseif eltname == "Tablefoot" then
       current_row = make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_row)
@@ -1030,8 +1037,39 @@ function setze_tabelle(self)
   local ht_current = self.optionen.ht_aktuell or self.optionen.ht_max
   local ht_max     = self.optionen.ht_max
   -- The maximum heights are saved here for each table. Currently all tables must have the same height (see the metatable)
-  local pagegoals = setmetatable({}, { __index = function() return ht_max - ht_header - ht_footer end})
-  pagegoals[1]  = ht_current - ht_first_header - ht_footer
+  local pagegoals = {}
+  local function showheader( tablepart )
+    if tablepart == 1 and filter.tablehead_force_first then return true end
+    if not filter.tablehead then return true end
+    if math.fmod(tablepart,2) == math.fmod(startpage,2) then
+      if filter.tablehead == "odd" then
+        return true
+      else
+        return false
+      end
+    else
+      if filter.tablehead == "odd" then
+        return false
+      else
+        return true
+      end
+    end
+  end
+  setmetatable(pagegoals, { __index = function(tbl,idx)
+    if not filter.tablehead then return ht_max - ht_header - ht_footer end
+    if idx == 1 then
+      if showheader(idx) then
+        return ht_current - ht_first_header - ht_footer
+      else
+        return ht_current - ht_footer
+      end
+    end
+    if showheader(idx) then
+        return ht_max - ht_header - ht_footer
+    else
+        return ht_max - ht_footer
+    end
+   end})
   pagegoals[-1] = ht_max - ht_header - ht_footer_last
 
   -- When we split the current table we return an array:
@@ -1083,6 +1121,8 @@ function setze_tabelle(self)
       -- ==0 can happen when there's not enough room for table head + first line
       if last_possible_split_is_after_line ~= 0 then
         splits[#splits + 1] = last_possible_split_is_after_line
+      else
+        startpage = startpage + 1
       end
       accumulated_height = ht_row
       extra_height = self.rowsep
@@ -1121,12 +1161,14 @@ function setze_tabelle(self)
         thissplittable[#thissplittable + 1] = node.copy_list(tmp2)
       end
     else
-      if s == 2 then
-        -- first page
-        thissplittable[#thissplittable + 1] = tablehead_first[1]
-      else
-        -- page > 1
-        thissplittable[#thissplittable + 1] = node.copy_list(tablehead[1])
+      if showheader(s-1) then
+        if s == 2 then
+          -- first page
+          thissplittable[#thissplittable + 1] = tablehead_first[1]
+        else
+          -- page > 1
+          thissplittable[#thissplittable + 1] = node.copy_list(tablehead[1])
+        end
       end
     end
     for i = first_row_in_new_table ,splits[s]  do

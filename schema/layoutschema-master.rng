@@ -1178,6 +1178,8 @@
             <a:documentation docid="table/head/page/all">This table head appears on all pages (default).</a:documentation>
             <value>first</value>
             <a:documentation docid="table/head/page/first">This table head appears on the first page.</a:documentation>
+            <value>even</value>
+            <value>odd</value>
           </choice>
         </attribute>
       </optional>

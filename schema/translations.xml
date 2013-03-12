@@ -101,6 +101,7 @@
     <value key="first" context="*" en="first" de="erste"/>
     <value key="solid" context="*" en="solid" de="durchgezogen"/>
     <value key="EAN13" en="EAN13" de="EAN13"/>
+    <value key="even" context="*" en="even" de="gerade"/>
     <value key="Code128" en="Code128" de="Code128"/>
     <value key="QRCode" en="QRCode" de="QRCode"/>
     <value key="Englisch (Great Britan)" context="*" en="Englisch (Great Britan)" de="Englisch (Großbritannien)"/>
@@ -110,6 +111,7 @@
     <value key="last" context="*" en="last" de="letzte"/>
     <value key="left" context="*" en="left" de="links"/>
     <value key="leftaligned" context="*" en="leftaligned" de="linksbündig"/>
+    <value key="odd" context="*" en="odd" de="ungerade"/>
     <value key="max" context="*" en="max" de="max"/>
     <value key="mediabox" context="*" en="mediabox" de="mediabox"/>
     <value key="no" context="*" en="no" de="nein"/>

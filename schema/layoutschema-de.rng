@@ -1194,6 +1194,8 @@
             <a:documentation docid="table/head/page/all">Dieser Tabellenkopf erscheint auf allen Seiten (default)</a:documentation>
             <value>erste</value>
             <a:documentation docid="table/head/page/first">Dieser Tabellenkopf erscheint auf der ersten Seite</a:documentation>
+            <value>gerade</value>
+            <value>ungerade</value>
           </choice>
         </attribute>
       </optional>
