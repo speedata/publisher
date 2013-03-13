@@ -51,17 +51,22 @@
     </oneOrMore>
   </define>
   <define name="descriptions">
-    <oneOrMore>
       <element name="description">
         <attribute name="xml:lang">
-          <choice>
-            <value>de</value>
             <value>en</value>
-          </choice>
         </attribute>
-        <ref name="para"></ref>
+        <oneOrMore>
+          <ref name="para"></ref>
+        </oneOrMore>
       </element>
-    </oneOrMore>
+      <element name="description">
+        <attribute name="xml:lang">
+            <value>de</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="para"></ref>
+        </oneOrMore>
+      </element>
   </define>
 
   <start>
