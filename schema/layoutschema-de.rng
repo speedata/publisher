@@ -4,7 +4,7 @@
   <start>
     <ref name="e_Layout"/>
   </start>
-  
+
   <define name="t_zerotohundred">
     <data type="nonNegativeInteger">
       <param name="pattern">(100|[0-9]?[0-9])</param>
@@ -93,6 +93,7 @@
       <ref name="e_I"/>
       <ref name="e_B"/>
       <ref name="e_Br"/>
+      <ref name="e_HSpace"/>
       <ref name="e_U"/>
       <ref name="e_FontFace"/>
       <ref name="e_Image"/>
@@ -558,6 +559,13 @@
       <a:documentation docid="i">Schaltet auf Kursiv um</a:documentation>
       <ref name="a_xmlid"/>
       <ref name="t_values"/>
+    </element>
+  </define>
+
+  <define name="e_HSpace">
+    <element name="HLeerraum">
+      <a:documentation docid="hspace">Dehnbaren Leerraum einfügen</a:documentation>
+      <empty/>
     </element>
   </define>
 

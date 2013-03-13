@@ -535,6 +535,19 @@ function commands.group( layoutxml,dataxml )
   publisher.current_grid = save_grid
 end
 
+--- HSpace
+--- ------
+--- Create a horizontal space that stretches up to infinity
+function commands.hspace( layoutxml,dataxml )
+  a = paragraph:new()
+  local n=node.new("glue")
+  n.spec=node.new("glue_spec")
+  n.spec.width = 0
+  n.spec.stretch = 65536
+  n.spec.stretch_order = 3
+  a:append(n,{})
+  return a
+end
 
 --- Hyphenation
 --- -----------

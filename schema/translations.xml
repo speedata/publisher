@@ -32,6 +32,7 @@
      <element key="ForAll" en="ForAll" de="FürAlle"/>
       <element key="Grid" en="Grid" de="Raster"/>
       <element key="Group" en="Group" de="Gruppe"/>
+     <element key="HSpace" en="HSpace" de="HLeerraum"/>
       <element key="Hyphenation" en="Hyphenation" de="Trennvorschlag"/>
       <element key="I" en="I" de="I"/>
       <element key="Image" en="Image" de="Bild"/>
@@ -643,6 +644,10 @@
          <en>Gets executed if no tests evaluate to true.</en>
          <de>Wird ausgeführt, falls keine Bedingung zutrifft</de>
       </documentation>
+     <documentation docid="hspace">
+       <en>Insert stretchable space</en>
+       <de>Dehnbaren Leerraum einfügen</de>
+     </documentation>
       <documentation docid="i">
          <en>Switch to italic font face.</en>
          <de>Schaltet auf Kursiv um</de>

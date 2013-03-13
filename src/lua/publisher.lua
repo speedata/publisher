@@ -188,6 +188,7 @@ local dispatch_table = {
   ForAll                  = commands.forall,
   Grid                    = commands.grid,
   Group                   = commands.group,
+  HSpace                  = commands.hspace,
   Hyphenation             = commands.hyphenation,
   I                       = commands.italic,
   Image                   = commands.image,

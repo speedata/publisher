@@ -1296,6 +1296,35 @@
     </example>
     <seealso />
   </command>
+  <command name="HSpace">
+    <description xml:lang="en">
+      <para>Create a horizontal stretching space. The space will take up no width  as a minimum but is able to stretch up to infinity. Useful in single line contexts.</para>
+      <para>In normal text there will surprising little stretching involved due to the global paragraph optimization alorithm.
+        You will see that all other word spaces will have the minimum width and the excessive whitespace is accumulated at the strechable space.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Erzeugt einen horizontalen dehnbaren Lerrraum. Der Leerraum hat die minimale Größe 0 und die maximale Größe »unendlich«. Sinnvoll nutzbar in einzeiligen Absätzen.</para>
+      <para>Im Fließtext wird es vermutlich unerwartete Ergebnisse hervorrufen. Der Leerraum in einer Zeile verteilt sich normalerweise gleichmäßig über jeden Wortzwischenraum. Wenn ein
+      <cmd name="HSpace"/> enthalten ist, erhalten alle Leerraume die minimale Breite, nur der dehnbare Leerraum hat den überschüssigen Leerraum »angehäuft«.</para>
+    </description>
+    <childelements></childelements>
+    <parentelements><cmd name="Paragraph"/></parentelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<PlaceObject>
+  <Textblock width="10">
+    <Paragraph><Value>Hello</Value><HSpace/><Value>World</Value></Paragraph>
+  </Textblock>
+</PlaceObject>]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<ObjektAusgeben>
+  <Textblock breite="10">
+    <Absatz><Wert>Hallo</Wert><HLeerraum/><Wert>Welt</Wert></Absatz>
+  </Textblock>
+</ObjektAusgeben>]]></listing>
+    </example>
+    <seealso><cmd name="Paragraph"/></seealso>
+  </command>
   <command name="I">
     <description xml:lang="en">
       <para></para>

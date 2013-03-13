@@ -6,6 +6,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* Neuer Befehl "HLeerraum":../commands-de/hspace.html um einen dehnbaren Leerraum einzufügen. (1.5.43)
 * Neuer sp-Befehl @compare@ für "PDF-Vergleich/Qualitätssicherung":qualityassurance.html (1.5.42)
 * Neuer Befehl "Br":../commands-de/br.html um einen Zeilenumbruch einzufügen. Br Tags sind nun auch in "Wert":../commmands-de/value.html erlaubt. (1.5.41)
 * Neue "XPath-Funktion":xpath.html @sd:formatiere-zahl()@ zum „Tausender formatieren“ (1.5.41)
