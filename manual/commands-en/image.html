@@ -14,31 +14,93 @@
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">Image</code></h1>
          <h2>Description</h2>
+         <p>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and
+            JPEG (.jpg).
+         </p>
          <p>Allowed attributes: <span class="tt"><a href="#file">file</a></span>, <span class="tt"><a href="#height">height</a></span>, <span class="tt"><a href="#maxsize">maxsize</a></span>, <span class="tt"><a href="#naturalsize">naturalsize</a></span>, <span class="tt"><a href="#page">page</a></span>, <span class="tt"><a href="#width">width</a></span><br>Child elements: <br>Parent elements: <a href="placeobject.html">PlaceObject</a></p>
          <h3>Attributes</h3>
          <dl>
             <dt><a name="file"></a><span class="tt">file</span> (string)
             </dt>
-            <dd></dd>
+            <dd>
+               
+               <p>Filename of the image. Can be a file in the search path or a URI for absolute paths
+                  (e.g. <span class="tt">file:///path/to/image.pdf</span>).
+               </p>
+               
+            </dd>
             <dt><a name="height"></a><span class="tt">height</span> (number or length, optional)
             </dt>
-            <dd></dd>
+            <dd>
+               
+               <p>Maximum height of the image in the grid.</p>
+               
+            </dd>
             <dt><a name="maxsize"></a><span class="tt">maxsize</span> (string, optional)
             </dt>
-            <dd></dd>
+            <dd>
+               
+               <p>The PDF box that represents the maximum width. Default is “cropbox”.</p>
+               
+            </dd>
             <dt><a name="naturalsize"></a><span class="tt">naturalsize</span> (string, optional)
             </dt>
-            <dd></dd>
+            <dd>
+               
+               <p>The PDF box that represents the visible area. Default is “cropbox”.</p>
+               
+            </dd>
             <dt><a name="page"></a><span class="tt">page</span> (number, optional)
             </dt>
-            <dd></dd>
+            <dd>
+               
+               <p>The page number from the PDF. Default is 1 (include the first page).</p>
+               
+            </dd>
             <dt><a name="width"></a><span class="tt">width</span> (number or length)
             </dt>
-            <dd></dd>
+            <dd>
+               
+               <p>Numer of grid cells that the image will use (horizontally).</p>
+               
+            </dd>
          </dl>
+         <h3>Remarks</h3>
+         
+         <p>The values of the attributes naturalsize and maxsize can be ‘artbox’, ‘bleedbox’,
+            ‘cropbox’, ‘mediabox’ and ‘trimbox’. These two values are used to 
+            enlarge the image for the bleed. In the second example below the designated view port
+            of the image is defined in the artbox, but the image has a larger
+            area (the cropbox) that is used for bleeding.
+         </p>
+         
+         <h2>Example</h2>
+         <pre class="syntax xml">&lt;Record element="productdata"&gt;
+  &lt;PlaceObject column="{ $column }"&gt;
+    &lt;Image width="10" file="{ string(.) }"/&gt;
+  &lt;/PlaceObject&gt;
+&lt;/Record&gt;
+</pre>
+         <p>Takes the file name of the image from the contents of the current element in the data
+            file (here: productdata). Sample data XML:
+         </p>
+         <pre class="syntax xml">&lt;productdata&gt;image.pdf&lt;/productdata&gt;</pre>
+         <h2>Example</h2>
+         
+         <p>The following example reads a pdf file, extracts a page and make the given artbox
+            (should be set in the pdf file) the width of 210mm.
+            If we have an area in the pdf that is larger than the artbox, it will be larger than
+            the given size.
+         </p>
+         <pre class="syntax xml">&lt;Record element="data"&gt;
+  &lt;PlaceObject column="0mm" row="0mm"&gt;
+    &lt;Image width="210mm" file="catalog.pdf" page="132" naturalsize="artbox"/&gt;
+  &lt;/PlaceObject&gt;
+&lt;/Record&gt;
+</pre>
          <h2>Info</h2>
          
-         <p>The number of pages in a PDF file can be determined with the XPath function <span class="tt">sd:number-of-pages(&lt;filename&gt;).</span></p>
+         <p>The number of pages in a PDF file can be determined with the XPath function <span class="tt">sd:number-of-pages(&lt;filename or URI&gt;).</span></p>
          
          <h2>See also</h2><a href="placeobject.html">PlaceObject</a></div>
       <div id="elementref">
@@ -55,6 +117,7 @@
             <li><a href="bolditalic.html">BoldItalic</a></li>
             <li><a href="bookmark.html">Bookmark</a></li>
             <li><a href="box.html">Box</a></li>
+            <li><a href="br.html">Br</a></li>
             <li><a href="case.html">Case</a></li>
             <li><a href="column.html">Column</a></li>
             <li><a href="columns.html">Columns</a></li>
@@ -69,6 +132,7 @@
             <li><a href="forall.html">ForAll</a></li>
             <li><a href="grid.html">Grid</a></li>
             <li><a href="group.html">Group</a></li>
+            <li><a href="hspace.html">HSpace</a></li>
             <li><a href="hyphenation.html">Hyphenation</a></li>
             <li><a href="i.html">I</a></li>
             <li class="active"><a href="image.html">Image</a></li>
@@ -77,7 +141,9 @@
             <li><a href="layout.html">Layout</a></li>
             <li><a href="loaddataset.html">LoadDataset</a></li>
             <li><a href="loadfontfile.html">LoadFontfile</a></li>
+            <li><a href="loop.html">Loop</a></li>
             <li><a href="margin.html">Margin</a></li>
+            <li><a href="mark.html">Mark</a></li>
             <li><a href="message.html">Message</a></li>
             <li><a href="newpage.html">NewPage</a></li>
             <li><a href="nextframe.html">NextFrame</a></li>

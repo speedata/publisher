@@ -38,11 +38,14 @@ Usage: sp [parameter] command
 -v, --var=VAR=VALUE          Set a variable for the publishing run
     --verbose                Print a bit of debugging output
     --version                Show version information
+    --wd=DIR                 Change working directory
     --xml                    Output as (pseudo-)XML (for list-fonts)
   
 Commands
       list-fonts             List installed fonts (use together with --xml
                              for copy/paste)
+      clean                  Remove publisher generated files
+      compare                Compare files for quality assurance
       doc                    Open documentation
       watch                  Start watchdog / hotfolder
       run                    Start publishing (default)</pre>
@@ -76,6 +79,8 @@ Commands
 	<dd>Bindet zusätzliche Verzeichnisse in den Publisherlauf ein. In diesen Verzeichnissen werden alle Daten gesucht: Bilddaten, Regelwerke, Datendateien und Schriftdateien. Dieses Argument kann mehrfach angegeben werden und per <a href="configuration.html">Konfigurationsdatei</a> mit Werten vorbelegt werden.</dd>
 	<dt><code>--verbose</code></dt>
 	<dd>Gibt mehr Informationen aus, also notwendig.</dd>
+	<dt><code>--wd=DIR</code></dt>
+	<dd>Wechselt in das angegebene Verzeichnis. Verhält sich genau so, als ob man vorher mit cd in dieses Verzeichnis gewechselt hat.</dd>
 	<dt><code>--xml</code></dt>
 	<dd>Die Ausgaben mancher Kommandos werden als (Pseudo-)<span class="caps">XML</span> dargestellt, um sie in das Layoutregelwerk zu übernehmen.</dd>
 </dl>
@@ -83,6 +88,10 @@ Commands
 <dl>
 	<dt><code>list-fonts</code></dt>
 	<dd>Listet alle Schriftdateien auf, die in den Publisher-Verzeichnissen gefunden werden. Zusammen mit <code>--xml</code> erlaubt dieses Kommando die Ausgabe per Copy&amp;Paste in das Layoutregelwerk zu übernehmen.</dd>
+	<dt><code>compare</code></dt>
+	<dd>Überprüft rekursiv ein Verzeichnis auf Layout-Anderungen. Siehe den <a href="qualityassurance.html">Abschnitt über Qualitätssicherung</a>.</dd>
+	<dt><code>clean</code></dt>
+	<dd>Entfernt temporäre Dateien aus dem Publisher-Lauf. Behält die <span class="caps">PDF</span> Datei.</dd>
 	<dt><code>doc</code></dt>
 	<dd>Öffnet die Onlinehilfe.</dd>
 	<dt><code>run</code></dt>

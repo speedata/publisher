@@ -19,6 +19,22 @@
 	<h1>Liste der Änderungen</h1>
 <h2>Version 1.6</h2>
 <ul>
+	<li>Neuer Befehl <a href="../commands-de/hspace.html">HLeerraum</a> um einen dehnbaren Leerraum einzufügen. (1.5.43)</li>
+	<li>Neuer sp-Befehl <code>compare</code> für <a href="qualityassurance.html"><span class="caps">PDF</span>-Vergleich/Qualitätssicherung</a> (1.5.42)</li>
+	<li>Neuer Befehl <a href="../commands-de/br.html">Br</a> um einen Zeilenumbruch einzufügen. Br Tags sind nun auch in <a href="../commmands-de/value.html">Wert</a> erlaubt. (1.5.41)</li>
+	<li>Neue <a href="xpath.html">XPath-Funktion</a> <code>sd:formatiere-zahl()</code> zum „Tausender formatieren“ (1.5.41)</li>
+	<li><a href="xpath.html">XPath-Funktion</a> <code>sd:formatiere-zahl()</code> in <code>sd:formatiere-string()</code> umbenannt (1.5.41)</li>
+	<li>Neuer Befehl <a href="../commands-de/loop.html">Schleife</a> um den Inhalt des Elements mehrfach zu wiederholen. (1.5.38)</li>
+	<li>Neue <a href="xpath.html">XPath-Funktionen</a> <code>sd:seitennummer(&lt;marke&gt;)</code> um die Seitennummer einer Marke zu bestimmen (1.5.36).</li>
+	<li>Neuer Befehl <a href="../commands-de/mark.html">Marke</a> um unsichtbare Markierungen zu erstellen. (1.5.36)</li>
+	<li>Neue <a href="xpath.html">XPath-Funktionen</a> <code>ceiling()</code> und <code>floor()</code> (1.5.36).</li>
+	<li>Neue Option: <code>sp --wd DIR</code>. Damit lässt sich das aktuelle Verzeichnis festlegen. Siehe <a href="commandline.html">Kommandozeile</a> (1.5.36)</li>
+	<li>Neuer Befehl: <code>sp clean</code> zum „Aufräumen“. Siehe <a href="commandline.html">Kommandozeile</a> (1.5.35)</li>
+	<li><a href="xpath.html">XPath-Funktion</a> <code>sd:alternierend()</code> geändert und <code>sd:alternierend-zurücksetzen()</code> eingeführt. (1.5.35)</li>
+	<li>Attribut <code>auswerten</code> in <a href="../commands-de/table.html">Tabelle</a> um XPath Ausdrücke auszuführen. (1.5.35)</li>
+	<li>File uri hat nun <code>file:///c:/foo/bar.baz</code> als Format (drei Schrägstriche am Anfang) (siehe <a href="http://en.wikipedia.org/wiki/File_URI_scheme#Windows_2">File <span class="caps">URI</span> scheme</a>) (1.5.35)</li>
+	<li>Neuer <span class="caps">XML</span>-Parser. Benötigt kein spezielles Binary (1.5.35)</li>
+	<li><a href="../commands-de/image.html">Bild</a> kann auch ein <span class="caps">URI</span> (<code>file://...</code>) als Argument für den Dateinamen erhalten. Ebenso die <a href="xpath.html">XPath-Ausdrücke</a> <code>sd:anzahl-seiten()</code>, <code>sd:bildbreite()</code> und <code>sd:datei-vorhanden()</code>. (1.5.33)</li>
 	<li>Wildcard (<code>*</code>) als <a href="xpath.html">XPath-Ausdruck</a> (1.5.32)</li>
 	<li><a href="../commands-de/processnode.html">BearbeiteKnoten</a> erlaubt <a href="xpath.html">XPath-Ausdrücke</a> (1.5.32)</li>
 	<li><a href="../commands-de/barcode.html">QR Codes</a> (1.5.28)</li>
@@ -44,7 +60,7 @@
 	<li>Anzahl der Läufe kann nur noch über Kommandozeile bzw. Konfigurationsdatei angegeben werden.</li>
 	<li><code>opencommand</code> Konfigurierbar (Programm zum Öffnen der Dokumentation / <span class="caps">PDF</span>-Dateien)</li>
 	<li>Konfigurationsdatei in <code>/etc/speedata</code> und im Homeverzeichnis <code>~/.publisher.cfg</code> werden eingelesen.</li>
-	<li>Default Textformat bei &#8220;Tabellen&#8221;../commands-de/table.html.</li>
+	<li>Default Textformat bei <a href="../commands-de/table.html">Tabellen</a>.</li>
 	<li><code>zeilen</code>-Angabe bei Textformaten (inkl hängender Einzug). Siehe <a href="../commands-de/definetextformat.html">DefiniereTextformat</a></li>
 	<li><code>sprun</code> durch <code>sp</code> ersetzt. Siehe <a href="commandline.html">Kommandozeile</a></li>
 	<li><code>hreferenz</code> bei <a href="../commands-de/placeobject.html">ObjektAusgeben</a>.</li>
@@ -128,7 +144,7 @@
 <ul>
 	<li>GruppeAusgeben ist in <a href="../commands-de/placeobject.html">ObjektAusgeben</a> aufgegangen.</li>
 	<li>(Erneut): Rahmen und Hintergrund bei <a href="../commands-de/placeobject">ObjektAusgeben</a>.</li>
-	<li>&#8220;Zuweisung&#8221;../commands-de/setvariable.html: Variablenname nun <a href="xpath.html">XPath-Ausdruck</a>.</li>
+	<li><a href="../commands-de/setvariable.html">Zuweisung</a>: Variablenname nun <a href="xpath.html">XPath-Ausdruck</a>.</li>
 	<li>Bild in Tabelle</li>
 </ul>
 <p><a href="changelogpre1.html">Änderungen vor Version 1.0</a></p>

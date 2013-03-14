@@ -14,36 +14,143 @@
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">Table</code></h1>
          <h2>Description</h2>
-         <p>Allowed attributes: <span class="tt"><a href="#columndistance">columndistance</a></span>, <span class="tt"><a href="#fontface">fontface</a></span>, <span class="tt"><a href="#leading">leading</a></span>, <span class="tt"><a href="#padding">padding</a></span>, <span class="tt"><a href="#stretch">stretch</a></span>, <span class="tt"><a href="#textformat">textformat</a></span>, <span class="tt"><a href="#width">width</a></span><br>Child elements: <a href="columns.html">Columns</a>, <a href="tablefoot.html">Tablefoot</a>, <a href="tablehead.html">Tablehead</a>, <a href="tablerule.html">Tablerule</a>, <a href="tr.html">Tr</a><br>Parent elements: <a href="placeobject.html">PlaceObject</a></p>
+         <p>Create a table that is similar to the HTML table model.</p>
+         <p>Allowed attributes: <span class="tt"><a href="#columndistance">columndistance</a></span>, <span class="tt"><a href="#eval">eval</a></span>, <span class="tt"><a href="#fontface">fontface</a></span>, <span class="tt"><a href="#leading">leading</a></span>, <span class="tt"><a href="#padding">padding</a></span>, <span class="tt"><a href="#stretch">stretch</a></span>, <span class="tt"><a href="#textformat">textformat</a></span>, <span class="tt"><a href="#width">width</a></span><br>Child elements: <a href="columns.html">Columns</a>, <a href="tablefoot.html">Tablefoot</a>, <a href="tablehead.html">Tablehead</a>, <a href="tablerule.html">Tablerule</a>, <a href="tr.html">Tr</a><br>Parent elements: <a href="placeobject.html">PlaceObject</a></p>
          <h3>Attributes</h3>
          <dl>
             <dt><a name="columndistance"></a><span class="tt">columndistance</span> (Length (mm,in,cm,pt), optional)
             </dt>
-            <dd></dd>
+            <dd>
+               
+               <p>Distance between two table columns.</p>
+               
+            </dd>
+            <dt><a name="eval"></a><span class="tt">eval</span> (XPath expression, optional)
+            </dt>
+            <dd>
+               
+               <p>Evaluates the given XPath expression and discards its output.</p>
+               
+            </dd>
             <dt><a name="fontface"></a><span class="tt">fontface</span> (string, optional)
             </dt>
-            <dd></dd>
+            <dd>
+               
+               <p>Name of the font family for the table. If not given, the font face ‘text’ is used.</p>
+               
+            </dd>
             <dt><a name="leading"></a><span class="tt">leading</span> (Length (mm,in,cm,pt), optional)
             </dt>
-            <dd></dd>
+            <dd>
+               
+               <p>The distance between two rows.</p>
+               
+            </dd>
             <dt><a name="padding"></a><span class="tt">padding</span> (Length (mm,in,cm,pt), optional)
             </dt>
-            <dd></dd>
+            <dd>
+               
+               <p>The distance between the table border and the table contents.</p>
+               
+            </dd>
             <dt><a name="stretch"></a><span class="tt">stretch</span> ('max', 'no', optional)
             </dt>
-            <dd></dd>
+            <dd>
+               
+               <p>If the table contents is narrow and stretch has the value no, the table only uses
+                  the minimal width. If the table
+                  contents is wider than the value width or stretch has the value max, the table's width
+                  is the size given in the width attribute.
+               </p>
+               
+            </dd>
             <dt><a name="textformat"></a><span class="tt">textformat</span> (string, optional)
             </dt>
-            <dd></dd>
+            <dd>
+               
+               <p>The name of the textformat to be applied to all texts. Default is ‘text’.</p>
+               
+            </dd>
             <dt><a name="width"></a><span class="tt">width</span> (number, optional)
             </dt>
-            <dd></dd>
+            <dd>
+               
+               <p>The maximum width of the table (in grid cells).</p>
+               
+            </dd>
          </dl>
+         <h3>Remarks</h3>
+         
+         <p>The table cells may contain Paragraphs, Images and other objects that are allowed
+            in <a href="placeobject.html">PlaceObject</a>.
+         </p>
+         
+         <h2>Example</h2>
+         <pre class="syntax xml">&lt;DefineColor name="gray" model="cmyk" c="20" m="20" y="20" k="0"/&gt;
+&lt;DefineColor name="white" model="cmyk" c="0" m="0" y="0" k="0"/&gt;
+
+&lt;Record element="data"&gt;
+  &lt;PlaceObject column="1"&gt;
+    &lt;Table width="14" stretch="max" padding="1pt"&gt;
+      &lt;Tablehead&gt;
+        &lt;Tr backgroundcolor="gray"&gt;
+          &lt;Td colspan="3"/&gt;
+          &lt;Td border-left="0.2pt" border-left-color="white" colspan="6" align="center"&gt;
+            &lt;Paragraph&gt;&lt;B&gt;&lt;Value&gt;Total&lt;/Value&gt;&lt;/B&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+          &lt;Td border-left="0.2pt" border-left-color="white"/&gt;
+        &lt;/Tr&gt;
+        &lt;Tr backgroundcolor="gray"&gt;
+          &lt;Td/&gt;
+          &lt;Td&gt;&lt;Paragraph&gt;&lt;B&gt;&lt;Value&gt;Clubs&lt;/Value&gt;&lt;/B&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+          &lt;Td&gt;&lt;Paragraph&gt;&lt;B&gt;&lt;Value&gt;P&lt;/Value&gt;&lt;/B&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+          &lt;Td border-left="0.2pt" border-left-color="white"&gt;
+            &lt;Paragraph&gt;&lt;B&gt;&lt;Value&gt;W&lt;/Value&gt;&lt;/B&gt;&lt;/Paragraph&gt;
+          &lt;/Td&gt;
+          &lt;Td&gt;&lt;Paragraph&gt;&lt;B&gt;&lt;Value&gt;D&lt;/Value&gt;&lt;/B&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+          &lt;Td&gt;&lt;Paragraph&gt;&lt;B&gt;&lt;Value&gt;L&lt;/Value&gt;&lt;/B&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+          &lt;Td&gt;&lt;Paragraph&gt;&lt;B&gt;&lt;Value&gt;F&lt;/Value&gt;&lt;/B&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+          &lt;Td&gt;&lt;Paragraph&gt;&lt;B&gt;&lt;Value&gt;A&lt;/Value&gt;&lt;/B&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+          &lt;Td&gt;&lt;Paragraph&gt;&lt;B&gt;&lt;Value&gt;+/-&lt;/Value&gt;&lt;/B&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+          &lt;Td border-left="0.2pt" border-left-color="white"&gt;
+            &lt;Paragraph&gt;&lt;B&gt;&lt;Value&gt;Pts&lt;/Value&gt;&lt;/B&gt;&lt;/Paragraph&gt;
+          &lt;/Td&gt;
+        &lt;/Tr&gt;
+      &lt;/Tablehead&gt;
+      &lt;ForAll select="entry"&gt;
+        &lt;Tr&gt;
+          &lt;Td align="left"&gt;&lt;Paragraph&gt;&lt;Value select="@pos"/&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+          &lt;Td align="left"&gt;&lt;Paragraph&gt;&lt;Value select="@name"/&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+          &lt;Td align="center"&gt;&lt;Paragraph&gt;&lt;Value select="@p"/&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+          &lt;Td align="center" border-left="0.2pt" border-left-color="gray"&gt;
+            &lt;Paragraph&gt;&lt;Value select="@tw"/&gt;&lt;/Paragraph&gt;
+          &lt;/Td&gt;
+          &lt;Td align="center"&gt;&lt;Paragraph&gt;&lt;Value select="@td"/&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+          &lt;Td align="center"&gt;&lt;Paragraph&gt;&lt;Value select="@tl"/&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+          &lt;Td align="center"&gt;&lt;Paragraph&gt;&lt;Value select="@ta"/&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+          &lt;Td align="center"&gt;&lt;Paragraph&gt;&lt;Value select="@tf"/&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+          &lt;Td align="center"&gt;&lt;Paragraph&gt;&lt;Value select="@tpm"/&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+          &lt;Td align="center" border-left="0.2pt" border-left-color="gray"&gt;
+            &lt;Paragraph&gt;&lt;Value select="@pts"/&gt;&lt;/Paragraph&gt;
+          &lt;/Td&gt;
+        &lt;/Tr&gt;
+      &lt;/ForAll&gt;
+    &lt;/Table&gt;
+  &lt;/PlaceObject&gt;
+&lt;/Record&gt;
+</pre>
+         <p>Using the following data:</p>
+         <pre class="syntax xml">&lt;data&gt;
+  &lt;entry pos="1" name="Paris Saint-Germain FC" p="6"
+  	  tw="5" td="0" tl="1" tf="14" ta="3" tpm="11" pts="15" /&gt;
+  &lt;entry pos="2" name="FC Porto" p="6"
+  	  tw="4" td="1" tl="1" tf="10" ta="4" tpm="6" pts="13" /&gt;
+  &lt;entry pos="3" name="FC Dynamo Kyiv" p="6"
+  	  tw="1" td="2" tl="3" tf="6"  ta="10" tpm="-4" pts="5" /&gt;
+  &lt;entry pos="4" name="GNK Dinamo Zagreb" p="6"
+  	  tw="0" td="1" tl="5" tf="1"  ta="14" tpm="-13" pts="1" /&gt;
+&lt;/data&gt;</pre>
          <h2>See also</h2>
-         <a href="tr.html">Tr</a>
-         <a href="td.html">Td</a>
-         <a href="tablerule.html">Tablerule</a>
-         <a href="placeobject.html">PlaceObject</a>
+         <a href="tr.html">Tr</a>,  <a href="td.html">Td</a>, <a href="tablerule.html">Tablerule</a>, <a href="placeobject.html">PlaceObject</a>
          
       </div>
       <div id="elementref">
@@ -60,6 +167,7 @@
             <li><a href="bolditalic.html">BoldItalic</a></li>
             <li><a href="bookmark.html">Bookmark</a></li>
             <li><a href="box.html">Box</a></li>
+            <li><a href="br.html">Br</a></li>
             <li><a href="case.html">Case</a></li>
             <li><a href="column.html">Column</a></li>
             <li><a href="columns.html">Columns</a></li>
@@ -74,6 +182,7 @@
             <li><a href="forall.html">ForAll</a></li>
             <li><a href="grid.html">Grid</a></li>
             <li><a href="group.html">Group</a></li>
+            <li><a href="hspace.html">HSpace</a></li>
             <li><a href="hyphenation.html">Hyphenation</a></li>
             <li><a href="i.html">I</a></li>
             <li><a href="image.html">Image</a></li>
@@ -82,7 +191,9 @@
             <li><a href="layout.html">Layout</a></li>
             <li><a href="loaddataset.html">LoadDataset</a></li>
             <li><a href="loadfontfile.html">LoadFontfile</a></li>
+            <li><a href="loop.html">Loop</a></li>
             <li><a href="margin.html">Margin</a></li>
+            <li><a href="mark.html">Mark</a></li>
             <li><a href="message.html">Message</a></li>
             <li><a href="newpage.html">NewPage</a></li>
             <li><a href="nextframe.html">NextFrame</a></li>

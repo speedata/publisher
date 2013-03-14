@@ -14,8 +14,8 @@
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">Wert</code></h1>
          <h2>Beschreibung</h2>
-         <p>Beschreibt einen Textinhalt</p>
-         <p>Erlaubte Attribute: <span class="tt"><a href="#select">auswahl</a></span><br>Kindelemente: <br>Elternelemente: <a href="b.html">B</a>, <a href="image.html">Bild</a>, <a href="switch.html">Fallunterscheidung</a>, <a href="i.html">I</a>, <a href="fontface.html">Schriftart</a>, <a href="sub.html">Sub</a>, <a href="sup.html">Sup</a>, <a href="u.html">U</a>, <a href="url.html">URL</a></p>
+         <p>Beinhaltet einen Textinhalt, der an das umgebende Element übergeben wird.</p>
+         <p>Erlaubte Attribute: <span class="tt"><a href="#select">auswahl</a></span><br>Kindelemente: <a href="br.html">Br</a><br>Elternelemente: <a href="b.html">B</a>, <a href="image.html">Bild</a>, <a href="switch.html">Fallunterscheidung</a>, <a href="i.html">I</a>, <a href="fontface.html">Schriftart</a>, <a href="sub.html">Sub</a>, <a href="sup.html">Sup</a>, <a href="u.html">U</a>, <a href="url.html">URL</a></p>
          <h3>Attribute</h3>
          <dl>
             <dt><a name="select"></a><span class="tt">auswahl</span> (XPath-Ausdruck, optional)
@@ -31,6 +31,8 @@
          <p>Der Inhalt kann entweder als XPath-Ausdruck im Attribut auswahl oder als Elementinhalt
             angegeben werden.
          </p>
+         
+         <p>Innenliegende Br-Tags werden als Zeilenumbruch interpretiert.</p>
          
          <h2>Beispiel</h2>
          <pre class="syntax xml">&lt;Textblock breite="14" schriftart="text"&gt;
@@ -57,6 +59,7 @@
             <li><a href="atpagecreation.html">BeiSeitenErzeugung</a></li>
             <li><a href="image.html">Bild</a></li>
             <li><a href="box.html">Box</a></li>
+            <li><a href="br.html">Br</a></li>
             <li><a href="record.html">Datensatz</a></li>
             <li><a href="definecolor.html">DefiniereFarbe</a></li>
             <li><a href="definefontfamily.html">DefiniereSchriftfamilie</a></li>
@@ -68,6 +71,7 @@
             <li><a href="bolditalic.html">FettKursiv</a></li>
             <li><a href="forall.html">FürAlle</a></li>
             <li><a href="group.html">Gruppe</a></li>
+            <li><a href="hspace.html">HLeerraum</a></li>
             <li><a href="i.html">I</a></li>
             <li><a href="include.html">Include</a></li>
             <li><a href="contents.html">Inhalt</a></li>
@@ -79,6 +83,7 @@
             <li><a href="emptyline.html">Leerzeile</a></li>
             <li><a href="bookmark.html">Lesezeichen</a></li>
             <li><a href="rule.html">Linie</a></li>
+            <li><a href="mark.html">Marke</a></li>
             <li><a href="message.html">Nachricht</a></li>
             <li><a href="newpage.html">NeueSeite</a></li>
             <li><a href="nextrow.html">NeueZeile</a></li>
@@ -90,6 +95,7 @@
             <li><a href="positioningframe.html">Platzierungsrahmen</a></li>
             <li><a href="margin.html">Rand</a></li>
             <li><a href="grid.html">Raster</a></li>
+            <li><a href="loop.html">Schleife</a></li>
             <li><a href="fontface.html">Schriftart</a></li>
             <li><a href="pageformat.html">Seitenformat</a></li>
             <li><a href="pagetype.html">Seitentyp</a></li>

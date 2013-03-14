@@ -14,10 +14,17 @@
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">Tabelle</code></h1>
          <h2>Beschreibung</h2>
-         <p>Erzeugt eine Tabelle, die in etwa dem HTML Tabellenmodell entspricht</p>
-         <p>Erlaubte Attribute: <span class="tt"><a href="#width">breite</a></span>, <span class="tt"><a href="#stretch">dehnen</a></span>, <span class="tt"><a href="#padding">padding</a></span>, <span class="tt"><a href="#fontface">schriftart</a></span>, <span class="tt"><a href="#columndistance">spaltenabstand</a></span>, <span class="tt"><a href="#textformat">textformat</a></span>, <span class="tt"><a href="#leading">zeilenabstand</a></span><br>Kindelemente: <a href="columns.html">Spalten</a>, <a href="tablefoot.html">Tabellenfuß</a>, <a href="tablehead.html">Tabellenkopf</a>, <a href="tablerule.html">Tlinie</a>, <a href="tr.html">Tr</a><br>Elternelemente: <a href="placeobject.html">ObjektAusgeben</a></p>
+         <p>Erzeugt eine Tabelle, die in etwa dem HTML Tabellenmodell entspricht.</p>
+         <p>Erlaubte Attribute: <span class="tt"><a href="#eval">auswerten</a></span>, <span class="tt"><a href="#width">breite</a></span>, <span class="tt"><a href="#stretch">dehnen</a></span>, <span class="tt"><a href="#padding">padding</a></span>, <span class="tt"><a href="#fontface">schriftart</a></span>, <span class="tt"><a href="#columndistance">spaltenabstand</a></span>, <span class="tt"><a href="#textformat">textformat</a></span>, <span class="tt"><a href="#leading">zeilenabstand</a></span><br>Kindelemente: <a href="columns.html">Spalten</a>, <a href="tablefoot.html">Tabellenfuß</a>, <a href="tablehead.html">Tabellenkopf</a>, <a href="tablerule.html">Tlinie</a>, <a href="tr.html">Tr</a><br>Elternelemente: <a href="placeobject.html">ObjektAusgeben</a></p>
          <h3>Attribute</h3>
          <dl>
+            <dt><a name="eval"></a><span class="tt">auswerten</span> (XPath-Ausdruck, optional)
+            </dt>
+            <dd>
+               
+               <p>Wertet den angegebenen XPath-Ausdruck aus und ignoriert dessen Ausgabe.</p>
+               
+            </dd>
             <dt><a name="width"></a><span class="tt">breite</span> (Zahl, optional)
             </dt>
             <dd>
@@ -64,7 +71,7 @@
             <dd>
                
                <p>Das Textformat, das benutzt wird, wenn kein anderes angegeben wird. Voreinstellung
-                  ist ›text‹'
+                  ist ›text‹.
                </p>
                
             </dd>
@@ -126,10 +133,7 @@
   &lt;/Tabelle&gt;
 &lt;/ObjektAusgeben&gt;</pre>
          <h2>Siehe auch</h2>
-         <a href="tr.html">Tr</a>
-         <a href="td.html">Td</a>
-         <a href="tablerule.html">Tlinie</a>
-         <a href="placeobject.html">ObjektAusgeben</a>
+         <a href="tr.html">Tr</a>,  <a href="td.html">Td</a>, <a href="tablerule.html">Tlinie</a>, <a href="placeobject.html">ObjektAusgeben</a>
          
       </div>
       <div id="elementref">
@@ -145,6 +149,7 @@
             <li><a href="atpagecreation.html">BeiSeitenErzeugung</a></li>
             <li><a href="image.html">Bild</a></li>
             <li><a href="box.html">Box</a></li>
+            <li><a href="br.html">Br</a></li>
             <li><a href="record.html">Datensatz</a></li>
             <li><a href="definecolor.html">DefiniereFarbe</a></li>
             <li><a href="definefontfamily.html">DefiniereSchriftfamilie</a></li>
@@ -156,6 +161,7 @@
             <li><a href="bolditalic.html">FettKursiv</a></li>
             <li><a href="forall.html">FürAlle</a></li>
             <li><a href="group.html">Gruppe</a></li>
+            <li><a href="hspace.html">HLeerraum</a></li>
             <li><a href="i.html">I</a></li>
             <li><a href="include.html">Include</a></li>
             <li><a href="contents.html">Inhalt</a></li>
@@ -167,6 +173,7 @@
             <li><a href="emptyline.html">Leerzeile</a></li>
             <li><a href="bookmark.html">Lesezeichen</a></li>
             <li><a href="rule.html">Linie</a></li>
+            <li><a href="mark.html">Marke</a></li>
             <li><a href="message.html">Nachricht</a></li>
             <li><a href="newpage.html">NeueSeite</a></li>
             <li><a href="nextrow.html">NeueZeile</a></li>
@@ -178,6 +185,7 @@
             <li><a href="positioningframe.html">Platzierungsrahmen</a></li>
             <li><a href="margin.html">Rand</a></li>
             <li><a href="grid.html">Raster</a></li>
+            <li><a href="loop.html">Schleife</a></li>
             <li><a href="fontface.html">Schriftart</a></li>
             <li><a href="pageformat.html">Seitenformat</a></li>
             <li><a href="pagetype.html">Seitentyp</a></li>

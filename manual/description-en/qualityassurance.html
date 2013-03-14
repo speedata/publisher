@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../css/normal.css" type="text/css" />
+<link rel="stylesheet" href="../css/pygments.css" type="text/css" />
+<link rel="stylesheet" href="../css/colorbox.css" type="text/css" />
+<script src="../javascript/jquery.min.js" ></script>
+<script src="../javascript/jquery.colorbox-min.js" ></script>
+<script>
+  $(document).ready(function(){
+     $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+  });
+</script>
+<title>Quality Assurance</title>
+</head>
+<body>
+<div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"></a></div>
+	<h1>Quality assurance and <span class="caps">PDF</span> comparison</h1>
+<p>To assure that new versions of the speedata Publisher produce the exact the same results as before, it has a built in functionality to check for unwanted changes of behavior.</p>
+<p>The idea is as follows: with a layout file and a “good” result (a reference <span class="caps">PDF</span>) the publisher can check whether the current version of the publisher gets the same result. For that one has to create a layout and data <span class="caps">XML</span> file, run the speedata Publisher and save the result under the name <code>reference.pdf</code>. When the publisher is invoked with <code>sp compare &lt;directory&gt;</code> it will re-create the document and compare, page by page, if the resulting <span class="caps">PDF</span> is visually the same as the previously created file <code>reference.pdf</code>.</p>
+<h2>Prerequisites for the comparison</h2>
+<p>The speedata publisher searches recursively from the given directory for directories that contain the file <code>layout.xml</code> or <code>publisher.cfg</code>. In these directories a new publisher run will be started. The layout file must be named <code>layout.xml</code>, the data file must be named <code>data.xml</code> unless configured otherwise in the optional configuration file <code>publisher.cfg</code>.</p>
+<p>The <span class="caps">PDF</span> comparison requires an installation of the free software ImageMagick, that is able to manipulate and compare images without user interaction. ImageMagick is available for Windows, Mac OS X, Linux and other platforms.</p>
+<h2>How to use <code>sp compare</code></h2>
+<p>Having a layout and a data file you create the <span class="caps">PDF</span> as usual. The easiest way is to create it directly with the name <code>reference.pdf</code>.</p>
+<pre>sp --jobname reference</pre>
+<p>creates the correct <span class="caps">PDF</span> file. With</p>
+<pre>sp --jobname reference clean</pre>
+<p>the redundant and not needed temporaray files are removed. The directory now looks like this:</p>
+<pre>example/
+├── data.xml
+├── layout.xml
+└── reference.pdf
+ 
+0 directories, 3 files</pre>
+<p>When you run <code>sp compare example</code>, no error messages should be given in the output:</p>
+<pre>$ sp compare example/
+Run comparison in directory example
+OK
+Total run time: 1.62956s</pre>
+<p>If a future version of the publisher introduces a visual change of the layout, the output would be something like this:</p>
+<pre>$ sp compare example/
+Run comparison in directory example
+Comparison failed. Bad pages are: [1]
+Total run time: 862.898ms</pre>
+<p>The differences are available as a <span class="caps">PNG</span> file in the directory:</p>
+<pre>example/
+├── data.xml
+├── layout.xml
+├── pagediff.png
+├── publisher.pdf
+├── reference.pdf
+├── reference.png
+└── source.png</pre>
+<p>The files <code>source.png</code> and <code>reference.png</code> (with documents that contain more than one page the file name looks like this: <code>source-1.png</code>) contain the current version and the reference as a bitmap graphic. The file <code>pagediff.png</code> (same numbering scheme as above) contains the highlighted differences between the two former files.</p>
+<h2>Quality assurance</h2>
+<p>The facilities of the <span class="caps">PDF</span> comparison can be used to create a collection of sample documents, that are typical for production documents. The practice is now to install a directory structure as follows:</p>
+<pre>qa/
+├── example1
+│   ├── data.xml
+│   ├── layout.xml
+│   └── reference.pdf
+├── example2
+│   ├── data.xml
+│   ├── layout.xml
+│   └── reference.pdf
+├── example3
+│   ├── data.xml
+│   ├── layout.xml
+│   └── reference.pdf
+├── example4
+│   ├── data.xml
+│   ├── layout.xml
+│   └── reference.pdf
+└── example5
+    ├── data.xml
+    ├── layout.xml
+    └── reference.pdf</pre>
+<p>When you run <code>sp compare qa</code> all subdirectories are visited and checked. In the best case the output is:</p>
+<pre>$ sp compare qa/
+Run comparison in directory example1
+OK
+Run comparison in directory example2
+OK
+Run comparison in directory example3
+OK
+Run comparison in directory example4
+OK
+Run comparison in directory example5
+OK
+Total run time: 4.541458s</pre>
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
+<a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language: <a href="../description-de/qualityassurance.html">German</a> 
+</body>
+</html>
