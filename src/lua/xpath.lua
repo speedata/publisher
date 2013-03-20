@@ -368,9 +368,6 @@ local function _comparison( ... )
   if select('#',...) == 1 then
    return ...
   end
-  if not (select(1,...) and select(2,...) and select(3,...)) then
-    return false
-  end
   local value1, value2 = select(1,...), select(3,...)
   local operator = select(2,...)
   local ret
