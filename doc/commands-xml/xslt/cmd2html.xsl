@@ -62,7 +62,7 @@
     <value type="leftright" de="'links' oder 'rechts'" en="'left' or 'right'" />
     <value type="numberlengthorstar" de="Zahl, Maßangabe oder *-Angaben" en="Number, length or *-numbers" />
     <value type="align" de="“right”,“left”,“center”" en="“right”,“left”,“center”" />
-    <value type="valign" de="“top”,“center”,“bottom”" en="“top”,“center”,“bottom”" />
+    <value type="valign" de="“top”,“middle”,“bottom”" en="“top”,“middle”,“bottom”" />
     <value type="maxno" de="'max', 'nein'" en="'max', 'no'" />
   </xsl:variable>
   

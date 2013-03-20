@@ -64,7 +64,7 @@ module Jekyll
       pagename = context.environments.first["page"]["url"]
       case pagename.match(/^\S+-(..)/) and pagename.match(/^\S+-(..)/)[1]
       when "de"
-        %Q!<a href="#{rootdir}/commands-de/layout.html">Elementreferenz</a>!
+        %Q!<a href="#{rootdir}/commands-de/layout.html">Befehlsreferenz</a>!
       else
         %Q!<a href="#{rootdir}/commands-en/layout.html">Element reference</a>!
       end

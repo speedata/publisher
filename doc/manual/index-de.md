@@ -12,7 +12,7 @@ Andere Sprachen: [Englisch](index.html)
 Referenz
 --------
 
- * [Elementreferenz](commands-de/layout.html)
+ * [Befehlsreferenz](commands-de/layout.html)
  * [Kommandozeile](description-de/commandline.html)
  * [XPath-Ausdrücke](description-de/xpath.html)
  * [Hotfolder/Watchdog](description-de/hotfolder.html)

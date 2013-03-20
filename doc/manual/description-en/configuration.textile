@@ -22,7 +22,7 @@ autoopen  = false
 The format of the file is important, otherwise it won't be recognized. The following options are supported:
 
 - @autoopen@ := if @true@, the publisher opens the PDF file. Default: @false@. The same effect can be achieved if you run  @sp --autoopen@.
-- @extra_dir@ := A list of directories in the file system separated by @;@ (Windows) or @:@ (Mac, Linux). These directories contain the images, fonts, source files and other assets that are used during the publisher run.
+- @extra-dir@ := A list of directories in the file system separated by @;@ (Windows) or @:@ (Mac, Linux). These directories contain the images, fonts, source files and other assets that are used during the publisher run.
 - @filter@  := Run the given file as an XPROC-Filter.
 - @layout@  := Name of the layout rule set (XML). The default name is @layout.xml@.
 - @data@    := Name of the data file (XML). If not given, the system uses @data.xml@.
