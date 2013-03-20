@@ -1643,7 +1643,7 @@
   </command>
   <command name="Layout">
     <description xml:lang="en">
-      <para></para>
+      <para>This command is the root element in the Layout instructions.</para>
     </description>
     <description xml:lang="de">
       <para>Das <cmd name="Layout" />Element ist das Wurzelelement im Regelwerk.</para>
@@ -1663,36 +1663,105 @@
       <cmd name="SetVariable" />
     </childelements>
     <parentelements />
+    <attribute name="version" type="number" optional="yes">
+      <description xml:lang="en">
+        <para>Minimum publisher version required. If major or minor version differ, give a warning. Format: 1.6.12 (revision number can be left out).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Gibt die minimale Version des Publishers an. Format: 1.6.13. Die letzten Ziffern können weggelassen werden.
+          Falls die erste oder die zweite Ziffer der Versionsangabe unterschiedlich ist, wird eine Warnung ausgegeben.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <para>This is a complete example for a layout ruleset:</para>
+      <listing><![CDATA[<?xml version="1.0"?>
+<Layout
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  xmlns="urn:speedata.de:2009/publisher/en">
+  <Options
+    show-grid="yes"
+    show-gridallocation="no"
+  />
+
+  <LoadFontfile name="Helvetica Fett" filename="texgyreheros-bold.otf" />
+
+<DefineFontfamily
+    name="title" 
+    fontsize="12"
+    leading="16">
+    <Regular fontface="Helvetica Fett" />
+  </DefineFontfamily>
+
+  <Pageformat width="150mm" height="200mm" />
+  <SetGrid width="4mm" height="14pt" />
+
+  <DefineTextformat name="text" alignment="justified" />
+
+  <Pagetype name="recto" test="sd:odd(sd:current-page())">
+    <Margin left="2cm" right="1cm" top="1cm" bottom="1cm" />
+  </Pagetype>
+
+  <Pagetype name="verso" test="sd:even(sd:current-page())">
+    <Margin left="1cm" right="2cm" top="1cm" bottom="1cm" />
+  </Pagetype>
+
+  <Record element="üroduct">
+    <SetVariable variable="column" select="2" />
+    <PlaceObject column="1">
+      <Textblock width="14" fontface="title">
+        <Paragraph>
+          <Value select="@name"/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <ProcessNode select="productimage"/>
+    <NewPage/>
+  </Record>
+
+  <Record element="productimage">
+    <NextRow rows="2"/>
+    <PlaceObject column="1">
+      <Image width="10" file="{string(.)}"/>
+    </PlaceObject>
+  </Record>
+
+</Layout>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <para>Nachfolgend ein vollständiges Beispiel für ein Layoutregelwerk.</para>
-      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/de">
+      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/de"
+  xmlns:sd="urn:speedata:2009/publisher/functions/de">
   <Optionen
-     zeige_rasterbelegung="nein"
-     zeichne_raster="ja"
-    />
- 
+    zeige_rasterbelegung="nein"
+    zeichne_raster="ja"
+  />
+
   <LadeSchriftdatei name="Helvetica Fett" dateiname="texgyreheros-bold.otf" />
-   
-  <DefiniereSchriftfamilie name="Überschrift" schriftgröße="12"
-                           zeilenabstand="16">
+
+  <DefiniereSchriftfamilie
+    name="Überschrift" 
+    schriftgröße="12"
+    zeilenabstand="16">
     <Normal schriftart="Helvetica Fett" />
   </DefiniereSchriftfamilie>
-   
+
   <Seitenformat breite="150mm" höhe="200mm" />
   <SetzeRaster breite="4mm" höhe="14pt" />
-  
+
   <DefiniereTextformat name="text" ausrichtung="blocksatz" />
-  
+
   <Seitentyp name="rechte Seite" bedingung="sd:ungerade(sd:aktuelle-seite())">
     <Rand links="2cm" rechts="1cm" oben="1cm" unten="1cm" />
   </Seitentyp>
-  
+
   <Seitentyp name="linke Seite" bedingung="sd:gerade(sd:aktuelle-seite())">
     <Rand links="1cm" rechts="2cm" oben="1cm" unten="1cm" />
   </Seitentyp>
-  
+
   <Datensatz element="Produkt">
-    <Zuweisung variable="spalte" wert="2" />
+    <Zuweisung variable="spalte" auswahl="2" />
     <ObjektAusgeben spalte="1">
       <Textblock breite="14" schriftart="Überschrift">
         <Absatz>
@@ -1703,15 +1772,15 @@
     <BearbeiteKnoten auswahl="produktbild" />
     <NeueSeite />
   </Datensatz>
-  
+
   <Datensatz element="produktbild">
-    <NeueZeile/>
-    <NeueZeile/>
+    <NeueZeile zeilen="2"/>
     <ObjektAusgeben spalte="1">
       <Bild breite="10" datei="{string(.)}"/>
     </ObjektAusgeben>
   </Datensatz>
-</Layout>]]></listing>
+</Layout>
+]]></listing>
     </example>
     <seealso>
       <cmd name="Include" />

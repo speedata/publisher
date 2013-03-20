@@ -240,6 +240,7 @@
       <attribute key="trim" en="trim" de="beschnittzugabe"/>
       <attribute key="type" en="type" de="typ" />
       <attribute key="valign" en="valign" de="valign"/>
+     <attribute key="version" en="version" de="version"/>
       <attribute key="variable" en="variable" de="variable"/>
       <attribute key="width" en="width" de="breite"/>
       <attribute key="y" en="y" de="y"/>
@@ -660,6 +661,10 @@
          <en>The XPath expression to determine the contents to be copied.</en>
          <de>XPath Ausdruck um den Inhalt zu ermitteln.</de>
       </documentation>
+     <documentation docid="layout/version">
+       <en>Minimum publisher version required. If major or minor version differ, give a warning. Format: 1.6.12 (revision number can be left out).</en>
+       <de>Gibt die minimale Version des Publishers an. Format: 1.6.13. Die letzten Ziffern können weggelassen werden.</de>
+     </documentation>
       <documentation docid="loaddataset">
          <en>Loads and executes a data XML file from the disk. It is fine if the given file does not exist (no error is raised).</en>
          <de>Lädt eine zuvor gespeicherte Datensatzdatei. Existiert die angegebene Datei nicht, wird dieser Befehl

@@ -390,6 +390,23 @@ function dothings()
     err("Cannot determine the language of the layout file.")
     exit()
   end
+
+  if layoutxml.version then
+    local version_mismatch = false
+    local publisher_version = string.explode(os.getenv("PUBLISHERVERSION"),".")
+    local requested_version = string.explode(layoutxml.version,".")
+    if publisher_version[1] ~= requested_version[1] then
+      version_mismatch = true
+    elseif publisher_version[2] ~= requested_version[2] then
+      version_mismatch = true
+    elseif requested_version[3] and publisher_version[3] < requested_version[3] then
+      version_mismatch = true
+    end
+    if version_mismatch then
+      err("Version mismatch. speedata Publisher is at version %s, requested version %s", os.getenv("PUBLISHERVERSION"), layoutxml.version)
+      exit()
+    end
+  end
   dispatch(layoutxml)
 
   --- override options set in the `<Options>` element

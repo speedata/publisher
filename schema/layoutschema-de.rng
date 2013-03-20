@@ -627,6 +627,10 @@
   <define name="e_Layout">
     <element name="Layout">
       <ref name="a_xmlid"/>
+      <optional>
+        <attribute name="version"/>
+        <a:documentation docid="layout/version">Gibt die minimale Version des Publishers an. Format: 1.6.13. Die letzten Ziffern können weggelassen werden.</a:documentation>
+      </optional>
       <oneOrMore>
         <ref name="t_Toplevel"/>
         <optional><ref name="e_Include"/></optional>

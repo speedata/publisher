@@ -349,6 +349,7 @@ values = {
     ["trim"] = {de = "beschnittzugabe", en = "trim", },
     ["type"] = {de = "typ", en = "type", },
     ["valign"] = {de = "valign", en = "valign", },
+    ["version"] = {de = "version", en = "version", },
     ["variable"] = {de = "variable", en = "variable", },
     ["width"] = {de = "breite", en = "width", },
     ["y"] = {de = "y", en = "y", },

@@ -136,6 +136,7 @@ func init() {
 		path_to_documentation = filepath.Join(installdir, "/build/manual/"+indexpage)
 	}
 	inifile = filepath.Join(srcdir, "lua/sdini.lua")
+	os.Setenv("PUBLISHERVERSION", version)
 }
 
 func getOptionSection(optionname string, section string) string {

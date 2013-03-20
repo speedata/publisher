@@ -615,6 +615,10 @@
   <define name="e_Layout">
     <element name="Layout">
       <ref name="a_xmlid"/>
+      <optional>
+        <attribute name="version"/>
+        <a:documentation docid="layout/version">Minimum publisher version required. If major or minor version differ, give a warning. Format: 1.6.12 (revision number can be left out).</a:documentation>
+      </optional>
       <oneOrMore>
         <ref name="t_Toplevel"/>
         <optional><ref name="e_Include"/></optional>

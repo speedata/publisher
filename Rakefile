@@ -8,14 +8,22 @@ CLOBBER.include("build/sourcedoc","src/go/sp/sp","src/go/sp/docgo", "src/go/sp/b
 installdir = Pathname.new(__FILE__).join("..")
 srcdir   = installdir.join("src")
 builddir = installdir.join("build")
+@versions = {}
+File.read("version").each_line do |line|
+	product,versionnumber = line.chomp.split(/=/) # / <-- ignore this slash
+	@versions[product]=versionnumber
+end
+
 
 
 desc "Compile and install necessary software"
 task :build do
 	ENV['GOPATH'] = "#{srcdir}/go/sp"
+	publisher_version = @versions['publisher_version']
+	puts publisher_version
 	Dir.chdir(srcdir.join("go","sp")) do
 		puts "Building (and copying) sp binary..."
-  		sh 'go build -ldflags "-X main.dest git -X main.version local"  sp.go'
+  		sh "go build -ldflags \"-X main.dest git -X main.version #{publisher_version}\"  sp.go"
 		cp("sp","#{installdir}/bin")
   		puts "...done"
 	end
