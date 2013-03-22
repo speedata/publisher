@@ -202,7 +202,18 @@ function textvalue( tab )
     end
   end
   if type(tab)=="string" then return tab end
-  if type(tab)=="number" then return tostring(tab) end
+  if type(tab)=="number" then
+    -- we don't like scientific notation in our strings
+    -- If the number is too large, just return the decimal
+    -- part of it
+    local tmp
+    tmp = tostring(tab)
+    if string.match(tmp,"e%+") then
+      return string.format("%d",tab)
+    else
+      return tostring(tab)
+    end
+  end
   -- The first argument can be a function (XPath function)
   if type(tab[1])=="function" then
     table.insert(tab,2,dataxml)
