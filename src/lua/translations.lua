@@ -2,6 +2,7 @@
 module(...)
 return {
 de = {  elements = {
+    ["A"] = "A",
     ["Aktion"] = "Action",
     ["ZurListeHinzufügen"] = "AddToList",
     ["BeiSeitenErzeugung"] = "AtPageCreation",
@@ -125,6 +126,7 @@ values = {
 },
 },
 },en = {  elements = {
+    ["A"] = "A",
     ["Action"] = "Action",
     ["AddToList"] = "AddToList",
     ["AtPageCreation"] = "AtPageCreation",
@@ -291,6 +293,7 @@ values = {
     ["framecolor"] = {de = "rahmenfarbe", en = "framecolor", },
     ["g"] = {de = "g", en = "g", },
     ["groupname"] = {de = "gruppenname", en = "groupname", },
+    ["href"] = {de = "href", en = "href", },
     ["height"] = {de = "höhe", en = "height", },
     ["hreference"] = {de = "hreferenz", en = "hreference", },
     ["xml:id"] = {de = "xml:id", en = "xml:id", },

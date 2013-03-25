@@ -166,6 +166,7 @@ namespaces_layout = nil
 
 --- The dispatch table maps every element in the layout xml to a command in the `commands.lua` file.
 local dispatch_table = {
+  A                       = commands.a,
   Action                  = commands.action,
   AddToList               = commands.add_to_list,
   AtPageCreation          = commands.atpagecreation,

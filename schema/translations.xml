@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <translations>
    <elements>
+     <element key="A" en="A" de="A"/>
      <element key="Action" en="Action" de="Aktion"/>
      <element key="AddToList" en="AddToList" de="ZurListeHinzufügen"/>
       <element key="AtPageCreation" en="AtPageCreation" de="BeiSeitenErzeugung"/>
@@ -178,6 +179,7 @@
       <attribute key="framecolor" en="framecolor" de="rahmenfarbe"/>
       <attribute key="g" en="g" de="g"/>
       <attribute key="groupname" en="groupname" de="gruppenname"/>
+      <attribute key="href" en="href" de="href" />
       <attribute key="height" en="height" de="höhe"/>
       <attribute key="hreference" en="hreference" de="hreferenz"/>
      <attribute key="xml:id" en="xml:id" de="xml:id"/>
@@ -246,6 +248,14 @@
       <attribute key="y" en="y" de="y"/>
    </attributes>
    <doc>
+     <documentation docid="a">
+       <en>Insert hyerlink to a URL</en>
+       <de>Hyperlink zu einer URL einfügen</de>
+     </documentation>
+     <documentation docid="a/href">
+       <en>URI destination (e.g. http://www.speedata.de)</en>
+       <de>URL Ziel (e.g. http://www.speedata.de)</de>
+     </documentation>
       <documentation docid="alignment">
          <en>Determines the text appearance</en>
          <de>Bestimmt den Rand der Zeilen</de>

@@ -90,6 +90,7 @@
 
   <define name="t_textvalues">
     <choice>
+      <ref name="e_A"/>
       <ref name="e_I"/>
       <ref name="e_B"/>
       <ref name="e_Br"/>
@@ -167,6 +168,16 @@
         <a:documentation docid="allocate/auto">The object's shape is considered when allocating cells.</a:documentation>
       </choice>
     </attribute>
+  </define>
+
+  <define name="e_A">
+    <element name="A">
+      <a:documentation docid="a">Insert hyerlink to a URL</a:documentation>
+      <attribute name="href"/>
+      <a:documentation docid="a/href">URI destination (e.g. http://www.speedata.de)</a:documentation>
+      <ref name="a_xmlid"/>
+      <ref name="t_values"/>
+    </element>
   </define>
 
   <define name="e_Paragraph">

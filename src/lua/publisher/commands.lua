@@ -18,6 +18,42 @@ require("fileutils")
 -- This module contains the commands in the layout file (the tags)
 commands = {}
 
+--- A
+--- -----
+--- Insert a hyperlink into the PDF.
+function commands.a( layoutxml,dataxml )
+  trace("A")
+  local href = publisher.read_attribute(layoutxml,dataxml,"href","rawstring")
+  local ai = node.new("action")
+  ai.action_type = 3
+  ai.data = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",href)
+  local stl = node.new("whatsit","pdf_start_link")
+  stl.action = ai
+  stl.width = -1073741824
+  stl.height = -1073741824
+  stl.depth = -1073741824
+  p = paragraph:new()
+  p:append(stl)
+
+  local tab = publisher.dispatch(layoutxml,dataxml)
+  local objects = {}
+  for i,j in ipairs(tab) do
+    if publisher.elementname(j,true) == "Value" and type(publisher.element_contents(j)) == "table" then
+      objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j))
+    else
+      objects[#objects + 1] = publisher.element_contents(j)
+    end
+  end
+  for _,j in ipairs(objects) do
+    p:append(j,{})
+  end
+  local enl = node.new("whatsit","pdf_end_link")
+  p:append(enl)
+
+
+  return p
+end
+
 --- Action
 --- ------
 --- Create a whatsit node of type 44 (`user_defined`). The only action

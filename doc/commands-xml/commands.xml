@@ -1,5 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <commands xmlns="urn:speedata.de:2011/publisher/documentation" xmlns:de="urn:speedata.de:2009/publisher/de">
+  <command name="A">
+    <description xml:lang="en">
+      <para>Insert Hyperlink to a URL.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Hyperlink auf eine URL einfügen.</para>
+    </description>
+    <childelements>
+      <cmd name="Value"/>
+    </childelements>
+    <parentelements>
+      <cmd name="Paragraph"/>
+    </parentelements>
+    <attribute name="href" type="text" optional="no">
+      <description xml:lang="en">
+        <para>The destination of the hyperlink (URI). Example: <tt>http://www.speedata.de</tt></para>
+      </description>
+      <description xml:lang="de">
+        <para>Das Ziel des Hyperlinks. Beispiel: <tt>http://www.speedata.de</tt></para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<PlaceObject>
+  <Textblock width="10">
+    <Paragraph><Value>See the </Value>
+      <A href="http://www.speedata.de">
+        <Value>homepage</Value>
+      </A>
+      <Value> for more information.</Value>
+    </Paragraph>
+  </Textblock>
+</PlaceObject>]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<ObjektAusgeben>
+  <Textblock breite="10">
+    <Absatz>
+      <Wert>Siehe die </Wert>
+      <A href="http://www.speedata.de"><Wert>Homepage</Wert></A>
+      <Wert> für weitere Information.</Wert>
+    </Absatz>
+  </Textblock>
+</ObjektAusgeben>
+]]></listing>
+    </example>
+    <seealso></seealso>
+  </command>
   <command name="Action">
     <description xml:lang="en">
       <para>Associates an action with a text. Once the text is placed on the page, the associated action will be executed. The action

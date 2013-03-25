@@ -90,6 +90,7 @@
 
   <define name="t_textvalues">
     <choice>
+      <ref name="e_A"/>
       <ref name="e_I"/>
       <ref name="e_B"/>
       <ref name="e_Br"/>
@@ -169,6 +170,16 @@
         <a:documentation docid="allocate/auto">Die Form des Objekts wird beim Belegen der Rasterzellen beachtet.</a:documentation>
       </choice>
     </attribute>
+  </define>
+
+  <define name="e_A">
+    <element name="A">
+      <a:documentation docid="a">Hyperlink zu einer URL einfügen</a:documentation>
+      <attribute name="href"/>
+      <a:documentation docid="a/href">URL Ziel (e.g. http://www.speedata.de)</a:documentation>
+      <ref name="a_xmlid"/>
+      <ref name="t_values"/>
+    </element>
   </define>
 
   <define name="e_Paragraph">
