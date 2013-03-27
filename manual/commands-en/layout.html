@@ -14,11 +14,78 @@
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">Layout</code></h1>
          <h2>Description</h2>
-         <p></p>
-         <p>Allowed attributes: <br>Child elements: <a href="dataset.html"></a>, <a href="definecolor.html">DefineColor</a>, <a href="definefontfamily.html">DefineFontfamily</a>, <a href="definetextformat.html">DefineTextformat</a>, <a href="hyphenation.html">Hyphenation</a>, <a href="include.html">Include</a>, <a href="loadfontfile.html">LoadFontfile</a>, <a href="options.html">Options</a>, <a href="pageformat.html">Pageformat</a>, <a href="pagetype.html">Pagetype</a>, <a href="setgrid.html">SetGrid</a>, <a href="setvariable.html">SetVariable</a><br>Parent elements: 
+         <p>This command is the root element in the Layout instructions.</p>
+         <p>Allowed attributes: <span class="tt"><a href="#version">version</a></span><br>Child elements: <a href="dataset.html"></a>, <a href="definecolor.html">DefineColor</a>, <a href="definefontfamily.html">DefineFontfamily</a>, <a href="definetextformat.html">DefineTextformat</a>, <a href="hyphenation.html">Hyphenation</a>, <a href="include.html">Include</a>, <a href="loadfontfile.html">LoadFontfile</a>, <a href="options.html">Options</a>, <a href="pageformat.html">Pageformat</a>, <a href="pagetype.html">Pagetype</a>, <a href="setgrid.html">SetGrid</a>, <a href="setvariable.html">SetVariable</a><br>Parent elements: 
          </p>
          <h3>Attributes</h3>
-         <dl></dl>
+         <dl>
+            <dt><a name="version"></a><span class="tt">version</span> (number, optional)
+            </dt>
+            <dd>
+               
+               <p>Minimum publisher version required. If major or minor version differ, give a warning.
+                  Format: 1.6.12 (revision number can be left out).
+               </p>
+               
+            </dd>
+         </dl>
+         <h2>Example</h2>
+         
+         <p>This is a complete example for a layout ruleset:</p>
+         <pre class="syntax xml">&lt;?xml version="1.0"?&gt;
+&lt;Layout
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  xmlns="urn:speedata.de:2009/publisher/en"&gt;
+  &lt;Options
+    show-grid="yes"
+    show-gridallocation="no"
+  /&gt;
+
+  &lt;LoadFontfile name="Helvetica Fett" filename="texgyreheros-bold.otf" /&gt;
+
+&lt;DefineFontfamily
+    name="title" 
+    fontsize="12"
+    leading="16"&gt;
+    &lt;Regular fontface="Helvetica Fett" /&gt;
+  &lt;/DefineFontfamily&gt;
+
+  &lt;Pageformat width="150mm" height="200mm" /&gt;
+  &lt;SetGrid width="4mm" height="14pt" /&gt;
+
+  &lt;DefineTextformat name="text" alignment="justified" /&gt;
+
+  &lt;Pagetype name="recto" test="sd:odd(sd:current-page())"&gt;
+    &lt;Margin left="2cm" right="1cm" top="1cm" bottom="1cm" /&gt;
+  &lt;/Pagetype&gt;
+
+  &lt;Pagetype name="verso" test="sd:even(sd:current-page())"&gt;
+    &lt;Margin left="1cm" right="2cm" top="1cm" bottom="1cm" /&gt;
+  &lt;/Pagetype&gt;
+
+  &lt;Record element="üroduct"&gt;
+    &lt;SetVariable variable="column" select="2" /&gt;
+    &lt;PlaceObject column="1"&gt;
+      &lt;Textblock width="14" fontface="title"&gt;
+        &lt;Paragraph&gt;
+          &lt;Value select="@name"/&gt;
+        &lt;/Paragraph&gt;
+      &lt;/Textblock&gt;
+    &lt;/PlaceObject&gt;
+    &lt;ProcessNode select="productimage"/&gt;
+    &lt;NewPage/&gt;
+  &lt;/Record&gt;
+
+  &lt;Record element="productimage"&gt;
+    &lt;NextRow rows="2"/&gt;
+    &lt;PlaceObject column="1"&gt;
+      &lt;Image width="10" file="{string(.)}"/&gt;
+    &lt;/PlaceObject&gt;
+  &lt;/Record&gt;
+
+&lt;/Layout&gt;
+</pre>
          <h2>See also</h2>
          <a href="include.html">Include</a>
          
@@ -26,6 +93,7 @@
       <div id="elementref">
          <h1>Commands</h1>
          <ul>
+            <li><a href="a.html">A</a></li>
             <li><a href="action.html">Action</a></li>
             <li><a href="addtolist.html">AddToList</a></li>
             <li><a href="atpagecreation.html">AtPageCreation</a></li>

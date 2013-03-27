@@ -7,37 +7,42 @@
              // This function highlights (by default) pre and code tags which are annotated correctly.
              $.syntax();
              });
-            </script><title>SetGrid</title>
+            </script><title>A</title>
    </head>
    <body>
       <div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"></a></div>
       <div id="elementdesc">
-         <h1>Elementname: <code class="syntax xml">SetGrid</code></h1>
+         <h1>Elementname: <code class="syntax xml">A</code></h1>
          <h2>Description</h2>
-         <p></p>
-         <p>Allowed attributes: <span class="tt"><a href="#height">height</a></span>, <span class="tt"><a href="#width">width</a></span><br>Child elements: <br>Parent elements: <a href="layout.html">Layout</a></p>
+         <p>Insert Hyperlink to a URL.</p>
+         <p>Allowed attributes: <span class="tt"><a href="#href">href</a></span><br>Child elements: <a href="value.html">Value</a><br>Parent elements: <a href="paragraph.html">Paragraph</a></p>
          <h3>Attributes</h3>
          <dl>
-            <dt><a name="height"></a><span class="tt">height</span> (Length (mm,in,cm,pt))
+            <dt><a name="href"></a><span class="tt">href</span> (string)
             </dt>
             <dd>
                
-               <p></p>
-               
-            </dd>
-            <dt><a name="width"></a><span class="tt">width</span> (Length (mm,in,cm,pt))
-            </dt>
-            <dd>
-               
-               <p></p>
+               <p>The destination of the hyperlink (URI). Example: <span class="tt">http://www.speedata.de</span></p>
                
             </dd>
          </dl>
-         <h2>See also</h2><a href="grid.html">Grid</a></div>
+         <h2>Example</h2>
+         <pre class="syntax xml">&lt;PlaceObject&gt;
+  &lt;Textblock width="10"&gt;
+    &lt;Paragraph&gt;&lt;Value&gt;See the &lt;/Value&gt;
+      &lt;A href="http://www.speedata.de"&gt;
+        &lt;Value&gt;homepage&lt;/Value&gt;
+      &lt;/A&gt;
+      &lt;Value&gt; for more information.&lt;/Value&gt;
+    &lt;/Paragraph&gt;
+  &lt;/Textblock&gt;
+&lt;/PlaceObject&gt;</pre>
+         <h2>See also</h2>
+      </div>
       <div id="elementref">
          <h1>Commands</h1>
          <ul>
-            <li><a href="a.html">A</a></li>
+            <li class="active"><a href="a.html">A</a></li>
             <li><a href="action.html">Action</a></li>
             <li><a href="addtolist.html">AddToList</a></li>
             <li><a href="atpagecreation.html">AtPageCreation</a></li>
@@ -94,7 +99,7 @@
             <li><a href="regular.html">Regular</a></li>
             <li><a href="rule.html">Rule</a></li>
             <li><a href="savedataset.html">SaveDataset</a></li>
-            <li class="active"><a href="setgrid.html">SetGrid</a></li>
+            <li><a href="setgrid.html">SetGrid</a></li>
             <li><a href="setvariable.html">SetVariable</a></li>
             <li><a href="sortsequence.html">SortSequence</a></li>
             <li><a href="stylesheet.html">Stylesheet</a></li>
@@ -117,5 +122,5 @@
       <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div><a href="../index.html">Start page</a>
       |
       <a href="../commands-en/layout.html">Command reference</a> |
-      Other languages: <a href="../commands-de/setgrid.html">German</a></body>
+      Other languages: <a href="../commands-de/a.html">German</a></body>
 </html>

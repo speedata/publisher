@@ -7,48 +7,42 @@
              // This function highlights (by default) pre and code tags which are annotated correctly.
              $.syntax();
              });
-            </script><title>ForAll</title>
+            </script><title>A</title>
    </head>
    <body>
       <div id="logo"><a href="../index-de.html"><img src="../images/publisher_logo.png" alt="Startseite"></a></div>
       <div id="elementdesc">
-         <h1>Elementname: <code class="syntax xml">FürAlle</code></h1>
+         <h1>Elementname: <code class="syntax xml">A</code></h1>
          <h2>Beschreibung</h2>
-         <p>Ruft die Kindelemente für alle Daten-Elemente auf, die auf das Muster bei <span class="tt">auswahl</span> passen.
-         </p>
-         <p>Erlaubte Attribute: <span class="tt"><a href="#select">auswahl</a></span><br>Kindelemente: <a href="b.html">B</a>, <a href="image.html">Bild</a>, <a href="switch.html">Fallunterscheidung</a>, <a href="i.html">I</a>, <a href="fontface.html">Schriftart</a>, <a href="sub.html">Sub</a>, <a href="sup.html">Sup</a>, <a href="u.html">U</a>, <a href="url.html">URL</a>, <a href="value.html">Wert</a>, <a href="setvariable.html">Zuweisung</a><br>Elternelemente: <a href="table.html">Tabelle</a></p>
+         <p>Hyperlink auf eine URL einfügen.</p>
+         <p>Erlaubte Attribute: <span class="tt"><a href="#href">href</a></span><br>Kindelemente: <a href="value.html">Wert</a><br>Elternelemente: <a href="paragraph.html">Absatz</a></p>
          <h3>Attribute</h3>
          <dl>
-            <dt><a name="select"></a><span class="tt">auswahl</span> (XPath-Ausdruck)
+            <dt><a name="href"></a><span class="tt">href</span> (Text)
             </dt>
             <dd>
                
-               <p>Wählt die Kindelemente aus.</p>
+               <p>Das Ziel des Hyperlinks. Beispiel: <span class="tt">http://www.speedata.de</span></p>
                
             </dd>
          </dl>
          <h2>Beispiel</h2>
-         <pre class="syntax xml">&lt;Datensatz element="data"&gt;
-  &lt;ObjektAusgeben&gt;
-    &lt;Tabelle breite="10"&gt;
-      &lt;FürAlle auswahl="eintrag"&gt;
-        &lt;Tr&gt;&lt;Td&gt;&lt;Absatz&gt;&lt;Wert auswahl="string(.)"&gt;&lt;/Wert&gt;&lt;/Absatz&gt;&lt;/Td&gt;&lt;/Tr&gt;
-      &lt;/FürAlle&gt;
-    &lt;/Tabelle&gt;
-  &lt;/ObjektAusgeben&gt;
-&lt;/Datensatz&gt;</pre>
-         <p>Erzeugt eine Tabellenzeile für alle Elemente <span class="tt">eintrag</span> im Datensatz <span class="tt">data</span>. So müsste in etwa ein entsprechender Eintrag in den Daten aussehen:
-         </p>
-         <pre class="syntax xml">&lt;data&gt;
-  &lt;eintrag&gt;a&lt;/eintrag&gt;
-  &lt;eintrag&gt;b&lt;/eintrag&gt;
-  &lt;eintrag&gt;c&lt;/eintrag&gt;
-&lt;/data&gt;</pre>
-         <h2>Siehe auch</h2><a href="switch.html">Fallunterscheidung</a></div>
+         <pre class="syntax xml">&lt;ObjektAusgeben&gt;
+  &lt;Textblock breite="10"&gt;
+    &lt;Absatz&gt;
+      &lt;Wert&gt;Siehe die &lt;/Wert&gt;
+      &lt;A href="http://www.speedata.de"&gt;&lt;Wert&gt;Homepage&lt;/Wert&gt;&lt;/A&gt;
+      &lt;Wert&gt; für weitere Information.&lt;/Wert&gt;
+    &lt;/Absatz&gt;
+  &lt;/Textblock&gt;
+&lt;/ObjektAusgeben&gt;
+</pre>
+         <h2>Siehe auch</h2>
+      </div>
       <div id="elementref">
          <h1>Befehlsübersicht</h1>
          <ul>
-            <li><a href="a.html">A</a></li>
+            <li class="active"><a href="a.html">A</a></li>
             <li><a href="paragraph.html">Absatz</a></li>
             <li><a href="action.html">Aktion</a></li>
             <li><a href="attribute.html">Attribut</a></li>
@@ -69,7 +63,7 @@
             <li><a href="switch.html">Fallunterscheidung</a></li>
             <li><a href="bold.html">Fett</a></li>
             <li><a href="bolditalic.html">FettKursiv</a></li>
-            <li class="active"><a href="forall.html">FürAlle</a></li>
+            <li><a href="forall.html">FürAlle</a></li>
             <li><a href="group.html">Gruppe</a></li>
             <li><a href="hspace.html">HLeerraum</a></li>
             <li><a href="i.html">I</a></li>
@@ -128,5 +122,5 @@
       <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div><a href="../index-de.html">Startseite</a>
       |
       <a href="../commands-de/layout.html">Befehlsreferenz</a> |
-      Andere Sprachen: <a href="../commands-en/forall.html">Englisch</a></body>
+      Andere Sprachen: <a href="../commands-en/a.html">Englisch</a></body>
 </html>

@@ -17,7 +17,7 @@
 <body>
 <div id="logo"><a href="../index-de.html"><img src="../images/publisher_logo.png" alt="Startseite"></a></div>
 	<h1>XPath Ausdrücke</h1>
-<p>Der Publisher akzeptiert in den den entsprechend markierten Attributen (zumeist <code>auswahl</code>) XPath Ausdrücke. In allen anderen Attributen kann durch die geschweiften Klammern (<code>{</code> und <code>}</code>) ein XPath Ausdruck erzwungen werden). In diesem Beispiel werden im Attribut <code>breite</code> und im Element <code>Wert</code> die Werte dynamisch erzeugt, d.h. für die Angabe der Breite wird auf den Inhalt der Variablen <code>breite</code> zurückgegriffen, der Inhalt des Absatzes ist der Inhalt (Textwert) des gerade aktuellen Datenknotens.</p>
+<p>Der Publisher akzeptiert in den den entsprechend markierten Attributen (zumeist <code>auswahl</code> und <code>bedingung</code>) XPath Ausdrücke. In allen anderen Attributen kann durch die geschweiften Klammern (<code>{</code> und <code>}</code>) ein XPath Ausdruck erzwungen werden. In diesem Beispiel werden im Attribut <code>breite</code> und im Element <code>Wert</code> die Werte dynamisch erzeugt, d.h. für die Angabe der Breite wird auf den Inhalt der Variablen <code>breite</code> zurückgegriffen, der Inhalt des Absatzes ist der Inhalt (Textwert) des gerade aktuellen Datenknotens.</p>
 <div class="highlight"><pre><code class="xml"><span class="nt">&lt;Textblock</span> <span class="na">breite=</span><span class="s">&quot;{$breite}&quot;</span> <span class="na">schriftart=</span><span class="s">&quot;text&quot;</span> <span class="na">textformat=</span><span class="s">&quot;Text mit Einrückung&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;Absatz&gt;</span>
     <span class="nt">&lt;Wert</span> <span class="na">auswahl=</span><span class="s">&quot;.&quot;</span><span class="nt">/&gt;</span>
@@ -101,6 +101,6 @@
 	<dd>Gibt „Wahr“ zurück.</dd>
 </dl>
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
-<a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache: <a href="../description-en/xpath.html">Englisch</a> 
+<a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Befehlsreferenz</a> | Andere Sprache: <a href="../description-en/xpath.html">Englisch</a> 
 </body>
 </html>

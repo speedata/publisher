@@ -16,41 +16,56 @@
          <h2>Beschreibung</h2>
          <p>Das <a href="layout.html">Layout</a>Element ist das Wurzelelement im Regelwerk.
          </p>
-         <p>Erlaubte Attribute: <br>Kindelemente: <a href="dataset.html"></a>, <a href="definecolor.html">DefiniereFarbe</a>, <a href="definefontfamily.html">DefiniereSchriftfamilie</a>, <a href="definetextformat.html">DefiniereTextformat</a>, <a href="include.html">Include</a>, <a href="loadfontfile.html">LadeSchriftdatei</a>, <a href="options.html">Optionen</a>, <a href="pageformat.html">Seitenformat</a>, <a href="pagetype.html">Seitentyp</a>, <a href="setgrid.html">SetzeRaster</a>, <a href="hyphenation.html">Trennvorschlag</a>, <a href="setvariable.html">Zuweisung</a><br>Elternelemente: 
+         <p>Erlaubte Attribute: <span class="tt"><a href="#version">version</a></span><br>Kindelemente: <a href="dataset.html"></a>, <a href="definecolor.html">DefiniereFarbe</a>, <a href="definefontfamily.html">DefiniereSchriftfamilie</a>, <a href="definetextformat.html">DefiniereTextformat</a>, <a href="include.html">Include</a>, <a href="loadfontfile.html">LadeSchriftdatei</a>, <a href="options.html">Optionen</a>, <a href="pageformat.html">Seitenformat</a>, <a href="pagetype.html">Seitentyp</a>, <a href="setgrid.html">SetzeRaster</a>, <a href="hyphenation.html">Trennvorschlag</a>, <a href="setvariable.html">Zuweisung</a><br>Elternelemente: 
          </p>
          <h3>Attribute</h3>
-         <dl></dl>
+         <dl>
+            <dt><a name="version"></a><span class="tt">version</span> (Zahl, optional)
+            </dt>
+            <dd>
+               
+               <p>Gibt die minimale Version des Publishers an. Format: 1.6.13. Die letzten Ziffern können
+                  weggelassen werden.
+                  Falls die erste oder die zweite Ziffer der Versionsangabe unterschiedlich ist, wird
+                  eine Warnung ausgegeben.
+               </p>
+               
+            </dd>
+         </dl>
          <h2>Beispiel</h2>
          
          <p>Nachfolgend ein vollständiges Beispiel für ein Layoutregelwerk.</p>
-         <pre class="syntax xml">&lt;Layout xmlns="urn:speedata.de:2009/publisher/de"&gt;
+         <pre class="syntax xml">&lt;Layout xmlns="urn:speedata.de:2009/publisher/de"
+  xmlns:sd="urn:speedata:2009/publisher/functions/de"&gt;
   &lt;Optionen
-     zeige_rasterbelegung="nein"
-     zeichne_raster="ja"
-    /&gt;
- 
+    zeige_rasterbelegung="nein"
+    zeichne_raster="ja"
+  /&gt;
+
   &lt;LadeSchriftdatei name="Helvetica Fett" dateiname="texgyreheros-bold.otf" /&gt;
-   
-  &lt;DefiniereSchriftfamilie name="Überschrift" schriftgröße="12"
-                           zeilenabstand="16"&gt;
+
+  &lt;DefiniereSchriftfamilie
+    name="Überschrift" 
+    schriftgröße="12"
+    zeilenabstand="16"&gt;
     &lt;Normal schriftart="Helvetica Fett" /&gt;
   &lt;/DefiniereSchriftfamilie&gt;
-   
+
   &lt;Seitenformat breite="150mm" höhe="200mm" /&gt;
   &lt;SetzeRaster breite="4mm" höhe="14pt" /&gt;
-  
+
   &lt;DefiniereTextformat name="text" ausrichtung="blocksatz" /&gt;
-  
+
   &lt;Seitentyp name="rechte Seite" bedingung="sd:ungerade(sd:aktuelle-seite())"&gt;
     &lt;Rand links="2cm" rechts="1cm" oben="1cm" unten="1cm" /&gt;
   &lt;/Seitentyp&gt;
-  
+
   &lt;Seitentyp name="linke Seite" bedingung="sd:gerade(sd:aktuelle-seite())"&gt;
     &lt;Rand links="1cm" rechts="2cm" oben="1cm" unten="1cm" /&gt;
   &lt;/Seitentyp&gt;
-  
+
   &lt;Datensatz element="Produkt"&gt;
-    &lt;Zuweisung variable="spalte" wert="2" /&gt;
+    &lt;Zuweisung variable="spalte" auswahl="2" /&gt;
     &lt;ObjektAusgeben spalte="1"&gt;
       &lt;Textblock breite="14" schriftart="Überschrift"&gt;
         &lt;Absatz&gt;
@@ -61,15 +76,15 @@
     &lt;BearbeiteKnoten auswahl="produktbild" /&gt;
     &lt;NeueSeite /&gt;
   &lt;/Datensatz&gt;
-  
+
   &lt;Datensatz element="produktbild"&gt;
-    &lt;NeueZeile/&gt;
-    &lt;NeueZeile/&gt;
+    &lt;NeueZeile zeilen="2"/&gt;
     &lt;ObjektAusgeben spalte="1"&gt;
       &lt;Bild breite="10" datei="{string(.)}"/&gt;
     &lt;/ObjektAusgeben&gt;
   &lt;/Datensatz&gt;
-&lt;/Layout&gt;</pre>
+&lt;/Layout&gt;
+</pre>
          <h2>Siehe auch</h2>
          <a href="include.html">Include</a>
          
@@ -77,6 +92,7 @@
       <div id="elementref">
          <h1>Befehlsübersicht</h1>
          <ul>
+            <li><a href="a.html">A</a></li>
             <li><a href="paragraph.html">Absatz</a></li>
             <li><a href="action.html">Aktion</a></li>
             <li><a href="attribute.html">Attribut</a></li>
