@@ -646,4 +646,5 @@ func main() {
 		log.Fatal("unknown command:", command)
 	}
 	showDuration()
+	os.Exit(0)
 }
