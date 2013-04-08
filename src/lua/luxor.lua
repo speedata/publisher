@@ -263,7 +263,12 @@ local function parse_xml(txt,options)
 	if string.match(txt,"<%?xml",pos) then
 		pos = parse_xmldecl(txt,pos)
 	end
-	local ret = parse_element(txt,pos,{})
+	local ret
+	while true do
+		ret,pos = parse_element(txt,pos,{})
+		if type(ret) == "table" then break end
+		_,pos = string.find(txt,"<",pos)
+	end
 	return ret
 end
 

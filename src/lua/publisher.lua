@@ -375,6 +375,10 @@ function dothings()
   else
     dataxml = load_xml(arg[3],"data file")
   end
+  if type(dataxml) ~= "table" then
+    err("Something is wrong with the data: dataxml is not a table")
+    exit()
+  end
 
   --- The `vars` file hold a lua document holding table
   local vars = loadfile(tex.jobname .. ".vars")()
