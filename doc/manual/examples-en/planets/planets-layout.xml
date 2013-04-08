@@ -86,7 +86,7 @@
     </SetVariable>
   </Record>
   
-  <!-- Wurzelelement -->
+  <!-- Root element -->
   <Record element="planets">
     <SetVariable variable="column" select="2" />
     <LoadDataset name="toc"/>
