@@ -6,6 +6,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* Hyperlinks dürfen auch in den Daten enthalten sein: @<a href="http://...">Text</a>@. (1.5.46)
 * Neuer Befehl "A":../commands-de/a.html für Hyperlinks (wie HTML). (1.5.45)
 * Neues Attribut @version@ beim Befehl "Layout":../commands-de/layout.html um Versionskompatibilität sicherzustellen (1.5.44).
 * Neuer Befehl "HLeerraum":../commands-de/hspace.html um einen dehnbaren Leerraum einzufügen. (1.5.43)

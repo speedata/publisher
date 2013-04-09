@@ -954,14 +954,36 @@ end
 function parse_html( elt )
   local a = paragraph:new()
   local bold,italic,underline
-  if elt[".__name"] then
-    if elt[".__name"] == "b" or elt[".__name"] == "B" then
+
+  local eltname = elt[".__name"]
+  if eltname then
+    if eltname == "b" or eltname == "B" then
       bold = 1
-    elseif elt[".__name"] == "i" or elt[".__name"] == "I" then
+    elseif eltname == "i" or eltname == "I" then
       italic = 1
-    elseif elt[".__name"] == "u" or elt[".__name"] == "U" then
+    elseif eltname == "u" or eltname == "U" then
       underline = 1
-    elseif string.match(elt[".__name"],"^[bB][rR]$") then
+    elseif eltname == "a" then
+      local ai = node.new("action")
+      ai.action_type = 3
+      ai.data = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",elt.href)
+      local stl = node.new("whatsit","pdf_start_link")
+      stl.action = ai
+      stl.width = -1073741824
+      stl.height = -1073741824
+      stl.depth = -1073741824
+      a:append(stl)
+      for i=1,#elt do
+        if type(elt[i]) == "string" then
+          a:append(elt[i],{fontfamily = 0, bold = bold, italic = italic, underline = underline })
+        elseif type(elt[i]) == "table" then
+          a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+        end
+      end
+      local enl = node.new("whatsit","pdf_end_link")
+      a:append(enl)
+      return a
+    elseif string.match(eltname,"^[bB][rR]$") then
       a:append("\n",{})
     end
   end
