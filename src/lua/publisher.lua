@@ -63,7 +63,8 @@ att_is_table_row    = 500
 att_tr_dynamic_data = 501
 
 
-user_defined_marker = 4
+user_defined_bookmark = 1
+user_defined_marker   = 4
 
 
 glue_spec_node = node.id("glue_spec")
@@ -73,6 +74,7 @@ rule_node      = node.id("rule")
 penalty_node   = node.id("penalty")
 whatsit_node   = node.id("whatsit")
 hlist_node     = node.id("hlist")
+vlist_node     = node.id("vlist")
 
 local t = node.whatsits()
 for k,v in pairs(node.whatsits()) do
@@ -1052,25 +1054,24 @@ function parse_html( elt )
   return a
 end
 
+
 --- Look for `user_defined` at end of page (shipout) and runs actions encoded in them.
 function find_user_defined_whatsits( head )
-  local typ,fun
+  local fun
   while head do
-    -- FIXME: that's slow!?!?
-    typ = node.type(head.id)
-    if typ == "vlist" or typ=="hlist" then
+    if head.id == vlist_node or head.id==hlist_node then
       find_user_defined_whatsits(head.list)
-    elseif typ == "whatsit" then
+    elseif head.id==whatsit_node then
       if head.subtype == user_defined_whatsit then
         -- action
         if head.user_id == 1 then
-          -- der Wert ist der Index für die Funktion unter user_defined_functions.
+          -- the value is the index of the hash of user_defined_functions
           fun = user_defined_functions[head.value]
           fun()
           -- use and forget
           user_defined_functions[head.value] = nil
         -- bookmark
-        elseif head.user_id == 2 then
+        elseif head.user_id == user_defined_bookmark then
           local level,openclose,dest,str =  string.match(head.value,"([^+]*)+([^+]*)+([^+]*)+(.*)")
           level = tonumber(level)
           local open_p
@@ -1600,7 +1601,7 @@ function mkbookmarknodes(level,open_p,title)
 
   n,counter = mkdest()
   local udw = node.new("whatsit","user_defined")
-  udw.user_id = 2
+  udw.user_id = user_defined_bookmark
   udw.type = 115 -- a string
   udw.value = string.format("%d+%d+%d+%s",level,openclosed,counter,title)
   n.next = udw

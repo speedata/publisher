@@ -1350,7 +1350,6 @@ function commands.rule( layoutxml,dataxml )
   if tonumber(length) then
     if direction == "horizontal" then
       length = publisher.current_grid.gridwidth * length
-    -- FIXME: vertical / vertikal should be handled in publisher.read_attribute()
     elseif direction == "vertical" then
       length = publisher.current_grid.gridheight * length
     else
