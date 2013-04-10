@@ -6,6 +6,7 @@ h1. Changelog
 
 h2. Version 1.6
 
+* New commands "Ol":../commands-en/ol.html and "Ul":../commands-en/ol.html, just like HTML. @Ol@ and @Ul@ (with @Li@) are also allowed in data. (1.5.46)
 * Hyperlinks are allowed in data: @<a href="http://...">text</a>@. (1.5.46)
 * New command "A":../commands-en/a.html for hyperlinks (same as HTML). (1.5.45)
 * New attribute @version@ at command "Layout":../commands-en/layout.html to ensure version number (1.5.44).

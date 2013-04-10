@@ -141,55 +141,91 @@ function Paragraph:append( whatever,parameter )
   end
 end
 
---- Turn a node list into a shaped block of text
+--- Turn a node list into a shaped block of text. 
+-- FIXME: document why splitting is needed (ul/li in data)
 function Paragraph:format(width_sp, default_textformat_name)
   local nodelist = node.copy_list(self.nodelist)
-  local current_textformat_name,current_textformat
-  if self.textformat then
-    current_textformat_name = self.textformat
-  else
-    current_textformat_name = default_textformat_name
-  end
-
-  if publisher.textformats[current_textformat_name] then
-    current_textformat = publisher.textformats[current_textformat_name]
-  else
-    current_textformat = publisher.textformats["text"]
-  end
-
-  publisher.fonts.pre_linebreak(nodelist)
-
-  local parameter = {}
-
-  if current_textformat.indent then
-    parameter.hangindent = current_textformat.indent
-    parameter.hangafter  = -current_textformat.rows
-  end
-
-  local ragged_shape
-  if current_textformat then
-    if current_textformat.alignment == "leftaligned" or current_textformat.alignment == "rightaligned" or current_textformat.alignment == "centered" then
-      ragged_shape = true
-    else
-      ragged_shape = false
+  local objects = {nodelist}
+  local head = nodelist
+  local whatsit_id = publisher.whatsit_node
+  local user_defined_whatsit_id = publisher.user_defined_whatsit
+  while head do
+    if head.id == whatsit_id and head.subtype == user_defined_whatsit_id and head.user_id == publisher.user_defined_marker then
+      -- We are at a <li> item. This needs special treatment
+      head.prev.next = nil
+      head = head.next
+      head.prev = nil
+      objects[#objects + 1] = head
     end
+    head = head.next
   end
 
-  -- If there is ragged shape (i.e. not a rectangle of text) then we should turn off
-  -- font expansion. This is done by setting tex.pdfadjustspacing to 0 temporarily
-  if ragged_shape then
-    parameter.tolerance     = 5000
-    parameter.hyphenpenalty = 200
+  for i=1,#objects do
+    nodelist = objects[i]
+    local current_textformat_name,current_textformat
+    if self.textformat then
+      current_textformat_name = self.textformat
+    else
+      current_textformat_name = default_textformat_name
+    end
 
-    local adjspace = tex.pdfadjustspacing
-    tex.pdfadjustspacing = 0
-    nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
-    tex.pdfadjustspacing = adjspace
-    publisher.fix_justification(nodelist,current_textformat.alignment)
-  else
-    nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
+    if publisher.textformats[current_textformat_name] then
+      current_textformat = publisher.textformats[current_textformat_name]
+    else
+      current_textformat = publisher.textformats["text"]
+    end
+
+    publisher.fonts.pre_linebreak(nodelist)
+
+    local parameter = {}
+
+    if current_textformat.indent then
+      parameter.hangindent = current_textformat.indent
+      parameter.hangafter  = -current_textformat.rows
+    end
+    local rows,indent
+    indent = node.has_attribute(nodelist,publisher.att_indent)
+    rows   = node.has_attribute(nodelist,publisher.att_rows)
+
+    if indent then
+        parameter.hangindent = indent
+    end
+    if rows then
+        parameter.hangafter = -1 * rows
+    end
+
+    local ragged_shape
+    if current_textformat then
+      if current_textformat.alignment == "leftaligned" or current_textformat.alignment == "rightaligned" or current_textformat.alignment == "centered" then
+        ragged_shape = true
+      else
+        ragged_shape = false
+      end
+    end
+
+    -- If there is ragged shape (i.e. not a rectangle of text) then we should turn off
+    -- font expansion. This is done by setting tex.pdfadjustspacing to 0 temporarily
+    if ragged_shape then
+      parameter.tolerance     = 5000
+      parameter.hyphenpenalty = 200
+
+      local adjspace = tex.pdfadjustspacing
+      tex.pdfadjustspacing = 0
+      nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
+      tex.pdfadjustspacing = adjspace
+      publisher.fix_justification(nodelist,current_textformat.alignment)
+    else
+      nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
+    end
+    publisher.fonts.post_linebreak(nodelist)
+    objects[i] = nodelist
   end
-  publisher.fonts.post_linebreak(nodelist)
+
+  for i=1,#objects - 1 do
+      objects[i].next = objects[i+1]
+      objects[i+1].prev = objects[i]
+  end
+  nodelist = node.vpack(objects[1])
   return nodelist
 end
 

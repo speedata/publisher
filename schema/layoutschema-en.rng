@@ -579,6 +579,15 @@
     </element>
   </define>
 
+  <define name="e_Li">
+    <element name="Li">
+      <a:documentation docid="li">List item in an (un)ordered list</a:documentation>
+      <oneOrMore>
+        <ref name="t_textvalues"/>
+      </oneOrMore>
+    </element>
+  </define>
+
   <define name="e_LoadDataset">
     <element name="LoadDataset">
       <a:documentation docid="loaddataset">Loads and executes a data XML file from the disk. It is fine if the given file does not exist (no error is raised).</a:documentation>
@@ -830,6 +839,15 @@
           </optional>
         </interleave>
       </choice>
+    </element>
+  </define>
+
+  <define name="e_Ol">
+    <element name="Ol">
+      <a:documentation docid="ol">Enumerated list, like in HTML (1., 2.,..)</a:documentation>
+      <oneOrMore>
+        <ref name="e_Li"/>
+      </oneOrMore>
     </element>
   </define>
 
@@ -1522,6 +1540,8 @@
       <oneOrMore>
         <choice>
           <ref name="e_Paragraph"/>
+          <ref name="e_Ol"/>
+          <ref name="e_Ul"/>
           <ref name="e_CopyOf"/>
           <ref name="e_Action"/>
           <ref name="e_Bookmark"/>
@@ -1579,6 +1599,15 @@
       <a:documentation docid="u">Turn on underlining.</a:documentation>
       <ref name="a_xmlid"/>
       <ref name="t_values"/>
+    </element>
+  </define>
+
+  <define name="e_Ul">
+    <element name="Ul">
+      <a:documentation docid="ul">Itemize list (with bullet points, just like HTML)</a:documentation>
+      <oneOrMore>
+        <ref name="e_Li"/>
+      </oneOrMore>
     </element>
   </define>
 

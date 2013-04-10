@@ -40,6 +40,7 @@
       <element key="Include" en="Include" de="Include"/>
       <element key="Italic" en="Italic" de="Kursiv"/>
       <element key="Layout" en="Layout" de="Layout"/>
+     <element key="Li" en="Li" de="Li"/>
       <element key="LoadDataset" en="LoadDataset" de="LadeDatensatzdatei"/>
       <element key="LoadFontfile" en="LoadFontfile" de="LadeSchriftdatei"/>
      <element key="Loop" en="Loop" de="Schleife"/>
@@ -49,7 +50,8 @@
       <element key="NewPage" en="NewPage" de="NeueSeite"/>
       <element key="NextFrame" en="NextFrame" de="NächsterRahmen"/>
       <element key="NextRow" en="NextRow" de="NeueZeile"/>
-      <element key="Options" en="Options" de="Optionen"/>
+     <element key="Ol" en="Ol" de="Ol"/>
+     <element key="Options" en="Options" de="Optionen"/>
       <element key="Otherwise" en="Otherwise" de="Sonst"/>
       <element key="Pageformat" en="Pageformat" de="Seitenformat"/>
       <element key="Pagetype" en="Pagetype" de="Seitentyp"/>
@@ -81,6 +83,7 @@
       <element key="Textblock" en="Textblock" de="Textblock"/>
       <element key="Tr" en="Tr" de="Tr"/>
       <element key="U" en="U" de="U"/>
+     <element key="Ul" en="Ul" de="Ul"/>
       <element key="URL" en="URL" de="URL"/>
       <element key="Value" en="Value" de="Wert"/>
       <element key="While" en="While" de="Solange"/>
@@ -675,7 +678,11 @@
        <en>Minimum publisher version required. If major or minor version differ, give a warning. Format: 1.6.12 (revision number can be left out).</en>
        <de>Gibt die minimale Version des Publishers an. Format: 1.6.13. Die letzten Ziffern können weggelassen werden.</de>
      </documentation>
-      <documentation docid="loaddataset">
+     <documentation docid="li">
+       <en>List item in an (un)ordered list</en>
+       <de>Listeneintrag in einer Aufzählungsliste</de>
+     </documentation>
+     <documentation docid="loaddataset">
          <en>Loads and executes a data XML file from the disk. It is fine if the given file does not exist (no error is raised).</en>
          <de>Lädt eine zuvor gespeicherte Datensatzdatei. Existiert die angegebene Datei nicht, wird dieser Befehl
                 übersprungen.</de>
@@ -786,6 +793,10 @@
      <documentation docid="loop/variable">
        <en>This variable gets the loop value. If not set, the variable is _loopcounter.</en>
        <de>Diese Variable erhält den aktuellen Schleifenwert. Wenn nicht gesetzt, wird die Variable _loopcounter genommen.</de>
+     </documentation>
+     <documentation docid="ol">
+       <en>Enumerated list, like in HTML (1., 2.,..)</en>
+       <de>Aufzählungsliste, nummeriert (wie in HTML)</de>
      </documentation>
       <documentation docid="placeobject">
          <en>Puts an object (image, text,... ) onto the page or into a group.</en>
@@ -1165,7 +1176,11 @@
          <en>Background color of the table cell.</en>
          <de>Farbe der Tabellenzelle</de>
       </documentation>
-      <documentation docid="valign">
+     <documentation docid="ul">
+       <en>Itemize list (with bullet points, just like HTML)</en>
+       <de>Stichpunktliste mit Punkten davor (wie in HTML)</de>
+     </documentation>
+     <documentation docid="valign">
          <en>Vertical alignment</en>
          <de>Vertikale Ausrichtung</de>
       </documentation>

@@ -1833,6 +1833,43 @@
       <cmd name="Include" />
     </seealso>
   </command>
+  <command name="Li">
+    <description xml:lang="en">
+      <para>List item in an ordered or unordered list.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Listeneintrag in einer Aufzählungsliste (mit Aufzählungspunkten oder nummerierten Punkten).</para>
+    </description>
+    <childelements>
+      <cmd name="I"/><cmd name="B"/><cmd name="Br"/><cmd name="HSpace"/><cmd name="U"/><cmd name="Sub"/><cmd name="Sup"/><cmd name="URL"/><cmd name="Value"/><cmd name="Switch"/>
+    </childelements>
+    <parentelements><cmd name="Ol"/><cmd name="Ul"/></parentelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<PlaceObject>
+  <Textblock width="10">
+    <Ol>
+      <Li><Value>First item</Value></Li>
+      <Li><Value>Second item</Value></Li>
+      <Li><Value>Third item</Value></Li>
+    </Ol>
+  </Textblock>
+</PlaceObject>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<ObjektAusgeben>
+  <Textblock breite="10">
+    <Ol>
+      <Li><Wert>Erster Eintrag</Wert></Li>
+      <Li><Wert>Zweiter Eintrag</Wert></Li>
+      <Li><Wert>Dritter Eintrag</Wert></Li>
+    </Ol>
+  </Textblock>
+</ObjektAusgeben>
+]]></listing>
+    </example>
+    <seealso><cmd name="Ol"/>, <cmd name="Ul"/></seealso>
+  </command>
   <command name="Loop">
     <description xml:lang="en">
       <para>Repeat the contents of this element several times.</para>
@@ -2153,6 +2190,43 @@
     <seealso>
       <cmd name="Leerzeile" />
     </seealso>
+  </command>
+  <command name="Ol">
+    <description xml:lang="en">
+      <para>Create an ordered list, just like in HTML</para>
+    </description>
+    <description xml:lang="de">
+      <para>Erzeugt eine nummerierte Aufzählungsliste wie in HTML</para>
+    </description>
+    <childelements>
+      <cmd name="Li"/>
+    </childelements>
+    <parentelements><cmd name="Textblock"/></parentelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<PlaceObject>
+  <Textblock width="10">
+    <Ol>
+      <Li><Value>First item</Value></Li>
+      <Li><Value>Second item</Value></Li>
+      <Li><Value>Third item</Value></Li>
+    </Ol>
+  </Textblock>
+</PlaceObject>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<ObjektAusgeben>
+  <Textblock breite="10">
+    <Ol>
+      <Li><Wert>Erster Eintrag</Wert></Li>
+      <Li><Wert>Zweiter Eintrag</Wert></Li>
+      <Li><Wert>Dritter Eintrag</Wert></Li>
+    </Ol>
+  </Textblock>
+</ObjektAusgeben>
+]]></listing>
+    </example>
+    <seealso><cmd name="Ul"/>, <cmd name="Li"/></seealso>
   </command>
   <command name="Options">
     <description xml:lang="en">
@@ -3875,6 +3949,43 @@
       <cmd name="I" />
       <cmd name="Paragraph" />
     </seealso>
+  </command>
+  <command name="Ul">
+    <description xml:lang="en">
+      <para>Create an unordered list, just like in HTML</para>
+    </description>
+    <description xml:lang="de">
+      <para>Erzeugt eine Stichpunktliste mit Aufzählungspunkten</para>
+    </description>
+    <childelements>
+      <cmd name="Li"/>
+   </childelements>
+    <parentelements><cmd name="Textblock"/></parentelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<PlaceObject>
+  <Textblock width="10">
+    <Ul>
+      <Li><Value>First item</Value></Li>
+      <Li><Value>Second item</Value></Li>
+      <Li><Value>Third item</Value></Li>
+    </Ul>
+  </Textblock>
+</PlaceObject>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<ObjektAusgeben>
+  <Textblock breite="10">
+    <Ul>
+      <Li><Wert>Erster Eintrag</Wert></Li>
+      <Li><Wert>Zweiter Eintrag</Wert></Li>
+      <Li><Wert>Dritter Eintrag</Wert></Li>
+    </Ul>
+  </Textblock>
+</ObjektAusgeben>
+]]></listing>
+    </example>
+    <seealso><cmd name="Ol"/></seealso>
   </command>
   <command name="URL">
     <description xml:lang="en">

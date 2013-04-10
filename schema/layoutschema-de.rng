@@ -590,6 +590,15 @@
     </element>
   </define>
 
+  <define name="e_Li">
+    <element name="Li">
+      <a:documentation docid="li">Listeneintrag in einer Aufzählungsliste</a:documentation>
+      <oneOrMore>
+        <ref name="t_textvalues"/>
+      </oneOrMore>
+    </element>
+  </define>
+
   <define name="e_LoadDataset">
     <element name="LadeDatensatzdatei">
       <a:documentation docid="loaddataset">Lädt eine zuvor gespeicherte Datensatzdatei. Existiert die angegebene Datei nicht, wird dieser Befehl
@@ -845,6 +854,15 @@
           </optional>
         </interleave>
       </choice>
+    </element>
+  </define>
+
+  <define name="e_Ol">
+    <element name="Ol">
+      <a:documentation docid="ol">Aufzählungsliste, nummeriert (wie in HTML)</a:documentation>
+      <oneOrMore>
+        <ref name="e_Li"/>
+      </oneOrMore>
     </element>
   </define>
 
@@ -1540,6 +1558,8 @@
       <oneOrMore>
         <choice>
           <ref name="e_Paragraph"/>
+          <ref name="e_Ol"/>
+          <ref name="e_Ul"/>
           <ref name="e_CopyOf"/>
           <ref name="e_Action"/>
           <ref name="e_Bookmark"/>
@@ -1597,6 +1617,15 @@
       <a:documentation docid="u">Schaltet »Unterstreichen« ein</a:documentation>
       <ref name="a_xmlid"/>
       <ref name="t_values"/>
+    </element>
+  </define>
+
+  <define name="e_Ul">
+    <element name="Ul">
+      <a:documentation docid="ul">Stichpunktliste mit Punkten davor (wie in HTML)</a:documentation>
+      <oneOrMore>
+        <ref name="e_Li"/>
+      </oneOrMore>
     </element>
   </define>
 

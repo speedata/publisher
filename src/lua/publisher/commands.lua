@@ -514,11 +514,9 @@ end
 function commands.forall( layoutxml,dataxml )
   local tab = {}
   local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
-  -- printtable("dataxml",dataxml)
   for i=1,#selection do
     tab[#tab + 1] = publisher.dispatch(layoutxml,selection[i])[1]
   end
-   -- printtable("whatever",tab)
    return tab
 end
 
@@ -693,6 +691,27 @@ function commands.italic( layoutxml,dataxml )
   end
   return a
 end
+
+--- List item (`<Li>`)
+--- ------------------
+--- An entry of an ordered or unordered list.
+function commands.li(layoutxml,dataxml )
+    local objects = {}
+    local a = paragraph:new()
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    for i,j in ipairs(tab) do
+        if publisher.elementname(j,true) == "Value" and type(publisher.element_contents(j)) == "table" then
+            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j))
+        else
+            objects[#objects + 1] = publisher.element_contents(j)
+        end
+    end
+    for _,j in ipairs(objects) do
+        a:append(j,{})
+    end
+    return a
+end
+
 
 --- Load Fontfile
 --- -------------
@@ -886,6 +905,24 @@ end
 function commands.new_page( )
   publisher.new_page()
 end
+
+--- Ordered list (`<Ol>`)
+--- ------------------
+--- A list with numbers
+function commands.ol(layoutxml,dataxml )
+    local ret = {}
+    local labelwidth = tex.sp("5mm")
+    publisher.textformats.__fivemm = {indent = labelwidth, alignment="justified",   rows = -1}
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    for i,j in ipairs(tab) do
+        local a = paragraph:new("__fivemm")
+        a:append(publisher.number_hbox(i,labelwidth),{})
+        a:append(publisher.element_contents(j),{})
+        ret[#ret + 1] = a
+    end
+    return ret
+end
+
 
 --- Options
 --- -------
@@ -1857,6 +1894,10 @@ function commands.textblock( layoutxml,dataxml )
     trace("Textblock: Element = %q",tostring(eltname))
     if eltname == "Paragraph" then
       objects[#objects + 1] = publisher.element_contents(j)
+    elseif eltname == "Ul" or eltname == "Ol" then
+        for j,w in ipairs(publisher.element_contents(j)) do
+            objects[#objects + 1] = w
+        end
     elseif eltname == "Text" then
       assert(false)
     elseif eltname == "Action" then
@@ -1870,7 +1911,6 @@ function commands.textblock( layoutxml,dataxml )
   if columns > 1 then
     width_sp = math.floor(  (width_sp - columndistance * ( columns - 1 ) )   / columns)
   end
-
   for _,paragraph in ipairs(objects) do
     if paragraph.id == 8 then -- whatsit
       -- todo: document how this can be!
@@ -1969,6 +2009,22 @@ function commands.underline( layoutxml,dataxml )
   return a
 end
 
+--- Unordered list (`<Ul>`)
+--- ------------------
+--- A list with bullet points.
+function commands.ul(layoutxml,dataxml )
+    local ret = {}
+    local labelwidth = tex.sp("5mm")
+    publisher.textformats.__fivemm = {indent = labelwidth, alignment="justified",   rows = -1}
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    for i,j in ipairs(tab) do
+        local a = paragraph:new("__fivemm")
+        a:append(publisher.bullet_hbox(labelwidth),{})
+        a:append(publisher.element_contents(j),{})
+        ret[#ret + 1] = a
+    end
+    return ret
+end
 
 --- URL
 --- ---

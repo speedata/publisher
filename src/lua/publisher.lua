@@ -1,7 +1,7 @@
 --- Here goes everything that does not belong anywhere else. Other parts are font handling, the command
 --- list, page and gridsetup, debugging and initialization. We start with the function `dothings()` that
 --- initializes some variables and starts processing (`dispatch())
--- 
+--
 --  publisher.lua
 --  speedata publisher
 --
@@ -28,7 +28,7 @@ orig_xpath_funktionen    = require("publisher.xpath_functions")
 module(...,package.seeall)
 
 --- One big point (DTP point, PostScript point) is approx. 65781 scaled points.
-factor = 65781 
+factor = 65781
 
 --- We use a lot of attributes to delay the processing of font shapes, ... to
 --- a later time. These attributes have have any number, they just need to be
@@ -38,6 +38,8 @@ att_italic         = 2
 att_bold           = 3
 att_script         = 4
 att_underline      = 5
+att_indent         = 6 -- see textformats for details
+att_rows           = 7 -- see textformats for details
 
 --- These attributes are for image shifting. The amount of shift up/left can
 --- be negative and is counted in scaled points.
@@ -57,8 +59,12 @@ att_break_above    = 401
 --- `att_is_table_row` is used in `tabular.lua` and if set to 1, it denotes
 --- a regular table row, and not a spacer. Spacers must not appear
 --- at the top or the bottom of a table, unless forced to.
-att_is_table_row   = 500
+att_is_table_row    = 500
 att_tr_dynamic_data = 501
+
+
+user_defined_marker = 4
+
 
 glue_spec_node = node.id("glue_spec")
 glue_node      = node.id("glue")
@@ -67,6 +73,13 @@ rule_node      = node.id("rule")
 penalty_node   = node.id("penalty")
 whatsit_node   = node.id("whatsit")
 hlist_node     = node.id("hlist")
+
+local t = node.whatsits()
+for k,v in pairs(node.whatsits()) do
+    if v == "user_defined" then
+        user_defined_whatsit = k
+    end
+end
 
 pdf_literal_node = node.subtype("pdf_literal")
 
@@ -107,14 +120,14 @@ current_grid = nil
 -- The array 'masterpages' has tables similar to these:
 -- { ist_seitentyp = test, res = tab, name = pagetypename }
 -- where `ist_seitentyp` is an xpath expression to be evaluated,
--- `res` is a table with layoutxml instructions 
+-- `res` is a table with layoutxml instructions
 -- `name` is a string.
 masterpages = {}
 
 
 --- Text formats is a hash with arbitrary names as keys and the values
---- are tables with alignment and indent. indent is the amount of 
---- indentation in sp. alignment is one of "leftaligned", "rightaligned", 
+--- are tables with alignment and indent. indent is the amount of
+--- indentation in sp. alignment is one of "leftaligned", "rightaligned",
 --- "centered" and "justified"
 textformats = {
   text           = { indent = 0, alignment="justified",   rows = 1},
@@ -127,7 +140,7 @@ textformats = {
 -- der Eintrag dann `texgyreheros-regular.otf`
 -- schrifttabelle = {}
 
---- We map from sybolic names to (part of) file names. The hyphenation pattern files are 
+--- We map from sybolic names to (part of) file names. The hyphenation pattern files are
 --- in the format `hyph-XXX.pat.txt` and we need to find out that `XXX` part.
 language_mapping = {
      ["German"]                       = "de-1996",
@@ -151,7 +164,7 @@ languages = {}
 ---         name = "outline 2" destination = "..." open = false,
 ---          { name = "outline 2.1", destination = "..." },
 ---          { name = "outline 2.2", destination = "..." }
----    
+---
 ---       }
 ---     }
 bookmarks = {}
@@ -194,6 +207,7 @@ local dispatch_table = {
   I                       = commands.italic,
   Image                   = commands.image,
   Include                 = commands.include,
+  Li                      = commands.li,
   LoadDataset             = commands.load_dataset,
   LoadFontfile            = commands.load_fontfile,
   Loop                    = commands.loop,
@@ -203,6 +217,7 @@ local dispatch_table = {
   NewPage                 = commands.new_page,
   NextFrame               = commands.next_frame,
   NextRow                 = commands.next_row,
+  Ol                      = commands.ol,
   Options                 = commands.options,
   Pageformat              = commands.page_format,
   Pagetype                = commands.pagetype,
@@ -231,6 +246,7 @@ local dispatch_table = {
   Textblock               = commands.textblock,
   Tr                      = commands.tr,
   U                       = commands.underline,
+  Ul                      = commands.ul,
   URL                     = commands.url,
   Value                   = commands.value,
   Variable                = commands.variable,
@@ -279,7 +295,7 @@ function dispatch(layoutxml,dataxml,optionen)
       if dispatch_table[eltname] ~= nil then
         tmp = dispatch_table[eltname](j,dataxml,optionen)
 
-        -- Copy-of-elements can be resolveld immediately 
+        -- Copy-of-elements can be resolveld immediately
         if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" then
           if type(tmp)=="table" then
             for i=1,#tmp do
@@ -345,7 +361,7 @@ function dothings()
   --- A4 paper is 210x297 mm
   set_pageformat(tex.sp("210mm"),tex.sp("297mm"))
 
-  --- The free font family `TeXGyreHeros` is a Helvetica clone and is part of the 
+  --- The free font family `TeXGyreHeros` is a Helvetica clone and is part of the
   --- [The TeX Gyre Collection of Fonts](http://www.gust.org.pl/projects/e-foundry/tex-gyre).
   --- We ship it in the distribution.
   fonts.load_fontfile("TeXGyreHeros-Regular",   "texgyreheros-regular.otf")
@@ -568,7 +584,7 @@ function ausgabe_bei( nodelist, x,y,allocate,bereich,valign,allocate_matrix)
     n = node.vpack(n)
 
     if group.contents then
-      -- There is already something in the group, we must add the new nodelist. 
+      -- There is already something in the group, we must add the new nodelist.
       -- The size of the new group: max(size of old group, size of new nodelist)
       local new_width, new_height
       new_width  = math.max(n.width, group.contents.width)
@@ -708,7 +724,7 @@ function setup_page()
   end
 end
 
---- Switch to the next frame in the given are. 
+--- Switch to the next frame in the given are.
 function next_area( areaname )
   local aktuelle_nummer = current_grid:rahmennummer(areaname)
   if not aktuelle_nummer then
@@ -723,7 +739,7 @@ function next_area( areaname )
   current_grid:set_current_row(1,areaname)
 end
 
---- Switch to a new page and shipout the current page. 
+--- Switch to a new page and shipout the current page.
 --- This new page is only created if something is typeset on it.
 function new_page()
   if pagebreak_impossible then
@@ -950,19 +966,56 @@ function element_contents( elt )
   return elt.contents
 end
 
+-- To split the textblock in pieces
+local marker
+marker = node.new("whatsit","user_defined")
+marker.user_id = user_defined_marker
+marker.type = 100  -- type 100: "value is a number"
+marker.value = 1
+
 --- Convert `<b>`, `<u>` and `<i>` in text to publisher recognized elements.
 function parse_html( elt )
   local a = paragraph:new()
   local bold,italic,underline
 
-  local eltname = elt[".__name"]
-  if eltname then
-    if eltname == "b" or eltname == "B" then
+  if elt[".__name"] then
+    local eltname = string.lower(elt[".__name"])
+    if eltname == "b" then
       bold = 1
-    elseif eltname == "i" or eltname == "I" then
+    elseif eltname == "i" then
       italic = 1
-    elseif eltname == "u" or eltname == "U" then
+    elseif eltname == "u" then
       underline = 1
+    elseif eltname == "ul" then
+        for i=1,#elt do
+            if type(elt[i]) == "string" then
+                -- ignore
+            elseif type(elt[i]) == "table" then
+                a:append(node.copy(marker))
+                local bul = bullet_hbox(tex.sp("5mm"))
+                a:append(bul)
+                a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                a:append("\n",{})
+            end
+        end
+        a:append(node.copy(marker))
+        return a
+    elseif eltname == "ol" then
+        local counter = 0
+        for i=1,#elt do
+            if type(elt[i]) == "string" then
+                -- ignore
+            elseif type(elt[i]) == "table" then
+                counter = counter + 1
+                a:append(node.copy(marker))
+                local num = number_hbox(counter,tex.sp("5mm"))
+                a:append(num)
+                a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                a:append("\n",{})
+            end
+        end
+        a:append(node.copy(marker))
+        return a
     elseif eltname == "a" then
       local ai = node.new("action")
       ai.action_type = 3
@@ -1003,11 +1056,12 @@ end
 function find_user_defined_whatsits( head )
   local typ,fun
   while head do
+    -- FIXME: that's slow!?!?
     typ = node.type(head.id)
     if typ == "vlist" or typ=="hlist" then
       find_user_defined_whatsits(head.list)
     elseif typ == "whatsit" then
-      if head.subtype == 44 then
+      if head.subtype == user_defined_whatsit then
         -- action
         if head.user_id == 1 then
           -- der Wert ist der Index für die Funktion unter user_defined_functions.
@@ -1058,7 +1112,7 @@ leftskip.stretch = 1 * 2^16
 leftskip.stretch_order = 3
 
 --- Create a `\hbox`. Return a nodelist. Parameter is one of
---- 
+---
 --- * languagecode
 --- * bold (bold)
 --- * italic (italic)
@@ -1164,7 +1218,7 @@ function mknodes(str,fontfamily,parameter)
       n = node.new(glue_node)
       n.spec = node.new(glue_spec_node)
       n.spec.width   = space
-      n.spec.shrink  = shrink 
+      n.spec.shrink  = shrink
       n.spec.stretch = stretch
 
       if parameter.underline == 1 then
@@ -1254,6 +1308,58 @@ function add_rule( nodelist,head_or_tail,parameters)
   assert(false,"never reached")
 end
 
+--- Return a hbox with width `labelwidth`
+function bullet_hbox( labelwidth )
+    local bullet, pre_glue, post_glue
+    bullet = mknodes("•",nil,{})
+
+    pre_glue = node.new("glue")
+    pre_glue.spec = node.new("glue_spec")
+    pre_glue.spec.stretch = 65536
+    pre_glue.spec.stretch_order = 3
+    pre_glue.next = bullet
+
+    post_glue = node.new("glue")
+    post_glue.spec = node.new("glue_spec")
+    post_glue.spec.width = 4 * 2^16
+    post_glue.prev = bullet
+    bullet.next = post_glue
+    local bullet_hbox = node.hpack(pre_glue,labelwidth,"exactly")
+
+    if options.trace then
+        boxit(bullet_hbox)
+    end
+    node.set_attribute(bullet_hbox,att_indent,labelwidth)
+    node.set_attribute(bullet_hbox,att_rows,-1)
+    return bullet_hbox
+end
+
+--- Return a hbox with width `labelwidth`
+function number_hbox( num, labelwidth )
+    local pre_glue, post_glue
+    local digits = mknodes( tostring(num) .. ".",nil,{})
+    pre_glue = node.new("glue")
+    pre_glue.spec = node.new("glue_spec")
+    pre_glue.spec.stretch = 65536
+    pre_glue.spec.stretch_order = 3
+    pre_glue.next = digits
+
+    post_glue = node.new("glue")
+    post_glue.spec = node.new("glue_spec")
+    post_glue.spec.width = 4 * 2^16
+    post_glue.prev = node.tail(digits)
+    node.tail(digits).next = post_glue
+    local digit_hbox = node.hpack(pre_glue,labelwidth,"exactly")
+
+    if options.trace then
+        boxit(digit_hbox)
+    end
+    node.set_attribute(digit_hbox,att_indent,labelwidth)
+    node.set_attribute(digit_hbox,att_rows,-1)
+    return digit_hbox
+end
+
+
 -- Add a glue to the front or tail of the given nodelist. `head_or_tail` is
 -- either the string `head` or `tail`. `parameter` is a table with the keys
 -- `width`, `stretch` and `stretch_order`. If the nodelist is nil, a simple
@@ -1321,7 +1427,7 @@ function fix_justification( nodelist,textformat,parent)
       -- The following code is problematic, in tabular material. This is my older comment
       -- There was code here (39826d4c5 and before) that changed
       -- the glue depending on the font before that glue. That
-      -- was problematic, because LuaTeX does not copy the 
+      -- was problematic, because LuaTeX does not copy the
       -- altered glue_spec node on copy_list (in paragraph:format())
       -- which, when reformatted, gets a complaint by LuaTeX about
       -- infinite shrinkage in a paragraph
@@ -1471,7 +1577,7 @@ end
 
 do
   local destcounter = 0
-  -- Create a pdf anchor (dest object). It returns a whatsit node and the 
+  -- Create a pdf anchor (dest object). It returns a whatsit node and the
   -- number of the anchor, so it can be used in a pdf link or an outline.
   function mkdest()
     destcounter = destcounter + 1
@@ -1485,9 +1591,9 @@ end
 
 -- Generate a hlist with necessary nodes for the bookmarks. To be inserted into a vlist that gets shipped out
 function mkbookmarknodes(level,open_p,title)
-  -- The bookmarks need three values, the level, the name and if it is 
+  -- The bookmarks need three values, the level, the name and if it is
   -- open or closed
-  local openclosed 
+  local openclosed
   if open_p then openclosed = 1 else openclosed = 2 end
   level = level or 1
   title = title or "no title for bookmark given"
@@ -1703,7 +1809,7 @@ function colorbar( wd,ht,dp,farbe )
   return rule_start, rule_stop
 end
 
---- Rotate a text on a given angle. 
+--- Rotate a text on a given angle.
 function rotate( nodelist,angle )
   local wd,ht = nodelist.width, nodelist.height + nodelist.depth
   nodelist.width = 0
@@ -1760,7 +1866,7 @@ function xml_to_string( xml_element, level )
 end
 
 --- The language name is something like `German` and needs to be mapped to an internal name.
---- 
+---
 function get_languagecode( language_name )
   local language_internal = language_mapping[language_name]
   if publisher.languages[language_internal] then
