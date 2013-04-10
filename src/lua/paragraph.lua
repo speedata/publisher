@@ -1,5 +1,5 @@
 --- Building and formatting a paragraph
--- 
+--
 --  paragraph.lua
 --  speedata publisher
 --
@@ -53,7 +53,7 @@ function Paragraph:set_color( color )
 
   local colorname
   if color == -1 then
-    colorname = "Schwarz" 
+    colorname = "Schwarz"
   else
     colorname = publisher.colortable[color]
   end
@@ -141,7 +141,7 @@ function Paragraph:append( whatever,parameter )
   end
 end
 
---- Turn a node list into a shaped block of text. 
+--- Turn a node list into a shaped block of text.
 -- FIXME: document why splitting is needed (ul/li in data)
 function Paragraph:format(width_sp, default_textformat_name)
   local nodelist = node.copy_list(self.nodelist)

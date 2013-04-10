@@ -50,7 +50,7 @@ function features_scripts_matches( tab,script,lang )
   return false
 end
 
---- Convert codepoint to a UTF-16 string. 
+--- Convert codepoint to a UTF-16 string.
 function to_utf16(codepoint)
   assert(codepoint)
   if codepoint < 65536 then
@@ -92,7 +92,7 @@ end
 local lookup_fonttable_from_filename = {}
 
 --- Return a TeX usable font table, or _nil_ plus an error message.
---- The parameter `name` is the filename (without path), `size` is 
+--- The parameter `name` is the filename (without path), `size` is
 --- given in scaled points, `extra_parameter` is a table such as:
 ---     {
 ---       ["space"] = "25"
@@ -125,7 +125,7 @@ function define_font(name, size,extra_parameter)
 
     fonttable.filename_with_path = filename_with_path
     local is_unicode = (fonttable.pfminfo.unicoderanges ~= nil)
-    
+
     --- We require a mapping glyph number -> unicode codepoint. The problem is
     --- that TTF/OTF fonts have a different encoding mechanism. TTF/OTF can be
     --- accessed via the table `fonttable.map.backmap` (the key is the glyph
@@ -153,7 +153,7 @@ function define_font(name, size,extra_parameter)
   end
 
   --- A this point we have taken the `fonttable` from memory or from `fontloader#to_table()`. The next
-  --- part is mostly size/features dependent. 
+  --- part is mostly size/features dependent.
 
   if (size < 0) then size = (- 655.36) * size end
   -- Some fonts have `units_per_em` set to 0. I am not sure if setting this to
@@ -161,7 +161,7 @@ function define_font(name, size,extra_parameter)
   if fonttable.units_per_em == 0 then fonttable.units_per_em = 1000 end
   local mag = size / fonttable.units_per_em
 
-  --- The table `f` is the font structure that TeX can use, see chapter 7 of the LuaTeX manual for a detailed description. This is returned from 
+  --- The table `f` is the font structure that TeX can use, see chapter 7 of the LuaTeX manual for a detailed description. This is returned from
   --- the function. It is safe to store additional data here.
   local f = { }
 
@@ -211,7 +211,7 @@ function define_font(name, size,extra_parameter)
 
     -- TeX uses U+002D HYPHEN-MINUS for hyphen, correct would be U+2012 HYPHEN.
     -- Because font vendors all have different ideas of hyphen, we just map all
-    -- occurrences of *HYPHEN* to 0x2D (decimal 45) 
+    -- occurrences of *HYPHEN* to 0x2D (decimal 45)
     if glyph.name:lower():match("^hyphen$") then codepoint=45  end
 
     f.characters[codepoint] = {
@@ -228,7 +228,7 @@ function define_font(name, size,extra_parameter)
     --- We change the `tounicode` entry for entries with a period. Sometimes fonts
     --- have entries like `a.sc` or `a.c2sc` for smallcaps letter a. We are
     --- only interested in the part before the period.
-    --- _This solution might not be perfect_. 
+    --- _This solution might not be perfect_.
     if glyph.name:match("%.") then
       local destname = glyph.name:gsub("^([^%.]*)%..*$","%1")
       local cp = fonttable.lookup_codepoint_by_name[destname]
@@ -260,4 +260,4 @@ function define_font(name, size,extra_parameter)
   return true,f
 end
 
--- End of file 
+-- End of file

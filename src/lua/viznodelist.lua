@@ -15,7 +15,7 @@
 --   require("viznodelist")
 --   viznodelist.nodelist_visualize(0,"mybox.gv")
 -- }
--- 
+--
 -- \bye
 
 -- and then open "mybox.gv" with graphviz
@@ -50,17 +50,17 @@ local function link_to( n,nodename,label )
     local t = node.type(n.id)
     local nodename_n = get_nodename(n)
     if t=="temp" or t=="nested_list" then return end
-    
+
     local ret
     if label=="prev" then
-      -- ignore nodes where node.prev.next does not exist. 
+      -- ignore nodes where node.prev.next does not exist.
       -- TODO: this should be more clever: ignore prev pointers of the first nodes in a list.
       if not n.next then return end
       ret = string.format("%s:%s:w -> %s:title\n",nodename,label,get_nodename(n))
     elseif label=="head" then
       ret = string.format("%s:%s -> %s:title\n",nodename,label,get_nodename(n))
     else
-      ret = string.format("%s:%s -> %s:title\n",nodename,label,get_nodename(n)) 
+      ret = string.format("%s:%s -> %s:title\n",nodename,label,get_nodename(n))
     end
     return ret
   end
@@ -186,7 +186,7 @@ local function dot_analyze_nodelist( head, options )
 	while head do
 	  typ = node.type(head.id)
 	  nodename = get_nodename(head)
-    
+
   	if typ == "hlist" then
       local tmp = {}
       if head.width ~= 0 then
@@ -354,7 +354,7 @@ local function dot_analyze_nodelist( head, options )
     else
       ret[#ret + 1] = draw_node(head, { })
     end
-    
+
     head = head.next
 	end
   return table.concat(ret)

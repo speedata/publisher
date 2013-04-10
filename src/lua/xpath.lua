@@ -518,7 +518,7 @@ function parse( data_xml, str, ns )
     -- [31]
     AbbrevForwardStep = space^0 * C( P"@" )^-1 * V"NodeTest",
     -- [35]      NodeTest    ::=     KindTest | NameTest
-    NodeTest = space^0 * V"NameTest" * space^0, 
+    NodeTest = space^0 * V"NameTest" * space^0,
     -- [36]
     NameTest = V"QName" + V"Wildcard",
     -- [37]      Wildcard    ::=    "*" | (NCName ":" "*") | ("*" ":" NCName) /* ws: explicit */
@@ -561,7 +561,7 @@ function parse( data_xml, str, ns )
     QName =  C((  basechar + ideographic + digit + dot + minus + underscore + combining_char + extender   ) * (  basechar + ideographic + digit + dot + minus + colon + underscore + combining_char + extender  )^0 ),
     -- [81]
     Digits = R("09")^1,
-    
+
   }
   local ret = lpeg.match(xpath,str)
   if type(ret)=="function" then return ret() end
@@ -586,7 +586,7 @@ end
 -- [24]      NodeComp    ::=    "is" | "<<" | ">>"
 -- [25]      PathExpr    ::=    ("/" RelativePathExpr?) | ("//" RelativePathExpr) | RelativePathExpr /* xgs: leading-lone-slash */
 -- [26]      RelativePathExpr    ::=     StepExpr (("/" | "//") StepExpr)*
--- [30]      ForwardAxis     ::=    ("child" "::") | ("descendant" "::") | ("attribute" "::") | ("self" "::") | ("descendant-or-self" "::")| ("following-sibling" "::") | ("following" "::") | ("namespace" "::") 
+-- [30]      ForwardAxis     ::=    ("child" "::") | ("descendant" "::") | ("attribute" "::") | ("self" "::") | ("descendant-or-self" "::")| ("following-sibling" "::") | ("following" "::") | ("namespace" "::")
 -- [32]      ReverseStep     ::=    (ReverseAxis NodeTest) | AbbrevReverseStep
 -- [33]      ReverseAxis     ::=    ("parent" "::") | ("ancestor" "::") | ("preceding-sibling" "::") | ("preceding" "::") | ("ancestor-or-self" "::")
 -- [34]      AbbrevReverseStep     ::=    ".."

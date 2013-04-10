@@ -110,7 +110,7 @@ end
 
 --- Attribute
 --- ---------
---- Create an attribute to be used in a XML structure. The XML structure can be formed via 
+--- Create an attribute to be used in a XML structure. The XML structure can be formed via
 --- Element and Attribute commands and writen to disk with SaveDataset.
 function commands.attribute( layoutxml,dataxml )
   local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpath")
@@ -124,7 +124,7 @@ end
 --- AtPageCreation
 --- -------------
 --- Run these commands when a page is created (as soon as the first element is written to it).
---- You can add header/footer and other repeating elements. These commands are 
+--- You can add header/footer and other repeating elements. These commands are
 --- not executed when encountered, rather in `publisher#setup_page()`.
 function commands.atpagecreation( layoutxml,dataxml )
   return layoutxml
@@ -132,8 +132,8 @@ end
 
 --- AtPageShipout
 --- -------------
---- Run these commands when a page is ready to be put in 
---- the PDF. You can add header/footer. These commands are 
+--- Run these commands when a page is ready to be put in
+--- the PDF. You can add header/footer. These commands are
 --- not executed when encountered, rather in `publisher#new_page()`.
 function commands.atpageshipout( layoutxml,dataxml )
   return layoutxml
@@ -288,7 +288,7 @@ end
 
 --- Columns
 --- -------
---- Set the width of a table to a fixed size. Expects multiple occurences of element 
+--- Set the width of a table to a fixed size. Expects multiple occurences of element
 --- Column as the child elements.
 function commands.columns( layoutxml,dataxml )
   local tab = publisher.dispatch(layoutxml,dataxml)
@@ -340,10 +340,10 @@ end
 
 --- Define Textformat
 --- ----------------
---- A text format defines the alignment and indentation of a paragraph. 
+--- A text format defines the alignment and indentation of a paragraph.
 ---
 --- The rules for textformat:
---- 
+---
 --- * if a paragraph has a textformat then use it, end
 --- * if the textblock has a textformat then use it, end
 --- * use the textformat `text` end
@@ -376,7 +376,7 @@ end
 
 --- Define Fontfamily
 --- -----------------
---- Define a font family. A font family must consist of a `Regular` shape, optional are `Bold`, 
+--- Define a font family. A font family must consist of a `Regular` shape, optional are `Bold`,
 --- `BoldItalic` and `Italic`.
 function commands.define_fontfamily( layoutxml,dataxml )
   local fonts = publisher.fonts
@@ -1295,7 +1295,7 @@ end
 
 --- PositioningFrame
 --- ----------------
---- Define a rectangular area on the page where content gets placed. 
+--- Define a rectangular area on the page where content gets placed.
 function commands.positioning_frame( layoutxml, dataxml )
   local column = publisher.read_attribute(layoutxml,dataxml,"column","number")
   local row    = publisher.read_attribute(layoutxml,dataxml,"row" ,"number")

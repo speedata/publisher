@@ -183,7 +183,7 @@ local function parse_element( txt,pos,namespaces )
 	elseif nextchar == "/" then -- </endelement
 		pos = parse_endelement(txt,pos)
 		return nil,pos
-		-- end element 
+		-- end element
 	elseif nextchar == "?" then
 		return parse_pi(txt,pos)
 	else

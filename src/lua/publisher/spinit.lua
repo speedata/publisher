@@ -1,4 +1,4 @@
---- The initialization file. The first file to be calles from the TeX file. Be aware that `sdini.lua` is 
+--- The initialization file. The first file to be calles from the TeX file. Be aware that `sdini.lua` is
 --- called from `luatex --lua ...` before this file.
 --
 --  spinit.lua
@@ -183,7 +183,7 @@ local function setup()
   tex.vfuzz = 6554
   tex.hbadness= 1000
   tex.vbadness=1000
-  --- The `lccode` is used for hyphenation. TeX sets the lccode for a-z to itself and A-Z to its lower correspondent. 
+  --- The `lccode` is used for hyphenation. TeX sets the lccode for a-z to itself and A-Z to its lower correspondent.
   --- The code for all other characters are not set and thus they don't hyhenate unless set like this.
   for _,i in ipairs
     {181,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,248,249,250,251,252,
@@ -242,7 +242,7 @@ local function setup()
   end
 end
 
---- This is the entry point in the publishing run and called from the TeX file (`publisher.tex`). 
+--- This is the entry point in the publishing run and called from the TeX file (`publisher.tex`).
 require("publisher")
 
 function main_loop()
@@ -251,8 +251,6 @@ function main_loop()
   call(publisher.dothings)
   exit(true)
 end
-
-
 
 --- I don't remember what made LuaTeX 0.61 so interesting. But there was a reason, I guess.
 if status.luatex_version < 61 then

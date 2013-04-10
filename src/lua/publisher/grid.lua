@@ -169,7 +169,7 @@ function set_framenumber( self,areaname, nummer )
   area.aktueller_rahmen = nummer
 end
 
--- Setzt die gridwidth und Rasterhöhe auf die Werte @b@ und @h@. 
+-- Setzt die gridwidth und Rasterhöhe auf die Werte @b@ und @h@.
 function set_width_height(self, b,h )
   assert(b)
   assert(h)
@@ -239,7 +239,7 @@ function allocate_cells(self,x,y,b,h,allocate_matrix,zeichne_markierung_p,areana
   end
 end
 
--- Gibt den Wahrheitswert zurück, ob ein Objekt der Breite @breite@ in die Zeile @zeile@ ab der Spalte @spalte@ 
+-- Gibt den Wahrheitswert zurück, ob ein Objekt der Breite @breite@ in die Zeile @zeile@ ab der Spalte @spalte@
 -- passt.
 function passt_x_in_zeile(self,spalte,breite,zeile)
   if not spalte then return false end

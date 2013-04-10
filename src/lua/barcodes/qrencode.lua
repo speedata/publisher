@@ -1,10 +1,10 @@
 --- The qrcode library is licensed under the 3-clause BSD license (aka "new BSD")
 --- To get in contact with the author, mail to <gundlach@speedata.de>.
---- 
+---
 --- Please report bugs on the [github project page](http://speedata.github.com/luaqrcode/).
 -- Copyright (c) 2012, Patrick Gundlach
 -- All rights reserved.
--- 
+--
 -- Redistribution and use in source and binary forms, with or without
 -- modification, are permitted provided that the following conditions are met:
 --	 * Redistributions of source code must retain the above copyright
@@ -15,7 +15,7 @@
 --	 * Neither the name of the <organization> nor the
 --	   names of its contributors may be used to endorse or promote products
 --	   derived from this software without specific prior written permission.
--- 
+--
 -- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 -- ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 -- WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -37,7 +37,7 @@
 --- 1. Arrange data and calculate error correction code
 --- 1. Generate 8 matrices with different masks and calculate the penalty
 --- 1. Return qrcode with least penalty
---- 
+---
 --- Each step is of course more or less complex and needs further description
 
 --- Helper functions
@@ -179,7 +179,7 @@ local function get_mode( str )
 		return 1
 	elseif string.match(str,"^[0-9A-Z $%%*./:+-]+$") then
 		return 2
-	else 
+	else
 		return 4
 	end
 	assert(false,"never reached")
@@ -268,7 +268,7 @@ local function get_version_eclevel(len,mode,requested_ec_level)
 	return minversion, maxec_level
 end
 
--- Return a bit string of 0s and 1s that includes the length of the code string. 
+-- Return a bit string of 0s and 1s that includes the length of the code string.
 -- The modes are numeric = 1, alphanumeric = 2, binary = 4, and japanese = 8
 local function get_length(str,version,mode)
 	local i = mode
@@ -318,8 +318,8 @@ end
 --- We already chose the encoding (a.k.a. mode) in the first step, so we need to apply the mode to the
 --- codeword.
 ---
---- **Numeric**: take three digits and encode them in 10 bits  
---- **Alphanumeric**: take two characters and encode them in 11 bits  
+--- **Numeric**: take three digits and encode them in 10 bits
+--- **Alphanumeric**: take two characters and encode them in 11 bits
 --- **Binary**: take one octet and encode it in 8 bits
 
 local asciitbl = {
@@ -348,7 +348,7 @@ local function encode_string_numeric(str)
 	return bitstring
 end
 
--- Return a binary representation of the alphanumeric string `str`. This must contain only 
+-- Return a binary representation of the alphanumeric string `str`. This must contain only
 -- digits 0-9, uppercase letters A-Z, space and the following chars: $%*./:+-.
 local function encode_string_ascii(str)
 	local bitstring = ""
@@ -392,7 +392,7 @@ local function encode_data(str,mode)
 	end
 end
 
--- Encoding the codeword is not enough. We need to make sure that 
+-- Encoding the codeword is not enough. We need to make sure that
 -- the length of the binary string is equal to the number of codewords of the version.
 local function add_pad_data(version,ec_level,data)
 	local count_to_pad, missing_digits
@@ -447,7 +447,7 @@ local alpha_int = {
 	162,  89, 178, 121, 242, 249, 239, 195, 155,  43,  86, 172,  69, 138,   9,  18,
 	 36,  72, 144,  61, 122, 244, 245, 247, 243, 251, 235, 203, 139,  11,  22,  44,
 	 88, 176, 125, 250, 233, 207, 131,  27,  54, 108, 216, 173,  71, 142,   1
-}	
+}
 
 local int_alpha = {
 	[0] = 0,
@@ -467,7 +467,7 @@ local int_alpha = {
 	161,  59,  82,  41, 157,  85, 170, 251,  96, 134, 177, 187, 204,  62,  90, 203,
 	 89,  95, 176, 156, 169, 160,  81,  11, 245,  22, 235, 122, 117,  44, 215,  79,
 	174, 213, 233, 230, 231, 173, 232, 116, 214, 244, 234, 168,  80,  88, 175
-} 
+}
 
 -- We only need the polynomial generators for block sizes 7, 10, 13, 15, 16, 17, 18, 20, 22, 24, 26, 28, and 30. Version
 -- 2 of the qr codes don't need larger ones (as opposed to version 1). The table has the format x^1*ɑ^21 + x^2*a^102 ...
@@ -530,7 +530,7 @@ local function convert_to_int(tab,len_message)
 	return new_tab
 end
 
--- That's the heart of the error correction calculation. 
+-- That's the heart of the error correction calculation.
 local function calculate_error_correction(data,num_ec_codewords)
 	local mp
 	if type(data)=="string" then
@@ -562,8 +562,8 @@ local function calculate_error_correction(data,num_ec_codewords)
 		gp_alpha = get_generator_polynominal_adjusted(num_ec_codewords,highest_exponent)
 
 		-- Multiply generator polynomial by first coefficient of the above polynomial
-	
-		-- take the highest exponent from the message polynom (alpha) and add 
+
+		-- take the highest exponent from the message polynom (alpha) and add
 		-- it to the generator polynom
 		local exp = mp_alpha[highest_exponent]
 		for i=highest_exponent,highest_exponent - num_ec_codewords,-1 do
@@ -576,11 +576,11 @@ local function calculate_error_correction(data,num_ec_codewords)
 		for i=highest_exponent - num_ec_codewords - 1,0,-1 do
 			gp_alpha[i] = 0
 		end
-	
+
 		gp_int = convert_to_int(gp_alpha)
 		mp_int = convert_to_int(mp_alpha)
-	
-	
+
+
 		tmp = {}
 		for i=highest_exponent,0,-1 do
 			tmp[i] = bit_xor(gp_int[i],mp_int[i])
@@ -615,7 +615,7 @@ end
 -- ec level. Each entry has two or four fields, the odd files are the number of repetitions for the
 -- folowing block info. The first entry of the block is the total number of codewords in the block,
 -- the second entry is the number of data codewords. The third is not important.
-local ecblocks = { 
+local ecblocks = {
   {{  1,{ 26, 19, 2}                 },   {  1,{26,16, 4}},                  {  1,{26,13, 6}},                  {  1, {26, 9, 8}               }},
   {{  1,{ 44, 34, 4}                 },   {  1,{44,28, 8}},                  {  1,{44,22,11}},                  {  1, {44,16,14}               }},
   {{  1,{ 70, 55, 7}                 },   {  1,{70,44,13}},                  {  2,{35,17, 9}},                  {  2, {35,13,11}               }},
@@ -656,7 +656,7 @@ local ecblocks = {
   {{  4,{152,122,15}, 18,{153,123,15}},   { 13,{74,46,14}, 32,{75,47,14}},   { 48,{54,24,15}, 14,{55,25,15}},   { 42, {45,15,15}, 32,{46,16,15}}},
   {{ 20,{147,117,15},  4,{148,118,15}},   { 40,{75,47,14},  7,{76,48,14}},   { 43,{54,24,15}, 22,{55,25,15}},   { 10, {45,15,15}, 67,{46,16,15}}},
   {{ 19,{148,118,15},  6,{149,119,15}},   { 18,{75,47,14}, 31,{76,48,14}},   { 34,{54,24,15}, 34,{55,25,15}},   { 20, {45,15,15}, 61,{46,16,15}}}
-} 
+}
 
 -- The bits that must be 0 if the version does fill the complete matrix.
 -- Example: for version 1, no bits need to be added after arranging the data, for version 2 we need to add 7 bits at the end.
@@ -687,7 +687,7 @@ local remainder = {0, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 4
 --- Example: Version 5-H has four data and four error correction blocks. The table above lists
 --- `2, {33,11,11},  2,{34,12,11}` for entry [5][4]. This means we take two blocks with 11 codewords
 --- and two blocks with 12 codewords, and two blocks with 33 - 11 = 22 ec codes and another
---- two blocks with 34 - 12 = 22 ec codes. 
+--- two blocks with 34 - 12 = 22 ec codes.
 ---	     Block 1: D1  D2  D3  ... D11
 ---	     Block 2: D12 D13 D14 ... D22
 ---	     Block 3: D23 D24 D25 ... D33 D34
@@ -764,13 +764,13 @@ end
 --- dimensional field where the numbers determine which pixel is blank or not.
 ---
 --- The following code is used for our matrix:
----	     0 = not in use yet, 
----	    -2 = blank by mandatory pattern, 
----	     2 = black by mandatory pattern, 
----	    -1 = blank by data, 
+---	     0 = not in use yet,
+---	    -2 = blank by mandatory pattern,
+---	     2 = black by mandatory pattern,
+---	    -1 = blank by data,
 ---	     1 = black by data
 ---
---- 
+---
 --- To prepare the _empty_, we add positioning, alingment and timing patters.
 
 --- ### Positioning patterns ###
@@ -915,7 +915,7 @@ local typeinfo = {
 	{ [-1]= "111111111111111", [0] = "001011010001001", "001001110111110", "001110011100111", "001100111010000", "000011101100010", "000001001010101", "000110100001100", "000100000111011" }
 }
 
--- The typeinfo is a mixture of mask and ec level information and is 
+-- The typeinfo is a mixture of mask and ec level information and is
 -- added twice to the qr code, one horizontal, one vertical.
 local function add_typeinfo_to_matrix( matrix,ec_level,mask )
 	local ec_mask_type = typeinfo[ec_level][mask]
@@ -1019,7 +1019,7 @@ end
 ---	     110                      ((y x) mod 2 + (y x) mod 3) mod 2 = 0
 ---	     111                      ((y x) mod 3 + (y+x) mod 2) mod 2 = 0
 
--- Return 1 (black) or -1 (blank) depending on the mask, value and position. 
+-- Return 1 (black) or -1 (blank) depending on the mask, value and position.
 -- Parameter mask is 0-7 (-1 for 'no mask'). x and y are 1-based coordinates,
 -- 1,1 = upper left. tonumber(value) must be 0 or 1.
 local function get_pixel_with_mask( mask, x,y,value )
@@ -1136,7 +1136,7 @@ end
 
 
 --- The total penalty of the matrix is the sum of four steps. The following steps are taken into account:
---- 
+---
 --- 1. Adjacent modules in row/column in same color
 --- 1. Block of modules in same color
 --- 1. 1:1:3:1:1 ratio (dark:light:dark:light:dark) pattern in row/column
@@ -1163,7 +1163,7 @@ local function calculate_penalty(matrix)
 		last_bit_blank = nil
 		for y = 1,size do
 			if matrix[x][y] > 0 then
-				-- small optimization: this is for penalty 4 
+				-- small optimization: this is for penalty 4
 				number_of_dark_cells = number_of_dark_cells + 1
 				is_blank = false
 			else

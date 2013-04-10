@@ -57,7 +57,7 @@ function attach_objects_row( tab )
       td_contents.objects = objects
     elseif td_elementname == "Tr" then -- probably from tablefoot/head
       attach_objects_row(td_contents)
-    elseif td_elementname == "Column" then 
+    elseif td_elementname == "Column" then
       -- ignore, they don't have objects
     else
       w("unknown element name %s",td_elementname)
@@ -75,7 +75,7 @@ end
 function calculate_columnwidth_for_row(self, tr_contents,current_row,colspans,colmin,colmax )
   local current_column
   local max_wd, min_wd -- maximale Breite und minimale Breite einer Tabellenzelle (Td)
-  -- als erstes die einzelnen rows/Zellen durchgehen und schauen, wie breit die 
+  -- als erstes die einzelnen rows/Zellen durchgehen und schauen, wie breit die
   -- Spalten sein müssen. Wenn es colspans gibt, müssen diese entsprechend
   -- berücksichtigt werden.
   current_column = 0
@@ -271,7 +271,7 @@ function calculate_spaltenbreite( self )
   --
   -- In diesem Fall ist sum<sub>min</sub> in etwa die Läne von "langer" und sum<sub>max</sub> ist die Länge des Textes.
   -- colmax[i] ist die Breite von "A", colmin[i] ebenfalls
-  -- 
+  --
   -- Phase II: Colspan einbeziehen
   --
   trace("tabular: colmin/colmax anpassen")
@@ -349,7 +349,7 @@ function calculate_spaltenbreite( self )
       -- aber um auf die Zellenbreite zu kommen muss ich mit tablewidth_target multiplizieren
       col_r[i] = colmax[i] * r
 
-      -- Wenn nun die errechnete Breite kleiner ist als die minimale Breite, dann muss die 
+      -- Wenn nun die errechnete Breite kleiner ist als die minimale Breite, dann muss die
       -- Zelle vergrößert werden und die Gesamtbreite um den Überschuss verringert werden
       if col_r[i] < colmin[i] then
         ueberschuss = ueberschuss + colmin[i] - col_r[i]

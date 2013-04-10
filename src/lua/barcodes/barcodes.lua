@@ -27,7 +27,7 @@ local function mkpattern( str )
   -- a bar two units wide, another gap of width one and a bar of width one.
   local digits_t = {"3211","2221","2122","1411",
              "1132","1231","1114","1312","1213","3112"}
-  
+
   -- The first digit is encoded by the appearance of the next six digits. A value of 1 means
   -- that the generated gaps/bars are to be inverted.
   local mirror_t = {"------","--1-11","--11-1","--111-","-1--11",
@@ -142,7 +142,7 @@ local function ean13(width,height,fontfamily,digits,showtext,overshoot_factor)
         end
     	local zerosize = 466387
     	overshoot = zerosize * overshoot_factor / 100
-    	barlength = barlength - zerosize - 0.1 * overshoot 
+    	barlength = barlength - zerosize - 0.1 * overshoot
 	else
 		overshoot_factor = overshoot_factor or 10
         if height then

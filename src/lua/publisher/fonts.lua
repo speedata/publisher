@@ -7,7 +7,7 @@
 --  See file COPYING in the root directory for license details.
 
 --- Loading a font is only one part of the story. Proper dealing with fonts
---- requires post processing at various stages. 
+--- requires post processing at various stages.
 
 require("fonts.fontloader")
 module(...,package.seeall)
@@ -102,7 +102,7 @@ end
 
 --- At this time we must adjust the contents of the paragraph how we would
 --- like it. For example the (sub/sup)script glyphs still have the width of
---- the regular characters and need 
+--- the regular characters and need
 function pre_linebreak( head )
   local first_head = head
 
