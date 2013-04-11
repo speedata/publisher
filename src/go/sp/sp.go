@@ -427,6 +427,32 @@ func compareTwoPages(sourcefile, referencefile, dummyfile string) bool {
 	return true
 }
 
+func newer(src, dest string) bool {
+	dest_fi, err := os.Stat(dest)
+	if err != nil {
+		return true
+	}
+	src_fi, err := os.Stat(src)
+	if err != nil {
+		panic(fmt.Sprintf("Source %s does not exist!", src))
+	}
+	return dest_fi.ModTime().Before(src_fi.ModTime())
+}
+
+func convertReference(soureFiles []string) error {
+	var dest string
+	if len(soureFiles) == 1 {
+		dest = "reference.png"
+	} else {
+		dest = "reference-1.png"
+	}
+	if newer("reference.pdf", dest) {
+		err := exec.Command("convert", "reference.pdf", "+adjoin", "reference.png").Run()
+		return err
+	}
+	return nil
+}
+
 func runComparison(info os.FileInfo) {
 	log.Println("Run comparison in directory", info.Name())
 	err := exec.Command("sp").Run()
@@ -437,16 +463,19 @@ func runComparison(info os.FileInfo) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = exec.Command("convert", "reference.pdf", "+adjoin", "reference.png").Run()
-	if err != nil {
-		log.Fatal(err)
-	}
+
 	sourceFiles, err := filepath.Glob("source*.png")
 	if err != nil {
 		log.Fatal(err)
 	}
 	number_of_sourcefiles := len(sourceFiles)
 	badPages := make([]int, 0, number_of_sourcefiles)
+
+	err = convertReference(sourceFiles)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	if number_of_sourcefiles == 1 {
 		if !compareTwoPages("source.png", "reference.png", "pagediff.png") {
 			badPages = append(badPages, 1)
@@ -521,7 +550,7 @@ func main() {
 	var command string
 	switch len(op.Extra) {
 	case 0:
-		// no command given, run is the default command 
+		// no command given, run is the default command
 		command = "run"
 	case 1:
 		// great
