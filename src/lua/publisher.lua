@@ -1471,14 +1471,17 @@ function fix_justification( nodelist,textformat,parent)
         list_start.prev = leftskip_node
         head.head = leftskip_node
         local tail = node.tail(head.head)
-
-        if tail.prev.id == 10 and tail.prev.subtype==15 then -- parfillskip
-          local parfillskip = tail.prev
-          tail.prev = parfillskip.prev
-          parfillskip.prev.next = tail
-          parfillskip.next = head.head
-          head.head = parfillskip
+        while tail.prev.id ~= 10 do
+          node.remove(head.head,tail.prev)
         end
+        if tail.prev.id == 10 then -- a skip
+          local lastskip = tail.prev
+          tail.prev = lastskip.prev
+          lastskip.prev.next = tail
+          lastskip.next = head.head
+          head.head = lastskip
+        end
+
       end
 
       if textformat == "centered" then
