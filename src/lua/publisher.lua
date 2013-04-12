@@ -5,7 +5,7 @@
 --  publisher.lua
 --  speedata publisher
 --
---  Copyright 2010-2012 Patrick Gundlach.
+--  Copyright 2010-2013 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 
 file_start("publisher.lua")
@@ -1471,10 +1471,10 @@ function fix_justification( nodelist,textformat,parent)
         list_start.prev = leftskip_node
         head.head = leftskip_node
         local tail = node.tail(head.head)
-        while tail.prev.id ~= 10 do
+        while tail.prev and tail.prev.id ~= 10 do
           node.remove(head.head,tail.prev)
         end
-        if tail.prev.id == 10 then -- a skip
+        if tail.prev and tail.prev.prev and tail.prev.id == 10 then -- a skip
           local lastskip = tail.prev
           tail.prev = lastskip.prev
           lastskip.prev.next = tail
@@ -1490,31 +1490,31 @@ function fix_justification( nodelist,textformat,parent)
         local leftskip_node = node.new("glue")
         leftskip_node.spec = node.new("glue_spec")
         local wd
-        while rightskip.prev.id ~= 10 do
+        while rightskip.prev and rightskip.prev.id ~= 10 do
           node.remove(head.head,rightskip.prev)
         end
+        if rightskip.prev then
+          if rightskip.prev.id == 10 then -- the last skip on the line (hopefully!!)
+            local parfillskip = rightskip.prev
 
-        if rightskip.prev.id == 10 then -- the last skip on the line (hopefully!!)
-          local parfillskip = rightskip.prev
+            wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head,parfillskip.prev)
 
-          wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head,parfillskip.prev)
-
-          -- remove parfillksip and insert half width in rightskip
-          parfillskip.prev.next = rightskip
-          rightskip.prev = parfillskip.prev
-          rightskip.spec = node.new("glue_spec")
-          rightskip.spec.width = (goal - wd) / 2
-          node.free(parfillskip)
-        else
-          assert(false,"textformat=='centered'")
+            -- remove parfillksip and insert half width in rightskip
+            parfillskip.prev.next = rightskip
+            rightskip.prev = parfillskip.prev
+            rightskip.spec = node.new("glue_spec")
+            rightskip.spec.width = (goal - wd) / 2
+            node.free(parfillskip)
+          else
+            assert(false,"textformat=='centered'")
+          end
+          -- insert half width in front of the row
+          leftskip_node.spec.width = ( goal - wd ) / 2
+          leftskip_node.next = list_start
+          list_start.prev = leftskip_node
+          head.head = leftskip_node
         end
-        -- insert half width in front of the row
-        leftskip_node.spec.width = ( goal - wd ) / 2
-        leftskip_node.next = list_start
-        list_start.prev = leftskip_node
-        head.head = leftskip_node
       end
-
     elseif head.id == 1 then -- vlist
       fix_justification(head.head,textformat,head)
     end
