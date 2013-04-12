@@ -161,6 +161,9 @@ end
 
 
 local function decode_html( dataxml, arg )
+  if type(arg) == "string" then
+    return luxor.parse_xml(arg)
+  end
   for i=1,#arg do
     for j=1,#arg[i] do
       local txt = arg[i][j]
