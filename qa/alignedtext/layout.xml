@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<Layout
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en">
+
+  <Pageformat width="6cm" height="8cm"/>
+
+  <DefineTextformat name="rightaligned" alignment="rightaligned"/>
+  <DefineTextformat name="centered" alignment="centered"/>
+  <DefineTextformat name="leftaligned" alignment="leftaligned"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="4">
+        <Paragraph textformat="rightaligned">
+          <Value>This is<br/>right aligned<br/>text.</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <PlaceObject>
+      <Textblock width="4">
+        <Paragraph textformat="centered">
+          <Value>This is<br/>centered<br/>text.</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <PlaceObject>
+      <Textblock width="4">
+        <Paragraph textformat="leftaligned">
+          <Value>This is<br/>left aligned<br/>text.</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>  </Record>
+</Layout>

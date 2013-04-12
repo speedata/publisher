@@ -1490,8 +1490,11 @@ function fix_justification( nodelist,textformat,parent)
         local leftskip_node = node.new("glue")
         leftskip_node.spec = node.new("glue_spec")
         local wd
+        while rightskip.prev.id ~= 10 do
+          node.remove(head.head,rightskip.prev)
+        end
 
-        if rightskip.prev.id == 10 and rightskip.prev.subtype==15 then -- parfillskip
+        if rightskip.prev.id == 10 then -- the last skip on the line (hopefully!!)
           local parfillskip = rightskip.prev
 
           wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head,parfillskip.prev)
@@ -1503,7 +1506,7 @@ function fix_justification( nodelist,textformat,parent)
           rightskip.spec.width = (goal - wd) / 2
           node.free(parfillskip)
         else
-          wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)
+          assert(false,"textformat=='centered'")
         end
         -- insert half width in front of the row
         leftskip_node.spec.width = ( goal - wd ) / 2
