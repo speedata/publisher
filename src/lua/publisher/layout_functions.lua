@@ -9,6 +9,8 @@
 file_start("layout_functions.lua")
 
 module(...,package.seeall)
+local luxor = do_luafile("luxor.lua")
+
 
 local function aktuelle_seite(  )
   publisher.setup_page()
@@ -157,6 +159,22 @@ local function variable(dataxml, arg )
   return publisher.variablen[arg]
 end
 
+
+local function decode_html( dataxml, arg )
+  for i=1,#arg do
+    for j=1,#arg[i] do
+      local txt = arg[i][j]
+      if type(txt) == "string" then
+        if string.find(txt,"<") then
+          local x = luxor.parse_xml(txt)
+          arg[i][j] = x
+        end
+      end
+    end
+  end
+  return arg
+end
+
 file_end("layout_functions.lua")
 
 return {
@@ -171,6 +189,7 @@ return {
     anzahl_seiten      = anzahl_seiten,
     anzahl_spalten     = number_of_columns,
     anzahl_zeilen      = anzahl_zeilen,
+    html_dekodieren    = decode_html,
     bildbreite         = bildbreite,
     datei_vorhanden    = datei_vorhanden,
     formatiere_string  = format_string,
@@ -189,6 +208,7 @@ return {
     current_row        = current_row,
     current_column     = current_column,
     even               = gerade,
+    decode_html        = decode_html,
     file_exists        = datei_vorhanden,
     groupheight        = gruppenhoehe,
     groupwidth         = gruppenbreite,
