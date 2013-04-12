@@ -1564,6 +1564,7 @@
           <ref name="e_Action"/>
           <ref name="e_Bookmark"/>
           <ref name="e_Value"/>
+          <ref name="e_ForAll"/>
         </choice>
       </oneOrMore>
       <optional><attribute name="textformat"/></optional>
