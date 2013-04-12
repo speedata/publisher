@@ -1843,11 +1843,12 @@ function commands.textblock( layoutxml,dataxml )
   local fontfamily
   local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface","rawstring")
   local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",   "rawstring")
-  local width          = publisher.read_attribute(layoutxml,dataxml,"width",   "number")
+  local width          = publisher.read_attribute(layoutxml,dataxml,"width",   "length_sp")
   local angle          = publisher.read_attribute(layoutxml,dataxml,"angle",   "number")
   local columns        = publisher.read_attribute(layoutxml,dataxml,"columns", "number")
   local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","rawstring")
   local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
+
 
   if not width then
     err("Can't evaluate width in textblock")
@@ -1881,7 +1882,8 @@ function commands.textblock( layoutxml,dataxml )
     end
   end
 
-  local width_sp = width * publisher.current_grid.gridwidth
+  -- FIXME: remove width_sp
+  local width_sp = width
 
   local objects, nodes = {},{}
   local nodelist,parameter
