@@ -56,6 +56,8 @@
     <optional><ref name="e_Sup"/></optional>
     <optional><ref name="e_Sub"/></optional>
     <optional><ref name="e_Action"/></optional>
+    <optional><ref name="e_CopyOf"/></optional>
+    <optional><ref name="e_Barcode"/></optional>
   </define>
 
   <define name="t_Commands">
@@ -152,6 +154,8 @@
         <a:documentation docid="valign/middle">Vertikal zentriert ausgeben</a:documentation>
         <value>bottom</value>
         <a:documentation docid="valign/bottom">Unten ausgeben</a:documentation>
+        <!-- it can also be a string like {...}  -->
+        <data type="string"/>
       </choice>
     </attribute>
   </define>
@@ -1273,7 +1277,8 @@
       <optional>
         <attribute name="colspan">
           <a:documentation docid="td/colspan">Gibt an, über wie viele Spalten sich der Inhalt erstreckt. Voreinstellung: 1</a:documentation>
-          <data type="integer"/>
+          <!-- this is an integer but it can also be a string like {...}  -->
+          <data type="string"/>
         </attribute>
       </optional>
       <optional>
@@ -1291,6 +1296,8 @@
             <a:documentation docid="td/align/center">Zentriert ausgeben</a:documentation>
             <value>right</value>
             <a:documentation docid="td/align/right">Rechtsbündig ausgeben</a:documentation>
+            <!-- it can also be a string like {...}  -->
+            <data type="string"/>
           </choice>
         </attribute>
       </optional>
@@ -1363,6 +1370,7 @@
           <ref name="e_Switch"/>
           <ref name="e_ForAll"/>
           <ref name="e_Loop"/>
+          <ref name="e_Barcode"/>
         </choice>
       </zeroOrMore>
     </element>
