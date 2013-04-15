@@ -70,13 +70,13 @@ function commands.action( layoutxml,dataxml)
     local eltname = publisher.elementname(j,true)
     if eltname == "AddToList" then
       local n = node.new("whatsit","user_defined")
-      n.user_id = 1 -- a magic number
+      n.user_id = publisher.user_defined_addtolist
       n.type = 100  -- type 100: "value is a number"
       n.value = publisher.element_contents(j) -- pointer to the function (int)
       p:append(n)
     elseif eltname == "Mark" then
       local n = node.new("whatsit","user_defined")
-      n.user_id = 3 -- a magic number
+      n.user_id = user_defined_mark -- a magic number
       n.type = 115  -- type 115: "value is a string"
       n.value = publisher.element_contents(j)
       p:append(n)

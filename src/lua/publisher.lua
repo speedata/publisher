@@ -63,8 +63,10 @@ att_is_table_row    = 500
 att_tr_dynamic_data = 501
 
 
-user_defined_bookmark = 1
-user_defined_marker   = 4
+user_defined_addtolist = 1
+user_defined_bookmark  = 2
+user_defined_mark      = 3
+user_defined_marker    = 4
 
 
 glue_spec_node = node.id("glue_spec")
@@ -1064,7 +1066,7 @@ function find_user_defined_whatsits( head )
     elseif head.id==whatsit_node then
       if head.subtype == user_defined_whatsit then
         -- action
-        if head.user_id == 1 then
+        if head.user_id == user_defined_addtolist then
           -- the value is the index of the hash of user_defined_functions
           fun = user_defined_functions[head.value]
           fun()
@@ -1092,7 +1094,7 @@ function find_user_defined_whatsits( head )
             i = i + 1
           end
           current_bookmark_table[#current_bookmark_table + 1] = {name = str, destination = dest, open = open_p}
-        elseif head.user_id == 3 then
+        elseif head.user_id == user_defined_mark then
           local marker = head.value
           publisher.markers[marker] = { page = tex.count[0] }
         end
