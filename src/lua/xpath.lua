@@ -388,7 +388,7 @@ local function _comparison( ... )
 
   if not value1 and value2 then
     err("Can't compare against nil value (%s %s %s)",tostring(value1),operator,tostring(value2))
-    return
+    return false
   end
   local ret
   -- See http://www.w3.org/TR/xpath/#booleans

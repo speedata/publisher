@@ -89,10 +89,14 @@ function Paragraph:min_width()
     local last_glue = self.nodelist
     local dimen
     -- Just measure the distance between two glue nodes and take the maximum of that
-    for n in node.traverse_id(37,self.nodelist) do
-        dimen = node.dimensions(last_glue,n)
-        wd = math.max(wd,dimen)
-        last_glue = n
+    local head = self.nodelist
+    while head do
+        if head.id == publisher.glue_node then
+            dimen = node.dimensions(last_glue,head)
+            wd = math.max(wd,dimen)
+            last_glue = head
+        end
+        head = head.next
     end
     -- There are two cases here, either there is only one word (= no glue), then last_glue is at the beginning of the
     -- node list. Or we are at the last glue, then there is a word after that glue. last_glue is the last glue element.
