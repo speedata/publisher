@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<Layout
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en">
+  
+  <Options show-grid="no"
+    mainlanguage="Englisch (Great Britan)"
+    show-gridallocation="no"
+    trace="no"/>
+  
+  
+  <DefineColor name="gray"    model="cmyk" c="38" m="30" y="26" k="0"/>
+  <DefineColor name="yellow"  model="cmyk" c="0" m="0" y="100" k="0"/>
+
+  <SetGrid width="1cm" height="12pt"/>
+  <Pageformat width="12cm" height="12cm"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Table width="10">
+        <Tr>
+          <Td><Paragraph><Value>Abc</Value></Paragraph></Td>
+          <Td><Paragraph><Value>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents.</Value></Paragraph></Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+    <NextRow/>
+    <PlaceObject>
+      <Table width="10" columndistance="3mm" padding="0mm" leading="2mm">
+        <Tr>
+          <Td padding-bottom="2mm"><Paragraph><Value>aaa</Value></Paragraph></Td>
+          <Td border-left="1mm" border-left-color="gray" padding-left="1mm"><Paragraph><Value>abc</Value></Paragraph></Td>
+          <Td border-right="1mm" align="center"><Paragraph><Value>abc</Value></Paragraph></Td>
+          <Td valign="top"><Paragraph><Value>abc</Value></Paragraph></Td>
+        </Tr>
+        <Tr backgroundcolor="yellow">
+          <Td ><Paragraph><Value>abc</Value></Paragraph></Td>
+          <Td border-bottom="1mm" border-top-color="gray" border-right="1mm" border-left="1mm" rowspan="2" colspan="2" ><Image width="5" file="ocean.pdf"/></Td>
+          <Td padding-left="2pt" padding-right="2pt"><Paragraph><Value>One two three.</Value></Paragraph></Td>
+        </Tr>
+        <Tr>
+          <Td border-top="2mm"><Paragraph><Value>abc</Value></Paragraph></Td>
+          <Td ><Paragraph><Value>abc</Value></Paragraph></Td>
+        </Tr>
+        <Tr>
+          <Td valign="bottom"><Paragraph><Value>abc</Value></Paragraph></Td>
+          <Td ><Paragraph><Value>abc</Value></Paragraph></Td>
+          <Td align="center"><Paragraph><Value>abc</Value></Paragraph></Td>
+          <Td border-bottom="2mm"><Paragraph><Value>abj</Value></Paragraph></Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
