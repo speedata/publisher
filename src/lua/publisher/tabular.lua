@@ -43,15 +43,19 @@ function attach_objects_row( tab )
         if td_elementname == "Td" then
             local objects = {}
             for i,j in ipairs(td_contents) do
-                if publisher.elementname(j,true) == "Paragraph" then
-                    objects[#objects + 1] = publisher.element_contents(j)
-                elseif publisher.elementname(j,true) == "Image" then
+                local eltname     = publisher.elementname(j,true)
+                local eltcontents = publisher.element_contents(j)
+                if eltname == "Paragraph" then
+                    objects[#objects + 1] = eltcontents
+                elseif eltname == "Image" then
                     -- FIXME: Image should be an object
-                    objects[#objects + 1] = publisher.element_contents(j)[1]
-                elseif publisher.elementname(j,true) == "Table" then
-                    objects[#objects + 1] = publisher.element_contents(j)[1]
+                    objects[#objects + 1] = eltcontents[1]
+                elseif eltname == "Table" then
+                    objects[#objects + 1] = eltcontents[1]
+                elseif eltname == "Barcode" then
+                    objects[#objects + 1] = eltcontents
                 else
-                    warning("Object not recognized: %s",publisher.elementname(j) or "???")
+                    warning("Object not recognized: %s",eltname or "???")
                 end
             end
             td_contents.objects = objects
