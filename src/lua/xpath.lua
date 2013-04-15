@@ -245,6 +245,10 @@ end
 
 local function get_number_value( v )
   -- w("get_number_value, type=%s",type(v))
+  if not v then
+    err("get_number_value: argument is nil")
+    return nil
+  end
   if type(v)=="number" then return v end
   if type(v)=="function" then return tonumber(v())  end
   if type(v)=="table"    then return get_number_value(v[1]) end
@@ -381,6 +385,11 @@ local function _comparison( ... )
   end
   local value1, value2 = select(1,...), select(3,...)
   local operator = select(2,...)
+
+  if not value1 and value2 then
+    err("Can't compare against nil value (%s %s %s)",tostring(value1),operator,tostring(value2))
+    return
+  end
   local ret
   -- See http://www.w3.org/TR/xpath/#booleans
   if type(value1) == "number" or type(value2) == "number" then
