@@ -1055,7 +1055,9 @@
       <attribute name="bedingung"/>
       <a:documentation docid="pagetype/test">XPath-Audruck, der »wahr« oder »falsch« zurückgibt. Bestimmt, ob diese Seite als Seitentyp gewählt wird</a:documentation>
       <ref name="e_Margin"/>
-      <optional><ref name="e_PositioningArea"/></optional>
+      <optional>
+        <oneOrMore><ref name="e_PositioningArea"/></oneOrMore>
+      </optional>
       <interleave>
         <optional>
           <element name="Raster">
@@ -1389,6 +1391,11 @@
           <choice>
             <value>nein</value>
           </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="daten">
+          <a:documentation docid="tr/data">Daten für Tabellenzeile, Zugriff mit $_last_tr_data Daten einer Tabellenzeile zuweisen. Diese Daten können später im Tabellenkopf und -fuß ausgelesen werden.</a:documentation>
         </attribute>
       </optional>
       <optional>

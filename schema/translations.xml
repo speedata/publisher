@@ -1252,6 +1252,10 @@
          <en>Create a table row</en>
          <de>Erzeugt eine Tabellenzeile</de>
       </documentation>
+     <documentation docid="tr/data">
+       <en>Save dynamic data, retrieve with $_last_tr_data</en>
+       <de>Daten für Tabellenzeile, Zugriff mit $_last_tr_data</de>
+     </documentation>
       <documentation docid="tr/backgroundcolor">
          <en>Background color of th table row. (text)</en>
          <de>Farbe des Zeilenhintergrundes. (Text)</de>

@@ -1041,7 +1041,9 @@
       <attribute name="test"/>
       <a:documentation docid="pagetype/test">XPath expression that needs to resolve to true or false. If true, this page type gets used.</a:documentation>
       <ref name="e_Margin"/>
-      <optional><ref name="e_PositioningArea"/></optional>
+      <optional>
+        <oneOrMore><ref name="e_PositioningArea"/></oneOrMore>
+      </optional>
       <interleave>
         <optional>
           <element name="Grid">
@@ -1373,6 +1375,11 @@
           <choice>
             <value>no</value>
           </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="data">
+          <a:documentation docid="tr/data"/>
         </attribute>
       </optional>
       <optional>
