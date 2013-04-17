@@ -252,6 +252,16 @@ function main_loop()
   exit(true)
 end
 
+function main_loop_profiling()
+  require("profiler")
+  log("Start processing")
+  setup()
+  profiler.start()
+  publisher.dothings()
+  profiler.stop()
+  exit(true)
+end
+
 --- I don't remember what made LuaTeX 0.61 so interesting. But there was a reason, I guess.
 if status.luatex_version < 61 then
   texio.write_nl("Requires LuaTeX version ≥ 0.61. Abort\n")
