@@ -110,7 +110,7 @@ options = {
 groups   = {}
 
 variablen = {}
-colors    = { Schwarz = { modell="grau", g = "0", pdfstring = " 0 G 0 g " } }
+colors    = { Schwarz = { modell="grau", g = "0", pdfstring = " 0 G 0 g " }, black = { modell="grau", g = "0", pdfstring = " 0 G 0 g " } }
 colortable = {}
 data_dispatcher = {}
 user_defined_functions = { last = 0}
