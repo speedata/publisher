@@ -512,10 +512,15 @@ end
 --- --------
 --- Execute the child elements for all elements given by the `select` attribute.
 function commands.forall( layoutxml,dataxml )
+    trace("ForAll")
     local tab = {}
+    local tmp_tab
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     for i=1,#selection do
-        tab[#tab + 1] = publisher.dispatch(layoutxml,selection[i])[1]
+        tmp_tab = publisher.dispatch(layoutxml,selection[i])
+        for j=1,#tmp_tab do
+            tab[#tab + 1] = tmp_tab[j]
+        end
     end
     return tab
 end
@@ -984,6 +989,7 @@ end
 --- It can have a font face, color,... but these can be also given
 --- On the surrounding element (`Textblock`).
 function commands.paragraph( layoutxml,dataxml )
+    trace("Paragraph")
     local class = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
     local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
 
