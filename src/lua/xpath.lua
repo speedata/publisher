@@ -387,7 +387,6 @@ local function _comparison( ... )
   local operator = select(2,...)
 
   if not value1 and value2 then
-    err("Can't compare against nil value (%s %s %s)",tostring(value1),operator,tostring(value2))
     return false
   end
   local ret
