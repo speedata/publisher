@@ -1678,8 +1678,18 @@ function commands.table( layoutxml,dataxml,optionen )
         err("Fontfamily %q not found.",fontname or "???")
         fontfamily = 1
     end
-
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = {}
+    local tab_tmp = publisher.dispatch(layoutxml,dataxml)
+    for i=1,#tab_tmp do
+        local eltname = publisher.elementname(tab_tmp[i])
+        if eltname == "Tr" or eltname == "Columns" or eltname == "Tablehead" or eltname == "Tablefoot" then
+            tab[#tab + 1] = tab_tmp[i]
+        else
+            if eltname then
+                warning("Ignore %q in table",eltname)
+            end
+        end
+    end
 
     local tabular = publisher.tabular:new()
 
