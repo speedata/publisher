@@ -1791,7 +1791,10 @@ function break_url( nodelist )
 end
 
 function colorbar( wd,ht,dp,farbe )
-    local colorname = farbe or "Schwarz"
+    local colorname = farbe
+    if not colorname or colorname == "" then
+        colorname = "Schwarz"
+    end
     if not colors[colorname] then
         err("Color %q not found",farbe)
         colorname = "Schwarz"

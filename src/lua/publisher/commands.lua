@@ -1875,7 +1875,6 @@ function commands.textblock( layoutxml,dataxml )
     local colortable
     if colorname then
         if not publisher.colors[colorname] then
-            -- Farbe ist nicht definiert
             err("Color %q is not defined.",colorname)
         else
             colortable = publisher.colors[colorname].index
