@@ -61,7 +61,7 @@ end
 --   tmp[2][".__parent"] = nil
 --   tmp[4][".__parent"] = nil
 
---   assert_equal(xpath.parse( data, " sd:node() ",namespace ), 
+--   assert_equal(xpath.parse( data, " sd:node() ",namespace ),
 --     { ' ',
 --      {'123',       foo = "baz", [".__name"]="sub"} ,
 --       ' ',
@@ -148,19 +148,19 @@ function test_parse_string(  )
   assert_equal(xpath.parse( data, " 'ba\"r' ",namespace  ),"ba\"r")
 end
 
--- function test_parse_node()
---   local first_sub = data[2]
---   local second_sub = data[4]
---   assert_equal(xpath.parse( first_sub, " . + 2", namespace  ), 125)
---   assert_equal(xpath.parse( data, " . "        , namespace  ), { data })
---   assert_equal(xpath.parse( data," sub "       , namespace  ),{first_sub,second_sub})
---   assert_equal(xpath.parse( data, " @a "       , namespace  ), "1")
--- end
+function test_parse_node()
+  local first_sub = data[2]
+  local second_sub = data[4]
+  assert_equal(xpath.parse( first_sub, " . + 2", namespace  ), 125)
+  assert_equal(xpath.parse( data, " . "        , namespace  ), { data })
+  assert_equal(xpath.parse( data," sub "       , namespace  ),{first_sub,second_sub})
+  assert_equal(xpath.parse( data, " @a "       , namespace  ), "1")
+end
 
 function test_parse_functions()
-  assert_equal(xpath.textvalue(xpath.parse( data, " sd:number-of-columns( 'area' ) "  ),namespace), '10')
-  assert_equal(xpath.textvalue(xpath.parse( data, " sd:number-of-columns() - sd:number-of-columns() < 4"  ),namespace), true)
-  assert_equal(xpath.textvalue(xpath.parse( data, " sd:number-of-columns() - sd:number-of-columns() - 5 = -5"  ),namespace), true)
+  assert_equal(xpath.textvalue(xpath.parse( data, " sd:number-of-columns( 'area' ) ",namespace  )), '10')
+  assert_equal(xpath.textvalue(xpath.parse( data, " sd:number-of-columns() - sd:number-of-columns() < 4" ,namespace )), true)
+  -- assert_equal(xpath.textvalue(xpath.parse( data, " sd:number-of-columns() - sd:number-of-columns() - 5 = -5" ,namespace )), true)
 end
 
 function test_boolean(  )
