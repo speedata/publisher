@@ -925,7 +925,7 @@ function read_attribute( layoutxml,dataxml,attname_english,typ,default,context)
     elseif typ=="length_sp" then
         num = tonumber(val or default)
         if num then -- most likely really a number, we need to multiply with grid width
-            ret = current_page.raster.gridwidth * num
+            ret = current_grid.gridwidth * num
         else
             ret = val
         end

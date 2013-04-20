@@ -530,7 +530,7 @@ end
 --- Set the grid (in a pagetype?)
 function commands.grid( layoutxml,dataxml )
     local width  = publisher.read_attribute(layoutxml,dataxml,"width",  "length_sp")
-    local height = publisher.read_attribute(layoutxml,dataxml,"height", "height")
+    local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp")
     return { breite = width, hoehe = height }
 end
 
@@ -538,6 +538,8 @@ end
 --- -----
 --- Create a virtual area
 function commands.group( layoutxml,dataxml )
+    local elementname
+    local grid
     publisher.setup_page()
     local groupname = publisher.read_attribute(layoutxml,dataxml,"name", "rawstring")
 
@@ -548,9 +550,21 @@ function commands.group( layoutxml,dataxml )
         publisher.groups[groupname] = nil
     end
 
+    for _,v in ipairs(layoutxml) do
+        elementname=publisher.translate_element(v[".__name"])
+        if type(v)=="table" and elementname=="Grid" then
+            grid = commands.grid(v,dataxml)
+        end
+    end
+
+
     local r = publisher.grid:new()
     r:set_margin(0,0,0,0)
-    r:set_width_height(publisher.current_page.raster.gridwidth,publisher.current_page.raster.gridheight)
+    if grid then
+        r:set_width_height(grid.breite,grid.hoehe)
+    else
+        r:set_width_height(publisher.current_page.raster.gridwidth,publisher.current_page.raster.gridheight)
+    end
     publisher.groups[groupname] = {
         contents = contents,
         grid     = r,
@@ -561,7 +575,6 @@ function commands.group( layoutxml,dataxml )
 
     publisher.current_group = groupname
     publisher.current_grid  = r
-    local elementname
 
     for _,v in ipairs(layoutxml) do
         elementname=publisher.translate_element(v[".__name"])

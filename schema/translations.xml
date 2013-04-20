@@ -1000,6 +1000,10 @@
          <en>XPath expression that needs to resolve to true or false. If true, this page type gets used.</en>
          <de>XPath-Audruck, der »wahr« oder »falsch« zurückgibt. Bestimmt, ob diese Seite als Seitentyp gewählt wird</de>
       </documentation>
+     <documentation docid="grid/group">
+       <en>Define a group-local grid.</en>
+       <de>Ein Gruppen-lokales Raster definieren.</de>
+     </documentation>
       <documentation docid="pagetype/grid">
          <en>Use a page specific grid.</en>
          <de>Bestimmt ein seitentspezifisches Raster</de>

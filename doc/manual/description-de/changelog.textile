@@ -6,6 +6,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.6
 
+* "Gruppenspezifisches":../commands-de/group.html Raster (1.5.49)
 * Neue "XPath-Funktion":xpath.html @sd:html-dekodieren()@ um @&lt;@ und ähnliche Entitäten in echtes HTML zu wandeln. (1.5.47)
 * Neue Befehle "Ol":../commands-de/ol.html und "Ul":../commands-de/ol.html, wie in HTML. @Ol@ und @Ul@ (mit @Li@) sind in den Daten erlaubt. (1.5.46)
 * Hyperlinks dürfen auch in den Daten enthalten sein: @<a href="http://...">Text</a>@. (1.5.46)

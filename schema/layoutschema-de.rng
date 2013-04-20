@@ -556,10 +556,24 @@
     </element>
   </define>
 
+  <define name="e_Grid">
+    <ref name="a_xmlid"/>
+    <attribute name="breite"/>
+    <a:documentation docid="pagetype/grid/width">Breite einer Rasterzelle (Maßeinheit), z.B. 10mm</a:documentation>
+    <attribute name="höhe"/>
+    <a:documentation docid="pagetype/grid/height">Höhe einer Rasterzelle (Maßeinheit), z.B. 10mm</a:documentation>
+  </define>
+
   <define name="e_Group">
     <element name="Gruppe">
       <attribute name="name"><data type="string"/></attribute>
       <ref name="a_xmlid"/>
+      <optional>
+        <element name="Raster">
+          <a:documentation docid="grid/group">Ein Gruppen-lokales Raster definieren.</a:documentation>
+          <ref name="e_Grid"/>
+        </element>
+      </optional>
       <element name="Inhalt">
         <ref name="a_xmlid"/>
         <oneOrMore>
@@ -1062,11 +1076,7 @@
         <optional>
           <element name="Raster">
             <a:documentation docid="pagetype/grid">Bestimmt ein seitentspezifisches Raster</a:documentation>
-            <ref name="a_xmlid"/>
-            <attribute name="breite"/>
-            <a:documentation docid="pagetype/grid/width">Breite einer Rasterzelle (Maßeinheit), z.B. 10mm</a:documentation>
-            <attribute name="höhe"/>
-            <a:documentation docid="pagetype/grid/height">Höhe einer Rasterzelle (Maßeinheit), z.B. 10mm</a:documentation>
+            <ref name="e_Grid"/>
           </element>
         </optional>
         <optional>

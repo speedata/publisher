@@ -1280,25 +1280,50 @@
   </command>
   <command name="Group">
     <description xml:lang="en">
-      <para></para>
+      <para>Create a virtual page that behaves like a real page but is not placed into the PDF.</para>
     </description>
     <description xml:lang="de">
       <para>Erzeugt einen virtuellen Bereich, in dem Elemente platziert werden können. Ausgegeben werden die Gruppen anschließend mit <cmd name="PlaceObject" />.</para>
     </description>
     <childelements>
       <cmd name="Contents" />
+      <cmd name="Grid"/>
     </childelements>
     <parentelements>
       <cmd name="Record" />
     </parentelements>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>Name of the group that is created.</para>
       </description>
       <description xml:lang="de">
         <para>Der Name der anzulegenden Gruppe.</para>
       </description>
     </attribute>
+    <example xml:lang="en"><listing><![CDATA[<Record element="data">
+  <Group name="Some group">
+    <!-- Optional, taken from the current page -->
+    <Grid width="10mm" height="10mm"/>
+    <Contents>
+      <PlaceObject column="3" row="2">
+        <Textblock width="14">
+          <Paragraph>
+            <Value>Text</Value>
+          </Paragraph>
+        </Textblock>
+      </PlaceObject>
+      <PlaceObject column="2" row="4">
+        <Textblock width="14">
+          <Paragraph>
+            <Value>Nächster Text</Value>
+          </Paragraph>
+        </Textblock>
+      </PlaceObject>
+    </Contents>
+  </Group>
+  <PlaceObject groupname="Some group" column="1" row="1" />
+</Record>
+]]></listing></example>
     <example xml:lang="de">
       <listing><![CDATA[<Gruppe name="Beispielgruppe">
   <Inhalt>

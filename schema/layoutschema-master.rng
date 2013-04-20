@@ -547,10 +547,24 @@
     </element>
   </define>
 
+  <define name="e_Grid">
+    <ref name="a_xmlid"/>
+    <attribute name="width"/>
+    <a:documentation docid="pagetype/grid/width">Width of a grid cell (length, e.g. 10mm)</a:documentation>
+    <attribute name="height"/>
+    <a:documentation docid="pagetype/grid/height">Height of a grid cell (lenght, e.g. 10mm)</a:documentation>
+  </define>
+
   <define name="e_Group">
     <element name="Group">
       <attribute name="name"><data type="string"/></attribute>
       <ref name="a_xmlid"/>
+      <optional>
+        <element name="Grid">
+          <a:documentation docid="grid/group"/>
+          <ref name="e_Grid"/>
+        </element>
+      </optional>
       <element name="Contents">
         <ref name="a_xmlid"/>
         <oneOrMore>
@@ -1048,11 +1062,7 @@
         <optional>
           <element name="Grid">
             <a:documentation docid="pagetype/grid">Use a page specific grid.</a:documentation>
-            <ref name="a_xmlid"/>
-            <attribute name="width"/>
-            <a:documentation docid="pagetype/grid/width">Width of a grid cell (length, e.g. 10mm)</a:documentation>
-            <attribute name="height"/>
-            <a:documentation docid="pagetype/grid/height">Height of a grid cell (lenght, e.g. 10mm)</a:documentation>
+            <ref name="e_Grid"/>
           </element>
         </optional>
         <optional>
