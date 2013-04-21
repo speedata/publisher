@@ -1799,20 +1799,19 @@ function colorbar( wd,ht,dp,farbe )
         err("Color %q not found",farbe)
         colorname = "Schwarz"
     end
-    local rule_start = node.new("whatsit","pdf_colorstack")
-    rule_start.stack = 1
-    rule_start.data = colors[colorname].pdfstring
-    rule_start.cmd = 1
+
+    local rule_start = node.new("whatsit","pdf_literal")
+    rule_start.mode = 1
+    rule_start.data = "q "..colors[colorname].pdfstring
 
     local rule = node.new("rule")
     rule.height = ht
     rule.depth  = dp
     rule.width  = wd
 
-    local rule_stop = node.new("whatsit","pdf_colorstack")
-    rule_stop.stack = 1
-    rule_stop.data = ""
-    rule_stop.cmd = 2
+    local rule_stop = node.new("whatsit","pdf_literal")
+    rule_stop.mode = 1
+    rule_stop.data = "Q"
 
     rule_start.next = rule
     rule.next = rule_stop
