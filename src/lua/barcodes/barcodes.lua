@@ -8,17 +8,24 @@
 
 
 local function scalebox(scalefactor,box)
-    local a = node.new("whatsit","pdf_literal")
-    a.data = string.format("q %.4g 0 0 %.4g 0 0 cm",scalefactor,scalefactor)
-    a.next = box
-    box.prev = a
-    local b = node.new("whatsit","pdf_literal")
-    b.data = "Q"
-    box.next = b
-    b.prev = box
-    box = node.vpack(a)
-    box.width = width
-    return box
+    local pdf_save, pdf_restore, pdf_setmatrix
+    pdf_save = node.new("whatsit","pdf_save")
+    pdf_restore = node.new("whatsit","pdf_restore")
+    pdf_setmatrix = node.new("whatsit","pdf_setmatrix")
+    pdf_setmatrix.data=string.format("%.4g 0 0 %.4g",scalefactor,scalefactor)
+
+    local hbox = node.hpack(box)
+    hbox = node.insert_before(hbox,hbox,pdf_setmatrix)
+    hbox = node.insert_before(hbox,pdf_setmatrix,pdf_save)
+
+    hbox = node.hpack(hbox)
+    hbox.height = box.height * scalefactor
+    hbox.width = box.width * scalefactor
+    hbox.depth = 0
+    node.insert_after(hbox,node.tail(hbox),pdf_restore)
+
+    local newbox = node.vpack(hbox)
+    return newbox
 end
 
 
