@@ -1256,11 +1256,15 @@ function mknodes(str,fontfamily,parameter)
             if parameter.underline == 1 then
                 node.set_attribute(n,att_underline,1)
             end
+            local lastitemwasglyph
+            if last and last.id == 37 then
+                lastitemwasglyph = true
+            end
             head,last = node.insert_after(head,last,n)
             -- We have a character but some characters must be treated in a special
             -- way.
             -- Hyphens must be sepearated from words:
-            if n.char == 45 then
+            if n.char == 45 and lastitemwasglyph then
                 local pen = node.new("penalty")
                 pen.penalty = 10000
 
