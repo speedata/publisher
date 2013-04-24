@@ -1218,6 +1218,12 @@ function mknodes(str,fontfamily,parameter)
 
 
         elseif match(char,"%s") then -- Space
+            -- ; and : should have the posibility to break easily if a space follows
+            if last.id == 37 and ( last.char == 58 or last.char == 59) then
+                n = node.new(penalty_node)
+                n.penalty = 0
+                head,last = node.insert_after(head,last,n)
+            end
             n = node.new(glue_node)
             n.spec = node.new(glue_spec_node)
             n.spec.width   = space
@@ -1268,11 +1274,6 @@ function mknodes(str,fontfamily,parameter)
                 end
                 head,last = node.insert_after(head,last,glue)
                 node.set_attribute(glue,att_tie_glue,1)
-            elseif match(char,"[;:]") then
-                -- and ;: should have the posibility to break easily after.
-                n = node.new(penalty_node)
-                n.penalty = 0
-                head,last = node.insert_after(head,last,n)
             end
         end
     end
