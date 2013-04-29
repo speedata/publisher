@@ -1219,7 +1219,7 @@ function mknodes(str,fontfamily,parameter)
 
         elseif match(char,"%s") then -- Space
             -- ; and : should have the posibility to break easily if a space follows
-            if last.id == 37 and ( last.char == 58 or last.char == 59) then
+            if last and last.id == 37 and ( last.char == 58 or last.char == 59) then
                 n = node.new(penalty_node)
                 n.penalty = 0
                 head,last = node.insert_after(head,last,n)
