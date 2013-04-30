@@ -1695,7 +1695,7 @@ function commands.table( layoutxml,dataxml,optionen )
     local tab_tmp = publisher.dispatch(layoutxml,dataxml)
     for i=1,#tab_tmp do
         local eltname = publisher.elementname(tab_tmp[i],true)
-        if eltname == "Tr" or eltname == "Columns" or eltname == "Tablehead" or eltname == "Tablefoot" then
+        if eltname == "Tr" or eltname == "Columns" or eltname == "Tablehead" or eltname == "Tablefoot" or eltname == "Tablerule" then
             tab[#tab + 1] = tab_tmp[i]
         else
             if eltname then
