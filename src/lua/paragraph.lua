@@ -222,7 +222,9 @@ function Paragraph:format(width_sp, default_textformat_name)
             nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
         end
         publisher.fonts.post_linebreak(nodelist)
-        objects[i] = nodelist
+        objects[i] = nodelist.list
+        nodelist.list = nil
+        node.free(nodelist)
     end
 
     for i=1,#objects - 1 do
