@@ -968,6 +968,7 @@ function setze_tabelle(self)
     local break_above = true
     local filter = {}
     local startpage = tex.count[0]
+    local tablepart_absolute = 1
 
     current_row = 0
     for _,tr in ipairs(self.tab) do
@@ -1043,9 +1044,9 @@ function setze_tabelle(self)
     -- The maximum heights are saved here for each table. Currently all tables must have the same height (see the metatable)
     local pagegoals = {}
     local function showheader( tablepart )
-        if tablepart == 1 and filter.tablehead_force_first then return true end
+        if tablepart_absolute == 1 and filter.tablehead_force_first then return true end
         if not filter.tablehead then return true end
-        if math.fmod(tablepart,2) == math.fmod(startpage,2) then
+        if math.fmod(tablepart_absolute,2) == math.fmod(startpage,2) then
             if filter.tablehead == "odd" then
                 return true
             else
@@ -1125,6 +1126,7 @@ function setze_tabelle(self)
             -- ==0 can happen when there's not enough room for table head + first line
             if last_possible_split_is_after_line ~= 0 then
                 splits[#splits + 1] = last_possible_split_is_after_line
+                tablepart_absolute = tablepart_absolute + 1
             else
                 startpage = startpage + 1
             end
@@ -1144,7 +1146,9 @@ function setze_tabelle(self)
     local first_row_in_new_table
 
     local last_tr_data
+    tablepart_absolute = 0
     for s=2,#splits do
+        tablepart_absolute = tablepart_absolute + 1
         publisher.variablen["_last_tr_data"] = nil
         first_row_in_new_table = splits[s-1] + 1
 
