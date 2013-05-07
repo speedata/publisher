@@ -184,7 +184,7 @@ function commands.bold( layoutxml,dataxml )
 
     for i,j in ipairs(tab) do
         if publisher.elementname(j,true) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j))
+            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{bold = true})
         else
             objects[#objects + 1] = publisher.element_contents(j)
         end
@@ -702,7 +702,7 @@ function commands.italic( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
         if publisher.elementname(j,true) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j))
+            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{italic = true})
         else
             objects[#objects + 1] = publisher.element_contents(j)
         end
@@ -2032,7 +2032,7 @@ function commands.underline( layoutxml,dataxml )
 
     for i,j in ipairs(tab) do
         if publisher.elementname(j,true) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j))
+            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{underline = true})
         else
             objects[#objects + 1] = publisher.element_contents(j)
         end
@@ -2085,7 +2085,6 @@ function commands.value( layoutxml,dataxml )
         local ok
         ok, tab = xpath.parse_raw(dataxml,selection,layoutxml[".__ns"])
         if not ok then err(tab) return end
-        tab = tab[1]
     else
         -- Change all br elements to \n
         for i=1,#layoutxml do

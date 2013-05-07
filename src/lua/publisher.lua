@@ -991,9 +991,20 @@ marker.type = 100  -- type 100: "value is a number"
 marker.value = 1
 
 --- Convert `<b>`, `<u>` and `<i>` in text to publisher recognized elements.
-function parse_html( elt )
+function parse_html( elt, parameter )
     local a = paragraph:new()
     local bold,italic,underline
+    if parameter then
+        if parameter.underline then
+            underline = 1
+        end
+        if parameter.bold then
+            bold = 1
+        end
+        if parameter.italic then
+            italic = 1
+        end
+    end
 
     if elt[".__name"] then
         local eltname = string.lower(elt[".__name"])
