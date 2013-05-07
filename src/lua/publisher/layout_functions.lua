@@ -166,6 +166,7 @@ end
 
 
 local function decode_html( dataxml, arg )
+    arg = arg[1]
     if type(arg) == "string" then
         if string.find(arg,"<") then
             ret = luxor.parse_xml("<dummy>" .. arg .. "</dummy>")
