@@ -1,102 +1,106 @@
-
-publisher = {}
-
-err = texio.write_nl
-
-publisher.variablen = {
-  ["column"]  = "2",
-  ["counter"]  = 1,
-  ["textvar"] = "yes",
-  ["empty"]   = '',
-  }
-publisher.alternating = {}
-
-local function alternating(dataxml, ... )
-  local alt_type = select(1,...)
-  if not publisher.alternating[alt_type] then
-    publisher.alternating[alt_type] = 1
-  else
-    publisher.alternating[alt_type] = math.fmod( publisher.alternating[alt_type], select("#",...) - 1 ) + 1
-  end
-  return select(publisher.alternating[alt_type] + 1 ,...)
-end
-
-publisher.sd_xpath_funktionen = { en = {
-  ["number_of_columns"]  = function() return 10 end,
-  ["groupheight"]        = function(dataxml, tmp) return tmp end,
-  ["alternating"]        = alternating,
-  ["number_of_datasets"] = function(dataxml, d) local count = 0 d = d[1] for i=1,#d do if type(d[i]) == 'table' then count = count + 1 end end return count end,
-  ["even"]               = function(dataxml, arg)  return math.fmod(arg,2) == 0  end,
-  ["odd"]                = function(dataxml, arg)  return math.fmod(arg,2) ~= 0  end,
-  ["node"]               = function(dataxml) local tab={} for i=1,#dataxml do tab[#tab + 1] = dataxml[i] end return tab end,
-  ["true"]               = function() return true end,
-  ["false"]              = function() return false end,
-  ["variable"]           = function(datanxml,arg) return publisher.variablen[arg] end
-}}
-
 module(...,package.seeall)
 
+
+xpath = do_luafile("xpath.lua")
 luxor = do_luafile("luxor.lua")
-require("xpath")
+
+xpath.set_variable("column",2)
+xpath.set_variable("counter",1)
+xpath.set_variable("textvar","yes")
+xpath.set_variable("empty","")
+xpath.set_variable("istrue",true)
+xpath.set_variable("isfalse",false)
+xpath.set_variable("foo-bar",'foobar')
 
 local data_src=[[
-<root a="1">
+<root one="1" foo='no' empty="">
  <sub foo="baz">123</sub>
  <sub foo="bar">contents</sub>
 </root>
 ]]
 
 local data = luxor.parse_xml(data_src)
-local namespace = { sd = "urn:speedata:2009/publisher/functions/en"}
+local namespace = { sd = "foo" }
+
+function number_of_datasets( self,arg)
+    local count = 0
+    for i=1,#arg do
+        if type(arg[i]) == 'table' then count = count + 1 end
+    end
+    return count
+end
+
+xpath.register_function("foo","verbose",function(dataxml,arg)  printtable("verbose",arg) return true end)
+xpath.register_function("foo","even",function(dataxml,x) return math.mod(x[1],2) == 0 end)
+xpath.register_function("foo","return-ten",function(dataxml) return 10 end)
+xpath.register_function("foo","number-of-datasets",number_of_datasets)
+
+
+function test_xpathfunctions()
+    assert_equal(secondoftwo(xpath.parse_raw( data, " normalize-space('  foo bar baz     ') ",namespace ))[1], "foo bar baz")
+end
+
+function test_castable()
+    assert_true(secondoftwo(xpath.parse_raw(data," 123 castable as xs:double",namespace))[1])
+    assert_true(secondoftwo(xpath.parse_raw(data," '123' castable as xs:double",namespace))[1])
+    assert_true(secondoftwo(xpath.parse_raw(data," 123 castable as xs:string",namespace))[1])
+    assert_false(secondoftwo(xpath.parse_raw(data," 'abc' castable as xs:double",namespace))[1])
+end
+
+function test_numdatasets()
+    assert_equal(xpath.parse( data, " sd:number-of-datasets(.) ",namespace ), 2)
+    assert_equal(#xpath.parse( data, " sub ",namespace),2)
+    assert_equal(#xpath.parse( data, " sub,sub,sub ",namespace),6)
+end
+
 
 function test_variable()
-  assert_equal(xpath.parse( data, " sd:variable('column') ",namespace ),'2')
-  assert_equal(xpath.parse( data, " ( sd:variable('column') ) ",namespace ),'2')
-  assert_equal(xpath.parse( data, " ( sd:variable('column') + sd:variable('column') ) ",namespace ),4)
+    assert_equal(xpath.get_variable("column"),2)
+    assert_false(firstoftwo(xpath.parse_raw(data,"$doesnotexist",namespace)))
+    assert_equal(secondoftwo(xpath.parse_raw(data,"$foo-bar",namespace))[1], 'foobar')
+    assert_equal(secondoftwo(xpath.parse_raw(data,"$abcäüödef",namespace)), 'Variable "abcäüödef" undefined')
 end
 
--- function test_node()
---   local tmp = xpath.parse( data, " sd:node() ",namespace )
---   --- recursive data structure! nil pointer to parent
---   tmp[2][".__parent"] = nil
---   tmp[4][".__parent"] = nil
-
---   assert_equal(xpath.parse( data, " sd:node() ",namespace ),
---     { ' ',
---      {'123',       foo = "baz", [".__name"]="sub"} ,
---       ' ',
---      { 'contents', foo = "bar",[".__name"]="sub"} ,
---       ' '
---      })
--- end
-
--- function test_nested_funcs( )
---   assert_false(xpath.parse( data, " sd:ungerade( sd:anzahl-spalten()  )" ))
---   assert_true(xpath.parse( data,  " sd:gerade( sd:anzahl-spalten()  )" ))
---   assert_true(xpath.parse( data,  " sd:ungerade( sd:anzahl-spalten() + 1 ) " ))
--- end
-
-function test_anzahldatensaetze()
-  assert_equal(xpath.parse( data, " sd:number-of-datasets(.) ",namespace ), 2)
+function test_andorexpr( )
+    assert_true( secondoftwo(xpath.parse_raw(data, "@one=1 and @foo='no'",namespace))[1])
+    assert_true( secondoftwo(xpath.parse_raw( data, " 2 > 4 or 3 > 5 or 6 > 2",namespace ))[1] )
+    assert_true(xpath.parse( data, " 2 > 4 or 3 > 5 or 6 > 2",namespace ))
+    assert_true(xpath.parse( data, " true() or false() ",namespace ))
+    assert_true(xpath.parse( data, " true() and true() ",namespace ))
+    assert_false(xpath.parse( data, " true() and false() ",namespace ))
+    assert_false(xpath.parse( data, " false() or false() ",namespace ))
+    assert_true(xpath.parse(data,"'a' = 'a'"))
+    assert_true(xpath.parse( data, " 'a' = 'a' and 'b' = 'b' ",namespace ))
+    assert_false(xpath.parse( data, " 6 < 4 and 7 > 5 ",namespace ))
+    assert_true(xpath.parse( data, " 2 < 4 and 7 > 5 ",namespace ))
 end
 
-function test_orexpr( )
-  assert_true(xpath.parse( data, " 2 > 4 or 3 > 5 or 3 > 1",namespace ))
+function test_parse_string(  )
+  assert_equal(xpath.parse( data, " 'ba\"r' ",namespace  ),"ba\"r")
 end
 
-function test_andexpr()
-  assert_true(xpath.parse( data, " 'a' = 'a' and 'b' = 'b' ",namespace ), true)
-  assert_false(xpath.parse( data, " 6 < 4 and 7 > 5 ",namespace ), false)
-  assert_true(xpath.parse( data, " 2 < 4 and 7 > 5 ",namespace ), true)
+
+function test_parse_functions()
+    assert_equal(xpath.textvalue(xpath.parse( data, " sd:return-ten( 'area' ) "  ,namespace)), '10')
+    -- why true and not "true"?
+    assert_equal(xpath.textvalue(xpath.parse( data, " sd:return-ten() - sd:return-ten() < 4" ,namespace )), true)
+    assert_equal(xpath.textvalue(xpath.parse( data, " sd:return-ten() - sd:return-ten() - 5" ,namespace )), '-5')
+
+    -- raw:
+    assert_equal(xpath.textvalue_raw(xpath.parse_raw( data, " sd:return-ten( 'area' ) "  ,namespace)), '10')
+    -- why true and not "true"?
+    assert_equal(xpath.textvalue_raw(xpath.parse_raw( data, " sd:return-ten() - sd:return-ten() < 4" ,namespace )), true)
+    assert_equal(xpath.textvalue_raw(xpath.parse_raw( data, " sd:return-ten() - sd:return-ten() - 5" ,namespace )), '-5')
 end
 
-function test_alternating()
-  assert_equal(xpath.parse( data, " sd:alternating('tmp','a','b','c') ",namespace ), 'a')
-  assert_equal(xpath.parse( data, " sd:alternating('tmp','a','b','c') ",namespace ), 'b')
-  assert_equal(xpath.parse( data, " sd:alternating('tmp','a','b','c') ",namespace ), 'c')
-  assert_equal(xpath.parse( data, " sd:alternating('tmp','a','b','c') ",namespace ), 'a')
-  assert_equal(xpath.parse( data, " sd:alternating('tmp','a','b','c') ",namespace ), 'b')
+
+function test_unaryexpr(  )
+  assert_equal(xpath.parse( data, " -4 ",namespace ), -4)
+  assert_equal(xpath.parse( data, " +4 ",namespace ), 4)
+  assert_equal(xpath.parse( data, " 4 ",namespace ), 4)
+  assert_equal(xpath.parse( data, " 5 - 1 - 3 ",namespace ), 1)
 end
+
 
 function test_stringcomparison()
   assert_equal(xpath.parse( data, " $textvar ",namespace ), 'yes')
@@ -104,39 +108,39 @@ function test_stringcomparison()
   assert_true(xpath.parse(  data, " $empty = ''",namespace ))
 end
 
-function test_unaryexpr(  )
-  -- FIXME
-  -- assert_equal(xpath.parse( data, " -4 ",namespace ), -4)
-  -- assert_equal(xpath.parse( data, " +4 ",namespace ), 4)
-  assert_equal(xpath.parse( data, " 4 ",namespace ), 4)
-  assert_equal(xpath.parse( data, " 5 - 1 - 3 ",namespace ), 1)
+
+function test_paren()
+    assert_equal(xpath.parse( data, " ( 6 + 4 )"                 , namespace ), 10)
+    assert_equal(xpath.parse( data, " ( 6 + 4 ) * 2"             , namespace ), 20)
 end
 
-function test_arg_function( )
-  assert_equal(xpath.parse( data, " sd:groupheight('foo') ",namespace ),'foo')
+function test_comparison(  )
+    assert_true(xpath.parse(data, " 3 < 6 " ))
+    assert_true(xpath.parse(data, " 6 > 3 " ))
+    assert_true(xpath.parse(data, " 3 <= 3 " ))
+    assert_true(xpath.parse(data, " 3 = 3 " ))
+    assert_true(xpath.parse(data, " 4 != 3 " ))
+    assert_false(xpath.parse(data , " $column > 3 "))
+    assert_true(xpath.parse(data , " $counter = 1 "))
 end
-
--- function test_normalize_space(  )
---   assert_equal(xpath.normalize_space(" abc "),"abc")
--- end
 
 function test_parse_arithmetic(  )
   assert_equal(xpath.parse( data, " 5"                         , namespace ), 5)
   assert_equal(xpath.parse( data, " 3.4 "                      , namespace ), 3.4)
   assert_equal(xpath.parse( data, " 'string' "                 , namespace ), "string")
   assert_equal(xpath.parse( data, " 5 * 6"                     , namespace ), 30)
-  assert_equal(xpath.parse( data, " 9 * 4 div 6"               , namespace ), 6)
+  assert_equal(secondoftwo(xpath.parse_raw( data," @one * 9.2" , namespace ))[1], 9.2)
   assert_equal(xpath.parse( data, " 5 mod 2 "                  , namespace ), 1)
   assert_equal(xpath.parse( data, " 4 mod 2 "                  , namespace ), 0)
-  assert_equal(xpath.parse( data, " sd:number-of-columns() mod 2 ", namespace ), 0)
+  assert_equal(xpath.parse( data, " 9 * 4 div 6"               , namespace ), 6)
+  assert_equal(xpath.parse( data, " sd:return-ten() mod 2 ", namespace ), 0)
   assert_equal(xpath.parse( data, " 6 + 5"                     , namespace ), 11)
   assert_equal(xpath.parse( data, " 6 - 5"                     , namespace ), 1)
   assert_equal(xpath.parse( data, " 6 + 5 + 3"                 , namespace ), 14)
   assert_equal(xpath.parse( data, " 10 - 10 - 5 "              , namespace ), -5)
+  assert_equal(xpath.parse( data, " 4 * 2 + 6"                 , namespace ), 14)
   assert_equal(xpath.parse( data, " 6 + 4 * 2"                 , namespace ), 14)
   assert_equal(xpath.parse( data, " 6 + 4  div 2"              , namespace ), 8)
-  assert_equal(xpath.parse( data, " ( 6 + 4 )"                 , namespace ), 10)
-  assert_equal(xpath.parse( data, " ( 6 + 4 ) * 2"             , namespace ), 20)
   assert_equal(xpath.parse( data, " $column + 2"               , namespace ), 4)
   assert_equal(xpath.parse( data, " 1 - $counter"              , namespace ), 0)
   assert_equal(xpath.parse( data, " 3.4 * 2"                   , namespace ), 6.8)
@@ -144,38 +148,38 @@ function test_parse_arithmetic(  )
   assert_equal(xpath.parse( data, " $column * 3.4"             , namespace ), 6.8)
 end
 
-function test_parse_string(  )
-  assert_equal(xpath.parse( data, " 'ba\"r' ",namespace  ),"ba\"r")
+function test_num()
+    assert_equal(xpath.parse(data, " -3.2 " ),-3.2)
+    assert_equal(xpath.parse(data, " -3" ),-3)
 end
 
-function test_parse_node()
-  local first_sub = data[2]
-  local second_sub = data[4]
-  assert_equal(xpath.parse( first_sub, " . + 2", namespace  ), 125)
-  assert_equal(xpath.parse( data, " . "        , namespace  ), { data })
-  assert_equal(xpath.parse( data," sub "       , namespace  ),{first_sub,second_sub})
-  assert_equal(xpath.parse( data, " @a "       , namespace  ), "1")
+function test_string()
+    assert_equal(xpath.parse(data, "'aäßc'" ),'aäßc')
+    assert_equal(xpath.parse(data, '"aäßc"' ),'aäßc')
+    assert_equal(xpath.parse(data, "  'aäßc'  " ),'aäßc')
 end
 
-function test_parse_functions()
-  assert_equal(xpath.textvalue(xpath.parse( data, " sd:number-of-columns( 'area' ) ",namespace  )), '10')
-  assert_equal(xpath.textvalue(xpath.parse( data, " sd:number-of-columns() - sd:number-of-columns() < 4" ,namespace )), true)
-  -- assert_equal(xpath.textvalue(xpath.parse( data, " sd:number-of-columns() - sd:number-of-columns() - 5 = -5" ,namespace )), true)
+function test_multiple()
+    assert_equal(xpath.parse(data, "3 , 3" ),{3,3})
 end
 
-function test_boolean(  )
-  assert_equal(xpath.parse(data , " 3 < 6 "       ,namespace ),true)
-  assert_equal(xpath.parse(data , " 6 < 3 "       ,namespace ),false)
-  assert_equal(xpath.parse(data , " 3 < 3 "       ,namespace ),false)
-  assert_equal(xpath.parse(data , " 3 <= 3 "      ,namespace ),true)
-  assert_equal(xpath.parse(data , " 3 = 3 "       ,namespace ),true)
-  assert_equal(xpath.parse(data , " 3 != 3 "      ,namespace ),false)
-  assert_equal(xpath.parse(data , " 4 != 3 "      ,namespace ),true)
-  assert_equal(xpath.parse(data , " 3 > 6 "       ,namespace ),false)
-  assert_equal(xpath.parse(data , " 6 > 3 "       ,namespace ),true)
-  assert_true(xpath.parse(data , " 'a' != '' "    ,namespace ))
-  assert_equal(xpath.parse(data , " $column > 3 " ,namespace ),false)
-  assert_equal(xpath.parse(data , " $counter = 1 ",namespace ),true)
-  assert_true(xpath.parse( data , " sd:true() "   ,namespace ))
-  assert_false(xpath.parse(data , " sd:false() "  ,namespace ))
+function test_attribute()
+    assert_equal(xpath.parse(data, "@one" ),'1')
+    assert_false(secondoftwo(xpath.parse_raw( data, "  @undefined='foo' ",namespace ))[1])
+    assert_true(secondoftwo(xpath.parse_raw(data, " empty(@undefined) "))[1])
+    assert_false(secondoftwo(xpath.parse_raw(data, " empty(@empty) "))[1])
 end
+
+
+function test_functions()
+    -- unknown function should return an error
+    assert_false(firstoftwo(xpath.parse_raw(data, " doesnotexist() ",namespace)))
+    assert_true(xpath.parse( data , " true() "   ,namespace ))
+    assert_false(xpath.parse(data , " false() "  ,namespace ))
+    assert_true(xpath.parse(data , " sd:even($column) ",namespace ))
+    assert_false(xpath.parse(data, " $isfalse = true() ",namespace))
+    assert_equal(xpath.parse(data , " concat($column, 'abc' ) ",namespace ),"2abc")
+    -- dashes:
+    assert_equal(xpath.parse( data, " sd:return-ten() ", namespace ), 10)
+end
+

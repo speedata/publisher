@@ -12,6 +12,7 @@ local function scalebox(scalefactor,box)
     pdf_save = node.new("whatsit","pdf_save")
     pdf_restore = node.new("whatsit","pdf_restore")
     pdf_setmatrix = node.new("whatsit","pdf_setmatrix")
+    scalefactor = math.round(scalefactor,3)
     pdf_setmatrix.data=string.format("%.4g 0 0 %.4g",scalefactor,scalefactor)
 
     local hbox = node.hpack(box)

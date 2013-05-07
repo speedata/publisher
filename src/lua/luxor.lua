@@ -133,7 +133,7 @@ local function read_attributes(txt,pos,namespaces)
 	pos = lpeg.match(attributes,txt,pos)
 	for key,value in next,current_element,nil do
 		if key == "xmlns" then
-			ns[".__default"] = value
+			ns[""] = value
 			current_element[key] = nil
 		elseif string.match(key,"^xmlns:(.*)$") then
 			prefix = string.match(key,"^xmlns:(.*)")
@@ -201,7 +201,7 @@ local function parse_element( txt,pos,namespaces )
 			end
 		else
 			if ns then
-				elt[".__namespace"] = ns[".__default"]
+				elt[".__namespace"] = ns[""]
 			end
 			elt[".__local_name"] = eltname
 		end

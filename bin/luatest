@@ -47,7 +47,7 @@ local function compare_tables( a,b ) -- http://lua-users.org/lists/lua-l/2008-12
 	return true
 end
 
--- 
+--
 function array_to_string( a )
   local ret = {}
   for _,v in ipairs(a) do
@@ -60,6 +60,12 @@ local function row()
   return debug.traceback():explode("\n")[4]:gsub("^.*:(%d+):.*$","%1")
 end
 
+function firstoftwo( a,b )
+  return a
+end
+function secondoftwo(a,b)
+  return b
+end
 
 
 function assert_equal(a,b,msg)
@@ -177,7 +183,7 @@ for _,modname in ipairs(arg) do
   else
     teardown = function() end
   end
-  
+
   for i,j in pairs(mod) do
     if string.sub(i,1,5) == "test_" and type(j)=="function" then
       count_tests = count_tests + 1
@@ -190,7 +196,7 @@ for _,modname in ipairs(arg) do
 end
 
 print(string.format("\n%d tests, %d assertions - with errors: %d", count_tests,count_assertions,count_errors))
-print("Finished in " .. format("%.3f econds.",os.gettimeofday() - starttime) )
+print("Finished in " .. format("%.3f seconds.",os.gettimeofday() - starttime) )
 
 if some_tests_failed==true then
   print("tests failed.")

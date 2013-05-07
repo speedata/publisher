@@ -2,29 +2,27 @@
 --  layout_funktionen.lua
 --  speedata publisher
 --
---  Copyright 2010-2011 Patrick Gundlach.
+--  Copyright 2010-2013 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 
 
 file_start("layout_functions.lua")
 
-module(...,package.seeall)
 local luxor = do_luafile("luxor.lua")
-
 
 local function aktuelle_seite(  )
   publisher.setup_page()
   return  tex.count[0]
 end
 
-local function current_row(dataxml,...)
+local function current_row(dataxml,arg)
   publisher.setup_page()
-  return publisher.current_grid:current_row(select(1,...))
+  return publisher.current_grid:current_row(arg[1])
 end
 
 --- Get the page number of a marker
-local function pagenumber(dataxml,...)
-  local m = publisher.markers[select(1,...)]
+local function pagenumber(dataxml,arg)
+  local m = publisher.markers[arg[1]]
   if m then
     return m.page
   else
@@ -32,27 +30,28 @@ local function pagenumber(dataxml,...)
   end
 end
 
-local function current_column(dataxml,...)
+local function current_column(dataxml,arg)
   publisher.setup_page()
-  return publisher.current_grid:current_column(select(1,...))
+  return publisher.current_grid:current_column(arg[1])
 end
 
-local function alternating(dataxml, ... )
-  local alt_type = select(1,...)
+local function alternating(dataxml, arg )
+  local alt_type = arg[1]
   if not publisher.alternating[alt_type] then
     publisher.alternating[alt_type] = 1
   else
-    publisher.alternating[alt_type] = math.fmod( publisher.alternating[alt_type], select("#",...) - 1 ) + 1
+    publisher.alternating[alt_type] = math.fmod( publisher.alternating[alt_type], #arg - 1 ) + 1
   end
-  return select(publisher.alternating[alt_type] + 1 ,...)
+  return arg[publisher.alternating[alt_type] + 1]
 end
 
-local function reset_alternating( dataxml,... )
-  local alt_type = select(1,...)
+local function reset_alternating( dataxml,arg )
+  local alt_type = arg[1]
   publisher.alternating[alt_type] = 0
 end
 
 local function anzahl_datensaetze(dataxml,d)
+  if not d then return 0 end
   local count = 0
   for i=1,#d do
     if type(d[i]) == 'table' then
@@ -62,41 +61,48 @@ local function anzahl_datensaetze(dataxml,d)
   return count
 end
 
-local function number_of_columns(dataxml,...)
+local function number_of_columns(dataxml,arg)
   publisher.setup_page()
-  return publisher.current_grid:number_of_columns(select(1,...))
+  return publisher.current_grid:number_of_columns(arg and arg[1])
 end
 
 --- Merge numbers like '1-5, 8, 9,10,11' into '1-5, 8-10'
 -- Very simple implementation, not to be used in other cases than 1-3!
 local function merge_pagenumbers(dataxml,arg )
   local a,b
-  _,_, a, b = unicode.utf8.find(arg,"^(%d+).(%d+)$")
-  if a == b then return a end
-  return arg
+  _,_, a, b = unicode.utf8.find(arg[1],"^(%d+).(%d+)$")
+  local ret
+  if a == b then
+      ret = a
+  else
+      ret = arg[1]
+  end
+  return ret
 end
 
-local function anzahl_zeilen(dataxml,...)
+local function anzahl_zeilen(dataxml,arg)
   publisher.setup_page()
-  return publisher.current_grid:number_of_rows(select(1,...))
+  return publisher.current_grid:number_of_rows(arg and arg[1])
 end
 
-local function anzahl_seiten( dataxml,... )
-  dateiname=select(1,...)
-  local img = publisher.imageinfo(dateiname)
+local function anzahl_seiten(dataxml,arg )
+  local filename = arg[1]
+  local img = publisher.imageinfo(filename)
   return img.img.pages
 end
 
-local function bildbreite(dataxml, ... )
-  dateiname=select(1,...)
-  local img = publisher.imageinfo(dateiname)
+local function bildbreite(dataxml, arg )
+  local filename = arg[1]
+  local img = publisher.imageinfo(filename)
   publisher.setup_page()
   return publisher.current_grid:width_in_gridcells_sp(img.img.width)
 end
 
-local function datei_vorhanden(dataxml, ... )
-  local dateiname=select(1,...)
-  if find_file_location(dateiname) then
+local function datei_vorhanden(dataxml, arg )
+  local filename = arg[1]
+  if not filename then return false end
+  if filename == "" then return false end
+  if find_file_location(filename) then
     return true
   end
   return false
@@ -128,23 +134,21 @@ end
 
 
 local function gerade(dataxml, arg )
-  return math.fmod(arg,2) == 0
+  return math.fmod(arg[1],2) == 0
 end
 
-local function gruppenbreite(dataxml, ... )
-  -- printtable("Gruppenbreite",{...})
+local function gruppenbreite(dataxml, arg )
   publisher.setup_page()
-  local groupname=select(1,...)
+  local groupname=arg[1]
   local gruppeninhalt=publisher.groups[groupname].contents
   local raster = publisher.current_grid
   local breite = raster:width_in_gridcells_sp(gruppeninhalt.width)
   return breite
 end
 
-local function gruppenhoehe(dataxml, ... )
-  -- printtable("Gruppenhöhe",{...})
+local function gruppenhoehe(dataxml, arg )
   publisher.setup_page()
-  local groupname=select(1,...)
+  local groupname=arg[1]
   local gruppeninhalt=publisher.groups[groupname].contents
   local raster = publisher.current_grid
   local height = raster:height_in_gridcells_sp(gruppeninhalt.height)
@@ -152,11 +156,12 @@ local function gruppenhoehe(dataxml, ... )
 end
 
 local function ungerade(dataxml, arg )
-  return math.fmod(arg,2) ~= 0
+  return math.fmod(arg[1],2) ~= 0
 end
 
 local function variable(dataxml, arg )
-  return publisher.variablen[arg]
+  local var = publisher.xpath.get_variable(arg[1])
+  return var
 end
 
 
@@ -182,54 +187,70 @@ local function decode_html( dataxml, arg )
   return arg
 end
 
-file_end("layout_functions.lua")
+local register = publisher.xpath.register_function
+register("urn:speedata:2009/publisher/functions/en","number-of-rows",anzahl_zeilen)
+register("urn:speedata:2009/publisher/functions/de","anzahl-zeilen",anzahl_zeilen)
 
-return {
-  de = {
-    aktuelle_seite     = aktuelle_seite,
-    aktuelle_zeile     = current_row,
-    aktuelle_spalte    = current_column,
-    alternierend       = alternating,
-    ["alternierend_zurücksetzen"] = reset_alternating,
-    anzahl_datensaetze = anzahl_datensaetze,
-    ["anzahl_datensätze"] = anzahl_datensaetze,
-    anzahl_seiten      = anzahl_seiten,
-    anzahl_spalten     = number_of_columns,
-    anzahl_zeilen      = anzahl_zeilen,
-    html_dekodieren    = decode_html,
-    bildbreite         = bildbreite,
-    datei_vorhanden    = datei_vorhanden,
-    formatiere_string  = format_string,
-    formatiere_zahl    = format_number,
-    gerade             = gerade,
-    gruppenbreite      = gruppenbreite,
-    ["gruppenhöhe"]    = gruppenhoehe,
-    seitennummer       = pagenumber,
-    seitenzahlen_zusammenfassen = merge_pagenumbers,
-    variable           = variable,
-    ungerade           = ungerade,
-  },
-  en = {
-    alternating        = alternating,
-    current_page       = aktuelle_seite,
-    current_row        = current_row,
-    current_column     = current_column,
-    even               = gerade,
-    decode_html        = decode_html,
-    file_exists        = datei_vorhanden,
-    groupheight        = gruppenhoehe,
-    groupwidth         = gruppenbreite,
-    format_number      = format_number,
-    format_string      = format_string,
-    imagewidth         = bildbreite,
-    number_of_columns  = number_of_columns,
-    number_of_datasets = anzahl_datensaetze,
-    number_of_pages    = anzahl_seiten,
-    number_of_rows     = anzahl_zeilen,
-    merge_pagenumbers  = merge_pagenumbers,
-    odd                = ungerade,
-    pagenumber         = pagenumber,
-    reset_alternating  = reset_alternating,
-    variable           = variable,
-  }
-}
+register("urn:speedata:2009/publisher/functions/en","number-of-columns",number_of_columns)
+register("urn:speedata:2009/publisher/functions/de","anzahl-spalten",number_of_columns)
+
+register("urn:speedata:2009/publisher/functions/en","number-of-pages",anzahl_seiten)
+register("urn:speedata:2009/publisher/functions/de","anzahl-seiten",anzahl_seiten)
+
+register("urn:speedata:2009/publisher/functions/en","current-page",aktuelle_seite)
+register("urn:speedata:2009/publisher/functions/de","aktuelle-seite",aktuelle_seite)
+
+register("urn:speedata:2009/publisher/functions/en","current-column",current_column)
+register("urn:speedata:2009/publisher/functions/de","aktuelle-spalte",current_column)
+
+register("urn:speedata:2009/publisher/functions/en","decode-html",decode_html)
+register("urn:speedata:2009/publisher/functions/de","html-dekodieren",decode_html)
+
+register("urn:speedata:2009/publisher/functions/en","file-exists",datei_vorhanden)
+register("urn:speedata:2009/publisher/functions/de","datei-vorhanden",datei_vorhanden)
+
+register("urn:speedata:2009/publisher/functions/en","number-of-datasets",anzahl_datensaetze)
+register("urn:speedata:2009/publisher/functions/de","anzahl-datensätze",anzahl_datensaetze)
+register("urn:speedata:2009/publisher/functions/de","anzahl-datensaetze",anzahl_datensaetze)
+
+register("urn:speedata:2009/publisher/functions/en","even",gerade)
+register("urn:speedata:2009/publisher/functions/de","gerade",gerade)
+
+register("urn:speedata:2009/publisher/functions/en","odd",ungerade)
+register("urn:speedata:2009/publisher/functions/de","ungerade",ungerade)
+
+register("urn:speedata:2009/publisher/functions/en","pagenumber",pagenumber)
+register("urn:speedata:2009/publisher/functions/de","seitennummer",pagenumber)
+
+register("urn:speedata:2009/publisher/functions/en","variable",variable)
+register("urn:speedata:2009/publisher/functions/de","variable",variable)
+
+register("urn:speedata:2009/publisher/functions/en","merge-pagenumbers",merge_pagenumbers)
+register("urn:speedata:2009/publisher/functions/de","seitenzahlen-zusammenfassen",merge_pagenumbers)
+
+register("urn:speedata:2009/publisher/functions/en","current-row",current_row)
+register("urn:speedata:2009/publisher/functions/de","aktuelle-zeile",current_row)
+
+register("urn:speedata:2009/publisher/functions/en","alternating",alternating)
+register("urn:speedata:2009/publisher/functions/de","alternierend",alternating)
+
+register("urn:speedata:2009/publisher/functions/en","groupheight",gruppenhoehe)
+register("urn:speedata:2009/publisher/functions/de","gruppenhöhe",gruppenhoehe)
+
+register("urn:speedata:2009/publisher/functions/en","groupwidth",gruppenbreite)
+register("urn:speedata:2009/publisher/functions/de","gruppenbreite",gruppenbreite)
+
+register("urn:speedata:2009/publisher/functions/en","format-number",format_number)
+register("urn:speedata:2009/publisher/functions/de","formatiere-zahl",format_number)
+
+register("urn:speedata:2009/publisher/functions/en","format-string",format_string)
+register("urn:speedata:2009/publisher/functions/de","formatiere-string",format_string)
+
+register("urn:speedata:2009/publisher/functions/en","imagewidth",bildbreite)
+register("urn:speedata:2009/publisher/functions/de","bildbreite",bildbreite)
+
+register("urn:speedata:2009/publisher/functions/en","reset_alternating",reset_alternating)
+register("urn:speedata:2009/publisher/functions/de","alternierend_zurücksetzen",reset_alternating)
+
+
+file_end("layout_functions.lua")

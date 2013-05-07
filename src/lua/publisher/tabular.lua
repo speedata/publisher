@@ -7,7 +7,7 @@
 
 
 file_start("table.lua")
-require("xpath")
+-- require("xpath")
 
 module(...,package.seeall)
 
@@ -1159,7 +1159,7 @@ function setze_tabelle(self)
         if last_tr_data and self.tablehead_contents then
             -- we have some data attached to table rows, so we re-format the header
             local val = dynamic_data[last_tr_data]
-            publisher.variablen["_last_tr_data"] = val
+            publisher.xpath.set_variable("_last_tr_data",val)
             local tmp1,tmp2 = reformat_head(self,s - 1)
             if s == 2 then
                 -- first page
@@ -1266,6 +1266,7 @@ function tabelle( self )
         return x
     end
     calculate_rowheights(self)
+    publisher.xpath.set_variable("_last_tr_data","")
     return setze_tabelle(self)
 end
 

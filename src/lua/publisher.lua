@@ -12,6 +12,8 @@ file_start("publisher.lua")
 
 barcodes = do_luafile("barcodes.lua")
 local luxor = do_luafile("luxor.lua")
+xpath = do_luafile("xpath.lua")
+
 local commands     = require("publisher.commands")
 local seite        = require("publisher.page")
 local translations = require("translations")
@@ -20,12 +22,12 @@ local paragraph    = require("paragraph")
 local fonts        = require("publisher.fonts")
 
 
-sd_xpath_funktionen      = require("publisher.layout_functions")
-orig_xpath_funktionen    = require("publisher.xpath_functions")
-
-
 
 module(...,package.seeall)
+
+
+do_luafile("layout_functions.lua")
+
 
 --- One big point (DTP point, PostScript point) is approx. 65781 scaled points.
 factor = 65781
@@ -377,7 +379,7 @@ function dothings()
 
     --- The default page type has 1cm margin
     local onecm=tex.sp("1cm")
-    masterpages[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", contents = function(_seite) _seite.raster:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Seite",ns={} }
+    masterpages[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", contents = function(_seite) _seite.raster:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Seite",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
 
     --- Both the data and the layout instructions are written in XML.
     local layoutxml = load_xml(arg[2],"layout instructions")
@@ -403,7 +405,8 @@ function dothings()
     --- The `vars` file hold a lua document holding table
     local vars = loadfile(tex.jobname .. ".vars")()
     for k,v in pairs(vars) do
-        variablen[k]=v
+        -- variablen[k]=v
+        xpath.set_variable(k,v)
     end
 
     --- Used in `xpath.lua` to find out which language the function is in.
@@ -903,7 +906,12 @@ function read_attribute( layoutxml,dataxml,attname_english,typ,default,context)
     local val,num,ret
     local xpathstring = string.match(layoutxml[attname],"{(.-)}")
     if xpathstring then
-        val = xpath.textvalue(xpath.parse(dataxml,xpathstring,namespaces))
+        local ok, xp = xpath.parse_raw(dataxml,xpathstring,namespaces)
+        if not ok then
+            err(xp)
+            return nil
+        end
+        val = xpath.textvalue(xp[1])
     else
         val = layoutxml[attname]
     end
@@ -911,7 +919,12 @@ function read_attribute( layoutxml,dataxml,attname_english,typ,default,context)
     if typ=="xpath" then
         return xpath.textvalue(xpath.parse(dataxml,val,namespaces))
     elseif typ=="xpathraw" then
-        return xpath.parse(dataxml,val,namespaces)
+        local ok,tmp = xpath.parse_raw(dataxml,val,namespaces)
+        if not ok then err(tmp)
+            return nil
+        else
+            return tmp
+        end
     elseif typ=="rawstring" then
         return tostring(val)
     elseif typ=="string" then
@@ -1046,7 +1059,7 @@ function parse_html( elt )
     end
 
     for i=1,#elt do
-        if type(elt[i]) == "string" then
+        if type(elt[i]) == "string" or type(elt[i]) == "number" then
             a:append(elt[i],{fontfamily = 0, bold = bold, italic = italic, underline = underline })
         elseif type(elt[i]) == "table" then
             a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})

@@ -17,6 +17,13 @@ function w( ... )
   end
 end
 
+-- xpath.lua
+function nexttok(src,str,pos)
+    pos = pos or M.nextpos
+    w(string.format("%.10s|",src)..string.sub(str,pos,pos + 10) .. "|")
+end
+
+
 if not log then
   log = function (...)
     texio.write_nl(string.format(...))

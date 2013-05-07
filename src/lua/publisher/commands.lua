@@ -11,7 +11,6 @@ file_start("commands.lua")
 require("publisher.fonts")
 require("publisher.tabular")
 local paragraph = require("paragraph")
-require("xpath")
 do_luafile("css.lua")
 require("fileutils")
 
@@ -97,11 +96,11 @@ function commands.add_to_list( layoutxml,dataxml )
     local selection  = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
 
     local value = xpath.parse(dataxml,selection,layoutxml[".__ns"])
-    if not publisher.variablen[listname] then
-        publisher.variablen[listname] = {}
-    end
+    local var = publisher.xpath.get_variable(listname)
+    if not var then var = {} end
+    publisher.xpath.set_variable(listname,var)
+
     local udef = publisher.user_defined_functions
-    local var  = publisher.variablen[listname]
     udef[udef.last + 1] = function() var[#var + 1] = { key , value } end
     udef.last = udef.last + 1
     return udef.last
@@ -300,11 +299,15 @@ end
 --- Return the contents of a variable. Warning: this function does not acutally copy the contents, so the name is a bit misleading.
 function commands.copy_of( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select", "rawstring")
-
+    local ok
     if layoutxml[1] and #layoutxml[1] > 0 then
         return table.concat(layoutxml)
     else
-        selection = xpath.parse(dataxml,selection,layoutxml[".__ns"])
+        ok,selection = xpath.parse_raw(dataxml,selection,layoutxml[".__ns"])
+        if not ok then
+            err(selection)
+            return nil
+        end
         return selection
     end
 end
@@ -790,7 +793,7 @@ function commands.loop( layoutxml, dataxml )
     local ret = {}
     local tab
     for i=1,num do
-        publisher.variablen[var] = i
+        publisher.xpath.set_variable(var,i)
         tab = publisher.dispatch(layoutxml,dataxml)
         for j=1,#tab do
             ret[#ret + 1] = tab[j]
@@ -1274,7 +1277,7 @@ function commands.process_record( layoutxml,dataxml )
         local eltname = datensatz[i]["inhalt"][".__name"]
         layoutknoten=publisher.data_dispatcher[""][eltname]
         log("Selecting node: %q",eltname or "???")
-        publisher.variablen.__position = i
+        publisher.xpath.set_variable("__position",i)
         publisher.dispatch(layoutknoten,publisher.element_contents(datensatz[i]))
     end
 end
@@ -1288,10 +1291,9 @@ end
 function commands.process_node(layoutxml,dataxml)
     local dataxml_selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     local mode              = publisher.read_attribute(layoutxml,dataxml,"mode","rawstring") or ""
-
     -- To restore the current value of `__position`, we save it.
     -- The value of `__position` is available from xpath (function position()).
-    local current_position = publisher.variablen.__position
+    local current_position = publisher.xpath.get_variable("__position")
     local element_name
     local layoutnode
     local pos = 1
@@ -1301,14 +1303,14 @@ function commands.process_node(layoutxml,dataxml)
         layoutnode = publisher.data_dispatcher[mode][element_name]
         if layoutnode then
             log("Selecting node: %q, mode=%q, pos=%d",element_name,mode,pos)
-            publisher.variablen.__position = pos
+            publisher.xpath.set_variable("__position",pos)
             publisher.dispatch(layoutnode,dataxml_selection[i])
             pos = pos + 1
         end
     end
 
     --- Now restore the value for the parent element
-    publisher.variablen.__position = current_position
+    publisher.xpath.set_variable("__position",current_position)
 end
 
 
@@ -1416,9 +1418,10 @@ function commands.save_dataset( layoutxml,dataxml )
 
     assert(filename)
     assert(elementname)
-
     if selection then
-        tab = xpath.parse(dataxml,selection,layoutxml[".__ns"])
+        local ok
+        ok, tab = xpath.parse_raw(dataxml,selection,layoutxml[".__ns"])
+        if not ok then err(tab) return end
     else
         tab = publisher.dispatch(layoutxml,dataxml)
     end
@@ -1516,34 +1519,34 @@ function commands.setvariable( layoutxml,dataxml )
         local ret
         for i=1,#contents do
             local eltname = publisher.elementname(contents[i],true)
-            local contents = publisher.element_contents(contents[i])
+            local element_contents = publisher.element_contents(contents[i])
             if eltname == "Sequence" or eltname == "Value" or eltname == "SortSequence" then
-                if type(contents) == "table" then
+                if type(element_contents) == "table" then
                     ret = ret or {}
                     if getmetatable(ret) == nil then
                         setmetatable(ret,{ __concat = table.__concat })
                     end
-                    ret = ret .. contents
-                elseif type(contents) == "string" then
+                    ret = ret .. element_contents
+                elseif type(element_contents) == "string" then
                     ret = ret or ""
-                    ret = ret .. contents
-                elseif type(contents) == "number" then
+                    ret = ret .. element_contents
+                elseif type(element_contents) == "number" then
                     ret = ret or ""
-                    ret = ret .. tostring(contents)
-                elseif type(contents) == "nil" then
+                    ret = ret .. tostring(element_contents)
+                elseif type(element_contents) == "nil" then
                     -- ignorieren
                 else
-                    err("Unknown type: %q",type(contents))
+                    err("Unknown type: %q",type(element_contents))
                     ret = nil
                 end
             elseif eltname == "elementstructure" then
-                for j=1,#contents do
+                for j=1,#element_contents do
                     ret = ret or {}
-                    ret[#ret + 1] = contents[j]
+                    ret[#ret + 1] = element_contents[j]
                 end
             elseif eltname == "Element" then
                 ret = ret or {}
-                ret[#ret + 1] = contents
+                ret[#ret + 1] = element_contents
             end
         end
         if ret then
@@ -1554,8 +1557,7 @@ function commands.setvariable( layoutxml,dataxml )
         log("SetVariable, variable name = %q, value = %q",varname or "???", tostring(contents))
         printtable("SetVariable",contents)
     end
-
-    publisher.variablen[varname] = contents
+    publisher.xpath.set_variable(varname,contents)
 end
 
 --- SortSequence
@@ -1641,7 +1643,10 @@ function commands.switch( layoutxml,dataxml )
         elementname = publisher.translate_element(case_or_otherwise_element[".__name"])
         if type(case_or_otherwise_element)=="table" and elementname=="Case" and case_matched ~= true then
             local test = publisher.read_attribute(case_or_otherwise_element,dataxml,"test","rawstring")
-            if xpath.parse(dataxml,test,layoutxml[".__ns"]) then
+            local ok, tab = xpath.parse_raw(dataxml,test,layoutxml[".__ns"])
+            if not ok then
+                err(tab)
+            elseif tab[1] then
                 case_matched = true
                 ret = publisher.dispatch(case_or_otherwise_element,dataxml)
             end
@@ -1698,7 +1703,7 @@ function commands.table( layoutxml,dataxml,optionen )
         if eltname == "Tr" or eltname == "Columns" or eltname == "Tablehead" or eltname == "Tablefoot" or eltname == "Tablerule" then
             tab[#tab + 1] = tab_tmp[i]
         else
-            if eltname then
+            if eltname and eltname ~= "elementstructure" then
                 warning("Ignore %q in table",eltname)
             end
         end
@@ -2062,7 +2067,7 @@ function commands.url(layoutxml,dataxml)
     local a = paragraph:new()
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
-        a:append(xpath.textvalue(publisher.element_contents(j)),{})
+        a:append(xpath.textvalue_raw(true,publisher.element_contents(j)),{})
         a.nodelist = publisher.break_url(a.nodelist)
     end
     return a
@@ -2074,10 +2079,13 @@ end
 --- Get the value of an xpath expression (attribute `select`) or of the literal string.
 function commands.value( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
-
+    local ok = true
     local tab
     if selection then
-        tab = xpath.parse(dataxml,selection,layoutxml[".__ns"])
+        local ok
+        ok, tab = xpath.parse_raw(dataxml,selection,layoutxml[".__ns"])
+        if not ok then err(tab) return end
+        tab = tab[1]
     else
         -- Change all br elements to \n
         for i=1,#layoutxml do
