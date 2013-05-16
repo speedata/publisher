@@ -1149,7 +1149,7 @@ function setze_tabelle(self)
     tablepart_absolute = 0
     for s=2,#splits do
         tablepart_absolute = tablepart_absolute + 1
-        publisher.variablen["_last_tr_data"] = nil
+        publisher.xpath.set_variable("_last_tr_data",nil)
         first_row_in_new_table = splits[s-1] + 1
 
         thissplittable = {}
@@ -1196,7 +1196,7 @@ function setze_tabelle(self)
         if last_tr_data and self.tablefoot_contents then
             -- we have some data attached to table rows, so we re-format the footer
             local val = dynamic_data[last_tr_data]
-            publisher.variablen["_last_tr_data"] = val
+            publisher.xpath.set_variable("_last_tr_data",val)
             local tmp1,tmp2 = reformat_foot(self,s - 1,#splits - 1)
             if s < #splits then
                 thissplittable[#thissplittable + 1] = node.copy_list(tmp2)

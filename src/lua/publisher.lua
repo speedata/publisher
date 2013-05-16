@@ -111,7 +111,6 @@ options = {
 -- a hash with keys contents (a nodelist) and raster (grid).
 groups   = {}
 
-variablen = {}
 colors    = { Schwarz = { modell="grau", g = "0", pdfstring = " 0 G 0 g " }, black = { modell="grau", g = "0", pdfstring = " 0 G 0 g " } }
 colortable = {}
 data_dispatcher = {}
@@ -405,7 +404,6 @@ function dothings()
     --- The `vars` file hold a lua document holding table
     local vars = loadfile(tex.jobname .. ".vars")()
     for k,v in pairs(vars) do
-        -- variablen[k]=v
         xpath.set_variable(k,v)
     end
 

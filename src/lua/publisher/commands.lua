@@ -518,13 +518,16 @@ function commands.forall( layoutxml,dataxml )
     trace("ForAll")
     local tab = {}
     local tmp_tab
+    local current_position = publisher.xpath.get_variable("__position")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     for i=1,#selection do
+        publisher.xpath.set_variable("__position",i)
         tmp_tab = publisher.dispatch(layoutxml,selection[i])
         for j=1,#tmp_tab do
             tab[#tab + 1] = tmp_tab[j]
         end
     end
+    publisher.xpath.set_variable("__position",current_position)
     return tab
 end
 
