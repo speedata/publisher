@@ -1061,7 +1061,6 @@ function setze_tabelle(self)
         end
     end
     setmetatable(pagegoals, { __index = function(tbl,idx)
-                if not filter.tablehead then return ht_max - ht_header - ht_footer end
                 if idx == 1 then
                     if showheader(idx) then
                         return ht_current - ht_first_header - ht_footer

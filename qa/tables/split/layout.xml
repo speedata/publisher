@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="urn:speedata.de:2009/publisher/en">
+
+  <SetGrid width="2mm" height="10pt" />
+  
+  <DefineFontfamily name="text" fontsize="9" leading="10">
+    <Regular fontface="TeXGyreHeros-Regular"/>
+  </DefineFontfamily>
+  <Pageformat width="100mm" height="40mm"/>
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="{sd:number-of-columns()- 2}">
+        <Paragraph>
+          <Value >xxxxx</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <NextRow/>
+    <PlaceObject>
+      <Table width="{sd:number-of-columns() - 2}" stretch="max" >
+        <Loop select="10">
+          <Tr>
+            <Td >
+              <Paragraph >
+                <Value select="$_loopcounter" />
+              </Paragraph>
+            </Td>
+          </Tr>
+        </Loop>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
