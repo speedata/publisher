@@ -1142,7 +1142,7 @@
     <element name="Table">
       <a:documentation docid="table">Create a table</a:documentation>
       <ref name="a_xmlid"/>
-      <attribute name="width"/>
+      <optional><attribute name="width"/></optional>
       <a:documentation docid="table/width">The width of the table in grid units. (number)</a:documentation>
       <optional>
         <attribute name="padding"/>
@@ -1561,7 +1561,6 @@
     <element name="Textblock">
       <a:documentation docid="textblock">Create a rectengular area with text. The text can contain several paragraphs denoted as »Paragraph«.</a:documentation>
       <ref name="a_xmlid"/>
-      <attribute name="width"/>
       <oneOrMore>
         <choice>
           <ref name="e_Paragraph"/>
@@ -1574,6 +1573,9 @@
           <ref name="e_ForAll"/>
         </choice>
       </oneOrMore>
+      <optional>
+        <attribute name="width"/>
+      </optional>
       <optional><attribute name="textformat"/></optional>
       <optional>
         <attribute name="fontface"/>

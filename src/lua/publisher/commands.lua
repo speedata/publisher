@@ -1123,6 +1123,11 @@ function commands.place_object( layoutxml,dataxml )
 
     publisher.setup_page()
 
+
+    -- remember the current maximum width for later
+    local current_maxwidth = xpath.get_variable("__maxwidth")
+    xpath.set_variable("__maxwidth", publisher.current_grid:number_of_columns(area))
+
     trace("Column = %q",tostring(spalte))
     trace("Row = %q",tostring(zeile))
 
@@ -1142,6 +1147,8 @@ function commands.place_object( layoutxml,dataxml )
     local raster = publisher.current_grid
     local tab    = publisher.dispatch(layoutxml,dataxml,optionen)
 
+    -- reset the current maxwidth
+    xpath.set_variable("__maxwidth",current_maxwidth)
     local objects = {}
     local object, objecttype
 
@@ -1683,6 +1690,9 @@ function commands.table( layoutxml,dataxml,optionen )
     padding        = tex.sp(padding        or "0pt")
     columndistance = tex.sp(columndistance or "0pt")
     rowdistance    = tex.sp(rowdistance    or "0pt")
+
+    width = width or xpath.get_variable("__maxwidth")
+
     if not width then
         err("Can't get the width of the table!")
         rule = publisher.add_rule(nil,"head",{height=100*2^16,width=100*2^16})
@@ -1886,6 +1896,7 @@ function commands.textblock( layoutxml,dataxml )
     local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","rawstring")
     local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
 
+    width = width or xpath.get_variable("__maxwidth") * publisher.current_grid.gridwidth
 
     if not width then
         err("Can't evaluate width in textblock")

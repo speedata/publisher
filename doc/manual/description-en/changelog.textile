@@ -6,6 +6,7 @@ h1. Changelog
 
 h2. Version 1.6
 
+* Width attribute in "Textblock":../commands-en/textblock.html and "Table":../commands-en/table.html optional (1.5.56)
 * Allow "group":../commands-en/group.html specific grid (1.5.49)
 * New "XPath-function":xpath.html @sd:decode-html()@ to decode @&lt;@ and similar entities into real HTML. (1.5.47)
 * New commands "Ol":../commands-en/ol.html and "Ul":../commands-en/ol.html, just like HTML. @Ol@ and @Ul@ (with @Li@) are also allowed in data. (1.5.46)

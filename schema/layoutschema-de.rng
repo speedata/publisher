@@ -1158,7 +1158,7 @@
     <element name="Tabelle">
       <a:documentation docid="table">Erzeugt eine Tabelle</a:documentation>
       <ref name="a_xmlid"/>
-      <attribute name="breite"/>
+      <optional><attribute name="breite"/></optional>
       <a:documentation docid="table/width">Die Breite der Tabelle im Raster. (Zahl)</a:documentation>
       <optional>
         <attribute name="padding"/>
@@ -1579,7 +1579,6 @@
     <element name="Textblock">
       <a:documentation docid="textblock">Erstellt einen rechteckigen Bereich mit Text. Der Text kann aus mehreren Absätzen bestehen und wird mit »Absatz« gekennzeichnet.</a:documentation>
       <ref name="a_xmlid"/>
-      <attribute name="breite"/>
       <oneOrMore>
         <choice>
           <ref name="e_Paragraph"/>
@@ -1592,6 +1591,9 @@
           <ref name="e_ForAll"/>
         </choice>
       </oneOrMore>
+      <optional>
+        <attribute name="breite"/>
+      </optional>
       <optional><attribute name="textformat"/></optional>
       <optional>
         <attribute name="schriftart"/>
