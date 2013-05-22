@@ -167,10 +167,15 @@ end
 
 local function decode_html( dataxml, arg )
     arg = arg[1]
+    local ok
     if type(arg) == "string" then
         if string.find(arg,"<") then
-            ret = luxor.parse_xml("<dummy>" .. arg .. "</dummy>")
-            return ret
+            ok,ret = pcall(luxor.parse_xml,"<dummy>" .. arg .. "</dummy>")
+            if ok then
+              return ret
+            else
+              err("decode-html failed for input string %q,",arg)
+            end
         end
         return arg
     end
