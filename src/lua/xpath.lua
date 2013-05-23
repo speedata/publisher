@@ -296,7 +296,16 @@ function M.eval_comparison(first,second,operator)
     -- turn everything into a number.
     -- IIRC this is in the XPath sepc TODO: check
     -- nilmarker is the code for "nil"
-    if first == nilmarker or second == nilmarker then return false end
+    if first == nilmarker and second ~= nilmarker or first ~= nilmarker and second == nilmarker then
+        if operator ~= "!=" then
+            return false
+        else
+            return true
+        end
+    elseif first == nilmarker and second == nilmarker then
+        return false
+    end
+
     if type(first) == "number" then
         second = tonumber(second)
     elseif type(second) == "number" then

@@ -149,6 +149,10 @@ local function parse_xmldecl( txt,pos )
 	local newpos = string.find(txt,"<",pos+1)
 	return newpos
 end
+local function parse_doctype(txt,pos)
+	local newpos = string.find(txt,"<",pos+1)
+	return newpos
+end
 local function parse_comment( txt,pos )
 	local _,newpos,contents = string.find(txt,"%-(.-)%-%->",pos+3)
 	-- return {[".__type"]="comment",contents},newpos
@@ -262,6 +266,9 @@ local function parse_xml(txt,options)
 	txt = txt.gsub(txt,"\13\n?","\n")
 	if string.match(txt,"<%?xml",pos) then
 		pos = parse_xmldecl(txt,pos)
+	end
+	if string.match(txt,"<!DOCTYPE",pos) then
+		pos = parse_doctype(txt,pos)
 	end
 	local ret
 	while true do

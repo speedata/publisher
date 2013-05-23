@@ -846,7 +846,12 @@ function commands.message( layoutxml, dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
 
     if selection then
-        contents = xpath.parse(dataxml,selection,layoutxml[".__ns"])
+        local tmp = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
+        local ret = {}
+        for i=1,#tmp do
+            ret[#ret + 1] = tostring(tmp[i])
+        end
+        contents = table.concat(ret)
     else
         local tab = publisher.dispatch(layoutxml,dataxml)
         contents = tab
