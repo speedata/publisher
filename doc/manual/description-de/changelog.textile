@@ -4,7 +4,7 @@ title: "Liste der Änderungen"
 ---
 h1. Liste der Änderungen
 
-h2. Version 1.6
+h2. Version 1.6 (2013-05-24)
 
 * Breite in "Textblock":../commands-de/textblock.html und "Tabelle":../commands-de/table.html optional (1.5.56)
 * "Gruppenspezifisches":../commands-de/group.html Raster (1.5.49)
