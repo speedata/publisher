@@ -143,26 +143,30 @@ function set_width_height(self, wd,ht )
     self.gridwidth  = wd
     self.gridheight = ht
     calculate_number_gridcells(self)
-    self.allocation_x = {}
-    for i=1,self:number_of_rows() do
-        self.allocation_x[i] = {}
+    self.allocation_x_y = {}
+    for i=1,self:number_of_columns() do
+        self.allocation_x_y[i] = {}
     end
 end
 
 -- Mark the rectangular area given by x and y (top left corner)
 -- and the width wd and height ht as "not free" (allocated)
-function allocate_cells(self,x,y,wd,ht,allocate_matrix,zeichne_markierung_p,areaname)
+function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname)
     if not x then return false end
+    local show_right  = false
+    local show_bottom = false
     areaname = areaname or publisher.default_areaname
     self:set_current_column(x + wd,areaname)
     self:set_current_row(y,areaname)
     local grid_conflict = false
     if  x + wd - 1 > self:number_of_columns(areaname) then
         warning("Object protrudes into the right margin")
+        show_right = true
         grid_conflict = true
     end
     if y + ht - 1 > self:number_of_rows(areaname) then
         warning("Object protrudes below the last line of the page")
+        show_bottom = true
         grid_conflict = true
     end
     local frame_margin_left, frame_margin_top
@@ -188,19 +192,25 @@ function allocate_cells(self,x,y,wd,ht,allocate_matrix,zeichne_markierung_p,area
             for _x=1,allocate_matrix.max_x do
                 cur_x = math.ceil(_x * grid_step_x)
                 if allocate_matrix[_y][_x] == 1 then
-                    self.allocation_x[cur_x + x - 1][cur_y  + y - 1] = true
+                    self.allocation_x_y[cur_x + x - 1][cur_y  + y - 1] = true
                 end
             end
         end
     else
         -- No allocate matrix (default)
-        for _x = x + frame_margin_left,x + frame_margin_left + wd - 1 do
-            for _y = y + frame_margin_top, y + frame_margin_top + ht - 1 do
-                if self.allocation_x[_x][_y] then
+        local max_x = x + frame_margin_left + math.min(self:number_of_columns(areaname),  wd) - 1
+        local max_y = y + frame_margin_top  + math.min(self:number_of_rows(areaname),     ht) - 1
+        for _x = x + frame_margin_left, max_x do
+            for _y = y + frame_margin_top, max_y do
+                if self.allocation_x_y[_x][_y] then
                     grid_conflict = true
-                    self.allocation_x[_x][_y] = self.allocation_x[_x][_y] + 1
+                    self.allocation_x_y[_x][_y] = self.allocation_x_y[_x][_y] + 1
                 else
-                    self.allocation_x[_x][_y] = 1
+                    if _x == max_x and show_right then
+                        self.allocation_x_y[_x][_y] = 2
+                    else
+                        self.allocation_x_y[_x][_y] = 1
+                    end
                 end
             end
         end
@@ -214,8 +224,10 @@ end
 -- at the column.
 function fits_in_row(self,column,width,row)
     if not column then return false end
-    for x = column, column + width - 1 do
-        if self.allocation_x[x][row] then return false end
+    if column + width - 1 > self:number_of_columns() then return false end
+    local max_x = column + width - 1
+    for x = column, max_x  do
+        if self.allocation_x_y[x][row] then return false end
     end
     return true
 end
@@ -328,11 +340,11 @@ function draw_gridallocation(self)
         local alloc_found = nil
 
         for x=1, self:number_of_columns() do
-            if self.allocation_x[x][y] then
+            if self.allocation_x_y[x][y] then
                 re_wd = sp_to_bp(self.gridwidth)
                 re_x = sp_to_bp (self.margin_left + self.extra_margin) + ( x - 1) * sp_to_bp(self.gridwidth)
                 re_y = paperheight - sp_to_bp(self.margin_top + self.extra_margin) - y * sp_to_bp(self.gridheight)
-                if self.allocation_x[x][y] > 1 then
+                if self.allocation_x_y[x][y] > 1 then
                     color = " 0 1 1 0 k "
                 else
                     color = " 0 0 1 0 k "

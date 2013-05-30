@@ -611,12 +611,12 @@ function output_at( nodelist, x,y,allocate,area,valign,allocate_matrix)
             group.contents = n
         end
         if allocate then
-            r:allocate_cells(x,y,width_gridcells,height_gridcells,allocate_matrix,options.showgridallocation)
+            r:allocate_cells(x,y,width_gridcells,height_gridcells,allocate_matrix)
         end
     else
         -- Put it on the current page
         if allocate then
-            r:allocate_cells(x,y,width_gridcells,height_gridcells,allocate_matrix,options.showgridallocation,area)
+            r:allocate_cells(x,y,width_gridcells,height_gridcells,allocate_matrix,area)
         end
 
         local n = add_glue( nodelist ,"head",{ width = delta_x })
