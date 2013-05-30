@@ -1,8 +1,8 @@
 --
---  raster.lua
+--  grid.lua
 --  speedata publisher
 --
---  Copyright 2010-2012 Patrick Gundlach.
+--  Copyright 2010-2013 Patrick Gundlach.
 --  See file COPYING in the root directory for license details.
 
 file_start("grid.lua")
@@ -16,40 +16,10 @@ local function to_sp(arg)
     return tex.dimen[0]
 end
 
-do
-    local auto, assign
-
-    function auto(tab, key)
-        return setmetatable({}, {
-                __index = auto,
-                __newindex = assign,
-                parent = tab,
-                key = key
-        })
-    end
-
-    local meta = {__index = auto}
-
-    function assign(tab, key, val)
-        local oldmt = getmetatable(tab)
-        oldmt.parent[oldmt.key] = tab
-        setmetatable(tab, meta)
-        tab[key] = val
-    end
-
-    function AutomagicTable()
-        return setmetatable({}, meta)
-    end
-end
--- http://lua-users.org/wiki/AutomagicTables
-
-
 function new( self )
     assert(self)
     local r = {
-        allocation_x=AutomagicTable(),
         pageheight_known  = false,
-        belegung_pdf      = {}, -- wird vor der Seitenausgabe (output-Routine) abgefragt
         extra_rand        = 0,  -- für Beschnittmarken, in sp
         beschnittzugabe   = 0,  -- bleed, in sp
         positioning_frames = { [publisher.default_areaname] = { { zeile = 1, spalte = 1} } },  -- Platzierungsrahmen
@@ -176,6 +146,10 @@ function set_width_height(self, b,h )
     self.gridwidth = b
     self.gridheight  = h
     calculate_number_gridcells(self)
+    self.allocation_x = {}
+    for i=1,self:number_of_rows() do
+        self.allocation_x[i] = {}
+    end
 end
 
 -- Markiert (intern) den rechteckigen Bereich durch `x`, `y` (linke obere Ecke)
@@ -222,12 +196,14 @@ function allocate_cells(self,x,y,b,h,allocate_matrix,zeichne_markierung_p,areana
             end
         end
     else
+        -- No allocate matrix (default)
         for _x = x + rahmen_rand_links,x + rahmen_rand_links + b - 1 do
             for _y = y + rahmen_rand_oben, y + rahmen_rand_oben + h - 1 do
-                if self.allocation_x[_x][_y] == true then
+                if self.allocation_x[_x][_y] then
                     rasterkonflikt = true
+                    self.allocation_x[_x][_y] = self.allocation_x[_x][_y] + 1
                 else
-                    self.allocation_x[_x][_y] = true
+                    self.allocation_x[_x][_y] = 1
                 end
             end
         end
@@ -243,7 +219,7 @@ function passt_x_in_zeile(self,spalte,breite,zeile)
     if not spalte then return false end
     -- printtable("passt_x_in_zeile",{spalte=spalte,breite=breite,zeile=zeile})
     for x = spalte, spalte + breite - 1 do
-        if self.allocation_x[x][zeile] == true then return false end
+        if self.allocation_x[x][zeile] then return false end
     end
     return true
 end
@@ -352,28 +328,22 @@ function draw_gridallocation(self)
     local pdf_literals = {}
     local paperheight  = sp_to_bp(tex.pageheight)
     -- where the yellow rectangle should be drawn
-    local re_wd, re_ht, re_x, re_y
-    local number_of_columns
+    local re_wd, re_ht, re_x, re_y, color
     re_ht = sp_to_bp(self.gridheight)
     for y=1,self:number_of_rows() do
         local alloc_found = nil
-        number_of_columns = self:number_of_columns()
-        for x=1, number_of_columns + 1 do
-            if x <= number_of_columns and self.allocation_x[x][y] == true  then
-                alloc_found = alloc_found or x
-            else
-                if alloc_found then
-                    local last_cell = x - 1
-                    for i=alloc_found,last_cell do
-                        -- OK, let's draw a rectangle. Height is 1 grid cell, width is x - alloc_found + 1
-                        re_wd = sp_to_bp( (last_cell - alloc_found + 1) * self.gridwidth  )
-                        re_x = sp_to_bp (self.rand_links + self.extra_rand) +  (alloc_found - 1) * sp_to_bp(self.gridwidth)
-                        re_y = paperheight - sp_to_bp(self.rand_oben + self.extra_rand) - y * sp_to_bp(self.gridheight)
-                    end
-                    pdf_literals[#pdf_literals + 1]  = string.format("q 0 0 1 0 k 0 0 1 0 K 1 0 0 1 %g %g cm 0 0 %g %g re f Q ",re_x, re_y, re_wd,re_ht)
-                    alloc_found = false
+
+        for x=1, self:number_of_columns() do
+            if self.allocation_x[x][y] then
+                re_wd = sp_to_bp(self.gridwidth)
+                re_x = sp_to_bp (self.rand_links + self.extra_rand) + ( x - 1) * sp_to_bp(self.gridwidth)
+                re_y = paperheight - sp_to_bp(self.rand_oben + self.extra_rand) - y * sp_to_bp(self.gridheight)
+                if self.allocation_x[x][y] > 1 then
+                    color = " 0 1 1 0 k "
                 else
+                    color = " 0 0 1 0 k "
                 end
+                pdf_literals[#pdf_literals + 1]  = string.format("q %s 1 0 0 1 %g %g cm 0 0 %g %g re f Q ",color,re_x, re_y, re_wd,re_ht)
             end
         end
         alloc_found=nil
