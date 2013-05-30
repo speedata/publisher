@@ -278,7 +278,8 @@ end
 -- Return the number of grid cells for the given width (in scaled points)
 function width_in_gridcells_sp(self,width_sp)
     assert(self)
-    return math.ceil(width_sp / self.gridwidth)
+    local wd = width_sp / self.gridwidth
+    return math.ceil(math.round(wd,4))
 end
 
 -- Return the number of grid cells for the given height (in scaled points)
