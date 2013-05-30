@@ -395,8 +395,8 @@ function calculate_spaltenbreite( self )
     end
 end
 
-function calculate_zeilenhoehe( self,tr_contents, current_row )
-    local zeilenhoehe
+function calculate_rowheight( self,tr_contents, current_row )
+    local rowheight
     local rowspan,colspan
     local wd,parameter
     local rowspans = {}
@@ -405,9 +405,9 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
     local min_lineheight = fam.baselineskip
 
     if tr_contents.minheight then
-        zeilenhoehe = math.max(publisher.current_grid.gridheight * tr_contents.minheight, min_lineheight)
+        rowheight = math.max(publisher.current_grid.gridheight * tr_contents.minheight, min_lineheight)
     else
-        zeilenhoehe = min_lineheight
+        rowheight = min_lineheight
     end
 
     current_column = 0
@@ -496,13 +496,13 @@ function calculate_zeilenhoehe( self,tr_contents, current_row )
             rowspans[#rowspans + 1] =  { start = current_row, ende = current_row + rowspan - 1, ht = tmp }
             td_contents.rowspan_internal = rowspans[#rowspans]
         else
-            zeilenhoehe = math.max(zeilenhoehe,tmp)
+            rowheight = math.max(rowheight,tmp)
         end
         -- FIXME: node.flushlist tmp ??
         -- node.flush_list(v)
         -- Attempt to double-free hlist node 387580, ignored.
     end
-    return zeilenhoehe,rowspans
+    return rowheight,rowspans
 end
 
 
@@ -527,8 +527,8 @@ function calculate_rowheights(self)
                 local zeile_eltname = publisher.elementname(zeile,true)
                 if zeile_eltname == "Tr" then
                     current_row = current_row + 1
-                    zeilenhoehe, _rowspans = self:calculate_zeilenhoehe(zeile_inhalt,current_row)
-                    self.rowheights[current_row] = zeilenhoehe
+                    rowheight, _rowspans = self:calculate_rowheight(zeile_inhalt,current_row)
+                    self.rowheights[current_row] = rowheight
                     rowspans = table.__concat(rowspans,_rowspans)
                 end
             end
@@ -538,16 +538,16 @@ function calculate_rowheights(self)
                 local zeile_eltname = publisher.elementname(zeile,true)
                 if zeile_eltname == "Tr" then
                     current_row = current_row + 1
-                    zeilenhoehe, _rowspans = self:calculate_zeilenhoehe(zeile_inhalt,current_row)
-                    self.rowheights[current_row] = zeilenhoehe
+                    rowheight, _rowspans = self:calculate_rowheight(zeile_inhalt,current_row)
+                    self.rowheights[current_row] = rowheight
                     rowspans = table.__concat(rowspans,_rowspans)
                 end
             end
 
         elseif eltname == "Tr" then
             current_row = current_row + 1
-            zeilenhoehe, _rowspans = self:calculate_zeilenhoehe(tr_contents,current_row)
-            self.rowheights[current_row] = zeilenhoehe
+            rowheight, _rowspans = self:calculate_rowheight(tr_contents,current_row)
+            self.rowheights[current_row] = rowheight
             rowspans = table.__concat(rowspans,_rowspans)
         else
             warning("Unknown contents in »Table« %s",eltname or "?")

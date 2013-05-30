@@ -1,12 +1,12 @@
 --
---  seite.lua
+--  page.lua
 --  speedata publisher
 --
---  Copyright 2010-2012 Patrick Gundlach.
+--  Copyright 2010-2013 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 
 
-local raster = require("publisher.grid")
+local grid = require("publisher.grid")
 
 page = {}
 
@@ -19,13 +19,13 @@ function page.new( self,width,height,additional_margin, trim )
   trim              = trim              or 0
 
   local s = {
-    raster = raster:new(),
+    grid = grid:new(),
     width  = width,
     height = height,
   }
 
-  s.raster.extra_rand      = additional_margin
-  s.raster.beschnittzugabe = trim
+  s.grid.extra_margin      = additional_margin
+  s.grid.trim = trim
 
   tex.pagewidth  = width   + additional_margin * 2
   tex.pageheight = height  + additional_margin * 2
