@@ -182,10 +182,8 @@ end
 -- und der Breite `b` und Höhe `h` als belegt.
 function allocate_cells(self,x,y,b,h,allocate_matrix,zeichne_markierung_p,areaname)
     if not x then return false end
-    -- printtable("grid/allocate_matrix",allocate_matrix)
     areaname = areaname or publisher.default_areaname
     self:set_current_column(x + b,areaname)
-    -- Todo: neuer Bereich, wenn der herunter rausragt
     self:set_current_row(y,areaname)
     local rasterkonflikt = false
     if  x + b - 1 > self:number_of_columns(areaname) then
@@ -208,10 +206,10 @@ function allocate_cells(self,x,y,b,h,allocate_matrix,zeichne_markierung_p,areana
         rahmen_rand_oben = block.zeile - 1
     end
     if allocate_matrix then
+        -- currently not used
         -- special handling for the non rectangular shape
         local grid_step_x = math.floor(100 * b / allocate_matrix.max_x) / 100
         local grid_step_y = math.floor(100 * h / allocate_matrix.max_y) / 100
-        w("mini-zelle x = %g, y = %g",grid_step_x,grid_step_y)
         local cur_x, cur_y
 
         for _y=1,allocate_matrix.max_y do
@@ -235,7 +233,7 @@ function allocate_cells(self,x,y,b,h,allocate_matrix,zeichne_markierung_p,areana
         end
     end
     if rasterkonflikt then
-        err("Conflict in grid")
+        warning("Conflict in grid")
     end
 end
 
@@ -355,11 +353,13 @@ function draw_gridallocation(self)
     local paperheight  = sp_to_bp(tex.pageheight)
     -- where the yellow rectangle should be drawn
     local re_wd, re_ht, re_x, re_y
+    local number_of_columns
     re_ht = sp_to_bp(self.gridheight)
     for y=1,self:number_of_rows() do
         local alloc_found = nil
-        for x=1,self:number_of_columns() do
-            if self.allocation_x[x][y] == true  then
+        number_of_columns = self:number_of_columns()
+        for x=1, number_of_columns + 1 do
+            if x <= number_of_columns and self.allocation_x[x][y] == true  then
                 alloc_found = alloc_found or x
             else
                 if alloc_found then
