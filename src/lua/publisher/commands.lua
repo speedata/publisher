@@ -1152,6 +1152,9 @@ function commands.place_object( layoutxml,dataxml )
         ht_aktuell = math.min(publisher.current_grid:remaining_height_sp(zeile,area),areaheight),
         ht_max     = areaheight,
     }
+    if allocate == "no" then
+        optionen.ht_aktuell = areaheight
+    end
 
     local grid = publisher.current_grid
     local tab    = publisher.dispatch(layoutxml,dataxml,optionen)
