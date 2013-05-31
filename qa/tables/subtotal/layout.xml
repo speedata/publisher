@@ -11,7 +11,7 @@
 
   <Record element="data">
     <PlaceObject column="1">
-      <Table width="10" leading="12pt" stretch="max">
+      <Table leading="12pt" stretch="max">
         <Tablefoot>
           <Tr>
             <Td><Paragraph>

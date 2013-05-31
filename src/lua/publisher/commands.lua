@@ -3,7 +3,7 @@
 --  commands.lua
 --  speedata publisher
 --
---  Copyright 2010-2012 Patrick Gundlach.
+--  Copyright 2010-2013 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 
 file_start("commands.lua")
@@ -569,7 +569,7 @@ function commands.group( layoutxml,dataxml )
     if grid then
         r:set_width_height(grid.breite,grid.hoehe)
     else
-        r:set_width_height(publisher.current_page.raster.gridwidth,publisher.current_page.raster.gridheight)
+        r:set_width_height(publisher.current_page.grid.gridwidth,publisher.current_page.grid.gridheight)
     end
     publisher.groups[groupname] = {
         contents = contents,
@@ -827,7 +827,7 @@ function commands.margin( layoutxml,dataxml )
     local top    = publisher.read_attribute(layoutxml,dataxml,"top",  "length")
     local bottom = publisher.read_attribute(layoutxml,dataxml,"bottom", "length")
 
-    return function(_seite) _seite.raster:set_margin(left,top,right,bottom) end
+    return function(_seite) _seite.grid:set_margin(left,top,right,bottom) end
 end
 
 --- Mark
@@ -924,7 +924,7 @@ function commands.next_row( layoutxml,dataxml )
     if not current_row then
         publisher.next_area(areaname)
         publisher.setup_page()
-        grid = publisher.current_page.raster
+        grid = publisher.current_page.grid
         grid:set_current_row(1)
     else
         grid:set_current_row(current_row + rows - 1,areaname)
@@ -1152,8 +1152,11 @@ function commands.place_object( layoutxml,dataxml )
         ht_aktuell = math.min(publisher.current_grid:remaining_height_sp(zeile,area),areaheight),
         ht_max     = areaheight,
     }
+    if allocate == "no" then
+        optionen.ht_aktuell = areaheight
+    end
 
-    local raster = publisher.current_grid
+    local grid = publisher.current_grid
     local tab    = publisher.dispatch(layoutxml,dataxml,optionen)
 
     -- reset the current maxwidth
@@ -1210,7 +1213,7 @@ function commands.place_object( layoutxml,dataxml )
             if hreference == "right" then
                 spalte = spalte - width_in_gridcells + 1
             end
-            publisher.output_absolute_position(object,spalte + current_grid.extra_rand,zeile + current_grid.extra_rand,allocate,objects[i].allocate_matrix)
+            publisher.output_absolute_position(object,spalte + current_grid.extra_margin,zeile + current_grid.extra_margin,allocate,objects[i].allocate_matrix)
         else
             -- Look for a place for the object
             -- local current_row = current_grid:current_row(area)
@@ -1256,7 +1259,7 @@ function commands.place_object( layoutxml,dataxml )
             if hreference == "right" then
                 current_column_start = current_column_start - width_in_gridcells + 1
             end
-            publisher.ausgabe_bei(object,current_column_start,current_row,allocate == "yes",area,valign,objects[i].allocate_matrix)
+            publisher.output_at(object,current_column_start,current_row,allocate == "yes",area,valign,objects[i].allocate_matrix)
             trace("object ausgegeben.")
             zeile = nil -- the current rows is not valid anymore because an object is already rendered
         end -- no absolute positioning
@@ -1342,10 +1345,10 @@ function commands.positioning_frame( layoutxml, dataxml )
     local width  = publisher.read_attribute(layoutxml,dataxml,"width","number")
     local height = publisher.read_attribute(layoutxml,dataxml,"height"  ,"number")
     return {
-        spalte = column,
-        zeile  = row,
-        breite = width,
-        hoehe  = height
+        column = column,
+        row    = row,
+        width  = width,
+        height = height
     }
 end
 

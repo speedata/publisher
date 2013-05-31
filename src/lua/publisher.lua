@@ -378,7 +378,7 @@ function dothings()
 
     --- The default page type has 1cm margin
     local onecm=tex.sp("1cm")
-    masterpages[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", contents = function(_seite) _seite.raster:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Seite",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
+    masterpages[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Seite",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
 
     --- Both the data and the layout instructions are written in XML.
     local layoutxml = load_xml(arg[2],"layout instructions")
@@ -536,7 +536,7 @@ function load_xml(filename,filetype)
 end
 
 --- Place an object at a position given in scaled points (_x_ and _y_). `allocate` is ignored at at the moment.
-function output_absolute_position( nodelist,x,y,allocate,bereich )
+function output_absolute_position( nodelist,x,y,allocate,area )
 
     if node.has_attribute(nodelist,att_shift_left) then
         x = x - node.has_attribute(nodelist,att_shift_left)
@@ -557,16 +557,15 @@ end
 
 --- Put the object (nodelist) on grid cell (x,y). If `allocate`=`true` then
 --- mark cells as occupied.
-function ausgabe_bei( nodelist, x,y,allocate,bereich,valign,allocate_matrix)
-
-    bereich = bereich or default_areaname
+function output_at( nodelist, x,y,allocate,area,valign,allocate_matrix)
+    area = area or default_areaname
     local r = current_grid
     local wd = nodelist.width
     local ht = nodelist.height + nodelist.depth
-    local breite_in_rasterzellen = r:width_in_gridcells_sp(wd)
-    local hoehe_in_rasterzellen  = r:height_in_gridcells_sp (ht)
+    local width_gridcells = r:width_in_gridcells_sp(wd)
+    local height_gridcells  = r:height_in_gridcells_sp (ht)
 
-    local delta_x, delta_y = r:position_rasterzelle_mass_tex(x,y,bereich,wd,ht,valign)
+    local delta_x, delta_y = r:position_grid_cell(x,y,area,wd,ht,valign)
     if not delta_x then
         err(delta_y)
         exit()
@@ -612,12 +611,12 @@ function ausgabe_bei( nodelist, x,y,allocate,bereich,valign,allocate_matrix)
             group.contents = n
         end
         if allocate then
-            r:allocate_cells(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,allocate_matrix,options.showgridallocation)
+            r:allocate_cells(x,y,width_gridcells,height_gridcells,allocate_matrix)
         end
     else
         -- Put it on the current page
         if allocate then
-            r:allocate_cells(x,y,breite_in_rasterzellen,hoehe_in_rasterzellen,allocate_matrix,options.showgridallocation,bereich)
+            r:allocate_cells(x,y,width_gridcells,height_gridcells,allocate_matrix,area)
         end
 
         local n = add_glue( nodelist ,"head",{ width = delta_x })
@@ -669,7 +668,7 @@ function setup_page()
         err("Can't create a new page. Is the page type (»PageType«) defined? %s",errorstring)
         exit()
     end
-    current_grid = current_page.raster
+    current_grid = current_page.grid
     seiten[tex.count[0]] = nil
     tex.count[0] = tex.count[0] + 1
     seiten[tex.count[0]] = current_page
@@ -697,7 +696,7 @@ function setup_page()
     end
     assert(gridwidth)
     assert(gridheight,"Gridheight!")
-    current_page.raster:set_width_height(gridwidth,gridheight)
+    current_page.grid:set_width_height(gridwidth,gridheight)
 
     for _,j in ipairs(pagetype) do
         local eltname = elementname(j,true)
@@ -731,15 +730,15 @@ end
 
 --- Switch to the next frame in the given are.
 function next_area( areaname )
-    local aktuelle_nummer = current_grid:rahmennummer(areaname)
-    if not aktuelle_nummer then
+    local current_framenumber = current_grid:framenumber(areaname)
+    if not current_framenumber then
         err("Cannot determine current area number (areaname=%q)",areaname or "(undefined)")
         return
     end
-    if aktuelle_nummer >= current_grid:anzahl_rahmen(areaname) then
+    if current_framenumber >= current_grid:number_of_frames(areaname) then
         new_page()
     else
-        current_grid:set_framenumber(areaname, aktuelle_nummer + 1)
+        current_grid:set_framenumber(areaname, current_framenumber + 1)
     end
     current_grid:set_current_row(1,areaname)
 end
@@ -819,7 +818,7 @@ end
 
 --- After everything is ready for page shipout, we add debug output and crop marks if necessary
 function dothingsbeforeoutput(  )
-    local r = current_page.raster
+    local r = current_page.grid
     local str
     find_user_defined_whatsits(publisher.global_pagebox)
     local firstbox
@@ -828,8 +827,8 @@ function dothingsbeforeoutput(  )
     local wd = sp_to_bp(current_page.width)
     local ht = sp_to_bp(current_page.height)
 
-    local x = 0 + current_page.raster.extra_rand
-    local y = 0 + current_page.raster.extra_rand + current_page.raster.rand_oben
+    local x = 0 + current_page.grid.extra_margin
+    local y = 0 + current_page.grid.extra_margin + current_page.grid.margin_top
 
     if options.trim then
         local trim_bp = sp_to_bp(options.trim)
@@ -860,7 +859,7 @@ function dothingsbeforeoutput(  )
     if options.showgrid then
         local lit = node.new("whatsit","pdf_literal")
         lit.mode = 1
-        lit.data = r:zeichne_raster()
+        lit.data = r:draw_grid()
         if firstbox then
             local tail = node.tail(firstbox)
             tail.next = lit
@@ -873,7 +872,7 @@ function dothingsbeforeoutput(  )
     if options.cutmarks then
         local lit = node.new("whatsit","pdf_literal")
         lit.mode = 1
-        lit.data = r:beschnittmarken()
+        lit.data = r:cutmarks()
         if firstbox then
             local tail = node.tail(firstbox)
             tail.next = lit
@@ -944,7 +943,7 @@ function read_attribute( layoutxml,dataxml,attname_english,typ,default,context)
     elseif typ=="height_sp" then
         num = tonumber(val or default)
         if num then -- most likely really a number, we need to multiply with grid height
-            ret = current_page.raster.gridheight * num
+            ret = current_page.grid.gridheight * num
         else
             ret = val
         end
