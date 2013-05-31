@@ -415,6 +415,7 @@ func runPublisher() {
 func compareTwoPages(sourcefile, referencefile, dummyfile string) bool {
 	res, err := exec.Command("compare", "-metric", "mae", sourcefile, referencefile, dummyfile).CombinedOutput()
 	if err != nil {
+		log.Println(string(res))
 		log.Fatal(err)
 	}
 	delta, err := strconv.ParseFloat(strings.Split(string(res), " ")[0], 32)
@@ -455,7 +456,23 @@ func convertReference(soureFiles []string) error {
 
 func runComparison(info os.FileInfo) {
 	log.Println("Run comparison in directory", info.Name())
-	err := exec.Command("sp").Run()
+
+	sourceFiles, err := filepath.Glob("source*.png")
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Let's remove the old source files, otherwise
+	// the number of pages (below) might
+	// be incorrect which results in a fatal
+	// error
+	for _, name := range sourceFiles {
+		err = os.Remove(name)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	err = exec.Command("sp").Run()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -464,7 +481,7 @@ func runComparison(info os.FileInfo) {
 		log.Fatal(err)
 	}
 
-	sourceFiles, err := filepath.Glob("source*.png")
+	sourceFiles, err = filepath.Glob("source*.png")
 	if err != nil {
 		log.Fatal(err)
 	}
