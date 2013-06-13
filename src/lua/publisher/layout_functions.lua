@@ -109,7 +109,8 @@ local function datei_vorhanden(dataxml, arg )
 end
 
 --- Insert 1000's separator and comma separator
-local function format_number(dataxml, num, thousandssep,commasep)
+local function format_number(dataxml,arg)
+  local num, thousandssep,commasep = arg[1], arg[2], arg[3]
   local sign,digits,commadigits = string.match(tostring(num),"([%-%+]?)(%d*)%.?(%d*)")
   local first_digits = math.mod(#digits,3)
   local ret = {}
@@ -128,8 +129,8 @@ local function format_number(dataxml, num, thousandssep,commasep)
 end
 
 
-local function format_string( dataxml,arg1,arg2 )
-  return string.format(arg2,arg1)
+local function format_string( dataxml,arg )
+  return string.format(arg[2],arg[1])
 end
 
 
