@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="urn:speedata.de:2009/publisher/de"
   xmlns:sd="urn:speedata:2009/publisher/functions/de">
-  <Optionen 
+  <Optionen
     zeige_rasterbelegung="nein"
     zeichne_raster="nein"
     trace="nein"
   />
- 
+
   <LadeSchriftdatei name="Helvetica" randausgleich="100" dateiname="texgyreheros-regular.otf" />
   <LadeSchriftdatei name="Helvetica Fett" dateiname="texgyreheros-bold.otf" />
   <LadeSchriftdatei name="Helvetica Kursiv" dateiname="texgyreheros-italic.otf" />
   <LadeSchriftdatei name="Helvetica Fett Kursiv" dateiname="texgyreheros-bolditalic.otf" />
 
-  
+
   <DefiniereSchriftfamilie name="Überschrift" schriftgröße="12" zeilenabstand="16">
     <Normal schriftart="Helvetica" />
     <Fett schriftart="Helvetica Fett" />
@@ -26,7 +26,7 @@
     <FettKursiv schriftart="Helvetica Fett Kursiv"/>
     <Kursiv schriftart="Helvetica Kursiv"/>
   </DefiniereSchriftfamilie>
-  
+
   <DefiniereSchriftfamilie name="Tabelle" schriftgröße="10" zeilenabstand="12">
     <Normal schriftart="Helvetica"/>
   </DefiniereSchriftfamilie>
@@ -63,10 +63,9 @@
     </BeiSeitenAusgabe>
   </Seitentyp>
 
-
+  <!-- Wird automatisch nach <LadeDatensatzdatei...> ausgeführt,
+       wenn dort Daten vorhanden sind (im zweiten Durchlauf) -->
   <Datensatz element="Inhaltsverzeichnis">
-    <Zuweisung variable="Inhaltsverzeichnis" auswahl="''" />
-    <BearbeiteKnoten auswahl="Planetenverzeichnis" />
     <ObjektAusgeben spalte="3" belegen="ja">
       <Textblock breite="20" schriftart="Überschrift">
         <Absatz>
@@ -77,21 +76,15 @@
     <NeueZeile />
     <ObjektAusgeben spalte="3">
       <Textblock breite="20">
-        <Kopie-von auswahl="$Inhaltsverzeichnis" />
+        <FürAlle auswahl="Planetenverzeichnis">
+          <Absatz>
+            <Wert auswahl="@name" />
+            <Wert>, Seite </Wert>
+            <Wert auswahl="@seite" />
+          </Absatz>
+        </FürAlle>
       </Textblock>
     </ObjektAusgeben>
-  </Datensatz>
-
-
-  <Datensatz element="Planetenverzeichnis">
-    <Zuweisung variable="Inhaltsverzeichnis">
-      <Kopie-von auswahl="$Inhaltsverzeichnis" />
-      <Absatz>
-        <Wert auswahl="@name" />
-        <Wert>, Seite </Wert>
-        <Wert auswahl="@seite" />
-      </Absatz>
-    </Zuweisung>
   </Datensatz>
 
   <!-- Wurzelelement -->
@@ -100,7 +93,7 @@
     <LadeDatensatzdatei name="toc" />
     <Zuweisung variable="Inhalt"/>
     <NeueSeite />
-    
+
     <BearbeiteKnoten auswahl="planet" />
 
     <SpeichereDatensatzdatei dateiname="toc" elementname="Inhaltsverzeichnis" auswahl="$Inhalt" />
@@ -122,9 +115,6 @@
         <Absatz>
           <Wert auswahl="@name" />
         </Absatz>
-        <!--<Aktion>
-          <ZurListeHinzufügen liste="inhalt" schlüssel="{@name}" auswahl="sd:aktuelle-seite()" />
-        </Aktion>-->
       </Textblock>
     </ObjektAusgeben>
 
@@ -132,7 +122,7 @@
     <BearbeiteKnoten auswahl="bild" />
     <BearbeiteKnoten auswahl="monde" />
     <BearbeiteKnoten auswahl="beschreibung" />
-    
+
     <NeueSeite />
   </Datensatz>
 
@@ -141,13 +131,11 @@
       <Textblock breite="29" textformat="text" schriftart="Überschrift">
         <Absatz>
           <Wert>URL: </Wert>
-          <URL>
-            <Wert auswahl="string(.)" />
-          </URL>
+          <A href="{string(.)}"><Wert auswahl="string(.)" /></A>
         </Absatz>
       </Textblock>
     </ObjektAusgeben>
-    
+
   </Datensatz>
 
   <Datensatz element="bild">
@@ -159,8 +147,6 @@
   </Datensatz>
 
   <Datensatz element="monde">
-    <Zuweisung variable="mondliste"/>
-    <BearbeiteKnoten auswahl="mond" />
     <ObjektAusgeben spalte="18">
       <Textblock breite="7">
         <Absatz>
@@ -168,21 +154,15 @@
             <Wert>Monde</Wert>
           </B>
         </Absatz>
-        <Kopie-von auswahl=" $mondliste " />
+        <Ul>
+          <FürAlle auswahl="mond">
+            <Li><Wert auswahl="string(.)"/></Li>
+          </FürAlle>
+        </Ul>
       </Textblock>
     </ObjektAusgeben>
     <NeueZeile />
     <NeueZeile />
-  </Datensatz>
-
-  <Datensatz element="mond">
-    <Zuweisung variable="mondliste">
-      <Kopie-von auswahl="$mondliste" />
-      <Absatz>
-        <Wert>• </Wert>
-        <Wert auswahl="string(.)" />
-      </Absatz>
-    </Zuweisung>
   </Datensatz>
 
   <Datensatz element="beschreibung">

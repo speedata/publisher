@@ -6,31 +6,31 @@
     show-grid="no"
     trace="no"
   />
-  
+
   <LoadFontfile name="Helvetica" marginprotrusion="100" filename="texgyreheros-regular.otf" />
   <LoadFontfile name="Helvetica Bold" filename="texgyreheros-bold.otf" />
   <LoadFontfile name="Helvetica Italic" filename="texgyreheros-italic.otf" />
   <LoadFontfile name="Helvetica Bold Italic" filename="texgyreheros-bolditalic.otf" />
-  
-  
+
+
   <DefineFontfamily name="Title" fontsize="12" leading="16">
     <Regular fontface="Helvetica"></Regular>
     <Bold fontface="Helvetica Bold" />
   </DefineFontfamily>
-  
+
   <DefineFontfamily name="text" fontsize="12" leading="13">
     <Regular fontface="Helvetica" />
     <Bold fontface="Helvetica Bold" />
   </DefineFontfamily>
-  
+
   <Pageformat width="150mm" height="200mm"/>
   <SetGrid width="4mm" height="14pt"/>
-  
+
   <DefineTextformat name="leftaligned" alignment="leftaligned"/>
   <DefineTextformat name="rightaligned" alignment="rightaligned"/>
   <DefineTextformat name="text" alignment="justified" />
   <DefineTextformat name="text with indentation" alignment="justified" indentation="2em" />
-  
+
   <Pagetype name="right page" test="sd:odd( sd:current-page() )">
     <Margin left="2cm" right="1cm" top="1cm" bottom="1cm" />
     <AtPageShipout>
@@ -42,7 +42,7 @@
       <Message select="sd:current-page()" />
     </AtPageShipout>
   </Pagetype>
-  
+
   <Pagetype name="left page" test="sd:even( sd:current-page() )">
     <Margin left="1cm" right="2cm" top="1cm" bottom="1cm" />
     <AtPageShipout>
@@ -54,12 +54,10 @@
       <Message select="sd:current-page()" />
     </AtPageShipout>
   </Pagetype>
-  
-  
+
+
   <Record element="tableofcontents">
-    <SetVariable variable="tableofcontents" select="''" />
-    <ProcessNode select="planetlisting" />
-    <PlaceObject column="3" allocate="yes">
+    <PlaceObject column="3">
       <Textblock width="20" fontface="Title">
         <Paragraph>
           <Value>Contents</Value>
@@ -69,36 +67,31 @@
     <NextRow/>
     <PlaceObject column="3">
       <Textblock width="20">
+        <ForAll select="planetlisting">
+          <Paragraph>
+            <Value select="@name" />
+            <Value>, page </Value>
+            <Value select="@pagenumber" />
+          </Paragraph>
+        </ForAll>
         <Copy-of select="$tableofcontents" />
       </Textblock>
     </PlaceObject>
   </Record>
-  
-  
-  <Record element="planetlisting">
-    <SetVariable variable="tableofcontents">
-      <Copy-of select="$tableofcontents" />
-      <Paragraph>
-        <Value select="@name" />
-        <Value>, page </Value>
-        <Value select="@pagenumber" />
-      </Paragraph>
-    </SetVariable>
-  </Record>
-  
+
   <!-- Root element -->
   <Record element="planets">
     <SetVariable variable="column" select="2" />
     <LoadDataset name="toc"/>
     <SetVariable variable="contents"/>
     <NewPage/>
-    
+
     <ProcessNode select="planet" />
-    
+
     <SaveDataset filename="toc" elementname="tableofcontents" select="$contents" />
-    
+
   </Record>
-  
+
   <Record element="planet">
     <SetVariable variable="contents">
       <Copy-of select="$contents" />
@@ -107,7 +100,7 @@
         <Attribute name="pagenumber" select=" sd:current-page()" />
       </Element>
     </SetVariable>
-    
+
     <PlaceObject column="1">
       <Textblock width="20">
         <Bookmark select="@name" level="1"/>
@@ -116,29 +109,29 @@
         </Paragraph>
       </Textblock>
     </PlaceObject>
-    
+
     <ProcessNode select="url" />
     <ProcessNode select="image" />
     <ProcessNode select="moons" />
     <ProcessNode select="description" />
-    
+
     <NewPage />
   </Record>
-  
+
   <Record element="url">
     <PlaceObject column="{ $column }">
       <Textblock width="29" textformat="text" fontface="Title">
         <Paragraph>
           <Value>URL: </Value>
-          <URL>
+          <A href="{ string(.) }">
             <Value select="string(.)" />
-          </URL>
+          </A>
         </Paragraph>
       </Textblock>
     </PlaceObject>
-    
+
   </Record>
-  
+
   <Record element="image">
     <NextRow />
     <NextRow />
@@ -146,10 +139,8 @@
       <Image width="10" file="{.}" />
     </PlaceObject>
   </Record>
-  
+
   <Record element="moons">
-    <SetVariable variable="moonlist"/>
-    <ProcessNode select="moon" />
     <PlaceObject column="18">
       <Textblock width="7">
         <Paragraph>
@@ -157,23 +148,17 @@
             <Value>Moons</Value>
           </B>
         </Paragraph>
-        <Copy-of select=" $moonlist " />
+        <Ul>
+          <ForAll select="moon">
+            <Li><Value select="string(.)"></Value></Li>
+          </ForAll>
+        </Ul>
       </Textblock>
     </PlaceObject>
     <NextRow />
     <NextRow />
   </Record>
-  
-  <Record element="moon">
-    <SetVariable variable="moonlist">
-      <Copy-of select="$moonlist" />
-      <Paragraph>
-        <Value>• </Value>
-        <Value select="string(.)" />
-      </Paragraph>
-    </SetVariable>
-  </Record>
-  
+
   <Record element="description">
     <PlaceObject column="{ $column }">
       <Textblock width="28" fontface="text" textformat="text with indentation">
@@ -183,5 +168,5 @@
       </Textblock>
     </PlaceObject>
   </Record>
-  
+
 </Layout>
