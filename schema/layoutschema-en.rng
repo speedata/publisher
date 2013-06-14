@@ -58,6 +58,7 @@
     <optional><ref name="e_Action"/></optional>
     <optional><ref name="e_CopyOf"/></optional>
     <optional><ref name="e_Barcode"/></optional>
+    <optional><ref name="e_Li"/></optional>
   </define>
 
   <define name="t_Commands">
@@ -497,7 +498,7 @@
       <ref name="a_xmlid"/>
       <attribute name="name"><data type="string"/></attribute>
       <a:documentation docid="element/name">Name of the element.</a:documentation>
-      
+
       <oneOrMore>
         <interleave>
           <optional><ref name="e_Element"/></optional>
@@ -1634,7 +1635,10 @@
     <element name="Ul">
       <a:documentation docid="ul">Itemize list (with bullet points, just like HTML)</a:documentation>
       <oneOrMore>
-        <ref name="e_Li"/>
+        <choice>
+          <ref name="e_Li"/>
+          <ref name="e_ForAll"/>
+        </choice>
       </oneOrMore>
     </element>
   </define>
@@ -1688,5 +1692,5 @@
       </choice>
     </element>
   </define>
-  
+
 </grammar>
