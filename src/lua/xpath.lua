@@ -272,9 +272,10 @@ function M.get_single_expr(dataxml,str,pos,ns)
     _,stop = string.find(str,"^%s*%)%s*",M.nextpos)
     if stop then
         M.nextpos = stop + 1
+        return stack,true
     end
     -- We are now at the end of an expression (either closing paren or end of string)
-    return stack
+    return stack,false
 end
 
 -- Return a table with one entry for each comma separated expression.
@@ -283,7 +284,9 @@ function M.get_expr(dataxml,str,ns,pos)
     local ret = {}
     pos = string.find(str,"%S",pos)
     while true do
-        ret[#ret + 1] = M.get_single_expr(dataxml,str,pos,ns)
+        local end_of_expression
+        ret[#ret + 1],end_of_expression = M.get_single_expr(dataxml,str,pos,ns)
+        if end_of_expression then break end
         local start,stop = string.find(str,"^%s*,%s*",M.nextpos)
         if not start then break end
         pos = stop + 1
