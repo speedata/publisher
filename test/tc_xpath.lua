@@ -30,10 +30,37 @@ function number_of_datasets( self,arg)
     return count
 end
 
+--- Insert 1000's separator and comma separator
+local function format_number(dataxml,arg)
+  local num, thousandssep,commasep = arg[1], arg[2], arg[3]
+  local sign,digits,commadigits = string.match(tostring(num),"([%-%+]?)(%d*)%.?(%d*)")
+  local first_digits = math.mod(#digits,3)
+  local ret = {}
+  if first_digits > 0 then
+    ret[1] = string.sub(digits,0,first_digits)
+  end
+  for i=1, ( #digits - first_digits) / 3 do
+    ret[#ret + 1] = string.sub(digits,first_digits + ( i - 1) * 3 + 1 ,first_digits + i * 3 )
+  end
+  ret = table.concat(ret, thousandssep)
+  if commadigits and #commadigits > 0 then
+    return  sign .. ret .. commasep .. commadigits
+  else
+    return sign .. ret
+  end
+end
+
+
+local function format_string( dataxml,arg )
+  return string.format(arg[2],arg[1])
+end
+
 xpath.register_function("foo","verbose",function(dataxml,arg)  printtable("verbose",arg) return true end)
 xpath.register_function("foo","even",function(dataxml,x) return math.mod(x[1],2) == 0 end)
 xpath.register_function("foo","return-ten",function(dataxml) return 10 end)
 xpath.register_function("foo","number-of-datasets",number_of_datasets)
+xpath.register_function("foo","format-string",format_string)
+xpath.register_function("foo","format-number",format_number)
 
 
 function test_xpathfunctions()
@@ -91,6 +118,9 @@ function test_parse_functions()
     -- why true and not "true"?
     assert_equal(xpath.textvalue_raw(xpath.parse_raw( data, " sd:return-ten() - sd:return-ten() < 4" ,namespace )), true)
     assert_equal(xpath.textvalue_raw(xpath.parse_raw( data, " sd:return-ten() - sd:return-ten() - 5" ,namespace )), '-5')
+    assert_true(xpath.parse(data,"sd:even(sd:return-ten())",namespace ))
+    assert_equal(secondoftwo(xpath.parse_raw(data,"sd:format-number(sd:format-string(1234.567, '%.2f'), '.', ',')",namespace))[1],"1.234,57")
+
 end
 
 
