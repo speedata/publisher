@@ -1517,34 +1517,25 @@ function fix_justification( nodelist,textformat,parent)
 
             if textformat == "centered" then
                 local list_start = head.head
-                local rightskip = node.tail(head.head)
+                local rightskip_node = node.tail(head.head)
+                local parfillskip
+
+                -- first we remove everything between the rightskip and the
+                -- last non-glue/non-penalty item
+                -- the glues might contain "plus 1 fill" and the penalties are not
+                -- useful
+                local tmp = rightskip_node.prev
+                while tmp and ( tmp.id == glue_node or tmp.id == penalty_node ) do
+                    tmp = tmp.prev
+                    head.head = node.remove(head.head,tmp.next)
+                end
+
+                local wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)
+
                 local leftskip_node = node.new("glue")
                 leftskip_node.spec = node.new("glue_spec")
-                local wd
-                while rightskip.prev and rightskip.prev.id ~= 10 do
-                    node.remove(head.head,rightskip.prev)
-                end
-                if rightskip.prev then
-                    if rightskip.prev.id == 10 then -- the last skip on the line (hopefully!!)
-                        local parfillskip = rightskip.prev
-
-                        wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head,parfillskip.prev)
-
-                        -- remove parfillksip and insert half width in rightskip
-                        parfillskip.prev.next = rightskip
-                        rightskip.prev = parfillskip.prev
-                        rightskip.spec = node.new("glue_spec")
-                        rightskip.spec.width = (goal - wd) / 2
-                        node.free(parfillskip)
-                    else
-                        assert(false,"textformat=='centered'")
-                    end
-                    -- insert half width in front of the row
-                    leftskip_node.spec.width = ( goal - wd ) / 2
-                    leftskip_node.next = list_start
-                    list_start.prev = leftskip_node
-                    head.head = leftskip_node
-                end
+                leftskip_node.spec.width = ( goal - wd ) / 2
+                head.head = node.insert_before(head.head,head.head,leftskip_node)
             end
         elseif head.id == 1 then -- vlist
             fix_justification(head.head,textformat,head)
