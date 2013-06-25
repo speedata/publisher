@@ -2078,6 +2078,12 @@
 </Datensatz>
 ]]></listing>
     </example>
+    <info xml:lang="en">
+      <para>This works only for backwards references (v1.6).</para>
+    </info>
+    <info xml:lang="de">
+      <para>Funktioniert nur für Rückwärtsreferenzen (v1.6).</para>
+    </info>
     <seealso><cmd name="Action"/></seealso>
   </command>
   <command name="Message">

@@ -1068,9 +1068,10 @@ function parse_html( elt, parameter )
     end
 
     for i=1,#elt do
-        if type(elt[i]) == "string" or type(elt[i]) == "number" then
+        local typ = type(elt[i])
+        if  typ == "string" or typ == "number" or typ == "boolean" then
             a:append(elt[i],{fontfamily = 0, bold = bold, italic = italic, underline = underline })
-        elseif type(elt[i]) == "table" then
+        elseif typ == "table" then
             a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
         end
     end

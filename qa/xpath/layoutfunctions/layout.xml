@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<Layout
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en">
+  <Options show-gridallocation="no" show-grid="no"/>
+  <Pageformat width="150mm" height="150mm"/>
+  
+  <DefineColor name="Gray" model="rgb" r="40" g="40" b="40"/>
+  <Record element="data">
+    <SetVariable variable="foo" select="12345.678"/>
+    <Group name="img">
+      <Contents>
+        <PlaceObject>
+          <Image width="5" file="ocean.pdf"/>
+        </PlaceObject>
+      </Contents>
+    </Group>
+    <PlaceObject>
+      <Textblock>
+        <Action><Mark select="'first'"/></Action>
+        <Paragraph>
+          <Value>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>Number of rows: </Value>
+          <Value select="sd:number-of-rows()"></Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>Number of columns: </Value>
+          <Value select="sd:number-of-columns()"></Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>Number of pages (ocean.pdf): </Value>
+          <Value select="sd:number-of-pages('ocean.pdf')"></Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>Current page: </Value>
+          <Value select="sd:current-page()"></Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>Current column: </Value>
+          <Value select="sd:current-column()"></Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>sd:decode-html('foo &lt;b&gt;bar&lt;/b&gt;'): </Value>
+          <Value select="sd:decode-html('foo &lt;b&gt;bar&lt;/b&gt;')"></Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>File exists 'ocean.pdf': </Value>
+          <Value select="sd:file-exists('ocean.pdf')"></Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>Number of datasets 'entry': </Value>
+          <Value select="sd:number-of-datasets(entry)"></Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>Even 5: </Value>
+          <Value select="sd:even(5)"></Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>Odd 5: </Value>
+          <Value select="sd:odd(5)"></Value>
+        </Paragraph>
+        <!-- No value upto version 1.6 -->
+        <!--<Paragraph>
+          <Value>Pagenumber of marker 'first': </Value>
+          <Value select="sd:pagenumber('first')"></Value>
+        </Paragraph>-->
+        <Paragraph>
+          <Value>Some variable: </Value>
+          <Value select="sd:variable('foo')"/>
+        </Paragraph>
+        <Paragraph>
+          <Value>Format number: </Value>
+          <Value select="sd:format-number($foo,',','.')"></Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>Format string: </Value>
+          <Value select="sd:format-string($foo,'%.2f')"></Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>Current row: </Value>
+          <Value select="sd:current-row()"></Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>Imagewidth: </Value>
+          <Value select="sd:imagewidth('ocean.pdf')"></Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>Group width: </Value>
+          <Value select="sd:groupwidth('img')"></Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>Group height: </Value>
+          <Value select="sd:groupheight('img')"></Value>
+        </Paragraph>
+        <Paragraph color="{sd:alternating('row','Gray','Black')}">
+          <Value>Alternating Gray</Value>
+        </Paragraph>
+        <Paragraph color="{sd:alternating('row','Gray','Black')}">
+          <Value>Alternating Black</Value>
+        </Paragraph>
+        <Paragraph color="{sd:alternating('row','Gray','Black')}">
+          <Value>Alternating Gray</Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>Merge pagenumbers: </Value>
+          <Value select="sd:merge-pagenumbers('1-4')"></Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

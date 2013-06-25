@@ -133,6 +133,8 @@ function Paragraph:append( whatever,parameter )
         self:add_italic_bold(whatever.nodelist,parameter)
         self:add_to_nodelist(whatever.nodelist)
         publisher.set_fontfamily_if_necessary(whatever.nodelist,parameter.fontfamily)
+    elseif type(whatever)=="boolean" then
+        self:add_to_nodelist(publisher.mknodes(tostring(whatever),parameter.fontfamily,parameter))
     elseif type(whatever)=="function" then
         self:add_to_nodelist(publisher.mknodes(whatever(),parameter.fontfamily,parameter))
     elseif type(whatever)=="userdata" then -- node.is_node in einer späteren Version
