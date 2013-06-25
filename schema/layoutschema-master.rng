@@ -688,8 +688,10 @@
       <ref name="a_xmlid"/>
       <attribute name="length"/>
       <a:documentation docid="rule/length">The length of the rule in grid cells (number) or as a dimension (e.g. 4cm)</a:documentation>
-      <attribute name="color"/>
-      <a:documentation docid="rule/color">The color of the rule (default: black)</a:documentation>
+      <optional>
+        <attribute name="color"/>
+        <a:documentation docid="rule/color">The color of the rule (default: black)</a:documentation>
+      </optional>
       <attribute name="direction">
         <a:documentation docid="rule/direction">The direction of the rule</a:documentation>
         <choice>
@@ -1566,6 +1568,7 @@
       <ref name="a_xmlid"/>
       <oneOrMore>
         <choice>
+          <ref name="e_Switch"/>
           <ref name="e_Paragraph"/>
           <ref name="e_Ol"/>
           <ref name="e_Ul"/>

@@ -17,7 +17,7 @@ end
 
 local function current_row(dataxml,arg)
   publisher.setup_page()
-  return publisher.current_grid:current_row(arg[1])
+  return publisher.current_grid:current_row(arg and arg[1])
 end
 
 --- Get the page number of a marker
@@ -32,7 +32,7 @@ end
 
 local function current_column(dataxml,arg)
   publisher.setup_page()
-  return publisher.current_grid:current_column(arg[1])
+  return publisher.current_grid:current_column(arg and arg[1])
 end
 
 local function alternating(dataxml, arg )

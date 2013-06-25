@@ -1063,12 +1063,13 @@ function commands.paragraph( layoutxml,dataxml )
     local objects = {}
     local tab = publisher.dispatch(layoutxml,dataxml)
 
-    for i,j in ipairs(tab) do
+    for _,j in ipairs(tab) do
         trace("Paragraph Elementname = %q",tostring(publisher.elementname(j,true)))
-        if publisher.elementname(j,true) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j))
+        local contents = publisher.element_contents(j)
+        if publisher.elementname(j,true) == "Value" and type(contents) == "table" then
+            objects[#objects + 1] = publisher.parse_html(contents)
         else
-            objects[#objects + 1] = publisher.element_contents(j)
+            objects[#objects + 1] = contents
         end
     end
     for _,j in ipairs(objects) do

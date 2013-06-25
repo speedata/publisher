@@ -698,8 +698,10 @@
       <ref name="a_xmlid"/>
       <attribute name="länge"/>
       <a:documentation docid="rule/length">Länge der Linie in Rasterzellen (Zahl) oder als Maß (z.B. 4cm)</a:documentation>
-      <attribute name="farbe"/>
-      <a:documentation docid="rule/color">Die Farbe der Linie</a:documentation>
+      <optional>
+        <attribute name="farbe"/>
+        <a:documentation docid="rule/color">Die Farbe der Linie</a:documentation>
+      </optional>
       <attribute name="richtung">
         <a:documentation docid="rule/direction">Ausrichtung der Linie</a:documentation>
         <choice>
@@ -1582,6 +1584,7 @@
       <ref name="a_xmlid"/>
       <oneOrMore>
         <choice>
+          <ref name="e_Switch"/>
           <ref name="e_Paragraph"/>
           <ref name="e_Ol"/>
           <ref name="e_Ul"/>
