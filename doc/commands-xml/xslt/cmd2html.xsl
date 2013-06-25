@@ -43,27 +43,28 @@
 
   <xsl:variable name="translations" select="document('../../../schema/translations.xml')" />
   <xsl:variable name="values">
-    <value type="xpath" de="XPath-Ausdruck" en="XPath expression"/>
-    <value type="all_last" de="alle / letzte" en="all / last"/>
-    <value type="all_first" de="alle / erste" en="all / first" />
-    <value type="languages" de="Sprache" en="language"/>
-    <value type="number" de="Zahl" en="number"/>
-    <value type="yesno" de="ja/nein" en="yes/no"/>
-    <value type="text"  de="Text" en="string" />
-    <value type="zerotohundred" de="0 bis 100" en="0 up to 100"/>
-    <value type="colormodel" de="rgb oder cmyk" en="rgb or cmyk"/>
-    <value type="numberorlength" de="Zahl oder Längenangabe" en="number or length" />
-    <value type="alignment" de="blocksatz, linksbündig, rechtsbündig, zentriert" en="justified, leftaligned, rightaligned, centered"/>
-    <value type="length" de="Längenangabe (mm,cm,pt)" en="Length (mm,in,cm,pt)"/>
-    <value type="horizontalvertical" de="horizontal oder vertikal" en="horizontal or vertical"/>
-    <value type="yesnoauto" de="›ja‹, ›nein‹ oder ›auto‹" en="'yes', 'no' or 'auto'"/>
-    <value type="solidwithout" de="›durchgezogen‹, ›ohne‹" en="'solid' or 'without'" />
-    <value type="topmiddlebottom" de="'top', 'middle' oder 'bottom'" en="'top', 'middle' or 'bottom'" />
-    <value type="leftright" de="'links' oder 'rechts'" en="'left' or 'right'" />
-    <value type="numberlengthorstar" de="Zahl, Maßangabe oder *-Angaben" en="Number, length or *-numbers" />
     <value type="align" de="“right”,“left”,“center”" en="“right”,“left”,“center”" />
-    <value type="valign" de="“top”,“middle”,“bottom”" en="“top”,“middle”,“bottom”" />
+    <value type="alignment" de="blocksatz, linksbündig, rechtsbündig, zentriert" en="justified, leftaligned, rightaligned, centered"/>
+    <value type="all_first" de="alle / erste" en="all / first" />
+    <value type="all_last" de="alle / letzte" en="all / last"/>
+    <value type="colormodel" de="rgb oder cmyk" en="rgb or cmyk"/>
+    <value type="fullwithout" de="ohne, vollständig" en="full, without" />
+    <value type="horizontalvertical" de="horizontal oder vertikal" en="horizontal or vertical"/>
+    <value type="languages" de="Sprache" en="language"/>
+    <value type="leftright" de="'links' oder 'rechts'" en="'left' or 'right'" />
+    <value type="length" de="Längenangabe (mm,cm,pt)" en="Length (mm,in,cm,pt)"/>
     <value type="maxno" de="'max', 'nein'" en="'max', 'no'" />
+    <value type="number" de="Zahl" en="number"/>
+    <value type="numberlengthorstar" de="Zahl, Maßangabe oder *-Angaben" en="Number, length or *-numbers" />
+    <value type="numberorlength" de="Zahl oder Längenangabe" en="number or length" />
+    <value type="solidwithout" de="›durchgezogen‹, ›ohne‹" en="'solid' or 'without'" />
+    <value type="text"  de="Text" en="string" />
+    <value type="topmiddlebottom" de="'top', 'middle' oder 'bottom'" en="'top', 'middle' or 'bottom'" />
+    <value type="valign" de="“top”,“middle”,“bottom”" en="“top”,“middle”,“bottom”" />
+    <value type="xpath" de="XPath-Ausdruck" en="XPath expression"/>
+    <value type="yesno" de="ja/nein" en="yes/no"/>
+    <value type="yesnoauto" de="›ja‹, ›nein‹ oder ›auto‹" en="'yes', 'no' or 'auto'"/>
+    <value type="zerotohundred" de="0 bis 100" en="0 up to 100"/>
   </xsl:variable>
   
   <xsl:template match="/">
