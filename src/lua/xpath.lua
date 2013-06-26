@@ -99,7 +99,7 @@ end
 
 function M.is_function(dataxml,str,pos,ns)
     local start,stop,prefix,fname
-    start,stop,prefix,fname = string.find(str,"^(%S-):?([^(:]+)%(%s*",pos)
+    start,stop,prefix,fname = string.find(str,"^(%S-):?([^(: ]+)%(%s*",pos)
     if prefix and fname then
         local x
         if prefix == "" then
@@ -660,13 +660,13 @@ M.default_functions.string = function(dataxml,arg)
         end
         ret = table.concat(ret)
     elseif arg == "\1" then -- nil value
-        return ""
+        ret = ""
     elseif type(arg) == "string" then
         ret = arg
     elseif type(arg) == "boolean" then
         ret = tostring(arg)
     elseif arg == nil then
-        ret = ''
+        ret = ""
     else
         warning("Unknown type in XPath-function 'string()': %s",type(arg))
         ret = tostring(arg)

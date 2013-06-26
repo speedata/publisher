@@ -62,6 +62,8 @@ xpath.register_function("foo","number-of-datasets",number_of_datasets)
 xpath.register_function("foo","format-string",format_string)
 xpath.register_function("foo","format-number",format_number)
 
+function test_foo()
+end
 
 function test_xpathfunctions()
     assert_equal(secondoftwo(xpath.parse_raw( data, " normalize-space('  foo bar baz     ') ",namespace ))[1], "foo bar baz")
@@ -120,7 +122,9 @@ function test_parse_functions()
     assert_equal(xpath.textvalue_raw(xpath.parse_raw( data, " sd:return-ten() - sd:return-ten() - 5" ,namespace )), '-5')
     assert_true(xpath.parse(data,"sd:even(sd:return-ten())",namespace ))
     assert_equal(secondoftwo(xpath.parse_raw(data,"sd:format-number(sd:format-string(1234.567, '%.2f'), '.', ',')",namespace))[1],"1.234,57")
-
+    local data = luxor.parse_xml([[<A><B>foo</B></A>]])
+    assert_true(secondoftwo(xpath.parse_raw(data," string(B) = 'foo' or string(B) = 'bar' ",namespace))[1])
+    assert_true(secondoftwo(xpath.parse_raw(data," string( B ) = 'foo' or string( B ) = 'bar' ",namespace))[1])
 end
 
 
