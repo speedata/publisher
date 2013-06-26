@@ -92,6 +92,7 @@
                 <choice>
                   <value>all_last</value>
                   <value>all_first</value>
+                  <value>fullwithout</value>
                   <value>xpath</value>
                   <value>number</value>
                   <value>numberorlength</value>
