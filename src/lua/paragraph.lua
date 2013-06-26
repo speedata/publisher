@@ -167,6 +167,18 @@ function Paragraph:format(width_sp, default_textformat_name)
 
     for i=1,#objects do
         nodelist = objects[i]
+
+        -- The first whatist (type user_defined_marker) is not necessary
+        -- for this. It indicates a new line and we have done this in
+        -- the previous.
+        if nodelist.id == publisher.whatsit_node and nodelist.subtype == publisher.user_defined_whatsit and nodelist.user_id == publisher.user_defined_marker then
+            nodelist = node.remove(nodelist,nodelist)
+        end
+        if nodelist == nil then
+            -- nothing after a <ul>/<ol>
+            break
+        end
+
         local current_textformat_name,current_textformat
         if self.textformat then
             current_textformat_name = self.textformat
