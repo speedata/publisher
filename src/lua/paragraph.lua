@@ -249,8 +249,6 @@ function Paragraph:format(width_sp, default_textformat_name)
     return nodelist
 end
 
-require("viznodelist")
-counter = counter or 0
 
 function Paragraph.vsplit(objects,frameheight,totalheight,balance)
     local balanced_height = totalheight / balance
@@ -261,8 +259,7 @@ function Paragraph.vsplit(objects,frameheight,totalheight,balance)
         goal = balanced_height
     end
     local obj,head,newhead
-    -- counter = counter + 1
-    -- viznodelist.nodelist_visualize(obj,string.format("mybox%d.gv",counter))
+
     local ht, prevht
     local finish = false
     local vlist
