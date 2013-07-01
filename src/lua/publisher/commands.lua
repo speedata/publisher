@@ -317,10 +317,10 @@ end
 --- Colors can be in model cmyk or rgb.
 function commands.define_color( layoutxml,dataxml )
     local name  = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
+    local value = publisher.read_attribute(layoutxml,dataxml,"value","rawstring")
     local model = publisher.read_attribute(layoutxml,dataxml,"model","string")
 
-    log("Defining color %q",name)
-    local color = { modell = model }
+    local color = { }
 
     if model=="cmyk" then
         color.c = publisher.read_attribute(layoutxml,dataxml,"c","number")
@@ -329,13 +329,37 @@ function commands.define_color( layoutxml,dataxml )
         color.k = publisher.read_attribute(layoutxml,dataxml,"k","number")
         color.pdfstring = string.format("%g %g %g %g k %g %g %g %g K", color.c/100, color.m/100, color.y/100, color.k/100,color.c/100, color.m/100, color.y/100, color.k/100)
     elseif model=="rgb" then
-        color.r = publisher.read_attribute(layoutxml,dataxml,"r","number")
+        color.r = publisher.read_attribute(layoutxml,dataxml,"r","number") / 100
+        color.g = publisher.read_attribute(layoutxml,dataxml,"g","number") / 100
+        color.b = publisher.read_attribute(layoutxml,dataxml,"b","number") / 100
+        color.pdfstring = string.format("%g %g %g rg %g %g %g RG", color.r, color.g, color.b, color.r,color.g, color.b)
+    elseif model=="gray" then
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number")
-        color.b = publisher.read_attribute(layoutxml,dataxml,"b","number")
-        color.pdfstring = string.format("%g %g %g rg %g %g %g RG", color.r/100, color.g/100, color.b/100, color.r/100,color.g/100, color.b/100)
+        color.pdfstring = string.format("%g g %g G",color.g/100,color.g/100)
+    elseif value then
+        local r,g,b
+        if #value == 7 then
+            model = "rgb"
+            r,g,b = string.match(value,"#?(%x%x)(%x%x)(%x%x)")
+            color.r = math.round(tonumber(r,16) / 255, 3)
+            color.g = math.round(tonumber(g,16) / 255, 3)
+            color.b = math.round(tonumber(b,16) / 255, 3)
+            color.pdfstring = string.format("%g %g %g rg %g %g %g RG", color.r, color.g, color.b, color.r,color.g, color.b)
+        elseif #value == 4 then
+            model = "rgb"
+            r,g,b = string.match(value,"#?(%x)(%x)(%x)")
+            color.r = math.round(tonumber(r,16) / 15, 3)
+            color.g = math.round(tonumber(g,16) / 15, 3)
+            color.b = math.round(tonumber(b,16) / 15, 3)
+            color.pdfstring = string.format("%g %g %g rg %g %g %g RG", color.r, color.g, color.b, color.r,color.g, color.b)
+        end
     else
         err("Unknown color model: %s",model or "?")
     end
+
+    log("Defining color %q",name)
+    color.model = model
+
     publisher.colortable[#publisher.colortable + 1] = name
     color.index = #publisher.colortable
     publisher.colors[name]=color
@@ -646,6 +670,7 @@ function commands.image( layoutxml,dataxml )
     local max_box_intern = box_lookup[max_box] or "crop"
 
     publisher.setup_page()
+    width = width or xpath.get_variable("__maxwidth")
 
     local width_sp, height_sp
     if width and not tonumber(width) then
@@ -978,6 +1003,59 @@ function commands.options( layoutxml,dataxml )
     end
 end
 
+
+function commands.output( layoutxml,dataxml )
+    local area = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
+
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    area = area or publisher.default_areaname
+    local last_area = publisher.xpath.get_variable("__area")
+    publisher.xpath.set_variable("__area",area)
+
+    local current_maxwidth = xpath.get_variable("__maxwidth")
+    xpath.set_variable("__maxwidth", publisher.current_grid:number_of_columns(area))
+
+    publisher.setup_page()
+    for i=1,#tab do
+        local contents = publisher.element_contents(tab[i])
+
+        local parameters
+        local more_to_follow
+        local obj
+        local maxht,row
+        local objcount = 0
+        while true do
+            objcount = objcount + 1
+            publisher.setup_page()
+            maxht, row = publisher.get_remaining_height(area)
+            current_grid = publisher.current_grid
+            current_row = publisher.current_grid:current_row(area)
+
+            parameters = {
+                area = area,
+                maxheight = maxht,
+                width = current_grid:number_of_columns(area) * current_grid.gridwidth,
+                balance = contents.balance,
+            }
+
+            obj,state,more_to_follow = contents.push(parameters,state)
+            if obj == nil then
+                break
+            else
+                publisher.output_at(obj,1,row,true,area,nil,nil)
+                if more_to_follow then
+                    publisher.next_area(area)
+                end
+            end
+        end
+    end
+    -- reset the current maxwidth
+    xpath.set_variable("__maxwidth",current_maxwidth)
+
+    publisher.xpath.set_variable("__area",last_area)
+end
+
+
 --- PageFormat
 --- ----------
 --- Set the dimensions of the page
@@ -1008,7 +1086,7 @@ function commands.pagetype(layoutxml,dataxml)
         end
     end
     -- assert(type(test())=="boolean")
-    publisher.masterpages[#publisher.masterpages + 1] = { ist_seitentyp = test, res = tmp_tab, name = pagetypename,ns=layoutxml[".__ns"] }
+    publisher.masterpages[#publisher.masterpages + 1] = { is_pagetype = test, res = tmp_tab, name = pagetypename,ns=layoutxml[".__ns"] }
 end
 
 --- Paragraph
@@ -1893,6 +1971,44 @@ function commands.td( layoutxml,dataxml )
     if tab["padding-left"]   then tab.padding_left   = tex.sp(tab["padding-left"])   end
     if tab["padding-right"]  then tab.padding_right  = tex.sp(tab["padding-right"])  end
     return tab
+end
+
+function commands.text(layoutxml,dataxml)
+    local balance = publisher.read_attribute(layoutxml,dataxml,"balance",   "rawstring")
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    tab.balance = balance
+    -- push returns
+    -- obj, state, more_to_follow
+    tab.push = function(parameter,state)
+            if not state then
+                -- called the first time
+                state = {}
+
+                if balance == "auto" then
+                    state.balance = publisher.current_grid:number_of_frames(parameter.area)
+                elseif balance == nil then
+                    state.balance =  1
+                else
+                    state.balance = tonumber(tab.balance)
+                end
+                local objects = {}
+                state.total_height = 0
+                state.objects = objects
+                for i=1,#tab do
+                    local contents = publisher.element_contents(tab[i])
+                    objects[#objects + 1] = contents:format(parameter.width)
+                    state.total_height = state.total_height + objects[#objects].height
+                end
+            end
+            if #state.objects > 0 then
+                local obj
+                obj = paragraph.vsplit(state.objects,parameter.maxheight,state.total_height, state.balance)
+                return obj,state, #state.objects > 0
+            else
+                return nil,nil, false
+            end
+        end
+   return tab
 end
 
 --- Textblock

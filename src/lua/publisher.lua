@@ -111,20 +111,20 @@ options = {
 -- a hash with keys contents (a nodelist) and raster (grid).
 groups   = {}
 
-colors    = { Schwarz = { modell="grau", g = "0", pdfstring = " 0 G 0 g " }, black = { modell="grau", g = "0", pdfstring = " 0 G 0 g " } }
+colors    = { Schwarz = { model="grau", g = "0", pdfstring = " 0 G 0 g " }, black = { model="grau", g = "0", pdfstring = " 0 G 0 g " } }
 colortable = {}
 data_dispatcher = {}
 user_defined_functions = { last = 0}
 markers = {}
 
--- die aktuelle Gruppe
+-- We will have to remember the current group and grid
 current_group = nil
 current_grid = nil
 
 
 -- The array 'masterpages' has tables similar to these:
--- { ist_seitentyp = test, res = tab, name = pagetypename }
--- where `ist_seitentyp` is an xpath expression to be evaluated,
+-- { is_pagetype = test, res = tab, name = pagetypename }
+-- where `is_pagetype` is an xpath expression to be evaluated,
 -- `res` is a table with layoutxml instructions
 -- `name` is a string.
 masterpages = {}
@@ -224,6 +224,7 @@ local dispatch_table = {
     NextRow                 = commands.next_row,
     Ol                      = commands.ol,
     Options                 = commands.options,
+    Output                  = commands.output,
     Pageformat              = commands.page_format,
     Pagetype                = commands.pagetype,
     Paragraph               = commands.paragraph,
@@ -249,6 +250,7 @@ local dispatch_table = {
     Tablerule               = commands.tablerule,
     Td                      = commands.td,
     Textblock               = commands.textblock,
+    Text                    = commands.text,
     Tr                      = commands.tr,
     U                       = commands.underline,
     Ul                      = commands.ul,
@@ -378,7 +380,7 @@ function dothings()
 
     --- The default page type has 1cm margin
     local onecm=tex.sp("1cm")
-    masterpages[1] = { ist_seitentyp = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Seite",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
+    masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Seite",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
 
     --- Both the data and the layout instructions are written in XML.
     local layoutxml = load_xml(arg[2],"layout instructions")
@@ -634,12 +636,12 @@ function output_at( nodelist, x,y,allocate,area,valign,allocate_matrix)
 end
 
 --- Return the XML structure that is stored at &lt;pagetype>. For every pagetype
---- in the table "masterpages" the function ist_seitentyp() gets called-
+--- in the table "masterpages" the function is_pagetype() gets called-
 function detect_pagetype()
     local ret = nil
     for i=#masterpages,1,-1 do
         local seitentyp = masterpages[i]
-        if xpath.parse(nil,seitentyp.ist_seitentyp,seitentyp.ns) == true then
+        if xpath.parse(nil,seitentyp.is_pagetype,seitentyp.ns) == true then
             log("Page of type %q created",seitentyp.name or "<detect_pagetype>")
             ret = seitentyp.res
             return ret
@@ -1964,6 +1966,15 @@ function define_default_fontfamily()
     fam.bolditalicscript = tmp
     fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
     fonts.lookup_fontfamily_name_number["text"]=#fonts.lookup_fontfamily_number_instance
+end
+
+
+function get_remaining_height(area)
+    local areaheight = current_grid:number_of_rows(area) * current_grid.gridheight
+    local remaining_height, row
+    row = current_grid:current_row(area)
+    remaining_height = math.min(current_grid:remaining_height_sp(nil,area),areaheight)
+    return remaining_height,row
 end
 
 

@@ -249,4 +249,85 @@ function Paragraph:format(width_sp, default_textformat_name)
     return nodelist
 end
 
+require("viznodelist")
+counter = counter or 0
+
+function Paragraph.vsplit(objects,frameheight,totalheight,balance)
+    local balanced_height = totalheight / balance
+    local goal
+    if balanced_height > frameheight then
+        goal = frameheight
+    else
+        goal = balanced_height
+    end
+    local obj,head,newhead
+    -- counter = counter + 1
+    -- viznodelist.nodelist_visualize(obj,string.format("mybox%d.gv",counter))
+    local ht, prevht
+    local finish = false
+    local vlist
+    ht = 0
+    -- The outer loop is when we end in the middle of the area and perhaps
+    -- there is more material to be placed into that area
+    while true do
+        if #objects == 0 then
+            break
+        end
+        obj = table.remove(objects,1)
+        vlist = vlist or obj
+        if vlist ~= obj then
+            -- next material on the area
+            head.next = obj.list
+            obj.list.prev = head
+        end
+        head = obj.list
+        newhead = node.copy(obj)
+        while true do
+            prevht = ht
+            if head.id == publisher.hlist_node then
+                ht = ht + head.height + head.depth
+            elseif head.id == publisher.glue_node then
+                -- ignore for now
+            else
+                w("unknown node: %d",head.id)
+            end
+            if head.next == nil then
+                prevht = ht
+                break
+            end
+            if ht > goal then
+                if goal == balanced_height then
+                    -- The first columns should have "one more"
+                    head = head.next
+                    if head.id == publisher.hlist_node then
+                        ht = ht + head.height + head.depth
+                    elseif head.id == publisher.glue_node then
+                        -- ignore for now
+                    else
+                        w("unknown node: %d",head.id)
+                    end
+                    prevht = ht
+                end
+                -- oh well, we are too high now.
+                -- put this hlist and all of the following in the new head
+                head.prev.next = nil
+                head.prev = nil
+                newhead.list = head
+                table.insert(objects,1,newhead)
+                finish = true
+                break
+            else
+                -- good, keep going on
+                head = head.next
+            end
+        end
+        vlist.height = prevht
+        vlist.depth = 0
+
+        if finish then break end
+    end
+    return vlist
+    -- body
+end
+
 return Paragraph

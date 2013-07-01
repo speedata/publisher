@@ -68,6 +68,7 @@
     <optional><ref name="e_LoadDataset"/></optional>
     <optional><ref name="e_SaveDataset"/></optional>
     <optional><ref name="e_PlaceObject"/></optional>
+    <optional><ref name="e_Output"/></optional>
     <optional><ref name="e_Switch"/></optional>
     <optional><ref name="e_ForAll"/></optional>
     <optional><ref name="e_While"/></optional>
@@ -405,25 +406,30 @@
 
   <define name="e_DefineColor">
      <element name="DefineColor">
-       <a:documentation docid="definecolor">Defines a color with the given name in the attribute ›name‹. Supported are two different models: »rgb« and »cmyk«. Values must be between 0 adn 100.</a:documentation>
+       <a:documentation docid="definecolor"/>
        <ref name="a_xmlid"/>
        <attribute name="name"><data type="string"/></attribute>
        <choice>
          <group>
            <attribute name="model">
-             <a:documentation docid="definecolor/model">The color model: ›cmyk‹ or ›rgb‹.</a:documentation><value>rgb</value></attribute>
+             <a:documentation docid="definecolor/model"/>
+             <value>rgb</value>
+           </attribute>
            <attribute name="r">
              <a:documentation docid="definecolor/r">Value for red (between 0 and 100)</a:documentation>
            </attribute>
            <attribute name="g">
-             <a:documentation docid="definecolor/g">Value for green (between 0 and 100)</a:documentation>
+             <a:documentation docid="definecolor/rgb/g">Value for green (between 0 and 100)</a:documentation>
            </attribute>
            <attribute name="b">
              <a:documentation docid="definecolor/b">Value for blue (between 0 and 100)</a:documentation>
            </attribute>
          </group>
          <group>
-           <attribute name="model"><value>cmyk</value></attribute>
+           <attribute name="model">
+             <a:documentation docid="definecolor/model"/>
+             <value>cmyk</value>
+           </attribute>
            <attribute name="c">
              <a:documentation docid="definecolor/c">Value for cyan (between 0 and 100)</a:documentation>
            </attribute>
@@ -436,6 +442,18 @@
            <attribute name="k">
              <a:documentation docid="definecolor/k">Value for black (key, between 0 and 100)</a:documentation>
            </attribute>
+         </group>
+         <group>
+           <attribute name="model">
+             <a:documentation docid="definecolor/model"/>
+             <value>gray</value>
+           </attribute>
+           <attribute name="g">
+             <a:documentation docid="definecolor/gray/g"/>
+           </attribute>
+         </group>
+         <group>
+           <attribute name="value"></attribute>
          </group>
        </choice>
      </element>
@@ -758,6 +776,17 @@
     </element>
   </define>
 
+  <define name="e_Output">
+    <element name="Output">
+      <optional><attribute name="area"/></optional>
+      <element name="Text">
+        <oneOrMore>
+          <ref name="e_Paragraph"/>
+        </oneOrMore>
+      </element>
+    </element>
+  </define>
+  
   <define name="e_PlaceObject">
     <element name="PlaceObject">
       <a:documentation docid="placeobject">Puts an object (image, text,... ) onto the page or into a group.</a:documentation>

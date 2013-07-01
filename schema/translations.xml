@@ -53,6 +53,7 @@
      <element key="Ol" en="Ol" de="Ol"/>
      <element key="Options" en="Options" de="Optionen"/>
       <element key="Otherwise" en="Otherwise" de="Sonst"/>
+      <element key="Output" en="Output" de="Ausgabe" />
       <element key="Pageformat" en="Pageformat" de="Seitenformat"/>
       <element key="Pagetype" en="Pagetype" de="Seitentyp"/>
       <element key="Paragraph" en="Paragraph" de="Absatz"/>
@@ -80,6 +81,7 @@
       <element key="Tablehead" en="Tablehead" de="Tabellenkopf"/>
       <element key="Tablerule" en="Tablerule" de="Tlinie"/>
       <element key="Td" en="Td" de="Td"/>
+      <element key="Text" en="Text" de="Text"/>
       <element key="Textblock" en="Textblock" de="Textblock"/>
       <element key="Tr" en="Tr" de="Tr"/>
       <element key="U" en="U" de="U"/>
@@ -100,6 +102,7 @@
     <value key="bottom" context="*" en="bottom" de="bottom"/>
     <value key="middle" context="*" en="middle" de="middle"/>
     <value key="cmyk" context="*" en="cmyk" de="cmyk"/>
+    <value key="gray" context="*" en="gray" de="graustufen"/>
     <value key="center" context="*" en="center" de="zentriert"/>
     <value key="cropbox" context="*" en="cropbox" de="cropbox"/>
     <value key="German" context="*" en="German" de="Deutsch"/>
@@ -141,6 +144,7 @@
       <attribute key="b" en="b" de="b"/>
       <attribute key="backgroundcolor" en="backgroundcolor" de="hintergrundfarbe"/>
       <attribute key="background" en="background" de="hintergrund"/>
+      <attribute key="balance" en="balance" de="ausgleich" />
       <attribute key="bleed" en="bleed" de="beschnitt"/>
       <attribute key="border-bottom" en="border-bottom" de="border-bottom"/>
       <attribute key="border-bottom-color"
@@ -244,6 +248,7 @@
       <attribute key="trace" en="trace" de="trace"/>
       <attribute key="trim" en="trim" de="beschnittzugabe"/>
       <attribute key="type" en="type" de="typ" />
+      <attribute key="value" en="value" de="wert" />
       <attribute key="valign" en="valign" de="valign"/>
      <attribute key="version" en="version" de="version"/>
       <attribute key="variable" en="variable" de="variable"/>
@@ -552,18 +557,18 @@
          <de>Wird ein Datensatz zusammen mit einem Modus definiert, dann wird er nur dann ausgeführt, wenn »BearbeiteKnoten« ebenfalls mit diesem Modus aufgerufen wurde.</de>
       </documentation>
       <documentation docid="definecolor">
-         <en>Defines a color with the given name in the attribute ›name‹. Supported are two different models: »rgb« and »cmyk«. Values must be between 0 adn 100.</en>
-         <de>Definiert eine Farbe mit dem Namen aus dem Attribut »name«. Es gibt zwei zulässige Modelle, »rgb« und »cmyk«. Die Wertangaben liegen zwischen 0 und 100.</de>
+         <en>Defines a color with the given name in the attribute ›name‹. Supported are these models: »rgb«, »cmyk« and »gray«. Values must be between 0 and 100.</en>
+         <de>Definiert eine Farbe mit dem Namen aus dem Attribut »name«. Es gibt diese Modelle, »rgb«, »cmyk« und »graustufen«. Die Wertangaben liegen zwischen 0 und 100.</de>
       </documentation>
       <documentation docid="definecolor/model">
-         <en>The color model: ›cmyk‹ or ›rgb‹.</en>
-         <de>Es gibt zwei zulässige Modelle: ›cmyk‹ und ›rgb‹.</de>
+         <en>The color model: ›cmyk‹, ›rgb‹ or ›gray‹.</en>
+         <de>Farbmodell: ›cmyk‹,›rgb‹ oder ›graustufen‹.</de>
       </documentation>
       <documentation docid="definecolor/r">
          <en>Value for red (between 0 and 100)</en>
          <de>Wert für Rot (zwischen 0 und 100)</de>
       </documentation>
-      <documentation docid="definecolor/g">
+      <documentation docid="definecolor/rgb/g">
          <en>Value for green (between 0 and 100)</en>
          <de>Wert für Grün (zwischen 0 und 100)</de>
       </documentation>
@@ -587,7 +592,11 @@
          <en>Value for black (key, between 0 and 100)</en>
          <de>Wert für Schwarz (key, zwischen 0 und 100)</de>
       </documentation>
-      <documentation docid="definetextformat/rows">
+     <documentation docid="definecolor/gray/g">
+       <en>Value for gray (between 0 and 100)</en>
+       <de>Wert für Grau (zwischen 0 und 100)</de>
+     </documentation>
+     <documentation docid="definetextformat/rows">
          <en>Number of rows for indentation or (if negative) number of rows not indented lines</en>
          <de>Anzahl der Zeilen mit Einzug oder (wenn negativ) Anzahl der nicht eingezogenen Zeilen</de>
       </documentation>

@@ -30,6 +30,10 @@ end
 
 -- Return the remaining height in the area in scaled points
 function remaining_height_sp( self,row,areaname )
+    if not self.positioning_frames[areaname] then
+        err("Area %q unknown, using page",areaname)
+        areaname = publisher.default_areaname
+    end
     row = row or self:current_row(areaname)
     local thisframe = self.positioning_frames[areaname][self:framenumber(areaname)]
     local overshoot = math.max( (thisframe.height - thisframe["row"] + 1)  * self.gridheight - tex.pageheight ,0)
@@ -58,25 +62,34 @@ end
 function set_current_row( self,row,areaname )
     assert(self)
     local areaname = areaname or publisher.default_areaname
+    if not self.positioning_frames[areaname] then
+        err("Area %q unknown, using page",areaname)
+        areaname = publisher.default_areaname
+    end
     local area = self.positioning_frames[areaname]
-    assert(area,string.format("Area %q not known",tostring(areaname)))
     area.current_row = row
 end
 
 function set_current_column( self,column,areaname )
     assert(self)
     local areaname = areaname or publisher.default_areaname
+    if not self.positioning_frames[areaname] then
+        err("Area %q unknown, using page",areaname)
+        areaname = publisher.default_areaname
+    end
     local area = self.positioning_frames[areaname]
-    assert(area,string.format("Area %q not known",tostring(areaname)))
     area.current_column = column
 end
 
 function number_of_rows(self,areaname)
     assert(self)
     local areaname = areaname or publisher.default_areaname
+    if not self.positioning_frames[areaname] then
+        err("Area %q unknown, using page",areaname)
+        areaname = publisher.default_areaname
+    end
     local current_frame = self:framenumber(areaname)
     local area = self.positioning_frames[areaname]
-    assert(area,string.format("Area %q not known",tostring(areaname)))
     local height = area[current_frame].height
     return height
 end
@@ -84,9 +97,12 @@ end
 function number_of_columns(self,areaname)
     assert(self)
     local areaname = areaname or publisher.default_areaname
+    if not self.positioning_frames[areaname] then
+        err("Area %q unknown, using page",areaname)
+        areaname = publisher.default_areaname
+    end
     local current_frame = self:framenumber(areaname)
     local area = self.positioning_frames[areaname]
-    assert(area,string.format("Area %q not known",tostring(areaname)))
     local width = area[current_frame].width
     return width
 end
@@ -243,11 +259,16 @@ function find_suitable_row( self,column, width,height,areaname)
         frame_margin_left, frame_margin_top = 0,0
     else
         local area = self.positioning_frames[areaname]
-        assert(area,string.format("Area %q not known",tostring(areaname)))
-        -- Todo: find the correct block becuse they can be of different width/height
-        local block = area[self:framenumber(areaname)]
-        frame_margin_left = block.column - 1
-        frame_margin_top = block.row - 1
+        if not self.positioning_frames[areaname] then
+            err("Area %q unknown, using page",areaname)
+            areaname = publisher.default_areaname
+            frame_margin_left, frame_margin_top = 0,0
+        else
+            -- Todo: find the correct block becuse they can be of different width/height
+            local block = area[self:framenumber(areaname)]
+            frame_margin_left = block.column - 1
+            frame_margin_top = block.row - 1
+        end
     end
     -- FIXME: inefficient algorithm
     if self:number_of_rows(areaname) < self:current_row(areaname) + height - 1 then return nil end
@@ -367,14 +388,19 @@ function position_grid_cell(self,x,y,areaname,wd,ht,valign)
     if areaname == publisher.default_areaname then
         frame_margin_left, frame_margin_top = 0,0
     else
-        local area = self.positioning_frames[areaname]
-        assert(area,string.format("Area %q not known",tostring(areaname)))
-        local current_frame = area.current_frame or 1
-        local current_row = self:current_row(areaname)
-        -- todo: find the correct block, the blocks can be of different width / height
-        local block = area[current_frame]
-        frame_margin_left = block.column - 1
-        frame_margin_top = block.row - 1
+        if not self.positioning_frames[areaname] then
+            err("Area %q unknown, using page",areaname)
+            areaname = publisher.default_areaname
+            frame_margin_left, frame_margin_top = 0,0
+        else
+            local area = self.positioning_frames[areaname]
+            local current_frame = area.current_frame or 1
+            local current_row = self:current_row(areaname)
+            -- todo: find the correct block, the blocks can be of different width / height
+            local block = area[current_frame]
+            frame_margin_left = block.column - 1
+            frame_margin_top = block.row - 1
+        end
     end
     x_sp = (frame_margin_left + x - 1) * self.gridwidth + self.margin_left + self.extra_margin
     y_sp = (frame_margin_top  + y - 1) * self.gridheight  + self.margin_top  + self.extra_margin

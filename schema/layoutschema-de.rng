@@ -66,6 +66,7 @@
     <optional><ref name="e_LoadDataset"/></optional>
     <optional><ref name="e_SaveDataset"/></optional>
     <optional><ref name="e_PlaceObject"/></optional>
+    <optional><ref name="e_Output"/></optional>
     <optional><ref name="e_Switch"/></optional>
     <optional><ref name="e_ForAll"/></optional>
     <optional><ref name="e_While"/></optional>
@@ -407,25 +408,30 @@
 
   <define name="e_DefineColor">
      <element name="DefiniereFarbe">
-       <a:documentation docid="definecolor">Definiert eine Farbe mit dem Namen aus dem Attribut »name«. Es gibt zwei zulässige Modelle, »rgb« und »cmyk«. Die Wertangaben liegen zwischen 0 und 100.</a:documentation>
+       <a:documentation docid="definecolor">Definiert eine Farbe mit dem Namen aus dem Attribut »name«. Es gibt diese Modelle, »rgb«, »cmyk« und »graustufen«. Die Wertangaben liegen zwischen 0 und 100.</a:documentation>
        <ref name="a_xmlid"/>
        <attribute name="name"><data type="string"/></attribute>
        <choice>
          <group>
            <attribute name="modell">
-             <a:documentation docid="definecolor/model">Es gibt zwei zulässige Modelle: ›cmyk‹ und ›rgb‹.</a:documentation><value>rgb</value></attribute>
+             <a:documentation docid="definecolor/model">Farbmodell: ›cmyk‹,›rgb‹ oder ›graustufen‹.</a:documentation>
+             <value>rgb</value>
+           </attribute>
            <attribute name="r">
              <a:documentation docid="definecolor/r">Wert für Rot (zwischen 0 und 100)</a:documentation>
            </attribute>
            <attribute name="g">
-             <a:documentation docid="definecolor/g">Wert für Grün (zwischen 0 und 100)</a:documentation>
+             <a:documentation docid="definecolor/rgb/g">Wert für Grün (zwischen 0 und 100)</a:documentation>
            </attribute>
            <attribute name="b">
              <a:documentation docid="definecolor/b">Wert für Blau (zwischen 0 und 100)</a:documentation>
            </attribute>
          </group>
          <group>
-           <attribute name="modell"><value>cmyk</value></attribute>
+           <attribute name="modell">
+             <a:documentation docid="definecolor/model">Farbmodell: ›cmyk‹,›rgb‹ oder ›graustufen‹.</a:documentation>
+             <value>cmyk</value>
+           </attribute>
            <attribute name="c">
              <a:documentation docid="definecolor/c">Wert für Türkis (cyan, zwischen 0 und 100)</a:documentation>
            </attribute>
@@ -438,6 +444,18 @@
            <attribute name="k">
              <a:documentation docid="definecolor/k">Wert für Schwarz (key, zwischen 0 und 100)</a:documentation>
            </attribute>
+         </group>
+         <group>
+           <attribute name="modell">
+             <a:documentation docid="definecolor/model">Farbmodell: ›cmyk‹,›rgb‹ oder ›graustufen‹.</a:documentation>
+             <value>graustufen</value>
+           </attribute>
+           <attribute name="g">
+             <a:documentation docid="definecolor/gray/g">Wert für Grau (zwischen 0 und 100)</a:documentation>
+           </attribute>
+         </group>
+         <group>
+           <attribute name="wert"/>
          </group>
        </choice>
      </element>
@@ -768,6 +786,17 @@
     </element>
   </define>
 
+  <define name="e_Output">
+    <element name="Ausgabe">
+      <optional><attribute name="bereich"/></optional>
+      <element name="Text">
+        <oneOrMore>
+          <ref name="e_Paragraph"/>
+        </oneOrMore>
+      </element>
+    </element>
+  </define>
+  
   <define name="e_PlaceObject">
     <element name="ObjektAusgeben">
       <a:documentation docid="placeobject">Gibt ein Objekt (Bild,..) aus.</a:documentation>
