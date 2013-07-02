@@ -14,19 +14,42 @@
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">Group</code></h1>
          <h2>Description</h2>
-         <p></p>
-         <p>Allowed attributes: <span class="tt"><a href="#name">name</a></span><br>Child elements: <a href="contents.html">Contents</a><br>Parent elements: <a href="record.html">Record</a></p>
+         <p>Create a virtual page that behaves like a real page but is not placed into the PDF.</p>
+         <p>Allowed attributes: <span class="tt"><a href="#name">name</a></span><br>Child elements: <a href="contents.html">Contents</a>, <a href="grid.html">Grid</a><br>Parent elements: <a href="record.html">Record</a></p>
          <h3>Attributes</h3>
          <dl>
             <dt><a name="name"></a><span class="tt">name</span> (string)
             </dt>
             <dd>
                
-               <p></p>
+               <p>Name of the group that is created.</p>
                
             </dd>
          </dl>
-         <h2>See also</h2>
+         <h2>Example</h2><pre class="syntax xml">&lt;Record element="data"&gt;
+  &lt;Group name="Some group"&gt;
+    &lt;!-- Optional, taken from the current page --&gt;
+    &lt;Grid width="10mm" height="10mm"/&gt;
+    &lt;Contents&gt;
+      &lt;PlaceObject column="3" row="2"&gt;
+        &lt;Textblock width="14"&gt;
+          &lt;Paragraph&gt;
+            &lt;Value&gt;Text&lt;/Value&gt;
+          &lt;/Paragraph&gt;
+        &lt;/Textblock&gt;
+      &lt;/PlaceObject&gt;
+      &lt;PlaceObject column="2" row="4"&gt;
+        &lt;Textblock width="14"&gt;
+          &lt;Paragraph&gt;
+            &lt;Value&gt;Nächster Text&lt;/Value&gt;
+          &lt;/Paragraph&gt;
+        &lt;/Textblock&gt;
+      &lt;/PlaceObject&gt;
+    &lt;/Contents&gt;
+  &lt;/Group&gt;
+  &lt;PlaceObject groupname="Some group" column="1" row="1" /&gt;
+&lt;/Record&gt;
+</pre><h2>See also</h2>
          <a href="placeobject.html">PlaceObject</a>
          <a href="contents.html">Contents</a>
          
@@ -68,6 +91,7 @@
             <li><a href="include.html">Include</a></li>
             <li><a href="italic.html">Italic</a></li>
             <li><a href="layout.html">Layout</a></li>
+            <li><a href="li.html">Li</a></li>
             <li><a href="loaddataset.html">LoadDataset</a></li>
             <li><a href="loadfontfile.html">LoadFontfile</a></li>
             <li><a href="loop.html">Loop</a></li>
@@ -77,6 +101,7 @@
             <li><a href="newpage.html">NewPage</a></li>
             <li><a href="nextframe.html">NextFrame</a></li>
             <li><a href="nextrow.html">NextRow</a></li>
+            <li><a href="ol.html">Ol</a></li>
             <li><a href="options.html">Options</a></li>
             <li><a href="otherwise.html">Otherwise</a></li>
             <li><a href="pageformat.html">Pageformat</a></li>
@@ -107,6 +132,7 @@
             <li><a href="tr.html">Tr</a></li>
             <li><a href="u.html">U</a></li>
             <li><a href="url.html">URL</a></li>
+            <li><a href="ul.html">Ul</a></li>
             <li><a href="value.html">Value</a></li>
             <li><a href="while.html">While</a></li>
          </ul>

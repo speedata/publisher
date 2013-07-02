@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../css/normal.css" type="text/css" />
+<link rel="stylesheet" href="../css/pygments.css" type="text/css" />
+<link rel="stylesheet" href="../css/colorbox.css" type="text/css" />
+<script src="../javascript/jquery.min.js" ></script>
+<script src="../javascript/jquery.colorbox-min.js" ></script>
+<script>
+  $(document).ready(function(){
+     $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+  });
+</script>
+<title>Command line options</title>
+</head>
+<body>
+<div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"></a></div>
+	<h1>Running the speedata publisher on the command line</h1>
+<pre>sp --help
+Usage: [parameter] command
+-h, --help                   Show this help
+    --autoopen               Open the PDF file (MacOS X and Linux only)
+    --data=NAME              Name of the XML data file. Defaults to
+                             'data.xml'. Use '-' for STDIN
+    --dummy                  Don't read a data file, use '&lt;data /&gt;' as input
+-x, --extra-dir=DIR          Additional directory for file search
+    --filter=FILTER          Run XPROC filter before publishing starts
+    --grid                   Display background grid. Disable with --no-grid
+    --[no-]local             Add local directory to the search path. Default
+                             is true
+    --layout=NAME            Name of the layout file. Defaults to 'layout.xml'
+    --jobname=NAME           The name of the resulting PDF file (without
+                             extension), default is 'publisher'
+    --outputdir=DIR          Copy PDF and protocol to this directory
+    --runs=NUM               Number of publishing runs 
+    --startpage=NUM          The first page number
+    --trace                  Show debug messages and some tracing PDF output
+-v, --var=VAR=VALUE          Set a variable for the publishing run
+    --verbose                Print a bit of debugging output
+    --version                Show version information
+    --wd=DIR                 Change working directory
+    --xml                    Output as (pseudo-)XML (for list-fonts)
+  
+Commands
+      list-fonts             List installed fonts (use together with --xml
+                             for copy/paste)
+      clean                  Remove publisher generated files
+      compare                Compare files for quality assurance
+      doc                    Open documentation
+      watch                  Start watchdog / hotfolder
+      run                    Start publishing (default)</pre>
+<h2>Description of the command line parameters</h2>
+<dl>
+	<dt><code>--autoopen</code></dt>
+	<dd>Opens the <span class="caps">PDF</span> file after running the publisher. Can also be set in the <a href="configuration.html">configuration file</a>.</dd>
+	<dt><code>--data=NAME</code></dt>
+	<dd>Name of the data <span class="caps">XML</span> file. Default is  <code>data.xml</code>. Can be set in the <a href="configuration.html">configuration file</a>. If the file name is a dash (<code>-</code>), the speedata publisher reads the <span class="caps">XML</span> data from standard input (<span class="caps">STDIN</span>).</dd>
+	<dt><code>--dummy</code></dt>
+	<dd>Only read the layout rules. A simple data file is assumed which only contains one element: <code>&lt;data /&gt;</code>. This is for quick testing of layout files.</dd>
+	<dt><code>--filter=FILTER</code></dt>
+	<dd>Run the given <span class="caps">XPROC</span> file.</dd>
+	<dt><code>--grid</code></dt>
+	<dd>Show the grid. Can be turned off with <code>--no-grid</code>.  Can be configured in the layout <span class="caps">XML</span> file: <a href="../commands-en/options.html">Layout</a>.</dd>
+	<dt><code>--layout=NAME</code></dt>
+	<dd>Name of the layout <span class="caps">XML</span> file. Default is <code>layout.xml</code>. Can be <a href="configuration.html">configured</a>.</dd>
+	<dt><code>--[no-]local</code></dt>
+	<dd>The current directory is (not) added to the search path recursively. The default is <code>--local</code> which means that the currenct directory and all its subdirectories is added to the search path. This allows you to run the publisher in any directory and put your assets in a subdirectory.</dd>
+	<dt><code>--jobname=NAME</code></dt>
+	<dd>The name of the output file. Default is <code>publisher</code>. The extension (<code>.pdf</code>) is added automatcially.</dd>
+	<dt><code>--outputdir=DIR</code></dt>
+	<dd>Name of the directory of the resulting file. The directory will be created if necessary.</dd>
+	<dt><code>--runs=NUM</code></dt>
+	<dd>The number of passes. Normally the publisher will process a file only once, but more passes can be necessary if intermediate files are created for generating a table of contents or other document dependent data.</dd>
+	<dt><code>--startpage=NUM</code></dt>
+	<dd>The number of the first page.</dd>
+	<dt><code>-v</code>, <code>--var=value</code></dt>
+	<dd>Passes additional variables to the publisher run. The variables can be accessed as usual with <code>select="$variable"</code>.</dd>
+	<dt><code>-x</code>, <code>--extra-dir</code></dt>
+	<dd>Puts the given directory into the search path. All assets (images, fonts, <span class="caps">XML</span> data and layout rules) must be found in the seach path, which will be traversed recursively. This parameter can be given multiple times and preset in the <a href="configuration.html">configuration file</a>.</dd>
+	<dt><code>--verbose</code></dt>
+	<dd>More inforation than necessary.</dd>
+	<dt><code>--wd=DIR</code></dt>
+	<dd>Change working directory. Exactly the same as if you&#8217;d cd into that directory before running <code>sp</code>.</dd>
+	<dt><code>--xml</code></dt>
+	<dd>The output of some commands (currently only <code>list-fonts</code>) will be printed in (pseudo) <span class="caps">XML</span>. That way the output can be re-used in the layout <span class="caps">XML</span>.</dd>
+</dl>
+<h2>Commands</h2>
+<dl>
+	<dt><code>list-fonts</code></dt>
+	<dd>Lists all fonts that are found in the search path. Together with <code>--xml</code> the output format can re used in the layout <span class="caps">XML</span>.</dd>
+	<dt><code>compare</code></dt>
+	<dd>Recursivly check a directory for layout changes. See the topic <a href="qualityassurance.html">about quality assurance</a>.</dd>
+	<dt><code>clean</code></dt>
+	<dd>Remove temporary files from the publisher run. Keeps the <span class="caps">PDF</span> file.</dd>
+	<dt><code>doc</code></dt>
+	<dd>Opens the <span class="caps">HTML</span> documentation.</dd>
+	<dt><code>run</code></dt>
+	<dd>Starts the pseedata publisher (this is the default command).</dd>
+	<dt><code>watch</code></dt>
+	<dd>Runs in internal hotfolder mode.</dd>
+</dl>
+<h3>Example for hotfolder configuration</h3>
+<pre>[hotfolder]
+hotfolder = /home/speedata/hotfolder
+events = layout\.xml:run(runpublisher);data\.xml:run(runpublisher)</pre>
+<dl>
+	<dt><code>hotfolder</code></dt>
+	<dd>Directory to be watched.</dd>
+	<dt><code>events</code></dt>
+	<dd>Entries (separated by a semicolon) in the form <code>pattern:command</code>. The <code>puster</code> is a regular expression. If this pattern matches a file, the command given in the configuration is executed. Currently only external programs can be run. These programs must be given in parentheses. The path to the file will be passed as the first argument. The hotfolder waits until the program is finished and removes the file afterwards.</dd>
+</dl>
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
+<a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language: <a href="../description-de/commandline.html">German</a> 
+</body>
+</html>

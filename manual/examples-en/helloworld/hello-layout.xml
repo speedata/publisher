@@ -1,0 +1,23 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+
+  <Options
+    trace="no"
+    show-grid="no"
+    cutmarks="no"
+    show-gridallocation="no"
+   />
+
+  <Record element="root">
+    <ProcessNode select="elt"/>
+  </Record>
+
+  <Record element="elt">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value select="@greeting" />
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

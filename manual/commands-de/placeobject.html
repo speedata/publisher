@@ -15,7 +15,7 @@
          <h1>Elementname: <code class="syntax xml">ObjektAusgeben</code></h1>
          <h2>Beschreibung</h2>
          <p>Gibt ein rechteckiges Objekt (Bild, Tabelle, Box oder Textblock) aus.</p>
-         <p>Erlaubte Attribute: <span class="tt"><a href="#allocate">belegen</a></span>, <span class="tt"><a href="#area">bereich</a></span>, <span class="tt"><a href="#groupname">gruppenname</a></span>, <span class="tt"><a href="#background">hintergrund</a></span>, <span class="tt"><a href="#hreference">hreferenz</a></span>, <span class="tt"><a href="#rulewidth">linienstärke</a></span>, <span class="tt"><a href="#maxheight">maxhöhe</a></span>, <span class="tt"><a href="#framecolor">rahmenfarbe</a></span>, <span class="tt"><a href="#column">spalte</a></span>, <span class="tt"><a href="#valign">valign</a></span>, <span class="tt"><a href="#row">zeile</a></span><br>Kindelemente: <a href="image.html">Bild</a>, <a href="box.html">Box</a>, <a href="barcode.html">Strichcode</a>, <a href="table.html">Tabelle</a>, <a href="textblock.html">Textblock</a>, <a href="tablerule.html">Tlinie</a><br>Elternelemente: <a href="record.html">Datensatz</a></p>
+         <p>Erlaubte Attribute: <span class="tt"><a href="#allocate">belegen</a></span>, <span class="tt"><a href="#area">bereich</a></span>, <span class="tt"><a href="#groupname">gruppenname</a></span>, <span class="tt"><a href="#background">hintergrund</a></span>, <span class="tt"><a href="#backgroundcolor">hintergrundfarbe</a></span>, <span class="tt"><a href="#hreference">hreferenz</a></span>, <span class="tt"><a href="#rulewidth">linienstärke</a></span>, <span class="tt"><a href="#maxheight">maxhöhe</a></span>, <span class="tt"><a href="#frame">rahmen</a></span>, <span class="tt"><a href="#framecolor">rahmenfarbe</a></span>, <span class="tt"><a href="#column">spalte</a></span>, <span class="tt"><a href="#valign">valign</a></span>, <span class="tt"><a href="#row">zeile</a></span><br>Kindelemente: <a href="image.html">Bild</a>, <a href="box.html">Box</a>, <a href="barcode.html">Strichcode</a>, <a href="table.html">Tabelle</a>, <a href="textblock.html">Textblock</a>, <a href="tablerule.html">Tlinie</a><br>Elternelemente: <a href="record.html">Datensatz</a></p>
          <h3>Attribute</h3>
          <dl>
             <dt><a name="allocate"></a><span class="tt">belegen</span> (›ja‹, ›nein‹ oder ›auto‹, optional)
@@ -48,13 +48,20 @@
                <p>Wenn eine Gruppe ausgegeben werden soll, muss der Name hier angegeben werden.</p>
                
             </dd>
-            <dt><a name="background"></a><span class="tt">hintergrund</span> (›durchgezogen‹, ›ohne‹, optional)
+            <dt><a name="background"></a><span class="tt">hintergrund</span> (ohne, vollständig, optional)
             </dt>
             <dd>
                
-               <p>Es wird ein durchgezogener Rahmen um das Objekt gezeichnet. Zusätzlich muss die Rahmenfarbe
-                  angegeben werden. “ohne”: Es wird kein Rahmen gezeichnet.
+               <p>Erzeugt einen farbigen Hintergrund für das Objekt. Das Attribut ›hintergrundfarbe‹
+                  gibt die Farbe an.
                </p>
+               
+            </dd>
+            <dt><a name="backgroundcolor"></a><span class="tt">hintergrundfarbe</span> (Text, optional)
+            </dt>
+            <dd>
+               
+               <p>Hintergrundfarbe wenn das Objekt mit einer Farbe hinterlegt werden soll.</p>
                
             </dd>
             <dt><a name="hreference"></a><span class="tt">hreferenz</span> ('links' oder 'rechts', optional)
@@ -81,6 +88,15 @@
                   Tabellenumbruch benötigt. Die umbrochenen Tabellen auf den Folgeseiten haben maximal
                   die
                   angegebene Höhe.
+               </p>
+               
+            </dd>
+            <dt><a name="frame"></a><span class="tt">rahmen</span> (›durchgezogen‹, ›ohne‹, optional)
+            </dt>
+            <dd>
+               
+               <p>Es wird ein durchgezogener Rahmen um das Objekt gezeichnet. Zusätzlich muss die Rahmenfarbe
+                  angegeben werden. “ohne”: Es wird kein Rahmen gezeichnet.
                </p>
                
             </dd>
@@ -193,6 +209,7 @@
             <li><a href="layout.html">Layout</a></li>
             <li><a href="emptyline.html">Leerzeile</a></li>
             <li><a href="bookmark.html">Lesezeichen</a></li>
+            <li><a href="li.html">Li</a></li>
             <li><a href="rule.html">Linie</a></li>
             <li><a href="mark.html">Marke</a></li>
             <li><a href="message.html">Nachricht</a></li>
@@ -201,6 +218,7 @@
             <li><a href="regular.html">Normal</a></li>
             <li><a href="nextframe.html">NächsterRahmen</a></li>
             <li class="active"><a href="placeobject.html">ObjektAusgeben</a></li>
+            <li><a href="ol.html">Ol</a></li>
             <li><a href="options.html">Optionen</a></li>
             <li><a href="positioningarea.html">Platzierungsbereich</a></li>
             <li><a href="positioningframe.html">Platzierungsrahmen</a></li>
@@ -231,6 +249,7 @@
             <li><a href="hyphenation.html">Trennvorschlag</a></li>
             <li><a href="u.html">U</a></li>
             <li><a href="url.html">URL</a></li>
+            <li><a href="ul.html">Ul</a></li>
             <li><a href="value.html">Wert</a></li>
             <li><a href="addtolist.html">ZurListeHinzufügen</a></li>
             <li><a href="setvariable.html">Zuweisung</a></li>

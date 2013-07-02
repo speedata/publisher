@@ -15,7 +15,7 @@
          <h1>Elementname: <code class="syntax xml">PlaceObject</code></h1>
          <h2>Description</h2>
          <p>Outputs a rectangular object (image, table, box or textblock).</p>
-         <p>Allowed attributes: <span class="tt"><a href="#allocate">allocate</a></span>, <span class="tt"><a href="#area">area</a></span>, <span class="tt"><a href="#background">background</a></span>, <span class="tt"><a href="#column">column</a></span>, <span class="tt"><a href="#framecolor">framecolor</a></span>, <span class="tt"><a href="#groupname">groupname</a></span>, <span class="tt"><a href="#hreference">hreference</a></span>, <span class="tt"><a href="#maxheight">maxheight</a></span>, <span class="tt"><a href="#row">row</a></span>, <span class="tt"><a href="#rulewidth">rulewidth</a></span>, <span class="tt"><a href="#valign">valign</a></span><br>Child elements: <a href="barcode.html">Barcode</a>, <a href="box.html">Box</a>, <a href="image.html">Image</a>, <a href="table.html">Table</a>, <a href="tablerule.html">Tablerule</a>, <a href="textblock.html">Textblock</a><br>Parent elements: <a href="record.html">Record</a></p>
+         <p>Allowed attributes: <span class="tt"><a href="#allocate">allocate</a></span>, <span class="tt"><a href="#area">area</a></span>, <span class="tt"><a href="#background">background</a></span>, <span class="tt"><a href="#backgroundcolor">backgroundcolor</a></span>, <span class="tt"><a href="#column">column</a></span>, <span class="tt"><a href="#frame">frame</a></span>, <span class="tt"><a href="#framecolor">framecolor</a></span>, <span class="tt"><a href="#groupname">groupname</a></span>, <span class="tt"><a href="#hreference">hreference</a></span>, <span class="tt"><a href="#maxheight">maxheight</a></span>, <span class="tt"><a href="#row">row</a></span>, <span class="tt"><a href="#rulewidth">rulewidth</a></span>, <span class="tt"><a href="#valign">valign</a></span><br>Child elements: <a href="barcode.html">Barcode</a>, <a href="box.html">Box</a>, <a href="image.html">Image</a>, <a href="table.html">Table</a>, <a href="tablerule.html">Tablerule</a>, <a href="textblock.html">Textblock</a><br>Parent elements: <a href="record.html">Record</a></p>
          <h3>Attributes</h3>
          <dl>
             <dt><a name="allocate"></a><span class="tt">allocate</span> ('yes', 'no' or 'auto', optional)
@@ -37,11 +37,18 @@
                </p>
                
             </dd>
-            <dt><a name="background"></a><span class="tt">background</span> ('solid' or 'without', optional)
+            <dt><a name="background"></a><span class="tt">background</span> (full, without, optional)
             </dt>
             <dd>
                
-               <p>Draw a solid frame around the object.</p>
+               <p>Fill the background of the object (full grid cells) with a color, given by backgroundcolor.</p>
+               
+            </dd>
+            <dt><a name="backgroundcolor"></a><span class="tt">backgroundcolor</span> (string, optional)
+            </dt>
+            <dd>
+               
+               <p>Color of the background if ›background‹ is set to ›full‹.</p>
                
             </dd>
             <dt><a name="column"></a><span class="tt">column</span> (number or length, optional)
@@ -49,6 +56,13 @@
             <dd>
                
                <p></p>
+               
+            </dd>
+            <dt><a name="frame"></a><span class="tt">frame</span> ('solid' or 'without', optional)
+            </dt>
+            <dd>
+               
+               <p>Draw a solid frame around the object.</p>
                
             </dd>
             <dt><a name="framecolor"></a><span class="tt">framecolor</span> (string, optional)
@@ -151,6 +165,7 @@
             <li><a href="include.html">Include</a></li>
             <li><a href="italic.html">Italic</a></li>
             <li><a href="layout.html">Layout</a></li>
+            <li><a href="li.html">Li</a></li>
             <li><a href="loaddataset.html">LoadDataset</a></li>
             <li><a href="loadfontfile.html">LoadFontfile</a></li>
             <li><a href="loop.html">Loop</a></li>
@@ -160,6 +175,7 @@
             <li><a href="newpage.html">NewPage</a></li>
             <li><a href="nextframe.html">NextFrame</a></li>
             <li><a href="nextrow.html">NextRow</a></li>
+            <li><a href="ol.html">Ol</a></li>
             <li><a href="options.html">Options</a></li>
             <li><a href="otherwise.html">Otherwise</a></li>
             <li><a href="pageformat.html">Pageformat</a></li>
@@ -190,6 +206,7 @@
             <li><a href="tr.html">Tr</a></li>
             <li><a href="u.html">U</a></li>
             <li><a href="url.html">URL</a></li>
+            <li><a href="ul.html">Ul</a></li>
             <li><a href="value.html">Value</a></li>
             <li><a href="while.html">While</a></li>
          </ul>
