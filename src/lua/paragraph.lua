@@ -235,6 +235,13 @@ function Paragraph:format(width_sp, default_textformat_name)
             nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
         end
         publisher.fonts.post_linebreak(nodelist)
+
+        if current_textformat.bordertop then
+            nodelist.list = publisher.add_rule(nodelist.list,"head",{width = -1073741824, height = current_textformat.bordertop})
+        end
+        if current_textformat.borderbottom then
+            nodelist.list = publisher.add_rule(nodelist.list,"tail",{width = -1073741824, height = current_textformat.borderbottom})
+        end
         objects[i] = nodelist.list
         nodelist.list = nil
         node.free(nodelist)
@@ -246,6 +253,7 @@ function Paragraph:format(width_sp, default_textformat_name)
         objects[i+1].prev = last
     end
     nodelist = node.vpack(objects[1])
+
     return nodelist
 end
 
@@ -285,8 +293,10 @@ function Paragraph.vsplit(objects,frameheight,totalheight,balance)
                 ht = ht + head.height + head.depth
             elseif head.id == publisher.glue_node then
                 -- ignore for now
+            elseif head.id == publisher.rule_node then
+                ht = ht + head.height + head.depth
             else
-                w("unknown node: %d",head.id)
+                w("unknown node 1: %d",head.id)
             end
             if head.next == nil then
                 prevht = ht
@@ -300,8 +310,10 @@ function Paragraph.vsplit(objects,frameheight,totalheight,balance)
                         ht = ht + head.height + head.depth
                     elseif head.id == publisher.glue_node then
                         -- ignore for now
+                    elseif head.id == publisher.rule_node then
+                        ht = ht + head.height + head.depth
                     else
-                        w("unknown node: %d",head.id)
+                        w("unknown node 2: %d",head.id)
                     end
                     prevht = ht
                 end

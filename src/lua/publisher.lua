@@ -182,6 +182,8 @@ bookmarks = {}
 ---    }
 namespaces_layout = nil
 
+-- A very large length
+maxdimen = 1073741823
 --- The dispatch table maps every element in the layout xml to a command in the `commands.lua` file.
 local dispatch_table = {
     A                       = commands.a,
@@ -1975,6 +1977,95 @@ function get_remaining_height(area)
     row = current_grid:current_row(area)
     remaining_height = math.min(current_grid:remaining_height_sp(nil,area),areaheight)
     return remaining_height,row
+end
+
+function set_image_length(len,width_or_height)
+    if len == nil or len == "auto" then
+        return nil
+    elseif len == "100%" and width_or_height == "width" then
+        return xpath.get_variable("__maxwidth") * current_grid.gridwidth
+    elseif tonumber(len) then
+        if width_or_height == "width" then
+            return len * current_grid.gridwidth
+        else
+            return len * current_grid.gridheight
+        end
+    else
+        return tex.sp(len)
+    end
+end
+
+function calculate_image_width_height( image, width,height,minwidth,minheight,maxwidth, maxheight )
+    -- from http://www.w3.org/TR/CSS2/visudet.html#min-max-widths:
+    --
+    -- Constraint Violation                                                           Resolved Width                      Resolved Height
+    -- ===================================================================================================================================================
+    --  1 none                                                                        w                                   h
+    --  2 w > max-width                                                               max-width                           max(max-width * h/w, min-height)
+    --  3 w < min-width                                                               min-width                           min(min-width * h/w, max-height)
+    --  4 h > max-height                                                              max(max-height * w/h, min-width)    max-height
+    --  5 h < min-height                                                              min(min-height * w/h, max-width)    min-height
+    --  6 (w > max-width) and (h > max-height), where (max-width/w ≤ max-height/h)    max-width                           max(min-height, max-width * h/w)
+    --  7 (w > max-width) and (h > max-height), where (max-width/w > max-height/h)    max(min-width, max-height * w/h)    max-height
+    --  8 (w < min-width) and (h < min-height), where (min-width/w ≤ min-height/h)    min(max-width, min-height * w/h)    min-height
+    --  9 (w < min-width) and (h < min-height), where (min-width/w > min-height/h)    min-width                           min(max-height, min-width * h/w)
+    -- 10 (w < min-width) and (h > max-height)                                        min-width                           max-height
+    -- 11 (w > max-width) and (h < min-height)                                        max-width                           min-height
+
+    if width < minwidth and height > maxheight then
+        -- w("10")
+        width = minwidth
+        height = maxheight
+    elseif width > maxwidth and height < minheight then
+        -- w("11")
+        width = maxwidth
+        height = minheight
+    elseif width > maxwidth and height > maxheight and maxwidth / width <= maxheight / height then
+        -- w("6")
+        width = maxwidth
+        height = math.max(minheight, maxwidth * height/width)
+    elseif width > maxwidth and height > maxheight and maxwidth / width > maxheight / height then
+        -- w("7")
+        width = math.max(minwidth,maxheight * width / height)
+        height = maxheight
+    elseif width < minwidth and height < minheight and minwidth / width <= minheight / height then
+        -- w("8")
+        width  = math.min(maxwidth,minheight * width / height)
+        height = minheight
+    elseif width < minwidth and height < minheight and minwidth / width > minheight / height then
+        -- w("9")
+        width = minwidth
+        height = math.min(maxheight,minwidth * height / width)
+    elseif width > maxwidth then
+        -- w("2")
+        width = maxwidth
+        height = math.max(maxwidth * height / width, minheight )
+    elseif width < minwidth then
+        -- w("3")
+        width = minwidth
+        height = math.min(minwidth * height / width, maxheight)
+    elseif height > maxheight then
+        -- w("4")
+        width = math.max(maxheight * width / height, minwidth)
+        height = maxheight
+    elseif height < minheight then
+        -- w("5")
+        width = math.min(minheight * width / height, maxwidth)
+        height = minheight
+    end
+
+    -- If one of height or width is given, the other one should
+    -- be adjusted to keep the aspect ratio
+    if height == image.height then
+        if width ~= image.width then
+            height = height * width / image.width
+        end
+    elseif width == image.width then
+        if height ~= image.height then
+            width = width *  height / image.height
+        end
+    end
+    return width, height
 end
 
 

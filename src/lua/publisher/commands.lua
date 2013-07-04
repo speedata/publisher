@@ -376,10 +376,12 @@ end
 --- * use the textformat `text` end
 function commands.define_textformat(layoutxml)
     trace("Command: DefineTextformat")
-    local alignment   = publisher.read_attribute(layoutxml,dataxml,"alignment",   "string")
-    local indentation = publisher.read_attribute(layoutxml,dataxml,"indentation", "length")
-    local name        = publisher.read_attribute(layoutxml,dataxml,"name",        "rawstring")
-    local rows        = publisher.read_attribute(layoutxml,dataxml,"rows",        "number")
+    local alignment    = publisher.read_attribute(layoutxml,dataxml,"alignment",   "string")
+    local indentation  = publisher.read_attribute(layoutxml,dataxml,"indentation", "length")
+    local name         = publisher.read_attribute(layoutxml,dataxml,"name",        "rawstring")
+    local rows         = publisher.read_attribute(layoutxml,dataxml,"rows",        "number")
+    local bordertop    = publisher.read_attribute(layoutxml,dataxml,"border-top",  "rawstring")
+    local borderbottom = publisher.read_attribute(layoutxml,dataxml,"border-bottom","rawstring")
 
     local fmt = {}
 
@@ -396,6 +398,12 @@ function commands.define_textformat(layoutxml)
         fmt.rows = rows
     else
         fmt.rows = 1
+    end
+    if bordertop then
+        fmt.bordertop = tex.sp(bordertop)
+    end
+    if borderbottom then
+        fmt.borderbottom = tex.sp(borderbottom)
     end
 
     publisher.textformats[name] = fmt
@@ -661,62 +669,118 @@ local box_lookup = {
 function commands.image( layoutxml,dataxml )
     local width     = publisher.read_attribute(layoutxml,dataxml,"width",      "rawstring")
     local height    = publisher.read_attribute(layoutxml,dataxml,"height",     "rawstring")
+    local minwidth  = publisher.read_attribute(layoutxml,dataxml,"minwidth",   "rawstring")
+    local minheight = publisher.read_attribute(layoutxml,dataxml,"minheight",  "rawstring")
+    local maxwidth  = publisher.read_attribute(layoutxml,dataxml,"maxwidth",   "rawstring")
+    local maxheight = publisher.read_attribute(layoutxml,dataxml,"maxheight",  "rawstring")
+    local clip      = publisher.read_attribute(layoutxml,dataxml,"clip",       "boolean")
     local seite     = publisher.read_attribute(layoutxml,dataxml,"page",       "number")
     local nat_box   = publisher.read_attribute(layoutxml,dataxml,"naturalsize","string")
     local max_box   = publisher.read_attribute(layoutxml,dataxml,"maxsize",    "rawstring")
     local filename  = publisher.read_attribute(layoutxml,dataxml,"file",       "rawstring")
 
+    -- width = 100%  => take width from surrounding area
+    -- auto on any value ({max,min}?{width,height}) is default
+
     local nat_box_intern = box_lookup[nat_box] or "crop"
     local max_box_intern = box_lookup[max_box] or "crop"
 
     publisher.setup_page()
-    width = width or xpath.get_variable("__maxwidth")
 
-    local width_sp, height_sp
-    if width and not tonumber(width) then
-        -- width ist keine Zahl, sondern eine Maßangabe
-        width_sp = tex.sp(width)
-    else
-        width_sp = width * publisher.current_grid.gridwidth
-    end
-
-    if height then
-        if tonumber(height) then
-            height_sp  = height * publisher.current_grid.gridheight
-        else
-            height_sp = tex.sp(height)
-        end
-    end
     local imageinfo = publisher.new_image(filename,seite,max_box_intern)
-    local bild = img.copy(imageinfo.img)
-    local allocate = imageinfo.allocate
-    local scale_wd = width_sp / bild.width
-    local scale = scale_wd
-    if height_sp then
-        local scale_ht = height_sp / bild.height
-        scale = math.min(scale_ht,scale_wd)
+    local image = img.copy(imageinfo.img)
+
+    height    = publisher.set_image_length(height,   "height") or image.height
+    width     = publisher.set_image_length(width,    "width" ) or image.width
+    minheight = publisher.set_image_length(minheight,"height") or 0
+    minwidth  = publisher.set_image_length(minwidth, "width" ) or 0
+    maxheight = publisher.set_image_length(maxheight,"height") or publisher.maxdimen
+    maxwidth  = publisher.set_image_length(maxwidth, "width" ) or publisher.maxdimen
+
+    if not clip then
+        width, height = publisher.calculate_image_width_height( image, width,height,minwidth,minheight,maxwidth, maxheight )
     end
 
-    local shift_left,shift_up
+    local overshoot
+    if clip then
+        local stretch_shrink
+        if width / image.width > height / image.height then
+            stretch_shrink = width / image.width
+            overshoot = math.round(  (image.height * stretch_shrink - height ) / publisher.factor / 2)
+            overshoot = -overshoot
+        else
+            stretch_shrink = height / image.height
+            overshoot = math.round(  (image.width * stretch_shrink - width) / publisher.factor / 2 )
+        end
+        width = image.width   * stretch_shrink
+        height = image.height * stretch_shrink
+    end
 
-    if nat_box_intern ~= max_box_intern then
-        --- The image must be enlarged and shifted left and up
-        local img_min = publisher.imageinfo(filename,seite,nat_box_intern).img
-        shift_left = ( bild.width  - img_min.width )  / 2
-        shift_up =   ( bild.height - img_min.height ) / 2
-        scale = scale * ( bild.width / img_min.width )
+    -- local width_sp, height_sp
+
+    -- local allocate = imageinfo.allocate
+    -- local scale_wd = width_sp / image.width
+    -- local scale = scale_wd
+    -- if height_sp then
+    --     local scale_ht = height_sp / image.height
+    --     scale = math.min(scale_ht,scale_wd)
+    -- end
+
+    local shift_left,shift_up = 0,0
+
+    -- if nat_box_intern ~= max_box_intern then
+    --     --- The image must be enlarged and shifted left and up
+    --     local img_min = publisher.imageinfo(filename,seite,nat_box_intern).img
+    --     shift_left = ( image.width  - img_min.width )  / 2
+    --     shift_up =   ( image.height - img_min.height ) / 2
+    --     scale = scale * ( image.width / img_min.width )
+    -- else
+    --     shift_left,shift_up = 0,0
+    -- end
+
+    image.width  = width
+    image.height = height
+
+    -- log("Load image %q with scaling %g",filename,scale)
+    local box
+    if clip then
+        local a=node.new("whatsit","pdf_literal")
+        local ht = math.round(height / publisher.factor)
+        local wd = math.round(width  / publisher.factor)
+        local right,left,top,bottom
+        -- overshoot > 0 if image is too wide else < 0
+        if overshoot > 0 then
+            right  = wd - overshoot
+            left   = overshoot
+            top    = ht
+            bottom = 0
+            shift_left = left * publisher.factor
+        else
+            right  = wd
+            left   = 0
+            top    = ht + overshoot
+            bottom = -overshoot
+            shift_up = bottom * publisher.factor
+        end
+
+        pdf_save = node.new("whatsit","pdf_save")
+        pdf_restore = node.new("whatsit","pdf_restore")
+
+        a.data = string.format("%g %g m %g %g l %g %g l %g %g l W n ",left,bottom,right,bottom,right,top,left,top)
+        i = img.node(image)
+        node.insert_after(pdf_save,pdf_save,a)
+        node.insert_after(a,a,i)
+        box = node.hpack(pdf_save)
+        box.depth = 0
+        node.insert_after(box,node.tail(box),pdf_restore)
+        box = node.vpack(box)
+        box.height = height - shift_up * 2
     else
-        shift_left,shift_up = 0,0
+        box = node.hpack(img.node(image))
     end
-
-    bild.width  = bild.width  * scale
-    bild.height = bild.height * scale
-
-    log("Load image %q with scaling %g",filename,scale)
-    local hbox = node.hpack(img.node(bild))
-    node.set_attribute(hbox, publisher.att_shift_left, shift_left)
-    node.set_attribute(hbox, publisher.att_shift_up  , shift_up  )
-    return {hbox,allocate}
+    node.set_attribute(box, publisher.att_shift_left, shift_left)
+    node.set_attribute(box, publisher.att_shift_up  , shift_up  )
+    return {box,allocate}
 end
 
 

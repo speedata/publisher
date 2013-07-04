@@ -164,6 +164,7 @@
       <attribute key="break-below" en="break-below" de="umbruch-unten"/>
       <attribute key="c" en="c" de="c"/>
      <attribute key="class" en="class" de="class"/>
+     <attribute key="clip" en="clip" de="ausschnitt"/>
       <attribute key="color" en="color" de="farbe"/>
       <attribute key="colspan" en="colspan" de="colspan"/>
       <attribute key="column" en="column" de="spalte"/>
@@ -204,8 +205,10 @@
       <attribute key="mainlanguage" en="mainlanguage" de="hauptsprache"/>
       <attribute key="marginprotrusion" en="marginprotrusion" de="randausgleich"/>
       <attribute key="maxheight" en="maxheight" de="maxhöhe"/>
+     <attribute key="maxwidth" en="maxwidth" de="maxbreite"/>
       <attribute key="maxsize" en="maxsize" de="maximale-größe"/>
       <attribute key="minheight" en="minheight" de="minhöhe"/>
+     <attribute key="minwidth" en="minwidth" de="minbreite"/>
       <attribute key="mode" en="mode" de="modus"/>
       <attribute key="model" en="model" de="modell"/>
       <attribute key="name" en="name" de="name"/>

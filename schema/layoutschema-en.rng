@@ -314,14 +314,47 @@
         <a:documentation docid="image/file">Filename of the image. (text)</a:documentation>
         <data type="string"/>
       </attribute>
-      <attribute name="width">
+      <optional>
+        <attribute name="clip">
+          <choice>
+            <value>yes</value>
+            <a:documentation docid="image/clip/yes"/>
+            <value>no</value>
+            <a:documentation docid="image/clip/no"/>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="width">
         <a:documentation docid="image/width">Width of the image in grid cells or in aboslute size</a:documentation>
       </attribute>
+      </optional>
       <optional>
         <attribute name="height">
           <a:documentation docid="image/height">The height of the image (in absolute values, e.g. 210mm)</a:documentation>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="minwidth">
+          <a:documentation docid="image/minwidth"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="minheight">
+          <a:documentation docid="image/minheight"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="maxwidth">
+          <a:documentation docid="image/maxwidth"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="maxheight">
+          <a:documentation docid="image/maxheight">The maximum size of the image. Defautl is the »cropbox«</a:documentation>
+        </attribute>
+      </optional>
+      
       <optional>
         <attribute name="page">
           <a:documentation docid="image/page">The page in the PDF file that gets included</a:documentation>

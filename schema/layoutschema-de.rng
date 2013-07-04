@@ -318,14 +318,47 @@
         <a:documentation docid="image/file">Dateiname der Bilddatei. (Text)</a:documentation>
         <data type="string"/>
       </attribute>
-      <attribute name="breite">
+      <optional>
+        <attribute name="ausschnitt">
+          <choice>
+            <value>ja</value>
+            <a:documentation docid="image/clip/yes"/>
+            <value>nein</value>
+            <a:documentation docid="image/clip/no"/>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="breite">
         <a:documentation docid="image/width">Breite des Bildes in Rasterzellen oder in absoluten Maßangaben.</a:documentation>
       </attribute>
+      </optional>
       <optional>
         <attribute name="höhe">
           <a:documentation docid="image/height">Gibt die maximale Höhe des Bildes an in Rasterzellen oder in absoluten Maßangaben (z.B. 210mm).</a:documentation>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="minbreite">
+          <a:documentation docid="image/minwidth"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="minhöhe">
+          <a:documentation docid="image/minheight"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="maxbreite">
+          <a:documentation docid="image/maxwidth"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="maxhöhe">
+          <a:documentation docid="image/maxheight">Die maximale Größe des Bildes. Voreinstellung ist die »cropbox«. </a:documentation>
+        </attribute>
+      </optional>
+      
       <optional>
         <attribute name="seite">
           <a:documentation docid="image/page">Bindet die angegebene Seite aus einer PDF-Datei ein. Voreinstellung: 1</a:documentation>
