@@ -444,7 +444,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
     end
     local ok,tmp,elementname,fontface
     for i,v in ipairs(layoutxml) do
-        elementname = publisher.translate_element(v[".__name"])
+        elementname = publisher.translate_element(v[".__local_name"])
         fontface    = publisher.read_attribute(v,dataxml,"fontface","rawstring")
         if type(v) ~= "table" then
             -- ignore
@@ -504,7 +504,7 @@ end
 function commands.element( layoutxml,dataxml )
     local elementname = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
 
-    local ret = { [".__name"] = elementname }
+    local ret = { [".__local_name"] = elementname }
 
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,v in ipairs(tab) do
@@ -589,7 +589,7 @@ function commands.group( layoutxml,dataxml )
     end
 
     for _,v in ipairs(layoutxml) do
-        elementname=publisher.translate_element(v[".__name"])
+        elementname=publisher.translate_element(v[".__local_name"])
         if type(v)=="table" and elementname=="Grid" then
             grid = commands.grid(v,dataxml)
         end
@@ -615,7 +615,7 @@ function commands.group( layoutxml,dataxml )
     publisher.current_grid  = r
 
     for _,v in ipairs(layoutxml) do
-        elementname=publisher.translate_element(v[".__name"])
+        elementname=publisher.translate_element(v[".__local_name"])
         if type(v)=="table" and elementname=="Contents" then
             publisher.dispatch(v,dataxml)
         end
@@ -862,7 +862,7 @@ function commands.load_dataset( layoutxml,dataxml )
     end
 
     local tmp_data = publisher.load_xml(filename)
-    local root_name = tmp_data[".__name"]
+    local root_name = tmp_data[".__local_name"]
 
     log("Selecting node: %q, mode=%q",root_name,"")
     publisher.dispatch(publisher.data_dispatcher[""][root_name],tmp_data)
@@ -1439,7 +1439,7 @@ function commands.process_record( layoutxml,dataxml )
     end
 
     for i=1,limit do
-        local eltname = datensatz[i]["inhalt"][".__name"]
+        local eltname = datensatz[i]["inhalt"][".__local_name"]
         layoutknoten=publisher.data_dispatcher[""][eltname]
         log("Selecting node: %q",eltname or "???")
         publisher.xpath.set_variable("__position",i)
@@ -1464,7 +1464,7 @@ function commands.process_node(layoutxml,dataxml)
     local pos = 1
     if not dataxml_selection then return nil end
     for i=1,#dataxml_selection do
-        element_name = dataxml_selection[i][".__name"]
+        element_name = dataxml_selection[i][".__local_name"]
         layoutnode = publisher.data_dispatcher[mode][element_name]
         if layoutnode then
             log("Selecting node: %q, mode=%q, pos=%d",element_name,mode,pos)
@@ -1607,21 +1607,21 @@ function commands.save_dataset( layoutxml,dataxml )
     ---    tmp = {
     ---      [1] = {
     ---        [".__parent"] =
-    ---        [".__name"] = "bar"
+    ---        [".__local_name"] = "bar"
     ---        ["att1"] = "1"
     ---      },
     ---      [2] = {
     ---        [".__parent"] =
-    ---        [".__name"] = "bar"
+    ---        [".__local_name"] = "bar"
     ---        ["att2"] = "2"
     ---      },
     ---      [3] = {
     ---        [".__parent"] =
-    ---        [".__name"] = "bar"
+    ---        [".__local_name"] = "bar"
     ---        ["att3"] = "3"
     ---      },
     ---    },
-    tmp[".__name"] = elementname
+    tmp[".__local_name"] = elementname
     local full_filename = tex.jobname .. "-" .. filename .. ".dataxml"
     local datei = io.open(full_filename,"w")
     towrite = publisher.xml_to_string(tmp)
@@ -1646,10 +1646,10 @@ end
 --- Todo: document, what does it?
 function commands.sequence( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
-    trace("Command: Sequence: %s, selection = %s",layoutxml[".__name"], selection )
+    trace("Command: Sequence: %s, selection = %s",layoutxml[".__local_name"], selection )
     local ret = {}
     for i,v in ipairs(dataxml) do
-        if type(v)=="table" and v[".__name"] == selection then
+        if type(v)=="table" and v[".__local_name"] == selection then
             ret[#ret + 1] = v
         end
     end
@@ -1805,7 +1805,7 @@ function commands.switch( layoutxml,dataxml )
     local case_matched = false
     local otherwise,ret,elementname
     for _,case_or_otherwise_element in ipairs(layoutxml) do
-        elementname = publisher.translate_element(case_or_otherwise_element[".__name"])
+        elementname = publisher.translate_element(case_or_otherwise_element[".__local_name"])
         if type(case_or_otherwise_element)=="table" and elementname=="Case" and case_matched ~= true then
             local test = publisher.read_attribute(case_or_otherwise_element,dataxml,"test","rawstring")
             local ok, tab = xpath.parse_raw(dataxml,test,layoutxml[".__ns"])
@@ -2295,7 +2295,7 @@ function commands.value( layoutxml,dataxml )
     else
         -- Change all br elements to \n
         for i=1,#layoutxml do
-            if type(layoutxml[i]) == "table" and string.match(layoutxml[i][".__name"],"^[bB][rR]$") then
+            if type(layoutxml[i]) == "table" and string.match(layoutxml[i][".__local_name"],"^[bB][rR]$") then
                 layoutxml[i] = "\n"
             end
         end

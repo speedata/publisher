@@ -300,7 +300,7 @@ function dispatch(layoutxml,dataxml,optionen)
     for _,j in ipairs(layoutxml) do
         -- j a table, if it is an element in layoutxml
         if type(j)=="table" then
-            local eltname = translate_element(j[".__name"])
+            local eltname = translate_element(j[".__local_name"])
             if dispatch_table[eltname] ~= nil then
                 tmp = dispatch_table[eltname](j,dataxml,optionen)
 
@@ -468,7 +468,7 @@ function dothings()
 
     --- Start data processing in the default mode (`""`)
     local tmp
-    local name = dataxml[".__name"]
+    local name = dataxml[".__local_name"]
     --- The rare case that the user has not any `Record` commands in the layout file:
     if not data_dispatcher[""] then
         err("Can't find »Record« command for the root node.")
@@ -519,15 +519,15 @@ end
 ---         [2] = {
 ---           [1] = "text in subelement"
 ---           [".__parent"] = (pointer to the "element" tree, which is the second entry in the top level)
----           [".__name"] = "subelement"
+---           [".__local_name"] = "subelement"
 ---         },
 ---         [3] = " "
 ---         [".__parent"] = (pointer to the root element)
----         [".__name"] = "element"
+---         [".__local_name"] = "element"
 ---         ["attribute"] = "whatever"
 ---       },
 ---       [3] = " "
----       [".__name"] = "data"
+---       [".__local_name"] = "data"
 ---     },
 function load_xml(filename,filetype)
     local path = kpse.find_file(filename)
@@ -1007,8 +1007,8 @@ function parse_html( elt, parameter )
         end
     end
 
-    if elt[".__name"] then
-        local eltname = string.lower(elt[".__name"])
+    if elt[".__local_name"] then
+        local eltname = string.lower(elt[".__local_name"])
         if eltname == "b" then
             bold = 1
         elseif eltname == "i" then
@@ -1710,11 +1710,11 @@ function imageinfo( filename,page,box )
         local segments = {}
         local cells_x,cells_y
         for _,v in ipairs(xmltab) do
-            if v[".__name"] == "cells_x" then
+            if v[".__local_name"] == "cells_x" then
                 cells_x = v[1]
-            elseif v[".__name"] == "cells_y" then
+            elseif v[".__local_name"] == "cells_y" then
                 cells_y = v[1]
-            elseif v[".__name"] == "segment" then
+            elseif v[".__local_name"] == "segment" then
                 -- 0 based segments
                 segments[#segments + 1] = {v.x1 + 1,v.y1 + 1,v.x2 + 1,v.y2 + 1}
             end
@@ -1886,7 +1886,7 @@ end
 function xml_to_string( xml_element, level )
     level = level or 0
     local str = ""
-    str = str .. string.rep(" ",level) .. "<" .. xml_element[".__name"]
+    str = str .. string.rep(" ",level) .. "<" .. xml_element[".__local_name"]
     for k,v in pairs(xml_element) do
         if type(k) == "string" and not k:match("^%.") then
             str = str .. string.format(" %s=%q", k,v)
@@ -1896,7 +1896,7 @@ function xml_to_string( xml_element, level )
     for i,v in ipairs(xml_element) do
         str = str .. xml_to_string(v,level + 1)
     end
-    str = str .. string.rep(" ",level) .. "</" .. xml_element[".__name"] .. ">\n"
+    str = str .. string.rep(" ",level) .. "</" .. xml_element[".__local_name"] .. ">\n"
     return str
 end
 

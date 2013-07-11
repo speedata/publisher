@@ -58,7 +58,7 @@ do
         if k ~= ".__parent" then
           printtable(k,l,level)
         else
-          log("%s[\".__parent\"] = <%s>", string.rep("  ",level),l[".__name"])
+          log("%s[\".__parent\"] = <%s>", string.rep("  ",level),l[".__local_name"])
         end
       else
         if type(k) == "number" then

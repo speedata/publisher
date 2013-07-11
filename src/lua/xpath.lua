@@ -36,7 +36,7 @@ function M.is_nodeselector( dataxml,str,pos,ns )
         local ret = {}
         M.nextpos = stop + 1
         for i=1,#dataxml do
-            if dataxml[i][".__name"] == eltname then
+            if dataxml[i][".__local_name"] == eltname then
                 ret[#ret + 1] = dataxml[i]
             end
         end
@@ -622,14 +622,14 @@ M.default_functions.floor = function(dataxml, arg)
 end
 
 M.default_functions.last = function( dataxml )
-    local datensatzname = dataxml[".__name"]
+    local datensatzname = dataxml[".__local_name"]
     local elternelement = dataxml[".__parent"]
     if not elternelement then
         return 1
     end
     local count = 0
     for i=1,#elternelement do
-        if type(elternelement[i]) == 'table' and elternelement[i][".__name"] == datensatzname then
+        if type(elternelement[i]) == 'table' and elternelement[i][".__local_name"] == datensatzname then
             count = count + 1
         end
     end
