@@ -4,9 +4,11 @@ package main
 
 import (
 	"configurator"
+	"encoding/xml"
 	"fmt"
 	"hotfolder"
 	"io"
+	"io/ioutil"
 	"log"
 	"optionparser"
 	"os"
@@ -43,6 +45,13 @@ var (
 	cfg                   *configurator.ConfigData
 	running_processes     []*os.Process
 )
+
+// The LuaTeX process writes out a file called "publisher.status"
+// which is a valid XML file. Currently the only field is "Errors"
+// with the number of errors occured during the publisher run.
+type status struct {
+	Errors int
+}
 
 func init() {
 	var err error
@@ -249,6 +258,7 @@ func run(cmdline string) {
 	}
 
 	err = cmd.Wait()
+
 	if err != nil {
 		showDuration()
 		log.Print(err)
@@ -351,9 +361,9 @@ func copy_file(srcpath, destpath string) error {
 	return nil // no error
 }
 
-func runPublisher() {
+func runPublisher() (exitstatus int) {
 	log.Print("run speedata publisher")
-
+	exitstatus = 0
 	save_variables()
 
 	f, err := os.Create(getOption("jobname") + ".protocol")
@@ -393,6 +403,18 @@ func runPublisher() {
 		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, exec_name, jobname, inifile, layoutname, dataname, layoutoptions_cmdline)
 		run(cmdline)
 	}
+	data, err := ioutil.ReadFile(fmt.Sprintf("%s.status", jobname))
+	if err == nil {
+		v := new(status)
+		err = xml.Unmarshal(data, &v)
+		if err != nil {
+			log.Printf("Error reading status XML: %v", err)
+		} else {
+			if v.Errors != 0 {
+				exitstatus = 1
+			}
+		}
+	}
 
 	// If user supplied an outpath, copy the PDF and the protocol to that path
 	p := getOption("outputdir")
@@ -410,6 +432,7 @@ func runPublisher() {
 			return
 		}
 	}
+	return
 }
 
 func compareTwoPages(sourcefile, referencefile, dummyfile string) bool {
@@ -607,7 +630,7 @@ func main() {
 	if getOption("verbose") != "" {
 		fmt.Println("SD_EXTRA_DIRS:", os.Getenv("SD_EXTRA_DIRS"))
 	}
-
+	var exitstatus int
 	switch command {
 	case "run":
 		if filter := getOption("filter"); filter != "" {
@@ -619,7 +642,7 @@ func main() {
 			cmdline := "java com.xmlcalabash.drivers.Main " + filter
 			run(cmdline)
 		}
-		runPublisher()
+		exitstatus = runPublisher()
 		// open PDF if necessary
 		if getOption("autoopen") == "true" {
 			openFile(getOption("jobname") + ".pdf")
@@ -692,5 +715,5 @@ func main() {
 		log.Fatal("unknown command:", command)
 	}
 	showDuration()
-	os.Exit(0)
+	os.Exit(exitstatus)
 }

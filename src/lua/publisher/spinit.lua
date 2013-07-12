@@ -162,6 +162,9 @@ function exit(graceful)
   errorlog:write(string.format("\nnode_mem_usage=%s",status.node_mem_usage))
   errorlog:write(string.format("luastate_bytes=%d",status.luastate_bytes / 1024))
   errorlog:close()
+  statusfile = io.open(string.format("%s.status",tex.jobname),"w")
+  statusfile:write(string.format("<Status>\n  <Errors>%d</Errors>\n</Status>",errcount))
+  statusfile:close()
   if not graceful then
     os.exit()
   end
