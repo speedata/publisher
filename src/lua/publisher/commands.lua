@@ -1069,6 +1069,7 @@ end
 
 
 function commands.output( layoutxml,dataxml )
+    publisher.setup_page()
     local area = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
 
     local tab = publisher.dispatch(layoutxml,dataxml)

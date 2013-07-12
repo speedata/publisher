@@ -18,6 +18,7 @@ callback.register('start_run',function() return true end)
 texconfig.kpse_init=false
 texconfig.max_print_line=99999
 texconfig.formatname="sd-format"
+texconfig.trace_file_names = false
 
 local basedir=os.getenv("PUBLISHER_BASE_PATH")
 local extra_dirs = os.getenv("SD_EXTRA_DIRS")
