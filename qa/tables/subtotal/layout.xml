@@ -10,6 +10,7 @@
   <Pageformat width="10cm" height="5cm"/>
 
   <Record element="data">
+    <SetVariable variable="_last_tr_data" select=""/>
     <PlaceObject column="1">
       <Table leading="12pt" stretch="max">
         <Tablefoot>

@@ -5,7 +5,7 @@
   <Options show-gridallocation="no" show-grid="no"/>
   <Pageformat width="150mm" height="150mm"/>
   
-  <DefineColor name="Gray" model="rgb" r="40" g="40" b="40"/>
+  <DefineColor name="gray" model="gray" g="40"/>
   <Record element="data">
     <SetVariable variable="foo" select="12345.678"/>
     <Group name="img">
@@ -98,13 +98,13 @@
           <Value>Group height: </Value>
           <Value select="sd:groupheight('img')"></Value>
         </Paragraph>
-        <Paragraph color="{sd:alternating('row','Gray','Black')}">
+        <Paragraph color="{sd:alternating('row','gray','black')}">
           <Value>Alternating Gray</Value>
         </Paragraph>
-        <Paragraph color="{sd:alternating('row','Gray','Black')}">
+        <Paragraph color="{sd:alternating('row','gray','black')}">
           <Value>Alternating Black</Value>
         </Paragraph>
-        <Paragraph color="{sd:alternating('row','Gray','Black')}">
+        <Paragraph color="{sd:alternating('row','gray','black')}">
           <Value>Alternating Gray</Value>
         </Paragraph>
         <Paragraph>
