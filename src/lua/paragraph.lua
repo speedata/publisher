@@ -236,8 +236,14 @@ function Paragraph:format(width_sp, default_textformat_name)
         end
         publisher.fonts.post_linebreak(nodelist)
 
+        if current_textformat.paddingtop then
+            nodelist.list = publisher.add_glue(nodelist.list,"head",{width = current_textformat.paddingtop})
+        end
         if current_textformat.bordertop then
             nodelist.list = publisher.add_rule(nodelist.list,"head",{width = -1073741824, height = current_textformat.bordertop})
+        end
+        if current_textformat.margintop then
+            nodelist.list = publisher.add_glue(nodelist.list,"head",{width = current_textformat.margintop})
         end
         if current_textformat.borderbottom then
             nodelist.list = publisher.add_rule(nodelist.list,"tail",{width = -1073741824, height = current_textformat.borderbottom})
@@ -258,85 +264,54 @@ function Paragraph:format(width_sp, default_textformat_name)
 end
 
 
-function Paragraph.vsplit(objects,frameheight,totalheight,balance)
-    local balanced_height = totalheight / balance
-    local goal
-    if balanced_height > frameheight then
-        goal = frameheight
-    else
-        goal = balanced_height
-    end
-    local obj,head,newhead
+-- We get a lot of objects (paragraphs) of different heights.
+-- We need to find _one_ breakpoint such that the new objects
+function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
+    local goal = frameheight
+    local totalheight = 0
+    local area_filled = false
+    local ht = 0
 
-    local ht, prevht
-    local finish = false
-    local vlist
-    ht = 0
-    -- The outer loop is when we end in the middle of the area and perhaps
-    -- there is more material to be placed into that area
-    while true do
-        if #objects == 0 then
-            break
-        end
-        obj = table.remove(objects,1)
-        vlist = vlist or obj
-        if vlist ~= obj then
-            -- next material on the area
-            head.next = obj.list
-            obj.list.prev = head
-        end
-        head = obj.list
-        newhead = node.copy(obj)
-        while true do
-            prevht = ht
-            if head.id == publisher.hlist_node then
-                ht = ht + head.height + head.depth
-            elseif head.id == publisher.glue_node then
-                -- ignore for now
-            elseif head.id == publisher.rule_node then
-                ht = ht + head.height + head.depth
-            else
-                w("unknown node 1: %d",head.id)
-            end
-            if head.next == nil then
-                prevht = ht
-                break
-            end
-            if ht > goal then
-                if goal == balanced_height then
-                    -- The first columns should have "one more"
-                    head = head.next
-                    if head.id == publisher.hlist_node then
-                        ht = ht + head.height + head.depth
-                    elseif head.id == publisher.glue_node then
-                        -- ignore for now
-                    elseif head.id == publisher.rule_node then
-                        ht = ht + head.height + head.depth
-                    else
-                        w("unknown node 2: %d",head.id)
-                    end
-                    prevht = ht
-                end
-                -- oh well, we are too high now.
-                -- put this hlist and all of the following in the new head
-                head.prev.next = nil
-                head.prev = nil
-                newhead.list = head
-                table.insert(objects,1,newhead)
-                finish = true
-                break
-            else
-                -- good, keep going on
-                head = head.next
-            end
-        end
-        vlist.height = prevht
-        vlist.depth = 0
+    local toplist
+    -- This is the list that gets all the lines (hboxes) for
+    -- the area. All other lines stay in the objects_t table
 
-        if finish then break end
+    local vlist = table.remove(objects_t,1)
+    local hbox = vlist.head
+    while not area_filled do
+        while hbox do
+            local line = hbox
+            local lineheight = 0
+            if hbox.id == publisher.hlist_node then
+                lineheight = hbox.height + hbox.depth
+            elseif hbox.id == publisher.glue_node then
+                lineheight = hbox.spec.width
+            elseif hbox.id == publisher.rule_node then
+                lineheight = hbox.height + hbox.depth
+            else
+                w("unknown node 1: %d",hbox.id)
+            end
+            if ht + lineheight >= goal then
+                -- There is enough material for the area
+                table.insert(objects_t,1,vlist)
+                return node.vpack(toplist)
+            else
+                local newhead
+                vlist.head,newhead = node.remove(vlist.head,hbox)
+                toplist = node.insert_after(toplist,node.tail(toplist),hbox)
+                hbox = newhead
+                ht = ht + lineheight
+            end
+        end
+        if #objects_t == 0 then
+            area_filled = true
+        else
+            -- todo: remove old vlist
+            vlist = table.remove(objects_t,1)
+            hbox = vlist.head
+        end
     end
-    return vlist
-    -- body
+    return node.vpack(toplist)
 end
 
 return Paragraph

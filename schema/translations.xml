@@ -203,6 +203,8 @@
       <attribute key="limit" en="limit" de="umfang"/>
       <attribute key="m" en="m" de="m"/>
       <attribute key="mainlanguage" en="mainlanguage" de="hauptsprache"/>
+      <attribute key="margin-top" en="margin-top" de="margin-top" />
+      <attribute key="margin-bottom" en="margin-bottom" de="margin-bottom" />
       <attribute key="marginprotrusion" en="marginprotrusion" de="randausgleich"/>
       <attribute key="maxheight" en="maxheight" de="maxhöhe"/>
      <attribute key="maxwidth" en="maxwidth" de="maxbreite"/>

@@ -287,7 +287,7 @@ end
 
 --- Columns
 --- -------
---- Set the width of a table to a fixed size. Expects multiple occurences of element
+--- Set the width of a table to a fixed size. Expects multiple occurrences of element
 --- Column as the child elements.
 function commands.columns( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
@@ -296,7 +296,7 @@ end
 
 --- CopyOf
 --- ------
---- Return the contents of a variable. Warning: this function does not acutally copy the contents, so the name is a bit misleading.
+--- Return the contents of a variable. Warning: this function does not actually copy the contents, so the name is a bit misleading.
 function commands.copy_of( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select", "rawstring")
     local ok
@@ -382,6 +382,10 @@ function commands.define_textformat(layoutxml)
     local rows         = publisher.read_attribute(layoutxml,dataxml,"rows",        "number")
     local bordertop    = publisher.read_attribute(layoutxml,dataxml,"border-top",  "rawstring")
     local borderbottom = publisher.read_attribute(layoutxml,dataxml,"border-bottom","rawstring")
+    local margintop     = publisher.read_attribute(layoutxml,dataxml,"margin-top",    "rawstring")
+    local marginbottom  = publisher.read_attribute(layoutxml,dataxml,"margin-bottom", "rawstring")
+    local paddingtop    = publisher.read_attribute(layoutxml,dataxml,"padding-top",   "rawstring")
+    local paddingbottom = publisher.read_attribute(layoutxml,dataxml,"padding-bottom","rawstring")
 
     local fmt = {}
 
@@ -404,6 +408,18 @@ function commands.define_textformat(layoutxml)
     end
     if borderbottom then
         fmt.borderbottom = tex.sp(borderbottom)
+    end
+    if margintop then
+        fmt.margintop = tex.sp(margintop)
+    end
+    if marginbottom then
+        fmt.marginbottom = tex.sp(marginbottom)
+    end
+    if paddingtop then
+        fmt.paddingtop = tex.sp(paddingtop)
+    end
+    if paddingbottom then
+        fmt.paddingbottom = tex.sp(paddingbottom)
     end
 
     publisher.textformats[name] = fmt
@@ -1048,7 +1064,7 @@ end
 
 --- Options
 --- -------
---- This is a top-level element in the layout defintion file. It saves the options such as `show-grid`.
+--- This is a top-level element in the layout definition file. It saves the options such as `show-grid`.
 function commands.options( layoutxml,dataxml )
     publisher.options.cutmarks           = publisher.read_attribute(layoutxml,dataxml,"cutmarks",    "boolean")
     publisher.options.showgrid           = publisher.read_attribute(layoutxml,dataxml,"show-grid",   "boolean")
@@ -1089,6 +1105,14 @@ function commands.output( layoutxml,dataxml )
         local obj
         local maxht,row
         local objcount = 0
+        -- We call push so long as it is needed. Say we have enough
+        -- material for three pages (areas), we call push three times.
+        -- So push()'s duty is to assemble enough material for that area.
+        -- Push needs to know the width and the height of the area.
+        --
+        -- Currently only the command Text implements push.
+        -- (Note: perhaps we should rename push to pull, as it is pulling
+        --  the contents from the elements.)
         while true do
             objcount = objcount + 1
             publisher.setup_page()
@@ -1102,12 +1126,12 @@ function commands.output( layoutxml,dataxml )
                 width = current_grid:number_of_columns(area) * current_grid.gridwidth,
                 balance = contents.balance,
             }
-
             obj,state,more_to_follow = contents.push(parameters,state)
             if obj == nil then
                 break
             else
                 publisher.output_at(obj,1,row,true,area,nil,nil)
+                -- We don't need to go to the next page when we are a the end
                 if more_to_follow then
                     publisher.next_area(area)
                 end
@@ -1417,7 +1441,7 @@ end
 --- ProcessRecord
 --- -------------
 --- This command takes the contents from the given attribute `select` (an
---- XPath- expresseion) and process this. If you feed garbage in, well,
+--- XPath- expression) and process this. If you feed garbage in, well,
 --- probably nothing useful comes out. (This should be the only command to
 --- process data, but at the moment there is the _static_ ProcessNode).
 
@@ -1451,7 +1475,7 @@ end
 --- ProcessNode
 --- -----------
 --- Call the given (in attribute `select`) names of elements in the data file.
---- The optional attribute `mode` must mach, if given. Since the attribute `select` is a fixed
+--- The optional attribute `mode` must match, if given. Since the attribute `select` is a fixed
 --- string, this function is rather stupid but nevertheless currently the main
 --- function for processing data.
 function commands.process_node(layoutxml,dataxml)
@@ -2042,20 +2066,18 @@ function commands.text(layoutxml,dataxml)
     local balance = publisher.read_attribute(layoutxml,dataxml,"balance",   "rawstring")
     local tab = publisher.dispatch(layoutxml,dataxml)
     tab.balance = balance
-    -- push returns
-    -- obj, state, more_to_follow
-    tab.push = function(parameter,state)
-            if not state then
-                -- called the first time
-                state = {}
+    -- push returns 'obj', 'state', 'more_to_follow'
 
-                if balance == "auto" then
-                    state.balance = publisher.current_grid:number_of_frames(parameter.area)
-                elseif balance == nil then
-                    state.balance =  1
-                else
-                    state.balance = tonumber(tab.balance)
-                end
+    -- push() gets called whenever we want to fill an area (perhaps the whole page).
+    -- We get the height (parameter.maxheight) and the width (parameter.width)
+    -- of the area to be filled.
+    tab.push = function(parameter,state)
+            -- When push is called the first time the state is not set yet.
+            -- Currently we format all sub-objects (paragraphs),
+            -- add them into the "object list" (state.objects) and
+            -- call vsplit on the object list.
+            if not state then
+                state = {}
                 local objects = {}
                 state.total_height = 0
                 state.objects = objects
@@ -2067,7 +2089,7 @@ function commands.text(layoutxml,dataxml)
             end
             if #state.objects > 0 then
                 local obj
-                obj = paragraph.vsplit(state.objects,parameter.maxheight,state.total_height, state.balance)
+                obj = paragraph.vsplit(state.objects,parameter.maxheight,state.total_height)
                 return obj,state, #state.objects > 0
             else
                 return nil,nil, false

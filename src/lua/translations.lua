@@ -323,6 +323,8 @@ values = {
     ["limit"] = {de = "umfang", en = "limit", },
     ["m"] = {de = "m", en = "m", },
     ["mainlanguage"] = {de = "hauptsprache", en = "mainlanguage", },
+    ["margin-top"] = {de = "margin-top", en = "margin-top", },
+    ["margin-bottom"] = {de = "margin-bottom", en = "margin-bottom", },
     ["marginprotrusion"] = {de = "randausgleich", en = "marginprotrusion", },
     ["maxheight"] = {de = "maxhöhe", en = "maxheight", },
     ["maxwidth"] = {de = "maxbreite", en = "maxwidth", },
