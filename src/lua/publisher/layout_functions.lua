@@ -161,8 +161,14 @@ local function ungerade(dataxml, arg )
 end
 
 local function variable(dataxml, arg )
-  local var = publisher.xpath.get_variable(arg[1])
+  local varname = table.concat(arg)
+  local var = publisher.xpath.get_variable(varname)
   return var
+end
+
+local function variable_exists(dataxml,arg)
+  local var = publisher.xpath.get_variable(arg[1])
+  return var ~= nil
 end
 
 
@@ -231,6 +237,9 @@ register("urn:speedata:2009/publisher/functions/de","seitennummer",pagenumber)
 
 register("urn:speedata:2009/publisher/functions/en","variable",variable)
 register("urn:speedata:2009/publisher/functions/de","variable",variable)
+
+register("urn:speedata:2009/publisher/functions/en","variable-exists",variable_exists)
+register("urn:speedata:2009/publisher/functions/de","variable-vorhanden",variable_exists)
 
 register("urn:speedata:2009/publisher/functions/en","merge-pagenumbers",merge_pagenumbers)
 register("urn:speedata:2009/publisher/functions/de","seitenzahlen-zusammenfassen",merge_pagenumbers)
