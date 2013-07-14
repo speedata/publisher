@@ -475,7 +475,12 @@ function calculate_rowheight( self,tr_contents, current_row )
                     cell = v
                 end
             elseif (type(object)=="userdata" and node.has_field(object,"width")) then
-                -- an image or a box!?!
+                -- an image or a box
+                -- FIXME:
+                -- The following code leads to an error if two images
+                -- are included in a table cell.
+                -- Also check QA tables/columnspread for an example why
+                -- this is necessary
                 if cell then
                     node.tail(cell).next = object
                 else

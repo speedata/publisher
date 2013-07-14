@@ -129,7 +129,7 @@ local function label(n,tab )
   local typ = node.type(n.id)
   local nodename = get_nodename(n)
   local subtype = get_subtype(n)
-  local ret = string.format("%s [ label = \"<title> name: %s | <sub> type: %s  |  { <prev> prev |<next> next }",nodename or "??",typ or "??",subtype or "?")
+  local ret = string.format("%s [ label = \"<title> name: %s (id %s) | <sub> type: %s  |  { <prev> prev |<next> next }",nodename or "??",typ or "??",string.gsub(nodename,"\"","") or "??",subtype or "?")
   if tab then
     for i=1,#tab do
       if tab[i][1] then
