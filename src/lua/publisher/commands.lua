@@ -555,7 +555,7 @@ function commands.fontface( layoutxml,dataxml )
         local a = paragraph:new()
         local tab = publisher.dispatch(layoutxml,dataxml)
         for i,j in ipairs(tab) do
-            a:append(publisher.element_contents(j),{fontfamily = familynumber})
+            a:append(xpath.textvalue_raw(true,publisher.element_contents(j)),{fontfamily = familynumber})
         end
         return a
     end
