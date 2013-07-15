@@ -19,7 +19,16 @@ local data_src=[[
 </root>
 ]]
 
+local mixed_elements_src=[[
+<root>
+ <one />
+ <two />
+</root>
+]]
+
+
 local data = luxor.parse_xml(data_src)
+local mixed_elements = luxor.parse_xml(mixed_elements_src)
 local namespace = { sd = "foo" }
 
 function number_of_datasets( self,arg)
@@ -80,6 +89,9 @@ function test_numdatasets()
     assert_equal(xpath.parse( data, " sd:number-of-datasets(.) ",namespace ), 2)
     assert_equal(#xpath.parse( data, " sub ",namespace),2)
     assert_equal(#xpath.parse( data, " sub,sub,sub ",namespace),6)
+    assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " sd:number-of-datasets(*)",namespace ))[1], 2)
+    assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " sd:number-of-datasets(one)",namespace ))[1], 1)
+    assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " count(*)",namespace ))[1], 2)
 end
 
 

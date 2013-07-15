@@ -23,10 +23,24 @@ end
 
 function M.is_nodeselector( dataxml,str,pos,ns )
     local start,stop
+    -- Just the current node (focus, ".")
     start,stop = string.find(str,"^%.%s*",pos)
     if start then
         M.nextpos = stop + 1
         M.tok = dataxml
+        return true
+    end
+    -- All sub nodes
+    start,stop = string.find(str,"^%*%s*",pos)
+    if start then
+        M.nextpos = stop + 1
+        local tmp = {}
+        for i=1,#dataxml do
+            if type(dataxml[i]) == "table" then
+                tmp[#tmp + 1] = dataxml[i]
+            end
+        end
+        M.tok = tmp
         return true
     end
     local eltname
@@ -588,6 +602,10 @@ function M.register_function(ns,fname,fun)
 end
 
 
+-- ------------------------------------------------------------
+-- -- Standard XPath functions
+-- ------------------------------------------------------------
+
 M.default_functions.position = function()
     local pos = publisher.xpath.get_variable("__position")
     return pos
@@ -622,14 +640,14 @@ M.default_functions.floor = function(dataxml, arg)
 end
 
 M.default_functions.last = function( dataxml )
-    local datensatzname = dataxml[".__local_name"]
-    local elternelement = dataxml[".__parent"]
-    if not elternelement then
+    local recordname    = dataxml[".__local_name"]
+    local parentelement = dataxml[".__parent"]
+    if not parentelement then
         return 1
     end
     local count = 0
-    for i=1,#elternelement do
-        if type(elternelement[i]) == 'table' and elternelement[i][".__local_name"] == datensatzname then
+    for i=1,#parentelement do
+        if type(parentelement[i]) == 'table' and parentelement[i][".__local_name"] == recordname then
             count = count + 1
         end
     end
