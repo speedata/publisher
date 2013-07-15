@@ -21,45 +21,6 @@ function M.is_number(str,pos)
     return false
 end
 
-function M.is_nodeselector( dataxml,str,pos,ns )
-    local start,stop
-    -- Just the current node (focus, ".")
-    start,stop = string.find(str,"^%.%s*",pos)
-    if start then
-        M.nextpos = stop + 1
-        M.tok = dataxml
-        return true
-    end
-    -- All sub nodes
-    start,stop = string.find(str,"^%*%s*",pos)
-    if start then
-        M.nextpos = stop + 1
-        local tmp = {}
-        for i=1,#dataxml do
-            if type(dataxml[i]) == "table" then
-                tmp[#tmp + 1] = dataxml[i]
-            end
-        end
-        M.tok = tmp
-        return true
-    end
-    local eltname
-    start,stop,eltname = string.find(str,"^(%w+)%s*",pos)
-
-    if start then
-        local ret = {}
-        M.nextpos = stop + 1
-        for i=1,#dataxml do
-            if dataxml[i][".__local_name"] == eltname then
-                ret[#ret + 1] = dataxml[i]
-            end
-        end
-        M.tok = ret
-        return true
-    end
-    return false
-end
-
 function M.is_attribute(dataxml,str,pos)
     local start,stop,attr
     start,stop,attr = string.find(str,"^@(%w+)%s*",pos)
@@ -161,6 +122,53 @@ function M.is_string(str,pos)
     end
     return false
 end
+
+function M.is_nodeselector( dataxml,str,pos,ns )
+    local start,stop
+    -- Just the current node (focus, ".")
+    start,stop = string.find(str,"^%.%s*",pos)
+    if start then
+        M.nextpos = stop + 1
+        M.tok = dataxml
+        return true
+    end
+    -- All sub nodes
+    start,stop = string.find(str,"^%*%s*",pos)
+    if start then
+        M.nextpos = stop + 1
+        local tmp = {}
+        for i=1,#dataxml do
+            if type(dataxml[i]) == "table" then
+                tmp[#tmp + 1] = dataxml[i]
+            end
+        end
+        M.tok = tmp
+        return true
+    end
+    local eltname
+    start,stop,eltname = string.find(str,"^(%a[%w/]*)%s*",pos)
+
+    if start then
+        local ret = {}
+        M.nextpos = stop + 1
+        local tmp = { dataxml }
+        for part in string.gmatch(eltname,"([^/]+)") do
+            local ret = {}
+            for i=1,#tmp do
+                for j=1,#tmp[i] do
+                    if tmp[i][j][".__local_name"] == part then
+                        ret[#ret + 1] = tmp[i][j]
+                    end
+                end
+            end
+            tmp = ret
+        end
+        M.tok = tmp
+        return true
+    end
+    return false
+end
+
 
 function M.get_operand(dataxml,str,pos,ns)
     local start, stop
@@ -568,6 +576,7 @@ function M.textvalue_raw(ok,value)
         return ""
     end
     if #value == 1 and type(value[1]) == "boolean" then return value[1] end
+    if type(value) == "string" then return value end
     local ret = {}
     for i=1,#value do
         ret[#ret + 1] = value[i]
@@ -690,6 +699,10 @@ M.default_functions.string = function(dataxml,arg)
         ret = tostring(arg)
     end
     return ret
+end
+
+M.default_functions["upper-case"] = function(dataxml,arg)
+    return string.upper(arg[1])
 end
 
 M.default_functions["true"] = function()

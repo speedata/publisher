@@ -19,12 +19,12 @@ local data_src=[[
 </root>
 ]]
 
-local mixed_elements_src=[[
-<root>
- <one />
+local mixed_elements_src=[[<root>
+ <one><subone a="b" /><subone /></one>
  <two />
-</root>
-]]
+</root>]]
+
+
 
 
 local data = luxor.parse_xml(data_src)
@@ -76,6 +76,7 @@ end
 
 function test_xpathfunctions()
     assert_equal(secondoftwo(xpath.parse_raw( data, " normalize-space('  foo bar baz     ') ",namespace ))[1], "foo bar baz")
+    assert_equal(secondoftwo(xpath.parse_raw( data, " upper-case('äöüaou') ",namespace ))[1], "ÄÖÜAOU")
 end
 
 function test_castable()
@@ -92,6 +93,7 @@ function test_numdatasets()
     assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " sd:number-of-datasets(*)",namespace ))[1], 2)
     assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " sd:number-of-datasets(one)",namespace ))[1], 1)
     assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " count(*)",namespace ))[1], 2)
+    assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " count(one/subone)",namespace ))[1], 2)
 end
 
 
