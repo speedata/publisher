@@ -36,7 +36,7 @@
             </dt>
             <dd>
                
-               <p>Green part with RGB</p>
+               <p>Green part with RGB / gray part when using the model gray</p>
                
             </dd>
             <dt><a name="k"></a><span class="tt">k</span> (0 up to 100)
@@ -57,8 +57,8 @@
             </dt>
             <dd>
                
-               <p>Color model to be used for the color. Currently only RGB and CMYK are supported. Send
-                  mail for more.
+               <p>Color model to be used for the color. Currently “rgb”, “cmyk” and “gray” are supported.
+                  More on request.
                </p>
                
             </dd>
@@ -77,6 +77,9 @@
                
             </dd>
          </dl>
+         <h2>Example</h2>
+         <pre class="syntax xml">&lt;DefineColor name="black" model="cmyk" c="0" m="0" y="0" k="100"/&gt;
+&lt;DefineColor name="white" model="rgb" r="100" g="100" b="100"/&gt;</pre>
          <h2>See also</h2>
       </div>
       <div id="elementref">
