@@ -663,6 +663,27 @@ M.default_functions.last = function( dataxml )
     return count
 end
 
+M.default_functions.max = function(dataxml,arg)
+    local max = arg[1]
+    for i=2,#arg do
+        if arg[i] > max then
+            max = arg[i]
+        end
+    end
+    return max
+end
+
+M.default_functions.min = function(dataxml,arg)
+    local min = arg[1]
+    for i=2,#arg do
+        if arg[i] < min then
+            min = arg[i]
+        end
+    end
+    return min
+end
+
+
 M.default_functions["normalize-space"] = function(dataxml, arg )
     local str = arg[1]
     if type(str) == "string" then

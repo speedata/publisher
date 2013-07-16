@@ -77,6 +77,10 @@ end
 function test_xpathfunctions()
     assert_equal(secondoftwo(xpath.parse_raw( data, " normalize-space('  foo bar baz     ') ",namespace ))[1], "foo bar baz")
     assert_equal(secondoftwo(xpath.parse_raw( data, " upper-case('äöüaou') ",namespace ))[1], "ÄÖÜAOU")
+    assert_equal(secondoftwo(xpath.parse_raw( data, " max(1,2,3) ",namespace ))[1], 3)
+    assert_equal(secondoftwo(xpath.parse_raw( data, " max('a','b','c') ",namespace ))[1], 'c')
+    assert_equal(secondoftwo(xpath.parse_raw( data, " min(1,2,3) ",namespace ))[1], 1)
+    assert_equal(secondoftwo(xpath.parse_raw( data, " min('a','b','c') ",namespace ))[1], 'a')
 end
 
 function test_castable()
