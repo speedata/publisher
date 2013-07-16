@@ -724,47 +724,26 @@ function commands.image( layoutxml,dataxml )
         local stretch_shrink
         if width / image.width > height / image.height then
             stretch_shrink = width / image.width
-            overshoot = math.round(  (image.height * stretch_shrink - height ) / publisher.factor / 2)
+            overshoot = math.round(  (image.height * stretch_shrink - height ) / publisher.factor / 2,3)
             overshoot = -overshoot
         else
             stretch_shrink = height / image.height
-            overshoot = math.round(  (image.width * stretch_shrink - width) / publisher.factor / 2 )
+            overshoot = math.round(  (image.width * stretch_shrink - width) / publisher.factor / 2 ,3)
         end
         width = image.width   * stretch_shrink
         height = image.height * stretch_shrink
     end
 
-    -- local width_sp, height_sp
-
-    -- local allocate = imageinfo.allocate
-    -- local scale_wd = width_sp / image.width
-    -- local scale = scale_wd
-    -- if height_sp then
-    --     local scale_ht = height_sp / image.height
-    --     scale = math.min(scale_ht,scale_wd)
-    -- end
-
     local shift_left,shift_up = 0,0
-
-    -- if nat_box_intern ~= max_box_intern then
-    --     --- The image must be enlarged and shifted left and up
-    --     local img_min = publisher.imageinfo(filename,seite,nat_box_intern).img
-    --     shift_left = ( image.width  - img_min.width )  / 2
-    --     shift_up =   ( image.height - img_min.height ) / 2
-    --     scale = scale * ( image.width / img_min.width )
-    -- else
-    --     shift_left,shift_up = 0,0
-    -- end
 
     image.width  = width
     image.height = height
 
-    -- log("Load image %q with scaling %g",filename,scale)
     local box
     if clip then
         local a=node.new("whatsit","pdf_literal")
-        local ht = math.round(height / publisher.factor)
-        local wd = math.round(width  / publisher.factor)
+        local ht = math.round(height / publisher.factor,4)
+        local wd = math.round(width  / publisher.factor,4)
         local right,left,top,bottom
         -- overshoot > 0 if image is too wide else < 0
         if overshoot > 0 then
@@ -780,6 +759,10 @@ function commands.image( layoutxml,dataxml )
             bottom = -overshoot
             shift_up = bottom * publisher.factor
         end
+        left   = math.round(left,3)
+        right  = math.round(right,3)
+        top    = math.round(top,3)
+        bottom = math.round(bottom,3)
 
         pdf_save = node.new("whatsit","pdf_save")
         pdf_restore = node.new("whatsit","pdf_restore")
@@ -792,12 +775,26 @@ function commands.image( layoutxml,dataxml )
         box.depth = 0
         node.insert_after(box,node.tail(box),pdf_restore)
         box = node.vpack(box)
+
+        local g = node.new("glue")
+        g.spec = node.new("glue_spec")
+        g.spec.width = -1 * shift_left
+        g = node.insert_after(g,g,box)
+        box = node.hpack(g)
+
+        g = node.new("glue")
+        g.spec = node.new("glue_spec")
+        g.spec.width = -1 * shift_up
+        g = node.insert_after(g,g,box)
+        box = node.vpack(g)
+
         box.height = height - shift_up * 2
+        box.width  = width  - shift_left * 2
     else
         box = node.hpack(img.node(image))
     end
-    node.set_attribute(box, publisher.att_shift_left, shift_left)
-    node.set_attribute(box, publisher.att_shift_up  , shift_up  )
+    -- node.set_attribute(box, publisher.att_shift_left, shift_left)
+    -- node.set_attribute(box, publisher.att_shift_up  , shift_up  )
     return {box,allocate}
 end
 
