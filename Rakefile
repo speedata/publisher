@@ -20,7 +20,6 @@ desc "Compile and install necessary software"
 task :build do
 	ENV['GOPATH'] = "#{srcdir}/go/sp"
 	publisher_version = @versions['publisher_version']
-	puts publisher_version
 	Dir.chdir(srcdir.join("go","sp")) do
 		puts "Building (and copying) sp binary..."
   		sh "go build -ldflags \"-X main.dest git -X main.version #{publisher_version}\"  sp.go"
@@ -35,8 +34,9 @@ task :doc do
 		sh "jekyll build"
 	end
 	print "Now generating command reference from XML..."
-	sh "java -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=en builddir=#{builddir}/manual"
-	sh "java -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=de builddir=#{builddir}/manual"
+	mkdir_p "temp"
+	sh "java -Dfile.encoding=utf8 -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=en builddir=#{builddir}/manual 2> temp/messages-en.csv"
+	sh "java -Dfile.encoding=utf8 -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=de builddir=#{builddir}/manual 2> temp/messages-de.csv"
 	puts "done"
 end
 
@@ -95,6 +95,13 @@ end
 desc "Update gh-pages"
 task :ghpages => [:doc] do
 	cp_r "#{builddir}/manual","webpage"
+	sh "bin/create-dash-documentsets.py"
+	Dir.chdir(builddir) do
+		sh "tar --exclude='.DS_Store' -czf ../webpage/speedatapublisher-de.tgz speedatapublisher-de.docset"
+		sh "tar --exclude='.DS_Store' -czf ../webpage/speedatapublisher-en.tgz speedatapublisher-en.docset"
+	end
+	IO.write("webpage/speedata_Publisher_(en).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>http://speedata.github.io/publisher/speedatapublisher-en.tgz</url>\n</entry>\n")
+	IO.write("webpage/speedata_Publisher_(de).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>http://speedata.github.io/publisher/speedatapublisher-de.tgz</url>\n</entry>\n")
 end
 
 # For now: only a small test

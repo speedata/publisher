@@ -73,8 +73,9 @@
 
   <xsl:template match="commands">
     <xsl:for-each select="command">
-      <xsl:result-document href="{concat($builddir,'/commands-',$lang,'/',lower-case(@name),'.html')}">
-        <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
+        <xsl:result-document href="{concat($builddir,'/commands-',$lang,'/',lower-case(@name),'.html')}">
+          <xsl:variable name="htmlpage" select="concat('commands-',$lang,'/',lower-case(@name),'.html')"/>
+          <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
         <html>
           <head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -101,7 +102,9 @@
               </xsl:otherwise>
             </xsl:choose>
             </div>
-              <xsl:apply-templates select="." />
+              <xsl:apply-templates select="." >
+                <xsl:with-param name="pagename" select="$htmlpage"/>
+              </xsl:apply-templates>
           </body>
         </html>
       </xsl:result-document>
@@ -109,6 +112,8 @@
   </xsl:template>
   
   <xsl:template match="command">
+    <xsl:param name="pagename"/>
+    <xsl:message select="concat('&quot;',sd:translate-command(@name),'&quot;,&quot;Function&quot;,&quot;',$pagename,'&quot;')"/>
     <div id="elementdesc">
       <h1>Elementname: <code class="syntax xml"><xsl:value-of select="sd:translate-command(@name)" /></code></h1>
       <h2><xsl:value-of select="sd:translate-text('Description')"></xsl:value-of></h2>
@@ -141,6 +146,7 @@
       <dl>
         <xsl:for-each select="attribute">
           <xsl:sort select="sd:translate-attribute(@name)" />
+          <xsl:message select="concat('&quot;',sd:translate-attribute(@name),'&quot;,&quot;Parameter&quot;,&quot;',$pagename,'#',@name,'&quot;')"/>
           <dt>
             <a name="{@name}" />
             <span class="tt">
