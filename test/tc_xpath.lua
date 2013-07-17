@@ -21,7 +21,7 @@ local data_src=[[
 
 local mixed_elements_src=[[<root>
  <one><subone a="b" /><subone /></one>
- <two />
+ <two><subtwo /><anoterhsubtwo /></two>
 </root>]]
 
 
@@ -98,6 +98,7 @@ function test_numdatasets()
     assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " sd:number-of-datasets(one)",namespace ))[1], 1)
     assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " count(*)",namespace ))[1], 2)
     assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " count(one/subone)",namespace ))[1], 2)
+    assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " count(two/*)",namespace ))[1], 2)
 end
 
 

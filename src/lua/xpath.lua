@@ -146,7 +146,7 @@ function M.is_nodeselector( dataxml,str,pos,ns )
         return true
     end
     local eltname
-    start,stop,eltname = string.find(str,"^(%a[%w/]*)%s*",pos)
+    start,stop,eltname = string.find(str,"^(%a[%w/%*]*)%s*",pos)
 
     if start then
         local ret = {}
@@ -156,7 +156,7 @@ function M.is_nodeselector( dataxml,str,pos,ns )
             local ret = {}
             for i=1,#tmp do
                 for j=1,#tmp[i] do
-                    if tmp[i][j][".__local_name"] == part then
+                    if part == "*" or part == tmp[i][j][".__local_name"] then
                         ret[#ret + 1] = tmp[i][j]
                     end
                 end
