@@ -317,9 +317,11 @@
         <a:documentation docid="image/file">Dateiname der Bilddatei. (Text)</a:documentation>
         <data type="string"/>
       </attribute>
-      <attribute name="breite">
+      <optional>
+        <attribute name="breite">
         <a:documentation docid="image/width">Breite des Bildes in Rasterzellen oder in absoluten Maßangaben.</a:documentation>
       </attribute>
+      </optional>
       <optional>
         <attribute name="höhe">
           <a:documentation docid="image/height">Gibt die maximale Höhe des Bildes an in Rasterzellen oder in absoluten Maßangaben (z.B. 210mm).</a:documentation>

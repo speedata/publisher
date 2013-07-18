@@ -313,9 +313,11 @@
         <a:documentation docid="image/file">Filename of the image. (text)</a:documentation>
         <data type="string"/>
       </attribute>
-      <attribute name="width">
+      <optional>
+        <attribute name="width">
         <a:documentation docid="image/width">Width of the image in grid cells or in aboslute size</a:documentation>
       </attribute>
+      </optional>
       <optional>
         <attribute name="height">
           <a:documentation docid="image/height">The height of the image (in absolute values, e.g. 210mm)</a:documentation>

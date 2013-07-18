@@ -152,6 +152,8 @@ function commands.barcode( layoutxml,dataxml )
     local showtext  = publisher.read_attribute(layoutxml,dataxml,"showtext" ,"boolean", "yes")
     local overshoot = publisher.read_attribute(layoutxml,dataxml,"overshoot","number"        )
 
+    width = width or xpath.get_variable("__maxwidth") * publisher.current_grid.gridwidth
+
     local fontfamily
     if fontname then
         fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
@@ -652,8 +654,9 @@ function commands.image( layoutxml,dataxml )
         -- width ist keine Zahl, sondern eine Maßangabe
         width_sp = tex.sp(width)
     else
-        width_sp = width * publisher.current_grid.gridwidth
+        width_sp = ( width or xpath.get_variable("__maxwidth")  ) * publisher.current_grid.gridwidth
     end
+
 
     if height then
         if tonumber(height) then
