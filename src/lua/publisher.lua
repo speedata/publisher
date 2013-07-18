@@ -1494,26 +1494,27 @@ function fix_justification( nodelist,textformat,parent)
             end
 
             if textformat == "rightaligned" then
-                local wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)
+
                 local list_start = head.head
+                local rightskip_node = node.tail(head.head)
+                local parfillskip
+
+                -- first we remove everything between the rightskip and the
+                -- last non-glue/non-penalty item
+                -- the glues might contain "plus 1 fill" and the penalties are not
+                -- useful
+                local tmp = rightskip_node.prev
+                while tmp and ( tmp.id == glue_node or tmp.id == penalty_node ) do
+                    tmp = tmp.prev
+                    head.head = node.remove(head.head,tmp.next)
+                end
+
+                local wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)
+
                 local leftskip_node = node.new("glue")
                 leftskip_node.spec = node.new("glue_spec")
                 leftskip_node.spec.width = goal - wd
-                leftskip_node.next = list_start
-                list_start.prev = leftskip_node
-                head.head = leftskip_node
-                local tail = node.tail(head.head)
-                while tail.prev and tail.prev.id ~= 10 do
-                    node.remove(head.head,tail.prev)
-                end
-                if tail.prev and tail.prev.prev and tail.prev.id == 10 then -- a skip
-                    local lastskip = tail.prev
-                    tail.prev = lastskip.prev
-                    lastskip.prev.next = tail
-                    lastskip.next = head.head
-                    head.head = lastskip
-                end
-
+                head.head = node.insert_before(head.head,head.head,leftskip_node)
             end
 
             if textformat == "centered" then
