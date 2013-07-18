@@ -1482,8 +1482,8 @@ function fix_justification( nodelist,textformat,parent)
                 end
 
                 -- n.spec.width > 0 because we insert a glue after a hyphen in
-                -- compund words mailing-[glue]list and that glue's width is 0pt
-                if n.subtype==0 and font_before_glue and n.spec.width > 0 then
+                -- compound words such as "mailing-[glue]list" and that glue's width is 0pt
+                if n.subtype==0 and font_before_glue and n.spec.width > 0 and head.glue_sign == 1 then
                     local fonttable = font.fonts[font_before_glue]
                     if not fonttable then fonttable = font.fonts[1] err("Some font not found") end
                     spec_new = node.new("glue_spec")
