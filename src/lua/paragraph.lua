@@ -3,8 +3,10 @@
 --  paragraph.lua
 --  speedata publisher
 --
---  Copyright 2012 Patrick Gundlach.
+--  Copyright 2012-2013 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
+
+file_start("paragraph.lua")
 
 require("publisher.fonts")
 
@@ -314,4 +316,7 @@ function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
     return node.vpack(toplist)
 end
 
+file_end("paragraph.lua")
+
 return Paragraph
+

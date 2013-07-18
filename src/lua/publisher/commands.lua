@@ -709,7 +709,7 @@ function commands.image( layoutxml,dataxml )
     local image = img.copy(imageinfo.img)
 
     height    = publisher.set_image_length(height,   "height") or image.height
-    width     = publisher.set_image_length(width,    "width" ) or image.width
+    width     = publisher.set_image_length(width,    "width" ) or math.min(image.width,xpath.get_variable("__maxwidth") * publisher.current_grid.gridwidth)
     minheight = publisher.set_image_length(minheight,"height") or 0
     minwidth  = publisher.set_image_length(minwidth, "width" ) or 0
     maxheight = publisher.set_image_length(maxheight,"height") or publisher.maxdimen
@@ -858,7 +858,7 @@ function commands.load_fontfile( layoutxml,dataxml )
             smcp = smcp == "yes",
         },
     }
-    log("filename = %q",filename or "?")
+    log("Load Fontfile %q",filename or "?")
     publisher.fonts.load_fontfile(name,filename,extra_parameter)
 end
 

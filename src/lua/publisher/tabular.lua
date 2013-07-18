@@ -2,12 +2,11 @@
 --  publisher/src/lua/tabular.lua
 --  speedata publisher
 --
---  Copyright 2010-2012 Patrick Gundlach.
+--  Copyright 2010-2013 Patrick Gundlach.
 --  See file COPYING in the root directory for license details.
 
 
-file_start("table.lua")
--- require("xpath")
+file_start("tabular.lua")
 
 module(...,package.seeall)
 
@@ -1274,5 +1273,5 @@ function tabelle( self )
     return setze_tabelle(self)
 end
 
-file_end("table.lua")
+file_end("tabular.lua")
 

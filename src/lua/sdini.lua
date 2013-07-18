@@ -46,12 +46,14 @@ function dirtree(dir)
       if not entry:match("^%.") then
         entry=dir.."/"..entry
      	  local attr=lfs.attributes(entry)
-     	  if attr.mode ~= "directory" then
-     	    coroutine.yield(entry,attr)
-     	  end
-     	  if attr.mode == "directory" then
-     	    yieldtree(entry)
-     	  end
+        if attr then
+     	    if attr.mode ~= "directory" then
+     	      coroutine.yield(entry,attr)
+     	    end
+     	    if attr.mode == "directory" then
+     	      yieldtree(entry)
+     	    end
+        end
       end
     end
   end
@@ -98,3 +100,4 @@ end
 do_luafile("sd-debug.lua")
 do_luafile("sd-callbacks.lua")
 
+texio.write_nl("Loading file sdini.lua ... done\n")
