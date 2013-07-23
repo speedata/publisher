@@ -215,7 +215,7 @@ func signalCatcher() {
 }
 
 // Run the given command line
-func run(cmdline string) {
+func run(cmdline string) (success bool) {
 	var cmdline_array []string
 	// The cmdline can have quoted strings. We remove the quotation marks
 	// by this ugly construct. That way strings such as "--data=foo\ bar" can
@@ -263,6 +263,8 @@ func run(cmdline string) {
 		showDuration()
 		log.Print(err)
 	}
+	success = cmd.ProcessState.Success()
+	return
 }
 
 func save_variables() {
@@ -401,7 +403,9 @@ func runPublisher() (exitstatus int) {
 	}
 	for i := 1; i <= runs; i++ {
 		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, exec_name, jobname, inifile, layoutname, dataname, layoutoptions_cmdline)
-		run(cmdline)
+		if !run(cmdline) {
+			exitstatus = 1
+		}
 	}
 	data, err := ioutil.ReadFile(fmt.Sprintf("%s.status", jobname))
 	if err == nil {
