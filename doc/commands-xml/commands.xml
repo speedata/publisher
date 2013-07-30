@@ -1710,6 +1710,12 @@
 <LadeSchriftdatei name="Helvetica Kursiv" dateiname="texgyreheros-italic.otf" />
 <LadeSchriftdatei name="Helvetica Fett Kursiv" dateiname="texgyreheros-bolditalic.otf" />]]></listing>
     </example>
+    <info xml:lang="en">
+      <para>The fonts are taken from the local search path. On Windows the path <tt>%WINDIR%\Fonts</tt> (usually <tt>C:\Windows\Fonts</tt>) and on Mac OS X the paths <tt>/Library/Fonts</tt> and <tt>/System/Library/Fonts</tt> are used as fallbacks for fonts. This can be configured with the setting <tt>fontpath</tt>.</para>
+    </info>
+    <info xml:lang="de">
+      <para>Die Schriftdateien werden aus dem lokalen Suchpfad geladen. Unter Windows wird der Pfad <tt>%WINDIR%\Fonts</tt> (normalerweise <tt>C:\Windows\Fonts</tt>) und auf Mac OS X die Pfade <tt>/Library/Fonts</tt> und <tt>/System/Library/Fonts</tt> dienen als Ergänzung des lokalen Suchpfads. Das kann mit der Option <tt>fontpath</tt> in der Konfigurationsdatei gesetzt werden.</para>
+    </info>
     <seealso>
       <cmd name="DefineFontfamily" />, <ref name="fonts" /></seealso>
   </command>

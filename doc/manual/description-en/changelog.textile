@@ -4,6 +4,11 @@ title: "Changelog"
 ---
 h1. Changelog
 
+
+h2. Version 1.8
+
+* New option in the configuration file: @fontpath@ to set fallback directories for fonts (1.7.1).
+
 h2. Version 1.6 (2013-05-24)
 
 * Width attribute in "Textblock":../commands-en/textblock.html and "Table":../commands-en/table.html optional (1.5.56)

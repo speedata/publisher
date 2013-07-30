@@ -2,7 +2,7 @@
 --  sdscripts.lua
 --  speedata publisher
 --
---  Copyright 2010-2011 Patrick Gundlach.
+--  Copyright 2010-2013 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 --
 
@@ -16,27 +16,42 @@ end
 
 local cmd = arg[2]
 
+local fontlist = {}
+
+local fp = os.getenv("SP_FONT_PATH")
+if fp ~= "" then
+  for _,dir in ipairs(string.explode(fp,":")) do
+    for i in dirtree(dir) do
+      local filename = i:gsub(".*/([^/]+)$","%1")
+      fontlist[filename] = i
+    end
+  end
+end
+
+
+for k,v in pairs(kpse.filelist) do fontlist[k] = v end
+
 if cmd=="list-fonts" then
   local is_xml = arg[3]=="xml"
   texio.write_nl("\n")
   if is_xml then
-  
+
   else
-    texio.write_nl(string.format("%-40s %s","Dateiname","PostScript Name"))
+    texio.write_nl(string.format("%-40s %s","Filename","PostScript Name"))
     texio.write_nl(string.format("%-40s %s","-----------------------------------","---------------"))
   end
   local l
-  local dateinamen_sortiert = {}
-  for filename,_ in pairs(kpse.filelist) do
+  local filenames_sorted = {}
+  for filename,_ in pairs(fontlist) do
     l = filename:lower()
     if l:match("%.pfb$") or l:match("%.ttf$") or l:match("%.otf") then
-      dateinamen_sortiert[#dateinamen_sortiert + 1] = filename
+      filenames_sorted[#filenames_sorted + 1] = filename
     end
   end
-  table.sort(dateinamen_sortiert)
+  table.sort(filenames_sorted)
   local psname
-  for i,v in ipairs(dateinamen_sortiert) do
-    psname = get_ps_name(kpse.filelist[v])
+  for i,v in ipairs(filenames_sorted) do
+    psname = get_ps_name(fontlist[v])
     if is_xml then
       print(string.format('<LadeSchriftdatei name="%s" dateiname="%s" />',psname,v))
     else
@@ -44,8 +59,8 @@ if cmd=="list-fonts" then
     end
   end
   texio.write_nl("----------------------------\n")
-  for i,v in ipairs(dateinamen_sortiert) do
-    psname = get_ps_name(kpse.filelist[v])
+  for i,v in ipairs(filenames_sorted) do
+    psname = get_ps_name(fontlist[v])
     if is_xml then
       print(string.format('<LoadFontfile name="%s" filename="%s" />',psname,v))
     else

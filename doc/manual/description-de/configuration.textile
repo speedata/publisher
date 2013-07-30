@@ -25,6 +25,7 @@ Das Format muss eingehalten werden, sonst wird die Datei nicht richtig erkannt. 
 - @autoopen@ := wenn hier @true@ anstelle von @false@ steht, wird das PDF nach dem Publisher Durchlauf automatisch geöffnet. Derselbe Effekt lässt sich über die Kommandozeile mit @--autoopen@ erreichen.
 - @extra-dir@ := Ein Verzeichnis im Dateisystem, das Dateien für den Publisherlauf enthält. Dazu gehören die Schriftdateien, die XML-Dateien (Daten und Layoutregelwerk) sowie die einzubindenden Bilddateien. Sollen mehrere Verzeichnisse hinzugefügt werden, müssen diese mit @:@ oder @;@ getrennt werden, je nach Betriebssystem (Windows: @;@, alle anderen: @:@). Das aktuelle Verzeichnis wird automatisch eingebunden.
 - @filter@  := Führt die angegebene Datei als XPROC-Filter aus.
+- @fontpath@ := Setzt den systemweiten Pfad für Fonts. Unter Windows ist dies @%WINDIR%\Fonts@, unter Mac OS X @/Library/Fonts:/System/Library/Fonts@.
 - @layout@  := Name des Layoutregelwerks. @layout.xml@ ist der voreingestellte Name.
 - @data@    := Name der XML-Daten. Wenn nicht vorhanden, wird die Datei @daten.xml@ geladen.
 - @dummy@   := Wenn @true@, dann wird die Datendatei nicht eingelesen. Anstatt dessen wird wird der folgende Inhalt angenommen: @<data />@. Das dient zum einfachen Testen von Layoutregelwerken.
@@ -37,7 +38,7 @@ Alle Angaben in dieser Konfigurationsdatei sind optional. Alle folgenden Konfigu
 
 h2.  Parameter auf der Kommandozeile
 
-Die erlaubten Parameter auf der Kommandozeile werden in einem "eigenen Abschnitt":commandline.html aufgeführt. 
+Die erlaubten Parameter auf der Kommandozeile werden in einem "eigenen Abschnitt":commandline.html aufgeführt.
 
 h2.  Angaben in der Layoutdatei
 

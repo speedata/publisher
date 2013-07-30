@@ -90,14 +90,16 @@ func init() {
 	}
 
 	// log.Print("Built for platform: ",dest)
-	switch os := runtime.GOOS; os {
+	switch runtime.GOOS {
 	case "darwin":
 		defaults["opencommand"] = "open"
+		defaults["fontpath"] = "/Library/Fonts:/System/Library/Fonts"
 		exe_suffix = ""
 	case "linux":
 		defaults["opencommand"] = "xdg-open"
 		exe_suffix = ""
 	case "windows":
+		defaults["fontpath"] = filepath.Join(os.Getenv("WINDIR"), "Fonts")
 		defaults["opencommand"] = "cmd /C start"
 		exe_suffix = ".exe"
 	}
@@ -582,6 +584,7 @@ func main() {
 	if add_local_path {
 		extra_dir = append(extra_dir, pwd)
 	}
+	os.Setenv("SP_FONT_PATH", getOption("fontpath"))
 
 	if ed := cfg.String("DEFAULT", "extra-dir"); ed != "" {
 		extra_dir = append(extra_dir, ed)
