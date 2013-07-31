@@ -93,17 +93,22 @@ func init() {
 	switch runtime.GOOS {
 	case "darwin":
 		defaults["opencommand"] = "open"
-		defaults["fontpath"] = "/Library/Fonts:/System/Library/Fonts"
 		exe_suffix = ""
 	case "linux":
 		defaults["opencommand"] = "xdg-open"
 		exe_suffix = ""
 	case "windows":
-		defaults["fontpath"] = filepath.Join(os.Getenv("WINDIR"), "Fonts")
 		defaults["opencommand"] = "cmd /C start"
 		exe_suffix = ".exe"
 	}
 	add_local_path = true
+
+	// FontFolder() is system dependent and defined in extra files
+	ff, err := FontFolder()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defaults["fontpath"] = ff
 
 	// LC_ALL is something like "de_DE.UTF-8"
 	re := regexp.MustCompile("^(d|D)(e|E)")
