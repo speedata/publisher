@@ -122,7 +122,7 @@ func init() {
 	// LC_ALL is something like "de_DE.UTF-8"
 	re := regexp.MustCompile("^(d|D)(e|E)")
 	var indexpage string
-	if re.MatchString(os.Getenv("LC_ALL")) {
+	if re.MatchString(os.Getenv("LANG")) {
 		indexpage = "index-de.html"
 	} else {
 		indexpage = "index.html"
