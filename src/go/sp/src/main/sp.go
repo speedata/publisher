@@ -99,7 +99,7 @@ func init() {
 	}
 
 	// log.Print("Built for platform: ",dest)
-	switch os := runtime.GOOS; os {
+	switch runtime.GOOS {
 	case "darwin":
 		defaults["opencommand"] = "open"
 		exe_suffix = ""
@@ -111,6 +111,13 @@ func init() {
 		exe_suffix = ".exe"
 	}
 	add_local_path = true
+
+	// FontFolder() is system dependent and defined in extra files
+	ff, err := FontFolder()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defaults["fontpath"] = ff
 
 	// LC_ALL is something like "de_DE.UTF-8"
 	re := regexp.MustCompile("^(d|D)(e|E)")
@@ -626,6 +633,7 @@ func main() {
 	if add_local_path {
 		extra_dir = append(extra_dir, pwd)
 	}
+	os.Setenv("SP_FONT_PATH", getOption("fontpath"))
 
 	if ed := cfg.String("DEFAULT", "extra-dir"); ed != "" {
 		extra_dir = append(extra_dir, ed)

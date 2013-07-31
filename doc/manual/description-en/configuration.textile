@@ -24,6 +24,7 @@ The format of the file is important, otherwise it won't be recognized. The follo
 - @autoopen@ := if @true@, the publisher opens the PDF file. Default: @false@. The same effect can be achieved if you run  @sp --autoopen@.
 - @extra-dir@ := A list of directories in the file system separated by @;@ (Windows) or @:@ (Mac, Linux). These directories contain the images, fonts, source files and other assets that are used during the publisher run.
 - @filter@  := Run the given file as an XPROC-Filter.
+- @fontpath@ := Set the path for system fonts. On Windows this is @%WINDIR%\Fonts@, on Mac OS X it defaults to @/Library/Fonts:/System/Library/Fonts@.
 - @layout@  := Name of the layout rule set (XML). The default name is @layout.xml@.
 - @data@    := Name of the data file (XML). If not given, the system uses @data.xml@.
 - @dummy@   := If @true@, the system won't read the data file, instead it uses the single element @<data />@ as its input.
@@ -37,7 +38,7 @@ All entries in the configuration file are optional. The configuration files are 
 
 h2.  Command line parameters
 
-The valid command line parameters are written on a "separate page":commandline.html. 
+The valid command line parameters are written on a "separate page":commandline.html.
 
 h2.  Options given in the layout file
 

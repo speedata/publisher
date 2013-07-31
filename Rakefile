@@ -22,8 +22,7 @@ task :build do
 	publisher_version = @versions['publisher_version']
 	Dir.chdir(srcdir.join("go","sp")) do
 		puts "Building (and copying) sp binary..."
-  		sh "go build -ldflags \"-X main.dest git -X main.version #{publisher_version}\"  sp.go"
-		cp("sp","#{installdir}/bin")
+  		sh "go build -ldflags \"-X main.dest git -X main.version #{publisher_version}\" -o  #{installdir}/bin/sp  main"
   		puts "...done"
 	end
 end

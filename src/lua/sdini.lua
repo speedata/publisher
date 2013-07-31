@@ -47,12 +47,12 @@ function dirtree(dir)
         entry=dir.."/"..entry
      	  local attr=lfs.attributes(entry)
         if attr then
-     	    if attr.mode ~= "directory" then
-     	      coroutine.yield(entry,attr)
-     	    end
-     	    if attr.mode == "directory" then
-     	      yieldtree(entry)
-     	    end
+     	      if attr.mode ~= "directory" then
+     	        coroutine.yield(entry,attr)
+     	      end
+     	      if attr.mode == "directory" then
+     	        yieldtree(entry)
+     	      end
         end
       end
     end

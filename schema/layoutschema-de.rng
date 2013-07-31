@@ -358,7 +358,7 @@
           <a:documentation docid="image/maxheight">Die maximale Größe des Bildes. Voreinstellung ist die »cropbox«. </a:documentation>
         </attribute>
       </optional>
-      
+
       <optional>
         <attribute name="seite">
           <a:documentation docid="image/page">Bindet die angegebene Seite aus einer PDF-Datei ein. Voreinstellung: 1</a:documentation>
@@ -829,7 +829,7 @@
       </element>
     </element>
   </define>
-  
+
   <define name="e_PlaceObject">
     <element name="ObjektAusgeben">
       <a:documentation docid="placeobject">Gibt ein Objekt (Bild,..) aus.</a:documentation>

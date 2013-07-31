@@ -356,7 +356,7 @@
           <a:documentation docid="image/maxheight"/>
         </attribute>
       </optional>
-      
+
       <optional>
         <attribute name="page">
           <a:documentation docid="image/page">The page in the PDF file that gets included</a:documentation>
@@ -819,7 +819,7 @@
       </element>
     </element>
   </define>
-  
+
   <define name="e_PlaceObject">
     <element name="PlaceObject">
       <a:documentation docid="placeobject">Puts an object (image, text,... ) onto the page or into a group.</a:documentation>

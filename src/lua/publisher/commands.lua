@@ -152,6 +152,8 @@ function commands.barcode( layoutxml,dataxml )
     local showtext  = publisher.read_attribute(layoutxml,dataxml,"showtext" ,"boolean", "yes")
     local overshoot = publisher.read_attribute(layoutxml,dataxml,"overshoot","number"        )
 
+    width = width or xpath.get_variable("__maxwidth") * publisher.current_grid.gridwidth
+
     local fontfamily
     if fontname then
         fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]

@@ -4,9 +4,11 @@ title: "Liste der Änderungen"
 ---
 h1. Liste der Änderungen
 
+h2. Versoion 2.0
+
 h2. Version 1.8
 
-* Neues Farbmodell @graustufen@ (1.7.1)
+* Neue Option in der Konfigurationsdatei: @fontpath@ um Fallback-Verzeichnisse für Fonts anzugeben (1.7.1).
 
 h2. Version 1.6 (2013-05-24)
 
