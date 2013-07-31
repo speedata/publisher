@@ -6,6 +6,9 @@ h1. Liste der Änderungen
 
 h2. Versoion 2.0
 
+* Neue "Konfiguration":configuration.html @pathrewrite@ um absolute Pfade (@file:///....@) für jeden Publishing-Lauf zu verändern.
+
+
 h2. Version 1.8
 
 * Neue Option in der Konfigurationsdatei: @fontpath@ um Fallback-Verzeichnisse für Fonts anzugeben (1.7.1).

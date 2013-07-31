@@ -23,6 +23,14 @@ local function reader( asked_name )
   return tab
 end
 
+local rewrite_tbl = {}
+if os.getenv("SP_PATH_REWRITE") ~= "" then
+    for _,v in ipairs(string.explode(os.getenv("SP_PATH_REWRITE"),",")) do
+        a,b = unpack(string.explode(v,"="))
+        rewrite_tbl[a]=b
+    end
+end
+
 
 function find_file_location( filename_or_uri )
   if filename_or_uri == "" then return nil end
@@ -36,21 +44,31 @@ function find_file_location( filename_or_uri )
   if not ( url_table or url_table.scheme ) then
     return nil
   end
+
   if url_table.scheme ~= "file" then
     err("Locating file -- scheme %q not supported. Requested file: %q",url_table.scheme or "(unable to parse scheme)",filename_or_uri or "(none)")
     return nil
   end
   local decoded_path = url.unescape(url_table.path)
-  -- remove first slash if on windows (/c:/foo/bar.png -> c:/foo/bar.png)
-  local _,_, windows_path = string.find(decoded_path,"^/(.:.*)$")
-  if windows_path then
-    decoded_path = windows_path
+
+  local path = decoded_path
+  for k,v in pairs(rewrite_tbl) do
+      path = string.gsub(path,k,v)
   end
-  x = lfs.attributes(decoded_path)
-  if not lfs.attributes(decoded_path) then
+  -- remove first slash if on windows (/c:/foo/bar.png -> c:/foo/bar.png)
+  if path ~= decoded_path then
+    log("Path rewrite: %q -> %q", decoded_path,path)
+  end
+
+  local _,_, windows_path = string.find(path,"^/(.:.*)$")
+  if windows_path then
+    path = windows_path
+  end
+  x = lfs.attributes(path)
+  if not lfs.attributes(path) then
     return nil
   end
-  return decoded_path
+  return path
 end
 
 local function find_xxx_file( asked_name )

@@ -634,6 +634,7 @@ func main() {
 		extra_dir = append(extra_dir, pwd)
 	}
 	os.Setenv("SP_FONT_PATH", getOption("fontpath"))
+	os.Setenv("SP_PATH_REWRITE", getOption("pathrewrite"))
 
 	if ed := cfg.String("DEFAULT", "extra-dir"); ed != "" {
 		extra_dir = append(extra_dir, ed)

@@ -23,18 +23,21 @@ extra-dir = "/home/speedata/Desktop/speedata"
 Das Format muss eingehalten werden, sonst wird die Datei nicht richtig erkannt. Folgende Optionen werden unterstützt:
 
 - @autoopen@ := wenn hier @true@ anstelle von @false@ steht, wird das PDF nach dem Publisher Durchlauf automatisch geöffnet. Derselbe Effekt lässt sich über die Kommandozeile mit @--autoopen@ erreichen.
+- @data@    := Name der XML-Daten. Wenn nicht vorhanden, wird die Datei @daten.xml@ geladen.
+- @dummy@   := Wenn @true@, dann wird die Datendatei nicht eingelesen. Anstatt dessen wird wird der folgende Inhalt angenommen: @<data />@. Das dient zum einfachen Testen von Layoutregelwerken.
 - @extra-dir@ := Ein Verzeichnis im Dateisystem, das Dateien für den Publisherlauf enthält. Dazu gehören die Schriftdateien, die XML-Dateien (Daten und Layoutregelwerk) sowie die einzubindenden Bilddateien. Sollen mehrere Verzeichnisse hinzugefügt werden, müssen diese mit @:@ oder @;@ getrennt werden, je nach Betriebssystem (Windows: @;@, alle anderen: @:@). Das aktuelle Verzeichnis wird automatisch eingebunden.
 - @filter@  := Führt die angegebene Datei als XPROC-Filter aus.
 - @fontpath@ := Setzt den systemweiten Pfad für Fonts. Unter Windows ist dies @%WINDIR%\Fonts@, unter Mac OS X @/Library/Fonts:/System/Library/Fonts@.
-- @layout@  := Name des Layoutregelwerks. @layout.xml@ ist der voreingestellte Name.
-- @data@    := Name der XML-Daten. Wenn nicht vorhanden, wird die Datei @daten.xml@ geladen.
-- @dummy@   := Wenn @true@, dann wird die Datendatei nicht eingelesen. Anstatt dessen wird wird der folgende Inhalt angenommen: @<data />@. Das dient zum einfachen Testen von Layoutregelwerken.
-- @jobname@ := Name der Ausgabedatei
-- @startpage@ := Nummer der ersten Seite
 - @grid@    := Bestimmt, ob das Raster angezeigt wird.
+- @jobname@ := Name der Ausgabedatei
+- @layout@  := Name des Layoutregelwerks. @layout.xml@ ist der voreingestellte Name.
 - @opencommand@ := Kommando für das automatische Öffnen der Dokumentation bzw. PDF-Datei. Für MacOS X sollte das @open@ sein, für Linux @xdg-open@ oder @exo-open@  (xfce).
+- @pathrewrite@ := Kommaseparierte Liste der Form Pfadteil=Pfadteil. Beispiel: @/media/=%(projectdir)s/myfiles/@. Das würde absolute Pfadangaben wie @file:///media/XYZ@ in @file:///Pfad/zum/Projekt/myfiles/XYZ@ ändern.
+- @startpage@ := Nummer der ersten Seite
 
-Alle Angaben in dieser Konfigurationsdatei sind optional. Alle folgenden Konfigurationsdateien werden in dieser Reihenfolge eingelesen: @/etc/speedata/publisher.cfg@, @~/.publisher.cfg@ und im aktuellen Verzeichnis @publisher.cfg@.
+In der Konfigurationsdatei kann mit @%(projectdir)s@ auf das Verzeichnis zugegriffen werden, in dem die Datei @publisher.cfg@ liegt.
+
+Alle Angaben in dieser Konfigurationsdatei sind optional. Alle folgenden Konfigurationsdateien werden in dieser Reihenfolge eingelesen: @/etc/speedata/publisher.cfg@, @~/.publisher.cfg@ und im aktuellen Verzeichnis @publisher.cfg@. Das aktuelle Verzeichnis kann beim Aufruf des Publishers mittels @--wd=...@ geändert werden.
 
 h2.  Parameter auf der Kommandozeile
 
