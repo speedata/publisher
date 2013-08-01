@@ -200,6 +200,10 @@ local function decode_html( dataxml, arg )
   return arg
 end
 
+local function count_saved_paged(dataxml,arg)
+    return #publisher.pagestore[arg[1]]
+end
+
 local register = publisher.xpath.register_function
 register("urn:speedata:2009/publisher/functions/en","number-of-rows",anzahl_zeilen)
 register("urn:speedata:2009/publisher/functions/de","anzahl-zeilen",anzahl_zeilen)
@@ -267,6 +271,9 @@ register("urn:speedata:2009/publisher/functions/de","bildbreite",bildbreite)
 
 register("urn:speedata:2009/publisher/functions/en","reset_alternating",reset_alternating)
 register("urn:speedata:2009/publisher/functions/de","alternierend_zurücksetzen",reset_alternating)
+
+register("urn:speedata:2009/publisher/functions/en","count-saved-pages",count_saved_paged)
+register("urn:speedata:2009/publisher/functions/de","anzahl-gespeicherte-seiten",count_saved_paged)
 
 
 file_end("layout_functions.lua")

@@ -27,6 +27,7 @@
       <element key="DefineTextformat"
                en="DefineTextformat"
                de="DefiniereTextformat"/>
+     <element key="SavePages" de="SeitenSpeichern" en="SavePages"/>
       <element key="Element" en="Element" de="Element"/>
       <element key="EmptyLine" en="EmptyLine" de="Leerzeile"/>
       <element key="Fontface" en="Fontface" de="Schriftart"/>
@@ -38,6 +39,7 @@
       <element key="I" en="I" de="I"/>
       <element key="Image" en="Image" de="Bild"/>
       <element key="Include" en="Include" de="Include"/>
+      <element key="InsertPages" de="SeitenEinfügen" en="InsertPages"/>
       <element key="Italic" en="Italic" de="Kursiv"/>
       <element key="Layout" en="Layout" de="Layout"/>
      <element key="Li" en="Li" de="Li"/>

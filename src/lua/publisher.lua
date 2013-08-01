@@ -109,7 +109,10 @@ options = {
 
 -- List of virtual areas. Key is the group name and value is
 -- a hash with keys contents (a nodelist) and raster (grid).
-groups   = {}
+groups    = {}
+
+-- sometimes we want to save pages for later reuse. Keys are pagestore names
+pagestore = {}
 
 colors    = { Schwarz = { model="grau", g = "0", pdfstring = " 0 G 0 g " }, black = { model="grau", g = "0", pdfstring = " 0 G 0 g " } }
 colortable = {}
@@ -214,6 +217,7 @@ local dispatch_table = {
     I                       = commands.italic,
     Image                   = commands.image,
     Include                 = commands.include,
+    InsertPages             = commands.insert_pages,
     Li                      = commands.li,
     LoadDataset             = commands.load_dataset,
     LoadFontfile            = commands.load_fontfile,
@@ -238,6 +242,7 @@ local dispatch_table = {
     Record                  = commands.record,
     Rule                    = commands.rule,
     SaveDataset             = commands.save_dataset,
+    SavePages               = commands.save_pages,
     Sequence                = commands.sequence,
     SetGrid                 = commands.set_grid,
     SetVariable             = commands.setvariable,
@@ -754,7 +759,7 @@ function new_page()
         return
     end
     if not current_page then
-        -- es wurde new_page() aufgerufen, ohne, dass was ausgegeben wurde bisher
+        -- new_page() is called without anything on the page yet
         page_initialized=false
         setup_page()
     end
@@ -768,8 +773,13 @@ function new_page()
     current_page = nil
 
     local n = node.vpack(publisher.global_pagebox)
-    tex.box[666] = n
-    tex.shipout(666)
+    if current_pagestore_name then
+        local thispagestore = pagestore[current_pagestore_name]
+        thispagestore[#thispagestore + 1] = n
+    else
+        tex.box[666] = n
+        tex.shipout(666)
+    end
 end
 
 --- Draw a background behind the rectangular (box) object.
