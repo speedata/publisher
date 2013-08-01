@@ -651,7 +651,7 @@ func main() {
 			xml = "xml"
 		}
 
-		cmdline := fmt.Sprintf(`"%s" --luaonly %s/lua/sdscripts.lua %s list-fonts %s`, getExecutablePath(), srcdir, inifile, xml)
+		cmdline := fmt.Sprintf(`"%s" --luaonly "%s/lua/sdscripts.lua" "%s" list-fonts %s`, getExecutablePath(), srcdir, inifile, xml)
 		run(cmdline)
 	case "watch":
 		watch_dir := getOptionSection("hotfolder", "hotfolder")
