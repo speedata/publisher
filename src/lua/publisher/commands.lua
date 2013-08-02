@@ -517,7 +517,6 @@ function commands.define_fontfamily( layoutxml,dataxml )
     log("DefineFontfamily, family=%d, name=%q",#fonts.lookup_fontfamily_number_instance,name)
 end
 
-
 --- Element
 --- -------
 --- Create an element for use with Attribute and SaveDataset
@@ -798,6 +797,19 @@ function commands.image( layoutxml,dataxml )
     -- node.set_attribute(box, publisher.att_shift_left, shift_left)
     -- node.set_attribute(box, publisher.att_shift_up  , shift_up  )
     return {box,allocate}
+end
+
+--- InsertPages
+--- -----------
+--- Insert previously saved pages with SavePages
+function commands.insert_pages( layoutxml,dataxml )
+    local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
+    local thispagestore = publisher.pagestore[pagestore_name]
+    for i=1,#thispagestore do
+        tex.box[666] = thispagestore[i]
+        tex.shipout(666)
+    end
+    tex.count[0] = tex.count[0] + #thispagestore
 end
 
 
@@ -1655,7 +1667,16 @@ function commands.save_dataset( layoutxml,dataxml )
     datei:close()
 end
 
-
+function commands.save_pages( layoutxml,dataxml )
+    thispage = tex.count[0]
+    local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
+    publisher.current_pagestore_name = pagestore_name
+    publisher.pagestore[pagestore_name] = {}
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    publisher.current_pagestore_name = nil
+    tex.count[0] = thispage
+    return tab
+end
 
 --- SetGrid
 --- -------
