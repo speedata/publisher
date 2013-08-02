@@ -1494,8 +1494,18 @@ end
 --- Set the grid to the given values.
 function commands.set_grid(layoutxml)
     trace("Command: SetGrid")
-    publisher.options.gridwidth   = tex.sp(publisher.read_attribute(layoutxml,dataxml,"width","length"))
-    publisher.options.gridheight  = tex.sp(publisher.read_attribute(layoutxml,dataxml,"height","length"))
+    local wd = publisher.read_attribute(layoutxml,dataxml,"width","rawstring")
+    local ht = publisher.read_attribute(layoutxml,dataxml,"height","rawstring")
+    if tonumber(wd) then
+        err("SetGrid: width must be a length (with unit). Setting it to 1cm.")
+        wd = "1cm"
+    end
+    if tonumber(ht) then
+        err("SetGrid: height must be a length (with unit). Setting it to 1cm.")
+        ht = "1cm"
+    end
+    publisher.options.gridwidth   = tex.sp(wd)
+    publisher.options.gridheight  = tex.sp(ht)
 end
 
 
