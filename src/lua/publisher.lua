@@ -1973,11 +1973,58 @@ end
 
 
 function get_remaining_height(area)
-    local areaheight = current_grid:number_of_rows(area) * current_grid.gridheight
-    local remaining_height, row
-    row = current_grid:current_row(area)
-    remaining_height = math.min(current_grid:remaining_height_sp(nil,area),areaheight)
-    return remaining_height,row
+    local cols = current_grid:number_of_columns(area)
+    local startcol = 1
+    local row,firstrow,lastrow,maxrows
+    firstrow = current_grid:current_row(area)
+    maxrows  = current_grid:number_of_rows(area)
+
+    if not current_grid:fits_in_row_area(startcol,cols,firstrow,area) then
+        while firstrow <= maxrows do
+            if current_grid:fits_in_row_area(startcol,cols,firstrow,area) then
+                break
+            end
+            firstrow = firstrow + 1
+        end
+    end
+
+    row = firstrow
+
+    while current_grid:fits_in_row_area(startcol,cols,row,area) and row <= maxrows do
+        row = row + 1
+    end
+
+    lastrow = row
+
+    while row <= maxrows do
+        if current_grid:fits_in_row_area(startcol,cols,row,area) then
+            return ( lastrow - firstrow)  * current_grid.gridheight, firstrow, row
+        end
+        row = row + 1
+    end
+    return ( lastrow - firstrow)  * current_grid.gridheight, firstrow, nil
+
+end
+
+function next_row(rownumber,areaname,rows)
+    local grid = current_grid
+
+    if rownumber then
+        grid:set_current_row(rownumber,areaname)
+        return
+    end
+
+    local current_row
+    current_row = grid:find_suitable_row(1,grid:number_of_columns(areaname),rows,areaname)
+    if not current_row then
+        publisher.next_area(areaname)
+        publisher.setup_page()
+        grid = publisher.current_page.grid
+        grid:set_current_row(1)
+    else
+        grid:set_current_row(current_row + rows - 1,areaname)
+        grid:set_current_column(1,areaname)
+    end
 end
 
 function set_image_length(len,width_or_height)
