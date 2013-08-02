@@ -248,6 +248,29 @@ function fits_in_row(self,column,width,row)
     return true
 end
 
+-- Same as fits in row, but take area into account (offset)
+function fits_in_row_area(self,column,width,row,areaname)
+    if not column then return false end
+
+    local frame_margin_left, frame_margin_top
+    if areaname == publisher.default_areaname then
+        frame_margin_left, frame_margin_top = 0,0
+    else
+        local area = self.positioning_frames[areaname]
+        if not self.positioning_frames[areaname] then
+            err("Area %q unknown, using page",areaname)
+            areaname = publisher.default_areaname
+            frame_margin_left, frame_margin_top = 0,0
+        else
+            -- Todo: find the correct block becuse they can be of different width/height
+            local block = area[self:framenumber(areaname)]
+            frame_margin_left = block.column - 1
+            frame_margin_top = block.row - 1
+        end
+    end
+    return self:fits_in_row(column + frame_margin_left, width, row + frame_margin_top )
+end
+
 -- Return the row in which the object of the given width can be placed.
 -- Starting column is @column@, If the page size is not know yet, the next free
 -- row will be given. Is the page full (the object cannot be placed), the

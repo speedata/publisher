@@ -1030,24 +1030,8 @@ function commands.next_row( layoutxml,dataxml )
     local rows      = publisher.read_attribute(layoutxml,dataxml,"rows","number")
     rows = rows or 1
     local areaname = areaname or publisher.default_areaname
-    local grid = publisher.current_grid
 
-    if rownumber then
-        grid:set_current_row(rownumber)
-        return
-    end
-
-    local current_row
-    current_row = grid:find_suitable_row(1,grid:number_of_columns(areaname),rows,areaname)
-    if not current_row then
-        publisher.next_area(areaname)
-        publisher.setup_page()
-        grid = publisher.current_page.grid
-        grid:set_current_row(1)
-    else
-        grid:set_current_row(current_row + rows - 1,areaname)
-        grid:set_current_column(1,areaname)
-    end
+    publisher.next_row(rownumber,areaname,rows)
 end
 
 --- NewPage
@@ -1105,6 +1089,9 @@ function commands.output( layoutxml,dataxml )
     area = area or publisher.default_areaname
     local last_area = publisher.xpath.get_variable("__area")
     publisher.xpath.set_variable("__area",area)
+    local row = publisher.read_attribute(layoutxml,dataxml,"row","number")
+    publisher.next_row(row,area,0)
+
 
     local current_maxwidth = xpath.get_variable("__maxwidth")
     xpath.set_variable("__maxwidth", publisher.current_grid:number_of_columns(area))
@@ -1116,7 +1103,7 @@ function commands.output( layoutxml,dataxml )
         local parameters
         local more_to_follow
         local obj
-        local maxht,row
+        local maxht,row,nextfreerow
         local objcount = 0
         -- We call push so long as it is needed. Say we have enough
         -- material for three pages (areas), we call push three times.
@@ -1129,7 +1116,7 @@ function commands.output( layoutxml,dataxml )
         while true do
             objcount = objcount + 1
             publisher.setup_page()
-            maxht, row = publisher.get_remaining_height(area)
+            maxht,row,nextfreerow = publisher.get_remaining_height(area)
             current_grid = publisher.current_grid
             current_row = publisher.current_grid:current_row(area)
 
@@ -1145,8 +1132,12 @@ function commands.output( layoutxml,dataxml )
             else
                 publisher.output_at(obj,1,row,true,area,nil,nil)
                 -- We don't need to go to the next page when we are a the end
-                if more_to_follow then
-                    publisher.next_area(area)
+                if nextfreerow then
+                    publisher.next_row(nextfreerow,area,0)
+                else
+                    if more_to_follow then
+                        publisher.next_area(area)
+                    end
                 end
             end
         end
