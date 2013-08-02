@@ -455,6 +455,12 @@ function dothings()
         options.showgrid = true
     end
 
+    if options.showgridallocation == "false" then
+        options.showgridallocation = false
+    elseif options.showgridallocation == "true" then
+        options.showgridallocation = true
+    end
+
     --- Set the starting page (which must be a number)
     if options.startpage then
         local num = options.startpage

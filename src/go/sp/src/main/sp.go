@@ -388,6 +388,9 @@ func runPublisher() (exitstatus int) {
 	if layoutoptions["grid"] != "" {
 		layoutoptions_ary = append(layoutoptions_ary, `showgrid=`+layoutoptions["grid"])
 	}
+	if layoutoptions["show-gridallocation"] != "" {
+		layoutoptions_ary = append(layoutoptions_ary, `showgridallocation=`+layoutoptions["show-gridallocation"])
+	}
 	if layoutoptions["startpage"] != "" {
 		layoutoptions_ary = append(layoutoptions_ary, `startpage=`+layoutoptions["startpage"])
 	}
@@ -580,6 +583,7 @@ func main() {
 	op.On("--outputdir=DIR", "Copy PDF and protocol to this directory", options)
 	op.On("--runs NUM", "Number of publishing runs ", options)
 	op.On("--startpage NUM", "The first page number", layoutoptions)
+	op.On("--show-gridallocation", "Show the allocated grid cells", layoutoptions)
 	op.On("--trace", "Show debug messages and some tracing PDF output", layoutoptions)
 	op.On("-v", "--var VAR=VALUE", "Set a variable for the publishing run", setVariable)
 	op.On("--verbose", "Print a bit of debugging output", options)
@@ -687,7 +691,7 @@ func main() {
 		}
 		for _, v := range files {
 			switch filepath.Ext(v) {
-			case ".vars", ".log", ".protocol", ".dataxml":
+			case ".vars", ".log", ".protocol", ".dataxml", ".status":
 				log.Printf("Removing %s", v)
 				err = os.Remove(v)
 				if err != nil {
