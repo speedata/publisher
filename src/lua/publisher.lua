@@ -1237,7 +1237,7 @@ function mknodes(str,fontfamily,parameter)
 
         elseif match(char,"%s") and last and last.id == glue_node and not node.has_attribute(last,att_tie_glue,1) then
             -- double space, don't do anything
-        elseif s == 160 then -- non breaking space
+        elseif s == 160 then -- non breaking space U+00A0
             n = node.new(penalty_node)
             n.penalty = 10000
 
