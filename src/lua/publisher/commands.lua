@@ -710,7 +710,7 @@ function commands.image( layoutxml,dataxml )
     local image = img.copy(imageinfo.img)
 
     height    = publisher.set_image_length(height,   "height") or image.height
-    width     = publisher.set_image_length(width,    "width" ) or math.min(image.width,xpath.get_variable("__maxwidth") * publisher.current_grid.gridwidth)
+    width     = publisher.set_image_length(width,    "width" ) or image.width
     minheight = publisher.set_image_length(minheight,"height") or 0
     minwidth  = publisher.set_image_length(minwidth, "width" ) or 0
     maxheight = publisher.set_image_length(maxheight,"height") or publisher.maxdimen
