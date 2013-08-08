@@ -318,6 +318,7 @@ values = {
     ["id"] = {de = "id", en = "id", },
     ["indentation"] = {de = "einrückung", en = "indentation", },
     ["k"] = {de = "k", en = "k", },
+    ["keepposition"] = {de = "behalteposition", en = "keepposition", },
     ["key"] = {de = "schlüssel", en = "key", },
     ["language"] = {de = "sprache", en = "language", },
     ["left"] = {de = "links", en = "left", },

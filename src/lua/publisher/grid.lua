@@ -16,9 +16,11 @@ local function to_sp(arg)
     return tex.dimen[0]
 end
 
-function new( self )
+-- pagenumber is only for debugging purpose
+function new( self,pagenumber )
     assert(self)
     local r = {
+        pagenumber        = pagenumber,
         pageheight_known  = false,
         extra_margin      = 0,  -- for cut marks, in sp
         trim              = 0,  -- bleed, in sp
@@ -167,13 +169,18 @@ end
 
 -- Mark the rectangular area given by x and y (top left corner)
 -- and the width wd and height ht as "not free" (allocated)
-function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname)
+function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname,keepposition)
     if not x then return false end
     local show_right  = false
     local show_bottom = false
     areaname = areaname or publisher.default_areaname
-    self:set_current_column(x + wd,areaname)
-    self:set_current_row(y,areaname)
+
+    -- when true, we don't want to move the cursor
+    if not keepposition then
+        self:set_current_column(x + wd,areaname)
+        self:set_current_row(y,areaname)
+    end
+
     local grid_conflict = false
     if  x + wd - 1 > self:number_of_columns(areaname) then
         warning("Object protrudes into the right margin")

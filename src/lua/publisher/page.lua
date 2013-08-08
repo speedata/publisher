@@ -10,7 +10,7 @@ local grid = require("publisher.grid")
 
 page = {}
 
-function page.new( self,width,height,additional_margin, trim )
+function page.new( self,width,height,additional_margin, trim,pagenumber )
   assert(self)
   if not width then return nil,"No information about page width found. Did you give the command <Pageformat>?" end
   assert(height)
@@ -19,9 +19,10 @@ function page.new( self,width,height,additional_margin, trim )
   trim              = trim              or 0
 
   local s = {
-    grid = grid:new(),
+    grid = grid:new(pagenumber),
     width  = width,
     height = height,
+    pagebox = node.new(publisher.vlist_node),
   }
 
   s.grid.extra_margin      = additional_margin

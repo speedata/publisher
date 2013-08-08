@@ -895,8 +895,24 @@
         <a:documentation docid="placeobject/backgroundcolor">Color of the background behind the object. (text)</a:documentation>
       </optional>
       <optional>
+        <attribute name="keepposition">
+          <a:documentation docid="placeobject/keepposition"/>
+          <choice>
+            <value>yes</value>
+            <a:documentation docid="placeobject/keepposition/yes"/>
+            <value>no</value>
+            <a:documentation docid="placeobject/keepposition/no"/>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="maxheight">
           <a:documentation docid="placeobject/maxheight">The maximum height of the objects (optional). Used for automatic table splitting.</a:documentation>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="page">
+          <a:documentation docid="placeobject/page"/>
         </attribute>
       </optional>
       <choice>

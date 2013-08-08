@@ -615,7 +615,7 @@ function commands.group( layoutxml,dataxml )
     end
 
 
-    local r = publisher.grid:new()
+    local r = publisher.grid:new(-1)
     r:set_margin(0,0,0,0)
     if grid then
         r:set_width_height(grid.breite,grid.hoehe)
@@ -704,7 +704,7 @@ function commands.image( layoutxml,dataxml )
     local nat_box_intern = box_lookup[nat_box] or "crop"
     local max_box_intern = box_lookup[max_box] or "crop"
 
-    publisher.setup_page()
+    -- publisher.setup_page()
 
     local imageinfo = publisher.new_image(filename,seite,max_box_intern)
     local image = img.copy(imageinfo.img)
@@ -809,7 +809,7 @@ function commands.insert_pages( layoutxml,dataxml )
         tex.box[666] = thispagestore[i]
         tex.shipout(666)
     end
-    tex.count[0] = tex.count[0] + #thispagestore
+    publisher.current_pagenumber = publisher.current_pagenumber + #thispagestore
 end
 
 
@@ -1090,13 +1090,13 @@ function commands.output( layoutxml,dataxml )
     local last_area = publisher.xpath.get_variable("__area")
     publisher.xpath.set_variable("__area",area)
     local row = publisher.read_attribute(layoutxml,dataxml,"row","number")
-    publisher.next_row(row,area,0)
+    publisher.next_row(row,area,1)
 
 
     local current_maxwidth = xpath.get_variable("__maxwidth")
     xpath.set_variable("__maxwidth", publisher.current_grid:number_of_columns(area))
 
-    publisher.setup_page()
+    -- publisher.setup_page()
     for i=1,#tab do
         local contents = publisher.element_contents(tab[i])
 
@@ -1272,6 +1272,8 @@ function commands.place_object( layoutxml,dataxml )
     local backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
     local rulewidth_sp     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",      "length_sp")
     local maxheight        = publisher.read_attribute(layoutxml,dataxml,"maxheight",      "number")
+    local onpage           = publisher.read_attribute(layoutxml,dataxml,"page",           "number")
+    local keepposition     = publisher.read_attribute(layoutxml,dataxml,"keepposition",   "boolean",false)
     local frame            = publisher.read_attribute(layoutxml,dataxml,"frame",          "string")
     local background       = publisher.read_attribute(layoutxml,dataxml,"background",     "string")
     local groupname        = publisher.read_attribute(layoutxml,dataxml,"groupname",      "rawstring")
@@ -1285,14 +1287,19 @@ function commands.place_object( layoutxml,dataxml )
     framecolor = framecolor or "Schwarz"
 
     if spalte and not tonumber(spalte) then
-        -- spalte scheint ein String zu sein
+        -- looks column is a string
         absolute_positioning = true
         spalte = tex.sp(spalte)
     end
-    if zeile and not tonumber(zeile) then
-        -- zeile scheint ein String zu sein
-        absolute_positioning = true
-        zeile = tex.sp(zeile)
+    if zeile then
+        local tmp = tonumber(zeile)
+        if not tmp then
+            -- looks row is a string
+            absolute_positioning = true
+            zeile = tex.sp(zeile)
+        else
+            zeile = tmp
+        end
     end
 
     if absolute_positioning then
@@ -1302,7 +1309,8 @@ function commands.place_object( layoutxml,dataxml )
         end
     end
 
-    publisher.setup_page()
+    if onpage == 'next' then onpage = publisher.current_pagenumber + 1 end
+    publisher.setup_page(onpage)
 
 
     -- remember the current maximum width for later
@@ -1426,18 +1434,23 @@ function commands.place_object( layoutxml,dataxml )
                 end
             end
 
-            log("PlaceObject: %s in row %d and column %d, width=%d, height=%d", objecttype, current_row, current_column_start,width_in_gridcells,height_in_gridcells)
+            log("PlaceObject: %s in row %d and column %d, width=%d, height=%d (page %d)", objecttype, current_row, current_column_start,width_in_gridcells,height_in_gridcells,onpage or publisher.current_pagenumber)
             trace("PlaceObject: object placed at (%d,%d)",current_column_start,current_row)
             if hreference == "right" then
                 current_column_start = current_column_start - width_in_gridcells + 1
             end
-            publisher.output_at(object,current_column_start,current_row,allocate == "yes",area,valign,objects[i].allocate_matrix)
+            publisher.output_at(object,current_column_start,current_row,allocate == "yes",area,valign,objects[i].allocate_matrix,onpage,keepposition)
             trace("object ausgegeben.")
             zeile = nil -- the current rows is not valid anymore because an object is already rendered
         end -- no absolute positioning
     end
     if not allocate == "yes" then
         publisher.current_grid:set_current_row(current_row_start)
+    end
+
+    if onpage then
+        publisher.setup_page()
+        publisher.current_grid = publisher.seiten[publisher.current_pagenumber].grid
     end
     trace("objects ausgegeben.")
 end
@@ -1662,14 +1675,17 @@ end
 --- ---------
 --- Save pages for later restore
 function commands.save_pages( layoutxml,dataxml )
-    thispage = tex.count[0]
+    thispage = publisher.current_pagenumber
     local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
     publisher.current_pagestore_name = pagestore_name
     publisher.pagestore[pagestore_name] = {}
     local tab = publisher.dispatch(layoutxml,dataxml)
     publisher.new_page()
+    for i=thispage,publisher.current_pagenumber - 1 do
+        publisher.seiten[i] = nil
+    end
     publisher.current_pagestore_name = nil
-    tex.count[0] = thispage
+    publisher.current_pagenumber = thispage
     return tab
 end
 

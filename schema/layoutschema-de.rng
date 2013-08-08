@@ -908,8 +908,24 @@
         <a:documentation docid="placeobject/backgroundcolor">Farbe des Hintergrunds, der gezeichnet werden soll. (Text)</a:documentation>
       </optional>
       <optional>
+        <attribute name="behalteposition">
+          <a:documentation docid="placeobject/keepposition"/>
+          <choice>
+            <value>ja</value>
+            <a:documentation docid="placeobject/keepposition/yes"/>
+            <value>nein</value>
+            <a:documentation docid="placeobject/keepposition/no"/>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="maxhöhe">
           <a:documentation docid="placeobject/maxheight">Gibt die maximale Höhe der auszugebenden Objekte an. Wird für automatischen Tabellenumbruch benötigt</a:documentation>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="seite">
+          <a:documentation docid="placeobject/page"/>
         </attribute>
       </optional>
       <choice>

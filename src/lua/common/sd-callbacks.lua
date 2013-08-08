@@ -9,6 +9,7 @@
 -- necessary callbacks if we want to use LuaTeX without kpathsea
 
 local url = require("socket.url")
+local verbosity = os.getenv("SP_VERBOSITY")
 
 local function reader( asked_name )
   local tab = { }
@@ -57,7 +58,9 @@ function find_file_location( filename_or_uri )
   end
   -- remove first slash if on windows (/c:/foo/bar.png -> c:/foo/bar.png)
   if path ~= decoded_path then
-    log("Path rewrite: %q -> %q", decoded_path,path)
+    if verbosity and tonumber(verbosity) > 0 then
+      log("Path rewrite: %q -> %q", decoded_path,path)
+    end
   end
 
   local _,_, windows_path = string.find(path,"^/(.:.*)$")
@@ -115,3 +118,9 @@ for _,t in ipairs({'read_vf_file','read_sdf_file','read_pk_file','read_data_file
   callback.register(t, read_xxx_file )
 end
 
+
+function print_page_number()
+  texio.write_nl(string.format("> Shipout page %d",publisher.current_pagenumber))
+end
+callback.register("start_page_number",print_page_number)
+callback.register("stop_page_number",false)

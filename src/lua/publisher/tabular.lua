@@ -971,7 +971,7 @@ function setze_tabelle(self)
     local rows = {}
     local break_above = true
     local filter = {}
-    local startpage = tex.count[0]
+    local startpage = publisher.current_pagenumber
     local tablepart_absolute = 1
 
     current_row = 0

@@ -96,6 +96,9 @@ default_areaname = "__seite"
 -- the language of the layout instructions ('en' or 'de')
 current_layoutlanguage = nil
 
+-- Startpage
+current_pagenumber = 1
+
 seiten   = {}
 
 -- CSS properties. Use `:matches(tbl)` to find a matching rule. `tbl` has the following structure: `{element=..., id=..., class=... }`
@@ -108,7 +111,7 @@ options = {
 }
 
 -- List of virtual areas. Key is the group name and value is
--- a hash with keys contents (a nodelist) and raster (grid).
+-- a hash with keys contents (a nodelist) and grid (grid).
 groups    = {}
 
 -- sometimes we want to save pages for later reuse. Keys are pagestore names
@@ -365,12 +368,14 @@ function bookmarkstotex( tbl )
     end
 end
 
+function page_initialized_p( pagenumber )
+    return seiten[pagenumber] ~= nil
+end
+
 --- Start the processing (`dothings()`)
 --- -------------------------------
 --- This is the entry point of the processing. It is called from `spinit.lua`/`main_loop()`.
 function dothings()
-    page_initialized=false
-
     --- First we set some defaults.
     --- A4 paper is 210x297 mm
     set_pageformat(tex.sp("210mm"),tex.sp("297mm"))
@@ -454,6 +459,12 @@ function dothings()
             end
         end
     end
+    if os.getenv("SP_VERBOSITY") == nil then
+        options.verbosity = 0
+    else
+        options.verbosity = tonumber(os.getenv("SP_VERBOSITY"))
+    end
+
     if options.showgrid == "false" then
         options.showgrid = false
     elseif options.showgrid == "true" then
@@ -470,7 +481,7 @@ function dothings()
     if options.startpage then
         local num = options.startpage
         if num then
-            tex.count[0] = num - 1
+            current_pagenumber = num - 1
             log("Set page number to %d",num)
         else
             err("Can't recognize starting page number %q",options.startpage)
@@ -491,9 +502,9 @@ function dothings()
 
     --- emit last page if necessary
     -- current_pagestore_name is set when in SavePages and nil otherwise
-    if page_initialized and current_pagestore_name == nil then
+    if page_initialized_p(current_pagenumber) and current_pagestore_name == nil then
         dothingsbeforeoutput()
-        local n = node.vpack(publisher.global_pagebox)
+        local n = node.vpack(seiten[current_pagenumber].pagebox)
 
         tex.box[666] = n
         tex.shipout(666)
@@ -566,14 +577,18 @@ function output_absolute_position( nodelist,x,y,allocate,area )
     n.width  = 0
     n.height = 0
     n.depth  = 0
-    local tail = node.tail(publisher.global_pagebox)
+    local tail = node.tail(seiten[current_pagenumber].pagebox)
     tail.next = n
     n.prev = tail
 end
 
 --- Put the object (nodelist) on grid cell (x,y). If `allocate`=`true` then
 --- mark cells as occupied.
-function output_at( nodelist, x,y,allocate,area,valign,allocate_matrix)
+function output_at( nodelist, x,y,allocate,area,valign,allocate_matrix,pagenumber,keepposition)
+    local outputpage = current_pagenumber
+    if pagenumber then
+        outputpage = pagenumber
+    end
     area = area or default_areaname
     local r = current_grid
     local wd = nodelist.width
@@ -632,7 +647,7 @@ function output_at( nodelist, x,y,allocate,area,valign,allocate_matrix)
     else
         -- Put it on the current page
         if allocate then
-            r:allocate_cells(x,y,width_gridcells,height_gridcells,allocate_matrix,area)
+            r:allocate_cells(x,y,width_gridcells,height_gridcells,allocate_matrix,area,keepposition)
         end
 
         local n = add_glue( nodelist ,"head",{ width = delta_x })
@@ -642,7 +657,7 @@ function output_at( nodelist, x,y,allocate,area,valign,allocate_matrix)
         n.width  = 0
         n.height = 0
         n.depth  = 0
-        local tail = node.tail(publisher.global_pagebox)
+        local tail = node.tail(seiten[outputpage].pagebox)
         tail.next = n
         n.prev = tail
 
@@ -650,13 +665,14 @@ function output_at( nodelist, x,y,allocate,area,valign,allocate_matrix)
 end
 
 --- Return the XML structure that is stored at &lt;pagetype>. For every pagetype
---- in the table "masterpages" the function is_pagetype() gets called-
-function detect_pagetype()
+--- in the table "masterpages" the function is_pagetype() gets called.
+-- pagenumber is for debugging purpose
+function detect_pagetype(pagenumber)
     local ret = nil
     for i=#masterpages,1,-1 do
         local seitentyp = masterpages[i]
         if xpath.parse(nil,seitentyp.is_pagetype,seitentyp.ns) == true then
-            log("Page of type %q created",seitentyp.name or "<detect_pagetype>")
+            log("Page of type %q created (%d)",seitentyp.name or "<detect_pagetype>",pagenumber)
             ret = seitentyp.res
             return ret
         end
@@ -666,10 +682,26 @@ function detect_pagetype()
 end
 
 --- _Must_ be called before something can be put on the page. Looks for hooks to be run before page creation.
-function setup_page()
-    if page_initialized then return end
-    page_initialized=true
-    publisher.global_pagebox = node.new("vlist")
+function setup_page(pagenumber)
+    if current_group then return end
+    local thispage
+    if pagenumber then
+        thispage = pagenumber
+        if seiten[pagenumber] ~= nil then
+            current_grid=seiten[pagenumber].grid
+            return
+        end
+    else
+        if page_initialized_p(current_pagenumber) then
+            current_grid=seiten[current_pagenumber].grid
+            return
+        end
+
+    end
+
+    if not pagenumber then
+        thispage = current_pagenumber
+    end
     local trim_amount = tex.sp(options.trim or 0)
     local extra_margin
     if options.cutmarks then
@@ -679,21 +711,20 @@ function setup_page()
     end
     local errorstring
 
-    current_page, errorstring = seite:new(options.pagewidth,options.seitenhoehe, extra_margin, trim_amount)
+    current_page, errorstring = seite:new(options.pagewidth,options.seitenhoehe, extra_margin, trim_amount,thispage)
     if not current_page then
         err("Can't create a new page. Is the page type (»PageType«) defined? %s",errorstring)
         exit()
     end
     current_grid = current_page.grid
-    seiten[tex.count[0]] = nil
-    tex.count[0] = tex.count[0] + 1
-    seiten[tex.count[0]] = current_page
+    -- seiten[current_pagenumber] = nil
+    seiten[thispage] = current_page
 
     local gridwidth = options.gridwidth
     local gridheight  = options.gridheight
 
 
-    local pagetype = detect_pagetype()
+    local pagetype = detect_pagetype(thispage)
     if pagetype == false then return false end
 
     for _,j in ipairs(pagetype) do
@@ -765,21 +796,21 @@ function new_page()
     if pagebreak_impossible then
         return
     end
-    if not current_page then
+    local thispage = seiten[current_pagenumber]
+    if not thispage then
         -- new_page() is called without anything on the page yet
-        page_initialized=false
         setup_page()
+        thispage = current_page
     end
-    if current_page.AtPageShipout then
+    if thispage.AtPageShipout then
         pagebreak_impossible = true
-        dispatch(current_page.AtPageShipout)
+        dispatch(thispage.AtPageShipout)
         pagebreak_impossible = false
     end
-    page_initialized=false
-    dothingsbeforeoutput()
-    current_page = nil
 
-    local n = node.vpack(publisher.global_pagebox)
+    dothingsbeforeoutput()
+
+    local n = node.vpack(seiten[current_pagenumber].pagebox)
     if current_pagestore_name then
         local thispagestore = pagestore[current_pagestore_name]
         thispagestore[#thispagestore + 1] = n
@@ -787,6 +818,7 @@ function new_page()
         tex.box[666] = n
         tex.shipout(666)
     end
+    current_pagenumber = current_pagenumber + 1
 end
 
 --- Draw a background behind the rectangular (box) object.
@@ -839,9 +871,10 @@ end
 
 --- After everything is ready for page shipout, we add debug output and crop marks if necessary
 function dothingsbeforeoutput(  )
+    local current_page = seiten[current_pagenumber]
     local r = current_page.grid
     local str
-    find_user_defined_whatsits(publisher.global_pagebox)
+    find_user_defined_whatsits(seiten[current_pagenumber].pagebox)
     local firstbox
 
     -- White background on page. Todo: Make color customizable and background optional.
@@ -903,8 +936,8 @@ function dothingsbeforeoutput(  )
         end
     end
     if firstbox then
-        local list_start = publisher.global_pagebox
-        publisher.global_pagebox = firstbox
+        local list_start = seiten[current_pagenumber].pagebox
+        seiten[current_pagenumber].pagebox = firstbox
         node.tail(firstbox).next = list_start
         list_start.prev = node.tail(firstbox)
     end
@@ -1139,7 +1172,7 @@ function find_user_defined_whatsits( head )
                     current_bookmark_table[#current_bookmark_table + 1] = {name = str, destination = dest, open = open_p}
                 elseif head.user_id == user_defined_mark then
                     local marker = head.value
-                    publisher.markers[marker] = { page = tex.count[0] }
+                    publisher.markers[marker] = { page = current_pagenumber }
                 end
             end
         end

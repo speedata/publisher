@@ -196,6 +196,7 @@
      <attribute key="id" en="id" de="id"/>
      <attribute key="indentation" en="indentation" de="einrückung"/>
       <attribute key="k" en="k" de="k"/>
+      <attribute key="keepposition" en="keepposition" de="behalteposition" />
       <attribute key="key" en="key" de="schlüssel"/>
       <attribute key="language" en="language" de="sprache"/>
       <attribute key="left" en="left" de="links"/>

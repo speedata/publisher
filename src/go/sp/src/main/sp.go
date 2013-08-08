@@ -645,6 +645,7 @@ func main() {
 	}
 	os.Setenv("SD_EXTRA_DIRS", strings.Join(extra_dir, string(filepath.ListSeparator)))
 	if getOption("verbose") != "" {
+		os.Setenv("SP_VERBOSITY", "1")
 		fmt.Println("SD_EXTRA_DIRS:", os.Getenv("SD_EXTRA_DIRS"))
 	}
 	var exitstatus int

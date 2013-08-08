@@ -12,7 +12,7 @@ local luxor = do_luafile("luxor.lua")
 
 local function aktuelle_seite(  )
   publisher.setup_page()
-  return  tex.count[0]
+  return publisher.current_pagenumber
 end
 
 local function current_row(dataxml,arg)
