@@ -1658,12 +1658,16 @@ function commands.save_dataset( layoutxml,dataxml )
     datei:close()
 end
 
+--- SavePages
+--- ---------
+--- Save pages for later restore
 function commands.save_pages( layoutxml,dataxml )
     thispage = tex.count[0]
     local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
     publisher.current_pagestore_name = pagestore_name
     publisher.pagestore[pagestore_name] = {}
     local tab = publisher.dispatch(layoutxml,dataxml)
+    publisher.new_page()
     publisher.current_pagestore_name = nil
     tex.count[0] = thispage
     return tab

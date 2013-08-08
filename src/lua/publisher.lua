@@ -490,7 +490,8 @@ function dothings()
 
 
     --- emit last page if necessary
-    if page_initialized then
+    -- current_pagestore_name is set when in SavePages and nil otherwise
+    if page_initialized and current_pagestore_name == nil then
         dothingsbeforeoutput()
         local n = node.vpack(publisher.global_pagebox)
 
