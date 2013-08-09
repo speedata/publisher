@@ -847,6 +847,17 @@
         </attribute>
       </optional>
       <optional>
+        <attribute name="vreference">
+          <a:documentation docid="placeobject/vreference"/>
+          <choice>
+            <value>top</value>
+            <a:documentation docid="placeobject/vreference/top"/>
+            <value>bottom</value>
+            <a:documentation docid="placeobject/vreference/bottom"/>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="area">
           <a:documentation docid="placeobject/area">The positioning area in which the object should be placed. The given column and row is relative to the area. The default area is »Page«.</a:documentation>
         </attribute>

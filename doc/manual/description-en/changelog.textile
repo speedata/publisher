@@ -9,6 +9,7 @@ h2. Version 2.0
 * New "Configuration":configuration.html @pathrewrite@ to change absolute paths (@file:///....@) for each publishing run.
 * New "Command line parameter":commandline.html @show-gridallocation@ to show allocated grid cells.
 * New color model @gray@ (1.7.1)
+* @vreferenz@ at "PlaceObject":../commands-en/placeobject.html.
 
 h2. Version 1.8
 

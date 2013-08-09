@@ -314,6 +314,7 @@ values = {
     ["href"] = {de = "href", en = "href", },
     ["height"] = {de = "höhe", en = "height", },
     ["hreference"] = {de = "hreferenz", en = "hreference", },
+    ["vreference"] = {de = "vreferenz", en = "vreference", },
     ["xml:id"] = {de = "xml:id", en = "xml:id", },
     ["id"] = {de = "id", en = "id", },
     ["indentation"] = {de = "einrückung", en = "indentation", },

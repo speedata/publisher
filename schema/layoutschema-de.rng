@@ -857,6 +857,17 @@
         </attribute>
       </optional>
       <optional>
+        <attribute name="vreferenz">
+          <a:documentation docid="placeobject/vreference">Das Objekt wird an der gewählten Zeile platziert. Mit vreferenz (vertikal) kann man die Kante bestimmen, die für die Platzierung gewählt wird.</a:documentation>
+          <choice>
+            <value>top</value>
+            <a:documentation docid="placeobject/vreference/top">Die Zeile gibt die obere Kante des Objekts an. (Voreinstellung)</a:documentation>
+            <value>bottom</value>
+            <a:documentation docid="placeobject/vreference/bottom">Die Zeile gibt die untere Kante des Objekts an.</a:documentation>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="bereich">
           <a:documentation docid="placeobject/area">Der Platzierungsbereich, in dem das Objekt ausgegeben werden soll. Die Angabe von Zeile und Spalte
                 bezieht sich auf den angegebenen Platzierungsbereich. Der voreingestellte Platzierungsbereich ist

@@ -2686,22 +2686,30 @@
     </attribute>
     <attribute name="hreference" type="leftright" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Determines the placement of the object relative to the given column. If 'left' (which is the default), the given column is the left border of the object. If 'right', the column determines the right edge of the object.</para>
       </description>
       <description xml:lang="de">
         <para>Bestimmt, ob die angegebene Spalte die linke oder die rechte Kante vom Objekt bezeichnet.</para>
       </description>
     </attribute>
+    <attribute name="vreference" type="topbottom" optional="yes">
+      <description xml:lang="en">
+        <para>Determines the placement of the object relative to the given row. If 'top' (which is the default), the given row is the top border of the object. If 'bottom', the column determines the bottom edge of the object.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt, ob die angegebene Zeile die obere oder die untere Kante vom Objekt bezeichnet.</para>
+      </description>
+    </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<Datensatz element="bild">
-  <ObjektAusgeben spalte="$spalte" rahmen="durchgezogen" rahmenfarbe="Rot">
-    <Bild breite="10" datei="." />
+  <ObjektAusgeben spalte="12" rahmen="durchgezogen" rahmenfarbe="Rot">
+    <Bild breite="10" datei="_samplea.pdf" />
   </ObjektAusgeben>
 </Datensatz>]]></listing>
       <para>Absolute Platzierung:</para>
       <listing><![CDATA[<Datensatz element="bild">
   <ObjektAusgeben spalte="1cm" zeile="4cm" rahmen="durchgezogen" rahmenfarbe="Rot">
-    <Bild breite="10" datei="." />
+    <Bild breite="10" datei="_samplea.pdf" />
   </ObjektAusgeben>
 </Datensatz>]]></listing>
     </example>
@@ -2710,11 +2718,11 @@
         eine Maßgangabe sein).</para>
     </info>
     <seealso>
-      <cmd name="Image" />
-      <cmd name="Box" />
-      <cmd name="Tablerule" />
-      <cmd name="Table" />
-      <cmd name="Textblock" />
+      <cmd name="Image" />,
+      <cmd name="Box" />,
+      <cmd name="Tablerule" />,
+      <cmd name="Table" />,
+      <cmd name="Textblock" />,
       <cmd name="DefineColor" />
     </seealso>
   </command>

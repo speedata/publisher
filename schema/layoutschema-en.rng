@@ -845,6 +845,17 @@
         </attribute>
       </optional>
       <optional>
+        <attribute name="vreference">
+          <a:documentation docid="placeobject/vreference">The object is placed at the given row. The vreference (vertical) determines the edge that is taken into account.</a:documentation>
+          <choice>
+            <value>top</value>
+            <a:documentation docid="placeobject/vreference/top">The given row is the top border of the object to be placed (default).</a:documentation>
+            <value>bottom</value>
+            <a:documentation docid="placeobject/vreference/bottom">The given row is the bottom border of the object to be placed.</a:documentation>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="area">
           <a:documentation docid="placeobject/area">The positioning area in which the object should be placed. The given column and row is relative to the area. The default area is »Page«.</a:documentation>
         </attribute>

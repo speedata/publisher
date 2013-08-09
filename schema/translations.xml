@@ -192,6 +192,7 @@
       <attribute key="href" en="href" de="href" />
       <attribute key="height" en="height" de="höhe"/>
       <attribute key="hreference" en="hreference" de="hreferenz"/>
+      <attribute key="vreference" en="vreference" de="vreferenz"/>
      <attribute key="xml:id" en="xml:id" de="xml:id"/>
      <attribute key="id" en="id" de="id"/>
      <attribute key="indentation" en="indentation" de="einrückung"/>
@@ -847,7 +848,19 @@
          <en>The given column is the right border of the object to be placed.</en>
          <de>Die Spalte gibt die rechte Kante des Objekts an.</de>
       </documentation>
-      <documentation docid="placeobject/row">
+     <documentation docid="placeobject/vreference">
+       <en>The object is placed at the given row. The vreference (vertical) determines the edge that is taken into account.</en>
+       <de>Das Objekt wird an der gewählten Zeile platziert. Mit vreferenz (vertikal) kann man die Kante bestimmen, die für die Platzierung gewählt wird.</de>
+     </documentation>
+     <documentation docid="placeobject/vreference/top">
+       <en>The given row is the top border of the object to be placed (default).</en>
+       <de>Die Zeile gibt die obere Kante des Objekts an. (Voreinstellung)</de>
+     </documentation>
+     <documentation docid="placeobject/vreference/bottom">
+       <en>The given row is the bottom border of the object to be placed.</en>
+       <de>Die Zeile gibt die untere Kante des Objekts an.</de>
+     </documentation>
+     <documentation docid="placeobject/row">
          <en>The row where the object is to be placed (optional, number). If not given, the system looks for the next free row.</en>
          <de>Zeile, in der das Objekt ausgegeben werden soll (optional, Zahl). Wird die Zeile nicht mit angegeben, so
                 sucht sich das System selbständig eine freie Zeile</de>

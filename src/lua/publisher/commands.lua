@@ -1279,6 +1279,7 @@ function commands.place_object( layoutxml,dataxml )
     local groupname        = publisher.read_attribute(layoutxml,dataxml,"groupname",      "rawstring")
     local valign           = publisher.read_attribute(layoutxml,dataxml,"valign",         "string")
     local hreference       = publisher.read_attribute(layoutxml,dataxml,"hreference",     "string")
+    local vreference       = publisher.read_attribute(layoutxml,dataxml,"vreference",     "string")
 
     if publisher.current_group and area then
         err("Areas can't be combined with groups")
@@ -1405,7 +1406,11 @@ function commands.place_object( layoutxml,dataxml )
 
             trace("PlaceObject: find suitable row for object, current_row = %d",zeile or current_grid:current_row(area) or "-1")
             if zeile then
-                current_row = zeile
+                if vreference == "bottom" then
+                    current_row = zeile - height_in_gridcells + 1
+                else
+                    current_row = zeile
+                end
             else
                 current_row = nil
             end

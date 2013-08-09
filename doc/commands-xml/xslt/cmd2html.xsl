@@ -52,6 +52,7 @@
     <value type="horizontalvertical" de="horizontal oder vertikal" en="horizontal or vertical"/>
     <value type="languages" de="Sprache" en="language"/>
     <value type="leftright" de="'links' oder 'rechts'" en="'left' or 'right'" />
+    <value type="topbottom" de="'oben' oder 'unten'" en="'top' or 'bottom'" />
     <value type="length" de="Längenangabe (mm,cm,pt)" en="Length (mm,in,cm,pt)"/>
     <value type="maxno" de="'max', 'nein'" en="'max', 'no'" />
     <value type="number" de="Zahl" en="number"/>
