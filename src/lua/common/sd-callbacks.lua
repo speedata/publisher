@@ -8,8 +8,8 @@
 
 -- necessary callbacks if we want to use LuaTeX without kpathsea
 
-local url = require("socket.url")
 local verbosity = os.getenv("SP_VERBOSITY")
+local url = require("socket_url")
 
 local function reader( asked_name )
   local tab = { }

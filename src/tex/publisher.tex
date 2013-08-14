@@ -10,8 +10,11 @@
 
 \directlua{
   require("publisher.spinit")
-  % main_loop_profiling()
-  main_loop()
+  if os.getenv("SD_PROFILER") == "true" then
+      main_loop_profiling()
+  else
+      main_loop()
+  end
   }
 
 \end

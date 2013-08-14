@@ -581,6 +581,7 @@ func main() {
 	op.On("--layout NAME", "Name of the layout file. Defaults to 'layout.xml'", options)
 	op.On("--jobname NAME", "The name of the resulting PDF file (without extension), default is 'publisher'", options)
 	op.On("--outputdir=DIR", "Copy PDF and protocol to this directory", options)
+	op.On("--profile", "Run publisher with profiling on (internal use)", options)
 	op.On("--runs NUM", "Number of publishing runs ", options)
 	op.On("--startpage NUM", "The first page number", layoutoptions)
 	op.On("--show-gridallocation", "Show the allocated grid cells", layoutoptions)
@@ -649,6 +650,21 @@ func main() {
 		fmt.Println("SD_EXTRA_DIRS:", os.Getenv("SD_EXTRA_DIRS"))
 	}
 	var exitstatus int
+	if getOption("profile") != "" {
+		fmt.Println("Profiling publisher run. Removing lprof_* now.")
+		os.Setenv("SD_PROFILER", "true")
+		files, err := filepath.Glob("lprof_*")
+		if err != nil {
+			log.Fatal(err)
+		}
+		for _, filename := range files {
+			err = os.Remove(filename)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+	}
+
 	switch command {
 	case "run":
 		if filter := getOption("filter"); filter != "" {
@@ -662,6 +678,20 @@ func main() {
 		}
 		exitstatus = runPublisher()
 		// open PDF if necessary
+		if getOption("profile") != "" {
+			fmt.Println("Run 'summary.lua' on resulting lprof_* file.")
+			files, err := filepath.Glob("lprof_*")
+			if err != nil {
+				log.Fatal(err)
+			}
+			if len(files) != 1 {
+				log.Println("Profiling not done, expecting exactly one file matching lprof_*.")
+			} else {
+				cmdline := fmt.Sprintf(`"%s" --luaonly "%s/lua/summary.lua"  -v %s`, getExecutablePath(), srcdir, files[0])
+				run(cmdline)
+			}
+
+		}
 		if getOption("autoopen") == "true" {
 			openFile(getOption("jobname") + ".pdf")
 		}

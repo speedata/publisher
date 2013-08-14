@@ -6,7 +6,7 @@ title: "Kommandozeile"
 h1. Aufruf des Publishers über Kommandozeile
 
 pre. sp --help
-Usage: [parameter] command
+Usage: sp [parameter] command
 -h, --help                   Show this help
     --autoopen               Open the PDF file (MacOS X and Linux only)
     --data=NAME              Name of the XML data file. Defaults to
@@ -20,6 +20,7 @@ Usage: [parameter] command
     --jobname=NAME           The name of the resulting PDF file (without
                              extension), default is 'publisher'
     --outputdir=DIR          Copy PDF and protocol to this directory
+    --profile                Run publisher with profiling on (internal use)
     --runs=NUM               Number of publishing runs
     --startpage=NUM          The first page number
     --show-gridallocation    Show the allocated grid cells
