@@ -25,7 +25,7 @@ local function reader( asked_name )
 end
 
 local rewrite_tbl = {}
-if os.getenv("SP_PATH_REWRITE") ~= "" then
+if os.getenv("SP_PATH_REWRITE") ~= nil then
     for _,v in ipairs(string.explode(os.getenv("SP_PATH_REWRITE"),",")) do
         a,b = unpack(string.explode(v,"="))
         rewrite_tbl[a]=b

@@ -1272,7 +1272,7 @@ function commands.place_object( layoutxml,dataxml )
     local backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
     local rulewidth_sp     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",      "length_sp")
     local maxheight        = publisher.read_attribute(layoutxml,dataxml,"maxheight",      "number")
-    local onpage           = publisher.read_attribute(layoutxml,dataxml,"page",           "number")
+    local onpage           = publisher.read_attribute(layoutxml,dataxml,"page",           "rawstring")
     local keepposition     = publisher.read_attribute(layoutxml,dataxml,"keepposition",   "boolean",false)
     local frame            = publisher.read_attribute(layoutxml,dataxml,"frame",          "string")
     local background       = publisher.read_attribute(layoutxml,dataxml,"background",     "string")
@@ -1310,7 +1310,15 @@ function commands.place_object( layoutxml,dataxml )
         end
     end
 
-    if onpage == 'next' then onpage = publisher.current_pagenumber + 1 end
+    if onpage then
+        if onpage == 'next' then
+            onpage = publisher.current_pagenumber + 1
+        elseif tonumber(onpage) then
+            onpage = tonumber(onpage)
+        end
+    end
+
+
     publisher.setup_page(onpage)
 
 
