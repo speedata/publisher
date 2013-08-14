@@ -8,7 +8,7 @@
 
 -- necessary callbacks if we want to use LuaTeX without kpathsea
 
-local url = require("socket.url")
+local url = require("socket_url")
 
 local function reader( asked_name )
   local tab = { }
@@ -86,7 +86,7 @@ callback.register('find_output_file',  return_asked_name)
 callback.register('read_opentype_file',read_font_file)
 callback.register('read_type1_file',   read_font_file)
 
-callback.register('find_write_file',find_write_file) 
+callback.register('find_write_file',find_write_file)
 
 callback.register('find_read_file',find_read_file)
 

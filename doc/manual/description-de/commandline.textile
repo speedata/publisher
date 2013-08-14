@@ -6,7 +6,7 @@ title: "Kommandozeile"
 h1. Aufruf des Publishers über Kommandozeile
 
 pre. sp --help
-Usage: sp [parameter] command 
+Usage: sp [parameter] command
 -h, --help                   Show this help
     --autoopen               Open the PDF file (MacOS X and Linux only)
     --data=NAME              Name of the XML data file. Defaults to 'data.xml'
@@ -20,7 +20,8 @@ Usage: sp [parameter] command
     --jobname=NAME           The name of the resulting PDF file, default is
                              'publisher.pdf'
     --outputdir=DIR          Copy PDF and protocol to this directory
-    --runs=NUM               Number of publishing runs 
+    --profile                Run publisher with profiling on (internal use)
+    --runs=NUM               Number of publishing runs
     --startpage=NUM          The first page number
     --trace                  Show debug messages and some tracing PDF output
 -v, --var=VAR=VALUE          Set a variable for the publishing run
@@ -28,7 +29,7 @@ Usage: sp [parameter] command
     --version                Show version information
     --wd=DIR                 Change working directory
     --xml                    Output as (pseudo-)XML (for list-fonts)
-  
+ 
 Commands
       list-fonts             List installed fonts (use together with --xml
                              for copy/paste)

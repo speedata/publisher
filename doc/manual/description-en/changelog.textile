@@ -7,6 +7,7 @@ h1. Changelog
 
 h2. Version 1.8
 
+* New "command line option":commandline.html  @--profile@ (1.7.2).
 * New option in the configuration file: @fontpath@ to set fallback directories for fonts (1.7.1).
 
 h2. Version 1.6 (2013-05-24)

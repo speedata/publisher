@@ -21,7 +21,8 @@ Usage: [parameter] command
     --jobname=NAME           The name of the resulting PDF file (without
                              extension), default is 'publisher'
     --outputdir=DIR          Copy PDF and protocol to this directory
-    --runs=NUM               Number of publishing runs 
+    --profile                Run publisher with profiling on (internal use)
+    --runs=NUM               Number of publishing runs
     --startpage=NUM          The first page number
     --trace                  Show debug messages and some tracing PDF output
 -v, --var=VAR=VALUE          Set a variable for the publishing run
@@ -29,7 +30,7 @@ Usage: [parameter] command
     --version                Show version information
     --wd=DIR                 Change working directory
     --xml                    Output as (pseudo-)XML (for list-fonts)
-  
+ 
 Commands
       list-fonts             List installed fonts (use together with --xml
                              for copy/paste)

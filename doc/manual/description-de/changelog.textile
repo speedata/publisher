@@ -6,6 +6,7 @@ h1. Liste der Änderungen
 
 h2. Version 1.8
 
+* Neuer "Kommandozeilenparameter":commandline.html  @--profile@ (1.7.2).
 * Neue Option in der Konfigurationsdatei: @fontpath@ um Fallback-Verzeichnisse für Fonts anzugeben (1.7.1).
 
 h2. Version 1.6 (2013-05-24)
