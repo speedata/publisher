@@ -221,19 +221,21 @@ function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname,keepposition)
         end
     else
         -- No allocate matrix (default)
-        local max_x = x + frame_margin_left + math.min(self:number_of_columns(areaname),  wd) - 1
-        local max_y = y + frame_margin_top  + math.min(self:number_of_rows(areaname),     ht) - 1
+        local max_x = frame_margin_left + math.min(self:number_of_columns(areaname), x + wd - 1)
+        local max_y = frame_margin_top  + math.min(self:number_of_rows(areaname),    y + ht - 1)
         for _x = x + frame_margin_left, max_x do
             for _y = y + frame_margin_top, max_y do
                 if self.allocation_x_y[_x][_y] then
                     grid_conflict = true
                     self.allocation_x_y[_x][_y] = self.allocation_x_y[_x][_y] + 1
                 else
+                    local color = 1
                     if _x == max_x and show_right then
-                        self.allocation_x_y[_x][_y] = 2
-                    else
-                        self.allocation_x_y[_x][_y] = 1
+                        color = 3
+                    elseif _y == max_y and show_bottom then
+                        color = 3
                     end
+                    self.allocation_x_y[_x][_y] = color
                 end
             end
         end
@@ -396,10 +398,12 @@ function draw_gridallocation(self)
                 re_wd = sp_to_bp(self.gridwidth)
                 re_x = sp_to_bp (self.margin_left + self.extra_margin) + ( x - 1) * sp_to_bp(self.gridwidth)
                 re_y = paperheight - sp_to_bp(self.margin_top + self.extra_margin) - y * sp_to_bp(self.gridheight)
-                if self.allocation_x_y[x][y] > 1 then
-                    color = " 0 1 1 0 k "
-                else
+                if self.allocation_x_y[x][y] == 1 then
                     color = " 0 0 1 0 k "
+                elseif self.allocation_x_y[x][y] == 2 then
+                    color = " 0 0.6 0.6 0 k "
+                else
+                    color = " 0 1 1 0 k "
                 end
                 pdf_literals[#pdf_literals + 1]  = string.format("q %s 1 0 0 1 %g %g cm 0 0 %g %g re f Q ",color,re_x, re_y, re_wd,re_ht)
             end
