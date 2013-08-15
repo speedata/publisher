@@ -985,6 +985,14 @@
           <ref name="t_languages"/>
         </attribute>
       </optional>
+        <optional>
+            <attribute name="ignorierezeilenende">
+                <choice>
+                    <value>ja</value>
+                    <value>nein</value>
+                </choice>
+            </attribute>
+        </optional>
       <optional>
         <attribute name="zeige_rasterbelegung">
           <a:documentation docid="options/showgridallocation">Bestimmt, ob die Rasterbelegung angezeigt wird.</a:documentation>

@@ -14,6 +14,7 @@ local P,S = lpeg.P, lpeg.S
 local string = unicode.utf8
 local current_element
 local decoder
+local err = err or print
 
 local html5entities = { apos = "'",
 	["Aacute"] = "Á", ["aacute"] = "á",  ["acirc"] = "â",   ["Acirc"] = "Â",   ["acute"] = "´",  ["AElig"] = "Æ",
@@ -263,7 +264,12 @@ local function parse_xml(txt,options)
 	else
 		decoder = decode_xmlstring
 	end
-	txt = txt.gsub(txt,"\13\n?","\n")
+	if options.ignoreeof == true then
+		txt = txt.gsub(txt,"\13\n?","\n")
+		txt = txt.gsub(txt,"\n%s*"," ")
+	else
+		txt = txt.gsub(txt,"\13\n?","\n")
+	end
 	if string.match(txt,"<%?xml",pos) then
 		pos = parse_xmldecl(txt,pos)
 	end

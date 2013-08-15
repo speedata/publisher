@@ -970,6 +970,14 @@
           <ref name="t_languages"/>
         </attribute>
       </optional>
+        <optional>
+            <attribute name="ignoreeof">
+                <choice>
+                    <value>yes</value>
+                    <value>no</value>
+                </choice>
+            </attribute>
+        </optional>
       <optional>
         <attribute name="show-gridallocation">
           <a:documentation docid="options/showgridallocation">Determins if the grid allocation should be shown.</a:documentation>

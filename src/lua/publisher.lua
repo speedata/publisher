@@ -400,20 +400,6 @@ function dothings()
         err("Without a valid layout-XML file, I can't really do anything.")
         exit()
     end
-    -- We allow the use of a dummy xml file for testing purpose
-    local dataxml
-    if arg[3] == "-dummy" then
-        dataxml = luxor.parse_xml("<data />")
-    elseif arg[3] == "-" then
-        log("Reading from stdin")
-        dataxml = luxor.parse_xml(io.stdin:read("*a"),{htmlentities = true})
-    else
-        dataxml = load_xml(arg[3],"data file")
-    end
-    if type(dataxml) ~= "table" then
-        err("Something is wrong with the data: dataxml is not a table")
-        exit()
-    end
 
     --- The `vars` file hold a lua document holding table
     local vars = loadfile(tex.jobname .. ".vars")()
@@ -488,6 +474,21 @@ function dothings()
         end
     end
 
+    -- We allow the use of a dummy xml file for testing purpose
+    local dataxml
+    if arg[3] == "-dummy" then
+        dataxml = luxor.parse_xml("<data />")
+    elseif arg[3] == "-" then
+        log("Reading from stdin")
+        dataxml = luxor.parse_xml(io.stdin:read("*a"),{htmlentities = true})
+    else
+        dataxml = load_xml(arg[3],"data file",{ htmlentities = true, ignoreeof = ( options.ignoreeof or false ) })
+    end
+    if type(dataxml) ~= "table" then
+        err("Something is wrong with the data: dataxml is not a table")
+        exit()
+    end
+
     --- Start data processing in the default mode (`""`)
     local tmp
     local name = dataxml[".__local_name"]
@@ -552,14 +553,14 @@ end
 ---       [3] = " "
 ---       [".__local_name"] = "data"
 ---     },
-function load_xml(filename,filetype)
+function load_xml(filename,filetype,options)
     local path = kpse.find_file(filename)
     if not path then
         err("Can't find XML file %q. Abort.\n",filename or "?")
         os.exit(-1)
     end
     log("Loading %s %q",filetype or "file",path)
-    return luxor.parse_xml_file(path, { htmlentities = true })
+    return luxor.parse_xml_file(path, options)
 end
 
 --- Place an object at a position given in scaled points (_x_ and _y_). `allocate` is ignored at at the moment.

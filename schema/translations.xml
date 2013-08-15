@@ -195,6 +195,7 @@
       <attribute key="vreference" en="vreference" de="vreferenz"/>
      <attribute key="xml:id" en="xml:id" de="xml:id"/>
      <attribute key="id" en="id" de="id"/>
+     <attribute key="ignoreeof" en="ignoreeof" de="ignorierezeilenende"/>
      <attribute key="indentation" en="indentation" de="einrückung"/>
       <attribute key="k" en="k" de="k"/>
       <attribute key="keepposition" en="keepposition" de="behalteposition" />
