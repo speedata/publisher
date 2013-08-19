@@ -213,7 +213,7 @@ end
 function commands.box( layoutxml,dataxml )
     local width     = publisher.read_attribute(layoutxml,dataxml,"width","number")
     local height    = publisher.read_attribute(layoutxml,dataxml,"height","number")
-    local hf_string = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
+    local colorname = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
     local bleed     = publisher.read_attribute(layoutxml,dataxml,"bleed","string")
 
     local current_grid = publisher.current_grid
@@ -224,7 +224,7 @@ function commands.box( layoutxml,dataxml )
     local shift_left,shift_up = 0,0
 
     if bleed then
-        local trim = publisher.options.trim
+        local trim = publisher.options.trim or 0
         local positions = string.explode(bleed,",")
         for i,v in ipairs(positions) do
             if v == "top" then
@@ -238,10 +238,7 @@ function commands.box( layoutxml,dataxml )
         end
     end
 
-    local _width   = sp_to_bp(width)
-    local _height  = sp_to_bp(height)
-    local n = publisher.box(_width,_height,hf_string)
-    n = node.hpack(n)
+    local n = publisher.box(width,height,colorname)
     node.set_attribute(n, publisher.att_shift_left, shift_left)
     node.set_attribute(n, publisher.att_shift_up  , shift_up )
     return n
