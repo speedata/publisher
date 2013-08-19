@@ -24,6 +24,7 @@ Usage: [parameter] command
     --runs=NUM               Number of publishing runs
     --startpage=NUM          The first page number
     --show-gridallocation    Show the allocated grid cells
+    --timeout=SEC            Exit after SEC seconds
     --trace                  Show debug messages and some tracing PDF output
 -v, --var=VAR=VALUE          Set a variable for the publishing run
     --verbose                Print a bit of debugging output
@@ -56,6 +57,7 @@ h2. Description of the command line parameters
 - @--runs=NUM@ := The number of passes. Normally the publisher will process a file only once, but more passes can be necessary if intermediate files are created for generating a table of contents or other document dependent data.
 - @--show-gridallocation@ := Show the allocated grid cells in yellowish color and double allocated grid cells in red.
 - @--startpage=NUM@ := The number of the first page.
+- @--timeout=SEC@ := Exit after SEC seconds with exit status 1.
 - @-v@, @--var=value@ := Passes additional variables to the publisher run. The variables can be accessed as usual with @select="$variable"@.
 - @--verbose@ := More inforation than necessary.
 - @--wd=DIR@ := Change working directory. Exactly the same as if you'd cd into that directory before running @sp@.

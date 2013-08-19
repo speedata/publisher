@@ -4,8 +4,9 @@ title: "Liste der Änderungen"
 ---
 h1. Liste der Änderungen
 
-h2. Versoion 2.0
+h2. Version 2.0
 
+* Neuer "Kommandozeilenparameter":commandline.html @timeout@ für Abbruch nach n Sekunden.
 * Neue "Konfiguration":configuration.html @pathrewrite@ um absolute Pfade (@file:///....@) für jeden Publishing-Lauf zu verändern.
 * Neuer "Kommandozeilenparameter":commandline.html @show-gridallocation@ um belegte Zellen zu zeigen.
 * @vreferenz@ bei "ObjektAusgeben":../commands-de/placeobject.html.

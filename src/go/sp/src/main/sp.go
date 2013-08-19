@@ -206,6 +206,21 @@ func showDuration() {
 	log.Printf("Total run time: %v\n", time.Now().Sub(starttime))
 }
 
+func timeoutCatcher(seconds int) {
+	timeout := make(chan bool, 1)
+	go func() {
+		time.Sleep(time.Duration(seconds) * time.Second)
+		timeout <- true
+	}()
+	select {
+	case <-timeout:
+		log.Printf("\n\nTimeout after %d seconds", seconds)
+		showDuration()
+		os.Exit(1)
+
+	}
+}
+
 func signalCatcher() {
 	ch := make(chan os.Signal)
 	signal.Notify(ch, syscall.SIGINT)
@@ -586,6 +601,7 @@ func main() {
 	op.On("--startpage NUM", "The first page number", layoutoptions)
 	op.On("--show-gridallocation", "Show the allocated grid cells", layoutoptions)
 	op.On("--trace", "Show debug messages and some tracing PDF output", layoutoptions)
+	op.On("--timeout SEC", "Exit after SEC seconds", options)
 	op.On("-v", "--var VAR=VALUE", "Set a variable for the publishing run", setVariable)
 	op.On("--verbose", "Print a bit of debugging output", options)
 	op.On("--version", "Show version information", versioninfo)
@@ -663,6 +679,15 @@ func main() {
 				log.Fatal(err)
 			}
 		}
+	}
+
+	if seconds := getOption("timeout"); seconds != "" {
+		num, err := strconv.Atoi(seconds)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Printf("Setting timeout to %d seconds", num)
+		go timeoutCatcher(num)
 	}
 
 	switch command {
