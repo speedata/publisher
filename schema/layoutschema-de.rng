@@ -771,6 +771,16 @@
     <element name="Nachricht">
       <a:documentation docid="message">Erzeugt eine Meldung auf der Konsole und im Protokoll. Die Nachricht wird durch das Attribut ›auswahl‹ oder durch Kindelemente »Wert« angegeben.</a:documentation>
       <ref name="a_xmlid"/>
+      <optional>
+        <attribute name="fehler">
+          <choice>
+            <value>ja</value>
+            <a:documentation docid="message/error/yes"/>
+            <value>nein</value>
+            <a:documentation docid="message/error/no"/>
+          </choice>
+        </attribute>
+      </optional>
       <choice>
         <attribute name="auswahl"><data type="string"/></attribute>
         <a:documentation docid="message/select">Nachricht, die ausgegeben werden soll (als XPath-Ausdruck)</a:documentation>

@@ -179,6 +179,7 @@
      <attribute key="digits" en="digits" de="ziffern"/>
       <attribute key="element" en="element" de="element"/>
       <attribute key="elementname" en="elementname" de="elementname"/>
+      <attribute key="error" en="error" de="fehler" />
      <attribute key="eval" en="eval" de="auswerten"/>
       <attribute key="file" en="file" de="datei"/>
       <attribute key="filename" en="filename" de="dateiname"/>

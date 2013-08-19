@@ -962,6 +962,7 @@ end
 function commands.message( layoutxml, dataxml )
     local contents
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
+    local errcond   = publisher.read_attribute(layoutxml,dataxml,"error", "boolean","no")
 
     if selection then
         local tmp = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
@@ -1009,7 +1010,11 @@ function commands.message( layoutxml, dataxml )
             contents = ret
         end
     end
-    log("Message: %q", tostring(contents) or "?")
+    if errcond then
+        err("%q", tostring(contents) or "?")
+    else
+        log("Message: %q", tostring(contents) or "?")
+    end
 end
 
 --- NextFrame

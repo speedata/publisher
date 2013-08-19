@@ -301,6 +301,7 @@ values = {
     ["digits"] = {de = "ziffern", en = "digits", },
     ["element"] = {de = "element", en = "element", },
     ["elementname"] = {de = "elementname", en = "elementname", },
+    ["error"] = {de = "fehler", en = "error", },
     ["eval"] = {de = "auswerten", en = "eval", },
     ["file"] = {de = "datei", en = "file", },
     ["filename"] = {de = "dateiname", en = "filename", },

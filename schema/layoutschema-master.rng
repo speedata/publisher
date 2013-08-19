@@ -761,6 +761,16 @@
     <element name="Message">
       <a:documentation docid="message">Writes a message to the console and to the log file. The message itself can be given with the attribute ›select‹ or the child element »Value«.</a:documentation>
       <ref name="a_xmlid"/>
+      <optional>
+        <attribute name="error">
+          <choice>
+            <value>yes</value>
+            <a:documentation docid="message/error/yes"/>
+            <value>no</value>
+            <a:documentation docid="message/error/no"/>
+          </choice>
+        </attribute>
+      </optional>
       <choice>
         <attribute name="select"><data type="string"/></attribute>
         <a:documentation docid="message/select">Message to be printed (XPath expression).</a:documentation>
