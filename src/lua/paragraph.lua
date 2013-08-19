@@ -250,6 +250,10 @@ function Paragraph:format(width_sp, default_textformat_name)
         if current_textformat.borderbottom then
             nodelist.list = publisher.add_rule(nodelist.list,"tail",{width = -1073741824, height = current_textformat.borderbottom})
         end
+        if current_textformat.marginbottom then
+            nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = current_textformat.marginbottom})
+        end
+
         objects[i] = nodelist.list
         nodelist.list = nil
         node.free(nodelist)
