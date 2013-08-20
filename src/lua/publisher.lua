@@ -55,7 +55,7 @@ att_tie_glue       = 201
 att_space_prio     = 300
 att_space_amount   = 301
 
-att_break_below    = 400
+att_break_below_forbidden    = 400
 att_break_above    = 401
 
 --- `att_is_table_row` is used in `tabular.lua` and if set to 1, it denotes

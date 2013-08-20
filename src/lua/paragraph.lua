@@ -240,9 +240,11 @@ function Paragraph:format(width_sp, default_textformat_name)
 
         if current_textformat.paddingtop then
             nodelist.list = publisher.add_glue(nodelist.list,"head",{width = current_textformat.paddingtop})
+            node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,1)
         end
         if current_textformat.bordertop then
             nodelist.list = publisher.add_rule(nodelist.list,"head",{width = -1073741824, height = current_textformat.bordertop})
+            node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,1)
         end
         if current_textformat.margintop then
             nodelist.list = publisher.add_glue(nodelist.list,"head",{width = current_textformat.margintop})
@@ -284,6 +286,7 @@ function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
 
     local vlist = table.remove(objects_t,1)
     local hbox = vlist.head
+    local templist
     while not area_filled do
         while hbox do
             local line = hbox
@@ -299,12 +302,32 @@ function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
             end
             if ht + lineheight >= goal then
                 -- There is enough material for the area
+
                 table.insert(objects_t,1,vlist)
+                if templist then
+                    vlist = node.vpack(templist)
+                    table.insert(objects_t,1,vlist)
+                end
                 return node.vpack(toplist)
             else
                 local newhead
                 vlist.head,newhead = node.remove(vlist.head,hbox)
-                toplist = node.insert_after(toplist,node.tail(toplist),hbox)
+                -- if break is not allowed, we store this in a temporary list
+                local break_forbidden = node.has_attribute(hbox,publisher.att_break_below_forbidden)
+
+                if break_forbidden then
+                    templist = node.insert_after(templist,node.tail(templist),hbox)
+                else
+                    if templist then
+                        local head = templist
+                        while head do
+                            toplist = node.insert_after(toplist,node.tail(toplist),head)
+                            head = head.next
+                        end
+                    end
+                    templist = nil
+                    toplist = node.insert_after(toplist,node.tail(toplist),hbox)
+                end
                 hbox = newhead
                 ht = ht + lineheight
             end

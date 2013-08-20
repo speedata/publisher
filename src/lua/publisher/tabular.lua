@@ -1018,7 +1018,7 @@ function setze_tabelle(self)
                 node.set_attribute(rows[#rows],publisher.att_space_amount,tr_contents["top-distance"])
             end
             if tr_contents["break-below"] == "no" then
-                node.set_attribute(rows[#rows],publisher.att_break_below,1)
+                node.set_attribute(rows[#rows],publisher.att_break_below_forbidden,1)
                 break_above = false
             end
 
