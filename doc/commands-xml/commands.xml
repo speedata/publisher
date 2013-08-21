@@ -1485,20 +1485,20 @@
     <parentelements>
       <cmd name="PlaceObject" />
     </parentelements>
-    <attribute name="width" type="numberorlength" optional="no">
+    <attribute name="width" type="numberorlength" optional="yes">
       <description xml:lang="en">
-        <para>Numer of grid cells that the image will use (horizontally).</para>
+        <para>Image width. One of 'auto' (default, take image width), '100%' (whole area width), length (such as '3cm') or number (in grid cells).</para>
       </description>
       <description xml:lang="de">
-        <para>Die Breite in Rasterzellen, den das Bild im Raster belegt.</para>
+        <para>Bildbreite. Angabe in der Form 'auto' (Voreinstellung, natürliche Bildbreite), '100%' (Breite des aktuellen Platzierungsbereichs), Längenangabe wie '4cm' oder Zahl (Anzahl von Rasterspalten)</para>
       </description>
     </attribute>
     <attribute name="height" type="numberorlength" optional="yes">
       <description xml:lang="en">
-        <para>Maximum height of the image in the grid.</para>
+        <para>Image height. One of 'auto' (default, take image width), length (such as '3cm') or number (in grid cells).</para>
       </description>
       <description xml:lang="de">
-        <para>Die maximale Höhe, die das Bild im Raster belegt.</para>
+        <para>Bildhöhe. Angabe in der Form 'auto' (Voreinstellung, natürliche Bildbreite), Längenangabe wie '4cm' oder Zahl (Anzahl von Rasterspalten)</para>
       </description>
     </attribute>
     <attribute name="file" type="text" optional="no">
