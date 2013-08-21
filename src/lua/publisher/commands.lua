@@ -1978,6 +1978,7 @@ function commands.table( layoutxml,dataxml,optionen )
     tabular.autostretch    = autostretch
     tabular.textformat     = textformat
 
+    xpath.set_variable("_last_tr_data","")
 
     local n = tabular:tabelle()
     return n
