@@ -385,6 +385,7 @@ function commands.define_textformat(layoutxml)
     local marginbottom  = publisher.read_attribute(layoutxml,dataxml,"margin-bottom", "rawstring")
     local paddingtop    = publisher.read_attribute(layoutxml,dataxml,"padding-top",   "rawstring")
     local paddingbottom = publisher.read_attribute(layoutxml,dataxml,"padding-bottom","rawstring")
+    local breakbelow    = publisher.read_attribute(layoutxml,dataxml,"break-below",   "boolean", true)
 
     local fmt = {}
 
@@ -420,6 +421,9 @@ function commands.define_textformat(layoutxml)
     if paddingbottom then
         fmt.paddingbottom = tex.sp(paddingbottom)
     end
+
+    fmt.breakbelow = breakbelow
+
 
     publisher.textformats[name] = fmt
 end
@@ -1925,7 +1929,6 @@ function commands.table( layoutxml,dataxml,optionen )
     local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",    "rawstring")
     local eval           = publisher.read_attribute(layoutxml,dataxml,"eval",          "xpath")
     -- FIXME: leading -> rowdistance or so
-
     padding        = tex.sp(padding        or "0pt")
     columndistance = tex.sp(columndistance or "0pt")
     rowdistance    = tex.sp(rowdistance    or "0pt")

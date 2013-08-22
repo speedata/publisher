@@ -249,11 +249,18 @@ function Paragraph:format(width_sp, default_textformat_name)
         if current_textformat.margintop then
             nodelist.list = publisher.add_glue(nodelist.list,"head",{width = current_textformat.margintop})
         end
+        if current_textformat.breakbelow == false then
+            node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,1)
+        end
         if current_textformat.borderbottom then
             nodelist.list = publisher.add_rule(nodelist.list,"tail",{width = -1073741824, height = current_textformat.borderbottom})
+            node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,1)
         end
         if current_textformat.marginbottom then
             nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = current_textformat.marginbottom})
+        end
+        if current_textformat.breakbelow == false then
+            node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,1)
         end
 
         objects[i] = nodelist.list
@@ -285,11 +292,12 @@ function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
     -- the area. All other lines stay in the objects_t table
 
     local vlist = table.remove(objects_t,1)
+
     local hbox = vlist.head
     local templist
     while not area_filled do
+
         while hbox do
-            local line = hbox
             local lineheight = 0
             if hbox.id == publisher.hlist_node then
                 lineheight = hbox.height + hbox.depth
@@ -320,12 +328,16 @@ function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
                 else
                     if templist then
                         local head = templist
-                        while head do
+                        repeat
+                            head = templist
+                            templist = head.next
+                            if templist then
+                                templist.prev = nil
+                                head.next = nil
+                            end
                             toplist = node.insert_after(toplist,node.tail(toplist),head)
-                            head = head.next
-                        end
+                        until templist == nil
                     end
-                    templist = nil
                     toplist = node.insert_after(toplist,node.tail(toplist),hbox)
                 end
                 hbox = newhead
