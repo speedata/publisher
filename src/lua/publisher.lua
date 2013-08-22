@@ -55,8 +55,9 @@ att_tie_glue       = 201
 att_space_prio     = 300
 att_space_amount   = 301
 
-att_break_below_forbidden    = 400
-att_break_above    = 401
+att_break_below_forbidden = 400
+att_break_above           = 401
+att_omit_at_top           = 402
 
 --- `att_is_table_row` is used in `tabular.lua` and if set to 1, it denotes
 --- a regular table row, and not a spacer. Spacers must not appear

@@ -258,6 +258,7 @@ function Paragraph:format(width_sp, default_textformat_name)
         end
         if current_textformat.marginbottom then
             nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = current_textformat.marginbottom})
+            node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
         end
         if current_textformat.breakbelow == false then
             node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,1)
@@ -303,6 +304,11 @@ function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
                 lineheight = hbox.height + hbox.depth
             elseif hbox.id == publisher.glue_node then
                 lineheight = hbox.spec.width
+                -- local x = node.has_attribute(hbox,publisher.att_omit_at_top)
+                -- if x == 1 and templist == nil and toplist == nil then
+                --     hbox.spec.width = 0
+                --     lineheight = 0
+                -- end
             elseif hbox.id == publisher.rule_node then
                 lineheight = hbox.height + hbox.depth
             else
@@ -311,7 +317,21 @@ function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
             if ht + lineheight >= goal then
                 -- There is enough material for the area
 
-                table.insert(objects_t,1,vlist)
+                local x = node.has_attribute(hbox,publisher.att_omit_at_top)
+                if x == 1 then
+                    -- We are at the bottom of the area and the next
+                    -- item would be omitted at the top, so we can
+                    -- safely remove this item
+                    vlist.head = node.remove(vlist.head,hbox)
+                end
+
+                if vlist.head then
+                    -- but when we remove it, the vlist
+                    -- might be empty
+                    -- if it's not empty (there are items that go onto the next area)
+                    -- we will re-insert the rest of the list in the list of objects.
+                    table.insert(objects_t,1,vlist)
+                end
                 if templist then
                     vlist = node.vpack(templist)
                     table.insert(objects_t,1,vlist)
