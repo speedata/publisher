@@ -963,7 +963,7 @@ end
 function commands.message( layoutxml, dataxml )
     local contents
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
-    local errcond   = publisher.read_attribute(layoutxml,dataxml,"error", "boolean","no")
+    local errcond   = publisher.read_attribute(layoutxml,dataxml,"error", "boolean",false)
 
     if selection then
         local tmp = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")

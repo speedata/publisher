@@ -493,6 +493,7 @@ function dothings()
     --- Start data processing in the default mode (`""`)
     local tmp
     local name = dataxml[".__local_name"]
+    xpath.set_variable("__position", 1)
     --- The rare case that the user has not any `Record` commands in the layout file:
     if not data_dispatcher[""] then
         err("Can't find »Record« command for the root node.")

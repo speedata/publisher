@@ -24,10 +24,14 @@ local mixed_elements_src=[[<root>
  <two><subtwo /><anoterhsubtwo /></two>
 </root>]]
 
+local with_underscore_src=[[<root>
+ <foo_bar>Hello world</foo_bar>
+</root>]]
 
 
 
 local data = luxor.parse_xml(data_src)
+local with_underscore = luxor.parse_xml(with_underscore_src)
 local mixed_elements = luxor.parse_xml(mixed_elements_src)
 local namespace = { sd = "foo" }
 
@@ -238,5 +242,9 @@ function test_functions()
     assert_equal(xpath.parse(data , " concat($column, 'abc' ) ",namespace ),"2abc")
     -- dashes:
     assert_equal(xpath.parse( data, " sd:return-ten() ", namespace ), 10)
+end
+
+function test_other()
+  assert_equal(secondoftwo(xpath.parse_raw(with_underscore," string(foo_bar) ",namespace))[1], "Hello world")
 end
 
