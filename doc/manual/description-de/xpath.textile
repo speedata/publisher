@@ -62,3 +62,13 @@ Es gibt zwei Klassen von XPath Funktionen: standardkonforme und speedata Publish
 - position() := Ermittelt die Position des aktuellen Datensatzes.
 - string(&lt;Sequenz>) := Gibt den Textwert der Sequenz zurück, d.h. den Inhalt der Elemente.
 - true() := Gibt „Wahr“ zurück.
+
+h2. Todo Dokumentieren:
+
+- ceiling()
+- max()
+- min()
+- normalize-space()
+- node()
+- string()
+- upper-case()

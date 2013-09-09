@@ -79,3 +79,13 @@ There are two classes of XPath functions: standard XPath functions and speedata 
 - position() := Return the position of the current node.
 - string(&lt;sequence>) := Return the text value of the sequence e.g. the contents of the elemements.
 - true() := Return __true__.
+
+h2. Todo document:
+
+- ceiling()
+- max()
+- min()
+- normalize-space()
+- node()
+- string()
+- upper-case()
