@@ -767,6 +767,14 @@
     </element>
   </define>
 
+  <define name="e_Makeindex">
+    <element name="Indexerstellen">
+      <attribute name="auswahl"/>
+      <attribute name="sortierschlüssel"/>
+      <attribute name="abschnitt"/>
+    </element>
+  </define>
+
   <define name="e_Message">
     <element name="Nachricht">
       <a:documentation docid="message">Erzeugt eine Meldung auf der Konsole und im Protokoll. Die Nachricht wird durch das Attribut ›auswahl‹ oder durch Kindelemente »Wert« angegeben.</a:documentation>
@@ -1154,6 +1162,7 @@
         <a:documentation docid="savedataset/select">Inhalt der Datensatzdatei</a:documentation>
         <oneOrMore>
           <optional><ref name="e_Element"/></optional>
+          <optional><ref name="e_Makeindex"/></optional>
           <optional><ref name="e_SortSequence"/></optional>
           <optional><ref name="e_Sequence"/></optional>
           <optional><ref name="e_CopyOf"/></optional>

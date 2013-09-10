@@ -226,6 +226,7 @@ local dispatch_table = {
     LoadDataset             = commands.load_dataset,
     LoadFontfile            = commands.load_fontfile,
     Loop                    = commands.loop,
+    Makeindex               = commands.makeindex,
     Margin                  = commands.margin,
     Mark                    = commands.mark,
     Message                 = commands.message,

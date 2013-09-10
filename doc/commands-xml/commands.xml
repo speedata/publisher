@@ -1963,6 +1963,150 @@
     </example>
     <seealso><cmd name="ForAll"/></seealso>
   </command>
+  <command name="Makeindex">
+    <description xml:lang="en">
+      <para>Sort and split a list of elements to make an index.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Eine Liste von Elementen sortieren und aufteilen um einen Index zu erzeugen.</para>
+    </description>
+    <childelements/>
+    <parentelements>
+      <cmd name="SaveDataset"/>
+    </parentelements>
+    <attribute name="section" type="text" optional="no">
+      <description xml:lang="en">
+        <para>Create an XML-element with this name for every section (letter) in the index.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Erzeuge ein XML-Element mit diesem Namen für jeden Abschnitt (Buchstabe) in dem Index.</para>
+      </description>
+    </attribute>
+    <attribute name="select" type="xpath" optional="no">
+      <description xml:lang="en">
+        <para>The xpath expression ($variable) that holds the element structure for the index.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der XPath-Ausdruck der die Elementstruktur für den Index enthält ($Variable).</para>
+      </description>
+    </attribute>
+    <attribute name="sortkey" type="text" optional="no">
+      <description xml:lang="en">
+        <para>The name of the attribute holding the indexentry (that should be sorted).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name des Attributs das den Indexeintrag enthält (der sortiert werden soll).</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <para>Index generation works in two steps: First, collect all the entries in a <cmd name="Element"/> structure, then, while saving the generated structure, sort the keys and group them with this command.</para>
+      <listing><![CDATA[  <Record element="data">
+    <LoadDataset name="index" />
+    <SetVariable variable="indexentries">
+      <Element name="indexentry">
+        <Attribute name="name" select="'Home'" />
+        <Attribute name="page" select="1" />
+      </Element>
+      <Element name="indexentry">
+        <Attribute name="name" select="'House'" />
+        <Attribute name="page" select="2" />
+      </Element>
+      <Element name="indexentry">
+        <Attribute name="name" select="'Hello'" />
+        <Attribute name="page" select="3" />
+      </Element>
+      <Element name="indexentry">
+        <Attribute name="name" select="'Garage'" />
+        <Attribute name="page" select="4" />
+      </Element>
+    </SetVariable>
+    <SaveDataset filename="index" elementname="Index">
+      <Makeindex select="$indexentries" sortkey="name" section="part" />
+    </SaveDataset>
+  </Record>
+  
+  <Record element="Index">
+    <ForAll select="part">
+      <PlaceObject column="1">
+        <Table width="3" stretch="max">
+          <Tr>
+            <Td border-bottom="0.4pt" colspan="2">
+              <Paragraph><Value select="@name" /></Paragraph>
+            </Td>
+          </Tr>
+          <ForAll select="indexentry">
+            <Tr>
+              <Td>
+                <Paragraph><Value select="@name" /></Paragraph>
+              </Td>
+              <Td>
+                <Paragraph><Value select="@page" /></Paragraph>
+              </Td>
+            </Tr>
+          </ForAll>
+        </Table>
+      </PlaceObject>
+      <EmptyLine/>
+    </ForAll>
+  </Record>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <para>Die Indexerstellung funktioniert in zwei Schritten. Im ersten Schritt werden die Daten in eine Elementstruktur gespeichert und mit diesem Befehl sortiert. Im zweiten Schritt wird die Elementstruktur ausgegeben (<cmd name="LoadDataset"/>).</para>
+      <listing><![CDATA[  <Datensatz element="data">
+     <LadeDatensatzdatei name="index"/>
+    <Zuweisung variable="indexeinträge">
+      <Element name="indexeintrag">
+        <Attribut name="name" auswahl="'Giraffe'"/>
+        <Attribut name="seite" auswahl="1"/>
+      </Element>
+      <Element name="indexeintrag">
+        <Attribut name="name" auswahl="'Garage'"/>
+        <Attribut name="seite" auswahl="2"/>
+      </Element>
+      <Element name="indexeintrag">
+        <Attribut name="name" auswahl="'Grußwort'"/>
+        <Attribut name="seite" auswahl="3"/>
+      </Element>
+      <Element name="indexeintrag">
+        <Attribut name="name" auswahl="'Aufzug'"/>
+        <Attribut name="seite" auswahl="4"/>
+      </Element>
+    </Zuweisung>
+    <SpeichereDatensatzdatei dateiname="index" elementname="Index">
+      <Indexerstellen auswahl="$indexeinträge" sortierschlüssel="name" abschnitt="teil"/>
+    </SpeichereDatensatzdatei>
+  </Datensatz>
+    
+  <Datensatz element="Index">
+    <FürAlle auswahl="teil">
+      <ObjektAusgeben spalte="1">
+        <Tabelle breite="3" dehnen="max">
+          <Tr>
+            <Td border-bottom="0.4pt" colspan="2">
+              <Absatz><Wert auswahl="@name"></Wert></Absatz>
+            </Td>
+          </Tr>
+          <FürAlle auswahl="indexeintrag">
+            <Tr>
+              <Td>
+                <Absatz><Wert auswahl="@name"/></Absatz>
+              </Td>
+              <Td>
+                <Absatz><Wert auswahl="@seite"/></Absatz>
+              </Td>
+            </Tr>
+          </FürAlle>
+        </Tabelle>
+      </ObjektAusgeben>
+    </FürAlle>
+  </Datensatz>
+]]></listing>
+    </example>
+    <seealso>
+      <cmd name="SaveDataset"/>
+    </seealso>
+  </command>
   <command name="Margin">
     <description xml:lang="en">
       <para></para>

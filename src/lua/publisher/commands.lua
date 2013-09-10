@@ -937,6 +937,35 @@ function commands.emptyline( layoutxml,dataxml )
     end
 end
 
+--- Makeindex
+--- ---------
+--- Generate an index from data
+function commands.makeindex( layoutxml,dataxml )
+    local xpath       = publisher.read_attribute(layoutxml,dataxml,"select",  "xpathraw")
+    local sortkey     = publisher.read_attribute(layoutxml,dataxml,"sortkey", "rawstring")
+    local sectionname = publisher.read_attribute(layoutxml,dataxml,"section", "rawstring")
+    table.sort(xpath,function(elta,eltb)
+        return string.lower(elta[sortkey]) < string.lower(eltb[sortkey])
+    end)
+    local section
+    local lastfirstletter = ""
+    local ret = {}
+    for i=1,#xpath do
+        local startletter = string.upper(string.sub(xpath[i][sortkey],1,1))
+
+        if startletter ~= lastfirstletter then
+            -- create a new section
+            section = { [".__local_name"] = sectionname, name = startletter }
+            ret[#ret + 1] = section
+        end
+        -- Add current entry to this section
+        section[#section + 1] = xpath[i]
+        lastfirstletter = startletter
+    end
+    return ret
+end
+
+
 --- Margin
 --- ------
 --- Set margin for this page.
@@ -1652,11 +1681,12 @@ function commands.save_dataset( layoutxml,dataxml )
     else
         tab = publisher.dispatch(layoutxml,dataxml)
     end
+
     tmp = {}
     for i=1,#tab do
         if tab[i].elementname=="Element" then
             tmp[#tmp + 1] = publisher.element_contents(tab[i])
-        elseif tab[i].elementname=="SortiereSequenz" or tab[i].elementname=="Sequenz" or tab[i].elementname=="elementstructure" then
+        elseif tab[i].elementname=="SortiereSequenz" or tab[i].elementname=="Sequenz" or tab[i].elementname=="elementstructure" or tab[i].elementname=="Makeindex" then
             for j=1,#publisher.element_contents(tab[i]) do
                 tmp[#tmp + 1] = publisher.element_contents(tab[i])[j]
             end
@@ -1685,10 +1715,10 @@ function commands.save_dataset( layoutxml,dataxml )
     ---    },
     tmp[".__local_name"] = elementname
     local full_filename = tex.jobname .. "-" .. filename .. ".dataxml"
-    local datei = io.open(full_filename,"w")
+    local file = io.open(full_filename,"w")
     towrite = publisher.xml_to_string(tmp)
-    datei:write(towrite)
-    datei:close()
+    file:write(towrite)
+    file:close()
 end
 
 --- SavePages

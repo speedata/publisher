@@ -48,6 +48,7 @@
      <element key="Loop" en="Loop" de="Schleife"/>
       <element key="Margin" en="Margin" de="Rand"/>
      <element key="Mark" en="Mark" de="Marke"></element>
+      <element key="Makeindex" en="Makeindex" de="Indexerstellen"/>
       <element key="Message" en="Message" de="Nachricht"/>
       <element key="NewPage" en="NewPage" de="NeueSeite"/>
       <element key="NextFrame" en="NextFrame" de="NächsterRahmen"/>
@@ -229,6 +230,7 @@
       <attribute key="padding-right" en="padding-right" de="padding-right"/>
       <attribute key="padding-top" en="padding-top" de="padding-top"/>
       <attribute key="page" en="page" de="seite"/>
+      <attribute key="pattern" en="pattern" de="muster" />
       <attribute key="r" en="r" de="r"/>
       <attribute key="removeduplicates" en="removeduplicates" de="duplikatelöschen"/>
       <attribute key="right" en="right" de="rechts"/>
@@ -240,6 +242,7 @@
       <attribute key="rulewidth" en="rulewidth" de="linienstärke"/>
       <attribute key="runs" en="runs" de="läufe"/>
       <attribute key="select" en="select" de="auswahl"/>
+      <attribute key="section" en="section" de="abschnitt" />
       <attribute key="show-grid" en="show-grid" de="zeichne_raster"/>
      <attribute key="showtext" en="showtext" de="zeigetext"/>
       <attribute key="show-gridallocation"
@@ -249,6 +252,7 @@
                  en="show-hyphenation"
                  de="zeige_silbentrennung"/>
       <attribute key="smallcaps" en="smallcaps" de="kapitälchen"/>
+      <attribute key="sortkey" en="sortkey" de="sortierschlüssel" />
       <attribute key="space" en="space" de="leerraum"/>
       <attribute key="startpage" en="startpage" de="startseite"/>
       <attribute key="stretch" en="stretch" de="dehnen"/>

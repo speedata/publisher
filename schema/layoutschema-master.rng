@@ -757,6 +757,14 @@
     </element>
   </define>
 
+  <define name="e_Makeindex">
+    <element name="Makeindex">
+      <attribute name="select"/>
+      <attribute name="sortkey"/>
+      <attribute name="section"/>
+    </element>
+  </define>
+
   <define name="e_Message">
     <element name="Message">
       <a:documentation docid="message">Writes a message to the console and to the log file. The message itself can be given with the attribute ›select‹ or the child element »Value«.</a:documentation>
@@ -1140,6 +1148,7 @@
         <a:documentation docid="savedataset/select">Contents of the data file</a:documentation>
         <oneOrMore>
           <optional><ref name="e_Element"/></optional>
+          <optional><ref name="e_Makeindex"/></optional>
           <optional><ref name="e_SortSequence"/></optional>
           <optional><ref name="e_Sequence"/></optional>
           <optional><ref name="e_CopyOf"/></optional>
