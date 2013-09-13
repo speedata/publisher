@@ -13,6 +13,8 @@
 
 require("i18n")
 
+tex.enableprimitives('',tex.extraprimitives ())
+
 function warning(...)
   local text = { ... }
   text[1] = gettext(text[1])
@@ -277,3 +279,8 @@ starttime = os.gettimeofday()
 
 font.cache = 'no'
 
+if os.getenv("SD_PROFILER") == "true" then
+    main_loop_profiling()
+else
+    main_loop()
+end

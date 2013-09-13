@@ -60,14 +60,14 @@ function Paragraph:set_color( color )
     local colstart = node.new(8,39)
     colstart.data  = publisher.colors[colorname].pdfstring
     colstart.cmd   = 1
-    colstart.stack = 1
+    colstart.stack = 0
     colstart.next = self.nodelist
     self.nodelist.prev = colstart
     self.nodelist = colstart
     local colstop  = node.new(8,39)
     colstop.data  = ""
     colstop.cmd   = 2
-    colstop.stack = 1
+    colstop.stack = 0
     local last = node.tail(self.nodelist)
     last.next = colstop
     colstop.prev = last

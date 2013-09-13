@@ -1,20 +1,6 @@
-\catcode`\{=1 % left brace is begin-group character
-\catcode`\}=2 % right brace is end-group character
+\catcode`\{=1
+\catcode`\}=2
 
-\directlua{
- tex.enableprimitives('',tex.extraprimitives ())
-}
-
-% todo in lua
-\chardef\Color=\pdfcolorstackinit page direct{0 g}
-
-\directlua{
-  require("publisher.spinit")
-  if os.getenv("SD_PROFILER") == "true" then
-      main_loop_profiling()
-  else
-      main_loop()
-  end
-  }
+\directlua{require("publisher.spinit")}
 
 \end
