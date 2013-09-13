@@ -1846,14 +1846,14 @@ function set_color_if_necessary( nodelist,color )
     local colstart = node.new(8,39)
     colstart.data  = colors[colorname].pdfstring
     colstart.cmd   = 1
-    colstart.stack = 1
+    colstart.stack = 0
     colstart.next = nodelist
     nodelist.prev = colstart
 
     local colstop  = node.new(8,39)
     colstop.data  = ""
     colstop.cmd   = 2
-    colstop.stack = 1
+    colstop.stack = 0
     local last = node.tail(nodelist)
     last.next = colstop
     colstop.prev = last
