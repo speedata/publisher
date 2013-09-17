@@ -90,6 +90,9 @@ function M.is_function(dataxml,str,pos,ns)
             if start then
                 M.nextpos = stop + 1
                 M.tok = y(dataxml)
+                -- After calling the function y, M.nextpos can be different
+                -- so we re-assign it
+                M.nextpos = stop + 1
             else
                 -- function has some xpath contents in it, we need to parse it
                 local contents = M.parse_internal(dataxml,str,ns,pos)
