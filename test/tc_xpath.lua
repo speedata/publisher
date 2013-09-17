@@ -78,6 +78,16 @@ xpath.register_function("foo","format-number",format_number)
 function test_foo()
 end
 
+function test_idiv()
+  assert_equal(secondoftwo(xpath.parse_raw( data, " 10 idiv 3 ",namespace ))[1], 3)
+  assert_equal(secondoftwo(xpath.parse_raw( data, " 3 idiv -2 ",namespace ))[1], -1)
+  assert_equal(secondoftwo(xpath.parse_raw( data, " -3 idiv 2 ",namespace ))[1], -1)
+  assert_equal(secondoftwo(xpath.parse_raw( data, " -3 idiv -2 ",namespace ))[1], 1)
+  assert_equal(secondoftwo(xpath.parse_raw( data, " 9.0 idiv 3 ",namespace ))[1], 3)
+  assert_equal(secondoftwo(xpath.parse_raw( data, " -3.5 idiv 3 ",namespace ))[1], -1)
+  assert_equal(secondoftwo(xpath.parse_raw( data, " 3.0 idiv 4 ",namespace ))[1], 0)
+end
+
 function test_xpathfunctions()
     assert_equal(secondoftwo(xpath.parse_raw( data, " normalize-space('  foo bar baz     ') ",namespace ))[1], "foo bar baz")
     assert_equal(secondoftwo(xpath.parse_raw( data, " upper-case('äöüaou') ",namespace ))[1], "ÄÖÜAOU")

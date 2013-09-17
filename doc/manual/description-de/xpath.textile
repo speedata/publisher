@@ -20,7 +20,7 @@ h2. Folgende XPath-Ausdrücke erkennt das System:
 
 * Zahl: gibt den Wert direkt zurück. Beispiel: @"5"@
 * Text: gibt den Wert direkt zurück. Beispiel: @'Text'@
-* Rechenoperationen (@*@, @div@, @+@, @-@, @mod@). Beispiel: @( 6 + 4.5 ) * 2@
+* Rechenoperationen (@*@, @div@, @idiv@, @+@, @-@, @mod@). Beispiel: @( 6 + 4.5 ) * 2@
 * Zugriff auf Variablen. Beispiel: @$spalte + 2@
 * Zugriff auf den aktuellen Knoten (Punkt-Operator). Beispiel: @. + 2@
 * Zugriff auf Unterelemente. Beispiel: @produktdaten@, @node()@, @*@

@@ -36,7 +36,7 @@ h2. The following XPath expressions are handled by the software:
 
 * Number: Return the value without change: @5@
 * Text: Return the text without chang: @'hello world'@
-* Arithmetic operation (@*@, @div@, @+@, @-@, @mod@). Example: @( 6 + 4.5 ) * 2@
+* Arithmetic operation (@*@, @div@, @idiv@, @+@, @-@, @mod@). Example: @( 6 + 4.5 ) * 2@
 * Variables. Example: @$column + 2@
 * Access to the current node (dot operator). Example: @. + 2@
 * Access to subelements. Examples: @productdata@, @node()@, @*@

@@ -378,6 +378,13 @@ function M.eval_multiplication(first,second,operator)
         return math.mod(first,second)
     elseif operator == "div" then
         return first / second
+    elseif operator =="idiv" then
+        local a = first / second
+        if a > 0 then
+            return math.floor(a)
+        else
+            return math.ceil(a)
+        end
     end
 end
 
