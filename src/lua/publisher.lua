@@ -307,6 +307,10 @@ end
 function dispatch(layoutxml,dataxml,optionen)
     local ret = {}
     local tmp
+    if not layoutxml then
+        err("No elements for dispatch, why?")
+        return
+    end
     for _,j in ipairs(layoutxml) do
         -- j a table, if it is an element in layoutxml
         if type(j)=="table" then
