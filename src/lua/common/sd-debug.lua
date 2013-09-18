@@ -13,7 +13,7 @@ function w( ... )
     texio.write_nl(debug.traceback())
   else
     texio.write_nl("-----> " .. fmt)
-    errorlog:write("-----> " .. fmt)
+    errorlog:write("-----> " .. fmt .. "\n")
   end
 end
 
