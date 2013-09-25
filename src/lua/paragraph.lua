@@ -297,7 +297,6 @@ function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
     local hbox = vlist.head
     local templist
     while not area_filled do
-
         while hbox do
             local lineheight = 0
             if hbox.id == publisher.hlist_node then
@@ -316,7 +315,6 @@ function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
             end
             if ht + lineheight >= goal then
                 -- There is enough material for the area
-
                 local x = node.has_attribute(hbox,publisher.att_omit_at_top)
                 if x == 1 then
                     -- We are at the bottom of the area and the next
@@ -336,7 +334,13 @@ function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
                     vlist = node.vpack(templist)
                     table.insert(objects_t,1,vlist)
                 end
-                return node.vpack(toplist)
+                if toplist then
+                    v = node.vpack(toplist)
+                    return v
+                else
+                    warning("toplist is empty")
+                    return nil
+                end
             else
                 local newhead
                 vlist.head,newhead = node.remove(vlist.head,hbox)
