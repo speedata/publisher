@@ -2013,7 +2013,8 @@ function commands.table( layoutxml,dataxml,optionen )
 
     xpath.set_variable("_last_tr_data","")
 
-    local n = tabular:tabelle()
+    local n = tabular:make_table()
+    trace("Done with table()")
     return n
 end
 
