@@ -339,7 +339,7 @@ function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
                     v = node.vpack(toplist)
                     return v
                 else
-                    warning("toplist is empty")
+                    err("toplist is empty")
                     return publisher.emergency_block()
                 end
             else
