@@ -385,8 +385,13 @@ func copy_file(srcpath, destpath string) error {
 	return nil // no error
 }
 
+func removeLogfile() {
+	os.Remove(getOption("jobname") + ".log")
+}
+
 func runPublisher() (exitstatus int) {
 	log.Print("run speedata publisher")
+	defer removeLogfile()
 	exitstatus = 0
 	save_variables()
 
