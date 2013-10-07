@@ -2135,6 +2135,16 @@ function set_image_length(len,width_or_height)
     end
 end
 
+function emergency_block()
+    local r = node.new(rule_node)
+    r.width = 5 * 2^16
+    r.height = 5 * 2^16
+    r.depth = 0
+    local v = node.vpack(r)
+    trace("emergency_block")
+    return v
+end
+
 function calculate_image_width_height( image, width,height,minwidth,minheight,maxwidth, maxheight )
     -- from http://www.w3.org/TR/CSS2/visudet.html#min-max-widths:
     --

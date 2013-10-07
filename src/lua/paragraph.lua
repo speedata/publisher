@@ -283,6 +283,7 @@ end
 -- We get a lot of objects (paragraphs) of different heights.
 -- We need to find _one_ breakpoint such that the new objects
 function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
+    trace("vsplit")
     local goal = frameheight
     local totalheight = 0
     local area_filled = false
@@ -339,7 +340,7 @@ function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
                     return v
                 else
                     warning("toplist is empty")
-                    return nil
+                    return publisher.emergency_block()
                 end
             else
                 local newhead

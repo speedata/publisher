@@ -1027,6 +1027,13 @@ function setze_tabelle(self)
         end -- wenn es eine Tabellenzelle ist
     end
 
+    if #rows == 0 then
+        -- WTF? No contents in the table
+        err("table without contents")
+        return publisher.emergency_block()
+    end
+
+
     local ht_first_header, ht_header = calculate_height_and_connect_tablehead(self,tablehead_first,tablehead)
     local ht_footer,  ht_footer_last = calculate_height_and_connect_tablefoot(self,tablefoot,tablefoot_last)
 
