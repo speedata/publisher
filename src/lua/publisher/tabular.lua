@@ -428,7 +428,11 @@ function calculate_rowheight( self,tr_contents, current_row )
 
         wd = 0
         for s = current_column,current_column + colspan - 1 do
-            wd = wd + self.colwidths[s]
+            if self.colwidths[s] == nil then
+                err("Something went wrong with the number of columns in the table")
+            else
+                wd = wd + self.colwidths[s]
+            end
         end
         current_column = current_column + colspan - 1
 
@@ -627,7 +631,11 @@ function typeset_row(self, tr_contents, current_row )
 
         current_column_width = 0
         for s = current_column,current_column + colspan - 1 do
-            current_column_width = current_column_width + self.colwidths[s]
+            if self.colwidths[s] == nil then
+                err("Something went wrong with the number of columns in the table")
+            else
+                current_column_width = current_column_width + self.colwidths[s]
+            end
         end
 
         -- FIXME: use column_distances[i] instead of self.colsep
