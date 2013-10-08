@@ -1111,6 +1111,7 @@
       </optional>
       <oneOrMore>
         <interleave>
+          <optional><ref name="e_Element"></ref></optional>
           <ref name="t_Switchcontents"/>
         </interleave>
       </oneOrMore>
@@ -1147,6 +1148,7 @@
         <attribute name="select"><data type="string"/></attribute>
         <a:documentation docid="savedataset/select">Contents of the data file</a:documentation>
         <oneOrMore>
+          <optional><ref name="e_Loop"/></optional>
           <optional><ref name="e_Element"/></optional>
           <optional><ref name="e_Makeindex"/></optional>
           <optional><ref name="e_SortSequence"/></optional>
