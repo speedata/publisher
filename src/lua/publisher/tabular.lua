@@ -218,7 +218,7 @@ function calculate_columnwidth( self )
                         end
                     end
                 end
-            end -- summe_* > 0
+            end -- sum_* > 0
         end
     end
 

@@ -1090,7 +1090,7 @@ function parse_html( elt, parameter )
 
     if elt[".__local_name"] then
         local eltname = string.lower(elt[".__local_name"])
-        if eltname == "b" then
+        if eltname == "b" or eltname == "strong" then
             bold = 1
         elseif eltname == "i" then
             italic = 1
