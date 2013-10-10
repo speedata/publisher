@@ -1560,6 +1560,7 @@ function commands.process_node(layoutxml,dataxml)
         if layoutnode then
             log("Selecting node: %q, mode=%q, pos=%d",element_name,mode,pos)
             publisher.xpath.set_variable("__position",pos)
+            dataxml_selection[i][".__context"] = dataxml_selection
             publisher.dispatch(layoutnode,dataxml_selection[i])
             pos = pos + 1
         end

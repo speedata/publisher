@@ -160,7 +160,9 @@ function M.is_nodeselector( dataxml,str,pos,ns )
             for i=1,#tmp do
                 for j=1,#tmp[i] do
                     if part == "*" or part == tmp[i][j][".__local_name"] then
-                        ret[#ret + 1] = tmp[i][j]
+                        if type(tmp[i][j]) == "table" then
+                            ret[#ret + 1] = tmp[i][j]
+                        end
                     end
                 end
             end
@@ -659,6 +661,9 @@ M.default_functions.floor = function(dataxml, arg)
 end
 
 M.default_functions.last = function( dataxml )
+    if dataxml[".__context"] then
+        return #dataxml[".__context"]
+    end
     local recordname    = dataxml[".__local_name"]
     local parentelement = dataxml[".__parent"]
     if not parentelement then
