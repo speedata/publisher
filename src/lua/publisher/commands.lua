@@ -1545,6 +1545,7 @@ end
 --- string, this function is rather stupid but nevertheless currently the main
 --- function for processing data.
 function commands.process_node(layoutxml,dataxml)
+    trace("process_node")
     local dataxml_selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     local mode              = publisher.read_attribute(layoutxml,dataxml,"mode","rawstring") or ""
     -- To restore the current value of `__position`, we save it.
@@ -1849,28 +1850,32 @@ end
 --- Sort a sequence. Warning: it changes the order in the variable.
 function commands.sort_sequence( layoutxml,dataxml )
     local selection        = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
-    local removeduplicates = publisher.read_attribute(layoutxml,dataxml,"removeduplicates","string")
+    local removeduplicates = publisher.read_attribute(layoutxml,dataxml,"removeduplicates","rawstring")
     local criterium        = publisher.read_attribute(layoutxml,dataxml,"criterium","rawstring")
 
     local sequence = xpath.parse(dataxml,selection,layoutxml[".__ns"])
     trace("SortSequence: Record = %q, criterium = %q",selection,criterium or "???")
     local sortkey = criterium
     local tmp = {}
-    for i,v in ipairs(sequence) do
-        tmp[i] = sequence[i]
+    if #sequence == 0 then
+        tmp[1] = sequence
+    else
+        for i,v in ipairs(sequence) do
+            tmp[i] = sequence[i]
+        end
     end
 
     table.sort(tmp, function(a,b) return a[sortkey]  < b[sortkey] end)
+
     if removeduplicates then
         local ret = {}
         local deleteme = {}
         local last_entry = {}
         for i,v in ipairs(tmp) do
-            local contents = publisher.element_contents(v)
-            if contents[removeduplicates] == last_entry[removeduplicates] then
+            if v[removeduplicates] == last_entry[removeduplicates] then
                 deleteme[#deleteme + 1] = i
             end
-            last_entry = contents
+            last_entry = v
         end
 
         for i=#deleteme,1,-1 do
