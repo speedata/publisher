@@ -1510,8 +1510,8 @@ end
 --- XPath- expression) and process this. If you feed garbage in, well,
 --- probably nothing useful comes out. (This should be the only command to
 --- process data, but at the moment there is the _static_ ProcessNode).
-
 function commands.process_record( layoutxml,dataxml )
+    -- FIXME: remove this, not needed anymore
     trace("ProcessRecord")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
     local limit     = publisher.read_attribute(layoutxml,dataxml,"limit","number")
@@ -1530,11 +1530,11 @@ function commands.process_record( layoutxml,dataxml )
     end
 
     for i=1,limit do
-        local eltname = datensatz[i]["inhalt"][".__local_name"]
+        local eltname = dataxml[i]["inhalt"][".__local_name"]
         layoutknoten=publisher.data_dispatcher[""][eltname]
         log("Selecting node: %q",eltname or "???")
         publisher.xpath.set_variable("__position",i)
-        publisher.dispatch(layoutknoten,publisher.element_contents(datensatz[i]))
+        publisher.dispatch(layoutknoten,publisher.element_contents(dataxml[i]))
     end
 end
 
