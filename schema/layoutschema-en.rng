@@ -71,7 +71,6 @@
     <optional><ref name="e_ForAll"/></optional>
     <optional><ref name="e_While"/></optional>
     <optional><ref name="e_Loop"/></optional>
-    <optional><ref name="e_ProcessRecord"/></optional>
     <optional><ref name="e_ProcessNode"/></optional>
     <optional><ref name="e_Message"/></optional>
     <optional><ref name="e_NextFrame"/></optional>
@@ -259,17 +258,6 @@
     <element name="Br">
       <a:documentation docid="br">Insert a newline</a:documentation>
       <empty/>
-    </element>
-  </define>
-
-  <define name="e_ProcessRecord">
-    <element name="ProcessRecord">
-      <a:documentation docid="processrecord">Processes a record which is the contents of the list (in the attribute ›select‹.</a:documentation>
-      <ref name="a_xmlid"/>
-      <attribute name="select"/>
-      <a:documentation docid="processrecord/select">The list that will be processed by matching »Record« commands.</a:documentation>
-      <attribute name="limit"/>
-      <a:documentation docid="processrecord/limit">Limits the number of nodes to be processed (number).</a:documentation>
     </element>
   </define>
 

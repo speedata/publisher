@@ -71,7 +71,6 @@
     <optional><ref name="e_ForAll"/></optional>
     <optional><ref name="e_While"/></optional>
     <optional><ref name="e_Loop"/></optional>
-    <optional><ref name="e_ProcessRecord"/></optional>
     <optional><ref name="e_ProcessNode"/></optional>
     <optional><ref name="e_Message"/></optional>
     <optional><ref name="e_NextFrame"/></optional>
@@ -262,17 +261,6 @@
     <element name="Br">
       <a:documentation docid="br">Zeilenumbruch einfügen</a:documentation>
       <empty/>
-    </element>
-  </define>
-
-  <define name="e_ProcessRecord">
-    <element name="BearbeiteDatensatz">
-      <a:documentation docid="processrecord">Führt eine Regel aus mit dem Inhalt einer Liste (im Attribut ›auswahl‹).</a:documentation>
-      <ref name="a_xmlid"/>
-      <attribute name="auswahl"/>
-      <a:documentation docid="processrecord/select">Bestimmt die Liste, die per »Datensatz« aufgerufen bearbeitet werden soll.</a:documentation>
-      <attribute name="umfang"/>
-      <a:documentation docid="processrecord/limit">Schränkt die Anzahl der Knoten ein, die verarbeitet werden.</a:documentation>
     </element>
   </define>
 

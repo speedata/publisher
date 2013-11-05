@@ -73,7 +73,6 @@
     <optional><ref name="e_ForAll"/></optional>
     <optional><ref name="e_While"/></optional>
     <optional><ref name="e_Loop"/></optional>
-    <optional><ref name="e_ProcessRecord"/></optional>
     <optional><ref name="e_ProcessNode"/></optional>
     <optional><ref name="e_Message"/></optional>
     <optional><ref name="e_NextFrame"/></optional>
@@ -264,17 +263,6 @@
     </element>
   </define>
 
-  <define name="e_ProcessRecord">
-    <element name="ProcessRecord">
-      <a:documentation docid="processrecord">Processes a record which is the contents of the list (in the attribute ›select‹.</a:documentation>
-      <ref name="a_xmlid"/>
-      <attribute name="select"/>
-      <a:documentation docid="processrecord/select">The list that will be processed by matching »Record« commands.</a:documentation>
-      <attribute name="limit" />
-      <a:documentation docid="processrecord/limit">Limits the number of nodes to be processed (number).</a:documentation>
-    </element>
-  </define>
-
   <define name="e_ProcessNode">
     <element name="ProcessNode">
       <a:documentation docid="processnode">Processes all child nodes of the current data element. The matching command is »Record«</a:documentation>
@@ -423,7 +411,7 @@
 
   <define name="e_Dataset">
     <element name="Record">
-      <a:documentation docid="record">Executes the child commands for every element given in the attribute ›element‹. Matches »ProcessNode« and »ProcesRecord«.</a:documentation>
+      <a:documentation docid="record">Executes the child commands for every element given in the attribute ›element‹. Matches »ProcessNode«.</a:documentation>
       <ref name="a_xmlid"/>
       <oneOrMore>
         <ref name="t_Commands"/>
@@ -432,7 +420,7 @@
       <a:documentation docid="record/element">The name of the elements that are processed by the child commands.</a:documentation>
       <optional>
         <attribute name="mode"/>
-        <a:documentation docid="record/mode">When called with a ›mode‹, the matching »ProcessRecord« must have the same mode. With this, you can select the »Record« command to be processed.</a:documentation>
+        <a:documentation docid="record/mode">When called with a ›mode‹, the matching »ProcessNode« must have the same mode. With this, you can select the »Record« command to be processed.</a:documentation>
       </optional>
     </element>
   </define>
