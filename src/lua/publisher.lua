@@ -473,7 +473,7 @@ function dothings()
     if options.startpage then
         local num = options.startpage
         if num then
-            current_pagenumber = num - 1
+            current_pagenumber = num
             log("Set page number to %d",num)
         else
             err("Can't recognize starting page number %q",options.startpage)
