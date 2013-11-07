@@ -11,7 +11,7 @@ Status of this source code
 
 The code is fully functional. See [the requirements section on the github page](http://speedata.github.com/publisher/) on how to get the software running.
 
-Most of the source is currently in German, one of the first things we change is that we translate it into English.
+We are on our way to version 2 of the publisher. Expect lots of code changes. The layout should stay the same with all future versions.
 
 Bugs
 ----
@@ -34,4 +34,4 @@ We offer commercial support for the speedata Publisher. You can find the contact
 
 --------
 URL: <http://speedata.github.com/publisher/> <br />
-Source: <https://github.com/speedata/publisher/> 
+Source: <https://github.com/speedata/publisher/>
