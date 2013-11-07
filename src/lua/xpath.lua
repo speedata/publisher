@@ -657,7 +657,7 @@ M.default_functions.empty = function( dataxml,arg )
 end
 
 M.default_functions.floor = function(dataxml, arg)
-    return math.floor(arg)
+    return math.floor(arg[1])
 end
 
 M.default_functions.last = function( dataxml )
