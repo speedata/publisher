@@ -479,7 +479,8 @@ func compareTwoPages(sourcefile, referencefile, dummyfile string) bool {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if delta > 0.4 {
+	if delta > 0.6 {
+		log.Println("Delta is", delta)
 		return false
 	}
 	return true
