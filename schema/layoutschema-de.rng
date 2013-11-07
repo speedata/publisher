@@ -47,40 +47,41 @@
 
   <define name="t_Switchcontents">
     <ref name="t_Commands"/>
-    <optional><ref name="e_Tablerule"/></optional>
-    <optional><ref name="e_Tr"/></optional>
-    <optional><ref name="e_Td"/></optional>
-    <optional><ref name="e_Value"/></optional>
-    <optional><ref name="e_Image"/></optional>
-    <optional><ref name="e_Paragraph"/></optional>
-    <optional><ref name="e_Sup"/></optional>
-    <optional><ref name="e_Sub"/></optional>
     <optional><ref name="e_Action"/></optional>
-    <optional><ref name="e_CopyOf"/></optional>
     <optional><ref name="e_Barcode"/></optional>
+    <optional><ref name="e_CopyOf"/></optional>
+    <optional><ref name="e_FontFace"/></optional>
+    <optional><ref name="e_Image"/></optional>
     <optional><ref name="e_Li"/></optional>
+    <optional><ref name="e_Paragraph"/></optional>
+    <optional><ref name="e_Sub"/></optional>
+    <optional><ref name="e_Sup"/></optional>
+    <optional><ref name="e_Tablerule"/></optional>
+    <optional><ref name="e_Td"/></optional>
+    <optional><ref name="e_Tr"/></optional>
+    <optional><ref name="e_Value"/></optional>
   </define>
 
   <define name="t_Commands">
     <optional><ref name="e_DefineColor"/></optional>
-    <optional><ref name="e_LoadDataset"/></optional>
-    <optional><ref name="e_SaveDataset"/></optional>
-    <optional><ref name="e_PlaceObject"/></optional>
-    <optional><ref name="e_Output"/></optional>
-    <optional><ref name="e_Switch"/></optional>
+    <optional><ref name="e_EmptyLine"/></optional>
     <optional><ref name="e_ForAll"/></optional>
-    <optional><ref name="e_While"/></optional>
+    <optional><ref name="e_Group"/></optional>
+    <optional><ref name="e_Hyphenation"/></optional>
+    <optional><ref name="e_LoadDataset"/></optional>
     <optional><ref name="e_Loop"/></optional>
-    <optional><ref name="e_ProcessNode"/></optional>
     <optional><ref name="e_Message"/></optional>
-    <optional><ref name="e_NextFrame"/></optional>
     <optional><ref name="e_NewPage"/></optional>
     <optional><ref name="e_NewRow"/></optional>
-    <optional><ref name="e_EmptyLine"/></optional>
-    <optional><ref name="e_Group"/></optional>
-    <optional><ref name="e_SortSequence"/></optional>
-    <optional><ref name="e_Hyphenation"/></optional>
+    <optional><ref name="e_NextFrame"/></optional>
+    <optional><ref name="e_Output"/></optional>
+    <optional><ref name="e_PlaceObject"/></optional>
+    <optional><ref name="e_ProcessNode"/></optional>
+    <optional><ref name="e_SaveDataset"/></optional>
     <optional><ref name="e_SetVariable"/></optional>
+    <optional><ref name="e_SortSequence"/></optional>
+    <optional><ref name="e_Switch"/></optional>
+    <optional><ref name="e_While"/></optional>
   </define>
 
   <define name="t_values">
@@ -536,7 +537,27 @@
       <optional>
         <attribute name="zeilen">
           <a:documentation docid="definetextformat/rows">Anzahl der Zeilen mit Einzug oder (wenn negativ) Anzahl der nicht eingezogenen Zeilen</a:documentation>
-        </attribute></optional>
+        </attribute>
+      </optional>
+      <!-- FIXME: documentation -->
+      <optional>
+        <attribute name="margin-top"/>
+      </optional>
+      <optional>
+        <attribute name="margin-bottom"/>
+      </optional>
+      <optional>
+        <attribute name="border-top"/>
+      </optional>
+      <optional>
+        <attribute name="border-bottom"/>
+      </optional>
+      <optional>
+        <attribute name="padding-top"/>
+      </optional>
+      <optional>
+        <attribute name="umbruch-unten"/>
+      </optional>
     </element>
   </define>
 
@@ -563,7 +584,11 @@
       <ref name="a_xmlid"/>
       <attribute name="auswahl"/>
       <a:documentation docid="forall/select">Der Name der Elemente, für die die Befehle ausgeführt werden sollen</a:documentation>
-      <ref name="t_Switchcontents"/>
+      <oneOrMore>
+        <interleave>
+          <ref name="t_Switchcontents"/>
+        </interleave>
+      </oneOrMore>
     </element>
   </define>
 
@@ -760,6 +785,7 @@
       <attribute name="auswahl"/>
       <attribute name="sortierschlüssel"/>
       <attribute name="abschnitt"/>
+      <attribute name="muster"/>
     </element>
   </define>
 
@@ -830,7 +856,11 @@
       <optional><attribute name="bereich"/></optional>
       <element name="Text">
         <oneOrMore>
-          <ref name="e_Paragraph"/>
+          <interleave>
+            <optional><ref name="e_CopyOf"/></optional>
+            <optional><ref name="e_Paragraph"/></optional>
+            <optional><ref name="e_ForAll"/></optional>
+          </interleave>
         </oneOrMore>
       </element>
     </element>
@@ -949,26 +979,28 @@
         <attribute name="gruppenname">
           <a:documentation docid="placeobject/groupname">Name der Gruppe, die ausgegeben werden soll (Text).</a:documentation>
         </attribute>
-        <interleave>
-          <optional>
-            <ref name="e_Image"/>
-          </optional>
-          <optional>
-            <ref name="e_Box"/>
-          </optional>
-          <optional>
-            <ref name="e_Rule"/>
-          </optional>
-          <optional>
-            <ref name="e_Textblock"/>
-          </optional>
-          <optional>
-            <ref name="e_Barcode"/>
-          </optional>
-          <optional>
-            <ref name="e_Table"/>
-          </optional>
-        </interleave>
+        <oneOrMore>
+          <interleave>
+            <optional>
+              <ref name="e_Image"/>
+            </optional>
+            <optional>
+              <ref name="e_Box"/>
+            </optional>
+            <optional>
+              <ref name="e_Rule"/>
+            </optional>
+            <optional>
+              <ref name="e_Textblock"/>
+            </optional>
+            <optional>
+              <ref name="e_Barcode"/>
+            </optional>
+            <optional>
+              <ref name="e_Table"/>
+            </optional>
+          </interleave>
+        </oneOrMore>
       </choice>
     </element>
   </define>
@@ -1509,6 +1541,8 @@
         <attribute name="umbruch-unten">
           <choice>
             <value>nein</value>
+            <value>ja</value>
+            <text/>
           </choice>
         </attribute>
       </optional>

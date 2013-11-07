@@ -1,4 +1,4 @@
 webpage
 build
-temp*
+temp
 .rake_t_cache
