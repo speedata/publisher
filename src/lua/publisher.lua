@@ -1291,6 +1291,14 @@ function mknodes(str,fontfamily,parameter)
         local char = unicode.utf8.char(s)
         -- If the next char is a newline (&amp;#x0A;) a \\ is inserted
         if s == 10 then
+            -- This is to enable hyphenation again. When we add a rule right after a word
+            -- hyphenation is disabled. So we insert a penalty of 10k which should not do
+            -- harm. Perhaps there is a better solution, but this seems to work OK.
+            local dummypenalty
+            dummypenalty = node.new(penalty_node)
+            dummypenalty.penalty = 10000
+            head,last = node.insert_after(head,last,dummypenalty)
+
             local strut
             strut = add_rule(nil,"head",{height = 8 * publisher.factor, depth = 3 * publisher.factor, width = 0 })
             head,last = node.insert_after(head,last,strut)
