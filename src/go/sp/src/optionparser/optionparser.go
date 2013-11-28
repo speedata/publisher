@@ -43,6 +43,7 @@ type allowedOptions struct {
 	function         func(string)
 	function_no_args func()
 	boolvalue        *bool
+	stringvalue      *string
 	stringmap        map[string]string
 	helptext         string
 }
@@ -75,7 +76,7 @@ func wordwrap(s string, wd int) []string {
 	return append(a, j...)
 }
 
-// Analyse the given argument such as '-s' or 'foo=bar' and 
+// Analyse the given argument such as '-s' or 'foo=bar' and
 // return an argumentDescription
 func split_on(arg string) *argumentDescription {
 	var (
@@ -164,6 +165,9 @@ func set(obj *allowedOptions, has_no_prefix bool, param string) {
 	if obj.function != nil {
 		obj.function(param)
 	}
+	if obj.stringvalue != nil {
+		*obj.stringvalue = param
+	}
 	if obj.stringmap != nil {
 		var name string
 		var value string
@@ -241,6 +245,8 @@ func (op *optionParser) On(a ...interface{}) {
 			option.function_no_args = x
 		case *bool:
 			option.boolvalue = x
+		case *string:
+			option.stringvalue = x
 		case map[string]string:
 			option.stringmap = x
 		default:
