@@ -1005,7 +1005,7 @@
   </command>
   <command name="DefineTextformat">
     <description xml:lang="en">
-      <para></para>
+      <para>Define text formatting instructions. A textformat is used to align and indent text and create margins and rules before and after the text.</para>
     </description>
     <description xml:lang="de">
       <para>Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen Absatz und
@@ -1017,7 +1017,7 @@
     </parentelements>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>Name of the textformat that is used later in the layout.</para>
       </description>
       <description xml:lang="de">
         <para>Name des Textformats, unter dem es später im Layoutregelwerk angesprochen wird.</para>
@@ -1025,7 +1025,7 @@
     </attribute>
     <attribute name="alignment" type="alignment" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Determines the formatting of the text.</para>
       </description>
       <description xml:lang="de">
         <para>Bestimmt die Formatierung des Textes.</para>
@@ -1033,21 +1033,43 @@
     </attribute>
     <attribute name="indentation" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The amount of indentation.</para>
       </description>
       <description xml:lang="de">
-        <para>Absatzeinzug.</para>
+        <para>Die Länge des Absatzeinzugs.</para>
       </description>
     </attribute>
     <attribute name="rows" type="number" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The number of rows with indentation given in the attribute <tt>indentation</tt>. If the number is negative, this determiens the number of rows that are <quote>not</quote> indented.</para>
       </description>
       <description xml:lang="de">
         <para>Anzahl der Zeilen, die eingezogen werden (wenn <tt>einrückung</tt> angegeben ist) bzw. falls die Zahl negativ ist, die Anzahl der Zeilen, die <quote>nicht</quote> eingerückt
           werden.</para>
       </description>
     </attribute>
+    <attribute name="border-top" type="length" optional="yes">
+      <description xml:lang="en">
+        <para>The thickness of the rule above the text.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Dicke der Linie über dem Text</para>
+      </description>
+    </attribute>
+    <attribute name="border-bottom" type="length" optional="yes">
+      <description xml:lang="en">
+        <para>The thickness of the rule below the text.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Dicke der Linie unter dem Text</para>
+      </description>
+    </attribute>
+    <remark xml:lang="en">
+      <para>The textformats <tt>text</tt>, <tt>centered</tt>, <tt>left</tt> and <tt>right</tt> are predefined. They stand for justified, centered, left aligned and right aligned text.</para>
+    </remark>
+    <remark xml:lang="de">
+      <para>Die Textformate <tt>text</tt>, <tt>zentriert</tt>, <tt>links</tt> und <tt>rechts</tt> sind vordefiniert. Sie stehen für blocksatz, zentriert, linksbündigen und rechtbündigen Text.</para>
+    </remark>
     <example xml:lang="de">
       <listing><![CDATA[<Layout>
   <DefiniereTextformat name="Text mit Einrückung" ausrichtung="blocksatz" einrückung="1cm" />
