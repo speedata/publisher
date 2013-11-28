@@ -1970,6 +1970,9 @@ function commands.table( layoutxml,dataxml,optionen )
         local v = node.vpack(rule)
         return v
     end
+
+    -- Needed for table inside table without anything output yet:
+    publisher.setup_page()
     width = publisher.current_grid.gridwidth * width
 
 
