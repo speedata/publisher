@@ -14,6 +14,7 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"os/user"
 	"path/filepath"
 	"regexp"
 	"runtime"
@@ -593,6 +594,10 @@ func compare(path string, info os.FileInfo, err error) error {
 }
 
 func main() {
+	me, err := user.Current()
+	if err != nil {
+		log.Fatal(err)
+	}
 	op := optionparser.NewOptionParser()
 	op.On("--autoopen", "Open the PDF file (MacOS X and Linux only)", options)
 	op.On("--data NAME", "Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN", options)
@@ -623,7 +628,7 @@ func main() {
 	op.Command("list-fonts", "List installed fonts (use together with --xml for copy/paste)")
 	op.Command("run", "Start publishing (default)")
 	op.Command("watch", "Start watchdog / hotfolder")
-	err := op.Parse()
+	err = op.Parse()
 	if err != nil {
 		log.Fatal("Parse error: ", err)
 	}
@@ -641,7 +646,7 @@ func main() {
 		command = op.Extra[0]
 	}
 
-	cfg, _ = configurator.ReadFiles(filepath.Join(os.Getenv("HOME"), ".publisher.cfg"), "/etc/speedata/publisher.cfg")
+	cfg, _ = configurator.ReadFiles(filepath.Join(me.HomeDir, ".publisher.cfg"), "/etc/speedata/publisher.cfg")
 	if err != nil {
 		log.Fatal(err)
 	}
