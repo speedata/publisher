@@ -1775,6 +1775,12 @@ end
 function imageinfo( filename,page,box )
     page = page or 1
     box = box or "crop"
+    -- there is no filename, we should fail or throw an error
+    if not filename then
+        err("No filename given for image")
+        filename = "filenotfound.pdf"
+    end
+
     local new_name = filename .. tostring(page) .. tostring(box)
 
     if images[new_name] then
