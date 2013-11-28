@@ -1763,17 +1763,10 @@ end
 
 --- Sequence
 --- --------
---- Todo: document, what does it?
+--- Get parts of the data. Can be stored in a variable
 function commands.sequence( layoutxml,dataxml )
-    local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
-    trace("Command: Sequence: %s, selection = %s",layoutxml[".__local_name"], selection )
-    local ret = {}
-    for i,v in ipairs(dataxml) do
-        if type(v)=="table" and v[".__local_name"] == selection then
-            ret[#ret + 1] = v
-        end
-    end
-    return ret
+    local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
+    return selection
 end
 
 --- SetVariable
