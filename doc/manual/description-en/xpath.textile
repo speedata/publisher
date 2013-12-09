@@ -76,6 +76,7 @@ There are two classes of XPath functions: standard XPath functions and speedata 
 - false() := Return __false__.
 - floor() := Returns the largest number with no fractional part that is not greater than the value of the argument.
 - last() := Return the number of elements of the same named sibling elements. *Not yet XPath conform.*
+- not() := Negates the value of the argument. Example: @not(true())@ returns @false()@.
 - position() := Return the position of the current node.
 - string(&lt;sequence>) := Return the text value of the sequence e.g. the contents of the elemements.
 - true() := Return __true__.

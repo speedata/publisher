@@ -749,7 +749,9 @@ M.default_functions["false"] = function()
     return false
 end
 
-
+M.default_functions["not"] = function (dataxml,arg)
+    return not arg[1]
+end
 
 return {
    get_variable      = M.get_variable,

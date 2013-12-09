@@ -59,6 +59,7 @@ Es gibt zwei Klassen von XPath Funktionen: standardkonforme und speedata Publish
 - false() := Gibt „Falsch“ zurück.
 - floor() := Gibt den abgerundeten Wert einer Zahl zurück.
 - last() := Gibt die Anzahl der Datensätze der gleichnamigen Geschwister-Elemente zurück. *Achtung: noch nicht XPath-konform.*
+- not() := Negiert den Wahrheitswert des Arguments. Beispiel: @not(true())@ ergibt @false()@.
 - position() := Ermittelt die Position des aktuellen Datensatzes.
 - string(&lt;Sequenz>) := Gibt den Textwert der Sequenz zurück, d.h. den Inhalt der Elemente.
 - true() := Gibt „Wahr“ zurück.
