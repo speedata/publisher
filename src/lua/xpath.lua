@@ -753,6 +753,14 @@ M.default_functions["not"] = function (dataxml,arg)
     return not arg[1]
 end
 
+M.default_functions["string-join"] = function (dataxml,arg)
+    ret = {}
+    for i=1,#arg - 1 do
+        ret[#ret + 1] = tostring(arg[i])
+    end
+    return table.concat(ret,arg[#arg])
+end
+
 return {
    get_variable      = M.get_variable,
    parse             = M.parse,
