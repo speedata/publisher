@@ -1325,7 +1325,7 @@ function mknodes(str,fontfamily,parameter)
             head,last = node.insert_after(head,last,g)
             head,last = node.insert_after(head,last,p2)
 
-        elseif match(char,"%s") and last and last.id == glue_node and not node.has_attribute(last,att_tie_glue,1) then
+        elseif match(char,"^%s$") and last and last.id == glue_node and not node.has_attribute(last,att_tie_glue,1) then
             -- double space, don't do anything
         elseif s == 160 then -- non breaking space U+00A0
             n = node.new(penalty_node)
@@ -1348,8 +1348,8 @@ function mknodes(str,fontfamily,parameter)
             end
             node.set_attribute(n,att_fontfamily,fontfamily)
 
-
-        elseif match(char,"%s") then -- Space
+        -- anchor is necessary. Otherwise à (C3A0) would match A0 - %s
+        elseif match(char,"^%s$") then -- Space
             -- ; and : should have the posibility to break easily if a space follows
             if last and last.id == 37 and ( last.char == 58 or last.char == 59) then
                 n = node.new(penalty_node)
