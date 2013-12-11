@@ -1396,7 +1396,7 @@ function mknodes(str,fontfamily,parameter)
             -- We have a character but some characters must be treated in a special
             -- way.
             -- Hyphens must be sepearated from words:
-            if n.char == 45 and lastitemwasglyph then
+            if ( n.char == 45 or n.char == 8211) and lastitemwasglyph then
                 local pen = node.new("penalty")
                 pen.penalty = 10000
 

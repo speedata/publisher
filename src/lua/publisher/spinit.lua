@@ -189,7 +189,7 @@ local function setup()
   tex.hbadness= 1000
   tex.vbadness=1000
   --- The `lccode` is used for hyphenation. TeX sets the lccode for a-z to itself and A-Z to its lower correspondent.
-  --- The code for all other characters are not set and thus they don't hyhenate unless set like this.
+  --- The code for all other characters are not set and thus they don't hyphenate unless set like this.
   for _,i in ipairs
     {181,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,248,249,250,251,252,
     253,254,255,257,259,261,263,265,267,269,271,273,275,277,279,281,283,285,287,289,291,293,295,297,299,301,303,305,307,309,
