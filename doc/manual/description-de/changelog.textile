@@ -4,6 +4,10 @@ title: "Liste der Änderungen"
 ---
 h1. Liste der Änderungen
 
+h2. Version 1.6.11 (2013-12-13)
+
+* Kritischer Fehler behoben: Zeichen wie à die einen Leerraum-Wert in der UTF-8 Sequenz enthalten (z.B. A0), werden nicht verschluckt.
+
 h2. Version 1.6 (2013-05-24)
 
 * Breite in "Textblock":../commands-de/textblock.html und "Tabelle":../commands-de/table.html optional (1.5.56)

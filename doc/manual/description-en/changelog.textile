@@ -4,6 +4,10 @@ title: "Changelog"
 ---
 h1. Changelog
 
+h2. Version 1.6.11 (2013-12-13)
+
+* Critical bugfix: don't drop characters like à that contain a space character in the UTF-8 sequence.
+
 h2. Version 1.6 (2013-05-24)
 
 * Width attribute in "Textblock":../commands-en/textblock.html and "Table":../commands-en/table.html optional (1.5.56)
