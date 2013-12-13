@@ -16,6 +16,7 @@ h2. Version 2.0
 
 h2. Version 1.8
 
+* Critical bugfix: don't drop characters like à that contain a space character in the UTF-8 sequence.
 * New "command line option":commandline.html  @--profile@ (1.7.2).
 * New option in the configuration file: @fontpath@ to set fallback directories for fonts (1.7.1).
 
