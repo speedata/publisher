@@ -4,8 +4,10 @@ title: "Liste der Änderungen"
 ---
 h1. Liste der Änderungen
 
+<<<<<<< HEAD
 h2. Version 1.8
 
+* Kritischer Fehler behoben: Zeichen wie à die einen Leerraum-Wert in der UTF-8 Sequenz enthalten (z.B. A0), werden nicht verschluckt.
 * Neuer "Kommandozeilenparameter":commandline.html  @--profile@ (1.7.2).
 * Neue Option in der Konfigurationsdatei: @fontpath@ um Fallback-Verzeichnisse für Fonts anzugeben (1.7.1).
 
