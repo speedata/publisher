@@ -40,6 +40,7 @@ var (
 	systemcfg             string
 	pwd                   string
 	exe_suffix            string
+	homedir               string
 	add_local_path        bool // Add pwd recursively to extra-dir
 	configfilename        string
 	extra_dir             []string
@@ -105,12 +106,20 @@ func init() {
 	case "darwin":
 		defaults["opencommand"] = "open"
 		exe_suffix = ""
+		homedir = os.Getenv("HOME")
 	case "linux":
 		defaults["opencommand"] = "xdg-open"
+		homedir = os.Getenv("HOME")
 		exe_suffix = ""
 	case "windows":
 		defaults["opencommand"] = "cmd /C start"
 		exe_suffix = ".exe"
+
+		me, err := user.Current()
+		if err != nil {
+			log.Fatal(err)
+		}
+		homedir = me.HomeDir
 	}
 	add_local_path = true
 	configfilename = "publisher.cfg"
@@ -594,10 +603,6 @@ func compare(path string, info os.FileInfo, err error) error {
 }
 
 func main() {
-	me, err := user.Current()
-	if err != nil {
-		log.Fatal(err)
-	}
 	op := optionparser.NewOptionParser()
 	op.On("--autoopen", "Open the PDF file (MacOS X and Linux only)", options)
 	op.On("--data NAME", "Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN", options)
@@ -628,7 +633,7 @@ func main() {
 	op.Command("list-fonts", "List installed fonts (use together with --xml for copy/paste)")
 	op.Command("run", "Start publishing (default)")
 	op.Command("watch", "Start watchdog / hotfolder")
-	err = op.Parse()
+	err := op.Parse()
 	if err != nil {
 		log.Fatal("Parse error: ", err)
 	}
@@ -646,7 +651,7 @@ func main() {
 		command = op.Extra[0]
 	}
 
-	cfg, _ = configurator.ReadFiles(filepath.Join(me.HomeDir, ".publisher.cfg"), "/etc/speedata/publisher.cfg")
+	cfg, _ = configurator.ReadFiles(filepath.Join(homedir, ".publisher.cfg"), "/etc/speedata/publisher.cfg")
 	if err != nil {
 		log.Fatal(err)
 	}
