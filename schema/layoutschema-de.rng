@@ -501,12 +501,14 @@
           <a:documentation docid="definefontfamily/regular">Wählt die Schriftart für den »normalen« Schriftschnitt aus</a:documentation>
           <ref name="a_xmlid"/>
           <attribute name="schriftart"/>
+          <empty/>
         </element>
         <optional>
           <element name="Fett">
             <a:documentation docid="definefontfamily/bold">Schriftart, wenn innerhalb eines Textes auf »Fett« (&lt;b&gt;...&lt;/b&gt;) umgeschaltet wird.</a:documentation>
             <ref name="a_xmlid"/>
             <attribute name="schriftart"/>
+            <empty/>
           </element>
         </optional>
         <optional>
@@ -514,6 +516,7 @@
             <a:documentation docid="definefontfamily/italic">Schriftart, wenn innerhalb eines Textes auf »Kursiv« (&lt;i&gt;...&lt;/i&gt;) umgeschaltet wird.</a:documentation>
             <ref name="a_xmlid"/>
             <attribute name="schriftart"/>
+            <empty/>
           </element>
         </optional>
         <optional>
@@ -522,6 +525,7 @@
                 (&lt;b&gt;&lt;i&gt;...&lt;/i&gt;&lt;/b&gt;) umgeschaltet wird.</a:documentation>
             <ref name="a_xmlid"/>
             <attribute name="schriftart"/>
+            <empty/>
           </element>
         </optional>
       </interleave>
@@ -1638,6 +1642,7 @@
           <optional>
             <ref name="a_valign"/>
           </optional>
+          <empty/>
         </element>
       </oneOrMore>
     </element>

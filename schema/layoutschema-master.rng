@@ -495,12 +495,14 @@
           <a:documentation docid="definefontfamily/regular">The font face of the text when none of bold, italic or bolditalic is used.</a:documentation>
           <ref name="a_xmlid"/>
           <attribute name="fontface"/>
+          <empty/>
         </element>
         <optional>
           <element name="Bold">
             <a:documentation docid="definefontfamily/bold">The font face to be used when switching to bold (&lt;B&gt;...&lt;/B&gt;). The name must be an alias given by »LoadFontfile«</a:documentation>
             <ref name="a_xmlid"/>
             <attribute name="fontface"/>
+            <empty/>
           </element>
         </optional>
         <optional>
@@ -508,6 +510,7 @@
             <a:documentation docid="definefontfamily/italic">The font face to be used when switching to italic (&lt;I&gt;...&lt;/I&gt;). The name must be an alias given by »LoadFontfile«</a:documentation>
             <ref name="a_xmlid"/>
             <attribute name="fontface"/>
+            <empty/>
           </element>
         </optional>
         <optional>
@@ -515,6 +518,7 @@
             <a:documentation docid="definefontfamily/bolditalic">The font face to be used when switching to bold and italic (&lt;B&gt;&lt;I&gt;...&lt;/I&gt;&lt;/B&gt;). The name must be an alias given by »LoadFontfile«</a:documentation>
             <ref name="a_xmlid"/>
             <attribute name="fontface"/>
+            <empty/>
           </element>
         </optional>
       </interleave>
@@ -1116,6 +1120,7 @@
       <attribute name="right"/>
       <attribute name="top"/>
       <attribute name="bottom"/>
+      <empty/>
     </element>
   </define>
 
@@ -1622,6 +1627,7 @@
           <optional>
             <ref name="a_valign"/>
           </optional>
+          <empty/>
         </element>
       </oneOrMore>
     </element>

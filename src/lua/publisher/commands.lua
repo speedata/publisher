@@ -1360,7 +1360,11 @@ function commands.place_object( layoutxml,dataxml )
 
     -- remember the current maximum width for later
     local current_maxwidth = xpath.get_variable("__maxwidth")
-    xpath.set_variable("__maxwidth", publisher.current_grid:number_of_columns(area))
+    local mw = publisher.current_grid:number_of_columns(area)
+    if absolute_positioning == false and tonumber(spalte) then
+        mw = mw - spalte + 1
+    end
+    xpath.set_variable("__maxwidth", mw)
 
     trace("Column = %q",tostring(spalte))
     trace("Row = %q",tostring(zeile))
