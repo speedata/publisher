@@ -43,6 +43,9 @@ att_underline      = 5
 att_indent         = 6 -- see textformats for details
 att_rows           = 7 -- see textformats for details
 
+
+att_debug          = 99 -- for debugging purposes
+
 --- These attributes are for image shifting. The amount of shift up/left can
 --- be negative and is counted in scaled points.
 att_shift_left     = 100
@@ -75,6 +78,7 @@ user_defined_marker    = 4
 glue_spec_node = node.id("glue_spec")
 glue_node      = node.id("glue")
 glyph_node     = node.id("glyph")
+disc_node      = node.id("disc")
 rule_node      = node.id("rule")
 penalty_node   = node.id("penalty")
 whatsit_node   = node.id("whatsit")
@@ -1292,6 +1296,8 @@ function mknodes(str,fontfamily,parameter)
         node.set_attribute(n,att_fontfamily,fontfamily)
         return n
     end
+    local lastitemwasglyph
+
     -- There is a string with utf8 chars
     for s in string.utfvalues(str) do
         local char = unicode.utf8.char(s)
@@ -1388,7 +1394,6 @@ function mknodes(str,fontfamily,parameter)
             if parameter.underline == 1 then
                 node.set_attribute(n,att_underline,1)
             end
-            local lastitemwasglyph
             if last and last.id == 37 then
                 lastitemwasglyph = true
             end
@@ -1399,17 +1404,9 @@ function mknodes(str,fontfamily,parameter)
             if ( n.char == 45 or n.char == 8211) and lastitemwasglyph then
                 local pen = node.new("penalty")
                 pen.penalty = 10000
-
                 head = node.insert_before(head,last,pen)
-
-                local glue = node.new("glue")
-                glue.spec = node.new("glue_spec")
-                glue.spec.width = 0
-                if parameter.underline == 1 then
-                    node.set_attribute(glue,att_underline,1)
-                end
-                head,last = node.insert_after(head,last,glue)
-                node.set_attribute(glue,att_tie_glue,1)
+                local disc = node.new(disc_node)
+                head,last = node.insert_after(head,last,disc)
             end
         end
     end
@@ -1585,7 +1582,11 @@ function fix_justification( nodelist,textformat,parent)
                     while font_node.id ~= 37 do
                         font_node = font_node.prev
                     end
-                    font_before_glue = nil
+                    if font_node then
+                        font_before_glue = font_node.font
+                    else
+                        font_before_glue = nil
+                    end
                 else
                     font_before_glue = nil
                 end

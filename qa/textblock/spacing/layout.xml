@@ -1,0 +1,19 @@
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en">
+  <Options mainlanguage="Englisch (Great Britan)"/>
+  
+  <Pageformat width="5cm" height="5cm"/>
+
+  <Record element="data">
+    <PlaceObject>
+        <Textblock width="3" textformat="left">
+          <Paragraph>
+            <Value>Some- and Australia</Value>
+          </Paragraph>
+          <Paragraph>
+            <Value>Foo baz kinder-garten</Value>
+          </Paragraph>
+        </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
