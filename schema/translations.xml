@@ -251,8 +251,9 @@
       <attribute key="show-hyphenation"
                  en="show-hyphenation"
                  de="zeige_silbentrennung"/>
-      <attribute key="smallcaps" en="smallcaps" de="kapitälchen"/>
-      <attribute key="sortkey" en="sortkey" de="sortierschlüssel" />
+     <attribute key="smallcaps" en="smallcaps" de="kapitälchen"/>
+     <attribute key="oldstylefigures" en="oldstylefigures" de="mediävalziffern"/>
+     <attribute key="sortkey" en="sortkey" de="sortierschlüssel" />
       <attribute key="space" en="space" de="leerraum"/>
       <attribute key="startpage" en="startpage" de="startseite"/>
       <attribute key="stretch" en="stretch" de="dehnen"/>

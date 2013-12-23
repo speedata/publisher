@@ -718,6 +718,17 @@
           </choice>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="oldstylefigures">
+          <a:documentation docid="loadfontfile/oldstylefigures"/>
+          <choice>
+            <value>yes</value>
+            <a:documentation docid="loadfontfile/osf/yes">Use oldstyle figures</a:documentation>
+            <value>no</value>
+            <a:documentation docid="loadfontfile/osf/no">Don't use oldstyle figures.</a:documentation>
+          </choice>
+        </attribute>
+      </optional>
     </element>
   </define>
 

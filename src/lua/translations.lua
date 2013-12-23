@@ -371,6 +371,7 @@ values = {
     ["show-gridallocation"] = {de = "zeige_rasterbelegung", en = "show-gridallocation", },
     ["show-hyphenation"] = {de = "zeige_silbentrennung", en = "show-hyphenation", },
     ["smallcaps"] = {de = "kapitälchen", en = "smallcaps", },
+    ["oldstylefigures"] = {de = "mediävalziffern", en = "oldstylefigures", },
     ["sortkey"] = {de = "sortierschlüssel", en = "sortkey", },
     ["space"] = {de = "leerraum", en = "space", },
     ["startpage"] = {de = "startseite", en = "startpage", },

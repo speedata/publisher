@@ -865,12 +865,14 @@ function commands.load_fontfile( layoutxml,dataxml )
     local smcp          = publisher.read_attribute(layoutxml,dataxml,"smallcaps",       "string")
     local filename      = publisher.read_attribute(layoutxml,dataxml,"filename",        "rawstring")
     local name          = publisher.read_attribute(layoutxml,dataxml,"name",            "rawstring")
+    local osf           = publisher.read_attribute(layoutxml,dataxml,"oldstylefigures", "boolean")
 
     local extra_parameter = {
         space            = leerraum      or 25,
         marginprotrusion = randausgleich or 0,
         otfeatures    = {
             smcp = smcp == "yes",
+            onum = osf == true,
         },
     }
     log("Load Fontfile %q",filename or "?")

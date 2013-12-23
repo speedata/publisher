@@ -728,6 +728,17 @@
           </choice>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="mediävalziffern">
+          <a:documentation docid="loadfontfile/oldstylefigures"/>
+          <choice>
+            <value>ja</value>
+            <a:documentation docid="loadfontfile/osf/yes"/>
+            <value>nein</value>
+            <a:documentation docid="loadfontfile/osf/no"/>
+          </choice>
+        </attribute>
+      </optional>
     </element>
   </define>
 
@@ -1133,6 +1144,7 @@
       <attribute name="rechts"/>
       <attribute name="oben"/>
       <attribute name="unten"/>
+      <empty/>
     </element>
   </define>
 

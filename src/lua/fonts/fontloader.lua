@@ -189,6 +189,10 @@ function define_font(name, size,extra_parameter)
     if extra_parameter and extra_parameter.otfeatures and extra_parameter.otfeatures.smcp then
         f.smcp = find_feature_string(fonttable,"smcp")
     end
+    if extra_parameter and extra_parameter.otfeatures and extra_parameter.otfeatures.onum then
+        f.onum = find_feature_string(fonttable,"onum")
+    end
+
     f.otfeatures    = extra_parameter.otfeatures             -- OpenType Features (smcp,...)
     f.name          = fonttable.fontname
     f.fullname      = fonttable.fontname
@@ -263,9 +267,9 @@ function define_font(name, size,extra_parameter)
         local kerns={}
         if glyph.kerns then
             for _,kern in pairs(glyph.kerns) do
-                local ziel = fonttable.lookup_codepoint_by_name[kern.char]
-                if ziel and ziel > 0 then
-                    kerns[ziel] = kern.off * mag
+                local dest = fonttable.lookup_codepoint_by_name[kern.char]
+                if dest and dest > 0 then
+                    kerns[dest] = kern.off * mag
                 else
                 end
             end

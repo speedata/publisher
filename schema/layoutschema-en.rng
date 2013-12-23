@@ -716,6 +716,17 @@
           </choice>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="oldstylefigures">
+          <a:documentation docid="loadfontfile/oldstylefigures"/>
+          <choice>
+            <value>yes</value>
+            <a:documentation docid="loadfontfile/osf/yes"/>
+            <value>no</value>
+            <a:documentation docid="loadfontfile/osf/no"/>
+          </choice>
+        </attribute>
+      </optional>
     </element>
   </define>
 
@@ -1118,6 +1129,7 @@
       <attribute name="right"/>
       <attribute name="top"/>
       <attribute name="bottom"/>
+      <empty/>
     </element>
   </define>
 
