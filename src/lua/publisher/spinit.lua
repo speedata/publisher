@@ -68,35 +68,6 @@ function table.sum( tbl, first, last )
   return sum
 end
 
--- See luatex mailing list
-function io.readall(f)
-   local size = f:seek("end")
-   if size == 0 then
-       return ""
-   elseif size < 1048576 then -- 1048576 = 1024 * 1024
-       f:seek("set",0)
-       return f:read('*all')
-   else
-       local done = f:seek("set",0)
-       if size < 1048576 then
-           step = 1048576
-       elseif size > 16777216 then -- 16777216 = 16*1048576
-           step = 16777216
-       else
-           step = math.floor(size/1048576) * 131072 -- 131072 = 1048576 / 8
-       end
-       local data = { }
-       while true do
-           local r = f:read(step)
-           if not r then
-               return table.concat(data)
-           else
-               data[#data+1] = r
-           end
-       end
-   end
-end
-
 -- tbl .. tbl
 function table.__concat( tbl, other )
   if not other then
