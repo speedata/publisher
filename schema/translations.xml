@@ -218,6 +218,7 @@
       <attribute key="maxsize" en="maxsize" de="maximale-größe"/>
       <attribute key="minheight" en="minheight" de="minhöhe"/>
      <attribute key="minwidth" en="minwidth" de="minbreite"/>
+     <attribute key="dpiwarn" en="dpiwarn" de="dpiwarnung" />
       <attribute key="mode" en="mode" de="modus"/>
       <attribute key="model" en="model" de="modell"/>
       <attribute key="name" en="name" de="name"/>

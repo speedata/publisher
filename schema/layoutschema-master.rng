@@ -363,6 +363,11 @@
           <ref name="t_PDFBOX"/>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="dpiwarn">
+          <a:documentation docid="/image/dpiwarn"/>
+        </attribute>
+      </optional>
     </element>
   </define>
 

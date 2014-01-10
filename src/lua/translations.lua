@@ -341,6 +341,7 @@ values = {
     ["maxsize"] = {de = "maximale-größe", en = "maxsize", },
     ["minheight"] = {de = "minhöhe", en = "minheight", },
     ["minwidth"] = {de = "minbreite", en = "minwidth", },
+    ["dpiwarn"] = {de = "dpiwarnung", en = "dpiwarn", },
     ["mode"] = {de = "modus", en = "mode", },
     ["model"] = {de = "modell", en = "model", },
     ["name"] = {de = "name", en = "name", },

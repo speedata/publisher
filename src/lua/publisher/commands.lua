@@ -698,6 +698,7 @@ function commands.image( layoutxml,dataxml )
     local nat_box   = publisher.read_attribute(layoutxml,dataxml,"naturalsize","string")
     local max_box   = publisher.read_attribute(layoutxml,dataxml,"maxsize",    "rawstring")
     local filename  = publisher.read_attribute(layoutxml,dataxml,"file",       "rawstring")
+    local dpiwarn   = publisher.read_attribute(layoutxml,dataxml,"dpiwarn",    "number")
 
     -- width = 100%  => take width from surrounding area
     -- auto on any value ({max,min}?{width,height}) is default
@@ -719,6 +720,16 @@ function commands.image( layoutxml,dataxml )
 
     if not clip then
         width, height = publisher.calculate_image_width_height( image, width,height,minwidth,minheight,maxwidth, maxheight )
+        if dpiwarn then
+            local inch_x = width / publisher.factor / 72
+            local inch_y = height / publisher.factor / 72
+            if (image.xsize / inch_x) < dpiwarn then
+                warning("Image dpi value too small (horizontal). Rendered is %d, requested minimum is %d. Filename: %q", image.xsize / inch_x,dpiwarn,filename)
+            end
+            if (image.ysize / inch_y) < dpiwarn then
+                warning("Image dpi value too small (vertical). Rendered is %d, requested minimum is %d. Filename: %q", image.xsize / inch_x,dpiwarn,filename)
+            end
+        end
     end
 
     local overshoot
