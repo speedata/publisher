@@ -639,7 +639,7 @@ end
 M.default_functions.concat = function(dataxml, arg )
     local ret = ""
     for i=1,#arg do
-        ret = ret .. arg[i]
+        ret = ret .. tostring(arg[i])
     end
     return ret
 end
