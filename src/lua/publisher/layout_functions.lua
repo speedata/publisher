@@ -252,9 +252,11 @@ register("urn:speedata:2009/publisher/functions/de","aktuelle-zeile",current_row
 register("urn:speedata:2009/publisher/functions/en","alternating",alternating)
 register("urn:speedata:2009/publisher/functions/de","alternierend",alternating)
 
+register("urn:speedata:2009/publisher/functions/en","group-height",gruppenhoehe)
 register("urn:speedata:2009/publisher/functions/en","groupheight",gruppenhoehe)
 register("urn:speedata:2009/publisher/functions/de","gruppenhöhe",gruppenhoehe)
 
+register("urn:speedata:2009/publisher/functions/en","group-width",gruppenbreite)
 register("urn:speedata:2009/publisher/functions/en","groupwidth",gruppenbreite)
 register("urn:speedata:2009/publisher/functions/de","gruppenbreite",gruppenbreite)
 
