@@ -148,7 +148,7 @@ func init() {
 		os.Setenv("LUA_PATH", fmt.Sprintf("%s/lua/?.lua;%s/lua/common/?.lua;", srcdir, srcdir))
 		path_to_documentation = "/usr/share/doc/speedata-publisher/" + indexpage
 	case "directory":
-		libdir = filepath.Join(installdir, "lib")
+		libdir = filepath.Join(installdir, "share", "lib")
 		srcdir = filepath.Join(installdir, "sw")
 		path_to_documentation = filepath.Join(installdir, "share/doc/"+indexpage)
 		os.Setenv("PUBLISHER_BASE_PATH", installdir)
@@ -721,7 +721,7 @@ func main() {
 			run(cmdline)
 		}
 		exitstatus = runPublisher()
-		// open PDF if necessary
+		// profiler requested?
 		if getOption("profile") != "" {
 			fmt.Println("Run 'summary.lua' on resulting lprof_* file.")
 			files, err := filepath.Glob("lprof_*")
@@ -736,6 +736,7 @@ func main() {
 			}
 
 		}
+		// open PDF if necessary
 		if getOption("autoopen") == "true" {
 			openFile(getOption("jobname") + ".pdf")
 		}
