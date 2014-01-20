@@ -6,6 +6,7 @@ h1. Liste der Änderungen
 
 h2. Version 2.0
 
+* Neue "XPath-Funktion":xpath.html @sd:aktuelle-rahmennummer()@ um im Positionierungsbereich die aktuelle Rahmennummer zu ermitteln.
 * Neuer Befehl "Indexerstellen":../commands-de/makeindex.html.
 * Neuer "Kommandozeilenparameter":commandline.html @timeout@ für Abbruch nach n Sekunden.
 * Neue "Konfiguration":configuration.html @pathrewrite@ um absolute Pfade (@file:///....@) für jeden Publishing-Lauf zu verändern.

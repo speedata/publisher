@@ -31,6 +31,7 @@ h2. Folgende XPath-Funktionen stehen bereit:
 
 Es gibt zwei Klassen von XPath Funktionen: standardkonforme und speedata Publisher spezifische Funktionen. Die spezifischen Funktionen sind im Namensraum @urn:speedata:2009/publisher/functions/de@ (im Folgenden mit @sd:@ gekennzeichnet). Die Standard Funktionen sollten sich wie XPath 2.0 verhalten.
 
+- sd:aktuelle-rahmennummer(&lt;name>):= Gibt die Nummer des aktuellen Rahmens im Platzierungsbereich zurück.
 - sd:aktuelle-seite() := Gibt die Seitennummer zurück.
 - sd:aktuelle-zeile() := Gibt die aktuelle Zeile zurück.
 - sd:aktuelle-spalte() := Gibt die aktuelle Spalte zurück.

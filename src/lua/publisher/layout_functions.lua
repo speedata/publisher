@@ -147,6 +147,13 @@ local function gruppenbreite(dataxml, arg )
   return breite
 end
 
+local function current_frame_number(dataxml,arg)
+  local framename = arg[1]
+  if framename == nil then return 1 end
+  local current_framenumber = current_grid:framenumber(framename)
+  return current_framenumber
+end
+
 local function gruppenhoehe(dataxml, arg )
   publisher.setup_page()
   local groupname=arg[1]
@@ -248,6 +255,9 @@ register("urn:speedata:2009/publisher/functions/de","seitenzahlen-zusammenfassen
 
 register("urn:speedata:2009/publisher/functions/en","current-row",current_row)
 register("urn:speedata:2009/publisher/functions/de","aktuelle-zeile",current_row)
+
+register("urn:speedata:2009/publisher/functions/en","current-framenumber",current_frame_number)
+register("urn:speedata:2009/publisher/functions/de","aktuelle-rahmennummer",current_frame_number)
 
 register("urn:speedata:2009/publisher/functions/en","alternating",alternating)
 register("urn:speedata:2009/publisher/functions/de","alternierend",alternating)

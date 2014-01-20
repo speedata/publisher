@@ -51,6 +51,7 @@ There are two classes of XPath functions: standard XPath functions and speedata 
 - sd:current-page() := Return the current page number.
 - sd:current-row() := Return the current row.
 - sd:current-column() := Return the current column.
+- sd:current-framenumber(&lt;name>) := Return the current frame number of given positioning area.
 - sd:alternating(&lt;type>, &lt;text>,&lt;text>,.. ) := On each call the next element will be returned. You can define more alternating sequences by using distinct type values. Example: @sd:alternating("tbl", "White","Gray")@ can be used for alternating color of table rules. To reset the state, use @sd:reset-alternating(<type>)@.
 - sd:decode-html(&lt;node>) := Change text such as @&lt;i&gt;italic&lt;/i&gt;@ into HTML markup.
 - sd:reset-alternating(&lt;type>) := Reset alternating so the next @sd:alternating()@ starts again from the first element.
