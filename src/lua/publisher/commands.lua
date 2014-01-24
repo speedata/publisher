@@ -1081,9 +1081,31 @@ end
 --- Go to the next row in the current area.
 function commands.next_row( layoutxml,dataxml )
     publisher.setup_page()
-    local rownumber = publisher.read_attribute(layoutxml,dataxml,"row", "number")
+    local rownumber = publisher.read_attribute(layoutxml,dataxml,"row", "rawstring")
     local areaname  = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
-    local rows      = publisher.read_attribute(layoutxml,dataxml,"rows","number")
+    local rows      = publisher.read_attribute(layoutxml,dataxml,"rows","rawstring")
+    local tmp
+
+    if rownumber ~= nil then
+        tmp = tonumber(rownumber)
+        if tmp == nil then
+            err("Cannot parse row in NextRow, number expected, but got %q",tostring(rownumber))
+            rownumber = nil
+        else
+            rownumber = tmp
+        end
+    end
+
+    if rows ~= nil then
+        tmp = tonumber(rows)
+        if tmp == nil then
+            err("Cannot parse rows in NextRow, number expected, but got %q",tostring(rows))
+            rows = nil
+        else
+            rows = tmp
+        end
+    end
+
     rows = rows or 1
     local areaname = areaname or publisher.default_areaname
 

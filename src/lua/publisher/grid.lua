@@ -87,7 +87,7 @@ function number_of_rows(self,areaname)
     assert(self)
     local areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
-        err("Area %q unknown, using page",areaname)
+        err("Area %q unknown, using page (number-of-rows)",areaname)
         areaname = publisher.default_areaname
     end
     local current_frame = self:framenumber(areaname)
@@ -100,7 +100,7 @@ function number_of_columns(self,areaname)
     assert(self)
     local areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
-        err("Area %q unknown, using page",areaname)
+        err("Area %q unknown, using page (number-of-columns)",areaname)
         areaname = publisher.default_areaname
     end
     local current_frame = self:framenumber(areaname)
