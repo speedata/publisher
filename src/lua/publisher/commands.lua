@@ -530,14 +530,22 @@ function commands.element( layoutxml,dataxml )
     for i,v in ipairs(tab) do
         local contents = publisher.element_contents(v)
         if contents[".__type"]=="attribute" then
-            -- Attribut
+            -- Attribute
             for _k,_v in pairs(contents) do
                 if _k ~= ".__type" then
                     ret[_k] = _v
                 end
             end
         else
-            ret[#ret + 1] = contents
+            -- .__local_name can be nil if we add Elements in another Element
+            -- The Elements are stored in sub-tables
+            if contents[".__local_name"] == nil then
+                for i=1,#contents do
+                    ret[#ret + 1] = contents[i]
+                end
+            else
+                ret[#ret + 1] = contents
+            end
         end
     end
 
