@@ -132,6 +132,8 @@ values = {
     ["zentriert"] = "centered",
     ["oben,rechts"] = "top,right",
     ["unten,rechts"] = "bottom,right",
+    ["oben,links"] = "top,left",
+    ["unten,links"] = "bottom,left",
 },
 },
 },en = {  elements = {
@@ -265,6 +267,8 @@ values = {
     ["centered"] = "centered",
     ["top,right"] = "top,right",
     ["bottom,right"] = "bottom,right",
+    ["top,left"] = "top,left",
+    ["bottom,left"] = "bottom,left",
 },
 },
 },attributes = {

@@ -234,6 +234,9 @@ function commands.box( layoutxml,dataxml )
                 width = width + trim
             elseif v == "bottom" then
                 height = height + trim
+            elseif v == "left" then
+                width = width + trim
+                shift_left = trim
             end
         end
     end

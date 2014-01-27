@@ -137,6 +137,8 @@
     <value key="centered" context="*" en="centered" de="zentriert"/>
     <value key="top,right" context="*" en="top,right" de="oben,rechts"/>
     <value key="bottom,right" context="*" en="bottom,right" de="unten,rechts"/>
+    <value key="top,left" context="*" en="top,left" de="oben,links"/>
+    <value key="bottom,left" context="*" en="bottom,left" de="unten,links"/>
   </values>
    <attributes>
       <attribute key="align" en="align" de="align"/>

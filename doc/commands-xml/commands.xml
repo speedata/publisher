@@ -560,7 +560,7 @@
   </command>
   <command name="Box">
     <description xml:lang="en">
-      <para>create a rectangular colored area. The area must fit the grid cells.</para>
+      <para>Create a rectangular colored area. The area must fit the grid cells.</para>
     </description>
     <description xml:lang="de">
       <para>Erzeugt einen rechteckigen gefärbten Bereich. Die Fläche muss mit den Rasterzellen übereinstimmen.</para>
@@ -591,6 +591,14 @@
       </description>
       <description xml:lang="de">
         <para>Farbe der Box.</para>
+      </description>
+    </attribute>
+    <attribute name="bleed" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>Lets the box increase its size by the amount of trim given in the options. Useful for thumb indexes. The contents of the attribute is either »left«, »right«, »top« or »bottom« or any combination such as »top,right«.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Lässt die Box am Rand größer werden. Wird z.B. für Daumenregister benutzt, die inkl. Beschnitt ganz zum Rand gehen sollen. Inhalt ist eine Ortsangabe bestehend aus den Werten »oben«, »unten«, »links« oder »rechts« bzw. eine Kombination wie »oben,rechts«.</para>
       </description>
     </attribute>
     <example xml:lang="en">

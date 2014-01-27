@@ -386,9 +386,14 @@
       <optional>
         <attribute name="beschnitt">
           <choice>
+            <value>links</value>
+            <value>top</value>
+            <value>bottom</value>
+            <value>rechts</value>
             <value>oben,rechts</value>
             <value>unten,rechts</value>
-            <value>rechts</value>
+            <value>oben,links</value>
+            <value>unten,links</value>
           </choice>
         </attribute>
       </optional>
