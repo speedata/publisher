@@ -232,11 +232,25 @@
           <attribute name="select"/>
           <a:documentation docid="action/select">The value that is accociated with the key. (XPath expression)</a:documentation>
         </element>
-        <element name="Mark">
-          <a:documentation docid="action/mark"/>
-          <attribute name="select"/>
-          <a:documentation docid="action/mark/select"/>
-        </element>
+        <oneOrMore>
+          <element name="Mark">
+            <a:documentation docid="action/mark"/>
+            <attribute name="select"/>
+            <a:documentation docid="action/mark/select"/>
+            <optional>
+              <attribute name="append">
+                <choice>
+                  <value>yes</value>
+                  <a:documentation docid="action/mark/select/yes"/>
+                  <value>no</value>
+                  <a:documentation docid="action/mark/select/no"/>
+                </choice>
+              </attribute>
+              <a:documentation docid="action/mark/append"/>
+            </optional>
+            <empty />
+          </element>
+        </oneOrMore>
       </choice>
     </element>
   </define>

@@ -55,8 +55,8 @@ end
 
 --- Action
 --- ------
---- Create a whatsit node of type 44 (`user_defined`). The only action
---- currently defined is `AddToList` and not well tested. Actions are
+--- Create a whatsit node of type 44 (`user_defined`). The action
+--- `AddToList` is not well tested. Actions are
 --- processed  after page shipout. The idea behind that is that we don't
 --- really know in advance which elements are put on a page and which are
 --- broken to the next page. This way we can find out exactly where something
@@ -74,10 +74,15 @@ function commands.action( layoutxml,dataxml)
             n.value = publisher.element_contents(j) -- pointer to the function (int)
             p:append(n)
         elseif eltname == "Mark" then
+            local tab = publisher.element_contents(j)
             local n = node.new("whatsit","user_defined")
-            n.user_id = publisher.user_defined_mark -- a magic number
+            if tab.append == true then
+                n.user_id = publisher.user_defined_mark_append -- a magic number
+            else
+                n.user_id = publisher.user_defined_mark
+            end
             n.type = 115  -- type 115: "value is a string"
-            n.value = publisher.element_contents(j)
+            n.value = tab.selection
             p:append(n)
         end
     end
@@ -1007,7 +1012,8 @@ end
 --- Set an invisible marker into the output (whatsit/user_defined)
 function commands.mark( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpath")
-    return selection
+    local append    = publisher.read_attribute(layoutxml,dataxml,"append","boolean")
+    return { selection = selection, append = append }
 end
 
 --- Message

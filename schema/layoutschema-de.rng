@@ -233,11 +233,25 @@
           <attribute name="auswahl"/>
           <a:documentation docid="action/select">Wert, der gepeichert wird (XPath-Ausdruck)</a:documentation>
         </element>
-        <element name="Marke">
-          <a:documentation docid="action/mark">Eine unsichtbare Markierung setzen. Kann benutzt werden, um die Seitenzahl zu ermitteln, auf der der Marker ausgegeben wurde.</a:documentation>
-          <attribute name="auswahl"/>
-          <a:documentation docid="action/mark/select">Der Name des Markers (XPath-Ausdruck)</a:documentation>
-        </element>
+        <oneOrMore>
+          <element name="Marke">
+            <a:documentation docid="action/mark">Eine unsichtbare Markierung setzen. Kann benutzt werden, um die Seitenzahl zu ermitteln, auf der der Marker ausgegeben wurde.</a:documentation>
+            <attribute name="auswahl"/>
+            <a:documentation docid="action/mark/select">Der Name des Markers (XPath-Ausdruck)</a:documentation>
+            <optional>
+              <attribute name="anhängen">
+                <choice>
+                  <value>ja</value>
+                  <a:documentation docid="action/mark/select/yes">Anhängen</a:documentation>
+                  <value>nein</value>
+                  <a:documentation docid="action/mark/select/no">Zahl nicht anhängen (Voreinstellung)</a:documentation>
+                </choice>
+              </attribute>
+              <a:documentation docid="action/mark/append">Seitenzahl wird zur schon existierenden Seitenzahl hinzugefügt (um ein mehrfaches Vorkommen eines Eintrags zu signalisieren) ja/nein</a:documentation>
+            </optional>
+            <empty/>
+          </element>
+        </oneOrMore>
       </choice>
     </element>
   </define>

@@ -2196,6 +2196,22 @@
     <parentelements>
       <cmd name="Action"/>
     </parentelements>
+    <attribute name="select" type="xpath" optional="no">
+      <description xml:lang="en">
+        <para>The name of the mark to be set.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name des Markers, der gesetzt wird.</para>
+      </description>
+    </attribute>
+    <attribute name="append" type="yesno" optional="yes">
+      <description xml:lang="en">
+        <para>When yes, append the current page to the previous values of the mark. Useful to get page ranges in an index. (Default is no.)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn ja, dann wird die aktuelle Seitenzahl an den letzten Wert angehängt (mit Komma separiert). Nützlich, um Seitenzahlen wie S. 3-5 im Index zu erstellen. Voreinstellung ist nein.</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Pageformat width="210mm" height="4cm"/>
 
@@ -2263,10 +2279,10 @@
 ]]></listing>
     </example>
     <info xml:lang="en">
-      <para>This works only for backwards references (v1.6).</para>
+      <para>Marks get saved for subsequent runs.</para>
     </info>
     <info xml:lang="de">
-      <para>Funktioniert nur für Rückwärtsreferenzen (v1.6).</para>
+      <para>Marker werden für nachfolgende Läufe gespeichert.</para>
     </info>
     <seealso><cmd name="Action"/></seealso>
   </command>

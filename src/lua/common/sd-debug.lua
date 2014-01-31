@@ -64,7 +64,7 @@ do
         if type(k) == "number" then
           key = string.format("[%d]",k)
         else
-          key = string.format("[%q]",k)
+          key = string.format("[%q]",tostring(k))
         end
         log("%s%s = %q", string.rep("  ",level), key,tostring(l))
       end

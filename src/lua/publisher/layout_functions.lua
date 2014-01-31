@@ -70,12 +70,12 @@ end
 -- Very simple implementation, not to be used in other cases than 1-3!
 local function merge_pagenumbers(dataxml,arg )
   local a,b
-  _,_, a, b = unicode.utf8.find(arg[1],"^(%d+).(%d+)$")
+  _,_, a, b = unicode.utf8.find(arg[1] or "","^(%d+).(%d+)$")
   local ret
   if a == b then
       ret = a
   else
-      ret = arg[1]
+      ret = arg[1] or ""
   end
   return ret
 end

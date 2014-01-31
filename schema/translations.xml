@@ -144,6 +144,7 @@
       <attribute key="align" en="align" de="align"/>
       <attribute key="alignment" en="alignment" de="ausrichtung"/>
       <attribute key="allocate" en="allocate" de="belegen"/>
+      <attribute key="append" en="append" de="anhängen" />
       <attribute key="angle" en="angle" de="winkel"/>
       <attribute key="area" en="area" de="bereich"/>
       <attribute key="b" en="b" de="b"/>
@@ -434,7 +435,19 @@
        <en>Name of the marker (XPath expression)</en>
        <de>Der Name des Markers (XPath-Ausdruck)</de>
      </documentation>
-      <documentation docid="attribute">
+     <documentation docid="action/mark/append">
+       <en>Append page number to the existing mark (denotes multiple occurence of an entry) yes/no</en>
+       <de>Seitenzahl wird zur schon existierenden Seitenzahl hinzugefügt (um ein mehrfaches Vorkommen eines Eintrags zu signalisieren) ja/nein</de>
+     </documentation>
+     <documentation docid="action/mark/select/yes">
+       <en>Append</en>
+       <de>Anhängen</de>
+     </documentation>
+     <documentation docid="action/mark/select/no">
+       <en>Don't append number (default)</en>
+       <de>Zahl nicht anhängen (Voreinstellung)</de>
+     </documentation>
+     <documentation docid="attribute">
          <en>Creates an attribute which can be wrapped in an »Element«.</en>
          <de>Erzeugt ein Attribut, das in ein »Element« geschachtelt werden kann.</de>
       </documentation>

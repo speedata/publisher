@@ -6,6 +6,7 @@ h1. Liste der Änderungen
 
 h2. Version 2.0
 
+* Funktionalität des Befehls "Mark":../commands-de/mark.html geändert, um Daten (Seitenzahlen) anzuhängen. Außerdem wird eine Zwischendatei für folgende Läufe generiert.
 * Neue "XPath-Funktion":xpath.html @sd:aktuelle-rahmennummer()@ um im Positionierungsbereich die aktuelle Rahmennummer zu ermitteln.
 * Neuer Befehl "Indexerstellen":../commands-de/makeindex.html.
 * Neuer "Kommandozeilenparameter":commandline.html @timeout@ für Abbruch nach n Sekunden.

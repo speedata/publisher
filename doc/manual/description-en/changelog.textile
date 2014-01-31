@@ -6,6 +6,7 @@ h1. Changelog
 
 h2. Version 2.0
 
+* Change "Mark":../commands-en/mark.html functionality to append data. Also gets automatically reloaded on the next run.
 * New "XPath-function":xpath.html @sd:current-framenumber()@ to determine the current frame in the given positioning area.
 * New Command "Makeindex":../commands-en/makeindex.html.
 * New "Command line parameter":commandline.html @timeout@ to set maximum time for publishing run.

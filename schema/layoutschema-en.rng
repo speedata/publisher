@@ -230,11 +230,25 @@
           <attribute name="select"/>
           <a:documentation docid="action/select">The value that is accociated with the key. (XPath expression)</a:documentation>
         </element>
-        <element name="Mark">
-          <a:documentation docid="action/mark">Set an invisble marker into the output. Can be used to obtain the page number where this marker gets.</a:documentation>
-          <attribute name="select"/>
-          <a:documentation docid="action/mark/select">Name of the marker (XPath expression)</a:documentation>
-        </element>
+        <oneOrMore>
+          <element name="Mark">
+            <a:documentation docid="action/mark">Set an invisble marker into the output. Can be used to obtain the page number where this marker gets.</a:documentation>
+            <attribute name="select"/>
+            <a:documentation docid="action/mark/select">Name of the marker (XPath expression)</a:documentation>
+            <optional>
+              <attribute name="append">
+                <choice>
+                  <value>yes</value>
+                  <a:documentation docid="action/mark/select/yes">Append</a:documentation>
+                  <value>no</value>
+                  <a:documentation docid="action/mark/select/no">Don't append number (default)</a:documentation>
+                </choice>
+              </attribute>
+              <a:documentation docid="action/mark/append">Append page number to the existing mark (denotes multiple occurence of an entry) yes/no</a:documentation>
+            </optional>
+            <empty/>
+          </element>
+        </oneOrMore>
       </choice>
     </element>
   </define>

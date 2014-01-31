@@ -73,6 +73,7 @@ user_defined_addtolist = 1
 user_defined_bookmark  = 2
 user_defined_mark      = 3
 user_defined_marker    = 4
+user_defined_mark_append = 5
 
 
 glue_spec_node = node.id("glue_spec")
@@ -432,6 +433,18 @@ function dothings()
         err("Cannot determine the language of the layout file.")
         exit()
     end
+    local auxfilename = tex.jobname .. "-aux.xml"
+    -- load help file if it exists
+    if kpse.filelist[auxfilename] then
+        local mark_tab = load_xml(auxfilename,"aux file",{ htmlentities = true, ignoreeof = true })
+        for i=1,#mark_tab do
+            local mt = mark_tab[i]
+            if type(mt) == "table" and mt[".__local_name"] == "mark" then
+                markers[mt.name] = { page = mt.page}
+            end
+        end
+    end
+    printtable("markers",markers)
 
     if layoutxml.version then
         local version_mismatch = false
@@ -536,7 +549,17 @@ function dothings()
     for _,v in ipairs(bookmarks) do
         bookmarkstotex(v)
     end
-
+    local tab = {}
+    for k,v in pairs(markers) do
+        tab[#tab + 1] = string.format("  <mark name=%q page=%q />",xml_escape(tostring(k)),xml_escape(tostring(v.page)))
+    end
+    if #tab > 0 then
+        local file = io.open(auxfilename,"w")
+        file:write("<marker>\n")
+        file:write(table.concat(tab,"\n"))
+        file:write("\n</marker>")
+        file:close()
+    end
 end
 
 --- Load an XML file from the harddrive. filename is without path but including extension,
@@ -1224,7 +1247,14 @@ function find_user_defined_whatsits( head )
                     current_bookmark_table[#current_bookmark_table + 1] = {name = str, destination = dest, open = open_p}
                 elseif head.user_id == user_defined_mark then
                     local marker = head.value
-                    publisher.markers[marker] = { page = current_pagenumber }
+                    markers[marker] = { page = current_pagenumber }
+                elseif head.user_id == user_defined_mark_append then
+                    local marker = head.value
+                    if markers[marker] == nil then
+                        markers[marker] = { page = tostring(current_pagenumber) }
+                    else
+                        markers[marker]["page"] = tostring(markers[marker]["page"]) .. "," ..  tostring(current_pagenumber)
+                    end
                 end
             end
         end
