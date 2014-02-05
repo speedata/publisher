@@ -170,7 +170,7 @@ task :zip do
 		platform = "windows"
 		arch = "386"
 	elsif test(?f,srcbindir +"/luatex") then
-		cp_r(srcbindir +"/sdluatex","#{targetbin}/sdluatex")
+		cp_r(srcbindir +"/luatex","#{targetbin}/sdluatex")
 	end
 	if platform == nil then
 		res = `file #{targetbin}/sdluatex`.gsub(/^.*sdluatex:/,'')
