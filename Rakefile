@@ -116,3 +116,109 @@ desc "Run quality assurance"
 task :qa do
 	sh "#{installdir}/bin/sp compare #{installdir}/qa"
 end
+
+def build_go(srcdir,destbin,goos,goarch)
+	ENV['GOARCH'] = goarch
+	ENV['GOOS'] = goos
+	ENV['GOPATH'] = "#{srcdir}/go/sp"
+	publisher_version = @versions['publisher_version']
+
+	binaryname = goos == "windows" ? "sp.exe" : "sp"
+    # Now compile the go executable
+	cmdline = "go build -ldflags '-X main.dest directory -X main.version #{publisher_version}' -o #{destbin}/#{binaryname} main"
+	sh cmdline do |ok, res|
+		if ! ok
+	    	puts "Go compilation failed"
+	    	return false
+	    end
+	end
+	return true
+end
+
+desc "Make ZIP files - set NODOC=true for stripped zip file"
+task :zip do
+	srcbindir = ENV["LUATEX_BIN"] || ""
+	if ! test(?d,srcbindir) then
+		puts "Environment variable LUATEX_BIN does not exist.\nMake sure it points to a path which contains `luatex'.\nUse like this: rake zip LUATEX_BIN=/path/to/bin\nAborting"
+		next
+	end
+	publisher_version = @versions['publisher_version']
+	dest="#{builddir}/speedata-publisher"
+	targetbin="#{dest}/bin"
+	targetshare="#{dest}/share"
+	targetfonts=File.join(targetshare,"fonts")
+	targetschema=File.join(targetshare,"schema")
+	targetsw=File.join(dest,"sw")
+	rm_rf dest
+	mkdir_p dest
+	mkdir_p targetbin
+	mkdir_p File.join(targetshare,"img")
+	mkdir_p targetschema
+	mkdir_p targetsw
+	if ENV['NODOC'] != "true" then
+		Rake::Task["doc"].execute
+		cp_r "#{builddir}/manual",File.join(targetshare,"doc")
+	end
+	platform = nil
+	arch = nil
+	if test(?f, srcbindir +"/sdluatex") then
+		cp_r(srcbindir +"/sdluatex",targetbin)
+	elsif test(?f,srcbindir +"/luatex.exe") then
+		cp_r(srcbindir +"/luatex.exe",targetbin)
+		cp_r(srcbindir +"/luatex.dll",targetbin)
+		cp_r(srcbindir +"/kpathsea610.dll",targetbin)
+		platform = "windows"
+		arch = "386"
+	elsif test(?f,srcbindir +"/luatex") then
+		cp_r(srcbindir +"/sdluatex","#{targetbin}/sdluatex")
+	end
+	if platform == nil then
+		res = `file #{targetbin}/sdluatex`.gsub(/^.*sdluatex:/,'')
+		case res
+		when /Mach-O/
+			platform = "darwin"
+		when /Linux/
+			platform = "linux"
+		end
+		case res
+		when /x86-64/,/x86_64/,/64-bit/
+			arch = "amd64"
+		when /32-bit/
+			arch = "386"
+		end
+	end
+	if !platform or !arch then
+		puts "Could not determine architecture (amd64/386) or platform (windows/linux/darwin)"
+		puts "This is the output of 'file':"
+		puts res
+		next
+	end
+
+	zipname = "speedata-publisher-#{platform}-#{arch}-#{publisher_version}.zip"
+	rm_rf File.join(builddir,zipname)
+
+	if build_go(srcdir,targetbin,platform,arch) == false then next end
+	cp_r(File.join("fonts"),targetfonts)
+	cp_r(Dir.glob("img/*"),File.join(targetshare,"img"))
+	cp_r(File.join("lib"),targetshare)
+	cp_r(File.join("schema","layoutschema-de.rng"),targetschema)
+	cp_r(File.join("schema","layoutschema-en.rng"),targetschema)
+
+	Dir.chdir("src") do
+		cp_r(["tex","hyphenation"],targetsw)
+		# do not copy every Lua file to the dest
+		# and leave out .gitignore and others
+		Dir.glob("**/*.lua").reject { |x|
+		    x =~  /viznode/
+		}.each { |x|
+		  FileUtils.mkdir_p(File.join(targetsw , File.dirname(x)))
+		  FileUtils.cp(x,File.join(targetsw,File.dirname(x)))
+		}
+	end
+	dirname = "speedata-publisher"
+	cmdline = "zip -rq #{zipname} #{dirname}"
+	Dir.chdir("build") do
+		puts cmdline
+		puts `#{cmdline}`
+	end
+end
