@@ -122,7 +122,12 @@ def build_go(srcdir,destbin,goos,goarch)
 	ENV['GOOS'] = goos
 	ENV['GOPATH'] = "#{srcdir}/go/sp"
 	publisher_version = @versions['publisher_version']
-
+	# let's always add the sha1 to the minor versions, so we
+	# _,minor,_ = publisher_version.split(/\./)
+	# if minor.to_i() % 2 == 1 then
+		rev = `git rev-parse HEAD`[0,8]
+		publisher_version = publisher_version + "-#{rev}"
+	# end
 	binaryname = goos == "windows" ? "sp.exe" : "sp"
     # Now compile the go executable
 	cmdline = "go build -ldflags '-X main.dest directory -X main.version #{publisher_version}' -o #{destbin}/#{binaryname} main"
