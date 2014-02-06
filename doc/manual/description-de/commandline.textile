@@ -24,6 +24,7 @@ Usage: sp [parameter] command
     --runs=NUM               Number of publishing runs
     --startpage=NUM          The first page number
     --show-gridallocation    Show the allocated grid cells
+    --systemfonts            Use system fonts
     --timeout=SEC            Exit after SEC seconds
     --trace                  Show debug messages and some tracing PDF output
 -v, --var=VAR=VALUE          Set a variable for the publishing run
@@ -57,6 +58,7 @@ h2. Erklärung der Kommandozeilenparameter
 - @--runs = NUM@ := Überschreibt die Anzahl der Durchläufe des Publishers.
 - @--startpage = NUM@ := Die Seitennummer der ersten Seite.
 - @--show-gridallocation@ := Markiert die belegten Rasterzellen mit einer gelblichen Farbe. Doppelt belegte Zellen werden mit rot gekennzeichnet.
+- @--systemfonts@  := Lädt zusätzlich Systemschriftarten. Funktioniert nicht unter Windows XP.
 - @--timeout=SEC@ := Beendet den Lauf nach SEC Sekunden mit Statuscode 1.
 - @-v@, @--var=value@ := Übergibt zusätzliche Variablen an den Publisher-Lauf. Diese können wie üblich mit @auswahl="$variable"@ benutzt werden.
 - @--verbose@ := Gibt mehr Informationen aus, also notwendig.

@@ -42,6 +42,7 @@ var (
 	exe_suffix            string
 	homedir               string
 	add_local_path        bool // Add pwd recursively to extra-dir
+	useSystemFonts        bool
 	configfilename        string
 	extra_dir             []string
 	starttime             time.Time
@@ -69,10 +70,11 @@ func init() {
 	layoutoptions = make(map[string]string)
 	options = make(map[string]string)
 	defaults = map[string]string{
-		"layout":  "layout.xml",
-		"jobname": "publisher",
-		"data":    "data.xml",
-		"runs":    "1",
+		"layout":   "layout.xml",
+		"jobname":  "publisher",
+		"data":     "data.xml",
+		"runs":     "1",
+		"fontpath": "",
 	}
 
 	// The problem now is that we don't know where the executable file is
@@ -122,14 +124,8 @@ func init() {
 		homedir = me.HomeDir
 	}
 	add_local_path = true
+	useSystemFonts = false
 	configfilename = "publisher.cfg"
-
-	// FontFolder() is system dependent and defined in extra files
-	ff, err := FontFolder()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defaults["fontpath"] = ff
 
 	// LC_ALL is something like "de_DE.UTF-8"
 	re := regexp.MustCompile("^(d|D)(e|E)")
@@ -619,6 +615,7 @@ func main() {
 	op.On("--runs NUM", "Number of publishing runs ", options)
 	op.On("--startpage NUM", "The first page number", layoutoptions)
 	op.On("--show-gridallocation", "Show the allocated grid cells", layoutoptions)
+	op.On("--systemfonts", "Use system fonts", &useSystemFonts)
 	op.On("--trace", "Show debug messages and some tracing PDF output", layoutoptions)
 	op.On("--timeout SEC", "Exit after SEC seconds", options)
 	op.On("-v", "--var VAR=VALUE", "Set a variable for the publishing run", setVariable)
@@ -672,6 +669,14 @@ func main() {
 
 	if add_local_path {
 		extra_dir = append(extra_dir, pwd)
+	}
+	if useSystemFonts {
+		// FontFolder() is system dependent and defined in extra files
+		ff, err := FontFolder()
+		if err != nil {
+			log.Fatal(err)
+		}
+		defaults["fontpath"] = ff
 	}
 	os.Setenv("SP_FONT_PATH", getOption("fontpath"))
 	os.Setenv("SP_PATH_REWRITE", getOption("pathrewrite"))
