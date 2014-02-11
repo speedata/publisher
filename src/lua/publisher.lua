@@ -444,7 +444,6 @@ function dothings()
             end
         end
     end
-    printtable("markers",markers)
 
     if layoutxml.version then
         local version_mismatch = false
