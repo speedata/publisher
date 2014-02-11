@@ -357,6 +357,14 @@ function M.eval_comparison(first,second,operator)
 end
 
 function M.eval_addition(first,second,operator)
+    if type(first)=='table' then
+        err("The first operand of +/- is a table. Evaluating to 0")
+        return 0
+    end
+    if type(second)=='table' then
+        err("The second operand of +/- is a table. Evaluating to 0")
+        return 0
+    end
     if operator == "+" then
         return first + second
     elseif operator == "-" then
