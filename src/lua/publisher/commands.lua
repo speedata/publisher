@@ -216,15 +216,25 @@ end
 --- ----
 --- Draw a rectangular filled area
 function commands.box( layoutxml,dataxml )
-    local width     = publisher.read_attribute(layoutxml,dataxml,"width","number")
-    local height    = publisher.read_attribute(layoutxml,dataxml,"height","number")
+    local width     = publisher.read_attribute(layoutxml,dataxml,"width","length")
+    local height    = publisher.read_attribute(layoutxml,dataxml,"height","length")
     local colorname = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
     local bleed     = publisher.read_attribute(layoutxml,dataxml,"bleed","string")
 
     local current_grid = publisher.current_grid
 
-    width  = current_grid.gridwidth  * width
-    height = current_grid.gridheight * height
+    -- Todo: document length or number
+    if tonumber(width) ~= nil then
+        width  = current_grid.gridwidth  * width
+    else
+        width = tex.sp(width)
+    end
+
+    if tonumber(height) ~= nil then
+        height = current_grid.gridheight * height
+    else
+        height = tex.sp(height)
+    end
 
     local shift_left,shift_up = 0,0
 
