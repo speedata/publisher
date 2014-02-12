@@ -360,6 +360,7 @@ values = {
     ["padding-top"] = {de = "padding-top", en = "padding-top", },
     ["page"] = {de = "seite", en = "page", },
     ["pattern"] = {de = "muster", en = "pattern", },
+    ["resetmarks"] = {de = "markerzurücksetzen", en = "resetmarks", },
     ["r"] = {de = "r", en = "r", },
     ["removeduplicates"] = {de = "duplikatelöschen", en = "removeduplicates", },
     ["right"] = {de = "rechts", en = "right", },

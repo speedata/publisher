@@ -235,6 +235,7 @@
       <attribute key="padding-top" en="padding-top" de="padding-top"/>
       <attribute key="page" en="page" de="seite"/>
       <attribute key="pattern" en="pattern" de="muster" />
+      <attribute key="resetmarks" en="resetmarks" de="markerzurücksetzen" />
       <attribute key="r" en="r" de="r"/>
       <attribute key="removeduplicates" en="removeduplicates" de="duplikatelöschen"/>
       <attribute key="right" en="right" de="rechts"/>

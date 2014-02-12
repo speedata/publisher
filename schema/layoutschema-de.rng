@@ -1139,6 +1139,17 @@
           <a:documentation docid="options/startpage">Gibt die Startseite an. Voreinstellung ist 1</a:documentation>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="markerzurücksetzen">
+          <a:documentation docid="options/resetmarks"/>
+          <choice>
+            <value>ja</value>
+            <a:documentation docid="options/resetmarks/yes"/>
+            <value>nein</value>
+            <a:documentation docid="options/resetmarks/no"/>
+          </choice>
+        </attribute>
+      </optional>
     </element>
   </define>
 

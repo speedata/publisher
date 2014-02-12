@@ -1124,6 +1124,17 @@
           <a:documentation docid="options/startpage">The first page number. Default is 1.</a:documentation>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="resetmarks">
+          <a:documentation docid="options/resetmarks"/>
+          <choice>
+            <value>yes</value>
+            <a:documentation docid="options/resetmarks/yes"/>
+            <value>no</value>
+            <a:documentation docid="options/resetmarks/no"/>
+          </choice>
+        </attribute>
+      </optional>
     </element>
   </define>
 

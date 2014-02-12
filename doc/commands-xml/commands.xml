@@ -2539,6 +2539,14 @@
         <para>Bei ja markiert der speedata Publisher die möglichen Trennstellen für die Silbentrennung.</para>
       </description>
     </attribute>
+    <attribute name="resetmarks" type="yesno" optional="yes">
+      <description xml:lang="en">
+        <para>Yes: ignore the marks file from previous run.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn ja, werden die Marker des letzten Laufs ignoriert.</para>
+      </description>
+    </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<Optionen
    zeige_rasterbelegung="nein"

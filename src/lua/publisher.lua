@@ -433,17 +433,6 @@ function dothings()
         err("Cannot determine the language of the layout file.")
         exit()
     end
-    local auxfilename = tex.jobname .. "-aux.xml"
-    -- load help file if it exists
-    if kpse.filelist[auxfilename] then
-        local mark_tab = load_xml(auxfilename,"aux file",{ htmlentities = true, ignoreeof = true })
-        for i=1,#mark_tab do
-            local mt = mark_tab[i]
-            if type(mt) == "table" and mt[".__local_name"] == "mark" then
-                markers[mt.name] = { page = mt.page}
-            end
-        end
-    end
 
     if layoutxml.version then
         local version_mismatch = false
@@ -499,6 +488,18 @@ function dothings()
             log("Set page number to %d",num)
         else
             err("Can't recognize starting page number %q",options.startpage)
+        end
+    end
+
+    local auxfilename = tex.jobname .. "-aux.xml"
+    -- load help file if it exists
+    if kpse.filelist[auxfilename] and options.resetmarks == false then
+        local mark_tab = load_xml(auxfilename,"aux file",{ htmlentities = true, ignoreeof = true })
+        for i=1,#mark_tab do
+            local mt = mark_tab[i]
+            if type(mt) == "table" and mt[".__local_name"] == "mark" then
+                markers[mt.name] = { page = mt.page}
+            end
         end
     end
 
