@@ -1055,7 +1055,7 @@
         </attribute>
       </optional>
         <optional>
-            <attribute name="ignoreeof">
+            <attribute name="ignoreeol">
                 <choice>
                     <value>yes</value>
                     <value>no</value>

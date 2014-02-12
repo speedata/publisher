@@ -6,6 +6,8 @@ h1. Changelog
 
 h2. Version 2.0
 
+* Add "Option":../commands-en/options.html @resetmarks@.
+* Rename "Option":../commands-en/options.html @ignoreeof@ to @ignoreeol@.
 * Access system fonts with @--systemfonts@. Doesn't work on Windows XP, and currently not on Linux.
 * Change "Mark":../commands-en/mark.html functionality to append data. Also gets automatically reloaded on the next run.
 * New "XPath-function":xpath.html @sd:current-framenumber()@ to determine the current frame in the given positioning area.

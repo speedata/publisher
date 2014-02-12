@@ -6,6 +6,7 @@ h1. Liste der Änderungen
 
 h2. Version 2.0
 
+* Neue "Option":../commands-de/options.html @markerzurücksetzen@.
 * Auf Systemschriftarten kann mit @--systemfonts@ zugegriffen werden. Funktioniert nicht unter Windows XP, und derzeit nicht unter Linux.
 * Funktionalität des Befehls "Mark":../commands-de/mark.html geändert, um Daten (Seitenzahlen) anzuhängen. Außerdem wird eine Zwischendatei für folgende Läufe generiert.
 * Neue "XPath-Funktion":xpath.html @sd:aktuelle-rahmennummer()@ um im Positionierungsbereich die aktuelle Rahmennummer zu ermitteln.

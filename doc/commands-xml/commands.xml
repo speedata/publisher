@@ -2547,6 +2547,14 @@
         <para>Wenn ja, werden die Marker des letzten Laufs ignoriert.</para>
       </description>
     </attribute>
+    <attribute name="ignoreeol" type="yesno" optional="yes">
+      <description xml:lang="en">
+        <para>Ignore newlines in data-xml</para>
+      </description>
+      <description xml:lang="de">
+        <para>Zeilenenden in Daten ignorieren.</para>
+      </description>
+    </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<Optionen
    zeige_rasterbelegung="nein"

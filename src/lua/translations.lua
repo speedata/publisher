@@ -325,7 +325,7 @@ values = {
     ["vreference"] = {de = "vreferenz", en = "vreference", },
     ["xml:id"] = {de = "xml:id", en = "xml:id", },
     ["id"] = {de = "id", en = "id", },
-    ["ignoreeof"] = {de = "ignorierezeilenende", en = "ignoreeof", },
+    ["ignoreeol"] = {de = "ignorierezeilenende", en = "ignoreeol", },
     ["indentation"] = {de = "einrückung", en = "indentation", },
     ["k"] = {de = "k", en = "k", },
     ["keepposition"] = {de = "behalteposition", en = "keepposition", },

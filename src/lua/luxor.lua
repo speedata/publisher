@@ -264,7 +264,7 @@ local function parse_xml(txt,options)
 	else
 		decoder = decode_xmlstring
 	end
-	if options.ignoreeof == true then
+	if options.ignoreeol == true then
 		txt = txt.gsub(txt,"\13\n?","\n")
 		txt = txt.gsub(txt,"\n%s*"," ")
 	else

@@ -494,7 +494,7 @@ function dothings()
     local auxfilename = tex.jobname .. "-aux.xml"
     -- load help file if it exists
     if kpse.filelist[auxfilename] and options.resetmarks == false then
-        local mark_tab = load_xml(auxfilename,"aux file",{ htmlentities = true, ignoreeof = true })
+        local mark_tab = load_xml(auxfilename,"aux file",{ htmlentities = true, ignoreeol = true })
         for i=1,#mark_tab do
             local mt = mark_tab[i]
             if type(mt) == "table" and mt[".__local_name"] == "mark" then
@@ -511,7 +511,7 @@ function dothings()
         log("Reading from stdin")
         dataxml = luxor.parse_xml(io.stdin:read("*a"),{htmlentities = true})
     else
-        dataxml = load_xml(arg[3],"data file",{ htmlentities = true, ignoreeof = ( options.ignoreeof or false ) })
+        dataxml = load_xml(arg[3],"data file",{ htmlentities = true, ignoreeol = ( options.ignoreeol or false ) })
     end
     if type(dataxml) ~= "table" then
         err("Something is wrong with the data: dataxml is not a table")

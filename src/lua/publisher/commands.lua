@@ -1167,7 +1167,7 @@ function commands.options( layoutxml,dataxml )
     publisher.options.startpage          = publisher.read_attribute(layoutxml,dataxml,"startpage",   "number")
     publisher.options.trace              = publisher.read_attribute(layoutxml,dataxml,"trace",       "boolean")
     publisher.options.trim               = publisher.read_attribute(layoutxml,dataxml,"trim",        "length")
-    publisher.options.ignoreeof          = publisher.read_attribute(layoutxml,dataxml,"ignoreeof",   "boolean")
+    publisher.options.ignoreeol          = publisher.read_attribute(layoutxml,dataxml,"ignoreeol",   "boolean")
     publisher.options.resetmarks         = publisher.read_attribute(layoutxml,dataxml,"resetmarks",  "boolean",false)
     local mainlanguage                   = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","Englisch (Great Britan)")
 
