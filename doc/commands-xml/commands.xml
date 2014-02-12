@@ -2319,7 +2319,7 @@
   </command>
   <command name="NewPage">
     <description xml:lang="en">
-      <para></para>
+      <para>Finishes the current page and creates a new one (only if new material for the page is available).</para>
     </description>
     <description xml:lang="de">
       <para>Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn später Text o.ä. ausgegeben wird.</para>
@@ -2328,6 +2328,14 @@
     <parentelements>
       <cmd name="Record" />
     </parentelements>
+    <attribute name="pagetype" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The name of the next page type that should be used.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name des Seitentyps der für die nächste Seite genommen werden soll.</para>
+      </description>
+    </attribute>
     <example xml:lang="de">
       <listing><![CDATA[
 <Datensatz element="Produktbeschreibung">
@@ -2341,7 +2349,7 @@
   
 </Datensatz>]]></listing>
     </example>
-    <seealso />
+    <seealso ><cmd name="Pagetype"/></seealso>
   </command>
   <command name="NextFrame">
     <description xml:lang="en">
@@ -2765,9 +2773,7 @@
   </Platzierungsbereich>
 </Seitentyp>]]></listing>
     </example>
-    <seealso> XPath-Expression, <cmd name="AtPageCreation" />
-      <cmd name="AtPageShipout" />
-      <cmd name="PositioningArea" />
+    <seealso> XPath-Expression, <cmd name="AtPageCreation" />,  <cmd name="AtPageShipout" />,   <cmd name="PositioningArea" />,  <cmd name="NewPage"/>
     </seealso>
   </command>
   <command name="PlaceObject">

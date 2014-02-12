@@ -1134,7 +1134,9 @@ end
 --- NewPage
 --- -------
 --- Create a new page. Run the hooks in AtPageShipout.
-function commands.new_page( )
+function commands.new_page( layoutxml,dataxml )
+    local pagetype = publisher.read_attribute(layoutxml,dataxml,"pagetype","rawstring")
+    publisher.nextpage = pagetype
     publisher.new_page()
 end
 

@@ -99,6 +99,9 @@ publisher.alternating = {}
 
 default_areaname = "__seite"
 
+-- The name of the next requested page
+nextpage = nil
+
 -- the language of the layout instructions ('en' or 'de')
 current_layoutlanguage = nil
 
@@ -712,6 +715,12 @@ function detect_pagetype(pagenumber)
     local ret = nil
     for i=#masterpages,1,-1 do
         local seitentyp = masterpages[i]
+        if seitentyp.name == nextpage then
+            log("Page of type %q created (%d) - pagetype requested",seitentyp.name or "<detect_pagetype>",pagenumber)
+            nextpage = nil
+            return seitentyp.res
+        end
+
         if xpath.parse(nil,seitentyp.is_pagetype,seitentyp.ns) == true then
             log("Page of type %q created (%d)",seitentyp.name or "<detect_pagetype>",pagenumber)
             ret = seitentyp.res

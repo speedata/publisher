@@ -6,6 +6,7 @@ h1. Changelog
 
 h2. Version 2.0
 
+* New feature @pagetype@ in "NewPage":../commands-en/newpage.html
 * Add "Option":../commands-en/options.html @resetmarks@.
 * Rename "Option":../commands-en/options.html @ignoreeof@ to @ignoreeol@.
 * Access system fonts with @--systemfonts@. Doesn't work on Windows XP, and currently not on Linux.

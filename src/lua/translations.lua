@@ -359,6 +359,7 @@ values = {
     ["padding-right"] = {de = "padding-right", en = "padding-right", },
     ["padding-top"] = {de = "padding-top", en = "padding-top", },
     ["page"] = {de = "seite", en = "page", },
+    ["pagetype"] = {de = "seitentyp", en = "pagetype", },
     ["pattern"] = {de = "muster", en = "pattern", },
     ["resetmarks"] = {de = "markerzurücksetzen", en = "resetmarks", },
     ["r"] = {de = "r", en = "r", },
