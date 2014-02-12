@@ -779,6 +779,13 @@ func main() {
 					log.Println(err)
 				}
 			}
+			if v == jobname+"-aux.xml" {
+				log.Printf("Removing %s", v)
+				err = os.Remove(v)
+				if err != nil {
+					log.Println(err)
+				}
+			}
 		}
 	case "doc":
 		openFile(path_to_documentation)

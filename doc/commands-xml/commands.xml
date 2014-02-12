@@ -569,15 +569,15 @@
     <parentelements>
       <cmd name="PlaceObject" />
     </parentelements>
-    <attribute name="width" type="number" optional="no">
+    <attribute name="width" type="numberorlength" optional="no">
       <description xml:lang="en">
-        <para>Width of the box in grid cells.</para>
+        <para>Width of the box in grid cells or in absolute values.</para>
       </description>
       <description xml:lang="de">
         <para>Breite der Box in Rasterzellen.</para>
       </description>
     </attribute>
-    <attribute name="height" type="number" optional="no">
+    <attribute name="height" type="numberorlength" optional="no">
       <description xml:lang="en">
         <para>Height of the box in grid cells.</para>
       </description>
