@@ -97,6 +97,7 @@
 
   <define name="t_textvalues">
     <choice>
+      <ref name="e_Action"/>
       <ref name="e_A"/>
       <ref name="e_I"/>
       <ref name="e_B"/>
