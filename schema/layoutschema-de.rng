@@ -55,6 +55,7 @@
     <optional><ref name="e_Image"/></optional>
     <optional><ref name="e_Li"/></optional>
     <optional><ref name="e_Paragraph"/></optional>
+    <optional><ref name="e_HSpace"/></optional>
     <optional><ref name="e_Sub"/></optional>
     <optional><ref name="e_Sup"/></optional>
     <optional><ref name="e_Tablerule"/></optional>
