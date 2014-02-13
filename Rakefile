@@ -172,7 +172,7 @@ task :zip do
 		cp_r(srcbindir +"/luatex.exe",targetbin)
 		cp_r(srcbindir +"/luatex.dll",targetbin)
 		cp_r(srcbindir +"/kpathsea610.dll",targetbin)
-		File.open(srcbindir + "/texmf.cnf", "w+") { |file| file.write("#dummy\n") }
+		File.open(targetbin + "/texmf.cnf", "w") { |file| file.write("#dummy\n") }
 		platform = "windows"
 		arch = "386"
 	elsif test(?f,srcbindir +"/luatex") then
