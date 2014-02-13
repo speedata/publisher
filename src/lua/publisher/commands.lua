@@ -2017,7 +2017,7 @@ end
 --- -----
 --- Typesets tabular material. Mostly like an HTML table.
 function commands.table( layoutxml,dataxml,optionen )
-    local width          = publisher.read_attribute(layoutxml,dataxml,"width",         "number")
+    local width          = publisher.read_attribute(layoutxml,dataxml,"width",         "length")
     local hoehe          = publisher.read_attribute(layoutxml,dataxml,"height",        "number")
     local padding        = publisher.read_attribute(layoutxml,dataxml,"padding",       "length")
     local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","length")
@@ -2030,8 +2030,17 @@ function commands.table( layoutxml,dataxml,optionen )
     padding        = tex.sp(padding        or "0pt")
     columndistance = tex.sp(columndistance or "0pt")
     rowdistance    = tex.sp(rowdistance    or "0pt")
+    publisher.setup_page()
 
-    width = width or xpath.get_variable("__maxwidth")
+    if width == nil then
+        width = xpath.get_variable("__maxwidth") * publisher.current_grid.gridwidth
+    else
+        if tonumber(width) ~= nil then
+            width  = publisher.current_grid.gridwidth  * width
+        else
+            width = tex.sp(width)
+        end
+    end
 
     if not width then
         err("Can't get the width of the table!")
@@ -2039,11 +2048,6 @@ function commands.table( layoutxml,dataxml,optionen )
         local v = node.vpack(rule)
         return v
     end
-
-    -- Needed for table inside table without anything output yet:
-    publisher.setup_page()
-    width = publisher.current_grid.gridwidth * width
-
 
     if not fontname then fontname = "text" end
     fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]

@@ -3595,12 +3595,12 @@
           nimmt die Tabelle den Wert aus dem Attribut breite ein.</para>
       </description>
     </attribute>
-    <attribute name="width" type="number" optional="yes">
+    <attribute name="width" type="numberorlength" optional="yes">
       <description xml:lang="en">
-        <para>The maximum width of the table (in grid cells).</para>
+        <para>The maximum width of the table (in grid cells or absolute values). Defaults to the available space.</para>
       </description>
       <description xml:lang="de">
-        <para>Der Bereich, den die Tabelle (maximal) im Raster belegt.</para>
+        <para>Der Bereich, den die Tabelle (maximal) im Raster belegt. Angabe in Rasterzellen oder absoluten Längenangaben. Voreinstellung ist der verfügbare Platz.</para>
       </description>
     </attribute>
     <attribute name="padding" type="length" optional="yes">
