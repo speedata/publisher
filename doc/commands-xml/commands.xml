@@ -4125,7 +4125,7 @@
   </command>
   <command name="Tr">
     <description xml:lang="en">
-      <para></para>
+      <para>Tablerow</para>
     </description>
     <description xml:lang="de">
       <para>Erstellt eine Tabellenzeile</para>
@@ -4140,7 +4140,7 @@
     </parentelements>
     <attribute name="align" type="align" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Horizontal alignment of the table cells in this row.</para>
       </description>
       <description xml:lang="de">
         <para>Die horizontale Ausrichtung des Tabelleninhalts (gilt für die gesamte Zeile).</para>
@@ -4148,7 +4148,7 @@
     </attribute>
     <attribute name="valign" type="valign" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Vertical aligment of the table cells in this row.</para>
       </description>
       <description xml:lang="de">
         <para>Die vertikale Ausrichtung des Tabelleninhalts (gilt für die gesamte Zeile).</para>
@@ -4156,7 +4156,7 @@
     </attribute>
     <attribute name="minheight" type="number" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Minimum rowheight in grid cells.</para>
       </description>
       <description xml:lang="de">
         <para>Die Mindesthöhe der Zeile in Rasterzellen.</para>
@@ -4164,7 +4164,7 @@
     </attribute>
     <attribute name="backgroundcolor" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Background color of each cell in this row.</para>
       </description>
       <description xml:lang="de">
         <para>Die Farbe der Zellen in der Zeile.</para>
