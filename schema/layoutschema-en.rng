@@ -324,11 +324,12 @@
       </attribute>
       <optional>
         <attribute name="clip">
+          <a:documentation docid="image/clip">Some parts of the image will be cut off to keep aspect ration and respect given width and height.</a:documentation>
           <choice>
             <value>yes</value>
-            <a:documentation docid="image/clip/yes"/>
+            <a:documentation docid="image/clip/yes">Image keeps aspect ratio and gets clipped</a:documentation>
             <value>no</value>
-            <a:documentation docid="image/clip/no"/>
+            <a:documentation docid="image/clip/no">Image gets distorted to fit in the given width and height</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -339,33 +340,33 @@
       </optional>
       <optional>
         <attribute name="height">
-          <a:documentation docid="image/height">The height of the image (in absolute values, e.g. 210mm)</a:documentation>
+          <a:documentation docid="image/height">The height of the image (in grid cells or absolute values, e.g. 210mm)</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="minwidth">
-          <a:documentation docid="image/minwidth"/>
+          <a:documentation docid="image/minwidth">Minimum width of the image. Given in length or grid cells or '100%' for full-width image. Only available with clip="no"</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="minheight">
-          <a:documentation docid="image/minheight"/>
+          <a:documentation docid="image/minheight">Minimum height of the image. Given in length or grid cells. Only available with clip="no"</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="maxwidth">
-          <a:documentation docid="image/maxwidth"/>
+          <a:documentation docid="image/maxwidth">The maximum widht of the image (in grid cells or absolute values, e.g. 210mm or 100% for full-width image)</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="maxheight">
-          <a:documentation docid="image/maxheight">The maximum size of the image. Defautl is the »cropbox«</a:documentation>
+          <a:documentation docid="image/maxheight">The maximum height of the image (in grid cells or absolute values, e.g. 297mm)</a:documentation>
         </attribute>
       </optional>
 
       <optional>
         <attribute name="page">
-          <a:documentation docid="image/page">The page in the PDF file that gets included</a:documentation>
+          <a:documentation docid="image/page">The page in the PDF file that gets included. Default is 1.</a:documentation>
         </attribute>
       </optional>
       <optional>
@@ -376,13 +377,13 @@
       </optional>
       <optional>
         <attribute name="maxsize">
-          <a:documentation docid="image/maxheight">The maximum size of the image. Defautl is the »cropbox«</a:documentation>
+          <a:documentation docid="image/maxheight">The maximum height of the image (in grid cells or absolute values, e.g. 297mm)</a:documentation>
           <ref name="t_PDFBOX"/>
         </attribute>
       </optional>
       <optional>
         <attribute name="dpiwarn">
-          <a:documentation docid="/image/dpiwarn"/>
+          <a:documentation docid="image/dpiwarn">Give a warning if the rendered image has less dpi than the given value.</a:documentation>
         </attribute>
       </optional>
     </element>
@@ -747,12 +748,12 @@
       </optional>
       <optional>
         <attribute name="oldstylefigures">
-          <a:documentation docid="loadfontfile/oldstylefigures"/>
+          <a:documentation docid="loadfontfile/oldstylefigures">Switch to oldstyle figures if the font provides them. (OpenType feature onum.)</a:documentation>
           <choice>
             <value>yes</value>
-            <a:documentation docid="loadfontfile/osf/yes"/>
+            <a:documentation docid="loadfontfile/osf/yes">Activate oldstyle figures.</a:documentation>
             <value>no</value>
-            <a:documentation docid="loadfontfile/osf/no"/>
+            <a:documentation docid="loadfontfile/osf/no">Deactivate oldstyle figures.</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -829,9 +830,9 @@
         <attribute name="error">
           <choice>
             <value>yes</value>
-            <a:documentation docid="message/error/yes"/>
+            <a:documentation docid="message/error/yes">Raise an error.</a:documentation>
             <value>no</value>
-            <a:documentation docid="message/error/no"/>
+            <a:documentation docid="message/error/no">Don't raise an error (default).</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -1128,12 +1129,12 @@
       </optional>
       <optional>
         <attribute name="resetmarks">
-          <a:documentation docid="options/resetmarks"/>
+          <a:documentation docid="options/resetmarks">Delete the marks from previous run on startup.</a:documentation>
           <choice>
             <value>yes</value>
-            <a:documentation docid="options/resetmarks/yes"/>
+            <a:documentation docid="options/resetmarks/yes">Delete marks</a:documentation>
             <value>no</value>
-            <a:documentation docid="options/resetmarks/no"/>
+            <a:documentation docid="options/resetmarks/no">Don't delete marks (default).</a:documentation>
           </choice>
         </attribute>
       </optional>

@@ -328,11 +328,12 @@
       </attribute>
       <optional>
         <attribute name="ausschnitt">
+          <a:documentation docid="image/clip">Teile des Bildes werden abgeschnitten, damit das Seitenverhältnis beibehalten und die geforderte Breite und Höhe eingehalten wird.</a:documentation>
           <choice>
             <value>ja</value>
-            <a:documentation docid="image/clip/yes"/>
+            <a:documentation docid="image/clip/yes">Bild behält Seitenverhältnis und wird beschnitten</a:documentation>
             <value>nein</value>
-            <a:documentation docid="image/clip/no"/>
+            <a:documentation docid="image/clip/no">Bild wird verzerrt um die Breite und Höhe einzuhalten</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -343,27 +344,27 @@
       </optional>
       <optional>
         <attribute name="höhe">
-          <a:documentation docid="image/height">Gibt die maximale Höhe des Bildes an in Rasterzellen oder in absoluten Maßangaben (z.B. 210mm).</a:documentation>
+          <a:documentation docid="image/height">Gibt die Höhe des Bildes an in Rasterzellen oder in absoluten Maßangaben (z.B. 210mm).</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="minbreite">
-          <a:documentation docid="image/minwidth"/>
+          <a:documentation docid="image/minwidth">Minimale Breite des Bildes. Angabe in Maßen (z.B. 4cm), Rasterzellen oder 100% für ein Bild mit voller Breite. Nur wenn ausschnitt="nein".</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="minhöhe">
-          <a:documentation docid="image/minheight"/>
+          <a:documentation docid="image/minheight">Minimale Höhe des Bildes. Angabe in Maßen (z.B. 4cm) oder Rasterzellen. Nur wenn ausschnitt="nein".</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="maxbreite">
-          <a:documentation docid="image/maxwidth"/>
+          <a:documentation docid="image/maxwidth">Gibt maximale die Breite des Bildes an in Rasterzellen oder in absoluten Maßangaben (z.B. 210mm) oder 100% für Bilder in voller Breite.</a:documentation>
         </attribute>
       </optional>
       <optional>
         <attribute name="maxhöhe">
-          <a:documentation docid="image/maxheight">Die maximale Größe des Bildes. Voreinstellung ist die »cropbox«. </a:documentation>
+          <a:documentation docid="image/maxheight">Gibt maximale die Höhe des Bildes an in Rasterzellen oder in absoluten Maßangaben (z.B. 297mm).</a:documentation>
         </attribute>
       </optional>
 
@@ -380,13 +381,13 @@
       </optional>
       <optional>
         <attribute name="maximale-größe">
-          <a:documentation docid="image/maxheight">Die maximale Größe des Bildes. Voreinstellung ist die »cropbox«. </a:documentation>
+          <a:documentation docid="image/maxheight">Gibt maximale die Höhe des Bildes an in Rasterzellen oder in absoluten Maßangaben (z.B. 297mm).</a:documentation>
           <ref name="t_PDFBOX"/>
         </attribute>
       </optional>
       <optional>
         <attribute name="dpiwarnung">
-          <a:documentation docid="/image/dpiwarn"/>
+          <a:documentation docid="image/dpiwarn">Warnung ausgeben, wenn das Bild mit einer geringeren DPI-Zahl ausgegeben wird als angegeben.</a:documentation>
         </attribute>
       </optional>
     </element>
@@ -759,12 +760,12 @@
       </optional>
       <optional>
         <attribute name="mediävalziffern">
-          <a:documentation docid="loadfontfile/oldstylefigures"/>
+          <a:documentation docid="loadfontfile/oldstylefigures">Schaltet auf Mediävalziffern um, wenn die Schriftart diese bereitstellt. (Opentype Feature onum.)</a:documentation>
           <choice>
             <value>ja</value>
-            <a:documentation docid="loadfontfile/osf/yes"/>
+            <a:documentation docid="loadfontfile/osf/yes">Mediävalziffern aktivieren.</a:documentation>
             <value>nein</value>
-            <a:documentation docid="loadfontfile/osf/no"/>
+            <a:documentation docid="loadfontfile/osf/no">Mediävalziffern ausschalten.</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -841,9 +842,9 @@
         <attribute name="fehler">
           <choice>
             <value>ja</value>
-            <a:documentation docid="message/error/yes"/>
+            <a:documentation docid="message/error/yes">Fehler melden.</a:documentation>
             <value>nein</value>
-            <a:documentation docid="message/error/no"/>
+            <a:documentation docid="message/error/no">Keinen Fehler melden (Voreinstellung).</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -1143,12 +1144,12 @@
       </optional>
       <optional>
         <attribute name="markerzurücksetzen">
-          <a:documentation docid="options/resetmarks"/>
+          <a:documentation docid="options/resetmarks">Marker aus dem letzten Lauf löschen.</a:documentation>
           <choice>
             <value>ja</value>
-            <a:documentation docid="options/resetmarks/yes"/>
+            <a:documentation docid="options/resetmarks/yes">Marker löschen</a:documentation>
             <value>nein</value>
-            <a:documentation docid="options/resetmarks/no"/>
+            <a:documentation docid="options/resetmarks/no">Marker nicht löschen (Voreinstellung).</a:documentation>
           </choice>
         </attribute>
       </optional>

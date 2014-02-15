@@ -150,7 +150,6 @@
       <cmd name="PlaceObject" />
       <cmd name="Switch" />
       <cmd name="While" />
-      <cmd name="ProcessRecord" />
       <cmd name="ProcessNode" />
       <cmd name="Message" />
       <cmd name="NextFrame" />
@@ -203,7 +202,6 @@
       <cmd name="PlaceObject" />
       <cmd name="Switch" />
       <cmd name="While" />
-      <cmd name="ProcessRecord" />
       <cmd name="ProcessNode" />
       <cmd name="Message" />
       <cmd name="NextFrame" />
@@ -657,16 +655,30 @@
     </description>
     <childelements>
       <cmd name="B" />
-      <cmd name="Image" />
-      <cmd name="Switch" />
-      <cmd name="I" />
+      <cmd name="Copy-of"/>
+      <cmd name="EmptyLine" />
       <cmd name="Fontface" />
+      <cmd name="Group" />
+      <cmd name="Hyphenation" />
+      <cmd name="I" />
+      <cmd name="Image" />
+      <cmd name="Message" />
+      <cmd name="NewPage" />
+      <cmd name="NextFrame" />
+      <cmd name="NextRow"/>
+      <cmd name="Paragraph"/>
+      <cmd name="PlaceObject"/>
+      <cmd name="ProcessNode" />
+      <cmd name="SetVariable" />
+      <cmd name="SortSequence" />
       <cmd name="Sub" />
       <cmd name="Sup" />
+      <cmd name="Switch" />
+      <cmd name="Td"/>
       <cmd name="U" />
       <cmd name="URL" />
       <cmd name="Value" />
-      <cmd name="SetVariable" />
+      <cmd name="While" />
     </childelements>
     <parentelements>
       <cmd name="Switch" />
@@ -884,7 +896,15 @@
         <para>Das Farbmodell, das benutzt werden soll. Derzeit werdern »rgb«, »cmyk« und »graustufen« unterstützt. Weitere Farbräume auf Anfrage.</para>
       </description>
     </attribute>
-    <attribute name="r" type="zerotohundred" optional="no">
+  <attribute name="name" type="text" optional="yes">
+    <description xml:lang="en">
+      <para>The name of the color to be defined.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Name der Farbe, die definiert wird.</para>
+    </description>
+  </attribute>
+    <attribute name="r" type="zerotohundred" optional="yes">
       <description xml:lang="en">
         <para>Red part with RGB</para>
       </description>
@@ -892,7 +912,7 @@
         <para>Rot Anteil bei RGB</para>
       </description>
     </attribute>
-    <attribute name="g" type="zerotohundred" optional="no">
+    <attribute name="g" type="zerotohundred" optional="yes">
       <description xml:lang="en">
         <para>Green part with RGB / gray part when using the model gray</para>
       </description>
@@ -900,7 +920,7 @@
         <para>Grün Anteil bei RGB</para>
       </description>
     </attribute>
-    <attribute name="b" type="zerotohundred" optional="no">
+    <attribute name="b" type="zerotohundred" optional="yes">
       <description xml:lang="en">
         <para>Blue part with RGB</para>
       </description>
@@ -908,7 +928,7 @@
         <para>Blau Anteil bei RGB</para>
       </description>
     </attribute>
-    <attribute name="c" type="zerotohundred" optional="no">
+    <attribute name="c" type="zerotohundred" optional="yes">
       <description xml:lang="en">
         <para>Cyan part with CMYK</para>
       </description>
@@ -916,7 +936,7 @@
         <para>Cyan Anteil bei CMYK</para>
       </description>
     </attribute>
-    <attribute name="m" type="zerotohundred" optional="no">
+    <attribute name="m" type="zerotohundred" optional="yes">
       <description xml:lang="en">
         <para>Magenta part with CMYK</para>
       </description>
@@ -924,7 +944,7 @@
         <para>Magenta Anteil bei CMYK</para>
       </description>
     </attribute>
-    <attribute name="y" type="zerotohundred" optional="no">
+    <attribute name="y" type="zerotohundred" optional="yes">
       <description xml:lang="en">
         <para>Yellow part with CMYK</para>
       </description>
@@ -932,7 +952,7 @@
         <para>Gelb Anteil bei CMYK</para>
       </description>
     </attribute>
-    <attribute name="k" type="zerotohundred" optional="no">
+    <attribute name="k" type="zerotohundred" optional="yes">
       <description xml:lang="en">
         <para>Black part with CMYK</para>
       </description>
@@ -1199,8 +1219,8 @@
       </listing>
     </example>
     <seealso>
-      <cmd name="Paragraph" />
-      <cmd name="I" />
+      <cmd name="Paragraph" />,
+      <cmd name="I" />,
       <cmd name="B" />
     </seealso>
   </command>
@@ -1217,9 +1237,11 @@
       <cmd name="Switch" />
       <cmd name="I" />
       <cmd name="Fontface" />
+      <cmd name="Paragraph" />
       <cmd name="Sub" />
       <cmd name="Sup" />
       <cmd name="U" />
+      <cmd name="Tr"/>
       <cmd name="URL" />
       <cmd name="Value" />
       <cmd name="SetVariable" />
@@ -1555,6 +1577,22 @@
         <para>Die PDF-Box, die den sichtbaren Bereich angibt. Voreinstellung ist »cropbox«.</para>
       </description>
     </attribute>
+    <attribute name="maxwidth" type="numberorlength" optional="yes">
+      <description xml:lang="en">
+        <para>The maximum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value »100%« for full width image.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die maximale Breite des Bilds. Nur, wenn ausschnitt="nein". Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</para>
+      </description>
+    </attribute>
+    <attribute name="maxheight" type="numberorlength" optional="yes">
+      <description xml:lang="en">
+        <para>The maximum height of the image. Only used when clip="no". Value is a number (grid cells) or a length.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die maximale Breite des Bilds. Nur, wenn ausschnitt="nein". Angabe in absoluten Längen oder Anzahl Rasterzellen.</para>
+      </description>
+    </attribute>
     <attribute name="maxsize" type="text" optional="yes">
       <description xml:lang="en">
         <para>The PDF box that represents the maximum width. Default is “cropbox”.</para>
@@ -1761,10 +1799,9 @@
       <para>Das <cmd name="Layout" />Element ist das Wurzelelement im Regelwerk.</para>
     </description>
     <childelements>
-      <cmd name="Dataset" />
       <cmd name="LoadFontfile" />
       <cmd name="DefineColor" />
-      <cmd name="DefineFontfamily" />
+      <cmd name="DefineFontfamily"/>
       <cmd name="DefineTextformat" />
       <cmd name="Include" />
       <cmd name="Pageformat" />
@@ -1773,6 +1810,7 @@
       <cmd name="SetGrid" />
       <cmd name="Hyphenation" />
       <cmd name="SetVariable" />
+      <cmd name="Record"/>
     </childelements>
     <parentelements />
     <attribute name="version" type="number" optional="yes">
@@ -2274,7 +2312,7 @@
     </Textblock>
   </ObjektAusgeben>
   <NeueSeite/>
-  <Nachricht auswahl="sd:seitennummer('Textanfang')"></Nachricht>
+  <Nachricht auswahl="sd:seitennummer('Textanfang')"/>
 </Datensatz>
 ]]></listing>
     </example>
@@ -2581,23 +2619,33 @@
     <description xml:lang="de">
       <para>Zweig, der bei <cmd name="Switch" /> ausgeführt wird, wenn kein <cmd name="Case" /> wahr ist.</para>
     </description>
+    <!-- same as case! -->
     <childelements>
-      <cmd name="LoadDataset" />
-      <cmd name="SaveDataset" />
-      <cmd name="PlaceObject" />
-      <cmd name="Switch" />
-      <cmd name="While" />
-      <cmd name="ProcessRecord" />
-      <cmd name="ProcessNode" />
-      <cmd name="Message" />
-      <cmd name="NextFrame" />
-      <cmd name="NewPage" />
-      <cmd name="NextRow" />
+      <cmd name="B" />
+      <cmd name="Copy-of"/>
       <cmd name="EmptyLine" />
+      <cmd name="Fontface" />
       <cmd name="Group" />
-      <cmd name="SortSequence" />
       <cmd name="Hyphenation" />
+      <cmd name="I" />
+      <cmd name="Image" />
+      <cmd name="Message" />
+      <cmd name="NewPage" />
+      <cmd name="NextFrame" />
+      <cmd name="NextRow"/>
+      <cmd name="Paragraph"/>
+      <cmd name="PlaceObject"/>
+      <cmd name="ProcessNode" />
       <cmd name="SetVariable" />
+      <cmd name="SortSequence" />
+      <cmd name="Sub" />
+      <cmd name="Sup" />
+      <cmd name="Switch" />
+      <cmd name="Td"/>
+      <cmd name="U" />
+      <cmd name="URL" />
+      <cmd name="Value" />
+      <cmd name="While" />
     </childelements>
     <parentelements>
       <cmd name="Switch" />
@@ -2605,8 +2653,11 @@
     <example xml:lang="de">
       <para>Siehe das Beispiel bei <cmd name="Switch" />.</para>
     </example>
+    <example xml:lang="en">
+      <para>See the example at <cmd name="Switch"/>.</para>
+    </example>
     <seealso>
-      <cmd name="Switch " />, <cmd name="Case" />
+      <cmd name="Switch" />, <cmd name="Case" />
     </seealso>
   </command>
   <command name="Paragraph">
@@ -2625,6 +2676,7 @@
       <cmd name="Fontface" />
       <cmd name="Sub" />
       <cmd name="Sup" />
+      <cmd name="Value"/>
     </childelements>
     <parentelements>
       <cmd name="Textblock" />
@@ -2789,6 +2841,7 @@
       <cmd name="Image" />
       <cmd name="Tablerule" />
       <cmd name="Table" />
+      <cmd name="Rule"/>
       <cmd name="Textblock" />
     </childelements>
     <parentelements>
@@ -3024,30 +3077,6 @@
       <cmd name="PositioningArea" />
     </seealso>
   </command>
-  <command name="ProcessRecord">
-    <description xml:lang="en">
-      <para></para>
-    </description>
-    <description xml:lang="de">
-      <para>Dieser Befehl erlaubt es, eine Liste aus Elementen/Attributen zu verarbeiten.</para>
-    </description>
-    <childelements />
-    <parentelements>
-      <cmd name="Record" />
-    </parentelements>
-    <attribute name="select" type="xpath" optional="no">
-      <description xml:lang="en">
-        <para></para>
-      </description>
-      <description xml:lang="de">
-        <para>Datensatz, der bearbeitet werden soll</para>
-      </description>
-    </attribute>
-    <example xml:lang="de">
-      <listing><![CDATA[<BearbeiteDatensatz auswahl="$artikelnummern"/>]]></listing>
-    </example>
-    <seealso><cmd name="ProcessNode" /></seealso>
-  </command>
   <command name="ProcessNode">
     <description xml:lang="en">
       <para>Executes all given nodes. The elements, that are to be executed, are given with the attribute <tt>selection</tt>.</para>
@@ -3075,19 +3104,13 @@
         <para>Name des Modus. Dieser muss bei <cmd name="Record"/> exakt übereinstimmen. Damit ist es möglich für dasselbe Element unterschiedliche Regeln aufzurufen.</para>
       </description>
     </attribute>
-    <remark xml:lang="en">
-      <para>Currently there also exists <cmd name="ProcessRecord"/> that works on a list.</para>
-    </remark>
-    <remark xml:lang="de">
-      <para>Derzeit gibt es auch BearbeiteDatensatz, das auf eine Liste arbeitet.</para>
-    </remark>
     <example xml:lang="en">
       <listing><![CDATA[<ProcessNode select="*" mode="sum" />]]></listing>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<BearbeiteKnoten auswahl="*" modus="summe" />]]></listing>
     </example>
-    <seealso><cmd name="Record" />, <cmd name="ProcessRecord" /></seealso>
+    <seealso><cmd name="Record" /></seealso>
   </command>
   <command name="Record">
     <description xml:lang="en">
@@ -3113,6 +3136,22 @@
     <parentelements>
       <cmd name="Layout" />
     </parentelements>
+    <attribute name="element" type="text" optional="no">
+      <description xml:lang="en">
+        <para>The name of the element the record matches.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name des Elements der auf den Datensatz passt.</para>
+      </description>
+    </attribute>
+    <attribute name="mode" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>Name of the mode that matches the mode in <cmd name="ProcessNode"/>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name des Modus der mit dem in <cmd name="ProcessNode"/> übereinstimmt.</para>
+      </description>
+    </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<Datensatz element="url" modus="ausgabe">
   <Textblock breite="27" spalte="2" textformat="text">
@@ -3314,7 +3353,16 @@
     <description xml:lang="de">
       <para>Weist einer Variablen einen Wert zu. Der Wert kann aus mehreren Elementen bestehen (siehe zweites Beispiel).</para>
     </description>
-    <childelements />
+    <childelements >
+      <cmd name="Columns"/>
+      <cmd name="Copy-of"/>
+      <cmd name="Element"/>
+      <cmd name="Paragraph"/>
+      <cmd name="SortSequence"/>
+      <cmd name="Tablerule"/>
+      <cmd name="Tr"/>
+      <cmd name="Value"/>
+    </childelements>
     <parentelements>
       <cmd name="Record" />
     </parentelements>
@@ -3368,6 +3416,18 @@
     <seealso>
       <cmd name="Value" />
     </seealso>
+  </command>
+  <command name="Sequence">
+    <description xml:lang="en">
+      <para></para>
+    </description>
+    <description xml:lang="de">
+      <para></para>
+    </description>
+    <childelements></childelements>
+    <parentelements></parentelements>
+    <example xml:lang="de"><para>foo</para></example>
+    <seealso></seealso>
   </command>
   <command name="SortSequence">
     <description xml:lang="en">
@@ -3472,8 +3532,8 @@
         Inhalt des Elements <cmd name="Otherwise" /> ausgeführt. Durch das frühzeitige Abbrechen werden nachfolgende Fälle nicht weiter untersucht (siehe Beispiel).</para>
     </description>
     <childelements>
-      <cmd name="Case" />
-      <cmd name="Otherwise" />
+      <cmd name="Case"/>
+      <cmd name="Otherwise"/>
     </childelements>
     <parentelements />
     <example xml:lang="de">
@@ -3568,7 +3628,10 @@
       <para>Erzeugt eine Tabelle, die in etwa dem HTML Tabellenmodell entspricht.</para>
     </description>
     <childelements>
+      <cmd name="Copy-of"/>
       <cmd name="Columns" />
+      <cmd name="ForAll"/>
+      <cmd name="Switch"/>
       <cmd name="Tr" />
       <cmd name="Tablerule" />
       <cmd name="Tablefoot" />
@@ -3828,13 +3891,24 @@
       <para>Erstellt eine Tabellenzelle</para>
     </description>
     <childelements>
-      <cmd name="Paragraph" />
+      <cmd name="Copy-of"/>
+      <cmd name="ForAll"/>
       <cmd name="Image" />
       <cmd name="Table" />
+      <cmd name="Paragraph" />
+      <cmd name="Switch"/>
     </childelements>
     <parentelements>
       <cmd name="Tr" />
     </parentelements>
+    <attribute name="backgroundcolor" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The name of the background color (if the cell should get a background).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name der Hintergrundfarbe, wenn die Zelle eingefärbt werden soll.</para>
+      </description>
+    </attribute>
     <attribute name="border-left" type="length" optional="yes">
       <description xml:lang="en">
         <para></para>
@@ -4132,6 +4206,7 @@
     </description>
     <childelements>
       <cmd name="Td" />
+      <cmd name="Switch"/>
     </childelements>
     <parentelements>
       <cmd name="Table" />
@@ -4312,7 +4387,7 @@
     <description xml:lang="de">
       <para>Beinhaltet einen Textinhalt, der an das umgebende Element übergeben wird.</para>
     </description>
-    <childelements><cmd name="Br"/></childelements>
+    <childelements><text/><cmd name="Br"/></childelements>
     <parentelements>
       <cmd name="B" />
       <cmd name="Image" />
@@ -4360,8 +4435,8 @@
 </Textblock>]]></listing>
     </example>
     <seealso>
-      <cmd name="Copy-of" />
-      <ref name="XPath-Expression" />
+      <cmd name="Copy-of" />,
+      <ref name="xpath"></ref>,
       <cmd name="SetVariable" />
     </seealso>
   </command>

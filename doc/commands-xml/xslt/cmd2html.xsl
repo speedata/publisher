@@ -21,6 +21,7 @@
     <text key="directories" en="How to generate a table of contents and other directories" de="Wie werden Verzeichnisse erstellt?" />
     <text key="fonts" en="How to use fonts" de="Einbinden von Schriftarten" />
     <text key="cutmarks" en="Cutmarks and bleed" de="Schnittmarken und Beschnittzugabe" />
+    <text key="xpath" en="XPath expressions" de="XPath-Ausdrücke" />
   </xsl:variable>
 
   <xsl:variable name="text-translations">
@@ -36,6 +37,7 @@
     <text key="Startpage" en="Startpage" de="Startseite" />
     <text key="Command reference" en="Command reference" de="Befehlsreferenz" />
     <text key="Other languages" en="Other languages" de="Andere Sprachen" />
+    <text key="text" en="text contents" de="Textinhalt" />
     <text key="Remarks" en="Remarks" de="Bemerkungen" />
     <text key="de" en="German" de="Deutsch" />
     <text key="en" en="English" de="Englisch" />
@@ -130,6 +132,7 @@
           <xsl:if test=" position() &lt; last()">, </xsl:if>
         </xsl:for-each><br/>
         <xsl:value-of select="sd:translate-text('Child elements')"/><xsl:text>: </xsl:text>
+        <xsl:apply-templates select="childelements/text"/>
         <xsl:for-each select="childelements/cmd">
           <xsl:sort select="sd:translate-command(@name)"/>
           <a href="{sd:makelink(@name)}"><xsl:value-of select="sd:translate-command(@name)"/></a>
@@ -239,6 +242,10 @@
   <xsl:template match="para"><p><xsl:apply-templates/></p></xsl:template>
   <xsl:template match="tt">
     <span class="tt"><xsl:apply-templates/></span>
+  </xsl:template>
+
+  <xsl:template match="text">
+    <xsl:value-of select="sd:translate-text('text')"/><xsl:text>, </xsl:text>
   </xsl:template>
 
   <xsl:template match="cmd">

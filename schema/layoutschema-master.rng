@@ -326,6 +326,7 @@
       </attribute>
       <optional>
         <attribute name="clip">
+          <a:documentation docid="image/clip"></a:documentation>
           <choice>
             <value>yes</value>
             <a:documentation docid="image/clip/yes"/>
@@ -336,7 +337,7 @@
       </optional>
       <optional>
         <attribute name="width">
-        <a:documentation docid="image/width">Width of the image in grid cells or in aboslute size</a:documentation>
+        <a:documentation docid="image/width"/>
       </attribute>
       </optional>
       <optional>
@@ -367,24 +368,24 @@
 
       <optional>
         <attribute name="page">
-          <a:documentation docid="image/page">The page in the PDF file that gets included</a:documentation>
+          <a:documentation docid="image/page"/>
         </attribute>
       </optional>
       <optional>
         <attribute name="naturalsize">
-          <a:documentation docid="image/natural-height">The natural size of the image. Default is the »cropbox«.</a:documentation>
+          <a:documentation docid="image/natural-height"/>
           <ref name="t_PDFBOX"/>
         </attribute>
       </optional>
       <optional>
         <attribute name="maxsize">
-          <a:documentation docid="image/maxheight">The maximum size of the image. Defautl is the »cropbox«</a:documentation>
+          <a:documentation docid="image/maxheight"/>
           <ref name="t_PDFBOX"/>
         </attribute>
       </optional>
       <optional>
         <attribute name="dpiwarn">
-          <a:documentation docid="/image/dpiwarn"/>
+          <a:documentation docid="image/dpiwarn"/>
         </attribute>
       </optional>
     </element>
@@ -624,10 +625,10 @@
       <ref name="a_xmlid"/>
       <oneOrMore>
         <element name="Case">
-          <a:documentation docid="switch/case">If the condition in the attribte ›test‹ evaluates to 'true', the contents of this element is executed and the processing continues after the »Switch« command.</a:documentation>
+          <a:documentation docid="switch/case"/>
           <ref name="a_xmlid"/>
           <attribute name="test"><data type="string"/></attribute>
-          <a:documentation docid="switch/test">The XPath-expression for the test.</a:documentation>
+          <a:documentation docid="switch/test"/>
           <oneOrMore>
             <ref name="t_Switchcontents"/>
           </oneOrMore>

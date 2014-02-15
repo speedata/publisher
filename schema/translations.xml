@@ -538,7 +538,19 @@
          <en>Include an external image.</en>
          <de>Bindet eine externe Grafik ein.</de>
       </documentation>
-      <documentation docid="image/file">
+     <documentation docid="image/clip">
+       <en>Some parts of the image will be cut off to keep aspect ration and respect given width and height.</en>
+       <de>Teile des Bildes werden abgeschnitten, damit das Seitenverhältnis beibehalten und die geforderte Breite und Höhe eingehalten wird.</de>
+     </documentation>
+     <documentation docid="image/clip/yes">
+       <en>Image keeps aspect ratio and gets clipped</en>
+       <de>Bild behält Seitenverhältnis und wird beschnitten</de>
+     </documentation>
+     <documentation docid="image/clip/no">
+       <en>Image gets distorted to fit in the given width and height</en>
+       <de>Bild wird verzerrt um die Breite und Höhe einzuhalten</de>
+     </documentation>
+     <documentation docid="image/file">
          <en>Filename of the image. (text)</en>
          <de>Dateiname der Bilddatei. (Text)</de>
       </documentation>
@@ -547,21 +559,37 @@
          <de>Breite des Bildes in Rasterzellen oder in absoluten Maßangaben.</de>
       </documentation>
       <documentation docid="image/height">
-         <en>The height of the image (in absolute values, e.g. 210mm)</en>
-         <de>Gibt die maximale Höhe des Bildes an in Rasterzellen oder in absoluten Maßangaben (z.B. 210mm).</de>
+         <en>The height of the image (in grid cells or absolute values, e.g. 210mm)</en>
+         <de>Gibt die Höhe des Bildes an in Rasterzellen oder in absoluten Maßangaben (z.B. 210mm).</de>
       </documentation>
       <documentation docid="image/page">
-         <en>The page in the PDF file that gets included</en>
+         <en>The page in the PDF file that gets included. Default is 1.</en>
          <de>Bindet die angegebene Seite aus einer PDF-Datei ein. Voreinstellung: 1</de>
       </documentation>
-      <documentation docid="image/natural-height">
+     <documentation docid="image/minwidth">
+       <en>Minimum width of the image. Given in length or grid cells or '100%' for full-width image. Only available with clip="no"</en>
+       <de>Minimale Breite des Bildes. Angabe in Maßen (z.B. 4cm), Rasterzellen oder 100% für ein Bild mit voller Breite. Nur wenn ausschnitt="nein".</de>
+     </documentation>
+     <documentation docid="image/minheight">
+       <en>Minimum height of the image. Given in length or grid cells. Only available with clip="no"</en>
+       <de>Minimale Höhe des Bildes. Angabe in Maßen (z.B. 4cm) oder Rasterzellen. Nur wenn ausschnitt="nein".</de>
+     </documentation>
+     <documentation docid="image/natural-height">
          <en>The natural size of the image. Default is the »cropbox«.</en>
          <de>Die natürliche Größe des Bildes. Voreinstellung ist die »cropbox«.</de>
       </documentation>
-      <documentation docid="image/maxheight">
-         <en>The maximum size of the image. Defautl is the »cropbox«</en>
-         <de>Die maximale Größe des Bildes. Voreinstellung ist die »cropbox«. </de>
+     <documentation docid="image/maxwidth">
+       <en>The maximum widht of the image (in grid cells or absolute values, e.g. 210mm or 100% for full-width image)</en>
+       <de>Gibt maximale die Breite des Bildes an in Rasterzellen oder in absoluten Maßangaben (z.B. 210mm) oder 100% für Bilder in voller Breite.</de>
+     </documentation>
+     <documentation docid="image/maxheight">
+        <en>The maximum height of the image (in grid cells or absolute values, e.g. 297mm)</en>
+        <de>Gibt maximale die Höhe des Bildes an in Rasterzellen oder in absoluten Maßangaben (z.B. 297mm).</de>
       </documentation>
+     <documentation docid="image/dpiwarn">
+       <en>Give a warning if the rendered image has less dpi than the given value.</en>
+       <de>Warnung ausgeben, wenn das Bild mit einer geringeren DPI-Zahl ausgegeben wird als angegeben.</de>
+     </documentation>
       <documentation docid="box">
          <en>Create a rectangular colored area.</en>
          <de>Erzeugt einen rechteckigen farbigen Bereich.</de>
@@ -742,7 +770,19 @@
          <en>The name of the font file, to be used by »DefineFontface«.</en>
          <de>Der Name, unter dem die Schriftart später angesprochen werden kann.</de>
       </documentation>
-      <documentation docid="loadfontfile/filename">
+     <documentation docid="loadfontfile/oldstylefigures">
+       <en>Switch to oldstyle figures if the font provides them. (OpenType feature onum.)</en>
+       <de>Schaltet auf Mediävalziffern um, wenn die Schriftart diese bereitstellt. (Opentype Feature onum.)</de>
+     </documentation>
+     <documentation docid="loadfontfile/osf/yes">
+       <en>Activate oldstyle figures.</en>
+       <de>Mediävalziffern aktivieren.</de>
+     </documentation>
+     <documentation docid="loadfontfile/osf/no">
+       <en>Deactivate oldstyle figures.</en>
+       <de>Mediävalziffern ausschalten.</de>
+     </documentation>
+     <documentation docid="loadfontfile/filename">
          <en>The filename without path. Example: »helvetica.ttf«</en>
          <de>Der Dateiname ohne Pfadangabe. Beispiel: »helvetica.ttf«</de>
       </documentation>
@@ -797,7 +837,15 @@
          <en>Message to be printed (XPath expression).</en>
          <de>Nachricht, die ausgegeben werden soll (als XPath-Ausdruck)</de>
       </documentation>
-      <documentation docid="nextframe">
+     <documentation docid="message/error/yes">
+       <en>Raise an error.</en>
+       <de>Fehler melden.</de>
+     </documentation>
+     <documentation docid="message/error/no">
+       <en>Don't raise an error (default).</en>
+       <de>Keinen Fehler melden (Voreinstellung).</de>
+     </documentation>
+     <documentation docid="nextframe">
          <en>Switch to the next frame in the given positioning area. If no frame is available on the current page, a new page gets generated.</en>
          <de>Wechselt auf den nächsten Rahmen im angegebenen Platzierungsbereich. Ist kein Rahmen mehr auf der Seite vorhanden, wird eine neue Seite erzeugt.</de>
       </documentation>
@@ -938,7 +986,19 @@
          <en>The default language of the printed text (used for hyphenation)</en>
          <de>Die voreingestellte Sprache für die Textausgabe (für Silbentrennung)</de>
       </documentation>
-      <documentation docid="options/showgridallocation">
+     <documentation docid="options/resetmarks">
+       <en>Delete the marks from previous run on startup.</en>
+       <de>Marker aus dem letzten Lauf löschen.</de>
+     </documentation>
+     <documentation docid="options/resetmarks/yes">
+       <en>Delete marks</en>
+       <de>Marker löschen</de>
+     </documentation>
+     <documentation docid="options/resetmarks/no">
+       <en>Don't delete marks (default).</en>
+       <de>Marker nicht löschen (Voreinstellung).</de>
+     </documentation>
+     <documentation docid="options/showgridallocation">
          <en>Determins if the grid allocation should be shown.</en>
          <de>Bestimmt, ob die Rasterbelegung angezeigt wird.</de>
       </documentation>

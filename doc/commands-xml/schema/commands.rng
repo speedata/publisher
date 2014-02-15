@@ -77,6 +77,7 @@
           <ref name="descriptions" />
           <element name="childelements">
             <zeroOrMore>
+              <optional><element name="text"><empty/></element></optional>
               <ref name="cmd"/>
             </zeroOrMore>
           </element>
