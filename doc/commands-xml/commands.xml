@@ -1,5 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <commands xmlns="urn:speedata.de:2011/publisher/documentation" xmlns:de="urn:speedata.de:2009/publisher/de">
+
+  <define name="Switchcontents">
+    <optional><cmd name="Action"/></optional>
+    <optional><cmd name="Barcode"/></optional>
+    <optional><cmd name="Column"/></optional>
+    <optional><cmd name="Copy-of"/></optional>
+    <optional><cmd name="DefineColor"/></optional>
+    <optional><cmd name="EmptyLine"/></optional>
+    <optional><cmd name="Fontface"/></optional>
+    <optional><cmd name="ForAll"/></optional>
+    <optional><cmd name="Group"/></optional>
+    <optional><cmd name="HSpace"/></optional>
+    <optional><cmd name="Hyphenation"/></optional>
+    <optional><cmd name="Image"/></optional>
+    <optional><cmd name="InsertPages"/></optional>
+    <optional><cmd name="Li"/></optional>
+    <optional><cmd name="LoadDataset"/></optional>
+    <optional><cmd name="Loop"/></optional>
+    <optional><cmd name="Message"/></optional>
+    <optional><cmd name="NewPage"/></optional>
+    <optional><cmd name="NextFrame"/></optional>
+    <optional><cmd name="NextRow"/></optional>
+    <optional><cmd name="Output"/></optional>
+    <optional><cmd name="Paragraph"/></optional>
+    <optional><cmd name="PlaceObject"/></optional>
+    <optional><cmd name="ProcessNode"/></optional>
+    <optional><cmd name="SaveDataset"/></optional>
+    <optional><cmd name="SavePages"/></optional>
+    <optional><cmd name="SetVariable"/></optional>
+    <optional><cmd name="SortSequence"/></optional>
+    <optional><cmd name="Sub"/></optional>
+    <optional><cmd name="Sup"/></optional>
+    <optional><cmd name="Switch"/></optional>
+    <optional><cmd name="Tablerule"/></optional>
+    <optional><cmd name="Td"/></optional>
+    <optional><cmd name="Tr"/></optional>
+    <optional><cmd name="Value"/></optional>
+    <optional><cmd name="While"/></optional>
+  </define>
+
+  <define name="Commands">
+    <optional><cmd name="DefineColor"/></optional>
+    <optional><cmd name="EmptyLine"/></optional>
+    <optional><cmd name="ForAll"/></optional>
+    <optional><cmd name="Group"/></optional>
+    <optional><cmd name="Hyphenation"/></optional>
+    <optional><cmd name="LoadDataset"/></optional>
+    <optional><cmd name="Loop"/></optional>
+    <optional><cmd name="Message"/></optional>
+    <optional><cmd name="NewPage"/></optional>
+    <optional><cmd name="NextRow"/></optional>
+    <optional><cmd name="NextFrame"/></optional>
+    <optional><cmd name="Output"/></optional>
+    <optional><cmd name="PlaceObject"/></optional>
+    <optional><cmd name="ProcessNode"/></optional>
+    <optional><cmd name="SaveDataset"/></optional>
+    <optional><cmd name="SetVariable"/></optional>
+    <optional><cmd name="SortSequence"/></optional>
+    <optional><cmd name="Switch"/></optional>
+    <optional><cmd name="While"/></optional>
+    <optional><cmd name="InsertPages"/></optional>
+  </define>
+
+  <define name="Textvalues">
+    <zeroOrMore>
+      <choice>
+        <cmd name="Action"/>
+        <cmd name="A"/>
+        <cmd name="I"/>
+        <cmd name="B"/>
+        <cmd name="Br"/>
+        <cmd name="HSpace"/>
+        <cmd name="U"/>
+        <cmd name="Fontface"/>
+        <cmd name="Image"/>
+        <cmd name="Sub"/>
+        <cmd name="Sup"/>
+        <cmd name="URL"/>
+        <cmd name="Value"/>
+        <cmd name="Switch"/>
+        <cmd name="Loop"/>
+        <cmd name="ForAll"/>
+      </choice>
+    </zeroOrMore>
+  </define>
+
+  <define name="Toplevel">
+    <optional><cmd name="Record"/></optional>
+    <optional><cmd name="LoadFontfile"/></optional>
+    <optional><cmd name="DefineColor"/></optional>
+    <optional><cmd name="DefineFontfamily"/></optional>
+    <optional><cmd name="DefineTextformat"/></optional>
+    <optional><cmd name="Pageformat"/></optional>
+    <optional><cmd name="Options"/></optional>
+    <optional><cmd name="Pagetype"/></optional>
+    <optional><cmd name="SetGrid"/></optional>
+    <optional><cmd name="Hyphenation"/></optional>
+    <optional><cmd name="SetVariable"/></optional>
+    <optional><cmd name="Stylesheet"/></optional>
+  </define>
+
   <command name="A">
     <description xml:lang="en">
       <para>Insert Hyperlink to a URL.</para>
@@ -10,9 +111,6 @@
     <childelements>
       <cmd name="Value"/>
     </childelements>
-    <parentelements>
-      <cmd name="Paragraph"/>
-    </parentelements>
     <attribute name="href" type="text" optional="no">
       <description xml:lang="en">
         <para>The destination of the hyperlink (URI). Example: <tt>http://www.speedata.de</tt></para>
@@ -45,7 +143,7 @@
 </ObjektAusgeben>
 ]]></listing>
     </example>
-    <seealso></seealso>
+    <seealso/>
   </command>
   <command name="Action">
     <description xml:lang="en">
@@ -61,9 +159,6 @@
       <cmd name="AddToList" />
       <cmd name="Mark"/>
     </childelements>
-    <parentelements>
-      <cmd name="Textblock" />
-    </parentelements>
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben spalte="1">
   <Textblock breite="40">
@@ -93,9 +188,6 @@
         vollständig getestet und wird noch überarbeitet.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Action" />
-    </parentelements>
     <attribute name="select" type="xpath" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -161,9 +253,6 @@
       <cmd name="Hyphenation" />
       <cmd name="SetVariable" />
     </childelements>
-    <parentelements>
-      <cmd name="Pagetype" />
-    </parentelements>
     <example xml:lang="en">
       <listing><![CDATA[<AtPageShipout>
   <PlaceObject column="1" row="20">
@@ -197,25 +286,31 @@
       <para>Die Inhalte des Elements »BeiSeitenErzeugung« werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird.</para>
     </description>
     <childelements>
-      <cmd name="LoadDataset" />
-      <cmd name="SaveDataset" />
-      <cmd name="PlaceObject" />
-      <cmd name="Switch" />
-      <cmd name="While" />
-      <cmd name="ProcessNode" />
-      <cmd name="Message" />
-      <cmd name="NextFrame" />
-      <cmd name="NewPage" />
-      <cmd name="NextRow" />
-      <cmd name="EmptyLine" />
-      <cmd name="Group" />
-      <cmd name="SortSequence" />
-      <cmd name="Hyphenation" />
-      <cmd name="SetVariable" />
+      <oneOrMore>
+      <!-- t_commands -->
+      <optional><cmd name="DefineColor"/></optional>
+      <optional><cmd name="EmptyLine"/></optional>
+      <optional><cmd name="ForAll"/></optional>
+      <optional><cmd name="Group"/></optional>
+      <optional><cmd name="Hyphenation"/></optional>
+      <optional><cmd name="LoadDataset"/></optional>
+      <optional><cmd name="Loop"/></optional>
+      <optional><cmd name="Message"/></optional>
+      <optional><cmd name="NewPage"/></optional>
+      <optional><cmd name="NextRow"/></optional>
+      <optional><cmd name="NextFrame"/></optional>
+      <optional><cmd name="Output"/></optional>
+      <optional><cmd name="PlaceObject"/></optional>
+      <optional><cmd name="ProcessNode"/></optional>
+      <optional><cmd name="SaveDataset"/></optional>
+      <optional><cmd name="SetVariable"/></optional>
+      <optional><cmd name="SortSequence"/></optional>
+      <optional><cmd name="Switch"/></optional>
+      <optional><cmd name="While"/></optional>
+      <optional><cmd name="InsertPages"/></optional>
+      </oneOrMore>
+
     </childelements>
-    <parentelements>
-      <cmd name="Pagetype" />
-    </parentelements>
     <example xml:lang="en">
       <listing><![CDATA[<AtPageCreation>
   <PlaceObject column="1" row="1">
@@ -249,10 +344,6 @@
       <para>Erzeugt eine Datenstruktur, die mithilfe von <cmd name="SaveDataset" /> auf Festplatte gespeichert werden kann.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Element" />
-      <cmd name="SetVariable" />
-    </parentelements>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
         <para>Name of the attribute that is created.</para>
@@ -293,18 +384,8 @@
       <para>Schaltet auf »Fett« um.</para>
     </description>
     <childelements>
-      <!-- Textwerte -->
-      <cmd name="B" />
-      <cmd name="Image" />
-      <cmd name="Switch" />
-      <cmd name="I" />
-      <cmd name="Fontface" />
-      <cmd name="Sub" />
-      <cmd name="Sup" />
+      <reference name="Textvalues"/>
     </childelements>
-    <parentelements>
-      <cmd name="Paragraph" />
-    </parentelements>
     <example xml:lang="en">
       <listing><![CDATA[<Textblock width="10">
   <Paragraph>
@@ -330,77 +411,98 @@
     <description xml:lang="de">
     <para>Erzeugt einen 1D oder 2D Strichcode (barcode), der in <cmd name="PlaceObject"/> ausgegeben werden kann.</para>
   </description>
-  <childelements/>
-  <parentelements>
-    <cmd name="PlaceObject"/>
-  </parentelements>
-  <attribute name="select" type="xpath" optional="no">
-    <description xml:lang="en">
-      <para>The data to be encoded in the barcode.</para>
-    </description>
-    <description xml:lang="de">
-      <para>Wert, der als Strichcode kodiert werden soll.</para>
-    </description>
-  </attribute>
-  <attribute name="fontface" type="text" optional="yes">
-    <description xml:lang="en">
-      <para>Name of the fontface of the text that can be placed beneath the barcode. Not used in all codes.</para>
-    </description>
-    <description xml:lang="de">
-      <para>Name der Schriftart des Textes, der ggf. unterhalb des Strichcodes ausgegeben wird. Nicht in allen Codes verwendet.</para>
-    </description>
-  </attribute>
-  <attribute name="type" type="text" optional="no">
-    <description xml:lang="en">
-      <para>Type of the barcode. One of <tt>EAN13</tt>, <tt>Code128</tt> or <tt>QRCode</tt>.</para>
-    </description>
-    <description xml:lang="de">
-      <para>Typ des Strichcodes. Kann <tt>EAN13</tt>, <tt>Code128</tt> oder <tt>QRCode</tt> sein.</para>
-    </description>
-  </attribute>
-  <attribute name="width" type="numberorlength" optional="yes">
-    <description xml:lang="en">
-      <para>Width of the barcode</para>
-    </description>
-    <description xml:lang="de">
-      <para>Breite des Strichcodes</para>
-    </description>
-  </attribute>
-  <attribute name="height" type="numberorlength" optional="yes">
-    <description xml:lang="en">
-      <para>Height of the barcode.</para>
-    </description>
-    <description xml:lang="de">
-      <para>Höhe des Strichcodes.</para>
-    </description>
-  </attribute>
-  <attribute name="showtext" type="yesno" optional="yes">
-    <description xml:lang="en">
-      <para>Should the text be written under the barcode?</para>
-    </description>
-    <description xml:lang="de">
-      <para>Bestimmt, ob unterhalb des Barcodes der Text erscheint.</para>
-    </description>
-  </attribute>
+    <childelements/>
+    <attribute name="select" type="xpath" optional="no">
+      <description xml:lang="en">
+        <para>The data to be encoded in the barcode.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wert, der als Strichcode kodiert werden soll.</para>
+      </description>
+    </attribute>
+    <attribute name="fontface" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>Name of the fontface of the text that can be placed beneath the barcode. Not used in all codes.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name der Schriftart des Textes, der ggf. unterhalb des Strichcodes ausgegeben wird. Nicht in allen Codes verwendet.</para>
+      </description>
+    </attribute>
+    <attribute name="type" optional="no">
+      <description xml:lang="en">
+        <para>Type of the barcode. One of <tt>EAN13</tt>, <tt>Code128</tt> or <tt>QRCode</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Typ des Strichcodes. Kann <tt>EAN13</tt>, <tt>Code128</tt> oder <tt>QRCode</tt> sein.</para>
+      </description>
+      <choice name="QRCode">
+        <description xml:lang="en">
+          <para>Create an »optimal« QR code in terms of error correction and size.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Erzeugt einen QR code, der für den Inhalt die kleinstmögliche Größe und den besten Fehlerkorrekturwert hat.</para>
+        </description>
+      </choice>
+      <choice name="Code128">
+        <description xml:lang="en">
+          <para>Generate a code 128 barcode for numbers and text.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Erzeugt einen Code 128 Barcode für Ziffern und Text (ohne Umlaute)</para>
+        </description>
+      </choice>
+      <choice name="EAN13">
+        <description xml:lang="en">
+          <para>Create an EAN13 barcode for 13 digits.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Erzeugt einen EAN13 Barcode mit genau 13 Ziffern.</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute name="width" type="numberorlength" optional="yes">
+      <description xml:lang="en">
+        <para>Width of the barcode</para>
+      </description>
+      <description xml:lang="de">
+        <para>Breite des Strichcodes</para>
+      </description>
+    </attribute>
+    <attribute name="height" type="numberorlength" optional="yes">
+      <description xml:lang="en">
+        <para>Height of the barcode.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Höhe des Strichcodes.</para>
+      </description>
+    </attribute>
+    <attribute name="showtext" type="yesno" optional="yes">
+      <description xml:lang="en">
+        <para>Should the text be written under the barcode?</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt, ob unterhalb des Barcodes der Text erscheint.</para>
+      </description>
+    </attribute>
 
-  <example xml:lang="en">
-    <listing><![CDATA[<PlaceObject>
+    <example xml:lang="en">
+      <listing><![CDATA[<PlaceObject>
   <Barcode select="'speedata Publisher'" type="Code 128" showtext="nein"/>
 </PlaceObject>]]></listing>
-    <listing><![CDATA[<PlaceObject>
+      <listing><![CDATA[<PlaceObject>
   <Barcode select="4242002518169" type="EAN13"/>
 </PlaceObject>]]></listing>
-  </example>
-  <example xml:lang="de">
-    <listing><![CDATA[<ObjektAusgeben>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<ObjektAusgeben>
   <Strichcode auswahl="'speedata Publisher'" typ="Code 128" zeigetext="nein"/>
 </ObjektAusgeben>]]></listing>
-    <listing><![CDATA[<ObjektAusgeben>
+      <listing><![CDATA[<ObjektAusgeben>
   <Strichcode auswahl="4242002518169" typ="EAN13"/>
 </ObjektAusgeben>]]></listing>
-  </example>
-  <seealso></seealso>
-</command>
+    </example>
+    <seealso><cmd name="PlaceObject"/></seealso>
+  </command>
   <command name="Bold">
     <description xml:lang="en">
       <para>Name of the font face that should be used when switching to »bold«.</para>
@@ -409,9 +511,6 @@
       <para>Name der Schriftart, die für den Schriftschrift Fett benutzt werden soll.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="DefineFontfamily" />
-    </parentelements>
     <attribute name="fontface" type="text" optional="no">
       <description xml:lang="en">
         <para>Name of the fontface for bold.</para>
@@ -461,9 +560,6 @@
       <para>Name der Schriftart, die für den Schriftschrift Fett-Kursiv benutzt werden soll.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="DefineFontfamily" />
-    </parentelements>
     <attribute name="fontface" type="text" optional="no">
       <description xml:lang="en">
         <para>Name of the fontface for bold italic.</para>
@@ -517,9 +613,6 @@
       <para>Erstellt ein Lesezeichen für den PDF Betrachter (z.B. Adobe Reader). Wenn der Leser auf das Lesezeichen klickt, springt der PDF Betrachter an diese Stelle im Dokument.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Textblock" />
-    </parentelements>
     <attribute name="select" type="xpath" optional="no">
       <description xml:lang="en">
         <para>Title of the bookmark</para>
@@ -564,9 +657,6 @@
       <para>Erzeugt einen rechteckigen gefärbten Bereich. Die Fläche muss mit den Rasterzellen übereinstimmen.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="PlaceObject" />
-    </parentelements>
     <attribute name="width" type="numberorlength" optional="no">
       <description xml:lang="en">
         <para>Width of the box in grid cells or in absolute values.</para>
@@ -619,7 +709,6 @@
       <para>Fügt einen Zeilenumbruch ein</para>
     </description>
     <childelements></childelements>
-    <parentelements><cmd name="Value"/></parentelements>
     <example xml:lang="en">
       <listing><![CDATA[<Record element="data">
   <PlaceObject>
@@ -654,35 +743,10 @@
         falls vorhanden, das Element <cmd name="Otherwise" /> ausgeführt.</para>
     </description>
     <childelements>
-      <cmd name="B" />
-      <cmd name="Copy-of"/>
-      <cmd name="EmptyLine" />
-      <cmd name="Fontface" />
-      <cmd name="Group" />
-      <cmd name="Hyphenation" />
-      <cmd name="I" />
-      <cmd name="Image" />
-      <cmd name="Message" />
-      <cmd name="NewPage" />
-      <cmd name="NextFrame" />
-      <cmd name="NextRow"/>
-      <cmd name="Paragraph"/>
-      <cmd name="PlaceObject"/>
-      <cmd name="ProcessNode" />
-      <cmd name="SetVariable" />
-      <cmd name="SortSequence" />
-      <cmd name="Sub" />
-      <cmd name="Sup" />
-      <cmd name="Switch" />
-      <cmd name="Td"/>
-      <cmd name="U" />
-      <cmd name="URL" />
-      <cmd name="Value" />
-      <cmd name="While" />
+      <oneOrMore>
+        <reference name="Switchcontents" />
+      </oneOrMore>
     </childelements>
-    <parentelements>
-      <cmd name="Switch" />
-    </parentelements>
     <attribute name="test" type="xpath" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -707,11 +771,10 @@
       <para>Kennzeichnet den Inhalt einer <cmd name="Group" />.</para>
     </description>
     <childelements>
-      <cmd name="PlaceObject" />
+      <oneOrMore>
+        <reference name="Commands"/>
+      </oneOrMore>
     </childelements>
-    <parentelements>
-      <cmd name="Group" />
-    </parentelements>
     <remark xml:lang="de">
       <para>Der Inhalt wird in einem extra Element gekapselt, damit die Gruppe später noch andere Elemente (z.B. Raster) beinhalten kann, ohne, dass die Angaben zu unübersichtlich werden. Das
         Inhalt-Element wird voraussichtlich in zukünftigen Versionen wegfallen.</para>
@@ -747,9 +810,6 @@
       <para>Gibt die Eigenschaften einer Spalte in einer Tabelle an.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Columns" />
-    </parentelements>
     <attribute name="width" type="numberlengthorstar" optional="yes">
       <description xml:lang="en">
         <para></para>
@@ -758,25 +818,73 @@
         <para>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm) oder in *-Angaben (z.B. 4*) angegeben werden.</para>
       </description>
     </attribute>
-    <attribute name="align" type="align" optional="yes">
+    <attribute name="align" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The horizontal alignment of the table cells in this column. Can be overridden in a cell (<cmd name="Td"/>).</para>
       </description>
       <description xml:lang="de">
-        <para>Die horizontale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (Td) überschrieben werden.</para>
+        <para>Die horizontale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (<cmd name="Td"/>) überschrieben werden.</para>
       </description>
+      <choice name="left" context="align">
+        <description xml:lang="en">
+          <para>The table cells are left aligned.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Tabellenzellen dieser Spalte werden linksbündig ausgerichtet.</para>
+        </description>
+      </choice>
+      <choice name="center" context="align">
+        <description xml:lang="en">
+          <para>The table cells are horizontally centerd.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Tabellenzellen dieser Spalte werden horizontal zentriert.</para>
+        </description>
+      </choice>
+      <choice name="right" context="align">
+        <description xml:lang="en">
+          <para>The table cells are right aligned.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Tabellenzellen dieser Spalte werden rechtsbündig ausgerichtet.</para>
+        </description>
+      </choice>
     </attribute>
-    <attribute name="valign" type="valign" optional="yes">
+    <attribute name="valign" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The vertical alignment of the cells in this column. Can be overridden in a cell (<cmd name="Td"/>).</para>
       </description>
       <description xml:lang="de">
         <para>Die vertikale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (Td) überschrieben werden.</para>
       </description>
+      <choice name="top">
+        <description xml:lang="en">
+          <para>The table cells are top aligned.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Tabellenzellen dieser Spalte werden oben ausgerichtet.</para>
+        </description>
+      </choice>
+      <choice name="middle">
+        <description xml:lang="en">
+          <para>The table cells are vertically centered.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Tabellenzellen dieser Spalte werden vertikal zentriert ausgerichtet.</para>
+        </description>
+      </choice>
+      <choice name="bottom">
+        <description xml:lang="en">
+          <para>The table cells are aligned at the bottom.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Tabellenzellen dieser Spalte werden  unten ausgerichtet.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute name="backgroundcolor" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>All cells in this column have this background color.</para>
       </description>
       <description xml:lang="de">
         <para>Farbe der Tabellenspalte.</para>
@@ -806,11 +914,13 @@
       <para>Legt die Spaltenbreiten in einer Tabelle fest.</para>
     </description>
     <childelements>
-      <cmd name="Column" />
+      <oneOrMore>
+        <choice>
+          <cmd name="Loop"/>
+          <cmd name="Column" />
+        </choice>
+      </oneOrMore>
     </childelements>
-    <parentelements>
-      <cmd name="Table" />
-    </parentelements>
     <remark xml:lang="de">
       <para>Die *-Breitenangaben im Element »Spalte« ermöglicht eine dynamische Aufteilung der Spaltenbreite. Dazu muss die Tabellenbreite vorgegeben sein und das Attribut dehnen bei Tabelle auf max
         stehen. Die Spaltenbreiten berechnen sich wie folgt: erst werden die fixen Breitenangaben berücksichtigt. Anschließend werden die *-Spalten auf den verbleibenden Platz verteilt. Die Angaben
@@ -841,7 +951,6 @@
       <para>Ersetzt das Element Kopie-von mit Inhalt von <tt>auswahl</tt> als Elementstruktur. Dient zum „Zusammenbauen“ von Texten und Tabellen.</para>
     </description>
     <childelements />
-    <parentelements />
     <attribute name="select" type="xpath" optional="no">
       <description xml:lang="en">
         <para>The selection (most likely a variable) that is to be copied.</para>
@@ -885,10 +994,7 @@
       <para>Definiert Farben, die später im Layout benutzt werden können</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Layout" />
-    </parentelements>
-    <attribute name="model" type="colormodel" optional="no">
+    <attribute name="model" type="colormodel" optional="yes">
       <description xml:lang="en">
         <para>Color model to be used for the color. Currently “rgb”, “cmyk” and “gray” are supported. More on request.</para>
       </description>
@@ -896,14 +1002,14 @@
         <para>Das Farbmodell, das benutzt werden soll. Derzeit werdern »rgb«, »cmyk« und »graustufen« unterstützt. Weitere Farbräume auf Anfrage.</para>
       </description>
     </attribute>
-  <attribute name="name" type="text" optional="yes">
-    <description xml:lang="en">
-      <para>The name of the color to be defined.</para>
-    </description>
-    <description xml:lang="de">
-      <para>Name der Farbe, die definiert wird.</para>
-    </description>
-  </attribute>
+    <attribute name="name" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The name of the color to be defined.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name der Farbe, die definiert wird.</para>
+      </description>
+    </attribute>
     <attribute name="r" type="zerotohundred" optional="yes">
       <description xml:lang="en">
         <para>Red part with RGB</para>
@@ -960,6 +1066,15 @@
         <para>Schwarz (key) Anteil bei CMYK</para>
       </description>
     </attribute>
+    <!-- todo -->
+    <attribute name="value" type="text" optional="yes">
+      <description xml:lang="en">
+        <para></para>
+      </description>
+      <description xml:lang="de">
+        <para></para>
+      </description>
+    </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<DefiniereFarbe name="Schwarz" modell="cmyk" c="0" m="0" y="0" k="100"/>
 <DefiniereFarbe name="Weiß" modell="rgb" r="100" g="100" b="100"/>]]></listing>
@@ -984,9 +1099,6 @@
       <cmd name="Bold" />
       <cmd name="BoldItalic" />
     </childelements>
-    <parentelements>
-      <cmd name="Layout" />
-    </parentelements>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -1040,9 +1152,6 @@
         Textblock) zurückgegriffen werden.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Layout" />
-    </parentelements>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
         <para>Name of the textformat that is used later in the layout.</para>
@@ -1051,13 +1160,45 @@
         <para>Name des Textformats, unter dem es später im Layoutregelwerk angesprochen wird.</para>
       </description>
     </attribute>
-    <attribute name="alignment" type="alignment" optional="yes">
+    <attribute name="alignment" optional="yes">
       <description xml:lang="en">
         <para>Determines the formatting of the text.</para>
       </description>
       <description xml:lang="de">
         <para>Bestimmt die Formatierung des Textes.</para>
       </description>
+      <choice name="justified">
+        <description xml:lang="en">
+          <para>Textblock has a rectangular shape.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Text hat eine rechteckige Form.</para>
+        </description>
+      </choice>
+      <choice name="leftaligned">
+        <description xml:lang="en">
+          <para>The text is ragged at the right margin.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Text flattert am rechten Rand.</para>
+        </description>
+      </choice>
+      <choice name="rightaligned">
+        <description xml:lang="en">
+          <para>The text is ragged right at the left margin.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Text flattert am linken Rand</para>
+        </description>
+      </choice>
+      <choice name="centered">
+        <description xml:lang="en">
+          <para>The text is ragged at the left and the right margin.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Text ist im Flattersatz an beiden Rändern (rechts und links) gesetzt.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute name="indentation" type="length" optional="yes">
       <description xml:lang="en">
@@ -1092,6 +1233,39 @@
         <para>Die Dicke der Linie unter dem Text</para>
       </description>
     </attribute>
+    <!-- todo -->
+    <attribute name="margin-bottom" type="length" optional="yes">
+      <description xml:lang="en">
+        <para></para>
+      </description>
+      <description xml:lang="de">
+        <para></para>
+      </description>
+    </attribute>
+    <attribute name="break-below" type="yesno" optional="yes">
+      <description xml:lang="en">
+        <para>(Dis-)Allow break below the text.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Umbruch unterhalb des Textes verbieten/erlauben.</para>
+      </description>
+    </attribute>
+    <attribute name="padding-top" type="length" optional="yes">
+      <description xml:lang="en">
+        <para></para>
+      </description>
+      <description xml:lang="de">
+        <para></para>
+      </description>
+    </attribute>
+    <attribute name="margin-top" type="length" optional="yes">
+      <description xml:lang="en">
+        <para></para>
+      </description>
+      <description xml:lang="de">
+        <para></para>
+      </description>
+    </attribute>
     <remark xml:lang="en">
       <para>The textformats <tt>text</tt>, <tt>centered</tt>, <tt>left</tt> and <tt>right</tt> are predefined. They stand for justified, centered, left aligned and right aligned text.</para>
     </remark>
@@ -1124,14 +1298,14 @@
       <para>Erzeugt eine Datenstruktur, die mithilfe von <cmd name="SaveDataset" /> auf Festplatte gespeichert werden kann.</para>
     </description>
     <childelements>
-      <cmd name="Element" />
-      <cmd name="Attribute" />
-      <cmd name="Value" />
+      <oneOrMore>
+        <interleave>
+          <optional><cmd name="Element"/></optional>
+          <optional><cmd name="Attribute"/></optional>
+          <optional><cmd name="Copy-of"/></optional>
+        </interleave>
+      </oneOrMore>
     </childelements>
-    <parentelements>
-      <cmd name="Element" />
-      <cmd name="SetVariable" />
-    </parentelements>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -1160,7 +1334,6 @@
       <para>Erzeugt eine leere (Raster-)Zeile. Ausgehend von der aktuellen Zeile wird die nächste freie Zeile gesucht. Das nächste Objekt wird in der nächsten Zeile ausgegeben.</para>
     </description>
     <childelements />
-    <parentelements />
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben spalte="1">
   <Bild breite="5" datei="cow.pdf"/>
@@ -1182,21 +1355,8 @@
       <para>Schaltet vorübergehend auf eine andere Schriftfamilie um.</para>
     </description>
     <childelements>
-      <cmd name="B" />
-      <cmd name="Image" />
-      <cmd name="Switch" />
-      <cmd name="I" />
-      <cmd name="Fontface" />
-      <cmd name="Sub" />
-      <cmd name="Sup" />
-      <cmd name="U" />
-      <cmd name="URL" />
-      <cmd name="Value" />
-      <cmd name="SetVariable" />
+      <reference name="Textvalues"/>
     </childelements>
-    <parentelements>
-      <cmd name="Paragraph" />
-    </parentelements>
     <attribute name="fontfamily" type="text" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -1232,23 +1392,12 @@
       <para>Ruft die Kindelemente für alle Daten-Elemente auf, die auf das Muster bei <tt>auswahl</tt> passen.</para>
     </description>
     <childelements>
-      <cmd name="B" />
-      <cmd name="Image" />
-      <cmd name="Switch" />
-      <cmd name="I" />
-      <cmd name="Fontface" />
-      <cmd name="Paragraph" />
-      <cmd name="Sub" />
-      <cmd name="Sup" />
-      <cmd name="U" />
-      <cmd name="Tr"/>
-      <cmd name="URL" />
-      <cmd name="Value" />
-      <cmd name="SetVariable" />
+      <oneOrMore>
+        <interleave>
+          <reference name="Switchcontents"/>
+        </interleave>
+      </oneOrMore>
     </childelements>
-    <parentelements>
-      <cmd name="Table"/>
-    </parentelements>
     <attribute name="select" type="xpath" optional="no">
       <description xml:lang="en">
         <para>Selects the child elements from the data XML</para>
@@ -1277,7 +1426,7 @@
     <example xml:lang="en">
       <listing><![CDATA[<Record element="data">
   <PlaceObject>
-    <Table breite="10">
+    <Table>
       <ForAll select="entry">
         <Tr><Td><Paragraph><Value select="string(.)"/></Paragraph></Td></Tr>
       </ForAll>
@@ -1301,9 +1450,6 @@
       <para>Überschreibt das allgemeine Raster aus <cmd name="SetGrid" />.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Pagetype" />
-    </parentelements>
     <attribute name="width" type="length" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -1322,7 +1468,7 @@
     </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<SetzeRaster breite="5mm" höhe="14pt" />
- 
+
 <Seitentyp name="Seite breit"  bedingung=" $var > 10 ">
   <Rand links="1cm" rechts="2cm" oben="1cm" unten="1cm" />
   <Raster breite="10mm" höhe="14pt" />
@@ -1345,9 +1491,6 @@
       <cmd name="Contents" />
       <cmd name="Grid"/>
     </childelements>
-    <parentelements>
-      <cmd name="Record" />
-    </parentelements>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
         <para>Name of the group that is created.</para>
@@ -1415,10 +1558,6 @@
         mit eine Bindestrich (-) markiert werden (s. Beispiel).</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Record" />
-      <cmd name="Layout" />
-    </parentelements>
     <example xml:lang="de">
       <listing><![CDATA[<Trennvorschlag>Au-to-bahn</Trennvorschlag>]]></listing>
     </example>
@@ -1436,7 +1575,6 @@
       <cmd name="HSpace"/> enthalten ist, erhalten alle Leerraume die minimale Breite, nur der dehnbare Leerraum hat den überschüssigen Leerraum »angehäuft«.</para>
     </description>
     <childelements></childelements>
-    <parentelements><cmd name="Paragraph"/></parentelements>
     <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
   <Textblock width="10">
@@ -1469,9 +1607,6 @@
       <cmd name="Sub" />
       <cmd name="Sup" />
     </childelements>
-    <parentelements>
-      <cmd name="Paragraph" />
-    </parentelements>
     <example xml:lang="de">
       <listing><![CDATA[<Textblock spalte="3" breite="10">
   <Absatz>
@@ -1501,9 +1636,6 @@
       <cmd name="Pageformat" />
       <cmd name="DefineTextformat" />
     </childelements>
-    <parentelements>
-      <cmd name="Layout" />
-    </parentelements>
     <example xml:lang="de">
       <para>Die Hauptdatei</para>
       <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/de"
@@ -1512,7 +1644,7 @@
  ...]]></listing>
       <para>Die Datei <tt>fontdefinitionen.xml</tt>:</para>
       <listing><![CDATA[<Include xmlns="urn:speedata.de:2009/publisher/de">
-  <LadeSchriftdatei name="Helvetica" 
+  <LadeSchriftdatei name="Helvetica"
                     dateiname="texgyreheros-regular.otf"/>
   <LadeSchriftdatei name="Helvetica Fett"
                     dateiname="texgyreheros-bold.otf"/>
@@ -1526,6 +1658,25 @@
       <cmd name="Layout" />
     </seealso>
   </command>
+  <command name="InsertPages">
+    <description xml:lang="en">
+      <para></para>
+    </description>
+    <description xml:lang="de">
+      <para></para>
+    </description>
+    <childelements></childelements>
+    <attribute name="name" type="text" optional="no">
+      <description xml:lang="en">
+        <para></para>
+      </description>
+      <description xml:lang="de">
+        <para></para>
+      </description>
+    </attribute>
+    <example xml:lang="en"><para></para></example>
+    <seealso></seealso>
+  </command>
   <command name="Image">
     <description xml:lang="en">
       <para>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg).</para>
@@ -1534,9 +1685,6 @@
       <para>Bindet eine externe Grafik ein. Erlaubte Grafikformate sind PDF (.pdf), PNG (.png) und JPEG (.jpg).</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="PlaceObject" />
-    </parentelements>
     <attribute name="width" type="numberorlength" optional="yes">
       <description xml:lang="en">
         <para>Image width. One of 'auto' (default, take image width), '100%' (whole area width), length (such as '3cm') or number (in grid cells).</para>
@@ -1601,8 +1749,41 @@
         <para>Die PDF-Box, die die maximale Größe angibt. Voreinstellung ist »cropbox«.</para>
       </description>
     </attribute>
+    <!-- todo -->
+    <attribute name="clip" type="yesno" optional="yes">
+      <description xml:lang="en">
+        <para></para>
+      </description>
+      <description xml:lang="de">
+        <para></para>
+      </description>
+    </attribute>
+    <attribute name="minwidth" type="numberorlength" optional="yes">
+      <description xml:lang="en">
+        <para>The nimimum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value »100%« for full width image.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die minimale Breite des Bilds. Nur, wenn ausschnitt="nein". Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</para>
+      </description>
+    </attribute>
+    <attribute name="minheight" type="numberorlength" optional="yes">
+      <description xml:lang="en">
+        <para>The minimum height of the image. Only used when clip="no". Value is a number (grid cells) or a length.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die minimale Breite des Bilds. Nur, wenn ausschnitt="nein". Angabe in absoluten Längen oder Anzahl Rasterzellen.</para>
+      </description>
+    </attribute>
+    <attribute name="dpiwarn" type="number" optional="yes">
+      <description xml:lang="en">
+        <para></para>
+      </description>
+      <description xml:lang="de">
+        <para></para>
+      </description>
+    </attribute>
     <remark xml:lang="en">
-      <para>The values of the attributes naturalsize and maxsize can be ‘artbox’, ‘bleedbox’, ‘cropbox’, ‘mediabox’ and ‘trimbox’. These two values are used to 
+      <para>The values of the attributes naturalsize and maxsize can be ‘artbox’, ‘bleedbox’, ‘cropbox’, ‘mediabox’ and ‘trimbox’. These two values are used to
       enlarge the image for the bleed. In the second example below the designated view port of the image is defined in the artbox, but the image has a larger
       area (the cropbox) that is used for bleeding.</para>
     </remark>
@@ -1661,9 +1842,6 @@
       <para>Dient als Festlegung des Schriftschnittes, wenn Formatierung I (Kursiv) angegeben ist.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="DefineFontfamily" />
-    </parentelements>
     <attribute name="fontface" type="text" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -1700,9 +1878,6 @@
         ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Record" />
-    </parentelements>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -1733,9 +1908,6 @@
       <para>Das Element LadeSchriftdatei weist einer physikalischen Schriftdatei einem internen Namen zu.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Layout" />
-    </parentelements>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -1799,20 +1971,11 @@
       <para>Das <cmd name="Layout" />Element ist das Wurzelelement im Regelwerk.</para>
     </description>
     <childelements>
-      <cmd name="LoadFontfile" />
-      <cmd name="DefineColor" />
-      <cmd name="DefineFontfamily"/>
-      <cmd name="DefineTextformat" />
-      <cmd name="Include" />
-      <cmd name="Pageformat" />
-      <cmd name="Options" />
-      <cmd name="Pagetype" />
-      <cmd name="SetGrid" />
-      <cmd name="Hyphenation" />
-      <cmd name="SetVariable" />
-      <cmd name="Record"/>
+      <oneOrMore>
+        <reference name="Toplevel"/>
+        <optional><cmd name="Include"/></optional>
+      </oneOrMore>
     </childelements>
-    <parentelements />
     <attribute name="version" type="number" optional="yes">
       <description xml:lang="en">
         <para>Minimum publisher version required. If major or minor version differ, give a warning. Format: 1.6.12 (revision number can be left out).</para>
@@ -1837,7 +2000,7 @@
   <LoadFontfile name="Helvetica Fett" filename="texgyreheros-bold.otf" />
 
 <DefineFontfamily
-    name="title" 
+    name="title"
     fontsize="12"
     leading="16">
     <Regular fontface="Helvetica Fett" />
@@ -1891,7 +2054,7 @@
   <LadeSchriftdatei name="Helvetica Fett" dateiname="texgyreheros-bold.otf" />
 
   <DefiniereSchriftfamilie
-    name="Überschrift" 
+    name="Überschrift"
     schriftgröße="12"
     zeilenabstand="16">
     <Normal schriftart="Helvetica Fett" />
@@ -1946,7 +2109,6 @@
     <childelements>
       <cmd name="I"/><cmd name="B"/><cmd name="Br"/><cmd name="HSpace"/><cmd name="U"/><cmd name="Sub"/><cmd name="Sup"/><cmd name="URL"/><cmd name="Value"/><cmd name="Switch"/>
     </childelements>
-    <parentelements><cmd name="Ol"/><cmd name="Ul"/></parentelements>
     <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
   <Textblock width="10">
@@ -1981,16 +2143,13 @@
       <para>Wiederhole den Inhalt dieses Elements mehrfach.</para>
     </description>
     <childelements>
-      <cmd name="Tablerule"/>
-      <cmd name="Tr"/>
-      <cmd name="Td"/>
-      <cmd name="Value"/>
-      <cmd name="Image"/>
-      <cmd name="Paragraph"/>
-      <cmd name="Sub"/>
-      <cmd name="Sup"/>
+      <oneOrMore>
+        <interleave>
+          <optional><cmd name="Element"></cmd></optional>
+          <reference name="Switchcontents"/>
+        </interleave>
+      </oneOrMore>
     </childelements>
-    <parentelements></parentelements>
     <attribute name="select" type="xpath" optional="no">
       <description xml:lang="en">
         <para>The number of loops. Must be a number or castable as a number.</para>
@@ -2039,9 +2198,6 @@
       <para>Eine Liste von Elementen sortieren und aufteilen um einen Index zu erzeugen.</para>
     </description>
     <childelements/>
-    <parentelements>
-      <cmd name="SaveDataset"/>
-    </parentelements>
     <attribute name="section" type="text" optional="no">
       <description xml:lang="en">
         <para>Create an XML-element with this name for every section (letter) in the index.</para>
@@ -2064,6 +2220,15 @@
       </description>
       <description xml:lang="de">
         <para>Der Name des Attributs das den Indexeintrag enthält (der sortiert werden soll).</para>
+      </description>
+    </attribute>
+    <!-- todo -->
+    <attribute name="pattern" type="text" optional="no">
+      <description xml:lang="en">
+        <para></para>
+      </description>
+      <description xml:lang="de">
+        <para></para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -2092,7 +2257,7 @@
       <Makeindex select="$indexentries" sortkey="name" section="part" />
     </SaveDataset>
   </Record>
-  
+
   <Record element="Index">
     <ForAll select="part">
       <PlaceObject column="1">
@@ -2145,7 +2310,7 @@
       <Indexerstellen auswahl="$indexeinträge" sortierschlüssel="name" abschnitt="teil"/>
     </SpeichereDatensatzdatei>
   </Datensatz>
-    
+
   <Datensatz element="Index">
     <FürAlle auswahl="teil">
       <ObjektAusgeben spalte="1">
@@ -2183,9 +2348,6 @@
       <para>Enthält die Angaben über den Seitenrand des zu druckbaren Bereich.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Pagetype" />
-    </parentelements>
     <attribute name="left" type="length" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -2231,9 +2393,6 @@
       <para>Setzt eine unsichtbare Markierung in die Ausgabe. Das ist hilfreich, um die Seitenzahl zu bestimmen, auf der die Marke gelandet ist.</para>
     </description>
     <childelements/>
-    <parentelements>
-      <cmd name="Action"/>
-    </parentelements>
     <attribute name="select" type="xpath" optional="no">
       <description xml:lang="en">
         <para>The name of the mark to be set.</para>
@@ -2334,15 +2493,21 @@
     <childelements>
       <cmd name="Value" />
     </childelements>
-    <parentelements>
-      <cmd name="Record" />
-    </parentelements>
     <attribute name="select" type="xpath" optional="yes">
       <description xml:lang="en">
         <para></para>
       </description>
       <description xml:lang="de">
         <para>Inhalt der Nachricht. Alternativ dazu: Kindelemente Wert innerhalb des Elements »<cmd name="Message" />«</para>
+      </description>
+    </attribute>
+    <!-- todo -->
+    <attribute name="error" type="yesno" optional="yes">
+      <description xml:lang="en">
+        <para></para>
+      </description>
+      <description xml:lang="de">
+        <para></para>
       </description>
     </attribute>
     <example xml:lang="de">
@@ -2363,9 +2528,6 @@
       <para>Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn später Text o.ä. ausgegeben wird.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Record" />
-    </parentelements>
     <attribute name="pagetype" type="text" optional="yes">
       <description xml:lang="en">
         <para>The name of the next page type that should be used.</para>
@@ -2382,9 +2544,9 @@
       <Wert>Text ...</Wert>
     </Absatz>
   </Textblock>
-  
+
   <NeueSeite />
-  
+
 </Datensatz>]]></listing>
     </example>
     <seealso ><cmd name="Pagetype"/></seealso>
@@ -2397,11 +2559,6 @@
       <para>Schaltet auf den nächsten freien Rahmen eines Platzierungsbereichs um</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="AtPageShipout" />
-      <cmd name="AtPageCreation" />
-      <cmd name="Record" />
-    </parentelements>
     <attribute name="area" type="text" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -2428,9 +2585,6 @@
       <para>Der virtuelle Cursor wird auf die nächste freie Zeile gesetzt.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Record" />
-    </parentelements>
     <attribute name="area" type="text" optional="yes">
       <description xml:lang="en">
         <para></para>
@@ -2478,7 +2632,6 @@
     <childelements>
       <cmd name="Li"/>
     </childelements>
-    <parentelements><cmd name="Textblock"/></parentelements>
     <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
   <Textblock width="10">
@@ -2513,9 +2666,6 @@
       <para>Setzt Publisher-spezifische Optionen.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Layout" />
-    </parentelements>
     <attribute name="cutmarks" type="yesno" optional="yes">
       <description xml:lang="en">
         <para>Cut marks / crop marks will be placed in the PDF. The distance
@@ -2619,37 +2769,11 @@
     <description xml:lang="de">
       <para>Zweig, der bei <cmd name="Switch" /> ausgeführt wird, wenn kein <cmd name="Case" /> wahr ist.</para>
     </description>
-    <!-- same as case! -->
     <childelements>
-      <cmd name="B" />
-      <cmd name="Copy-of"/>
-      <cmd name="EmptyLine" />
-      <cmd name="Fontface" />
-      <cmd name="Group" />
-      <cmd name="Hyphenation" />
-      <cmd name="I" />
-      <cmd name="Image" />
-      <cmd name="Message" />
-      <cmd name="NewPage" />
-      <cmd name="NextFrame" />
-      <cmd name="NextRow"/>
-      <cmd name="Paragraph"/>
-      <cmd name="PlaceObject"/>
-      <cmd name="ProcessNode" />
-      <cmd name="SetVariable" />
-      <cmd name="SortSequence" />
-      <cmd name="Sub" />
-      <cmd name="Sup" />
-      <cmd name="Switch" />
-      <cmd name="Td"/>
-      <cmd name="U" />
-      <cmd name="URL" />
-      <cmd name="Value" />
-      <cmd name="While" />
+      <oneOrMore>
+        <reference name="Switchcontents" />
+      </oneOrMore>
     </childelements>
-    <parentelements>
-      <cmd name="Switch" />
-    </parentelements>
     <example xml:lang="de">
       <para>Siehe das Beispiel bei <cmd name="Switch" />.</para>
     </example>
@@ -2660,30 +2784,43 @@
       <cmd name="Switch" />, <cmd name="Case" />
     </seealso>
   </command>
-  <command name="Paragraph">
+  <command name="Output">
+    <!-- todo -->
     <description xml:lang="en">
       <para></para>
+    </description>
+    <description xml:lang="de">
+      <para></para>
+    </description>
+    <childelements>
+      <cmd name="Text"/>
+    </childelements>
+    <attribute name="area" type="text" optional="yes">
+      <description xml:lang="en">
+        <para></para>
+      </description>
+      <description xml:lang="de">
+        <para></para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <para></para>
+    </example>
+    <seealso></seealso>
+  </command>
+  <command name="Paragraph">
+    <description xml:lang="en">
+      <para>Insert a paragraph of text. The width of the paragraph is inherited from the surrounding element.</para>
     </description>
     <description xml:lang="de">
       <para>Erzeugt einen Absatz innerhalb eines Textblocks.</para>
     </description>
     <childelements>
-      <!-- Textwerte -->
-      <cmd name="B" />
-      <cmd name="Image" />
-      <cmd name="Switch" />
-      <cmd name="I" />
-      <cmd name="Fontface" />
-      <cmd name="Sub" />
-      <cmd name="Sup" />
-      <cmd name="Value"/>
+      <reference name="Textvalues"/>
     </childelements>
-    <parentelements>
-      <cmd name="Textblock" />
-    </parentelements>
     <attribute name="color" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Color of the paragraph. Must be defined with <cmd name="DefineColor"/> before use.</para>
       </description>
       <description xml:lang="de">
         <para>Farbe des Absatzes. Muss vorher mit <cmd name="DefineColor" /> definiert worden sein.</para>
@@ -2691,7 +2828,7 @@
     </attribute>
     <attribute name="textformat" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Name of the textformat that is applied to the paragraph. If none is specified the textformat <tt>text</tt> is used.</para>
       </description>
       <description xml:lang="de">
         <para>Name des zu benutzenden Textformats. Wird kein Textformat angegeben, nimmt das System das Textformat <tt>text</tt></para>
@@ -2699,19 +2836,44 @@
     </attribute>
     <attribute name="fontface" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The name of the fontface for the paragraph. The default is »text« (lowercase t).</para>
       </description>
       <description xml:lang="de">
-        <para>Name der Schriftart.</para>
+        <para>Name der Schriftart. Voreinstellung ist »text« (mit kleinem t).</para>
       </description>
     </attribute>
-    <attribute name="language" type="languages" optional="yes">
+    <attribute name="language" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Name of the language for hyphenation.</para>
       </description>
       <description xml:lang="de">
-        <para>Name der Sprache für die Silbentrennung. Gültige Werte: <tt>Deutsch</tt>, <tt>Englisch (Großbritannien)</tt>, <tt>Französisch</tt>.</para>
+        <para>Name der Sprache für die Silbentrennung.</para>
       </description>
+      <choice name="German">
+        <description xml:lang="en">
+          <para>Use German language for hyphenation.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Deutsche Trennmuster</para>
+        </description>
+      </choice>
+      <choice name="Englisch (Great Britan)">
+        <description xml:lang="en">
+          <para>Use English hyphenation patterns</para>
+        </description>
+        <description xml:lang="de">
+          <para>Englische Trennmuster auswählen</para>
+        </description>
+      </choice>
+      <choice name="French">
+        <description xml:lang="en">
+          <para>French hyphenation patterns</para>
+        </description>
+        <description xml:lang="de">
+          <para>Französische Trennmuster</para>
+        </description>
+      </choice>
+
     </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<Textblock breite="27">
@@ -2734,18 +2896,15 @@
   </command>
   <command name="Pageformat">
     <description xml:lang="en">
-      <para></para>
+      <para>The size of the PDF pages. Defaults to 210mm width and 297mm height (A4)</para>
     </description>
     <description xml:lang="de">
-      <para>Legt die Größe des Ausgabemediums (z.B. DIN A4) fest.</para>
+      <para>Legt die Größe des Ausgabemediums (z.B. DIN A4) fest. Voreinstellung ist eine Breite von 210mm und eine Höhe von 297mm.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Layout" />
-    </parentelements>
     <attribute name="width" type="length" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>Width of the PDF pages.</para>
       </description>
       <description xml:lang="de">
         <para>Breite des Ausgabemediums.</para>
@@ -2753,7 +2912,7 @@
     </attribute>
     <attribute name="height" type="length" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>The height of the PDF pages.</para>
       </description>
       <description xml:lang="de">
         <para>Höhe des Ausgabemediums.</para>
@@ -2773,14 +2932,21 @@
     </description>
     <childelements>
       <cmd name="Margin" />
-      <cmd name="AtPageCreation" />
-      <cmd name="AtPageShipout" />
-      <cmd name="Grid" />
-      <cmd name="PositioningArea" />
+      <optional>
+        <oneOrMore><cmd name="PositioningArea"/></oneOrMore>
+      </optional>
+      <interleave>
+        <optional>
+          <cmd name="Grid"/>
+        </optional>
+        <optional>
+          <cmd name="AtPageCreation"/>
+        </optional>
+        <optional>
+          <cmd name="AtPageShipout"/>
+        </optional>
+      </interleave>
     </childelements>
-    <parentelements>
-      <cmd name="Layout" />
-    </parentelements>
     <attribute name="test" type="xpath" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -2836,17 +3002,17 @@
       <para>Gibt ein rechteckiges Objekt (Bild, Tabelle, Box oder Textblock) aus.</para>
     </description>
     <childelements>
-      <cmd name="Barcode"/>
-      <cmd name="Box" />
-      <cmd name="Image" />
-      <cmd name="Tablerule" />
-      <cmd name="Table" />
-      <cmd name="Rule"/>
-      <cmd name="Textblock" />
+      <oneOrMore>
+        <interleave>
+          <optional><cmd name="Image"/></optional>
+          <optional><cmd name="Box"/></optional>
+          <optional><cmd name="Rule"/></optional>
+          <optional><cmd name="Textblock"/></optional>
+          <optional><cmd name="Barcode"/></optional>
+          <optional><cmd name="Table"/></optional>
+        </interleave>
+      </oneOrMore>
     </childelements>
-    <parentelements>
-      <cmd name="Record" />
-    </parentelements>
     <attribute name="allocate" type="yesnoauto" optional="yes">
       <description xml:lang="en">
         <para>Determines if the area of the object is marked as »allocated«. With allocate="no", the cursor position is not changed.</para>
@@ -2999,11 +3165,8 @@
       <para>Beschreibt einen Platzierungsbereich, der mehrere Platzierungsrahmen beinhalten kann. In diesen Rahmen können Elemente platziert werden</para>
     </description>
     <childelements>
-      <cmd name="PositioningFrame" />
+      <oneOrMore><cmd name="PositioningFrame" /></oneOrMore>
     </childelements>
-    <parentelements>
-      <cmd name="Pagetype" />
-    </parentelements>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -3032,9 +3195,6 @@
         platziert.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="PositioningArea" />
-    </parentelements>
     <attribute name="width" type="number" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -3085,9 +3245,6 @@
       <para>Bearbeitet alle angegebenen Datensätze. Die Elemente, für die die Regeln ausgeführt werden sollen, werden mit dem Attribut auswahl angegeben.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Record" />
-    </parentelements>
     <attribute name="select" type="xpath" optional="no">
       <description xml:lang="en">
         <para>Selection of child elements, that are to be processed.</para>
@@ -3121,21 +3278,11 @@
         nachfolgenden Datensätze müssen über das Element BearbeiteKnoten aufgerufen werden.</para>
     </description>
     <childelements>
-      <cmd name="ProcessNode" />
-      <cmd name="Switch" />
-      <cmd name="Group" />
-      <cmd name="LoadDataset" />
-      <cmd name="Message" />
-      <cmd name="NewPage" />
-      <cmd name="SetVariable" />
-      <cmd name="SaveDataset" />
-      <cmd name="While" />
-      <cmd name="PlaceObject" />
-      <cmd name="NextRow" />
+      <oneOrMore>
+        <reference name="Commands"/>
+      </oneOrMore>
     </childelements>
-    <parentelements>
-      <cmd name="Layout" />
-    </parentelements>
+
     <attribute name="element" type="text" optional="no">
       <description xml:lang="en">
         <para>The name of the element the record matches.</para>
@@ -3176,9 +3323,6 @@
       <para>Dient als Festlegung des Schriftschnittes, wenn keine Formatierung angegeben ist.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="DefineFontfamily" />
-    </parentelements>
     <attribute name="fontface" type="text" optional="yes">
       <description xml:lang="en">
         <para></para>
@@ -3212,9 +3356,6 @@
       <para>Zeichnet eine horizontale oder vertikale Linie im Raster.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="PlaceObject" />
-    </parentelements>
     <attribute name="direction" type="horizontalvertical" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -3263,14 +3404,15 @@
         durch Variablen. Eine ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</para>
     </description>
     <childelements>
-      <cmd name="Element" />
-      <cmd name="Copy-of" />
-      <cmd name="SortSequence" />
-      <cmd name="Sequence" />
+      <oneOrMore>
+        <optional><cmd name="Loop"/></optional>
+        <optional><cmd name="Element"/></optional>
+        <optional><cmd name="Makeindex"/></optional>
+        <optional><cmd name="SortSequence"/></optional>
+        <optional><cmd name="Sequence"/></optional>
+        <optional><cmd name="Copy-of"/></optional>
+      </oneOrMore>
     </childelements>
-    <parentelements>
-      <cmd name="Record" />
-    </parentelements>
     <attribute name="filename" type="text" optional="no">
       <description xml:lang="en">
         <para>Name of the file. Example: toc</para>
@@ -3314,6 +3456,34 @@
       <cmd name="Element" />, <cmd name="Attribute" />, <cmd name="LoadDataset" />, <ref name="directories"/>
     </seealso>
   </command>
+  <!-- todo -->
+  <command name="SavePages">
+    <description xml:lang="en">
+      <para></para>
+    </description>
+    <description xml:lang="de">
+      <para></para>
+    </description>
+    <childelements>
+      <oneOrMore>
+        <interleave>
+          <reference name="Commands"/>
+        </interleave>
+      </oneOrMore>
+    </childelements>
+    <attribute name="name" type="text" optional="no">
+      <description xml:lang="en">
+        <para></para>
+      </description>
+      <description xml:lang="de">
+        <para></para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <para></para>
+    </example>
+    <seealso><cmd name="InsertPages"/></seealso>
+  </command>
   <command name="SetGrid">
     <description xml:lang="en">
       <para></para>
@@ -3322,9 +3492,6 @@
       <para>Setzt die Größe und Höhe eines Rasterkästchens. In dem Seitenraster können Elemente platziert werden</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Layout" />
-    </parentelements>
     <attribute name="width" type="length" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -3353,19 +3520,27 @@
     <description xml:lang="de">
       <para>Weist einer Variablen einen Wert zu. Der Wert kann aus mehreren Elementen bestehen (siehe zweites Beispiel).</para>
     </description>
-    <childelements >
-      <cmd name="Columns"/>
-      <cmd name="Copy-of"/>
-      <cmd name="Element"/>
-      <cmd name="Paragraph"/>
-      <cmd name="SortSequence"/>
-      <cmd name="Tablerule"/>
-      <cmd name="Tr"/>
-      <cmd name="Value"/>
+    <childelements>
+      <oneOrMore>
+        <interleave>
+          <optional><cmd name="Paragraph"/></optional>
+          <optional><cmd name="Value"/></optional>
+          <optional><cmd name="Copy-of"/></optional>
+          <optional><cmd name="Sequence"/></optional>
+          <optional><cmd name="Element"/></optional>
+          <optional><cmd name="Attribute"/></optional>
+          <optional><cmd name="Switch"/></optional>
+          <optional><cmd name="Loop"/></optional>
+          <optional><cmd name="ForAll"/></optional>
+          <optional><cmd name="Tr"/></optional>
+          <optional><cmd name="Td"/></optional>
+          <optional><cmd name="Columns"/></optional>
+          <optional><cmd name="Tablerule"/></optional>
+          <optional><cmd name="SortSequence"/></optional>
+          <optional><cmd name="Tablehead"/></optional>
+        </interleave>
+      </oneOrMore>
     </childelements>
-    <parentelements>
-      <cmd name="Record" />
-    </parentelements>
     <attribute name="variable" type="text" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -3425,7 +3600,6 @@
       <para></para>
     </description>
     <childelements></childelements>
-    <parentelements></parentelements>
     <example xml:lang="de"><para>foo</para></example>
     <seealso></seealso>
   </command>
@@ -3437,10 +3611,6 @@
       <para>Sortiert eine Liste.</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Case" />
-      <cmd name="Record" />
-    </parentelements>
     <attribute name="select" type="xpath" optional="no">
       <description xml:lang="en">
         <para></para>
@@ -3483,9 +3653,6 @@
     <childelements>
       <cmd name="Value" />
     </childelements>
-    <parentelements>
-      <cmd name="Paragraph" />
-    </parentelements>
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben spalte="1">
   <Textblock breite="20">
@@ -3507,9 +3674,6 @@
     <childelements>
       <cmd name="Value" />
     </childelements>
-    <parentelements>
-      <cmd name="Paragraph" />
-    </parentelements>
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben spalte="1">
   <Textblock breite="20">
@@ -3532,10 +3696,13 @@
         Inhalt des Elements <cmd name="Otherwise" /> ausgeführt. Durch das frühzeitige Abbrechen werden nachfolgende Fälle nicht weiter untersucht (siehe Beispiel).</para>
     </description>
     <childelements>
-      <cmd name="Case"/>
-      <cmd name="Otherwise"/>
+      <oneOrMore>
+        <cmd name="Case"/>
+      </oneOrMore>
+      <optional>
+        <cmd name="Otherwise"/>
+      </optional>
     </childelements>
-    <parentelements />
     <example xml:lang="de">
       <listing><![CDATA[<Datensatz element="...">
   <Zuweisung variable="zähler" auswahl="3"/>
@@ -3601,9 +3768,6 @@
       <para>Lädt eine CSS-Datei</para>
     </description>
     <childelements/>
-    <parentelements>
-      <cmd name="Layout"/>
-    </parentelements>
     <attribute name="filename" type="text" optional="no">
       <description xml:lang="en">
         <para>The filename of the CSS stylesheet including the file extension.</para>
@@ -3628,6 +3792,20 @@
       <para>Erzeugt eine Tabelle, die in etwa dem HTML Tabellenmodell entspricht.</para>
     </description>
     <childelements>
+      <oneOrMore>
+        <interleave>
+          <optional><cmd name="Tablehead"></cmd></optional>
+          <optional><cmd name="Tablefoot"/></optional>
+          <optional><cmd name="Columns"/></optional>
+          <optional><cmd name="Tr"/></optional>
+          <optional><cmd name="Copy-of"/></optional>
+          <optional><cmd name="Tablerule"/></optional>
+          <optional><cmd name="Message"/></optional>
+          <optional><cmd name="Switch"/></optional>
+          <optional><cmd name="Loop"/></optional>
+          <optional><cmd name="ForAll"/></optional>
+        </interleave>
+      </oneOrMore>
       <cmd name="Copy-of"/>
       <cmd name="Columns" />
       <cmd name="ForAll"/>
@@ -3637,9 +3815,6 @@
       <cmd name="Tablefoot" />
       <cmd name="Tablehead" />
     </childelements>
-    <parentelements>
-      <cmd name="PlaceObject" />
-    </parentelements>
     <attribute name="eval" type="xpath" optional="yes">
       <description xml:lang="en">
         <para>Evaluates the given XPath expression and discards its output.</para>
@@ -3835,12 +4010,13 @@
       <para>Gibt den Tabellenfuß an.</para>
     </description>
     <childelements>
-      <cmd name="Tablerule" />
-      <cmd name="Tr" />
-    </childelements>
-    <parentelements>
-      <cmd name="Table" />
-    </parentelements>
+      <oneOrMore>
+        <interleave>
+          <optional><cmd name="Tablerule"/></optional>
+          <optional><cmd name="Copy-of"/></optional>
+          <optional><cmd name="Tr"/></optional>
+        </interleave>
+      </oneOrMore>    </childelements>
     <attribute name="page" type="all_last" optional="yes">
       <description xml:lang="en">
         <para>This command is only valid for the given pages. The default is to place the foot on all pages.</para>
@@ -3867,12 +4043,14 @@
       <para>Gibt den Tabellenkopf an.</para>
     </description>
     <childelements>
-      <cmd name="Tablerule" />
-      <cmd name="Tr" />
+      <oneOrMore>
+        <interleave>
+          <optional><cmd name="Tablerule"/></optional>
+          <optional><cmd name="Copy-of"/></optional>
+          <optional><cmd name="Tr"/></optional>
+        </interleave>
+      </oneOrMore>
     </childelements>
-    <parentelements>
-      <cmd name="Table" />
-    </parentelements>
     <remark xml:lang="de">
       <para>Der Inhalt von Tabellenkopf wird auf jeder Seite einer automatisch umbrochenen Tabelle wiederholt.</para>
     </remark>
@@ -3891,16 +4069,20 @@
       <para>Erstellt eine Tabellenzelle</para>
     </description>
     <childelements>
-      <cmd name="Copy-of"/>
-      <cmd name="ForAll"/>
-      <cmd name="Image" />
-      <cmd name="Table" />
-      <cmd name="Paragraph" />
-      <cmd name="Switch"/>
+      <zeroOrMore>
+        <choice>
+          <cmd name="Paragraph"/>
+          <cmd name="Table"/>
+          <cmd name="Image"/>
+          <cmd name="Copy-of"/>
+          <cmd name="Switch"/>
+          <cmd name="ForAll"/>
+          <cmd name="Loop"/>
+          <cmd name="Barcode"/>
+        </choice>
+      </zeroOrMore>
     </childelements>
-    <parentelements>
-      <cmd name="Tr" />
-    </parentelements>
+
     <attribute name="backgroundcolor" type="text" optional="yes">
       <description xml:lang="en">
         <para>The name of the background color (if the cell should get a background).</para>
@@ -4070,9 +4252,6 @@
       <para>Erzeugt eine horizontale Linie in einer Tabelle</para>
     </description>
     <childelements />
-    <parentelements>
-      <cmd name="Table" />
-    </parentelements>
     <attribute name="rulewidth" type="length" optional="yes">
       <description xml:lang="en">
         <para></para>
@@ -4115,14 +4294,20 @@
       <para>Erzeugt einen rechteckigen Bereich mit Text.</para>
     </description>
     <childelements>
-      <cmd name="Paragraph" />
-      <cmd name="Action" />
-      <cmd name="Copy-of" />
-      <cmd name="Bookmark" />
+      <oneOrMore>
+        <choice>
+          <cmd name="Switch"/>
+          <cmd name="Paragraph"/>
+          <cmd name="Ol"/>
+          <cmd name="Ul"/>
+          <cmd name="Copy-of"/>
+          <cmd name="Action"/>
+          <cmd name="Bookmark"/>
+          <cmd name="Value"/>
+          <cmd name="ForAll"/>
+        </choice>
+      </oneOrMore>
     </childelements>
-    <parentelements>
-      <cmd name="PlaceObject" />
-    </parentelements>
     <attribute name="angle" type="number" optional="yes">
       <description xml:lang="en">
         <para></para>
@@ -4197,6 +4382,34 @@
       <cmd name="DefineTextformat" />, <cmd name="DefineColor" />, <cmd name="Paragraph" />, <cmd name="PlaceObject" />
     </seealso>
   </command>
+  <command name="Text">
+    <!-- todo -->
+    <description xml:lang="en">
+      <para></para>
+    </description>
+    <description xml:lang="de">
+      <para></para>
+    </description>
+    <childelements>
+      <oneOrMore>
+        <choice>
+          <cmd name="Switch"/>
+          <cmd name="Paragraph"/>
+          <cmd name="Ol"/>
+          <cmd name="Ul"/>
+          <cmd name="Copy-of"/>
+          <cmd name="Action"/>
+          <cmd name="Bookmark"/>
+          <cmd name="Value"/>
+          <cmd name="ForAll"/>
+        </choice>
+      </oneOrMore>
+    </childelements>
+    <example xml:lang="en">
+      <para></para>
+    </example>
+    <seealso></seealso>
+  </command>
   <command name="Tr">
     <description xml:lang="en">
       <para>Tablerow</para>
@@ -4205,14 +4418,23 @@
       <para>Erstellt eine Tabellenzeile</para>
     </description>
     <childelements>
-      <cmd name="Td" />
-      <cmd name="Switch"/>
+      <oneOrMore>
+        <optional>
+          <cmd name="Message"/>
+        </optional>
+        <optional>
+          <cmd name="Td"/>
+        </optional>
+        <optional><cmd name="Copy-of"/></optional>
+        <optional>
+          <cmd name="Switch"/>
+        </optional>
+        <optional>
+          <cmd name="ForAll"/>
+        </optional>
+        <optional><cmd name="Loop"/></optional>
+      </oneOrMore>
     </childelements>
-    <parentelements>
-      <cmd name="Table" />
-      <cmd name="Tablehead" />
-      <cmd name="Tablefoot" />
-    </parentelements>
     <attribute name="align" type="align" optional="yes">
       <description xml:lang="en">
         <para>Horizontal alignment of the table cells in this row.</para>
@@ -4243,6 +4465,15 @@
       </description>
       <description xml:lang="de">
         <para>Die Farbe der Zellen in der Zeile.</para>
+      </description>
+    </attribute>
+    <!-- todo -->
+    <attribute name="break-below" type="yesno" optional="yes">
+      <description xml:lang="en">
+        <para></para>
+      </description>
+      <description xml:lang="de">
+        <para></para>
       </description>
     </attribute>
     <remark xml:lang="de">
@@ -4281,9 +4512,6 @@
       <cmd name="URL" />
       <cmd name="Value" />
     </childelements>
-    <parentelements>
-      <cmd name="Paragraph" />
-    </parentelements>
     <remark xml:lang="de">
       <para>Funktioniert derzeit nicht zusammen mit optischen Randausgleich.</para>
     </remark>
@@ -4312,7 +4540,6 @@
     <childelements>
       <cmd name="Li"/>
    </childelements>
-    <parentelements><cmd name="Textblock"/></parentelements>
     <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
   <Textblock width="10">
@@ -4358,18 +4585,6 @@
       <cmd name="URL" />
       <cmd name="Value" />
     </childelements>
-    <parentelements>
-      <cmd name="B" />
-      <cmd name="Image" />
-      <cmd name="Switch" />
-      <cmd name="I" />
-      <cmd name="Fontface" />
-      <cmd name="Sub" />
-      <cmd name="Sup" />
-      <cmd name="U" />
-      <cmd name="URL" />
-      <cmd name="Value" />
-    </parentelements>
     <example xml:lang="de">
       <listing><![CDATA[<Textblock breite="27" spalte="2" textformat="text">
   <Absatz>
@@ -4388,17 +4603,6 @@
       <para>Beinhaltet einen Textinhalt, der an das umgebende Element übergeben wird.</para>
     </description>
     <childelements><text/><cmd name="Br"/></childelements>
-    <parentelements>
-      <cmd name="B" />
-      <cmd name="Image" />
-      <cmd name="Switch" />
-      <cmd name="I" />
-      <cmd name="Fontface" />
-      <cmd name="Sub" />
-      <cmd name="Sup" />
-      <cmd name="U" />
-      <cmd name="URL" />
-    </parentelements>
     <attribute name="select" type="xpath" optional="yes">
       <description xml:lang="en">
         <para>Value to be passed to the outer element.</para>
@@ -4436,7 +4640,7 @@
     </example>
     <seealso>
       <cmd name="Copy-of" />,
-      <ref name="xpath"></ref>,
+      <ref name="xpath"/>,
       <cmd name="SetVariable" />
     </seealso>
   </command>
@@ -4448,12 +4652,12 @@
       <para>Erzeugt eine Schleife, die wiederholt durchlaufen wird. Die Kindelemente werden so oft ausgeführt, solange die Bedingung im Attribut bedingung wahr ergibt.</para>
     </description>
     <childelements>
-      <cmd name="Value" />
-      <cmd name="SetVariable" />
+      <oneOrMore>
+        <interleave>
+          <reference name="Switchcontents"/>
+        </interleave>
+      </oneOrMore>
     </childelements>
-    <parentelements>
-      <cmd name="Record" />
-    </parentelements>
     <attribute name="test" type="xpath" optional="no">
       <description xml:lang="en">
         <para></para>

@@ -6,6 +6,7 @@ h1. Liste der Änderungen
 
 h2. Version 2.0
 
+* Das Schema wird nun aus der Dokumentation automatisch erzeugt.
 * Neues Feature @seitentyp@ in "NeueSeite":../commands-de/newpage.html.
 * Neue "Option":../commands-de/options.html @markerzurücksetzen@.
 * Auf Systemschriftarten kann mit @--systemfonts@ zugegriffen werden. Funktioniert nicht unter Windows XP, und derzeit nicht unter Linux.

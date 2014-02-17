@@ -44,8 +44,8 @@ task :schema do
   # generate the lua translation
   sh "java -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/schema/translations.xml -o:#{installdir}/src/lua/translations.lua -xsl:#{installdir}/schema/genluatranslations.xsl"
   # generate english + german schema
-  sh "java -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/schema/layoutschema-master.rng -o:#{installdir}/schema/layoutschema-en.rng -xsl:#{installdir}/schema/translate_schema.xsl pFrom=en pTo=en"
-  sh "java -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/schema/layoutschema-master.rng -o:#{installdir}/schema/layoutschema-de.rng -xsl:#{installdir}/schema/translate_schema.xsl pFrom=en pTo=de"
+  sh "java -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:#{installdir}/schema/layoutschema-en.rng -xsl:#{installdir}/doc/commands-xml/xslt/cmd2rng.xsl lang=en"
+  sh "java -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:#{installdir}/schema/layoutschema-de.rng -xsl:#{installdir}/doc/commands-xml/xslt/cmd2rng.xsl lang=de"
 end
 
 desc "Source documentation"

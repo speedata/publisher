@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar 
+<grammar
   xmlns="http://relaxng.org/ns/structure/1.0"
   xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
   datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
   ns="urn:speedata.de:2011/publisher/documentation">
-  
+
   <define name="para">
     <element name="para">
       <oneOrMore>
@@ -27,7 +27,70 @@
       <empty />
     </element>
   </define>
-  
+
+  <define name="oneOrMore">
+    <element name="oneOrMore">
+      <oneOrMore>
+        <interleave>
+          <optional><ref name="optional"/></optional>
+          <optional><ref name="cmd"/></optional>
+          <optional><ref name="choice"/></optional>
+          <optional><ref name="reference"/></optional>
+          <optional><ref name="interleave"/></optional>
+        </interleave>
+      </oneOrMore>
+    </element>
+  </define>
+
+  <define name="zeroOrMore">
+    <element name="zeroOrMore">
+      <oneOrMore>
+        <interleave>
+          <optional><ref name="optional"/></optional>
+          <optional><ref name="choice"/></optional>
+          <optional><ref name="cmd"/></optional>
+          <optional><ref name="reference"/></optional>
+          <optional><ref name="interleave"/></optional>
+        </interleave>
+      </oneOrMore>
+    </element>
+  </define>
+
+  <define name="choice">
+    <element name="choice">
+      <oneOrMore><ref name="cmd"/></oneOrMore>
+    </element>
+  </define>
+
+  <define name="interleave">
+    <element name="interleave">
+      <oneOrMore>
+        <interleave>
+          <optional><ref name="optional"/></optional>
+          <optional><ref name="reference"/></optional>
+        </interleave>
+      </oneOrMore>
+    </element>
+  </define>
+
+  <define name="reference">
+    <element name="reference">
+      <attribute name="name"/>
+      <empty/>
+    </element>
+  </define>
+
+  <define name="optional">
+    <element name="optional">
+      <oneOrMore>
+        <choice>
+          <ref name="oneOrMore"/>
+          <ref name="cmd"/>
+        </choice>
+    </oneOrMore>
+    </element>
+  </define>
+
   <define name="paraorlisting">
     <oneOrMore>
       <choice>
@@ -72,57 +135,80 @@
   <start>
     <element name="commands">
       <oneOrMore>
+        <element name="define">
+          <attribute name="name"/>
+            <oneOrMore>
+              <interleave>
+                <optional><ref name="zeroOrMore"/></optional>
+                <optional><element name="optional"><ref name="cmd"></ref></element></optional>
+              </interleave>
+            </oneOrMore>
+        </element>
+      </oneOrMore>
+      <oneOrMore>
         <element name="command">
           <attribute name="name" />
           <ref name="descriptions" />
           <element name="childelements">
             <zeroOrMore>
-              <optional><element name="text"><empty/></element></optional>
-              <ref name="cmd"/>
-            </zeroOrMore>
-          </element>
-          <element name="parentelements">
-            <zeroOrMore>
-              <ref name="cmd"/>
+              <interleave>
+                <optional><element name="text"><empty/></element></optional>
+                <optional><ref name="oneOrMore"/></optional>
+                <optional><ref name="zeroOrMore"/></optional>
+                <optional><ref name="optional"/></optional>
+                <optional><ref name="cmd"/></optional>
+                <optional><ref name="reference"/></optional>
+                <optional><ref name="interleave"/></optional>
+              </interleave>
             </zeroOrMore>
           </element>
           <zeroOrMore>
             <element name="attribute">
               <attribute name="name" />
-              <attribute name="type">
-                <choice>
-                  <value>all_last</value>
-                  <value>all_first</value>
-                  <value>fullwithout</value>
-                  <value>xpath</value>
-                  <value>number</value>
-                  <value>numberorlength</value>
-                  <value>yesno</value>
-                  <value>text</value>
-                  <value>languages</value>
-                  <value>zerotohundred</value>
-                  <value>colormodel</value>
-                  <value>alignment</value>
-                  <value>length</value>
-                  <value>horizontalvertical</value>
-                  <value>yesnoauto</value>
-                  <value>solidwithout</value>
-                  <value>topmiddlebottom</value>
-                  <value>leftright</value>
-                  <value>topbottom</value>
-                  <value>numberlengthorstar</value>
-                  <value>align</value>
-                  <value>valign</value>
-                  <value>maxno</value>
-                </choice>
-              </attribute>
-              <attribute name="optional" >
+              <attribute name="optional">
                 <choice>
                   <value>yes</value>
                   <value>no</value>
                 </choice>
               </attribute>
               <ref name="descriptions" />
+              <choice>
+                <attribute name="type">
+                  <choice>
+                    <value>choice</value>
+                    <value>all_last</value>
+                    <value>all_first</value>
+                    <value>fullwithout</value>
+                    <value>xpath</value>
+                    <value>number</value>
+                    <value>numberorlength</value>
+                    <value>yesno</value>
+                    <value>text</value>
+                    <value>languages</value>
+                    <value>zerotohundred</value>
+                    <value>colormodel</value>
+                    <value>alignment</value>
+                    <value>length</value>
+                    <value>horizontalvertical</value>
+                    <value>yesnoauto</value>
+                    <value>solidwithout</value>
+                    <value>topmiddlebottom</value>
+                    <value>leftright</value>
+                    <value>topbottom</value>
+                    <value>numberlengthorstar</value>
+                    <value>align</value>
+                    <value>valign</value>
+                    <value>maxno</value>
+                  </choice>
+                </attribute>
+                <oneOrMore>
+                  <element name="choice">
+                    <attribute name="name">
+                    </attribute>
+                    <ref name="descriptions"/>
+                  </element>
+                </oneOrMore>
+              </choice>
             </element>
           </zeroOrMore>
           <zeroOrMore>

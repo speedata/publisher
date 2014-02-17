@@ -6,16 +6,15 @@
   xpath-default-namespace="urn:speedata.de:2011/publisher/documentation"
   version="2.0">
   <xsl:output method="html" indent="yes" encoding="UTF-8"/>
+  <xsl:include href="translatehelper.xsl"/>
 
-  <xsl:param name="lang" select="'en'"/>
+
   <xsl:variable name="all-languages" select="('en','de')"/>
   <xsl:variable name="other-languages" select="$all-languages[. ne $lang ]" />
 
-  <xsl:param name="builddir" select="'/tmp/manual/'"></xsl:param>
+  <xsl:param name="builddir" select="'/tmp/manual/'"/>
 
   <xsl:key name="en-texts"      match="text" use="@key" xpath-default-namespace=""/>
-  <xsl:key name="en-commands"   match="translations/elements/element"     use="@en" xpath-default-namespace="" />
-  <xsl:key name="en-attributes" match="translations/attributes/attribute" use="@en" xpath-default-namespace="" />
 
   <xsl:variable name="refs-translations">
     <text key="directories" en="How to generate a table of contents and other directories" de="Wie werden Verzeichnisse erstellt?" />
@@ -33,6 +32,7 @@
     <text key="Attributes" en="Attributes" de="Attribute" />
     <text key="See also" en="See also" de="Siehe auch"/>
     <text key="Info" en="Info" de="Hinweis" />
+    <text key="none" en="none" de="keine"/>
     <text key="Commands" en="Commands" de="Befehlsübersicht" />
     <text key="Startpage" en="Startpage" de="Startseite" />
     <text key="Command reference" en="Command reference" de="Befehlsreferenz" />
@@ -43,7 +43,6 @@
     <text key="en" en="English" de="Englisch" />
   </xsl:variable>
 
-  <xsl:variable name="translations" select="document('../../../schema/translations.xml')" />
   <xsl:variable name="values">
     <value type="align" de="“right”,“left”,“center”" en="“right”,“left”,“center”" />
     <value type="alignment" de="blocksatz, linksbündig, rechtsbündig, zentriert" en="justified, leftaligned, rightaligned, centered"/>
@@ -69,7 +68,7 @@
     <value type="yesnoauto" de="›ja‹, ›nein‹ oder ›auto‹" en="'yes', 'no' or 'auto'"/>
     <value type="zerotohundred" de="0 bis 100" en="0 up to 100"/>
   </xsl:variable>
-  
+
   <xsl:template match="/">
     <xsl:apply-templates/>
   </xsl:template>
@@ -98,10 +97,10 @@
             <div id="logo">
             <xsl:choose>
               <xsl:when test="$lang = 'de'">
-                <a href="../index-de.html"><img src="../images/publisher_logo.png" alt="Startseite"/></a>    
+                <a href="../index-de.html"><img src="../images/publisher_logo.png" alt="Startseite"/></a>
               </xsl:when>
               <xsl:otherwise>
-                <a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"/></a>    
+                <a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"/></a>
               </xsl:otherwise>
             </xsl:choose>
             </div>
@@ -113,7 +112,7 @@
       </xsl:result-document>
     </xsl:for-each>
   </xsl:template>
-  
+
   <xsl:template match="command">
     <xsl:param name="pagename"/>
     <xsl:message select="concat('&quot;',sd:translate-command(@name),'&quot;,&quot;Function&quot;,&quot;',$pagename,'&quot;')"/>
@@ -125,51 +124,81 @@
           <xsl:apply-templates />
         </p>
       </xsl:for-each>
-      <p><xsl:value-of select="sd:translate-text('Allowed attributes')"></xsl:value-of><xsl:text>: </xsl:text> <xsl:for-each select="attribute">
-          <xsl:sort select="sd:translate-attribute(@name)" />
-          <span class="tt"><a href="#{@name}"><xsl:value-of select="sd:translate-attribute(@name)"
-               /></a></span>
-          <xsl:if test=" position() &lt; last()">, </xsl:if>
-        </xsl:for-each><br/>
+      <div class="hangingindent">
+        <p>
+          <xsl:value-of select="sd:translate-text('Allowed attributes')"></xsl:value-of><xsl:text>: </xsl:text>
+          <xsl:choose>
+            <xsl:when test="count(attribute) > 0">
+              <xsl:for-each select="attribute">
+                <xsl:sort select="sd:translate-attribute(@name)" />
+                <span class="tt"><a href="#{@name}"><xsl:value-of select="sd:translate-attribute(@name)"/></a></span>
+                <xsl:if test=" position() &lt; last()">, </xsl:if>
+              </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat('(',sd:translate-text('none'),')')"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </p>
+      </div>
+      <div class="hangingindent"><p>
         <xsl:value-of select="sd:translate-text('Child elements')"/><xsl:text>: </xsl:text>
-        <xsl:apply-templates select="childelements/text"/>
-        <xsl:for-each select="childelements/cmd">
-          <xsl:sort select="sd:translate-command(@name)"/>
-          <a href="{sd:makelink(@name)}"><xsl:value-of select="sd:translate-command(@name)"/></a>
-          <xsl:if test="position() &lt; last()">, </xsl:if>
-        </xsl:for-each>
-        <br/>
-        <xsl:value-of select="sd:translate-text('Parent elements')"/><xsl:text>: </xsl:text>
-        <xsl:for-each select="parentelements/cmd">
-          <xsl:sort select="sd:translate-command(@name)"/>
-          <a href="{sd:makelink(@name)}"><xsl:value-of select="sd:translate-command(@name)"/></a>
-          <xsl:if test="position() &lt; last()">, </xsl:if>
-        </xsl:for-each>
+        <xsl:choose>
+          <xsl:when test="count(childelements/*) > 0">
+            <xsl:apply-templates select="childelements//text"/>
+            <xsl:variable name="ref" select="childelements//reference/@name"/>
+            <xsl:for-each select="childelements//cmd | /commands/define[@name = $ref]//cmd ">
+              <xsl:sort select="sd:translate-command(@name)"/>
+              <a href="{sd:makelink(@name)}"><xsl:value-of select="sd:translate-command(@name)"/></a>
+              <xsl:if test="position() &lt; last()">, </xsl:if>
+            </xsl:for-each>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="concat('(',sd:translate-text('none'),')')"></xsl:value-of>
+          </xsl:otherwise>
+        </xsl:choose>
       </p>
-      <h3><xsl:value-of select="sd:translate-text('Attributes')"/></h3>
-      <dl>
-        <xsl:for-each select="attribute">
-          <xsl:sort select="sd:translate-attribute(@name)" />
-          <xsl:message select="concat('&quot;',sd:translate-attribute(@name),'&quot;,&quot;Parameter&quot;,&quot;',$pagename,'#',@name,'&quot;')"/>
-          <dt>
-            <a name="{@name}" />
-            <span class="tt">
-              <xsl:value-of select="sd:translate-attribute(@name)" />
-            </span>
-            <xsl:text> (</xsl:text>
-            <xsl:value-of select="sd:translate-value(@type)" />
-            <xsl:choose>
-              <xsl:when test="@optional = 'yes'">
-                <xsl:text>, optional</xsl:text>
-              </xsl:when>
-            </xsl:choose>
-            <xsl:text>)</xsl:text>
-          </dt>
-          <dd>
-            <xsl:apply-templates select="description[@xml:lang = $lang]" />
-          </dd>
+      </div>
+      <div class="hangingindent">
+        <p>
+        <xsl:value-of select="sd:translate-text('Parent elements')"/><xsl:text>: </xsl:text>
+        <xsl:variable name="thisname" select="@name"/>
+          <!--
+            example: we are in PlaceObject and the parent element could be Record
+            Record has a reference to a define, so we can't just collect the child elements of
+            Record.
+          -->
+        <xsl:variable name="define" select="/commands/define[*/cmd[@name = $thisname]]/@name"/>
+
+        <xsl:for-each select="../command[childelements//cmd/@name = $thisname] | ../command[childelements//reference[@name = $define]] ">
+          <xsl:sort select="sd:translate-command(@name)"/>
+          <a href="{sd:makelink(@name)}"><xsl:value-of select="sd:translate-command(@name)"/></a>
+          <xsl:if test="position() &lt; last()">, </xsl:if>
         </xsl:for-each>
-      </dl>
+        </p>
+      </div>
+      <xsl:choose>
+        <xsl:when test="count(attribute) > 0">
+          <h3><xsl:value-of select="sd:translate-text('Attributes')"/></h3>
+          <dl>
+            <xsl:for-each select="attribute">
+              <xsl:sort select="sd:translate-attribute(@name)" />
+              <xsl:message select="concat('&quot;',sd:translate-attribute(@name),'&quot;,&quot;Parameter&quot;,&quot;',$pagename,'#',@name,'&quot;')"/>
+              <dt>
+                <xsl:apply-templates select="." mode="attributehead"/>
+              </dt>
+              <dd>
+                <xsl:apply-templates select="description[@xml:lang = $lang]" />
+                <xsl:choose>
+                  <xsl:when test="count(choice) > 0">
+                    <xsl:apply-templates select="."/>
+                  </xsl:when>
+                </xsl:choose>
+              </dd>
+            </xsl:for-each>
+          </dl>
+        </xsl:when>
+      </xsl:choose>
       <xsl:apply-templates select="remark[@xml:lang = $lang]" />
       <xsl:apply-templates select="example[@xml:lang = $lang]" />
       <xsl:apply-templates select="info[@xml:lang = $lang]" />
@@ -205,7 +234,7 @@
     <h3><xsl:value-of select="sd:translate-text('Remarks')"/></h3>
     <xsl:apply-templates/>
   </xsl:template>
-  
+
   <xsl:template match="info">
     <h2><xsl:value-of select="sd:translate-text('Info')"/></h2>
     <xsl:apply-templates />
@@ -220,8 +249,54 @@
   </xsl:template>
 
   <xsl:template match="seealso">
-    <h2><xsl:value-of select="sd:translate-text('See also')"/></h2>
-    <xsl:apply-templates />
+    <xsl:choose>
+      <xsl:when test="count(*|text()) > 0">
+        <h2><xsl:value-of select="sd:translate-text('See also')"/></h2>
+        <xsl:apply-templates />
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="attribute" mode="attributehead">
+    <a name="{@name}" />
+    <span class="tt">
+      <xsl:value-of select="sd:translate-attribute(@name)" />
+    </span>
+    <xsl:text> (</xsl:text>
+    <xsl:value-of select="sd:translate-value(@type)" />
+    <xsl:choose>
+      <xsl:when test="@optional = 'yes'">
+        <xsl:text>, optional</xsl:text>
+      </xsl:when>
+    </xsl:choose>
+    <xsl:text>)</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="attribute[count(choice) > 0]" mode="attributehead">
+    <a name="{@name}" />
+    <span class="tt">
+      <xsl:value-of select="sd:translate-attribute(@name)" />
+    </span>
+    <xsl:choose>
+      <xsl:when test="@optional = 'yes'">
+        <xsl:text> (optional)</xsl:text>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="attribute[count(choice) > 0]">
+  <table class="attributechoice">
+    <xsl:apply-templates select="choice"/>
+  </table>
+  </xsl:template>
+
+
+  <xsl:template match="choice">
+    <!-- * is the default context -->
+    <xsl:variable name="context" select="(@context,'*')[1]"/>
+      <tr>
+        <td><p><xsl:value-of select="sd:translate-tvalue(@name,$context)"/>:</p></td><td><xsl:apply-templates select="description[@xml:lang = $lang]"/></td>
+      </tr>
   </xsl:template>
 
   <xsl:template match="commands" mode="commandlist">
@@ -239,7 +314,10 @@
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template match="para"><p><xsl:apply-templates/></p></xsl:template>
+  <xsl:template match="para">
+    <p><xsl:apply-templates/></p>
+  </xsl:template>
+
   <xsl:template match="tt">
     <span class="tt"><xsl:apply-templates/></span>
   </xsl:template>
@@ -259,16 +337,6 @@
   <xsl:function name="sd:makelink">
     <xsl:param name="name"/>
     <xsl:value-of select="concat(encode-for-uri(lower-case($name)),'.html')"/>
-  </xsl:function>
-
-  <xsl:function name="sd:translate-attribute">
-    <xsl:param name="name"/>
-    <xsl:value-of select="key('en-attributes',$name, $translations)/@*[local-name() = $lang]"/>
-  </xsl:function>
-
-  <xsl:function name="sd:translate-command">
-    <xsl:param name="name"/>
-    <xsl:value-of select="key('en-commands',$name, $translations)/@*[local-name() = $lang]"/>
   </xsl:function>
 
   <xsl:function name="sd:translate-value">
