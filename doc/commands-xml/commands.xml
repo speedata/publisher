@@ -156,8 +156,10 @@
         vorstellen. Wenn der Publisher das unsichtbare Zeichen ausgibt, werden die Anweisungen in Aktion ausgeführt.</para>
     </description>
     <childelements>
-      <cmd name="AddToList" />
-      <cmd name="Mark"/>
+      <optional><cmd name="AddToList"/></optional>
+      <oneOrMore>
+        <cmd name="Mark"/>
+      </oneOrMore>
     </childelements>
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben spalte="1">
@@ -994,13 +996,37 @@
       <para>Definiert Farben, die später im Layout benutzt werden können</para>
     </description>
     <childelements />
-    <attribute name="model" type="colormodel" optional="yes">
+    <attribute name="model" optional="yes">
       <description xml:lang="en">
         <para>Color model to be used for the color. Currently “rgb”, “cmyk” and “gray” are supported. More on request.</para>
       </description>
       <description xml:lang="de">
         <para>Das Farbmodell, das benutzt werden soll. Derzeit werdern »rgb«, »cmyk« und »graustufen« unterstützt. Weitere Farbräume auf Anfrage.</para>
       </description>
+      <choice name="cmyk">
+        <description xml:lang="en">
+          <para>CMYK (cyan, magenta, yellow, key/black)</para>
+        </description>
+        <description xml:lang="de">
+          <para>CMYK (Türkis, Magenta, Gelb und Schwarz)</para>
+        </description>
+      </choice>
+      <choice name="rgb">
+        <description xml:lang="en">
+          <para>RGB (red, green, blue)</para>
+        </description>
+        <description xml:lang="de">
+          <para>RGB (Rot, Grün, Blau)</para>
+        </description>
+      </choice>
+      <choice name="gray">
+        <description xml:lang="en">
+          <para>Gray (0=Black)</para>
+        </description>
+        <description xml:lang="de">
+          <para>Graustufen (0=Schwarz)</para>
+        </description>
+      </choice>
     </attribute>
     <attribute name="name" type="text" optional="yes">
       <description xml:lang="en">

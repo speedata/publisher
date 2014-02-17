@@ -203,8 +203,8 @@
                 </attribute>
                 <oneOrMore>
                   <element name="choice">
-                    <attribute name="name">
-                    </attribute>
+                    <attribute name="name"/>
+                    <optional><attribute name="context"/></optional>
                     <ref name="descriptions"/>
                   </element>
                 </oneOrMore>

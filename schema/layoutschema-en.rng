@@ -26,9 +26,9 @@
          <optional>
             <ref name="e_AddToList"/>
          </optional>
-         <optional>
+         <oneOrMore>
             <ref name="e_Mark"/>
-         </optional>
+         </oneOrMore>
       </element>
    </define>
    <define name="e_AddToList">
@@ -565,6 +565,14 @@
          <optional>
             <attribute name="model">
                <a:documentation>Color model to be used for the color. Currently “rgb”, “cmyk” and “gray” are supported. More on request.</a:documentation>
+               <choice>
+                  <value>cmyk</value>
+                  <a:documentation xmlns="">CMYK (cyan, magenta, yellow, key/black)</a:documentation>
+                  <value>rgb</value>
+                  <a:documentation xmlns="">RGB (red, green, blue)</a:documentation>
+                  <value>gray</value>
+                  <a:documentation xmlns="">Gray (0=Black)</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>

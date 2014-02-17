@@ -27,9 +27,9 @@
          <optional>
             <ref name="e_AddToList"/>
          </optional>
-         <optional>
+         <oneOrMore>
             <ref name="e_Mark"/>
-         </optional>
+         </oneOrMore>
       </element>
    </define>
    <define name="e_AddToList">
@@ -568,6 +568,14 @@
          <optional>
             <attribute name="modell">
                <a:documentation>Das Farbmodell, das benutzt werden soll. Derzeit werdern »rgb«, »cmyk« und »graustufen« unterstützt. Weitere Farbräume auf Anfrage.</a:documentation>
+               <choice>
+                  <value>cmyk</value>
+                  <a:documentation xmlns="">CMYK (Türkis, Magenta, Gelb und Schwarz)</a:documentation>
+                  <value>rgb</value>
+                  <a:documentation xmlns="">RGB (Rot, Grün, Blau)</a:documentation>
+                  <value>graustufen</value>
+                  <a:documentation xmlns="">Graustufen (0=Schwarz)</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>

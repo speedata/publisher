@@ -5,8 +5,7 @@
   xmlns:sd="urn:speedata.de:2011/publisher/documentation/functions"
   xmlns:sddoc="urn:speedata.de:2011/publisher/documentation"
   xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
-  version="2.0"
-  >
+  version="2.0">
   <xsl:output indent="yes"/>
   <xsl:include href="translatehelper.xsl"/>
 
@@ -15,9 +14,7 @@
     <xsl:comment>This file is generated from commands.xml by cmd2rng.xsl. Don't edit it!</xsl:comment>
     <xsl:text>&#x0A;</xsl:text>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0"
-      ns="urn:speedata.de:2009/publisher/{$lang}"
-
-      >
+      ns="urn:speedata.de:2009/publisher/{$lang}">
       <start>
         <ref name="e_Layout"/>
       </start>
