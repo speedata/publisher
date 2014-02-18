@@ -1968,10 +1968,18 @@
     </attribute>
     <attribute name="smallcaps" type="yesno" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Use small caps glyphs when the font supplies them.</para>
       </description>
       <description xml:lang="de">
         <para>Schalter, ob die Schriftart als Kapitälchen dargestellt werden soll.</para>
+      </description>
+    </attribute>
+    <attribute name="oldstylefigures" type="yesno" optional="yes">
+      <description xml:lang="en">
+        <para>Use oldstyle figures if the font includes them. (OpenType feature »onum«)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Schalter, ob auf Mediävalziffern umgeschaltet wird (OpenType Feature »onum«).</para>
       </description>
     </attribute>
     <example xml:lang="de">

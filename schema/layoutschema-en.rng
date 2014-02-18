@@ -1113,7 +1113,17 @@
          </optional>
          <optional>
             <attribute name="smallcaps">
-               <a:documentation/>
+               <a:documentation>Use small caps glyphs when the font supplies them.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+                  <text/>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="oldstylefigures">
+               <a:documentation>Use oldstyle figures if the font includes them. (OpenType feature »onum«)</a:documentation>
                <choice>
                   <value>yes</value>
                   <value>no</value>

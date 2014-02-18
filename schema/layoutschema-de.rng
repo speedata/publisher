@@ -1129,6 +1129,16 @@
                </choice>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="mediävalziffern">
+               <a:documentation>Schalter, ob auf Mediävalziffern umgeschaltet wird (OpenType Feature »onum«).</a:documentation>
+               <choice>
+                  <value>ja</value>
+                  <value>nein</value>
+                  <text/>
+               </choice>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>

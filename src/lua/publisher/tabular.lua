@@ -63,7 +63,7 @@ function attach_objects_row( tab )
         elseif td_elementname == "Column" then
             -- ignore, they don't have objects
         else
-            w("unknown element name %s",td_elementname)
+            -- w("unknown element name %s",td_elementname)
         end
     end
 end
