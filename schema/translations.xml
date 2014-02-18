@@ -270,7 +270,6 @@
       <attribute key="trace" en="trace" de="trace"/>
       <attribute key="trim" en="trim" de="beschnittzugabe"/>
       <attribute key="type" en="type" de="typ" />
-      <attribute key="url" en="url" de="url" />
       <attribute key="value" en="value" de="wert" />
       <attribute key="valign" en="valign" de="valign"/>
      <attribute key="version" en="version" de="version"/>

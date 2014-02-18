@@ -724,7 +724,7 @@ function commands.image( layoutxml,dataxml )
     local nat_box   = publisher.read_attribute(layoutxml,dataxml,"naturalsize","string")
     local max_box   = publisher.read_attribute(layoutxml,dataxml,"maxsize",    "rawstring")
     local filename  = publisher.read_attribute(layoutxml,dataxml,"file",       "rawstring")
-    local url       = publisher.read_attribute(layoutxml,dataxml,"url",        "rawstring")
+    local url       = publisher.read_attribute(layoutxml,dataxml,"href",       "rawstring")
     local dpiwarn   = publisher.read_attribute(layoutxml,dataxml,"dpiwarn",    "number")
 
     -- width = 100%  => take width from surrounding area

@@ -1728,7 +1728,7 @@
         <para>Bildhöhe. Angabe in der Form 'auto' (Voreinstellung, natürliche Bildbreite), Längenangabe wie '4cm' oder Zahl (Anzahl von Rasterspalten)</para>
       </description>
     </attribute>
-    <attribute name="url" type="text" optional="yes">
+    <attribute name="href" type="text" optional="yes">
       <description xml:lang="en">
         <para>An URL (http://....) of the image. Will be downloaded and cached in <tt>TEMPDIR/sp/images</tt> (which can be configured by setting the configuration file key <tt>imagecache</tt>) . Alternative to ›file‹.</para>
       </description>

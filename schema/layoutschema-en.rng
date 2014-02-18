@@ -1025,7 +1025,7 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="url">
+            <attribute name="href">
                <a:documentation>An URL (http://....) of the image. Will be downloaded and cached in TEMPDIR/sp/images (which can be configured by setting the configuration file key imagecache) . Alternative to ›file‹.</a:documentation>
             </attribute>
          </optional>

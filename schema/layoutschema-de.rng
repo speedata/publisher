@@ -1031,7 +1031,7 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="url">
+            <attribute name="href">
                <a:documentation>Eine URL (http://...) des Bildes. Wird herunter geladen und in TEMPDIR/sp/images (kann mit der Einstellung imagecache in der Konfigurationsdatei geändert werden) zwischengespeichert. Alternativ zur Angabe »datei«.</a:documentation>
             </attribute>
          </optional>
