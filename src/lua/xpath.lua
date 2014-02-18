@@ -2,6 +2,8 @@
 
 local string = unicode.utf8
 
+local stack = {}
+
 local M = {}
 -- file global:
 
@@ -9,6 +11,21 @@ M.variables = {}
 M.functions = {}
 M.default_functions = {}
 local nilmarker = "\1"
+
+-- We need push/pop to run a sub-xpath during an active xpath session.
+-- file global variables suck!
+function M.push_state()
+    stack[#stack + 1] = {
+        tok = M.tok,
+        nextpos = M.nextpos
+    }
+end
+
+function M.pop_state()
+    M.tok     = stack[#stack].tok
+    M.nextpos = stack[#stack].nextpos
+    stack[#stack] = nil
+end
 
 function M.is_number(str,pos)
     local start,stop,num
@@ -777,5 +794,7 @@ return {
    set_variable      = M.set_variable,
    textvalue         = M.textvalue,
    textvalue_raw     = M.textvalue_raw,
+   push_state        = M.push_state,
+   pop_state         = M.pop_state,
 }
 

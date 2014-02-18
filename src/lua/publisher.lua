@@ -721,6 +721,9 @@ end
 --- in the table "masterpages" the function is_pagetype() gets called.
 -- pagenumber is for debugging purpose
 function detect_pagetype(pagenumber)
+    -- ugly hack. file global variables are a bad idea.
+    xpath.push_state()
+
     local ret = nil
     for i=#masterpages,1,-1 do
         local seitentyp = masterpages[i]
@@ -731,12 +734,15 @@ function detect_pagetype(pagenumber)
         end
 
         if xpath.parse(nil,seitentyp.is_pagetype,seitentyp.ns) == true then
+
             log("Page of type %q created (%d)",seitentyp.name or "<detect_pagetype>",pagenumber)
             ret = seitentyp.res
+            xpath.pop_state()
             return ret
         end
     end
     err("Can't find correct page type!")
+    xpath.pop_state()
     return false
 end
 
