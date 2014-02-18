@@ -335,6 +335,9 @@
                <ref name="e_DefineColor"/>
             </optional>
             <optional>
+               <ref name="e_Element"/>
+            </optional>
+            <optional>
                <ref name="e_EmptyLine"/>
             </optional>
             <optional>
@@ -797,6 +800,9 @@
                   <ref name="e_DefineColor"/>
                </optional>
                <optional>
+                  <ref name="e_Element"/>
+               </optional>
+               <optional>
                   <ref name="e_EmptyLine"/>
                </optional>
                <optional>
@@ -1241,9 +1247,6 @@
          <oneOrMore>
             <interleave>
                <optional>
-                  <ref name="e_Element"/>
-               </optional>
-               <optional>
                   <ref name="e_Action"/>
                </optional>
                <optional>
@@ -1257,6 +1260,9 @@
                </optional>
                <optional>
                   <ref name="e_DefineColor"/>
+               </optional>
+               <optional>
+                  <ref name="e_Element"/>
                </optional>
                <optional>
                   <ref name="e_EmptyLine"/>
@@ -1595,6 +1601,9 @@
             </optional>
             <optional>
                <ref name="e_DefineColor"/>
+            </optional>
+            <optional>
+               <ref name="e_Element"/>
             </optional>
             <optional>
                <ref name="e_EmptyLine"/>
@@ -2798,6 +2807,9 @@
                </optional>
                <optional>
                   <ref name="e_DefineColor"/>
+               </optional>
+               <optional>
+                  <ref name="e_Element"/>
                </optional>
                <optional>
                   <ref name="e_EmptyLine"/>

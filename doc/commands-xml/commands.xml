@@ -7,6 +7,7 @@
     <optional><cmd name="Column"/></optional>
     <optional><cmd name="Copy-of"/></optional>
     <optional><cmd name="DefineColor"/></optional>
+    <optional><cmd name="Element"/></optional>
     <optional><cmd name="EmptyLine"/></optional>
     <optional><cmd name="Fontface"/></optional>
     <optional><cmd name="ForAll"/></optional>
@@ -2187,7 +2188,6 @@
     <childelements>
       <oneOrMore>
         <interleave>
-          <optional><cmd name="Element"></cmd></optional>
           <reference name="Switchcontents"/>
         </interleave>
       </oneOrMore>
