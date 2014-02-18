@@ -59,6 +59,7 @@ There are two classes of XPath functions: standard XPath functions and speedata 
 - sd:number-of-pages(&lt;filename or URI schema>) := Determines the number of pages of a (PDF-)file.
 - sd:number-of-columns() := Number of columns in the current grid.
 - sd:number-of-rows() := Number of rows in the current grid.
+- sd:imageheight(&lt;filename or URI schema>) := Natural height of the image in grid cells. Attention: if the image is not found, the height of the file-not-found placeholder will be returned. Therefore you need to check in advance if the image exists.
 - sd:imagewidth(&lt;filename or URI schema>) := Natural width of the image in grid cells. Attention: if the image is not found, the width of the file-not-found placeholder will be returned. Therefore you need to check in advance if the image exists.
 - sd:file-exists(&lt;filename or URI schema>) := True if file exists in the current search path. Otherwise it returns false.
 - sd:format-number(Number or string, thousands separator, comma separator) := Format the number and insert thousands separators and change comma separator. Example: @sd:format-number(12345.67, ',','.')@ returns the string @12,345.67@.

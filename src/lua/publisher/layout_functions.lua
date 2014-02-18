@@ -95,7 +95,15 @@ local function bildbreite(dataxml, arg )
   local filename = arg[1]
   local img = publisher.imageinfo(filename)
   publisher.setup_page()
-  return publisher.current_grid:width_in_gridcells_sp(img.img.width)
+  local tmp = publisher.current_grid:width_in_gridcells_sp(img.img.width)
+  return tmp
+end
+
+local function imageheight(dataxml, arg )
+  local filename = arg[1]
+  local img = publisher.imageinfo(filename)
+  publisher.setup_page()
+  return publisher.current_grid:height_in_gridcells_sp(img.img.height)
 end
 
 local function datei_vorhanden(dataxml, arg )
@@ -278,6 +286,9 @@ register("urn:speedata:2009/publisher/functions/de","formatiere-string",format_s
 
 register("urn:speedata:2009/publisher/functions/en","imagewidth",bildbreite)
 register("urn:speedata:2009/publisher/functions/de","bildbreite",bildbreite)
+
+register("urn:speedata:2009/publisher/functions/en","imageheight",imageheight)
+register("urn:speedata:2009/publisher/functions/de","bildhöhe",imageheight)
 
 register("urn:speedata:2009/publisher/functions/en","reset_alternating",reset_alternating)
 register("urn:speedata:2009/publisher/functions/de","alternierend_zurücksetzen",reset_alternating)

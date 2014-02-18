@@ -6,6 +6,8 @@ h1. Liste der Änderungen
 
 h2. Version 2.0
 
+
+* Neue "XPath-Funktion":xpath.html @sd:bildhöhe(<Dateiname>)@.
 * Das Schema wird nun aus der Dokumentation automatisch erzeugt.
 * "Bild":../commands-de/image.html kann auch eie URL (@http://...@) als Argument für @url@ erhalten.
 * Neues Feature @seitentyp@ in "NeueSeite":../commands-de/newpage.html.
