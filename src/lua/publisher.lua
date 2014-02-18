@@ -12,6 +12,10 @@ file_start("publisher.lua")
 
 barcodes = do_luafile("barcodes.lua")
 local luxor = do_luafile("luxor.lua")
+
+local http = require("socket.http")
+local url = require("socket_url")
+
 xpath = do_luafile("xpath.lua")
 
 local commands     = require("publisher.commands")
@@ -202,6 +206,11 @@ bookmarks = {}
 ---      sd = "urn:speedata:2009/publisher/functions/de"
 ---    }
 namespaces_layout = nil
+
+os_separator = "/"
+if os.type == "windows" then
+    os_separator = "\\"
+end
 
 -- A very large length
 maxdimen = 1073741823
@@ -1809,6 +1818,80 @@ end
 local images = {}
 function new_image( filename, page, box)
     return imageinfo(filename,page,box)
+end
+
+-- Retrieve image from an URL if its not cached
+function get_image(requeste_url)
+    local imgcache = os.getenv("IMGCACHE")
+    local parsed_url = url.parse(requeste_url)
+    -- http://placekitten.com/g/200/300?foo=bar gives
+    -- x = {
+    --  ["path"] = "/g/200/300"
+    --  ["scheme"] = "http"
+    --  ["query"] = "foo=bar"
+    --  ["authority"] = "placekitten.com"
+    --  ["host"] = "placekitten.com"
+    -- },
+    local request_filename = parsed_url.host .. parsed_url.path
+    if parsed_url.query then
+        request_filename = request_filename .. "?" .. parsed_url.query
+    end
+    -- md5 should be over the complete part after the host
+    local mdfivesum = string.gsub(md5.sum(request_filename),".",function(chr) return string.format("%02x",string.byte(chr)) end)
+    local path_to_image = os.getenv("IMGCACHE") .. os_separator .. mdfivesum
+
+    if lfs.isfile(path_to_image) then
+        log("Image: string used for caching (-> md5): %q",request_filename)
+        log("Read image file from cache: %s",path_to_image)
+        return imageinfo(path_to_image)
+    end
+
+    -- c = {
+    --   ["last-modified"] = "Mon, 21 Oct 2013 12:45:54 GMT"
+    --   ["connection"] = "close"
+    --   ["accept-ranges"] = "bytes"
+    --   ["date"] = "Thu, 13 Feb 2014 16:29:11 GMT"
+    --   ["content-length"] = "52484"
+    --   ["content-type"] = "image/jpeg"
+    -- }
+    log("Retrieving file: %q",tostring(requeste_url))
+    txt, statuscode, c = http.request(requeste_url)
+    if statuscode ~= 200 then
+        err("404 when retrieving image %q",requeste_url)
+        return imageinfo(nil) -- nil is "filenotfound.pdf"
+    end
+
+    -- Create the temporary directory if necessary
+    if not lfs.isdir(imgcache) then
+        local imgcachepaths = string.explode(imgcache,os_separator)
+        local tmp = ""
+        for i=2, #imgcachepaths do
+            tmp = tmp .. os_separator .. imgcachepaths[i]
+            if not lfs.isdir(tmp) then
+                local ok,e = lfs.mkdir(tmp)
+                if not ok then
+                    err("Could not create temporary directory for images: %q",tmp)
+                end
+            end
+        end
+    end
+
+    local file,e = io.open(path_to_image,"wb")
+    if file == nil then
+        err("Could not open image file for writing into temp directory: %q",e)
+        return imageinfo(nil)
+    end
+    local ok
+    ok, e = file:write(txt)
+    if not ok then
+        err("Could not write image file into temp directory %q",e)
+        return imageinfo(nil)
+    end
+    file:flush()
+    file:close()
+
+    -- Just re-run this function. The image is now cached
+    return get_image(requeste_url)
 end
 
 -- Box is none, media, crop, bleed, trim, art

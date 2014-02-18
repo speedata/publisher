@@ -70,11 +70,12 @@ func init() {
 	layoutoptions = make(map[string]string)
 	options = make(map[string]string)
 	defaults = map[string]string{
-		"layout":   "layout.xml",
-		"jobname":  "publisher",
-		"data":     "data.xml",
-		"runs":     "1",
-		"fontpath": "",
+		"layout":     "layout.xml",
+		"jobname":    "publisher",
+		"data":       "data.xml",
+		"runs":       "1",
+		"fontpath":   "",
+		"imagecache": filepath.Join(os.TempDir(), "sp", "images"),
 	}
 
 	// The problem now is that we don't know where the executable file is
@@ -680,6 +681,7 @@ func main() {
 	}
 	os.Setenv("SP_FONT_PATH", getOption("fontpath"))
 	os.Setenv("SP_PATH_REWRITE", getOption("pathrewrite"))
+	os.Setenv("IMGCACHE", getOption("imagecache"))
 
 	if ed := cfg.String("DEFAULT", "extra-dir"); ed != "" {
 		extra_dir = append(extra_dir, ed)

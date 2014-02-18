@@ -724,6 +724,7 @@ function commands.image( layoutxml,dataxml )
     local nat_box   = publisher.read_attribute(layoutxml,dataxml,"naturalsize","string")
     local max_box   = publisher.read_attribute(layoutxml,dataxml,"maxsize",    "rawstring")
     local filename  = publisher.read_attribute(layoutxml,dataxml,"file",       "rawstring")
+    local url       = publisher.read_attribute(layoutxml,dataxml,"url",        "rawstring")
     local dpiwarn   = publisher.read_attribute(layoutxml,dataxml,"dpiwarn",    "number")
 
     -- width = 100%  => take width from surrounding area
@@ -732,9 +733,13 @@ function commands.image( layoutxml,dataxml )
     local nat_box_intern = box_lookup[nat_box] or "crop"
     local max_box_intern = box_lookup[max_box] or "crop"
 
-    -- publisher.setup_page()
+    local imageinfo
+    if url ~= nil then
+        imageinfo = publisher.get_image(url)
+    else
+        imageinfo = publisher.new_image(filename,seite,max_box_intern)
+    end
 
-    local imageinfo = publisher.new_image(filename,seite,max_box_intern)
     local image = img.copy(imageinfo.img)
 
     height    = publisher.set_image_length(height,   "height") or image.height

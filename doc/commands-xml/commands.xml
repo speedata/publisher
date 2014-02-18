@@ -1727,12 +1727,20 @@
         <para>Bildhöhe. Angabe in der Form 'auto' (Voreinstellung, natürliche Bildbreite), Längenangabe wie '4cm' oder Zahl (Anzahl von Rasterspalten)</para>
       </description>
     </attribute>
-    <attribute name="file" type="text" optional="no">
+    <attribute name="url" type="text" optional="yes">
       <description xml:lang="en">
-        <para>Filename of the image. Can be a file in the search path or a URI for absolute paths (e.g. <tt>file:///path/to/image.pdf</tt>).</para>
+        <para>An URL (http://....) of the image. Will be downloaded and cached in <tt>TEMPDIR/sp/images</tt> (which can be configured by setting the configuration file key <tt>imagecache</tt>) . Alternative to ›file‹.</para>
       </description>
       <description xml:lang="de">
-        <para>Dateiname des Bildes. Kann entweder eine Datei im Suchpfad sein oder ein URI-Schema (z.B. <tt>file:///pfad/zum/bild.pdf</tt>).</para>
+        <para>Eine URL (http://...) des Bildes. Wird herunter geladen und in <tt>TEMPDIR/sp/images</tt> (kann mit der Einstellung <tt>imagecache</tt> in der Konfigurationsdatei geändert werden) zwischengespeichert. Alternativ zur Angabe »datei«.</para>
+      </description>
+    </attribute>
+    <attribute name="file" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>Filename of the image. Can be a file in the search path or a file-URI for absolute paths (e.g. <tt>file:///path/to/image.pdf</tt>).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Dateiname des Bildes. Kann entweder eine Datei im Suchpfad sein oder ein file-URI-Schema (z.B. <tt>file:///pfad/zum/bild.pdf</tt>).</para>
       </description>
     </attribute>
     <attribute name="page" type="number" optional="yes">

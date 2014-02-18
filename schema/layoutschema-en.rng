@@ -1018,9 +1018,16 @@
                <a:documentation>Image height. One of 'auto' (default, take image width), length (such as '3cm') or number (in grid cells).</a:documentation>
             </attribute>
          </optional>
-         <attribute name="file">
-            <a:documentation>Filename of the image. Can be a file in the search path or a URI for absolute paths (e.g. file:///path/to/image.pdf).</a:documentation>
-         </attribute>
+         <optional>
+            <attribute name="url">
+               <a:documentation>An URL (http://....) of the image. Will be downloaded and cached in TEMPDIR/sp/images (which can be configured by setting the configuration file key imagecache) . Alternative to ›file‹.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="file">
+               <a:documentation>Filename of the image. Can be a file in the search path or a file-URI for absolute paths (e.g. file:///path/to/image.pdf).</a:documentation>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="page">
                <a:documentation>The page number from the PDF. Default is 1 (include the first page).</a:documentation>

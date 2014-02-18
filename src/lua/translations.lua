@@ -397,6 +397,7 @@ values = {
     ["trace"] = {de = "trace", en = "trace", },
     ["trim"] = {de = "beschnittzugabe", en = "trim", },
     ["type"] = {de = "typ", en = "type", },
+    ["url"] = {de = "url", en = "url", },
     ["value"] = {de = "wert", en = "value", },
     ["valign"] = {de = "valign", en = "valign", },
     ["version"] = {de = "version", en = "version", },

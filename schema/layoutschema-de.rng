@@ -1024,9 +1024,16 @@
                <a:documentation>Bildhöhe. Angabe in der Form 'auto' (Voreinstellung, natürliche Bildbreite), Längenangabe wie '4cm' oder Zahl (Anzahl von Rasterspalten)</a:documentation>
             </attribute>
          </optional>
-         <attribute name="datei">
-            <a:documentation>Dateiname des Bildes. Kann entweder eine Datei im Suchpfad sein oder ein URI-Schema (z.B. file:///pfad/zum/bild.pdf).</a:documentation>
-         </attribute>
+         <optional>
+            <attribute name="url">
+               <a:documentation>Eine URL (http://...) des Bildes. Wird herunter geladen und in TEMPDIR/sp/images (kann mit der Einstellung imagecache in der Konfigurationsdatei geändert werden) zwischengespeichert. Alternativ zur Angabe »datei«.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="datei">
+               <a:documentation>Dateiname des Bildes. Kann entweder eine Datei im Suchpfad sein oder ein file-URI-Schema (z.B. file:///pfad/zum/bild.pdf).</a:documentation>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="seite">
                <a:documentation>Die Seitenzahl aus dem PDF. Voreinstellung ist 1.</a:documentation>
