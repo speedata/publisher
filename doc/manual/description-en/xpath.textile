@@ -86,6 +86,7 @@ There are two classes of XPath functions: standard XPath functions and speedata 
 
 h2. Todo document:
 
+- abs()
 - ceiling()
 - max()
 - min()

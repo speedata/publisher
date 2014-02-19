@@ -652,6 +652,12 @@ end
 -- -- Standard XPath functions
 -- ------------------------------------------------------------
 
+M.default_functions.abs = function(dataxml,arg)
+    local tmp = math.abs(tonumber(arg[1]))
+    return tmp
+end
+
+
 M.default_functions.position = function()
     local pos = publisher.xpath.get_variable("__position")
     return pos

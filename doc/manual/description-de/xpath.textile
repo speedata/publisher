@@ -69,6 +69,8 @@ Es gibt zwei Klassen von XPath Funktionen: standardkonforme und speedata Publish
 
 h2. Todo Dokumentieren:
 
+
+- abs()
 - ceiling()
 - max()
 - min()
