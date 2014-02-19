@@ -594,11 +594,16 @@ end
 --- Execute the child elements for all elements given by the `select` attribute.
 function commands.forall( layoutxml,dataxml )
     trace("ForAll")
+    local limit = publisher.read_attribute(layoutxml,dataxml,"limit","number")
     local tab = {}
     local tmp_tab
     local current_position = publisher.xpath.get_variable("__position")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
-    for i=1,#selection do
+    limit = limit or #selection
+    if limit > #selection then
+        limit = #selection
+    end
+    for i=1,limit do
         publisher.xpath.set_variable("__position",i)
         tmp_tab = publisher.dispatch(layoutxml,selection[i])
         for j=1,#tmp_tab do

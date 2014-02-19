@@ -782,6 +782,11 @@
          <attribute name="select">
             <a:documentation>Selects the child elements from the data XML</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="limit">
+               <a:documentation>Limits the number of children to the given number.</a:documentation>
+            </attribute>
+         </optional>
          <oneOrMore>
             <interleave>
                <optional>

@@ -1433,6 +1433,14 @@
         <para>Wählt die Kindelemente aus.</para>
       </description>
     </attribute>
+    <attribute name="limit" type="number" optional="yes">
+      <description xml:lang="en">
+        <para>Limits the number of children to the given number.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Anzahl der Kinder wird durch die Zahl begrenzt.</para>
+      </description>
+    </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<Datensatz element="data">
   <ObjektAusgeben>

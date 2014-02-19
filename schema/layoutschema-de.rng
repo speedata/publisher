@@ -787,6 +787,11 @@
          <attribute name="auswahl">
             <a:documentation>Wählt die Kindelemente aus.</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="umfang">
+               <a:documentation>Die Anzahl der Kinder wird durch die Zahl begrenzt.</a:documentation>
+            </attribute>
+         </optional>
          <oneOrMore>
             <interleave>
                <optional>
