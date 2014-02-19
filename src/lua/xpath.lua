@@ -143,6 +143,25 @@ function M.is_string(str,pos)
     return false
 end
 
+function M.check_restriction(dataxml,str,pos)
+    local start,stop,subxpath
+    start,stop,subxpath = string.find(str,"^%[(.-)%]%s*",pos)
+    subxpath = tonumber(subxpath)
+    local ret = {}
+    if start then
+        for i=1,#M.tok do
+            if i == subxpath then
+                ret[#ret + 1] = M.tok[i]
+            end
+        end
+        M.nextpos = stop + 1
+        M.tok = ret
+        return
+    end
+    return
+end
+
+
 function M.is_nodeselector( dataxml,str,pos,ns )
     local start,stop
     -- Just the current node (focus, ".")
@@ -163,6 +182,7 @@ function M.is_nodeselector( dataxml,str,pos,ns )
             end
         end
         M.tok = tmp
+        M.check_restriction(dataxml,str,M.nextpos)
         return true
     end
     local eltname

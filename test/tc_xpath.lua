@@ -94,7 +94,7 @@ function test_xpathfunctions()
     assert_equal(secondoftwo(xpath.parse_raw( data, " max(1,2,3) ",namespace ))[1], 3)
     assert_equal(secondoftwo(xpath.parse_raw( data, " max('a','b','c') ",namespace ))[1], 'c')
     assert_equal(secondoftwo(xpath.parse_raw( data, " min(1,2,3) ",namespace ))[1], 1)
-    assert_equal(secondoftwo(xpath.parse_raw( data, " min('a','b','c') ",namespace ))[1], 'a')
+    assert_equal(secondoftwo(xpath.parse_raw( data, " last() ",namespace ))[1], 1)
 end
 
 function test_castable()
@@ -112,6 +112,7 @@ function test_numdatasets()
     assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " sd:number-of-datasets(one)",namespace ))[1], 1)
     assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " count(*)",namespace ))[1], 2)
     assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " count(one/subone)",namespace ))[1], 2)
+    assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " count(*[1])",namespace ))[1], 1)
     assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " count(two/*)",namespace ))[1], 2)
 end
 
