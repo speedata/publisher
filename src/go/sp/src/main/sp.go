@@ -61,7 +61,8 @@ func init() {
 	var err error
 	log.SetFlags(0)
 	starttime = time.Now()
-	go signalCatcher()
+	go sigIntCatcher()
+	go sigTermCatcher()
 	pwd, err = os.Getwd()
 	if err != nil {
 		log.Fatal(err)
@@ -230,7 +231,23 @@ func timeoutCatcher(seconds int) {
 	}
 }
 
-func signalCatcher() {
+// fixme: move the next two functions into one function
+func sigTermCatcher() {
+	ch := make(chan os.Signal)
+	signal.Notify(ch, syscall.SIGTERM)
+	sig := <-ch
+	log.Printf("Signal received: %v", sig)
+	for _, proc := range running_processes {
+		err := proc.Kill()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	showDuration()
+	os.Exit(0)
+}
+
+func sigIntCatcher() {
 	ch := make(chan os.Signal)
 	signal.Notify(ch, syscall.SIGINT)
 	sig := <-ch
