@@ -1330,6 +1330,7 @@
           <optional><cmd name="Element"/></optional>
           <optional><cmd name="Attribute"/></optional>
           <optional><cmd name="Copy-of"/></optional>
+          <optional><cmd name="ForAll"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>

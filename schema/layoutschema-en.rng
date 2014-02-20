@@ -738,6 +738,9 @@
                <optional>
                   <ref name="e_Copy-of"/>
                </optional>
+               <optional>
+                  <ref name="e_ForAll"/>
+               </optional>
             </interleave>
          </oneOrMore>
       </element>
