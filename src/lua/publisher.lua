@@ -723,7 +723,8 @@ end
 function detect_pagetype(pagenumber)
     -- ugly hack. file global variables are a bad idea.
     xpath.push_state()
-
+    local cp = current_pagenumber
+    current_pagenumber = pagenumber
     local ret = nil
     for i=#masterpages,1,-1 do
         local seitentyp = masterpages[i]
@@ -733,15 +734,17 @@ function detect_pagetype(pagenumber)
             return seitentyp.res
         end
 
-        if xpath.parse(nil,seitentyp.is_pagetype,seitentyp.ns) == true then
 
+        if xpath.parse(nil,seitentyp.is_pagetype,seitentyp.ns) == true then
             log("Page of type %q created (%d)",seitentyp.name or "<detect_pagetype>",pagenumber)
             ret = seitentyp.res
             xpath.pop_state()
+            current_pagenumber = cp
             return ret
         end
     end
     err("Can't find correct page type!")
+    current_pagenumber = cp
     xpath.pop_state()
     return false
 end
