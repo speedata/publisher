@@ -1429,13 +1429,20 @@ function commands.place_object( layoutxml,dataxml )
         end
     end
 
-
     publisher.setup_page(onpage)
+
+    local cg = publisher.current_grid
+    if onpage then
+        current_grid = publisher.seiten[onpage].grid
+    else
+        current_grid = publisher.current_grid
+    end
+
 
 
     -- remember the current maximum width for later
     local current_maxwidth = xpath.get_variable("__maxwidth")
-    local mw = publisher.current_grid:number_of_columns(area)
+    local mw = current_grid:number_of_columns(area)
     if absolute_positioning == false and tonumber(spalte) then
         mw = mw - spalte + 1
     end
@@ -1444,23 +1451,23 @@ function commands.place_object( layoutxml,dataxml )
     trace("Column = %q",tostring(spalte))
     trace("Row = %q",tostring(zeile))
 
-    local current_row_start  = publisher.current_grid:current_row(area)
+    local current_row_start  = current_grid:current_row(area)
     if not current_row_start then
         return nil
     end
-    local current_column_start = spalte or publisher.current_grid:current_column(area)
+    local current_column_start = spalte or current_grid:current_column(area)
 
     -- ht_aktuell is the remaining space on the current page in sp
-    local areaheight = ( maxheight or publisher.current_grid:number_of_rows(area) ) * publisher.current_grid.gridheight
+    local areaheight = ( maxheight or current_grid:number_of_rows(area) ) * current_grid.gridheight
     local optionen = {
-        ht_aktuell = math.min(publisher.current_grid:remaining_height_sp(zeile,area),areaheight),
+        ht_aktuell = math.min(current_grid:remaining_height_sp(zeile,area),areaheight),
         ht_max     = areaheight,
     }
     if allocate == "no" then
         optionen.ht_aktuell = areaheight
     end
 
-    local grid = publisher.current_grid
+    local grid   = current_grid
     local tab    = publisher.dispatch(layoutxml,dataxml,optionen)
 
     -- reset the current maxwidth
@@ -1494,7 +1501,6 @@ function commands.place_object( layoutxml,dataxml )
         end
     end
     for i=1,#objects do
-        current_grid = publisher.current_grid
         object     = objects[i].object
         objecttype = objects[i].objecttype
 
@@ -1556,8 +1562,7 @@ function commands.place_object( layoutxml,dataxml )
                         warning("No suitable row found for object")
                         publisher.next_area(area)
                         publisher.setup_page()
-                        current_grid = publisher.current_grid
-                        current_row = publisher.current_grid:current_row(area)
+                        current_row = current_grid:current_row(area)
                     end
                 end
             end
@@ -1567,20 +1572,20 @@ function commands.place_object( layoutxml,dataxml )
             if hreference == "right" then
                 current_column_start = current_column_start - width_in_gridcells + 1
             end
-            publisher.output_at(object,current_column_start,current_row,allocate == "yes",area,valign,objects[i].allocate_matrix,onpage,keepposition)
-            trace("object ausgegeben.")
+            publisher.output_at(object,current_column_start,current_row,allocate == "yes",area,valign,objects[i].allocate_matrix,onpage,keepposition,current_grid)
+            trace("object placed")
             zeile = nil -- the current rows is not valid anymore because an object is already rendered
         end -- no absolute positioning
     end
     if not allocate == "yes" then
-        publisher.current_grid:set_current_row(current_row_start)
+        current_grid:set_current_row(current_row_start)
     end
 
     if onpage then
         publisher.setup_page()
-        publisher.current_grid = publisher.seiten[publisher.current_pagenumber].grid
+        current_grid = publisher.seiten[publisher.current_pagenumber].grid
     end
-    trace("objects ausgegeben.")
+    trace("objects placed")
 end
 
 --- ProcessRecord

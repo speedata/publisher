@@ -112,7 +112,7 @@ current_layoutlanguage = nil
 -- Startpage
 current_pagenumber = 1
 
-seiten   = {}
+seiten = {}
 
 -- CSS properties. Use `:matches(tbl)` to find a matching rule. `tbl` has the following structure: `{element=..., id=..., class=... }`
 css = do_luafile("css.lua"):new()
@@ -637,13 +637,15 @@ end
 
 --- Put the object (nodelist) on grid cell (x,y). If `allocate`=`true` then
 --- mark cells as occupied.
-function output_at( nodelist, x,y,allocate,area,valign,allocate_matrix,pagenumber,keepposition)
+function output_at( nodelist, x,y,allocate,area,valign,allocate_matrix,pagenumber,keepposition,grid)
     local outputpage = current_pagenumber
     if pagenumber then
         outputpage = pagenumber
     end
     area = area or default_areaname
-    local r = current_grid
+
+    -- current_grid is important here, because it can be a group
+    local r = grid or current_grid
     local wd = nodelist.width
     local ht = nodelist.height + nodelist.depth
     local width_gridcells = r:width_in_gridcells_sp(wd)
