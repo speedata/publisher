@@ -839,10 +839,17 @@ function setup_page(pagenumber)
         end
     end
 
-
+    local cp = current_page
+    current_page = seiten[thispage]
     if current_page.atpagecreation then
+        local cpn = current_pagenumber
+        current_pagenumber = thispage
+        current_grid = seiten[thispage].grid
         publisher.dispatch(current_page.atpagecreation,nil)
+        current_pagenumber = cpn
     end
+    current_page = cp
+
 end
 
 --- Switch to the next frame in the given are.
