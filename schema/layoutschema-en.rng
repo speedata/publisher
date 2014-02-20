@@ -1866,6 +1866,21 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="keepposition">
+               <a:documentation>Don't move the virtual cursor to the next free space</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+                  <text/>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="page">
+               <a:documentation>The page (later in the PDF), the object should appear on.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="row">
                <a:documentation/>
             </attribute>

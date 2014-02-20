@@ -3139,9 +3139,25 @@
           die Position von der oberen Blattkante.</para>
       </description>
     </attribute>
+    <attribute name="keepposition" type="yesno" optional="yes">
+      <description xml:lang="en">
+        <para>Don't move the virtual cursor to the next free space</para>
+      </description>
+      <description xml:lang="de">
+        <para>Den virtuellen Cursor nicht verändern.</para>
+      </description>
+    </attribute>
+    <attribute name="page" type="number" optional="yes">
+      <description xml:lang="en">
+        <para>The page (later in the PDF), the object should appear on. Number of the keyword »next« for the next page.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Seite (später im PDF), auf der das Objekt erscheinen soll. Angabe als Zahl oder »next« für die nächste Seite.</para>
+      </description>
+    </attribute>
     <attribute name="row" type="numberorlength" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The row where the object is placed. If none given, the publisher tries to find a row by itself. You can give a number (in grid cells) or an absolute value (from top left).</para>
       </description>
       <description xml:lang="de">
         <para>Zahl: Die Zeile im Raster, in der das Objekt ausgegeben wird. Wird die Zeile nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe:

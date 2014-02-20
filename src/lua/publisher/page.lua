@@ -2,7 +2,7 @@
 --  page.lua
 --  speedata publisher
 --
---  Copyright 2010-2013 Patrick Gundlach.
+--  Copyright 2010-2014 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 
 

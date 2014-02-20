@@ -1876,6 +1876,21 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="behalteposition">
+               <a:documentation>Den virtuellen Cursor nicht verändern.</a:documentation>
+               <choice>
+                  <value>ja</value>
+                  <value>nein</value>
+                  <text/>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="seite">
+               <a:documentation>Die Seite (später im PDF), auf der das Objekt erscheinen soll.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="zeile">
                <a:documentation>Zahl: Die Zeile im Raster, in der das Objekt ausgegeben wird. Wird die Zeile nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe:
           die Position von der oberen Blattkante.</a:documentation>
