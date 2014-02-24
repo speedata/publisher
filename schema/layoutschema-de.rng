@@ -329,6 +329,9 @@
                <ref name="e_Barcode"/>
             </optional>
             <optional>
+               <ref name="e_Columns"/>
+            </optional>
+            <optional>
                <ref name="e_Column"/>
             </optional>
             <optional>
@@ -426,6 +429,9 @@
             </optional>
             <optional>
                <ref name="e_Tr"/>
+            </optional>
+            <optional>
+               <ref name="e_Tablehead"/>
             </optional>
             <optional>
                <ref name="e_Value"/>
@@ -804,6 +810,9 @@
                   <ref name="e_Barcode"/>
                </optional>
                <optional>
+                  <ref name="e_Columns"/>
+               </optional>
+               <optional>
                   <ref name="e_Column"/>
                </optional>
                <optional>
@@ -901,6 +910,9 @@
                </optional>
                <optional>
                   <ref name="e_Tr"/>
+               </optional>
+               <optional>
+                  <ref name="e_Tablehead"/>
                </optional>
                <optional>
                   <ref name="e_Value"/>
@@ -1270,6 +1282,9 @@
                   <ref name="e_Barcode"/>
                </optional>
                <optional>
+                  <ref name="e_Columns"/>
+               </optional>
+               <optional>
                   <ref name="e_Column"/>
                </optional>
                <optional>
@@ -1367,6 +1382,9 @@
                </optional>
                <optional>
                   <ref name="e_Tr"/>
+               </optional>
+               <optional>
+                  <ref name="e_Tablehead"/>
                </optional>
                <optional>
                   <ref name="e_Value"/>
@@ -1609,6 +1627,9 @@
                <ref name="e_Barcode"/>
             </optional>
             <optional>
+               <ref name="e_Columns"/>
+            </optional>
+            <optional>
                <ref name="e_Column"/>
             </optional>
             <optional>
@@ -1706,6 +1727,9 @@
             </optional>
             <optional>
                <ref name="e_Tr"/>
+            </optional>
+            <optional>
+               <ref name="e_Tablehead"/>
             </optional>
             <optional>
                <ref name="e_Value"/>
@@ -2846,6 +2870,9 @@
                   <ref name="e_Barcode"/>
                </optional>
                <optional>
+                  <ref name="e_Columns"/>
+               </optional>
+               <optional>
                   <ref name="e_Column"/>
                </optional>
                <optional>
@@ -2943,6 +2970,9 @@
                </optional>
                <optional>
                   <ref name="e_Tr"/>
+               </optional>
+               <optional>
+                  <ref name="e_Tablehead"/>
                </optional>
                <optional>
                   <ref name="e_Value"/>
