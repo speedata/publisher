@@ -1887,7 +1887,7 @@
          </optional>
          <optional>
             <attribute name="seite">
-               <a:documentation>Die Seite (später im PDF), auf der das Objekt erscheinen soll.</a:documentation>
+               <a:documentation>Die Seite (später im PDF), auf der das Objekt erscheinen soll. Angabe als Zahl oder »next« für die nächste Seite.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2108,6 +2108,11 @@
          <optional>
             <attribute name="auswahl">
                <a:documentation>Alternativ zur Angabe des Datensatzes im Kindelement.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="attribute">
+               <a:documentation>Der Variablenname (als XPath-Ausdruck, also $foo), der Attribut-Elemente beinhaltet. Diese Attribute werden zum Wurzelelement hinzugefügt.</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>

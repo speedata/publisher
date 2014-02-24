@@ -1757,9 +1757,24 @@ function commands.save_dataset( layoutxml,dataxml )
     local filename    = publisher.read_attribute(layoutxml,dataxml,"filename",  "rawstring")
     local elementname = publisher.read_attribute(layoutxml,dataxml,"elementname","rawstring")
     local selection   = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
+    local attributes  = publisher.read_attribute(layoutxml,dataxml,"attributes","xpathraw")
 
     assert(filename)
     assert(elementname)
+
+    tmp = {}
+    if attributes then
+        for i=1,#attributes do
+            if publisher.elementname(attributes[i]) == "Attribute" then
+                for k,v in pairs(publisher.element_contents(attributes[i])) do
+                    if k ~= ".__type" then
+                        tmp[k] = v
+                    end
+                end
+            end
+        end
+    end
+
     if selection then
         local ok
         ok, tab = xpath.parse_raw(dataxml,selection,layoutxml[".__ns"])
@@ -1768,7 +1783,6 @@ function commands.save_dataset( layoutxml,dataxml )
         tab = publisher.dispatch(layoutxml,dataxml)
     end
 
-    tmp = {}
     for i=1,#tab do
         if tab[i].elementname=="Element" then
             tmp[#tmp + 1] = publisher.element_contents(tab[i])

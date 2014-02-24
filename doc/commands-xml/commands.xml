@@ -3504,6 +3504,34 @@
         <para>Alternativ zur Angabe des Datensatzes im Kindelement.</para>
       </description>
     </attribute>
+    <attribute name="attributes" type="xpath" optional="yes">
+      <description xml:lang="en">
+        <para>The variable (as an XPath expression, e.g. $foo) which contains <cmd name="Attribute"/> Elements. These attributes are added to the root element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Variablenname (als XPath-Ausdruck, also $foo), der <cmd name="Attribute"/>-Elemente beinhaltet. Diese Attribute werden zum Wurzelelement hinzugefügt.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[  <Record element="data">
+    <SetVariable variable="attributesvar">
+      <Attribute name="att1" select="'Hello'" />
+      <Attribute name="att2" select="123" />
+    </SetVariable>
+
+    <SaveDataset filename="toc" elementname="root" attributes="$attributesvar">
+      <Element name="child">
+        <Attribute name="attchild" select="999"/>
+      </Element>
+    </SaveDataset>
+  </Record>
+]]></listing>
+      <para>This code saves an XML file to the disc which has this structure:</para>
+      <listing><![CDATA[<root att1="Hello" att2="123">
+ <child attchild="999"/>
+</root>
+]]></listing>
+    </example>
     <example xml:lang="en">
       <listing><![CDATA[<SaveDataset filename="toc" elementname="Contents">
   <Copy-of select="$contents"/>

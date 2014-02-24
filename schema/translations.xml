@@ -147,6 +147,7 @@
       <attribute key="append" en="append" de="anhängen" />
       <attribute key="angle" en="angle" de="winkel"/>
       <attribute key="area" en="area" de="bereich"/>
+      <attribute key="attributes" en="attributes" de="attribute" />
       <attribute key="b" en="b" de="b"/>
       <attribute key="backgroundcolor" en="backgroundcolor" de="hintergrundfarbe"/>
       <attribute key="background" en="background" de="hintergrund"/>

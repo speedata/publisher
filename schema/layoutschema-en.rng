@@ -1877,12 +1877,12 @@
          </optional>
          <optional>
             <attribute name="page">
-               <a:documentation>The page (later in the PDF), the object should appear on.</a:documentation>
+               <a:documentation>The page (later in the PDF), the object should appear on. Number of the keyword »next« for the next page.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="row">
-               <a:documentation/>
+               <a:documentation>The row where the object is placed. If none given, the publisher tries to find a row by itself. You can give a number (in grid cells) or an absolute value (from top left).</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2092,6 +2092,11 @@
          <optional>
             <attribute name="select">
                <a:documentation>Alternative to giving the data structure in the child elements.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="attributes">
+               <a:documentation>The variable (as an XPath expression, e.g. $foo) which contains Attribute Elements. These attributes are added to the root element.</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>

@@ -284,6 +284,7 @@ values = {
     ["append"] = {de = "anhängen", en = "append", },
     ["angle"] = {de = "winkel", en = "angle", },
     ["area"] = {de = "bereich", en = "area", },
+    ["attributes"] = {de = "attribute", en = "attributes", },
     ["b"] = {de = "b", en = "b", },
     ["backgroundcolor"] = {de = "hintergrundfarbe", en = "backgroundcolor", },
     ["background"] = {de = "hintergrund", en = "background", },
