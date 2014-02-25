@@ -63,10 +63,16 @@ end
 
 kpse.filelist = {}
 
+local jobname = os.getenv("SP_JOBNAME")
+local currentdir = lfs.currentdir()
 local function add_dir( dir )
   for i in dirtree(dir) do
     local filename = i:gsub(".*/([^/]+)$","%1")
-    kpse.filelist[filename] = i
+    if i == currentdir .. "/" .. jobname .. ".pdf" then
+        -- ignore
+    else
+        kpse.filelist[filename] = i
+    end
   end
 end
 

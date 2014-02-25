@@ -38,9 +38,10 @@ end
 
 function find_file_location( filename_or_uri )
   if filename_or_uri == "" then return nil end
-  if lfs.isfile(filename_or_uri) then return filename_or_uri end
   local p = kpse.filelist[filename_or_uri]
   if p then return p end
+
+  if lfs.isfile(filename_or_uri) then return filename_or_uri end
   if filename_or_uri == "pdftex.map" then return nil end
   -- not in the search path or its subdirectories
   local url_table = url.parse(filename_or_uri)

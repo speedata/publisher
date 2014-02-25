@@ -452,6 +452,7 @@ func runPublisher() (exitstatus int) {
 	if dummy_data == "true" {
 		dataname = "-dummy"
 	}
+	os.Setenv("SP_JOBNAME", jobname)
 
 	runs, err := strconv.Atoi(getOption("runs"))
 	if err != nil {
