@@ -2039,6 +2039,14 @@
           Falls die erste oder die zweite Ziffer der Versionsangabe unterschiedlich ist, wird eine Warnung ausgegeben.</para>
       </description>
     </attribute>
+    <attribute name="name" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>A name for the layout. Optional, without any influence on the layout itself.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name des Layouts. Hat keinen Einfluss auf das Layout.</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <para>This is a complete example for a layout ruleset:</para>
       <listing><![CDATA[<?xml version="1.0"?>

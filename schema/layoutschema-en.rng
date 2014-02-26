@@ -1175,6 +1175,11 @@
                <a:documentation>Minimum publisher version required. If major or minor version differ, give a warning. Format: 1.6.12 (revision number can be left out).</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="name">
+               <a:documentation>A name for the layout. Optional, without any influence on the layout itself.</a:documentation>
+            </attribute>
+         </optional>
          <oneOrMore>
             <optional>
                <ref name="e_Record"/>
