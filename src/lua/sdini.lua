@@ -63,12 +63,14 @@ end
 
 kpse.filelist = {}
 
+-- only set when running the publisher, not with list-fonts
+-- so jobname can be nil
 local jobname = os.getenv("SP_JOBNAME")
 local currentdir = lfs.currentdir()
 local function add_dir( dir )
   for i in dirtree(dir) do
     local filename = i:gsub(".*/([^/]+)$","%1")
-    if i == currentdir .. "/" .. jobname .. ".pdf" then
+    if jobname and ( i == currentdir .. "/" .. jobname .. ".pdf" ) then
         -- ignore
     else
         kpse.filelist[filename] = i
