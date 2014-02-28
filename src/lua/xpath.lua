@@ -402,6 +402,21 @@ function M.eval_addition(first,second,operator)
         err("The second operand of +/- is a table. Evaluating to 0")
         return 0
     end
+    if type(first)=='string' then
+        first = tonumber(first)
+    end
+    if first == nil then
+        err("The first operand of +/- is not a number. Evaluating to 0")
+        return 0
+    end
+    if type(second)=='string' then
+        second = tonumber(second)
+    end
+    if second == nil then
+        err("The second operand of +/- is not a number. Evaluating to 0")
+        return 0
+    end
+
     if operator == "+" then
         return first + second
     elseif operator == "-" then
