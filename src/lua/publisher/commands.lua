@@ -993,10 +993,12 @@ function commands.makeindex( layoutxml,dataxml )
     local xpath       = publisher.read_attribute(layoutxml,dataxml,"select",  "xpathraw")
     local sortkey     = publisher.read_attribute(layoutxml,dataxml,"sortkey", "rawstring")
     local sectionname = publisher.read_attribute(layoutxml,dataxml,"section", "rawstring")
-    table.sort(xpath,function(elta,eltb)
+
+    publisher.stable_sort(xpath,function(elta,eltb)
         return string.lower(elta[sortkey]) < string.lower(eltb[sortkey])
     end)
-    local section
+
+    local section, lastname, lastindex
     local lastfirstletter = ""
     local ret = {}
     for i=1,#xpath do
@@ -1008,7 +1010,14 @@ function commands.makeindex( layoutxml,dataxml )
             ret[#ret + 1] = section
         end
         -- Add current entry to this section
-        section[#section + 1] = xpath[i]
+        -- The current implementation only concatenates page numbers
+        if xpath[i].name == lastname then
+            xpath[lastindex].page = xpath[lastindex].page .. ", " .. xpath[i].page
+        else
+            lastindex = i
+            lastname = xpath[i].name
+            section[#section + 1] = xpath[i]
+        end
         lastfirstletter = startletter
     end
     return ret
