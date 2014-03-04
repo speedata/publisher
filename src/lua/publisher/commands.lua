@@ -1264,7 +1264,8 @@ function commands.output( layoutxml,dataxml )
     end
     -- reset the current maxwidth
     xpath.set_variable("__maxwidth",current_maxwidth)
-
+    _,row,_ = publisher.get_remaining_height(area)
+    current_grid:set_current_row(row,area)
     publisher.xpath.set_variable("__area",last_area)
 end
 
