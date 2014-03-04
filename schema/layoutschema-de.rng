@@ -671,6 +671,26 @@
       <element name="DefiniereTextformat">
          <a:documentation>Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen Absatz und
         Textblock) zurückgegriffen werden.</a:documentation>
+         <optional>
+            <attribute name="schusterjunge">
+               <a:documentation>Wenn nein, Schusterjungen verhindern (erste Zeile eines Absatzes ist auf der vorherigen Seite). Voreinstellung ist nein.</a:documentation>
+               <choice>
+                  <value>ja</value>
+                  <value>nein</value>
+                  <text/>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="hurenkind">
+               <a:documentation>Wenn nein, Hurenkinder verhindern (letzte Zeile eines Absatzes ist auf der nächsten Seite). Voreinstellung ist nein.</a:documentation>
+               <choice>
+                  <value>ja</value>
+                  <value>nein</value>
+                  <text/>
+               </choice>
+            </attribute>
+         </optional>
          <attribute name="name">
             <a:documentation>Name des Textformats, unter dem es später im Layoutregelwerk angesprochen wird.</a:documentation>
          </attribute>

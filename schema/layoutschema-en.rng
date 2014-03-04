@@ -667,6 +667,26 @@
    <define name="e_DefineTextformat">
       <element name="DefineTextformat">
          <a:documentation>Define text formatting instructions. A textformat is used to align and indent text and create margins and rules before and after the text.</a:documentation>
+         <optional>
+            <attribute name="orphan">
+               <a:documentation>If no, prohibit orphans (first line of paragraph is on the previous page). Default: no.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+                  <text/>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="widow">
+               <a:documentation>If no, prohibit widows (last line of paragraph is on the next page). Default: no.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+                  <text/>
+               </choice>
+            </attribute>
+         </optional>
          <attribute name="name">
             <a:documentation>Name of the textformat that is used later in the layout.</a:documentation>
          </attribute>

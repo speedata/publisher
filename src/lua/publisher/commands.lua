@@ -404,6 +404,8 @@ function commands.define_textformat(layoutxml)
     local paddingtop    = publisher.read_attribute(layoutxml,dataxml,"padding-top",   "rawstring")
     local paddingbottom = publisher.read_attribute(layoutxml,dataxml,"padding-bottom","rawstring")
     local breakbelow    = publisher.read_attribute(layoutxml,dataxml,"break-below",   "boolean", true)
+    local orphan        = publisher.read_attribute(layoutxml,dataxml,"orphan",        "boolean", false)
+    local widow         = publisher.read_attribute(layoutxml,dataxml,"widow",         "boolean", false)
 
     local fmt = {}
 
@@ -412,6 +414,9 @@ function commands.define_textformat(layoutxml)
     else
         fmt.alignment = "justified"
     end
+
+    fmt.orphan = orphan
+    fmt.widow = widow
 
     if indentation then
         fmt.indent = tex.sp(indentation)
@@ -2273,6 +2278,7 @@ end
 function commands.text(layoutxml,dataxml)
     local balance = publisher.read_attribute(layoutxml,dataxml,"balance",   "rawstring")
     local tab = publisher.dispatch(layoutxml,dataxml)
+
     tab.balance = balance
     -- push returns 'obj', 'state', 'more_to_follow'
 

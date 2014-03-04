@@ -236,6 +236,40 @@ function Paragraph:format(width_sp, default_textformat_name)
         else
             nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
         end
+
+        -- Remove glue between the lines
+        -- it's always 0 anyway (hopefully!)
+        local line = nodelist.head
+        while line do
+            if line.id == 10 then
+                line.prev.next = line.next
+                if line.next then
+                    line.next.prev = line.prev
+                end
+            end
+            line = line.next
+        end
+
+        line = nodelist.head
+        local c = 0
+        while line do
+            c = c + 1
+            if c == 1 then
+                -- orphan
+                if current_textformat.orphan == false then
+                    node.set_attribute(line,publisher.att_break_below_forbidden,1)
+                end
+            end
+            if line.id == 0 and line.next ~= nil and line.next.next == nil then
+                -- widow
+                if current_textformat.widow == false then
+                    node.set_attribute(line,publisher.att_break_below_forbidden,1)
+                end
+            end
+            line = line.next
+        end
+
+
         publisher.fonts.post_linebreak(nodelist)
 
         if current_textformat.paddingtop then
@@ -378,7 +412,11 @@ function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
             hbox = vlist.head
         end
     end
-    return node.vpack(toplist)
+    if toplist then
+        return node.vpack(toplist)
+    else
+        return publisher.empty_block()
+    end
 end
 
 file_end("paragraph.lua")

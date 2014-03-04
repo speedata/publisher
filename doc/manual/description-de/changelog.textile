@@ -6,7 +6,7 @@ h1. Liste der Änderungen
 
 h2. Version 2.0
 
-
+* Neue Attribute @schusterjunge@ und @hurenkind@ bei "DefiniereTextformat":../commands-de/definetextformat.html. Die Voreinstellung für Text ist nun, dass Schusterjungen und Hurenkinder vermieden werden.
 * Neues Attribut @attribute@ in "SpeichereDatensatzdatei":../commands-de/savedataset.html um Attribute für das Root-Element zu erlauben.
 * Neue "XPath-Funktion":xpath.html @sd:bildhöhe(<Dateiname>)@.
 * Das Schema wird nun aus der Dokumentation automatisch erzeugt.

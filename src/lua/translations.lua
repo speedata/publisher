@@ -359,6 +359,8 @@ values = {
     ["name"] = {de = "name", en = "name", },
     ["naturalsize"] = {de = "natürliche-größe", en = "naturalsize", },
     ["open"] = {de = "offen", en = "open", },
+    ["orphan"] = {de = "schusterjunge", en = "orphan", },
+    ["widow"] = {de = "hurenkind", en = "widow", },
     ["overshoot"] = {de = "übersteigen", en = "overshoot", },
     ["padding"] = {de = "padding", en = "padding", },
     ["padding-bottom"] = {de = "padding-bottom", en = "padding-bottom", },

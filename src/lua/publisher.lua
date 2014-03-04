@@ -154,7 +154,7 @@ masterpages = {}
 --- indentation in sp. alignment is one of "leftaligned", "rightaligned",
 --- "centered" and "justified"
 textformats = {
-    text           = { indent = 0, alignment="justified",   rows = 1},
+    text           = { indent = 0, alignment="justified",   rows = 1, orphan = false, widow = false},
     __centered     = { indent = 0, alignment="centered",    rows = 1},
     __leftaligned  = { indent = 0, alignment="leftaligned", rows = 1},
     __rightaligned = { indent = 0, alignment="rightaligned",rows = 1},

@@ -228,6 +228,8 @@
       <attribute key="name" en="name" de="name"/>
       <attribute key="naturalsize" en="naturalsize" de="natürliche-größe"/>
       <attribute key="open" en="open" de="offen"/>
+      <attribute key="orphan" en="orphan" de="schusterjunge" />
+      <attribute key="widow" en="widow" de="hurenkind" />
      <attribute key="overshoot" en="overshoot" de="übersteigen"/>
       <attribute key="padding" en="padding" de="padding"/>
       <attribute key="padding-bottom" en="padding-bottom" de="padding-bottom"/>

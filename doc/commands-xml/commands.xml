@@ -1183,6 +1183,22 @@
         Textblock) zurückgegriffen werden.</para>
     </description>
     <childelements />
+    <attribute name="orphan" type="yesno" optional="yes">
+      <description xml:lang="en">
+        <para>If no, prohibit orphans (first line of paragraph is on the previous page). Default: no.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn nein, Schusterjungen verhindern (erste Zeile eines Absatzes ist auf der vorherigen Seite). Voreinstellung ist nein.</para>
+      </description>
+    </attribute>
+    <attribute name="widow" optional="yes" type="yesno">
+      <description xml:lang="en">
+        <para>If no, prohibit widows (last line of paragraph is on the next page). Default: no.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn nein, Hurenkinder verhindern (letzte Zeile eines Absatzes ist auf der nächsten Seite). Voreinstellung ist nein.</para>
+      </description>
+    </attribute>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
         <para>Name of the textformat that is used later in the layout.</para>
