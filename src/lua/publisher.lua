@@ -2296,6 +2296,17 @@ function set_image_length(len,width_or_height)
     end
 end
 
+function empty_block()
+    local r = node.new(hlist_node)
+    r.width = 0
+    r.height = 0
+    r.depth = 0
+    local v = node.vpack(r)
+    trace("empty_block")
+    return v
+end
+
+
 function emergency_block()
     local r = node.new(rule_node)
     r.width = 5 * 2^16
