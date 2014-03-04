@@ -8,6 +8,7 @@
     <optional><cmd name="Column"/></optional>
     <optional><cmd name="Copy-of"/></optional>
     <optional><cmd name="DefineColor"/></optional>
+    <optional><cmd name="DefineFontfamily"/></optional>
     <optional><cmd name="Element"/></optional>
     <optional><cmd name="EmptyLine"/></optional>
     <optional><cmd name="Fontface"/></optional>
@@ -19,6 +20,7 @@
     <optional><cmd name="InsertPages"/></optional>
     <optional><cmd name="Li"/></optional>
     <optional><cmd name="LoadDataset"/></optional>
+    <optional><cmd name="LoadFontfile"/></optional>
     <optional><cmd name="Loop"/></optional>
     <optional><cmd name="Message"/></optional>
     <optional><cmd name="NewPage"/></optional>

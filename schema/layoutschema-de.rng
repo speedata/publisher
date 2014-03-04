@@ -341,6 +341,9 @@
                <ref name="e_DefineColor"/>
             </optional>
             <optional>
+               <ref name="e_DefineFontfamily"/>
+            </optional>
+            <optional>
                <ref name="e_Element"/>
             </optional>
             <optional>
@@ -372,6 +375,9 @@
             </optional>
             <optional>
                <ref name="e_LoadDataset"/>
+            </optional>
+            <optional>
+               <ref name="e_LoadFontfile"/>
             </optional>
             <optional>
                <ref name="e_Loop"/>
@@ -822,6 +828,9 @@
                   <ref name="e_DefineColor"/>
                </optional>
                <optional>
+                  <ref name="e_DefineFontfamily"/>
+               </optional>
+               <optional>
                   <ref name="e_Element"/>
                </optional>
                <optional>
@@ -853,6 +862,9 @@
                </optional>
                <optional>
                   <ref name="e_LoadDataset"/>
+               </optional>
+               <optional>
+                  <ref name="e_LoadFontfile"/>
                </optional>
                <optional>
                   <ref name="e_Loop"/>
@@ -1299,6 +1311,9 @@
                   <ref name="e_DefineColor"/>
                </optional>
                <optional>
+                  <ref name="e_DefineFontfamily"/>
+               </optional>
+               <optional>
                   <ref name="e_Element"/>
                </optional>
                <optional>
@@ -1330,6 +1345,9 @@
                </optional>
                <optional>
                   <ref name="e_LoadDataset"/>
+               </optional>
+               <optional>
+                  <ref name="e_LoadFontfile"/>
                </optional>
                <optional>
                   <ref name="e_Loop"/>
@@ -1644,6 +1662,9 @@
                <ref name="e_DefineColor"/>
             </optional>
             <optional>
+               <ref name="e_DefineFontfamily"/>
+            </optional>
+            <optional>
                <ref name="e_Element"/>
             </optional>
             <optional>
@@ -1675,6 +1696,9 @@
             </optional>
             <optional>
                <ref name="e_LoadDataset"/>
+            </optional>
+            <optional>
+               <ref name="e_LoadFontfile"/>
             </optional>
             <optional>
                <ref name="e_Loop"/>
@@ -2887,6 +2911,9 @@
                   <ref name="e_DefineColor"/>
                </optional>
                <optional>
+                  <ref name="e_DefineFontfamily"/>
+               </optional>
+               <optional>
                   <ref name="e_Element"/>
                </optional>
                <optional>
@@ -2918,6 +2945,9 @@
                </optional>
                <optional>
                   <ref name="e_LoadDataset"/>
+               </optional>
+               <optional>
+                  <ref name="e_LoadFontfile"/>
                </optional>
                <optional>
                   <ref name="e_Loop"/>
