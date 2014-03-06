@@ -244,21 +244,9 @@
       <para>Die innerhalb dieses Befehls definierten Anweisungen werden ausgeführt, sobald die Seite ins PDF ausgegeben wird.</para>
     </description>
     <childelements>
-      <cmd name="LoadDataset" />
-      <cmd name="SaveDataset" />
-      <cmd name="PlaceObject" />
-      <cmd name="Switch" />
-      <cmd name="While" />
-      <cmd name="ProcessNode" />
-      <cmd name="Message" />
-      <cmd name="NextFrame" />
-      <cmd name="NewPage" />
-      <cmd name="NextRow" />
-      <cmd name="EmptyLine" />
-      <cmd name="Group" />
-      <cmd name="SortSequence" />
-      <cmd name="Hyphenation" />
-      <cmd name="SetVariable" />
+      <oneOrMore>
+        <reference name="Commands"/>
+      </oneOrMore>
     </childelements>
     <example xml:lang="en">
       <listing><![CDATA[<AtPageShipout>
@@ -294,29 +282,8 @@
     </description>
     <childelements>
       <oneOrMore>
-      <!-- t_commands -->
-      <optional><cmd name="DefineColor"/></optional>
-      <optional><cmd name="EmptyLine"/></optional>
-      <optional><cmd name="ForAll"/></optional>
-      <optional><cmd name="Group"/></optional>
-      <optional><cmd name="Hyphenation"/></optional>
-      <optional><cmd name="LoadDataset"/></optional>
-      <optional><cmd name="Loop"/></optional>
-      <optional><cmd name="Message"/></optional>
-      <optional><cmd name="NewPage"/></optional>
-      <optional><cmd name="NextRow"/></optional>
-      <optional><cmd name="NextFrame"/></optional>
-      <optional><cmd name="Output"/></optional>
-      <optional><cmd name="PlaceObject"/></optional>
-      <optional><cmd name="ProcessNode"/></optional>
-      <optional><cmd name="SaveDataset"/></optional>
-      <optional><cmd name="SetVariable"/></optional>
-      <optional><cmd name="SortSequence"/></optional>
-      <optional><cmd name="Switch"/></optional>
-      <optional><cmd name="While"/></optional>
-      <optional><cmd name="InsertPages"/></optional>
+        <reference name="Commands"/>
       </oneOrMore>
-
     </childelements>
     <example xml:lang="en">
       <listing><![CDATA[<AtPageCreation>
@@ -4725,7 +4692,18 @@
     <description xml:lang="de">
       <para>Beinhaltet einen Textinhalt, der an das umgebende Element übergeben wird.</para>
     </description>
-    <childelements><text/><cmd name="Br"/></childelements>
+    <childelements>
+      <interleave>
+        <zeroOrMore>
+          <text/>
+        </zeroOrMore>
+        <zeroOrMore>
+          <element name="br">
+            <empty/>
+          </element>
+        </zeroOrMore>
+      </interleave>
+    </childelements>
     <attribute name="select" type="xpath" optional="yes">
       <description xml:lang="en">
         <para>Value to be passed to the outer element.</para>

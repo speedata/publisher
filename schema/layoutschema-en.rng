@@ -49,51 +49,68 @@
    <define name="e_AtPageShipout">
       <element name="AtPageShipout">
          <a:documentation>The enclosed instructions will be executed when the page is placed into the PDF file.</a:documentation>
-         <optional>
-            <ref name="e_LoadDataset"/>
-         </optional>
-         <optional>
-            <ref name="e_SaveDataset"/>
-         </optional>
-         <optional>
-            <ref name="e_PlaceObject"/>
-         </optional>
-         <optional>
-            <ref name="e_Switch"/>
-         </optional>
-         <optional>
-            <ref name="e_While"/>
-         </optional>
-         <optional>
-            <ref name="e_ProcessNode"/>
-         </optional>
-         <optional>
-            <ref name="e_Message"/>
-         </optional>
-         <optional>
-            <ref name="e_NextFrame"/>
-         </optional>
-         <optional>
-            <ref name="e_NewPage"/>
-         </optional>
-         <optional>
-            <ref name="e_NextRow"/>
-         </optional>
-         <optional>
-            <ref name="e_EmptyLine"/>
-         </optional>
-         <optional>
-            <ref name="e_Group"/>
-         </optional>
-         <optional>
-            <ref name="e_SortSequence"/>
-         </optional>
-         <optional>
-            <ref name="e_Hyphenation"/>
-         </optional>
-         <optional>
-            <ref name="e_SetVariable"/>
-         </optional>
+         <oneOrMore>
+            <optional>
+               <ref name="e_DefineColor"/>
+            </optional>
+            <optional>
+               <ref name="e_EmptyLine"/>
+            </optional>
+            <optional>
+               <ref name="e_ForAll"/>
+            </optional>
+            <optional>
+               <ref name="e_Group"/>
+            </optional>
+            <optional>
+               <ref name="e_Hyphenation"/>
+            </optional>
+            <optional>
+               <ref name="e_LoadDataset"/>
+            </optional>
+            <optional>
+               <ref name="e_Loop"/>
+            </optional>
+            <optional>
+               <ref name="e_Message"/>
+            </optional>
+            <optional>
+               <ref name="e_NewPage"/>
+            </optional>
+            <optional>
+               <ref name="e_NextRow"/>
+            </optional>
+            <optional>
+               <ref name="e_NextFrame"/>
+            </optional>
+            <optional>
+               <ref name="e_Output"/>
+            </optional>
+            <optional>
+               <ref name="e_PlaceObject"/>
+            </optional>
+            <optional>
+               <ref name="e_ProcessNode"/>
+            </optional>
+            <optional>
+               <ref name="e_SaveDataset"/>
+            </optional>
+            <optional>
+               <ref name="e_SetVariable"/>
+            </optional>
+            <optional>
+               <ref name="e_SortSequence"/>
+            </optional>
+            <optional>
+               <ref name="e_Switch"/>
+            </optional>
+            <optional>
+               <ref name="e_While"/>
+            </optional>
+            <optional>
+               <ref name="e_InsertPages"/>
+            </optional>
+         </oneOrMore>
       </element>
    </define>
    <define name="e_AtPageCreation">
@@ -161,7 +178,6 @@
                <ref name="e_InsertPages"/>
             </optional>
          </oneOrMore>
-
       </element>
    </define>
    <define name="e_Attribute">
@@ -2879,11 +2895,16 @@
                <a:documentation>Value to be passed to the outer element.</a:documentation>
             </attribute>
          </optional>
-         <text/>
-         <text/>
-         <optional>
-            <ref name="e_Br"/>
-         </optional>
+         <interleave>
+            <zeroOrMore>
+               <text/>
+            </zeroOrMore>
+            <zeroOrMore>
+               <element name="br">
+                  <empty/>
+               </element>
+            </zeroOrMore>
+         </interleave>
       </element>
    </define>
    <define name="e_While">

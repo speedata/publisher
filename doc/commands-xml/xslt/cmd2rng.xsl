@@ -27,7 +27,8 @@
       <element name="{sd:translate-command(@name)}">
         <a:documentation><xsl:apply-templates select="description[@xml:lang = $lang]"/></a:documentation>
         <xsl:choose>
-          <xsl:when test="count(childelements//cmd) = 0 and count(childelements//reference) = 0">
+          <!-- An element with no child elements must be declared empty -->
+          <xsl:when test="count(childelements//cmd) = 0 and count(childelements//reference) = 0 and count(childelements//element) = 0">
             <xsl:apply-templates select="attribute"/>
             <empty/>
           </xsl:when>
@@ -41,6 +42,18 @@
     </define>
   </xsl:template>
 
+  <xsl:template match="sddoc:element" mode="#all">
+    <element xmlns="http://relaxng.org/ns/structure/1.0">
+      <xsl:attribute name="name" select="@name"/>
+      <xsl:apply-templates select="sddoc:*" mode="#current"/>
+    </element>
+  </xsl:template>
+
+  <xsl:template match="sddoc:empty" mode="#all">
+    <empty xmlns="http://relaxng.org/ns/structure/1.0"/>
+  </xsl:template>
+
+
   <xsl:template match="sddoc:reference" mode="#all">
     <xsl:variable name="thisname" select="@name"/>
     <xsl:apply-templates select="/sddoc:commands/sddoc:define[@name=$thisname]/*"/>
@@ -52,7 +65,7 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="sddoc:text">
+  <xsl:template match="sddoc:text" mode="#all">
     <text xmlns="http://relaxng.org/ns/structure/1.0"/>
   </xsl:template>
 
