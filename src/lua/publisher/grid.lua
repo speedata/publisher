@@ -467,8 +467,17 @@ function calculate_number_gridcells(self)
     assert(self.margin_left,  "Margin not set yet!")
     assert(self.gridwidth,"gridwidth not set yet!")
     self.pageheight_known = true
-    self:set_number_of_columns(math.ceil(math.round( (tex.pagewidth  - self.margin_left - self.margin_right - 2 * self.extra_margin) / self.gridwidth,4)))
-    self:set_number_of_rows(math.ceil(math.round( (tex.pageheight - self.margin_top  - self.margin_bottom  - 2 * self.extra_margin) /  self.gridheight ,4)))
+    if self.pagenumber == -999 then
+        -- a group
+        -- This is an ugly workaround. We should not make the group height 10 times the current page height.
+        -- FIXME!!
+        self:set_number_of_columns(math.ceil(math.round( (tex.pagewidth  - self.margin_left - self.margin_right - 2 * self.extra_margin) / self.gridwidth,4)))
+        self:set_number_of_rows(math.ceil(math.round( ( 10 * tex.pageheight - self.margin_top  - self.margin_bottom  - 2 * self.extra_margin) /  self.gridheight ,4)))
+    else
+        self:set_number_of_columns(math.ceil(math.round( (tex.pagewidth  - self.margin_left - self.margin_right - 2 * self.extra_margin) / self.gridwidth,4)))
+        self:set_number_of_rows(math.ceil(math.round( (tex.pageheight - self.margin_top  - self.margin_bottom  - 2 * self.extra_margin) /  self.gridheight ,4)))
+    end
+
     log("Number of rows: %d, number of columns = %d",self:number_of_rows(), self:number_of_columns())
 end
 

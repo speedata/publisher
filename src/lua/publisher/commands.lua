@@ -652,7 +652,7 @@ function commands.group( layoutxml,dataxml )
     end
 
 
-    local r = publisher.grid:new(-1)
+    local r = publisher.grid:new(-999)
     r:set_margin(0,0,0,0)
     if grid then
         r:set_width_height(grid.breite,grid.hoehe)
