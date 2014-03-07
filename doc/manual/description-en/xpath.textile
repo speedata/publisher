@@ -70,6 +70,7 @@ There are two classes of XPath functions: standard XPath functions and speedata 
 - sd:groupheight(&lt;string>) := Return the given group's height (in gridcells). See @sd:groupwidth(...)@
 - sd:pagenumber(&lt;string>) := Get the number of the page where the given mark is placed on. See the command "Mark":../commands-en/mark.html.
 - sd:variable(&lt;name>) := The same as $name. This function allows variable names to be constructed dynamically. Example: @sd:variable(concat('myvar',$num))@ - if @$num@ contains the number 3, the resulting variable is @myvar3@.
+- sd:sha1(&lt;value>,&lt;value>, ...) := Return the SHA-1 sum of the concatenation of each value as a hex string. Example: @sd:sha1('hello ', 'world')@ gives the string @2aae6c35c94fcfb415dbe95f408b9ce91ee846ed@.
 
 - concat( &lt;value>,&lt;value>, ... ) := Create a new text value by concatinating the
 - count(&lt;text>) := Counts all child elements with the given name. Example: @count(article)@ counts, how many child elements with the name @article@ exists.

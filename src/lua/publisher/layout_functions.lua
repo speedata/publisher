@@ -9,6 +9,7 @@
 file_start("layout_functions.lua")
 
 local luxor = do_luafile("luxor.lua")
+local sha1  = require('sha1')
 
 local function aktuelle_seite(  )
   publisher.setup_page()
@@ -186,6 +187,11 @@ local function variable_exists(dataxml,arg)
   return var ~= nil
 end
 
+local function shaone(dataxml,arg)
+    local message = table.concat(arg)
+    local ret = sha1.sha1(message)
+    return ret
+end
 
 local function decode_html( dataxml, arg )
     arg = arg[1]
@@ -296,5 +302,7 @@ register("urn:speedata:2009/publisher/functions/de","alternierend_zurücksetzen"
 register("urn:speedata:2009/publisher/functions/en","count-saved-pages",count_saved_paged)
 register("urn:speedata:2009/publisher/functions/de","anzahl-gespeicherte-seiten",count_saved_paged)
 
+register("urn:speedata:2009/publisher/functions/en","sha1",shaone)
+register("urn:speedata:2009/publisher/functions/de","sha1",shaone)
 
 file_end("layout_functions.lua")

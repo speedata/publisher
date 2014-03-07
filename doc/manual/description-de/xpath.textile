@@ -52,6 +52,7 @@ Es gibt zwei Klassen von XPath Funktionen: standardkonforme und speedata Publish
 - sd:gruppenbreite(&lt;string>) := Gibt die Breite in Rasterzellen für die Gruppe im ersten Argument an. Beispiel: @sd:gruppenbreite('Beispielgruppe')@
 - sd:gruppenhöhe(&lt;string>) := Gibt die Höhe in Rasterzellen für die Gruppe im ersten Argument an. Beispiel: @sd:gruppenbreite('Beispielgruppe')@
 - sd:seitennummer(&lt;Marke>) := Liefert die Seitenzahl der Seite auf der die angegebene Marke ausgegeben wurde. Siehe den Befehl "Marke":../commands-de/mark.html
+- sd:sha1(&lt;Wert>,&lt;Wert>, ...) := Erzeugt die SHA-1 Summe der Hintereinanderkettung der Werte als Hex-Zeichenkette. Beispiel: @sd:sha1('Hallo ', 'Welt')@ ergibt die Zeichenkette @28cbbc72d6a52617a7abbfff6756d04bbad0106a@.
 - sd:variable(&lt;Name>) := ist dasselbe wie $Name, nur mit der Möglichkeit den Namen auch dynamisch (z.B. mit @concat()@) zu erzeugen.
 
 - concat( &lt;Wert>,&lt;Wert>, ... ) := Erzeugt einen neuen Text aus der Verkettung der einzelnen Werte.
