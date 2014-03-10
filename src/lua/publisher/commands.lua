@@ -1577,6 +1577,7 @@ function commands.place_object( layoutxml,dataxml )
                         warning("No suitable row found for object")
                         publisher.next_area(area)
                         publisher.setup_page()
+                        current_grid = publisher.current_grid
                         current_row = current_grid:current_row(area)
                     end
                 end
