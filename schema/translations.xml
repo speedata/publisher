@@ -92,6 +92,7 @@
       <element key="URL" en="URL" de="URL"/>
       <element key="Value" en="Value" de="Wert"/>
       <element key="While" en="While" de="Solange"/>
+      <element key="Until" en="Until" de="Bis" />
    </elements>
   <values>
     <value key="alignleft"  context="align" en="left" de="left"/>

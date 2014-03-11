@@ -6,6 +6,7 @@ h1. Changelog
 
 h2. Version 2.0
 
+* New command "Until":../commands-en/until.html. Should be obvious what it does...
 * New attributes @widow@ and @orphan@ bei "DefineTextformat":../commands-en/definetextformat.html. The default for text is now to prevent orphans and widows.
 * New attribute @attributes@ in "SaveDataset":../commands-en/savedataset.html to allow attributes for the root element.
 * New "XPath-function":xpath.html @sd:imageheight()@.

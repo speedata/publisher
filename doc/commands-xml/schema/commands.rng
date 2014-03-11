@@ -51,8 +51,17 @@
           <optional><ref name="cmd"/></optional>
           <optional><ref name="reference"/></optional>
           <optional><ref name="interleave"/></optional>
+          <optional><element name="text"><empty/></element></optional>
+          <optional><ref name="element"/></optional>
         </interleave>
       </oneOrMore>
+    </element>
+  </define>
+
+  <define name="element">
+    <element name="element">
+      <attribute name="name"/>
+      <element name="empty"><empty/></element>
     </element>
   </define>
 
@@ -66,6 +75,7 @@
     <element name="interleave">
       <oneOrMore>
         <interleave>
+          <optional><ref name="zeroOrMore"></ref></optional>
           <optional><ref name="optional"/></optional>
           <optional><ref name="reference"/></optional>
         </interleave>

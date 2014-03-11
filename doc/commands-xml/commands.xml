@@ -41,6 +41,7 @@
     <optional><cmd name="Td"/></optional>
     <optional><cmd name="Tr"/></optional>
     <optional><cmd name="Tablehead"/></optional>
+    <optional><cmd name="Until"/></optional>
     <optional><cmd name="Value"/></optional>
     <optional><cmd name="While"/></optional>
   </define>
@@ -51,6 +52,7 @@
     <optional><cmd name="ForAll"/></optional>
     <optional><cmd name="Group"/></optional>
     <optional><cmd name="Hyphenation"/></optional>
+    <optional><cmd name="InsertPages"/></optional>
     <optional><cmd name="LoadDataset"/></optional>
     <optional><cmd name="Loop"/></optional>
     <optional><cmd name="Message"/></optional>
@@ -64,8 +66,8 @@
     <optional><cmd name="SetVariable"/></optional>
     <optional><cmd name="SortSequence"/></optional>
     <optional><cmd name="Switch"/></optional>
+    <optional><cmd name="Until"/></optional>
     <optional><cmd name="While"/></optional>
-    <optional><cmd name="InsertPages"/></optional>
   </define>
 
   <define name="Textvalues">
@@ -4656,6 +4658,34 @@
     </example>
     <seealso><cmd name="Ol"/></seealso>
   </command>
+  <command name="Until">
+    <description xml:lang="en">
+      <para>Create a loop. All child elements are executed repeatedly until the given condition is true.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Erzeugt eine Schleife. Die Kindelemente werden so oft ausgeführt, bis die Bedingung im Attribut bedingung wahr ergibt.</para>
+    </description>
+    <childelements>
+      <oneOrMore>
+        <interleave>
+          <reference name="Switchcontents"/>
+        </interleave>
+      </oneOrMore>
+    </childelements>
+    <attribute name="test" type="xpath" optional="no">
+      <description xml:lang="en">
+        <para>Every time after the the loop is executed, the condition is evaluated. If it is true, the loop exits.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Nach jedem Schleifendurchlauf wird die Bedingung überprüft. Wenn sie wahr ergibt, wird die Schleife verlassen.</para>
+      </description>
+    </attribute>
+    <seealso>
+      <cmd name="Switch" />,
+      <cmd name="SetVariable" />,
+      <cmd name="While"/>
+    </seealso>
+  </command>
   <command name="URL">
     <description xml:lang="en">
       <para></para>
@@ -4747,7 +4777,7 @@
   </command>
   <command name="While">
     <description xml:lang="en">
-      <para></para>
+      <para>Create a loop. All child elements are executed, as long as the condition in the test attribute evaluates to true.</para>
     </description>
     <description xml:lang="de">
       <para>Erzeugt eine Schleife, die wiederholt durchlaufen wird. Die Kindelemente werden so oft ausgeführt, solange die Bedingung im Attribut bedingung wahr ergibt.</para>
@@ -4761,10 +4791,10 @@
     </childelements>
     <attribute name="test" type="xpath" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>Every time before the the loop is executed, this condition must evaluate to true. See the command <cmd name="Until"/> for a loop with an exit test.</para>
       </description>
       <description xml:lang="de">
-        <para>Für jedes Mal, das die Schleife durchlaufen werden soll, muss die Bedingung im Attribut erfüllt sein.</para>
+        <para>Für jedes Mal, das die Schleife durchlaufen werden soll, muss die Bedingung im Attribut erfüllt sein. Die Bedingung wird am Anfang der Schleife überprüft. Eine Schleife, bei der die Bedingung am Ende der Schleife geprüft wird, ist <cmd name="Until"/>.</para>
       </description>
     </attribute>
     <example xml:lang="de">
@@ -4787,8 +4817,9 @@
 </Datensatz>]]></listing>
     </example>
     <seealso>
-      <cmd name="Switch" />
-      <cmd name="SetVariable" />
+      <cmd name="Switch" />,
+      <cmd name="SetVariable" />,
+      <cmd name="Until"/>
     </seealso>
   </command>
 </commands>

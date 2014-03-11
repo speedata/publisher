@@ -66,6 +66,9 @@
                <ref name="e_Hyphenation"/>
             </optional>
             <optional>
+               <ref name="e_InsertPages"/>
+            </optional>
+            <optional>
                <ref name="e_LoadDataset"/>
             </optional>
             <optional>
@@ -105,10 +108,10 @@
                <ref name="e_Switch"/>
             </optional>
             <optional>
-               <ref name="e_While"/>
+               <ref name="e_Until"/>
             </optional>
             <optional>
-               <ref name="e_InsertPages"/>
+               <ref name="e_While"/>
             </optional>
          </oneOrMore>
       </element>
@@ -133,6 +136,9 @@
                <ref name="e_Hyphenation"/>
             </optional>
             <optional>
+               <ref name="e_InsertPages"/>
+            </optional>
+            <optional>
                <ref name="e_LoadDataset"/>
             </optional>
             <optional>
@@ -172,10 +178,10 @@
                <ref name="e_Switch"/>
             </optional>
             <optional>
-               <ref name="e_While"/>
+               <ref name="e_Until"/>
             </optional>
             <optional>
-               <ref name="e_InsertPages"/>
+               <ref name="e_While"/>
             </optional>
          </oneOrMore>
       </element>
@@ -453,6 +459,9 @@
                <ref name="e_Tablehead"/>
             </optional>
             <optional>
+               <ref name="e_Until"/>
+            </optional>
+            <optional>
                <ref name="e_Value"/>
             </optional>
             <optional>
@@ -479,6 +488,9 @@
             </optional>
             <optional>
                <ref name="e_Hyphenation"/>
+            </optional>
+            <optional>
+               <ref name="e_InsertPages"/>
             </optional>
             <optional>
                <ref name="e_LoadDataset"/>
@@ -520,10 +532,10 @@
                <ref name="e_Switch"/>
             </optional>
             <optional>
-               <ref name="e_While"/>
+               <ref name="e_Until"/>
             </optional>
             <optional>
-               <ref name="e_InsertPages"/>
+               <ref name="e_While"/>
             </optional>
          </oneOrMore>
       </element>
@@ -956,6 +968,9 @@
                </optional>
                <optional>
                   <ref name="e_Tablehead"/>
+               </optional>
+               <optional>
+                  <ref name="e_Until"/>
                </optional>
                <optional>
                   <ref name="e_Value"/>
@@ -1437,6 +1452,9 @@
                   <ref name="e_Tablehead"/>
                </optional>
                <optional>
+                  <ref name="e_Until"/>
+               </optional>
+               <optional>
                   <ref name="e_Value"/>
                </optional>
                <optional>
@@ -1790,6 +1808,9 @@
                <ref name="e_Tablehead"/>
             </optional>
             <optional>
+               <ref name="e_Until"/>
+            </optional>
+            <optional>
                <ref name="e_Value"/>
             </optional>
             <optional>
@@ -2089,6 +2110,9 @@
                <ref name="e_Hyphenation"/>
             </optional>
             <optional>
+               <ref name="e_InsertPages"/>
+            </optional>
+            <optional>
                <ref name="e_LoadDataset"/>
             </optional>
             <optional>
@@ -2128,10 +2152,10 @@
                <ref name="e_Switch"/>
             </optional>
             <optional>
-               <ref name="e_While"/>
+               <ref name="e_Until"/>
             </optional>
             <optional>
-               <ref name="e_InsertPages"/>
+               <ref name="e_While"/>
             </optional>
          </oneOrMore>
       </element>
@@ -2234,6 +2258,9 @@
                   <ref name="e_Hyphenation"/>
                </optional>
                <optional>
+                  <ref name="e_InsertPages"/>
+               </optional>
+               <optional>
                   <ref name="e_LoadDataset"/>
                </optional>
                <optional>
@@ -2273,10 +2300,10 @@
                   <ref name="e_Switch"/>
                </optional>
                <optional>
-                  <ref name="e_While"/>
+                  <ref name="e_Until"/>
                </optional>
                <optional>
-                  <ref name="e_InsertPages"/>
+                  <ref name="e_While"/>
                </optional>
             </interleave>
          </oneOrMore>
@@ -2852,66 +2879,11 @@
          </optional>
       </element>
    </define>
-   <define name="e_URL">
-      <element name="URL">
-         <a:documentation/>
-         <optional>
-            <ref name="e_B"/>
-         </optional>
-         <optional>
-            <ref name="e_Image"/>
-         </optional>
-         <optional>
-            <ref name="e_Switch"/>
-         </optional>
-         <optional>
-            <ref name="e_I"/>
-         </optional>
-         <optional>
-            <ref name="e_Fontface"/>
-         </optional>
-         <optional>
-            <ref name="e_Sub"/>
-         </optional>
-         <optional>
-            <ref name="e_Sup"/>
-         </optional>
-         <optional>
-            <ref name="e_U"/>
-         </optional>
-         <optional>
-            <ref name="e_URL"/>
-         </optional>
-         <optional>
-            <ref name="e_Value"/>
-         </optional>
-      </element>
-   </define>
-   <define name="e_Value">
-      <element name="Value">
-         <a:documentation>Contains a text value that is passed to the surrounding element.</a:documentation>
-         <optional>
-            <attribute name="select">
-               <a:documentation>Value to be passed to the outer element.</a:documentation>
-            </attribute>
-         </optional>
-         <interleave>
-            <zeroOrMore>
-               <text/>
-            </zeroOrMore>
-            <zeroOrMore>
-               <element name="br">
-                  <empty/>
-               </element>
-            </zeroOrMore>
-         </interleave>
-      </element>
-   </define>
-   <define name="e_While">
-      <element name="While">
-         <a:documentation/>
+   <define name="e_Until">
+      <element name="Until">
+         <a:documentation>Create a loop. All child elements are executed repeatedly until the given condition is true.</a:documentation>
          <attribute name="test">
-            <a:documentation/>
+            <a:documentation>Every time after the the loop is executed, the condition is evaluated. If it is true, the loop exits.</a:documentation>
          </attribute>
          <oneOrMore>
             <interleave>
@@ -3031,6 +3003,202 @@
                </optional>
                <optional>
                   <ref name="e_Tablehead"/>
+               </optional>
+               <optional>
+                  <ref name="e_Until"/>
+               </optional>
+               <optional>
+                  <ref name="e_Value"/>
+               </optional>
+               <optional>
+                  <ref name="e_While"/>
+               </optional>
+            </interleave>
+         </oneOrMore>
+      </element>
+   </define>
+   <define name="e_URL">
+      <element name="URL">
+         <a:documentation/>
+         <optional>
+            <ref name="e_B"/>
+         </optional>
+         <optional>
+            <ref name="e_Image"/>
+         </optional>
+         <optional>
+            <ref name="e_Switch"/>
+         </optional>
+         <optional>
+            <ref name="e_I"/>
+         </optional>
+         <optional>
+            <ref name="e_Fontface"/>
+         </optional>
+         <optional>
+            <ref name="e_Sub"/>
+         </optional>
+         <optional>
+            <ref name="e_Sup"/>
+         </optional>
+         <optional>
+            <ref name="e_U"/>
+         </optional>
+         <optional>
+            <ref name="e_URL"/>
+         </optional>
+         <optional>
+            <ref name="e_Value"/>
+         </optional>
+      </element>
+   </define>
+   <define name="e_Value">
+      <element name="Value">
+         <a:documentation>Contains a text value that is passed to the surrounding element.</a:documentation>
+         <optional>
+            <attribute name="select">
+               <a:documentation>Value to be passed to the outer element.</a:documentation>
+            </attribute>
+         </optional>
+         <interleave>
+            <zeroOrMore>
+               <text/>
+            </zeroOrMore>
+            <zeroOrMore>
+               <element name="br">
+                  <empty/>
+               </element>
+            </zeroOrMore>
+         </interleave>
+      </element>
+   </define>
+   <define name="e_While">
+      <element name="While">
+         <a:documentation>Create a loop. All child elements are executed, as long as the condition in the test attribute evaluates to true.</a:documentation>
+         <attribute name="test">
+            <a:documentation>Every time before the the loop is executed, this condition must evaluate to true. See the command Until for a loop with an exit test.</a:documentation>
+         </attribute>
+         <oneOrMore>
+            <interleave>
+               <optional>
+                  <ref name="e_Action"/>
+               </optional>
+               <optional>
+                  <ref name="e_Barcode"/>
+               </optional>
+               <optional>
+                  <ref name="e_Columns"/>
+               </optional>
+               <optional>
+                  <ref name="e_Column"/>
+               </optional>
+               <optional>
+                  <ref name="e_Copy-of"/>
+               </optional>
+               <optional>
+                  <ref name="e_DefineColor"/>
+               </optional>
+               <optional>
+                  <ref name="e_DefineFontfamily"/>
+               </optional>
+               <optional>
+                  <ref name="e_Element"/>
+               </optional>
+               <optional>
+                  <ref name="e_EmptyLine"/>
+               </optional>
+               <optional>
+                  <ref name="e_Fontface"/>
+               </optional>
+               <optional>
+                  <ref name="e_ForAll"/>
+               </optional>
+               <optional>
+                  <ref name="e_Group"/>
+               </optional>
+               <optional>
+                  <ref name="e_HSpace"/>
+               </optional>
+               <optional>
+                  <ref name="e_Hyphenation"/>
+               </optional>
+               <optional>
+                  <ref name="e_Image"/>
+               </optional>
+               <optional>
+                  <ref name="e_InsertPages"/>
+               </optional>
+               <optional>
+                  <ref name="e_Li"/>
+               </optional>
+               <optional>
+                  <ref name="e_LoadDataset"/>
+               </optional>
+               <optional>
+                  <ref name="e_LoadFontfile"/>
+               </optional>
+               <optional>
+                  <ref name="e_Loop"/>
+               </optional>
+               <optional>
+                  <ref name="e_Message"/>
+               </optional>
+               <optional>
+                  <ref name="e_NewPage"/>
+               </optional>
+               <optional>
+                  <ref name="e_NextFrame"/>
+               </optional>
+               <optional>
+                  <ref name="e_NextRow"/>
+               </optional>
+               <optional>
+                  <ref name="e_Output"/>
+               </optional>
+               <optional>
+                  <ref name="e_Paragraph"/>
+               </optional>
+               <optional>
+                  <ref name="e_PlaceObject"/>
+               </optional>
+               <optional>
+                  <ref name="e_ProcessNode"/>
+               </optional>
+               <optional>
+                  <ref name="e_SaveDataset"/>
+               </optional>
+               <optional>
+                  <ref name="e_SavePages"/>
+               </optional>
+               <optional>
+                  <ref name="e_SetVariable"/>
+               </optional>
+               <optional>
+                  <ref name="e_SortSequence"/>
+               </optional>
+               <optional>
+                  <ref name="e_Sub"/>
+               </optional>
+               <optional>
+                  <ref name="e_Sup"/>
+               </optional>
+               <optional>
+                  <ref name="e_Switch"/>
+               </optional>
+               <optional>
+                  <ref name="e_Tablerule"/>
+               </optional>
+               <optional>
+                  <ref name="e_Td"/>
+               </optional>
+               <optional>
+                  <ref name="e_Tr"/>
+               </optional>
+               <optional>
+                  <ref name="e_Tablehead"/>
+               </optional>
+               <optional>
+                  <ref name="e_Until"/>
                </optional>
                <optional>
                   <ref name="e_Value"/>

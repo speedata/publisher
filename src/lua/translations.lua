@@ -87,6 +87,7 @@ de = {  elements = {
     ["URL"] = "URL",
     ["Wert"] = "Value",
     ["Solange"] = "While",
+    ["Bis"] = "Until",
   },
 values = {
 ["align"] = {
@@ -225,6 +226,7 @@ values = {
     ["URL"] = "URL",
     ["Value"] = "Value",
     ["While"] = "While",
+    ["Until"] = "Until",
   },
 values = {
 ["align"] = {

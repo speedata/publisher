@@ -2505,6 +2505,19 @@ function commands.ul(layoutxml,dataxml )
     return ret
 end
 
+
+--- Until
+--- -----
+--- A repeat .. until loop. Use the condition in `test` to determine if the loop should exit
+function commands.until_do( layoutxml,dataxml )
+    local test = publisher.read_attribute(layoutxml,dataxml,"test","rawstring")
+    assert(test)
+    repeat
+        publisher.dispatch(layoutxml,dataxml)
+    until xpath.parse(dataxml,test,layoutxml[".__ns"])
+end
+
+
 --- URL
 --- ---
 --- Format the current URL. It should make the URL active.
