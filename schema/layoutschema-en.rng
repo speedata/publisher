@@ -345,6 +345,9 @@
                <ref name="e_Action"/>
             </optional>
             <optional>
+               <ref name="e_Attribute"/>
+            </optional>
+            <optional>
                <ref name="e_Barcode"/>
             </optional>
             <optional>
@@ -799,6 +802,9 @@
                   <ref name="e_Copy-of"/>
                </optional>
                <optional>
+                  <ref name="e_Switch"/>
+               </optional>
+               <optional>
                   <ref name="e_ForAll"/>
                </optional>
             </interleave>
@@ -854,6 +860,9 @@
             <interleave>
                <optional>
                   <ref name="e_Action"/>
+               </optional>
+               <optional>
+                  <ref name="e_Attribute"/>
                </optional>
                <optional>
                   <ref name="e_Barcode"/>
@@ -1338,6 +1347,9 @@
                   <ref name="e_Action"/>
                </optional>
                <optional>
+                  <ref name="e_Attribute"/>
+               </optional>
+               <optional>
                   <ref name="e_Barcode"/>
                </optional>
                <optional>
@@ -1692,6 +1704,9 @@
          <oneOrMore>
             <optional>
                <ref name="e_Action"/>
+            </optional>
+            <optional>
+               <ref name="e_Attribute"/>
             </optional>
             <optional>
                <ref name="e_Barcode"/>
@@ -2891,6 +2906,9 @@
                   <ref name="e_Action"/>
                </optional>
                <optional>
+                  <ref name="e_Attribute"/>
+               </optional>
+               <optional>
                   <ref name="e_Barcode"/>
                </optional>
                <optional>
@@ -3082,6 +3100,9 @@
             <interleave>
                <optional>
                   <ref name="e_Action"/>
+               </optional>
+               <optional>
+                  <ref name="e_Attribute"/>
                </optional>
                <optional>
                   <ref name="e_Barcode"/>

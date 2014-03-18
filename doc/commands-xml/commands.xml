@@ -3,6 +3,7 @@
 
   <define name="Switchcontents">
     <optional><cmd name="Action"/></optional>
+    <optional><cmd name="Attribute"></cmd></optional>
     <optional><cmd name="Barcode"/></optional>
     <optional><cmd name="Columns"></cmd></optional>
     <optional><cmd name="Column"/></optional>
@@ -1319,6 +1320,7 @@
           <optional><cmd name="Element"/></optional>
           <optional><cmd name="Attribute"/></optional>
           <optional><cmd name="Copy-of"/></optional>
+          <optional><cmd name="Switch"/></optional>
           <optional><cmd name="ForAll"/></optional>
         </interleave>
       </oneOrMore>
