@@ -263,7 +263,7 @@ function Paragraph:format(width_sp, default_textformat_name)
             if line.id == 0 and line.next ~= nil and line.next.next == nil then
                 -- widow
                 if current_textformat.widow == false then
-                    node.set_attribute(line,publisher.att_break_below_forbidden,1)
+                    node.set_attribute(line,publisher.att_break_below_forbidden,2)
                 end
             end
             line = line.next
@@ -274,28 +274,28 @@ function Paragraph:format(width_sp, default_textformat_name)
 
         if current_textformat.paddingtop then
             nodelist.list = publisher.add_glue(nodelist.list,"head",{width = current_textformat.paddingtop})
-            node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,1)
+            node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,3)
         end
         if current_textformat.bordertop then
             nodelist.list = publisher.add_rule(nodelist.list,"head",{width = -1073741824, height = current_textformat.bordertop})
-            node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,1)
+            node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,4)
         end
         if current_textformat.margintop then
             nodelist.list = publisher.add_glue(nodelist.list,"head",{width = current_textformat.margintop})
         end
         if current_textformat.breakbelow == false then
-            node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,1)
+            node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,5)
         end
         if current_textformat.borderbottom then
             nodelist.list = publisher.add_rule(nodelist.list,"tail",{width = -1073741824, height = current_textformat.borderbottom})
-            node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,1)
+            node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,6)
         end
         if current_textformat.marginbottom then
             nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = current_textformat.marginbottom})
             node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
         end
         if current_textformat.breakbelow == false then
-            node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,1)
+            node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,7)
         end
 
         objects[i] = nodelist.list
@@ -383,6 +383,10 @@ function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
                 -- if break is not allowed, we store this in a temporary list
                 local break_forbidden = node.has_attribute(hbox,publisher.att_break_below_forbidden)
 
+                -- don't disallow breaks on the last line:
+                if newhead == nil then
+                    break_forbidden = false
+                end
                 if break_forbidden then
                     templist = node.insert_after(templist,node.tail(templist),hbox)
                 else
