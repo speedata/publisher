@@ -2225,7 +2225,7 @@ function define_default_fontfamily()
     fonts.lookup_fontfamily_name_number["text"]=#fonts.lookup_fontfamily_number_instance
 end
 
-
+-- Return remaining height (sp), first row, last row
 function get_remaining_height(area)
     local cols = current_grid:number_of_columns(area)
     local startcol = 1
@@ -2252,7 +2252,7 @@ function get_remaining_height(area)
 
     while row <= maxrows do
         if current_grid:fits_in_row_area(startcol,cols,row,area) then
-            return ( lastrow - firstrow)  * current_grid.gridheight, firstrow, row
+            return ( lastrow - firstrow)  * current_grid.gridheight, firstrow, firstrow
         end
         row = row + 1
     end
