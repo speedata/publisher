@@ -437,6 +437,29 @@ end
 
 
 function M.eval_multiplication(first,second,operator)
+    if type(first)=='table' then
+        err("The first operand of the multiplication is a table. Evaluating to 0")
+        return 0
+    end
+    if type(second)=='table' then
+        err("The second operand of the multiplication is a table. Evaluating to 0")
+        return 0
+    end
+    if type(first)=='string' then
+        first = tonumber(first)
+    end
+    if first == nil then
+        err("The first operand of the multiplication is not a number. Evaluating to 0")
+        return 0
+    end
+    if type(second)=='string' then
+        second = tonumber(second)
+    end
+    if second == nil then
+        err("The second operand of the multiplication is not a number. Evaluating to 0")
+        return 0
+    end
+
     if operator == "*" then
         return first * second
     elseif operator == "mod" then
