@@ -2737,13 +2737,29 @@
         <para>Die Größe des Beschnitts (bleed). Voreinstellung ist 0mm.</para>
       </description>
     </attribute>
-    <attribute name="mainlanguage" type="text" optional="yes">
+    <attribute name="mainlanguage" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The default language for text (hyphenation).</para>
       </description>
       <description xml:lang="de">
         <para>Die Sprache (Silbentrennung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist.</para>
       </description>
+      <choice name="German">
+        <description xml:lang="en">
+          <para>Switch to German hyphenation patterns.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Auf Deutsche Trennmuster umschalten.</para>
+        </description>
+      </choice>
+      <choice name="Englisch (Great Britan)">
+        <description xml:lang="en">
+          <para>Switch to English hyphenation patterns.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Auf Englische Trennmuster umschalten.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute name="trace" type="yesno" optional="yes">
       <description xml:lang="en">
@@ -4131,7 +4147,7 @@
   </command>
   <command name="Tablehead">
     <description xml:lang="en">
-      <para></para>
+      <para>Create a table head.</para>
     </description>
     <description xml:lang="de">
       <para>Gibt den Tabellenkopf an.</para>
@@ -4145,6 +4161,46 @@
         </interleave>
       </oneOrMore>
     </childelements>
+    <attribute name="page" optional="yes">
+      <description xml:lang="en">
+        <para>The page the table head should appear on. Defaults to »all«</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Seite, auf der der Tabellenkopf erscheinen soll. Voreinstellung ist »alle«</para>
+      </description>
+      <choice name="first">
+        <description xml:lang="en">
+          <para>Only appear on the first page.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Nur auf der ersten Seite.</para>
+        </description>
+      </choice>
+      <choice name="all">
+        <description xml:lang="en">
+          <para>All pages. If »first« is defined, the tablehead appears on all pages but the first.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Auf allen Seiten. Falls »first« definiert, erscheint der Tabellenkopf auf allen Seiten bis auf der ersten.</para>
+        </description>
+      </choice>
+      <choice name="odd">
+        <description xml:lang="en">
+          <para>Appear on all odd pages.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Auf allen ungeraden Seiten.</para>
+        </description>
+      </choice>
+      <choice name="even">
+        <description xml:lang="en">
+          <para>Appear on all even pages.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Auf allen geraden Seiten.</para>
+        </description>
+      </choice>
+    </attribute>
     <remark xml:lang="de">
       <para>Der Inhalt von Tabellenkopf wird auf jeder Seite einer automatisch umbrochenen Tabelle wiederholt.</para>
     </remark>
@@ -4564,10 +4620,18 @@
     <!-- todo -->
     <attribute name="break-below" type="yesno" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Allow a table break between this row and the following. Defaults to yes.</para>
       </description>
       <description xml:lang="de">
-        <para></para>
+        <para>Erlaubt einen Tabellenumbruch zwischen dieser und der nächsten Zeile. Voreinstellung ist ja.</para>
+      </description>
+    </attribute>
+    <attribute name="data" optional="yes" type="xpath">
+      <description xml:lang="en">
+        <para>Data that can be accessed via <tt>$_last_tr_data</tt> in the tablefoot and tablehead.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf diese Daten können im Tabellenkopf und Tabellenfuß mit <tt>$_last_tr_data</tt> zugegriffen werden.</para>
       </description>
     </attribute>
     <remark xml:lang="de">

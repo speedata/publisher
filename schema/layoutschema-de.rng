@@ -1635,6 +1635,12 @@
          <optional>
             <attribute name="hauptsprache">
                <a:documentation>Die Sprache (Silbentrennung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist.</a:documentation>
+               <choice>
+                  <value>Deutsch</value>
+                  <a:documentation xmlns="">Auf Deutsche Trennmuster umschalten.</a:documentation>
+                  <value>Englisch (Großbritannien)</value>
+                  <a:documentation xmlns="">Auf Englische Trennmuster umschalten.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -2604,6 +2610,21 @@
    <define name="e_Tablehead">
       <element name="Tabellenkopf">
          <a:documentation>Gibt den Tabellenkopf an.</a:documentation>
+         <optional>
+            <attribute name="seite">
+               <a:documentation>Die Seite, auf der der Tabellenkopf erscheinen soll. Voreinstellung ist »alle«</a:documentation>
+               <choice>
+                  <value>erste</value>
+                  <a:documentation xmlns="">Nur auf der ersten Seite.</a:documentation>
+                  <value>alle</value>
+                  <a:documentation xmlns="">Auf allen Seiten. Falls »first« definiert, erscheint der Tabellenkopf auf allen Seiten bis auf der ersten.</a:documentation>
+                  <value>ungerade</value>
+                  <a:documentation xmlns="">Auf allen ungeraden Seiten.</a:documentation>
+                  <value>gerade</value>
+                  <a:documentation xmlns="">Auf allen geraden Seiten.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <oneOrMore>
             <interleave>
                <optional>
@@ -2839,12 +2860,17 @@
          </optional>
          <optional>
             <attribute name="umbruch-unten">
-               <a:documentation/>
+               <a:documentation>Erlaubt einen Tabellenumbruch zwischen dieser und der nächsten Zeile. Voreinstellung ist ja.</a:documentation>
                <choice>
                   <value>ja</value>
                   <value>nein</value>
                   <text/>
                </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="daten">
+               <a:documentation>Auf diese Daten können im Tabellenkopf und Tabellenfuß mit $_last_tr_data zugegriffen werden.</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>

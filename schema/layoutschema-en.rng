@@ -1627,7 +1627,13 @@
          </optional>
          <optional>
             <attribute name="mainlanguage">
-               <a:documentation/>
+               <a:documentation>The default language for text (hyphenation).</a:documentation>
+               <choice>
+                  <value>German</value>
+                  <a:documentation xmlns="">Switch to German hyphenation patterns.</a:documentation>
+                  <value>Englisch (Great Britan)</value>
+                  <a:documentation xmlns="">Switch to English hyphenation patterns.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -2586,7 +2592,22 @@
    </define>
    <define name="e_Tablehead">
       <element name="Tablehead">
-         <a:documentation/>
+         <a:documentation>Create a table head.</a:documentation>
+         <optional>
+            <attribute name="page">
+               <a:documentation>The page the table head should appear on. Defaults to »all«</a:documentation>
+               <choice>
+                  <value>first</value>
+                  <a:documentation xmlns="">Only appear on the first page.</a:documentation>
+                  <value>all</value>
+                  <a:documentation xmlns="">All pages. If »first« is defined, the tablehead appears on all pages but the first.</a:documentation>
+                  <value>odd</value>
+                  <a:documentation xmlns="">Appear on all odd pages.</a:documentation>
+                  <value>even</value>
+                  <a:documentation xmlns="">Appear on all even pages.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <oneOrMore>
             <interleave>
                <optional>
@@ -2821,12 +2842,17 @@
          </optional>
          <optional>
             <attribute name="break-below">
-               <a:documentation/>
+               <a:documentation>Allow a table break between this row and the following. Defaults to yes.</a:documentation>
                <choice>
                   <value>yes</value>
                   <value>no</value>
                   <text/>
                </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="data">
+               <a:documentation>Data that can be accessed via $_last_tr_data in the tablefoot and tablehead.</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>
