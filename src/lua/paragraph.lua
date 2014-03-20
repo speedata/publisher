@@ -255,8 +255,8 @@ function Paragraph:format(width_sp, default_textformat_name)
         while line do
             c = c + 1
             if c == 1 then
-                -- orphan
-                if current_textformat.orphan == false then
+                -- orphan, but ignore on one-line texts
+                if current_textformat.orphan == false and line.next then
                     node.set_attribute(line,publisher.att_break_below_forbidden,1)
                 end
             end
@@ -383,10 +383,6 @@ function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
                 -- if break is not allowed, we store this in a temporary list
                 local break_forbidden = node.has_attribute(hbox,publisher.att_break_below_forbidden)
 
-                -- don't disallow breaks on the last line:
-                if newhead == nil then
-                    break_forbidden = false
-                end
                 if break_forbidden then
                     templist = node.insert_after(templist,node.tail(templist),hbox)
                 else

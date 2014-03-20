@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en" >
+
+  <Pageformat width="7cm" height="5cm"/>
+
+  <DefineTextformat name="ruled" border-top="0.25pt" border-bottom="0.25pt" padding-top="2pt" break-below="no" margin-bottom="5pt" alignment="leftaligned" />
+
+  <Record element="data">
+    <Output>
+      <Text>
+        <Paragraph>
+          <Value>Onelinehead</Value>
+        </Paragraph>
+      </Text>
+    </Output>
+
+    <NextRow row="3"/>
+
+    <Output>
+      <Text>
+        <Paragraph textformat="ruled">
+          <Value>A title</Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.</Value>
+        </Paragraph>
+      </Text>
+    </Output>
+  </Record>
+</Layout>
