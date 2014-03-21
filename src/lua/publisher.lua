@@ -1934,7 +1934,7 @@ function imageinfo( filename,page,box )
         filename = "filenotfound.pdf"
         page = 1
     end
-
+    -- example is wrong: one based index
     -- <?xml version="1.0" ?>
     -- <imageinfo>
     --    <cells_x>30</cells_x>
@@ -1971,7 +1971,7 @@ function imageinfo( filename,page,box )
                 cells_y = v[1]
             elseif v[".__local_name"] == "segment" then
                 -- 0 based segments
-                segments[#segments + 1] = {v.x1 + 1,v.y1 + 1,v.x2 + 1,v.y2 + 1}
+                segments[#segments + 1] = {v.x1,v.y1,v.x2,v.y2}
             end
         end
         -- we have parsed the file, let's build a beautiful 2dim array
@@ -2226,12 +2226,15 @@ function define_default_fontfamily()
 end
 
 -- Return remaining height (sp), first row, last row
-function get_remaining_height(area)
+function get_remaining_height(area,allocate)
     local cols = current_grid:number_of_columns(area)
     local startcol = 1
     local row,firstrow,lastrow,maxrows
     firstrow = current_grid:current_row(area)
     maxrows  = current_grid:number_of_rows(area)
+    if allocate == "auto" then
+        return (maxrows - firstrow + 1)  * current_grid.gridheight, firstrow, nil
+    end
 
     if not current_grid:fits_in_row_area(startcol,cols,firstrow,area) then
         while firstrow <= maxrows do

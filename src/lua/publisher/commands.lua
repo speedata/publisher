@@ -849,7 +849,7 @@ function commands.image( layoutxml,dataxml )
     end
     -- node.set_attribute(box, publisher.att_shift_left, shift_left)
     -- node.set_attribute(box, publisher.att_shift_up  , shift_up  )
-    return {box,allocate}
+    return {box,imageinfo.allocate}
 end
 
 --- InsertPages
@@ -1209,7 +1209,7 @@ end
 function commands.output( layoutxml,dataxml )
     publisher.setup_page()
     local area = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
-
+    local allocate = publisher.read_attribute(layoutxml,dataxml,"allocate", "string", "yes")
     local tab = publisher.dispatch(layoutxml,dataxml)
     area = area or publisher.default_areaname
     local last_area = publisher.xpath.get_variable("__area")
@@ -1230,18 +1230,16 @@ function commands.output( layoutxml,dataxml )
         local obj
         local maxht,row,nextfreerow
         local objcount = 0
-        -- We call push so long as it is needed. Say we have enough
-        -- material for three pages (areas), we call push three times.
-        -- So push()'s duty is to assemble enough material for that area.
-        -- Push needs to know the width and the height of the area.
+        -- We call pull so long as it is needed. Say we have enough
+        -- material for three pages (areas), we call pull three times.
+        -- So pull()'s duty is to assemble enough material for that area.
+        -- pull needs to know the width and the height of the area.
         --
-        -- Currently only the command Text implements push.
-        -- (Note: perhaps we should rename push to pull, as it is pulling
-        --  the contents from the elements.)
+        -- Currently only the command Text implements pull.
         while true do
             objcount = objcount + 1
             publisher.setup_page()
-            maxht,row,nextfreerow = publisher.get_remaining_height(area)
+            maxht,row,nextfreerow = publisher.get_remaining_height(area,allocate)
             current_grid = publisher.current_grid
             current_row = publisher.current_grid:current_row(area)
 
@@ -1250,8 +1248,10 @@ function commands.output( layoutxml,dataxml )
                 maxheight = maxht,
                 width = current_grid:number_of_columns(area) * current_grid.gridwidth,
                 balance = contents.balance,
+                current_grid = current_grid,
+                allocate = allocate,
             }
-            obj,state,more_to_follow = contents.push(parameters,state)
+            obj,state,more_to_follow = contents.pull(parameters,state)
             if obj == nil then
                 break
             else
@@ -1269,7 +1269,7 @@ function commands.output( layoutxml,dataxml )
     end
     -- reset the current maxwidth
     xpath.set_variable("__maxwidth",current_maxwidth)
-    _,row,_ = publisher.get_remaining_height(area)
+    _,row,_ = publisher.get_remaining_height(area,allocate)
     current_grid:set_current_row(row,area)
     publisher.xpath.set_variable("__area",last_area)
 end
@@ -1542,7 +1542,7 @@ function commands.place_object( layoutxml,dataxml )
         else
             -- Look for a place for the object
             -- local current_row = current_grid:current_row(area)
-            trace("PlaceObject: Breitenberechnung")
+            trace("PlaceObject: calculate object width")
             if not node.has_field(object,"width") then
                 warning("Can't calculate with object's width!")
             end
@@ -2277,17 +2277,18 @@ function commands.td( layoutxml,dataxml )
 end
 
 function commands.text(layoutxml,dataxml)
-    local balance = publisher.read_attribute(layoutxml,dataxml,"balance",   "rawstring")
+    -- balance is currently not supported
+    -- local balance = publisher.read_attribute(layoutxml,dataxml,"balance",   "rawstring")
     local tab = publisher.dispatch(layoutxml,dataxml)
 
     tab.balance = balance
-    -- push returns 'obj', 'state', 'more_to_follow'
+    -- pull returns 'obj', 'state', 'more_to_follow'
 
-    -- push() gets called whenever we want to fill an area (perhaps the whole page).
+    -- pull() gets called whenever we want to fill an area (perhaps the whole page).
     -- We get the height (parameter.maxheight) and the width (parameter.width)
     -- of the area to be filled.
-    tab.push = function(parameter,state)
-            -- When push is called the first time the state is not set yet.
+    tab.pull = function(parameter,state)
+            -- When pull is called the first time the state is not set yet.
             -- Currently we format all sub-objects (paragraphs),
             -- add them into the "object list" (state.objects) and
             -- call vsplit on the object list.
@@ -2298,7 +2299,7 @@ function commands.text(layoutxml,dataxml)
                 state.objects = objects
                 for i=1,#tab do
                     local contents = publisher.element_contents(tab[i])
-                    objects[#objects + 1] = contents:format(parameter.width)
+                    objects[#objects + 1] = contents:format(parameter.width,nil,parameter)
                     state.total_height = state.total_height + objects[#objects].height
                 end
             end

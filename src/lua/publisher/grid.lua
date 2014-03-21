@@ -83,6 +83,27 @@ function set_current_column( self,column,areaname )
     area.current_column = column
 end
 
+function get_parshape( self,row,areaname,framenumber )
+    local frame_margin_left, frame_margin_top
+    local area = self.positioning_frames[areaname]
+    local block = area[framenumber]
+    frame_margin_left = block.column - 1
+    frame_margin_top = block.row - 1
+    local first_free_column
+    local last_free_column = block.width
+    local y = frame_margin_top + row
+    for i=1,block.width do
+        local x = frame_margin_left + i
+        if self.allocation_x_y[x][y] == nil then
+            first_free_column = first_free_column or i
+            last_free_column = i
+        end
+    end
+    local x_start = ( first_free_column - 1) * self.gridwidth
+    local x_end = ( last_free_column - first_free_column + 1 ) * self.gridwidth
+    return {x_start,x_end}
+end
+
 function number_of_rows(self,areaname)
     assert(self)
     local areaname = areaname or publisher.default_areaname
@@ -204,18 +225,22 @@ function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname,keepposition)
         frame_margin_top = block.row - 1
     end
     if allocate_matrix then
-        -- currently not used
+        -- used in output/text when allocate="auto"
         -- special handling for the non rectangular shape
         local grid_step_x = math.floor(100 * wd / allocate_matrix.max_x) / 100
-        local grid_step_y = math.floor(100 * ht / allocate_matrix.max_y) / 100
+        local grid_step_y = math.floor(1000 * ht / allocate_matrix.max_y) / 1000
         local cur_x, cur_y
-
-        for _y=1,allocate_matrix.max_y do
-            cur_y = math.ceil(_y * grid_step_y)
-            for _x=1,allocate_matrix.max_x do
-                cur_x = math.ceil(_x * grid_step_x)
-                if allocate_matrix[_y][_x] == 1 then
-                    self.allocation_x_y[cur_x + x - 1][cur_y  + y - 1] = true
+        for _y=1,ht do
+            cur_y = math.ceil(_y / ht * allocate_matrix.max_y)
+            for _x=1,wd do
+                if _x < wd / 2 then
+                    cur_x = math.ceil(_x / wd * allocate_matrix.max_x)
+                else
+                    -- we need to look into this again. Don't ask me why -1 works best.
+                    cur_x = math.floor((_x - 1) / wd * allocate_matrix.max_x)
+                end
+                if allocate_matrix[cur_y][cur_x] == 1 then
+                    self.allocation_x_y[_x + x - 1][_y + y - 1] = 1
                 end
             end
         end
@@ -271,7 +296,7 @@ function fits_in_row_area(self,column,width,row,areaname)
             areaname = publisher.default_areaname
             frame_margin_left, frame_margin_top = 0,0
         else
-            -- Todo: find the correct block becuse they can be of different width/height
+            -- Todo: find the correct block because they can be of different width/height
             local block = area[self:framenumber(areaname)]
             frame_margin_left = block.column - 1
             frame_margin_top = block.row - 1

@@ -151,7 +151,30 @@ end
 
 --- Turn a node list into a shaped block of text.
 -- FIXME: document why splitting is needed (ul/li in data)
-function Paragraph:format(width_sp, default_textformat_name)
+function Paragraph:format(width_sp, default_textformat_name,options)
+    options = options or {}
+    local parameter = {}
+
+    if options.allocate == "auto" then
+        w("try to make a parshape")
+        w("area %s",options.area)
+        local cg = options.current_grid
+        local areaname = options.area
+        w("current row %d",cg:current_row(areaname))
+        local current_row    = cg:current_row(areaname)
+        local number_of_rows = cg:number_of_rows(areaname)
+        -- printtable("cg:allocation_x_y",cg.allocation_x_y)
+        parameter.parshape = {}
+        local framenumber = cg:framenumber(areaname)
+        local maxframes = cg:number_of_frames(areaname)
+        while framenumber <= maxframes do
+            for i = current_row,number_of_rows do
+                parameter.parshape[#parameter.parshape + 1] = cg:get_parshape(i,areaname,framenumber)
+            end
+            framenumber = framenumber + 1
+            current_row = 1
+        end
+    end
     local nodelist = node.copy_list(self.nodelist)
     local objects = {nodelist}
     local head = nodelist
@@ -196,7 +219,6 @@ function Paragraph:format(width_sp, default_textformat_name)
 
         publisher.fonts.pre_linebreak(nodelist)
 
-        local parameter = {}
 
         if current_textformat.indent then
             parameter.hangindent = current_textformat.indent
