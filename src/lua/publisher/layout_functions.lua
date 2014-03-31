@@ -296,7 +296,8 @@ register("urn:speedata:2009/publisher/functions/de","bildbreite",bildbreite)
 register("urn:speedata:2009/publisher/functions/en","imageheight",imageheight)
 register("urn:speedata:2009/publisher/functions/de","bildhöhe",imageheight)
 
-register("urn:speedata:2009/publisher/functions/en","reset_alternating",reset_alternating)
+register("urn:speedata:2009/publisher/functions/en","reset_alternating",reset_alternating) -- backward comp.
+register("urn:speedata:2009/publisher/functions/en","reset-alternating",reset_alternating)
 register("urn:speedata:2009/publisher/functions/de","alternierend_zurücksetzen",reset_alternating)
 
 register("urn:speedata:2009/publisher/functions/en","count-saved-pages",count_saved_paged)
