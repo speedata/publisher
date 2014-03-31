@@ -1,284 +1,268 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <translations>
-   <elements>
-     <element key="A" en="A" de="A"/>
-     <element key="Action" en="Action" de="Aktion"/>
-     <element key="AddToList" en="AddToList" de="ZurListeHinzufügen"/>
-      <element key="AtPageCreation" en="AtPageCreation" de="BeiSeitenErzeugung"/>
-      <element key="AtPageShipout" en="AtPageShipout" de="BeiSeitenAusgabe"/>
-      <element key="Attribute" en="Attribute" de="Attribut"/>
-     <element key="B" en="B" de="B"/>
-     <element key="br" en="br" de="br"/>
-     <element key="Br" en="Br" de="Br"/>
-     <element key="Barcode" en="Barcode" de="Strichcode"/>
-      <element key="Bold" en="Bold" de="Fett"/>
-      <element key="BoldItalic" en="BoldItalic" de="FettKursiv"/>
-      <element key="Box" en="Box" de="Box"/>
-      <element key="Bookmark" en="Bookmark" de="Lesezeichen"/>
-      <element key="Case" en="Case" de="Fall"/>
-      <element key="Column" en="Column" de="Spalte"/>
-      <element key="Columns" en="Columns" de="Spalten"/>
-      <element key="Contents" en="Contents" de="Inhalt"/>
-      <element key="Copy-of" en="Copy-of" de="Kopie-von"/>
-      <element key="DefineColor" en="DefineColor" de="DefiniereFarbe"/>
-      <element key="DefineFontfamily"
-               en="DefineFontfamily"
-               de="DefiniereSchriftfamilie"/>
-      <element key="DefineTextformat"
-               en="DefineTextformat"
-               de="DefiniereTextformat"/>
-     <element key="SavePages" de="SeitenSpeichern" en="SavePages"/>
-      <element key="Element" en="Element" de="Element"/>
-      <element key="EmptyLine" en="EmptyLine" de="Leerzeile"/>
-      <element key="Fontface" en="Fontface" de="Schriftart"/>
-     <element key="ForAll" en="ForAll" de="FürAlle"/>
-      <element key="Grid" en="Grid" de="Raster"/>
-      <element key="Group" en="Group" de="Gruppe"/>
-     <element key="HSpace" en="HSpace" de="HLeerraum"/>
-      <element key="Hyphenation" en="Hyphenation" de="Trennvorschlag"/>
-      <element key="I" en="I" de="I"/>
-      <element key="Image" en="Image" de="Bild"/>
-      <element key="Include" en="Include" de="Include"/>
-      <element key="InsertPages" de="SeitenEinfügen" en="InsertPages"/>
-      <element key="Italic" en="Italic" de="Kursiv"/>
-      <element key="Layout" en="Layout" de="Layout"/>
-     <element key="Li" en="Li" de="Li"/>
-      <element key="LoadDataset" en="LoadDataset" de="LadeDatensatzdatei"/>
-      <element key="LoadFontfile" en="LoadFontfile" de="LadeSchriftdatei"/>
-     <element key="Loop" en="Loop" de="Schleife"/>
-      <element key="Margin" en="Margin" de="Rand"/>
-     <element key="Mark" en="Mark" de="Marke"></element>
-      <element key="Makeindex" en="Makeindex" de="Indexerstellen"/>
-      <element key="Message" en="Message" de="Nachricht"/>
-      <element key="NewPage" en="NewPage" de="NeueSeite"/>
-      <element key="NextFrame" en="NextFrame" de="NächsterRahmen"/>
-      <element key="NextRow" en="NextRow" de="NeueZeile"/>
-     <element key="Ol" en="Ol" de="Ol"/>
-     <element key="Options" en="Options" de="Optionen"/>
-      <element key="Otherwise" en="Otherwise" de="Sonst"/>
-      <element key="Output" en="Output" de="Ausgabe" />
-      <element key="Pageformat" en="Pageformat" de="Seitenformat"/>
-      <element key="Pagetype" en="Pagetype" de="Seitentyp"/>
-      <element key="Paragraph" en="Paragraph" de="Absatz"/>
-      <element key="PlaceObject" en="PlaceObject" de="ObjektAusgeben"/>
-      <element key="PositioningArea" en="PositioningArea" de="Platzierungsbereich"/>
-      <element key="PositioningFrame"
-               en="PositioningFrame"
-               de="Platzierungsrahmen"/>
-      <element key="ProcessNode" en="ProcessNode" de="BearbeiteKnoten"/>
-      <element key="ProcessRecord" en="ProcessRecord" de="BearbeiteDatensatz"/>
-      <element key="Record" en="Record" de="Datensatz"/>
-      <element key="Regular" en="Regular" de="Normal"/>
-      <element key="Rule" en="Rule" de="Linie"/>
-      <element key="SaveDataset" en="SaveDataset" de="SpeichereDatensatzdatei"/>
-      <element key="Sequence" en="Sequence" de="Sequenz"/>
-      <element key="SetGrid" en="SetGrid" de="SetzeRaster"/>
-      <element key="SetVariable" en="SetVariable" de="Zuweisung"/>
-      <element key="SortSequence" en="SortSequence" de="SortiereSequenz"/>
-      <element key="Stylesheet" en="Stylesheet" de="Stylesheet" />
-      <element key="Sub" en="Sub" de="Sub"/>
-      <element key="Sup" en="Sup" de="Sup"/>
-      <element key="Switch" en="Switch" de="Fallunterscheidung"/>
-      <element key="Table" en="Table" de="Tabelle"/>
-      <element key="Tablefoot" en="Tablefoot" de="Tabellenfuß"/>
-      <element key="Tablehead" en="Tablehead" de="Tabellenkopf"/>
-      <element key="Tablerule" en="Tablerule" de="Tlinie"/>
-      <element key="Td" en="Td" de="Td"/>
-      <element key="Text" en="Text" de="Text"/>
-      <element key="Textblock" en="Textblock" de="Textblock"/>
-      <element key="Tr" en="Tr" de="Tr"/>
-      <element key="U" en="U" de="U"/>
-     <element key="Ul" en="Ul" de="Ul"/>
-      <element key="URL" en="URL" de="URL"/>
-      <element key="Value" en="Value" de="Wert"/>
-      <element key="While" en="While" de="Solange"/>
-      <element key="Until" en="Until" de="Bis" />
-   </elements>
+  <elements>
+    <element key="A" en="A" de="A"/>
+    <element key="Action" en="Action" de="Aktion"/>
+    <element key="AddToList" en="AddToList" de="ZurListeHinzufügen"/>
+    <element key="AtPageCreation" en="AtPageCreation" de="BeiSeitenErzeugung"/>
+    <element key="AtPageShipout" en="AtPageShipout" de="BeiSeitenAusgabe"/>
+    <element key="Attribute" en="Attribute" de="Attribut"/>
+    <element key="B" en="B" de="B"/>
+    <element key="Barcode" en="Barcode" de="Strichcode"/>
+    <element key="Bold" en="Bold" de="Fett"/>
+    <element key="BoldItalic" en="BoldItalic" de="FettKursiv"/>
+    <element key="Bookmark" en="Bookmark" de="Lesezeichen"/>
+    <element key="Box" en="Box" de="Box"/>
+    <element key="br" en="br" de="br"/>
+    <element key="Br" en="Br" de="Br"/>
+    <element key="Case" en="Case" de="Fall"/>
+    <element key="Column" en="Column" de="Spalte"/>
+    <element key="Columns" en="Columns" de="Spalten"/>
+    <element key="Contents" en="Contents" de="Inhalt"/>
+    <element key="Copy-of" en="Copy-of" de="Kopie-von"/>
+    <element key="DefineColor" en="DefineColor" de="DefiniereFarbe"/>
+    <element key="DefineFontfamily" en="DefineFontfamily" de="DefiniereSchriftfamilie"/>
+    <element key="DefineTextformat" en="DefineTextformat" de="DefiniereTextformat"/>
+    <element key="Element" en="Element" de="Element"/>
+    <element key="EmptyLine" en="EmptyLine" de="Leerzeile"/>
+    <element key="Fontface" en="Fontface" de="Schriftart"/>
+    <element key="ForAll" en="ForAll" de="FürAlle"/>
+    <element key="Grid" en="Grid" de="Raster"/>
+    <element key="Group" en="Group" de="Gruppe"/>
+    <element key="HSpace" en="HSpace" de="HLeerraum"/>
+    <element key="Hyphenation" en="Hyphenation" de="Trennvorschlag"/>
+    <element key="I" en="I" de="I"/>
+    <element key="Image" en="Image" de="Bild"/>
+    <element key="Include" en="Include" de="Include"/>
+    <element key="InsertPages" de="SeitenEinfügen" en="InsertPages"/>
+    <element key="Italic" en="Italic" de="Kursiv"/>
+    <element key="Layout" en="Layout" de="Layout"/>
+    <element key="Li" en="Li" de="Li"/>
+    <element key="LoadDataset" en="LoadDataset" de="LadeDatensatzdatei"/>
+    <element key="LoadFontfile" en="LoadFontfile" de="LadeSchriftdatei"/>
+    <element key="Loop" en="Loop" de="Schleife"/>
+    <element key="Makeindex" en="Makeindex" de="Indexerstellen"/>
+    <element key="Margin" en="Margin" de="Rand"/>
+    <element key="Mark" en="Mark" de="Marke"></element>
+    <element key="Message" en="Message" de="Nachricht"/>
+    <element key="NewPage" en="NewPage" de="NeueSeite"/>
+    <element key="NextFrame" en="NextFrame" de="NächsterRahmen"/>
+    <element key="NextRow" en="NextRow" de="NeueZeile"/>
+    <element key="Ol" en="Ol" de="Ol"/>
+    <element key="Options" en="Options" de="Optionen"/>
+    <element key="Otherwise" en="Otherwise" de="Sonst"/>
+    <element key="Output" en="Output" de="Ausgabe" />
+    <element key="Pageformat" en="Pageformat" de="Seitenformat"/>
+    <element key="Pagetype" en="Pagetype" de="Seitentyp"/>
+    <element key="Paragraph" en="Paragraph" de="Absatz"/>
+    <element key="PlaceObject" en="PlaceObject" de="ObjektAusgeben"/>
+    <element key="PositioningArea" en="PositioningArea" de="Platzierungsbereich"/>
+    <element key="PositioningFrame" en="PositioningFrame" de="Platzierungsrahmen"/>
+    <element key="ProcessNode" en="ProcessNode" de="BearbeiteKnoten"/>
+    <element key="ProcessRecord" en="ProcessRecord" de="BearbeiteDatensatz"/>
+    <element key="Record" en="Record" de="Datensatz"/>
+    <element key="Regular" en="Regular" de="Normal"/>
+    <element key="Rule" en="Rule" de="Linie"/>
+    <element key="SaveDataset" en="SaveDataset" de="SpeichereDatensatzdatei"/>
+    <element key="SavePages" de="SeitenSpeichern" en="SavePages"/>
+    <element key="Sequence" en="Sequence" de="Sequenz"/>
+    <element key="SetGrid" en="SetGrid" de="SetzeRaster"/>
+    <element key="SetVariable" en="SetVariable" de="Zuweisung"/>
+    <element key="SortSequence" en="SortSequence" de="SortiereSequenz"/>
+    <element key="Stylesheet" en="Stylesheet" de="Stylesheet" />
+    <element key="Sub" en="Sub" de="Sub"/>
+    <element key="Sup" en="Sup" de="Sup"/>
+    <element key="Switch" en="Switch" de="Fallunterscheidung"/>
+    <element key="Table" en="Table" de="Tabelle"/>
+    <element key="Tablefoot" en="Tablefoot" de="Tabellenfuß"/>
+    <element key="Tablehead" en="Tablehead" de="Tabellenkopf"/>
+    <element key="Tablerule" en="Tablerule" de="Tlinie"/>
+    <element key="Td" en="Td" de="Td"/>
+    <element key="Text" en="Text" de="Text"/>
+    <element key="Textblock" en="Textblock" de="Textblock"/>
+    <element key="Tr" en="Tr" de="Tr"/>
+    <element key="U" en="U" de="U"/>
+    <element key="Ul" en="Ul" de="Ul"/>
+    <element key="Until" en="Until" de="Bis" />
+    <element key="URL" en="URL" de="URL"/>
+    <element key="Value" en="Value" de="Wert"/>
+    <element key="While" en="While" de="Solange"/>
+  </elements>
   <values>
+    <value key="aligncenter" context="align" en="center" de="center"/>
     <value key="alignleft"  context="align" en="left" de="left"/>
     <value key="alignright" context="align" en="right" de="right"/>
-    <value key="aligncenter" context="align" en="center" de="center"/>
     <value key="all" context="*" en="all" de="alle"/>
     <value key="artbox" context="*" en="artbox" de="artbox"/>
     <value key="auto" context="*" en="auto" de="auto"/>
     <value key="bleedbox" context="*" en="bleedbox" de="bleedbox"/>
-    <value key="justified" context="*" en="justified" de="blocksatz"/>
     <value key="bottom" context="*" en="bottom" de="bottom"/>
-    <value key="middle" context="*" en="middle" de="middle"/>
-    <value key="cmyk" context="*" en="cmyk" de="cmyk"/>
-    <value key="gray" context="*" en="gray" de="graustufen"/>
+    <value key="bottom,left" context="*" en="bottom,left" de="unten,links"/>
+    <value key="bottom,right" context="*" en="bottom,right" de="unten,rechts"/>
     <value key="center" context="*" en="center" de="zentriert"/>
-    <value key="cropbox" context="*" en="cropbox" de="cropbox"/>
-    <value key="German" context="*" en="German" de="Deutsch"/>
-    <value key="first" context="*" en="first" de="erste"/>
-    <value key="solid" context="*" en="solid" de="durchgezogen"/>
-    <value key="EAN13" context="*" en="EAN13" de="EAN13"/>
-    <value key="even" context="*" en="even" de="gerade"/>
+    <value key="centered" context="*" en="centered" de="zentriert"/>
+    <value key="cmyk" context="*" en="cmyk" de="cmyk"/>
     <value key="Code128" context="*" en="Code128" de="Code128"/>
-    <value key="QRCode" context="*" en="QRCode" de="QRCode"/>
+    <value key="cropbox" context="*" en="cropbox" de="cropbox"/>
+    <value key="EAN13" context="*" en="EAN13" de="EAN13"/>
     <value key="Englisch (Great Britan)" context="*" en="Englisch (Great Britan)" de="Englisch (Großbritannien)"/>
+    <value key="even" context="*" en="even" de="gerade"/>
+    <value key="first" context="*" en="first" de="erste"/>
     <value key="French" context="*" en="French" de="Französisch"/>
+    <value key="full" context="*" en="full" de="vollständig"/>
+    <value key="German" context="*" en="German" de="Deutsch"/>
+    <value key="gray" context="*" en="gray" de="graustufen"/>
     <value key="horizontal" context="*" en="horizontal" de="horizontal"/>
-    <value key="yes" context="*" en="yes" de="ja"/>
+    <value key="justified" context="*" en="justified" de="blocksatz"/>
     <value key="last" context="*" en="last" de="letzte"/>
     <value key="left" context="*" en="left" de="links"/>
     <value key="leftaligned" context="*" en="leftaligned" de="linksbündig"/>
-    <value key="odd" context="*" en="odd" de="ungerade"/>
     <value key="max" context="*" en="max" de="max"/>
     <value key="mediabox" context="*" en="mediabox" de="mediabox"/>
+    <value key="middle" context="*" en="middle" de="middle"/>
     <value key="no" context="*" en="no" de="nein"/>
-    <value key="without" context="*" en="without" de="ohne"/>
-    <value key="rightaligned" context="*" en="rightaligned" de="rechtsbündig"/>
+    <value key="odd" context="*" en="odd" de="ungerade"/>
+    <value key="QRCode" context="*" en="QRCode" de="QRCode"/>
     <value key="rgb" context="*" en="rgb" de="rgb"/>
     <value key="right" context="*" en="right" de="rechts"/>
+    <value key="rightaligned" context="*" en="rightaligned" de="rechtsbündig"/>
+    <value key="solid" context="*" en="solid" de="durchgezogen"/>
     <value key="top" context="*" en="top" de="top"/>
+    <value key="top,left" context="*" en="top,left" de="oben,links"/>
+    <value key="top,right" context="*" en="top,right" de="oben,rechts"/>
     <value key="trimbox" context="*" en="trimbox" de="trimbox"/>
     <value key="vertical" context="*" en="vertical" de="vertikal"/>
-    <value key="full" context="*" en="full" de="vollständig"/>
-    <value key="centered" context="*" en="centered" de="zentriert"/>
-    <value key="top,right" context="*" en="top,right" de="oben,rechts"/>
-    <value key="bottom,right" context="*" en="bottom,right" de="unten,rechts"/>
-    <value key="top,left" context="*" en="top,left" de="oben,links"/>
-    <value key="bottom,left" context="*" en="bottom,left" de="unten,links"/>
+    <value key="without" context="*" en="without" de="ohne"/>
+    <value key="yes" context="*" en="yes" de="ja"/>
   </values>
-   <attributes>
-      <attribute key="align" en="align" de="align"/>
-      <attribute key="alignment" en="alignment" de="ausrichtung"/>
-      <attribute key="allocate" en="allocate" de="belegen"/>
-      <attribute key="append" en="append" de="anhängen" />
-      <attribute key="angle" en="angle" de="winkel"/>
-      <attribute key="area" en="area" de="bereich"/>
-      <attribute key="attributes" en="attributes" de="attribute" />
-      <attribute key="b" en="b" de="b"/>
-      <attribute key="backgroundcolor" en="backgroundcolor" de="hintergrundfarbe"/>
-      <attribute key="background" en="background" de="hintergrund"/>
-      <attribute key="balance" en="balance" de="ausgleich" />
-      <attribute key="bleed" en="bleed" de="beschnitt"/>
-      <attribute key="border-bottom" en="border-bottom" de="border-bottom"/>
-      <attribute key="border-bottom-color"
-                 en="border-bottom-color"
-                 de="border-bottom-color"/>
-      <attribute key="border-left" en="border-left" de="border-left"/>
-      <attribute key="border-left-color"
-                 en="border-left-color"
-                 de="border-left-color"/>
-      <attribute key="border-right" en="border-right" de="border-right"/>
-      <attribute key="border-right-color"
-                 en="border-right-color"
-                 de="border-right-color"/>
-      <attribute key="border-top" en="border-top" de="border-top"/>
-      <attribute key="border-top-color" en="border-top-color" de="border-top-color"/>
-      <attribute key="bottom" en="bottom" de="unten"/>
-      <attribute key="break-below" en="break-below" de="umbruch-unten"/>
-      <attribute key="c" en="c" de="c"/>
-     <attribute key="class" en="class" de="class"/>
-     <attribute key="clip" en="clip" de="ausschnitt"/>
-      <attribute key="color" en="color" de="farbe"/>
-      <attribute key="colspan" en="colspan" de="colspan"/>
-      <attribute key="column" en="column" de="spalte"/>
-      <attribute key="columndistance" en="columndistance" de="spaltenabstand"/>
-      <attribute key="columns" en="columns" de="spalten"/>
-      <attribute key="criterium" en="criterium" de="kriterium"/>
-      <attribute key="cutmarks" en="cutmarks" de="beschnittmarken"/>
-     <attribute key="data" en="data" de="daten"></attribute>
-     <attribute key="direction" en="direction" de="richtung"/>
-     <attribute key="digits" en="digits" de="ziffern"/>
-      <attribute key="element" en="element" de="element"/>
-      <attribute key="elementname" en="elementname" de="elementname"/>
-      <attribute key="error" en="error" de="fehler" />
-     <attribute key="eval" en="eval" de="auswerten"/>
-      <attribute key="file" en="file" de="datei"/>
-      <attribute key="filename" en="filename" de="dateiname"/>
-      <attribute key="fontface" en="fontface" de="schriftart"/>
-      <attribute key="fontfamily" en="fontfamily" de="schriftfamilie"/>
-      <attribute key="fontsize" en="fontsize" de="schriftgröße"/>
-      <attribute key="frame" en="frame" de="rahmen"/>
-      <attribute key="framecolor" en="framecolor" de="rahmenfarbe"/>
-      <attribute key="g" en="g" de="g"/>
-      <attribute key="groupname" en="groupname" de="gruppenname"/>
-      <attribute key="href" en="href" de="href" />
-      <attribute key="height" en="height" de="höhe"/>
-      <attribute key="hreference" en="hreference" de="hreferenz"/>
-      <attribute key="vreference" en="vreference" de="vreferenz"/>
-     <attribute key="xml:id" en="xml:id" de="xml:id"/>
-     <attribute key="id" en="id" de="id"/>
-     <attribute key="ignoreeol" en="ignoreeol" de="ignorierezeilenende"/>
-     <attribute key="indentation" en="indentation" de="einrückung"/>
-      <attribute key="k" en="k" de="k"/>
-      <attribute key="keepposition" en="keepposition" de="behalteposition" />
-      <attribute key="key" en="key" de="schlüssel"/>
-      <attribute key="language" en="language" de="sprache"/>
-      <attribute key="left" en="left" de="links"/>
-      <attribute key="length" en="length" de="länge"/>
-      <attribute key="level" en="level" de="ebene"/>
-      <attribute key="list" en="list" de="liste"/>
-      <attribute key="limit" en="limit" de="umfang"/>
-      <attribute key="m" en="m" de="m"/>
-      <attribute key="mainlanguage" en="mainlanguage" de="hauptsprache"/>
-      <attribute key="margin-top" en="margin-top" de="margin-top" />
-      <attribute key="margin-bottom" en="margin-bottom" de="margin-bottom" />
-      <attribute key="marginprotrusion" en="marginprotrusion" de="randausgleich"/>
-      <attribute key="maxheight" en="maxheight" de="maxhöhe"/>
-     <attribute key="maxwidth" en="maxwidth" de="maxbreite"/>
-      <attribute key="maxsize" en="maxsize" de="maximale-größe"/>
-      <attribute key="minheight" en="minheight" de="minhöhe"/>
-     <attribute key="minwidth" en="minwidth" de="minbreite"/>
-     <attribute key="dpiwarn" en="dpiwarn" de="dpiwarnung" />
-      <attribute key="mode" en="mode" de="modus"/>
-      <attribute key="model" en="model" de="modell"/>
-      <attribute key="name" en="name" de="name"/>
-      <attribute key="naturalsize" en="naturalsize" de="natürliche-größe"/>
-      <attribute key="open" en="open" de="offen"/>
-      <attribute key="orphan" en="orphan" de="schusterjunge" />
-      <attribute key="widow" en="widow" de="hurenkind" />
-     <attribute key="overshoot" en="overshoot" de="übersteigen"/>
-      <attribute key="padding" en="padding" de="padding"/>
-      <attribute key="padding-bottom" en="padding-bottom" de="padding-bottom"/>
-      <attribute key="padding-left" en="padding-left" de="padding-left"/>
-      <attribute key="padding-right" en="padding-right" de="padding-right"/>
-      <attribute key="padding-top" en="padding-top" de="padding-top"/>
-      <attribute key="page" en="page" de="seite"/>
-      <attribute key="pagetype" en="pagetype" de="seitentyp" />
-      <attribute key="pattern" en="pattern" de="muster" />
-      <attribute key="resetmarks" en="resetmarks" de="markerzurücksetzen" />
-      <attribute key="r" en="r" de="r"/>
-      <attribute key="removeduplicates" en="removeduplicates" de="duplikatelöschen"/>
-      <attribute key="right" en="right" de="rechts"/>
-      <attribute key="row" en="row" de="zeile"/>
-      <attribute key="rows" en="rows" de="zeilen"/>
-      <attribute key="leading" en="leading" de="zeilenabstand"/>
-     <attribute key="rowdistance" en="rowdistance" de="zeilenabstand"/>
-     <attribute key="rowspan" en="rowspan" de="rowspan"/>
-      <attribute key="rulewidth" en="rulewidth" de="linienstärke"/>
-      <attribute key="runs" en="runs" de="läufe"/>
-      <attribute key="select" en="select" de="auswahl"/>
-      <attribute key="section" en="section" de="abschnitt" />
-      <attribute key="show-grid" en="show-grid" de="zeichne_raster"/>
-     <attribute key="showtext" en="showtext" de="zeigetext"/>
-      <attribute key="show-gridallocation"
-                 en="show-gridallocation"
-                 de="zeige_rasterbelegung"/>
-      <attribute key="show-hyphenation"
-                 en="show-hyphenation"
-                 de="zeige_silbentrennung"/>
-     <attribute key="smallcaps" en="smallcaps" de="kapitälchen"/>
-     <attribute key="oldstylefigures" en="oldstylefigures" de="mediävalziffern"/>
-     <attribute key="sortkey" en="sortkey" de="sortierschlüssel" />
-      <attribute key="space" en="space" de="leerraum"/>
-      <attribute key="startpage" en="startpage" de="startseite"/>
-      <attribute key="stretch" en="stretch" de="dehnen"/>
-      <attribute key="test" en="test" de="bedingung"/>
-      <attribute key="textformat" en="textformat" de="textformat"/>
-      <attribute key="top" en="top" de="oben"/>
-      <attribute key="top-distance" en="top-distance" de="abstand-oben"/>
-      <attribute key="trace" en="trace" de="trace"/>
-      <attribute key="trim" en="trim" de="beschnittzugabe"/>
-      <attribute key="type" en="type" de="typ" />
-      <attribute key="value" en="value" de="wert" />
-      <attribute key="valign" en="valign" de="valign"/>
-     <attribute key="version" en="version" de="version"/>
-      <attribute key="variable" en="variable" de="variable"/>
-      <attribute key="width" en="width" de="breite"/>
-      <attribute key="y" en="y" de="y"/>
-   </attributes>
+  <attributes>
+    <attribute key="align" en="align" de="align"/>
+    <attribute key="alignment" en="alignment" de="ausrichtung"/>
+    <attribute key="allocate" en="allocate" de="belegen"/>
+    <attribute key="angle" en="angle" de="winkel"/>
+    <attribute key="append" en="append" de="anhängen" />
+    <attribute key="area" en="area" de="bereich"/>
+    <attribute key="attributes" en="attributes" de="attribute" />
+    <attribute key="b" en="b" de="b"/>
+    <attribute key="background" en="background" de="hintergrund"/>
+    <attribute key="backgroundcolor" en="backgroundcolor" de="hintergrundfarbe"/>
+    <attribute key="balance" en="balance" de="ausgleich" />
+    <attribute key="bleed" en="bleed" de="beschnitt"/>
+    <attribute key="border-bottom" en="border-bottom" de="border-bottom"/>
+    <attribute key="border-bottom-color" en="border-bottom-color" de="border-bottom-color"/>
+    <attribute key="border-left" en="border-left" de="border-left"/>
+    <attribute key="border-left-color" en="border-left-color" de="border-left-color"/>
+    <attribute key="border-right" en="border-right" de="border-right"/>
+    <attribute key="border-right-color" en="border-right-color" de="border-right-color"/>
+    <attribute key="border-top" en="border-top" de="border-top"/>
+    <attribute key="border-top-color" en="border-top-color" de="border-top-color"/>
+    <attribute key="bottom" en="bottom" de="unten"/>
+    <attribute key="break-below" en="break-below" de="umbruch-unten"/>
+    <attribute key="c" en="c" de="c"/>
+    <attribute key="class" en="class" de="class"/>
+    <attribute key="clip" en="clip" de="ausschnitt"/>
+    <attribute key="color" en="color" de="farbe"/>
+    <attribute key="colspan" en="colspan" de="colspan"/>
+    <attribute key="column" en="column" de="spalte"/>
+    <attribute key="columndistance" en="columndistance" de="spaltenabstand"/>
+    <attribute key="columns" en="columns" de="spalten"/>
+    <attribute key="criterium" en="criterium" de="kriterium"/>
+    <attribute key="cutmarks" en="cutmarks" de="beschnittmarken"/>
+    <attribute key="data" en="data" de="daten"></attribute>
+    <attribute key="digits" en="digits" de="ziffern"/>
+    <attribute key="direction" en="direction" de="richtung"/>
+    <attribute key="dpiwarn" en="dpiwarn" de="dpiwarnung" />
+    <attribute key="element" en="element" de="element"/>
+    <attribute key="elementname" en="elementname" de="elementname"/>
+    <attribute key="error" en="error" de="fehler" />
+    <attribute key="eval" en="eval" de="auswerten"/>
+    <attribute key="file" en="file" de="datei"/>
+    <attribute key="filename" en="filename" de="dateiname"/>
+    <attribute key="fontface" en="fontface" de="schriftart"/>
+    <attribute key="fontfamily" en="fontfamily" de="schriftfamilie"/>
+    <attribute key="fontsize" en="fontsize" de="schriftgröße"/>
+    <attribute key="frame" en="frame" de="rahmen"/>
+    <attribute key="framecolor" en="framecolor" de="rahmenfarbe"/>
+    <attribute key="g" en="g" de="g"/>
+    <attribute key="groupname" en="groupname" de="gruppenname"/>
+    <attribute key="height" en="height" de="höhe"/>
+    <attribute key="href" en="href" de="href" />
+    <attribute key="hreference" en="hreference" de="hreferenz"/>
+    <attribute key="id" en="id" de="id"/>
+    <attribute key="ignoreeol" en="ignoreeol" de="ignorierezeilenende"/>
+    <attribute key="indentation" en="indentation" de="einrückung"/>
+    <attribute key="k" en="k" de="k"/>
+    <attribute key="keepposition" en="keepposition" de="behalteposition" />
+    <attribute key="key" en="key" de="schlüssel"/>
+    <attribute key="language" en="language" de="sprache"/>
+    <attribute key="leading" en="leading" de="zeilenabstand"/>
+    <attribute key="left" en="left" de="links"/>
+    <attribute key="length" en="length" de="länge"/>
+    <attribute key="level" en="level" de="ebene"/>
+    <attribute key="limit" en="limit" de="umfang"/>
+    <attribute key="list" en="list" de="liste"/>
+    <attribute key="m" en="m" de="m"/>
+    <attribute key="mainlanguage" en="mainlanguage" de="hauptsprache"/>
+    <attribute key="margin-bottom" en="margin-bottom" de="margin-bottom" />
+    <attribute key="margin-top" en="margin-top" de="margin-top" />
+    <attribute key="marginprotrusion" en="marginprotrusion" de="randausgleich"/>
+    <attribute key="maxheight" en="maxheight" de="maxhöhe"/>
+    <attribute key="maxsize" en="maxsize" de="maximale-größe"/>
+    <attribute key="maxwidth" en="maxwidth" de="maxbreite"/>
+    <attribute key="minheight" en="minheight" de="minhöhe"/>
+    <attribute key="minwidth" en="minwidth" de="minbreite"/>
+    <attribute key="mode" en="mode" de="modus"/>
+    <attribute key="model" en="model" de="modell"/>
+    <attribute key="name" en="name" de="name"/>
+    <attribute key="naturalsize" en="naturalsize" de="natürliche-größe"/>
+    <attribute key="oldstylefigures" en="oldstylefigures" de="mediävalziffern"/>
+    <attribute key="open" en="open" de="offen"/>
+    <attribute key="orphan" en="orphan" de="schusterjunge" />
+    <attribute key="overshoot" en="overshoot" de="übersteigen"/>
+    <attribute key="padding" en="padding" de="padding"/>
+    <attribute key="padding-bottom" en="padding-bottom" de="padding-bottom"/>
+    <attribute key="padding-left" en="padding-left" de="padding-left"/>
+    <attribute key="padding-right" en="padding-right" de="padding-right"/>
+    <attribute key="padding-top" en="padding-top" de="padding-top"/>
+    <attribute key="page" en="page" de="seite"/>
+    <attribute key="pagetype" en="pagetype" de="seitentyp" />
+    <attribute key="pattern" en="pattern" de="muster" />
+    <attribute key="r" en="r" de="r"/>
+    <attribute key="removeduplicates" en="removeduplicates" de="duplikatelöschen"/>
+    <attribute key="resetmarks" en="resetmarks" de="markerzurücksetzen" />
+    <attribute key="right" en="right" de="rechts"/>
+    <attribute key="row" en="row" de="zeile"/>
+    <attribute key="rowdistance" en="rowdistance" de="zeilenabstand"/>
+    <attribute key="rows" en="rows" de="zeilen"/>
+    <attribute key="rowspan" en="rowspan" de="rowspan"/>
+    <attribute key="rulewidth" en="rulewidth" de="linienstärke"/>
+    <attribute key="runs" en="runs" de="läufe"/>
+    <attribute key="section" en="section" de="abschnitt" />
+    <attribute key="select" en="select" de="auswahl"/>
+    <attribute key="show-grid" en="show-grid" de="zeichne_raster"/>
+    <attribute key="show-gridallocation" en="show-gridallocation" de="zeige_rasterbelegung"/>
+    <attribute key="show-hyphenation" en="show-hyphenation" de="zeige_silbentrennung"/>
+    <attribute key="showtext" en="showtext" de="zeigetext"/>
+    <attribute key="smallcaps" en="smallcaps" de="kapitälchen"/>
+    <attribute key="sortkey" en="sortkey" de="sortierschlüssel" />
+    <attribute key="space" en="space" de="leerraum"/>
+    <attribute key="startpage" en="startpage" de="startseite"/>
+    <attribute key="stretch" en="stretch" de="dehnen"/>
+    <attribute key="test" en="test" de="bedingung"/>
+    <attribute key="textformat" en="textformat" de="textformat"/>
+    <attribute key="top" en="top" de="oben"/>
+    <attribute key="top-distance" en="top-distance" de="abstand-oben"/>
+    <attribute key="trace" en="trace" de="trace"/>
+    <attribute key="trim" en="trim" de="beschnittzugabe"/>
+    <attribute key="type" en="type" de="typ" />
+    <attribute key="valign" en="valign" de="valign"/>
+    <attribute key="value" en="value" de="wert" />
+    <attribute key="variable" en="variable" de="variable"/>
+    <attribute key="version" en="version" de="version"/>
+    <attribute key="vreference" en="vreference" de="vreferenz"/>
+    <attribute key="widow" en="widow" de="hurenkind" />
+    <attribute key="width" en="width" de="breite"/>
+    <attribute key="xml:id" en="xml:id" de="xml:id"/>
+    <attribute key="y" en="y" de="y"/>
+  </attributes>
 </translations>
