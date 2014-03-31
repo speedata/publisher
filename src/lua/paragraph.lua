@@ -405,6 +405,11 @@ function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
                 -- if break is not allowed, we store this in a temporary list
                 local break_forbidden = node.has_attribute(hbox,publisher.att_break_below_forbidden)
 
+                -- don't disallow breaks on the last line. This "7" needs closer inspection, it looks
+                -- wrong. Had a document where a ruled heading with break-below="no" went into an endless loop
+                if newhead == nil and break_forbidden ~= 7 then
+                    break_forbidden = false
+                end
                 if break_forbidden then
                     templist = node.insert_after(templist,node.tail(templist),hbox)
                 else
