@@ -107,14 +107,11 @@ local function imageheight(dataxml, arg )
   return publisher.current_grid:height_in_gridcells_sp(img.img.height)
 end
 
-local function datei_vorhanden(dataxml, arg )
-  local filename = arg[1]
-  if not filename then return false end
-  if filename == "" then return false end
-  if find_file_location(filename) then
-    return true
-  end
-  return false
+local function file_exists(dataxml, arg )
+    local filename = arg[1]
+    if not filename then return false end
+    if filename == "" then return false end
+    return find_file_location(filename) ~= nil
 end
 
 --- Insert 1000's separator and comma separator
@@ -242,8 +239,8 @@ register("urn:speedata:2009/publisher/functions/de","aktuelle-spalte",current_co
 register("urn:speedata:2009/publisher/functions/en","decode-html",decode_html)
 register("urn:speedata:2009/publisher/functions/de","html-dekodieren",decode_html)
 
-register("urn:speedata:2009/publisher/functions/en","file-exists",datei_vorhanden)
-register("urn:speedata:2009/publisher/functions/de","datei-vorhanden",datei_vorhanden)
+register("urn:speedata:2009/publisher/functions/en","file-exists",file_exists)
+register("urn:speedata:2009/publisher/functions/de","datei-vorhanden",file_exists)
 
 register("urn:speedata:2009/publisher/functions/en","number-of-datasets",anzahl_datensaetze)
 register("urn:speedata:2009/publisher/functions/de","anzahl-datensätze",anzahl_datensaetze)

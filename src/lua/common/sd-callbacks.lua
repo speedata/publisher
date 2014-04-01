@@ -47,7 +47,7 @@ function find_file_location( filename_or_uri )
   local url_table = url.parse(filename_or_uri)
   -- If we didn't find a file:// or something similar,
   -- we don't try to find the file.
-  if not ( url_table or url_table.scheme ) then
+  if not ( url_table and url_table.scheme ) then
     return nil
   end
 
