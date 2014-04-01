@@ -119,8 +119,10 @@ css = do_luafile("css.lua"):new()
 
 -- The defaults (set in the layout instructions file)
 options = {
-    gridwidth = tex.sp("10mm"),
-    gridheight = tex.sp("10mm"),
+    gridwidth   = tex.sp("10mm"),
+    gridheight  = tex.sp("10mm"),
+    gridcells_x = 0,
+    gridcells_y = 0,
 }
 
 -- List of virtual areas. Key is the group name and value is
@@ -782,7 +784,7 @@ function setup_page(pagenumber)
     end
     local errorstring
 
-    current_page, errorstring = seite:new(options.pagewidth,options.seitenhoehe, extra_margin, trim_amount,thispage)
+    current_page, errorstring = seite:new(options.pagewidth,options.pageheight, extra_margin, trim_amount,thispage)
     if not current_page then
         err("Can't create a new page. Is the page type (»PageType«) defined? %s",errorstring)
         exit()
@@ -791,9 +793,9 @@ function setup_page(pagenumber)
     -- seiten[current_pagenumber] = nil
     seiten[thispage] = current_page
 
-    local gridwidth = options.gridwidth
-    local gridheight  = options.gridheight
-
+    local gridwidth, gridheight, nx, ny
+    nx = options.gridcells_x
+    ny = options.gridcells_y
 
     local pagetype = detect_pagetype(thispage)
     if pagetype == false then return false end
@@ -803,18 +805,22 @@ function setup_page(pagenumber)
         if type(element_contents(j))=="function" and eltname=="Margin" then
             element_contents(j)(current_page)
         elseif eltname=="Grid" then
-            gridwidth = element_contents(j).breite
-            gridheight  = element_contents(j).hoehe
+            gridwidth  = element_contents(j).width
+            gridheight = element_contents(j).height
+            nx = element_contents(j).nx
+            ny = element_contents(j).ny
         end
     end
 
-    if not gridwidth then
-        err("Grid is not set!")
-        exit()
+    if gridwidth == nil and options.gridwidth ~= 0 then
+        gridwidth = options.gridwidth
     end
-    assert(gridwidth)
-    assert(gridheight,"Gridheight!")
-    current_page.grid:set_width_height(gridwidth,gridheight)
+
+    if gridheight == nil and options.gridheight ~= 0 then
+        gridheight = options.gridheight
+    end
+
+    current_page.grid:set_width_height({wd = gridwidth, ht = gridheight, nx = nx, ny = ny })
 
     for _,j in ipairs(pagetype) do
         local eltname = elementname(j,true)
@@ -2179,7 +2185,7 @@ end
 
 function set_pageformat( wd,ht )
     options.pagewidth    = wd
-    options.seitenhoehe  = ht
+    options.pageheight  = ht
     tex.pdfpagewidth =  wd
     tex.pdfpageheight = ht
     -- why the + 2cm? is this for the trim-/art-/bleedbox? FIXME: document

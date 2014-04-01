@@ -176,11 +176,11 @@ function set_framenumber( self,areaname, number )
 end
 
 -- Set width and height of the given grid (self) to the values wd and ht
-function set_width_height(self, wd,ht )
-    assert(wd)
-    assert(ht)
-    self.gridwidth  = wd
-    self.gridheight = ht
+function set_width_height(self, options)
+    self.gridwidth  = options.wd
+    self.gridheight = options.ht
+    self.grid_nx    = options.nx
+    self.grid_ny    = options.ny
     calculate_number_gridcells(self)
     self.allocation_x_y = {}
     for i=1,self:number_of_columns() do
@@ -490,7 +490,6 @@ end
 function calculate_number_gridcells(self)
     assert(self)
     assert(self.margin_left,  "Margin not set yet!")
-    assert(self.gridwidth,"gridwidth not set yet!")
     self.pageheight_known = true
     if self.pagenumber == -999 then
         -- a group
@@ -499,8 +498,23 @@ function calculate_number_gridcells(self)
         self:set_number_of_columns(math.ceil(math.round( (tex.pagewidth  - self.margin_left - self.margin_right - 2 * self.extra_margin) / self.gridwidth,4)))
         self:set_number_of_rows(math.ceil(math.round( ( 10 * tex.pageheight - self.margin_top  - self.margin_bottom  - 2 * self.extra_margin) /  self.gridheight ,4)))
     else
-        self:set_number_of_columns(math.ceil(math.round( (tex.pagewidth  - self.margin_left - self.margin_right - 2 * self.extra_margin) / self.gridwidth,4)))
-        self:set_number_of_rows(math.ceil(math.round( (tex.pageheight - self.margin_top  - self.margin_bottom  - 2 * self.extra_margin) /  self.gridheight ,4)))
+        local pagearea_x, pagearea_y
+        pagearea_x = tex.pagewidth  - self.margin_left - self.margin_right - 2 * self.extra_margin
+        pagearea_y = tex.pageheight - self.margin_top  - self.margin_bottom  - 2 * self.extra_margin
+
+        if self.grid_nx and self.grid_nx ~= 0 then
+            self:set_number_of_columns( self.grid_nx )
+            self.gridwidth = pagearea_x / self.grid_nx
+        else
+            self:set_number_of_columns(math.ceil(math.round( pagearea_x / self.gridwidth,4)))
+        end
+
+        if self.grid_ny and self.grid_ny ~= 0 then
+            self:set_number_of_rows( self.grid_ny )
+            self.gridheight = pagearea_y / self.grid_ny
+        else
+            self:set_number_of_rows(math.ceil(math.round( pagearea_y /  self.gridheight ,4)))
+        end
     end
 
     log("Number of rows: %d, number of columns = %d",self:number_of_rows(), self:number_of_columns())

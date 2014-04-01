@@ -621,11 +621,14 @@ end
 
 --- Grid
 --- -----
---- Set the grid (in a pagetype?)
+--- Set the grid in a group (also in a pagetype?)
 function commands.grid( layoutxml,dataxml )
     local width  = publisher.read_attribute(layoutxml,dataxml,"width",  "length_sp")
     local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp")
-    return { breite = width, hoehe = height }
+    local nx     = publisher.read_attribute(layoutxml,dataxml,"nx",     "rawstring")
+    local ny     = publisher.read_attribute(layoutxml,dataxml,"ny",     "rawstring")
+
+    return { width = width, height = height, nx = tonumber(nx), ny = tonumber(ny) }
 end
 
 --- Group
@@ -655,9 +658,14 @@ function commands.group( layoutxml,dataxml )
     local r = publisher.grid:new(-999)
     r:set_margin(0,0,0,0)
     if grid then
-        r:set_width_height(grid.breite,grid.hoehe)
+        if grid.nx or grid.ny then
+            err("Setting grid via nx or ny doesn't make sense in groups. Fallback to 1cm.")
+            grid.width = tex.sp("1cm")
+            grid.height = grid.width
+        end
+        r:set_width_height({wd = grid.width, ht = grid.height})
     else
-        r:set_width_height(publisher.current_page.grid.gridwidth,publisher.current_page.grid.gridheight)
+        r:set_width_height({wd = publisher.current_page.grid.gridwidth, ht = publisher.current_page.grid.gridheight})
     end
     publisher.groups[groupname] = {
         contents = contents,
@@ -1860,18 +1868,33 @@ end
 --- Set the grid to the given values.
 function commands.set_grid(layoutxml)
     trace("Command: SetGrid")
-    local wd = publisher.read_attribute(layoutxml,dataxml,"width","rawstring")
+    local wd = publisher.read_attribute(layoutxml,dataxml,"width", "rawstring")
     local ht = publisher.read_attribute(layoutxml,dataxml,"height","rawstring")
-    if tonumber(wd) then
-        err("SetGrid: width must be a length (with unit). Setting it to 1cm.")
-        wd = "1cm"
+    local nx = publisher.read_attribute(layoutxml,dataxml,"nx",    "rawstring")
+    local ny = publisher.read_attribute(layoutxml,dataxml,"ny",    "rawstring")
+
+    local _nx = tonumber(nx)
+    local _ny = tonumber(ny)
+    if _nx then
+        publisher.options.gridcells_x = _nx
+        publisher.options.gridwidth = 0
+    else
+        if tonumber(wd) then
+            err("SetGrid: width must be a length (with unit). Setting it to 1cm.")
+            wd = "1cm"
+        end
+        publisher.options.gridwidth   = tex.sp(wd)
     end
-    if tonumber(ht) then
-        err("SetGrid: height must be a length (with unit). Setting it to 1cm.")
-        ht = "1cm"
+    if _ny then
+        publisher.options.gridcells_y = _ny
+        publisher.options.gridheight = 0
+    else
+        if tonumber(ht) then
+            err("SetGrid: height must be a length (with unit). Setting it to 1cm.")
+            ht = "1cm"
+        end
+        publisher.options.gridheight  = tex.sp(ht)
     end
-    publisher.options.gridwidth   = tex.sp(wd)
-    publisher.options.gridheight  = tex.sp(ht)
 end
 
 

@@ -2348,13 +2348,27 @@
    </define>
    <define name="e_SetGrid">
       <element name="SetzeRaster">
-         <a:documentation>Setzt die Größe und Höhe eines Rasterkästchens. In dem Seitenraster können Elemente platziert werden</a:documentation>
-         <attribute name="breite">
-            <a:documentation>Breite einer Rasterzelle</a:documentation>
-         </attribute>
-         <attribute name="höhe">
-            <a:documentation>Höhe einer Rasterzelle</a:documentation>
-         </attribute>
+         <a:documentation>Setzt die Größe und Höhe eines Rasterkästchens. In dem Seitenraster können Elemente platziert werden.</a:documentation>
+         <optional>
+            <attribute name="breite">
+               <a:documentation>Breite einer Rasterzelle. Entweder breite oder nx benutzen, nicht beide.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="höhe">
+               <a:documentation>Höhe einer Rasterzelle. Entweder höhe oder ny angeben, nicht beide.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="nx">
+               <a:documentation>Anzahl der Rasterzellen in horizontaler Richtung. Entweder nx oder breite angeben.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="ny">
+               <a:documentation>Gibt die Anzahl der Rasterzellen in vertikaler Richtung an. Entweder ny oder höhe angeben.</a:documentation>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>

@@ -215,6 +215,8 @@
     <attribute key="model" en="model" de="modell"/>
     <attribute key="name" en="name" de="name"/>
     <attribute key="naturalsize" en="naturalsize" de="natürliche-größe"/>
+    <attribute key="nx" en="nx" de="nx" />
+    <attribute key="ny" en="ny" de="ny" />
     <attribute key="oldstylefigures" en="oldstylefigures" de="mediävalziffern"/>
     <attribute key="open" en="open" de="offen"/>
     <attribute key="orphan" en="orphan" de="schusterjunge" />

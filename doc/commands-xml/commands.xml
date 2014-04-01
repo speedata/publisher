@@ -1471,28 +1471,50 @@
   </command>
   <command name="Grid">
     <description xml:lang="en">
-      <para></para>
+      <para>Override the grid settings from <cmd name="SetGrid" />.</para>
     </description>
     <description xml:lang="de">
       <para>Überschreibt das allgemeine Raster aus <cmd name="SetGrid" />.</para>
     </description>
     <childelements />
-    <attribute name="width" type="length" optional="no">
+    <attribute name="width" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Set the width of a grid cell.</para>
       </description>
       <description xml:lang="de">
-        <para>Breite einer Rasterzelle</para>
+        <para>Breite einer Rasterzelle.</para>
       </description>
     </attribute>
-    <attribute name="height" type="length" optional="no">
+    <attribute name="height" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Height of a grid cell.</para>
       </description>
       <description xml:lang="de">
-        <para>Höhe einer Rasterzelle</para>
+        <para>Höhe einer Rasterzelle.</para>
       </description>
     </attribute>
+    <attribute name="nx" optional="yes" type="number">
+      <description xml:lang="en">
+        <para>Number of grid cells in horizontal direction.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Anzahl der Rasterzellen in horizontaler Richtung.</para>
+      </description>
+    </attribute>
+    <attribute name="ny" optional="yes" type="number">
+      <description xml:lang="en">
+        <para>Number of grid cells in vertical direction.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Anzahl der Rasterzellen in vertikaler Richtung.</para>
+      </description>
+    </attribute>
+    <remark xml:lang="en">
+      <para>nx and ny don't make sense in <cmd name="Group"/>.</para>
+    </remark>
+    <remark xml:lang="de">
+      <para>nx und ny haben keinen Sinn in <cmd name="Group"/>.</para>
+    </remark>
     <example xml:lang="de">
       <listing><![CDATA[<SetzeRaster breite="5mm" höhe="14pt" />
 
@@ -1505,6 +1527,7 @@
     <seealso>
       <cmd name="SetGrid" />
       <cmd name="Pagetype" />
+      <cmd name="Group"/>
     </seealso>
   </command>
   <command name="Group">
@@ -3596,26 +3619,42 @@
   </command>
   <command name="SetGrid">
     <description xml:lang="en">
-      <para></para>
+      <para>Set size of the grid cells. All objects are placed in the grid.</para>
     </description>
     <description xml:lang="de">
-      <para>Setzt die Größe und Höhe eines Rasterkästchens. In dem Seitenraster können Elemente platziert werden</para>
+      <para>Setzt die Größe und Höhe eines Rasterkästchens. In dem Seitenraster können Elemente platziert werden.</para>
     </description>
     <childelements />
-    <attribute name="width" type="length" optional="no">
+    <attribute name="width" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The width of a grid cell. Use either width or nx, not both.</para>
       </description>
       <description xml:lang="de">
-        <para>Breite einer Rasterzelle</para>
+        <para>Breite einer Rasterzelle. Entweder breite oder nx benutzen, nicht beide.</para>
       </description>
     </attribute>
-    <attribute name="height" type="length" optional="no">
+    <attribute name="height" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The height of a grid cell. Use either height or ny, but not both.</para>
       </description>
       <description xml:lang="de">
-        <para>Höhe einer Rasterzelle</para>
+        <para>Höhe einer Rasterzelle. Entweder höhe oder ny angeben, nicht beide.</para>
+      </description>
+    </attribute>
+    <attribute name="nx" optional="yes" type="number">
+      <description xml:lang="en">
+        <para>Specify the number of grid cells in horizontal direction. Use either nx or width, not both.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Anzahl der Rasterzellen in horizontaler Richtung. Entweder nx oder breite angeben.</para>
+      </description>
+    </attribute>
+    <attribute name="ny" optional="yes" type="number">
+      <description xml:lang="en">
+        <para>Set the number of grid cells in vertical direction. Give ny or height, but not both.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Gibt die Anzahl der Rasterzellen in vertikaler Richtung an. Entweder ny oder höhe angeben.</para>
       </description>
     </attribute>
     <example xml:lang="de">

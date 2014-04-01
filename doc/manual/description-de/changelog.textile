@@ -6,6 +6,7 @@ h1. Liste der Änderungen
 
 h2. Version 2.0
 
+* Neue Methode um Rasterbreite und -höhe zu definieren. Mit @nx@ und @ny@ kann man die Anzahl der Rasterzellen auf der Seite in x und y-Richtung festlegen.
 * Neuer Befehl "Until":../commands-de/until.html.
 * Neue Attribute @schusterjunge@ und @hurenkind@ bei "DefiniereTextformat":../commands-de/definetextformat.html. Die Voreinstellung für Text ist nun, dass Schusterjungen und Hurenkinder vermieden werden.
 * Neues Attribut @attribute@ in "SpeichereDatensatzdatei":../commands-de/savedataset.html um Attribute für das Root-Element zu erlauben.

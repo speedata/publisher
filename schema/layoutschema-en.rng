@@ -2332,13 +2332,27 @@
    </define>
    <define name="e_SetGrid">
       <element name="SetGrid">
-         <a:documentation/>
-         <attribute name="width">
-            <a:documentation/>
-         </attribute>
-         <attribute name="height">
-            <a:documentation/>
-         </attribute>
+         <a:documentation>Set size of the grid cells. All objects are placed in the grid.</a:documentation>
+         <optional>
+            <attribute name="width">
+               <a:documentation>The width of a grid cell. Use either width or nx, not both.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="height">
+               <a:documentation>The height of a grid cell. Use either height or ny, but not both.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="nx">
+               <a:documentation>Specify the number of grid cells in horizontal direction. Use either nx or width, not both.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="ny">
+               <a:documentation>Set the number of grid cells in vertical direction. Give ny or height, but not both.</a:documentation>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>
