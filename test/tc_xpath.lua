@@ -35,10 +35,10 @@ local with_underscore = luxor.parse_xml(with_underscore_src)
 local mixed_elements = luxor.parse_xml(mixed_elements_src)
 local namespace = { sd = "foo" }
 
-function number_of_datasets( self,arg)
+function number_of_datasets(self,arg)
     local count = 0
     for i=1,#arg do
-        if type(arg[i]) == 'table' then count = count + 1 end
+        if type(arg[i]) == 'table' and arg[i][".__type"] == "element" then count = count + 1 end
     end
     return count
 end
@@ -105,7 +105,7 @@ function test_castable()
 end
 
 function test_numdatasets()
-    assert_equal(xpath.parse( data, " sd:number-of-datasets(.) ",namespace ), 2)
+    assert_equal(xpath.parse( data, " sd:number-of-datasets(.) ",namespace ), 1)
     assert_equal(#xpath.parse( data, " sub ",namespace),2)
     assert_equal(#xpath.parse( data, " sub,sub,sub ",namespace),6)
     assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " sd:number-of-datasets(*)",namespace ))[1], 2)

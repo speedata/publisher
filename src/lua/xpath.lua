@@ -168,7 +168,7 @@ function M.is_nodeselector( dataxml,str,pos,ns )
     start,stop = string.find(str,"^%.%s*",pos)
     if start then
         M.nextpos = stop + 1
-        M.tok = dataxml
+        M.tok = {dataxml}
         return true
     end
     -- All sub nodes
