@@ -392,6 +392,7 @@ values = {
     ["smallcaps"] = {de = "kapitälchen", en = "smallcaps", },
     ["sortkey"] = {de = "sortierschlüssel", en = "sortkey", },
     ["space"] = {de = "leerraum", en = "space", },
+    ["start"] = {de = "start", en = "start", },
     ["startpage"] = {de = "startseite", en = "startpage", },
     ["stretch"] = {de = "dehnen", en = "stretch", },
     ["test"] = {de = "bedingung", en = "test", },

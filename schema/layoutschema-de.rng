@@ -999,12 +999,26 @@
    <define name="e_Grid">
       <element name="Raster">
          <a:documentation>Überschreibt das allgemeine Raster aus SetzeRaster.</a:documentation>
-         <attribute name="breite">
-            <a:documentation>Breite einer Rasterzelle</a:documentation>
-         </attribute>
-         <attribute name="höhe">
-            <a:documentation>Höhe einer Rasterzelle</a:documentation>
-         </attribute>
+         <optional>
+            <attribute name="breite">
+               <a:documentation>Breite einer Rasterzelle.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="höhe">
+               <a:documentation>Höhe einer Rasterzelle.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="nx">
+               <a:documentation>Anzahl der Rasterzellen in horizontaler Richtung.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="ny">
+               <a:documentation>Anzahl der Rasterzellen in vertikaler Richtung.</a:documentation>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>
@@ -2766,12 +2780,17 @@
          <a:documentation>Erzeugt eine horizontale Linie in einer Tabelle</a:documentation>
          <optional>
             <attribute name="linienstärke">
-               <a:documentation>Die »Dicke« der Linie. Voreinstellung ist 0.4 Punkt.</a:documentation>
+               <a:documentation>Die »Dicke« der Linie. Voreinstellung ist 0.25 Punkt.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="farbe">
                <a:documentation>Farbe der Linie. (Default: Schwarz)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="start">
+               <a:documentation>Die erste Spalte der Linie. Voreinstellung ist 1.</a:documentation>
             </attribute>
          </optional>
          <empty/>

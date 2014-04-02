@@ -993,13 +993,27 @@
    </define>
    <define name="e_Grid">
       <element name="Grid">
-         <a:documentation/>
-         <attribute name="width">
-            <a:documentation/>
-         </attribute>
-         <attribute name="height">
-            <a:documentation/>
-         </attribute>
+         <a:documentation>Override the grid settings from SetGrid.</a:documentation>
+         <optional>
+            <attribute name="width">
+               <a:documentation>Set the width of a grid cell.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="height">
+               <a:documentation>Height of a grid cell.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="nx">
+               <a:documentation>Number of grid cells in horizontal direction.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="ny">
+               <a:documentation>Number of grid cells in vertical direction.</a:documentation>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>
@@ -2746,15 +2760,20 @@
    </define>
    <define name="e_Tablerule">
       <element name="Tablerule">
-         <a:documentation/>
+         <a:documentation>Insert a horizontal rule in a table</a:documentation>
          <optional>
             <attribute name="rulewidth">
-               <a:documentation/>
+               <a:documentation>The width (thickness) of the rule. Defaults to 0.25pt.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="color">
-               <a:documentation/>
+               <a:documentation>The color of the rule. Defaults to black.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="start">
+               <a:documentation>The first column of the rule. Defaults to 1.</a:documentation>
             </attribute>
          </optional>
          <empty/>

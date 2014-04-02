@@ -990,7 +990,16 @@ function typeset_table(self)
         if eltname == "Columns" then
             -- ignorieren
         elseif eltname == "Tablerule" then
-            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(tr_contents.rulewidth or "0.25pt"),0,tr_contents.farbe)
+            local offset = 0
+            if tr_contents.start and tr_contents.start ~= 1 then
+                local sum = 0
+                for i=1,tr_contents.start - 1 do
+                    sum = sum + self.colwidths[i]
+                end
+                offset = sum
+            end
+            tmp = publisher.colorbar(self.tablewidth_target - offset,tex.sp(tr_contents.rulewidth or "0.25pt"),0,tr_contents.farbe)
+            tmp = publisher.add_glue(tmp,"head",{width = offset})
             rows[#rows + 1] = node.hpack(tmp)
 
         elseif eltname == "Tablehead" then

@@ -4435,7 +4435,7 @@
   </command>
   <command name="Tablerule">
     <description xml:lang="en">
-      <para></para>
+      <para>Insert a horizontal rule in a table</para>
     </description>
     <description xml:lang="de">
       <para>Erzeugt eine horizontale Linie in einer Tabelle</para>
@@ -4443,18 +4443,26 @@
     <childelements />
     <attribute name="rulewidth" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The width (thickness) of the rule. Defaults to 0.25pt.</para>
       </description>
       <description xml:lang="de">
-        <para>Die »Dicke« der Linie. Voreinstellung ist 0.4 Punkt.</para>
+        <para>Die »Dicke« der Linie. Voreinstellung ist 0.25 Punkt.</para>
       </description>
     </attribute>
     <attribute name="color" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The color of the rule. Defaults to black.</para>
       </description>
       <description xml:lang="de">
         <para>Farbe der Linie. (Default: Schwarz)</para>
+      </description>
+    </attribute>
+    <attribute name="start" optional="yes" type="number">
+      <description xml:lang="en">
+        <para>The first column of the rule. Defaults to 1.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die erste Spalte der Linie. Voreinstellung ist 1.</para>
       </description>
     </attribute>
     <remark xml:lang="de">

@@ -2196,7 +2196,8 @@ end
 function commands.tablerule( layoutxml,dataxml )
     local rulewidth = publisher.read_attribute(layoutxml,dataxml,"rulewidth","length")
     local color     = publisher.read_attribute(layoutxml,dataxml,"color","rawstring")
-    return { rulewidth = rulewidth, farbe = color }
+    local start     = publisher.read_attribute(layoutxml,dataxml,"start","number")
+    return { rulewidth = rulewidth, farbe = color, start = start }
 end
 
 --- Tr

@@ -248,6 +248,7 @@
     <attribute key="smallcaps" en="smallcaps" de="kapitälchen"/>
     <attribute key="sortkey" en="sortkey" de="sortierschlüssel" />
     <attribute key="space" en="space" de="leerraum"/>
+    <attribute key="start" en="start" de="start"/>
     <attribute key="startpage" en="startpage" de="startseite"/>
     <attribute key="stretch" en="stretch" de="dehnen"/>
     <attribute key="test" en="test" de="bedingung"/>

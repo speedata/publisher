@@ -2075,14 +2075,14 @@ function break_url( nodelist )
     return nodelist
 end
 
-function colorbar( wd,ht,dp,farbe )
-    local colorname = farbe
+function colorbar( wd,ht,dp,color )
+    local colorname = color
     if not colorname or colorname == "" then
-        colorname = "Schwarz"
+        colorname = "black"
     end
     if not colors[colorname] then
-        err("Color %q not found",farbe)
-        colorname = "Schwarz"
+        err("Color %q not found",color)
+        colorname = "black"
     end
 
     local rule_start = node.new("whatsit","pdf_literal")

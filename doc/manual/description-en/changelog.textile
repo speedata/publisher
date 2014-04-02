@@ -6,6 +6,7 @@ h1. Changelog
 
 h2. Version 2.0
 
+* "Tablerule":../commands-en/tablerule.html has a new attribute: @start@ to give the start column.
 * New way to define grid cells. You can use nx and ny to determine the number of grid cells in x or y direction.
 * New command "Until":../commands-en/until.html. Should be obvious what it does...
 * New attributes @widow@ and @orphan@ bei "DefineTextformat":../commands-en/definetextformat.html. The default for text is now to prevent orphans and widows.
