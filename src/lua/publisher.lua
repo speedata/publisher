@@ -999,12 +999,12 @@ function dothingsbeforeoutput(  )
         y = y - options.trim
     end
 
-    firstbox = node.new("whatsit","pdf_literal")
+    firstbox = node.new(whatsit_node,"pdf_literal")
     firstbox.data = string.format("q 0 0 0 0 k  1 0 0 1 0 0 cm %g %g %g %g re f Q",sp_to_bp(x), sp_to_bp(y),wd ,ht)
     firstbox.mode = 1
 
     if options.showgridallocation then
-        local lit = node.new("whatsit","pdf_literal")
+        local lit = node.new(whatsit_node,"pdf_literal")
         lit.mode = 1
         lit.data = r:draw_gridallocation()
 
@@ -1018,7 +1018,7 @@ function dothingsbeforeoutput(  )
     end
 
     if options.showgrid then
-        local lit = node.new("whatsit","pdf_literal")
+        local lit = node.new(whatsit_node,"pdf_literal")
         lit.mode = 1
         lit.data = r:draw_grid()
         if firstbox then
@@ -1031,7 +1031,7 @@ function dothingsbeforeoutput(  )
     end
     r:trimbox()
     if options.cutmarks then
-        local lit = node.new("whatsit","pdf_literal")
+        local lit = node.new(whatsit_node,"pdf_literal")
         lit.mode = 1
         lit.data = r:cutmarks()
         if firstbox then
@@ -1143,7 +1143,7 @@ end
 
 -- To split the textblock in pieces
 local marker
-marker = node.new("whatsit","user_defined")
+marker = node.new(whatsit_node,"user_defined")
 marker.user_id = user_defined_marker
 marker.type = 100  -- type 100: "value is a number"
 marker.value = 1
@@ -1216,7 +1216,7 @@ function parse_html( elt, parameter )
                 local ai = node.new("action")
                 ai.action_type = 3
                 ai.data = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",elt.href)
-                local stl = node.new("whatsit","pdf_start_link")
+                local stl = node.new(whatsit_node,"pdf_start_link")
                 stl.action = ai
                 stl.width = -1073741824
                 stl.height = -1073741824
@@ -1229,7 +1229,7 @@ function parse_html( elt, parameter )
                         a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
                     end
                 end
-                local enl = node.new("whatsit","pdf_end_link")
+                local enl = node.new(whatsit_node,"pdf_end_link")
                 a:append(enl)
             end
             return a
@@ -1795,7 +1795,7 @@ do
     -- number of the anchor, so it can be used in a pdf link or an outline.
     function mkdest()
         destcounter = destcounter + 1
-        local d = node.new("whatsit","pdf_dest")
+        local d = node.new(whatsit_node,"pdf_dest")
         d.named_id = 0
         d.dest_id = destcounter
         d.dest_type = 3
@@ -1813,7 +1813,7 @@ function mkbookmarknodes(level,open_p,title)
     title = title or "no title for bookmark given"
 
     n,counter = mkdest()
-    local udw = node.new("whatsit","user_defined")
+    local udw = node.new(whatsit_node,"user_defined")
     udw.user_id = user_defined_bookmark
     udw.type = 115 -- a string
     udw.value = string.format("%d+%d+%d+%s",level,openclosed,counter,title)
@@ -1831,7 +1831,7 @@ function boxit( box )
     local ht = (box.height + box.depth)  / factor - rule_width
     local dp = box.depth                 / factor - rule_width / 2
 
-    local wbox = node.new("whatsit","pdf_literal")
+    local wbox = node.new(whatsit_node,"pdf_literal")
     wbox.data = string.format("q 0.1 G %g w %g %g %g %g re s Q", rule_width, rule_width / 2, -dp, -wd, ht)
     wbox.mode = 0
     -- Draw box at the end so its contents gets "below" it.
@@ -2015,16 +2015,24 @@ function set_color_if_necessary( nodelist,color )
         colorname = colortable[color]
     end
 
-    local colstart = node.new(8,39)
+    local colstart = node.new(whatsit_node,39)
     colstart.data  = colors[colorname].pdfstring
-    colstart.cmd   = 1
+    if status.luatex_version < 79 then
+        colstart.cmd = 1
+    else
+        colstart.command = 1
+    end
     colstart.stack = 0
     colstart.next = nodelist
     nodelist.prev = colstart
 
-    local colstop  = node.new(8,39)
+    local colstop  = node.new(whatsit_node,39)
     colstop.data  = ""
-    colstop.cmd   = 2
+    if status.luatex_version < 79 then
+        colstop.cmd = 2
+    else
+        colstop.command = 2
+    end
     colstop.stack = 0
     local last = node.tail(nodelist)
     last.next = colstop
@@ -2085,7 +2093,7 @@ function colorbar( wd,ht,dp,color )
         colorname = "black"
     end
 
-    local rule_start = node.new("whatsit","pdf_literal")
+    local rule_start = node.new(whatsit_node,"pdf_literal")
     rule_start.mode = 1
     rule_start.data = "q "..colors[colorname].pdfstring
 
@@ -2094,7 +2102,7 @@ function colorbar( wd,ht,dp,color )
     rule.depth  = dp
     rule.width  = wd
 
-    local rule_stop = node.new("whatsit","pdf_literal")
+    local rule_stop = node.new(whatsit_node,"pdf_literal")
     rule_stop.mode = 1
     rule_stop.data = "Q"
 
@@ -2114,14 +2122,14 @@ function rotate( nodelist,angle )
     local angle_rad = math.rad(angle)
     local sin = math.round(math.sin(angle_rad),3)
     local cos = math.round(math.cos(angle_rad),3)
-    local q = node.new("whatsit","pdf_literal")
+    local q = node.new(whatsit_node,"pdf_literal")
     q.mode = 0
     local shift_x = math.round(math.min(0,math.sin(angle_rad) * sp_to_bp(ht)) + math.min(0,     math.cos(angle_rad) * sp_to_bp(wd)),3)
     local shift_y = math.round(math.max(0,math.sin(angle_rad) * sp_to_bp(wd)) + math.max(0,-1 * math.cos(angle_rad) * sp_to_bp(ht)),3)
     q.data = string.format("q %g %g %g %g %g %g cm",cos,sin, -1 * sin,cos, -1 * shift_x ,-1 * shift_y )
     q.next = nodelist
     local tail = node.tail(nodelist)
-    local Q = node.new("whatsit","pdf_literal")
+    local Q = node.new(whatsit_node,"pdf_literal")
     Q.data = "Q"
     tail.next = Q
     local tmp = node.vpack(q)

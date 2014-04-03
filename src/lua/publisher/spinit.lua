@@ -4,7 +4,7 @@
 --  spinit.lua
 --  speedata publisher
 --
---  Copyright 2010-2013 Patrick Gundlach.
+--  Copyright 2010-2014 Patrick Gundlach.
 --  See file COPYING in the root directory for license details.
 
 
@@ -14,6 +14,8 @@
 require("i18n")
 
 tex.enableprimitives('',tex.extraprimitives ())
+-- Lua 5.2 has table.unpack
+unpack = unpack or table.unpack
 
 function warning(...)
   local text = { ... }

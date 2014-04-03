@@ -59,16 +59,24 @@ function Paragraph:set_color( color )
     else
         colorname = publisher.colortable[color]
     end
-    local colstart = node.new(8,39)
+    local colstart = node.new(publisher.whatsit_node,39)
     colstart.data  = publisher.colors[colorname].pdfstring
-    colstart.cmd   = 1
+    if status.luatex_version < 79 then
+        colstart.cmd = 1
+    else
+        colstart.command = 1
+    end
     colstart.stack = 0
     colstart.next = self.nodelist
     self.nodelist.prev = colstart
     self.nodelist = colstart
-    local colstop  = node.new(8,39)
+    local colstop  = node.new(publisher.whatsit_node,39)
     colstop.data  = ""
-    colstop.cmd   = 2
+    if status.luatex_version < 79 then
+        colstop.cmd = 2
+    else
+        colstop.command = 2
+    end
     colstop.stack = 0
     local last = node.tail(self.nodelist)
     last.next = colstop

@@ -463,7 +463,7 @@ function M.eval_multiplication(first,second,operator)
     if operator == "*" then
         return first * second
     elseif operator == "mod" then
-        return math.mod(first,second)
+        return math.fmod(first,second)
     elseif operator == "div" then
         return first / second
     elseif operator =="idiv" then

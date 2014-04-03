@@ -118,7 +118,7 @@ end
 local function format_number(dataxml,arg)
   local num, thousandssep,commasep = arg[1], arg[2], arg[3]
   local sign,digits,commadigits = string.match(tostring(num),"([%-%+]?)(%d*)%.?(%d*)")
-  local first_digits = math.mod(#digits,3)
+  local first_digits = math.fmod(#digits,3)
   local ret = {}
   if first_digits > 0 then
     ret[1] = string.sub(digits,0,first_digits)

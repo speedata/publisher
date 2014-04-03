@@ -2,7 +2,7 @@
 --  sd-callbacks.lua
 --  speedata publisher
 --
---  Copyright 2010-2011 Patrick Gundlach.
+--  Copyright 2010-2014 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 
 
@@ -10,6 +10,9 @@
 
 local verbosity = os.getenv("SP_VERBOSITY")
 local url = require("socket_url")
+
+-- Lua 5.2 has table.unpack
+unpack = unpack or table.unpack
 
 local function reader( asked_name )
   local tab = { }
