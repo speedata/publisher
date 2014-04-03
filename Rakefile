@@ -166,32 +166,30 @@ task :zip do
 	end
 	platform = nil
 	arch = nil
+	execfilename = "sdluatex"
 	if test(?f, srcbindir +"/sdluatex") then
 		cp_r(srcbindir +"/sdluatex",targetbin)
 	elsif test(?f,srcbindir +"/luatex.exe") then
-		cp_r(srcbindir +"/luatex.exe",targetbin)
-		cp_r(srcbindir +"/luatex.dll",targetbin)
-		cp_r(srcbindir +"/kpathsea610.dll",targetbin)
+		cp_r(Dir.glob(srcbindir +"/*") ,targetbin)
 		File.open(targetbin + "/texmf.cnf", "w") { |file| file.write("#dummy\n") }
 		platform = "windows"
-		arch = "386"
+		execfilename = "luatex.exe"
 	elsif test(?f,srcbindir +"/luatex") then
 		cp_r(srcbindir +"/luatex","#{targetbin}/sdluatex")
 	end
-	if platform == nil then
-		res = `file #{targetbin}/sdluatex`.gsub(/^.*sdluatex:/,'')
-		case res
-		when /Mach-O/
-			platform = "darwin"
-		when /Linux/
-			platform = "linux"
-		end
-		case res
-		when /x86-64/,/x86_64/,/64-bit/
-			arch = "amd64"
-		when /32-bit/
-			arch = "386"
-		end
+	cmd = "file #{targetbin}/#{execfilename}"
+	res = `#{cmd}`.gsub(/^.*luatex.*:/,'')
+	case res
+	when /Mach-O/
+		platform = "darwin"
+	when /Linux/
+		platform = "linux"
+	end
+	case res
+	when /x86-64/,/x86_64/,/64-bit/,/PE32\+/
+		arch = "amd64"
+	when /32-bit/
+		arch = "386"
 	end
 	if !platform or !arch then
 		puts "Could not determine architecture (amd64/386) or platform (windows/linux/darwin)"
