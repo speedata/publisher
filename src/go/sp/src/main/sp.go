@@ -559,7 +559,7 @@ func runComparison(info os.FileInfo) {
 
 	err = exec.Command("sp").Run()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Error running command 'sp': ", err)
 	}
 	err = exec.Command("convert", "publisher.pdf", "+adjoin", "source.png").Run()
 	if err != nil {
@@ -568,14 +568,14 @@ func runComparison(info os.FileInfo) {
 
 	sourceFiles, err = filepath.Glob("source*.png")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("No source files found. ", err)
 	}
 	number_of_sourcefiles := len(sourceFiles)
 	badPages := make([]int, 0, number_of_sourcefiles)
 
 	err = convertReference(sourceFiles)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("error converting reference. ", err)
 	}
 
 	if number_of_sourcefiles == 1 {
