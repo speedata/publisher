@@ -215,7 +215,7 @@ task :zip do
 		# do not copy every Lua file to the dest
 		# and leave out .gitignore and others
 		Dir.glob("**/*.lua").reject { |x|
-		    x =~  /viznode/
+		    x =~  /viznode|fileutils/
 		}.each { |x|
 		  FileUtils.mkdir_p(File.join(targetsw , File.dirname(x)))
 		  FileUtils.cp(x,File.join(targetsw,File.dirname(x)))

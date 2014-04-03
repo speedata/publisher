@@ -12,7 +12,6 @@ require("publisher.fonts")
 require("publisher.tabular")
 local paragraph = require("paragraph")
 do_luafile("css.lua")
-require("fileutils")
 
 -- This module contains the commands in the layout file (the tags)
 commands = {}
@@ -948,7 +947,8 @@ function commands.load_dataset( layoutxml,dataxml )
     assert(name)
     local filename = tex.jobname .. "-" .. name .. ".dataxml"
 
-    if fileutils.test("x",filename)==false then
+    local ok,_ = lfs.attributes(filename)
+    if ok == nil then
         -- at the first run, the file does not exist. That's ok
         return
     end
