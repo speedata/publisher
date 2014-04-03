@@ -371,7 +371,7 @@ function nodelist_visualize( box,filename,options )
     box_to_analyze = box
   end
   local gv = dot_analyze_nodelist(box_to_analyze,options or {})
-  local outfile = io.open(filename,"w")
+  local outfile = io.open(filename,"wb")
   outfile:write([[
 digraph g {
 graph [

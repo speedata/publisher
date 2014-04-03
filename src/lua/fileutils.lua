@@ -43,7 +43,7 @@ end
 function cp( src,dest )
   local src_io,dest_io
 
-  src_io  = io.open(src,"r")
+  src_io  = io.open(src,"rb")
 
   if lfs.isdir(dest) then
     dest_io = io.open(dest .. "/" .. src,"w+")

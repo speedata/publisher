@@ -16,7 +16,7 @@ unpack = unpack or table.unpack
 
 local function reader( asked_name )
   local tab = { }
-  tab.file = io.open(asked_name)
+  tab.file = io.open(asked_name,"rb")
   tab.reader = function (t)
                   local f = t.file
                   return f:read('*l')
@@ -90,7 +90,7 @@ local function return_asked_name( asked_name )
   return asked_name
 end
 local function read_font_file( name )
-  local f = io.open(name)
+  local f = io.open(name,"rb")
   local buf = f:read("*all")
   f:close()
   return true,buf,buf:len()

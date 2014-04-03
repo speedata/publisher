@@ -137,7 +137,7 @@ function exit(graceful)
   errorlog:write(string.format("\nnode_mem_usage=%s",status.node_mem_usage))
   errorlog:write(string.format("luastate_bytes=%d",status.luastate_bytes / 1024))
   errorlog:close()
-  statusfile = io.open(string.format("%s.status",tex.jobname),"w")
+  statusfile = io.open(string.format("%s.status",tex.jobname),"wb")
   statusfile:write(string.format("<Status>\n  <Errors>%d</Errors>\n</Status>",errcount))
   statusfile:close()
   if not graceful then
@@ -248,7 +248,7 @@ end
 
 
 
-errorlog = io.open(string.format("%s.protocol",tex.jobname),"a")
+errorlog = io.open(string.format("%s.protocol",tex.jobname),"ab")
 errorlog:write("---------------------------------------------\n")
 
 starttime = os.gettimeofday()

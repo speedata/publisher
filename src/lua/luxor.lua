@@ -287,7 +287,7 @@ end
 
 local function parse_xml_file( path, options)
 	options = options or {}
-  local xmlfile = io.open(path,"r")
+  local xmlfile = io.open(path,"rb")
   if not xmlfile then
     err("Can't open XML file. Abort.")
     os.exit(-1)

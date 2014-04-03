@@ -1839,7 +1839,7 @@ function commands.save_dataset( layoutxml,dataxml )
     ---    },
     tmp[".__local_name"] = elementname
     local full_filename = tex.jobname .. "-" .. filename .. ".dataxml"
-    local file = io.open(full_filename,"w")
+    local file = io.open(full_filename,"wb")
     towrite = publisher.xml_to_string(tmp)
     file:write(towrite)
     file:close()

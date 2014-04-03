@@ -36,7 +36,7 @@ local function parse( self,filename)
     return
   end
   log("Loading CSS %q",path)
-  local cssio = io.open(path,"r")
+  local cssio = io.open(path,"rb")
   local csstext = cssio:read("*all")
   cssio:close()
   csstext = string.gsub(csstext,"%s+"," ")

@@ -569,7 +569,7 @@ function dothings()
         tab[#tab + 1] = string.format("  <mark name=%q page=%q />",xml_escape(tostring(k)),xml_escape(tostring(v.page)))
     end
     if #tab > 0 then
-        local file = io.open(auxfilename,"w")
+        local file = io.open(auxfilename,"wb")
         file:write("<marker>\n")
         file:write(table.concat(tab,"\n"))
         file:write("\n</marker>")

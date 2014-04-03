@@ -5,7 +5,7 @@
 
 <http://www.frykholm.se/files/markdown.lua>
 
-**Author:** Niklas Frykholm, <niklas@frykholm.se>  
+**Author:** Niklas Frykholm, <niklas@frykholm.se>
 **Date:** 31 May 2008
 
 This is an implementation of the popular text markup language Markdown in pure Lua.
@@ -47,10 +47,10 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 software and associated documentation files (the "Software"), to deal in the Software
 without restriction, including without limitation the rights to use, copy, modify, merge,
 publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
-to whom the Software is furnished to do so, subject to the following conditions: 
+to whom the Software is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all copies
-or substantial portions of the Software. 
+or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -226,7 +226,7 @@ function indent(text)
 	return text
 end
 
--- Does a simple tokenization of html data. Returns the data as a list of tokens. 
+-- Does a simple tokenization of html data. Returns the data as a list of tokens.
 -- Each token is a table with a type field (which is either "tag" or "text") and
 -- a text field (which contains the original token data).
 function tokenize_html(html)
@@ -239,7 +239,7 @@ function tokenize_html(html)
 			break
 		end
 		if start ~= pos then table.insert(tokens, {type="text", text = html:sub(pos, start-1)}) end
-		
+
 		local _, stop
 		if html:match("^<!%-%-", start) then
 			_,stop = html:find("%-%->", start)
@@ -249,7 +249,7 @@ function tokenize_html(html)
 			_,stop = html:find("%b<>", start)
 		end
 		if not stop then
-			-- error("Could not match html tag " .. html:sub(start,start+30)) 
+			-- error("Could not match html tag " .. html:sub(start,start+30))
 		 	table.insert(tokens, {type="text", text=html:sub(start, start)})
 			pos = start + 1
 		else
@@ -272,15 +272,15 @@ end
 local HASH = {
 	-- Has the hash been inited.
 	inited = false,
-	
+
 	-- The unique string prepended to all hash values. This is to ensure
 	-- that hash values do not accidently coincide with an actual existing
 	-- string in the document.
 	identifier = "",
-	
+
 	-- Counter that counts up for each new hash instance.
 	counter = 0,
-	
+
 	-- Hash table.
 	table = {}
 }
@@ -292,7 +292,7 @@ function init_hash(text)
 	HASH.identifier = ""
 	HASH.counter = 0
 	HASH.table = {}
-	
+
 	local s = "HASH"
 	local counter = 0
 	local id
@@ -320,7 +320,7 @@ end
 ----------------------------------------------------------------------
 
 -- The protection module is used to "protect" parts of a document
--- so that they are not modified by subsequent processing steps. 
+-- so that they are not modified by subsequent processing steps.
 -- Protected parts are saved in a table for later unprotection
 
 -- Protection data
@@ -419,13 +419,13 @@ end
 -- Identifies the block level formatting present in the line
 function classify(line)
 	local info = {line = line, text = line}
-	
+
 	if line:match("^    ") then
 		info.type = "indented"
 		info.outdented = line:sub(5)
 		return info
 	end
-	
+
 	for _,c in ipairs({'*', '-', '_', '='}) do
 		if is_ruler_of(line, c) then
 			info.type = "ruler"
@@ -433,12 +433,12 @@ function classify(line)
 			return info
 		end
 	end
-	
+
 	if line == "" then
 		info.type = "blank"
 		return info
 	end
-	
+
 	if line:match("^(#+)[ \t]*(.-)[ \t]*#*[ \t]*$") then
 		local m1, m2 = line:match("^(#+)[ \t]*(.-)[ \t]*#*[ \t]*$")
 		info.type = "header"
@@ -446,7 +446,7 @@ function classify(line)
 		info.text = m2
 		return info
 	end
-	
+
 	if line:match("^ ? ? ?(%d+)%.[ \t]+(.+)") then
 		local number, text = line:match("^ ? ? ?(%d+)%.[ \t]+(.+)")
 		info.type = "list_item"
@@ -455,7 +455,7 @@ function classify(line)
 		info.text = text
 		return info
 	end
-	
+
 	if line:match("^ ? ? ?([%*%+%-])[ \t]+(.+)") then
 		local bullet, text = line:match("^ ? ? ?([%*%+%-])[ \t]+(.+)")
 		info.type = "list_item"
@@ -464,19 +464,19 @@ function classify(line)
 		info.text= text
 		return info
 	end
-	
+
 	if line:match("^>[ \t]?(.*)") then
 		info.type = "blockquote"
 		info.text = line:match("^>[ \t]?(.*)")
 		return info
 	end
-	
+
 	if is_protected(line) then
 		info.type = "raw"
 		info.html = unprotect(line)
 		return info
 	end
-	
+
 	info.type = "normal"
 	return info
 end
@@ -486,7 +486,7 @@ end
 function headers(array)
 	local i = 1
 	while i <= #array - 1 do
-		if array[i].type  == "normal" and array[i+1].type == "ruler" and 
+		if array[i].type  == "normal" and array[i+1].type == "ruler" and
 			(array[i+1].ruler_char == "-" or array[i+1].ruler_char == "=") then
 			local info = {line = array[i].line}
 			info.text = info.line
@@ -509,7 +509,7 @@ function lists(array, sublist)
 			end
 			return false
 		end
-		
+
 		local function split_list_items(arr)
 			local acc = {arr[1]}
 			local res = {}
@@ -524,12 +524,12 @@ function lists(array, sublist)
 			table.insert(res, acc)
 			return res
 		end
-		
+
 		local function process_list_item(lines, block)
 			while lines[#lines].type == "blank" do
 				table.remove(lines)
 			end
-			
+
 			local itemtext = lines[1].text
 			for i=2,#lines do
 				itemtext = itemtext .. "\n" .. outdent(lines[i].line)
@@ -548,7 +548,7 @@ function lists(array, sublist)
 				return "    <li>" .. itemtext .. "</li>"
 			end
 		end
-		
+
 		local block_list = any_blanks(arr)
 		local items = split_list_items(arr)
 		local out = ""
@@ -561,7 +561,7 @@ function lists(array, sublist)
 			return "<ul>\n" .. out .. "</ul>"
 		end
 	end
-	
+
 	-- Finds the range of lines composing the first list in the array. A list
 	-- starts with (^ list_item) or (blank list_item) and ends with
 	-- (blank* $) or (blank normal).
@@ -586,7 +586,7 @@ function lists(array, sublist)
 		local function find_list_end(array, start)
 			local pos = #array
 			for i = start, #array-1 do
-				if array[i].type == "blank" and array[i+1].type ~= "list_item" 
+				if array[i].type == "blank" and array[i+1].type ~= "list_item"
 					and array[i+1].type ~= "indented" and array[i+1].type ~= "blank" then
 					pos = i-1
 					break
@@ -597,12 +597,12 @@ function lists(array, sublist)
 			end
 			return pos
 		end
-		
+
 		local start = find_list_start(array, sublist)
 		if not start then return nil end
 		return start, find_list_end(array, start)
 	end
-	
+
 	while true do
 		local start, stop = find_list(array, sublist)
 		if not start then break end
@@ -614,12 +614,12 @@ function lists(array, sublist)
 		}
 		array = splice(array, start, stop, {info})
 	end
-	
+
 	-- Convert any remaining list items to normal
 	for _,line in ipairs(array) do
 		if line.type == "list_item" then line.type = "normal" end
 	end
-	
+
 	return array
 end
 
@@ -634,7 +634,7 @@ function blockquotes(lines)
 			end
 		end
 		if not start then return nil end
-		
+
 		local stop = #lines
 		for i = start+1, #lines do
 			if lines[i].type == "blank" or lines[i].type == "blockquote" then
@@ -647,7 +647,7 @@ function blockquotes(lines)
 		while lines[stop].type == "blank" do stop = stop - 1 end
 		return start, stop
 	end
-	
+
 	local function process_blockquote(lines)
 		local raw = lines[1].text
 		for i = 2,#lines do
@@ -658,7 +658,7 @@ function blockquotes(lines)
 		return "<blockquote>\n    " .. bt ..
 			"\n</blockquote>"
 	end
-	
+
 	while true do
 		local start, stop = find_blockquote(lines)
 		if not start then break end
@@ -681,7 +681,7 @@ function codeblocks(lines)
 			if line.type == "indented" then start = i break end
 		end
 		if not start then return nil end
-		
+
 		local stop = #lines
 		for i = start+1, #lines do
 			if lines[i].type ~= "indented" and lines[i].type ~= "blank" then
@@ -692,7 +692,7 @@ function codeblocks(lines)
 		while lines[stop].type == "blank" do stop = stop - 1 end
 		return start, stop
 	end
-	
+
 	local function process_codeblock(lines)
 		local raw = detab(encode_code(outdent(lines[1].line)))
 		for i = 2,#lines do
@@ -700,7 +700,7 @@ function codeblocks(lines)
 		end
 		return "<pre><code>" .. raw .. "\n</code></pre>"
 	end
-	
+
 	while true do
 		local start, stop = find_codeblock(lines)
 		if not start then break end
@@ -727,12 +727,12 @@ function blocks_to_html(lines, no_paragraphs)
 			table.insert(out, line.html)
 		elseif line.type == "normal" then
 			local s = line.line
-			
+
 			while i+1 <= #lines and lines[i+1].type == "normal" do
 				i = i + 1
 				s = s .. "\n" .. lines[i].line
 			end
-			
+
 			if no_paragraphs then
 				table.insert(out, span_transform(s))
 			else
@@ -795,12 +795,12 @@ function add_escape(text)
 		escape_table[text] = hash(text)
 	end
 	return escape_table[text]
-end	
+end
 
 -- Escape characters that should not be disturbed by markdown.
 function escape_special_chars(text)
 	local tokens = tokenize_html(text)
-	
+
 	local out = ""
 	for _, token in ipairs(tokens) do
 		local t = token.text
@@ -902,7 +902,7 @@ function images(text)
 		if title then title = " title=\"" .. title .. "\"" else title = "" end
 		return add_escape ('<img src="' .. url .. '" alt="' .. alt .. '"' .. title .. "/>")
 	end
-	
+
 	local function inline_link(alt, link)
 		alt = encode_alt(alt:match("%b[]"):sub(2,-2))
 		local url, title = link:match("%(<?(.-)>?[ \t]*['\"](.+)['\"]")
@@ -915,7 +915,7 @@ function images(text)
 			return add_escape('<img src="' .. url .. '" alt="' .. alt .. '"/>')
 		end
 	end
-	
+
 	text = text:gsub("!(%b[])[ \t]*\n?[ \t]*(%b[])", reference_link)
 	text = text:gsub("!(%b[])(%b())", inline_link)
 	return text
@@ -935,7 +935,7 @@ function anchors(text)
 		if title then title = " title=\"" .. title .. "\"" else title = "" end
 		return add_escape("<a href=\"" .. url .. "\"" .. title .. ">") .. text .. add_escape("</a>")
 	end
-	
+
 	local function inline_link(text, link)
 		text = text:match("%b[]"):sub(2,-2)
 		local url, title = link:match("%(<?(.-)>?[ \t]*['\"](.+)['\"]")
@@ -948,7 +948,7 @@ function anchors(text)
 			return add_escape("<a href=\"" .. url .. "\">") .. text .. add_escape("</a>")
 		end
 	end
-	
+
 	text = text:gsub("(%b[])[ \t]*\n?[ \t]*(%b[])", reference_link)
 	text = text:gsub("(%b[])(%b())", inline_link)
 	return text
@@ -969,21 +969,21 @@ function auto_links(text)
 		local plain = {code = function(c) return c end, count = 0, rate = 0.1}
 		local codes = {hex, dec, plain}
 		local function swap(t,k1,k2) local temp = t[k2] t[k2] = t[k1] t[k1] = temp end
-		
+
 		local out = ""
 		for i = 1,s:len() do
 			for _,code in ipairs(codes) do code.count = code.count + code.rate end
 			if codes[1].count < codes[2].count then swap(codes,1,2) end
 			if codes[2].count < codes[3].count then swap(codes,2,3) end
 			if codes[1].count < codes[2].count then swap(codes,1,2) end
-			
+
 			local code = codes[1]
 			local c = s:sub(i,i)
 			-- Force encoding of "@" to make email address more invisible.
 			if c == "@" and code == plain then code = codes[2] end
 			out = out .. code.code(c)
 			code.count = code.count - 1
-		end	
+		end
 		return out
 	end
 	local function mail(s)
@@ -995,7 +995,7 @@ function auto_links(text)
 	-- links
 	text = text:gsub("<(https?:[^'\">%s]+)>", link)
 	text = text:gsub("<(ftp:[^'\">%s]+)>", link)
-	
+
 	-- mail
 	text = text:gsub("<mailto:([^'\">%s]+)>", mail)
 	text = text:gsub("<([-.%w]+%@[-.%w]+)>", mail)
@@ -1019,11 +1019,11 @@ function amps_and_angles(s)
 			pos = amp+1
 		end
 	end
-	
+
 	-- encode naked <'s
 	s = s:gsub("<([^a-zA-Z/?$!])", "&lt;%1")
 	s = s:gsub("<$", "&lt;")
-	
+
 	-- what about >, nothing done in the original markdown source to handle them
 	return s
 end
@@ -1071,24 +1071,24 @@ function cleanup(text)
 	-- Standardize line endings
 	text = text:gsub("\r\n", "\n")  -- DOS to UNIX
 	text = text:gsub("\r", "\n")    -- Mac to UNIX
-	
+
 	-- Convert all tabs to spaces
 	text = detab(text)
-	
+
 	-- Strip lines with only spaces and tabs
 	while true do
 		local subs
 		text, subs = text:gsub("\n[ \t]+\n", "\n\n")
 		if subs == 0 then break end
 	end
-	
+
 	return "\n" .. text .. "\n"
 end
 
 -- Strips link definitions from the text and stores the data in a lookup table.
 function strip_link_definitions(text)
 	local linkdb = {}
-	
+
 	local function link_def(id, url, title)
 		id = id:match("%[(.+)%]"):lower()
 		linkdb[id] = linkdb[id] or {}
@@ -1101,7 +1101,7 @@ function strip_link_definitions(text)
 	local def_title1 = def_no_title .. "[ \t]+\n?[ \t]*[\"'(]([^\n]+)[\"')][ \t]*"
 	local def_title2 = def_no_title .. "[ \t]*\n[ \t]*[\"'(]([^\n]+)[\"')][ \t]*"
 	local def_title3 = def_no_title .. "[ \t]*\n?[ \t]+[\"'(]([^\n]+)[\"')][ \t]*"
-	
+
 	text = text:gsub(def_title1, link_def)
 	text = text:gsub(def_title2, link_def)
 	text = text:gsub(def_title3, link_def)
@@ -1115,7 +1115,7 @@ link_database = {}
 function markdown(text)
 	init_hash(text)
 	init_escape_table()
-	
+
 	text = cleanup(text)
 	text = protect(text)
 	text, link_database = strip_link_definitions(text)
@@ -1225,7 +1225,7 @@ local function run_command_line(arg)
 		if not options.wrap_header then return s end
 		local header = ""
 		if options.header then
-			local f = io.open(options.header) or error("Could not open file: " .. options.header) 
+			local f = io.open(options.header) or error("Could not open file: " .. options.header)
 			header = f:read("*a")
 			f:close()
 		else
@@ -1239,14 +1239,14 @@ local function run_command_line(arg)
 </head>
 <body>
 ]]
-			local title = options.title or s:match("<h1>(.-)</h1>") or s:match("<h2>(.-)</h2>") or 
+			local title = options.title or s:match("<h1>(.-)</h1>") or s:match("<h2>(.-)</h2>") or
 				s:match("<h3>(.-)</h3>") or "Untitled"
 			header = header:gsub("TITLE", title)
 			if options.inline_style then
 				local style = ""
 				local f = io.open(options.stylesheet)
-				if f then 
-					style = f:read("*a") f:close() 
+				if f then
+					style = f:read("*a") f:close()
 				else
 					error("Could not include style sheet " .. options.stylesheet .. ": File not found")
 				end
@@ -1265,15 +1265,15 @@ local function run_command_line(arg)
 		end
 		return header .. s .. footer
 	end
-	
-	-- Generate output path name from input path name given options.	
+
+	-- Generate output path name from input path name given options.
 	local function outpath(path, options)
 		if options.append then return path .. ".html" end
 		local m = path:match("^(.+%.html)[^/\\]+$") if m then return m end
 		m = path:match("^(.+%.)[^/\\]*$") if m and path ~= m .. "html" then return m .. "html" end
 		return path .. ".html"
 	end
-	
+
 	-- Default commandline options
 	local options = {
 		wrap_header = true,
@@ -1316,29 +1316,29 @@ Other options:
 	op:param("s", "style", function(x) options.stylesheet = x end)
 	op:flag("l", "inline-style", function(x) options.inline_style = true end)
 	op:flag("a", "append", function() options.append = true end)
-	op:flag("t", "test", function() 
+	op:flag("t", "test", function()
 		local n = arg[0]:gsub("markdown.lua", "markdown-tests.lua")
 		local f = io.open(n)
-		if f then 
-			f:close() dofile(n) 
+		if f then
+			f:close() dofile(n)
 		else
 			error("Cannot find markdown-tests.lua")
 		end
-		run_stdin = false 
+		run_stdin = false
 	end)
 	op:flag("h", "help", function() print(help) run_stdin = false end)
-	op:arg(function(path) 
-			local file = io.open(path) or error("Could not open file: " .. path)
+	op:arg(function(path)
+			local file = io.open(path,"rb") or error("Could not open file: " .. path)
 			local s = file:read("*a")
 			file:close()
 			s = run(s, options)
-			file = io.open(outpath(path, options), "w") or error("Could not open output file: " .. outpath(path, options))
+			file = io.open(outpath(path, options), "wb") or error("Could not open output file: " .. outpath(path, options))
 			file:write(s)
 			file:close()
 			run_stdin = false
 		end
 	)
-	
+
 	if not op:run(arg) then
 		print(help)
 		run_stdin = false
@@ -1350,7 +1350,7 @@ Other options:
 		io.write(s)
 	end
 end
-	
+
 -- If we are being run from the command-line, act accordingly
 if arg and arg[0]:find("markdown%.lua$") then
 	run_command_line(arg)
