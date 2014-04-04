@@ -188,7 +188,7 @@ task :zip do
 	case res
 	when /x86-64/,/x86_64/,/64-bit/,/PE32\+/
 		arch = "amd64"
-	when /32-bit/
+	when /32-bit/,/80386/
 		arch = "386"
 	end
 	if !platform or !arch then
