@@ -149,8 +149,14 @@ function Paragraph:append( whatever,parameter )
         self:add_to_nodelist(publisher.mknodes(whatever(),parameter.fontfamily,parameter))
     elseif type(whatever)=="userdata" then -- node.is_node in einer späteren Version
         self:add_to_nodelist(whatever)
-    elseif type(whatever)=="table" and not whatever.nodelist then
+    elseif type(whatever)=="table" and #whatever == 0 then
         self:add_to_nodelist(publisher.mknodes("",parameter.fontfamily,parameter))
+    elseif type(whatever)=="table" then
+        for i=1,#whatever do
+            if type(whatever[i]) == "userdata" then
+                self:add_to_nodelist(whatever[i])
+            end
+        end
     else
         if type(whatever)=="table" then printtable("Paragraph:append",whatever) end
         assert(false,string.format("Interner Fehler bei Paragraph:append, type(arg)=%s",type(whatever)))

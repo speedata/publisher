@@ -72,6 +72,8 @@ att_omit_at_top           = 402
 att_is_table_row    = 500
 att_tr_dynamic_data = 501
 
+-- Force a hbox line height
+att_lineheight = 600
 
 user_defined_addtolist = 1
 user_defined_bookmark  = 2
@@ -1759,9 +1761,11 @@ function do_linebreak( nodelist,hsize,parameters )
     local maxskip
     while head do
         if head.id == 0 then -- hlist
+            local lineheight
             maxskip = 0
             local head_list = head.list
             while head_list do
+                lineheight = lineheight or node.has_attribute(head_list,att_lineheight)
                 local fam = node.has_attribute(head_list,att_fontfamily)
                 if fam then
                     -- Is this necessary anymore? FIXME
@@ -1770,8 +1774,13 @@ function do_linebreak( nodelist,hsize,parameters )
                 end
                 head_list = head_list.next
             end
-            head.height = 0.75 * maxskip
-            head.depth  = 0.25 * maxskip
+            if lineheight and lineheight > 0.75 * maxskip then
+                head.height = lineheight
+                head.depth  = 0.25 * maxskip
+            else
+                head.height = 0.75 * maxskip
+                head.depth  = 0.25 * maxskip
+            end
         end
         head = head.next
     end
