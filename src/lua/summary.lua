@@ -36,7 +36,7 @@ function CreateSummary(lines, summary)
 	local global_time = 0
 
 	-- Note: ignore first line
-	for i = 2, table.getn(lines) do
+	for i = 2, #lines do
 		local word = string.match(lines[i], "[^\t]+\t[^\t]+\t([^\t]+)")
 		local local_time, total_time = string.match(lines[i], "[^\t]+\t[^\t]+\t[^\t]+\t[^\t]+\t[^\t]+\t([^\t]+)\t([^\t]+)")
         local_time = string.gsub(local_time, ",", ".")
