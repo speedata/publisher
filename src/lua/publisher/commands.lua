@@ -642,7 +642,11 @@ function commands.group( layoutxml,dataxml )
     if publisher.groups[groupname] == nil then
         log("Create »Group« %q.",groupname)
     else
-        node.flush_list(publisher.groups[groupname].contents)
+        log("Re-use »Group« %q.",groupname)
+        -- The old nodes are still in the group. We should clean the nodes
+        -- but this cleans too much.
+        -- copy-of should really copy the nodes. FIXME
+        -- node.flush_list(publisher.groups[groupname].contents)
         publisher.groups[groupname] = nil
     end
 
@@ -2158,6 +2162,10 @@ function commands.table( layoutxml,dataxml,optionen )
     xpath.set_variable("_last_tr_data","")
 
     local n = tabular:make_table()
+    -- Helpful for debugging purpose:
+    -- for i=1,#n do
+    --     node.set_attribute(n[i],publisher.att_origin,publisher.origin_table)
+    -- end
     trace("Done with table()")
     return n
 end

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en" >
+
+  <Pageformat width="10cm" height="5cm"/>
+
+  <Record element="data">
+    <SetVariable variable="para">
+      <Paragraph><Value>Some text</Value></Paragraph>
+    </SetVariable>
+    <SetVariable variable="foo">
+      <Tr>
+        <Td>
+          <Table stretch="max" width="8">
+            <Tr><Td><Copy-of select="$para"/></Td></Tr>
+          </Table>
+        </Td>
+      </Tr>
+    </SetVariable>
+
+    <Group name="mygroup">
+      <Contents>
+        <PlaceObject>
+          <Table>
+            <Copy-of select="$foo"/>
+          </Table>
+        </PlaceObject>
+      </Contents>
+    </Group>
+
+    <!-- re-use group -->
+    <Group name="mygroup">
+      <Contents>
+        <PlaceObject>
+          <Table>
+            <Copy-of select="$foo"/>
+          </Table>
+        </PlaceObject>
+      </Contents>
+    </Group>
+
+    <!-- The inner is not typeset when the group is re-used and the inner nodes are cleared (node.flush_list()) -->
+
+    <PlaceObject groupname="mygroup" column="1" row="1"/>
+  </Record>
+</Layout>

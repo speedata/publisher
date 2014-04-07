@@ -47,7 +47,7 @@ att_underline      = 5
 att_indent         = 6 -- see textformats for details
 att_rows           = 7 -- see textformats for details
 
-
+att_origin         = 98 -- for debugging purpose
 att_debug          = 99 -- for debugging purposes
 
 --- These attributes are for image shifting. The amount of shift up/left can
@@ -74,6 +74,10 @@ att_tr_dynamic_data = 501
 
 -- Force a hbox line height
 att_lineheight = 600
+
+-- Debugging / see att_origin
+origin_table = 1
+
 
 user_defined_addtolist = 1
 user_defined_bookmark  = 2

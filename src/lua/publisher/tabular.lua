@@ -53,6 +53,8 @@ function attach_objects_row( tab )
                     objects[#objects + 1] = eltcontents[1]
                 elseif eltname == "Barcode" then
                     objects[#objects + 1] = eltcontents
+                elseif eltname == "Box" then
+                    objects[#objects + 1] = eltcontents
                 else
                     warning("Object not recognized: %s",eltname or "???")
                 end
