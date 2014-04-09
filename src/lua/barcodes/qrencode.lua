@@ -401,11 +401,11 @@ local function add_pad_data(version,ec_level,data)
 	if count_to_pad > 0 then
 		data = data .. string.rep("0",count_to_pad)
 	end
-	if math.mod(#data,8) ~= 0 then
-		missing_digits = 8 - math.mod(#data,8)
+	if math.fmod(#data,8) ~= 0 then
+		missing_digits = 8 - math.fmod(#data,8)
 		data = data .. string.rep("0",missing_digits)
 	end
-	assert(math.mod(#data,8) == 0)
+	assert(math.fmod(#data,8) == 0)
 	-- add "11101100" and "00010001" until enough data
 	while #data < cpty do
 		data = data .. "11101100"
@@ -568,7 +568,7 @@ local function calculate_error_correction(data,num_ec_codewords)
 		local exp = mp_alpha[highest_exponent]
 		for i=highest_exponent,highest_exponent - num_ec_codewords,-1 do
 			if gp_alpha[i] + exp > 255 then
-				gp_alpha[i] = math.mod(gp_alpha[i] + exp,255)
+				gp_alpha[i] = math.fmod(gp_alpha[i] + exp,255)
 			else
 				gp_alpha[i] = gp_alpha[i] + exp
 			end
@@ -680,7 +680,7 @@ local remainder = {0, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 4
 -- 	else
 -- 		size = size - 31
 -- 	end
--- 	return math.floor(size/8),math.mod(size,8)
+-- 	return math.floor(size/8),math.fmod(size,8)
 -- end
 
 
@@ -824,14 +824,14 @@ local function add_timing_pattern(tab_x)
 	line = 7
 	col = 9
 	for i=col,#tab_x - 8 do
-		if math.mod(i,2) == 1 then
+		if math.fmod(i,2) == 1 then
 			tab_x[i][line] = 2
 		else
 			tab_x[i][line] = -2
 		end
 	end
 	for i=col,#tab_x - 8 do
-		if math.mod(i,2) == 1 then
+		if math.fmod(i,2) == 1 then
 			tab_x[line][i] = 2
 		else
 			tab_x[line][i] = -2
@@ -968,7 +968,7 @@ local function add_version_information(matrix,version)
 	start_y = 1
 	for i=1,#bitstring do
 		bit = string.sub(bitstring,i,i)
-		x = start_x + math.mod(i - 1,3)
+		x = start_x + math.fmod(i - 1,3)
 		y = start_y + math.floor( (i - 1) / 3 )
 		fill_matrix_position(matrix,bit,x,y)
 	end
@@ -979,7 +979,7 @@ local function add_version_information(matrix,version)
 	for i=1,#bitstring do
 		bit = string.sub(bitstring,i,i)
 		x = start_x + math.floor( (i - 1) / 3 )
-		y = start_y + math.mod(i - 1,3)
+		y = start_y + math.fmod(i - 1,3)
 		fill_matrix_position(matrix,bit,x,y)
 	end
 end
@@ -1030,21 +1030,21 @@ local function get_pixel_with_mask( mask, x,y,value )
 	if mask == -1 then
 		-- ignore, no masking applied
 	elseif mask == 0 then
-		if math.mod(x + y,2) == 0 then invert = true end
+		if math.fmod(x + y,2) == 0 then invert = true end
 	elseif mask == 1 then
-		if math.mod(y,2) == 0 then invert = true end
+		if math.fmod(y,2) == 0 then invert = true end
 	elseif mask == 2 then
-		if math.mod(x,3) == 0 then invert = true end
+		if math.fmod(x,3) == 0 then invert = true end
 	elseif mask == 3 then
-		if math.mod(x + y,3) == 0 then invert = true end
+		if math.fmod(x + y,3) == 0 then invert = true end
 	elseif mask == 4 then
-		if math.mod(math.floor(y / 2) + math.floor(x / 3),2) == 0 then invert = true end
+		if math.fmod(math.floor(y / 2) + math.floor(x / 3),2) == 0 then invert = true end
 	elseif mask == 5 then
-		if math.mod(x * y,2) + math.mod(x * y,3) == 0 then invert = true end
+		if math.fmod(x * y,2) + math.fmod(x * y,3) == 0 then invert = true end
 	elseif mask == 6 then
-		if math.mod(math.mod(x * y,2) + math.mod(x * y,3),2) == 0 then invert = true end
+		if math.fmod(math.fmod(x * y,2) + math.fmod(x * y,3),2) == 0 then invert = true end
 	elseif mask == 7 then
-		if math.mod(math.mod(x * y,3) + math.mod(x + y,2),2) == 0 then invert = true end
+		if math.fmod(math.fmod(x * y,3) + math.fmod(x + y,2),2) == 0 then invert = true end
 	else
 		assert(false,"This can't happen (mask must be <= 7)")
 	end
@@ -1308,8 +1308,8 @@ local function qrcode( str, ec_level, mode )
 	data_raw = data_raw .. encode_data(str,mode)
 	data_raw = add_pad_data(version,ec_level,data_raw)
 	arranged_data = arrange_codewords_and_calculate_ec(version,ec_level,data_raw)
-	if math.mod(#arranged_data,8) ~= 0 then
-		return false, string.format("Arranged data %% 8 != 0: data length = %d, mod 8 = %d",#arranged_data, math.mod(#arranged_data,8))
+	if math.fmod(#arranged_data,8) ~= 0 then
+		return false, string.format("Arranged data %% 8 != 0: data length = %d, mod 8 = %d",#arranged_data, math.fmod(#arranged_data,8))
 	end
 	arranged_data = arranged_data .. string.rep("0",remainder[version])
 	local tab = get_matrix_with_lowest_penalty(version,ec_level,arranged_data)

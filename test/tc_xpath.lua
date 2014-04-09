@@ -47,7 +47,7 @@ end
 local function format_number(dataxml,arg)
   local num, thousandssep,commasep = arg[1], arg[2], arg[3]
   local sign,digits,commadigits = string.match(tostring(num),"([%-%+]?)(%d*)%.?(%d*)")
-  local first_digits = math.mod(#digits,3)
+  local first_digits = math.fmod(#digits,3)
   local ret = {}
   if first_digits > 0 then
     ret[1] = string.sub(digits,0,first_digits)
@@ -69,7 +69,7 @@ local function format_string( dataxml,arg )
 end
 
 xpath.register_function("foo","verbose",function(dataxml,arg)  printtable("verbose",arg) return true end)
-xpath.register_function("foo","even",function(dataxml,x) return math.mod(x[1],2) == 0 end)
+xpath.register_function("foo","even",function(dataxml,x) return math.fmod(x[1],2) == 0 end)
 xpath.register_function("foo","return-ten",function(dataxml) return 10 end)
 xpath.register_function("foo","number-of-datasets",number_of_datasets)
 xpath.register_function("foo","format-string",format_string)

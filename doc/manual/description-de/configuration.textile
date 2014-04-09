@@ -29,7 +29,7 @@ Das Format muss eingehalten werden, sonst wird die Datei nicht richtig erkannt. 
 - @filter@  := Führt die angegebene Datei als XPROC-Filter aus.
 - @fontpath@ := Setzt den systemweiten Pfad für Fonts. Unter Windows ist dies @%WINDIR%\Fonts@, unter Mac OS X @/Library/Fonts:/System/Library/Fonts@.
 - @grid@    := Bestimmt, ob das Raster angezeigt wird.
-- @imagecache@ := Ordner für zwichengespeicherte Bilder (nur @url="http://..."@). Voreinstellung: @$TMPDIR/sp/images@.
+- @imagecache@ := Ordner für zwichengespeicherte Bilder (nur @href="http://..."@). Voreinstellung: @$TMPDIR/sp/images@.
 - @jobname@ := Name der Ausgabedatei
 - @layout@  := Name des Layoutregelwerks. @layout.xml@ ist der voreingestellte Name.
 - @opencommand@ := Kommando für das automatische Öffnen der Dokumentation bzw. PDF-Datei. Für MacOS X sollte das @open@ sein, für Linux @xdg-open@ oder @exo-open@  (xfce).
