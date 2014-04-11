@@ -1652,10 +1652,10 @@
       <cmd name="B" />
       <cmd name="Image" />
       <cmd name="Switch" />
-      <cmd name="I" />
       <cmd name="Fontface" />
       <cmd name="Sub" />
       <cmd name="Sup" />
+      <cmd name="Value"/>
     </childelements>
     <example xml:lang="de">
       <listing><![CDATA[<Textblock spalte="3" breite="10">
@@ -2781,6 +2781,142 @@
         </description>
         <description xml:lang="de">
           <para>Auf Englische Trennmuster umschalten.</para>
+        </description>
+      </choice>
+      <choice name="Czech">
+        <description xml:lang="en">
+          <para></para>
+        </description>
+        <description xml:lang="de">
+          <para></para>
+        </description>
+      </choice>
+      <choice name="Danish">
+        <description xml:lang="en">
+          <para></para>
+        </description>
+        <description xml:lang="de">
+          <para></para>
+        </description>
+      </choice>
+      <choice name="Dutch">
+        <description xml:lang="en">
+          <para></para>
+        </description>
+        <description xml:lang="de">
+          <para></para>
+        </description>
+      </choice>
+      <choice name="Englisch (USA)">
+        <description xml:lang="en">
+          <para></para>
+        </description>
+        <description xml:lang="de">
+          <para></para>
+        </description>
+      </choice>
+      <choice name="Finnish">
+        <description xml:lang="en">
+          <para></para>
+        </description>
+        <description xml:lang="de">
+          <para></para>
+        </description>
+      </choice>
+      <choice name="Greek">
+        <description xml:lang="en">
+          <para>Monotonic greek</para>
+        </description>
+        <description xml:lang="de">
+          <para>Neugriechisch</para>
+        </description>
+      </choice>
+      <choice name="Hungarian">
+        <description xml:lang="en">
+          <para></para>
+        </description>
+        <description xml:lang="de">
+          <para></para>
+        </description>
+      </choice>
+      <choice name="Italian">
+        <description xml:lang="en">
+          <para></para>
+        </description>
+        <description xml:lang="de">
+          <para></para>
+        </description>
+      </choice>
+      <choice name="Norwegian Bokmål">
+        <description xml:lang="en">
+          <para></para>
+        </description>
+        <description xml:lang="de">
+          <para></para>
+        </description>
+      </choice>
+      <choice name="Norwegian Nynorsk">
+        <description xml:lang="en">
+          <para></para>
+        </description>
+        <description xml:lang="de">
+          <para></para>
+        </description>
+      </choice>
+      <choice name="Polish">
+        <description xml:lang="en">
+          <para></para>
+        </description>
+        <description xml:lang="de">
+          <para></para>
+        </description>
+      </choice>
+      <choice name="Portuguese">
+        <description xml:lang="en">
+          <para></para>
+        </description>
+        <description xml:lang="de">
+          <para></para>
+        </description>
+      </choice>
+      <choice name="Russian">
+        <description xml:lang="en">
+          <para></para>
+        </description>
+        <description xml:lang="de">
+          <para></para>
+        </description>
+      </choice>
+      <choice name="Serbian">
+        <description xml:lang="en">
+          <para></para>
+        </description>
+        <description xml:lang="de">
+          <para></para>
+        </description>
+      </choice>
+      <choice name="Spanish">
+        <description xml:lang="en">
+          <para></para>
+        </description>
+        <description xml:lang="de">
+          <para></para>
+        </description>
+      </choice>
+      <choice name="Swedish">
+        <description xml:lang="en">
+          <para></para>
+        </description>
+        <description xml:lang="de">
+          <para></para>
+        </description>
+      </choice>
+      <choice name="Turkish">
+        <description xml:lang="en">
+          <para></para>
+        </description>
+        <description xml:lang="de">
+          <para></para>
         </description>
       </choice>
     </attribute>

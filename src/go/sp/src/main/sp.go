@@ -44,6 +44,7 @@ var (
 	add_local_path        bool // Add pwd recursively to extra-dir
 	useSystemFonts        bool
 	configfilename        string
+	mainlanguage          string
 	extra_dir             []string
 	starttime             time.Time
 	cfg                   *configurator.ConfigData
@@ -629,6 +630,7 @@ func main() {
 	op.On("--no-local", "Add local directory to the search path. Default is true", &add_local_path)
 	op.On("--layout NAME", "Name of the layout file. Defaults to 'layout.xml'", options)
 	op.On("--jobname NAME", "The name of the resulting PDF file (without extension), default is 'publisher'", options)
+	op.On("--mainlanguage NAME", "The document's main language in locale format, for example 'en' or 'en_US'.", &mainlanguage)
 	op.On("--outputdir=DIR", "Copy PDF and protocol to this directory", options)
 	op.On("--profile", "Run publisher with profiling on (internal use)", options)
 	op.On("--runs NUM", "Number of publishing runs ", options)
@@ -697,6 +699,7 @@ func main() {
 		}
 		defaults["fontpath"] = ff
 	}
+	os.Setenv("SP_MAINLANGUAGE", mainlanguage)
 	os.Setenv("SP_FONT_PATH", getOption("fontpath"))
 	os.Setenv("SP_PATH_REWRITE", getOption("pathrewrite"))
 	os.Setenv("IMGCACHE", getOption("imagecache"))

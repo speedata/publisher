@@ -105,12 +105,9 @@
     <value key="Code128" context="*" en="Code128" de="Code128"/>
     <value key="cropbox" context="*" en="cropbox" de="cropbox"/>
     <value key="EAN13" context="*" en="EAN13" de="EAN13"/>
-    <value key="Englisch (Great Britan)" context="*" en="Englisch (Great Britan)" de="Englisch (Großbritannien)"/>
     <value key="even" context="*" en="even" de="gerade"/>
     <value key="first" context="*" en="first" de="erste"/>
-    <value key="French" context="*" en="French" de="Französisch"/>
     <value key="full" context="*" en="full" de="vollständig"/>
-    <value key="German" context="*" en="German" de="Deutsch"/>
     <value key="gray" context="*" en="gray" de="graustufen"/>
     <value key="horizontal" context="*" en="horizontal" de="horizontal"/>
     <value key="justified" context="*" en="justified" de="blocksatz"/>
@@ -134,6 +131,27 @@
     <value key="vertical" context="*" en="vertical" de="vertikal"/>
     <value key="without" context="*" en="without" de="ohne"/>
     <value key="yes" context="*" en="yes" de="ja"/>
+
+    <value context="*" key="Englisch (Great Britan)" en="Englisch (Great Britan)" de="Englisch (Großbritannien)"/>
+    <value context="*" key="Englisch (USA)" en="Englisch (USA)" de="Englisch (USA)"/>
+    <value context="*" key="French" en="French" de="Französisch"/>
+    <value context="*" key="German" en="German" de="Deutsch"/>
+    <value context="*" key="Czech" en="Czech" de="Tschechisch" />
+    <value context="*" key="Danish" en="Danish" de="Dänisch"/>
+    <value context="*" key="Dutch" en="Dutch" de="Niederländisch"/>
+    <value context="*" key="Finnish" en="Finnish" de="Finnisch"/>
+    <value context="*" key="Greek" en="Greek" de="Neugriechisch"/>
+    <value context="*" key="Hungarian" en="Hungarian" de="Ungarisch"/>
+    <value context="*" key="Italian" en="Italian" de="Italienisch"/>
+    <value context="*" key="Norwegian Bokmål" en="Norwegian Bokmål" de="Bokmål"/>
+    <value context="*" key="Norwegian Nynorsk" en="Norwegian Nynorsk" de="Nynorsk"/>
+    <value context="*" key="Polish" en="Polish" de="Polnisch"/>
+    <value context="*" key="Portuguese" en="Portuguese" de="Portugiesisch"/>
+    <value context="*" key="Russian" en="Russian" de="Russisch"/>
+    <value context="*" key="Serbian" en="Serbian" de="Serbisch"/>
+    <value context="*" key="Spanish" en="Spanish" de="Spanisch"/>
+    <value context="*" key="Swedish" en="Swedish" de="Schwedisch"/>
+    <value context="*" key="Turkish" en="Turkish" de="Türkisch"/>
   </values>
   <attributes>
     <attribute key="align" en="align" de="align"/>

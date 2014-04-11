@@ -34,9 +34,6 @@ function Paragraph:add_italic_bold( nodelist,parameter )
         if parameter.underline == 1 then
             node.set_attribute(i,att_underline,1)
         end
-        if languagecodeuagecode then
-            i.lang = languagecodeuagecode
-        end
     end
 end
 

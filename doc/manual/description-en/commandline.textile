@@ -19,6 +19,8 @@ Usage: [parameter] command
     --layout=NAME            Name of the layout file. Defaults to 'layout.xml'
     --jobname=NAME           The name of the resulting PDF file (without
                              extension), default is 'publisher'
+    --mainlanguage=NAME      The document's main language in locale format,
+                             for example en_US.
     --outputdir=DIR          Copy PDF and protocol to this directory
     --profile                Run publisher with profiling on (internal use)
     --runs=NUM               Number of publishing runs
@@ -54,6 +56,7 @@ h2. Description of the command line parameters
 - @--layout=NAME@:= Name of the layout XML file. Default is @layout.xml@. Can be "configured":configuration.html.
 - @--[no-]local@ := The current directory is (not) added to the search path recursively. The default is @--local@ which means that the currenct directory and all its subdirectories is added to the search path. This allows you to run the publisher in any directory and put your assets in a subdirectory.
 - @--jobname=NAME@ := The name of the output file. Default is @publisher@. The extension (@.pdf@) is added automatcially.
+- @--mainlanguage=NAME@ := Set the main language for the document (hyphenation). Allowed values are: @af@, @as@, @bg@, @ca@, @cs@, @cy@, @da@, @de@, @el@, @en@, @en_GB@, @en_US@, @eo@, @es@, @et@, @eu@, @fi@, @fr@, @ga@, @gl@, @gu@, @hi@, @hr@, @hu@, @hy@, @ia@, @id@, @is@, @it@, @ku@, @kn@, @la@, @lo@, @lt@, @ml@, @lv@, @ml@, @mn@, @mr@, @nb@, @nl@, @nn@, @or@, @pa@, @pl@, @pt@, @ro@, @ru@, @sa@, @sk@, @sl@, @sr@, @sv@, @ta@, @te@, @tk@, @tr@, @uk@ und @zh@. See also the "language code list":http://www.loc.gov/standards/iso639-2/php/code_list.php.
 - @--outputdir=DIR@ := Name of the directory of the resulting file. The directory will be created if necessary.
 - @--runs=NUM@ := The number of passes. Normally the publisher will process a file only once, but more passes can be necessary if intermediate files are created for generating a table of contents or other document dependent data.
 - @--show-gridallocation@ := Show the allocated grid cells in yellowish color and double allocated grid cells in red.

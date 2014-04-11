@@ -1063,9 +1063,6 @@
             <ref name="e_Switch"/>
          </optional>
          <optional>
-            <ref name="e_I"/>
-         </optional>
-         <optional>
             <ref name="e_Fontface"/>
          </optional>
          <optional>
@@ -1073,6 +1070,9 @@
          </optional>
          <optional>
             <ref name="e_Sup"/>
+         </optional>
+         <optional>
+            <ref name="e_Value"/>
          </optional>
       </element>
    </define>
@@ -1654,6 +1654,40 @@
                   <a:documentation xmlns="">Auf Deutsche Trennmuster umschalten.</a:documentation>
                   <value>Englisch (Großbritannien)</value>
                   <a:documentation xmlns="">Auf Englische Trennmuster umschalten.</a:documentation>
+                  <value>Tschechisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Dänisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Niederländisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Englisch (USA)</value>
+                  <a:documentation xmlns=""/>
+                  <value>Finnisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Neugriechisch</value>
+                  <a:documentation xmlns="">Neugriechisch</a:documentation>
+                  <value>Ungarisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Italienisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Bokmål</value>
+                  <a:documentation xmlns=""/>
+                  <value>Nynorsk</value>
+                  <a:documentation xmlns=""/>
+                  <value>Polnisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Portugiesisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Russisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Serbisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Spanisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Schwedisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Türkisch</value>
+                  <a:documentation xmlns=""/>
                </choice>
             </attribute>
          </optional>

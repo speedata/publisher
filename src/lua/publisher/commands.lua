@@ -1209,11 +1209,11 @@ function commands.options( layoutxml,dataxml )
     publisher.options.trim               = publisher.read_attribute(layoutxml,dataxml,"trim",        "length")
     publisher.options.ignoreeol          = publisher.read_attribute(layoutxml,dataxml,"ignoreeol",   "boolean")
     publisher.options.resetmarks         = publisher.read_attribute(layoutxml,dataxml,"resetmarks",  "boolean",false)
-    local mainlanguage                   = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","Englisch (Great Britan)")
+    local mainlanguage                   = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","")
 
-    log("Setting default language to %q",mainlanguage or "?")
-    publisher.get_languagecode(mainlanguage)
-
+    if mainlanguage ~= "" then
+        publisher.set_mainlanguage(mainlanguage,true)
+    end
     if publisher.options.trim then
         publisher.options.trim = tex.sp(publisher.options.trim)
     end
@@ -1357,7 +1357,7 @@ function commands.paragraph( layoutxml,dataxml )
     if language_name then
         languagecode = publisher.get_languagecode(language_name)
     else
-        languagecode = 0
+        languagecode = publisher.defaultlanguage
     end
 
     local colortable

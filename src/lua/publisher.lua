@@ -115,6 +115,9 @@ nextpage = nil
 -- the language of the layout instructions ('en' or 'de')
 current_layoutlanguage = nil
 
+-- The document language
+defaultlanguage = 0
+
 -- Startpage
 current_pagenumber = 1
 
@@ -181,9 +184,148 @@ textformats = {
 --- We map from sybolic names to (part of) file names. The hyphenation pattern files are
 --- in the format `hyph-XXX.pat.txt` and we need to find out that `XXX` part.
 language_mapping = {
-    ["German"]                       = "de-1996",
-    ["Englisch (Great Britan)"]      = "en-gb",
+    ["Czech"]                        = "cs",
+    ["Danish"]                       = "da",
+    ["Dutch"]                        = "nl",
+    ["Englisch (Great Britan)"]      = "en_GB",
+    ["Englisch (USA)"]               = "en_US",
+    ["Finnish"]                      = "fi",
     ["French"]                       = "fr",
+    ["German"]                       = "de",
+    ["Greek"]                        = "el",
+    ["Hungarian"]                    = "hu",
+    ["Italian"]                      = "it",
+    ["Norwegian Bokmål"]             = "nb",
+    ["Norwegian Nynorsk"]            = "nn",
+    ["Polish"]                       = "pt",
+    ["Portuguese"]                   = "pt",
+    ["Russian"]                      = "ru",
+    ["Serbian"]                      = "sr",
+    ["Spanish"]                      = "es",
+    ["Swedish"]                      = "sv",
+    ["Turkish"]                      = "tr",
+}
+
+-- af, Afrikaans - Afrikaans
+-- as, Assamese - Assamesisch
+-- bg, Bulgarian - Bulgarisch
+-- ca, Catalan - Katalanisch
+-- cs, Czech - Tschechisch
+-- cy, Welsh - Kymrisch
+-- da, Danish - Dänisch
+-- de, German - Deutsch
+-- el, Greek - Neugriechisch
+-- en, English - Englisch
+-- en_US,
+-- eo, Esperanto - Esperanto
+-- es, Spanish - Spanisch
+-- et, Estonian - Estnisch
+-- eu, Basque - Baskisch
+-- fi, Finnish - Finnisch
+-- fr, French - Französisch
+-- ga, Irish - Irisch
+-- gl, Galician - Galicisch
+-- gu, Gujarati - Gujarati
+-- hi, Hindi - Hindi
+-- hr, Croatian - Kroatisch
+-- hu, Hungarian - Ungarisch
+-- hy, Armenian - Armenisch
+-- ia, Interlingua - Interlingua
+-- id, Indonesian - Bahasa Melayu
+-- is, Icelandic - Isländisch
+-- it, Italian - Italienisch
+-- ku, Kurdish - Kurdisch
+-- kn, Kannada - Kannada
+-- la, Latin - Latein
+-- lo, Lao - Laotisch
+-- lt, Lithuanian - Litauisch
+-- ml, Malayalam - Malayalam
+-- lv, Latvian - Lettisch
+-- ml, Malayalam - Malayalam
+-- mn, Mongolian - Mongolisch
+-- mr, Marathi - Marathi
+-- nb, Norwegian Bokmål - Bokmål
+-- nl, Dutch - Niederländisch
+-- nn, Norwegian Nynorsk - Nynorsk
+-- or, Oriya - Oriya
+-- pa, Panjabi - Pandschabi
+-- pl, Polish - Polnisch
+-- pt, Portuguese - Portugiesisch
+-- ro, Romanian - Rumänisch
+-- ru, Russian - Russisch
+-- sa, Sanskrit - Sanskrit
+-- sk, Slovak - Slowakisch
+-- sl, Slovenian - Slowenisch
+-- sr, Serbian - Serbisch
+-- sv, Swedish - Schwedisch
+-- ta, Tamil - Tamil
+-- te, Telugu - Telugu
+-- tk, Turkmen - Turkmenisch
+-- tr, Turkish - Türkisch
+-- uk, Ukrainian - Ukrainisch
+-- zh, Chinese - Chinesisch
+
+
+language_filename = {
+    ["af"]    = "af",
+    ["as"]    = "as",
+    ["bg"]    = "bg",
+    ["ca"]    = "ca",
+    ["cs"]    = "cs",
+    ["cy"]    = "cy",
+    ["da"]    = "da",
+    ["de"]    = "de-1996",
+    ["el"]    = "el-monoton",
+    ["en"]    = "en-gb",
+    ["en_GB"] = "en-gb",
+    ["en_US"] = "en-us",
+    ["eo"]    = "eo",
+    ["es"]    = "es",
+    ["et"]    = "et",
+    ["eu"]    = "eu",
+    ["fi"]    = "fi",
+    ["fr"]    = "fr",
+    ["ga"]    = "ga",
+    ["gl"]    = "gl",
+    ["gu"]    = "gu",
+    ["hi"]    = "hi",
+    ["hr"]    = "hr",
+    ["hu"]    = "hu",
+    ["hy"]    = "hy",
+    ["ia"]    = "ia",
+    ["id"]    = "id",
+    ["is"]    = "is",
+    ["it"]    = "it",
+    ["ku"]    = "kmr",
+    ["kn"]    = "kn",
+    ["la"]    = "la",
+    ["lo"]    = "lo",
+    ["lt"]    = "lt",
+    ["ml"]    = "ml",
+    ["lv"]    = "lv",
+    ["ml"]    = "ml",
+    ["mn"]    = "mn-cyrl",
+    ["mr"]    = "mr",
+    ["nb"]    = "nb",
+    ["nl"]    = "nl",
+    ["nn"]    = "nn",
+    ["or"]    = "or",
+    ["pa"]    = "pa",
+    ["pl"]    = "pl",
+    ["pt"]    = "pt",
+    ["ro"]    = "ro",
+    ["ru"]    = "ru",
+    ["sa"]    = "sa",
+    ["sk"]    = "sk",
+    ["sl"]    = "sl",
+    ["sr"]    = "sr",
+    ["sv"]    = "sv",
+    ["ta"]    = "ta",
+    ["te"]    = "te",
+    ["tk"]    = "tk",
+    ["tr"]    = "tr",
+    ["uk"]    = "uk",
+    ["zh"]    = "zh-latn",
 }
 
 --- Once a hyphenation pattern file is loaded, we only need the _id_ of it. This is stored in the
@@ -417,6 +559,7 @@ function dothings()
     --- First we set some defaults.
     --- A4 paper is 210x297 mm
     set_pageformat(tex.sp("210mm"),tex.sp("297mm"))
+    get_languagecode(os.getenv("SP_MAINLANGUAGE") or "en_GB")
 
     --- The free font family `TeXGyreHeros` is a Helvetica clone and is part of the
     --- [The TeX Gyre Collection of Fonts](http://www.gust.org.pl/projects/e-foundry/tex-gyre).
@@ -1331,7 +1474,7 @@ function mknodes(str,fontfamily,parameter)
     -- instance is the internal fontnumber
     local instance
     local instancename
-    local languagecode = parameter.languagecode or 0
+    local languagecode = parameter.languagecode or defaultlanguage
     if parameter.bold == 1 then
         if parameter.italic == 1 then
             instancename = "bolditalic"
@@ -1366,12 +1509,7 @@ function mknodes(str,fontfamily,parameter)
         n.font = instance
         n.subtype = 1
         n.char = s
-        if languagecode then
-            n.lang = languagecode
-        else
-            n.lang = 0
-        end
-
+        n.lang = languagecode
         node.set_attribute(n,att_fontfamily,fontfamily)
         return n
     end
@@ -2182,25 +2320,44 @@ function xml_to_string( xml_element, level )
     return str
 end
 
---- The language name is something like `German` and needs to be mapped to an internal name.
----
-function get_languagecode( language_name )
-    local language_internal = language_mapping[language_name]
-    if publisher.languages[language_internal] then
-        return publisher.languages[language_internal]
+--- The language name is something like `German` or a locale.
+function get_languagecode( locale_or_name )
+    local locale = locale_or_name
+
+    if language_mapping[locale_or_name] then
+        locale = language_mapping[locale_or_name]
     end
-    local filename = string.format("hyph-%s.pat.txt",language_internal)
+
+    if languages[locale] then
+        return languages[locale]
+    end
+
+    local filename_part
+    if language_filename[locale] then
+        filename_part = language_filename[locale]
+    else
+        local lang, _ = table.unpack(string.explode(locale,"_"))
+        if language_filename[lang] then
+            filename_part = language_filename[lang]
+        end
+    end
+    if not filename_part then
+        err("Can't find hyphenation patterns for language %s",tostring(locale))
+        return 0
+    end
+
+    local filename = string.format("hyph-%s.pat.txt",filename_part)
     log("Loading hyphenation patterns %q.",filename)
     local path = kpse.find_file(filename)
     local pattern_file = io.open(path)
     local pattern = pattern_file:read("*all")
+    pattern_file:close()
 
     local l = lang.new()
     l:patterns(pattern)
     local id = l:id()
     log("Language id: %d",id)
-    pattern_file:close()
-    publisher.languages[language_internal] = id
+    languages[locale] = id
     return id
 end
 
@@ -2502,6 +2659,12 @@ function stable_sort( array, goes_before )
     return array
 end
 -- end of stable sorting function
+
+function set_mainlanguage( mainlanguage )
+    log("Setting default language to %q",mainlanguage or "?")
+    defaultlanguage = get_languagecode(mainlanguage)
+end
+
 
 
 file_end("publisher.lua")
