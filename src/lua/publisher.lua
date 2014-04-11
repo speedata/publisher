@@ -998,11 +998,13 @@ function setup_page(pagenumber)
     local cp = current_page
     current_page = seiten[thispage]
     if current_page.atpagecreation then
+        pagebreak_impossible = true
         local cpn = current_pagenumber
         current_pagenumber = thispage
         current_grid = seiten[thispage].grid
         publisher.dispatch(current_page.atpagecreation,nil)
         current_pagenumber = cpn
+        pagebreak_impossible = false
     end
     current_page = cp
 
