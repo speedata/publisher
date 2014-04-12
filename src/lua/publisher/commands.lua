@@ -1552,7 +1552,11 @@ function commands.place_object( layoutxml,dataxml )
             if hreference == "right" then
                 spalte = spalte - width_in_gridcells + 1
             end
-            publisher.output_absolute_position(object,spalte + current_grid.extra_margin,zeile + current_grid.extra_margin,allocate,objects[i].allocate_matrix)
+            local top = zeile + current_grid.extra_margin
+            if vreference == "bottom" then
+                top = top - object.height
+            end
+            publisher.output_absolute_position(object,spalte + current_grid.extra_margin,top,allocate,objects[i].allocate_matrix)
         else
             -- Look for a place for the object
             -- local current_row = current_grid:current_row(area)
