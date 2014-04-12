@@ -2002,6 +2002,11 @@
          <optional>
             <attribute name="allocate">
                <a:documentation>Determines if the area of the object is marked as »allocated«. With allocate="no", the cursor position is not changed.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+                  <text/>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -2011,7 +2016,7 @@
          </optional>
          <optional>
             <attribute name="groupname">
-               <a:documentation/>
+               <a:documentation>The name of the group that gets output. When given a groupname, PlaceObject should not contain any objects.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2041,7 +2046,7 @@
          </optional>
          <optional>
             <attribute name="column">
-               <a:documentation/>
+               <a:documentation>If contents is a number: the grid cell from the left margin of the area. If it is a length: the absolute position from the left paper margin. If this attribute is omitted, the system tries to place the object by itself.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2066,22 +2071,42 @@
          </optional>
          <optional>
             <attribute name="maxheight">
-               <a:documentation/>
+               <a:documentation>Only used for multi-page table: the maximum height of tables.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="valign">
-               <a:documentation/>
+               <a:documentation>When an object is placed on the grid and it's height is not a multiple of grid height, there is a space left on the page between the object an the next grid cell. With this attribute you can instruct the software where to place the gap.</a:documentation>
+               <choice>
+                  <value>top</value>
+                  <a:documentation xmlns="">The object is aligned at the top.</a:documentation>
+                  <value>middle</value>
+                  <a:documentation xmlns="">The object is aligned so that the space at the top is the same as at the bottom.</a:documentation>
+                  <value>bottom</value>
+                  <a:documentation xmlns="">The object is aligned at the bottom.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
             <attribute name="hreference">
                <a:documentation>Determines the placement of the object relative to the given column. If 'left' (which is the default), the given column is the left border of the object. If 'right', the column determines the right edge of the object.</a:documentation>
+               <choice>
+                  <value>left</value>
+                  <a:documentation xmlns="">The object is placed in given column.</a:documentation>
+                  <value>right</value>
+                  <a:documentation xmlns="">The given columns determines the right edge of the border.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
             <attribute name="vreference">
-               <a:documentation>Determines the placement of the object relative to the given row. If 'top' (which is the default), the given row is the top border of the object. If 'bottom', the column determines the bottom edge of the object.</a:documentation>
+               <a:documentation>Sets the placement of the object relative to the given row. </a:documentation>
+               <choice>
+                  <value>bottom</value>
+                  <a:documentation xmlns="">The row determines the bottom edge of the object.</a:documentation>
+                  <value>top</value>
+                  <a:documentation xmlns="">If 'top' (default), the given row is the top border of the object.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <oneOrMore>

@@ -3238,7 +3238,7 @@
         </interleave>
       </oneOrMore>
     </childelements>
-    <attribute name="allocate" type="yesnoauto" optional="yes">
+    <attribute name="allocate" type="yesno" optional="yes">
       <description xml:lang="en">
         <para>Determines if the area of the object is marked as »allocated«. With allocate="no", the cursor position is not changed.</para>
       </description>
@@ -3258,7 +3258,7 @@
     </attribute>
     <attribute name="groupname" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The name of the group that gets output. When given a groupname, PlaceObject should not contain any objects.</para>
       </description>
       <description xml:lang="de">
         <para>Wenn eine Gruppe ausgegeben werden soll, muss der Name hier angegeben werden.</para>
@@ -3306,7 +3306,7 @@
     </attribute>
     <attribute name="column" type="numberorlength" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>If contents is a number: the grid cell from the left margin of the area. If it is a length: the absolute position from the left paper margin. If this attribute is omitted, the system tries to place the object by itself.</para>
       </description>
       <description xml:lang="de">
         <para>Zahl: Die Zeile im Raster, in der das Objekt ausgegeben wird. Wird die Zeile nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe:
@@ -3340,37 +3340,93 @@
     </attribute>
     <attribute name="maxheight" type="number" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Only used for multi-page table: the maximum height of tables.</para>
       </description>
       <description xml:lang="de">
         <para>Die maximale Höhe in Rasterzellen, die das Objekt belegen darf. Wird nur für den automatischen Tabellenumbruch benötigt. Die umbrochenen Tabellen auf den Folgeseiten haben maximal die
           angegebene Höhe.</para>
       </description>
     </attribute>
-    <attribute name="valign" type="topmiddlebottom" optional="yes">
+    <attribute name="valign" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>When an object is placed on the grid and it's height is not a multiple of grid height, there is a space left on the page between the object an the next grid cell. With this attribute you can instruct the software where to place the gap.</para>
       </description>
       <description xml:lang="de">
-        <para>Wird ein Objekt ausgegeben, das kein Vielfaches der Rasterhöhe ist, dann gibt das Attribut die vertikale Ausrichtung an. Bottom beispielsweise bedeutet, dass der freie Platz oberhalb des
+        <para>Wird ein Objekt ausgegeben, das kein vielfaches der Rasterhöhe ist, dann gibt das Attribut die vertikale Ausrichtung an. Bottom beispielsweise bedeutet, dass der freie Platz oberhalb des
           Objekts bleibt. Voreinstellung ist “top”.</para>
       </description>
+      <choice name="top">
+        <description xml:lang="en">
+          <para>The object is aligned at the top.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Das Objekt wird oben ausgerichtet.</para>
+        </description>
+      </choice>
+      <choice name="middle">
+        <description xml:lang="en">
+          <para>The object is aligned so that the space at the top is the same as at the bottom.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Das Objekt wird so platziert, dass der Leerraum überhalb und unterhalb derselbe ist.</para>
+        </description>
+      </choice>
+      <choice name="bottom">
+        <description xml:lang="en">
+          <para>The object is aligned at the bottom.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Das Objekt wird unten ausgerichtet.</para>
+        </description>
+      </choice>
     </attribute>
-    <attribute name="hreference" type="leftright" optional="yes">
+    <attribute name="hreference" optional="yes">
       <description xml:lang="en">
         <para>Determines the placement of the object relative to the given column. If 'left' (which is the default), the given column is the left border of the object. If 'right', the column determines the right edge of the object.</para>
       </description>
       <description xml:lang="de">
         <para>Bestimmt, ob die angegebene Spalte die linke oder die rechte Kante vom Objekt bezeichnet.</para>
       </description>
+      <choice name="left">
+        <description xml:lang="en">
+          <para>The object is placed in given column.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Das Objekt wird in der angegebenen Spalte platziert.</para>
+        </description>
+      </choice>
+      <choice name="right">
+        <description xml:lang="en">
+          <para>The given columns determines the right edge of the border.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Das Objekt wird mit dem rechten Rand in der gegebenen Spalte ausgerichtet.</para>
+        </description>
+      </choice>
     </attribute>
-    <attribute name="vreference" type="topbottom" optional="yes">
+    <attribute name="vreference" optional="yes">
       <description xml:lang="en">
-        <para>Determines the placement of the object relative to the given row. If 'top' (which is the default), the given row is the top border of the object. If 'bottom', the column determines the bottom edge of the object.</para>
+        <para>Sets the placement of the object relative to the given row. </para>
       </description>
       <description xml:lang="de">
-        <para>Bestimmt, ob die angegebene Zeile die obere oder die untere Kante vom Objekt bezeichnet.</para>
+        <para>Bestimmt die Platzierung des Objekts relativ zur angegebenen Zeile.</para>
       </description>
+      <choice name="bottom">
+        <description xml:lang="en">
+          <para>The row determines the bottom edge of the object.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Zeile gibt die untere Kante des Objekts an.</para>
+        </description>
+      </choice>
+      <choice name="top">
+        <description xml:lang="en">
+          <para>If 'top' (default), the given row is the top border of the object.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Zeile gibt die obere Kante des Objekts an (Voreinstellung).</para>
+        </description>
+      </choice>
     </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<Datensatz element="bild">
@@ -3395,7 +3451,8 @@
       <cmd name="Tablerule" />,
       <cmd name="Table" />,
       <cmd name="Textblock" />,
-      <cmd name="DefineColor" />
+      <cmd name="DefineColor" />,
+      <cmd name="Output"/>
     </seealso>
   </command>
   <command name="PositioningArea">
@@ -4929,6 +4986,21 @@
         <para>Nach jedem Schleifendurchlauf wird die Bedingung überprüft. Wenn sie wahr ergibt, wird die Schleife verlassen.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="data">
+  <SetVariable variable="i" select="0"/>
+  <Until test="$i = 4">
+    <Message select="concat('$i is: ', $i)"/>
+    <SetVariable variable="i" select="$i + 1"/>
+  </Until>
+</Record>
+]]></listing>
+      <para>Gives the following output (in the protocol file)</para>
+      <listing><![CDATA[Message: "$i is: 0"
+Message: "$i is: 1"
+Message: "$i is: 2"
+Message: "$i is: 3"]]></listing>
+    </example>
     <seealso>
       <cmd name="Switch" />,
       <cmd name="SetVariable" />,

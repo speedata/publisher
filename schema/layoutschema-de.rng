@@ -2010,6 +2010,11 @@
             <attribute name="belegen">
                <a:documentation>Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei belegen=“nein” wird auch die aktuelle Zeile im Raster nicht verändert. Bei “auto” wird bei Bildern der
           Bildumriss beachtet, sofern eine Umrissdatei vorliegt. Siehe die Beschreibung bei Bild</a:documentation>
+               <choice>
+                  <value>ja</value>
+                  <value>nein</value>
+                  <text/>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -2083,18 +2088,38 @@
          </optional>
          <optional>
             <attribute name="valign">
-               <a:documentation>Wird ein Objekt ausgegeben, das kein Vielfaches der Rasterhöhe ist, dann gibt das Attribut die vertikale Ausrichtung an. Bottom beispielsweise bedeutet, dass der freie Platz oberhalb des
+               <a:documentation>Wird ein Objekt ausgegeben, das kein vielfaches der Rasterhöhe ist, dann gibt das Attribut die vertikale Ausrichtung an. Bottom beispielsweise bedeutet, dass der freie Platz oberhalb des
           Objekts bleibt. Voreinstellung ist “top”.</a:documentation>
+               <choice>
+                  <value>top</value>
+                  <a:documentation xmlns="">Das Objekt wird oben ausgerichtet.</a:documentation>
+                  <value>middle</value>
+                  <a:documentation xmlns="">Das Objekt wird so platziert, dass der Leerraum überhalb und unterhalb derselbe ist.</a:documentation>
+                  <value>bottom</value>
+                  <a:documentation xmlns="">Das Objekt wird unten ausgerichtet.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
             <attribute name="hreferenz">
                <a:documentation>Bestimmt, ob die angegebene Spalte die linke oder die rechte Kante vom Objekt bezeichnet.</a:documentation>
+               <choice>
+                  <value>links</value>
+                  <a:documentation xmlns="">Das Objekt wird in der angegebenen Spalte platziert.</a:documentation>
+                  <value>rechts</value>
+                  <a:documentation xmlns="">Das Objekt wird mit dem rechten Rand in der gegebenen Spalte ausgerichtet.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
             <attribute name="vreferenz">
-               <a:documentation>Bestimmt, ob die angegebene Zeile die obere oder die untere Kante vom Objekt bezeichnet.</a:documentation>
+               <a:documentation>Bestimmt die Platzierung des Objekts relativ zur angegebenen Zeile.</a:documentation>
+               <choice>
+                  <value>bottom</value>
+                  <a:documentation xmlns="">Die Zeile gibt die untere Kante des Objekts an.</a:documentation>
+                  <value>top</value>
+                  <a:documentation xmlns="">Die Zeile gibt die obere Kante des Objekts an (Voreinstellung).</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <oneOrMore>
