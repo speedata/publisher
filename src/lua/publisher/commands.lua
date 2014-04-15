@@ -1404,8 +1404,8 @@ end
 function commands.place_object( layoutxml,dataxml )
     trace("Command: PlaceObject")
     local absolute_positioning = false
-    local spalte           = publisher.read_attribute(layoutxml,dataxml,"column",         "rawstring")
-    local zeile            = publisher.read_attribute(layoutxml,dataxml,"row",            "rawstring")
+    local column           = publisher.read_attribute(layoutxml,dataxml,"column",         "rawstring")
+    local row            = publisher.read_attribute(layoutxml,dataxml,"row",            "rawstring")
     local area             = publisher.read_attribute(layoutxml,dataxml,"area",           "rawstring")
     local allocate         = publisher.read_attribute(layoutxml,dataxml,"allocate",       "string", "yes")
     local framecolor       = publisher.read_attribute(layoutxml,dataxml,"framecolor",     "rawstring")
@@ -1427,24 +1427,24 @@ function commands.place_object( layoutxml,dataxml )
     area = area or publisher.default_areaname
     framecolor = framecolor or "Schwarz"
 
-    if spalte and not tonumber(spalte) then
-        -- looks column is a string
+    if column and not tonumber(column) then
+        -- looks like column is a string
         absolute_positioning = true
-        spalte = tex.sp(spalte)
+        column = tex.sp(column)
     end
-    if zeile then
-        local tmp = tonumber(zeile)
+    if row then
+        local tmp = tonumber(row)
         if not tmp then
             -- looks row is a string
             absolute_positioning = true
-            zeile = tex.sp(zeile)
+            row = tex.sp(row)
         else
-            zeile = tmp
+            row = tmp
         end
     end
 
     if absolute_positioning then
-        if not ( zeile and spalte ) then
+        if not ( row and column ) then
             err("»Column« and »Row« must be given with absolute positioning (PlaceObject).")
             return
         end
@@ -1472,28 +1472,28 @@ function commands.place_object( layoutxml,dataxml )
     -- remember the current maximum width for later
     local current_maxwidth = xpath.get_variable("__maxwidth")
     local mw = current_grid:number_of_columns(area)
-    if absolute_positioning == false and tonumber(spalte) then
-        mw = mw - spalte + 1
+    if absolute_positioning == false and tonumber(column) then
+        mw = mw - column + 1
     end
     xpath.set_variable("__maxwidth", mw)
 
-    trace("Column = %q",tostring(spalte))
-    trace("Row = %q",tostring(zeile))
+    trace("Column = %q",tostring(column))
+    trace("Row = %q",tostring(row))
 
     local current_row_start  = current_grid:current_row(area)
     if not current_row_start then
         return nil
     end
-    local current_column_start = spalte or current_grid:current_column(area)
+    local current_column_start = column or current_grid:current_column(area)
 
-    -- ht_aktuell is the remaining space on the current page in sp
+    -- current_height is the remaining space on the current page in sp
     local areaheight = ( maxheight or current_grid:number_of_rows(area) ) * current_grid.gridheight
     local optionen = {
-        ht_aktuell = math.min(current_grid:remaining_height_sp(zeile,area),areaheight),
+        current_height = math.min(current_grid:remaining_height_sp(row,area),areaheight),
         ht_max     = areaheight,
     }
     if allocate == "no" then
-        optionen.ht_aktuell = areaheight
+        optionen.current_height = areaheight
     end
 
     local grid   = current_grid
@@ -1550,13 +1550,13 @@ function commands.place_object( layoutxml,dataxml )
 
         if absolute_positioning then
             if hreference == "right" then
-                spalte = spalte - width_in_gridcells + 1
+                column = column - width_in_gridcells + 1
             end
-            local top = zeile + current_grid.extra_margin
+            local top = row + current_grid.extra_margin
             if vreference == "bottom" then
                 top = top - object.height
             end
-            publisher.output_absolute_position(object,spalte + current_grid.extra_margin,top,allocate,objects[i].allocate_matrix)
+            publisher.output_absolute_position(object,column + current_grid.extra_margin,top,allocate,objects[i].allocate_matrix)
         else
             -- Look for a place for the object
             -- local current_row = current_grid:current_row(area)
@@ -1566,12 +1566,12 @@ function commands.place_object( layoutxml,dataxml )
             end
             trace("PlaceObject: finished calculating width: wd=%d,ht=%d",width_in_gridcells,height_in_gridcells)
 
-            trace("PlaceObject: find suitable row for object, current_row = %d",zeile or current_grid:current_row(area) or "-1")
-            if zeile then
+            trace("PlaceObject: find suitable row for object, current_row = %d",row or current_grid:current_row(area) or "-1")
+            if row then
                 if vreference == "bottom" then
-                    current_row = zeile - height_in_gridcells + 1
+                    current_row = row - height_in_gridcells + 1
                 else
-                    current_row = zeile
+                    current_row = row
                 end
             else
                 current_row = nil
@@ -1579,8 +1579,8 @@ function commands.place_object( layoutxml,dataxml )
 
             -- While (not found a free area) switch to next frame
             while current_row == nil do
-                if not spalte then
-                    -- Keine Zeile und keine Spalte angegeben. Dann suche ich mir doch die richtigen Werte selbst.
+                if not column then
+                    -- no row or column given. So I'll look for the values myself:
                     if current_column_start + width_in_gridcells - 1 > current_grid:number_of_columns() then
                         current_column_start = 1
                     end
@@ -1608,7 +1608,7 @@ function commands.place_object( layoutxml,dataxml )
             end
             publisher.output_at(object,current_column_start,current_row,allocate == "yes",area,valign,objects[i].allocate_matrix,onpage,keepposition,current_grid)
             trace("object placed")
-            zeile = nil -- the current rows is not valid anymore because an object is already rendered
+            row = nil -- the current rows is not valid anymore because an object is already rendered
         end -- no absolute positioning
     end
     if not allocate == "yes" then
@@ -2453,30 +2453,30 @@ function commands.textblock( layoutxml,dataxml )
 
     --- Multi column typesetting
     if columns > 1 then
-        local zeilen = {}
-        local zeilenanzahl = 0
+        local rows = {}
+        local number_of_rows = 0
         local neue_nodes = {}
         for i=1,#nodes do
             for n in node.traverse_id(0,nodes[i].list) do
-                zeilenanzahl = zeilenanzahl + 1
-                zeilen[zeilenanzahl] = n
+                number_of_rows = number_of_rows + 1
+                rows[number_of_rows] = n
             end
         end
 
-        local zeilenanzahl_mehrspaltiger_satz = math.ceil(zeilenanzahl / columns)
-        for i=1,zeilenanzahl_mehrspaltiger_satz do
+        local rows_in_multicolumn = math.ceil(number_of_rows / columns)
+        for i=1,rows_in_multicolumn do
             local current_row,hbox_current_row
-            hbox_current_row = zeilen[i] -- erste Spalte
+            hbox_current_row = rows[i] -- first column
             local tail = hbox_current_row
-            for j=2,columns do -- zweite und folgende columns
+            for j=2,columns do -- second and following columns
                 local g1 = node.new("glue")
                 g1.spec = node.new("glue_spec")
                 g1.spec.width = columndistance
                 tail.next = g1
                 g1.prev = tail
-                current_row = (j - 1) * zeilenanzahl_mehrspaltiger_satz + i
-                if current_row <= zeilenanzahl then
-                    tail = zeilen[current_row]
+                current_row = (j - 1) * rows_in_multicolumn + i
+                if current_row <= number_of_rows then
+                    tail = rows[current_row]
                     g1.next = tail
                     tail.prev = g1
                 end
@@ -2506,7 +2506,8 @@ end
 
 --- Underline
 --- ---------
---- Underline text. This is done by setting the `att_underline` attribute and in the "finalizer" drawing a line underneath the text.
+--- Underline text. This is done by setting the `att_underline` attribute and in the "finalizer"
+--- drawing a line underneath the text.
 function commands.underline( layoutxml,dataxml )
     trace("Underline")
 
