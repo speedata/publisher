@@ -827,7 +827,13 @@ M.default_functions.string = function(dataxml,arg)
 end
 
 M.default_functions["upper-case"] = function(dataxml,arg)
-    return string.upper(arg[1])
+    local str = arg and arg[1]
+    if str then
+        return string.upper(arg[1])
+    else
+        warning("No string given for upper-case()")
+        return ""
+    end
 end
 
 M.default_functions["true"] = function()
