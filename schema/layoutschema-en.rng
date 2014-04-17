@@ -1576,6 +1576,22 @@
                <a:documentation>The name of the next page type that should be used.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="skippagetype">
+               <a:documentation>The pagetype of the blank page if inserted (see the attribute openon).</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="openon">
+               <a:documentation>The next current page will be a left or a right page. E.g. when on page 1 and openon="right" then page 2 is empty and the next current page is 3.</a:documentation>
+               <choice>
+                  <value>left</value>
+                  <a:documentation xmlns="">The next objects will be placed on a left page.</a:documentation>
+                  <value>right</value>
+                  <a:documentation xmlns="">The next objects will be placed on a right page.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>

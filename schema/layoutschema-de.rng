@@ -1585,6 +1585,22 @@
                <a:documentation>Der Name des Seitentyps der für die nächste Seite genommen werden soll.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="seitentypdazwischen">
+               <a:documentation>Der Seitentyp der leeren Seite, falls sie eingefügt wird.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="öffnenauf">
+               <a:documentation>Die nächste aktuelle Seite ist eine linke oder rechte Seite. Z.B. wenn auf Seite 1 ein Seitenwechsel erzwungen wird mit öffnenauf="rechts", dann wird Seite zwei leer und die nächste aktuelle Seite ist die Seite 3.</a:documentation>
+               <choice>
+                  <value>links</value>
+                  <a:documentation xmlns="">Die nächsten Objekte werden auf einer linken Seite ausgegeben.</a:documentation>
+                  <value>rechts</value>
+                  <a:documentation xmlns="">Die nächsten Objekte werden auf einer rechten Seite ausgegeben.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>

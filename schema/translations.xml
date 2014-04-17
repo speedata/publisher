@@ -237,6 +237,7 @@
     <attribute key="ny" en="ny" de="ny" />
     <attribute key="oldstylefigures" en="oldstylefigures" de="mediävalziffern"/>
     <attribute key="open" en="open" de="offen"/>
+    <attribute key="openon" en="openon" de="öffnenauf"/>
     <attribute key="orphan" en="orphan" de="schusterjunge" />
     <attribute key="overshoot" en="overshoot" de="übersteigen"/>
     <attribute key="padding" en="padding" de="padding"/>
@@ -246,6 +247,7 @@
     <attribute key="padding-top" en="padding-top" de="padding-top"/>
     <attribute key="page" en="page" de="seite"/>
     <attribute key="pagetype" en="pagetype" de="seitentyp" />
+    <attribute key="skippagetype" en="skippagetype" de="seitentypdazwischen" />
     <attribute key="pattern" en="pattern" de="muster" />
     <attribute key="r" en="r" de="r"/>
     <attribute key="removeduplicates" en="removeduplicates" de="duplikatelöschen"/>

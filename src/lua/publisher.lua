@@ -905,6 +905,7 @@ end
 
 --- _Must_ be called before something can be put on the page. Looks for hooks to be run before page creation.
 function setup_page(pagenumber)
+    trace("setup_page")
     if current_group then return end
     local thispage
     if pagenumber then
@@ -1028,6 +1029,7 @@ end
 --- Switch to a new page and shipout the current page.
 --- This new page is only created if something is typeset on it.
 function new_page()
+    trace("publisher new_page")
     if pagebreak_impossible then
         return
     end
@@ -1054,6 +1056,7 @@ function new_page()
         tex.shipout(666)
     end
     current_pagenumber = current_pagenumber + 1
+    trace("page finished (new_page), setting current_pagenumber to %d",current_pagenumber)
 end
 
 --- Draw a background behind the rectangular (box) object.

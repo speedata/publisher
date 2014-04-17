@@ -6,6 +6,8 @@ h1. Liste der Änderungen
 
 h2. Version 2.0
 
+
+* Neue Optionen für "NeueSeite":../commands-en/newpage.html um Seiten zu überspringen. (1.99.41)
 * Weitere Sprachen eingebaut, "Kommandozeile sp":commandline.html um @--mainlanguage@ erweitert. (1.99.40)
 * "Tlinie":../commands-de/tablerule.html hat ein neues Attribut: @start@. Damit lässt sich die Startspalte bestimmen.
 * Neue Methode um Rasterbreite und -höhe zu definieren. Mit @nx@ und @ny@ kann man die Anzahl der Rasterzellen auf der Seite in x und y-Richtung festlegen.

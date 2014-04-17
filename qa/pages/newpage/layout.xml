@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en" >
+
+  <Pageformat width="10cm" height="10cm"/>
+  <Pagetype name="foo" test="false()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+    <AtPageCreation>
+      <PlaceObject>
+        <Textblock>
+          <Paragraph><Value>This is a page of type foo.</Value></Paragraph>
+        </Textblock>
+      </PlaceObject>
+    </AtPageCreation>
+  </Pagetype>
+
+  <Pagetype name="skip" test="false()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+    <AtPageCreation>
+      <PlaceObject>
+        <Textblock>
+          <Paragraph><Value>This is a page of type »skip«.</Value></Paragraph>
+        </Textblock>
+      </PlaceObject>
+    </AtPageCreation>
+  </Pagetype>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph><Value>This is page </Value><Value select="sd:current-page()"/></Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <NewPage pagetype="foo" openon="right" skippagetype="skip"/>
+    <PlaceObject>
+      <Textblock>
+        <Paragraph><Value>And this is page </Value><Value select="sd:current-page()"/></Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <NewPage/>
+  </Record>
+
+</Layout>

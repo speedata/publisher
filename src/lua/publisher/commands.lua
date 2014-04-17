@@ -1173,9 +1173,25 @@ end
 --- -------
 --- Create a new page. Run the hooks in AtPageShipout.
 function commands.new_page( layoutxml,dataxml )
-    local pagetype = publisher.read_attribute(layoutxml,dataxml,"pagetype","rawstring")
-    publisher.nextpage = pagetype
-    publisher.new_page()
+    local pagetype     = publisher.read_attribute(layoutxml,dataxml,"pagetype","rawstring")
+    local skippagetype = publisher.read_attribute(layoutxml,dataxml,"skippagetype","rawstring")
+    local openon   = publisher.read_attribute(layoutxml,dataxml,"openon","string")
+
+    if openon == "right" and math.fmod(publisher.current_pagenumber,2) == 1 then
+        publisher.new_page()
+        publisher.nextpage = skippagetype
+        publisher.new_page()
+        publisher.nextpage = pagetype
+    elseif openon == "left" and math.fmod(publisher.current_pagenumber,2) == 0 then
+        publisher.new_page()
+        publisher.nextpage = skippagetype
+        publisher.new_page()
+        publisher.nextpage = pagetype
+    else
+        publisher.nextpage = pagetype
+        publisher.new_page()
+    end
+
 end
 
 --- Ordered list (`<Ol>`)

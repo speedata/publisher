@@ -2609,18 +2609,75 @@
         <para>Der Name des Seitentyps der für die nächste Seite genommen werden soll.</para>
       </description>
     </attribute>
+    <attribute name="skippagetype" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>The pagetype of the blank page if inserted (see the attribute openon).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Seitentyp der leeren Seite, falls sie eingefügt wird.</para>
+      </description>
+    </attribute>
+    <attribute name="openon" optional="yes">
+      <description xml:lang="en">
+        <para>The next current page will be a left or a right page. E.g. when on page 1 and openon="right" then page 2 is empty and the next current page is 3.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die nächste aktuelle Seite ist eine linke oder rechte Seite. Z.B. wenn auf Seite 1 ein Seitenwechsel erzwungen wird mit öffnenauf="rechts", dann wird Seite zwei leer und die nächste aktuelle Seite ist die Seite 3.</para>
+      </description>
+      <choice name="left">
+        <description xml:lang="en">
+          <para>The next objects will be placed on a left page.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die nächsten Objekte werden auf einer linken Seite ausgegeben.</para>
+        </description>
+      </choice>
+      <choice name="right">
+        <description xml:lang="en">
+          <para>The next objects will be placed on a right page.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die nächsten Objekte werden auf einer rechten Seite ausgegeben.</para>
+        </description>
+      </choice>
+    </attribute>
+
+
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject>
+    <Textblock>
+      <Paragraph><Value>This is page 1</Value></Paragraph>
+    </Textblock>
+  </PlaceObject>
+  <NewPage openon="right"/>
+  <PlaceObject>
+    <Textblock>
+      <Paragraph><Value>And this is page 3</Value></Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>
+]]></listing>
+    </example>
     <example xml:lang="de">
-      <listing><![CDATA[
-<Datensatz element="Produktbeschreibung">
-  <Textblock breite="10" spalte="1">
-    <Absatz>
-      <Wert>Text ...</Wert>
-    </Absatz>
-  </Textblock>
-
-  <NeueSeite />
-
-</Datensatz>]]></listing>
+      <listing><![CDATA[<Datensatz element="data">
+  <ObjektAusgeben>
+    <Textblock>
+      <Absatz>
+        <Wert>Das ist Seite 1</Wert>
+      </Absatz>
+    </Textblock>
+  </ObjektAusgeben>
+  <NeueSeite öffnenauf="rechts"/>
+  <ObjektAusgeben>
+    <Textblock>
+      <Absatz>
+        <Wert>Das ist Seite 3</Wert>
+      </Absatz>
+    </Textblock>
+  </ObjektAusgeben>
+</Datensatz>
+]]></listing>
     </example>
     <seealso ><cmd name="Pagetype"/></seealso>
   </command>
