@@ -121,7 +121,7 @@ defaultlanguage = 0
 -- Startpage
 current_pagenumber = 1
 
-seiten = {}
+pages = {}
 
 -- CSS properties. Use `:matches(tbl)` to find a matching rule. `tbl` has the following structure: `{element=..., id=..., class=... }`
 css = do_luafile("css.lua"):new()
@@ -549,7 +549,7 @@ function bookmarkstotex( tbl )
 end
 
 function page_initialized_p( pagenumber )
-    return seiten[pagenumber] ~= nil
+    return pages[pagenumber] ~= nil
 end
 
 --- Start the processing (`dothings()`)
@@ -699,7 +699,7 @@ function dothings()
     -- current_pagestore_name is set when in SavePages and nil otherwise
     if page_initialized_p(current_pagenumber) and current_pagestore_name == nil then
         dothingsbeforeoutput()
-        local n = node.vpack(seiten[current_pagenumber].pagebox)
+        local n = node.vpack(pages[current_pagenumber].pagebox)
 
         tex.box[666] = n
         tex.shipout(666)
@@ -782,7 +782,7 @@ function output_absolute_position( nodelist,x,y,allocate,area )
     n.width  = 0
     n.height = 0
     n.depth  = 0
-    local tail = node.tail(seiten[current_pagenumber].pagebox)
+    local tail = node.tail(pages[current_pagenumber].pagebox)
     tail.next = n
     n.prev = tail
 end
@@ -864,7 +864,7 @@ function output_at( nodelist, x,y,allocate,area,valign,allocate_matrix,pagenumbe
         n.width  = 0
         n.height = 0
         n.depth  = 0
-        local tail = node.tail(seiten[outputpage].pagebox)
+        local tail = node.tail(pages[outputpage].pagebox)
         tail.next = n
         n.prev = tail
 
@@ -881,17 +881,17 @@ function detect_pagetype(pagenumber)
     current_pagenumber = pagenumber
     local ret = nil
     for i=#masterpages,1,-1 do
-        local seitentyp = masterpages[i]
-        if seitentyp.name == nextpage then
-            log("Page of type %q created (%d) - pagetype requested",seitentyp.name or "<detect_pagetype>",pagenumber)
+        local pagetype = masterpages[i]
+        if pagetype.name == nextpage then
+            log("Page of type %q created (%d) - pagetype requested",pagetype.name or "<detect_pagetype>",pagenumber)
             nextpage = nil
-            return seitentyp.res
+            return pagetype.res
         end
 
 
-        if xpath.parse(nil,seitentyp.is_pagetype,seitentyp.ns) == true then
-            log("Page of type %q created (%d)",seitentyp.name or "<detect_pagetype>",pagenumber)
-            ret = seitentyp.res
+        if xpath.parse(nil,pagetype.is_pagetype,pagetype.ns) == true then
+            log("Page of type %q created (%d)",pagetype.name or "<detect_pagetype>",pagenumber)
+            ret = pagetype.res
             xpath.pop_state()
             current_pagenumber = cp
             return ret
@@ -909,13 +909,13 @@ function setup_page(pagenumber)
     local thispage
     if pagenumber then
         thispage = pagenumber
-        if seiten[pagenumber] ~= nil then
-            current_grid=seiten[pagenumber].grid
+        if pages[pagenumber] ~= nil then
+            current_grid=pages[pagenumber].grid
             return
         end
     else
         if page_initialized_p(current_pagenumber) then
-            current_grid=seiten[current_pagenumber].grid
+            current_grid=pages[current_pagenumber].grid
             return
         end
 
@@ -939,8 +939,8 @@ function setup_page(pagenumber)
         exit()
     end
     current_grid = current_page.grid
-    -- seiten[current_pagenumber] = nil
-    seiten[thispage] = current_page
+    -- pages[current_pagenumber] = nil
+    pages[thispage] = current_page
 
     local gridwidth, gridheight, nx, ny
     nx = options.gridcells_x
@@ -996,12 +996,12 @@ function setup_page(pagenumber)
     end
 
     local cp = current_page
-    current_page = seiten[thispage]
+    current_page = pages[thispage]
     if current_page.atpagecreation then
         pagebreak_impossible = true
         local cpn = current_pagenumber
         current_pagenumber = thispage
-        current_grid = seiten[thispage].grid
+        current_grid = pages[thispage].grid
         publisher.dispatch(current_page.atpagecreation,nil)
         current_pagenumber = cpn
         pagebreak_impossible = false
@@ -1031,7 +1031,7 @@ function new_page()
     if pagebreak_impossible then
         return
     end
-    local thispage = seiten[current_pagenumber]
+    local thispage = pages[current_pagenumber]
     if not thispage then
         -- new_page() is called without anything on the page yet
         setup_page()
@@ -1045,7 +1045,7 @@ function new_page()
 
     dothingsbeforeoutput()
 
-    local n = node.vpack(seiten[current_pagenumber].pagebox)
+    local n = node.vpack(pages[current_pagenumber].pagebox)
     if current_pagestore_name then
         local thispagestore = pagestore[current_pagestore_name]
         thispagestore[#thispagestore + 1] = n
@@ -1129,10 +1129,10 @@ end
 
 --- After everything is ready for page shipout, we add debug output and crop marks if necessary
 function dothingsbeforeoutput(  )
-    local current_page = seiten[current_pagenumber]
+    local current_page = pages[current_pagenumber]
     local r = current_page.grid
     local str
-    find_user_defined_whatsits(seiten[current_pagenumber].pagebox)
+    find_user_defined_whatsits(pages[current_pagenumber].pagebox)
     local firstbox
 
     -- White background on page. Todo: Make color customizable and background optional.
@@ -1194,8 +1194,8 @@ function dothingsbeforeoutput(  )
         end
     end
     if firstbox then
-        local list_start = seiten[current_pagenumber].pagebox
-        seiten[current_pagenumber].pagebox = firstbox
+        local list_start = pages[current_pagenumber].pagebox
+        pages[current_pagenumber].pagebox = firstbox
         node.tail(firstbox).next = list_start
         list_start.prev = node.tail(firstbox)
     end

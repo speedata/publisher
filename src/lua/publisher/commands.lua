@@ -1462,7 +1462,7 @@ function commands.place_object( layoutxml,dataxml )
 
     local cg = publisher.current_grid
     if onpage then
-        current_grid = publisher.seiten[onpage].grid
+        current_grid = publisher.pages[onpage].grid
     else
         current_grid = publisher.current_grid
     end
@@ -1617,7 +1617,7 @@ function commands.place_object( layoutxml,dataxml )
 
     if onpage then
         publisher.setup_page()
-        current_grid = publisher.seiten[publisher.current_pagenumber].grid
+        current_grid = publisher.pages[publisher.current_pagenumber].grid
     end
     trace("objects placed")
 end
@@ -1866,7 +1866,7 @@ function commands.save_pages( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     publisher.new_page()
     for i=thispage,publisher.current_pagenumber - 1 do
-        publisher.seiten[i] = nil
+        publisher.pages[i] = nil
     end
     publisher.current_pagestore_name = nil
     publisher.current_pagenumber = thispage
