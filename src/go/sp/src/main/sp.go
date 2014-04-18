@@ -130,6 +130,7 @@ func init() {
 	add_local_path = true
 	useSystemFonts = false
 	configfilename = "publisher.cfg"
+	mainlanguage = "en_GB"
 
 	// LC_ALL is something like "de_DE.UTF-8"
 	re := regexp.MustCompile("^(d|D)(e|E)")
