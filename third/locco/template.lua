@@ -6,7 +6,8 @@ header = [[<!DOCTYPE html>
 <head>
   <title>%title%</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" media="all" href="locco.css" />
+  <link rel="stylesheet" media="all" href="locco.css" >
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
   <div id="container">

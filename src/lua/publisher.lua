@@ -1,6 +1,6 @@
 --- Here goes everything that does not belong anywhere else. Other parts are font handling, the command
 --- list, page and gridsetup, debugging and initialization. We start with the function `dothings()` that
---- initializes some variables and starts processing (`dispatch())
+--- initializes some variables and starts processing (`dispatch()`)
 --
 --  publisher.lua
 --  speedata publisher
@@ -177,161 +177,11 @@ textformats = {
     rechts         = { indent = 0, alignment="rightaligned",rows = 1},
 }
 
+-- FIXME: not used currently -> implement!
 -- Liste der Schriftarten und deren Synonyme. Beispielsweise könnte ein Schlüssel `Helvetica` sein,
 -- der Eintrag dann `texgyreheros-regular.otf`
 -- schrifttabelle = {}
 
---- We map from sybolic names to (part of) file names. The hyphenation pattern files are
---- in the format `hyph-XXX.pat.txt` and we need to find out that `XXX` part.
-language_mapping = {
-    ["Czech"]                        = "cs",
-    ["Danish"]                       = "da",
-    ["Dutch"]                        = "nl",
-    ["Englisch (Great Britan)"]      = "en_GB",
-    ["Englisch (USA)"]               = "en_US",
-    ["Finnish"]                      = "fi",
-    ["French"]                       = "fr",
-    ["German"]                       = "de",
-    ["Greek"]                        = "el",
-    ["Hungarian"]                    = "hu",
-    ["Italian"]                      = "it",
-    ["Norwegian Bokmål"]             = "nb",
-    ["Norwegian Nynorsk"]            = "nn",
-    ["Polish"]                       = "pt",
-    ["Portuguese"]                   = "pt",
-    ["Russian"]                      = "ru",
-    ["Serbian"]                      = "sr",
-    ["Spanish"]                      = "es",
-    ["Swedish"]                      = "sv",
-    ["Turkish"]                      = "tr",
-}
-
--- af, Afrikaans - Afrikaans
--- as, Assamese - Assamesisch
--- bg, Bulgarian - Bulgarisch
--- ca, Catalan - Katalanisch
--- cs, Czech - Tschechisch
--- cy, Welsh - Kymrisch
--- da, Danish - Dänisch
--- de, German - Deutsch
--- el, Greek - Neugriechisch
--- en, English - Englisch
--- en_US,
--- eo, Esperanto - Esperanto
--- es, Spanish - Spanisch
--- et, Estonian - Estnisch
--- eu, Basque - Baskisch
--- fi, Finnish - Finnisch
--- fr, French - Französisch
--- ga, Irish - Irisch
--- gl, Galician - Galicisch
--- gu, Gujarati - Gujarati
--- hi, Hindi - Hindi
--- hr, Croatian - Kroatisch
--- hu, Hungarian - Ungarisch
--- hy, Armenian - Armenisch
--- ia, Interlingua - Interlingua
--- id, Indonesian - Bahasa Melayu
--- is, Icelandic - Isländisch
--- it, Italian - Italienisch
--- ku, Kurdish - Kurdisch
--- kn, Kannada - Kannada
--- la, Latin - Latein
--- lo, Lao - Laotisch
--- lt, Lithuanian - Litauisch
--- ml, Malayalam - Malayalam
--- lv, Latvian - Lettisch
--- ml, Malayalam - Malayalam
--- mn, Mongolian - Mongolisch
--- mr, Marathi - Marathi
--- nb, Norwegian Bokmål - Bokmål
--- nl, Dutch - Niederländisch
--- nn, Norwegian Nynorsk - Nynorsk
--- or, Oriya - Oriya
--- pa, Panjabi - Pandschabi
--- pl, Polish - Polnisch
--- pt, Portuguese - Portugiesisch
--- ro, Romanian - Rumänisch
--- ru, Russian - Russisch
--- sa, Sanskrit - Sanskrit
--- sk, Slovak - Slowakisch
--- sl, Slovenian - Slowenisch
--- sr, Serbian - Serbisch
--- sv, Swedish - Schwedisch
--- ta, Tamil - Tamil
--- te, Telugu - Telugu
--- tk, Turkmen - Turkmenisch
--- tr, Turkish - Türkisch
--- uk, Ukrainian - Ukrainisch
--- zh, Chinese - Chinesisch
-
-
-language_filename = {
-    ["af"]    = "af",
-    ["as"]    = "as",
-    ["bg"]    = "bg",
-    ["ca"]    = "ca",
-    ["cs"]    = "cs",
-    ["cy"]    = "cy",
-    ["da"]    = "da",
-    ["de"]    = "de-1996",
-    ["el"]    = "el-monoton",
-    ["en"]    = "en-gb",
-    ["en_GB"] = "en-gb",
-    ["en_US"] = "en-us",
-    ["eo"]    = "eo",
-    ["es"]    = "es",
-    ["et"]    = "et",
-    ["eu"]    = "eu",
-    ["fi"]    = "fi",
-    ["fr"]    = "fr",
-    ["ga"]    = "ga",
-    ["gl"]    = "gl",
-    ["gu"]    = "gu",
-    ["hi"]    = "hi",
-    ["hr"]    = "hr",
-    ["hu"]    = "hu",
-    ["hy"]    = "hy",
-    ["ia"]    = "ia",
-    ["id"]    = "id",
-    ["is"]    = "is",
-    ["it"]    = "it",
-    ["ku"]    = "kmr",
-    ["kn"]    = "kn",
-    ["la"]    = "la",
-    ["lo"]    = "lo",
-    ["lt"]    = "lt",
-    ["ml"]    = "ml",
-    ["lv"]    = "lv",
-    ["ml"]    = "ml",
-    ["mn"]    = "mn-cyrl",
-    ["mr"]    = "mr",
-    ["nb"]    = "nb",
-    ["nl"]    = "nl",
-    ["nn"]    = "nn",
-    ["or"]    = "or",
-    ["pa"]    = "pa",
-    ["pl"]    = "pl",
-    ["pt"]    = "pt",
-    ["ro"]    = "ro",
-    ["ru"]    = "ru",
-    ["sa"]    = "sa",
-    ["sk"]    = "sk",
-    ["sl"]    = "sl",
-    ["sr"]    = "sr",
-    ["sv"]    = "sv",
-    ["ta"]    = "ta",
-    ["te"]    = "te",
-    ["tk"]    = "tk",
-    ["tr"]    = "tr",
-    ["uk"]    = "uk",
-    ["zh"]    = "zh-latn",
-}
-
---- Once a hyphenation pattern file is loaded, we only need the _id_ of it. This is stored in the
---- `languages` table. Key is the filename part (such as `de-1996`) and the value is the internal
---- language id.
-languages = {}
 
 --- The bookmarks table has the format
 ---     bookmarks = {
@@ -351,12 +201,13 @@ bookmarks = {}
 
 --- A table with key namespace prefix (`de` or `en`) and value namespace. Example:
 ---
----    {
----      [""] = "urn:speedata.de:2009/publisher/de"
----      sd = "urn:speedata:2009/publisher/functions/de"
----    }
+---     {
+---       [""] = "urn:speedata.de:2009/publisher/de"
+---       sd = "urn:speedata:2009/publisher/functions/de"
+---     }
 namespaces_layout = nil
 
+--- We need the separator for writing files in a directory structure (image cace for now)
 os_separator = "/"
 if os.type == "windows" then
     os_separator = "\\"
@@ -364,6 +215,7 @@ end
 
 -- A very large length
 maxdimen = 1073741823
+
 --- The dispatch table maps every element in the layout xml to a command in the `commands.lua` file.
 local dispatch_table = {
     A                       = commands.a,
@@ -470,14 +322,14 @@ end
 
 --- The returned table is an array with hashes. The keys of these
 --- hashes are `elementname` and `contents`. For example:
----    {
----      [1] = {
----        ["elementname"] = "Paragraph"
----        ["contents"] = {
----          ["nodelist"] = "<node    nil <  58515 >    nil : glyph 1>"
----        },
----      },
----    },
+---     {
+---       [1] = {
+---         ["elementname"] = "Paragraph"
+---         ["contents"] = {
+---           ["nodelist"] = "<node    nil <  58515 >    nil : glyph 1>"
+---         },
+---       },
+---     },
 function dispatch(layoutxml,dataxml,optionen)
     local ret = {}
     local tmp
@@ -1459,6 +1311,10 @@ function find_user_defined_whatsits( head )
     end
 end
 
+--- Node(list) creation
+--- -------------------
+
+
 rightskip = node.new(glue_spec_node)
 rightskip.width = 0
 rightskip.stretch = 1 * 2^16
@@ -1996,170 +1852,6 @@ function boxit( box )
     return box
 end
 
-local images = {}
-function new_image( filename, page, box)
-    return imageinfo(filename,page,box)
-end
-
--- Retrieve image from an URL if its not cached
-function get_image(requeste_url)
-    local imgcache = os.getenv("IMGCACHE")
-    local parsed_url = url.parse(requeste_url)
-    -- http://placekitten.com/g/200/300?foo=bar gives
-    -- x = {
-    --  ["path"] = "/g/200/300"
-    --  ["scheme"] = "http"
-    --  ["query"] = "foo=bar"
-    --  ["authority"] = "placekitten.com"
-    --  ["host"] = "placekitten.com"
-    -- },
-    local request_filename = parsed_url.host .. parsed_url.path
-    if parsed_url.query then
-        request_filename = request_filename .. "?" .. parsed_url.query
-    end
-    -- md5 should be over the complete part after the host
-    local mdfivesum = string.gsub(md5.sum(request_filename),".",function(chr) return string.format("%02x",string.byte(chr)) end)
-    local path_to_image = os.getenv("IMGCACHE") .. os_separator .. mdfivesum
-
-    if lfs.isfile(path_to_image) then
-        log("Image: string used for caching (-> md5): %q",request_filename)
-        log("Read image file from cache: %s",path_to_image)
-        return imageinfo(path_to_image)
-    end
-
-    -- c = {
-    --   ["last-modified"] = "Mon, 21 Oct 2013 12:45:54 GMT"
-    --   ["connection"] = "close"
-    --   ["accept-ranges"] = "bytes"
-    --   ["date"] = "Thu, 13 Feb 2014 16:29:11 GMT"
-    --   ["content-length"] = "52484"
-    --   ["content-type"] = "image/jpeg"
-    -- }
-    log("Retrieving file: %q",tostring(requeste_url))
-    txt, statuscode, c = http.request(requeste_url)
-    if statuscode ~= 200 then
-        err("404 when retrieving image %q",requeste_url)
-        return imageinfo(nil) -- nil is "filenotfound.pdf"
-    end
-
-    -- Create the temporary directory if necessary
-    if not lfs.isdir(imgcache) then
-        local imgcachepaths = string.explode(imgcache,os_separator)
-        local tmp = ""
-        for i=2, #imgcachepaths do
-            tmp = tmp .. os_separator .. imgcachepaths[i]
-            if not lfs.isdir(tmp) then
-                local ok,e = lfs.mkdir(tmp)
-                if not ok then
-                    err("Could not create temporary directory for images: %q",tmp)
-                end
-            end
-        end
-    end
-
-    local file,e = io.open(path_to_image,"wb")
-    if file == nil then
-        err("Could not open image file for writing into temp directory: %q",e)
-        return imageinfo(nil)
-    end
-    local ok
-    ok, e = file:write(txt)
-    if not ok then
-        err("Could not write image file into temp directory %q",e)
-        return imageinfo(nil)
-    end
-    file:flush()
-    file:close()
-
-    -- Just re-run this function. The image is now cached
-    return get_image(requeste_url)
-end
-
--- Box is none, media, crop, bleed, trim, art
-function imageinfo( filename,page,box )
-    page = page or 1
-    box = box or "crop"
-    -- there is no filename, we should fail or throw an error
-    if not filename then
-        err("No filename given for image")
-        filename = "filenotfound.pdf"
-    end
-
-    local new_name = filename .. tostring(page) .. tostring(box)
-
-    if images[new_name] then
-        return images[new_name]
-    end
-
-    if not find_file_location(filename) then
-        err("Image %q not found!",filename or "???")
-        filename = "filenotfound.pdf"
-        page = 1
-    end
-    -- example is wrong: one based index
-    -- <?xml version="1.0" ?>
-    -- <imageinfo>
-    --    <cells_x>30</cells_x>
-    --    <cells_y>21</cells_y>
-    --    <segment x1='13' y1='0' x2='16' y2='0' />
-    --    <segment x1='13' y1='1' x2='16' y2='1' />
-    --    <segment x1='11' y1='2' x2='18' y2='2' />
-    --    <segment x1='10' y1='3' x2='18' y2='3' />
-    --    <segment x1='10' y1='4' x2='18' y2='4' />
-    --    <segment x1='9' y1='5' x2='20' y2='5' />
-    --    <segment x1='8' y1='6' x2='20' y2='6' />
-    --    <segment x1='8' y1='7' x2='20' y2='7' />
-    --    <segment x1='7' y1='8' x2='21' y2='8' />
-    --    <segment x1='6' y1='9' x2='21' y2='9' />
-    --    <segment x1='5' y1='10' x2='24' y2='10' />
-    --    <segment x1='5' y1='11' x2='24' y2='11' />
-    --    <segment x1='4' y1='12' x2='25' y2='12' />
-    --    <segment x1='3' y1='13' x2='25' y2='13' />
-    --    <segment x1='3' y1='14' x2='27' y2='14' />
-    --    <segment x1='2' y1='15' x2='27' y2='15' />
-    --    <segment x1='1' y1='16' x2='28' y2='16' />
-    --  </imageinfo>
-    local xmlfilename = string.gsub(filename,"(%..*)$",".xml")
-    local mt
-    if kpse.filelist[xmlfilename] then
-        mt = {}
-        local xmltab = load_xml(xmlfilename,"Imageinfo")
-        local segments = {}
-        local cells_x,cells_y
-        for _,v in ipairs(xmltab) do
-            if v[".__local_name"] == "cells_x" then
-                cells_x = v[1]
-            elseif v[".__local_name"] == "cells_y" then
-                cells_y = v[1]
-            elseif v[".__local_name"] == "segment" then
-                -- 0 based segments
-                segments[#segments + 1] = {v.x1,v.y1,v.x2,v.y2}
-            end
-        end
-        -- we have parsed the file, let's build a beautiful 2dim array
-        mt.max_x = cells_x
-        mt.max_y = cells_y
-        for i=1,cells_y do
-            mt[i] = {}
-            for j=1,cells_x do
-                mt[i][j] = 0
-            end
-        end
-        for i,v in ipairs(segments) do
-            for x=v[1],v[3] do
-                for y=v[2],v[4] do
-                    mt[y][x] = 1
-                end
-            end
-        end
-    end
-
-    if not images[new_name] then
-        local image_info = img.scan{filename = filename, pagebox = box, page=page }
-        images[new_name] = { img = image_info, allocate = mt }
-    end
-    return images[new_name]
-end
 
 function set_color_if_necessary( nodelist,color )
     if not color then return nodelist end
@@ -2325,6 +2017,162 @@ function xml_to_string( xml_element, level )
     return str
 end
 
+--- Hyphenation and language handling
+--- ---------------------------------
+
+--- We map from sybolic names to (part of) file names. The hyphenation pattern files are
+--- in the format `hyph-XXX.pat.txt` and we need to find out that `XXX` part.
+language_mapping = {
+    ["Czech"]                        = "cs",
+    ["Danish"]                       = "da",
+    ["Dutch"]                        = "nl",
+    ["Englisch (Great Britan)"]      = "en_GB",
+    ["Englisch (USA)"]               = "en_US",
+    ["Finnish"]                      = "fi",
+    ["French"]                       = "fr",
+    ["German"]                       = "de",
+    ["Greek"]                        = "el",
+    ["Hungarian"]                    = "hu",
+    ["Italian"]                      = "it",
+    ["Norwegian Bokmål"]             = "nb",
+    ["Norwegian Nynorsk"]            = "nn",
+    ["Polish"]                       = "pt",
+    ["Portuguese"]                   = "pt",
+    ["Russian"]                      = "ru",
+    ["Serbian"]                      = "sr",
+    ["Spanish"]                      = "es",
+    ["Swedish"]                      = "sv",
+    ["Turkish"]                      = "tr",
+}
+
+--- Supported language names. Not all are currently available from the publisher
+---     af, Afrikaans - Afrikaans
+---     as, Assamese - Assamesisch
+---     bg, Bulgarian - Bulgarisch
+---     ca, Catalan - Katalanisch
+---     cs, Czech - Tschechisch
+---     cy, Welsh - Kymrisch
+---     da, Danish - Dänisch
+---     de, German - Deutsch
+---     el, Greek - Neugriechisch
+---     en, English - Englisch
+---     eo, Esperanto - Esperanto
+---     es, Spanish - Spanisch
+---     et, Estonian - Estnisch
+---     eu, Basque - Baskisch
+---     fi, Finnish - Finnisch
+---     fr, French - Französisch
+---     ga, Irish - Irisch
+---     gl, Galician - Galicisch
+---     gu, Gujarati - Gujarati
+---     hi, Hindi - Hindi
+---     hr, Croatian - Kroatisch
+---     hu, Hungarian - Ungarisch
+---     hy, Armenian - Armenisch
+---     ia, Interlingua - Interlingua
+---     id, Indonesian - Bahasa Melayu
+---     is, Icelandic - Isländisch
+---     it, Italian - Italienisch
+---     ku, Kurdish - Kurdisch
+---     kn, Kannada - Kannada
+---     la, Latin - Latein
+---     lo, Lao - Laotisch
+---     lt, Lithuanian - Litauisch
+---     ml, Malayalam - Malayalam
+---     lv, Latvian - Lettisch
+---     ml, Malayalam - Malayalam
+---     mn, Mongolian - Mongolisch
+---     mr, Marathi - Marathi
+---     nb, Norwegian Bokmål - Bokmål
+---     nl, Dutch - Niederländisch
+---     nn, Norwegian Nynorsk - Nynorsk
+---     or, Oriya - Oriya
+---     pa, Panjabi - Pandschabi
+---     pl, Polish - Polnisch
+---     pt, Portuguese - Portugiesisch
+---     ro, Romanian - Rumänisch
+---     ru, Russian - Russisch
+---     sa, Sanskrit - Sanskrit
+---     sk, Slovak - Slowakisch
+---     sl, Slovenian - Slowenisch
+---     sr, Serbian - Serbisch
+---     sv, Swedish - Schwedisch
+---     ta, Tamil - Tamil
+---     te, Telugu - Telugu
+---     tk, Turkmen - Turkmenisch
+---     tr, Turkish - Türkisch
+---     uk, Ukrainian - Ukrainisch
+---     zh, Chinese - Chinesisch
+
+
+language_filename = {
+    ["af"]    = "af",
+    ["as"]    = "as",
+    ["bg"]    = "bg",
+    ["ca"]    = "ca",
+    ["cs"]    = "cs",
+    ["cy"]    = "cy",
+    ["da"]    = "da",
+    ["de"]    = "de-1996",
+    ["el"]    = "el-monoton",
+    ["en"]    = "en-gb",
+    ["en_GB"] = "en-gb",
+    ["en_US"] = "en-us",
+    ["eo"]    = "eo",
+    ["es"]    = "es",
+    ["et"]    = "et",
+    ["eu"]    = "eu",
+    ["fi"]    = "fi",
+    ["fr"]    = "fr",
+    ["ga"]    = "ga",
+    ["gl"]    = "gl",
+    ["gu"]    = "gu",
+    ["hi"]    = "hi",
+    ["hr"]    = "hr",
+    ["hu"]    = "hu",
+    ["hy"]    = "hy",
+    ["ia"]    = "ia",
+    ["id"]    = "id",
+    ["is"]    = "is",
+    ["it"]    = "it",
+    ["ku"]    = "kmr",
+    ["kn"]    = "kn",
+    ["la"]    = "la",
+    ["lo"]    = "lo",
+    ["lt"]    = "lt",
+    ["ml"]    = "ml",
+    ["lv"]    = "lv",
+    ["ml"]    = "ml",
+    ["mn"]    = "mn-cyrl",
+    ["mr"]    = "mr",
+    ["nb"]    = "nb",
+    ["nl"]    = "nl",
+    ["nn"]    = "nn",
+    ["or"]    = "or",
+    ["pa"]    = "pa",
+    ["pl"]    = "pl",
+    ["pt"]    = "pt",
+    ["ro"]    = "ro",
+    ["ru"]    = "ru",
+    ["sa"]    = "sa",
+    ["sk"]    = "sk",
+    ["sl"]    = "sl",
+    ["sr"]    = "sr",
+    ["sv"]    = "sv",
+    ["ta"]    = "ta",
+    ["te"]    = "te",
+    ["tk"]    = "tk",
+    ["tr"]    = "tr",
+    ["uk"]    = "uk",
+    ["zh"]    = "zh-latn",
+}
+
+--- Once a hyphenation pattern file is loaded, we only need the _id_ of it. This is stored in the
+--- `languages` table. Key is the filename part (such as `de-1996`) and the value is the internal
+--- language id.
+languages = {}
+
+
 --- The language name is something like `German` or a locale.
 function get_languagecode( locale_or_name )
     local locale = locale_or_name
@@ -2366,6 +2214,13 @@ function get_languagecode( locale_or_name )
     return id
 end
 
+function set_mainlanguage( mainlanguage )
+    log("Setting default language to %q",mainlanguage or "?")
+    defaultlanguage = get_languagecode(mainlanguage)
+end
+
+--- Misc
+--- --------
 function set_pageformat( wd,ht )
     options.pagewidth    = wd
     options.pageheight  = ht
@@ -2378,40 +2233,6 @@ function set_pageformat( wd,ht )
     -- necessary? FIXME: check if necessary.
     tex.hsize = wd
     tex.vsize = ht
-end
-
---- This function is only called once from `dothings()` during startup phase. We define
---- a family with regular, bold, italic and bolditalic font with size 10pt (we always
---- measure font size in dtp points)
-function define_default_fontfamily()
-    local fam={
-        size         = 10 * factor,
-        baselineskip = 12 * factor,
-        scriptsize   = 10 * factor * 0.8,
-        scriptshift  = 10 * factor * 0.3,
-    }
-    local ok,tmp
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Regular",fam.size)
-    fam.normal = tmp
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Regular",fam.scriptsize)
-    fam.normalscript = tmp
-
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Bold",fam.size)
-    fam.bold = tmp
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Bold",fam.scriptsize)
-    fam.boldscript = tmp
-
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Italic",fam.size)
-    fam.italic = tmp
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Italic",fam.scriptsize)
-    fam.italicscript = tmp
-
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-BoldItalic",fam.size)
-    fam.bolditalic = tmp
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-BoldItalic",fam.scriptsize)
-    fam.bolditalicscript = tmp
-    fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
-    fonts.lookup_fontfamily_name_number["text"]=#fonts.lookup_fontfamily_number_instance
 end
 
 -- Return remaining height (sp), first row, last row
@@ -2473,22 +2294,6 @@ function next_row(rownumber,areaname,rows)
     end
 end
 
-function set_image_length(len,width_or_height)
-    if len == nil or len == "auto" then
-        return nil
-    elseif len == "100%" and width_or_height == "width" then
-        return xpath.get_variable("__maxwidth") * current_grid.gridwidth
-    elseif tonumber(len) then
-        if width_or_height == "width" then
-            return len * current_grid.gridwidth
-        else
-            return len * current_grid.gridheight
-        end
-    else
-        return tex.sp(len)
-    end
-end
-
 function empty_block()
     local r = node.new(hlist_node)
     r.width = 0
@@ -2509,6 +2314,66 @@ function emergency_block()
     trace("emergency_block")
     return v
 end
+
+
+
+--- Defaults
+--- --------
+
+--- This function is only called once from `dothings()` during startup phase. We define
+--- a family with regular, bold, italic and bolditalic font with size 10pt (we always
+--- measure font size in dtp points)
+function define_default_fontfamily()
+    local fam={
+        size         = 10 * factor,
+        baselineskip = 12 * factor,
+        scriptsize   = 10 * factor * 0.8,
+        scriptshift  = 10 * factor * 0.3,
+    }
+    local ok,tmp
+    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Regular",fam.size)
+    fam.normal = tmp
+    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Regular",fam.scriptsize)
+    fam.normalscript = tmp
+
+    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Bold",fam.size)
+    fam.bold = tmp
+    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Bold",fam.scriptsize)
+    fam.boldscript = tmp
+
+    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Italic",fam.size)
+    fam.italic = tmp
+    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Italic",fam.scriptsize)
+    fam.italicscript = tmp
+
+    ok,tmp = fonts.make_font_instance("TeXGyreHeros-BoldItalic",fam.size)
+    fam.bolditalic = tmp
+    ok,tmp = fonts.make_font_instance("TeXGyreHeros-BoldItalic",fam.scriptsize)
+    fam.bolditalicscript = tmp
+    fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
+    fonts.lookup_fontfamily_name_number["text"]=#fonts.lookup_fontfamily_number_instance
+end
+
+
+--- Image handling
+--- --------------
+
+function set_image_length(len,width_or_height)
+    if len == nil or len == "auto" then
+        return nil
+    elseif len == "100%" and width_or_height == "width" then
+        return xpath.get_variable("__maxwidth") * current_grid.gridwidth
+    elseif tonumber(len) then
+        if width_or_height == "width" then
+            return len * current_grid.gridwidth
+        else
+            return len * current_grid.gridheight
+        end
+    else
+        return tex.sp(len)
+    end
+end
+
 
 function calculate_image_width_height( image, width,height,minwidth,minheight,maxwidth, maxheight )
     -- from http://www.w3.org/TR/CSS2/visudet.html#min-max-widths:
@@ -2584,9 +2449,177 @@ function calculate_image_width_height( image, width,height,minwidth,minheight,ma
 end
 
 
+local images = {}
+function new_image( filename, page, box)
+    return imageinfo(filename,page,box)
+end
+
+-- Retrieve image from an URL if its not cached
+function get_image(requeste_url)
+    local imgcache = os.getenv("IMGCACHE")
+    local parsed_url = url.parse(requeste_url)
+    -- http://placekitten.com/g/200/300?foo=bar gives
+    -- x = {
+    --  ["path"] = "/g/200/300"
+    --  ["scheme"] = "http"
+    --  ["query"] = "foo=bar"
+    --  ["authority"] = "placekitten.com"
+    --  ["host"] = "placekitten.com"
+    -- },
+    local request_filename = parsed_url.host .. parsed_url.path
+    if parsed_url.query then
+        request_filename = request_filename .. "?" .. parsed_url.query
+    end
+    -- md5 should be over the complete part after the host
+    local mdfivesum = string.gsub(md5.sum(request_filename),".",function(chr) return string.format("%02x",string.byte(chr)) end)
+    local path_to_image = os.getenv("IMGCACHE") .. os_separator .. mdfivesum
+
+    if lfs.isfile(path_to_image) then
+        log("Image: string used for caching (-> md5): %q",request_filename)
+        log("Read image file from cache: %s",path_to_image)
+        return imageinfo(path_to_image)
+    end
+
+    -- c = {
+    --   ["last-modified"] = "Mon, 21 Oct 2013 12:45:54 GMT"
+    --   ["connection"] = "close"
+    --   ["accept-ranges"] = "bytes"
+    --   ["date"] = "Thu, 13 Feb 2014 16:29:11 GMT"
+    --   ["content-length"] = "52484"
+    --   ["content-type"] = "image/jpeg"
+    -- }
+    log("Retrieving file: %q",tostring(requeste_url))
+    txt, statuscode, c = http.request(requeste_url)
+    if statuscode ~= 200 then
+        err("404 when retrieving image %q",requeste_url)
+        return imageinfo(nil) -- nil is "filenotfound.pdf"
+    end
+
+    -- Create the temporary directory if necessary
+    if not lfs.isdir(imgcache) then
+        local imgcachepaths = string.explode(imgcache,os_separator)
+        local tmp = ""
+        for i=2, #imgcachepaths do
+            tmp = tmp .. os_separator .. imgcachepaths[i]
+            if not lfs.isdir(tmp) then
+                local ok,e = lfs.mkdir(tmp)
+                if not ok then
+                    err("Could not create temporary directory for images: %q",tmp)
+                end
+            end
+        end
+    end
+
+    local file,e = io.open(path_to_image,"wb")
+    if file == nil then
+        err("Could not open image file for writing into temp directory: %q",e)
+        return imageinfo(nil)
+    end
+    local ok
+    ok, e = file:write(txt)
+    if not ok then
+        err("Could not write image file into temp directory %q",e)
+        return imageinfo(nil)
+    end
+    file:flush()
+    file:close()
+
+    -- Just re-run this function. The image is now cached
+    return get_image(requeste_url)
+end
+
+-- Box is none, media, crop, bleed, trim, art
+function imageinfo( filename,page,box )
+    page = page or 1
+    box = box or "crop"
+    -- there is no filename, we should fail or throw an error
+    if not filename then
+        err("No filename given for image")
+        filename = "filenotfound.pdf"
+    end
+
+    local new_name = filename .. tostring(page) .. tostring(box)
+
+    if images[new_name] then
+        return images[new_name]
+    end
+
+    if not find_file_location(filename) then
+        err("Image %q not found!",filename or "???")
+        filename = "filenotfound.pdf"
+        page = 1
+    end
+    -- example is wrong: one based index
+    -- <?xml version="1.0" ?>
+    -- <imageinfo>
+    --    <cells_x>30</cells_x>
+    --    <cells_y>21</cells_y>
+    --    <segment x1='13' y1='0' x2='16' y2='0' />
+    --    <segment x1='13' y1='1' x2='16' y2='1' />
+    --    <segment x1='11' y1='2' x2='18' y2='2' />
+    --    <segment x1='10' y1='3' x2='18' y2='3' />
+    --    <segment x1='10' y1='4' x2='18' y2='4' />
+    --    <segment x1='9' y1='5' x2='20' y2='5' />
+    --    <segment x1='8' y1='6' x2='20' y2='6' />
+    --    <segment x1='8' y1='7' x2='20' y2='7' />
+    --    <segment x1='7' y1='8' x2='21' y2='8' />
+    --    <segment x1='6' y1='9' x2='21' y2='9' />
+    --    <segment x1='5' y1='10' x2='24' y2='10' />
+    --    <segment x1='5' y1='11' x2='24' y2='11' />
+    --    <segment x1='4' y1='12' x2='25' y2='12' />
+    --    <segment x1='3' y1='13' x2='25' y2='13' />
+    --    <segment x1='3' y1='14' x2='27' y2='14' />
+    --    <segment x1='2' y1='15' x2='27' y2='15' />
+    --    <segment x1='1' y1='16' x2='28' y2='16' />
+    --  </imageinfo>
+    local xmlfilename = string.gsub(filename,"(%..*)$",".xml")
+    local mt
+    if kpse.filelist[xmlfilename] then
+        mt = {}
+        local xmltab = load_xml(xmlfilename,"Imageinfo")
+        local segments = {}
+        local cells_x,cells_y
+        for _,v in ipairs(xmltab) do
+            if v[".__local_name"] == "cells_x" then
+                cells_x = v[1]
+            elseif v[".__local_name"] == "cells_y" then
+                cells_y = v[1]
+            elseif v[".__local_name"] == "segment" then
+                -- 0 based segments
+                segments[#segments + 1] = {v.x1,v.y1,v.x2,v.y2}
+            end
+        end
+        -- we have parsed the file, let's build a beautiful 2dim array
+        mt.max_x = cells_x
+        mt.max_y = cells_y
+        for i=1,cells_y do
+            mt[i] = {}
+            for j=1,cells_x do
+                mt[i][j] = 0
+            end
+        end
+        for i,v in ipairs(segments) do
+            for x=v[1],v[3] do
+                for y=v[2],v[4] do
+                    mt[y][x] = 1
+                end
+            end
+        end
+    end
+
+    if not images[new_name] then
+        local image_info = img.scan{filename = filename, pagebox = box, page=page }
+        images[new_name] = { img = image_info, allocate = mt }
+    end
+    return images[new_name]
+end
+
+--- Sorting
+--- -------
+--- The sorting code is currently used for index generation (commands.lua/makeindex)
+
 -- see http://lua.2524044.n2.nabble.com/A-stable-sort-td7648892.html
 -- public domain or cc0
-
 
 -- If you're using LuaJIT, change to 72.
 local max_chunk_size = 12
@@ -2664,12 +2697,6 @@ function stable_sort( array, goes_before )
     return array
 end
 -- end of stable sorting function
-
-function set_mainlanguage( mainlanguage )
-    log("Setting default language to %q",mainlanguage or "?")
-    defaultlanguage = get_languagecode(mainlanguage)
-end
-
 
 
 file_end("publisher.lua")

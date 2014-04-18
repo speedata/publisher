@@ -53,12 +53,13 @@ task :sourcedoc do
 	Dir.chdir("#{srcdir}/lua") do
 		sh "#{installdir}/third/locco/locco.lua #{builddir}/sourcedoc css.lua luxor.lua sdini.lua paragraph.lua sdscripts.lua xpath.lua publisher.lua publisher/*lua common/*lua fonts/*.lua barcodes/*lua"
 	end
+	cp_r(installdir.join("doc","sourcedoc","img"), builddir.join("sourcedoc"))
 	ENV['GOPATH'] = "#{srcdir}/go/sp"
 	Dir.chdir(srcdir.join("go","sp","src","main")) do
 		puts "Building docgo..."
-  		sh 'go build github.com/pgundlach/docgo'
-  		puts "...done"
-  		sh "./docgo -outdir #{builddir}/sourcedoc -resdir #{srcdir}/go/sp/src/github.com/pgundlach/docgo/ sp.go"
+		sh 'go build github.com/pgundlach/docgo'
+		puts "...done"
+		sh "./docgo -outdir #{builddir}/sourcedoc -resdir #{srcdir}/go/sp/src/github.com/pgundlach/docgo/ sp.go"
 	end
 	puts "done"
 	puts "Generated source documentation in \n#{builddir}/sourcedoc"

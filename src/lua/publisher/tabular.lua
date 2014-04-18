@@ -76,8 +76,23 @@ function attach_objects( tab )
     end
 end
 
---------------------------------------------------------------------------
-function calculate_columnwidth_for_row(self, tr_contents,current_row,colspans,colmin,colmax )
+--- Width calculation
+--- =================
+
+--- We calculate the widths in two passes:
+---
+---  1. Calculate the width of each table cell in a row
+---  1. Calculate the row height
+---
+--- The minimum width (min\_wd) is calculated as follows. Calculate the length of the longest item in the row:
+---
+--- ![minimum width](img/calculate_longtext2.svg)
+---
+--- The maximum width (max\_wd) is calculated by typesetting the text and taking total size of the hbox into account:
+---
+--- ![maximum width](img/calculate_longtext.svg)
+-- Calculate the width for each column in the row.
+function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,colmin,colmax )
     local current_column
     local max_wd, min_wd -- maximum and minimum width of a table cell (Td)
     -- first we go through all rows/cells and look, how wide the columns
@@ -102,11 +117,10 @@ function calculate_columnwidth_for_row(self, tr_contents,current_row,colspans,co
             end
         end
 
-        local td_borderleft = tex.sp(td_contents["border-left"]  or 0)
-        local td_boderright = tex.sp(td_contents["border-right"] or 0)
-
-        local padding_left  = td_contents.padding_left  or self.padding_left
-        local padding_right = td_contents.padding_right or self.padding_right
+        local td_borderleft  = tex.sp(td_contents["border-left"]  or 0)
+        local td_borderright = tex.sp(td_contents["border-right"] or 0)
+        local padding_left   = td_contents.padding_left  or self.padding_left
+        local padding_right  = td_contents.padding_right or self.padding_right
 
         for _,object in ipairs(td_contents.objects) do
             if type(object)=="table" then
@@ -118,18 +132,18 @@ function calculate_columnwidth_for_row(self, tr_contents,current_row,colspans,co
                 end
 
                 if object.min_width then
-                    min_wd = math.max(object:min_width() + padding_left  + padding_right + td_borderleft + td_boderright, min_wd or 0)
+                    min_wd = math.max(object:min_width() + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
                 end
                 if object.max_width then
-                    max_wd = math.max(object:max_width() + padding_left  + padding_right + td_borderleft + td_boderright, max_wd or 0)
+                    max_wd = math.max(object:max_width() + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
                 end
                 trace("table: min_wd, max_wd set (%gpt,%gpt)",min_wd / 2^16, max_wd / 2^16)
             end
             if not ( min_wd and max_wd) then
                 trace("min_wd and max_wd not set yet. Type(object)==%s",type(object))
                 if object.width then
-                    min_wd = object.width + padding_left  + padding_right + td_borderleft + td_boderright
-                    max_wd = object.width + padding_left  + padding_right + td_borderleft + td_boderright
+                    min_wd = object.width + padding_left  + padding_right + td_borderleft + td_borderright
+                    max_wd = object.width + padding_left  + padding_right + td_borderleft + td_borderright
                     trace("table: width (image) = %gpt",min_wd / 2^16)
                 else
                     warning("Could not determine min_wd and max_wd")
@@ -152,6 +166,8 @@ function calculate_columnwidth_for_row(self, tr_contents,current_row,colspans,co
 end
 
 
+--- Calculate the widths of the columns for the table.
+--- -------------------------------------------------
 function calculate_columnwidth( self )
     trace("table: calculate columnwidth")
     local colspans = {}
@@ -165,6 +181,17 @@ function calculate_columnwidth( self )
         local tr_contents      = publisher.element_contents(tr)
         local tr_elementname = publisher.elementname(tr,true)
 
+        --- When the user gives us column widths, we use them for calculation. There are two ways to
+        --- determine the column widths: with \\(n\\)* (where \\(n\\) is an integer number) or with absolute
+        --- lengths such as `4` (in grid cells) or `2.5cm`. For example:
+        ---
+        ---     <Columns>
+        ---       <Column width="3cm"/>
+        ---       <Column width="1*"/>
+        ---       <Column width="3*"/>
+        ---     </Columns>
+        --- When we typeset a table with a requested with of 11cm, the first column would get 3cm,
+        --- the second column 1/4 of the rest (2cm) and the third 3/4 of the rest (4cm).
         if tr_elementname == "Columns" then
             local wd
             local i = 0
@@ -226,14 +253,16 @@ function calculate_columnwidth( self )
 
     if columnwidths_given then return end
 
-    -- Phase I: calculate max_wd, min_wd
+    --- Phase I
+    --- -------
+    --- Calculate max\_wd, min\_wd. We do this in a separate function for each row.
     for _,tr in ipairs(self.tab) do
         local tr_contents      = publisher.element_contents(tr)
         local tr_elementname = publisher.elementname(tr,true)
 
         if tr_elementname == "Tr" then
             current_row = current_row + 1
-            self:calculate_columnwidth_for_row(tr_contents,current_row,colspans,colmin,colmax)
+            self:calculate_columnwidths_for_row(tr_contents,current_row,colspans,colmin,colmax)
         elseif tr_elementname == "Tablerule" then
             -- ignore
         elseif tr_elementname == "Tablehead" then
@@ -242,16 +271,16 @@ function calculate_columnwidth( self )
                 local row_elementname = publisher.elementname(row,true)
                 if row_elementname == "Tr" then
                     current_row = current_row + 1
-                    self:calculate_columnwidth_for_row(row_contents,current_row,colspans,colmin,colmax)
+                    self:calculate_columnwidths_for_row(row_contents,current_row,colspans,colmin,colmax)
                 end
             end
         elseif tr_elementname == "Tablefoot" then
             for _,row in ipairs(tr_contents) do
-                local row_contents  = publisher.element_contents(row)
+                local row_contents    = publisher.element_contents(row)
                 local row_elementname = publisher.elementname(row,true)
                 if row_elementname == "Tr" then
                     current_row = current_row + 1
-                    self:calculate_columnwidth_for_row(row_contents,current_row,colspans,colmin,colmax)
+                    self:calculate_columnwidths_for_row(row_contents,current_row,colspans,colmin,colmax)
                 end
             end
         else
@@ -260,32 +289,32 @@ function calculate_columnwidth( self )
     end -- ∀ rows / rules
 
 
-    -- Now we are finished with all cells in all rows. If there are colospans, we might have
-    -- to increase some column widths
-    --
-    -- Example (fake):
-    --     <Table width="30">
-    --       <Tr><Td>A</Td><Td>A</Td></Tr>
-    --       <Tr><Td colspan="2">A very very very long text</Td></Tr>
-    --     </Table>
-    --     ----------------------------
-    --     |A           |A            |
-    --     |A very very very long text|
-    --     ----------------------------
-    --
-    -- In this case sum(min) is approx. the width of the word "very" and sum(max) is the width of the text.
-    -- colmax[i] is the width of "A", colmin[i] also
-    --
-    -- Phase II: include colspan
-    --
+    --- Now we are finished with all cells in all rows. If there are colospans, we might have
+    --- to increase some column widths
+    ---
+    --- Example (fake):
+    ---     <Table width="30">
+    ---       <Tr><Td>A</Td><Td>A</Td></Tr>
+    ---       <Tr><Td colspan="2">A very very very long text</Td></Tr>
+    ---     </Table>
+    ---     ----------------------------
+    ---     |A           |A            |
+    ---     |A very very very long text|
+    ---     ----------------------------
+    ---
+    --- In this case sum(min) is approx. the width of the word "very" and sum(max) is the width of the text.
+    --- colmax[i] is the width of "A", colmin[i] also
+    ---
+    --- Phase II: include colspan
+    --- -------------------------
     trace("table: adjust colmin/colmax")
     for i,colspan in pairs(colspans) do
         trace("table: colspan #%d",i)
         local sum_min,sum_max = 0,0
         local r -- stretch factor = wd(colspan)/wd(sum_start_end)
 
-        -- first we calclulate how wide the columns are that are covered by colspan, but without
-        -- colspan itself
+        --- First we calculate how wide the columns are that are covered by colspan, but without
+        --- colspan itself
 
         if #colmax < colspan.stop then
             err("Not enough columns found for colspan")
@@ -294,11 +323,11 @@ function calculate_columnwidth( self )
         sum_max = table.sum(colmax,colspan.start,colspan.stop)
         sum_min = table.sum(colmin,colspan.start,colspan.stop)
 
-        -- if the colspan requires more room than the rest of the table, we have to increase
-        -- the width of all columns in the table accordingly. We stretch the columns by
-        -- a factor r. r is calculated by the contents
-
-        -- We do that once for the maximum width and once for the minimum width
+        --- If the colspan requires more room than the rest of the table, we have to increase
+        --- the width of all columns in the table accordingly. We stretch the columns by
+        --- a factor r. r is calculated by the contents.
+        ---
+        --- We do that once for the maximum width and once for the minimum width
         local width_of_colsep = table.sum(self.column_distances,colspan.start,colspan.start)
 
         if colspan.max_wd > sum_max + width_of_colsep then
@@ -319,7 +348,8 @@ function calculate_columnwidth( self )
     -- Now colmin and colmax are calculated for all columns. colspans are included.
 
 
-    -- Phase III: stretch or shrink table
+    --- Phase III: Stretch or shrink table
+    --- ----------------------------------
 
     -- Here comes the main width calculation
     -- ---------------------------------------------
@@ -327,9 +357,10 @@ function calculate_columnwidth( self )
     local colsep = (#colmax - 1) * self.colsep
     local tablewidth_is = table.sum(colmax) + colsep
 
-    -- 1) calculate natural (max) width / total width for each column
-    -- if stretch="no" is set, we can encounter the case that the table is too wide. Then it
-    -- must be shrinked
+    --- 1. calculate natural (max) width / total width for each column.
+    ---
+    --- If stretch="no" is set, we can encounter the case that the table is too wide. Then it
+    --- must be shrinked.
 
     -- highly unlikely that the table matches the size exactly
     if tablewidth_is == self.tablewidth_target then
@@ -416,7 +447,7 @@ function calculate_rowheight( self,tr_contents, current_row )
 
 
         local td_borderleft   = tex.sp(td_contents["border-left"]   or 0)
-        local td_boderright   = tex.sp(td_contents["border-right"]  or 0)
+        local td_borderright  = tex.sp(td_contents["border-right"]  or 0)
         local td_bordertop    = tex.sp(td_contents["border-top"]    or 0)
         local td_borderbottom = tex.sp(td_contents["border-bottom"] or 0)
 
@@ -469,7 +500,7 @@ function calculate_rowheight( self,tr_contents, current_row )
                 end
                 publisher.set_fontfamily_if_necessary(object.nodelist,self.fontfamily)
 
-                local v = object:format(wd - padding_left - padding_right - td_borderleft - td_boderright,default_textformat_name)
+                local v = object:format(wd - padding_left - padding_right - td_borderleft - td_borderright,default_textformat_name)
                 if cell then
                     node.tail(cell).next = v
                 else
@@ -512,7 +543,6 @@ function calculate_rowheight( self,tr_contents, current_row )
 end
 
 
---------------------------------------------------------------------------
 function calculate_rowheights(self)
     trace("table: calculate row height")
     local current_row = 0
@@ -587,6 +617,12 @@ function calculate_rowheights(self)
     end
 end
 
+--- ![Table cell](img/cell.svg)
+
+--- Width calculation is now finished, we can typeset the table
+--- Typesetting the table
+--- ---------------------
+--- First, we create a complete table with all rows. Splitting into pages is done later on
 function typeset_row(self, tr_contents, current_row )
     trace("table: typeset row")
     local current_column
@@ -606,15 +642,15 @@ function typeset_row(self, tr_contents, current_row )
         colspan = tonumber(td_contents.colspan) or 1
 
         -- FIXME: am I sure that I am in the corerct column?  (colspan...)?
-        local td_borderleft  = tex.sp(td_contents["border-left"]   or 0)
-        local td_boderright = tex.sp(td_contents["border-right"]  or 0)
-        local td_bordertop   = tex.sp(td_contents["border-top"]    or 0)
-        local td_borderbottom  = tex.sp(td_contents["border-bottom"] or 0)
+        local td_borderleft   = tex.sp(td_contents["border-left"]   or 0)
+        local td_borderright  = tex.sp(td_contents["border-right"]  or 0)
+        local td_bordertop    = tex.sp(td_contents["border-top"]    or 0)
+        local td_borderbottom = tex.sp(td_contents["border-bottom"] or 0)
 
-        local padding_left   = td_contents.padding_left   or self.padding_left
-        local padding_right  = td_contents.padding_right  or self.padding_right
-        local padding_top    = td_contents.padding_top    or self.padding_top
-        local padding_bottom = td_contents.padding_bottom or self.padding_bottom
+        local padding_left    = td_contents.padding_left   or self.padding_left
+        local padding_right   = td_contents.padding_right  or self.padding_right
+        local padding_top     = td_contents.padding_top    or self.padding_top
+        local padding_bottom  = td_contents.padding_bottom or self.padding_bottom
 
         -- when we are on a skip-cell (because of a rowspan), we need to create an empty hbox
         while self.skip[current_row] and self.skip[current_row][current_column] do
@@ -667,7 +703,8 @@ function typeset_row(self, tr_contents, current_row )
         local zelle
         local current = node.tail(cell_start)
 
-
+        --- Let's combine every object in the cell by setting the next pointer at the end
+        --- to the following object and vpack it for the cell
         for _,object in ipairs(td_contents.objects) do
             if type(object) == "table" then
                 if not (object and object.nodelist) then
@@ -700,7 +737,7 @@ function typeset_row(self, tr_contents, current_row )
                         default_textformat_name = self.textformat
                     end
                 end
-                v = object:format(current_column_width - padding_left - padding_right - td_borderleft - td_boderright, default_textformat_name)
+                v = object:format(current_column_width - padding_left - padding_right - td_borderleft - td_borderright, default_textformat_name)
                 if publisher.options.trace then
                     v = publisher.boxit(v)
                 end
@@ -723,11 +760,16 @@ function typeset_row(self, tr_contents, current_row )
             g.spec.stretch_order = 2
         end
 
+
         current.next = g
 
         vlist = node.vpack(cell_start,ht - td_bordertop - td_borderbottom,"exactly")
+        --- The table cell now looks like this
+        ---
+        --- ![Table cell vertical](img/tablecell1.svg)
+        ---
+        --- Now we need to add the left and the right glue
 
-        -- done with a cell, let's put it into an hlist
         g = node.new("glue")
         g.spec = node.new("glue_spec")
         g.spec.width = padding_left
@@ -741,8 +783,8 @@ function typeset_row(self, tr_contents, current_row )
 
         cell_start = g
 
-        if td_contents["border-left"] then
-            local start, stop = publisher.colorbar(tex.sp(td_contents["border-left"]),-1073741824,-1073741824,td_contents["border-left-color"])
+        if td_borderleft ~= 0 then
+            local start, stop = publisher.colorbar(tex.sp(td_borderleft),-1073741824,-1073741824,td_contents["border-left-color"])
             stop.next = g
             cell_start = start
         end
@@ -764,14 +806,15 @@ function typeset_row(self, tr_contents, current_row )
         current.next = g
         current = g
 
-        if td_contents["border-right"] then
-            local rule = publisher.colorbar(tex.sp(td_contents["border-right"]),-1073741824,-1073741824,td_contents["border-right-color"])
+        if td_borderright ~= 0 then
+            local rule = publisher.colorbar(tex.sp(td_borderright),-1073741824,-1073741824,td_contents["border-right-color"])
             g.next = rule
         end
 
         hlist = node.hpack(cell_start,current_column_width,"exactly")
-
-        -- the row is now complete. We can set the background color now
+        --- The row is now almost complete. We can set the background color and add the top and bottom rule.
+        ---
+        --- ![Table cell vertical](img/tablecell2.svg)
         if tr_contents.backgroundcolor or td_contents.backgroundcolor or self.columncolors[current_column] then
             -- prio: Td.backgroundcolor, then Tr.backgroundcolor, then Column.backgroundcolor
             local color = self.columncolors[current_column]
@@ -781,21 +824,19 @@ function typeset_row(self, tr_contents, current_row )
         end
 
         local head = hlist
-        if td_contents["border-top"] then
-            local rule = publisher.colorbar(-1073741824,tex.sp(td_contents["border-top"]),0,td_contents["border-top-color"])
+        if td_bordertop > 0 then
+            local rule = publisher.colorbar(-1073741824,tex.sp(td_bordertop),0,td_contents["border-top-color"])
             -- rule is: whatsit, rule, whatsit
             node.tail(rule).next = hlist
             head = rule
         end
 
-        if td_contents["border-bottom"] then
-            local rule = publisher.colorbar(-1073741824,tex.sp(td_contents["border-bottom"]),0,td_contents["border-bottom-color"])
+        if td_borderbottom > 0 then
+            local rule = publisher.colorbar(-1073741824,tex.sp(td_borderbottom),0,td_contents["border-bottom-color"])
             hlist.next = rule
         end
 
-
-        -- vlist.height = self.rowheights[current_row]
-        -- hlist.height = self.rowheights[current_row]
+        -- What is this for?
         local gl = node.new("glue")
         gl.spec = node.new("glue_spec")
         gl.spec.width = 0
@@ -803,7 +844,11 @@ function typeset_row(self, tr_contents, current_row )
         gl.spec.shrink_order = 2
         node.slide(head).next = gl
 
+        --- This is our table cell now:
+        ---
+        --- ![Table cell vertical](img/tablecell3.svg)
         hlist = node.vpack(head,self.rowheights[current_row],"exactly")
+
 
         if publisher.options.trace then
             publisher.boxit(hlist)
@@ -825,7 +870,7 @@ function typeset_row(self, tr_contents, current_row )
     cell_start = row[1]
     current = cell_start
 
-    -- FIXME: hier statt self.colsep die column_distances[i] berücksichtigen
+    -- FIXME: use column_distances[i] instead of self.colsep
     if row[1] then
         for z=2,#row do
             _,current = publisher.add_glue(current,"tail",{ width = self.colsep })
