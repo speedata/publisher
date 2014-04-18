@@ -51,10 +51,10 @@ end
 desc "Source documentation"
 task :sourcedoc do
 	Dir.chdir("#{srcdir}/lua") do
-		sh "#{installdir}/third/locco/locco.lua #{builddir}/sourcedoc *lua publisher/*lua common/*lua fonts/*.lua barcodes/*lua"
+		sh "#{installdir}/third/locco/locco.lua #{builddir}/sourcedoc css.lua luxor.lua sdini.lua paragraph.lua sdscripts.lua xpath.lua publisher.lua publisher/*lua common/*lua fonts/*.lua barcodes/*lua"
 	end
 	ENV['GOPATH'] = "#{srcdir}/go/sp"
-	Dir.chdir(srcdir.join("go","sp")) do
+	Dir.chdir(srcdir.join("go","sp","src","main")) do
 		puts "Building docgo..."
   		sh 'go build github.com/pgundlach/docgo'
   		puts "...done"

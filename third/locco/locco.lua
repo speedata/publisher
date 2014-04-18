@@ -1,5 +1,5 @@
 #!/usr/bin/env texlua
--- This version is modified from the original. It takes the output path as 
+-- This version is modified from the original. It takes the output path as
 -- the first argument 1. All other arguments are the source files to translate
 
 -- __Locco__ is a Lua port of [Docco](http://jashkenas.github.com/docco/),
@@ -95,7 +95,7 @@ end
 -- _sections_: A table with split sections.<br>
 function highlight(sections)
   for i=1, #sections do
-    sections[i]['docs_html'] = markdown(sections[i]['docs_text'])
+    sections[i]['docs_html'] = md.markdown(sections[i]['docs_text'])
     sections[i]['code_html'] = highlight_lua(sections[i]['code_text'])
   end
   return sections
@@ -135,7 +135,7 @@ package.path = table.concat({
   package.path
 }, ';');
 -- Load markdown.lua. It creates a global `markdown` function
-require 'markdown'
+md = require 'markdown'
 -- Load Lua Balanced.
 lb = require('luabalanced')
 -- Load HTML templates.
@@ -196,6 +196,7 @@ function highlight_lua(code)
         elseif u == 's' then -- Strings.
           sout = '<span class="s">'..escape(s)..'</span>'
         elseif u == 'e' then -- Code.
+          s = escape(s)
           -- First highlight function names.
           s = s:gsub('function ([%w_:%.]+)', 'function <span class="nf">%1</span>')
           -- There might be a non-keyword at the beginning of the snippet.
