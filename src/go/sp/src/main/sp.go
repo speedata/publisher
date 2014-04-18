@@ -3,6 +3,7 @@
 package main
 
 import (
+	"bufio"
 	"configurator"
 	"encoding/xml"
 	"fmt"
@@ -498,18 +499,52 @@ func runPublisher() (exitstatus int) {
 }
 
 func compareTwoPages(sourcefile, referencefile, dummyfile string) bool {
-	res, err := exec.Command("compare", "-metric", "mae", sourcefile, referencefile, dummyfile).CombinedOutput()
+	// More complicated than the trivial case because I need the different exit statuses.
+	// See http://stackoverflow.com/a/10385867
+
+	cmd := exec.Command("compare", "-metric", "mae", sourcefile, referencefile, dummyfile)
+	// err == 1 looks like an indicator that the comparison is OK but some diffs in the images
+	// err == 2 seems to be a fatal error
+	stderr, err := cmd.StderrPipe()
 	if err != nil {
-		log.Println(string(res))
 		log.Fatal(err)
 	}
-	delta, err := strconv.ParseFloat(strings.Split(string(res), " ")[0], 32)
-	if err != nil {
-		log.Fatal(err)
+
+	if err := cmd.Start(); err != nil {
+		log.Fatalf("cmd.Start: %v")
 	}
-	if delta > 0.6 {
-		log.Println("Delta is", delta)
-		return false
+
+	r := bufio.NewReader(stderr)
+	line, _ := r.ReadBytes('\n')
+
+	if err := cmd.Wait(); err != nil {
+		if exiterr, ok := err.(*exec.ExitError); ok {
+			// The program has exited with an exit code != 0
+
+			// This works on Mac and hopefully on Unix and Windows. Although package
+			// syscall is generally platform dependent, WaitStatus is
+			// defined for both Unix and Windows and in both cases has
+			// an ExitStatus() method with the same signature.
+			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
+				if status.ExitStatus() == 1 {
+					// comparison ok with differences
+					delta, err := strconv.ParseFloat(strings.Split(string(line), " ")[0], 32)
+					if err != nil {
+						log.Fatal(err)
+					}
+					if delta > 0.6 {
+						log.Println("Delta is", delta)
+						return false
+					} else {
+						fmt.Println("Small difference found, ignoring.")
+					}
+				} else {
+					log.Fatal(err)
+				}
+			}
+		} else {
+			log.Fatalf("cmd.Wait: %v", err)
+		}
 	}
 	return true
 }
