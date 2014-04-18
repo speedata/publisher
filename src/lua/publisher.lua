@@ -1523,7 +1523,7 @@ function mknodes(str,fontfamily,parameter)
     -- There is a string with utf8 chars
     for s in string.utfvalues(str) do
         local char = unicode.utf8.char(s)
-        -- If the next char is a newline (&amp;#x0A;) a \\ is inserted
+        -- If the next char is a newline (&#x0A;) a \\ is inserted
         if s == 10 then
             -- This is to enable hyphenation again. When we add a rule right after a word
             -- hyphenation is disabled. So we insert a penalty of 10k which should not do

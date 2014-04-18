@@ -12,13 +12,11 @@ header = [[<!DOCTYPE html>
   <div id="container">
     <div id="background"></div>
     %jump%
-    <table cellpadding="0" cellspacing="0">
+    <table>
       <thead>
         <tr>
           <th class="docs">
-            <h1>
-              %title%
-            </h1>
+            <span class="h1">%title%</span>
           </th>
           <th class="code">
           </th>

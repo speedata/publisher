@@ -145,6 +145,7 @@ require 'template'
 -- Parameter:<br>
 -- _s_: String to escape.<br>
 function escape(s)
+  s = s:gsub('&', '&amp;')
   s = s:gsub('<', '&lt;')
   s = s:gsub('>', '&gt;')
   s = s:gsub('%%', '&#37;')
