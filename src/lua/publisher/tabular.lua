@@ -24,7 +24,7 @@ function new( self )
         tablefoot_contents,
         tablewidth_target,
         columncolors  = {},
-        -- Der Abstand zwischen Spalte i und i+1, derzeit nicht benutzt
+        -- The distance between column i and i+1, currently not used
         column_distances = {},
     }
 
@@ -191,7 +191,8 @@ function calculate_columnwidth( self )
         ---       <Column width="3*"/>
         ---     </Columns>
         --- When we typeset a table with a requested with of 11cm, the first column would get 3cm,
-        --- the second column 1/4 of the rest (2cm) and the third 3/4 of the rest (4cm).
+        --- the second column 1/4 of the rest (2cm) and the third 3/4 of the rest (6cm).
+        --- ![Table calculation](img/table313.svg)
         if tr_elementname == "Columns" then
             local wd
             local i = 0
@@ -700,7 +701,6 @@ function typeset_row(self, tr_contents, current_row )
 
         local cell_start = g
 
-        local zelle
         local current = node.tail(cell_start)
 
         --- Let's combine every object in the cell by setting the next pointer at the end
@@ -812,7 +812,7 @@ function typeset_row(self, tr_contents, current_row )
         end
 
         hlist = node.hpack(cell_start,current_column_width,"exactly")
-        --- The row is now almost complete. We can set the background color and add the top and bottom rule.
+        --- The cell is now almost complete. We can set the background color and add the top and bottom rule.
         ---
         --- ![Table cell vertical](img/tablecell2.svg)
         if tr_contents.backgroundcolor or td_contents.backgroundcolor or self.columncolors[current_column] then
@@ -866,10 +866,13 @@ function typeset_row(self, tr_contents, current_row )
         row[1] = node.vpack(v,self.rowheights[current_row],"exactly")
     end
 
-    local zelle, cell_start,current
+    local cell_start,current
     cell_start = row[1]
     current = cell_start
 
+    --- We now add colsep and connect the cells so we have a list of vboxes and
+    --- pack them in a hbox.
+    --- ![a row](img/tablerow.svg)
     -- FIXME: use column_distances[i] instead of self.colsep
     if row[1] then
         for z=2,#row do
