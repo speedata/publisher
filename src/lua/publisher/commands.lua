@@ -2120,6 +2120,8 @@ function commands.table( layoutxml,dataxml,optionen )
     local autostretch    = publisher.read_attribute(layoutxml,dataxml,"stretch",       "string")
     local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",    "rawstring")
     local eval           = publisher.read_attribute(layoutxml,dataxml,"eval",          "xpath")
+    local collapse       = publisher.read_attribute(layoutxml,dataxml,"border-collapse",  "string", "separate")
+
     -- FIXME: leading -> rowdistance or so
     padding        = tex.sp(padding        or "0pt")
     columndistance = tex.sp(columndistance or "0pt")

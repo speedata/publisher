@@ -4280,6 +4280,30 @@
         <para>Der Abstand zwischen zwei Zeilen.</para>
       </description>
     </attribute>
+    <attribute name="border-collapse" optional="yes">
+      <description xml:lang="en">
+        <para>Determine if adjacent table cells share borders.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt, ob benachbarte Zellen die Rahmen teilen.</para>
+      </description>
+      <choice name="separate">
+        <description xml:lang="en">
+          <para>The borders are part of the cell and not shared with its neighbors.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Rahmen sind Teil der Zelle und werden nicht mit den Nachbarzellen geteilt.</para>
+        </description>
+      </choice>
+      <choice name="collapse">
+        <description xml:lang="en">
+          <para>The borders of neighboring cells overlap.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Rahmen benachbarter Zellen überlappen sich.</para>
+        </description>
+      </choice>
+    </attribute>
     <remark xml:lang="en">
       <para>The table cells may contain Paragraphs, Images and other objects that are allowed in <cmd name="PlaceObject"/>.</para>
     </remark>

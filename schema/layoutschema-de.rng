@@ -2627,6 +2627,17 @@
                <a:documentation>Der Abstand zwischen zwei Zeilen.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="border-collapse">
+               <a:documentation>Bestimmt, ob benachbarte Zellen die Rahmen teilen.</a:documentation>
+               <choice>
+                  <value>separate</value>
+                  <a:documentation xmlns="">Die Rahmen sind Teil der Zelle und werden nicht mit den Nachbarzellen geteilt.</a:documentation>
+                  <value>collapse</value>
+                  <a:documentation xmlns="">Die Rahmen benachbarter Zellen überlappen sich.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <oneOrMore>
             <interleave>
                <optional>
