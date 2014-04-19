@@ -79,26 +79,61 @@ end
 --- Width calculation
 --- =================
 
---- We calculate the widths in two passes:
+--- First we check for adjacent columns for collapsing border:
+--- ![maximum width](img/bordercollapse.svg)
 ---
----  1. Calculate the width of each table cell in a row
----  1. Calculate the row height
+--- The resulting width for each border (left and right) is
 ---
---- The minimum width (min\_wd) is calculated as follows. Calculate the length of the longest item in the row:
+--- \\(\frac{max(border-left,border-right)}{2}\\)
 ---
---- ![minimum width](img/calculate_longtext2.svg)
----
---- The maximum width (max\_wd) is calculated by typesetting the text and taking total size of the hbox into account:
----
---- ![maximum width](img/calculate_longtext.svg)
+--- even if one
+--- side didn't have a border. In that case we need to adjust the border colors. Beware: the result is slightly undefined
+--- if both sides have different colors.
 -- Calculate the width for each column in the row.
 function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,colmin,colmax )
-    local current_column
+    local current_column = 0
     local max_wd, min_wd -- maximum and minimum width of a table cell (Td)
     -- first we go through all rows/cells and look, how wide the columns
     -- are supposed to be. If there are colspans, they have to be treated specially
-    current_column = 0
+    if self.bordercollapse_horizontal then
+        for i=1,#tr_contents do
+            if i ~= #tr_contents then
+                local thiscell,nextcell,nextcell_borderleft,thiscell_borderright,new_borderwidth,new_borderwidth
 
+                thiscell = publisher.element_contents(tr_contents[i])
+                nextcell = publisher.element_contents(tr_contents[i + 1])
+
+                thiscell_borderright = tex.sp(thiscell["border-right"] or 0)
+                nextcell_borderleft  = tex.sp(nextcell["border-left"]  or 0)
+
+                new_borderwidth = math.abs( math.max(thiscell_borderright,nextcell_borderleft) / 2 )
+
+                nextcell["border-left"]  = new_borderwidth
+                thiscell["border-right"] = new_borderwidth
+
+                if thiscell_borderright == 0 then
+                    thiscell["border-right-color"] = nextcell["border-left-color"]
+                end
+                if nextcell_borderleft == 0 then
+                    nextcell["border-left-color"] = thiscell["border-right-color"]
+                end
+            end
+        end
+    end
+
+    --- We calculate the widths in two passes:
+    ---
+    ---  1. Calculate the width of each table cell in a row
+    ---  1. Calculate the row height
+    ---
+    --- The minimum width (min\_wd) is calculated as follows. Calculate the length of the longest item in the row:
+    ---
+    --- ![minimum width](img/calculate_longtext2.svg)
+    ---
+    --- The maximum width (max\_wd) is calculated by typesetting the text and taking total size of the hbox into account:
+    ---
+    --- ![maximum width](img/calculate_longtext.svg)
+    ---
     for _,td in ipairs(tr_contents) do
         local td_contents = publisher.element_contents(td)
         -- all columms (table cells)
@@ -361,7 +396,7 @@ function calculate_columnwidth( self )
     --- 1. calculate natural (max) width / total width for each column.
     ---
     --- If stretch="no" is set, we can encounter the case that the table is too wide. Then it
-    --- must be shrinked.
+    --- must be shrunk.
 
     -- highly unlikely that the table matches the size exactly
     if tablewidth_is == self.tablewidth_target then

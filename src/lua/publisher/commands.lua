@@ -2181,6 +2181,10 @@ function commands.table( layoutxml,dataxml,optionen )
     tabular.rowsep         = rowdistance
     tabular.autostretch    = autostretch
     tabular.textformat     = textformat
+    tabular.bordercollapse_horizontal  = collapse == "collapse"
+    tabular.bordercollapse_bottom = collapse == "collapse"
+    if columndistance > 0 then tabular.bordercollapse_horizontal  = false end
+    if rowdistance    > 0 then tabular.bordercollapse_bottom = false end
 
     xpath.set_variable("_last_tr_data","")
 

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en" >
+
+  <Pageformat width="10cm" height="10cm"/>
+
+  <DefineColor name="green" value="#0f0"/>
+  <DefineColor name="red" value="#f00"/>
+  <DefineColor name="blue" value="#00f"/>
+  <DefineColor name="yellow" value="#ff0"/>
+  
+  <Options show-grid="yes" trace="no"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Table width="8" padding="3pt" border-collapse="collapse" stretch="max">
+        <Tr>
+          <Td
+            border-bottom="4pt" border-bottom-color="green"
+            border-right="12pt" border-right-color="red"
+            border-left="4pt" border-left-color="yellow"
+            border-top="4pt" border-top-color="blue"
+            >
+            <Paragraph><Value>Cell 1 contents</Value></Paragraph>
+          </Td>
+          <Td
+            border-bottom="4pt" border-bottom-color="green"
+            border-right="4pt" border-right-color="red"
+            border-left="4pt" border-left-color="yellow"
+            border-top="4pt" border-top-color="blue"
+            >
+            <Paragraph><Value>Cell 2 contents</Value></Paragraph>
+          </Td>
+        </Tr>
+        <Tr>
+          <Td
+            border-bottom="4pt" border-bottom-color="green"
+            border-right="8pt" border-right-color="red"
+            border-left="4pt" border-left-color="yellow"
+            border-top="4pt" border-top-color="blue"
+            >
+            <Paragraph><Value>Cell 3 contents</Value></Paragraph>
+          </Td>
+          <Td
+            border-bottom="4pt" border-bottom-color="green"
+            border-right="4pt"  border-right-color="red"
+            border-left="1pt"   border-left-color="yellow"
+            border-top="4pt"    border-top-color="blue"
+            >
+            <Paragraph><Value>Cell 4 contents</Value></Paragraph>
+          </Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+    <!-- some borders are missing -->
+    <PlaceObject>
+      <Table width="8" padding="3pt" border-collapse="collapse" stretch="max">
+        <Tr>
+          <Td
+            border-bottom="4pt" border-bottom-color="green"
+            border-left="4pt" border-left-color="yellow"
+            border-top="4pt" border-top-color="blue"
+            >
+            <Paragraph><Value>Cell 1 contents</Value></Paragraph>
+          </Td>
+          <Td
+            border-bottom="4pt" border-bottom-color="green"
+            border-right="4pt" border-right-color="red"
+            border-left="4pt" border-left-color="yellow"
+            border-top="4pt" border-top-color="blue"
+            >
+            <Paragraph><Value>Cell 2 contents</Value></Paragraph>
+          </Td>
+        </Tr>
+        <Tr>
+          <Td
+            border-bottom="4pt" border-bottom-color="green"
+            border-right="8pt" border-right-color="red"
+            border-left="4pt" border-left-color="yellow"
+            border-top="4pt" border-top-color="blue"
+            >
+            <Paragraph><Value>Cell 3 contents</Value></Paragraph>
+          </Td>
+          <Td
+            border-bottom="4pt" border-bottom-color="green"
+            border-right="4pt"  border-right-color="red"
+            border-top="4pt"    border-top-color="blue"
+            >
+            <Paragraph><Value>Cell 4 contents</Value></Paragraph>
+          </Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+    <PlaceObject>
+      <Table width="8cm" padding="3pt" border-collapse="separate" stretch="max">
+        <Tr>
+          <Td
+            border-bottom="4pt" border-bottom-color="green"
+            border-right="12pt" border-right-color="red"
+            border-left="4pt" border-left-color="yellow"
+            border-top="4pt" border-top-color="blue"
+            >
+            <Paragraph><Value>Cell 1 contents</Value></Paragraph>
+          </Td>
+          <Td
+            border-bottom="4pt" border-bottom-color="green"
+            border-right="4pt" border-right-color="red"
+            border-left="4pt" border-left-color="yellow"
+            border-top="4pt" border-top-color="blue"
+            >
+            <Paragraph><Value>Cell 2 contents</Value></Paragraph>
+          </Td>
+        </Tr>
+        <Tr>
+          <Td
+            border-bottom="4pt" border-bottom-color="green"
+            border-right="8pt" border-right-color="red"
+            border-left="4pt" border-left-color="yellow"
+            border-top="4pt" border-top-color="blue"
+            >
+            <Paragraph><Value>Cell 3 contents</Value></Paragraph>
+          </Td>
+          <Td
+            border-bottom="4pt" border-bottom-color="green"
+            border-right="4pt"  border-right-color="red"
+            border-left="1pt"   border-left-color="yellow"
+            border-top="4pt"    border-top-color="blue"
+            >
+            <Paragraph><Value>Cell 4 contents</Value></Paragraph>
+          </Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+    
+  </Record>
+
+</Layout>
