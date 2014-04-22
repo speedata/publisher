@@ -590,7 +590,7 @@
    </define>
    <define name="e_Columns">
       <element name="Spalten">
-         <a:documentation>Legt die Spaltenbreiten in einer Tabelle fest.</a:documentation>
+         <a:documentation>Legt die Spaltenbreiten und andere Eigenschaften einer Tabelle fest.</a:documentation>
          <oneOrMore>
             <choice>
                <ref name="e_Loop"/>
@@ -2629,7 +2629,7 @@
          </optional>
          <optional>
             <attribute name="border-collapse">
-               <a:documentation>Bestimmt, ob benachbarte Zellen die Rahmen teilen.</a:documentation>
+               <a:documentation>Bestimmt, ob benachbarte Zellen die Rahmen teilen. Das Verhalten von border-collapse="collapse" ist nicht definiert wenn die Tablle einen Zeilen- oder Spaltenabstand &gt; 0 haben oder wenn die benachbarten Zellen nicht dieselbe Strichstärke und -farbe haben.</a:documentation>
                <choice>
                   <value>separate</value>
                   <a:documentation xmlns="">Die Rahmen sind Teil der Zelle und werden nicht mit den Nachbarzellen geteilt.</a:documentation>
@@ -2756,7 +2756,7 @@
    </define>
    <define name="e_Td">
       <element name="Td">
-         <a:documentation>Erstellt eine Tabellenzelle</a:documentation>
+         <a:documentation>Erstellt eine Tabellenzelle, wie in HTML</a:documentation>
          <optional>
             <attribute name="hintergrundfarbe">
                <a:documentation>Der Name der Hintergrundfarbe, wenn die Zelle eingefärbt werden soll.</a:documentation>
@@ -2815,16 +2815,32 @@
          <optional>
             <attribute name="align">
                <a:documentation>Die horizontale Ausrichtung des Tabelleninhalts</a:documentation>
+               <choice>
+                  <value>left</value>
+                  <a:documentation xmlns="">Der Inhalt der Zelle ist am linken Rand ausgerichtet. (Voreinstellung)</a:documentation>
+                  <value>right</value>
+                  <a:documentation xmlns="">Der Inhalt der Zelle ist rechtsbündig ausgerichtet.</a:documentation>
+                  <value>center</value>
+                  <a:documentation xmlns="">Der Inhalt der Zelle ist auf der Mittelachse ausgerichtet mit links und rechts Flatterrand.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
             <attribute name="valign">
-               <a:documentation>Die vertikale Ausrichtung des Tabelleninhalts.</a:documentation>
+               <a:documentation>Die vertikale Ausrichtung des Zelleninhalts.</a:documentation>
+               <choice>
+                  <value>top</value>
+                  <a:documentation xmlns="">Der Zellinhalt ist an der oberen Kante ausgerichtet.</a:documentation>
+                  <value>middle</value>
+                  <a:documentation xmlns="">Der Zellinhalt vertikal zentriert.</a:documentation>
+                  <value>bottom</value>
+                  <a:documentation xmlns="">Der Zellinhalt ist an der unteren Kante ausgerichtet.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
             <attribute name="padding">
-               <a:documentation>Kurzform für die Bestimmung von padding-top und den anderen drei Werden mit derselben Maßangabe</a:documentation>
+               <a:documentation>Kurzform für die Bestimmung von padding-top und den anderen drei Werten mit derselben Maßangabe</a:documentation>
             </attribute>
          </optional>
          <optional>

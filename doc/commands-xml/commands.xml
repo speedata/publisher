@@ -781,7 +781,7 @@
   </command>
   <command name="Column">
     <description xml:lang="en">
-      <para></para>
+      <para>Set the properties of a column in the table.</para>
     </description>
     <description xml:lang="de">
       <para>Gibt die Eigenschaften einer Spalte in einer Tabelle an.</para>
@@ -789,7 +789,7 @@
     <childelements />
     <attribute name="width" type="numberlengthorstar" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Width of the column. Argument can be a number (in grid cells) a length (e.g. 2cm) or a *-number (e.g. 4*).</para>
       </description>
       <description xml:lang="de">
         <para>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm) oder in *-Angaben (z.B. 4*) angegeben werden.</para>
@@ -802,7 +802,7 @@
       <description xml:lang="de">
         <para>Die horizontale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (<cmd name="Td"/>) überschrieben werden.</para>
       </description>
-      <choice name="left" context="align">
+      <choice name="alignleft" context="align">
         <description xml:lang="en">
           <para>The table cells are left aligned.</para>
         </description>
@@ -810,7 +810,7 @@
           <para>Die Tabellenzellen dieser Spalte werden linksbündig ausgerichtet.</para>
         </description>
       </choice>
-      <choice name="center" context="align">
+      <choice name="aligncenter" context="align">
         <description xml:lang="en">
           <para>The table cells are horizontally centerd.</para>
         </description>
@@ -818,7 +818,7 @@
           <para>Die Tabellenzellen dieser Spalte werden horizontal zentriert.</para>
         </description>
       </choice>
-      <choice name="right" context="align">
+      <choice name="alignright" context="align">
         <description xml:lang="en">
           <para>The table cells are right aligned.</para>
         </description>
@@ -867,6 +867,19 @@
         <para>Farbe der Tabellenspalte.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Table>
+  <Columns>
+    <Column width="14mm" />
+    <Column width="2" />
+    <Column width="1*" align="right" valign="top" />
+    <Column width="5*" />
+    <Column width="5mm" backgroundcolor="gray" />
+  </Columns>
+</Table>
+]]></listing>
+      <para>This defines a table with five columns. The first column has a width of 14mm, the last of 5mm, the second column is two units wide (grid cells). The third and fourth column have a width of 1/6 and 5/6 of the remaining width.</para>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Tabelle>
   <Spalten>
@@ -885,10 +898,10 @@
   </command>
   <command name="Columns">
     <description xml:lang="en">
-      <para></para>
+      <para>Set the widths and other properties of the columns in a table.</para>
     </description>
     <description xml:lang="de">
-      <para>Legt die Spaltenbreiten in einer Tabelle fest.</para>
+      <para>Legt die Spaltenbreiten und andere Eigenschaften einer Tabelle fest.</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -898,13 +911,29 @@
         </choice>
       </oneOrMore>
     </childelements>
+    <remark xml:lang="en">
+      <para>The *-widths in the command »Column« allow dynamic cell widths. For that the total width of the table must be set and the attribute (on <cmd name="table"/>) »stretch« must be set to »max«. 
+        The widths of the columns are calculated as follows: first the absolute widths are taken into account. After that, the *-columns are distributed across the remaining space. The
+        numbers before the * denote the fraction of the space. In the example below the third column gets 1/6 of the remaining width, the fourth column get 5/6.</para>
+    </remark>
     <remark xml:lang="de">
       <para>Die *-Breitenangaben im Element »Spalte« ermöglicht eine dynamische Aufteilung der Spaltenbreite. Dazu muss die Tabellenbreite vorgegeben sein und das Attribut dehnen bei Tabelle auf max
         stehen. Die Spaltenbreiten berechnen sich wie folgt: erst werden die fixen Breitenangaben berücksichtigt. Anschließend werden die *-Spalten auf den verbleibenden Platz verteilt. Die Angaben
         vor den Sternchen dienen der Verteilung innerhalb der *-Spalten. Im Beispiel unten nimmt die vierte Spalte in etwa den fünffachen Platz der dritten Spalte ein. Angenommen die Tabelle sollte
         32mm breit werden. Die fixen Spalten nehmen davon 20mm in Anspruch, übrig bleiben 12 mm. Diese 12mm werden auf die beiden Spalten verteilt, 2mm entfallen auf die 1*-Spalte (1/6 von 12mm), 10mm
         auf die 5*-Spalte (5/6 von 12mm).</para>
-    </remark>
+    </remark><example xml:lang="en">
+      <listing><![CDATA[<Table>
+  <Columns>
+    <Column width="14mm" />
+    <Column width="2" />
+    <Column width="1*" align="right" valign="top" />
+    <Column width="5*" />
+    <Column width="5mm" backgroundcolor="gray" />
+  </Columns>
+</Table>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Tabelle>
   <Spalten>
@@ -4526,10 +4555,10 @@
   </command>
   <command name="Td">
     <description xml:lang="en">
-      <para></para>
+      <para>Td wraps a table row, just like HTML.</para>
     </description>
     <description xml:lang="de">
-      <para>Erstellt eine Tabellenzelle</para>
+      <para>Erstellt eine Tabellenzelle, wie in HTML</para>
     </description>
     <childelements>
       <zeroOrMore>
@@ -4545,7 +4574,6 @@
         </choice>
       </zeroOrMore>
     </childelements>
-
     <attribute name="backgroundcolor" type="text" optional="yes">
       <description xml:lang="en">
         <para>The name of the background color (if the cell should get a background).</para>
@@ -4556,7 +4584,7 @@
     </attribute>
     <attribute name="border-left" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The width (tickness) of the left border. The border is inside the cell.</para>
       </description>
       <description xml:lang="de">
         <para>Die Breite der Linie links. Die Linie liegt innerhalb der Zelle.</para>
@@ -4564,7 +4592,7 @@
     </attribute>
     <attribute name="border-right" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The width (tickness) of the right border. The border is inside the cell.</para>
       </description>
       <description xml:lang="de">
         <para>Die Breite der Linie rechts. Die Linie liegt innerhalb der Zelle.</para>
@@ -4572,7 +4600,7 @@
     </attribute>
     <attribute name="border-top" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The width (tickness) of the top border. The border is inside the cell.</para>
       </description>
       <description xml:lang="de">
         <para>Die Breite der Linie oben. Die Linie liegt innerhalb der Zelle.</para>
@@ -4580,7 +4608,7 @@
     </attribute>
     <attribute name="border-bottom" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The width (tickness) of the bottom border. The border is inside the cell.</para>
       </description>
       <description xml:lang="de">
         <para>Die Breite der Linie unten. Die Linie liegt innerhalb der Zelle.</para>
@@ -4588,7 +4616,7 @@
     </attribute>
     <attribute name="border-left-color" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The color of the left border.</para>
       </description>
       <description xml:lang="de">
         <para>Die Farbe der Linie links.</para>
@@ -4596,7 +4624,7 @@
     </attribute>
     <attribute name="border-right-color" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The color of the left border.</para>
       </description>
       <description xml:lang="de">
         <para>Die Farbe der Linie rechts.</para>
@@ -4604,7 +4632,7 @@
     </attribute>
     <attribute name="border-top-color" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The color of the top border.</para>
       </description>
       <description xml:lang="de">
         <para>Die Farbe der Linie oben.</para>
@@ -4612,7 +4640,7 @@
     </attribute>
     <attribute name="border-bottom-color" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The color of the bottom border.</para>
       </description>
       <description xml:lang="de">
         <para>Die Farbe der Linie unten.</para>
@@ -4620,7 +4648,7 @@
     </attribute>
     <attribute name="colspan" type="number" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The number of columns this cell spans. Defaults to 1.</para>
       </description>
       <description xml:lang="de">
         <para>Die Anzahl der Spalten, die die Zelle überdecken soll. Voreinstellung ist 1.</para>
@@ -4628,39 +4656,87 @@
     </attribute>
     <attribute name="rowspan" type="number" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The number of rows for this cell. Defaults to 1.</para>
       </description>
       <description xml:lang="de">
         <para>Die Anzahl der Zeilen, die die Zelle überdecken soll. Voreinstellung ist 1.</para>
       </description>
     </attribute>
-    <attribute name="align" type="align" optional="yes">
+    <attribute name="align" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Horizontal alignment of the cell contents. Defaults to left.</para>
       </description>
       <description xml:lang="de">
         <para>Die horizontale Ausrichtung des Tabelleninhalts</para>
       </description>
+      <choice name="alignleft" context="align">
+        <description xml:lang="en">
+          <para>The contents is left aligned (ragged right). This is the default.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Inhalt der Zelle ist am linken Rand ausgerichtet. (Voreinstellung)</para>
+        </description>
+      </choice>
+      <choice name="alignright" context="align">
+        <description xml:lang="en">
+          <para>The contents of the cell is right aligend.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Inhalt der Zelle ist rechtsbündig ausgerichtet.</para>
+        </description>
+      </choice>
+      <choice name="aligncenter" context="align">
+        <description xml:lang="en">
+          <para>The contents of the cell is aligned at the center, with ragged right and left margin.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Inhalt der Zelle ist auf der Mittelachse ausgerichtet mit links und rechts Flatterrand.</para>
+        </description>
+      </choice>
     </attribute>
-    <attribute name="valign" type="valign" optional="yes">
+    <attribute name="valign" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The vertical alignment of the cell.</para>
       </description>
       <description xml:lang="de">
-        <para>Die vertikale Ausrichtung des Tabelleninhalts.</para>
+        <para>Die vertikale Ausrichtung des Zelleninhalts.</para>
       </description>
+      <choice name="top">
+        <description xml:lang="en">
+          <para>The contents is aligend at the top edge of the cell.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Zellinhalt ist an der oberen Kante ausgerichtet.</para>
+        </description>
+      </choice>
+      <choice name="middle">
+        <description xml:lang="en">
+          <para>The contents is vertically centered.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Zellinhalt vertikal zentriert.</para>
+        </description>
+      </choice>
+      <choice name="bottom">
+        <description xml:lang="en">
+          <para>The contents is aligend at the bottom edge of the cell.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Zellinhalt ist an der unteren Kante ausgerichtet.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute name="padding" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Shorthand for setting padding-top and the other values with this length.</para>
       </description>
       <description xml:lang="de">
-        <para>Kurzform für die Bestimmung von padding-top und den anderen drei Werden mit derselben Maßangabe</para>
+        <para>Kurzform für die Bestimmung von padding-top und den anderen drei Werten mit derselben Maßangabe</para>
       </description>
     </attribute>
     <attribute name="padding-top" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Set the inner distance (width between contents and the border) to the top edge.</para>
       </description>
       <description xml:lang="de">
         <para>Bestimmt den Innenabstand einer Tabelle (oben)</para>
@@ -4668,7 +4744,7 @@
     </attribute>
     <attribute name="padding-bottom" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Set the inner distance (width between contents and the border) to the bottom edge.</para>
       </description>
       <description xml:lang="de">
         <para>Bestimmt den Innenabstand einer Tabelle (unten)</para>
@@ -4676,7 +4752,7 @@
     </attribute>
     <attribute name="padding-left" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Set the inner distance (width between contents and the border) to the left edge.</para>
       </description>
       <description xml:lang="de">
         <para>Bestimmt den Innenabstand einer Tabelle (links)</para>
@@ -4684,7 +4760,7 @@
     </attribute>
     <attribute name="padding-right" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Set the inner distance (width between contents and the border) to the right edge.</para>
       </description>
       <description xml:lang="de">
         <para>Bestimmt den Innenabstand einer Tabelle (rechts)</para>
