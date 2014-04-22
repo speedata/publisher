@@ -4282,10 +4282,10 @@
     </attribute>
     <attribute name="border-collapse" optional="yes">
       <description xml:lang="en">
-        <para>Determine if adjacent table cells share borders.</para>
+        <para>Determine if adjacent table cells share borders. The behavior of border-collapse="collapse" is undefined when the table has columndistance or rowdistance set to a non-zero value and if the adjacent borders don't have the same width and color.</para>
       </description>
       <description xml:lang="de">
-        <para>Bestimmt, ob benachbarte Zellen die Rahmen teilen.</para>
+        <para>Bestimmt, ob benachbarte Zellen die Rahmen teilen. Das Verhalten von border-collapse="collapse" ist nicht definiert wenn die Tablle einen Zeilen- oder Spaltenabstand > 0 haben oder wenn die benachbarten Zellen nicht dieselbe Strichstärke und -farbe haben.</para>
       </description>
       <choice name="separate">
         <description xml:lang="en">

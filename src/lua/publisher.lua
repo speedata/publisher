@@ -72,6 +72,9 @@ att_omit_at_top           = 402
 att_is_table_row    = 500
 att_tr_dynamic_data = 501
 
+-- for border-collapse (vertical)
+att_tr_shift_up     = 550
+
 -- Force a hbox line height
 att_lineheight = 600
 
@@ -1942,23 +1945,14 @@ function colorbar( wd,ht,dp,color )
     end
 
     local rule_start = node.new(whatsit_node,"pdf_literal")
-    rule_start.mode = 1
-    rule_start.data = "q "..colors[colorname].pdfstring
+    rule_start.mode = 0
+    rule_start.data = "q "..colors[colorname].pdfstring .. string.format(" 0 0 %g %g  re f Q ",sp_to_bp(wd),sp_to_bp(ht))
 
-    local rule = node.new("rule")
-    rule.height = ht
-    rule.depth  = dp
-    rule.width  = wd
-
-    local rule_stop = node.new(whatsit_node,"pdf_literal")
-    rule_stop.mode = 1
-    rule_stop.data = "Q"
-
-    rule_start.next = rule
-    rule.next = rule_stop
-    rule_stop.prev = rule
-    rule.prev = rule_start
-    return rule_start, rule_stop
+    local h = node.hpack(rule_start)
+    h.width = wd
+    h.depth = dp
+    h.height = ht
+    return h
 end
 
 --- Rotate a text on a given angle.
