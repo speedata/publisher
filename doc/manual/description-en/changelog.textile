@@ -6,6 +6,7 @@ h1. Changelog
 
 h2. Version 2.0
 
+* New option for "Table":../commands-en/table.html to let adjacent cells merge the borders (@border-collapse@). (1.99.42)
 * New options for "NewPage":../commands-en/newpage.html to skip a page. (1.99.41)
 * Add more languages for hyphenation, "sp command line":commandline.html extended with switch @--mainlanguage@. (1.99.40)
 * "Tablerule":../commands-en/tablerule.html has a new attribute: @start@ to give the start column.

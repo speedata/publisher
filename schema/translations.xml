@@ -102,6 +102,7 @@
     <value key="center" context="*" en="center" de="zentriert"/>
     <value key="centered" context="*" en="centered" de="zentriert"/>
     <value key="cmyk" context="*" en="cmyk" de="cmyk"/>
+    <value key="collapse" context="*" en="collapse" de="collapse" />
     <value key="Code128" context="*" en="Code128" de="Code128"/>
     <value key="cropbox" context="*" en="cropbox" de="cropbox"/>
     <value key="EAN13" context="*" en="EAN13" de="EAN13"/>
@@ -123,6 +124,7 @@
     <value key="rgb" context="*" en="rgb" de="rgb"/>
     <value key="right" context="*" en="right" de="rechts"/>
     <value key="rightaligned" context="*" en="rightaligned" de="rechtsbündig"/>
+    <value key="separate" context="*" en="separate" de="separate" />
     <value key="solid" context="*" en="solid" de="durchgezogen"/>
     <value key="top" context="*" en="top" de="top"/>
     <value key="top,left" context="*" en="top,left" de="oben,links"/>
@@ -166,6 +168,7 @@
     <attribute key="backgroundcolor" en="backgroundcolor" de="hintergrundfarbe"/>
     <attribute key="balance" en="balance" de="ausgleich" />
     <attribute key="bleed" en="bleed" de="beschnitt"/>
+    <attribute key="border-collapse" en="border-collapse" de="border-collapse"/>
     <attribute key="border-bottom" en="border-bottom" de="border-bottom"/>
     <attribute key="border-bottom-color" en="border-bottom-color" de="border-bottom-color"/>
     <attribute key="border-left" en="border-left" de="border-left"/>

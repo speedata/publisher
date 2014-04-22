@@ -79,26 +79,61 @@ end
 --- Width calculation
 --- =================
 
---- We calculate the widths in two passes:
+--- First we check for adjacent columns for collapsing border:
+--- ![maximum width](img/bordercollapse.svg)
 ---
----  1. Calculate the width of each table cell in a row
----  1. Calculate the row height
+--- The resulting width for each border (left and right) is
 ---
---- The minimum width (min\_wd) is calculated as follows. Calculate the length of the longest item in the row:
+--- \\(\frac{max(border-left,border-right)}{2}\\)
 ---
---- ![minimum width](img/calculate_longtext2.svg)
----
---- The maximum width (max\_wd) is calculated by typesetting the text and taking total size of the hbox into account:
----
---- ![maximum width](img/calculate_longtext.svg)
+--- even if one
+--- side didn't have a border. In that case we need to adjust the border colors. Beware: the result is slightly undefined
+--- if both sides have different colors.
 -- Calculate the width for each column in the row.
 function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,colmin,colmax )
-    local current_column
+    local current_column = 0
     local max_wd, min_wd -- maximum and minimum width of a table cell (Td)
     -- first we go through all rows/cells and look, how wide the columns
     -- are supposed to be. If there are colspans, they have to be treated specially
-    current_column = 0
+    if self.bordercollapse_horizontal then
+        for i=1,#tr_contents do
+            if i ~= #tr_contents then
+                local thiscell,nextcell,nextcell_borderleft,thiscell_borderright,new_borderwidth,new_borderwidth
 
+                thiscell = publisher.element_contents(tr_contents[i])
+                nextcell = publisher.element_contents(tr_contents[i + 1])
+
+                thiscell_borderright = tex.sp(thiscell["border-right"] or 0)
+                nextcell_borderleft  = tex.sp(nextcell["border-left"]  or 0)
+
+                new_borderwidth = math.abs( math.max(thiscell_borderright,nextcell_borderleft) / 2 )
+
+                nextcell["border-left"]  = new_borderwidth
+                thiscell["border-right"] = new_borderwidth
+
+                if thiscell_borderright == 0 then
+                    thiscell["border-right-color"] = nextcell["border-left-color"]
+                end
+                if nextcell_borderleft == 0 then
+                    nextcell["border-left-color"] = thiscell["border-right-color"]
+                end
+            end
+        end
+    end
+
+    --- We calculate the widths in two passes:
+    ---
+    ---  1. Calculate the width of each table cell in a row
+    ---  1. Calculate the row height
+    ---
+    --- The minimum width (min\_wd) is calculated as follows. Calculate the length of the longest item in the row:
+    ---
+    --- ![minimum width](img/calculate_longtext2.svg)
+    ---
+    --- The maximum width (max\_wd) is calculated by typesetting the text and taking total size of the hbox into account:
+    ---
+    --- ![maximum width](img/calculate_longtext.svg)
+    ---
     for _,td in ipairs(tr_contents) do
         local td_contents = publisher.element_contents(td)
         -- all columms (table cells)
@@ -361,7 +396,7 @@ function calculate_columnwidth( self )
     --- 1. calculate natural (max) width / total width for each column.
     ---
     --- If stretch="no" is set, we can encounter the case that the table is too wide. Then it
-    --- must be shrinked.
+    --- must be shrunk.
 
     -- highly unlikely that the table matches the size exactly
     if tablewidth_is == self.tablewidth_target then
@@ -425,11 +460,15 @@ function calculate_columnwidth( self )
     end
 end
 
-function calculate_rowheight( self,tr_contents, current_row )
+--- last\_shiftup is for vertical border-collapse.
+function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
+    last_shiftup = last_shiftup or 0
     local rowheight
     local rowspan,colspan
     local wd,parameter
     local rowspans = {}
+    local shiftup = 0
+
 
     local fam = publisher.fonts.lookup_fontfamily_number_instance[self.fontfamily]
     local min_lineheight = fam.baselineskip
@@ -536,11 +575,12 @@ function calculate_rowheight( self,tr_contents, current_row )
         else
             rowheight = math.max(rowheight,tmp)
         end
-        -- FIXME: node.flushlist tmp ??
-        -- node.flush_list(v)
-        -- Attempt to double-free hlist node 387580, ignored.
+        if self.bordercollapse_vertical then
+            shiftup = math.max(shiftup,td_borderbottom)
+        end
     end
-    return rowheight,rowspans
+    tr_contents.shiftup = last_shiftup
+    return rowheight,rowspans,shiftup
 end
 
 
@@ -550,6 +590,7 @@ function calculate_rowheights(self)
     local rowspans = {}
     local _rowspans
 
+    local last_shiftup = 0
 
     for _,tr in ipairs(self.tab) do
         local tr_contents = publisher.element_contents(tr)
@@ -559,23 +600,25 @@ function calculate_rowheights(self)
             -- ignorieren
 
         elseif eltname == "Tablehead" then
+            local last_shiftup_head = 0
             for _,row in ipairs(tr_contents) do
                 local cellcontents  = publisher.element_contents(row)
                 local cell_elementname = publisher.elementname(row,true)
                 if cell_elementname == "Tr" then
                     current_row = current_row + 1
-                    rowheight, _rowspans = self:calculate_rowheight(cellcontents,current_row)
+                    rowheight, _rowspans,last_shiftup_head = self:calculate_rowheight(cellcontents,current_row,last_shiftup_head)
                     self.rowheights[current_row] = rowheight
                     rowspans = table.__concat(rowspans,_rowspans)
                 end
             end
         elseif eltname == "Tablefoot" then
+            local last_shiftup_foot = 0
             for _,row in ipairs(tr_contents) do
                 local cellcontents  = publisher.element_contents(row)
                 local cell_elementname = publisher.elementname(row,true)
                 if cell_elementname == "Tr" then
                     current_row = current_row + 1
-                    rowheight, _rowspans = self:calculate_rowheight(cellcontents,current_row)
+                    rowheight, _rowspans,last_shiftup_foot = self:calculate_rowheight(cellcontents,current_row,last_shiftup_foot)
                     self.rowheights[current_row] = rowheight
                     rowspans = table.__concat(rowspans,_rowspans)
                 end
@@ -583,7 +626,7 @@ function calculate_rowheights(self)
 
         elseif eltname == "Tr" then
             current_row = current_row + 1
-            rowheight, _rowspans = self:calculate_rowheight(tr_contents,current_row)
+            rowheight, _rowspans,last_shiftup = self:calculate_rowheight(tr_contents,current_row,last_shiftup)
             self.rowheights[current_row] = rowheight
             rowspans = table.__concat(rowspans,_rowspans)
         else
@@ -624,6 +667,7 @@ end
 --- Typesetting the table
 --- ---------------------
 --- First, we create a complete table with all rows. Splitting into pages is done later on
+-- Return one row (an hlist)
 function typeset_row(self, tr_contents, current_row )
     trace("table: typeset row")
     local current_column
@@ -782,9 +826,16 @@ function typeset_row(self, tr_contents, current_row )
         end
 
         cell_start = g
+        local ht_border = 0
+        local rowspan = td_contents.rowspan or 1
+        for i=1,rowspan do
+            ht_border = ht_border + self.rowheights[current_row + i - 1] + self.rowsep
+        end
+        ht_border = ht_border - td_bordertop - td_borderbottom - self.rowsep
 
         if td_borderleft ~= 0 then
-            local start, stop = publisher.colorbar(tex.sp(td_borderleft),-1073741824,-1073741824,td_contents["border-left-color"])
+            local start = publisher.colorbar(td_borderleft,ht_border,0,td_contents["border-left-color"])
+            local stop = node.tail(start)
             stop.next = g
             cell_start = start
         end
@@ -805,9 +856,8 @@ function typeset_row(self, tr_contents, current_row )
 
         current.next = g
         current = g
-
         if td_borderright ~= 0 then
-            local rule = publisher.colorbar(tex.sp(td_borderright),-1073741824,-1073741824,td_contents["border-right-color"])
+            local rule = publisher.colorbar(td_borderright,ht_border,0,td_contents["border-right-color"])
             g.next = rule
         end
 
@@ -825,14 +875,14 @@ function typeset_row(self, tr_contents, current_row )
 
         local head = hlist
         if td_bordertop > 0 then
-            local rule = publisher.colorbar(-1073741824,tex.sp(td_bordertop),0,td_contents["border-top-color"])
+            local rule = publisher.colorbar(current_column_width,td_bordertop,0,td_contents["border-top-color"])
             -- rule is: whatsit, rule, whatsit
             node.tail(rule).next = hlist
             head = rule
         end
 
         if td_borderbottom > 0 then
-            local rule = publisher.colorbar(-1073741824,tex.sp(td_borderbottom),0,td_contents["border-bottom-color"])
+            local rule = publisher.colorbar(current_column_width,td_borderbottom,0,td_contents["border-bottom-color"])
             hlist.next = rule
         end
 
@@ -884,6 +934,7 @@ function typeset_row(self, tr_contents, current_row )
     else
         err("(Internal error) Table is not complete.")
     end
+    node.set_attribute(row,publisher.att_tr_shift_up,tr_contents.shiftup)
     return row
 end
 
@@ -959,7 +1010,6 @@ local function calculate_height_and_connect_tablehead(self,tablehead_first,table
         tmp.next = tablehead_first[z+1]
         tablehead_first[z+1].prev = tmp
     end
-
 
     for z = 1,#tablehead - 1 do
         ht_header = ht_header + tablehead[z].height  -- Tr or Tablerule
@@ -1182,7 +1232,12 @@ function typeset_table(self)
     local last_possible_split_is_after_line = 0
 
     local current_page = 1
+
     for i=1,#rows do
+        local shiftup = node.has_attribute(rows[i],publisher.att_tr_shift_up)
+        if shiftup > 0 then
+            rows[i].height = rows[i].height - shiftup
+        end
         pagegoal = pagegoals[current_page]
         ht_row = rows[i].height + rows[i].depth
         break_above = node.has_attribute(rows[i],publisher.att_break_above) or -1
@@ -1198,6 +1253,9 @@ function typeset_table(self)
         extra_height = extra_height + ht_row
         local fits_in_table = accumulated_height + extra_height + space_above < pagegoal
         if not fits_in_table then
+            if shiftup > 0 then
+                rows[i].height = rows[i].height + shiftup
+            end
             -- ==0 can happen when there's not enough room for table head + first line
             if last_possible_split_is_after_line ~= 0 then
                 splits[#splits + 1] = last_possible_split_is_after_line
