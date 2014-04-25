@@ -2822,6 +2822,8 @@
                   <a:documentation xmlns="">Der Inhalt der Zelle ist rechtsbündig ausgerichtet.</a:documentation>
                   <value>center</value>
                   <a:documentation xmlns="">Der Inhalt der Zelle ist auf der Mittelachse ausgerichtet mit links und rechts Flatterrand.</a:documentation>
+                  <value>justify</value>
+                  <a:documentation xmlns="">Text im Blocksatz.</a:documentation>
                </choice>
             </attribute>
          </optional>

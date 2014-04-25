@@ -530,6 +530,8 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
                     default_textformat_name = "__leftaligned"
                 elseif align=="right" then
                     default_textformat_name = "__rightaligned"
+                elseif align=="justify" then
+                    default_textformat_name = "__justified"
                 end
                 if not default_textformat_name then
                     if object.textformat then
@@ -776,6 +778,8 @@ function typeset_row(self, tr_contents, current_row )
                     default_textformat_name = "__leftaligned"
                 elseif align=="right" then
                     default_textformat_name = "__rightaligned"
+                elseif align=="justify" then
+                    default_textformat_name = "__justified"
                 end
                 if not default_textformat_name then
                     if object.textformat then

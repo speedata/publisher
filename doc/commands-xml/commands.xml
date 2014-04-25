@@ -4693,6 +4693,14 @@
           <para>Der Inhalt der Zelle ist auf der Mittelachse ausgerichtet mit links und rechts Flatterrand.</para>
         </description>
       </choice>
+      <choice name="alignjustify" context="align">
+        <description xml:lang="en">
+          <para>Justified text with straight margins.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Text im Blocksatz.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute name="valign" optional="yes">
       <description xml:lang="en">

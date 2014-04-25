@@ -172,6 +172,7 @@ textformats = {
     __centered     = { indent = 0, alignment="centered",    rows = 1},
     __leftaligned  = { indent = 0, alignment="leftaligned", rows = 1},
     __rightaligned = { indent = 0, alignment="rightaligned",rows = 1},
+    __justified    = { indent = 0, alignment="justified",   rows = 1},
     centered       = { indent = 0, alignment="centered",    rows = 1},
     left           = { indent = 0, alignment="leftaligned", rows = 1},
     right          = { indent = 0, alignment="rightaligned",rows = 1},

@@ -92,6 +92,7 @@
     <value key="aligncenter" context="align" en="center" de="center"/>
     <value key="alignleft"  context="align" en="left" de="left"/>
     <value key="alignright" context="align" en="right" de="right"/>
+    <value key="alignjustify" context="align" en="justify" de="justify"/>
     <value key="all" context="*" en="all" de="alle"/>
     <value key="artbox" context="*" en="artbox" de="artbox"/>
     <value key="auto" context="*" en="auto" de="auto"/>

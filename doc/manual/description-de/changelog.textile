@@ -6,6 +6,8 @@ h1. Liste der Änderungen
 
 h2. Version 2.0
 
+* **Die Voreinstellung für die horizontale Ausrichtung einer Tabellenzelle ist nun @left@.**
+* Neue Option @justify@ für horizontale Ausrichtung in "Tabelle":../commands-de/table.html (1.99.43)
 * Neue Option für "Tabelle":../commands-de/table.html: @border-collapse@ um Rahmen benachbarter Zellen überlappen zu lassen. (1.99.42)
 * Neue Optionen für "NeueSeite":../commands-en/newpage.html um Seiten zu überspringen. (1.99.41)
 * Weitere Sprachen eingebaut, "Kommandozeile sp":commandline.html um @--mainlanguage@ erweitert. (1.99.40)

@@ -2805,6 +2805,8 @@
                   <a:documentation xmlns="">The contents of the cell is right aligend.</a:documentation>
                   <value>center</value>
                   <a:documentation xmlns="">The contents of the cell is aligned at the center, with ragged right and left margin.</a:documentation>
+                  <value>justify</value>
+                  <a:documentation xmlns="">Justified text with straight margins.</a:documentation>
                </choice>
             </attribute>
          </optional>

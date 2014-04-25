@@ -94,6 +94,7 @@ values = {
     ["center"] = "center",
     ["left"] = "left",
     ["right"] = "right",
+    ["justify"] = "justify",
 },
 ["*"] = {
     ["alle"] = "all",
@@ -252,6 +253,7 @@ values = {
     ["center"] = "center",
     ["left"] = "left",
     ["right"] = "right",
+    ["justify"] = "justify",
 },
 ["*"] = {
     ["all"] = "all",

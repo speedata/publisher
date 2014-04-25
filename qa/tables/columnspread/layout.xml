@@ -20,29 +20,29 @@
       <Table width="10">
         <Tr>
           <Td><Paragraph><Value>Abc</Value></Paragraph></Td>
-          <Td align="left"><Paragraph><Value>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents.</Value></Paragraph></Td>
+          <Td align="justify"><Paragraph><Value>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents.</Value></Paragraph></Td>
         </Tr>
       </Table>
     </PlaceObject>
     <NextRow/>
     <PlaceObject>
       <Table width="10" columndistance="3mm" padding="0mm" leading="2mm">
-        <Tr>
+        <Tr align="center">
           <Td padding-bottom="2mm"><Paragraph><Value>aaa</Value></Paragraph></Td>
           <Td border-left="1mm" border-left-color="gray" padding-left="1mm"><Paragraph><Value>abc</Value></Paragraph></Td>
           <Td border-right="1mm" align="center"><Paragraph><Value>abc</Value></Paragraph></Td>
           <Td valign="top"><Paragraph><Value>abc</Value></Paragraph></Td>
         </Tr>
-        <Tr backgroundcolor="yellow">
-          <Td ><Paragraph><Value>abc</Value></Paragraph></Td>
+        <Tr align="center" backgroundcolor="yellow">
+          <Td><Paragraph><Value>abc</Value></Paragraph></Td>
           <Td border-bottom="1mm" border-top-color="gray" border-right="1mm" border-left="1mm" rowspan="2" colspan="2" ><Image width="5" file="ocean.pdf"/></Td>
           <Td padding-left="2pt" padding-right="2pt"><Paragraph><Value>One two three.</Value></Paragraph></Td>
         </Tr>
-        <Tr>
+        <Tr align="center">
           <Td border-top="2mm"><Paragraph><Value>abc</Value></Paragraph></Td>
           <Td ><Paragraph><Value>abc</Value></Paragraph></Td>
         </Tr>
-        <Tr>
+        <Tr align="center">
           <Td valign="bottom"><Paragraph><Value>abc</Value></Paragraph></Td>
           <Td ><Paragraph><Value>abc</Value></Paragraph></Td>
           <Td align="center"><Paragraph><Value>abc</Value></Paragraph></Td>

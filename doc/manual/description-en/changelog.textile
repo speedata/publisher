@@ -6,6 +6,8 @@ h1. Changelog
 
 h2. Version 2.0
 
+* **The default horizontal alignment for table cells is now @left@**
+* New option @justify@ for horizontal alignment in "Table":../commands-en/table.html (1.99.43)
 * New option for "Table":../commands-en/table.html to let adjacent cells merge the borders (@border-collapse@). (1.99.42)
 * New options for "NewPage":../commands-en/newpage.html to skip a page. (1.99.41)
 * Add more languages for hyphenation, "sp command line":commandline.html extended with switch @--mainlanguage@. (1.99.40)
@@ -29,7 +31,7 @@ h2. Version 2.0
 * New "Configuration":configuration.html @pathrewrite@ to change absolute paths (@file:///....@) for each publishing run.
 * New "Command line parameter":commandline.html @show-gridallocation@ to show allocated grid cells.
 * New color model @gray@ (1.7.1)
-* @vreferenz@ at "PlaceObject":../commands-en/placeobject.html.
+* @vreference@ at "PlaceObject":../commands-en/placeobject.html.
 
 h2. Version 1.8
 
