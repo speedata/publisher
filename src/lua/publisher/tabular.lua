@@ -1239,7 +1239,7 @@ function typeset_table(self)
     local current_page = 1
 
     for i=1,#rows do
-        local shiftup = node.has_attribute(rows[i],publisher.att_tr_shift_up)
+        local shiftup = node.has_attribute(rows[i],publisher.att_tr_shift_up) or 0
         if shiftup > 0 then
             rows[i].height = rows[i].height - shiftup
         end
