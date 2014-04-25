@@ -468,7 +468,6 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
     local wd,parameter
     local rowspans = {}
     local shiftup = 0
-    local default_textformat_name
 
     local fam = publisher.fonts.lookup_fontfamily_number_instance[self.fontfamily]
     local min_lineheight = fam.baselineskip
@@ -482,6 +481,7 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
     current_column = 0
 
     for _,td in ipairs(tr_contents) do
+        local default_textformat_name
         local td_contents = publisher.element_contents(td)
         current_column = current_column + 1
 
@@ -675,13 +675,13 @@ function typeset_row(self, tr_contents, current_row )
     local current_column
     local current_column_width, ht
     local row = {}
-    local default_textformat_name
     local rowspan, colspan
     local v,vlist,hlist
     local fill = { width = 0, stretch = 2^16, stretch_order = 3}
 
     current_column = 0
     for _,td in ipairs(tr_contents) do
+        local default_textformat_name
 
         current_column = current_column + 1
 
