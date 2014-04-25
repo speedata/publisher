@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en" >
+  <Options ignoreeol="yes" mainlanguage="German"/>
+  
+  <DefineColor name="gray1" model="gray" g="90"/>
+  <DefineColor name="gray2" model="gray" g="98"/>
+  
+  <LoadFontfile name="DVSCondensed" filename="DejaVuSerifCondensed.ttf" />
+  
+  <Pageformat width="210mm" height="50mm"/>
+  
+  <DefineFontfamily name="table" fontsize="8" leading="9">
+    <Regular fontface="DVSCondensed"/>
+  </DefineFontfamily>
+  
+  
+  <Record element="data">
+    <PlaceObject>
+      <Table stretch="max" fontface="table" padding="3pt">
+        <Columns>
+          <Column width="247.805pt"/>
+          <Column width="179.035pt"/>
+          <Column width="111.748pt"/>
+        </Columns>
+          <Tr backgroundcolor="{sd:alternating('table','gray1','gray2')}" valign="top">
+            <Td><Paragraph><Value>Prerower Platz hinter dem Lindencenter, Berlin-Hohenschönhausen</Value></Paragraph></Td>
+            <Td><Paragraph><Value>Mi</Value></Paragraph></Td>
+            <Td><Paragraph><Value>09:00 - 17:00</Value></Paragraph></Td>
+          </Tr>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>

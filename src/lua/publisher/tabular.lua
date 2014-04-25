@@ -536,6 +536,8 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
                         default_textformat_name = object.textformat
                     elseif self.textformat then
                         default_textformat_name = self.textformat
+                    else
+                        default_textformat_name = "__leftaligned"
                     end
                 end
                 publisher.set_fontfamily_if_necessary(object.nodelist,self.fontfamily)
