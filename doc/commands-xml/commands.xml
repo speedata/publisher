@@ -1678,13 +1678,7 @@
       <para>Schaltet auf »Kursiv« um.</para>
     </description>
     <childelements>
-      <cmd name="B" />
-      <cmd name="Image" />
-      <cmd name="Switch" />
-      <cmd name="Fontface" />
-      <cmd name="Sub" />
-      <cmd name="Sup" />
-      <cmd name="Value"/>
+      <reference name="Textvalues"/>
     </childelements>
     <example xml:lang="de">
       <listing><![CDATA[<Textblock spalte="3" breite="10">

@@ -1047,27 +1047,26 @@
    <define name="e_I">
       <element name="I">
          <a:documentation/>
-         <optional>
-            <ref name="e_B"/>
-         </optional>
-         <optional>
-            <ref name="e_Image"/>
-         </optional>
-         <optional>
-            <ref name="e_Switch"/>
-         </optional>
-         <optional>
-            <ref name="e_Fontface"/>
-         </optional>
-         <optional>
-            <ref name="e_Sub"/>
-         </optional>
-         <optional>
-            <ref name="e_Sup"/>
-         </optional>
-         <optional>
-            <ref name="e_Value"/>
-         </optional>
+         <zeroOrMore>
+            <choice>
+               <ref name="e_Action"/>
+               <ref name="e_A"/>
+               <ref name="e_I"/>
+               <ref name="e_B"/>
+               <ref name="e_Br"/>
+               <ref name="e_HSpace"/>
+               <ref name="e_U"/>
+               <ref name="e_Fontface"/>
+               <ref name="e_Image"/>
+               <ref name="e_Sub"/>
+               <ref name="e_Sup"/>
+               <ref name="e_URL"/>
+               <ref name="e_Value"/>
+               <ref name="e_Switch"/>
+               <ref name="e_Loop"/>
+               <ref name="e_ForAll"/>
+            </choice>
+         </zeroOrMore>
       </element>
    </define>
    <define name="e_Include">
