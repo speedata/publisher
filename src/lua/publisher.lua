@@ -99,18 +99,9 @@ whatsit_node   = node.id("whatsit")
 hlist_node     = node.id("hlist")
 vlist_node     = node.id("vlist")
 
-local t = node.whatsits()
-for k,v in pairs(node.whatsits()) do
-    if v == "user_defined" then
-        user_defined_whatsit = k
-    end
-end
+alternating = {}
 
-pdf_literal_node = node.subtype("pdf_literal")
-
-publisher.alternating = {}
-
-default_areaname = "__seite"
+default_areaname = "_default_area"
 
 -- The name of the next requested page
 nextpage = nil
@@ -429,7 +420,7 @@ function dothings()
 
     --- The default page type has 1cm margin
     local onecm=tex.sp("1cm")
-    masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Seite",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
+    masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
 
     --- Both the data and the layout instructions are written in XML.
     local layoutxml = load_xml(arg[2],"layout instructions")
@@ -548,7 +539,7 @@ function dothings()
         exit()
     end
     tmp = data_dispatcher[""][name]
-    if tmp then publisher.dispatch(tmp,dataxml) end
+    if tmp then dispatch(tmp,dataxml) end
 
 
     --- emit last page if necessary
@@ -843,7 +834,7 @@ function setup_page(pagenumber)
             current_grid.positioning_frames[name] = {}
             local current_positioning_area = current_grid.positioning_frames[name]
             -- we evaluate now, because the attributes in PositioningFrame can be page dependent.
-            local tab  = publisher.dispatch(element_contents(j).layoutxml,dataxml)
+            local tab  = dispatch(element_contents(j).layoutxml,dataxml)
             for i,k in ipairs(tab) do
                 current_positioning_area[#current_positioning_area + 1] = element_contents(k)
             end
@@ -859,7 +850,7 @@ function setup_page(pagenumber)
         local cpn = current_pagenumber
         current_pagenumber = thispage
         current_grid = pages[thispage].grid
-        publisher.dispatch(current_page.atpagecreation,nil)
+        dispatch(current_page.atpagecreation,nil)
         current_pagenumber = cpn
         pagebreak_impossible = false
     end
@@ -923,7 +914,7 @@ function background( box, colorname )
     end
     local pdfcolorstring = colors[colorname].pdfstring
     local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
-    n = node.new(whatsit_node,pdf_literal_node)
+    n = node.new("whatsit","pdf_literal")
     n.data = string.format("q %s 0 -%g %g %g re f Q",pdfcolorstring,dp,wd,ht + dp)
     n.mode = 0
     if node.type(box.id) == "hlist" then
@@ -946,7 +937,7 @@ function frame( box, colorname, width )
     local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
     local w = width / factor -- width of stroke
     local hw = 0.5 * w -- half width of stroke
-    n = node.new(whatsit_node,pdf_literal_node)
+    n = node.new("whatsit","pdf_literal")
     n.data = string.format("q %s %g w -%g -%g %g %g re S Q",pdfcolorstring, w , hw ,dp + hw ,wd + w,ht + dp + w)
     n.mode = 0
     n.next = box
@@ -960,15 +951,15 @@ function box( width_sp,height_sp,colorname )
     local _width   = sp_to_bp(width_sp)
     local _height  = sp_to_bp(height_sp)
 
-    local paint = node.new(whatsit_node,pdf_literal_node)
+    local paint = node.new("whatsit","pdf_literal")
     paint.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colors[colorname].pdfstring,_width,_height)
     paint.mode = 0
 
     local h,v
     local hglue,vglue
 
-    hglue = node.new(glue_node,0)
-    hglue.spec = node.new(glue_spec_node)
+    hglue = node.new("glue",0)
+    hglue.spec = node.new("glue_spec")
     hglue.spec.width         = 0
     hglue.spec.stretch       = 2^16
     hglue.spec.stretch_order = 3
@@ -976,7 +967,7 @@ function box( width_sp,height_sp,colorname )
     h = node.hpack(h,width_sp,"exactly")
 
     vglue = node.new(glue_node,0)
-    vglue.spec = node.new(glue_spec_node)
+    vglue.spec = node.new("glue_spec")
     vglue.spec.width         = 0
     vglue.spec.stretch       = 2^16
     vglue.spec.stretch_order = 3
@@ -1009,12 +1000,12 @@ function dothingsbeforeoutput(  )
         y = y - options.trim
     end
 
-    firstbox = node.new(whatsit_node,"pdf_literal")
+    firstbox = node.new("whatsit","pdf_literal")
     firstbox.data = string.format("q 0 0 0 0 k  1 0 0 1 0 0 cm %g %g %g %g re f Q",sp_to_bp(x), sp_to_bp(y),wd ,ht)
     firstbox.mode = 1
 
     if options.showgridallocation then
-        local lit = node.new(whatsit_node,"pdf_literal")
+        local lit = node.new("whatsit","pdf_literal")
         lit.mode = 1
         lit.data = r:draw_gridallocation()
 
@@ -1028,7 +1019,7 @@ function dothingsbeforeoutput(  )
     end
 
     if options.showgrid then
-        local lit = node.new(whatsit_node,"pdf_literal")
+        local lit = node.new("whatsit","pdf_literal")
         lit.mode = 1
         lit.data = r:draw_grid()
         if firstbox then
@@ -1041,7 +1032,7 @@ function dothingsbeforeoutput(  )
     end
     r:trimbox()
     if options.cutmarks then
-        local lit = node.new(whatsit_node,"pdf_literal")
+        local lit = node.new("whatsit","pdf_literal")
         lit.mode = 1
         lit.data = r:cutmarks()
         if firstbox then
@@ -1153,7 +1144,7 @@ end
 
 -- To split the textblock in pieces
 local marker
-marker = node.new(whatsit_node,"user_defined")
+marker = node.new("whatsit","user_defined")
 marker.user_id = user_defined_marker
 marker.type = 100  -- type 100: "value is a number"
 marker.value = 1
@@ -1226,7 +1217,7 @@ function parse_html( elt, parameter )
                 local ai = node.new("action")
                 ai.action_type = 3
                 ai.data = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",elt.href)
-                local stl = node.new(whatsit_node,"pdf_start_link")
+                local stl = node.new("whatsit","pdf_start_link")
                 stl.action = ai
                 stl.width = -1073741824
                 stl.height = -1073741824
@@ -1239,7 +1230,7 @@ function parse_html( elt, parameter )
                         a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
                     end
                 end
-                local enl = node.new(whatsit_node,"pdf_end_link")
+                local enl = node.new("whatsit","pdf_end_link")
                 a:append(enl)
             end
             return a
@@ -1319,12 +1310,12 @@ end
 --- -------------------
 
 
-rightskip = node.new(glue_spec_node)
+rightskip = node.new("glue_spec")
 rightskip.width = 0
 rightskip.stretch = 1 * 2^16
 rightskip.stretch_order = 3
 
-leftskip = node.new(glue_spec_node)
+leftskip = node.new("glue_spec")
 leftskip.width = 0
 leftskip.stretch = 1 * 2^16
 leftskip.stretch_order = 3
@@ -1369,7 +1360,7 @@ function mknodes(str,fontfamily,parameter)
 
     -- if it's an empty string, we make it a space character (experimental)
     if string.len(str) == 0 then
-        n = node.new(glyph_node)
+        n = node.new("glyph")
         n.char = 32
         n.font = instance
         n.subtype = 1
@@ -1389,24 +1380,24 @@ function mknodes(str,fontfamily,parameter)
             -- hyphenation is disabled. So we insert a penalty of 10k which should not do
             -- harm. Perhaps there is a better solution, but this seems to work OK.
             local dummypenalty
-            dummypenalty = node.new(penalty_node)
+            dummypenalty = node.new("penalty")
             dummypenalty.penalty = 10000
             head,last = node.insert_after(head,last,dummypenalty)
 
             local strut
-            strut = add_rule(nil,"head",{height = 8 * publisher.factor, depth = 3 * publisher.factor, width = 0 })
+            strut = add_rule(nil,"head",{height = 8 * factor, depth = 3 * factor, width = 0 })
             head,last = node.insert_after(head,last,strut)
 
             local p1,g,p2
-            p1 = node.new(penalty_node)
+            p1 = node.new("penalty")
             p1.penalty = 10000
 
-            g = node.new(glue_node)
-            g.spec = node.new(glue_spec_node)
+            g = node.new("glue")
+            g.spec = node.new("glue_spec")
             g.spec.stretch = 2^16
             g.spec.stretch_order = 2
 
-            p2 = node.new(penalty_node)
+            p2 = node.new("penalty")
             p2.penalty = -10000
 
             head,last = node.insert_after(head,last,p1)
@@ -1416,13 +1407,13 @@ function mknodes(str,fontfamily,parameter)
         elseif match(char,"^%s$") and last and last.id == glue_node and not node.has_attribute(last,att_tie_glue,1) then
             -- double space, don't do anything
         elseif s == 160 then -- non breaking space U+00A0
-            n = node.new(penalty_node)
+            n = node.new("penalty")
             n.penalty = 10000
 
             head,last = node.insert_after(head,last,n)
 
-            n = node.new(glue_node)
-            n.spec = node.new(glue_spec_node)
+            n = node.new("glue")
+            n.spec = node.new("glue_spec")
             n.spec.width   = space
             n.spec.shrink  = shrink
             n.spec.stretch = stretch
@@ -1438,14 +1429,14 @@ function mknodes(str,fontfamily,parameter)
 
         -- anchor is necessary. Otherwise à (C3A0) would match A0 - %s
         elseif match(char,"^%s$") then -- Space
-            -- ; and : should have the posibility to break easily if a space follows
-            if last and last.id == 37 and ( last.char == 58 or last.char == 59) then
-                n = node.new(penalty_node)
+            -- ; and : should have the possibility to break easily if a space follows
+            if last and last.id == glyph_node and ( last.char == 58 or last.char == 59) then
+                n = node.new("penalty")
                 n.penalty = 0
                 head,last = node.insert_after(head,last,n)
             end
-            n = node.new(glue_node)
-            n.spec = node.new(glue_spec_node)
+            n = node.new("glue")
+            n.spec = node.new("glue_spec")
             n.spec.width   = space
             n.spec.shrink  = shrink
             n.spec.stretch = stretch
@@ -1458,7 +1449,7 @@ function mknodes(str,fontfamily,parameter)
             head,last = node.insert_after(head,last,n)
         else
             -- A regular character?!?
-            n = node.new(glyph_node)
+            n = node.new("glyph")
             n.font = instance
             n.subtype = 1
             n.char = s
@@ -1476,18 +1467,18 @@ function mknodes(str,fontfamily,parameter)
             if parameter.underline == 1 then
                 node.set_attribute(n,att_underline,1)
             end
-            if last and last.id == 37 then
+            if last and last.id == glyph_node then
                 lastitemwasglyph = true
             end
             head,last = node.insert_after(head,last,n)
             -- We have a character but some characters must be treated in a special
             -- way.
-            -- Hyphens must be sepearated from words:
+            -- Hyphens must be separated from words:
             if ( n.char == 45 or n.char == 8211) and lastitemwasglyph then
                 local pen = node.new("penalty")
                 pen.penalty = 10000
                 head = node.insert_before(head,last,pen)
-                local disc = node.new(disc_node)
+                local disc = node.new("disc")
                 head,last = node.insert_after(head,last,disc)
             end
         end
@@ -1504,11 +1495,8 @@ end
 -- head_or_tail = "head" oder "tail" (default: tail). Return new head (perhaps same as nodelist)
 function add_rule( nodelist,head_or_tail,parameters)
     parameters = parameters or {}
-    -- if parameters.height == nil then parameters.height = -1073741824 end
-    -- if parameters.width  == nil then parameters.width  = -1073741824 end
-    -- if parameters.depth  == nil then parameters.depth  = -1073741824 end
 
-    local n=node.new(rule_node)
+    local n=node.new("rule")
     n.width  = parameters.width
     n.height = parameters.height
     n.depth  = parameters.depth
@@ -1586,8 +1574,8 @@ end
 function add_glue( nodelist,head_or_tail,parameter)
     parameter = parameter or {}
 
-    local n=node.new(glue_node, parameter.subtype or 0)
-    n.spec = node.new(glue_spec_node)
+    local n=node.new("glue", parameter.subtype or 0)
+    n.spec = node.new("glue_spec")
     n.spec.width         = parameter.width
     n.spec.stretch       = parameter.stretch
     n.spec.stretch_order = parameter.stretch_order
@@ -1620,7 +1608,7 @@ function finish_par( nodelist,hsize )
     assert(nodelist)
     node.slide(nodelist)
     lang.hyphenate(nodelist)
-    local n = node.new(penalty_node)
+    local n = node.new("penalty")
     n.penalty = 10000
     local last = node.slide(nodelist)
 
@@ -1655,13 +1643,13 @@ function fix_justification( nodelist,textformat,parent)
             -- because this list is copied in paragraph:format()
             local spec_new
 
-            for n in node.traverse_id(10,head.head) do
+            for n in node.traverse_id(glue_node,head.head) do
                 -- calculate the font before this id.
-                if n.prev and n.prev.id == 37 then -- glyph
+                if n.prev and n.prev.id == glyph_node then -- glyph
                     font_before_glue = n.prev.font
-                elseif n.prev and n.prev.id == 7 then -- disc
+                elseif n.prev and n.prev.id == disc_node then -- disc
                     local font_node = n.prev
-                    while font_node.id ~= 37 do
+                    while font_node.id ~= glyph_node do
                         font_node = font_node.prev
                     end
                     if font_node then
@@ -1796,8 +1784,8 @@ function do_linebreak( nodelist,hsize,parameters )
 end
 
 function create_empty_hbox_with_width( wd )
-    local n=node.new(glue_node,0)
-    n.spec = node.new(glue_spec_node)
+    local n=node.new("glue")
+    n.spec = node.new("glue_spec")
     n.spec.width         = 0
     n.spec.stretch       = 2^16
     n.spec.stretch_order = 3
@@ -1811,7 +1799,7 @@ do
     -- number of the anchor, so it can be used in a pdf link or an outline.
     function mkdest()
         destcounter = destcounter + 1
-        local d = node.new(whatsit_node,"pdf_dest")
+        local d = node.new("whatsit","pdf_dest")
         d.named_id = 0
         d.dest_id = destcounter
         d.dest_type = 3
@@ -1829,7 +1817,7 @@ function mkbookmarknodes(level,open_p,title)
     title = title or "no title for bookmark given"
 
     n,counter = mkdest()
-    local udw = node.new(whatsit_node,"user_defined")
+    local udw = node.new("whatsit","user_defined")
     udw.user_id = user_defined_bookmark
     udw.type = 115 -- a string
     udw.value = string.format("%d+%d+%d+%s",level,openclosed,counter,title)
@@ -1847,7 +1835,7 @@ function boxit( box )
     local ht = (box.height + box.depth)  / factor - rule_width
     local dp = box.depth                 / factor - rule_width / 2
 
-    local wbox = node.new(whatsit_node,"pdf_literal")
+    local wbox = node.new("whatsit","pdf_literal")
     wbox.data = string.format("q 0.1 G %g w %g %g %g %g re s Q", rule_width, rule_width / 2, -dp, -wd, ht)
     wbox.mode = 0
     -- Draw box at the end so its contents gets "below" it.
@@ -1867,7 +1855,7 @@ function set_color_if_necessary( nodelist,color )
         colorname = colortable[color]
     end
 
-    local colstart = node.new(whatsit_node,39)
+    local colstart = node.new("whatsit","pdf_colorstack")
     colstart.data  = colors[colorname].pdfstring
     if status.luatex_version < 79 then
         colstart.cmd = 1
@@ -1878,7 +1866,7 @@ function set_color_if_necessary( nodelist,color )
     colstart.next = nodelist
     nodelist.prev = colstart
 
-    local colstop  = node.new(whatsit_node,39)
+    local colstop  = node.new("whatsit","pdf_colorstack")
     colstop.data  = ""
     if status.luatex_version < 79 then
         colstop.cmd = 2
@@ -1921,7 +1909,7 @@ function break_url( nodelist )
 
     local slash = string.byte("/")
     for n in node.traverse_id(glyph_node,nodelist) do
-        p = node.new(penalty_node)
+        p = node.new("penalty")
 
         if n.char == slash then
             p.penalty=-50
@@ -1945,7 +1933,7 @@ function colorbar( wd,ht,dp,color )
         colorname = "black"
     end
 
-    local rule_start = node.new(whatsit_node,"pdf_literal")
+    local rule_start = node.new("whatsit","pdf_literal")
     rule_start.mode = 0
     rule_start.data = "q "..colors[colorname].pdfstring .. string.format(" 0 0 %g %g  re f Q ",sp_to_bp(wd),sp_to_bp(ht))
 
@@ -1965,14 +1953,14 @@ function rotate( nodelist,angle )
     local angle_rad = math.rad(angle)
     local sin = math.round(math.sin(angle_rad),3)
     local cos = math.round(math.cos(angle_rad),3)
-    local q = node.new(whatsit_node,"pdf_literal")
+    local q = node.new("whatsit","pdf_literal")
     q.mode = 0
     local shift_x = math.round(math.min(0,math.sin(angle_rad) * sp_to_bp(ht)) + math.min(0,     math.cos(angle_rad) * sp_to_bp(wd)),3)
     local shift_y = math.round(math.max(0,math.sin(angle_rad) * sp_to_bp(wd)) + math.max(0,-1 * math.cos(angle_rad) * sp_to_bp(ht)),3)
     q.data = string.format("q %g %g %g %g %g %g cm",cos,sin, -1 * sin,cos, -1 * shift_x ,-1 * shift_y )
     q.next = nodelist
     local tail = node.tail(nodelist)
-    local Q = node.new(whatsit_node,"pdf_literal")
+    local Q = node.new("whatsit","pdf_literal")
     Q.data = "Q"
     tail.next = Q
     local tmp = node.vpack(q)
@@ -2015,7 +2003,7 @@ end
 --- Hyphenation and language handling
 --- ---------------------------------
 
---- We map from sybolic names to (part of) file names. The hyphenation pattern files are
+--- We map from symbolic names to (part of) file names. The hyphenation pattern files are
 --- in the format `hyph-XXX.pat.txt` and we need to find out that `XXX` part.
 language_mapping = {
     ["Czech"]                        = "cs",
@@ -2279,9 +2267,9 @@ function next_row(rownumber,areaname,rows)
     local current_row
     current_row = grid:find_suitable_row(1,grid:number_of_columns(areaname),rows,areaname)
     if not current_row then
-        publisher.next_area(areaname)
-        publisher.setup_page()
-        grid = publisher.current_page.grid
+        next_area(areaname)
+        setup_page()
+        grid = current_page.grid
         grid:set_current_row(1)
     else
         grid:set_current_row(current_row + rows - 1,areaname)
@@ -2290,7 +2278,7 @@ function next_row(rownumber,areaname,rows)
 end
 
 function empty_block()
-    local r = node.new(hlist_node)
+    local r = node.new("hlist")
     r.width = 0
     r.height = 0
     r.depth = 0
@@ -2301,7 +2289,7 @@ end
 
 
 function emergency_block()
-    local r = node.new(rule_node)
+    local r = node.new("rule")
     r.width = 5 * 2^16
     r.height = 5 * 2^16
     r.depth = 0

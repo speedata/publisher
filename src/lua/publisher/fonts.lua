@@ -165,7 +165,7 @@ function pre_linebreak( head )
             else
                 -- FIXME: how can it be that there is no glue_spec???
                 -- no glue_spec found.
-                gluespec = node.new("glue_spec",0)
+                gluespec = node.new("glue_spec")
                 local fontfamily=node.has_attribute(head,att_fontfamily)
                 local instance = lookup_fontfamily_number_instance[fontfamily]
                 local f = used_fonts[instance.normal]
@@ -249,7 +249,7 @@ function pre_linebreak( head )
                                             if i==1 then
                                                 head.char=f.fontloader.lookup_codepoint_by_name[v]
                                             else
-                                                local n = node.new("glyph",0)
+                                                local n = node.new("glyph")
                                                 n.next = head.next
                                                 n.font = tmp_fontnum
                                                 n.lang = 0

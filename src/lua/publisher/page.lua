@@ -22,7 +22,7 @@ function page.new( self,width,height,additional_margin, trim,pagenumber )
     grid = grid:new(pagenumber),
     width  = width,
     height = height,
-    pagebox = node.new(publisher.vlist_node),
+    pagebox = node.new("vlist"),
   }
 
   s.grid.extra_margin      = additional_margin

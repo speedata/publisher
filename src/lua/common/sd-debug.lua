@@ -73,43 +73,6 @@ do
   end
 end
 
-function nodelist_analyze(head)
-  local whatsits = node.whatsits()
-
-  for n in node.traverse(head) do
-    if node.type(n.id) == "whatsit" then
-      w("whatsit: type=%q",whatsits[n.subtype])
-      if whatsits[n.subtype]=="local_par" then
-        w("local_par: pen_inter=%s, pen_broken=%s",tostring(n.pen_inter),tostring(pen_broken))
-      end
-    elseif node.type(n.id) == "hlist" then
-      w("hlist: subtype=%d, Breite=%gpt, list=%q",n.subtype,n.width / 2^16,tostring(n.list) )
-      nodelist_analyze(n.list)
-    elseif node.type(n.id) == "vlist" then
-      w("vlist")
-      nodelist_analyze(n.list)
-    elseif node.type(n.id) == "glyph" then
-      w("glyph: font=%s, Zeichennummer=%d, Zeichen=%q",n.font,n.char,string.char(n.char))
-    elseif node.type(n.id) == "kern" then
-      w("kern: subtype=%d, kern=%gpt",n.subtype,n.kern / 2^16)
-
-    elseif node.type(n.id) == "glue" then
-      local spec = n.spec
-      w("glue: subtype=%d",n.subtype)
-      w("gluespec: space=%d, stretch=%d, shrink=%d, stretch_order=%d, shrink_order=%d",n.spec.width,n.spec.stretch,n.spec.shrink, n.spec.stretch_order, n.spec.shrink_order)
-
-    elseif node.type(n.id) == "penalty" then
-      w("penalty: %d",n.penalty)
-    elseif node.type(n.id) == "rule" then
-      w("rule: width=%d, height=%d, depth=%d",n.width / 2^16, n.height, n.depth)
-    else
-      w("?? %s",node.type(n.id))
-    end
-  end
-  texio.write("\n")
-  return true
-end
-
 
 function trace( ... )
   if publisher.options.trace then
