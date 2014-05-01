@@ -925,16 +925,16 @@ end
 --- -------------
 --- Load a given font file (`name`). Actually the font file is not loaded yet, only stored in a table. See `publisher.font#load_fontfile()`.
 function commands.load_fontfile( layoutxml,dataxml )
-    local randausgleich = publisher.read_attribute(layoutxml,dataxml,"marginprotrusion","number")
-    local leerraum      = publisher.read_attribute(layoutxml,dataxml,"space",           "number")
-    local smcp          = publisher.read_attribute(layoutxml,dataxml,"smallcaps",       "string")
-    local filename      = publisher.read_attribute(layoutxml,dataxml,"filename",        "rawstring")
-    local name          = publisher.read_attribute(layoutxml,dataxml,"name",            "rawstring")
-    local osf           = publisher.read_attribute(layoutxml,dataxml,"oldstylefigures", "boolean")
+    local marginprotrusion = publisher.read_attribute(layoutxml,dataxml,"marginprotrusion","number")
+    local space            = publisher.read_attribute(layoutxml,dataxml,"space",           "number")
+    local smcp             = publisher.read_attribute(layoutxml,dataxml,"smallcaps",       "string")
+    local filename         = publisher.read_attribute(layoutxml,dataxml,"filename",        "rawstring")
+    local name             = publisher.read_attribute(layoutxml,dataxml,"name",            "rawstring")
+    local osf              = publisher.read_attribute(layoutxml,dataxml,"oldstylefigures", "boolean")
 
     local extra_parameter = {
-        space            = leerraum      or 25,
-        marginprotrusion = randausgleich or 0,
+        space            = space      or 25,
+        marginprotrusion = marginprotrusion or 0,
         otfeatures    = {
             smcp = smcp == "yes",
             onum = osf == true,
@@ -1926,7 +1926,7 @@ end
 
 --- Sequence
 --- --------
---- Get parts of the data. Can be stored in a variable
+--- Get parts of the data. Can be stored in a variable. This command seems to be obsolete now
 function commands.sequence( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     return selection

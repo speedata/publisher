@@ -33,7 +33,7 @@
    </define>
    <define name="e_AddToList">
       <element name="AddToList">
-         <a:documentation/>
+         <a:documentation>Can be used inside of Action. Not tested properly.</a:documentation>
          <attribute name="select">
             <a:documentation/>
          </attribute>
@@ -97,6 +97,9 @@
             </optional>
             <optional>
                <ref name="e_SaveDataset"/>
+            </optional>
+            <optional>
+               <ref name="e_SavePages"/>
             </optional>
             <optional>
                <ref name="e_SetVariable"/>
@@ -167,6 +170,9 @@
             </optional>
             <optional>
                <ref name="e_SaveDataset"/>
+            </optional>
+            <optional>
+               <ref name="e_SavePages"/>
             </optional>
             <optional>
                <ref name="e_SetVariable"/>
@@ -336,9 +342,9 @@
    </define>
    <define name="e_Case">
       <element name="Case">
-         <a:documentation/>
+         <a:documentation>Part of a Switch construct. All cases up to the first case which evaluates to »true« will be executed. If no cases match and there is a Otherwise, this will be executed instead.</a:documentation>
          <attribute name="test">
-            <a:documentation/>
+            <a:documentation>The test that gets evaluated.</a:documentation>
          </attribute>
          <oneOrMore>
             <optional>
@@ -475,7 +481,7 @@
    </define>
    <define name="e_Contents">
       <element name="Contents">
-         <a:documentation/>
+         <a:documentation>Marks the contents of a Group.</a:documentation>
          <oneOrMore>
             <optional>
                <ref name="e_DefineColor"/>
@@ -524,6 +530,9 @@
             </optional>
             <optional>
                <ref name="e_SaveDataset"/>
+            </optional>
+            <optional>
+               <ref name="e_SavePages"/>
             </optional>
             <optional>
                <ref name="e_SetVariable"/>
@@ -598,7 +607,7 @@
    </define>
    <define name="e_Copy-of">
       <element name="Copy-of">
-         <a:documentation/>
+         <a:documentation>Replace this element by the copy of the selection as an element structure. You can use it to construct more complex data structures.</a:documentation>
          <attribute name="select">
             <a:documentation>The selection (most likely a variable) that is to be copied.</a:documentation>
          </attribute>
@@ -621,11 +630,9 @@
                </choice>
             </attribute>
          </optional>
-         <optional>
-            <attribute name="name">
-               <a:documentation>The name of the color to be defined.</a:documentation>
-            </attribute>
-         </optional>
+         <attribute name="name">
+            <a:documentation>The name of the color to be defined.</a:documentation>
+         </attribute>
          <optional>
             <attribute name="r">
                <a:documentation>Red part with RGB</a:documentation>
@@ -671,15 +678,15 @@
    </define>
    <define name="e_DefineFontfamily">
       <element name="DefineFontfamily">
-         <a:documentation/>
+         <a:documentation>Defines a font family consisting of the shapes »regular», »bold«, »bold italic« and »italic«. To be used in Paragraph, Textblock,  and Table with the attribute fontface.</a:documentation>
          <attribute name="name">
-            <a:documentation/>
+            <a:documentation>The symbolic name that is used as a reference to access this font family.</a:documentation>
          </attribute>
          <attribute name="fontsize">
-            <a:documentation/>
+            <a:documentation>Font size in pt (PostScript points). Number without unit.</a:documentation>
          </attribute>
          <attribute name="leading">
-            <a:documentation/>
+            <a:documentation>Distance between two baselines in pt (PostScript points). Without unit.</a:documentation>
          </attribute>
          <optional>
             <ref name="e_Regular"/>
@@ -758,7 +765,7 @@
          </optional>
          <optional>
             <attribute name="margin-bottom">
-               <a:documentation/>
+               <a:documentation>Distance between the bottom rule and the text of the next paragraph.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -773,12 +780,12 @@
          </optional>
          <optional>
             <attribute name="padding-top">
-               <a:documentation/>
+               <a:documentation>Distance between the top of the text and the top rule.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="margin-top">
-               <a:documentation/>
+               <a:documentation>Distance between the top rule and the text of the previous paragraph.</a:documentation>
             </attribute>
          </optional>
          <empty/>
@@ -786,9 +793,9 @@
    </define>
    <define name="e_Element">
       <element name="Element">
-         <a:documentation/>
+         <a:documentation>Create a data structure that can be used to save on the harddrive between consecutive runs (with SaveDataset).</a:documentation>
          <attribute name="name">
-            <a:documentation/>
+            <a:documentation>Name of the element that gets created.</a:documentation>
          </attribute>
          <oneOrMore>
             <interleave>
@@ -813,15 +820,15 @@
    </define>
    <define name="e_EmptyLine">
       <element name="EmptyLine">
-         <a:documentation/>
+         <a:documentation>Create an empty row an set the cursor to the next row.</a:documentation>
          <empty/>
       </element>
    </define>
    <define name="e_Fontface">
       <element name="Fontface">
-         <a:documentation/>
+         <a:documentation>Switch to another font family.</a:documentation>
          <attribute name="fontfamily">
-            <a:documentation/>
+            <a:documentation>The name of the font family to switch to.</a:documentation>
          </attribute>
          <zeroOrMore>
             <choice>
@@ -1033,8 +1040,8 @@
    </define>
    <define name="e_Hyphenation">
       <element name="Hyphenation">
-         <a:documentation/>
-         <empty/>
+         <a:documentation>Suggest a hyphenation. This hyphenation will be used in the running text. See the example.</a:documentation>
+         <text/>
       </element>
    </define>
    <define name="e_HSpace">
@@ -1046,7 +1053,7 @@
    </define>
    <define name="e_I">
       <element name="I">
-         <a:documentation/>
+         <a:documentation>Switch to italic text.</a:documentation>
          <zeroOrMore>
             <choice>
                <ref name="e_Action"/>
@@ -1071,7 +1078,7 @@
    </define>
    <define name="e_Include">
       <element name="Include">
-         <a:documentation>Includes other layout files.</a:documentation>
+         <a:documentation>Include other layout files.</a:documentation>
          <optional>
             <ref name="e_Record"/>
          </optional>
@@ -1109,9 +1116,9 @@
    </define>
    <define name="e_InsertPages">
       <element name="InsertPages">
-         <a:documentation/>
+         <a:documentation>Insert previously saved pages.</a:documentation>
          <attribute name="name">
-            <a:documentation/>
+            <a:documentation>The name of the saved pages.</a:documentation>
          </attribute>
          <empty/>
       </element>
@@ -1166,7 +1173,7 @@
          </optional>
          <optional>
             <attribute name="clip">
-               <a:documentation/>
+               <a:documentation>When yes, the image keeps its apsect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</a:documentation>
                <choice>
                   <value>yes</value>
                   <value>no</value>
@@ -1186,7 +1193,7 @@
          </optional>
          <optional>
             <attribute name="dpiwarn">
-               <a:documentation/>
+               <a:documentation>Warn if the image gets lower resultion than given.</a:documentation>
             </attribute>
          </optional>
          <empty/>
@@ -1194,39 +1201,41 @@
    </define>
    <define name="e_Italic">
       <element name="Italic">
-         <a:documentation/>
+         <a:documentation>The font face to be used when the user switches to italic.</a:documentation>
          <attribute name="fontface">
-            <a:documentation/>
+            <a:documentation>The name of the fontface.</a:documentation>
          </attribute>
          <empty/>
       </element>
    </define>
    <define name="e_LoadDataset">
       <element name="LoadDataset">
-         <a:documentation/>
+         <a:documentation>Load an XML file previously written by SaveDataset. The regular data processing is interrupted and the contents of the data file is taken as a data source.
+        If the file does not exist, the call to LoadDataset is ignored.
+      </a:documentation>
          <attribute name="name">
-            <a:documentation/>
+            <a:documentation>Name of the data file. Example: toc</a:documentation>
          </attribute>
          <empty/>
       </element>
    </define>
    <define name="e_LoadFontfile">
       <element name="LoadFontfile">
-         <a:documentation/>
+         <a:documentation>Load a font file (.otf, .ttf, .pfb) and associate it with an internal name.</a:documentation>
          <attribute name="name">
-            <a:documentation/>
+            <a:documentation>The internal name of the font file. To be used within DefineFontfamily.</a:documentation>
          </attribute>
          <attribute name="filename">
-            <a:documentation/>
+            <a:documentation>The name (with extension) of the font file.</a:documentation>
          </attribute>
          <optional>
             <attribute name="space">
-               <a:documentation/>
+               <a:documentation>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="marginprotrusion">
-               <a:documentation/>
+               <a:documentation>The amount of protrusion glyphs like -, . and - stick into the right margin. Highly font dependent. Defaults to 0.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1501,26 +1510,23 @@
          <attribute name="sortkey">
             <a:documentation>The name of the attribute holding the indexentry (that should be sorted).</a:documentation>
          </attribute>
-         <attribute name="pattern">
-            <a:documentation/>
-         </attribute>
          <empty/>
       </element>
    </define>
    <define name="e_Margin">
       <element name="Margin">
-         <a:documentation/>
+         <a:documentation>Set the margin of the document or master page.</a:documentation>
          <attribute name="left">
-            <a:documentation/>
+            <a:documentation>Left margin</a:documentation>
          </attribute>
          <attribute name="right">
-            <a:documentation/>
+            <a:documentation>Right margin</a:documentation>
          </attribute>
          <attribute name="top">
-            <a:documentation/>
+            <a:documentation>Top margin</a:documentation>
          </attribute>
          <attribute name="bottom">
-            <a:documentation/>
+            <a:documentation>Bottom margin</a:documentation>
          </attribute>
          <empty/>
       </element>
@@ -1546,15 +1552,15 @@
    </define>
    <define name="e_Message">
       <element name="Message">
-         <a:documentation/>
+         <a:documentation>Writes a message onto the console and to the protocol file.</a:documentation>
          <optional>
             <attribute name="select">
-               <a:documentation/>
+               <a:documentation>Contents of the message. You can alternatively specify the message by the child elements Value.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="error">
-               <a:documentation/>
+               <a:documentation>Generate an error besides writing the message.</a:documentation>
                <choice>
                   <value>yes</value>
                   <value>no</value>
@@ -1596,29 +1602,29 @@
    </define>
    <define name="e_NextFrame">
       <element name="NextFrame">
-         <a:documentation/>
+         <a:documentation>Switch to the next free frame of a positioning area.</a:documentation>
          <attribute name="area">
-            <a:documentation/>
+            <a:documentation>Name of the positioning area.</a:documentation>
          </attribute>
          <empty/>
       </element>
    </define>
    <define name="e_NextRow">
       <element name="NextRow">
-         <a:documentation/>
+         <a:documentation>The virtual cursor is set on the next free row.</a:documentation>
          <optional>
             <attribute name="area">
-               <a:documentation/>
+               <a:documentation>Name of the area of the virtual cursor.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="row">
-               <a:documentation/>
+               <a:documentation>The absolute number of the row for the cursor. If no row is given, the system tries to find a completely free row (perhaps on an empty page).</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="rows">
-               <a:documentation/>
+               <a:documentation>The number of rows to clear. Defaults to 1.</a:documentation>
             </attribute>
          </optional>
          <empty/>
@@ -1651,7 +1657,7 @@
          </optional>
          <optional>
             <attribute name="trim">
-               <a:documentation/>
+               <a:documentation>The amount of bleed. Defaults to 0mm.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1701,7 +1707,7 @@
          </optional>
          <optional>
             <attribute name="trace">
-               <a:documentation/>
+               <a:documentation>Draw rectangles around objects for debugging purposes.</a:documentation>
                <choice>
                   <value>yes</value>
                   <value>no</value>
@@ -1711,12 +1717,12 @@
          </optional>
          <optional>
             <attribute name="startpage">
-               <a:documentation/>
+               <a:documentation>Set the number of the first page.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="show-grid">
-               <a:documentation/>
+               <a:documentation>Draw the grid on the page.</a:documentation>
                <choice>
                   <value>yes</value>
                   <value>no</value>
@@ -1726,7 +1732,7 @@
          </optional>
          <optional>
             <attribute name="show-gridallocation">
-               <a:documentation/>
+               <a:documentation>Draw allocated cells with yellow and conflicts with red markers.</a:documentation>
                <choice>
                   <value>yes</value>
                   <value>no</value>
@@ -1736,7 +1742,7 @@
          </optional>
          <optional>
             <attribute name="show-hyphenation">
-               <a:documentation/>
+               <a:documentation>Draw little marks to show all hyphenation points.</a:documentation>
                <choice>
                   <value>yes</value>
                   <value>no</value>
@@ -1769,7 +1775,7 @@
    </define>
    <define name="e_Otherwise">
       <element name="Otherwise">
-         <a:documentation/>
+         <a:documentation>Default branch of a Switch command.</a:documentation>
          <oneOrMore>
             <optional>
                <ref name="e_Action"/>
@@ -1905,10 +1911,10 @@
    </define>
    <define name="e_Output">
       <element name="Output">
-         <a:documentation/>
+         <a:documentation>Still exerimental. This command is similar to PlaceObject and is currently limited to output text which can be broken across positioning frames.</a:documentation>
          <optional>
             <attribute name="area">
-               <a:documentation/>
+               <a:documentation>The name of the positioning frame for the text.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1983,12 +1989,12 @@
    </define>
    <define name="e_Pagetype">
       <element name="Pagetype">
-         <a:documentation/>
+         <a:documentation>Define a master page. A master page is chosen depending on the criterium given with the attribute »test«.</a:documentation>
          <attribute name="test">
-            <a:documentation/>
+            <a:documentation>If this xpath expression evaluates to true, this page is taken as a master page.</a:documentation>
          </attribute>
          <attribute name="name">
-            <a:documentation/>
+            <a:documentation>Name of the master page. It is for informational purpose and as a selection for NewPage.</a:documentation>
          </attribute>
          <optional>
             <ref name="e_Margin"/>
@@ -2150,9 +2156,9 @@
    </define>
    <define name="e_PositioningArea">
       <element name="PositioningArea">
-         <a:documentation/>
+         <a:documentation>Describes an area which contains one or more frames. Elements can be placed within these frames.</a:documentation>
          <attribute name="name">
-            <a:documentation/>
+            <a:documentation>Name of the area.</a:documentation>
          </attribute>
          <oneOrMore>
             <ref name="e_PositioningFrame"/>
@@ -2161,18 +2167,18 @@
    </define>
    <define name="e_PositioningFrame">
       <element name="PositioningFrame">
-         <a:documentation/>
+         <a:documentation>Defines a rectangular area for objects.</a:documentation>
          <attribute name="width">
-            <a:documentation/>
+            <a:documentation>The width of the frame in grid cells.</a:documentation>
          </attribute>
          <attribute name="height">
-            <a:documentation/>
+            <a:documentation>The height of the frame in grid cells.</a:documentation>
          </attribute>
          <attribute name="row">
-            <a:documentation/>
+            <a:documentation>The row number relative to the grid.</a:documentation>
          </attribute>
          <attribute name="column">
-            <a:documentation/>
+            <a:documentation>First column of the frame, in grid cells.</a:documentation>
          </attribute>
          <empty/>
       </element>
@@ -2193,7 +2199,9 @@
    </define>
    <define name="e_Record">
       <element name="Record">
-         <a:documentation/>
+         <a:documentation>Contains the instructions when the publisher processes the element in the data file with the given name.
+        The record matching the root element will be called by the software automatically, all further data handling must be done
+      by the user.</a:documentation>
          <attribute name="element">
             <a:documentation>The name of the element the record matches.</a:documentation>
          </attribute>
@@ -2252,6 +2260,9 @@
                <ref name="e_SaveDataset"/>
             </optional>
             <optional>
+               <ref name="e_SavePages"/>
+            </optional>
+            <optional>
                <ref name="e_SetVariable"/>
             </optional>
             <optional>
@@ -2271,32 +2282,30 @@
    </define>
    <define name="e_Regular">
       <element name="Regular">
-         <a:documentation/>
-         <optional>
-            <attribute name="fontface">
-               <a:documentation/>
-            </attribute>
-         </optional>
+         <a:documentation>The (symbolic) name of the fontface for regular text, i.e. without bold or italic.</a:documentation>
+         <attribute name="fontface">
+            <a:documentation>The symbolic name fo the font file.</a:documentation>
+         </attribute>
          <empty/>
       </element>
    </define>
    <define name="e_Rule">
       <element name="Rule">
-         <a:documentation/>
+         <a:documentation>Draw a horizontal or vertical rule in the grid.</a:documentation>
          <attribute name="direction">
-            <a:documentation/>
+            <a:documentation>The direction of the rule.</a:documentation>
          </attribute>
          <optional>
             <attribute name="rulewidth">
-               <a:documentation/>
+               <a:documentation>The rule thicknes given in grid cells or as a length.</a:documentation>
             </attribute>
          </optional>
          <attribute name="length">
-            <a:documentation/>
+            <a:documentation>The length of the rule in grid cells or as an absolute length.</a:documentation>
          </attribute>
          <optional>
             <attribute name="color">
-               <a:documentation/>
+               <a:documentation>The color of the rule. Defaults to black.</a:documentation>
             </attribute>
          </optional>
          <empty/>
@@ -2304,7 +2313,7 @@
    </define>
    <define name="e_SaveDataset">
       <element name="SaveDataset">
-         <a:documentation/>
+         <a:documentation>Saves an element/attribute structure to be used in the next publisher run. The contents must have a tree structure.</a:documentation>
          <attribute name="filename">
             <a:documentation>Name of the file. Example: toc</a:documentation>
          </attribute>
@@ -2345,9 +2354,9 @@
    </define>
    <define name="e_SavePages">
       <element name="SavePages">
-         <a:documentation/>
+         <a:documentation>Everything enclosed in SavePages is saved internally and not placed into the PDF. Useful if the output migth be discarded.</a:documentation>
          <attribute name="name">
-            <a:documentation/>
+            <a:documentation>The name of the discarded output. For later retrieval with InsertPages.</a:documentation>
          </attribute>
          <oneOrMore>
             <interleave>
@@ -2400,6 +2409,9 @@
                   <ref name="e_SaveDataset"/>
                </optional>
                <optional>
+                  <ref name="e_SavePages"/>
+               </optional>
+               <optional>
                   <ref name="e_SetVariable"/>
                </optional>
                <optional>
@@ -2446,13 +2458,13 @@
    </define>
    <define name="e_SetVariable">
       <element name="SetVariable">
-         <a:documentation/>
+         <a:documentation>Associates a value with a variable name. The value can be a simple value or a more complex one consisting of several elements.</a:documentation>
          <attribute name="variable">
-            <a:documentation/>
+            <a:documentation>The name of the variable that holds the contents.</a:documentation>
          </attribute>
          <optional>
             <attribute name="select">
-               <a:documentation/>
+               <a:documentation>The value of the contents.</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>
@@ -2508,30 +2520,33 @@
    </define>
    <define name="e_Sequence">
       <element name="Sequence">
-         <a:documentation/>
+         <a:documentation>Return a selection of data. Probably not useful anymore as a separate command. Don't use this anymore!</a:documentation>
+         <attribute name="select">
+            <a:documentation>The data to be selected.</a:documentation>
+         </attribute>
          <empty/>
       </element>
    </define>
    <define name="e_SortSequence">
       <element name="SortSequence">
-         <a:documentation/>
+         <a:documentation>Sort a list.</a:documentation>
          <attribute name="select">
-            <a:documentation/>
+            <a:documentation>The data that should be sorted.</a:documentation>
          </attribute>
          <optional>
             <attribute name="removeduplicates">
-               <a:documentation/>
+               <a:documentation>If this attribute is used then it contains the name of the data-attribute that gets evaluated when duplicates are eliminated.</a:documentation>
             </attribute>
          </optional>
          <attribute name="criterium">
-            <a:documentation/>
+            <a:documentation>Name of the attribute that is used as the sort key.</a:documentation>
          </attribute>
          <empty/>
       </element>
    </define>
    <define name="e_Sub">
       <element name="Sub">
-         <a:documentation/>
+         <a:documentation>Subscript text.</a:documentation>
          <optional>
             <ref name="e_Value"/>
          </optional>
@@ -2539,7 +2554,7 @@
    </define>
    <define name="e_Sup">
       <element name="Sup">
-         <a:documentation/>
+         <a:documentation>Superscript text.</a:documentation>
          <optional>
             <ref name="e_Value"/>
          </optional>
@@ -2547,7 +2562,8 @@
    </define>
    <define name="e_Switch">
       <element name="Switch">
-         <a:documentation/>
+         <a:documentation>Create an if-then-else construct. The test attribute of each Case commands is evaluated until it yields true.
+        The contents of the Case gets executed. If no test suceeds, the (optional) Otherwise gets executed.</a:documentation>
          <oneOrMore>
             <ref name="e_Case"/>
          </oneOrMore>
@@ -2682,7 +2698,7 @@
    </define>
    <define name="e_Tablefoot">
       <element name="Tablefoot">
-         <a:documentation/>
+         <a:documentation>Create a repeating table footer.</a:documentation>
          <optional>
             <attribute name="page">
                <a:documentation>This command is only valid for the given pages. The default is to place the foot on all pages.</a:documentation>
@@ -2700,12 +2716,12 @@
                   <ref name="e_Tr"/>
                </optional>
             </interleave>
-         </oneOrMore>    
+         </oneOrMore>
       </element>
    </define>
    <define name="e_Tablehead">
       <element name="Tablehead">
-         <a:documentation>Create a table head.</a:documentation>
+         <a:documentation>Create a repeating table head.</a:documentation>
          <optional>
             <attribute name="page">
                <a:documentation>The page the table head should appear on. Defaults to »all«</a:documentation>
@@ -2884,15 +2900,15 @@
    </define>
    <define name="e_Textblock">
       <element name="Textblock">
-         <a:documentation/>
+         <a:documentation>Create a rectangular piece of text.</a:documentation>
          <optional>
             <attribute name="angle">
-               <a:documentation/>
+               <a:documentation>The angle (counter clockwise) that the text gets turned.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="color">
-               <a:documentation/>
+               <a:documentation>The name of the color of the text.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2902,22 +2918,22 @@
          </optional>
          <optional>
             <attribute name="fontface">
-               <a:documentation/>
+               <a:documentation>The name of the font family. Defaults to text'.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="textformat">
-               <a:documentation/>
+               <a:documentation>The name of the text format to be applied to the text. Defaults to text.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="columns">
-               <a:documentation/>
+               <a:documentation>Number of columns in the textblock.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="columndistance">
-               <a:documentation/>
+               <a:documentation>Distance between two columns. Defaults to 3mm.</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>
@@ -2937,7 +2953,7 @@
    </define>
    <define name="e_Text">
       <element name="Text">
-         <a:documentation/>
+         <a:documentation>Create a text that can be broken across text containers or pages. To be used with Output</a:documentation>
          <oneOrMore>
             <choice>
                <ref name="e_Switch"/>
@@ -3015,7 +3031,7 @@
    </define>
    <define name="e_U">
       <element name="U">
-         <a:documentation/>
+         <a:documentation>Underline text.</a:documentation>
          <optional>
             <ref name="e_B"/>
          </optional>
@@ -3199,7 +3215,7 @@
    </define>
    <define name="e_URL">
       <element name="URL">
-         <a:documentation/>
+         <a:documentation>enables a better breaking of URLs.</a:documentation>
          <optional>
             <ref name="e_B"/>
          </optional>

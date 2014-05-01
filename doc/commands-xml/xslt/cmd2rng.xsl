@@ -28,13 +28,12 @@
         <a:documentation><xsl:apply-templates select="description[@xml:lang = $lang]"/></a:documentation>
         <xsl:choose>
           <!-- An element with no child elements must be declared empty -->
-          <xsl:when test="count(childelements//cmd) = 0 and count(childelements//reference) = 0 and count(childelements//element) = 0">
+          <xsl:when test="count(childelements//cmd) = 0 and count(childelements//reference) = 0 and count(childelements//element) = 0 and count(childelements/text) = 0 ">
             <xsl:apply-templates select="attribute"/>
             <empty/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:apply-templates select="attribute"/>
-            <xsl:apply-templates select="childelements/text"/>
             <xsl:apply-templates select="childelements"/>
           </xsl:otherwise>
         </xsl:choose>

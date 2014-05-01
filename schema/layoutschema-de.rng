@@ -101,6 +101,9 @@
                <ref name="e_SaveDataset"/>
             </optional>
             <optional>
+               <ref name="e_SavePages"/>
+            </optional>
+            <optional>
                <ref name="e_SetVariable"/>
             </optional>
             <optional>
@@ -169,6 +172,9 @@
             </optional>
             <optional>
                <ref name="e_SaveDataset"/>
+            </optional>
+            <optional>
+               <ref name="e_SavePages"/>
             </optional>
             <optional>
                <ref name="e_SetVariable"/>
@@ -529,6 +535,9 @@
                <ref name="e_SaveDataset"/>
             </optional>
             <optional>
+               <ref name="e_SavePages"/>
+            </optional>
+            <optional>
                <ref name="e_SetVariable"/>
             </optional>
             <optional>
@@ -624,11 +633,9 @@
                </choice>
             </attribute>
          </optional>
-         <optional>
-            <attribute name="name">
-               <a:documentation>Name der Farbe, die definiert wird.</a:documentation>
-            </attribute>
-         </optional>
+         <attribute name="name">
+            <a:documentation>Name der Farbe, die definiert wird.</a:documentation>
+         </attribute>
          <optional>
             <attribute name="r">
                <a:documentation>Rot Anteil bei RGB</a:documentation>
@@ -674,12 +681,12 @@
    </define>
    <define name="e_DefineFontfamily">
       <element name="DefiniereSchriftfamilie">
-         <a:documentation>Das Element  definiert eine Schriftfamilie, auf in den Elementen , Textblock,  und  mit dem Attribut schriftart zugegriffen werden kann.</a:documentation>
+         <a:documentation>Das Element  definiert eine Schriftfamilie, auf in den Elementen Absatz, Textblock,  und Tabelle mit dem Attribut schriftart zugegriffen werden kann.</a:documentation>
          <attribute name="name">
             <a:documentation>Interner Name, unter dem die Schriftfamilie später angesprochen wird.</a:documentation>
          </attribute>
          <attribute name="schriftgröße">
-            <a:documentation>Schriftgröße in pt (PostScript-Punkte, DTP-Punkte).</a:documentation>
+            <a:documentation>Schriftgröße in pt (PostScript-Punkte, DTP-Punkte). Zahl ohne Einheit.</a:documentation>
          </attribute>
          <attribute name="zeilenabstand">
             <a:documentation>Abstand zwischen zwei Grundlinien in pt (PostScript-Punkte).</a:documentation>
@@ -763,7 +770,7 @@
          </optional>
          <optional>
             <attribute name="margin-bottom">
-               <a:documentation/>
+               <a:documentation>Abstand zwischen der Linie unten und dem nachfolgenden Absatz.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -778,12 +785,12 @@
          </optional>
          <optional>
             <attribute name="padding-top">
-               <a:documentation/>
+               <a:documentation>Abstand zwischen der Oberkante des Texts und der Linie oben.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="margin-top">
-               <a:documentation/>
+               <a:documentation>Abstand zwischen der Linie oben und dem vorhergehenden Text.</a:documentation>
             </attribute>
          </optional>
          <empty/>
@@ -793,7 +800,7 @@
       <element name="Element">
          <a:documentation>Erzeugt eine Datenstruktur, die mithilfe von SpeichereDatensatzdatei auf Festplatte gespeichert werden kann.</a:documentation>
          <attribute name="name">
-            <a:documentation>Name des Elements, das erzeugt wird</a:documentation>
+            <a:documentation>Name des Elements, das erzeugt wird.</a:documentation>
          </attribute>
          <oneOrMore>
             <interleave>
@@ -1040,7 +1047,7 @@
       <element name="Trennvorschlag">
          <a:documentation>Erzeugt einen Trennvorschlag für die automatische Silbentrennung. Die Trennvorschläge werden dann benutzt, wenn die automatische Silbentrennung fehlerhaft trennt. Alle Trennstellen müssen
         mit eine Bindestrich (-) markiert werden (s. Beispiel).</a:documentation>
-         <empty/>
+         <text/>
       </element>
    </define>
    <define name="e_HSpace">
@@ -1115,9 +1122,9 @@
    </define>
    <define name="e_InsertPages">
       <element name="SeitenEinfügen">
-         <a:documentation/>
+         <a:documentation>Fügt zuvor gespeicherte Seiten ein.</a:documentation>
          <attribute name="name">
-            <a:documentation/>
+            <a:documentation>Der Name der gespeicherten Seiten.</a:documentation>
          </attribute>
          <empty/>
       </element>
@@ -1172,7 +1179,7 @@
          </optional>
          <optional>
             <attribute name="ausschnitt">
-               <a:documentation/>
+               <a:documentation>Wenn ja, dann behält das Bild sein Seitenverhältnis wenn Breite und Höhe gegeben ist. Um das Bild einzupassen, wird ein Teil abgeschnitten.</a:documentation>
                <choice>
                   <value>ja</value>
                   <value>nein</value>
@@ -1192,7 +1199,7 @@
          </optional>
          <optional>
             <attribute name="dpiwarnung">
-               <a:documentation/>
+               <a:documentation>Warnung ausgeben, wenn das Bild eine geringere Auflösung bekommt als angegeben.</a:documentation>
             </attribute>
          </optional>
          <empty/>
@@ -1229,7 +1236,7 @@
          </attribute>
          <optional>
             <attribute name="leerraum">
-               <a:documentation>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25.</a:documentation>
+               <a:documentation>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1510,9 +1517,6 @@
          <attribute name="sortierschlüssel">
             <a:documentation>Der Name des Attributs das den Indexeintrag enthält (der sortiert werden soll).</a:documentation>
          </attribute>
-         <attribute name="muster">
-            <a:documentation/>
-         </attribute>
          <empty/>
       </element>
    </define>
@@ -1563,7 +1567,7 @@
          </optional>
          <optional>
             <attribute name="fehler">
-               <a:documentation/>
+               <a:documentation>Zusätzlich einen Fehler melden.</a:documentation>
                <choice>
                   <value>ja</value>
                   <value>nein</value>
@@ -1605,7 +1609,7 @@
    </define>
    <define name="e_NextFrame">
       <element name="NächsterRahmen">
-         <a:documentation>Schaltet auf den nächsten freien Rahmen eines Platzierungsbereichs um</a:documentation>
+         <a:documentation>Schaltet auf den nächsten freien Rahmen eines Platzierungsbereichs um.</a:documentation>
          <attribute name="bereich">
             <a:documentation>Name des Platzierungsbereich, in dem der nächste Rahmen gesucht werden soll.</a:documentation>
          </attribute>
@@ -1912,10 +1916,10 @@
    </define>
    <define name="e_Output">
       <element name="Ausgabe">
-         <a:documentation/>
+         <a:documentation>Experimentell. Dieser Befehl ist ähnlich zu ObjektAusgeben und dient derzeit nur dazu, Text auszugeben, der auf mehrere Seite umbrachen werden kann.</a:documentation>
          <optional>
             <attribute name="bereich">
-               <a:documentation/>
+               <a:documentation>Der Name des Platzierungsbereichs für den Text.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1995,7 +1999,7 @@
             <a:documentation>Wenn der XPath-Ausdruck »wahr« ergibt, dann wird diese Seite als Vorlage genommen.</a:documentation>
          </attribute>
          <attribute name="name">
-            <a:documentation>Name der Seitenvorlage. Bisher wird der Name nur für interne Zwecke benötigt.</a:documentation>
+            <a:documentation>Name der Seitenvorlage. Der Name ist zu Informationszwecken und zur Auswahl bei NeueSeite.</a:documentation>
          </attribute>
          <optional>
             <ref name="e_Margin"/>
@@ -2183,10 +2187,10 @@
             <a:documentation>Höhe des Rahmens in Rasterkästen</a:documentation>
          </attribute>
          <attribute name="zeile">
-            <a:documentation>Erste Spalte des Rahmens</a:documentation>
+            <a:documentation>Erste Zeile des Rahmens</a:documentation>
          </attribute>
          <attribute name="spalte">
-            <a:documentation>Erste Zeile des Rahmens</a:documentation>
+            <a:documentation>Erste Spalte des Rahmens</a:documentation>
          </attribute>
          <empty/>
       </element>
@@ -2267,6 +2271,9 @@
                <ref name="e_SaveDataset"/>
             </optional>
             <optional>
+               <ref name="e_SavePages"/>
+            </optional>
+            <optional>
                <ref name="e_SetVariable"/>
             </optional>
             <optional>
@@ -2287,11 +2294,9 @@
    <define name="e_Regular">
       <element name="Normal">
          <a:documentation>Dient als Festlegung des Schriftschnittes, wenn keine Formatierung angegeben ist.</a:documentation>
-         <optional>
-            <attribute name="schriftart">
-               <a:documentation>Name der Schriftdatei, die geladen werden soll.</a:documentation>
-            </attribute>
-         </optional>
+         <attribute name="schriftart">
+            <a:documentation>Name der Schriftdatei, die geladen werden soll.</a:documentation>
+         </attribute>
          <empty/>
       </element>
    </define>
@@ -2361,9 +2366,9 @@
    </define>
    <define name="e_SavePages">
       <element name="SeitenSpeichern">
-         <a:documentation/>
+         <a:documentation>Alle Ausgaben innerhalb von SeitenSpeichern werden intern gespeichert und nicht ins PDF ausgegeben. Hilfreich wenn die Ausgabe ggf. verworfen werden soll.</a:documentation>
          <attribute name="name">
-            <a:documentation/>
+            <a:documentation>Der Name der Ausgabe, die verworfen wird. Kann später mit SeitenEinfügen wiedergeholt werden.</a:documentation>
          </attribute>
          <oneOrMore>
             <interleave>
@@ -2414,6 +2419,9 @@
                </optional>
                <optional>
                   <ref name="e_SaveDataset"/>
+               </optional>
+               <optional>
+                  <ref name="e_SavePages"/>
                </optional>
                <optional>
                   <ref name="e_SetVariable"/>
@@ -2524,7 +2532,10 @@
    </define>
    <define name="e_Sequence">
       <element name="Sequenz">
-         <a:documentation/>
+         <a:documentation>Gibt eine Datenselektion zurück. Wahrscheinlich nicht mehr als eigener Befehl vonnöten. Nicht mehr benutzen!</a:documentation>
+         <attribute name="auswahl">
+            <a:documentation>Die Daten, die ausgewählt werden.</a:documentation>
+         </attribute>
          <empty/>
       </element>
    </define>
@@ -2540,7 +2551,7 @@
             </attribute>
          </optional>
          <attribute name="kriterium">
-            <a:documentation>Attributname, nach dem sortiert werden soll</a:documentation>
+            <a:documentation>Attributname, nach dem sortiert werden soll.</a:documentation>
          </attribute>
          <empty/>
       </element>
@@ -2717,7 +2728,7 @@
                   <ref name="e_Tr"/>
                </optional>
             </interleave>
-         </oneOrMore>    
+         </oneOrMore>
       </element>
    </define>
    <define name="e_Tablehead">
@@ -2904,7 +2915,8 @@
          <a:documentation>Erzeugt einen rechteckigen Bereich mit Text.</a:documentation>
          <optional>
             <attribute name="winkel">
-               <a:documentation>Winkel (Drehrichtung gegen den Uhrzeigersinn), um der der Text gedreht wird. Die Spalte und die Zeile, in der der Text ausgegeben wird, bleibt gleich, die Breite und die Höhe des Textes
+               <a:documentation>Winkel (Drehrichtung gegen den Uhrzeigersinn), um der der Text gedreht wird. Die Spalte und die Zeile, 
+          in der der Text ausgegeben wird, bleibt gleich, die Breite und die Höhe des Textes
           ändert sich gegenüber dem ursprünglichen Text.</a:documentation>
             </attribute>
          </optional>
@@ -2930,7 +2942,7 @@
          </optional>
          <optional>
             <attribute name="spalten">
-               <a:documentation>Anzahl der Spalten in dem Textblock</a:documentation>
+               <a:documentation>Anzahl der Spalten in dem Textblock.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2955,7 +2967,7 @@
    </define>
    <define name="e_Text">
       <element name="Text">
-         <a:documentation/>
+         <a:documentation>Erzeugt einen Text, der über die Grenzen von Positionierungsrahmen umbrechen kann. Wird mit Ausgabe benutzt.</a:documentation>
          <oneOrMore>
             <choice>
                <ref name="e_Switch"/>

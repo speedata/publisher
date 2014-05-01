@@ -64,6 +64,7 @@
     <optional><cmd name="PlaceObject"/></optional>
     <optional><cmd name="ProcessNode"/></optional>
     <optional><cmd name="SaveDataset"/></optional>
+    <optional><cmd name="SavePages"/></optional>
     <optional><cmd name="SetVariable"/></optional>
     <optional><cmd name="SortSequence"/></optional>
     <optional><cmd name="Switch"/></optional>
@@ -191,7 +192,7 @@
   </command>
   <command name="AddToList">
     <description xml:lang="en">
-      <para></para>
+      <para>Can be used inside of <cmd name="Action"/>. Not tested properly.</para>
     </description>
     <description xml:lang="de">
       <para>Dieses Kommando kann innerhalb von Aktion benutzt werden. Wenn es ausgeführt wird, wird eine Schlüssel/Wert-Kombination in eine Liste eingefügt. Dieser Befehl ist derzeitig nicht
@@ -713,7 +714,7 @@
   </command>
   <command name="Case">
     <description xml:lang="en">
-      <para></para>
+      <para>Part of a <cmd name="Switch"/> construct. All cases up to the first case which evaluates to »true« will be executed. If no cases match and there is a <cmd name="Otherwise"/>, this will be executed instead.</para>
     </description>
     <description xml:lang="de">
       <para>Stellt einen Fall einer <cmd name="Switch" /> dar. Der erste <cmd name="Case" />, der zutrifft, wird ausgeführt. Weitere Fälle werden nicht betrachtet. Wird kein Fall erfüllt, dann wird,
@@ -726,15 +727,17 @@
     </childelements>
     <attribute name="test" type="xpath" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>The test that gets evaluated.</para>
       </description>
       <description xml:lang="de">
         <para>Für jeden Fall in einer Fallunterscheidung wird überprüft, ob die Bedingung erfüllt ist und bei Übereinstimmung die Kindelemente ausgeführt.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <para>See the example at <cmd name="Switch"/>.</para>
+    </example>
     <example xml:lang="de">
-      <para>Siehe das Beispiel bei <cmd name="Switch" />
-      </para>
+      <para>Siehe das Beispiel bei <cmd name="Switch" />.</para>
     </example>
     <seealso>
       <cmd name="Switch" />, <cmd name="Otherwise" />
@@ -742,7 +745,7 @@
   </command>
   <command name="Contents">
     <description xml:lang="en">
-      <para></para>
+      <para>Marks the contents of a <cmd name="Group"/>.</para>
     </description>
     <description xml:lang="de">
       <para>Kennzeichnet den Inhalt einer <cmd name="Group" />.</para>
@@ -752,10 +755,33 @@
         <reference name="Commands"/>
       </oneOrMore>
     </childelements>
+    <remark xml:lang="en">
+      <para>The contents of a group is encapsulated in its own Element, as there are other elements that are part of the group definition (such as <cmd name="Grid"/>).</para>
+    </remark>
     <remark xml:lang="de">
       <para>Der Inhalt wird in einem extra Element gekapselt, damit die Gruppe später noch andere Elemente (z.B. Raster) beinhalten kann, ohne, dass die Angaben zu unübersichtlich werden. Das
         Inhalt-Element wird voraussichtlich in zukünftigen Versionen wegfallen.</para>
     </remark>
+    <example xml:lang="en"><listing><![CDATA[<Group name="examplegroup">
+  <Contents>
+    <PlaceObject column="3" row="2">
+      <Textblock width="14">
+        <Paragraph>
+          <Value>Text</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <PlaceObject column="2" row="4">
+      <Textblock width="14">
+        <Paragraph>
+          <Value>Some more text</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Contents>
+</Group>
+<PlaceObject groupname="examplegroup" column="1" row="1"/>
+]]></listing></example>
     <example xml:lang="de">
       <listing><![CDATA[<Gruppe name="Beispielgruppe">
   <Inhalt>
@@ -912,7 +938,7 @@
       </oneOrMore>
     </childelements>
     <remark xml:lang="en">
-      <para>The *-widths in the command »Column« allow dynamic cell widths. For that the total width of the table must be set and the attribute (on <cmd name="table"/>) »stretch« must be set to »max«. 
+      <para>The *-widths in the command »Column« allow dynamic cell widths. For that the total width of the table must be set and the attribute (on <cmd name="table"/>) »stretch« must be set to »max«.
         The widths of the columns are calculated as follows: first the absolute widths are taken into account. After that, the *-columns are distributed across the remaining space. The
         numbers before the * denote the fraction of the space. In the example below the third column gets 1/6 of the remaining width, the fourth column get 5/6.</para>
     </remark>
@@ -951,7 +977,7 @@
   </command>
   <command name="Copy-of">
     <description xml:lang="en">
-      <para></para>
+      <para>Replace this element by the copy of the selection as an element structure. You can use it to construct more complex data structures.</para>
     </description>
     <description xml:lang="de">
       <para>Ersetzt das Element Kopie-von mit Inhalt von <tt>auswahl</tt> als Elementstruktur. Dient zum „Zusammenbauen“ von Texten und Tabellen.</para>
@@ -965,22 +991,48 @@
         <para>Die Auswahl (eine Variable) die kopiert werden soll.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<SetVariable variable="myparagraph">
+  <Paragraph>
+    <Value select="@name"/><Value>, Symbol=</Value><Value select="@symbol"/>
+  </Paragraph>
+</SetVariable>
+<PlaceObject>
+  <Textblock width="14" fontface="text">
+    <Copy-of select="$myparagraph"/>
+  </Textblock>
+</PlaceObject>
+]]></listing>
+      <para>is the same as</para>
+      <listing><![CDATA[<PlaceObject>
+  <Textblock width="14" fontface="text">
+    <Paragraph>
+      <Value select="@name"/><Value>, Symbol=</Value><Value select="@symbol"/>
+    </Paragraph>
+  </Textblock>
+</PlaceObject>]]></listing>
+      <para>with the exception that the values of <tt>@name</tt> and <tt>@symbol</tt> can be evaluated before the text gets output.</para>
+    </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Zuweisung variable="$meinabsatz" >
+      <listing><![CDATA[<Zuweisung variable="meinabsatz">
   <Absatz>
-    <Wert auswahl="@name"/><Wert>, Symbol=</Wert><Wert auswahl="@symbol" />
+    <Wert auswahl="@name"/><Wert>, Symbol=</Wert><Wert auswahl="@symbol"/>
   </Absatz>
 </Zuweisung>
-  
-<Textblock breite="14" schriftart="text">
-    <Kopie-von auswahl="$meinabsatz" />
-</Textblock>]]></listing>
-      <para>Ist dasselbe wie</para>
-      <listing><![CDATA[<Textblock breite="14" schriftart="text">
-  <Absatz>
-    <Wert auswahl="@name"/><Wert>, Symbol=</Wert><Wert auswahl="@symbol" />
-  </Absatz>
-</Textblock>]]></listing>
+<ObjektAusgeben>
+  <Textblock breite="14" schriftart="text">
+    <Kopie-von auswahl="$meinabsatz"/>
+  </Textblock>
+</ObjektAusgeben>]]></listing>
+      <para>ist dasselbe wie</para>
+      <listing><![CDATA[<ObjektAusgeben>
+  <Textblock breite="14" schriftart="text">
+    <Absatz>
+      <Wert auswahl="@name"/><Wert>, Symbol=</Wert><Wert auswahl="@symbol"/>
+    </Absatz>
+  </Textblock>
+</ObjektAusgeben>
+]]></listing>
       <para>nur mit dem Unterschied, dass der Inhalt vom Absatz (<tt>@name</tt>, <tt>@symbol</tt>) ermittelt werden kann, bevor der Text ausgegeben wird. Die Zuweisung und die Textausgabe können in
         verschiedenen Regeln stehen.</para>
     </example>
@@ -988,9 +1040,9 @@
       <para>Currently there is no copying involved: the underlying data is destroyed after <cmd name="Copy-of"/>.</para>
     </info>
     <info xml:lang="de">
-      <para>Derzeit wird der Inhalt nicht kopiert, der aktuelle Inhalt der Variable is nocht weiter verwendbar.</para>
+      <para>Derzeit wird der Inhalt nicht kopiert, der aktuelle Inhalt der Variable ist nicht weiter verwendbar.</para>
     </info>
-    <seealso><cmd name="Value" />, XPath-Ausdruck, <cmd name="SetVariable" /></seealso>
+    <seealso><cmd name="Value" />, <ref name="xpath"></ref>, <cmd name="SetVariable" /></seealso>
   </command>
   <command name="DefineColor">
     <description xml:lang="en">
@@ -1032,7 +1084,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute name="name" type="text" optional="yes">
+    <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
         <para>The name of the color to be defined.</para>
       </description>
@@ -1117,11 +1169,11 @@
   </command>
   <command name="DefineFontfamily">
     <description xml:lang="en">
-      <para></para>
+      <para>Defines a font family consisting of the shapes »regular», »bold«, »bold italic« and »italic«. To be used in <cmd name="Paragraph"/>, <cmd name="Textblock" />, <cmd name="Fontface " /> and <cmd name="Table"/> with the attribute fontface.</para>
     </description>
     <description xml:lang="de">
-      <para>Das Element <cmd name="DefiniereSchriftfamilie" /> definiert eine Schriftfamilie, auf in den Elementen <cmd name="Absatz" />, <cmd name="Textblock" />, <cmd name="Schriftart " /> und <cmd
-          name="Tabelle " /> mit dem Attribut <tt>schriftart</tt> zugegriffen werden kann.</para>
+      <para>Das Element <cmd name="DefiniereSchriftfamilie" /> definiert eine Schriftfamilie, auf in den Elementen <cmd name="Paragraph" />, <cmd name="Textblock" />, <cmd name="Fontface " /> und <cmd
+          name="Table" /> mit dem Attribut <tt>schriftart</tt> zugegriffen werden kann.</para>
     </description>
     <childelements>
       <cmd name="Regular" />
@@ -1131,7 +1183,7 @@
     </childelements>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>The symbolic name that is used as a reference to access this font family.</para>
       </description>
       <description xml:lang="de">
         <para>Interner Name, unter dem die Schriftfamilie später angesprochen wird.</para>
@@ -1139,24 +1191,44 @@
     </attribute>
     <attribute name="fontsize" type="number" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>Font size in pt (PostScript points). Number without unit.</para>
       </description>
       <description xml:lang="de">
-        <para>Schriftgröße in pt (PostScript-Punkte, DTP-Punkte).</para>
+        <para>Schriftgröße in pt (PostScript-Punkte, DTP-Punkte). Zahl ohne Einheit.</para>
       </description>
     </attribute>
     <attribute name="leading" type="number" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>Distance between two baselines in pt (PostScript points). Without unit.</para>
       </description>
       <description xml:lang="de">
         <para>Abstand zwischen zwei Grundlinien in pt (PostScript-Punkte).</para>
       </description>
     </attribute>
+    <remark xml:lang="en">
+      <para>The default fontface is named »text« and it can be redefined by defining a new font family called »text«.</para>
+      <para>The variants bold, italic and bold italic are optional. </para>
+    </remark>
     <remark xml:lang="de">
       <para>Wird keine Schriftart angegeben, dann wird auf die Schriftfamilie text (kleines ‘t’) zurückgegriffen.</para>
       <para>Die Schnitte Fett, Kursiv und FettKursiv müssen nur dann angegeben werden, wenn sie auch benutzt werden. Es wird aber empfohlen, diese anzugeben, damit nicht unbemerkt auf die Standardschriftart umgeschaltet wird.</para>
     </remark>
+    <example xml:lang="en">
+      <listing><![CDATA[<DefineFontfamily name="Title" fontsize="12" leading="14">
+  <Regular fontface="Helvetica Regular"/>
+  <Bold fontface="Helvetica Bold"/>
+  <Italic fontface="Helvetica Italic"/>
+  <BoldItalic fontface="Helvetica Bold Italic"/>
+</DefineFontfamily>
+]]></listing>
+      <para>This font family can now be accessed like this:</para>
+      <listing><![CDATA[<Textblock width="14" fontface="Title">
+  <Paragraph>
+    <Value>...<Value>
+  </Paragraph>
+</Textblock>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<DefiniereSchriftfamilie name="Helvetica" schriftgröße="12" zeilenabstand="14">
   <Normal schriftart="Helvetica Normal"/>
@@ -1279,13 +1351,12 @@
         <para>Die Dicke der Linie unter dem Text</para>
       </description>
     </attribute>
-    <!-- todo -->
     <attribute name="margin-bottom" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Distance between the bottom rule and the text of the next paragraph.</para>
       </description>
       <description xml:lang="de">
-        <para></para>
+        <para>Abstand zwischen der Linie unten und dem nachfolgenden Absatz.</para>
       </description>
     </attribute>
     <attribute name="break-below" type="yesno" optional="yes">
@@ -1298,18 +1369,18 @@
     </attribute>
     <attribute name="padding-top" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Distance between the top of the text and the top rule.</para>
       </description>
       <description xml:lang="de">
-        <para></para>
+        <para>Abstand zwischen der Oberkante des Texts und der Linie oben.</para>
       </description>
     </attribute>
     <attribute name="margin-top" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Distance between the top rule and the text of the previous paragraph.</para>
       </description>
       <description xml:lang="de">
-        <para></para>
+        <para>Abstand zwischen der Linie oben und dem vorhergehenden Text.</para>
       </description>
     </attribute>
     <remark xml:lang="en">
@@ -1318,12 +1389,26 @@
     <remark xml:lang="de">
       <para>Die Textformate <tt>text</tt>, <tt>zentriert</tt>, <tt>links</tt> und <tt>rechts</tt> sind vordefiniert. Sie stehen für blocksatz, zentriert, linksbündigen und rechtbündigen Text.</para>
     </remark>
+    <example xml:lang="en">
+      <listing><![CDATA[<DefineTextformat name="text with indentation" alignment="justified" indentation="1cm"/>
+
+<Record element="...">
+  <PlaceObject>
+    <Textblock width="10" textformat="text with indentation">
+    <Paragraph>
+      <Value>Text ...</Value>
+    </Paragraph>
+  </Textblock>
+  </PlaceObject>
+</Record>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Layout>
   <DefiniereTextformat name="Text mit Einrückung" ausrichtung="blocksatz" einrückung="1cm" />
   ...
   <Datensatz element="...">
-    <Textblock breite="10" spalte="1" textformat="Text mit Einrückung">
+    <Textblock breite="10" textformat="Text mit Einrückung">
       <Absatz>
         <Wert>Text ...</Wert>
       </Absatz>
@@ -1338,7 +1423,7 @@
   </command>
   <command name="Element">
     <description xml:lang="en">
-      <para></para>
+      <para>Create a data structure that can be used to save on the harddrive between consecutive runs (with <cmd name="SaveDataset"/>).</para>
     </description>
     <description xml:lang="de">
       <para>Erzeugt eine Datenstruktur, die mithilfe von <cmd name="SaveDataset" /> auf Festplatte gespeichert werden kann.</para>
@@ -1356,32 +1441,61 @@
     </childelements>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>Name of the element that gets created.</para>
       </description>
       <description xml:lang="de">
-        <para>Name des Elements, das erzeugt wird</para>
+        <para>Name des Elements, das erzeugt wird.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<SetVariable variable="articles">
+  <Element name="articlelist">
+    <Attribute name="name" select=" @name "/>
+    <Attribute name="page" select="sd:current-page()"/>
+  </Element>
+</SetVariable>
+]]></listing>
+    </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Element name="Planetenverzeichnis">
+      <listing><![CDATA[<Element name="artikelliste">
   <Attribut name="name" auswahl=" @name "/>
   <Attribut name="seite" auswahl=" sd:aktuelle-seite()"/>
 </Element>]]></listing>
     </example>
     <seealso>
-      <cmd name="Attribute" />
-      <cmd name="LoadDataset" />
+      <cmd name="Attribute" />,
+      <cmd name="LoadDataset" />,
       <cmd name="SaveDataset" />
     </seealso>
   </command>
   <command name="EmptyLine">
     <description xml:lang="en">
-      <para></para>
+      <para>Create an empty row an set the cursor to the next row.</para>
     </description>
     <description xml:lang="de">
       <para>Erzeugt eine leere (Raster-)Zeile. Ausgehend von der aktuellen Zeile wird die nächste freie Zeile gesucht. Das nächste Objekt wird in der nächsten Zeile ausgegeben.</para>
     </description>
     <childelements />
+    <example xml:lang="en">
+      <listing><![CDATA[<ObjektAusgeben>
+  <Textblock breite="5">
+    <Absatz>
+      <Wert>Hallo</Wert>
+    </Absatz>
+  </Textblock>
+</ObjektAusgeben>
+
+<Leerzeile/>
+
+<ObjektAusgeben>
+  <Textblock breite="5">
+    <Absatz>
+      <Wert>Welt</Wert>
+    </Absatz>
+  </Textblock>
+</ObjektAusgeben>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben spalte="1">
   <Bild breite="5" datei="cow.pdf"/>
@@ -1397,7 +1511,7 @@
   </command>
   <command name="Fontface">
     <description xml:lang="en">
-      <para></para>
+      <para>Switch to another font family.</para>
     </description>
     <description xml:lang="de">
       <para>Schaltet vorübergehend auf eine andere Schriftfamilie um.</para>
@@ -1407,12 +1521,26 @@
     </childelements>
     <attribute name="fontfamily" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>The name of the font family to switch to.</para>
       </description>
       <description xml:lang="de">
         <para>Schaltet auf die angegebene Schriftfamilie um.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="...">
+  <PlaceObject column="1">
+    <Textblock width="20">
+      <Paragraph fontface="large">
+        <Value>large</Value>
+        <Fontface fontfamily="text">
+          <Value>regular</Value><B><Value>bold</Value></B>
+        </Fontface>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben spalte="1">
   <Textblock breite="20">
@@ -1544,6 +1672,12 @@
     <remark xml:lang="de">
       <para>nx und ny haben keinen Sinn in <cmd name="Group"/>.</para>
     </remark>
+    <example xml:lang="en">
+      <listing><![CDATA[<Pagetype name="page wide" test=" $var > 10 ">
+  <Margin left="1cm" right="2cm" top="1cm" bottom="1cm"/>
+  <Grid width="10mm" height="14pt"/>
+</Pagetype>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<SetzeRaster breite="5mm" höhe="14pt" />
 
@@ -1630,13 +1764,16 @@
   </command>
   <command name="Hyphenation">
     <description xml:lang="en">
-      <para></para>
+      <para>Suggest a hyphenation. This hyphenation will be used in the running text. See the example.</para>
     </description>
     <description xml:lang="de">
       <para>Erzeugt einen Trennvorschlag für die automatische Silbentrennung. Die Trennvorschläge werden dann benutzt, wenn die automatische Silbentrennung fehlerhaft trennt. Alle Trennstellen müssen
         mit eine Bindestrich (-) markiert werden (s. Beispiel).</para>
     </description>
-    <childelements />
+    <childelements><text/></childelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<Hyphenation>su-per-cal-ifrag-ilis-tic-ex-pi-ali-do-cious</Hyphenation>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Trennvorschlag>Au-to-bahn</Trennvorschlag>]]></listing>
     </example>
@@ -1672,7 +1809,7 @@
   </command>
   <command name="I">
     <description xml:lang="en">
-      <para></para>
+      <para>Switch to italic text.</para>
     </description>
     <description xml:lang="de">
       <para>Schaltet auf »Kursiv« um.</para>
@@ -1680,8 +1817,17 @@
     <childelements>
       <reference name="Textvalues"/>
     </childelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<PlaceObject>
+  <Textblock>
+    <Paragraph>
+      <I><Value>Italic text</Value></I>
+    </Paragraph>
+  </Textblock>
+</PlaceObject>]]></listing>
+    </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Textblock spalte="3" breite="10">
+      <listing><![CDATA[<Textblock breite="10">
   <Absatz>
     <I><Wert>Kursiver Text</Wert></I>
   </Absatz>
@@ -1691,7 +1837,7 @@
   </command>
   <command name="Include">
     <description xml:lang="en">
-      <para>Includes other layout files.</para>
+      <para>Include other layout files.</para>
     </description>
     <description xml:lang="de">
       <para>Bindet andere Layoutregelwerke ein.</para>
@@ -1709,6 +1855,12 @@
       <cmd name="Pageformat" />
       <cmd name="DefineTextformat" />
     </childelements>
+    <remark xml:lang="en">
+      <para>This command is currently disabled.</para>
+    </remark>
+    <remark xml:lang="de">
+      <para>Dieser Befehl ist derzeit deaktiviert.</para>
+    </remark>
     <example xml:lang="de">
       <para>Die Hauptdatei</para>
       <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/de"
@@ -1733,22 +1885,59 @@
   </command>
   <command name="InsertPages">
     <description xml:lang="en">
-      <para></para>
+      <para>Insert previously saved pages.</para>
     </description>
     <description xml:lang="de">
-      <para></para>
+      <para>Fügt zuvor gespeicherte Seiten ein.</para>
     </description>
-    <childelements></childelements>
+    <childelements/>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>The name of the saved pages.</para>
       </description>
       <description xml:lang="de">
-        <para></para>
+        <para>Der Name der gespeicherten Seiten.</para>
       </description>
     </attribute>
-    <example xml:lang="en"><para></para></example>
-    <seealso></seealso>
+    <remark xml:lang="en">
+      <para>Useful if you require a certain amount of pages and you need to try out how many pages you get by typesetting onto virtual pages.</para>
+    </remark>
+    <remark xml:lang="de">
+      <para>Hilfreich um Seiten erst einmal virtuell zu erzeugen und dann einzufügen, z.B. um eine Höchstzahl an Seiten zu garantieren.</para>
+    </remark>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="data">
+  <SavePages name="foo">
+    <Loop select="100">
+      <PlaceObject>
+        <Textblock>
+          <Paragraph><Value>Hello world</Value></Paragraph>
+        </Textblock>
+      </PlaceObject>
+    </Loop>
+  </SavePages>
+  <Message select="sd:count-saved-pages('foo')"></Message>
+  <InsertPages name="foo"/>
+</Record>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Datensatz element="data">
+  <SeitenSpeichern name="foo">
+    <Schleife auswahl="100">
+      <ObjektAusgeben>
+        <Textblock>
+          <Absatz><Wert>Hallo Welt</Wert></Absatz>
+        </Textblock>
+      </ObjektAusgeben>
+    </Schleife>
+  </SeitenSpeichern>
+  <Nachricht auswahl="sd:anzahl-gespeicherter-seiten('foo')"/>
+  <SeitenEinfügen name="foo"/>
+</Datensatz>
+]]></listing>
+    </example>
+    <seealso><cmd name="SavePages"/></seealso>
   </command>
   <command name="Image">
     <description xml:lang="en">
@@ -1830,13 +2019,12 @@
         <para>Die PDF-Box, die die maximale Größe angibt. Voreinstellung ist »cropbox«.</para>
       </description>
     </attribute>
-    <!-- todo -->
     <attribute name="clip" type="yesno" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>When yes, the image keeps its apsect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</para>
       </description>
       <description xml:lang="de">
-        <para></para>
+        <para>Wenn ja, dann behält das Bild sein Seitenverhältnis wenn Breite und Höhe gegeben ist. Um das Bild einzupassen, wird ein Teil abgeschnitten.</para>
       </description>
     </attribute>
     <attribute name="minwidth" type="numberorlength" optional="yes">
@@ -1857,10 +2045,10 @@
     </attribute>
     <attribute name="dpiwarn" type="number" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Warn if the image gets lower resultion than given.</para>
       </description>
       <description xml:lang="de">
-        <para></para>
+        <para>Warnung ausgeben, wenn das Bild eine geringere Auflösung bekommt als angegeben.</para>
       </description>
     </attribute>
     <remark xml:lang="en">
@@ -1917,7 +2105,7 @@
   </command>
   <command name="Italic">
     <description xml:lang="en">
-      <para></para>
+      <para>The font face to be used when the user switches to italic.</para>
     </description>
     <description xml:lang="de">
       <para>Dient als Festlegung des Schriftschnittes, wenn Formatierung I (Kursiv) angegeben ist.</para>
@@ -1925,12 +2113,26 @@
     <childelements />
     <attribute name="fontface" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>The name of the fontface.</para>
       </description>
       <description xml:lang="de">
         <para>Name der Schriftart, die für eine kursive Schrift benutzt werden soll.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<LoadFontfile name="Helvetica" filename="helvetica-regular.otf"/>
+<LoadFontfile name="Helvetica Bold" filename="helvetica-bold.otf"/>
+<LoadFontfile name="Helvetica Italic" filename="helvetica-italic.otf"/>
+<LoadFontfile name="Helvetica Bold Italic" filename="helvetica-bolditalic.otf"/>
+
+<DefineFontfamily name="text" fontsize="12" leading="14">
+  <Regular fontface="Helvetica"/>
+  <Bold fontface="Helvetica Bold"/>
+  <Italic fontface="Helvetica Italic"/>
+  <BoldItalic fontface="Helvetica Bold Italic"/>
+</DefineFontfamily>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<LadeSchriftdatei name="Helvetica" dateiname="helvetica-regular.otf" />
 ...
@@ -1951,7 +2153,9 @@
   </command>
   <command name="LoadDataset">
     <description xml:lang="en">
-      <para></para>
+      <para>Load an XML file previously written by <cmd name="SaveDataset"/>. The regular data processing is interrupted and the contents of the data file is taken as a data source.
+        If the file does not exist, the call to <cmd name="LoadDataset"/> is ignored.
+      </para>
     </description>
     <description xml:lang="de">
       <para>Lädt eine Datensatzdatei, die in einem vorherigen Durchlauf des Publishers erzeugt wurde. Die »normale« Verarbeitung des Layoutregelwerks wird unterbrochen und mit dem Inhalt der
@@ -1961,12 +2165,20 @@
     <childelements />
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>Name of the data file. Example: toc</para>
       </description>
       <description xml:lang="de">
         <para>Name der Dateisatzdatei. Beispiel: toc</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="articles">
+  <LoadDataset name="toc"/>
+  <NewPage/>
+  <ProcessNode select="article"/>
+</Record>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Datensatz element="planeten">
   <Zuweisung variable="spalte" auswahl="2" />
@@ -1977,13 +2189,13 @@
 </Datensatz>]]></listing>
     </example>
     <seealso>
-      <cmd name="Element" />
-      <cmd name="Attribute" />
-      <cmd name="SaveDataset" /> Wie werden automatische Verzeichnisse erstellt? </seealso>
+      <cmd name="Element" />,
+      <cmd name="Attribute" />,
+      <cmd name="SaveDataset" />, <ref name="directories"/></seealso>
   </command>
   <command name="LoadFontfile">
     <description xml:lang="en">
-      <para></para>
+      <para>Load a font file (.otf, .ttf, .pfb) and associate it with an internal name.</para>
     </description>
     <description xml:lang="de">
       <para>Das Element LadeSchriftdatei weist einer physikalischen Schriftdatei einem internen Namen zu.</para>
@@ -1991,15 +2203,15 @@
     <childelements />
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>The internal name of the font file. To be used within <cmd name="DefineFontfamily"/>.</para>
       </description>
       <description xml:lang="de">
-        <para>Der interne Name, unter dem die Schriftart im Element DefiniereSchriftfamilie angesprochen wird.</para>
+        <para>Der interne Name, unter dem die Schriftart im Element <cmd name="DefineFontfamily"/> angesprochen wird.</para>
       </description>
     </attribute>
     <attribute name="filename" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>The name (with extension) of the font file.</para>
       </description>
       <description xml:lang="de">
         <para>Der Dateiname mit Endung, ohne Pfad.</para>
@@ -2007,15 +2219,15 @@
     </attribute>
     <attribute name="space" type="zerotohundred" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size.</para>
       </description>
       <description xml:lang="de">
-        <para>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25.</para>
+        <para>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße.</para>
       </description>
     </attribute>
     <attribute name="marginprotrusion" type="zerotohundred" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The amount of protrusion glyphs like -, . and - stick into the right margin. Highly font dependent. Defaults to 0.</para>
       </description>
       <description xml:lang="de">
         <para>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark Schriftartabhängig.</para>
@@ -2044,10 +2256,10 @@
 <LadeSchriftdatei name="Helvetica Fett Kursiv" dateiname="texgyreheros-bolditalic.otf" />]]></listing>
     </example>
     <info xml:lang="en">
-      <para>The fonts are taken from the local search path. On Windows the path <tt>%WINDIR%\Fonts</tt> (usually <tt>C:\Windows\Fonts</tt>) and on Mac OS X the paths <tt>/Library/Fonts</tt> and <tt>/System/Library/Fonts</tt> are used as fallbacks for fonts. This can be configured with the setting <tt>fontpath</tt>.</para>
+      <para>The fonts are optionally taken from the local search path. On Windows the path <tt>%WINDIR%\Fonts</tt> (usually <tt>C:\Windows\Fonts</tt>) and on Mac OS X the paths <tt>/Library/Fonts</tt> and <tt>/System/Library/Fonts</tt> can be used as fallbacks for fonts. This can be configured with the setting <tt>fontpath</tt>.</para>
     </info>
     <info xml:lang="de">
-      <para>Die Schriftdateien werden aus dem lokalen Suchpfad geladen. Unter Windows wird der Pfad <tt>%WINDIR%\Fonts</tt> (normalerweise <tt>C:\Windows\Fonts</tt>) und auf Mac OS X die Pfade <tt>/Library/Fonts</tt> und <tt>/System/Library/Fonts</tt> dienen als Ergänzung des lokalen Suchpfads. Das kann mit der Option <tt>fontpath</tt> in der Konfigurationsdatei gesetzt werden.</para>
+      <para>Die Schriftdateien werden aus dem lokalen Suchpfad geladen. Unter Windows wird der Pfad <tt>%WINDIR%\Fonts</tt> (normalerweise <tt>C:\Windows\Fonts</tt>) und auf Mac OS X die Pfade <tt>/Library/Fonts</tt> und <tt>/System/Library/Fonts</tt> können als Ergänzung des lokalen Suchpfads dienen. Das kann mit der Option <tt>fontpath</tt> in der Konfigurationsdatei gesetzt werden.</para>
     </info>
     <seealso>
       <cmd name="DefineFontfamily" />, <ref name="fonts" /></seealso>
@@ -2087,7 +2299,6 @@
       <listing><![CDATA[<?xml version="1.0"?>
 <Layout
   xmlns:sd="urn:speedata:2009/publisher/functions/en"
-  xmlns:xi="http://www.w3.org/2001/XInclude"
   xmlns="urn:speedata.de:2009/publisher/en">
   <Options
     show-grid="yes"
@@ -2318,15 +2529,6 @@
         <para>Der Name des Attributs das den Indexeintrag enthält (der sortiert werden soll).</para>
       </description>
     </attribute>
-    <!-- todo -->
-    <attribute name="pattern" type="text" optional="no">
-      <description xml:lang="en">
-        <para></para>
-      </description>
-      <description xml:lang="de">
-        <para></para>
-      </description>
-    </attribute>
     <example xml:lang="en">
       <para>Index generation works in two steps: First, collect all the entries in a <cmd name="Element"/> structure, then, while saving the generated structure, sort the keys and group them with this command.</para>
       <listing><![CDATA[  <Record element="data">
@@ -2438,7 +2640,7 @@
   </command>
   <command name="Margin">
     <description xml:lang="en">
-      <para></para>
+      <para>Set the margin of the document or master page.</para>
     </description>
     <description xml:lang="de">
       <para>Enthält die Angaben über den Seitenrand des zu druckbaren Bereich.</para>
@@ -2446,7 +2648,7 @@
     <childelements />
     <attribute name="left" type="length" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>Left margin</para>
       </description>
       <description xml:lang="de">
         <para>Rand links</para>
@@ -2454,7 +2656,7 @@
     </attribute>
     <attribute name="right" type="length" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>Right margin</para>
       </description>
       <description xml:lang="de">
         <para>Rand rechts</para>
@@ -2462,7 +2664,7 @@
     </attribute>
     <attribute name="top" type="length" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>Top margin</para>
       </description>
       <description xml:lang="de">
         <para>Rand oben</para>
@@ -2470,12 +2672,15 @@
     </attribute>
     <attribute name="bottom" type="length" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>Bottom margin</para>
       </description>
       <description xml:lang="de">
         <para>Rand unten</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Margin left="2cm" right="1cm" top="1cm" bottom="1cm"/>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Rand links="2cm" rechts="1cm" oben="1cm" unten="1cm" />]]></listing>
     </example>
@@ -2581,7 +2786,7 @@
   </command>
   <command name="Message">
     <description xml:lang="en">
-      <para></para>
+      <para>Writes a message onto the console and to the protocol file.</para>
     </description>
     <description xml:lang="de">
       <para>Gibt eine Textmeldung auf der Konsole und in der Protokolldatei aus.</para>
@@ -2591,21 +2796,23 @@
     </childelements>
     <attribute name="select" type="xpath" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Contents of the message. You can alternatively specify the message by the child elements <cmd name="Value"/>.</para>
       </description>
       <description xml:lang="de">
         <para>Inhalt der Nachricht. Alternativ dazu: Kindelemente Wert innerhalb des Elements »<cmd name="Message" />«</para>
       </description>
     </attribute>
-    <!-- todo -->
     <attribute name="error" type="yesno" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Generate an error besides writing the message.</para>
       </description>
       <description xml:lang="de">
-        <para></para>
+        <para>Zusätzlich einen Fehler melden.</para>
       </description>
     </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<Message select="concat('Price: ',@price)" error="no"/>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Datensatz element="Datensatz">
   <Nachricht>
@@ -2614,7 +2821,7 @@
   </Nachricht>
 </Datensatz>]]></listing>
     </example>
-    <seealso> </seealso>
+    <seealso/>
   </command>
   <command name="NewPage">
     <description xml:lang="en">
@@ -2664,8 +2871,6 @@
         </description>
       </choice>
     </attribute>
-
-
     <example xml:lang="en">
       <listing><![CDATA[<Record element="data">
   <PlaceObject>
@@ -2706,20 +2911,23 @@
   </command>
   <command name="NextFrame">
     <description xml:lang="en">
-      <para></para>
+      <para>Switch to the next free frame of a positioning area.</para>
     </description>
     <description xml:lang="de">
-      <para>Schaltet auf den nächsten freien Rahmen eines Platzierungsbereichs um</para>
+      <para>Schaltet auf den nächsten freien Rahmen eines Platzierungsbereichs um.</para>
     </description>
     <childelements />
     <attribute name="area" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>Name of the positioning area.</para>
       </description>
       <description xml:lang="de">
         <para>Name des Platzierungsbereich, in dem der nächste Rahmen gesucht werden soll.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<NextFrame area="articlearea"/>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Datensatz element="artikel">
   <NächsterRahmen bereich="Titel" />
@@ -2732,7 +2940,7 @@
   </command>
   <command name="NextRow">
     <description xml:lang="en">
-      <para></para>
+      <para>The virtual cursor is set on the next free row.</para>
     </description>
     <description xml:lang="de">
       <para>Der virtuelle Cursor wird auf die nächste freie Zeile gesetzt.</para>
@@ -2740,7 +2948,7 @@
     <childelements />
     <attribute name="area" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Name of the area of the virtual cursor.</para>
       </description>
       <description xml:lang="de">
         <para>Name des Bereichs, in dem der Cursor bewegt wird.</para>
@@ -2748,7 +2956,7 @@
     </attribute>
     <attribute name="row" type="number" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The absolute number of the row for the cursor. If no row is given, the system tries to find a completely free row (perhaps on an empty page).</para>
       </description>
       <description xml:lang="de">
         <para>Zeile für den virtuellen Cursor. Wird keine Zeile angegeben, dann sucht sich der Publisher selbständig eine freie Zeile (ggf. auf einer neuen Seite oder in einem neuen
@@ -2757,12 +2965,21 @@
     </attribute>
     <attribute name="rows" type="number" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The number of rows to clear. Defaults to 1.</para>
       </description>
       <description xml:lang="de">
         <para>Anzahl der Zeilen, die frei gehalten werden sollen. Vorgabe: 1.</para>
       </description>
     </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<Record element="image">
+  <NextRow row="5"/>
+  <PlaceObject column="{column}">
+    <Image width="10" file="{.}"/>
+  </PlaceObject>
+</Record>]]></listing>
+      <para>This places the image on row 5.</para>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Datensatz element="bild">
   <NeueZeile zeile="5" />
@@ -2834,7 +3051,7 @@
     </attribute>
     <attribute name="trim" type="length" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The amount of bleed. Defaults to 0mm.</para>
       </description>
       <description xml:lang="de">
         <para>Die Größe des Beschnitts (bleed). Voreinstellung ist 0mm.</para>
@@ -3002,7 +3219,7 @@
     </attribute>
     <attribute name="trace" type="yesno" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Draw rectangles around objects for debugging purposes.</para>
       </description>
       <description xml:lang="de">
         <para>Erzeugt zusätzliche Ausgaben in der Protokolldatei und optische Hilfen im PDF.</para>
@@ -3010,7 +3227,7 @@
     </attribute>
     <attribute name="startpage" type="number" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Set the number of the first page.</para>
       </description>
       <description xml:lang="de">
         <para>Gibt den Nummer der ersten Seite an.</para>
@@ -3018,7 +3235,7 @@
     </attribute>
     <attribute name="show-grid" type="yesno" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Draw the grid on the page.</para>
       </description>
       <description xml:lang="de">
         <para>Wenn ja, dann zeichnet der Publisher das zugrunde liegende Raster auf die Seiten.</para>
@@ -3026,7 +3243,7 @@
     </attribute>
     <attribute name="show-gridallocation" type="yesno" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Draw allocated cells with yellow and conflicts with red markers.</para>
       </description>
       <description xml:lang="de">
         <para>Wenn ja, dann markiert der Publisher die belegten Rasterzellen mit einer Hintergrundfarbe.</para>
@@ -3034,7 +3251,7 @@
     </attribute>
     <attribute name="show-hyphenation" type="yesno" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Draw little marks to show all hyphenation points.</para>
       </description>
       <description xml:lang="de">
         <para>Bei ja markiert der speedata Publisher die möglichen Trennstellen für die Silbentrennung.</para>
@@ -3056,6 +3273,13 @@
         <para>Zeilenenden in Daten ignorieren.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Options
+    show-gridallocation="no"
+    show-grid="yes"
+    cutmarks="yes"
+    trim="3mm"/>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Optionen
    zeige_rasterbelegung="nein"
@@ -3069,7 +3293,7 @@
   </command>
   <command name="Otherwise">
     <description xml:lang="en">
-      <para></para>
+      <para>Default branch of a <cmd name="Switch"/> command.</para>
     </description>
     <description xml:lang="de">
       <para>Zweig, der bei <cmd name="Switch" /> ausgeführt wird, wenn kein <cmd name="Case" /> wahr ist.</para>
@@ -3090,26 +3314,63 @@
     </seealso>
   </command>
   <command name="Output">
-    <!-- todo -->
     <description xml:lang="en">
-      <para></para>
+      <para>Still exerimental. This command is similar to <cmd name="PlaceObject"/> and is currently limited to output text which can be broken across positioning frames.</para>
     </description>
     <description xml:lang="de">
-      <para></para>
+      <para>Experimentell. Dieser Befehl ist ähnlich zu <cmd name="PlaceObject"/> und dient derzeit nur dazu, Text auszugeben, der auf mehrere Seite umbrachen werden kann.</para>
     </description>
     <childelements>
       <cmd name="Text"/>
     </childelements>
     <attribute name="area" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The name of the positioning frame for the text.</para>
       </description>
       <description xml:lang="de">
-        <para></para>
+        <para>Der Name des Platzierungsbereichs für den Text.</para>
       </description>
     </attribute>
     <example xml:lang="en">
-      <para></para>
+      <listing><![CDATA[<Pagetype name="page" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+    <PositioningArea name="text">
+      <PositioningFrame width="9" height="4" row="1" column="1"/>
+      <PositioningFrame width="9" height="4" row="1" column="11"/>
+      <PositioningFrame width="9" height="4" row="6" column="1"/>
+      <PositioningFrame width="9" height="4" row="6" column="11"/>
+    </PositioningArea>
+  </Pagetype>
+  <Record element="data">
+    <Output area="text">
+      <Text>
+        <Paragraph fontface="text">
+          <Value>A wonderful serenity has taken possession of my entire soul,...</Value>
+        </Paragraph>
+      </Text>
+    </Output>
+  </Record>]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[  <Seitentyp name="seite" bedingung="true()">
+    <Rand links="1cm" rechts="1cm" oben="1cm" unten="1cm"/>
+    <Platzierungsbereich name="text">
+      <Platzierungsrahmen breite="9" höhe="4" zeile="1" spalte="1"/>
+      <Platzierungsrahmen breite="9" höhe="4" zeile="1" spalte="11"/>
+      <Platzierungsrahmen breite="9" höhe="4" zeile="6" spalte="1"/>
+      <Platzierungsrahmen breite="9" höhe="4" zeile="6" spalte="11"/>
+    </Platzierungsbereich>
+  </Seitentyp>
+  <Datensatz element="data">
+    <Ausgabe bereich="text">
+      <Text>
+        <Absatz schriftart="text">
+          <Wert>Kaum standen am folgenden...</Wert>
+        </Absatz>
+      </Text>
+    </Ausgabe>
+  </Datensatz>
+]]></listing>
     </example>
     <seealso></seealso>
   </command>
@@ -3178,8 +3439,15 @@
           <para>Französische Trennmuster</para>
         </description>
       </choice>
-
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Textblock width="27">
+  <Paragraph fontface="Title">
+    <Value>Hallo Welt</Value>
+  </Paragraph>
+</Textblock>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Textblock breite="27">
   <Absatz schriftart="Überschrift">
@@ -3223,14 +3491,17 @@
         <para>Höhe des Ausgabemediums.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Pageformat width="150mm" height="150mm"/>]]></listing>
+    </example>
     <example xml:lang="de">
-      <listing><![CDATA[ <Seitenformat breite="150mm" höhe="150mm" />]]></listing>
+      <listing><![CDATA[<Seitenformat breite="150mm" höhe="150mm" />]]></listing>
     </example>
     <seealso />
   </command>
   <command name="Pagetype">
     <description xml:lang="en">
-      <para></para>
+      <para>Define a master page. A master page is chosen depending on the criterium given with the attribute »test«.</para>
     </description>
     <description xml:lang="de">
       <para>Definiert eine Seitenvorlage. Anhand der Kriterien, die im Attribut bedingung angegeben werden, wählt das System eine Seitenvorlage aus.</para>
@@ -3254,7 +3525,7 @@
     </childelements>
     <attribute name="test" type="xpath" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>If this xpath expression evaluates to true, this page is taken as a master page.</para>
       </description>
       <description xml:lang="de">
         <para>Wenn der XPath-Ausdruck »wahr« ergibt, dann wird diese Seite als Vorlage genommen.</para>
@@ -3262,18 +3533,44 @@
     </attribute>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>Name of the master page. It is for informational purpose and as a selection for <cmd name="NewPage"/>.</para>
       </description>
       <description xml:lang="de">
-        <para>Name der Seitenvorlage. Bisher wird der Name nur für interne Zwecke benötigt.</para>
+        <para>Name der Seitenvorlage. Der Name ist zu Informationszwecken und zur Auswahl bei <cmd name="NewPage"/>.</para>
       </description>
     </attribute>
+    <remark xml:lang="en">
+      <para>The contents of the element at <cmd name="AtPageCreation"/> is executed, as soon as something will be placed on the page. The commands inside <cmd name="AtPageShipout"/> are executed when switching to a new page.</para>
+      <para>Whe creating a new page, all page tyes are tried in reversed order. That means that the later defined master pages have a higher priority. This is important if more than one test in a pagetype defintion evaluates to true.</para>
+    </remark>
     <remark xml:lang="de">
-      <para>Die Inhalte des Elements BeiSeitenErzeugung werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird, bei BeiSeitenAusgabe werden die Inhalte ausgeführt, sobald
+      <para>Die Inhalte des Elements <cmd name="AtPageCreation"/> werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird, bei <cmd name="AtPageShipout"/> werden die Inhalte ausgeführt, sobald
         beispielsweise NeueSeite aufgerufen wird.</para>
       <para>Wenn eine neue Seite erzeugt wird, werden die Seitentypen in umgekehrter Reihenfolge geprüft. Das bedeutet, dass die allgemeineren Seitentypen zuerst definiert werden müssen, später die
         speziellen. Das ist nur dann wichtig, wenn mehrere Bedingungen »wahr« ergeben würden. </para>
     </remark>
+    <example xml:lang="en">
+      <listing><![CDATA[<Pagetype name="right page" test=" sd:odd( sd:current-page() ) "/>]]></listing>
+      <listing><![CDATA[<Pagetype name="left page" test=" sd:even( sd:current-page() ) "/>]]></listing>
+      <listing><![CDATA[<Pagetype name="main part right" test=" sd:odd( sd:current-page() ) and $chapter='main' "/>]]></listing>
+      <listing><![CDATA[<Pagetype name="right page" test="sd:odd( sd:current-page() )">
+  <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+  <PositioningArea name="frame1">
+    <PositioningFrame width="12" height="30" column="2" row="2"/>
+    <PositioningFrame width="12" height="30" column="16" row="2"/>
+  </PositioningArea>
+  <AtPageCreation>
+    <PlaceObject column="1">
+      <!-- header -->
+    </PlaceObject>
+  </AtPageCreation>
+  <AtPageShipout>
+    <PlaceObject column="1">
+      <!-- footer -->
+    </PlaceObject>
+  </AtPageShipout>
+</Pagetype>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Seitentyp name="rechte Seite" bedingung=" sd:ungerade( sd:aktuelle-seite() ) ">]]></listing>
       <listing><![CDATA[<Seitentyp name="linke Seite" bedingung=" sd:gerade( sd:aktuelle-seite() ) ">]]></listing>
@@ -3296,7 +3593,7 @@
   </Platzierungsbereich>
 </Seitentyp>]]></listing>
     </example>
-    <seealso> XPath-Expression, <cmd name="AtPageCreation" />,  <cmd name="AtPageShipout" />,   <cmd name="PositioningArea" />,  <cmd name="NewPage"/>
+    <seealso><ref name="xpath"/>, <cmd name="AtPageCreation" />,  <cmd name="AtPageShipout" />,   <cmd name="PositioningArea" />,  <cmd name="NewPage"/>
     </seealso>
   </command>
   <command name="PlaceObject">
@@ -3508,6 +3805,21 @@
         </description>
       </choice>
     </attribute>
+    <example xml:lang="en">
+      <para>Positioning inside the grid:</para>
+      <listing><![CDATA[<Record element="image">
+  <PlaceObject column="12" frame="solid" framecolor="red">
+    <Image width="10" file="_samplea.pdf"/>
+  </PlaceObject>
+</Record>]]></listing>
+      <para>Absolute positioning (from top left edge):</para>
+      <listing><![CDATA[<Record element="image">
+  <PlaceObject column="1cm" row="4cm" frame="solid" framecolor="red">
+    <Image width="10" file="_samplea.pdf"/>
+  </PlaceObject>
+</Record>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Datensatz element="bild">
   <ObjektAusgeben spalte="12" rahmen="durchgezogen" rahmenfarbe="Rot">
@@ -3521,6 +3833,9 @@
   </ObjektAusgeben>
 </Datensatz>]]></listing>
     </example>
+    <info xml:lang="en">
+      <para>The objects can be placed in a grid (when the value in the attributes row and column are numbers) or they can be placed with absolute positions where the origin is at the top and left border of the page.</para>
+    </info>
     <info xml:lang="de">
       <para>Die Ausgabe kann entweder im Raster erfolgen (Angabe bei zeile und spalte ist eine Zahl) oder als absolute Positionierung (die Angaben bei zeile und spalte müssen beide vorhanden sein und
         eine Maßgangabe sein).</para>
@@ -3537,7 +3852,7 @@
   </command>
   <command name="PositioningArea">
     <description xml:lang="en">
-      <para></para>
+      <para>Describes an area which contains one or more frames. Elements can be placed within these frames.</para>
     </description>
     <description xml:lang="de">
       <para>Beschreibt einen Platzierungsbereich, der mehrere Platzierungsrahmen beinhalten kann. In diesen Rahmen können Elemente platziert werden</para>
@@ -3547,12 +3862,21 @@
     </childelements>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>Name of the area.</para>
       </description>
       <description xml:lang="de">
         <para>Name des Platzierungsbereichs</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Pagetype name="right page" test="sd:odd( sd:current-page() )">
+  <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+  <PositioningArea name="frame1">
+    <PositioningFrame width="12" height="30" column="2" row="2"/>
+    <PositioningFrame width="12" height="30" column="16" row="2"/>
+  </PositioningArea>
+</Pagetype>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Platzierungsbereich name="rahmen1">
   <Platzierungsrahmen breite="12" höhe="30" spalte="2" zeile="2"/>
@@ -3566,7 +3890,7 @@
   </command>
   <command name="PositioningFrame">
     <description xml:lang="en">
-      <para></para>
+      <para>Defines a rectangular area for objects.</para>
     </description>
     <description xml:lang="de">
       <para>Beschreibt einen rechteckigen Bereich, in dem Elemente platziert werden können. Inhalte in diesen Bereichen werden bei Platzmangel automatisch in den nächsten Rahmen deselben Bereichs
@@ -3575,7 +3899,7 @@
     <childelements />
     <attribute name="width" type="number" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>The width of the frame in grid cells.</para>
       </description>
       <description xml:lang="de">
         <para>Breite des Rahmens in Rasterkästen</para>
@@ -3583,7 +3907,7 @@
     </attribute>
     <attribute name="height" type="number" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>The height of the frame in grid cells.</para>
       </description>
       <description xml:lang="de">
         <para>Höhe des Rahmens in Rasterkästen</para>
@@ -3591,20 +3915,29 @@
     </attribute>
     <attribute name="row" type="number" optional="no">
       <description xml:lang="en">
-        <para></para>
-      </description>
-      <description xml:lang="de">
-        <para>Erste Spalte des Rahmens</para>
-      </description>
-    </attribute>
-    <attribute name="column" type="number" optional="no">
-      <description xml:lang="en">
-        <para></para>
+        <para>The row number relative to the grid.</para>
       </description>
       <description xml:lang="de">
         <para>Erste Zeile des Rahmens</para>
       </description>
     </attribute>
+    <attribute name="column" type="number" optional="no">
+      <description xml:lang="en">
+        <para>First column of the frame, in grid cells.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Erste Spalte des Rahmens</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Pagetype name="right page" test="sd:odd( sd:current-page() )">
+  <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+  <PositioningArea name="frame1">
+    <PositioningFrame width="12" height="30" column="2" row="2"/>
+    <PositioningFrame width="12" height="30" column="16" row="2"/>
+  </PositioningArea>
+</Pagetype>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Platzierungsbereich name="rahmen1">
   <Platzierungsrahmen breite="12" höhe="30" spalte="2" zeile="2"/>
@@ -3649,7 +3982,9 @@
   </command>
   <command name="Record">
     <description xml:lang="en">
-      <para></para>
+      <para>Contains the instructions when the publisher processes the element in the data file with the given name.
+        The record matching the root element will be called by the software automatically, all further data handling must be done
+      by the user.</para>
     </description>
     <description xml:lang="de">
       <para>Enthält die Anweisungen, die bei dem angegebenen Datensatz ausgeführt werden sollen. Der oberste Datensatz (d.h. direkt unterhalb des Wurzelelements) wird vom Publisher aufgerufen, alle
@@ -3677,17 +4012,29 @@
         <para>Name des Modus der mit dem in <cmd name="ProcessNode"/> übereinstimmt.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="url" mode="output">
+  <PlaceObject>
+    <Textblock width="27" textformat="text">
+      <Paragraph>
+        <A href="http://www.speedata.de"><Value>Webseite of speedata</Value></A>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Datensatz element="url" modus="ausgabe">
-  <Textblock breite="27" spalte="2" textformat="text">
-    <Absatz>
-      <Wert>URL: </Wert>
-      <URL>
-        <Wert auswahl="." />
-      </URL>
-    </Absatz>
-  </Textblock>
-</Datensatz>]]></listing>
+  <ObjektAusgeben>
+    <Textblock breite="27" textformat="text">
+      <Absatz>
+        <A href="http://www.speedata.de"><Wert>Webseite von speedata</Wert></A>
+      </Absatz>
+    </Textblock>
+  </ObjektAusgeben>
+</Datensatz>
+]]></listing>
     </example>
     <seealso>
       <cmd name="ProcessNode" />
@@ -3695,20 +4042,36 @@
   </command>
   <command name="Regular">
     <description xml:lang="en">
-      <para></para>
+      <para>The (symbolic) name of the fontface for regular text, i.e. without bold or italic.</para>
     </description>
     <description xml:lang="de">
       <para>Dient als Festlegung des Schriftschnittes, wenn keine Formatierung angegeben ist.</para>
     </description>
     <childelements />
-    <attribute name="fontface" type="text" optional="yes">
+    <attribute name="fontface" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>The symbolic name fo the font file.</para>
       </description>
       <description xml:lang="de">
         <para>Name der Schriftdatei, die geladen werden soll.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<DefineFontfamily name="Title" fontsize="12" leading="14">
+  <Regular fontface="Helvetica Regular"/>
+  <Bold fontface="Helvetica Bold"/>
+  <Italic fontface="Helvetica Italic"/>
+  <BoldItalic fontface="Helvetica Bold Italic"/>
+</DefineFontfamily>
+]]></listing>
+      <para>This font family can now be accessed like this:</para>
+      <listing><![CDATA[<Textblock width="14" fontface="Title">
+  <Paragraph>
+    <Value>...<Value>
+  </Paragraph>
+</Textblock>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<LadeSchriftdatei name="Helvetica" dateiname="helvetica-regular.otf" />
 ...
@@ -3728,7 +4091,7 @@
   </command>
   <command name="Rule">
     <description xml:lang="en">
-      <para></para>
+      <para>Draw a horizontal or vertical rule in the grid.</para>
     </description>
     <description xml:lang="de">
       <para>Zeichnet eine horizontale oder vertikale Linie im Raster.</para>
@@ -3736,7 +4099,7 @@
     <childelements />
     <attribute name="direction" type="horizontalvertical" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>The direction of the rule.</para>
       </description>
       <description xml:lang="de">
         <para>Bestimmt die Ausrichtung der Linie.</para>
@@ -3744,7 +4107,7 @@
     </attribute>
     <attribute name="rulewidth" type="numberorlength" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The rule thicknes given in grid cells or as a length.</para>
       </description>
       <description xml:lang="de">
         <para>Dicke der Linie in Rasterzellen oder als absolute Angabe.</para>
@@ -3752,7 +4115,7 @@
     </attribute>
     <attribute name="length" type="numberorlength" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>The length of the rule in grid cells or as an absolute length.</para>
       </description>
       <description xml:lang="de">
         <para>Länge der Linie in Rasterzellen oder als absolute Angabe.</para>
@@ -3760,14 +4123,26 @@
     </attribute>
     <attribute name="color" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The color of the rule. Defaults to black.</para>
       </description>
       <description xml:lang="de">
         <para>Farbe der Linie. Vorgabe: Schwarz</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject>
+    <Rule direction="horizontal" length="10" rulewidth="3"/>
+  </PlaceObject>
+</Record>]]></listing>
+    </example>
     <example xml:lang="de">
-      <listing><![CDATA[]]></listing>
+      <listing><![CDATA[<Datensatz element="data">
+  <ObjektAusgeben>
+    <Linie richtung="horizontal" länge="10" linienstärke="3"/>
+  </ObjektAusgeben>
+</Datensatz>
+]]></listing>
     </example>
     <seealso>
       <cmd name="PlaceObject" />
@@ -3775,7 +4150,7 @@
   </command>
   <command name="SaveDataset">
     <description xml:lang="en">
-      <para></para>
+      <para>Saves an element/attribute structure to be used in the next publisher run. The contents must have a tree structure.</para>
     </description>
     <description xml:lang="de">
       <para>Speichert eine XML-Datei auf Festplatte. Diese Datei muss als Kindelement hierarchische Struktur, zum Beispiel aus den Befehlen Element und Attribut enthalten, wahlweise zusammengesetzt
@@ -3862,13 +4237,12 @@
       <cmd name="Element" />, <cmd name="Attribute" />, <cmd name="LoadDataset" />, <ref name="directories"/>
     </seealso>
   </command>
-  <!-- todo -->
   <command name="SavePages">
     <description xml:lang="en">
-      <para></para>
+      <para>Everything enclosed in <cmd name="SavePages"/> is saved internally and not placed into the PDF. Useful if the output migth be discarded.</para>
     </description>
     <description xml:lang="de">
-      <para></para>
+      <para>Alle Ausgaben innerhalb von <cmd name="SavePages"/> werden intern gespeichert und nicht ins PDF ausgegeben. Hilfreich wenn die Ausgabe ggf. verworfen werden soll.</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -3879,14 +4253,43 @@
     </childelements>
     <attribute name="name" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>The name of the discarded output. For later retrieval with <cmd name="InsertPages"/>.</para>
       </description>
       <description xml:lang="de">
-        <para></para>
+        <para>Der Name der Ausgabe, die verworfen wird. Kann später mit <cmd name="InsertPages"/> wiedergeholt werden.</para>
       </description>
     </attribute>
     <example xml:lang="en">
-      <para></para>
+      <listing><![CDATA[<Record element="data">
+  <SavePages name="foo">
+    <Loop select="100">
+      <PlaceObject>
+        <Textblock>
+          <Paragraph><Value>Hello world</Value></Paragraph>
+        </Textblock>
+      </PlaceObject>
+    </Loop>
+  </SavePages>
+  <Message select="sd:count-saved-pages('foo')"></Message>
+  <InsertPages name="foo"/>
+</Record>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Datensatz element="data">
+  <SeitenSpeichern name="foo">
+    <Schleife auswahl="100">
+      <ObjektAusgeben>
+        <Textblock>
+          <Absatz><Wert>Hallo Welt</Wert></Absatz>
+        </Textblock>
+      </ObjektAusgeben>
+    </Schleife>
+  </SeitenSpeichern>
+  <Nachricht auswahl="sd:anzahl-gespeicherter-seiten('foo')"/>
+  <SeitenEinfügen name="foo"/>
+</Datensatz>
+]]></listing>
     </example>
     <seealso><cmd name="InsertPages"/></seealso>
   </command>
@@ -3930,14 +4333,17 @@
         <para>Gibt die Anzahl der Rasterzellen in vertikaler Richtung an. Entweder ny oder höhe angeben.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<SetGrid width="4mm" height="14pt"/>]]></listing>
+    </example>
     <example xml:lang="de">
-      <listing><![CDATA[<SetzeRaster breite=“4mm” höhe=“14pt” />]]></listing>
+      <listing><![CDATA[<SetzeRaster breite="4mm" höhe="14pt" />]]></listing>
     </example>
     <seealso><cmd name="Grid" /></seealso>
   </command>
   <command name="SetVariable">
     <description xml:lang="en">
-      <para></para>
+      <para>Associates a value with a variable name. The value can be a simple value or a more complex one consisting of several elements.</para>
     </description>
     <description xml:lang="de">
       <para>Weist einer Variablen einen Wert zu. Der Wert kann aus mehreren Elementen bestehen (siehe zweites Beispiel).</para>
@@ -3965,7 +4371,7 @@
     </childelements>
     <attribute name="variable" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>The name of the variable that holds the contents.</para>
       </description>
       <description xml:lang="de">
         <para>Name der Variablen, der etwas zugewiesen werden soll.</para>
@@ -3973,26 +4379,62 @@
     </attribute>
     <attribute name="select" type="xpath" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The value of the contents.</para>
       </description>
       <description xml:lang="de">
         <para>Inhalt, der der Variablen zugewiesen wird.</para>
       </description>
     </attribute>
+    <remark xml:lang="en"><para>Variables have global scope.</para></remark>
+    <remark xml:lang="de"><para>Variablen haben eine globale Sichtbarkeit.</para></remark>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="product">
+  <SetVariable variable="wd" select="5"/>
+  <PlaceObject column="1">
+    <Textblock width="{ $wd }">
+      <Paragraph>
+        <Value select="$articlenumber"/>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>
+]]></listing>
+      <para>The following example shows a more complex scenario: you can collect complex elements in a variable.</para>
+      <listing><![CDATA[<Record element="products">
+  <SetVariable variable="articletext"/>
+  <ProcessNode select="article"/>
+  <PlaceObject column="1">
+    <Textblock width="10">
+      <Value select=" $articletext "/>
+    </Textblock>
+  </PlaceObject>
+</Record>
+
+<Record element="article">
+  <SetVariable variable="articletext">
+    <!-- the previous contents is added -->
+    <Value select="$articletext"/>
+    <Paragraph>
+      <Value select=" @description "/>
+    </Paragraph>
+  </SetVariable>
+</Record>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Datensatz element="produkt">
-  <Zuweisung variable="Textbreite" auswahl=" 5 "/>
+  <Zuweisung variable="Textbreite" auswahl="5"/>
   <ObjektAusgeben spalte="1">
     <Textblock breite="{ $Textbreite }">
       <Absatz>
-        <Variable name="Artikelnummer"/>
+        <Wert auswahl="$Artikelnummer"/>
       </Absatz>
     </Textblock>
   </ObjektAusgeben>
 </Datensatz>]]></listing>
       <para>Folgendes Beispiel zeigt, wie mehrere Absätze in einer Variablen gespeichert werden, um sie anschließend in einem Textblock auszugeben.</para>
       <listing><![CDATA[<Datensatz element="produkte">
-  <Zuweisung variable="Artikeltext" auswahl="''"/>
+  <Zuweisung variable="Artikeltext"/>
   <BearbeiteKnoten auswahl="artikel"/>
   <ObjektAusgeben spalte="1">
     <Textblock breite="10">
@@ -4003,6 +4445,7 @@
 
 <Datensatz element="artikel">
   <Zuweisung variable="Artikeltext">
+    <!-- Der vorherige Inhalt wird hinzugefügt -->
     <Wert auswahl="$Artikeltext"/>
     <Absatz>
       <Wert auswahl=" @beschreibung " />
@@ -4016,18 +4459,47 @@
   </command>
   <command name="Sequence">
     <description xml:lang="en">
-      <para></para>
+      <para>Return a selection of data. Probably not useful anymore as a separate command. Don't use this anymore!</para>
     </description>
     <description xml:lang="de">
-      <para></para>
+      <para>Gibt eine Datenselektion zurück. Wahrscheinlich nicht mehr als eigener Befehl vonnöten. Nicht mehr benutzen!</para>
     </description>
-    <childelements></childelements>
-    <example xml:lang="de"><para>foo</para></example>
+    <childelements/>
+    <attribute name="select" optional="no" type="xpath">
+      <description xml:lang="en">
+        <para>The data to be selected.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Daten, die ausgewählt werden.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="data">
+  <SetVariable variable="saveme">
+    <Sequence select="*" />
+  </SetVariable>
+  <PlaceObject>
+    <Textblock>
+      <ForAll select="$saveme">
+        <Paragraph><Value select="string(.)"></Value></Paragraph>
+      </ForAll>
+    </Textblock>
+  </PlaceObject>
+</Record>
+]]></listing>
+      <listing><![CDATA[<data>
+  <elt>one</elt>
+  <elt>two</elt>
+  <elt>three</elt>
+</data>
+
+]]></listing>
+    </example>
     <seealso></seealso>
   </command>
   <command name="SortSequence">
     <description xml:lang="en">
-      <para></para>
+      <para>Sort a list.</para>
     </description>
     <description xml:lang="de">
       <para>Sortiert eine Liste.</para>
@@ -4035,7 +4507,7 @@
     <childelements />
     <attribute name="select" type="xpath" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>The data that should be sorted.</para>
       </description>
       <description xml:lang="de">
         <para>Datensatz, der sortiert werden soll</para>
@@ -4043,7 +4515,7 @@
     </attribute>
     <attribute name="removeduplicates" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>If this attribute is used then it contains the name of the data-attribute that gets evaluated when duplicates are eliminated.</para>
       </description>
       <description xml:lang="de">
         <para>Wenn Duplikate gelöscht werden sollen, steht hier das Attribut mit dem Inhalt.</para>
@@ -4051,23 +4523,65 @@
     </attribute>
     <attribute name="criterium" type="text" optional="no">
       <description xml:lang="en">
-        <para></para>
+        <para>Name of the attribute that is used as the sort key.</para>
       </description>
       <description xml:lang="de">
-        <para>Attributname, nach dem sortiert werden soll</para>
+        <para>Attributname, nach dem sortiert werden soll.</para>
       </description>
     </attribute>
-    <remark xml:lang="de">
-      <para>Die Liste (im Beispiel $artikelnummern) wird verändert.</para>
-    </remark>
+    <example xml:lang="en">
+      <para>Data:</para>
+      <listing><![CDATA[<data>
+  <elt value="one"/>
+  <elt value="two"/>
+  <elt value="three"/>
+</data>
+]]></listing>
+      <para>Layout:</para>
+      <listing><![CDATA[<Record element="data">
+  <SetVariable variable="unsorted" select="*"/>
+  <SetVariable variable="sorted">
+    <SortSequence select="$unsorted" criterium="value"/>
+  </SetVariable>
+  <PlaceObject>
+    <Textblock>
+      <ForAll select="$sorted">
+        <Paragraph><Value select="@value"></Value></Paragraph>
+      </ForAll>
+    </Textblock>
+  </PlaceObject>
+</Record>
+]]></listing>
+    </example>    
     <example xml:lang="de">
-      <listing><![CDATA[<SortiereSequenz auswahl=" $artikelnummern " kriterium="prio" duplikatelöschen="seriennummer" />]]></listing>
+      <para>Daten:</para>
+      <listing><![CDATA[<data>
+  <elt value="one"/>
+  <elt value="two"/>
+  <elt value="three"/>
+</data>
+]]></listing>
+      <para>Layout:</para>
+      <listing><![CDATA[<Datensatz element="data">
+  <Zuweisung variable="unsorted" auswahl="*"/>
+  <Zuweisung variable="sorted">
+    <SortiereSequenz auswahl="$unsorted" kriterium="value"/>
+  </Zuweisung>
+  <ObjektAusgeben>
+    <Textblock>
+      <FürAlle auswahl="$sorted">
+        <Absatz><Wert auswahl="@value"/></Absatz>
+      </FürAlle>
+    </Textblock>
+  </ObjektAusgeben>
+</Datensatz>
+]]></listing>
     </example>
     <seealso />
   </command>
   <command name="Sub">
     <description xml:lang="en">
-      <para></para>
+      <para>Subscript text.</para>
     </description>
     <description xml:lang="de">
       <para>Erzeugt tiefgestellten Text.</para>
@@ -4075,6 +4589,14 @@
     <childelements>
       <cmd name="Value" />
     </childelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<PlaceObject column="1">
+  <Textblock width="20">
+    <Paragraph><Value>Text</Value><Sub><Value>low</Value></Sub></Paragraph>
+  </Textblock>
+</PlaceObject>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben spalte="1">
   <Textblock breite="20">
@@ -4088,7 +4610,7 @@
   </command>
   <command name="Sup">
     <description xml:lang="en">
-      <para></para>
+      <para>Superscript text.</para>
     </description>
     <description xml:lang="de">
       <para>Erzeugt hochgestellten Text.</para>
@@ -4096,6 +4618,14 @@
     <childelements>
       <cmd name="Value" />
     </childelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<PlaceObject column="1">
+  <Textblock width="20">
+    <Paragraph><Value>Text</Value><Sup><Value>high</Value></Sup></Paragraph>
+  </Textblock>
+</PlaceObject>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben spalte="1">
   <Textblock breite="20">
@@ -4110,7 +4640,8 @@
   </command>
   <command name="Switch">
     <description xml:lang="en">
-      <para></para>
+      <para>Create an if-then-else construct. The test attribute of each <cmd name="Case"/> commands is evaluated until it yields true.
+        The contents of the Case gets executed. If no test suceeds, the (optional) <cmd name="Otherwise"/> gets executed.</para>
     </description>
     <description xml:lang="de">
       <para>Erzeugt eine „Wenn-Dann-Abfrage“. Das heißt, für jedes Kindelement <cmd name="Case" /> wird überprüft, ob die Bedingung erfüllt ist. Wenn ja, dann wird der Inhalt des Kindelements <cmd
@@ -4125,6 +4656,27 @@
         <cmd name="Otherwise"/>
       </optional>
     </childelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="data">
+  <SetVariable variable="counter" select="3"/>
+  <Switch>
+    <Case test=" $counter &lt; 5">
+      <SetVariable variable="text" select="'Less than 5'"/>
+    </Case>
+    <Case test=" $counter &lt; 20">
+      <SetVariable variable="text" select="'Less than 20'"/>
+    </Case>
+    <Otherwise>
+      <SetVariable variable="text" select="'Larger or equal to 20'"/>
+    </Otherwise>
+  </Switch>
+  <PlaceObject column="1">
+    <Textblock>
+      <Paragraph><Value select="$text"/></Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Datensatz element="...">
   <Zuweisung variable="zähler" auswahl="3"/>
@@ -4140,12 +4692,16 @@
     </Sonst>
   </Fallunterscheidung>
   <ObjektAusgeben spalte="1">
-    <Textblock breite="20">
+    <Textblock>
       <Absatz><Wert auswahl="$text" /></Absatz>
     </Textblock>
   </ObjektAusgeben>
 </Datensatz>]]></listing>
     </example>
+    <info xml:lang="en">
+      <para>You have to be careful to encode the test with the rules of XML: that is »less« must be written as &amp;lt; as &lt; must not be part of text contents.</para>
+      <para>A Switch may be part of nearly all commands. It dissolves and only the contents of the Case or Ohterwise gets replaced by the whole construct.</para>
+    </info>
     <info xml:lang="de">
       <para>»Größer« und »kleiner« Vergleiche müssen nach den Regeln von XML kodiert werden. Für »größer« kann das > Zeichen oder &amp;gt; benutzt werden, »kleiner« muss zwingend als &amp;lt;
         ausgeschrieben sein, da das Zeichen &lt; nicht in einem XML Attribut vorkommen darf.</para>
@@ -4450,7 +5006,7 @@
   </command>
   <command name="Tablefoot">
     <description xml:lang="en">
-      <para></para>
+      <para>Create a repeating table footer.</para>
     </description>
     <description xml:lang="de">
       <para>Gibt den Tabellenfuß an.</para>
@@ -4462,7 +5018,8 @@
           <optional><cmd name="Copy-of"/></optional>
           <optional><cmd name="Tr"/></optional>
         </interleave>
-      </oneOrMore>    </childelements>
+      </oneOrMore>
+    </childelements>
     <attribute name="page" type="all_last" optional="yes">
       <description xml:lang="en">
         <para>This command is only valid for the given pages. The default is to place the foot on all pages.</para>
@@ -4474,6 +5031,9 @@
     <remark xml:lang="de">
       <para>Der Inhalt von Tabellenfuß wird auf jeder Seite einer automatisch umbrochenen Tabelle wiederholt.</para>
     </remark>
+    <example xml:lang="en">
+      <para>See the description of <cmd name="Table"/></para>
+    </example>
     <example xml:lang="de">
       <para>Siehe Erläuterung zu <cmd name="Table" /></para>
     </example>
@@ -4483,7 +5043,7 @@
   </command>
   <command name="Tablehead">
     <description xml:lang="en">
-      <para>Create a table head.</para>
+      <para>Create a repeating table head.</para>
     </description>
     <description xml:lang="de">
       <para>Gibt den Tabellenkopf an.</para>
@@ -4537,11 +5097,17 @@
         </description>
       </choice>
     </attribute>
+    <remark xml:lang="en">
+      <para>The contents of the table head gets repeated on every page of a broken table.</para>
+    </remark>
     <remark xml:lang="de">
       <para>Der Inhalt von Tabellenkopf wird auf jeder Seite einer automatisch umbrochenen Tabelle wiederholt.</para>
     </remark>
+    <example xml:lang="en">
+      <para>See the explanation of <cmd name="Table"/>.</para>
+    </example>
     <example xml:lang="de">
-      <para>Siehe Erläuterung zu <cmd name="Table" /></para>
+      <para>Siehe Erläuterung zu <cmd name="Table" />.</para>
     </example>
     <seealso>
       <cmd name="Tablefoot" />
@@ -4820,6 +5386,17 @@
     <remark xml:lang="de">
       <para>Die Linie geht über die gesamte Breite der Tabelle und verschiebt nachfolgende Zeilen nach unten.</para>
     </remark>
+    <example xml:lang="en">
+      <listing><![CDATA[<Tablerule rulewidth="1pt"/>
+<Tr>
+  <Td align="center">Position</Td>
+  <Td align="center">Club</Td>
+  <Td align="center">Points</Td>
+  <Td align="center">Difference</Td>
+</Tr>
+<Tablerule rulewidth="0.6pt"/>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Tlinie linienstärke="1pt" />
 <Tr>
@@ -4837,7 +5414,7 @@
   </command>
   <command name="Textblock">
     <description xml:lang="en">
-      <para></para>
+      <para>Create a rectangular piece of text.</para>
     </description>
     <description xml:lang="de">
       <para>Erzeugt einen rechteckigen Bereich mit Text.</para>
@@ -4859,16 +5436,17 @@
     </childelements>
     <attribute name="angle" type="number" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The angle (counter clockwise) that the text gets turned.</para>
       </description>
       <description xml:lang="de">
-        <para>Winkel (Drehrichtung gegen den Uhrzeigersinn), um der der Text gedreht wird. Die Spalte und die Zeile, in der der Text ausgegeben wird, bleibt gleich, die Breite und die Höhe des Textes
+        <para>Winkel (Drehrichtung gegen den Uhrzeigersinn), um der der Text gedreht wird. Die Spalte und die Zeile, 
+          in der der Text ausgegeben wird, bleibt gleich, die Breite und die Höhe des Textes
           ändert sich gegenüber dem ursprünglichen Text.</para>
       </description>
     </attribute>
     <attribute name="color" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The name of the color of the text.</para>
       </description>
       <description xml:lang="de">
         <para>Name der Farbe im Textblock.</para>
@@ -4884,7 +5462,7 @@
     </attribute>
     <attribute name="fontface" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The name of the font family. Defaults to <tt>text</tt>'.</para>
       </description>
       <description xml:lang="de">
         <para>Name der Schriftfamilie, die benutzt werden soll.</para>
@@ -4892,7 +5470,7 @@
     </attribute>
     <attribute name="textformat" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>The name of the text format to be applied to the text. Defaults to <tt>text</tt>.</para>
       </description>
       <description xml:lang="de">
         <para>Name des zu benutzenden Textformats. Wird kein Textformat angegeben, nimmt das System das Textformat <tt>text</tt>.</para>
@@ -4900,24 +5478,39 @@
     </attribute>
     <attribute name="columns" type="number" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Number of columns in the textblock.</para>
       </description>
       <description xml:lang="de">
-        <para>Anzahl der Spalten in dem Textblock</para>
+        <para>Anzahl der Spalten in dem Textblock.</para>
       </description>
     </attribute>
     <attribute name="columndistance" type="numberorlength" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Distance between two columns. Defaults to 3mm.</para>
       </description>
       <description xml:lang="de">
         <para>Abstand zwischen zwei Spalten. Voreinstellung: 3mm.</para>
       </description>
     </attribute>
-    <remark xml:lang="de">
-      <para>Durch die Angabe eines Textformats wird das Aussehen der Absätze beeinflusst. Textformate müssen vorher mit <cmd name="DefineTextformat" /> festgelegt werden. Wenn kein Textformat
-        angegeben wird, nimmt das System das Textformat <tt>text</tt>.</para>
+    <remark xml:lang="en">
+      <para>The textformat change the appearance of the paragraphs. They have to be previously defined by <cmd name="DefineTextformat"/>.</para>
     </remark>
+    <remark xml:lang="de">
+      <para>Durch die Angabe eines Textformats wird das Aussehen der Absätze beeinflusst. Textformate müssen vorher mit <cmd name="DefineTextformat" /> festgelegt werden.
+        Wenn kein Textformat angegeben wird, nimmt das System das Textformat <tt>text</tt>.</para>
+    </remark>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject column="3">
+    <Textblock width="10" angle="-20">
+      <Paragraph>
+        <B><Value>Bold slanted text</Value></B>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben spalte="3">
   <Textblock breite="10" winkel="-20">
@@ -4932,12 +5525,11 @@
     </seealso>
   </command>
   <command name="Text">
-    <!-- todo -->
     <description xml:lang="en">
-      <para></para>
+      <para>Create a text that can be broken across text containers or pages. To be used with <cmd name="Output"/></para>
     </description>
     <description xml:lang="de">
-      <para></para>
+      <para>Erzeugt einen Text, der über die Grenzen von Positionierungsrahmen umbrechen kann. Wird mit <cmd name="Output"/> benutzt.</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -4953,11 +5545,46 @@
           <cmd name="ForAll"/>
         </choice>
       </oneOrMore>
-    </childelements>
+    </childelements>    
     <example xml:lang="en">
-      <para></para>
+      <listing><![CDATA[<Pagetype name="page" test="true()">
+  <Margin left="1cm" right="1cm" top="1cm" bottom="1cm" />
+  <PositioningArea name="text">
+    <PositioningFrame width="4" height="10" row="1" column="1" />
+    <PositioningFrame width="4" height="10" row="1" column="6" />
+  </PositioningArea>
+</Pagetype>
+<Record element="data">
+  <Output area="text">
+    <Text>
+      <Paragraph>
+        <Value select="string(.)" />
+      </Paragraph>
+    </Text>
+  </Output>
+</Record>
+]]></listing>
     </example>
-    <seealso></seealso>
+    <example xml:lang="de">
+      <listing><![CDATA[<Seitentyp name="seite" bedingung="true()">
+  <Rand links="1cm" rechts="1cm" oben="1cm" unten="1cm"/>
+  <Platzierungsbereich name="text">
+    <Platzierungsrahmen breite="4" höhe="10" zeile="1" spalte="1"/>
+    <Platzierungsrahmen breite="4" höhe="10" zeile="1" spalte="6"/>
+  </Platzierungsbereich>
+</Seitentyp>
+<Datensatz element="data">
+  <Ausgabe bereich="text">
+    <Text>
+      <Absatz>
+        <Wert auswahl="string(.)"/>
+      </Absatz>
+    </Text>
+  </Ausgabe>
+</Datensatz>
+]]></listing>
+    </example>
+    <seealso><cmd name="PlaceObject"/></seealso>
   </command>
   <command name="Tr">
     <description xml:lang="en">
@@ -5016,7 +5643,6 @@
         <para>Die Farbe der Zellen in der Zeile.</para>
       </description>
     </attribute>
-    <!-- todo -->
     <attribute name="break-below" type="yesno" optional="yes">
       <description xml:lang="en">
         <para>Allow a table break between this row and the following. Defaults to yes.</para>
@@ -5036,6 +5662,15 @@
     <remark xml:lang="de">
       <para>Das Attribut minhöhe war in einer vorigen Version minhoehe.</para>
     </remark>
+    <example xml:lang="en">
+      <listing><![CDATA[<Tr minheight="8mm" backgroundcolor="yellow">
+  <Td align="center"><Paragraph><Value>A</Value></Paragraph></Td>
+  <Td><Paragraph><Value>B</Value></Paragraph></Td>
+  <Td align="center"><Paragraph><Value>C</Value></Paragraph></Td>
+  <Td align="center"><Paragraph><Value>D</Value></Paragraph></Td>
+  <Td><Paragraph><Value>E</Value></Paragraph></Td>
+</Tr>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Tr minhöhe="8mm" hintergrundfarbe="gelb">
   <Td align="center"><Absatz><Wert>4</Wert></Absatz></Td>
@@ -5052,7 +5687,7 @@
   </command>
   <command name="U">
     <description xml:lang="en">
-      <para></para>
+      <para>Underline text.</para>
     </description>
     <description xml:lang="de">
       <para>Schaltet »Unterstreichen« ein.</para>
@@ -5069,9 +5704,26 @@
       <cmd name="URL" />
       <cmd name="Value" />
     </childelements>
+    <remark xml:lang="en">
+      <para>Currenty it doesn't work with margin protrusion.</para>
+    </remark>
     <remark xml:lang="de">
       <para>Funktioniert derzeit nicht zusammen mit optischen Randausgleich.</para>
     </remark>
+    <example xml:lang="en">
+      <listing>
+        <![CDATA[<Record element="data">
+  <PlaceObject column="1" row="1">
+    <Textblock width="18">
+      <Paragraph>
+        <U><Value>Underlined text</Value></U>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>
+]]>
+      </listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben spalte="1" zeile="1">
   <Textblock breite="18">
@@ -5160,6 +5812,15 @@ Message: "$i is: 1"
 Message: "$i is: 2"
 Message: "$i is: 3"]]></listing>
     </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Datensatz element="data">
+  <Zuweisung variable="i" auswahl="0"/>
+  <Bis bedingung="$i = 4">
+    <Nachricht auswahl="concat('$i ist: ', $i)"/>
+    <Zuweisung variable="i" auswahl="$i + 1"/>
+  </Bis>
+</Datensatz>]]></listing>
+    </example>
     <seealso>
       <cmd name="Switch" />,
       <cmd name="SetVariable" />,
@@ -5168,7 +5829,7 @@ Message: "$i is: 3"]]></listing>
   </command>
   <command name="URL">
     <description xml:lang="en">
-      <para></para>
+      <para>enables a better breaking of URLs.</para>
     </description>
     <description xml:lang="de">
       <para>Ermöglicht ein sinnvolles Umbrechen einer URL.</para>
@@ -5185,8 +5846,19 @@ Message: "$i is: 3"]]></listing>
       <cmd name="URL" />
       <cmd name="Value" />
     </childelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<PlaceObject>
+  <Textblock>
+    <Paragraph>
+      <Value>URL: </Value>
+      <URL><Value>http://www.speedata.de/publisher</Value></URL>
+    </Paragraph>
+  </Textblock>
+</PlaceObject>
+]]></listing>
+    </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Textblock breite="27" spalte="2" textformat="text">
+      <listing><![CDATA[<Textblock>
   <Absatz>
     <Wert>URL: </Wert>
     <URL><Wert>http://www.speedata.de/publisher</Wert></URL>
@@ -5233,7 +5905,7 @@ Message: "$i is: 3"]]></listing>
     <example xml:lang="en">
       <listing><![CDATA[<Record element="data">
   <PlaceObject>
-   <Textblock width="10">
+   <Textblock>
      <Paragraph>
        <Value select="@name"/><Value>, symbol=</Value><Value select="@symbol"/>
      </Paragraph>
@@ -5243,7 +5915,7 @@ Message: "$i is: 3"]]></listing>
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Textblock breite="14" schriftart="text">
+      <listing><![CDATA[<Textblock>
   <Absatz>
     <Wert auswahl="@name"/><Wert>, Symbol=</Wert><Wert auswahl="@symbol" />
   </Absatz>
@@ -5277,6 +5949,26 @@ Message: "$i is: 3"]]></listing>
         <para>Für jedes Mal, das die Schleife durchlaufen werden soll, muss die Bedingung im Attribut erfüllt sein. Die Bedingung wird am Anfang der Schleife überprüft. Eine Schleife, bei der die Bedingung am Ende der Schleife geprüft wird, ist <cmd name="Until"/>.</para>
       </description>
     </attribute>
+    <example xml:lang="en">
+      <para>The following example creates a textblock with thre times the contents 'Text Text Text '.</para>
+      <listing><![CDATA[<Record element="data">
+  <SetVariable variable="counter" select="1"/>
+  <SetVariable variable="text" select="''"/>
+  <While test=" $counter &lt;= 3 "> <!-- less or equal -->
+    <SetVariable variable="counter" select=" $counter + 1"/>
+    <SetVariable variable="text">
+      <Value select="$text"/>
+      <Value select="'Text '"/>
+    </SetVariable>
+  </While>
+  <PlaceObject column="1">
+    <Textblock width="10">
+      <Paragraph><Value select="$text"/></Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>  
+]]></listing>
+    </example>
     <example xml:lang="de">
       <para>Folgendes Beispiel erzeugt einen Textblock mit dem Inhalt „Text Text Text“.</para>
       <listing><![CDATA[<Datensatz element="url">
