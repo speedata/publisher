@@ -7,12 +7,12 @@ title: speedata Publisher documentation
 speedata Publisher documentation
 ================================
 
-Other languages: [German](index-de.html). This translation is work in progress.
+Other languages: [German](index-de.html).
 
 Reference
 ---------
 
- * [Element reference](commands-en/layout.html) (work in progress)
+ * [Element reference](commands-en/layout.html)
  * [Command line](description-en/commandline.html)
  * [XPath expressions](description-en/xpath.html)
  * [Changelog](description-en/changelog.html)

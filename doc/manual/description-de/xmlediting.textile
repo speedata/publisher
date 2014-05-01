@@ -10,27 +10,25 @@ Durch die Benutzung von Standard XML (utf-8) lässt sich das Layoutregelwerk mit
 
 * "OxygenXML":http://www.oxygenxml.com (Mac, Windows, Linux)
 * "XMLSpy":http://www.altova.com/xml-editor/ (Windows)
-* "GNU Emacs":http://www.gnu.org/software/emacs/ mit "nxml-mode":http://www.thaiopensource.com/nxml-mode/ (alle Betriebssysteme)
 * "XML Blueprint":http://www.xmlblueprint.com/ (nur Windows)
+* "GNU Emacs":http://www.gnu.org/software/emacs/ mit "nxml-mode":http://www.thaiopensource.com/nxml-mode/ (alle Betriebssysteme)
+* "jEdit":www.jedit.org (Mac, Windows, Linux, kostenlos)
 
-Das RelaxNG-Schema für das Layoutregelwerk liegt in der virtuellen Maschine (VM) im Verzeichnis @/usr/share/speedata-publisher/schema/@ unter dem Dateinamen @layoutschema-de.rng@.
+Das RelaxNG-Schema für das Layoutregelwerk liegt in der ZIP-Datei im Verzeichnis @share/schema/@ unter dem Dateinamen @layoutschema-de.rng@ bzw. @layoutschema-en.rng@ für das englischsprachige Regelwerk.
 
 h2. Hinweis
 
-Der XML-Namensraum des Layoutregelwerks ist @urn:speedata.de:2009/publisher/de@. Daher muss das Layoutregelwerk, sofern es
-gegen das RelaxNG Schema validiert wird, wie folgt aussehen:
+Der XML-Namensraum des Layoutregelwerks ist @urn:speedata.de:2009/publisher/de@. Daher muss das Layoutregelwerk, sofern es gegen das RelaxNG Schema validiert wird, wie folgt aussehen:
 
 {% highlight xml %}
-<?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="urn:speedata.de:2009/publisher/de">
  ...
 </Layout>
 {% endhighlight %}
 
-Die erste Zeile mit der XML-Deklaration ist optional. Falls, was wahrscheinlich ist, Layoutspezifische XPath-Funktionen benutzt werden, muss der Namensraum @urn:speedata:2009/publisher/functions/de@ bzw. für englische Funktionen @urn:speedata:2009/publisher/functions/en@ angegeben werden:
+Falls Layoutspezifische XPath-Funktionen benutzt werden, muss der Namensraum @urn:speedata:2009/publisher/functions/de@ bzw. für englische Funktionen @urn:speedata:2009/publisher/functions/en@ angegeben werden:
 
 {% highlight xml %}
-<?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="urn:speedata.de:2009/publisher/de"
         xmlns:sd="urn:speedata:2009/publisher/functions/de">
  ...
@@ -59,8 +57,8 @@ und klicken Sie auf auf den @+@-Button und erstellen die Regel wie in dieser Abb
 
 {% figure namensraumzuordnung.png %}
 
-Anschließend muss noch der Pfad zur Schemadatei angegeben werden (@/usr/share/speedata-publisher/schema/layoutschema-de.rng@):
+Anschließend muss noch der Pfad zur Schemadatei angegeben werden (@.../schema/layoutschema-de.rng@):
 
 {% figure schemazuweisung-oxygen.png %}
 
-Die Dialoge müssen mit @OK@ bestätigt werden. Sobald Sie ein Layoutregelwerk öffnen, wird das Schema dem Dokument automatisch zugeordnet und Sie erhalten die volle Editorunterstützung.
+Die Dialoge müssen mit @OK@ bestätigt werden. Sobald ein Layoutregelwerk geöffnet wird, ist dem Dokument ein Schema zugeordnet man erhält die volle Editorunterstützung mit Autovervollständigung und Tooltips.

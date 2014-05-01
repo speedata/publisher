@@ -10,26 +10,25 @@ The layout file is encoded in standard XML (UTF-8) and therefore it can be edite
 
 * "OxygenXML":http://www.oxygenxml.com (Mac, Windows, Linux)
 * "XMLSpy":http://www.altova.com/xml-editor/ (Windows)
-* "GNU Emacs":http://www.gnu.org/software/emacs/ with "nxml-mode":http://www.thaiopensource.com/nxml-mode/ (all operating systems)
 * "XML Blueprint":http://www.xmlblueprint.com/ (Windows only)
+* "GNU Emacs":http://www.gnu.org/software/emacs/ with "nxml-mode":http://www.thaiopensource.com/nxml-mode/ (all operating systems, free)
+* "jEdit":www.jedit.org (Mac, Windows, Linux, free)
 
-The schema for editing the layout XML can be found in the directory @share/schema@ in the file @layoutschema-en.rng@. In the Linux Ubuntu package and in the virutal machine, it can be found in @/usr/share/speedata-publisher/schema/@.
+The schema for editing the layout XML can be found in the directory @share/schema@ in the file @layoutschema-en.rng@.
 
 h2. Note
 
 The XML namespace of the layout rules is @urn:speedata.de:2009/publisher/en@. The layout XML must look like this if you wish to validate against the Schema:
 
 {% highlight xml %}
-<?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="urn:speedata.de:2009/publisher/en">
  ...
 </Layout>
 {% endhighlight %}
 
-The first line with the XML declaration is optional. If, as expected, you use layout specific functions, you should add the following namespace declaration to the start tag:
+To use layout specific functions, you should add the following namespace declaration to the start tag:
 
 {% highlight xml %}
-<?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
         xmlns:sd="urn:speedata:2009/publisher/functions/en">
  ...
@@ -41,7 +40,7 @@ Replace @en@ by @de@ if you wish to use the German layout rules / layout functio
 
 h2. Connecting the RelaxNG Schema with the Layout XML in the OxygenXML editor
 
-As an example, here is how to make OxygenXML automatcially choose the right Schema if you edit the layout xml file. The fastest way is to manually connect the document to the schema:
+As an example, here is how to make OxygenXML automatically choose the right Schema if you edit the layout xml file. The fastest way is to manually connect the document to the schema:
 
 {% figure :shadow oxygen-associateschema.png %}
 
@@ -61,7 +60,7 @@ and click on the @+@ button to create the rule like this:
 
 {% figure :shadow oxygen-associatenamespace.png %}
 
-After that, you need to supply the path to the RelaxNG schema file (here: a local installation). 
+After that, you need to supply the path to the RelaxNG schema file (here: a local installation).
 
 {% figure :shadow oxygen-associateschema2.png %}
 
