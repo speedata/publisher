@@ -1003,6 +1003,7 @@ function commands.emptyline( layoutxml,dataxml )
     else
         current_grid:set_current_row(current_row + 1)
     end
+    current_grid:set_current_column(1)
 end
 
 --- Makeindex
