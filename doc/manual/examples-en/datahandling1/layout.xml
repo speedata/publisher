@@ -1,0 +1,13 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" >
+
+  <Record element="root">
+    <ProcessNode select="child"/>
+  </Record>
+
+  <Record element="child">
+    <PlaceObject>
+      <Barcode select="string(.)" type="Code128" width="4"/>
+    </PlaceObject>
+    <NextRow/>
+  </Record>
+</Layout>

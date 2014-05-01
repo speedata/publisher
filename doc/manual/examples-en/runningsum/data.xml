@@ -1,0 +1,11 @@
+<data>
+  <item name="Household pliers"  artnr="129234" image="household_pliers.pdf" price="8,99" sum="8,99"/>
+  <item name="Vise" artnr="154515" image="vise.pdf" price="44,90" sum="53,89"/>
+  <item name="Scissors" artnr="455548" image="scissors.pdf" price="2,45" sum="56,34" />
+  <item name="Knife" artnr="123233" image="knife.pdf" price="7,80" sum="64,14" />
+  <item name="Wrench" artnr="134223" image="wrench.pdf" price="18,90" sum="83,04"/>
+  <item name="Fire extinguisher" artnr="134232" image="fireextinguisher.pdf" price="59,60" sum="142,64" />
+  <item name="Hammer"       artnr="242345" image="hammer.pdf" price="5,49" sum="148,13" />
+  <item name="Cutting pliers"   artnr="642143" image="cutting_pliers.pdf" price="7,29" sum="155,42" />
+  <item name="Screwdriver" artnr="499203" image="screwdriver.pdf" price="3,99" sum="159,41" />
+</data>
