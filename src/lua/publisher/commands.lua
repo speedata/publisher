@@ -992,8 +992,12 @@ function commands.loop( layoutxml, dataxml )
     return ret
 end
 
+--- Empty line
+--- ----------
+--- Create an empty row in the layout. Set the cursor to the next free line and
+--- let an empty row between.
 function commands.emptyline( layoutxml,dataxml )
-    trace("Leerzeile, aktuelle Zeile = %d",publisher.current_grid:current_row())
+    trace("Emtpy row, current row is %d",publisher.current_grid:current_row())
     local areaname = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
     local areaname = areaname or publisher.default_areaname
     local current_grid = publisher.current_grid
