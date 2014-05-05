@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/de">
+
+  <Datensatz element="root">
+    <FürAlle auswahl="child">
+      <ObjektAusgeben>
+        <Strichcode auswahl="string(.)" typ="Code128" breite="4"/>
+      </ObjektAusgeben>
+      <NeueZeile/>
+    </FürAlle>
+  </Datensatz>
+
+</Layout>

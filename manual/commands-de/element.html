@@ -1,7 +1,7 @@
 <!DOCTYPE html><html>
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <link rel="stylesheet" href="../css/normal.css" type="text/css"><script src="../javascript/jquery.min.js" type="text/javascript"></script><script src="../javascript/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
+      <link rel="stylesheet" href="../assets/css/normal.css" type="text/css"><script src="../assets/js/jquery.min.js" type="text/javascript"></script><script src="../assets/js/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
                // This function is executed when the page has finished loading.
              jQuery(function($) {
              // This function highlights (by default) pre and code tags which are annotated correctly.
@@ -10,31 +10,39 @@
             </script><title>Element</title>
    </head>
    <body>
-      <div id="logo"><a href="../index-de.html"><img src="../images/publisher_logo.png" alt="Startseite"></a></div>
+      <div id="logo"><a href="../index-de.html"><img src="../assets/images/publisher_logo.png" alt="Startseite"></a></div>
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">Element</code></h1>
          <h2>Beschreibung</h2>
          <p>Erzeugt eine Datenstruktur, die mithilfe von <a href="savedataset.html">SpeichereDatensatzdatei</a> auf Festplatte gespeichert werden kann.
          </p>
-         <p>Erlaubte Attribute: <span class="tt"><a href="#name">name</a></span><br>Kindelemente: <a href="attribute.html">Attribut</a>, <a href="element.html">Element</a>, <a href="value.html">Wert</a><br>Elternelemente: <a href="element.html">Element</a>, <a href="setvariable.html">Zuweisung</a></p>
+         <div class="hangingindent">
+            <p>Erlaubte Attribute: <span class="tt"><a href="#name">name</a></span></p>
+         </div>
+         <div class="hangingindent">
+            <p>Kindelemente: <a href="attribute.html">Attribut</a>, <a href="element.html">Element</a>, <a href="switch.html">Fallunterscheidung</a>, <a href="forall.html">FürAlle</a>, <a href="copy-of.html">Kopie-von</a></p>
+         </div>
+         <div class="hangingindent">
+            <p>Elternelemente: <a href="until.html">Bis</a>, <a href="element.html">Element</a>, <a href="case.html">Fall</a>, <a href="forall.html">FürAlle</a>, <a href="loop.html">Schleife</a>, <a href="while.html">Solange</a>, <a href="otherwise.html">Sonst</a>, <a href="savedataset.html">SpeichereDatensatzdatei</a>, <a href="setvariable.html">Zuweisung</a></p>
+         </div>
          <h3>Attribute</h3>
          <dl>
             <dt><a name="name"></a><span class="tt">name</span> (Text)
             </dt>
             <dd>
                
-               <p>Name des Elements, das erzeugt wird</p>
+               <p>Name des Elements, das erzeugt wird.</p>
                
             </dd>
          </dl>
          <h2>Beispiel</h2>
-         <pre class="syntax xml">&lt;Element name="Planetenverzeichnis"&gt;
+         <pre class="syntax xml">&lt;Element name="artikelliste"&gt;
   &lt;Attribut name="name" auswahl=" @name "/&gt;
   &lt;Attribut name="seite" auswahl=" sd:aktuelle-seite()"/&gt;
 &lt;/Element&gt;</pre>
          <h2>Siehe auch</h2>
-         <a href="attribute.html">Attribut</a>
-         <a href="loaddataset.html">LadeDatensatzdatei</a>
+         <a href="attribute.html">Attribut</a>,
+         <a href="loaddataset.html">LadeDatensatzdatei</a>,
          <a href="savedataset.html">SpeichereDatensatzdatei</a>
          
       </div>
@@ -45,12 +53,13 @@
             <li><a href="paragraph.html">Absatz</a></li>
             <li><a href="action.html">Aktion</a></li>
             <li><a href="attribute.html">Attribut</a></li>
+            <li><a href="output.html">Ausgabe</a></li>
             <li><a href="b.html">B</a></li>
-            <li><a href="processrecord.html">BearbeiteDatensatz</a></li>
             <li><a href="processnode.html">BearbeiteKnoten</a></li>
             <li><a href="atpageshipout.html">BeiSeitenAusgabe</a></li>
             <li><a href="atpagecreation.html">BeiSeitenErzeugung</a></li>
             <li><a href="image.html">Bild</a></li>
+            <li><a href="until.html">Bis</a></li>
             <li><a href="box.html">Box</a></li>
             <li><a href="br.html">Br</a></li>
             <li><a href="record.html">Datensatz</a></li>
@@ -67,6 +76,7 @@
             <li><a href="hspace.html">HLeerraum</a></li>
             <li><a href="i.html">I</a></li>
             <li><a href="include.html">Include</a></li>
+            <li><a href="makeindex.html">Indexerstellen</a></li>
             <li><a href="contents.html">Inhalt</a></li>
             <li><a href="copy-of.html">Kopie-von</a></li>
             <li><a href="italic.html">Kursiv</a></li>
@@ -92,8 +102,11 @@
             <li><a href="grid.html">Raster</a></li>
             <li><a href="loop.html">Schleife</a></li>
             <li><a href="fontface.html">Schriftart</a></li>
+            <li><a href="insertpages.html">SeitenEinfügen</a></li>
+            <li><a href="savepages.html">SeitenSpeichern</a></li>
             <li><a href="pageformat.html">Seitenformat</a></li>
             <li><a href="pagetype.html">Seitentyp</a></li>
+            <li><a href="sequence.html">Sequenz</a></li>
             <li><a href="setgrid.html">SetzeRaster</a></li>
             <li><a href="while.html">Solange</a></li>
             <li><a href="otherwise.html">Sonst</a></li>
@@ -109,6 +122,7 @@
             <li><a href="tablefoot.html">Tabellenfuß</a></li>
             <li><a href="tablehead.html">Tabellenkopf</a></li>
             <li><a href="td.html">Td</a></li>
+            <li><a href="text.html">Text</a></li>
             <li><a href="textblock.html">Textblock</a></li>
             <li><a href="tablerule.html">Tlinie</a></li>
             <li><a href="tr.html">Tr</a></li>

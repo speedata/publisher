@@ -1,7 +1,7 @@
 <!DOCTYPE html><html>
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <link rel="stylesheet" href="../css/normal.css" type="text/css"><script src="../javascript/jquery.min.js" type="text/javascript"></script><script src="../javascript/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
+      <link rel="stylesheet" href="../assets/css/normal.css" type="text/css"><script src="../assets/js/jquery.min.js" type="text/javascript"></script><script src="../assets/js/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
                // This function is executed when the page has finished loading.
              jQuery(function($) {
              // This function highlights (by default) pre and code tags which are annotated correctly.
@@ -10,7 +10,7 @@
             </script><title>DefineTextformat</title>
    </head>
    <body>
-      <div id="logo"><a href="../index-de.html"><img src="../images/publisher_logo.png" alt="Startseite"></a></div>
+      <div id="logo"><a href="../index-de.html"><img src="../assets/images/publisher_logo.png" alt="Startseite"></a></div>
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">DefiniereTextformat</code></h1>
          <h2>Beschreibung</h2>
@@ -19,21 +19,108 @@
             Absatz und
             Textblock) zurückgegriffen werden.
          </p>
-         <p>Erlaubte Attribute: <span class="tt"><a href="#alignment">ausrichtung</a></span>, <span class="tt"><a href="#indentation">einrückung</a></span>, <span class="tt"><a href="#name">name</a></span>, <span class="tt"><a href="#rows">zeilen</a></span><br>Kindelemente: <br>Elternelemente: <a href="layout.html">Layout</a></p>
+         <div class="hangingindent">
+            <p>Erlaubte Attribute: <span class="tt"><a href="#alignment">ausrichtung</a></span>, <span class="tt"><a href="#border-bottom">border-bottom</a></span>, <span class="tt"><a href="#border-top">border-top</a></span>, <span class="tt"><a href="#indentation">einrückung</a></span>, <span class="tt"><a href="#widow">hurenkind</a></span>, <span class="tt"><a href="#margin-bottom">margin-bottom</a></span>, <span class="tt"><a href="#margin-top">margin-top</a></span>, <span class="tt"><a href="#name">name</a></span>, <span class="tt"><a href="#padding-top">padding-top</a></span>, <span class="tt"><a href="#orphan">schusterjunge</a></span>, <span class="tt"><a href="#break-below">umbruch-unten</a></span>, <span class="tt"><a href="#rows">zeilen</a></span></p>
+         </div>
+         <div class="hangingindent">
+            <p>Kindelemente: (keine)</p>
+         </div>
+         <div class="hangingindent">
+            <p>Elternelemente: <a href="include.html">Include</a>, <a href="layout.html">Layout</a></p>
+         </div>
          <h3>Attribute</h3>
          <dl>
-            <dt><a name="alignment"></a><span class="tt">ausrichtung</span> (blocksatz, linksbündig, rechtsbündig, zentriert, optional)
+            <dt><a name="alignment"></a><span class="tt">ausrichtung</span> (optional)
             </dt>
             <dd>
                
                <p>Bestimmt die Formatierung des Textes.</p>
+               
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>blocksatz:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Der Text hat eine rechteckige Form.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>linksbündig:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Der Text flattert am rechten Rand.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>rechtsbündig:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Der Text flattert am linken Rand</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>zentriert:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Der Text ist im Flattersatz an beiden Rändern (rechts und links) gesetzt.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
+            </dd>
+            <dt><a name="border-bottom"></a><span class="tt">border-bottom</span> (Längenangabe (mm,cm,pt), optional)
+            </dt>
+            <dd>
+               
+               <p>Die Dicke der Linie unter dem Text</p>
+               
+            </dd>
+            <dt><a name="border-top"></a><span class="tt">border-top</span> (Längenangabe (mm,cm,pt), optional)
+            </dt>
+            <dd>
+               
+               <p>Die Dicke der Linie über dem Text</p>
                
             </dd>
             <dt><a name="indentation"></a><span class="tt">einrückung</span> (Längenangabe (mm,cm,pt), optional)
             </dt>
             <dd>
                
-               <p>Absatzeinzug.</p>
+               <p>Die Länge des Absatzeinzugs.</p>
+               
+            </dd>
+            <dt><a name="widow"></a><span class="tt">hurenkind</span> (ja/nein, optional)
+            </dt>
+            <dd>
+               
+               <p>Wenn nein, Hurenkinder verhindern (letzte Zeile eines Absatzes ist auf der nächsten
+                  Seite). Voreinstellung ist nein.
+               </p>
+               
+            </dd>
+            <dt><a name="margin-bottom"></a><span class="tt">margin-bottom</span> (Längenangabe (mm,cm,pt), optional)
+            </dt>
+            <dd>
+               
+               <p>Abstand zwischen der Linie unten und dem nachfolgenden Absatz.</p>
+               
+            </dd>
+            <dt><a name="margin-top"></a><span class="tt">margin-top</span> (Längenangabe (mm,cm,pt), optional)
+            </dt>
+            <dd>
+               
+               <p>Abstand zwischen der Linie oben und dem vorhergehenden Text.</p>
                
             </dd>
             <dt><a name="name"></a><span class="tt">name</span> (Text)
@@ -41,6 +128,29 @@
             <dd>
                
                <p>Name des Textformats, unter dem es später im Layoutregelwerk angesprochen wird.</p>
+               
+            </dd>
+            <dt><a name="padding-top"></a><span class="tt">padding-top</span> (Längenangabe (mm,cm,pt), optional)
+            </dt>
+            <dd>
+               
+               <p>Abstand zwischen der Oberkante des Texts und der Linie oben.</p>
+               
+            </dd>
+            <dt><a name="orphan"></a><span class="tt">schusterjunge</span> (ja/nein, optional)
+            </dt>
+            <dd>
+               
+               <p>Wenn nein, Schusterjungen verhindern (erste Zeile eines Absatzes ist auf der vorherigen
+                  Seite). Voreinstellung ist nein.
+               </p>
+               
+            </dd>
+            <dt><a name="break-below"></a><span class="tt">umbruch-unten</span> (ja/nein, optional)
+            </dt>
+            <dd>
+               
+               <p>Umbruch unterhalb des Textes verbieten/erlauben.</p>
                
             </dd>
             <dt><a name="rows"></a><span class="tt">zeilen</span> (Zahl, optional)
@@ -53,12 +163,18 @@
                
             </dd>
          </dl>
+         <h3>Bemerkungen</h3>
+         
+         <p>Die Textformate <span class="tt">text</span>, <span class="tt">zentriert</span>, <span class="tt">links</span> und <span class="tt">rechts</span> sind vordefiniert. Sie stehen für blocksatz, zentriert, linksbündigen und rechtbündigen
+            Text.
+         </p>
+         
          <h2>Beispiel</h2>
          <pre class="syntax xml">&lt;Layout&gt;
   &lt;DefiniereTextformat name="Text mit Einrückung" ausrichtung="blocksatz" einrückung="1cm" /&gt;
   ...
   &lt;Datensatz element="..."&gt;
-    &lt;Textblock breite="10" spalte="1" textformat="Text mit Einrückung"&gt;
+    &lt;Textblock breite="10" textformat="Text mit Einrückung"&gt;
       &lt;Absatz&gt;
         &lt;Wert&gt;Text ...&lt;/Wert&gt;
       &lt;/Absatz&gt;
@@ -77,12 +193,13 @@
             <li><a href="paragraph.html">Absatz</a></li>
             <li><a href="action.html">Aktion</a></li>
             <li><a href="attribute.html">Attribut</a></li>
+            <li><a href="output.html">Ausgabe</a></li>
             <li><a href="b.html">B</a></li>
-            <li><a href="processrecord.html">BearbeiteDatensatz</a></li>
             <li><a href="processnode.html">BearbeiteKnoten</a></li>
             <li><a href="atpageshipout.html">BeiSeitenAusgabe</a></li>
             <li><a href="atpagecreation.html">BeiSeitenErzeugung</a></li>
             <li><a href="image.html">Bild</a></li>
+            <li><a href="until.html">Bis</a></li>
             <li><a href="box.html">Box</a></li>
             <li><a href="br.html">Br</a></li>
             <li><a href="record.html">Datensatz</a></li>
@@ -99,6 +216,7 @@
             <li><a href="hspace.html">HLeerraum</a></li>
             <li><a href="i.html">I</a></li>
             <li><a href="include.html">Include</a></li>
+            <li><a href="makeindex.html">Indexerstellen</a></li>
             <li><a href="contents.html">Inhalt</a></li>
             <li><a href="copy-of.html">Kopie-von</a></li>
             <li><a href="italic.html">Kursiv</a></li>
@@ -124,8 +242,11 @@
             <li><a href="grid.html">Raster</a></li>
             <li><a href="loop.html">Schleife</a></li>
             <li><a href="fontface.html">Schriftart</a></li>
+            <li><a href="insertpages.html">SeitenEinfügen</a></li>
+            <li><a href="savepages.html">SeitenSpeichern</a></li>
             <li><a href="pageformat.html">Seitenformat</a></li>
             <li><a href="pagetype.html">Seitentyp</a></li>
+            <li><a href="sequence.html">Sequenz</a></li>
             <li><a href="setgrid.html">SetzeRaster</a></li>
             <li><a href="while.html">Solange</a></li>
             <li><a href="otherwise.html">Sonst</a></li>
@@ -141,6 +262,7 @@
             <li><a href="tablefoot.html">Tabellenfuß</a></li>
             <li><a href="tablehead.html">Tabellenkopf</a></li>
             <li><a href="td.html">Td</a></li>
+            <li><a href="text.html">Text</a></li>
             <li><a href="textblock.html">Textblock</a></li>
             <li><a href="tablerule.html">Tlinie</a></li>
             <li><a href="tr.html">Tr</a></li>

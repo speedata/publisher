@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout 
+  xmlns="urn:speedata.de:2009/publisher/en" 
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Options ignoreeol="yes"/>
+
+  <LoadFontfile name="WarnockPro-Light" filename="WarnockPro-Light.otf" />
+  <LoadFontfile name="WarnockPro-LightIt" filename="WarnockPro-LightIt.otf" />
+  <LoadFontfile name="WarnockPro-Semibold" filename="WarnockPro-Semibold.otf" />
+
+  <DefineFontfamily name="text" fontsize="10" leading="12">
+    <Regular fontface="WarnockPro-Light"/>
+    <Italic fontface="WarnockPro-LightIt"/>
+    <Bold fontface="WarnockPro-Semibold"/>
+  </DefineFontfamily>
+  
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <ForAll select="text">
+          <Paragraph><Value select="."/></Paragraph>
+        </ForAll>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

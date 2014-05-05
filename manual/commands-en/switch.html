@@ -1,7 +1,7 @@
 <!DOCTYPE html><html>
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <link rel="stylesheet" href="../css/normal.css" type="text/css"><script src="../javascript/jquery.min.js" type="text/javascript"></script><script src="../javascript/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
+      <link rel="stylesheet" href="../assets/css/normal.css" type="text/css"><script src="../assets/js/jquery.min.js" type="text/javascript"></script><script src="../assets/js/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
                // This function is executed when the page has finished loading.
              jQuery(function($) {
              // This function highlights (by default) pre and code tags which are annotated correctly.
@@ -10,15 +10,52 @@
             </script><title>Switch</title>
    </head>
    <body>
-      <div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"></a></div>
+      <div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">Switch</code></h1>
          <h2>Description</h2>
-         <p></p>
-         <p>Allowed attributes: <br>Child elements: <a href="case.html">Case</a>, <a href="otherwise.html">Otherwise</a><br>Parent elements: 
+         <p>Create an if-then-else construct. The test attribute of each <a href="case.html">Case</a> commands is evaluated until it yields true.
+            The contents of the Case gets executed. If no test suceeds, the (optional) <a href="otherwise.html">Otherwise</a> gets executed.
          </p>
-         <h3>Attributes</h3>
-         <dl></dl>
+         <div class="hangingindent">
+            <p>Allowed attributes: (none)</p>
+         </div>
+         <div class="hangingindent">
+            <p>Child elements: <a href="case.html">Case</a>, <a href="otherwise.html">Otherwise</a></p>
+         </div>
+         <div class="hangingindent">
+            <p>Parent elements: <a href="atpagecreation.html">AtPageCreation</a>, <a href="atpageshipout.html">AtPageShipout</a>, <a href="case.html">Case</a>, <a href="contents.html">Contents</a>, <a href="element.html">Element</a>, <a href="forall.html">ForAll</a>, <a href="li.html">Li</a>, <a href="loop.html">Loop</a>, <a href="otherwise.html">Otherwise</a>, <a href="record.html">Record</a>, <a href="savepages.html">SavePages</a>, <a href="setvariable.html">SetVariable</a>, <a href="table.html">Table</a>, <a href="td.html">Td</a>, <a href="text.html">Text</a>, <a href="textblock.html">Textblock</a>, <a href="tr.html">Tr</a>, <a href="u.html">U</a>, <a href="url.html">URL</a>, <a href="until.html">Until</a>, <a href="while.html">While</a></p>
+         </div>
+         <h2>Example</h2>
+         <pre class="syntax xml">&lt;Record element="data"&gt;
+  &lt;SetVariable variable="counter" select="3"/&gt;
+  &lt;Switch&gt;
+    &lt;Case test=" $counter &amp;lt; 5"&gt;
+      &lt;SetVariable variable="text" select="'Less than 5'"/&gt;
+    &lt;/Case&gt;
+    &lt;Case test=" $counter &amp;lt; 20"&gt;
+      &lt;SetVariable variable="text" select="'Less than 20'"/&gt;
+    &lt;/Case&gt;
+    &lt;Otherwise&gt;
+      &lt;SetVariable variable="text" select="'Larger or equal to 20'"/&gt;
+    &lt;/Otherwise&gt;
+  &lt;/Switch&gt;
+  &lt;PlaceObject column="1"&gt;
+    &lt;Textblock&gt;
+      &lt;Paragraph&gt;&lt;Value select="$text"/&gt;&lt;/Paragraph&gt;
+    &lt;/Textblock&gt;
+  &lt;/PlaceObject&gt;
+&lt;/Record&gt;</pre>
+         <h2>Info</h2>
+         
+         <p>You have to be careful to encode the test with the rules of XML: that is »less« must
+            be written as &amp;lt; as &lt; must not be part of text contents.
+         </p>
+         
+         <p>A Switch may be part of nearly all commands. It dissolves and only the contents of
+            the Case or Ohterwise gets replaced by the whole construct.
+         </p>
+         
          <h2>See also</h2>
          <a href="case.html">Case</a>
          <a href="otherwise.html">Otherwise</a>
@@ -59,12 +96,14 @@
             <li><a href="i.html">I</a></li>
             <li><a href="image.html">Image</a></li>
             <li><a href="include.html">Include</a></li>
+            <li><a href="insertpages.html">InsertPages</a></li>
             <li><a href="italic.html">Italic</a></li>
             <li><a href="layout.html">Layout</a></li>
             <li><a href="li.html">Li</a></li>
             <li><a href="loaddataset.html">LoadDataset</a></li>
             <li><a href="loadfontfile.html">LoadFontfile</a></li>
             <li><a href="loop.html">Loop</a></li>
+            <li><a href="makeindex.html">Makeindex</a></li>
             <li><a href="margin.html">Margin</a></li>
             <li><a href="mark.html">Mark</a></li>
             <li><a href="message.html">Message</a></li>
@@ -74,6 +113,7 @@
             <li><a href="ol.html">Ol</a></li>
             <li><a href="options.html">Options</a></li>
             <li><a href="otherwise.html">Otherwise</a></li>
+            <li><a href="output.html">Output</a></li>
             <li><a href="pageformat.html">Pageformat</a></li>
             <li><a href="pagetype.html">Pagetype</a></li>
             <li><a href="paragraph.html">Paragraph</a></li>
@@ -81,11 +121,12 @@
             <li><a href="positioningarea.html">PositioningArea</a></li>
             <li><a href="positioningframe.html">PositioningFrame</a></li>
             <li><a href="processnode.html">ProcessNode</a></li>
-            <li><a href="processrecord.html">ProcessRecord</a></li>
             <li><a href="record.html">Record</a></li>
             <li><a href="regular.html">Regular</a></li>
             <li><a href="rule.html">Rule</a></li>
             <li><a href="savedataset.html">SaveDataset</a></li>
+            <li><a href="savepages.html">SavePages</a></li>
+            <li><a href="sequence.html">Sequence</a></li>
             <li><a href="setgrid.html">SetGrid</a></li>
             <li><a href="setvariable.html">SetVariable</a></li>
             <li><a href="sortsequence.html">SortSequence</a></li>
@@ -98,11 +139,13 @@
             <li><a href="tablehead.html">Tablehead</a></li>
             <li><a href="tablerule.html">Tablerule</a></li>
             <li><a href="td.html">Td</a></li>
+            <li><a href="text.html">Text</a></li>
             <li><a href="textblock.html">Textblock</a></li>
             <li><a href="tr.html">Tr</a></li>
             <li><a href="u.html">U</a></li>
             <li><a href="url.html">URL</a></li>
             <li><a href="ul.html">Ul</a></li>
+            <li><a href="until.html">Until</a></li>
             <li><a href="value.html">Value</a></li>
             <li><a href="while.html">While</a></li>
          </ul>

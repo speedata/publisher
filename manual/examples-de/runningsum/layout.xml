@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/de"
+  xmlns:sd="urn:speedata:2009/publisher/functions/de">
+
+  <Optionen zeichne_raster="nein" hauptsprache="Deutsch"/>
+
+  <SetzeRaster nx="16" höhe="12pt"/>
+  <Seitenformat breite="10cm" höhe="11cm"/>
+
+  <DefiniereFarbe name="weiß" wert="#fff"/>
+  <DefiniereFarbe name="grau" wert="#eee"/>
+
+  <LadeSchriftdatei name="MyriadPro-Regular" dateiname="MyriadPro-Regular.otf" />
+  <LadeSchriftdatei name="MyriadPro-Bold" dateiname="MyriadPro-Bold.otf" />
+
+  <DefiniereSchriftfamilie name="text" schriftgröße="10" zeilenabstand="12">
+    <Normal schriftart="MyriadPro-Regular"/>
+    <Fett schriftart="MyriadPro-Bold"/>
+  </DefiniereSchriftfamilie>
+  
+  <Datensatz element="data">
+    <Zuweisung variable="_last_tr_data" auswahl="0"></Zuweisung>
+    <ObjektAusgeben>
+      <Tabelle dehnen="max" padding="4pt">
+        <Tabellenkopf seite="erste">
+          <Tr hintergrundfarbe="grau">
+            <Td border-bottom="0.25pt" align="center"><Absatz><B><Wert>Nr.</Wert></B></Absatz></Td>
+            <Td border-bottom="0.25pt" align="center"><Absatz><B><Wert>Bild</Wert></B></Absatz></Td>
+            <Td border-bottom="0.25pt" align="center"><Absatz><B><Wert>Name</Wert></B></Absatz></Td>
+            <Td border-bottom="0.25pt" align="center"><Absatz><B><Wert>Art-Nr.</Wert></B></Absatz></Td>
+            <Td border-bottom="0.25pt" align="center"><Absatz><B><Wert>Preis</Wert></B></Absatz></Td>
+          </Tr>
+        </Tabellenkopf>
+        <Tabellenkopf seite="alle">
+          <Tr hintergrundfarbe="grau">
+            <Td border-bottom="0.25pt" align="center"><Absatz><B><Wert>Nr.</Wert></B></Absatz></Td>
+            <Td border-bottom="0.25pt" align="center"><Absatz><B><Wert>Bild</Wert></B></Absatz></Td>
+            <Td border-bottom="0.25pt" align="center"><Absatz><B><Wert>Name</Wert></B></Absatz></Td>
+            <Td border-bottom="0.25pt" align="center"><Absatz><B><Wert>Art-Nr.</Wert></B></Absatz></Td>
+            <Td border-bottom="0.25pt" align="center"><Absatz><B><Wert>Preis</Wert></B></Absatz></Td>
+          </Tr>
+          <Tr>
+            <Td colspan="3"></Td>
+            <Td border-bottom="0.25pt" colspan="2" align="right"><Absatz schriftart="text"><Wert>Übertrag: </Wert><Wert auswahl="$_last_tr_data"/></Absatz></Td>
+          </Tr>
+        </Tabellenkopf>
+        <Tabellenfuß seite="alle">
+          <Tr>
+            <Td colspan="3"></Td>
+            <Td border-top="0.25pt" colspan="2" align="right"><Absatz schriftart="text"><Wert>Summe:</Wert><HLeerraum/><Wert auswahl="$_last_tr_data"/></Absatz></Td>
+          </Tr>
+        </Tabellenfuß>
+        <Tabellenfuß seite="letzte">
+          <Tr>
+            <Td colspan="3"></Td>
+            <Td border-top="0.25pt" colspan="2" align="right"><Absatz schriftart="text"><Wert>Gesamt:</Wert><HLeerraum/><Wert auswahl="$_last_tr_data"/></Absatz></Td>
+          </Tr>
+        </Tabellenfuß>
+        <FürAlle auswahl="artikel">
+          <Tr daten="@summe" hintergrundfarbe="{sd:alternierend('tab','weiß','grau')}">
+            <Td align="center"><Absatz><Wert auswahl="position()"></Wert></Absatz></Td>
+            <Td align="center"><Bild maxbreite="2" maxhöhe="3" datei="{@bild}"/></Td>
+            <Td align="left"><Absatz><Wert auswahl="@name"></Wert></Absatz></Td>
+            <Td align="left"><Absatz><Wert auswahl="@artnr"></Wert></Absatz></Td>
+            <Td align="right"><Absatz><Wert auswahl="@preis"></Wert></Absatz></Td>
+          </Tr>
+        </FürAlle>
+      </Tabelle>
+    </ObjektAusgeben>
+  </Datensatz>
+</Layout>

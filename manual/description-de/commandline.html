@@ -1,46 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="../css/normal.css" type="text/css" />
-<link rel="stylesheet" href="../css/pygments.css" type="text/css" />
-<link rel="stylesheet" href="../css/colorbox.css" type="text/css" />
-<script src="../javascript/jquery.min.js" ></script>
-<script src="../javascript/jquery.colorbox-min.js" ></script>
-<script>
-  $(document).ready(function(){
-     $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
-  });
-</script>
-<title>Kommandozeile</title>
+    <title>Kommandozeile</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../assets/css/normal.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/colorbox.css" type="text/css" />
+    <script src="../assets/js/jquery.min.js" ></script>
+    <script src="../assets/js/jquery.colorbox-min.js" ></script>
+    <script>
+      $(document).ready(function(){
+         $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+      });
+    </script>
 </head>
 <body>
-<div id="logo"><a href="../index-de.html"><img src="../images/publisher_logo.png" alt="Startseite"></a></div>
-	<h1>Aufruf des Publishers über Kommandozeile</h1>
-<pre>sp --help
-Usage: sp [parameter] command 
+<div id="logo"><a href="../index-de.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
+<div class="">
+<h1>Aufruf des Publishers über Kommandozeile</h1>
+
+<pre><code>sp --help
+Usage: sp [parameter] command
 -h, --help                   Show this help
     --autoopen               Open the PDF file (MacOS X and Linux only)
-    --data=NAME              Name of the XML data file. Defaults to 'data.xml'
+    --data=NAME              Name of the XML data file. Defaults to
+                             'data.xml'. Use '-' for STDIN
     --dummy                  Don't read a data file, use '&lt;data /&gt;' as input
 -x, --extra-dir=DIR          Additional directory for file search
     --filter=FILTER          Run XPROC filter before publishing starts
     --grid                   Display background grid. Disable with --no-grid
-    --[no-]local             Add local directory to the search path. Default
-                             is true
+    --[no-]local             Add local directory to the search path. Default is true
     --layout=NAME            Name of the layout file. Defaults to 'layout.xml'
-    --jobname=NAME           The name of the resulting PDF file, default is
-                             'publisher.pdf'
+    --jobname=NAME           The name of the resulting PDF file (without
+                             extension), default is 'publisher'
+    --mainlanguage=NAME      The document's main language in locale format,
+                             for example en_US.
     --outputdir=DIR          Copy PDF and protocol to this directory
-    --runs=NUM               Number of publishing runs 
+    --profile                Run publisher with profiling on (internal use)
+    --runs=NUM               Number of publishing runs
     --startpage=NUM          The first page number
+    --show-gridallocation    Show the allocated grid cells
+    --systemfonts            Use system fonts
+    --timeout=SEC            Exit after SEC seconds
     --trace                  Show debug messages and some tracing PDF output
 -v, --var=VAR=VALUE          Set a variable for the publishing run
     --verbose                Print a bit of debugging output
     --version                Show version information
     --wd=DIR                 Change working directory
     --xml                    Output as (pseudo-)XML (for list-fonts)
-  
+ 
 Commands
       list-fonts             List installed fonts (use together with --xml
                              for copy/paste)
@@ -48,68 +56,193 @@ Commands
       compare                Compare files for quality assurance
       doc                    Open documentation
       watch                  Start watchdog / hotfolder
-      run                    Start publishing (default)</pre>
+      run                    Start publishing (default)
+</code></pre>
+
 <h2>Erklärung der Kommandozeilenparameter</h2>
-<dl>
-	<dt><code>--autoopen</code></dt>
-	<dd>Öffnet die <span class="caps">PDF</span>-Datei nach dem Publisher-Durchlauf. Kann auch in der <a href="configuration.html">Konfigurationsdatei</a> eingestellt werden.</dd>
-	<dt><code>--data=NAME</code></dt>
-	<dd>Gibt den Namen der <span class="caps">XML</span>-Daten an. Voreinstellung ist <code>data.xml</code>. Ebenfalls <a href="configuration.html">konfigurierbar</a>. Wird als Dateiname ein Strich (<code>-</code>) angegeben, liest der Publisher die <span class="caps">XML</span>-Daten aus der Standard-Eingabe (<span class="caps">STDIN</span>).</dd>
-	<dt><code>--dummy</code></dt>
-	<dd>Führt nur das Regelwerk aus. Als Dateninhalt wird <code>&lt;data /&gt;</code> angenommen. Dient zum schnellen Testen von Regelwerken</dd>
-	<dt><code>--filter=FILTER</code></dt>
-	<dd>Führt die angegebene <span class="caps">XPROC</span>-Datei aus.</dd>
-	<dt><code>--grid</code></dt>
-	<dd>Zeichnet das Raster. Mit <code>--no-grid</code> wird es ausgeschaltet.  Konfigurierbar auch im <a href="../commands-de/options.html">Layout</a>.</dd>
-	<dt><code>--layout=NAME</code></dt>
-	<dd>Gibt den Namen des Layoutregelwerks an. Voreinstellung ist <code>layout.xml</code>. Ebenfalls <a href="configuration.html">konfigurierbar</a>.</dd>
-	<dt><code>--[no-]local</code></dt>
-	<dd>Das aktuelle Verzeichnis wird (nicht) rekursiv dem Suchpfad hinzugefügt. Voreingestellt ist, dass das aktuelle Verzeichnis und seine Unterverzeichnisse beachtet werden.</dd>
-	<dt><code>--jobname=NAME</code></dt>
-	<dd>Bestimmt den Ausgabenamen. Voreinstellung ist <code>publisher.pdf</code>.</dd>
-	<dt><code>--outputdir=VERZEICHNIS</code></dt>
-	<dd>Die resultierende <span class="caps">PDF</span>-Datei und Protokolldatei wird in das angegebene Verzeichnis kopiert. Das Verzeichnis wird erstellt, falls es noch nicht existiert.</dd>
-	<dt><code>--runs = NUM</code></dt>
-	<dd>Überschreibt die Anzahl der Durchläufe des Publishers.</dd>
-	<dt><code>--startpage = NUM</code></dt>
-	<dd>Die Seitennummer der ersten Seite.</dd>
-	<dt><code>-v</code>, <code>--var=value</code></dt>
-	<dd>Übergibt zusätzliche Variablen an den Publisher-Lauf. Diese können wie üblich mit <code>auswahl="$variable"</code> benutzt werden.</dd>
-	<dt><code>-x</code>, <code>--extra-dir</code></dt>
-	<dd>Bindet zusätzliche Verzeichnisse in den Publisherlauf ein. In diesen Verzeichnissen werden alle Daten gesucht: Bilddaten, Regelwerke, Datendateien und Schriftdateien. Dieses Argument kann mehrfach angegeben werden und per <a href="configuration.html">Konfigurationsdatei</a> mit Werten vorbelegt werden.</dd>
-	<dt><code>--verbose</code></dt>
-	<dd>Gibt mehr Informationen aus, also notwendig.</dd>
-	<dt><code>--wd=DIR</code></dt>
-	<dd>Wechselt in das angegebene Verzeichnis. Verhält sich genau so, als ob man vorher mit cd in dieses Verzeichnis gewechselt hat.</dd>
-	<dt><code>--xml</code></dt>
-	<dd>Die Ausgaben mancher Kommandos werden als (Pseudo-)<span class="caps">XML</span> dargestellt, um sie in das Layoutregelwerk zu übernehmen.</dd>
-</dl>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>--autoopen</code></td>
+<td>Öffnet die PDF-Datei nach dem Publisher-Durchlauf. Kann auch in der <a href="configuration.html">Konfigurationsdatei</a> eingestellt werden.  <code>--data=NAME</code></td>
+</tr>
+
+<tr>
+<td><code>--dummy</code></td>
+<td>Führt nur das Regelwerk aus. Als Dateninhalt wird <code>&lt;data /&gt;</code> angenommen. Dient zum schnellen Testen von Regelwerken</td>
+</tr>
+
+<tr>
+<td><code>-x</code>, <code>--extra-dir</code></td>
+<td>Bindet zusätzliche Verzeichnisse in den Publisherlauf ein. In diesen  Verzeichnissen werden alle Daten gesucht: Bilddaten, Regelwerke,  Datendateien und Schriftdateien. Dieses Argument kann mehrfach  angegeben werden und per <a href="configuration.html">Konfigurationsdatei</a>  mit Werten vorbelegt werden.</td>
+</tr>
+
+<tr>
+<td><code>--filter=FILTER</code></td>
+<td>Führt die angegebene XPROC-Datei aus.</td>
+</tr>
+
+<tr>
+<td><code>--grid</code></td>
+<td>Zeichnet das Raster. Mit <code>--no-grid</code> wird es ausgeschaltet. Konfigurierbar auch im <a href="../commands-de/options.html">Layout</a>.</td>
+</tr>
+
+<tr>
+<td><code>--layout=NAME</code></td>
+<td>Gibt den Namen des Layoutregelwerks an. Voreinstellung ist <code>layout.xml</code>. Ebenfalls <a href="configuration.html">konfigurierbar</a>.</td>
+</tr>
+
+<tr>
+<td><code>--[no-]local</code></td>
+<td>Das aktuelle Verzeichnis wird (nicht) rekursiv dem Suchpfad hinzugefügt. Voreingestellt ist, dass das aktuelle Verzeichnis und  seine Unterverzeichnisse beachtet werden.</td>
+</tr>
+
+<tr>
+<td><code>--jobname=NAME</code></td>
+<td>Bestimmt den Ausgabenamen. Voreinstellung ist <code>publisher.pdf</code>.</td>
+</tr>
+
+<tr>
+<td><code>--mainlanguage=NAME</code></td>
+<td>Bestimmt die Hauptsprache des Dokuments für die Silbentrennung. Mögliche Werte sind: <code>af</code>, <code>as</code>, <code>bg</code>, <code>ca</code>, <code>cs</code>, <code>cy</code>, <code>da</code>, <code>de</code>,<code>el</code>, <code>en</code>, <code>en_GB</code>, <code>en_US</code>, <code>eo</code>, <code>es</code>, <code>et</code>, <code>eu</code>, <code>fi</code>, <code>fr</code>,<code>ga</code>, <code>gl</code>, <code>gu</code>, <code>hi</code>, <code>hr</code>, <code>hu</code>, <code>hy</code>, <code>ia</code>, <code>id</code>, <code>is</code>, <code>it</code>,<code>ku</code>, <code>kn</code>, <code>la</code>, <code>lo</code>, <code>lt</code>, <code>ml</code>, <code>lv</code>, <code>ml</code>, <code>mn</code>, <code>mr</code>, <code>nb</code>,<code>nl</code>, <code>nn</code>, <code>or</code>, <code>pa</code>, <code>pl</code>, <code>pt</code>, <code>ro</code>, <code>ru</code>, <code>sa</code>, <code>sk</code>, <code>sl</code>,<code>sr</code>, <code>sv</code>, <code>ta</code>, <code>te</code>, <code>tk</code>, <code>tr</code>, <code>uk</code> und <code>zh</code>. Siehe <a href="http://www.loc.gov/standards/iso639-2/php/code_list.php">Codeliste der Sprachen</a>.</td>
+</tr>
+
+<tr>
+<td><code>--outputdir=VERZEICHNIS</code></td>
+<td>Die resultierende PDF-Datei und Protokolldatei wird in das angegebene Verzeichnis kopiert. Das Verzeichnis wird erstellt, falls es noch nicht existiert.</td>
+</tr>
+
+<tr>
+<td><code>--runs = NUM</code></td>
+<td>Überschreibt die Anzahl der Durchläufe des Publishers.</td>
+</tr>
+
+<tr>
+<td><code>--startpage = NUM</code></td>
+<td>Die Seitennummer der ersten Seite.</td>
+</tr>
+
+<tr>
+<td><code>--show-gridallocation</code></td>
+<td>Markiert die belegten Rasterzellen mit einer gelblichen Farbe. Doppelt belegte Zellen werden mit rot gekennzeichnet.</td>
+</tr>
+
+<tr>
+<td><code>--systemfonts</code></td>
+<td>Lädt zusätzlich Systemschriftarten. Funktioniert nicht unter Windows XP.</td>
+</tr>
+
+<tr>
+<td><code>--timeout=SEC</code></td>
+<td>Beendet den Lauf nach SEC Sekunden mit Statuscode 1.</td>
+</tr>
+
+<tr>
+<td><code>-v</code>, <code>--var=value</code></td>
+<td>Übergibt zusätzliche Variablen an den Publisher-Lauf. Diese können wie üblich mit <code>auswahl=&quot;$variable&quot;</code> benutzt werden.</td>
+</tr>
+
+<tr>
+<td><code>--verbose</code></td>
+<td>Gibt mehr Informationen aus, also notwendig.</td>
+</tr>
+
+<tr>
+<td><code>--wd=DIR</code></td>
+<td>Wechselt in das angegebene Verzeichnis. Verhält sich genau so, als ob man vorher mit cd in dieses Verzeichnis gewechselt hat.</td>
+</tr>
+
+<tr>
+<td><code>--xml</code></td>
+<td>Die Ausgaben mancher Kommandos werden als (Pseudo-)XML dargestellt, um sie in das Layoutregelwerk zu übernehmen.</td>
+</tr>
+</tbody>
+</table>
+
 <h2>Befehle</h2>
-<dl>
-	<dt><code>list-fonts</code></dt>
-	<dd>Listet alle Schriftdateien auf, die in den Publisher-Verzeichnissen gefunden werden. Zusammen mit <code>--xml</code> erlaubt dieses Kommando die Ausgabe per Copy&amp;Paste in das Layoutregelwerk zu übernehmen.</dd>
-	<dt><code>compare</code></dt>
-	<dd>Überprüft rekursiv ein Verzeichnis auf Layout-Anderungen. Siehe den <a href="qualityassurance.html">Abschnitt über Qualitätssicherung</a>.</dd>
-	<dt><code>clean</code></dt>
-	<dd>Entfernt temporäre Dateien aus dem Publisher-Lauf. Behält die <span class="caps">PDF</span> Datei.</dd>
-	<dt><code>doc</code></dt>
-	<dd>Öffnet die Onlinehilfe.</dd>
-	<dt><code>run</code></dt>
-	<dd>Startet den Publisher Lauf.</dd>
-	<dt><code>watch</code></dt>
-	<dd>Startet den internen Hotfolder</dd>
-</dl>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>list-fonts</code></td>
+<td>Listet alle Schriftdateien auf, die in den Publisher-Verzeichnissen gefunden werden. Zusammen mit <code>--xml</code> erlaubt dieses Kommando die Ausgabe per Copy&amp;Paste in das Layoutregelwerk zu übernehmen.</td>
+</tr>
+
+<tr>
+<td><code>compare</code></td>
+<td>Überprüft rekursiv ein Verzeichnis auf Layout-Anderungen. Siehe den <a href="qualityassurance.html">Abschnitt über Qualitätssicherung</a>.</td>
+</tr>
+
+<tr>
+<td><code>clean</code></td>
+<td>Entfernt temporäre Dateien aus dem Publisher-Lauf. Behält die PDF Datei.</td>
+</tr>
+
+<tr>
+<td><code>doc</code></td>
+<td>Öffnet die Onlinehilfe.</td>
+</tr>
+
+<tr>
+<td><code>run</code></td>
+<td>Startet den Publisher Lauf.</td>
+</tr>
+
+<tr>
+<td><code>watch</code></td>
+<td>Startet den internen Hotfolder</td>
+</tr>
+</tbody>
+</table>
+
 <h3>Beispiel für die Hotfolder Konfiguration</h3>
-<pre>[hotfolder]
+
+<pre><code>[hotfolder]
 hotfolder = /home/speedata/hotfolder
-events = layout\.xml:run(runpublisher);data\.xml:run(runpublisher)</pre>
-<dl>
-	<dt><code>hotfolder</code></dt>
-	<dd>Verzeichnis, das überwacht werden soll.</dd>
-	<dt><code>events</code></dt>
-	<dd>Einträge (mit Semikolon getrennt) in der Form <code>Muster:Befehl</code>. Das <code>Muster</code> ist ein Regulärer Ausdruck. Wenn dieser auf die Datei <em>passt</em>, dann wird das Programm unter <code>Befehl</code> ausgeführt. Derzeit können nur externe Programme ausgeführt werden. Diese werden in den Klammern angegeben. Die Programme erhalten als erstes Argument den Pfad zur gefundenen Datei. Der Hotfolder wartet, bis das Programm beendet wurde und löscht anschließend die Datei.</dd>
-</dl>
-<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
-<a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Befehlsreferenz</a> | Andere Sprache: <a href="../description-en/commandline.html">Englisch</a> 
+events = layout\.xml:run(runpublisher);data\.xml:run(runpublisher)
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>hotfolder</code></td>
+<td>Verzeichnis, das überwacht werden soll.</td>
+</tr>
+
+<tr>
+<td><code>events</code></td>
+<td>Einträge (mit Semikolon getrennt) in der Form <code>Muster:Befehl</code>. Das <code>Muster</code> ist ein Regulärer Ausdruck. Wenn dieser auf die Datei <em>passt</em>, dann wird das Programm unter <code>Befehl</code> ausgeführt. Derzeit können nur externe Programme ausgeführt werden. Diese werden in den Klammern angegeben. Die Programme erhalten als erstes Argument den Pfad zur gefundenen Datei. Der Hotfolder wartet, bis das Programm beendet wurde und löscht anschließend die Datei.</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+
+
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
+<a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/commandline.html">Englisch</a>
+
 </body>
 </html>

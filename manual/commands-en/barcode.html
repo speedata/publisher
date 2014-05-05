@@ -1,7 +1,7 @@
 <!DOCTYPE html><html>
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <link rel="stylesheet" href="../css/normal.css" type="text/css"><script src="../javascript/jquery.min.js" type="text/javascript"></script><script src="../javascript/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
+      <link rel="stylesheet" href="../assets/css/normal.css" type="text/css"><script src="../assets/js/jquery.min.js" type="text/javascript"></script><script src="../assets/js/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
                // This function is executed when the page has finished loading.
              jQuery(function($) {
              // This function highlights (by default) pre and code tags which are annotated correctly.
@@ -10,13 +10,21 @@
             </script><title>Barcode</title>
    </head>
    <body>
-      <div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"></a></div>
+      <div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">Barcode</code></h1>
          <h2>Description</h2>
          <p>Print a 1d or 2d barcode. To be used in <a href="placeobject.html">PlaceObject</a>.
          </p>
-         <p>Allowed attributes: <span class="tt"><a href="#fontface">fontface</a></span>, <span class="tt"><a href="#height">height</a></span>, <span class="tt"><a href="#select">select</a></span>, <span class="tt"><a href="#showtext">showtext</a></span>, <span class="tt"><a href="#type">type</a></span>, <span class="tt"><a href="#width">width</a></span><br>Child elements: <br>Parent elements: <a href="placeobject.html">PlaceObject</a></p>
+         <div class="hangingindent">
+            <p>Allowed attributes: <span class="tt"><a href="#fontface">fontface</a></span>, <span class="tt"><a href="#height">height</a></span>, <span class="tt"><a href="#select">select</a></span>, <span class="tt"><a href="#showtext">showtext</a></span>, <span class="tt"><a href="#type">type</a></span>, <span class="tt"><a href="#width">width</a></span></p>
+         </div>
+         <div class="hangingindent">
+            <p>Child elements: (none)</p>
+         </div>
+         <div class="hangingindent">
+            <p>Parent elements: <a href="case.html">Case</a>, <a href="forall.html">ForAll</a>, <a href="loop.html">Loop</a>, <a href="otherwise.html">Otherwise</a>, <a href="placeobject.html">PlaceObject</a>, <a href="td.html">Td</a>, <a href="until.html">Until</a>, <a href="while.html">While</a></p>
+         </div>
          <h3>Attributes</h3>
          <dl>
             <dt><a name="fontface"></a><span class="tt">fontface</span> (string, optional)
@@ -49,13 +57,44 @@
                <p>Should the text be written under the barcode?</p>
                
             </dd>
-            <dt><a name="type"></a><span class="tt">type</span> (string)
-            </dt>
+            <dt><a name="type"></a><span class="tt">type</span></dt>
             <dd>
                
                <p>Type of the barcode. One of <span class="tt">EAN13</span>, <span class="tt">Code128</span> or <span class="tt">QRCode</span>.
                </p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>QRCode:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Create an »optimal« QR code in terms of error correction and size.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Code128:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Generate a code 128 barcode for numbers and text.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>EAN13:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Create an EAN13 barcode for 13 digits.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name="width"></a><span class="tt">width</span> (number or length, optional)
             </dt>
@@ -72,8 +111,7 @@
          <pre class="syntax xml">&lt;PlaceObject&gt;
   &lt;Barcode select="4242002518169" type="EAN13"/&gt;
 &lt;/PlaceObject&gt;</pre>
-         <h2>See also</h2>
-      </div>
+         <h2>See also</h2><a href="placeobject.html">PlaceObject</a></div>
       <div id="elementref">
          <h1>Commands</h1>
          <ul>
@@ -109,12 +147,14 @@
             <li><a href="i.html">I</a></li>
             <li><a href="image.html">Image</a></li>
             <li><a href="include.html">Include</a></li>
+            <li><a href="insertpages.html">InsertPages</a></li>
             <li><a href="italic.html">Italic</a></li>
             <li><a href="layout.html">Layout</a></li>
             <li><a href="li.html">Li</a></li>
             <li><a href="loaddataset.html">LoadDataset</a></li>
             <li><a href="loadfontfile.html">LoadFontfile</a></li>
             <li><a href="loop.html">Loop</a></li>
+            <li><a href="makeindex.html">Makeindex</a></li>
             <li><a href="margin.html">Margin</a></li>
             <li><a href="mark.html">Mark</a></li>
             <li><a href="message.html">Message</a></li>
@@ -124,6 +164,7 @@
             <li><a href="ol.html">Ol</a></li>
             <li><a href="options.html">Options</a></li>
             <li><a href="otherwise.html">Otherwise</a></li>
+            <li><a href="output.html">Output</a></li>
             <li><a href="pageformat.html">Pageformat</a></li>
             <li><a href="pagetype.html">Pagetype</a></li>
             <li><a href="paragraph.html">Paragraph</a></li>
@@ -131,11 +172,12 @@
             <li><a href="positioningarea.html">PositioningArea</a></li>
             <li><a href="positioningframe.html">PositioningFrame</a></li>
             <li><a href="processnode.html">ProcessNode</a></li>
-            <li><a href="processrecord.html">ProcessRecord</a></li>
             <li><a href="record.html">Record</a></li>
             <li><a href="regular.html">Regular</a></li>
             <li><a href="rule.html">Rule</a></li>
             <li><a href="savedataset.html">SaveDataset</a></li>
+            <li><a href="savepages.html">SavePages</a></li>
+            <li><a href="sequence.html">Sequence</a></li>
             <li><a href="setgrid.html">SetGrid</a></li>
             <li><a href="setvariable.html">SetVariable</a></li>
             <li><a href="sortsequence.html">SortSequence</a></li>
@@ -148,11 +190,13 @@
             <li><a href="tablehead.html">Tablehead</a></li>
             <li><a href="tablerule.html">Tablerule</a></li>
             <li><a href="td.html">Td</a></li>
+            <li><a href="text.html">Text</a></li>
             <li><a href="textblock.html">Textblock</a></li>
             <li><a href="tr.html">Tr</a></li>
             <li><a href="u.html">U</a></li>
             <li><a href="url.html">URL</a></li>
             <li><a href="ul.html">Ul</a></li>
+            <li><a href="until.html">Until</a></li>
             <li><a href="value.html">Value</a></li>
             <li><a href="while.html">While</a></li>
          </ul>

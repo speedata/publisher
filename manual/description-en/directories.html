@@ -1,137 +1,209 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="../css/normal.css" type="text/css" />
-<link rel="stylesheet" href="../css/pygments.css" type="text/css" />
-<link rel="stylesheet" href="../css/colorbox.css" type="text/css" />
-<script src="../javascript/jquery.min.js" ></script>
-<script src="../javascript/jquery.colorbox-min.js" ></script>
-<script>
-  $(document).ready(function(){
-     $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
-  });
-</script>
-<title>Automatically generated lists</title>
+    <title>speedata Publisher manual</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../assets/css/normal.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/colorbox.css" type="text/css" />
+    <script src="../assets/js/jquery.min.js" ></script>
+    <script src="../assets/js/jquery.colorbox-min.js" ></script>
+    <script>
+      $(document).ready(function(){
+         $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+      });
+    </script>
 </head>
 <body>
-<div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"></a></div>
-	<h1>Automatically generated lists / directories</h1>
-<p>The speedata Publisher can create arbitrary types of directories. All lists: table of contents, list of articles or keyword index, are created by the same principle. The necessary data for the list (e.g. page number, article number) are saved in its own <span class="caps">XML</span> data structure, saved to the harddrive and used in the next publishing run.</p>
-<p>To make the speedata publisher run more than once, it needs to be instructed by a switch on the <a href="commandline.html">command line</a> (<code>sp --runs=2</code>) or in the <a href="configuration.html">configuration file</a> with <code>runs=2</code>. You can give any number, but normally two or three runs are sufficient to generate the list.</p>
+<div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
+<div class="">
+<h1>Automatically generated lists / directories</h1>
+
+<p>The speedata Publisher can create arbitrary types of directories. All
+lists: table of contents, list of articles or keyword index, are created
+by the same principle. The necessary data for the list (e.g. page
+number, article number) are saved in its own XML data structure, saved
+to the harddrive and used in the next publishing run.</p>
+
+<p>To make the speedata publisher run more than once, it needs to be
+instructed by a switch on the <a href="commandline.html">command line</a>
+(<code>sp --runs=2</code>) or in the <a href="configuration.html">configuration file</a> with
+<code>runs=2</code>. You can give any number, but normally two or three runs are
+sufficient to generate the list.</p>
+
 <h2>Step 1: Collection the information</h2>
-<p>Both commands <a href="../commands-en/element.html">Element</a> and <a href="../commands-en/attribute.html">Attribute</a> are used to structure the data, that are to be read on the next publishing run. You can create <span class="caps">XML</span> data structures with the information for the list that you need to generate. The data should have a structure that is suited for processing with the speedata Publisher. The following is an example of a suitable data structure:</p>
-<div class="highlight"><pre><code class="xml"><span class="nt">&lt;articlelist&gt;</span>
-  <span class="nt">&lt;article</span> <span class="na">nummer=</span><span class="s">&quot;1&quot;</span> <span class="na">page=</span><span class="s">&quot;10&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;article</span> <span class="na">nummer=</span><span class="s">&quot;2&quot;</span> <span class="na">page=</span><span class="s">&quot;12&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;article</span> <span class="na">nummer=</span><span class="s">&quot;3&quot;</span> <span class="na">page=</span><span class="s">&quot;14&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/articlelist&gt;</span>
-</code></pre></div><p>To create this structure in the layout rules, you need to apply the commands <a href="../commands-en/element.html">Element</a> and <a href="../commands-en/attribute.html">Attribute</a> as follows:</p>
-<div class="highlight"><pre><code class="xml"><span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;articlelist&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;article&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Attribute</span> <span class="na">name=</span><span class="s">&quot;nummer&quot;</span> <span class="na">select=</span><span class="s">&quot;1&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;Attribute</span> <span class="na">name=</span><span class="s">&quot;page&quot;</span> <span class="na">select=</span><span class="s">&quot;10&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;/Element&gt;</span>
-  <span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;article&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Attribute</span> <span class="na">name=</span><span class="s">&quot;nummer&quot;</span> <span class="na">select=</span><span class="s">&quot;2&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;Attribute</span> <span class="na">name=</span><span class="s">&quot;page&quot;</span> <span class="na">select=</span><span class="s">&quot;12&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;/Element&gt;</span>
-  <span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;article&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Attribute</span> <span class="na">name=</span><span class="s">&quot;nummer&quot;</span> <span class="na">select=</span><span class="s">&quot;3&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;Attribute</span> <span class="na">name=</span><span class="s">&quot;page&quot;</span> <span class="na">select=</span><span class="s">&quot;14&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;/Element&gt;</span>
-<span class="nt">&lt;/Element&gt;</span>
-</code></pre></div><p>Instead of using the commands <a href="../commands-en/element.html">Element</a> and <a href="../commands-en/attribute.html">Attribute</a> in one place you can create the construct by using variables to save the data. See the example below.</p>
+
+<p>Both commands <a href="../commands-en/element.html">Element</a> and
+<a href="../commands-en/attribute.html">Attribute</a> are used to structure the
+data, that are to be read on the next publishing run. You can create XML
+data structures with the information for the list that you need to
+generate. The data should have a structure that is suited for processing
+with the speedata Publisher. The following is an example of a suitable
+data structure:</p>
+
+<pre><code>&lt;articlelist&gt;
+  &lt;article nummer=&quot;1&quot; page=&quot;10&quot;/&gt;
+  &lt;article nummer=&quot;2&quot; page=&quot;12&quot;/&gt;
+  &lt;article nummer=&quot;3&quot; page=&quot;14&quot;/&gt;
+&lt;/articlelist&gt;
+</code></pre>
+
+<p>To create this structure in the layout rules, you need to apply the
+commands <a href="../commands-en/element.html">Element</a> and
+<a href="../commands-en/attribute.html">Attribute</a> as follows:</p>
+
+<pre><code>&lt;Element name=&quot;articlelist&quot;&gt;
+  &lt;Element name=&quot;article&quot;&gt;
+    &lt;Attribute name=&quot;nummer&quot; select=&quot;1&quot;/&gt;
+    &lt;Attribute name=&quot;page&quot; select=&quot;10&quot;/&gt;
+  &lt;/Element&gt;
+  &lt;Element name=&quot;article&quot;&gt;
+    &lt;Attribute name=&quot;nummer&quot; select=&quot;2&quot;/&gt;
+    &lt;Attribute name=&quot;page&quot; select=&quot;12&quot;/&gt;
+  &lt;/Element&gt;
+  &lt;Element name=&quot;article&quot;&gt;
+    &lt;Attribute name=&quot;nummer&quot; select=&quot;3&quot;/&gt;
+    &lt;Attribute name=&quot;page&quot; select=&quot;14&quot;/&gt;
+  &lt;/Element&gt;
+&lt;/Element&gt;
+</code></pre>
+
+<p>Instead of using the commands <a href="../commands-en/element.html">Element</a> and
+<a href="../commands-en/attribute.html">Attribute</a> in one place you can create
+the construct by using variables to save the data. See the example
+below.</p>
+
 <h2>Step 2: Save and load the list information</h2>
-<p>The command <a href="../commands-en/savedataset.html">SaveDataset</a> saves the given structure to the harddrive which can be loaded again (in the next run) with <a href="../commands-en/loaddataset.html">LoadDataset</a>. If the file does not exist when loading it with <a href="../commands-en/loaddataset.html">LoadDataset</a> it will be silently ignored, because it could be the first run which means the file does not exist yet.</p>
+
+<p>The command <a href="../commands-en/savedataset.html">SaveDataset</a> saves the
+given structure to the harddrive which can be loaded again (in the next
+run) with <a href="../commands-en/loaddataset.html">LoadDataset</a>. If the file
+does not exist when loading it with
+<a href="../commands-en/loaddataset.html">LoadDataset</a> it will be silently
+ignored, because it could be the first run which means the file does not
+exist yet.</p>
+
 <h2>Step 3: Process the information</h2>
-<p>Right after using <a href="../commands-en/loaddataset.html">LoadDataset</a>, data processing continues with the matching rule for the<br />
-data set file. In the example above, a rule that maches <code>articlelist</code> will be applied (<a href="../commands-en/record.html">Record</a> element=&#8220;articlelist&#8221;). When this rule finishes, the layout continues right after <code>LoadDataset</code>.</p>
+
+<p>Right after using <a href="../commands-en/loaddataset.html">LoadDataset</a>, data
+processing continues with the matching rule for the\
+ data set file. In the example above, a rule that maches <code>articlelist</code>
+will be applied (<a href="../commands-en/record.html">Record</a>
+element=“articlelist”). When this rule finishes, the layout continues
+right after <code>LoadDataset</code>.</p>
+
 <h2>Example</h2>
-<p>The following example (planets) is included in the distribution. It creates a table of contents for the following pages. The data processing starts at the element  <code>planets</code> (about the middle of the file). We load the data file <code>toc</code> (it could be any name). In the first run, this file is not found and the command <a href="../commands-en/loaddataset.html">LoadDataset</a> does not execute anything. The data processing continues with the command after the <code>LoadDataset</code> (here: <code>&gt;SetVariable&gt;</code>).  During the first run data which has the following  structure is written on the disk (with the name <code>toc</code>):</p>
-<div class="highlight"><pre><code class="xml"><span class="nt">&lt;tableofcontents&gt;</span>
-  <span class="nt">&lt;planetlisting</span> <span class="na">name=</span><span class="s">&quot;Mercury&quot;</span> <span class="na">pagenumber=</span><span class="s">&quot;2&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;planetlisting</span> <span class="na">name=</span><span class="s">&quot;Venus&quot;</span> <span class="na">pagenumber=</span><span class="s">&quot;3&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;planetlisting</span> <span class="na">name=</span><span class="s">&quot;Earth&quot;</span> <span class="na">pagenumber=</span><span class="s">&quot;4&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;planetlisting</span> <span class="na">name=</span><span class="s">&quot;Mars&quot;</span> <span class="na">pagenumber=</span><span class="s">&quot;5&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;planetlisting</span> <span class="na">name=</span><span class="s">&quot;Jupiter&quot;</span> <span class="na">pagenumber=</span><span class="s">&quot;6&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;planetlisting</span> <span class="na">name=</span><span class="s">&quot;Saturn&quot;</span> <span class="na">pagenumber=</span><span class="s">&quot;7&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;planetlisting</span> <span class="na">name=</span><span class="s">&quot;Uranus&quot;</span> <span class="na">pagenumber=</span><span class="s">&quot;8&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;planetlisting</span> <span class="na">name=</span><span class="s">&quot;Neptune&quot;</span> <span class="na">pagenumber=</span><span class="s">&quot;9&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/tableofcontents&gt;</span>
-</code></pre></div><p>In the layout <span class="caps">XML</span> file, the data structure must have this format:</p>
-<div class="highlight"><pre><code class="xml"><span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;tableofcontents&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;planetlisting&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Attribute</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">select=</span><span class="s">&quot;&#39;Mercury&#39;&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;Attribute</span> <span class="na">name=</span><span class="s">&quot;pagenumber&quot;</span> <span class="na">select=</span><span class="s">&quot;2&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;/Element&gt;</span>
-  <span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;planetlisting&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Attribute</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">select=</span><span class="s">&quot;&#39;Venus&#39;&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;Attribute</span> <span class="na">name=</span><span class="s">&quot;pagenumber&quot;</span> <span class="na">select=</span><span class="s">&quot;3&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;/Element&gt;</span>
+
+<p>The following example (planets) is included in the distribution. It
+creates a table of contents for the following pages. The data processing
+starts at the element <code>planets</code> (about the middle of the file). We load
+the data file <code>toc</code> (it could be any name). In the first run, this file
+is not found and the command
+<a href="../commands-en/loaddataset.html">LoadDataset</a> does not execute
+anything. The data processing continues with the command after the
+<code>LoadDataset</code> (here: <code>&gt;SetVariable&gt;</code>). During the first run data which
+has the following structure is written on the disk (with the name
+<code>toc</code>):</p>
+
+<pre><code>&lt;tableofcontents&gt;
+  &lt;planetlisting name=&quot;Mercury&quot; pagenumber=&quot;2&quot;/&gt;
+  &lt;planetlisting name=&quot;Venus&quot; pagenumber=&quot;3&quot;/&gt;
+  &lt;planetlisting name=&quot;Earth&quot; pagenumber=&quot;4&quot;/&gt;
+  &lt;planetlisting name=&quot;Mars&quot; pagenumber=&quot;5&quot;/&gt;
+  &lt;planetlisting name=&quot;Jupiter&quot; pagenumber=&quot;6&quot;/&gt;
+  &lt;planetlisting name=&quot;Saturn&quot; pagenumber=&quot;7&quot;/&gt;
+  &lt;planetlisting name=&quot;Uranus&quot; pagenumber=&quot;8&quot;/&gt;
+  &lt;planetlisting name=&quot;Neptune&quot; pagenumber=&quot;9&quot;/&gt;
+&lt;/tableofcontents&gt;
+</code></pre>
+
+<p>In the layout XML file, the data structure must have this format:</p>
+
+<pre><code>&lt;Element name=&quot;tableofcontents&quot;&gt;
+  &lt;Element name=&quot;planetlisting&quot;&gt;
+    &lt;Attribute name=&quot;name&quot; select=&quot;'Mercury'&quot;/&gt;
+    &lt;Attribute name=&quot;pagenumber&quot; select=&quot;2&quot;/&gt;
+  &lt;/Element&gt;
+  &lt;Element name=&quot;planetlisting&quot;&gt;
+    &lt;Attribute name=&quot;name&quot; select=&quot;'Venus'&quot;/&gt;
+    &lt;Attribute name=&quot;pagenumber&quot; select=&quot;3&quot;/&gt;
+  &lt;/Element&gt;
   ...
-  <span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;planetlisting&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Attribute</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">select=</span><span class="s">&quot;&#39;Uranus&#39;&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;Attribute</span> <span class="na">name=</span><span class="s">&quot;pagenumber&quot;</span> <span class="na">select=</span><span class="s">&quot;9&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;/Element&gt;</span>
-<span class="nt">&lt;/Element&gt;</span>
-</code></pre></div><p>The information in the attributes should be created dynamically. We use the XPath expression <code>@name</code> and the XPath function <code>sd:current-page()</code>.</p>
-<p>In the second run the file <code>toc</code> will be read by <code>LoadDataset</code>. The layout <span class="caps">XML</span> processing jumps to the <code>&lt;Record element=tableofcontents"&gt;</code> at the beginning of the file, since <code>tableofcontents</code> is the root element of the data set.</p>
-<div class="highlight"><pre><code class="xml"><span class="nt">&lt;Record</span> <span class="na">element=</span><span class="s">&quot;tableofcontents&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;SetVariable</span> <span class="na">variable=</span><span class="s">&quot;tableofcontents&quot;</span> <span class="na">select=</span><span class="s">&quot;&#39;&#39;&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;ProcessNode</span> <span class="na">select=</span><span class="s">&quot;planetlisting&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;PlaceObject</span> <span class="na">column=</span><span class="s">&quot;3&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Textblock</span> <span class="na">width=</span><span class="s">&quot;20&quot;</span> <span class="na">fontface=</span><span class="s">&quot;Header&quot;</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;Paragraph&gt;&lt;Value&gt;</span>Contents<span class="nt">&lt;/Value&gt;&lt;/Paragraph&gt;</span>
-    <span class="nt">&lt;/Textblock&gt;</span>
-  <span class="nt">&lt;/PlaceObject&gt;</span>
-  <span class="nt">&lt;PlaceObject</span> <span class="na">column=</span><span class="s">&quot;3&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Textblock</span> <span class="na">width=</span><span class="s">&quot;20&quot;</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;Value</span> <span class="na">select=</span><span class="s">&quot;$tableofcontents&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/Textblock&gt;</span>
-  <span class="nt">&lt;/PlaceObject&gt;</span>
-<span class="nt">&lt;/Record&gt;</span>
+  &lt;Element name=&quot;planetlisting&quot;&gt;
+    &lt;Attribute name=&quot;name&quot; select=&quot;'Uranus'&quot;/&gt;
+    &lt;Attribute name=&quot;pagenumber&quot; select=&quot;9&quot;/&gt;
+  &lt;/Element&gt;
+&lt;/Element&gt;
+</code></pre>
+
+<p>The information in the attributes should be created dynamically. We use
+the XPath expression <code>@name</code> and the XPath function <code>sd:current-page()</code>.</p>
+
+<p>In the second run the file <code>toc</code> will be read by <code>LoadDataset</code>. The
+layout XML processing jumps to the <code>&lt;Record element=tableofcontents&quot;&gt;</code>
+at the beginning of the file, since <code>tableofcontents</code> is the root
+element of the data set.</p>
+
+<pre><code>&lt;Record element=&quot;tableofcontents&quot;&gt;
+  &lt;SetVariable variable=&quot;tableofcontents&quot; select=&quot;''&quot;/&gt;
+  &lt;ProcessNode select=&quot;planetlisting&quot;/&gt;
+  &lt;PlaceObject column=&quot;3&quot;&gt;
+    &lt;Textblock width=&quot;20&quot; fontface=&quot;Header&quot;&gt;
+      &lt;Paragraph&gt;&lt;Value&gt;Contents&lt;/Value&gt;&lt;/Paragraph&gt;
+    &lt;/Textblock&gt;
+  &lt;/PlaceObject&gt;
+  &lt;PlaceObject column=&quot;3&quot;&gt;
+    &lt;Textblock width=&quot;20&quot;&gt;
+      &lt;Value select=&quot;$tableofcontents&quot;/&gt;
+    &lt;/Textblock&gt;
+  &lt;/PlaceObject&gt;
+&lt;/Record&gt;
  
-<span class="nt">&lt;Record</span> <span class="na">element=</span><span class="s">&quot;planetlisting&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;SetVariable</span> <span class="na">variable=</span><span class="s">&quot;tableofcontents&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Value</span> <span class="na">select=</span><span class="s">&quot;$tableofcontents&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;Paragraph&gt;</span>
-      <span class="nt">&lt;Value</span> <span class="na">select=</span><span class="s">&quot;@name&quot;</span><span class="nt">/&gt;</span>
-      <span class="nt">&lt;Value&gt;</span>, page <span class="nt">&lt;/Value&gt;</span>
-      <span class="nt">&lt;Value</span> <span class="na">select=</span><span class="s">&quot;@page&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/Paragraph&gt;</span>
-  <span class="nt">&lt;/SetVariable&gt;</span>
-<span class="nt">&lt;/Record&gt;</span>
+&lt;Record element=&quot;planetlisting&quot;&gt;
+  &lt;SetVariable variable=&quot;tableofcontents&quot;&gt;
+    &lt;Value select=&quot;$tableofcontents&quot;/&gt;
+    &lt;Paragraph&gt;
+      &lt;Value select=&quot;@name&quot;/&gt;
+      &lt;Value&gt;, page &lt;/Value&gt;
+      &lt;Value select=&quot;@page&quot;/&gt;
+    &lt;/Paragraph&gt;
+  &lt;/SetVariable&gt;
+&lt;/Record&gt;
  
-<span class="c">&lt;!-- Root element --&gt;</span>
-<span class="nt">&lt;Record</span> <span class="na">element=</span><span class="s">&quot;planets&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;SetVariable</span> <span class="na">variable=</span><span class="s">&quot;column&quot;</span> <span class="na">select=</span><span class="s">&quot;2&quot;</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;LoadDataset</span> <span class="na">name=</span><span class="s">&quot;toc&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;SetVariable</span> <span class="na">variable=</span><span class="s">&quot;Contents&quot;</span> <span class="na">select=</span><span class="s">&quot;&#39;&#39;&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;NewPage/&gt;</span>
-  <span class="nt">&lt;ProcessNode</span> <span class="na">select=</span><span class="s">&quot;planet&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/Record&gt;</span>
+&lt;!-- Root element --&gt;
+&lt;Record element=&quot;planets&quot;&gt;
+  &lt;SetVariable variable=&quot;column&quot; select=&quot;2&quot; /&gt;
+  &lt;LoadDataset name=&quot;toc&quot;/&gt;
+  &lt;SetVariable variable=&quot;Contents&quot; select=&quot;''&quot;/&gt;
+  &lt;NewPage/&gt;
+  &lt;ProcessNode select=&quot;planet&quot;/&gt;
+&lt;/Record&gt;
  
-<span class="nt">&lt;Record</span> <span class="na">element=</span><span class="s">&quot;planet&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;SetVariable</span> <span class="na">variable=</span><span class="s">&quot;Contents&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Value</span> <span class="na">select=</span><span class="s">&quot;$Contents&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;planetlisting&quot;</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;Attribute</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">select=</span><span class="s">&quot; @name &quot;</span><span class="nt">/&gt;</span>
-      <span class="nt">&lt;Attribute</span> <span class="na">name=</span><span class="s">&quot;page&quot;</span> <span class="na">select=</span><span class="s">&quot; sd:current-page()&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/Element&gt;</span>
-  <span class="nt">&lt;/SetVariable&gt;</span>
+&lt;Record element=&quot;planet&quot;&gt;
+  &lt;SetVariable variable=&quot;Contents&quot;&gt;
+    &lt;Value select=&quot;$Contents&quot;/&gt;
+    &lt;Element name=&quot;planetlisting&quot;&gt;
+      &lt;Attribute name=&quot;name&quot; select=&quot; @name &quot;/&gt;
+      &lt;Attribute name=&quot;page&quot; select=&quot; sd:current-page()&quot;/&gt;
+    &lt;/Element&gt;
+  &lt;/SetVariable&gt;
  
-  <span class="nt">&lt;ProcessNode</span> <span class="na">select=</span><span class="s">&quot;url&quot;</span> <span class="nt">/&gt;</span>
+  &lt;ProcessNode select=&quot;url&quot; /&gt;
   ...
-  <span class="nt">&lt;NewPage</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;SaveDataset</span> <span class="na">filename=</span><span class="s">&quot;toc&quot;</span> <span class="na">elementname=</span><span class="s">&quot;tableofcontents&quot;</span> <span class="na">select=</span><span class="s">&quot;$Contents&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/Record&gt;</span>
+  &lt;NewPage /&gt;
+  &lt;SaveDataset filename=&quot;toc&quot; elementname=&quot;tableofcontents&quot; select=&quot;$Contents&quot;/&gt;
+&lt;/Record&gt;
  
-<span class="nt">&lt;Record</span> <span class="na">element=</span><span class="s">&quot;url&quot;</span><span class="nt">&gt;</span>
+&lt;Record element=&quot;url&quot;&gt;
   ...
-<span class="nt">&lt;/Record&gt;</span>
-</code></pre></div>
-<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
-<a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language: <a href="../description-de/directories.html">German</a> 
+&lt;/Record&gt;
+</code></pre>
+
+</div>
+
+
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
+<a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/directories.html">German</a>
+
 </body>
 </html>

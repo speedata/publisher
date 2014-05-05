@@ -1,28 +1,92 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="../css/normal.css" type="text/css" />
-<link rel="stylesheet" href="../css/pygments.css" type="text/css" />
-<link rel="stylesheet" href="../css/colorbox.css" type="text/css" />
-<script src="../javascript/jquery.min.js" ></script>
-<script src="../javascript/jquery.colorbox-min.js" ></script>
-<script>
-  $(document).ready(function(){
-     $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
-  });
-</script>
-<title>File index</title>
+    <title>File index</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../assets/css/normal.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/colorbox.css" type="text/css" />
+    <script src="../assets/js/jquery.min.js" ></script>
+    <script src="../assets/js/jquery.colorbox-min.js" ></script>
+    <script>
+      $(document).ready(function(){
+         $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+      });
+    </script>
 </head>
 <body>
-<div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"></a></div>
-	<h1>
-File list
-</h1><table>
-<tr><td><a href='helloworld/index.html'>helloworld/</a></td><td style='padding-left: 40px;'>Simple example with text</td></tr>
-<tr><td><a href='planets/index.html'>planets/</a></td><td style='padding-left: 40px;'>Example with table of contents</td></tr>
-</table><div style='margin-top: 30px;' />
-<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
-<a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language: <a href="../examples-de/index.html">German</a> 
+<div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
+<div class="filelist">
+<h1>List of files</h1>
+
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><a href="datahandling1/index.html">datahandling1</a></td>
+<td>Simple data processing via ProcessNode</td>
+</tr>
+
+<tr>
+<td><a href="datahandling2/index.html">datahandling2</a></td>
+<td>Simple data processing via ForAll</td>
+</tr>
+
+<tr>
+<td><a href="datasource/index.html">datasource</a></td>
+<td>HTML elements in the data source</td>
+</tr>
+
+<tr>
+<td><a href="grid/index.html">grid</a></td>
+<td>Typesetting on a grid</td>
+</tr>
+
+<tr>
+<td><a href="helloworld/index.html">helloworld</a></td>
+<td>The classical hello world-example</td>
+</tr>
+
+<tr>
+<td><a href="imageshape/index.html">imageshape</a></td>
+<td>Text flows around an image</td>
+</tr>
+
+<tr>
+<td><a href="planets/index.html">planets</a></td>
+<td>How to handle automatically generated table of contents etc.</td>
+</tr>
+
+<tr>
+<td><a href="runningsum/index.html">runningsum</a></td>
+<td>A table with a dynamic header and footer</td>
+</tr>
+
+<tr>
+<td><a href="simpletable/index.html">simpletable</a></td>
+<td>A simple HTML like table</td>
+</tr>
+
+<tr>
+<td><a href="textframe/index.html">textframe</a></td>
+<td>Overflowing text containers</td>
+</tr>
+</tbody>
+</table>
+
+<p><a href="../index.html">Parent directory</a></p>
+
+</div>
+
+
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
+<a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../examples-de/index.html">German</a>
+
 </body>
 </html>

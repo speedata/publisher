@@ -1,140 +1,214 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="../css/normal.css" type="text/css" />
-<link rel="stylesheet" href="../css/pygments.css" type="text/css" />
-<link rel="stylesheet" href="../css/colorbox.css" type="text/css" />
-<script src="../javascript/jquery.min.js" ></script>
-<script src="../javascript/jquery.colorbox-min.js" ></script>
-<script>
-  $(document).ready(function(){
-     $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
-  });
-</script>
-<title>Automatisch erstellte Verzeichnisse</title>
+    <title>Handbuch Publisher</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../assets/css/normal.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/colorbox.css" type="text/css" />
+    <script src="../assets/js/jquery.min.js" ></script>
+    <script src="../assets/js/jquery.colorbox-min.js" ></script>
+    <script>
+      $(document).ready(function(){
+         $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+      });
+    </script>
 </head>
 <body>
-<div id="logo"><a href="../index-de.html"><img src="../images/publisher_logo.png" alt="Startseite"></a></div>
-	<h1>Automatisch erstellte Verzeichnisse</h1>
-<p>Der speedata Publisher kann beliebige Verzeichnistypen erstellen. Ob Inhaltsverzeichnis, Artikelliste oder Stichwortindex &#8211; alle Listen funktionieren nach demselben Prinzip: die notwendigen Daten (z.B. Seitenzahlen, Artikelnummern) werden in einer eigenen Datenstruktur gespeichert, auf Festplatte geschrieben und beim nächsten Lauf des Publishers werden diese Daten eingelesen und stehen sofort zur Verfügung.</p>
-<p>Damit der Publisher mehrfach durchläuft, muss der Parameter <code>runs</code> auf der Kommandozeile bzw. in der Konfigurationsdatei gesetzt werden, beispielsweise mit <code>sp --runs=2</code> (Kommandozeile) bzw. <code>runs = 2</code> (Optionen).</p>
+<div id="logo"><a href="../index-de.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
+<div class="">
+<h1>Automatisch erstellte Verzeichnisse</h1>
+
+<p>Der speedata Publisher kann beliebige Verzeichnistypen erstellen. Ob
+Inhaltsverzeichnis, Artikelliste oder Stichwortindex – alle Listen
+funktionieren nach demselben Prinzip: die notwendigen Daten (z.B.
+Seitenzahlen, Artikelnummern) werden in einer eigenen Datenstruktur
+gespeichert, auf Festplatte geschrieben und beim nächsten Lauf des
+Publishers werden diese Daten eingelesen und stehen sofort zur
+Verfügung.</p>
+
+<p>Damit der Publisher mehrfach durchläuft, muss der Parameter <code>runs</code> auf
+der Kommandozeile bzw. in der Konfigurationsdatei gesetzt werden,
+beispielsweise mit <code>sp --runs=2</code> (Kommandozeile) bzw. <code>runs = 2</code>
+(Optionen).</p>
+
 <h2>Schritt 1: Sammeln der Informationen</h2>
-<p>Die beiden Befehle <a href="../commands-de/element.html">Element</a> und <a href="../commands-de/attribute.html">Attribut</a> dienen zur Strukturierung von Daten, die während der Verarbeitung gelesen werden. Mit diesen Befehlen lassen sich neue <span class="caps">XML</span> Datensatzdateien erzeugen. Die Datensatzdatei sollte eine Struktur haben, die sich für die automatische Verarbeitung mit dem Publisher eignet. Folgende Struktur könnte für eine Artikelliste sinnvoll sein:</p>
-<div class="highlight"><pre><code class="xml"><span class="nt">&lt;Artikelverzeichnis&gt;</span>
-  <span class="nt">&lt;Artikel</span> <span class="na">nummer=</span><span class="s">&quot;1&quot;</span> <span class="na">seite=</span><span class="s">&quot;10&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;Artikel</span> <span class="na">nummer=</span><span class="s">&quot;2&quot;</span> <span class="na">seite=</span><span class="s">&quot;12&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;Artikel</span> <span class="na">nummer=</span><span class="s">&quot;3&quot;</span> <span class="na">seite=</span><span class="s">&quot;14&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/Artikelverzeichnis&gt;</span>
-</code></pre></div><p>Um diese Struktur im Layoutregelwerk zu erstellen, muss sie aus den Befehlen <a href="../commands-de/element.html">Element</a> und <a href="../commands-de/attribute.html">Attribut</a> wie folgt zusammengesetzt werden:</p>
-<div class="highlight"><pre><code class="xml"><span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;Artikelverzeichnis&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;Artikel&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Attribut</span> <span class="na">name=</span><span class="s">&quot;nummer&quot;</span> <span class="na">auswahl=</span><span class="s">&quot;1&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;Attribut</span> <span class="na">name=</span><span class="s">&quot;seite&quot;</span> <span class="na">auswahl=</span><span class="s">&quot;10&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;/Element&gt;</span>
-  <span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;Artikel&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Attribut</span> <span class="na">name=</span><span class="s">&quot;nummer&quot;</span> <span class="na">auswahl=</span><span class="s">&quot;2&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;Attribut</span> <span class="na">name=</span><span class="s">&quot;seite&quot;</span> <span class="na">auswahl=</span><span class="s">&quot;12&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;/Element&gt;</span>
-  <span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;Artikel&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Attribut</span> <span class="na">name=</span><span class="s">&quot;nummer&quot;</span> <span class="na">auswahl=</span><span class="s">&quot;3&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;Attribut</span> <span class="na">name=</span><span class="s">&quot;seite&quot;</span> <span class="na">auswahl=</span><span class="s">&quot;14&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;/Element&gt;</span>
-<span class="nt">&lt;/Element&gt;</span>
-</code></pre></div><p>Anstelle der Befehle <a href="../commands-de/element.html">Element</a> und <a href="../commands-de/attribute.html">Attribut</a> können auch Variablen als Speicher benutzt werden (siehe Beispiel unten).</p>
+
+<p>Die beiden Befehle <a href="../commands-de/element.html">Element</a> und
+<a href="../commands-de/attribute.html">Attribut</a> dienen zur Strukturierung von
+Daten, die während der Verarbeitung gelesen werden. Mit diesen Befehlen
+lassen sich neue XML Datensatzdateien erzeugen. Die Datensatzdatei
+sollte eine Struktur haben, die sich für die automatische Verarbeitung
+mit dem Publisher eignet. Folgende Struktur könnte für eine Artikelliste
+sinnvoll sein:</p>
+
+<pre><code>&lt;Artikelverzeichnis&gt;
+  &lt;Artikel nummer=&quot;1&quot; seite=&quot;10&quot;/&gt;
+  &lt;Artikel nummer=&quot;2&quot; seite=&quot;12&quot;/&gt;
+  &lt;Artikel nummer=&quot;3&quot; seite=&quot;14&quot;/&gt;
+&lt;/Artikelverzeichnis&gt;
+</code></pre>
+
+<p>Um diese Struktur im Layoutregelwerk zu erstellen, muss sie aus den
+Befehlen <a href="../commands-de/element.html">Element</a> und
+<a href="../commands-de/attribute.html">Attribut</a> wie folgt zusammengesetzt
+werden:</p>
+
+<pre><code>&lt;Element name=&quot;Artikelverzeichnis&quot;&gt;
+  &lt;Element name=&quot;Artikel&quot;&gt;
+    &lt;Attribut name=&quot;nummer&quot; auswahl=&quot;1&quot;/&gt;
+    &lt;Attribut name=&quot;seite&quot; auswahl=&quot;10&quot;/&gt;
+  &lt;/Element&gt;
+  &lt;Element name=&quot;Artikel&quot;&gt;
+    &lt;Attribut name=&quot;nummer&quot; auswahl=&quot;2&quot;/&gt;
+    &lt;Attribut name=&quot;seite&quot; auswahl=&quot;12&quot;/&gt;
+  &lt;/Element&gt;
+  &lt;Element name=&quot;Artikel&quot;&gt;
+    &lt;Attribut name=&quot;nummer&quot; auswahl=&quot;3&quot;/&gt;
+    &lt;Attribut name=&quot;seite&quot; auswahl=&quot;14&quot;/&gt;
+  &lt;/Element&gt;
+&lt;/Element&gt;
+</code></pre>
+
+<p>Anstelle der Befehle <a href="../commands-de/element.html">Element</a> und
+<a href="../commands-de/attribute.html">Attribut</a> können auch Variablen als
+Speicher benutzt werden (siehe Beispiel unten).</p>
+
 <h2>Schritt 2: Speichern und Laden der Informationen</h2>
-<p>Mit dem Befehl <a href="../commands-de/savedataset.html">SpeichereDatensatzdatei</a> wird die Struktur auf Festplatte gespeichert und mit <a href="../commands-de/loaddataset.html">LadeDatensatzdatei</a> wird sie wieder geladen. Existiert die Datei nicht, so wird kein Fehler gemeldet, da es sich um den ersten Durchlauf handeln könnte, wo die Datei naturgemäß noch nicht existiert.</p>
+
+<p>Mit dem Befehl
+<a href="../commands-de/savedataset.html">SpeichereDatensatzdatei</a> wird die
+Struktur auf Festplatte gespeichert und mit
+<a href="../commands-de/loaddataset.html">LadeDatensatzdatei</a> wird sie wieder
+geladen. Existiert die Datei nicht, so wird kein Fehler gemeldet, da es
+sich um den ersten Durchlauf handeln könnte, wo die Datei naturgemäß
+noch nicht existiert.</p>
+
 <h2>Schritt 3: Verarbeiten der Informationen</h2>
-<p>Direkt nach dem Laden wird die <span class="caps">XML</span>-Verarbeitung mit dem ersten Element der gerade geladenen Struktur fortgesetzt, im Beispiel oben würde nach dem folgenden Befehl im Layoutregelwerk gesucht:</p>
-<div class="highlight"><pre><code class="xml"><span class="nt">&lt;Datensatz</span> <span class="na">element=</span><span class="s">&quot;Artikelverzeichnis&quot;</span><span class="nt">&gt;</span>
+
+<p>Direkt nach dem Laden wird die XML-Verarbeitung mit dem ersten Element
+der gerade geladenen Struktur fortgesetzt, im Beispiel oben würde nach
+dem folgenden Befehl im Layoutregelwerk gesucht:</p>
+
+<pre><code>&lt;Datensatz element=&quot;Artikelverzeichnis&quot;&gt;
   ...
-<span class="nt">&lt;/Datensatz&gt;</span>
-</code></pre></div><p>Das heißt, dass die eigentliche Datenverarbeitung zeitweilig unterbrochen und mit dem neuen Datensatz aus <a href="../commands-de/loaddataset.html">LadeDatensatzdatei</a> fortgeführt wird.</p>
+&lt;/Datensatz&gt;
+</code></pre>
+
+<p>Das heißt, dass die eigentliche Datenverarbeitung zeitweilig
+unterbrochen und mit dem neuen Datensatz aus
+<a href="../commands-de/loaddataset.html">LadeDatensatzdatei</a> fortgeführt wird.</p>
+
 <h2>Beispiel</h2>
-<p>Das folgende Beispiel reichert die »Planetenliste« um ein Inhaltsverzeichnis an. Die Verarbeitung beginnt beim Wurzelelement <code>planeten</code> (in der Mitte der Datei). Hier wird die Datensatzdatei <code>toc</code> (für: table of contents) geladen. Im ersten Durchlauf wird die Datei nicht gefunden, daher wird die Datensatzdatei »planeten« normal weiter verarbeitet. Während des Durchlaufs wird eine Liste erstellt, die folgende <span class="caps">XML</span>-Struktur hat:</p>
-<div class="highlight"><pre><code class="xml"><span class="nt">&lt;Inhaltsverzeichnis&gt;</span>
-  <span class="nt">&lt;Planetenverzeichnis</span> <span class="na">name=</span><span class="s">&quot;Merkur&quot;</span> <span class="na">seite=</span><span class="s">&quot;2&quot;</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;Planetenverzeichnis</span> <span class="na">name=</span><span class="s">&quot;Venus&quot;</span> <span class="na">seite=</span><span class="s">&quot;3&quot;</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;Planetenverzeichnis</span> <span class="na">name=</span><span class="s">&quot;Erde&quot;</span> <span class="na">seite=</span><span class="s">&quot;4&quot;</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;Planetenverzeichnis</span> <span class="na">name=</span><span class="s">&quot;Mars&quot;</span> <span class="na">seite=</span><span class="s">&quot;5&quot;</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;Planetenverzeichnis</span> <span class="na">name=</span><span class="s">&quot;Jupiter&quot;</span> <span class="na">seite=</span><span class="s">&quot;6&quot;</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;Planetenverzeichnis</span> <span class="na">name=</span><span class="s">&quot;Saturn&quot;</span> <span class="na">seite=</span><span class="s">&quot;7&quot;</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;Planetenverzeichnis</span> <span class="na">name=</span><span class="s">&quot;Uranus&quot;</span> <span class="na">seite=</span><span class="s">&quot;8&quot;</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;Planetenverzeichnis</span> <span class="na">name=</span><span class="s">&quot;Neptun&quot;</span> <span class="na">seite=</span><span class="s">&quot;9&quot;</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/Inhaltsverzeichnis&gt;</span>
-</code></pre></div><p>Im Layoutregelwerk muss diese den folgenden Aufbau haben:</p>
-<div class="highlight"><pre><code class="xml"><span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;Inhaltsverzeichnis&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;Planetenverzeichnis&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Attribut</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">auswahl=</span><span class="s">&quot;&#39;Merkur&#39;&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;Attribut</span> <span class="na">name=</span><span class="s">&quot;seite&quot;</span> <span class="na">auswahl=</span><span class="s">&quot;2&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;/Element&gt;</span>
-  <span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;Planetenverzeichnis&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Attribut</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">auswahl=</span><span class="s">&quot;&#39;Venus&#39;&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;Attribut</span> <span class="na">name=</span><span class="s">&quot;seite&quot;</span> <span class="na">auswahl=</span><span class="s">&quot;3&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;/Element&gt;</span>
+
+<p>Das folgende Beispiel reichert die »Planetenliste« um ein
+Inhaltsverzeichnis an. Die Verarbeitung beginnt beim Wurzelelement
+<code>planeten</code> (in der Mitte der Datei). Hier wird die Datensatzdatei <code>toc</code>
+(für: table of contents) geladen. Im ersten Durchlauf wird die Datei
+nicht gefunden, daher wird die Datensatzdatei »planeten« normal weiter
+verarbeitet. Während des Durchlaufs wird eine Liste erstellt, die
+folgende XML-Struktur hat:</p>
+
+<pre><code>&lt;Inhaltsverzeichnis&gt;
+  &lt;Planetenverzeichnis name=&quot;Merkur&quot; seite=&quot;2&quot; /&gt;
+  &lt;Planetenverzeichnis name=&quot;Venus&quot; seite=&quot;3&quot; /&gt;
+  &lt;Planetenverzeichnis name=&quot;Erde&quot; seite=&quot;4&quot; /&gt;
+  &lt;Planetenverzeichnis name=&quot;Mars&quot; seite=&quot;5&quot; /&gt;
+  &lt;Planetenverzeichnis name=&quot;Jupiter&quot; seite=&quot;6&quot; /&gt;
+  &lt;Planetenverzeichnis name=&quot;Saturn&quot; seite=&quot;7&quot; /&gt;
+  &lt;Planetenverzeichnis name=&quot;Uranus&quot; seite=&quot;8&quot; /&gt;
+  &lt;Planetenverzeichnis name=&quot;Neptun&quot; seite=&quot;9&quot; /&gt;
+&lt;/Inhaltsverzeichnis&gt;
+</code></pre>
+
+<p>Im Layoutregelwerk muss diese den folgenden Aufbau haben:</p>
+
+<pre><code>&lt;Element name=&quot;Inhaltsverzeichnis&quot;&gt;
+  &lt;Element name=&quot;Planetenverzeichnis&quot;&gt;
+    &lt;Attribut name=&quot;name&quot; auswahl=&quot;'Merkur'&quot;/&gt;
+    &lt;Attribut name=&quot;seite&quot; auswahl=&quot;2&quot;/&gt;
+  &lt;/Element&gt;
+  &lt;Element name=&quot;Planetenverzeichnis&quot;&gt;
+    &lt;Attribut name=&quot;name&quot; auswahl=&quot;'Venus'&quot;/&gt;
+    &lt;Attribut name=&quot;seite&quot; auswahl=&quot;3&quot;/&gt;
+  &lt;/Element&gt;
   ...
-  <span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;Planetenverzeichnis&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Attribut</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">auswahl=</span><span class="s">&quot;&#39;Uranus&#39;&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;Attribut</span> <span class="na">name=</span><span class="s">&quot;seite&quot;</span> <span class="na">auswahl=</span><span class="s">&quot;9&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;/Element&gt;</span>
-<span class="nt">&lt;/Element&gt;</span>
-</code></pre></div><p>Natürlich soll die Information in den Attributen dynamisch erzeugt werden, dafür werden der XPath-Ausdruck <code>@name</code> und die XPath-Funktion <code>sd:aktuelle-seite()</code> benutzt.</p>
-<p>Im zweiten Durchlauf wird die Datei erfolgreich eingelesen und die Verarbeitung »springt« zum Datensatz <code>Inhaltsverzeichnis</code>, da es das Wurzelelement der neuen Datei ist. Hier wird im Layoutregelwerk das Inhaltsverzeichnis erstellt.</p>
-<div class="highlight"><pre><code class="xml"><span class="nt">&lt;Datensatz</span> <span class="na">element=</span><span class="s">&quot;Inhaltsverzeichnis&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;Zuweisung</span> <span class="na">variable=</span><span class="s">&quot;Inhaltsverzeichnis&quot;</span> <span class="na">auswahl=</span><span class="s">&quot;&#39;&#39;&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;BearbeiteKnoten</span> <span class="na">auswahl=</span><span class="s">&quot;Planetenverzeichnis&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;ObjektAusgeben</span> <span class="na">spalte=</span><span class="s">&quot;3&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Textblock</span> <span class="na">breite=</span><span class="s">&quot;20&quot;</span> <span class="na">schriftart=</span><span class="s">&quot;Überschrift&quot;</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;Absatz&gt;&lt;Wert&gt;</span>Inhalt<span class="nt">&lt;/Wert&gt;&lt;/Absatz&gt;</span>
-    <span class="nt">&lt;/Textblock&gt;</span>
-  <span class="nt">&lt;/ObjektAusgeben&gt;</span>
-  <span class="nt">&lt;ObjektAusgeben</span> <span class="na">spalte=</span><span class="s">&quot;3&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Textblock</span> <span class="na">breite=</span><span class="s">&quot;20&quot;</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;Wert</span> <span class="na">auswahl=</span><span class="s">&quot;$Inhaltsverzeichnis&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/Textblock&gt;</span>
-  <span class="nt">&lt;/ObjektAusgeben&gt;</span>
-<span class="nt">&lt;/Datensatz&gt;</span>
+  &lt;Element name=&quot;Planetenverzeichnis&quot;&gt;
+    &lt;Attribut name=&quot;name&quot; auswahl=&quot;'Uranus'&quot;/&gt;
+    &lt;Attribut name=&quot;seite&quot; auswahl=&quot;9&quot;/&gt;
+  &lt;/Element&gt;
+&lt;/Element&gt;
+</code></pre>
+
+<p>Natürlich soll die Information in den Attributen dynamisch erzeugt
+werden, dafür werden der XPath-Ausdruck <code>@name</code> und die XPath-Funktion
+<code>sd:aktuelle-seite()</code> benutzt.</p>
+
+<p>Im zweiten Durchlauf wird die Datei erfolgreich eingelesen und die
+Verarbeitung »springt« zum Datensatz <code>Inhaltsverzeichnis</code>, da es das
+Wurzelelement der neuen Datei ist. Hier wird im Layoutregelwerk das
+Inhaltsverzeichnis erstellt.</p>
+
+<pre><code>&lt;Datensatz element=&quot;Inhaltsverzeichnis&quot;&gt;
+  &lt;Zuweisung variable=&quot;Inhaltsverzeichnis&quot; auswahl=&quot;''&quot;/&gt;
+  &lt;BearbeiteKnoten auswahl=&quot;Planetenverzeichnis&quot;/&gt;
+  &lt;ObjektAusgeben spalte=&quot;3&quot;&gt;
+    &lt;Textblock breite=&quot;20&quot; schriftart=&quot;Überschrift&quot;&gt;
+      &lt;Absatz&gt;&lt;Wert&gt;Inhalt&lt;/Wert&gt;&lt;/Absatz&gt;
+    &lt;/Textblock&gt;
+  &lt;/ObjektAusgeben&gt;
+  &lt;ObjektAusgeben spalte=&quot;3&quot;&gt;
+    &lt;Textblock breite=&quot;20&quot;&gt;
+      &lt;Wert auswahl=&quot;$Inhaltsverzeichnis&quot;/&gt;
+    &lt;/Textblock&gt;
+  &lt;/ObjektAusgeben&gt;
+&lt;/Datensatz&gt;
  
-<span class="nt">&lt;Datensatz</span> <span class="na">element=</span><span class="s">&quot;Planetenverzeichnis&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;Zuweisung</span> <span class="na">variable=</span><span class="s">&quot;Inhaltsverzeichnis&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Wert</span> <span class="na">auswahl=</span><span class="s">&quot;$Inhaltsverzeichnis&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;Absatz&gt;</span>
-      <span class="nt">&lt;Wert</span> <span class="na">auswahl=</span><span class="s">&quot;@name&quot;</span><span class="nt">/&gt;</span>
-      <span class="nt">&lt;Wert&gt;</span>, Seite <span class="nt">&lt;/Wert&gt;</span>
-      <span class="nt">&lt;Wert</span> <span class="na">auswahl=</span><span class="s">&quot;@seite&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/Absatz&gt;</span>
-  <span class="nt">&lt;/Zuweisung&gt;</span>
-<span class="nt">&lt;/Datensatz&gt;</span>
+&lt;Datensatz element=&quot;Planetenverzeichnis&quot;&gt;
+  &lt;Zuweisung variable=&quot;Inhaltsverzeichnis&quot;&gt;
+    &lt;Wert auswahl=&quot;$Inhaltsverzeichnis&quot;/&gt;
+    &lt;Absatz&gt;
+      &lt;Wert auswahl=&quot;@name&quot;/&gt;
+      &lt;Wert&gt;, Seite &lt;/Wert&gt;
+      &lt;Wert auswahl=&quot;@seite&quot;/&gt;
+    &lt;/Absatz&gt;
+  &lt;/Zuweisung&gt;
+&lt;/Datensatz&gt;
  
-<span class="c">&lt;!-- Wurzelelement --&gt;</span>
-<span class="nt">&lt;Datensatz</span> <span class="na">element=</span><span class="s">&quot;planeten&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;Zuweisung</span> <span class="na">variable=</span><span class="s">&quot;spalte&quot;</span> <span class="na">auswahl=</span><span class="s">&quot;2&quot;</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;LadeDatensatzdatei</span> <span class="na">name=</span><span class="s">&quot;toc&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;Zuweisung</span> <span class="na">variable=</span><span class="s">&quot;Inhalt&quot;</span> <span class="na">auswahl=</span><span class="s">&quot;&#39;&#39;&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;NeueSeite/&gt;</span>
-  <span class="nt">&lt;BearbeiteKnoten</span> <span class="na">auswahl=</span><span class="s">&quot;planet&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/Datensatz&gt;</span>
+&lt;!-- Wurzelelement --&gt;
+&lt;Datensatz element=&quot;planeten&quot;&gt;
+  &lt;Zuweisung variable=&quot;spalte&quot; auswahl=&quot;2&quot; /&gt;
+  &lt;LadeDatensatzdatei name=&quot;toc&quot;/&gt;
+  &lt;Zuweisung variable=&quot;Inhalt&quot; auswahl=&quot;''&quot;/&gt;
+  &lt;NeueSeite/&gt;
+  &lt;BearbeiteKnoten auswahl=&quot;planet&quot;/&gt;
+&lt;/Datensatz&gt;
  
-<span class="nt">&lt;Datensatz</span> <span class="na">element=</span><span class="s">&quot;planet&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;Zuweisung</span> <span class="na">variable=</span><span class="s">&quot;Inhalt&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Wert</span> <span class="na">auswahl=</span><span class="s">&quot;$Inhalt&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;Element</span> <span class="na">name=</span><span class="s">&quot;Planetenverzeichnis&quot;</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;Attribut</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">auswahl=</span><span class="s">&quot; @name &quot;</span><span class="nt">/&gt;</span>
-      <span class="nt">&lt;Attribut</span> <span class="na">name=</span><span class="s">&quot;seite&quot;</span> <span class="na">auswahl=</span><span class="s">&quot; sd:aktuelle-seite()&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/Element&gt;</span>
-  <span class="nt">&lt;/Zuweisung&gt;</span>
+&lt;Datensatz element=&quot;planet&quot;&gt;
+  &lt;Zuweisung variable=&quot;Inhalt&quot;&gt;
+    &lt;Wert auswahl=&quot;$Inhalt&quot;/&gt;
+    &lt;Element name=&quot;Planetenverzeichnis&quot;&gt;
+      &lt;Attribut name=&quot;name&quot; auswahl=&quot; @name &quot;/&gt;
+      &lt;Attribut name=&quot;seite&quot; auswahl=&quot; sd:aktuelle-seite()&quot;/&gt;
+    &lt;/Element&gt;
+  &lt;/Zuweisung&gt;
  
-  <span class="nt">&lt;BearbeiteKnoten</span> <span class="na">auswahl=</span><span class="s">&quot;url&quot;</span> <span class="nt">/&gt;</span>
+  &lt;BearbeiteKnoten auswahl=&quot;url&quot; /&gt;
   ...
-  <span class="nt">&lt;NeueSeite</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;SpeichereDatensatzdatei</span> <span class="na">dateiname=</span><span class="s">&quot;toc&quot;</span> <span class="na">elementname=</span><span class="s">&quot;Inhaltsverzeichnis&quot;</span> <span class="na">auswahl=</span><span class="s">&quot;$Inhalt&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/Datensatz&gt;</span>
+  &lt;NeueSeite /&gt;
+  &lt;SpeichereDatensatzdatei dateiname=&quot;toc&quot; elementname=&quot;Inhaltsverzeichnis&quot; auswahl=&quot;$Inhalt&quot;/&gt;
+&lt;/Datensatz&gt;
  
-<span class="nt">&lt;Datensatz</span> <span class="na">element=</span><span class="s">&quot;url&quot;</span><span class="nt">&gt;</span>
+&lt;Datensatz element=&quot;url&quot;&gt;
   ...
-<span class="nt">&lt;/Datensatz&gt;</span>
-</code></pre></div>
-<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
-<a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Befehlsreferenz</a> | Andere Sprache: <a href="../description-en/directories.html">Englisch</a> 
+&lt;/Datensatz&gt;
+</code></pre>
+
+</div>
+
+
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
+<a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/directories.html">Englisch</a>
+
 </body>
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html><html>
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <link rel="stylesheet" href="../css/normal.css" type="text/css"><script src="../javascript/jquery.min.js" type="text/javascript"></script><script src="../javascript/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
+      <link rel="stylesheet" href="../assets/css/normal.css" type="text/css"><script src="../assets/js/jquery.min.js" type="text/javascript"></script><script src="../assets/js/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
                // This function is executed when the page has finished loading.
              jQuery(function($) {
              // This function highlights (by default) pre and code tags which are annotated correctly.
@@ -10,14 +10,81 @@
             </script><title>Tablehead</title>
    </head>
    <body>
-      <div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"></a></div>
+      <div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">Tablehead</code></h1>
          <h2>Description</h2>
-         <p></p>
-         <p>Allowed attributes: <br>Child elements: <a href="tablerule.html">Tablerule</a>, <a href="tr.html">Tr</a><br>Parent elements: <a href="table.html">Table</a></p>
+         <p>Create a repeating table head.</p>
+         <div class="hangingindent">
+            <p>Allowed attributes: <span class="tt"><a href="#page">page</a></span></p>
+         </div>
+         <div class="hangingindent">
+            <p>Child elements: <a href="copy-of.html">Copy-of</a>, <a href="tablerule.html">Tablerule</a>, <a href="tr.html">Tr</a></p>
+         </div>
+         <div class="hangingindent">
+            <p>Parent elements: <a href="case.html">Case</a>, <a href="forall.html">ForAll</a>, <a href="loop.html">Loop</a>, <a href="otherwise.html">Otherwise</a>, <a href="setvariable.html">SetVariable</a>, <a href="table.html">Table</a>, <a href="until.html">Until</a>, <a href="while.html">While</a></p>
+         </div>
          <h3>Attributes</h3>
-         <dl></dl>
+         <dl>
+            <dt><a name="page"></a><span class="tt">page</span> (optional)
+            </dt>
+            <dd>
+               
+               <p>The page the table head should appear on. Defaults to »all«</p>
+               
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>first:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Only appear on the first page.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>all:</p>
+                     </td>
+                     <td>
+                        
+                        <p>All pages. If »first« is defined, the tablehead appears on all pages but the first.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>odd:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Appear on all odd pages.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>even:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Appear on all even pages.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
+            </dd>
+         </dl>
+         <h3>Remarks</h3>
+         
+         <p>The contents of the table head gets repeated on every page of a broken table.</p>
+         
+         <h2>Example</h2>
+         
+         <p>See the explanation of <a href="table.html">Table</a>.
+         </p>
+         
          <h2>See also</h2>
          <a href="tablefoot.html">Tablefoot</a>
          
@@ -57,12 +124,14 @@
             <li><a href="i.html">I</a></li>
             <li><a href="image.html">Image</a></li>
             <li><a href="include.html">Include</a></li>
+            <li><a href="insertpages.html">InsertPages</a></li>
             <li><a href="italic.html">Italic</a></li>
             <li><a href="layout.html">Layout</a></li>
             <li><a href="li.html">Li</a></li>
             <li><a href="loaddataset.html">LoadDataset</a></li>
             <li><a href="loadfontfile.html">LoadFontfile</a></li>
             <li><a href="loop.html">Loop</a></li>
+            <li><a href="makeindex.html">Makeindex</a></li>
             <li><a href="margin.html">Margin</a></li>
             <li><a href="mark.html">Mark</a></li>
             <li><a href="message.html">Message</a></li>
@@ -72,6 +141,7 @@
             <li><a href="ol.html">Ol</a></li>
             <li><a href="options.html">Options</a></li>
             <li><a href="otherwise.html">Otherwise</a></li>
+            <li><a href="output.html">Output</a></li>
             <li><a href="pageformat.html">Pageformat</a></li>
             <li><a href="pagetype.html">Pagetype</a></li>
             <li><a href="paragraph.html">Paragraph</a></li>
@@ -79,11 +149,12 @@
             <li><a href="positioningarea.html">PositioningArea</a></li>
             <li><a href="positioningframe.html">PositioningFrame</a></li>
             <li><a href="processnode.html">ProcessNode</a></li>
-            <li><a href="processrecord.html">ProcessRecord</a></li>
             <li><a href="record.html">Record</a></li>
             <li><a href="regular.html">Regular</a></li>
             <li><a href="rule.html">Rule</a></li>
             <li><a href="savedataset.html">SaveDataset</a></li>
+            <li><a href="savepages.html">SavePages</a></li>
+            <li><a href="sequence.html">Sequence</a></li>
             <li><a href="setgrid.html">SetGrid</a></li>
             <li><a href="setvariable.html">SetVariable</a></li>
             <li><a href="sortsequence.html">SortSequence</a></li>
@@ -96,11 +167,13 @@
             <li class="active"><a href="tablehead.html">Tablehead</a></li>
             <li><a href="tablerule.html">Tablerule</a></li>
             <li><a href="td.html">Td</a></li>
+            <li><a href="text.html">Text</a></li>
             <li><a href="textblock.html">Textblock</a></li>
             <li><a href="tr.html">Tr</a></li>
             <li><a href="u.html">U</a></li>
             <li><a href="url.html">URL</a></li>
             <li><a href="ul.html">Ul</a></li>
+            <li><a href="until.html">Until</a></li>
             <li><a href="value.html">Value</a></li>
             <li><a href="while.html">While</a></li>
          </ul>

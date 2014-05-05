@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/de" xmlns:sd="urn:speedata:2009/publisher/functions/de">
+
+  <Optionen zeichne_raster="nein" zeige_rasterbelegung="nein" hauptsprache="Deutsch"/>
+
+  <LadeSchriftdatei name="WarnockPro-Regular" dateiname="WarnockPro-Regular.otf" randausgleich="60" />
+
+  <DefiniereSchriftfamilie name="Überschrift" schriftgröße="14" zeilenabstand="16">
+    <Normal schriftart="WarnockPro-Regular"/>
+  </DefiniereSchriftfamilie>
+  <DefiniereSchriftfamilie name="text" schriftgröße="10" zeilenabstand="12">
+    <Normal schriftart="WarnockPro-Regular"/>
+  </DefiniereSchriftfamilie>
+  <DefiniereTextformat name="text" schusterjunge="ja"/>
+  <DefiniereTextformat name="Überschrift" margin-top="3pt" schusterjunge="ja"/>
+  
+  <SetzeRaster breite="5mm" höhe="12pt"/>
+  <Seitenformat breite="125mm" höhe="145mm"/>
+  
+  <Seitentyp name="text" bedingung="true()">
+    <Rand links="1cm" rechts="1cm" oben="1cm" unten="1cm"/>
+    <Platzierungsbereich name="text">
+      <Platzierungsrahmen breite="10" höhe="30" zeile="1" spalte="1"/>
+      <Platzierungsrahmen breite="10" höhe="30" zeile="1" spalte="12"/>
+    </Platzierungsbereich>
+  </Seitentyp>
+  
+  <DefiniereFarbe name="grau" wert="#D1FEE7"/>
+  <DefiniereFarbe name="weiß" wert="#FFF"/>
+
+  <Datensatz element="data">
+    <ObjektAusgeben zeile="10" spalte="12" valign="bottom">
+      <Bild datei="tree.pdf" breite="10"/>
+    </ObjektAusgeben>
+    <FürAlle auswahl="Abschnitt">
+      <Ausgabe bereich="text">
+        <Text>
+          <Absatz  textformat="Überschrift" schriftart="Überschrift">
+            <Wert auswahl="@titel"/>
+          </Absatz>
+        </Text>
+      </Ausgabe>
+      <Ausgabe bereich="text">
+        <Text>
+          <Absatz schriftart="text">
+            <Wert auswahl="string(.)"/>
+          </Absatz>
+        </Text>
+      </Ausgabe>
+    </FürAlle>
+  </Datensatz>
+</Layout>

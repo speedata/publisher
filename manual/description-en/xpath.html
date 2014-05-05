@@ -1,117 +1,299 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="../css/normal.css" type="text/css" />
-<link rel="stylesheet" href="../css/pygments.css" type="text/css" />
-<link rel="stylesheet" href="../css/colorbox.css" type="text/css" />
-<script src="../javascript/jquery.min.js" ></script>
-<script src="../javascript/jquery.colorbox-min.js" ></script>
-<script>
-  $(document).ready(function(){
-     $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
-  });
-</script>
-<title>XPath expressions</title>
+    <title>XPath expressions</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../assets/css/normal.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/colorbox.css" type="text/css" />
+    <script src="../assets/js/jquery.min.js" ></script>
+    <script src="../assets/js/jquery.colorbox-min.js" ></script>
+    <script>
+      $(document).ready(function(){
+         $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+      });
+    </script>
 </head>
 <body>
-<div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"></a></div>
-	<h1>XPath expressions</h1>
-<p>The speedata Publisher accepts XPath expressions in some attributes. These attributes are called <code>test</code> or <code>select</code> or documented as such. In all other attributes XPath expressions can be used via curly braces (<code>{</code> and <code>}</code>). In the following example XPath expressions are used in the attribute <code>width</code> and in the element <code>Value</code>. The width of the textblock is taken from the variable <code>$width</code>, the contents of the paragraph is the string value of the current node.</p>
-<div class="highlight"><pre><code class="xml"><span class="nt">&lt;PlaceObject&gt;</span>
-  <span class="nt">&lt;Textblock</span> <span class="na">width=</span><span class="s">&quot;{$width}&quot;</span> <span class="na">fontface=</span><span class="s">&quot;text&quot;</span> <span class="na">textformat=</span><span class="s">&quot;text with indentation&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;Paragraph&gt;</span>
-      <span class="nt">&lt;Value</span> <span class="na">select=</span><span class="s">&quot;.&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/Paragraph&gt;</span>
-  <span class="nt">&lt;/Textblock&gt;</span>
-<span class="nt">&lt;/PlaceObject&gt;</span>
-</code></pre></div><p>The next example uses the <code>test</code> attribute. The given XPath expression must return either <em>true</em> or <em>false</em>.</p>
-<div class="highlight"><pre><code class="xml"><span class="nt">&lt;Switch&gt;</span>
-  <span class="nt">&lt;Case</span> <span class="na">test=</span><span class="s">&quot;$article = 1 and sd:current-page() &gt; 4&quot;</span><span class="nt">&gt;</span>
-  	....
-  <span class="nt">&lt;/Case&gt;</span>
-  <span class="nt">&lt;Otherwise&gt;</span>
-  	....
-  <span class="nt">&lt;/Otherwise&gt;</span>
-<span class="nt">&lt;/Switch&gt;</span>
-</code></pre></div><h2>The following XPath expressions are handled by the software:</h2>
+<div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
+<div class="">
+<h1>XPath expressions</h1>
+
+<p>The speedata Publisher accepts XPath expressions in some attributes.
+These attributes are called <code>test</code> or <code>select</code> or documented as such. In
+all other attributes XPath expressions can be used via curly braces (<code>{</code>
+and <code>}</code>). In the following example XPath expressions are used in the
+attribute <code>width</code> and in the element <code>Value</code>. The width of the textblock
+is taken from the variable <code>$width</code>, the contents of the paragraph is
+the string value of the current node.</p>
+
+<pre><code>&lt;PlaceObject&gt;
+  &lt;Textblock width=&quot;{$width}&quot; fontface=&quot;text&quot; textformat=&quot;text with indentation&quot;&gt;
+    &lt;Paragraph&gt;
+      &lt;Value select=&quot;.&quot;/&gt;
+    &lt;/Paragraph&gt;
+  &lt;/Textblock&gt;
+&lt;/PlaceObject&gt;
+</code></pre>
+
+<p>The next example uses the <code>test</code> attribute. The given XPath expression
+must return either <em>true</em> or <em>false</em>.</p>
+
+<pre><code>&lt;Switch&gt;
+  &lt;Case test=&quot;$article = 1 and sd:current-page() &gt; 4&quot;&gt;
+    ....
+  &lt;/Case&gt;
+  &lt;Otherwise&gt;
+    ....
+  &lt;/Otherwise&gt;
+&lt;/Switch&gt;
+</code></pre>
+
+<h2>The following XPath expressions are handled by the software:</h2>
+
 <ul>
-	<li>Number: Return the value without change: <code>5</code></li>
-	<li>Text: Return the text without chang: <code>'hello world'</code></li>
-	<li>Arithmetic operation (<code>*</code>, <code>div</code>, <code>+</code>, <code>-</code>, <code>mod</code>). Example: <code>( 6 + 4.5 ) * 2</code></li>
-	<li>Variables. Example: <code>$column + 2</code></li>
-	<li>Access to the current node (dot operator). Example: <code>. + 2</code></li>
-	<li>Access to subelements. Examples: <code>productdata</code>, <code>node()</code>, <code>*</code></li>
-	<li>Attribute access in the current node. Example <code>@a</code></li>
-	<li>Boolean expressions: <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>=</code>, <code>!=</code>. Attention, the less than symbol <code>&lt;</code> <strong>must</strong> be written in <span class="caps">XML</span> as <code>&amp;lt;</code>, the symbol <code>&gt;</code> <strong>can</strong> be written as <code>&amp;gt;</code>. Example: <code>$number &gt; 6</code>. Can be used in tests.</li>
+<li>Number: Return the value without change: <code>5</code></li>
+<li>Text: Return the text without chang: <code>'hello world'</code></li>
+<li>Arithmetic operation (<code>*</code>, <code>div</code>, <code>idiv</code>, <code>+</code>, <code>-</code>, <code>mod</code>). Example:
+<code>( 6 + 4.5 ) * 2</code></li>
+<li>Variables. Example: <code>$column + 2</code></li>
+<li>Access to the current node (dot operator). Example: <code>. + 2</code></li>
+<li>Access to subelements. Examples: <code>productdata</code>, <code>node()</code>, <code>*</code></li>
+<li>Attribute access in the current node. Example <code>@a</code></li>
+<li>Boolean expressions: <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>=</code>, <code>!=</code>. Attention, the
+less than symbol <code>&lt;</code> <strong>must</strong> be written in XML as <code>&amp;lt;</code>, the
+symbol <code>&gt;</code> <strong>can</strong> be written as <code>&amp;gt;</code>. Example: <code>$number &gt; 6</code>. Can
+be used in tests.</li>
 </ul>
+
 <h2>The following XPath functions are known to the system:</h2>
-<p>There are two classes of XPath functions: standard XPath functions and speedata Publisher specific ones. The specific functions are in the namespace <code>urn:speedata:2009/publisher/functions/en</code> (denoted by <code>sd:</code> below). The standard functions should behave like documented by the XPath 2.0 standard.</p>
-<dl>
-	<dt>sd:current-page()</dt>
-	<dd>Return the current page number.</dd>
-	<dt>sd:current-row()</dt>
-	<dd>Return the current row.</dd>
-	<dt>sd:current-column()</dt>
-	<dd>Return the current column.</dd>
-	<dt>sd:alternating(&lt;type&gt;, &lt;text&gt;,&lt;text&gt;,.. )</dt>
-	<dd>On each call the next element will be returned. You can define more alternating sequences by using distinct type values. Example: <code>sd:alternating("tbl", "White","Gray")</code> can be used for alternating color of table rules. To reset the state, use <code>sd:reset-alternating(&amp;lt;type&gt;)</code>.</dd>
-	<dt>sd:decode-html(&lt;node&gt;)</dt>
-	<dd>Change text such as <code>&amp;lt;i&amp;gt;italic&amp;lt;/i&amp;gt;</code> into <span class="caps">HTML</span> markup.</dd>
-	<dt>sd:reset-alternating(&lt;type&gt;)</dt>
-	<dd>Reset alternating so the next <code>sd:alternating()</code> starts again from the first element.</dd>
-	<dt>sd:number-of-datasets(&lt;Sequence&gt;)</dt>
-	<dd>Return the number of records of the sequence.</dd>
-	<dt>sd:number-of-pages(&lt;filename or <span class="caps">URI</span> schema&gt;)</dt>
-	<dd>Determines the number of pages of a (<span class="caps">PDF</span>-)file.</dd>
-	<dt>sd:number-of-columns()</dt>
-	<dd>Number of columns in the current grid.</dd>
-	<dt>sd:number-of-rows()</dt>
-	<dd>Number of rows in the current grid.</dd>
-	<dt>sd:imagewidth(&lt;filename or <span class="caps">URI</span> schema&gt;)</dt>
-	<dd>Natural width of the image in grid cells. Attention: if the image is not found, the width of the file-not-found placeholder will be returned. Therefore you need to check in advance if the image exists.</dd>
-	<dt>sd:file-exists(&lt;filename or <span class="caps">URI</span> schema&gt;)</dt>
-	<dd>True if file exists in the current search path. Otherwise it returns false.</dd>
-	<dt>sd:format-number(Number or string, thousands separator, comma separator)</dt>
-	<dd>Format the number and insert thousands separators and change comma separator. Example: <code>sd:format-number(12345.67, ',','.')</code> returns the string <code>12,345.67</code>.</dd>
-	<dt>sd:format-string(Number or string,formatting instructions)</dt>
-	<dd>Return a text string with the number formatted as given by the formatting instructions. These instructions are the same as the instructions by the C function <code>printf()</code>.</dd>
-	<dt>sd:even(&lt;number&gt;)</dt>
-	<dd>True if number is even. Example: <code>sd:even(sd:current-page())</code></dd>
-	<dt>sd:odd(&lt;number&gt;)</dt>
-	<dd>True if number is odd.</dd>
-	<dt>sd:groupwidth(&lt;string&gt;)</dt>
-	<dd>Return the number of gridcells of the given group&#8217;s width. The argument must be the name of an existing group. Example: <code>sd:groupwidth('My group')</code></dd>
-	<dt>sd:groupheight(&lt;string&gt;)</dt>
-	<dd>Return the given group&#8217;s height (in gridcells). See <code>sd:groupwidth(...)</code></dd>
-	<dt>sd:pagenumber(&lt;string&gt;)</dt>
-	<dd>Get the number of the page where the given mark is placed on. See the command <a href="../commands-en/mark.html">Mark</a>.</dd>
-	<dt>sd:variable(&lt;name&gt;)</dt>
-	<dd>The same as $name. This function allows variable names to be constructed dynamically. Example: <code>sd:variable(concat('myvar',$num))</code> &#8211; if <code>$num</code> contains the number 3, the resulting variable is <code>myvar3</code>.</dd>
-</dl>
-<dl>
-	<dt>concat( &lt;value&gt;,&lt;value&gt;, &#8230; )</dt>
-	<dd>Create a new text value by concatinating the</dd>
-	<dt>count(&lt;text&gt;)</dt>
-	<dd>Counts all child elements with the given name. Example: <code>count(article)</code> counts, how many child elements with the name <code>article</code> exists.</dd>
-	<dt>ceiling()</dt>
-	<dd>Returns the smallest number with no fractional part that is not less than the value of the given argument.</dd>
-	<dt>empty(&lt;attribute&gt;)</dt>
-	<dd>Checks, if an attribute is (not) available.</dd>
-	<dt>false()</dt>
-	<dd>Return <i>false</i>.</dd>
-	<dt>floor()</dt>
-	<dd>Returns the largest number with no fractional part that is not greater than the value of the argument.</dd>
-	<dt>last()</dt>
-	<dd>Return the number of elements of the same named sibling elements. <strong>Not yet XPath conform.</strong></dd>
-	<dt>position()</dt>
-	<dd>Return the position of the current node.</dd>
-	<dt>string(&lt;sequence&gt;)</dt>
-	<dd>Return the text value of the sequence e.g. the contents of the elemements.</dd>
-	<dt>true()</dt>
-	<dd>Return <i>true</i>.</dd>
-</dl>
-<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
-<a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language: <a href="../description-de/xpath.html">German</a> 
+
+<p>There are two classes of XPath functions: standard XPath functions and
+speedata Publisher specific ones. The specific functions are in the
+namespace <code>urn:speedata:2009/publisher/functions/en</code> (denoted by <code>sd:</code>
+below). The standard functions should behave like documented by the
+XPath 2.0 standard.</p>
+
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>sd:current-page()</td>
+<td>Return the current page number.</td>
+</tr>
+
+<tr>
+<td>sd:current-row()</td>
+<td>Return the current row.</td>
+</tr>
+
+<tr>
+<td>sd:current-column()</td>
+<td>Return the current column.</td>
+</tr>
+
+<tr>
+<td>sd:current-framenumber(&lt;name&gt;)</td>
+<td>Return the current frame number of given positioning area.</td>
+</tr>
+
+<tr>
+<td>sd:alternating(&lt;type&gt;, &lt;text&gt;,&lt;text&gt;,.. )</td>
+<td>On each call the next element will be returned. You can define more alternating sequences by using distinct type values. Example: <code>sd:alternating(&quot;tbl&quot;, &quot;White&quot;,&quot;Gray&quot;)</code> can be used for alternating color of table rules. To reset the state, use <code>sd:reset-alternating(&lt;type&gt;)</code>.</td>
+</tr>
+
+<tr>
+<td>sd:decode-html(&lt;node&gt;)</td>
+<td>Change text such as <code>&amp;lt;i&amp;gt;italic&amp;lt;/i&amp;gt;</code> into HTML markup.</td>
+</tr>
+
+<tr>
+<td>sd:reset-alternating(&lt;type&gt;)</td>
+<td>Reset alternating so the next <code>sd:alternating()</code> starts again from the first element.</td>
+</tr>
+
+<tr>
+<td>sd:number-of-datasets(&lt;Sequence&gt;)</td>
+<td>Return the number of records of the sequence.</td>
+</tr>
+
+<tr>
+<td>sd:number-of-pages(&lt;filename or URI schema&gt;)</td>
+<td>Determines the number of pages of a (PDF-)file.</td>
+</tr>
+
+<tr>
+<td>sd:number-of-columns()</td>
+<td>Number of columns in the current grid.</td>
+</tr>
+
+<tr>
+<td>sd:number-of-rows()</td>
+<td>Number of rows in the current grid.</td>
+</tr>
+
+<tr>
+<td>sd:imageheight(&lt;filename or URI schema&gt;)</td>
+<td>Natural height of the image in grid cells. Attention: if the image is not found, the height of the file-not-found placeholder will be returned. Therefore you need to check in advance if the image exists.</td>
+</tr>
+
+<tr>
+<td>sd:imagewidth(&lt;filename or URI schema&gt;)</td>
+<td>Natural width of the image in grid cells. Attention: if the image is not found, the width of the file-not-found placeholder will be returned. Therefore you need to check in advance if the image exists.</td>
+</tr>
+
+<tr>
+<td>sd:file-exists(&lt;filename or URI schema&gt;)</td>
+<td>True if file exists in the current search path. Otherwise it returns false.</td>
+</tr>
+
+<tr>
+<td>sd:format-number(Number or string, thousands separator, comma separator)</td>
+<td>Format the number and insert thousands separators and change comma separator. Example: <code>sd:format-number(12345.67, ',','.')</code> returns the string <code>12,345.67</code>.</td>
+</tr>
+
+<tr>
+<td>sd:format-string(Number or string,formatting instructions)</td>
+<td>Return a text string with the number formatted as given by the formatting instructions. These instructions are the same as the instructions by the C function <code>printf()</code>.</td>
+</tr>
+
+<tr>
+<td>sd:even(&lt;number&gt;)</td>
+<td>True if number is even. Example: <code>sd:even(sd:current-page())</code></td>
+</tr>
+
+<tr>
+<td>sd:odd(&lt;number&gt;)</td>
+<td>True if number is odd.</td>
+</tr>
+
+<tr>
+<td>sd:groupwidth(&lt;string&gt;)</td>
+<td>Return the number of gridcells of the given group’s width. The argument must be the name of an existing group. Example: <code>sd:groupwidth('My group')</code></td>
+</tr>
+
+<tr>
+<td>sd:groupheight(&lt;string&gt;)</td>
+<td>Return the given group’s height (in gridcells). See <code>sd:groupwidth(...)</code></td>
+</tr>
+
+<tr>
+<td>sd:pagenumber(&lt;string&gt;)</td>
+<td>Get the number of the page where the given mark is placed on. See the command <a href="../commands-en/mark.html">Mark</a>.</td>
+</tr>
+
+<tr>
+<td>sd:variable(&lt;name&gt;)</td>
+<td>The same as \$name. This function allows variable names to be constructed dynamically. Example: <code>sd:variable(concat('myvar',$num))</code> – if <code>$num</code> contains the number 3, the resulting variable is <code>myvar3</code>.</td>
+</tr>
+
+<tr>
+<td>sd:variable-exists(&lt;name&gt;)</td>
+<td>True if variable <code>name</code> exists.</td>
+</tr>
+
+<tr>
+<td>sd:sha1(&lt;value&gt;,&lt;value&gt;, …)</td>
+<td>Return the SHA-1 sum of the concatenation of each value as a hex string. Example: <code>sd:sha1('hello ', 'world')</code> gives the string <code>2aae6c35c94fcfb415dbe95f408b9ce91ee846ed</code>.</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>concat( &lt;value&gt;,&lt;value&gt;, … )</td>
+<td>Create a new text value by concatinating the</td>
+</tr>
+
+<tr>
+<td>count(&lt;text&gt;)</td>
+<td>Counts all child elements with the given name. Example: <code>count(article)</code> counts, how many child elements with the name <code>article</code> exists.</td>
+</tr>
+
+<tr>
+<td>ceiling()</td>
+<td>Returns the smallest number with no fractional part that is not less than the value of the given argument.</td>
+</tr>
+
+<tr>
+<td>empty(&lt;attribute&gt;)</td>
+<td>Checks, if an attribute is (not) available.</td>
+</tr>
+
+<tr>
+<td>false()</td>
+<td>Return <em>false</em>.</td>
+</tr>
+
+<tr>
+<td>floor()</td>
+<td>Returns the largest number with no fractional part that is not greater than the value of the argument.</td>
+</tr>
+
+<tr>
+<td>last()</td>
+<td>Return the number of elements of the same named sibling elements. <strong>Not yet XPath conform.</strong></td>
+</tr>
+
+<tr>
+<td>not()</td>
+<td>Negates the value of the argument. Example: <code>not(true())</code> returns <code>false()</code>.</td>
+</tr>
+
+<tr>
+<td>position()</td>
+<td>Return the position of the current node.</td>
+</tr>
+
+<tr>
+<td>string(&lt;sequence&gt;)</td>
+<td>Return the text value of the sequence e.g. the contents of the elemements.</td>
+</tr>
+
+<tr>
+<td>string-join(&lt;sequence&gt;,separator)</td>
+<td>Return the string value of the sequence, where each element is separated by the separator.</td>
+</tr>
+
+<tr>
+<td>true()</td>
+<td>Return <em>true</em>.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Todo document:</h2>
+
+<ul>
+<li><code>abs()</code></li>
+<li><code>ceiling()</code></li>
+<li><code>max()</code></li>
+<li><code>min()</code></li>
+<li><code>normalize-space()</code></li>
+<li><code>node()</code></li>
+<li><code>string()</code></li>
+<li><code>upper-case()</code></li>
+</ul>
+
+</div>
+
+
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
+<a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/xpath.html">German</a>
+
 </body>
 </html>

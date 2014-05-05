@@ -1,7 +1,7 @@
 <!DOCTYPE html><html>
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <link rel="stylesheet" href="../css/normal.css" type="text/css"><script src="../javascript/jquery.min.js" type="text/javascript"></script><script src="../javascript/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
+      <link rel="stylesheet" href="../assets/css/normal.css" type="text/css"><script src="../assets/js/jquery.min.js" type="text/javascript"></script><script src="../assets/js/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
                // This function is executed when the page has finished loading.
              jQuery(function($) {
              // This function highlights (by default) pre and code tags which are annotated correctly.
@@ -10,12 +10,20 @@
             </script><title>Box</title>
    </head>
    <body>
-      <div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"></a></div>
+      <div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">Box</code></h1>
          <h2>Description</h2>
-         <p>create a rectangular colored area. The area must fit the grid cells.</p>
-         <p>Allowed attributes: <span class="tt"><a href="#backgroundcolor">backgroundcolor</a></span>, <span class="tt"><a href="#height">height</a></span>, <span class="tt"><a href="#width">width</a></span><br>Child elements: <br>Parent elements: <a href="placeobject.html">PlaceObject</a></p>
+         <p>Create a rectangular colored area. The area must fit the grid cells.</p>
+         <div class="hangingindent">
+            <p>Allowed attributes: <span class="tt"><a href="#backgroundcolor">backgroundcolor</a></span>, <span class="tt"><a href="#bleed">bleed</a></span>, <span class="tt"><a href="#height">height</a></span>, <span class="tt"><a href="#width">width</a></span></p>
+         </div>
+         <div class="hangingindent">
+            <p>Child elements: (none)</p>
+         </div>
+         <div class="hangingindent">
+            <p>Parent elements: <a href="placeobject.html">PlaceObject</a></p>
+         </div>
          <h3>Attributes</h3>
          <dl>
             <dt><a name="backgroundcolor"></a><span class="tt">backgroundcolor</span> (string)
@@ -25,18 +33,28 @@
                <p>Color of the box.</p>
                
             </dd>
-            <dt><a name="height"></a><span class="tt">height</span> (number)
+            <dt><a name="bleed"></a><span class="tt">bleed</span> (string, optional)
+            </dt>
+            <dd>
+               
+               <p>Lets the box increase its size by the amount of trim given in the options. Useful
+                  for thumb indexes. The contents of the attribute is either »left«, »right«, »top«
+                  or »bottom« or any combination such as »top,right«.
+               </p>
+               
+            </dd>
+            <dt><a name="height"></a><span class="tt">height</span> (number or length)
             </dt>
             <dd>
                
                <p>Height of the box in grid cells.</p>
                
             </dd>
-            <dt><a name="width"></a><span class="tt">width</span> (number)
+            <dt><a name="width"></a><span class="tt">width</span> (number or length)
             </dt>
             <dd>
                
-               <p>Width of the box in grid cells.</p>
+               <p>Width of the box in grid cells or in absolute values.</p>
                
             </dd>
          </dl>
@@ -82,12 +100,14 @@
             <li><a href="i.html">I</a></li>
             <li><a href="image.html">Image</a></li>
             <li><a href="include.html">Include</a></li>
+            <li><a href="insertpages.html">InsertPages</a></li>
             <li><a href="italic.html">Italic</a></li>
             <li><a href="layout.html">Layout</a></li>
             <li><a href="li.html">Li</a></li>
             <li><a href="loaddataset.html">LoadDataset</a></li>
             <li><a href="loadfontfile.html">LoadFontfile</a></li>
             <li><a href="loop.html">Loop</a></li>
+            <li><a href="makeindex.html">Makeindex</a></li>
             <li><a href="margin.html">Margin</a></li>
             <li><a href="mark.html">Mark</a></li>
             <li><a href="message.html">Message</a></li>
@@ -97,6 +117,7 @@
             <li><a href="ol.html">Ol</a></li>
             <li><a href="options.html">Options</a></li>
             <li><a href="otherwise.html">Otherwise</a></li>
+            <li><a href="output.html">Output</a></li>
             <li><a href="pageformat.html">Pageformat</a></li>
             <li><a href="pagetype.html">Pagetype</a></li>
             <li><a href="paragraph.html">Paragraph</a></li>
@@ -104,11 +125,12 @@
             <li><a href="positioningarea.html">PositioningArea</a></li>
             <li><a href="positioningframe.html">PositioningFrame</a></li>
             <li><a href="processnode.html">ProcessNode</a></li>
-            <li><a href="processrecord.html">ProcessRecord</a></li>
             <li><a href="record.html">Record</a></li>
             <li><a href="regular.html">Regular</a></li>
             <li><a href="rule.html">Rule</a></li>
             <li><a href="savedataset.html">SaveDataset</a></li>
+            <li><a href="savepages.html">SavePages</a></li>
+            <li><a href="sequence.html">Sequence</a></li>
             <li><a href="setgrid.html">SetGrid</a></li>
             <li><a href="setvariable.html">SetVariable</a></li>
             <li><a href="sortsequence.html">SortSequence</a></li>
@@ -121,11 +143,13 @@
             <li><a href="tablehead.html">Tablehead</a></li>
             <li><a href="tablerule.html">Tablerule</a></li>
             <li><a href="td.html">Td</a></li>
+            <li><a href="text.html">Text</a></li>
             <li><a href="textblock.html">Textblock</a></li>
             <li><a href="tr.html">Tr</a></li>
             <li><a href="u.html">U</a></li>
             <li><a href="url.html">URL</a></li>
             <li><a href="ul.html">Ul</a></li>
+            <li><a href="until.html">Until</a></li>
             <li><a href="value.html">Value</a></li>
             <li><a href="while.html">While</a></li>
          </ul>

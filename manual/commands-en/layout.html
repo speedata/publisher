@@ -1,7 +1,7 @@
 <!DOCTYPE html><html>
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <link rel="stylesheet" href="../css/normal.css" type="text/css"><script src="../javascript/jquery.min.js" type="text/javascript"></script><script src="../javascript/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
+      <link rel="stylesheet" href="../assets/css/normal.css" type="text/css"><script src="../assets/js/jquery.min.js" type="text/javascript"></script><script src="../assets/js/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
                // This function is executed when the page has finished loading.
              jQuery(function($) {
              // This function highlights (by default) pre and code tags which are annotated correctly.
@@ -10,15 +10,29 @@
             </script><title>Layout</title>
    </head>
    <body>
-      <div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"></a></div>
+      <div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">Layout</code></h1>
          <h2>Description</h2>
          <p>This command is the root element in the Layout instructions.</p>
-         <p>Allowed attributes: <span class="tt"><a href="#version">version</a></span><br>Child elements: <a href="dataset.html"></a>, <a href="definecolor.html">DefineColor</a>, <a href="definefontfamily.html">DefineFontfamily</a>, <a href="definetextformat.html">DefineTextformat</a>, <a href="hyphenation.html">Hyphenation</a>, <a href="include.html">Include</a>, <a href="loadfontfile.html">LoadFontfile</a>, <a href="options.html">Options</a>, <a href="pageformat.html">Pageformat</a>, <a href="pagetype.html">Pagetype</a>, <a href="setgrid.html">SetGrid</a>, <a href="setvariable.html">SetVariable</a><br>Parent elements: 
-         </p>
+         <div class="hangingindent">
+            <p>Allowed attributes: <span class="tt"><a href="#name">name</a></span>, <span class="tt"><a href="#version">version</a></span></p>
+         </div>
+         <div class="hangingindent">
+            <p>Child elements: <a href="definecolor.html">DefineColor</a>, <a href="definefontfamily.html">DefineFontfamily</a>, <a href="definetextformat.html">DefineTextformat</a>, <a href="hyphenation.html">Hyphenation</a>, <a href="include.html">Include</a>, <a href="loadfontfile.html">LoadFontfile</a>, <a href="options.html">Options</a>, <a href="pageformat.html">Pageformat</a>, <a href="pagetype.html">Pagetype</a>, <a href="record.html">Record</a>, <a href="setgrid.html">SetGrid</a>, <a href="setvariable.html">SetVariable</a>, <a href="stylesheet.html">Stylesheet</a></p>
+         </div>
+         <div class="hangingindent">
+            <p>Parent elements: </p>
+         </div>
          <h3>Attributes</h3>
          <dl>
+            <dt><a name="name"></a><span class="tt">name</span> (string, optional)
+            </dt>
+            <dd>
+               
+               <p>A name for the layout. Optional, without any influence on the layout itself.</p>
+               
+            </dd>
             <dt><a name="version"></a><span class="tt">version</span> (number, optional)
             </dt>
             <dd>
@@ -35,7 +49,6 @@
          <pre class="syntax xml">&lt;?xml version="1.0"?&gt;
 &lt;Layout
   xmlns:sd="urn:speedata:2009/publisher/functions/en"
-  xmlns:xi="http://www.w3.org/2001/XInclude"
   xmlns="urn:speedata.de:2009/publisher/en"&gt;
   &lt;Options
     show-grid="yes"
@@ -45,7 +58,7 @@
   &lt;LoadFontfile name="Helvetica Fett" filename="texgyreheros-bold.otf" /&gt;
 
 &lt;DefineFontfamily
-    name="title" 
+    name="title"
     fontsize="12"
     leading="16"&gt;
     &lt;Regular fontface="Helvetica Fett" /&gt;
@@ -125,12 +138,14 @@
             <li><a href="i.html">I</a></li>
             <li><a href="image.html">Image</a></li>
             <li><a href="include.html">Include</a></li>
+            <li><a href="insertpages.html">InsertPages</a></li>
             <li><a href="italic.html">Italic</a></li>
             <li class="active"><a href="layout.html">Layout</a></li>
             <li><a href="li.html">Li</a></li>
             <li><a href="loaddataset.html">LoadDataset</a></li>
             <li><a href="loadfontfile.html">LoadFontfile</a></li>
             <li><a href="loop.html">Loop</a></li>
+            <li><a href="makeindex.html">Makeindex</a></li>
             <li><a href="margin.html">Margin</a></li>
             <li><a href="mark.html">Mark</a></li>
             <li><a href="message.html">Message</a></li>
@@ -140,6 +155,7 @@
             <li><a href="ol.html">Ol</a></li>
             <li><a href="options.html">Options</a></li>
             <li><a href="otherwise.html">Otherwise</a></li>
+            <li><a href="output.html">Output</a></li>
             <li><a href="pageformat.html">Pageformat</a></li>
             <li><a href="pagetype.html">Pagetype</a></li>
             <li><a href="paragraph.html">Paragraph</a></li>
@@ -147,11 +163,12 @@
             <li><a href="positioningarea.html">PositioningArea</a></li>
             <li><a href="positioningframe.html">PositioningFrame</a></li>
             <li><a href="processnode.html">ProcessNode</a></li>
-            <li><a href="processrecord.html">ProcessRecord</a></li>
             <li><a href="record.html">Record</a></li>
             <li><a href="regular.html">Regular</a></li>
             <li><a href="rule.html">Rule</a></li>
             <li><a href="savedataset.html">SaveDataset</a></li>
+            <li><a href="savepages.html">SavePages</a></li>
+            <li><a href="sequence.html">Sequence</a></li>
             <li><a href="setgrid.html">SetGrid</a></li>
             <li><a href="setvariable.html">SetVariable</a></li>
             <li><a href="sortsequence.html">SortSequence</a></li>
@@ -164,11 +181,13 @@
             <li><a href="tablehead.html">Tablehead</a></li>
             <li><a href="tablerule.html">Tablerule</a></li>
             <li><a href="td.html">Td</a></li>
+            <li><a href="text.html">Text</a></li>
             <li><a href="textblock.html">Textblock</a></li>
             <li><a href="tr.html">Tr</a></li>
             <li><a href="u.html">U</a></li>
             <li><a href="url.html">URL</a></li>
             <li><a href="ul.html">Ul</a></li>
+            <li><a href="until.html">Until</a></li>
             <li><a href="value.html">Value</a></li>
             <li><a href="while.html">While</a></li>
          </ul>

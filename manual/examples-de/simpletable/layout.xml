@@ -1,0 +1,18 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+  <Record element="data">
+    <PlaceObject>
+      <Table width="5" stretch="max" padding="2pt">
+        <Tr>
+          <Td align="left"><Paragraph><Value>Artikelnummer</Value></Paragraph></Td>
+          <Td align="right"><Paragraph><Value>Preis (Euro)</Value></Paragraph></Td>
+        </Tr>
+        <ForAll select="entry">
+          <Tr>
+            <Td align="left"><Paragraph><Value select="@artikelnr"/></Paragraph></Td>
+            <Td align="right"><Paragraph><Value select="@preis"/></Paragraph></Td>
+          </Tr>
+        </ForAll>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>

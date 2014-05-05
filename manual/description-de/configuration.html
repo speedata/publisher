@@ -1,63 +1,155 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="../css/normal.css" type="text/css" />
-<link rel="stylesheet" href="../css/pygments.css" type="text/css" />
-<link rel="stylesheet" href="../css/colorbox.css" type="text/css" />
-<script src="../javascript/jquery.min.js" ></script>
-<script src="../javascript/jquery.colorbox-min.js" ></script>
-<script>
-  $(document).ready(function(){
-     $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
-  });
-</script>
-<title>Konfiguration des Publishers</title>
+    <title>Konfigurationsdatei</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../assets/css/normal.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/colorbox.css" type="text/css" />
+    <script src="../assets/js/jquery.min.js" ></script>
+    <script src="../assets/js/jquery.colorbox-min.js" ></script>
+    <script>
+      $(document).ready(function(){
+         $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+      });
+    </script>
 </head>
 <body>
-<div id="logo"><a href="../index-de.html"><img src="../images/publisher_logo.png" alt="Startseite"></a></div>
-	<h1>Konfiguration des Publishers</h1>
+<div id="logo"><a href="../index-de.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
+<div class="">
+<h1>Konfiguration des Publishers</h1>
+
 <p>Der Publisher ist auf verschiedene Weisen zu konfigurieren:</p>
+
 <ol>
-	<li>Die Datei <code>publisher.cfg</code> in <code>/etc/speedata/</code>, im Homeverzeichnis (mit Punkt davor) bzw. im aktuellen Verzeichnis</li>
-	<li>Die Parameter auf der Kommandozeile</li>
-	<li>Die Angaben in der Layoutdatei</li>
+<li>Die Datei <code>publisher.cfg</code> in <code>/etc/speedata/</code>, im Homeverzeichnis
+(mit Punkt davor) bzw. im aktuellen Verzeichnis</li>
+<li>Die Parameter auf der Kommandozeile</li>
+<li>Die Angaben in der Layoutdatei</li>
 </ol>
+
 <h2>Die Datei <code>publisher.cfg</code> in <code>/etc/speedata/</code>, im Homeverzeichnis und im aktuellen Verzeichnis.</h2>
-<p>Die Datei <code>publisher.cfg</code> (<code>/etc/speedata/publisher.cfg</code>, <code>/home/speedata/.publisher.cfg</code>) sowie im aktuellen Verzeichnis ist eine Textdatei, die beim Starten des Publishers eingelesen wird. Im Auslieferungszustand sieht sie wie folgt aus:</p>
-<pre>data      = data.xml
+
+<p>Die Datei <code>publisher.cfg</code> (<code>/etc/speedata/publisher.cfg</code>,
+<code>/home/speedata/.publisher.cfg</code>) sowie im aktuellen Verzeichnis ist eine
+Textdatei, die beim Starten des Publishers eingelesen wird. Im
+Auslieferungszustand sieht sie wie folgt aus:</p>
+
+<pre><code>data      = data.xml
 layout    = layout.xml
 autoopen  = false
-extra-dir = "/home/speedata/Desktop/speedata"</pre>
-<p>Das Format muss eingehalten werden, sonst wird die Datei nicht richtig erkannt. Folgende Optionen werden unterstützt:</p>
-<dl>
-	<dt><code>autoopen</code></dt>
-	<dd>wenn hier <code>true</code> anstelle von <code>false</code> steht, wird das <span class="caps">PDF</span> nach dem Publisher Durchlauf automatisch geöffnet. Derselbe Effekt lässt sich über die Kommandozeile mit <code>--autoopen</code> erreichen.</dd>
-	<dt><code>extra-dir</code></dt>
-	<dd>Ein Verzeichnis im Dateisystem, das Dateien für den Publisherlauf enthält. Dazu gehören die Schriftdateien, die <span class="caps">XML</span>-Dateien (Daten und Layoutregelwerk) sowie die einzubindenden Bilddateien. Sollen mehrere Verzeichnisse hinzugefügt werden, müssen diese mit <code>:</code> oder <code>;</code> getrennt werden, je nach Betriebssystem (Windows: <code>;</code>, alle anderen: <code>:</code>). Das aktuelle Verzeichnis wird automatisch eingebunden.</dd>
-	<dt><code>filter</code></dt>
-	<dd>Führt die angegebene Datei als <span class="caps">XPROC</span>-Filter aus.</dd>
-	<dt><code>layout</code></dt>
-	<dd>Name des Layoutregelwerks. <code>layout.xml</code> ist der voreingestellte Name.</dd>
-	<dt><code>data</code></dt>
-	<dd>Name der <span class="caps">XML</span>-Daten. Wenn nicht vorhanden, wird die Datei <code>daten.xml</code> geladen.</dd>
-	<dt><code>dummy</code></dt>
-	<dd>Wenn <code>true</code>, dann wird die Datendatei nicht eingelesen. Anstatt dessen wird wird der folgende Inhalt angenommen: <code>&lt;data /&gt;</code>. Das dient zum einfachen Testen von Layoutregelwerken.</dd>
-	<dt><code>jobname</code></dt>
-	<dd>Name der Ausgabedatei</dd>
-	<dt><code>startpage</code></dt>
-	<dd>Nummer der ersten Seite</dd>
-	<dt><code>grid</code></dt>
-	<dd>Bestimmt, ob das Raster angezeigt wird.</dd>
-	<dt><code>opencommand</code></dt>
-	<dd>Kommando für das automatische Öffnen der Dokumentation bzw. <span class="caps">PDF</span>-Datei. Für MacOS X sollte das <code>open</code> sein, für Linux <code>xdg-open</code> oder <code>exo-open</code>  (xfce).</dd>
-</dl>
-<p>Alle Angaben in dieser Konfigurationsdatei sind optional. Alle folgenden Konfigurationsdateien werden in dieser Reihenfolge eingelesen: <code>/etc/speedata/publisher.cfg</code>, <code>~/.publisher.cfg</code> und im aktuellen Verzeichnis <code>publisher.cfg</code>.</p>
+extra-dir = &quot;/home/speedata/Desktop/speedata&quot;
+</code></pre>
+
+<p>Das Format muss eingehalten werden, sonst wird die Datei nicht richtig
+erkannt. Folgende Optionen werden unterstützt:</p>
+
+<table>
+<thead>
+<tr>
+<th>Wert</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>autoopen</code></td>
+<td>wenn hier <code>true</code> anstelle von <code>false</code> steht, wird das PDF nach dem Publisher Durchlauf automatisch geöffnet. Derselbe Effekt lässt sich über die Kommandozeile mit <code>--autoopen</code> erreichen.</td>
+</tr>
+
+<tr>
+<td><code>data</code></td>
+<td>Name der XML-Daten. Wenn nicht vorhanden, wird die Datei <code>daten.xml</code> geladen.</td>
+</tr>
+
+<tr>
+<td><code>dummy</code></td>
+<td>Wenn <code>true</code>, dann wird die Datendatei nicht eingelesen. Anstatt dessen wird wird der folgende Inhalt angenommen: <code>&lt;data /&gt;</code>. Das dient zum einfachen Testen von Layoutregelwerken.</td>
+</tr>
+
+<tr>
+<td><code>extra-dir</code></td>
+<td>Ein Verzeichnis im Dateisystem, das Dateien für den Publisherlauf enthält. Dazu gehören die Schriftdateien, die XML-Dateien (Daten und Layoutregelwerk) sowie die einzubindenden Bilddateien. Sollen mehrere Verzeichnisse hinzugefügt werden, müssen diese mit <code>:</code> oder <code>;</code> getrennt werden, je nach Betriebssystem (Windows: <code>;</code>, alle anderen: <code>:</code>). Das aktuelle Verzeichnis wird automatisch eingebunden.</td>
+</tr>
+
+<tr>
+<td><code>filter</code></td>
+<td>Führt die angegebene Datei als XPROC-Filter aus.</td>
+</tr>
+
+<tr>
+<td><code>fontpath</code></td>
+<td>Setzt den systemweiten Pfad für Fonts. Unter Windows ist dies <code>%WINDIR%\Fonts</code>, unter Mac OS X <code>/Library/Fonts:/System/Library/Fonts</code>.</td>
+</tr>
+
+<tr>
+<td><code>grid</code></td>
+<td>Bestimmt, ob das Raster angezeigt wird.</td>
+</tr>
+
+<tr>
+<td><code>imagecache</code></td>
+<td>Ordner für zwichengespeicherte Bilder (nur <code>href=&quot;http://...&quot;</code>). Voreinstellung: <code>$TMPDIR/sp/images</code>.</td>
+</tr>
+
+<tr>
+<td><code>jobname</code></td>
+<td>Name der Ausgabedatei</td>
+</tr>
+
+<tr>
+<td><code>layout</code></td>
+<td>Name des Layoutregelwerks. <code>layout.xml</code> ist der voreingestellte Name.</td>
+</tr>
+
+<tr>
+<td><code>opencommand</code></td>
+<td>Kommando für das automatische Öffnen der Dokumentation bzw. PDF-Datei. Für MacOS X sollte das <code>open</code> sein, für Linux <code>xdg-open</code> oder <code>exo-open</code> (xfce).</td>
+</tr>
+
+<tr>
+<td><code>pathrewrite</code></td>
+<td>Kommaseparierte Liste der Form Pfadteil=Pfadteil. Beispiel: <code>/media/=%(projectdir)s/myfiles/</code>. Das würde absolute Pfadangaben wie <code>file:///media/XYZ</code> in <code>file:///Pfad/zum/Projekt/myfiles/XYZ</code> ändern.</td>
+</tr>
+
+<tr>
+<td><code>timeout</code></td>
+<td>Maximale Dauer des Publishing-Laufs. Wenn dieser überschritten wird, bricht der Lauf mit Fehler 1 ab.</td>
+</tr>
+
+<tr>
+<td><code>startpage</code></td>
+<td>Nummer der ersten Seite</td>
+</tr>
+</tbody>
+</table>
+
+<p>In der Konfigurationsdatei kann mit <code>%(projectdir)s</code> auf das Verzeichnis
+zugegriffen werden, in dem die Datei <code>publisher.cfg</code> liegt.</p>
+
+<p>Alle Angaben in dieser Konfigurationsdatei sind optional. Alle folgenden
+Konfigurationsdateien werden in dieser Reihenfolge eingelesen:
+<code>/etc/speedata/publisher.cfg</code>, <code>~/.publisher.cfg</code> und im aktuellen
+Verzeichnis <code>publisher.cfg</code>. Das aktuelle Verzeichnis kann beim Aufruf
+des Publishers mittels <code>--wd=...</code> geändert werden.</p>
+
 <h2>Parameter auf der Kommandozeile</h2>
-<p>Die erlaubten Parameter auf der Kommandozeile werden in einem <a href="commandline.html">eigenen Abschnitt</a> aufgeführt.</p>
+
+<p>Die erlaubten Parameter auf der Kommandozeile werden in einem <a href="commandline.html">eigenen
+Abschnitt</a> aufgeführt.</p>
+
 <h2>Angaben in der Layoutdatei</h2>
-<p>Das Layoutregelwerk erlaubt manche Parameter zu setzen. Dazu gehören die Angaben, die im Element <a href="../commands-de/options.html">Optionen</a> gesetzt werden.</p>
-<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
-<a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Befehlsreferenz</a> | Andere Sprache: <a href="../description-en/configuration.html">Englisch</a> 
+
+<p>Das Layoutregelwerk erlaubt manche Parameter zu setzen. Dazu gehören die
+Angaben, die im Element <a href="../commands-de/options.html">Optionen</a> gesetzt
+werden.</p>
+
+</div>
+
+
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
+<a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/configuration.html">Englisch</a>
+
 </body>
 </html>

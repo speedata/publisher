@@ -1,7 +1,7 @@
 <!DOCTYPE html><html>
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <link rel="stylesheet" href="../css/normal.css" type="text/css"><script src="../javascript/jquery.min.js" type="text/javascript"></script><script src="../javascript/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
+      <link rel="stylesheet" href="../assets/css/normal.css" type="text/css"><script src="../assets/js/jquery.min.js" type="text/javascript"></script><script src="../assets/js/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
                // This function is executed when the page has finished loading.
              jQuery(function($) {
              // This function highlights (by default) pre and code tags which are annotated correctly.
@@ -10,20 +10,70 @@
             </script><title>Td</title>
    </head>
    <body>
-      <div id="logo"><a href="../index-de.html"><img src="../images/publisher_logo.png" alt="Startseite"></a></div>
+      <div id="logo"><a href="../index-de.html"><img src="../assets/images/publisher_logo.png" alt="Startseite"></a></div>
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">Td</code></h1>
          <h2>Beschreibung</h2>
-         <p>Erstellt eine Tabellenzelle</p>
-         <p>Erlaubte Attribute: <span class="tt"><a href="#align">align</a></span>, <span class="tt"><a href="#border-bottom">border-bottom</a></span>, <span class="tt"><a href="#border-bottom-color">border-bottom-color</a></span>, <span class="tt"><a href="#border-left">border-left</a></span>, <span class="tt"><a href="#border-left-color">border-left-color</a></span>, <span class="tt"><a href="#border-right">border-right</a></span>, <span class="tt"><a href="#border-right-color">border-right-color</a></span>, <span class="tt"><a href="#border-top">border-top</a></span>, <span class="tt"><a href="#border-top-color">border-top-color</a></span>, <span class="tt"><a href="#colspan">colspan</a></span>, <span class="tt"><a href="#padding">padding</a></span>, <span class="tt"><a href="#padding-bottom">padding-bottom</a></span>, <span class="tt"><a href="#padding-left">padding-left</a></span>, <span class="tt"><a href="#padding-right">padding-right</a></span>, <span class="tt"><a href="#padding-top">padding-top</a></span>, <span class="tt"><a href="#rowspan">rowspan</a></span>, <span class="tt"><a href="#valign">valign</a></span><br>Kindelemente: <a href="paragraph.html">Absatz</a>, <a href="image.html">Bild</a>, <a href="table.html">Tabelle</a><br>Elternelemente: <a href="tr.html">Tr</a></p>
+         <p>Erstellt eine Tabellenzelle, wie in HTML</p>
+         <div class="hangingindent">
+            <p>Erlaubte Attribute: <span class="tt"><a href="#align">align</a></span>, <span class="tt"><a href="#border-bottom">border-bottom</a></span>, <span class="tt"><a href="#border-bottom-color">border-bottom-color</a></span>, <span class="tt"><a href="#border-left">border-left</a></span>, <span class="tt"><a href="#border-left-color">border-left-color</a></span>, <span class="tt"><a href="#border-right">border-right</a></span>, <span class="tt"><a href="#border-right-color">border-right-color</a></span>, <span class="tt"><a href="#border-top">border-top</a></span>, <span class="tt"><a href="#border-top-color">border-top-color</a></span>, <span class="tt"><a href="#colspan">colspan</a></span>, <span class="tt"><a href="#backgroundcolor">hintergrundfarbe</a></span>, <span class="tt"><a href="#padding">padding</a></span>, <span class="tt"><a href="#padding-bottom">padding-bottom</a></span>, <span class="tt"><a href="#padding-left">padding-left</a></span>, <span class="tt"><a href="#padding-right">padding-right</a></span>, <span class="tt"><a href="#padding-top">padding-top</a></span>, <span class="tt"><a href="#rowspan">rowspan</a></span>, <span class="tt"><a href="#valign">valign</a></span></p>
+         </div>
+         <div class="hangingindent">
+            <p>Kindelemente: <a href="paragraph.html">Absatz</a>, <a href="image.html">Bild</a>, <a href="switch.html">Fallunterscheidung</a>, <a href="forall.html">FürAlle</a>, <a href="copy-of.html">Kopie-von</a>, <a href="loop.html">Schleife</a>, <a href="barcode.html">Strichcode</a>, <a href="table.html">Tabelle</a></p>
+         </div>
+         <div class="hangingindent">
+            <p>Elternelemente: <a href="until.html">Bis</a>, <a href="case.html">Fall</a>, <a href="forall.html">FürAlle</a>, <a href="loop.html">Schleife</a>, <a href="while.html">Solange</a>, <a href="otherwise.html">Sonst</a>, <a href="tr.html">Tr</a>, <a href="setvariable.html">Zuweisung</a></p>
+         </div>
          <h3>Attribute</h3>
          <dl>
-            <dt><a name="align"></a><span class="tt">align</span> (“right”,“left”,“center”, optional)
+            <dt><a name="align"></a><span class="tt">align</span> (optional)
             </dt>
             <dd>
                
                <p>Die horizontale Ausrichtung des Tabelleninhalts</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>left:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Der Inhalt der Zelle ist am linken Rand ausgerichtet. (Voreinstellung)</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>right:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Der Inhalt der Zelle ist rechtsbündig ausgerichtet.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>center:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Der Inhalt der Zelle ist auf der Mittelachse ausgerichtet mit links und rechts Flatterrand.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>justify:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Text im Blocksatz.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name="border-bottom"></a><span class="tt">border-bottom</span> (Längenangabe (mm,cm,pt), optional)
             </dt>
@@ -88,11 +138,18 @@
                <p>Die Anzahl der Spalten, die die Zelle überdecken soll. Voreinstellung ist 1.</p>
                
             </dd>
+            <dt><a name="backgroundcolor"></a><span class="tt">hintergrundfarbe</span> (Text, optional)
+            </dt>
+            <dd>
+               
+               <p>Der Name der Hintergrundfarbe, wenn die Zelle eingefärbt werden soll.</p>
+               
+            </dd>
             <dt><a name="padding"></a><span class="tt">padding</span> (Längenangabe (mm,cm,pt), optional)
             </dt>
             <dd>
                
-               <p>Kurzform für die Bestimmung von padding-top und den anderen drei Werden mit derselben
+               <p>Kurzform für die Bestimmung von padding-top und den anderen drei Werten mit derselben
                   Maßangabe
                </p>
                
@@ -132,12 +189,44 @@
                <p>Die Anzahl der Zeilen, die die Zelle überdecken soll. Voreinstellung ist 1.</p>
                
             </dd>
-            <dt><a name="valign"></a><span class="tt">valign</span> (“top”,“middle”,“bottom”, optional)
+            <dt><a name="valign"></a><span class="tt">valign</span> (optional)
             </dt>
             <dd>
                
-               <p>Die vertikale Ausrichtung des Tabelleninhalts.</p>
+               <p>Die vertikale Ausrichtung des Zelleninhalts.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>top:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Der Zellinhalt ist an der oberen Kante ausgerichtet.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>middle:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Der Zellinhalt vertikal zentriert.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>bottom:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Der Zellinhalt ist an der unteren Kante ausgerichtet.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
          </dl>
          <h3>Bemerkungen</h3>
@@ -167,12 +256,13 @@
             <li><a href="paragraph.html">Absatz</a></li>
             <li><a href="action.html">Aktion</a></li>
             <li><a href="attribute.html">Attribut</a></li>
+            <li><a href="output.html">Ausgabe</a></li>
             <li><a href="b.html">B</a></li>
-            <li><a href="processrecord.html">BearbeiteDatensatz</a></li>
             <li><a href="processnode.html">BearbeiteKnoten</a></li>
             <li><a href="atpageshipout.html">BeiSeitenAusgabe</a></li>
             <li><a href="atpagecreation.html">BeiSeitenErzeugung</a></li>
             <li><a href="image.html">Bild</a></li>
+            <li><a href="until.html">Bis</a></li>
             <li><a href="box.html">Box</a></li>
             <li><a href="br.html">Br</a></li>
             <li><a href="record.html">Datensatz</a></li>
@@ -189,6 +279,7 @@
             <li><a href="hspace.html">HLeerraum</a></li>
             <li><a href="i.html">I</a></li>
             <li><a href="include.html">Include</a></li>
+            <li><a href="makeindex.html">Indexerstellen</a></li>
             <li><a href="contents.html">Inhalt</a></li>
             <li><a href="copy-of.html">Kopie-von</a></li>
             <li><a href="italic.html">Kursiv</a></li>
@@ -214,8 +305,11 @@
             <li><a href="grid.html">Raster</a></li>
             <li><a href="loop.html">Schleife</a></li>
             <li><a href="fontface.html">Schriftart</a></li>
+            <li><a href="insertpages.html">SeitenEinfügen</a></li>
+            <li><a href="savepages.html">SeitenSpeichern</a></li>
             <li><a href="pageformat.html">Seitenformat</a></li>
             <li><a href="pagetype.html">Seitentyp</a></li>
+            <li><a href="sequence.html">Sequenz</a></li>
             <li><a href="setgrid.html">SetzeRaster</a></li>
             <li><a href="while.html">Solange</a></li>
             <li><a href="otherwise.html">Sonst</a></li>
@@ -231,6 +325,7 @@
             <li><a href="tablefoot.html">Tabellenfuß</a></li>
             <li><a href="tablehead.html">Tabellenkopf</a></li>
             <li class="active"><a href="td.html">Td</a></li>
+            <li><a href="text.html">Text</a></li>
             <li><a href="textblock.html">Textblock</a></li>
             <li><a href="tablerule.html">Tlinie</a></li>
             <li><a href="tr.html">Tr</a></li>

@@ -1,7 +1,7 @@
 <!DOCTYPE html><html>
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <link rel="stylesheet" href="../css/normal.css" type="text/css"><script src="../javascript/jquery.min.js" type="text/javascript"></script><script src="../javascript/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
+      <link rel="stylesheet" href="../assets/css/normal.css" type="text/css"><script src="../assets/js/jquery.min.js" type="text/javascript"></script><script src="../assets/js/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
                // This function is executed when the page has finished loading.
              jQuery(function($) {
              // This function highlights (by default) pre and code tags which are annotated correctly.
@@ -10,15 +10,23 @@
             </script><title>PlaceObject</title>
    </head>
    <body>
-      <div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"></a></div>
+      <div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">PlaceObject</code></h1>
          <h2>Description</h2>
          <p>Outputs a rectangular object (image, table, box or textblock).</p>
-         <p>Allowed attributes: <span class="tt"><a href="#allocate">allocate</a></span>, <span class="tt"><a href="#area">area</a></span>, <span class="tt"><a href="#background">background</a></span>, <span class="tt"><a href="#backgroundcolor">backgroundcolor</a></span>, <span class="tt"><a href="#column">column</a></span>, <span class="tt"><a href="#frame">frame</a></span>, <span class="tt"><a href="#framecolor">framecolor</a></span>, <span class="tt"><a href="#groupname">groupname</a></span>, <span class="tt"><a href="#hreference">hreference</a></span>, <span class="tt"><a href="#maxheight">maxheight</a></span>, <span class="tt"><a href="#row">row</a></span>, <span class="tt"><a href="#rulewidth">rulewidth</a></span>, <span class="tt"><a href="#valign">valign</a></span><br>Child elements: <a href="barcode.html">Barcode</a>, <a href="box.html">Box</a>, <a href="image.html">Image</a>, <a href="table.html">Table</a>, <a href="tablerule.html">Tablerule</a>, <a href="textblock.html">Textblock</a><br>Parent elements: <a href="record.html">Record</a></p>
+         <div class="hangingindent">
+            <p>Allowed attributes: <span class="tt"><a href="#allocate">allocate</a></span>, <span class="tt"><a href="#area">area</a></span>, <span class="tt"><a href="#background">background</a></span>, <span class="tt"><a href="#backgroundcolor">backgroundcolor</a></span>, <span class="tt"><a href="#column">column</a></span>, <span class="tt"><a href="#frame">frame</a></span>, <span class="tt"><a href="#framecolor">framecolor</a></span>, <span class="tt"><a href="#groupname">groupname</a></span>, <span class="tt"><a href="#hreference">hreference</a></span>, <span class="tt"><a href="#keepposition">keepposition</a></span>, <span class="tt"><a href="#maxheight">maxheight</a></span>, <span class="tt"><a href="#page">page</a></span>, <span class="tt"><a href="#row">row</a></span>, <span class="tt"><a href="#rulewidth">rulewidth</a></span>, <span class="tt"><a href="#valign">valign</a></span>, <span class="tt"><a href="#vreference">vreference</a></span></p>
+         </div>
+         <div class="hangingindent">
+            <p>Child elements: <a href="barcode.html">Barcode</a>, <a href="box.html">Box</a>, <a href="image.html">Image</a>, <a href="rule.html">Rule</a>, <a href="table.html">Table</a>, <a href="textblock.html">Textblock</a></p>
+         </div>
+         <div class="hangingindent">
+            <p>Parent elements: <a href="atpagecreation.html">AtPageCreation</a>, <a href="atpageshipout.html">AtPageShipout</a>, <a href="case.html">Case</a>, <a href="contents.html">Contents</a>, <a href="forall.html">ForAll</a>, <a href="loop.html">Loop</a>, <a href="otherwise.html">Otherwise</a>, <a href="record.html">Record</a>, <a href="savepages.html">SavePages</a>, <a href="until.html">Until</a>, <a href="while.html">While</a></p>
+         </div>
          <h3>Attributes</h3>
          <dl>
-            <dt><a name="allocate"></a><span class="tt">allocate</span> ('yes', 'no' or 'auto', optional)
+            <dt><a name="allocate"></a><span class="tt">allocate</span> (yes/no, optional)
             </dt>
             <dd>
                
@@ -55,7 +63,10 @@
             </dt>
             <dd>
                
-               <p></p>
+               <p>If contents is a number: the grid cell from the left margin of the area. If it is
+                  a length: the absolute position from the left paper margin. If this attribute is omitted,
+                  the system tries to place the object by itself.
+               </p>
                
             </dd>
             <dt><a name="frame"></a><span class="tt">frame</span> ('solid' or 'without', optional)
@@ -78,28 +89,73 @@
             </dt>
             <dd>
                
-               <p></p>
+               <p>The name of the group that gets output. When given a groupname, PlaceObject should
+                  not contain any objects.
+               </p>
                
             </dd>
-            <dt><a name="hreference"></a><span class="tt">hreference</span> ('left' or 'right', optional)
+            <dt><a name="hreference"></a><span class="tt">hreference</span> (optional)
             </dt>
             <dd>
                
-               <p></p>
+               <p>Determines the placement of the object relative to the given column. If 'left' (which
+                  is the default), the given column is the left border of the object. If 'right', the
+                  column determines the right edge of the object.
+               </p>
+               
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>left:</p>
+                     </td>
+                     <td>
+                        
+                        <p>The object is placed in given column.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>right:</p>
+                     </td>
+                     <td>
+                        
+                        <p>The given columns determines the right edge of the border.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
+            </dd>
+            <dt><a name="keepposition"></a><span class="tt">keepposition</span> (yes/no, optional)
+            </dt>
+            <dd>
+               
+               <p>Don't move the virtual cursor to the next free space</p>
                
             </dd>
             <dt><a name="maxheight"></a><span class="tt">maxheight</span> (number, optional)
             </dt>
             <dd>
                
-               <p></p>
+               <p>Only used for multi-page table: the maximum height of tables.</p>
+               
+            </dd>
+            <dt><a name="page"></a><span class="tt">page</span> (number, optional)
+            </dt>
+            <dd>
+               
+               <p>The page (later in the PDF), the object should appear on. Number of the keyword »next«
+                  for the next page.
+               </p>
                
             </dd>
             <dt><a name="row"></a><span class="tt">row</span> (number or length, optional)
             </dt>
             <dd>
                
-               <p></p>
+               <p>The row where the object is placed. If none given, the publisher tries to find a row
+                  by itself. You can give a number (in grid cells) or an absolute value (from top left).
+               </p>
                
             </dd>
             <dt><a name="rulewidth"></a><span class="tt">rulewidth</span> (Length (mm,in,cm,pt), optional)
@@ -111,21 +167,108 @@
                </p>
                
             </dd>
-            <dt><a name="valign"></a><span class="tt">valign</span> ('top', 'middle' or 'bottom', optional)
+            <dt><a name="valign"></a><span class="tt">valign</span> (optional)
             </dt>
             <dd>
                
-               <p></p>
+               <p>When an object is placed on the grid and it's height is not a multiple of grid height,
+                  there is a space left on the page between the object an the next grid cell. With this
+                  attribute you can instruct the software where to place the gap.
+               </p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>top:</p>
+                     </td>
+                     <td>
+                        
+                        <p>The object is aligned at the top.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>middle:</p>
+                     </td>
+                     <td>
+                        
+                        <p>The object is aligned so that the space at the top is the same as at the bottom.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>bottom:</p>
+                     </td>
+                     <td>
+                        
+                        <p>The object is aligned at the bottom.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
+            </dd>
+            <dt><a name="vreference"></a><span class="tt">vreference</span> (optional)
+            </dt>
+            <dd>
+               
+               <p>Sets the placement of the object relative to the given row. </p>
+               
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>bottom:</p>
+                     </td>
+                     <td>
+                        
+                        <p>The row determines the bottom edge of the object.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>top:</p>
+                     </td>
+                     <td>
+                        
+                        <p>If 'top' (default), the given row is the top border of the object.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
          </dl>
+         <h2>Example</h2>
+         
+         <p>Positioning inside the grid:</p>
+         <pre class="syntax xml">&lt;Record element="image"&gt;
+  &lt;PlaceObject column="12" frame="solid" framecolor="red"&gt;
+    &lt;Image width="10" file="_samplea.pdf"/&gt;
+  &lt;/PlaceObject&gt;
+&lt;/Record&gt;</pre>
+         <p>Absolute positioning (from top left edge):</p>
+         <pre class="syntax xml">&lt;Record element="image"&gt;
+  &lt;PlaceObject column="1cm" row="4cm" frame="solid" framecolor="red"&gt;
+    &lt;Image width="10" file="_samplea.pdf"/&gt;
+  &lt;/PlaceObject&gt;
+&lt;/Record&gt;
+</pre>
+         <h2>Info</h2>
+         
+         <p>The objects can be placed in a grid (when the value in the attributes row and column
+            are numbers) or they can be placed with absolute positions where the origin is at
+            the top and left border of the page.
+         </p>
+         
          <h2>See also</h2>
-         <a href="image.html">Image</a>
-         <a href="box.html">Box</a>
-         <a href="tablerule.html">Tablerule</a>
-         <a href="table.html">Table</a>
-         <a href="textblock.html">Textblock</a>
-         <a href="definecolor.html">DefineColor</a>
+         <a href="image.html">Image</a>,
+         <a href="box.html">Box</a>,
+         <a href="tablerule.html">Tablerule</a>,
+         <a href="table.html">Table</a>,
+         <a href="textblock.html">Textblock</a>,
+         <a href="definecolor.html">DefineColor</a>,
+         <a href="output.html">Output</a>
          
       </div>
       <div id="elementref">
@@ -163,12 +306,14 @@
             <li><a href="i.html">I</a></li>
             <li><a href="image.html">Image</a></li>
             <li><a href="include.html">Include</a></li>
+            <li><a href="insertpages.html">InsertPages</a></li>
             <li><a href="italic.html">Italic</a></li>
             <li><a href="layout.html">Layout</a></li>
             <li><a href="li.html">Li</a></li>
             <li><a href="loaddataset.html">LoadDataset</a></li>
             <li><a href="loadfontfile.html">LoadFontfile</a></li>
             <li><a href="loop.html">Loop</a></li>
+            <li><a href="makeindex.html">Makeindex</a></li>
             <li><a href="margin.html">Margin</a></li>
             <li><a href="mark.html">Mark</a></li>
             <li><a href="message.html">Message</a></li>
@@ -178,6 +323,7 @@
             <li><a href="ol.html">Ol</a></li>
             <li><a href="options.html">Options</a></li>
             <li><a href="otherwise.html">Otherwise</a></li>
+            <li><a href="output.html">Output</a></li>
             <li><a href="pageformat.html">Pageformat</a></li>
             <li><a href="pagetype.html">Pagetype</a></li>
             <li><a href="paragraph.html">Paragraph</a></li>
@@ -185,11 +331,12 @@
             <li><a href="positioningarea.html">PositioningArea</a></li>
             <li><a href="positioningframe.html">PositioningFrame</a></li>
             <li><a href="processnode.html">ProcessNode</a></li>
-            <li><a href="processrecord.html">ProcessRecord</a></li>
             <li><a href="record.html">Record</a></li>
             <li><a href="regular.html">Regular</a></li>
             <li><a href="rule.html">Rule</a></li>
             <li><a href="savedataset.html">SaveDataset</a></li>
+            <li><a href="savepages.html">SavePages</a></li>
+            <li><a href="sequence.html">Sequence</a></li>
             <li><a href="setgrid.html">SetGrid</a></li>
             <li><a href="setvariable.html">SetVariable</a></li>
             <li><a href="sortsequence.html">SortSequence</a></li>
@@ -202,11 +349,13 @@
             <li><a href="tablehead.html">Tablehead</a></li>
             <li><a href="tablerule.html">Tablerule</a></li>
             <li><a href="td.html">Td</a></li>
+            <li><a href="text.html">Text</a></li>
             <li><a href="textblock.html">Textblock</a></li>
             <li><a href="tr.html">Tr</a></li>
             <li><a href="u.html">U</a></li>
             <li><a href="url.html">URL</a></li>
             <li><a href="ul.html">Ul</a></li>
+            <li><a href="until.html">Until</a></li>
             <li><a href="value.html">Value</a></li>
             <li><a href="while.html">While</a></li>
          </ul>

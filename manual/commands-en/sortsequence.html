@@ -1,7 +1,7 @@
 <!DOCTYPE html><html>
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <link rel="stylesheet" href="../css/normal.css" type="text/css"><script src="../javascript/jquery.min.js" type="text/javascript"></script><script src="../javascript/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
+      <link rel="stylesheet" href="../assets/css/normal.css" type="text/css"><script src="../assets/js/jquery.min.js" type="text/javascript"></script><script src="../assets/js/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
                // This function is executed when the page has finished loading.
              jQuery(function($) {
              // This function highlights (by default) pre and code tags which are annotated correctly.
@@ -10,38 +10,71 @@
             </script><title>SortSequence</title>
    </head>
    <body>
-      <div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"></a></div>
+      <div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">SortSequence</code></h1>
          <h2>Description</h2>
-         <p></p>
-         <p>Allowed attributes: <span class="tt"><a href="#criterium">criterium</a></span>, <span class="tt"><a href="#removeduplicates">removeduplicates</a></span>, <span class="tt"><a href="#select">select</a></span><br>Child elements: <br>Parent elements: <a href="case.html">Case</a>, <a href="record.html">Record</a></p>
+         <p>Sort a list.</p>
+         <div class="hangingindent">
+            <p>Allowed attributes: <span class="tt"><a href="#criterium">criterium</a></span>, <span class="tt"><a href="#removeduplicates">removeduplicates</a></span>, <span class="tt"><a href="#select">select</a></span></p>
+         </div>
+         <div class="hangingindent">
+            <p>Child elements: (none)</p>
+         </div>
+         <div class="hangingindent">
+            <p>Parent elements: <a href="atpagecreation.html">AtPageCreation</a>, <a href="atpageshipout.html">AtPageShipout</a>, <a href="case.html">Case</a>, <a href="contents.html">Contents</a>, <a href="forall.html">ForAll</a>, <a href="loop.html">Loop</a>, <a href="otherwise.html">Otherwise</a>, <a href="record.html">Record</a>, <a href="savedataset.html">SaveDataset</a>, <a href="savepages.html">SavePages</a>, <a href="setvariable.html">SetVariable</a>, <a href="until.html">Until</a>, <a href="while.html">While</a></p>
+         </div>
          <h3>Attributes</h3>
          <dl>
             <dt><a name="criterium"></a><span class="tt">criterium</span> (string)
             </dt>
             <dd>
                
-               <p></p>
+               <p>Name of the attribute that is used as the sort key.</p>
                
             </dd>
             <dt><a name="removeduplicates"></a><span class="tt">removeduplicates</span> (string, optional)
             </dt>
             <dd>
                
-               <p></p>
+               <p>If this attribute is used then it contains the name of the data-attribute that gets
+                  evaluated when duplicates are eliminated.
+               </p>
                
             </dd>
             <dt><a name="select"></a><span class="tt">select</span> (XPath expression)
             </dt>
             <dd>
                
-               <p></p>
+               <p>The data that should be sorted.</p>
                
             </dd>
          </dl>
-         <h2>See also</h2>
-      </div>
+         <h2>Example</h2>
+         
+         <p>Data:</p>
+         <pre class="syntax xml">&lt;data&gt;
+  &lt;elt value="one"/&gt;
+  &lt;elt value="two"/&gt;
+  &lt;elt value="three"/&gt;
+&lt;/data&gt;
+</pre>
+         <p>Layout:</p>
+         <pre class="syntax xml">&lt;Record element="data"&gt;
+  &lt;SetVariable variable="unsorted" select="*"/&gt;
+  &lt;SetVariable variable="sorted"&gt;
+    &lt;SortSequence select="$unsorted" criterium="value"/&gt;
+  &lt;/SetVariable&gt;
+  &lt;PlaceObject&gt;
+    &lt;Textblock&gt;
+      &lt;ForAll select="$sorted"&gt;
+        &lt;Paragraph&gt;&lt;Value select="@value"&gt;&lt;/Value&gt;&lt;/Paragraph&gt;
+      &lt;/ForAll&gt;
+    &lt;/Textblock&gt;
+  &lt;/PlaceObject&gt;
+&lt;/Record&gt;
+</pre>
+         </div>
       <div id="elementref">
          <h1>Commands</h1>
          <ul>
@@ -77,12 +110,14 @@
             <li><a href="i.html">I</a></li>
             <li><a href="image.html">Image</a></li>
             <li><a href="include.html">Include</a></li>
+            <li><a href="insertpages.html">InsertPages</a></li>
             <li><a href="italic.html">Italic</a></li>
             <li><a href="layout.html">Layout</a></li>
             <li><a href="li.html">Li</a></li>
             <li><a href="loaddataset.html">LoadDataset</a></li>
             <li><a href="loadfontfile.html">LoadFontfile</a></li>
             <li><a href="loop.html">Loop</a></li>
+            <li><a href="makeindex.html">Makeindex</a></li>
             <li><a href="margin.html">Margin</a></li>
             <li><a href="mark.html">Mark</a></li>
             <li><a href="message.html">Message</a></li>
@@ -92,6 +127,7 @@
             <li><a href="ol.html">Ol</a></li>
             <li><a href="options.html">Options</a></li>
             <li><a href="otherwise.html">Otherwise</a></li>
+            <li><a href="output.html">Output</a></li>
             <li><a href="pageformat.html">Pageformat</a></li>
             <li><a href="pagetype.html">Pagetype</a></li>
             <li><a href="paragraph.html">Paragraph</a></li>
@@ -99,11 +135,12 @@
             <li><a href="positioningarea.html">PositioningArea</a></li>
             <li><a href="positioningframe.html">PositioningFrame</a></li>
             <li><a href="processnode.html">ProcessNode</a></li>
-            <li><a href="processrecord.html">ProcessRecord</a></li>
             <li><a href="record.html">Record</a></li>
             <li><a href="regular.html">Regular</a></li>
             <li><a href="rule.html">Rule</a></li>
             <li><a href="savedataset.html">SaveDataset</a></li>
+            <li><a href="savepages.html">SavePages</a></li>
+            <li><a href="sequence.html">Sequence</a></li>
             <li><a href="setgrid.html">SetGrid</a></li>
             <li><a href="setvariable.html">SetVariable</a></li>
             <li class="active"><a href="sortsequence.html">SortSequence</a></li>
@@ -116,11 +153,13 @@
             <li><a href="tablehead.html">Tablehead</a></li>
             <li><a href="tablerule.html">Tablerule</a></li>
             <li><a href="td.html">Td</a></li>
+            <li><a href="text.html">Text</a></li>
             <li><a href="textblock.html">Textblock</a></li>
             <li><a href="tr.html">Tr</a></li>
             <li><a href="u.html">U</a></li>
             <li><a href="url.html">URL</a></li>
             <li><a href="ul.html">Ul</a></li>
+            <li><a href="until.html">Until</a></li>
             <li><a href="value.html">Value</a></li>
             <li><a href="while.html">While</a></li>
          </ul>

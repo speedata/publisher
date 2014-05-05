@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout 
+  xmlns="urn:speedata.de:2009/publisher/de" 
+  xmlns:sd="urn:speedata:2009/publisher/functions/de">
+  <Optionen ignorierezeilenende="ja"/>
+
+  <LadeSchriftdatei name="WarnockPro-Light" dateiname="WarnockPro-Light.otf" />
+  <LadeSchriftdatei name="WarnockPro-LightIt" dateiname="WarnockPro-LightIt.otf" />
+  <LadeSchriftdatei name="WarnockPro-Semibold" dateiname="WarnockPro-Semibold.otf" />
+
+  <DefiniereSchriftfamilie name="text" schriftgröße="10" zeilenabstand="12">
+    <Normal schriftart="WarnockPro-Light"/>
+    <Kursiv schriftart="WarnockPro-LightIt"/>
+    <Fett schriftart="WarnockPro-Semibold"/>
+  </DefiniereSchriftfamilie>
+  <Datensatz element="data">
+    <ObjektAusgeben>
+      <Textblock>
+        <FürAlle auswahl="text">
+          <Absatz><Wert auswahl="."/></Absatz>
+        </FürAlle>
+      </Textblock>
+    </ObjektAusgeben>
+  </Datensatz>
+</Layout>

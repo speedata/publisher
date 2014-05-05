@@ -1,7 +1,7 @@
 <!DOCTYPE html><html>
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <link rel="stylesheet" href="../css/normal.css" type="text/css"><script src="../javascript/jquery.min.js" type="text/javascript"></script><script src="../javascript/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
+      <link rel="stylesheet" href="../assets/css/normal.css" type="text/css"><script src="../assets/js/jquery.min.js" type="text/javascript"></script><script src="../assets/js/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
                // This function is executed when the page has finished loading.
              jQuery(function($) {
              // This function highlights (by default) pre and code tags which are annotated correctly.
@@ -10,12 +10,20 @@
             </script><title>Options</title>
    </head>
    <body>
-      <div id="logo"><a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"></a></div>
+      <div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">Options</code></h1>
          <h2>Description</h2>
          <p>Set publisher specific options</p>
-         <p>Allowed attributes: <span class="tt"><a href="#cutmarks">cutmarks</a></span>, <span class="tt"><a href="#mainlanguage">mainlanguage</a></span>, <span class="tt"><a href="#show-grid">show-grid</a></span>, <span class="tt"><a href="#show-gridallocation">show-gridallocation</a></span>, <span class="tt"><a href="#show-hyphenation">show-hyphenation</a></span>, <span class="tt"><a href="#startpage">startpage</a></span>, <span class="tt"><a href="#trace">trace</a></span>, <span class="tt"><a href="#trim">trim</a></span><br>Child elements: <br>Parent elements: <a href="layout.html">Layout</a></p>
+         <div class="hangingindent">
+            <p>Allowed attributes: <span class="tt"><a href="#cutmarks">cutmarks</a></span>, <span class="tt"><a href="#ignoreeol">ignoreeol</a></span>, <span class="tt"><a href="#mainlanguage">mainlanguage</a></span>, <span class="tt"><a href="#resetmarks">resetmarks</a></span>, <span class="tt"><a href="#show-grid">show-grid</a></span>, <span class="tt"><a href="#show-gridallocation">show-gridallocation</a></span>, <span class="tt"><a href="#show-hyphenation">show-hyphenation</a></span>, <span class="tt"><a href="#startpage">startpage</a></span>, <span class="tt"><a href="#trace">trace</a></span>, <span class="tt"><a href="#trim">trim</a></span></p>
+         </div>
+         <div class="hangingindent">
+            <p>Child elements: (none)</p>
+         </div>
+         <div class="hangingindent">
+            <p>Parent elements: <a href="include.html">Include</a>, <a href="layout.html">Layout</a></p>
+         </div>
          <h3>Attributes</h3>
          <dl>
             <dt><a name="cutmarks"></a><span class="tt">cutmarks</span> (yes/no, optional)
@@ -30,56 +38,268 @@
                </p>
                
             </dd>
-            <dt><a name="mainlanguage"></a><span class="tt">mainlanguage</span> (string, optional)
+            <dt><a name="ignoreeol"></a><span class="tt">ignoreeol</span> (yes/no, optional)
             </dt>
             <dd>
                
-               <p></p>
+               <p>Ignore newlines in data-xml</p>
+               
+            </dd>
+            <dt><a name="mainlanguage"></a><span class="tt">mainlanguage</span> (optional)
+            </dt>
+            <dd>
+               
+               <p>The default language for text (hyphenation).</p>
+               
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>German:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Switch to German hyphenation patterns.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Englisch (Great Britan):</p>
+                     </td>
+                     <td>
+                        
+                        <p>Switch to English hyphenation patterns.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Czech:</p>
+                     </td>
+                     <td>
+                        
+                        <p></p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Danish:</p>
+                     </td>
+                     <td>
+                        
+                        <p></p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Dutch:</p>
+                     </td>
+                     <td>
+                        
+                        <p></p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Englisch (USA):</p>
+                     </td>
+                     <td>
+                        
+                        <p></p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Finnish:</p>
+                     </td>
+                     <td>
+                        
+                        <p></p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Greek:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Monotonic greek</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Hungarian:</p>
+                     </td>
+                     <td>
+                        
+                        <p></p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Italian:</p>
+                     </td>
+                     <td>
+                        
+                        <p></p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Norwegian Bokmål:</p>
+                     </td>
+                     <td>
+                        
+                        <p></p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Norwegian Nynorsk:</p>
+                     </td>
+                     <td>
+                        
+                        <p></p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Polish:</p>
+                     </td>
+                     <td>
+                        
+                        <p></p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Portuguese:</p>
+                     </td>
+                     <td>
+                        
+                        <p></p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Russian:</p>
+                     </td>
+                     <td>
+                        
+                        <p></p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Serbian:</p>
+                     </td>
+                     <td>
+                        
+                        <p></p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Spanish:</p>
+                     </td>
+                     <td>
+                        
+                        <p></p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Swedish:</p>
+                     </td>
+                     <td>
+                        
+                        <p></p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>Turkish:</p>
+                     </td>
+                     <td>
+                        
+                        <p></p>
+                        
+                     </td>
+                  </tr>
+               </table>
+            </dd>
+            <dt><a name="resetmarks"></a><span class="tt">resetmarks</span> (yes/no, optional)
+            </dt>
+            <dd>
+               
+               <p>Yes: ignore the marks file from previous run.</p>
                
             </dd>
             <dt><a name="show-grid"></a><span class="tt">show-grid</span> (yes/no, optional)
             </dt>
             <dd>
                
-               <p></p>
+               <p>Draw the grid on the page.</p>
                
             </dd>
             <dt><a name="show-gridallocation"></a><span class="tt">show-gridallocation</span> (yes/no, optional)
             </dt>
             <dd>
                
-               <p></p>
+               <p>Draw allocated cells with yellow and conflicts with red markers.</p>
                
             </dd>
             <dt><a name="show-hyphenation"></a><span class="tt">show-hyphenation</span> (yes/no, optional)
             </dt>
             <dd>
                
-               <p></p>
+               <p>Draw little marks to show all hyphenation points.</p>
                
             </dd>
             <dt><a name="startpage"></a><span class="tt">startpage</span> (number, optional)
             </dt>
             <dd>
                
-               <p></p>
+               <p>Set the number of the first page.</p>
                
             </dd>
             <dt><a name="trace"></a><span class="tt">trace</span> (yes/no, optional)
             </dt>
             <dd>
                
-               <p></p>
+               <p>Draw rectangles around objects for debugging purposes.</p>
                
             </dd>
             <dt><a name="trim"></a><span class="tt">trim</span> (Length (mm,in,cm,pt), optional)
             </dt>
             <dd>
                
-               <p></p>
+               <p>The amount of bleed. Defaults to 0mm.</p>
                
             </dd>
          </dl>
+         <h2>Example</h2>
+         <pre class="syntax xml">&lt;Options
+    show-gridallocation="no"
+    show-grid="yes"
+    cutmarks="yes"
+    trim="3mm"/&gt;</pre>
          <h2>See also</h2><a href="../description-en/cutmarks.html">Cutmarks and bleed</a></div>
       <div id="elementref">
          <h1>Commands</h1>
@@ -116,12 +336,14 @@
             <li><a href="i.html">I</a></li>
             <li><a href="image.html">Image</a></li>
             <li><a href="include.html">Include</a></li>
+            <li><a href="insertpages.html">InsertPages</a></li>
             <li><a href="italic.html">Italic</a></li>
             <li><a href="layout.html">Layout</a></li>
             <li><a href="li.html">Li</a></li>
             <li><a href="loaddataset.html">LoadDataset</a></li>
             <li><a href="loadfontfile.html">LoadFontfile</a></li>
             <li><a href="loop.html">Loop</a></li>
+            <li><a href="makeindex.html">Makeindex</a></li>
             <li><a href="margin.html">Margin</a></li>
             <li><a href="mark.html">Mark</a></li>
             <li><a href="message.html">Message</a></li>
@@ -131,6 +353,7 @@
             <li><a href="ol.html">Ol</a></li>
             <li class="active"><a href="options.html">Options</a></li>
             <li><a href="otherwise.html">Otherwise</a></li>
+            <li><a href="output.html">Output</a></li>
             <li><a href="pageformat.html">Pageformat</a></li>
             <li><a href="pagetype.html">Pagetype</a></li>
             <li><a href="paragraph.html">Paragraph</a></li>
@@ -138,11 +361,12 @@
             <li><a href="positioningarea.html">PositioningArea</a></li>
             <li><a href="positioningframe.html">PositioningFrame</a></li>
             <li><a href="processnode.html">ProcessNode</a></li>
-            <li><a href="processrecord.html">ProcessRecord</a></li>
             <li><a href="record.html">Record</a></li>
             <li><a href="regular.html">Regular</a></li>
             <li><a href="rule.html">Rule</a></li>
             <li><a href="savedataset.html">SaveDataset</a></li>
+            <li><a href="savepages.html">SavePages</a></li>
+            <li><a href="sequence.html">Sequence</a></li>
             <li><a href="setgrid.html">SetGrid</a></li>
             <li><a href="setvariable.html">SetVariable</a></li>
             <li><a href="sortsequence.html">SortSequence</a></li>
@@ -155,11 +379,13 @@
             <li><a href="tablehead.html">Tablehead</a></li>
             <li><a href="tablerule.html">Tablerule</a></li>
             <li><a href="td.html">Td</a></li>
+            <li><a href="text.html">Text</a></li>
             <li><a href="textblock.html">Textblock</a></li>
             <li><a href="tr.html">Tr</a></li>
             <li><a href="u.html">U</a></li>
             <li><a href="url.html">URL</a></li>
             <li><a href="ul.html">Ul</a></li>
+            <li><a href="until.html">Until</a></li>
             <li><a href="value.html">Value</a></li>
             <li><a href="while.html">While</a></li>
          </ul>
