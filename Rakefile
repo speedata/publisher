@@ -18,9 +18,9 @@ end
 
 desc "Compile and install necessary software"
 task :build do
-	ENV['GOPATH'] = "#{srcdir}/go/sp"
+	ENV['GOPATH'] = "#{srcdir}/go"
 	publisher_version = @versions['publisher_version']
-	Dir.chdir(srcdir.join("go","sp")) do
+	Dir.chdir(srcdir.join("go")) do
 		puts "Building (and copying) sp binary..."
   		sh "go build -ldflags \"-X main.dest git -X main.version #{publisher_version}\" -o  #{installdir}/bin/sp  main"
   		puts "...done"
@@ -29,10 +29,17 @@ end
 
 desc "Generate documentation"
 task :doc do
-	Dir.chdir(installdir.join("doc","manual")) do
-		sh "jekyll build"
+	ENV['GOPATH'] = "#{srcdir}/go"
+	Dir.chdir(srcdir.join("go")) do
+		puts "Building the gomddoc binary..."
+		sh "go build -o  #{installdir}/bin/gomddoc gomddoc/main"
+		puts "...done"
 	end
-	print "Now generating command reference from XML..."
+
+	Dir.chdir(installdir.join("doc","manual")) do
+		sh "gomddoc  --base . --source doc --dest #{builddir}/manual"
+	end
+	# puts "Now generating command reference from XML..."
 	mkdir_p "temp"
 	sh "java -Dfile.encoding=utf8 -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=en builddir=#{builddir}/manual 2> temp/messages-en.csv"
 	sh "java -Dfile.encoding=utf8 -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=de builddir=#{builddir}/manual 2> temp/messages-de.csv"
@@ -55,13 +62,13 @@ task :sourcedoc do
 	end
 	cp_r(installdir.join("doc","sourcedoc","img"), builddir.join("sourcedoc"))
 	cp_r(installdir.join("doc","sourcedoc","mj"),  builddir.join("sourcedoc"))
-	# ENV['GOPATH'] = "#{srcdir}/go/sp"
-	# Dir.chdir(srcdir.join("go","sp","src","main")) do
-	# 	puts "Building docgo..."
-	# 	sh 'go build github.com/pgundlach/docgo'
-	# 	puts "...done"
-	# 	sh "./docgo -outdir #{builddir}/sourcedoc -resdir #{srcdir}/go/sp/src/github.com/pgundlach/docgo/ sp.go"
-	# end
+	ENV['GOPATH'] = "#{srcdir}/go"
+	Dir.chdir(srcdir.join("go","src","main")) do
+		puts "Building docgo..."
+		sh "go build -o #{installdir}/bin/docgo github.com/pgundlach/docgo"
+		puts "...done"
+		sh "#{installdir}/bin/docgo -outdir #{builddir}/sourcedoc -resdir #{srcdir}/go/src/github.com/pgundlach/docgo/ sp.go"
+	end
 	puts "done"
 	puts "Generated source documentation in \n#{builddir}/sourcedoc"
 end
@@ -122,7 +129,7 @@ end
 def build_go(srcdir,destbin,goos,goarch)
 	ENV['GOARCH'] = goarch
 	ENV['GOOS'] = goos
-	ENV['GOPATH'] = "#{srcdir}/go/sp"
+	ENV['GOPATH'] = "#{srcdir}/go"
 	publisher_version = @versions['publisher_version']
 	# let's always add the sha1 to the minor versions, so we
 	# _,minor,_ = publisher_version.split(/\./)

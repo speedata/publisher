@@ -81,9 +81,9 @@
         <html>
           <head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-            <link rel="stylesheet" href="../css/normal.css" type="text/css" />
-            <script src="../javascript/jquery.min.js" type="text/javascript"></script>
-            <script src="../javascript/jquery.syntax.min.js" type="text/javascript"></script>
+            <link rel="stylesheet" href="../assets/css/normal.css" type="text/css" />
+            <script src="../assets/js/jquery.min.js" type="text/javascript"></script>
+            <script src="../assets/js/jquery.syntax.min.js" type="text/javascript"></script>
             <script type="text/javascript">
                // This function is executed when the page has finished loading.
              jQuery(function($) {
@@ -97,10 +97,10 @@
             <div id="logo">
             <xsl:choose>
               <xsl:when test="$lang = 'de'">
-                <a href="../index-de.html"><img src="../images/publisher_logo.png" alt="Startseite"/></a>
+                <a href="../index-de.html"><img src="../assets/images/publisher_logo.png" alt="Startseite"/></a>
               </xsl:when>
               <xsl:otherwise>
-                <a href="../index.html"><img src="../images/publisher_logo.png" alt="Start page"/></a>
+                <a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"/></a>
               </xsl:otherwise>
             </xsl:choose>
             </div>
