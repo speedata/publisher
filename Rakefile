@@ -30,9 +30,10 @@ end
 desc "Generate documentation"
 task :doc do
 	ENV['GOPATH'] = "#{srcdir}/go"
+	publisher_version = @versions['publisher_version']
 	Dir.chdir(srcdir.join("go")) do
 		puts "Building the gomddoc binary..."
-		sh "go build -o  #{installdir}/bin/gomddoc gomddoc/main"
+		sh "go build -ldflags \"-X main.version #{publisher_version}\" -o  #{installdir}/bin/gomddoc gomddoc/main"
 		puts "...done"
 	end
 
@@ -41,8 +42,8 @@ task :doc do
 	end
 	# puts "Now generating command reference from XML..."
 	mkdir_p "temp"
-	sh "java -Dfile.encoding=utf8 -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=en builddir=#{builddir}/manual 2> temp/messages-en.csv"
-	sh "java -Dfile.encoding=utf8 -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=de builddir=#{builddir}/manual 2> temp/messages-de.csv"
+	sh "java -Dfile.encoding=utf8 -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=en version=#{publisher_version} builddir=#{builddir}/manual 2> temp/messages-en.csv"
+	sh "java -Dfile.encoding=utf8 -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=de version=#{publisher_version} builddir=#{builddir}/manual 2> temp/messages-de.csv"
 	puts "done"
 end
 

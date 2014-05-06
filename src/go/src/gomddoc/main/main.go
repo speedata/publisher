@@ -6,6 +6,10 @@ import (
 	"optionparser"
 )
 
+var (
+	version string
+)
+
 func main() {
 	var (
 		root    string
@@ -25,7 +29,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	mkdoc.Version = version
 	err = mkdoc.DoThings()
 	if err != nil {
 		log.Fatal(err)

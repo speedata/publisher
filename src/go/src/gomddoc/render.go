@@ -22,6 +22,7 @@ var (
 )
 
 type MDDoc struct {
+	Version  string
 	root     string
 	basedir  string
 	assets   string
@@ -296,9 +297,9 @@ func (md *MDDoc) otherLanguage(path string) string {
 
 func (md *MDDoc) footerHTML(path string) string {
 	if isEn(path) {
-		return fmt.Sprintf(`<a href="%s">Start page</a> | <a href="%scommands-en/layout.html">Element reference</a> | Other language:  <a href="%s">German</a>`, md.rootDoc(path), md.pathToRoot(path), md.otherLanguage(path))
+		return fmt.Sprintf(`Version: %s | <a href="%s">Start page</a> | <a href="%scommands-en/layout.html">Element reference</a> | Other language:  <a href="%s">German</a>`, md.Version, md.rootDoc(path), md.pathToRoot(path), md.otherLanguage(path))
 	} else {
-		return fmt.Sprintf(`<a href="%s">Startseite</a> | <a href="%scommands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="%s">Englisch</a>`, md.rootDoc(path), md.pathToRoot(path), md.otherLanguage(path))
+		return fmt.Sprintf(`Version: %s | <a href="%s">Startseite</a> | <a href="%scommands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="%s">Englisch</a>`, md.Version, md.rootDoc(path), md.pathToRoot(path), md.otherLanguage(path))
 	}
 }
 

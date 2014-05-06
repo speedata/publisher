@@ -13,6 +13,7 @@
   <xsl:variable name="other-languages" select="$all-languages[. ne $lang ]" />
 
   <xsl:param name="builddir" select="'/tmp/manual/'"/>
+  <xsl:param name="version" select="'0.0.0'"/>
 
   <xsl:key name="en-texts"      match="text" use="@key" xpath-default-namespace=""/>
 
@@ -214,6 +215,7 @@
     </div>
     <xsl:variable name="commandname" select="@name"/>
     <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
+    <xsl:text>Version: </xsl:text><xsl:value-of select="$version"/> |
     <xsl:choose>
       <xsl:when test="$lang='de'">
         <a href="../index-de.html">Startseite</a>
