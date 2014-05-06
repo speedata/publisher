@@ -39,7 +39,7 @@ task :doc do
 	end
 
 	Dir.chdir(installdir.join("doc","manual")) do
-		sh "gomddoc  --base . --source doc --dest #{builddir}/manual"
+		sh "#{installdir}/bin/gomddoc  --base . --source doc --dest #{builddir}/manual"
 	end
 	puts "Now generating command reference from XML..."
 	mkdir_p "temp"
