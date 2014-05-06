@@ -632,6 +632,8 @@ func runComparison(info os.FileInfo) {
 
 	if len(badPages) > 0 {
 		log.Println("Comparison failed. Bad pages are:", badPages)
+		cwd, _ := os.Getwd()
+		log.Println(cwd)
 	} else {
 		log.Println("OK")
 	}

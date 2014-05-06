@@ -99,6 +99,14 @@ whatsit_node   = node.id("whatsit")
 hlist_node     = node.id("hlist")
 vlist_node     = node.id("vlist")
 
+local t = node.whatsits()
+for k,v in pairs(node.whatsits()) do
+    if v == "user_defined" then
+        -- for action/mark command
+        user_defined_whatsit = k
+    end
+end
+
 alternating = {}
 
 default_areaname = "_default_area"

@@ -6,6 +6,7 @@ Changelog
 Version 2.0
 -----------
 
+-   New [XPath-function](xpath.html) sd:merge-pagenumbers() (1.99.44)
 -   **The default horizontal alignment for table cells is now `left`**
 -   New option `justify` for horizontal alignment in
     [Table](../commands-en/table.html) (1.99.43)

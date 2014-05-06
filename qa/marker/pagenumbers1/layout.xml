@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Options show-grid="no" resetmarks="yes" />
+  
+  <Pageformat width="4cm" height="4cm"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Action>
+        <Mark select="'foo'" append="yes"/>
+      </Action>
+      </Textblock>
+    </PlaceObject>
+    <PlaceObject>
+      <Textblock>
+        <Action>
+          <Mark select="'foo'" append="yes"/>
+        </Action>
+        <Paragraph>
+          <Value>One</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <NewPage/>
+    <PlaceObject>
+      <Textblock>
+        <Action>
+          <Mark select="'foo'" append="yes"/>
+        </Action>
+        <Paragraph>
+          <Value>two</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    
+    <NewPage/>
+    
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value select="sd:merge-pagenumbers(sd:pagenumber('foo'),'','*')"></Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+
+
+
+</Layout>

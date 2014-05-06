@@ -51,7 +51,7 @@ local function reset_alternating( dataxml,arg )
   publisher.alternating[alt_type] = 0
 end
 
-local function anzahl_datensaetze(dataxml,d)
+local function number_of_datasets(dataxml,d)
   if not d then return 0 end
   local count = 0
   for i=1,#d do
@@ -68,17 +68,40 @@ local function number_of_columns(dataxml,arg)
 end
 
 --- Merge numbers like '1-5, 8, 9,10,11' into '1-5, 8-10'
--- Very simple implementation, not to be used in other cases than 1-3!
 local function merge_pagenumbers(dataxml,arg )
-  local a,b
-  _,_, a, b = unicode.utf8.find(arg[1] or "","^(%d+).(%d+)$")
-  local ret
-  if a == b then
-      ret = a
+  local pagenumbers_string = string.gsub(arg[1] or "","%s","")
+  local mergechar = arg[2] or "–"
+  local spacer    = arg[3] or ", "
+
+  if mergechar ~= "" and mergechar ~= "–" then
+    printtable("pagenumbers_string",string.explode(pagenumbers_string,", "))
+    err("not implemented yet")
   else
-      ret = arg[1] or ""
+    local pagenumbers = string.explode(pagenumbers_string,",")
+    -- let's remove duplicates now
+    local dupes = {}
+    local withoutdupes = {}
+    for i=1,#pagenumbers do
+      local num = pagenumbers[i]
+      if (not dupes[num]) then
+          withoutdupes[#withoutdupes+1] = num
+          dupes[num] = true
+      end
+    end
+    publisher.stable_sort(withoutdupes,function(elta,eltb)
+        return tonumber(elta) < tonumber(eltb)
+    end)
+    return table.concat(withoutdupes, spacer)
   end
-  return ret
+  -- local a,b
+  -- _,_, a, b = unicode.utf8.find(arg[1] or "","^(%d+).(%d+)$")
+  -- local ret
+  -- if a == b then
+  --     ret = a
+  -- else
+  --     ret = arg[1] or ""
+  -- end
+  -- return ret
 end
 
 local function anzahl_zeilen(dataxml,arg)
@@ -134,23 +157,22 @@ local function format_number(dataxml,arg)
   end
 end
 
-
 local function format_string( dataxml,arg )
   return string.format(arg[2],arg[1])
 end
 
 
-local function gerade(dataxml, arg )
+local function even(dataxml, arg )
   return math.fmod(arg[1],2) == 0
 end
 
-local function gruppenbreite(dataxml, arg )
+local function groupwidth(dataxml, arg )
   publisher.setup_page()
   local groupname=arg[1]
-  local gruppeninhalt=publisher.groups[groupname].contents
-  local raster = publisher.current_grid
-  local breite = raster:width_in_gridcells_sp(gruppeninhalt.width)
-  return breite
+  local groupcontents=publisher.groups[groupname].contents
+  local grid = publisher.current_grid
+  local width = grid:width_in_gridcells_sp(groupcontents.width)
+  return width
 end
 
 local function current_frame_number(dataxml,arg)
@@ -160,16 +182,16 @@ local function current_frame_number(dataxml,arg)
   return current_framenumber
 end
 
-local function gruppenhoehe(dataxml, arg )
+local function groupheight(dataxml, arg )
   publisher.setup_page()
   local groupname=arg[1]
-  local gruppeninhalt=publisher.groups[groupname].contents
-  local raster = publisher.current_grid
-  local height = raster:height_in_gridcells_sp(gruppeninhalt.height)
+  local groupcontents=publisher.groups[groupname].contents
+  local grid = publisher.current_grid
+  local height = grid:height_in_gridcells_sp(groupcontents.height)
   return height
 end
 
-local function ungerade(dataxml, arg )
+local function odd(dataxml, arg )
   return math.fmod(arg[1],2) ~= 0
 end
 
@@ -242,15 +264,15 @@ register("urn:speedata:2009/publisher/functions/de","html-dekodieren",decode_htm
 register("urn:speedata:2009/publisher/functions/en","file-exists",file_exists)
 register("urn:speedata:2009/publisher/functions/de","datei-vorhanden",file_exists)
 
-register("urn:speedata:2009/publisher/functions/en","number-of-datasets",anzahl_datensaetze)
-register("urn:speedata:2009/publisher/functions/de","anzahl-datensätze",anzahl_datensaetze)
-register("urn:speedata:2009/publisher/functions/de","anzahl-datensaetze",anzahl_datensaetze)
+register("urn:speedata:2009/publisher/functions/en","number-of-datasets",number_of_datasets)
+register("urn:speedata:2009/publisher/functions/de","anzahl-datensätze",number_of_datasets)
+register("urn:speedata:2009/publisher/functions/de","anzahl-datensaetze",number_of_datasets)
 
-register("urn:speedata:2009/publisher/functions/en","even",gerade)
-register("urn:speedata:2009/publisher/functions/de","gerade",gerade)
+register("urn:speedata:2009/publisher/functions/en","even",even)
+register("urn:speedata:2009/publisher/functions/de","gerade",even)
 
-register("urn:speedata:2009/publisher/functions/en","odd",ungerade)
-register("urn:speedata:2009/publisher/functions/de","ungerade",ungerade)
+register("urn:speedata:2009/publisher/functions/en","odd",odd)
+register("urn:speedata:2009/publisher/functions/de","ungerade",odd)
 
 register("urn:speedata:2009/publisher/functions/en","pagenumber",pagenumber)
 register("urn:speedata:2009/publisher/functions/de","seitennummer",pagenumber)
@@ -273,13 +295,13 @@ register("urn:speedata:2009/publisher/functions/de","aktuelle-rahmennummer",curr
 register("urn:speedata:2009/publisher/functions/en","alternating",alternating)
 register("urn:speedata:2009/publisher/functions/de","alternierend",alternating)
 
-register("urn:speedata:2009/publisher/functions/en","group-height",gruppenhoehe)
-register("urn:speedata:2009/publisher/functions/en","groupheight",gruppenhoehe)
-register("urn:speedata:2009/publisher/functions/de","gruppenhöhe",gruppenhoehe)
+register("urn:speedata:2009/publisher/functions/en","group-height",groupheight)
+register("urn:speedata:2009/publisher/functions/en","groupheight",groupheight)
+register("urn:speedata:2009/publisher/functions/de","gruppenhöhe",groupheight)
 
-register("urn:speedata:2009/publisher/functions/en","group-width",gruppenbreite)
-register("urn:speedata:2009/publisher/functions/en","groupwidth",gruppenbreite)
-register("urn:speedata:2009/publisher/functions/de","gruppenbreite",gruppenbreite)
+register("urn:speedata:2009/publisher/functions/en","group-width",groupwidth)
+register("urn:speedata:2009/publisher/functions/en","groupwidth",groupwidth)
+register("urn:speedata:2009/publisher/functions/de","gruppenbreite",groupwidth)
 
 register("urn:speedata:2009/publisher/functions/en","format-number",format_number)
 register("urn:speedata:2009/publisher/functions/de","formatiere-zahl",format_number)
