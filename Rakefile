@@ -31,6 +31,7 @@ desc "Generate documentation"
 task :doc do
 	ENV['GOPATH'] = "#{srcdir}/go"
 	publisher_version = @versions['publisher_version']
+	rm_rf builddir.join("manual")
 	Dir.chdir(srcdir.join("go")) do
 		puts "Building the gomddoc binary..."
 		sh "go build -ldflags \"-X main.version #{publisher_version}\" -o  #{installdir}/bin/gomddoc gomddoc/main"
@@ -40,11 +41,23 @@ task :doc do
 	Dir.chdir(installdir.join("doc","manual")) do
 		sh "gomddoc  --base . --source doc --dest #{builddir}/manual"
 	end
-	# puts "Now generating command reference from XML..."
+	puts "Now generating command reference from XML..."
 	mkdir_p "temp"
 	sh "java -Dfile.encoding=utf8 -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=en version=#{publisher_version} builddir=#{builddir}/manual 2> temp/messages-en.csv"
 	sh "java -Dfile.encoding=utf8 -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=de version=#{publisher_version} builddir=#{builddir}/manual 2> temp/messages-de.csv"
 	puts "done"
+end
+
+task :updateexamples do
+	Dir.chdir(installdir.join("doc","manual")) do
+		Dir.glob('doc/examples-*/**').select { |f| File.directory? f}.each do |dir|
+			puts "Update example in #{dir}"
+			Dir.chdir(dir) do
+				`sp`
+				`sp clean`
+			end
+		end
+	end
 end
 
 desc "Generate schema and translations from master"
