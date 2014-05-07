@@ -13,4 +13,18 @@ simpletable: Einfache Tabelle
 textframe: Textcontainer mit Überlauf
 ---
 
+Beispiele
+=========
+
+In diesem Verzeichnis gibt es eine Reihe (einfacher) Beispiele.
+
+Am besten ist es, sie in ein separates Verzeichnis zu kopieren und dort mit
+
+    sp
+
+die Beispiele einzeln selbst zu übersetzen.
+
+Dieselben Beispiele gibt es auch für das englischsprachige Regelwerk unterhalb von `doc/examples-en`.
+
+
 {{template "filelist" .}}

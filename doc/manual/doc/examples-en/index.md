@@ -13,4 +13,13 @@ simpletable: A simple HTML like table
 textframe: Overflowing text containers
 ---
 
+Examples
+========
+
+This directory contains some examples. Run each of them in a separate directory by the command line program
+
+    sp
+
+Have fun!
+
 {{template "filelist" .}}
