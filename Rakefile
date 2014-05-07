@@ -262,7 +262,7 @@ task :deb do
 
 	destdir      = builddir.join("deb")
 	targetbin    = destdir.join("usr","bin")
-	targetdoc    = destdir.join("usr","doc","speedata-publisher")
+	targetdoc    = destdir.join("usr","share","doc","speedata-publisher")
 	targetshare  = destdir.join("usr","share")
 	targetfonts  = targetshare.join("speedata-publisher", "fonts")
 	targetimg    = targetshare.join("speedata-publisher", "img")
