@@ -140,7 +140,7 @@ task :qa do
 	sh "#{installdir}/bin/sp compare #{installdir}/qa"
 end
 
-def build_go(srcdir,destbin,goos,goarch)
+def build_go(srcdir,destbin,goos,goarch,targettype)
 	ENV['GOARCH'] = goarch
 	ENV['GOOS'] = goos
 	ENV['GOPATH'] = "#{srcdir}/go"
@@ -153,7 +153,7 @@ def build_go(srcdir,destbin,goos,goarch)
 	# end
 	binaryname = goos == "windows" ? "sp.exe" : "sp"
     # Now compile the go executable
-	cmdline = "go build -ldflags '-X main.dest directory -X main.version #{publisher_version}' -o #{destbin}/#{binaryname} main"
+	cmdline = "go build -ldflags '-X main.dest #{targettype} -X main.version #{publisher_version}' -o #{destbin}/#{binaryname} main"
 	sh cmdline do |ok, res|
 		if ! ok
 	    	puts "Go compilation failed"
@@ -224,7 +224,7 @@ task :zip do
 	zipname = "speedata-publisher-#{platform}-#{arch}-#{publisher_version}.zip"
 	rm_rf File.join(builddir,zipname)
 
-	if build_go(srcdir,targetbin,platform,arch) == false then next end
+	if build_go(srcdir,targetbin,platform,arch,"directory") == false then next end
 	cp_r(File.join("fonts"),targetfonts)
 	cp_r(Dir.glob("img/*"),File.join(targetshare,"img"))
 	cp_r(File.join("lib"),targetshare)
@@ -248,4 +248,107 @@ task :zip do
 		puts cmdline
 		puts `#{cmdline}`
 	end
+end
+
+
+desc "Prepare a .deb directory"
+task :deb do
+	srcbindir = ENV["LUATEX_BIN"] || ""
+	if ! test(?d,srcbindir) then
+		puts "Environment variable LUATEX_BIN does not exist.\nMake sure it points to a path which contains `luatex'.\nUse like this: rake zip LUATEX_BIN=/path/to/bin\nAborting"
+		next
+	end
+	publisher_version = @versions['publisher_version']
+
+	destdir      = builddir.join("deb")
+	targetbin    = destdir.join("usr","bin")
+	targetdoc    = destdir.join("usr","doc","speedata-publisher")
+	targetshare  = destdir.join("usr","share")
+	targetfonts  = targetshare.join("speedata-publisher", "fonts")
+	targetimg    = targetshare.join("speedata-publisher", "img")
+	targetlib    = targetshare.join("speedata-publisher", "lib")
+	targetschema = targetshare.join("speedata-publisher", "schema")
+	targetsw     = targetshare.join("speedata-publisher", "sw")
+
+	rm_rf destdir
+	mkdir_p targetbin
+	mkdir_p targetdoc
+	mkdir_p targetfonts
+	mkdir_p targetimg
+	mkdir_p targetlib
+	mkdir_p targetschema
+	mkdir_p targetsw
+
+	Rake::Task["doc"].execute
+	cp_r "#{builddir}/manual/.",targetdoc
+
+	platform = nil
+	arch = nil
+	execfilename = "sdluatex"
+	if test(?f, srcbindir +"/sdluatex") then
+		cp_r(srcbindir +"/sdluatex",targetbin)
+	end
+	cmd = "file #{targetbin}/#{execfilename}"
+	res = `#{cmd}`.gsub(/^.*luatex.*:/,'')
+	case res
+	when /Linux/
+		platform = "linux"
+	end
+	case res
+	when /x86-64/,/x86_64/,/64-bit/
+		arch = "amd64"
+		debarch = arch
+	when /32-bit/,/80386/
+		arch = "386"
+		debarch = "i386"
+	end
+	if platform != "linux" then
+		puts "platform is not linux"
+		next
+	end
+	if !arch then
+		puts "Could not determine architecture (amd64/386)"
+		puts "This is the output of 'file':"
+		puts res
+		next
+	end
+
+	if build_go(srcdir,targetbin,platform,arch,"linux-usr") == false then next end
+
+	cp_r("fonts/.",targetfonts)
+	cp_r(Dir.glob("img/*"),targetimg)
+	cp_r("lib/.",targetlib)
+	cp_r(File.join("schema","layoutschema-de.rng"),targetschema)
+	cp_r(File.join("schema","layoutschema-en.rng"),targetschema)
+
+	Dir.chdir("src") do
+		cp_r(["tex","hyphenation"],targetsw)
+		# do not copy every Lua file to the dest
+		# and leave out .gitignore and others
+		Dir.glob("**/*.lua").reject { |x|
+		    x =~  /viznode|fileutils/
+		}.each { |x|
+		  mkdir_p(targetsw.join(File.dirname(x)))
+		  cp(x,targetsw.join(File.dirname(x)))
+		}
+	end
+    # control-file
+    mkdir_p destdir.join("DEBIAN")
+    size = `du -ks #{destdir}/usr | cut -f 1`.chomp
+    File.open(destdir.join("DEBIAN","control"), "w") do |f|
+		f << %Q{Package: speedata-publisher
+	        Version: #{publisher_version}
+	        Section: text
+	        Priority: optional
+	        Architecture: #{arch}
+	        Installed-Size: #{size}
+	        Maintainer: speedata <info@speedata.de>
+	        Description: speedata publisher
+	        }.gsub(/^	        /,"")
+	end # file.open
+end
+
+desc "Show the version number"
+task :publisherversion do
+	puts @versions['publisher_version']
 end
