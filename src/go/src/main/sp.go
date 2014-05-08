@@ -863,7 +863,7 @@ func main() {
 		watch_dir := getOptionSection("hotfolder", "hotfolder")
 		events := getOptionSection("events", "hotfolder")
 		var hotfolder_events []hotfolder.Event
-		// hotfolder_events := make([]hotfolder.Event, 0, 4)
+
 		for _, v := range strings.Split(events, ";") {
 			pattern_command := strings.Split(v, ":")
 			hotfolder_event := new(hotfolder.Event)
