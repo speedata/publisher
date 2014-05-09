@@ -445,6 +445,10 @@ function dothings()
 
     --- Used in `xpath.lua` to find out which language the function is in.
     local ns = layoutxml[".__namespace"]
+    if not ns then
+        err("Cannot find the namespace of the layout file. What should I do?")
+        exit()
+    end
 
     --- The currently active layout language. One of `de` or `en`.
     current_layoutlanguage = string.gsub(ns,"urn:speedata.de:2009/publisher/","")
