@@ -443,6 +443,9 @@ func runPublisher() (exitstatus int) {
 	if layoutoptions["startpage"] != "" {
 		layoutoptions_ary = append(layoutoptions_ary, `startpage=`+layoutoptions["startpage"])
 	}
+	if layoutoptions["cutmarks"] != "" {
+		layoutoptions_ary = append(layoutoptions_ary, `cutmarks=`+layoutoptions["cutmarks"])
+	}
 	if layoutoptions["trace"] != "" {
 		layoutoptions_ary = append(layoutoptions_ary, `trace=`+layoutoptions["trace"])
 	}
@@ -662,6 +665,7 @@ func main() {
 	op.On("--data NAME", "Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN", options)
 	op.On("--dummy", "Don't read a data file, use '<data />' as input", options)
 	op.On("-c NAME", "--config", "Read the config file with the given NAME. Default: 'publisher.cfg'", &configfilename)
+	op.On("--no-cutmarks", "Display cutmarks in the document", layoutoptions)
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
 	op.On("--filter FILTER", "Run XPROC filter before publishing starts", options)
 	op.On("--grid", "Display background grid. Disable with --no-grid", layoutoptions)

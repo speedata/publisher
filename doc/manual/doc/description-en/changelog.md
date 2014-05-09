@@ -6,6 +6,7 @@ Changelog
 Version 2.0
 -----------
 
+-   New [Command line parameter](commandline.html) `cutmarks` to display cutmarks. (1.99.46)
 -   New [XPath-function](xpath.html) sd:merge-pagenumbers() (1.99.44)
 -   **The default horizontal alignment for table cells is now `left`**
 -   New option `justify` for horizontal alignment in

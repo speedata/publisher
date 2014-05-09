@@ -3,44 +3,47 @@ title: Kommandozeile
 Aufruf des Publishers über Kommandozeile
 ========================================
 
-    sp --help
-    Usage: sp [parameter] command
+    $ sp --help
+    Usage: [parameter] command
     -h, --help                   Show this help
         --autoopen               Open the PDF file (MacOS X and Linux only)
-        --data=NAME              Name of the XML data file. Defaults to
-                                 'data.xml'. Use '-' for STDIN
+        --data=NAME              Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN
         --dummy                  Don't read a data file, use '<data />' as input
+    -c, --config=NAME            Read the config file with the given NAME. Default: 'publisher.cfg'
+        --[no-]cutmarks          Display cutmarks in the document
     -x, --extra-dir=DIR          Additional directory for file search
         --filter=FILTER          Run XPROC filter before publishing starts
         --grid                   Display background grid. Disable with --no-grid
-        --[no-]local             Add local directory to the search path. Default is true
+        --[no-]local             Add local directory to the search path. Default is true.
         --layout=NAME            Name of the layout file. Defaults to 'layout.xml'
         --jobname=NAME           The name of the resulting PDF file (without
                                  extension), default is 'publisher'
         --mainlanguage=NAME      The document's main language in locale format,
-                                 for example en_US.
+                                 for example 'en' or 'en_US'.
         --outputdir=DIR          Copy PDF and protocol to this directory
         --profile                Run publisher with profiling on (internal use)
         --runs=NUM               Number of publishing runs
         --startpage=NUM          The first page number
         --show-gridallocation    Show the allocated grid cells
         --systemfonts            Use system fonts
-        --timeout=SEC            Exit after SEC seconds
         --trace                  Show debug messages and some tracing PDF output
+        --timeout=SEC            Exit after SEC seconds
     -v, --var=VAR=VALUE          Set a variable for the publishing run
         --verbose                Print a bit of debugging output
         --version                Show version information
         --wd=DIR                 Change working directory
         --xml                    Output as (pseudo-)XML (for list-fonts)
-     
+
     Commands
-          list-fonts             List installed fonts (use together with --xml
-                                 for copy/paste)
           clean                  Remove publisher generated files
           compare                Compare files for quality assurance
           doc                    Open documentation
-          watch                  Start watchdog / hotfolder
+          list-fonts             List installed fonts (use together with --xml
+                                 for copy/paste)
           run                    Start publishing (default)
+          watch                  Start watchdog / hotfolder
+
+
 
 Erklärung der Kommandozeilenparameter
 -------------------------------------
@@ -48,6 +51,7 @@ Erklärung der Kommandozeilenparameter
 Parameter | Beschreibung
 ----------|-------------
 `--autoopen`| Öffnet die PDF-Datei nach dem Publisher-Durchlauf. Kann auch in der [Konfigurationsdatei](configuration.html) eingestellt werden.  `--data=NAME`| Gibt den Namen der XML-Daten an. Voreinstellung ist `data.xml`.   Ebenfalls [konfigurierbar](configuration.html). Wird als Dateiname ein Strich (`-`) angegeben, liest der Publisher die XML-Daten aus der Standard-Eingabe (STDIN).
+`--cutmarks` | Zeigt die Schnittmarken an. Einstellbar im [Layout](../commands-de/options.html).
 `--dummy`| Führt nur das Regelwerk aus. Als Dateninhalt wird `<data />` angenommen. Dient zum schnellen Testen von Regelwerken
 `-x`, `--extra-dir`| Bindet zusätzliche Verzeichnisse in den Publisherlauf ein. In diesen  Verzeichnissen werden alle Daten gesucht: Bilddaten, Regelwerke,  Datendateien und Schriftdateien. Dieses Argument kann mehrfach  angegeben werden und per [Konfigurationsdatei](configuration.html)  mit Werten vorbelegt werden.
 `--filter=FILTER`| Führt die angegebene XPROC-Datei aus.

@@ -3,13 +3,14 @@ title: Command line reference
 Running the speedata publisher on the command line
 ==================================================
 
-    sp --help
+    $ sp --help
     Usage: [parameter] command
     -h, --help                   Show this help
         --autoopen               Open the PDF file (MacOS X and Linux only)
-        --data=NAME              Name of the XML data file. Defaults to
-                                 'data.xml'. Use '-' for STDIN
+        --data=NAME              Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN
         --dummy                  Don't read a data file, use '<data />' as input
+    -c, --config=NAME            Read the config file with the given NAME. Default: 'publisher.cfg'
+        --[no-]cutmarks          Display cutmarks in the document
     -x, --extra-dir=DIR          Additional directory for file search
         --filter=FILTER          Run XPROC filter before publishing starts
         --grid                   Display background grid. Disable with --no-grid
@@ -18,29 +19,30 @@ Running the speedata publisher on the command line
         --jobname=NAME           The name of the resulting PDF file (without
                                  extension), default is 'publisher'
         --mainlanguage=NAME      The document's main language in locale format,
-                                 for example en_US.
+                                 for example 'en' or 'en_US'.
         --outputdir=DIR          Copy PDF and protocol to this directory
         --profile                Run publisher with profiling on (internal use)
         --runs=NUM               Number of publishing runs
         --startpage=NUM          The first page number
         --show-gridallocation    Show the allocated grid cells
         --systemfonts            Use system fonts
-        --timeout=SEC            Exit after SEC seconds
         --trace                  Show debug messages and some tracing PDF output
+        --timeout=SEC            Exit after SEC seconds
     -v, --var=VAR=VALUE          Set a variable for the publishing run
         --verbose                Print a bit of debugging output
         --version                Show version information
         --wd=DIR                 Change working directory
         --xml                    Output as (pseudo-)XML (for list-fonts)
-     
+
     Commands
-          list-fonts             List installed fonts (use together with --xml
-                                 for copy/paste)
           clean                  Remove publisher generated files
           compare                Compare files for quality assurance
           doc                    Open documentation
-          watch                  Start watchdog / hotfolder
+          list-fonts             List installed fonts (use together with --xml
+                                 for copy/paste)
           run                    Start publishing (default)
+          watch                  Start watchdog / hotfolder
+
 
 Description of the command line parameters
 ------------------------------------------
@@ -49,6 +51,7 @@ Parameter | Description
 ----------|------------
 `--autoopen` | Opens the PDF file after running the publisher. Can also be set in the [configuration file](configuration.html).
 `--data=NAME` | Name of the data XML file. Default is `data.xml`. Can be set in the[configuration file](configuration.html). If the file name is a dash(`-`), the speedata publisher reads the XML data from standard input(STDIN).
+`--cutmarks` | Show cut marks. Can be also configured in the [Layout](../commands-en/options.html).
 `--dummy` | Only read the layout rules. A simple data file is assumed which only contains one element: `<data />`. This is for quick testing of layout files.
 `-x`, `--extra-dir` | Puts the given directory into the search path. All assets (images,fonts, XML data and layout rules) must be found in the seach path,which will be traversed recursively. This parameter can be given multiple times and preset in the [configurationfile](configuration.html).
 `--filter=FILTER` | Run the given XPROC file.

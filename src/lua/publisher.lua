@@ -493,6 +493,12 @@ function dothings()
         options.showgrid = true
     end
 
+    if options.cutmarks == "true" then
+        options.cutmarks = true
+    elseif options.cutmarks == "false" then
+        options.cutmarks = false
+    end
+
     if options.showgridallocation == "false" then
         options.showgridallocation = false
     elseif options.showgridallocation == "true" then

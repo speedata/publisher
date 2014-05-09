@@ -7,6 +7,7 @@ Liste der Änderungen
 Version 2.0
 -----------
 
+-   Neuer [Kommandozeilenschalter](commandline.html) `cutmarks` um Schnittmarken anzuzeigen. (1.99.46)
 -   Neue [XPath-Funktion](xpath.html) sd:seitenzahlen-zusammenfassen() (1.99.44)
 -   **Die Voreinstellung für die horizontale Ausrichtung einer
     Tabellenzelle ist nun `left`.**
