@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-30 16:54+0100\n"
+"POT-Creation-Date: 2014-05-09 22:46+0200\n"
 "PO-Revision-Date: 2011-07-11 20:05+0200\n"
 "Last-Translator: Patrick Gundlach <gundlach@speedata.de>\n"
 "Language-Team: German\n"
@@ -18,213 +18,287 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lua/common/sd-debug.lua:45
+#: lua/common/sd-debug.lua:53
 msgid " = {"
 msgstr ""
 
-#: lua/publisher/spinit.lua:156
+#: lua/publisher/spinit.lua:131
 #, c-format
 msgid "%d errors occurred"
 msgstr "%d Fehler aufgetreten"
 
-#: lua/xmlparser-lpeg.lua:412
+#: lua/publisher/commands.lua:1127
 msgid "%q"
 msgstr ""
 
-#: lua/common/sd-debug.lua:61
+#: lua/common/sd-debug.lua:69
 msgid "%s%s = %q"
 msgstr ""
 
-#: lua/common/sd-debug.lua:53
+#: lua/common/sd-debug.lua:61
 #, c-format
 msgid "%s[\".__parent\"] = <%s>"
 msgstr ""
 
-#: lua/publisher/tabular.lua:823
+#: lua/publisher/tabular.lua:944
 msgid "(Internal error) Table is not complete."
 msgstr "(Interner Fehler) Tabelle nicht vollständig."
 
-#: lua/publisher/commands.lua:1215
+#: lua/publisher.lua:2495
+msgid "404 when retrieving image %q"
+msgstr "404 Fehler beim Herunterladen des Bildes %q"
+
+#: lua/publisher/grid.lua:165
+msgid "Area %q is not known on this page."
+msgstr "Bereich %q ist auf dieser Seite unbekannt."
+
+#: lua/publisher/grid.lua:155
+msgid "Area %q is not known on this page. Using the default area (page)"
+msgstr ""
+"Bereich %q ist auf dieser Seite unbekannt. Benutze den Default-Bereich "
+"(Seite)."
+
+#: lua/publisher/grid.lua:51
+#, fuzzy
+msgid "Area %q not known"
+msgstr "Bereich %q nicht gefunden"
+
+#: lua/publisher/grid.lua:36 lua/publisher/grid.lua:68
+#: lua/publisher/grid.lua:79 lua/publisher/grid.lua:295
+#: lua/publisher/grid.lua:320 lua/publisher/grid.lua:451
+msgid "Area %q unknown, using page"
+msgstr "Bereich %q unbekannt, benutze Seite."
+
+#: lua/publisher/grid.lua:124
+msgid "Area %q unknown, using page (number-of-columns)"
+msgstr "Bereich %q unbekannt, benutze Seite. (anzahl-spalten)"
+
+#: lua/publisher/grid.lua:111
+msgid "Area %q unknown, using page (number-of-rows)"
+msgstr "Bereich %q unbekannt, benutze Seite. (anzahl-zeilen)"
+
+#: lua/publisher/commands.lua:1446
+msgid "Areas can't be combined with groups"
+msgstr "Bereiche können nicht mit Gruppen kombiniert werden."
+
+#: lua/publisher/commands.lua:1774
 #, fuzzy
 msgid "Attribute »direction« with »Linie«: unknown direction: %q"
 msgstr "Attribut »richtung« bei »Linie«: unbekannte Richtung: %q"
 
-#: lua/publisher.lua:724
+#: lua/publisher.lua:930
 msgid "Background: Color %q is not defined"
 msgstr "Hintergrundfarbe %q ist nicht definiert"
 
 #: lua/css.lua:35
 #, fuzzy
 msgid "CSS: cannot find filename %q."
-msgstr "Konnte XML Datei %q nicht finden. Abbruch.\n"
+msgstr "CSS: kann Datei %q nicht finden"
 
-#: lua/publisher/commands.lua:1443
+#: lua/publisher/commands.lua:2056
 msgid "CSS: no filename given"
-msgstr ""
+msgstr "CSS: kein Dateiname gegeben"
 
-#: lua/publisher/commands.lua:1036
+#: lua/publisher/commands.lua:1586
 msgid "Can't calculate with object's width!"
 msgstr "Kann keine Breitenberechnung vornehmen!"
 
-#: lua/publisher.lua:622
+#: lua/publisher.lua:804
 #, fuzzy, c-format
 msgid "Can't create a new page. Is the page type (»PageType«) defined? %s"
 msgstr ""
 "Konnte keine Seite anlegen. Ist ein entsprechender Seitentyp definiert?"
 
-#: lua/publisher.lua:484
+#: lua/publisher/commands.lua:2399
+msgid "Can't evaluate width in textblock"
+msgstr "Kann Breite im Textblock nicht bestimmen"
+
+#: lua/publisher.lua:628
 msgid "Can't find XML file %q. Abort.\n"
 msgstr "Konnte XML Datei %q nicht finden. Abbruch.\n"
 
-#: lua/publisher.lua:602
+#: lua/publisher.lua:765
 msgid "Can't find correct page type!"
 msgstr "Seitentyp konnte nicht ermittelt werden!"
 
-#: lua/publisher.lua:423
-msgid "Can't find »Record« command for the root node."
-msgstr ""
+#: lua/publisher.lua:2199
+#, fuzzy, c-format
+msgid "Can't find hyphenation patterns for language %s"
+msgstr "Lade Trennmuster %q."
 
-#: lua/xmlparser-lpeg.lua:392
+#: lua/publisher.lua:556
+msgid "Can't find »Record« command for the root node."
+msgstr "Kann den Befehl »Datensatz« für das Wurzelelement nicht finden."
+
+#: lua/publisher/commands.lua:2147
+msgid "Can't get the width of the table!"
+msgstr "Kann die Breite der Tabelle nicht bestimmen!"
+
+#: lua/luxor.lua:292
 msgid "Can't open XML file. Abort."
 msgstr "Konnte XML Datei nicht öffnen. Abbruch."
 
-#: lua/xmlparser-lpeg.lua:411
-#, fuzzy
-msgid "Can't parse XML file."
-msgstr "Konnte XML Datei nicht öffnen. Abbruch."
-
-#: lua/publisher.lua:414
+#: lua/publisher.lua:519
 msgid "Can't recognize starting page number %q"
 msgstr "Konnte Startseitenzahl %q nicht erkennen"
 
-#: lua/publisher.lua:386
+#: lua/publisher.lua:883
+msgid "Cannot determine current area number (areaname=%q)"
+msgstr "Kann die aktuelle Bereichsnummer nicht bestimmen (Bereichsname=%q)"
+
+#: lua/publisher.lua:456
 msgid "Cannot determine the language of the layout file."
-msgstr ""
+msgstr "Kann die Sprache des Layoutregelwerks nicht bestimmen."
 
-#: lua/publisher/tabular.lua:1208
+#: lua/publisher.lua:449
+msgid "Cannot find the namespace of the layout file. What should I do?"
+msgstr "Kann den Namensraum des Wurzelelements nicht finden. Was soll ich tun?"
+
+#: lua/publisher/commands.lua:1154
+msgid "Cannot parse row in NextRow, number expected, but got %q"
+msgstr ""
+"Kann die Zeile in NeueZeile nicht bestimmen. Zahl erwartet, %q gefunden."
+
+#: lua/publisher/commands.lua:1164
+msgid "Cannot parse rows in NextRow, number expected, but got %q"
+msgstr ""
+"Kann die Zeilen in NeueZeile nicht bestimmen. Zahl erwartet, %q gefunden."
+
+#: lua/publisher/tabular.lua:1407
 msgid "Cannot print table"
-msgstr ""
+msgstr "Kann Tabelle nicht ausgeben"
 
-#: lua/xpath.lua:344
-msgid ""
-"Cannot resolve namespace for prefix %q in function %q\n"
-"Please use urn:speedata:2009/publisher/functions/en (or .../de)"
-msgstr ""
-
-#: lua/publisher/commands.lua:886
+#: lua/publisher/commands.lua:1387
 #, fuzzy
 msgid "Color %q is not defined yet."
 msgstr "Farbe %q ist nicht defniert."
 
-#: lua/publisher/commands.lua:1723
+#: lua/publisher/commands.lua:2423
 msgid "Color %q is not defined."
 msgstr "Farbe %q ist nicht defniert."
 
-#: lua/publisher.lua:1613
+#: lua/publisher.lua:1950
 msgid "Color %q not found"
 msgstr "Farbe %q nicht gefunden"
 
-#: lua/publisher/grid.lua:229
+#: lua/publisher/grid.lua:269
 msgid "Conflict in grid"
 msgstr "Rasterkonflikt"
 
-#: lua/publisher/spinit.lua:131
+#: lua/publisher/spinit.lua:106
 msgid "Could not convert dimension %q"
 msgstr "Konnte Maßeinheit %q nicht konvertieren"
 
-#: lua/publisher/tabular.lua:131
+#: lua/publisher.lua:2508
+msgid "Could not create temporary directory for images: %q"
+msgstr "Kann das temporäre Verzeichnis für Bilder nicht erzeugen (%q)"
+
+#: lua/publisher/tabular.lua:184
 msgid "Could not determine min_wd and max_wd"
 msgstr "Achtung, konnte min_wd und max_wd nicht erkennen"
 
-#: lua/publisher/commands.lua:490
+#: lua/publisher.lua:2516
+msgid "Could not open image file for writing into temp directory: %q"
+msgstr ""
+"Kann die Bilddatei nicht öffnen, um sie in das temporäre Verzeichnis zu "
+"schreiben (%q)"
+
+#: lua/publisher.lua:2522
+msgid "Could not write image file into temp directory %q"
+msgstr "Kann das Bild nicht in das temporäre Verzeichnis schreiben (%q)"
+
+#: lua/publisher/commands.lua:643
 #, fuzzy
 msgid "Create »Group« %q."
 msgstr "Erzeuge Gruppe %q"
 
-#: lua/publisher/commands.lua:410
+#: lua/publisher/commands.lua:540
 #, fuzzy
 msgid "DefineFontfamily, family=%d, name=%q"
 msgstr "»DefiniereSchriftfamilie«, Familie=%d, Name=%q"
 
-#: lua/publisher/commands.lua:339
-msgid "DefineFontfamily: fontsize is not a number. Using default '10'"
-msgstr ""
-
-#: lua/publisher/commands.lua:344
-msgid "DefineFontfamily: leading is not a number. Using default '12'"
-msgstr ""
-
-#: lua/publisher/commands.lua:355
+#: lua/publisher/commands.lua:485
 #, fuzzy
 msgid "DefineFontfamily: no size given."
 msgstr "DefiniereSchriftfamilie: keine Größe angegeben."
 
-#: lua/publisher/commands.lua:267
+#: lua/publisher/commands.lua:376
 msgid "Defining color %q"
 msgstr "Definiere Farbe %q"
 
-#: lua/publisher/spinit.lua:157
+#: lua/publisher/spinit.lua:132
 #, c-format
 msgid "Duration: %3f seconds"
 msgstr "Dauer: %3f Sekunden"
 
-#: lua/publisher/commands.lua:838
+#: lua/publisher/commands.lua:1338
 msgid "Element %q in »Seitentyp« unknown"
 msgstr "Element %q in »Seitentyp« unbekannt"
 
-#: lua/publisher.lua:675
+#: lua/publisher.lua:860
 #, fuzzy
 msgid "Element name %q unknown (setup_page())"
 msgstr "Elementname %q unbekannt (seite_einrichten())"
 
-#: lua/xpath.lua:315
-msgid "Empty sequence"
-msgstr ""
-
-#: lua/publisher/commands.lua:405
+#: lua/publisher/commands.lua:535
 msgid "Error creating font instance %q: %s"
 msgstr "Fehler beim Erzeugen der Fontinstanz %q: %s"
 
-#: lua/publisher/commands.lua:116 lua/publisher/commands.lua:868
-#: lua/publisher/commands.lua:1523 lua/publisher/commands.lua:1715
+#: lua/publisher/commands.lua:165 lua/publisher/commands.lua:1369
+#: lua/publisher/commands.lua:2157 lua/publisher/commands.lua:2416
 msgid "Fontfamily %q not found."
 msgstr "Fontfamilie %q nicht gefunden."
 
-#: lua/publisher/commands.lua:370
+#: lua/publisher/commands.lua:500
 msgid "Fontinstance 'normal' could not be created for %q."
 msgstr "Fontinstanz 'normal' konnte für %q nicht erzeugt werden."
 
-#: lua/publisher.lua:648
-msgid "Grid is not set!"
-msgstr "Raster nicht gesetzt!"
+#: lua/publisher/commands.lua:2168
+#, fuzzy
+msgid "Ignore %q in table"
+msgstr "Keine Zeile in der Tabelle gefunden"
 
-#: lua/publisher.lua:1473
+#: lua/publisher.lua:2549
 msgid "Image %q not found!"
 msgstr "Bild %q nicht gefunden!"
 
-#: lua/xpath.lua:349
-#, fuzzy
-msgid "Language %q unknown!"
-msgstr "Fontfamilie %q unbekannt"
+#: lua/publisher/commands.lua:780
+msgid ""
+"Image dpi value too small (horizontal). Rendered is %d, requested minimum is "
+"%d. Filename: %q"
+msgstr ""
 
-#: lua/publisher.lua:1710
+#: lua/publisher/commands.lua:783
+msgid ""
+"Image dpi value too small (vertical). Rendered is %d, requested minimum is "
+"%d. Filename: %q"
+msgstr ""
+"DPI-Wert des Bildes zu gering. Ausgegeben ist %d, gefordertes Minumum ist "
+"%d. Dateiname: %q"
+
+#: lua/publisher.lua:2479
+msgid "Image: string used for caching (-> md5): %q"
+msgstr "Bild: String benutzt für caching (-> md5) %q"
+
+#: lua/publisher.lua:2213
 #, c-format
 msgid "Language id: %d"
 msgstr "Sprach-Id: %d"
 
-#: lua/sdini.lua:28
+#: lua/publisher/commands.lua:943
+#, fuzzy
+msgid "Load Fontfile %q"
+msgstr "Lade Datei: %q ..."
+
+#: lua/sdini.lua:29
 msgid "Load file: %q ..."
 msgstr "Lade Datei: %q ..."
 
-#: lua/sdini.lua:33
+#: lua/sdini.lua:34
 msgid "Load file: %q ... done"
 msgstr "Lade Datei: %q ... fertig"
 
-#: lua/publisher/commands.lua:603
-msgid "Load image %q with scaling %g"
-msgstr "Lade Bild %q mit Skalierung %g"
-
-#: lua/publisher.lua:487
+#: lua/publisher.lua:631
 msgid "Loading %s %q"
 msgstr "Lade %s %q"
 
@@ -233,211 +307,330 @@ msgstr "Lade %s %q"
 msgid "Loading CSS %q"
 msgstr "Lade %s %q"
 
-#: lua/publisher.lua:1702
+#: lua/publisher.lua:2204
 msgid "Loading hyphenation patterns %q."
 msgstr "Lade Trennmuster %q."
 
-#: lua/publisher/commands.lua:744
+#: lua/common/sd-callbacks.lua:58
+msgid "Locating file -- scheme %q not supported. Requested file: %q"
+msgstr "Suche Datei -- Schema %q nicht unterstützt. Erwartete Datei ist %q"
+
+#: lua/publisher/commands.lua:1129
 msgid "Message: %q"
 msgstr "Nachricht: %q"
 
-#: lua/publisher.lua:979
+#: lua/publisher.lua:1304
 #, c-format
 msgid "No bookmark given for this level (%d)!"
-msgstr ""
+msgstr "Kein Lesezeichen für diese Ebene (%d) gegeben!"
 
-#: lua/publisher/commands.lua:910
+#: lua/publisher/commands.lua:1412
 msgid "No contents found in paragraph."
 msgstr "Keinen Inhalt in Absatz gefunden."
 
-#: lua/publisher.lua:1162
+#: lua/publisher.lua:340
+msgid "No elements for dispatch, why?"
+msgstr "Keine Elemente zum Bearbeiten gefunden, warum?"
+
+#: lua/publisher.lua:2538
+msgid "No filename given for image"
+msgstr "Keinen Dateiname gegeben für das Bild"
+
+#: lua/publisher.lua:1507
 #, fuzzy
 msgid "No head found"
 msgstr "Keine Nodeliste gefunden!"
 
-#: lua/publisher/tabular.lua:447 lua/publisher/tabular.lua:660
+#: lua/publisher/tabular.lua:523 lua/publisher/tabular.lua:760
 msgid "No nodelist found!"
 msgstr "Keine Nodeliste gefunden!"
 
-#: lua/publisher/commands.lua:1062
+#: lua/xpath.lua:834
+msgid "No string given for upper-case()"
+msgstr "Keinen String angegeben für upper-case()"
+
+#: lua/publisher/commands.lua:1616
 msgid "No suitable row found for object"
 msgstr "Keine passende Zeile für das Objekt gefunden"
 
-#: lua/publisher/tabular.lua:287
+#: lua/publisher/tabular.lua:356
 msgid "Not enough columns found for colspan"
-msgstr ""
+msgstr "Nicht genügend Spalten für colspan gefunden"
 
-#: lua/publisher/grid.lua:428
+#: lua/publisher/grid.lua:520
 #, c-format
 msgid "Number of rows: %d, number of columns = %d"
 msgstr "Anzahl Zeilen: %d, Anzahl Spalten = %d"
 
-#: lua/publisher/tabular.lua:54
+#: lua/publisher/tabular.lua:59
 #, c-format
 msgid "Object not recognized: %s"
 msgstr "Objekt nicht erkannt: %s"
 
-#: lua/publisher/grid.lua:187
+#: lua/publisher/grid.lua:212
 msgid "Object protrudes below the last line of the page"
 msgstr "Objekt ragt über die untere Zeile hinaus"
 
-#: lua/publisher/grid.lua:183
+#: lua/publisher/grid.lua:207
 msgid "Object protrudes into the right margin"
 msgstr "Objekt ragt über den rechten Rand hinaus"
 
-#: lua/publisher.lua:597
-msgid "Page of type %q created"
+#: lua/publisher.lua:758
+#, fuzzy
+msgid "Page of type %q created (%d)"
+msgstr "Seite vom Typ %q wird erzeugt (%d)"
+
+#: lua/publisher.lua:751
+#, fuzzy
+msgid "Page of type %q created (%d) - pagetype requested"
 msgstr "Seite vom Typ %q wird erzeugt"
 
-#: lua/publisher/commands.lua:1071
-#, c-format
-msgid "PlaceObject: %s in row %d and column %d, width=%d, height=%d"
-msgstr "ObjektAusgeben: %s in Zeile %d und Spalte %d, Breite=%d, Höhe=%d"
+#: lua/common/sd-callbacks.lua:70
+msgid "Path rewrite: %q -> %q"
+msgstr "Pfadersetzung: %q -> %q"
 
-#: lua/publisher.lua:365
-msgid "Reading from stdin"
+#: lua/publisher/commands.lua:1625
+#, fuzzy, c-format
+msgid "PlaceObject: %s in row %d and column %d, width=%d, height=%d (page %d)"
 msgstr ""
+"ObjektAusgeben: %s in Zeile %d und Spalte %d, Breite=%d, Höhe=%d (Seite %d)"
 
-#: lua/publisher/commands.lua:1115
+#: lua/publisher/commands.lua:645
+#, fuzzy
+msgid "Re-use »Group« %q."
+msgstr "Erzeuge Gruppe %q"
+
+#: lua/publisher.lua:2480
+#, c-format
+msgid "Read image file from cache: %s"
+msgstr "Lese Bilddatei vom Cache: %s"
+
+#: lua/publisher.lua:540
+msgid "Reading from stdin"
+msgstr "Lese von Standardeingabe"
+
+#: lua/publisher.lua:2492
+msgid "Retrieving file: %q"
+msgstr "Lese Datei %q"
+
+#: lua/publisher/commands.lua:1674
 msgid "Selecting node: %q"
 msgstr "Bearbeite Knoten %q"
 
-#: lua/publisher/commands.lua:670
+#: lua/publisher/commands.lua:965
 msgid "Selecting node: %q, mode=%q"
 msgstr "Bearbeite Knoten %q, Modus=%q"
 
-#: lua/publisher/commands.lua:1142
+#: lua/publisher/commands.lua:1701
 msgid "Selecting node: %q, mode=%q, pos=%d"
 msgstr "Bearbeite Knoten %q, Modus=%q, Position=%d"
 
-#: lua/xpath.lua:191
-msgid "Sequenz must only contain one item"
-msgstr "Sequenz darf nur ein Item haben"
-
-#: lua/publisher.lua:412
+#: lua/publisher.lua:517
 #, c-format
 msgid "Set page number to %d"
 msgstr "Setze Seitenzahl auf %d"
 
-#: lua/publisher/commands.lua:1393
+#: lua/publisher/commands.lua:1924
+msgid "SetGrid: height must be a length (with unit). Setting it to 1cm."
+msgstr ""
+"SetzeRaster: höhe muss eine Maßangabe (mit Einheit) sein. Setze sie auf 1cm."
+
+#: lua/publisher/commands.lua:1914
+msgid "SetGrid: width must be a length (with unit). Setting it to 1cm."
+msgstr ""
+"SetzeRaster: breite muss eine Maßangabe (mit Einheit) sein. Setze sie auf "
+"1cm."
+
+#: lua/publisher/commands.lua:2003
 msgid "SetVariable, variable name = %q, value = %q"
 msgstr "»Zuweisung«, Variablenname = %q, Wert = %q"
 
-#: lua/publisher/commands.lua:805
+#: lua/publisher.lua:2219
 msgid "Setting default language to %q"
 msgstr "Setze Defaultsprache auf %q"
 
-#: lua/publisher/spinit.lua:249
+#: lua/publisher/commands.lua:666
+msgid ""
+"Setting grid via nx or ny doesn't make sense in groups. Fallback to 1cm."
+msgstr ""
+"Benutzung von nx oder ny in Raster ergibt keinen Sinn in Gruppen. Setze "
+"Raster auf 1cm."
+
+#: lua/publisher.lua:1686
+#, fuzzy
+msgid "Some font not found"
+msgstr "Einig Schriftarten wurden nicht gefunden."
+
+#: lua/publisher.lua:546
+msgid "Something is wrong with the data: dataxml is not a table"
+msgstr ""
+"Etwas ist komisch mit den Daten. dataxml ist keine Tabelle (interner Fehler)"
+
+#: lua/publisher/tabular.lua:505 lua/publisher/tabular.lua:723
+msgid "Something went wrong with the number of columns in the table"
+msgstr "Etwas ist schief gelaufen mit der Anzahl der Spalten in der Tabelle"
+
+#: lua/publisher/spinit.lua:227 lua/publisher/spinit.lua:235
 msgid "Start processing"
 msgstr "Starte Datenverarbeitung"
 
-#: lua/publisher/spinit.lua:155
+#: lua/publisher/spinit.lua:130
 msgid "Stop processing data"
 msgstr "Beende Datenverarbeitung"
 
-#: lua/publisher/commands.lua:1611 lua/publisher/commands.lua:1673
+#: lua/publisher/commands.lua:2328
 msgid ""
 "Td, attribute align. Values 'links' and 'right' should be 'left' and 'right'"
-msgstr ""
+msgstr "Td, Attribut align. Die Werte 'links' und 'rechts' sollten 'left' und 'right' sein."
 
-#: lua/publisher/commands.lua:1772
+#: lua/publisher/commands.lua:2476
 msgid "Textblock: no objects found!"
 msgstr "Textblock: keine Objekte gefunden!"
 
-#: lua/publisher/grid.lua:435
-#, c-format
-msgid "Trimbox = %g %g %g %g, bleedbox =  %g %g %g %g"
-msgstr "Trimbox = %g %g %g %g, bleedbox =  %g %g %g %g"
+#: lua/xpath.lua:398
+msgid "The first operand of +/- is a table. Evaluating to 0"
+msgstr "Der erste Operand von +/- ist eine Tabelle. Nehme 0"
 
-#: lua/publisher/tabular.lua:254
+#: lua/xpath.lua:409
+msgid "The first operand of +/- is not a number. Evaluating to 0"
+msgstr "Der erste Operand von +/- ist keine Zahl. Nehme 0"
+
+#: lua/xpath.lua:441
+msgid "The first operand of the multiplication is a table. Evaluating to 0"
+msgstr "Der erste Operand der Multiplikation ist eine Tabelle. Nehme 0"
+
+#: lua/xpath.lua:452
+msgid ""
+"The first operand of the multiplication is not a number. Evaluating to 0"
+msgstr "Der erste Operand der Multiplikation ist keine Zahl. Nehme 0"
+
+#: lua/xpath.lua:402
+msgid "The second operand of +/- is a table. Evaluating to 0"
+msgstr "Der zweite Operand von +/- ist eine Tabelle. Nehme 0"
+
+#: lua/xpath.lua:416
+msgid "The second operand of +/- is not a number. Evaluating to 0"
+msgstr "Der zweite Operand von +/- ist keine Zahl. Nehme 0"
+
+#: lua/xpath.lua:445
+msgid "The second operand of the multiplication is a table. Evaluating to 0"
+msgstr "Der zweite Operand der Multiplikation ist eine Tabelle. Nehme 0"
+
+#: lua/xpath.lua:459
+msgid ""
+"The second operand of the multiplication is not a number. Evaluating to 0"
+msgstr "Der zweite Operand der Multiplikation ist keine Zahl. Nehme 0"
+
+#: lua/publisher/commands.lua:2266
+msgid ""
+"Tr, attribute align. Values 'links' and 'rechts' should be 'left' and 'right'"
+msgstr ""
+"Tr: Attribute 'rechts' und 'links' bei align sollten 'right' und 'left' sein."
+
+#: lua/publisher/tabular.lua:323
 msgid "Unknown Element: %q"
 msgstr "Unbekanntes Element: %q"
 
-#: lua/publisher/commands.lua:129
+#: lua/publisher/commands.lua:178
 msgid "Unknown barcode type %q"
 msgstr "Unbekannter barcode Typ: %q"
 
-#: lua/publisher/commands.lua:282
+#: lua/publisher/commands.lua:373
 #, c-format
 msgid "Unknown color model: %s"
 msgstr "Unbekanntes Farbmodell: %s"
 
-#: lua/publisher/tabular.lua:549 lua/publisher/tabular.lua:1006
-#, fuzzy, c-format
+#: lua/publisher/tabular.lua:637 lua/publisher/tabular.lua:1150
+#, c-format
 msgid "Unknown contents in »Table« %s"
-msgstr "Unbekannter Inhalt in »Tabelle«"
+msgstr "Unbekannter Inhalt in »Tabelle« %s"
 
-#: lua/publisher.lua:289
+#: lua/publisher.lua:365
 msgid "Unknown element found in layoutfile: %q"
 msgstr "Unbekanntes Element in Layoutdatei gefunden: %q"
 
-#: lua/xpath.lua:359
-msgid "Unknown function %q"
-msgstr "Unbekannte Funktion %q"
-
-#: lua/publisher/commands.lua:983
+#: lua/publisher/commands.lua:1530
 msgid "Unknown group %q in PlaceObject"
 msgstr "Unbekannte Gruppe %q in ObjektAusgeben"
 
-#: lua/publisher/fonts.lua:251
+#: lua/publisher/fonts.lua:269
 msgid "Unknown node: %q"
 msgstr "Unbekannter Knoten: %q"
 
-#: lua/publisher/xpath_functions.lua:80
+#: lua/xpath.lua:823
 #, c-format
 msgid "Unknown type in XPath-function 'string()': %s"
 msgstr "Unbekannter Typ in XPath-Funktion 'string()': %s"
 
-#: lua/publisher/commands.lua:735 lua/publisher/commands.lua:1375
+#: lua/publisher/commands.lua:1117 lua/publisher/commands.lua:1985
 msgid "Unknown type: %q"
 msgstr "Unbekannter Typ: %q"
 
-#: lua/publisher/commands.lua:1342
+#: lua/publisher/commands.lua:1952
 #, fuzzy
 msgid "Variable name in »SetVariable« not recognized"
 msgstr "Variablenname in der Zuweisung konnte nicht ermittelt werden"
 
-#: lua/publisher.lua:357
+#: lua/publisher.lua:472
+#, c-format
+msgid ""
+"Version mismatch. speedata Publisher is at version %s, requested version %s"
+msgstr ""
+"Version fehlerhaft. Der speedata Publisher hat die Version %s, die "
+"geforderte Version ist %s"
+
+#: lua/publisher.lua:436
 msgid "Without a valid layout-XML file, I can't really do anything."
-msgstr ""
+msgstr "Ohne wohlgeformte Layout-XML Datei, kann ich nichts vernünftiges tun."
 
-#: lua/publisher/commands.lua:649
-msgid "filename = %q"
-msgstr ""
+#: lua/publisher/layout_functions.lua:223
+msgid "decode-html failed for input string %q (1)"
+msgstr "dekodiere-html ist für %q fehlgeschlagen."
 
-#: lua/publisher/commands.lua:448
+#: lua/publisher/commands.lua:585
 msgid "font: family %q unknown"
 msgstr "Fontfamilie %q unbekannt"
 
-#: lua/publisher/spinit.lua:159
+#: lua/publisher.lua:1226
+msgid "html a link has no href"
+msgstr "html a-Link hat kein href"
+
+#: lua/publisher/commands.lua:978
+msgid "loop: can't parse number given in the attribute select: %q"
+msgstr "Schleife: kann die Zahl im Attribut auswahl nicht ermitteln: %q"
+
+#: lua/publisher/spinit.lua:134
 #, c-format
 msgid "luastate_bytes=%d"
 msgstr ""
 
-#: lua/publisher/spinit.lua:158
+#: lua/publisher/spinit.lua:133
 #, c-format
 msgid "node_mem_usage=%s"
 msgstr ""
 
-#: lua/common/sd-debug.lua:30
+#: lua/publisher/layout_functions.lua:78
+msgid "not implemented yet"
+msgstr "Noch nicht eingebaut."
+
+#: lua/common/sd-debug.lua:38
 msgid "printtable: %q ist keine Tabelle, es ist ein %s (%q)"
 msgstr ""
 
-#: lua/publisher.lua:903
+#: lua/publisher.lua:1144
 #, fuzzy, c-format
 msgid "read_attribut (2): unknown type: %s"
 msgstr "lese_attribut(2): unbekannter typ: %s"
 
-#: lua/xmlparser.lua:66
-#, c-format
-msgid "xmlparser: unknown node type found: %s"
-msgstr "lese_attribut: unbekannter typ: %s"
+#: lua/publisher/tabular.lua:1156
+msgid "table without contents"
+msgstr "Tabelle ohne Inhalt"
 
-#: lua/common/sd-debug.lua:64
+#: lua/common/sd-debug.lua:72
 msgid "},"
 msgstr ""
 
-#: lua/publisher/commands.lua:956
+#: lua/publisher/commands.lua:1469
 #, fuzzy
 msgid ""
 "»Column« and »Row« must be given with absolute positioning (PlaceObject)."
@@ -445,16 +638,39 @@ msgstr ""
 "Spalte und Zeile muss bei absoluter Positionierung angegeben werden "
 "(ObjektAusgeben)."
 
+#, fuzzy
+#~ msgid "Can't parse XML file."
+#~ msgstr "Konnte XML Datei nicht öffnen. Abbruch."
+
+#~ msgid "Grid is not set!"
+#~ msgstr "Raster nicht gesetzt!"
+
+#, fuzzy
+#~ msgid "Language %q unknown!"
+#~ msgstr "Fontfamilie %q unbekannt"
+
 #~ msgid "Language code is not set and lang==0"
 #~ msgstr "Sprachcode nicht gesetzt und lang==0"
 
-#~ msgid "No row found in table"
-#~ msgstr "Keine Zeile in der Tabelle gefunden"
+#~ msgid "Load image %q with scaling %g"
+#~ msgstr "Lade Bild %q mit Skalierung %g"
+
+#~ msgid "Sequenz must only contain one item"
+#~ msgstr "Sequenz darf nur ein Item haben"
 
 #~ msgid "Textformat %q not defined!"
 #~ msgstr "Textformat %q nicht definiert!"
 
+#~ msgid "Trimbox = %g %g %g %g, bleedbox =  %g %g %g %g"
+#~ msgstr "Trimbox = %g %g %g %g, bleedbox =  %g %g %g %g"
+
+#~ msgid "Unknown function %q"
+#~ msgstr "Unbekannte Funktion %q"
+
 #~ msgid "lese_attribut: unknown type: %s"
+#~ msgstr "lese_attribut: unbekannter typ: %s"
+
+#~ msgid "xmlparser: unknown node type found: %s"
 #~ msgstr "lese_attribut: unbekannter typ: %s"
 
 #~ msgid "»Textblock« textformat %q unknown!"

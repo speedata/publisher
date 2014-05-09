@@ -679,7 +679,7 @@ function output_at( nodelist, x,y,allocate,area,valign,allocate_matrix,pagenumbe
         delta_y = delta_y - node.has_attribute(nodelist,att_shift_up)
     end
 
-    --- We don't necessarily ouput things on a page, we can output them in a virtual page, called _group_.
+    --- We don't necessarily output things on a page, we can output them in a virtual page, called _group_.
     if current_group then
         -- Put the contents of the nodelist into the current group
         local group = groups[current_group]
