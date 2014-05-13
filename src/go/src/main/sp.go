@@ -659,12 +659,38 @@ func compare(path string, info os.FileInfo, err error) error {
 	return nil
 }
 
+func showCredits() {
+	fmt.Println("This is the speedata Publisher, version", version)
+	fmt.Println(`
+Copyright 2014 speedata UG (haftungsbeschränkt), Berlin. Licensed under
+the GNU Affero GPL License, see
+  https://raw.githubusercontent.com/speedata/publisher/develop/COPYING
+for details.
+
+This software is built upon and contains third party libraries including:
+
+LuaTeX (http://www.luatex.org/)
+goconfig (https://github.com/Unknwon/goconfig)
+TeX Gyre Heros fonts (http://www.gust.org.pl/projects/e-foundry/tex-gyre/heros)
+Parts of the Go library (https://code.google.com/p/go/)
+Blackfriday (https://github.com/russross/blackfriday)
+
+Contact:
+   gundlach@speedata.de
+or see the web page
+   https://github.com/speedata/publisher/wiki/contact
+`)
+
+	os.Exit(0)
+}
+
 func main() {
 	op := optionparser.NewOptionParser()
 	op.On("--autoopen", "Open the PDF file (MacOS X and Linux only)", options)
 	op.On("--data NAME", "Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN", options)
 	op.On("--dummy", "Don't read a data file, use '<data />' as input", options)
 	op.On("-c NAME", "--config", "Read the config file with the given NAME. Default: 'publisher.cfg'", &configfilename)
+	op.On("--credits", "Show credits and exit", showCredits)
 	op.On("--no-cutmarks", "Display cutmarks in the document", layoutoptions)
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
 	op.On("--filter FILTER", "Run XPROC filter before publishing starts", options)
