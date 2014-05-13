@@ -86,6 +86,7 @@
     <element key="Until" en="Until" de="Bis" />
     <element key="URL" en="URL" de="URL"/>
     <element key="Value" en="Value" de="Wert"/>
+    <element key="VSpace" en="VSpace" de="VLeerraum"/>
     <element key="While" en="While" de="Solange"/>
   </elements>
   <values>

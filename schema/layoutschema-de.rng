@@ -2877,14 +2877,16 @@
          </optional>
          <zeroOrMore>
             <choice>
-               <ref name="e_Paragraph"/>
-               <ref name="e_Table"/>
-               <ref name="e_Image"/>
-               <ref name="e_Copy-of"/>
-               <ref name="e_Switch"/>
-               <ref name="e_ForAll"/>
-               <ref name="e_Loop"/>
                <ref name="e_Barcode"/>
+               <ref name="e_Box"/>
+               <ref name="e_Copy-of"/>
+               <ref name="e_ForAll"/>
+               <ref name="e_Image"/>
+               <ref name="e_Loop"/>
+               <ref name="e_Paragraph"/>
+               <ref name="e_Switch"/>
+               <ref name="e_Table"/>
+               <ref name="e_VSpace"/>
             </choice>
          </zeroOrMore>
       </element>
@@ -2915,7 +2917,7 @@
          <a:documentation>Erzeugt einen rechteckigen Bereich mit Text.</a:documentation>
          <optional>
             <attribute name="winkel">
-               <a:documentation>Winkel (Drehrichtung gegen den Uhrzeigersinn), um der der Text gedreht wird. Die Spalte und die Zeile, 
+               <a:documentation>Winkel (Drehrichtung gegen den Uhrzeigersinn), um der der Text gedreht wird. Die Spalte und die Zeile,
           in der der Text ausgegeben wird, bleibt gleich, die Breite und die Höhe des Textes
           ändert sich gegenüber dem ursprünglichen Text.</a:documentation>
             </attribute>
@@ -3280,6 +3282,12 @@
                </element>
             </zeroOrMore>
          </interleave>
+      </element>
+   </define>
+   <define name="e_VSpace">
+      <element name="VLeerraum">
+         <a:documentation>Erzeugt einen vertikal dehnbaren Lerrraum. Der Leerraum hat die minimale Höhe 0 und die maximale Höhe »unendlich«. Sinnvoll nutzbar in Tabellenzellen.</a:documentation>
+         <empty/>
       </element>
    </define>
    <define name="e_While">

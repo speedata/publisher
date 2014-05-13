@@ -2865,14 +2865,16 @@
          </optional>
          <zeroOrMore>
             <choice>
-               <ref name="e_Paragraph"/>
-               <ref name="e_Table"/>
-               <ref name="e_Image"/>
-               <ref name="e_Copy-of"/>
-               <ref name="e_Switch"/>
-               <ref name="e_ForAll"/>
-               <ref name="e_Loop"/>
                <ref name="e_Barcode"/>
+               <ref name="e_Box"/>
+               <ref name="e_Copy-of"/>
+               <ref name="e_ForAll"/>
+               <ref name="e_Image"/>
+               <ref name="e_Loop"/>
+               <ref name="e_Paragraph"/>
+               <ref name="e_Switch"/>
+               <ref name="e_Table"/>
+               <ref name="e_VSpace"/>
             </choice>
          </zeroOrMore>
       </element>
@@ -3266,6 +3268,12 @@
                </element>
             </zeroOrMore>
          </interleave>
+      </element>
+   </define>
+   <define name="e_VSpace">
+      <element name="VSpace">
+         <a:documentation>Create a vertically stretching space. The space has a minimum height of 0 but is able to stretch up to infinity. Useful in table cells.</a:documentation>
+         <empty/>
       </element>
    </define>
    <define name="e_While">

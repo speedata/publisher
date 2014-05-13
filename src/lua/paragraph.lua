@@ -167,8 +167,6 @@ function Paragraph:format(width_sp, default_textformat_name,options)
     local parameter = {}
 
     if options.allocate == "auto" then
-        w("try to make a parshape")
-        w("area %s",options.area)
         local cg = options.current_grid
         local areaname = options.area
         w("current row %d",cg:current_row(areaname))

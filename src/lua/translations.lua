@@ -87,6 +87,7 @@ de = {  elements = {
     ["Bis"] = "Until",
     ["URL"] = "URL",
     ["Wert"] = "Value",
+    ["VLeerraum"] = "VSpace",
     ["Solange"] = "While",
   },
 values = {
@@ -246,6 +247,7 @@ values = {
     ["Until"] = "Until",
     ["URL"] = "URL",
     ["Value"] = "Value",
+    ["VSpace"] = "VSpace",
     ["While"] = "While",
   },
 values = {

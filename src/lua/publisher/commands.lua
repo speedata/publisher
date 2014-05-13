@@ -2622,6 +2622,20 @@ function commands.value( layoutxml,dataxml )
     return tab
 end
 
+--- VSpace
+--- ------
+--- Create a vertical space that stretches up to infinity
+function commands.vspace( layoutxml,dataxml )
+    local n=node.new("glue")
+    n.spec=node.new("glue_spec")
+    n.spec.width = 0
+    n.spec.stretch = 65536
+    n.spec.stretch_order = 3
+    node.set_attribute(n,publisher.att_origin,publisher.origin_vspace)
+    return n
+end
+
+
 --- While
 --- -----
 --- A while loop. Use the condition in `test` to determine if the loop should be entered

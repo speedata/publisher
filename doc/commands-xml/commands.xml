@@ -4552,7 +4552,7 @@
   </PlaceObject>
 </Record>
 ]]></listing>
-    </example>    
+    </example>
     <example xml:lang="de">
       <para>Daten:</para>
       <listing><![CDATA[<data>
@@ -5123,14 +5123,16 @@
     <childelements>
       <zeroOrMore>
         <choice>
-          <cmd name="Paragraph"/>
-          <cmd name="Table"/>
-          <cmd name="Image"/>
-          <cmd name="Copy-of"/>
-          <cmd name="Switch"/>
-          <cmd name="ForAll"/>
-          <cmd name="Loop"/>
           <cmd name="Barcode"/>
+          <cmd name="Box"/>
+          <cmd name="Copy-of"/>
+          <cmd name="ForAll"/>
+          <cmd name="Image"/>
+          <cmd name="Loop"/>
+          <cmd name="Paragraph"/>
+          <cmd name="Switch"/>
+          <cmd name="Table"/>
+          <cmd name="VSpace" />
         </choice>
       </zeroOrMore>
     </childelements>
@@ -5334,9 +5336,14 @@
         <para>Bestimmt den Innenabstand einer Tabelle (rechts)</para>
       </description>
     </attribute>
+    <remark xml:lang="en">
+      <para>The child elements of the table cells are either block objects that start a new line or inline objects that are placed horizontally next to each other (from left to right) until the width of the table cell forces a line break. 
+        Block objects are <cmd name="Paragraph"/>, <cmd name="Table"/> and <cmd name="Box"/>, inline objects are <cmd name="Barcode"/> and <cmd name="Image"/>.</para>
+    </remark>
     <remark xml:lang="de">
+      <para>Die Kindelemente der Tabellenzelle können Blockobjekte oder Zeilenobjekte sein. Blockobjekte erzeugen eine neue Zeile, Zeilenobjekte werden von rechts nach links
+        so lange in eine Zeile geschrieben, bis die Zeilenbreite einen Zeilenumbruch erzwingt. Blockobjekte sind <cmd name="Paragraph"/>, <cmd name="Table"/> und <cmd name="Box"/>, Zeilenobjekte sind <cmd name="Barcode"/> und <cmd name="Image"/>.</para>
       <para>Das Attribut align erzeugt implizit ein Textformat (nur in Bezug auf Ausrichtung) für alle Kindelemente Absatz, sofern dort kein Textformat angegeben ist.</para>
-      <para>Tabellen dürfen wiederum Tabellen enthalten.</para>
     </remark>
     <example xml:lang="de">
       <listing><![CDATA[<Tr>
@@ -5345,9 +5352,9 @@
 </Tr>]]></listing>
     </example>
     <seealso>
-      <cmd name="Table" />
-      <cmd name="Tr" />
-      <cmd name="Paragraph" />
+      <cmd name="Table" />,
+      <cmd name="Tr" />, 
+      <cmd name="Paragraph" />,
       <cmd name="Image" />
     </seealso>
   </command>
@@ -5439,7 +5446,7 @@
         <para>The angle (counter clockwise) that the text gets turned.</para>
       </description>
       <description xml:lang="de">
-        <para>Winkel (Drehrichtung gegen den Uhrzeigersinn), um der der Text gedreht wird. Die Spalte und die Zeile, 
+        <para>Winkel (Drehrichtung gegen den Uhrzeigersinn), um der der Text gedreht wird. Die Spalte und die Zeile,
           in der der Text ausgegeben wird, bleibt gleich, die Breite und die Höhe des Textes
           ändert sich gegenüber dem ursprünglichen Text.</para>
       </description>
@@ -5545,7 +5552,7 @@
           <cmd name="ForAll"/>
         </choice>
       </oneOrMore>
-    </childelements>    
+    </childelements>
     <example xml:lang="en">
       <listing><![CDATA[<Pagetype name="page" test="true()">
   <Margin left="1cm" right="1cm" top="1cm" bottom="1cm" />
@@ -5927,6 +5934,36 @@ Message: "$i is: 3"]]></listing>
       <cmd name="SetVariable" />
     </seealso>
   </command>
+  <command name="VSpace">
+    <description xml:lang="en">
+      <para>Create a vertically stretching space. The space has a minimum height of 0 but is able to stretch up to infinity. Useful in table cells.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Erzeugt einen vertikal dehnbaren Lerrraum. Der Leerraum hat die minimale Höhe 0 und die maximale Höhe »unendlich«. Sinnvoll nutzbar in Tabellenzellen.</para>
+    </description>
+    <childelements/>
+    <example xml:lang="en">
+      <listing><![CDATA[<Td valign="bottom">
+  <VSpace/>
+  <!-- vertically centered image -->
+  <Image width="3" file="article.pdf"/>
+  <VSpace/>
+  <Paragraph><Value>Some text at the bottom of the cell</Value></Paragraph>
+</Td>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Td valign="bottom">
+  <VLeerraum/>
+  <!-- vertikal zentriertes Bild-->
+  <Bild breite="3" datei="article.pdf"/>
+  <VLeerraum/>
+  <Paragraph><Value>Text am unteren Ende der Zelle</Value></Paragraph>
+</Td>
+]]></listing>
+    </example>
+    <seealso><cmd name="Td"/></seealso>
+  </command>
   <command name="While">
     <description xml:lang="en">
       <para>Create a loop. All child elements are executed, as long as the condition in the test attribute evaluates to true.</para>
@@ -5966,7 +6003,7 @@ Message: "$i is: 3"]]></listing>
       <Paragraph><Value select="$text"/></Paragraph>
     </Textblock>
   </PlaceObject>
-</Record>  
+</Record>
 ]]></listing>
     </example>
     <example xml:lang="de">

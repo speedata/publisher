@@ -2,9 +2,8 @@
 --  publisher/src/lua/tabular.lua
 --  speedata publisher
 --
---  Copyright 2010-2013 Patrick Gundlach.
+--  Copyright 2010-2014 Patrick Gundlach.
 --  See file COPYING in the root directory for license details.
-
 
 file_start("tabular.lua")
 
@@ -33,39 +32,78 @@ function new( self )
     return t
 end
 
+--- The objects in a table cell can be block objects or inline objects.
+--- See the list of [html block objects](https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements)
+--- for a rule of thumb how objects are arranged in a table cell. I am not sure if we should fully follow
+--- the HTML way.
+---
+--- The returned array is a list of arrays. The inner arrays contain the objects to be stacked from left to right (“inline”)
+--- and the outer array is a list of block objects that are to be stacked from top to bottom:
+---     { { img      },
+---       { par      },
+---       { img, img },
+---       { table    }  }
+---
+--- ![Objects in a table](img/objectsintable.svg)
 function attach_objects_row( tab )
+    -- For each block object (container) there is one row in block
     local td_elementname
     local td_contents
     for _,td in ipairs(tab) do
         td_elementname = publisher.elementname(td,true)
         td_contents    = publisher.element_contents(td)
         if td_elementname == "Td" then
+            local block = {}
+            local inline = {}
+
             local objects = {}
             for i,j in ipairs(td_contents) do
                 local eltname     = publisher.elementname(j,true)
                 local eltcontents = publisher.element_contents(j)
-                if eltname == "Paragraph" then
-                    objects[#objects + 1] = eltcontents
-                elseif eltname == "Image" then
-                    -- FIXME: Image should be an object
-                    objects[#objects + 1] = eltcontents[1]
-                elseif eltname == "Table" then
-                    objects[#objects + 1] = eltcontents[1]
+                if eltname == "Image" then
+                    -- inline
+                    inline[#inline + 1] = eltcontents[1]
                 elseif eltname == "Barcode" then
-                    objects[#objects + 1] = eltcontents
-                elseif eltname == "Box" then
-                    objects[#objects + 1] = eltcontents
+                    -- inline
+                    inline[#inline + 1] = eltcontents
+                elseif eltname == "VSpace" then
+                    if #inline > 0 then
+                        -- add current inline to the list of blocks
+                        block[#block + 1] = inline
+                        inline = {}
+                    end
+                    block[#block + 1] = {eltcontents}
+                elseif eltname == "Paragraph" or eltname == "Box" then
+                    -- block
+                    if #inline > 0 then
+                        -- add current inline to the list of blocks
+                        block[#block + 1] = inline
+                        inline = {}
+                    end
+                    block[#block + 1] = {eltcontents}
+                elseif eltname == "Table" then
+                    -- block
+                    if #inline > 0 then
+                        -- add current inline to the list of blocks
+                        block[#block + 1] = inline
+                        inline = {}
+                    end
+                    block[#block + 1] = eltcontents
                 else
-                    warning("Object not recognized: %s",eltname or "???")
+                    warning("Unknown object in table: %s",eltname or "???")
                 end
             end
-            td_contents.objects = objects
+            if #inline > 0 then
+                -- add current inline to the list of blocks
+                block[#block + 1] = inline
+            end
+            td_contents.objects = block
         elseif td_elementname == "Tr" then -- probably from tablefoot/head
             attach_objects_row(td_contents)
-        elseif td_elementname == "Column" then
+        elseif td_elementname == "Column" or td_elementname == "Tablerule" then
             -- ignore, they don't have objects
         else
-            -- w("unknown element name %s",td_elementname)
+            w("unknown element name %s",td_elementname)
         end
     end
 end
@@ -157,32 +195,43 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
         local padding_left   = td_contents.padding_left  or self.padding_left
         local padding_right  = td_contents.padding_right or self.padding_right
 
-        for _,object in ipairs(td_contents.objects) do
-            if type(object)=="table" then
-                trace("table: check for nodelist (%s)",tostring(object.nodelist ~= nil))
+        for _,blockobject in ipairs(td_contents.objects) do
+            for i=1,#blockobject do
+                local inlineobject = blockobject[i]
+                if type(inlineobject)=="table" then
+                    trace("table: check for nodelist (%s)",tostring(inlineobject.nodelist ~= nil))
 
-                if object.nodelist then
-                    publisher.set_fontfamily_if_necessary(object.nodelist,self.fontfamily)
-                    publisher.fonts.pre_linebreak(object.nodelist)
-                end
+                    if inlineobject.nodelist then
+                        publisher.set_fontfamily_if_necessary(inlineobject.nodelist,self.fontfamily)
+                        publisher.fonts.pre_linebreak(inlineobject.nodelist)
+                    end
 
-                if object.min_width then
-                    min_wd = math.max(object:min_width() + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
+                    if inlineobject.min_width then
+                        min_wd = math.max(inlineobject:min_width() + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
+                    end
+                    if inlineobject.max_width then
+                        max_wd = math.max(inlineobject:max_width() + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
+                    end
+                    trace("table: min_wd, max_wd set (%gpt,%gpt)",min_wd / 2^16, max_wd / 2^16)
+                elseif node.is_node(inlineobject) and node.has_field(inlineobject,"width") then
+                    min_wd = math.max(inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
+                    max_wd = math.max(inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
                 end
-                if object.max_width then
-                    max_wd = math.max(object:max_width() + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
-                end
-                trace("table: min_wd, max_wd set (%gpt,%gpt)",min_wd / 2^16, max_wd / 2^16)
             end
             if not ( min_wd and max_wd) then
-                trace("min_wd and max_wd not set yet. Type(object)==%s",type(object))
-                if object.width then
-                    min_wd = object.width + padding_left  + padding_right + td_borderleft + td_borderright
-                    max_wd = object.width + padding_left  + padding_right + td_borderleft + td_borderright
-                    trace("table: width (image) = %gpt",min_wd / 2^16)
+                trace("min_wd and max_wd not set yet. Type(inlineobject)==%s",type(inlineobject))
+                if node.has_field(inlineobject,"width") then
+                    if inlineobject.width then
+                        min_wd = inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright
+                        max_wd = inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright
+                        trace("table: width (image) = %gpt",min_wd / 2^16)
+                    else
+                        warning("Could not determine min_wd and max_wd")
+                        assert(false)
+                    end
                 else
-                    warning("Could not determine min_wd and max_wd")
-                    assert(false)
+                    min_wd = 0
+                    max_wd = 0
                 end
             end
         end
@@ -460,6 +509,88 @@ function calculate_columnwidth( self )
     end
 end
 
+-- Typeset a table cell. Return a vlist, tightly packed (i.e. all vspace are 0).
+function pack_cell(self, blockobject, width, horizontal_alignment)
+    local cell
+    for _,blockobject in ipairs(blockobject) do
+        local cellrow = nil
+        local current_width = 0
+        for i=1,#blockobject do
+            local default_textformat_name
+            local inlineobject = blockobject[i]
+            if type(inlineobject) == "table" then
+                if width then
+                    -- ok, a paragraph with a certain width, that we can typeset
+                    if     horizontal_alignment=="center"  then  default_textformat_name = "__centered"
+                    elseif horizontal_alignment=="left"    then  default_textformat_name = "__leftaligned"
+                    elseif horizontal_alignment=="right"   then  default_textformat_name = "__rightaligned"
+                    elseif horizontal_alignment=="justify" then  default_textformat_name = "__justified"
+                    end
+                    if not default_textformat_name then
+                        if inlineobject.textformat then
+                            default_textformat_name = inlineobject.textformat
+                        elseif self.textformat then
+                            default_textformat_name = self.textformat
+                        else
+                            default_textformat_name = "__leftaligned"
+                        end
+                    end
+                    publisher.set_fontfamily_if_necessary(inlineobject.nodelist,self.fontfamily)
+                    local v = inlineobject:format(width,default_textformat_name)
+                    cell = node.insert_after(cell,node.tail(cell),v)
+                else
+                    w("no width given in paragraph")
+                end
+            elseif node.is_node(inlineobject) then
+                -- an image for example
+                if node.has_field(inlineobject,"width") then
+                    -- insert a line break if the row is too wide
+                    if current_width + inlineobject.width > width then
+                        local tmp
+                        if cellrow then
+                            if cellrow.next then
+                                tmp = node.hpack(cellrow)
+                            else
+                                tmp = cellrow
+                            end
+                        end
+                        cell = node.insert_after(cell,node.tail(cell),tmp)
+                        cellrow = inlineobject
+                        current_width = inlineobject.width
+                    else
+                        current_width = current_width + inlineobject.width
+                        cellrow = node.insert_after(cellrow,node.tail(cellrow),inlineobject)
+                    end
+                else
+                    cellrow = node.insert_after(cellrow,node.tail(cellrow),inlineobject)
+                end
+
+            else
+                w("unknown %s",type(inlineobject))
+            end
+        end
+
+        -- cellrow can be nil if there is a paragraph for example
+        if cellrow then
+            local tmp
+            if cellrow.next then
+                tmp = node.hpack(cellrow)
+            else
+                tmp = cellrow
+            end
+            cell = node.insert_after(cell,node.tail(cell),tmp)
+        end
+    end
+
+    -- if there are no objects in a row, we create a dummy object
+    -- so the row can be created and vpack does not fall over a nil
+    cell = cell or node.new("hlist")
+
+    local ret
+    ret = node.vpack(cell)
+    return ret
+end
+
 --- last\_shiftup is for vertical border-collapse.
 function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
     last_shiftup = last_shiftup or 0
@@ -478,6 +609,9 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
         rowheight = min_lineheight
     end
 
+    -- its not trivial to find out in which column I am in.
+    -- See the example in qa/tables/columnspread. Line three:
+    -- The first cell is in column 1, the second cell is in column 4
     current_column = 0
 
     for _,td in ipairs(tr_contents) do
@@ -498,8 +632,13 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
 
         rowspan = tonumber(td_contents.rowspan) or 1
         colspan = tonumber(td_contents.colspan) or 1
-
         wd = 0
+
+        -- There might be a rowspan in the row above, so we need to find the correct
+        -- column width
+        while self.skip[current_row] and self.skip[current_row][current_column] do
+            current_column = current_column + 1
+        end
         for s = current_column,current_column + colspan - 1 do
             if self.colwidths[s] == nil then
                 err("Something went wrong with the number of columns in the table")
@@ -508,71 +647,16 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
             end
         end
         current_column = current_column + colspan - 1
-
         -- FIXME: use column_distances[i] instead of self.colsep
         wd = wd + ( colspan - 1 ) * self.colsep
+
         -- FIXME: take border-left and border-right into account
         --        in the height calculation also border-top and border-bottom
-        local cell
+        local alignment = td_contents.align or tr_contents.align or self.align[current_column]
+        local cell = self:pack_cell(td_contents.objects,wd - padding_left - padding_right - td_borderleft - td_borderright,alignment)
+        td_contents.cell = cell
 
-        for _,object in ipairs(td_contents.objects) do
-            if type(object)=="table" then
-                -- Its a regular paragraph!?!?
-
-                if not (object.nodelist) then
-                    err("No nodelist found!")
-                end
-
-                local align = td_contents.align or tr_contents.align or self.align[current_column]
-                if align=="center" then
-                    default_textformat_name = "__centered"
-                elseif align=="left" then
-                    default_textformat_name = "__leftaligned"
-                elseif align=="right" then
-                    default_textformat_name = "__rightaligned"
-                elseif align=="justify" then
-                    default_textformat_name = "__justified"
-                end
-                if not default_textformat_name then
-                    if object.textformat then
-                        default_textformat_name = object.textformat
-                    elseif self.textformat then
-                        default_textformat_name = self.textformat
-                    else
-                        default_textformat_name = "__leftaligned"
-                    end
-                end
-                publisher.set_fontfamily_if_necessary(object.nodelist,self.fontfamily)
-
-                local v = object:format(wd - padding_left - padding_right - td_borderleft - td_borderright,default_textformat_name)
-                if cell then
-                    node.tail(cell).next = v
-                else
-                    cell = v
-                end
-            elseif (type(object)=="userdata" and node.has_field(object,"width")) then
-                -- an image or a box
-                -- FIXME:
-                -- The following code leads to an error if two images
-                -- are included in a table cell.
-                -- Also check QA tables/columnspread for an example why
-                -- this is necessary
-                if cell then
-                    node.tail(cell).next = object
-                else
-                    cell = object
-                end
-            end
-        end
-
-        -- if there are no objects in a row, we create a dummy object
-        -- so the row can be created and vpack does not fall over a nil
-        if not cell then
-            cell = node.new("hlist")
-        end
-        v=node.vpack(cell)
-
-        tmp = v.height + v.depth +  padding_top + padding_bottom + td_borderbottom + td_bordertop
+        tmp = cell.height + cell.depth +  padding_top + padding_bottom + td_borderbottom + td_bordertop
         if rowspan > 1 then
             rowspans[#rowspans + 1] =  { start = current_row, stop = current_row + rowspan - 1, ht = tmp }
             td_contents.rowspan_internal = rowspans[#rowspans]
@@ -741,6 +825,7 @@ function typeset_row(self, tr_contents, current_row )
         local g = node.new("glue")
         g.spec = node.new("glue_spec")
         g.spec.width = padding_top
+        node.set_attribute(g,publisher.att_origin,publisher.origin_align_top)
 
         local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
         if valign ~= "top" then
@@ -749,59 +834,25 @@ function typeset_row(self, tr_contents, current_row )
         end
 
         local cell_start = g
-
         local current = node.tail(cell_start)
 
-        --- Let's combine every object in the cell by setting the next pointer at the end
-        --- to the following object and vpack it for the cell
-        for _,object in ipairs(td_contents.objects) do
-            if type(object) == "table" then
-                if not (object and object.nodelist) then
-                    warning("No nodelist found!")
-                end
-                -- Unsure why I copied the list. It seems
-                -- to work when I just assign it
-                -- v = node.copy_list(object.nodelist)
-                v = object.nodelist
-            elseif type(object) == "userdata" then
-                -- Same here. Why did I copy the list?
-                -- v = node.copy_list(object)
-                v = object
-            end
-
-            if type(object) == "table" then
-                -- Paragraph with a node list
-                local align = td_contents.align or tr_contents.align or self.align[current_column]
-                if align=="center" then
-                    default_textformat_name = "__centered"
-                elseif align=="left" then
-                    default_textformat_name = "__leftaligned"
-                elseif align=="right" then
-                    default_textformat_name = "__rightaligned"
-                elseif align=="justify" then
-                    default_textformat_name = "__justified"
-                end
-                if not default_textformat_name then
-                    if object.textformat then
-                        default_textformat_name = object.textformat
-                    elseif self.textformat then
-                        default_textformat_name = self.textformat
-                    else
-                        default_textformat_name = "__leftaligned"
-                    end
-                end
-                v = object:format(current_column_width - padding_left - padding_right - td_borderleft - td_borderright, default_textformat_name)
-                if publisher.options.trace then
-                    v = publisher.boxit(v)
-                end
-            elseif type(object) == "userdata" then
-                v = node.hpack(v)
-            else
-                assert(false)
-            end
-            current.next = v
-            current = v
+        local cell
+        -- td_contents.cell can be nil if we have dynamic table head and foot
+        if td_contents.cell then
+            cell = td_contents.cell.head
+            td_contents.cell.head = nil
+            node.free(td_contents.cell)
+        else
+            local alignment = td_contents.align or tr_contents.align or self.align[current_column]
+            cell = self:pack_cell(td_contents.objects,current_column_width - padding_left - padding_right - td_borderleft - td_borderright,alignment)
+            cell = cell.head
         end
+        -- The cell is a vlist with minumum height. We need to repack the contents of the
+        -- cell in order to use the aligns and VSpaces in the table cell
+
+        local tail = node.tail(cell_start)
+        tail.next = cell
+        cell.prev = tail
 
         g = node.new("glue")
         g.spec = node.new("glue_spec")
@@ -814,7 +865,7 @@ function typeset_row(self, tr_contents, current_row )
         end
 
 
-        current.next = g
+        node.insert_after(cell_start,node.tail(cell_start),g)
 
         vlist = node.vpack(cell_start,ht - td_bordertop - td_borderbottom,"exactly")
         --- The table cell now looks like this
@@ -1097,7 +1148,7 @@ function typeset_table(self)
         -- Will be set to false if break_below is "no"
 
         if eltname == "Columns" then
-            -- ignorieren
+            -- ignore
         elseif eltname == "Tablerule" then
             local offset = 0
             if tr_contents.start and tr_contents.start ~= 1 then
@@ -1408,6 +1459,7 @@ function make_table( self )
         local x = node.new("vlist")
         return x
     end
+
     calculate_rowheights(self)
     publisher.xpath.set_variable("_last_tr_data","")
     return typeset_table(self)

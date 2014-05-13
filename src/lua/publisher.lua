@@ -80,6 +80,8 @@ att_lineheight = 600
 
 -- Debugging / see att_origin
 origin_table = 1
+origin_vspace = 2
+origin_align_top = 3
 
 
 user_defined_addtolist = 1
@@ -298,6 +300,7 @@ local dispatch_table = {
     URL                     = commands.url,
     Value                   = commands.value,
     Variable                = commands.variable,
+    VSpace                  = commands.vspace,
     While                   = commands.while_do,
 }
 

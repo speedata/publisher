@@ -4,6 +4,10 @@ title: Changelog
 Liste der Änderungen
 ====================
 
+Version 2.1
+-----------
+- Neues Verhalten von Elementen in Tabellenzellen (Td). Nun wird, soweit sinnvoll, die Logik von HTML angewandt (siehe [HTML Blockelemente](https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements)). (2.1.0)
+
 Version 2.0
 -----------
 
