@@ -7,40 +7,35 @@
              // This function highlights (by default) pre and code tags which are annotated correctly.
              $.syntax();
              });
-            </script><title>NextFrame</title>
+            </script><title>VSpace</title>
    </head>
    <body>
       <div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
       <div id="elementdesc">
-         <h1>Elementname: <code class="syntax xml">NextFrame</code></h1>
+         <h1>Elementname: <code class="syntax xml">VSpace</code></h1>
          <h2>Description</h2>
-         <p>Switch to the next free frame of a positioning area.</p>
+         <p>Create a vertically stretching space. The space has a minimum height of 0 but is able
+            to stretch up to infinity. Useful in table cells.
+         </p>
          <div class="hangingindent">
-            <p>Allowed attributes: <span class="tt"><a href="#area">area</a></span></p>
+            <p>Allowed attributes: (none)</p>
          </div>
          <div class="hangingindent">
             <p>Child elements: (none)</p>
          </div>
          <div class="hangingindent">
-            <p>Parent elements: <a href="atpagecreation.html">AtPageCreation</a>, <a href="atpageshipout.html">AtPageShipout</a>, <a href="case.html">Case</a>, <a href="contents.html">Contents</a>, <a href="forall.html">ForAll</a>, <a href="loop.html">Loop</a>, <a href="otherwise.html">Otherwise</a>, <a href="record.html">Record</a>, <a href="savepages.html">SavePages</a>, <a href="until.html">Until</a>, <a href="while.html">While</a></p>
+            <p>Parent elements: <a href="td.html">Td</a></p>
          </div>
-         <h3>Attributes</h3>
-         <dl>
-            <dt><a name="area"></a><span class="tt">area</span> (string)
-            </dt>
-            <dd>
-               
-               <p>Name of the positioning area.</p>
-               
-            </dd>
-         </dl>
          <h2>Example</h2>
-         <pre class="syntax xml">&lt;NextFrame area="articlearea"/&gt;</pre>
-         <h2>See also</h2>
-         <a href="positioningarea.html">PositioningArea</a>
-         <a href="positioningframe.html">PositioningFrame</a>
-         
-      </div>
+         <pre class="syntax xml">&lt;Td valign="bottom"&gt;
+  &lt;VSpace/&gt;
+  &lt;!-- vertically centered image --&gt;
+  &lt;Image width="3" file="article.pdf"/&gt;
+  &lt;VSpace/&gt;
+  &lt;Paragraph&gt;&lt;Value&gt;Some text at the bottom of the cell&lt;/Value&gt;&lt;/Paragraph&gt;
+&lt;/Td&gt;
+</pre>
+         <h2>See also</h2><a href="td.html">Td</a></div>
       <div id="elementref">
          <h1>Commands</h1>
          <ul>
@@ -88,7 +83,7 @@
             <li><a href="mark.html">Mark</a></li>
             <li><a href="message.html">Message</a></li>
             <li><a href="newpage.html">NewPage</a></li>
-            <li class="active"><a href="nextframe.html">NextFrame</a></li>
+            <li><a href="nextframe.html">NextFrame</a></li>
             <li><a href="nextrow.html">NextRow</a></li>
             <li><a href="ol.html">Ol</a></li>
             <li><a href="options.html">Options</a></li>
@@ -126,7 +121,7 @@
             <li><a href="url.html">URL</a></li>
             <li><a href="ul.html">Ul</a></li>
             <li><a href="until.html">Until</a></li>
-            <li><a href="vspace.html">VSpace</a></li>
+            <li class="active"><a href="vspace.html">VSpace</a></li>
             <li><a href="value.html">Value</a></li>
             <li><a href="while.html">While</a></li>
          </ul>
@@ -135,5 +130,5 @@
       <a href="../index.html">Start page</a>
       |
       <a href="../commands-en/layout.html">Command reference</a> |
-      Other languages: <a href="../commands-de/nextframe.html">German</a></body>
+      Other languages: <a href="../commands-de/vspace.html">German</a></body>
 </html>

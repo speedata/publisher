@@ -19,7 +19,7 @@
             <p>Erlaubte Attribute: <span class="tt"><a href="#align">align</a></span>, <span class="tt"><a href="#border-bottom">border-bottom</a></span>, <span class="tt"><a href="#border-bottom-color">border-bottom-color</a></span>, <span class="tt"><a href="#border-left">border-left</a></span>, <span class="tt"><a href="#border-left-color">border-left-color</a></span>, <span class="tt"><a href="#border-right">border-right</a></span>, <span class="tt"><a href="#border-right-color">border-right-color</a></span>, <span class="tt"><a href="#border-top">border-top</a></span>, <span class="tt"><a href="#border-top-color">border-top-color</a></span>, <span class="tt"><a href="#colspan">colspan</a></span>, <span class="tt"><a href="#backgroundcolor">hintergrundfarbe</a></span>, <span class="tt"><a href="#padding">padding</a></span>, <span class="tt"><a href="#padding-bottom">padding-bottom</a></span>, <span class="tt"><a href="#padding-left">padding-left</a></span>, <span class="tt"><a href="#padding-right">padding-right</a></span>, <span class="tt"><a href="#padding-top">padding-top</a></span>, <span class="tt"><a href="#rowspan">rowspan</a></span>, <span class="tt"><a href="#valign">valign</a></span></p>
          </div>
          <div class="hangingindent">
-            <p>Kindelemente: <a href="paragraph.html">Absatz</a>, <a href="image.html">Bild</a>, <a href="switch.html">Fallunterscheidung</a>, <a href="forall.html">FürAlle</a>, <a href="copy-of.html">Kopie-von</a>, <a href="loop.html">Schleife</a>, <a href="barcode.html">Strichcode</a>, <a href="table.html">Tabelle</a></p>
+            <p>Kindelemente: <a href="paragraph.html">Absatz</a>, <a href="image.html">Bild</a>, <a href="box.html">Box</a>, <a href="switch.html">Fallunterscheidung</a>, <a href="forall.html">FürAlle</a>, <a href="copy-of.html">Kopie-von</a>, <a href="loop.html">Schleife</a>, <a href="barcode.html">Strichcode</a>, <a href="table.html">Tabelle</a>, <a href="vspace.html">VLeerraum</a></p>
          </div>
          <div class="hangingindent">
             <p>Elternelemente: <a href="until.html">Bis</a>, <a href="case.html">Fall</a>, <a href="forall.html">FürAlle</a>, <a href="loop.html">Schleife</a>, <a href="while.html">Solange</a>, <a href="otherwise.html">Sonst</a>, <a href="tr.html">Tr</a>, <a href="setvariable.html">Zuweisung</a></p>
@@ -231,11 +231,15 @@
          </dl>
          <h3>Bemerkungen</h3>
          
+         <p>Die Kindelemente der Tabellenzelle können Blockobjekte oder Zeilenobjekte sein. Blockobjekte
+            erzeugen eine neue Zeile, Zeilenobjekte werden von rechts nach links
+            so lange in eine Zeile geschrieben, bis die Zeilenbreite einen Zeilenumbruch erzwingt.
+            Blockobjekte sind <a href="paragraph.html">Absatz</a>, <a href="table.html">Tabelle</a> und <a href="box.html">Box</a>, Zeilenobjekte sind <a href="barcode.html">Strichcode</a> und <a href="image.html">Bild</a>.
+         </p>
+         
          <p>Das Attribut align erzeugt implizit ein Textformat (nur in Bezug auf Ausrichtung)
             für alle Kindelemente Absatz, sofern dort kein Textformat angegeben ist.
          </p>
-         
-         <p>Tabellen dürfen wiederum Tabellen enthalten.</p>
          
          <h2>Beispiel</h2>
          <pre class="syntax xml">&lt;Tr&gt;
@@ -243,9 +247,9 @@
   &lt;Td rowspan="3"&gt;&lt;Bild breite="3" datei="bildname.jpg"/&gt;&lt;/Td&gt;
 &lt;/Tr&gt;</pre>
          <h2>Siehe auch</h2>
-         <a href="table.html">Tabelle</a>
-         <a href="tr.html">Tr</a>
-         <a href="paragraph.html">Absatz</a>
+         <a href="table.html">Tabelle</a>,
+         <a href="tr.html">Tr</a>, 
+         <a href="paragraph.html">Absatz</a>,
          <a href="image.html">Bild</a>
          
       </div>
@@ -333,12 +337,13 @@
             <li><a href="u.html">U</a></li>
             <li><a href="url.html">URL</a></li>
             <li><a href="ul.html">Ul</a></li>
+            <li><a href="vspace.html">VLeerraum</a></li>
             <li><a href="value.html">Wert</a></li>
             <li><a href="addtolist.html">ZurListeHinzufügen</a></li>
             <li><a href="setvariable.html">Zuweisung</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 1.99.46 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.0 |
       <a href="../index-de.html">Startseite</a>
       |
       <a href="../commands-de/layout.html">Befehlsreferenz</a> |

@@ -7,65 +7,35 @@
              // This function highlights (by default) pre and code tags which are annotated correctly.
              $.syntax();
              });
-            </script><title>Rule</title>
+            </script><title>VSpace</title>
    </head>
    <body>
       <div id="logo"><a href="../index-de.html"><img src="../assets/images/publisher_logo.png" alt="Startseite"></a></div>
       <div id="elementdesc">
-         <h1>Elementname: <code class="syntax xml">Linie</code></h1>
+         <h1>Elementname: <code class="syntax xml">VLeerraum</code></h1>
          <h2>Beschreibung</h2>
-         <p>Zeichnet eine horizontale oder vertikale Linie im Raster.</p>
+         <p>Erzeugt einen vertikal dehnbaren Lerrraum. Der Leerraum hat die minimale Höhe 0 und
+            die maximale Höhe »unendlich«. Sinnvoll nutzbar in Tabellenzellen.
+         </p>
          <div class="hangingindent">
-            <p>Erlaubte Attribute: <span class="tt"><a href="#color">farbe</a></span>, <span class="tt"><a href="#rulewidth">linienstärke</a></span>, <span class="tt"><a href="#length">länge</a></span>, <span class="tt"><a href="#direction">richtung</a></span></p>
+            <p>Erlaubte Attribute: (keine)</p>
          </div>
          <div class="hangingindent">
             <p>Kindelemente: (keine)</p>
          </div>
          <div class="hangingindent">
-            <p>Elternelemente: <a href="placeobject.html">ObjektAusgeben</a></p>
+            <p>Elternelemente: <a href="td.html">Td</a></p>
          </div>
-         <h3>Attribute</h3>
-         <dl>
-            <dt><a name="color"></a><span class="tt">farbe</span> (Text, optional)
-            </dt>
-            <dd>
-               
-               <p>Farbe der Linie. Vorgabe: Schwarz</p>
-               
-            </dd>
-            <dt><a name="rulewidth"></a><span class="tt">linienstärke</span> (Zahl oder Längenangabe, optional)
-            </dt>
-            <dd>
-               
-               <p>Dicke der Linie in Rasterzellen oder als absolute Angabe.</p>
-               
-            </dd>
-            <dt><a name="length"></a><span class="tt">länge</span> (Zahl oder Längenangabe)
-            </dt>
-            <dd>
-               
-               <p>Länge der Linie in Rasterzellen oder als absolute Angabe.</p>
-               
-            </dd>
-            <dt><a name="direction"></a><span class="tt">richtung</span> (horizontal oder vertikal)
-            </dt>
-            <dd>
-               
-               <p>Bestimmt die Ausrichtung der Linie.</p>
-               
-            </dd>
-         </dl>
          <h2>Beispiel</h2>
-         <pre class="syntax xml">&lt;Datensatz element="data"&gt;
-  &lt;ObjektAusgeben&gt;
-    &lt;Linie richtung="horizontal" länge="10" linienstärke="3"/&gt;
-  &lt;/ObjektAusgeben&gt;
-&lt;/Datensatz&gt;
+         <pre class="syntax xml">&lt;Td valign="bottom"&gt;
+  &lt;VLeerraum/&gt;
+  &lt;!-- vertikal zentriertes Bild--&gt;
+  &lt;Bild breite="3" datei="article.pdf"/&gt;
+  &lt;VLeerraum/&gt;
+  &lt;Paragraph&gt;&lt;Value&gt;Text am unteren Ende der Zelle&lt;/Value&gt;&lt;/Paragraph&gt;
+&lt;/Td&gt;
 </pre>
-         <h2>Siehe auch</h2>
-         <a href="placeobject.html">ObjektAusgeben</a>
-         
-      </div>
+         <h2>Siehe auch</h2><a href="td.html">Td</a></div>
       <div id="elementref">
          <h1>Befehlsübersicht</h1>
          <ul>
@@ -106,7 +76,7 @@
             <li><a href="emptyline.html">Leerzeile</a></li>
             <li><a href="bookmark.html">Lesezeichen</a></li>
             <li><a href="li.html">Li</a></li>
-            <li class="active"><a href="rule.html">Linie</a></li>
+            <li><a href="rule.html">Linie</a></li>
             <li><a href="mark.html">Marke</a></li>
             <li><a href="message.html">Nachricht</a></li>
             <li><a href="newpage.html">NeueSeite</a></li>
@@ -150,7 +120,7 @@
             <li><a href="u.html">U</a></li>
             <li><a href="url.html">URL</a></li>
             <li><a href="ul.html">Ul</a></li>
-            <li><a href="vspace.html">VLeerraum</a></li>
+            <li class="active"><a href="vspace.html">VLeerraum</a></li>
             <li><a href="value.html">Wert</a></li>
             <li><a href="addtolist.html">ZurListeHinzufügen</a></li>
             <li><a href="setvariable.html">Zuweisung</a></li>
@@ -160,5 +130,5 @@
       <a href="../index-de.html">Startseite</a>
       |
       <a href="../commands-de/layout.html">Befehlsreferenz</a> |
-      Andere Sprachen: <a href="../commands-en/rule.html">Englisch</a></body>
+      Andere Sprachen: <a href="../commands-en/vspace.html">Englisch</a></body>
 </html>
