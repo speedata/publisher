@@ -3059,10 +3059,10 @@
     </attribute>
     <attribute name="mainlanguage" optional="yes">
       <description xml:lang="en">
-        <para>The default language for text (hyphenation).</para>
+        <para>The default language for text (hyphenation). You can also set the default language on the command line and locally set it at <cmd name="Paragraph"/>.</para>
       </description>
       <description xml:lang="de">
-        <para>Die Sprache (Silbentrennung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist.</para>
+        <para>Die Sprache (Silbentrennung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist. Sie kann global über die Kommandozeile gesteuert werden oder für jeden <cmd name="Paragraph"/> einzeln.</para>
       </description>
       <choice name="German">
         <description xml:lang="en">
@@ -5337,7 +5337,7 @@
       </description>
     </attribute>
     <remark xml:lang="en">
-      <para>The child elements of the table cells are either block objects that start a new line or inline objects that are placed horizontally next to each other (from left to right) until the width of the table cell forces a line break. 
+      <para>The child elements of the table cells are either block objects that start a new line or inline objects that are placed horizontally next to each other (from left to right) until the width of the table cell forces a line break.
         Block objects are <cmd name="Paragraph"/>, <cmd name="Table"/> and <cmd name="Box"/>, inline objects are <cmd name="Barcode"/> and <cmd name="Image"/>.</para>
     </remark>
     <remark xml:lang="de">
@@ -5353,7 +5353,7 @@
     </example>
     <seealso>
       <cmd name="Table" />,
-      <cmd name="Tr" />, 
+      <cmd name="Tr" />,
       <cmd name="Paragraph" />,
       <cmd name="Image" />
     </seealso>

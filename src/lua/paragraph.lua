@@ -345,9 +345,22 @@ function Paragraph:format(width_sp, default_textformat_name,options)
 end
 
 
--- We get a lot of objects (paragraphs) of different heights.
--- We need to find _one_ breakpoint such that the new objects
-function Paragraph.vsplit( objects_t,frameheight,totalobjectsheight )
+--- vsplit
+--- ======
+--- The idea of vsplit is to take a long paragraph and break it into small pieces of text
+--- ![Idea of vsplit](img/vsplit.png)
+--- Of course its not without things to take care of.
+---
+---  1. Orphans and widows
+---  1. The size of the destination area
+---
+--- Input
+--- -----
+--- The material we get is made up of vboxes. We dissect the contents of the vbox and add it, line by line, to the output box.
+---
+--- `vsplit()` is called every time there is material available.
+--- The `objects_t` table must be cleared of already used objects.
+function Paragraph.vsplit( objects_t,frameheight )
     trace("vsplit")
     local goal = frameheight
     local totalheight = 0

@@ -48,6 +48,7 @@ task :doc do
 	puts "done"
 end
 
+desc "Update the examples in the documentation"
 task :updateexamples do
 	Dir.chdir(installdir.join("doc","manual")) do
 		Dir.glob('doc/examples-*/**').select { |f| File.directory? f}.each do |dir|

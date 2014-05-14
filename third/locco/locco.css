@@ -299,3 +299,7 @@ body .nc,body .nn {
 body .nv,body .ss,body .vc,body .vg,body .vi {
     color:#19469D;
 }
+
+img {
+    max-width: 100%;
+}

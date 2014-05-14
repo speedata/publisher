@@ -1240,23 +1240,44 @@ function commands.options( layoutxml,dataxml )
     end
 end
 
-
+--- Output
+--- ------
+--- This command is able to produce multi-area contents by pulling from the underlying command.
+--- That means the children (currently only `<Text>`) must implement a function called `pull()`
+--- taking two arguments: 1) parameters, 2) state. Parameters is a table with the following layout:
+---
+---     parameters = {
+---         area = area,
+---         maxheight = maxht,
+---         width = wd,
+---         balance = true/false,
+---         current_grid = current_grid,
+---         allocate = allocate,
+---     }
+--- The state is just a table that is empty in the beginning and re-passed into `pull()`
+--- every time there is output left over.
+---
+--- The function `pull()` must return three values:
+---
+---  1. `obj`: The vbox that should be placed in the pdf at the current position
+---  1. `state`: The table that is passed to the next iteration of `pull()`
+---  1. `more_to_follow`: boolean which indicates that there is output left for the next area
 function commands.output( layoutxml,dataxml )
     publisher.setup_page()
-    local area = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
+    local area     = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
     local allocate = publisher.read_attribute(layoutxml,dataxml,"allocate", "string", "yes")
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local row      = publisher.read_attribute(layoutxml,dataxml,"row","number")
+    local tab  = publisher.dispatch(layoutxml,dataxml)
     area = area or publisher.default_areaname
     local last_area = publisher.xpath.get_variable("__area")
+    local state
     publisher.xpath.set_variable("__area",area)
-    local row = publisher.read_attribute(layoutxml,dataxml,"row","number")
     publisher.next_row(row,area,1)
 
 
     local current_maxwidth = xpath.get_variable("__maxwidth")
     xpath.set_variable("__maxwidth", publisher.current_grid:number_of_columns(area))
 
-    -- publisher.setup_page()
     for i=1,#tab do
         local contents = publisher.element_contents(tab[i])
 
@@ -1335,7 +1356,7 @@ function commands.pagetype(layoutxml,dataxml)
         if eltname=="Margin" or eltname == "AtPageShipout" or eltname == "AtPageCreation" or eltname=="Grid" or eltname=="PositioningArea" then
             tmp_tab [#tmp_tab + 1] = j
         else
-            err("Element %q in »Seitentyp« unknown",tostring(eltname))
+            err("Element %q in »Pagetype« unknown",tostring(eltname))
             tmp_tab [#tmp_tab + 1] = j
         end
     end
@@ -1560,7 +1581,10 @@ function commands.place_object( layoutxml,dataxml )
         if frame  == "solid" then
             object = publisher.frame(object,framecolor,rulewidth_sp)
         end
-
+        if not object then
+            err("Something is wrong with <PlaceObject>, content is missing")
+            return
+        end
         if publisher.options.trace then
             publisher.boxit(object)
         end
@@ -2323,10 +2347,6 @@ function commands.td( layoutxml,dataxml )
     end
 
     tab.align = publisher.read_attribute(layoutxml,dataxml,"align","string",nil,"align")
-    -- Remove this err in 2014
-    if layoutxml.align == "links" or layoutxml.align == "rechts" then
-        err("Td, attribute align. Values 'links' and 'right' should be 'left' and 'right'")
-    end
 
     if tab.padding then
         tab.padding_left   = tex.sp(tab.padding)
@@ -2341,6 +2361,9 @@ function commands.td( layoutxml,dataxml )
     return tab
 end
 
+--- Text
+--- ----
+--- Text is currently the only function / command that implements the pull-interface defined by output.
 function commands.text(layoutxml,dataxml)
     -- balance is currently not supported
     -- local balance = publisher.read_attribute(layoutxml,dataxml,"balance",   "rawstring")
@@ -2365,12 +2388,11 @@ function commands.text(layoutxml,dataxml)
                 for i=1,#tab do
                     local contents = publisher.element_contents(tab[i])
                     objects[#objects + 1] = contents:format(parameter.width,nil,parameter)
-                    state.total_height = state.total_height + objects[#objects].height
                 end
             end
             if #state.objects > 0 then
                 local obj
-                obj = paragraph.vsplit(state.objects,parameter.maxheight,state.total_height)
+                obj = paragraph.vsplit(state.objects,parameter.maxheight)
                 return obj,state, #state.objects > 0
             else
                 return nil,nil, false

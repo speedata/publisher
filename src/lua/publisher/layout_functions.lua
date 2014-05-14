@@ -185,7 +185,16 @@ end
 local function groupheight(dataxml, arg )
   publisher.setup_page()
   local groupname=arg[1]
+  if not publisher.groups[groupname] then
+    err("Can't find group with the name %q",groupname)
+    return 0
+  end
+
   local groupcontents=publisher.groups[groupname].contents
+  if not groupcontents then
+    err("Can't find group with the name %q",groupname)
+    return 0
+  end
   local grid = publisher.current_grid
   local height = grid:height_in_gridcells_sp(groupcontents.height)
   return height

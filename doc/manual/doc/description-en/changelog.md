@@ -3,7 +3,7 @@ title: speedata Publisher manual
 Changelog
 =========
 
-Version 2.1
+Version 2.2
 -----------
 - New behaviour of contents in table cells (Td). The rules of HTML (see [HTML block elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements)) are followed as far as possible. (2.1.0)
 
