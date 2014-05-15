@@ -305,25 +305,25 @@ function Paragraph:format(width_sp, default_textformat_name,options)
 
         publisher.fonts.post_linebreak(nodelist)
 
-        if current_textformat.paddingtop then
+        if current_textformat.paddingtop and current_textformat.paddingtop ~= 0 then
             nodelist.list = publisher.add_glue(nodelist.list,"head",{width = current_textformat.paddingtop})
             node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,3)
         end
-        if current_textformat.bordertop then
+        if current_textformat.bordertop and current_textformat.bordertop ~= 0 then
             nodelist.list = publisher.add_rule(nodelist.list,"head",{width = -1073741824, height = current_textformat.bordertop})
             node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,4)
         end
-        if current_textformat.margintop then
+        if current_textformat.margintop and current_textformat.margintop ~= 0 then
             nodelist.list = publisher.add_glue(nodelist.list,"head",{width = current_textformat.margintop})
         end
         if current_textformat.breakbelow == false then
             node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,5)
         end
-        if current_textformat.borderbottom then
+        if current_textformat.borderbottom and current_textformat.borderbottom ~= 0 then
             nodelist.list = publisher.add_rule(nodelist.list,"tail",{width = -1073741824, height = current_textformat.borderbottom})
             node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,6)
         end
-        if current_textformat.marginbottom then
+        if current_textformat.marginbottom and current_textformat.marginbottom ~= 0 then
             nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = current_textformat.marginbottom})
             node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
         end
