@@ -1314,6 +1314,9 @@ function commands.output( layoutxml,dataxml )
                 publisher.output_at(obj,1,row,true,area,nil,nil)
                 -- We don't need to go to the next page when we are a the end
                 if nextfreerow then
+                    if nextfreerow <= row then
+                        nextfreerow = row + 1
+                    end
                     publisher.next_row(nextfreerow,area,0)
                 else
                     if more_to_follow then

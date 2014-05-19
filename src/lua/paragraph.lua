@@ -313,6 +313,7 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         end
         if current_textformat.margintop and current_textformat.margintop ~= 0 then
             nodelist.list = publisher.add_glue(nodelist.list,"head",{width = current_textformat.margintop})
+            node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,6)
         end
         if current_textformat.breakbelow == false then
             node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,5)
@@ -324,6 +325,7 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         if current_textformat.marginbottom and current_textformat.marginbottom ~= 0 then
             nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = current_textformat.marginbottom})
             node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
+            -- node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,7)
         end
         if current_textformat.breakbelow == false then
             node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,7)
@@ -344,6 +346,19 @@ function Paragraph:format(width_sp, default_textformat_name,options)
     return nodelist
 end
 
+function join_table_to_box(objects)
+    for i=1,#objects - 1 do
+        objects[i].next = objects[i+1]
+    end
+    if objects[1] == nil then
+        return nil
+    end
+    node.slide(objects[1])
+
+    local vbox = node.vpack(objects[1])
+    return vbox
+end
+
 
 --- vsplit
 --- ======
@@ -356,114 +371,131 @@ end
 ---
 --- Input
 --- -----
---- The material we get is made up of vboxes. We dissect the contents of the vbox and add it, line by line, to the output box.
+--- The table `objects_t` is an array of vboxes, containing material for the current frame of height
+--- `frameheight`. It is not defined if the height of the vboxes is larger than the height of the frame.
+--- Therefore we dissect all the paragraphs and place them into one large list, the `hlist`.
 ---
---- `vsplit()` is called every time there is material available.
---- The `objects_t` table must be cleared of already used objects.
+--- Output
+--- ------
+--- The return value is  a vbox that should be placed in the PDF and has a height <= frameheight. If there
+--- is material left over for a next area, the `objects_t` table is changed and vsplit gets called again.
+--- Making `objects_t` empty is a signal for the function calling vsplit (commands/text) that all
+--- text has been put into the PDF.
 function Paragraph.vsplit( objects_t,frameheight )
     trace("vsplit")
-    local goal = frameheight
-    local totalheight = 0
-    local area_filled = false
-    local ht = 0
 
-    local toplist
-    -- This is the list that gets all the lines (hboxes) for
-    -- the area. All other lines stay in the objects_t table
+    --- Step 1: collect all the objects in one big table.
+    --- ------------------------------------------------
+    --- The objects that are not allowed to break are temporarily
+    --- collected in a special vertical list that gets vpacked to
+    --- disallow an "area" break.
+    ---
+    --- ![Step 1](img/vsplit2.png)
+    --- (assuming that there is a `break-below="no"` for the text format of the header).
+    local hlist = {}
 
+    -- a list for hboxes with break_below = true
+    local tmplist = {}
+    local tmp
+    local numlists = #objects_t
     local vlist = table.remove(objects_t,1)
+    local i = 1
+    while vlist do
+        local head = vlist.head
+        while head do
+            if i == numlists and head.next == nil then
+                -- the last object must not be in the tmplist
+                node.unset_attribute(head,publisher.att_break_below_forbidden)
+            end
+            head.prev = nil
+            local break_forbidden = node.has_attribute(head,publisher.att_break_below_forbidden)
+            if break_forbidden then
+                tmplist[#tmplist + 1] = head
+                tmp = head.next
+                head.next = nil
+                head = tmp
+            else
+                -- break allowed
+                -- if there is anything in the tmplist, we vpack it and add it to the current hlist.
+                if #tmplist > 0 then
+                    tmplist[#tmplist + 1] = head
 
-    local hbox = vlist.head
-    local templist
+                    tmp = head.next
+                    head.next = nil
+                    head = tmp
+
+                    local vbox = join_table_to_box(tmplist)
+                    hlist[#hlist + 1] = vbox
+                    tmplist = {}
+                else
+                    hlist[#hlist + 1] = head
+                    tmp = head.next
+                    head.next = nil
+                    head = tmp
+                end
+            end
+        end
+        vlist = table.remove(objects_t,1)
+        i = i + 1
+    end
+    --- Step 2: Fill vbox (the return value)
+    --- ------------------------------------
+    --- Two cases: the objects have enough material to fill up the area (a)
+    --- or we have no objects left for the area and return the final vbox for this area. (b)
+    --- The task is to go though collection of h/vboxes (the hlist) and create one big vbox.
+    --- This is done by filling the table `thisarea`.
+    ---
+    --- ![final step for area](img/vsplit3.png)
+    local goal = frameheight
+    local accumulated_height = 0
+    local thisarea = {}
+    local remaining_objects = {}
+    local area_filled = false
+    local lineheight
     while not area_filled do
-        while hbox do
-            local lineheight = 0
-            if hbox.id == publisher.hlist_node then
-                lineheight = hbox.height + hbox.depth
-            elseif hbox.id == publisher.glue_node then
-                lineheight = hbox.spec.width
-                -- local x = node.has_attribute(hbox,publisher.att_omit_at_top)
-                -- if x == 1 and templist == nil and toplist == nil then
-                --     hbox.spec.width = 0
-                --     lineheight = 0
-                -- end
-            elseif hbox.id == publisher.rule_node then
-                lineheight = hbox.height + hbox.depth
-            else
-                w("unknown node 1: %d",hbox.id)
-            end
-            if ht + lineheight >= goal then
-                -- There is enough material for the area
-                local x = node.has_attribute(hbox,publisher.att_omit_at_top)
-                if x == 1 then
-                    -- We are at the bottom of the area and the next
-                    -- item would be omitted at the top, so we can
-                    -- safely remove this item
-                    vlist.head = node.remove(vlist.head,hbox)
-                end
+        for i=1,#hlist do
+            local hbox = table.remove(hlist,1)
 
-                if vlist.head then
-                    -- but when we remove it, the vlist
-                    -- might be empty
-                    -- if it's not empty (there are items that go onto the next area)
-                    -- we will re-insert the rest of the list in the list of objects.
-                    table.insert(objects_t,1,vlist)
-                end
-                if templist then
-                    vlist = node.vpack(templist)
-                    table.insert(objects_t,1,vlist)
-                end
-                if toplist then
-                    v = node.vpack(toplist)
-                    return v
-                else
-                    return publisher.empty_block()
-                end
+            if #thisarea == 0 and node.has_attribute(hbox, publisher.att_omit_at_top) then
+                -- When the margin-below appears at the top of the new frame, we just ignore
+                -- it. Too bad Lua doesn't have a 'next' in for-loops
             else
-                local newhead
-                vlist.head,newhead = node.remove(vlist.head,hbox)
-                -- if break is not allowed, we store this in a temporary list
-                local break_forbidden = node.has_attribute(hbox,publisher.att_break_below_forbidden)
-
-                -- don't disallow breaks on the last line. This "7" needs closer inspection, it looks
-                -- wrong. Had a document where a ruled heading with break-below="no" went into an endless loop
-                if newhead == nil and break_forbidden ~= 7 then
-                    break_forbidden = false
-                end
-                if break_forbidden then
-                    templist = node.insert_after(templist,node.tail(templist),hbox)
+                if hbox.id == publisher.hlist_node or hbox.id == publisher.vlist_node then
+                    lineheight = hbox.height + hbox.depth
+                elseif hbox.id == publisher.glue_node then
+                    lineheight = hbox.spec.width
+                elseif hbox.id == publisher.rule_node then
+                    lineheight = hbox.height + hbox.depth
                 else
-                    if templist then
-                        local head = templist
-                        repeat
-                            head = templist
-                            templist = head.next
-                            if templist then
-                                templist.prev = nil
-                                head.next = nil
-                            end
-                            toplist = node.insert_after(toplist,node.tail(toplist),head)
-                        until templist == nil
-                    end
-                    toplist = node.insert_after(toplist,node.tail(toplist),hbox)
+                    w("unknown node 1: %d",hbox.id)
                 end
-                hbox = newhead
-                ht = ht + lineheight
+                if accumulated_height + lineheight <= goal then
+                    thisarea[#thisarea + 1] = hbox
+                    accumulated_height = accumulated_height + lineheight
+                else
+                    -- objects > goal
+                    -- This is case (a)
+                    remaining_objects[1] = hbox
+                    area_filled = true
+                    break
+                end
             end
         end
-        if #objects_t == 0 then
-            area_filled = true
-        else
-            -- todo: remove old vlist
-            vlist = table.remove(objects_t,1)
-            hbox = vlist.head
+        area_filled = true
+    end
+
+    if #hlist > 0 then
+        for i=1,#hlist do
+            remaining_objects[#remaining_objects + 1] = hlist[i]
         end
+        objects_t[1] = join_table_to_box(remaining_objects)
     end
-    if toplist then
-        return node.vpack(toplist)
-    else
-        return publisher.empty_block()
-    end
+
+    --- It's a common situation where there is a single free row but the next material is
+    --- too high for the row. So we return an empty list and hope that the calling function
+    --- is clever enough to detect this case. (Well, it's not too difficult to detect, as
+    --- the `objects_t` table is not empty yet.)
+    return join_table_to_box(thisarea) or publisher.empty_block()
 end
 
 file_end("paragraph.lua")
