@@ -169,7 +169,6 @@ function Paragraph:format(width_sp, default_textformat_name,options)
     if options.allocate == "auto" then
         local cg = options.current_grid
         local areaname = options.area
-        w("current row %d",cg:current_row(areaname))
         local current_row    = cg:current_row(areaname)
         local number_of_rows = cg:number_of_rows(areaname)
         -- printtable("cg:allocation_x_y",cg.allocation_x_y)

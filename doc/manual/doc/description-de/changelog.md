@@ -6,6 +6,7 @@ Liste der Änderungen
 
 Version 2.2
 -----------
+- Trennung im zweiten Wort in zusammengesetzten Wörtern erlauben, Umbruch möglich nach "," und "/" (2.1.2)
 - Neue Implementierung des Textumbruchs in Spalten. Vollständig abwärtskompatibel. (2.1.1)
 - Neues Verhalten von Elementen in Tabellenzellen (Td). Nun wird, soweit sinnvoll, die Logik von HTML angewandt (siehe [HTML Blockelemente](https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements)). (2.1.0)
 

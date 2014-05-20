@@ -1341,6 +1341,15 @@ leftskip.width = 0
 leftskip.stretch = 1 * 2^16
 leftskip.stretch_order = 3
 
+--- Return the larger glue(spec) values
+function bigger_glue_spec( a,b )
+    if a.stretch_order > b.stretch_order then return a end
+    if b.stretch_order > a.stretch_order then return b end
+    if a.stretch > b.stretch then return a end
+    if b.stretch > a.stretch then return b end
+    if a.width > b.width then return a else return b end
+end
+
 --- Create a `\hbox`. Return a nodelist. Parameter is one of
 ---
 --- * languagecode
@@ -1391,12 +1400,12 @@ function mknodes(str,fontfamily,parameter)
         return n
     end
     local lastitemwasglyph
-
+    local newline = 10
     -- There is a string with utf8 chars
     for s in string.utfvalues(str) do
         local char = unicode.utf8.char(s)
         -- If the next char is a newline (&#x0A;) a \\ is inserted
-        if s == 10 then
+        if s == newline then
             -- This is to enable hyphenation again. When we add a rule right after a word
             -- hyphenation is disabled. So we insert a penalty of 10k which should not do
             -- harm. Perhaps there is a better solution, but this seems to work OK.
@@ -1426,7 +1435,12 @@ function mknodes(str,fontfamily,parameter)
             head,last = node.insert_after(head,last,p2)
 
         elseif match(char,"^%s$") and last and last.id == glue_node and not node.has_attribute(last,att_tie_glue,1) then
-            -- double space, don't do anything
+            -- double space, use the bigger glue
+            local tmp = node.new(glue_spec_node)
+            tmp.width   = space
+            tmp.shrink  = shrink
+            tmp.stretch = stretch
+            last.spec = bigger_glue_spec(last.spec,tmp)
         elseif s == 160 then -- non breaking space U+00A0
             n = node.new("penalty")
             n.penalty = 10000
@@ -1502,6 +1516,9 @@ function mknodes(str,fontfamily,parameter)
                 head = node.insert_before(head,last,pen)
                 local disc = node.new("disc")
                 head,last = node.insert_after(head,last,disc)
+                local g = node.new(glue_node)
+                g.spec = node.new(glue_spec_node)
+                head,last = node.insert_after(head,last,g)
             elseif char == ',' or char == '/' then
                 local pen = node.new("penalty")
                 pen.penalty = 0
