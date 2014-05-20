@@ -5,7 +5,7 @@ Changelog
 
 Version 2.2
 -----------
-- Allow hyphenation in the second word in compound words such as longword-anotherlongword. Also enable line breaks after "," and "/" (2.1.2)
+- Allow hyphenation in the second word in compound words such as longword-anotherlongword. Also enable line breaks after "/" (2.1.3)
 - New implemtation of paragraph splitting, should be completely backward compatible. (2.1.1)
 - New behaviour of contents in table cells (Td). The rules of HTML (see [HTML block elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements)) are followed as far as possible. (2.1.0)
 

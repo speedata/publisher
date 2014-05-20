@@ -1519,7 +1519,8 @@ function mknodes(str,fontfamily,parameter)
                 local g = node.new(glue_node)
                 g.spec = node.new(glue_spec_node)
                 head,last = node.insert_after(head,last,g)
-            elseif char == ',' or char == '/' then
+            -- elseif char == ',' or char == '/' then
+            elseif char == '/' then
                 local pen = node.new("penalty")
                 pen.penalty = 0
                 head,last = node.insert_after(head,last,pen)
