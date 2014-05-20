@@ -1491,6 +1491,7 @@ function mknodes(str,fontfamily,parameter)
             if last and last.id == glyph_node then
                 lastitemwasglyph = true
             end
+
             head,last = node.insert_after(head,last,n)
             -- We have a character but some characters must be treated in a special
             -- way.
@@ -1501,6 +1502,10 @@ function mknodes(str,fontfamily,parameter)
                 head = node.insert_before(head,last,pen)
                 local disc = node.new("disc")
                 head,last = node.insert_after(head,last,disc)
+            elseif char == ',' or char == '/' then
+                local pen = node.new("penalty")
+                pen.penalty = 0
+                head,last = node.insert_after(head,last,pen)
             end
         end
     end
@@ -1510,6 +1515,7 @@ function mknodes(str,fontfamily,parameter)
         warning("No head found")
         return node.new("hlist")
     end
+
     return head
 end
 
@@ -1643,10 +1649,11 @@ function finish_par( nodelist,hsize )
     n,last = add_glue(n,"tail",{ subtype = 15, width = 0, stretch = 2^16, stretch_order = 2})
 end
 
-function fix_justification( nodelist,textformat,parent)
+function fix_justification( nodelist,alignment,parent)
     local head = nodelist
     while head do
         if head.id == 0 then -- hlist
+
             -- we are on a line now. We assume that the spacing needs correction.
             -- The goal depends on the current line (parshape!)
             local goal,_,_ = node.dimensions(head.glue_set, head.glue_sign, head.glue_order, head.head)
@@ -1664,37 +1671,22 @@ function fix_justification( nodelist,textformat,parent)
             -- because this list is copied in paragraph:format()
             local spec_new
 
-            for n in node.traverse_id(glue_node,head.head) do
-                -- calculate the font before this id.
-                if n.prev and n.prev.id == glyph_node then -- glyph
-                    font_before_glue = n.prev.font
-                elseif n.prev and n.prev.id == disc_node then -- disc
-                    local font_node = n.prev
-                    while font_node.id ~= glyph_node do
-                        font_node = font_node.prev
+            for n in node.traverse(head.head) do
+                if n.id == glyph_node then
+                    font_before_glue = n.font
+                elseif n.id == glue_node then
+                    if n.subtype==0 and font_before_glue and n.spec.width > 0 and head.glue_sign == 1 then
+                        local fonttable = font.fonts[font_before_glue]
+                        if not fonttable then fonttable = font.fonts[1] err("Some font not found") end
+                        spec_new = node.new("glue_spec")
+                        spec_new.width = fonttable.parameters.space
+                        spec_new.shrink_order = head.glue_order
+                        n.spec = spec_new
                     end
-                    if font_node then
-                        font_before_glue = font_node.font
-                    else
-                        font_before_glue = nil
-                    end
-                else
-                    font_before_glue = nil
-                end
-
-                -- n.spec.width > 0 because we insert a glue after a hyphen in
-                -- compound words such as "mailing-[glue]list" and that glue's width is 0pt
-                if n.subtype==0 and font_before_glue and n.spec.width > 0 and head.glue_sign == 1 then
-                    local fonttable = font.fonts[font_before_glue]
-                    if not fonttable then fonttable = font.fonts[1] err("Some font not found") end
-                    spec_new = node.new("glue_spec")
-                    spec_new.width = fonttable.parameters.space
-                    spec_new.shrink_order = head.glue_order
-                    n.spec = spec_new
                 end
             end
 
-            if textformat == "rightaligned" then
+            if alignment == "rightaligned" then
 
                 local list_start = head.head
                 local rightskip_node = node.tail(head.head)
@@ -1718,7 +1710,7 @@ function fix_justification( nodelist,textformat,parent)
                 head.head = node.insert_before(head.head,head.head,leftskip_node)
             end
 
-            if textformat == "centered" then
+            if alignment == "centered" then
                 local list_start = head.head
                 local rightskip_node = node.tail(head.head)
                 local parfillskip
@@ -1741,7 +1733,7 @@ function fix_justification( nodelist,textformat,parent)
                 head.head = node.insert_before(head.head,head.head,leftskip_node)
             end
         elseif head.id == 1 then -- vlist
-            fix_justification(head.head,textformat,head)
+            fix_justification(head.head,alignment,head)
         end
         head = head.next
     end
