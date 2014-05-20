@@ -709,10 +709,11 @@ end
 
 --- Hyphenation
 --- -----------
---- The contents of this element must be a string such as `hy-phen-ation`. This command is currently fixed to the german language,
+--- The contents of this element must be a string such as `hy-phen-ation`.
 -- FIXME: allow language attribute.
 function commands.hyphenation( layoutxml,dataxml )
-    lang.hyphenation(publisher.languages.de,layoutxml[1])
+    local l = publisher.get_language(publisher.defaultlanguage)
+    lang.hyphenation(l.l,layoutxml[1])
 end
 
 --- Include

@@ -2172,16 +2172,19 @@ language_filename = {
 --- `languages` table. Key is the filename part (such as `de-1996`) and the value is the internal
 --- language id.
 languages = {}
+languages_id_lang = {}
 
-
---- The language name is something like `German` or a locale.
-function get_languagecode( locale_or_name )
-    local locale = locale_or_name
-
-    if language_mapping[locale_or_name] then
-        locale = language_mapping[locale_or_name]
+--- Return a lang object
+function get_language(id_or_locale_or_name)
+    local num = tonumber(id_or_locale_or_name)
+    if num then
+        return languages_id_lang[num]
     end
+    local locale = id_or_locale_or_name
 
+    if language_mapping[id_or_locale_or_name] then
+        locale = language_mapping[id_or_locale_or_name]
+    end
     if languages[locale] then
         return languages[locale]
     end
@@ -2211,8 +2214,16 @@ function get_languagecode( locale_or_name )
     l:patterns(pattern)
     local id = l:id()
     log("Language id: %d",id)
-    languages[locale] = id
-    return id
+    local ret = { id = id, l = l }
+    languages_id_lang[id] = ret
+    languages[locale] = ret
+    return ret
+end
+
+--- The language name is something like `German` or a locale.
+function get_languagecode( locale_or_name )
+    local tmp = get_language(locale_or_name)
+    return tmp.id
 end
 
 function set_mainlanguage( mainlanguage )
