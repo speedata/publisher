@@ -586,6 +586,46 @@ function pack_cell(self, blockobject, width, horizontal_alignment)
     -- so the row can be created and vpack does not fall over a nil
     cell = cell or node.new("hlist")
 
+    local n = cell
+    while n do
+        if n.id == publisher.hlist_node then
+            local n_prev = n.prev
+            local n_next = n.next
+            local tmp = n
+            n.next = nil
+            local glue_left, glue_right
+
+            if horizontal_alignment == "center" or horizontal_alignment == "justify" then
+                glue_left = node.copy(publisher.glue_stretch2)
+                glue_right = node.copy(publisher.glue_stretch2)
+            elseif horizontal_alignment=="left"    then
+                glue_left = nil
+                glue_right = node.copy(publisher.glue_stretch2)
+            elseif horizontal_alignment=="right"   then
+                glue_left = node.copy(publisher.glue_stretch2)
+                glue_right = nil
+            end
+
+            if glue_left then
+                tmp = node.insert_before(tmp,n,glue_left)
+            end
+            if glue_right then
+                tmp = node.insert_after(tmp,n,glue_right)
+            end
+            tmp = node.hpack(tmp,width,"exactly")
+
+            if n_prev then
+                n_prev.next = tmp
+            end
+            if n_next then
+                n_next.prev = tmp
+            end
+            tmp.prev = n_prev
+            tmp.next = n_next
+            n = tmp
+        end
+        n = n.next
+    end
     local ret
     ret = node.vpack(cell)
     return ret
@@ -873,17 +913,9 @@ function typeset_row(self, tr_contents, current_row )
         --- ![Table cell vertical](img/tablecell1.svg)
         ---
         --- Now we need to add the left and the right glue
-
         g = node.new("glue")
         g.spec = node.new("glue_spec")
         g.spec.width = padding_left
-
-
-        local align = td_contents.align or tr_contents.align or self.align[current_column]
-        if align ~= "left" then
-            g.spec.stretch = 2^16
-            g.spec.stretch_order = 2
-        end
 
         cell_start = g
         local ht_border = 0
@@ -907,12 +939,6 @@ function typeset_row(self, tr_contents, current_row )
         g = node.new("glue")
         g.spec = node.new("glue_spec")
         g.spec.width = padding_right
-
-        local align = td_contents.align or tr_contents.align or self.align[current_column]
-        if align ~= "right" then
-            g.spec.stretch = 2^16
-            g.spec.stretch_order = 2
-        end
 
         current.next = g
         current = g

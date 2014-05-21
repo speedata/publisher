@@ -15,6 +15,7 @@ function w( ... )
     texio.write_nl("-----> " .. fmt)
     errorlog:write("-----> " .. fmt .. "\n")
   end
+  io.stdout:flush()
 end
 
 -- xpath.lua

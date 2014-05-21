@@ -221,6 +221,14 @@ end
 -- A very large length
 maxdimen = 1073741823
 
+-- It's convenient to just copy the stretching glue instead of writing
+-- the stretch etc. over and over again.
+glue_stretch2 = node.new("glue")
+glue_stretch2.spec = node.new("glue_spec")
+glue_stretch2.spec.stretch = 2^16
+glue_stretch2.spec.stretch_order = 2
+
+
 --- The dispatch table maps every element in the layout xml to a command in the `commands.lua` file.
 local dispatch_table = {
     A                       = commands.a,
