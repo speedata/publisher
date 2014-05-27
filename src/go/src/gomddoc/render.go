@@ -2,6 +2,7 @@ package gomddoc
 
 import (
 	"bytes"
+	"encoding/xml"
 	"errors"
 	"fmt"
 	"github.com/speedata/blackfriday"
@@ -21,13 +22,34 @@ var (
 	ignoredFiles     map[string]bool
 )
 
+type clText struct {
+	Text string `xml:",innerxml"`
+}
+
+type clEntry struct {
+	Version string `xml:"version,attr"`
+	Date    string `xml:"date,attr"`
+	En      clText `xml:"en"`
+	De      clText `xml:"de"`
+}
+
+type clChapter struct {
+	Version string    `xml:"version,attr"`
+	Entries []clEntry `xml:"entry"`
+}
+
+type changelog struct {
+	Chapter []clChapter `xml:"chapter"`
+}
+
 type MDDoc struct {
-	Version  string
-	root     string
-	basedir  string
-	assets   string
-	dest     string
-	renderer blackfriday.Renderer
+	Version   string
+	root      string
+	basedir   string
+	assets    string
+	dest      string
+	changelog *changelog
+	renderer  blackfriday.Renderer
 }
 
 func init() {
@@ -40,10 +62,23 @@ func init() {
 	}
 }
 
+func parseChangelog(filename string) *changelog {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	cl := &changelog{}
+	err = xml.Unmarshal(data, cl)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return cl
+}
+
 // rootdir is the directory with the documents (subdir doc/) and the css/js etc (assets/).
 // destdir is where the documentation should be placed in,
 // basedir is the the installation with the template directory
-func NewMDDoc(rootdir, destdir, basedir string) (*MDDoc, error) {
+func NewMDDoc(rootdir, destdir, basedir, changelogpath string) (*MDDoc, error) {
 	var directoriesNotSet []string
 
 	if basedir == "" {
@@ -63,6 +98,7 @@ func NewMDDoc(rootdir, destdir, basedir string) (*MDDoc, error) {
 	a.root = rootdir
 	a.dest = destdir
 	a.basedir = basedir
+	a.changelog = parseChangelog(changelogpath)
 	a.assets = filepath.Join(basedir, "assets")
 	a.renderer = blackfriday.HtmlRenderer(0, "", "")
 	return &a, nil
@@ -135,6 +171,7 @@ func (md *MDDoc) copyFile(path string, info os.FileInfo) error {
 }
 
 type mdTemplateData struct {
+	Changelog      *changelog
 	Sourcefilename string
 	KeyValue       map[string]string
 	IsEn           bool
@@ -191,7 +228,6 @@ func (md *MDDoc) filelist(context mdTemplateData) []mdFilelist {
 }
 
 func (md *MDDoc) convertToHTML(filename string) {
-
 	f, err := ioutil.ReadFile(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -219,6 +255,7 @@ func (md *MDDoc) convertToHTML(filename string) {
 	x.ParseGlob(filepath.Join(md.basedir, "templatesmd", "*.md"))
 
 	dataMd := mdTemplateData{
+		Changelog:      md.changelog,
 		Sourcefilename: filename,
 		KeyValue:       kv,
 		IsEn:           isEn(filename),

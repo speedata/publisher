@@ -10,3 +10,9 @@ File | Description
 <a href="{{ parentdir .}}">{{if .IsEn}}Parent directory{{else}}Übergeordnetes Verzeichnis{{end}}</a>
 
 {{end}}
+
+{{define "changelog"}}
+{{ $isen := .IsEn }}{{ range .Changelog.Chapter }}<h2>Version {{ .Version }}</h2>
+<ul>{{range .Entries }}<li>{{if $isen}}{{.En.Text}}{{else}}{{.De.Text}}{{end}} ({{.Version}})</li>{{end}}
+</ul>{{end}}
+{{ end }}

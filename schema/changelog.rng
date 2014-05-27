@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+  xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+  ns="urn:speedata.de:2014/changelog">
+
+  <define name="html">
+    <mixed>
+      <zeroOrMore>
+        <element name="a">
+          <attribute name="href" />
+          <text />
+        </element>
+      </zeroOrMore>
+    </mixed>
+  </define>
+
+  <start>
+    <element name="changelog">
+      <oneOrMore>
+        <element name="chapter">
+          <attribute name="version" />
+          <oneOrMore>
+            <element name="entry">
+              <attribute name="version" />
+              <attribute name="date"/>
+              <element name="en">
+                <ref name="html" />
+              </element>
+              <element name="de">
+                <ref name="html" />
+              </element>
+            </element>
+          </oneOrMore>
+        </element>
+      </oneOrMore>
+    </element>
+  </start>
+</grammar>
