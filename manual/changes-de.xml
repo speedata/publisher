@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
+  <title>speedata Publisher changelog (de)</title>
+  <id>http://www.speedata.de</id>
+  <updated>2014-05-27T14:42:18+02:00</updated>
+  <subtitle>Neue Versionen des Publishers zum Download und Liste der Änderungen</subtitle>
+  <link href="http://www.speedata.de"></link>
+  <author>
+    <name>speedata</name>
+    <email>info@speedata.de</email>
+  </author>
+  <entry>
+    <title>Version 2.1.3</title>
+    <updated>2014-05-20T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-05-20:</id>
+    <content type="html">Trennung im zweiten Wort in zusammengesetzten Wörtern erlauben, Umbruch möglich nach &#34;/&#34; </content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.1</title>
+    <updated>2014-05-19T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-05-19:</id>
+    <content type="html">Neue Implementierung des Textumbruchs in Spalten. Vollständig abwärtskompatibel.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.0</title>
+    <updated>2014-05-15T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-05-15:</id>
+    <content type="html">Neues Verhalten von Elementen in Tabellenzellen (Td). Nun wird, soweit sinnvoll, die Logik von HTML angewandt (siehe &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements&#34;&gt;HTML Blockelemente&lt;/a&gt;).</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+</feed>
