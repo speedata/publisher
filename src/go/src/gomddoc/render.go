@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"fmt"
+	"github.com/gorilla/feeds"
 	"github.com/speedata/blackfriday"
 	"io/ioutil"
 	"log"
@@ -14,6 +15,7 @@ import (
 	"regexp"
 	"strings"
 	"text/template"
+	"time"
 )
 
 var (
@@ -104,6 +106,11 @@ func NewMDDoc(rootdir, destdir, basedir, changelogpath string) (*MDDoc, error) {
 	return &a, nil
 }
 
+func (md *MDDoc) getRootDir(context htmlTemplateData) string {
+	path_elements := strings.Split(strings.TrimPrefix(context.Sourcefilename, md.dest+"/"), "/")
+	return strings.Repeat("../", len(path_elements)-1)
+}
+
 func (md *MDDoc) getAssetsDir(context htmlTemplateData) string {
 	path_elements := strings.Split(strings.TrimPrefix(context.Sourcefilename, md.dest+"/"), "/")
 	return strings.Repeat("../", len(path_elements)-1) + "assets"
@@ -113,6 +120,44 @@ func (md *MDDoc) image(context mdTemplateData, imagename string) string {
 	return fmt.Sprintf(`<a href="../img/%s"><img src="../img/%s"></a>`, imagename, imagename)
 }
 
+func (md *MDDoc) writeFeed(lang string) {
+	feed := &feeds.Feed{
+		Title:   fmt.Sprintf("speedata Publisher changelog (%s)", lang),
+		Link:    &feeds.Link{Href: "http://www.speedata.de"},
+		Author:  &feeds.Author{"speedata", "info@speedata.de"},
+		Created: time.Now(),
+	}
+	if lang == "en" {
+		feed.Description = "New revisions for download and changelog."
+	} else {
+		feed.Description = "Neue Versionen des Publishers zum Download und Liste der Änderungen"
+	}
+	feed.Items = make([]*feeds.Item, 0)
+	for _, chap := range md.changelog.Chapter {
+		for _, entry := range chap.Entries {
+			i := &feeds.Item{}
+			i.Title = "Version " + entry.Version
+			t, err := time.Parse("2006-01-02", entry.Date)
+			if err == nil {
+				i.Created = t
+			}
+			if lang == "en" {
+				i.Description = entry.En.Text
+			} else {
+				i.Description = entry.De.Text
+			}
+			i.Link = &feeds.Link{Href: "http://www.speedata.de"}
+
+			feed.Items = append(feed.Items, i)
+		}
+	}
+	atom, err := feed.ToAtom()
+	if err != nil {
+		log.Fatal(err)
+	}
+	ioutil.WriteFile(filepath.Join(md.dest, fmt.Sprintf("changes-%s.xml", lang)), []byte(atom), 0644)
+}
+
 // Generate the html documentation and copy all necessary assets to the build directory
 func (md *MDDoc) DoThings() error {
 	var err error
@@ -120,6 +165,7 @@ func (md *MDDoc) DoThings() error {
 		"rootDoc": md.rootDoc,
 		"footer":  md.footerHTML,
 		"assets":  md.getAssetsDir,
+		"root":    md.getRootDir,
 	}
 
 	err = os.MkdirAll(md.dest, 0755)
@@ -137,6 +183,9 @@ func (md *MDDoc) DoThings() error {
 	if err != nil {
 		return err
 	}
+
+	md.writeFeed("en")
+	md.writeFeed("de")
 	return nil
 }
 
@@ -182,6 +231,7 @@ type htmlTemplateData struct {
 	Contents       string
 	Layout         string
 	Sourcefilename string
+	IsEn           bool
 }
 
 type mdFilelist struct {
@@ -283,7 +333,7 @@ func (md *MDDoc) convertToHTML(filename string) {
 		log.Fatal(err)
 	}
 
-	data := htmlTemplateData{kv["title"], string(out), kv["layout"], outfilename}
+	data := htmlTemplateData{kv["title"], string(out), kv["layout"], outfilename, isEn(filename)}
 	err = templates.ExecuteTemplate(outfile, "main.html", data)
 	if err != nil {
 		log.Fatal(err)
@@ -333,10 +383,16 @@ func (md *MDDoc) otherLanguage(path string) string {
 }
 
 func (md *MDDoc) footerHTML(path string) string {
+	var clpart string
+	if strings.HasSuffix(path, "description-en/changelog.html") {
+		clpart = ` | <a href="../changes-en.xml">Changelog (atom feed)</a>`
+	} else if strings.HasSuffix(path, "description-de/changelog.html") {
+		clpart = ` | <a href="../changes-de.xml">Liste der Änderungen (atom feed)</a>`
+	}
 	if isEn(path) {
-		return fmt.Sprintf(`Version: %s | <a href="%s">Start page</a> | <a href="%scommands-en/layout.html">Element reference</a> | Other language:  <a href="%s">German</a>`, md.Version, md.rootDoc(path), md.pathToRoot(path), md.otherLanguage(path))
+		return fmt.Sprintf(`Version: %s | <a href="%s">Start page</a> | <a href="%scommands-en/layout.html">Element reference</a> | Other language:  <a href="%s">German</a>%s`, md.Version, md.rootDoc(path), md.pathToRoot(path), md.otherLanguage(path), clpart)
 	} else {
-		return fmt.Sprintf(`Version: %s | <a href="%s">Startseite</a> | <a href="%scommands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="%s">Englisch</a>`, md.Version, md.rootDoc(path), md.pathToRoot(path), md.otherLanguage(path))
+		return fmt.Sprintf(`Version: %s | <a href="%s">Startseite</a> | <a href="%scommands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="%s">Englisch</a>%s`, md.Version, md.rootDoc(path), md.pathToRoot(path), md.otherLanguage(path), clpart)
 	}
 }
 

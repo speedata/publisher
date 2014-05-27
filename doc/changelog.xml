@@ -4,7 +4,7 @@
       <en>Allow hyphenation in the second word in compound words such as longword-anotherlongword. Also enable line breaks after "/"</en>
       <de>Trennung im zweiten Wort in zusammengesetzten Wörtern erlauben, Umbruch möglich nach "/" </de>
     </entry>
-    <entry version="2.1.1" date="">
+    <entry version="2.1.1" date="2014-05-19">
       <en>New implemtation of paragraph splitting, should be completely backward compatible.</en>
       <de>Neue Implementierung des Textumbruchs in Spalten. Vollständig abwärtskompatibel.</de>
     </entry>

@@ -3,6 +3,7 @@
 <head>
     <title>{{.Title}}</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    {{ if .IsEn}}<link rel="alternate" type="application/atom+xml"  title="changelog speedata Publisher (en)"  href="{{ root .}}changes-en.xml" />{{else}}<link rel="alternate" type="application/atom+xml"  title="Liste der Änderungen speedata Publisher (de)"  href="{{ root .}}changes-de.xml" />{{end}}
     <link rel="stylesheet" href="{{assets .}}/css/normal.css" type="text/css" />
     <link rel="stylesheet" href="{{assets .}}/css/pygments.css" type="text/css" />
     <link rel="stylesheet" href="{{assets .}}/css/colorbox.css" type="text/css" />
