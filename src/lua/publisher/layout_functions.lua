@@ -11,7 +11,7 @@ file_start("layout_functions.lua")
 local luxor = do_luafile("luxor.lua")
 local sha1  = require('sha1')
 
-local function aktuelle_seite(  )
+local function current_page(  )
   publisher.setup_page()
   return publisher.current_pagenumber
 end
@@ -104,12 +104,12 @@ local function merge_pagenumbers(dataxml,arg )
   -- return ret
 end
 
-local function anzahl_zeilen(dataxml,arg)
+local function number_of_rows(dataxml,arg)
   publisher.setup_page()
   return publisher.current_grid:number_of_rows(arg and arg[1])
 end
 
-local function anzahl_seiten(dataxml,arg )
+local function number_of_pages(dataxml,arg )
   local filename = arg[1]
   local img = publisher.imageinfo(filename)
   return img.img.pages
@@ -252,17 +252,17 @@ local function count_saved_paged(dataxml,arg)
 end
 
 local register = publisher.xpath.register_function
-register("urn:speedata:2009/publisher/functions/en","number-of-rows",anzahl_zeilen)
-register("urn:speedata:2009/publisher/functions/de","anzahl-zeilen",anzahl_zeilen)
+register("urn:speedata:2009/publisher/functions/en","number-of-rows",number_of_rows)
+register("urn:speedata:2009/publisher/functions/de","anzahl-zeilen",number_of_rows)
 
 register("urn:speedata:2009/publisher/functions/en","number-of-columns",number_of_columns)
 register("urn:speedata:2009/publisher/functions/de","anzahl-spalten",number_of_columns)
 
-register("urn:speedata:2009/publisher/functions/en","number-of-pages",anzahl_seiten)
-register("urn:speedata:2009/publisher/functions/de","anzahl-seiten",anzahl_seiten)
+register("urn:speedata:2009/publisher/functions/en","number-of-pages",number_of_pages)
+register("urn:speedata:2009/publisher/functions/de","anzahl-seiten",number_of_pages)
 
-register("urn:speedata:2009/publisher/functions/en","current-page",aktuelle_seite)
-register("urn:speedata:2009/publisher/functions/de","aktuelle-seite",aktuelle_seite)
+register("urn:speedata:2009/publisher/functions/en","current-page",current_page)
+register("urn:speedata:2009/publisher/functions/de","aktuelle-seite",current_page)
 
 register("urn:speedata:2009/publisher/functions/en","current-column",current_column)
 register("urn:speedata:2009/publisher/functions/de","aktuelle-spalte",current_column)
