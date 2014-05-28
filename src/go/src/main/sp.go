@@ -11,6 +11,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"math"
 	"optionparser"
 	"os"
 	"os/exec"
@@ -21,6 +22,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync"
 	"syscall"
 	"time"
 )
@@ -50,6 +52,8 @@ var (
 	starttime             time.Time
 	cfg                   *configurator.ConfigData
 	running_processes     []*os.Process
+	mtx                   sync.Mutex
+	wg                    sync.WaitGroup
 )
 
 // The LuaTeX process writes out a file called "publisher.status"
@@ -502,7 +506,7 @@ func runPublisher() (exitstatus int) {
 	return
 }
 
-func compareTwoPages(sourcefile, referencefile, dummyfile string) bool {
+func compareTwoPages(sourcefile, referencefile, dummyfile string) float64 {
 	// More complicated than the trivial case because I need the different exit statuses.
 	// See http://stackoverflow.com/a/10385867
 
@@ -536,12 +540,7 @@ func compareTwoPages(sourcefile, referencefile, dummyfile string) bool {
 					if err != nil {
 						log.Fatal(err)
 					}
-					if delta > 0.6 {
-						log.Println("Delta is", delta)
-						return false
-					} else {
-						fmt.Println("Small difference found, ignoring.")
-					}
+					return delta
 				} else {
 					log.Fatal(err)
 				}
@@ -550,7 +549,7 @@ func compareTwoPages(sourcefile, referencefile, dummyfile string) bool {
 			log.Fatalf("cmd.Wait: %v", err)
 		}
 	}
-	return true
+	return 0.0
 }
 
 func newer(src, dest string) bool {
@@ -579,8 +578,9 @@ func convertReference(soureFiles []string) error {
 	return nil
 }
 
-func runComparison(info os.FileInfo) {
-	log.Println("Run comparison in directory", info.Name())
+func runComparison(path string, status chan compareStatus) {
+	cs := compareStatus{}
+	cs.path = path
 
 	sourceFiles, err := filepath.Glob("source*.png")
 	if err != nil {
@@ -597,11 +597,21 @@ func runComparison(info os.FileInfo) {
 		}
 	}
 
-	err = exec.Command("sp").Run()
+	cmd := exec.Command("sp", "--wd", path)
+	cmd.Dir = path
+	err = cmd.Run()
 	if err != nil {
 		log.Fatal("Error running command 'sp': ", err)
 	}
-	err = exec.Command("convert", "publisher.pdf", "+adjoin", "source.png").Run()
+	cmd = exec.Command("convert", "publisher.pdf", "+adjoin", "source.png")
+	cmd.Dir = path
+	cmd.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	mtx.Lock()
+	err = os.Chdir(path)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -611,7 +621,6 @@ func runComparison(info os.FileInfo) {
 		log.Fatal("No source files found. ", err)
 	}
 	number_of_sourcefiles := len(sourceFiles)
-	badPages := make([]int, 0, number_of_sourcefiles)
 
 	err = convertReference(sourceFiles)
 	if err != nil {
@@ -619,44 +628,64 @@ func runComparison(info os.FileInfo) {
 	}
 
 	if number_of_sourcefiles == 1 {
-		if !compareTwoPages("source.png", "reference.png", "pagediff.png") {
-			badPages = append(badPages, 1)
+		if delta := compareTwoPages("source.png", "reference.png", "pagediff.png"); delta > 0 {
+			cs.delta = delta
+			if delta > 0.6 {
+				cs.badpages = append(cs.badpages, 1)
+			}
 		}
 	} else {
 		for i := 0; i < number_of_sourcefiles; i++ {
 			sourceFile := fmt.Sprintf("source-%d.png", i)
 			referenceFile := fmt.Sprintf("reference-%d.png", i)
 			dummyFile := fmt.Sprintf("pagediff-%d.png", i)
-			if !compareTwoPages(sourceFile, referenceFile, dummyFile) {
-				badPages = append(badPages, i)
+			if delta := compareTwoPages(sourceFile, referenceFile, dummyFile); delta > 0 {
+				cs.delta = math.Max(cs.delta, delta)
+				if delta > 0.6 {
+					cs.badpages = append(cs.badpages, i)
+				}
 			}
 		}
 	}
 
-	if len(badPages) > 0 {
-		log.Println("Comparison failed. Bad pages are:", badPages)
-		cwd, _ := os.Getwd()
-		log.Println(cwd)
-	} else {
-		log.Println("OK")
+	mtx.Unlock()
+	status <- cs
+	wg.Done()
+}
+
+type compareStatus struct {
+	path     string
+	badpages []int
+	diff     bool
+	delta    float64
+}
+
+func getCompareStatus(cs chan compareStatus) {
+	for {
+		select {
+		case st := <-cs:
+			if len(st.badpages) > 0 {
+				fmt.Println("---------------------------")
+				fmt.Println("Finished with comparison in")
+				fmt.Println(st.path)
+				fmt.Println("Comparison failed. Bad pages are:", st.badpages)
+				fmt.Println("Max delta is", st.delta)
+			}
+		}
 	}
 }
 
-func compare(path string, info os.FileInfo, err error) error {
-	if info.IsDir() {
-		if err := os.Chdir(path); err != nil {
-			log.Println(err)
-			return err
+func mkCompare(status chan compareStatus) filepath.WalkFunc {
+	return func(path string, info os.FileInfo, err error) error {
+		if !info.IsDir() {
+			return nil
 		}
-		if _, err := os.Stat("publisher.cfg"); err == nil {
-			// publisher.cfg exists, run comparison here
-			runComparison(info)
-		} else if _, err := os.Stat("layout.xml"); err == nil {
-			runComparison(info)
+		if _, err := os.Stat(filepath.Join(path, "reference.pdf")); err == nil {
+			wg.Add(1)
+			go runComparison(path, status)
 		}
 		return nil
 	}
-	return nil
 }
 
 func showCredits() {
@@ -678,8 +707,7 @@ Blackfriday (https://github.com/russross/blackfriday)
 Contact:
    gundlach@speedata.de
 or see the web page
-   https://github.com/speedata/publisher/wiki/contact
-`)
+   https://github.com/speedata/publisher/wiki/contact`)
 
 	os.Exit(0)
 }
@@ -850,7 +878,11 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
+			compareStatus := make(chan compareStatus, 0)
+			compare := mkCompare(compareStatus)
 			filepath.Walk(absDir, compare)
+			go getCompareStatus(compareStatus)
+			wg.Wait()
 
 		} else {
 			log.Println("Please give one directory")

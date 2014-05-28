@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
+    <entry version="2.1.6" date="2014-05-28">
+      <en>Parallelise sp compare for much better performance.</en>
+      <de>sp compare parallelisiert für höhrere Geschwindigkeit.</de>
+    </entry>
     <entry version="2.1.5" date="2014-05-28">
       <en>Bugfix table cells with align=center and a fixed width.</en>
       <de>Fehlerbehebung bei Tabellenzellen mit align="center" und fixer Breite.</de>
