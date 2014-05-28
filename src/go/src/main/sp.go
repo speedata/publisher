@@ -52,7 +52,6 @@ var (
 	starttime             time.Time
 	cfg                   *configurator.ConfigData
 	running_processes     []*os.Process
-	mtx                   sync.Mutex
 	wg                    sync.WaitGroup
 )
 
@@ -506,11 +505,11 @@ func runPublisher() (exitstatus int) {
 	return
 }
 
-func compareTwoPages(sourcefile, referencefile, dummyfile string) float64 {
+func compareTwoPages(sourcefile, referencefile, dummyfile, path string) float64 {
 	// More complicated than the trivial case because I need the different exit statuses.
 	// See http://stackoverflow.com/a/10385867
-
 	cmd := exec.Command("compare", "-metric", "mae", sourcefile, referencefile, dummyfile)
+	cmd.Dir = path
 	// err == 1 looks like an indicator that the comparison is OK but some diffs in the images
 	// err == 2 seems to be a fatal error
 	stderr, err := cmd.StderrPipe()
@@ -519,7 +518,7 @@ func compareTwoPages(sourcefile, referencefile, dummyfile string) float64 {
 	}
 
 	if err := cmd.Start(); err != nil {
-		log.Fatalf("cmd.Start: %v")
+		log.Fatalf("cmd.Start: %v", err)
 	}
 
 	r := bufio.NewReader(stderr)
@@ -564,25 +563,11 @@ func newer(src, dest string) bool {
 	return dest_fi.ModTime().Before(src_fi.ModTime())
 }
 
-func convertReference(soureFiles []string) error {
-	var dest string
-	if len(soureFiles) == 1 {
-		dest = "reference.png"
-	} else {
-		dest = "reference-1.png"
-	}
-	if newer("reference.pdf", dest) {
-		err := exec.Command("convert", "reference.pdf", "+adjoin", "reference.png").Run()
-		return err
-	}
-	return nil
-}
-
 func runComparison(path string, status chan compareStatus) {
 	cs := compareStatus{}
 	cs.path = path
 
-	sourceFiles, err := filepath.Glob("source*.png")
+	sourceFiles, err := filepath.Glob("source-*.png")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -597,58 +582,48 @@ func runComparison(path string, status chan compareStatus) {
 		}
 	}
 
-	cmd := exec.Command("sp", "--wd", path)
+	cmd := exec.Command("sp")
 	cmd.Dir = path
 	err = cmd.Run()
 	if err != nil {
 		log.Fatal("Error running command 'sp': ", err)
 	}
-	cmd = exec.Command("convert", "publisher.pdf", "+adjoin", "source.png")
+	cmd = exec.Command("convert", "publisher.pdf", "source-%02d.png")
 	cmd.Dir = path
 	cmd.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	mtx.Lock()
-	err = os.Chdir(path)
-	if err != nil {
-		log.Fatal(err)
+	// convert the reference pdf to png for later comparisons
+	// we only do that when the pdf is newer than the png files
+	// (that is: the pdf has been updated)
+	if newer(filepath.Join(path, "reference.pdf"), filepath.Join(path, "reference-00.png")) {
+		cmd := exec.Command("convert", "reference.pdf", "reference-%02d.png")
+		cmd.Dir = path
+		err = cmd.Run()
+		if err != nil {
+			log.Fatal("error converting reference. ", err)
+		}
 	}
 
-	sourceFiles, err = filepath.Glob("source*.png")
+	sourceFiles, err = filepath.Glob(filepath.Join(path, "source-*.png"))
 	if err != nil {
 		log.Fatal("No source files found. ", err)
 	}
-	number_of_sourcefiles := len(sourceFiles)
 
-	err = convertReference(sourceFiles)
-	if err != nil {
-		log.Fatal("error converting reference. ", err)
-	}
-
-	if number_of_sourcefiles == 1 {
-		if delta := compareTwoPages("source.png", "reference.png", "pagediff.png"); delta > 0 {
-			cs.delta = delta
+	for i := 0; i < len(sourceFiles); i++ {
+		sourceFile := fmt.Sprintf("source-%02d.png", i)
+		referenceFile := fmt.Sprintf("reference-%02d.png", i)
+		dummyFile := fmt.Sprintf("pagediff-%02d.png", i)
+		if delta := compareTwoPages(sourceFile, referenceFile, dummyFile, path); delta > 0 {
+			cs.delta = math.Max(cs.delta, delta)
 			if delta > 0.6 {
-				cs.badpages = append(cs.badpages, 1)
-			}
-		}
-	} else {
-		for i := 0; i < number_of_sourcefiles; i++ {
-			sourceFile := fmt.Sprintf("source-%d.png", i)
-			referenceFile := fmt.Sprintf("reference-%d.png", i)
-			dummyFile := fmt.Sprintf("pagediff-%d.png", i)
-			if delta := compareTwoPages(sourceFile, referenceFile, dummyFile); delta > 0 {
-				cs.delta = math.Max(cs.delta, delta)
-				if delta > 0.6 {
-					cs.badpages = append(cs.badpages, i)
-				}
+				cs.badpages = append(cs.badpages, i)
 			}
 		}
 	}
 
-	mtx.Unlock()
 	status <- cs
 	wg.Done()
 }
