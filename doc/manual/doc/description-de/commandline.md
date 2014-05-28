@@ -22,6 +22,7 @@ Aufruf des Publishers über Kommandozeile
                                  for example 'en' or 'en_US'.
         --outputdir=DIR          Copy PDF and protocol to this directory
         --profile                Run publisher with profiling on (internal use)
+        --quiet                  Run publisher in silent mode
         --runs=NUM               Number of publishing runs
         --startpage=NUM          The first page number
         --show-gridallocation    Show the allocated grid cells
@@ -61,6 +62,8 @@ Parameter | Beschreibung
 `--jobname=NAME`| Bestimmt den Ausgabenamen. Voreinstellung ist `publisher.pdf`.
 `--mainlanguage=NAME`| Bestimmt die Hauptsprache des Dokuments für die Silbentrennung. Mögliche Werte sind: `af`, `as`, `bg`, `ca`, `cs`, `cy`, `da`, `de`,`el`, `en`, `en_GB`, `en_US`, `eo`, `es`, `et`, `eu`, `fi`, `fr`,`ga`, `gl`, `gu`, `hi`, `hr`, `hu`, `hy`, `ia`, `id`, `is`, `it`,`ku`, `kn`, `la`, `lo`, `lt`, `ml`, `lv`, `ml`, `mn`, `mr`, `nb`,`nl`, `nn`, `or`, `pa`, `pl`, `pt`, `ro`, `ru`, `sa`, `sk`, `sl`,`sr`, `sv`, `ta`, `te`, `tk`, `tr`, `uk` und `zh`. Siehe [Codeliste der Sprachen](http://www.loc.gov/standards/iso639-2/php/code_list.php).
 `--outputdir=VERZEICHNIS`| Die resultierende PDF-Datei und Protokolldatei wird in das angegebene Verzeichnis kopiert. Das Verzeichnis wird erstellt, falls es noch nicht existiert.
+`--profile`   | Erzeugt Profiling-Informationen für den internen Gebrauch.
+`--quiet`     | Unterdrückt alle Ausgaben des Publishers.
 `--runs = NUM`| Überschreibt die Anzahl der Durchläufe des Publishers.
 `--startpage = NUM`| Die Seitennummer der ersten Seite.
 `--show-gridallocation`| Markiert die belegten Rasterzellen mit einer gelblichen Farbe. Doppelt belegte Zellen werden mit rot gekennzeichnet.

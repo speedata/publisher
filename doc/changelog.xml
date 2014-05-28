@@ -1,6 +1,10 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
     <entry version="2.1.6" date="2014-05-28">
+      <en>sp --quiet for console-less output</en>
+      <de>sp --quiet unterdrückt die Ausgabe</de>
+    </entry>
+    <entry version="2.1.6" date="2014-05-28">
       <en>Parallelise sp compare for much better performance.</en>
       <de>sp compare parallelisiert für höhrere Geschwindigkeit.</de>
     </entry>

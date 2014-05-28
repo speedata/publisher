@@ -77,6 +77,7 @@ func init() {
 		"jobname":    "publisher",
 		"data":       "data.xml",
 		"runs":       "1",
+		"quiet":      "false",
 		"fontpath":   "",
 		"imagecache": filepath.Join(os.TempDir(), "sp", "images"),
 	}
@@ -299,8 +300,14 @@ func run(cmdline string) (success bool) {
 		log.Fatal(err)
 	}
 	running_processes = append(running_processes, cmd.Process)
-	go io.Copy(os.Stdout, stdout)
-	go io.Copy(os.Stderr, stderr)
+
+	if getOption("quiet") == "true" {
+		go io.Copy(ioutil.Discard, stdout)
+		go io.Copy(ioutil.Discard, stderr)
+	} else {
+		go io.Copy(os.Stdout, stdout)
+		go io.Copy(os.Stderr, stderr)
+	}
 	// We can read from stdin if data name = "-". But we should only
 	// wait on stdin if we really want to.
 	if dataname := getOption("data"); dataname == "-" {
@@ -543,6 +550,7 @@ func main() {
 	op.On("--mainlanguage NAME", "The document's main language in locale format, for example 'en' or 'en_US'.", &mainlanguage)
 	op.On("--outputdir=DIR", "Copy PDF and protocol to this directory", options)
 	op.On("--profile", "Run publisher with profiling on (internal use)", options)
+	op.On("--quiet", "Run publisher in silent mode", options)
 	op.On("--runs NUM", "Number of publishing runs ", options)
 	op.On("--startpage NUM", "The first page number", layoutoptions)
 	op.On("--show-gridallocation", "Show the allocated grid cells", layoutoptions)

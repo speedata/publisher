@@ -22,6 +22,7 @@ Running the speedata publisher on the command line
                                  for example 'en' or 'en_US'.
         --outputdir=DIR          Copy PDF and protocol to this directory
         --profile                Run publisher with profiling on (internal use)
+        --quiet                  Run publisher in silent mode
         --runs=NUM               Number of publishing runs
         --startpage=NUM          The first page number
         --show-gridallocation    Show the allocated grid cells
@@ -61,6 +62,8 @@ Parameter | Description
 `--jobname=NAME` | The name of the output file. Default is `publisher`. The extension(`.pdf`) is added automatically.
 `--mainlanguage=NAME` | Set the main language for the document (hyphenation). Allowed values are: `af`, `as`, `bg`, `ca`, `cs`, `cy`, `da`, `de`, `el`, `en`,`en_GB`, `en_US`, `eo`, `es`, `et`, `eu`, `fi`, `fr`, `ga`, `gl`,`gu`, `hi`, `hr`, `hu`, `hy`, `ia`, `id`, `is`, `it`, `ku`, `kn`,`la`, `lo`, `lt`, `ml`, `lv`, `ml`, `mn`, `mr`, `nb`, `nl`, `nn`,`or`, `pa`, `pl`, `pt`, `ro`, `ru`, `sa`, `sk`, `sl`, `sr`, `sv`,`ta`, `te`, `tk`, `tr`, `uk` und `zh`. See also the [language codelist](http://www.loc.gov/standards/iso639-2/php/code_list.php).
 `--outputdir=DIR` | Name of the directory of the resulting file. The directory will be created if necessary.
+`--profile`     |   Run publisher with profiling on (internal use).
+`--quiet`     |    Run publisher in silent mode.
 `--runs=NUM` | The number of passes. Normally the publisher will process a file only once, but more passes can be necessary if intermediate files are created for generating a table of contents or other document dependent data.
 `--show-gridallocation` | Show the allocated grid cells in yellowish color and double allocated grid cells in red.
 `--startpage=NUM` | The number of the first page.
