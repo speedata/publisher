@@ -14,17 +14,36 @@ File.read("version").each_line do |line|
 	@versions[product]=versionnumber
 end
 
-
+def build_go(srcdir,destbin,goos,goarch,targettype)
+	if goarch
+		ENV['GOARCH'] = goarch
+	end
+	if goos
+		ENV['GOOS'] = goos
+	end
+	ENV['GOPATH'] = "#{srcdir}/go"
+	publisher_version = @versions['publisher_version']
+	# let's always add the sha1 to the minor versions, so we
+	# _,minor,_ = publisher_version.split(/\./)
+	# if minor.to_i() % 2 == 1 then
+		rev = `git rev-parse HEAD`[0,8]
+		publisher_version = publisher_version + "-#{rev}"
+	# end
+	binaryname = goos == "windows" ? "sp.exe" : "sp"
+    # Now compile the go executable
+	cmdline = "go build -ldflags '-X main.dest #{targettype} -X main.version #{publisher_version}' -o #{destbin}/#{binaryname} sp/main"
+	sh cmdline do |ok, res|
+		if ! ok
+	    	puts "Go compilation failed"
+	    	return false
+	    end
+	end
+	return true
+end
 
 desc "Compile and install necessary software"
 task :build do
-	ENV['GOPATH'] = "#{srcdir}/go"
-	publisher_version = @versions['publisher_version']
-	Dir.chdir(srcdir.join("go")) do
-		puts "Building (and copying) sp binary..."
-  		sh "go build -ldflags \"-X main.dest git -X main.version #{publisher_version}\" -o  #{installdir}/bin/sp  main"
-  		puts "...done"
-	end
+	build_go(srcdir,"#{installdir}/bin",nil,nil,"local")
 end
 
 desc "Generate documentation"
@@ -78,7 +97,7 @@ task :sourcedoc do
 	cp_r(installdir.join("doc","sourcedoc","img"), builddir.join("sourcedoc"))
 	cp_r(installdir.join("doc","sourcedoc","mj"),  builddir.join("sourcedoc"))
 	ENV['GOPATH'] = "#{srcdir}/go"
-	Dir.chdir(srcdir.join("go","src","main")) do
+	Dir.chdir(srcdir.join("go","src", "sp", "main")) do
 		puts "Building docgo..."
 		sh "go build -o #{installdir}/bin/docgo github.com/pgundlach/docgo"
 		puts "...done"
@@ -141,28 +160,6 @@ task :qa do
 	sh "#{installdir}/bin/sp compare #{installdir}/qa"
 end
 
-def build_go(srcdir,destbin,goos,goarch,targettype)
-	ENV['GOARCH'] = goarch
-	ENV['GOOS'] = goos
-	ENV['GOPATH'] = "#{srcdir}/go"
-	publisher_version = @versions['publisher_version']
-	# let's always add the sha1 to the minor versions, so we
-	# _,minor,_ = publisher_version.split(/\./)
-	# if minor.to_i() % 2 == 1 then
-		rev = `git rev-parse HEAD`[0,8]
-		publisher_version = publisher_version + "-#{rev}"
-	# end
-	binaryname = goos == "windows" ? "sp.exe" : "sp"
-    # Now compile the go executable
-	cmdline = "go build -ldflags '-X main.dest #{targettype} -X main.version #{publisher_version}' -o #{destbin}/#{binaryname} main"
-	sh cmdline do |ok, res|
-		if ! ok
-	    	puts "Go compilation failed"
-	    	return false
-	    end
-	end
-	return true
-end
 
 desc "Make ZIP files - set NODOC=true for stripped zip file"
 task :zip do
