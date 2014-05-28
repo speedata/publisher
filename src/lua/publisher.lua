@@ -1748,7 +1748,9 @@ function fix_justification( nodelist,alignment,parent)
                 local tmp = rightskip_node.prev
                 while tmp and ( tmp.id == glue_node or tmp.id == penalty_node ) do
                     tmp = tmp.prev
-                    head.head = node.remove(head.head,tmp.next)
+                    if tmp then
+                        head.head = node.remove(head.head,tmp.next)
+                    end
                 end
 
                 local wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)

@@ -1,6 +1,10 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
-    <entry version="2.1.3" date="2014-05-20"> 
+    <entry version="2.1.5" date="2014-05-28">
+      <en>Bugfix table cells with align=center and a fixed width.</en>
+      <de>Fehlerbehebung bei Tabellenzellen mit align="center" und fixer Breite.</de>
+    </entry>
+    <entry version="2.1.3" date="2014-05-20">
       <en>Allow hyphenation in the second word in compound words such as longword-anotherlongword. Also enable line breaks after "/"</en>
       <de>Trennung im zweiten Wort in zusammengesetzten Wörtern erlauben, Umbruch möglich nach "/" </de>
     </entry>
@@ -11,6 +15,6 @@
     <entry version="2.1.0" date="2014-05-15">
       <en>New behaviour of contents in table cells (Td). The rules of HTML (see <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements">HTML block elements</a>) are followed as far as possible.</en>
       <de>Neues Verhalten von Elementen in Tabellenzellen (Td). Nun wird, soweit sinnvoll, die Logik von HTML angewandt (siehe <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements">HTML Blockelemente</a>).</de>
-    </entry>  
+    </entry>
   </chapter>
 </changelog>

@@ -515,58 +515,62 @@ function pack_cell(self, blockobject, width, horizontal_alignment)
     for _,blockobject in ipairs(blockobject) do
         local cellrow = nil
         local current_width = 0
-        for i=1,#blockobject do
-            local default_textformat_name
-            local inlineobject = blockobject[i]
-            if type(inlineobject) == "table" then
-                if width then
-                    -- ok, a paragraph with a certain width, that we can typeset
-                    if     horizontal_alignment=="center"  then  default_textformat_name = "__centered"
-                    elseif horizontal_alignment=="left"    then  default_textformat_name = "__leftaligned"
-                    elseif horizontal_alignment=="right"   then  default_textformat_name = "__rightaligned"
-                    elseif horizontal_alignment=="justify" then  default_textformat_name = "__justified"
-                    end
-                    if not default_textformat_name then
-                        if inlineobject.textformat then
-                            default_textformat_name = inlineobject.textformat
-                        elseif self.textformat then
-                            default_textformat_name = self.textformat
-                        else
-                            default_textformat_name = "__leftaligned"
+        if node.is_node(blockobject) then
+            cellrow = node.insert_after(cellrow,node.tail(cellrow),blockobject)
+        else
+            for i=1,#blockobject do
+                local default_textformat_name
+                local inlineobject = blockobject[i]
+                if type(inlineobject) == "table" then
+                    if width then
+                        -- ok, a paragraph with a certain width, that we can typeset
+                        if     horizontal_alignment=="center"  then  default_textformat_name = "__centered"
+                        elseif horizontal_alignment=="left"    then  default_textformat_name = "__leftaligned"
+                        elseif horizontal_alignment=="right"   then  default_textformat_name = "__rightaligned"
+                        elseif horizontal_alignment=="justify" then  default_textformat_name = "__justified"
                         end
-                    end
-                    publisher.set_fontfamily_if_necessary(inlineobject.nodelist,self.fontfamily)
-                    local v = inlineobject:format(width,default_textformat_name)
-                    cell = node.insert_after(cell,node.tail(cell),v)
-                else
-                    w("no width given in paragraph")
-                end
-            elseif node.is_node(inlineobject) then
-                -- an image for example
-                if node.has_field(inlineobject,"width") then
-                    -- insert a line break if the row is too wide
-                    if current_width + inlineobject.width > width then
-                        local tmp
-                        if cellrow then
-                            if cellrow.next then
-                                tmp = node.hpack(cellrow)
+                        if not default_textformat_name then
+                            if inlineobject.textformat then
+                                default_textformat_name = inlineobject.textformat
+                            elseif self.textformat then
+                                default_textformat_name = self.textformat
                             else
-                                tmp = cellrow
+                                default_textformat_name = "__leftaligned"
                             end
                         end
-                        cell = node.insert_after(cell,node.tail(cell),tmp)
-                        cellrow = inlineobject
-                        current_width = inlineobject.width
+                        publisher.set_fontfamily_if_necessary(inlineobject.nodelist,self.fontfamily)
+                        local v = inlineobject:format(width,default_textformat_name)
+                        cell = node.insert_after(cell,node.tail(cell),v)
                     else
-                        current_width = current_width + inlineobject.width
+                        w("no width given in paragraph")
+                    end
+                elseif node.is_node(inlineobject) then
+                    -- an image for example
+                    if node.has_field(inlineobject,"width") then
+                        -- insert a line break if the row is too wide
+                        if current_width + inlineobject.width > width then
+                            local tmp
+                            if cellrow then
+                                if cellrow.next then
+                                    tmp = node.hpack(cellrow)
+                                else
+                                    tmp = cellrow
+                                end
+                            end
+                            cell = node.insert_after(cell,node.tail(cell),tmp)
+                            cellrow = inlineobject
+                            current_width = inlineobject.width
+                        else
+                            current_width = current_width + inlineobject.width
+                            cellrow = node.insert_after(cellrow,node.tail(cellrow),inlineobject)
+                        end
+                    else
                         cellrow = node.insert_after(cellrow,node.tail(cellrow),inlineobject)
                     end
-                else
-                    cellrow = node.insert_after(cellrow,node.tail(cellrow),inlineobject)
-                end
 
-            else
-                w("unknown %s",type(inlineobject))
+                else
+                    w("unknown %s",type(inlineobject))
+                end
             end
         end
 
@@ -622,6 +626,9 @@ function pack_cell(self, blockobject, width, horizontal_alignment)
             end
             tmp.prev = n_prev
             tmp.next = n_next
+            if n == cell then
+                cell = tmp
+            end
             n = tmp
         end
         n = n.next
@@ -860,8 +867,6 @@ function typeset_row(self, tr_contents, current_row )
             ht = self.rowheights[current_row]
         end
 
-        -- FIXME: do I really have to do that over and over again! This is crap. I did the same
-        -- calculate rowheights (put text into a paragraph)
         local g = node.new("glue")
         g.spec = node.new("glue_spec")
         g.spec.width = padding_top
@@ -887,7 +892,7 @@ function typeset_row(self, tr_contents, current_row )
             cell = self:pack_cell(td_contents.objects,current_column_width - padding_left - padding_right - td_borderleft - td_borderright,alignment)
             cell = cell.head
         end
-        -- The cell is a vlist with minumum height. We need to repack the contents of the
+        -- The cell is a vlist with minimum height. We need to repack the contents of the
         -- cell in order to use the aligns and VSpaces in the table cell
 
         local tail = node.tail(cell_start)
@@ -1229,9 +1234,8 @@ function typeset_table(self)
     end
 
     if #rows == 0 then
-        -- WTF? No contents in the table
-        err("table without contents")
-        return publisher.emergency_block()
+        warning("table without contents")
+        return publisher.empty_block()
     end
 
 

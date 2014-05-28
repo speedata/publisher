@@ -1848,7 +1848,7 @@ function commands.save_dataset( layoutxml,dataxml )
     tmp = {}
     if attributes then
         for i=1,#attributes do
-            if publisher.elementname(attributes[i]) == "Attribute" then
+            if publisher.elementname(attributes[i],true) == "Attribute" then
                 for k,v in pairs(publisher.element_contents(attributes[i])) do
                     if k ~= ".__type" then
                         tmp[k] = v
@@ -1959,7 +1959,7 @@ end
 
 --- Sequence
 --- --------
---- Get parts of the data. Can be stored in a variable. This command seems to be obsolete now
+--- Get parts of the data. Can be stored in a variable.
 function commands.sequence( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     return selection

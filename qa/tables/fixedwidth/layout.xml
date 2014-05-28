@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options show-grid="no" resetmarks="no" cutmarks="no" trace="no" />
+  <SetGrid width="5mm" height="4mm"/>
+  <Pagetype name="p" test="true()">
+    <Margin left="3mm" right="0mm" top="2mm" bottom="0mm"/>
+  </Pagetype>
+  <Pageformat width="7cm" height="4.5cm"/>
+  
+  <Record element="data">
+    <PlaceObject>
+      <Table width="13" stretch="max">
+        <Tr minheight="10.5">
+          <Td border-left="1pt" border-right="1pt" padding="3pt" align="center">
+            <Image file="_samplea.pdf" maxheight="34mm" maxwidth="35mm"/>
+          </Td>
+        </Tr>
+    </Table>
+    </PlaceObject>
+  </Record>
+
+
+
+</Layout>
