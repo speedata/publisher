@@ -96,14 +96,6 @@ task :sourcedoc do
 	end
 	cp_r(installdir.join("doc","sourcedoc","img"), builddir.join("sourcedoc"))
 	cp_r(installdir.join("doc","sourcedoc","mj"),  builddir.join("sourcedoc"))
-	ENV['GOPATH'] = "#{srcdir}/go"
-	Dir.chdir(srcdir.join("go","src", "sp", "main")) do
-		puts "Building docgo..."
-		sh "go build -o #{installdir}/bin/docgo github.com/pgundlach/docgo"
-		puts "...done"
-		sh "#{installdir}/bin/docgo -outdir #{builddir}/sourcedoc -resdir #{srcdir}/go/src/github.com/pgundlach/docgo/ sp.go"
-	end
-	puts "done"
 	puts "Generated source documentation in \n#{builddir}/sourcedoc"
 end
 
