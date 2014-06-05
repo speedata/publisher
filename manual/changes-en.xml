@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (en)</title>
   <id>http://www.speedata.de</id>
-  <updated>2014-05-28T14:19:35+02:00</updated>
+  <updated>2014-06-05T16:05:41+02:00</updated>
   <subtitle>New revisions for download and changelog.</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.1.6</title>
+    <updated>2014-06-05T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-06-05:</id>
+    <content type="html">Experimental option &#39;allowbreak&#39; on Paragraph to provide a list of characters where line break may occur.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.6</title>
+    <updated>2014-05-28T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-05-28:</id>
+    <content type="html">sp --quiet for console-less output</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.6</title>
+    <updated>2014-05-28T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-05-28:</id>
+    <content type="html">Parallelise sp compare for much better performance.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.1.5</title>
     <updated>2014-05-28T00:00:00Z</updated>

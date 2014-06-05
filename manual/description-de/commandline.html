@@ -39,6 +39,7 @@ Usage: [parameter] command
                              for example 'en' or 'en_US'.
     --outputdir=DIR          Copy PDF and protocol to this directory
     --profile                Run publisher with profiling on (internal use)
+    --quiet                  Run publisher in silent mode
     --runs=NUM               Number of publishing runs
     --startpage=NUM          The first page number
     --show-gridallocation    Show the allocated grid cells
@@ -125,6 +126,16 @@ Commands
 <tr>
 <td><code>--outputdir=VERZEICHNIS</code></td>
 <td>Die resultierende PDF-Datei und Protokolldatei wird in das angegebene Verzeichnis kopiert. Das Verzeichnis wird erstellt, falls es noch nicht existiert.</td>
+</tr>
+
+<tr>
+<td><code>--profile</code></td>
+<td>Erzeugt Profiling-Informationen für den internen Gebrauch.</td>
+</tr>
+
+<tr>
+<td><code>--quiet</code></td>
+<td>Unterdrückt alle Ausgaben des Publishers.</td>
 </tr>
 
 <tr>
@@ -249,7 +260,7 @@ events = layout\.xml:run(runpublisher);data\.xml:run(runpublisher)
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.1.5 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/commandline.html">Englisch</a>
+Version: 2.1.6 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/commandline.html">Englisch</a>
 
 </body>
 </html>

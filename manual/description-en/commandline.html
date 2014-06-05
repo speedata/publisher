@@ -39,6 +39,7 @@ Usage: [parameter] command
                              for example 'en' or 'en_US'.
     --outputdir=DIR          Copy PDF and protocol to this directory
     --profile                Run publisher with profiling on (internal use)
+    --quiet                  Run publisher in silent mode
     --runs=NUM               Number of publishing runs
     --startpage=NUM          The first page number
     --show-gridallocation    Show the allocated grid cells
@@ -130,6 +131,16 @@ Commands
 <tr>
 <td><code>--outputdir=DIR</code></td>
 <td>Name of the directory of the resulting file. The directory will be created if necessary.</td>
+</tr>
+
+<tr>
+<td><code>--profile</code></td>
+<td>Run publisher with profiling on (internal use).</td>
+</tr>
+
+<tr>
+<td><code>--quiet</code></td>
+<td>Run publisher in silent mode.</td>
 </tr>
 
 <tr>
@@ -254,7 +265,7 @@ events = layout\.xml:run(runpublisher);data\.xml:run(runpublisher)
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.1.5 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/commandline.html">German</a>
+Version: 2.1.6 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/commandline.html">German</a>
 
 </body>
 </html>
