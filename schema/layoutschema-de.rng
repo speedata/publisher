@@ -1667,7 +1667,7 @@
          </optional>
          <optional>
             <attribute name="hauptsprache">
-               <a:documentation>Die Sprache (Silbentrennung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist.</a:documentation>
+               <a:documentation>Die Sprache (Silbentrennung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist. Sie kann global über die Kommandozeile gesteuert werden oder für jeden Absatz einzeln.</a:documentation>
                <choice>
                   <value>Deutsch</value>
                   <a:documentation xmlns="">Auf Deutsche Trennmuster umschalten.</a:documentation>
@@ -1930,6 +1930,11 @@
    <define name="e_Paragraph">
       <element name="Absatz">
          <a:documentation>Erzeugt einen Absatz innerhalb eines Textblocks.</a:documentation>
+         <optional>
+            <attribute name="erlaubeumbruch">
+               <a:documentation/>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="farbe">
                <a:documentation>Farbe des Absatzes. Muss vorher mit DefiniereFarbe definiert worden sein.</a:documentation>

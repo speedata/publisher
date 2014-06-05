@@ -3384,6 +3384,14 @@
     <childelements>
       <reference name="Textvalues"/>
     </childelements>
+    <attribute name="allowbreak" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>(Experimental!) list of characters where a line beak is possible.</para>
+      </description>
+      <description xml:lang="de">
+        <para>(Experimentell) Liste der Zeichen, bei denen ein Umbruch möglich ist.</para>
+      </description>
+    </attribute>
     <attribute name="color" type="text" optional="yes">
       <description xml:lang="en">
         <para>Color of the paragraph. Must be defined with <cmd name="DefineColor"/> before use.</para>

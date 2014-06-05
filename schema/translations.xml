@@ -161,6 +161,7 @@
     <attribute key="align" en="align" de="align"/>
     <attribute key="alignment" en="alignment" de="ausrichtung"/>
     <attribute key="allocate" en="allocate" de="belegen"/>
+    <attribute key="allowbreak" en="allowbreak" de="erlaubeumbruch"/>
     <attribute key="angle" en="angle" de="winkel"/>
     <attribute key="append" en="append" de="anhängen" />
     <attribute key="area" en="area" de="bereich"/>

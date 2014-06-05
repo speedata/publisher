@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
+    <entry version="2.1.6" date="2014-06-05">
+      <en>Experimental option 'allowbreak' on Paragraph to provide a list of characters where line break may occur.</en>
+      <de>Experimentelle Option 'erlaubeumbruch' bei Absatz um eine Liste der möglichen Trennpunkte anzugeben.</de>
+    </entry>
     <entry version="2.1.6" date="2014-05-28">
       <en>sp --quiet for console-less output</en>
       <de>sp --quiet unterdrückt die Ausgabe</de>

@@ -325,6 +325,7 @@ values = {
     ["align"] = {de = "align", en = "align", },
     ["alignment"] = {de = "ausrichtung", en = "alignment", },
     ["allocate"] = {de = "belegen", en = "allocate", },
+    ["allowbreak"] = {de = "erlaubeumbruch", en = "allowbreak", },
     ["angle"] = {de = "winkel", en = "angle", },
     ["append"] = {de = "anhängen", en = "append", },
     ["area"] = {de = "bereich", en = "area", },

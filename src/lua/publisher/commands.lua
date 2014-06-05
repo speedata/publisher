@@ -1381,6 +1381,7 @@ function commands.paragraph( layoutxml,dataxml )
     local css_rules = publisher.css:matches({element = 'paragraph', class=class,id=id}) or {}
 
     local textformat    = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
+    local allowbreak    = publisher.read_attribute(layoutxml,dataxml,"allowbreak","rawstring")
     local fontname      = publisher.read_attribute(layoutxml,dataxml,"fontface",  "rawstring")
     local colorname     = publisher.read_attribute(layoutxml,dataxml,"color",     "rawstring")
     local language_name = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
@@ -1419,18 +1420,19 @@ function commands.paragraph( layoutxml,dataxml )
     local a = paragraph:new(textformat)
     local objects = {}
     local tab = publisher.dispatch(layoutxml,dataxml)
-
     for _,j in ipairs(tab) do
         trace("Paragraph Elementname = %q",tostring(publisher.elementname(j,true)))
         local contents = publisher.element_contents(j)
-        if publisher.elementname(j,true) == "Value" and type(contents) == "table" then
+        if publisher.elementname(j,true) == "Value" and type(contents) == "table" and #contents == 1 and type(contents[1]) == "string"  then
+            objects[#objects + 1] = contents[1]
+        elseif publisher.elementname(j,true) == "Value" and type(contents) == "table" then
             objects[#objects + 1] = publisher.parse_html(contents)
         else
             objects[#objects + 1] = contents
         end
     end
     for _,j in ipairs(objects) do
-        a:append(j,{fontfamily = fontfamily, languagecode = languagecode})
+        a:append(j,{fontfamily = fontfamily, languagecode = languagecode, allowbreak = allowbreak})
     end
     if #objects == 0 then
         -- nothing got through, why?? check

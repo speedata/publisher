@@ -1518,6 +1518,7 @@ function mknodes(str,fontfamily,parameter)
             -- We have a character but some characters must be treated in a special
             -- way.
             -- Hyphens must be separated from words:
+
             if ( n.char == 45 or n.char == 8211) and lastitemwasglyph then
                 local pen = node.new("penalty")
                 pen.penalty = 10000
@@ -1529,6 +1530,10 @@ function mknodes(str,fontfamily,parameter)
                 head,last = node.insert_after(head,last,g)
             -- elseif char == ',' or char == '/' then
             elseif char == '/' then
+                local pen = node.new("penalty")
+                pen.penalty = 0
+                head,last = node.insert_after(head,last,pen)
+            elseif parameter.allowbreak and string.find(parameter.allowbreak, char,1,true) then
                 local pen = node.new("penalty")
                 pen.penalty = 0
                 head,last = node.insert_after(head,last,pen)

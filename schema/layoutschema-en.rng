@@ -1662,7 +1662,7 @@
          </optional>
          <optional>
             <attribute name="mainlanguage">
-               <a:documentation>The default language for text (hyphenation).</a:documentation>
+               <a:documentation>The default language for text (hyphenation). You can also set the default language on the command line and locally set it at Paragraph.</a:documentation>
                <choice>
                   <value>German</value>
                   <a:documentation xmlns="">Switch to German hyphenation patterns.</a:documentation>
@@ -1925,6 +1925,11 @@
    <define name="e_Paragraph">
       <element name="Paragraph">
          <a:documentation>Insert a paragraph of text. The width of the paragraph is inherited from the surrounding element.</a:documentation>
+         <optional>
+            <attribute name="allowbreak">
+               <a:documentation/>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="color">
                <a:documentation>Color of the paragraph. Must be defined with DefineColor before use.</a:documentation>
