@@ -2164,7 +2164,12 @@ function commands.table( layoutxml,dataxml,optionen )
     publisher.setup_page()
 
     if width == nil then
-        width = xpath.get_variable("__maxwidth") * publisher.current_grid.gridwidth
+        if xpath.get_variable("__maxwidth") == nil then
+            err("Can't determine the current width. Tables in groups and data cells must contain explicit widths.")
+            width = 50 * 2^16
+        else
+            width = xpath.get_variable("__maxwidth") * publisher.current_grid.gridwidth
+        end
     else
         if tonumber(width) ~= nil then
             width  = publisher.current_grid.gridwidth  * width
