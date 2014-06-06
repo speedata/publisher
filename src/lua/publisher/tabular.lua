@@ -592,7 +592,7 @@ function pack_cell(self, blockobject, width, horizontal_alignment)
 
     local n = cell
     while n do
-        if n.id == publisher.hlist_node then
+        if n.id == publisher.hlist_node or n.id == publisher.vlist_node then
             local n_prev = n.prev
             local n_next = n.next
             local tmp = n
