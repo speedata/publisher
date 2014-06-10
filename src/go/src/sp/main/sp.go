@@ -85,12 +85,10 @@ func init() {
 	// The problem now is that we don't know where the executable file is
 	// if it's in the PATH, it has no ../ prefix
 	// if it is relative, make an absolute path from it.
-
-	executable_name := filepath.Base(os.Args[0])
 	var bindir string
-	if executable_name == os.Args[0] {
+	if execdir := filepath.Base(os.Args[0]); execdir == os.Args[0] {
 		// most likely an absolute path
-		bindir, err = exec.LookPath(executable_name)
+		bindir, err = exec.LookPath(execdir)
 		if err != nil {
 			log.Fatal(err)
 		}
