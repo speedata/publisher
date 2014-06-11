@@ -66,7 +66,7 @@ sd:current-framenumber(\<name\>) | Return the current frame number of given posi
 sd:alternating(\<type\>, \<text\>,\<text\>,.. ) | On each call the next element will be returned. You can define more alternating sequences by using distinct type values. Example: `sd:alternating("tbl", "White","Gray")` can be used for alternating color of table rules. To reset the state, use `sd:reset-alternating(<type>)`.
 sd:decode-html(\<node\>) | Change text such as `&lt;i&gt;italic&lt;/i&gt;` into HTML markup.
 sd:reset-alternating(\<type\>) | Reset alternating so the next `sd:alternating()` starts again from the first element.
-sd:marge-pagenumbers(\<pagenumbers\>,\<separator for range\>,\<separator for space\>) | Merge page numbers. For example the numbers `"1, 3, 4, 5"` are merged into `1, 3–5`. Defaults for the separator for the range is an en-dash (–), default for the spacing separator is ', ' (comma, space). Merging ranges is not implemented yet. This function sorts the page numbers and removes duplicates.
+sd:merge-pagenumbers(\<pagenumbers\>,\<separator for range\>,\<separator for space\>) | Merge page numbers. For example the numbers `"1, 3, 4, 5"` are merged into `1, 3–5`. Defaults for the separator for the range is an en-dash (–), default for the spacing separator is ', ' (comma, space). Merging ranges is not implemented yet. This function sorts the page numbers and removes duplicates.
 sd:number-of-datasets(\<Sequence\>) | Return the number of records of the sequence.
 sd:number-of-pages(\<filename or URI schema\>) | Determines the number of pages of a (PDF-)file.
 sd:number-of-columns() | Number of columns in the current grid.
