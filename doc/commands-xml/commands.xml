@@ -4172,6 +4172,7 @@
         <optional><cmd name="SortSequence"/></optional>
         <optional><cmd name="Sequence"/></optional>
         <optional><cmd name="Copy-of"/></optional>
+        <optional><cmd name="ForAll"/></optional>
       </oneOrMore>
     </childelements>
     <attribute name="filename" type="text" optional="no">

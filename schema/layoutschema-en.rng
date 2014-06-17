@@ -1927,7 +1927,7 @@
          <a:documentation>Insert a paragraph of text. The width of the paragraph is inherited from the surrounding element.</a:documentation>
          <optional>
             <attribute name="allowbreak">
-               <a:documentation/>
+               <a:documentation>(Experimental!) list of characters where a line beak is possible.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2353,6 +2353,9 @@
             </optional>
             <optional>
                <ref name="e_Copy-of"/>
+            </optional>
+            <optional>
+               <ref name="e_ForAll"/>
             </optional>
          </oneOrMore>
       </element>
