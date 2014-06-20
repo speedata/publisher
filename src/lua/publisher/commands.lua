@@ -1944,7 +1944,11 @@ function commands.set_grid(layoutxml)
             err("SetGrid: width must be a length (with unit). Setting it to 1cm.")
             wd = "1cm"
         end
-        publisher.options.gridwidth   = tex.sp(wd)
+        if wd == nil then
+            err("Gridwidth not set")
+        else
+            publisher.options.gridwidth = tex.sp(wd)
+        end
     end
     if _ny then
         publisher.options.gridcells_y = _ny
