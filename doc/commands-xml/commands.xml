@@ -2269,7 +2269,7 @@
       <para>This command is the root element in the Layout instructions.</para>
     </description>
     <description xml:lang="de">
-      <para>Das <cmd name="Layout" />Element ist das Wurzelelement im Regelwerk.</para>
+      <para>Das <cmd name="Layout" />-Element ist das Wurzelelement im Regelwerk.</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -2327,7 +2327,7 @@
     <Margin left="1cm" right="2cm" top="1cm" bottom="1cm" />
   </Pagetype>
 
-  <Record element="üroduct">
+  <Record element="product">
     <SetVariable variable="column" select="2" />
     <PlaceObject column="1">
       <Textblock width="14" fontface="title">
