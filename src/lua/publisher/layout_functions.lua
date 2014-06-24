@@ -117,8 +117,10 @@ local function merge_pagenumbers(dataxml,arg )
             prev = cur
         end
         for i=1,#buckets do
-            if #buckets[i] > 1 then
+            if #buckets[i] > 2 then
                 buckets[i] = buckets[i][1] .. mergechar .. buckets[i][#buckets[i]]
+            elseif #buckets[i] == 2 then
+                buckets[i] = buckets[i][1] .. spacer .. buckets[i][#buckets[i]]
             else
                 buckets[i] = buckets[i][1]
             end
