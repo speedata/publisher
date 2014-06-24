@@ -1019,7 +1019,7 @@ function dothingsbeforeoutput(  )
     local ht = sp_to_bp(current_page.height)
 
     local x = 0 + current_page.grid.extra_margin
-    local y = 0 + current_page.grid.extra_margin + current_page.grid.margin_top
+    local y = 0 + current_page.grid.extra_margin
 
     if options.trim then
         local trim_bp = sp_to_bp(options.trim)
