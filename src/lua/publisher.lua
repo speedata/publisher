@@ -65,6 +65,7 @@ att_space_amount   = 301
 att_break_below_forbidden = 400
 att_break_above           = 401
 att_omit_at_top           = 402
+att_use_as_head           = 403
 
 --- `att_is_table_row` is used in `tabular.lua` and if set to 1, it denotes
 --- a regular table row, and not a spacer. Spacers must not appear
@@ -1019,7 +1020,7 @@ function dothingsbeforeoutput(  )
     local ht = sp_to_bp(current_page.height)
 
     local x = 0 + current_page.grid.extra_margin
-    local y = 0 + current_page.grid.extra_margin + current_page.grid.margin_top
+    local y = 0 + current_page.grid.extra_margin
 
     if options.trim then
         local trim_bp = sp_to_bp(options.trim)

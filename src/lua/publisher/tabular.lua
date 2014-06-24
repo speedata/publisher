@@ -37,7 +37,7 @@ end
 --- for a rule of thumb how objects are arranged in a table cell. I am not sure if we should fully follow
 --- the HTML way.
 ---
---- The returned array is a list of arrays. The inner arrays contain the objects to be stacked from left to right (“inline”)
+--- The inner arrays contain the objects to be stacked from left to right (“inline”)
 --- and the outer array is a list of block objects that are to be stacked from top to bottom:
 ---     { { img      },
 ---       { par      },
@@ -45,6 +45,7 @@ end
 ---       { table    }  }
 ---
 --- ![Objects in a table](img/objectsintable.svg)
+--- The table is stored in the objects
 function attach_objects_row( tab )
     -- For each block object (container) there is one row in block
     local td_elementname
@@ -55,8 +56,6 @@ function attach_objects_row( tab )
         if td_elementname == "Td" then
             local block = {}
             local inline = {}
-
-            local objects = {}
             for i,j in ipairs(td_contents) do
                 local eltname     = publisher.elementname(j,true)
                 local eltcontents = publisher.element_contents(j)
@@ -258,7 +257,7 @@ function calculate_columnwidth( self )
     local colmax,colmin = {},{}
 
     local current_row = 0
-    self.tablewidth_target = self.breite
+    self.tablewidth_target = self.width
     local columnwidths_given = false
 
     for _,tr in ipairs(self.tab) do
@@ -990,7 +989,6 @@ function typeset_row(self, tr_contents, current_row )
         --- ![Table cell vertical](img/tablecell3.svg)
         hlist = node.vpack(head,self.rowheights[current_row],"exactly")
 
-
         if publisher.options.trace then
             publisher.boxit(hlist)
         end
@@ -1026,6 +1024,11 @@ function typeset_row(self, tr_contents, current_row )
         err("(Internal error) Table is not complete.")
     end
     node.set_attribute(row,publisher.att_tr_shift_up,tr_contents.shiftup)
+    if tr_contents.sethead then
+        node.set_attribute(row,publisher.att_use_as_head,1)
+    end
+
+
     return row
 end
 
@@ -1092,36 +1095,21 @@ local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_
     return current_row
 end
 --------------------------------------------------------------------------
+
+-- TODO: rename function: we don't calculate the height here
 local function calculate_height_and_connect_tablehead(self,tablehead_first,tablehead)
-    local ht_header, ht_first_header = 0, 0
     -- We connect all but the last row with the next row and remember the height in ht_header
     for z = 1,#tablehead_first - 1 do
-        ht_first_header = ht_first_header + tablehead_first[z].height  -- Tr oder Tablerule
         _,tmp = publisher.add_glue(tablehead_first[z],"tail",{ width = self.rowsep })
         tmp.next = tablehead_first[z+1]
         tablehead_first[z+1].prev = tmp
     end
 
     for z = 1,#tablehead - 1 do
-        ht_header = ht_header + tablehead[z].height  -- Tr or Tablerule
         _,tmp = publisher.add_glue(tablehead[z],"tail",{ width = self.rowsep })
         tmp.next = tablehead[z+1]
         tablehead[z+1].prev = tmp
     end
-
-    -- perhaps there is a last row, that is connected but its height is not
-    -- taken into account yet.
-    if #tablehead > 0 then
-        ht_header = ht_header + tablehead[#tablehead].height + self.rowsep  * ( #tablehead )
-    end
-
-    if #tablehead_first > 0 then
-        ht_first_header = ht_first_header + tablehead_first[#tablehead_first].height + self.rowsep * (#tablehead_first)
-    else
-        ht_first_header = ht_header
-    end
-
-    return ht_first_header,ht_header
 end
 
 local function calculate_height_and_connect_tablefoot(self,tablefoot,tablefoot_last)
@@ -1163,6 +1151,7 @@ function typeset_table(self)
     local tablehead = {}
     local tablefoot_last = {}
     local tablefoot = {}
+    local omit_head_on_pages = {}
     local rows = {}
     local break_above = true
     local filter = {}
@@ -1238,8 +1227,16 @@ function typeset_table(self)
         return publisher.empty_block()
     end
 
+    local tableheads_extra = {}
 
-    local ht_first_header, ht_header = calculate_height_and_connect_tablehead(self,tablehead_first,tablehead)
+
+    setmetatable(tableheads_extra, { __index = function(tbl,idx)
+        if idx < 1 then return nil end
+        return tbl[idx - 1]
+    end
+    })
+
+    calculate_height_and_connect_tablehead(self,tablehead_first,tablehead)
     local ht_footer,  ht_footer_last = calculate_height_and_connect_tablefoot(self,tablefoot,tablefoot_last)
 
     if not tablehead[1] then
@@ -1259,8 +1256,12 @@ function typeset_table(self)
     local ht_max     = self.optionen.ht_max
     -- The maximum heights are saved here for each table. Currently all tables must have the same height (see the metatable)
     local pagegoals = {}
+
     local function showheader( tablepart )
+        -- We can skip the header on pages where the first line is also
+        if omit_head_on_pages[tablepart] then return false end
         if tablepart_absolute == 1 and filter.tablehead_force_first then return true end
+        if tableheads_extra[tablepart_absolute] ~= nil then return true end
         if not filter.tablehead then return true end
         if math.fmod(tablepart_absolute,2) == math.fmod(startpage,2) then
             if filter.tablehead == "odd" then
@@ -1276,21 +1277,38 @@ function typeset_table(self)
             end
         end
     end
+    local function get_height_header(i)
+        if not showheader(i) then return 0 end
+        if tableheads_extra[i] then
+            return tableheads_extra[i].height + self.rowsep
+        end
+        if i == 1 then
+            return tablehead_first[1].height + self.rowsep
+        end
+        return tablehead[1].height + self.rowsep
+    end
+
     setmetatable(pagegoals, { __index = function(tbl,idx)
+                local ht_head = get_height_header(idx)
                 if idx == 1 then
-                    if showheader(idx) then
-                        return ht_current - ht_first_header - ht_footer
-                    else
-                        return ht_current - ht_footer
-                    end
+                    return ht_current - ht_head - ht_footer
+                elseif idx == -1 then
+                    return ht_max - ht_head - ht_footer_last
                 end
-                if showheader(idx) then
-                    return ht_max - ht_header - ht_footer
-                else
-                    return ht_max - ht_footer
-                end
+                return ht_max - ht_head - ht_footer
     end})
-    pagegoals[-1] = ht_max - ht_header - ht_footer_last
+
+
+    local function get_tablehead( page )
+        if s == 1 then
+            return tablehead_first[1]
+        end
+        if tableheads_extra[page] then
+            return node.copy_list(tableheads_extra[page])
+        end
+        return node.copy_list(tablehead[1])
+    end
+
 
     -- When we split the current table we return an array:
     local final_split_tables = {}
@@ -1324,10 +1342,18 @@ function typeset_table(self)
     local current_page = 1
 
     for i=1,#rows do
+        -- We can mark a row as "use_as_head" to turn the row into a dynamic head
+        local use_as_head = node.has_attribute(rows[i],publisher.att_use_as_head)
+        if use_as_head then
+            -- tablehead[1] = node.copy(rows[i])
+            tableheads_extra[#splits + 1] = node.copy(rows[i])
+        end
         local shiftup = node.has_attribute(rows[i],publisher.att_tr_shift_up) or 0
         if shiftup > 0 then
             rows[i].height = rows[i].height - shiftup
         end
+
+
         pagegoal = pagegoals[current_page]
         ht_row = rows[i].height + rows[i].depth
         break_above = node.has_attribute(rows[i],publisher.att_break_above) or -1
@@ -1343,6 +1369,12 @@ function typeset_table(self)
         extra_height = extra_height + ht_row
         local fits_in_table = accumulated_height + extra_height + space_above < pagegoal
         if not fits_in_table then
+            if node.has_attribute(rows[i],publisher.att_use_as_head) == 1 then
+                -- the next line would be used as a header, so let's skip the
+                -- header on this page
+                omit_head_on_pages[#splits + 1] = true
+            end
+
             if shiftup > 0 then
                 rows[i].height = rows[i].height + shiftup
             end
@@ -1393,16 +1425,11 @@ function typeset_table(self)
             end
         else
             if showheader(s-1) then
-                if s == 2 then
-                    -- first page
-                    thissplittable[#thissplittable + 1] = tablehead_first[1]
-                else
-                    -- page > 1
-                    thissplittable[#thissplittable + 1] = node.copy_list(tablehead[1])
-                end
+                thissplittable[#thissplittable + 1] = get_tablehead(s-1)
             end
         end
-        for i = first_row_in_new_table ,splits[s]  do
+
+        for i = first_row_in_new_table,splits[s]  do
             if i > first_row_in_new_table then
                 space_above = node.has_attribute(rows[i],publisher.att_space_amount) or 0
             else
@@ -1415,7 +1442,7 @@ function typeset_table(self)
 
         last_tr_data = node.has_attribute(thissplittable[#thissplittable - 1],publisher.att_tr_dynamic_data)
 
-        -- only refomat the foot when we have dynamic data _and_ have a foot to reformat.
+        -- only reformat the foot when we have dynamic data _and_ have a foot to reformat.
         if last_tr_data and self.tablefoot_contents then
             -- we have some data attached to table rows, so we re-format the footer
             local val = dynamic_data[last_tr_data]

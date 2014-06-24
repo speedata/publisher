@@ -67,41 +67,68 @@ local function number_of_columns(dataxml,arg)
   return publisher.current_grid:number_of_columns(arg and arg[1])
 end
 
---- Merge numbers like '1-5, 8, 9,10,11' into '1-5, 8-10'
+--- Merge numbers like '1,2,3,4,5, 8, 9,10,11' into '1-5, 8-10'
 local function merge_pagenumbers(dataxml,arg )
-  local pagenumbers_string = string.gsub(arg[1] or "","%s","")
-  local mergechar = arg[2] or "–"
-  local spacer    = arg[3] or ", "
+    local pagenumbers_string = string.gsub(arg[1] or "","%s","")
+    local mergechar = arg[2] or "–"
+    local spacer    = arg[3] or ", "
 
-  if mergechar ~= "" and mergechar ~= "–" then
-    printtable("pagenumbers_string",string.explode(pagenumbers_string,", "))
-    err("not implemented yet")
-  else
     local pagenumbers = string.explode(pagenumbers_string,",")
     -- let's remove duplicates now
     local dupes = {}
     local withoutdupes = {}
+    local cap1,cap2
     for i=1,#pagenumbers do
-      local num = pagenumbers[i]
-      if (not dupes[num]) then
-          withoutdupes[#withoutdupes+1] = num
-          dupes[num] = true
-      end
+        local num = pagenumbers[i]
+        cap1, cap2 = string.match(num,"^(.)-(.)$")
+        if cap1 then
+            for i=tonumber(cap1),tonumber(cap2) do
+                num = tostring(i)
+                if (not dupes[num]) then
+                    withoutdupes[#withoutdupes+1] = num
+                    dupes[num] = true
+                end
+            end
+        else
+            if (not dupes[num]) then
+                withoutdupes[#withoutdupes+1] = num
+                dupes[num] = true
+            end
+        end
     end
     publisher.stable_sort(withoutdupes,function(elta,eltb)
-        return tonumber(elta) < tonumber(eltb)
-    end)
-    return table.concat(withoutdupes, spacer)
-  end
-  -- local a,b
-  -- _,_, a, b = unicode.utf8.find(arg[1] or "","^(%d+).(%d+)$")
-  -- local ret
-  -- if a == b then
-  --     ret = a
-  -- else
-  --     ret = arg[1] or ""
-  -- end
-  -- return ret
+          return tonumber(elta) < tonumber(eltb)
+      end)
+
+    if mergechar ~= "" then
+        local buckets = {}
+        local bucket
+        local cur
+        local prev = -99
+        for i=1,#withoutdupes do
+            cur = tonumber(withoutdupes[i])
+            if cur == prev + 1 then
+                -- same bucket
+                bucket[#bucket + 1] = cur
+            else
+                bucket = { cur }
+                buckets[#buckets + 1] = bucket
+            end
+            prev = cur
+        end
+        for i=1,#buckets do
+            if #buckets[i] > 2 then
+                buckets[i] = buckets[i][1] .. mergechar .. buckets[i][#buckets[i]]
+            elseif #buckets[i] == 2 then
+                buckets[i] = buckets[i][1] .. spacer .. buckets[i][#buckets[i]]
+            else
+                buckets[i] = buckets[i][1]
+            end
+        end
+        return table.concat(buckets,spacer)
+    else
+        return table.concat(withoutdupes, spacer)
+    end
 end
 
 local function number_of_rows(dataxml,arg)

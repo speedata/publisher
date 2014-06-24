@@ -1932,7 +1932,7 @@
          <a:documentation>Erzeugt einen Absatz innerhalb eines Textblocks.</a:documentation>
          <optional>
             <attribute name="erlaubeumbruch">
-               <a:documentation/>
+               <a:documentation>(Experimentell) Liste der Zeichen, bei denen ein Umbruch möglich ist.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2365,6 +2365,9 @@
             </optional>
             <optional>
                <ref name="e_Copy-of"/>
+            </optional>
+            <optional>
+               <ref name="e_ForAll"/>
             </optional>
          </oneOrMore>
       </element>
@@ -3026,6 +3029,16 @@
          <optional>
             <attribute name="daten">
                <a:documentation>Auf diese Daten können im Tabellenkopf und Tabellenfuß mit $_last_tr_data zugegriffen werden.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="setzekopf">
+               <a:documentation>Diese Zeile für zukünftige Kopfzeilen benutzen.</a:documentation>
+               <choice>
+                  <value>ja</value>
+                  <value>nein</value>
+                  <text/>
+               </choice>
             </attribute>
          </optional>
          <oneOrMore>
