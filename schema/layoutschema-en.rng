@@ -3017,6 +3017,16 @@
                <a:documentation>Data that can be accessed via $_last_tr_data in the tablefoot and tablehead.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="sethead">
+               <a:documentation>Use this line for future table heads.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+                  <text/>
+               </choice>
+            </attribute>
+         </optional>
          <oneOrMore>
             <optional>
                <ref name="e_Message"/>

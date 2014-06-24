@@ -284,6 +284,7 @@
     <attribute key="trace" en="trace" de="trace"/>
     <attribute key="trim" en="trim" de="beschnittzugabe"/>
     <attribute key="type" en="type" de="typ" />
+    <attribute key="sethead" en="sethead" de="setzekopf" />
     <attribute key="valign" en="valign" de="valign"/>
     <attribute key="value" en="value" de="wert" />
     <attribute key="variable" en="variable" de="variable"/>

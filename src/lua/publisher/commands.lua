@@ -2215,7 +2215,7 @@ function commands.table( layoutxml,dataxml,optionen )
     tabular.optionen       = optionen or { ht_max=99999*2^16 } -- FIXME! Test - this is for tabular in tabular
     tabular.layoutxml      = layoutxml
     tabular.dataxml        = dataxml
-    tabular.breite         = width
+    tabular.width          = width
     tabular.fontfamily     = fontfamily
     tabular.padding_left   = padding
     tabular.padding_top    = padding
@@ -2293,6 +2293,7 @@ function commands.tr( layoutxml,dataxml )
         ["minheight"]       = "number",
         ["top-distance"]    = "rawstring",
         ["break-below"]     = "string",
+        ["sethead"]         = "boolean",
     }
 
     for attname,atttyp in pairs(attribute) do

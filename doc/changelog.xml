@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
+    <entry version="2.1.8" date="2014-06-24">
+      <en>Extend table rows (Tr) to re-use as table header.</en>
+      <de>Tabellenzeilen (Tr) können als Tabellenkopf wiederbenutzt werden.</de>
+    </entry>
+    <entry version="2.1.8" date="2014-06-24">
+      <en>Merge pagenumbers now accept page ranges.</en>
+      <de>Seitenzahlen zusammenfassen verarbeitet Seitenbereiche.</de>
+    </entry>
     <entry version="2.1.7" date="2014-06-06">
       <en>Bugfix for table in table and alignment. align="right" didn't work.</en>
       <de>Fehlerkorrektur für Tabellen in Tabellen, die rechtsbündig gesetzt werden sollen.</de>

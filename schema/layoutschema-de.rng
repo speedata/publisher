@@ -3031,6 +3031,16 @@
                <a:documentation>Auf diese Daten können im Tabellenkopf und Tabellenfuß mit $_last_tr_data zugegriffen werden.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="setzekopf">
+               <a:documentation>Diese Zeile für zukünftige Kopfzeilen benutzen.</a:documentation>
+               <choice>
+                  <value>ja</value>
+                  <value>nein</value>
+                  <text/>
+               </choice>
+            </attribute>
+         </optional>
          <oneOrMore>
             <optional>
                <ref name="e_Message"/>

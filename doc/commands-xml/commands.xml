@@ -5675,6 +5675,14 @@
         <para>Auf diese Daten können im Tabellenkopf und Tabellenfuß mit <tt>$_last_tr_data</tt> zugegriffen werden.</para>
       </description>
     </attribute>
+    <attribute name="sethead" type="yesno" optional="yes">
+      <description xml:lang="en">
+        <para>Use this line for future table heads.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Diese Zeile für zukünftige Kopfzeilen benutzen.</para>
+      </description>
+    </attribute>
     <remark xml:lang="de">
       <para>Das Attribut minhöhe war in einer vorigen Version minhoehe.</para>
     </remark>

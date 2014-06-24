@@ -448,6 +448,7 @@ values = {
     ["trace"] = {de = "trace", en = "trace", },
     ["trim"] = {de = "beschnittzugabe", en = "trim", },
     ["type"] = {de = "typ", en = "type", },
+    ["sethead"] = {de = "setzekopf", en = "sethead", },
     ["valign"] = {de = "valign", en = "valign", },
     ["value"] = {de = "wert", en = "value", },
     ["variable"] = {de = "variable", en = "variable", },
