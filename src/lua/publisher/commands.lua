@@ -463,12 +463,20 @@ function commands.define_fontfamily( layoutxml,dataxml )
     local size         = publisher.read_attribute(layoutxml,dataxml,"fontsize","rawstring")
     local baselineskip = publisher.read_attribute(layoutxml,dataxml,"leading", "rawstring")
 
+    if size == nil then
+      err("DefineFontfamily: no size given.")
+      return
+    end
     if tonumber(size) == nil then
         size = tex.sp(size)
     else
         size = size * publisher.factor
     end
 
+    if baselineskip == nil then
+        err("DefineFontfamily: no leading given.")
+        return
+    end
     if tonumber(baselineskip) == nil then
         baselineskip = tex.sp(baselineskip)
     else
@@ -480,11 +488,6 @@ function commands.define_fontfamily( layoutxml,dataxml )
     fam.scriptsize   = fam.size * 0.8 -- subscript / superscript
     fam.scriptshift  = fam.size * 0.3
 
-    -- Not used anymore?
-    if not fam.size then
-        err("DefineFontfamily: no size given.")
-        return
-    end
     local ok,tmp,elementname,fontface
     for i,v in ipairs(layoutxml) do
         elementname = publisher.translate_element(v[".__local_name"])
