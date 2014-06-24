@@ -42,19 +42,23 @@ function dirtree(dir)
   end
 
   local function yieldtree(dir)
+    local dirs = {}
     for entry in lfs.dir(dir) do
       if not entry:match("^%.") then
         entry=dir.."/"..entry
-     	  local attr=lfs.attributes(entry)
+        local attr=lfs.attributes(entry)
         if attr then
-     	      if attr.mode ~= "directory" then
-     	        coroutine.yield(entry,attr)
-     	      end
-     	      if attr.mode == "directory" then
-     	        yieldtree(entry)
-     	      end
+     	  if attr.mode ~= "directory" then
+     	    coroutine.yield(entry,attr)
+     	  end
+     	  if attr.mode == "directory" then
+            table.insert(dirs, entry)  
+     	  end
         end
       end
+    end
+    for i = 1, #dirs do
+      yieldtree(dirs[i])
     end
   end
 
@@ -73,7 +77,9 @@ local function add_dir( dir )
     if jobname and ( i == currentdir .. "/" .. jobname .. ".pdf" ) then
         -- ignore
     else
-        kpse.filelist[filename] = i
+        if kpse.filelist[filename] == nil then
+            kpse.filelist[filename] = i
+        end 
     end
   end
 end
