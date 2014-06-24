@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (de)</title>
   <id>http://www.speedata.de</id>
-  <updated>2014-06-05T16:05:41+02:00</updated>
+  <updated>2014-06-24T17:25:00+02:00</updated>
   <subtitle>Neue Versionen des Publishers zum Download und Liste der Änderungen</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.1.8</title>
+    <updated>2014-06-24T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-06-24:</id>
+    <content type="html">Tabellenzeilen (Tr) können als Tabellenkopf wiederbenutzt werden.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.8</title>
+    <updated>2014-06-24T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-06-24:</id>
+    <content type="html">Seitenzahlen zusammenfassen verarbeitet Seitenbereiche.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.7</title>
+    <updated>2014-06-06T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-06-06:</id>
+    <content type="html">Fehlerkorrektur für Tabellen in Tabellen, die rechtsbündig gesetzt werden sollen.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.1.6</title>
     <updated>2014-06-05T00:00:00Z</updated>
