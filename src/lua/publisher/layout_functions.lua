@@ -77,11 +77,23 @@ local function merge_pagenumbers(dataxml,arg )
     -- let's remove duplicates now
     local dupes = {}
     local withoutdupes = {}
+    local cap1,cap2
     for i=1,#pagenumbers do
         local num = pagenumbers[i]
-        if (not dupes[num]) then
-            withoutdupes[#withoutdupes+1] = num
-            dupes[num] = true
+        cap1, cap2 = string.match(num,"^(.)-(.)$")
+        if cap1 then
+            for i=tonumber(cap1),tonumber(cap2) do
+                num = tostring(i)
+                if (not dupes[num]) then
+                    withoutdupes[#withoutdupes+1] = num
+                    dupes[num] = true
+                end
+            end
+        else
+            if (not dupes[num]) then
+                withoutdupes[#withoutdupes+1] = num
+                dupes[num] = true
+            end
         end
     end
     publisher.stable_sort(withoutdupes,function(elta,eltb)

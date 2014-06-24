@@ -109,7 +109,7 @@
         </Paragraph>
         <Paragraph>
           <Value>Merge pagenumbers: </Value>
-          <Value select="sd:merge-pagenumbers('1-4')"></Value>
+          <Value select="sd:merge-pagenumbers('1-4','-')"></Value>
         </Paragraph>
       </Textblock>
     </PlaceObject>
