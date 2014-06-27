@@ -16,7 +16,10 @@
     <grammar xmlns="http://relaxng.org/ns/structure/1.0"
       ns="urn:speedata.de:2009/publisher/{$lang}">
       <start>
-        <ref name="e_Layout"/>
+        <choice>
+          <ref name="e_Layout"/>
+          <ref name="e_Include"/>
+        </choice>
       </start>
       <xsl:apply-templates select="sddoc:commands/*"/>
     </grammar>
@@ -26,6 +29,13 @@
     <define name="e_{@name}" xmlns="http://relaxng.org/ns/structure/1.0">
       <element name="{sd:translate-command(@name)}">
         <a:documentation><xsl:apply-templates select="description[@xml:lang = $lang]"/></a:documentation>
+        <xsl:choose>
+          <xsl:when test="@name = 'Include'">
+            <optional>
+              <attribute name="xml:base"/>
+            </optional>
+          </xsl:when>
+        </xsl:choose>
         <xsl:choose>
           <!-- An element with no child elements must be declared empty -->
           <xsl:when test="count(childelements//cmd) = 0 and count(childelements//reference) = 0 and count(childelements//element) = 0 and count(childelements/text) = 0 ">

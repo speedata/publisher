@@ -6,7 +6,10 @@
          xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
          ns="urn:speedata.de:2009/publisher/en">
    <start>
-      <ref name="e_Layout"/>
+      <choice>
+         <ref name="e_Layout"/>
+         <ref name="e_Include"/>
+      </choice>
    </start>
    <define name="e_A">
       <element name="A">
@@ -1078,40 +1081,48 @@
    </define>
    <define name="e_Include">
       <element name="Include">
-         <a:documentation>Include other layout files.</a:documentation>
+         <a:documentation>Toplevel element for included layout files.</a:documentation>
          <optional>
-            <ref name="e_Record"/>
+            <attribute name="xml:base"/>
          </optional>
-         <optional>
-            <ref name="e_SetVariable"/>
-         </optional>
-         <optional>
-            <ref name="e_Hyphenation"/>
-         </optional>
-         <optional>
-            <ref name="e_SetGrid"/>
-         </optional>
-         <optional>
-            <ref name="e_Pagetype"/>
-         </optional>
-         <optional>
-            <ref name="e_Options"/>
-         </optional>
-         <optional>
-            <ref name="e_LoadFontfile"/>
-         </optional>
-         <optional>
-            <ref name="e_DefineColor"/>
-         </optional>
-         <optional>
-            <ref name="e_DefineFontfamily"/>
-         </optional>
-         <optional>
-            <ref name="e_Pageformat"/>
-         </optional>
-         <optional>
-            <ref name="e_DefineTextformat"/>
-         </optional>
+         <oneOrMore>
+            <optional>
+               <ref name="e_Record"/>
+            </optional>
+            <optional>
+               <ref name="e_LoadFontfile"/>
+            </optional>
+            <optional>
+               <ref name="e_DefineColor"/>
+            </optional>
+            <optional>
+               <ref name="e_DefineFontfamily"/>
+            </optional>
+            <optional>
+               <ref name="e_DefineTextformat"/>
+            </optional>
+            <optional>
+               <ref name="e_Pageformat"/>
+            </optional>
+            <optional>
+               <ref name="e_Options"/>
+            </optional>
+            <optional>
+               <ref name="e_Pagetype"/>
+            </optional>
+            <optional>
+               <ref name="e_SetGrid"/>
+            </optional>
+            <optional>
+               <ref name="e_Hyphenation"/>
+            </optional>
+            <optional>
+               <ref name="e_SetVariable"/>
+            </optional>
+            <optional>
+               <ref name="e_Stylesheet"/>
+            </optional>
+         </oneOrMore>
       </element>
    </define>
    <define name="e_InsertPages">

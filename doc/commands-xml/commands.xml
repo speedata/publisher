@@ -1837,30 +1837,46 @@
   </command>
   <command name="Include">
     <description xml:lang="en">
-      <para>Include other layout files.</para>
+      <para>Toplevel element for included layout files.</para>
     </description>
     <description xml:lang="de">
-      <para>Bindet andere Layoutregelwerke ein.</para>
+      <para>Toplevel Element für eingebundene Layoutdateien.</para>
     </description>
     <childelements>
-      <cmd name="Record" />
-      <cmd name="SetVariable" />
-      <cmd name="Hyphenation" />
-      <cmd name="SetGrid" />
-      <cmd name="Pagetype" />
-      <cmd name="Options" />
-      <cmd name="LoadFontfile" />
-      <cmd name="DefineColor" />
-      <cmd name="DefineFontfamily" />
-      <cmd name="Pageformat" />
-      <cmd name="DefineTextformat" />
+      <oneOrMore>
+        <reference name="Toplevel"/>
+      </oneOrMore>
     </childelements>
-    <remark xml:lang="en">
-      <para>This command is currently disabled.</para>
-    </remark>
-    <remark xml:lang="de">
-      <para>Dieser Befehl ist derzeit deaktiviert.</para>
-    </remark>
+    <example xml:lang="en">
+      <para>The main file:</para>
+      <listing><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns:xi="http://www.w3.org/2001/XInclude">
+  
+  <xi:include href="sublayout.xml" xml:base=""/>
+  
+  <Record element="data">
+    <PlaceObject background="full" backgroundcolor="green">
+      <Textblock>
+        <Paragraph><Value>Hello world</Value></Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+  
+</Layout>
+]]></listing>
+      <para>and the file <tt>sublayout.xml</tt>:</para>
+      <listing><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<Include xmlns="urn:speedata.de:2009/publisher/en"  
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  
+  <DefineColor name="green" value="#0f0"/>
+  <DefineColor name="gray" value="#ddd"/>
+  
+</Include>
+]]></listing>
+    </example>
     <example xml:lang="de">
       <para>Die Hauptdatei</para>
       <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/de"

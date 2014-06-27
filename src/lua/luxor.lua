@@ -16,6 +16,8 @@ local current_element
 local decoder
 local err = err or print
 
+local parse_xml_file
+
 local html5entities = { apos = "'",
 	["Aacute"] = "Á", ["aacute"] = "á",  ["acirc"] = "â",   ["Acirc"] = "Â",   ["acute"] = "´",  ["AElig"] = "Æ",
 	["aelig"] = "æ",  ["agrave"] = "à",  ["Agrave"] = "À",  ["alefsym"] = "ℵ", ["Alpha"] = "Α",  ["alpha"] = "α",
@@ -192,11 +194,15 @@ local function parse_element( txt,pos,namespaces )
 	elseif nextchar == "?" then
 		return parse_pi(txt,pos)
 	else
-		local elt,eltname,namespace,local_name,ns
+		local elt,eltname,namespace,local_name,ns,xinclude
 		_,pos,eltname = string.find(txt,"([^/>%s]+)",pos + 1)
 		pos, elt = read_attributes(txt,pos + 1,namespaces)
 		_,_,namespace,local_name = string.find(eltname,"^(.-):(.*)$")
 		ns = elt[".__ns"]
+		if ns and ns[namespace] == "http://www.w3.org/2001/XInclude" and local_name == "include" then
+			-- w("xinclude %s",tostring(elt["href"]))
+			xinclude = parse_xml_file(elt["href"])
+		end
 		if namespace then
 			if ns and ns[namespace] then
 				elt[".__namespace"] = ns[namespace]
@@ -216,7 +222,11 @@ local function parse_element( txt,pos,namespaces )
 		_,rangle = string.find(txt,">",pos)
 		_,_,pre_rangle = string.find(txt,"(.)",rangle - 1)
 		if pre_rangle == "/" then
-			return elt,rangle
+			if xinclude then
+				return xinclude,rangle
+			else
+				return elt,rangle
+			end
 		end
 		pos = rangle
 		-- "Regular" (non-empty) element. Now parse it
@@ -246,7 +256,11 @@ local function parse_element( txt,pos,namespaces )
 					contents[".__parent"] = elt
 				end
 			else
-				return elt,pos
+				if xinclude then
+					return xinclude,pos
+				else
+					return elt,pos
+				end
 			end
 		end
 	end
@@ -285,7 +299,7 @@ local function parse_xml(txt,options)
 	return ret
 end
 
-local function parse_xml_file( path, options)
+function parse_xml_file( path, options)
 	options = options or {}
   local xmlfile = io.open(path,"rb")
   if not xmlfile then

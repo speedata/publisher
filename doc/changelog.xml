@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
+    <entry version="2.1.9" date="2014-06-27">
+      <en>XInclude rebirth</en>
+      <de>XInclude wieder aktiviert.</de>
+    </entry>
     <entry version="2.1.8" date="2014-06-24">
       <en>Extend table rows (Tr) to re-use as table header.</en>
       <de>Tabellenzeilen (Tr) können als Tabellenkopf wiederbenutzt werden.</de>
