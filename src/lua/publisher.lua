@@ -345,7 +345,7 @@ end
 ---         },
 ---       },
 ---     },
-function dispatch(layoutxml,dataxml,optionen)
+function dispatch(layoutxml,dataxml,options)
     local ret = {}
     local tmp
     if not layoutxml then
@@ -357,7 +357,7 @@ function dispatch(layoutxml,dataxml,optionen)
         if type(j)=="table" then
             local eltname = translate_element(j[".__local_name"])
             if dispatch_table[eltname] ~= nil then
-                tmp = dispatch_table[eltname](j,dataxml,optionen)
+                tmp = dispatch_table[eltname](j,dataxml,options)
 
                 -- Copy-of-elements can be resolveld immediately
                 if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" then

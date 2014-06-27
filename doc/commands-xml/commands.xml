@@ -3681,13 +3681,29 @@
         <para>Die Farbe des Rahmens, wenn ein Rahmen ausgegeben wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
       </description>
     </attribute>
-    <attribute name="background" type="fullwithout" optional="yes">
+    <attribute name="background" optional="yes">
       <description xml:lang="en">
         <para>Fill the background of the object (full grid cells) with a color, given by backgroundcolor.</para>
       </description>
       <description xml:lang="de">
         <para>Erzeugt einen farbigen Hintergrund für das Objekt. Das Attribut ›hintergrundfarbe‹ gibt die Farbe an.</para>
       </description>
+      <choice name="full">
+        <description xml:lang="en">
+          <para>Fill background with the given color (in backgroundcolor).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Den Hintergrund in der angegebenen Farbe füllen (in hintergrundfarbe)</para>
+        </description>
+      </choice>
+      <choice name="without">
+        <description xml:lang="en">
+          <para>Empty background</para>
+        </description>
+        <description xml:lang="de">
+          <para>Leerer Hintergrund</para>
+        </description>
+      </choice>
     </attribute>
     <attribute name="backgroundcolor" type="text" optional="yes">
       <description xml:lang="en">

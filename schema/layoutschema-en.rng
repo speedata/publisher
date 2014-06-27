@@ -2069,6 +2069,12 @@
          <optional>
             <attribute name="background">
                <a:documentation>Fill the background of the object (full grid cells) with a color, given by backgroundcolor.</a:documentation>
+               <choice>
+                  <value>full</value>
+                  <a:documentation xmlns="">Fill background with the given color (in backgroundcolor).</a:documentation>
+                  <value>without</value>
+                  <a:documentation xmlns="">Empty background</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>

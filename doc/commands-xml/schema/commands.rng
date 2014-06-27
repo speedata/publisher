@@ -188,7 +188,6 @@
                     <value>choice</value>
                     <value>all_last</value>
                     <value>all_first</value>
-                    <value>fullwithout</value>
                     <value>xpath</value>
                     <value>number</value>
                     <value>numberorlength</value>
@@ -202,7 +201,6 @@
                     <value>horizontalvertical</value>
                     <value>yesnoauto</value>
                     <value>solidwithout</value>
-                    <value>topmiddlebottom</value>
                     <value>leftright</value>
                     <value>topbottom</value>
                     <value>numberlengthorstar</value>

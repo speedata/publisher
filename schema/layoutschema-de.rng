@@ -2076,6 +2076,12 @@
          <optional>
             <attribute name="hintergrund">
                <a:documentation>Erzeugt einen farbigen Hintergrund für das Objekt. Das Attribut ›hintergrundfarbe‹ gibt die Farbe an.</a:documentation>
+               <choice>
+                  <value>vollständig</value>
+                  <a:documentation xmlns="">Den Hintergrund in der angegebenen Farbe füllen (in hintergrundfarbe)</a:documentation>
+                  <value>ohne</value>
+                  <a:documentation xmlns="">Leerer Hintergrund</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
