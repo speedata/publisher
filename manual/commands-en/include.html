@@ -14,20 +14,47 @@
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">Include</code></h1>
          <h2>Description</h2>
-         <p>Include other layout files.</p>
+         <p>Toplevel element for included layout files.</p>
          <div class="hangingindent">
             <p>Allowed attributes: (none)</p>
          </div>
          <div class="hangingindent">
-            <p>Child elements: <a href="definecolor.html">DefineColor</a>, <a href="definefontfamily.html">DefineFontfamily</a>, <a href="definetextformat.html">DefineTextformat</a>, <a href="hyphenation.html">Hyphenation</a>, <a href="loadfontfile.html">LoadFontfile</a>, <a href="options.html">Options</a>, <a href="pageformat.html">Pageformat</a>, <a href="pagetype.html">Pagetype</a>, <a href="record.html">Record</a>, <a href="setgrid.html">SetGrid</a>, <a href="setvariable.html">SetVariable</a></p>
+            <p>Child elements: <a href="definecolor.html">DefineColor</a>, <a href="definefontfamily.html">DefineFontfamily</a>, <a href="definetextformat.html">DefineTextformat</a>, <a href="hyphenation.html">Hyphenation</a>, <a href="loadfontfile.html">LoadFontfile</a>, <a href="options.html">Options</a>, <a href="pageformat.html">Pageformat</a>, <a href="pagetype.html">Pagetype</a>, <a href="record.html">Record</a>, <a href="setgrid.html">SetGrid</a>, <a href="setvariable.html">SetVariable</a>, <a href="stylesheet.html">Stylesheet</a></p>
          </div>
          <div class="hangingindent">
             <p>Parent elements: <a href="layout.html">Layout</a></p>
          </div>
-         <h3>Remarks</h3>
+         <h2>Example</h2>
          
-         <p>This command is currently disabled.</p>
-         
+         <p>The main file:</p>
+         <pre class="syntax xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns:xi="http://www.w3.org/2001/XInclude"&gt;
+  
+  &lt;xi:include href="sublayout.xml" xml:base=""/&gt;
+  
+  &lt;Record element="data"&gt;
+    &lt;PlaceObject background="full" backgroundcolor="green"&gt;
+      &lt;Textblock&gt;
+        &lt;Paragraph&gt;&lt;Value&gt;Hello world&lt;/Value&gt;&lt;/Paragraph&gt;
+      &lt;/Textblock&gt;
+    &lt;/PlaceObject&gt;
+  &lt;/Record&gt;
+  
+&lt;/Layout&gt;
+</pre>
+         <p>and the file <span class="tt">sublayout.xml</span>:
+         </p>
+         <pre class="syntax xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;Include xmlns="urn:speedata.de:2009/publisher/en"  
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+  
+  &lt;DefineColor name="green" value="#0f0"/&gt;
+  &lt;DefineColor name="gray" value="#ddd"/&gt;
+  
+&lt;/Include&gt;
+</pre>
          <h2>See also</h2>
          <a href="layout.html">Layout</a>
          
@@ -122,7 +149,7 @@
             <li><a href="while.html">While</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.8 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.9 |
       <a href="../index.html">Start page</a>
       |
       <a href="../commands-en/layout.html">Command reference</a> |

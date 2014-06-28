@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (en)</title>
   <id>http://www.speedata.de</id>
-  <updated>2014-06-24T17:25:00+02:00</updated>
+  <updated>2014-06-28T08:02:40+02:00</updated>
   <subtitle>New revisions for download and changelog.</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.1.9</title>
+    <updated>2014-06-27T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-06-27:</id>
+    <content type="html">XInclude rebirth</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.1.8</title>
     <updated>2014-06-24T00:00:00Z</updated>
