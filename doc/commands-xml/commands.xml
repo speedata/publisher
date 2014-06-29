@@ -1854,7 +1854,7 @@
   xmlns:sd="urn:speedata:2009/publisher/functions/en"
   xmlns:xi="http://www.w3.org/2001/XInclude">
   
-  <xi:include href="sublayout.xml" xml:base=""/>
+  <xi:include href="sublayout.xml" />
   
   <Record element="data">
     <PlaceObject background="full" backgroundcolor="green">
