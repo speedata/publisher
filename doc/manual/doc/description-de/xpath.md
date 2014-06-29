@@ -72,6 +72,8 @@ sd:seitenzahlen-zusammenfassen(\<Seitenzahlen\>,\<Trenner für Bereiche\>,\<Tren
 sd:sha1(\<Wert\>,\<Wert\>, …)|  Erzeugt die SHA-1 Summe der Hintereinanderkettung der Werte als Hex-Zeichenkette. Beispiel: `sd:sha1('Hallo ', 'Welt')` ergibt die Zeichenkette `28cbbc72d6a52617a7abbfff6756d04bbad0106a`.
 sd:variable(\<Name\>)|  ist dasselbe wie \$Name, nur mit der Möglichkeit den Namen auch dynamisch (z.B. mit `concat()`) zu erzeugen.
 sd:variable-vorhanden(\<\<Name\>)|  Prüft, ob eine Variable vorhanden ist.
+sd:blindtext() | Gibt den Blindtext "Lorem ipsum..." mit über 50 Wörtern zurück.
+sd:loremipsum() | Alias für `sd:blindtext()`
 
 Funktion | Beschreibung
 ---------|-------------

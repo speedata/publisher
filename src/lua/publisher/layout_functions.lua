@@ -278,6 +278,19 @@ local function count_saved_paged(dataxml,arg)
     return #publisher.pagestore[arg[1]]
 end
 
+local function loremipsum( )
+    local lorem = [[ 
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
+        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea 
+        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate 
+        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint 
+        occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
+        mollit anim id est laborum.
+    ]]
+    return lorem:gsub("^%s*(.-)%s*$","%1"):gsub("[%s\n]+"," ") 
+end
+
 local register = publisher.xpath.register_function
 register("urn:speedata:2009/publisher/functions/en","number-of-rows",number_of_rows)
 register("urn:speedata:2009/publisher/functions/de","anzahl-zeilen",number_of_rows)
@@ -360,5 +373,10 @@ register("urn:speedata:2009/publisher/functions/de","anzahl-gespeicherte-seiten"
 
 register("urn:speedata:2009/publisher/functions/en","sha1",shaone)
 register("urn:speedata:2009/publisher/functions/de","sha1",shaone)
+
+register("urn:speedata:2009/publisher/functions/en","dummytext",loremipsum)
+register("urn:speedata:2009/publisher/functions/de","blindtext",loremipsum)
+register("urn:speedata:2009/publisher/functions/en","loremipsum",loremipsum)
+register("urn:speedata:2009/publisher/functions/de","loremipsum",loremipsum)
 
 file_end("layout_functions.lua")
