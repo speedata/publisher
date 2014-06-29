@@ -791,7 +791,7 @@ end
 M.default_functions["normalize-space"] = function(dataxml, arg )
     local str = arg[1]
     if type(str) == "string" then
-        return str:gsub("^%s*(.-)%s*$","%1"):gsub("%s+"," ")
+        return str:gsub("^%s*(.-)%s*$","%1"):gsub("[%s\n]+"," ")
     end
 end
 

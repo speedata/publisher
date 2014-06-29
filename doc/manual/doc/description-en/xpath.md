@@ -99,6 +99,7 @@ position() | Return the position of the current node.
 string(\<sequence\>) | Return the text value of the sequence e.g. the contents of the elemements.
 string-join(\<sequence\>,separator) | Return the string value of the sequence, where each element is separated by the separator.
 true() | Return *true*.
+normalize-space(\<text\>) | Return the text without leading and trailing spaces. All newlines will be changed to spaces. Multiple spaces/newlines will be changed to a single space.
 
 Todo document:
 --------------
@@ -107,7 +108,6 @@ Todo document:
 - `ceiling()`
 - `max()`
 - `min()`
-- `normalize-space()`
 - `node()`
 - `string()`
 - `upper-case()`

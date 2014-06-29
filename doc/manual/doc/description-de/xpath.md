@@ -87,6 +87,7 @@ position()|  Ermittelt die Position des aktuellen Datensatzes.
 string(\<Sequenz\>)|  Gibt den Textwert der Sequenz zurück, d.h. den Inhalt der Elemente.
 string-join(\<Sequenz\>, Separator)|  Gibt den Textwert der Sequenz zurück, wobei alle Elemente durch den Separator getrennt werden.
 true()|  Gibt „Wahr“ zurück.
+normalize-space(\<text\>) | Gibt den Text ohne führende und nachstehende Leerzeichen zurück. Alle Zeilenvorschübe werden durch Leerzeichen ersetzt. Mehrfach hintereinander auftretende Leerzeichen/Zeilenvorschübe werden durch ein einzelnes Leerzeichen ersetzt.
 
 Todo Dokumentieren:
 -------------------
@@ -95,7 +96,6 @@ Todo Dokumentieren:
 - `ceiling()`
 - `max()`
 - `min()`
-- `normalize-space()`
 - `node()`
 - `string()`
 - `upper-case()`
