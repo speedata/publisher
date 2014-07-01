@@ -9,7 +9,7 @@ Liste der Änderungen
 
 */}}{{ template "changelog" . }}
 
-Version 2.0
+Version 2.0 (2014-07-01)
 -----------
 
 -   Neuer [Kommandozeilenschalter](commandline.html) `cutmarks` um Schnittmarken anzuzeigen. (1.99.46)

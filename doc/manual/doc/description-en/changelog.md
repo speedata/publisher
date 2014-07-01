@@ -9,7 +9,7 @@ Changelog
 */}}{{ template "changelog" . }}
 
 
-Version 2.0
+Version 2.0 (2014-07-01)
 -----------
 
 -   New [Command line parameter](commandline.html) `cutmarks` to display cutmarks. (1.99.46)
