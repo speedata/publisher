@@ -340,7 +340,7 @@ task :deb do
 	        Version: #{publisher_version}
 	        Section: text
 	        Priority: optional
-	        Architecture: #{arch}
+	        Architecture: #{debarch}
 	        Installed-Size: #{size}
 	        Maintainer: speedata <info@speedata.de>
 	        Description: speedata publisher
