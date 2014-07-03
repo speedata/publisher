@@ -3402,10 +3402,10 @@
     </childelements>
     <attribute name="allowbreak" type="text" optional="yes">
       <description xml:lang="en">
-        <para>(Experimental!) list of characters where a line beak is possible.</para>
+        <para>(Experimental!) list of characters where a line beak is possible. Space character is not implied when this attribute is set.</para>
       </description>
       <description xml:lang="de">
-        <para>(Experimentell) Liste der Zeichen, bei denen ein Umbruch möglich ist.</para>
+        <para>(Experimentell) Liste der Zeichen, bei denen ein Umbruch möglich ist. Das Leerzeichen wird nicht automatisch als Umbruchbunkt erkannt, wenn das Attribut angegeben ist.</para>
       </description>
     </attribute>
     <attribute name="color" type="text" optional="yes">

@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
+    <entry version="2.1.10" date="2014-07-03">
+      <en>Change behaviour of allowbreak=".." at Paragraph. Space must be made explicit.</en>
+      <de>Das Verhalten von erlaubeumbruch bei Absatz wurde geändert. Das Leerzeichen muss explizit angegeben werden.</de>
+    </entry>
+    <entry version="2.1.10" date="2014-06-29">
+      <en>New xpath function sd:dummytext() and sd:loremipsum() for a sample text (lorem ipsum)</en>
+      <de>Neue XPath-Funktion sd:blindtext() und sd:loremipsum() für Beispieltext (lorem ipsum)</de>
+    </entry>
     <entry version="2.1.9" date="2014-06-27">
       <en>XInclude rebirth</en>
       <de>XInclude wieder aktiviert.</de>

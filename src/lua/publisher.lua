@@ -1410,6 +1410,10 @@ function mknodes(str,fontfamily,parameter)
     end
     local lastitemwasglyph
     local newline = 10
+    local breakatspace = true
+    if parameter.allowbreak and not string.find(parameter.allowbreak, " ") then
+        breakatspace = false
+    end
     -- There is a string with utf8 chars
     for s in string.utfvalues(str) do
         local char = unicode.utf8.char(s)
@@ -1473,6 +1477,13 @@ function mknodes(str,fontfamily,parameter)
 
         -- anchor is necessary. Otherwise à (C3A0) would match A0 - %s
         elseif match(char,"^%s$") then -- Space
+            if breakatspace == false then
+                n = node.new("penalty")
+                n.penalty = 10000
+
+                head,last = node.insert_after(head,last,n)
+
+            end
             -- ; and : should have the possibility to break easily if a space follows
             if last and last.id == glyph_node and ( last.char == 58 or last.char == 59) then
                 n = node.new("penalty")
@@ -1484,6 +1495,10 @@ function mknodes(str,fontfamily,parameter)
             n.spec.width   = space
             n.spec.shrink  = shrink
             n.spec.stretch = stretch
+
+            if breakatspace == false then
+                node.set_attribute(n,att_tie_glue,1)
+            end
 
             if parameter.underline == 1 then
                 node.set_attribute(n,att_underline,1)
