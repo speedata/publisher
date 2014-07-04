@@ -7,15 +7,19 @@
   <Pageformat width="100mm" height="100mm"/>
   <SetGrid height="12pt" nx="4"/>
   <DefineColor name="gray" value="#ddd"/>
+  <DefineColor name="green" value="#0e0"/>
   
   <Record element="data">
     <SetVariable variable="a" select="10"/>
-    <SetVariable variable="b" select="7"/>
-    <SetVariable variable="c" select="20"/>
-    <SetVariable variable="d" select="20"/>
+    <SetVariable variable="b" select="6"/>
+    <SetVariable variable="c" select="16"/>
+    <SetVariable variable="d" select="5"/>
 
     <PlaceObject>
       <Table stretch="max">
+        <Tablehead>
+          <Tr backgroundcolor="green"><Td><Paragraph><Value>A head</Value></Paragraph></Td></Tr>
+        </Tablehead>
         <Tr sethead="yes" backgroundcolor="gray"><Td><Paragraph><Value>Header A (</Value><Value select="$a"/><Value>)</Value></Paragraph></Td></Tr>
         <Loop select="$a" variable="i">
           <Tr>
@@ -34,7 +38,8 @@
             <Td><Paragraph><Value>Entry C </Value><Value select="$i"/></Paragraph></Td>
           </Tr>
         </Loop>
-        <Tr sethead="yes" backgroundcolor="gray"><Td><Paragraph><Value>Header D (</Value><Value select="$d"/><Value>)</Value></Paragraph></Td></Tr>
+        <!-- break-below="no": don't repeat the 'Header D' -->
+        <Tr  break-below="no" sethead="yes" backgroundcolor="gray"><Td><Paragraph><Value>Header D (</Value><Value select="$d"/><Value>)</Value></Paragraph></Td></Tr>
         <Loop select="$d" variable="i">
           <Tr>
             <Td><Paragraph><Value>Entry D </Value><Value select="$i"/></Paragraph></Td>

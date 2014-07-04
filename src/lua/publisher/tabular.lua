@@ -1001,7 +1001,7 @@ function typeset_row(self, tr_contents, current_row )
         trace("table: no td-cells found in this column")
         v = publisher.create_empty_hbox_with_width(self.tablewidth_target)
         trace("table: create empty hbox")
-        v = publisher.add_glue(v,"head",fill) -- sonst gäb's ne underfull vbox
+        v = publisher.add_glue(v,"head",fill) -- otherwise we get an underfull vbox
         row[1] = node.vpack(v,self.rowheights[current_row],"exactly")
     end
 
@@ -1230,6 +1230,7 @@ function typeset_table(self)
     local tableheads_extra = {}
 
 
+    -- The dynamic table head on page n should be the same as on n - 1, unless changed
     setmetatable(tableheads_extra, { __index = function(tbl,idx)
         if idx < 1 then return nil end
         return tbl[idx - 1]
@@ -1257,11 +1258,9 @@ function typeset_table(self)
     -- The maximum heights are saved here for each table. Currently all tables must have the same height (see the metatable)
     local pagegoals = {}
 
-    local function showheader( tablepart )
-        -- We can skip the header on pages where the first line is also
-        if omit_head_on_pages[tablepart] then return false end
+    -- Return a boolean if we need to show the static header on this page
+    local function showheader_static( tablepart )
         if tablepart_absolute == 1 and filter.tablehead_force_first then return true end
-        if tableheads_extra[tablepart_absolute] ~= nil then return true end
         if not filter.tablehead then return true end
         if math.fmod(tablepart_absolute,2) == math.fmod(startpage,2) then
             if filter.tablehead == "odd" then
@@ -1277,15 +1276,29 @@ function typeset_table(self)
             end
         end
     end
+
+    -- Return a boolean if we need to show the dynamic header on this page
+    local function showheader( tablepart )
+        -- We can skip the dynamic header on pages where the first line is the next dynamic header
+        if omit_head_on_pages[tablepart] then return false end
+        if tableheads_extra[tablepart_absolute] ~= nil then return true end
+        return false
+    end
+
+
     local function get_height_header(i)
-        if not showheader(i) then return 0 end
-        if tableheads_extra[i] then
-            return tableheads_extra[i].height + self.rowsep
+        local ht = 0
+        if showheader_static(i) then
+            if i == 1 then
+                ht = tablehead_first[1].height + self.rowsep
+            else
+                ht = tablehead[1].height + self.rowsep
+            end
         end
-        if i == 1 then
-            return tablehead_first[1].height + self.rowsep
+        if showheader(i) then
+            ht = ht + tableheads_extra[i].height + self.rowsep
         end
-        return tablehead[1].height + self.rowsep
+        return ht
     end
 
     setmetatable(pagegoals, { __index = function(tbl,idx)
@@ -1300,15 +1313,20 @@ function typeset_table(self)
 
 
     local function get_tablehead( page )
-        if s == 1 then
-            return tablehead_first[1]
-        end
         if tableheads_extra[page] then
             return node.copy_list(tableheads_extra[page])
         end
-        return node.copy_list(tablehead[1])
+        local tmp = node.new("hlist")
+        return tmp
     end
 
+
+    local function get_tablehead_static( page )
+        if s == 1 then
+            return tablehead_first[1]
+        end
+        return node.copy_list(tablehead[1])
+    end
 
     -- When we split the current table we return an array:
     local final_split_tables = {}
@@ -1345,7 +1363,6 @@ function typeset_table(self)
         -- We can mark a row as "use_as_head" to turn the row into a dynamic head
         local use_as_head = node.has_attribute(rows[i],publisher.att_use_as_head)
         if use_as_head then
-            -- tablehead[1] = node.copy(rows[i])
             tableheads_extra[#splits + 1] = node.copy(rows[i])
         end
         local shiftup = node.has_attribute(rows[i],publisher.att_tr_shift_up) or 0
@@ -1380,6 +1397,9 @@ function typeset_table(self)
             end
             -- ==0 can happen when there's not enough room for table head + first line
             if last_possible_split_is_after_line ~= 0 then
+                if node.has_attribute(rows[last_possible_split_is_after_line + 1],publisher.att_use_as_head) then
+                    omit_head_on_pages[#splits + 1] = true
+                end
                 splits[#splits + 1] = last_possible_split_is_after_line
                 tablepart_absolute = tablepart_absolute + 1
             else
@@ -1424,6 +1444,9 @@ function typeset_table(self)
                 thissplittable[#thissplittable + 1] = node.copy_list(tmp2)
             end
         else
+            if showheader_static(s-1) then
+                thissplittable[#thissplittable + 1] = get_tablehead_static(s-1)
+            end
             if showheader(s-1) then
                 thissplittable[#thissplittable + 1] = get_tablehead(s-1)
             end
