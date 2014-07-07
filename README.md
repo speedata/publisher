@@ -4,26 +4,32 @@ speedata Publisher
 About
 -----
 
-The speedata Publisher is a full featured database publishing software. It has a built-in layout description language which allows you to create arbitrary complex layouts.
+The speedata Publisher is a full featured database publishing software. It generates PDF files from XML data and XML layout instructions. It is used to make product catalogs and other documents with high demands on the layout.
 
-Status of this source code
---------------------------
+It's built-in layout description language allows you to create almost arbitrary layouts, while keeping the job as simple as possible.
 
-The code is fully functional. See [the requirements section on the github page](http://speedata.github.com/publisher/) on how to get the software running.
 
-We are on our way to version 2 of the publisher. Expect lots of code changes. The layout should stay the same with all future versions.
+Can I use this in production?
+-----------------------------
+
+Yes. Absolutely. We release stable (long term support) versions once in a while which are heavily tested in commercial environments and we release _unstable_ versions often. Note that these _unstable_ are still safe to use, they just might contain some experimental new features.
+
+Just get one of the ready-to-run packages from http://download.speedata.de/public/publisher/ and follow the directions inside the ZIP file (=just extract and set the PATH variable).
+
 
 Bugs
 ----
 
 Please use the [github bug tracker](https://github.com/speedata/publisher/issues) for reporting bugs.
 
+
+
 License / Contributing
 ----------------------
 
 The license is AGPLv3 for now, see the file COPYING in the root directory. This is not set in stone, we might choose a more liberal license in the future.
 
-We welcome contributions. Just [follow the github procedure (fork, pull requests)](http://help.github.com/send-pull-requests/). Please note, as we might choose a more liberal license in the future, we appreciate patches under a MIT like license.
+We welcome contributions. Just [follow the github procedure (fork, pull requests)](http://help.github.com/send-pull-requests/).
 
 Contact / Support
 -----------------
