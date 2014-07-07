@@ -601,7 +601,7 @@ function pack_cell(self, blockobject, width, horizontal_alignment)
             if horizontal_alignment == "center" or horizontal_alignment == "justify" then
                 glue_left = node.copy(publisher.glue_stretch2)
                 glue_right = node.copy(publisher.glue_stretch2)
-            elseif horizontal_alignment=="left"    then
+            elseif horizontal_alignment=="left" or horizontal_alignment == nil then
                 glue_left = nil
                 glue_right = node.copy(publisher.glue_stretch2)
             elseif horizontal_alignment=="right"   then
