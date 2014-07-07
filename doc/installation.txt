@@ -1,0 +1,70 @@
+How to install the speedata Publisher (ZIP file)
+================================================
+
+The ZIP file is organized as follows:
+
+speedata-publisher/
+├── bin
+├── share
+└── sw
+
+
+you can run the publisher without further installation just by calling the
+program named 'sp' in the `bin' directory from the command line.
+
+The shell's current directory should be the directory with the data and layout
+file.
+
+To avoid giving the path to the sp binary every time the publisher is called,
+you should add the location of the binary to the PATH environment variable.
+
+
+
+Optional: add bin directory to the PATH environment variable
+=============================================================
+
+Non-permanent
+-------------
+
+{{ if or (eq .Os "linux") (eq .Os "darwin")  }}
+Run this on the command line:
+
+     cd speedata-publisher/bin
+     export PATH=$PATH:$PWD
+{{ end }}{{ if eq .Os "windows"  }}
+Run these commands on the command prompt
+
+    cd speedata-publisher\bin
+    set PATH=%PATH%;%CD%
+{{ end }}
+
+Permanent
+---------
+{{ if eq .Os "linux"  }}
+Edit the startup file for your system. This depends heavily on your
+shell/distribution. Usually it is something like .bashrc or .bash_profile in
+your home directory or /etc/profile for a system wide installation. Add a line
+like this:
+
+    export PATH=$PATH:/path/to/your/installation
+
+{{ end }}{{ if eq .Os "darwin"  }}
+For a global installation: add a file in /etc/paths.d with one line
+(the path do the bin directory):
+
+    cd speedata-publisher/bin
+    echo $PWD | sudo tee /etc/paths.d/speedata
+
+For a local installation:
+
+Edit the startup file for your system. This depends heavily on your
+shell/distribution. Usually it is something like .bashrc or .bash_profile in
+your home directory. Add a line like this:
+
+    export PATH=$PATH:/path/to/your/installation
+
+
+{{ end }}{{ if eq .Os "windows"  }}
+
+See http://www.computerhope.com/issues/ch000549.htm for instructions.
+{{ end }}

@@ -161,6 +161,14 @@ task :zip do
 		next
 	end
 	publisher_version = @versions['publisher_version']
+
+	ENV['GOPATH'] = "#{srcdir}/go"
+	Dir.chdir(srcdir.join("go")) do
+		puts "Building the mkreadme binary..."
+		sh "go build -o  #{installdir}/bin/mkreadme support/mkreadme"
+		puts "...done"
+	end
+
 	dest="#{builddir}/speedata-publisher"
 	targetbin="#{dest}/bin"
 	targetshare="#{dest}/share"
@@ -232,6 +240,7 @@ task :zip do
 		  FileUtils.cp(x,File.join(targetsw,File.dirname(x)))
 		}
 	end
+	sh "#{installdir}/bin/mkreadme #{platform} #{dest}"
 	dirname = "speedata-publisher"
 	cmdline = "zip -rq #{zipname} #{dirname}"
 	Dir.chdir("build") do
