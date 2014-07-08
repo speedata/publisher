@@ -500,7 +500,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
                 fam.normal = tmp
             else
                 fam.normal = 1
-                err("Fontinstance 'normal' could not be created for %q.",tostring(v.schriftart))
+                err("Fontinstance 'normal' could not be created for %q.",tostring(fontface))
             end
             ok,tmp=fonts.make_font_instance(fontface,fam.scriptsize)
             if ok then

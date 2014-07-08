@@ -183,11 +183,6 @@ textformats = {
     rechts         = { indent = 0, alignment="rightaligned",rows = 1},
 }
 
--- FIXME: not used currently -> implement!
--- Liste der Schriftarten und deren Synonyme. Beispielsweise könnte ein Schlüssel `Helvetica` sein,
--- der Eintrag dann `texgyreheros-regular.otf`
--- schrifttabelle = {}
-
 
 --- The bookmarks table has the format
 ---     bookmarks = {
