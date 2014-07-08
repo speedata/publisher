@@ -43,7 +43,7 @@ lookup_fontfamily_number_instance={}
 function load_fontfile( name, filename,parameter_tab)
     assert(filename)
     assert(name)
-    lookup_fontname_filename[name]={filename,parameter_tab}
+    lookup_fontname_filename[name]={filename,parameter_tab or {}}
     return true
 end
 
@@ -80,8 +80,10 @@ function make_font_instance( name,size )
     end
     local filename,parameter = unpack(lookup_fontname_filename[name])
     assert(filename)
-
     local k = {filename = filename, size = size}
+    if parameter.otfeatures then
+        k.smcp = parameter.otfeatures.smcp
+    end
     local fontnumber = table.find(font_instances,k)
     if fontnumber then
         return true,fontnumber
