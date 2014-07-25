@@ -250,17 +250,21 @@ function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname,keepposition)
         local max_y = frame_margin_top  + math.min(self:number_of_rows(areaname),    y + ht - 1)
         for _x = x + frame_margin_left, max_x do
             for _y = y + frame_margin_top, max_y do
-                if self.allocation_x_y[_x][_y] then
+                if self.allocation_x_y[_x] == nil then
                     grid_conflict = true
-                    self.allocation_x_y[_x][_y] = self.allocation_x_y[_x][_y] + 1
                 else
-                    local color = 1
-                    if _x == max_x and show_right then
-                        color = 3
-                    elseif _y == max_y and show_bottom then
-                        color = 3
+                    if self.allocation_x_y[_x][_y] then
+                        grid_conflict = true
+                        self.allocation_x_y[_x][_y] = self.allocation_x_y[_x][_y] + 1
+                    else
+                        local color = 1
+                        if _x == max_x and show_right then
+                            color = 3
+                        elseif _y == max_y and show_bottom then
+                            color = 3
+                        end
+                        self.allocation_x_y[_x][_y] = color
                     end
-                    self.allocation_x_y[_x][_y] = color
                 end
             end
         end
