@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
+    <entry version="2.1.12" date="2014-07-25">
+      <en>New command »Color« to switch to a different text color in text.</en>
+      <de>Neuer Befehl »Farbe« um vorübergehend die Textfarbe zu ändern.</de>
+    </entry>
     <entry version="2.1.10" date="2014-07-03">
       <en>Change behaviour of allowbreak=".." at Paragraph. Space must be made explicit.</en>
       <de>Das Verhalten von erlaubeumbruch bei Absatz wurde geändert. Das Leerzeichen muss explizit angegeben werden.</de>

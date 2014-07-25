@@ -285,6 +285,39 @@ function commands.bookmark( layoutxml,dataxml )
     return p
 end
 
+--- Color
+--- -----
+--- Set the color of the enclosed text.
+function commands.color( layoutxml, dataxml )
+    local colorname = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
+    local colortable
+    if colorname then
+        if not publisher.colors[colorname] then
+            err("Color %q is not defined yet.",colorname)
+        else
+            colortable = publisher.colors[colorname].index
+        end
+    end
+
+    local a = paragraph:new()
+
+    local objects = {}
+    local tab = publisher.dispatch(layoutxml,dataxml)
+
+    for i,j in ipairs(tab) do
+        if publisher.elementname(j,true) == "Value" and type(publisher.element_contents(j)) == "table" then
+            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{})
+        else
+            objects[#objects + 1] = publisher.element_contents(j)
+        end
+    end
+    for _,j in ipairs(objects) do
+        a:append(j,{})
+    end
+
+    a:set_color(colortable)
+    return a
+end
 
 
 --- Column

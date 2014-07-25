@@ -80,6 +80,7 @@
         <cmd name="I"/>
         <cmd name="B"/>
         <cmd name="Br"/>
+        <cmd name="Color"/>
         <cmd name="HSpace"/>
         <cmd name="U"/>
         <cmd name="Fontface"/>
@@ -742,6 +743,61 @@
     <seealso>
       <cmd name="Switch" />, <cmd name="Otherwise" />
     </seealso>
+  </command>
+  <command name="Color">
+    <description xml:lang="en">
+      <para>Switch to another text color</para>
+    </description>
+    <description xml:lang="de">
+      <para>Auf eine andere Textfarbe wechseln</para>
+    </description>
+    <childelements>
+      <reference name="Textvalues"/>
+    </childelements>
+    <attribute name="name" optional="no" type="text">
+      <description xml:lang="en">
+        <para>The name of the color. Must be pre-defined with <cmd name="DefineColor"/>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name der Farbe. Muss mit <cmd name="DefineColor"/> vorher definiert werden.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en">
+
+  <DefineColor name="red" value="#f00"/>
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>Hello </Value><Color name="red"><Value>bar</Value></Color>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Layout xmlns:sd="urn:speedata:2009/publisher/functions/de" xmlns="urn:speedata.de:2009/publisher/de">
+
+  <DefiniereFarbe name="rot" wert="#f00"/>
+
+  <Datensatz element="data">
+    <ObjektAusgeben>
+      <Textblock>
+        <Absatz>
+          <Wert>Hallo </Wert><Farbe name="rot"><Wert>Welt</Wert></Farbe>
+        </Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+  </Datensatz>
+
+</Layout>
+]]></listing>
+    </example>
+    <seealso><cmd name="DefineColor"/></seealso>
   </command>
   <command name="Contents">
     <description xml:lang="en">

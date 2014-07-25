@@ -217,6 +217,7 @@
                <ref name="e_I"/>
                <ref name="e_B"/>
                <ref name="e_Br"/>
+               <ref name="e_Color"/>
                <ref name="e_HSpace"/>
                <ref name="e_U"/>
                <ref name="e_Fontface"/>
@@ -480,6 +481,35 @@
                <ref name="e_While"/>
             </optional>
          </oneOrMore>
+      </element>
+   </define>
+   <define name="e_Color">
+      <element name="Color">
+         <a:documentation>Switch to another text color</a:documentation>
+         <attribute name="name">
+            <a:documentation>The name of the color. Must be pre-defined with DefineColor.</a:documentation>
+         </attribute>
+         <zeroOrMore>
+            <choice>
+               <ref name="e_Action"/>
+               <ref name="e_A"/>
+               <ref name="e_I"/>
+               <ref name="e_B"/>
+               <ref name="e_Br"/>
+               <ref name="e_Color"/>
+               <ref name="e_HSpace"/>
+               <ref name="e_U"/>
+               <ref name="e_Fontface"/>
+               <ref name="e_Image"/>
+               <ref name="e_Sub"/>
+               <ref name="e_Sup"/>
+               <ref name="e_URL"/>
+               <ref name="e_Value"/>
+               <ref name="e_Switch"/>
+               <ref name="e_Loop"/>
+               <ref name="e_ForAll"/>
+            </choice>
+         </zeroOrMore>
       </element>
    </define>
    <define name="e_Contents">
@@ -840,6 +870,7 @@
                <ref name="e_I"/>
                <ref name="e_B"/>
                <ref name="e_Br"/>
+               <ref name="e_Color"/>
                <ref name="e_HSpace"/>
                <ref name="e_U"/>
                <ref name="e_Fontface"/>
@@ -1064,6 +1095,7 @@
                <ref name="e_I"/>
                <ref name="e_B"/>
                <ref name="e_Br"/>
+               <ref name="e_Color"/>
                <ref name="e_HSpace"/>
                <ref name="e_U"/>
                <ref name="e_Fontface"/>
@@ -1938,7 +1970,7 @@
          <a:documentation>Insert a paragraph of text. The width of the paragraph is inherited from the surrounding element.</a:documentation>
          <optional>
             <attribute name="allowbreak">
-               <a:documentation>(Experimental!) list of characters where a line beak is possible.</a:documentation>
+               <a:documentation>(Experimental!) list of characters where a line beak is possible. Space character is not implied when this attribute is set.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1976,6 +2008,7 @@
                <ref name="e_I"/>
                <ref name="e_B"/>
                <ref name="e_Br"/>
+               <ref name="e_Color"/>
                <ref name="e_HSpace"/>
                <ref name="e_U"/>
                <ref name="e_Fontface"/>

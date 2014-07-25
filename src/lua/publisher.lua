@@ -238,6 +238,7 @@ local dispatch_table = {
     Bookmark                = commands.bookmark,
     Box                     = commands.box,
     Br                      = commands.br,
+    Color                   = commands.color,
     Column                  = commands.column,
     Columns                 = commands.columns,
     ["Copy-of"]             = commands.copy_of,

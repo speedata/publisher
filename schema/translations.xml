@@ -16,6 +16,7 @@
     <element key="br" en="br" de="br"/>
     <element key="Br" en="Br" de="Br"/>
     <element key="Case" en="Case" de="Fall"/>
+    <element key="Color" en="Color" de="Farbe"/>
     <element key="Column" en="Column" de="Spalte"/>
     <element key="Columns" en="Columns" de="Spalten"/>
     <element key="Contents" en="Contents" de="Inhalt"/>
