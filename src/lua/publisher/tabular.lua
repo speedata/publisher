@@ -73,6 +73,15 @@ function attach_objects_row( tab )
                     end
                     block[#block + 1] = {eltcontents}
                 elseif eltname == "Paragraph" or eltname == "Box" then
+                    local default_textformat_name
+                    local alignment = td_contents.align or tab.align
+                    if     alignment=="center"  then  default_textformat_name = "__centered"
+                    elseif alignment=="left"    then  default_textformat_name = "__leftaligned"
+                    elseif alignment=="right"   then  default_textformat_name = "__rightaligned"
+                    elseif alignment=="justify" then  default_textformat_name = "__justified"
+                    end
+
+                    eltcontents.textformat = eltcontents.textformat or default_textformat_name or "__leftaligned"
                     -- block
                     if #inline > 0 then
                         -- add current inline to the list of blocks
@@ -206,7 +215,7 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
                     end
 
                     if inlineobject.min_width then
-                        min_wd = math.max(inlineobject:min_width() + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
+                        min_wd = math.max(inlineobject:min_width(inlineobject.alignment) + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
                     end
                     if inlineobject.max_width then
                         max_wd = math.max(inlineobject:max_width() + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)

@@ -3,7 +3,7 @@
 --  paragraph.lua
 --  speedata publisher
 --
---  Copyright 2012-2013 Patrick Gundlach.
+--  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
 
 file_start("paragraph.lua")
@@ -80,37 +80,15 @@ function Paragraph:set_color( color )
     colstop.prev = last
 end
 
--- -- Return the width of the longest word. FIXME: check for hypenation
--- function Paragraph:oldmin_width()
---     assert(self)
---     local wd = 0
---     local last_glue = self.nodelist
---     local dimen
---     -- Just measure the distance between two glue nodes and take the maximum of that
---     local head = self.nodelist
---     while head do
---         if head.id == publisher.glue_node then
---             dimen = node.dimensions(last_glue,head)
---             wd = math.max(wd,dimen)
---             last_glue = head
---         end
---         head = head.next
---     end
---     -- There are two cases here, either there is only one word (= no glue), then last_glue is at the beginning of the
---     -- node list. Or we are at the last glue, then there is a word after that glue. last_glue is the last glue element.
---     dimen = node.dimensions(last_glue,node.tail(n))
---     wd = math.max(wd,dimen)
---     return wd
--- end
-
-function Paragraph:min_width()
+-- Return the width of the longest word (breakable part)
+function Paragraph:min_width(textfomat_name)
     -- Box of wd 1 will generate messages for all lines. We should ignore them as they
     -- are intentional and not to be seen by the user (hfuzz)
     local hfuzz = tex.hfuzz
     tex.hfuzz = publisher.maxdimen
 
     local nl = node.copy_list(self.nodelist)
-    local box = self:format(1)
+    local box = self:format(1,textfomat_name)
     local head = box.head
     local _w,_h,_d
     local max = 0

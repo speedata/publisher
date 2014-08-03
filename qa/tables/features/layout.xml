@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+
+  <Record element="data">
+    <!-- allowbreak in tables -->
+    <PlaceObject>
+      <Table width="3">
+        <Tr>
+          <Td>
+            <Paragraph allowbreak="/">
+              <Value>The/quick/brown/fox/jumps/over/the/lazy/dog</Value>
+            </Paragraph>
+          </Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
