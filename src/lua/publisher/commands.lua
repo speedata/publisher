@@ -1509,7 +1509,7 @@ function commands.place_object( layoutxml,dataxml )
         err("Areas can't be combined with groups")
     end
     area = area or publisher.default_areaname
-    framecolor = framecolor or "Schwarz"
+    framecolor = framecolor or "black"
 
     if column and not tonumber(column) then
         -- looks like column is a string
@@ -1829,7 +1829,7 @@ function commands.rule( layoutxml,dataxml )
     local rulewidth     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",  "rawstring")
     local color         = publisher.read_attribute(layoutxml,dataxml,"color",      "rawstring")
 
-    local colorname = color or "Schwarz"
+    local colorname = color or "black"
 
     if tonumber(length) then
         if direction == "horizontal" then

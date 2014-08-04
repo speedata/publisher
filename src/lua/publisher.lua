@@ -146,7 +146,7 @@ groups    = {}
 -- sometimes we want to save pages for later reuse. Keys are pagestore names
 pagestore = {}
 
-colors    = { Schwarz = { model="grau", g = "0", pdfstring = " 0 G 0 g " }, black = { model="grau", g = "0", pdfstring = " 0 G 0 g " } }
+colors    = { Schwarz = { model="gray", g = "0", pdfstring = " 0 G 0 g " }, black = { model="gray", g = "0", pdfstring = " 0 G 0 g " } }
 colortable = {}
 data_dispatcher = {}
 user_defined_functions = { last = 0}
@@ -1908,7 +1908,7 @@ function set_color_if_necessary( nodelist,color )
 
     local colorname
     if color == -1 then
-        colorname = "Schwarz"
+        colorname = "black"
     else
         colorname = colortable[color]
     end
