@@ -579,8 +579,14 @@ function dothings()
     end
 
     --- At this point, all pages are in the PDF
-    pdf.catalog = [[ /PageMode /UseOutlines ]]
-    pdf.info    = [[ /Creator	(speedata Publisher) /Producer(speedata Publisher, www.speedata.de) ]]
+
+    if pdf.setinfo then
+        pdf.setcatalog([[ /PageMode /UseOutlines ]])
+        pdf.setinfo([[ /Creator	(speedata Publisher) /Producer(speedata Publisher, www.speedata.de) ]])
+    else
+        pdf.catalog = [[ /PageMode /UseOutlines ]]
+        pdf.info = [[ /Creator (speedata Publisher) /Producer(speedata Publisher, www.speedata.de) ]]
+    end
 
     --- Now put the bookmarks in the pdf
     for _,v in ipairs(bookmarks) do
