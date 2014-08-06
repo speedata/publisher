@@ -1110,10 +1110,10 @@
     <childelements />
     <attribute name="model" optional="yes">
       <description xml:lang="en">
-        <para>Color model to be used for the color. Currently “rgb”, “cmyk” and “gray” are supported. More on request.</para>
+        <para>Color model to be used for the color. Currently “rgb”, “cmyk”, “gray” and “spotcolor” are supported.</para>
       </description>
       <description xml:lang="de">
-        <para>Das Farbmodell, das benutzt werden soll. Derzeit werdern »rgb«, »cmyk« und »graustufen« unterstützt. Weitere Farbräume auf Anfrage.</para>
+        <para>Das Farbmodell, das benutzt werden soll. Derzeit werdern »rgb«, »cmyk«, »graustufen« und »sonderfarbe« unterstützt.</para>
       </description>
       <choice name="cmyk">
         <description xml:lang="en">
@@ -1137,6 +1137,14 @@
         </description>
         <description xml:lang="de">
           <para>Graustufen (0=Schwarz)</para>
+        </description>
+      </choice>
+      <choice name="spotcolor">
+        <description xml:lang="en">
+          <para>Use a PANTONE or HKS color.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Eine PANTONE oder HKS Farbe.</para>
         </description>
       </choice>
     </attribute>
@@ -1204,13 +1212,21 @@
         <para>Schwarz (key) Anteil bei CMYK</para>
       </description>
     </attribute>
+    <attribute name="colorname" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>The name of the spot color if model is »spotcolor«. The name must match the required color name, such as »PANTONE 116 C«.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name der Sonderfarbe wenn das Modell auf »sonderfarbe« eingestellt ist. Der muss den offiziellen Namen tragen, wie z.B. »PANTONE 116 C«.</para>
+      </description>
+    </attribute>
     <!-- todo -->
     <attribute name="value" type="text" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Hex value of the color, such as #FA5 or #FFAA55.</para>
       </description>
       <description xml:lang="de">
-        <para></para>
+        <para>Der Hexwert der Farbe, wie beispielsweise #FA5 oder #FFAA55.</para>
       </description>
     </attribute>
     <example xml:lang="de">

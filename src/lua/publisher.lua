@@ -90,6 +90,7 @@ user_defined_bookmark  = 2
 user_defined_mark      = 3
 user_defined_marker    = 4
 user_defined_mark_append = 5
+user_defined_color     = 6
 
 
 glue_spec_node = node.id("glue_spec")
@@ -984,7 +985,13 @@ function box( width_sp,height_sp,colorname )
     local _height  = sp_to_bp(height_sp)
 
     local paint = node.new("whatsit","pdf_literal")
-    paint.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colors[colorname].pdfstring,_width,_height)
+    local colentry = colors[colorname]
+    if not colentry then
+        err("Color %q unknown, reverting to black",colorname )
+        colentry = colors["black"]
+    end
+    -- a spot color
+    paint.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colentry.pdfstring,_width,_height)
     paint.mode = 0
 
     local h,v
@@ -996,6 +1003,16 @@ function box( width_sp,height_sp,colorname )
     hglue.spec.stretch       = 2^16
     hglue.spec.stretch_order = 3
     h = node.insert_after(paint,paint,hglue)
+    if colentry.objectnum then
+        local spotcolor_whatsit
+        spotcolor_whatsit = node.new("whatsit","user_defined")
+        spotcolor_whatsit.user_id = user_defined_color
+        spotcolor_whatsit.type = 115  -- type 115: "value is a string"
+        spotcolor_whatsit.value = colorname
+        h = node.insert_before(paint,paint,spotcolor_whatsit)
+    end
+
+
     h = node.hpack(h,width_sp,"exactly")
 
     vglue = node.new(glue_node,0)
@@ -1011,10 +1028,19 @@ end
 
 --- After everything is ready for page shipout, we add debug output and crop marks if necessary
 function dothingsbeforeoutput(  )
+    local page_resources = {}
     local current_page = pages[current_pagenumber]
     local r = current_page.grid
     local str
-    find_user_defined_whatsits(pages[current_pagenumber].pagebox)
+    local colors_used = find_user_defined_whatsits(pages[current_pagenumber].pagebox)
+    local colorname_tbl = {}
+    for colorname,_ in pairs(colors_used) do
+        colorname_tbl[#colorname_tbl + 1] = string.format("/CS%d %d 0 R",colors[colorname].colornum,colors[colorname].objectnum)
+    end
+    if #colorname_tbl > 0 then
+        page_resources[#page_resources + 1] = "/ColorSpace << " .. table.concat(colorname_tbl," ") .. " >>"
+    end
+    pdf.setpageresources(table.concat(page_resources))
     local firstbox
 
     -- White background on page. Todo: Make color customizable and background optional.
@@ -1286,10 +1312,16 @@ end
 
 --- Look for `user_defined` at end of page (shipout) and runs actions encoded in them.
 function find_user_defined_whatsits( head )
+    local colors_used = {}
     local fun
     while head do
         if head.id == vlist_node or head.id==hlist_node then
-            find_user_defined_whatsits(head.list)
+            -- We need to recurse into the boxes. The colors used there must be kept.
+            -- Todo: use a variable that is global for this function. (do local x ; function ... end end)
+            local cu = find_user_defined_whatsits(head.list)
+            for k,_ in pairs(cu) do
+                colors_used[k] = true
+            end
         elseif head.id==whatsit_node then
             if head.subtype == user_defined_whatsit then
                 -- action
@@ -1331,11 +1363,15 @@ function find_user_defined_whatsits( head )
                     else
                         markers[marker]["page"] = tostring(markers[marker]["page"]) .. "," ..  tostring(current_pagenumber)
                     end
+                elseif head.user_id == user_defined_color then
+                    -- a spot color
+                    colors_used[head.value] = true
                 end
             end
         end
         head = head.next
     end
+    return colors_used
 end
 
 --- Node(list) creation

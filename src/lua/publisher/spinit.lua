@@ -4,8 +4,8 @@
 --  spinit.lua
 --  speedata publisher
 --
---  Copyright 2010-2014 Patrick Gundlach.
---  See file COPYING in the root directory for license details.
+--  For a list of authors see `git blame'
+--  See file COPYING in the root directory for license info.
 
 
 

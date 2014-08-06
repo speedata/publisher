@@ -655,7 +655,7 @@
          <a:documentation>Definiert Farben, die später im Layout benutzt werden können</a:documentation>
          <optional>
             <attribute name="modell">
-               <a:documentation>Das Farbmodell, das benutzt werden soll. Derzeit werdern »rgb«, »cmyk« und »graustufen« unterstützt. Weitere Farbräume auf Anfrage.</a:documentation>
+               <a:documentation>Das Farbmodell, das benutzt werden soll. Derzeit werdern »rgb«, »cmyk«, »graustufen« und »sonderfarbe« unterstützt.</a:documentation>
                <choice>
                   <value>cmyk</value>
                   <a:documentation xmlns="">CMYK (Türkis, Magenta, Gelb und Schwarz)</a:documentation>
@@ -663,6 +663,8 @@
                   <a:documentation xmlns="">RGB (Rot, Grün, Blau)</a:documentation>
                   <value>graustufen</value>
                   <a:documentation xmlns="">Graustufen (0=Schwarz)</a:documentation>
+                  <value>sonderfarbe</value>
+                  <a:documentation xmlns="">Eine PANTONE oder HKS Farbe.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -705,8 +707,13 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="farbname">
+               <a:documentation>Der Name der Sonderfarbe wenn das Modell auf »sonderfarbe« eingestellt ist. Der muss den offiziellen Namen tragen, wie z.B. »PANTONE 116 C«.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="wert">
-               <a:documentation/>
+               <a:documentation>Der Hexwert der Farbe, wie beispielsweise #FA5 oder #FFAA55.</a:documentation>
             </attribute>
          </optional>
          <empty/>

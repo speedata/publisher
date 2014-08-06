@@ -2,7 +2,7 @@
 --  sdini.lua
 --  speedata publisher
 --
---  Copyright 2010-2011 Patrick Gundlach.
+--  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
 --
 
@@ -52,7 +52,7 @@ function dirtree(dir)
      	    coroutine.yield(entry,attr)
      	  end
      	  if attr.mode == "directory" then
-            table.insert(dirs, entry)  
+            table.insert(dirs, entry)
      	  end
         end
       end
@@ -79,7 +79,7 @@ local function add_dir( dir )
     else
         if kpse.filelist[filename] == nil then
             kpse.filelist[filename] = i
-        end 
+        end
     end
   end
 end

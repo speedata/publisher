@@ -129,6 +129,7 @@
     <value key="rightaligned" context="*" en="rightaligned" de="rechtsbündig"/>
     <value key="separate" context="*" en="separate" de="separate" />
     <value key="solid" context="*" en="solid" de="durchgezogen"/>
+    <value key="spotcolor" context="*" en="spotcolor" de="sonderfarbe" />
     <value key="top" context="*" en="top" de="top"/>
     <value key="top,left" context="*" en="top,left" de="oben,links"/>
     <value key="top,right" context="*" en="top,right" de="oben,rechts"/>
@@ -188,6 +189,7 @@
     <attribute key="clip" en="clip" de="ausschnitt"/>
     <attribute key="color" en="color" de="farbe"/>
     <attribute key="colspan" en="colspan" de="colspan"/>
+    <attribute key="colorname" en="colorname" de="farbname" />
     <attribute key="column" en="column" de="spalte"/>
     <attribute key="columndistance" en="columndistance" de="spaltenabstand"/>
     <attribute key="columns" en="columns" de="spalten"/>

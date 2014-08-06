@@ -10,6 +10,7 @@ file_start("commands.lua")
 
 require("publisher.fonts")
 require("publisher.tabular")
+spotcolors = require("spotcolors")
 local paragraph = require("paragraph")
 do_luafile("css.lua")
 
@@ -368,6 +369,7 @@ function commands.define_color( layoutxml,dataxml )
     local name  = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
     local value = publisher.read_attribute(layoutxml,dataxml,"value","rawstring")
     local model = publisher.read_attribute(layoutxml,dataxml,"model","string")
+    local colorname = publisher.read_attribute(layoutxml,dataxml,"colorname","rawstring")
 
     local color = { }
 
@@ -385,6 +387,11 @@ function commands.define_color( layoutxml,dataxml )
     elseif model=="gray" then
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number")
         color.pdfstring = string.format("%g g %g G",color.g/100,color.g/100)
+    elseif model=="spotcolor" then
+        local colornumber_objectnumber = spotcolors.add_colordefinition(colorname)
+        color.pdfstring = string.format("/CS%d cs 1 scn ",colornumber_objectnumber[1])
+        color.objectnum = colornumber_objectnumber[2]
+        color.colornum = colornumber_objectnumber[1]
     elseif value then
         local r,g,b
         if #value == 7 then

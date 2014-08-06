@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
+    <entry version="2.1.13" date="2014-08-06">
+      <en>Spot colors (PANTONE and HKS)</en>
+      <de>Sonderfarben (PANTONE und HKS)</de>
+    </entry>
     <entry version="2.1.12" date="2014-07-25">
       <en>New command »Color« to switch to a different text color in text.</en>
       <de>Neuer Befehl »Farbe« um vorübergehend die Textfarbe zu ändern.</de>

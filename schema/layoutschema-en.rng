@@ -652,7 +652,7 @@
          <a:documentation>Colors defined with DefineColors can be referenced later by their name.</a:documentation>
          <optional>
             <attribute name="model">
-               <a:documentation>Color model to be used for the color. Currently “rgb”, “cmyk” and “gray” are supported. More on request.</a:documentation>
+               <a:documentation>Color model to be used for the color. Currently “rgb”, “cmyk”, “gray” and “spotcolor” are supported.</a:documentation>
                <choice>
                   <value>cmyk</value>
                   <a:documentation xmlns="">CMYK (cyan, magenta, yellow, key/black)</a:documentation>
@@ -660,6 +660,8 @@
                   <a:documentation xmlns="">RGB (red, green, blue)</a:documentation>
                   <value>gray</value>
                   <a:documentation xmlns="">Gray (0=Black)</a:documentation>
+                  <value>spotcolor</value>
+                  <a:documentation xmlns="">Use a PANTONE or HKS color.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -702,8 +704,13 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="colorname">
+               <a:documentation>The name of the spot color if model is »spotcolor«. The name must match the required color name, such as »PANTONE 116 C«.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="value">
-               <a:documentation/>
+               <a:documentation>Hex value of the color, such as #FA5 or #FFAA55.</a:documentation>
             </attribute>
          </optional>
          <empty/>
