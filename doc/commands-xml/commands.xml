@@ -1220,7 +1220,14 @@
         <para>Der Name der Sonderfarbe wenn das Modell auf »sonderfarbe« eingestellt ist. Der muss den offiziellen Namen tragen, wie z.B. »PANTONE 116 C«.</para>
       </description>
     </attribute>
-    <!-- todo -->
+    <attribute name="overprint" optional="yes" type="yesno">
+      <description xml:lang="en">
+        <para>Enable overprint for this color.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Überdrucken für diese Farbe anschalten</para>
+      </description>
+    </attribute>
     <attribute name="value" type="text" optional="yes">
       <description xml:lang="en">
         <para>Hex value of the color, such as #FA5 or #FFAA55.</para>

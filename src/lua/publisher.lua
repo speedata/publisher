@@ -151,8 +151,8 @@ pagestore = {}
 -- The spot colors used in the document (even when discarded)
 used_spotcolors = {}
 
--- The predefined colors
-colors    = { Schwarz = { model="gray", g = "0", pdfstring = " 0 G 0 g " }, black = { model="gray", g = "0", pdfstring = " 0 G 0 g " } }
+-- The predefined colors. index = 1 because we "know" that black will be the first registered color.
+colors  = { black = { model="gray", g = "0", pdfstring = " 0 G 0 g ", index = 1 } }
 
 -- An array of defined colors
 colortable = {}
@@ -433,6 +433,10 @@ function dothings()
     set_pageformat(tex.sp("210mm"),tex.sp("297mm"))
     get_languagecode(os.getenv("SP_MAINLANGUAGE") or "en_GB")
 
+
+    register_color("black")
+
+
     --- The free font family `TeXGyreHeros` is a Helvetica clone and is part of the
     --- [The TeX Gyre Collection of Fonts](http://www.gust.org.pl/projects/e-foundry/tex-gyre).
     --- We ship it in the distribution.
@@ -490,6 +494,11 @@ function dothings()
             exit()
         end
     end
+
+    -- We define two graphic states for overprinting on and off.
+    GS_State_OP_On  = pdf.immediateobj([[<< /Type/ExtGState /OP true /OPM 1 >>]])
+    GS_State_OP_Off = pdf.immediateobj([[<< /Type/ExtGState /OP false >>]])
+
     dispatch(layoutxml)
 
     --- override options set in the `<Options>` element
@@ -998,8 +1007,12 @@ end
 
 -- Set the PDF pageresources for the current page.
 function setpageresources()
+    local gstateresource = string.format(" /ExtGState << /GS0 %d 0 R /GS1 %d 0 R >>", GS_State_OP_On, GS_State_OP_Off)
+
     if #used_spotcolors > 0 then
-        pdf.setpageresources("/ColorSpace << " .. spotcolors.getresource(used_spotcolors) .. " >>")
+        pdf.setpageresources("/ColorSpace << " .. spotcolors.getresource(used_spotcolors) .. " >>" .. gstateresource )
+    else
+        pdf.setpageresources(gstateresource)
     end
 end
 
@@ -1945,6 +1958,12 @@ function boxit( box )
     local tmp = node.tail(box.list)
     tmp.next = wbox
     return box
+end
+
+-- We have an array of color names to be used in attributes. Every color needs to get registered!
+function register_color( name )
+    colortable[#colortable + 1] = name
+    return #colortable
 end
 
 -- color is an integer

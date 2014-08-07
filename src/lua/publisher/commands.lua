@@ -370,31 +370,47 @@ function commands.define_color( layoutxml,dataxml )
     local value = publisher.read_attribute(layoutxml,dataxml,"value","rawstring")
     local model = publisher.read_attribute(layoutxml,dataxml,"model","string")
     local colorname = publisher.read_attribute(layoutxml,dataxml,"colorname","rawstring")
+    local overprint = publisher.read_attribute(layoutxml,dataxml,"overprint","boolean")
+
 
     local color = setmetatable({},
         {
            __index = function(tbl,idx)
                if idx == "pdfstring" and tbl.model == "spotcolor" then
                 publisher.usespotcolor(tbl.colornum)
-                return string.format("/CS%d cs 1 scn ",tbl.colornum)
+                local op
+                if tbl.overprint then
+                    op = "/GS0 gs"
+                else
+                    op = ""
+                end
+                return string.format("%s /CS%d cs 1 scn ",op,tbl.colornum)
                end
            end
         })
+    color.overprint = overprint
+
+    local op
+    if overprint then
+        op = "/GS0 gs"
+    else
+        op = ""
+    end
 
     if model=="cmyk" then
         color.c = publisher.read_attribute(layoutxml,dataxml,"c","number")
         color.m = publisher.read_attribute(layoutxml,dataxml,"m","number")
         color.y = publisher.read_attribute(layoutxml,dataxml,"y","number")
         color.k = publisher.read_attribute(layoutxml,dataxml,"k","number")
-        color.pdfstring = string.format("%g %g %g %g k %g %g %g %g K", color.c/100, color.m/100, color.y/100, color.k/100,color.c/100, color.m/100, color.y/100, color.k/100)
+        color.pdfstring = string.format("%s %g %g %g %g k %g %g %g %g K", op, color.c/100, color.m/100, color.y/100, color.k/100,color.c/100, color.m/100, color.y/100, color.k/100)
     elseif model=="rgb" then
         color.r = publisher.read_attribute(layoutxml,dataxml,"r","number") / 100
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number") / 100
         color.b = publisher.read_attribute(layoutxml,dataxml,"b","number") / 100
-        color.pdfstring = string.format("%g %g %g rg %g %g %g RG", color.r, color.g, color.b, color.r,color.g, color.b)
+        color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
     elseif model=="gray" then
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number")
-        color.pdfstring = string.format("%g g %g G",color.g/100,color.g/100)
+        color.pdfstring = string.format("%s %g g %g G",op,color.g/100,color.g/100)
     elseif model=="spotcolor" then
         color.colornum = spotcolors.register(colorname)
     elseif value then
@@ -405,14 +421,14 @@ function commands.define_color( layoutxml,dataxml )
             color.r = math.round(tonumber(r,16) / 255, 3)
             color.g = math.round(tonumber(g,16) / 255, 3)
             color.b = math.round(tonumber(b,16) / 255, 3)
-            color.pdfstring = string.format("%g %g %g rg %g %g %g RG", color.r, color.g, color.b, color.r,color.g, color.b)
+            color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
         elseif #value == 4 then
             model = "rgb"
             r,g,b = string.match(value,"#?(%x)(%x)(%x)")
             color.r = math.round(tonumber(r,16) / 15, 3)
             color.g = math.round(tonumber(g,16) / 15, 3)
             color.b = math.round(tonumber(b,16) / 15, 3)
-            color.pdfstring = string.format("%g %g %g rg %g %g %g RG", color.r, color.g, color.b, color.r,color.g, color.b)
+            color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
         end
     else
         err("Unknown color model: %s",model or "?")
@@ -420,9 +436,7 @@ function commands.define_color( layoutxml,dataxml )
 
     log("Defining color %q",name)
     color.model = model
-
-    publisher.colortable[#publisher.colortable + 1] = name
-    color.index = #publisher.colortable
+    color.index = publisher.register_color(name)
     publisher.colors[name]=color
 end
 
@@ -2473,7 +2487,7 @@ function commands.textblock( layoutxml,dataxml )
     trace("Textblock")
     local fontfamily
     local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface","rawstring")
-    local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",   "rawstring")
+    local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",   "rawstring", "black")
     local width          = publisher.read_attribute(layoutxml,dataxml,"width",   "length_sp")
     local angle          = publisher.read_attribute(layoutxml,dataxml,"angle",   "number")
     local columns        = publisher.read_attribute(layoutxml,dataxml,"columns", "number")

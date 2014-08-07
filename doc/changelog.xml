@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
+    <entry version="2.1.13" date="2014-08-07">
+      <en>Colors can have overprinting enabled.</en>
+      <de>Farben können die Eigenschaft »überdrucken« haben.</de>
+    </entry>
     <entry version="2.1.13" date="2014-08-06">
       <en>Spot colors (PANTONE and HKS)</en>
       <de>Sonderfarben (PANTONE und HKS)</de>

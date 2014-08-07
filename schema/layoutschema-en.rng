@@ -709,6 +709,16 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="overprint">
+               <a:documentation>Set overprinting for this color.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+                  <text/>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="value">
                <a:documentation>Hex value of the color, such as #FA5 or #FFAA55.</a:documentation>
             </attribute>

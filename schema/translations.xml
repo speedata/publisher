@@ -250,6 +250,7 @@
     <attribute key="openon" en="openon" de="öffnenauf"/>
     <attribute key="orphan" en="orphan" de="schusterjunge" />
     <attribute key="overshoot" en="overshoot" de="übersteigen"/>
+    <attribute key="overprint" en="overprint" de="überdrucken"/>
     <attribute key="padding" en="padding" de="padding"/>
     <attribute key="padding-bottom" en="padding-bottom" de="padding-bottom"/>
     <attribute key="padding-left" en="padding-left" de="padding-left"/>

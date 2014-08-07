@@ -416,6 +416,7 @@ values = {
     ["openon"] = {de = "öffnenauf", en = "openon", },
     ["orphan"] = {de = "schusterjunge", en = "orphan", },
     ["overshoot"] = {de = "übersteigen", en = "overshoot", },
+    ["overprint"] = {de = "überdrucken", en = "overprint", },
     ["padding"] = {de = "padding", en = "padding", },
     ["padding-bottom"] = {de = "padding-bottom", en = "padding-bottom", },
     ["padding-left"] = {de = "padding-left", en = "padding-left", },

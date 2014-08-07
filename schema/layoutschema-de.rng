@@ -712,6 +712,16 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="überdrucken">
+               <a:documentation>Überdrucken für diese Farbe anschalten</a:documentation>
+               <choice>
+                  <value>ja</value>
+                  <value>nein</value>
+                  <text/>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="wert">
                <a:documentation>Der Hexwert der Farbe, wie beispielsweise #FA5 oder #FFAA55.</a:documentation>
             </attribute>
