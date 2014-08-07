@@ -356,6 +356,7 @@ values = {
     ["color"] = {de = "farbe", en = "color", },
     ["colspan"] = {de = "colspan", en = "colspan", },
     ["colorname"] = {de = "farbname", en = "colorname", },
+    ["colorprofile"] = {de = "farbprofil", en = "colorprofile", },
     ["column"] = {de = "spalte", en = "column", },
     ["columndistance"] = {de = "spaltenabstand", en = "columndistance", },
     ["columns"] = {de = "spalten", en = "columns", },

@@ -15,6 +15,7 @@ local luxor = do_luafile("luxor.lua")
 
 local http = require("socket.http")
 local url = require("socket_url")
+local spotcolors = require("spotcolors")
 
 xpath = do_luafile("xpath.lua")
 
@@ -90,7 +91,6 @@ user_defined_bookmark  = 2
 user_defined_mark      = 3
 user_defined_marker    = 4
 user_defined_mark_append = 5
-user_defined_color     = 6
 
 
 glue_spec_node = node.id("glue_spec")
@@ -147,8 +147,16 @@ groups    = {}
 -- sometimes we want to save pages for later reuse. Keys are pagestore names
 pagestore = {}
 
+
+-- The spot colors used in the document (even when discarded)
+used_spotcolors = {}
+
+-- The predefined colors
 colors    = { Schwarz = { model="gray", g = "0", pdfstring = " 0 G 0 g " }, black = { model="gray", g = "0", pdfstring = " 0 G 0 g " } }
+
+-- An array of defined colors
 colortable = {}
+
 data_dispatcher = {}
 user_defined_functions = { last = 0}
 markers = {}
@@ -527,6 +535,10 @@ function dothings()
         else
             err("Can't recognize starting page number %q",options.startpage)
         end
+    end
+
+    if options.colorprofile then
+        spotcolors.set_colorprofile_filename(options.colorprofile)
     end
 
     local auxfilename = tex.jobname .. "-aux.xml"
@@ -979,6 +991,18 @@ function frame( box, colorname, width )
     return n
 end
 
+-- collect all spot colors used so far to create proper page resources
+function usespotcolor(num)
+    used_spotcolors[num] = true
+end
+
+-- Set the PDF pageresources for the current page.
+function setpageresources()
+    if #used_spotcolors > 0 then
+        pdf.setpageresources("/ColorSpace << " .. spotcolors.getresource(used_spotcolors) .. " >>")
+    end
+end
+
 --- Create a colored area. width and height are in scaled points.
 function box( width_sp,height_sp,colorname )
     local _width   = sp_to_bp(width_sp)
@@ -1003,15 +1027,6 @@ function box( width_sp,height_sp,colorname )
     hglue.spec.stretch       = 2^16
     hglue.spec.stretch_order = 3
     h = node.insert_after(paint,paint,hglue)
-    if colentry.objectnum then
-        local spotcolor_whatsit
-        spotcolor_whatsit = node.new("whatsit","user_defined")
-        spotcolor_whatsit.user_id = user_defined_color
-        spotcolor_whatsit.type = 115  -- type 115: "value is a string"
-        spotcolor_whatsit.value = colorname
-        h = node.insert_before(paint,paint,spotcolor_whatsit)
-    end
-
 
     h = node.hpack(h,width_sp,"exactly")
 
@@ -1032,16 +1047,11 @@ function dothingsbeforeoutput(  )
     local current_page = pages[current_pagenumber]
     local r = current_page.grid
     local str
-    local colors_used = find_user_defined_whatsits(pages[current_pagenumber].pagebox)
-    local colorname_tbl = {}
-    for colorname,_ in pairs(colors_used) do
-        colorname_tbl[#colorname_tbl + 1] = string.format("/CS%d %d 0 R",colors[colorname].colornum,colors[colorname].objectnum)
-    end
-    if #colorname_tbl > 0 then
-        page_resources[#page_resources + 1] = "/ColorSpace << " .. table.concat(colorname_tbl," ") .. " >>"
-    end
-    pdf.setpageresources(table.concat(page_resources))
+    find_user_defined_whatsits(pages[current_pagenumber].pagebox)
     local firstbox
+
+    -- for spot colors, if necessary
+    setpageresources()
 
     -- White background on page. Todo: Make color customizable and background optional.
     local wd = sp_to_bp(current_page.width)
@@ -1312,16 +1322,12 @@ end
 
 --- Look for `user_defined` at end of page (shipout) and runs actions encoded in them.
 function find_user_defined_whatsits( head )
-    local colors_used = {}
     local fun
     while head do
         if head.id == vlist_node or head.id==hlist_node then
             -- We need to recurse into the boxes. The colors used there must be kept.
             -- Todo: use a variable that is global for this function. (do local x ; function ... end end)
-            local cu = find_user_defined_whatsits(head.list)
-            for k,_ in pairs(cu) do
-                colors_used[k] = true
-            end
+            find_user_defined_whatsits(head.list)
         elseif head.id==whatsit_node then
             if head.subtype == user_defined_whatsit then
                 -- action
@@ -1363,9 +1369,6 @@ function find_user_defined_whatsits( head )
                     else
                         markers[marker]["page"] = tostring(markers[marker]["page"]) .. "," ..  tostring(current_pagenumber)
                     end
-                elseif head.user_id == user_defined_color then
-                    -- a spot color
-                    colors_used[head.value] = true
                 end
             end
         end
@@ -1944,7 +1947,7 @@ function boxit( box )
     return box
 end
 
-
+-- color is an integer
 function set_color_if_necessary( nodelist,color )
     if not color then return nodelist end
 

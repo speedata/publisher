@@ -52,7 +52,7 @@ function Paragraph:set_color( color )
 
     local colorname
     if color == -1 then
-        colorname = "Schwarz"
+        colorname = "black"
     else
         colorname = publisher.colortable[color]
     end

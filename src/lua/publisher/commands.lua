@@ -10,8 +10,8 @@ file_start("commands.lua")
 
 require("publisher.fonts")
 require("publisher.tabular")
-spotcolors = require("spotcolors")
-local paragraph = require("paragraph")
+local spotcolors = require("spotcolors")
+local paragraph  = require("paragraph")
 do_luafile("css.lua")
 
 -- This module contains the commands in the layout file (the tags)
@@ -371,7 +371,15 @@ function commands.define_color( layoutxml,dataxml )
     local model = publisher.read_attribute(layoutxml,dataxml,"model","string")
     local colorname = publisher.read_attribute(layoutxml,dataxml,"colorname","rawstring")
 
-    local color = { }
+    local color = setmetatable({},
+        {
+           __index = function(tbl,idx)
+               if idx == "pdfstring" and tbl.model == "spotcolor" then
+                publisher.usespotcolor(tbl.colornum)
+                return string.format("/CS%d cs 1 scn ",tbl.colornum)
+               end
+           end
+        })
 
     if model=="cmyk" then
         color.c = publisher.read_attribute(layoutxml,dataxml,"c","number")
@@ -388,10 +396,7 @@ function commands.define_color( layoutxml,dataxml )
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number")
         color.pdfstring = string.format("%g g %g G",color.g/100,color.g/100)
     elseif model=="spotcolor" then
-        local colornumber_objectnumber = spotcolors.add_colordefinition(colorname)
-        color.pdfstring = string.format("/CS%d cs 1 scn ",colornumber_objectnumber[1])
-        color.objectnum = colornumber_objectnumber[2]
-        color.colornum = colornumber_objectnumber[1]
+        color.colornum = spotcolors.register(colorname)
     elseif value then
         local r,g,b
         if #value == 7 then
@@ -1274,6 +1279,7 @@ function commands.options( layoutxml,dataxml )
     publisher.options.trim               = publisher.read_attribute(layoutxml,dataxml,"trim",        "length")
     publisher.options.ignoreeol          = publisher.read_attribute(layoutxml,dataxml,"ignoreeol",   "boolean")
     publisher.options.resetmarks         = publisher.read_attribute(layoutxml,dataxml,"resetmarks",  "boolean",false)
+    publisher.options.colorprofile       = publisher.read_attribute(layoutxml,dataxml,"colorprofile",  "rawstring")
     local mainlanguage                   = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","")
 
     if mainlanguage ~= "" then

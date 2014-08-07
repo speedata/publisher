@@ -1700,6 +1700,11 @@
       <element name="Optionen">
          <a:documentation>Setzt Publisher-spezifische Optionen.</a:documentation>
          <optional>
+            <attribute name="farbprofil">
+               <a:documentation>Der Dateiname des Farbprofils. Das voreingestellte Profil ist »ISO Coated v2 (ECI)«. Farbprofile werden nur geladen, wenn Sonderfarben benutzt werden.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="beschnittmarken">
                <a:documentation>Beschnittmarken (crop marks) werden ausgegeben. Der Abstand der Schnittmarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die
           Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Schnittmarken ausgegeben.</a:documentation>

@@ -9,11 +9,12 @@
 local colorprofile_objectid = 0
 local colorprofile_filename = "ISOcoated_v2_eci.icc"
 
--- name -> {color number, object id}
-local colornumber = 0
+-- index: color number
+-- value: { colorname, pdfobject for the color definition }
+-- The object number is 0 until the color is acutally used (by color.pdfstring
 local colorobjects = {}
 
-local add_colorprofile, set_colorprofile_filename, add_colordefinition
+local set_colorprofile_filename, write_colorprofile, use_color, getresource, register
 
 local spotcolors =  {
     ["pantone 100"] = {0, 0, 51, 0},
@@ -1193,14 +1194,15 @@ local spotcolors =  {
 }
 
 
-
+-- The color profile defaults to 'ISO coated v2'
 function set_colorprofile_filename(fn)
     colorprofile_filename = fn
 end
 
-
-function add_colorprofile()
+-- Make sure that the color profile is written to the PDF.
+function write_colorprofile()
     if colorprofile_objectid == 0 then
+        log("Loading colorprofile %s",colorprofile_filename)
         local path = kpse.find_file(colorprofile_filename)
         if not path then
             err("colorprofile not found %s",tostring(colorprofile_filename))
@@ -1211,7 +1213,27 @@ function add_colorprofile()
     return colorprofile_objectid
 end
 
-function add_colordefinition(colorname)
+-- DefineColor registers the colors
+function register( colorname )
+    colorobjects[#colorobjects + 1] = { colorname, 0 }
+    return #colorobjects
+end
+
+function getresource( tab )
+    local ret = {}
+    for k,_ in pairs(tab) do
+        local name, objnum = table.unpack(colorobjects[k])
+        if objnum == 0 then
+            objnum = use_color(name)
+            colorobjects[k] = {name, objnum}
+        end
+        ret[#ret + 1] = string.format("/CS%d %d 0 R", k,objnum)
+    end
+    return table.concat(ret, " ")
+end
+
+-- Make sure the color definition is written to the PDF.
+function use_color(colorname)
     local rawname
     _,_, rawname = string.find(string.lower(colorname),"^(.*)%s+[cmunkez]%s*$")
     local cmyktable = spotcolors[rawname]
@@ -1220,17 +1242,15 @@ function add_colordefinition(colorname)
         return
     end
     local pdfcolorname = "/" .. string.gsub(colorname," ","#20")
-    if not colorobjects[colorname] then
-        local cp = add_colorprofile()
-        local c,m,y,k = table.unpack(cmyktable)
-        local tmp = string.format([==[[/Separation %s [ /ICCBased %d 0 R ]  << /FunctionType 2 /C0 [ 0 0 0 0 ] /C1 [ %g %g %g %g ] /Domain [ 0 1 ] /N 1 >> ]]==],pdfcolorname,cp,c/100,m/100,y/100,k/100)
-        local objnum = pdf.immediateobj(tmp)
-        colorobjects[colorname] = { colornumber, objnum }
-        colornumber = colornumber + 1
-    end
-    return colorobjects[colorname]
+    local cp = write_colorprofile()
+    local c,m,y,k = table.unpack(cmyktable)
+    local tmp = string.format([==[[/Separation %s [ /ICCBased %d 0 R ]  << /FunctionType 2 /C0 [ 0 0 0 0 ] /C1 [ %g %g %g %g ] /Domain [ 0 1 ] /N 1 >> ]]==],pdfcolorname,cp,c/100,m/100,y/100,k/100)
+    return pdf.immediateobj(tmp)
 end
 
-return { add_colordefinition       = add_colordefinition,
-         set_colorprofile_filename = set_colorprofile_filename}
+return {
+    getresource               = getresource,
+    register                  = register,
+    set_colorprofile_filename = set_colorprofile_filename,
+}
 

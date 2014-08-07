@@ -190,6 +190,7 @@
     <attribute key="color" en="color" de="farbe"/>
     <attribute key="colspan" en="colspan" de="colspan"/>
     <attribute key="colorname" en="colorname" de="farbname" />
+    <attribute key="colorprofile" en="colorprofile" de="farbprofil" />
     <attribute key="column" en="column" de="spalte"/>
     <attribute key="columndistance" en="columndistance" de="spaltenabstand"/>
     <attribute key="columns" en="columns" de="spalten"/>

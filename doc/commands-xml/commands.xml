@@ -3124,6 +3124,14 @@
       <para>Setzt Publisher-spezifische Optionen.</para>
     </description>
     <childelements />
+    <attribute name="colorprofile" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>The filename of the color profile. The default profile is »ISO Coated v2 (ECI)«. Only used when spot colors are used.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Dateiname des Farbprofils. Das voreingestellte Profil ist »ISO Coated v2 (ECI)«. Farbprofile werden nur geladen, wenn Sonderfarben benutzt werden.</para>
+      </description>
+    </attribute>
     <attribute name="cutmarks" type="yesno" optional="yes">
       <description xml:lang="en">
         <para>Cut marks / crop marks will be placed in the PDF. The distance
