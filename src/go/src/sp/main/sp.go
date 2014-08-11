@@ -23,6 +23,8 @@ import (
 	"strings"
 	"syscall"
 	"time"
+
+	"sp/comm"
 )
 
 var (
@@ -50,6 +52,7 @@ var (
 	starttime             time.Time
 	cfg                   *configurator.ConfigData
 	running_processes     []*os.Process
+	server                *comm.Server
 )
 
 // The LuaTeX process writes out a file called "publisher.status"
@@ -651,6 +654,13 @@ func main() {
 		}
 		log.Printf("Setting timeout to %d seconds", num)
 		go timeoutCatcher(num)
+	}
+
+	// There is no need for the internal server when we do the other commands
+	switch command {
+	case "run", "server":
+		server = comm.NewServer()
+		go server.Run()
 	}
 
 	switch command {

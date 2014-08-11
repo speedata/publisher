@@ -5,7 +5,7 @@
 --  publisher.lua
 --  speedata publisher
 --
---  Copyright 2010-2014 Patrick Gundlach.
+--  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
 
 file_start("publisher.lua")
@@ -446,6 +446,10 @@ function dothings()
     --- Define a basic font family with name `text`:
     define_default_fontfamily()
 
+    local comm = require("publisher.comm")
+
+    -- global tcp object
+    tcp = comm.listen()
     --- The default page type has 1cm margin
     local onecm=tex.sp("1cm")
     masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
