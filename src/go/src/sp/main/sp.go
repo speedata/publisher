@@ -81,6 +81,7 @@ func init() {
 		"data":       "data.xml",
 		"runs":       "1",
 		"quiet":      "false",
+		"port":       "5266",
 		"fontpath":   "",
 		"imagecache": filepath.Join(os.TempDir(), "sp", "images"),
 	}
@@ -550,6 +551,7 @@ func main() {
 	op.On("--jobname NAME", "The name of the resulting PDF file (without extension), default is 'publisher'", options)
 	op.On("--mainlanguage NAME", "The document's main language in locale format, for example 'en' or 'en_US'.", &mainlanguage)
 	op.On("--outputdir=DIR", "Copy PDF and protocol to this directory", options)
+	op.On("--port PORT", "Port to be used for the server mode. Defaults to 5266", options)
 	op.On("--profile", "Run publisher with profiling on (internal use)", options)
 	op.On("--quiet", "Run publisher in silent mode", options)
 	op.On("--runs NUM", "Number of publishing runs ", options)
@@ -569,6 +571,7 @@ func main() {
 	op.Command("doc", "Open documentation")
 	op.Command("list-fonts", "List installed fonts (use together with --xml for copy/paste)")
 	op.Command("run", "Start publishing (default)")
+	op.Command("server", "Run as http-api server on port 5266 (configure with --port")
 	op.Command("watch", "Start watchdog / hotfolder")
 	err := op.Parse()
 	if err != nil {
@@ -764,6 +767,13 @@ func main() {
 		} else {
 			log.Fatal("Problem with watch dir in section [hotfolder].")
 		}
+	case "server":
+		go runServer(getOption("port"))
+		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode --ini "--lua=%s" publisher.tex ___server___`, getExecutablePath(), inifile)
+		if !run(cmdline) {
+			exitstatus = 1
+		}
+
 	default:
 		log.Fatal("unknown command:", command)
 	}

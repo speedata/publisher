@@ -450,6 +450,20 @@ function dothings()
 
     -- global tcp object
     tcp = comm.listen()
+
+    if arg[2] == "___server___" then
+        local s = require("publisher.server")
+        s.servermode(tcp)
+    else
+        initialize_luatex()
+    end
+end
+
+-- When not in server mode, we initialize LuaTeX in such a way that
+-- it has defaults, loads a layout file and a data file and
+-- executes them both
+function initialize_luatex()
+
     --- The default page type has 1cm margin
     local onecm=tex.sp("1cm")
     masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }

@@ -52,6 +52,9 @@ function log(...)
   end
 end
 
+function synclog()
+  io.stdout:flush()
+end
 
 --- Convert scaled point to postscript points,
 --- rounded to three digits after decimal point
