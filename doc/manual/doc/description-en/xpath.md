@@ -114,3 +114,4 @@ Todo document:
 - `string()`
 - `upper-case()`
 - `tokenize()`
+- `replace()`

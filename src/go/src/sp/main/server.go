@@ -26,7 +26,6 @@ func v0FormatHandler(rw http.ResponseWriter, req *http.Request) {
 }
 
 func runServer(port string) {
-	fmt.Println(port)
 	r := mux.NewRouter()
 	v0 := r.PathPrefix("/v0").Subrouter()
 	v0.HandleFunc("/format", v0FormatHandler)

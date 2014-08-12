@@ -56,4 +56,5 @@ return {
     tcp = tcp,
     sendmessage = sendmessage,
     get_string_messages = get_string_messages,
+    send_string_message = send_string_message,
 }

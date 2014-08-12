@@ -102,3 +102,4 @@ Todo Dokumentieren:
 - `string()`
 - `upper-case()`
 - `tokenize()`
+- `replace()`

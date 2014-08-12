@@ -17,13 +17,14 @@ func getMessage(c net.Conn) (n int, typ string, message []byte, err error) {
 	msgstart := make([]byte, 12)
 
 	_, err = c.Read(msgstart)
-	if err != nil && err != io.EOF {
+	if err != nil {
 		return
 	}
 
 	tmp := bytes.Split(msgstart, []byte(","))
 	if len(tmp) != 3 {
 		log.Println("Internal error: message length 3 expected, got: ", len(tmp))
+		log.Printf("%#v\n", tmp)
 		return
 	}
 
@@ -56,11 +57,15 @@ func getMessage(c net.Conn) (n int, typ string, message []byte, err error) {
 func reader(message chan []byte, c net.Conn) {
 	_, typ, msg, err := getMessage(c)
 	if err != nil {
-		log.Println(err)
-		message <- []byte{}
+		if err == io.EOF {
+			// publisher quits data processing, we can stop listening to it
+			close(message)
+		} else {
+			log.Println(err)
+			message <- []byte{}
+		}
 		return
 	}
-
 	switch typ {
 	case "tok":
 		_, _, rexp, err := getMessage(c)
@@ -75,6 +80,24 @@ func reader(message chan []byte, c net.Conn) {
 			write := fmt.Sprintf("%d,str,%06d%s", len(res)-i-1, len(msg), msg)
 			c.Write([]byte(write))
 		}
+		message <- []byte{}
+		return
+	case "rep":
+		_, _, rexp, err := getMessage(c)
+		if err != nil {
+			log.Println(err)
+			message <- []byte{}
+			return
+		}
+		_, _, repl, err := getMessage(c)
+		if err != nil {
+			log.Println(err)
+			message <- []byte{}
+			return
+		}
+		res := xpath.Replace(msg, string(rexp), repl)
+		write := fmt.Sprintf("0,str,%06d%s", len(res), res)
+		c.Write([]byte(write))
 		message <- []byte{}
 		return
 	}
@@ -125,8 +148,13 @@ func (s *Server) Run() {
 	for {
 		go reader(msg, s.Conn)
 		select {
-		case x := <-msg:
-			s.Message <- x
+		case x, ok := <-msg:
+			if !ok {
+				return
+			}
+			if len(x) > 0 {
+				s.Message <- x
+			}
 		}
 	}
 }
