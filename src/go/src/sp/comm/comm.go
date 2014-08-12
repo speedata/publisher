@@ -2,52 +2,80 @@ package comm
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"log"
 	"net"
 	"os"
 	"strconv"
+
+	"sp/xpath"
 )
 
-func reader(message chan []byte, c net.Conn) {
+func getMessage(c net.Conn) (n int, typ string, message []byte, err error) {
 	msgstart := make([]byte, 12)
 
-	_, err := c.Read(msgstart)
-	if err != nil {
-		if err == io.EOF {
-			return
-		} else {
-			log.Fatal("c.Read: ", err)
-		}
+	_, err = c.Read(msgstart)
+	if err != nil && err != io.EOF {
+		return
 	}
+
 	tmp := bytes.Split(msgstart, []byte(","))
 	if len(tmp) != 3 {
 		log.Println("Internal error: message length 3 expected, got: ", len(tmp))
-		message <- ""
 		return
 	}
 
-	numberOfMessages := tmp[0]
-	messageType := tmp[1]
+	n, err = strconv.Atoi(string(tmp[0]))
+	if err != nil {
+		return
+	}
+	typ = string(tmp[1])
 	messageLength, err := strconv.Atoi(string(tmp[2]))
 	if err != nil {
-		log.Println("Can't decode integer", tmp[2], err)
-		message <- ""
 		return
 	}
 
-	msg := make([]byte, messageLength)
-	n, err := c.Read(msg)
+	message = make([]byte, messageLength)
+	var n_ int
+	n_, err = c.Read(message)
 	if err != nil {
 		log.Println("Can't read enough bytes", err)
-		message <- ""
 		return
 	}
 
-	if n != messageLength {
+	if n_ != messageLength {
 		log.Println("not enough bytes read. Got ", n, " but expected ", messageLength)
-		message <- ""
+		err = errors.New("Message too short")
+		return
+	}
+	return
+}
+
+func reader(message chan []byte, c net.Conn) {
+	_, typ, msg, err := getMessage(c)
+	if err != nil {
+		log.Println(err)
+		message <- []byte{}
+		return
+	}
+
+	switch typ {
+	case "tok":
+		_, _, rexp, err := getMessage(c)
+		if err != nil {
+			log.Println(err)
+			message <- []byte{}
+			return
+		}
+		res := xpath.Tokenize(msg, string(rexp))
+		for i := 0; i < len(res); i++ {
+			msg := res[i]
+			write := fmt.Sprintf("%d,str,%06d%s", len(res)-i-1, len(msg), msg)
+			c.Write([]byte(write))
+		}
+		message <- []byte{}
 		return
 	}
 	message <- msg
@@ -97,7 +125,6 @@ func (s *Server) Run() {
 	for {
 		go reader(msg, s.Conn)
 		select {
-
 		case x := <-msg:
 			s.Message <- x
 		}

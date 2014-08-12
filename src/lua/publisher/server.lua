@@ -10,8 +10,6 @@ local luxor = do_luafile("luxor.lua")
 local comm = require("publisher.comm")
 
 -- todo: move this into another file
-
-
 local function fmt(msg)
     local x = luxor.parse_xml(msg)
     local rootelt = x
@@ -27,12 +25,10 @@ local function fmt(msg)
                     txt = txt .. "\n"
                 end
             end
-            w(txt)
             local j = publisher.mknodes(txt)
         end
     end
-    synclog()
-    comm.sendmessage(msg)
+    comm.send_string_message(msg)
 end
 
 
