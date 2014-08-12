@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-func reader(done chan bool, c net.Conn) {
+func reader(message chan []byte, c net.Conn) {
 	msgstart := make([]byte, 12)
 
 	_, err := c.Read(msgstart)
@@ -23,31 +23,34 @@ func reader(done chan bool, c net.Conn) {
 	}
 	tmp := bytes.Split(msgstart, []byte(","))
 	if len(tmp) != 3 {
-		log.Fatal("Internal error: message length 3 expected, got: ", len(tmp))
+		log.Println("Internal error: message length 3 expected, got: ", len(tmp))
+		message <- ""
+		return
 	}
 
 	numberOfMessages := tmp[0]
 	messageType := tmp[1]
 	messageLength, err := strconv.Atoi(string(tmp[2]))
-
 	if err != nil {
-		log.Fatal(err)
-	}
-
-	if false {
-		fmt.Println(numberOfMessages, messageType)
+		log.Println("Can't decode integer", tmp[2], err)
+		message <- ""
+		return
 	}
 
 	msg := make([]byte, messageLength)
 	n, err := c.Read(msg)
 	if err != nil {
-		log.Fatal(err)
+		log.Println("Can't read enough bytes", err)
+		message <- ""
+		return
 	}
 
 	if n != messageLength {
-		log.Fatal("not enough bytes read. Got ", n, " but expected ", messageLength)
+		log.Println("not enough bytes read. Got ", n, " but expected ", messageLength)
+		message <- ""
+		return
 	}
-	done <- true
+	message <- msg
 }
 
 func (s *Server) StringMessage(typ, msg string) {
@@ -56,8 +59,10 @@ func (s *Server) StringMessage(typ, msg string) {
 }
 
 type Server struct {
-	Listener net.Listener
-	Conn     net.Conn
+	Listener   net.Listener
+	Conn       net.Conn
+	serverused bool
+	Message    chan []byte
 }
 
 func NewServer() *Server {
@@ -66,11 +71,18 @@ func NewServer() *Server {
 		log.Fatalf("net.Listen %s", err)
 	}
 	usedport := l.Addr().(*net.TCPAddr).Port
-	// fmt.Println("Internal server start on port", usedport)
 	os.Setenv("SP_SERVERPORT", strconv.Itoa(usedport))
 	s := &Server{}
 	s.Listener = l
+	s.Message = make(chan []byte)
 	return s
+}
+
+func (s *Server) Close() {
+	if s.serverused {
+		s.Conn.Close()
+		s.Listener.Close()
+	}
 }
 
 func (s *Server) Run() {
@@ -80,21 +92,14 @@ func (s *Server) Run() {
 		log.Fatalf("lAccept %s", err)
 	}
 
-	done := make(chan bool)
+	msg := make(chan []byte)
 
 	for {
-		go reader(done, s.Conn)
-		// fmt.Println("for")
+		go reader(msg, s.Conn)
 		select {
 
-		case <-done:
-			// fmt.Println("reader")
-		} // Wait for a connection.
+		case x := <-msg:
+			s.Message <- x
+		}
 	}
-
-	// err = conn.Close()
-	// if err != nil {
-	// 	log.Fatal("conn.Close", err)
-	// }
-	// defer l.Close()
 }

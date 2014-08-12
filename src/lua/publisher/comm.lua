@@ -9,6 +9,11 @@ local socket = require("socket")
 
 local tcp
 
+local function sendmessage(msg)
+    local x = string.format("1,str,%06d%s",#msg,msg)
+    tcp:send(x)
+end
+
 local function listen()
     local port = os.getenv("SP_SERVERPORT")
     log("Talking to server on port %s",port)
@@ -23,4 +28,5 @@ end
 return {
     listen = listen,
     tcp = tcp,
+    sendmessage = sendmessage,
 }

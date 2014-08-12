@@ -777,6 +777,9 @@ func main() {
 	default:
 		log.Fatal("unknown command:", command)
 	}
+	if server != nil {
+		server.Close()
+	}
 	showDuration()
 	os.Exit(exitstatus)
 }

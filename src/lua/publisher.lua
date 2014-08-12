@@ -642,6 +642,7 @@ function initialize_luatex()
         file:write("\n</marker>")
         file:close()
     end
+    tcp:close()
 end
 
 --- Load an XML file from the harddrive. filename is without path but including extension,
@@ -1438,6 +1439,7 @@ end
 --- * underline
 function mknodes(str,fontfamily,parameter)
     -- instance is the internal fontnumber
+    parameter = parameter or {}
     local instance
     local instancename
     local languagecode = parameter.languagecode or defaultlanguage
