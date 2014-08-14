@@ -12,6 +12,7 @@
 -- file_start("spinit.lua")
 
 require("i18n")
+local comm = require("publisher.comm")
 
 tex.enableprimitives('',tex.extraprimitives ())
 -- Lua 5.2 has table.unpack
@@ -229,7 +230,11 @@ require("publisher")
 function main_loop()
   log("Start processing")
   setup()
+  -- global tcp object
+  tcp = comm.listen()
+
   call(publisher.dothings)
+  tcp:close()
   exit(true)
 end
 

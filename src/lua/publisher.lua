@@ -446,11 +446,6 @@ function dothings()
     --- Define a basic font family with name `text`:
     define_default_fontfamily()
 
-    local comm = require("publisher.comm")
-
-    -- global tcp object
-    tcp = comm.listen()
-
     if arg[2] == "___server___" then
         local s = require("publisher.server")
         s.servermode(tcp)
@@ -642,7 +637,6 @@ function initialize_luatex()
         file:write("\n</marker>")
         file:close()
     end
-    tcp:close()
 end
 
 --- Load an XML file from the harddrive. filename is without path but including extension,
