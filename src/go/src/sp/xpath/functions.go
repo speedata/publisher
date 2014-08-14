@@ -23,7 +23,6 @@ func Replace(text []byte, rexpr string, repl []byte) []byte {
 		repl = nummatcher.ReplaceAll(repl, []byte(`$${1}`))
 	}
 	str := r.ReplaceAll(text, repl)
-	fmt.Printf("%#v\n", string(str))
 	return str
 }
 

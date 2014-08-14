@@ -39,6 +39,7 @@ Value | Description
 `layout` | Name of the layout rule set (XML). The default name is `layout.xml`.
 `opencommand` | Command that will be run to open the documentation and the PDF file. For MacOS X this should be `open`, for Linux `xdg-open` or `exo-open` (xfce).
 `pathrewrite` | Comma separated list of entries of the form `A=B` which replace parts in `file:///...A...` to `file:///...B...`. Useful when you have absolute paths in the data which must be changed during the publishing process.
+`runs` | Set the number of runs.
 `startpage` | Number of the first page.
 `timeout` | Maximum time of the publishing run. If time is exceeded, the publisher exits with status 1.
 

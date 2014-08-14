@@ -52,7 +52,7 @@ var (
 	starttime             time.Time
 	cfg                   *configurator.ConfigData
 	running_processes     []*os.Process
-	server                *comm.Server
+	daemon                *comm.Server
 )
 
 // The LuaTeX process writes out a file called "publisher.status"
@@ -474,6 +474,7 @@ func runPublisher() (exitstatus int) {
 		log.Fatal(err)
 	}
 	for i := 1; i <= runs; i++ {
+		go daemon.Run()
 		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, exec_name, jobname, inifile, layoutname, dataname, layoutoptions_cmdline)
 		if !run(cmdline) {
 			exitstatus = 1
@@ -659,11 +660,10 @@ func main() {
 		go timeoutCatcher(num)
 	}
 
-	// There is no need for the internal server when we do the other commands
+	// There is no need for the internal daemon when we do the other commands
 	switch command {
 	case "run", "server":
-		server = comm.NewServer()
-		go server.Run()
+		daemon = comm.NewServer()
 	}
 
 	switch command {
@@ -768,6 +768,7 @@ func main() {
 			log.Fatal("Problem with watch dir in section [hotfolder].")
 		}
 	case "server":
+		go daemon.Run()
 		go runServer(getOption("port"))
 		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode --ini "--lua=%s" publisher.tex ___server___`, getExecutablePath(), inifile)
 		if !run(cmdline) {
@@ -777,8 +778,8 @@ func main() {
 	default:
 		log.Fatal("unknown command:", command)
 	}
-	if server != nil {
-		server.Close()
+	if daemon != nil {
+		daemon.Close()
 	}
 	showDuration()
 	os.Exit(exitstatus)

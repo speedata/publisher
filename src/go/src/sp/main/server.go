@@ -20,9 +20,9 @@ func v0FormatHandler(rw http.ResponseWriter, req *http.Request) {
 		log.Println(err)
 		return
 	}
-	server.StringMessage("fmt", string(buf[:n]))
+	daemon.StringMessage("fmt", string(buf[:n]))
 
-	rw.Write(<-server.Message)
+	rw.Write(<-daemon.Message)
 }
 
 func runServer(port string) {
