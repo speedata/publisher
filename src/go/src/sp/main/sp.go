@@ -151,7 +151,7 @@ func init() {
 		libdir = filepath.Join(installdir, "share", "lib")
 		srcdir = filepath.Join(installdir, "sw")
 		path_to_documentation = filepath.Join(installdir, "share/doc/"+indexpage)
-		os.Setenv("PUBLISHER_BASE_PATH", installdir)
+		os.Setenv("PUBLISHER_BASE_PATH", srcdir)
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
 	default:
 		// local git installation

@@ -182,13 +182,13 @@ task :zip do
 	dest="#{builddir}/speedata-publisher"
 	targetbin="#{dest}/bin"
 	targetshare="#{dest}/share"
-	targetfonts=File.join(targetshare,"fonts")
-	targetschema=File.join(targetshare,"schema")
 	targetsw=File.join(dest,"sw")
+	targetfonts=File.join(targetsw,"fonts")
+	targetschema=File.join(targetshare,"schema")
 	rm_rf dest
 	mkdir_p dest
 	mkdir_p targetbin
-	mkdir_p File.join(targetshare,"img")
+	mkdir_p File.join(targetsw,"img")
 	mkdir_p targetschema
 	mkdir_p targetsw
 	if ENV['NODOC'] != "true" then
@@ -234,7 +234,7 @@ task :zip do
 
 	if build_go(srcdir,targetbin,platform,arch,"directory") == false then next end
 	cp_r(File.join("fonts"),targetfonts)
-	cp_r(Dir.glob("img/*"),File.join(targetshare,"img"))
+	cp_r(Dir.glob("img/*"),File.join(targetsw,"img"))
 	cp_r(File.join("lib"),targetshare)
 	cp_r(File.join("schema","layoutschema-de.rng"),targetschema)
 	cp_r(File.join("schema","layoutschema-en.rng"),targetschema)
