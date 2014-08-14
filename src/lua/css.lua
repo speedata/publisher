@@ -54,7 +54,7 @@ local function parse( self,filename)
       rule = rules[i]
       -- if it's not only whitespace
       if not string.match(rule,"^%s*$") then
-        _,rule_stop,property = string.find(rule,"%s+([^:]+):")
+        _,rule_stop,property = string.find(rule,"%s*([^:]+):")
         _,_,expr = string.find(rule,"^%s*(.-)%s*$",rule_stop + 1)
         rules_t[property] = expr
       end
@@ -92,8 +92,6 @@ end
 --- * `parent`
 ---
 local function matches_selector(tbl,selector )
-  -- w("selector=%q",selector)
-  -- printtable("tbl",tbl)
   local element,class,id = tbl.element,tbl.class,tbl.id
   local id_found   ,class_found   ,element_found    = false,false,false
   local id_matches ,class_matches ,element_matches  = false,false,false

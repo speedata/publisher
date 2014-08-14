@@ -5336,6 +5336,14 @@
         <para>Die Farbe der Linie unten.</para>
       </description>
     </attribute>
+    <attribute name="class" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>The css class to be used for formatting the table cell (experimental).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die CSS-Klasse für die Formtierung. (Experimentell)</para>
+      </description>
+    </attribute>
     <attribute name="colspan" type="number" optional="yes">
       <description xml:lang="en">
         <para>The number of columns this cell spans. Defaults to 1.</para>
@@ -5483,7 +5491,8 @@
       <cmd name="Table" />,
       <cmd name="Tr" />,
       <cmd name="Paragraph" />,
-      <cmd name="Image" />
+      <cmd name="Image" />,
+      <cmd name="Stylesheet"/>
     </seealso>
   </command>
   <command name="Tablerule">

@@ -710,7 +710,7 @@
          </optional>
          <optional>
             <attribute name="overprint">
-               <a:documentation>Set overprinting for this color.</a:documentation>
+               <a:documentation>Enable overprint for this color.</a:documentation>
                <choice>
                   <value>yes</value>
                   <value>no</value>
@@ -2878,6 +2878,11 @@
          <optional>
             <attribute name="border-bottom-color">
                <a:documentation>The color of the bottom border.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>The css class to be used for formatting the table cell (experimental).</a:documentation>
             </attribute>
          </optional>
          <optional>

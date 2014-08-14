@@ -2893,6 +2893,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="class">
+               <a:documentation>Die CSS-Klasse für die Formtierung. (Experimentell)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="colspan">
                <a:documentation>Die Anzahl der Spalten, die die Zelle überdecken soll. Voreinstellung ist 1.</a:documentation>
             </attribute>
