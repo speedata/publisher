@@ -838,6 +838,16 @@
                <a:documentation>Distance between the top rule and the text of the previous paragraph.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="hyphenate">
+               <a:documentation>Enable or disable hyphenation (default: on).</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+                  <text/>
+               </choice>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>

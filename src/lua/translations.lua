@@ -382,6 +382,7 @@ values = {
     ["height"] = {de = "höhe", en = "height", },
     ["href"] = {de = "href", en = "href", },
     ["hreference"] = {de = "hreferenz", en = "hreference", },
+    ["hyphenate"] = {de = "silbentrennung", en = "hyphenate", },
     ["id"] = {de = "id", en = "id", },
     ["ignoreeol"] = {de = "ignorierezeilenende", en = "ignoreeol", },
     ["indentation"] = {de = "einrückung", en = "indentation", },

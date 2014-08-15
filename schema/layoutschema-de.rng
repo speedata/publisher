@@ -843,6 +843,16 @@
                <a:documentation>Abstand zwischen der Linie oben und dem vorhergehenden Text.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="silbentrennung">
+               <a:documentation>Silbentrennung erlauben oder abschalten (Voreinstellung ist an).</a:documentation>
+               <choice>
+                  <value>ja</value>
+                  <value>nein</value>
+                  <text/>
+               </choice>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>

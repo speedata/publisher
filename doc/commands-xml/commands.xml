@@ -1462,6 +1462,14 @@
         <para>Abstand zwischen der Linie oben und dem vorhergehenden Text.</para>
       </description>
     </attribute>
+    <attribute name="hyphenate" optional="yes" type="yesno">
+      <description xml:lang="en">
+        <para>Enable or disable hyphenation (default: on).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Silbentrennung erlauben oder abschalten (Voreinstellung ist an).</para>
+      </description>
+    </attribute>
     <remark xml:lang="en">
       <para>The textformats <tt>text</tt>, <tt>centered</tt>, <tt>left</tt> and <tt>right</tt> are predefined. They stand for justified, centered, left aligned and right aligned text.</para>
     </remark>

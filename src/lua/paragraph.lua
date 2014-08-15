@@ -235,6 +235,8 @@ function Paragraph:format(width_sp, default_textformat_name,options)
             parameter.hangafter = -1 * rows
         end
 
+        parameter.disable_hyphenation = current_textformat.disable_hyphenation
+
         local ragged_shape
         if current_textformat then
             if current_textformat.alignment == "leftaligned" or current_textformat.alignment == "rightaligned" or current_textformat.alignment == "centered" then

@@ -452,6 +452,7 @@ function dothings()
     else
         initialize_luatex()
     end
+    pdf.immediateobj("(Created with the speedata Publisher - www.speedata.de)")
 end
 
 -- When not in server mode, we initialize LuaTeX in such a way that
@@ -1745,10 +1746,13 @@ function make_glue( parameter )
     return n
 end
 
-function finish_par( nodelist,hsize )
+function finish_par( nodelist,hsize,parameters )
     assert(nodelist)
     node.slide(nodelist)
-    lang.hyphenate(nodelist)
+
+    if not parameters.disable_hyphenation then
+        lang.hyphenate(nodelist)
+    end
     local n = node.new("penalty")
     n.penalty = 10000
     local last = node.slide(nodelist)
@@ -1758,7 +1762,8 @@ function finish_par( nodelist,hsize )
     last = n
 
     n = node.kerning(nodelist)
-    n = node.ligaturing(n)
+    -- FIXME: why do I call node.ligaturing()? I don't have any ligatures anyway
+    -- n = node.ligaturing(n)
 
     n,last = add_glue(n,"tail",{ subtype = 15, width = 0, stretch = 2^16, stretch_order = 2})
 end
@@ -1859,7 +1864,7 @@ end
 function do_linebreak( nodelist,hsize,parameters )
     assert(nodelist,"No nodelist found for line breaking.")
     parameters = parameters or {}
-    finish_par(nodelist,hsize)
+    finish_par(nodelist,hsize,parameters)
 
     local pdfignoreddimen
     pdfignoreddimen    = -65536000

@@ -216,6 +216,7 @@
     <attribute key="height" en="height" de="höhe"/>
     <attribute key="href" en="href" de="href" />
     <attribute key="hreference" en="hreference" de="hreferenz"/>
+    <attribute key="hyphenate" en="hyphenate" de="silbentrennung"/>
     <attribute key="id" en="id" de="id"/>
     <attribute key="ignoreeol" en="ignoreeol" de="ignorierezeilenende"/>
     <attribute key="indentation" en="indentation" de="einrückung"/>
