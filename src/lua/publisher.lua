@@ -1246,7 +1246,7 @@ marker.value = 1
 --- Convert `<b>`, `<u>` and `<i>` in text to publisher recognized elements.
 function parse_html( elt, parameter )
     local a = paragraph:new()
-    local bold,italic,underline
+    local bold,italic,underline,allowbreak
     if parameter then
         if parameter.underline then
             underline = 1
@@ -1257,6 +1257,7 @@ function parse_html( elt, parameter )
         if parameter.italic then
             italic = 1
         end
+        allowbreak = parameter.allowbreak
     end
 
     if elt[".__local_name"] then
@@ -1336,9 +1337,9 @@ function parse_html( elt, parameter )
     for i=1,#elt do
         local typ = type(elt[i])
         if  typ == "string" or typ == "number" or typ == "boolean" then
-            a:append(elt[i],{fontfamily = 0, bold = bold, italic = italic, underline = underline })
+            a:append(elt[i],{fontfamily = 0, bold = bold, italic = italic, underline = underline, allowbreak = allowbreak })
         elseif typ == "table" then
-            a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+            a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline, allowbreak = allowbreak})
         end
     end
 

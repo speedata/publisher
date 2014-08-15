@@ -1491,7 +1491,7 @@ function commands.paragraph( layoutxml,dataxml )
         if publisher.elementname(j,true) == "Value" and type(contents) == "table" and #contents == 1 and type(contents[1]) == "string"  then
             objects[#objects + 1] = contents[1]
         elseif publisher.elementname(j,true) == "Value" and type(contents) == "table" then
-            objects[#objects + 1] = publisher.parse_html(contents)
+            objects[#objects + 1] = publisher.parse_html(contents,{allowbreak = allowbreak})
         else
             objects[#objects + 1] = contents
         end
