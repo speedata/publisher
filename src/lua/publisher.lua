@@ -379,8 +379,7 @@ function dispatch(layoutxml,dataxml,options)
                     ret[#ret + 1] =   { elementname = eltname, contents = tmp }
                 end
             else
-                err("Unknown element found in layoutfile: %q", eltname or "???")
-                printtable("j",j)
+                err("Unknown element found in layoutfile: %q", j[".__local_name"] or "???")
             end
         end
     end
