@@ -7,6 +7,7 @@ datasource: HTML elements in the data source
 grid: Typesetting on a grid
 helloworld: The classical hello world-example
 imageshape: Text flows around an image
+imagescaling: How width, height, and clip affects image display
 planets: How to handle automatically generated table of contents etc.
 runningsum: A table with a dynamic header and footer
 simpletable: A simple HTML like table

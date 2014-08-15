@@ -7,6 +7,7 @@ datasource: Beispiel für HTML-Elemente in Datenquellen
 grid: Registerhaltiger Satz
 helloworld: Klassisches »Hallo Welt«-Beispiel
 imageshape: Umfließen von Bildern
+imagescaling: Skalierung von Bildern und Größenangaben
 planets: Beispiele für automatisch generierte Listen
 runningsum: Tabelle mit dynamischen Kopf- und Fußzeilen
 simpletable: Einfache Tabelle
