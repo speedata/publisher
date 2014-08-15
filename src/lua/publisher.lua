@@ -5,7 +5,7 @@
 --  publisher.lua
 --  speedata publisher
 --
---  Copyright 2010-2014 Patrick Gundlach.
+--  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
 
 file_start("publisher.lua")
@@ -445,6 +445,19 @@ function dothings()
     fonts.load_fontfile("TeXGyreHeros-BoldItalic","texgyreheros-bolditalic.otf")
     --- Define a basic font family with name `text`:
     define_default_fontfamily()
+
+    if arg[2] == "___server___" then
+        local s = require("publisher.server")
+        s.servermode(tcp)
+    else
+        initialize_luatex()
+    end
+end
+
+-- When not in server mode, we initialize LuaTeX in such a way that
+-- it has defaults, loads a layout file and a data file and
+-- executes them both
+function initialize_luatex()
 
     --- The default page type has 1cm margin
     local onecm=tex.sp("1cm")
@@ -1420,6 +1433,7 @@ end
 --- * underline
 function mknodes(str,fontfamily,parameter)
     -- instance is the internal fontnumber
+    parameter = parameter or {}
     local instance
     local instancename
     local languagecode = parameter.languagecode or defaultlanguage

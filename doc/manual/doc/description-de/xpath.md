@@ -101,4 +101,5 @@ Todo Dokumentieren:
 - `node()`
 - `string()`
 - `upper-case()`
-
+- `tokenize()`
+- `replace()`

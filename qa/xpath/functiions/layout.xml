@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <DefineColor name="red" value="#f00"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <ForAll select='tokenize(replace("#bar #baz Some other text", "(#ba.)\s*","$1x!x"), "x!x")'>
+          <Switch>
+            <Case test="string(.) = '#bar'">
+              <Paragraph><Value>First replacement</Value></Paragraph>
+            </Case>
+            <Case test="string(.) = '#baz'">
+              <Paragraph color="red"><Value>Second replacement</Value></Paragraph>
+            </Case>
+            <Otherwise>
+              <Paragraph><Value select="string(.)"></Value></Paragraph>
+            </Otherwise>
+          </Switch>
+        </ForAll>
+     </Textblock>
+    </PlaceObject>
+  </Record>
+
+</Layout>

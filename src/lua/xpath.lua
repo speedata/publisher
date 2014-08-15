@@ -1,6 +1,7 @@
 -- xpath.lua
 
 local string = unicode.utf8
+local comm = require("publisher.comm")
 
 local stack = {}
 
@@ -825,6 +826,26 @@ M.default_functions.string = function(dataxml,arg)
     end
     return ret
 end
+
+-- Tokenize is the first function we ask 'sp' for help
+M.default_functions["tokenize"] = function(dataxml,arg)
+    comm.sendmessage('tok',arg[1])
+    comm.sendmessage('str',arg[2])
+    local msg = comm.get_string_messages()
+    tracetable("tokenize()", msg)
+    return msg
+end
+
+M.default_functions["replace"] = function(dataxml,arg)
+    comm.sendmessage('rep',arg[1])
+    comm.sendmessage('str',arg[2])
+    comm.sendmessage('str',arg[3])
+    local msg = comm.get_string_messages()
+    trace("Replace: %s",msg[1])
+    return msg[1]
+end
+
+
 
 M.default_functions["upper-case"] = function(dataxml,arg)
     local str = arg and arg[1]
