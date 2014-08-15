@@ -1,13 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (en)</title>
   <id>http://www.speedata.de</id>
-  <updated>2014-06-28T08:02:40+02:00</updated>
+  <updated>2014-08-15T16:54:50+02:00</updated>
   <subtitle>New revisions for download and changelog.</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.1.14</title>
+    <updated>2014-08-15T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-08-15:</id>
+    <content type="html">Hyphenation = yes/no at DefineTextformat</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.13</title>
+    <updated>2014-08-12T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-08-12:</id>
+    <content type="html">Basic version of tokenize() and replace(), basic server mode.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.13</title>
+    <updated>2014-08-07T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-08-07:</id>
+    <content type="html">Colors can have overprinting enabled.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.13</title>
+    <updated>2014-08-06T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-08-06:</id>
+    <content type="html">Spot colors (PANTONE and HKS)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.12</title>
+    <updated>2014-07-25T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-07-25:</id>
+    <content type="html">New command »Color« to switch to a different text color in text.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.10</title>
+    <updated>2014-07-03T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-07-03:</id>
+    <content type="html">Change behaviour of allowbreak=&#34;..&#34; at Paragraph. Space must be made explicit.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.10</title>
+    <updated>2014-06-29T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-06-29:</id>
+    <content type="html">New xpath function sd:dummytext() and sd:loremipsum() for a sample text (lorem ipsum)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.1.9</title>
     <updated>2014-06-27T00:00:00Z</updated>

@@ -199,6 +199,16 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 <td>sd:variable-vorhanden(&lt;&lt;Name&gt;)</td>
 <td>Prüft, ob eine Variable vorhanden ist.</td>
 </tr>
+
+<tr>
+<td>sd:blindtext()</td>
+<td>Gibt den Blindtext &quot;Lorem ipsum...&quot; mit über 50 Wörtern zurück.</td>
+</tr>
+
+<tr>
+<td>sd:loremipsum()</td>
+<td>Alias für <code>sd:blindtext()</code></td>
+</tr>
 </tbody>
 </table>
 
@@ -270,6 +280,11 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 <td>true()</td>
 <td>Gibt „Wahr“ zurück.</td>
 </tr>
+
+<tr>
+<td>normalize-space(&lt;text&gt;)</td>
+<td>Gibt den Text ohne führende und nachstehende Leerzeichen zurück. Alle Zeilenvorschübe werden durch Leerzeichen ersetzt. Mehrfach hintereinander auftretende Leerzeichen/Zeilenvorschübe werden durch ein einzelnes Leerzeichen ersetzt.</td>
+</tr>
 </tbody>
 </table>
 
@@ -280,17 +295,18 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 <li><code>ceiling()</code></li>
 <li><code>max()</code></li>
 <li><code>min()</code></li>
-<li><code>normalize-space()</code></li>
 <li><code>node()</code></li>
 <li><code>string()</code></li>
 <li><code>upper-case()</code></li>
+<li><code>tokenize()</code></li>
+<li><code>replace()</code></li>
 </ul>
 
 </div>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.1.9 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/xpath.html">Englisch</a>
+Version: 2.1.14 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/xpath.html">Englisch</a>
 
 </body>
 </html>

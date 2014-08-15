@@ -16,7 +16,7 @@
          <h2>Description</h2>
          <p>Td wraps a table row, just like HTML.</p>
          <div class="hangingindent">
-            <p>Allowed attributes: <span class="tt"><a href="#align">align</a></span>, <span class="tt"><a href="#backgroundcolor">backgroundcolor</a></span>, <span class="tt"><a href="#border-bottom">border-bottom</a></span>, <span class="tt"><a href="#border-bottom-color">border-bottom-color</a></span>, <span class="tt"><a href="#border-left">border-left</a></span>, <span class="tt"><a href="#border-left-color">border-left-color</a></span>, <span class="tt"><a href="#border-right">border-right</a></span>, <span class="tt"><a href="#border-right-color">border-right-color</a></span>, <span class="tt"><a href="#border-top">border-top</a></span>, <span class="tt"><a href="#border-top-color">border-top-color</a></span>, <span class="tt"><a href="#colspan">colspan</a></span>, <span class="tt"><a href="#padding">padding</a></span>, <span class="tt"><a href="#padding-bottom">padding-bottom</a></span>, <span class="tt"><a href="#padding-left">padding-left</a></span>, <span class="tt"><a href="#padding-right">padding-right</a></span>, <span class="tt"><a href="#padding-top">padding-top</a></span>, <span class="tt"><a href="#rowspan">rowspan</a></span>, <span class="tt"><a href="#valign">valign</a></span></p>
+            <p>Allowed attributes: <span class="tt"><a href="#align">align</a></span>, <span class="tt"><a href="#backgroundcolor">backgroundcolor</a></span>, <span class="tt"><a href="#border-bottom">border-bottom</a></span>, <span class="tt"><a href="#border-bottom-color">border-bottom-color</a></span>, <span class="tt"><a href="#border-left">border-left</a></span>, <span class="tt"><a href="#border-left-color">border-left-color</a></span>, <span class="tt"><a href="#border-right">border-right</a></span>, <span class="tt"><a href="#border-right-color">border-right-color</a></span>, <span class="tt"><a href="#border-top">border-top</a></span>, <span class="tt"><a href="#border-top-color">border-top-color</a></span>, <span class="tt"><a href="#class">class</a></span>, <span class="tt"><a href="#colspan">colspan</a></span>, <span class="tt"><a href="#padding">padding</a></span>, <span class="tt"><a href="#padding-bottom">padding-bottom</a></span>, <span class="tt"><a href="#padding-left">padding-left</a></span>, <span class="tt"><a href="#padding-right">padding-right</a></span>, <span class="tt"><a href="#padding-top">padding-top</a></span>, <span class="tt"><a href="#rowspan">rowspan</a></span>, <span class="tt"><a href="#valign">valign</a></span></p>
          </div>
          <div class="hangingindent">
             <p>Child elements: <a href="barcode.html">Barcode</a>, <a href="box.html">Box</a>, <a href="copy-of.html">Copy-of</a>, <a href="forall.html">ForAll</a>, <a href="image.html">Image</a>, <a href="loop.html">Loop</a>, <a href="paragraph.html">Paragraph</a>, <a href="switch.html">Switch</a>, <a href="table.html">Table</a>, <a href="vspace.html">VSpace</a></p>
@@ -138,6 +138,13 @@
                <p>The color of the top border.</p>
                
             </dd>
+            <dt><a name="class"></a><span class="tt">class</span> (string, optional)
+            </dt>
+            <dd>
+               
+               <p>The css class to be used for formatting the table cell (experimental).</p>
+               
+            </dd>
             <dt><a name="colspan"></a><span class="tt">colspan</span> (number, optional)
             </dt>
             <dd>
@@ -239,7 +246,8 @@
          <a href="table.html">Table</a>,
          <a href="tr.html">Tr</a>,
          <a href="paragraph.html">Paragraph</a>,
-         <a href="image.html">Image</a>
+         <a href="image.html">Image</a>,
+         <a href="stylesheet.html">Stylesheet</a>
          
       </div>
       <div id="elementref">
@@ -259,6 +267,7 @@
             <li><a href="box.html">Box</a></li>
             <li><a href="br.html">Br</a></li>
             <li><a href="case.html">Case</a></li>
+            <li><a href="color.html">Color</a></li>
             <li><a href="column.html">Column</a></li>
             <li><a href="columns.html">Columns</a></li>
             <li><a href="contents.html">Contents</a></li>
@@ -332,7 +341,7 @@
             <li><a href="while.html">While</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.9 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.14 |
       <a href="../index.html">Start page</a>
       |
       <a href="../commands-en/layout.html">Command reference</a> |

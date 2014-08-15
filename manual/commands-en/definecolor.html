@@ -16,7 +16,7 @@
          <h2>Description</h2>
          <p>Colors defined with DefineColors can be referenced later by their name.</p>
          <div class="hangingindent">
-            <p>Allowed attributes: <span class="tt"><a href="#b">b</a></span>, <span class="tt"><a href="#c">c</a></span>, <span class="tt"><a href="#g">g</a></span>, <span class="tt"><a href="#k">k</a></span>, <span class="tt"><a href="#m">m</a></span>, <span class="tt"><a href="#model">model</a></span>, <span class="tt"><a href="#name">name</a></span>, <span class="tt"><a href="#r">r</a></span>, <span class="tt"><a href="#value">value</a></span>, <span class="tt"><a href="#y">y</a></span></p>
+            <p>Allowed attributes: <span class="tt"><a href="#b">b</a></span>, <span class="tt"><a href="#c">c</a></span>, <span class="tt"><a href="#colorname">colorname</a></span>, <span class="tt"><a href="#g">g</a></span>, <span class="tt"><a href="#k">k</a></span>, <span class="tt"><a href="#m">m</a></span>, <span class="tt"><a href="#model">model</a></span>, <span class="tt"><a href="#name">name</a></span>, <span class="tt"><a href="#overprint">overprint</a></span>, <span class="tt"><a href="#r">r</a></span>, <span class="tt"><a href="#value">value</a></span>, <span class="tt"><a href="#y">y</a></span></p>
          </div>
          <div class="hangingindent">
             <p>Child elements: (none)</p>
@@ -38,6 +38,15 @@
             <dd>
                
                <p>Cyan part with CMYK</p>
+               
+            </dd>
+            <dt><a name="colorname"></a><span class="tt">colorname</span> (string, optional)
+            </dt>
+            <dd>
+               
+               <p>The name of the spot color if model is »spotcolor«. The name must match the required
+                  color name, such as »PANTONE 116 C«.
+               </p>
                
             </dd>
             <dt><a name="g"></a><span class="tt">g</span> (0 up to 100, optional)
@@ -65,8 +74,8 @@
             </dt>
             <dd>
                
-               <p>Color model to be used for the color. Currently “rgb”, “cmyk” and “gray” are supported.
-                  More on request.
+               <p>Color model to be used for the color. Currently “rgb”, “cmyk”, “gray” and “spotcolor”
+                  are supported.
                </p>
                
                <table class="attributechoice">
@@ -100,6 +109,16 @@
                         
                      </td>
                   </tr>
+                  <tr>
+                     <td>
+                        <p>spotcolor:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Use a PANTONE or HKS color.</p>
+                        
+                     </td>
+                  </tr>
                </table>
             </dd>
             <dt><a name="name"></a><span class="tt">name</span> (string)
@@ -107,6 +126,13 @@
             <dd>
                
                <p>The name of the color to be defined.</p>
+               
+            </dd>
+            <dt><a name="overprint"></a><span class="tt">overprint</span> (yes/no, optional)
+            </dt>
+            <dd>
+               
+               <p>Enable overprint for this color.</p>
                
             </dd>
             <dt><a name="r"></a><span class="tt">r</span> (0 up to 100, optional)
@@ -120,7 +146,7 @@
             </dt>
             <dd>
                
-               <p></p>
+               <p>Hex value of the color, such as #FA5 or #FFAA55.</p>
                
             </dd>
             <dt><a name="y"></a><span class="tt">y</span> (0 up to 100, optional)
@@ -152,6 +178,7 @@
             <li><a href="box.html">Box</a></li>
             <li><a href="br.html">Br</a></li>
             <li><a href="case.html">Case</a></li>
+            <li><a href="color.html">Color</a></li>
             <li><a href="column.html">Column</a></li>
             <li><a href="columns.html">Columns</a></li>
             <li><a href="contents.html">Contents</a></li>
@@ -225,7 +252,7 @@
             <li><a href="while.html">While</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.9 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.14 |
       <a href="../index.html">Start page</a>
       |
       <a href="../commands-en/layout.html">Command reference</a> |

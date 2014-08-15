@@ -16,7 +16,7 @@
          <h2>Beschreibung</h2>
          <p>Setzt Publisher-spezifische Optionen.</p>
          <div class="hangingindent">
-            <p>Erlaubte Attribute: <span class="tt"><a href="#cutmarks">beschnittmarken</a></span>, <span class="tt"><a href="#trim">beschnittzugabe</a></span>, <span class="tt"><a href="#mainlanguage">hauptsprache</a></span>, <span class="tt"><a href="#ignoreeol">ignorierezeilenende</a></span>, <span class="tt"><a href="#resetmarks">markerzurücksetzen</a></span>, <span class="tt"><a href="#startpage">startseite</a></span>, <span class="tt"><a href="#trace">trace</a></span>, <span class="tt"><a href="#show-grid">zeichne_raster</a></span>, <span class="tt"><a href="#show-gridallocation">zeige_rasterbelegung</a></span>, <span class="tt"><a href="#show-hyphenation">zeige_silbentrennung</a></span></p>
+            <p>Erlaubte Attribute: <span class="tt"><a href="#cutmarks">beschnittmarken</a></span>, <span class="tt"><a href="#trim">beschnittzugabe</a></span>, <span class="tt"><a href="#colorprofile">farbprofil</a></span>, <span class="tt"><a href="#mainlanguage">hauptsprache</a></span>, <span class="tt"><a href="#ignoreeol">ignorierezeilenende</a></span>, <span class="tt"><a href="#resetmarks">markerzurücksetzen</a></span>, <span class="tt"><a href="#startpage">startseite</a></span>, <span class="tt"><a href="#trace">trace</a></span>, <span class="tt"><a href="#show-grid">zeichne_raster</a></span>, <span class="tt"><a href="#show-gridallocation">zeige_rasterbelegung</a></span>, <span class="tt"><a href="#show-hyphenation">zeige_silbentrennung</a></span></p>
          </div>
          <div class="hangingindent">
             <p>Kindelemente: (keine)</p>
@@ -43,6 +43,15 @@
             <dd>
                
                <p>Die Größe des Beschnitts (bleed). Voreinstellung ist 0mm.</p>
+               
+            </dd>
+            <dt><a name="colorprofile"></a><span class="tt">farbprofil</span> (Text, optional)
+            </dt>
+            <dd>
+               
+               <p>Der Dateiname des Farbprofils. Das voreingestellte Profil ist »ISO Coated v2 (ECI)«.
+                  Farbprofile werden nur geladen, wenn Sonderfarben benutzt werden.
+               </p>
                
             </dd>
             <dt><a name="mainlanguage"></a><span class="tt">hauptsprache</span> (optional)
@@ -329,6 +338,7 @@
             <li><a href="element.html">Element</a></li>
             <li><a href="case.html">Fall</a></li>
             <li><a href="switch.html">Fallunterscheidung</a></li>
+            <li><a href="color.html">Farbe</a></li>
             <li><a href="bold.html">Fett</a></li>
             <li><a href="bolditalic.html">FettKursiv</a></li>
             <li><a href="forall.html">FürAlle</a></li>
@@ -396,7 +406,7 @@
             <li><a href="setvariable.html">Zuweisung</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.9 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.14 |
       <a href="../index-de.html">Startseite</a>
       |
       <a href="../commands-de/layout.html">Befehlsreferenz</a> |

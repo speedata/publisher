@@ -16,7 +16,7 @@
          <h2>Description</h2>
          <p>Set publisher specific options</p>
          <div class="hangingindent">
-            <p>Allowed attributes: <span class="tt"><a href="#cutmarks">cutmarks</a></span>, <span class="tt"><a href="#ignoreeol">ignoreeol</a></span>, <span class="tt"><a href="#mainlanguage">mainlanguage</a></span>, <span class="tt"><a href="#resetmarks">resetmarks</a></span>, <span class="tt"><a href="#show-grid">show-grid</a></span>, <span class="tt"><a href="#show-gridallocation">show-gridallocation</a></span>, <span class="tt"><a href="#show-hyphenation">show-hyphenation</a></span>, <span class="tt"><a href="#startpage">startpage</a></span>, <span class="tt"><a href="#trace">trace</a></span>, <span class="tt"><a href="#trim">trim</a></span></p>
+            <p>Allowed attributes: <span class="tt"><a href="#colorprofile">colorprofile</a></span>, <span class="tt"><a href="#cutmarks">cutmarks</a></span>, <span class="tt"><a href="#ignoreeol">ignoreeol</a></span>, <span class="tt"><a href="#mainlanguage">mainlanguage</a></span>, <span class="tt"><a href="#resetmarks">resetmarks</a></span>, <span class="tt"><a href="#show-grid">show-grid</a></span>, <span class="tt"><a href="#show-gridallocation">show-gridallocation</a></span>, <span class="tt"><a href="#show-hyphenation">show-hyphenation</a></span>, <span class="tt"><a href="#startpage">startpage</a></span>, <span class="tt"><a href="#trace">trace</a></span>, <span class="tt"><a href="#trim">trim</a></span></p>
          </div>
          <div class="hangingindent">
             <p>Child elements: (none)</p>
@@ -26,6 +26,15 @@
          </div>
          <h3>Attributes</h3>
          <dl>
+            <dt><a name="colorprofile"></a><span class="tt">colorprofile</span> (string, optional)
+            </dt>
+            <dd>
+               
+               <p>The filename of the color profile. The default profile is »ISO Coated v2 (ECI)«. Only
+                  used when spot colors are used.
+               </p>
+               
+            </dd>
             <dt><a name="cutmarks"></a><span class="tt">cutmarks</span> (yes/no, optional)
             </dt>
             <dd>
@@ -320,6 +329,7 @@
             <li><a href="box.html">Box</a></li>
             <li><a href="br.html">Br</a></li>
             <li><a href="case.html">Case</a></li>
+            <li><a href="color.html">Color</a></li>
             <li><a href="column.html">Column</a></li>
             <li><a href="columns.html">Columns</a></li>
             <li><a href="contents.html">Contents</a></li>
@@ -393,7 +403,7 @@
             <li><a href="while.html">While</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.9 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.14 |
       <a href="../index.html">Start page</a>
       |
       <a href="../commands-en/layout.html">Command reference</a> |

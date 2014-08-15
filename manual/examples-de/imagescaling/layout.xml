@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/de"
+  xmlns:sd="urn:speedata:2009/publisher/functions/de">
+  <Optionen zeichne_raster="ja"/>
+  
+  <Datensatz element="data">
+    <Zuweisung variable="img" auswahl="'ocean.pdf'"/>
+    <ObjektAusgeben>
+      <Textblock>
+        <Absatz><Wert>Mit ausschnitt="nein" (default) und maxbreite und maxhöhe</Wert></Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Textblock>
+        <Absatz><Wert>maxbreite="5" maxhöhe="5"</Wert></Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Bild maxbreite="5" maxhöhe="5" datei="{$img}" ausschnitt="nein"/>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Textblock>
+        <Absatz><Wert>maxbreite="10" maxhöhe="5"</Wert></Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Bild maxbreite="10" maxhöhe="5" datei="{$img}" ausschnitt="nein"/>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Textblock>
+        <Absatz><Wert>maxbreite="5" maxhöhe="10"</Wert></Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Bild maxbreite="5" maxhöhe="10" datei="{$img}" ausschnitt="nein"/>
+    </ObjektAusgeben>
+    <NeueSeite/>
+    <ObjektAusgeben>
+      <Textblock>
+        <Absatz><Wert>Mit ausschnitt="nein"</Wert></Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Textblock>
+        <Absatz><Wert>breite="5" höhe="5"</Wert></Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Bild breite="5" höhe="5" datei="{$img}" ausschnitt="nein"/>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Textblock>
+        <Absatz><Wert>breite="10" höhe="5"</Wert></Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Bild breite="10" höhe="5" datei="{$img}" ausschnitt="nein"/>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Textblock>
+        <Absatz><Wert>breite="5" höhe="10"</Wert></Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Bild breite="5" höhe="10" datei="{$img}" ausschnitt="nein"/>
+    </ObjektAusgeben>
+    <NeueSeite/>
+
+    <ObjektAusgeben>
+      <Textblock>
+        <Absatz><Wert>Mit ausschnitt="ja"</Wert></Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Textblock>
+        <Absatz><Wert>breite="5" höhe="5"</Wert></Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Bild breite="5" höhe="5" datei="{$img}" ausschnitt="ja"/>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Textblock>
+        <Absatz><Wert>breite="10" höhe="5"</Wert></Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Bild breite="10" höhe="5" datei="{$img}" ausschnitt="ja"/>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Textblock>
+        <Absatz><Wert>breite="5" höhe="10"</Wert></Absatz>
+      </Textblock>
+    </ObjektAusgeben>
+    <ObjektAusgeben>
+      <Bild breite="5" höhe="10" datei="{$img}" ausschnitt="ja"/>
+    </ObjektAusgeben>
+  </Datensatz>
+</Layout>

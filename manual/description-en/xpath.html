@@ -208,6 +208,16 @@ XPath 2.0 standard.</p>
 <td>sd:sha1(&lt;value&gt;,&lt;value&gt;, …)</td>
 <td>Return the SHA-1 sum of the concatenation of each value as a hex string. Example: <code>sd:sha1('hello ', 'world')</code> gives the string <code>2aae6c35c94fcfb415dbe95f408b9ce91ee846ed</code>.</td>
 </tr>
+
+<tr>
+<td>sd:dummytext()</td>
+<td>Returns the dummy text &quot;Lorem ipsum...&quot; (more than 50 words, enough for a paragraph)</td>
+</tr>
+
+<tr>
+<td>sd:loremipsum()</td>
+<td>Same as <code>sd:dummytext()</code></td>
+</tr>
 </tbody>
 </table>
 
@@ -279,6 +289,11 @@ XPath 2.0 standard.</p>
 <td>true()</td>
 <td>Return <em>true</em>.</td>
 </tr>
+
+<tr>
+<td>normalize-space(&lt;text&gt;)</td>
+<td>Return the text without leading and trailing spaces. All newlines will be changed to spaces. Multiple spaces/newlines will be changed to a single space.</td>
+</tr>
 </tbody>
 </table>
 
@@ -289,17 +304,18 @@ XPath 2.0 standard.</p>
 <li><code>ceiling()</code></li>
 <li><code>max()</code></li>
 <li><code>min()</code></li>
-<li><code>normalize-space()</code></li>
 <li><code>node()</code></li>
 <li><code>string()</code></li>
 <li><code>upper-case()</code></li>
+<li><code>tokenize()</code></li>
+<li><code>replace()</code></li>
 </ul>
 
 </div>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.1.9 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/xpath.html">German</a>
+Version: 2.1.14 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/xpath.html">German</a>
 
 </body>
 </html>

@@ -16,7 +16,7 @@
          <h2>Beschreibung</h2>
          <p>Definiert Farben, die später im Layout benutzt werden können</p>
          <div class="hangingindent">
-            <p>Erlaubte Attribute: <span class="tt"><a href="#b">b</a></span>, <span class="tt"><a href="#c">c</a></span>, <span class="tt"><a href="#g">g</a></span>, <span class="tt"><a href="#k">k</a></span>, <span class="tt"><a href="#m">m</a></span>, <span class="tt"><a href="#model">modell</a></span>, <span class="tt"><a href="#name">name</a></span>, <span class="tt"><a href="#r">r</a></span>, <span class="tt"><a href="#value">wert</a></span>, <span class="tt"><a href="#y">y</a></span></p>
+            <p>Erlaubte Attribute: <span class="tt"><a href="#b">b</a></span>, <span class="tt"><a href="#c">c</a></span>, <span class="tt"><a href="#colorname">farbname</a></span>, <span class="tt"><a href="#g">g</a></span>, <span class="tt"><a href="#k">k</a></span>, <span class="tt"><a href="#m">m</a></span>, <span class="tt"><a href="#model">modell</a></span>, <span class="tt"><a href="#name">name</a></span>, <span class="tt"><a href="#r">r</a></span>, <span class="tt"><a href="#value">wert</a></span>, <span class="tt"><a href="#y">y</a></span>, <span class="tt"><a href="#overprint">überdrucken</a></span></p>
          </div>
          <div class="hangingindent">
             <p>Kindelemente: (keine)</p>
@@ -38,6 +38,15 @@
             <dd>
                
                <p>Cyan Anteil bei CMYK</p>
+               
+            </dd>
+            <dt><a name="colorname"></a><span class="tt">farbname</span> (Text, optional)
+            </dt>
+            <dd>
+               
+               <p>Der Name der Sonderfarbe wenn das Modell auf »sonderfarbe« eingestellt ist. Der muss
+                  den offiziellen Namen tragen, wie z.B. »PANTONE 116 C«.
+               </p>
                
             </dd>
             <dt><a name="g"></a><span class="tt">g</span> (0 bis 100, optional)
@@ -65,8 +74,8 @@
             </dt>
             <dd>
                
-               <p>Das Farbmodell, das benutzt werden soll. Derzeit werdern »rgb«, »cmyk« und »graustufen«
-                  unterstützt. Weitere Farbräume auf Anfrage.
+               <p>Das Farbmodell, das benutzt werden soll. Derzeit werdern »rgb«, »cmyk«, »graustufen«
+                  und »sonderfarbe« unterstützt.
                </p>
                
                <table class="attributechoice">
@@ -100,6 +109,16 @@
                         
                      </td>
                   </tr>
+                  <tr>
+                     <td>
+                        <p>sonderfarbe:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Eine PANTONE oder HKS Farbe.</p>
+                        
+                     </td>
+                  </tr>
                </table>
             </dd>
             <dt><a name="name"></a><span class="tt">name</span> (Text)
@@ -120,7 +139,7 @@
             </dt>
             <dd>
                
-               <p></p>
+               <p>Der Hexwert der Farbe, wie beispielsweise #FA5 oder #FFAA55.</p>
                
             </dd>
             <dt><a name="y"></a><span class="tt">y</span> (0 bis 100, optional)
@@ -128,6 +147,13 @@
             <dd>
                
                <p>Gelb Anteil bei CMYK</p>
+               
+            </dd>
+            <dt><a name="overprint"></a><span class="tt">überdrucken</span> (ja/nein, optional)
+            </dt>
+            <dd>
+               
+               <p>Überdrucken für diese Farbe anschalten</p>
                
             </dd>
          </dl>
@@ -158,6 +184,7 @@
             <li><a href="element.html">Element</a></li>
             <li><a href="case.html">Fall</a></li>
             <li><a href="switch.html">Fallunterscheidung</a></li>
+            <li><a href="color.html">Farbe</a></li>
             <li><a href="bold.html">Fett</a></li>
             <li><a href="bolditalic.html">FettKursiv</a></li>
             <li><a href="forall.html">FürAlle</a></li>
@@ -225,7 +252,7 @@
             <li><a href="setvariable.html">Zuweisung</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.9 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.14 |
       <a href="../index-de.html">Startseite</a>
       |
       <a href="../commands-de/layout.html">Befehlsreferenz</a> |
