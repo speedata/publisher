@@ -39,9 +39,9 @@ Aufruf des Publishers über Kommandozeile
           clean                  Remove publisher generated files
           compare                Compare files for quality assurance
           doc                    Open documentation
-          list-fonts             List installed fonts (use together with --xml
-                                 for copy/paste)
+          list-fonts             List installed fonts (use together with --xml for copy/paste)
           run                    Start publishing (default)
+          server                 Run as http-api server on port 5266 (configure with --port)
           watch                  Start watchdog / hotfolder
 
 
@@ -84,6 +84,7 @@ Parameter | Beschreibung
 `clean`|  Entfernt temporäre Dateien aus dem Publisher-Lauf. Behält die PDF Datei.
 `doc`|  Öffnet die Onlinehilfe.
 `run`|  Startet den Publisher Lauf.
+`server` | Startet im [Server-Modus](servermode.html).
 `watch`|  Startet den internen Hotfolder
 
 ### Beispiel für die Hotfolder Konfiguration

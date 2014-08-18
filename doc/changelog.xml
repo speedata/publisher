@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
+    <entry version="2.1.15" date="2014-08-18">
+      <en>Experimental server-mode (/v0/format)</en>
+      <de>Experimenteller Servermodus (/v0/format)</de>
+    </entry>
     <entry version="2.1.14" date="2014-08-15">
       <en>Hyphenation = yes/no at DefineTextformat</en>
       <de>Silbentrennung bei DefiniereTextformat an- und ausschaltbar</de>

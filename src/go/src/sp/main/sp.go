@@ -572,7 +572,7 @@ func main() {
 	op.Command("doc", "Open documentation")
 	op.Command("list-fonts", "List installed fonts (use together with --xml for copy/paste)")
 	op.Command("run", "Start publishing (default)")
-	op.Command("server", "Run as http-api server on port 5266 (configure with --port")
+	op.Command("server", "Run as http-api server on port 5266 (configure with --port)")
 	op.Command("watch", "Start watchdog / hotfolder")
 	err := op.Parse()
 	if err != nil {

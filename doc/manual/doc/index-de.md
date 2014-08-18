@@ -24,5 +24,6 @@ Weiterführende Themen
  * [Bearbeiten des Layoutregelwerks](description-de/xmlediting.html)
  * [Schnittmarken und Beschnittzugabe](description-de/cutmarks.html)
  * [Konfiguration des Publishers](description-de/configuration.html)
+ * [Server-Modus](description-de/servermode.html)
  * [Qualitätssicherung](description-de/qualityassurance.html)
  * [Beispiele](examples-de/index.html)

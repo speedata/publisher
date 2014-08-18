@@ -8,27 +8,79 @@
 
 local luxor = do_luafile("luxor.lua")
 local comm = require("publisher.comm")
+local paragraph  = require("paragraph")
+
+local function analyze_format_xml( nodelist )
+    local head = nodelist
+    local txt = {}
+    while head do
+        if head.id == publisher.hlist_node or head.id == publisher.vlist_node then
+            txt[#txt + 1] = analyze_format_xml(head.list)
+        elseif head.id == publisher.glyph_node then
+            txt[#txt + 1] = unicode.utf8.char(head.char)
+        elseif head.id == publisher.glue_node then
+            if head.subtype == 9 then
+                txt[#txt + 1] = "<br />"
+            elseif head.spec.width > 0 then
+                txt[#txt + 1] = " "
+            end
+        elseif head.id == publisher.disc_node then
+            local x = node.has_attribute(head,publisher.att_keep)
+            if x == 1 then
+                txt[#txt + 1] = '<shy class="keep" />'
+            else
+                txt[#txt + 1] = "<shy />"
+            end
+        end
+        head = head.next
+    end
+    return table.concat(txt,"")
+end
 
 -- todo: move this into another file
 local function fmt(msg)
-    local x = luxor.parse_xml(msg)
-    local rootelt = x
+    local nodelist
+    local ret = {}
+    local rootelt = luxor.parse_xml(msg)
+    local a = paragraph:new()
+    local parameter
     for i=1,#rootelt do
-        if type(rootelt[i]) == "table" and rootelt[i][".__name"] == "text" then
-            local foo = rootelt[i]
-            local txt = ""
-            for j=1,#foo do
-                local elt = foo[j]
+        local thiselement = rootelt[i]
+
+        if type(thiselement) == "table" and thiselement[".__name"] == "text" then
+            parameter = {}
+
+            if thiselement["hyphenate-limit-before"] then
+                parameter.left = tonumber(thiselement["hyphenate-limit-before"])
+            end
+            if thiselement["hyphenate-limit-after"] then
+                parameter.right = tonumber(thiselement["hyphenate-limit-after"])
+            end
+
+            local txt = {}
+            for j=1,#thiselement do
+                local elt = thiselement[j]
                 if type(elt) == "string" then
-                    txt = txt .. elt
+                    txt[#txt + 1] = elt
                 elseif type(elt) == "table" and elt[".__name"] == "br" then
-                    txt = txt .. "\n"
+                    if elt.class == "keep" then
+                        txt[#txt + 1] = "\n"
+                    else
+                        txt[#txt + 1] = " "
+                    end
+                elseif type(elt) == "table" and elt[".__name"] == "shy" then
+                    if elt.class == "keep" then
+                        txt[#txt + 1] = unicode.utf8.char(173)
+                    end
                 end
             end
-            local j = publisher.mknodes(txt)
+            a:append(table.concat(txt,""),parameter)
+            nodelist = a:format(1073741823)
+            ret[#ret + 1] = "<text>" .. analyze_format_xml(nodelist) .. "</text>\n"
         end
     end
-    comm.send_string_message(msg)
+
+    comm.send_string_message("<root>\n" .. table.concat(ret) .."</root>\n\r")
 end
 
 

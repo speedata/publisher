@@ -39,9 +39,9 @@ Running the speedata publisher on the command line
           clean                  Remove publisher generated files
           compare                Compare files for quality assurance
           doc                    Open documentation
-          list-fonts             List installed fonts (use together with --xml
-                                 for copy/paste)
+          list-fonts             List installed fonts (use together with --xml for copy/paste)
           run                    Start publishing (default)
+          server                 Run as http-api server on port 5266 (configure with --port)
           watch                  Start watchdog / hotfolder
 
 
@@ -84,6 +84,7 @@ Command   | Description
 `clean` | Remove temporary files from the publisher run. Keeps the PDF file.
 `doc` | Opens the HTML documentation.
 `run` | Starts the speedata publisher (this is the default command).
+`server` | Runs in [Server-mode](servermode.html).
 `watch` | Runs in internal hotfolder mode.
 
 ### Example for hotfolder configuration

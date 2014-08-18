@@ -80,6 +80,9 @@ att_tr_shift_up     = 550
 -- Force a hbox line height
 att_lineheight = 600
 
+-- server-mode / linebreaking
+att_keep = 700
+
 -- Debugging / see att_origin
 origin_table = 1
 origin_vspace = 2
@@ -1543,7 +1546,23 @@ function mknodes(str,fontfamily,parameter)
                 node.set_attribute(n,att_underline,1)
             end
             node.set_attribute(n,att_fontfamily,fontfamily)
+        elseif s == 173 then -- soft hyphen
+            -- The soft hyphen is used in server-mode /v0/format
+            n = node.new(penalty_node)
+            n.penalty = 10000
+            head, last = node.insert_after(head,last,n)
 
+            n = node.new(disc_node)
+            node.set_attribute(n,att_keep,1)
+            head, last = node.insert_after(head,last,n)
+
+            n = node.new(penalty_node)
+            n.penalty = 10000
+            head, last = node.insert_after(head,last,n)
+
+            n = node.new(glue_node)
+            n.spec = node.new(glue_spec_node)
+            head, last = node.insert_after(head,last,n)
         -- anchor is necessary. Otherwise à (C3A0) would match A0 - %s
         elseif match(char,"^%s$") then -- Space
             if breakatspace == false then
@@ -1583,8 +1602,8 @@ function mknodes(str,fontfamily,parameter)
             n.char = s
             n.lang = languagecode
             n.uchyph = 1
-            n.left = tex.lefthyphenmin
-            n.right = tex.righthyphenmin
+            n.left = parameter.left or tex.lefthyphenmin
+            n.right = parameter.right or tex.righthyphenmin
             node.set_attribute(n,att_fontfamily,fontfamily)
             if parameter.bold == 1 then
                 node.set_attribute(n,att_bold,1)

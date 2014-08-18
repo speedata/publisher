@@ -24,5 +24,6 @@ Advanced topics
  * [Editing the XML layout rules](description-en/xmlediting.html)
  * [Cutmarks and bleed](description-en/cutmarks.html)
  * [Configuring the speedata Publisher](description-en/configuration.html)
+ * [Server-mode](description-en/servermode.html)
  * [Quality assurance](description-en/qualityassurance.html)
  * [Examples](examples-en/index.html)
