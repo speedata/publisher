@@ -2216,13 +2216,11 @@ end
 --- Typesets tabular material. Mostly like an HTML table.
 function commands.table( layoutxml,dataxml,optionen )
     local width          = publisher.read_attribute(layoutxml,dataxml,"width",         "length")
-    local hoehe          = publisher.read_attribute(layoutxml,dataxml,"height",        "number")
     local padding        = publisher.read_attribute(layoutxml,dataxml,"padding",       "length")
     local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","length")
     local rowdistance    = publisher.read_attribute(layoutxml,dataxml,"leading",       "length")
     local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",      "rawstring")
     local autostretch    = publisher.read_attribute(layoutxml,dataxml,"stretch",       "string")
-    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",    "rawstring")
     local eval           = publisher.read_attribute(layoutxml,dataxml,"eval",          "xpath")
     local collapse       = publisher.read_attribute(layoutxml,dataxml,"border-collapse",  "string", "separate")
 
@@ -2289,7 +2287,6 @@ function commands.table( layoutxml,dataxml,optionen )
     tabular.colsep         = columndistance
     tabular.rowsep         = rowdistance
     tabular.autostretch    = autostretch
-    tabular.textformat     = textformat
     tabular.bordercollapse_horizontal = collapse == "collapse"
     tabular.bordercollapse_vertical   = collapse == "collapse"
     if columndistance > 0 then tabular.bordercollapse_horizontal = false end

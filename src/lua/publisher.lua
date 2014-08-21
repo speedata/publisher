@@ -1619,10 +1619,8 @@ function mknodes(str,fontfamily,parameter)
             end
 
             head,last = node.insert_after(head,last,n)
-            -- We have a character but some characters must be treated in a special
-            -- way.
+            -- Some characters must be treated in a special way.
             -- Hyphens must be separated from words:
-
             if ( n.char == 45 or n.char == 8211) and lastitemwasglyph then
                 local pen = node.new("penalty")
                 pen.penalty = 10000
@@ -1633,6 +1631,7 @@ function mknodes(str,fontfamily,parameter)
                 g.spec = node.new(glue_spec_node)
                 head,last = node.insert_after(head,last,g)
             elseif parameter.allowbreak and string.find(parameter.allowbreak, char,1,true) then
+                -- allowbreak lists characters where the publisher may break lines
                 local pen = node.new("penalty")
                 pen.penalty = 0
                 head,last = node.insert_after(head,last,pen)

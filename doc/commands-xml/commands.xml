@@ -4979,14 +4979,6 @@
         <para>Der Abstand zwischen zwei Spalten.</para>
       </description>
     </attribute>
-    <attribute name="textformat" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>The name of the textformat to be applied to all texts. Default is ‘text’.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Das Textformat, das benutzt wird, wenn kein anderes angegeben wird. Voreinstellung ist ›text‹.</para>
-      </description>
-    </attribute>
     <attribute name="leading" type="length" optional="yes">
       <description xml:lang="en">
         <para>The distance between two rows.</para>
