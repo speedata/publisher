@@ -39,6 +39,7 @@ func compareTwoPages(sourcefile, referencefile, dummyfile, path string) float64 
 	}
 
 	if err := cmd.Start(); err != nil {
+		log.Println("Do you have imagemagick installed?")
 		log.Fatalf("cmd.Start: %v", err)
 	}
 
@@ -124,7 +125,7 @@ func runComparison(path string, status chan compareStatus) {
 		cmd.Dir = path
 		err = cmd.Run()
 		if err != nil {
-			log.Fatal("error converting reference. ", err)
+			log.Fatal("Errror converting reference. Do you have ghostscript installed?", err)
 		}
 	}
 
