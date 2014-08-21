@@ -1342,7 +1342,7 @@ function parse_html( elt, parameter )
         if  typ == "string" or typ == "number" or typ == "boolean" then
             a:append(elt[i],{fontfamily = 0, bold = bold, italic = italic, underline = underline, allowbreak = allowbreak })
         elseif typ == "table" then
-            a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline, allowbreak = allowbreak})
+            a:append(parse_html(elt[i],{fontfamily = 0, bold = bold, italic = italic, underline = underline, allowbreak = allowbreak}))
         end
     end
 
