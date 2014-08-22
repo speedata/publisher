@@ -70,8 +70,8 @@ sd:gruppenhöhe(\<string\>)|  Gibt die Höhe in Rasterzellen für die Gruppe im 
 sd:seitennummer(\<Marke\>)|  Liefert die Seitenzahl der Seite auf der die angegebene Marke ausgegeben wurde. Siehe den Befehl [Marke](../commands-de/mark.html)
 sd:seitenzahlen-zusammenfassen(\<Seitenzahlen\>,\<Trenner für Bereiche\>,\<Trenner für Leerraum\>) | Fasst Seitenzahlenbereiche zusammen. Beispielsweise aus `"1, 3, 4, 5"` wird `1, 3–5`. Voreinstellung für den Trenner für Bereiche ist ein Halbgeviertstrich (–), Voreinstellung für den Trenner für Leerraum ist ', ' (Komma, Leerzeichen). Diese Funktion sortiert die Zahlen und löscht doppelte Einträge. Bei leerem Trenner für Bereiche werden Zahlen nicht zusammengeführt, sondern einzeln mit dem Trenner für Leerraum verbunden.
 sd:sha1(\<Wert\>,\<Wert\>, …)|  Erzeugt die SHA-1 Summe der Hintereinanderkettung der Werte als Hex-Zeichenkette. Beispiel: `sd:sha1('Hallo ', 'Welt')` ergibt die Zeichenkette `28cbbc72d6a52617a7abbfff6756d04bbad0106a`.
-sd:variable(\<Name\>)|  ist dasselbe wie \$Name, nur mit der Möglichkeit den Namen auch dynamisch (z.B. mit `concat()`) zu erzeugen.
-sd:variable-vorhanden(\<\<Name\>)|  Prüft, ob eine Variable vorhanden ist.
+sd:variable(\<Name\>)|  ist dasselbe wie $Name, nur mit der Möglichkeit den Namen auch dynamisch (z.B. mit `concat()`) zu erzeugen.
+sd:variable-vorhanden(\<Name\>)|  Prüft, ob eine Variable vorhanden ist.
 sd:blindtext() | Gibt den Blindtext "Lorem ipsum..." mit über 50 Wörtern zurück.
 sd:loremipsum() | Alias für `sd:blindtext()`
 
@@ -86,9 +86,11 @@ floor()|  Gibt den abgerundeten Wert einer Zahl zurück.
 last()|  Gibt die Anzahl der Datensätze der gleichnamigen Geschwister-Elemente zurück. **Achtung: noch nicht XPath-konform.**
 not()|  Negiert den Wahrheitswert des Arguments. Beispiel: `not(true())` ergibt `false()`.
 position()|  Ermittelt die Position des aktuellen Datensatzes.
+replace(\<Eingabe\>,\<Regexp\>, \<Ersetzung\>) | Ersetzt die Eingabe mit dem regulären Ausdruck durch den Ersetzungstext. Beispiel: `replace("banana", "a", "o")` ergibt `bonono`.
 string(\<Sequenz\>)|  Gibt den Textwert der Sequenz zurück, d.h. den Inhalt der Elemente.
 string-join(\<Sequenz\>, Separator)|  Gibt den Textwert der Sequenz zurück, wobei alle Elemente durch den Separator getrennt werden.
 true()|  Gibt „Wahr“ zurück.
+tokenize(\<Eingabe\>,\<Regexp\>) |  Die Rückgabe ist eine Sequenz von Zeichenketten. Die Eingabe wird von links nach rechts gelesen. Sobald eine Stelle gefunden wird, auf die der Reguläre Ausdruck passt, wird die bisherige Eingabe zurück gegeben. Beispiel (aus M. Kays XPath / XSLT-Buch): `tokenize("Go home, Jack!", "\W+")` ergibt die Sequenz `"Go", "home", "Jack", ""`.
 normalize-space(\<text\>) | Gibt den Text ohne führende und nachstehende Leerzeichen zurück. Alle Zeilenvorschübe werden durch Leerzeichen ersetzt. Mehrfach hintereinander auftretende Leerzeichen/Zeilenvorschübe werden durch ein einzelnes Leerzeichen ersetzt.
 
 Todo Dokumentieren:
@@ -101,5 +103,3 @@ Todo Dokumentieren:
 - `node()`
 - `string()`
 - `upper-case()`
-- `tokenize()`
-- `replace()`

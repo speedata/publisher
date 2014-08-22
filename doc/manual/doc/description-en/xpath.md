@@ -98,8 +98,10 @@ floor() | Returns the largest number with no fractional part that is not greater
 last() | Return the number of elements of the same named sibling elements. **Not yet XPath conform.**
 not() | Negates the value of the argument. Example: `not(true())` returns `false()`.
 position() | Return the position of the current node.
+replace(\<input\>,\<regexp\>, \<replacement\>) | Replace the input using the regular expression with the given replacement text. Example: `replace("banana", "a", "o")` yields `bonono`.
 string(\<sequence\>) | Return the text value of the sequence e.g. the contents of the elemements.
 string-join(\<sequence\>,separator) | Return the string value of the sequence, where each element is separated by the separator.
+tokenize(\<input\>,\<regexp\>) | This function returns a sequence of strings. The input text is read from left to right. When the regular expression matches the current position, the text read so far from the last match is returned. Example (from the great XPath / XSLT book by M. Key): `tokenize("Go home, Jack!", "\W+")` returns the sequence `"Go", "home", "Jack", ""`.
 true() | Return *true*.
 normalize-space(\<text\>) | Return the text without leading and trailing spaces. All newlines will be changed to spaces. Multiple spaces/newlines will be changed to a single space.
 
@@ -113,5 +115,3 @@ Todo document:
 - `node()`
 - `string()`
 - `upper-case()`
-- `tokenize()`
-- `replace()`

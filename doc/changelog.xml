@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
+    <entry version="2.1.16" date="2014-08-22">
+      <en>Don't break lines on / anymore, unless specified in allowbreaks="/".</en>
+      <de>Zeilen dürfen bei / nicht mehr umbrochen werden, außer in erlaubeumbruch enthält den Schrägstrich.</de>
+    </entry>
     <entry version="2.1.15" date="2014-08-18">
       <en>Experimental server-mode (/v0/format)</en>
       <de>Experimenteller Servermodus (/v0/format)</de>
