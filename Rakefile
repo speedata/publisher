@@ -14,6 +14,9 @@ File.read("version").each_line do |line|
 	@versions[product]=versionnumber
 end
 
+ENV['GOPATH'] = "#{srcdir}/go"
+
+
 def build_go(srcdir,destbin,goos,goarch,targettype)
 	if goarch
 		ENV['GOARCH'] = goarch
@@ -21,7 +24,6 @@ def build_go(srcdir,destbin,goos,goarch,targettype)
 	if goos
 		ENV['GOOS'] = goos
 	end
-	ENV['GOPATH'] = "#{srcdir}/go"
 	publisher_version = @versions['publisher_version']
 	# let's always add the sha1 to the minor versions, so we
 	# _,minor,_ = publisher_version.split(/\./)
@@ -58,7 +60,6 @@ end
 
 desc "Generate documentation"
 task :doc do
-	ENV['GOPATH'] = "#{srcdir}/go"
 	publisher_version = @versions['publisher_version']
 	rm_rf builddir.join("manual")
 	Dir.chdir(srcdir.join("go")) do
@@ -101,12 +102,13 @@ end
 
 desc "Source documentation"
 task :sourcedoc do
-	Dir.chdir("#{srcdir}/lua") do
-		sh "#{installdir}/third/locco/locco.lua #{builddir}/sourcedoc css.lua luxor.lua sdini.lua paragraph.lua sdscripts.lua xpath.lua publisher.lua publisher/*lua common/*lua fonts/*.lua barcodes/*lua"
+	# sh "go build -o #{installdir}/bin/sourcedoc sourcedoc/main"
+	sh "#{installdir}/bin/sourcedoc #{srcdir.join('lua')} #{builddir.join('sourcedoc')} #{installdir.join('doc','sourcedoc','assets')} #{installdir.join('doc','sourcedoc','img')}"
+	if RUBY_PLATFORM =~ /darwin/
+		sh "open #{builddir}/sourcedoc/publisher.html" 
+	else
+		puts "Generated source documentation in \n#{builddir}/sourcedoc/publisher.html"
 	end
-	cp_r(installdir.join("doc","sourcedoc","img"), builddir.join("sourcedoc"))
-	cp_r(installdir.join("doc","sourcedoc","mj"),  builddir.join("sourcedoc"))
-	puts "Generated source documentation in \n#{builddir}/sourcedoc"
 end
 
 desc "Update program messages"
@@ -172,7 +174,6 @@ task :zip do
 	end
 	publisher_version = @versions['publisher_version']
 
-	ENV['GOPATH'] = "#{srcdir}/go"
 	Dir.chdir(srcdir.join("go")) do
 		puts "Building the mkreadme binary..."
 		sh "go build -o  #{installdir}/bin/mkreadme support/mkreadme"

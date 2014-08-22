@@ -44,7 +44,7 @@ end
 ---       { img, img },
 ---       { table    }  }
 ---
---- ![Objects in a table](img/objectsintable.svg)
+--- ![Objects in a table](../img/objectsintable.svg)
 --- The table is stored in the objects
 function attach_objects_row( tab )
     -- For each block object (container) there is one row in block
@@ -126,7 +126,7 @@ end
 --- =================
 
 --- First we check for adjacent columns for collapsing border:
---- ![maximum width](img/bordercollapse.svg)
+--- ![maximum width](../img/bordercollapse.svg)
 ---
 --- The resulting width for each border (left and right) is
 ---
@@ -174,11 +174,11 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
     ---
     --- The minimum width (min\_wd) is calculated as follows. Calculate the length of the longest item in the row:
     ---
-    --- ![minimum width](img/calculate_longtext2.svg)
+    --- ![minimum width](../img/calculate_longtext2.svg)
     ---
     --- The maximum width (max\_wd) is calculated by typesetting the text and taking total size of the hbox into account:
     ---
-    --- ![maximum width](img/calculate_longtext.svg)
+    --- ![maximum width](../img/calculate_longtext.svg)
     ---
     for _,td in ipairs(tr_contents) do
         local td_contents = publisher.element_contents(td)
@@ -284,7 +284,7 @@ function calculate_columnwidth( self )
         ---     </Columns>
         --- When we typeset a table with a requested with of 11cm, the first column would get 3cm,
         --- the second column 1/4 of the rest (2cm) and the third 3/4 of the rest (6cm).
-        --- ![Table calculation](img/table313.svg)
+        --- ![Table calculation](../img/table313.svg)
         if tr_elementname == "Columns" then
             local wd
             local i = 0
@@ -804,7 +804,7 @@ function calculate_rowheights(self)
     end
 end
 
---- ![Table cell](img/cell.svg)
+--- ![Table cell](../img/cell.svg)
 
 --- Width calculation is now finished, we can typeset the table
 --- Typesetting the table
@@ -923,7 +923,7 @@ function typeset_row(self, tr_contents, current_row )
         vlist = node.vpack(cell_start,ht - td_bordertop - td_borderbottom,"exactly")
         --- The table cell now looks like this
         ---
-        --- ![Table cell vertical](img/tablecell1.svg)
+        --- ![Table cell vertical](../img/tablecell1.svg)
         ---
         --- Now we need to add the left and the right glue
         g = node.new("glue")
@@ -963,7 +963,7 @@ function typeset_row(self, tr_contents, current_row )
         hlist = node.hpack(cell_start,current_column_width,"exactly")
         --- The cell is now almost complete. We can set the background color and add the top and bottom rule.
         ---
-        --- ![Table cell vertical](img/tablecell2.svg)
+        --- ![Table cell vertical](../img/tablecell2.svg)
         if tr_contents.backgroundcolor or td_contents.backgroundcolor or self.columncolors[current_column] then
             -- prio: Td.backgroundcolor, then Tr.backgroundcolor, then Column.backgroundcolor
             local color = self.columncolors[current_column]
@@ -995,7 +995,7 @@ function typeset_row(self, tr_contents, current_row )
 
         --- This is our table cell now:
         ---
-        --- ![Table cell vertical](img/tablecell3.svg)
+        --- ![Table cell vertical](../img/tablecell3.svg)
         hlist = node.vpack(head,self.rowheights[current_row],"exactly")
 
         if publisher.options.trace then
@@ -1020,7 +1020,7 @@ function typeset_row(self, tr_contents, current_row )
 
     --- We now add colsep and connect the cells so we have a list of vboxes and
     --- pack them in a hbox.
-    --- ![a row](img/tablerow.svg)
+    --- ![a row](../img/tablerow.svg)
     -- FIXME: use column_distances[i] instead of self.colsep
     if row[1] then
         for z=2,#row do
