@@ -1,6 +1,6 @@
 --- Here goes everything that does not belong anywhere else. Other parts are font handling, the command
---- list, page and gridsetup, debugging and initialization. We start with the function `dothings()` that
---- initializes some variables and starts processing (`dispatch()`)
+--- list, page and gridsetup, debugging and initialization. We start with the function publisher#dothings that
+--- initializes some variables and starts processing (publisher#dispatch())
 --
 --  publisher.lua
 --  speedata publisher
@@ -37,9 +37,13 @@ do_luafile("layout_functions.lua")
 --- One big point (DTP point, PostScript point) is approx. 65781 scaled points.
 factor = 65781
 
---- We use a lot of attributes to delay the processing of font shapes, ... to
---- a later time. These attributes have have any number, they just need to be
---- constant across the whole source.
+--- Attributes
+--- ----------
+--- Attributes are attached to nodes, so we can store information that are not present in the
+--- nodes themselves or are evaluated later on (such as font selection - when generating glyph
+--- nodes, we don't yet know what font the user will use).
+---
+--- Attributes may have any number, they just need to be constant across the whole source.
 att_fontfamily     = 1
 att_italic         = 2
 att_bold           = 3
@@ -197,6 +201,7 @@ textformats = {
 
 
 --- The bookmarks table has the format
+---
 ---     bookmarks = {
 ---       { --- first bookmark
 ---         name = "outline 1" destination = "..." open = true,
@@ -345,6 +350,7 @@ end
 
 --- The returned table is an array with hashes. The keys of these
 --- hashes are `elementname` and `contents`. For example:
+---
 ---     {
 ---       [1] = {
 ---         ["elementname"] = "Paragraph"
@@ -428,7 +434,7 @@ end
 
 --- Start the processing (`dothings()`)
 --- -------------------------------
---- This is the entry point of the processing. It is called from `spinit.lua`/`main_loop()`.
+--- This is the entry point of the processing. It is called from publisher.spinit#main_loop.
 function dothings()
     --- First we set some defaults.
     --- A4 paper is 210x297 mm
@@ -449,19 +455,22 @@ function dothings()
     --- Define a basic font family with name `text`:
     define_default_fontfamily()
 
+    --- The server mode is quite interesting: we don't generate a PDF, but wait for requests and try to answer
+    --- them. We rely on the internal communication (tcp) in publisher.server#servermode.
     if arg[2] == "___server___" then
         local s = require("publisher.server")
         s.servermode(tcp)
     else
-        initialize_luatex()
+        initialize_luatex_and_generate_pdf()
+        -- The last thing is to put a stamp in the PDF
+        pdf.immediateobj("(Created with the speedata Publisher - www.speedata.de)")
     end
-    pdf.immediateobj("(Created with the speedata Publisher - www.speedata.de)")
 end
 
 -- When not in server mode, we initialize LuaTeX in such a way that
 -- it has defaults, loads a layout file and a data file and
 -- executes them both
-function initialize_luatex()
+function initialize_luatex_and_generate_pdf()
 
     --- The default page type has 1cm margin
     local onecm=tex.sp("1cm")
@@ -928,7 +937,7 @@ function setup_page(pagenumber)
 
 end
 
---- Switch to the next frame in the given are.
+--- Switch to the next frame in the given area.
 function next_area( areaname )
     local current_framenumber = current_grid:framenumber(areaname)
     if not current_framenumber then
@@ -2136,7 +2145,7 @@ function xml_escape( str )
     return ret
 end
 
---- See `commands#save_dataset()` for  documentation on the data structure for `xml_element`.
+--- See commands#save_dataset() for  documentation on the data structure for `xml_element`.
 function xml_to_string( xml_element, level )
     level = level or 0
     local str = ""
@@ -2183,6 +2192,7 @@ language_mapping = {
 }
 
 --- Supported language names. Not all are currently available from the publisher
+---
 ---     af, Afrikaans - Afrikaans
 ---     as, Assamese - Assamesisch
 ---     bg, Bulgarian - Bulgarisch
@@ -2764,7 +2774,7 @@ end
 
 --- Sorting
 --- -------
---- The sorting code is currently used for index generation (commands.lua/makeindex)
+--- The sorting code is currently used for index generation (commands#makeindex)
 
 -- see http://lua.2524044.n2.nabble.com/A-stable-sort-td7648892.html
 -- public domain or cc0

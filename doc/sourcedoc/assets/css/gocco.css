@@ -1,13 +1,9 @@
 body {
     font-family: "Calibri", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-    /*line-height:22px;*/
     color:#252519;
     margin:0;
     padding:0;
 }
-
-
-
 
 table {
   padding: 0;
@@ -19,6 +15,10 @@ td {
     outline:0;
 }
 
+
+.docs h1, h2 {
+    margin-top: 0px;
+}
 
 td.docs,th.docs {
     max-width:450px;

@@ -204,7 +204,8 @@ local function ean13(width,height,fontfamily,digits,showtext,overshoot_factor)
     end
     return bc
 end
---- ----------------------------
+--- Code 128
+--- --------
 local code128encoding = {
     [0] = "212222", "222122", "222221", "121223", "121322", --  0 -  4
     "131222", "122213", "122312", "132212", "221213",
@@ -384,9 +385,8 @@ local function code128(width,height,fontfamily,text,showtext)
   return vbox
 end
 
--- -------------------------------------------------------
--- ------- QR Codes  -------------------------------------
--- -------------------------------------------------------
+--- QR Codes
+--- --------
 
 barcodes_qrencode = nil
 

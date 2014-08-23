@@ -102,10 +102,10 @@ end
 
 desc "Source documentation"
 task :sourcedoc do
-	# sh "go build -o #{installdir}/bin/sourcedoc sourcedoc/main"
+	sh "go build -o #{installdir}/bin/sourcedoc sourcedoc/main"
 	sh "#{installdir}/bin/sourcedoc #{srcdir.join('lua')} #{builddir.join('sourcedoc')} #{installdir.join('doc','sourcedoc','assets')} #{installdir.join('doc','sourcedoc','img')}"
 	if RUBY_PLATFORM =~ /darwin/
-		sh "open #{builddir}/sourcedoc/publisher.html" 
+		sh "open #{builddir}/sourcedoc/publisher.html"
 	else
 		puts "Generated source documentation in \n#{builddir}/sourcedoc/publisher.html"
 	end

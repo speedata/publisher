@@ -16,10 +16,10 @@ import (
 )
 
 var (
-	srcpath, outpath, csspath, jspath string
-	htmltemplate                      *template.Template
-	luafiles                          []string
-	linemarker                        *regexp.Regexp
+	srcpath, outpath, csspath, jspath      string
+	htmltemplate                           *template.Template
+	luafiles                               []string
+	linemarker, functionmarker, linkmarker *regexp.Regexp
 )
 
 type collection struct {
@@ -55,7 +55,6 @@ func toMarkdown(input string) string {
 }
 
 func genHTML(srcfile, destpath string) {
-
 	var jumpTo []collection
 	for _, v := range luafiles {
 		rel, err := filepath.Rel(filepath.Dir(srcfile), v)
@@ -75,7 +74,6 @@ func genHTML(srcfile, destpath string) {
 		}
 	}
 
-	// fmt.Println("Generating HTML for", srcfile, "to", destpath)
 	os.MkdirAll(filepath.Dir(destpath), 0755)
 
 	csslink, err := filepath.Rel(filepath.Dir(destpath), csspath)
@@ -105,6 +103,24 @@ func genHTML(srcfile, destpath string) {
 	var doc []string
 	var code []string
 
+	// a function to link to other source files such as publisher#mknodes()
+	replace := func(in string) string {
+		filebase := strings.TrimSuffix(filepath.Base(srcfile), ".lua")
+		x := linkmarker.FindAllStringSubmatch(in, -1)[0]
+		if len(x[1]) > 0 {
+			// subdirectory
+			return fmt.Sprintf(`[%s#%s%s](%s/%s.html#%s)`, x[2], x[3], x[4], strings.TrimSuffix(x[1], "."), x[2], x[3])
+		} else {
+			if x[2] == filebase {
+				// this file
+				return fmt.Sprintf(`[%s%s](#%s)`, x[3], x[4], x[3])
+			} else {
+				return fmt.Sprintf(`[%s#%s%s](%s.html#%s)`, x[2], x[3], x[4], x[2], x[3])
+			}
+		}
+		return in
+	}
+
 	inCode := true
 	for s.Scan() {
 		line := s.Text()
@@ -112,12 +128,16 @@ func genHTML(srcfile, destpath string) {
 			if inCode {
 				if len(doc) > 0 || len(code) > 0 {
 					sec := section{}
-					sec.Doc = template.HTML(toMarkdown(strings.Join(doc, "\n")))
+					txt := strings.Join(doc, "\n")
+					// autolink function foo#bar to foo.html#bar
+					txt = linkmarker.ReplaceAllStringFunc(txt, replace)
+					sec.Doc = template.HTML(toMarkdown(txt))
 					codelines := strings.Join(code, "\n")
 					c, err := decorate.Highlight([]byte(codelines), "lua", "html")
 					if err != nil {
 						log.Fatal(err)
 					}
+					c = functionmarker.ReplaceAllString(c, `${1}<a name="${2}">${2}`)
 					sec.Code = template.HTML(c)
 					document = append(document, sec)
 					doc = doc[0:0]
@@ -134,12 +154,16 @@ func genHTML(srcfile, destpath string) {
 		}
 	}
 	sec := section{}
-	sec.Doc = template.HTML(toMarkdown(strings.Join(doc, "\n")))
+	txt := strings.Join(doc, "\n")
+	// autolink function foo#bar to foo.html#bar
+	txt = linkmarker.ReplaceAllStringFunc(txt, replace)
+	sec.Doc = template.HTML(toMarkdown(txt))
 	codelines := strings.Join(code, "\n")
 	c, err := decorate.Highlight([]byte(codelines), "lua", "html")
 	if err != nil {
 		log.Fatal(err)
 	}
+	c = functionmarker.ReplaceAllString(c, `${1}<a name="${2}">${2}`)
 	sec.Code = template.HTML(c)
 	document = append(document, sec)
 
@@ -286,7 +310,9 @@ func dothings() error {
 //    3 = assets
 //    4 = images
 func main() {
-	linemarker = regexp.MustCompile(`^.*--- ?(.*)$`)
+	linemarker = regexp.MustCompile(`^.*?--- ?(.*)$`)
+	functionmarker = regexp.MustCompile(`(span class="kw">function</span>\s+)([^ (]*)`)
+	linkmarker = regexp.MustCompile(`(\w+\.)?(\w+)#(\w+)(\(\))?`)
 	err := dothings()
 	if err != nil {
 		log.Fatal(err)
