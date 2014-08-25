@@ -158,7 +158,8 @@
       </oneOrMore>
       <oneOrMore>
         <element name="command">
-          <attribute name="name" />
+          <optional><attribute name="en"/></optional>
+          <optional><attribute name="de"/></optional>
           <ref name="descriptions" />
           <element name="childelements">
             <zeroOrMore>
@@ -276,17 +277,6 @@
         </element>
       </oneOrMore>
       <element name="translations">
-        <oneOrMore>
-          <element name="elements">
-            <oneOrMore>
-              <element name="element">
-                <attribute name="key"/>
-                <attribute name="en"/>
-                <attribute name="de"/>
-              </element>
-            </oneOrMore>
-          </element>
-        </oneOrMore>
         <oneOrMore>
           <element name="values">
             <oneOrMore>

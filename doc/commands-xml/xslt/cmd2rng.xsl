@@ -27,11 +27,11 @@
   </xsl:template>
 
   <xsl:template match="sddoc:command">
-    <define name="e_{@name}" xmlns="http://relaxng.org/ns/structure/1.0">
-      <element name="{sd:translate-command(@name)}">
+    <define name="e_{@en}" xmlns="http://relaxng.org/ns/structure/1.0">
+      <element name="{@*[local-name() = $lang] }">
         <a:documentation><xsl:apply-templates select="description[@xml:lang = $lang]"/></a:documentation>
         <xsl:choose>
-          <xsl:when test="@name = 'Include'">
+          <xsl:when test="@en = 'Include'">
             <optional>
               <attribute name="xml:base"/>
             </optional>
@@ -129,7 +129,8 @@
   </xsl:template>
 
   <xsl:template match="sddoc:cmd" mode="annotation">
-    <xsl:value-of select="sd:translate-command(@name)"/>
+    <xsl:variable name="name" select="@name"/>
+    <xsl:value-of select="/commands/command[@en = $name]/@*[local-name() = $lang]"/>
   </xsl:template>
 
   <xsl:template name="foo">

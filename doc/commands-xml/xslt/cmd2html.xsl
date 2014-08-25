@@ -15,7 +15,8 @@
   <xsl:param name="builddir" select="'/tmp/manual/'"/>
   <xsl:param name="version" select="'0.0.0'"/>
 
-  <xsl:key name="en-texts"      match="text" use="@key" xpath-default-namespace=""/>
+  <xsl:key name="en-commands" match="/commands/command" use="@en" />
+  <xsl:key name="en-texts"    match="text" use="@key" xpath-default-namespace=""/>
 
   <xsl:variable name="refs-translations">
     <text key="directories" en="How to generate a table of contents and other directories" de="Wie werden Verzeichnisse erstellt?" />
@@ -70,14 +71,16 @@
     <value type="zerotohundred" de="0 bis 100" en="0 up to 100"/>
   </xsl:variable>
 
+  <xsl:variable name="root" select="/"/>
+
   <xsl:template match="/">
     <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="commands">
     <xsl:for-each select="command">
-        <xsl:result-document href="{concat($builddir,'/commands-',$lang,'/',lower-case(@name),'.html')}">
-          <xsl:variable name="htmlpage" select="concat('commands-',$lang,'/',lower-case(@name),'.html')"/>
+        <xsl:result-document href="{concat($builddir,'/commands-',$lang,'/',lower-case(@en),'.html')}">
+          <xsl:variable name="htmlpage" select="concat('commands-',$lang,'/',lower-case(@en),'.html')"/>
           <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
         <html>
           <head>
@@ -92,7 +95,7 @@
              $.syntax();
              });
             </script>
-            <title><xsl:value-of select="@name"/></title>
+            <title><xsl:value-of select="sd:translate-command(@en)"/></title>
           </head>
           <body>
             <div id="logo">
@@ -116,9 +119,9 @@
 
   <xsl:template match="command">
     <xsl:param name="pagename"/>
-    <xsl:message select="concat('&quot;',sd:translate-command(@name),'&quot;,&quot;Function&quot;,&quot;',$pagename,'&quot;')"/>
+    <xsl:message select="concat('&quot;',sd:translate-command(@en),'&quot;,&quot;Function&quot;,&quot;',$pagename,'&quot;')"/>
     <div id="elementdesc">
-      <h1>Elementname: <code class="syntax xml"><xsl:value-of select="sd:translate-command(@name)" /></code></h1>
+      <h1>Elementname: <code class="syntax xml"><xsl:value-of select="sd:translate-command(@en)" /></code></h1>
       <h2><xsl:value-of select="sd:translate-text('Description')"></xsl:value-of></h2>
       <xsl:for-each select="description[@xml:lang = $lang]/para">
         <p>
@@ -213,7 +216,7 @@
         </xsl:apply-templates>
       </ul>
     </div>
-    <xsl:variable name="commandname" select="@name"/>
+    <xsl:variable name="commandname" select="@en"/>
     <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
     <xsl:text>Version: </xsl:text><xsl:value-of select="$version"/> |
     <xsl:choose>
@@ -304,14 +307,14 @@
   <xsl:template match="commands" mode="commandlist">
     <xsl:param name="currentcommand"/>
     <xsl:for-each select="command">
-      <xsl:sort select="sd:translate-command(@name)"/>
+      <xsl:sort select="sd:translate-command(@en)"/>
       <li>
       <xsl:choose>
         <xsl:when test="@name = $currentcommand">
           <xsl:attribute name="class" select="'active'"/>
         </xsl:when>
       </xsl:choose>
-        <a href="{sd:makelink(@name)}"><xsl:value-of select="sd:translate-command(@name)"/></a>
+        <a href="{sd:makelink(@en)}"><xsl:value-of select="sd:translate-command(@en)"/></a>
       </li>
     </xsl:for-each>
   </xsl:template>
@@ -340,6 +343,12 @@
     <xsl:param name="name"/>
     <xsl:value-of select="concat(encode-for-uri(lower-case($name)),'.html')"/>
   </xsl:function>
+
+  <xsl:function name="sd:translate-command">
+    <xsl:param name="name"/>
+    <xsl:value-of select="key('en-commands',$name,$root)/@*[local-name() = $lang]"/>
+  </xsl:function>
+
 
   <xsl:function name="sd:translate-value">
     <xsl:param name="type"/>

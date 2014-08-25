@@ -6,7 +6,6 @@
     <xsl:output method="text"/>
 
 
-  <xsl:key name="en-elements" match="translations/elements/element" use="@key"/>
   <xsl:key name="en-values" match="translations/values/value" use="@key"/>
   <xsl:key name="en-attributes" match="translations/attributes/attribute" use="@key"/>
 
@@ -19,10 +18,11 @@
     <xsl:text>return {&#x0A;</xsl:text>
     <xsl:for-each select="$languages">
       <xsl:variable name="current_language" select="." />
-      <xsl:value-of select="$current_language" /><xsl:text> = {</xsl:text>
-      <xsl:apply-templates select="$root/doc:translations/doc:elements">
-        <xsl:with-param name="current_language" select="." />
-      </xsl:apply-templates>
+      <xsl:value-of select="$current_language" /><xsl:text> = {  elements = {&#x0A;</xsl:text>
+      <xsl:for-each select="$root/command">
+        <xsl:value-of select="concat('    [&quot;',@*[local-name() = $current_language],'&quot;] = &quot;',@en,'&quot;,&#x0A;')"></xsl:value-of>
+      </xsl:for-each>
+      <xsl:text>  },&#x0A;</xsl:text>
       <xsl:apply-templates select="$root/translations/values" >
         <xsl:with-param name="current_language" select="." />
       </xsl:apply-templates>
@@ -48,15 +48,6 @@
         <xsl:text>  },&#x0a;</xsl:text>
     </xsl:template>
 
-  <xsl:template match="element">
-    <xsl:param name="current_language" />
-    <xsl:text>    ["</xsl:text>
-    <xsl:value-of select="key('en-elements',@key)/@*[local-name() = $current_language]"/>
-    <xsl:text>"] = "</xsl:text>
-    <xsl:value-of select="@key" />
-    <xsl:text>",&#x0a;</xsl:text>
-  </xsl:template>
-  
   <xsl:template match="attributes">
     <xsl:text>attributes = {&#x0A;</xsl:text>
     <xsl:apply-templates />
