@@ -2718,11 +2718,6 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="textformat">
-               <a:documentation>Das Textformat, das benutzt wird, wenn kein anderes angegeben wird. Voreinstellung ist ›text‹.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="zeilenabstand">
                <a:documentation>Der Abstand zwischen zwei Zeilen.</a:documentation>
             </attribute>

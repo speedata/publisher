@@ -2706,11 +2706,6 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="textformat">
-               <a:documentation>The name of the textformat to be applied to all texts. Default is ‘text’.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="leading">
                <a:documentation>The distance between two rows.</a:documentation>
             </attribute>

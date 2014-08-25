@@ -5,6 +5,7 @@
   xmlns:sd="urn:speedata.de:2011/publisher/documentation/functions"
   xmlns:sddoc="urn:speedata.de:2011/publisher/documentation"
   xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+  xpath-default-namespace="urn:speedata.de:2011/publisher/documentation"
   version="2.0">
   <xsl:output indent="yes"/>
   <xsl:include href="translatehelper.xsl"/>
@@ -21,11 +22,11 @@
           <ref name="e_Include"/>
         </choice>
       </start>
-      <xsl:apply-templates select="sddoc:commands/*"/>
+      <xsl:apply-templates select="sddoc:commands/sddoc:command | sddoc:commands/sddoc:define"/>
     </grammar>
   </xsl:template>
 
-  <xsl:template match="sddoc:command" xpath-default-namespace="urn:speedata.de:2011/publisher/documentation">
+  <xsl:template match="sddoc:command">
     <define name="e_{@name}" xmlns="http://relaxng.org/ns/structure/1.0">
       <element name="{sd:translate-command(@name)}">
         <a:documentation><xsl:apply-templates select="description[@xml:lang = $lang]"/></a:documentation>

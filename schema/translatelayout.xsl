@@ -59,7 +59,7 @@
   <xsl:key name="en-attributes" match="translations/attributes/attribute" use="@en" xpath-default-namespace="" />
   <xsl:key name="en-values"     match="translations/values/value"         use="@en" xpath-default-namespace="" />
 
-  <xsl:variable name="translations" select="document('translations.xml')" />
+  <xsl:variable name="translations" select="document('commands.xml')" />
   
   <xsl:function name="sdf:translate-command-de">
     <xsl:param name="name"/>

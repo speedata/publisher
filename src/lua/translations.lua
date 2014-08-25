@@ -1,4 +1,4 @@
--- auto generated from genluatranslations.xsl and the source translations.xml
+-- auto generated from genluatranslations.xsl and the source commands.xml
 module(...)
 return {
 de = {  elements = {

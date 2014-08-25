@@ -123,6 +123,7 @@
       </choice>
     </oneOrMore>
   </define>
+
   <define name="descriptions">
       <element name="description">
         <attribute name="xml:lang">
@@ -274,6 +275,42 @@
           </oneOrMore>
         </element>
       </oneOrMore>
+      <element name="translations">
+        <oneOrMore>
+          <element name="elements">
+            <oneOrMore>
+              <element name="element">
+                <attribute name="key"/>
+                <attribute name="en"/>
+                <attribute name="de"/>
+              </element>
+            </oneOrMore>
+          </element>
+        </oneOrMore>
+        <oneOrMore>
+          <element name="values">
+            <oneOrMore>
+              <element name="value">
+                <attribute name="key"/>
+                <attribute name="en"/>
+                <attribute name="de"/>
+                <attribute name="context"/>
+              </element>
+            </oneOrMore>
+          </element>
+        </oneOrMore>
+        <oneOrMore>
+          <element name="attributes">
+            <oneOrMore>
+              <element name="attribute">
+                <attribute name="key"/>
+                <attribute name="en"/>
+                <attribute name="de"/>
+              </element>
+            </oneOrMore>
+          </element>
+        </oneOrMore>
+      </element>
     </element>
 
   </start>
