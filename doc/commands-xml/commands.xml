@@ -4230,13 +4230,29 @@
       <para>Zeichnet eine horizontale oder vertikale Linie im Raster.</para>
     </description>
     <childelements/>
-    <attribute name="direction" type="horizontalvertical" optional="no">
+    <attribute name="direction" optional="no">
       <description xml:lang="en">
         <para>The direction of the rule.</para>
       </description>
       <description xml:lang="de">
         <para>Bestimmt die Ausrichtung der Linie.</para>
       </description>
+      <choice name="horizontal">
+        <description xml:lang="en">
+          <para>Horizontal rule</para>
+        </description>
+        <description xml:lang="de">
+          <para>Horizontale Linie</para>
+        </description>
+      </choice>
+      <choice name="vertical">
+        <description xml:lang="en">
+          <para>Vertical rule</para>
+        </description>
+        <description xml:lang="de">
+          <para>Vertikale Linie</para>
+        </description>
+      </choice>
     </attribute>
     <attribute name="rulewidth" type="numberorlength" optional="yes">
       <description xml:lang="en">

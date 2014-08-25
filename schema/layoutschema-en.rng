@@ -2381,6 +2381,12 @@
          <a:documentation>Draw a horizontal or vertical rule in the grid.</a:documentation>
          <attribute name="direction">
             <a:documentation>The direction of the rule.</a:documentation>
+            <choice>
+               <value>horizontal</value>
+               <a:documentation xmlns="">Horizontal rule</a:documentation>
+               <value>vertical</value>
+               <a:documentation xmlns="">Vertical rule</a:documentation>
+            </choice>
          </attribute>
          <optional>
             <attribute name="rulewidth">

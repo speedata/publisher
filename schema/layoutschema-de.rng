@@ -2392,6 +2392,12 @@
          <a:documentation>Zeichnet eine horizontale oder vertikale Linie im Raster.</a:documentation>
          <attribute name="richtung">
             <a:documentation>Bestimmt die Ausrichtung der Linie.</a:documentation>
+            <choice>
+               <value>horizontal</value>
+               <a:documentation xmlns="">Horizontale Linie</a:documentation>
+               <value>vertikal</value>
+               <a:documentation xmlns="">Vertikale Linie</a:documentation>
+            </choice>
          </attribute>
          <optional>
             <attribute name="linienstärke">

@@ -52,7 +52,6 @@
     <value type="all_last" de="alle / letzte" en="all / last"/>
     <value type="colormodel" de="rgb oder cmyk" en="rgb or cmyk"/>
     <value type="fullwithout" de="ohne, vollständig" en="full, without" />
-    <value type="horizontalvertical" de="horizontal oder vertikal" en="horizontal or vertical"/>
     <value type="languages" de="Sprache" en="language"/>
     <value type="leftright" de="'links' oder 'rechts'" en="'left' or 'right'" />
     <value type="topbottom" de="'oben' oder 'unten'" en="'top' or 'bottom'" />
