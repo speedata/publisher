@@ -1377,7 +1377,7 @@ function commands.output( layoutxml,dataxml )
             if obj == nil then
                 break
             else
-                publisher.output_at(obj,1,row,true,area,nil,nil)
+                publisher.output_at({nodelist = obj, x = 1, y = row, allocate = true, area = area})
                 -- We don't need to go to the next page when we are a the end
                 if nextfreerow then
                     if nextfreerow <= row then
@@ -1518,7 +1518,7 @@ function commands.place_object( layoutxml,dataxml )
     trace("Command: PlaceObject")
     local absolute_positioning = false
     local column           = publisher.read_attribute(layoutxml,dataxml,"column",         "rawstring")
-    local row            = publisher.read_attribute(layoutxml,dataxml,"row",            "rawstring")
+    local row              = publisher.read_attribute(layoutxml,dataxml,"row",            "rawstring")
     local area             = publisher.read_attribute(layoutxml,dataxml,"area",           "rawstring")
     local allocate         = publisher.read_attribute(layoutxml,dataxml,"allocate",       "string", "yes")
     local framecolor       = publisher.read_attribute(layoutxml,dataxml,"framecolor",     "rawstring")
@@ -1722,7 +1722,7 @@ function commands.place_object( layoutxml,dataxml )
             if hreference == "right" then
                 current_column_start = current_column_start - width_in_gridcells + 1
             end
-            publisher.output_at(object,current_column_start,current_row,allocate == "yes",area,valign,objects[i].allocate_matrix,onpage,keepposition,current_grid)
+            publisher.output_at({ ["nodelist"] = object, x = current_column_start, y = current_row, allocate = ( allocate == "yes"), area = area, valign = valign, allocate_matrix = objects[i].allocate_matrix, pagenumber = onpage, keepposition = keepposition, grid = current_grid})
             trace("object placed")
             row = nil -- the current rows is not valid anymore because an object is already rendered
         end -- no absolute positioning

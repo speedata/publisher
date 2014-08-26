@@ -666,6 +666,7 @@ end
 ---     </data>
 ---
 --- is represented by this Lua table:
+---
 ---     XML = {
 ---       [1] = " "
 ---       [2] = {
@@ -713,9 +714,25 @@ function output_absolute_position( nodelist,x,y,allocate,area )
     n.prev = tail
 end
 
+--- Parameter       | Description
+--- ----------------|----------------------------------------------
+--- nodelist        | The box to be placed
+--- x               | The horizontal distance from the left edge in grid cells
+--- y               | The vertical distance form the top edge in grid cells
+--- allocate        | Mark these cells as 'occupied'
+--- area            | The area on which the object should be placed. Defaults to the page area.
+--- valign          |
+--- allocate_matrix | For image-shapes
+--- pagenumber      | The page the object should be placed
+--- keepposition    | Move the local cursor?
+--- grid            | The grid object. If not present, we use the default grid object
+function output_at( param )
+    __output_at(param.nodelist, param.x,param.y,param.allocate,param.area,param.valign,param.allocate_matrix,param.pagenumber,param.keepposition,param.grid)
+end
+
 --- Put the object (nodelist) on grid cell (x,y). If `allocate`=`true` then
 --- mark cells as occupied.
-function output_at( nodelist, x,y,allocate,area,valign,allocate_matrix,pagenumber,keepposition,grid)
+function __output_at( nodelist, x,y,allocate,area,valign,allocate_matrix,pagenumber,keepposition,grid)
     local outputpage = current_pagenumber
     if pagenumber then
         outputpage = pagenumber
