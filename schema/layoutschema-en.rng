@@ -275,6 +275,11 @@
                </choice>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="overshoot">
+               <a:documentation>The factor denoting the extra length of the outer and middle bar. Only useful with EAN13.</a:documentation>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>
@@ -2033,6 +2038,16 @@
                </choice>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS class for this paragraph.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id for this paragraph.</a:documentation>
+            </attribute>
+         </optional>
          <zeroOrMore>
             <choice>
                <ref name="e_Action"/>
@@ -2897,6 +2912,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="id">
+               <a:documentation>CSS id for this paragraph.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="colspan">
                <a:documentation>The number of columns this cell spans. Defaults to 1.</a:documentation>
             </attribute>
@@ -3113,6 +3133,11 @@
                   <value>no</value>
                   <text/>
                </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="top-distance">
+               <a:documentation>Todo: document</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>

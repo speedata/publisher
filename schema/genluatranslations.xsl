@@ -28,41 +28,14 @@
       </xsl:apply-templates>
       <xsl:text>},</xsl:text>
     </xsl:for-each>
-    <xsl:apply-templates select="$root/translations/attributes" />
-    <xsl:text>}</xsl:text>
-  </xsl:template>
-    
-    <xsl:template match="translations">
-      <xsl:param name="current_language" />
-      <xsl:apply-templates  select="elements,values">
-      <xsl:with-param name="current_language" select="$current_language" />
-        </xsl:apply-templates>
-    </xsl:template>
-
-    <xsl:template match="elements">
-    <xsl:param name="current_language" />
-      <xsl:text>  </xsl:text><xsl:value-of select="local-name()"/><xsl:text> = {&#x0a;</xsl:text>
-        <xsl:apply-templates >
-          <xsl:with-param name="current_language" select="$current_language" />
-        </xsl:apply-templates>
-        <xsl:text>  },&#x0a;</xsl:text>
-    </xsl:template>
-
-  <xsl:template match="attributes">
     <xsl:text>attributes = {&#x0A;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>},&#x0A;</xsl:text>
-  </xsl:template>
-
-  <xsl:template match="attribute">
-    <xsl:text>    ["</xsl:text><xsl:value-of select="@key" /><xsl:text>"] = {</xsl:text>
-    <xsl:variable name="all-attributes" select="@*"/>
-    <xsl:for-each select="$languages">
-      <xsl:variable name="lang" select="."/>
-      <xsl:text></xsl:text><xsl:value-of select="."/><xsl:text> = "</xsl:text>
-      <xsl:value-of select="$all-attributes[local-name() = $lang]" /><xsl:text>", </xsl:text>
+    <xsl:for-each select="distinct-values(/commands/command/attribute/@en)">
+      <xsl:sort select="."/>
+      <xsl:variable name="envalue" select="."/>
+      <xsl:value-of select="concat('    [&quot;',string(.),'&quot;] = {de = &quot;',($root/command/attribute[@en = $envalue]/@de)[1],'&quot;, en = &quot;',string(.),'&quot;, },&#x0A;')"></xsl:value-of>
     </xsl:for-each>
-    <xsl:text>},&#x0a;</xsl:text>
+    <xsl:text>},&#x0A;</xsl:text>
+    <xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="values">

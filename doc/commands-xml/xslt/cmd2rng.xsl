@@ -100,7 +100,7 @@
     <xsl:choose>
       <xsl:when test="@optional = 'yes'">
         <optional xmlns="http://relaxng.org/ns/structure/1.0">
-          <attribute name="{sd:translate-attribute(@name)}">
+          <attribute name="{@*[local-name() = $lang]}">
             <a:documentation><xsl:apply-templates  select="sddoc:description[@xml:lang = $lang]"/></a:documentation>
             <xsl:call-template name="foo"/>
             <xsl:choose>
@@ -116,7 +116,7 @@
         </optional>
       </xsl:when>
       <xsl:otherwise>
-        <attribute name="{sd:translate-attribute(@name)}" xmlns="http://relaxng.org/ns/structure/1.0">
+        <attribute name="{@*[local-name() = $lang]}" xmlns="http://relaxng.org/ns/structure/1.0">
           <a:documentation><xsl:apply-templates  select="sddoc:description[@xml:lang = $lang]"/></a:documentation>
           <xsl:call-template name="foo"/>
         </attribute>

@@ -7,16 +7,11 @@
   exclude-result-prefixes="xs"
   version="2.0">
 
-  <xsl:key name="en-attributes" match="translations/attributes/attribute" use="@key" />
   <xsl:key name="en-values"     match="translations/values/value"         use="@key" />
 
   <xsl:variable name="translations" select="document('../commands.xml')" />
   <xsl:param name="lang" select="'de'"/>
 
-  <xsl:function name="sd:translate-attribute">
-    <xsl:param name="name"/>
-    <xsl:value-of select="key('en-attributes',$name, $translations)/@*[local-name() = $lang]"/>
-  </xsl:function>
   <xsl:function name="sd:translate-tvalue">
     <xsl:param name="name"/>
     <xsl:param name="context"/>

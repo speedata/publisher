@@ -277,6 +277,11 @@
                </choice>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="übersteigen">
+               <a:documentation>Der Faktor, um den die äußeren und der innere Balken die normalen Balken übersteigt. Nur anwendbar bei EAN13.</a:documentation>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>
@@ -2038,6 +2043,16 @@
                </choice>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS Klasse für diesen Absatz.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id für diesen Absatz.</a:documentation>
+            </attribute>
+         </optional>
          <zeroOrMore>
             <choice>
                <ref name="e_Action"/>
@@ -2909,6 +2924,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="id">
+               <a:documentation>CSS id für diesen Absatz.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="colspan">
                <a:documentation>Die Anzahl der Spalten, die die Zelle überdecken soll. Voreinstellung ist 1.</a:documentation>
             </attribute>
@@ -3127,6 +3147,11 @@
                   <value>nein</value>
                   <text/>
                </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="abstand-oben">
+               <a:documentation>Todo: document</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>

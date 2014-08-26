@@ -133,8 +133,8 @@
           <xsl:choose>
             <xsl:when test="count(attribute) > 0">
               <xsl:for-each select="attribute">
-                <xsl:sort select="sd:translate-attribute(@name)" />
-                <span class="tt"><a href="#{@name}"><xsl:value-of select="sd:translate-attribute(@name)"/></a></span>
+                <xsl:sort select="@*[local-name() = $lang]" />
+                <span class="tt"><a href="#{@en}"><xsl:value-of select="@*[local-name() = $lang]"/></a></span>
                 <xsl:if test=" position() &lt; last()">, </xsl:if>
               </xsl:for-each>
             </xsl:when>
@@ -185,8 +185,8 @@
           <h3><xsl:value-of select="sd:translate-text('Attributes')"/></h3>
           <dl>
             <xsl:for-each select="attribute">
-              <xsl:sort select="sd:translate-attribute(@name)" />
-              <xsl:message select="concat('&quot;',sd:translate-attribute(@name),'&quot;,&quot;Parameter&quot;,&quot;',$pagename,'#',@name,'&quot;')"/>
+              <xsl:sort select="@*[local-name() = $lang]" />
+              <xsl:message select="concat('&quot;',@*[local-name() = $lang],'&quot;,&quot;Parameter&quot;,&quot;',$pagename,'#',@en,'&quot;')"/>
               <dt>
                 <xsl:apply-templates select="." mode="attributehead"/>
               </dt>
@@ -262,9 +262,9 @@
   </xsl:template>
 
   <xsl:template match="attribute" mode="attributehead">
-    <a name="{@name}" />
+    <a name="{@en}" />
     <span class="tt">
-      <xsl:value-of select="sd:translate-attribute(@name)" />
+      <xsl:value-of select="@*[local-name() = $lang]" />
     </span>
     <xsl:text> (</xsl:text>
     <xsl:value-of select="sd:translate-value(@type)" />
@@ -279,7 +279,7 @@
   <xsl:template match="attribute[count(choice) > 0]" mode="attributehead">
     <a name="{@name}" />
     <span class="tt">
-      <xsl:value-of select="sd:translate-attribute(@name)" />
+      <xsl:value-of select="@*[local-name() = $lang]" />
     </span>
     <xsl:choose>
       <xsl:when test="@optional = 'yes'">

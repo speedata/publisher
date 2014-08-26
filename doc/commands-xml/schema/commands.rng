@@ -176,7 +176,8 @@
           </element>
           <zeroOrMore>
             <element name="attribute">
-              <attribute name="name" />
+              <attribute name="en"/>
+              <attribute name="de"/>
               <attribute name="optional">
                 <choice>
                   <value>yes</value>
@@ -284,17 +285,6 @@
                 <attribute name="en"/>
                 <attribute name="de"/>
                 <attribute name="context"/>
-              </element>
-            </oneOrMore>
-          </element>
-        </oneOrMore>
-        <oneOrMore>
-          <element name="attributes">
-            <oneOrMore>
-              <element name="attribute">
-                <attribute name="key"/>
-                <attribute name="en"/>
-                <attribute name="de"/>
               </element>
             </oneOrMore>
           </element>
