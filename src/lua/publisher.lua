@@ -2356,7 +2356,7 @@ function get_language(id_or_locale_or_name)
     if language_filename[locale] then
         filename_part = language_filename[locale]
     else
-        local lang, _ = table.unpack(string.explode(locale,"_"))
+        local lang, _ = unpack(string.explode(locale,"_"))
         if language_filename[lang] then
             filename_part = language_filename[lang]
         end

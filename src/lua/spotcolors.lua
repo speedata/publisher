@@ -1222,7 +1222,7 @@ end
 function getresource( tab )
     local ret = {}
     for k,_ in pairs(tab) do
-        local name, objnum = table.unpack(colorobjects[k])
+        local name, objnum = unpack(colorobjects[k])
         if objnum == 0 then
             objnum = use_color(name)
             colorobjects[k] = {name, objnum}
@@ -1243,7 +1243,7 @@ function use_color(colorname)
     end
     local pdfcolorname = "/" .. string.gsub(colorname," ","#20")
     local cp = write_colorprofile()
-    local c,m,y,k = table.unpack(cmyktable)
+    local c,m,y,k = unpack(cmyktable)
     local tmp = string.format([==[[/Separation %s [ /ICCBased %d 0 R ]  << /FunctionType 2 /C0 [ 0 0 0 0 ] /C1 [ %g %g %g %g ] /Domain [ 0 1 ] /N 1 >> ]]==],pdfcolorname,cp,c/100,m/100,y/100,k/100)
     return pdf.immediateobj(tmp)
 end

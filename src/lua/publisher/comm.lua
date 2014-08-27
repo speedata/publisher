@@ -20,7 +20,7 @@ end
 
 function getmessage()
     local s, status, partial = tcp:receive(12)
-    local nummessage,msgtype,_msglength = table.unpack(string.explode(s,","))
+    local nummessage,msgtype,_msglength = unpack(string.explode(s,","))
     local msglength = tonumber(_msglength)
     if msglength == 0 then
         return tonumber(nummessage),msgtype,""

@@ -89,7 +89,7 @@ local function servermode(tcp)
     synclog()
     while true do
         local s, status, partial = tcp:receive(12)
-        nummessage,msgtype,msglength = table.unpack(string.explode(s,","))
+        nummessage,msgtype,msglength = unpack(string.explode(s,","))
         msglength = tonumber(msglength)
         msg = tcp:receive(msglength)
         if msgtype == "fmt" then
