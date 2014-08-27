@@ -8,7 +8,7 @@
   xpath-default-namespace="urn:speedata.de:2011/publisher/documentation"
   version="2.0">
   <xsl:output indent="yes"/>
-  <xsl:include href="translatehelper.xsl"/>
+  <xsl:param name="lang" select="'de'"/>
 
 
   <xsl:template match="/">
@@ -103,15 +103,6 @@
           <attribute name="{@*[local-name() = $lang]}">
             <a:documentation><xsl:apply-templates  select="sddoc:description[@xml:lang = $lang]"/></a:documentation>
             <xsl:call-template name="foo"/>
-            <xsl:choose>
-              <xsl:when test="@type='yesno'">
-                <choice>
-                  <value><xsl:value-of select="sd:translate-tvalue('yes','*')"/></value>
-                  <value><xsl:value-of select="sd:translate-tvalue('no','*')"/></value>
-                  <text/>
-                </choice>
-              </xsl:when>
-            </xsl:choose>
           </attribute>
         </optional>
       </xsl:when>
@@ -146,7 +137,7 @@
   <xsl:template match="sddoc:attribute/sddoc:choice">
     <!-- * is the default context -->
     <xsl:variable name="context" select="(@context,'*')[1]"/>
-    <value xmlns="http://relaxng.org/ns/structure/1.0"><xsl:value-of select="sd:translate-tvalue(@name,$context)"/></value>
+    <value xmlns="http://relaxng.org/ns/structure/1.0"><xsl:value-of select="@*[local-name() = $lang]"/></value>
     <a:documentation><xsl:apply-templates select="sddoc:description[@xml:lang = $lang]"/></a:documentation>
   </xsl:template>
 </xsl:stylesheet>

@@ -413,7 +413,7 @@
       <description xml:lang="de">
         <para>Typ des Strichcodes. Kann <tt>EAN13</tt>, <tt>Code128</tt> oder <tt>QRCode</tt> sein.</para>
       </description>
-      <choice name="QRCode">
+      <choice en="QRCode" de="QRCode">
         <description xml:lang="en">
           <para>Create an »optimal« QR code in terms of error correction and size.</para>
         </description>
@@ -421,7 +421,7 @@
           <para>Erzeugt einen QR code, der für den Inhalt die kleinstmögliche Größe und den besten Fehlerkorrekturwert hat.</para>
         </description>
       </choice>
-      <choice name="Code128">
+      <choice en="Code128" de="Code128">
         <description xml:lang="en">
           <para>Generate a code 128 barcode for numbers and text.</para>
         </description>
@@ -429,7 +429,7 @@
           <para>Erzeugt einen Code 128 Barcode für Ziffern und Text (ohne Umlaute)</para>
         </description>
       </choice>
-      <choice name="EAN13">
+      <choice en="EAN13" de="EAN13">
         <description xml:lang="en">
           <para>Create an EAN13 barcode for 13 digits.</para>
         </description>
@@ -454,13 +454,29 @@
         <para>Höhe des Strichcodes.</para>
       </description>
     </attribute>
-    <attribute en="showtext" de="zeigetext" type="yesno" optional="yes">
+    <attribute en="showtext" de="zeigetext" optional="yes">
       <description xml:lang="en">
         <para>Should the text be written under the barcode?</para>
       </description>
       <description xml:lang="de">
         <para>Bestimmt, ob unterhalb des Barcodes der Text erscheint.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Write text beneath the barcode.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Text unterhalb des Barcodes schreiben.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Don't display text.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Keinen Text anzeigen.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="overshoot" de="übersteigen" optional="yes" type="number">
       <description xml:lang="en">
@@ -614,13 +630,29 @@
         <para>Hierarchieebene. 1 ist die höchste Ebene, zwei die nächst tiefere Ebene etc.</para>
       </description>
     </attribute>
-    <attribute en="open" de="offen" type="yesno" optional="yes">
+    <attribute en="open" de="offen" optional="yes">
       <description xml:lang="en">
         <para>If yes, the child elements are shown. If no, the child elements are hidden.</para>
       </description>
       <description xml:lang="de">
         <para>Bestimmt, ob die Kind-Lesezeichen dargestellt werden sollen oder nicht.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Show children.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeige Kinder.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Hide children.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Verstecke Kinder.</para>
+        </description>
+      </choice>
     </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Bookmark level="1" select="$title" open="no" />]]></listing>
@@ -890,7 +922,7 @@
       <description xml:lang="de">
         <para>Die horizontale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (<cmd name="Td"/>) überschrieben werden.</para>
       </description>
-      <choice name="alignleft" context="align">
+      <choice en="left" de="left">
         <description xml:lang="en">
           <para>The table cells are left aligned.</para>
         </description>
@@ -898,7 +930,7 @@
           <para>Die Tabellenzellen dieser Spalte werden linksbündig ausgerichtet.</para>
         </description>
       </choice>
-      <choice name="aligncenter" context="align">
+      <choice en="center" de="center">
         <description xml:lang="en">
           <para>The table cells are horizontally centerd.</para>
         </description>
@@ -906,7 +938,7 @@
           <para>Die Tabellenzellen dieser Spalte werden horizontal zentriert.</para>
         </description>
       </choice>
-      <choice name="alignright" context="align">
+      <choice en="right" de="right">
         <description xml:lang="en">
           <para>The table cells are right aligned.</para>
         </description>
@@ -922,7 +954,7 @@
       <description xml:lang="de">
         <para>Die vertikale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (Td) überschrieben werden.</para>
       </description>
-      <choice name="top">
+      <choice en="top" de="top">
         <description xml:lang="en">
           <para>The table cells are top aligned.</para>
         </description>
@@ -930,7 +962,7 @@
           <para>Die Tabellenzellen dieser Spalte werden oben ausgerichtet.</para>
         </description>
       </choice>
-      <choice name="middle">
+      <choice en="middle" de="middle">
         <description xml:lang="en">
           <para>The table cells are vertically centered.</para>
         </description>
@@ -938,7 +970,7 @@
           <para>Die Tabellenzellen dieser Spalte werden vertikal zentriert ausgerichtet.</para>
         </description>
       </choice>
-      <choice name="bottom">
+      <choice en="bottom" de="bottom">
         <description xml:lang="en">
           <para>The table cells are aligned at the bottom.</para>
         </description>
@@ -1121,7 +1153,7 @@
       <description xml:lang="de">
         <para>Das Farbmodell, das benutzt werden soll. Derzeit werdern »rgb«, »cmyk«, »graustufen« und »sonderfarbe« unterstützt.</para>
       </description>
-      <choice name="cmyk">
+      <choice en="cmyk" de="cmyk">
         <description xml:lang="en">
           <para>CMYK (cyan, magenta, yellow, key/black)</para>
         </description>
@@ -1129,7 +1161,7 @@
           <para>CMYK (Türkis, Magenta, Gelb und Schwarz)</para>
         </description>
       </choice>
-      <choice name="rgb">
+      <choice en="rgb" de="rgb">
         <description xml:lang="en">
           <para>RGB (red, green, blue)</para>
         </description>
@@ -1137,7 +1169,7 @@
           <para>RGB (Rot, Grün, Blau)</para>
         </description>
       </choice>
-      <choice name="gray">
+      <choice en="gray" de="graustufen">
         <description xml:lang="en">
           <para>Gray (0=Black)</para>
         </description>
@@ -1145,7 +1177,7 @@
           <para>Graustufen (0=Schwarz)</para>
         </description>
       </choice>
-      <choice name="spotcolor">
+      <choice en="spotcolor" de="sonderfarbe">
         <description xml:lang="en">
           <para>Use a PANTONE or HKS color.</para>
         </description>
@@ -1226,13 +1258,29 @@
         <para>Der Name der Sonderfarbe wenn das Modell auf »sonderfarbe« eingestellt ist. Der muss den offiziellen Namen tragen, wie z.B. »PANTONE 116 C«.</para>
       </description>
     </attribute>
-    <attribute en="overprint" de="überdrucken" type="yesno" optional="yes">
+    <attribute en="overprint" de="überdrucken" optional="yes">
       <description xml:lang="en">
         <para>Enable overprint for this color.</para>
       </description>
       <description xml:lang="de">
         <para>Überdrucken für diese Farbe anschalten</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Enable overprint for this color.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Überdrucken für diese Farbe anschalten.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Disable overprint for this color (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Überdrucken für diese Farbe ausschalten (Voreinstellung).</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="value" de="wert" type="text" optional="yes">
       <description xml:lang="en">
@@ -1338,21 +1386,53 @@
         Textblock) zurückgegriffen werden.</para>
     </description>
     <childelements/>
-    <attribute en="orphan" de="schusterjunge" type="yesno" optional="yes">
+    <attribute en="orphan" de="schusterjunge" optional="yes">
       <description xml:lang="en">
         <para>If no, prohibit orphans (first line of paragraph is on the previous page). Default: no.</para>
       </description>
       <description xml:lang="de">
         <para>Wenn nein, Schusterjungen verhindern (erste Zeile eines Absatzes ist auf der vorherigen Seite). Voreinstellung ist nein.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Allow orphans.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Schusterjungen erlauben.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Prevent orphans (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Schusterjungen verhindern (Voreinstellung).</para>
+        </description>
+      </choice>
     </attribute>
-    <attribute en="widow" de="hurenkind" type="yesno" optional="yes">
+    <attribute en="widow" de="hurenkind" optional="yes">
       <description xml:lang="en">
         <para>If no, prohibit widows (last line of paragraph is on the next page). Default: no.</para>
       </description>
       <description xml:lang="de">
         <para>Wenn nein, Hurenkinder verhindern (letzte Zeile eines Absatzes ist auf der nächsten Seite). Voreinstellung ist nein.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Allow widows.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Hurenkinder erlauben.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Prevent widows (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Hurenkinder verhindern (Voreinstellung).</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="name" de="name" type="text" optional="no">
       <description xml:lang="en">
@@ -1369,7 +1449,7 @@
       <description xml:lang="de">
         <para>Bestimmt die Formatierung des Textes.</para>
       </description>
-      <choice name="justified">
+      <choice en="justified" de="blocksatz">
         <description xml:lang="en">
           <para>Textblock has a rectangular shape.</para>
         </description>
@@ -1377,7 +1457,7 @@
           <para>Der Text hat eine rechteckige Form.</para>
         </description>
       </choice>
-      <choice name="leftaligned">
+      <choice en="leftaligned" de="linksbündig">
         <description xml:lang="en">
           <para>The text is ragged at the right margin.</para>
         </description>
@@ -1385,7 +1465,7 @@
           <para>Der Text flattert am rechten Rand.</para>
         </description>
       </choice>
-      <choice name="rightaligned">
+      <choice en="rightaligned" de="rechtsbündig">
         <description xml:lang="en">
           <para>The text is ragged right at the left margin.</para>
         </description>
@@ -1393,7 +1473,7 @@
           <para>Der Text flattert am linken Rand</para>
         </description>
       </choice>
-      <choice name="centered">
+      <choice en="centered" de="zentriert">
         <description xml:lang="en">
           <para>The text is ragged at the left and the right margin.</para>
         </description>
@@ -1443,13 +1523,29 @@
         <para>Abstand zwischen der Linie unten und dem nachfolgenden Absatz.</para>
       </description>
     </attribute>
-    <attribute en="break-below" de="umbruch-unten" type="yesno" optional="yes">
+    <attribute en="break-below" de="umbruch-unten" optional="yes">
       <description xml:lang="en">
         <para>(Dis-)Allow break below the text.</para>
       </description>
       <description xml:lang="de">
         <para>Umbruch unterhalb des Textes verbieten/erlauben.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Allow a break below this text (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Umbruch unterhalb des Textes erlauben (Voreinstellung).</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Prevent a page break below this text.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Seitenumbruch unterhalb des Textes verhindern.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="padding-top" de="padding-top" type="length" optional="yes">
       <description xml:lang="en">
@@ -1467,13 +1563,29 @@
         <para>Abstand zwischen der Linie oben und dem vorhergehenden Text.</para>
       </description>
     </attribute>
-    <attribute en="hyphenate" de="silbentrennung" type="yesno" optional="yes">
+    <attribute en="hyphenate" de="silbentrennung" optional="yes">
       <description xml:lang="en">
         <para>Enable or disable hyphenation (default: on).</para>
       </description>
       <description xml:lang="de">
         <para>Silbentrennung erlauben oder abschalten (Voreinstellung ist an).</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Enable hyphenation (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Silbentrennung erlauben (Voreinstellung).</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Disable hyphenation.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Silbentrennung für den Absatz verhindern.</para>
+        </description>
+      </choice>
     </attribute>
     <remark xml:lang="en">
       <para>The textformats <tt>text</tt>, <tt>centered</tt>, <tt>left</tt> and <tt>right</tt> are predefined. They stand for justified, centered, left aligned and right aligned text.</para>
@@ -2127,13 +2239,29 @@
         <para>Die PDF-Box, die die maximale Größe angibt. Voreinstellung ist »cropbox«.</para>
       </description>
     </attribute>
-    <attribute en="clip" de="ausschnitt" type="yesno" optional="yes">
+    <attribute en="clip" de="ausschnitt" optional="yes">
       <description xml:lang="en">
         <para>When yes, the image keeps its apsect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</para>
       </description>
       <description xml:lang="de">
         <para>Wenn ja, dann behält das Bild sein Seitenverhältnis wenn Breite und Höhe gegeben ist. Um das Bild einzupassen, wird ein Teil abgeschnitten.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Keep the aspect ratio and cut off left/right or top/bottom edges.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Seitenverhältnis beibehalten und linken und rechten oder oberen und unteren Rand abschneiden.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Distort the image to make it fit in the given area.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Bild verzerren, damit es in den vorgegebenen Rahmen passt.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="minwidth" de="minbreite" type="numberorlength" optional="yes">
       <description xml:lang="en">
@@ -2341,21 +2469,53 @@
         <para>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark Schriftartabhängig.</para>
       </description>
     </attribute>
-    <attribute en="smallcaps" de="kapitälchen" type="yesno" optional="yes">
+    <attribute en="smallcaps" de="kapitälchen" optional="yes">
       <description xml:lang="en">
         <para>Use small caps glyphs when the font supplies them.</para>
       </description>
       <description xml:lang="de">
         <para>Schalter, ob die Schriftart als Kapitälchen dargestellt werden soll.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Use small caps for this font.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Kapitälchen benutzen.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Don't switch to small caps (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Nicht auf Kapitälchen umschalten (Voreinstellung).</para>
+        </description>
+      </choice>
     </attribute>
-    <attribute en="oldstylefigures" de="mediävalziffern" type="yesno" optional="yes">
+    <attribute en="oldstylefigures" de="mediävalziffern" optional="yes">
       <description xml:lang="en">
         <para>Use oldstyle figures if the font includes them. (OpenType feature »onum«)</para>
       </description>
       <description xml:lang="de">
         <para>Schalter, ob auf Mediävalziffern umgeschaltet wird (OpenType Feature »onum«).</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Use oldstyle figures.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Mediävalziffern benutzen.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Use lining figures.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Normale Ziffern benutzen.</para>
+        </description>
+      </choice>
     </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<LadeSchriftdatei name="Helvetica" dateiname="texgyreheros-regular.otf" />
@@ -2810,13 +2970,29 @@
         <para>Der Name des Markers, der gesetzt wird.</para>
       </description>
     </attribute>
-    <attribute en="append" de="anhängen" type="yesno" optional="yes">
+    <attribute en="append" de="anhängen" optional="yes">
       <description xml:lang="en">
         <para>When yes, append the current page to the previous values of the mark. Useful to get page ranges in an index. (Default is no.)</para>
       </description>
       <description xml:lang="de">
         <para>Wenn ja, dann wird die aktuelle Seitenzahl an den letzten Wert angehängt (mit Komma separiert). Nützlich, um Seitenzahlen wie S. 3-5 im Index zu erstellen. Voreinstellung ist nein.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Append the page number to the previous value of the mark.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Seitenzahl an die vorherigen Werte anhängen.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Replace the previous value.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Den vorherigen Wert ersetzen.</para>
+        </description>
+      </choice>
     </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Pageformat width="210mm" height="4cm"/>
@@ -2910,13 +3086,29 @@
         <para>Inhalt der Nachricht. Alternativ dazu: Kindelemente Wert innerhalb des Elements »<cmd name="Message"/>«</para>
       </description>
     </attribute>
-    <attribute en="error" de="fehler" type="yesno" optional="yes">
+    <attribute en="error" de="fehler" optional="yes">
       <description xml:lang="en">
         <para>Generate an error besides writing the message.</para>
       </description>
       <description xml:lang="de">
         <para>Zusätzlich einen Fehler melden.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Report an error.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Fehler ausgeben.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Do not report an error (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Keinen Fehler ausgeben (Voreinstellung).</para>
+        </description>
+      </choice>
     </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<Message select="concat('Price: ',@price)" error="no"/>]]></listing>
@@ -2962,7 +3154,7 @@
       <description xml:lang="de">
         <para>Die nächste aktuelle Seite ist eine linke oder rechte Seite. Z.B. wenn auf Seite 1 ein Seitenwechsel erzwungen wird mit öffnenauf="rechts", dann wird Seite zwei leer und die nächste aktuelle Seite ist die Seite 3.</para>
       </description>
-      <choice name="left">
+      <choice en="left" de="links">
         <description xml:lang="en">
           <para>The next objects will be placed on a left page.</para>
         </description>
@@ -2970,7 +3162,7 @@
           <para>Die nächsten Objekte werden auf einer linken Seite ausgegeben.</para>
         </description>
       </choice>
-      <choice name="right">
+      <choice en="right" de="rechts">
         <description xml:lang="en">
           <para>The next objects will be placed on a right page.</para>
         </description>
@@ -3152,7 +3344,7 @@
         <para>Der Dateiname des Farbprofils. Das voreingestellte Profil ist »ISO Coated v2 (ECI)«. Farbprofile werden nur geladen, wenn Sonderfarben benutzt werden.</para>
       </description>
     </attribute>
-    <attribute en="cutmarks" de="beschnittmarken" type="yesno" optional="yes">
+    <attribute en="cutmarks" de="beschnittmarken" optional="yes">
       <description xml:lang="en">
         <para>Cut marks / crop marks will be placed in the PDF. The distance
           of the marks from the imaginary center is determined by the attribute <tt>trim</tt>,
@@ -3164,6 +3356,22 @@
         <para>Beschnittmarken (crop marks) werden ausgegeben. Der Abstand der Schnittmarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die
           Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Schnittmarken ausgegeben.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Show crop marks.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Beschnittmarken anzeigen.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Don't show crop marks (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Beschnittmarken nicht anzeigen (Voreinstellung).</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="trim" de="beschnittzugabe" type="length" optional="yes">
       <description xml:lang="en">
@@ -3180,7 +3388,7 @@
       <description xml:lang="de">
         <para>Die Sprache (Silbentrennung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist. Sie kann global über die Kommandozeile gesteuert werden oder für jeden <cmd name="Paragraph"/> einzeln.</para>
       </description>
-      <choice name="German">
+      <choice en="German" de="Deutsch">
         <description xml:lang="en">
           <para>Switch to German hyphenation patterns.</para>
         </description>
@@ -3188,7 +3396,7 @@
           <para>Auf Deutsche Trennmuster umschalten.</para>
         </description>
       </choice>
-      <choice name="Englisch (Great Britan)">
+      <choice en="Englisch (Great Britan)" de="Englisch (Großbritannien)">
         <description xml:lang="en">
           <para>Switch to English hyphenation patterns.</para>
         </description>
@@ -3196,7 +3404,7 @@
           <para>Auf Englische Trennmuster umschalten.</para>
         </description>
       </choice>
-      <choice name="Czech">
+      <choice en="Czech" de="Tschechisch">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3204,7 +3412,7 @@
           <para/>
         </description>
       </choice>
-      <choice name="Danish">
+      <choice en="Danish" de="Dänisch">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3212,7 +3420,7 @@
           <para/>
         </description>
       </choice>
-      <choice name="Dutch">
+      <choice en="Dutch" de="Niederländisch">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3220,7 +3428,7 @@
           <para/>
         </description>
       </choice>
-      <choice name="Englisch (USA)">
+      <choice en="Englisch (USA)" de="Englisch (USA)">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3228,7 +3436,7 @@
           <para/>
         </description>
       </choice>
-      <choice name="Finnish">
+      <choice en="Finnish" de="Finnisch">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3236,7 +3444,7 @@
           <para/>
         </description>
       </choice>
-      <choice name="Greek">
+      <choice en="Greek" de="Neugriechisch">
         <description xml:lang="en">
           <para>Monotonic greek</para>
         </description>
@@ -3244,7 +3452,7 @@
           <para>Neugriechisch</para>
         </description>
       </choice>
-      <choice name="Hungarian">
+      <choice en="Hungarian" de="Ungarisch">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3252,7 +3460,7 @@
           <para/>
         </description>
       </choice>
-      <choice name="Italian">
+      <choice en="Italian" de="Italienisch">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3260,7 +3468,7 @@
           <para/>
         </description>
       </choice>
-      <choice name="Norwegian Bokmål">
+      <choice en="Norwegian Bokmål" de="Bokmål">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3268,7 +3476,7 @@
           <para/>
         </description>
       </choice>
-      <choice name="Norwegian Nynorsk">
+      <choice en="Norwegian Nynorsk" de="Nynorsk">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3276,7 +3484,7 @@
           <para/>
         </description>
       </choice>
-      <choice name="Polish">
+      <choice en="Polish" de="Polnisch">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3284,7 +3492,7 @@
           <para/>
         </description>
       </choice>
-      <choice name="Portuguese">
+      <choice en="Portuguese" de="Portugiesisch">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3292,7 +3500,7 @@
           <para/>
         </description>
       </choice>
-      <choice name="Russian">
+      <choice en="Russian" de="Russisch">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3300,7 +3508,7 @@
           <para/>
         </description>
       </choice>
-      <choice name="Serbian">
+      <choice en="Serbian" de="Serbisch">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3308,7 +3516,7 @@
           <para/>
         </description>
       </choice>
-      <choice name="Spanish">
+      <choice en="Spanish" de="Spanisch">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3316,7 +3524,7 @@
           <para/>
         </description>
       </choice>
-      <choice name="Swedish">
+      <choice en="Swedish" de="Schwedisch">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3324,7 +3532,7 @@
           <para/>
         </description>
       </choice>
-      <choice name="Turkish">
+      <choice en="Turkish" de="Türkisch">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3333,13 +3541,29 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="trace" de="trace" type="yesno" optional="yes">
+    <attribute en="trace" de="trace" optional="yes">
       <description xml:lang="en">
         <para>Draw rectangles around objects for debugging purposes.</para>
       </description>
       <description xml:lang="de">
         <para>Erzeugt zusätzliche Ausgaben in der Protokolldatei und optische Hilfen im PDF.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Verbose output in the log file and the PDF.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zusätzliche Ausgaben in der Logdatei und im PDF erzeugen.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Regular run (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Normaler Lauf (Voreinstellung).</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="startpage" de="startseite" type="number" optional="yes">
       <description xml:lang="en">
@@ -3349,45 +3573,125 @@
         <para>Gibt den Nummer der ersten Seite an.</para>
       </description>
     </attribute>
-    <attribute en="show-grid" de="zeichne_raster" type="yesno" optional="yes">
+    <attribute en="show-grid" de="zeichne_raster" optional="yes">
       <description xml:lang="en">
         <para>Draw the grid on the page.</para>
       </description>
       <description xml:lang="de">
         <para>Wenn ja, dann zeichnet der Publisher das zugrunde liegende Raster auf die Seiten.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Show the grid.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeige das Raster.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Don't show the grid (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Das Raster wird nicht angezeigt (Voreinstellung).</para>
+        </description>
+      </choice>
     </attribute>
-    <attribute en="show-gridallocation" de="zeige_rasterbelegung" type="yesno" optional="yes">
+    <attribute en="show-gridallocation" de="zeige_rasterbelegung" optional="yes">
       <description xml:lang="en">
         <para>Draw allocated cells with yellow and conflicts with red markers.</para>
       </description>
       <description xml:lang="de">
         <para>Wenn ja, dann markiert der Publisher die belegten Rasterzellen mit einer Hintergrundfarbe.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Show grid allocation.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeige Rasterbelegung.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Don't show the grid allocation (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Rasterbelegung nicht zeigen (Voreinstellung).</para>
+        </description>
+      </choice>
     </attribute>
-    <attribute en="show-hyphenation" de="zeige_silbentrennung" type="yesno" optional="yes">
+    <attribute en="show-hyphenation" de="zeige_silbentrennung" optional="yes">
       <description xml:lang="en">
         <para>Draw little marks to show all hyphenation points.</para>
       </description>
       <description xml:lang="de">
         <para>Bei ja markiert der speedata Publisher die möglichen Trennstellen für die Silbentrennung.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Show hyphenation points.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeige Silbentrennungsmöglichkeiten.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Don't show any hyphenation points (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Keine Silbentrennungsmöglichkeiten zeigen (Voreinstellung).</para>
+        </description>
+      </choice>
     </attribute>
-    <attribute en="resetmarks" de="markerzurücksetzen" type="yesno" optional="yes">
+    <attribute en="resetmarks" de="markerzurücksetzen" optional="yes">
       <description xml:lang="en">
         <para>Yes: ignore the marks file from previous run.</para>
       </description>
       <description xml:lang="de">
         <para>Wenn ja, werden die Marker des letzten Laufs ignoriert.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Ignore marks from the previous run.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Marker aus dem vorherigen Lauf ignorieren.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Use marks from the previous run (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Marker aus dem vorherigen Lauf weiter benutzen (Voreinstellung).</para>
+        </description>
+      </choice>
     </attribute>
-    <attribute en="ignoreeol" de="ignorierezeilenende" type="yesno" optional="yes">
+    <attribute en="ignoreeol" de="ignorierezeilenende" optional="yes">
       <description xml:lang="en">
         <para>Ignore newlines in data-xml</para>
       </description>
       <description xml:lang="de">
         <para>Zeilenenden in Daten ignorieren.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Ignore newlines in data-xml</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeilenenden in Daten ignorieren.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Respect newlines in data-xml</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeilenenden in Daten beachten.</para>
+        </description>
+      </choice>
     </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Options
@@ -3539,7 +3843,7 @@
       <description xml:lang="de">
         <para>Name der Sprache für die Silbentrennung.</para>
       </description>
-      <choice name="German">
+      <choice en="German" de="Deutsch">
         <description xml:lang="en">
           <para>Use German language for hyphenation.</para>
         </description>
@@ -3547,7 +3851,7 @@
           <para>Deutsche Trennmuster</para>
         </description>
       </choice>
-      <choice name="Englisch (Great Britan)">
+      <choice en="Englisch (Great Britan)" de="Englisch (Großbritannien)">
         <description xml:lang="en">
           <para>Use English hyphenation patterns</para>
         </description>
@@ -3555,7 +3859,7 @@
           <para>Englische Trennmuster auswählen</para>
         </description>
       </choice>
-      <choice name="French">
+      <choice en="French" de="Französisch">
         <description xml:lang="en">
           <para>French hyphenation patterns</para>
         </description>
@@ -3755,7 +4059,7 @@
         </interleave>
       </oneOrMore>
     </childelements>
-    <attribute en="allocate" de="belegen" type="yesno" optional="yes">
+    <attribute en="allocate" de="belegen" optional="yes">
       <description xml:lang="en">
         <para>Determines if the area of the object is marked as »allocated«. With allocate="no", the cursor position is not changed.</para>
       </description>
@@ -3763,6 +4067,22 @@
         <para>Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei belegen=“nein” wird auch die aktuelle Zeile im Raster nicht verändert. Bei “auto” wird bei Bildern der
           Bildumriss beachtet, sofern eine Umrissdatei vorliegt. Siehe die Beschreibung bei Bild</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Occupy space in the grid (default for grid positioning).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Platz im Raster reservieren (Voreinstellung für Platzierung im Raster).</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Don't allocate space in the grid (default for absolute positioning).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Bereich nicht als Belegt markieren (Voreinstellung für absolute Positionierung)</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="area" de="bereich" type="text" optional="yes">
       <description xml:lang="en">
@@ -3781,13 +4101,29 @@
         <para>Wenn eine Gruppe ausgegeben werden soll, muss der Name hier angegeben werden.</para>
       </description>
     </attribute>
-    <attribute en="frame" de="rahmen" type="solidwithout" optional="yes">
+    <attribute en="frame" de="rahmen" optional="yes">
       <description xml:lang="en">
-        <para>Draw a solid frame around the object.</para>
+        <para>Draw a frame around the object. You need to supply the frame color.</para>
       </description>
       <description xml:lang="de">
-        <para>Es wird ein durchgezogener Rahmen um das Objekt gezeichnet. Zusätzlich muss die Rahmenfarbe angegeben werden. “ohne”: Es wird kein Rahmen gezeichnet.</para>
+        <para>Es wird ein Rahmen um das Objekt gezeichnet. Zusätzlich muss die Rahmenfarbe angegeben werden.</para>
       </description>
+      <choice en="solid" de="durchgezogen">
+        <description xml:lang="en">
+          <para>Draw a frame around the object.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Einen Rahmen um das Objekt zeichnen.</para>
+        </description>
+      </choice>
+      <choice en="without" de="ohne">
+        <description xml:lang="en">
+          <para>Don't draw a frame around the object.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Keinen Rahmen zeichnen.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="framecolor" de="rahmenfarbe" type="text" optional="yes">
       <description xml:lang="en">
@@ -3804,7 +4140,7 @@
       <description xml:lang="de">
         <para>Erzeugt einen farbigen Hintergrund für das Objekt. Das Attribut ›hintergrundfarbe‹ gibt die Farbe an.</para>
       </description>
-      <choice name="full">
+      <choice en="full" de="vollständig">
         <description xml:lang="en">
           <para>Fill background with the given color (in backgroundcolor).</para>
         </description>
@@ -3812,7 +4148,7 @@
           <para>Den Hintergrund in der angegebenen Farbe füllen (in hintergrundfarbe)</para>
         </description>
       </choice>
-      <choice name="without">
+      <choice en="without" de="ohne">
         <description xml:lang="en">
           <para>Empty background</para>
         </description>
@@ -3846,13 +4182,29 @@
           die Position von der oberen Blattkante.</para>
       </description>
     </attribute>
-    <attribute en="keepposition" de="behalteposition" type="yesno" optional="yes">
+    <attribute en="keepposition" de="behalteposition" optional="yes">
       <description xml:lang="en">
         <para>Don't move the virtual cursor to the next free space</para>
       </description>
       <description xml:lang="de">
         <para>Den virtuellen Cursor nicht verändern.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Don't move the virtual cursor.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Den virtuellen Cursor nicht verändern.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Move the virtual cursor (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Den virtuellen Cursor verschieben (Voreinstellung)</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="page" de="seite" type="number" optional="yes">
       <description xml:lang="en">
@@ -3888,7 +4240,7 @@
         <para>Wird ein Objekt ausgegeben, das kein vielfaches der Rasterhöhe ist, dann gibt das Attribut die vertikale Ausrichtung an. Bottom beispielsweise bedeutet, dass der freie Platz oberhalb des
           Objekts bleibt. Voreinstellung ist “top”.</para>
       </description>
-      <choice name="top">
+      <choice en="top" de="top">
         <description xml:lang="en">
           <para>The object is aligned at the top.</para>
         </description>
@@ -3896,7 +4248,7 @@
           <para>Das Objekt wird oben ausgerichtet.</para>
         </description>
       </choice>
-      <choice name="middle">
+      <choice en="middle" de="middle">
         <description xml:lang="en">
           <para>The object is aligned so that the space at the top is the same as at the bottom.</para>
         </description>
@@ -3904,7 +4256,7 @@
           <para>Das Objekt wird so platziert, dass der Leerraum überhalb und unterhalb derselbe ist.</para>
         </description>
       </choice>
-      <choice name="bottom">
+      <choice en="bottom" de="bottom">
         <description xml:lang="en">
           <para>The object is aligned at the bottom.</para>
         </description>
@@ -3920,7 +4272,7 @@
       <description xml:lang="de">
         <para>Bestimmt, ob die angegebene Spalte die linke oder die rechte Kante vom Objekt bezeichnet.</para>
       </description>
-      <choice name="left">
+      <choice en="left" de="links">
         <description xml:lang="en">
           <para>The object is placed in given column.</para>
         </description>
@@ -3928,7 +4280,7 @@
           <para>Das Objekt wird in der angegebenen Spalte platziert.</para>
         </description>
       </choice>
-      <choice name="right">
+      <choice en="right" de="rechts">
         <description xml:lang="en">
           <para>The given columns determines the right edge of the border.</para>
         </description>
@@ -3944,7 +4296,7 @@
       <description xml:lang="de">
         <para>Bestimmt die Platzierung des Objekts relativ zur angegebenen Zeile.</para>
       </description>
-      <choice name="bottom">
+      <choice en="bottom" de="bottom">
         <description xml:lang="en">
           <para>The row determines the bottom edge of the object.</para>
         </description>
@@ -3952,7 +4304,7 @@
           <para>Die Zeile gibt die untere Kante des Objekts an.</para>
         </description>
       </choice>
-      <choice name="top">
+      <choice en="top" de="top">
         <description xml:lang="en">
           <para>If 'top' (default), the given row is the top border of the object.</para>
         </description>
@@ -4260,7 +4612,7 @@
       <description xml:lang="de">
         <para>Bestimmt die Ausrichtung der Linie.</para>
       </description>
-      <choice name="horizontal">
+      <choice en="horizontal" de="horizontal">
         <description xml:lang="en">
           <para>Horizontal rule</para>
         </description>
@@ -4268,7 +4620,7 @@
           <para>Horizontale Linie</para>
         </description>
       </choice>
-      <choice name="vertical">
+      <choice en="vertical" de="vertikal">
         <description xml:lang="en">
           <para>Vertical rule</para>
         </description>
@@ -4973,7 +5325,7 @@
         <para>Wertet den angegebenen XPath-Ausdruck aus und ignoriert dessen Ausgabe.</para>
       </description>
     </attribute>
-    <attribute en="stretch" de="dehnen" type="maxno" optional="yes">
+    <attribute en="stretch" de="dehnen" optional="yes">
       <description xml:lang="en">
         <para>If the table contents is narrow and stretch has the value no, the table only uses the minimal width. If the table
           contents is wider than the value width or stretch has the value max, the table's width is the size given in the width attribute.</para>
@@ -4982,6 +5334,22 @@
         <para>Wenn der Tabelleninhalt schmal ist und dehnen den Wert nein hat, dann nimmt die Tabelle nur den benötigten Platz ein. Wenn der Tabelleninhalt breit ist oder dehnen den Wert max hat, dann
           nimmt die Tabelle den Wert aus dem Attribut breite ein.</para>
       </description>
+      <choice en="max" de="max">
+        <description xml:lang="en">
+          <para>Stretch the table to its given width.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Tabelle zur angegebenen Breite dehnen.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>The table width is the minimum width depending on it's contents.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Tabelle nimmt den kleinstmöglichen Platz ein.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="width" de="breite" type="numberorlength" optional="yes">
       <description xml:lang="en">
@@ -5030,7 +5398,7 @@
       <description xml:lang="de">
         <para>Bestimmt, ob benachbarte Zellen die Rahmen teilen. Das Verhalten von border-collapse="collapse" ist nicht definiert wenn die Tablle einen Zeilen- oder Spaltenabstand &gt; 0 haben oder wenn die benachbarten Zellen nicht dieselbe Strichstärke und -farbe haben.</para>
       </description>
-      <choice name="separate">
+      <choice en="separate" de="separate">
         <description xml:lang="en">
           <para>The borders are part of the cell and not shared with its neighbors.</para>
         </description>
@@ -5038,7 +5406,7 @@
           <para>Die Rahmen sind Teil der Zelle und werden nicht mit den Nachbarzellen geteilt.</para>
         </description>
       </choice>
-      <choice name="collapse">
+      <choice en="collapse" de="collapse">
         <description xml:lang="en">
           <para>The borders of neighboring cells overlap.</para>
         </description>
@@ -5184,13 +5552,29 @@
         </interleave>
       </oneOrMore>
     </childelements>
-    <attribute en="page" de="seite" type="all_last" optional="yes">
+    <attribute en="page" de="seite" optional="yes">
       <description xml:lang="en">
         <para>This command is only valid for the given pages. The default is to place the foot on all pages.</para>
       </description>
       <description xml:lang="de">
         <para>Der Tabellenfuß wird nur auf den angegebenen Seiten platziert. Voreinstellung ist, dass er auf jeder Seite erscheint.</para>
       </description>
+      <choice en="all" de="alle">
+        <description xml:lang="en">
+          <para>Place the footer on all pages.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Tabellenfuß auf allen Seiten darstellen.</para>
+        </description>
+      </choice>
+      <choice en="last" de="letzte">
+        <description xml:lang="en">
+          <para>Display the table footer only on the last page.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Den Tabellenfuß nur auf der letzten Seite anzeigen.</para>
+        </description>
+      </choice>
     </attribute>
     <remark xml:lang="de">
       <para>Der Inhalt von Tabellenfuß wird auf jeder Seite einer automatisch umbrochenen Tabelle wiederholt.</para>
@@ -5228,7 +5612,7 @@
       <description xml:lang="de">
         <para>Die Seite, auf der der Tabellenkopf erscheinen soll. Voreinstellung ist »alle«</para>
       </description>
-      <choice name="first">
+      <choice en="first" de="erste">
         <description xml:lang="en">
           <para>Only appear on the first page.</para>
         </description>
@@ -5236,7 +5620,7 @@
           <para>Nur auf der ersten Seite.</para>
         </description>
       </choice>
-      <choice name="all">
+      <choice en="all" de="alle">
         <description xml:lang="en">
           <para>All pages. If »first« is defined, the tablehead appears on all pages but the first.</para>
         </description>
@@ -5244,7 +5628,7 @@
           <para>Auf allen Seiten. Falls »first« definiert, erscheint der Tabellenkopf auf allen Seiten bis auf der ersten.</para>
         </description>
       </choice>
-      <choice name="odd">
+      <choice en="odd" de="ungerade">
         <description xml:lang="en">
           <para>Appear on all odd pages.</para>
         </description>
@@ -5252,7 +5636,7 @@
           <para>Auf allen ungeraden Seiten.</para>
         </description>
       </choice>
-      <choice name="even">
+      <choice en="even" de="gerade">
         <description xml:lang="en">
           <para>Appear on all even pages.</para>
         </description>
@@ -5412,7 +5796,7 @@
       <description xml:lang="de">
         <para>Die horizontale Ausrichtung des Tabelleninhalts</para>
       </description>
-      <choice name="alignleft" context="align">
+      <choice en="left" de="left">
         <description xml:lang="en">
           <para>The contents is left aligned (ragged right). This is the default.</para>
         </description>
@@ -5420,7 +5804,7 @@
           <para>Der Inhalt der Zelle ist am linken Rand ausgerichtet. (Voreinstellung)</para>
         </description>
       </choice>
-      <choice name="alignright" context="align">
+      <choice en="right" de="right">
         <description xml:lang="en">
           <para>The contents of the cell is right aligend.</para>
         </description>
@@ -5428,7 +5812,7 @@
           <para>Der Inhalt der Zelle ist rechtsbündig ausgerichtet.</para>
         </description>
       </choice>
-      <choice name="aligncenter" context="align">
+      <choice en="center" de="center">
         <description xml:lang="en">
           <para>The contents of the cell is aligned at the center, with ragged right and left margin.</para>
         </description>
@@ -5436,7 +5820,7 @@
           <para>Der Inhalt der Zelle ist auf der Mittelachse ausgerichtet mit links und rechts Flatterrand.</para>
         </description>
       </choice>
-      <choice name="alignjustify" context="align">
+      <choice en="justify" de="justify">
         <description xml:lang="en">
           <para>Justified text with straight margins.</para>
         </description>
@@ -5452,7 +5836,7 @@
       <description xml:lang="de">
         <para>Die vertikale Ausrichtung des Zelleninhalts.</para>
       </description>
-      <choice name="top">
+      <choice en="top" de="top">
         <description xml:lang="en">
           <para>The contents is aligend at the top edge of the cell.</para>
         </description>
@@ -5460,7 +5844,7 @@
           <para>Der Zellinhalt ist an der oberen Kante ausgerichtet.</para>
         </description>
       </choice>
-      <choice name="middle">
+      <choice en="middle" de="middle">
         <description xml:lang="en">
           <para>The contents is vertically centered.</para>
         </description>
@@ -5468,7 +5852,7 @@
           <para>Der Zellinhalt vertikal zentriert.</para>
         </description>
       </choice>
-      <choice name="bottom">
+      <choice en="bottom" de="bottom">
         <description xml:lang="en">
           <para>The contents is aligend at the bottom edge of the cell.</para>
         </description>
@@ -5800,21 +6184,77 @@
         <optional><cmd name="Loop"/></optional>
       </oneOrMore>
     </childelements>
-    <attribute en="align" de="align" type="align" optional="yes">
+    <attribute en="align" de="align" optional="yes">
       <description xml:lang="en">
         <para>Horizontal alignment of the table cells in this row.</para>
       </description>
       <description xml:lang="de">
         <para>Die horizontale Ausrichtung des Tabelleninhalts (gilt für die gesamte Zeile).</para>
       </description>
+      <choice en="left" de="left">
+        <description xml:lang="en">
+          <para>The contents is left aligned (ragged right). This is the default.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Inhalt der Zelle ist am linken Rand ausgerichtet. (Voreinstellung)</para>
+        </description>
+      </choice>
+      <choice en="right" de="right">
+        <description xml:lang="en">
+          <para>The contents of the cell is right aligend.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Inhalt der Zelle ist rechtsbündig ausgerichtet.</para>
+        </description>
+      </choice>
+      <choice en="center" de="center">
+        <description xml:lang="en">
+          <para>The contents of the cell is aligned at the center, with ragged right and left margin.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Inhalt der Zelle ist auf der Mittelachse ausgerichtet mit links und rechts Flatterrand.</para>
+        </description>
+      </choice>
+      <choice en="justify" de="justify">
+        <description xml:lang="en">
+          <para>Justified text with straight margins.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Text im Blocksatz.</para>
+        </description>
+      </choice>
     </attribute>
-    <attribute en="valign" de="valign" type="valign" optional="yes">
+    <attribute en="valign" de="valign" optional="yes">
       <description xml:lang="en">
         <para>Vertical aligment of the table cells in this row.</para>
       </description>
       <description xml:lang="de">
         <para>Die vertikale Ausrichtung des Tabelleninhalts (gilt für die gesamte Zeile).</para>
       </description>
+      <choice en="top" de="top">
+        <description xml:lang="en">
+          <para>The objects in this row are aligned at the top.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Objekte dieser Zeile werden oben ausgerichtet.</para>
+        </description>
+      </choice>
+      <choice en="top" de="middle">
+        <description xml:lang="en">
+          <para>The objects in this row are aligned at the middle axis.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Objekte dieser Zeile werden auf der Mittelachse ausgerichtet.</para>
+        </description>
+      </choice>
+      <choice en="top" de="bottom">
+        <description xml:lang="en">
+          <para>The objects in this row are aligned at the bottom.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Objekte dieser Zeile werden am unteren Rand ausgerichtet.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="minheight" de="minhöhe" type="number" optional="yes">
       <description xml:lang="en">
@@ -5832,13 +6272,29 @@
         <para>Die Farbe der Zellen in der Zeile.</para>
       </description>
     </attribute>
-    <attribute en="break-below" de="umbruch-unten" type="yesno" optional="yes">
+    <attribute en="break-below" de="umbruch-unten" optional="yes">
       <description xml:lang="en">
-        <para>Allow a table break between this row and the following. Defaults to yes.</para>
+        <para>Allow a table break between this row and the following.</para>
       </description>
       <description xml:lang="de">
-        <para>Erlaubt einen Tabellenumbruch zwischen dieser und der nächsten Zeile. Voreinstellung ist ja.</para>
+        <para>Erlaubt einen Tabellenumbruch zwischen dieser und der nächsten Zeile.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Allow a table break between this row and the following (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Erlaubt einen Tabellenumbruch zwischen dieser und der nächsten Zeile (Voreinstellung).</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Disable a table break between this row and the following.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Verhindert einen Tabellenumbruch zwischen dieser und der nächsten Zeile.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="data" de="daten" type="xpath" optional="yes">
       <description xml:lang="en">
@@ -5848,13 +6304,29 @@
         <para>Auf diese Daten können im Tabellenkopf und Tabellenfuß mit <tt>$_last_tr_data</tt> zugegriffen werden.</para>
       </description>
     </attribute>
-    <attribute en="sethead" de="setzekopf" type="yesno" optional="yes">
+    <attribute en="sethead" de="setzekopf" optional="yes">
       <description xml:lang="en">
         <para>Use this line for future table heads.</para>
       </description>
       <description xml:lang="de">
         <para>Diese Zeile für zukünftige Kopfzeilen benutzen.</para>
       </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Use this line for future table heads.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Diese Zeile für zukünftige Kopfzeilen benutzen.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>No special treatment of this line (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Diese Zeile wird nicht besonders behandelt (Voreinstellung).</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="top-distance" de="abstand-oben" optional="yes" type="numberorlength">
       <description xml:lang="en">

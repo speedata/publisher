@@ -188,32 +188,19 @@
               <choice>
                 <attribute name="type">
                   <choice>
-                    <value>choice</value>
-                    <value>all_last</value>
-                    <value>all_first</value>
                     <value>xpath</value>
                     <value>number</value>
                     <value>numberorlength</value>
-                    <value>yesno</value>
                     <value>text</value>
-                    <value>languages</value>
                     <value>zerotohundred</value>
-                    <value>colormodel</value>
-                    <value>alignment</value>
                     <value>length</value>
-                    <value>yesnoauto</value>
-                    <value>solidwithout</value>
-                    <value>leftright</value>
-                    <value>topbottom</value>
                     <value>numberlengthorstar</value>
-                    <value>align</value>
-                    <value>valign</value>
-                    <value>maxno</value>
                   </choice>
                 </attribute>
                 <oneOrMore>
                   <element name="choice">
-                    <attribute name="name"/>
+                    <attribute name="en"/>
+                    <attribute name="de"/>
                     <optional><attribute name="context"/></optional>
                     <ref name="descriptions"/>
                   </element>

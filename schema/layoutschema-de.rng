@@ -272,8 +272,9 @@
                <a:documentation>Bestimmt, ob unterhalb des Barcodes der Text erscheint.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Text unterhalb des Barcodes schreiben.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Keinen Text anzeigen.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -317,8 +318,9 @@
                <a:documentation>Bestimmt, ob die Kind-Lesezeichen dargestellt werden sollen oder nicht.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Zeige Kinder.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Verstecke Kinder.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -721,8 +723,9 @@
                <a:documentation>Überdrucken für diese Farbe anschalten</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Überdrucken für diese Farbe anschalten.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Überdrucken für diese Farbe ausschalten (Voreinstellung).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -769,8 +772,9 @@
                <a:documentation>Wenn nein, Schusterjungen verhindern (erste Zeile eines Absatzes ist auf der vorherigen Seite). Voreinstellung ist nein.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Schusterjungen erlauben.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Schusterjungen verhindern (Voreinstellung).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -779,8 +783,9 @@
                <a:documentation>Wenn nein, Hurenkinder verhindern (letzte Zeile eines Absatzes ist auf der nächsten Seite). Voreinstellung ist nein.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Hurenkinder erlauben.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Hurenkinder verhindern (Voreinstellung).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -833,8 +838,9 @@
                <a:documentation>Umbruch unterhalb des Textes verbieten/erlauben.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Umbruch unterhalb des Textes erlauben (Voreinstellung).</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Seitenumbruch unterhalb des Textes verhindern.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -853,8 +859,9 @@
                <a:documentation>Silbentrennung erlauben oder abschalten (Voreinstellung ist an).</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Silbentrennung erlauben (Voreinstellung).</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Silbentrennung für den Absatz verhindern.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1257,8 +1264,9 @@
                <a:documentation>Wenn ja, dann behält das Bild sein Seitenverhältnis wenn Breite und Höhe gegeben ist. Um das Bild einzupassen, wird ein Teil abgeschnitten.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Seitenverhältnis beibehalten und linken und rechten oder oberen und unteren Rand abschneiden.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Bild verzerren, damit es in den vorgegebenen Rahmen passt.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1324,8 +1332,9 @@
                <a:documentation>Schalter, ob die Schriftart als Kapitälchen dargestellt werden soll.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Kapitälchen benutzen.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Nicht auf Kapitälchen umschalten (Voreinstellung).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1334,8 +1343,9 @@
                <a:documentation>Schalter, ob auf Mediävalziffern umgeschaltet wird (OpenType Feature »onum«).</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Mediävalziffern benutzen.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Normale Ziffern benutzen.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1624,8 +1634,9 @@
                <a:documentation>Wenn ja, dann wird die aktuelle Seitenzahl an den letzten Wert angehängt (mit Komma separiert). Nützlich, um Seitenzahlen wie S. 3-5 im Index zu erstellen. Voreinstellung ist nein.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Die Seitenzahl an die vorherigen Werte anhängen.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Den vorherigen Wert ersetzen.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1645,8 +1656,9 @@
                <a:documentation>Zusätzlich einen Fehler melden.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Fehler ausgeben.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Keinen Fehler ausgeben (Voreinstellung).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1735,8 +1747,9 @@
           Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Schnittmarken ausgegeben.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Beschnittmarken anzeigen.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Beschnittmarken nicht anzeigen (Voreinstellung).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1795,8 +1808,9 @@
                <a:documentation>Erzeugt zusätzliche Ausgaben in der Protokolldatei und optische Hilfen im PDF.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Zusätzliche Ausgaben in der Logdatei und im PDF erzeugen.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Normaler Lauf (Voreinstellung).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1810,8 +1824,9 @@
                <a:documentation>Wenn ja, dann zeichnet der Publisher das zugrunde liegende Raster auf die Seiten.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Zeige das Raster.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Das Raster wird nicht angezeigt (Voreinstellung).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1820,8 +1835,9 @@
                <a:documentation>Wenn ja, dann markiert der Publisher die belegten Rasterzellen mit einer Hintergrundfarbe.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Zeige Rasterbelegung.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Rasterbelegung nicht zeigen (Voreinstellung).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1830,8 +1846,9 @@
                <a:documentation>Bei ja markiert der speedata Publisher die möglichen Trennstellen für die Silbentrennung.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Zeige Silbentrennungsmöglichkeiten.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Keine Silbentrennungsmöglichkeiten zeigen (Voreinstellung).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1840,8 +1857,9 @@
                <a:documentation>Wenn ja, werden die Marker des letzten Laufs ignoriert.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Marker aus dem vorherigen Lauf ignorieren.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Marker aus dem vorherigen Lauf weiter benutzen (Voreinstellung).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1850,8 +1868,9 @@
                <a:documentation>Zeilenenden in Daten ignorieren.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Zeilenenden in Daten ignorieren.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Zeilenenden in Daten beachten.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -2127,8 +2146,9 @@
           Bildumriss beachtet, sofern eine Umrissdatei vorliegt. Siehe die Beschreibung bei Bild</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Platz im Raster reservieren (Voreinstellung für Platzierung im Raster).</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Bereich nicht als Belegt markieren (Voreinstellung für absolute Positionierung)</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -2145,7 +2165,13 @@
          </optional>
          <optional>
             <attribute name="rahmen">
-               <a:documentation>Es wird ein durchgezogener Rahmen um das Objekt gezeichnet. Zusätzlich muss die Rahmenfarbe angegeben werden. “ohne”: Es wird kein Rahmen gezeichnet.</a:documentation>
+               <a:documentation>Es wird ein Rahmen um das Objekt gezeichnet. Zusätzlich muss die Rahmenfarbe angegeben werden.</a:documentation>
+               <choice>
+                  <value>durchgezogen</value>
+                  <a:documentation xmlns="">Einen Rahmen um das Objekt zeichnen.</a:documentation>
+                  <value>ohne</value>
+                  <a:documentation xmlns="">Keinen Rahmen zeichnen.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -2185,8 +2211,9 @@
                <a:documentation>Den virtuellen Cursor nicht verändern.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Den virtuellen Cursor nicht verändern.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Den virtuellen Cursor verschieben (Voreinstellung)</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -2716,6 +2743,12 @@
             <attribute name="dehnen">
                <a:documentation>Wenn der Tabelleninhalt schmal ist und dehnen den Wert nein hat, dann nimmt die Tabelle nur den benötigten Platz ein. Wenn der Tabelleninhalt breit ist oder dehnen den Wert max hat, dann
           nimmt die Tabelle den Wert aus dem Attribut breite ein.</a:documentation>
+               <choice>
+                  <value>max</value>
+                  <a:documentation xmlns="">Die Tabelle zur angegebenen Breite dehnen.</a:documentation>
+                  <value>nein</value>
+                  <a:documentation xmlns="">Die Tabelle nimmt den kleinstmöglichen Platz ein.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -2820,6 +2853,12 @@
          <optional>
             <attribute name="seite">
                <a:documentation>Der Tabellenfuß wird nur auf den angegebenen Seiten platziert. Voreinstellung ist, dass er auf jeder Seite erscheint.</a:documentation>
+               <choice>
+                  <value>alle</value>
+                  <a:documentation xmlns="">Tabellenfuß auf allen Seiten darstellen.</a:documentation>
+                  <value>letzte</value>
+                  <a:documentation xmlns="">Den Tabellenfuß nur auf der letzten Seite anzeigen.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <oneOrMore>
@@ -3107,11 +3146,29 @@
          <optional>
             <attribute name="align">
                <a:documentation>Die horizontale Ausrichtung des Tabelleninhalts (gilt für die gesamte Zeile).</a:documentation>
+               <choice>
+                  <value>left</value>
+                  <a:documentation xmlns="">Der Inhalt der Zelle ist am linken Rand ausgerichtet. (Voreinstellung)</a:documentation>
+                  <value>right</value>
+                  <a:documentation xmlns="">Der Inhalt der Zelle ist rechtsbündig ausgerichtet.</a:documentation>
+                  <value>center</value>
+                  <a:documentation xmlns="">Der Inhalt der Zelle ist auf der Mittelachse ausgerichtet mit links und rechts Flatterrand.</a:documentation>
+                  <value>justify</value>
+                  <a:documentation xmlns="">Text im Blocksatz.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
             <attribute name="valign">
                <a:documentation>Die vertikale Ausrichtung des Tabelleninhalts (gilt für die gesamte Zeile).</a:documentation>
+               <choice>
+                  <value>top</value>
+                  <a:documentation xmlns="">Die Objekte dieser Zeile werden oben ausgerichtet.</a:documentation>
+                  <value>middle</value>
+                  <a:documentation xmlns="">Die Objekte dieser Zeile werden auf der Mittelachse ausgerichtet.</a:documentation>
+                  <value>bottom</value>
+                  <a:documentation xmlns="">Die Objekte dieser Zeile werden am unteren Rand ausgerichtet.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -3126,11 +3183,12 @@
          </optional>
          <optional>
             <attribute name="umbruch-unten">
-               <a:documentation>Erlaubt einen Tabellenumbruch zwischen dieser und der nächsten Zeile. Voreinstellung ist ja.</a:documentation>
+               <a:documentation>Erlaubt einen Tabellenumbruch zwischen dieser und der nächsten Zeile.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Erlaubt einen Tabellenumbruch zwischen dieser und der nächsten Zeile (Voreinstellung).</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Verhindert einen Tabellenumbruch zwischen dieser und der nächsten Zeile.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -3144,8 +3202,9 @@
                <a:documentation>Diese Zeile für zukünftige Kopfzeilen benutzen.</a:documentation>
                <choice>
                   <value>ja</value>
+                  <a:documentation xmlns="">Diese Zeile für zukünftige Kopfzeilen benutzen.</a:documentation>
                   <value>nein</value>
-                  <text/>
+                  <a:documentation xmlns="">Diese Zeile wird nicht besonders behandelt (Voreinstellung).</a:documentation>
                </choice>
             </attribute>
          </optional>

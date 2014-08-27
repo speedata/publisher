@@ -270,8 +270,9 @@
                <a:documentation>Should the text be written under the barcode?</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Write text beneath the barcode.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Don't display text.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -315,8 +316,9 @@
                <a:documentation>If yes, the child elements are shown. If no, the child elements are hidden.</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Show children.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Hide children.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -718,8 +720,9 @@
                <a:documentation>Enable overprint for this color.</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Enable overprint for this color.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Disable overprint for this color (default).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -765,8 +768,9 @@
                <a:documentation>If no, prohibit orphans (first line of paragraph is on the previous page). Default: no.</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Allow orphans.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Prevent orphans (default).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -775,8 +779,9 @@
                <a:documentation>If no, prohibit widows (last line of paragraph is on the next page). Default: no.</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Allow widows.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Prevent widows (default).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -828,8 +833,9 @@
                <a:documentation>(Dis-)Allow break below the text.</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Allow a break below this text (default).</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Prevent a page break below this text.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -848,8 +854,9 @@
                <a:documentation>Enable or disable hyphenation (default: on).</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Enable hyphenation (default).</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Disable hyphenation.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1251,8 +1258,9 @@
                <a:documentation>When yes, the image keeps its apsect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Keep the aspect ratio and cut off left/right or top/bottom edges.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Distort the image to make it fit in the given area.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1318,8 +1326,9 @@
                <a:documentation>Use small caps glyphs when the font supplies them.</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Use small caps for this font.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Don't switch to small caps (default).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1328,8 +1337,9 @@
                <a:documentation>Use oldstyle figures if the font includes them. (OpenType feature »onum«)</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Use oldstyle figures.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Use lining figures.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1617,8 +1627,9 @@
                <a:documentation>When yes, append the current page to the previous values of the mark. Useful to get page ranges in an index. (Default is no.)</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Append the page number to the previous value of the mark.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Replace the previous value.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1638,8 +1649,9 @@
                <a:documentation>Generate an error besides writing the message.</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Report an error.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Do not report an error (default).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1730,8 +1742,9 @@
         </a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Show crop marks.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Don't show crop marks (default).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1790,8 +1803,9 @@
                <a:documentation>Draw rectangles around objects for debugging purposes.</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Verbose output in the log file and the PDF.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Regular run (default).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1805,8 +1819,9 @@
                <a:documentation>Draw the grid on the page.</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Show the grid.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Don't show the grid (default).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1815,8 +1830,9 @@
                <a:documentation>Draw allocated cells with yellow and conflicts with red markers.</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Show grid allocation.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Don't show the grid allocation (default).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1825,8 +1841,9 @@
                <a:documentation>Draw little marks to show all hyphenation points.</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Show hyphenation points.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Don't show any hyphenation points (default).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1835,8 +1852,9 @@
                <a:documentation>Yes: ignore the marks file from previous run.</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Ignore marks from the previous run.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Use marks from the previous run (default).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1845,8 +1863,9 @@
                <a:documentation>Ignore newlines in data-xml</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Ignore newlines in data-xml</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Respect newlines in data-xml</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -2121,8 +2140,9 @@
                <a:documentation>Determines if the area of the object is marked as »allocated«. With allocate="no", the cursor position is not changed.</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Occupy space in the grid (default for grid positioning).</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Don't allocate space in the grid (default for absolute positioning).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -2138,7 +2158,13 @@
          </optional>
          <optional>
             <attribute name="frame">
-               <a:documentation>Draw a solid frame around the object.</a:documentation>
+               <a:documentation>Draw a frame around the object. You need to supply the frame color.</a:documentation>
+               <choice>
+                  <value>solid</value>
+                  <a:documentation xmlns="">Draw a frame around the object.</a:documentation>
+                  <value>without</value>
+                  <a:documentation xmlns="">Don't draw a frame around the object.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -2177,8 +2203,9 @@
                <a:documentation>Don't move the virtual cursor to the next free space</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Don't move the virtual cursor.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Move the virtual cursor (default).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -2704,6 +2731,12 @@
             <attribute name="stretch">
                <a:documentation>If the table contents is narrow and stretch has the value no, the table only uses the minimal width. If the table
           contents is wider than the value width or stretch has the value max, the table's width is the size given in the width attribute.</a:documentation>
+               <choice>
+                  <value>max</value>
+                  <a:documentation xmlns="">Stretch the table to its given width.</a:documentation>
+                  <value>no</value>
+                  <a:documentation xmlns="">The table width is the minimum width depending on it's contents.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -2808,6 +2841,12 @@
          <optional>
             <attribute name="page">
                <a:documentation>This command is only valid for the given pages. The default is to place the foot on all pages.</a:documentation>
+               <choice>
+                  <value>all</value>
+                  <a:documentation xmlns="">Place the footer on all pages.</a:documentation>
+                  <value>last</value>
+                  <a:documentation xmlns="">Display the table footer only on the last page.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <oneOrMore>
@@ -3093,11 +3132,29 @@
          <optional>
             <attribute name="align">
                <a:documentation>Horizontal alignment of the table cells in this row.</a:documentation>
+               <choice>
+                  <value>left</value>
+                  <a:documentation xmlns="">The contents is left aligned (ragged right). This is the default.</a:documentation>
+                  <value>right</value>
+                  <a:documentation xmlns="">The contents of the cell is right aligend.</a:documentation>
+                  <value>center</value>
+                  <a:documentation xmlns="">The contents of the cell is aligned at the center, with ragged right and left margin.</a:documentation>
+                  <value>justify</value>
+                  <a:documentation xmlns="">Justified text with straight margins.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
             <attribute name="valign">
                <a:documentation>Vertical aligment of the table cells in this row.</a:documentation>
+               <choice>
+                  <value>top</value>
+                  <a:documentation xmlns="">The objects in this row are aligned at the top.</a:documentation>
+                  <value>top</value>
+                  <a:documentation xmlns="">The objects in this row are aligned at the middle axis.</a:documentation>
+                  <value>top</value>
+                  <a:documentation xmlns="">The objects in this row are aligned at the bottom.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -3112,11 +3169,12 @@
          </optional>
          <optional>
             <attribute name="break-below">
-               <a:documentation>Allow a table break between this row and the following. Defaults to yes.</a:documentation>
+               <a:documentation>Allow a table break between this row and the following.</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Allow a table break between this row and the following (default).</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">Disable a table break between this row and the following.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -3130,8 +3188,9 @@
                <a:documentation>Use this line for future table heads.</a:documentation>
                <choice>
                   <value>yes</value>
+                  <a:documentation xmlns="">Use this line for future table heads.</a:documentation>
                   <value>no</value>
-                  <text/>
+                  <a:documentation xmlns="">No special treatment of this line (default).</a:documentation>
                </choice>
             </attribute>
          </optional>
