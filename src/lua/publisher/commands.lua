@@ -687,7 +687,7 @@ end
 --- Set the grid in a group (also in a pagetype?)
 function commands.grid( layoutxml,dataxml )
     local width  = publisher.read_attribute(layoutxml,dataxml,"width",  "length_sp")
-    local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp")
+    local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --pg
     local nx     = publisher.read_attribute(layoutxml,dataxml,"nx",     "rawstring")
     local ny     = publisher.read_attribute(layoutxml,dataxml,"ny",     "rawstring")
 

@@ -57,6 +57,9 @@
                <ref name="e_DefineColor"/>
             </optional>
             <optional>
+               <ref name="e_DefineFontfamily"/>
+            </optional>
+            <optional>
                <ref name="e_EmptyLine"/>
             </optional>
             <optional>
@@ -128,6 +131,9 @@
          <oneOrMore>
             <optional>
                <ref name="e_DefineColor"/>
+            </optional>
+            <optional>
+               <ref name="e_DefineFontfamily"/>
             </optional>
             <optional>
                <ref name="e_EmptyLine"/>
@@ -527,6 +533,9 @@
                <ref name="e_DefineColor"/>
             </optional>
             <optional>
+               <ref name="e_DefineFontfamily"/>
+            </optional>
+            <optional>
                <ref name="e_EmptyLine"/>
             </optional>
             <optional>
@@ -746,18 +755,20 @@
          <attribute name="leading">
             <a:documentation>Distance between two baselines in pt (PostScript points). Without unit.</a:documentation>
          </attribute>
-         <optional>
-            <ref name="e_Regular"/>
-         </optional>
-         <optional>
-            <ref name="e_Italic"/>
-         </optional>
-         <optional>
-            <ref name="e_Bold"/>
-         </optional>
-         <optional>
-            <ref name="e_BoldItalic"/>
-         </optional>
+         <interleave>
+            <optional>
+               <ref name="e_Regular"/>
+            </optional>
+            <optional>
+               <ref name="e_Italic"/>
+            </optional>
+            <optional>
+               <ref name="e_Bold"/>
+            </optional>
+            <optional>
+               <ref name="e_BoldItalic"/>
+            </optional>
+         </interleave>
       </element>
    </define>
    <define name="e_DefineTextformat">
@@ -2344,6 +2355,9 @@
                <ref name="e_DefineColor"/>
             </optional>
             <optional>
+               <ref name="e_DefineFontfamily"/>
+            </optional>
+            <optional>
                <ref name="e_EmptyLine"/>
             </optional>
             <optional>
@@ -2500,6 +2514,9 @@
             <interleave>
                <optional>
                   <ref name="e_DefineColor"/>
+               </optional>
+               <optional>
+                  <ref name="e_DefineFontfamily"/>
                </optional>
                <optional>
                   <ref name="e_EmptyLine"/>
@@ -2893,6 +2910,9 @@
                <optional>
                   <ref name="e_Tr"/>
                </optional>
+               <optional>
+                  <ref name="e_Switch"/>
+               </optional>
             </interleave>
          </oneOrMore>
       </element>
@@ -3224,36 +3244,27 @@
    <define name="e_U">
       <element name="U">
          <a:documentation>Underline text.</a:documentation>
-         <optional>
-            <ref name="e_B"/>
-         </optional>
-         <optional>
-            <ref name="e_Image"/>
-         </optional>
-         <optional>
-            <ref name="e_Switch"/>
-         </optional>
-         <optional>
-            <ref name="e_I"/>
-         </optional>
-         <optional>
-            <ref name="e_Fontface"/>
-         </optional>
-         <optional>
-            <ref name="e_Sub"/>
-         </optional>
-         <optional>
-            <ref name="e_Sup"/>
-         </optional>
-         <optional>
-            <ref name="e_U"/>
-         </optional>
-         <optional>
-            <ref name="e_URL"/>
-         </optional>
-         <optional>
-            <ref name="e_Value"/>
-         </optional>
+         <zeroOrMore>
+            <choice>
+               <ref name="e_Action"/>
+               <ref name="e_A"/>
+               <ref name="e_I"/>
+               <ref name="e_B"/>
+               <ref name="e_Br"/>
+               <ref name="e_Color"/>
+               <ref name="e_HSpace"/>
+               <ref name="e_U"/>
+               <ref name="e_Fontface"/>
+               <ref name="e_Image"/>
+               <ref name="e_Sub"/>
+               <ref name="e_Sup"/>
+               <ref name="e_URL"/>
+               <ref name="e_Value"/>
+               <ref name="e_Switch"/>
+               <ref name="e_Loop"/>
+               <ref name="e_ForAll"/>
+            </choice>
+         </zeroOrMore>
       </element>
    </define>
    <define name="e_Ul">

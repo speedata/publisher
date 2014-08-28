@@ -48,6 +48,7 @@
 
   <define name="Commands">
     <optional><cmd name="DefineColor"/></optional>
+    <optional><cmd name="DefineFontfamily"/></optional>
     <optional><cmd name="EmptyLine"/></optional>
     <optional><cmd name="ForAll"/></optional>
     <optional><cmd name="Group"/></optional>
@@ -1308,10 +1309,12 @@
       <para>Das Element <cmd name="DefiniereSchriftfamilie"/> definiert eine Schriftfamilie, auf in den Elementen <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface "/> und <cmd name="Table"/> mit dem Attribut <tt>schriftart</tt> zugegriffen werden kann.</para>
     </description>
     <childelements>
-      <cmd name="Regular"/>
-      <cmd name="Italic"/>
-      <cmd name="Bold"/>
-      <cmd name="BoldItalic"/>
+      <interleave>
+        <optional><cmd name="Regular"/></optional>
+        <optional><cmd name="Italic"/></optional>
+        <optional><cmd name="Bold"/></optional>
+        <optional><cmd name="BoldItalic"/></optional>
+      </interleave>
     </childelements>
     <attribute en="name" de="name" type="text" optional="no">
       <description xml:lang="en">
@@ -5602,6 +5605,7 @@
           <optional><cmd name="Tablerule"/></optional>
           <optional><cmd name="Copy-of"/></optional>
           <optional><cmd name="Tr"/></optional>
+          <optional><cmd name="Switch"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>
@@ -6370,16 +6374,7 @@
       <para>Schaltet »Unterstreichen« ein.</para>
     </description>
     <childelements>
-      <cmd name="B"/>
-      <cmd name="Image"/>
-      <cmd name="Switch"/>
-      <cmd name="I"/>
-      <cmd name="Fontface"/>
-      <cmd name="Sub"/>
-      <cmd name="Sup"/>
-      <cmd name="U"/>
-      <cmd name="URL"/>
-      <cmd name="Value"/>
+      <reference name="Textvalues"/>
     </childelements>
     <remark xml:lang="en">
       <para>Currenty it doesn't work with margin protrusion.</para>

@@ -1174,7 +1174,7 @@ function dothingsbeforeoutput(  )
     end
 end
 
---- Read the contents of the attribute `attname_english.` `typ` is one of
+--- Read the contents of the attribute `attname_english`. `typ` is one of
 --- `string`, `number`, `length` and `boolean`.
 --- `default` gives something that is to be returned if no attribute with this name is present.
 function read_attribute( layoutxml,dataxml,attname_english,typ,default,context)
