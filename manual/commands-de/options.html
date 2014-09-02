@@ -7,7 +7,7 @@
              // This function highlights (by default) pre and code tags which are annotated correctly.
              $.syntax();
              });
-            </script><title>Options</title>
+            </script><title>Optionen</title>
    </head>
    <body>
       <div id="logo"><a href="../index-de.html"><img src="../assets/images/publisher_logo.png" alt="Startseite"></a></div>
@@ -22,11 +22,11 @@
             <p>Kindelemente: (keine)</p>
          </div>
          <div class="hangingindent">
-            <p>Elternelemente: <a href="include.html">Include</a>, <a href="layout.html">Layout</a></p>
+            <p>Elternelemente: </p>
          </div>
          <h3>Attribute</h3>
          <dl>
-            <dt><a name="cutmarks"></a><span class="tt">beschnittmarken</span> (ja/nein, optional)
+            <dt><a name=""></a><span class="tt">beschnittmarken</span> (optional)
             </dt>
             <dd>
                
@@ -37,6 +37,28 @@
                   ausgegeben.
                </p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>ja:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Beschnittmarken anzeigen.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>nein:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Beschnittmarken nicht anzeigen (Voreinstellung).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name="trim"></a><span class="tt">beschnittzugabe</span> (Längenangabe (mm,cm,pt), optional)
             </dt>
@@ -54,7 +76,7 @@
                </p>
                
             </dd>
-            <dt><a name="mainlanguage"></a><span class="tt">hauptsprache</span> (optional)
+            <dt><a name=""></a><span class="tt">hauptsprache</span> (optional)
             </dt>
             <dd>
                
@@ -256,19 +278,63 @@
                   </tr>
                </table>
             </dd>
-            <dt><a name="ignoreeol"></a><span class="tt">ignorierezeilenende</span> (ja/nein, optional)
+            <dt><a name=""></a><span class="tt">ignorierezeilenende</span> (optional)
             </dt>
             <dd>
                
                <p>Zeilenenden in Daten ignorieren.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>ja:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Zeilenenden in Daten ignorieren.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>nein:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Zeilenenden in Daten beachten.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
-            <dt><a name="resetmarks"></a><span class="tt">markerzurücksetzen</span> (ja/nein, optional)
+            <dt><a name=""></a><span class="tt">markerzurücksetzen</span> (optional)
             </dt>
             <dd>
                
                <p>Wenn ja, werden die Marker des letzten Laufs ignoriert.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>ja:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Marker aus dem vorherigen Lauf ignorieren.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>nein:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Marker aus dem vorherigen Lauf weiter benutzen (Voreinstellung).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name="startpage"></a><span class="tt">startseite</span> (Zahl, optional)
             </dt>
@@ -277,33 +343,121 @@
                <p>Gibt den Nummer der ersten Seite an.</p>
                
             </dd>
-            <dt><a name="trace"></a><span class="tt">trace</span> (ja/nein, optional)
+            <dt><a name=""></a><span class="tt">trace</span> (optional)
             </dt>
             <dd>
                
                <p>Erzeugt zusätzliche Ausgaben in der Protokolldatei und optische Hilfen im PDF.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>ja:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Zusätzliche Ausgaben in der Logdatei und im PDF erzeugen.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>nein:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Normaler Lauf (Voreinstellung).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
-            <dt><a name="show-grid"></a><span class="tt">zeichne_raster</span> (ja/nein, optional)
+            <dt><a name=""></a><span class="tt">zeichne_raster</span> (optional)
             </dt>
             <dd>
                
                <p>Wenn ja, dann zeichnet der Publisher das zugrunde liegende Raster auf die Seiten.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>ja:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Zeige das Raster.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>nein:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Das Raster wird nicht angezeigt (Voreinstellung).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
-            <dt><a name="show-gridallocation"></a><span class="tt">zeige_rasterbelegung</span> (ja/nein, optional)
+            <dt><a name=""></a><span class="tt">zeige_rasterbelegung</span> (optional)
             </dt>
             <dd>
                
                <p>Wenn ja, dann markiert der Publisher die belegten Rasterzellen mit einer Hintergrundfarbe.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>ja:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Zeige Rasterbelegung.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>nein:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Rasterbelegung nicht zeigen (Voreinstellung).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
-            <dt><a name="show-hyphenation"></a><span class="tt">zeige_silbentrennung</span> (ja/nein, optional)
+            <dt><a name=""></a><span class="tt">zeige_silbentrennung</span> (optional)
             </dt>
             <dd>
                
                <p>Bei ja markiert der speedata Publisher die möglichen Trennstellen für die Silbentrennung.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>ja:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Zeige Silbentrennungsmöglichkeiten.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>nein:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Keine Silbentrennungsmöglichkeiten zeigen (Voreinstellung).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
          </dl>
          <h2>Beispiel</h2>
@@ -365,7 +519,7 @@
             <li><a href="nextframe.html">NächsterRahmen</a></li>
             <li><a href="placeobject.html">ObjektAusgeben</a></li>
             <li><a href="ol.html">Ol</a></li>
-            <li class="active"><a href="options.html">Optionen</a></li>
+            <li><a href="options.html">Optionen</a></li>
             <li><a href="positioningarea.html">Platzierungsbereich</a></li>
             <li><a href="positioningframe.html">Platzierungsrahmen</a></li>
             <li><a href="margin.html">Rand</a></li>
@@ -406,7 +560,7 @@
             <li><a href="setvariable.html">Zuweisung</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.14 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.17 |
       <a href="../index-de.html">Startseite</a>
       |
       <a href="../commands-de/layout.html">Befehlsreferenz</a> |

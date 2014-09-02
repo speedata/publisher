@@ -22,11 +22,11 @@
             <p>Child elements: <a href="barcode.html">Barcode</a>, <a href="box.html">Box</a>, <a href="image.html">Image</a>, <a href="rule.html">Rule</a>, <a href="table.html">Table</a>, <a href="textblock.html">Textblock</a></p>
          </div>
          <div class="hangingindent">
-            <p>Parent elements: <a href="atpagecreation.html">AtPageCreation</a>, <a href="atpageshipout.html">AtPageShipout</a>, <a href="case.html">Case</a>, <a href="contents.html">Contents</a>, <a href="forall.html">ForAll</a>, <a href="loop.html">Loop</a>, <a href="otherwise.html">Otherwise</a>, <a href="record.html">Record</a>, <a href="savepages.html">SavePages</a>, <a href="until.html">Until</a>, <a href="while.html">While</a></p>
+            <p>Parent elements: </p>
          </div>
          <h3>Attributes</h3>
          <dl>
-            <dt><a name="allocate"></a><span class="tt">allocate</span> (yes/no, optional)
+            <dt><a name=""></a><span class="tt">allocate</span> (optional)
             </dt>
             <dd>
                
@@ -34,6 +34,28 @@
                   the cursor position is not changed.
                </p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Occupy space in the grid (default for grid positioning).</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>no:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Don't allocate space in the grid (default for absolute positioning).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name="area"></a><span class="tt">area</span> (string, optional)
             </dt>
@@ -45,7 +67,7 @@
                </p>
                
             </dd>
-            <dt><a name="background"></a><span class="tt">background</span> (optional)
+            <dt><a name=""></a><span class="tt">background</span> (optional)
             </dt>
             <dd>
                
@@ -91,12 +113,34 @@
                </p>
                
             </dd>
-            <dt><a name="frame"></a><span class="tt">frame</span> ('solid' or 'without', optional)
+            <dt><a name=""></a><span class="tt">frame</span> (optional)
             </dt>
             <dd>
                
-               <p>Draw a solid frame around the object.</p>
+               <p>Draw a frame around the object. You need to supply the frame color.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>solid:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Draw a frame around the object.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>without:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Don't draw a frame around the object.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name="framecolor"></a><span class="tt">framecolor</span> (string, optional)
             </dt>
@@ -116,7 +160,7 @@
                </p>
                
             </dd>
-            <dt><a name="hreference"></a><span class="tt">hreference</span> (optional)
+            <dt><a name=""></a><span class="tt">hreference</span> (optional)
             </dt>
             <dd>
                
@@ -148,12 +192,34 @@
                   </tr>
                </table>
             </dd>
-            <dt><a name="keepposition"></a><span class="tt">keepposition</span> (yes/no, optional)
+            <dt><a name=""></a><span class="tt">keepposition</span> (optional)
             </dt>
             <dd>
                
                <p>Don't move the virtual cursor to the next free space</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Don't move the virtual cursor.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>no:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Move the virtual cursor (default).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name="maxheight"></a><span class="tt">maxheight</span> (number, optional)
             </dt>
@@ -189,7 +255,7 @@
                </p>
                
             </dd>
-            <dt><a name="valign"></a><span class="tt">valign</span> (optional)
+            <dt><a name=""></a><span class="tt">valign</span> (optional)
             </dt>
             <dd>
                
@@ -231,7 +297,7 @@
                   </tr>
                </table>
             </dd>
-            <dt><a name="vreference"></a><span class="tt">vreference</span> (optional)
+            <dt><a name=""></a><span class="tt">vreference</span> (optional)
             </dt>
             <dd>
                
@@ -350,7 +416,7 @@
             <li><a href="pageformat.html">Pageformat</a></li>
             <li><a href="pagetype.html">Pagetype</a></li>
             <li><a href="paragraph.html">Paragraph</a></li>
-            <li class="active"><a href="placeobject.html">PlaceObject</a></li>
+            <li><a href="placeobject.html">PlaceObject</a></li>
             <li><a href="positioningarea.html">PositioningArea</a></li>
             <li><a href="positioningframe.html">PositioningFrame</a></li>
             <li><a href="processnode.html">ProcessNode</a></li>
@@ -384,7 +450,7 @@
             <li><a href="while.html">While</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.14 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.17 |
       <a href="../index.html">Start page</a>
       |
       <a href="../commands-en/layout.html">Command reference</a> |

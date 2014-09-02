@@ -17,13 +17,13 @@
          <p>Print a 1d or 2d barcode. To be used in <a href="placeobject.html">PlaceObject</a>.
          </p>
          <div class="hangingindent">
-            <p>Allowed attributes: <span class="tt"><a href="#fontface">fontface</a></span>, <span class="tt"><a href="#height">height</a></span>, <span class="tt"><a href="#select">select</a></span>, <span class="tt"><a href="#showtext">showtext</a></span>, <span class="tt"><a href="#type">type</a></span>, <span class="tt"><a href="#width">width</a></span></p>
+            <p>Allowed attributes: <span class="tt"><a href="#fontface">fontface</a></span>, <span class="tt"><a href="#height">height</a></span>, <span class="tt"><a href="#overshoot">overshoot</a></span>, <span class="tt"><a href="#select">select</a></span>, <span class="tt"><a href="#showtext">showtext</a></span>, <span class="tt"><a href="#type">type</a></span>, <span class="tt"><a href="#width">width</a></span></p>
          </div>
          <div class="hangingindent">
             <p>Child elements: (none)</p>
          </div>
          <div class="hangingindent">
-            <p>Parent elements: <a href="case.html">Case</a>, <a href="forall.html">ForAll</a>, <a href="loop.html">Loop</a>, <a href="otherwise.html">Otherwise</a>, <a href="placeobject.html">PlaceObject</a>, <a href="td.html">Td</a>, <a href="until.html">Until</a>, <a href="while.html">While</a></p>
+            <p>Parent elements: </p>
          </div>
          <h3>Attributes</h3>
          <dl>
@@ -43,6 +43,15 @@
                <p>Height of the barcode.</p>
                
             </dd>
+            <dt><a name="overshoot"></a><span class="tt">overshoot</span> (number, optional)
+            </dt>
+            <dd>
+               
+               <p>The factor denoting the extra length of the outer and middle bar. Only useful with
+                  EAN13.
+               </p>
+               
+            </dd>
             <dt><a name="select"></a><span class="tt">select</span> (XPath expression)
             </dt>
             <dd>
@@ -50,14 +59,36 @@
                <p>The data to be encoded in the barcode.</p>
                
             </dd>
-            <dt><a name="showtext"></a><span class="tt">showtext</span> (yes/no, optional)
+            <dt><a name=""></a><span class="tt">showtext</span> (optional)
             </dt>
             <dd>
                
                <p>Should the text be written under the barcode?</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Write text beneath the barcode.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>no:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Don't display text.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
-            <dt><a name="type"></a><span class="tt">type</span></dt>
+            <dt><a name=""></a><span class="tt">type</span></dt>
             <dd>
                
                <p>Type of the barcode. One of <span class="tt">EAN13</span>, <span class="tt">Code128</span> or <span class="tt">QRCode</span>.
@@ -122,7 +153,7 @@
             <li><a href="atpageshipout.html">AtPageShipout</a></li>
             <li><a href="attribute.html">Attribute</a></li>
             <li><a href="b.html">B</a></li>
-            <li class="active"><a href="barcode.html">Barcode</a></li>
+            <li><a href="barcode.html">Barcode</a></li>
             <li><a href="bold.html">Bold</a></li>
             <li><a href="bolditalic.html">BoldItalic</a></li>
             <li><a href="bookmark.html">Bookmark</a></li>
@@ -203,7 +234,7 @@
             <li><a href="while.html">While</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.14 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.17 |
       <a href="../index.html">Start page</a>
       |
       <a href="../commands-en/layout.html">Command reference</a> |

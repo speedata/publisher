@@ -24,11 +24,11 @@
             <p>Child elements: (none)</p>
          </div>
          <div class="hangingindent">
-            <p>Parent elements: <a href="include.html">Include</a>, <a href="layout.html">Layout</a></p>
+            <p>Parent elements: </p>
          </div>
          <h3>Attributes</h3>
          <dl>
-            <dt><a name="alignment"></a><span class="tt">alignment</span> (optional)
+            <dt><a name=""></a><span class="tt">alignment</span> (optional)
             </dt>
             <dd>
                
@@ -91,19 +91,63 @@
                <p>The thickness of the rule above the text.</p>
                
             </dd>
-            <dt><a name="break-below"></a><span class="tt">break-below</span> (yes/no, optional)
+            <dt><a name=""></a><span class="tt">break-below</span> (optional)
             </dt>
             <dd>
                
                <p>(Dis-)Allow break below the text.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Allow a break below this text (default).</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>no:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Prevent a page break below this text.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
-            <dt><a name="hyphenate"></a><span class="tt">hyphenate</span> (yes/no, optional)
+            <dt><a name=""></a><span class="tt">hyphenate</span> (optional)
             </dt>
             <dd>
                
                <p>Enable or disable hyphenation (default: on).</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Enable hyphenation (default).</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>no:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Disable hyphenation.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name="indentation"></a><span class="tt">indentation</span> (Length (mm,in,cm,pt), optional)
             </dt>
@@ -133,7 +177,7 @@
                <p>Name of the textformat that is used later in the layout.</p>
                
             </dd>
-            <dt><a name="orphan"></a><span class="tt">orphan</span> (yes/no, optional)
+            <dt><a name=""></a><span class="tt">orphan</span> (optional)
             </dt>
             <dd>
                
@@ -141,6 +185,28 @@
                   no.
                </p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Allow orphans.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>no:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Prevent orphans (default).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name="padding-top"></a><span class="tt">padding-top</span> (Length (mm,in,cm,pt), optional)
             </dt>
@@ -157,12 +223,34 @@
                </p>
                
             </dd>
-            <dt><a name="widow"></a><span class="tt">widow</span> (yes/no, optional)
+            <dt><a name=""></a><span class="tt">widow</span> (optional)
             </dt>
             <dd>
                
                <p>If no, prohibit widows (last line of paragraph is on the next page). Default: no.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Allow widows.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>no:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Prevent widows (default).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
          </dl>
          <h3>Remarks</h3>
@@ -213,7 +301,7 @@
             <li><a href="copy-of.html">Copy-of</a></li>
             <li><a href="definecolor.html">DefineColor</a></li>
             <li><a href="definefontfamily.html">DefineFontfamily</a></li>
-            <li class="active"><a href="definetextformat.html">DefineTextformat</a></li>
+            <li><a href="definetextformat.html">DefineTextformat</a></li>
             <li><a href="element.html">Element</a></li>
             <li><a href="emptyline.html">EmptyLine</a></li>
             <li><a href="fontface.html">Fontface</a></li>
@@ -280,7 +368,7 @@
             <li><a href="while.html">While</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.14 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.17 |
       <a href="../index.html">Start page</a>
       |
       <a href="../commands-en/layout.html">Command reference</a> |

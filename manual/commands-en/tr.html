@@ -16,22 +16,64 @@
          <h2>Description</h2>
          <p>Tablerow</p>
          <div class="hangingindent">
-            <p>Allowed attributes: <span class="tt"><a href="#align">align</a></span>, <span class="tt"><a href="#backgroundcolor">backgroundcolor</a></span>, <span class="tt"><a href="#break-below">break-below</a></span>, <span class="tt"><a href="#data">data</a></span>, <span class="tt"><a href="#minheight">minheight</a></span>, <span class="tt"><a href="#sethead">sethead</a></span>, <span class="tt"><a href="#valign">valign</a></span></p>
+            <p>Allowed attributes: <span class="tt"><a href="#align">align</a></span>, <span class="tt"><a href="#backgroundcolor">backgroundcolor</a></span>, <span class="tt"><a href="#break-below">break-below</a></span>, <span class="tt"><a href="#data">data</a></span>, <span class="tt"><a href="#minheight">minheight</a></span>, <span class="tt"><a href="#sethead">sethead</a></span>, <span class="tt"><a href="#top-distance">top-distance</a></span>, <span class="tt"><a href="#valign">valign</a></span></p>
          </div>
          <div class="hangingindent">
             <p>Child elements: <a href="copy-of.html">Copy-of</a>, <a href="forall.html">ForAll</a>, <a href="loop.html">Loop</a>, <a href="message.html">Message</a>, <a href="switch.html">Switch</a>, <a href="td.html">Td</a></p>
          </div>
          <div class="hangingindent">
-            <p>Parent elements: <a href="case.html">Case</a>, <a href="forall.html">ForAll</a>, <a href="loop.html">Loop</a>, <a href="otherwise.html">Otherwise</a>, <a href="setvariable.html">SetVariable</a>, <a href="table.html">Table</a>, <a href="tablefoot.html">Tablefoot</a>, <a href="tablehead.html">Tablehead</a>, <a href="until.html">Until</a>, <a href="while.html">While</a></p>
+            <p>Parent elements: </p>
          </div>
          <h3>Attributes</h3>
          <dl>
-            <dt><a name="align"></a><span class="tt">align</span> (“right”,“left”,“center”, optional)
+            <dt><a name=""></a><span class="tt">align</span> (optional)
             </dt>
             <dd>
                
                <p>Horizontal alignment of the table cells in this row.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>left:</p>
+                     </td>
+                     <td>
+                        
+                        <p>The contents is left aligned (ragged right). This is the default.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>right:</p>
+                     </td>
+                     <td>
+                        
+                        <p>The contents of the cell is right aligend.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>center:</p>
+                     </td>
+                     <td>
+                        
+                        <p>The contents of the cell is aligned at the center, with ragged right and left margin.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>justify:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Justified text with straight margins.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name="backgroundcolor"></a><span class="tt">backgroundcolor</span> (string, optional)
             </dt>
@@ -40,12 +82,34 @@
                <p>Background color of each cell in this row.</p>
                
             </dd>
-            <dt><a name="break-below"></a><span class="tt">break-below</span> (yes/no, optional)
+            <dt><a name=""></a><span class="tt">break-below</span> (optional)
             </dt>
             <dd>
                
-               <p>Allow a table break between this row and the following. Defaults to yes.</p>
+               <p>Allow a table break between this row and the following.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Allow a table break between this row and the following (default).</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>no:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Disable a table break between this row and the following.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name="data"></a><span class="tt">data</span> (XPath expression, optional)
             </dt>
@@ -62,19 +126,80 @@
                <p>Minimum rowheight in grid cells.</p>
                
             </dd>
-            <dt><a name="sethead"></a><span class="tt">sethead</span> (yes/no, optional)
+            <dt><a name=""></a><span class="tt">sethead</span> (optional)
             </dt>
             <dd>
                
                <p>Use this line for future table heads.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Use this line for future table heads.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>no:</p>
+                     </td>
+                     <td>
+                        
+                        <p>No special treatment of this line (default).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
-            <dt><a name="valign"></a><span class="tt">valign</span> (“top”,“middle”,“bottom”, optional)
+            <dt><a name="top-distance"></a><span class="tt">top-distance</span> (number or length, optional)
+            </dt>
+            <dd>
+               
+               <p>Todo: document</p>
+               
+            </dd>
+            <dt><a name=""></a><span class="tt">valign</span> (optional)
             </dt>
             <dd>
                
                <p>Vertical aligment of the table cells in this row.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>top:</p>
+                     </td>
+                     <td>
+                        
+                        <p>The objects in this row are aligned at the top.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>middle:</p>
+                     </td>
+                     <td>
+                        
+                        <p>The objects in this row are aligned at the middle axis.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>bottom:</p>
+                     </td>
+                     <td>
+                        
+                        <p>The objects in this row are aligned at the bottom.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
          </dl>
          <h2>Example</h2>
@@ -171,7 +296,7 @@
             <li><a href="td.html">Td</a></li>
             <li><a href="text.html">Text</a></li>
             <li><a href="textblock.html">Textblock</a></li>
-            <li class="active"><a href="tr.html">Tr</a></li>
+            <li><a href="tr.html">Tr</a></li>
             <li><a href="u.html">U</a></li>
             <li><a href="url.html">URL</a></li>
             <li><a href="ul.html">Ul</a></li>
@@ -181,7 +306,7 @@
             <li><a href="while.html">While</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.14 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.17 |
       <a href="../index.html">Start page</a>
       |
       <a href="../commands-en/layout.html">Command reference</a> |

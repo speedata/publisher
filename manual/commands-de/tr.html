@@ -16,22 +16,71 @@
          <h2>Beschreibung</h2>
          <p>Erstellt eine Tabellenzeile</p>
          <div class="hangingindent">
-            <p>Erlaubte Attribute: <span class="tt"><a href="#align">align</a></span>, <span class="tt"><a href="#data">daten</a></span>, <span class="tt"><a href="#backgroundcolor">hintergrundfarbe</a></span>, <span class="tt"><a href="#minheight">minhöhe</a></span>, <span class="tt"><a href="#sethead">setzekopf</a></span>, <span class="tt"><a href="#break-below">umbruch-unten</a></span>, <span class="tt"><a href="#valign">valign</a></span></p>
+            <p>Erlaubte Attribute: <span class="tt"><a href="#top-distance">abstand-oben</a></span>, <span class="tt"><a href="#align">align</a></span>, <span class="tt"><a href="#data">daten</a></span>, <span class="tt"><a href="#backgroundcolor">hintergrundfarbe</a></span>, <span class="tt"><a href="#minheight">minhöhe</a></span>, <span class="tt"><a href="#sethead">setzekopf</a></span>, <span class="tt"><a href="#break-below">umbruch-unten</a></span>, <span class="tt"><a href="#valign">valign</a></span></p>
          </div>
          <div class="hangingindent">
             <p>Kindelemente: <a href="switch.html">Fallunterscheidung</a>, <a href="forall.html">FürAlle</a>, <a href="copy-of.html">Kopie-von</a>, <a href="message.html">Nachricht</a>, <a href="loop.html">Schleife</a>, <a href="td.html">Td</a></p>
          </div>
          <div class="hangingindent">
-            <p>Elternelemente: <a href="until.html">Bis</a>, <a href="case.html">Fall</a>, <a href="forall.html">FürAlle</a>, <a href="loop.html">Schleife</a>, <a href="while.html">Solange</a>, <a href="otherwise.html">Sonst</a>, <a href="table.html">Tabelle</a>, <a href="tablefoot.html">Tabellenfuß</a>, <a href="tablehead.html">Tabellenkopf</a>, <a href="setvariable.html">Zuweisung</a></p>
+            <p>Elternelemente: </p>
          </div>
          <h3>Attribute</h3>
          <dl>
-            <dt><a name="align"></a><span class="tt">align</span> (“right”,“left”,“center”, optional)
+            <dt><a name="top-distance"></a><span class="tt">abstand-oben</span> (Zahl oder Längenangabe, optional)
+            </dt>
+            <dd>
+               
+               <p>Todo: document</p>
+               
+            </dd>
+            <dt><a name=""></a><span class="tt">align</span> (optional)
             </dt>
             <dd>
                
                <p>Die horizontale Ausrichtung des Tabelleninhalts (gilt für die gesamte Zeile).</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>left:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Der Inhalt der Zelle ist am linken Rand ausgerichtet. (Voreinstellung)</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>right:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Der Inhalt der Zelle ist rechtsbündig ausgerichtet.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>center:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Der Inhalt der Zelle ist auf der Mittelachse ausgerichtet mit links und rechts Flatterrand.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>justify:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Text im Blocksatz.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name="data"></a><span class="tt">daten</span> (XPath-Ausdruck, optional)
             </dt>
@@ -55,28 +104,102 @@
                <p>Die Mindesthöhe der Zeile in Rasterzellen.</p>
                
             </dd>
-            <dt><a name="sethead"></a><span class="tt">setzekopf</span> (ja/nein, optional)
+            <dt><a name=""></a><span class="tt">setzekopf</span> (optional)
             </dt>
             <dd>
                
                <p>Diese Zeile für zukünftige Kopfzeilen benutzen.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>ja:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Diese Zeile für zukünftige Kopfzeilen benutzen.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>nein:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Diese Zeile wird nicht besonders behandelt (Voreinstellung).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
-            <dt><a name="break-below"></a><span class="tt">umbruch-unten</span> (ja/nein, optional)
+            <dt><a name=""></a><span class="tt">umbruch-unten</span> (optional)
             </dt>
             <dd>
                
-               <p>Erlaubt einen Tabellenumbruch zwischen dieser und der nächsten Zeile. Voreinstellung
-                  ist ja.
-               </p>
+               <p>Erlaubt einen Tabellenumbruch zwischen dieser und der nächsten Zeile.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>ja:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Erlaubt einen Tabellenumbruch zwischen dieser und der nächsten Zeile (Voreinstellung).</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>nein:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Verhindert einen Tabellenumbruch zwischen dieser und der nächsten Zeile.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
-            <dt><a name="valign"></a><span class="tt">valign</span> (“top”,“middle”,“bottom”, optional)
+            <dt><a name=""></a><span class="tt">valign</span> (optional)
             </dt>
             <dd>
                
                <p>Die vertikale Ausrichtung des Tabelleninhalts (gilt für die gesamte Zeile).</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>top:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Die Objekte dieser Zeile werden oben ausgerichtet.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>middle:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Die Objekte dieser Zeile werden auf der Mittelachse ausgerichtet.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>bottom:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Die Objekte dieser Zeile werden am unteren Rand ausgerichtet.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
          </dl>
          <h3>Bemerkungen</h3>
@@ -176,7 +299,7 @@
             <li><a href="text.html">Text</a></li>
             <li><a href="textblock.html">Textblock</a></li>
             <li><a href="tablerule.html">Tlinie</a></li>
-            <li class="active"><a href="tr.html">Tr</a></li>
+            <li><a href="tr.html">Tr</a></li>
             <li><a href="hyphenation.html">Trennvorschlag</a></li>
             <li><a href="u.html">U</a></li>
             <li><a href="url.html">URL</a></li>
@@ -187,7 +310,7 @@
             <li><a href="setvariable.html">Zuweisung</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.14 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.17 |
       <a href="../index-de.html">Startseite</a>
       |
       <a href="../commands-de/layout.html">Befehlsreferenz</a> |

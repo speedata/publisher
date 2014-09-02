@@ -7,7 +7,7 @@
              // This function highlights (by default) pre and code tags which are annotated correctly.
              $.syntax();
              });
-            </script><title>Barcode</title>
+            </script><title>Strichcode</title>
    </head>
    <body>
       <div id="logo"><a href="../index-de.html"><img src="../assets/images/publisher_logo.png" alt="Startseite"></a></div>
@@ -17,13 +17,13 @@
          <p>Erzeugt einen 1D oder 2D Strichcode (barcode), der in <a href="placeobject.html">ObjektAusgeben</a> ausgegeben werden kann.
          </p>
          <div class="hangingindent">
-            <p>Erlaubte Attribute: <span class="tt"><a href="#select">auswahl</a></span>, <span class="tt"><a href="#width">breite</a></span>, <span class="tt"><a href="#height">höhe</a></span>, <span class="tt"><a href="#fontface">schriftart</a></span>, <span class="tt"><a href="#type">typ</a></span>, <span class="tt"><a href="#showtext">zeigetext</a></span></p>
+            <p>Erlaubte Attribute: <span class="tt"><a href="#select">auswahl</a></span>, <span class="tt"><a href="#width">breite</a></span>, <span class="tt"><a href="#height">höhe</a></span>, <span class="tt"><a href="#fontface">schriftart</a></span>, <span class="tt"><a href="#type">typ</a></span>, <span class="tt"><a href="#showtext">zeigetext</a></span>, <span class="tt"><a href="#overshoot">übersteigen</a></span></p>
          </div>
          <div class="hangingindent">
             <p>Kindelemente: (keine)</p>
          </div>
          <div class="hangingindent">
-            <p>Elternelemente: <a href="until.html">Bis</a>, <a href="case.html">Fall</a>, <a href="forall.html">FürAlle</a>, <a href="placeobject.html">ObjektAusgeben</a>, <a href="loop.html">Schleife</a>, <a href="while.html">Solange</a>, <a href="otherwise.html">Sonst</a>, <a href="td.html">Td</a></p>
+            <p>Elternelemente: </p>
          </div>
          <h3>Attribute</h3>
          <dl>
@@ -57,7 +57,7 @@
                </p>
                
             </dd>
-            <dt><a name="type"></a><span class="tt">typ</span></dt>
+            <dt><a name=""></a><span class="tt">typ</span></dt>
             <dd>
                
                <p>Typ des Strichcodes. Kann <span class="tt">EAN13</span>, <span class="tt">Code128</span> oder <span class="tt">QRCode</span> sein.
@@ -98,11 +98,42 @@
                   </tr>
                </table>
             </dd>
-            <dt><a name="showtext"></a><span class="tt">zeigetext</span> (ja/nein, optional)
+            <dt><a name=""></a><span class="tt">zeigetext</span> (optional)
             </dt>
             <dd>
                
                <p>Bestimmt, ob unterhalb des Barcodes der Text erscheint.</p>
+               
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>ja:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Text unterhalb des Barcodes schreiben.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>nein:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Keinen Text anzeigen.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
+            </dd>
+            <dt><a name="overshoot"></a><span class="tt">übersteigen</span> (Zahl, optional)
+            </dt>
+            <dd>
+               
+               <p>Der Faktor, um den die äußeren und der innere Balken die normalen Balken übersteigt.
+                  Nur anwendbar bei EAN13.
+               </p>
                
             </dd>
          </dl>
@@ -183,7 +214,7 @@
             <li><a href="column.html">Spalte</a></li>
             <li><a href="columns.html">Spalten</a></li>
             <li><a href="savedataset.html">SpeichereDatensatzdatei</a></li>
-            <li class="active"><a href="barcode.html">Strichcode</a></li>
+            <li><a href="barcode.html">Strichcode</a></li>
             <li><a href="stylesheet.html">Stylesheet</a></li>
             <li><a href="sub.html">Sub</a></li>
             <li><a href="sup.html">Sup</a></li>
@@ -205,7 +236,7 @@
             <li><a href="setvariable.html">Zuweisung</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.14 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.17 |
       <a href="../index-de.html">Startseite</a>
       |
       <a href="../commands-de/layout.html">Befehlsreferenz</a> |

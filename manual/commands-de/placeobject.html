@@ -7,7 +7,7 @@
              // This function highlights (by default) pre and code tags which are annotated correctly.
              $.syntax();
              });
-            </script><title>PlaceObject</title>
+            </script><title>ObjektAusgeben</title>
    </head>
    <body>
       <div id="logo"><a href="../index-de.html"><img src="../assets/images/publisher_logo.png" alt="Startseite"></a></div>
@@ -22,18 +22,40 @@
             <p>Kindelemente: <a href="image.html">Bild</a>, <a href="box.html">Box</a>, <a href="rule.html">Linie</a>, <a href="barcode.html">Strichcode</a>, <a href="table.html">Tabelle</a>, <a href="textblock.html">Textblock</a></p>
          </div>
          <div class="hangingindent">
-            <p>Elternelemente: <a href="atpageshipout.html">BeiSeitenAusgabe</a>, <a href="atpagecreation.html">BeiSeitenErzeugung</a>, <a href="until.html">Bis</a>, <a href="record.html">Datensatz</a>, <a href="case.html">Fall</a>, <a href="forall.html">FürAlle</a>, <a href="contents.html">Inhalt</a>, <a href="loop.html">Schleife</a>, <a href="savepages.html">SeitenSpeichern</a>, <a href="while.html">Solange</a>, <a href="otherwise.html">Sonst</a></p>
+            <p>Elternelemente: </p>
          </div>
          <h3>Attribute</h3>
          <dl>
-            <dt><a name="keepposition"></a><span class="tt">behalteposition</span> (ja/nein, optional)
+            <dt><a name=""></a><span class="tt">behalteposition</span> (optional)
             </dt>
             <dd>
                
                <p>Den virtuellen Cursor nicht verändern.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>ja:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Den virtuellen Cursor nicht verändern.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>nein:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Den virtuellen Cursor verschieben (Voreinstellung)</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
-            <dt><a name="allocate"></a><span class="tt">belegen</span> (ja/nein, optional)
+            <dt><a name=""></a><span class="tt">belegen</span> (optional)
             </dt>
             <dd>
                
@@ -44,6 +66,28 @@
                   Bild
                </p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>ja:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Platz im Raster reservieren (Voreinstellung für Platzierung im Raster).</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>nein:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Bereich nicht als Belegt markieren (Voreinstellung für absolute Positionierung)</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name="area"></a><span class="tt">bereich</span> (Text, optional)
             </dt>
@@ -63,7 +107,7 @@
                <p>Wenn eine Gruppe ausgegeben werden soll, muss der Name hier angegeben werden.</p>
                
             </dd>
-            <dt><a name="background"></a><span class="tt">hintergrund</span> (optional)
+            <dt><a name=""></a><span class="tt">hintergrund</span> (optional)
             </dt>
             <dd>
                
@@ -101,7 +145,7 @@
                <p>Hintergrundfarbe wenn das Objekt mit einer Farbe hinterlegt werden soll.</p>
                
             </dd>
-            <dt><a name="hreference"></a><span class="tt">hreferenz</span> (optional)
+            <dt><a name=""></a><span class="tt">hreferenz</span> (optional)
             </dt>
             <dd>
                
@@ -150,14 +194,36 @@
                </p>
                
             </dd>
-            <dt><a name="frame"></a><span class="tt">rahmen</span> (›durchgezogen‹, ›ohne‹, optional)
+            <dt><a name=""></a><span class="tt">rahmen</span> (optional)
             </dt>
             <dd>
                
-               <p>Es wird ein durchgezogener Rahmen um das Objekt gezeichnet. Zusätzlich muss die Rahmenfarbe
-                  angegeben werden. “ohne”: Es wird kein Rahmen gezeichnet.
+               <p>Es wird ein Rahmen um das Objekt gezeichnet. Zusätzlich muss die Rahmenfarbe angegeben
+                  werden.
                </p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>durchgezogen:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Einen Rahmen um das Objekt zeichnen.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>ohne:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Keinen Rahmen zeichnen.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name="framecolor"></a><span class="tt">rahmenfarbe</span> (Text, optional)
             </dt>
@@ -188,7 +254,7 @@
                </p>
                
             </dd>
-            <dt><a name="valign"></a><span class="tt">valign</span> (optional)
+            <dt><a name=""></a><span class="tt">valign</span> (optional)
             </dt>
             <dd>
                
@@ -231,7 +297,7 @@
                   </tr>
                </table>
             </dd>
-            <dt><a name="vreference"></a><span class="tt">vreferenz</span> (optional)
+            <dt><a name=""></a><span class="tt">vreferenz</span> (optional)
             </dt>
             <dd>
                
@@ -350,7 +416,7 @@
             <li><a href="nextrow.html">NeueZeile</a></li>
             <li><a href="regular.html">Normal</a></li>
             <li><a href="nextframe.html">NächsterRahmen</a></li>
-            <li class="active"><a href="placeobject.html">ObjektAusgeben</a></li>
+            <li><a href="placeobject.html">ObjektAusgeben</a></li>
             <li><a href="ol.html">Ol</a></li>
             <li><a href="options.html">Optionen</a></li>
             <li><a href="positioningarea.html">Platzierungsbereich</a></li>
@@ -393,7 +459,7 @@
             <li><a href="setvariable.html">Zuweisung</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.14 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.17 |
       <a href="../index-de.html">Startseite</a>
       |
       <a href="../commands-de/layout.html">Befehlsreferenz</a> |

@@ -19,10 +19,10 @@
             <p>Allowed attributes: (none)</p>
          </div>
          <div class="hangingindent">
-            <p>Child elements: <a href="definecolor.html">DefineColor</a>, <a href="definefontfamily.html">DefineFontfamily</a>, <a href="definetextformat.html">DefineTextformat</a>, <a href="hyphenation.html">Hyphenation</a>, <a href="loadfontfile.html">LoadFontfile</a>, <a href="options.html">Options</a>, <a href="pageformat.html">Pageformat</a>, <a href="pagetype.html">Pagetype</a>, <a href="record.html">Record</a>, <a href="setgrid.html">SetGrid</a>, <a href="setvariable.html">SetVariable</a>, <a href="stylesheet.html">Stylesheet</a></p>
+            <p>Child elements: <a href="definecolor.html">DefineColor</a>, <a href="definefontfamily.html">DefineFontfamily</a>, <a href="definetextformat.html">DefineTextformat</a>, <a href="hyphenation.html">Hyphenation</a>, <a href="loadfontfile.html">LoadFontfile</a>, <a href="options.html">Options</a>, <a href="pageformat.html">Pageformat</a>, <a href="pagetype.html">Pagetype</a>, <a href="record.html">Record</a>, <a href="setgrid.html">SetGrid</a>, <a href="setvariable.html">SetVariable</a>, <a href="stylesheet.html">Stylesheet</a>, <a href="switch.html">Switch</a></p>
          </div>
          <div class="hangingindent">
-            <p>Parent elements: <a href="layout.html">Layout</a></p>
+            <p>Parent elements: </p>
          </div>
          <h2>Example</h2>
          
@@ -31,9 +31,9 @@
 &lt;Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en"
   xmlns:xi="http://www.w3.org/2001/XInclude"&gt;
-  
+
   &lt;xi:include href="sublayout.xml" /&gt;
-  
+
   &lt;Record element="data"&gt;
     &lt;PlaceObject background="full" backgroundcolor="green"&gt;
       &lt;Textblock&gt;
@@ -41,18 +41,18 @@
       &lt;/Textblock&gt;
     &lt;/PlaceObject&gt;
   &lt;/Record&gt;
-  
+
 &lt;/Layout&gt;
 </pre>
          <p>and the file <span class="tt">sublayout.xml</span>:
          </p>
          <pre class="syntax xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;Include xmlns="urn:speedata.de:2009/publisher/en"  
+&lt;Include xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
-  
+
   &lt;DefineColor name="green" value="#0f0"/&gt;
   &lt;DefineColor name="gray" value="#ddd"/&gt;
-  
+
 &lt;/Include&gt;
 </pre>
          <h2>See also</h2>
@@ -94,7 +94,7 @@
             <li><a href="hyphenation.html">Hyphenation</a></li>
             <li><a href="i.html">I</a></li>
             <li><a href="image.html">Image</a></li>
-            <li class="active"><a href="include.html">Include</a></li>
+            <li><a href="include.html">Include</a></li>
             <li><a href="insertpages.html">InsertPages</a></li>
             <li><a href="italic.html">Italic</a></li>
             <li><a href="layout.html">Layout</a></li>
@@ -150,7 +150,7 @@
             <li><a href="while.html">While</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.14 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.17 |
       <a href="../index.html">Start page</a>
       |
       <a href="../commands-en/layout.html">Command reference</a> |

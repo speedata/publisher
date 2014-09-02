@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Server-mode</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="alternate" type="application/atom+xml"  title="changelog speedata Publisher (en)"  href="../changes-en.xml" />
+    <link rel="stylesheet" href="../assets/css/normal.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/colorbox.css" type="text/css" />
+    <script src="../assets/js/jquery.min.js" ></script>
+    <script src="../assets/js/jquery.colorbox-min.js" ></script>
+    <script>
+      $(document).ready(function(){
+         $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+      });
+    </script>
+</head>
+<body>
+<div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
+<div class="">
+<h1>Server-mode</h1>
+
+<p>(Experimental)</p>
+
+<p>When the speedata Publisher is started in the server-mode, it expects HTTP-requests on port 5266 (configurable). There is currently only one request-URL to find hyphenation points in text.</p>
+
+<h2>API</h2>
+
+<h3><code>/v0/format</code></h3>
+
+<p>Generates hyphenation points for a text, that is given via POST-request. The text is encoded in XML and can contain mandatory line breaks (<code>&lt;br class=&quot;keep&quot; /&gt;</code>) or mandatory mid-word breaks (<code>&lt;shy class=&quot;keep&quot; /&gt;</code>).</p>
+
+<p>The returned XML has the same format as the request.</p>
+
+<p>The XML-structure of the request and answer must confirm to the following RelqxNG-compact schema:</p>
+
+<pre><code>namespace a = &quot;http://relaxng.org/ns/compatibility/annotations/1.0&quot;
+start =
+  element root {
+    element text {
+      (attribute hyphenate-limit-before { xsd:unsignedInt },
+       attribute hyphenate-limit-after { xsd:unsignedInt })?,
+      mixed {
+        element br {
+          attribute class { &quot;keep&quot; | &quot;soft&quot; }?,
+          empty
+        }+,
+        element shy {
+          attribute class { &quot;keep&quot; | &quot;soft&quot; }?,
+          empty
+        }+
+      }
+    }+
+  }
+</code></pre>
+
+</div>
+
+
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
+Version: 2.1.17 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/servermode.html">German</a>
+
+</body>
+</html>

@@ -192,11 +192,11 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 
 <tr>
 <td>sd:variable(&lt;Name&gt;)</td>
-<td>ist dasselbe wie \$Name, nur mit der Möglichkeit den Namen auch dynamisch (z.B. mit <code>concat()</code>) zu erzeugen.</td>
+<td>ist dasselbe wie $Name, nur mit der Möglichkeit den Namen auch dynamisch (z.B. mit <code>concat()</code>) zu erzeugen.</td>
 </tr>
 
 <tr>
-<td>sd:variable-vorhanden(&lt;&lt;Name&gt;)</td>
+<td>sd:variable-vorhanden(&lt;Name&gt;)</td>
 <td>Prüft, ob eine Variable vorhanden ist.</td>
 </tr>
 
@@ -267,6 +267,11 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 </tr>
 
 <tr>
+<td>replace(&lt;Eingabe&gt;,&lt;Regexp&gt;, &lt;Ersetzung&gt;)</td>
+<td>Ersetzt die Eingabe mit dem regulären Ausdruck durch den Ersetzungstext. Beispiel: <code>replace(&quot;banana&quot;, &quot;a&quot;, &quot;o&quot;)</code> ergibt <code>bonono</code>.</td>
+</tr>
+
+<tr>
 <td>string(&lt;Sequenz&gt;)</td>
 <td>Gibt den Textwert der Sequenz zurück, d.h. den Inhalt der Elemente.</td>
 </tr>
@@ -279,6 +284,11 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 <tr>
 <td>true()</td>
 <td>Gibt „Wahr“ zurück.</td>
+</tr>
+
+<tr>
+<td>tokenize(&lt;Eingabe&gt;,&lt;Regexp&gt;)</td>
+<td>Die Rückgabe ist eine Sequenz von Zeichenketten. Die Eingabe wird von links nach rechts gelesen. Sobald eine Stelle gefunden wird, auf die der Reguläre Ausdruck passt, wird die bisherige Eingabe zurück gegeben. Beispiel (aus M. Kays XPath / XSLT-Buch): <code>tokenize(&quot;Go home, Jack!&quot;, &quot;\W+&quot;)</code> ergibt die Sequenz <code>&quot;Go&quot;, &quot;home&quot;, &quot;Jack&quot;, &quot;&quot;</code>.</td>
 </tr>
 
 <tr>
@@ -298,15 +308,13 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 <li><code>node()</code></li>
 <li><code>string()</code></li>
 <li><code>upper-case()</code></li>
-<li><code>tokenize()</code></li>
-<li><code>replace()</code></li>
 </ul>
 
 </div>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.1.14 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/xpath.html">Englisch</a>
+Version: 2.1.17 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/xpath.html">Englisch</a>
 
 </body>
 </html>

@@ -22,7 +22,7 @@
             <p>Child elements: (none)</p>
          </div>
          <div class="hangingindent">
-            <p>Parent elements: <a href="include.html">Include</a>, <a href="layout.html">Layout</a></p>
+            <p>Parent elements: </p>
          </div>
          <h3>Attributes</h3>
          <dl>
@@ -35,7 +35,7 @@
                </p>
                
             </dd>
-            <dt><a name="cutmarks"></a><span class="tt">cutmarks</span> (yes/no, optional)
+            <dt><a name=""></a><span class="tt">cutmarks</span> (optional)
             </dt>
             <dd>
                
@@ -46,15 +46,59 @@
                   
                </p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Show crop marks.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>no:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Don't show crop marks (default).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
-            <dt><a name="ignoreeol"></a><span class="tt">ignoreeol</span> (yes/no, optional)
+            <dt><a name=""></a><span class="tt">ignoreeol</span> (optional)
             </dt>
             <dd>
                
                <p>Ignore newlines in data-xml</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Ignore newlines in data-xml</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>no:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Respect newlines in data-xml</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
-            <dt><a name="mainlanguage"></a><span class="tt">mainlanguage</span> (optional)
+            <dt><a name=""></a><span class="tt">mainlanguage</span> (optional)
             </dt>
             <dd>
                
@@ -255,33 +299,121 @@
                   </tr>
                </table>
             </dd>
-            <dt><a name="resetmarks"></a><span class="tt">resetmarks</span> (yes/no, optional)
+            <dt><a name=""></a><span class="tt">resetmarks</span> (optional)
             </dt>
             <dd>
                
                <p>Yes: ignore the marks file from previous run.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Ignore marks from the previous run.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>no:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Use marks from the previous run (default).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
-            <dt><a name="show-grid"></a><span class="tt">show-grid</span> (yes/no, optional)
+            <dt><a name=""></a><span class="tt">show-grid</span> (optional)
             </dt>
             <dd>
                
                <p>Draw the grid on the page.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Show the grid.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>no:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Don't show the grid (default).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
-            <dt><a name="show-gridallocation"></a><span class="tt">show-gridallocation</span> (yes/no, optional)
+            <dt><a name=""></a><span class="tt">show-gridallocation</span> (optional)
             </dt>
             <dd>
                
                <p>Draw allocated cells with yellow and conflicts with red markers.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Show grid allocation.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>no:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Don't show the grid allocation (default).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
-            <dt><a name="show-hyphenation"></a><span class="tt">show-hyphenation</span> (yes/no, optional)
+            <dt><a name=""></a><span class="tt">show-hyphenation</span> (optional)
             </dt>
             <dd>
                
                <p>Draw little marks to show all hyphenation points.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Show hyphenation points.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>no:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Don't show any hyphenation points (default).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name="startpage"></a><span class="tt">startpage</span> (number, optional)
             </dt>
@@ -290,12 +422,34 @@
                <p>Set the number of the first page.</p>
                
             </dd>
-            <dt><a name="trace"></a><span class="tt">trace</span> (yes/no, optional)
+            <dt><a name=""></a><span class="tt">trace</span> (optional)
             </dt>
             <dd>
                
                <p>Draw rectangles around objects for debugging purposes.</p>
                
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Verbose output in the log file and the PDF.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>no:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Regular run (default).</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name="trim"></a><span class="tt">trim</span> (Length (mm,in,cm,pt), optional)
             </dt>
@@ -363,7 +517,7 @@
             <li><a href="nextframe.html">NextFrame</a></li>
             <li><a href="nextrow.html">NextRow</a></li>
             <li><a href="ol.html">Ol</a></li>
-            <li class="active"><a href="options.html">Options</a></li>
+            <li><a href="options.html">Options</a></li>
             <li><a href="otherwise.html">Otherwise</a></li>
             <li><a href="output.html">Output</a></li>
             <li><a href="pageformat.html">Pageformat</a></li>
@@ -403,7 +557,7 @@
             <li><a href="while.html">While</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.14 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.17 |
       <a href="../index.html">Start page</a>
       |
       <a href="../commands-en/layout.html">Command reference</a> |
