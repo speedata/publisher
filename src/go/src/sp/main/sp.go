@@ -10,7 +10,6 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
-	"optionparser"
 	"os"
 	"os/exec"
 	"os/signal"
@@ -24,6 +23,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/speedata/optionparser"
 	"sp/comm"
 )
 
