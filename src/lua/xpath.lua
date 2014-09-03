@@ -750,6 +750,7 @@ M.default_functions.floor = function(dataxml, arg)
     return math.floor(arg[1])
 end
 
+-- Return number of records with the same name
 M.default_functions.last = function( dataxml )
     if dataxml[".__context"] then
         return #dataxml[".__context"]

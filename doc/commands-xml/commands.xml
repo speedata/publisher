@@ -4,6 +4,7 @@
     <optional><cmd name="Action"/></optional>
     <optional><cmd name="Attribute"/></optional>
     <optional><cmd name="Barcode"/></optional>
+    <optional><cmd name="B"/></optional>
     <optional><cmd name="Columns"/></optional>
     <optional><cmd name="Column"/></optional>
     <optional><cmd name="Copy-of"/></optional>
@@ -16,6 +17,7 @@
     <optional><cmd name="Group"/></optional>
     <optional><cmd name="HSpace"/></optional>
     <optional><cmd name="Hyphenation"/></optional>
+    <optional><cmd name="Include"/></optional>
     <optional><cmd name="Image"/></optional>
     <optional><cmd name="InsertPages"/></optional>
     <optional><cmd name="Li"/></optional>
@@ -53,6 +55,7 @@
     <optional><cmd name="ForAll"/></optional>
     <optional><cmd name="Group"/></optional>
     <optional><cmd name="Hyphenation"/></optional>
+    <optional><cmd name="Include"/></optional>
     <optional><cmd name="InsertPages"/></optional>
     <optional><cmd name="LoadDataset"/></optional>
     <optional><cmd name="Loop"/></optional>
@@ -109,6 +112,22 @@
     <optional><cmd name="Hyphenation"/></optional>
     <optional><cmd name="SetVariable"/></optional>
     <optional><cmd name="Stylesheet"/></optional>
+  </define>
+
+  <define name="Include">
+    <optional><cmd name="Record"/></optional>
+    <optional><cmd name="LoadFontfile"/></optional>
+    <optional><cmd name="DefineColor"/></optional>
+    <optional><cmd name="DefineFontfamily"/></optional>
+    <optional><cmd name="DefineTextformat"/></optional>
+    <optional><cmd name="Pageformat"/></optional>
+    <optional><cmd name="Options"/></optional>
+    <optional><cmd name="Pagetype"/></optional>
+    <optional><cmd name="SetGrid"/></optional>
+    <optional><cmd name="Hyphenation"/></optional>
+    <optional><cmd name="SetVariable"/></optional>
+    <optional><cmd name="Stylesheet"/></optional>
+    <optional><cmd name="Switch"/></optional>
   </define>
 
   <command en="A" de="A">
@@ -2051,7 +2070,7 @@
     </description>
     <childelements>
       <oneOrMore>
-        <reference name="Toplevel"/>
+        <reference name="Include"/>
       </oneOrMore>
     </childelements>
     <example xml:lang="en">
@@ -6243,7 +6262,7 @@
           <para>Die Objekte dieser Zeile werden oben ausgerichtet.</para>
         </description>
       </choice>
-      <choice en="top" de="middle">
+      <choice en="middle" de="middle">
         <description xml:lang="en">
           <para>The objects in this row are aligned at the middle axis.</para>
         </description>
@@ -6251,7 +6270,7 @@
           <para>Die Objekte dieser Zeile werden auf der Mittelachse ausgerichtet.</para>
         </description>
       </choice>
-      <choice en="top" de="bottom">
+      <choice en="bottom" de="bottom">
         <description xml:lang="en">
           <para>The objects in this row are aligned at the bottom.</para>
         </description>

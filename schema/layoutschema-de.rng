@@ -74,6 +74,9 @@
                <ref name="e_Hyphenation"/>
             </optional>
             <optional>
+               <ref name="e_Include"/>
+            </optional>
+            <optional>
                <ref name="e_InsertPages"/>
             </optional>
             <optional>
@@ -148,6 +151,9 @@
             </optional>
             <optional>
                <ref name="e_Hyphenation"/>
+            </optional>
+            <optional>
+               <ref name="e_Include"/>
             </optional>
             <optional>
                <ref name="e_InsertPages"/>
@@ -377,6 +383,9 @@
                <ref name="e_Barcode"/>
             </optional>
             <optional>
+               <ref name="e_B"/>
+            </optional>
+            <optional>
                <ref name="e_Columns"/>
             </optional>
             <optional>
@@ -411,6 +420,9 @@
             </optional>
             <optional>
                <ref name="e_Hyphenation"/>
+            </optional>
+            <optional>
+               <ref name="e_Include"/>
             </optional>
             <optional>
                <ref name="e_Image"/>
@@ -549,6 +561,9 @@
             </optional>
             <optional>
                <ref name="e_Hyphenation"/>
+            </optional>
+            <optional>
+               <ref name="e_Include"/>
             </optional>
             <optional>
                <ref name="e_InsertPages"/>
@@ -964,6 +979,9 @@
                   <ref name="e_Barcode"/>
                </optional>
                <optional>
+                  <ref name="e_B"/>
+               </optional>
+               <optional>
                   <ref name="e_Columns"/>
                </optional>
                <optional>
@@ -998,6 +1016,9 @@
                </optional>
                <optional>
                   <ref name="e_Hyphenation"/>
+               </optional>
+               <optional>
+                  <ref name="e_Include"/>
                </optional>
                <optional>
                   <ref name="e_Image"/>
@@ -1209,6 +1230,9 @@
             </optional>
             <optional>
                <ref name="e_Stylesheet"/>
+            </optional>
+            <optional>
+               <ref name="e_Switch"/>
             </optional>
          </oneOrMore>
       </element>
@@ -1478,6 +1502,9 @@
                   <ref name="e_Barcode"/>
                </optional>
                <optional>
+                  <ref name="e_B"/>
+               </optional>
+               <optional>
                   <ref name="e_Columns"/>
                </optional>
                <optional>
@@ -1512,6 +1539,9 @@
                </optional>
                <optional>
                   <ref name="e_Hyphenation"/>
+               </optional>
+               <optional>
+                  <ref name="e_Include"/>
                </optional>
                <optional>
                   <ref name="e_Image"/>
@@ -1902,6 +1932,9 @@
                <ref name="e_Barcode"/>
             </optional>
             <optional>
+               <ref name="e_B"/>
+            </optional>
+            <optional>
                <ref name="e_Columns"/>
             </optional>
             <optional>
@@ -1936,6 +1969,9 @@
             </optional>
             <optional>
                <ref name="e_Hyphenation"/>
+            </optional>
+            <optional>
+               <ref name="e_Include"/>
             </optional>
             <optional>
                <ref name="e_Image"/>
@@ -2381,6 +2417,9 @@
                <ref name="e_Hyphenation"/>
             </optional>
             <optional>
+               <ref name="e_Include"/>
+            </optional>
+            <optional>
                <ref name="e_InsertPages"/>
             </optional>
             <optional>
@@ -2541,6 +2580,9 @@
                </optional>
                <optional>
                   <ref name="e_Hyphenation"/>
+               </optional>
+               <optional>
+                  <ref name="e_Include"/>
                </optional>
                <optional>
                   <ref name="e_InsertPages"/>
@@ -3307,6 +3349,9 @@
                   <ref name="e_Barcode"/>
                </optional>
                <optional>
+                  <ref name="e_B"/>
+               </optional>
+               <optional>
                   <ref name="e_Columns"/>
                </optional>
                <optional>
@@ -3341,6 +3386,9 @@
                </optional>
                <optional>
                   <ref name="e_Hyphenation"/>
+               </optional>
+               <optional>
+                  <ref name="e_Include"/>
                </optional>
                <optional>
                   <ref name="e_Image"/>
@@ -3509,6 +3557,9 @@
                   <ref name="e_Barcode"/>
                </optional>
                <optional>
+                  <ref name="e_B"/>
+               </optional>
+               <optional>
                   <ref name="e_Columns"/>
                </optional>
                <optional>
@@ -3543,6 +3594,9 @@
                </optional>
                <optional>
                   <ref name="e_Hyphenation"/>
+               </optional>
+               <optional>
+                  <ref name="e_Include"/>
                </optional>
                <optional>
                   <ref name="e_Image"/>
