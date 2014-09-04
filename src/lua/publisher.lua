@@ -154,6 +154,8 @@ groups    = {}
 -- sometimes we want to save pages for later reuse. Keys are pagestore names
 pagestore = {}
 
+-- to be used for translations
+translated_values = nil
 
 -- The spot colors used in the document (even when discarded)
 used_spotcolors = {}
@@ -326,27 +328,18 @@ local dispatch_table = {
     While                   = commands.while_do,
 }
 
---- Return the element name as an english string. The argument is in the
---- current language of the layout file (currently English and German).
-function translate_element( eltname )
-    return translations[current_layoutlanguage].elements[eltname]
-end
 
 --- Return the value as an english string. The argument is in the
 --- current language of the layout file (currently English and German).
 --- All translations are only valid in a context which defaults to the
 --- _global_ context.
 function translate_value( value,context )
+    -- If we don't have a values variable, it must be english
+    if translated_values == nil then return value end
     context = context or "*"
-    local tmp = translations[current_layoutlanguage].values[context][value]
-    return tmp
+    return translated_values[context][value]
 end
 
---- Return the attribute name as an english string. The argument is in the
---- current language of the layout file (currently English and German).
-function translate_attribute( attname )
-    return translations.attributes[attname][current_layoutlanguage]
-end
 
 --- The returned table is an array with hashes. The keys of these
 --- hashes are `elementname` and `contents`. For example:
@@ -369,7 +362,7 @@ function dispatch(layoutxml,dataxml,options)
     for _,j in ipairs(layoutxml) do
         -- j a table, if it is an element in layoutxml
         if type(j)=="table" then
-            local eltname = translate_element(j[".__local_name"])
+            local eltname = j[".__local_name"]
             if dispatch_table[eltname] ~= nil then
                 tmp = dispatch_table[eltname](j,dataxml,options)
 
@@ -432,6 +425,30 @@ function page_initialized_p( pagenumber )
     return pages[pagenumber] ~= nil
 end
 
+-- Translate attributes and elements to english, so that
+-- we don't need to translate them later again and again and again
+function translate_layout(layoutxml,lang)
+    local x
+    for i=1,#layoutxml do
+        x = layoutxml[i]
+        if type(x) == "table" then
+            local y = x[".__local_name"]
+            local cmd = lang[y]
+            x[".__local_name"] = cmd[1]
+            x[".__name"] = cmd[1]
+            for k,v in pairs(cmd) do
+                if type(k) == "string" then
+                    if x[k] then
+                        x[v] = x[k]
+                    end
+                end
+            end
+           translate_layout(x,lang)
+        end
+    end
+end
+
+
 --- Start the processing (`dothings()`)
 --- -------------------------------
 --- This is the entry point of the processing. It is called from publisher.spinit#main_loop.
@@ -476,17 +493,18 @@ function initialize_luatex_and_generate_pdf()
     local onecm=tex.sp("1cm")
     masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
 
+    --- The `vars` file hold a lua document holding table
+    local vars = loadfile(tex.jobname .. ".vars")()
+    for k,v in pairs(vars) do
+        xpath.set_variable(k,v)
+    end
+
+
     --- Both the data and the layout instructions are written in XML.
     local layoutxml = load_xml(arg[2],"layout instructions")
     if not layoutxml then
         err("Without a valid layout-XML file, I can't really do anything.")
         exit()
-    end
-
-    --- The `vars` file hold a lua document holding table
-    local vars = loadfile(tex.jobname .. ".vars")()
-    for k,v in pairs(vars) do
-        xpath.set_variable(k,v)
     end
 
     --- Used in `xpath.lua` to find out which language the function is in.
@@ -501,6 +519,11 @@ function initialize_luatex_and_generate_pdf()
     if not (current_layoutlanguage=='de' or current_layoutlanguage=='en') then
         err("Cannot determine the language of the layout file.")
         exit()
+    end
+
+    if current_layoutlanguage ~= "en" then
+        translated_values = translations[current_layoutlanguage]["__values"]
+        translate_layout(layoutxml,translations[current_layoutlanguage])
     end
 
     if layoutxml.version then
@@ -612,7 +635,9 @@ function initialize_luatex_and_generate_pdf()
         exit()
     end
     tmp = data_dispatcher[""][name]
-    if tmp then dispatch(tmp,dataxml) end
+    if tmp then
+        dispatch(tmp,dataxml)
+    end
 
 
     --- emit last page if necessary
@@ -894,7 +919,7 @@ function setup_page(pagenumber)
     if pagetype == false then return false end
 
     for _,j in ipairs(pagetype) do
-        local eltname = elementname(j,true)
+        local eltname = elementname(j)
         if type(element_contents(j))=="function" and eltname=="Margin" then
             element_contents(j)(current_page)
         elseif eltname=="Grid" then
@@ -916,7 +941,7 @@ function setup_page(pagenumber)
     current_page.grid:set_width_height({wd = gridwidth, ht = gridheight, nx = nx, ny = ny })
 
     for _,j in ipairs(pagetype) do
-        local eltname = elementname(j,true)
+        local eltname = elementname(j)
         if type(element_contents(j))=="function" and eltname=="Margin" then
             -- do nothing, done before
         elseif eltname=="Grid" then
@@ -1179,8 +1204,7 @@ end
 --- `default` gives something that is to be returned if no attribute with this name is present.
 function read_attribute( layoutxml,dataxml,attname_english,typ,default,context)
     local namespaces = layoutxml[".__ns"]
-    local attname = translate_attribute(attname_english)
-
+    local attname = attname_english
     if not layoutxml[attname] then
         return default -- can be nil
     end
@@ -1251,13 +1275,9 @@ function read_attribute( layoutxml,dataxml,attname_english,typ,default,context)
     return val
 end
 
--- Return the element name of the given element (elt) and translate it
--- into english, unless raw_p is true.
-function elementname( elt ,raw_p)
-    trace("elementname = %q",elt.elementname or "?")
-    if raw_p then return elt.elementname end
-    trace("translated = %q",translate_element(elt.elementname) or "?")
-    return translate_element(elt.elementname)
+-- Return the element name of the given element (elt)
+function elementname(elt)
+    return elt.elementname
 end
 
 --- Return the contents of an entry from the `dispatch()` function call.

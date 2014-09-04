@@ -37,7 +37,7 @@ function commands.a( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     local objects = {}
     for i,j in ipairs(tab) do
-        if publisher.elementname(j,true) == "Value" and type(publisher.element_contents(j)) == "table" then
+        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
             objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j))
         else
             objects[#objects + 1] = publisher.element_contents(j)
@@ -66,7 +66,7 @@ function commands.action( layoutxml,dataxml)
     p = paragraph:new()
 
     for _,j in ipairs(tab) do
-        local eltname = publisher.elementname(j,true)
+        local eltname = publisher.elementname(j)
         if eltname == "AddToList" then
             local n = node.new("whatsit","user_defined")
             n.user_id = publisher.user_defined_addtolist
@@ -190,7 +190,7 @@ function commands.bold( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
 
     for i,j in ipairs(tab) do
-        if publisher.elementname(j,true) == "Value" and type(publisher.element_contents(j)) == "table" then
+        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
             objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{bold = true})
         else
             objects[#objects + 1] = publisher.element_contents(j)
@@ -306,7 +306,7 @@ function commands.color( layoutxml, dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
 
     for i,j in ipairs(tab) do
-        if publisher.elementname(j,true) == "Value" and type(publisher.element_contents(j)) == "table" then
+        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
             objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{})
         else
             objects[#objects + 1] = publisher.element_contents(j)
@@ -551,7 +551,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
 
     local ok,tmp,elementname,fontface
     for i,v in ipairs(layoutxml) do
-        elementname = publisher.translate_element(v[".__local_name"])
+        elementname = v[".__local_name"]
         fontface    = publisher.read_attribute(v,dataxml,"fontface","rawstring")
         if type(v) ~= "table" then
             -- ignore
@@ -716,7 +716,7 @@ function commands.group( layoutxml,dataxml )
     end
 
     for _,v in ipairs(layoutxml) do
-        elementname=publisher.translate_element(v[".__local_name"])
+        elementname=v[".__local_name"]
         if type(v)=="table" and elementname=="Grid" then
             grid = commands.grid(v,dataxml)
         end
@@ -747,7 +747,7 @@ function commands.group( layoutxml,dataxml )
     publisher.current_grid  = r
 
     for _,v in ipairs(layoutxml) do
-        elementname=publisher.translate_element(v[".__local_name"])
+        elementname=v[".__local_name"]
         if type(v)=="table" and elementname=="Contents" then
             publisher.dispatch(v,dataxml)
         end
@@ -953,7 +953,7 @@ function commands.italic( layoutxml,dataxml )
     local objects = {}
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
-        if publisher.elementname(j,true) == "Value" and type(publisher.element_contents(j)) == "table" then
+        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
             objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{italic = true})
         else
             objects[#objects + 1] = publisher.element_contents(j)
@@ -973,7 +973,7 @@ function commands.li(layoutxml,dataxml )
     local a = paragraph:new()
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
-        if publisher.elementname(j,true) == "Value" and type(publisher.element_contents(j)) == "table" then
+        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
             objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j))
         else
             objects[#objects + 1] = publisher.element_contents(j)
@@ -1160,7 +1160,7 @@ function commands.message( layoutxml, dataxml )
     if type(contents)=="table" then
         local ret
         for i=1,#contents do
-            local eltname = publisher.elementname(contents[i],true)
+            local eltname = publisher.elementname(contents[i])
             local contents = publisher.element_contents(contents[i])
 
             if eltname == "Sequence" or eltname == "Value" then
@@ -1421,7 +1421,7 @@ function commands.pagetype(layoutxml,dataxml)
     local tab = publisher.dispatch(layoutxml,dataxml)
 
     for i,j in ipairs(tab) do
-        local eltname = publisher.elementname(j,true)
+        local eltname = publisher.elementname(j)
         if eltname=="Margin" or eltname == "AtPageShipout" or eltname == "AtPageCreation" or eltname=="Grid" or eltname=="PositioningArea" then
             tmp_tab [#tmp_tab + 1] = j
         else
@@ -1486,11 +1486,11 @@ function commands.paragraph( layoutxml,dataxml )
     local objects = {}
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
-        trace("Paragraph Elementname = %q",tostring(publisher.elementname(j,true)))
+        trace("Paragraph Elementname = %q",tostring(publisher.elementname(j)))
         local contents = publisher.element_contents(j)
-        if publisher.elementname(j,true) == "Value" and type(contents) == "table" and #contents == 1 and type(contents[1]) == "string"  then
+        if publisher.elementname(j) == "Value" and type(contents) == "table" and #contents == 1 and type(contents[1]) == "string"  then
             objects[#objects + 1] = contents[1]
-        elseif publisher.elementname(j,true) == "Value" and type(contents) == "table" then
+        elseif publisher.elementname(j) == "Value" and type(contents) == "table" then
             objects[#objects + 1] = publisher.parse_html(contents,{allowbreak = allowbreak})
         else
             objects[#objects + 1] = contents
@@ -1627,7 +1627,7 @@ function commands.place_object( layoutxml,dataxml )
     else
         for i,j in ipairs(tab) do
             object = publisher.element_contents(j)
-            objecttype = publisher.elementname(j,true)
+            objecttype = publisher.elementname(j)
             if objecttype == "Image" then
                 -- return value is a table, #1 is the image, #2 is the allocation grid
                 objects[#objects + 1] = {object = object[1], objecttype = objecttype, allocate_matrix = object[2] }
@@ -1915,7 +1915,7 @@ function commands.save_dataset( layoutxml,dataxml )
     tmp = {}
     if attributes then
         for i=1,#attributes do
-            if publisher.elementname(attributes[i],true) == "Attribute" then
+            if publisher.elementname(attributes[i]) == "Attribute" then
                 for k,v in pairs(publisher.element_contents(attributes[i])) do
                     if k ~= ".__type" then
                         tmp[k] = v
@@ -2063,7 +2063,7 @@ function commands.setvariable( layoutxml,dataxml )
     if type(contents)=="table" then
         local ret
         for i=1,#contents do
-            local eltname = publisher.elementname(contents[i],true)
+            local eltname = publisher.elementname(contents[i])
             local element_contents = publisher.element_contents(contents[i])
             if eltname == "Sequence" or eltname == "Value" or eltname == "SortSequence" then
                 if type(element_contents) == "table" then
@@ -2189,7 +2189,7 @@ function commands.switch( layoutxml,dataxml )
     local case_matched = false
     local otherwise,ret,elementname
     for _,case_or_otherwise_element in ipairs(layoutxml) do
-        elementname = publisher.translate_element(case_or_otherwise_element[".__local_name"])
+        elementname = case_or_otherwise_element[".__local_name"]
         if type(case_or_otherwise_element)=="table" and elementname=="Case" and case_matched ~= true then
             local test = publisher.read_attribute(case_or_otherwise_element,dataxml,"test","rawstring")
             local ok, tab = xpath.parse_raw(dataxml,test,layoutxml[".__ns"])
@@ -2262,7 +2262,7 @@ function commands.table( layoutxml,dataxml,optionen )
     local tab = {}
     local tab_tmp = publisher.dispatch(layoutxml,dataxml)
     for i=1,#tab_tmp do
-        local eltname = publisher.elementname(tab_tmp[i],true)
+        local eltname = publisher.elementname(tab_tmp[i])
         if eltname == "Tr" or eltname == "Columns" or eltname == "Tablehead" or eltname == "Tablefoot" or eltname == "Tablerule" then
             tab[#tab + 1] = tab_tmp[i]
         else
@@ -2535,7 +2535,7 @@ function commands.textblock( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
 
     for i,j in ipairs(tab) do
-        local eltname = publisher.elementname(j,true)
+        local eltname = publisher.elementname(j)
         trace("Textblock: Element = %q",tostring(eltname))
         if eltname == "Paragraph" then
             objects[#objects + 1] = publisher.element_contents(j)
@@ -2643,7 +2643,7 @@ function commands.underline( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
 
     for i,j in ipairs(tab) do
-        if publisher.elementname(j,true) == "Value" and type(publisher.element_contents(j)) == "table" then
+        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
             objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{underline = true})
         else
             objects[#objects + 1] = publisher.element_contents(j)

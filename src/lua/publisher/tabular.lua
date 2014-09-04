@@ -51,13 +51,13 @@ function attach_objects_row( tab )
     local td_elementname
     local td_contents
     for _,td in ipairs(tab) do
-        td_elementname = publisher.elementname(td,true)
+        td_elementname = publisher.elementname(td)
         td_contents    = publisher.element_contents(td)
         if td_elementname == "Td" then
             local block = {}
             local inline = {}
             for i,j in ipairs(td_contents) do
-                local eltname     = publisher.elementname(j,true)
+                local eltname     = publisher.elementname(j)
                 local eltcontents = publisher.element_contents(j)
                 if eltname == "Image" then
                     -- inline
@@ -271,7 +271,7 @@ function calculate_columnwidth( self )
 
     for _,tr in ipairs(self.tab) do
         local tr_contents      = publisher.element_contents(tr)
-        local tr_elementname = publisher.elementname(tr,true)
+        local tr_elementname = publisher.elementname(tr)
 
         --- When the user gives us column widths, we use them for calculation. There are two ways to
         --- determine the column widths: with \\(n\\)* (where \\(n\\) is an integer number) or with absolute
@@ -293,7 +293,7 @@ function calculate_columnwidth( self )
             local count_columns = 0
             local pattern = "([0-9]+)%*"
             for _,spalte in ipairs(tr_contents) do
-                if publisher.elementname(spalte,true)=="Column" then
+                if publisher.elementname(spalte)=="Column" then
                     local column_contents = publisher.element_contents(spalte)
                     i = i + 1
                     self.align[i] =  column_contents.align
@@ -331,7 +331,7 @@ function calculate_columnwidth( self )
 
                 i = 0
                 for _,column in ipairs(tr_contents) do
-                    if publisher.elementname(column,true)=="Column" then
+                    if publisher.elementname(column)=="Column" then
                         local column_contents = publisher.element_contents(column)
                         i = i + 1
                         local width_stars = string.match(column_contents.width,pattern)
@@ -351,7 +351,7 @@ function calculate_columnwidth( self )
     --- Calculate max\_wd, min\_wd. We do this in a separate function for each row.
     for _,tr in ipairs(self.tab) do
         local tr_contents      = publisher.element_contents(tr)
-        local tr_elementname = publisher.elementname(tr,true)
+        local tr_elementname = publisher.elementname(tr)
 
         if tr_elementname == "Tr" then
             current_row = current_row + 1
@@ -361,7 +361,7 @@ function calculate_columnwidth( self )
         elseif tr_elementname == "Tablehead" then
             for _,row in ipairs(tr_contents) do
                 local row_contents    = publisher.element_contents(row)
-                local row_elementname = publisher.elementname(row,true)
+                local row_elementname = publisher.elementname(row)
                 if row_elementname == "Tr" then
                     current_row = current_row + 1
                     self:calculate_columnwidths_for_row(row_contents,current_row,colspans,colmin,colmax)
@@ -370,7 +370,7 @@ function calculate_columnwidth( self )
         elseif tr_elementname == "Tablefoot" then
             for _,row in ipairs(tr_contents) do
                 local row_contents    = publisher.element_contents(row)
-                local row_elementname = publisher.elementname(row,true)
+                local row_elementname = publisher.elementname(row)
                 if row_elementname == "Tr" then
                     current_row = current_row + 1
                     self:calculate_columnwidths_for_row(row_contents,current_row,colspans,colmin,colmax)
@@ -737,7 +737,7 @@ function calculate_rowheights(self)
 
     for _,tr in ipairs(self.tab) do
         local tr_contents = publisher.element_contents(tr)
-        local eltname = publisher.elementname(tr,true)
+        local eltname = publisher.elementname(tr)
 
         if eltname == "Tablerule" or eltname == "Columns" then
             -- ignorieren
@@ -746,7 +746,7 @@ function calculate_rowheights(self)
             local last_shiftup_head = 0
             for _,row in ipairs(tr_contents) do
                 local cellcontents  = publisher.element_contents(row)
-                local cell_elementname = publisher.elementname(row,true)
+                local cell_elementname = publisher.elementname(row)
                 if cell_elementname == "Tr" then
                     current_row = current_row + 1
                     rowheight, _rowspans,last_shiftup_head = self:calculate_rowheight(cellcontents,current_row,last_shiftup_head)
@@ -758,7 +758,7 @@ function calculate_rowheights(self)
             local last_shiftup_foot = 0
             for _,row in ipairs(tr_contents) do
                 local cellcontents  = publisher.element_contents(row)
-                local cell_elementname = publisher.elementname(row,true)
+                local cell_elementname = publisher.elementname(row)
                 if cell_elementname == "Tr" then
                     current_row = current_row + 1
                     rowheight, _rowspans,last_shiftup_foot = self:calculate_rowheight(cellcontents,current_row,last_shiftup_foot)
@@ -1061,7 +1061,7 @@ local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current
 
     for _,row in ipairs(tr_contents) do
         row_contents = publisher.element_contents(row)
-        row_elementname = publisher.elementname(row,true)
+        row_elementname = publisher.elementname(row)
         if row_elementname == "Tr" then
             current_row = current_row + 1
             current_tablehead_type[#current_tablehead_type + 1] = self:typeset_row(row_contents,current_row)
@@ -1092,7 +1092,7 @@ local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_
     end
     for _,row in ipairs(tr_contents) do
         row_contents = publisher.element_contents(row)
-        row_elementname = publisher.elementname(row,true)
+        row_elementname = publisher.elementname(row)
         if row_elementname == "Tr" then
             current_row = current_row + 1
             current_tablefoot_type[#current_tablefoot_type + 1] = self:typeset_row(row_contents,current_row)
@@ -1171,7 +1171,7 @@ function typeset_table(self)
     for _,tr in ipairs(self.tab) do
         trace("table: Tr")
         local tr_contents = publisher.element_contents(tr)
-        local eltname   = publisher.elementname(tr,true)
+        local eltname   = publisher.elementname(tr)
         local tmp
         -- If this row is allowed to break above
         -- Will be set to false if break_below is "no"
