@@ -47,7 +47,7 @@ function log(...)
   local text = { ... }
   text[1] = gettext(text[1])
   local res = call(string.format,unpack(text))
-  texio.write_nl(res)
+  texio.write(res .. "\n")
   if io.type(errorlog) == "file" then
     errorlog:write(res .. "\n")
   end

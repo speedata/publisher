@@ -12,7 +12,7 @@ function w( ... )
     texio.write_nl("-(e)-> " .. fmt)
     texio.write_nl(debug.traceback())
   else
-    texio.write_nl("-----> " .. fmt)
+    texio.write("-----> " .. fmt .. "\n")
     errorlog:write("-----> " .. fmt .. "\n")
   end
   io.stdout:flush()
@@ -27,7 +27,7 @@ end
 
 if not log then
   log = function (...)
-    texio.write_nl(string.format(...))
+    texio.write(string.format(...) .. "\n")
   end
 end
 

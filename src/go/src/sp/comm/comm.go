@@ -10,6 +10,7 @@ import (
 	"os"
 	"strconv"
 
+	. "sp/logger"
 	"sp/xpath"
 )
 
@@ -68,6 +69,7 @@ func reader(message chan []byte, c net.Conn) {
 	}
 	switch typ {
 	case "tok":
+		Trace("tokenize")
 		_, _, rexp, err := getMessage(c)
 		if err != nil {
 			log.Println(err)
@@ -75,14 +77,20 @@ func reader(message chan []byte, c net.Conn) {
 			return
 		}
 		res := xpath.Tokenize(msg, string(rexp))
+		var togo byte
 		for i := 0; i < len(res); i++ {
 			msg := res[i]
-			write := fmt.Sprintf("%d,str,%06d%s", len(res)-i-1, len(msg), msg)
+			togo = byte(len(res) - i - 1)
+			if togo > 9 {
+				togo = 9
+			}
+			write := fmt.Sprintf("%d,str,%06d%s", togo, len(msg), msg)
 			c.Write([]byte(write))
 		}
 		message <- []byte{}
 		return
 	case "rep":
+		Trace("replace")
 		_, _, rexp, err := getMessage(c)
 		if err != nil {
 			log.Println(err)
@@ -105,6 +113,7 @@ func reader(message chan []byte, c net.Conn) {
 }
 
 func (s *Server) StringMessage(typ, msg string) {
+	Trace("StringMessage", typ, msg)
 	write := fmt.Sprintf("1,%s,%06d%s", typ, len(msg), msg)
 	s.Conn.Write([]byte(write))
 }

@@ -32,7 +32,7 @@ end
 function get_string_messages()
     local ret = {}
     repeat
-        nummsg, msgtype, msg = getmessage()
+        local nummsg, msgtype, msg = getmessage()
         ret[#ret + 1] = msg
     until nummsg == 0
     return ret
