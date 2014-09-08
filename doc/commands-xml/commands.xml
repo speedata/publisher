@@ -5,6 +5,7 @@
     <optional><cmd name="Attribute"/></optional>
     <optional><cmd name="Barcode"/></optional>
     <optional><cmd name="B"/></optional>
+    <optional><cmd name="Br"/></optional>
     <optional><cmd name="Columns"/></optional>
     <optional><cmd name="Column"/></optional>
     <optional><cmd name="Copy-of"/></optional>

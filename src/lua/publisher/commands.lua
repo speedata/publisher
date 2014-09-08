@@ -2363,10 +2363,6 @@ function commands.tr( layoutxml,dataxml )
     end
 
     tab.align = publisher.read_attribute(layoutxml,dataxml,"align","string",nil,"align")
-    -- Remove this err in 2014
-    if layoutxml.align == "links" or layoutxml.align == "rechts" then
-        err("Tr, attribute align. Values 'links' and 'rechts' should be 'left' and 'right'")
-    end
 
     if tab["top-distance"] then
         if tonumber(tab["top-distance"]) then

@@ -1202,9 +1202,8 @@ end
 --- Read the contents of the attribute `attname_english`. `typ` is one of
 --- `string`, `number`, `length` and `boolean`.
 --- `default` gives something that is to be returned if no attribute with this name is present.
-function read_attribute( layoutxml,dataxml,attname_english,typ,default,context)
+function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     local namespaces = layoutxml[".__ns"]
-    local attname = attname_english
     if not layoutxml[attname] then
         return default -- can be nil
     end

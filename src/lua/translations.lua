@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2014-09-04 10:37)
+-- generated from genluatranslations.go (2014-09-05 14:14)
 -- do not edit!
 module(...)
 return {
