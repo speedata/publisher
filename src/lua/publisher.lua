@@ -698,7 +698,8 @@ end
 ---         [1] = " "
 ---         [2] = {
 ---           [1] = "text in subelement"
----           [".__parent"] = (pointer to the "element" tree, which is the second entry in the top level)
+---           [".__parent"] = (pointer to the "element" tree, which is
+---                            the second entry in the top level)
 ---           [".__local_name"] = "subelement"
 ---         },
 ---         [3] = " "
@@ -739,6 +740,9 @@ function output_absolute_position( nodelist,x,y,allocate,area )
     n.prev = tail
 end
 
+--- Put the object (nodelist) on grid cell (x,y). If `allocate`=`true` then
+--- mark cells as occupied.
+---
 --- Parameter       | Description
 --- ----------------|----------------------------------------------
 --- nodelist        | The box to be placed
@@ -751,18 +755,24 @@ end
 --- pagenumber      | The page the object should be placed
 --- keepposition    | Move the local cursor?
 --- grid            | The grid object. If not present, we use the default grid object
+--- rotate          | Rotation counter clockwise in degrees (0-360).
+--- origin_x        | Origin X for rotation. Left is 0 and right is 100
+--- origin_y        | Origin Y for rotation. Top is 0 and bottom is 100
 function output_at( param )
-    __output_at(param.nodelist, param.x,param.y,param.allocate,param.area,param.valign,param.allocate_matrix,param.pagenumber,param.keepposition,param.grid)
-end
-
---- Put the object (nodelist) on grid cell (x,y). If `allocate`=`true` then
---- mark cells as occupied.
-function __output_at( nodelist, x,y,allocate,area,valign,allocate_matrix,pagenumber,keepposition,grid)
     local outputpage = current_pagenumber
-    if pagenumber then
-        outputpage = pagenumber
+    if param.pagenumber then
+        outputpage = param.pagenumber
     end
-    area = area or default_areaname
+    local nodelist = param.nodelist
+    local x = param.x
+    local y = param.y
+    local allocate = param.allocate
+    local allocate_matrix = param.allocate_matrix
+    local area = param.area or default_areaname
+    local valign = param.valign
+    local keepposition = param.keepposition
+    local grid = param.grid
+
 
     -- current_grid is important here, because it can be a group
     local r = grid or current_grid
@@ -823,6 +833,11 @@ function __output_at( nodelist, x,y,allocate,area,valign,allocate_matrix,pagenum
         -- Put it on the current page
         if allocate then
             r:allocate_cells(x,y,width_gridcells,height_gridcells,allocate_matrix,area,keepposition)
+        end
+        if param.rotate then
+            nodelist = rotate(nodelist,param.rotate, param.origin_x or 0, param.origin_y or 0)
+        elseif param.matrix then
+            nodelist = matrix(nodelist,param.matrix, param.origin_x or 0, param.origin_y or 0)
         end
 
         local n = add_glue( nodelist ,"head",{ width = delta_x })
@@ -2143,8 +2158,67 @@ function colorbar( wd,ht,dp,color )
     return h
 end
 
---- Rotate a text on a given angle.
-function rotate( nodelist,angle )
+--- Apply transformation matrix to object given at _nodelist_
+function matrix( nodelist,matrix,origin_x,origin_y )
+    w("matrix %s",matrix)
+    local tbl = string.explode(matrix," ")
+    printtable("tbl",tbl)
+    local q = node.new("whatsit","pdf_literal")
+    q.mode = 0
+    q.data = string.format("q %g %g %g %g %g %g cm",tbl[1],tbl[2],tbl[3],tbl[4],tbl[5],tbl[6] )
+    q.next = nodelist
+    local tail = node.tail(nodelist)
+    local Q = node.new("whatsit","pdf_literal")
+    Q.data = "Q"
+    tail.next = Q
+    local tmp = node.vpack(q)
+    return tmp
+end
+
+
+--- Rotate an object clockwise with a given angle (in degrees).
+---
+--- First rotate the object at the top left corner (default)
+--- If the origin is not top left, we need to shift the object
+function rotate( nodelist,angle,origin_x,origin_y )
+    local wd,ht = nodelist.width, nodelist.height + nodelist.depth
+    nodelist.width = 0
+    nodelist.height = 0
+    nodelist.depth = 0
+    -- positive would be counter clockwise, but CSS is clowckwise. So we multiply by -1
+    local angle_rad = -1 * math.rad(angle)
+    local sin = math.round(math.sin(angle_rad),3)
+    local cos = math.round(math.cos(angle_rad),3)
+    local q = node.new("whatsit","pdf_literal")
+    q.mode = 0
+    -- shift_x and shift_y depend on the origin. With origin top left (0,0), there is no shifting needed.
+
+    -- only shift_x == 0 is supported at th emoment
+    local shift_x, shift_y
+    if origin_x == 0 then
+        shift_x = math.sin(angle_rad) * sp_to_bp(ht * origin_y / 100 )
+        shift_y = sp_to_bp(ht * origin_y / 100) -  sp_to_bp(ht * origin_y / 100) * math.cos(angle_rad)
+    end
+
+    shift_x = math.round(shift_x ,3)
+    shift_y = math.round(shift_y ,3)
+
+    q.data = string.format("q %g %g %g %g %g %g cm",cos,sin, -1 * sin,cos, -1 * shift_x ,-1 * shift_y )
+    q.next = nodelist
+    local tail = node.tail(nodelist)
+    local Q = node.new("whatsit","pdf_literal")
+    Q.data = "Q"
+    tail.next = Q
+    local tmp = node.vpack(q)
+    tmp.width  = 0 -- math.abs(wd * cos) + math.abs(ht * math.cos(math.rad(90 - angle)))
+    tmp.height = 0 -- math.abs(ht * math.sin(math.rad(90 - angle))) + math.abs(wd * sin)
+    tmp.depth = 0
+    return tmp
+end
+
+
+--- Rotate a text on a given angle (`angle` on textblock).
+function rotate_textblock( nodelist,angle )
     local wd,ht = nodelist.width, nodelist.height + nodelist.depth
     nodelist.width = 0
     nodelist.height = 0

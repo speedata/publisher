@@ -1533,6 +1533,25 @@ function commands.place_object( layoutxml,dataxml )
     local valign           = publisher.read_attribute(layoutxml,dataxml,"valign",         "string")
     local hreference       = publisher.read_attribute(layoutxml,dataxml,"hreference",     "string")
     local vreference       = publisher.read_attribute(layoutxml,dataxml,"vreference",     "string")
+    local rotate           = publisher.read_attribute(layoutxml,dataxml,"rotate",         "number")
+    local matrix           = publisher.read_attribute(layoutxml,dataxml,"matrix",         "rawstring")
+    local origin_x         = publisher.read_attribute(layoutxml,dataxml,"origin-x",       "string")
+    local origin_y         = publisher.read_attribute(layoutxml,dataxml,"origin-y",       "string")
+
+    if origin_x == "left" then
+        origin_x = 0
+    elseif origin_x == "center" then
+        origin_x = 50
+    elseif origin_x == "right" then
+        origin_x = 100
+    end
+    if origin_y == "top" then
+        origin_y = 0
+    elseif origin_y == "center" then
+        origin_y = 50
+    elseif origin_y == "bottom" then
+        origin_y = 100
+    end
 
     if publisher.current_group and area then
         err("Areas can't be combined with groups")
@@ -1722,7 +1741,22 @@ function commands.place_object( layoutxml,dataxml )
             if hreference == "right" then
                 current_column_start = current_column_start - width_in_gridcells + 1
             end
-            publisher.output_at({ ["nodelist"] = object, x = current_column_start, y = current_row, allocate = ( allocate == "yes"), area = area, valign = valign, allocate_matrix = objects[i].allocate_matrix, pagenumber = onpage, keepposition = keepposition, grid = current_grid})
+            publisher.output_at({
+                nodelist = object,
+                x = current_column_start,
+                y = current_row,
+                allocate = ( allocate == "yes"),
+                area = area,
+                valign = valign,
+                allocate_matrix = objects[i].allocate_matrix,
+                pagenumber = onpage,
+                keepposition = keepposition,
+                grid = current_grid,
+                rotate = rotate,
+                matrix = matrix,
+                origin_x = origin_x,
+                origin_y = origin_y,
+                })
             trace("object placed")
             row = nil -- the current rows is not valid anymore because an object is already rendered
         end -- no absolute positioning
@@ -2620,7 +2654,7 @@ function commands.textblock( layoutxml,dataxml )
     trace("Textbock: vpack()")
     nodelist = node.vpack(nodes[1])
     if angle then
-        nodelist = publisher.rotate(nodelist,angle)
+        nodelist = publisher.rotate_textblock(nodelist,angle)
     end
     trace("Textbock: end")
     return nodelist

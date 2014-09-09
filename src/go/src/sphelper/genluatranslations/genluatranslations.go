@@ -79,14 +79,14 @@ func DoThings(cfg *config.Config) error {
 	fmt.Fprintln(out, `return {`)
 	fmt.Fprintln(out, `  de = {`)
 	for _, v := range c.Commands {
-		fmt.Fprintf(out, "      [%q] = { %q, \n", v.De, v.En)
+		fmt.Fprintf(out, "      [%q] = { %q,\n", v.De, v.En)
 		for _, attr := range v.Attributes {
 			fmt.Fprintf(out, "        [%q] = %q,\n", attr.De, attr.En)
 		}
 		fmt.Fprintln(out, `        },`)
 	}
 
-	fmt.Fprintln(out, `  ["__values"] = { `)
+	fmt.Fprintln(out, `  ["__values"] = {`)
 	for ctx, values := range contexts {
 		fmt.Fprintf(out, "    [%q] = {\n", ctx)
 		for _, v := range values {

@@ -2288,13 +2288,45 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="origin-x">
+               <a:documentation>The origin for rotation</a:documentation>
+               <choice>
+                  <value>left</value>
+                  <a:documentation xmlns="">The origin is at the left hand side.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="origin-y">
+               <a:documentation>The origin for rotation (on the vertical axis)</a:documentation>
+               <choice>
+                  <value>top</value>
+                  <a:documentation xmlns="">Rotation around a point at the top.</a:documentation>
+                  <value>center</value>
+                  <a:documentation xmlns="">Rotate around the vertical center.</a:documentation>
+                  <value>bottom</value>
+                  <a:documentation xmlns="">Rotate around a point at the bottom.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="row">
                <a:documentation>The row where the object is placed. If none given, the publisher tries to find a row by itself. You can give a number (in grid cells) or an absolute value (from top left).</a:documentation>
             </attribute>
          </optional>
          <optional>
+            <attribute name="rotate">
+               <a:documentation/>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="maxheight">
                <a:documentation>Only used for multi-page table: the maximum height of tables.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="matrix">
+               <a:documentation>The transformation matrix for the object.</a:documentation>
             </attribute>
          </optional>
          <optional>

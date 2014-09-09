@@ -3,7 +3,8 @@ package main
 import (
 	"gomddoc"
 	"log"
-	"optionparser"
+
+	"github.com/speedata/optionparser"
 )
 
 var (

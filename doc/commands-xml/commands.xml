@@ -4269,6 +4269,54 @@
         <para>Die Seite (später im PDF), auf der das Objekt erscheinen soll. Angabe als Zahl oder »next« für die nächste Seite.</para>
       </description>
     </attribute>
+    <attribute en="origin-x" de="ursprung-x" optional="yes">
+      <description xml:lang="en">
+        <para>The origin for rotation</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Ursprung für die Drehung</para>
+      </description>
+      <choice en="left" de="links">
+        <description xml:lang="en">
+          <para>The origin is at the left hand side.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Ursprung liegt links.</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="origin-y" de="ursprung-y" optional="yes">
+      <description xml:lang="en">
+        <para>The origin for rotation (on the vertical axis)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Ursprung der Drehung (vertikale Achse)</para>
+      </description>
+      <choice en="top" de="open">
+        <description xml:lang="en">
+          <para>Rotation around a point at the top.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Rotation um die obere Kante des Objekts.</para>
+        </description>
+      </choice>
+      <choice en="center" de="mitte">
+        <description xml:lang="en">
+          <para>Rotate around the vertical center.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Rotation um die vertikale Mitte.</para>
+        </description>
+      </choice>
+      <choice en="bottom" de="unten">
+        <description xml:lang="en">
+          <para>Rotate around a point at the bottom.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Um einen Punkt am unteren Rand rotieren.</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="row" de="zeile" type="numberorlength" optional="yes">
       <description xml:lang="en">
         <para>The row where the object is placed. If none given, the publisher tries to find a row by itself. You can give a number (in grid cells) or an absolute value (from top left).</para>
@@ -4278,6 +4326,14 @@
           die Position von der oberen Blattkante.</para>
       </description>
     </attribute>
+    <attribute en="rotate" de="drehen" type="number" optional="yes">
+      <description xml:lang="en">
+        <para></para>
+      </description>
+      <description xml:lang="de">
+        <para></para>
+      </description>
+    </attribute>
     <attribute en="maxheight" de="maxhöhe" type="number" optional="yes">
       <description xml:lang="en">
         <para>Only used for multi-page table: the maximum height of tables.</para>
@@ -4285,6 +4341,14 @@
       <description xml:lang="de">
         <para>Die maximale Höhe in Rasterzellen, die das Objekt belegen darf. Wird nur für den automatischen Tabellenumbruch benötigt. Die umbrochenen Tabellen auf den Folgeseiten haben maximal die
           angegebene Höhe.</para>
+      </description>
+    </attribute>
+    <attribute en="matrix" de="matrix" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>The transformation matrix for the object. Expected is a space separated string of six values.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Transformations-Matrix für das Objekt. Erwartet wird eine Leerzeichen-separierte Zeichenkette mit sechs Werten.</para>
       </description>
     </attribute>
     <attribute en="valign" de="valign" optional="yes">

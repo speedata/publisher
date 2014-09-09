@@ -2296,15 +2296,47 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="ursprung-x">
+               <a:documentation>Der Ursprung für die Drehung</a:documentation>
+               <choice>
+                  <value>links</value>
+                  <a:documentation xmlns="">Der Ursprung liegt links.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="ursprung-y">
+               <a:documentation>Der Ursprung der Drehung (vertikale Achse)</a:documentation>
+               <choice>
+                  <value>open</value>
+                  <a:documentation xmlns="">Rotation um die obere Kante des Objekts.</a:documentation>
+                  <value>mitte</value>
+                  <a:documentation xmlns="">Rotation um die vertikale Mitte.</a:documentation>
+                  <value>unten</value>
+                  <a:documentation xmlns="">Um einen Punkt am unteren Rand rotieren.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="zeile">
                <a:documentation>Zahl: Die Zeile im Raster, in der das Objekt ausgegeben wird. Wird die Zeile nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe:
           die Position von der oberen Blattkante.</a:documentation>
             </attribute>
          </optional>
          <optional>
+            <attribute name="drehen">
+               <a:documentation/>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="maxhöhe">
                <a:documentation>Die maximale Höhe in Rasterzellen, die das Objekt belegen darf. Wird nur für den automatischen Tabellenumbruch benötigt. Die umbrochenen Tabellen auf den Folgeseiten haben maximal die
           angegebene Höhe.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="matrix">
+               <a:documentation>Die Transformations-Matrix für das Objekt</a:documentation>
             </attribute>
          </optional>
          <optional>

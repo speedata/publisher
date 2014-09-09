@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
+    <entry version="2.1.18" date="2014-09-09">
+      <en>A transformation matrix can be set on PlaceObject</en>
+      <de>Eine Transformationsmatrix kann bei ObjektAusgeben angegeben werden.</de>
+    </entry>
     <entry version="2.1.16" date="2014-08-22">
       <en>Don't break lines on / anymore, unless specified in allowbreaks="/".</en>
       <de>Zeilen dürfen bei / nicht mehr umbrochen werden, außer in erlaubeumbruch enthält den Schrägstrich.</de>
