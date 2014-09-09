@@ -10,7 +10,7 @@
 -- ! in LUA_PATH gets replaced by $PWD
 package.path=os.getenv("LUA_PATH")
 
-texio.write_nl("Loading file sdini.lua ...")
+texio.write("Loading file sdini.lua ...")
 
 callback.register('start_run',function() return true end)
 
@@ -114,4 +114,4 @@ end
 do_luafile("sd-debug.lua")
 do_luafile("sd-callbacks.lua")
 
-texio.write_nl("Loading file sdini.lua ... done\n")
+texio.write(" done\n")

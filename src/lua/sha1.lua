@@ -35,7 +35,7 @@ local sha1 = {
 -----------------------------------------------------------------------------------
 
 -- loading this file (takes a while but grants a boost of factor 13)
-local PRELOAD_CACHE = true
+local PRELOAD_CACHE = false
 
 local BLOCK_SIZE = 64 -- 512 bits
 

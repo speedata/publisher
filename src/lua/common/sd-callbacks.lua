@@ -128,7 +128,7 @@ end
 
 
 function print_page_number()
-  texio.write_nl(string.format("> Shipout page %d",publisher.current_pagenumber))
+  texio.write(string.format("> Shipout page %d\n",publisher.current_pagenumber))
 end
 callback.register("start_page_number",print_page_number)
 callback.register("stop_page_number",false)
