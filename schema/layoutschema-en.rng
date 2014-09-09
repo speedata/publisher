@@ -2071,10 +2071,24 @@
       <element name="Output">
          <a:documentation>Still exerimental. This command is similar to PlaceObject and is currently limited to output text which can be broken across positioning frames.</a:documentation>
          <optional>
+            <attribute name="allocate">
+               <a:documentation>Should text flow around already allocated objects? This is experimental: you need to set the grid height to the size of the body font (leading) and this works on the first page only.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation xmlns="">Regular behaviour: the text does not flow around objects.</a:documentation>
+                  <value>auto</value>
+                  <a:documentation xmlns="">Text flows around allocated objects.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="area">
                <a:documentation>The name of the positioning frame for the text.</a:documentation>
             </attribute>
          </optional>
+         <attribute name="row">
+            <a:documentation>The starting row for the text.</a:documentation>
+         </attribute>
          <optional>
             <ref name="e_Text"/>
          </optional>

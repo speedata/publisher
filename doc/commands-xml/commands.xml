@@ -3766,12 +3766,44 @@
     <childelements>
       <cmd name="Text"/>
     </childelements>
+    <attribute en="allocate" de="belegen" optional="yes">
+      <description xml:lang="en">
+        <para>Should text flow around already allocated objects? This is experimental: you need to set the grid height to the size of the body font (leading) and this works on the first page only.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Soll Text um schon vorhandene (belege) Bereiche fließen? Dieser Teil ist exprimentell. Die Rasterhöhe muss gleich dem Zeilenabstand der Textschriftart sein. Außerdem funktioniert dies nur auf der ersten Seite von <cmd name="Output"/></para>
+      </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Regular behaviour: the text does not flow around objects.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Normales Verhalten, der Text hat eine rechteckige Form.</para>
+        </description>
+      </choice>
+      <choice en="auto" de="auto">
+        <description xml:lang="en">
+          <para>Text flows around allocated objects.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Text fließt um belegte Bereiche.</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="area" de="bereich" type="text" optional="yes">
       <description xml:lang="en">
         <para>The name of the positioning frame for the text.</para>
       </description>
       <description xml:lang="de">
         <para>Der Name des Platzierungsbereichs für den Text.</para>
+      </description>
+    </attribute>
+    <attribute en="row" de="row" optional="no" type="number">
+      <description xml:lang="en">
+        <para>The starting row for the text.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Startzeile für den Text</para>
       </description>
     </attribute>
     <example xml:lang="en">

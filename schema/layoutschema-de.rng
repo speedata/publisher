@@ -2076,10 +2076,24 @@
       <element name="Ausgabe">
          <a:documentation>Experimentell. Dieser Befehl ist ähnlich zu ObjektAusgeben und dient derzeit nur dazu, Text auszugeben, der auf mehrere Seite umbrachen werden kann.</a:documentation>
          <optional>
+            <attribute name="belegen">
+               <a:documentation>Soll Text um schon vorhandene (belege) Bereiche fließen? Dieser Teil ist exprimentell. Die Rasterhöhe muss gleich dem Zeilenabstand der Textschriftart sein. Außerdem funktioniert dies nur auf der ersten Seite von Ausgabe</a:documentation>
+               <choice>
+                  <value>ja</value>
+                  <a:documentation xmlns="">Normales Verhalten, der Text hat eine rechteckige Form.</a:documentation>
+                  <value>auto</value>
+                  <a:documentation xmlns="">Text fließt um belegte Bereiche.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="bereich">
                <a:documentation>Der Name des Platzierungsbereichs für den Text.</a:documentation>
             </attribute>
          </optional>
+         <attribute name="row">
+            <a:documentation>Die Startzeile für den Text</a:documentation>
+         </attribute>
          <optional>
             <ref name="e_Text"/>
          </optional>

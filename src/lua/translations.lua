@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2014-09-05 14:14)
+-- generated from genluatranslations.go (2014-09-09 05:59)
 -- do not edit!
 module(...)
 return {
@@ -225,7 +225,9 @@ return {
       ["Sonst"] = { "Otherwise", 
         },
       ["Ausgabe"] = { "Output", 
+        ["belegen"] = "allocate",
         ["bereich"] = "area",
+        ["row"] = "row",
         },
       ["Absatz"] = { "Paragraph", 
         ["erlaubeumbruch"] = "allowbreak",
