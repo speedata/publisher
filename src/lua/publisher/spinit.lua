@@ -22,7 +22,7 @@ function warning(...)
   local text = { ... }
   text[1] = gettext(text[1])
   errorlog:write("Warning: " .. string.format(unpack(text)) .. "\n")
-  texio.write_nl("Warning: " .. string.format(unpack(text)))
+  texio.write("Warning: " .. string.format(unpack(text)) .. "\n")
 end
 
 local errcount=0
@@ -31,7 +31,7 @@ function err(...)
   local text = { ... }
   text[1] = gettext(text[1])
   errorlog:write("Error: " .. string.format(unpack(text)) .. "\n")
-  texio.write_nl("Error: " .. string.format(unpack(text)))
+  texio.write("Error: " .. string.format(unpack(text)) .. "\n")
 end
 
 function call(...)

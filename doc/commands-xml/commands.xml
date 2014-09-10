@@ -3798,7 +3798,7 @@
         <para>Der Name des Platzierungsbereichs für den Text.</para>
       </description>
     </attribute>
-    <attribute en="row" de="row" optional="no" type="number">
+    <attribute en="row" de="zeile" optional="yes" type="number">
       <description xml:lang="en">
         <para>The starting row for the text.</para>
       </description>

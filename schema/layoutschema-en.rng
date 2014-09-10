@@ -2086,9 +2086,11 @@
                <a:documentation>The name of the positioning frame for the text.</a:documentation>
             </attribute>
          </optional>
-         <attribute name="row">
-            <a:documentation>The starting row for the text.</a:documentation>
-         </attribute>
+         <optional>
+            <attribute name="row">
+               <a:documentation>The starting row for the text.</a:documentation>
+            </attribute>
+         </optional>
          <optional>
             <ref name="e_Text"/>
          </optional>
@@ -2326,7 +2328,7 @@
          </optional>
          <optional>
             <attribute name="matrix">
-               <a:documentation>The transformation matrix for the object.</a:documentation>
+               <a:documentation>The transformation matrix for the object. Expected is a space separated string of six values.</a:documentation>
             </attribute>
          </optional>
          <optional>

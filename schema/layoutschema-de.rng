@@ -2091,9 +2091,11 @@
                <a:documentation>Der Name des Platzierungsbereichs für den Text.</a:documentation>
             </attribute>
          </optional>
-         <attribute name="row">
-            <a:documentation>Die Startzeile für den Text</a:documentation>
-         </attribute>
+         <optional>
+            <attribute name="zeile">
+               <a:documentation>Die Startzeile für den Text</a:documentation>
+            </attribute>
+         </optional>
          <optional>
             <ref name="e_Text"/>
          </optional>
@@ -2336,7 +2338,7 @@
          </optional>
          <optional>
             <attribute name="matrix">
-               <a:documentation>Die Transformations-Matrix für das Objekt</a:documentation>
+               <a:documentation>Die Transformations-Matrix für das Objekt. Erwartet wird eine Leerzeichen-separierte Zeichenkette mit sechs Werten.</a:documentation>
             </attribute>
          </optional>
          <optional>

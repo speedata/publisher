@@ -434,16 +434,22 @@ function translate_layout(layoutxml,lang)
         if type(x) == "table" then
             local y = x[".__local_name"]
             local cmd = lang[y]
-            x[".__local_name"] = cmd[1]
-            x[".__name"] = cmd[1]
-            for k,v in pairs(cmd) do
-                if type(k) == "string" then
-                    if x[k] then
-                        x[v] = x[k]
+            if not cmd then
+                if x[".__parent"][".__local_name"] ~= "Value" then
+                    err("Unknown command %q in Layoutfile",y)
+                end
+            else
+                x[".__local_name"] = cmd[1]
+                x[".__name"] = cmd[1]
+                for k,v in pairs(cmd) do
+                    if type(k) == "string" then
+                        if x[k] then
+                            x[v] = x[k]
+                        end
                     end
                 end
+                translate_layout(x,lang)
             end
-           translate_layout(x,lang)
         end
     end
 end
