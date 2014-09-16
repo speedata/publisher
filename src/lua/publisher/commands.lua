@@ -358,7 +358,8 @@ function commands.copy_of( layoutxml,dataxml )
             err(selection)
             return nil
         end
-        return selection
+
+        return publisher.deepcopy(selection)
     end
 end
 
@@ -709,9 +710,7 @@ function commands.group( layoutxml,dataxml )
         log("Re-use »Group« %q.",groupname)
         -- The old nodes are still in the group. We should clean the nodes
         -- but this cleans too much.
-        -- copy-of should really copy the nodes. FIXME
-        -- See qa/groups/reusegroup, commit d20aeb890b9
-        -- node.flush_list(publisher.groups[groupname].contents)
+        node.flush_list(publisher.groups[groupname].contents)
         publisher.groups[groupname] = nil
     end
 

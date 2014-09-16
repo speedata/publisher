@@ -1151,12 +1151,6 @@
       <para>nur mit dem Unterschied, dass der Inhalt vom Absatz (<tt>@name</tt>, <tt>@symbol</tt>) ermittelt werden kann, bevor der Text ausgegeben wird. Die Zuweisung und die Textausgabe können in
         verschiedenen Regeln stehen.</para>
     </example>
-    <info xml:lang="en">
-      <para>Currently there is no copying involved: the underlying data is destroyed after <cmd name="Copy-of"/>.</para>
-    </info>
-    <info xml:lang="de">
-      <para>Derzeit wird der Inhalt nicht kopiert, der aktuelle Inhalt der Variable ist nicht weiter verwendbar.</para>
-    </info>
     <seealso><cmd name="Value"/>, <ref name="xpath"/>, <cmd name="SetVariable"/></seealso>
   </command>
   <command en="DefineColor" de="DefiniereFarbe">

@@ -2629,6 +2629,28 @@ function define_default_fontfamily()
 end
 
 
+-- deepcopy is for <Copy-of>
+function deepcopy(t)
+    local typ = type(t)
+    if typ ~= 'table' then return t end
+    local mt = getmetatable(t)
+    local res = {}
+    for k,v in pairs(t) do
+        typ = type(v)
+        if typ == 'table' then
+            v = deepcopy(v)
+        else
+            if node.is_node(v) then
+                v = node.copy_list(v)
+            end
+        end
+        res[k] = v
+    end
+    setmetatable(res,mt)
+    return res
+end
+
+
 --- Image handling
 --- --------------
 
