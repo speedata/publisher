@@ -386,6 +386,7 @@ function calculate_columnwidth( self )
     --- to increase some column widths
     ---
     --- Example (fake):
+    ---
     ---     <Table width="30">
     ---       <Tr><Td>A</Td><Td>A</Td></Tr>
     ---       <Tr><Td colspan="2">A very very very long text</Td></Tr>
@@ -445,7 +446,6 @@ function calculate_columnwidth( self )
     --- ----------------------------------
 
     -- Here comes the main width calculation
-    -- ---------------------------------------------
     -- FIXME: we should use column_distances[i] instead of self.colsep
     local colsep = (#colmax - 1) * self.colsep
     local tablewidth_is = table.sum(colmax) + colsep
@@ -691,6 +691,13 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
 
         -- There might be a rowspan in the row above, so we need to find the correct
         -- column width
+        -- rowspan? - this is not DRY: we did the same already in calculate_columnwidth
+        for z = current_row + 1, current_row + rowspan - 1 do
+            for y = current_column, current_column + colspan - 1 do
+                self.skip[z] = self.skip[z] or {}  self.skip[z][y] = true
+            end
+        end
+
         while self.skip[current_row] and self.skip[current_row][current_column] do
             current_column = current_column + 1
         end
