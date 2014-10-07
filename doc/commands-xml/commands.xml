@@ -4265,10 +4265,10 @@
     </attribute>
     <attribute en="origin-x" de="ursprung-x" optional="yes">
       <description xml:lang="en">
-        <para>The origin for rotation</para>
+        <para>The origin for rotation and the matrix transformation.</para>
       </description>
       <description xml:lang="de">
-        <para>Der Ursprung für die Drehung</para>
+        <para>Der Ursprung für die Drehung und Matrix-Tranformation</para>
       </description>
       <choice en="left" de="links">
         <description xml:lang="en">
@@ -4276,6 +4276,22 @@
         </description>
         <description xml:lang="de">
           <para>Der Ursprung liegt links.</para>
+        </description>
+      </choice>
+      <choice en="center" de="mitte">
+        <description xml:lang="en">
+          <para>The origin is in the center of the object.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Ursprung liegt im Mittelpunkt des Objekts.</para>
+        </description>
+      </choice>
+      <choice en="right" de="rechts">
+        <description xml:lang="en">
+          <para>The origin is at the right hand side.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Ursprung liegt rechts.</para>
         </description>
       </choice>
     </attribute>
@@ -4322,10 +4338,10 @@
     </attribute>
     <attribute en="rotate" de="drehen" type="number" optional="yes">
       <description xml:lang="en">
-        <para></para>
+        <para>Experimental/obsolete. Rotates the object.  The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</para>
       </description>
       <description xml:lang="de">
-        <para></para>
+        <para>Experimentell / Obsolete. Dreht das Objekt. Ein Winkel > 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</para>
       </description>
     </attribute>
     <attribute en="maxheight" de="maxhöhe" type="number" optional="yes">
@@ -4339,10 +4355,10 @@
     </attribute>
     <attribute en="matrix" de="matrix" optional="yes" type="text">
       <description xml:lang="en">
-        <para>The transformation matrix for the object. Expected is a space separated string of six values.</para>
+        <para>Experimental / obsolete: The transformation matrix for the object. Expected is a space separated string of six values.</para>
       </description>
       <description xml:lang="de">
-        <para>Die Transformations-Matrix für das Objekt. Erwartet wird eine Leerzeichen-separierte Zeichenkette mit sechs Werten.</para>
+        <para>Experimentell. Die Transformations-Matrix für das Objekt. Erwartet wird eine Leerzeichen-separierte Zeichenkette mit sechs Werten.</para>
       </description>
     </attribute>
     <attribute en="valign" de="valign" optional="yes">

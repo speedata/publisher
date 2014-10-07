@@ -2166,16 +2166,21 @@ end
 
 --- Apply transformation matrix to object given at _nodelist_
 function matrix( nodelist,matrix,origin_x,origin_y )
-    w("matrix %s",matrix)
+    local wd,ht = nodelist.width, nodelist.height + nodelist.depth
     local tbl = string.explode(matrix," ")
-    printtable("tbl",tbl)
     local q = node.new("whatsit","pdf_literal")
     q.mode = 0
-    q.data = string.format("q %g %g %g %g %g %g cm",tbl[1],tbl[2],tbl[3],tbl[4],tbl[5],tbl[6] )
+
+    origin_x = 100 - origin_x
+    origin_y = 100 - origin_y
+    local x = math.round(  sp_to_bp(wd - (wd * origin_x) / 100  )  , 3 )
+    local y = math.round(  sp_to_bp(ht - (ht * origin_y) / 100  )  , 3 )
+
+    q.data = string.format("q 1 0 0 1 %g -%g cm  q %g %g %g %g %g %g cm q 1 0 0 1 -%g %g cm ",x,y,tbl[1],tbl[2],tbl[3],tbl[4],tbl[5],tbl[6],x,y )
     q.next = nodelist
     local tail = node.tail(nodelist)
     local Q = node.new("whatsit","pdf_literal")
-    Q.data = "Q"
+    Q.data = "Q Q Q"
     tail.next = Q
     local tmp = node.vpack(q)
     return tmp
@@ -2191,29 +2196,23 @@ function rotate( nodelist,angle,origin_x,origin_y )
     nodelist.width = 0
     nodelist.height = 0
     nodelist.depth = 0
+
     -- positive would be counter clockwise, but CSS is clowckwise. So we multiply by -1
     local angle_rad = -1 * math.rad(angle)
     local sin = math.round(math.sin(angle_rad),3)
     local cos = math.round(math.cos(angle_rad),3)
     local q = node.new("whatsit","pdf_literal")
     q.mode = 0
-    -- shift_x and shift_y depend on the origin. With origin top left (0,0), there is no shifting needed.
 
-    -- only shift_x == 0 is supported at th emoment
-    local shift_x, shift_y
-    if origin_x == 0 then
-        shift_x = math.sin(angle_rad) * sp_to_bp(ht * origin_y / 100 )
-        shift_y = sp_to_bp(ht * origin_y / 100) -  sp_to_bp(ht * origin_y / 100) * math.cos(angle_rad)
-    end
-
-    shift_x = math.round(shift_x ,3)
-    shift_y = math.round(shift_y ,3)
-
-    q.data = string.format("q %g %g %g %g %g %g cm",cos,sin, -1 * sin,cos, -1 * shift_x ,-1 * shift_y )
+    origin_x = 100 - origin_x
+    origin_y = 100 - origin_y
+    local x = math.round(  sp_to_bp(wd - (wd * origin_x) / 100  )  , 3 )
+    local y = math.round(  sp_to_bp(ht - (ht * origin_y) / 100  )  , 3 )
+    q.data = string.format("q 1 0 0 1 %g -%g cm  q %g %g %g %g 0 0 cm q 1 0 0 1 -%g %g cm ",x,y,cos,sin, -1 * sin,cos,x,y )
     q.next = nodelist
     local tail = node.tail(nodelist)
     local Q = node.new("whatsit","pdf_literal")
-    Q.data = "Q"
+    Q.data = "Q Q Q"
     tail.next = Q
     local tmp = node.vpack(q)
     tmp.width  = 0 -- math.abs(wd * cos) + math.abs(ht * math.cos(math.rad(90 - angle)))
