@@ -9,6 +9,7 @@ helloworld: The classical hello world-example
 imageshape: Text flows around an image
 imagescaling: How width, height, and clip affects image display
 planets: How to handle automatically generated table of contents etc.
+rotating: Shows the effect of origin-x and origin-y on PlaceObject/rotate
 runningsum: A table with a dynamic header and footer
 simpletable: A simple HTML like table
 textframe: Overflowing text containers
