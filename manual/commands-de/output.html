@@ -18,7 +18,7 @@
             kann.
          </p>
          <div class="hangingindent">
-            <p>Erlaubte Attribute: <span class="tt"><a href="#area">bereich</a></span></p>
+            <p>Erlaubte Attribute: <span class="tt"><a href="#allocate">belegen</a></span>, <span class="tt"><a href="#area">bereich</a></span>, <span class="tt"><a href="#row">zeile</a></span></p>
          </div>
          <div class="hangingindent">
             <p>Kindelemente: <a href="text.html">Text</a></p>
@@ -28,11 +28,49 @@
          </div>
          <h3>Attribute</h3>
          <dl>
+            <dt><a name=""></a><span class="tt">belegen</span> (optional)
+            </dt>
+            <dd>
+               
+               <p>Soll Text um schon vorhandene (belege) Bereiche fließen? Dieser Teil ist exprimentell.
+                  Die Rasterhöhe muss gleich dem Zeilenabstand der Textschriftart sein. Außerdem funktioniert
+                  dies nur auf der ersten Seite von <a href="output.html">Ausgabe</a></p>
+               
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>ja:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Normales Verhalten, der Text hat eine rechteckige Form.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>auto:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Text fließt um belegte Bereiche.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
+            </dd>
             <dt><a name="area"></a><span class="tt">bereich</span> (Text, optional)
             </dt>
             <dd>
                
                <p>Der Name des Platzierungsbereichs für den Text.</p>
+               
+            </dd>
+            <dt><a name="row"></a><span class="tt">zeile</span> (Zahl, optional)
+            </dt>
+            <dd>
+               
+               <p>Die Startzeile für den Text</p>
                
             </dd>
          </dl>
@@ -148,7 +186,7 @@
             <li><a href="setvariable.html">Zuweisung</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.17 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.21 |
       <a href="../index-de.html">Startseite</a>
       |
       <a href="../commands-de/layout.html">Befehlsreferenz</a> |

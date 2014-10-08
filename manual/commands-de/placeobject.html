@@ -16,7 +16,7 @@
          <h2>Beschreibung</h2>
          <p>Gibt ein rechteckiges Objekt (Bild, Tabelle, Box oder Textblock) aus.</p>
          <div class="hangingindent">
-            <p>Erlaubte Attribute: <span class="tt"><a href="#keepposition">behalteposition</a></span>, <span class="tt"><a href="#allocate">belegen</a></span>, <span class="tt"><a href="#area">bereich</a></span>, <span class="tt"><a href="#groupname">gruppenname</a></span>, <span class="tt"><a href="#background">hintergrund</a></span>, <span class="tt"><a href="#backgroundcolor">hintergrundfarbe</a></span>, <span class="tt"><a href="#hreference">hreferenz</a></span>, <span class="tt"><a href="#rulewidth">linienstärke</a></span>, <span class="tt"><a href="#maxheight">maxhöhe</a></span>, <span class="tt"><a href="#frame">rahmen</a></span>, <span class="tt"><a href="#framecolor">rahmenfarbe</a></span>, <span class="tt"><a href="#page">seite</a></span>, <span class="tt"><a href="#column">spalte</a></span>, <span class="tt"><a href="#valign">valign</a></span>, <span class="tt"><a href="#vreference">vreferenz</a></span>, <span class="tt"><a href="#row">zeile</a></span></p>
+            <p>Erlaubte Attribute: <span class="tt"><a href="#keepposition">behalteposition</a></span>, <span class="tt"><a href="#allocate">belegen</a></span>, <span class="tt"><a href="#area">bereich</a></span>, <span class="tt"><a href="#rotate">drehen</a></span>, <span class="tt"><a href="#groupname">gruppenname</a></span>, <span class="tt"><a href="#background">hintergrund</a></span>, <span class="tt"><a href="#backgroundcolor">hintergrundfarbe</a></span>, <span class="tt"><a href="#hreference">hreferenz</a></span>, <span class="tt"><a href="#rulewidth">linienstärke</a></span>, <span class="tt"><a href="#matrix">matrix</a></span>, <span class="tt"><a href="#maxheight">maxhöhe</a></span>, <span class="tt"><a href="#frame">rahmen</a></span>, <span class="tt"><a href="#framecolor">rahmenfarbe</a></span>, <span class="tt"><a href="#page">seite</a></span>, <span class="tt"><a href="#column">spalte</a></span>, <span class="tt"><a href="#origin-x">ursprung-x</a></span>, <span class="tt"><a href="#origin-y">ursprung-y</a></span>, <span class="tt"><a href="#valign">valign</a></span>, <span class="tt"><a href="#vreference">vreferenz</a></span>, <span class="tt"><a href="#row">zeile</a></span></p>
          </div>
          <div class="hangingindent">
             <p>Kindelemente: <a href="image.html">Bild</a>, <a href="box.html">Box</a>, <a href="rule.html">Linie</a>, <a href="barcode.html">Strichcode</a>, <a href="table.html">Tabelle</a>, <a href="textblock.html">Textblock</a></p>
@@ -97,6 +97,15 @@
                   Wird kein Bereich angegeben, so wird das Objekt auf der »Seite« (dem Bereich, der
                   alle Rasterkästen
                   beinhaltet) ausgegeben.
+               </p>
+               
+            </dd>
+            <dt><a name="rotate"></a><span class="tt">drehen</span> (Zahl, optional)
+            </dt>
+            <dd>
+               
+               <p>Experimentell / Obsolete. Dreht das Objekt. Ein Winkel &gt; 0 dreht das Objekt im Uhrzeigersinn,
+                  ein Winkel &lt; 0 gegen den Uhrzeigersinn.
                </p>
                
             </dd>
@@ -183,6 +192,15 @@
                </p>
                
             </dd>
+            <dt><a name="matrix"></a><span class="tt">matrix</span> (Text, optional)
+            </dt>
+            <dd>
+               
+               <p>Experimentell. Die Transformations-Matrix für das Objekt. Erwartet wird eine Leerzeichen-separierte
+                  Zeichenkette mit sechs Werten.
+               </p>
+               
+            </dd>
             <dt><a name="maxheight"></a><span class="tt">maxhöhe</span> (Zahl, optional)
             </dt>
             <dd>
@@ -253,6 +271,84 @@
                   die Position von der oberen Blattkante.
                </p>
                
+            </dd>
+            <dt><a name=""></a><span class="tt">ursprung-x</span> (optional)
+            </dt>
+            <dd>
+               
+               <p>Der Ursprung für die Drehung und Matrix-Tranformation</p>
+               
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>links:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Der Ursprung liegt links.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>mitte:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Der Ursprung liegt im Mittelpunkt des Objekts.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>rechts:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Der Ursprung liegt rechts.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
+            </dd>
+            <dt><a name=""></a><span class="tt">ursprung-y</span> (optional)
+            </dt>
+            <dd>
+               
+               <p>Der Ursprung der Drehung (vertikale Achse)</p>
+               
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>oben:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Rotation um die obere Kante des Objekts.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>mitte:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Rotation um die vertikale Mitte.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>unten:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Um einen Punkt am unteren Rand rotieren.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
             </dd>
             <dt><a name=""></a><span class="tt">valign</span> (optional)
             </dt>
@@ -459,7 +555,7 @@
             <li><a href="setvariable.html">Zuweisung</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.17 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.21 |
       <a href="../index-de.html">Startseite</a>
       |
       <a href="../commands-de/layout.html">Befehlsreferenz</a> |

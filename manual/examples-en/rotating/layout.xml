@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Options show-grid="no" trace="no"/>
+
+  <DefineColor name="red" value="#f00"/>
+  <DefineColor name="green" value="#0f0"/>
+  <DefineColor name="blue" value="#00f"/>
+  <DefineColor name="gray" value="#eee"/>
+ 
+
+  <DefineTextformat name="text" alignment="rightaligned"/>
+  <DefineTextformat name="title" alignment="leftaligned"/>
+  
+  <Pagetype name="page" test="true()">
+    <Margin left="1cm" right="1cm" top="4cm" bottom="1cm"/>
+    <AtPageCreation>
+      <PlaceObject row="1cm" column="1cm" allocate="no">
+        <Textblock>
+          <Paragraph textformat="title">
+            <Value>The effect of origin-x and origin-y with rotation. Red = -30°, green = 30° and blue = 80°.</Value>
+          </Paragraph>
+        </Textblock>
+      </PlaceObject>
+      <PlaceObject column="2" row="2" allocate="no">
+        <Box width="4" height="2" backgroundcolor="gray"/>
+      </PlaceObject>
+      <PlaceObject column="2" row="5" allocate="no">
+        <Box width="4" height="2" backgroundcolor="gray"/>
+      </PlaceObject>
+      <PlaceObject column="2" row="10" allocate="no">
+        <Box width="4" height="2" backgroundcolor="gray"/>
+      </PlaceObject>
+      
+    </AtPageCreation>
+  </Pagetype>
+  
+  <Record element="data">
+    <PlaceObject>
+      <Textblock><Paragraph><Value>left, bottom</Value></Paragraph></Textblock>
+    </PlaceObject>
+
+   <PlaceObject column="2">
+      <Rule direction="vertical" length="15"/>
+    </PlaceObject>
+
+    <PlaceObject row="4" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="-30" origin-x="left" origin-y="bottom" column="2" row="2">
+      <Box width="4" height="2" backgroundcolor="red"/>
+    </PlaceObject>
+
+    <PlaceObject row="7" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="30" origin-x="left" origin-y="bottom" column="2" row="5">
+      <Box width="4" height="2" backgroundcolor="green"/>
+    </PlaceObject>
+
+
+    <PlaceObject row="12" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="80" origin-x="left" origin-y="bottom" column="2" row="10">
+      <Box width="4" height="2" backgroundcolor="blue"/>
+    </PlaceObject>
+
+    <NewPage/>
+    <PlaceObject>
+      <Textblock><Paragraph><Value>left, center</Value></Paragraph></Textblock>
+    </PlaceObject>
+    <PlaceObject column="2">
+      <Rule direction="vertical" length="15"/>
+    </PlaceObject>
+    <PlaceObject row="3" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="-30" origin-x="left" origin-y="center" column="2" row="2">
+      <Box width="4" height="2" backgroundcolor="red"/>
+    </PlaceObject>
+    <PlaceObject row="6" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="30" origin-x="left" origin-y="center" column="2" row="5">
+      <Box width="4" height="2" backgroundcolor="green"/>
+    </PlaceObject>
+    <PlaceObject row="11" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="80" origin-x="left" origin-y="center" column="2" row="10">
+      <Box width="4" height="2" backgroundcolor="blue"/>
+    </PlaceObject>
+
+    <NewPage/>
+    <PlaceObject>
+      <Textblock><Paragraph><Value>left, top</Value></Paragraph></Textblock>
+    </PlaceObject>
+    <PlaceObject column="2">
+      <Rule direction="vertical" length="15"/>
+    </PlaceObject>
+    <PlaceObject row="2" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="-30" origin-x="left" origin-y="top" column="2" row="2">
+     <Box width="4" height="2" backgroundcolor="red"/>
+   </PlaceObject>
+
+
+    <PlaceObject row="5" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="30" origin-x="left" origin-y="top" column="2" row="5">
+      <Box width="4" height="2" backgroundcolor="green"/>
+    </PlaceObject>
+
+
+    <PlaceObject row="10" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="80" origin-x="left" origin-y="top" column="2" row="10">
+      <Box width="4" height="2" backgroundcolor="blue"/>
+    </PlaceObject>
+
+    <NewPage/>
+    
+
+    <PlaceObject>
+        <Textblock><Paragraph><Value>center, bottom</Value></Paragraph></Textblock>
+      </PlaceObject>
+      <PlaceObject column="4">
+        <Rule direction="vertical" length="15"/>
+      </PlaceObject>
+      <PlaceObject row="4" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="-30" origin-x="center" origin-y="bottom" column="2" row="2">
+        <Box width="4" height="2" backgroundcolor="red"/>
+      </PlaceObject>
+
+
+      <PlaceObject row="7" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="30" origin-x="center" origin-y="bottom" column="2" row="5">
+        <Box width="4" height="2" backgroundcolor="green"/>
+      </PlaceObject>
+
+
+      <PlaceObject row="12" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="80" origin-x="center" origin-y="bottom" column="2" row="10">
+        <Box width="4" height="2" backgroundcolor="blue"/>
+      </PlaceObject>
+
+      <NewPage/>
+      <PlaceObject>
+        <Textblock><Paragraph><Value>center, center</Value></Paragraph></Textblock>
+      </PlaceObject>
+      <PlaceObject column="4">
+        <Rule direction="vertical" length="15"/>
+      </PlaceObject>
+      <PlaceObject row="3" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="-30" origin-x="center" origin-y="center" column="2" row="2">
+        <Box width="4" height="2" backgroundcolor="red"/>
+      </PlaceObject>
+
+
+      <PlaceObject row="6" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="30" origin-x="center" origin-y="center" column="2" row="5">
+        <Box width="4" height="2" backgroundcolor="green"/>
+      </PlaceObject>
+
+
+      <PlaceObject row="11" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="80" origin-x="center" origin-y="center" column="2" row="10">
+        <Box width="4" height="2" backgroundcolor="blue"/>
+      </PlaceObject>
+
+      <NewPage/>
+      <PlaceObject>
+        <Textblock><Paragraph><Value>center, top</Value></Paragraph></Textblock>
+      </PlaceObject>
+      <PlaceObject column="4">
+        <Rule direction="vertical" length="15"/>
+      </PlaceObject>
+      <PlaceObject row="2" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="-30" origin-x="center" origin-y="top" column="2" row="2">
+        <Box width="4" height="2" backgroundcolor="red"/>
+      </PlaceObject>
+
+
+      <PlaceObject row="5" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="30" origin-x="center" origin-y="top" column="2" row="5">
+        <Box width="4" height="2" backgroundcolor="green"/>
+      </PlaceObject>
+
+
+      <PlaceObject row="10" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="80" origin-x="center" origin-y="top" column="2" row="10">
+        <Box width="4" height="2" backgroundcolor="blue"/>
+      </PlaceObject>
+
+
+    <NewPage/>
+
+    <PlaceObject>
+      <Textblock><Paragraph><Value>right, bottom</Value></Paragraph></Textblock>
+    </PlaceObject>
+    <PlaceObject column="6">
+      <Rule direction="vertical" length="15"/>
+    </PlaceObject>
+    <PlaceObject row="4" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="-30" origin-x="right" origin-y="bottom" column="2" row="2">
+      <Box width="4" height="2" backgroundcolor="red"/>
+    </PlaceObject>
+
+
+    <PlaceObject row="7" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="30" origin-x="right" origin-y="bottom" column="2" row="5">
+      <Box width="4" height="2" backgroundcolor="green"/>
+    </PlaceObject>
+
+
+    <PlaceObject row="12" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="80" origin-x="right" origin-y="bottom" column="2" row="10">
+      <Box width="4" height="2" backgroundcolor="blue"/>
+    </PlaceObject>
+
+    <NewPage/>
+    <PlaceObject>
+      <Textblock><Paragraph><Value>right, center</Value></Paragraph></Textblock>
+    </PlaceObject>
+    <PlaceObject column="6">
+      <Rule direction="vertical" length="15"/>
+    </PlaceObject>
+    <PlaceObject row="3" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="-30" origin-x="right" origin-y="center" column="2" row="2">
+      <Box width="4" height="2" backgroundcolor="red"/>
+    </PlaceObject>
+
+
+    <PlaceObject row="6" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="30" origin-x="right" origin-y="center" column="2" row="5">
+      <Box width="4" height="2" backgroundcolor="green"/>
+    </PlaceObject>
+
+
+    <PlaceObject row="11" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="80" origin-x="right" origin-y="center" column="2" row="10">
+      <Box width="4" height="2" backgroundcolor="blue"/>
+    </PlaceObject>
+
+    <NewPage/>
+    <PlaceObject>
+      <Textblock><Paragraph><Value>right, top</Value></Paragraph></Textblock>
+    </PlaceObject>
+    <PlaceObject column="6">
+      <Rule direction="vertical" length="15"/>
+    </PlaceObject>
+    <PlaceObject row="2" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="-30" origin-x="right" origin-y="top" column="2" row="2">
+      <Box width="4" height="2" backgroundcolor="red"/>
+    </PlaceObject>
+
+
+    <PlaceObject row="5" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="30" origin-x="right" origin-y="top" column="2" row="5">
+      <Box width="4" height="2" backgroundcolor="green"/>
+    </PlaceObject>
+
+
+    <PlaceObject row="10" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="80" origin-x="right" origin-y="top" column="2" row="10">
+      <Box width="4" height="2" backgroundcolor="blue"/>
+    </PlaceObject>
+
+    </Record>
+
+</Layout>

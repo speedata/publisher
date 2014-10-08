@@ -16,7 +16,7 @@
          <h2>Description</h2>
          <p>Outputs a rectangular object (image, table, box or textblock).</p>
          <div class="hangingindent">
-            <p>Allowed attributes: <span class="tt"><a href="#allocate">allocate</a></span>, <span class="tt"><a href="#area">area</a></span>, <span class="tt"><a href="#background">background</a></span>, <span class="tt"><a href="#backgroundcolor">backgroundcolor</a></span>, <span class="tt"><a href="#column">column</a></span>, <span class="tt"><a href="#frame">frame</a></span>, <span class="tt"><a href="#framecolor">framecolor</a></span>, <span class="tt"><a href="#groupname">groupname</a></span>, <span class="tt"><a href="#hreference">hreference</a></span>, <span class="tt"><a href="#keepposition">keepposition</a></span>, <span class="tt"><a href="#maxheight">maxheight</a></span>, <span class="tt"><a href="#page">page</a></span>, <span class="tt"><a href="#row">row</a></span>, <span class="tt"><a href="#rulewidth">rulewidth</a></span>, <span class="tt"><a href="#valign">valign</a></span>, <span class="tt"><a href="#vreference">vreference</a></span></p>
+            <p>Allowed attributes: <span class="tt"><a href="#allocate">allocate</a></span>, <span class="tt"><a href="#area">area</a></span>, <span class="tt"><a href="#background">background</a></span>, <span class="tt"><a href="#backgroundcolor">backgroundcolor</a></span>, <span class="tt"><a href="#column">column</a></span>, <span class="tt"><a href="#frame">frame</a></span>, <span class="tt"><a href="#framecolor">framecolor</a></span>, <span class="tt"><a href="#groupname">groupname</a></span>, <span class="tt"><a href="#hreference">hreference</a></span>, <span class="tt"><a href="#keepposition">keepposition</a></span>, <span class="tt"><a href="#matrix">matrix</a></span>, <span class="tt"><a href="#maxheight">maxheight</a></span>, <span class="tt"><a href="#origin-x">origin-x</a></span>, <span class="tt"><a href="#origin-y">origin-y</a></span>, <span class="tt"><a href="#page">page</a></span>, <span class="tt"><a href="#rotate">rotate</a></span>, <span class="tt"><a href="#row">row</a></span>, <span class="tt"><a href="#rulewidth">rulewidth</a></span>, <span class="tt"><a href="#valign">valign</a></span>, <span class="tt"><a href="#vreference">vreference</a></span></p>
          </div>
          <div class="hangingindent">
             <p>Child elements: <a href="barcode.html">Barcode</a>, <a href="box.html">Box</a>, <a href="image.html">Image</a>, <a href="rule.html">Rule</a>, <a href="table.html">Table</a>, <a href="textblock.html">Textblock</a></p>
@@ -221,6 +221,15 @@
                   </tr>
                </table>
             </dd>
+            <dt><a name="matrix"></a><span class="tt">matrix</span> (string, optional)
+            </dt>
+            <dd>
+               
+               <p>Experimental / obsolete: The transformation matrix for the object. Expected is a space
+                  separated string of six values.
+               </p>
+               
+            </dd>
             <dt><a name="maxheight"></a><span class="tt">maxheight</span> (number, optional)
             </dt>
             <dd>
@@ -228,12 +237,100 @@
                <p>Only used for multi-page table: the maximum height of tables.</p>
                
             </dd>
+            <dt><a name=""></a><span class="tt">origin-x</span> (optional)
+            </dt>
+            <dd>
+               
+               <p>The origin for rotation and the matrix transformation.</p>
+               
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>left:</p>
+                     </td>
+                     <td>
+                        
+                        <p>The origin is at the left hand side.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>center:</p>
+                     </td>
+                     <td>
+                        
+                        <p>The origin is in the center of the object.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>right:</p>
+                     </td>
+                     <td>
+                        
+                        <p>The origin is at the right hand side.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
+            </dd>
+            <dt><a name=""></a><span class="tt">origin-y</span> (optional)
+            </dt>
+            <dd>
+               
+               <p>The origin for rotation (on the vertical axis)</p>
+               
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>top:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Rotation around a point at the top.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>center:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Rotate around the vertical center.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>bottom:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Rotate around a point at the bottom.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
+            </dd>
             <dt><a name="page"></a><span class="tt">page</span> (number, optional)
             </dt>
             <dd>
                
                <p>The page (later in the PDF), the object should appear on. Number of the keyword »next«
                   for the next page.
+               </p>
+               
+            </dd>
+            <dt><a name="rotate"></a><span class="tt">rotate</span> (number, optional)
+            </dt>
+            <dd>
+               
+               <p>Experimental/obsolete. Rotates the object.  The amount of movement is defined by the
+                  specified angle; if positive, the movement will be clockwise, if negative, it will
+                  be counter-clockwise.
                </p>
                
             </dd>
@@ -450,7 +547,7 @@
             <li><a href="while.html">While</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.17 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.21 |
       <a href="../index.html">Start page</a>
       |
       <a href="../commands-en/layout.html">Command reference</a> |

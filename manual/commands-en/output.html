@@ -17,7 +17,7 @@
          <p>Still exerimental. This command is similar to <a href="placeobject.html">PlaceObject</a> and is currently limited to output text which can be broken across positioning frames.
          </p>
          <div class="hangingindent">
-            <p>Allowed attributes: <span class="tt"><a href="#area">area</a></span></p>
+            <p>Allowed attributes: <span class="tt"><a href="#allocate">allocate</a></span>, <span class="tt"><a href="#area">area</a></span>, <span class="tt"><a href="#row">row</a></span></p>
          </div>
          <div class="hangingindent">
             <p>Child elements: <a href="text.html">Text</a></p>
@@ -27,11 +27,50 @@
          </div>
          <h3>Attributes</h3>
          <dl>
+            <dt><a name=""></a><span class="tt">allocate</span> (optional)
+            </dt>
+            <dd>
+               
+               <p>Should text flow around already allocated objects? This is experimental: you need
+                  to set the grid height to the size of the body font (leading) and this works on the
+                  first page only.
+               </p>
+               
+               <table class="attributechoice">
+                  <tr>
+                     <td>
+                        <p>yes:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Regular behaviour: the text does not flow around objects.</p>
+                        
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p>auto:</p>
+                     </td>
+                     <td>
+                        
+                        <p>Text flows around allocated objects.</p>
+                        
+                     </td>
+                  </tr>
+               </table>
+            </dd>
             <dt><a name="area"></a><span class="tt">area</span> (string, optional)
             </dt>
             <dd>
                
                <p>The name of the positioning frame for the text.</p>
+               
+            </dd>
+            <dt><a name="row"></a><span class="tt">row</span> (number, optional)
+            </dt>
+            <dd>
+               
+               <p>The starting row for the text.</p>
                
             </dd>
          </dl>
@@ -146,7 +185,7 @@
             <li><a href="while.html">While</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.17 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.21 |
       <a href="../index.html">Start page</a>
       |
       <a href="../commands-en/layout.html">Command reference</a> |

@@ -1,13 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (en)</title>
   <id>http://www.speedata.de</id>
-  <updated>2014-09-02T15:01:00+02:00</updated>
+  <updated>2014-10-08T15:10:24+02:00</updated>
   <subtitle>New revisions for download and changelog.</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.1.21</title>
+    <updated>2014-10-08T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-10-08:</id>
+    <content type="html">Custom spot colors</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.21</title>
+    <updated>2014-10-07T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-10-07:</id>
+    <content type="html">Transformation origin for rotate and matrix (PlaceObject)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.20</title>
+    <updated>2014-09-16T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-09-16:</id>
+    <content type="html">Copy-of copys does not destroy the underlying content.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.18</title>
+    <updated>2014-09-09T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-09-09:</id>
+    <content type="html">A transformation matrix can be set on PlaceObject</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.1.16</title>
     <updated>2014-08-22T00:00:00Z</updated>
