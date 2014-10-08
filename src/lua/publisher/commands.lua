@@ -1534,8 +1534,8 @@ function commands.place_object( layoutxml,dataxml )
     local vreference       = publisher.read_attribute(layoutxml,dataxml,"vreference",     "string")
     local rotate           = publisher.read_attribute(layoutxml,dataxml,"rotate",         "number")
     local matrix           = publisher.read_attribute(layoutxml,dataxml,"matrix",         "rawstring")
-    local origin_x         = publisher.read_attribute(layoutxml,dataxml,"origin-x",       "string")
-    local origin_y         = publisher.read_attribute(layoutxml,dataxml,"origin-y",       "string")
+    local origin_x         = publisher.read_attribute(layoutxml,dataxml,"origin-x",       "string", nil, "origin")
+    local origin_y         = publisher.read_attribute(layoutxml,dataxml,"origin-y",       "string", nil, "origin")
 
     if origin_x == "left" then
         origin_x = 0

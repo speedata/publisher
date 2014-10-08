@@ -4302,7 +4302,7 @@
       <description xml:lang="de">
         <para>Der Ursprung der Drehung (vertikale Achse)</para>
       </description>
-      <choice en="top" de="open">
+      <choice en="top" de="oben">
         <description xml:lang="en">
           <para>Rotation around a point at the top.</para>
         </description>
@@ -6871,6 +6871,12 @@ Message: "$i is: 3"]]></listing>
       <value key="vertical" context="*" en="vertical" de="vertikal"/>
       <value key="without" context="*" en="without" de="ohne"/>
       <value key="yes" context="*" en="yes" de="ja"/>
+
+      <value context="origin" key="top" en="top" de="oben"/>
+      <value context="origin" key="center" en="center" de="mitte" />
+      <value context="origin" key="bottom" en="bottom" de="unten" />
+      <value context="origin" key="left" en="left" de="links" />
+      <value context="origin" key="right" en="right" de="rechts" />
 
       <value context="*" key="Englisch (Great Britan)" en="Englisch (Great Britan)" de="Englisch (Großbritannien)"/>
       <value context="*" key="Englisch (USA)" en="Englisch (USA)" de="Englisch (USA)"/>

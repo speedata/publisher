@@ -2299,10 +2299,14 @@
          </optional>
          <optional>
             <attribute name="ursprung-x">
-               <a:documentation>Der Ursprung für die Drehung</a:documentation>
+               <a:documentation>Der Ursprung für die Drehung und Matrix-Tranformation</a:documentation>
                <choice>
                   <value>links</value>
                   <a:documentation xmlns="">Der Ursprung liegt links.</a:documentation>
+                  <value>mitte</value>
+                  <a:documentation xmlns="">Der Ursprung liegt im Mittelpunkt des Objekts.</a:documentation>
+                  <value>rechts</value>
+                  <a:documentation xmlns="">Der Ursprung liegt rechts.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -2310,7 +2314,7 @@
             <attribute name="ursprung-y">
                <a:documentation>Der Ursprung der Drehung (vertikale Achse)</a:documentation>
                <choice>
-                  <value>open</value>
+                  <value>oben</value>
                   <a:documentation xmlns="">Rotation um die obere Kante des Objekts.</a:documentation>
                   <value>mitte</value>
                   <a:documentation xmlns="">Rotation um die vertikale Mitte.</a:documentation>
@@ -2327,7 +2331,7 @@
          </optional>
          <optional>
             <attribute name="drehen">
-               <a:documentation/>
+               <a:documentation>Experimentell / Obsolete. Dreht das Objekt. Ein Winkel &gt; 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2338,7 +2342,7 @@
          </optional>
          <optional>
             <attribute name="matrix">
-               <a:documentation>Die Transformations-Matrix für das Objekt. Erwartet wird eine Leerzeichen-separierte Zeichenkette mit sechs Werten.</a:documentation>
+               <a:documentation>Experimentell. Die Transformations-Matrix für das Objekt. Erwartet wird eine Leerzeichen-separierte Zeichenkette mit sechs Werten.</a:documentation>
             </attribute>
          </optional>
          <optional>

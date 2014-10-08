@@ -9,6 +9,7 @@ helloworld: Klassisches »Hallo Welt«-Beispiel
 imageshape: Umfließen von Bildern
 imagescaling: Skalierung von Bildern und Größenangaben
 planets: Beispiele für automatisch generierte Listen
+rotating: Effekt von drehen und ursprung-x und ursprung-y
 runningsum: Tabelle mit dynamischen Kopf- und Fußzeilen
 simpletable: Einfache Tabelle
 textframe: Textcontainer mit Überlauf

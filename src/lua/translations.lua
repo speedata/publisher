@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2014-09-10 13:31)
+-- generated from genluatranslations.go (2014-10-08 14:55)
 -- do not edit!
 module(...)
 return {
@@ -481,6 +481,13 @@ return {
       ["Spanisch"] = "Spanish",
       ["Schwedisch"] = "Swedish",
       ["Türkisch"] = "Turkish",
+   },
+    ["origin"] = {
+      ["oben"] = "top",
+      ["mitte"] = "center",
+      ["unten"] = "bottom",
+      ["links"] = "left",
+      ["rechts"] = "right",
    },
    } 
   },

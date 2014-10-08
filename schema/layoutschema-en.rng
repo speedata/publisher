@@ -2291,10 +2291,14 @@
          </optional>
          <optional>
             <attribute name="origin-x">
-               <a:documentation>The origin for rotation</a:documentation>
+               <a:documentation>The origin for rotation and the matrix transformation.</a:documentation>
                <choice>
                   <value>left</value>
                   <a:documentation xmlns="">The origin is at the left hand side.</a:documentation>
+                  <value>center</value>
+                  <a:documentation xmlns="">The origin is in the center of the object.</a:documentation>
+                  <value>right</value>
+                  <a:documentation xmlns="">The origin is at the right hand side.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -2318,7 +2322,7 @@
          </optional>
          <optional>
             <attribute name="rotate">
-               <a:documentation/>
+               <a:documentation>Experimental/obsolete. Rotates the object.  The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2328,7 +2332,7 @@
          </optional>
          <optional>
             <attribute name="matrix">
-               <a:documentation>The transformation matrix for the object. Expected is a space separated string of six values.</a:documentation>
+               <a:documentation>Experimental / obsolete: The transformation matrix for the object. Expected is a space separated string of six values.</a:documentation>
             </attribute>
          </optional>
          <optional>
