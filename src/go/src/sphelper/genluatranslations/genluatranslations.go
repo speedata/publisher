@@ -2,43 +2,15 @@ package genluatranslations
 
 import (
 	"bytes"
-	"encoding/xml"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"time"
 
+	"sphelper/commandsxml"
 	"sphelper/config"
 )
-
-type commandsxmlAttribute struct {
-	En     string `xml:"en,attr"`
-	De     string `xml:"de,attr"`
-	Choice []struct {
-		En string `xml:"en,attr"`
-		De string `xml:"de,attr"`
-	} `xml:"choice"`
-}
-
-type commandsxmlCommand struct {
-	En         string                 `xml:"en,attr"`
-	De         string                 `xml:"de,attr"`
-	Attributes []commandsxmlAttribute `xml:"attribute"`
-}
-
-type commandsxmlValue struct {
-	En      string `xml:"en,attr"`
-	De      string `xml:"de,attr"`
-	Key     string `xml:"key,attr"`
-	Context string `xml:"context,attr"`
-}
-
-type commandsXML struct {
-	Commands     []commandsxmlCommand `xml:"command"`
-	Translations []commandsxmlValue   `xml:"translations>values>value"`
-}
 
 type attributeHash struct {
 	en     string
@@ -54,18 +26,12 @@ func DoThings(cfg *config.Config) error {
 	if cfg.Basedir == "" {
 		return errors.New("Need basedir")
 	}
-
-	commandsdata, err := ioutil.ReadFile(filepath.Join("doc", "commands-xml", "commands.xml"))
-	if err != nil {
-		return err
-	}
-	c := &commandsXML{}
-	err = xml.Unmarshal(commandsdata, c)
+	c, err := commandsxml.ReadCommandsFile(cfg)
 	if err != nil {
 		return err
 	}
 
-	contexts := make(map[string][]commandsxmlValue)
+	contexts := make(map[string][]commandsxml.CommandsxmlValue)
 
 	for _, v := range c.Translations {
 		contexts[v.Context] = append(contexts[v.Context], v)
