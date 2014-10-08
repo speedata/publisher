@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
+    <entry version="2.1.21" date="2014-10-08">
+      <en>Custom spot colors</en>
+      <de>Benutzerdefinierte Sonderfarben</de>
+    </entry>
+    <entry version="2.1.21" date="2014-10-07">
+      <en>Transformation origin for rotate and matrix (PlaceObject)</en>
+      <de>Transformations-Ursprung bei drehen und matrix (ObjektAusgeben)</de>
+    </entry>
     <entry version="2.1.20" date="2014-09-16">
       <en>Copy-of copys does not destroy the underlying content.</en>
       <de>Kopie-von zerstört nicht den Inhalt.</de>

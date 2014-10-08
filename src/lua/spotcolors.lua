@@ -1214,8 +1214,14 @@ function write_colorprofile()
 end
 
 -- DefineColor registers the colors
-function register( colorname )
+function register( colorname,c,m,y,k )
     colorobjects[#colorobjects + 1] = { colorname, 0 }
+    local rawname
+    _,_, rawname = string.find(string.lower(colorname),"^(.-)%s*[cmunkez]?%s*$")
+    local cmyktable = spotcolors[rawname]
+    if not cmyktable then
+        spotcolors[rawname] = { c,m,y,k }
+    end
     return #colorobjects
 end
 

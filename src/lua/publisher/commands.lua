@@ -413,7 +413,11 @@ function commands.define_color( layoutxml,dataxml )
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number")
         color.pdfstring = string.format("%s %g g %g G",op,color.g/100,color.g/100)
     elseif model=="spotcolor" then
-        color.colornum = spotcolors.register(colorname)
+        local c = publisher.read_attribute(layoutxml,dataxml,"c","number")
+        local m = publisher.read_attribute(layoutxml,dataxml,"m","number")
+        local y = publisher.read_attribute(layoutxml,dataxml,"y","number")
+        local k = publisher.read_attribute(layoutxml,dataxml,"k","number")
+        color.colornum = spotcolors.register(colorname,c,m,y,k)
     elseif value then
         local r,g,b
         if #value == 7 then
