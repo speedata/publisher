@@ -11,7 +11,7 @@ local colorprofile_filename = "ISOcoated_v2_eci.icc"
 
 -- index: color number
 -- value: { colorname, pdfobject for the color definition }
--- The object number is 0 until the color is acutally used (by color.pdfstring
+-- The object number is 0 until the color is acutally used (by color.pdfstring)
 local colorobjects = {}
 
 local set_colorprofile_filename, write_colorprofile, use_color, getresource, register
@@ -1219,10 +1219,18 @@ function register( colorname )
     return #colorobjects
 end
 
+--- getresource is called from publisher.lua from dothingsbeforeoutput()
+--- `tab` has the form
+---
+---     tab = {
+---        [1] = "true"
+---        [3] = "true"
+---     }
 function getresource( tab )
     local ret = {}
     for k,_ in pairs(tab) do
         local name, objnum = unpack(colorobjects[k])
+        -- name is the user supplied name
         if objnum == 0 then
             objnum = use_color(name)
             colorobjects[k] = {name, objnum}
@@ -1235,7 +1243,7 @@ end
 -- Make sure the color definition is written to the PDF.
 function use_color(colorname)
     local rawname
-    _,_, rawname = string.find(string.lower(colorname),"^(.*)%s+[cmunkez]%s*$")
+    _,_, rawname = string.find(string.lower(colorname),"^(.-)%s*[cmunkez]?%s*$")
     local cmyktable = spotcolors[rawname]
     if not cmyktable then
         err("Cannot find CMYK replacement for color %q",colorname)
