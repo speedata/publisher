@@ -43,6 +43,11 @@ def build_go(srcdir,destbin,goos,goarch,targettype)
 	return true
 end
 
+task :sphelper do
+  cmd = "go build -o #{installdir}/bin/sphelper sphelper/main"
+  sh cmd
+end
+
 desc "Show rake description"
 task :default do
 	puts
@@ -92,10 +97,8 @@ task :updateexamples do
 end
 
 desc "Generate schema and translations from master"
-task :schema do
+task :schema => [:sphelper] do
   # generate the lua translation
-  cmd = "go build -o #{installdir}/bin/sphelper sphelper/main"
-  sh cmd
   cmd = "#{installdir}/bin/sphelper --basedir #{installdir} genluatranslations"
   sh cmd
   # generate english + german schema
