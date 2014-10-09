@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
+    <entry version="2.1.22" date="2014-10-09">
+      <en>Transformations can be nested inside PlaceObject</en>
+      <de>Transformationen können in ObjektAusgeben geschachltelt werden.</de>
+    </entry>
     <entry version="2.1.21" date="2014-10-08">
       <en>Custom spot colors</en>
       <de>Benutzerdefinierte Sonderfarben</de>

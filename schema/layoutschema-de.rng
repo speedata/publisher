@@ -2299,7 +2299,7 @@
          </optional>
          <optional>
             <attribute name="ursprung-x">
-               <a:documentation>Der Ursprung für die Drehung und Matrix-Tranformation</a:documentation>
+               <a:documentation>Der Ursprung für die Drehung</a:documentation>
                <choice>
                   <value>links</value>
                   <a:documentation xmlns="">Der Ursprung liegt links.</a:documentation>
@@ -2338,11 +2338,6 @@
             <attribute name="maxhöhe">
                <a:documentation>Die maximale Höhe in Rasterzellen, die das Objekt belegen darf. Wird nur für den automatischen Tabellenumbruch benötigt. Die umbrochenen Tabellen auf den Folgeseiten haben maximal die
           angegebene Höhe.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="matrix">
-               <a:documentation>Experimentell. Die Transformations-Matrix für das Objekt. Erwartet wird eine Leerzeichen-separierte Zeichenkette mit sechs Werten.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2400,6 +2395,9 @@
                </optional>
                <optional>
                   <ref name="e_Table"/>
+               </optional>
+               <optional>
+                  <ref name="e_Transformation"/>
                </optional>
             </interleave>
          </oneOrMore>
@@ -3358,6 +3356,51 @@
             <optional>
                <ref name="e_Loop"/>
             </optional>
+         </oneOrMore>
+      </element>
+   </define>
+   <define name="e_Transformation">
+      <element name="Transformation">
+         <a:documentation>Das Aussehen eines Objekts manipulieren, in dem eine Matrix-Operation angewendet wird. Siehe PDF-Referenz 4.2.2 und folgende. </a:documentation>
+         <optional>
+            <attribute name="matrix">
+               <a:documentation>Die Transformations-Matrix für das Objekt. Erwartet wird eine Leerzeichen-separierte Zeichenkette mit sechs Werten.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="ursprung-x">
+               <a:documentation>Der Ursprung für Matrix-Tranformation. Muss links, mitte oder rechts oder eine Zahl von 0 bis 100 (0 = links, 100 = rechts) sein.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="ursprung-y">
+               <a:documentation>Der vertikale Ursprung der der Matrix-Transformation. Muss oben, mitte oder unten sein oder eine Zahl von 0 bis 100 (0 = oben, 100 = unten)</a:documentation>
+            </attribute>
+         </optional>
+         <oneOrMore>
+            <interleave>
+               <optional>
+                  <ref name="e_Image"/>
+               </optional>
+               <optional>
+                  <ref name="e_Box"/>
+               </optional>
+               <optional>
+                  <ref name="e_Rule"/>
+               </optional>
+               <optional>
+                  <ref name="e_Textblock"/>
+               </optional>
+               <optional>
+                  <ref name="e_Barcode"/>
+               </optional>
+               <optional>
+                  <ref name="e_Table"/>
+               </optional>
+               <optional>
+                  <ref name="e_Transformation"/>
+               </optional>
+            </interleave>
          </oneOrMore>
       </element>
    </define>

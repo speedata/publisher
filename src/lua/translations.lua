@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2014-10-08 14:55)
+-- generated from genluatranslations.go (2014-10-09 13:48)
 -- do not edit!
 module(...)
 return {
@@ -263,7 +263,6 @@ return {
         ["zeile"] = "row",
         ["drehen"] = "rotate",
         ["maxhöhe"] = "maxheight",
-        ["matrix"] = "matrix",
         ["valign"] = "valign",
         ["hreferenz"] = "hreference",
         ["vreferenz"] = "vreference",
@@ -393,6 +392,11 @@ return {
         ["daten"] = "data",
         ["setzekopf"] = "sethead",
         ["abstand-oben"] = "top-distance",
+        },
+      ["Transformation"] = { "Transformation",
+        ["matrix"] = "matrix",
+        ["ursprung-x"] = "origin-x",
+        ["ursprung-y"] = "origin-y",
         },
       ["U"] = { "U",
         },

@@ -4105,6 +4105,7 @@
           <optional><cmd name="Textblock"/></optional>
           <optional><cmd name="Barcode"/></optional>
           <optional><cmd name="Table"/></optional>
+          <optional><cmd name="Transformation"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>
@@ -4265,10 +4266,10 @@
     </attribute>
     <attribute en="origin-x" de="ursprung-x" optional="yes">
       <description xml:lang="en">
-        <para>The origin for rotation and the matrix transformation.</para>
+        <para>The origin for rotation.</para>
       </description>
       <description xml:lang="de">
-        <para>Der Ursprung für die Drehung und Matrix-Tranformation</para>
+        <para>Der Ursprung für die Drehung</para>
       </description>
       <choice en="left" de="links">
         <description xml:lang="en">
@@ -4351,14 +4352,6 @@
       <description xml:lang="de">
         <para>Die maximale Höhe in Rasterzellen, die das Objekt belegen darf. Wird nur für den automatischen Tabellenumbruch benötigt. Die umbrochenen Tabellen auf den Folgeseiten haben maximal die
           angegebene Höhe.</para>
-      </description>
-    </attribute>
-    <attribute en="matrix" de="matrix" optional="yes" type="text">
-      <description xml:lang="en">
-        <para>Experimental / obsolete: The transformation matrix for the object. Expected is a space separated string of six values.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Experimentell. Die Transformations-Matrix für das Objekt. Erwartet wird eine Leerzeichen-separierte Zeichenkette mit sechs Werten.</para>
       </description>
     </attribute>
     <attribute en="valign" de="valign" optional="yes">
@@ -6491,6 +6484,82 @@
       <cmd name="Td"/>
       <cmd name="Table"/>
     </seealso>
+  </command>
+  <command en="Transformation" de="Transformation">
+    <description xml:lang="en">
+      <para>Manipulate an object's appearance by applying a matrix. See the PDF reference 4.2.2 Common Transformations and following.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Das Aussehen eines Objekts manipulieren, in dem eine Matrix-Operation angewendet wird. Siehe PDF-Referenz 4.2.2 und folgende.</para>
+    </description>
+    <childelements>
+      <oneOrMore>
+        <interleave>
+          <optional><cmd name="Image"/></optional>
+          <optional><cmd name="Box"/></optional>
+          <optional><cmd name="Rule"/></optional>
+          <optional><cmd name="Textblock"/></optional>
+          <optional><cmd name="Barcode"/></optional>
+          <optional><cmd name="Table"/></optional>
+          <optional><cmd name="Transformation"/></optional>
+        </interleave>
+      </oneOrMore>
+    </childelements>
+    <attribute en="matrix" de="matrix" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>Experimental The transformation matrix for the object. Expected is a space separated string of six values.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Transformations-Matrix für das Objekt. Erwartet wird eine Leerzeichen-separierte Zeichenkette mit sechs Werten.</para>
+      </description>
+    </attribute>
+    <attribute en="origin-x" de="ursprung-x" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>The origin for matrix transformation. Must be left, center or right or a number from 0 to 100 (0 = left, 100 = right).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Ursprung für Matrix-Tranformation. Muss links, mitte oder rechts oder eine Zahl von 0 bis 100 (0 = links, 100 = rechts) sein.</para>
+      </description>
+    </attribute>
+    <attribute en="origin-y" de="ursprung-y" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>The vertical origin for the matrix tranformation. Must be top, center or bottom or a number from 0 to 100 (0 = top, 100 = bottom).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der vertikale Ursprung der der Matrix-Transformation. Muss oben, mitte oder unten sein oder eine Zahl von 0 bis 100 (0 = oben, 100 = unten)</para>
+      </description>
+    </attribute>
+
+    <example xml:lang="de">
+      <listing><![CDATA[<Datensatz element="data">
+  <ObjektAusgeben>
+    <Transformation matrix="1 0 0 1 72 -72">
+      <Transformation matrix="1 0 0 0.5 0 0" ursprung-x="100">
+        <Transformation matrix="1 1 -1 1 0 0">
+          <Bild datei="_samplea.pdf" maxbreite="4" maxhöhe="4"></Bild>
+        </Transformation>
+      </Transformation>
+    </Transformation>
+  </ObjektAusgeben>
+</Datensatz>
+]]></listing>
+    </example>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject>
+    <Transformation matrix="1 0 0 1 72 -72">
+      <Transformation matrix="1 0 0 0.5 0 0" origin-x="100">
+        <Transformation matrix="1 1 -1 1 0 0">
+          <Image file="_samplea.pdf" maxwidth="4" maxheight="4"/>
+        </Transformation>
+      </Transformation>
+    </Transformation>
+  </PlaceObject>
+</Record>
+]]></listing>
+
+    </example>
+    <seealso><cmd name="PlaceObject"/></seealso>
   </command>
   <command en="U" de="U">
     <description xml:lang="en">

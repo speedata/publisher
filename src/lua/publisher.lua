@@ -318,6 +318,7 @@ local dispatch_table = {
     Textblock               = commands.textblock,
     Text                    = commands.text,
     Tr                      = commands.tr,
+    Transformation          = commands.transformation,
     U                       = commands.underline,
     Ul                      = commands.ul,
     Until                   = commands.until_do,
@@ -367,7 +368,7 @@ function dispatch(layoutxml,dataxml,options)
                 tmp = dispatch_table[eltname](j,dataxml,options)
 
                 -- Copy-of-elements can be resolveld immediately
-                if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" then
+                if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" or eltname == "Transformation" then
                     if type(tmp)=="table" then
                         for i=1,#tmp do
                             if tmp[i].contents then
@@ -2164,10 +2165,20 @@ function colorbar( wd,ht,dp,color )
     return h
 end
 
+local explode = function(s,p)
+   local t = { }
+   for s in string.gmatch(s,p) do
+       if s ~= "" then
+           t[#t+1] = s
+       end
+   end
+   return t
+end
+
 --- Apply transformation matrix to object given at _nodelist_
 function matrix( nodelist,matrix,origin_x,origin_y )
     local wd,ht = nodelist.width, nodelist.height + nodelist.depth
-    local tbl = string.explode(matrix," ")
+    local tbl = explode(matrix,"[^\t ]+")
     local q = node.new("whatsit","pdf_literal")
     q.mode = 0
 
@@ -2215,8 +2226,8 @@ function rotate( nodelist,angle,origin_x,origin_y )
     Q.data = "Q Q Q"
     tail.next = Q
     local tmp = node.vpack(q)
-    tmp.width  = 0 -- math.abs(wd * cos) + math.abs(ht * math.cos(math.rad(90 - angle)))
-    tmp.height = 0 -- math.abs(ht * math.sin(math.rad(90 - angle))) + math.abs(wd * sin)
+    tmp.width  = 0
+    tmp.height = 0
     tmp.depth = 0
     return tmp
 end

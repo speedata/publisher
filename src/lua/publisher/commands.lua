@@ -2412,6 +2412,45 @@ function commands.tr( layoutxml,dataxml )
     return tab
 end
 
+--- Transformation
+--- --------------
+--- Apply a transformation on an object for PlaceObject. Transformaitons can be nested.
+function commands.transformation( layoutxml,dataxml )
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    local matrix   = publisher.read_attribute(layoutxml,dataxml,"matrix",  "rawstring")
+    local origin_x = publisher.read_attribute(layoutxml,dataxml,"origin-x","string", "50", "origin")
+    local origin_y = publisher.read_attribute(layoutxml,dataxml,"origin-y","string", "50", "origin")
+    if origin_x == "left" then
+        origin_x = 0
+    elseif origin_x == "center" then
+        origin_x = 50
+    elseif origin_x == "right" then
+        origin_x = 100
+    end
+    if origin_y == "top" then
+        origin_y = 0
+    elseif origin_y == "center" then
+        origin_y = 50
+    elseif origin_y == "bottom" then
+        origin_y = 100
+    end
+    for i=1,#tab do
+        local contents = publisher.element_contents(tab[i])
+        if node.is_node(contents) then
+            if matrix then
+                tab[i].contents = publisher.matrix(contents,matrix,origin_x, origin_y)
+            end
+        else
+            for j=1,#contents do
+                if node.is_node(contents[j]) then
+                    contents[j] = publisher.matrix(contents[j],matrix,origin_x, origin_y)
+                end
+            end
+        end
+    end
+    return tab
+end
+
 --- Td
 --- -----
 --- A table cell. Can have anything in it that is a horizontal box.
