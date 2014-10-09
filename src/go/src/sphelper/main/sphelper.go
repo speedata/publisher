@@ -38,13 +38,20 @@ func main() {
 			log.Fatal(err)
 		}
 	case "translate":
-		if len(op.Extra) > 2 {
-			err = translatelayout.Translate(cfg, op.Extra[1], op.Extra[2])
-			if err != nil {
-				log.Fatal(err)
+		if len(op.Extra) > 1 {
+			if len(op.Extra) > 2 {
+				err = translatelayout.Translate(cfg, op.Extra[1], op.Extra[2])
+				if err != nil {
+					log.Fatal(err)
+				}
+			} else {
+				err = translatelayout.Translate(cfg, op.Extra[1], "")
+				if err != nil {
+					log.Fatal(err)
+				}
 			}
 		} else {
-			fmt.Println("translate needs the input and output filename: sphelper translate infile outfile")
+			fmt.Println("translate needs the input and output filename: sphelper translate infile.xml [outfile.xml]")
 			os.Exit(-1)
 		}
 
