@@ -2,14 +2,12 @@ package genluatranslations
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"time"
 
 	"sphelper/commandsxml"
-	"sphelper/config"
 )
 
 type attributeHash struct {
@@ -22,11 +20,8 @@ type commandHash struct {
 	attributes map[string]attributeHash
 }
 
-func DoThings(cfg *config.Config) error {
-	if cfg.Basedir == "" {
-		return errors.New("Need basedir")
-	}
-	c, err := commandsxml.ReadCommandsFile(cfg)
+func DoThings(basedir string) error {
+	c, err := commandsxml.ReadCommandsFile(basedir)
 	if err != nil {
 		return err
 	}
@@ -64,7 +59,7 @@ func DoThings(cfg *config.Config) error {
 	fmt.Fprintln(out, `  },`)
 	fmt.Fprintln(out, `}`)
 
-	outfile, err := os.OpenFile(filepath.Join(cfg.Basedir, "src", "lua", "translations.lua"), os.O_WRONLY|os.O_TRUNC, 0644)
+	outfile, err := os.OpenFile(filepath.Join(basedir, "src", "lua", "translations.lua"), os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}

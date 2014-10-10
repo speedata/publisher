@@ -11,6 +11,10 @@ import (
 	"github.com/speedata/optionparser"
 )
 
+var (
+	basedir string
+)
+
 func main() {
 	cfg := config.NewConfig()
 
@@ -31,21 +35,25 @@ func main() {
 		os.Exit(-1)
 	}
 
+	if cfg.Basedir != "" {
+		basedir = cfg.Basedir
+	}
+
 	switch command {
 	case "genluatranslations":
-		err = genluatranslations.DoThings(cfg)
+		err = genluatranslations.DoThings(basedir)
 		if err != nil {
 			log.Fatal(err)
 		}
 	case "translate":
 		if len(op.Extra) > 1 {
 			if len(op.Extra) > 2 {
-				err = translatelayout.Translate(cfg, op.Extra[1], op.Extra[2])
+				err = translatelayout.Translate(basedir, op.Extra[1], op.Extra[2])
 				if err != nil {
 					log.Fatal(err)
 				}
 			} else {
-				err = translatelayout.Translate(cfg, op.Extra[1], "")
+				err = translatelayout.Translate(basedir, op.Extra[1], "")
 				if err != nil {
 					log.Fatal(err)
 				}

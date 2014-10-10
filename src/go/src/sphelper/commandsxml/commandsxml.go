@@ -4,8 +4,6 @@ import (
 	"encoding/xml"
 	"io/ioutil"
 	"path/filepath"
-
-	"sphelper/config"
 )
 
 type CommandsxmlAttribute struct {
@@ -37,8 +35,8 @@ type CommandsXML struct {
 	en           map[string]CommandsxmlCommand
 }
 
-func ReadCommandsFile(cfg *config.Config) (*CommandsXML, error) {
-	commandsdata, err := ioutil.ReadFile(filepath.Join(cfg.Basedir, "doc", "commands-xml", "commands.xml"))
+func ReadCommandsFile(basedir string) (*CommandsXML, error) {
+	commandsdata, err := ioutil.ReadFile(filepath.Join(basedir, "doc", "commands-xml", "commands.xml"))
 	if err != nil {
 		return nil, err
 	}

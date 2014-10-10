@@ -7,12 +7,11 @@ import (
 	"io/ioutil"
 	"os"
 	"sphelper/commandsxml"
-	"sphelper/config"
 	"strings"
 )
 
-func Translate(cfg *config.Config, inputfilename, outputfilename string) error {
-	c, err := commandsxml.ReadCommandsFile(cfg)
+func Translate(basedir, inputfilename, outputfilename string) error {
+	c, err := commandsxml.ReadCommandsFile(basedir)
 	if err != nil {
 		return err
 	}

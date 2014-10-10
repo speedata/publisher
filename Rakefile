@@ -44,7 +44,7 @@ def build_go(srcdir,destbin,goos,goarch,targettype)
 end
 
 task :sphelper do
-  cmd = "go build -o #{installdir}/bin/sphelper sphelper/main"
+  cmd = "go build -ldflags \"-X main.basedir #{installdir}\" -o #{installdir}/bin/sphelper sphelper/main"
   sh cmd
 end
 
