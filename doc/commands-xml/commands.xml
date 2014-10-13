@@ -4151,6 +4151,38 @@
         <para>Wenn eine Gruppe ausgegeben werden soll, muss der Name hier angegeben werden.</para>
       </description>
     </attribute>
+    <attribute en="border-bottom-right-radius" de="rahmen-unten-rechts-radius" optional="yes" type="length">
+      <description xml:lang="en">
+        <para>Radius of corner bottom right.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Radius der Ecke unten rechts.</para>
+      </description>
+    </attribute>
+    <attribute en="border-top-right-radius" de="rahmen-oben-rechts-radius" optional="yes" type="length">
+      <description xml:lang="en">
+        <para>Radius of corner top right.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Radius der Ecke oben rechts.</para>
+      </description>
+    </attribute>
+    <attribute en="border-top-left-radius" de="rahmen-oben-links-radius" optional="yes" type="length">
+      <description xml:lang="en">
+        <para>Radius of corner top left.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Radius der Ecke oben links.</para>
+      </description>
+    </attribute>
+    <attribute en="border-bottom-left-radius" de="rahmen-unten-links-radius" optional="yes" type="length">
+      <description xml:lang="en">
+        <para>Radius of corner bottom left.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Radius der Ecke unten links.</para>
+      </description>
+    </attribute>
     <attribute en="frame" de="rahmen" optional="yes">
       <description xml:lang="en">
         <para>Draw a frame around the object. You need to supply the frame color.</para>

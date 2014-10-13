@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2014-10-09 13:48)
+-- generated from genluatranslations.go (2014-10-13 10:55)
 -- do not edit!
 module(...)
 return {
@@ -250,6 +250,10 @@ return {
         ["belegen"] = "allocate",
         ["bereich"] = "area",
         ["gruppenname"] = "groupname",
+        ["rahmen-unten-rechts-radius"] = "border-bottom-right-radius",
+        ["rahmen-oben-rechts-radius"] = "border-top-right-radius",
+        ["rahmen-oben-links-radius"] = "border-top-left-radius",
+        ["rahmen-unten-links-radius"] = "border-bottom-left-radius",
         ["rahmen"] = "frame",
         ["rahmenfarbe"] = "framecolor",
         ["hintergrund"] = "background",

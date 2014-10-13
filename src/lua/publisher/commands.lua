@@ -1526,7 +1526,7 @@ function commands.place_object( layoutxml,dataxml )
     local allocate         = publisher.read_attribute(layoutxml,dataxml,"allocate",       "string", "yes")
     local framecolor       = publisher.read_attribute(layoutxml,dataxml,"framecolor",     "rawstring")
     local backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
-    local rulewidth_sp     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",      "length_sp")
+    local rulewidth_sp     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",      "length_sp", 26312) -- 0.4bp
     local maxheight        = publisher.read_attribute(layoutxml,dataxml,"maxheight",      "number")
     local onpage           = publisher.read_attribute(layoutxml,dataxml,"page",           "rawstring")
     local keepposition     = publisher.read_attribute(layoutxml,dataxml,"keepposition",   "boolean",false)
@@ -1537,9 +1537,13 @@ function commands.place_object( layoutxml,dataxml )
     local hreference       = publisher.read_attribute(layoutxml,dataxml,"hreference",     "string")
     local vreference       = publisher.read_attribute(layoutxml,dataxml,"vreference",     "string")
     local rotate           = publisher.read_attribute(layoutxml,dataxml,"rotate",         "number")
-    local matrix           = publisher.read_attribute(layoutxml,dataxml,"matrix",         "rawstring")
     local origin_x         = publisher.read_attribute(layoutxml,dataxml,"origin-x",       "string", nil, "origin")
     local origin_y         = publisher.read_attribute(layoutxml,dataxml,"origin-y",       "string", nil, "origin")
+    local b_b_r_radius     = publisher.read_attribute(layoutxml,dataxml,"border-bottom-right-radius", "string")
+    local b_t_r_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-right-radius",    "string")
+    local b_t_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-left-radius",     "string")
+    local b_b_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-bottom-left-radius",  "string")
+
 
     if origin_x == "left" then
         origin_x = 0
@@ -1672,7 +1676,15 @@ function commands.place_object( layoutxml,dataxml )
             object = publisher.background(object,backgroundcolor)
         end
         if frame  == "solid" then
-            object = publisher.frame(object,framecolor,rulewidth_sp)
+            object = publisher.frame({
+                box       = object,
+                colorname = framecolor,
+                rulewidth = rulewidth_sp,
+                b_b_r_radius = tex.sp(b_b_r_radius or 0),
+                b_t_r_radius = tex.sp(b_t_r_radius or 0),
+                b_t_l_radius = tex.sp(b_t_l_radius or 0),
+                b_b_l_radius = tex.sp(b_b_l_radius or 0),
+                })
         end
         if not object then
             err("Something is wrong with <PlaceObject>, content is missing")
@@ -1756,7 +1768,6 @@ function commands.place_object( layoutxml,dataxml )
                 keepposition = keepposition,
                 grid = current_grid,
                 rotate = rotate,
-                matrix = matrix,
                 origin_x = origin_x,
                 origin_y = origin_y,
                 })

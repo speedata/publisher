@@ -2232,6 +2232,26 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="border-bottom-right-radius">
+               <a:documentation>Radius of corner bottom right.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="border-top-right-radius">
+               <a:documentation>Radius of corner top right.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="border-top-left-radius">
+               <a:documentation>Radius of corner top left.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="border-bottom-left-radius">
+               <a:documentation>Radius of corner bottom left.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="frame">
                <a:documentation>Draw a frame around the object. You need to supply the frame color.</a:documentation>
                <choice>

@@ -843,8 +843,6 @@ function output_at( param )
         end
         if param.rotate then
             nodelist = rotate(nodelist,param.rotate, param.origin_x or 0, param.origin_y or 0)
-        elseif param.matrix then
-            nodelist = matrix(nodelist,param.matrix, param.origin_x or 0, param.origin_y or 0)
         end
 
         local n = add_glue( nodelist ,"head",{ width = delta_x })
@@ -1075,18 +1073,75 @@ function background( box, colorname )
 end
 
 --- Draw a frame around the given TeX box with color `colorname`.
-function frame( box, colorname, width )
+--- The control points of the frame are
+--- ![control points](img/roundedcorners.svg)
+
+function frame(obj)
+    local  box, colorname, width
+    box          = obj.box
+    colorname    = obj.colorname
+    width        = obj.rulewidth
+    b_b_r_radius = sp_to_bp(obj.b_b_r_radius)
+    b_t_r_radius = sp_to_bp(obj.b_t_r_radius)
+    b_t_l_radius = sp_to_bp(obj.b_t_l_radius)
+    b_b_l_radius = sp_to_bp(obj.b_b_l_radius)
+
+
+    local write = w
     local pdfcolorstring = colors[colorname].pdfstring
     local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
     local w = width / factor -- width of stroke
     local hw = 0.5 * w -- half width of stroke
+    -- local hw = 0
+
+    local x1, y1   = b_b_l_radius - hw           , -hw
+    local x2, y2   = wd - b_b_r_radius + hw      , -hw
+    local x3, y3   = wd - 0.5 * b_b_r_radius + hw, -hw
+    local x4, y4   = wd + hw                     , -hw + 0.5 * b_b_r_radius
+    local x5, y5   = wd + hw                     , -hw + b_b_r_radius
+    local x6, y6   = wd + hw                     , ht - b_t_r_radius
+    local x7, y7   = wd + hw                     , ht - 0.5 * b_t_r_radius
+    local x8, y8   = wd + hw - 0.5 * b_t_r_radius, ht + hw
+    local x9, y9   = wd + hw - b_t_r_radius      , ht + hw
+    local x10, y10 = -hw + b_t_l_radius          , ht + hw
+    local x11, y11 = -hw + 0.5 * b_t_l_radius    , ht + hw
+    local x12, y12 = -hw                         , hw + ht - 0.5 * b_t_l_radius
+    local x13, y13 = -hw                         , hw + ht - b_t_l_radius
+    local x14, y14 = -hw                         , -hw + b_b_l_radius
+    local x15, y15 = -hw                         , -hw + 0.5 * b_b_l_radius
+    local x16, y16 = -hw                         , -hw
+
     n = node.new("whatsit","pdf_literal")
-    n.data = string.format("q %s %g w -%g -%g %g %g re S Q",pdfcolorstring, w , hw ,dp + hw ,wd + w,ht + dp + w)
+    local rule = {}
+    rule[#rule + 1] = string.format("%s",pdfcolorstring)
+    rule[#rule + 1] = string.format("%g w",w)           -- rule width
+    rule[#rule + 1] = string.format("%g %g m",x1,y1)
+    rule[#rule + 1] = string.format("%g %g l",x2,y2)
+    rule[#rule + 1] = string.format("%g %g %g %g %g %g c", x3,y3, x4,y4, x5, y5 )
+    rule[#rule + 1] = string.format("%g %g l",x6, y6)
+    rule[#rule + 1] = string.format("%g %g %g %g %g %g c", x7,y7,x8,y8, x9,y9  )
+    rule[#rule + 1] = string.format("%g %g l",x10, y10)
+    rule[#rule + 1] = string.format("%g %g %g %g %g %g c", x11,y11,x12,y12, x13,y13  )
+    rule[#rule + 1] = string.format("%g %g l",x14,y14 )
+    rule[#rule + 1] = string.format("%g %g %g %g %g %g c", x15,y15,x16,y16, x1,y1  )
+    rule[#rule + 1] = " h W S"
+
+    n.data = table.concat(rule, " ")
+
+
     n.mode = 0
-    n.next = box
-    box.prev = n
-    n = node.hpack(n)
-    return n
+
+    local pdf_save = node.new("whatsit","pdf_save")
+    local pdf_restore = node.new("whatsit","pdf_restore")
+
+    node.insert_after(pdf_save,pdf_save,n)
+    node.insert_after(n,n,box)
+
+    local hvbox = node.hpack(pdf_save)
+    hvbox.depth = 0
+    node.insert_after(hvbox,node.tail(hvbox),pdf_restore)
+    hvbox = node.vpack(hvbox)
+    return hvbox
 end
 
 -- collect all spot colors used so far to create proper page resources
@@ -2175,7 +2230,7 @@ local explode = function(s,p)
    return t
 end
 
---- Apply transformation matrix to object given at _nodelist_
+--- Apply transformation matrix to object given at _nodelist_. Called from commmands#transformation.
 function matrix( nodelist,matrix,origin_x,origin_y )
     local wd,ht = nodelist.width, nodelist.height + nodelist.depth
     local tbl = explode(matrix,"[^\t ]+")

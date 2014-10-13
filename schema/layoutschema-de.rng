@@ -2239,6 +2239,26 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="rahmen-unten-rechts-radius">
+               <a:documentation>Radius der Ecke unten rechts.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="rahmen-oben-rechts-radius">
+               <a:documentation>Radius der Ecke oben rechts.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="rahmen-oben-links-radius">
+               <a:documentation>Radius der Ecke oben links.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="rahmen-unten-links-radius">
+               <a:documentation>Radius der Ecke unten links.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="rahmen">
                <a:documentation>Es wird ein Rahmen um das Objekt gezeichnet. Zusätzlich muss die Rahmenfarbe angegeben werden.</a:documentation>
                <choice>
@@ -3361,7 +3381,7 @@
    </define>
    <define name="e_Transformation">
       <element name="Transformation">
-         <a:documentation>Das Aussehen eines Objekts manipulieren, in dem eine Matrix-Operation angewendet wird. Siehe PDF-Referenz 4.2.2 und folgende. </a:documentation>
+         <a:documentation>Das Aussehen eines Objekts manipulieren, in dem eine Matrix-Operation angewendet wird. Siehe PDF-Referenz 4.2.2 und folgende.</a:documentation>
          <optional>
             <attribute name="matrix">
                <a:documentation>Die Transformations-Matrix für das Objekt. Erwartet wird eine Leerzeichen-separierte Zeichenkette mit sechs Werten.</a:documentation>
