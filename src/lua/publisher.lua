@@ -1086,7 +1086,12 @@ function frame(obj)
     b_t_l_radius = sp_to_bp(obj.b_t_l_radius)
     b_b_l_radius = sp_to_bp(obj.b_b_l_radius)
 
-
+    -- FIXME: see http://en.wikipedia.org/wiki/File:Circle_and_cubic_bezier.svg
+    -- http://en.wikipedia.org/wiki/Composite_B%C3%A9zier_curve
+    -- 0.5522847498
+    -- http://spencermortensen.com/articles/bezier-circle/
+    -- 0.551915024494
+    local circle_bezier = 0.551915024494
     local write = w
     local pdfcolorstring = colors[colorname].pdfstring
     local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
@@ -1096,20 +1101,37 @@ function frame(obj)
 
     local x1, y1   = b_b_l_radius - hw           , -hw
     local x2, y2   = wd - b_b_r_radius + hw      , -hw
-    local x3, y3   = wd - 0.5 * b_b_r_radius + hw, -hw
-    local x4, y4   = wd + hw                     , -hw + 0.5 * b_b_r_radius
+    local x3, y3   = wd - circle_bezier * b_b_r_radius + hw, -hw
+    local x4, y4   = wd + hw                     , -hw + circle_bezier * b_b_r_radius
     local x5, y5   = wd + hw                     , -hw + b_b_r_radius
-    local x6, y6   = wd + hw                     , ht - b_t_r_radius
-    local x7, y7   = wd + hw                     , ht - 0.5 * b_t_r_radius
-    local x8, y8   = wd + hw - 0.5 * b_t_r_radius, ht + hw
+    local x6, y6   = wd + hw                     , ht - b_t_r_radius + hw
+    local x7, y7   = wd + hw                     , ht - circle_bezier * b_t_r_radius + hw
+    local x8, y8   = wd + hw - circle_bezier * b_t_r_radius, ht + hw
     local x9, y9   = wd + hw - b_t_r_radius      , ht + hw
     local x10, y10 = -hw + b_t_l_radius          , ht + hw
-    local x11, y11 = -hw + 0.5 * b_t_l_radius    , ht + hw
-    local x12, y12 = -hw                         , hw + ht - 0.5 * b_t_l_radius
+    local x11, y11 = -hw + circle_bezier * b_t_l_radius    , ht + hw
+    local x12, y12 = -hw                         , hw + ht - circle_bezier * b_t_l_radius
     local x13, y13 = -hw                         , hw + ht - b_t_l_radius
     local x14, y14 = -hw                         , -hw + b_b_l_radius
-    local x15, y15 = -hw                         , -hw + 0.5 * b_b_l_radius
+    local x15, y15 = -hw                         , -hw + circle_bezier * b_b_l_radius
     local x16, y16 = -hw                         , -hw
+
+    x1,  y1  = math.round(x1,3),  math.round(y1,3)
+    x2,  y2  = math.round(x2,3),  math.round(y2,3)
+    x3,  y3  = math.round(x3,3),  math.round(y3,3)
+    x4,  y4  = math.round(x4,3),  math.round(y4,3)
+    x5,  y5  = math.round(x5,3),  math.round(y5,3)
+    x6,  y6  = math.round(x6,3),  math.round(y6,3)
+    x7,  y7  = math.round(x7,3),  math.round(y7,3)
+    x8,  y8  = math.round(x8,3),  math.round(y8,3)
+    x9,  y9  = math.round(x9,3),  math.round(y9,3)
+    x10, y10 = math.round(x10,3), math.round(y10,3)
+    x11, y11 = math.round(x11,3), math.round(y11,3)
+    x12, y12 = math.round(x12,3), math.round(y12,3)
+    x13, y13 = math.round(x13,3), math.round(y13,3)
+    x14, y14 = math.round(x14,3), math.round(y14,3)
+    x15, y15 = math.round(x15,3), math.round(y15,3)
+    x16, y16 = math.round(x16,3), math.round(y16,3)
 
     n = node.new("whatsit","pdf_literal")
     local rule = {}
@@ -1124,7 +1146,11 @@ function frame(obj)
     rule[#rule + 1] = string.format("%g %g %g %g %g %g c", x11,y11,x12,y12, x13,y13  )
     rule[#rule + 1] = string.format("%g %g l",x14,y14 )
     rule[#rule + 1] = string.format("%g %g %g %g %g %g c", x15,y15,x16,y16, x1,y1  )
-    rule[#rule + 1] = " h W S"
+    if w == 0 then
+        rule[#rule + 1] = "W n"
+    else
+        rule[#rule + 1] = "W h S"
+    end
 
     n.data = table.concat(rule, " ")
 
