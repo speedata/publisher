@@ -1177,12 +1177,19 @@ end
 
 -- Set the PDF pageresources for the current page.
 function setpageresources()
+
     local gstateresource = string.format(" /ExtGState << /GS0 %d 0 R /GS1 %d 0 R >>", GS_State_OP_On, GS_State_OP_Off)
 
-    if #used_spotcolors > 0 then
-        pdf.setpageresources("/ColorSpace << " .. spotcolors.getresource(used_spotcolors) .. " >>" .. gstateresource )
+    if status.luatex_version < 79 then
+        if #used_spotcolors > 0 then
+            pdf.pageresources = "/ColorSpace << " .. spotcolors.getresource(used_spotcolors) .. " >>" .. gstateresource
+        end
     else
-        pdf.setpageresources(gstateresource)
+        if #used_spotcolors > 0 then
+            pdf.setpageresources("/ColorSpace << " .. spotcolors.getresource(used_spotcolors) .. " >>" .. gstateresource )
+        else
+            pdf.setpageresources(gstateresource)
+        end
     end
 end
 
