@@ -2267,24 +2267,33 @@ end
 function matrix( nodelist,matrix,origin_x,origin_y )
     local wd,ht = nodelist.width, nodelist.height + nodelist.depth
     local tbl = explode(matrix,"[^\t ]+")
-    local q = node.new("whatsit","pdf_literal")
-    q.mode = 0
 
     origin_x = 100 - origin_x
     origin_y = 100 - origin_y
     local x = math.round(  sp_to_bp(wd - (wd * origin_x) / 100  )  , 3 )
     local y = math.round(  sp_to_bp(ht - (ht * origin_y) / 100  )  , 3 )
 
-    q.data = string.format("q 1 0 0 1 %g -%g cm  q %g %g %g %g %g %g cm q 1 0 0 1 -%g %g cm ",x,y,tbl[1],tbl[2],tbl[3],tbl[4],tbl[5],tbl[6],x,y )
-    q.next = nodelist
-    local tail = node.tail(nodelist)
-    local Q = node.new("whatsit","pdf_literal")
-    Q.data = "Q Q Q"
-    tail.next = Q
-    local tmp = node.vpack(q)
-    return tmp
-end
+    local pdf_literal_q = node.new("whatsit","pdf_literal")
+    local pdf_literal_Q = node.new("whatsit","pdf_literal")
 
+    pdf_literal_q.data   = string.format("q 1 0 0 1 %g -%g cm  q %g %g %g %g %g %g cm q 1 0 0 1 -%g %g cm ",x,y,tbl[1],tbl[2],tbl[3],tbl[4],tbl[5],tbl[6],x,y )
+    pdf_literal_Q.data = "Q Q Q"
+
+    local pdf_save    = node.new("whatsit","pdf_save")
+    local pdf_restore = node.new("whatsit","pdf_restore")
+
+    local hbox
+    hbox = node.insert_before(nodelist,nodelist,pdf_literal_q)
+    node.insert_after(nodelist,nodelist,pdf_literal_Q)
+    hbox = node.insert_before(hbox,pdf_literal_q,pdf_save)
+    hbox = node.hpack(hbox)
+
+    hbox.depth = 0
+    node.insert_after(hbox,node.tail(hbox),pdf_restore)
+
+    local newbox = node.vpack(hbox)
+    return newbox
+end
 
 --- Rotate an object clockwise with a given angle (in degrees).
 ---
