@@ -1109,6 +1109,74 @@
          </oneOrMore>
       </element>
    </define>
+   <define name="e_Frame">
+      <element name="Frame">
+         <a:documentation>Manipulate an object's appearance by drawing a frame.</a:documentation>
+         <optional>
+            <attribute name="border-bottom-right-radius">
+               <a:documentation>Radius of corner bottom right.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="border-top-right-radius">
+               <a:documentation>Radius of corner top right.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="border-top-left-radius">
+               <a:documentation>Radius of corner top left.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="border-bottom-left-radius">
+               <a:documentation>Radius of corner bottom left.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="framecolor">
+               <a:documentation>The color of the frame around the object. Only makes sense in combination with the attribute 'frame'.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="backgroundcolor">
+               <a:documentation>Color of the background if ›background‹ is set to ›full‹.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="rulewidth">
+               <a:documentation>The thickness of the frame that is drawn around the object. Only makes sense in combination with the attribute 'frame'.</a:documentation>
+            </attribute>
+         </optional>
+         <oneOrMore>
+            <interleave>
+               <optional>
+                  <ref name="e_Image"/>
+               </optional>
+               <optional>
+                  <ref name="e_Box"/>
+               </optional>
+               <optional>
+                  <ref name="e_Rule"/>
+               </optional>
+               <optional>
+                  <ref name="e_Textblock"/>
+               </optional>
+               <optional>
+                  <ref name="e_Barcode"/>
+               </optional>
+               <optional>
+                  <ref name="e_Table"/>
+               </optional>
+               <optional>
+                  <ref name="e_Transformation"/>
+               </optional>
+               <optional>
+                  <ref name="e_Frame"/>
+               </optional>
+            </interleave>
+         </oneOrMore>
+      </element>
+   </define>
    <define name="e_Grid">
       <element name="Grid">
          <a:documentation>Override the grid settings from SetGrid.</a:documentation>
@@ -2408,6 +2476,9 @@
                <optional>
                   <ref name="e_Transformation"/>
                </optional>
+               <optional>
+                  <ref name="e_Frame"/>
+               </optional>
             </interleave>
          </oneOrMore>
       </element>
@@ -3402,6 +3473,9 @@
                </optional>
                <optional>
                   <ref name="e_Table"/>
+               </optional>
+               <optional>
+                  <ref name="e_Frame"/>
                </optional>
                <optional>
                   <ref name="e_Transformation"/>

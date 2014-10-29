@@ -268,6 +268,7 @@ local dispatch_table = {
     EmptyLine               = commands.emptyline,
     Fontface                = commands.fontface,
     ForAll                  = commands.forall,
+    Frame                  = commands.frame,
     Grid                    = commands.grid,
     Group                   = commands.group,
     HSpace                  = commands.hspace,
@@ -368,7 +369,7 @@ function dispatch(layoutxml,dataxml,options)
                 tmp = dispatch_table[eltname](j,dataxml,options)
 
                 -- Copy-of-elements can be resolveld immediately
-                if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" or eltname == "Transformation" then
+                if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" or eltname == "Transformation" or eltname == "Frame" then
                     if type(tmp)=="table" then
                         for i=1,#tmp do
                             if tmp[i].contents then
@@ -780,7 +781,6 @@ function output_at( param )
     local keepposition = param.keepposition
     local grid = param.grid
 
-
     -- current_grid is important here, because it can be a group
     local r = grid or current_grid
     local wd = nodelist.width
@@ -1079,12 +1079,12 @@ end
 function frame(obj)
     local  box, colorname, width
     box          = obj.box
-    colorname    = obj.colorname
+    colorname    = obj.colorname or "black"
     width        = obj.rulewidth
-    b_b_r_radius = sp_to_bp(obj.b_b_r_radius)
-    b_t_r_radius = sp_to_bp(obj.b_t_r_radius)
-    b_t_l_radius = sp_to_bp(obj.b_t_l_radius)
-    b_b_l_radius = sp_to_bp(obj.b_b_l_radius)
+    local b_b_r_radius = sp_to_bp(obj.b_b_r_radius)
+    local b_t_r_radius = sp_to_bp(obj.b_t_r_radius)
+    local b_t_l_radius = sp_to_bp(obj.b_t_l_radius)
+    local b_b_l_radius = sp_to_bp(obj.b_b_l_radius)
 
     -- FIXME: see http://en.wikipedia.org/wiki/File:Circle_and_cubic_bezier.svg
     -- http://en.wikipedia.org/wiki/Composite_B%C3%A9zier_curve

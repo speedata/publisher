@@ -1847,6 +1847,105 @@
     </example>
     <seealso><cmd name="Switch"/></seealso>
   </command>
+  <command en="Frame" de="Rahmen">
+    <description xml:lang="en">
+      <para>Manipulate an object's appearance by drawing a frame. Can be used as a clipping path.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Um ein Objekt ein Rahmen zeichnen. Kann als Clipping-Pfad benutzt werden.</para>
+    </description>
+    <childelements>
+      <oneOrMore>
+        <interleave>
+          <optional><cmd name="Image"/></optional>
+          <optional><cmd name="Box"/></optional>
+          <optional><cmd name="Rule"/></optional>
+          <optional><cmd name="Textblock"/></optional>
+          <optional><cmd name="Barcode"/></optional>
+          <optional><cmd name="Table"/></optional>
+          <optional><cmd name="Transformation"/></optional>
+          <optional><cmd name="Frame"/></optional>
+        </interleave>
+      </oneOrMore>
+    </childelements>
+    <attribute en="border-bottom-right-radius" de="rahmen-unten-rechts-radius" optional="yes" type="length">
+      <description xml:lang="en">
+        <para>Radius of corner bottom right.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Radius der Ecke unten rechts.</para>
+      </description>
+    </attribute>
+    <attribute en="border-top-right-radius" de="rahmen-oben-rechts-radius" optional="yes" type="length">
+      <description xml:lang="en">
+        <para>Radius of corner top right.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Radius der Ecke oben rechts.</para>
+      </description>
+    </attribute>
+    <attribute en="border-top-left-radius" de="rahmen-oben-links-radius" optional="yes" type="length">
+      <description xml:lang="en">
+        <para>Radius of corner top left.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Radius der Ecke oben links.</para>
+      </description>
+    </attribute>
+    <attribute en="border-bottom-left-radius" de="rahmen-unten-links-radius" optional="yes" type="length">
+      <description xml:lang="en">
+        <para>Radius of corner bottom left.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Radius der Ecke unten links.</para>
+      </description>
+    </attribute>
+    <attribute en="framecolor" de="rahmenfarbe" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The color of the frame around the object. Only makes sense in combination with the attribute 'frame'.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Farbe des Rahmens, wenn ein Rahmen ausgegeben wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
+      </description>
+    </attribute>
+    <attribute en="backgroundcolor" de="hintergrundfarbe" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>Color of the background if ›background‹ is set to ›full‹.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Hintergrundfarbe wenn das Objekt mit einer Farbe hinterlegt werden soll.</para>
+      </description>
+    </attribute>
+    <attribute en="rulewidth" de="linienstärke" type="length" optional="yes">
+      <description xml:lang="en">
+        <para>The thickness of the frame that is drawn around the object. Only makes sense in combination with the attribute 'frame'.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Dicke des Rahmnes, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject>
+    <Frame framecolor="red" border-bottom-left-radius="10pt">
+      <Image width="20" file="_samplea.pdf"/>
+    </Frame>
+  </PlaceObject>
+</Record>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Datensatz element="data">
+  <ObjektAusgeben>
+    <Rahmen rahmenfarbe="red" rahmen-unten-links-radius="10pt">
+      <Bild breite="20" datei="_samplea.pdf"></Bild>
+    </Rahmen>
+  </ObjektAusgeben>
+</Datensatz>
+]]></listing>
+    </example>
+    <seealso><cmd name="PlaceObject"/></seealso>
+  </command>
   <command en="Grid" de="Raster">
     <description xml:lang="en">
       <para>Override the grid settings from <cmd name="SetGrid"/>.</para>
@@ -4106,6 +4205,7 @@
           <optional><cmd name="Barcode"/></optional>
           <optional><cmd name="Table"/></optional>
           <optional><cmd name="Transformation"/></optional>
+          <optional><cmd name="Frame"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>
@@ -6533,6 +6633,7 @@
           <optional><cmd name="Textblock"/></optional>
           <optional><cmd name="Barcode"/></optional>
           <optional><cmd name="Table"/></optional>
+          <optional><cmd name="Frame"/></optional>
           <optional><cmd name="Transformation"/></optional>
         </interleave>
       </oneOrMore>

@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2014-10-13 10:55)
+-- generated from genluatranslations.go (2014-10-29 10:41)
 -- do not edit!
 module(...)
 return {
@@ -115,6 +115,15 @@ return {
       ["FürAlle"] = { "ForAll",
         ["auswahl"] = "select",
         ["umfang"] = "limit",
+        },
+      ["Rahmen"] = { "Frame",
+        ["rahmen-unten-rechts-radius"] = "border-bottom-right-radius",
+        ["rahmen-oben-rechts-radius"] = "border-top-right-radius",
+        ["rahmen-oben-links-radius"] = "border-top-left-radius",
+        ["rahmen-unten-links-radius"] = "border-bottom-left-radius",
+        ["rahmenfarbe"] = "framecolor",
+        ["hintergrundfarbe"] = "backgroundcolor",
+        ["linienstärke"] = "rulewidth",
         },
       ["Raster"] = { "Grid",
         ["breite"] = "width",
@@ -420,12 +429,6 @@ return {
         ["bedingung"] = "test",
         },
   ["__values"] = {
-    ["align"] = {
-      ["center"] = "center",
-      ["left"] = "left",
-      ["right"] = "right",
-      ["justify"] = "justify",
-   },
     ["*"] = {
       ["alle"] = "all",
       ["artbox"] = "artbox",
@@ -496,6 +499,12 @@ return {
       ["unten"] = "bottom",
       ["links"] = "left",
       ["rechts"] = "right",
+   },
+    ["align"] = {
+      ["center"] = "center",
+      ["left"] = "left",
+      ["right"] = "right",
+      ["justify"] = "justify",
    },
    } 
   },

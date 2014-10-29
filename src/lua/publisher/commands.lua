@@ -687,6 +687,54 @@ function commands.forall( layoutxml,dataxml )
     return tab
 end
 
+--- Frame
+--- --------------
+--- Apply a frame on an object for PlaceObject. Frames can be nested (with Transformation)
+function commands.frame( layoutxml,dataxml )
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    local b_b_r_radius     = publisher.read_attribute(layoutxml,dataxml,"border-bottom-right-radius", "string")
+    local b_t_r_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-right-radius",    "string")
+    local b_t_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-left-radius",     "string")
+    local b_b_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-bottom-left-radius",  "string")
+    local framecolor       = publisher.read_attribute(layoutxml,dataxml,"framecolor",     "rawstring")
+    local backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
+    local rulewidth_sp     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",      "length_sp", 26312) -- 0.4bp
+
+    for i=1,#tab do
+        local contents = publisher.element_contents(tab[i])
+        if node.is_node(contents) then
+            if matrix then
+                tab[i].contents = publisher.frame({
+                    box       = contents,
+                    colorname = framecolor,
+                    rulewidth = rulewidth_sp,
+                    b_b_r_radius = tex.sp(b_b_r_radius or 0),
+                    b_t_r_radius = tex.sp(b_t_r_radius or 0),
+                    b_t_l_radius = tex.sp(b_t_l_radius or 0),
+                    b_b_l_radius = tex.sp(b_b_l_radius or 0),
+                })
+
+            end
+        else
+            for j=1,#contents do
+                if node.is_node(contents[j]) then
+                    contents[j] = publisher.frame({
+                        box       = contents[j],
+                        colorname = framecolor,
+                        rulewidth = rulewidth_sp,
+                        b_b_r_radius = tex.sp(b_b_r_radius or 0),
+                        b_t_r_radius = tex.sp(b_t_r_radius or 0),
+                        b_t_l_radius = tex.sp(b_t_l_radius or 0),
+                        b_b_l_radius = tex.sp(b_b_l_radius or 0),
+                    })
+
+                end
+            end
+        end
+    end
+    return tab
+end
+
 --- Grid
 --- -----
 --- Set the grid in a group (also in a pagetype?)
@@ -1693,7 +1741,7 @@ function commands.place_object( layoutxml,dataxml )
         if publisher.options.trace then
             publisher.boxit(object)
         end
-
+        assert(object.width,"Can't determine object width")
         local width_in_gridcells   = current_grid:width_in_gridcells_sp(object.width)
         local height_in_gridcells  = current_grid:height_in_gridcells_sp (object.height + object.depth)
 

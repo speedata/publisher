@@ -1114,6 +1114,74 @@
          </oneOrMore>
       </element>
    </define>
+   <define name="e_Frame">
+      <element name="Rahmen">
+         <a:documentation>Um ein Objekt ein Rahmen zeichnen.</a:documentation>
+         <optional>
+            <attribute name="rahmen-unten-rechts-radius">
+               <a:documentation>Radius der Ecke unten rechts.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="rahmen-oben-rechts-radius">
+               <a:documentation>Radius der Ecke oben rechts.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="rahmen-oben-links-radius">
+               <a:documentation>Radius der Ecke oben links.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="rahmen-unten-links-radius">
+               <a:documentation>Radius der Ecke unten links.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="rahmenfarbe">
+               <a:documentation>Die Farbe des Rahmens, wenn ein Rahmen ausgegeben wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="hintergrundfarbe">
+               <a:documentation>Hintergrundfarbe wenn das Objekt mit einer Farbe hinterlegt werden soll.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="linienstärke">
+               <a:documentation>Die Dicke des Rahmnes, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</a:documentation>
+            </attribute>
+         </optional>
+         <oneOrMore>
+            <interleave>
+               <optional>
+                  <ref name="e_Image"/>
+               </optional>
+               <optional>
+                  <ref name="e_Box"/>
+               </optional>
+               <optional>
+                  <ref name="e_Rule"/>
+               </optional>
+               <optional>
+                  <ref name="e_Textblock"/>
+               </optional>
+               <optional>
+                  <ref name="e_Barcode"/>
+               </optional>
+               <optional>
+                  <ref name="e_Table"/>
+               </optional>
+               <optional>
+                  <ref name="e_Transformation"/>
+               </optional>
+               <optional>
+                  <ref name="e_Frame"/>
+               </optional>
+            </interleave>
+         </oneOrMore>
+      </element>
+   </define>
    <define name="e_Grid">
       <element name="Raster">
          <a:documentation>Überschreibt das allgemeine Raster aus SetzeRaster.</a:documentation>
@@ -2419,6 +2487,9 @@
                <optional>
                   <ref name="e_Transformation"/>
                </optional>
+               <optional>
+                  <ref name="e_Frame"/>
+               </optional>
             </interleave>
          </oneOrMore>
       </element>
@@ -3416,6 +3487,9 @@
                </optional>
                <optional>
                   <ref name="e_Table"/>
+               </optional>
+               <optional>
+                  <ref name="e_Frame"/>
                </optional>
                <optional>
                   <ref name="e_Transformation"/>
