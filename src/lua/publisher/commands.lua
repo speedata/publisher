@@ -1979,15 +1979,14 @@ function commands.rule( layoutxml,dataxml )
     else
         rulewidth = tex.sp(rulewidth)
     end
-    rulewidth = sp_to_bp(rulewidth)
-
+    rulewidth = math.round(sp_to_bp(rulewidth),3)
 
     local n = node.new("whatsit","pdf_literal")
     n.mode = 0
     if direction == "horizontal" then
-        n.data = string.format("q %d w %s 0 0 m %g 0 l S Q",rulewidth,publisher.colors[colorname].pdfstring,length)
+        n.data = string.format("q %g w %s 0 0 m %g 0 l S Q",rulewidth,publisher.colors[colorname].pdfstring,length)
     elseif direction == "vertical" then
-        n.data = string.format("q %d w %s 0 0 m 0 %g l S Q",rulewidth,publisher.colors[colorname].pdfstring,-length)
+        n.data = string.format("q %g w %s 0 0 m 0 %g l S Q",rulewidth,publisher.colors[colorname].pdfstring,-length)
     else
         --
     end
