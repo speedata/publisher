@@ -461,6 +461,7 @@ end
 --- -------------------------------
 --- This is the entry point of the processing. It is called from publisher.spinit#main_loop.
 function dothings()
+    log("LuaTeX version %d.%d",tex.luatexversion,tex.luatexrevision)
     --- First we set some defaults.
     --- A4 paper is 210x297 mm
     set_pageformat(tex.sp("210mm"),tex.sp("297mm"))
