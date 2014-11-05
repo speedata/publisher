@@ -528,7 +528,11 @@ function trimbox( self )
     assert(self)
     local x,y,wd,ht =  sp_to_bp(self.extra_margin), sp_to_bp(self.extra_margin) , sp_to_bp(tex.pagewidth - self.extra_margin), sp_to_bp(tex.pageheight - self.extra_margin)
     local b_x,b_y,b_wd,b_ht = sp_to_bp(self.extra_margin - self.trim), sp_to_bp(self.extra_margin - self.trim) , sp_to_bp(tex.pagewidth - self.extra_margin + self.trim), sp_to_bp(tex.pageheight - self.extra_margin + self.trim)
-    pdf.pageattributes = string.format("/TrimBox [ %g %g %g %g] /BleedBox [%g %g %g %g]",x,y,wd,ht,b_x,b_y,b_wd,b_ht)
+    if status.luatex_version < 79 then
+        pdf.pageattributes = string.format("/TrimBox [ %g %g %g %g] /BleedBox [%g %g %g %g]",x,y,wd,ht,b_x,b_y,b_wd,b_ht)
+    else
+        pdf.setpageattributes(string.format("/TrimBox [ %g %g %g %g] /BleedBox [%g %g %g %g]",x,y,wd,ht,b_x,b_y,b_wd,b_ht))
+    end
 end
 
 function cutmarks( self, length, distance, width )
