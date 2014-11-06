@@ -16,10 +16,10 @@
          <h2>Beschreibung</h2>
          <p>Gibt ein rechteckiges Objekt (Bild, Tabelle, Box oder Textblock) aus.</p>
          <div class="hangingindent">
-            <p>Erlaubte Attribute: <span class="tt"><a href="#keepposition">behalteposition</a></span>, <span class="tt"><a href="#allocate">belegen</a></span>, <span class="tt"><a href="#area">bereich</a></span>, <span class="tt"><a href="#rotate">drehen</a></span>, <span class="tt"><a href="#groupname">gruppenname</a></span>, <span class="tt"><a href="#background">hintergrund</a></span>, <span class="tt"><a href="#backgroundcolor">hintergrundfarbe</a></span>, <span class="tt"><a href="#hreference">hreferenz</a></span>, <span class="tt"><a href="#rulewidth">linienstärke</a></span>, <span class="tt"><a href="#matrix">matrix</a></span>, <span class="tt"><a href="#maxheight">maxhöhe</a></span>, <span class="tt"><a href="#frame">rahmen</a></span>, <span class="tt"><a href="#framecolor">rahmenfarbe</a></span>, <span class="tt"><a href="#page">seite</a></span>, <span class="tt"><a href="#column">spalte</a></span>, <span class="tt"><a href="#origin-x">ursprung-x</a></span>, <span class="tt"><a href="#origin-y">ursprung-y</a></span>, <span class="tt"><a href="#valign">valign</a></span>, <span class="tt"><a href="#vreference">vreferenz</a></span>, <span class="tt"><a href="#row">zeile</a></span></p>
+            <p>Erlaubte Attribute: <span class="tt"><a href="#keepposition">behalteposition</a></span>, <span class="tt"><a href="#allocate">belegen</a></span>, <span class="tt"><a href="#area">bereich</a></span>, <span class="tt"><a href="#rotate">drehen</a></span>, <span class="tt"><a href="#groupname">gruppenname</a></span>, <span class="tt"><a href="#background">hintergrund</a></span>, <span class="tt"><a href="#backgroundcolor">hintergrundfarbe</a></span>, <span class="tt"><a href="#hreference">hreferenz</a></span>, <span class="tt"><a href="#rulewidth">linienstärke</a></span>, <span class="tt"><a href="#maxheight">maxhöhe</a></span>, <span class="tt"><a href="#frame">rahmen</a></span>, <span class="tt"><a href="#border-top-left-radius">rahmen-oben-links-radius</a></span>, <span class="tt"><a href="#border-top-right-radius">rahmen-oben-rechts-radius</a></span>, <span class="tt"><a href="#border-bottom-left-radius">rahmen-unten-links-radius</a></span>, <span class="tt"><a href="#border-bottom-right-radius">rahmen-unten-rechts-radius</a></span>, <span class="tt"><a href="#framecolor">rahmenfarbe</a></span>, <span class="tt"><a href="#page">seite</a></span>, <span class="tt"><a href="#column">spalte</a></span>, <span class="tt"><a href="#origin-x">ursprung-x</a></span>, <span class="tt"><a href="#origin-y">ursprung-y</a></span>, <span class="tt"><a href="#valign">valign</a></span>, <span class="tt"><a href="#vreference">vreferenz</a></span>, <span class="tt"><a href="#row">zeile</a></span></p>
          </div>
          <div class="hangingindent">
-            <p>Kindelemente: <a href="image.html">Bild</a>, <a href="box.html">Box</a>, <a href="rule.html">Linie</a>, <a href="barcode.html">Strichcode</a>, <a href="table.html">Tabelle</a>, <a href="textblock.html">Textblock</a></p>
+            <p>Kindelemente: <a href="image.html">Bild</a>, <a href="box.html">Box</a>, <a href="rule.html">Linie</a>, <a href="frame.html">Rahmen</a>, <a href="barcode.html">Strichcode</a>, <a href="table.html">Tabelle</a>, <a href="textblock.html">Textblock</a>, <a href="transformation.html">Transformation</a></p>
          </div>
          <div class="hangingindent">
             <p>Elternelemente: </p>
@@ -192,15 +192,6 @@
                </p>
                
             </dd>
-            <dt><a name="matrix"></a><span class="tt">matrix</span> (Text, optional)
-            </dt>
-            <dd>
-               
-               <p>Experimentell. Die Transformations-Matrix für das Objekt. Erwartet wird eine Leerzeichen-separierte
-                  Zeichenkette mit sechs Werten.
-               </p>
-               
-            </dd>
             <dt><a name="maxheight"></a><span class="tt">maxhöhe</span> (Zahl, optional)
             </dt>
             <dd>
@@ -243,6 +234,34 @@
                   </tr>
                </table>
             </dd>
+            <dt><a name="border-top-left-radius"></a><span class="tt">rahmen-oben-links-radius</span> (Längenangabe (mm,cm,pt), optional)
+            </dt>
+            <dd>
+               
+               <p>Radius der Ecke oben links.</p>
+               
+            </dd>
+            <dt><a name="border-top-right-radius"></a><span class="tt">rahmen-oben-rechts-radius</span> (Längenangabe (mm,cm,pt), optional)
+            </dt>
+            <dd>
+               
+               <p>Radius der Ecke oben rechts.</p>
+               
+            </dd>
+            <dt><a name="border-bottom-left-radius"></a><span class="tt">rahmen-unten-links-radius</span> (Längenangabe (mm,cm,pt), optional)
+            </dt>
+            <dd>
+               
+               <p>Radius der Ecke unten links.</p>
+               
+            </dd>
+            <dt><a name="border-bottom-right-radius"></a><span class="tt">rahmen-unten-rechts-radius</span> (Längenangabe (mm,cm,pt), optional)
+            </dt>
+            <dd>
+               
+               <p>Radius der Ecke unten rechts.</p>
+               
+            </dd>
             <dt><a name="framecolor"></a><span class="tt">rahmenfarbe</span> (Text, optional)
             </dt>
             <dd>
@@ -276,7 +295,7 @@
             </dt>
             <dd>
                
-               <p>Der Ursprung für die Drehung und Matrix-Tranformation</p>
+               <p>Der Ursprung für die Drehung</p>
                
                <table class="attributechoice">
                   <tr>
@@ -517,6 +536,7 @@
             <li><a href="options.html">Optionen</a></li>
             <li><a href="positioningarea.html">Platzierungsbereich</a></li>
             <li><a href="positioningframe.html">Platzierungsrahmen</a></li>
+            <li><a href="frame.html">Rahmen</a></li>
             <li><a href="margin.html">Rand</a></li>
             <li><a href="grid.html">Raster</a></li>
             <li><a href="loop.html">Schleife</a></li>
@@ -545,6 +565,7 @@
             <li><a href="textblock.html">Textblock</a></li>
             <li><a href="tablerule.html">Tlinie</a></li>
             <li><a href="tr.html">Tr</a></li>
+            <li><a href="transformation.html">Transformation</a></li>
             <li><a href="hyphenation.html">Trennvorschlag</a></li>
             <li><a href="u.html">U</a></li>
             <li><a href="url.html">URL</a></li>
@@ -555,7 +576,7 @@
             <li><a href="setvariable.html">Zuweisung</a></li>
          </ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.21 |
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.27 |
       <a href="../index-de.html">Startseite</a>
       |
       <a href="../commands-de/layout.html">Befehlsreferenz</a> |

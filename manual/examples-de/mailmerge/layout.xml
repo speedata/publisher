@@ -1,0 +1,82 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/de" xmlns:sd="urn:speedata:2009/publisher/functions/de">
+
+    <SetzeRaster höhe="12pt" nx="30"/>
+    <Optionen hauptsprache="Deutsch"/>
+    <DefiniereTextformat name="text" ausrichtung="linksbündig"/>
+    <DefiniereTextformat name="company" ausrichtung="rechtsbündig"/>
+
+    <DefiniereSchriftfamilie name="company" schriftgröße="8" zeilenabstand="10">
+        <Normal schriftart="TeXGyreHeros-Regular"/>
+    </DefiniereSchriftfamilie>
+
+    <Datensatz element="root">
+        <BearbeiteKnoten auswahl="record"/>
+    </Datensatz>
+
+    <Seitentyp name="page" bedingung="true()">
+        <Rand links="20mm" rechts="10mm" oben="10mm" unten="20mm"></Rand>
+        <Platzierungsbereich name="recipient">
+            <Platzierungsrahmen breite="20" höhe="5" zeile="10" spalte="3"/>
+        </Platzierungsbereich>
+        <Platzierungsbereich name="company">
+            <Platzierungsrahmen breite="7" höhe="20" zeile="1" spalte="24"/>
+        </Platzierungsbereich>
+        <BeiSeitenErzeugung>
+            <ObjektAusgeben zeile="1" spalte="3" bereich="company">
+                <Bild datei="logo.pdf" breite="5"/>
+            </ObjektAusgeben>
+            <NeueZeile bereich="company"/>
+            <ObjektAusgeben bereich="company">
+                <Textblock schriftart="company" textformat="company">
+                    <Absatz>
+                        <Wert>Print Company &amp; Office<br/>61556 W 20th Ave<br/>Seattle King WA 98104<br></br><br></br>206-711-6498<br></br>206-395-6284<br></br><br></br>jbiddy@printcompany.com<br></br></Wert><A href="http://www.printcompany.com"><Wert>www.printcompany.com</Wert></A>
+                    </Absatz>
+                </Textblock>
+            </ObjektAusgeben>
+        </BeiSeitenErzeugung>
+    </Seitentyp>
+
+    <Datensatz element="record">
+        <ObjektAusgeben bereich="recipient">
+            <Textblock>
+                <Absatz>
+                    <Wert auswahl="@GivenName"/><Wert> </Wert><Wert auswahl="@Surname"/><Br/>
+                    <Wert auswahl="@StreetAddress"/><Br/>
+                    <Wert auswahl="@ZipCode"/><Wert> </Wert><Wert auswahl="@City"/>
+                </Absatz>
+            </Textblock>
+        </ObjektAusgeben>
+        <ObjektAusgeben zeile="20" spalte="1">
+            <Textblock>
+                <Absatz>
+                    <Wert>6. November 2014</Wert>
+                </Absatz>
+            </Textblock>
+        </ObjektAusgeben>
+        <NeueZeile zeilen="2"/>
+        <ObjektAusgeben>
+            <Textblock breite="15">
+                <Absatz>
+                    <Wert>Liebe</Wert>
+                    <Fallunterscheidung>
+                        <Fall bedingung="@Gender = 'male'">
+                            <Wert>r</Wert>
+                        </Fall>
+                    </Fallunterscheidung>
+                    <Wert auswahl="concat(' ',@GivenName,', ' @Surname,',')"/>
+                </Absatz>
+                <Absatz><Wert></Wert></Absatz>
+                <Absatz>
+                    <Wert>es gibt im Moment in diese Mannschaft, oh, einige Spieler vergessen ihnen Profi was sie sind. Ich lese nicht sehr viele Zeitungen, aber ich habe gehört viele Situationen. Erstens: wir haben nicht offensiv gespielt. Es gibt keine deutsche Mannschaft spielt offensiv und die Name offensiv wie Bayern. Letzte Spiel hatten wir in Platz drei Spitzen: Elber, Jancka und dann Zickler. Wir müssen nicht vergessen Zickler. Zickler ist eine Spitzen mehr, Mehmet eh mehr Basler. Ist klar diese Wörter, ist möglich verstehen, was ich hab gesagt? Danke. Offensiv, offensiv ist wie machen wir in Platz. Zweitens: ich habe erklärt mit diese zwei Spieler: nach Dortmund brauchen vielleicht Halbzeit Pause. Ich habe auch andere Mannschaften gesehen in Europa nach diese Mittwoch. Ich habe gesehen auch zwei Tage die Training. Ein Trainer ist nicht ein Idiot! Ein Trainer sei sehen was passieren in Platz. In diese Spiel es waren zwei, drei diese Spieler waren schwach wie eine Flasche leer! Haben Sie gesehen Mittwoch, welche Mannschaft hat gespielt Mittwoch? Hat gespielt Mehmet oder gespielt Basler oder hat gespielt Trapattoni? Diese Spieler beklagen mehr als sie spielen! Wissen Sie, warum die Italienmannschaften kaufen nicht diese Spieler? Weil wir haben gesehen viele Male solche Spiel!</Wert>
+                </Absatz>
+                <Absatz><Wert></Wert></Absatz>
+                <Absatz><Wert>Mit freundlichem Gruß
+
+
+Jani Biddy</Wert></Absatz>
+            </Textblock>
+        </ObjektAusgeben>
+        <NeueSeite></NeueSeite>
+    </Datensatz>
+</Layout>
+
