@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
+    <entry version="2.1.27" date="2014-11-06">
+      <en>New example "mail merge"</en>
+      <de>Neues Beispiel "Serienbriefe"</de>
+    </entry>
     <entry version="2.1.26" date="2014-10-29">
       <en>New command: Frame. Can be used inside PlaceObject to frame an object.</en>
       <de>Neuer Befehl: Rahmen. Kann als Beschneidungspfad für innenliegende Ojbekte genommen werden.</de>

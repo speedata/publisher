@@ -1,0 +1,904 @@
+<root>
+  <record first_name="James" last_name="Butt" company_name="Benton, John B Jr"
+    address="6649 N Blue Gum St" city="New Orleans" county="Orleans" state="LA" zip="70116"
+    phone1="504-621-8927" phone2="504-845-1427" email="jbutt@gmail.com"
+    web="http://www.bentonjohnbjr.com"/>
+  <record first_name="Josephine" last_name="Darakjy" company_name="Chanay, Jeffrey A Esq"
+    address="4 B Blue Ridge Blvd" city="Brighton" county="Livingston" state="MI" zip="48116"
+    phone1="810-292-9388" phone2="810-374-9840" email="josephine_darakjy@darakjy.org"
+    web="http://www.chanayjeffreyaesq.com"/>
+  <record first_name="Art" last_name="Venere" company_name="Chemel, James L Cpa"
+    address="8 W Cerritos Ave #54" city="Bridgeport" county="Gloucester" state="NJ" zip="08014"
+    phone1="856-636-8749" phone2="856-264-4130" email="art@venere.org"
+    web="http://www.chemeljameslcpa.com"/>
+  <record first_name="Lenna" last_name="Paprocki" company_name="Feltz Printing Service"
+    address="639 Main St" city="Anchorage" county="Anchorage" state="AK" zip="99501"
+    phone1="907-385-4412" phone2="907-921-2010" email="lpaprocki@hotmail.com"
+    web="http://www.feltzprintingservice.com"/>
+  <record first_name="Donette" last_name="Foller" company_name="Printing Dimensions"
+    address="34 Center St" city="Hamilton" county="Butler" state="OH" zip="45011"
+    phone1="513-570-1893" phone2="513-549-4561" email="donette.foller@cox.net"
+    web="http://www.printingdimensions.com"/>
+  <record first_name="Simona" last_name="Morasca" company_name="Chapman, Ross E Esq"
+    address="3 Mcauley Dr" city="Ashland" county="Ashland" state="OH" zip="44805"
+    phone1="419-503-2484" phone2="419-800-6759" email="simona@morasca.com"
+    web="http://www.chapmanrosseesq.com"/>
+  <record first_name="Mitsue" last_name="Tollner" company_name="Morlong Associates"
+    address="7 Eads St" city="Chicago" county="Cook" state="IL" zip="60632" phone1="773-573-6914"
+    phone2="773-924-8565" email="mitsue_tollner@yahoo.com" web="http://www.morlongassociates.com"/>
+  <record first_name="Leota" last_name="Dilliard" company_name="Commercial Press"
+    address="7 W Jackson Blvd" city="San Jose" county="Santa Clara" state="CA" zip="95111"
+    phone1="408-752-3500" phone2="408-813-1105" email="leota@hotmail.com"
+    web="http://www.commercialpress.com"/>
+  <record first_name="Sage" last_name="Wieser" company_name="Truhlar And Truhlar Attys"
+    address="5 Boston Ave #88" city="Sioux Falls" county="Minnehaha" state="SD" zip="57105"
+    phone1="605-414-2147" phone2="605-794-4895" email="sage_wieser@cox.net"
+    web="http://www.truhlarandtruhlarattys.com"/>
+  <record first_name="Kris" last_name="Marrier" company_name="King, Christopher A Esq"
+    address="228 Runamuck Pl #2808" city="Baltimore" county="Baltimore City" state="MD" zip="21224"
+    phone1="410-655-8723" phone2="410-804-4694" email="kris@gmail.com"
+    web="http://www.kingchristopheraesq.com"/>
+  <record first_name="Minna" last_name="Amigon" company_name="Dorl, James J Esq"
+    address="2371 Jerrold Ave" city="Kulpsville" county="Montgomery" state="PA" zip="19443"
+    phone1="215-874-1229" phone2="215-422-8694" email="minna_amigon@yahoo.com"
+    web="http://www.dorljamesjesq.com"/>
+  <record first_name="Abel" last_name="Maclead" company_name="Rangoni Of Florence"
+    address="37275 St  Rt 17m M" city="Middle Island" county="Suffolk" state="NY" zip="11953"
+    phone1="631-335-3414" phone2="631-677-3675" email="amaclead@gmail.com"
+    web="http://www.rangoniofflorence.com"/>
+  <record first_name="Kiley" last_name="Caldarera" company_name="Feiner Bros"
+    address="25 E 75th St #69" city="Los Angeles" county="Los Angeles" state="CA" zip="90034"
+    phone1="310-498-5651" phone2="310-254-3084" email="kiley.caldarera@aol.com"
+    web="http://www.feinerbros.com"/>
+  <record first_name="Graciela" last_name="Ruta" company_name="Buckley Miller &amp; Wright"
+    address="98 Connecticut Ave Nw" city="Chagrin Falls" county="Geauga" state="OH" zip="44023"
+    phone1="440-780-8425" phone2="440-579-7763" email="gruta@cox.net"
+    web="http://www.buckleymillerwright.com"/>
+  <record first_name="Cammy" last_name="Albares" company_name="Rousseaux, Michael Esq"
+    address="56 E Morehead St" city="Laredo" county="Webb" state="TX" zip="78045"
+    phone1="956-537-6195" phone2="956-841-7216" email="calbares@gmail.com"
+    web="http://www.rousseauxmichaelesq.com"/>
+  <record first_name="Mattie" last_name="Poquette" company_name="Century Communications"
+    address="73 State Road 434 E" city="Phoenix" county="Maricopa" state="AZ" zip="85013"
+    phone1="602-277-4385" phone2="602-953-6360" email="mattie@aol.com"
+    web="http://www.centurycommunications.com"/>
+  <record first_name="Meaghan" last_name="Garufi" company_name="Bolton, Wilbur Esq"
+    address="69734 E Carrillo St" city="Mc Minnville" county="Warren" state="TN" zip="37110"
+    phone1="931-313-9635" phone2="931-235-7959" email="meaghan@hotmail.com"
+    web="http://www.boltonwilburesq.com"/>
+  <record first_name="Gladys" last_name="Rim" company_name="T M Byxbee Company Pc"
+    address="322 New Horizon Blvd" city="Milwaukee" county="Milwaukee" state="WI" zip="53207"
+    phone1="414-661-9598" phone2="414-377-2880" email="gladys.rim@rim.org"
+    web="http://www.tmbyxbeecompanypc.com"/>
+  <record first_name="Yuki" last_name="Whobrey" company_name="Farmers Insurance Group"
+    address="1 State Route 27" city="Taylor" county="Wayne" state="MI" zip="48180"
+    phone1="313-288-7937" phone2="313-341-4470" email="yuki_whobrey@aol.com"
+    web="http://www.farmersinsurancegroup.com"/>
+  <record first_name="Fletcher" last_name="Flosi" company_name="Post Box Services Plus"
+    address="394 Manchester Blvd" city="Rockford" county="Winnebago" state="IL" zip="61109"
+    phone1="815-828-2147" phone2="815-426-5657" email="fletcher.flosi@yahoo.com"
+    web="http://www.postboxservicesplus.com"/>
+  <record first_name="Bette" last_name="Nicka" company_name="Sport En Art" address="6 S 33rd St"
+    city="Aston" county="Delaware" state="PA" zip="19014" phone1="610-545-3615"
+    phone2="610-492-4643" email="bette_nicka@cox.net" web="http://www.sportenart.com"/>
+  <record first_name="Veronika" last_name="Inouye" company_name="C 4 Network Inc"
+    address="6 Greenleaf Ave" city="San Jose" county="Santa Clara" state="CA" zip="95111"
+    phone1="408-540-1785" phone2="408-813-4592" email="vinouye@aol.com"
+    web="http://www.cnetworkinc.com"/>
+  <record first_name="Willard" last_name="Kolmetz" company_name="Ingalls, Donald R Esq"
+    address="618 W Yakima Ave" city="Irving" county="Dallas" state="TX" zip="75062"
+    phone1="972-303-9197" phone2="972-896-4882" email="willard@hotmail.com"
+    web="http://www.ingallsdonaldresq.com"/>
+  <record first_name="Maryann" last_name="Royster" company_name="Franklin, Peter L Esq"
+    address="74 S Westgate St" city="Albany" county="Albany" state="NY" zip="12204"
+    phone1="518-966-7987" phone2="518-448-8982" email="mroyster@royster.com"
+    web="http://www.franklinpeterlesq.com"/>
+  <record first_name="Alisha" last_name="Slusarski" company_name="Wtlz Power 107 Fm"
+    address="3273 State St" city="Middlesex" county="Middlesex" state="NJ" zip="08846"
+    phone1="732-658-3154" phone2="732-635-3453" email="alisha@slusarski.com"
+    web="http://www.wtlzpowerfm.com"/>
+  <record first_name="Allene" last_name="Iturbide" company_name="Ledecky, David Esq"
+    address="1 Central Ave" city="Stevens Point" county="Portage" state="WI" zip="54481"
+    phone1="715-662-6764" phone2="715-530-9863" email="allene_iturbide@cox.net"
+    web="http://www.ledeckydavidesq.com"/>
+  <record first_name="Chanel" last_name="Caudy" company_name="Professional Image Inc"
+    address="86 Nw 66th St #8673" city="Shawnee" county="Johnson" state="KS" zip="66218"
+    phone1="913-388-2079" phone2="913-899-1103" email="chanel.caudy@caudy.org"
+    web="http://www.professionalimageinc.com"/>
+  <record first_name="Ezekiel" last_name="Chui" company_name="Sider, Donald C Esq"
+    address="2 Cedar Ave #84" city="Easton" county="Talbot" state="MD" zip="21601"
+    phone1="410-669-1642" phone2="410-235-8738" email="ezekiel@chui.com"
+    web="http://www.siderdonaldcesq.com"/>
+  <record first_name="Willow" last_name="Kusko" company_name="U Pull It"
+    address="90991 Thorburn Ave" city="New York" county="New York" state="NY" zip="10011"
+    phone1="212-582-4976" phone2="212-934-5167" email="wkusko@yahoo.com"
+    web="http://www.upullit.com"/>
+  <record first_name="Bernardo" last_name="Figeroa" company_name="Clark, Richard Cpa"
+    address="386 9th Ave N" city="Conroe" county="Montgomery" state="TX" zip="77301"
+    phone1="936-336-3951" phone2="936-597-3614" email="bfigeroa@aol.com"
+    web="http://www.clarkrichardcpa.com"/>
+  <record first_name="Ammie" last_name="Corrio" company_name="Moskowitz, Barry S"
+    address="74874 Atlantic Ave" city="Columbus" county="Franklin" state="OH" zip="43215"
+    phone1="614-801-9788" phone2="614-648-3265" email="ammie@corrio.com"
+    web="http://www.moskowitzbarrys.com"/>
+  <record first_name="Francine" last_name="Vocelka" company_name="Cascade Realty Advisors Inc"
+    address="366 South Dr" city="Las Cruces" county="Dona Ana" state="NM" zip="88011"
+    phone1="505-977-3911" phone2="505-335-5293" email="francine_vocelka@vocelka.com"
+    web="http://www.cascaderealtyadvisorsinc.com"/>
+  <record first_name="Ernie" last_name="Stenseth" company_name="Knwz Newsradio"
+    address="45 E Liberty St" city="Ridgefield Park" county="Bergen" state="NJ" zip="07660"
+    phone1="201-709-6245" phone2="201-387-9093" email="ernie_stenseth@aol.com"
+    web="http://www.knwznewsradio.com"/>
+  <record first_name="Albina" last_name="Glick" company_name="Giampetro, Anthony D"
+    address="4 Ralph Ct" city="Dunellen" county="Middlesex" state="NJ" zip="08812"
+    phone1="732-924-7882" phone2="732-782-6701" email="albina@glick.com"
+    web="http://www.giampetroanthonyd.com"/>
+  <record first_name="Alishia" last_name="Sergi" company_name="Milford Enterprises Inc"
+    address="2742 Distribution Way" city="New York" county="New York" state="NY" zip="10025"
+    phone1="212-860-1579" phone2="212-753-2740" email="asergi@gmail.com"
+    web="http://www.milfordenterprisesinc.com"/>
+  <record first_name="Solange" last_name="Shinko" company_name="Mosocco, Ronald A"
+    address="426 Wolf St" city="Metairie" county="Jefferson" state="LA" zip="70002"
+    phone1="504-979-9175" phone2="504-265-8174" email="solange@shinko.com"
+    web="http://www.mosoccoronalda.com"/>
+  <record first_name="Jose" last_name="Stockham" company_name="Tri State Refueler Co"
+    address="128 Bransten Rd" city="New York" county="New York" state="NY" zip="10011"
+    phone1="212-675-8570" phone2="212-569-4233" email="jose@yahoo.com"
+    web="http://www.tristaterefuelerco.com"/>
+  <record first_name="Rozella" last_name="Ostrosky" company_name="Parkway Company"
+    address="17 Morena Blvd" city="Camarillo" county="Ventura" state="CA" zip="93012"
+    phone1="805-832-6163" phone2="805-609-1531" email="rozella.ostrosky@ostrosky.com"
+    web="http://www.parkwaycompany.com"/>
+  <record first_name="Valentine" last_name="Gillian" company_name="Fbs Business Finance"
+    address="775 W 17th St" city="San Antonio" county="Bexar" state="TX" zip="78204"
+    phone1="210-812-9597" phone2="210-300-6244" email="valentine_gillian@gmail.com"
+    web="http://www.fbsbusinessfinance.com"/>
+  <record first_name="Kati" last_name="Rulapaugh" company_name="Eder Assocs Consltng Engrs Pc"
+    address="6980 Dorsett Rd" city="Abilene" county="Dickinson" state="KS" zip="67410"
+    phone1="785-463-7829" phone2="785-219-7724" email="kati.rulapaugh@hotmail.com"
+    web="http://www.ederassocsconsltngengrspc.com"/>
+  <record first_name="Youlanda" last_name="Schemmer" company_name="Tri M Tool Inc"
+    address="2881 Lewis Rd" city="Prineville" county="Crook" state="OR" zip="97754"
+    phone1="541-548-8197" phone2="541-993-2611" email="youlanda@aol.com"
+    web="http://www.trimtoolinc.com"/>
+  <record first_name="Dyan" last_name="Oldroyd" company_name="International Eyelets Inc"
+    address="7219 Woodfield Rd" city="Overland Park" county="Johnson" state="KS" zip="66204"
+    phone1="913-413-4604" phone2="913-645-8918" email="doldroyd@aol.com"
+    web="http://www.internationaleyeletsinc.com"/>
+  <record first_name="Roxane" last_name="Campain" company_name="Rapid Trading Intl"
+    address="1048 Main St" city="Fairbanks" county="Fairbanks North Star" state="AK" zip="99708"
+    phone1="907-231-4722" phone2="907-335-6568" email="roxane@hotmail.com"
+    web="http://www.rapidtradingintl.com"/>
+  <record first_name="Lavera" last_name="Perin" company_name="Abc Enterprises Inc"
+    address="678 3rd Ave" city="Miami" county="Miami-Dade" state="FL" zip="33196"
+    phone1="305-606-7291" phone2="305-995-2078" email="lperin@perin.org"
+    web="http://www.abcenterprisesinc.com"/>
+  <record first_name="Erick" last_name="Ferencz" company_name="Cindy Turner Associates"
+    address="20 S Babcock St" city="Fairbanks" county="Fairbanks North Star" state="AK" zip="99712"
+    phone1="907-741-1044" phone2="907-227-6777" email="erick.ferencz@aol.com"
+    web="http://www.cindyturnerassociates.com"/>
+  <record first_name="Fatima" last_name="Saylors" company_name="Stanton, James D Esq"
+    address="2 Lighthouse Ave" city="Hopkins" county="Hennepin" state="MN" zip="55343"
+    phone1="952-768-2416" phone2="952-479-2375" email="fsaylors@saylors.org"
+    web="http://www.stantonjamesdesq.com"/>
+  <record first_name="Jina" last_name="Briddick" company_name="Grace Pastries Inc"
+    address="38938 Park Blvd" city="Boston" county="Suffolk" state="MA" zip="02128"
+    phone1="617-399-5124" phone2="617-997-5771" email="jina_briddick@briddick.com"
+    web="http://www.gracepastriesinc.com"/>
+  <record first_name="Kanisha" last_name="Waycott" company_name="Schroer, Gene E Esq"
+    address="5 Tomahawk Dr" city="Los Angeles" county="Los Angeles" state="CA" zip="90006"
+    phone1="323-453-2780" phone2="323-315-7314" email="kanisha_waycott@yahoo.com"
+    web="http://www.schroergeneeesq.com"/>
+  <record first_name="Emerson" last_name="Bowley" company_name="Knights Inn" address="762 S Main St"
+    city="Madison" county="Dane" state="WI" zip="53711" phone1="608-336-7444" phone2="608-658-7940"
+    email="emerson.bowley@bowley.org" web="http://www.knightsinn.com"/>
+  <record first_name="Blair" last_name="Malet" company_name="Bollinger Mach Shp &amp; Shipyard"
+    address="209 Decker Dr" city="Philadelphia" county="Philadelphia" state="PA" zip="19132"
+    phone1="215-907-9111" phone2="215-794-4519" email="bmalet@yahoo.com"
+    web="http://www.bollingermachshpshipyard.com"/>
+  <record first_name="Brock" last_name="Bolognia" company_name="Orinda News"
+    address="4486 W O St #1" city="New York" county="New York" state="NY" zip="10003"
+    phone1="212-402-9216" phone2="212-617-5063" email="bbolognia@yahoo.com"
+    web="http://www.orindanews.com"/>
+  <record first_name="Lorrie" last_name="Nestle" company_name="Ballard Spahr Andrews"
+    address="39 S 7th St" city="Tullahoma" county="Coffee" state="TN" zip="37388"
+    phone1="931-875-6644" phone2="931-303-6041" email="lnestle@hotmail.com"
+    web="http://www.ballardspahrandrews.com"/>
+  <record first_name="Sabra" last_name="Uyetake" company_name="Lowy Limousine Service"
+    address="98839 Hawthorne Blvd #6101" city="Columbia" county="Richland" state="SC" zip="29201"
+    phone1="803-925-5213" phone2="803-681-3678" email="sabra@uyetake.org"
+    web="http://www.lowylimousineservice.com"/>
+  <record first_name="Marjory" last_name="Mastella" company_name="Vicon Corporation"
+    address="71 San Mateo Ave" city="Wayne" county="Delaware" state="PA" zip="19087"
+    phone1="610-814-5533" phone2="610-379-7125" email="mmastella@mastella.com"
+    web="http://www.viconcorporation.com"/>
+  <record first_name="Karl" last_name="Klonowski" company_name="Rossi, Michael M"
+    address="76 Brooks St #9" city="Flemington" county="Hunterdon" state="NJ" zip="08822"
+    phone1="908-877-6135" phone2="908-470-4661" email="karl_klonowski@yahoo.com"
+    web="http://www.rossimichaelm.com"/>
+  <record first_name="Tonette" last_name="Wenner" company_name="Northwest Publishing"
+    address="4545 Courthouse Rd" city="Westbury" county="Nassau" state="NY" zip="11590"
+    phone1="516-968-6051" phone2="516-333-4861" email="twenner@aol.com"
+    web="http://www.northwestpublishing.com"/>
+  <record first_name="Amber" last_name="Monarrez" company_name="Branford Wire &amp; Mfg Co"
+    address="14288 Foster Ave #4121" city="Jenkintown" county="Montgomery" state="PA" zip="19046"
+    phone1="215-934-8655" phone2="215-329-6386" email="amber_monarrez@monarrez.org"
+    web="http://www.branfordwiremfgco.com"/>
+  <record first_name="Shenika" last_name="Seewald" company_name="East Coast Marketing"
+    address="4 Otis St" city="Van Nuys" county="Los Angeles" state="CA" zip="91405"
+    phone1="818-423-4007" phone2="818-749-8650" email="shenika@gmail.com"
+    web="http://www.eastcoastmarketing.com"/>
+  <record first_name="Delmy" last_name="Ahle" company_name="Wye Technologies Inc"
+    address="65895 S 16th St" city="Providence" county="Providence" state="RI" zip="02909"
+    phone1="401-458-2547" phone2="401-559-8961" email="delmy.ahle@hotmail.com"
+    web="http://www.wyetechnologiesinc.com"/>
+  <record first_name="Deeanna" last_name="Juhas" company_name="Healy, George W Iv"
+    address="14302 Pennsylvania Ave" city="Huntingdon Valley" county="Montgomery" state="PA"
+    zip="19006" phone1="215-211-9589" phone2="215-417-9563" email="deeanna_juhas@gmail.com"
+    web="http://www.healygeorgewiv.com"/>
+  <record first_name="Blondell" last_name="Pugh" company_name="Alpenlite Inc" address="201 Hawk Ct"
+    city="Providence" county="Providence" state="RI" zip="02904" phone1="401-960-8259"
+    phone2="401-300-8122" email="bpugh@aol.com" web="http://www.alpenliteinc.com"/>
+  <record first_name="Jamal" last_name="Vanausdal" company_name="Hubbard, Bruce Esq"
+    address="53075 Sw 152nd Ter #615" city="Monroe Township" county="Middlesex" state="NJ"
+    zip="08831" phone1="732-234-1546" phone2="732-904-2931" email="jamal@vanausdal.org"
+    web="http://www.hubbardbruceesq.com"/>
+  <record first_name="Cecily" last_name="Hollack" company_name="Arthur A Oliver &amp; Son Inc"
+    address="59 N Groesbeck Hwy" city="Austin" county="Travis" state="TX" zip="78731"
+    phone1="512-486-3817" phone2="512-861-3814" email="cecily@hollack.org"
+    web="http://www.arthuraoliversoninc.com"/>
+  <record first_name="Carmelina" last_name="Lindall" company_name="George Jessop Carter Jewelers"
+    address="2664 Lewis Rd" city="Littleton" county="Douglas" state="CO" zip="80126"
+    phone1="303-724-7371" phone2="303-874-5160" email="carmelina_lindall@lindall.com"
+    web="http://www.georgejessopcarterjewelers.com"/>
+  <record first_name="Maurine" last_name="Yglesias" company_name="Schultz, Thomas C Md"
+    address="59 Shady Ln #53" city="Milwaukee" county="Milwaukee" state="WI" zip="53214"
+    phone1="414-748-1374" phone2="414-573-7719" email="maurine_yglesias@yglesias.com"
+    web="http://www.schultzthomascmd.com"/>
+  <record first_name="Tawna" last_name="Buvens" company_name="H H H Enterprises Inc"
+    address="3305 Nabell Ave #679" city="New York" county="New York" state="NY" zip="10009"
+    phone1="212-674-9610" phone2="212-462-9157" email="tawna@gmail.com"
+    web="http://www.hhhenterprisesinc.com"/>
+  <record first_name="Penney" last_name="Weight" company_name="Hawaiian King Hotel"
+    address="18 Fountain St" city="Anchorage" county="Anchorage" state="AK" zip="99515"
+    phone1="907-797-9628" phone2="907-873-2882" email="penney_weight@aol.com"
+    web="http://www.hawaiiankinghotel.com"/>
+  <record first_name="Elly" last_name="Morocco" company_name="Killion Industries"
+    address="7 W 32nd St" city="Erie" county="Erie" state="PA" zip="16502" phone1="814-393-5571"
+    phone2="814-420-3553" email="elly_morocco@gmail.com" web="http://www.killionindustries.com"/>
+  <record first_name="Ilene" last_name="Eroman" company_name="Robinson, William J Esq"
+    address="2853 S Central Expy" city="Glen Burnie" county="Anne Arundel" state="MD" zip="21061"
+    phone1="410-914-9018" phone2="410-937-4543" email="ilene.eroman@hotmail.com"
+    web="http://www.robinsonwilliamjesq.com"/>
+  <record first_name="Vallie" last_name="Mondella" company_name="Private Properties"
+    address="74 W College St" city="Boise" county="Ada" state="ID" zip="83707" phone1="208-862-5339"
+    phone2="208-737-8439" email="vmondella@mondella.com" web="http://www.privateproperties.com"/>
+  <record first_name="Kallie" last_name="Blackwood" company_name="Rowley Schlimgen Inc"
+    address="701 S Harrison Rd" city="San Francisco" county="San Francisco" state="CA" zip="94104"
+    phone1="415-315-2761" phone2="415-604-7609" email="kallie.blackwood@gmail.com"
+    web="http://www.rowleyschlimgeninc.com"/>
+  <record first_name="Johnetta" last_name="Abdallah" company_name="Forging Specialties"
+    address="1088 Pinehurst St" city="Chapel Hill" county="Orange" state="NC" zip="27514"
+    phone1="919-225-9345" phone2="919-715-3791" email="johnetta_abdallah@aol.com"
+    web="http://www.forgingspecialties.com"/>
+  <record first_name="Bobbye" last_name="Rhym" company_name="Smits, Patricia Garity"
+    address="30 W 80th St #1995" city="San Carlos" county="San Mateo" state="CA" zip="94070"
+    phone1="650-528-5783" phone2="650-811-9032" email="brhym@rhym.com"
+    web="http://www.smitspatriciagarity.com"/>
+  <record first_name="Micaela" last_name="Rhymes" company_name="H Lee Leonard Attorney At Law"
+    address="20932 Hedley St" city="Concord" county="Contra Costa" state="CA" zip="94520"
+    phone1="925-647-3298" phone2="925-522-7798" email="micaela_rhymes@gmail.com"
+    web="http://www.hleeleonardattorneyatlaw.com"/>
+  <record first_name="Tamar" last_name="Hoogland" company_name="A K Construction Co"
+    address="2737 Pistorio Rd #9230" city="London" county="Madison" state="OH" zip="43140"
+    phone1="740-343-8575" phone2="740-526-5410" email="tamar@hotmail.com"
+    web="http://www.akconstructionco.com"/>
+  <record first_name="Moon" last_name="Parlato" company_name="Ambelang, Jessica M Md"
+    address="74989 Brandon St" city="Wellsville" county="Allegany" state="NY" zip="14895"
+    phone1="585-866-8313" phone2="585-498-4278" email="moon@yahoo.com"
+    web="http://www.ambelangjessicammd.com"/>
+  <record first_name="Laurel" last_name="Reitler" company_name="Q A Service" address="6 Kains Ave"
+    city="Baltimore" county="Baltimore City" state="MD" zip="21215" phone1="410-520-4832"
+    phone2="410-957-6903" email="laurel_reitler@reitler.com" web="http://www.qaservice.com"/>
+  <record first_name="Delisa" last_name="Crupi" company_name="Wood &amp; Whitacre Contractors"
+    address="47565 W Grand Ave" city="Newark" county="Essex" state="NJ" zip="07105"
+    phone1="973-354-2040" phone2="973-847-9611" email="delisa.crupi@crupi.com"
+    web="http://www.woodwhitacrecontractors.com"/>
+  <record first_name="Viva" last_name="Toelkes" company_name="Mark Iv Press Ltd"
+    address="4284 Dorigo Ln" city="Chicago" county="Cook" state="IL" zip="60647"
+    phone1="773-446-5569" phone2="773-352-3437" email="viva.toelkes@gmail.com"
+    web="http://www.markivpressltd.com"/>
+  <record first_name="Elza" last_name="Lipke" company_name="Museum Of Science &amp; Industry"
+    address="6794 Lake Dr E" city="Newark" county="Essex" state="NJ" zip="07104"
+    phone1="973-927-3447" phone2="973-796-3667" email="elza@yahoo.com"
+    web="http://www.museumofscienceindustry.com"/>
+  <record first_name="Devorah" last_name="Chickering" company_name="Garrison Ind"
+    address="31 Douglas Blvd #950" city="Clovis" county="Curry" state="NM" zip="88101"
+    phone1="505-975-8559" phone2="505-950-1763" email="devorah@hotmail.com"
+    web="http://www.garrisonind.com"/>
+  <record first_name="Timothy" last_name="Mulqueen" company_name="Saronix Nymph Products"
+    address="44 W 4th St" city="Staten Island" county="Richmond" state="NY" zip="10309"
+    phone1="718-332-6527" phone2="718-654-7063" email="timothy_mulqueen@mulqueen.org"
+    web="http://www.saronixnymphproducts.com"/>
+  <record first_name="Arlette" last_name="Honeywell" company_name="Smc Inc"
+    address="11279 Loytan St" city="Jacksonville" county="Duval" state="FL" zip="32254"
+    phone1="904-775-4480" phone2="904-514-9918" email="ahoneywell@honeywell.com"
+    web="http://www.smcinc.com"/>
+  <record first_name="Dominque" last_name="Dickerson" company_name="E A I Electronic Assocs Inc"
+    address="69 Marquette Ave" city="Hayward" county="Alameda" state="CA" zip="94545"
+    phone1="510-993-3758" phone2="510-901-7640" email="dominque.dickerson@dickerson.org"
+    web="http://www.eaielectronicassocsinc.com"/>
+  <record first_name="Lettie" last_name="Isenhower" company_name="Conte, Christopher A Esq"
+    address="70 W Main St" city="Beachwood" county="Cuyahoga" state="OH" zip="44122"
+    phone1="216-657-7668" phone2="216-733-8494" email="lettie_isenhower@yahoo.com"
+    web="http://www.contechristopheraesq.com"/>
+  <record first_name="Myra" last_name="Munns" company_name="Anker Law Office"
+    address="461 Prospect Pl #316" city="Euless" county="Tarrant" state="TX" zip="76040"
+    phone1="817-914-7518" phone2="817-451-3518" email="mmunns@cox.net"
+    web="http://www.ankerlawoffice.com"/>
+  <record first_name="Stephaine" last_name="Barfield" company_name="Beutelschies &amp; Company"
+    address="47154 Whipple Ave Nw" city="Gardena" county="Los Angeles" state="CA" zip="90247"
+    phone1="310-774-7643" phone2="310-968-1219" email="stephaine@barfield.com"
+    web="http://www.beutelschiescompany.com"/>
+  <record first_name="Lai" last_name="Gato" company_name="Fligg, Kenneth I Jr"
+    address="37 Alabama Ave" city="Evanston" county="Cook" state="IL" zip="60201"
+    phone1="847-728-7286" phone2="847-957-4614" email="lai.gato@gato.org"
+    web="http://www.fliggkennethijr.com"/>
+  <record first_name="Stephen" last_name="Emigh" company_name="Sharp, J Daniel Esq"
+    address="3777 E Richmond St #900" city="Akron" county="Summit" state="OH" zip="44302"
+    phone1="330-537-5358" phone2="330-700-2312" email="stephen_emigh@hotmail.com"
+    web="http://www.sharpjdanielesq.com"/>
+  <record first_name="Tyra" last_name="Shields" company_name="Assink, Anne H Esq"
+    address="3 Fort Worth Ave" city="Philadelphia" county="Philadelphia" state="PA" zip="19106"
+    phone1="215-255-1641" phone2="215-228-8264" email="tshields@gmail.com"
+    web="http://www.assinkannehesq.com"/>
+  <record first_name="Tammara" last_name="Wardrip" company_name="Jewel My Shop Inc"
+    address="4800 Black Horse Pike" city="Burlingame" county="San Mateo" state="CA" zip="94010"
+    phone1="650-803-1936" phone2="650-216-5075" email="twardrip@cox.net"
+    web="http://www.jewelmyshopinc.com"/>
+  <record first_name="Cory" last_name="Gibes" company_name="Chinese Translation Resources"
+    address="83649 W Belmont Ave" city="San Gabriel" county="Los Angeles" state="CA" zip="91776"
+    phone1="626-572-1096" phone2="626-696-2777" email="cory.gibes@gmail.com"
+    web="http://www.chinesetranslationresources.com"/>
+  <record first_name="Danica" last_name="Bruschke" company_name="Stevens, Charles T"
+    address="840 15th Ave" city="Waco" county="McLennan" state="TX" zip="76708"
+    phone1="254-782-8569" phone2="254-205-1422" email="danica_bruschke@gmail.com"
+    web="http://www.stevenscharlest.com"/>
+  <record first_name="Wilda" last_name="Giguere" company_name="Mclaughlin, Luther W Cpa"
+    address="1747 Calle Amanecer #2" city="Anchorage" county="Anchorage" state="AK" zip="99501"
+    phone1="907-870-5536" phone2="907-914-9482" email="wilda@cox.net"
+    web="http://www.mclaughlinlutherwcpa.com"/>
+  <record first_name="Elvera" last_name="Benimadho" company_name="Tree Musketeers"
+    address="99385 Charity St #840" city="San Jose" county="Santa Clara" state="CA" zip="95110"
+    phone1="408-703-8505" phone2="408-440-8447" email="elvera.benimadho@cox.net"
+    web="http://www.treemusketeers.com"/>
+  <record first_name="Carma" last_name="Vanheusen" company_name="Springfield Div Oh Edison Co"
+    address="68556 Central Hwy" city="San Leandro" county="Alameda" state="CA" zip="94577"
+    phone1="510-503-7169" phone2="510-452-4835" email="carma@cox.net"
+    web="http://www.springfielddivohedisonco.com"/>
+  <record first_name="Malinda" last_name="Hochard" company_name="Logan Memorial Hospital"
+    address="55 Riverside Ave" city="Indianapolis" county="Marion" state="IN" zip="46202"
+    phone1="317-722-5066" phone2="317-472-2412" email="malinda.hochard@yahoo.com"
+    web="http://www.loganmemorialhospital.com"/>
+  <record first_name="Natalie" last_name="Fern" company_name="Kelly, Charles G Esq"
+    address="7140 University Ave" city="Rock Springs" county="Sweetwater" state="WY" zip="82901"
+    phone1="307-704-8713" phone2="307-279-3793" email="natalie.fern@hotmail.com"
+    web="http://www.kellycharlesgesq.com"/>
+  <record first_name="Lisha" last_name="Centini" company_name="Industrial Paper Shredders Inc"
+    address="64 5th Ave #1153" city="Mc Lean" county="Fairfax" state="VA" zip="22102"
+    phone1="703-235-3937" phone2="703-475-7568" email="lisha@centini.org"
+    web="http://www.industrialpapershreddersinc.com"/>
+  <record first_name="Arlene" last_name="Klusman" company_name="Beck Horizon Builders"
+    address="3 Secor Rd" city="New Orleans" county="Orleans" state="LA" zip="70112"
+    phone1="504-710-5840" phone2="504-946-1807" email="arlene_klusman@gmail.com"
+    web="http://www.beckhorizonbuilders.com"/>
+  <record first_name="Alease" last_name="Buemi" company_name="Porto Cayo At Hawks Cay"
+    address="4 Webbs Chapel Rd" city="Boulder" county="Boulder" state="CO" zip="80303"
+    phone1="303-301-4946" phone2="303-521-9860" email="alease@buemi.com"
+    web="http://www.portocayoathawkscay.com"/>
+  <record first_name="Louisa" last_name="Cronauer" company_name="Pacific Grove Museum Ntrl Hist"
+    address="524 Louisiana Ave Nw" city="San Leandro" county="Alameda" state="CA" zip="94577"
+    phone1="510-828-7047" phone2="510-472-7758" email="louisa@cronauer.com"
+    web="http://www.pacificgrovemuseumntrlhist.com"/>
+  <record first_name="Angella" last_name="Cetta" company_name="Bender &amp; Hatley Pc"
+    address="185 Blackstone Bldge" city="Honolulu" county="Honolulu" state="HI" zip="96817"
+    phone1="808-892-7943" phone2="808-475-2310" email="angella.cetta@hotmail.com"
+    web="http://www.benderhatleypc.com"/>
+  <record first_name="Cyndy" last_name="Goldammer" company_name="Di Cristina J &amp; Son"
+    address="170 Wyoming Ave" city="Burnsville" county="Dakota" state="MN" zip="55337"
+    phone1="952-334-9408" phone2="952-938-9457" email="cgoldammer@cox.net"
+    web="http://www.dicristinajson.com"/>
+  <record first_name="Rosio" last_name="Cork" company_name="Green Goddess" address="4 10th St W"
+    city="High Point" county="Guilford" state="NC" zip="27263" phone1="336-243-5659"
+    phone2="336-497-4407" email="rosio.cork@gmail.com" web="http://www.greengoddess.com"/>
+  <record first_name="Celeste" last_name="Korando" company_name="American Arts &amp; Graphics"
+    address="7 W Pinhook Rd" city="Lynbrook" county="Nassau" state="NY" zip="11563"
+    phone1="516-509-2347" phone2="516-365-7266" email="ckorando@hotmail.com"
+    web="http://www.americanartsgraphics.com"/>
+  <record first_name="Twana" last_name="Felger" company_name="Opryland Hotel"
+    address="1 Commerce Way" city="Portland" county="Washington" state="OR" zip="97224"
+    phone1="503-939-3153" phone2="503-909-7167" email="twana.felger@felger.org"
+    web="http://www.oprylandhotel.com"/>
+  <record first_name="Estrella" last_name="Samu" company_name="Marking Devices Pubg Co"
+    address="64 Lakeview Ave" city="Beloit" county="Rock" state="WI" zip="53511"
+    phone1="608-976-7199" phone2="608-942-8836" email="estrella@aol.com"
+    web="http://www.markingdevicespubgco.com"/>
+  <record first_name="Donte" last_name="Kines" company_name="W Tc Industries Inc"
+    address="3 Aspen St" city="Worcester" county="Worcester" state="MA" zip="01602"
+    phone1="508-429-8576" phone2="508-843-1426" email="dkines@hotmail.com"
+    web="http://www.wtcindustriesinc.com"/>
+  <record first_name="Tiffiny" last_name="Steffensmeier" company_name="Whitehall Robbins Labs Divsn"
+    address="32860 Sierra Rd" city="Miami" county="Miami-Dade" state="FL" zip="33133"
+    phone1="305-385-9695" phone2="305-304-6573" email="tiffiny_steffensmeier@cox.net"
+    web="http://www.whitehallrobbinslabsdivsn.com"/>
+  <record first_name="Edna" last_name="Miceli" company_name="Sampler" address="555 Main St"
+    city="Erie" county="Erie" state="PA" zip="16502" phone1="814-460-2655" phone2="814-299-2877"
+    email="emiceli@miceli.org" web="http://www.sampler.com"/>
+  <record first_name="Sue" last_name="Kownacki" company_name="Juno Chefs Incorporated"
+    address="2 Se 3rd Ave" city="Mesquite" county="Dallas" state="TX" zip="75149"
+    phone1="972-666-3413" phone2="972-742-4000" email="sue@aol.com"
+    web="http://www.junochefsincorporated.com"/>
+  <record first_name="Jesusa" last_name="Shin" company_name="Carroccio, A Thomas Esq"
+    address="2239 Shawnee Mission Pky" city="Tullahoma" county="Coffee" state="TN" zip="37388"
+    phone1="931-273-8709" phone2="931-739-1551" email="jshin@shin.com"
+    web="http://www.carroccioathomasesq.com"/>
+  <record first_name="Rolland" last_name="Francescon" company_name="Stanley, Richard L Esq"
+    address="2726 Charcot Ave" city="Paterson" county="Passaic" state="NJ" zip="07501"
+    phone1="973-649-2922" phone2="973-284-4048" email="rolland@cox.net"
+    web="http://www.stanleyrichardlesq.com"/>
+  <record first_name="Pamella" last_name="Schmierer" company_name="K Cs Cstm Mouldings Windows"
+    address="5161 Dorsett Rd" city="Homestead" county="Miami-Dade" state="FL" zip="33030"
+    phone1="305-420-8970" phone2="305-575-8481" email="pamella.schmierer@schmierer.org"
+    web="http://www.kcscstmmouldingswindows.com"/>
+  <record first_name="Glory" last_name="Kulzer" company_name="Comfort Inn"
+    address="55892 Jacksonville Rd" city="Owings Mills" county="Baltimore" state="MD" zip="21117"
+    phone1="410-224-9462" phone2="410-916-8015" email="gkulzer@kulzer.org"
+    web="http://www.comfortinn.com"/>
+  <record first_name="Shawna" last_name="Palaspas" company_name="Windsor, James L Esq"
+    address="5 N Cleveland Massillon Rd" city="Thousand Oaks" county="Ventura" state="CA"
+    zip="91362" phone1="805-275-3566" phone2="805-638-6617" email="shawna_palaspas@palaspas.org"
+    web="http://www.windsorjameslesq.com"/>
+  <record first_name="Brandon" last_name="Callaro" company_name="Jackson Shields Yeiser"
+    address="7 Benton Dr" city="Honolulu" county="Honolulu" state="HI" zip="96819"
+    phone1="808-215-6832" phone2="808-240-5168" email="brandon_callaro@hotmail.com"
+    web="http://www.jacksonshieldsyeiser.com"/>
+  <record first_name="Scarlet" last_name="Cartan" company_name="Box, J Calvin Esq"
+    address="9390 S Howell Ave" city="Albany" county="Dougherty" state="GA" zip="31701"
+    phone1="229-735-3378" phone2="229-365-9658" email="scarlet.cartan@yahoo.com"
+    web="http://www.boxjcalvinesq.com"/>
+  <record first_name="Oretha" last_name="Menter" company_name="Custom Engineering Inc"
+    address="8 County Center Dr #647" city="Boston" county="Suffolk" state="MA" zip="02210"
+    phone1="617-418-5043" phone2="617-697-6024" email="oretha_menter@yahoo.com"
+    web="http://www.customengineeringinc.com"/>
+  <record first_name="Ty" last_name="Smith" company_name="Bresler Eitel Framg Gllry Ltd"
+    address="4646 Kaahumanu St" city="Hackensack" county="Bergen" state="NJ" zip="07601"
+    phone1="201-672-1553" phone2="201-995-3149" email="tsmith@aol.com"
+    web="http://www.breslereitelframggllryltd.com"/>
+  <record first_name="Xuan" last_name="Rochin" company_name="Carol, Drake Sparks Esq"
+    address="2 Monroe St" city="San Mateo" county="San Mateo" state="CA" zip="94403"
+    phone1="650-933-5072" phone2="650-247-2625" email="xuan@gmail.com"
+    web="http://www.caroldrakesparksesq.com"/>
+  <record first_name="Lindsey" last_name="Dilello" company_name="Biltmore Investors Bank"
+    address="52777 Leaders Heights Rd" city="Ontario" county="San Bernardino" state="CA" zip="91761"
+    phone1="909-639-9887" phone2="909-589-1693" email="lindsey.dilello@hotmail.com"
+    web="http://www.biltmoreinvestorsbank.com"/>
+  <record first_name="Devora" last_name="Perez" company_name="Desco Equipment Corp"
+    address="72868 Blackington Ave" city="Oakland" county="Alameda" state="CA" zip="94606"
+    phone1="510-955-3016" phone2="510-755-9274" email="devora_perez@perez.org"
+    web="http://www.descoequipmentcorp.com"/>
+  <record first_name="Herman" last_name="Demesa" company_name="Merlin Electric Co"
+    address="9 Norristown Rd" city="Troy" county="Rensselaer" state="NY" zip="12180"
+    phone1="518-497-2940" phone2="518-931-7852" email="hdemesa@cox.net"
+    web="http://www.merlinelectricco.com"/>
+  <record first_name="Rory" last_name="Papasergi" company_name="Bailey Cntl Co Div Babcock"
+    address="83 County Road 437 #8581" city="Clarks Summit" county="Lackawanna" state="PA"
+    zip="18411" phone1="570-867-7489" phone2="570-469-8401" email="rpapasergi@cox.net"
+    web="http://www.baileycntlcodivbabcock.com"/>
+  <record first_name="Talia" last_name="Riopelle" company_name="Ford Brothers Wholesale Inc"
+    address="1 N Harlem Ave #9" city="Orange" county="Essex" state="NJ" zip="07050"
+    phone1="973-245-2133" phone2="973-818-9788" email="talia_riopelle@aol.com"
+    web="http://www.fordbrotherswholesaleinc.com"/>
+  <record first_name="Van" last_name="Shire" company_name="Cambridge Inn" address="90131 J St"
+    city="Pittstown" county="Hunterdon" state="NJ" zip="08867" phone1="908-409-2890"
+    phone2="908-448-1209" email="van.shire@shire.com" web="http://www.cambridgeinn.com"/>
+  <record first_name="Lucina" last_name="Lary" company_name="Matricciani, Albert J Jr"
+    address="8597 W National Ave" city="Cocoa" county="Brevard" state="FL" zip="32922"
+    phone1="321-749-4981" phone2="321-632-4668" email="lucina_lary@cox.net"
+    web="http://www.matriccianialbertjjr.com"/>
+  <record first_name="Bok" last_name="Isaacs" company_name="Nelson Hawaiian Ltd"
+    address="6 Gilson St" city="Bronx" county="Bronx" state="NY" zip="10468" phone1="718-809-3762"
+    phone2="718-478-8568" email="bok.isaacs@aol.com" web="http://www.nelsonhawaiianltd.com"/>
+  <record first_name="Rolande" last_name="Spickerman" company_name="Neland Travel Agency"
+    address="65 W Maple Ave" city="Pearl City" county="Honolulu" state="HI" zip="96782"
+    phone1="808-315-3077" phone2="808-526-5863" email="rolande.spickerman@spickerman.com"
+    web="http://www.nelandtravelagency.com"/>
+  <record first_name="Howard" last_name="Paulas" company_name="Asendorf, J Alan Esq"
+    address="866 34th Ave" city="Denver" county="Denver" state="CO" zip="80231"
+    phone1="303-623-4241" phone2="303-692-3118" email="hpaulas@gmail.com"
+    web="http://www.asendorfjalanesq.com"/>
+  <record first_name="Kimbery" last_name="Madarang" company_name="Silberman, Arthur L Esq"
+    address="798 Lund Farm Way" city="Rockaway" county="Morris" state="NJ" zip="07866"
+    phone1="973-310-1634" phone2="973-225-6259" email="kimbery_madarang@cox.net"
+    web="http://www.silbermanarthurlesq.com"/>
+  <record first_name="Thurman" last_name="Manno" company_name="Honey Bee Breeding Genetics &amp;"
+    address="9387 Charcot Ave" city="Absecon" county="Atlantic" state="NJ" zip="08201"
+    phone1="609-524-3586" phone2="609-234-8376" email="thurman.manno@yahoo.com"
+    web="http://www.honeybeebreedinggenetics.com"/>
+  <record first_name="Becky" last_name="Mirafuentes" company_name="Wells Kravitz Schnitzer"
+    address="30553 Washington Rd" city="Plainfield" county="Union" state="NJ" zip="07062"
+    phone1="908-877-8409" phone2="908-426-8272" email="becky.mirafuentes@mirafuentes.com"
+    web="http://www.wellskravitzschnitzer.com"/>
+  <record first_name="Beatriz" last_name="Corrington" company_name="Prohab Rehabilitation Servs"
+    address="481 W Lemon St" city="Middleboro" county="Plymouth" state="MA" zip="02346"
+    phone1="508-584-4279" phone2="508-315-3867" email="beatriz@yahoo.com"
+    web="http://www.prohabrehabilitationservs.com"/>
+  <record first_name="Marti" last_name="Maybury" company_name="Eldridge, Kristin K Esq"
+    address="4 Warehouse Point Rd #7" city="Chicago" county="Cook" state="IL" zip="60638"
+    phone1="773-775-4522" phone2="773-539-1058" email="marti.maybury@yahoo.com"
+    web="http://www.eldridgekristinkesq.com"/>
+  <record first_name="Nieves" last_name="Gotter" company_name="Vlahos, John J Esq"
+    address="4940 Pulaski Park Dr" city="Portland" county="Multnomah" state="OR" zip="97202"
+    phone1="503-527-5274" phone2="503-455-3094" email="nieves_gotter@gmail.com"
+    web="http://www.vlahosjohnjesq.com"/>
+  <record first_name="Leatha" last_name="Hagele" company_name="Ninas Indian Grs &amp; Videos"
+    address="627 Walford Ave" city="Dallas" county="Dallas" state="TX" zip="75227"
+    phone1="214-339-1809" phone2="214-225-5850" email="lhagele@cox.net"
+    web="http://www.ninasindiangrsvideos.com"/>
+  <record first_name="Valentin" last_name="Klimek" company_name="Schmid, Gayanne K Esq"
+    address="137 Pioneer Way" city="Chicago" county="Cook" state="IL" zip="60604"
+    phone1="312-303-5453" phone2="312-512-2338" email="vklimek@klimek.org"
+    web="http://www.schmidgayannekesq.com"/>
+  <record first_name="Melissa" last_name="Wiklund" company_name="Moapa Valley Federal Credit Un"
+    address="61 13 Stoneridge #835" city="Findlay" county="Hancock" state="OH" zip="45840"
+    phone1="419-939-3613" phone2="419-254-4591" email="melissa@cox.net"
+    web="http://www.moapavalleyfederalcreditun.com"/>
+  <record first_name="Sheridan" last_name="Zane" company_name="Kentucky Tennessee Clay Co"
+    address="2409 Alabama Rd" city="Riverside" county="Riverside" state="CA" zip="92501"
+    phone1="951-645-3605" phone2="951-248-6822" email="sheridan.zane@zane.com"
+    web="http://www.kentuckytennesseeclayco.com"/>
+  <record first_name="Bulah" last_name="Padilla" company_name="Admiral Party Rentals &amp; Sales"
+    address="8927 Vandever Ave" city="Waco" county="McLennan" state="TX" zip="76707"
+    phone1="254-463-4368" phone2="254-816-8417" email="bulah_padilla@hotmail.com"
+    web="http://www.admiralpartyrentalssales.com"/>
+  <record first_name="Audra" last_name="Kohnert" company_name="Nelson, Karolyn King Esq"
+    address="134 Lewis Rd" city="Nashville" county="Davidson" state="TN" zip="37211"
+    phone1="615-406-7854" phone2="615-448-9249" email="audra@kohnert.com"
+    web="http://www.nelsonkarolynkingesq.com"/>
+  <record first_name="Daren" last_name="Weirather" company_name="Panasystems"
+    address="9 N College Ave #3" city="Milwaukee" county="Milwaukee" state="WI" zip="53216"
+    phone1="414-959-2540" phone2="414-838-3151" email="dweirather@aol.com"
+    web="http://www.panasystems.com"/>
+  <record first_name="Fernanda" last_name="Jillson" company_name="Shank, Edward L Esq"
+    address="60480 Old Us Highway 51" city="Preston" county="Caroline" state="MD" zip="21655"
+    phone1="410-387-5260" phone2="410-724-6472" email="fjillson@aol.com"
+    web="http://www.shankedwardlesq.com"/>
+  <record first_name="Gearldine" last_name="Gellinger" company_name="Megibow &amp; Edwards"
+    address="4 Bloomfield Ave" city="Irving" county="Dallas" state="TX" zip="75061"
+    phone1="972-934-6914" phone2="972-821-7118" email="gearldine_gellinger@gellinger.com"
+    web="http://www.megibowedwards.com"/>
+  <record first_name="Chau" last_name="Kitzman" company_name="Benoff, Edward Esq"
+    address="429 Tiger Ln" city="Beverly Hills" county="Los Angeles" state="CA" zip="90212"
+    phone1="310-560-8022" phone2="310-969-7230" email="chau@gmail.com"
+    web="http://www.benoffedwardesq.com"/>
+  <record first_name="Theola" last_name="Frey" company_name="Woodbridge Free Public Library"
+    address="54169 N Main St" city="Massapequa" county="Nassau" state="NY" zip="11758"
+    phone1="516-948-5768" phone2="516-357-3362" email="theola_frey@frey.com"
+    web="http://www.woodbridgefreepubliclibrary.com"/>
+  <record first_name="Cheryl" last_name="Haroldson" company_name="New York Life John Thune"
+    address="92 Main St" city="Atlantic City" county="Atlantic" state="NJ" zip="08401"
+    phone1="609-518-7697" phone2="609-263-9243" email="cheryl@haroldson.org"
+    web="http://www.newyorklifejohnthune.com"/>
+  <record first_name="Laticia" last_name="Merced" company_name="Alinabal Inc" address="72 Mannix Dr"
+    city="Cincinnati" county="Hamilton" state="OH" zip="45203" phone1="513-508-7371"
+    phone2="513-418-1566" email="lmerced@gmail.com" web="http://www.alinabalinc.com"/>
+  <record first_name="Carissa" last_name="Batman" company_name="Poletto, Kim David Esq"
+    address="12270 Caton Center Dr" city="Eugene" county="Lane" state="OR" zip="97401"
+    phone1="541-326-4074" phone2="541-801-5717" email="carissa.batman@yahoo.com"
+    web="http://www.polettokimdavidesq.com"/>
+  <record first_name="Lezlie" last_name="Craghead" company_name="Chang, Carolyn Esq"
+    address="749 W 18th St #45" city="Smithfield" county="Johnston" state="NC" zip="27577"
+    phone1="919-533-3762" phone2="919-885-2453" email="lezlie.craghead@craghead.org"
+    web="http://www.changcarolynesq.com"/>
+  <record first_name="Ozell" last_name="Shealy" company_name="Silver Bros Inc"
+    address="8 Industry Ln" city="New York" county="New York" state="NY" zip="10002"
+    phone1="212-332-8435" phone2="212-880-8865" email="oshealy@hotmail.com"
+    web="http://www.silverbrosinc.com"/>
+  <record first_name="Arminda" last_name="Parvis" company_name="Newtec Inc" address="1 Huntwood Ave"
+    city="Phoenix" county="Maricopa" state="AZ" zip="85017" phone1="602-906-9419"
+    phone2="602-277-3025" email="arminda@parvis.com" web="http://www.newtecinc.com"/>
+  <record first_name="Reita" last_name="Leto" company_name="Creative Business Systems"
+    address="55262 N French Rd" city="Indianapolis" county="Marion" state="IN" zip="46240"
+    phone1="317-234-1135" phone2="317-787-5514" email="reita.leto@gmail.com"
+    web="http://www.creativebusinesssystems.com"/>
+  <record first_name="Yolando" last_name="Luczki" company_name="Dal Tile Corporation"
+    address="422 E 21st St" city="Syracuse" county="Onondaga" state="NY" zip="13214"
+    phone1="315-304-4759" phone2="315-640-6357" email="yolando@cox.net"
+    web="http://www.daltilecorporation.com"/>
+  <record first_name="Lizette" last_name="Stem" company_name="Edward S Katz"
+    address="501 N 19th Ave" city="Cherry Hill" county="Camden" state="NJ" zip="08002"
+    phone1="856-487-5412" phone2="856-702-3676" email="lizette.stem@aol.com"
+    web="http://www.edwardskatz.com"/>
+  <record first_name="Gregoria" last_name="Pawlowicz" company_name="Oh My Goodknits Inc"
+    address="455 N Main Ave" city="Garden City" county="Nassau" state="NY" zip="11530"
+    phone1="516-212-1915" phone2="516-376-4230" email="gpawlowicz@yahoo.com"
+    web="http://www.ohmygoodknitsinc.com"/>
+  <record first_name="Carin" last_name="Deleo" company_name="Redeker, Debbie"
+    address="1844 Southern Blvd" city="Little Rock" county="Pulaski" state="AR" zip="72202"
+    phone1="501-308-1040" phone2="501-409-6072" email="cdeleo@deleo.com"
+    web="http://www.redekerdebbie.com"/>
+  <record first_name="Chantell" last_name="Maynerich" company_name="Desert Sands Motel"
+    address="2023 Greg St" city="Saint Paul" county="Ramsey" state="MN" zip="55101"
+    phone1="651-591-2583" phone2="651-776-9688" email="chantell@yahoo.com"
+    web="http://www.desertsandsmotel.com"/>
+  <record first_name="Dierdre" last_name="Yum" company_name="Cummins Southern Plains Inc"
+    address="63381 Jenks Ave" city="Philadelphia" county="Philadelphia" state="PA" zip="19134"
+    phone1="215-325-3042" phone2="215-346-4666" email="dyum@yahoo.com"
+    web="http://www.cumminssouthernplainsinc.com"/>
+  <record first_name="Larae" last_name="Gudroe" company_name="Lehigh Furn Divsn Lehigh"
+    address="6651 Municipal Rd" city="Houma" county="Terrebonne" state="LA" zip="70360"
+    phone1="985-890-7262" phone2="985-261-5783" email="larae_gudroe@gmail.com"
+    web="http://www.lehighfurndivsnlehigh.com"/>
+  <record first_name="Latrice" last_name="Tolfree" company_name="United Van Lines Agent"
+    address="81 Norris Ave #525" city="Ronkonkoma" county="Suffolk" state="NY" zip="11779"
+    phone1="631-957-7624" phone2="631-998-2102" email="latrice.tolfree@hotmail.com"
+    web="http://www.unitedvanlinesagent.com"/>
+  <record first_name="Kerry" last_name="Theodorov" company_name="Capitol Reporters"
+    address="6916 W Main St" city="Sacramento" county="Sacramento" state="CA" zip="95827"
+    phone1="916-591-3277" phone2="916-770-7448" email="kerry.theodorov@gmail.com"
+    web="http://www.capitolreporters.com"/>
+  <record first_name="Dorthy" last_name="Hidvegi" company_name="Kwik Kopy Printing"
+    address="9635 S Main St" city="Boise" county="Ada" state="ID" zip="83704" phone1="208-649-2373"
+    phone2="208-690-3315" email="dhidvegi@yahoo.com" web="http://www.kwikkopyprinting.com"/>
+  <record first_name="Fannie" last_name="Lungren" company_name="Centro Inc"
+    address="17 Us Highway 111" city="Round Rock" county="Williamson" state="TX" zip="78664"
+    phone1="512-587-5746" phone2="512-528-9933" email="fannie.lungren@yahoo.com"
+    web="http://www.centroinc.com"/>
+  <record first_name="Evangelina" last_name="Radde" company_name="Campbell, Jan Esq"
+    address="992 Civic Center Dr" city="Philadelphia" county="Philadelphia" state="PA" zip="19123"
+    phone1="215-964-3284" phone2="215-417-5612" email="evangelina@aol.com"
+    web="http://www.campbelljanesq.com"/>
+  <record first_name="Novella" last_name="Degroot" company_name="Evans, C Kelly Esq"
+    address="303 N Radcliffe St" city="Hilo" county="Hawaii" state="HI" zip="96720"
+    phone1="808-477-4775" phone2="808-746-1865" email="novella_degroot@degroot.org"
+    web="http://www.evansckellyesq.com"/>
+  <record first_name="Clay" last_name="Hoa" company_name="Scat Enterprises"
+    address="73 Saint Ann St #86" city="Reno" county="Washoe" state="NV" zip="89502"
+    phone1="775-501-8109" phone2="775-848-9135" email="choa@hoa.org"
+    web="http://www.scatenterprises.com"/>
+  <record first_name="Jennifer" last_name="Fallick" company_name="Nagle, Daniel J Esq"
+    address="44 58th St" city="Wheeling" county="Cook" state="IL" zip="60090" phone1="847-979-9545"
+    phone2="847-800-3054" email="jfallick@yahoo.com" web="http://www.nagledanieljesq.com"/>
+  <record first_name="Irma" last_name="Wolfgramm" company_name="Serendiquity Bed &amp; Breakfast"
+    address="9745 W Main St" city="Randolph" county="Morris" state="NJ" zip="07869"
+    phone1="973-545-7355" phone2="973-868-8660" email="irma.wolfgramm@hotmail.com"
+    web="http://www.serendiquitybedbreakfast.com"/>
+  <record first_name="Eun" last_name="Coody" company_name="Ray Carolyne Realty"
+    address="84 Bloomfield Ave" city="Spartanburg" county="Spartanburg" state="SC" zip="29301"
+    phone1="864-256-3620" phone2="864-594-4578" email="eun@yahoo.com"
+    web="http://www.raycarolynerealty.com"/>
+  <record first_name="Sylvia" last_name="Cousey" company_name="Berg, Charles E"
+    address="287 Youngstown Warren Rd" city="Hampstead" county="Carroll" state="MD" zip="21074"
+    phone1="410-209-9545" phone2="410-863-8263" email="sylvia_cousey@cousey.org"
+    web="http://www.bergcharlese.com"/>
+  <record first_name="Nana" last_name="Wrinkles" company_name="Ray, Milbern D"
+    address="6 Van Buren St" city="Mount Vernon" county="Westchester" state="NY" zip="10553"
+    phone1="914-855-2115" phone2="914-796-3775" email="nana@aol.com"
+    web="http://www.raymilbernd.com"/>
+  <record first_name="Layla" last_name="Springe" company_name="Chadds Ford Winery"
+    address="229 N Forty Driv" city="New York" county="New York" state="NY" zip="10011"
+    phone1="212-260-3151" phone2="212-253-7448" email="layla.springe@cox.net"
+    web="http://www.chaddsfordwinery.com"/>
+  <record first_name="Joesph" last_name="Degonia" company_name="A R Packaging"
+    address="2887 Knowlton St #5435" city="Berkeley" county="Alameda" state="CA" zip="94710"
+    phone1="510-677-9785" phone2="510-942-5916" email="joesph_degonia@degonia.org"
+    web="http://www.arpackaging.com"/>
+  <record first_name="Annabelle" last_name="Boord" company_name="Corn Popper"
+    address="523 Marquette Ave" city="Concord" county="Middlesex" state="MA" zip="01742"
+    phone1="978-697-6263" phone2="978-289-7717" email="annabelle.boord@cox.net"
+    web="http://www.cornpopper.com"/>
+  <record first_name="Stephaine" last_name="Vinning" company_name="Birite Foodservice Distr"
+    address="3717 Hamann Industrial Pky" city="San Francisco" county="San Francisco" state="CA"
+    zip="94104" phone1="415-767-6596" phone2="415-712-9530" email="stephaine@cox.net"
+    web="http://www.biritefoodservicedistr.com"/>
+  <record first_name="Nelida" last_name="Sawchuk" company_name="Anchorage Museum Of Hist &amp; Art"
+    address="3 State Route 35 S" city="Paramus" county="Bergen" state="NJ" zip="07652"
+    phone1="201-971-1638" phone2="201-247-8925" email="nelida@gmail.com"
+    web="http://www.anchoragemuseumofhistart.com"/>
+  <record first_name="Marguerita" last_name="Hiatt" company_name="Haber, George D Md"
+    address="82 N Highway 67" city="Oakley" county="Contra Costa" state="CA" zip="94561"
+    phone1="925-634-7158" phone2="925-541-8521" email="marguerita.hiatt@gmail.com"
+    web="http://www.habergeorgedmd.com"/>
+  <record first_name="Carmela" last_name="Cookey" company_name="Royal Pontiac Olds Inc"
+    address="9 Murfreesboro Rd" city="Chicago" county="Cook" state="IL" zip="60623"
+    phone1="773-494-4195" phone2="773-297-9391" email="ccookey@cookey.org"
+    web="http://www.royalpontiacoldsinc.com"/>
+  <record first_name="Junita" last_name="Brideau" company_name="Leonards Antiques Inc"
+    address="6 S Broadway St" city="Cedar Grove" county="Essex" state="NJ" zip="07009"
+    phone1="973-943-3423" phone2="973-582-5469" email="jbrideau@aol.com"
+    web="http://www.leonardsantiquesinc.com"/>
+  <record first_name="Claribel" last_name="Varriano" company_name="Meca"
+    address="6 Harry L Dr #6327" city="Perrysburg" county="Wood" state="OH" zip="43551"
+    phone1="419-544-4900" phone2="419-573-2033" email="claribel_varriano@cox.net"
+    web="http://www.meca.com"/>
+  <record first_name="Benton" last_name="Skursky" company_name="Nercon Engineering &amp; Mfg Inc"
+    address="47939 Porter Ave" city="Gardena" county="Los Angeles" state="CA" zip="90248"
+    phone1="310-579-2907" phone2="310-694-8466" email="benton.skursky@aol.com"
+    web="http://www.nerconengineeringmfginc.com"/>
+  <record first_name="Hillary" last_name="Skulski" company_name="Replica I"
+    address="9 Wales Rd Ne #914" city="Homosassa" county="Citrus" state="FL" zip="34448"
+    phone1="352-242-2570" phone2="352-990-5946" email="hillary.skulski@aol.com"
+    web="http://www.replicai.com"/>
+  <record first_name="Merilyn" last_name="Bayless" company_name="20 20 Printing Inc"
+    address="195 13n N" city="Santa Clara" county="Santa Clara" state="CA" zip="95054"
+    phone1="408-758-5015" phone2="408-346-2180" email="merilyn_bayless@cox.net"
+    web="http://www.printinginc.com"/>
+  <record first_name="Teri" last_name="Ennaco" company_name="Publishers Group West"
+    address="99 Tank Farm Rd" city="Hazleton" county="Luzerne" state="PA" zip="18201"
+    phone1="570-889-5187" phone2="570-355-1665" email="tennaco@gmail.com"
+    web="http://www.publishersgroupwest.com"/>
+  <record first_name="Merlyn" last_name="Lawler" company_name="Nischwitz, Jeffrey L Esq"
+    address="4671 Alemany Blvd" city="Jersey City" county="Hudson" state="NJ" zip="07304"
+    phone1="201-588-7810" phone2="201-858-9960" email="merlyn_lawler@hotmail.com"
+    web="http://www.nischwitzjeffreylesq.com"/>
+  <record first_name="Georgene" last_name="Montezuma" company_name="Payne Blades &amp; Wellborn Pa"
+    address="98 University Dr" city="San Ramon" county="Contra Costa" state="CA" zip="94583"
+    phone1="925-615-5185" phone2="925-943-3449" email="gmontezuma@cox.net"
+    web="http://www.paynebladeswellbornpa.com"/>
+  <record first_name="Jettie" last_name="Mconnell" company_name="Coldwell Bnkr Wright Real Est"
+    address="50 E Wacker Dr" city="Bridgewater" county="Somerset" state="NJ" zip="08807"
+    phone1="908-802-3564" phone2="908-602-5258" email="jmconnell@hotmail.com"
+    web="http://www.coldwellbnkrwrightrealest.com"/>
+  <record first_name="Lemuel" last_name="Latzke" company_name="Computer Repair Service"
+    address="70 Euclid Ave #722" city="Bohemia" county="Suffolk" state="NY" zip="11716"
+    phone1="631-748-6479" phone2="631-291-4976" email="lemuel.latzke@gmail.com"
+    web="http://www.computerrepairservice.com"/>
+  <record first_name="Melodie" last_name="Knipp" company_name="Fleetwood Building Block Inc"
+    address="326 E Main St #6496" city="Thousand Oaks" county="Ventura" state="CA" zip="91362"
+    phone1="805-690-1682" phone2="805-810-8964" email="mknipp@gmail.com"
+    web="http://www.fleetwoodbuildingblockinc.com"/>
+  <record first_name="Candida" last_name="Corbley" company_name="Colts Neck Medical Assocs Inc"
+    address="406 Main St" city="Somerville" county="Somerset" state="NJ" zip="08876"
+    phone1="908-275-8357" phone2="908-943-6103" email="candida_corbley@hotmail.com"
+    web="http://www.coltsneckmedicalassocsinc.com"/>
+  <record first_name="Karan" last_name="Karpin" company_name="New England Taxidermy"
+    address="3 Elmwood Dr" city="Beaverton" county="Washington" state="OR" zip="97005"
+    phone1="503-940-8327" phone2="503-707-5812" email="karan_karpin@gmail.com"
+    web="http://www.newenglandtaxidermy.com"/>
+  <record first_name="Andra" last_name="Scheyer" company_name="Ludcke, George O Esq"
+    address="9 Church St" city="Salem" county="Marion" state="OR" zip="97302" phone1="503-516-2189"
+    phone2="503-950-3068" email="andra@gmail.com" web="http://www.ludckegeorgeoesq.com"/>
+  <record first_name="Felicidad" last_name="Poullion" company_name="Mccorkle, Tom S Esq"
+    address="9939 N 14th St" city="Riverton" county="Burlington" state="NJ" zip="08077"
+    phone1="856-305-9731" phone2="856-828-6021" email="fpoullion@poullion.com"
+    web="http://www.mccorkletomsesq.com"/>
+  <record first_name="Belen" last_name="Strassner" company_name="Eagle Software Inc"
+    address="5384 Southwyck Blvd" city="Douglasville" county="Douglas" state="GA" zip="30135"
+    phone1="770-507-8791" phone2="770-802-4003" email="belen_strassner@aol.com"
+    web="http://www.eaglesoftwareinc.com"/>
+  <record first_name="Gracia" last_name="Melnyk" company_name="Juvenile &amp; Adult Super"
+    address="97 Airport Loop Dr" city="Jacksonville" county="Duval" state="FL" zip="32216"
+    phone1="904-235-3633" phone2="904-627-4341" email="gracia@melnyk.com"
+    web="http://www.juvenileadultsuper.com"/>
+  <record first_name="Jolanda" last_name="Hanafan" company_name="Perez, Joseph J Esq"
+    address="37855 Nolan Rd" city="Bangor" county="Penobscot" state="ME" zip="04401"
+    phone1="207-458-9196" phone2="207-233-6185" email="jhanafan@gmail.com"
+    web="http://www.perezjosephjesq.com"/>
+  <record first_name="Barrett" last_name="Toyama" company_name="Case Foundation Co"
+    address="4252 N Washington Ave #9" city="Kennedale" county="Tarrant" state="TX" zip="76060"
+    phone1="817-765-5781" phone2="817-577-6151" email="barrett.toyama@toyama.org"
+    web="http://www.casefoundationco.com"/>
+  <record first_name="Helga" last_name="Fredicks" company_name="Eis Environmental Engrs Inc"
+    address="42754 S Ash Ave" city="Buffalo" county="Erie" state="NY" zip="14228"
+    phone1="716-752-4114" phone2="716-854-9845" email="helga_fredicks@yahoo.com"
+    web="http://www.eisenvironmentalengrsinc.com"/>
+  <record first_name="Ashlyn" last_name="Pinilla" company_name="Art Crafters"
+    address="703 Beville Rd" city="Opa Locka" county="Miami-Dade" state="FL" zip="33054"
+    phone1="305-670-9628" phone2="305-857-5489" email="apinilla@cox.net"
+    web="http://www.artcrafters.com"/>
+  <record first_name="Fausto" last_name="Agramonte" company_name="Marriott Hotels Resorts Suites"
+    address="5 Harrison Rd" city="New York" county="New York" state="NY" zip="10038"
+    phone1="212-313-1783" phone2="212-778-3063" email="fausto_agramonte@yahoo.com"
+    web="http://www.marriotthotelsresortssuites.com"/>
+  <record first_name="Ronny" last_name="Caiafa" company_name="Remaco Inc" address="73 Southern Blvd"
+    city="Philadelphia" county="Philadelphia" state="PA" zip="19103" phone1="215-605-7570"
+    phone2="215-511-3531" email="ronny.caiafa@caiafa.org" web="http://www.remacoinc.com"/>
+  <record first_name="Marge" last_name="Limmel" company_name="Bjork, Robert D Jr"
+    address="189 Village Park Rd" city="Crestview" county="Okaloosa" state="FL" zip="32536"
+    phone1="850-430-1663" phone2="850-330-8079" email="marge@gmail.com"
+    web="http://www.bjorkrobertdjr.com"/>
+  <record first_name="Norah" last_name="Waymire" company_name="Carmichael, Jeffery L Esq"
+    address="6 Middlegate Rd #106" city="San Francisco" county="San Francisco" state="CA"
+    zip="94107" phone1="415-306-7897" phone2="415-874-2984" email="norah.waymire@gmail.com"
+    web="http://www.carmichaeljefferylesq.com"/>
+  <record first_name="Aliza" last_name="Baltimore" company_name="Andrews, J Robert Esq"
+    address="1128 Delaware St" city="San Jose" county="Santa Clara" state="CA" zip="95132"
+    phone1="408-504-3552" phone2="408-425-1994" email="aliza@aol.com"
+    web="http://www.andrewsjrobertesq.com"/>
+  <record first_name="Mozell" last_name="Pelkowski" company_name="Winship &amp; Byrne"
+    address="577 Parade St" city="South San Francisco" county="San Mateo" state="CA" zip="94080"
+    phone1="650-947-1215" phone2="650-960-1069" email="mpelkowski@pelkowski.org"
+    web="http://www.winshipbyrne.com"/>
+  <record first_name="Viola" last_name="Bitsuie" company_name="Burton &amp; Davis"
+    address="70 Mechanic St" city="Northridge" county="Los Angeles" state="CA" zip="91325"
+    phone1="818-864-4875" phone2="818-481-5787" email="viola@gmail.com"
+    web="http://www.burtondavis.com"/>
+  <record first_name="Franklyn" last_name="Emard" company_name="Olympic Graphic Arts"
+    address="4379 Highway 116" city="Philadelphia" county="Philadelphia" state="PA" zip="19103"
+    phone1="215-558-8189" phone2="215-483-3003" email="femard@emard.com"
+    web="http://www.olympicgraphicarts.com"/>
+  <record first_name="Willodean" last_name="Konopacki" company_name="Magnuson"
+    address="55 Hawthorne Blvd" city="Lafayette" county="Lafayette" state="LA" zip="70506"
+    phone1="337-253-8384" phone2="337-774-7564" email="willodean_konopacki@konopacki.org"
+    web="http://www.magnuson.com"/>
+  <record first_name="Beckie" last_name="Silvestrini" company_name="A All American Travel Inc"
+    address="7116 Western Ave" city="Dearborn" county="Wayne" state="MI" zip="48126"
+    phone1="313-533-4884" phone2="313-390-7855" email="beckie.silvestrini@silvestrini.com"
+    web="http://www.aallamericantravelinc.com"/>
+  <record first_name="Rebecka" last_name="Gesick" company_name="Polykote Inc"
+    address="2026 N Plankinton Ave #3" city="Austin" county="Travis" state="TX" zip="78754"
+    phone1="512-213-8574" phone2="512-693-8345" email="rgesick@gesick.org"
+    web="http://www.polykoteinc.com"/>
+  <record first_name="Frederica" last_name="Blunk" company_name="Jets Cybernetics"
+    address="99586 Main St" city="Dallas" county="Dallas" state="TX" zip="75207"
+    phone1="214-428-2285" phone2="214-529-1949" email="frederica_blunk@gmail.com"
+    web="http://www.jetscybernetics.com"/>
+  <record first_name="Glen" last_name="Bartolet" company_name="Metlab Testing Services"
+    address="8739 Hudson St" city="Vashon" county="King" state="WA" zip="98070"
+    phone1="206-697-5796" phone2="206-389-1482" email="glen_bartolet@hotmail.com"
+    web="http://www.metlabtestingservices.com"/>
+  <record first_name="Freeman" last_name="Gochal" company_name="Kellermann, William T Esq"
+    address="383 Gunderman Rd #197" city="Coatesville" county="Chester" state="PA" zip="19320"
+    phone1="610-476-3501" phone2="610-752-2683" email="freeman_gochal@aol.com"
+    web="http://www.kellermannwilliamtesq.com"/>
+  <record first_name="Vincent" last_name="Meinerding" company_name="Arturi, Peter D Esq"
+    address="4441 Point Term Mkt" city="Philadelphia" county="Philadelphia" state="PA" zip="19143"
+    phone1="215-372-1718" phone2="215-829-4221" email="vincent.meinerding@hotmail.com"
+    web="http://www.arturipeterdesq.com"/>
+  <record first_name="Rima" last_name="Bevelacqua" company_name="Mcauley Mfg Co"
+    address="2972 Lafayette Ave" city="Gardena" county="Los Angeles" state="CA" zip="90248"
+    phone1="310-858-5079" phone2="310-499-4200" email="rima@cox.net"
+    web="http://www.mcauleymfgco.com"/>
+  <record first_name="Glendora" last_name="Sarbacher" company_name="Defur Voran Hanley Radcliff"
+    address="2140 Diamond Blvd" city="Rohnert Park" county="Sonoma" state="CA" zip="94928"
+    phone1="707-653-8214" phone2="707-881-3154" email="gsarbacher@gmail.com"
+    web="http://www.defurvoranhanleyradcliff.com"/>
+  <record first_name="Avery" last_name="Steier" company_name="Dill Dill Carr &amp; Stonbraker Pc"
+    address="93 Redmond Rd #492" city="Orlando" county="Orange" state="FL" zip="32803"
+    phone1="407-808-9439" phone2="407-945-8566" email="avery@cox.net"
+    web="http://www.dilldillcarrstonbrakerpc.com"/>
+  <record first_name="Cristy" last_name="Lother" company_name="Kleensteel" address="3989 Portage Tr"
+    city="Escondido" county="San Diego" state="CA" zip="92025" phone1="760-971-4322"
+    phone2="760-465-4762" email="cristy@lother.com" web="http://www.kleensteel.com"/>
+  <record first_name="Nicolette" last_name="Brossart" company_name="Goulds Pumps Inc Slurry Pump"
+    address="1 Midway Rd" city="Westborough" county="Worcester" state="MA" zip="01581"
+    phone1="508-837-9230" phone2="508-504-6388" email="nicolette_brossart@brossart.com"
+    web="http://www.gouldspumpsincslurrypump.com"/>
+  <record first_name="Tracey" last_name="Modzelewski" company_name="Kansas City Insurance Report"
+    address="77132 Coon Rapids Blvd Nw" city="Conroe" county="Montgomery" state="TX" zip="77301"
+    phone1="936-264-9294" phone2="936-988-8171" email="tracey@hotmail.com"
+    web="http://www.kansascityinsurancereport.com"/>
+  <record first_name="Virgina" last_name="Tegarden" company_name="Berhanu International Foods"
+    address="755 Harbor Way" city="Milwaukee" county="Milwaukee" state="WI" zip="53226"
+    phone1="414-214-8697" phone2="414-411-5744" email="virgina_tegarden@tegarden.com"
+    web="http://www.berhanuinternationalfoods.com"/>
+  <record first_name="Tiera" last_name="Frankel" company_name="Roland Ashcroft"
+    address="87 Sierra Rd" city="El Monte" county="Los Angeles" state="CA" zip="91731"
+    phone1="626-636-4117" phone2="626-638-4241" email="tfrankel@aol.com"
+    web="http://www.rolandashcroft.com"/>
+  <record first_name="Alaine" last_name="Bergesen" company_name="Hispanic Magazine"
+    address="7667 S Hulen St #42" city="Yonkers" county="Westchester" state="NY" zip="10701"
+    phone1="914-300-9193" phone2="914-654-1426" email="alaine_bergesen@cox.net"
+    web="http://www.hispanicmagazine.com"/>
+  <record first_name="Earleen" last_name="Mai" company_name="Little Sheet Metal Co"
+    address="75684 S Withlapopka Dr #32" city="Dallas" county="Dallas" state="TX" zip="75227"
+    phone1="214-289-1973" phone2="214-785-6750" email="earleen_mai@cox.net"
+    web="http://www.littlesheetmetalco.com"/>
+  <record first_name="Leonida" last_name="Gobern" company_name="Holmes, Armstead J Esq"
+    address="5 Elmwood Park Blvd" city="Biloxi" county="Harrison" state="MS" zip="39530"
+    phone1="228-235-5615" phone2="228-432-4635" email="leonida@gobern.org"
+    web="http://www.holmesarmsteadjesq.com"/>
+  <record first_name="Ressie" last_name="Auffrey" company_name="Faw, James C Cpa"
+    address="23 Palo Alto Sq" city="Miami" county="Miami-Dade" state="FL" zip="33134"
+    phone1="305-604-8981" phone2="305-287-4743" email="ressie.auffrey@yahoo.com"
+    web="http://www.fawjamesccpa.com"/>
+</root>
