@@ -2,11 +2,14 @@ package buildsp
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 
 	"sphelper/config"
+
+	"github.com/speedata/gogit"
 )
 
 func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype string) bool {
@@ -22,20 +25,25 @@ func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype string) bool 
 		os.Setenv("GOOS", goos)
 	}
 
-	// publisher_version = @versions['publisher_version']
-	//  let's always add the sha1 to the minor versions, so we
-	//  _,minor,_ = publisher_version.split(/\./)
-	//  if minor.to_i() % 2 == 1 then
-	// 	rev = `git rev-parse HEAD`[0,8]
-	// 	publisher_version = publisher_version + "-#{rev}"
-	// # end
+	// We add the git sha1 to the version number
+	repo, err := gogit.OpenRepository(filepath.Join(cfg.Basedir(), ".git"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	rev, err := repo.LookupReference("HEAD")
+	if err != nil {
+		log.Fatal(err)
+	}
+	headsha1 := rev.Target().String()[:8]
+
+	publisher_version := cfg.Publisherversion.String() + "-" + headsha1
 	binaryname := "sp"
 	if goos == "windows" {
 		binaryname += ".exe"
 	}
 
 	// Now compile the go executable
-	arguments := []string{"build", "-ldflags", fmt.Sprintf("-X main.dest %s -X main.version %s", targettype, cfg.Publisherversion), "-o", filepath.Join(destbin, binaryname), "sp/main"}
+	arguments := []string{"build", "-ldflags", fmt.Sprintf("-X main.dest %s -X main.version %s", targettype, publisher_version), "-o", filepath.Join(destbin, binaryname), "sp/main"}
 
 	cmd := exec.Command("go", arguments...)
 	outbuf, err := cmd.CombinedOutput()
@@ -44,13 +52,5 @@ func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype string) bool 
 		fmt.Println(err)
 		return false
 	}
-	// arguments = "go build -ldflags '-X main.dest #{targettype} -X main.version #{publisher_version}' -o #{destbin}/#{binaryname} sp/main"
-	// sh arguments do |ok, res|
-	// 	if ! ok
-	//     	puts "Go compilation failed"
-	//     	return false
-	//     end
-	// end
 	return true
-
 }
