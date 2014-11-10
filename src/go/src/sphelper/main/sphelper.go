@@ -9,6 +9,7 @@ import (
 	"sphelper/buildsp"
 	"sphelper/config"
 	"sphelper/genluatranslations"
+	"sphelper/sourcedoc"
 	"sphelper/translatelayout"
 
 	"github.com/speedata/optionparser"
@@ -27,9 +28,10 @@ func main() {
 	var commandlinebasedir string
 	op := optionparser.NewOptionParser()
 	op.On("--basedir DIR", "Base dir", &commandlinebasedir)
+	op.Command("build", "Build go binary")
 	op.Command("genluatranslations", "Generate Lua translations")
+	op.Command("sourcedoc", "Generate the source documentation")
 	op.Command("translate", "Translate layout")
-	op.Command("build", "build go binary")
 	err := op.Parse()
 	if err != nil {
 		log.Fatal(err)
@@ -48,8 +50,16 @@ func main() {
 	}
 
 	switch command {
+	case "build":
+		buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local")
 	case "genluatranslations":
 		err = genluatranslations.DoThings(basedir)
+		if err != nil {
+			log.Fatal(err)
+		}
+	case "sourcedoc":
+		// 1 = srcpath, 2 = outpath, 3 = assets, 4 = images
+		err := sourcedoc.GenSourcedoc(filepath.Join(cfg.Srcdir, "lua"), filepath.Join(cfg.Builddir, "sourcedoc"), filepath.Join(cfg.Basedir(), "doc", "sourcedoc", "assets"), filepath.Join(cfg.Basedir(), "doc", "sourcedoc", "img"))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -70,8 +80,6 @@ func main() {
 			fmt.Println("translate needs the input and output filename: sphelper translate infile.xml [outfile.xml]")
 			os.Exit(-1)
 		}
-	case "build":
-		buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local")
 	default:
 		op.Help()
 		os.Exit(-1)

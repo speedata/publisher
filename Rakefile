@@ -100,7 +100,7 @@ end
 desc "Generate schema and translations from master"
 task :schema => [:sphelper] do
   # generate the lua translation
-  cmd = "#{installdir}/bin/sphelper --basedir #{installdir} genluatranslations"
+  cmd = "#{installdir}/bin/sphelper genluatranslations"
   sh cmd
   # generate english + german schema
   sh "java -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:#{installdir}/schema/layoutschema-en.rng -xsl:#{installdir}/doc/commands-xml/xslt/cmd2rng.xsl lang=en"
@@ -108,9 +108,8 @@ task :schema => [:sphelper] do
 end
 
 desc "Source documentation"
-task :sourcedoc do
-	sh "go build -o #{installdir}/bin/sourcedoc sourcedoc/main"
-	sh "#{installdir}/bin/sourcedoc #{srcdir.join('lua')} #{builddir.join('sourcedoc')} #{installdir.join('doc','sourcedoc','assets')} #{installdir.join('doc','sourcedoc','img')}"
+task :sourcedoc => [:sphelper] do
+    sh "#{installdir}/bin/sphelper sourcedoc"
 	if RUBY_PLATFORM =~ /darwin/
 		sh "open #{builddir}/sourcedoc/publisher.html"
 	else
