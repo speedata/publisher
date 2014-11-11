@@ -3,7 +3,6 @@ package gomddoc
 import (
 	"bytes"
 	"encoding/xml"
-	"errors"
 	"fmt"
 	"github.com/gorilla/feeds"
 	"github.com/speedata/blackfriday"
@@ -81,21 +80,6 @@ func parseChangelog(filename string) *changelog {
 // destdir is where the documentation should be placed in,
 // basedir is the the installation with the template directory
 func NewMDDoc(rootdir, destdir, basedir, changelogpath string) (*MDDoc, error) {
-	var directoriesNotSet []string
-
-	if basedir == "" {
-		directoriesNotSet = append(directoriesNotSet, "base directory")
-	}
-	if rootdir == "" {
-		directoriesNotSet = append(directoriesNotSet, "root directory")
-	}
-	if destdir == "" {
-		directoriesNotSet = append(directoriesNotSet, "dest directory")
-	}
-	if len(directoriesNotSet) > 0 {
-		return nil, errors.New("Missing name of these directories:" + strings.Join(directoriesNotSet, ", "))
-	}
-
 	a := MDDoc{}
 	a.root = rootdir
 	a.dest = destdir

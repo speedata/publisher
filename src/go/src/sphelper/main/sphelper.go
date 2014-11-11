@@ -9,6 +9,7 @@ import (
 	"sphelper/buildsp"
 	"sphelper/config"
 	"sphelper/genluatranslations"
+	"sphelper/gomddoc"
 	"sphelper/sourcedoc"
 	"sphelper/translatelayout"
 
@@ -30,6 +31,7 @@ func main() {
 	op.On("--basedir DIR", "Base dir", &commandlinebasedir)
 	op.Command("build", "Build go binary")
 	op.Command("genluatranslations", "Generate Lua translations")
+	op.Command("doc", "Generate speedata Publisher documentation (md only)")
 	op.Command("sourcedoc", "Generate the source documentation")
 	op.Command("translate", "Translate layout")
 	err := op.Parse()
@@ -52,6 +54,34 @@ func main() {
 	switch command {
 	case "build":
 		buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local")
+	case "doc":
+
+		curwd, err := os.Getwd()
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = os.Chdir(filepath.Join(cfg.Basedir(), "doc", "manual"))
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		root := "doc"
+		basedir := "."
+		dest := filepath.Join(cfg.Builddir, "manual")
+		changelog := filepath.Join(cfg.Basedir(), "doc", "changelog.xml")
+
+		d, err := gomddoc.NewMDDoc(root, dest, basedir, changelog)
+		if err != nil {
+			log.Fatal(err)
+		}
+		d.Version = cfg.Publisherversion.String()
+		err = d.DoThings()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		os.Chdir(curwd)
+
 	case "genluatranslations":
 		err = genluatranslations.DoThings(basedir)
 		if err != nil {
