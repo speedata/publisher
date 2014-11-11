@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2014-10-29 10:41)
+-- generated from genluatranslations.go (2014-11-11 14:33)
 -- do not edit!
 module(...)
 return {
@@ -90,6 +90,7 @@ return {
         ["zeilenabstand"] = "leading",
         },
       ["DefiniereTextformat"] = { "DefineTextformat",
+        ["tennzeichen"] = "hyphenchar",
         ["schusterjunge"] = "orphan",
         ["hurenkind"] = "widow",
         ["name"] = "name",

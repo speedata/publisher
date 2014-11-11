@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
+    <entry version="2.1.28" date="2014-11-11">
+      <en>Allow specification of hyphen char in textformat.</en>
+      <de>Trennzeichen kann in Textformat festgelegt werden.</de>
+    </entry>
     <entry version="2.1.27" date="2014-11-06">
       <en>New example "mail merge"</en>
       <de>Neues Beispiel "Serienbriefe"</de>

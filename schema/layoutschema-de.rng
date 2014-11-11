@@ -797,6 +797,11 @@
          <a:documentation>Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen Absatz und
         Textblock) zurückgegriffen werden.</a:documentation>
          <optional>
+            <attribute name="tennzeichen">
+               <a:documentation>Das Zeichen, das für Trennung benutzt wird (Voreinstellung: -)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="schusterjunge">
                <a:documentation>Wenn nein, Schusterjungen verhindern (erste Zeile eines Absatzes ist auf der vorherigen Seite). Voreinstellung ist nein.</a:documentation>
                <choice>

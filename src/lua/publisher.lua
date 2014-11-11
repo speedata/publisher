@@ -2601,6 +2601,21 @@ function set_mainlanguage( mainlanguage )
     defaultlanguage = get_languagecode(mainlanguage)
 end
 
+
+--- Return the language numbers used in this nodelist. Used before `do_linebreak()` to change pre-hyphenchar temporarily.
+function get_languages_used( nodelist )
+    local langs = {}
+    for n in node.traverse_id(glyph_node,nodelist) do
+        langs[n.lang] = true
+    end
+    local ret = {}
+    for k,_ in pairs(langs) do
+        ret[#ret + 1] = k
+    end
+    return ret
+end
+
+
 --- Misc
 --- --------
 function set_pageformat( wd,ht )

@@ -470,6 +470,7 @@ function commands.define_textformat(layoutxml)
     local orphan        = publisher.read_attribute(layoutxml,dataxml,"orphan",        "boolean", false)
     local widow         = publisher.read_attribute(layoutxml,dataxml,"widow",         "boolean", false)
     local hyphenate     = publisher.read_attribute(layoutxml,dataxml,"hyphenate",     "boolean", true)
+    local hyphenchar    = publisher.read_attribute(layoutxml,dataxml,"hyphenchar",    "rawstring")
 
     local fmt = {}
 
@@ -482,6 +483,7 @@ function commands.define_textformat(layoutxml)
     fmt.orphan = orphan
     fmt.widow = widow
     fmt.disable_hyphenation = not hyphenate
+    fmt.hyphenchar = hyphenchar
 
     if indentation then
         fmt.indent = tex.sp(indentation)

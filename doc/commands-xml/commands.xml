@@ -1403,6 +1403,14 @@
         Textblock) zurückgegriffen werden.</para>
     </description>
     <childelements/>
+    <attribute en="hyphenchar" de="tennzeichen" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>The character used for hyphenation (default: -)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Das Zeichen, das für Trennung benutzt wird (Voreinstellung: -)</para>
+      </description>
+    </attribute>
     <attribute en="orphan" de="schusterjunge" optional="yes">
       <description xml:lang="en">
         <para>If no, prohibit orphans (first line of paragraph is on the previous page). Default: no.</para>

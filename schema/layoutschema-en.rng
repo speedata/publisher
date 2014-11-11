@@ -793,6 +793,11 @@
       <element name="DefineTextformat">
          <a:documentation>Define text formatting instructions. A textformat is used to align and indent text and create margins and rules before and after the text.</a:documentation>
          <optional>
+            <attribute name="hyphenchar">
+               <a:documentation>The character used for hyphenation (default: -)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="orphan">
                <a:documentation>If no, prohibit orphans (first line of paragraph is on the previous page). Default: no.</a:documentation>
                <choice>

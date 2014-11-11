@@ -218,6 +218,18 @@ function Paragraph:format(width_sp, default_textformat_name,options)
             current_textformat = publisher.textformats["text"]
         end
 
+        local langs_num,langs
+        langs = {}
+        if current_textformat.hyphenchar then
+            langs_num = publisher.get_languages_used(nodelist)
+            for i,v in ipairs(langs_num) do
+                local l = publisher.get_language(v)
+                langs[#langs + 1] = l
+                l.prehyphenchar = lang.prehyphenchar(l.l)
+                lang.prehyphenchar(l.l,unicode.utf8.byte(current_textformat.hyphenchar))
+            end
+        end
+
         publisher.fonts.pre_linebreak(nodelist)
 
 
@@ -261,6 +273,11 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         else
             nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
         end
+
+        for _,v in ipairs(langs) do
+            lang.prehyphenchar(v.l,v.prehyphenchar)
+        end
+
 
         -- Remove glue between the lines
         -- it's always 0 anyway (hopefully!)
