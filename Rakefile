@@ -43,6 +43,7 @@ def build_go(srcdir,destbin,goos,goarch,targettype)
 	return true
 end
 
+desc "Build sphelper program"
 task :sphelper do
   cmd = "go build -ldflags \"-X main.basedir #{installdir}\" -o #{installdir}/bin/sphelper sphelper/main"
   sh cmd
@@ -59,25 +60,17 @@ task :default do
 end
 
 desc "Compile and install necessary software"
-task :build do
-	build_go(srcdir,"#{installdir}/bin",nil,nil,"local")
+task :build => [:sphelper] do
+	sh "sphelper build"
 end
 
 desc "Generate documentation"
-task :doc do
-	publisher_version = @versions['publisher_version']
+task :doc => [:sphelper] do
 	rm_rf builddir.join("manual")
-	Dir.chdir(srcdir.join("go")) do
-		puts "Building the gomddoc binary..."
-		sh "go build -ldflags \"-X main.version #{publisher_version}\" -o  #{installdir}/bin/gomddoc gomddoc/main"
-		puts "...done"
-	end
-
-	Dir.chdir(installdir.join("doc","manual")) do
-		sh "#{installdir}/bin/gomddoc  --base . --source doc --dest #{builddir}/manual --changelog #{installdir}/doc/changelog.xml"
-	end
+	sh "sphelper doc"
 	puts "Now generating command reference from XML..."
 	mkdir_p "temp"
+	publisher_version = @versions['publisher_version']
 	sh "java -Dfile.encoding=utf8 -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=en version=#{publisher_version} builddir=#{builddir}/manual 2> temp/messages-en.csv"
 	sh "java -Dfile.encoding=utf8 -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=de version=#{publisher_version} builddir=#{builddir}/manual 2> temp/messages-de.csv"
 	puts "done"
@@ -99,7 +92,7 @@ end
 desc "Generate schema and translations from master"
 task :schema => [:sphelper] do
   # generate the lua translation
-  cmd = "#{installdir}/bin/sphelper --basedir #{installdir} genluatranslations"
+  cmd = "#{installdir}/bin/sphelper genluatranslations"
   sh cmd
   # generate english + german schema
   sh "java -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:#{installdir}/schema/layoutschema-en.rng -xsl:#{installdir}/doc/commands-xml/xslt/cmd2rng.xsl lang=en"
@@ -107,9 +100,8 @@ task :schema => [:sphelper] do
 end
 
 desc "Source documentation"
-task :sourcedoc do
-	sh "go build -o #{installdir}/bin/sourcedoc sourcedoc/main"
-	sh "#{installdir}/bin/sourcedoc #{srcdir.join('lua')} #{builddir.join('sourcedoc')} #{installdir.join('doc','sourcedoc','assets')} #{installdir.join('doc','sourcedoc','img')}"
+task :sourcedoc => [:sphelper] do
+    sh "#{installdir}/bin/sphelper sourcedoc"
 	if RUBY_PLATFORM =~ /darwin/
 		sh "open #{builddir}/sourcedoc/publisher.html"
 	else
@@ -172,19 +164,13 @@ end
 
 
 desc "Make ZIP files - set NODOC=true for stripped zip file"
-task :zip do
+task :zip => [:sphelper] do
 	srcbindir = ENV["LUATEX_BIN"] || ""
 	if ! test(?d,srcbindir) then
 		puts "Environment variable LUATEX_BIN does not exist.\nMake sure it points to a path which contains `luatex'.\nUse like this: rake zip LUATEX_BIN=/path/to/bin\nAborting"
 		next
 	end
 	publisher_version = @versions['publisher_version']
-
-	Dir.chdir(srcdir.join("go")) do
-		puts "Building the mkreadme binary..."
-		sh "go build -o  #{installdir}/bin/mkreadme support/mkreadme"
-		puts "...done"
-	end
 
 	dest="#{builddir}/speedata-publisher"
 	targetbin="#{dest}/bin"
@@ -257,7 +243,7 @@ task :zip do
 		  FileUtils.cp(x,File.join(targetsw,File.dirname(x)))
 		}
 	end
-	sh "#{installdir}/bin/mkreadme #{platform} #{dest}"
+	sh "#{installdir}/bin/sphelper mkreadme #{platform} #{dest}"
 	dirname = "speedata-publisher"
 	cmdline = "zip -rq #{zipname} #{dirname}"
 	Dir.chdir("build") do

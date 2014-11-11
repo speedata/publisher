@@ -1,4 +1,4 @@
-package main
+package sourcedoc
 
 import (
 	"bufio"
@@ -260,22 +260,25 @@ func copyDir(dir ...string) error {
 	return nil
 }
 
-func dothings() error {
+func GenSourcedoc(_srcpath, _outpath, _assets, _images string) error {
+	linemarker = regexp.MustCompile(`^.*?--- ?(.*)$`)
+	functionmarker = regexp.MustCompile(`(span class="kw">function</span>\s+)([^ (]*)`)
+	linkmarker = regexp.MustCompile(`(\w+\.)?(\w+)#(\w+)(\(\))?`)
 	var err error
 
-	srcpath, err = filepath.Abs(os.Args[1])
+	srcpath, err = filepath.Abs(_srcpath)
 	if err != nil {
 		return err
 	}
-	outpath, err = filepath.Abs(os.Args[2])
+	outpath, err = filepath.Abs(_outpath)
 	if err != nil {
 		return err
 	}
-	csspath, err = filepath.Abs(filepath.Join(os.Args[2], "css", "gocco.css"))
+	csspath, err = filepath.Abs(filepath.Join(_outpath, "css", "gocco.css"))
 	if err != nil {
 		return err
 	}
-	jspath, err = filepath.Abs(filepath.Join(os.Args[2], "js", "MathJax.js"))
+	jspath, err = filepath.Abs(filepath.Join(_outpath, "js", "MathJax.js"))
 	if err != nil {
 		return err
 	}
@@ -299,24 +302,8 @@ func dothings() error {
 		return err
 	}
 
-	err = copyDir(filepath.Join(os.Args[3], "css"), filepath.Join(os.Args[3], "js"), os.Args[4])
+	err = copyDir(filepath.Join(_assets, "css"), filepath.Join(_assets, "js"), _images)
 	return err
-
-}
-
-// os.Args:
-//    1 = srcpath
-//    2 = outpath
-//    3 = assets
-//    4 = images
-func main() {
-	linemarker = regexp.MustCompile(`^.*?--- ?(.*)$`)
-	functionmarker = regexp.MustCompile(`(span class="kw">function</span>\s+)([^ (]*)`)
-	linkmarker = regexp.MustCompile(`(\w+\.)?(\w+)#(\w+)(\(\))?`)
-	err := dothings()
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 var tmplatesrc string = `<!DOCTYPE html>

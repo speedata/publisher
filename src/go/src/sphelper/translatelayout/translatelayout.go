@@ -6,8 +6,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"sphelper/commandsxml"
 	"strings"
+
+	"sphelper/commandsxml"
 )
 
 func Translate(basedir, inputfilename, outputfilename string) error {
