@@ -164,19 +164,13 @@ end
 
 
 desc "Make ZIP files - set NODOC=true for stripped zip file"
-task :zip do
+task :zip => [:sphelper] do
 	srcbindir = ENV["LUATEX_BIN"] || ""
 	if ! test(?d,srcbindir) then
 		puts "Environment variable LUATEX_BIN does not exist.\nMake sure it points to a path which contains `luatex'.\nUse like this: rake zip LUATEX_BIN=/path/to/bin\nAborting"
 		next
 	end
 	publisher_version = @versions['publisher_version']
-
-	Dir.chdir(srcdir.join("go")) do
-		puts "Building the mkreadme binary..."
-		sh "go build -o  #{installdir}/bin/mkreadme support/mkreadme"
-		puts "...done"
-	end
 
 	dest="#{builddir}/speedata-publisher"
 	targetbin="#{dest}/bin"
@@ -249,7 +243,7 @@ task :zip do
 		  FileUtils.cp(x,File.join(targetsw,File.dirname(x)))
 		}
 	end
-	sh "#{installdir}/bin/mkreadme #{platform} #{dest}"
+	sh "#{installdir}/bin/sphelper mkreadme #{platform} #{dest}"
 	dirname = "speedata-publisher"
 	cmdline = "zip -rq #{zipname} #{dirname}"
 	Dir.chdir("build") do

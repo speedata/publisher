@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"os"
 	"path/filepath"
@@ -30,8 +31,9 @@ func main() {
 	op := optionparser.NewOptionParser()
 	op.On("--basedir DIR", "Base dir", &commandlinebasedir)
 	op.Command("build", "Build go binary")
-	op.Command("genluatranslations", "Generate Lua translations")
 	op.Command("doc", "Generate speedata Publisher documentation (md only)")
+	op.Command("genluatranslations", "Generate Lua translations")
+	op.Command("mkreadme", "Make readme for installation/distribution")
 	op.Command("sourcedoc", "Generate the source documentation")
 	op.Command("translate", "Translate layout")
 	err := op.Parse()
@@ -87,6 +89,31 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+	case "mkreadme":
+		if len(op.Extra) < 3 {
+			fmt.Println("Not enough arguments, use `mkreadme <os> <destdir>'.")
+			fmt.Println("Where <os> is one of 'linux', 'darwin' or 'windows'.")
+			os.Exit(-1)
+		}
+		t := template.Must(template.ParseFiles("doc/installation.txt"))
+		data := struct {
+			Os string
+		}{
+			op.Extra[1],
+		}
+
+		w, err := os.OpenFile(filepath.Join(op.Extra[2], "installation.txt"), os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(-1)
+		}
+
+		err = t.Execute(w, data)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(-1)
+		}
+
 	case "sourcedoc":
 		// 1 = srcpath, 2 = outpath, 3 = assets, 4 = images
 		err := sourcedoc.GenSourcedoc(filepath.Join(cfg.Srcdir, "lua"), filepath.Join(cfg.Builddir, "sourcedoc"), filepath.Join(cfg.Basedir(), "doc", "sourcedoc", "assets"), filepath.Join(cfg.Basedir(), "doc", "sourcedoc", "img"))
