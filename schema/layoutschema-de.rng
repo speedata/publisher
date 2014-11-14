@@ -1121,7 +1121,7 @@
    </define>
    <define name="e_Frame">
       <element name="Rahmen">
-         <a:documentation>Um ein Objekt ein Rahmen zeichnen.</a:documentation>
+         <a:documentation>Um ein Objekt ein Rahmen zeichnen. Kann als Clipping-Pfad benutzt werden.</a:documentation>
          <optional>
             <attribute name="rahmen-unten-rechts-radius">
                <a:documentation>Radius der Ecke unten rechts.</a:documentation>

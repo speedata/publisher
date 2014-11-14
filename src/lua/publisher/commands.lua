@@ -705,18 +705,15 @@ function commands.frame( layoutxml,dataxml )
     for i=1,#tab do
         local contents = publisher.element_contents(tab[i])
         if node.is_node(contents) then
-            if matrix then
-                tab[i].contents = publisher.frame({
-                    box       = contents,
-                    colorname = framecolor,
-                    rulewidth = rulewidth_sp,
-                    b_b_r_radius = tex.sp(b_b_r_radius or 0),
-                    b_t_r_radius = tex.sp(b_t_r_radius or 0),
-                    b_t_l_radius = tex.sp(b_t_l_radius or 0),
-                    b_b_l_radius = tex.sp(b_b_l_radius or 0),
-                })
-
-            end
+            tab[i].contents = publisher.frame({
+                box       = contents,
+                colorname = framecolor,
+                rulewidth = rulewidth_sp,
+                b_b_r_radius = tex.sp(b_b_r_radius or 0),
+                b_t_r_radius = tex.sp(b_t_r_radius or 0),
+                b_t_l_radius = tex.sp(b_t_l_radius or 0),
+                b_b_l_radius = tex.sp(b_b_l_radius or 0),
+            })
         else
             for j=1,#contents do
                 if node.is_node(contents[j]) then
@@ -729,7 +726,6 @@ function commands.frame( layoutxml,dataxml )
                         b_t_l_radius = tex.sp(b_t_l_radius or 0),
                         b_b_l_radius = tex.sp(b_b_l_radius or 0),
                     })
-
                 end
             end
         end

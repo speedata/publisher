@@ -1116,7 +1116,7 @@
    </define>
    <define name="e_Frame">
       <element name="Frame">
-         <a:documentation>Manipulate an object's appearance by drawing a frame.</a:documentation>
+         <a:documentation>Manipulate an object's appearance by drawing a frame. Can be used as a clipping path.</a:documentation>
          <optional>
             <attribute name="border-bottom-right-radius">
                <a:documentation>Radius of corner bottom right.</a:documentation>
