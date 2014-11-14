@@ -1781,9 +1781,12 @@ function commands.place_object( layoutxml,dataxml )
                         current_column_start = 1
                     end
                 end
-                -- This is not correct! Todo: fixme!
+
                 if publisher.current_group then
-                    current_row = 1
+                    current_row = current_grid:find_suitable_row(current_column_start,width_in_gridcells,height_in_gridcells,area)
+                    if not current_row then
+                        current_row = 1
+                    end
                 else
                     -- the current grid is different when in a group
                     current_row = current_grid:find_suitable_row(current_column_start,width_in_gridcells,height_in_gridcells,area)
