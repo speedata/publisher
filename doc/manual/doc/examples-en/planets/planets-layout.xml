@@ -74,7 +74,6 @@
             <Value select="@pagenumber" />
           </Paragraph>
         </ForAll>
-        <Copy-of select="$tableofcontents" />
       </Textblock>
     </PlaceObject>
   </Record>

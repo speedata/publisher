@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- source: wikipedia -->
 <planets>
   <planet name="Mercury" symbol="☿">
     <url>http://pds.jpl.nasa.gov/planets/special/mercury.htm</url>
@@ -23,7 +22,7 @@
       times that of Earth's. With a mean surface temperature of 735 K, Venus is by far the hottest planet in the Solar System. It has no carbon cycle to lock carbon back into rocks and surface
       features, nor does it seem to have any organic life to absorb it in biomass.</description>
   </planet>
-  <planet name="Erde" symbol="♁">
+  <planet name="Earth" symbol="♁">
     <image>earth.jpg</image>
     <url>http://pds.jpl.nasa.gov/planets/special/earth.htm</url>
     <description>Earth is the third planet from the Sun, and the densest and fifth-largest of the eight planets in the Solar System. It is also the largest of the Solar System's four terrestrial
@@ -125,3 +124,5 @@
       which flew by the planet on August 25, 1989. </description>
   </planet>
 </planets>
+<!-- source: wikipedia -->
+
