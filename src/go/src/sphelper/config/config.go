@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -37,11 +38,21 @@ func (cfg *Config) Basedir() string {
 func NewConfig(basedir string) *Config {
 	cfg := &Config{}
 	cfg.SetBasedir(basedir)
-	cfg.Publisherversion = readVersion("publisher")
+	cfg.Publisherversion = readVersion("publisher", basedir)
 	return cfg
 }
 
-func readVersion(product string) Version {
+func readVersion(product string, basedir string) Version {
+	curwd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	err = os.Chdir(basedir)
+	if err != nil {
+		panic(err)
+	}
+	defer os.Chdir(curwd)
+
 	buf, err := ioutil.ReadFile("version")
 	if err != nil {
 		panic("Cannot read version file")
@@ -67,5 +78,6 @@ func readVersion(product string) Version {
 		}
 	}
 	panic("Cannot find version number")
+
 	return ver
 }
