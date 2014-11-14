@@ -61,13 +61,13 @@ end
 
 desc "Compile and install necessary software"
 task :build => [:sphelper] do
-	sh "sphelper build"
+	sh "#{installdir}/bin/sphelper build"
 end
 
 desc "Generate documentation"
 task :doc => [:sphelper] do
 	rm_rf builddir.join("manual")
-	sh "sphelper doc"
+	sh "#{installdir}/bin/sphelper doc"
 	puts "Now generating command reference from XML..."
 	mkdir_p "temp"
 	publisher_version = @versions['publisher_version']
