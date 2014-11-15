@@ -1167,6 +1167,7 @@ function typeset_table(self)
     local tablehead = {}
     local tablefoot_last = {}
     local tablefoot = {}
+    -- omit_head_on_pages is for dynamic headers (2)
     local omit_head_on_pages = {}
     local rows = {}
     local break_above = true
@@ -1338,7 +1339,7 @@ function typeset_table(self)
 
 
     local function get_tablehead_static( page )
-        if s == 1 then
+        if page == 1 then
             return tablehead_first[1]
         end
         return node.copy_list(tablehead[1])
