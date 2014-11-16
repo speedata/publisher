@@ -1,12 +1,10 @@
 --  luxor.lua
 --  speedata publisher
+--  A crappy non-validating XML parser
 --
---  Copyright 2013 Patrick Gundlach.
+--  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
 
-
--- TODO:
---  * xinclude
 
 
 local P,S = lpeg.P, lpeg.S
@@ -263,6 +261,10 @@ local function parse_xml(txt,options)
 	options = options or {}
 	local pos = 1
 	local line = 1
+
+	txt = string.gsub(txt,"<!%-%-.-%-%->","")
+	txt = string.gsub(txt,"<!%[CDATA%[(.-)%]%]>",replacecdata)
+
 	if string.byte(txt) ~= 60 then
 		_,_,txt = string.find(txt,"(<.*)$",pos)
 	end
@@ -271,8 +273,8 @@ local function parse_xml(txt,options)
 	else
 		decoder = decode_xmlstring
 	end
-	if options.ignoreeol == true then
 		txt = txt.gsub(txt,"\13\n?","\n")
+	if options.ignoreeol == true then
 		txt = txt.gsub(txt,"\n%s*"," ")
 	else
 		txt = txt.gsub(txt,"\13\n?","\n")
@@ -283,8 +285,7 @@ local function parse_xml(txt,options)
 	if string.match(txt,"<!DOCTYPE",pos) then
 		pos = parse_doctype(txt,pos)
 	end
-	txt = string.gsub(txt,"<!%[CDATA%[(.-)%]%]>",replacecdata)
-	txt = string.gsub(txt,"<!%-%-.-%-%->","")
+
 	local ret
 	while true do
 		ret,pos = parse_element(txt,pos,{})
