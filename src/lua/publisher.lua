@@ -2396,8 +2396,8 @@ language_mapping = {
     ["Czech"]                        = "cs",
     ["Danish"]                       = "da",
     ["Dutch"]                        = "nl",
-    ["Englisch (Great Britan)"]      = "en_GB",
-    ["Englisch (USA)"]               = "en_US",
+    ["English (Great Britan)"]       = "en_GB",
+    ["English (USA)"]                = "en_US",
     ["Finnish"]                      = "fi",
     ["French"]                       = "fr",
     ["German"]                       = "de",
@@ -2435,6 +2435,7 @@ language_mapping = {
 ---     fr, French - Französisch
 ---     ga, Irish - Irisch
 ---     gl, Galician - Galicisch
+---     grc, Ancient Greek - Altgriechisch
 ---     gu, Gujarati - Gujarati
 ---     hi, Hindi - Hindi
 ---     hr, Croatian - Kroatisch
@@ -2497,6 +2498,7 @@ language_filename = {
     ["fr"]    = "fr",
     ["ga"]    = "ga",
     ["gl"]    = "gl",
+    ["grc"]   = "grc",
     ["gu"]    = "gu",
     ["hi"]    = "hi",
     ["hr"]    = "hr",
