@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2014-11-11 14:33)
+-- generated from genluatranslations.go (2014-11-17 14:30)
 -- do not edit!
 module(...)
 return {
@@ -48,6 +48,8 @@ return {
         ["höhe"] = "height",
         ["hintergrundfarbe"] = "backgroundcolor",
         ["beschnitt"] = "bleed",
+        ["class"] = "class",
+        ["id"] = "id",
         },
       ["Br"] = { "Br",
         },
@@ -125,6 +127,8 @@ return {
         ["rahmenfarbe"] = "framecolor",
         ["hintergrundfarbe"] = "backgroundcolor",
         ["linienstärke"] = "rulewidth",
+        ["class"] = "class",
+        ["id"] = "id",
         },
       ["Raster"] = { "Grid",
         ["breite"] = "width",

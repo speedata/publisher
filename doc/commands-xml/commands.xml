@@ -711,7 +711,7 @@
         <para>Höhe der Box in Rasterzellen.</para>
       </description>
     </attribute>
-    <attribute en="backgroundcolor" de="hintergrundfarbe" type="text" optional="no">
+    <attribute en="backgroundcolor" de="hintergrundfarbe" type="text" optional="yes" css="background-color">
       <description xml:lang="en">
         <para>Color of the box.</para>
       </description>
@@ -725,6 +725,22 @@
       </description>
       <description xml:lang="de">
         <para>Lässt die Box am Rand größer werden. Wird z.B. für Daumenregister benutzt, die inkl. Beschnitt ganz zum Rand gehen sollen. Inhalt ist eine Ortsangabe bestehend aus den Werten »oben«, »unten«, »links« oder »rechts« bzw. eine Kombination wie »oben,rechts«.</para>
+      </description>
+    </attribute>
+    <attribute en="class" de="class" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS class for this box.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS Klasse für diese Box.</para>
+      </description>
+    </attribute>
+    <attribute en="id" de="id" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS id for this box.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS id für diese Box.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -1876,7 +1892,7 @@
         </interleave>
       </oneOrMore>
     </childelements>
-    <attribute en="border-bottom-right-radius" de="rahmen-unten-rechts-radius" optional="yes" type="length">
+    <attribute en="border-bottom-right-radius" de="rahmen-unten-rechts-radius" css="border-bottom-right-radius" optional="yes" type="length">
       <description xml:lang="en">
         <para>Radius of corner bottom right.</para>
       </description>
@@ -1884,7 +1900,7 @@
         <para>Radius der Ecke unten rechts.</para>
       </description>
     </attribute>
-    <attribute en="border-top-right-radius" de="rahmen-oben-rechts-radius" optional="yes" type="length">
+    <attribute en="border-top-right-radius" de="rahmen-oben-rechts-radius" css="border-top-right-radius" optional="yes" type="length">
       <description xml:lang="en">
         <para>Radius of corner top right.</para>
       </description>
@@ -1892,7 +1908,7 @@
         <para>Radius der Ecke oben rechts.</para>
       </description>
     </attribute>
-    <attribute en="border-top-left-radius" de="rahmen-oben-links-radius" optional="yes" type="length">
+    <attribute en="border-top-left-radius" de="rahmen-oben-links-radius" css="border-top-left-radius" optional="yes" type="length">
       <description xml:lang="en">
         <para>Radius of corner top left.</para>
       </description>
@@ -1900,7 +1916,7 @@
         <para>Radius der Ecke oben links.</para>
       </description>
     </attribute>
-    <attribute en="border-bottom-left-radius" de="rahmen-unten-links-radius" optional="yes" type="length">
+    <attribute en="border-bottom-left-radius" de="rahmen-unten-links-radius" css="border-bottom-left-radius" optional="yes" type="length">
       <description xml:lang="en">
         <para>Radius of corner bottom left.</para>
       </description>
@@ -1930,6 +1946,22 @@
       </description>
       <description xml:lang="de">
         <para>Die Dicke des Rahmnes, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
+      </description>
+    </attribute>
+    <attribute en="class" de="class" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS class for this element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS Klasse für dieses Element.</para>
+      </description>
+    </attribute>
+    <attribute en="id" de="id" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS id for this element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS id für dieses Element.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -5542,11 +5574,39 @@
         <para>Der Dateiname der CSS Datei (inklusive Dateiendung).</para>
       </description>
     </attribute>
+    <remark xml:lang="en">
+      <para>If no filename is given, the speedata Publisher expects the CSS rules as the contents of this element.</para>
+    </remark>
+    <remark xml:lang="de">
+      <para>Wird kein Dateiname angegeben, so erwartet der speedata Publisher CSS-Eigenschaften als Inhalt des Elements.</para>
+    </remark>
     <example xml:lang="en">
       <listing><![CDATA[<Stylesheet filename="style.css" />]]></listing>
+      <listing><![CDATA[<Stylesheet>
+  frame {
+    border-bottom-right-radius: 1cm;
+    border-bottom-left-radius: 1cm;
+    border-top-right-radius: 1cm;
+    border-top-left-radius: 1cm;
+  }
+  box {
+    background-color: red;
+  }
+</Stylesheet>]]></listing>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<Stylesheet dateiname="style.css" />]]></listing>
+      <listing><![CDATA[<Stylesheet>
+  frame {
+    border-bottom-right-radius: 1cm;
+    border-bottom-left-radius: 1cm;
+    border-top-right-radius: 1cm;
+    border-top-left-radius: 1cm;
+  }
+  box {
+    background-color: red;
+  }
+</Stylesheet>]]></listing>
     </example>
     <seealso/>
   </command>

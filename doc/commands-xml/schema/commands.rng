@@ -184,6 +184,9 @@
                   <value>no</value>
                 </choice>
               </attribute>
+              <optional>
+                <attribute name="css"/>
+              </optional>
               <ref name="descriptions" />
               <choice>
                 <attribute name="type">

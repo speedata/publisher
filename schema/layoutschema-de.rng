@@ -348,12 +348,24 @@
          <attribute name="höhe">
             <a:documentation>Höhe der Box in Rasterzellen.</a:documentation>
          </attribute>
-         <attribute name="hintergrundfarbe">
-            <a:documentation>Farbe der Box.</a:documentation>
-         </attribute>
+         <optional>
+            <attribute name="hintergrundfarbe">
+               <a:documentation>Farbe der Box.</a:documentation>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="beschnitt">
                <a:documentation>Lässt die Box am Rand größer werden. Wird z.B. für Daumenregister benutzt, die inkl. Beschnitt ganz zum Rand gehen sollen. Inhalt ist eine Ortsangabe bestehend aus den Werten »oben«, »unten«, »links« oder »rechts« bzw. eine Kombination wie »oben,rechts«.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS Klasse für diese Box.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id für diese Box.</a:documentation>
             </attribute>
          </optional>
          <empty/>
@@ -1155,6 +1167,16 @@
          <optional>
             <attribute name="linienstärke">
                <a:documentation>Die Dicke des Rahmnes, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS Klasse für dieses Element.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id für dieses Element.</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>

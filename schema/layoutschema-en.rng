@@ -346,12 +346,24 @@
          <attribute name="height">
             <a:documentation>Height of the box in grid cells.</a:documentation>
          </attribute>
-         <attribute name="backgroundcolor">
-            <a:documentation>Color of the box.</a:documentation>
-         </attribute>
+         <optional>
+            <attribute name="backgroundcolor">
+               <a:documentation>Color of the box.</a:documentation>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="bleed">
                <a:documentation>Lets the box increase its size by the amount of trim given in the options. Useful for thumb indexes. The contents of the attribute is either »left«, »right«, »top« or »bottom« or any combination such as »top,right«.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS class for this box.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id for this box.</a:documentation>
             </attribute>
          </optional>
          <empty/>
@@ -1150,6 +1162,16 @@
          <optional>
             <attribute name="rulewidth">
                <a:documentation>The thickness of the frame that is drawn around the object. Only makes sense in combination with the attribute 'frame'.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS class for this element.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id for this element.</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>

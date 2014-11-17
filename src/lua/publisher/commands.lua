@@ -216,10 +216,16 @@ end
 --- ----
 --- Draw a rectangular filled area
 function commands.box( layoutxml,dataxml )
-    local width     = publisher.read_attribute(layoutxml,dataxml,"width","length")
-    local height    = publisher.read_attribute(layoutxml,dataxml,"height","length")
+    local bleed     = publisher.read_attribute(layoutxml,dataxml,"bleed",          "string")
     local colorname = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
-    local bleed     = publisher.read_attribute(layoutxml,dataxml,"bleed","string")
+    local height    = publisher.read_attribute(layoutxml,dataxml,"height",         "length")
+    local width     = publisher.read_attribute(layoutxml,dataxml,"width",          "length")
+
+    local class     = publisher.read_attribute(layoutxml,dataxml,"class",          "rawstring")
+    local id        = publisher.read_attribute(layoutxml,dataxml,"id",             "rawstring")
+
+    local css_rules = publisher.css:matches({element = 'box', class=class,id=id}) or {}
+    colorname = colorname or css_rules["background-color"] or "black"
 
     local current_grid = publisher.current_grid
 
@@ -698,9 +704,18 @@ function commands.frame( layoutxml,dataxml )
     local b_t_r_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-right-radius",    "string")
     local b_t_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-left-radius",     "string")
     local b_b_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-bottom-left-radius",  "string")
-    local framecolor       = publisher.read_attribute(layoutxml,dataxml,"framecolor",     "rawstring")
-    local backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
-    local rulewidth_sp     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",      "length_sp", 26312) -- 0.4bp
+    local framecolor       = publisher.read_attribute(layoutxml,dataxml,"framecolor",                 "rawstring")
+    local backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor",            "rawstring")
+    local rulewidth_sp     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",                  "length_sp", 26312) -- 0.4bp
+    local class            = publisher.read_attribute(layoutxml,dataxml,"class",                      "rawstring")
+    local id               = publisher.read_attribute(layoutxml,dataxml,"id",                         "rawstring")
+
+    local css_rules = publisher.css:matches({element = 'frame', class=class,id=id}) or {}
+
+    b_b_r_radius = b_b_r_radius or css_rules["border-bottom-right-radius"]
+    b_b_l_radius = b_b_l_radius or css_rules["border-bottom-left-radius"]
+    b_t_r_radius = b_t_r_radius or css_rules["border-top-right-radius"]
+    b_t_l_radius = b_t_l_radius or css_rules["border-top-left-radius"]
 
     for i=1,#tab do
         local contents = publisher.element_contents(tab[i])

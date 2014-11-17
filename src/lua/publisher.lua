@@ -1202,7 +1202,7 @@ function box( width_sp,height_sp,colorname )
     local paint = node.new("whatsit","pdf_literal")
     local colentry = colors[colorname]
     if not colentry then
-        err("Color %q unknown, reverting to black",colorname )
+        err("Color %q unknown, reverting to black",colorname or "(no color name given)")
         colentry = colors["black"]
     end
     -- a spot color
