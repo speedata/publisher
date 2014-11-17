@@ -1923,6 +1923,8 @@
                   <a:documentation xmlns=""/>
                   <value>Neugriechisch</value>
                   <a:documentation xmlns="">Neugriechisch</a:documentation>
+                  <value>Altgriechisch</value>
+                  <a:documentation xmlns="">Altgriechische Trennmuster</a:documentation>
                   <value>Ungarisch</value>
                   <a:documentation xmlns=""/>
                   <value>Italienisch</value>
@@ -2224,11 +2226,45 @@
                <a:documentation>Name der Sprache für die Silbentrennung.</a:documentation>
                <choice>
                   <value>Deutsch</value>
-                  <a:documentation xmlns="">Deutsche Trennmuster</a:documentation>
+                  <a:documentation xmlns="">Auf Deutsche Trennmuster umschalten.</a:documentation>
                   <value>Englisch (Großbritannien)</value>
-                  <a:documentation xmlns="">Englische Trennmuster auswählen</a:documentation>
-                  <value>Französisch</value>
-                  <a:documentation xmlns="">Französische Trennmuster</a:documentation>
+                  <a:documentation xmlns="">Auf Englische Trennmuster umschalten.</a:documentation>
+                  <value>Tschechisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Dänisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Niederländisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Englisch (USA)</value>
+                  <a:documentation xmlns=""/>
+                  <value>Finnisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Neugriechisch</value>
+                  <a:documentation xmlns="">Neugriechisch</a:documentation>
+                  <value>Altgriechisch</value>
+                  <a:documentation xmlns="">Altgriechische Trennmuster</a:documentation>
+                  <value>Ungarisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Italienisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Bokmål</value>
+                  <a:documentation xmlns=""/>
+                  <value>Nynorsk</value>
+                  <a:documentation xmlns=""/>
+                  <value>Polnisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Portugiesisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Russisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Serbisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Spanisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Schwedisch</value>
+                  <a:documentation xmlns=""/>
+                  <value>Türkisch</value>
+                  <a:documentation xmlns=""/>
                </choice>
             </attribute>
          </optional>

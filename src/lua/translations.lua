@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2014-11-17 14:30)
+-- generated from genluatranslations.go (2014-11-17 20:43)
 -- do not edit!
 module(...)
 return {
@@ -477,8 +477,8 @@ return {
       ["vertikal"] = "vertical",
       ["ohne"] = "without",
       ["ja"] = "yes",
-      ["Englisch (Großbritannien)"] = "Englisch (Great Britan)",
-      ["Englisch (USA)"] = "Englisch (USA)",
+      ["Englisch (Großbritannien)"] = "English (Great Britan)",
+      ["Englisch (USA)"] = "English (USA)",
       ["Französisch"] = "French",
       ["Deutsch"] = "German",
       ["Tschechisch"] = "Czech",
@@ -486,6 +486,7 @@ return {
       ["Niederländisch"] = "Dutch",
       ["Finnisch"] = "Finnish",
       ["Neugriechisch"] = "Greek",
+      ["Altgriechisch"] = "Ancient Greek",
       ["Ungarisch"] = "Hungarian",
       ["Italienisch"] = "Italian",
       ["Bokmål"] = "Norwegian Bokmål",

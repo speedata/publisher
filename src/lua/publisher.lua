@@ -2402,6 +2402,7 @@ language_mapping = {
     ["French"]                       = "fr",
     ["German"]                       = "de",
     ["Greek"]                        = "el",
+    ["Ancient Greek"]                = "grc",
     ["Hungarian"]                    = "hu",
     ["Italian"]                      = "it",
     ["Norwegian Bokmål"]             = "nb",

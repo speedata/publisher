@@ -3552,7 +3552,7 @@
           <para>Auf Deutsche Trennmuster umschalten.</para>
         </description>
       </choice>
-      <choice en="Englisch (Great Britan)" de="Englisch (Großbritannien)">
+      <choice en="English (Great Britan)" de="Englisch (Großbritannien)">
         <description xml:lang="en">
           <para>Switch to English hyphenation patterns.</para>
         </description>
@@ -3584,7 +3584,7 @@
           <para/>
         </description>
       </choice>
-      <choice en="Englisch (USA)" de="Englisch (USA)">
+      <choice en="English (USA)" de="Englisch (USA)">
         <description xml:lang="en">
           <para/>
         </description>
@@ -3606,6 +3606,14 @@
         </description>
         <description xml:lang="de">
           <para>Neugriechisch</para>
+        </description>
+      </choice>
+      <choice en="Ancient Greek" de="Altgriechisch">
+        <description xml:lang="en">
+          <para>Ancient Greek hyphenation patterns.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Altgriechische Trennmuster</para>
         </description>
       </choice>
       <choice en="Hungarian" de="Ungarisch">
@@ -4033,26 +4041,162 @@
       </description>
       <choice en="German" de="Deutsch">
         <description xml:lang="en">
-          <para>Use German language for hyphenation.</para>
+          <para>Switch to German hyphenation patterns.</para>
         </description>
         <description xml:lang="de">
-          <para>Deutsche Trennmuster</para>
+          <para>Auf Deutsche Trennmuster umschalten.</para>
         </description>
       </choice>
-      <choice en="Englisch (Great Britan)" de="Englisch (Großbritannien)">
+      <choice en="English (Great Britan)" de="Englisch (Großbritannien)">
         <description xml:lang="en">
-          <para>Use English hyphenation patterns</para>
+          <para>Switch to English hyphenation patterns.</para>
         </description>
         <description xml:lang="de">
-          <para>Englische Trennmuster auswählen</para>
+          <para>Auf Englische Trennmuster umschalten.</para>
         </description>
       </choice>
-      <choice en="French" de="Französisch">
+      <choice en="Czech" de="Tschechisch">
         <description xml:lang="en">
-          <para>French hyphenation patterns</para>
+          <para/>
         </description>
         <description xml:lang="de">
-          <para>Französische Trennmuster</para>
+          <para/>
+        </description>
+      </choice>
+      <choice en="Danish" de="Dänisch">
+        <description xml:lang="en">
+          <para/>
+        </description>
+        <description xml:lang="de">
+          <para/>
+        </description>
+      </choice>
+      <choice en="Dutch" de="Niederländisch">
+        <description xml:lang="en">
+          <para/>
+        </description>
+        <description xml:lang="de">
+          <para/>
+        </description>
+      </choice>
+      <choice en="English (USA)" de="Englisch (USA)">
+        <description xml:lang="en">
+          <para/>
+        </description>
+        <description xml:lang="de">
+          <para/>
+        </description>
+      </choice>
+      <choice en="Finnish" de="Finnisch">
+        <description xml:lang="en">
+          <para/>
+        </description>
+        <description xml:lang="de">
+          <para/>
+        </description>
+      </choice>
+      <choice en="Greek" de="Neugriechisch">
+        <description xml:lang="en">
+          <para>Monotonic greek</para>
+        </description>
+        <description xml:lang="de">
+          <para>Neugriechisch</para>
+        </description>
+      </choice>
+      <choice en="Ancient Greek" de="Altgriechisch">
+        <description xml:lang="en">
+          <para>Ancient Greek hyphenation patterns.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Altgriechische Trennmuster</para>
+        </description>
+      </choice>
+      <choice en="Hungarian" de="Ungarisch">
+        <description xml:lang="en">
+          <para/>
+        </description>
+        <description xml:lang="de">
+          <para/>
+        </description>
+      </choice>
+      <choice en="Italian" de="Italienisch">
+        <description xml:lang="en">
+          <para/>
+        </description>
+        <description xml:lang="de">
+          <para/>
+        </description>
+      </choice>
+      <choice en="Norwegian Bokmål" de="Bokmål">
+        <description xml:lang="en">
+          <para/>
+        </description>
+        <description xml:lang="de">
+          <para/>
+        </description>
+      </choice>
+      <choice en="Norwegian Nynorsk" de="Nynorsk">
+        <description xml:lang="en">
+          <para/>
+        </description>
+        <description xml:lang="de">
+          <para/>
+        </description>
+      </choice>
+      <choice en="Polish" de="Polnisch">
+        <description xml:lang="en">
+          <para/>
+        </description>
+        <description xml:lang="de">
+          <para/>
+        </description>
+      </choice>
+      <choice en="Portuguese" de="Portugiesisch">
+        <description xml:lang="en">
+          <para/>
+        </description>
+        <description xml:lang="de">
+          <para/>
+        </description>
+      </choice>
+      <choice en="Russian" de="Russisch">
+        <description xml:lang="en">
+          <para/>
+        </description>
+        <description xml:lang="de">
+          <para/>
+        </description>
+      </choice>
+      <choice en="Serbian" de="Serbisch">
+        <description xml:lang="en">
+          <para/>
+        </description>
+        <description xml:lang="de">
+          <para/>
+        </description>
+      </choice>
+      <choice en="Spanish" de="Spanisch">
+        <description xml:lang="en">
+          <para/>
+        </description>
+        <description xml:lang="de">
+          <para/>
+        </description>
+      </choice>
+      <choice en="Swedish" de="Schwedisch">
+        <description xml:lang="en">
+          <para/>
+        </description>
+        <description xml:lang="de">
+          <para/>
+        </description>
+      </choice>
+      <choice en="Turkish" de="Türkisch">
+        <description xml:lang="en">
+          <para/>
+        </description>
+        <description xml:lang="de">
+          <para/>
         </description>
       </choice>
     </attribute>
@@ -7150,8 +7294,8 @@ Message: "$i is: 3"]]></listing>
       <value context="origin" key="left" en="left" de="links" />
       <value context="origin" key="right" en="right" de="rechts" />
 
-      <value context="*" key="Englisch (Great Britan)" en="Englisch (Great Britan)" de="Englisch (Großbritannien)"/>
-      <value context="*" key="Englisch (USA)" en="Englisch (USA)" de="Englisch (USA)"/>
+      <value context="*" key="English (Great Britan)" en="English (Great Britan)" de="Englisch (Großbritannien)"/>
+      <value context="*" key="English (USA)" en="English (USA)" de="Englisch (USA)"/>
       <value context="*" key="French" en="French" de="Französisch"/>
       <value context="*" key="German" en="German" de="Deutsch"/>
       <value context="*" key="Czech" en="Czech" de="Tschechisch"/>
@@ -7159,6 +7303,7 @@ Message: "$i is: 3"]]></listing>
       <value context="*" key="Dutch" en="Dutch" de="Niederländisch"/>
       <value context="*" key="Finnish" en="Finnish" de="Finnisch"/>
       <value context="*" key="Greek" en="Greek" de="Neugriechisch"/>
+      <value context="*" key="Ancient Greek" en="Ancient Greek" de="Altgriechisch"/>
       <value context="*" key="Hungarian" en="Hungarian" de="Ungarisch"/>
       <value context="*" key="Italian" en="Italian" de="Italienisch"/>
       <value context="*" key="Norwegian Bokmål" en="Norwegian Bokmål" de="Bokmål"/>

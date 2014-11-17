@@ -1904,7 +1904,7 @@
                <choice>
                   <value>German</value>
                   <a:documentation xmlns="">Switch to German hyphenation patterns.</a:documentation>
-                  <value>Englisch (Great Britan)</value>
+                  <value>English (Great Britan)</value>
                   <a:documentation xmlns="">Switch to English hyphenation patterns.</a:documentation>
                   <value>Czech</value>
                   <a:documentation xmlns=""/>
@@ -1912,12 +1912,14 @@
                   <a:documentation xmlns=""/>
                   <value>Dutch</value>
                   <a:documentation xmlns=""/>
-                  <value>Englisch (USA)</value>
+                  <value>English (USA)</value>
                   <a:documentation xmlns=""/>
                   <value>Finnish</value>
                   <a:documentation xmlns=""/>
                   <value>Greek</value>
                   <a:documentation xmlns="">Monotonic greek</a:documentation>
+                  <value>Ancient Greek</value>
+                  <a:documentation xmlns="">Ancient Greek hyphenation patterns.</a:documentation>
                   <value>Hungarian</value>
                   <a:documentation xmlns=""/>
                   <value>Italian</value>
@@ -2219,11 +2221,45 @@
                <a:documentation>Name of the language for hyphenation.</a:documentation>
                <choice>
                   <value>German</value>
-                  <a:documentation xmlns="">Use German language for hyphenation.</a:documentation>
-                  <value>Englisch (Great Britan)</value>
-                  <a:documentation xmlns="">Use English hyphenation patterns</a:documentation>
-                  <value>French</value>
-                  <a:documentation xmlns="">French hyphenation patterns</a:documentation>
+                  <a:documentation xmlns="">Switch to German hyphenation patterns.</a:documentation>
+                  <value>English (Great Britan)</value>
+                  <a:documentation xmlns="">Switch to English hyphenation patterns.</a:documentation>
+                  <value>Czech</value>
+                  <a:documentation xmlns=""/>
+                  <value>Danish</value>
+                  <a:documentation xmlns=""/>
+                  <value>Dutch</value>
+                  <a:documentation xmlns=""/>
+                  <value>English (USA)</value>
+                  <a:documentation xmlns=""/>
+                  <value>Finnish</value>
+                  <a:documentation xmlns=""/>
+                  <value>Greek</value>
+                  <a:documentation xmlns="">Monotonic greek</a:documentation>
+                  <value>Ancient Greek</value>
+                  <a:documentation xmlns="">Ancient Greek hyphenation patterns.</a:documentation>
+                  <value>Hungarian</value>
+                  <a:documentation xmlns=""/>
+                  <value>Italian</value>
+                  <a:documentation xmlns=""/>
+                  <value>Norwegian Bokmål</value>
+                  <a:documentation xmlns=""/>
+                  <value>Norwegian Nynorsk</value>
+                  <a:documentation xmlns=""/>
+                  <value>Polish</value>
+                  <a:documentation xmlns=""/>
+                  <value>Portuguese</value>
+                  <a:documentation xmlns=""/>
+                  <value>Russian</value>
+                  <a:documentation xmlns=""/>
+                  <value>Serbian</value>
+                  <a:documentation xmlns=""/>
+                  <value>Spanish</value>
+                  <a:documentation xmlns=""/>
+                  <value>Swedish</value>
+                  <a:documentation xmlns=""/>
+                  <value>Turkish</value>
+                  <a:documentation xmlns=""/>
                </choice>
             </attribute>
          </optional>

@@ -5,7 +5,7 @@
 
   <Options
     show-grid="no"
-    mainlanguage="Englisch (Great Britan)"
+    mainlanguage="English (Great Britan)"
   />
   <SetGrid nx="16" height="12pt"/>
   <Pageformat width="10cm" height="11cm"/>
