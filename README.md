@@ -47,5 +47,5 @@ We offer commercial support for the speedata Publisher. You can find the contact
 
 
 --------
-URL: <http://speedata.github.com/publisher/> <br />
+URL: <http://speedata.github.io/publisher/> <br />
 Source: <https://github.com/speedata/publisher/>
