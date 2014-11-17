@@ -2244,14 +2244,14 @@ end
 
 --- Stylesheet
 --- ----------
---- Load a CSS file
+--- Load a CSS file or read the command's value.
 function commands.stylesheet( layoutxml,dataxml )
     local filename = publisher.read_attribute(layoutxml,dataxml,"filename","rawstring")
-    if not filename then
-        warning("CSS: no filename given")
-        return
+    if filename then
+        publisher.css:parse(filename)
+    else
+        publisher.css:parsetxt(layoutxml[1])
     end
-    publisher.css:parse(filename)
 end
 
 --- Sub

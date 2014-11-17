@@ -2941,11 +2941,13 @@
    </define>
    <define name="e_Stylesheet">
       <element name="Stylesheet">
-         <a:documentation>Lädt eine CSS-Datei</a:documentation>
-         <attribute name="dateiname">
-            <a:documentation>Der Dateiname der CSS Datei (inklusive Dateiendung).</a:documentation>
-         </attribute>
-         <empty/>
+         <a:documentation>Lädt eine CSS-Datei oder definiert CSS-Eigenschaften</a:documentation>
+         <optional>
+            <attribute name="dateiname">
+               <a:documentation>Der Dateiname der CSS Datei (inklusive Dateiendung).</a:documentation>
+            </attribute>
+         </optional>
+         <text/>
       </element>
    </define>
    <define name="e_Table">

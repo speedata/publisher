@@ -5526,13 +5526,15 @@
   </command>
   <command en="Stylesheet" de="Stylesheet">
     <description xml:lang="en">
-      <para>Load a CSS file</para>
+      <para>Load a CSS file or define CSS rules</para>
     </description>
     <description xml:lang="de">
-      <para>Lädt eine CSS-Datei</para>
+      <para>Lädt eine CSS-Datei oder definiert CSS-Eigenschaften</para>
     </description>
-    <childelements/>
-    <attribute en="filename" de="dateiname" type="text" optional="no">
+    <childelements>
+      <text/>
+    </childelements>
+    <attribute en="filename" de="dateiname" type="text" optional="yes">
       <description xml:lang="en">
         <para>The filename of the CSS stylesheet including the file extension.</para>
       </description>

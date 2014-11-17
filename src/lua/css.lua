@@ -29,16 +29,7 @@ local function get_priority( selector )
   return sel,prio
 end
 
-local function parse( self,filename)
-  local path = kpse.find_file(filename)
-  if not path then
-    err("CSS: cannot find filename %q.",filename or "--")
-    return
-  end
-  log("Loading CSS %q",path)
-  local cssio = io.open(path,"rb")
-  local csstext = cssio:read("*all")
-  cssio:close()
+local function parsetxt(self,csstext)
   csstext = string.gsub(csstext,"%s+"," ")
   -- remove comments:
   csstext = string.gsub(csstext,"/%*.-%*/"," ")
@@ -82,6 +73,19 @@ local function parse( self,filename)
   -- now sort the table with the priorities, so we can access the
   -- rules in the order of priorities (that's the whole point)
   table.sort( self.priorities,function ( a,b ) return a > b end )
+end
+
+local function parse( self,filename)
+  local path = kpse.find_file(filename)
+  if not path then
+    err("CSS: cannot find filename %q.",filename or "--")
+    return
+  end
+  log("Loading CSS %q",path)
+  local cssio = io.open(path,"rb")
+  local csstext = cssio:read("*all")
+  cssio:close()
+  return parsetxt(self,csstext)
 end
 
 --- tbl has these entries:
@@ -153,7 +157,8 @@ end
 
 
 return {
-  new     = new,
-  parse   = parse,
-  matches = matches,
+  new       = new,
+  parse     = parse,
+  parsetxt  = parsetxt,
+  matches   = matches,
 }
