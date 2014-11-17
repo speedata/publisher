@@ -20,6 +20,11 @@ Yes. Absolutely. We release stable (long term support) versions once in a while 
 Just get one of the ready-to-run packages from http://download.speedata.de/publisher/ and follow the directions inside the ZIP file (=just extract and set the PATH variable).
 
 
+Manual
+------
+Our documentation is available online: http://speedata.github.io/publisher/manual/index.html and included in the distribution (`sp doc`).
+
+
 Bugs
 ----
 
