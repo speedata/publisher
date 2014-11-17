@@ -20,7 +20,7 @@ local spotcolors = require("spotcolors")
 xpath = do_luafile("xpath.lua")
 
 local commands     = require("publisher.commands")
-local seite        = require("publisher.page")
+local page         = require("publisher.page")
 local translations = require("translations")
 local fontloader   = require("fonts.fontloader")
 local paragraph    = require("paragraph")
@@ -923,7 +923,7 @@ function setup_page(pagenumber)
     end
     local errorstring
 
-    current_page, errorstring = seite:new(options.pagewidth,options.pageheight, extra_margin, trim_amount,thispage)
+    current_page, errorstring = page:new(options.pagewidth,options.pageheight, extra_margin, trim_amount,thispage)
     if not current_page then
         err("Can't create a new page. Is the page type (»PageType«) defined? %s",errorstring)
         exit()
