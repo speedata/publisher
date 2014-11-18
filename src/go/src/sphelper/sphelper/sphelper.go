@@ -57,32 +57,10 @@ func main() {
 	case "build":
 		buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local")
 	case "doc":
-
-		curwd, err := os.Getwd()
+		err = gomddoc.DoThings(cfg)
 		if err != nil {
 			log.Fatal(err)
 		}
-		err = os.Chdir(filepath.Join(cfg.Basedir(), "doc", "manual"))
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		root := "doc"
-		basedir := "."
-		dest := filepath.Join(cfg.Builddir, "manual")
-		changelog := filepath.Join(cfg.Basedir(), "doc", "changelog.xml")
-
-		d, err := gomddoc.NewMDDoc(root, dest, basedir, changelog)
-		if err != nil {
-			log.Fatal(err)
-		}
-		d.Version = cfg.Publisherversion.String()
-		err = d.DoThings()
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		os.Chdir(curwd)
 	case "genschema":
 		err = genluatranslations.DoThings(basedir)
 		if err != nil {

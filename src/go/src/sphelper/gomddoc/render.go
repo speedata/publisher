@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"encoding/xml"
 	"fmt"
-	"github.com/gorilla/feeds"
-	"github.com/speedata/blackfriday"
 	"io/ioutil"
 	"log"
 	"os"
@@ -15,6 +13,11 @@ import (
 	"strings"
 	"text/template"
 	"time"
+
+	"github.com/gorilla/feeds"
+	"github.com/speedata/blackfriday"
+
+	"sphelper/config"
 )
 
 var (
@@ -76,20 +79,6 @@ func parseChangelog(filename string) *changelog {
 	return cl
 }
 
-// rootdir is the directory with the documents (subdir doc/) and the css/js etc (assets/).
-// destdir is where the documentation should be placed in,
-// basedir is the the installation with the template directory
-func NewMDDoc(rootdir, destdir, basedir, changelogpath string) (*MDDoc, error) {
-	a := MDDoc{}
-	a.root = rootdir
-	a.dest = destdir
-	a.basedir = basedir
-	a.changelog = parseChangelog(changelogpath)
-	a.assets = filepath.Join(basedir, "assets")
-	a.renderer = blackfriday.HtmlRenderer(0, "", "")
-	return &a, nil
-}
-
 func (md *MDDoc) getRootDir(context htmlTemplateData) string {
 	path_elements := strings.Split(strings.TrimPrefix(context.Sourcefilename, md.dest+"/"), "/")
 	return strings.Repeat("../", len(path_elements)-1)
@@ -143,8 +132,29 @@ func (md *MDDoc) writeFeed(lang string) {
 }
 
 // Generate the html documentation and copy all necessary assets to the build directory
-func (md *MDDoc) DoThings() error {
+func DoThings(cfg *config.Config) error {
 	var err error
+
+	curwd, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = os.Chdir(filepath.Join(cfg.Basedir(), "doc", "manual"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer os.Chdir(curwd)
+
+	md := MDDoc{}
+	md.root = "doc"
+	md.dest = filepath.Join(cfg.Builddir, "manual")
+	md.basedir = "."
+	md.changelog = parseChangelog(filepath.Join(cfg.Basedir(), "doc", "changelog.xml"))
+	md.assets = filepath.Join(cfg.Basedir(), "assets")
+	md.renderer = blackfriday.HtmlRenderer(0, "", "")
+	md.Version = cfg.Publisherversion.String()
+
 	funcMap := template.FuncMap{
 		"rootDoc": md.rootDoc,
 		"footer":  md.footerHTML,
