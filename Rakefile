@@ -45,8 +45,8 @@ end
 
 desc "Build sphelper program"
 task :sphelper do
-  cmd = "go build -ldflags \"-X main.basedir #{installdir}\" -o #{installdir}/bin/sphelper sphelper/main"
-  sh cmd
+	ENV["GOBIN"] = "#{installdir}/bin"
+	sh "go install -ldflags \"-X main.basedir #{installdir}\"  sphelper/sphelper"
 end
 
 desc "Show rake description"
