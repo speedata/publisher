@@ -91,12 +91,8 @@ end
 
 desc "Generate schema and translations from master"
 task :schema => [:sphelper] do
-  # generate the lua translation
-  cmd = "#{installdir}/bin/sphelper genluatranslations"
-  sh cmd
-  # generate english + german schema
-  sh "java -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:#{installdir}/schema/layoutschema-en.rng -xsl:#{installdir}/doc/commands-xml/xslt/cmd2rng.xsl lang=en"
-  sh "java -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:#{installdir}/schema/layoutschema-de.rng -xsl:#{installdir}/doc/commands-xml/xslt/cmd2rng.xsl lang=de"
+  # generate the lua translation + schema
+  sh "#{installdir}/bin/sphelper genschema"
 end
 
 desc "Source documentation"

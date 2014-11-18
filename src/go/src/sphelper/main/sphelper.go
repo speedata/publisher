@@ -10,6 +10,7 @@ import (
 	"sphelper/buildsp"
 	"sphelper/config"
 	"sphelper/genluatranslations"
+	"sphelper/genschema"
 	"sphelper/gomddoc"
 	"sphelper/sourcedoc"
 	"sphelper/translatelayout"
@@ -32,7 +33,6 @@ func main() {
 	op.On("--basedir DIR", "Base dir", &commandlinebasedir)
 	op.Command("build", "Build go binary")
 	op.Command("doc", "Generate speedata Publisher documentation (md only)")
-	op.Command("genluatranslations", "Generate Lua translations")
 	op.Command("mkreadme", "Make readme for installation/distribution")
 	op.Command("sourcedoc", "Generate the source documentation")
 	op.Command("translate", "Translate layout")
@@ -83,9 +83,12 @@ func main() {
 		}
 
 		os.Chdir(curwd)
-
-	case "genluatranslations":
+	case "genschema":
 		err = genluatranslations.DoThings(basedir)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = genschema.DoThings(basedir)
 		if err != nil {
 			log.Fatal(err)
 		}

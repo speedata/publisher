@@ -157,6 +157,19 @@
         </element>
       </oneOrMore>
       <oneOrMore>
+        <element name="defineattribute">
+          <attribute name="name"/>
+          <oneOrMore>
+            <element name="choice">
+              <attribute name="en"/>
+              <attribute name="de"/>
+              <optional><attribute name="context"/></optional>
+              <ref name="descriptions"/>
+            </element>
+          </oneOrMore>
+        </element>
+      </oneOrMore>
+      <oneOrMore>
         <element name="command">
           <optional><attribute name="en"/></optional>
           <optional><attribute name="de"/></optional>
@@ -200,14 +213,20 @@
                     <value>numberlengthorstar</value>
                   </choice>
                 </attribute>
-                <oneOrMore>
+                <zeroOrMore>
                   <element name="choice">
                     <attribute name="en"/>
                     <attribute name="de"/>
                     <optional><attribute name="context"/></optional>
                     <ref name="descriptions"/>
                   </element>
-                </oneOrMore>
+                </zeroOrMore>
+                <zeroOrMore>
+                  <element name="referenceattribute">
+                    <attribute name="name"/>
+                    <empty/>
+                  </element>
+                </zeroOrMore>
               </choice>
             </element>
           </zeroOrMore>
