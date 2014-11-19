@@ -130,8 +130,12 @@ end
 
 
 local function ean13(width,height,fontfamily,digits,showtext,overshoot_factor)
+    if #digits ~= 13 and showtext then
+        err("Not enough numbers for EAN13 code _and_ text")
+        showtext = false
+    end
 	local fontnumber  = publisher.fonts.lookup_fontfamily_number_instance[fontfamily].normal
-  	local digit_zero  = font.fonts[fontnumber].characters[48]
+  local digit_zero  = font.fonts[fontnumber].characters[48]
 	local unit = calculate_unit(digit_zero)
 	local scalefactor
 	if width then -- we need to scale the resulting barcode
