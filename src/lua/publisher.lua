@@ -91,6 +91,7 @@ att_keep = 700
 origin_table = 1
 origin_vspace = 2
 origin_align_top = 3
+origin_image = 4
 
 
 user_defined_addtolist = 1
