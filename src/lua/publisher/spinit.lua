@@ -57,6 +57,27 @@ function synclog()
   io.stdout:flush()
 end
 
+do
+local matches = {
+  ["^"] = "%^";
+  ["$"] = "%$";
+  ["("] = "%(";
+  [")"] = "%)";
+  ["%"] = "%%";
+  ["."] = "%.";
+  ["["] = "%[";
+  ["]"] = "%]";
+  ["*"] = "%*";
+  ["+"] = "%+";
+  ["-"] = "%-";
+  ["?"] = "%?";
+  ["\0"] = "%z";
+}
+escape_lua_pattern = function(s)
+  return (s:gsub(".", matches))
+  end
+end
+
 --- Convert scaled point to postscript points,
 --- rounded to three digits after decimal point
 function sp_to_bp( sp )

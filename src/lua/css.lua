@@ -39,6 +39,9 @@ local function parsetxt(self,csstext)
     _,stop,selector = string.find(csstext,"^%s*([^{]+)",stop + 1)
     if not selector then break end
     _, stop,rules_text = string.find(csstext,"{([^}]+)}%s*",stop + 1)
+    if not rules_text then
+      return
+    end
     rules = explode(rules_text,";")
     local rules_t = {}
     for i=1,#rules do
@@ -110,7 +113,7 @@ local function matches_selector(tbl,selector )
         return_false = true
       end
       id_found = true
-      if id and string.match(id,string.sub(x,2)) then
+      if id and string.match(id,escape_lua_pattern(string.sub(x,2))) then
         id_matches = true
       end
     elseif string.match(x,"^%.") then
@@ -118,7 +121,7 @@ local function matches_selector(tbl,selector )
         return_false = true
       end
       class_found = true
-      if class and string.match(class,string.sub(x,2)) then
+      if class and string.match(class,escape_lua_pattern(string.sub(x,2))) then
         class_matches = true
       end
     else
@@ -126,7 +129,7 @@ local function matches_selector(tbl,selector )
         return_false = true
       end
       element_found = true
-      if element and string.match(element,"^" .. x .. "$") then
+      if element and string.match(element,"^" .. escape_lua_pattern(x) .. "$") then
         element_matches = true
       end
     end
