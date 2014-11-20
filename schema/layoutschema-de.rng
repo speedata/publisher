@@ -3211,7 +3211,7 @@
          </optional>
          <optional>
             <attribute name="id">
-               <a:documentation>CSS id für diesen Absatz.</a:documentation>
+               <a:documentation>CSS id für diese Tabellenzelle.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -3309,6 +3309,16 @@
          <optional>
             <attribute name="start">
                <a:documentation>Die erste Spalte der Linie. Voreinstellung ist 1.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS Klasse für dieses Element.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id für dieses Element.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>

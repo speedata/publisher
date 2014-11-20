@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2014-11-17 20:43)
+-- generated from genluatranslations.go (2014-11-20 11:27)
 -- do not edit!
 module(...)
 return {
@@ -389,6 +389,8 @@ return {
         ["linienstärke"] = "rulewidth",
         ["farbe"] = "color",
         ["start"] = "start",
+        ["class"] = "class",
+        ["id"] = "id",
         },
       ["Textblock"] = { "Textblock",
         ["winkel"] = "angle",

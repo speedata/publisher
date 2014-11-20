@@ -3211,7 +3211,7 @@
          </optional>
          <optional>
             <attribute name="id">
-               <a:documentation>CSS id for this paragraph.</a:documentation>
+               <a:documentation>CSS id for this table cell.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -3309,6 +3309,16 @@
          <optional>
             <attribute name="start">
                <a:documentation>The first column of the rule. Defaults to 1.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS class for this element.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id for this element.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>

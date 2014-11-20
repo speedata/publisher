@@ -2450,6 +2450,21 @@ function commands.tablerule( layoutxml,dataxml )
     local rulewidth = publisher.read_attribute(layoutxml,dataxml,"rulewidth","length")
     local color     = publisher.read_attribute(layoutxml,dataxml,"color","rawstring")
     local start     = publisher.read_attribute(layoutxml,dataxml,"start","number")
+    local class     = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
+    local id        = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
+
+    local css_rules = publisher.css:matches({element = "tablerule", class=class,id=id}) or {}
+
+    local tmp = css_rules["height"]
+    if tmp then
+        rulewidth = tex.sp(tmp)
+    end
+
+    rulewidth = rulewidth or tex.sp("0.25pt")
+    color     = color     or css_rules["background-color"]
+    start     = start     or tonumber(css_rules["rule-start"])
+
+
     return { rulewidth = rulewidth, farbe = color, start = start }
 end
 

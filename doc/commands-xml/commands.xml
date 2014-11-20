@@ -6080,10 +6080,10 @@
     </attribute>
     <attribute en="id" de="id" optional="yes" type="text">
       <description xml:lang="en">
-        <para>CSS id for this paragraph.</para>
+        <para>CSS id for this table cell.</para>
       </description>
       <description xml:lang="de">
-        <para>CSS id für diesen Absatz.</para>
+        <para>CSS id für diese Tabellenzelle.</para>
       </description>
     </attribute>
 
@@ -6246,7 +6246,7 @@
       <para>Erzeugt eine horizontale Linie in einer Tabelle</para>
     </description>
     <childelements/>
-    <attribute en="rulewidth" de="linienstärke" type="length" optional="yes">
+    <attribute en="rulewidth" de="linienstärke" type="length" optional="yes" css="height">
       <description xml:lang="en">
         <para>The width (thickness) of the rule. Defaults to 0.25pt.</para>
       </description>
@@ -6254,7 +6254,7 @@
         <para>Die »Dicke« der Linie. Voreinstellung ist 0.25 Punkt.</para>
       </description>
     </attribute>
-    <attribute en="color" de="farbe" type="text" optional="yes">
+    <attribute en="color" de="farbe" type="text" optional="yes" css="background-color">
       <description xml:lang="en">
         <para>The color of the rule. Defaults to black.</para>
       </description>
@@ -6262,12 +6262,28 @@
         <para>Farbe der Linie. (Default: Schwarz)</para>
       </description>
     </attribute>
-    <attribute en="start" de="start" type="number" optional="yes">
+    <attribute en="start" de="start" type="number" optional="yes" css="rule-start">
       <description xml:lang="en">
         <para>The first column of the rule. Defaults to 1.</para>
       </description>
       <description xml:lang="de">
         <para>Die erste Spalte der Linie. Voreinstellung ist 1.</para>
+      </description>
+    </attribute>
+    <attribute en="class" de="class" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS class for this element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS Klasse für dieses Element.</para>
+      </description>
+    </attribute>
+    <attribute en="id" de="id" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS id for this element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS id für dieses Element.</para>
       </description>
     </attribute>
     <remark xml:lang="de">
