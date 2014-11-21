@@ -2370,6 +2370,14 @@
         <reference name="Include"/>
       </oneOrMore>
     </childelements>
+    <attribute en="xml:base" de="xml:base" optional="yes">
+      <description xml:lang="en">
+        <para>(not intended to be used, for error-free validation purpose only)</para>
+      </description>
+      <description xml:lang="de">
+        <para>(nicht zur Benutzung gedacht, ist nur eingebaut, um Validierungsfehler zu vermeiden)</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <para>The main file:</para>
       <listing><![CDATA[<?xml version="1.0" encoding="UTF-8"?>

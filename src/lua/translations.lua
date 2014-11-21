@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2014-11-20 11:27)
+-- generated from genluatranslations.go (2014-11-21 15:13)
 -- do not edit!
 module(...)
 return {
@@ -146,6 +146,7 @@ return {
       ["I"] = { "I",
         },
       ["Include"] = { "Include",
+        ["xml:base"] = "xml:base",
         },
       ["SeitenEinfügen"] = { "InsertPages",
         ["name"] = "name",

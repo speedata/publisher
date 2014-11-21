@@ -1278,6 +1278,11 @@
    <define name="e_Include">
       <element name="Include">
          <a:documentation>Toplevel element for included layout files.</a:documentation>
+         <optional>
+            <attribute name="xml:base">
+               <a:documentation>(not intended to be used, for error-free validation purpose only)</a:documentation>
+            </attribute>
+         </optional>
          <oneOrMore>
             <optional>
                <ref name="e_Record"></ref>
