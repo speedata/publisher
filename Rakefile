@@ -296,7 +296,7 @@ task :deb do
 	when /x86-64/,/x86_64/,/64-bit/
 		arch = "amd64"
 		debarch = arch
-	when /32-bit/,/80386/
+	when /32-bit/,/80386/,/i386/
 		arch = "386"
 		debarch = "i386"
 	end
