@@ -90,11 +90,19 @@ function Paragraph:min_width(textfomat_name)
     local nl = node.copy_list(self.nodelist)
     local box = self:format(1,textfomat_name)
     local head = box.head
+    -- See bug #46: a text format margin-top has a glue as its first item in the vlist
+    while head.id ~= publisher.hlist_node do
+        head = head.next
+    end
     local _w,_h,_d
     local max = 0
     while head do
-        _w,_h,_d = node.dimensions(box.glue_set, box.glue_sign, box.glue_order,head.head)
-        max = math.max(max,_w)
+        -- there are some situations, where a list has no head (a bullet point)
+        -- we should not bother checking them.
+        if head.head ~= nil then
+            _w,_h,_d = node.dimensions(box.glue_set, box.glue_sign, box.glue_order,head.head)
+            max = math.max(max,_w)
+        end
         head = head.next
     end
 
