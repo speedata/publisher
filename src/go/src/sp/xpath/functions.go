@@ -1,8 +1,12 @@
 package xpath
 
 import (
+	"bytes"
+	"encoding/xml"
 	"fmt"
+	"io"
 	"regexp"
+	"strings"
 )
 
 // replace() xpath function
@@ -41,4 +45,42 @@ func Tokenize(text []byte, rexpr string) []string {
 	}
 	res = append(res, string(text[pos:]))
 	return res
+}
+
+func HtmlToXml(input string) (string, error) {
+	input = "<toplevel·toplevel>" + input + "</toplevel·toplevel>"
+	r := strings.NewReader(input)
+	var w bytes.Buffer
+
+	enc := xml.NewEncoder(&w)
+	dec := xml.NewDecoder(r)
+
+	dec.Strict = false
+	dec.AutoClose = xml.HTMLAutoClose
+	for {
+		t, err := dec.Token()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			enc.Flush()
+			return w.String(), err
+		}
+		switch v := t.(type) {
+		case xml.StartElement:
+			if v.Name.Local != "toplevel·toplevel" {
+				enc.EncodeToken(t)
+			}
+		case xml.EndElement:
+			if v.Name.Local != "toplevel·toplevel" {
+				enc.EncodeToken(t)
+			}
+		case xml.CharData:
+			enc.EncodeToken(t)
+		default:
+			// fmt.Println(v)
+		}
+	}
+	enc.Flush()
+	return w.String(), nil
 }

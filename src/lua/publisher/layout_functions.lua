@@ -10,6 +10,7 @@ file_start("layout_functions.lua")
 
 local luxor = do_luafile("luxor.lua")
 local sha1  = require('sha1')
+local comm  = require("publisher.comm")
 
 local function current_page(  )
   publisher.setup_page()
@@ -252,13 +253,10 @@ local function decode_html( dataxml, arg )
     arg = arg[1]
     local ok
     if type(arg) == "string" then
-        ok,ret = pcall(luxor.parse_xml,"<dummy>" .. arg .. "</dummy>")
-        if ok then
-          return ret
-        else
-          err("decode-html failed for input string %q (1)",arg)
-        end
-        return arg
+        comm.sendmessage('dec',arg)
+        local msg = comm.get_string_messages()
+        local ret = luxor.parse_xml("<dummy>" .. msg[1] .. "</dummy>")
+        return ret
     end
   for i=1,#arg do
     for j=1,#arg[i] do
