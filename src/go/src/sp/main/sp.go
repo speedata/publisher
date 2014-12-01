@@ -628,7 +628,11 @@ func main() {
 	os.Setenv("IMGCACHE", getOption("imagecache"))
 
 	if ed := cfg.String("DEFAULT", "extra-dir"); ed != "" {
-		extra_dir = append(extra_dir, ed)
+		abspath, err := filepath.Abs(ed)
+		if err != nil {
+			log.Fatal("Cannot find directory", ed)
+		}
+		extra_dir = append(extra_dir, abspath)
 	}
 	os.Setenv("SD_EXTRA_DIRS", strings.Join(extra_dir, string(filepath.ListSeparator)))
 	if getOption("verbose") != "" {

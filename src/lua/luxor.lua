@@ -13,7 +13,7 @@ local string = unicode.utf8
 local current_element
 local decoder
 local err = err or print
-
+local filefinder
 local parse_xml_file
 
 local html5entities = { apos = "'",
@@ -295,8 +295,14 @@ local function parse_xml(txt,options)
 	return ret
 end
 
-function parse_xml_file( path, options)
+function parse_xml_file( path, options, filefinderfunc)
 	options = options or {}
+	if filefinderfunc then
+		filefinder = filefinderfunc
+	end
+	if filefinder then
+		path = filefinder(path) or path
+	end
   local xmlfile = io.open(path,"rb")
   if not xmlfile then
     err("Can't open XML file. Abort.")

@@ -727,7 +727,7 @@ function load_xml(filename,filetype,options)
         os.exit(-1)
     end
     log("Loading %s %q",filetype or "file",path)
-    return luxor.parse_xml_file(path, options)
+    return luxor.parse_xml_file(path, options,kpse.find_file)
 end
 
 --- Place an object at a position given in scaled points (_x_ and _y_). `allocate` is ignored at at the moment.
