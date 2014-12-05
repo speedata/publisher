@@ -1801,7 +1801,6 @@ function mknodes(str,fontfamily,parameter)
         warning("No head found")
         return node.new("hlist")
     end
-
     return head
 end
 
@@ -2032,6 +2031,22 @@ function fix_justification( nodelist,alignment,parent)
     return nodelist
 end
 
+local function check_if_a_line_exeeds(nodelist,wd,glue_set,glue_sign,glue_order)
+    local head = nodelist
+    while head do
+        if head.id == vlist_node then
+            return check_if_a_line_exeeds(head.head,wd,glue_set,glue_sign,glue_order)
+        elseif head.id == hlist_node then
+            local width = node.dimensions(glue_set,glue_sign,glue_order,head.head)
+            if width > wd then
+                return true
+            end
+        end
+        head = head.next
+    end
+    return false
+end
+
 function do_linebreak( nodelist,hsize,parameters )
     assert(nodelist,"No nodelist found for line breaking.")
     parameters = parameters or {}
@@ -2039,6 +2054,7 @@ function do_linebreak( nodelist,hsize,parameters )
 
     local pdfignoreddimen
     pdfignoreddimen    = -65536000
+
 
     local default_parameters = {
         hsize = hsize,
@@ -2053,8 +2069,26 @@ function do_linebreak( nodelist,hsize,parameters )
         pdflastlinedepth  = pdfignoreddimen,
         pdfignoreddimen   = pdfignoreddimen,
     }
+
     setmetatable(parameters,{__index=default_parameters})
-    local j = tex.linebreak(nodelist,parameters)
+
+    -- Try to break the paragraph until there is no line
+    -- longer than expected
+    local j
+    local c = 0
+    while true do
+        j = tex.linebreak(node.copy_list(nodelist),parameters)
+        if not check_if_a_line_exeeds(j,hsize,j.glue_set, j.glue_sign,j.glue_order) then
+            break
+        end
+        default_parameters.emergencystretch = default_parameters.emergencystretch + 0.1 * hsize
+        c = c + 1
+        if c > 9 then
+            break
+        end
+        node.flush_list(j)
+    end
+    node.flush_list(nodelist)
 
     -- Adjust line heights. Always take the largest font in a row.
     local head = j
