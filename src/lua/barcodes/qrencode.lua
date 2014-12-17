@@ -147,8 +147,9 @@ local function binary(x,digits)
   s=string.gsub(s,"(.)",function (d) return a[d] end)
   -- remove leading 0s
   s = string.gsub(s,"^0*(.*)$","%1")
-  local fmtstring = string.format("%%0%ds",digits)
-  return string.format(fmtstring,s)
+  local fmtstring = string.format("%%%ds",digits)
+  local ret = string.format(fmtstring,s)
+  return string.gsub(ret," ","0")
 end
 
 -- A small helper function for add_typeinfo_to_matrix() and add_version_information()
