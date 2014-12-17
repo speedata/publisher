@@ -9,9 +9,11 @@ import (
 
 	"sphelper/buildsp"
 	"sphelper/config"
+	"sphelper/dashdoc"
 	"sphelper/genluatranslations"
 	"sphelper/genschema"
 	"sphelper/gomddoc"
+	"sphelper/htmldoc"
 	"sphelper/sourcedoc"
 	"sphelper/translatelayout"
 
@@ -32,7 +34,8 @@ func main() {
 	op := optionparser.NewOptionParser()
 	op.On("--basedir DIR", "Base dir", &commandlinebasedir)
 	op.Command("build", "Build go binary")
-	op.Command("doc", "Generate speedata Publisher documentation (md only)")
+	op.Command("dashdoc", "Generate speedata Publisher documentation (for dash)")
+	op.Command("doc", "Generate speedata Publisher documentation")
 	op.Command("mkreadme", "Make readme for installation/distribution")
 	op.Command("sourcedoc", "Generate the source documentation")
 	op.Command("translate", "Translate layout")
@@ -58,6 +61,15 @@ func main() {
 		buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local")
 	case "doc":
 		err = gomddoc.DoThings(cfg)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = htmldoc.DoThings(cfg)
+		if err != nil {
+			log.Fatal(err)
+		}
+	case "dashdoc":
+		err = dashdoc.DoThings(cfg)
 		if err != nil {
 			log.Fatal(err)
 		}

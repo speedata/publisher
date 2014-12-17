@@ -168,7 +168,7 @@ func DoThings(cfg *config.Config) error {
 	}
 
 	// text.template because we trust the input...
-	templates, err = template.New("").Funcs(funcMap).ParseGlob(filepath.Join(md.basedir, "templates", "*html"))
+	templates, err = template.New("").Funcs(funcMap).ParseFiles(filepath.Join(md.basedir, "templates", "main.html"))
 	if err != nil {
 		return err
 	}

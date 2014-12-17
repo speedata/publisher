@@ -1232,7 +1232,7 @@
       </oneOrMore>
     </childelements>
     <remark xml:lang="en">
-      <para>The *-widths in the command »Column« allow dynamic cell widths. For that the total width of the table must be set and the attribute (on <cmd name="table"/>) »stretch« must be set to »max«.
+      <para>The *-widths in the command »Column« allow dynamic cell widths. For that the total width of the table must be set and the attribute (on <cmd name="Table"/>) »stretch« must be set to »max«.
         The widths of the columns are calculated as follows: first the absolute widths are taken into account. After that, the *-columns are distributed across the remaining space. The
         numbers before the * denote the fraction of the space. In the example below the third column gets 1/6 of the remaining width, the fourth column get 5/6.</para>
     </remark>
@@ -1496,10 +1496,10 @@
   </command>
   <command en="DefineFontfamily" de="DefiniereSchriftfamilie">
     <description xml:lang="en">
-      <para>Defines a font family consisting of the shapes »regular», »bold«, »bold italic« and »italic«. To be used in <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface "/> and <cmd name="Table"/> with the attribute fontface.</para>
+      <para>Defines a font family consisting of the shapes »regular», »bold«, »bold italic« and »italic«. To be used in <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface"/> and <cmd name="Table"/> with the attribute fontface.</para>
     </description>
     <description xml:lang="de">
-      <para>Das Element <cmd name="DefiniereSchriftfamilie"/> definiert eine Schriftfamilie, auf in den Elementen <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface "/> und <cmd name="Table"/> mit dem Attribut <tt>schriftart</tt> zugegriffen werden kann.</para>
+      <para>Das Element <cmd name="DefineFontfamily"/> definiert eine Schriftfamilie, auf in den Elementen <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface"/> und <cmd name="Table"/> mit dem Attribut <tt>schriftart</tt> zugegriffen werden kann.</para>
     </description>
     <childelements>
       <interleave>
@@ -1825,7 +1825,7 @@
 </Layout>]]></listing>
     </example>
     <seealso>
-      <cmd name="Textblock"/>
+      <cmd name="Textblock"/>,
       <cmd name="Paragraph"/>
     </seealso>
   </command>
@@ -1885,24 +1885,25 @@
     </description>
     <childelements/>
     <example xml:lang="en">
-      <listing><![CDATA[<ObjektAusgeben>
-  <Textblock breite="5">
-    <Absatz>
-      <Wert>Hallo</Wert>
-    </Absatz>
-  </Textblock>
-</ObjektAusgeben>
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject>
+    <Textblock width="5">
+      <Paragraph>
+        <Value>Hallo</Value>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
 
-<Leerzeile/>
+  <EmptyLine/>
 
-<ObjektAusgeben>
-  <Textblock breite="5">
-    <Absatz>
-      <Wert>Welt</Wert>
-    </Absatz>
-  </Textblock>
-</ObjektAusgeben>
-]]></listing>
+  <PlaceObject>
+    <Textblock width="5">
+      <Paragraph>
+        <Value>Welt</Value>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>]]></listing>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben spalte="1">
@@ -3616,7 +3617,7 @@
 </Datensatz>]]></listing>
     </example>
     <seealso>
-      <cmd name="Leerzeile"/>
+      <cmd name="EmptyLine"/>
     </seealso>
   </command>
   <command en="Ol" de="Ol">

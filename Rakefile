@@ -68,11 +68,6 @@ desc "Generate documentation"
 task :doc => [:sphelper] do
 	rm_rf builddir.join("manual")
 	sh "#{installdir}/bin/sphelper doc"
-	puts "Now generating command reference from XML..."
-	mkdir_p "temp"
-	publisher_version = @versions['publisher_version']
-	sh "java -Dfile.encoding=utf8 -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=en version=#{publisher_version} builddir=#{builddir}/manual 2> temp/messages-en.csv"
-	sh "java -Dfile.encoding=utf8 -jar #{installdir}/lib/saxon9he.jar -s:#{installdir}/doc/commands-xml/commands.xml -o:/dev/null -xsl:#{installdir}/doc/commands-xml/xslt/cmd2html.xsl lang=de version=#{publisher_version} builddir=#{builddir}/manual 2> temp/messages-de.csv"
 	puts "done"
 end
 
@@ -133,9 +128,11 @@ task :newmsglang, :lang do |t,args|
 end
 
 desc "Update gh-pages"
-task :ghpages => [:doc] do
+task :ghpages => [:sphelper] do
+	sh "#{installdir}/bin/sphelper doc"
 	cp_r "#{builddir}/manual","webpage"
-	sh "bin/create-dash-documentsets.py"
+	sh "#{installdir}/bin/sphelper dashdoc"
+
 	Dir.chdir(builddir) do
 		sh "tar --exclude='.DS_Store' -czf ../webpage/speedatapublisher-de.tgz speedatapublisher-de.docset"
 		sh "tar --exclude='.DS_Store' -czf ../webpage/speedatapublisher-en.tgz speedatapublisher-en.docset"
