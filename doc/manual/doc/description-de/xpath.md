@@ -57,6 +57,7 @@ sd:anzahl-datensätze(\<Sequenz\>)|  Gibt die Anzahl der Datensätze der Sequenz
 sd:anzahl-seiten(\<Dateiname oder URI-Schema\>)|  Ermittelt die Anzahl der Seiten der angegebenen (PDF-)Datei.
 sd:anzahl-spalten()|  Gibt die Anzahl der Spalten im aktuellen Raster.
 sd:anzahl-zeilen()|  Gibt die Anzahl der Zeilen im aktuellen Raster.
+sd:attr(\<Name\>, ...)|  ist dasselbe wie `@Name`, nur mit der Möglichkeit den Namen auch dynamisch (z.B. mit `concat()`) zu erzeugen. Siehe Beispiel bei `sd:variable()`.
 sd:bildbreite(\<Dateiname oder URI-Schema\>)|  Breite des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Breite des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert.
 sd:bildhöhe(\<Dateiname oder URI-Schema\>)|  Höhe des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Höhe des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert.
 sd:datei-vorhanden(\<Dateiname oder URI-Schema\>)|  Wahr, wenn der Dateiname im Suchpfad existiert, ansonsten false.
@@ -70,7 +71,7 @@ sd:gruppenhöhe(\<string\>)|  Gibt die Höhe in Rasterzellen für die Gruppe im 
 sd:seitennummer(\<Marke\>)|  Liefert die Seitenzahl der Seite auf der die angegebene Marke ausgegeben wurde. Siehe den Befehl [Marke](../commands-de/mark.html)
 sd:seitenzahlen-zusammenfassen(\<Seitenzahlen\>,\<Trenner für Bereiche\>,\<Trenner für Leerraum\>) | Fasst Seitenzahlenbereiche zusammen. Beispielsweise aus `"1, 3, 4, 5"` wird `1, 3–5`. Voreinstellung für den Trenner für Bereiche ist ein Halbgeviertstrich (–), Voreinstellung für den Trenner für Leerraum ist ', ' (Komma, Leerzeichen). Diese Funktion sortiert die Zahlen und löscht doppelte Einträge. Bei leerem Trenner für Bereiche werden Zahlen nicht zusammengeführt, sondern einzeln mit dem Trenner für Leerraum verbunden.
 sd:sha1(\<Wert\>,\<Wert\>, …)|  Erzeugt die SHA-1 Summe der Hintereinanderkettung der Werte als Hex-Zeichenkette. Beispiel: `sd:sha1('Hallo ', 'Welt')` ergibt die Zeichenkette `28cbbc72d6a52617a7abbfff6756d04bbad0106a`.
-sd:variable(\<Name\>)|  ist dasselbe wie $Name, nur mit der Möglichkeit den Namen auch dynamisch (z.B. mit `concat()`) zu erzeugen.
+sd:variable(\<Name\>, ...)|  ist dasselbe wie $Name, nur mit der Möglichkeit den Namen auch dynamisch zu erzeugen. Falls `$i` den Wert 3 enthält, liest `sd:variable('foo',$i)` den Inhalt der Variablen `$foo3`. Damit lassen sich Arrays abbilden.
 sd:variable-vorhanden(\<Name\>)|  Prüft, ob eine Variable vorhanden ist.
 sd:blindtext() | Gibt den Blindtext "Lorem ipsum..." mit über 50 Wörtern zurück.
 sd:loremipsum() | Alias für `sd:blindtext()`

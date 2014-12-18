@@ -238,6 +238,12 @@ local function variable(dataxml, arg )
   return var
 end
 
+local function attr(dataxml, arg )
+  local attname = table.concat(arg)
+  local att = dataxml[attname]
+  return att
+end
+
 local function variable_exists(dataxml,arg)
   local var = publisher.xpath.get_variable(arg[1])
   return var ~= nil
@@ -326,6 +332,9 @@ register("urn:speedata:2009/publisher/functions/de","seitennummer",pagenumber)
 
 register("urn:speedata:2009/publisher/functions/en","variable",variable)
 register("urn:speedata:2009/publisher/functions/de","variable",variable)
+
+register("urn:speedata:2009/publisher/functions/en","attr",attr)
+register("urn:speedata:2009/publisher/functions/de","attr",attr)
 
 register("urn:speedata:2009/publisher/functions/en","variable-exists",variable_exists)
 register("urn:speedata:2009/publisher/functions/de","variable-vorhanden",variable_exists)

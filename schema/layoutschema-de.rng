@@ -768,7 +768,7 @@
    </define>
    <define name="e_DefineFontfamily">
       <element name="DefiniereSchriftfamilie">
-         <a:documentation>Das Element  definiert eine Schriftfamilie, auf in den Elementen Absatz, Textblock,  und Tabelle mit dem Attribut schriftart zugegriffen werden kann.</a:documentation>
+         <a:documentation>Das Element DefiniereSchriftfamilie definiert eine Schriftfamilie, auf in den Elementen Absatz, Textblock, Schriftart und Tabelle mit dem Attribut schriftart zugegriffen werden kann.</a:documentation>
          <attribute name="name">
             <a:documentation>Interner Name, unter dem die Schriftfamilie später angesprochen wird.</a:documentation>
          </attribute>

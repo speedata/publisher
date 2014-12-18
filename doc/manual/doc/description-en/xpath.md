@@ -64,6 +64,7 @@ sd:current-row() | Return the current row.
 sd:current-column() | Return the current column.
 sd:current-framenumber(\<name\>) | Return the current frame number of given positioning area.
 sd:alternating(\<type\>, \<text\>,\<text\>,.. ) | On each call the next element will be returned. You can define more alternating sequences by using distinct type values. Example: `sd:alternating("tbl", "White","Gray")` can be used for alternating color of table rules. To reset the state, use `sd:reset-alternating(<type>)`.
+sd:attr(\<name\>, ...)|  Is the same as `@name`, but can be used to dynamically construct the attribute name. See example at `sd:variable()`.
 sd:decode-html(\<node\>) | Change text such as `&lt;i&gt;italic&lt;/i&gt;` into HTML markup.
 sd:reset-alternating(\<type\>) | Reset alternating so the next `sd:alternating()` starts again from the first element.
 sd:merge-pagenumbers(\<pagenumbers\>,\<separator for range\>,\<separator for space\>) | Merge page numbers. For example the numbers `"1, 3, 4, 5"` are merged into `1, 3–5`. Defaults for the separator for the range is an en-dash (–), default for the spacing separator is ', ' (comma, space). This function sorts the page numbers and removes duplicates. When the separator for range is empty, the page numbers are separated each with the separator for the space.
@@ -81,7 +82,7 @@ sd:odd(\<number\>) | True if number is odd.
 sd:groupwidth(\<string\>) | Return the number of gridcells of the given group’s width. The argument must be the name of an existing group. Example: `sd:groupwidth('My group')`
 sd:groupheight(\<string\>) | Return the given group’s height (in gridcells). See `sd:groupwidth(...)`
 sd:pagenumber(\<string\>) | Get the number of the page where the given mark is placed on. See the command [Mark](../commands-en/mark.html).
-sd:variable(\<name\>) | The same as \$name. This function allows variable names to be constructed dynamically. Example: `sd:variable(concat('myvar',$num))` – if `$num` contains the number 3, the resulting variable is `myvar3`.
+sd:variable(\<name\>, ...) | The same as `$name`. This function allows variable names to be constructed dynamically. Example: `sd:variable('myvar',$num)` – if `$num` contains the number 3, the resulting variable name is `myvar3`.
 sd:variable-exists(\<name\>) | True if variable `name` exists.
 sd:sha1(\<value\>,\<value\>, …) | Return the SHA-1 sum of the concatenation of each value as a hex string. Example: `sd:sha1('hello ', 'world')` gives the string `2aae6c35c94fcfb415dbe95f408b9ce91ee846ed`.
 sd:dummytext() | Returns the dummy text "Lorem ipsum..." (more than 50 words, enough for a paragraph)
