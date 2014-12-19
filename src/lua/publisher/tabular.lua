@@ -747,8 +747,7 @@ function calculate_rowheights(self)
         local eltname = publisher.elementname(tr)
 
         if eltname == "Tablerule" or eltname == "Columns" then
-            -- ignorieren
-
+            -- ignore
         elseif eltname == "Tablehead" then
             local last_shiftup_head = 0
             for _,row in ipairs(tr_contents) do
@@ -1307,9 +1306,11 @@ function typeset_table(self)
         local ht = 0
         if showheader_static(i) then
             if i == 1 then
-                ht = tablehead_first[1].height + self.rowsep
+                local x = node.vpack(tablehead_first[1])
+                ht = x.height
             else
-                ht = tablehead[1].height + self.rowsep
+                local x = node.vpack(tablehead[1])
+                ht = x.height
             end
         end
         if showheader(i) then
@@ -1320,12 +1321,17 @@ function typeset_table(self)
 
     setmetatable(pagegoals, { __index = function(tbl,idx)
                 local ht_head = get_height_header(idx)
+                local val
                 if idx == 1 then
-                    return ht_current - ht_head - ht_footer
+                    val = ht_current - ht_head - ht_footer
                 elseif idx == -1 then
-                    return ht_max - ht_head - ht_footer_last
+                    val = ht_current - ht_head - ht_footer
+                else
+                    val = ht_max - ht_head - ht_footer
                 end
-                return ht_max - ht_head - ht_footer
+                tbl[idx] = val
+
+                return val
     end})
 
 
