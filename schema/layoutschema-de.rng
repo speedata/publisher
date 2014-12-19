@@ -47,6 +47,9 @@
          <a:documentation>Die innerhalb dieses Befehls definierten Anweisungen werden ausgeführt, sobald die Seite ins PDF ausgegeben wird.</a:documentation>
          <oneOrMore>
             <optional>
+               <ref name="e_Bookmark"></ref>
+            </optional>
+            <optional>
                <ref name="e_DefineColor"></ref>
             </optional>
             <optional>
@@ -125,6 +128,9 @@
       <element name="BeiSeitenErzeugung">
          <a:documentation>Die Inhalte des Elements »BeiSeitenErzeugung« werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird.</a:documentation>
          <oneOrMore>
+            <optional>
+               <ref name="e_Bookmark"></ref>
+            </optional>
             <optional>
                <ref name="e_DefineColor"></ref>
             </optional>
@@ -388,6 +394,9 @@
                <ref name="e_B"></ref>
             </optional>
             <optional>
+               <ref name="e_Bookmark"></ref>
+            </optional>
+            <optional>
                <ref name="e_Br"></ref>
             </optional>
             <optional>
@@ -549,6 +558,9 @@
       <element name="Inhalt">
          <a:documentation>Kennzeichnet den Inhalt einer Gruppe.</a:documentation>
          <oneOrMore>
+            <optional>
+               <ref name="e_Bookmark"></ref>
+            </optional>
             <optional>
                <ref name="e_DefineColor"></ref>
             </optional>
@@ -988,6 +1000,9 @@
                </optional>
                <optional>
                   <ref name="e_B"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Bookmark"></ref>
                </optional>
                <optional>
                   <ref name="e_Br"></ref>
@@ -1591,6 +1606,9 @@
                   <ref name="e_B"></ref>
                </optional>
                <optional>
+                  <ref name="e_Bookmark"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Br"></ref>
                </optional>
                <optional>
@@ -2022,6 +2040,9 @@
             </optional>
             <optional>
                <ref name="e_B"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Bookmark"></ref>
             </optional>
             <optional>
                <ref name="e_Br"></ref>
@@ -2590,6 +2611,9 @@
          </optional>
          <oneOrMore>
             <optional>
+               <ref name="e_Bookmark"></ref>
+            </optional>
+            <optional>
                <ref name="e_DefineColor"></ref>
             </optional>
             <optional>
@@ -2753,6 +2777,9 @@
          </attribute>
          <oneOrMore>
             <interleave>
+               <optional>
+                  <ref name="e_Bookmark"></ref>
+               </optional>
                <optional>
                   <ref name="e_DefineColor"></ref>
                </optional>
@@ -3598,6 +3625,9 @@
                   <ref name="e_B"></ref>
                </optional>
                <optional>
+                  <ref name="e_Bookmark"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Br"></ref>
                </optional>
                <optional>
@@ -3807,6 +3837,9 @@
                </optional>
                <optional>
                   <ref name="e_B"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Bookmark"></ref>
                </optional>
                <optional>
                   <ref name="e_Br"></ref>

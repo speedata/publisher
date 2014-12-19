@@ -175,6 +175,7 @@ markers = {}
 current_group = nil
 current_grid = nil
 
+intextblockcontext = 0
 
 -- The array 'masterpages' has tables similar to these:
 -- { is_pagetype = test, res = tab, name = pagetypename }
@@ -2150,12 +2151,13 @@ end
 function mkbookmarknodes(level,open_p,title)
     -- The bookmarks need three values, the level, the name and if it is
     -- open or closed
+    setup_page()
     local openclosed
     if open_p then openclosed = 1 else openclosed = 2 end
     level = level or 1
     title = title or "no title for bookmark given"
 
-    n,counter = mkdest()
+    local n,counter = mkdest()
     local udw = node.new("whatsit","user_defined")
     udw.user_id = user_defined_bookmark
     udw.type = 115 -- a string

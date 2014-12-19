@@ -286,10 +286,17 @@ function commands.bookmark( layoutxml,dataxml )
     local level  = publisher.read_attribute(layoutxml,dataxml,"level", "number")
     local open_p = publisher.read_attribute(layoutxml,dataxml,"open",  "boolean")
 
+
     local hlist = publisher.mkbookmarknodes(level,open_p,title)
-    local p = paragraph:new()
-    p:append(hlist)
-    return p
+
+    if publisher.intextblockcontext == 0 then
+        publisher.setup_page()
+        publisher.output_absolute_position(hlist,0,0)
+    else
+        local p = paragraph:new()
+        p:append(hlist)
+        return p
+    end
 end
 
 --- Color
@@ -1547,6 +1554,7 @@ function commands.paragraph( layoutxml,dataxml )
     end
 
 
+    publisher.intextblockcontext = publisher.intextblockcontext + 1
     local a = paragraph:new(textformat)
     local objects = {}
     local tab = publisher.dispatch(layoutxml,dataxml)
@@ -1571,6 +1579,7 @@ function commands.paragraph( layoutxml,dataxml )
     end
 
     a:set_color(colortable)
+    publisher.intextblockcontext = publisher.intextblockcontext - 1
     return a
 end
 
@@ -2664,6 +2673,8 @@ function commands.textblock( layoutxml,dataxml )
         return v
     end
 
+    publisher.intextblockcontext = publisher.intextblockcontext + 1
+
     columns = columns or 1
     if not columndistance then columndistance = "3mm" end
     if tonumber(columndistance) then
@@ -2789,6 +2800,7 @@ function commands.textblock( layoutxml,dataxml )
         nodelist = publisher.rotate_textblock(nodelist,angle)
     end
     trace("Textbock: end")
+    publisher.intextblockcontext = publisher.intextblockcontext - 1
     return nodelist
 end
 
