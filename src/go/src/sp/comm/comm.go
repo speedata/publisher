@@ -38,6 +38,9 @@ func getMessage(c net.Conn) (n int, typ string, message []byte, err error) {
 	if err != nil {
 		return
 	}
+	if messageLength == 0 {
+		return
+	}
 
 	message = make([]byte, messageLength)
 	var n_ int
