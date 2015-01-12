@@ -1433,7 +1433,8 @@ function parse_html( elt, parameter )
             for i=1,#elt do
                 if type(elt[i]) == "string" then
                     -- ignore
-                elseif type(elt[i]) == "table" then
+                elseif type(elt[i]) == "table" and elt[i][".__name"] ~= "br" then
+                    -- we should ignore br directly inside ul
                     a:append(node.copy(marker))
                     local bul = bullet_hbox(tex.sp("5mm"))
                     a:append(bul)
