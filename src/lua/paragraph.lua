@@ -240,20 +240,19 @@ function Paragraph:format(width_sp, default_textformat_name,options)
 
         publisher.fonts.pre_linebreak(nodelist)
 
-
-        if current_textformat.indent then
-            parameter.hangindent = current_textformat.indent
-            parameter.hangafter  = -current_textformat.rows
-        end
         local rows,indent
         indent = node.has_attribute(nodelist,publisher.att_indent)
         rows   = node.has_attribute(nodelist,publisher.att_rows)
 
         if indent then
             parameter.hangindent = indent
+        else
+            parameter.hangindent = 0
         end
         if rows then
             parameter.hangafter = -1 * rows
+        else
+            parameter.hangafter = 0
         end
 
         parameter.disable_hyphenation = current_textformat.disable_hyphenation
@@ -270,12 +269,18 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         -- If there is ragged shape (i.e. not a rectangle of text) then we should turn off
         -- font expansion. This is done by setting tex.pdfadjustspacing to 0 temporarily
         if ragged_shape then
+            local save_tolerance     = parameter.tolerance
+            local save_hyphenpenalty = parameter.hyphenpenalty
             parameter.tolerance     = 5000
             parameter.hyphenpenalty = 200
 
             local adjspace = tex.pdfadjustspacing
             tex.pdfadjustspacing = 0
             nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
+
+            parameter.tolerance     = save_tolerance
+            parameter.hyphenpenalty = save_hyphenpenalty
+
             tex.pdfadjustspacing = adjspace
             publisher.fix_justification(nodelist,current_textformat.alignment)
         else
