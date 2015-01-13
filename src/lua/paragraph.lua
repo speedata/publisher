@@ -26,13 +26,13 @@ function Paragraph:add_italic_bold( nodelist,parameter )
     -- FIXME(?): recurse, node.traverse() stops at hlists
     for i in node.traverse_id(37,nodelist) do
         if parameter.bold == 1 then
-            node.set_attribute(i,att_bold,1)
+            node.set_attribute(i,publisher.att_bold,1)
         end
         if parameter.italic == 1 then
-            node.set_attribute(i,att_italic,1)
+            node.set_attribute(i,publisher.att_italic,1)
         end
         if parameter.underline == 1 then
-            node.set_attribute(i,att_underline,1)
+            node.set_attribute(i,publisher.att_underline,1)
         end
     end
 end
@@ -129,7 +129,7 @@ function Paragraph:script( whatever,scr,parameter )
     nl = node.hpack(nl)
     -- Beware! This width is still incorrect (it is the width of the normal glyphs)
     -- Therefore we have to correct the width in pre_linebreak
-    node.set_attribute(nl,att_script,scr)
+    node.set_attribute(nl,publisher.att_script,scr)
     self:add_to_nodelist(nl)
 end
 
