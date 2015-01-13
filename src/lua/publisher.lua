@@ -1138,7 +1138,8 @@ function frame(obj)
 
     n = node.new("whatsit","pdf_literal")
     local rule = {}
-    rule[#rule + 1] = string.format("%s",pdfcolorstring)
+    -- We need to add q .. Q because the color would leak into the inner objects (#55)
+    rule[#rule + 1] = string.format("q %s",pdfcolorstring)
     rule[#rule + 1] = string.format("%g w",w)           -- rule width
     rule[#rule + 1] = string.format("%g %g m",x1,y1)
     rule[#rule + 1] = string.format("%g %g l",x2,y2)
@@ -1154,6 +1155,7 @@ function frame(obj)
     else
         rule[#rule + 1] = "W h S"
     end
+    rule[#rule + 1] = "Q"
 
     n.data = table.concat(rule, " ")
 
