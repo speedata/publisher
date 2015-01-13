@@ -727,6 +727,10 @@ function commands.frame( layoutxml,dataxml )
     for i=1,#tab do
         local contents = publisher.element_contents(tab[i])
         if node.is_node(contents) then
+            -- This case is for <Textblock>...
+            if backgroundcolor then
+                contents = publisher.background(contents,backgroundcolor)
+            end
             tab[i].contents = publisher.frame({
                 box       = contents,
                 colorname = framecolor,
@@ -737,8 +741,12 @@ function commands.frame( layoutxml,dataxml )
                 b_b_l_radius = tex.sp(b_b_l_radius or 0),
             })
         else
+            -- This case is for <Table>
             for j=1,#contents do
                 if node.is_node(contents[j]) then
+                    if backgroundcolor then
+                        contents[j] = publisher.background(contents[j],backgroundcolor)
+                    end
                     contents[j] = publisher.frame({
                         box       = contents[j],
                         colorname = framecolor,
