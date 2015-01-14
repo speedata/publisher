@@ -51,6 +51,10 @@ func translate(lang, text string) string {
 		return "keine"
 	case "Remarks":
 		return "Bemerkungen"
+	case "CSS name":
+		return "CSS Name"
+	case "CSS property":
+		return "CSS Eigenschaft"
 	}
 	return "--"
 }

@@ -2571,8 +2571,13 @@ function commands.td( layoutxml,dataxml )
 
     if css_rules and type(css_rules) == "table" then
         for k,v in pairs(css_rules) do
-            tab[k] = v
+            if k == "vertical-align" then
+                tab.valign = v
+            else
+                tab[k] = v
+            end
         end
+
     end
 
     local attribute = {

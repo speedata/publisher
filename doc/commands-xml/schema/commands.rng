@@ -171,8 +171,9 @@
       </oneOrMore>
       <oneOrMore>
         <element name="command">
-          <optional><attribute name="en"/></optional>
-          <optional><attribute name="de"/></optional>
+          <attribute name="en"/>
+          <attribute name="de"/>
+          <optional><attribute name="css"/></optional>
           <ref name="descriptions" />
           <element name="childelements">
             <zeroOrMore>

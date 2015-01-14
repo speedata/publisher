@@ -140,6 +140,7 @@ type Attribute struct {
 	Choice        []*choice
 	NameEn        string
 	NameDe        string
+	Css           string
 	Type          string
 	Optional      bool
 }
@@ -330,8 +331,9 @@ type Command struct {
 	ExamplesDe     []*example
 	Childelement   *Childelement
 	Children       map[string][]*Command
-	NameEn         string `xml:"en,attr"`
-	NameDe         string `xml:"de,attr"`
+	NameEn         string
+	NameDe         string
+	Css            string
 	seealso        *seealso
 }
 
@@ -407,6 +409,8 @@ func (c *Command) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error {
 						a.NameEn = attribute.Value
 					case "de":
 						a.NameDe = attribute.Value
+					case "css":
+						a.Css = attribute.Value
 					case "optional":
 						a.Optional = attribute.Value == "yes"
 					case "type":
@@ -840,6 +844,9 @@ func ReadCommandsFile(r io.Reader) (*Commands, error) {
 					if attribute.Name.Local == "en" {
 						commands.CommandsEn[attribute.Value] = c
 						c.NameEn = attribute.Value
+					}
+					if attribute.Name.Local == "css" {
+						c.Css = attribute.Value
 					}
 				}
 			}

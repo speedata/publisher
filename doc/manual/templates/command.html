@@ -14,6 +14,7 @@
       <div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">{{.Command.Name .Lang}}</code></h1>
+         {{ with .Command.Css}}{{ translate $.Lang "CSS name"}}: {{.}}{{end}}
          <h2>{{ translate .Lang "Description"  }}</h2>
          <p>{{  .Command.DescriptionHTML .Lang }}</p>
          <div class="hangingindent">
@@ -26,7 +27,7 @@
             <p>{{ translate .Lang "Parent elements" }}: {{ parentelements .Lang .Command }}</p>
          </div>
          <h3>{{ translate .Lang "Attributes" }}</h3>
-         <dl>{{ range .Command.Attributes .Lang }}<dt><a name="{{.HTMLFragment}}"></a><span class="tt">{{ .Name $.Lang }}</span> ({{atttypeinfo . $.Lang}})</dt><dd>{{.DescriptionHTML $.Lang }}</dd>{{ end }}</dl>
+         <dl>{{ range .Command.Attributes .Lang }}<dt><a name="{{.HTMLFragment}}"></a><span class="tt">{{ .Name $.Lang }}</span> ({{atttypeinfo . $.Lang}}{{ with .Css }},  {{ translate $.Lang "CSS property"}}: {{.}}{{end}})</dt><dd>{{.DescriptionHTML $.Lang }}</dd>{{ end }}</dl>
          {{ with (.Command.RemarkHTML $.Lang) }}
          <h3>{{ translate $.Lang "Remarks" }}</h3>{{.}}{{end}}
 
