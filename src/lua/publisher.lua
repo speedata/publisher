@@ -1083,11 +1083,16 @@ function frame(obj)
     local  box, colorname, width
     box          = obj.box
     colorname    = obj.colorname or "black"
-    width        = obj.rulewidth
+    width        = obj.rulewidth or 0
     local b_b_r_radius = sp_to_bp(obj.b_b_r_radius)
     local b_t_r_radius = sp_to_bp(obj.b_t_r_radius)
     local b_t_l_radius = sp_to_bp(obj.b_t_l_radius)
     local b_b_l_radius = sp_to_bp(obj.b_b_l_radius)
+
+    local b_b_r_radius_inner = math.round(math.max(sp_to_bp(obj.b_b_r_radius) - width / factor,0),3)
+    local b_t_r_radius_inner = math.round(math.max(sp_to_bp(obj.b_t_r_radius) - width / factor,0),3)
+    local b_t_l_radius_inner = math.round(math.max(sp_to_bp(obj.b_t_l_radius) - width / factor,0),3)
+    local b_b_l_radius_inner = math.round(math.max(sp_to_bp(obj.b_b_l_radius) - width / factor,0),3)
 
     -- FIXME: see http://en.wikipedia.org/wiki/File:Circle_and_cubic_bezier.svg
     -- http://en.wikipedia.org/wiki/Composite_B%C3%A9zier_curve
@@ -1095,29 +1100,27 @@ function frame(obj)
     -- http://spencermortensen.com/articles/bezier-circle/
     -- 0.551915024494
     local circle_bezier = 0.551915024494
-    local write = w
     local pdfcolorstring = colors[colorname].pdfstring
     local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
-    local w = width / factor -- width of stroke
-    local hw = 0.5 * w -- half width of stroke
-    -- local hw = 0
+    local rw = math.round(width / factor,3) -- width of stroke
 
-    local x1, y1   = -hw + b_b_l_radius                     , -hw
-    local x2, y2   =  hw + wd - b_b_r_radius                , -hw
-    local x3, y3   =  hw + wd - circle_bezier * b_b_r_radius, -hw
-    local x4, y4   =  hw + wd                               , -hw + circle_bezier * b_b_r_radius
-    local x5, y5   =  hw + wd                               , -hw + b_b_r_radius
-    local x6, y6   =  hw + wd                               ,  hw + ht - b_t_r_radius
-    local x7, y7   =  hw + wd                               ,  hw + ht - circle_bezier * b_t_r_radius
-    local x8, y8   =  hw + wd - circle_bezier * b_t_r_radius,  hw + ht
-    local x9, y9   =  hw + wd - b_t_r_radius                ,  hw + ht
-    local x10, y10 = -hw + b_t_l_radius                     ,  hw + ht
-    local x11, y11 = -hw + circle_bezier * b_t_l_radius     ,  hw + ht
-    local x12, y12 = -hw                                    ,  hw + ht - circle_bezier * b_t_l_radius
-    local x13, y13 = -hw                                    ,  hw + ht - b_t_l_radius
-    local x14, y14 = -hw                                    , -hw + b_b_l_radius
-    local x15, y15 = -hw                                    , -hw + circle_bezier * b_b_l_radius
-    local x16, y16 = -hw + circle_bezier * b_b_l_radius     , -hw
+    -- outer boundary
+    local x1, y1   = -rw + b_b_l_radius                     , -rw
+    local x2, y2   =  rw + wd - b_b_r_radius                , -rw
+    local x3, y3   =  rw + wd - circle_bezier * b_b_r_radius, -rw
+    local x4, y4   =  rw + wd                               , -rw + circle_bezier * b_b_r_radius
+    local x5, y5   =  rw + wd                               , -rw + b_b_r_radius
+    local x6, y6   =  rw + wd                               ,  rw + ht - b_t_r_radius
+    local x7, y7   =  rw + wd                               ,  rw + ht - circle_bezier * b_t_r_radius
+    local x8, y8   =  rw + wd - circle_bezier * b_t_r_radius,  rw + ht
+    local x9, y9   =  rw + wd - b_t_r_radius                ,  rw + ht
+    local x10, y10 = -rw + b_t_l_radius                     ,  rw + ht
+    local x11, y11 = -rw + circle_bezier * b_t_l_radius     ,  rw + ht
+    local x12, y12 = -rw                                    ,  rw + ht - circle_bezier * b_t_l_radius
+    local x13, y13 = -rw                                    ,  rw + ht - b_t_l_radius
+    local x14, y14 = -rw                                    , -rw + b_b_l_radius
+    local x15, y15 = -rw                                    , -rw + circle_bezier * b_b_l_radius
+    local x16, y16 = -rw + circle_bezier * b_b_l_radius     , -rw
 
     x1,  y1  = math.round(x1,3),  math.round(y1,3)
     x2,  y2  = math.round(x2,3),  math.round(y2,3)
@@ -1136,11 +1139,71 @@ function frame(obj)
     x15, y15 = math.round(x15,3), math.round(y15,3)
     x16, y16 = math.round(x16,3), math.round(y16,3)
 
-    n = node.new("whatsit","pdf_literal")
+
+    -- inner boundary
+    local xx1, yy1   =   b_b_l_radius_inner                      , 0
+    local xx2, yy2   =   wd - b_b_r_radius_inner                 , 0
+    local xx3, yy3   =   wd - circle_bezier * b_b_r_radius_inner , 0
+    local xx4, yy4   =   wd                                      , circle_bezier * b_b_r_radius_inner
+    local xx5, yy5   =   wd                                      , b_b_r_radius_inner
+    local xx6, yy6   =   wd                                      , ht - b_t_r_radius_inner
+    local xx7, yy7   =   wd                                      , ht - circle_bezier * b_t_r_radius_inner
+    local xx8, yy8   =   wd - circle_bezier * b_t_r_radius_inner , ht
+    local xx9, yy9   =   wd - b_t_r_radius_inner                 , ht
+    local xx10, yy10 =   b_t_l_radius_inner                      , ht
+    local xx11, yy11 =   circle_bezier * b_t_l_radius_inner      , ht
+    local xx12, yy12 =   0                                       , ht - circle_bezier * b_t_l_radius_inner
+    local xx13, yy13 =   0                                       , ht - b_t_l_radius_inner
+    local xx14, yy14 =   0                                       , b_b_l_radius_inner
+    local xx15, yy15 =   0                                       , circle_bezier * b_b_l_radius_inner
+    local xx16, yy16 =   circle_bezier * b_b_l_radius_inner      , 0
+
+    xx1,  yy1  = math.round(xx1,3),  math.round(yy1,3)
+    xx2,  yy2  = math.round(xx2,3),  math.round(yy2,3)
+    xx3,  yy3  = math.round(xx3,3),  math.round(yy3,3)
+    xx4,  yy4  = math.round(xx4,3),  math.round(yy4,3)
+    xx5,  yy5  = math.round(xx5,3),  math.round(yy5,3)
+    xx6,  yy6  = math.round(xx6,3),  math.round(yy6,3)
+    xx7,  yy7  = math.round(xx7,3),  math.round(yy7,3)
+    xx8,  yy8  = math.round(xx8,3),  math.round(yy8,3)
+    xx9,  yy9  = math.round(xx9,3),  math.round(yy9,3)
+    xx10, yy10 = math.round(xx10,3), math.round(yy10,3)
+    xx11, yy11 = math.round(xx11,3), math.round(yy11,3)
+    xx12, yy12 = math.round(xx12,3), math.round(yy12,3)
+    xx13, yy13 = math.round(xx13,3), math.round(yy13,3)
+    xx14, yy14 = math.round(xx14,3), math.round(yy14,3)
+    xx15, yy15 = math.round(xx15,3), math.round(yy15,3)
+    xx16, yy16 = math.round(xx16,3), math.round(yy16,3)
+
+    local n_clip = node.new("whatsit","pdf_literal")
+    local rule_clip = {}
+    rule_clip[#rule_clip + 1] = string.format("%g %g m",xx1,yy1)
+    rule_clip[#rule_clip + 1] = string.format("%g %g l",xx2,yy2)
+    rule_clip[#rule_clip + 1] = string.format("%g %g %g %g %g %g c", xx3,yy3, xx4,yy4, xx5, yy5 )
+    rule_clip[#rule_clip + 1] = string.format("%g %g l",xx6, yy6)
+    rule_clip[#rule_clip + 1] = string.format("%g %g %g %g %g %g c", xx7,yy7,xx8,yy8, xx9,yy9  )
+    rule_clip[#rule_clip + 1] = string.format("%g %g l",xx10, yy10)
+    rule_clip[#rule_clip + 1] = string.format("%g %g %g %g %g %g c", xx11,yy11,xx12,yy12, xx13,yy13  )
+    rule_clip[#rule_clip + 1] = string.format("%g %g l",xx14,yy14 )
+    rule_clip[#rule_clip + 1] = string.format("%g %g %g %g %g %g c W n ", xx15,yy15,xx16,yy16, xx1,yy1  )
+
+    local n = node.new("whatsit","pdf_literal")
     local rule = {}
+
     -- We need to add q .. Q because the color would leak into the inner objects (#55)
     rule[#rule + 1] = string.format("q %s",pdfcolorstring)
-    rule[#rule + 1] = string.format("%g w",w)           -- rule width
+    rule[#rule + 1] = string.format("%g w",rw)           -- rule width
+
+    rule[#rule + 1] = string.format("%g %g m",xx1,yy1)
+    rule[#rule + 1] = string.format("%g %g l",xx2,yy2)
+    rule[#rule + 1] = string.format("%g %g %g %g %g %g c", xx3,yy3, xx4,yy4, xx5, yy5 )
+    rule[#rule + 1] = string.format("%g %g l",xx6, yy6)
+    rule[#rule + 1] = string.format("%g %g %g %g %g %g c", xx7,yy7,xx8,yy8, xx9,yy9  )
+    rule[#rule + 1] = string.format("%g %g l",xx10, yy10)
+    rule[#rule + 1] = string.format("%g %g %g %g %g %g c", xx11,yy11,xx12,yy12, xx13,yy13  )
+    rule[#rule + 1] = string.format("%g %g l",xx14,yy14 )
+    rule[#rule + 1] = string.format("%g %g %g %g %g %g c ", xx15,yy15,xx16,yy16, xx1,yy1  )
+
     rule[#rule + 1] = string.format("%g %g m",x1,y1)
     rule[#rule + 1] = string.format("%g %g l",x2,y2)
     rule[#rule + 1] = string.format("%g %g %g %g %g %g c", x3,y3, x4,y4, x5, y5 )
@@ -1150,23 +1213,61 @@ function frame(obj)
     rule[#rule + 1] = string.format("%g %g %g %g %g %g c", x11,y11,x12,y12, x13,y13  )
     rule[#rule + 1] = string.format("%g %g l",x14,y14 )
     rule[#rule + 1] = string.format("%g %g %g %g %g %g c", x15,y15,x16,y16, x1,y1  )
-    if w == 0 then
-        rule[#rule + 1] = "W n"
+
+    if rw == 0 then
+        rule[#rule + 1] = "n"
     else
-        rule[#rule + 1] = "W h S"
+        rule[#rule + 1] = "f* s"
+    end
+
+    if false then
+        rule[#rule + 1] = " 0 0 1 rg  "
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x1 - 0.5 ,y1 - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x2  - 0.5 ,y2  - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x3  - 0.5 ,y3  - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x4  - 0.5 ,y4  - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x5  - 0.5 ,y5  - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x6  - 0.5 ,y6  - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x7  - 0.5 ,y7  - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x8  - 0.5 ,y8  - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x9  - 0.5 ,y9  - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x10 - 0.5 ,y10 - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x11 - 0.5 ,y11 - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x12 - 0.5 ,y12 - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x13 - 0.5 ,y13 - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x14 - 0.5 ,y14 - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x15 - 0.5 ,y15 - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x16 - 0.5 ,y16 - 0.5)
+        rule[#rule + 1] = " 0 1 1 rg"
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx1 - 0.5 , yy1 - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx2  - 0.5 ,yy2  - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx3  - 0.5 ,yy3  - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx4  - 0.5 ,yy4  - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx5  - 0.5 ,yy5  - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx6  - 0.5 ,yy6  - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx7  - 0.5 ,yy7  - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx8  - 0.5 ,yy8  - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx9  - 0.5 ,yy9  - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx10 - 0.5 ,yy10 - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx11 - 0.5 ,yy11 - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx12 - 0.5 ,yy12 - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx13 - 0.5 ,yy13 - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx14 - 0.5 ,yy14 - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx15 - 0.5 ,yy15 - 0.5)
+        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx16 - 0.5 ,yy16 - 0.5)
+        rule[#rule + 1] = "  s "
     end
     rule[#rule + 1] = "Q"
 
     n.data = table.concat(rule, " ")
-
-
-    n.mode = 0
+    n_clip.data = table.concat(rule_clip, " ")
 
     local pdf_save = node.new("whatsit","pdf_save")
     local pdf_restore = node.new("whatsit","pdf_restore")
 
     node.insert_after(pdf_save,pdf_save,n)
-    node.insert_after(n,n,box)
+    node.insert_after(n,n,n_clip)
+    node.insert_after(n_clip,n_clip,box)
 
     local hvbox = node.hpack(pdf_save)
     hvbox.depth = 0

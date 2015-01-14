@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout 
+  xmlns="urn:speedata.de:2009/publisher/en" 
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  
+  <DefineColor name="red" value="#f00"/>
+  <DefineColor name="blue" value="#00f"/>
+  
+  <SetGrid width="10pt" height="10pt" />
+  <Options show-grid="no"/>
+  
+  <Pageformat width="5cm" height="5cm"/>
+  
+  <Record element="data">
+    <PlaceObject row="2" column="2">
+      <Frame framecolor="black" rulewidth="1pt" border-bottom-right-radius="3pt" border-bottom-left-radius="20pt" border-top-left-radius="5pt" border-top-right-radius="1pt">
+        <Transformation matrix="3 0 0 1.2 -10 -10">
+        <Image file="_samplea.pdf" maxwidth="7"/>
+          
+        </Transformation>
+      </Frame>
+    </PlaceObject>
+  </Record>
+</Layout>
+
