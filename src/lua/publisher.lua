@@ -1094,7 +1094,7 @@ function frame(obj)
     local b_t_l_radius_inner = math.round(math.max(sp_to_bp(obj.b_t_l_radius) - width / factor,0),3)
     local b_b_l_radius_inner = math.round(math.max(sp_to_bp(obj.b_b_l_radius) - width / factor,0),3)
 
-    -- FIXME: see http://en.wikipedia.org/wiki/File:Circle_and_cubic_bezier.svg
+    -- See http://en.wikipedia.org/wiki/File:Circle_and_cubic_bezier.svg
     -- http://en.wikipedia.org/wiki/Composite_B%C3%A9zier_curve
     -- 0.5522847498
     -- http://spencermortensen.com/articles/bezier-circle/
@@ -1213,56 +1213,17 @@ function frame(obj)
     rule[#rule + 1] = string.format("%g %g %g %g %g %g c", x11,y11,x12,y12, x13,y13  )
     rule[#rule + 1] = string.format("%g %g l",x14,y14 )
     rule[#rule + 1] = string.format("%g %g %g %g %g %g c", x15,y15,x16,y16, x1,y1  )
-
     if rw == 0 then
         rule[#rule + 1] = "n"
     else
         rule[#rule + 1] = "f* s"
     end
-
-    if false then
-        rule[#rule + 1] = " 0 0 1 rg  "
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x1 - 0.5 ,y1 - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x2  - 0.5 ,y2  - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x3  - 0.5 ,y3  - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x4  - 0.5 ,y4  - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x5  - 0.5 ,y5  - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x6  - 0.5 ,y6  - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x7  - 0.5 ,y7  - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x8  - 0.5 ,y8  - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x9  - 0.5 ,y9  - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x10 - 0.5 ,y10 - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x11 - 0.5 ,y11 - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x12 - 0.5 ,y12 - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x13 - 0.5 ,y13 - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x14 - 0.5 ,y14 - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x15 - 0.5 ,y15 - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",x16 - 0.5 ,y16 - 0.5)
-        rule[#rule + 1] = " 0 1 1 rg"
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx1 - 0.5 , yy1 - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx2  - 0.5 ,yy2  - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx3  - 0.5 ,yy3  - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx4  - 0.5 ,yy4  - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx5  - 0.5 ,yy5  - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx6  - 0.5 ,yy6  - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx7  - 0.5 ,yy7  - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx8  - 0.5 ,yy8  - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx9  - 0.5 ,yy9  - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx10 - 0.5 ,yy10 - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx11 - 0.5 ,yy11 - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx12 - 0.5 ,yy12 - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx13 - 0.5 ,yy13 - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx14 - 0.5 ,yy14 - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx15 - 0.5 ,yy15 - 0.5)
-        rule[#rule + 1] = string.format("%g %g  1 1 re f ",xx16 - 0.5 ,yy16 - 0.5)
-        rule[#rule + 1] = "  s "
-    end
     rule[#rule + 1] = "Q"
 
-    n.data = table.concat(rule, " ")
+    n.data      = table.concat(rule,      " ")
     n_clip.data = table.concat(rule_clip, " ")
 
-    local pdf_save = node.new("whatsit","pdf_save")
+    local pdf_save    = node.new("whatsit","pdf_save")
     local pdf_restore = node.new("whatsit","pdf_restore")
 
     node.insert_after(pdf_save,pdf_save,n)
