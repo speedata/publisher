@@ -565,6 +565,9 @@ func init() {
 		"xpath": {
 			"XPath expressions", "XPath-Ausdrücke", "xpath.html",
 		},
+		"css": {
+			"Using CSS with the speedata Publisher", "CSS im speedata Publisher", "css.html",
+		},
 	}
 }
 

@@ -1523,7 +1523,7 @@ function commands.paragraph( layoutxml,dataxml )
     local class = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
     local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
 
-    local css_rules = publisher.css:matches({element = 'paragraph', class=class,id=id}) or {}
+    local css_rules = publisher.css:matches({element = 'p', class=class,id=id}) or {}
 
     local textformat    = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
     local allowbreak    = publisher.read_attribute(layoutxml,dataxml,"allowbreak","rawstring")
@@ -1532,7 +1532,7 @@ function commands.paragraph( layoutxml,dataxml )
     local language_name = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
 
     colorname = colorname or css_rules["color"]
-    fontname  = fontname  or css_rules["fontface"]
+    fontname  = fontname  or css_rules["font-family"]
     local fontfamily
     if fontname then
         fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
@@ -2573,6 +2573,18 @@ function commands.td( layoutxml,dataxml )
         for k,v in pairs(css_rules) do
             if k == "vertical-align" then
                 tab.valign = v
+            elseif k == "background-color" then
+                tab.backgroundcolor = v
+            elseif k == "border-left-width" then
+                tab["border-left"] = v
+            elseif k == "border-right-width" then
+                tab["border-right"] = v
+            elseif k == "border-top-width" then
+                tab["border-top"] = v
+            elseif k == "border-bottom-width" then
+                tab["border-bottom"] = v
+            elseif k == "text-align" then
+                tab.align = v
             else
                 tab[k] = v
             end
@@ -2608,7 +2620,10 @@ function commands.td( layoutxml,dataxml )
         end
     end
 
-    tab.align = publisher.read_attribute(layoutxml,dataxml,"align","string",nil,"align")
+    local tmp = publisher.read_attribute(layoutxml,dataxml,"align","string",nil,"align")
+    if tmp then
+        tab.align = tmp
+    end
 
     if tab.padding then
         tab.padding_left   = tex.sp(tab.padding)

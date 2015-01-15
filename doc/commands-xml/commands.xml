@@ -852,7 +852,7 @@
       <cmd name="Textblock"/>
     </seealso>
   </command>
-  <command en="Box" de="Box">
+  <command en="Box" de="Box" css="box">
     <description xml:lang="en">
       <para>Create a rectangular colored area. The area must fit the grid cells.</para>
     </description>
@@ -2041,7 +2041,7 @@
     </example>
     <seealso><cmd name="Switch"/></seealso>
   </command>
-  <command en="Frame" de="Rahmen">
+  <command en="Frame" de="Rahmen" css="frame">
     <description xml:lang="en">
       <para>Manipulate an object's appearance by drawing a frame. Can be used as a clipping path.</para>
     </description>
@@ -4009,7 +4009,7 @@
     </example>
     <seealso/>
   </command>
-  <command en="Paragraph" de="Absatz">
+  <command en="Paragraph" de="Absatz" css="p">
     <description xml:lang="en">
       <para>Insert a paragraph of text. The width of the paragraph is inherited from the surrounding element.</para>
     </description>
@@ -4027,7 +4027,7 @@
         <para>(Experimentell) Liste der Zeichen, bei denen ein Umbruch möglich ist. Das Leerzeichen wird nicht automatisch als Umbruchbunkt erkannt, wenn das Attribut angegeben ist.</para>
       </description>
     </attribute>
-    <attribute en="color" de="farbe" type="text" optional="yes">
+    <attribute en="color" de="farbe" type="text" css="color" optional="yes">
       <description xml:lang="en">
         <para>Color of the paragraph. Must be defined with <cmd name="DefineColor"/> before use.</para>
       </description>
@@ -4043,7 +4043,7 @@
         <para>Name des zu benutzenden Textformats. Wird kein Textformat angegeben, nimmt das System das Textformat <tt>text</tt></para>
       </description>
     </attribute>
-    <attribute en="fontface" de="schriftart" type="text" optional="yes">
+    <attribute en="fontface" de="schriftart" css="font-family" type="text" optional="yes">
       <description xml:lang="en">
         <para>The name of the fontface for the paragraph. The default is »text« (lowercase t).</para>
       </description>
@@ -5612,7 +5612,7 @@
   }
 </Stylesheet>]]></listing>
     </example>
-    <seealso/>
+    <seealso><ref name="css"/></seealso>
   </command>
   <command en="Table" de="Tabelle">
     <description xml:lang="en">
@@ -6013,7 +6013,7 @@
         </choice>
       </zeroOrMore>
     </childelements>
-    <attribute en="backgroundcolor" de="hintergrundfarbe" type="text" optional="yes">
+    <attribute en="backgroundcolor" de="hintergrundfarbe" css="background-color" type="text" optional="yes">
       <description xml:lang="en">
         <para>The name of the background color (if the cell should get a background).</para>
       </description>
@@ -6021,7 +6021,7 @@
         <para>Der Name der Hintergrundfarbe, wenn die Zelle eingefärbt werden soll.</para>
       </description>
     </attribute>
-    <attribute en="border-left" de="border-left" type="length" optional="yes">
+    <attribute en="border-left" de="border-left" type="length" optional="yes" css="border-left-width">
       <description xml:lang="en">
         <para>The width (tickness) of the left border. The border is inside the cell.</para>
       </description>
@@ -6029,7 +6029,7 @@
         <para>Die Breite der Linie links. Die Linie liegt innerhalb der Zelle.</para>
       </description>
     </attribute>
-    <attribute en="border-right" de="border-right" type="length" optional="yes">
+    <attribute en="border-right" de="border-right" type="length" optional="yes" css="border-right-width">
       <description xml:lang="en">
         <para>The width (tickness) of the right border. The border is inside the cell.</para>
       </description>
@@ -6037,7 +6037,7 @@
         <para>Die Breite der Linie rechts. Die Linie liegt innerhalb der Zelle.</para>
       </description>
     </attribute>
-    <attribute en="border-top" de="border-top" type="length" optional="yes">
+    <attribute en="border-top" de="border-top" type="length" optional="yes" css="border-top-width">
       <description xml:lang="en">
         <para>The width (tickness) of the top border. The border is inside the cell.</para>
       </description>
@@ -6045,7 +6045,7 @@
         <para>Die Breite der Linie oben. Die Linie liegt innerhalb der Zelle.</para>
       </description>
     </attribute>
-    <attribute en="border-bottom" de="border-bottom" type="length" optional="yes">
+    <attribute en="border-bottom" de="border-bottom" type="length" optional="yes" css="border-bottom-width">
       <description xml:lang="en">
         <para>The width (tickness) of the bottom border. The border is inside the cell.</para>
       </description>
@@ -6053,7 +6053,7 @@
         <para>Die Breite der Linie unten. Die Linie liegt innerhalb der Zelle.</para>
       </description>
     </attribute>
-    <attribute en="border-left-color" de="border-left-color" type="text" optional="yes">
+    <attribute en="border-left-color" de="border-left-color" type="text" optional="yes" css="border-left-color">
       <description xml:lang="en">
         <para>The color of the left border.</para>
       </description>
@@ -6061,7 +6061,7 @@
         <para>Die Farbe der Linie links.</para>
       </description>
     </attribute>
-    <attribute en="border-right-color" de="border-right-color" type="text" optional="yes">
+    <attribute en="border-right-color" de="border-right-color" type="text" optional="yes" css="border-right-color">
       <description xml:lang="en">
         <para>The color of the left border.</para>
       </description>
@@ -6069,7 +6069,7 @@
         <para>Die Farbe der Linie rechts.</para>
       </description>
     </attribute>
-    <attribute en="border-top-color" de="border-top-color" type="text" optional="yes">
+    <attribute en="border-top-color" de="border-top-color" type="text" optional="yes" css="border-top-color">
       <description xml:lang="en">
         <para>The color of the top border.</para>
       </description>
@@ -6077,7 +6077,7 @@
         <para>Die Farbe der Linie oben.</para>
       </description>
     </attribute>
-    <attribute en="border-bottom-color" de="border-bottom-color" type="text" optional="yes">
+    <attribute en="border-bottom-color" de="border-bottom-color" type="text" optional="yes" css="border-bottom-color">
       <description xml:lang="en">
         <para>The color of the bottom border.</para>
       </description>
@@ -6117,7 +6117,7 @@
         <para>Die Anzahl der Zeilen, die die Zelle überdecken soll. Voreinstellung ist 1.</para>
       </description>
     </attribute>
-    <attribute en="align" de="align" optional="yes">
+    <attribute en="align" de="align" optional="yes" css="text-align">
       <description xml:lang="en">
         <para>Horizontal alignment of the cell contents. Defaults to left.</para>
       </description>
@@ -6189,7 +6189,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="padding" de="padding" type="length" optional="yes">
+    <attribute en="padding" de="padding" type="length" optional="yes" css="padding">
       <description xml:lang="en">
         <para>Shorthand for setting padding-top and the other values with this length.</para>
       </description>
@@ -6252,7 +6252,7 @@
       <cmd name="Stylesheet"/>
     </seealso>
   </command>
-  <command en="Tablerule" de="Tlinie">
+  <command en="Tablerule" de="Tlinie" css="tablerule">
     <description xml:lang="en">
       <para>Insert a horizontal rule in a table</para>
     </description>
