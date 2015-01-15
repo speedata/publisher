@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.2">
+    <entry version="2.2.36" date="2015-01-15">
+      <en>Add all CSS level 3 colors (see http://www.w3.org/TR/css3-color/ for a list)</en>
+      <de>Alle CSS Level 3 Farben hinzugefügt (siehe http://www.w3.org/TR/css3-color/ für eine Liste)</de>
+    </entry>
     <entry version="2.1.35" date="2014-12-19">
       <en>Allow bookmarks on any level (experimental)</en>
       <de>Lesezeichen auf allen Ebenen erlauben (experimentell)</de>
