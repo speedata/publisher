@@ -57,16 +57,15 @@ When you run `sp compare example`, no error messages should be given in
 the output:
 
     $ sp compare example/
-    Run comparison in directory example
-    OK
     Total run time: 1.62956s
 
 If a future version of the publisher introduces a visual change of the
 layout, the output would be something like this:
 
     $ sp compare example/
-    Run comparison in directory example
-    Comparison failed. Bad pages are: [1]
+    /path/to/example
+    Comparison failed. Bad pages are: [0]
+    Max delta is 2162.760009765625
     Total run time: 862.898ms
 
 The differences are available as a PNG file in the directory:
@@ -119,15 +118,5 @@ When you run `sp compare qa` all subdirectories are visited and checked.
 In the best case the output is:
 
     $ sp compare qa/
-    Run comparison in directory example1
-    OK
-    Run comparison in directory example2
-    OK
-    Run comparison in directory example3
-    OK
-    Run comparison in directory example4
-    OK
-    Run comparison in directory example5
-    OK
     Total run time: 4.541458s
 

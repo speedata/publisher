@@ -61,16 +61,15 @@ Wird nun `sp compare beispiel` aufgerufen, sollte es keine Beanstandung
 geben und als Ausgabe erscheinen:
 
     $ sp compare beispiel/
-    Run comparison in directory beispiel
-    OK
     Total run time: 1.62956s
 
 Falls nun eine zukünftige Version des Publishers eine visuelle Änderung
 des Layouts hervorrufen würde, wäre die Ausgabe z.B. folgende:
 
     $ sp compare beispiel/
-    Run comparison in directory beispiel
-    Comparison failed. Bad pages are: [1]
+    /pfad/zum/verzeichnis/beispiel
+    Comparison failed. Bad pages are: [0]
+    Max delta is 2162.760009765625
     Total run time: 862.898ms
 
 Die Unterschiede sind als PNG Dateien in dem Verzeichnis enthalten:
@@ -125,15 +124,5 @@ Mit dem Aufruf `sp compare qa` werden alle Unterverzeichnisse
 durchlaufen und überprüft. Im besten Fall ist die Ausgabe:
 
     $ sp compare qa/
-    Run comparison in directory beispiel1
-    OK
-    Run comparison in directory beispiel2
-    OK
-    Run comparison in directory beispiel3
-    OK
-    Run comparison in directory beispiel4
-    OK
-    Run comparison in directory beispiel5
-    OK
     Total run time: 4.541458s
 
