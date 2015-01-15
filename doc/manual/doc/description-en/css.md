@@ -28,13 +28,13 @@ With these rules, some of the XML elements in the layout stylesheet (currently `
 
 For this table
 
-    <ObjektAusgeben>
-      <Tabelle>
-        <Tr minhöhe="4">
-          <Td class="myclass" id="myid"><Absatz><Wert>Hallo Welt</Wert></Absatz></Td>
+    <PlaceObject>
+      <Table>
+        <Tr minheight="4">
+          <Td class="myclass" id="myid"><Paragraph><Value>Hello world</Value></Paragraph></Td>
         </Tr>
-      </Tabelle>
-    </ObjektAusgeben>
+      </Table>
+    </PlaceObject>
 
 each of the following CSS declarations have the same effect:
 
