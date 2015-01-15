@@ -110,6 +110,11 @@ XPath 2.0 standard.</p>
 </tr>
 
 <tr>
+<td>sd:attr(&lt;name&gt;, ...)</td>
+<td>Is the same as <code>@name</code>, but can be used to dynamically construct the attribute name. See example at <code>sd:variable()</code>.</td>
+</tr>
+
+<tr>
 <td>sd:decode-html(&lt;node&gt;)</td>
 <td>Change text such as <code>&amp;lt;i&amp;gt;italic&amp;lt;/i&amp;gt;</code> into HTML markup.</td>
 </tr>
@@ -195,8 +200,8 @@ XPath 2.0 standard.</p>
 </tr>
 
 <tr>
-<td>sd:variable(&lt;name&gt;)</td>
-<td>The same as \$name. This function allows variable names to be constructed dynamically. Example: <code>sd:variable(concat('myvar',$num))</code> – if <code>$num</code> contains the number 3, the resulting variable is <code>myvar3</code>.</td>
+<td>sd:variable(&lt;name&gt;, ...)</td>
+<td>The same as <code>$name</code>. This function allows variable names to be constructed dynamically. Example: <code>sd:variable('myvar',$num)</code> – if <code>$num</code> contains the number 3, the resulting variable name is <code>myvar3</code>.</td>
 </tr>
 
 <tr>
@@ -323,7 +328,7 @@ XPath 2.0 standard.</p>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.1.27 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/xpath.html">German</a>
+Version: 2.1.37 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/xpath.html">German</a>
 
 </body>
 </html>

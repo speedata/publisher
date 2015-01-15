@@ -126,6 +126,11 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 </tr>
 
 <tr>
+<td>sd:attr(&lt;Name&gt;, ...)</td>
+<td>ist dasselbe wie <code>@Name</code>, nur mit der Möglichkeit den Namen auch dynamisch (z.B. mit <code>concat()</code>) zu erzeugen. Siehe Beispiel bei <code>sd:variable()</code>.</td>
+</tr>
+
+<tr>
 <td>sd:bildbreite(&lt;Dateiname oder URI-Schema&gt;)</td>
 <td>Breite des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Breite des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert.</td>
 </tr>
@@ -191,8 +196,8 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 </tr>
 
 <tr>
-<td>sd:variable(&lt;Name&gt;)</td>
-<td>ist dasselbe wie $Name, nur mit der Möglichkeit den Namen auch dynamisch (z.B. mit <code>concat()</code>) zu erzeugen.</td>
+<td>sd:variable(&lt;Name&gt;, ...)</td>
+<td>ist dasselbe wie $Name, nur mit der Möglichkeit den Namen auch dynamisch zu erzeugen. Falls <code>$i</code> den Wert 3 enthält, liest <code>sd:variable('foo',$i)</code> den Inhalt der Variablen <code>$foo3</code>. Damit lassen sich Arrays abbilden.</td>
 </tr>
 
 <tr>
@@ -314,7 +319,7 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.1.27 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/xpath.html">Englisch</a>
+Version: 2.1.37 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/xpath.html">Englisch</a>
 
 </body>
 </html>

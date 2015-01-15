@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSS</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="alternate" type="application/atom+xml"  title="changelog speedata Publisher (en)"  href="../changes-en.xml" />
+    <link rel="stylesheet" href="../assets/css/normal.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/colorbox.css" type="text/css" />
+    <script src="../assets/js/jquery.min.js" ></script>
+    <script src="../assets/js/jquery.colorbox-min.js" ></script>
+    <script>
+      $(document).ready(function(){
+         $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+      });
+    </script>
+</head>
+<body>
+<div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
+<div class="">
+<h1>Using CSS with the speedata Publisher</h1>
+
+<p><em>Remark: The support of CSS was introduced in version 2.2. At that time, it is more a proof-of-concept than a full implementation. The interface might change in the future. When in doubt, just ask.</em></p>
+
+<h2>Loading a stylesheet and declaring CSS rules</h2>
+
+<p>CSS Stylesheets are defined with the command <code>Stylesheet</code>:</p>
+
+<pre><code>&lt;Stylesheet filename=&quot;rules.css&quot;/&gt;
+</code></pre>
+
+<p>or</p>
+
+<pre><code>&lt;Stylesheet&gt;
+  td {
+    vertical-align: top ;
+  }
+&lt;/Stylesheet&gt;
+</code></pre>
+
+<p>With these rules, some of the XML elements in the layout stylesheet (currently <code>Box</code>, <code>Frame</code>, <code>Paragraph</code>, <code>Tablerule</code>, <code>Td</code>) can be styled. As it is common with CSS, you can set the properties with the class name, the id and the command name.</p>
+
+<p>For this table</p>
+
+<pre><code>&lt;ObjektAusgeben&gt;
+  &lt;Tabelle&gt;
+    &lt;Tr minhöhe=&quot;4&quot;&gt;
+      &lt;Td class=&quot;myclass&quot; id=&quot;myid&quot;&gt;&lt;Absatz&gt;&lt;Wert&gt;Hallo Welt&lt;/Wert&gt;&lt;/Absatz&gt;&lt;/Td&gt;
+    &lt;/Tr&gt;
+  &lt;/Tabelle&gt;
+&lt;/ObjektAusgeben&gt;
+</code></pre>
+
+<p>each of the following CSS declarations have the same effect:</p>
+
+<pre><code>#myid {
+  vertical-align: top ;
+}
+</code></pre>
+
+<pre><code>.myclass {
+  vertical-align: top ;
+}
+</code></pre>
+
+<p>und</p>
+
+<pre><code>td {
+  vertical-align: top ;
+}
+</code></pre>
+
+<p>The mapping of the command names for the CSS rules and the layout rules are documented in the reference manual.</p>
+
+</div>
+
+
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
+Version: 2.1.37 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/css.html">German</a>
+
+</body>
+</html>

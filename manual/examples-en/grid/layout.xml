@@ -3,11 +3,11 @@
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
   <Options
-    show-grid="yes" 
-    show-gridallocation="no" 
-    mainlanguage="Englisch (Great Britan)"/>
-  
-  
+    show-grid="yes"
+    show-gridallocation="no"
+    mainlanguage="English (Great Britan)"/>
+
+
   <LoadFontfile name="WarnockPro-Regular" filename="WarnockPro-Regular.otf" marginprotrusion="60"/>
   <DefineFontfamily name="Title" fontsize="14" leading="16">
     <Regular fontface="WarnockPro-Regular"/>
@@ -18,21 +18,21 @@
 
   <DefineTextformat name="text" orphan="yes"/>
   <DefineTextformat name="Title" margin-top="3pt" orphan="yes"/>
-  
+
   <SetGrid width="5mm" height="12pt"/>
   <Pageformat width="125mm" height="145mm"/>
-  
+
   <Pagetype name="text" test="true()">
     <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
     <PositioningArea name="text">
       <PositioningFrame width="10" height="30" row="1" column="1"/>
       <PositioningFrame width="10" height="30" row="1" column="12"/>
     </PositioningArea>
-  </Pagetype>  
+  </Pagetype>
 
   <DefineColor name="gray" value="#D1FEE7"/>
   <DefineColor name="white" value="#FFF"/>
-  
+
   <Record element="data">
     <PlaceObject row="10" column="12" valign="bottom">
       <Image file="tree.pdf" width="10"/>

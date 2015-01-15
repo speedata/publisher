@@ -1,10 +1,11 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <link rel="stylesheet" href="../assets/css/normal.css" type="text/css"><script src="../assets/js/jquery.min.js" type="text/javascript"></script><script src="../assets/js/jquery.syntax.min.js" type="text/javascript"></script><script type="text/javascript">
-               // This function is executed when the page has finished loading.
+               
              jQuery(function($) {
-             // This function highlights (by default) pre and code tags which are annotated correctly.
+             
              $.syntax();
              });
             </script><title>DefineTextformat</title>
@@ -13,258 +14,99 @@
       <div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
       <div id="elementdesc">
          <h1>Elementname: <code class="syntax xml">DefineTextformat</code></h1>
+         
          <h2>Description</h2>
-         <p>Define text formatting instructions. A textformat is used to align and indent text
-            and create margins and rules before and after the text.
-         </p>
+         <p><p>Define text formatting instructions. A textformat is used to align and indent text and create margins and rules before and after the text.</p></p>
          <div class="hangingindent">
-            <p>Allowed attributes: <span class="tt"><a href="#alignment">alignment</a></span>, <span class="tt"><a href="#border-bottom">border-bottom</a></span>, <span class="tt"><a href="#border-top">border-top</a></span>, <span class="tt"><a href="#break-below">break-below</a></span>, <span class="tt"><a href="#hyphenate">hyphenate</a></span>, <span class="tt"><a href="#indentation">indentation</a></span>, <span class="tt"><a href="#margin-bottom">margin-bottom</a></span>, <span class="tt"><a href="#margin-top">margin-top</a></span>, <span class="tt"><a href="#name">name</a></span>, <span class="tt"><a href="#orphan">orphan</a></span>, <span class="tt"><a href="#padding-top">padding-top</a></span>, <span class="tt"><a href="#rows">rows</a></span>, <span class="tt"><a href="#widow">widow</a></span></p>
+            <p>Allowed attributes: <a href="#%!s(func() string=0x413f330)"><span class="tt">alignment</span></a>, <a href="#%!s(func() string=0x413f330)"><span class="tt">border-bottom</span></a>, <a href="#%!s(func() string=0x413f330)"><span class="tt">border-top</span></a>, <a href="#%!s(func() string=0x413f330)"><span class="tt">break-below</span></a>, <a href="#%!s(func() string=0x413f330)"><span class="tt">hyphenate</span></a>, <a href="#%!s(func() string=0x413f330)"><span class="tt">hyphenchar</span></a>, <a href="#%!s(func() string=0x413f330)"><span class="tt">indentation</span></a>, <a href="#%!s(func() string=0x413f330)"><span class="tt">margin-bottom</span></a>, <a href="#%!s(func() string=0x413f330)"><span class="tt">margin-top</span></a>, <a href="#%!s(func() string=0x413f330)"><span class="tt">name</span></a>, <a href="#%!s(func() string=0x413f330)"><span class="tt">orphan</span></a>, <a href="#%!s(func() string=0x413f330)"><span class="tt">padding-top</span></a>, <a href="#%!s(func() string=0x413f330)"><span class="tt">rows</span></a>, <a href="#%!s(func() string=0x413f330)"><span class="tt">widow</span></a></p>
          </div>
          <div class="hangingindent">
             <p>Child elements: (none)</p>
          </div>
          <div class="hangingindent">
-            <p>Parent elements: </p>
+            <p>Parent elements: <a href="include.html">Include</a>, <a href="layout.html">Layout</a></p>
          </div>
          <h3>Attributes</h3>
-         <dl>
-            <dt><a name=""></a><span class="tt">alignment</span> (optional)
-            </dt>
-            <dd>
-               
-               <p>Determines the formatting of the text.</p>
-               
-               <table class="attributechoice">
-                  <tr>
-                     <td>
-                        <p>justified:</p>
-                     </td>
-                     <td>
-                        
-                        <p>Textblock has a rectangular shape.</p>
-                        
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>
-                        <p>leftaligned:</p>
-                     </td>
-                     <td>
-                        
-                        <p>The text is ragged at the right margin.</p>
-                        
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>
-                        <p>rightaligned:</p>
-                     </td>
-                     <td>
-                        
-                        <p>The text is ragged right at the left margin.</p>
-                        
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>
-                        <p>centered:</p>
-                     </td>
-                     <td>
-                        
-                        <p>The text is ragged at the left and the right margin.</p>
-                        
-                     </td>
-                  </tr>
-               </table>
-            </dd>
-            <dt><a name="border-bottom"></a><span class="tt">border-bottom</span> (Length (mm,in,cm,pt), optional)
-            </dt>
-            <dd>
-               
-               <p>The thickness of the rule below the text.</p>
-               
-            </dd>
-            <dt><a name="border-top"></a><span class="tt">border-top</span> (Length (mm,in,cm,pt), optional)
-            </dt>
-            <dd>
-               
-               <p>The thickness of the rule above the text.</p>
-               
-            </dd>
-            <dt><a name=""></a><span class="tt">break-below</span> (optional)
-            </dt>
-            <dd>
-               
-               <p>(Dis-)Allow break below the text.</p>
-               
-               <table class="attributechoice">
-                  <tr>
-                     <td>
-                        <p>yes:</p>
-                     </td>
-                     <td>
-                        
-                        <p>Allow a break below this text (default).</p>
-                        
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>
-                        <p>no:</p>
-                     </td>
-                     <td>
-                        
-                        <p>Prevent a page break below this text.</p>
-                        
-                     </td>
-                  </tr>
-               </table>
-            </dd>
-            <dt><a name=""></a><span class="tt">hyphenate</span> (optional)
-            </dt>
-            <dd>
-               
-               <p>Enable or disable hyphenation (default: on).</p>
-               
-               <table class="attributechoice">
-                  <tr>
-                     <td>
-                        <p>yes:</p>
-                     </td>
-                     <td>
-                        
-                        <p>Enable hyphenation (default).</p>
-                        
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>
-                        <p>no:</p>
-                     </td>
-                     <td>
-                        
-                        <p>Disable hyphenation.</p>
-                        
-                     </td>
-                  </tr>
-               </table>
-            </dd>
-            <dt><a name="indentation"></a><span class="tt">indentation</span> (Length (mm,in,cm,pt), optional)
-            </dt>
-            <dd>
-               
-               <p>The amount of indentation.</p>
-               
-            </dd>
-            <dt><a name="margin-bottom"></a><span class="tt">margin-bottom</span> (Length (mm,in,cm,pt), optional)
-            </dt>
-            <dd>
-               
-               <p>Distance between the bottom rule and the text of the next paragraph.</p>
-               
-            </dd>
-            <dt><a name="margin-top"></a><span class="tt">margin-top</span> (Length (mm,in,cm,pt), optional)
-            </dt>
-            <dd>
-               
-               <p>Distance between the top rule and the text of the previous paragraph.</p>
-               
-            </dd>
-            <dt><a name="name"></a><span class="tt">name</span> (string)
-            </dt>
-            <dd>
-               
-               <p>Name of the textformat that is used later in the layout.</p>
-               
-            </dd>
-            <dt><a name=""></a><span class="tt">orphan</span> (optional)
-            </dt>
-            <dd>
-               
-               <p>If no, prohibit orphans (first line of paragraph is on the previous page). Default:
-                  no.
-               </p>
-               
-               <table class="attributechoice">
-                  <tr>
-                     <td>
-                        <p>yes:</p>
-                     </td>
-                     <td>
-                        
-                        <p>Allow orphans.</p>
-                        
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>
-                        <p>no:</p>
-                     </td>
-                     <td>
-                        
-                        <p>Prevent orphans (default).</p>
-                        
-                     </td>
-                  </tr>
-               </table>
-            </dd>
-            <dt><a name="padding-top"></a><span class="tt">padding-top</span> (Length (mm,in,cm,pt), optional)
-            </dt>
-            <dd>
-               
-               <p>Distance between the top of the text and the top rule.</p>
-               
-            </dd>
-            <dt><a name="rows"></a><span class="tt">rows</span> (number, optional)
-            </dt>
-            <dd>
-               
-               <p>The number of rows with indentation given in the attribute <span class="tt">indentation</span>. If the number is negative, this determiens the number of rows that are not indented.
-               </p>
-               
-            </dd>
-            <dt><a name=""></a><span class="tt">widow</span> (optional)
-            </dt>
-            <dd>
-               
-               <p>If no, prohibit widows (last line of paragraph is on the next page). Default: no.</p>
-               
-               <table class="attributechoice">
-                  <tr>
-                     <td>
-                        <p>yes:</p>
-                     </td>
-                     <td>
-                        
-                        <p>Allow widows.</p>
-                        
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>
-                        <p>no:</p>
-                     </td>
-                     <td>
-                        
-                        <p>Prevent widows (default).</p>
-                        
-                     </td>
-                  </tr>
-               </table>
-            </dd>
-         </dl>
-         <h3>Remarks</h3>
+         <dl><dt><a name="alignment"></a><span class="tt">alignment</span> (optional)</dt><dd><p>Determines the formatting of the text.</p>
+<table class="attributechoice">
+<tr><td><p>
+justified:
+</p></td><td>
+<p>Textblock has a rectangular shape.</p>
+</td></tr>
+<tr><td><p>
+leftaligned:
+</p></td><td>
+<p>The text is ragged at the right margin.</p>
+</td></tr>
+<tr><td><p>
+rightaligned:
+</p></td><td>
+<p>The text is ragged right at the left margin.</p>
+</td></tr>
+<tr><td><p>
+centered:
+</p></td><td>
+<p>The text is ragged at the left and the right margin.</p>
+</td></tr>
+</table></dd><dt><a name="border-bottom"></a><span class="tt">border-bottom</span> (length, optional)</dt><dd><p>The thickness of the rule below the text.</p></dd><dt><a name="border-top"></a><span class="tt">border-top</span> (length, optional)</dt><dd><p>The thickness of the rule above the text.</p></dd><dt><a name="break-below"></a><span class="tt">break-below</span> (optional)</dt><dd><p>(Dis-)Allow break below the text.</p>
+<table class="attributechoice">
+<tr><td><p>
+yes:
+</p></td><td>
+<p>Allow a break below this text (default).</p>
+</td></tr>
+<tr><td><p>
+no:
+</p></td><td>
+<p>Prevent a page break below this text.</p>
+</td></tr>
+</table></dd><dt><a name="hyphenate"></a><span class="tt">hyphenate</span> (optional)</dt><dd><p>Enable or disable hyphenation (default: on).</p>
+<table class="attributechoice">
+<tr><td><p>
+yes:
+</p></td><td>
+<p>Enable hyphenation (default).</p>
+</td></tr>
+<tr><td><p>
+no:
+</p></td><td>
+<p>Disable hyphenation.</p>
+</td></tr>
+</table></dd><dt><a name="hyphenchar"></a><span class="tt">hyphenchar</span> (text, optional)</dt><dd><p>The character used for hyphenation (default: -)</p></dd><dt><a name="indentation"></a><span class="tt">indentation</span> (length, optional)</dt><dd><p>The amount of indentation.</p></dd><dt><a name="margin-bottom"></a><span class="tt">margin-bottom</span> (length, optional)</dt><dd><p>Distance between the bottom rule and the text of the next paragraph.</p></dd><dt><a name="margin-top"></a><span class="tt">margin-top</span> (length, optional)</dt><dd><p>Distance between the top rule and the text of the previous paragraph.</p></dd><dt><a name="name"></a><span class="tt">name</span> (text)</dt><dd><p>Name of the textformat that is used later in the layout.</p></dd><dt><a name="orphan"></a><span class="tt">orphan</span> (optional)</dt><dd><p>If no, prohibit orphans (first line of paragraph is on the previous page). Default: no.</p>
+<table class="attributechoice">
+<tr><td><p>
+yes:
+</p></td><td>
+<p>Allow orphans.</p>
+</td></tr>
+<tr><td><p>
+no:
+</p></td><td>
+<p>Prevent orphans (default).</p>
+</td></tr>
+</table></dd><dt><a name="padding-top"></a><span class="tt">padding-top</span> (length, optional)</dt><dd><p>Distance between the top of the text and the top rule.</p></dd><dt><a name="rows"></a><span class="tt">rows</span> (number, optional)</dt><dd><p>The number of rows with indentation given in the attribute <tt>indentation</tt>. If the number is negative, this determiens the number of rows that are not indented.</p></dd><dt><a name="widow"></a><span class="tt">widow</span> (optional)</dt><dd><p>If no, prohibit widows (last line of paragraph is on the next page). Default: no.</p>
+<table class="attributechoice">
+<tr><td><p>
+yes:
+</p></td><td>
+<p>Allow widows.</p>
+</td></tr>
+<tr><td><p>
+no:
+</p></td><td>
+<p>Prevent widows (default).</p>
+</td></tr>
+</table></dd></dl>
          
-         <p>The textformats <span class="tt">text</span>, <span class="tt">centered</span>, <span class="tt">left</span> and <span class="tt">right</span> are predefined. They stand for justified, centered, left aligned and right aligned
-            text.
-         </p>
-         
-         <h2>Example</h2>
-         <pre class="syntax xml">&lt;DefineTextformat name="text with indentation" alignment="justified" indentation="1cm"/&gt;
+         <h3>Remarks</h3><p>The textformats <tt>text</tt>, <tt>centered</tt>, <tt>left</tt> and <tt>right</tt> are predefined. They stand for justified, centered, left aligned and right aligned text.</p>
 
-&lt;Record element="..."&gt;
+         <h2>Example</h2>
+         <pre class="syntax xml">&lt;DefineTextformat name=&#34;text with indentation&#34; alignment=&#34;justified&#34; indentation=&#34;1cm&#34;/&gt;
+
+&lt;Record element=&#34;...&#34;&gt;
   &lt;PlaceObject&gt;
-    &lt;Textblock width="10" textformat="text with indentation"&gt;
+    &lt;Textblock width=&#34;10&#34; textformat=&#34;text with indentation&#34;&gt;
     &lt;Paragraph&gt;
       &lt;Value&gt;Text ...&lt;/Value&gt;
     &lt;/Paragraph&gt;
@@ -272,107 +114,17 @@
   &lt;/PlaceObject&gt;
 &lt;/Record&gt;
 </pre>
-         <h2>See also</h2>
-         <a href="textblock.html">Textblock</a>
-         <a href="paragraph.html">Paragraph</a>
          
+          <h2>See also</h2>
+      <a href="textblock.html">Textblock</a>,
+      <a href="paragraph.html">Paragraph</a>
+    
       </div>
       <div id="elementref">
          <h1>Commands</h1>
-         <ul>
-            <li><a href="a.html">A</a></li>
-            <li><a href="action.html">Action</a></li>
-            <li><a href="addtolist.html">AddToList</a></li>
-            <li><a href="atpagecreation.html">AtPageCreation</a></li>
-            <li><a href="atpageshipout.html">AtPageShipout</a></li>
-            <li><a href="attribute.html">Attribute</a></li>
-            <li><a href="b.html">B</a></li>
-            <li><a href="barcode.html">Barcode</a></li>
-            <li><a href="bold.html">Bold</a></li>
-            <li><a href="bolditalic.html">BoldItalic</a></li>
-            <li><a href="bookmark.html">Bookmark</a></li>
-            <li><a href="box.html">Box</a></li>
-            <li><a href="br.html">Br</a></li>
-            <li><a href="case.html">Case</a></li>
-            <li><a href="color.html">Color</a></li>
-            <li><a href="column.html">Column</a></li>
-            <li><a href="columns.html">Columns</a></li>
-            <li><a href="contents.html">Contents</a></li>
-            <li><a href="copy-of.html">Copy-of</a></li>
-            <li><a href="definecolor.html">DefineColor</a></li>
-            <li><a href="definefontfamily.html">DefineFontfamily</a></li>
-            <li><a href="definetextformat.html">DefineTextformat</a></li>
-            <li><a href="element.html">Element</a></li>
-            <li><a href="emptyline.html">EmptyLine</a></li>
-            <li><a href="fontface.html">Fontface</a></li>
-            <li><a href="forall.html">ForAll</a></li>
-            <li><a href="frame.html">Frame</a></li>
-            <li><a href="grid.html">Grid</a></li>
-            <li><a href="group.html">Group</a></li>
-            <li><a href="hspace.html">HSpace</a></li>
-            <li><a href="hyphenation.html">Hyphenation</a></li>
-            <li><a href="i.html">I</a></li>
-            <li><a href="image.html">Image</a></li>
-            <li><a href="include.html">Include</a></li>
-            <li><a href="insertpages.html">InsertPages</a></li>
-            <li><a href="italic.html">Italic</a></li>
-            <li><a href="layout.html">Layout</a></li>
-            <li><a href="li.html">Li</a></li>
-            <li><a href="loaddataset.html">LoadDataset</a></li>
-            <li><a href="loadfontfile.html">LoadFontfile</a></li>
-            <li><a href="loop.html">Loop</a></li>
-            <li><a href="makeindex.html">Makeindex</a></li>
-            <li><a href="margin.html">Margin</a></li>
-            <li><a href="mark.html">Mark</a></li>
-            <li><a href="message.html">Message</a></li>
-            <li><a href="newpage.html">NewPage</a></li>
-            <li><a href="nextframe.html">NextFrame</a></li>
-            <li><a href="nextrow.html">NextRow</a></li>
-            <li><a href="ol.html">Ol</a></li>
-            <li><a href="options.html">Options</a></li>
-            <li><a href="otherwise.html">Otherwise</a></li>
-            <li><a href="output.html">Output</a></li>
-            <li><a href="pageformat.html">Pageformat</a></li>
-            <li><a href="pagetype.html">Pagetype</a></li>
-            <li><a href="paragraph.html">Paragraph</a></li>
-            <li><a href="placeobject.html">PlaceObject</a></li>
-            <li><a href="positioningarea.html">PositioningArea</a></li>
-            <li><a href="positioningframe.html">PositioningFrame</a></li>
-            <li><a href="processnode.html">ProcessNode</a></li>
-            <li><a href="record.html">Record</a></li>
-            <li><a href="regular.html">Regular</a></li>
-            <li><a href="rule.html">Rule</a></li>
-            <li><a href="savedataset.html">SaveDataset</a></li>
-            <li><a href="savepages.html">SavePages</a></li>
-            <li><a href="sequence.html">Sequence</a></li>
-            <li><a href="setgrid.html">SetGrid</a></li>
-            <li><a href="setvariable.html">SetVariable</a></li>
-            <li><a href="sortsequence.html">SortSequence</a></li>
-            <li><a href="stylesheet.html">Stylesheet</a></li>
-            <li><a href="sub.html">Sub</a></li>
-            <li><a href="sup.html">Sup</a></li>
-            <li><a href="switch.html">Switch</a></li>
-            <li><a href="table.html">Table</a></li>
-            <li><a href="tablefoot.html">Tablefoot</a></li>
-            <li><a href="tablehead.html">Tablehead</a></li>
-            <li><a href="tablerule.html">Tablerule</a></li>
-            <li><a href="td.html">Td</a></li>
-            <li><a href="text.html">Text</a></li>
-            <li><a href="textblock.html">Textblock</a></li>
-            <li><a href="tr.html">Tr</a></li>
-            <li><a href="transformation.html">Transformation</a></li>
-            <li><a href="u.html">U</a></li>
-            <li><a href="url.html">URL</a></li>
-            <li><a href="ul.html">Ul</a></li>
-            <li><a href="until.html">Until</a></li>
-            <li><a href="vspace.html">VSpace</a></li>
-            <li><a href="value.html">Value</a></li>
-            <li><a href="while.html">While</a></li>
-         </ul>
+         <ul><li><a title="Insert Hyperlink to a URL." href="a.html">A</a></li><li><a title="Associates an action with a text. Once the text is placed on the page, the associated action will be executed. The action can be compared to an invisible character. When the publisher outputs the character, the corresponding instructions will be run." href="action.html">Action</a></li><li><a title="Can be used inside of Action. Not tested properly." href="addtolist.html">AddToList</a></li><li><a title="The contents of the element AtPageCreation are executed the first time the page is accessed." href="atpagecreation.html">AtPageCreation</a></li><li><a title="The enclosed instructions will be executed when the page is placed into the PDF file." href="atpageshipout.html">AtPageShipout</a></li><li><a title="Create a data structure that can be saved to the harddrive with SaveDataset." href="attribute.html">Attribute</a></li><li><a title="Switch to fontface »bold«" href="b.html">B</a></li><li><a title="Print a 1d or 2d barcode. To be used in PlaceObject." href="barcode.html">Barcode</a></li><li><a title="Name of the font face that should be used when switching to »bold«." href="bold.html">Bold</a></li><li><a title="Name of the font face that should be used when switching to »bold italic«. " href="bolditalic.html">BoldItalic</a></li><li><a title="Create a bookmark for the PDF viewer (e.g. Adobe Reader). When the user clicks on a bookmark, the PDF viewer jumps to that place in the document." href="bookmark.html">Bookmark</a></li><li><a title="Create a rectangular colored area. The area must fit the grid cells." href="box.html">Box</a></li><li><a title="Insert a newline" href="br.html">Br</a></li><li><a title="Part of a Switch construct. All cases up to the first case which evaluates to »true« will be executed. If no cases match and there is a Otherwise, this will be executed instead." href="case.html">Case</a></li><li><a title="Switch to another text color" href="color.html">Color</a></li><li><a title="Set the properties of a column in the table." href="column.html">Column</a></li><li><a title="Set the widths and other properties of the columns in a table." href="columns.html">Columns</a></li><li><a title="Marks the contents of a Group." href="contents.html">Contents</a></li><li><a title="Replace this element by the copy of the selection as an element structure. You can use it to construct more complex data structures." href="copy-of.html">Copy-of</a></li><li><a title="Colors defined with DefineColors can be referenced later by their name." href="definecolor.html">DefineColor</a></li><li><a title="Defines a font family consisting of the shapes »regular», »bold«, »bold italic« and »italic«. To be used in Paragraph, Textblock, Fontface and Table with the attribute fontface." href="definefontfamily.html">DefineFontfamily</a></li><li><a title="Define text formatting instructions. A textformat is used to align and indent text and create margins and rules before and after the text." href="definetextformat.html">DefineTextformat</a></li><li><a title="Create a data structure that can be used to save on the harddrive between consecutive runs (with SaveDataset)." href="element.html">Element</a></li><li><a title="Create an empty row an set the cursor to the next row." href="emptyline.html">EmptyLine</a></li><li><a title="Switch to another font family." href="fontface.html">Fontface</a></li><li><a title="Executes the given commands for all elements in the data XML file that match the contents of the attribute select." href="forall.html">ForAll</a></li><li><a title="Manipulate an object&#39;s appearance by drawing a frame. Can be used as a clipping path." href="frame.html">Frame</a></li><li><a title="Override the grid settings from SetGrid." href="grid.html">Grid</a></li><li><a title="Create a virtual page that behaves like a real page but is not placed into the PDF." href="group.html">Group</a></li><li><a title="Create a horizontal stretching space. The space will take up no width as a minimum but is able to stretch up to infinity. Useful in single line contexts.In normal text there will surprising little stretching involved due to the global paragraph optimization alorithm. You will see that all other word spaces will have the minimum width and the excessive whitespace is accumulated at the strechable space." href="hspace.html">HSpace</a></li><li><a title="Suggest a hyphenation. This hyphenation will be used in the running text. See the example." href="hyphenation.html">Hyphenation</a></li><li><a title="Switch to italic text." href="i.html">I</a></li><li><a title="Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg)." href="image.html">Image</a></li><li><a title="Toplevel element for included layout files." href="include.html">Include</a></li><li><a title="Insert previously saved pages." href="insertpages.html">InsertPages</a></li><li><a title="The font face to be used when the user switches to italic." href="italic.html">Italic</a></li><li><a title="This command is the root element in the Layout instructions." href="layout.html">Layout</a></li><li><a title="List item in an ordered or unordered list." href="li.html">Li</a></li><li><a title="Load an XML file previously written by SaveDataset. The regular data processing is interrupted and the contents of the data file is taken as a data source. If the file does not exist, the call to LoadDataset is ignored. " href="loaddataset.html">LoadDataset</a></li><li><a title="Load a font file (.otf, .ttf, .pfb) and associate it with an internal name." href="loadfontfile.html">LoadFontfile</a></li><li><a title="Repeat the contents of this element several times." href="loop.html">Loop</a></li><li><a title="Sort and split a list of elements to make an index." href="makeindex.html">Makeindex</a></li><li><a title="Set the margin of the document or master page." href="margin.html">Margin</a></li><li><a title="Sets an invisible mark into the output. This is helpful when you want to know on which page the mark is placed on." href="mark.html">Mark</a></li><li><a title="Writes a message onto the console and to the protocol file." href="message.html">Message</a></li><li><a title="Finishes the current page and creates a new one (only if new material for the page is available)." href="newpage.html">NewPage</a></li><li><a title="Switch to the next free frame of a positioning area." href="nextframe.html">NextFrame</a></li><li><a title="The virtual cursor is set on the next free row." href="nextrow.html">NextRow</a></li><li><a title="Create an ordered list, just like in HTML" href="ol.html">Ol</a></li><li><a title="Set publisher specific options" href="options.html">Options</a></li><li><a title="Default branch of a Switch command." href="otherwise.html">Otherwise</a></li><li><a title="Still exerimental. This command is similar to PlaceObject and is currently limited to output text which can be broken across positioning frames." href="output.html">Output</a></li><li><a title="The size of the PDF pages. Defaults to 210mm width and 297mm height (A4)" href="pageformat.html">Pageformat</a></li><li><a title="Define a master page. A master page is chosen depending on the criterium given with the attribute »test«." href="pagetype.html">Pagetype</a></li><li><a title="Insert a paragraph of text. The width of the paragraph is inherited from the surrounding element." href="paragraph.html">Paragraph</a></li><li><a title="Outputs a rectangular object (image, table, box or textblock)." href="placeobject.html">PlaceObject</a></li><li><a title="Describes an area which contains one or more frames. Elements can be placed within these frames." href="positioningarea.html">PositioningArea</a></li><li><a title="Defines a rectangular area for objects." href="positioningframe.html">PositioningFrame</a></li><li><a title="Executes all given nodes. The elements, that are to be executed, are given with the attribute selection." href="processnode.html">ProcessNode</a></li><li><a title="Contains the instructions when the publisher processes the element in the data file with the given name. The record matching the root element will be called by the software automatically, all further data handling must be done by the user." href="record.html">Record</a></li><li><a title="The (symbolic) name of the fontface for regular text, i.e. without bold or italic." href="regular.html">Regular</a></li><li><a title="Draw a horizontal or vertical rule in the grid." href="rule.html">Rule</a></li><li><a title="Saves an element/attribute structure to be used in the next publisher run. The contents must have a tree structure." href="savedataset.html">SaveDataset</a></li><li><a title="Everything enclosed in SavePages is saved internally and not placed into the PDF. Useful if the output migth be discarded." href="savepages.html">SavePages</a></li><li><a title="Return a selection of data. Probably not useful anymore as a separate command. Don&#39;t use this anymore!" href="sequence.html">Sequence</a></li><li><a title="Set size of the grid cells. All objects are placed in the grid." href="setgrid.html">SetGrid</a></li><li><a title="Associates a value with a variable name. The value can be a simple value or a more complex one consisting of several elements." href="setvariable.html">SetVariable</a></li><li><a title="Sort a list." href="sortsequence.html">SortSequence</a></li><li><a title="Load a CSS file or define CSS rules" href="stylesheet.html">Stylesheet</a></li><li><a title="Subscript text." href="sub.html">Sub</a></li><li><a title="Superscript text." href="sup.html">Sup</a></li><li><a title="Create an if-then-else construct. The test attribute of each Case commands is evaluated until it yields true. The contents of the Case gets executed. If no test suceeds, the (optional) Otherwise gets executed." href="switch.html">Switch</a></li><li><a title="Create a table that is similar to the HTML table model." href="table.html">Table</a></li><li><a title="Create a repeating table footer." href="tablefoot.html">Tablefoot</a></li><li><a title="Create a repeating table head." href="tablehead.html">Tablehead</a></li><li><a title="Insert a horizontal rule in a table" href="tablerule.html">Tablerule</a></li><li><a title="Td wraps a table row, just like HTML." href="td.html">Td</a></li><li><a title="Create a text that can be broken across text containers or pages. To be used with Output" href="text.html">Text</a></li><li><a title="Create a rectangular piece of text." href="textblock.html">Textblock</a></li><li><a title="Tablerow" href="tr.html">Tr</a></li><li><a title="Manipulate an object&#39;s appearance by applying a matrix. See the PDF reference 4.2.2 Common Transformations and following." href="transformation.html">Transformation</a></li><li><a title="Underline text." href="u.html">U</a></li><li><a title="enables a better breaking of URLs." href="url.html">URL</a></li><li><a title="Create an unordered list, just like in HTML" href="ul.html">Ul</a></li><li><a title="Create a loop. All child elements are executed repeatedly until the given condition is true." href="until.html">Until</a></li><li><a title="Create a vertically stretching space. The space has a minimum height of 0 but is able to stretch up to infinity. Useful in table cells." href="vspace.html">VSpace</a></li><li><a title="Contains a text value that is passed to the surrounding element." href="value.html">Value</a></li><li><a title="Create a loop. All child elements are executed, as long as the condition in the test attribute evaluates to true." href="while.html">While</a></li></ul>
       </div>
-      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>Version: 2.1.27 |
-      <a href="../index.html">Start page</a>
-      |
-      <a href="../commands-en/layout.html">Command reference</a> |
-      Other languages: <a href="../commands-de/definetextformat.html">German</a></body>
+      <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%"></div>
+      Version: 2.1.37 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Command reference</a> | Other language: <a href="../commands-de/definetextformat.html">German</a>
+     </body>
 </html>

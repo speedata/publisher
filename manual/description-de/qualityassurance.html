@@ -79,8 +79,6 @@ Verzeichnis sieht nun so aus:</p>
 geben und als Ausgabe erscheinen:</p>
 
 <pre><code>$ sp compare beispiel/
-Run comparison in directory beispiel
-OK
 Total run time: 1.62956s
 </code></pre>
 
@@ -88,8 +86,9 @@ Total run time: 1.62956s
 des Layouts hervorrufen würde, wäre die Ausgabe z.B. folgende:</p>
 
 <pre><code>$ sp compare beispiel/
-Run comparison in directory beispiel
-Comparison failed. Bad pages are: [1]
+/pfad/zum/verzeichnis/beispiel
+Comparison failed. Bad pages are: [0]
+Max delta is 2162.760009765625
 Total run time: 862.898ms
 </code></pre>
 
@@ -146,16 +145,6 @@ wie folgt aufgebaut ist:</p>
 durchlaufen und überprüft. Im besten Fall ist die Ausgabe:</p>
 
 <pre><code>$ sp compare qa/
-Run comparison in directory beispiel1
-OK
-Run comparison in directory beispiel2
-OK
-Run comparison in directory beispiel3
-OK
-Run comparison in directory beispiel4
-OK
-Run comparison in directory beispiel5
-OK
 Total run time: 4.541458s
 </code></pre>
 
@@ -163,7 +152,7 @@ Total run time: 4.541458s
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.1.27 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/qualityassurance.html">Englisch</a>
+Version: 2.1.37 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/qualityassurance.html">Englisch</a>
 
 </body>
 </html>

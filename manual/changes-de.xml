@@ -1,13 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (de)</title>
   <id>http://www.speedata.de</id>
-  <updated>2014-11-06T22:47:53+01:00</updated>
+  <updated>2015-01-15T14:59:19+01:00</updated>
   <subtitle>Neue Versionen des Publishers zum Download und Liste der Änderungen</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.2.36</title>
+    <updated>2015-01-15T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-01-15:</id>
+    <content type="html">Alle CSS Level 3 Farben hinzugefügt (siehe http://www.w3.org/TR/css3-color/ für eine Liste)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.35</title>
+    <updated>2014-12-19T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-12-19:</id>
+    <content type="html">Lesezeichen auf allen Ebenen erlauben (experimentell)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.34</title>
+    <updated>2014-12-18T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-12-18:</id>
+    <content type="html">Neue Funktion sd:attr(), um auf Attribute mit dynamischen Namen zuzugreifen.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.32</title>
+    <updated>2014-12-01T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-12-01:</id>
+    <content type="html">Der XML-Parser beachtet --extra-dir bei XInclude</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.28</title>
+    <updated>2014-11-11T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2014-11-11:</id>
+    <content type="html">Trennzeichen kann in Textformat festgelegt werden.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.1.27</title>
     <updated>2014-11-06T00:00:00Z</updated>

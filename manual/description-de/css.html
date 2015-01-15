@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSS</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="alternate" type="application/atom+xml"  title="Liste der Änderungen speedata Publisher (de)"  href="../changes-de.xml" />
+    <link rel="stylesheet" href="../assets/css/normal.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/colorbox.css" type="text/css" />
+    <script src="../assets/js/jquery.min.js" ></script>
+    <script src="../assets/js/jquery.colorbox-min.js" ></script>
+    <script>
+      $(document).ready(function(){
+         $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+      });
+    </script>
+</head>
+<body>
+<div id="logo"><a href="../index-de.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
+<div class="">
+<h1>CSS im speedata Publisher</h1>
+
+<p><em>Hinweis: Die Unterstützung von CSS wurde in Version 2.2 eingeführt. Es handelt sich zu dem Zeitpunkt mehr um einen Proof-of-Concept als um eine vollständige Implementierung. Möglicherweise wird sich die Syntax oder die Schnittstelle zu den Befehlen in zukünftigen Versionen verändern! Bitte bei Bedarf anfragen.</em></p>
+
+<h2>Laden eines Stylesheets bzw. deklarieren der CSS-Regeln</h2>
+
+<p>Im Publisher kann mit der Stylesheet-Anweisung eine CSS-Datei geladen werden bzw. innerhalb einer Stylesheet-Anweisung können CSS-Regeln deklariert werden:</p>
+
+<pre><code>&lt;Stylesheet dateiname=&quot;regeln.css&quot;/&gt;
+</code></pre>
+
+<p>oder</p>
+
+<pre><code>&lt;Stylesheet&gt;
+  td {
+    vertical-align: top ;
+  }
+&lt;/Stylesheet&gt;
+</code></pre>
+
+<p>Mit diesen Regeln lassen sich einige der Befehle (derzeit <code>Absatz</code>, <code>Box</code>,
+<code>Rahmen</code>, <code>Tlinie</code>, <code>Td</code>) im Aussehen anpassen. Wie bei CSS üblich können die
+Eigenschaften über die Id, Klasse und über den Befehlsnamen angesprochen
+werden.</p>
+
+<p>So bewirken für diese Tabelle:</p>
+
+<pre><code>&lt;ObjektAusgeben&gt;
+  &lt;Tabelle&gt;
+    &lt;Tr minhöhe=&quot;4&quot;&gt;
+      &lt;Td class=&quot;myclass&quot; id=&quot;myid&quot;&gt;&lt;Absatz&gt;&lt;Wert&gt;Hallo Welt&lt;/Wert&gt;&lt;/Absatz&gt;&lt;/Td&gt;
+    &lt;/Tr&gt;
+  &lt;/Tabelle&gt;
+&lt;/ObjektAusgeben&gt;
+</code></pre>
+
+<p>alle folgenden CSS-Anweisungen dasselbe</p>
+
+<pre><code>#myid {
+  vertical-align: top ;
+}
+</code></pre>
+
+<pre><code>.myclass {
+  vertical-align: top ;
+}
+</code></pre>
+
+<p>und</p>
+
+<pre><code>td {
+  vertical-align: top ;
+}
+</code></pre>
+
+<p>Die Zuordnung vom Befehlsnamen in den CSS-Anweisungen und im Layout-Regelwerk sind im Handbuch in der Befehlsreferenz dokumentiert.</p>
+
+</div>
+
+
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
+Version: 2.1.37 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/css.html">Englisch</a>
+
+</body>
+</html>
