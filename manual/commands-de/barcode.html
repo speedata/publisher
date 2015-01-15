@@ -27,7 +27,19 @@
             <p>Elternelemente: <a href="until.html">Bis</a>, <a href="case.html">Fall</a>, <a href="forall.html">FürAlle</a>, <a href="placeobject.html">ObjektAusgeben</a>, <a href="frame.html">Rahmen</a>, <a href="loop.html">Schleife</a>, <a href="while.html">Solange</a>, <a href="otherwise.html">Sonst</a>, <a href="td.html">Td</a>, <a href="transformation.html">Transformation</a></p>
          </div>
          <h3>Attribute</h3>
-         <dl><dt><a name="select"></a><span class="tt">auswahl</span> (<a href="../description-de/xpath.html">XPath Ausdruck</a>)</dt><dd><p>Wert, der als Strichcode kodiert werden soll.</p></dd><dt><a name="width"></a><span class="tt">breite</span> (Zahl oder Längenangabe, optional)</dt><dd><p>Breite des Strichcodes</p></dd><dt><a name="height"></a><span class="tt">höhe</span> (Zahl oder Längenangabe, optional)</dt><dd><p>Höhe des Strichcodes.</p></dd><dt><a name="fontface"></a><span class="tt">schriftart</span> (Text, optional)</dt><dd><p>Name der Schriftart des Textes, der ggf. unterhalb des Strichcodes ausgegeben wird. Nicht in allen Codes verwendet.</p></dd><dt><a name="type"></a><span class="tt">typ</span> ()</dt><dd><p>Typ des Strichcodes. Kann <tt>EAN13</tt>, <tt>Code128</tt> oder <tt>QRCode</tt> sein.</p>
+         <dl><dt><a name="select"></a><span class="tt">schriftart</span> (Text, optional)</dt><dd><p>Name der Schriftart des Textes, der ggf. unterhalb des Strichcodes ausgegeben wird. Nicht in allen Codes verwendet.</p></dd><dt><a name="height"></a><span class="tt">höhe</span> (Zahl oder Längenangabe, optional)</dt><dd><p>Höhe des Strichcodes.</p></dd><dt><a name="overshoot"></a><span class="tt">übersteigen</span> (Zahl, optional)</dt><dd><p>Der Faktor, um den die äußeren und der innere Balken die normalen Balken übersteigt. Nur anwendbar bei EAN13.</p></dd><dt><a name="select"></a><span class="tt">auswahl</span> (<a href="../description-de/xpath.html">XPath Ausdruck</a>)</dt><dd><p>Wert, der als Strichcode kodiert werden soll.</p></dd><dt><a name="showtext"></a><span class="tt">zeigetext</span> (optional)</dt><dd><p>Bestimmt, ob unterhalb des Barcodes der Text erscheint.</p>
+<table class="attributechoice">
+<tr><td><p>
+ja:
+</p></td><td>
+<p>Text unterhalb des Barcodes schreiben.</p>
+</td></tr>
+<tr><td><p>
+nein:
+</p></td><td>
+<p>Keinen Text anzeigen.</p>
+</td></tr>
+</table></dd><dt><a name="type"></a><span class="tt">typ</span> ()</dt><dd><p>Typ des Strichcodes. Kann <tt>EAN13</tt>, <tt>Code128</tt> oder <tt>QRCode</tt> sein.</p>
 <table class="attributechoice">
 <tr><td><p>
 QRCode:
@@ -44,19 +56,7 @@ EAN13:
 </p></td><td>
 <p>Erzeugt einen EAN13 Barcode mit genau 13 Ziffern.</p>
 </td></tr>
-</table></dd><dt><a name="showtext"></a><span class="tt">zeigetext</span> (optional)</dt><dd><p>Bestimmt, ob unterhalb des Barcodes der Text erscheint.</p>
-<table class="attributechoice">
-<tr><td><p>
-ja:
-</p></td><td>
-<p>Text unterhalb des Barcodes schreiben.</p>
-</td></tr>
-<tr><td><p>
-nein:
-</p></td><td>
-<p>Keinen Text anzeigen.</p>
-</td></tr>
-</table></dd><dt><a name="overshoot"></a><span class="tt">übersteigen</span> (Zahl, optional)</dt><dd><p>Der Faktor, um den die äußeren und der innere Balken die normalen Balken übersteigt. Nur anwendbar bei EAN13.</p></dd></dl>
+</table></dd><dt><a name="width"></a><span class="tt">breite</span> (Zahl oder Längenangabe, optional)</dt><dd><p>Breite des Strichcodes</p></dd></dl>
          
 
          <h2>Beispiel</h2>

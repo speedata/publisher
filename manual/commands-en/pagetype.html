@@ -27,7 +27,7 @@
             <p>Parent elements: <a href="include.html">Include</a>, <a href="layout.html">Layout</a></p>
          </div>
          <h3>Attributes</h3>
-         <dl><dt><a name="name"></a><span class="tt">name</span> (text)</dt><dd><p>Name of the master page. It is for informational purpose and as a selection for <a href="newpage.html">NewPage</a>.</p></dd><dt><a name="test"></a><span class="tt">test</span> (<a href="../description-en/xpath.html">XPath Expression</a>)</dt><dd><p>If this xpath expression evaluates to true, this page is taken as a master page.</p></dd></dl>
+         <dl><dt><a name="name"></a><span class="tt">test</span> (<a href="../description-en/xpath.html">XPath Expression</a>)</dt><dd><p>If this xpath expression evaluates to true, this page is taken as a master page.</p></dd><dt><a name="name"></a><span class="tt">name</span> (text)</dt><dd><p>Name of the master page. It is for informational purpose and as a selection for <a href="newpage.html">NewPage</a>.</p></dd></dl>
          
          <h3>Remarks</h3><p>The contents of the element at <a href="atpagecreation.html">AtPageCreation</a> is executed, as soon as something will be placed on the page. The commands inside <a href="atpageshipout.html">AtPageShipout</a> are executed when switching to a new page.</p><p>Whe creating a new page, all page tyes are tried in reversed order. That means that the later defined master pages have a higher priority. This is important if more than one test in a pagetype defintion evaluates to true.</p>
 
