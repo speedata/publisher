@@ -63,34 +63,13 @@ local html5entities = { apos = "'",
 }
 
 local function decode_xmlstring_html(txt)
-	return string.gsub(txt,"&(.-);",function(arg)
-		if html5entities[arg] then return html5entities[arg]
-		elseif string.find(arg,"^#x") then
-			return string.char(tonumber(string.sub(arg,3,-1),16))
-		elseif string.find(arg,"^#") then
-			return string.char(string.sub(arg,2,-1))
-		end
-	end)
+	return string.gsub(txt,"&(.-);",html5entities)
 end
 
+local XMLentities = { gt = ">", lt = "<", amp = "&",  apos = "'", quot = '"' }
+
 local function decode_xmlstring( txt )
-	return string.gsub(txt,"&(.-);",function (arg)
-		if arg == "lt" then
-			return "<"
-		elseif arg == "gt" then
-			return ">"
-		elseif arg == "amp" then
-			return "&"
-		elseif arg == "quot" then
-			return '"'
-		elseif arg == "apos" then
-			return "'"
-		elseif string.find(arg,"^#x") then
-			return string.char(tonumber(string.sub(arg,3,-1),16))
-		elseif string.find(arg,"^#") then
-			return string.char(string.sub(arg,2,-1))
-		end
-	end)
+	return string.gsub(txt,"&(.-);",XMLentities)
 end
 
 
@@ -273,7 +252,19 @@ local function parse_xml(txt,options)
 	else
 		decoder = decode_xmlstring
 	end
-		txt = txt.gsub(txt,"\13\n?","\n")
+
+	txt = string.gsub(txt,"&(.-);",function (arg)
+		if string.find(arg,"^#x") then
+			return string.char(tonumber(string.sub(arg,3,-1),16))
+		elseif string.find(arg,"^#X") then
+			return string.char(tonumber(string.sub(arg,3,-1),16))
+		elseif string.find(arg,"^#") then
+			return string.char(string.sub(arg,2,-1))
+		end
+	end)
+
+	txt = txt.gsub(txt,"\13\n?","\n")
+
 	if options.ignoreeol == true then
 		txt = txt.gsub(txt,"\n%s*"," ")
 	else
