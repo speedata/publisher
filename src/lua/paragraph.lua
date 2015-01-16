@@ -82,11 +82,6 @@ end
 
 -- Return the width of the longest word (breakable part)
 function Paragraph:min_width(textfomat_name)
-    -- Box of wd 1 will generate messages for all lines. We should ignore them as they
-    -- are intentional and not to be seen by the user (hfuzz)
-    local hfuzz = tex.hfuzz
-    tex.hfuzz = publisher.maxdimen
-
     local nl = node.copy_list(self.nodelist)
     local box = self:format(1,textfomat_name)
     local head = box.head
@@ -108,7 +103,6 @@ function Paragraph:min_width(textfomat_name)
 
     node.flush_list(self.nodelist)
     self.nodelist = nl
-    tex.hfuzz = hfuzz
     return max
 end
 

@@ -182,10 +182,10 @@ local function setup()
   tex.pdfminorversion = 6
   tex.lefthyphenmin  = 2
   tex.righthyphenmin = 3
-  tex.hfuzz = 6554
-  tex.vfuzz = 6554
-  tex.hbadness= 1000
-  tex.vbadness=1000
+  tex.hfuzz    = publisher.maxdimen
+  tex.vfuzz    = publisher.maxdimen
+  tex.hbadness = publisher.maxdimen
+  tex.vbadness = publisher.maxdimen
   --- The `lccode` is used for hyphenation. TeX sets the lccode for a-z to itself and A-Z to its lower correspondent.
   --- The code for all other characters are not set and thus they don't hyphenate unless set like this.
   for _,i in ipairs
