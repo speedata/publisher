@@ -1647,7 +1647,7 @@ function parse_html( elt, parameter )
                     end
                     -- we should ignore br directly inside ul
                     a:append(node.copy(marker))
-                    local bul = bullet_hbox(tex.sp("5mm"))
+                    local bul = bullet_hbox(tex.sp("2.5mm"))
                     a:append(bul)
                     a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
                     a:append("\n",{})
@@ -1663,7 +1663,7 @@ function parse_html( elt, parameter )
                 elseif type(elt[i]) == "table" then
                     counter = counter + 1
                     a:append(node.copy(marker))
-                    local num = number_hbox(counter,tex.sp("5mm"))
+                    local num = number_hbox(counter,tex.sp("2.5mm"))
                     a:append(num)
                     a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
                     a:append("\n",{})
