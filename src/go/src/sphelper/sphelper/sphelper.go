@@ -58,7 +58,10 @@ func main() {
 
 	switch command {
 	case "build":
-		buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local")
+		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local")
+		if err != nil {
+			os.Exit(-1)
+		}
 	case "doc":
 		err = gomddoc.DoThings(cfg)
 		if err != nil {

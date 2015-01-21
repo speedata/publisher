@@ -12,7 +12,7 @@ import (
 	"github.com/speedata/gogit"
 )
 
-func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype string) bool {
+func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype string) error {
 	srcdir := cfg.Srcdir
 	os.Chdir(cfg.Basedir())
 
@@ -49,8 +49,7 @@ func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype string) bool 
 	outbuf, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println(string(outbuf))
-		fmt.Println(err)
-		return false
+		return err
 	}
-	return true
+	return nil
 }
