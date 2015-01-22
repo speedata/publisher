@@ -1,6 +1,12 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="2.2">
-    <entry version="2.2.36" date="2015-01-15">
+  <chapter version="2.4">
+    <entry version="2.3.2" date="2015-01-22">
+      <en>New server mode for remote publishing.</en>
+      <de>Neuer Server-Modus für entferntes Publishing.</de>
+    </entry>
+  </chapter>
+  <chapter version="2.2" date="2015-01-19">
+    <entry version="2.1.36" date="2015-01-15">
       <en>Add all CSS level 3 colors (see http://www.w3.org/TR/css3-color/ for a list)</en>
       <de>Alle CSS Level 3 Farben hinzugefügt (siehe http://www.w3.org/TR/css3-color/ für eine Liste)</de>
     </entry>

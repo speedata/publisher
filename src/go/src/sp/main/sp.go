@@ -33,6 +33,7 @@ var (
 	layoutoptions         map[string]string
 	variables             map[string]string
 	installdir            string
+	bindir                string
 	libdir                string
 	srcdir                string
 	path_to_documentation string // Where the documentation (index.html) is
@@ -76,20 +77,20 @@ func init() {
 	layoutoptions = make(map[string]string)
 	options = make(map[string]string)
 	defaults = map[string]string{
-		"layout":     "layout.xml",
-		"jobname":    "publisher",
+		"address":    "127.0.0.1",
 		"data":       "data.xml",
-		"runs":       "1",
-		"quiet":      "false",
-		"port":       "5266",
 		"fontpath":   "",
 		"imagecache": filepath.Join(os.TempDir(), "sp", "images"),
+		"jobname":    "publisher",
+		"layout":     "layout.xml",
+		"port":       "5266",
+		"quiet":      "false",
+		"runs":       "1",
 	}
 
 	// The problem now is that we don't know where the executable file is
 	// if it's in the PATH, it has no ../ prefix
 	// if it is relative, make an absolute path from it.
-	var bindir string
 	if execdir := filepath.Base(os.Args[0]); execdir == os.Args[0] {
 		// most likely an absolute path
 		bindir, err = exec.LookPath(execdir)
@@ -104,6 +105,11 @@ func init() {
 			log.Fatal(err)
 		}
 	}
+	bindir, err = filepath.Abs(bindir)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	installdir = filepath.Join(bindir, "..")
 
 	if version == "" {
@@ -428,7 +434,7 @@ func removeLogfile() {
 }
 
 func runPublisher() (exitstatus int) {
-	log.Print("run speedata publisher")
+	log.Print("Run speedata publisher")
 	defer removeLogfile()
 	exitstatus = 0
 	save_variables()
@@ -475,11 +481,13 @@ func runPublisher() (exitstatus int) {
 	}
 	for i := 1; i <= runs; i++ {
 		go daemon.Run()
+		fmt.Println(os.Getwd())
 		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, exec_name, jobname, inifile, layoutname, dataname, layoutoptions_cmdline)
 		if !run(cmdline) {
 			exitstatus = 1
 		}
 	}
+	// todo: DRY code -> server/status
 	data, err := ioutil.ReadFile(fmt.Sprintf("%s.status", jobname))
 	if err == nil {
 		v := new(status)
@@ -538,6 +546,7 @@ or see the web page
 
 func main() {
 	op := optionparser.NewOptionParser()
+	op.On("--address IPADDRESS", "Address to be used for the server mode. Defaults to 127.0.0.1", options)
 	op.On("--autoopen", "Open the PDF file (MacOS X and Linux only)", options)
 	op.On("-c NAME", "--config", "Read the config file with the given NAME. Default: 'publisher.cfg'", &configfilename)
 	op.On("--credits", "Show credits and exit", showCredits)
@@ -572,7 +581,7 @@ func main() {
 	op.Command("doc", "Open documentation")
 	op.Command("list-fonts", "List installed fonts (use together with --xml for copy/paste)")
 	op.Command("run", "Start publishing (default)")
-	op.Command("server", "Run as http-api server on port 5266 (configure with --port)")
+	op.Command("server", "Run as http-api server on localhost port 5266 (configure with --address and --port)")
 	op.Command("watch", "Start watchdog / hotfolder")
 	err := op.Parse()
 	if err != nil {
@@ -772,13 +781,7 @@ func main() {
 			log.Fatal("Problem with watch dir in section [hotfolder].")
 		}
 	case "server":
-		go daemon.Run()
-		go runServer(getOption("port"))
-		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode --ini "--lua=%s" publisher.tex ___server___`, getExecutablePath(), inifile)
-		if !run(cmdline) {
-			exitstatus = 1
-		}
-
+		runServer(getOption("port"), getOption("address"))
 	default:
 		log.Fatal("unknown command:", command)
 	}
