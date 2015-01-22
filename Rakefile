@@ -191,6 +191,11 @@ task :zip => [:sphelper] do
 		File.open(targetbin + "/texmf.cnf", "w") { |file| file.write("#dummy\n") }
 		platform = "windows"
 		execfilename = "luatex.exe"
+	elsif test(?f,srcbindir +"/sdluatex.exe") then
+		cp_r(Dir.glob(srcbindir +"/*") ,targetbin)
+		File.open(targetbin + "/texmf.cnf", "w") { |file| file.write("#dummy\n") }
+		platform = "windows"
+		execfilename = "sdluatex.exe"
 	elsif test(?f,srcbindir +"/luatex") then
 		cp_r(srcbindir +"/luatex","#{targetbin}/sdluatex")
 	end
