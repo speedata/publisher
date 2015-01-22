@@ -24,11 +24,11 @@ also z.B.
     {"layout.xml":"PD94bWwgdmVyc2lv....",
      "data.xml":"PGRhdGE+CiAgICA8Y29udGVudHM+PCFbQ0RBVEFbPHV..." }
 
-Diese Dateien werden in ein leeres Verzeichnis kopiert und dort `sp` aufgerufen. Die Rückgabe ist in der Form
+Diese Dateien werden in ein leeres Verzeichnis kopiert und dort wird `sp` aufgerufen. Die Rückgabe ist in der Form
 
     {"id":"752869708"}
 
-mit eienm HTTP-Statuscode 200 (OK).
+mit einem HTTP-Statuscode 200 (OK).
 
 Falls die JSON-Datei fehlerhaft ist, wird derzeit ein HTTP-Statuscode 400 (Bad
 Request) zurückgegeben, mit dem textuellen Inhalt der Fehlermeldung, z.B.:

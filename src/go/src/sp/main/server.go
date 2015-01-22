@@ -164,7 +164,6 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = os.Chdir(tmpdir)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintln(w, err)
@@ -174,7 +173,7 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 	for k, v := range files {
 		bb := bytes.NewBuffer([]byte(v.(string)))
 		b64reader := base64.NewDecoder(base64.StdEncoding, bb)
-		f, err := os.Create(k)
+		f, err := os.Create(filepath.Join(tmpdir, k))
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprintln(w, err)
@@ -188,10 +187,12 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		f.Close()
 	}
-	spPath := filepath.Join(bindir, "sp"+exe_suffix)
 
-	go exec.Command(spPath).Run()
 	fmt.Fprintf(protocolFile, "executing with id %s\n", id)
+
+	cmd := exec.Command(filepath.Join(bindir, "sp"+exe_suffix))
+	cmd.Dir = tmpdir
+	go cmd.Run()
 
 	jsonid := struct {
 		Id string `json:"id"`
