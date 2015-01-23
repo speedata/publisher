@@ -96,15 +96,21 @@ func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	pdfPath := filepath.Join(publishdir, "publisher.pdf")
-	if r.FormValue("delete") != "false" {
-		defer os.RemoveAll(publishdir)
-	}
 
 	fi, err = os.Stat(pdfPath)
 	if err != nil && os.IsNotExist(err) {
 		// status does not exist yet, so it's in progress
 		response.Blob = "not finished"
 		response.Status = "error"
+		buf, marshallerr := json.Marshal(response)
+		if marshallerr != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintln(w, marshallerr)
+			return
+		}
+		w.WriteHeader(http.StatusNotFound)
+		w.Write(buf)
+		return
 	}
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -112,7 +118,11 @@ func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// data, err := ioutil.ReadFile(pdfPath)
+	// Only if the PDF is finished, we may remove the directory
+	if r.FormValue("delete") != "false" {
+		defer os.RemoveAll(publishdir)
+	}
+
 	response.Status = "ok"
 	response.Path = pdfPath
 	response.Blob, err = encodeFileToBase64(pdfPath)
@@ -243,6 +253,16 @@ func v0StatusHandler(w http.ResponseWriter, r *http.Request) {
 		stat.Message = ""
 		stat.Result = "not finished"
 		stat.Errstatus = "ok"
+
+		buf, marshallerr := json.Marshal(stat)
+		if marshallerr != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintln(w, marshallerr)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write(buf)
+		return
 	}
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
