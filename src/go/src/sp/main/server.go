@@ -13,8 +13,8 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"os/exec"
 	"path/filepath"
+	"runtime"
 	"time"
 )
 
@@ -69,6 +69,11 @@ func encodeFileToBase64(filename string) (string, error) {
 		return "", err
 	}
 	return layoutbase64.String(), nil
+}
+
+func addPublishrequestToQueue(id string) {
+	fmt.Fprintf(protocolFile, "Add request %s to queue.\n", id)
+	WorkQueue <- WorkRequest{Id: id}
 }
 
 func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
@@ -139,7 +144,6 @@ func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 
 func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 	var files map[string]interface{}
-	fmt.Fprintf(protocolFile, "%s: Publishing request from %s ... ", time.Now().Format("2006-01-02 15:04:05"), r.RemoteAddr)
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -174,11 +178,7 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintln(w, err)
-		return
-	}
+	fmt.Fprintf(protocolFile, "%s: Publishing request from %s with id %s\n", time.Now().Format("2006-01-02 15:04:05"), r.RemoteAddr, id)
 
 	for k, v := range files {
 		bb := bytes.NewBuffer([]byte(v.(string)))
@@ -198,11 +198,7 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 		f.Close()
 	}
 
-	fmt.Fprintf(protocolFile, "executing with id %s\n", id)
-
-	cmd := exec.Command(filepath.Join(bindir, "sp"+exe_suffix))
-	cmd.Dir = tmpdir
-	go cmd.Run()
+	addPublishrequestToQueue(id)
 
 	jsonid := struct {
 		Id string `json:"id"`
@@ -345,6 +341,8 @@ func runServer(port string, address string) {
 
 	options["quiet"] = "true"
 	options["autoopen"] = "false"
+
+	StartDispatcher(runtime.NumCPU())
 
 	r := mux.NewRouter()
 	v0 := r.PathPrefix("/v0").Subrouter()
