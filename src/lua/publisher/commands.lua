@@ -432,22 +432,9 @@ function commands.define_color( layoutxml,dataxml )
         local k = publisher.read_attribute(layoutxml,dataxml,"k","number")
         color.colornum = spotcolors.register(colorname,c,m,y,k)
     elseif value then
-        local r,g,b
-        if #value == 7 then
-            model = "rgb"
-            r,g,b = string.match(value,"#?(%x%x)(%x%x)(%x%x)")
-            color.r = math.round(tonumber(r,16) / 255, 3)
-            color.g = math.round(tonumber(g,16) / 255, 3)
-            color.b = math.round(tonumber(b,16) / 255, 3)
-            color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
-        elseif #value == 4 then
-            model = "rgb"
-            r,g,b = string.match(value,"#?(%x)(%x)(%x)")
-            color.r = math.round(tonumber(r,16) / 15, 3)
-            color.g = math.round(tonumber(g,16) / 15, 3)
-            color.b = math.round(tonumber(b,16) / 15, 3)
-            color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
-        end
+        color.r,color.g,color.b = publisher.getrgb(value)
+        color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
+        model = "rgb"
     else
         err("Unknown color model: %s",model or "?")
     end
@@ -1987,8 +1974,13 @@ function commands.rule( layoutxml,dataxml )
     local length        = publisher.read_attribute(layoutxml,dataxml,"length",     "rawstring")
     local rulewidth     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",  "rawstring")
     local color         = publisher.read_attribute(layoutxml,dataxml,"color",      "rawstring")
+    local class         = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
+    local id            = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
 
-    local colorname = color or "black"
+    local css_rules = publisher.css:matches({element = "rule", class=class,id=id}) or {}
+
+    local colorname = color or css_rules["background-color"] or "black"
+    -- #hexvalue -> colorname
 
     if tonumber(length) then
         if direction == "horizontal" then
@@ -2003,11 +1995,11 @@ function commands.rule( layoutxml,dataxml )
     end
     length = sp_to_bp(length)
 
-    rulewidth = rulewidth or "1pt"
+    rulewidth = rulewidth or css_rules["height"] or "1pt"
     if tonumber(rulewidth) then
         if direction == "horizontal" then
             rulewidth = publisher.current_grid.gridwidth * rulewidth
-        elseif direction == "vertical" or direction == "vertikal" then
+        elseif direction == "vertical" then
             rulewidth = publisher.current_grid.gridheight * rulewidth
         end
     else

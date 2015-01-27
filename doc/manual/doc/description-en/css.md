@@ -24,7 +24,7 @@ or
       }
     </Stylesheet>
 
-With these rules, some of the XML elements in the layout stylesheet (currently `Box`, `Frame`, `Paragraph`, `Tablerule`, `Td`) can be styled. As it is common with CSS, you can set the properties with the class name, the id and the command name.
+With these rules, some of the XML elements in the layout stylesheet (currently `Box`, `Frame`, `Rule`, `Paragraph`, `Tablerule`, `Td`) can be styled. As it is common with CSS, you can set the properties with the class name, the id and the command name.
 
 For this table
 

@@ -13,12 +13,13 @@ Reference
  * [Command line](description-en/commandline.html)
  * [XPath expressions](description-en/xpath.html)
  * [Changelog](description-en/changelog.html)
- * [Using CSS with the speedata Publisher](description-en/css.html)
  * [Lengths and units](description-en/lengths.html)
 
 Advanced topics
 ---------------
 
+ * [Using CSS with the speedata Publisher](description-en/css.html)
+ * [How to use colors](description-en/colors.html)
  * [How to use fonts](description-en/fonts.html)
  * [How to generate a table of contents and other directories](description-en/directories.html)
  * [Using the speedata Publisher](description-en/publisherusage.html)

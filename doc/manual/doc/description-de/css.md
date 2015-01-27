@@ -23,9 +23,9 @@ oder
     </Stylesheet>
 
 Mit diesen Regeln lassen sich einige der Befehle (derzeit `Absatz`, `Box`,
-`Rahmen`, `Tlinie`, `Td`) im Aussehen anpassen. Wie bei CSS üblich können die
-Eigenschaften über die Id, Klasse und über den Befehlsnamen angesprochen
-werden.
+`Linie`, `Rahmen`, `Tlinie`, `Td`) im Aussehen anpassen. Wie bei CSS üblich
+können die Eigenschaften über die Id, Klasse und über den Befehlsnamen
+angesprochen werden.
 
 So bewirken für diese Tabelle:
 

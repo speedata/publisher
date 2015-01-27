@@ -4895,7 +4895,7 @@
       <cmd name="BoldItalic"/>
     </seealso>
   </command>
-  <command en="Rule" de="Linie">
+  <command en="Rule" de="Linie" css="rule">
     <description xml:lang="en">
       <para>Draw a horizontal or vertical rule in the grid.</para>
     </description>
@@ -4927,7 +4927,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="rulewidth" de="linienstärke" type="numberorlength" optional="yes">
+    <attribute en="rulewidth" de="linienstärke" type="numberorlength" optional="yes" css="height">
       <description xml:lang="en">
         <para>The rule thicknes given in grid cells or as a length.</para>
       </description>
@@ -4943,7 +4943,7 @@
         <para>Länge der Linie in Rasterzellen oder als absolute Angabe.</para>
       </description>
     </attribute>
-    <attribute en="color" de="farbe" type="text" optional="yes">
+    <attribute en="color" de="farbe" type="text" optional="yes" css="background-color">
       <description xml:lang="en">
         <para>The color of the rule. Defaults to black.</para>
       </description>

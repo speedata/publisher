@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.3" date="2015-01-26">
+      <en>Some CSS for rule, direct color definition.</en>
+      <de>Ein paar CSS-Regeln für Linie, direkte Farbdefinition.</de>
+    </entry>
     <entry version="2.3.2" date="2015-01-22">
       <en>New server mode for remote publishing.</en>
       <de>Neuer Server-Modus für entferntes Publishing.</de>

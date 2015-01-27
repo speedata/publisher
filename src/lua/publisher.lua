@@ -314,6 +314,23 @@ colors  = {
 -- An array of defined colors
 colortable = {"black","aliceblue", "orange", "rebeccapurple", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "blanchedalmond", "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkgrey", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange", "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkslategrey", "darkturquoise", "darkviolet", "deeppink", "deepskyblue", "dimgray", "dimgrey", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold", "goldenrod", "gray", "green", "greenyellow", "grey", "honeydew", "hotpink", "indianred", "indigo", "ivory", "khaki", "lavender", "lavenderblush", "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgray", "lightgreen", "lightgrey", "lightpink", "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightslategrey", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", "mediumslateblue", "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", "navy", "oldlace", "olive", "olivedrab", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred", "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon", "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "slategrey", "snow", "springgreen", "steelblue", "tan", "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen"}
 
+setmetatable(colors,{  __index = function (tbl,key)
+    if string.sub(key,1,1) ~= "#" then
+        return nil
+    end
+    log("Defining color %q",key)
+    local color = {}
+    color.r, color.g, color.b = getrgb(key)
+    color.pdfstring = string.format("%g %g %g rg %g %g %g RG", color.r, color.g, color.b, color.r,color.g, color.b)
+    color.overprint = false
+    color.model = model
+    colortable[#colortable + 1] = key
+    color.index = #colortable
+    rawset(tbl,key,color)
+    return color
+end
+ })
+
 data_dispatcher = {}
 user_defined_functions = { last = 0}
 markers = {}
@@ -2407,6 +2424,23 @@ function register_color( name )
     end
     colortable[#colortable + 1] = name
     return #colortable
+end
+
+function getrgb( colorvalue )
+    local r,g,b
+    local model = "rgb"
+    if #colorvalue == 7 then
+        r,g,b = string.match(colorvalue,"#?(%x%x)(%x%x)(%x%x)")
+        r = math.round(tonumber(r,16) / 255, 3)
+        g = math.round(tonumber(g,16) / 255, 3)
+        b = math.round(tonumber(b,16) / 255, 3)
+    elseif #colorvalue == 4 then
+        r,g,b = string.match(colorvalue,"#?(%x)(%x)(%x)")
+        r = math.round(tonumber(r,16) / 15, 3)
+        g = math.round(tonumber(g,16) / 15, 3)
+        b = math.round(tonumber(b,16) / 15, 3)
+    end
+    return r,g,b
 end
 
 -- color is an integer

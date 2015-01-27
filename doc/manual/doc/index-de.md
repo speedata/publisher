@@ -13,13 +13,14 @@ Referenz
  * [Kommandozeile](description-de/commandline.html)
  * [XPath-Ausdrücke](description-de/xpath.html)
  * [Liste der Änderungen](description-de/changelog.html)
- * [CSS im speedata Publisher](description-de/css.html)
  * [Längenangaben und Maßeinheiten](description-de/lengths.html)
 
 Weiterführende Themen
 ---------------------
 
+ * [CSS im speedata Publisher](description-de/css.html)
  * [Einbinden von Schriftarten](description-de/fonts.html)
+ * [Benutzung von Farben](description-de/colors.html)
  * [Automatisch generierte Verzeichnisse](description-de/directories.html)
  * [Benutzung des Publishers](description-de/publisherusage.html)
  * [Bearbeiten des Layoutregelwerks](description-de/xmlediting.html)
