@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.4" date="2015-01-27">
+      <en>Bugfix: spot colors apply to stroking and non-stroking operations</en>
+      <de>Fehlerkorrektur: Sonderfarben gelten nun für Striche und Flächen</de>
+    </entry>
     <entry version="2.3.3" date="2015-01-26">
       <en>Some CSS for rule, direct color definition.</en>
       <de>Ein paar CSS-Regeln für Linie, direkte Farbdefinition.</de>

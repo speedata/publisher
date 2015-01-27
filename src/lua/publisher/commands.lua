@@ -398,7 +398,7 @@ function commands.define_color( layoutxml,dataxml )
                 else
                     op = ""
                 end
-                return string.format("%s /CS%d cs 1 scn ",op,tbl.colornum)
+                return string.format("%s /CS%d CS /CS%d cs 1 scn ",op,tbl.colornum, tbl.colornum)
                end
            end
         })
