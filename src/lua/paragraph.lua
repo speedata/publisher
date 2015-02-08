@@ -94,7 +94,8 @@ function Paragraph:min_width(textfomat_name)
     while head do
         -- there are some situations, where a list has no head (a bullet point)
         -- we should not bother checking them.
-        if head.head ~= nil then
+        -- LuaTeX 0.71 needs the extra 'node.has_field(head,"head")' check.
+        if node.has_field(head,"head") and head.head ~= nil then
             _w,_h,_d = node.dimensions(box.glue_set, box.glue_sign, box.glue_order,head.head)
             max = math.max(max,_w)
         end
