@@ -432,6 +432,10 @@ function commands.define_color( layoutxml,dataxml )
         local k = publisher.read_attribute(layoutxml,dataxml,"k","number")
         color.colornum = spotcolors.register(colorname,c,m,y,k)
     elseif value then
+        if string.sub(value,1,1) ~= "#" then
+            err("DefineColor: value does not start with #, it is %q",tostring(value))
+            return nil
+        end
         color.r,color.g,color.b = publisher.getrgb(value)
         color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
         model = "rgb"
