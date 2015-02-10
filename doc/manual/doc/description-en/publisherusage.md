@@ -13,7 +13,7 @@ Windows you click on the windows button and type in `cmd.exe` in the
 search box. On Linux, it depends on the distribution you use, but there
 is usually a menu entry called “Terminal”.
 
-This is what the terminal window on Linux looks like. On other systems
+This is what the terminal window on Mac looks like. On other systems
 it should be similar:
 
 {{ img . "terminal.png" }}

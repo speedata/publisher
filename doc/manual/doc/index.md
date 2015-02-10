@@ -6,6 +6,13 @@ title: speedata Publisher documentation
 speedata Publisher documentation
 ================================
 
+Introduction
+------------
+
+* [First steps with the speedata Publisher (Hello world)](description-en/firststeps.html)
+* [Using the speedata Publisher](description-en/publisherusage.html)
+
+
 Reference
 ---------
 
@@ -22,7 +29,6 @@ Advanced topics
  * [How to use colors](description-en/colors.html)
  * [How to use fonts](description-en/fonts.html)
  * [How to generate a table of contents and other directories](description-en/directories.html)
- * [Using the speedata Publisher](description-en/publisherusage.html)
  * [Editing the XML layout rules](description-en/xmlediting.html)
  * [Cutmarks and bleed](description-en/cutmarks.html)
  * [Configuring the speedata Publisher](description-en/configuration.html)
