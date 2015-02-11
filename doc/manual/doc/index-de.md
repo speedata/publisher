@@ -23,6 +23,7 @@ Referenz
  * [Liste der Änderungen](description-de/changelog.html)
  * [Längenangaben und Maßeinheiten](description-de/lengths.html)
  * [Konfiguration des Publishers](description-de/configuration.html)
+ * [Voreinstellungen](description-de/defaults.html)
 
 Weiterführende Themen
 ---------------------

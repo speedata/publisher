@@ -21,6 +21,7 @@ Reference
  * [XPath expressions](description-en/xpath.html)
  * [Changelog](description-en/changelog.html)
  * [Lengths and units](description-en/lengths.html)
+ * [Defaults](description-en/defaults.html)
 
 Advanced topics
 ---------------
