@@ -1546,17 +1546,14 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     end
 
     local val,num,ret
-    local xpathstring = string.match(layoutxml[attname],"{(.-)}")
-    if xpathstring then
-        local ok, xp = xpath.parse_raw(dataxml,xpathstring,namespaces)
+    val = string.gsub(layoutxml[attname],"{(.-)}", function (x)
+        local ok, xp = xpath.parse_raw(dataxml,x,namespaces)
         if not ok then
             err(xp)
             return nil
         end
-        val = xpath.textvalue(xp[1])
-    else
-        val = layoutxml[attname]
-    end
+        return xpath.textvalue(xp[1])
+        end)
 
     if typ=="xpath" then
         return xpath.textvalue(xpath.parse(dataxml,val,namespaces))
