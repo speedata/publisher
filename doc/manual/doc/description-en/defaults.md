@@ -18,7 +18,7 @@ The distribution includes the free font family TeXGyreHeros, a high quality clon
     <LoadFontfile name="TeXGyreHeros-BoldItalic" filename="texgyreheros-bolditalic.otf" />
 
 
-Die dazugehörige Schriftfamilie ist
+The corresponding font family is defined as:
 
     <DefineFontfamily name="text" fontsize="10" leading="12">
       <Regular fontface="TeXGyreHeros-Regular"/>
