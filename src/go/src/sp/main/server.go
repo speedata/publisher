@@ -79,9 +79,10 @@ func addPublishrequestToQueue(id string) {
 func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	response := struct {
-		Status string `json:"status"`
-		Path   string `json:"path"`
-		Blob   string `json:"blob"`
+		Status     string `json:"status"`
+		Path       string `json:"path"`
+		Blob       string `json:"blob"`
+		Statusfile string `json:"statusfile"`
 	}{}
 
 	publishdir := filepath.Join(serverTemp, id)
@@ -101,6 +102,7 @@ func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	pdfPath := filepath.Join(publishdir, "publisher.pdf")
+	statusfilePath := filepath.Join(publishdir, "publisher.status")
 
 	fi, err = os.Stat(pdfPath)
 	if err != nil && os.IsNotExist(err) {
@@ -131,6 +133,19 @@ func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 	response.Status = "ok"
 	response.Path = pdfPath
 	response.Blob, err = encodeFileToBase64(pdfPath)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintln(w, err)
+		return
+	}
+
+	response.Statusfile, err = encodeFileToBase64(statusfilePath)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintln(w, err)
+		return
+	}
+
 	buf, marshallerr := json.Marshal(response)
 	if marshallerr != nil {
 		w.WriteHeader(http.StatusInternalServerError)
