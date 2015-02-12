@@ -409,6 +409,7 @@ glue_stretch2.spec = node.new("glue_spec")
 glue_stretch2.spec.stretch = 2^16
 glue_stretch2.spec.stretch_order = 2
 
+messages = {}
 
 --- The dispatch table maps every element in the layout xml to a command in the `commands.lua` file.
 local dispatch_table = {
@@ -2651,7 +2652,7 @@ function xml_escape( str )
         ["\""] = "&quot;",
         ["&"] = "&amp;",
     }
-    local ret = str.gsub(str,".",replace)
+    local ret = string.gsub(str,".",replace)
     return ret
 end
 
