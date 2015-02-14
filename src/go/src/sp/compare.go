@@ -140,7 +140,7 @@ func runComparison(path string, status chan compareStatus) {
 		dummyFile := fmt.Sprintf("pagediff-%02d.png", i)
 		if delta := compareTwoPages(sourceFile, referenceFile, dummyFile, path); delta > 0 {
 			cs.delta = math.Max(cs.delta, delta)
-			if delta > 0.6 {
+			if delta > 0.3 {
 				cs.badpages = append(cs.badpages, i)
 			}
 		}
