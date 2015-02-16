@@ -78,7 +78,6 @@ func main() {
 			os.Exit(-1)
 		}
 	case "doc":
-		os.RemoveAll(cfg.Builddir)
 		err = makedoc(cfg)
 		if err != nil {
 			log.Fatal(err)
@@ -99,6 +98,7 @@ func main() {
 		}
 	case "dist":
 		fmt.Println("Generate ZIP files and windows installer")
+		os.RemoveAll(cfg.Builddir)
 		makedoc(cfg)
 		destdir := filepath.Join(cfg.Builddir, "speedata-publisher")
 		var srcbindir string
