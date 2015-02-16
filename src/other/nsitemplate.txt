@@ -1,0 +1,19 @@
+OutFile {{ .Exename }}
+!include "../src/other/EnvVarUpdate.nsh"
+InstallDir $PROGRAMFILES{{ if eq .Arch "amd64" }}64{{end}}\speedata-publisher
+DirText "This will install speedata Publisher on your computer. Choose a directory"
+
+Section
+SetOutPath $INSTDIR
+RMDir /r /REBOOTOK $INSTDIR
+File /r {{ .Sourcedir }}\*.*
+${EnvVarUpdate} $0 "PATH" "A" "HKCU" "$INSTDIR\bin"
+WriteUninstaller $INSTDIR\Uninstall.exe
+MessageBox MB_OK "Run speedata Publisher with 'sp' on the command.com prompt"
+SectionEnd
+
+
+Section "Uninstall"
+${un.EnvVarUpdate} $0 "PATH" "R" "HKCU" "$INSTDIR\bin"
+RMDir /r /REBOOTOK $INSTDIR
+SectionEnd

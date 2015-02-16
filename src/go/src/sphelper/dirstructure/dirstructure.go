@@ -1,0 +1,50 @@
+package dirstructure
+
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+
+	"sphelper/config"
+	"sphelper/fileutils"
+)
+
+func MkBuilddir(cfg *config.Config, srcbindir string) error {
+	// build dir contains the documentation
+	if false {
+		fmt.Println("xx")
+	}
+
+	var err error
+
+	destdir := filepath.Join(cfg.Builddir, "speedata-publisher")
+	os.RemoveAll(destdir)
+	os.MkdirAll(destdir, 0755)
+
+	srcdir := filepath.Join(cfg.Basedir(), "src")
+
+	mapping := []struct {
+		src    string
+		dest   string
+		reject []string
+	}{
+		{src: srcbindir, dest: filepath.Join(destdir, "bin")},
+		{src: filepath.Join(cfg.Builddir, "manual"), dest: filepath.Join(destdir, "share", "doc")},
+		{src: filepath.Join(cfg.Basedir(), "lib"), dest: filepath.Join(destdir, "share", "lib")},
+		{src: filepath.Join(cfg.Basedir(), "schema"), dest: filepath.Join(destdir, "share", "schema"), reject: []string{"changelog.rng", "readme.txt"}},
+		{src: filepath.Join(cfg.Basedir(), "fonts"), dest: filepath.Join(destdir, "sw", "fonts")},
+		{src: filepath.Join(cfg.Basedir(), "img"), dest: filepath.Join(destdir, "sw", "img")},
+		{src: filepath.Join(srcdir, "tex"), dest: filepath.Join(destdir, "sw", "tex")},
+		{src: filepath.Join(srcdir, "lua"), dest: filepath.Join(destdir, "sw", "lua"), reject: []string{"viznodelist.lua", "fileutils.lua"}},
+		{src: filepath.Join(srcdir, "hyphenation"), dest: filepath.Join(destdir, "sw", "hyphenation")},
+	}
+
+	for _, v := range mapping {
+		reject := append(v.reject, ".DS_Store")
+		err = fileutils.CpR(v.src, v.dest, reject...)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}

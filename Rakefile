@@ -66,7 +66,6 @@ end
 
 desc "Generate documentation"
 task :doc => [:sphelper] do
-	rm_rf builddir.join("manual")
 	sh "#{installdir}/bin/sphelper doc"
 	puts "done"
 end
@@ -155,6 +154,10 @@ task :qa do
 	sh "#{installdir}/bin/sp compare #{installdir}/qa"
 end
 
+desc "Make ZIP files for all platforms and installer for windows"
+task :dist => [:sphelper] do
+	sh "sphelper dist windows/amd64 windows/386 linux/amd64 linux/386 darwin/amd64 darwin/386"
+end
 
 desc "Make ZIP files - set NODOC=true for stripped zip file"
 task :zip => [:sphelper] do
