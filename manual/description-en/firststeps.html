@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>First steps with the speedata Publisher (hello world)</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="alternate" type="application/atom+xml"  title="changelog speedata Publisher (en)"  href="../changes-en.xml" />
+    <link rel="stylesheet" href="../assets/css/normal.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/colorbox.css" type="text/css" />
+    <script src="../assets/js/jquery.min.js" ></script>
+    <script src="../assets/js/jquery.colorbox-min.js" ></script>
+    <script>
+      $(document).ready(function(){
+         $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+      });
+    </script>
+</head>
+<body>
+<div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
+<div class="">
+<h1>First steps with the speedata Publisher (hello world)</h1>
+
+<p><a href="../img/schema1.png"><img src="../img/schema1.png"></a></p>
+
+<p>The speedata Publisher is a so called »database publishing system«. That means
+that the source of the  publising process is a data set. The ouput of the
+software is PDF. The layout of data in the PDF is controlled via an XML file,
+the layout file. The data also has to be in the XML format, therefore it might
+be necessary to convert other formats (Excel spreadsheet, database) into XML
+before starting the publishing process.</p>
+
+<p>This introduction coves the classical »hello world« example.</p>
+
+<h2>Data file</h2>
+
+<p>There are no special requirements for the structure of the data XML source. As long as it is well-formed (see wikipedia), the speedata Publisher will handle it. For our example the following data file is perfect:</p>
+
+<pre><code>&lt;root greeting=&quot;Hello world&quot;/&gt;
+</code></pre>
+
+<p>Save this with the file name <code>data.xml</code> in an empty directory on your harddrive.</p>
+
+<h2>Layout file</h2>
+
+<p>The layout file (file name <code>layout.xml</code>) contains the instructions how the data should be layed out. The root element is the element with the name <code>Layout</code> with the namespace <code>urn:speedata.de:2009/publisher/en</code>, which expects instructions written in English (such as <a href="../commands-en/placeobject.html">PlaceObject</a>). The namespace <code>.../de</code> allows you to write the commands in German (e.g. <a href="../commands-de/placeobject.html">ObjektAusgeben</a>). The hello world example uses the <code>.../en</code> namespace of course. The feature set of both instruction languages is identical. A minimal (and pointless) layout file is:</p>
+
+<pre><code>&lt;Layout xmlns=&quot;urn:speedata.de:2009/publisher/en&quot; /&gt;
+</code></pre>
+
+<p>The XML file contains a declarative part (master pages, color definitions and similar) and a data processing part (read child elements and attributes and act upon the data). Both parts can be mixed.</p>
+
+<p>Data processing starts with the command <code>Record</code>:</p>
+
+<pre><code>&lt;Record element=&quot;(name of the root element)&quot;&gt;
+     ... instructions for the root element ...
+&lt;/Record&gt;
+</code></pre>
+
+<p>The instructions to place an object in the PDF is called (surprise!) <a href="../commands-en/placeobject.html"><code>PlaceObject</code></a>. It expects the kind of object as its child element (<a href="../commands-de/image.html">Image</a>, <a href="../commands-de/box.html">Box</a>, <a href="../commands-de/rule.html">Rule</a>, <a href="../commands-de/frame.html">Frame</a>, <a href="../commands-de/barcode.html">Barcode</a>, <a href="../commands-de/table.html">Table</a>, <a href="../commands-de/textblock.html">Textblock</a>, <a href="../commands-de/transformation.html">Transformation</a>). Textblock (a rectangular shaped text with a fixed width) expects one or more paragraphs as its child elements. The contents of the paragraph is encapsulated in the element <code>&lt;Value&gt;text that appears in the PDF&lt;/Value&gt;</code>. Instead of giving the text within the element <a href="../commands-en/value.html">Value</a>, it is possible to use a subset of <a href="xpath.html">XPath</a> expressions to select data from the data source. For example the familiar <code>@</code> notation for attribute access.</p>
+
+<p>The complete hello world example is simple:</p>
+
+<pre><code>&lt;Layout
+  xmlns=&quot;urn:speedata.de:2009/publisher/en&quot;
+  xmlns:sd=&quot;urn:speedata:2009/publisher/functions/en&quot;&gt;
+
+  &lt;Record element=&quot;root&quot;&gt;
+    &lt;PlaceObject&gt;
+      &lt;Textblock&gt;
+        &lt;Paragraph&gt;
+          &lt;Value select=&quot;@greeting&quot;/&gt;
+        &lt;/Paragraph&gt;
+      &lt;/Textblock&gt;
+    &lt;/PlaceObject&gt;
+  &lt;/Record&gt;
+&lt;/Layout&gt;
+</code></pre>
+
+<p>More examples can be found in the folder <a href="../examples-en/index.html">manual/examples-en</a> in the distribution.</p>
+
+<h2>Running the speedata Publisher</h2>
+
+<p>If both files are saved in the same directory, the PDF file can be generated with the commmand:</p>
+
+<pre><code>sp
+</code></pre>
+
+<p>The result is written to the file <code>publisher.pdf</code>.</p>
+
+<p><a href="../img/helloworldframe.png"><img src="../img/helloworldframe.png"></a></p>
+
+<p>The names of the data source and the layout rules can be set on the command line:</p>
+
+<pre><code>sp --data &lt;name of the data file.xml&gt; --layout &lt;name of the layout file.xml&gt;
+</code></pre>
+
+<p>or you can fix the file names in the file <code>publisher.cfg</code>:</p>
+
+<pre><code>data=&lt;datafile.xml&gt;
+layout=&lt;layoutfile.xml&gt;
+</code></pre>
+
+<p>More information on the subject in <a href="publisherusage.html">Using the speedata Publisher</a> and <a href="commandline.html">Running the speedata publisher on the command line</a>.</p>
+
+</div>
+
+
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
+Version: 2.3.6 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/firststeps.html">German</a>
+
+</body>
+</html>

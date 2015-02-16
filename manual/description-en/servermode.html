@@ -22,11 +22,90 @@
 
 <p>(Experimental)</p>
 
-<p>When the speedata Publisher is started in the server-mode, it expects HTTP-requests on port 5266 (configurable). There is currently only one request-URL to find hyphenation points in text.</p>
+<p>When the speedata Publisher is started in the server-mode (<code>sp server</code>), it expects HTTP-requests on port 5266 (configurable).</p>
 
-<h2>API</h2>
+<h2><code>/v0/publish</code></h2>
 
-<h3><code>/v0/format</code></h3>
+<p>When called with a POST-request, the speedata Publisher expects  a JSON file in the follwing format:</p>
+
+<pre><code>{&lt;filename&gt;:&lt;base64 encoded file contents&gt;,
+ &lt;filename&gt;:&lt;base64 encoded file contents&gt;,
+ ...
+ }
+</code></pre>
+
+<p>for example:</p>
+
+<pre><code>{&quot;layout.xml&quot;:&quot;PD94bWwgdmVyc2lv....&quot;,
+ &quot;data.xml&quot;:&quot;PGRhdGE+CiAgICA8Y29udGVudHM+PCFbQ0RBVEFbPHV...&quot; }
+</code></pre>
+
+<p>These files are copied into an empty directory and after the request, the program <code>sp</code> is called without arguments. The result of the POST request is in the form:</p>
+
+<pre><code>{&quot;id&quot;:&quot;752869708&quot;}
+</code></pre>
+
+<p>with an HTTP status code 200 (OK).</p>
+
+<p>If the JSON file is defective, the HTTP status code is 400 (bad request) and the returned contents is a text string, such as</p>
+
+<pre><code>illegal base64 data at input byte 0
+</code></pre>
+
+<p><strong>This format might change</strong></p>
+
+<h2><code>/v0/publish/&lt;id&gt;</code></h2>
+
+<p>A GET request with an id from the aforementioned POST request returns a JSON file with the following contents:</p>
+
+<pre><code>{&quot;status&quot;:&quot;ok&quot;,&quot;path&quot;:&quot;/path/to/publisher.pdf&quot;,&quot;blob&quot;:&quot;&lt;base64 encoded PDF file&quot;&gt;}
+</code></pre>
+
+<p>or, in case of an error, if the id is unknown:</p>
+
+<pre><code>{&quot;status&quot;:&quot;error&quot;,&quot;path&quot;:&quot;&quot;,&quot;blob&quot;:&quot;id unknown&quot;}
+</code></pre>
+
+<p>If the PDF file is not finished yet:</p>
+
+<pre><code>{&quot;status&quot;:&quot;error&quot;,&quot;path&quot;:&quot;&quot;,&quot;blob&quot;:&quot;in progress&quot;}
+</code></pre>
+
+<p>The directory of the publishing run will be deleted right after the request, unless the URL has the suffix <code>?delete=false</code>.</p>
+
+<h2><code>/v0/status/&lt;id&gt;</code></h2>
+
+<p>Determines the current status of the publishing run, which was POSTed to <code>/v0/publish</code>.</p>
+
+<p>The returned JSON has the following keys:</p>
+
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Descripiton</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>errorstatus</code></td>
+<td>Is the request valid? Possible answers are <code>error</code> and <code>ok</code>. If it is <code>error</code>, the value of the <code>message</code> contains the reason for the error, the value for the key <code>result</code> is without any meaning.</td>
+</tr>
+
+<tr>
+<td><code>result</code></td>
+<td>Contains <code>failed</code> if the PDF file is created but with errors. <code>not finished</code> if the PDF file is not finished, <code>ok</code> if everything went fine.</td>
+</tr>
+
+<tr>
+<td><code>message</code></td>
+<td>Contains an informal message, for example <code>no errors found</code> or <code>2 errors occurred during publishing run</code>.</td>
+</tr>
+</tbody>
+</table>
+
+<h2><code>/v0/format</code></h2>
 
 <p>Generates hyphenation points for a text, that is given via POST-request. The text is encoded in XML and can contain mandatory line breaks (<code>&lt;br class=&quot;keep&quot; /&gt;</code>) or mandatory mid-word breaks (<code>&lt;shy class=&quot;keep&quot; /&gt;</code>).</p>
 
@@ -58,7 +137,7 @@ start =
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.2.0 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/servermode.html">German</a>
+Version: 2.3.6 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/servermode.html">German</a>
 
 </body>
 </html>

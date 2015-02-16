@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (de)</title>
   <id>http://www.speedata.de</id>
-  <updated>2015-01-21T11:00:00+01:00</updated>
+  <updated>2015-02-16T17:37:24+01:00</updated>
   <subtitle>Neue Versionen des Publishers zum Download und Liste der Änderungen</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
@@ -9,7 +9,35 @@
     <email>info@speedata.de</email>
   </author>
   <entry>
-    <title>Version 2.2.36</title>
+    <title>Version 2.3.6</title>
+    <updated>2015-02-12T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-02-12:</id>
+    <content type="html">Die Datei publisher.status enthält die Nachrichten und Fehlermeldungen.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.4</title>
+    <updated>2015-01-27T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-01-27:</id>
+    <content type="html">Fehlerkorrektur: Sonderfarben gelten nun für Striche und Flächen</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.3</title>
+    <updated>2015-01-26T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-01-26:</id>
+    <content type="html">Ein paar CSS-Regeln für Linie, direkte Farbdefinition.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.2</title>
+    <updated>2015-01-22T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-01-22:</id>
+    <content type="html">Neuer Server-Modus für entferntes Publishing.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.1.36</title>
     <updated>2015-01-15T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-01-15:</id>
     <content type="html">Alle CSS Level 3 Farben hinzugefügt (siehe http://www.w3.org/TR/css3-color/ für eine Liste)</content>

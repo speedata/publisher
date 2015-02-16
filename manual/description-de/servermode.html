@@ -22,11 +22,91 @@
 
 <p>(Experimentell)</p>
 
-<p>Wird der speedata Publisher im Server-Modus gestartet, erwartet das Programm HTTP-Anfragen auf Port 5266 (konfigurierbar). Derzeit gibt es eine Anfrage-URL um Trennstellen zu ermitteln.</p>
+<p>Wird der speedata Publisher im Server-Modus gestartet (<code>sp server</code>), erwartet das Programm HTTP-Anfragen auf Port 5266 (konfigurierbar).</p>
 
-<h2>API</h2>
+<h2><code>/v0/publish</code></h2>
 
-<h3><code>/v0/format</code></h3>
+<p>Wird die URL mit einem POST-Request aufgerufen, erwartet der speedata Publisher eine JSON-Datei im folgenden Format:</p>
+
+<pre><code>{&lt;dateiname&gt;:&lt;base64 kodierter Inhalt&gt;,
+ &lt;dateiname&gt;:&lt;base64 kodierter Inhalt&gt;,
+ ...
+ }
+</code></pre>
+
+<p>also z.B.</p>
+
+<pre><code>{&quot;layout.xml&quot;:&quot;PD94bWwgdmVyc2lv....&quot;,
+ &quot;data.xml&quot;:&quot;PGRhdGE+CiAgICA8Y29udGVudHM+PCFbQ0RBVEFbPHV...&quot; }
+</code></pre>
+
+<p>Diese Dateien werden in ein leeres Verzeichnis kopiert und dort wird <code>sp</code> aufgerufen. Die Rückgabe ist in der Form</p>
+
+<pre><code>{&quot;id&quot;:&quot;752869708&quot;}
+</code></pre>
+
+<p>mit einem HTTP-Statuscode 200 (OK).</p>
+
+<p>Falls die JSON-Datei fehlerhaft ist, wird derzeit ein HTTP-Statuscode 400 (Bad
+Request) zurückgegeben, mit dem textuellen Inhalt der Fehlermeldung, z.B.:</p>
+
+<pre><code>illegal base64 data at input byte 0
+</code></pre>
+
+<p><strong>Das Format wird möglicherweise noch geändert</strong></p>
+
+<h2><code>/v0/publish/&lt;id&gt;</code></h2>
+
+<p>Ein GET-Request mit einer Id aus dem oben beschriebenen POST-Request liefert eine JSON-Datei, mit dem Inhalt:</p>
+
+<pre><code>{&quot;status&quot;:&quot;ok&quot;,&quot;path&quot;:&quot;/pfad/zu/publisher.pdf&quot;,&quot;blob&quot;:&quot;&lt;base64 kodiertes PDF&quot;&gt;}
+</code></pre>
+
+<p>oder, im Fehlerfall, falls die Id unbekannt ist:</p>
+
+<pre><code>{&quot;status&quot;:&quot;error&quot;,&quot;path&quot;:&quot;&quot;,&quot;blob&quot;:&quot;id unknown&quot;}
+</code></pre>
+
+<p>Falls die PDF-Datei noch nicht geschrieben wurde:</p>
+
+<pre><code>{&quot;status&quot;:&quot;error&quot;,&quot;path&quot;:&quot;&quot;,&quot;blob&quot;:&quot;in progress&quot;}
+</code></pre>
+
+<p>Das Verzeichnis mit der PDF-Datei wird nach diesem Request gelöscht, es sei denn, die URL enthält die Endung <code>?delete=false</code>.</p>
+
+<h2><code>/v0/status/&lt;id&gt;</code></h2>
+
+<p>Ermittelt den Status des Publisher-Laufs, der per POST-Request an <code>/v0/publish</code> gesendet wurde.</p>
+
+<p>Die zurückgegebene JSON Datei hat folgende Schlüssel:</p>
+
+<table>
+<thead>
+<tr>
+<th>Schlüssel</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>errorstatus</code></td>
+<td>Ist die Anfrage gültig? Mögliche Antworten <code>error</code> und <code>ok</code>. Wenn <code>error</code>, dann enthält der Schlüssel <code>message</code> den Grund für den Fehler, das Fed <code>result</code> ist in dem Fall ohne Bedeutung. Wenn <code>ok</code>, dann enthält das Feld <code>result</code> den Wert <code>not finished</code>, falls die PDF-Datei noch nicht erzeugt wurde.</td>
+</tr>
+
+<tr>
+<td><code>result</code></td>
+<td>Ist eine PDF-Datei erzeugt worden, enthält das Feld <code>result</code> <code>failed</code>, falls bei der PDF-Erzeugung Fehler aufgetreten sind, <code>not finished</code>, falls der Publishing-Prozess noch fortdauert, ansonsten <code>ok</code>.</td>
+</tr>
+
+<tr>
+<td><code>message</code></td>
+<td>Enthält eine informelle Nachricht zum Ergebnis. Bsp. <code>no errors found</code> oder <code>2 errors occurred during publishing run</code>.</td>
+</tr>
+</tbody>
+</table>
+
+<h2><code>/v0/format</code></h2>
 
 <p>Erzeugt Trennstellen für einen Text, der per POST-Request übergeben wird. Der Text wird mit XML kodiert und kann feste Umbrüche (<code>&lt;br class=&quot;keep&quot; /&gt;</code>) oder Trennvorschläge (<code>&lt;shy class=&quot;keep&quot; /&gt;</code>) enthalten.</p>
 
@@ -58,7 +138,7 @@ start =
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.2.0 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/servermode.html">Englisch</a>
+Version: 2.3.6 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/servermode.html">Englisch</a>
 
 </body>
 </html>
