@@ -886,7 +886,7 @@ function load_xml(filename,filetype,options)
     local path = kpse.find_file(filename)
     if not path then
         err("Can't find XML file %q. Abort.\n",filename or "?")
-        os.exit(-1)
+        return
     end
     log("Loading %s %q",filetype or "file",path)
     return luxor.parse_xml_file(path, options,kpse.find_file)

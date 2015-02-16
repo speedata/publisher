@@ -152,6 +152,7 @@ end
 --- Stop the data processing and write PDF. If `graceful` is not given or `false` then
 --- `os.exit()` gets called. This is the last function to be called.
 function exit(graceful)
+  tcp:close()
   log("Stop processing data")
   log("%d errors occurred",errcount)
   log("Duration: %3f seconds",os.gettimeofday() - starttime)
@@ -261,9 +262,7 @@ function main_loop()
   setup()
   -- global tcp object
   tcp = comm.listen()
-
   call(publisher.dothings)
-  tcp:close()
   exit(true)
 end
 
