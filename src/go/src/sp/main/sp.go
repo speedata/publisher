@@ -206,13 +206,13 @@ func getOption(optionname string) string {
 // Open the given file with the system's default program
 func openFile(filename string) {
 	opencommand := getOption("opencommand")
-	cmdname := strings.SplitN(opencommand+" "+filename, " ", 2)
-	cmd := exec.Command(cmdname[0], cmdname[1])
-	err := cmd.Start()
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = cmd.Wait()
+	cmdname := strings.SplitN(opencommand, " ", -1)
+	cmdname = append(cmdname, filepath.Base(filename))
+	cmd := exec.Command(cmdname[0], cmdname[1:]...)
+	// windows doesn't like quotation marks on the filename argument. So we change into the
+	// directory
+	cmd.Dir = filepath.Dir(filename)
+	err := cmd.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
