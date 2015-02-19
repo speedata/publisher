@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.7" date="2015-02-19">
+      <en>Background text for table cells (td)</en>
+      <de>Hintergrundtext für Tabellenzellen (td)</de>
+    </entry>
     <entry version="2.3.6" date="2015-02-12">
       <en>publisher.status file contains the (error-)messages.</en>
       <de>Die Datei publisher.status enthält die Nachrichten und Fehlermeldungen.</de>
