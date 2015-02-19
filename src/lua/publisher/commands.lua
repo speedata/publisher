@@ -877,7 +877,7 @@ function commands.image( layoutxml,dataxml )
     local maxwidth  = publisher.read_attribute(layoutxml,dataxml,"maxwidth",   "rawstring")
     local maxheight = publisher.read_attribute(layoutxml,dataxml,"maxheight",  "rawstring")
     local clip      = publisher.read_attribute(layoutxml,dataxml,"clip",       "boolean")
-    local seite     = publisher.read_attribute(layoutxml,dataxml,"page",       "number")
+    local page      = publisher.read_attribute(layoutxml,dataxml,"page",       "number")
     local nat_box   = publisher.read_attribute(layoutxml,dataxml,"naturalsize","string")
     local max_box   = publisher.read_attribute(layoutxml,dataxml,"maxsize",    "rawstring")
     local filename  = publisher.read_attribute(layoutxml,dataxml,"file",       "rawstring")
@@ -894,7 +894,7 @@ function commands.image( layoutxml,dataxml )
     if url ~= nil then
         imageinfo = publisher.get_image(url)
     else
-        imageinfo = publisher.new_image(filename,seite,max_box_intern)
+        imageinfo = publisher.new_image(filename,page,max_box_intern)
     end
 
     local image = img.copy(imageinfo.img)
@@ -2582,6 +2582,14 @@ function commands.td( layoutxml,dataxml )
                 tab["border-bottom"] = v
             elseif k == "text-align" then
                 tab.align = v
+            elseif k == "background-text" then
+                local x = string.match(v,"\"(.*)\"")
+                tab["background-text"] = x
+            elseif k == "background-size" then
+                if v ~= "contain" then
+                    err("The background size of Td must be 'contain'")
+                end
+                tab["background-size"] = "contain"
             else
                 tab[k] = v
             end
@@ -2597,7 +2605,12 @@ function commands.td( layoutxml,dataxml )
         ["padding-right"]    = "length",
         ["padding-bottom"]   = "length",
         ["padding-left"]     = "length",
-        ["backgroundcolor"]  = "rawstring",
+        ["backgroundcolor"]      = "rawstring",
+        ["background-text"]      = "rawstring",
+        ["background-textcolor"] = "rawstring",
+        ["background-transform"] = "rawstring",
+        ["background-size"]        = "rawstring",
+        ["background-font-family"] = "rawstring",
         ["valign"]           = "string",
         ["border-left"]      = "length",
         ["border-right"]     = "length",
@@ -2620,6 +2633,11 @@ function commands.td( layoutxml,dataxml )
     local tmp = publisher.read_attribute(layoutxml,dataxml,"align","string",nil,"align")
     if tmp then
         tab.align = tmp
+    end
+
+    if tab["background-transform"] then
+        local angle = string.match(tab["background-transform"],"rotate%((.-)deg%)")
+        tab["background-angle"] = tonumber(angle)
     end
 
     if tab.padding then

@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2014-11-21 15:13)
+-- generated from genluatranslations.go (2015-02-19 12:46)
 -- do not edit!
 module(...)
 return {
@@ -385,6 +385,11 @@ return {
         ["padding-bottom"] = "padding-bottom",
         ["padding-left"] = "padding-left",
         ["padding-right"] = "padding-right",
+        ["background-text"] = "background-text",
+        ["background-textcolor"] = "background-textcolor",
+        ["background-transform"] = "background-transform",
+        ["background-size"] = "background-size",
+        ["background-font-family"] = "background-font-family",
         },
       ["Tlinie"] = { "Tablerule",
         ["linienstärke"] = "rulewidth",

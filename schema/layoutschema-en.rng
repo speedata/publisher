@@ -3309,6 +3309,35 @@
                <a:documentation>Set the inner distance (width between contents and the border) to the right edge.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="background-text">
+               <a:documentation>A text that should be placed in the background of the table cell.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="background-textcolor">
+               <a:documentation>The color of the text in the background (if any).</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="background-transform">
+               <a:documentation>The transformation of the background text (if any). Currently supported: rotate(-40deg) (and other angles in the range 0 to -90).</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="background-size">
+               <a:documentation>Controls the size of the background text. Currently only &#39;contain&#39; is allowed.</a:documentation>
+               <choice>
+                  <value>contain</value>
+                  <a:documentation>Fill the height of the table cell.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="background-font-family">
+               <a:documentation>Set the font family of the background text. Defaults to the table font.</a:documentation>
+            </attribute>
+         </optional>
          <zeroOrMore>
             <choice>
                <ref name="e_Barcode"></ref>

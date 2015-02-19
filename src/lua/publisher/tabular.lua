@@ -978,6 +978,27 @@ function typeset_row(self, tr_contents, current_row )
             hlist = publisher.background(hlist,color)
         end
 
+        -- local bg = td_contents["background-image"]
+        -- if bg then
+        --     local bgimages = {}
+        --     for bgimage in string.gmatch(bg, "url%((.-)%)") do
+        --         bgimages[#bgimages + 1] = bgimage
+        --     end
+        --     -- Let's assume there is only one image for now
+        --     if #bgimages > 0 then
+        --         hlist = publisher.bgimage(hlist,bgimages[1])
+        --     end
+        -- end
+
+        local bg = td_contents["background-text"]
+        if bg then
+            local bgcolor = td_contents["background-textcolor"] or "black"
+            local angle = td_contents["background-angle"] or 0
+            local fontname = td_contents["background-font-family"]
+            local ff = publisher.fonts.lookup_fontfamily_name_number[fontname]
+            hlist = publisher.bgtext(hlist,bg,angle,bgcolor, ff or self.fontfamily)
+        end
+
         local head = hlist
         if td_bordertop > 0 then
             local rule = publisher.colorbar(current_column_width,td_bordertop,0,td_contents["border-top-color"])

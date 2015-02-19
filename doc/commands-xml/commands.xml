@@ -6229,6 +6229,54 @@
         <para>Bestimmt den Innenabstand einer Tabelle (rechts)</para>
       </description>
     </attribute>
+    <attribute en="background-text" de="background-text" optional="yes" css="background-text">
+      <description xml:lang="en">
+        <para>A text that should be placed in the background of the table cell.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Ein Text, der in den Tabellenhintergrund gelegt wird.</para>
+      </description>
+    </attribute>
+    <attribute en="background-textcolor" de="background-textcolor" optional="yes" css="background-textcolor">
+      <description xml:lang="en">
+        <para>The color of the text in the background (if any).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Farbe des Hintergrundtexts, falls vorhanden.</para>
+      </description>
+    </attribute>
+    <attribute en="background-transform" de="background-transform" optional="yes" css="background-transform">
+      <description xml:lang="en">
+        <para>The transformation of the background text (if any). Currently supported: <tt>rotate(-40deg)</tt> (and other angles in the range 0 to -90).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Transformation des Hintergrundtexts (falls vorhanden). Derzeit wird folgende Angabe unterstützt: <tt>rotate(-40deg) (und andere Winkel im Bereich 0 bis -90).</tt></para>
+      </description>
+    </attribute>
+    <attribute en="background-size" de="background-size" optional="yes" css="background-size">
+      <description xml:lang="en">
+        <para>Controls the size of the background text. Currently only 'contain' is allowed.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt die Größe des Hintergrundtexts. Derzeit ist nur 'contain' erlaubt.</para>
+      </description>
+      <choice en="contain" de="contain">
+        <description xml:lang="en">
+          <para>Fill the height of the table cell.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Text passt sich der Zellenhöhe an.</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="background-font-family" de="background-font-family" optional="yes" css="background-font-family" type="text">
+      <description xml:lang="en">
+        <para>Set the font family of the background text. Defaults to the table font.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setzt die Fontfamilie für den Hintergrundtext. Voreinstellung ist die Fontfamilie für die Tabelle.</para>
+      </description>
+    </attribute>
     <remark xml:lang="en">
       <para>The child elements of the table cells are either block objects that start a new line or inline objects that are placed horizontally next to each other (from left to right) until the width of the table cell forces a line break.
         Block objects are <cmd name="Paragraph"/>, <cmd name="Table"/> and <cmd name="Box"/>, inline objects are <cmd name="Barcode"/> and <cmd name="Image"/>.</para>
@@ -6243,6 +6291,35 @@
   <Td colspan="2" align="right"><Absatz><Wert>Text</Wert></Absatz></Td>
   <Td rowspan="3"><Bild breite="3" datei="bildname.jpg"/></Td>
 </Tr>]]></listing>
+    </example>
+    <example xml:lang="en">
+      <para>The following example places a background text behind the Td cell.</para>
+      <listing><![CDATA[<DefineFontfamily name="td-background" fontsize="12" leading="12">
+  <Regular fontface="TeXGyreHeros-Bold"/>
+</DefineFontfamily>
+
+<Record element="data">
+   <PlaceObject>
+     <Table stretch="max">
+       <Columns>
+         <Column width="5cm"/>
+       </Columns>
+       <Tr>
+         <Td border-top="0.25pt" border-bottom="0.25pt"
+            background-text="hello!"
+            background-textcolor="goldenrod"
+            background-transform="rotate(-30deg)"
+            background-size="contain"
+            background-font-family="td-background">
+           <Paragraph><Value>A wonderful serenity has taken possession of my entire soul,
+             like these sweet mornings of spring which I enjoy with my whole heart.</Value>
+           </Paragraph>
+         </Td>
+       </Tr>
+     </Table>
+   </PlaceObject>
+</Record>
+]]></listing>
     </example>
     <seealso>
       <cmd name="Table"/>,

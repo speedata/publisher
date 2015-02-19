@@ -1211,6 +1211,67 @@ function new_page()
     trace("page finished (new_page), setting current_pagenumber to %d",current_pagenumber)
 end
 
+-- a,b are both arrays of 6 numbers
+function concat_transformation( a, b )
+    local c = {}
+    c[1] = a[1] * b[1] + a[2] * b[3]
+    c[2] = a[1] * b[2] + a[2] * b[4]
+    c[3] = a[3] * b[1] + a[4] * b[3]
+    c[4] = a[3] * b[2] + a[4] * b[4]
+    c[5] = a[5] * b[1] + a[6] * b[3] + b[5]
+    c[6] = a[5] * b[2] + a[6] * b[4] + b[6]
+    return c
+end
+
+-- Place a text in the background
+function bgtext( box, textstring, angle, colorname, fontfamily )
+    local colorindex = colors[colorname].index
+    local boxheight, boxwidth = box.height, box.width
+    local angle_rad = -1 * math.rad(angle)
+    local sin = math.sin(angle_rad)
+    local cos = math.cos(angle_rad)
+    a = paragraph:new()
+    a:append(textstring, {fontfamily = fontfamily})
+    a:set_color(colorindex)
+    local textbox = node.hpack(a.nodelist)
+    local rotated_height = sin * textbox.width  + cos * textbox.height
+    local scale = boxheight  / rotated_height
+    local rotated_width  = sin * textbox.height + cos * textbox.width
+    local shift_right = sp_to_bp( (boxwidth - rotated_width * scale ) / 2)
+
+    -- rotate: [cos θ sin θ −sin θ cos θ 0 0 ]
+    local rotate_matrix = {   cos, sin, -1 * sin,   cos,           0, 0 }
+    local scale_matrix  = { scale,   0,        0, scale,           0, 0 }
+    local shift_matrix  = {     1,   0,        0,     1, shift_right, 0 }
+    local result_matrix
+    result_matrix = concat_transformation(rotate_matrix,scale_matrix)
+    result_matrix = concat_transformation(result_matrix,shift_matrix)
+    local matrixstring = string.format("%g %g %g %g %d %g",math.round(result_matrix[1],3),math.round(result_matrix[2],3),math.round(result_matrix[3],3),math.round(result_matrix[4],3),math.round(result_matrix[5],3),math.round(result_matrix[6],3))
+    local x = matrix( textbox, matrixstring,0,0 )
+    x = node.hpack(x)
+    x.width = 0
+    x.height = 0
+    box = node.insert_before(box,box,x)
+    box = node.hpack(box)
+    return box
+end
+
+-- Todo: size = contain, ...
+function bgimage( box, imagename )
+    local imginfo = new_image(imagename)
+    local image = img.copy(imginfo.img)
+    image.width = box.width
+    image.height = box.height
+
+    local imgnode = img.node(image)
+    local x = node.hpack(imgnode)
+    x.width = 0
+    x.height = 0
+    box = node.insert_before(box,box,x)
+    box = node.hpack(box)
+    return box
+end
+
 --- Draw a background behind the rectangular (box) object.
 function background( box, colorname )
     if not colors[colorname] then
