@@ -66,9 +66,9 @@ func attributes(lang string, attributes []*commandsxml.Attribute) template.HTML 
 	for _, att := range attributes {
 		switch lang {
 		case "en":
-			ret = append(ret, fmt.Sprintf(`<a href="#%s"><span class="tt">%s</span></a>`, att.HTMLFragment, att.NameEn))
+			ret = append(ret, fmt.Sprintf(`<a href="#%s"><span class="tt">%s</span></a>`, att.HTMLFragment(), att.NameEn))
 		case "de":
-			ret = append(ret, fmt.Sprintf(`<a href="#%s"><span class="tt">%s</span></a>`, att.HTMLFragment, att.NameDe))
+			ret = append(ret, fmt.Sprintf(`<a href="#%s"><span class="tt">%s</span></a>`, att.HTMLFragment(), att.NameDe))
 		}
 	}
 	return template.HTML(strings.Join(ret, ", "))
