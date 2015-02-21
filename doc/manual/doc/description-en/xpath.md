@@ -46,6 +46,7 @@ The following XPath expressions are handled by the software:
     less than symbol `<` **must** be written in XML as `&lt;`, the
     symbol `>` **can** be written as `&gt;`. Example: `$number > 6`. Can
     be used in tests.
+-   Simple if/then/else expressions: `if (...) then ... else ...`.
 
 The following XPath functions are known to the system:
 ------------------------------------------------------

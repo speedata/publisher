@@ -33,6 +33,7 @@ Folgende XPath-Ausdrücke erkennt das System:
     Zeichen `<` muss in XML als `&lt;` geschrieben werden, das Zeichen
     `>` kann als `&gt;` geschrieben werden. Beispiel: `$zahl > 6`. Kann
     in Bedingungen benutzt werden.
+-   Einfache `if/then/else`-Abfragen: `if (...) then ... else ...`
 
 Folgende XPath-Funktionen stehen bereit:
 ----------------------------------------

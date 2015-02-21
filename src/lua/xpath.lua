@@ -28,6 +28,42 @@ function M.pop_state()
     stack[#stack] = nil
 end
 
+function M.is_ifthenelse(dataxml,str,pos,ns)
+    local start,stop,num
+    start,stop = string.find(str,"^if%s+%(",pos)
+    if start then
+        local lvl = 1
+        local curpos,curstring = stop + 1, ""
+        while lvl > 0 do
+            curstring = string.sub(str,curpos,curpos)
+            if curstring == "(" then
+                lvl = lvl + 1
+            elseif curstring == ")" then
+                lvl = lvl - 1
+            end
+            curpos = curpos + 1
+        end
+        local eval = string.sub(str,stop + 1,curpos - 2)
+        M.push_state()
+        local ok = M.parse_internal(dataxml,eval,ns,1)[1]
+        M.pop_state()
+        local thenpart, elsepart
+        _, _, thenpart, elsepart = string.find(str,"then(.-)else(.*)")
+        local ret
+        M.push_state()
+        if ok then
+            ret = M.parse_internal(dataxml,thenpart,ns,1)[1]
+        else
+            ret = M.parse_internal(dataxml,elsepart,ns,1)[1]
+        end
+        M.pop_state()
+        M.tok = ret
+
+        return true
+    end
+    return false
+end
+
 function M.is_number(str,pos)
     local start,stop,num
     start, stop, num = string.find(str,"^([%-+]?%d+%.?%d*)%s*",pos)
@@ -217,6 +253,8 @@ function M.get_operand(dataxml,str,pos,ns)
     local start, stop
     if M.is_number(str,pos) then
          return tonumber(M.tok)
+    elseif M.is_ifthenelse(dataxml,str,pos,ns) then
+        return M.tok
     elseif M.is_attribute(dataxml,str,pos) then
         return M.tok
     elseif M.is_string(str,pos) then

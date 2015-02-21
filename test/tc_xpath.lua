@@ -78,6 +78,15 @@ xpath.register_function("foo","format-number",format_number)
 function test_foo()
 end
 
+function test_ifthenelse()
+  assert_true(secondoftwo(xpath.parse_raw(data,  " if ( 1 = 1 ) then true() else false()",namespace))[1] )
+  assert_false(secondoftwo(xpath.parse_raw(data, " if ( 1 = 2 ) then true() else false()",namespace))[1] )
+  assert_equal(secondoftwo(xpath.parse_raw(data, " if ( true() ) then 1 else 2",namespace))[1],1 )
+  assert_equal(secondoftwo(xpath.parse_raw(data, " if ( false() ) then 1 else 2",namespace))[1],2 )
+  assert_equal(secondoftwo(xpath.parse_raw(data, " if ( false() ) then 'a' else 'b'",namespace))[1],"b")
+  assert_equal(secondoftwo(xpath.parse_raw(data, " if ( true() ) then 'a' else 'b'",namespace))[1],"a")
+end
+
 function test_idiv()
   assert_equal(secondoftwo(xpath.parse_raw( data, " 10 idiv 3 ",namespace ))[1], 3)
   assert_equal(secondoftwo(xpath.parse_raw( data, " 3 idiv -2 ",namespace ))[1], -1)
