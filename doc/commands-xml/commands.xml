@@ -2621,6 +2621,14 @@
         <para>Warnung ausgeben, wenn das Bild eine geringere Auflösung bekommt als angegeben.</para>
       </description>
     </attribute>
+    <attribute en="rotate" de="drehen" type="number" optional="yes">
+      <description xml:lang="en">
+        <para>Rotate the image in steps of 90°. The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Dreht das Bild in 90°-Schritten. Ein Winkel > 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</para>
+      </description>
+    </attribute>
     <remark xml:lang="en">
       <para>The values of the attributes naturalsize and maxsize can be ‘artbox’, ‘bleedbox’, ‘cropbox’, ‘mediabox’ and ‘trimbox’. These two values are used to
       enlarge the image for the bleed. In the second example below the designated view port of the image is defined in the artbox, but the image has a larger

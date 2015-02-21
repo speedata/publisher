@@ -1424,6 +1424,11 @@
                <a:documentation>Warn if the image gets lower resultion than given.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="rotate">
+               <a:documentation>Rotate the image in steps of 90°. The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

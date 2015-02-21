@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2015-02-19 12:46)
+-- generated from genluatranslations.go (2015-02-21 21:22)
 -- do not edit!
 module(...)
 return {
@@ -165,6 +165,7 @@ return {
         ["minbreite"] = "minwidth",
         ["minhöhe"] = "minheight",
         ["dpiwarnung"] = "dpiwarn",
+        ["drehen"] = "rotate",
         },
       ["Kursiv"] = { "Italic",
         ["schriftart"] = "fontface",

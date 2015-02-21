@@ -1424,6 +1424,11 @@
                <a:documentation>Warnung ausgeben, wenn das Bild eine geringere Auflösung bekommt als angegeben.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="drehen">
+               <a:documentation>Dreht das Bild in 90°-Schritten. Ein Winkel &gt; 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
