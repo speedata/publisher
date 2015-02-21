@@ -143,7 +143,7 @@ local function number_of_pages(dataxml,arg )
   return img.img.pages
 end
 
-local function bildbreite(dataxml, arg )
+local function imagewidth(dataxml, arg )
   local filename = arg[1]
   local img = publisher.imageinfo(filename)
   publisher.setup_page()
@@ -282,6 +282,12 @@ local function count_saved_paged(dataxml,arg)
     return #publisher.pagestore[arg[1]]
 end
 
+local function aspectratio( dataxml,arg )
+  local filename = arg[1]
+  local img = publisher.imageinfo(filename)
+  return img.img.width / img.img.height
+end
+
 local function loremipsum( )
     local lorem = [[
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -365,8 +371,8 @@ register("urn:speedata:2009/publisher/functions/de","formatiere-zahl",format_num
 register("urn:speedata:2009/publisher/functions/en","format-string",format_string)
 register("urn:speedata:2009/publisher/functions/de","formatiere-string",format_string)
 
-register("urn:speedata:2009/publisher/functions/en","imagewidth",bildbreite)
-register("urn:speedata:2009/publisher/functions/de","bildbreite",bildbreite)
+register("urn:speedata:2009/publisher/functions/en","imagewidth",imagewidth)
+register("urn:speedata:2009/publisher/functions/de","bildbreite",imagewidth)
 
 register("urn:speedata:2009/publisher/functions/en","imageheight",imageheight)
 register("urn:speedata:2009/publisher/functions/de","bildhöhe",imageheight)
@@ -380,6 +386,9 @@ register("urn:speedata:2009/publisher/functions/de","anzahl-gespeicherte-seiten"
 
 register("urn:speedata:2009/publisher/functions/en","sha1",shaone)
 register("urn:speedata:2009/publisher/functions/de","sha1",shaone)
+
+register("urn:speedata:2009/publisher/functions/en","aspectratio",aspectratio)
+register("urn:speedata:2009/publisher/functions/de","seitenverhältnis",aspectratio)
 
 register("urn:speedata:2009/publisher/functions/en","dummytext",loremipsum)
 register("urn:speedata:2009/publisher/functions/de","blindtext",loremipsum)

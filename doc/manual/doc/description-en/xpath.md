@@ -64,6 +64,7 @@ sd:current-row() | Return the current row.
 sd:current-column() | Return the current column.
 sd:current-framenumber(\<name\>) | Return the current frame number of given positioning area.
 sd:alternating(\<type\>, \<text\>,\<text\>,.. ) | On each call the next element will be returned. You can define more alternating sequences by using distinct type values. Example: `sd:alternating("tbl", "White","Gray")` can be used for alternating color of table rules. To reset the state, use `sd:reset-alternating(<type>)`.
+sd:aspectratio(\<imagename>) | Return the result of the division width by height of the given image. (< 1 for portrait images, > 1 for landscape).
 sd:attr(\<name\>, ...)|  Is the same as `@name`, but can be used to dynamically construct the attribute name. See example at `sd:variable()`.
 sd:decode-html(\<node\>) | Change text such as `&lt;i&gt;italic&lt;/i&gt;` into HTML markup.
 sd:reset-alternating(\<type\>) | Reset alternating so the next `sd:alternating()` starts again from the first element.
