@@ -339,6 +339,7 @@ markers = {}
 current_group = nil
 current_grid = nil
 
+-- Used when bookmarks are inserted in a non-text context
 intextblockcontext = 0
 
 -- The array 'masterpages' has tables similar to these:

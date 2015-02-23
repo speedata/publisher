@@ -81,6 +81,9 @@ function M.is_attribute(dataxml,str,pos)
     if attr then
         M.nextpos = stop + 1
         M.tok = dataxml[attr]
+        if type(M.tok) == "string" and #M.tok == 0 then
+            M.tok = nil
+        end
         if M.tok == nil then M.tok = nilmarker end
         return true
     end

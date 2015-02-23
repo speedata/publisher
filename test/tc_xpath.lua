@@ -248,7 +248,7 @@ function test_attribute()
     assert_false(secondoftwo(xpath.parse_raw( data, "  @undefined = @undefined ",namespace ))[1])
     assert_false(secondoftwo(xpath.parse_raw( data, "  @undefined >= @undefined ",namespace ))[1])
     assert_true(secondoftwo(xpath.parse_raw(data, " empty(@undefined) "))[1])
-    assert_false(secondoftwo(xpath.parse_raw(data, " empty(@empty) "))[1])
+    assert_true(secondoftwo(xpath.parse_raw(data, " empty(@empty) "))[1])
 end
 
 

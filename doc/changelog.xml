@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.9" date="2015-02-23">
+      <en>Empty attributes (attr="") are treated as nil. empty(@attr) now returns true().</en>
+      <de>Leere Attribute (attr="") werden als nil behandelt. empty(@attr) gibt jetzt true() zurück.</de>
+    </entry>
     <entry version="2.3.8" date="2015-02-21">
       <en>Rotate (steps of 90°) for images</en>
       <de>Drehung in 90°-Schritten bei Bildern</de>
