@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.8" date="2015-02-21">
+      <en>Rotate (steps of 90°) for images</en>
+      <de>Drehung in 90°-Schritten bei Bildern</de>
+    </entry>
+    <entry version="2.3.8" date="2015-02-21">
+      <en>New xpath function sd:aspectratio('imgname.png')</en>
+      <de>Neue XPath-Funktion sd:seitenverhältnis('bildname.png')</de>
+    </entry>
+    <entry version="2.3.8" date="2015-02-21">
+      <en>Simple if/then/else expressions in XPath</en>
+      <de>Einfache if/then/else Ausdrücke in XPath</de>
+    </entry>
     <entry version="2.3.7" date="2015-02-19">
       <en>Background text for table cells (td)</en>
       <de>Hintergrundtext für Tabellenzellen (td)</de>
