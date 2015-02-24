@@ -27,9 +27,10 @@ end
 
 local errcount=0
 function err(...)
-  errcount =  errcount + 1
   local text = { ... }
   text[1] = gettext(text[1])
+  publisher.messages[#publisher.messages + 1] = { string.format(unpack(text)) , true }
+  errcount =  errcount + 1
   errorlog:write("Error: " .. string.format(unpack(text)) .. "\n")
   texio.write("Error: " .. string.format(unpack(text)) .. "\n")
 end

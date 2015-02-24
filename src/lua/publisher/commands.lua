@@ -1275,10 +1275,10 @@ function commands.message( layoutxml, dataxml )
             contents = ret
         end
     end
-    publisher.messages[#publisher.messages + 1] = { contents, errcond }
     if errcond then
         err("%q", tostring(contents) or "?")
     else
+        publisher.messages[#publisher.messages + 1] = { contents, false }
         log("Message: %q", tostring(contents) or "?")
     end
 end
