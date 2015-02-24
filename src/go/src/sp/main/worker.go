@@ -71,7 +71,7 @@ func (w Worker) Start() {
 				cmd := exec.Command(filepath.Join(bindir, "sp"+exe_suffix))
 				cmd.Dir = filepath.Join(serverTemp, work.Id)
 				cmd.Run()
-				fmt.Fprintf(protocolFile, "Id %s finished\n", w.ID, work.Id)
+				fmt.Fprintf(protocolFile, "Id %s finished\n", work.Id)
 			case <-w.QuitChan:
 				// We have been asked to stop.
 				return
