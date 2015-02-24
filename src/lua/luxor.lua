@@ -9,6 +9,7 @@
 
 local P,S = lpeg.P, lpeg.S
 
+local _string = string
 local string = unicode.utf8
 local current_element
 local decoder
@@ -270,10 +271,14 @@ local function parse_xml(txt,options)
 	else
 		txt = txt.gsub(txt,"\13\n?","\n")
 	end
-	if string.match(txt,"<%?xml",pos) then
+
+	-- If the file has utf8 errors, utf8.match goes into an infinite loop. Therefore
+	-- we use the plain old string.match function, which should be good enough for
+	-- detecting <%?xml
+	if _string.match(txt,"<%?xml",pos) then
 		pos = parse_xmldecl(txt,pos)
 	end
-	if string.match(txt,"<!DOCTYPE",pos) then
+	if _string.match(txt,"<!DOCTYPE",pos) then
 		pos = parse_doctype(txt,pos)
 	end
 
