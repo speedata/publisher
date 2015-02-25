@@ -1169,7 +1169,6 @@ function commands.makeindex( layoutxml,dataxml )
     local xpath       = publisher.read_attribute(layoutxml,dataxml,"select",  "xpathraw")
     local sortkey     = publisher.read_attribute(layoutxml,dataxml,"sortkey", "rawstring")
     local sectionname = publisher.read_attribute(layoutxml,dataxml,"section", "rawstring")
-
     publisher.stable_sort(xpath,function(elta,eltb)
         return string.lower(elta[sortkey]) < string.lower(eltb[sortkey])
     end)
@@ -1178,23 +1177,28 @@ function commands.makeindex( layoutxml,dataxml )
     local lastfirstletter = ""
     local ret = {}
     for i=1,#xpath do
-        local startletter = string.upper(string.sub(xpath[i][sortkey],1,1))
-
-        if startletter ~= lastfirstletter then
-            -- create a new section
-            section = { [".__local_name"] = sectionname, name = startletter }
-            ret[#ret + 1] = section
-        end
-        -- Add current entry to this section
-        -- The current implementation only concatenates page numbers
-        if xpath[i].name == lastname then
-            xpath[lastindex].page = xpath[lastindex].page .. ", " .. xpath[i].page
+        local tmp = string.sub(xpath[i][sortkey],1,1)
+        if tmp == nil or tmp == "" then
+            err("Incorrect index entry - no contents?")
         else
-            lastindex = i
-            lastname = xpath[i].name
-            section[#section + 1] = xpath[i]
+            local startletter = string.upper(tmp)
+
+            if startletter ~= lastfirstletter then
+                -- create a new section
+                section = { [".__local_name"] = sectionname, name = startletter }
+                ret[#ret + 1] = section
+            end
+            -- Add current entry to this section
+            -- The current implementation only concatenates page numbers
+            if xpath[i].name == lastname then
+                xpath[lastindex].page = xpath[lastindex].page .. ", " .. xpath[i].page
+            else
+                lastindex = i
+                lastname = xpath[i].name
+                section[#section + 1] = xpath[i]
+            end
+            lastfirstletter = startletter
         end
-        lastfirstletter = startletter
     end
     return ret
 end

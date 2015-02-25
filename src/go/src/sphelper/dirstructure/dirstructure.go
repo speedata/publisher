@@ -47,7 +47,6 @@ func MkBuilddir(cfg *config.Config, srcbindir string) error {
 		}
 	}
 	exefiles, err := filepath.Glob(filepath.Join(destdir, "bin", "*"))
-	fmt.Println(exefiles)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(-1)
