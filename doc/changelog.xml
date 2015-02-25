@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.10" date="2015-02-25">
+      <en>Bugfix: index entry without contents crashes the publisher.</en>
+      <de>Fehlerkorrektur: Indexeintrag ohne Inhalt lässt den Publisher abstürzen.</de>
+    </entry>
     <entry version="2.3.9" date="2015-02-24">
       <en>Bugfixes (sp server mode protocol file, infinite loop on malformed utf8 data)</en>
       <de>Fehlerkorrekturen (sp server-Modus .protocol Datei, Endlosschleife bei fehlerhaften UTF8-Daten)</de>
