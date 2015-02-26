@@ -2884,6 +2884,11 @@
                <a:documentation>Set the number of grid cells in vertical direction. Give ny or height, but not both.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="dx">
+               <a:documentation>Distance between two grid cells (horizontal)</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

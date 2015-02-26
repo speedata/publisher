@@ -231,7 +231,7 @@ function commands.box( layoutxml,dataxml )
 
     -- Todo: document length or number
     if tonumber(width) ~= nil then
-        width  = current_grid.gridwidth  * width
+        width  = current_grid:width_sp(width)
     else
         width = tex.sp(width)
     end
@@ -2144,6 +2144,9 @@ function commands.set_grid(layoutxml)
     local ht = publisher.read_attribute(layoutxml,dataxml,"height","rawstring")
     local nx = publisher.read_attribute(layoutxml,dataxml,"nx",    "rawstring")
     local ny = publisher.read_attribute(layoutxml,dataxml,"ny",    "rawstring")
+    local dx = publisher.read_attribute(layoutxml,dataxml,"dx",    "length_sp")
+
+    publisher.options.gridcells_dx = dx
 
     local _nx = tonumber(nx)
     local _ny = tonumber(ny)

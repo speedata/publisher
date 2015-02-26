@@ -950,6 +950,8 @@ function output_at( param )
     local r = grid or current_grid
     local wd = nodelist.width
     local ht = nodelist.height + nodelist.depth
+
+    -- For grid allocation
     local width_gridcells = r:width_in_gridcells_sp(wd)
     local height_gridcells  = r:height_in_gridcells_sp (ht)
 
@@ -1099,6 +1101,7 @@ function setup_page(pagenumber)
     local gridwidth, gridheight, nx, ny
     nx = options.gridcells_x
     ny = options.gridcells_y
+    dx = options.gridcells_dx
 
     local pagetype = detect_pagetype(thispage)
     if pagetype == false then return false end
@@ -1112,6 +1115,7 @@ function setup_page(pagenumber)
             gridheight = element_contents(j).height
             nx = element_contents(j).nx
             ny = element_contents(j).ny
+            dx = element_contents(j).ny
         end
     end
 
@@ -1123,7 +1127,7 @@ function setup_page(pagenumber)
         gridheight = options.gridheight
     end
 
-    current_page.grid:set_width_height({wd = gridwidth, ht = gridheight, nx = nx, ny = ny })
+    current_page.grid:set_width_height({wd = gridwidth, ht = gridheight, nx = nx, ny = ny, dx = dx })
 
     for _,j in ipairs(pagetype) do
         local eltname = elementname(j)
@@ -1640,7 +1644,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     elseif typ=="length_sp" then
         num = tonumber(val or default)
         if num then -- most likely really a number, we need to multiply with grid width
-            ret = current_grid.gridwidth * num
+            ret = current_grid:width_sp(num)
         else
             ret = val
         end
@@ -3136,7 +3140,7 @@ function set_image_length(len,width_or_height)
         return xpath.get_variable("__maxwidth") * current_grid.gridwidth
     elseif tonumber(len) then
         if width_or_height == "width" then
-            return len * current_grid.gridwidth
+            return current_grid:width_sp(len)
         else
             return len * current_grid.gridheight
         end

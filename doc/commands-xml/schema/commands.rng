@@ -201,6 +201,9 @@
               <optional>
                 <attribute name="css"/>
               </optional>
+              <optional>
+                <attribute name="since"/>
+              </optional>
               <ref name="descriptions" />
               <choice>
                 <attribute name="type">

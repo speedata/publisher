@@ -5164,6 +5164,14 @@
         <para>Gibt die Anzahl der Rasterzellen in vertikaler Richtung an. Entweder ny oder höhe angeben.</para>
       </description>
     </attribute>
+    <attribute en="dx" de="dx" optional="yes" since="2.3.11">
+      <description xml:lang="en">
+        <para>Distance between two grid cells (horizontal)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Abstand zwischen zwei Rasterzellen (horizontal)</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<SetGrid width="4mm" height="14pt"/>]]></listing>
     </example>

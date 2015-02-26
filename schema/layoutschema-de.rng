@@ -2884,6 +2884,11 @@
                <a:documentation>Gibt die Anzahl der Rasterzellen in vertikaler Richtung an. Entweder ny oder höhe angeben.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="dx">
+               <a:documentation>Abstand zwischen zwei Rasterzellen (horizontal)</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
