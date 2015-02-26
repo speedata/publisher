@@ -18,6 +18,14 @@ var (
 	wg sync.WaitGroup
 )
 
+func fileExists(filename string) bool {
+	fi, err := os.Stat(filename)
+	if err != nil {
+		return false
+	}
+	return !fi.IsDir()
+}
+
 func DoCompare(absdir string) {
 	compareStatus := make(chan compareStatus, 0)
 	compare := mkCompare(compareStatus)
@@ -29,6 +37,10 @@ func DoCompare(absdir string) {
 func compareTwoPages(sourcefile, referencefile, dummyfile, path string) float64 {
 	// More complicated than the trivial case because I need the different exit statuses.
 	// See http://stackoverflow.com/a/10385867
+	if !fileExists(filepath.Join(path, sourcefile)) || !fileExists(filepath.Join(path, referencefile)) {
+		return 99.0
+	}
+
 	cmd := exec.Command("compare", "-metric", "mae", sourcefile, referencefile, dummyfile)
 	cmd.Dir = path
 	// err == 1 looks like an indicator that the comparison is OK but some diffs in the images
@@ -89,10 +101,11 @@ func runComparison(path string, status chan compareStatus) {
 	cs := compareStatus{}
 	cs.path = path
 
-	sourceFiles, err := filepath.Glob("source-*.png")
+	sourceFiles, err := filepath.Glob(filepath.Join(path, "source-*.png"))
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	// Let's remove the old source files, otherwise
 	// the number of pages (below) might
 	// be incorrect which results in a fatal
