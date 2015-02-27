@@ -8,6 +8,10 @@ Server-Modus
 
 Wird der speedata Publisher im Server-Modus gestartet (`sp server`), erwartet das Programm HTTP-Anfragen auf Port 5266 (konfigurierbar).
 
+## `/available`
+
+Gibt den HTTP-Status 200 zurück.
+
 ## `/v0/publish`
 
 Wird die URL mit einem POST-Request aufgerufen, erwartet der speedata Publisher eine JSON-Datei im folgenden Format:
@@ -28,7 +32,7 @@ Diese Dateien werden in ein leeres Verzeichnis kopiert und dort wird `sp` aufger
 
     {"id":"752869708"}
 
-mit einem HTTP-Statuscode 200 (OK).
+mit einem HTTP-Statuscode 201 (Created).
 
 Falls die JSON-Datei fehlerhaft ist, wird derzeit ein HTTP-Statuscode 400 (Bad
 Request) zurückgegeben, mit dem textuellen Inhalt der Fehlermeldung, z.B.:

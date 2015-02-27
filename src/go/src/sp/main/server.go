@@ -226,7 +226,7 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, marshallerr)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusCreated)
 	w.Write(buf)
 
 	return
@@ -345,6 +345,11 @@ func v0FormatHandler(w http.ResponseWriter, req *http.Request) {
 	w.Write(<-daemon.Message)
 }
 
+func available(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	return
+}
+
 func runServer(port string, address string) {
 	var err error
 	protocolFile, err = os.Create("publisher.protocol")
@@ -360,6 +365,7 @@ func runServer(port string, address string) {
 	StartDispatcher(runtime.NumCPU())
 
 	r := mux.NewRouter()
+	r.HandleFunc("/available", available)
 	v0 := r.PathPrefix("/v0").Subrouter()
 	v0.HandleFunc("/format", v0FormatHandler)
 	v0.HandleFunc("/publish", v0PublishHandler).Methods("POST")
