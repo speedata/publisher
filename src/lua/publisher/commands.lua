@@ -803,7 +803,7 @@ function commands.group( layoutxml,dataxml )
         end
         r:set_width_height({wd = grid.width, ht = grid.height})
     else
-        r:set_width_height({wd = publisher.current_page.grid.gridwidth, ht = publisher.current_page.grid.gridheight})
+        r:set_width_height({wd = publisher.current_page.grid.gridwidth, ht = publisher.current_page.grid.gridheight, dx = publisher.current_page.grid.grid_dx })
     end
     publisher.groups[groupname] = {
         contents = contents,
