@@ -46,7 +46,8 @@ Request) zurückgegeben, mit dem textuellen Inhalt der Fehlermeldung, z.B.:
 
 Ein GET-Request mit einer Id aus dem oben beschriebenen POST-Request liefert eine JSON-Datei, mit dem Inhalt:
 
-    {"status":"ok","path":"/pfad/zu/publisher.pdf","blob":"<base64 kodiertes PDF>",finished:"2015-03-03T13:12:55+01:00"}
+    {"status":"ok","path":"/pfad/zu/publisher.pdf","blob":"<base64 kodiertes PDF>",
+      finished:"2015-03-03T13:12:55+01:00"}
 
 oder, im Fehlerfall, falls die Id unbekannt ist:
 
@@ -57,6 +58,18 @@ Falls die PDF-Datei noch nicht geschrieben wurde:
     {"status":"error","path":"","blob":"in progress"}
 
 Das Verzeichnis mit der PDF-Datei wird nach diesem Request gelöscht, es sei denn, die URL enthält die Endung `?delete=false`.
+
+## `/v0/pdf/<id>`
+
+Ein GET-Request mit der Id aus dem POST-Request von `/v0/publish`. Es wird im Erfolgsfall die PDF-Datei mit dem Statuscode 200 und dem Dateinamen `publisher.pdf` zurückgegeben. Der Request wartet auf die Fertigstellung des Publishing Prozesses. Im Fehlerfall wird nur ein Fehlercode zurück gegeben:
+
+Statuscode  | Beschreibung
+------------|--------------
+200 OK              | PDF wurde fehlerfrei generiert
+404 Not Found       | Id ungültig
+406  Not Acceptable | PDF wurde fehlerhaft generiert
+
+
 
 ## `/v0/status/<id>`
 

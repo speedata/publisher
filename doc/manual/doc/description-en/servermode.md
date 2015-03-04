@@ -45,7 +45,8 @@ If the JSON file is defective, the HTTP status code is 400 (bad request) and the
 
 A GET request with an id from the aforementioned POST request returns a JSON file with the following contents:
 
-    {"status":"ok","path":"/path/to/publisher.pdf","blob":"<base64 encoded PDF file>",finished:"2015-03-03T13:12:55+01:00"}
+    {"status":"ok","path":"/path/to/publisher.pdf","blob":"<base64 encoded PDF file>",
+     finished:"2015-03-03T13:12:55+01:00"}
 
 or, in case of an error, if the id is unknown:
 
@@ -58,13 +59,24 @@ If the PDF file is not finished yet:
 The directory of the publishing run will be deleted right after the request, unless the URL has the suffix `?delete=false`.
 
 
+## `/v0/pdf/<id>`
+
+A GET request with an id from the aforementioned POST request. In case of success, the PDF file gets returned with a 200 OK status. The request waits for the PDF file to be ready. On error, the answer is an error code:
+
+Status code  | Description
+------------|--------------
+200 OK              | PDF rendered OK
+404 Not Found       | Id is invalid
+406  Not Acceptable | PDF has errors
+
+
 ## `/v0/status/<id>`
 
 Determines the current status of the publishing run, which was POSTed to `/v0/publish`.
 
 The returned JSON has the following keys:
 
-Key           | Descripiton
+Key           | Description
 --------------|--------------
 `errorstatus` | Is the request valid? Possible answers are `error` and `ok`. If it is `error`, the value of the `message` contains the reason for the error, the value for the key `result` is without any meaning.
 `result`      | Contains `failed` if the PDF file is created but with errors. `not finished` if the PDF file is not finished, `ok` if everything went fine.

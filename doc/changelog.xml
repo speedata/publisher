@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.14" date="2015-03-04">
+      <en>Server-mode: /v0/pdf/&lt;id&gt; returns the PDF</en>
+      <de>Server-Modus: /v0/pdf/&lt;id&gt; gibt das PDF zurück</de>
+    </entry>
     <entry version="2.3.14" date="2015-03-03">
       <en>Server-mode: add timestamp for /v0/publish/&lt;id&gt;</en>
       <de>Server-Modus: Zeitstempel für /v0/publish/&lt;id&gt;</de>

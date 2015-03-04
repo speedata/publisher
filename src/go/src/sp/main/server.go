@@ -7,6 +7,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"fmt"
+	"fsnotify"
 	"github.com/gorilla/mux"
 	"io"
 	"io/ioutil"
@@ -76,7 +77,7 @@ func addPublishrequestToQueue(id string) {
 	WorkQueue <- WorkRequest{Id: id}
 }
 
-func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
+func v0PublishIdHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	response := struct {
 		Status     string `json:"status"`
@@ -158,6 +159,120 @@ func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func watchDirectory(dir string, filename string) error {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = watcher.WatchFlags(dir, fsnotify.FSN_CREATE)
+	if err != nil {
+		return err
+	}
+
+	for {
+		select {
+		case ev := <-watcher.Event:
+			if ev.IsCreate() {
+				x := filepath.Join(dir, filename)
+				if ev.Name == x {
+					return waitForFile2(ev.Name)
+				}
+			}
+		case err := <-watcher.Error:
+			return err
+		}
+	}
+	watcher.Close()
+	return nil
+}
+
+func waitForFile2(filename string) error {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		return err
+	}
+
+	err = watcher.Watch(filename)
+	if err != nil {
+		return err
+	}
+
+	for {
+		timer := time.NewTimer(100 * time.Millisecond)
+		select {
+		case <-watcher.Event:
+		case err := <-watcher.Error:
+			return err
+		case <-timer.C:
+			return nil
+		}
+		timer.Stop()
+	}
+	watcher.Close()
+	return nil
+}
+
+func waitForFile(dir, filename string) error {
+	f := filepath.Join(dir, filename)
+	_, err := os.Stat(f)
+	if err == nil {
+		// Exists, so we just need to wait for the last write
+		return waitForFile2(f)
+
+	}
+	return watchDirectory(dir, filename)
+}
+
+func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
+	// Not found? 404
+	// PDF not ready? Wait
+	// PDF has errors? 406
+	// PDF ok? 200
+	// Internal error? 500
+	id := mux.Vars(r)["id"]
+	fmt.Fprintf(protocolFile, "/v0/pdf/%s\n", id)
+	publishdir := filepath.Join(serverTemp, id)
+	fi, err := os.Stat(publishdir)
+	if err != nil && os.IsNotExist(err) || !fi.IsDir() {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintln(protocolFile, err)
+		return
+	}
+
+	statusPath := filepath.Join(publishdir, "publisher.status")
+	err = waitForFile(publishdir, "publisher.status")
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintln(protocolFile, err)
+		return
+	}
+
+	data, err := ioutil.ReadFile(statusPath)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintln(protocolFile, err)
+		return
+	}
+
+	v := status{}
+	err = xml.Unmarshal(data, &v)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintln(protocolFile, err)
+		return
+	}
+
+	if v.Errors > 0 {
+		w.WriteHeader(http.StatusNotAcceptable)
+		fmt.Fprintf(protocolFile, "PDF with errors")
+		return
+	}
+	w.Header().Set("Content-Type", "application/pdf")
+	w.Header().Add("Content-Disposition", `attachment; filename="publisher.pdf"`)
+	w.Header().Add("Content-Transfer-Encoding", "binary")
+	http.ServeFile(w, r, filepath.Join(publishdir, "publisher.pdf"))
+}
+
 func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 	var files map[string]interface{}
 	data, err := ioutil.ReadAll(r.Body)
@@ -213,7 +328,6 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		f.Close()
 	}
-
 	addPublishrequestToQueue(id)
 
 	jsonid := struct {
@@ -370,7 +484,8 @@ func runServer(port string, address string) {
 	v0 := r.PathPrefix("/v0").Subrouter()
 	v0.HandleFunc("/format", v0FormatHandler)
 	v0.HandleFunc("/publish", v0PublishHandler).Methods("POST")
-	v0.HandleFunc("/publish/{id}", v0GetPDFHandler).Methods("GET")
+	v0.HandleFunc("/pdf/{id}", v0GetPDFHandler).Methods("GET")
+	v0.HandleFunc("/publish/{id}", v0PublishIdHandler).Methods("GET")
 	v0.HandleFunc("/status/{id}", v0StatusHandler).Methods("GET")
 	http.Handle("/", r)
 	fmt.Printf("Listen on http://%s:%s\n", address, port)
