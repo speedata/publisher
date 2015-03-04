@@ -1,8 +1,8 @@
 layout: main
 title: Changelog
 ---
-Liste der Änderungen
-====================
+Liste der Änderungen ([Feed](../changes-de.xml))
+====================================================
 
 {{/*
        changelog ist ab sofort in changelog.xml

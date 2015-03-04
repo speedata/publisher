@@ -46,7 +46,7 @@ Request) zurückgegeben, mit dem textuellen Inhalt der Fehlermeldung, z.B.:
 
 Ein GET-Request mit einer Id aus dem oben beschriebenen POST-Request liefert eine JSON-Datei, mit dem Inhalt:
 
-    {"status":"ok","path":"/pfad/zu/publisher.pdf","blob":"<base64 kodiertes PDF">}
+    {"status":"ok","path":"/pfad/zu/publisher.pdf","blob":"<base64 kodiertes PDF>",finished:"2015-03-03T13:12:55+01:00"}
 
 oder, im Fehlerfall, falls die Id unbekannt ist:
 

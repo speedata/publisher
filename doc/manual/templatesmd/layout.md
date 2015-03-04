@@ -12,7 +12,7 @@ File | Description
 {{end}}
 
 {{define "changelog"}}
-{{ $isen := .IsEn }}{{ range .Changelog.Chapter }}<h2>Version {{ .Version }}</h2>
-<ul>{{range .Entries }}<li>{{if $isen}}{{.En.Text}}{{else}}{{.De.Text}}{{end}} ({{.Version}})</li>{{end}}
+{{ range .Changelog.Chapter }}<h2>Version {{ .Version }}</h2>
+<ul>{{range .Entries }}<li>{{if $.IsEn}}{{.En.Text}}{{else}}{{.De.Text}}{{end}} ({{.Version}})</li>{{end}}
 </ul>{{end}}
 {{ end }}

@@ -83,8 +83,8 @@ func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 		Path       string `json:"path"`
 		Blob       string `json:"blob"`
 		Statusfile string `json:"statusfile"`
+		Finished   string `json:"finished"`
 	}{}
-
 	publishdir := filepath.Join(serverTemp, id)
 	fi, err := os.Stat(publishdir)
 	if err != nil && os.IsNotExist(err) || !fi.IsDir() {
@@ -132,6 +132,7 @@ func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 
 	response.Status = "ok"
 	response.Path = pdfPath
+	response.Finished = fi.ModTime().Format(time.RFC3339)
 	response.Blob, err = encodeFileToBase64(pdfPath)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

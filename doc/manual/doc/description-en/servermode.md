@@ -45,7 +45,7 @@ If the JSON file is defective, the HTTP status code is 400 (bad request) and the
 
 A GET request with an id from the aforementioned POST request returns a JSON file with the following contents:
 
-    {"status":"ok","path":"/path/to/publisher.pdf","blob":"<base64 encoded PDF file">}
+    {"status":"ok","path":"/path/to/publisher.pdf","blob":"<base64 encoded PDF file>",finished:"2015-03-03T13:12:55+01:00"}
 
 or, in case of an error, if the id is unknown:
 

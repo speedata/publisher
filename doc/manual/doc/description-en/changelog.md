@@ -1,7 +1,7 @@
 title: speedata Publisher manual
 ---
-Changelog
-=========
+Changelog ([feed](../changes-en.xml))
+=====================================
 
 {{/*
        changelog is now in changelog.xml

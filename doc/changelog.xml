@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.14" date="2015-03-03">
+      <en>Server-mode: add timestamp for /v0/publish/&lt;id&gt;</en>
+      <de>Server-Modus: Zeitstempel für /v0/publish/&lt;id&gt;</de>
+    </entry>
     <entry version="2.3.12" date="2015-02-27">
       <en>New api call /available -> 200 OK, /v0/publish returns 201</en>
       <de>Neuer API Aufruf /available -> 200 OK, /v0/publish gibt 201 zurück</de>
