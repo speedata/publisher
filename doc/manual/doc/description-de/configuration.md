@@ -31,9 +31,9 @@ Wert | Beschreibung
 `autoopen` | wenn hier `true` anstelle von `false` steht, wird das PDF nach dem Publisher Durchlauf automatisch geöffnet. Derselbe Effekt lässt sich über die Kommandozeile mit `--autoopen` erreichen.
 `data` | Name der XML-Daten. Wenn nicht vorhanden, wird die Datei `daten.xml` geladen.
 `dummy` | Wenn `true`, dann wird die Datendatei nicht eingelesen. Anstatt dessen wird wird der folgende Inhalt angenommen: `<data />`. Das dient zum einfachen Testen von Layoutregelwerken.
-`extra-dir` | Ein Verzeichnis im Dateisystem, das Dateien für den Publisherlauf enthält. Dazu gehören die Schriftdateien, die XML-Dateien (Daten und Layoutregelwerk) sowie die einzubindenden Bilddateien. Sollen mehrere Verzeichnisse hinzugefügt werden, müssen diese mit `:` oder `;` getrennt werden, je nach Betriebssystem (Windows: `;`, alle anderen: `:`). Das aktuelle Verzeichnis wird automatisch eingebunden.
+`extra-dir` | Ein Verzeichnis im Dateisystem, das Dateien für den Publisherlauf enthält. Dazu gehören die Schriftdateien, die XML-Dateien (Daten und Layoutregelwerk) sowie die einzubindenden Bilddateien. Sollen mehrere Verzeichnisse hinzugefügt werden, müssen diese mit `:` oder `;` getrennt werden, je nach Betriebssystem (Windows: `;`, alle anderen: `:`). Das aktuelle Verzeichnis wird automatisch eingebunden. Beispiel unter Windows: `extra-dir=c:\myfonts`.
 `filter` | Führt die angegebene Datei als XPROC-Filter aus.
-`fontpath` | Setzt den systemweiten Pfad für Fonts. Unter Windows ist dies `%WINDIR%\Fonts`, unter Mac OS X `/Library/Fonts:/System/Library/Fonts`.
+`fontpath` | Setzt den systemweiten Pfad für Fonts. Unter Windows ist dies `%WINDIR%\Fonts`, unter Mac OS X `/Library/Fonts:/System/Library/Fonts`. Funktioniert derzeit nicht unter Windows XP.
 `grid` | Bestimmt, ob das Raster angezeigt wird.
 `imagecache` | Ordner für zwichengespeicherte Bilder (nur `href="http://..."`). Voreinstellung: `$TMPDIR/sp/images`.
 `jobname` | Name der Ausgabedatei

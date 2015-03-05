@@ -566,7 +566,7 @@ func main() {
 	op.On("--runs NUM", "Number of publishing runs ", options)
 	op.On("--startpage NUM", "The first page number", layoutoptions)
 	op.On("--show-gridallocation", "Show the allocated grid cells", layoutoptions)
-	op.On("--systemfonts", "Use system fonts", &useSystemFonts)
+	op.On("--systemfonts", "Use system fonts (not Win XP)", &useSystemFonts)
 	op.On("--trace", "Show debug messages and some tracing PDF output", layoutoptions)
 	op.On("--timeout SEC", "Exit after SEC seconds", options)
 	op.On("-v", "--var VAR=VALUE", "Set a variable for the publishing run", setVariable)
