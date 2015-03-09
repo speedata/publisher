@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.15" date="2015-03-09">
+      <en>API changes: make jobname configurable through parameter, better error messages.</en>
+      <de>API Änderungen: jobname ist per URL-Parameter konfigurierbar, bessere Fehlermeldungen</de>
+    </entry>
     <entry version="2.3.14" date="2015-03-04">
       <en>Server-mode: /v0/pdf/&lt;id&gt; returns the PDF</en>
       <de>Server-Modus: /v0/pdf/&lt;id&gt; gibt das PDF zurück</de>
