@@ -77,6 +77,74 @@ func addPublishrequestToQueue(id string) {
 	WorkQueue <- WorkRequest{Id: id}
 }
 
+// Wait until the file filename gets created in directory dir
+func watchDirectory(dir string, filename string) error {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = watcher.WatchFlags(dir, fsnotify.FSN_CREATE)
+	if err != nil {
+		return err
+	}
+
+	for {
+		select {
+		case ev := <-watcher.Event:
+			if ev.IsCreate() {
+				x := filepath.Join(dir, filename)
+				if ev.Name == x {
+					return waitForFile2(ev.Name)
+				}
+			}
+		case err := <-watcher.Error:
+			return err
+		}
+	}
+	watcher.Close()
+	return nil
+}
+
+// Wait until the file filename has no more changes
+func waitForFile2(filename string) error {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		return err
+	}
+
+	err = watcher.Watch(filename)
+	if err != nil {
+		return err
+	}
+
+	for {
+		timer := time.NewTimer(100 * time.Millisecond)
+		select {
+		case <-watcher.Event:
+		case err := <-watcher.Error:
+			return err
+		case <-timer.C:
+			return nil
+		}
+		timer.Stop()
+	}
+	watcher.Close()
+	return nil
+}
+
+// Wait until filename in dir exists and is complete
+func waitForFile(dir, filename string) error {
+	f := filepath.Join(dir, filename)
+	_, err := os.Stat(f)
+	if err == nil {
+		// Exists, so we just need to wait for the last write
+		return waitForFile2(f)
+
+	}
+	return watchDirectory(dir, filename)
+}
+
+// Request a JSON answer with the PDF and the status file.
 func v0PublishIdHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	response := struct {
@@ -159,70 +227,7 @@ func v0PublishIdHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func watchDirectory(dir string, filename string) error {
-	watcher, err := fsnotify.NewWatcher()
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = watcher.WatchFlags(dir, fsnotify.FSN_CREATE)
-	if err != nil {
-		return err
-	}
-
-	for {
-		select {
-		case ev := <-watcher.Event:
-			if ev.IsCreate() {
-				x := filepath.Join(dir, filename)
-				if ev.Name == x {
-					return waitForFile2(ev.Name)
-				}
-			}
-		case err := <-watcher.Error:
-			return err
-		}
-	}
-	watcher.Close()
-	return nil
-}
-
-func waitForFile2(filename string) error {
-	watcher, err := fsnotify.NewWatcher()
-	if err != nil {
-		return err
-	}
-
-	err = watcher.Watch(filename)
-	if err != nil {
-		return err
-	}
-
-	for {
-		timer := time.NewTimer(100 * time.Millisecond)
-		select {
-		case <-watcher.Event:
-		case err := <-watcher.Error:
-			return err
-		case <-timer.C:
-			return nil
-		}
-		timer.Stop()
-	}
-	watcher.Close()
-	return nil
-}
-
-func waitForFile(dir, filename string) error {
-	f := filepath.Join(dir, filename)
-	_, err := os.Stat(f)
-	if err == nil {
-		// Exists, so we just need to wait for the last write
-		return waitForFile2(f)
-
-	}
-	return watchDirectory(dir, filename)
-}
-
+// Return the PDF from job id (given in the URL)
 func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 	// Not found? 404
 	// PDF not ready? Wait
@@ -267,12 +272,27 @@ func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(protocolFile, "PDF with errors")
 		return
 	}
+
+	filename := "publisher.pdf"
+	// if jobname.txt was written, use the contents for the jobname
+	fi, err = os.Stat(filepath.Join(publishdir, "jobname.txt"))
+	if err == nil {
+		name, err := ioutil.ReadFile(filepath.Join(publishdir, "jobname.txt"))
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintln(protocolFile, err)
+			return
+		}
+		filename = string(name) + ".pdf"
+	}
+
 	w.Header().Set("Content-Type", "application/pdf")
-	w.Header().Add("Content-Disposition", `attachment; filename="publisher.pdf"`)
+	w.Header().Add("Content-Disposition", fmt.Sprintf(`attachment; filename=%q`, filename))
 	w.Header().Add("Content-Transfer-Encoding", "binary")
 	http.ServeFile(w, r, filepath.Join(publishdir, "publisher.pdf"))
 }
 
+// Start a publishing process. Accepted parameter: jobname=<jobname>
 func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 	var files map[string]interface{}
 	data, err := ioutil.ReadAll(r.Body)
@@ -328,6 +348,16 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		f.Close()
 	}
+
+	jobname := r.FormValue("jobname")
+	if jobname != "" {
+		err = ioutil.WriteFile(filepath.Join(tmpdir, "jobname.txt"), []byte(jobname), 0644)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintln(w, err)
+			return
+		}
+	}
 	addPublishrequestToQueue(id)
 
 	jsonid := struct {
@@ -347,6 +377,7 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// Get the status of the PDF (finished?)
 func v0StatusHandler(w http.ResponseWriter, r *http.Request) {
 	type statusresponse struct {
 		Errstatus string `json:"errorstatus"`

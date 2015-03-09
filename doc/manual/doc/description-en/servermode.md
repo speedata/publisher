@@ -6,7 +6,7 @@ Server-mode
 
 (Experimental)
 
-When the speedata Publisher is started in the server-mode (`sp server`), it expects HTTP-requests on port 5266 (configurable).
+When the speedata Publisher is started in the server-mode (`sp server`), it expects HTTP-requests on port 5266 (configurable). All of these API calls are experimental. So expect changes.
 
 ## `/available`
 
@@ -38,7 +38,12 @@ If the JSON file is defective, the HTTP status code is 400 (bad request) and the
 
     illegal base64 data at input byte 0
 
-**This format might change**
+### Parameters
+
+A parameter can be specified to set the result name of the PDF (without extension):
+
+`/v0/publish?jobname=myfile` sets the jobname to "myfile", so `/v0/pdf/<id>` returns the data with the given filename (plus the `.pdf`) extension. This is done via the HTTP header `Content-Disposition`.
+
 
 
 ## `/v0/publish/<id>`

@@ -68,7 +68,8 @@ func (w Worker) Start() {
 			case work := <-w.Work:
 				// Receive a work request.
 				fmt.Fprintf(protocolFile, "Running speedata publisher for id %s\n", work.Id)
-				cmd := exec.Command(filepath.Join(bindir, "sp"+exe_suffix))
+				// Force the jobname, so the result is always 'publisher.pdf'
+				cmd := exec.Command(filepath.Join(bindir, "sp"+exe_suffix), "--jobname", "publisher")
 				cmd.Dir = filepath.Join(serverTemp, work.Id)
 				cmd.Run()
 				fmt.Fprintf(protocolFile, "Id %s finished\n", work.Id)

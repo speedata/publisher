@@ -39,7 +39,12 @@ Request) zurückgegeben, mit dem textuellen Inhalt der Fehlermeldung, z.B.:
 
     illegal base64 data at input byte 0
 
-**Das Format wird möglicherweise noch geändert**
+
+### Parameter
+
+Ein URL-Parameter kann angegeben werden, um die Ausgabe der PDF-Datei (ohne Dateiendung) anzugeben:
+
+`/v0/publish?jobname=meinedatei` setzt den Jobname auf "meinedatei", so  dass `/v0/pdf/<id>` die PDF-Datei mit dem Dateinamen `meinedatei.pdf` zurückgibt. Das wird mithilfe des HTTP-Headers `Content-Disposition` erreicht.
 
 
 ## `/v0/publish/<id>`
