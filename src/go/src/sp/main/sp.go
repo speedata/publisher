@@ -60,7 +60,9 @@ var (
 // which is a valid XML file. Currently the only field is "Errors"
 // with the number of errors occured during the publisher run.
 type status struct {
-	Errors int
+	XMLName xml.Name `xml:"Status"`
+	Error   []string
+	Errors  int
 }
 
 func init() {
@@ -305,7 +307,9 @@ func run(cmdline string) (success bool) {
 	}
 	err = cmd.Start()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		success = false
+		return
 	}
 	running_processes = append(running_processes, cmd.Process)
 
@@ -322,12 +326,13 @@ func run(cmdline string) (success bool) {
 		io.Copy(stdin, os.Stdin)
 		stdin.Close()
 	}
-
 	err = cmd.Wait()
 
 	if err != nil {
 		showDuration()
 		log.Print(err)
+		success = false
+		return
 	}
 	success = cmd.ProcessState.Success()
 	return
@@ -436,6 +441,7 @@ func removeLogfile() {
 func runPublisher() (exitstatus int) {
 	log.Print("Run speedata publisher")
 	defer removeLogfile()
+
 	exitstatus = 0
 	save_variables()
 
@@ -479,11 +485,24 @@ func runPublisher() (exitstatus int) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	go daemon.Run()
 	for i := 1; i <= runs; i++ {
-		go daemon.Run()
 		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, exec_name, jobname, inifile, layoutname, dataname, layoutoptions_cmdline)
 		if !run(cmdline) {
 			exitstatus = 1
+			v := status{}
+			v.Errors = 1
+			v.Error = append(v.Error, "Error executing sdluatex")
+			data, err := xml.Marshal(v)
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = ioutil.WriteFile(fmt.Sprintf("%s.status", jobname), data, 0600)
+			if err != nil {
+				log.Fatal(err)
+			}
+			os.Exit(-1)
+			break
 		}
 	}
 	// todo: DRY code -> server/status

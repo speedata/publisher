@@ -172,8 +172,9 @@ func v0PublishIdHandler(w http.ResponseWriter, r *http.Request) {
 
 	pdfPath := filepath.Join(publishdir, "publisher.pdf")
 	statusfilePath := filepath.Join(publishdir, "publisher.status")
+	finishedfile := filepath.Join(serverTemp, id, id+"finished.txt")
 
-	fi, err = os.Stat(pdfPath)
+	fi, err = os.Stat(finishedfile)
 	if err != nil && os.IsNotExist(err) {
 		// status does not exist yet, so it's in progress
 		response.Blob = "not finished"
@@ -203,10 +204,14 @@ func v0PublishIdHandler(w http.ResponseWriter, r *http.Request) {
 	response.Path = pdfPath
 	response.Finished = fi.ModTime().Format(time.RFC3339)
 	response.Blob, err = encodeFileToBase64(pdfPath)
-	if err != nil {
+	if err != nil && !os.IsNotExist(err) {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintln(w, err)
 		return
+	}
+	if response.Blob == "" {
+		response.Status = "error"
+		response.Path = ""
 	}
 
 	response.Statusfile, err = encodeFileToBase64(statusfilePath)

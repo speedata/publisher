@@ -4,6 +4,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os/exec"
 	"path/filepath"
 )
@@ -70,8 +71,10 @@ func (w Worker) Start() {
 				fmt.Fprintf(protocolFile, "Running speedata publisher for id %s\n", work.Id)
 				// Force the jobname, so the result is always 'publisher.pdf'
 				cmd := exec.Command(filepath.Join(bindir, "sp"+exe_suffix), "--jobname", "publisher")
-				cmd.Dir = filepath.Join(serverTemp, work.Id)
+				dir := filepath.Join(serverTemp, work.Id)
+				cmd.Dir = dir
 				cmd.Run()
+				ioutil.WriteFile(filepath.Join(dir, work.Id+"finished.txt"), []byte("finished"), 0600)
 				fmt.Fprintf(protocolFile, "Id %s finished\n", work.Id)
 			case <-w.QuitChan:
 				// We have been asked to stop.
