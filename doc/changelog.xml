@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.16" date="2015-03-11">
+      <en>Command NoBreak to disable a line break within.</en>
+      <de>Befehl KeinUmbruch um einen Zeilenumbruch innerhalb des Elements zu verhindern.</de>
+    </entry>
     <entry version="2.3.15" date="2015-03-09">
       <en>API changes: make jobname configurable through parameter, better error messages.</en>
       <de>API Änderungen: jobname ist per URL-Parameter konfigurierbar, bessere Fehlermeldungen</de>
