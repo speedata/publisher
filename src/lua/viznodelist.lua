@@ -34,7 +34,7 @@
 
 local io,string,table = io,string,table
 local assert,tostring,type = assert,tostring,type
-local tex,texio,node,unicode,font=tex,texio,node,unicode,font
+local tex,texio,node,unicode,font,status=tex,texio,node,unicode,font,status
 
 module(...)
 
@@ -342,7 +342,14 @@ local function dot_analyze_nodelist( head, options )
     elseif typ == "whatsit" and head.subtype == 39 then
       local stack,cmd,data
       stack = string.format("stack: %d",head.stack)
-      cmd   = string.format("cmd: %d", head.cmd)
+      if status.luatex_version < 79 then
+        cmd = string.format("cmd: %d",  head.cmd)
+        -- colstart.cmd = 1
+      else
+        cmd = string.format("cmd: %d",  head.command)
+        -- colstart.command = 1
+      end
+
       data  = string.format("data: %s", head.data)
       ret[#ret + 1] = draw_node(head,{ {"subtype", "colorstack"},{"stack",stack},{"cmd",cmd},{"data",data} })
     elseif typ == "whatsit" and head.subtype == 44 then

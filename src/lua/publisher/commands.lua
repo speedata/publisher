@@ -534,7 +534,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
     local name         = publisher.read_attribute(layoutxml,dataxml,"name",    "rawstring" )
     local size         = publisher.read_attribute(layoutxml,dataxml,"fontsize","rawstring")
     local baselineskip = publisher.read_attribute(layoutxml,dataxml,"leading", "rawstring")
-
+    fam.name = name
     if size == nil then
       err("DefineFontfamily: no size given.")
       return
@@ -574,6 +574,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
                 fam.normal = 1
                 err("Fontinstance 'normal' could not be created for %q.",tostring(fontface))
             end
+            fam.fontfaceregular = fontface
             ok,tmp=fonts.make_font_instance(fontface,fam.scriptsize)
             if ok then
                 fam.normalscript = tmp
@@ -1356,6 +1357,66 @@ function commands.new_page( layoutxml,dataxml )
 
 end
 
+--- NoBreak
+--- -------
+--- Don't allow a linebreak of the contents. Reduce font size if necessary
+function commands.nobreak( layoutxml, dataxml )
+    -- local textformat    = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
+    -- local allowbreak    = publisher.read_attribute(layoutxml,dataxml,"allowbreak","rawstring")
+    -- local fontname      = publisher.read_attribute(layoutxml,dataxml,"fontface",  "rawstring")
+    -- local colorname     = publisher.read_attribute(layoutxml,dataxml,"color",     "rawstring")
+    -- local language_name = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
+
+    local current_maxwidth =publisher.read_attribute(layoutxml,dataxml,"maxwidth",  "length_sp", current_grid:width_sp(xpath.get_variable("__maxwidth")))
+    local shrinkfactor = publisher.read_attribute(layoutxml,dataxml,"factor", "rawstring",0.9)
+
+    local fontfamily = 0
+    local languagecode = publisher.defaultlanguage
+
+    publisher.intextblockcontext = publisher.intextblockcontext + 1
+    local a = paragraph:new(textformat)
+    local objects = {}
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    for _,j in ipairs(tab) do
+        trace("Paragraph Elementname = %q",tostring(publisher.elementname(j)))
+        local contents = publisher.element_contents(j)
+        if publisher.elementname(j) == "Value" and type(contents) == "table" and #contents == 1 and type(contents[1]) == "string"  then
+            objects[#objects + 1] = contents[1]
+        elseif publisher.elementname(j) == "Value" and type(contents) == "table" then
+            objects[#objects + 1] = publisher.parse_html(contents,{allowbreak = allowbreak})
+        else
+            objects[#objects + 1] = contents
+        end
+    end
+    for _,j in ipairs(objects) do
+        a:append(j,{fontfamily = 0, languagecode = languagecode, allowbreak = allowbreak})
+    end
+
+
+    local fam = publisher.current_fontfamily
+    local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[fam]
+    local strut
+    strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 })
+
+    local nl = node.hpack(node.copy_list(a.nodelist))
+    nl = node.insert_before(nl, nl , node.copy(strut))
+
+    while nl.next.width > current_maxwidth do
+        fam = publisher.fonts.clone_family(fam, {size = shrinkfactor})
+        local oldnl = nl
+        nl = node.copy_list(a.nodelist)
+        publisher.set_fontfamily_if_necessary(nl,fam)
+        -- pre_linebreak is necessary to set the different font widths
+        publisher.fonts.pre_linebreak(nl)
+        nl = node.hpack(nl)
+        nl = node.insert_before(nl, nl , node.copy(strut))
+    end
+
+    a.nodelist = nl
+    publisher.intextblockcontext = publisher.intextblockcontext - 1
+    return a
+end
+
 --- Ordered list (`<Ol>`)
 --- ------------------
 --- A list with numbers
@@ -1545,6 +1606,8 @@ function commands.paragraph( layoutxml,dataxml )
 
     colorname = colorname or css_rules["color"]
     fontname  = fontname  or css_rules["font-family"]
+
+    local save_fontfamily = publisher.current_fontfamily
     local fontfamily
     if fontname then
         fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
@@ -1552,6 +1615,7 @@ function commands.paragraph( layoutxml,dataxml )
             err("Fontfamily %q not found.",fontname)
             fontfamily = 0
         end
+        publisher.current_fontfamily = fontfamily
     else
         fontfamily = 0
     end
@@ -1600,6 +1664,7 @@ function commands.paragraph( layoutxml,dataxml )
 
     a:set_color(colortable)
     publisher.intextblockcontext = publisher.intextblockcontext - 1
+    publisher.current_fontfamily = save_fontfamily
     return a
 end
 
@@ -2373,6 +2438,7 @@ function commands.table( layoutxml,dataxml,optionen )
     local eval           = publisher.read_attribute(layoutxml,dataxml,"eval",          "xpath")
     local collapse       = publisher.read_attribute(layoutxml,dataxml,"border-collapse",  "string", "separate")
 
+
     -- FIXME: leading -> rowdistance or so
     padding        = tex.sp(padding        or "0pt")
     columndistance = tex.sp(columndistance or "0pt")
@@ -2403,6 +2469,8 @@ function commands.table( layoutxml,dataxml,optionen )
 
     if not fontname then fontname = "text" end
     fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+    local save_fontfamily = publisher.current_fontfamily
+    publisher.current_fontfamily = fontfamily
 
     if fontfamily == nil then
         err("Fontfamily %q not found.",fontname or "???")
@@ -2724,14 +2792,16 @@ function commands.textblock( layoutxml,dataxml )
     local fontfamily
     local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface","rawstring")
     local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",   "rawstring", "black")
-    local width          = publisher.read_attribute(layoutxml,dataxml,"width",   "length_sp")
+    local width          = publisher.read_attribute(layoutxml,dataxml,"width",   "length")
     local angle          = publisher.read_attribute(layoutxml,dataxml,"angle",   "number")
     local columns        = publisher.read_attribute(layoutxml,dataxml,"columns", "number")
     local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","rawstring")
     local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
 
-    width = width or xpath.get_variable("__maxwidth") * publisher.current_grid.gridwidth
-
+    local save_width = xpath.get_variable("__maxwidth")
+    width = width or xpath.get_variable("__maxwidth")
+    xpath.set_variable("__maxwidth", width)
+    width = current_grid:width_sp(width)
     if not width then
         err("Can't evaluate width in textblock")
         rule = publisher.add_rule(nil,"head",{height=100*2^16,width=100*2^16})
@@ -2755,6 +2825,9 @@ function commands.textblock( layoutxml,dataxml )
         err("Fontfamily %q not found.",fontname or "???")
         fontfamily = 1
     end
+
+    local save_fontfamily = publisher.current_fontfamily
+    publisher.current_fontfamily = fontfamily
 
     local colortable
     if colorname then
@@ -2865,6 +2938,9 @@ function commands.textblock( layoutxml,dataxml )
     if angle then
         nodelist = publisher.rotate_textblock(nodelist,angle)
     end
+
+    publisher.current_fontfamily = save_fontfamily
+    xpath.set_variable("__maxwidth", save_width)
     trace("Textbock: end")
     publisher.intextblockcontext = publisher.intextblockcontext - 1
     return nodelist

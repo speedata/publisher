@@ -70,6 +70,7 @@ end
 -- is the internal font number. After calling this method, the font can be used
 -- with the key { filename,size}
 function make_font_instance( name,size )
+    -- Name is something like "TeXGyreHeros-Regular", the visible name of the font file
     assert(name)
     assert(size)
     assert(    type(size)=="number" )
@@ -344,5 +345,37 @@ function post_linebreak( head, list_head)
         head = head.next
     end
     return head
+end
+
+-- fam is a number
+function clone_family( fam, params )
+    -- fam_tbl = {
+    --   ["baselineskip"] = "789372"
+    --   ["name"] = "text"
+    --   ["normalscript"] = "10"
+    --   ["scriptshift"] = "197343"
+    --   ["scriptsize"] = "526248"
+    --   ["normal"] = "9"
+    --   ["size"] = "657810"
+    -- },
+
+    local fam_tbl = lookup_fontfamily_number_instance[fam]
+    local newfam = {}
+    for k,v in pairs(fam_tbl) do
+        newfam[k] = v
+    end
+    newfam.name = "cloned"
+    local normal = used_fonts[fam_tbl.normal]
+
+    local ok,b = make_font_instance(newfam.fontfaceregular, params.size * newfam.size )
+    if not ok then
+        err(b)
+        return fam
+    else
+        newfam.normal = b
+        newfam.size = math.floor(params.size * newfam.size)
+        lookup_fontfamily_number_instance[#lookup_fontfamily_number_instance + 1] = newfam
+        return #lookup_fontfamily_number_instance
+    end
 end
 

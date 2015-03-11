@@ -339,6 +339,9 @@ markers = {}
 current_group = nil
 current_grid = nil
 
+-- paragaph, table and textblock should set them
+current_fontfamily = 0
+
 -- Used when bookmarks are inserted in a non-text context
 intextblockcontext = 0
 
@@ -456,6 +459,7 @@ local dispatch_table = {
     NewPage                 = commands.new_page,
     NextFrame               = commands.next_frame,
     NextRow                 = commands.next_row,
+    NoBreak                 = commands.nobreak,
     Ol                      = commands.ol,
     Options                 = commands.options,
     Output                  = commands.output,
@@ -3082,10 +3086,12 @@ function define_default_fontfamily()
         baselineskip = 12 * factor,
         scriptsize   = 10 * factor * 0.8,
         scriptshift  = 10 * factor * 0.3,
+        name = "text"
     }
     local ok,tmp
     ok,tmp = fonts.make_font_instance("TeXGyreHeros-Regular",fam.size)
     fam.normal = tmp
+    fam.fontfaceregular = "TeXGyreHeros-Regular"
     ok,tmp = fonts.make_font_instance("TeXGyreHeros-Regular",fam.scriptsize)
     fam.normalscript = tmp
 

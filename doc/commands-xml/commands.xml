@@ -3,12 +3,12 @@
   <define name="Switchcontents">
     <optional><cmd name="Action"/></optional>
     <optional><cmd name="Attribute"/></optional>
-    <optional><cmd name="Barcode"/></optional>
     <optional><cmd name="B"/></optional>
+    <optional><cmd name="Barcode"/></optional>
     <optional><cmd name="Bookmark"/></optional>
     <optional><cmd name="Br"/></optional>
-    <optional><cmd name="Columns"/></optional>
     <optional><cmd name="Column"/></optional>
+    <optional><cmd name="Columns"/></optional>
     <optional><cmd name="Copy-of"/></optional>
     <optional><cmd name="DefineColor"/></optional>
     <optional><cmd name="DefineFontfamily"/></optional>
@@ -19,8 +19,8 @@
     <optional><cmd name="Group"/></optional>
     <optional><cmd name="HSpace"/></optional>
     <optional><cmd name="Hyphenation"/></optional>
-    <optional><cmd name="Include"/></optional>
     <optional><cmd name="Image"/></optional>
+    <optional><cmd name="Include"/></optional>
     <optional><cmd name="InsertPages"/></optional>
     <optional><cmd name="Li"/></optional>
     <optional><cmd name="LoadDataset"/></optional>
@@ -41,10 +41,10 @@
     <optional><cmd name="Sub"/></optional>
     <optional><cmd name="Sup"/></optional>
     <optional><cmd name="Switch"/></optional>
+    <optional><cmd name="Tablehead"/></optional>
     <optional><cmd name="Tablerule"/></optional>
     <optional><cmd name="Td"/></optional>
     <optional><cmd name="Tr"/></optional>
-    <optional><cmd name="Tablehead"/></optional>
     <optional><cmd name="Until"/></optional>
     <optional><cmd name="Value"/></optional>
     <optional><cmd name="While"/></optional>
@@ -64,8 +64,8 @@
     <optional><cmd name="Loop"/></optional>
     <optional><cmd name="Message"/></optional>
     <optional><cmd name="NewPage"/></optional>
-    <optional><cmd name="NextRow"/></optional>
     <optional><cmd name="NextFrame"/></optional>
+    <optional><cmd name="NextRow"/></optional>
     <optional><cmd name="Output"/></optional>
     <optional><cmd name="PlaceObject"/></optional>
     <optional><cmd name="ProcessNode"/></optional>
@@ -81,23 +81,24 @@
   <define name="Textvalues">
     <zeroOrMore>
       <choice>
-        <cmd name="Action"/>
         <cmd name="A"/>
-        <cmd name="I"/>
+        <cmd name="Action"/>
         <cmd name="B"/>
         <cmd name="Br"/>
         <cmd name="Color"/>
-        <cmd name="HSpace"/>
-        <cmd name="U"/>
         <cmd name="Fontface"/>
+        <cmd name="ForAll"/>
+        <cmd name="HSpace"/>
+        <cmd name="I"/>
         <cmd name="Image"/>
+        <cmd name="Loop"/>
+        <cmd name="NoBreak"/>
         <cmd name="Sub"/>
         <cmd name="Sup"/>
+        <cmd name="Switch"/>
+        <cmd name="U"/>
         <cmd name="URL"/>
         <cmd name="Value"/>
-        <cmd name="Switch"/>
-        <cmd name="Loop"/>
-        <cmd name="ForAll"/>
       </choice>
     </zeroOrMore>
   </define>
@@ -3633,6 +3634,75 @@
     <seealso>
       <cmd name="EmptyLine"/>
     </seealso>
+  </command>
+  <command en="NoBreak" de="KeinUmbruch" since="2.3.14">
+    <description xml:lang="en">
+      <para>Don't allow a line break within this element</para>
+    </description>
+    <description xml:lang="de">
+      <para>Kein Umbruch innerhalb des Elements erlauben</para>
+    </description>
+    <childelements><reference name="Textvalues"/></childelements>
+    <attribute en="maxwidth" de="maxbreite" optional="yes" type="numberorlength">
+      <description xml:lang="en">
+        <para>Set the maximum width of the text if it cannot be deduced from the current surrounding (such as table cells).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setzt die maximale Breite des Texts, wenn sie sich nicht aus der Umgebung herleiten lässt (wie beispielsweise Tabellenzellen).</para>
+      </description>
+    </attribute>
+    <attribute en="reduce" de="reduzieren" optional="yes">
+      <description xml:lang="en">
+        <para>Reduce the text size if necessary.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Verringere die Textgröße falls notwendig.</para>
+      </description>
+      <choice en="fontsize" de="schriftgröße">
+        <description xml:lang="en">
+          <para>Reduces the text by decreasing the font size.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Verkleinert durch Verringerung der Schriftgröße.</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="factor" de="faktor" optional="yes" type="number">
+      <description xml:lang="en">
+        <para>Multiplier for the font size when reduce=fontsize. Default value: 0.9. That means the font size gets decreased by 0.9 until the text fits the objects width.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Multiplikator für die Schriftgröße, wenn reduzieren=schriftgröße. Voreinstellung: 0.9. Das bedeutet, dass die Schriftgröße um 0,9 reduziert wird, bis der Text in die vorgegebene Breite hineinpasst.</para>
+      </description>
+    </attribute>
+    <example xml:lang="de">
+      <listing><![CDATA[<ObjektAusgeben>
+  <Textblock breite="5">
+    <Absatz>
+      <Wert>Seit zwei Jahren ist meine Arbeit in Düsseldorf. </Wert><Br/>
+      <KeinUmbruch reduzieren="schriftgröße" faktor="0.9">
+        <Wert>Meine Familie lebt dagegen in Hamburg.</Wert>
+      </KeinUmbruch>
+      <Wert> Und dazwischen ich, aber ganz cool.</Wert>
+    </Absatz>
+  </Textblock>
+</ObjektAusgeben>]]></listing>
+    </example>
+    <example xml:lang="en">
+      <listing><![CDATA[<PlaceObject>
+  <Textblock width="5">
+    <Paragraph>
+      <NoBreak reduce="fontsize" factor="0.7">
+        <Value>The quick brown fox jumps over the lazy dog.</Value>
+      </NoBreak>
+      <Value> </Value>
+      <Value>The quick brown fox jumps over the lazy dog.</Value>
+    </Paragraph>
+  </Textblock>
+</PlaceObject>
+]]></listing>
+    </example>
+    <seealso></seealso>
   </command>
   <command en="Ol" de="Ol">
     <description xml:lang="en">

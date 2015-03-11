@@ -86,10 +86,10 @@
                <ref name="e_NewPage"></ref>
             </optional>
             <optional>
-               <ref name="e_NextRow"></ref>
+               <ref name="e_NextFrame"></ref>
             </optional>
             <optional>
-               <ref name="e_NextFrame"></ref>
+               <ref name="e_NextRow"></ref>
             </optional>
             <optional>
                <ref name="e_Output"></ref>
@@ -168,10 +168,10 @@
                <ref name="e_NewPage"></ref>
             </optional>
             <optional>
-               <ref name="e_NextRow"></ref>
+               <ref name="e_NextFrame"></ref>
             </optional>
             <optional>
-               <ref name="e_NextFrame"></ref>
+               <ref name="e_NextRow"></ref>
             </optional>
             <optional>
                <ref name="e_Output"></ref>
@@ -223,23 +223,24 @@
          <a:documentation>Switch to fontface »bold«</a:documentation>
          <zeroOrMore>
             <choice>
-               <ref name="e_Action"></ref>
                <ref name="e_A"></ref>
-               <ref name="e_I"></ref>
+               <ref name="e_Action"></ref>
                <ref name="e_B"></ref>
                <ref name="e_Br"></ref>
                <ref name="e_Color"></ref>
-               <ref name="e_HSpace"></ref>
-               <ref name="e_U"></ref>
                <ref name="e_Fontface"></ref>
+               <ref name="e_ForAll"></ref>
+               <ref name="e_HSpace"></ref>
+               <ref name="e_I"></ref>
                <ref name="e_Image"></ref>
+               <ref name="e_Loop"></ref>
+               <ref name="e_NoBreak"></ref>
                <ref name="e_Sub"></ref>
                <ref name="e_Sup"></ref>
+               <ref name="e_Switch"></ref>
+               <ref name="e_U"></ref>
                <ref name="e_URL"></ref>
                <ref name="e_Value"></ref>
-               <ref name="e_Switch"></ref>
-               <ref name="e_Loop"></ref>
-               <ref name="e_ForAll"></ref>
             </choice>
          </zeroOrMore>
       </element>
@@ -388,10 +389,10 @@
                <ref name="e_Attribute"></ref>
             </optional>
             <optional>
-               <ref name="e_Barcode"></ref>
+               <ref name="e_B"></ref>
             </optional>
             <optional>
-               <ref name="e_B"></ref>
+               <ref name="e_Barcode"></ref>
             </optional>
             <optional>
                <ref name="e_Bookmark"></ref>
@@ -400,10 +401,10 @@
                <ref name="e_Br"></ref>
             </optional>
             <optional>
-               <ref name="e_Columns"></ref>
+               <ref name="e_Column"></ref>
             </optional>
             <optional>
-               <ref name="e_Column"></ref>
+               <ref name="e_Columns"></ref>
             </optional>
             <optional>
                <ref name="e_Copy-of"></ref>
@@ -436,10 +437,10 @@
                <ref name="e_Hyphenation"></ref>
             </optional>
             <optional>
-               <ref name="e_Include"></ref>
+               <ref name="e_Image"></ref>
             </optional>
             <optional>
-               <ref name="e_Image"></ref>
+               <ref name="e_Include"></ref>
             </optional>
             <optional>
                <ref name="e_InsertPages"></ref>
@@ -502,6 +503,9 @@
                <ref name="e_Switch"></ref>
             </optional>
             <optional>
+               <ref name="e_Tablehead"></ref>
+            </optional>
+            <optional>
                <ref name="e_Tablerule"></ref>
             </optional>
             <optional>
@@ -509,9 +513,6 @@
             </optional>
             <optional>
                <ref name="e_Tr"></ref>
-            </optional>
-            <optional>
-               <ref name="e_Tablehead"></ref>
             </optional>
             <optional>
                <ref name="e_Until"></ref>
@@ -533,23 +534,24 @@
          </attribute>
          <zeroOrMore>
             <choice>
-               <ref name="e_Action"></ref>
                <ref name="e_A"></ref>
-               <ref name="e_I"></ref>
+               <ref name="e_Action"></ref>
                <ref name="e_B"></ref>
                <ref name="e_Br"></ref>
                <ref name="e_Color"></ref>
-               <ref name="e_HSpace"></ref>
-               <ref name="e_U"></ref>
                <ref name="e_Fontface"></ref>
+               <ref name="e_ForAll"></ref>
+               <ref name="e_HSpace"></ref>
+               <ref name="e_I"></ref>
                <ref name="e_Image"></ref>
+               <ref name="e_Loop"></ref>
+               <ref name="e_NoBreak"></ref>
                <ref name="e_Sub"></ref>
                <ref name="e_Sup"></ref>
+               <ref name="e_Switch"></ref>
+               <ref name="e_U"></ref>
                <ref name="e_URL"></ref>
                <ref name="e_Value"></ref>
-               <ref name="e_Switch"></ref>
-               <ref name="e_Loop"></ref>
-               <ref name="e_ForAll"></ref>
             </choice>
          </zeroOrMore>
       </element>
@@ -598,10 +600,10 @@
                <ref name="e_NewPage"></ref>
             </optional>
             <optional>
-               <ref name="e_NextRow"></ref>
+               <ref name="e_NextFrame"></ref>
             </optional>
             <optional>
-               <ref name="e_NextFrame"></ref>
+               <ref name="e_NextRow"></ref>
             </optional>
             <optional>
                <ref name="e_Output"></ref>
@@ -955,23 +957,24 @@
          </attribute>
          <zeroOrMore>
             <choice>
-               <ref name="e_Action"></ref>
                <ref name="e_A"></ref>
-               <ref name="e_I"></ref>
+               <ref name="e_Action"></ref>
                <ref name="e_B"></ref>
                <ref name="e_Br"></ref>
                <ref name="e_Color"></ref>
-               <ref name="e_HSpace"></ref>
-               <ref name="e_U"></ref>
                <ref name="e_Fontface"></ref>
+               <ref name="e_ForAll"></ref>
+               <ref name="e_HSpace"></ref>
+               <ref name="e_I"></ref>
                <ref name="e_Image"></ref>
+               <ref name="e_Loop"></ref>
+               <ref name="e_NoBreak"></ref>
                <ref name="e_Sub"></ref>
                <ref name="e_Sup"></ref>
+               <ref name="e_Switch"></ref>
+               <ref name="e_U"></ref>
                <ref name="e_URL"></ref>
                <ref name="e_Value"></ref>
-               <ref name="e_Switch"></ref>
-               <ref name="e_Loop"></ref>
-               <ref name="e_ForAll"></ref>
             </choice>
          </zeroOrMore>
       </element>
@@ -996,10 +999,10 @@
                   <ref name="e_Attribute"></ref>
                </optional>
                <optional>
-                  <ref name="e_Barcode"></ref>
+                  <ref name="e_B"></ref>
                </optional>
                <optional>
-                  <ref name="e_B"></ref>
+                  <ref name="e_Barcode"></ref>
                </optional>
                <optional>
                   <ref name="e_Bookmark"></ref>
@@ -1008,10 +1011,10 @@
                   <ref name="e_Br"></ref>
                </optional>
                <optional>
-                  <ref name="e_Columns"></ref>
+                  <ref name="e_Column"></ref>
                </optional>
                <optional>
-                  <ref name="e_Column"></ref>
+                  <ref name="e_Columns"></ref>
                </optional>
                <optional>
                   <ref name="e_Copy-of"></ref>
@@ -1044,10 +1047,10 @@
                   <ref name="e_Hyphenation"></ref>
                </optional>
                <optional>
-                  <ref name="e_Include"></ref>
+                  <ref name="e_Image"></ref>
                </optional>
                <optional>
-                  <ref name="e_Image"></ref>
+                  <ref name="e_Include"></ref>
                </optional>
                <optional>
                   <ref name="e_InsertPages"></ref>
@@ -1110,6 +1113,9 @@
                   <ref name="e_Switch"></ref>
                </optional>
                <optional>
+                  <ref name="e_Tablehead"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Tablerule"></ref>
                </optional>
                <optional>
@@ -1117,9 +1123,6 @@
                </optional>
                <optional>
                   <ref name="e_Tr"></ref>
-               </optional>
-               <optional>
-                  <ref name="e_Tablehead"></ref>
                </optional>
                <optional>
                   <ref name="e_Until"></ref>
@@ -1269,23 +1272,24 @@
          <a:documentation>Switch to italic text.</a:documentation>
          <zeroOrMore>
             <choice>
-               <ref name="e_Action"></ref>
                <ref name="e_A"></ref>
-               <ref name="e_I"></ref>
+               <ref name="e_Action"></ref>
                <ref name="e_B"></ref>
                <ref name="e_Br"></ref>
                <ref name="e_Color"></ref>
-               <ref name="e_HSpace"></ref>
-               <ref name="e_U"></ref>
                <ref name="e_Fontface"></ref>
+               <ref name="e_ForAll"></ref>
+               <ref name="e_HSpace"></ref>
+               <ref name="e_I"></ref>
                <ref name="e_Image"></ref>
+               <ref name="e_Loop"></ref>
+               <ref name="e_NoBreak"></ref>
                <ref name="e_Sub"></ref>
                <ref name="e_Sup"></ref>
+               <ref name="e_Switch"></ref>
+               <ref name="e_U"></ref>
                <ref name="e_URL"></ref>
                <ref name="e_Value"></ref>
-               <ref name="e_Switch"></ref>
-               <ref name="e_Loop"></ref>
-               <ref name="e_ForAll"></ref>
             </choice>
          </zeroOrMore>
       </element>
@@ -1605,10 +1609,10 @@
                   <ref name="e_Attribute"></ref>
                </optional>
                <optional>
-                  <ref name="e_Barcode"></ref>
+                  <ref name="e_B"></ref>
                </optional>
                <optional>
-                  <ref name="e_B"></ref>
+                  <ref name="e_Barcode"></ref>
                </optional>
                <optional>
                   <ref name="e_Bookmark"></ref>
@@ -1617,10 +1621,10 @@
                   <ref name="e_Br"></ref>
                </optional>
                <optional>
-                  <ref name="e_Columns"></ref>
+                  <ref name="e_Column"></ref>
                </optional>
                <optional>
-                  <ref name="e_Column"></ref>
+                  <ref name="e_Columns"></ref>
                </optional>
                <optional>
                   <ref name="e_Copy-of"></ref>
@@ -1653,10 +1657,10 @@
                   <ref name="e_Hyphenation"></ref>
                </optional>
                <optional>
-                  <ref name="e_Include"></ref>
+                  <ref name="e_Image"></ref>
                </optional>
                <optional>
-                  <ref name="e_Image"></ref>
+                  <ref name="e_Include"></ref>
                </optional>
                <optional>
                   <ref name="e_InsertPages"></ref>
@@ -1719,6 +1723,9 @@
                   <ref name="e_Switch"></ref>
                </optional>
                <optional>
+                  <ref name="e_Tablehead"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Tablerule"></ref>
                </optional>
                <optional>
@@ -1726,9 +1733,6 @@
                </optional>
                <optional>
                   <ref name="e_Tr"></ref>
-               </optional>
-               <optional>
-                  <ref name="e_Tablehead"></ref>
                </optional>
                <optional>
                   <ref name="e_Until"></ref>
@@ -1875,6 +1879,52 @@
             </attribute>
          </optional>
          <empty></empty>
+      </element>
+   </define>
+   <define name="e_NoBreak">
+      <element name="NoBreak">
+         <a:documentation>Don&#39;t allow a line break within this element</a:documentation>
+         <optional>
+            <attribute name="maxwidth">
+               <a:documentation>Set the maximum width of the text if it cannot be deduced from the current surrounding (such as table cells).</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="reduce">
+               <a:documentation>Reduce the text size if necessary.</a:documentation>
+               <choice>
+                  <value>fontsize</value>
+                  <a:documentation>Reduces the text by decreasing the font size.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="factor">
+               <a:documentation>Multiplier for the font size when reduce=fontsize. Default value: 0.9. That means the font size gets decreased by 0.9 until the text fits the objects width.</a:documentation>
+            </attribute>
+         </optional>
+         <zeroOrMore>
+            <choice>
+               <ref name="e_A"></ref>
+               <ref name="e_Action"></ref>
+               <ref name="e_B"></ref>
+               <ref name="e_Br"></ref>
+               <ref name="e_Color"></ref>
+               <ref name="e_Fontface"></ref>
+               <ref name="e_ForAll"></ref>
+               <ref name="e_HSpace"></ref>
+               <ref name="e_I"></ref>
+               <ref name="e_Image"></ref>
+               <ref name="e_Loop"></ref>
+               <ref name="e_NoBreak"></ref>
+               <ref name="e_Sub"></ref>
+               <ref name="e_Sup"></ref>
+               <ref name="e_Switch"></ref>
+               <ref name="e_U"></ref>
+               <ref name="e_URL"></ref>
+               <ref name="e_Value"></ref>
+            </choice>
+         </zeroOrMore>
       </element>
    </define>
    <define name="e_Ol">
@@ -2041,10 +2091,10 @@
                <ref name="e_Attribute"></ref>
             </optional>
             <optional>
-               <ref name="e_Barcode"></ref>
+               <ref name="e_B"></ref>
             </optional>
             <optional>
-               <ref name="e_B"></ref>
+               <ref name="e_Barcode"></ref>
             </optional>
             <optional>
                <ref name="e_Bookmark"></ref>
@@ -2053,10 +2103,10 @@
                <ref name="e_Br"></ref>
             </optional>
             <optional>
-               <ref name="e_Columns"></ref>
+               <ref name="e_Column"></ref>
             </optional>
             <optional>
-               <ref name="e_Column"></ref>
+               <ref name="e_Columns"></ref>
             </optional>
             <optional>
                <ref name="e_Copy-of"></ref>
@@ -2089,10 +2139,10 @@
                <ref name="e_Hyphenation"></ref>
             </optional>
             <optional>
-               <ref name="e_Include"></ref>
+               <ref name="e_Image"></ref>
             </optional>
             <optional>
-               <ref name="e_Image"></ref>
+               <ref name="e_Include"></ref>
             </optional>
             <optional>
                <ref name="e_InsertPages"></ref>
@@ -2155,6 +2205,9 @@
                <ref name="e_Switch"></ref>
             </optional>
             <optional>
+               <ref name="e_Tablehead"></ref>
+            </optional>
+            <optional>
                <ref name="e_Tablerule"></ref>
             </optional>
             <optional>
@@ -2162,9 +2215,6 @@
             </optional>
             <optional>
                <ref name="e_Tr"></ref>
-            </optional>
-            <optional>
-               <ref name="e_Tablehead"></ref>
             </optional>
             <optional>
                <ref name="e_Until"></ref>
@@ -2289,23 +2339,24 @@
          </optional>
          <zeroOrMore>
             <choice>
-               <ref name="e_Action"></ref>
                <ref name="e_A"></ref>
-               <ref name="e_I"></ref>
+               <ref name="e_Action"></ref>
                <ref name="e_B"></ref>
                <ref name="e_Br"></ref>
                <ref name="e_Color"></ref>
-               <ref name="e_HSpace"></ref>
-               <ref name="e_U"></ref>
                <ref name="e_Fontface"></ref>
+               <ref name="e_ForAll"></ref>
+               <ref name="e_HSpace"></ref>
+               <ref name="e_I"></ref>
                <ref name="e_Image"></ref>
+               <ref name="e_Loop"></ref>
+               <ref name="e_NoBreak"></ref>
                <ref name="e_Sub"></ref>
                <ref name="e_Sup"></ref>
+               <ref name="e_Switch"></ref>
+               <ref name="e_U"></ref>
                <ref name="e_URL"></ref>
                <ref name="e_Value"></ref>
-               <ref name="e_Switch"></ref>
-               <ref name="e_Loop"></ref>
-               <ref name="e_ForAll"></ref>
             </choice>
          </zeroOrMore>
       </element>
@@ -2655,10 +2706,10 @@
                <ref name="e_NewPage"></ref>
             </optional>
             <optional>
-               <ref name="e_NextRow"></ref>
+               <ref name="e_NextFrame"></ref>
             </optional>
             <optional>
-               <ref name="e_NextFrame"></ref>
+               <ref name="e_NextRow"></ref>
             </optional>
             <optional>
                <ref name="e_Output"></ref>
@@ -2822,10 +2873,10 @@
                   <ref name="e_NewPage"></ref>
                </optional>
                <optional>
-                  <ref name="e_NextRow"></ref>
+                  <ref name="e_NextFrame"></ref>
                </optional>
                <optional>
-                  <ref name="e_NextFrame"></ref>
+                  <ref name="e_NextRow"></ref>
                </optional>
                <optional>
                   <ref name="e_Output"></ref>
@@ -3614,23 +3665,24 @@
          <a:documentation>Underline text.</a:documentation>
          <zeroOrMore>
             <choice>
-               <ref name="e_Action"></ref>
                <ref name="e_A"></ref>
-               <ref name="e_I"></ref>
+               <ref name="e_Action"></ref>
                <ref name="e_B"></ref>
                <ref name="e_Br"></ref>
                <ref name="e_Color"></ref>
-               <ref name="e_HSpace"></ref>
-               <ref name="e_U"></ref>
                <ref name="e_Fontface"></ref>
+               <ref name="e_ForAll"></ref>
+               <ref name="e_HSpace"></ref>
+               <ref name="e_I"></ref>
                <ref name="e_Image"></ref>
+               <ref name="e_Loop"></ref>
+               <ref name="e_NoBreak"></ref>
                <ref name="e_Sub"></ref>
                <ref name="e_Sup"></ref>
+               <ref name="e_Switch"></ref>
+               <ref name="e_U"></ref>
                <ref name="e_URL"></ref>
                <ref name="e_Value"></ref>
-               <ref name="e_Switch"></ref>
-               <ref name="e_Loop"></ref>
-               <ref name="e_ForAll"></ref>
             </choice>
          </zeroOrMore>
       </element>
@@ -3658,10 +3710,10 @@
                   <ref name="e_Attribute"></ref>
                </optional>
                <optional>
-                  <ref name="e_Barcode"></ref>
+                  <ref name="e_B"></ref>
                </optional>
                <optional>
-                  <ref name="e_B"></ref>
+                  <ref name="e_Barcode"></ref>
                </optional>
                <optional>
                   <ref name="e_Bookmark"></ref>
@@ -3670,10 +3722,10 @@
                   <ref name="e_Br"></ref>
                </optional>
                <optional>
-                  <ref name="e_Columns"></ref>
+                  <ref name="e_Column"></ref>
                </optional>
                <optional>
-                  <ref name="e_Column"></ref>
+                  <ref name="e_Columns"></ref>
                </optional>
                <optional>
                   <ref name="e_Copy-of"></ref>
@@ -3706,10 +3758,10 @@
                   <ref name="e_Hyphenation"></ref>
                </optional>
                <optional>
-                  <ref name="e_Include"></ref>
+                  <ref name="e_Image"></ref>
                </optional>
                <optional>
-                  <ref name="e_Image"></ref>
+                  <ref name="e_Include"></ref>
                </optional>
                <optional>
                   <ref name="e_InsertPages"></ref>
@@ -3772,6 +3824,9 @@
                   <ref name="e_Switch"></ref>
                </optional>
                <optional>
+                  <ref name="e_Tablehead"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Tablerule"></ref>
                </optional>
                <optional>
@@ -3779,9 +3834,6 @@
                </optional>
                <optional>
                   <ref name="e_Tr"></ref>
-               </optional>
-               <optional>
-                  <ref name="e_Tablehead"></ref>
                </optional>
                <optional>
                   <ref name="e_Until"></ref>
@@ -3872,10 +3924,10 @@
                   <ref name="e_Attribute"></ref>
                </optional>
                <optional>
-                  <ref name="e_Barcode"></ref>
+                  <ref name="e_B"></ref>
                </optional>
                <optional>
-                  <ref name="e_B"></ref>
+                  <ref name="e_Barcode"></ref>
                </optional>
                <optional>
                   <ref name="e_Bookmark"></ref>
@@ -3884,10 +3936,10 @@
                   <ref name="e_Br"></ref>
                </optional>
                <optional>
-                  <ref name="e_Columns"></ref>
+                  <ref name="e_Column"></ref>
                </optional>
                <optional>
-                  <ref name="e_Column"></ref>
+                  <ref name="e_Columns"></ref>
                </optional>
                <optional>
                   <ref name="e_Copy-of"></ref>
@@ -3920,10 +3972,10 @@
                   <ref name="e_Hyphenation"></ref>
                </optional>
                <optional>
-                  <ref name="e_Include"></ref>
+                  <ref name="e_Image"></ref>
                </optional>
                <optional>
-                  <ref name="e_Image"></ref>
+                  <ref name="e_Include"></ref>
                </optional>
                <optional>
                   <ref name="e_InsertPages"></ref>
@@ -3986,6 +4038,9 @@
                   <ref name="e_Switch"></ref>
                </optional>
                <optional>
+                  <ref name="e_Tablehead"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Tablerule"></ref>
                </optional>
                <optional>
@@ -3993,9 +4048,6 @@
                </optional>
                <optional>
                   <ref name="e_Tr"></ref>
-               </optional>
-               <optional>
-                  <ref name="e_Tablehead"></ref>
                </optional>
                <optional>
                   <ref name="e_Until"></ref>

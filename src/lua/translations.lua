@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2015-02-26 13:40)
+-- generated from genluatranslations.go (2015-03-11 11:40)
 -- do not edit!
 module(...)
 return {
@@ -222,6 +222,11 @@ return {
         ["bereich"] = "area",
         ["zeile"] = "row",
         ["zeilen"] = "rows",
+        },
+      ["KeinUmbruch"] = { "NoBreak",
+        ["maxbreite"] = "maxwidth",
+        ["reduzieren"] = "reduce",
+        ["faktor"] = "factor",
         },
       ["Ol"] = { "Ol",
         },
