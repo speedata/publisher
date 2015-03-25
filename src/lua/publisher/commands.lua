@@ -2316,6 +2316,7 @@ function commands.setvariable( layoutxml,dataxml )
         log("SetVariable, variable name = %q, value = %q",varname or "???", tostring(contents))
         printtable("SetVariable",contents)
     end
+    publisher.flush_variable(varname)
     publisher.xpath.set_variable(varname,contents)
 end
 

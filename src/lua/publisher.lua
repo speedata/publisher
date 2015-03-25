@@ -3480,5 +3480,32 @@ end
 -- end of stable sorting function
 
 
+--- Garbage Collection
+--- -------------------
+--- This is somewhat experimental. The idea is to remove all nodes from the
+--- contents of the old value of that variable. Hopefully this has no
+--- evil side effects. We'll find out....
+function flush_table(tbl)
+    for k,v in pairs(tbl) do
+        if k == ".__context" or k == ".__parent" then
+            -- nothing, to prevent infinite loops
+        elseif type(v) == "table" then
+            flush_table(v)
+        elseif type(v) == "userdata" then
+            node.flush_list(v)
+        else
+            k = nil
+        end
+    end
+end
+
+function flush_variable( varname )
+    local x = xpath.get_variable(varname)
+    if type(x) == "table" then
+        flush_table(x)
+    end
+end
+
+
 file_end("publisher.lua")
 
