@@ -485,8 +485,8 @@ func runPublisher() (exitstatus int) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	go daemon.Run()
 	for i := 1; i <= runs; i++ {
+		go daemon.Run()
 		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, exec_name, jobname, inifile, layoutname, dataname, layoutoptions_cmdline)
 		if !run(cmdline) {
 			exitstatus = 1
