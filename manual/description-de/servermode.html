@@ -24,6 +24,10 @@
 
 <p>Wird der speedata Publisher im Server-Modus gestartet (<code>sp server</code>), erwartet das Programm HTTP-Anfragen auf Port 5266 (konfigurierbar).</p>
 
+<h2><code>/available</code></h2>
+
+<p>Gibt den HTTP-Status 200 zurück.</p>
+
 <h2><code>/v0/publish</code></h2>
 
 <p>Wird die URL mit einem POST-Request aufgerufen, erwartet der speedata Publisher eine JSON-Datei im folgenden Format:</p>
@@ -45,7 +49,7 @@
 <pre><code>{&quot;id&quot;:&quot;752869708&quot;}
 </code></pre>
 
-<p>mit einem HTTP-Statuscode 200 (OK).</p>
+<p>mit einem HTTP-Statuscode 201 (Created).</p>
 
 <p>Falls die JSON-Datei fehlerhaft ist, wird derzeit ein HTTP-Statuscode 400 (Bad
 Request) zurückgegeben, mit dem textuellen Inhalt der Fehlermeldung, z.B.:</p>
@@ -53,13 +57,18 @@ Request) zurückgegeben, mit dem textuellen Inhalt der Fehlermeldung, z.B.:</p>
 <pre><code>illegal base64 data at input byte 0
 </code></pre>
 
-<p><strong>Das Format wird möglicherweise noch geändert</strong></p>
+<h3>Parameter</h3>
+
+<p>Ein URL-Parameter kann angegeben werden, um die Ausgabe der PDF-Datei (ohne Dateiendung) anzugeben:</p>
+
+<p><code>/v0/publish?jobname=meinedatei</code> setzt den Jobname auf &quot;meinedatei&quot;, so  dass <code>/v0/pdf/&lt;id&gt;</code> die PDF-Datei mit dem Dateinamen <code>meinedatei.pdf</code> zurückgibt. Das wird mithilfe des HTTP-Headers <code>Content-Disposition</code> erreicht.</p>
 
 <h2><code>/v0/publish/&lt;id&gt;</code></h2>
 
 <p>Ein GET-Request mit einer Id aus dem oben beschriebenen POST-Request liefert eine JSON-Datei, mit dem Inhalt:</p>
 
-<pre><code>{&quot;status&quot;:&quot;ok&quot;,&quot;path&quot;:&quot;/pfad/zu/publisher.pdf&quot;,&quot;blob&quot;:&quot;&lt;base64 kodiertes PDF&quot;&gt;}
+<pre><code>{&quot;status&quot;:&quot;ok&quot;,&quot;path&quot;:&quot;/pfad/zu/publisher.pdf&quot;,&quot;blob&quot;:&quot;&lt;base64 kodiertes PDF&gt;&quot;,
+  finished:&quot;2015-03-03T13:12:55+01:00&quot;}
 </code></pre>
 
 <p>oder, im Fehlerfall, falls die Id unbekannt ist:</p>
@@ -73,6 +82,36 @@ Request) zurückgegeben, mit dem textuellen Inhalt der Fehlermeldung, z.B.:</p>
 </code></pre>
 
 <p>Das Verzeichnis mit der PDF-Datei wird nach diesem Request gelöscht, es sei denn, die URL enthält die Endung <code>?delete=false</code>.</p>
+
+<h2><code>/v0/pdf/&lt;id&gt;</code></h2>
+
+<p>Ein GET-Request mit der Id aus dem POST-Request von <code>/v0/publish</code>. Es wird im Erfolgsfall die PDF-Datei mit dem Statuscode 200 und dem Dateinamen <code>publisher.pdf</code> zurückgegeben. Der Request wartet auf die Fertigstellung des Publishing Prozesses. Im Fehlerfall wird nur ein Fehlercode zurück gegeben:</p>
+
+<table>
+<thead>
+<tr>
+<th>Statuscode</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>200 OK</td>
+<td>PDF wurde fehlerfrei generiert</td>
+</tr>
+
+<tr>
+<td>404 Not Found</td>
+<td>Id ungültig</td>
+</tr>
+
+<tr>
+<td>406  Not Acceptable</td>
+<td>PDF wurde fehlerhaft generiert</td>
+</tr>
+</tbody>
+</table>
 
 <h2><code>/v0/status/&lt;id&gt;</code></h2>
 
@@ -138,7 +177,7 @@ start =
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.3.7 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/servermode.html">Englisch</a>
+Version: 2.3.17 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/servermode.html">Englisch</a>
 
 </body>
 </html>

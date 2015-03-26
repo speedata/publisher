@@ -1,13 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (en)</title>
   <id>http://www.speedata.de</id>
-  <updated>2015-02-19T13:37:05+01:00</updated>
+  <updated>2015-03-26T15:27:53+01:00</updated>
   <subtitle>New revisions for download and changelog.</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.3.17</title>
+    <updated>2015-03-25T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-03-25:</id>
+    <content type="html">Experimental garbage collection, in effect with SetVariable.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.16</title>
+    <updated>2015-03-11T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-03-11:</id>
+    <content type="html">Command NoBreak to disable a line break within.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.15</title>
+    <updated>2015-03-09T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-03-09:</id>
+    <content type="html">API changes: make jobname configurable through parameter, better error messages.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.14</title>
+    <updated>2015-03-04T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-03-04:</id>
+    <content type="html">Server-mode: /v0/pdf/&amp;lt;id&amp;gt; returns the PDF</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.14</title>
+    <updated>2015-03-03T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-03-03:</id>
+    <content type="html">Server-mode: add timestamp for /v0/publish/&amp;lt;id&amp;gt;</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.12</title>
+    <updated>2015-02-27T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-02-27:</id>
+    <content type="html">New api call /available -&gt; 200 OK, /v0/publish returns 201</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.11</title>
+    <updated>2015-02-26T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-02-26:</id>
+    <content type="html">Grid distance horizontal can be set.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.10</title>
+    <updated>2015-02-25T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-02-25:</id>
+    <content type="html">Bugfix: index entry without contents crashes the publisher.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.9</title>
+    <updated>2015-02-24T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-02-24:</id>
+    <content type="html">Bugfixes (sp server mode protocol file, infinite loop on malformed utf8 data)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.9</title>
+    <updated>2015-02-23T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-02-23:</id>
+    <content type="html">Empty attributes (attr=&#34;&#34;) are treated as nil. empty(@attr) now returns true().</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.8</title>
+    <updated>2015-02-21T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-02-21:</id>
+    <content type="html">Rotate (steps of 90°) for images</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.8</title>
+    <updated>2015-02-21T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-02-21:</id>
+    <content type="html">New xpath function sd:aspectratio(&#39;imgname.png&#39;)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.8</title>
+    <updated>2015-02-21T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-02-21:</id>
+    <content type="html">Simple if/then/else expressions in XPath</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.3.7</title>
     <updated>2015-02-19T00:00:00Z</updated>

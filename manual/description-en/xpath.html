@@ -65,6 +65,7 @@ must return either <em>true</em> or <em>false</em>.</p>
 less than symbol <code>&lt;</code> <strong>must</strong> be written in XML as <code>&amp;lt;</code>, the
 symbol <code>&gt;</code> <strong>can</strong> be written as <code>&amp;gt;</code>. Example: <code>$number &gt; 6</code>. Can
 be used in tests.</li>
+<li>Simple if/then/else expressions: <code>if (...) then ... else ...</code>.</li>
 </ul>
 
 <h2>The following XPath functions are known to the system:</h2>
@@ -107,6 +108,11 @@ XPath 2.0 standard.</p>
 <tr>
 <td>sd:alternating(&lt;type&gt;, &lt;text&gt;,&lt;text&gt;,.. )</td>
 <td>On each call the next element will be returned. You can define more alternating sequences by using distinct type values. Example: <code>sd:alternating(&quot;tbl&quot;, &quot;White&quot;,&quot;Gray&quot;)</code> can be used for alternating color of table rules. To reset the state, use <code>sd:reset-alternating(&lt;type&gt;)</code>.</td>
+</tr>
+
+<tr>
+<td>sd:aspectratio(&lt;imagename&gt;)</td>
+<td>Return the result of the division width by height of the given image. (&lt; 1 for portrait images, &gt; 1 for landscape).</td>
 </tr>
 
 <tr>
@@ -328,7 +334,7 @@ XPath 2.0 standard.</p>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.3.7 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/xpath.html">German</a>
+Version: 2.3.17 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/xpath.html">German</a>
 
 </body>
 </html>

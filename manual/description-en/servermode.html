@@ -22,7 +22,11 @@
 
 <p>(Experimental)</p>
 
-<p>When the speedata Publisher is started in the server-mode (<code>sp server</code>), it expects HTTP-requests on port 5266 (configurable).</p>
+<p>When the speedata Publisher is started in the server-mode (<code>sp server</code>), it expects HTTP-requests on port 5266 (configurable). All of these API calls are experimental. So expect changes.</p>
+
+<h2><code>/available</code></h2>
+
+<p>Return HTTP-status 200 (OK).</p>
 
 <h2><code>/v0/publish</code></h2>
 
@@ -45,20 +49,25 @@
 <pre><code>{&quot;id&quot;:&quot;752869708&quot;}
 </code></pre>
 
-<p>with an HTTP status code 200 (OK).</p>
+<p>with an HTTP status code 201 (Created).</p>
 
 <p>If the JSON file is defective, the HTTP status code is 400 (bad request) and the returned contents is a text string, such as</p>
 
 <pre><code>illegal base64 data at input byte 0
 </code></pre>
 
-<p><strong>This format might change</strong></p>
+<h3>Parameters</h3>
+
+<p>A parameter can be specified to set the result name of the PDF (without extension):</p>
+
+<p><code>/v0/publish?jobname=myfile</code> sets the jobname to &quot;myfile&quot;, so <code>/v0/pdf/&lt;id&gt;</code> returns the data with the given filename (plus the <code>.pdf</code>) extension. This is done via the HTTP header <code>Content-Disposition</code>.</p>
 
 <h2><code>/v0/publish/&lt;id&gt;</code></h2>
 
 <p>A GET request with an id from the aforementioned POST request returns a JSON file with the following contents:</p>
 
-<pre><code>{&quot;status&quot;:&quot;ok&quot;,&quot;path&quot;:&quot;/path/to/publisher.pdf&quot;,&quot;blob&quot;:&quot;&lt;base64 encoded PDF file&quot;&gt;}
+<pre><code>{&quot;status&quot;:&quot;ok&quot;,&quot;path&quot;:&quot;/path/to/publisher.pdf&quot;,&quot;blob&quot;:&quot;&lt;base64 encoded PDF file&gt;&quot;,
+ finished:&quot;2015-03-03T13:12:55+01:00&quot;}
 </code></pre>
 
 <p>or, in case of an error, if the id is unknown:</p>
@@ -73,6 +82,36 @@
 
 <p>The directory of the publishing run will be deleted right after the request, unless the URL has the suffix <code>?delete=false</code>.</p>
 
+<h2><code>/v0/pdf/&lt;id&gt;</code></h2>
+
+<p>A GET request with an id from the aforementioned POST request. In case of success, the PDF file gets returned with a 200 OK status. The request waits for the PDF file to be ready. On error, the answer is an error code:</p>
+
+<table>
+<thead>
+<tr>
+<th>Status code</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>200 OK</td>
+<td>PDF rendered OK</td>
+</tr>
+
+<tr>
+<td>404 Not Found</td>
+<td>Id is invalid</td>
+</tr>
+
+<tr>
+<td>406  Not Acceptable</td>
+<td>PDF has errors</td>
+</tr>
+</tbody>
+</table>
+
 <h2><code>/v0/status/&lt;id&gt;</code></h2>
 
 <p>Determines the current status of the publishing run, which was POSTed to <code>/v0/publish</code>.</p>
@@ -83,7 +122,7 @@
 <thead>
 <tr>
 <th>Key</th>
-<th>Descripiton</th>
+<th>Description</th>
 </tr>
 </thead>
 
@@ -137,7 +176,7 @@ start =
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.3.7 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/servermode.html">German</a>
+Version: 2.3.17 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/servermode.html">German</a>
 
 </body>
 </html>
