@@ -24,7 +24,7 @@ func Replace(text []byte, rexpr string, repl []byte) []byte {
 		// first create rexepx that match "$i"
 		x := fmt.Sprintf(`\$(%d)`, i)
 		nummatcher := regexp.MustCompile(x)
-		repl = nummatcher.ReplaceAll(repl, []byte(`$${1}`))
+		repl = nummatcher.ReplaceAll(repl, []byte(fmt.Sprintf(`$${%d}`, i)))
 	}
 	str := r.ReplaceAll(text, repl)
 	return str
