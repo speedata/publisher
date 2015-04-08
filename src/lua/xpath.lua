@@ -884,7 +884,7 @@ end
 
 M.default_functions["replace"] = function(dataxml,arg)
     if arg[1] == nil or arg[2] == nil or arg[3] == nil then
-        err("replace: one of the arguments is empty")
+        warning("replace: one of the arguments is empty")
         return ""
     end
     comm.sendmessage('rep',arg[1])
