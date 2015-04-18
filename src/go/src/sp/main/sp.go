@@ -82,6 +82,7 @@ func init() {
 		"address":    "127.0.0.1",
 		"data":       "data.xml",
 		"fontpath":   "",
+		"grid":       "",
 		"imagecache": filepath.Join(os.TempDir(), "sp", "images"),
 		"jobname":    "publisher",
 		"layout":     "layout.xml",
@@ -453,6 +454,8 @@ func runPublisher() (exitstatus int) {
 	fmt.Fprintln(f, "Time:", starttime.Format(time.ANSIC))
 	f.Close()
 
+	layoutoptions["grid"] = getOption("grid")
+
 	// layoutoptions are passed as a command line argument to the publisher
 	var layoutoptions_ary []string
 	if layoutoptions["grid"] != "" {
@@ -573,7 +576,7 @@ func main() {
 	op.On("--dummy", "Don't read a data file, use '<data />' as input", options)
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
 	op.On("--filter FILTER", "Run XPROC filter before publishing starts", options)
-	op.On("--grid", "Display background grid. Disable with --no-grid", layoutoptions)
+	op.On("--grid", "Display background grid. Disable with --no-grid", options)
 	op.On("--no-local", "Add local directory to the search path. Default is true", &add_local_path)
 	op.On("--layout NAME", "Name of the layout file. Defaults to 'layout.xml'", options)
 	op.On("--jobname NAME", "The name of the resulting PDF file (without extension), default is 'publisher'", options)
