@@ -2,7 +2,7 @@
 --  viznodelist.lua
 --  speedata publisher
 --
---  Copyright 2010-2013 Patrick Gundlach.
+--  Copyright 2010-2015 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 
 --
@@ -344,10 +344,8 @@ local function dot_analyze_nodelist( head, options )
       stack = string.format("stack: %d",head.stack)
       if status.luatex_version < 79 then
         cmd = string.format("cmd: %d",  head.cmd)
-        -- colstart.cmd = 1
       else
         cmd = string.format("cmd: %d",  head.command)
-        -- colstart.command = 1
       end
 
       data  = string.format("data: %s", head.data)

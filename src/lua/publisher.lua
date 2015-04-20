@@ -2246,7 +2246,12 @@ function fix_justification( nodelist,alignment,parent)
 
             -- we are on a line now. We assume that the spacing needs correction.
             -- The goal depends on the current line (parshape!)
-            local goal = head.width
+            local goal
+            if head.width == 1 then
+                goal, _, _ = node.dimensions(head.glue_set, head.glue_sign, head.glue_order, head.head)
+            else
+                goal = head.width
+            end
             local font_before_glue
 
             -- The following code is problematic, in tabular material. This is my older comment
