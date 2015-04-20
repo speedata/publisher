@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.19" date="2015-04-20">
+      <en>PositioningFrames can now use the current data ({@attrib} for example)</en>
+      <de>Platzierungsrahmen dürfen nun auf Daten zugreifen ({@attrib} zum Beispiel)</de>
+    </entry>
+    <entry version="2.3.19" date="2015-04-20">
+      <en>Bugfix/workaround for an issue introduced in 2.3.18 in multi line Td cells.</en>
+      <de>Fehlerkorrektur/Workaround für einen Fehler in zentrierten Td-Zellen mit mehreren Zeilen.</de>
+    </entry>
     <entry version="2.3.18" date="2015-04-08">
       <en>Bugfixes: replace() and $1, $2, ... / multi line &lt;Td align="center">...&lt;/Td> contents</en>
       <de>Fehlerkorrekturen: replace() und $1, $2, ... / &lt;Td align="center">...&lt;/Td> Inhalte mit mehrern Zeilen.</de>
