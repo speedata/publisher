@@ -1148,7 +1148,7 @@ function setup_page(pagenumber)
             current_grid.positioning_frames[name] = {}
             local current_positioning_area = current_grid.positioning_frames[name]
             -- we evaluate now, because the attributes in PositioningFrame can be page dependent.
-            local tab  = dispatch(element_contents(j).layoutxml,dataxml)
+            local tab  = dispatch(element_contents(j).layoutxml,element_contents(j).dataxml)
             for i,k in ipairs(tab) do
                 current_positioning_area[#current_positioning_area + 1] = element_contents(k)
             end

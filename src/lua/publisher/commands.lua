@@ -2037,6 +2037,7 @@ function commands.positioning_area( layoutxml,dataxml )
     -- might depend on values on the _current_ page, which is not set!
     local tab = {}
     tab.layoutxml = layoutxml
+    tab.dataxml = dataxml
     local name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
     tab.name = name
     return tab

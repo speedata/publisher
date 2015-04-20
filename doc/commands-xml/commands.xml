@@ -33,6 +33,8 @@
     <optional><cmd name="Output"/></optional>
     <optional><cmd name="Paragraph"/></optional>
     <optional><cmd name="PlaceObject"/></optional>
+    <optional><cmd name="PositioningArea"/></optional>
+    <optional><cmd name="PositioningFrame"/></optional>
     <optional><cmd name="ProcessNode"/></optional>
     <optional><cmd name="SaveDataset"/></optional>
     <optional><cmd name="SavePages"/></optional>
@@ -67,6 +69,7 @@
     <optional><cmd name="NextFrame"/></optional>
     <optional><cmd name="NextRow"/></optional>
     <optional><cmd name="Output"/></optional>
+    <optional><cmd name="Pagetype"/></optional>
     <optional><cmd name="PlaceObject"/></optional>
     <optional><cmd name="ProcessNode"/></optional>
     <optional><cmd name="SaveDataset"/></optional>
@@ -4226,15 +4229,10 @@
         <oneOrMore><cmd name="PositioningArea"/></oneOrMore>
       </optional>
       <interleave>
-        <optional>
-          <cmd name="Grid"/>
-        </optional>
-        <optional>
-          <cmd name="AtPageCreation"/>
-        </optional>
-        <optional>
-          <cmd name="AtPageShipout"/>
-        </optional>
+        <optional><cmd name="AtPageCreation"/></optional>
+        <optional><cmd name="AtPageShipout"/></optional>
+        <optional><cmd name="ForAll"/></optional>
+        <optional><cmd name="Grid"/></optional>
       </interleave>
     </childelements>
     <attribute en="test" de="bedingung" type="xpath" optional="no">
@@ -4328,6 +4326,7 @@
           <optional><cmd name="Table"/></optional>
           <optional><cmd name="Transformation"/></optional>
           <optional><cmd name="Frame"/></optional>
+          <optional><cmd name="Switch"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>
@@ -4742,7 +4741,12 @@
       <para>Beschreibt einen Platzierungsbereich, der mehrere Platzierungsrahmen beinhalten kann. In diesen Rahmen können Elemente platziert werden</para>
     </description>
     <childelements>
-      <oneOrMore><cmd name="PositioningFrame"/></oneOrMore>
+      <oneOrMore>
+        <interleave>
+          <optional><cmd name="PositioningFrame"/></optional>
+          <optional><cmd name="Loop"/></optional>
+        </interleave>  
+      </oneOrMore>
     </childelements>
     <attribute en="name" de="name" type="text" optional="no">
       <description xml:lang="en">

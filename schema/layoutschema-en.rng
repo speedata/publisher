@@ -95,6 +95,9 @@
                <ref name="e_Output"></ref>
             </optional>
             <optional>
+               <ref name="e_Pagetype"></ref>
+            </optional>
+            <optional>
                <ref name="e_PlaceObject"></ref>
             </optional>
             <optional>
@@ -175,6 +178,9 @@
             </optional>
             <optional>
                <ref name="e_Output"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Pagetype"></ref>
             </optional>
             <optional>
                <ref name="e_PlaceObject"></ref>
@@ -479,6 +485,12 @@
                <ref name="e_PlaceObject"></ref>
             </optional>
             <optional>
+               <ref name="e_PositioningArea"></ref>
+            </optional>
+            <optional>
+               <ref name="e_PositioningFrame"></ref>
+            </optional>
+            <optional>
                <ref name="e_ProcessNode"></ref>
             </optional>
             <optional>
@@ -607,6 +619,9 @@
             </optional>
             <optional>
                <ref name="e_Output"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Pagetype"></ref>
             </optional>
             <optional>
                <ref name="e_PlaceObject"></ref>
@@ -1087,6 +1102,12 @@
                </optional>
                <optional>
                   <ref name="e_PlaceObject"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_PositioningArea"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_PositioningFrame"></ref>
                </optional>
                <optional>
                   <ref name="e_ProcessNode"></ref>
@@ -1699,6 +1720,12 @@
                   <ref name="e_PlaceObject"></ref>
                </optional>
                <optional>
+                  <ref name="e_PositioningArea"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_PositioningFrame"></ref>
+               </optional>
+               <optional>
                   <ref name="e_ProcessNode"></ref>
                </optional>
                <optional>
@@ -2181,6 +2208,12 @@
                <ref name="e_PlaceObject"></ref>
             </optional>
             <optional>
+               <ref name="e_PositioningArea"></ref>
+            </optional>
+            <optional>
+               <ref name="e_PositioningFrame"></ref>
+            </optional>
+            <optional>
                <ref name="e_ProcessNode"></ref>
             </optional>
             <optional>
@@ -2392,13 +2425,16 @@
          </optional>
          <interleave>
             <optional>
-               <ref name="e_Grid"></ref>
-            </optional>
-            <optional>
                <ref name="e_AtPageCreation"></ref>
             </optional>
             <optional>
                <ref name="e_AtPageShipout"></ref>
+            </optional>
+            <optional>
+               <ref name="e_ForAll"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Grid"></ref>
             </optional>
          </interleave>
       </element>
@@ -2607,6 +2643,9 @@
                <optional>
                   <ref name="e_Frame"></ref>
                </optional>
+               <optional>
+                  <ref name="e_Switch"></ref>
+               </optional>
             </interleave>
          </oneOrMore>
       </element>
@@ -2618,7 +2657,14 @@
             <a:documentation>Name of the area.</a:documentation>
          </attribute>
          <oneOrMore>
-            <ref name="e_PositioningFrame"></ref>
+            <interleave>
+               <optional>
+                  <ref name="e_PositioningFrame"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Loop"></ref>
+               </optional>
+            </interleave>
          </oneOrMore>
       </element>
    </define>
@@ -2713,6 +2759,9 @@
             </optional>
             <optional>
                <ref name="e_Output"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Pagetype"></ref>
             </optional>
             <optional>
                <ref name="e_PlaceObject"></ref>
@@ -2880,6 +2929,9 @@
                </optional>
                <optional>
                   <ref name="e_Output"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Pagetype"></ref>
                </optional>
                <optional>
                   <ref name="e_PlaceObject"></ref>
@@ -3800,6 +3852,12 @@
                   <ref name="e_PlaceObject"></ref>
                </optional>
                <optional>
+                  <ref name="e_PositioningArea"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_PositioningFrame"></ref>
+               </optional>
+               <optional>
                   <ref name="e_ProcessNode"></ref>
                </optional>
                <optional>
@@ -4012,6 +4070,12 @@
                </optional>
                <optional>
                   <ref name="e_PlaceObject"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_PositioningArea"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_PositioningFrame"></ref>
                </optional>
                <optional>
                   <ref name="e_ProcessNode"></ref>
