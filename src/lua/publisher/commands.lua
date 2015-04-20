@@ -2075,7 +2075,7 @@ function commands.rule( layoutxml,dataxml )
 
     if tonumber(length) then
         if direction == "horizontal" then
-            length = publisher.current_grid.gridwidth * length
+            length = publisher.current_grid:width_sp(length)
         elseif direction == "vertical" then
             length = publisher.current_grid.gridheight * length
         else
@@ -2452,11 +2452,11 @@ function commands.table( layoutxml,dataxml,optionen )
             err("Can't determine the current width. Tables in groups and data cells must contain explicit widths.")
             width = 50 * 2^16
         else
-            width = xpath.get_variable("__maxwidth") * publisher.current_grid.gridwidth
+            width = publisher.current_grid:width_sp(xpath.get_variable("__maxwidth"))
         end
     else
         if tonumber(width) ~= nil then
-            width  = publisher.current_grid.gridwidth  * width
+            width  = publisher.current_grid:width_sp(width)
         else
             width = tex.sp(width)
         end
