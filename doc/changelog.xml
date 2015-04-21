@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.20" date="2015-04-21">
+      <en>Bugfix: width Table and Rule and grid distance</en>
+      <de>Fehlerkorrektur: Breite bei Tabelle und Linie in Kombination mit Rasterzellenabstand</de>
+    </entry>
     <entry version="2.3.19" date="2015-04-20">
       <en>PositioningFrames can now use the current data ({@attrib} for example)</en>
       <de>Platzierungsrahmen dürfen nun auf Daten zugreifen ({@attrib} zum Beispiel)</de>
