@@ -359,6 +359,9 @@ function find_suitable_row( self,column, width,height,areaname)
 end
 
 function width_sp(self, gridcells )
+    if not tonumber(gridcells) then
+        return tex.sp(gridcells)
+    end
     local wd = self.gridwidth * gridcells + (gridcells - 1 ) * self.grid_dx
     return math.ceil(math.round(wd,3))
 end
