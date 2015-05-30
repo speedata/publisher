@@ -1971,6 +1971,17 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="crop">
+               <a:documentation>Crop the pages so that the pdf size of the page is at its minimum.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Use cropping</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Don&#39;t use cropping (default)</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="cutmarks">
                <a:documentation>Cut marks / crop marks will be placed in the PDF. The distance&#xA;          of the marks from the imaginary center is determined by the attribute trim,&#xA;          but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute&#xA;          is no, that means no cut marks will be displayed.</a:documentation>
                <choice>

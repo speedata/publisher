@@ -1448,7 +1448,8 @@ function commands.options( layoutxml,dataxml )
     publisher.options.trim               = publisher.read_attribute(layoutxml,dataxml,"trim",        "length")
     publisher.options.ignoreeol          = publisher.read_attribute(layoutxml,dataxml,"ignoreeol",   "boolean")
     publisher.options.resetmarks         = publisher.read_attribute(layoutxml,dataxml,"resetmarks",  "boolean",false)
-    publisher.options.colorprofile       = publisher.read_attribute(layoutxml,dataxml,"colorprofile",  "rawstring")
+    publisher.options.colorprofile       = publisher.read_attribute(layoutxml,dataxml,"colorprofile","rawstring")
+    publisher.options.crop               = publisher.read_attribute(layoutxml,dataxml,"crop",        "boolean",false)
     local mainlanguage                   = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","")
 
     if mainlanguage ~= "" then
@@ -1825,13 +1826,15 @@ function commands.place_object( layoutxml,dataxml )
         end
     end
     for i=1,#objects do
+        local framewidth
         object     = objects[i].object
         objecttype = objects[i].objecttype
 
         if background  == "full" then
             object = publisher.background(object,backgroundcolor)
         end
-        if frame  == "solid" then
+        if frame == "solid" then
+            framewidth = rulewidth_sp
             object = publisher.frame({
                 box       = object,
                 colorname = framecolor,
@@ -1841,6 +1844,9 @@ function commands.place_object( layoutxml,dataxml )
                 b_t_l_radius = tex.sp(b_t_l_radius or 0),
                 b_b_l_radius = tex.sp(b_b_l_radius or 0),
                 })
+        else
+            -- set to 0 so framewidth in parameter below
+            framewidth = 0
         end
         if not object then
             err("Something is wrong with <PlaceObject>, content is missing")
@@ -1929,6 +1935,7 @@ function commands.place_object( layoutxml,dataxml )
                 rotate = rotate,
                 origin_x = origin_x,
                 origin_y = origin_y,
+                framewidth = framewidth,
                 })
             trace("object placed")
             row = nil -- the current rows is not valid anymore because an object is already rendered

@@ -1971,6 +1971,17 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="beschnitt">
+               <a:documentation>Beschneidet eine Seite, so dass die Objekte auf einer Seite die Größe bestimmen.</a:documentation>
+               <choice>
+                  <value>ja</value>
+                  <a:documentation>Beschnitt einschalten</a:documentation>
+                  <value>nein</value>
+                  <a:documentation>Seiten nicht beschneiden. (Voreinstellung)</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="beschnittmarken">
                <a:documentation>Beschnittmarken (crop marks) werden ausgegeben. Der Abstand der Schnittmarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die&#xA;          Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Schnittmarken ausgegeben.</a:documentation>
                <choice>

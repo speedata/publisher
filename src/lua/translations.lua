@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2015-03-11 11:40)
+-- generated from genluatranslations.go (2015-05-30 13:09)
 -- do not edit!
 module(...)
 return {
@@ -232,6 +232,7 @@ return {
         },
       ["Optionen"] = { "Options",
         ["farbprofil"] = "colorprofile",
+        ["beschnitt"] = "crop",
         ["beschnittmarken"] = "cutmarks",
         ["beschnittzugabe"] = "trim",
         ["hauptsprache"] = "mainlanguage",

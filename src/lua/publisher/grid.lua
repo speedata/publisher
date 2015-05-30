@@ -24,6 +24,7 @@ function new( self,pagenumber )
         pageheight_known  = false,
         extra_margin      = 0,  -- for cut marks, in sp
         trim              = 0,  -- bleed, in sp
+        dimensions        = {}, -- min-x, min-y, max-x, max-y
         positioning_frames = { [publisher.default_areaname] = { { row = 1, column = 1} } },  -- Positioning frame
     }
     setmetatable(r, self)
@@ -553,14 +554,44 @@ function calculate_number_gridcells(self)
     log("Number of rows: %d, number of columns = %d",self:number_of_rows(), self:number_of_columns())
 end
 
-function trimbox( self )
+function setarea( self, x, y, wd, ht)
+    if self.dimensions[1] == nil then
+        self.dimensions[1] = x
+    else
+        self.dimensions[1] = math.min(self.dimensions[1],x)
+    end
+    if self.dimensions[2] == nil then
+        self.dimensions[2] = y
+    else
+        self.dimensions[2] = math.min(self.dimensions[2],y)
+    end
+    if self.dimensions[3] == nil then
+        self.dimensions[3] = x + wd
+    else
+        self.dimensions[3] = math.max(self.dimensions[3], x + wd)
+    end
+    if self.dimensions[4] == nil then
+        self.dimensions[4] = y + ht
+    else
+        self.dimensions[4] = math.max(self.dimensions[4],y + ht)
+    end
+end
+
+function trimbox( self, crop )
     assert(self)
     local x,y,wd,ht =  sp_to_bp(self.extra_margin), sp_to_bp(self.extra_margin) , sp_to_bp(tex.pagewidth - self.extra_margin), sp_to_bp(tex.pageheight - self.extra_margin)
     local b_x,b_y,b_wd,b_ht = sp_to_bp(self.extra_margin - self.trim), sp_to_bp(self.extra_margin - self.trim) , sp_to_bp(tex.pagewidth - self.extra_margin + self.trim), sp_to_bp(tex.pageheight - self.extra_margin + self.trim)
+    local attrstring = {}
+    attrstring[#attrstring + 1] = string.format("/TrimBox [ %g %g %g %g]",x,y,wd,ht)
+    attrstring[#attrstring + 1] = string.format("/BleedBox [%g %g %g %g]",b_x,b_y,b_wd,b_ht)
+    if crop then
+        attrstring[#attrstring + 1] = string.format("/CropBox [%g %g %g %g]", sp_to_bp(self.dimensions[1]), sp_to_bp(tex.pageheight - self.dimensions[2]), sp_to_bp(self.dimensions[3]), sp_to_bp(tex.pageheight - self.dimensions[4]))
+    end
+
     if status.luatex_version < 79 then
-        pdf.pageattributes = string.format("/TrimBox [ %g %g %g %g] /BleedBox [%g %g %g %g]",x,y,wd,ht,b_x,b_y,b_wd,b_ht)
+        pdf.pageattributes = table.concat(attrstring, " ")
     else
-        pdf.setpageattributes(string.format("/TrimBox [ %g %g %g %g] /BleedBox [%g %g %g %g]",x,y,wd,ht,b_x,b_y,b_wd,b_ht))
+        pdf.setpageattributes(table.concat(attrstring, " "))
     end
 end
 

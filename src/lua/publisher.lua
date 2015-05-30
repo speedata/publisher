@@ -935,7 +935,14 @@ end
 --- rotate          | Rotation counter clockwise in degrees (0-360).
 --- origin_x        | Origin X for rotation. Left is 0 and right is 100
 --- origin_y        | Origin Y for rotation. Top is 0 and bottom is 100
+--- framewidth      | When frame=solid then this has the frame width
 function output_at( param )
+    _wd, _ht, _dp = node.dimensions(param.nodelist)
+    if param.framewidth then
+        _wd = _wd + param.framewidth
+        _ht = _ht + param.framewidth
+    end
+
     local outputpage = current_pagenumber
     if param.pagenumber then
         outputpage = param.pagenumber
@@ -948,10 +955,9 @@ function output_at( param )
     local area = param.area or default_areaname
     local valign = param.valign
     local keepposition = param.keepposition
-    local grid = param.grid
 
     -- current_grid is important here, because it can be a group
-    local r = grid or current_grid
+    local r = param.grid or current_grid
     local wd = nodelist.width
     local ht = nodelist.height + nodelist.depth
 
@@ -960,7 +966,9 @@ function output_at( param )
     local height_gridcells  = r:height_in_gridcells_sp (ht)
 
     local delta_x, delta_y = r:position_grid_cell(x,y,area,wd,ht,valign)
+
     if not delta_x then
+        -- if delta_x is nil, delta_y has the error message
         err(delta_y)
         exit()
     end
@@ -969,6 +977,14 @@ function output_at( param )
         delta_x = delta_x - node.has_attribute(nodelist,att_shift_left)
         delta_y = delta_y - node.has_attribute(nodelist,att_shift_up)
     end
+
+
+    local extra_crop = 0
+    if param.framewidth then
+        extra_crop = param.framewidth
+    end
+
+    r:setarea(delta_x - extra_crop,delta_y - extra_crop, _wd + extra_crop, _ht + extra_crop)
 
     --- We don't necessarily output things on a page, we can output them in a virtual page, called _group_.
     if current_group then
@@ -1477,12 +1493,14 @@ end
 function setpageresources()
 
     local gstateresource = string.format(" /ExtGState << /GS0 %d 0 R /GS1 %d 0 R >>", GS_State_OP_On, GS_State_OP_Off)
+    local cropbox = ""
 
     if status.luatex_version < 79 then
         if #used_spotcolors > 0 then
             pdf.pageresources = "/ColorSpace << " .. spotcolors.getresource(used_spotcolors) .. " >>" .. gstateresource
         end
     else
+        -- LuaTeX has setpageresources
         if #used_spotcolors > 0 then
             pdf.setpageresources("/ColorSpace << " .. spotcolors.getresource(used_spotcolors) .. " >>" .. gstateresource )
         else
@@ -1531,7 +1549,6 @@ end
 
 --- After everything is ready for page shipout, we add debug output and crop marks if necessary
 function dothingsbeforeoutput(  )
-    local page_resources = {}
     local current_page = pages[current_pagenumber]
     local r = current_page.grid
     local str
@@ -1586,7 +1603,8 @@ function dothingsbeforeoutput(  )
             firstbox = lit
         end
     end
-    r:trimbox()
+    r:trimbox(options.crop)
+
     if options.cutmarks then
         local lit = node.new("whatsit","pdf_literal")
         lit.mode = 1
