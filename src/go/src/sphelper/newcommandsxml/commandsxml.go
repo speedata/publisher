@@ -141,6 +141,7 @@ type Attribute struct {
 	NameEn        string
 	NameDe        string
 	Css           string
+	Since         string
 	Type          string
 	Optional      bool
 }
@@ -334,6 +335,7 @@ type Command struct {
 	NameEn         string
 	NameDe         string
 	Css            string
+	Since          string
 	seealso        *seealso
 }
 
@@ -411,6 +413,8 @@ func (c *Command) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error {
 						a.NameDe = attribute.Value
 					case "css":
 						a.Css = attribute.Value
+					case "since":
+						a.Since = attribute.Value
 					case "optional":
 						a.Optional = attribute.Value == "yes"
 					case "type":
@@ -850,6 +854,9 @@ func ReadCommandsFile(r io.Reader) (*Commands, error) {
 					}
 					if attribute.Name.Local == "css" {
 						c.Css = attribute.Value
+					}
+					if attribute.Name.Local == "since" {
+						c.Since = attribute.Value
 					}
 				}
 			}

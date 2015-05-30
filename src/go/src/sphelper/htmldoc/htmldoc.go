@@ -1,3 +1,4 @@
+// Package is for documenting each command
 package htmldoc
 
 import (
@@ -55,6 +56,8 @@ func translate(lang, text string) string {
 		return "CSS Name"
 	case "CSS property":
 		return "CSS Eigenschaft"
+	case "since version":
+		return "seit Version"
 	}
 	return "--"
 }

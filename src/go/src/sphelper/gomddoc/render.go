@@ -1,3 +1,5 @@
+// package is for static documentation pages
+
 package gomddoc
 
 import (
