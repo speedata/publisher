@@ -42,8 +42,12 @@ end
 
 local function listen()
     local port = os.getenv("SP_SERVERPORT")
-    assert(port,"Port must be set (environment variable SP_SERVERPORT)")
-    log("Talking to server on port %s",port)
+    if not port then
+        err("Port must be set (environment variable SP_SERVERPORT)")
+        err("Perhaps sp and the Lua base are out of sync?")
+        exit(false)
+    end
+    log("Talking to server on port %s",port or "(no port number)")
 
     local host = "127.0.0.1"
     tcp = assert(socket.tcp())
