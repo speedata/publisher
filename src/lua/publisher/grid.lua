@@ -521,6 +521,7 @@ function set_margin(self,left,top,right,bottom)
     self.margin_bottom  = to_sp(bottom)
 end
 
+--- ![width calculation](../img/gridnx.svg)
 function calculate_number_gridcells(self)
     assert(self)
     assert(self.margin_left,  "Margin not set yet!")
@@ -537,8 +538,10 @@ function calculate_number_gridcells(self)
         pagearea_y = tex.pageheight - self.margin_top  - self.margin_bottom  - 2 * self.extra_margin
 
         if self.grid_nx and self.grid_nx ~= 0 then
+            -- See the image
             self:set_number_of_columns( self.grid_nx )
-            self.gridwidth = pagearea_x / self.grid_nx
+            local sum_distances = ( self.grid_nx - 1 )  * self.grid_dx
+            self.gridwidth = math.floor( ( pagearea_x - sum_distances ) /  self.grid_nx, 0)
         else
             self:set_number_of_columns(self:width_in_gridcells_sp(pagearea_x))
         end

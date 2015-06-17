@@ -187,7 +187,7 @@ func getCompareStatus(cs chan compareStatus) {
 
 func mkCompare(status chan compareStatus) filepath.WalkFunc {
 	return func(path string, info os.FileInfo, err error) error {
-		if !info.IsDir() {
+		if info == nil || !info.IsDir() {
 			return nil
 		}
 		if _, err := os.Stat(filepath.Join(path, "reference.pdf")); err == nil {
