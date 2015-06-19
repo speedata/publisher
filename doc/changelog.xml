@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.22" date="2015-06-19">
+      <en>Bugfix with dx and nx in SetGrid</en>
+      <de>Fehlerkorrektur bei dx und nx in SetzeRaster</de>
+    </entry>
     <entry version="2.3.21" date="2015-05-30">
       <en>New option crop for pages with a tight cropbox.</en>
       <de>Neue Option »beschnitt« für Seiten mit einer CropBox, die den Objekten auf der Seite entspricht.</de>
