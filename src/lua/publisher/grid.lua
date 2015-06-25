@@ -371,7 +371,7 @@ end
 function width_in_gridcells_sp(self,width_sp)
     assert(self)
     local wd_sp = width_sp - self.gridwidth
-    if wd_sp == 0 then return 1 end
+    if wd_sp <= 0 then return 1 end
 
     local wd_gridcells = 1
     repeat
