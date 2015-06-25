@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.23" date="2015-06-25">
+      <en>Bugfix width calculation in the grid</en>
+      <de>Fehlerbehebung in der Breitenberechnung im Raster</de>
+    </entry>
     <entry version="2.3.22" date="2015-06-19">
       <en>Bugfix with dx and nx in SetGrid</en>
       <de>Fehlerkorrektur bei dx und nx in SetzeRaster</de>
