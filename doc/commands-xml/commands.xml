@@ -3812,6 +3812,36 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="trimmarks" de="beschnittzugabemarken" optional="yes" since="2.3.24">
+      <description xml:lang="en">
+        <para>Trim marks will be placed in the PDF. The distance
+          of the marks from the imaginary center is determined by the attribute <tt>trim</tt>,
+          but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute
+          is <tt>no</tt>, that means no trim marks will be displayed. The trim marks show the
+          additional trim distance.
+        </para>
+      </description>
+      <description xml:lang="de">
+        <para>Beschnittzugabemarken werden ausgegeben. Diese Marken zeigen, wie groß die Beschnittzugabe ist. Der Abstand der Beschnittzugabemarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die
+          Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Beschnittzugabemarken ausgegeben.</para>
+      </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Show trim marks.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Beschnittzugabemarken anzeigen.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Don't show trim marks (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Beschnittzugabemarken nicht anzeigen (Voreinstellung).</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="trim" de="beschnittzugabe" type="length" optional="yes">
       <description xml:lang="en">
         <para>The amount of bleed. Defaults to 0mm.</para>
@@ -4769,7 +4799,7 @@
         <interleave>
           <optional><cmd name="PositioningFrame"/></optional>
           <optional><cmd name="Loop"/></optional>
-        </interleave>  
+        </interleave>
       </oneOrMore>
     </childelements>
     <attribute en="name" de="name" type="text" optional="no">

@@ -754,6 +754,12 @@ function initialize_luatex_and_generate_pdf()
         options.cutmarks = false
     end
 
+    if options.trimmarks == "true" then
+        options.trimmarks = true
+    elseif options.trimmarks == "false" then
+        options.trimmarks = false
+    end
+
     if options.showgridallocation == "false" then
         options.showgridallocation = false
     elseif options.showgridallocation == "true" then
@@ -1102,7 +1108,7 @@ function setup_page(pagenumber)
     end
     local trim_amount = tex.sp(options.trim or 0)
     local extra_margin
-    if options.cutmarks then
+    if options.cutmarks or options.trimmarks then
         extra_margin = tex.sp("1cm") + trim_amount
     elseif trim_amount > 0 then
         extra_margin = trim_amount
@@ -1573,6 +1579,7 @@ function dothingsbeforeoutput(  )
         y = y - options.trim
     end
 
+    -- White background
     firstbox = node.new("whatsit","pdf_literal")
     firstbox.data = string.format("q 0 0 0 0 k  1 0 0 1 0 0 cm %g %g %g %g re f Q",sp_to_bp(x), sp_to_bp(y),wd ,ht)
     firstbox.mode = 1
@@ -1617,6 +1624,20 @@ function dothingsbeforeoutput(  )
             firstbox = lit
         end
     end
+
+    if options.trimmarks then
+        local lit = node.new("whatsit","pdf_literal")
+        lit.mode = 1
+        lit.data = r:trimmarks()
+        if firstbox then
+            local tail = node.tail(firstbox)
+            tail.next = lit
+            lit.prev = tail
+        else
+            firstbox = lit
+        end
+    end
+
     if firstbox then
         local list_start = pages[current_pagenumber].pagebox
         pages[current_pagenumber].pagebox = firstbox

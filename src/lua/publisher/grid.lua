@@ -396,10 +396,9 @@ function draw_grid(self)
     local color
     local ret = {}
     ret[#ret + 1] = "q 0.2 w [2] 1 d "
-    local paperheight = sp_to_bp(tex.pageheight)
-    local paperwidth  = sp_to_bp(tex.pagewidth  - self.extra_margin)
-    local x, y, width, height
-    y = sp_to_bp ( self.extra_margin )
+    local paperheight_bp = sp_to_bp(tex.pageheight - self.extra_margin)
+    local paperwidth_bp  = sp_to_bp(tex.pagewidth  - self.extra_margin)
+    local x
     local count_col = self:number_of_columns()
     for i=0, count_col do
         -- every 5 grid cells draw a grey rule
@@ -410,33 +409,45 @@ function draw_grid(self)
         -- left boundary of each grid cell (horizontal)
         if i < count_col then
             x = sp_to_bp(i * ( self.gridwidth + self.grid_dx) + self.margin_left + self.extra_margin)
-            ret[#ret + 1] = string.format("%g G %g %g m %g %g l S", color, math.round(x,1), math.round(y,1), math.round(x,1), math.round(paperheight - y,1))
+            ret[#ret + 1] = string.format("%g G %g 0 m %g %g l S", color, math.round(x,1), math.round(x,1), math.round(paperheight_bp,1))
         end
 
         -- right boundary of each grid cell (horizontal)
         if i > 0 and self.grid_dx > 0  or i == count_col then
             x = sp_to_bp(i * self.gridwidth +  ( i - 1 ) * self.grid_dx + self.margin_left + self.extra_margin)
-            ret[#ret + 1] = string.format("%g G %g %g m %g %g l S", color, math.round(x,1), math.round(y,1), math.round(x,1), math.round(paperheight - y,1))
+            ret[#ret + 1] = string.format("%g G %g 0 m %g %g l S", color, math.round(x,1), math.round(x,1), math.round(paperheight_bp,1))
         end
     end
     x = sp_to_bp(self.extra_margin)
+    local y
     for i=0,self:number_of_rows() do
         -- every 5 grid cells draw a gray rule
         if (i % 5 == 0) then color = "0.6" else color = "0.8" end
         -- every 10 grid cells draw a black rule
         if (i % 10 == 0) then color = "0.2" end
-        y = sp_to_bp( i * self.gridheight  + self.margin_top + self.extra_margin)
-        ret[#ret + 1] = string.format("%g G %g %g m %g %g l S", color, math.round(x,2), math.round(paperheight - y,2), math.round(paperwidth,2), math.round(paperheight - y,2))
+        y = sp_to_bp( i * self.gridheight  + self.margin_top )
+        ret[#ret + 1] = string.format("%g G %g %g m %g %g l S", color, math.round(x,2), math.round(paperheight_bp - y,2), math.round(paperwidth_bp,2), math.round(paperheight_bp - y,2))
     end
     ret[#ret + 1] = "Q"
+    ret[#ret + 1] = "q"
+    local width,height
     for _,area in pairs(self.positioning_frames) do
         for _,frame in ipairs(area) do
             x      = sp_to_bp(( frame.column - 1) * ( self.gridwidth + self.grid_dx) + self.extra_margin + self.margin_left)
-            y      = sp_to_bp( (frame.row - 1)  * self.gridheight  + self.extra_margin + self.margin_top )
+            y      = sp_to_bp( (frame.row - 1)  * self.gridheight  +  self.margin_top )
             width  = sp_to_bp(frame.width * self.gridwidth + (frame.width - 1) * self.grid_dx)
             height = sp_to_bp(frame.height  * self.gridheight )
-            ret[#ret + 1] = string.format("q %s %g w %g %g %g %g re S Q", "1 0 0  RG",0.5, x,math.round(paperheight - y,2),width,-height)
+            ret[#ret + 1] = string.format("q %s %g w %g %g %g %g re S Q", "1 0 0  RG",0.5, x,math.round(paperheight_bp - y,2),width,-height)
         end
+    end
+    ret[#ret + 1] = "Q"
+
+    if self.extra_margin ~= 0 and self.trim ~= 0 then -- draw trimbox
+        x = sp_to_bp(self.extra_margin - self.trim)
+        y = sp_to_bp(self.extra_margin - self.trim)
+        width  = paperwidth_bp  + sp_to_bp( 2 *  self.trim - self.extra_margin )
+        height = sp_to_bp(tex.pageheight - 2 * self.extra_margin + 2 * self.trim)
+        ret[#ret + 1] = string.format("q 0.4 w [3 5] 6 d 0.5 G %g %g %g %g re s Q", math.round(x,2), math.round(y ,2), math.round(width,2), math.round(height,2))
     end
     return table.concat(ret,"\n")
 end
@@ -636,5 +647,42 @@ function cutmarks( self, length, distance, width )
     return table.concat(ret,"\n")
 end
 
+function trimmarks( self, length, distance, width )
+    local x,y,wd,ht = sp_to_bp(self.extra_margin - self.trim), sp_to_bp(self.extra_margin - self.trim) , sp_to_bp(tex.pagewidth - self.extra_margin + self.trim), sp_to_bp(tex.pageheight - self.extra_margin + self.trim)
+    local ret = {}
+    local distance_bp, length_bp, width_bp
+    if not distance then
+        distance_bp = sp_to_bp(self.trim)
+    else
+        distance_bp = sp_to_bp(distance)
+    end
+    if distance_bp < 5 then distance_bp = 5 end
+    if not length then
+        length_bp = 20
+    else
+        length_bp = sp_to_bp(length)
+    end
+    if not width then
+        width_bp = 0.5
+    else
+        width_bp = sp_to_bp(width)
+    end
+
+    -- bottom left
+    ret[#ret + 1] = string.format("q 0 G %g w %g %g m %g %g l S Q",width_bp, x, y - distance_bp, x, y - length_bp - distance_bp)  -- v
+    ret[#ret + 1] = string.format("q 0 G %g w %g %g m %g %g l S Q",width_bp, x - distance_bp, y, x - length_bp - distance_bp, y)  -- h
+    -- bottom right
+    ret[#ret + 1] = string.format("q 0 G %g w %g %g m %g %g l S Q",width_bp, wd, y - distance_bp, wd, y - length_bp - distance_bp)
+    ret[#ret + 1] = string.format("q 0 G %g w %g %g m %g %g l S Q",width_bp, wd + distance_bp, y, wd + distance_bp + length_bp, y)
+    -- top right
+    ret[#ret + 1] = string.format("q 0 G %g w %g %g m %g %g l S Q",width_bp, wd, ht + distance_bp, wd, ht + distance_bp + length_bp)
+    ret[#ret + 1] = string.format("q 0 G %g w %g %g m %g %g l S Q",width_bp, wd + distance_bp, ht, wd + distance_bp + length_bp, ht)
+    -- top left
+    ret[#ret + 1] = string.format("q 0 G %g w %g %g m %g %g l S Q",width_bp, x, ht + distance_bp, x, ht + distance_bp + length_bp)
+    ret[#ret + 1] = string.format("q 0 G %g w %g %g m %g %g l S Q",width_bp, x - distance_bp, ht, x - length_bp - distance_bp, ht)
+
+
+    return table.concat(ret,"\n")
+end
 file_end("grid.lua")
 

@@ -1977,7 +1977,7 @@
                   <value>ja</value>
                   <a:documentation>Beschnitt einschalten</a:documentation>
                   <value>nein</value>
-                  <a:documentation>Seiten nicht beschneiden. (Voreinstellung)</a:documentation>
+                  <a:documentation>Seiten nicht beschneiden (Voreinstellung).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1989,6 +1989,17 @@
                   <a:documentation>Beschnittmarken anzeigen.</a:documentation>
                   <value>nein</value>
                   <a:documentation>Beschnittmarken nicht anzeigen (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="beschnittzugabemarken">
+               <a:documentation>Beschnittzugabemarken werden ausgegeben. Diese Marken zeigen, wie groß die Beschnittzugabe ist. Der Abstand der Beschnittzugabemarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die&#xA;          Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Beschnittzugabemarken ausgegeben.</a:documentation>
+               <choice>
+                  <value>ja</value>
+                  <a:documentation>Beschnittzugabemarken anzeigen.</a:documentation>
+                  <value>nein</value>
+                  <a:documentation>Beschnittzugabemarken nicht anzeigen (Voreinstellung).</a:documentation>
                </choice>
             </attribute>
          </optional>

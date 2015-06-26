@@ -1977,7 +1977,7 @@
                   <value>yes</value>
                   <a:documentation>Use cropping</a:documentation>
                   <value>no</value>
-                  <a:documentation>Don&#39;t use cropping (default)</a:documentation>
+                  <a:documentation>Don&#39;t use cropping (default).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -1989,6 +1989,17 @@
                   <a:documentation>Show crop marks.</a:documentation>
                   <value>no</value>
                   <a:documentation>Don&#39;t show crop marks (default).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="trimmarks">
+               <a:documentation>Trim marks will be placed in the PDF. The distance&#xA;          of the marks from the imaginary center is determined by the attribute trim,&#xA;          but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute&#xA;          is no, that means no trim marks will be displayed. The trim marks show the&#xA;          additional trim distance.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Show trim marks.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Don&#39;t show trim marks (default).</a:documentation>
                </choice>
             </attribute>
          </optional>

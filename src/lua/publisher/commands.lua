@@ -1440,6 +1440,7 @@ end
 --- This is a top-level element in the layout definition file. It saves the options such as `show-grid`.
 function commands.options( layoutxml,dataxml )
     publisher.options.cutmarks           = publisher.read_attribute(layoutxml,dataxml,"cutmarks",    "boolean")
+    publisher.options.trimmarks          = publisher.read_attribute(layoutxml,dataxml,"trimmarks",   "boolean")
     publisher.options.showgrid           = publisher.read_attribute(layoutxml,dataxml,"show-grid",   "boolean")
     publisher.options.showgridallocation = publisher.read_attribute(layoutxml,dataxml,"show-gridallocation","boolean")
     publisher.options.showhyphenation    = publisher.read_attribute(layoutxml,dataxml,"show-hyphenation","boolean")
