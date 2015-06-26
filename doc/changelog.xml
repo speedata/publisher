@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.24" date="2015-06-26">
+      <en>Add option »trimmarks«, show the trim box when show-grid is turned on.</en>
+      <de>Neue Option »beschnittzugabemarken«, Darstellung der Trim-Box wenn show-grid angeschaltet ist.</de>
+    </entry>
     <entry version="2.3.23" date="2015-06-25">
       <en>Bugfix width calculation in the grid</en>
       <de>Fehlerbehebung in der Breitenberechnung im Raster</de>
