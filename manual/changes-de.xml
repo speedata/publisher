@@ -1,13 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (de)</title>
   <id>http://www.speedata.de</id>
-  <updated>2015-03-26T15:27:53+01:00</updated>
+  <updated>2015-06-26T12:25:36+02:00</updated>
   <subtitle>Neue Versionen des Publishers zum Download und Liste der Änderungen</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.3.24</title>
+    <updated>2015-06-26T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-06-26:</id>
+    <content type="html">Neue Option »beschnittzugabemarken«, Darstellung der Trim-Box wenn show-grid angeschaltet ist.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.23</title>
+    <updated>2015-06-25T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-06-25:</id>
+    <content type="html">Fehlerbehebung in der Breitenberechnung im Raster</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.22</title>
+    <updated>2015-06-19T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-06-19:</id>
+    <content type="html">Fehlerkorrektur bei dx und nx in SetzeRaster</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.21</title>
+    <updated>2015-05-30T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-05-30:</id>
+    <content type="html">Neue Option »beschnitt« für Seiten mit einer CropBox, die den Objekten auf der Seite entspricht.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.20</title>
+    <updated>2015-04-21T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-04-21:</id>
+    <content type="html">Fehlerkorrektur: Breite bei Tabelle und Linie in Kombination mit Rasterzellenabstand</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.19</title>
+    <updated>2015-04-20T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-04-20:</id>
+    <content type="html">Platzierungsrahmen dürfen nun auf Daten zugreifen ({@attrib} zum Beispiel)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.19</title>
+    <updated>2015-04-20T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-04-20:</id>
+    <content type="html">Fehlerkorrektur/Workaround für einen Fehler in zentrierten Td-Zellen mit mehreren Zeilen.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.18</title>
+    <updated>2015-04-08T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-04-08:</id>
+    <content type="html">Fehlerkorrekturen: replace() und $1, $2, ... / &amp;lt;Td align=&#34;center&#34;&gt;...&amp;lt;/Td&gt; Inhalte mit mehrern Zeilen.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.3.17</title>
     <updated>2015-03-25T00:00:00Z</updated>

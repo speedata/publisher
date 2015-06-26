@@ -1,13 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (en)</title>
   <id>http://www.speedata.de</id>
-  <updated>2015-03-26T15:27:53+01:00</updated>
+  <updated>2015-06-26T12:25:36+02:00</updated>
   <subtitle>New revisions for download and changelog.</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.3.24</title>
+    <updated>2015-06-26T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-06-26:</id>
+    <content type="html">Add option »trimmarks«, show the trim box when show-grid is turned on.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.23</title>
+    <updated>2015-06-25T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-06-25:</id>
+    <content type="html">Bugfix width calculation in the grid</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.22</title>
+    <updated>2015-06-19T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-06-19:</id>
+    <content type="html">Bugfix with dx and nx in SetGrid</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.21</title>
+    <updated>2015-05-30T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-05-30:</id>
+    <content type="html">New option crop for pages with a tight cropbox.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.20</title>
+    <updated>2015-04-21T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-04-21:</id>
+    <content type="html">Bugfix: width Table and Rule and grid distance</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.19</title>
+    <updated>2015-04-20T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-04-20:</id>
+    <content type="html">PositioningFrames can now use the current data ({@attrib} for example)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.19</title>
+    <updated>2015-04-20T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-04-20:</id>
+    <content type="html">Bugfix/workaround for an issue introduced in 2.3.18 in multi line Td cells.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.18</title>
+    <updated>2015-04-08T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-04-08:</id>
+    <content type="html">Bugfixes: replace() and $1, $2, ... / multi line &amp;lt;Td align=&#34;center&#34;&gt;...&amp;lt;/Td&gt; contents</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.3.17</title>
     <updated>2015-03-25T00:00:00Z</updated>
