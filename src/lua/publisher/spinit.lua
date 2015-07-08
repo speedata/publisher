@@ -175,6 +175,7 @@ function exit(graceful)
           statusfile:write(string.format("  <Message>%s</Message>\n", publisher.xml_escape(publisher.messages[i][1])))
       end
   end
+  statusfile:write(string.format("  <DurationSeconds>%d</DurationSeconds>\n",math.ceil(os.gettimeofday() - starttime)))
   statusfile:write("</Status>")
   statusfile:close()
   if not graceful then
