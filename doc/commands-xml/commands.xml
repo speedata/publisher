@@ -5780,14 +5780,6 @@
           <optional><cmd name="ForAll"/></optional>
         </interleave>
       </oneOrMore>
-      <cmd name="Copy-of"/>
-      <cmd name="Columns"/>
-      <cmd name="ForAll"/>
-      <cmd name="Switch"/>
-      <cmd name="Tr"/>
-      <cmd name="Tablerule"/>
-      <cmd name="Tablefoot"/>
-      <cmd name="Tablehead"/>
     </childelements>
     <attribute en="eval" de="auswerten" type="xpath" optional="yes">
       <description xml:lang="en">

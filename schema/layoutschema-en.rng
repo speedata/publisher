@@ -3232,30 +3232,6 @@
                </optional>
             </interleave>
          </oneOrMore>
-         <optional>
-            <ref name="e_Copy-of"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Columns"></ref>
-         </optional>
-         <optional>
-            <ref name="e_ForAll"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Switch"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Tr"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Tablerule"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Tablefoot"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Tablehead"></ref>
-         </optional>
       </element>
    </define>
    <define name="e_Tablefoot">
