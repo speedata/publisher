@@ -157,7 +157,7 @@ function commands.barcode( layoutxml,dataxml )
     local showtext  = publisher.read_attribute(layoutxml,dataxml,"showtext" ,"boolean", "yes")
     local overshoot = publisher.read_attribute(layoutxml,dataxml,"overshoot","number"        )
 
-    width = width or xpath.get_variable("__maxwidth") * publisher.current_grid.gridwidth
+    width = width or xpath.get_variable("__maxwidth")
 
     local fontfamily
     if fontname then
@@ -1367,7 +1367,7 @@ function commands.nobreak( layoutxml, dataxml )
     -- local colorname     = publisher.read_attribute(layoutxml,dataxml,"color",     "rawstring")
     -- local language_name = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
 
-    local current_maxwidth =publisher.read_attribute(layoutxml,dataxml,"maxwidth",  "length_sp", current_grid:width_sp(xpath.get_variable("__maxwidth")))
+    local current_maxwidth =publisher.read_attribute(layoutxml,dataxml,"maxwidth",  "length_sp", xpath.get_variable("__maxwidth"))
     local shrinkfactor = publisher.read_attribute(layoutxml,dataxml,"factor", "rawstring",0.9)
 
     local fontfamily = 0
@@ -1497,7 +1497,7 @@ function commands.output( layoutxml,dataxml )
 
 
     local current_maxwidth = xpath.get_variable("__maxwidth")
-    xpath.set_variable("__maxwidth", publisher.current_grid:number_of_columns(area))
+    xpath.set_variable("__maxwidth", publisher.current_grid:width_sp(publisher.current_grid:number_of_columns(area)))
 
     for i=1,#tab do
         local contents = publisher.element_contents(tab[i])
@@ -1769,8 +1769,14 @@ function commands.place_object( layoutxml,dataxml )
     -- remember the current maximum width for later
     local current_maxwidth = xpath.get_variable("__maxwidth")
     local mw = current_grid:number_of_columns(area)
-    if absolute_positioning == false and tonumber(column) then
-        mw = mw - column + 1
+    if absolute_positioning == false then
+        if tonumber(column) then
+            mw = current_grid:width_sp(mw - column + 1)
+        else
+            mw = current_grid:width_sp(mw)
+       end
+    else
+        mw = tex.pdfpagewidth
     end
     xpath.set_variable("__maxwidth", mw)
 
@@ -2460,7 +2466,7 @@ function commands.table( layoutxml,dataxml,optionen )
             err("Can't determine the current width. Tables in groups and data cells must contain explicit widths.")
             width = 50 * 2^16
         else
-            width = publisher.current_grid:width_sp(xpath.get_variable("__maxwidth"))
+            width = xpath.get_variable("__maxwidth")
         end
     else
         if tonumber(width) ~= nil then
@@ -2469,7 +2475,6 @@ function commands.table( layoutxml,dataxml,optionen )
             width = tex.sp(width)
         end
     end
-
     if not width then
         err("Can't get the width of the table!")
         rule = publisher.add_rule(nil,"head",{height=100*2^16,width=100*2^16})
@@ -2802,16 +2807,14 @@ function commands.textblock( layoutxml,dataxml )
     local fontfamily
     local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface","rawstring")
     local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",   "rawstring", "black")
-    local width          = publisher.read_attribute(layoutxml,dataxml,"width",   "length")
+    local width          = publisher.read_attribute(layoutxml,dataxml,"width",   "length_sp")
     local angle          = publisher.read_attribute(layoutxml,dataxml,"angle",   "number")
     local columns        = publisher.read_attribute(layoutxml,dataxml,"columns", "number")
     local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","rawstring")
     local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
-
     local save_width = xpath.get_variable("__maxwidth")
     width = width or xpath.get_variable("__maxwidth")
     xpath.set_variable("__maxwidth", width)
-    width = current_grid:width_sp(width)
     if not width then
         err("Can't evaluate width in textblock")
         rule = publisher.add_rule(nil,"head",{height=100*2^16,width=100*2^16})

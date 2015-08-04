@@ -3187,7 +3187,7 @@ function set_image_length(len,width_or_height)
     if len == nil or len == "auto" then
         return nil
     elseif len == "100%" and width_or_height == "width" then
-        return xpath.get_variable("__maxwidth") * current_grid.gridwidth
+        return xpath.get_variable("__maxwidth")
     elseif tonumber(len) then
         if width_or_height == "width" then
             return current_grid:width_sp(len)
