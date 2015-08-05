@@ -41,8 +41,9 @@ Wert | Beschreibung
 `opencommand` | Kommando für das automatische Öffnen der Dokumentation bzw. PDF-Datei. Für MacOS X sollte das `open` sein, für Linux `xdg-open` oder `exo-open` (xfce).
 `pathrewrite` | Kommaseparierte Liste der Form Pfadteil=Pfadteil. Beispiel: `/media/=%(projectdir)s/myfiles/`. Das würde absolute Pfadangaben wie `file:///media/XYZ` in `file:///Pfad/zum/Projekt/myfiles/XYZ` ändern.
 `runs` | Setzt die Anzahl der Durchläufe fest.
-`timeout` | Maximale Dauer des Publishing-Laufs. Wenn dieser überschritten wird, bricht der Lauf mit Fehler 1 ab.
 `startpage` | Nummer der ersten Seite
+`timeout` | Maximale Dauer des Publishing-Laufs. Wenn dieser überschritten wird, bricht der Lauf mit Fehler 1 ab.
+`vars` | Kommaseparierte Liste der Form `var=wert` um Variablen in der Konfigurationsdatei festzulegen.
 
 In der Konfigurationsdatei kann mit `%(projectdir)s` auf das Verzeichnis
 zugegriffen werden, in dem die Datei `publisher.cfg` liegt.

@@ -42,6 +42,7 @@ Value | Description
 `runs` | Set the number of runs.
 `startpage` | Number of the first page.
 `timeout` | Maximum time of the publishing run. If time is exceeded, the publisher exits with status 1.
+`vars` | Comma separated list of variables and values in the form `var=value` to set additional variables.
 
 You can access the base directory of the project with `%(projectdir)s`.
 This is the directory with the file `publisher.cfg`.

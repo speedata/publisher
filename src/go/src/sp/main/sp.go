@@ -362,6 +362,14 @@ func saveVariables() {
 		f.Close()
 		fmt.Println("done")
 	}
+	if vars := getOption("vars"); vars != "" {
+		for _, keyvalue := range strings.Split(vars, ",") {
+			tmp := strings.Split(keyvalue, "=")
+			if len(tmp) == 2 {
+				variables[tmp[0]] = tmp[1]
+			}
+		}
+	}
 
 	jobname := getOption("jobname")
 	f, err := os.Create(jobname + ".vars")
