@@ -301,7 +301,7 @@ function parse_xml_file( path, options, filefinderfunc)
 	end
   local xmlfile = io.open(path,"rb")
   if not xmlfile then
-    err("Can't open XML file. Abort.")
+    err("Can't open XML file %q. Abort.",path)
     os.exit(-1)
   end
   local text = xmlfile:read("*all")

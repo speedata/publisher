@@ -51,6 +51,7 @@ var (
 	configfilename        string
 	mainlanguage          string
 	extra_dir             []string
+	extraxml              []string
 	starttime             time.Time
 	cfg                   *configurator.ConfigData
 	running_processes     []*os.Process
@@ -389,6 +390,11 @@ func extradir(arg string) {
 	extra_dir = append(extra_dir, arg)
 }
 
+// Add the commandline argument to the list of additional XML files for the layout
+func extraXML(arg string) {
+	extraxml = append(extraxml, arg)
+}
+
 /// We don't know where the executable is. On systems where we have
 /// LuaTeX, we don't want to interfere with the binary so we
 /// install a binary called sdluatex (linux package). Therefore
@@ -606,6 +612,7 @@ func main() {
 	op.On("--data NAME", "Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN", options)
 	op.On("--dummy", "Don't read a data file, use '<data />' as input", options)
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
+	op.On("--extra-xml NAME", "Add this file to the layout file", extraXML)
 	op.On("--filter FILTER", "Run XPROC filter before publishing starts", options)
 	op.On("--grid", "Display background grid. Disable with --no-grid", options)
 	op.On("--no-local", "Add local directory to the search path. Default is true", &add_local_path)
@@ -697,10 +704,21 @@ func main() {
 		extra_dir = append(extra_dir, abspath)
 	}
 	os.Setenv("SD_EXTRA_DIRS", strings.Join(extra_dir, string(filepath.ListSeparator)))
+
+	if extraxmloption := getOption("extraxml"); extraxmloption != "" {
+		for _, xmlfile := range strings.Split(extraxmloption, ",") {
+			extraxml = append(extraxml, xmlfile)
+		}
+	}
+
+	os.Setenv("SD_EXTRA_XML", strings.Join(extraxml, ","))
+
 	if getOption("verbose") != "" {
 		os.Setenv("SP_VERBOSITY", "1")
 		fmt.Println("SD_EXTRA_DIRS:", os.Getenv("SD_EXTRA_DIRS"))
+		fmt.Println("SD_EXTRA_XML:", os.Getenv("SD_EXTRA_XML"))
 	}
+
 	var exitstatus int
 	if getOption("profile") != "" {
 		fmt.Println("Profiling publisher run. Removing lprof_* now.")

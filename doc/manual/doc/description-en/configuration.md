@@ -31,6 +31,7 @@ Value | Description
 `data` | Name of the data file (XML). If not given, the system uses `data.xml`.
 `dummy` | If `true`, the system won’t read the data file, instead it uses the single element `<data />` as its input.
 `extra-dir` | A list of directories in the file system separated by `;` (Windows) or `:` (Mac, Linux). These directories contain the images, fonts, source files and other assets that are used during the publisher run. Example for windows: `extra-dir=c:\myfonts`.
+`extraxml` | Add this XML file to the layout instructions. List of comma separated file names (`extraxml=file1.xml,file2.xml`).
 `filter` | Run the given file as an XPROC-Filter.
 `fontpath` | Set the path for system fonts. On Windows this is `%WINDIR%\Fonts`, on Mac OS X it defaults to `/Library/Fonts:/System/Library/Fonts`. Currently dysfunctional on Windows XP.
 `grid` | If `true`, the underlying grid is shown in the PDF file. For debugging purpose only.

@@ -1,6 +1,10 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
     <entry version="2.2.25" date="2015-08-05">
+      <en>New command line option --extra-xml and new configuration option extraxml to add additional XML files to the layout instructions (similar to xinclude).</en>
+      <de>Neue Kommandozeilenoption --extra-xml und neue Konfiguration extraxml um zusätzliche XML-Dateien den Layoutanweisungen hinzuzufügen (wie xinclude).</de>
+    </entry>
+    <entry version="2.2.25" date="2015-08-05">
       <en>New configuration option var to add variables.</en>
       <de>Neue Option in der Konfigurationsdatei um zusätzliche Variablen zu definieren.</de>
     </entry>

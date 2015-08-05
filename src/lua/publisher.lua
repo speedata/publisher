@@ -723,6 +723,12 @@ function initialize_luatex_and_generate_pdf()
     -- We define two graphic states for overprinting on and off.
     GS_State_OP_On  = pdf.immediateobj([[<< /Type/ExtGState /OP true /OPM 1 >>]])
     GS_State_OP_Off = pdf.immediateobj([[<< /Type/ExtGState /OP false >>]])
+    tmp = os.getenv("SD_EXTRA_XML")
+    if tmp and tmp ~= "" then
+        for _,v in ipairs(string.explode(tmp,",")) do
+            layoutxml[#layoutxml + 1] = luxor.parse_xml_file(v)
+        end
+    end
 
     dispatch(layoutxml)
 
