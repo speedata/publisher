@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.2.25" date="2015-08-05">
+      <en>New command line option --varsfile to define more variables.</en>
+      <de>Neue Kommandozeilenoption --varsfile um weitere Variablen zu definieren.</de>
+    </entry>
     <entry version="2.3.24" date="2015-06-26">
       <en>Add option »trimmarks«, show the trim box when show-grid is turned on.</en>
       <de>Neue Option »beschnittzugabemarken«, Darstellung der Trim-Box wenn show-grid angeschaltet ist.</de>

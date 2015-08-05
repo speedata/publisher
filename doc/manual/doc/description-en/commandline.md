@@ -30,6 +30,7 @@ Running the speedata publisher on the command line
         --trace                  Show debug messages and some tracing PDF output
         --timeout=SEC            Exit after SEC seconds
     -v, --var=VAR=VALUE          Set a variable for the publishing run
+        --varsfile=NAME          Set variables for the publishing run from key=value... file
         --verbose                Print a bit of debugging output
         --version                Show version information
         --wd=DIR                 Change working directory
@@ -70,6 +71,7 @@ Parameter | Description
 `--systemfonts` | Also use system fonts. Does not work on Windows XP.
 `--timeout=SEC` | Exit after SEC seconds with exit status 1.
 `-v`, `--var=value` | Passes additional variables to the publisher run. The variables can be accessed as usual with `select="$variable"`.
+`--varsfile=NAME` | Read an external file where each line has the format `variable=value` to add additional variables`
 `--verbose` | More information than necessary.
 `--wd=DIR` | Change working directory. Exactly the same as if you’d cd into that directory before running `sp`.
 `--xml` | The output of some commands (currently only `list-fonts`) will be printed in (pseudo) XML. That way the output can be re-used in the layout XML.

@@ -2760,6 +2760,7 @@ end
 
 --- Make a string XML safe
 function xml_escape( str )
+    if not str then return "" end
     local replace = {
         [">"] = "&gt;",
         ["<"] = "&lt;",

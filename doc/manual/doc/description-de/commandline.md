@@ -30,6 +30,7 @@ Aufruf des Publishers über Kommandozeile
         --trace                  Show debug messages and some tracing PDF output
         --timeout=SEC            Exit after SEC seconds
     -v, --var=VAR=VALUE          Set a variable for the publishing run
+        --varsfile=NAME          Set variables for the publishing run from key=value... file
         --verbose                Print a bit of debugging output
         --version                Show version information
         --wd=DIR                 Change working directory
@@ -70,6 +71,7 @@ Parameter | Beschreibung
 `--systemfonts`| Lädt zusätzlich Systemschriftarten. Funktioniert nicht unter Windows XP.
 `--timeout=SEC`| Beendet den Lauf nach SEC Sekunden mit Statuscode 1.
 `-v`, `--var=value`| Übergibt zusätzliche Variablen an den Publisher-Lauf. Diese können wie üblich mit `auswahl="$variable"` benutzt werden.
+`--varsfile=NAME` | Liest eine Datei ein, in der in jeder Zeile in der Form `variable=wert` Variablen definiert werden.
 `--verbose`| Gibt mehr Informationen aus, also notwendig.
 `--wd=DIR`| Wechselt in das angegebene Verzeichnis. Verhält sich genau so, als ob man vorher mit cd in dieses Verzeichnis gewechselt hat.
 `--xml`| Die Ausgaben mancher Kommandos werden als (Pseudo-)XML dargestellt, um sie in das Layoutregelwerk zu übernehmen.

@@ -3,6 +3,7 @@
 package main
 
 import (
+	"bufio"
 	"configurator"
 	"encoding/xml"
 	"fmt"
@@ -339,7 +340,29 @@ func run(cmdline string) (success bool) {
 	return
 }
 
-func save_variables() {
+func saveVariables() {
+	if fn := getOption("varsfile"); fn != "" {
+		// Read vars-file
+		f, err := os.Open(fn)
+		if err != nil {
+			fmt.Println("File", fn, "not found. Exit.")
+			os.Exit(-1)
+		}
+		fmt.Print("Read file ", fn, "...")
+		s := bufio.NewScanner(f)
+		// Read each line
+		for s.Scan() {
+			res := strings.Split(s.Text(), "=")
+			if len(res) != 2 {
+				// ignore
+			} else {
+				variables[res[0]] = res[1]
+			}
+		}
+		f.Close()
+		fmt.Println("done")
+	}
+
 	jobname := getOption("jobname")
 	f, err := os.Create(jobname + ".vars")
 	if err != nil {
@@ -444,7 +467,7 @@ func runPublisher() (exitstatus int) {
 	defer removeLogfile()
 
 	exitstatus = 0
-	save_variables()
+	saveVariables()
 
 	f, err := os.Create(getOption("jobname") + ".protocol")
 	if err != nil {
@@ -592,6 +615,7 @@ func main() {
 	op.On("--trace", "Show debug messages and some tracing PDF output", layoutoptions)
 	op.On("--timeout SEC", "Exit after SEC seconds", options)
 	op.On("-v", "--var VAR=VALUE", "Set a variable for the publishing run", setVariable)
+	op.On("--varsfile NAME", "Set variables for the publishing run from key=value... file", options)
 	op.On("--verbose", "Print a bit of debugging output", options)
 	op.On("--version", "Show version information", versioninfo)
 	op.On("--wd DIR", "Change working directory", options)
