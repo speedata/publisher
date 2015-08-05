@@ -46,6 +46,7 @@ Ein URL-Parameter kann angegeben werden, um die Ausgabe der PDF-Datei (ohne Date
 
 `/v0/publish?jobname=meinedatei` setzt den Jobname auf "meinedatei", so  dass `/v0/pdf/<id>` die PDF-Datei mit dem Dateinamen `meinedatei.pdf` zurückgibt. Das wird mithilfe des HTTP-Headers `Content-Disposition` erreicht.
 
+Ebenso können zusätzliche Variablen angegeben werden: `/v0/publish?vars=var1%3Dwert1`. Dies entspricht der Angabe auf der Kommandozeile. Die Übergabe erfolgt in der (URL-Kodierten) Form `var1=wert1,var2=wert2,var3=wert3...`.
 
 ## `/v0/publish/<id>`
 

@@ -1,6 +1,10 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
     <entry version="2.2.25" date="2015-08-05">
+      <en>New server mode api parameter vars to send additional variables to the publishing process.</en>
+      <de>Neuer Parameter vars im Server-Modus, um zusätzliche Variablen für den Publishing-Prozess anzugeben.</de>
+    </entry>
+    <entry version="2.2.25" date="2015-08-05">
       <en>New command line option --varsfile to define more variables.</en>
       <de>Neue Kommandozeilenoption --varsfile um weitere Variablen zu definieren.</de>
     </entry>

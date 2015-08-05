@@ -5,6 +5,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"os/exec"
 	"path/filepath"
 )
@@ -69,9 +70,14 @@ func (w Worker) Start() {
 			case work := <-w.Work:
 				// Receive a work request.
 				fmt.Fprintf(protocolFile, "Running speedata publisher for id %s\n", work.Id)
-				// Force the jobname, so the result is always 'publisher.pdf'
-				cmd := exec.Command(filepath.Join(bindir, "sp"+exe_suffix), "--jobname", "publisher")
 				dir := filepath.Join(serverTemp, work.Id)
+				// Force the jobname, so the result is always 'publisher.pdf'
+				params := []string{"--jobname", "publisher"}
+				if _, err := os.Stat(filepath.Join(dir, "extravars")); err != os.ErrNotExist {
+					params = append(params, "--varsfile")
+					params = append(params, "extravars")
+				}
+				cmd := exec.Command(filepath.Join(bindir, "sp"+exe_suffix), params...)
 				cmd.Dir = dir
 				cmd.Run()
 				ioutil.WriteFile(filepath.Join(dir, work.Id+"finished.txt"), []byte("finished"), 0600)

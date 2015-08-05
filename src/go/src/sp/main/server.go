@@ -16,6 +16,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"time"
 )
 
@@ -297,7 +298,9 @@ func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, filepath.Join(publishdir, "publisher.pdf"))
 }
 
-// Start a publishing process. Accepted parameter: jobname=<jobname>
+// Start a publishing process. Accepted parameter:
+//   jobname=<jobname>
+//   vars=var1=foo,var2=bar (where all but the frist = is encoded as %3D)
 func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 	var files map[string]interface{}
 	data, err := ioutil.ReadAll(r.Body)
@@ -363,6 +366,20 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
+	if vars := r.FormValue("vars"); vars != "" {
+		f, err := os.OpenFile(filepath.Join(tmpdir, "extravars"), os.O_RDWR|os.O_CREATE, 0644)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintln(w, err)
+			return
+		}
+		for _, v := range strings.Split(vars, ",") {
+			f.Write([]byte(v + "\n"))
+		}
+		f.Close()
+	}
+
 	addPublishrequestToQueue(id)
 
 	jsonid := struct {

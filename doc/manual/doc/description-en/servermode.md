@@ -44,6 +44,7 @@ A parameter can be specified to set the result name of the PDF (without extensio
 
 `/v0/publish?jobname=myfile` sets the jobname to "myfile", so `/v0/pdf/<id>` returns the data with the given filename (plus the `.pdf`) extension. This is done via the HTTP header `Content-Disposition`.
 
+You can also submit additional variables: `/v0/publish?vars=var1%3Dvalue1`. This is similar to the command line parameter `--var`.  The parameter is URL-encoded in the form `var1=value1,var2=value2,var3=value3...`.
 
 
 ## `/v0/publish/<id>`
