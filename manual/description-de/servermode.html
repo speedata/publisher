@@ -63,6 +63,8 @@ Request) zurückgegeben, mit dem textuellen Inhalt der Fehlermeldung, z.B.:</p>
 
 <p><code>/v0/publish?jobname=meinedatei</code> setzt den Jobname auf &quot;meinedatei&quot;, so  dass <code>/v0/pdf/&lt;id&gt;</code> die PDF-Datei mit dem Dateinamen <code>meinedatei.pdf</code> zurückgibt. Das wird mithilfe des HTTP-Headers <code>Content-Disposition</code> erreicht.</p>
 
+<p>Ebenso können zusätzliche Variablen angegeben werden: <code>/v0/publish?vars=var1%3Dwert1</code>. Dies entspricht der Angabe auf der Kommandozeile. Die Übergabe erfolgt in der (URL-Kodierten) Form <code>var1=wert1,var2=wert2,var3=wert3...</code>.</p>
+
 <h2><code>/v0/publish/&lt;id&gt;</code></h2>
 
 <p>Ein GET-Request mit einer Id aus dem oben beschriebenen POST-Request liefert eine JSON-Datei, mit dem Inhalt:</p>
@@ -130,7 +132,7 @@ Request) zurückgegeben, mit dem textuellen Inhalt der Fehlermeldung, z.B.:</p>
 <tbody>
 <tr>
 <td><code>errorstatus</code></td>
-<td>Ist die Anfrage gültig? Mögliche Antworten <code>error</code> und <code>ok</code>. Wenn <code>error</code>, dann enthält der Schlüssel <code>message</code> den Grund für den Fehler, das Fed <code>result</code> ist in dem Fall ohne Bedeutung. Wenn <code>ok</code>, dann enthält das Feld <code>result</code> den Wert <code>not finished</code>, falls die PDF-Datei noch nicht erzeugt wurde.</td>
+<td>Ist die Anfrage gültig? Mögliche Antworten <code>error</code> und <code>ok</code>. Wenn <code>error</code>, dann enthält der Schlüssel <code>message</code> den Grund für den Fehler, das Feld <code>result</code> ist in dem Fall ohne Bedeutung. Wenn <code>ok</code>, dann enthält das Feld <code>result</code> den Wert <code>not finished</code>, falls die PDF-Datei noch nicht erzeugt wurde.</td>
 </tr>
 
 <tr>
@@ -177,7 +179,7 @@ start =
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.3.24 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/servermode.html">Englisch</a>
+Version: 2.3.25 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/servermode.html">Englisch</a>
 
 </body>
 </html>

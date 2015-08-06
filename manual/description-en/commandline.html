@@ -29,6 +29,7 @@ Usage: [parameter] command
 -c, --config=NAME            Read the config file with the given NAME. Default: 'publisher.cfg'
     --[no-]cutmarks          Display cutmarks in the document
 -x, --extra-dir=DIR          Additional directory for file search
+    --extra-xml=NAME         Add this file to the layout file
     --filter=FILTER          Run XPROC filter before publishing starts
     --grid                   Display background grid. Disable with --no-grid
     --[no-]local             Add local directory to the search path. Default is true
@@ -47,6 +48,7 @@ Usage: [parameter] command
     --trace                  Show debug messages and some tracing PDF output
     --timeout=SEC            Exit after SEC seconds
 -v, --var=VAR=VALUE          Set a variable for the publishing run
+    --varsfile=NAME          Set variables for the publishing run from key=value... file
     --verbose                Print a bit of debugging output
     --version                Show version information
     --wd=DIR                 Change working directory
@@ -96,6 +98,11 @@ Commands
 <tr>
 <td><code>-x</code>, <code>--extra-dir</code></td>
 <td>Puts the given directory into the search path. All assets (images,fonts, XML data and layout rules) must be found in the seach path,which will be traversed recursively. This parameter can be given multiple times and preset in the <a href="configuration.html">configurationfile</a>.</td>
+</tr>
+
+<tr>
+<td><code>--extra-xml=NAME</code></td>
+<td>Add this file to the layout instructions. Similar to inclusion of the file with xinclude.</td>
 </tr>
 
 <tr>
@@ -171,6 +178,11 @@ Commands
 <tr>
 <td><code>-v</code>, <code>--var=value</code></td>
 <td>Passes additional variables to the publisher run. The variables can be accessed as usual with <code>select=&quot;$variable&quot;</code>.</td>
+</tr>
+
+<tr>
+<td><code>--varsfile=NAME</code></td>
+<td>Read an external file where each line has the format <code>variable=value</code> to add additional variables`</td>
 </tr>
 
 <tr>
@@ -270,7 +282,7 @@ events = layout\.xml:run(runpublisher);data\.xml:run(runpublisher)
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.3.24 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/commandline.html">German</a>
+Version: 2.3.25 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/commandline.html">German</a>
 
 </body>
 </html>
