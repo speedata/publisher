@@ -27,7 +27,9 @@
             <p>{{ translate .Lang "Parent elements" }}: {{ parentelements .Lang .Command }}</p>
          </div>
          <h3>{{ translate .Lang "Attributes" }}</h3>
-         <dl>{{ range .Command.Attributes .Lang }}<dt><a name="{{.HTMLFragment}}"></a><span class="tt">{{ .Name $.Lang }}</span> ({{atttypeinfo . $.Lang}}{{ with .Css }}, {{ translate $.Lang "CSS property"}}: {{.}}{{end}}{{with .Since}}, {{translate $.Lang "since version"}} {{.}}{{end}})</dt><dd>{{.DescriptionHTML $.Lang }}</dd>{{ end }}</dl>
+         <dl>{{ range .Command.Attributes .Lang }}
+           <dt><a name="{{.HTMLFragment}}"></a><span class="tt">{{ .Name $.Lang }}</span> ({{atttypeinfo . $.Lang}}{{ with .Css }}, {{ translate $.Lang "CSS property"}}: {{.}}{{end}}{{with .Since}}, {{translate $.Lang "since version"}} {{.}}{{end}})</dt>
+           <dd>{{.DescriptionHTML $.Lang }}</dd>{{ end }}</dl>
          {{ with (.Command.RemarkHTML $.Lang) }}
          <h3>{{ translate $.Lang "Remarks" }}</h3>{{.}}{{end}}
 
