@@ -2056,7 +2056,11 @@ function commands.position( layoutxml, dataxml )
     local y = publisher.read_attribute(layoutxml,dataxml,"y","number")
 
     local tab = publisher.dispatch(layoutxml,dataxml)
-    return {x = x, y = y, contents = tab[1].contents}
+    if publisher.elementname(tab[1]) == "Image" then
+        return {x = x, y = y, contents = publisher.element_contents(tab[1])[1]}
+    else
+        return {x = x, y = y, contents = tab[1].contents}
+    end
 end
 
 
