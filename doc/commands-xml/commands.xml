@@ -678,19 +678,41 @@
     </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
-  <Barcode select="'speedata Publisher'" type="Code 128" showtext="nein"/>
+  <Barcode select="'speedata Publisher'" type="Code128" showtext="yes"/>
 </PlaceObject>]]></listing>
+      <para>gives</para>
+      <image file="code128-speedata-publisher.png"/>
       <listing><![CDATA[<PlaceObject>
   <Barcode select="4242002518169" type="EAN13"/>
 </PlaceObject>]]></listing>
+      <para>becomes</para>
+      <image file="ean13-supertex.png" width="300"/>
+      <para>And finally the QR code</para>
+      <listing><![CDATA[<PlaceObject>
+  <Barcode select="'http://www.speedata.de'" type="QRCode" height="5"/>
+</PlaceObject>
+]]></listing>
+      <para>looks like (surprise!)</para>
+      <image file="speedata-publisher-qrcode.png" width="300"/>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben>
-  <Strichcode auswahl="'speedata Publisher'" typ="Code 128" zeigetext="nein"/>
+  <Strichcode auswahl="'speedata Publisher'" typ="Code128" zeigetext="ja"/>
 </ObjektAusgeben>]]></listing>
+      <para>ergibt</para>
+      <image file="code128-speedata-publisher.png"/>
       <listing><![CDATA[<ObjektAusgeben>
   <Strichcode auswahl="4242002518169" typ="EAN13"/>
 </ObjektAusgeben>]]></listing>
+      <para>wird zu</para>
+      <image file="ean13-supertex.png" width="300"/>
+      <para>und</para>
+      <listing><![CDATA[<ObjektAusgeben>
+  <Strichcode auswahl="'http://www.speedata.de'" typ="QRCode" höhe="5"/>
+</ObjektAusgeben>
+]]></listing>
+      <para>wird zu</para>
+      <image file="speedata-publisher-qrcode.png" width="300"/>
     </example>
     <seealso><cmd name="PlaceObject"/></seealso>
   </command>
@@ -913,14 +935,22 @@
       </description>
     </attribute>
     <example xml:lang="en">
-      <listing><![CDATA[<DefineColor name="green" model="cmyk" c="22" m="0" y="55" k="0"/>
+      <listing><![CDATA[<DefineColor name="mygreen" model="cmyk" c="22" m="0" y="55" k="0"/>
 <PlaceObject row="10" column="5">
-  <Box width="10" height="5" backgroundcolor="green"/>
+  <Box width="10" height="5" backgroundcolor="mygreen"/>
 </PlaceObject>
 ]]></listing>
+      <para>looks like</para>
+      <image file="greenbox.png"/>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Box breite="5" höhe="2" hintergrundfarbe="Dunkelblau" />]]></listing>
+      <listing><![CDATA[<DefiniereFarbe name="meingrün" modell="cmyk" c="22" m="0" y="55" k="0"/>
+<ObjektAusgeben>
+  <Box breite="10" höhe="5" hintergrundfarbe="meingrün" />
+</ObjektAusgeben>
+]]></listing>
+      <para>erzeugt ein farbiges Rechteck</para>
+      <image file="greenbox.png"/>
     </example>
     <seealso><cmd name="DefineColor"/>, <cmd name="PlaceObject"/></seealso>
   </command>
@@ -5984,9 +6014,7 @@
       <para>Die Tabellenzellen dürfen Absätze (Absatz), Bilder (Bild) und wiederum Tabellen enthalten.</para>
     </remark>
     <example xml:lang="en">
-      <listing><![CDATA[<DefineColor name="gray" model="cmyk" c="20" m="20" y="20" k="0"/>
-<DefineColor name="white" model="cmyk" c="0" m="0" y="0" k="0"/>
-
+      <listing><![CDATA[
 <Record element="data">
   <PlaceObject column="1">
     <Table width="14" stretch="max" padding="1pt">
@@ -6001,15 +6029,15 @@
           <Td/>
           <Td><Paragraph><B><Value>Clubs</Value></B></Paragraph></Td>
           <Td><Paragraph><B><Value>P</Value></B></Paragraph></Td>
-          <Td border-left="0.2pt" border-left-color="white">
+          <Td align="center" border-left="0.2pt" border-left-color="white">
             <Paragraph><B><Value>W</Value></B></Paragraph>
           </Td>
-          <Td><Paragraph><B><Value>D</Value></B></Paragraph></Td>
-          <Td><Paragraph><B><Value>L</Value></B></Paragraph></Td>
-          <Td><Paragraph><B><Value>F</Value></B></Paragraph></Td>
-          <Td><Paragraph><B><Value>A</Value></B></Paragraph></Td>
-          <Td><Paragraph><B><Value>+/-</Value></B></Paragraph></Td>
-          <Td border-left="0.2pt" border-left-color="white">
+          <Td align="center"><Paragraph><B><Value>D</Value></B></Paragraph></Td>
+          <Td align="center"><Paragraph><B><Value>L</Value></B></Paragraph></Td>
+          <Td align="center"><Paragraph><B><Value>F</Value></B></Paragraph></Td>
+          <Td align="center"><Paragraph><B><Value>A</Value></B></Paragraph></Td>
+          <Td align="center"><Paragraph><B><Value>+/-</Value></B></Paragraph></Td>
+          <Td align="center" border-left="0.2pt" border-left-color="white">
             <Paragraph><B><Value>Pts</Value></B></Paragraph>
           </Td>
         </Tr>
@@ -6047,6 +6075,7 @@
   <entry pos="4" name="GNK Dinamo Zagreb" p="6"
   	  tw="0" td="1" tl="5" tf="1"  ta="14" tpm="-13" pts="1" />
 </data>]]></listing>
+      <image file="table-en.png"/>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben spalte="1">
@@ -6093,6 +6122,7 @@
     </Tabellenfuß>
   </Tabelle>
 </ObjektAusgeben>]]></listing>
+      <image file="table-de.png"/>
     </example>
     <seealso>
       <cmd name="Tr"/>,  <cmd name="Td"/>, <cmd name="Tablerule"/>, <cmd name="PlaceObject"/>

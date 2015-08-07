@@ -2308,7 +2308,7 @@
    </define>
    <define name="e_Overlay">
       <element name="Overlay">
-         <a:documentation></a:documentation>
+         <a:documentation>Overlays the first element with the following »positions«.</a:documentation>
          <optional>
             <ref name="e_Image"></ref>
          </optional>
@@ -2339,44 +2339,6 @@
          <oneOrMore>
             <ref name="e_Position"></ref>
          </oneOrMore>
-      </element>
-   </define>
-   <define name="e_Position">
-      <element name="Position">
-         <a:documentation></a:documentation>
-         <attribute name="x">
-            <a:documentation>The horizontal position (0=left, 100=right).</a:documentation>
-         </attribute>
-         <attribute name="y">
-            <a:documentation>The vertical position (0=bottom, 100=top)</a:documentation>
-         </attribute>
-         <optional>
-            <ref name="e_Image"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Box"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Rule"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Textblock"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Barcode"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Table"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Transformation"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Frame"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Switch"></ref>
-         </optional>
       </element>
    </define>
    <define name="e_Paragraph">
@@ -2737,6 +2699,44 @@
                </optional>
             </interleave>
          </oneOrMore>
+      </element>
+   </define>
+   <define name="e_Position">
+      <element name="Position">
+         <a:documentation>Add an element to the current Overlay.</a:documentation>
+         <attribute name="x">
+            <a:documentation>The horizontal position (0=left, 100=right).</a:documentation>
+         </attribute>
+         <attribute name="y">
+            <a:documentation>The vertical position (0=bottom, 100=top).</a:documentation>
+         </attribute>
+         <optional>
+            <ref name="e_Image"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Box"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Rule"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Textblock"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Barcode"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Table"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Transformation"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Frame"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Switch"></ref>
+         </optional>
       </element>
    </define>
    <define name="e_PositioningArea">

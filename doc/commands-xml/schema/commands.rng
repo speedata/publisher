@@ -122,6 +122,9 @@
         </element>
         <element name="image">
           <attribute name="file"/>
+          <optional>
+            <attribute name="width"/>
+          </optional>
           <empty/>
         </element>
       </choice>

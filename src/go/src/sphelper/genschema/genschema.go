@@ -3,7 +3,6 @@ package genschema
 import (
 	"bytes"
 	"encoding/xml"
-	"fmt"
 	"io/ioutil"
 	"path/filepath"
 
@@ -213,9 +212,6 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 }
 
 func DoThings(basedir string) error {
-	if false {
-		fmt.Println("hallo")
-	}
 	c, err := commandsxml.ReadCommandsFile(basedir)
 	if err != nil {
 		return err

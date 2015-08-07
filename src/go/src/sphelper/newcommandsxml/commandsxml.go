@@ -688,11 +688,16 @@ func (c *Command) Example(lang string) template.HTML {
 			case "listing":
 				inListing = true
 			case "image":
+				var fn, wd string
 				for _, a := range v.Attr {
+					wd = "max-width: 90%;"
 					if a.Name.Local == "file" {
-						ret = append(ret, fmt.Sprintf(`<img style="max-width: 100%%; padding-left: 1em;" src="../img/%s">`, a.Value))
+						fn = a.Value
+					} else if a.Name.Local == "width" {
+						wd = fmt.Sprintf(`width: %spx;`, a.Value)
 					}
 				}
+				ret = append(ret, fmt.Sprintf(`<img style="%s padding-left: 1em;" src="../img/%s">`, wd, fn))
 			case "para":
 				p := &para{}
 				p.commands = c.commands

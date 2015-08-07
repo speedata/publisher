@@ -2308,7 +2308,7 @@
    </define>
    <define name="e_Overlay">
       <element name="Überlagern">
-         <a:documentation></a:documentation>
+         <a:documentation>Überlagert das erste Element mit den nachfolgenden »Positionen«.</a:documentation>
          <optional>
             <ref name="e_Image"></ref>
          </optional>
@@ -2339,44 +2339,6 @@
          <oneOrMore>
             <ref name="e_Position"></ref>
          </oneOrMore>
-      </element>
-   </define>
-   <define name="e_Position">
-      <element name="Position">
-         <a:documentation></a:documentation>
-         <attribute name="x">
-            <a:documentation>Die horizontale Position (0=links, 100=rechts).</a:documentation>
-         </attribute>
-         <attribute name="y">
-            <a:documentation>Die vertikale Position (0=unten, 100=oben)</a:documentation>
-         </attribute>
-         <optional>
-            <ref name="e_Image"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Box"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Rule"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Textblock"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Barcode"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Table"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Transformation"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Frame"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Switch"></ref>
-         </optional>
       </element>
    </define>
    <define name="e_Paragraph">
@@ -2737,6 +2699,44 @@
                </optional>
             </interleave>
          </oneOrMore>
+      </element>
+   </define>
+   <define name="e_Position">
+      <element name="Position">
+         <a:documentation>Ein Element zum aktuellen Überlagern hinzufügen.</a:documentation>
+         <attribute name="x">
+            <a:documentation>Die horizontale Position (0=links, 100=rechts).</a:documentation>
+         </attribute>
+         <attribute name="y">
+            <a:documentation>Die vertikale Position (0=unten, 100=oben).</a:documentation>
+         </attribute>
+         <optional>
+            <ref name="e_Image"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Box"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Rule"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Textblock"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Barcode"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Table"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Transformation"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Frame"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Switch"></ref>
+         </optional>
       </element>
    </define>
    <define name="e_PositioningArea">
