@@ -28,8 +28,6 @@
          </div>
          <h3>Attributes</h3>
          <dl>
-           <dt><a name="border-collapse"></a><span class="tt">border-collapse</span> (<a href="../description-en/xpath.html">XPath Expression</a>, optional)</dt>
-           <dd><p>Evaluates the given XPath expression and discards its output.</p></dd>
            <dt><a name="border-collapse"></a><span class="tt">border-collapse</span> (optional)</dt>
            <dd><p>Determine if adjacent table cells share borders. The behavior of border-collapse="collapse" is undefined when the table has columndistance or rowdistance set to a non-zero value and if the adjacent borders don't have the same width and color.</p>
 <table class="attributechoice">
@@ -44,8 +42,16 @@ collapse:
 <p>The borders of neighboring cells overlap.</p>
 </td></tr>
 </table></dd>
-           <dt><a name="width"></a><span class="tt">width</span> (number or length, optional)</dt>
-           <dd><p>The maximum width of the table (in grid cells or absolute values). Defaults to the available space.</p></dd>
+           <dt><a name="columndistance"></a><span class="tt">columndistance</span> (length, optional)</dt>
+           <dd><p>Distance between two table columns.</p></dd>
+           <dt><a name="eval"></a><span class="tt">eval</span> (<a href="../description-en/xpath.html">XPath Expression</a>, optional)</dt>
+           <dd><p>Evaluates the given XPath expression and discards its output.</p></dd>
+           <dt><a name="fontface"></a><span class="tt">fontface</span> (text, optional)</dt>
+           <dd><p>Name of the font family for the table. If not given, the font face ‘text’ is used.</p></dd>
+           <dt><a name="leading"></a><span class="tt">leading</span> (length, optional)</dt>
+           <dd><p>The distance between two rows.</p></dd>
+           <dt><a name="padding"></a><span class="tt">padding</span> (length, optional)</dt>
+           <dd><p>The distance between the table border and the table contents.</p></dd>
            <dt><a name="stretch"></a><span class="tt">stretch</span> (optional)</dt>
            <dd><p>If the table contents is narrow and stretch has the value no, the table only uses the minimal width. If the table
           contents is wider than the value width or stretch has the value max, the table's width is the size given in the width attribute.</p>
@@ -61,14 +67,8 @@ no:
 <p>The table width is the minimum width depending on it's contents.</p>
 </td></tr>
 </table></dd>
-           <dt><a name="padding"></a><span class="tt">padding</span> (length, optional)</dt>
-           <dd><p>The distance between the table border and the table contents.</p></dd>
-           <dt><a name="fontface"></a><span class="tt">fontface</span> (text, optional)</dt>
-           <dd><p>Name of the font family for the table. If not given, the font face ‘text’ is used.</p></dd>
-           <dt><a name="columndistance"></a><span class="tt">columndistance</span> (length, optional)</dt>
-           <dd><p>Distance between two table columns.</p></dd>
-           <dt><a name="leading"></a><span class="tt">leading</span> (length, optional)</dt>
-           <dd><p>The distance between two rows.</p></dd></dl>
+           <dt><a name="width"></a><span class="tt">width</span> (number or length, optional)</dt>
+           <dd><p>The maximum width of the table (in grid cells or absolute values). Defaults to the available space.</p></dd></dl>
          
          <h3>Remarks</h3><p>The table cells may contain Paragraphs, Images and other objects that are allowed in <a href="placeobject.html">PlaceObject</a>.</p>
 
