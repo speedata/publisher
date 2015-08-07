@@ -12,10 +12,12 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"sync"
 )
 
 var (
 	multipleSpace *regexp.Regexp
+	mutex         = &sync.Mutex{}
 )
 
 func init() {
@@ -638,12 +640,16 @@ func (c *Command) Seealso(lang string) template.HTML {
 }
 
 func (c *Command) Attributes(lang string) []*Attribute {
+	mutex.Lock()
 	if lang == "en" {
 		sort.Sort(attributesbyen{c.Attr})
 	} else {
 		sort.Sort(attributesbyde{c.Attr})
 	}
-	return c.Attr
+	ret := make([]*Attribute, len(c.Attr))
+	copy(ret, c.Attr)
+	mutex.Unlock()
+	return ret
 }
 
 func (c *Command) Example(lang string) template.HTML {
