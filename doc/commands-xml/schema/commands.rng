@@ -120,6 +120,10 @@
         <element name="listing">
           <text />
         </element>
+        <element name="image">
+          <attribute name="file"/>
+          <empty/>
+        </element>
       </choice>
     </oneOrMore>
   </define>

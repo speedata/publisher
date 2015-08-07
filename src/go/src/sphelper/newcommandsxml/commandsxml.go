@@ -681,6 +681,12 @@ func (c *Command) Example(lang string) template.HTML {
 			switch v.Name.Local {
 			case "listing":
 				inListing = true
+			case "image":
+				for _, a := range v.Attr {
+					if a.Name.Local == "file" {
+						ret = append(ret, fmt.Sprintf(`<img style="max-width: 100%%; padding-left: 1em;" src="../img/%s">`, a.Value))
+					}
+				}
 			case "para":
 				p := &para{}
 				p.commands = c.commands
