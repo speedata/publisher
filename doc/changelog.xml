@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.26" date="2015-08-07">
+      <en>New command Overlay to stack objects.</en>
+      <de>Neuer Befehl Überlagern um Objekte übereinanderzulegen</de>
+    </entry>
     <entry version="2.3.25" date="2015-08-05">
       <en>New command line option --extra-xml and new configuration option extraxml to add additional XML files to the layout instructions (similar to xinclude).</en>
       <de>Neue Kommandozeilenoption --extra-xml und neue Konfiguration extraxml um zusätzliche XML-Dateien den Layoutanweisungen hinzuzufügen (wie xinclude).</de>
