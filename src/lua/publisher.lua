@@ -463,10 +463,12 @@ local dispatch_table = {
     Ol                      = commands.ol,
     Options                 = commands.options,
     Output                  = commands.output,
+    Overlay                 = commands.overlay,
     Pageformat              = commands.page_format,
     Pagetype                = commands.pagetype,
     Paragraph               = commands.paragraph,
     PlaceObject             = commands.place_object,
+    Position                = commands.position,
     PositioningArea         = commands.positioning_area,
     PositioningFrame        = commands.positioning_frame,
     ProcessNode             = commands.process_node,
@@ -2669,6 +2671,43 @@ local explode = function(s,p)
        end
    end
    return t
+end
+
+function montage( nodelist_background,nodelist_foreground, origin_x, origin_y )
+    local wd_bg = nodelist_background.width
+    local ht_bg = nodelist_background.height + nodelist_background.depth
+    local wd_fg = nodelist_foreground.width
+    local ht_fg = nodelist_foreground.height + nodelist_foreground.depth
+    local wd = wd_bg - wd_fg
+    local ht = ht_bg - ht_fg
+    origin_x = 100 - origin_x
+    origin_y = 100 - origin_y
+    local x = math.round(  sp_to_bp(wd - (wd * origin_x) / 100  ), 3 )
+    local y = math.round(  sp_to_bp(ht - (ht * origin_y) / 100  ), 3 )
+
+    local pdf_literal_q = node.new("whatsit","pdf_literal")
+    pdf_literal_q.data = string.format("1 0 0 1 %g %g cm ",x, y)
+
+    local pdf_literal_Q = node.new("whatsit","pdf_literal")
+    pdf_literal_Q.data = string.format("1 0 0 1 %g 0 cm ",-1 * math.round(sp_to_bp(wd_bg),3))
+
+    local pdf_save    = node.new("whatsit","pdf_save")
+    local pdf_restore = node.new("whatsit","pdf_restore")
+    local hbox
+
+    hbox = node.insert_before(nodelist_background,nodelist_background, pdf_save)
+    hbox = node.insert_after(hbox,node.tail(hbox),pdf_literal_Q)
+    hbox = node.insert_after(hbox,node.tail(hbox),pdf_literal_q)
+    hbox = node.insert_after(hbox,node.tail(hbox),nodelist_foreground)
+
+    hbox = node.hpack(hbox)
+    hbox.depth = 0
+    hbox = node.insert_after(hbox,node.tail(hbox),pdf_restore)
+
+    hbox = node.vpack(hbox)
+    hbox.width = wd_bg
+    hbox.height = ht_bg
+    return hbox
 end
 
 --- Apply transformation matrix to object given at _nodelist_. Called from commmands#transformation.

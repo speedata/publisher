@@ -1,0 +1,28 @@
+<Layout 
+  xmlns="urn:speedata.de:2009/publisher/en" 
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Options trace="no" crop="yes"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Table>
+        <Tr>
+          <Td>
+            <Overlay>
+              <Image width="5" height="4" file="_samplea.pdf"/>
+              <Position x="0" y="0">
+                <Box width="2" height="2" backgroundcolor="white"/>
+              </Position>
+              <Position x="0" y="0">
+                <Barcode select="'speedata'" type="QRCode" width="2" height="2"/>
+              </Position>
+            </Overlay>
+          </Td>
+          <Td>
+            <Image file="_sampleb.pdf" width="5" height="4" clip="no"/>
+          </Td>
+        </Tr>
+      </Table>      
+    </PlaceObject>
+  </Record>
+</Layout>

@@ -4144,6 +4144,74 @@
     </example>
     <seealso/>
   </command>
+  <command en="Overlay" de="Überlagern" since="2.3.26">
+    <description xml:lang="en">
+      <para>Overlays the first element with the following »positions«.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Überlagert das erste Element mit den nachfolgenden »Positionen«.</para>
+    </description>
+    <childelements>
+      <optional><cmd name="Image"/></optional>
+      <optional><cmd name="Box"/></optional>
+      <optional><cmd name="Rule"/></optional>
+      <optional><cmd name="Textblock"/></optional>
+      <optional><cmd name="Barcode"/></optional>
+      <optional><cmd name="Table"/></optional>
+      <optional><cmd name="Transformation"/></optional>
+      <optional><cmd name="Frame"/></optional>
+      <optional><cmd name="Switch"/></optional>
+      <oneOrMore>
+        <cmd name="Position"/>
+      </oneOrMore>
+    </childelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<PlaceObject>
+  <Table>
+    <Tr>
+      <Td>
+        <Overlay>
+          <Image width="5" height="4" file="_samplea.pdf"/>
+          <Position x="0" y="0">
+            <Box width="2" height="2" backgroundcolor="white"/>
+          </Position>
+          <Position x="0" y="0">
+            <Barcode select="'speedata'" type="QRCode" width="2" height="2"/>
+          </Position>
+        </Overlay>
+      </Td>
+      <Td>
+        <Image file="_sampleb.pdf" width="5" height="4" clip="no"/>
+      </Td>
+    </Tr>
+  </Table>
+</PlaceObject>]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<ObjektAusgeben>
+  <Tabelle>
+    <Tr>
+      <Td>
+        <Überlagern>
+          <Bild breite="5" höhe="4" datei="_samplea.pdf"/>
+          <Position x="0" y="0">
+            <Box breite="2" höhe="2" hintergrundfarbe="#fff"/>
+          </Position>
+          <Position y="0" x="0">
+            <Strichcode auswahl="'speedata'" typ="QRCode" breite="2"/>
+          </Position>
+        </Überlagern>
+      </Td>
+      <Td>
+        <Bild breite="5" höhe="4" datei="_sampleb.pdf"/>
+      </Td>
+    </Tr>
+  </Tabelle>
+</ObjektAusgeben>
+]]></listing>
+    </example>
+    <seealso><cmd name="Position"/></seealso>
+  </command>
   <command en="Paragraph" de="Absatz" css="p">
     <description xml:lang="en">
       <para>Insert a paragraph of text. The width of the paragraph is inherited from the surrounding element.</para>
@@ -4786,6 +4854,48 @@
       <cmd name="DefineColor"/>,
       <cmd name="Output"/>
     </seealso>
+  </command>
+  <command en="Position" de="Position" since="2.3.26">
+    <description xml:lang="en">
+      <para>Add an element to the current <cmd name="Overlay"/>.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Ein Element zum aktuellen <cmd name="Overlay"/> hinzufügen.</para>
+    </description>
+    <childelements>
+      <optional><cmd name="Image"/></optional>
+      <optional><cmd name="Box"/></optional>
+      <optional><cmd name="Rule"/></optional>
+      <optional><cmd name="Textblock"/></optional>
+      <optional><cmd name="Barcode"/></optional>
+      <optional><cmd name="Table"/></optional>
+      <optional><cmd name="Transformation"/></optional>
+      <optional><cmd name="Frame"/></optional>
+      <optional><cmd name="Switch"/></optional>
+    </childelements>
+    <attribute en="x" de="x" optional="no" type="number">
+      <description xml:lang="en">
+        <para>The horizontal position (0=left, 100=right).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die horizontale Position (0=links, 100=rechts).</para>
+      </description>
+    </attribute>
+    <attribute en="y" de="y" optional="no" type="number">
+      <description xml:lang="en">
+        <para>The vertical position (0=bottom, 100=top)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die vertikale Position (0=unten, 100=oben)</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <para>See the example at <cmd name="Overlay"/></para>
+    </example>
+    <example xml:lang="de">
+      <para>Siehe das Beispiel bei <cmd name="Overlay"/></para>
+    </example>
+    <seealso><cmd name="Overlay"/></seealso>
   </command>
   <command en="PositioningArea" de="Platzierungsbereich">
     <description xml:lang="en">
@@ -6142,6 +6252,7 @@
           <cmd name="ForAll"/>
           <cmd name="Image"/>
           <cmd name="Loop"/>
+          <cmd name="Overlay"/>
           <cmd name="Paragraph"/>
           <cmd name="Switch"/>
           <cmd name="Table"/>

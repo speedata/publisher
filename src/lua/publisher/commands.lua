@@ -1554,6 +1554,28 @@ function commands.output( layoutxml,dataxml )
     publisher.xpath.set_variable("__area",last_area)
 end
 
+--- Overlay
+--- -------
+--- Stacks things (like images, barcode, etc) on top of each other
+function commands.overlay( layoutxml, dataxml )
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    local fg
+    local box
+    local ti
+    for i,v in ipairs(tab) do
+        ti = tab[i].contents
+        if i == 1 then
+            if publisher.elementname(tab[i]) == "Image" then
+                box = ti[1]
+            else
+                box = ti
+            end
+        else
+            box = publisher.montage(box,ti.contents,ti.x,ti.y)
+        end
+    end
+    return box
+end
 
 --- PageFormat
 --- ----------
@@ -2024,6 +2046,17 @@ function commands.process_node(layoutxml,dataxml)
 
     --- Now restore the value for the parent element
     publisher.xpath.set_variable("__position",current_position)
+end
+
+--- Position
+--- -------
+--- Used from Overlay to stack one thing on top of the first element of Overlay
+function commands.position( layoutxml, dataxml )
+    local x = publisher.read_attribute(layoutxml,dataxml,"x","number")
+    local y = publisher.read_attribute(layoutxml,dataxml,"y","number")
+
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    return {x = x, y = y, contents = tab[1].contents}
 end
 
 

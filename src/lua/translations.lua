@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2015-06-25 14:21)
+-- generated from genluatranslations.go (2015-08-06 21:03)
 -- do not edit!
 module(...)
 return {
@@ -251,6 +251,12 @@ return {
         ["belegen"] = "allocate",
         ["bereich"] = "area",
         ["zeile"] = "row",
+        },
+      ["Überlagern"] = { "Overlay",
+        },
+      ["Position"] = { "Position",
+        ["x"] = "x",
+        ["y"] = "y",
         },
       ["Absatz"] = { "Paragraph",
         ["erlaubeumbruch"] = "allowbreak",

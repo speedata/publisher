@@ -2312,6 +2312,79 @@
          </optional>
       </element>
    </define>
+   <define name="e_Overlay">
+      <element name="Überlagern">
+         <a:documentation></a:documentation>
+         <optional>
+            <ref name="e_Image"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Box"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Rule"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Textblock"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Barcode"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Table"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Transformation"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Frame"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Switch"></ref>
+         </optional>
+         <oneOrMore>
+            <ref name="e_Position"></ref>
+         </oneOrMore>
+      </element>
+   </define>
+   <define name="e_Position">
+      <element name="Position">
+         <a:documentation></a:documentation>
+         <attribute name="x">
+            <a:documentation>Die horizontale Position (0=links, 100=rechts).</a:documentation>
+         </attribute>
+         <attribute name="y">
+            <a:documentation>Die vertikale Position (0=unten, 100=oben)</a:documentation>
+         </attribute>
+         <optional>
+            <ref name="e_Image"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Box"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Rule"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Textblock"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Barcode"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Table"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Transformation"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Frame"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Switch"></ref>
+         </optional>
+      </element>
+   </define>
    <define name="e_Paragraph">
       <element name="Absatz">
          <a:documentation>Erzeugt einen Absatz innerhalb eines Textblocks.</a:documentation>
@@ -3457,6 +3530,7 @@
                <ref name="e_ForAll"></ref>
                <ref name="e_Image"></ref>
                <ref name="e_Loop"></ref>
+               <ref name="e_Overlay"></ref>
                <ref name="e_Paragraph"></ref>
                <ref name="e_Switch"></ref>
                <ref name="e_Table"></ref>

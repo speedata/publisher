@@ -65,6 +65,9 @@ function attach_objects_row( tab )
                 elseif eltname == "Barcode" then
                     -- inline
                     inline[#inline + 1] = eltcontents
+                elseif eltname == "Overlay" then
+                    -- inline
+                    inline[#inline + 1] = eltcontents
                 elseif eltname == "VSpace" then
                     if #inline > 0 then
                         -- add current inline to the list of blocks
@@ -80,8 +83,10 @@ function attach_objects_row( tab )
                     elseif alignment=="right"   then  default_textformat_name = "__rightaligned"
                     elseif alignment=="justify" then  default_textformat_name = "__justified"
                     end
-
-                    eltcontents.textformat = eltcontents.textformat or default_textformat_name or "__leftaligned"
+                    -- box doesn't have field textformat
+                    if type(eltcontents) == "table" then
+                        eltcontents.textformat = eltcontents.textformat or default_textformat_name or "__leftaligned"
+                    end
                     -- block
                     if #inline > 0 then
                         -- add current inline to the list of blocks
