@@ -1,8 +1,12 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.27" date="2015-08-07">
+      <en>Bugfix for Overlay command: Image can be stacked on another element.</en>
+      <de>Fehlerkorrektur für Überlagern: Bild kann über eine anderes Element überlagert werden.</de>
+    </entry>
     <entry version="2.3.26" date="2015-08-07">
       <en>New command Overlay to stack objects.</en>
-      <de>Neuer Befehl Überlagern um Objekte übereinanderzulegen</de>
+      <de>Neuer Befehl Überlagern um Objekte übereinanderzulegen.</de>
     </entry>
     <entry version="2.3.25" date="2015-08-05">
       <en>New command line option --extra-xml and new configuration option extraxml to add additional XML files to the layout instructions (similar to xinclude).</en>
