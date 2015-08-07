@@ -1972,13 +1972,7 @@
          </optional>
          <optional>
             <attribute name="beschnitt">
-               <a:documentation>Beschneidet eine Seite, so dass die Objekte auf einer Seite die Größe bestimmen.</a:documentation>
-               <choice>
-                  <value>ja</value>
-                  <a:documentation>Beschnitt einschalten</a:documentation>
-                  <value>nein</value>
-                  <a:documentation>Seiten nicht beschneiden (Voreinstellung).</a:documentation>
-               </choice>
+               <a:documentation>Beschneidet eine Seite, so dass die Objekte auf einer Seite die Größe bestimmen. Erlabute Werte sind ja, nein und eine Längenangabe.</a:documentation>
             </attribute>
          </optional>
          <optional>

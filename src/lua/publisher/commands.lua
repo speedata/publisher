@@ -1450,7 +1450,7 @@ function commands.options( layoutxml,dataxml )
     publisher.options.ignoreeol          = publisher.read_attribute(layoutxml,dataxml,"ignoreeol",   "boolean")
     publisher.options.resetmarks         = publisher.read_attribute(layoutxml,dataxml,"resetmarks",  "boolean",false)
     publisher.options.colorprofile       = publisher.read_attribute(layoutxml,dataxml,"colorprofile","rawstring")
-    publisher.options.crop               = publisher.read_attribute(layoutxml,dataxml,"crop",        "boolean",false)
+    publisher.options.crop               = publisher.read_attribute(layoutxml,dataxml,"crop",        "booleanorlength",false)
     local mainlanguage                   = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","")
 
     if mainlanguage ~= "" then

@@ -513,7 +513,7 @@ function translate_value( value,context )
     -- If we don't have a values variable, it must be english
     if translated_values == nil then return value end
     context = context or "*"
-    return translated_values[context][value]
+    return translated_values[context][value] or value
 end
 
 
@@ -1720,6 +1720,19 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
             return false
         end
         return nil
+    elseif typ=="booleanorlength" then
+        if val then
+            val = translate_value(val,context)
+        else
+            val = default
+        end
+        if val=="yes" then
+            return true
+        elseif val=="no" then
+            return false
+        else
+            return tex.sp(val)
+        end
     else
         warning("read_attribut (2): unknown type: %s",type(val))
     end

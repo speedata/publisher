@@ -568,6 +568,7 @@ function calculate_number_gridcells(self)
     log("Number of rows: %d, number of columns = %d",self:number_of_rows(), self:number_of_columns())
 end
 
+-- Sets the used area for the page (used by crop="yes")
 function setarea( self, x, y, wd, ht)
     if self.dimensions[1] == nil then
         self.dimensions[1] = x
@@ -598,8 +599,10 @@ function trimbox( self, crop )
     local attrstring = {}
     attrstring[#attrstring + 1] = string.format("/TrimBox [ %g %g %g %g]",x,y,wd,ht)
     attrstring[#attrstring + 1] = string.format("/BleedBox [%g %g %g %g]",b_x,b_y,b_wd,b_ht)
-    if crop then
+    if crop == true then
         attrstring[#attrstring + 1] = string.format("/CropBox [%g %g %g %g]", sp_to_bp(self.dimensions[1]), sp_to_bp(tex.pageheight - self.dimensions[2]), sp_to_bp(self.dimensions[3]), sp_to_bp(tex.pageheight - self.dimensions[4]))
+    elseif tonumber(crop) then
+        attrstring[#attrstring + 1] = string.format("/CropBox [%g %g %g %g]", sp_to_bp(self.dimensions[1] - 2*crop), sp_to_bp(tex.pageheight - self.dimensions[2] + 2* crop), sp_to_bp(self.dimensions[3] + 2*crop), sp_to_bp(tex.pageheight - self.dimensions[4] - 2*crop))
     end
 
     if status.luatex_version < 79 then

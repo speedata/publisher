@@ -3759,29 +3759,13 @@
         <para>Der Dateiname des Farbprofils. Das voreingestellte Profil ist »ISO Coated v2 (ECI)«. Farbprofile werden nur geladen, wenn Sonderfarben benutzt werden.</para>
       </description>
     </attribute>
-    <attribute en="crop" de="beschnitt" optional="yes" since="2.3.21">
+    <attribute en="crop" de="beschnitt" optional="yes" since="2.3.21" type="yesnolength">
       <description xml:lang="en">
-        <para>Crop the pages so that the pdf size of the page is at its minimum.</para>
+        <para>Crop the pages so that the pdf size of the page is at its minimum. Allowed values are yes, no and a length.</para>
       </description>
       <description xml:lang="de">
-        <para>Beschneidet eine Seite, so dass die Objekte auf einer Seite die Größe bestimmen.</para>
+        <para>Beschneidet eine Seite, so dass die Objekte auf einer Seite die Größe bestimmen. Erlabute Werte sind ja, nein und eine Längenangabe.</para>
       </description>
-      <choice en="yes" de="ja">
-        <description xml:lang="en">
-          <para>Use cropping</para>
-        </description>
-        <description xml:lang="de">
-          <para>Beschnitt einschalten</para>
-        </description>
-      </choice>
-      <choice en="no" de="nein">
-        <description xml:lang="en">
-          <para>Don't use cropping (default).</para>
-        </description>
-        <description xml:lang="de">
-          <para>Seiten nicht beschneiden (Voreinstellung).</para>
-        </description>
-      </choice>
     </attribute>
     <attribute en="cutmarks" de="beschnittmarken" optional="yes">
       <description xml:lang="en">

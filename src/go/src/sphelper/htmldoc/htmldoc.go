@@ -123,6 +123,7 @@ func atttypeinfo(att *commandsxml.Attribute, lang string) template.HTML {
 		"xpath":              `<a href="../description-de/xpath.html">XPath Ausdruck</a>`,
 		"text":               "Text",
 		"number":             "Zahl",
+		"yesnolength":        "ja, nein oder Längenangabe",
 		"numberorlength":     "Zahl oder Längenangabe",
 		"numberlengthorstar": "Zahl, Maßangabe oder *-Angaben",
 		"zerotohundred":      "0 bis 100",
@@ -131,6 +132,7 @@ func atttypeinfo(att *commandsxml.Attribute, lang string) template.HTML {
 		"xpath":              `<a href="../description-en/xpath.html">XPath Expression</a>`,
 		"numberorlength":     "number or length",
 		"numberlengthorstar": "Number, length or *-numbers",
+		"yesnolength":        "yes, no or length",
 		"zerotohundred":      "0 up to 100",
 	}
 	ret := []string{}

@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.28" date="2015-08-07">
+      <en>Option crop can take a length.</en>
+      <de>Option crop kann eine Längenangabe verarbeiten.</de>
+    </entry>
     <entry version="2.3.27" date="2015-08-07">
       <en>Bugfix for Overlay command: Image can be stacked on another element.</en>
       <de>Fehlerkorrektur für Überlagern: Bild kann über eine anderes Element überlagert werden.</de>

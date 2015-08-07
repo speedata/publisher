@@ -220,6 +220,7 @@
                     <value>zerotohundred</value>
                     <value>length</value>
                     <value>numberlengthorstar</value>
+                    <value>yesnolength</value>
                   </choice>
                 </attribute>
                 <zeroOrMore>

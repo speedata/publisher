@@ -1972,13 +1972,7 @@
          </optional>
          <optional>
             <attribute name="crop">
-               <a:documentation>Crop the pages so that the pdf size of the page is at its minimum.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Use cropping</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Don&#39;t use cropping (default).</a:documentation>
-               </choice>
+               <a:documentation>Crop the pages so that the pdf size of the page is at its minimum. Allowed values are yes, no and a length.</a:documentation>
             </attribute>
          </optional>
          <optional>
