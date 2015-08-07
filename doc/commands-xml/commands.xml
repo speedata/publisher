@@ -4186,6 +4186,8 @@
     </Tr>
   </Table>
 </PlaceObject>]]></listing>
+      <para>which gives the following output</para>
+      <image file="overlay.png"/>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben>
@@ -4209,6 +4211,8 @@
   </Tabelle>
 </ObjektAusgeben>
 ]]></listing>
+      <para>ergibt folgende Ausgabe</para>
+      <image file="overlay.png"/>
     </example>
     <seealso><cmd name="Position"/></seealso>
   </command>
@@ -4883,10 +4887,10 @@
     </attribute>
     <attribute en="y" de="y" optional="no" type="number">
       <description xml:lang="en">
-        <para>The vertical position (0=bottom, 100=top)</para>
+        <para>The vertical position (0=bottom, 100=top).</para>
       </description>
       <description xml:lang="de">
-        <para>Die vertikale Position (0=unten, 100=oben)</para>
+        <para>Die vertikale Position (0=unten, 100=oben).</para>
       </description>
     </attribute>
     <example xml:lang="en">
