@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (en)</title>
   <id>http://www.speedata.de</id>
-  <updated>2015-08-07T10:57:05+02:00</updated>
+  <updated>2015-08-11T21:26:29+02:00</updated>
   <subtitle>New revisions for download and changelog.</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.3.28</title>
+    <updated>2015-08-11T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-08-11:</id>
+    <content type="html">Textblock can have a minimum height.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.28</title>
+    <updated>2015-08-07T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-08-07:</id>
+    <content type="html">Option crop can take a length.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.27</title>
+    <updated>2015-08-07T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-08-07:</id>
+    <content type="html">Bugfix for Overlay command: Image can be stacked on another element.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.3.26</title>
     <updated>2015-08-07T00:00:00Z</updated>
