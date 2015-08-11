@@ -2846,6 +2846,7 @@ function commands.textblock( layoutxml,dataxml )
     local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",   "rawstring", "black")
     local width          = publisher.read_attribute(layoutxml,dataxml,"width",   "length_sp")
     local angle          = publisher.read_attribute(layoutxml,dataxml,"angle",   "number")
+    local minheight      = publisher.read_attribute(layoutxml,dataxml,"minheight", "height_sp")
     local columns        = publisher.read_attribute(layoutxml,dataxml,"columns", "number")
     local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","rawstring")
     local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
@@ -2993,6 +2994,9 @@ function commands.textblock( layoutxml,dataxml )
     xpath.set_variable("__maxwidth", save_width)
     trace("Textbock: end")
     publisher.intextblockcontext = publisher.intextblockcontext - 1
+    if minheight then
+        nodelist.height = math.max(nodelist.height + nodelist.depth, minheight - nodelist.depth)
+    end
     return nodelist
 end
 

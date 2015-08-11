@@ -6751,6 +6751,14 @@
         <para>Abstand zwischen zwei Spalten. Voreinstellung: 3mm.</para>
       </description>
     </attribute>
+    <attribute en="minheight" de="minhöhe" optional="yes" type="numberorlength" since="2.3.28">
+      <description xml:lang="en">
+        <para>The minimum height of the textblock, given as a length or number (grid cells).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die minimale Höhe des Textblocks als Längenangabe oder als Maßeinheit.</para>
+      </description>
+    </attribute>
     <remark xml:lang="en">
       <para>The textformat change the appearance of the paragraphs. They have to be previously defined by <cmd name="DefineTextformat"/>.</para>
     </remark>

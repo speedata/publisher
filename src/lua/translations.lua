@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2015-08-06 21:03)
+-- generated from genluatranslations.go (2015-08-11 21:21)
 -- do not edit!
 module(...)
 return {
@@ -421,6 +421,7 @@ return {
         ["textformat"] = "textformat",
         ["spalten"] = "columns",
         ["spaltenabstand"] = "columndistance",
+        ["minhöhe"] = "minheight",
         },
       ["Text"] = { "Text",
         },

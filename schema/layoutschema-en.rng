@@ -3602,6 +3602,11 @@
                <a:documentation>Distance between two columns. Defaults to 3mm.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="minheight">
+               <a:documentation>The minimum height of the textblock, given as a length or number (grid cells).</a:documentation>
+            </attribute>
+         </optional>
          <oneOrMore>
             <choice>
                <ref name="e_Switch"></ref>

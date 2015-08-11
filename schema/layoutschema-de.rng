@@ -3602,6 +3602,11 @@
                <a:documentation>Abstand zwischen zwei Spalten. Voreinstellung: 3mm.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="minhöhe">
+               <a:documentation>Die minimale Höhe des Textblocks als Längenangabe oder als Maßeinheit.</a:documentation>
+            </attribute>
+         </optional>
          <oneOrMore>
             <choice>
                <ref name="e_Switch"></ref>
