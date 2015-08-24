@@ -73,7 +73,7 @@ func (w Worker) Start() {
 				dir := filepath.Join(serverTemp, work.Id)
 				// Force the jobname, so the result is always 'publisher.pdf'
 				params := []string{"--jobname", "publisher"}
-				if _, err := os.Stat(filepath.Join(dir, "extravars")); err != os.ErrNotExist {
+				if _, err := os.Stat(filepath.Join(dir, "extravars")); err == nil {
 					params = append(params, "--varsfile")
 					params = append(params, "extravars")
 				}
