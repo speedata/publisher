@@ -53,6 +53,7 @@ sd:aktuelle-zeile()|  Gibt die aktuelle Zeile zurück.
 sd:aktuelle-spalte()|  Gibt die aktuelle Spalte zurück.
 sd:alternierend(\<typ\>, \<text\>,\<text\>,.. )|  Bei jedem Aufruf wird das nächste Argument zurück gegeben. Wert des Typs ist beliebig, muss aber eindeutig sein. Beispiel: `sd:alternierend("tbl", "Weiß","Grau")` könnte für die Hintergrundfarbe von Tabellen benutzt werden.
 sd:alternierend-zurücksetzen(\<typ\>)|  Setzt den Zustand für `sd:alternierend()` für den angegebenen Typ zurück.
+sd:alternierend-beibehalten(\<typ\>)| Nutzt den aktuellen Wert von `sd:alternierend(<typ>)`, ohne diesen zu verändern.
 sd:anzahl-gespeicherte-seiten(\<Name\>)|  Gibt die Anzahl der gespeicherten Seiten, die mit \<SeitenSpeichern\> zwischengspeichert wurden.
 sd:anzahl-datensätze(\<Sequenz\>)|  Gibt die Anzahl der Datensätze der Sequenz zurück.
 sd:anzahl-seiten(\<Dateiname oder URI-Schema\>)|  Ermittelt die Anzahl der Seiten der angegebenen (PDF-)Datei.

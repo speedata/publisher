@@ -119,7 +119,10 @@ for k,v in pairs(node.whatsits()) do
     end
 end
 
+-- sd:alternating
 alternating = {}
+alternating_value = {}
+
 
 default_areaname = "_default_area"
 

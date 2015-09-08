@@ -44,8 +44,16 @@ local function alternating(dataxml, arg )
   else
     publisher.alternating[alt_type] = math.fmod( publisher.alternating[alt_type], #arg - 1 ) + 1
   end
-  return arg[publisher.alternating[alt_type] + 1]
+  local val = arg[publisher.alternating[alt_type] + 1]
+  publisher.alternating_value[alt_type] = val
+  return val
 end
+
+local function keepalternating(dataxml, arg )
+  local alt_type = arg[1]
+  return publisher.alternating_value[alt_type]
+end
+
 
 local function reset_alternating( dataxml,arg )
   local alt_type = arg[1]
@@ -356,6 +364,9 @@ register("urn:speedata:2009/publisher/functions/de","aktuelle-rahmennummer",curr
 
 register("urn:speedata:2009/publisher/functions/en","alternating",alternating)
 register("urn:speedata:2009/publisher/functions/de","alternierend",alternating)
+
+register("urn:speedata:2009/publisher/functions/en","keep-alternating",keepalternating)
+register("urn:speedata:2009/publisher/functions/de","alternierend-beibehalten",keepalternating)
 
 register("urn:speedata:2009/publisher/functions/en","group-height",groupheight)
 register("urn:speedata:2009/publisher/functions/en","groupheight",groupheight)
