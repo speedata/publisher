@@ -233,6 +233,44 @@ func v0PublishIdHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// Return full path to directory on success, empty string on failure
+func checkIdExists(id string) string {
+	publishdir := filepath.Join(serverTemp, id)
+	fi, err := os.Stat(publishdir)
+	if err != nil {
+		return ""
+	}
+	if err != nil && os.IsNotExist(err) || !fi.IsDir() {
+		// Does not exist or is not a directory
+		return ""
+	}
+	if a, err := filepath.Rel(filepath.Join(publishdir, ".."), serverTemp); err != nil && a == "." {
+		return ""
+	} else {
+		return publishdir
+	}
+}
+
+// Delete the folder with the given ID
+func v0DeleteHandler(w http.ResponseWriter, r *http.Request) {
+	// Not found? 404
+	// Deleted? 200
+	id := mux.Vars(r)["id"]
+	fmt.Fprintf(protocolFile, "/v0/delete/%s\n", id)
+	if d := checkIdExists(id); d != "" {
+		err := os.RemoveAll(d)
+		if err != nil {
+			fmt.Fprintln(protocolFile, err)
+		} else {
+			fmt.Fprintln(protocolFile, "ok")
+		}
+		w.WriteHeader(http.StatusOK)
+	} else {
+		fmt.Fprintln(protocolFile, "not found")
+		w.WriteHeader(http.StatusNotFound)
+	}
+}
+
 // Return the PDF from job id (given in the URL)
 func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 	// Not found? 404
@@ -540,6 +578,7 @@ func runServer(port string, address string) {
 	v0.HandleFunc("/pdf/{id}", v0GetPDFHandler).Methods("GET")
 	v0.HandleFunc("/publish/{id}", v0PublishIdHandler).Methods("GET")
 	v0.HandleFunc("/status/{id}", v0StatusHandler).Methods("GET")
+	v0.HandleFunc("/delete/{id}", v0DeleteHandler).Methods("GET")
 	http.Handle("/", r)
 	fmt.Printf("Listen on http://%s:%s\n", address, port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", address, port), nil))

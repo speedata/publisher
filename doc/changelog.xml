@@ -1,6 +1,10 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
     <entry version="2.3.30" date="2015-09-08">
+      <en>New API call /v0/delete/id to remove the publishing request</en>
+      <de>Neuer API-Aufruf /v0/delete/id um den Publishing-Aufruf zu löschen</de>
+    </entry>
+    <entry version="2.3.30" date="2015-09-08">
       <en>New xpath function sd:keep-alternating() to re-use the current alternating value.</en>
       <de>Neue XPath-Funktion sd:alternierend-beibehalten() um den aktuellen Wert weiter zu benutzen.</de>
     </entry>

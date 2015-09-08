@@ -46,6 +46,10 @@ A parameter can be specified to set the result name of the PDF (without extensio
 
 You can also submit additional variables: `/v0/publish?vars=var1%3Dvalue1`. This is similar to the command line parameter `--var`.  The parameter is URL-encoded in the form `var1=value1,var2=value2,var3=value3...`.
 
+## `/v0/delete/<id>`
+
+GET: Remove the directory for this ID. Returns 200 if the ID is valid, 404 if not.
+
 
 ## `/v0/publish/<id>`
 

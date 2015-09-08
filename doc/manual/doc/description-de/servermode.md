@@ -48,6 +48,10 @@ Ein URL-Parameter kann angegeben werden, um die Ausgabe der PDF-Datei (ohne Date
 
 Ebenso können zusätzliche Variablen angegeben werden: `/v0/publish?vars=var1%3Dwert1`. Dies entspricht der Angabe auf der Kommandozeile. Die Übergabe erfolgt in der (URL-Kodierten) Form `var1=wert1,var2=wert2,var3=wert3...`.
 
+## `/v0/delete/<id>`
+
+GET: Löscht das Verzeichnis mit dieser ID. Gibt 200 zurück, wenn die ID vorhanden ist, 404 falls nicht.
+
 ## `/v0/publish/<id>`
 
 Ein GET-Request mit einer Id aus dem oben beschriebenen POST-Request liefert eine JSON-Datei, mit dem Inhalt:
