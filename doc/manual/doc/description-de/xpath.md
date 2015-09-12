@@ -82,6 +82,7 @@ sd:loremipsum() | Alias für `sd:blindtext()`
 Funktion | Beschreibung
 ---------|-------------
 concat( \<Wert\>,\<Wert\>, … )|  Erzeugt einen neuen Text aus der Verkettung der einzelnen Werte.
+contains(\<heuhaufen\>,\<nadel\>)  | Wahr, wenn `heuhaufen` `nadel` enthält.
 count()|  Zählt alle Kindelemente mit dem angegebenen Namen. Beispiel: `count(eintrag)` zählt, wie viele Kindelemente mit den Namen `eintrag` existieren.
 ceiling()|  Gibt den aufgerundeten Wert einer Zahl zurück.
 empty(\<Attribut\>)|  Prüft, ob ein Attribut (nicht) vorhanden ist.

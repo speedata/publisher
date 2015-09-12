@@ -895,6 +895,22 @@ M.default_functions["replace"] = function(dataxml,arg)
     return msg[1]
 end
 
+M.default_functions["contains"] = function(dataxml,arg)
+    if arg[1] == nil or arg[2] == nil  then
+        warning("contains(): one of the arguments is empty")
+        return false
+    end
+    if type(arg[1]) ~= "string" or type(arg[2]) ~= "string"  then
+        err("contains(): one of the arguments is not a string")
+        return false
+    end
+    comm.sendmessage('con',arg[1])
+    comm.sendmessage('str',arg[2])
+    local msg = comm.get_string_messages()
+    trace("Contains: %s",msg[1])
+    return msg[1] == "true"
+end
+
 
 
 M.default_functions["upper-case"] = function(dataxml,arg)

@@ -71,6 +71,20 @@ func reader(message chan []byte, c net.Conn) {
 		return
 	}
 	switch typ {
+	case "con":
+		Trace("contains")
+		_, _, text, err := getMessage(c)
+		if err != nil {
+			log.Println(err)
+			message <- []byte{}
+			return
+		}
+		res := xpath.Contains(msg, text)
+		write := fmt.Sprintf("0,str,%06d%s", len(res), res)
+		c.Write([]byte(write))
+		message <- []byte{}
+		return
+
 	case "tok":
 		Trace("tokenize")
 		_, _, rexp, err := getMessage(c)

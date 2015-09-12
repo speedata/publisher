@@ -30,6 +30,15 @@ func Replace(text []byte, rexpr string, repl []byte) []byte {
 	return str
 }
 
+// contains() xpath function
+func Contains(text []byte, substring []byte) string {
+	if bytes.Contains(text, substring) {
+		return "true"
+	} else {
+		return "false"
+	}
+}
+
 // tokenize() xpath function
 func Tokenize(text []byte, rexpr string) []string {
 	r, err := regexp.Compile(rexpr)

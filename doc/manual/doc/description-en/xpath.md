@@ -93,7 +93,8 @@ sd:loremipsum() | Same as `sd:dummytext()`
 
 Function | Description
 ---------|------------
-concat( \<value\>,\<value\>, … ) | Create a new text value by concatinating the
+concat( \<value\>,\<value\>, … ) | Create a new text value by concatinating the arguments.
+contains(\<haystack\>,\<needle\>)  | True if haystack contains needle.
 count(\<text\>) | Counts all child elements with the given name. Example: `count(article)` counts, how many child elements with the name `article` exists.
 ceiling() | Returns the smallest number with no fractional part that is not less than the value of the given argument.
 empty(\<attribute\>) | Checks, if an attribute is (not) available.
