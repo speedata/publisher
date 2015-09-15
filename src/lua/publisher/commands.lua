@@ -75,15 +75,17 @@ function commands.action( layoutxml,dataxml)
             p:append(n)
         elseif eltname == "Mark" then
             local tab = publisher.element_contents(j)
-            local n = node.new("whatsit","user_defined")
-            if tab.append == true then
-                n.user_id = publisher.user_defined_mark_append -- a magic number
-            else
-                n.user_id = publisher.user_defined_mark
+            for _,v in ipairs(tab) do
+                local n = node.new("whatsit","user_defined")
+                if v.append == true then
+                    n.user_id = publisher.user_defined_mark_append -- a magic number
+                else
+                    n.user_id = publisher.user_defined_mark
+                end
+                n.type = 115  -- type 115: "value is a string"
+                n.value = v.selection
+                p:append(n)
             end
-            n.type = 115  -- type 115: "value is a string"
-            n.value = tab.selection
-            p:append(n)
         end
     end
     return p
@@ -1227,9 +1229,17 @@ end
 --- ----
 --- Set an invisible marker into the output (whatsit/user_defined)
 function commands.mark( layoutxml,dataxml )
-    local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpath")
+    local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     local append    = publisher.read_attribute(layoutxml,dataxml,"append","boolean")
-    return { selection = selection, append = append }
+    local ret = {}
+    if type(selection) == "table" then
+        for _,v in ipairs(selection) do
+            ret[#ret + 1] = { selection = v, append = append }
+        end
+        return ret
+    else
+        err("Unknown type in <Mark>")
+    end
 end
 
 --- Message
