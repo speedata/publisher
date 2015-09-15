@@ -18,7 +18,7 @@
    </define>
    <define name="e_Action">
       <element name="Aktion">
-         <a:documentation>Assoziiert eine Aktion mit einem Text. Sobald der Text auf einer Seite platziert wird, wird die dazugehörige Aktion ausgeführt.&#xA;        Die Aktion kann man sich als unsichtbares Zeichen&#xA;        vorstellen. Wenn der Publisher das unsichtbare Zeichen ausgibt, werden die Anweisungen in Aktion ausgeführt.</a:documentation>
+         <a:documentation>Assoziiert eine Aktion mit einem Text. Sobald der Text auf einer Seite platziert wird, wird die dazugehörige Aktion ausgeführt. Die Aktion kann man sich als unsichtbares Zeichen vorstellen. Wenn der Publisher das unsichtbare Zeichen ausgibt, werden die Anweisungen in Aktion ausgeführt.</a:documentation>
          <optional>
             <ref name="e_AddToList"></ref>
          </optional>
@@ -29,7 +29,7 @@
    </define>
    <define name="e_AddToList">
       <element name="ZurListeHinzufügen">
-         <a:documentation>Dieses Kommando kann innerhalb von Aktion benutzt werden. Wenn es ausgeführt wird, wird eine Schlüssel/Wert-Kombination in eine Liste eingefügt. Dieser Befehl ist derzeitig nicht&#xA;        vollständig getestet und wird noch überarbeitet.</a:documentation>
+         <a:documentation>Dieses Kommando kann innerhalb von Aktion benutzt werden. Wenn es ausgeführt wird, wird eine Schlüssel/Wert-Kombination in eine Liste eingefügt. Dieser Befehl ist derzeitig nicht vollständig getestet und wird noch überarbeitet.</a:documentation>
          <attribute name="auswahl">
             <a:documentation>Wert, der in der Liste gespeichert werden soll.</a:documentation>
          </attribute>
@@ -383,7 +383,7 @@
    </define>
    <define name="e_Case">
       <element name="Fall">
-         <a:documentation>Stellt einen Fall einer Fallunterscheidung dar. Der erste Fall, der zutrifft, wird ausgeführt. Weitere Fälle werden nicht betrachtet. Wird kein Fall erfüllt, dann wird,&#xA;        falls vorhanden, das Element Sonst ausgeführt.</a:documentation>
+         <a:documentation>Stellt einen Fall einer Fallunterscheidung dar. Der erste Fall, der zutrifft, wird ausgeführt. Weitere Fälle werden nicht betrachtet. Wird kein Fall erfüllt, dann wird, falls vorhanden, das Element Sonst ausgeführt.</a:documentation>
          <attribute name="bedingung">
             <a:documentation>Für jeden Fall in einer Fallunterscheidung wird überprüft, ob die Bedingung erfüllt ist und bei Übereinstimmung die Kindelemente ausgeführt.</a:documentation>
          </attribute>
@@ -825,7 +825,7 @@
    </define>
    <define name="e_DefineTextformat">
       <element name="DefiniereTextformat">
-         <a:documentation>Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen Absatz und&#xA;        Textblock) zurückgegriffen werden.</a:documentation>
+         <a:documentation>Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen Absatz und Textblock) zurückgegriffen werden.</a:documentation>
          <optional>
             <attribute name="tennzeichen">
                <a:documentation>Das Zeichen, das für Trennung benutzt wird (Voreinstellung: -)</a:documentation>
@@ -878,7 +878,7 @@
          </optional>
          <optional>
             <attribute name="zeilen">
-               <a:documentation>Anzahl der Zeilen, die eingezogen werden (wenn einrückung angegeben ist) bzw. falls die Zahl negativ ist, die Anzahl der Zeilen, die nicht eingerückt&#xA;          werden.</a:documentation>
+               <a:documentation>Anzahl der Zeilen, die eingezogen werden (wenn einrückung angegeben ist) bzw. falls die Zahl negativ ist, die Anzahl der Zeilen, die nicht eingerückt werden.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1278,7 +1278,7 @@
    </define>
    <define name="e_Hyphenation">
       <element name="Trennvorschlag">
-         <a:documentation>Erzeugt einen Trennvorschlag für die automatische Silbentrennung. Die Trennvorschläge werden dann benutzt, wenn die automatische Silbentrennung fehlerhaft trennt. Alle Trennstellen müssen&#xA;        mit eine Bindestrich (-) markiert werden (s. Beispiel).</a:documentation>
+         <a:documentation>Erzeugt einen Trennvorschlag für die automatische Silbentrennung. Die Trennvorschläge werden dann benutzt, wenn die automatische Silbentrennung fehlerhaft trennt. Alle Trennstellen müssen mit eine Bindestrich (-) markiert werden (s. Beispiel).</a:documentation>
          <text></text>
       </element>
    </define>
@@ -1475,7 +1475,7 @@
    </define>
    <define name="e_LoadDataset">
       <element name="LadeDatensatzdatei">
-         <a:documentation>Lädt eine Datensatzdatei, die in einem vorherigen Durchlauf des Publishers erzeugt wurde. Die »normale« Verarbeitung des Layoutregelwerks wird unterbrochen und mit dem Inhalt der&#xA;        Datensatzdatei fortgeführt. Nachdem die Verarbeitung der neu geladenen Datensatzdatei beendet ist, wird die Verarbeitung des Layoutregelwerks mit dem ursprünglichen Datensatz fortgesetzt. Eine&#xA;        ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</a:documentation>
+         <a:documentation>Lädt eine Datensatzdatei, die in einem vorherigen Durchlauf des Publishers erzeugt wurde. Die »normale« Verarbeitung des Layoutregelwerks wird unterbrochen und mit dem Inhalt der Datensatzdatei fortgeführt. Nachdem die Verarbeitung der neu geladenen Datensatzdatei beendet ist, wird die Verarbeitung des Layoutregelwerks mit dem ursprünglichen Datensatz fortgesetzt. Eine ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</a:documentation>
          <attribute name="name">
             <a:documentation>Name der Dateisatzdatei. Beispiel: toc</a:documentation>
          </attribute>
@@ -1531,7 +1531,7 @@
          <a:documentation>Das Layout-Element ist das Wurzelelement im Regelwerk.</a:documentation>
          <optional>
             <attribute name="version">
-               <a:documentation>Gibt die minimale Version des Publishers an. Format: 1.6.13. Die letzten Ziffern können weggelassen werden.&#xA;          Falls die erste oder die zweite Ziffer der Versionsangabe unterschiedlich ist, wird eine Warnung ausgegeben.</a:documentation>
+               <a:documentation>Gibt die minimale Version des Publishers an. Format: 1.6.13. Die letzten Ziffern können weggelassen werden. Falls die erste oder die zweite Ziffer der Versionsangabe unterschiedlich ist, wird eine Warnung ausgegeben.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1904,7 +1904,7 @@
          </optional>
          <optional>
             <attribute name="zeile">
-               <a:documentation>Zeile für den virtuellen Cursor. Wird keine Zeile angegeben, dann sucht sich der Publisher selbständig eine freie Zeile (ggf. auf einer neuen Seite oder in einem neuen&#xA;          Platzierungsrahmen).</a:documentation>
+               <a:documentation>Zeile für den virtuellen Cursor. Wird keine Zeile angegeben, dann sucht sich der Publisher selbständig eine freie Zeile (ggf. auf einer neuen Seite oder in einem neuen Platzierungsrahmen).</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1984,7 +1984,7 @@
          </optional>
          <optional>
             <attribute name="beschnittmarken">
-               <a:documentation>Beschnittmarken (crop marks) werden ausgegeben. Der Abstand der Schnittmarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die&#xA;          Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Schnittmarken ausgegeben.</a:documentation>
+               <a:documentation>Beschnittmarken (crop marks) werden ausgegeben. Der Abstand der Schnittmarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Schnittmarken ausgegeben.</a:documentation>
                <choice>
                   <value>ja</value>
                   <a:documentation>Beschnittmarken anzeigen.</a:documentation>
@@ -1995,7 +1995,7 @@
          </optional>
          <optional>
             <attribute name="beschnittzugabemarken">
-               <a:documentation>Beschnittzugabemarken werden ausgegeben. Diese Marken zeigen, wie groß die Beschnittzugabe ist. Der Abstand der Beschnittzugabemarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die&#xA;          Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Beschnittzugabemarken ausgegeben.</a:documentation>
+               <a:documentation>Beschnittzugabemarken werden ausgegeben. Diese Marken zeigen, wie groß die Beschnittzugabe ist. Der Abstand der Beschnittzugabemarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Beschnittzugabemarken ausgegeben.</a:documentation>
                <choice>
                   <value>ja</value>
                   <a:documentation>Beschnittzugabemarken anzeigen.</a:documentation>
@@ -2502,7 +2502,7 @@
          <a:documentation>Gibt ein rechteckiges Objekt (Bild, Tabelle, Box oder Textblock) aus.</a:documentation>
          <optional>
             <attribute name="belegen">
-               <a:documentation>Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei belegen=“nein” wird auch die aktuelle Zeile im Raster nicht verändert. Bei “auto” wird bei Bildern der&#xA;          Bildumriss beachtet, sofern eine Umrissdatei vorliegt. Siehe die Beschreibung bei Bild</a:documentation>
+               <a:documentation>Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei belegen=“nein” wird auch die aktuelle Zeile im Raster nicht verändert. Bei “auto” wird bei Bildern der Bildumriss beachtet, sofern eine Umrissdatei vorliegt. Siehe die Beschreibung bei Bild</a:documentation>
                <choice>
                   <value>ja</value>
                   <a:documentation>Platz im Raster reservieren (Voreinstellung für Platzierung im Raster).</a:documentation>
@@ -2513,7 +2513,7 @@
          </optional>
          <optional>
             <attribute name="bereich">
-               <a:documentation>Name des Bereichs (Platzierungsbereich), in dem das Objekt ausgegeben werden soll. Wird kein Bereich angegeben, so wird das Objekt auf der »Seite« (dem Bereich, der alle Rasterkästen&#xA;          beinhaltet) ausgegeben.</a:documentation>
+               <a:documentation>Name des Bereichs (Platzierungsbereich), in dem das Objekt ausgegeben werden soll. Wird kein Bereich angegeben, so wird das Objekt auf der »Seite« (dem Bereich, der alle Rasterkästen beinhaltet) ausgegeben.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2580,7 +2580,7 @@
          </optional>
          <optional>
             <attribute name="spalte">
-               <a:documentation>Zahl: Die Zeile im Raster, in der das Objekt ausgegeben wird. Wird die Zeile nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe:&#xA;          die Position von der oberen Blattkante.</a:documentation>
+               <a:documentation>Zahl: Die Spalte im Raster, in der das Objekt ausgegeben wird. Wird die Spalte nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe: die Position von der linken Blattkante.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2627,7 +2627,7 @@
          </optional>
          <optional>
             <attribute name="zeile">
-               <a:documentation>Zahl: Die Zeile im Raster, in der das Objekt ausgegeben wird. Wird die Zeile nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe:&#xA;          die Position von der oberen Blattkante.</a:documentation>
+               <a:documentation>Zahl: Die Zeile im Raster, in der das Objekt ausgegeben wird. Wird die Zeile nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe: die Position von der oberen Blattkante.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2637,12 +2637,12 @@
          </optional>
          <optional>
             <attribute name="maxhöhe">
-               <a:documentation>Die maximale Höhe in Rasterzellen, die das Objekt belegen darf. Wird nur für den automatischen Tabellenumbruch benötigt. Die umbrochenen Tabellen auf den Folgeseiten haben maximal die&#xA;          angegebene Höhe.</a:documentation>
+               <a:documentation>Die maximale Höhe in Rasterzellen, die das Objekt belegen darf. Wird nur für den automatischen Tabellenumbruch benötigt. Die umbrochenen Tabellen auf den Folgeseiten haben maximal die angegebene Höhe.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="valign">
-               <a:documentation>Wird ein Objekt ausgegeben, das kein vielfaches der Rasterhöhe ist, dann gibt das Attribut die vertikale Ausrichtung an. Bottom beispielsweise bedeutet, dass der freie Platz oberhalb des&#xA;          Objekts bleibt. Voreinstellung ist “top”.</a:documentation>
+               <a:documentation>Wird ein Objekt ausgegeben, das kein vielfaches der Rasterhöhe ist, dann gibt das Attribut die vertikale Ausrichtung an. Bottom beispielsweise bedeutet, dass der freie Platz oberhalb des Objekts bleibt. Voreinstellung ist “top”.</a:documentation>
                <choice>
                   <value>top</value>
                   <a:documentation>Das Objekt wird oben ausgerichtet.</a:documentation>
@@ -2766,7 +2766,7 @@
    </define>
    <define name="e_PositioningFrame">
       <element name="Platzierungsrahmen">
-         <a:documentation>Beschreibt einen rechteckigen Bereich, in dem Elemente platziert werden können. Inhalte in diesen Bereichen werden bei Platzmangel automatisch in den nächsten Rahmen deselben Bereichs&#xA;        platziert.</a:documentation>
+         <a:documentation>Beschreibt einen rechteckigen Bereich, in dem Elemente platziert werden können. Inhalte in diesen Bereichen werden bei Platzmangel automatisch in den nächsten Rahmen deselben Bereichs platziert.</a:documentation>
          <attribute name="breite">
             <a:documentation>Breite des Rahmens in Rasterkästen</a:documentation>
          </attribute>
@@ -2798,7 +2798,7 @@
    </define>
    <define name="e_Record">
       <element name="Datensatz">
-         <a:documentation>Enthält die Anweisungen, die bei dem angegebenen Datensatz ausgeführt werden sollen. Der oberste Datensatz (d.h. direkt unterhalb des Wurzelelements) wird vom Publisher aufgerufen, alle&#xA;        nachfolgenden Datensätze müssen über das Element BearbeiteKnoten aufgerufen werden.</a:documentation>
+         <a:documentation>Enthält die Anweisungen, die bei dem angegebenen Datensatz ausgeführt werden sollen. Der oberste Datensatz (d.h. direkt unterhalb des Wurzelelements) wird vom Publisher aufgerufen, alle nachfolgenden Datensätze müssen über das Element BearbeiteKnoten aufgerufen werden.</a:documentation>
          <attribute name="element">
             <a:documentation>Der Name des Elements der auf den Datensatz passt.</a:documentation>
          </attribute>
@@ -2928,7 +2928,7 @@
    </define>
    <define name="e_SaveDataset">
       <element name="SpeichereDatensatzdatei">
-         <a:documentation>Speichert eine XML-Datei auf Festplatte. Diese Datei muss als Kindelement hierarchische Struktur, zum Beispiel aus den Befehlen Element und Attribut enthalten, wahlweise zusammengesetzt&#xA;        durch Variablen. Eine ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</a:documentation>
+         <a:documentation>Speichert eine XML-Datei auf Festplatte. Diese Datei muss als Kindelement hierarchische Struktur, zum Beispiel aus den Befehlen Element und Attribut enthalten, wahlweise zusammengesetzt durch Variablen. Eine ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</a:documentation>
          <attribute name="dateiname">
             <a:documentation>Name der Dateisatzdatei. Beispiel: toc</a:documentation>
          </attribute>
@@ -3197,7 +3197,7 @@
    </define>
    <define name="e_Switch">
       <element name="Fallunterscheidung">
-         <a:documentation>Erzeugt eine „Wenn-Dann-Abfrage“. Das heißt, für jedes Kindelement Fall wird überprüft, ob die Bedingung erfüllt ist. Wenn ja, dann wird der Inhalt des Kindelements Fall ausgeführt und die Verarbeitung hinter der Fallunterscheidung fortgesetzt. Wenn keine Bedingung erfüllt wurde und ein Element Sonst gefunden wurde, wird der&#xA;        Inhalt des Elements Sonst ausgeführt. Durch das frühzeitige Abbrechen werden nachfolgende Fälle nicht weiter untersucht (siehe Beispiel).</a:documentation>
+         <a:documentation>Erzeugt eine „Wenn-Dann-Abfrage“. Das heißt, für jedes Kindelement Fall wird überprüft, ob die Bedingung erfüllt ist. Wenn ja, dann wird der Inhalt des Kindelements Fall ausgeführt und die Verarbeitung hinter der Fallunterscheidung fortgesetzt. Wenn keine Bedingung erfüllt wurde und ein Element Sonst gefunden wurde, wird der         Inhalt des Elements Sonst ausgeführt. Durch das frühzeitige Abbrechen werden nachfolgende Fälle nicht weiter untersucht (siehe Beispiel).</a:documentation>
          <oneOrMore>
             <ref name="e_Case"></ref>
          </oneOrMore>
@@ -3227,7 +3227,7 @@
          </optional>
          <optional>
             <attribute name="dehnen">
-               <a:documentation>Wenn der Tabelleninhalt schmal ist und dehnen den Wert nein hat, dann nimmt die Tabelle nur den benötigten Platz ein. Wenn der Tabelleninhalt breit ist oder dehnen den Wert max hat, dann&#xA;          nimmt die Tabelle den Wert aus dem Attribut breite ein.</a:documentation>
+               <a:documentation>Wenn der Tabelleninhalt schmal ist und dehnen den Wert nein hat, dann nimmt die Tabelle nur den benötigten Platz ein. Wenn der Tabelleninhalt breit ist oder dehnen den Wert max hat, dann nimmt die Tabelle den Wert aus dem Attribut breite ein.</a:documentation>
                <choice>
                   <value>max</value>
                   <a:documentation>Die Tabelle zur angegebenen Breite dehnen.</a:documentation>
@@ -3576,7 +3576,7 @@
          <a:documentation>Erzeugt einen rechteckigen Bereich mit Text.</a:documentation>
          <optional>
             <attribute name="winkel">
-               <a:documentation>Winkel (Drehrichtung gegen den Uhrzeigersinn), um der der Text gedreht wird. Die Spalte und die Zeile,&#xA;          in der der Text ausgegeben wird, bleibt gleich, die Breite und die Höhe des Textes&#xA;          ändert sich gegenüber dem ursprünglichen Text.</a:documentation>
+               <a:documentation>Winkel (Drehrichtung gegen den Uhrzeigersinn), um der der Text gedreht wird. Die Spalte und die Zeile, in der der Text ausgegeben wird, bleibt gleich, die Breite und die Höhe des Textes ändert sich gegenüber dem ursprünglichen Text.</a:documentation>
             </attribute>
          </optional>
          <optional>

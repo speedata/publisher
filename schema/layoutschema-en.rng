@@ -18,7 +18,7 @@
    </define>
    <define name="e_Action">
       <element name="Action">
-         <a:documentation>Associates an action with a text. Once the text is placed on the page, the associated action will be executed. The action&#xA;      can be compared to an invisible character. When the publisher outputs the character, the corresponding instructions will be run.</a:documentation>
+         <a:documentation>Associates an action with a text. Once the text is placed on the page, the associated action will be executed. The action can be compared to an invisible character. When the publisher outputs the character, the corresponding instructions will be run.</a:documentation>
          <optional>
             <ref name="e_AddToList"></ref>
          </optional>
@@ -1475,7 +1475,7 @@
    </define>
    <define name="e_LoadDataset">
       <element name="LoadDataset">
-         <a:documentation>Load an XML file previously written by SaveDataset. The regular data processing is interrupted and the contents of the data file is taken as a data source.&#xA;        If the file does not exist, the call to LoadDataset is ignored.</a:documentation>
+         <a:documentation>Load an XML file previously written by SaveDataset. The regular data processing is interrupted and the contents of the data file is taken as a data source. If the file does not exist, the call to LoadDataset is ignored.</a:documentation>
          <attribute name="name">
             <a:documentation>Name of the data file. Example: toc</a:documentation>
          </attribute>
@@ -1984,7 +1984,7 @@
          </optional>
          <optional>
             <attribute name="cutmarks">
-               <a:documentation>Cut marks / crop marks will be placed in the PDF. The distance&#xA;          of the marks from the imaginary center is determined by the attribute trim,&#xA;          but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute&#xA;          is no, that means no cut marks will be displayed.</a:documentation>
+               <a:documentation>Cut marks / crop marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute trim, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is no, that means no cut marks will be displayed.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>Show crop marks.</a:documentation>
@@ -1995,7 +1995,7 @@
          </optional>
          <optional>
             <attribute name="trimmarks">
-               <a:documentation>Trim marks will be placed in the PDF. The distance&#xA;          of the marks from the imaginary center is determined by the attribute trim,&#xA;          but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute&#xA;          is no, that means no trim marks will be displayed. The trim marks show the&#xA;          additional trim distance.</a:documentation>
+               <a:documentation>Trim marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute trim, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is no, that means no trim marks will be displayed. The trim marks show the additional trim distance.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>Show trim marks.</a:documentation>
@@ -2798,7 +2798,7 @@
    </define>
    <define name="e_Record">
       <element name="Record">
-         <a:documentation>Contains the instructions when the publisher processes the element in the data file with the given name.&#xA;        The record matching the root element will be called by the software automatically, all further data handling must be done&#xA;      by the user.</a:documentation>
+         <a:documentation>Contains the instructions when the publisher processes the element in the data file with the given name. The record matching the root element will be called by the software automatically, all further data handling must be done by the user.</a:documentation>
          <attribute name="element">
             <a:documentation>The name of the element the record matches.</a:documentation>
          </attribute>
@@ -3197,7 +3197,7 @@
    </define>
    <define name="e_Switch">
       <element name="Switch">
-         <a:documentation>Create an if-then-else construct. The test attribute of each Case commands is evaluated until it yields true.&#xA;        The contents of the Case gets executed. If no test suceeds, the (optional) Otherwise gets executed.</a:documentation>
+         <a:documentation>Create an if-then-else construct. The test attribute of each Case commands is evaluated until it yields true. The contents of the Case gets executed. If no test suceeds, the (optional) Otherwise gets executed.</a:documentation>
          <oneOrMore>
             <ref name="e_Case"></ref>
          </oneOrMore>
@@ -3227,7 +3227,7 @@
          </optional>
          <optional>
             <attribute name="stretch">
-               <a:documentation>If the table contents is narrow and stretch has the value no, the table only uses the minimal width. If the table&#xA;          contents is wider than the value width or stretch has the value max, the table&#39;s width is the size given in the width attribute.</a:documentation>
+               <a:documentation>If the table contents is narrow and stretch has the value no, the table only uses the minimal width. If the table contents is wider than the value width or stretch has the value max, the table&#39;s width is the size given in the width attribute.</a:documentation>
                <choice>
                   <value>max</value>
                   <a:documentation>Stretch the table to its given width.</a:documentation>

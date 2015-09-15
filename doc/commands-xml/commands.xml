@@ -346,13 +346,10 @@
   </command>
   <command en="Action" de="Aktion">
     <description xml:lang="en">
-      <para>Associates an action with a text. Once the text is placed on the page, the associated action will be executed. The action
-      can be compared to an invisible character. When the publisher outputs the character, the corresponding instructions will be run.</para>
+      <para>Associates an action with a text. Once the text is placed on the page, the associated action will be executed. The action can be compared to an invisible character. When the publisher outputs the character, the corresponding instructions will be run.</para>
     </description>
     <description xml:lang="de">
-      <para>Assoziiert eine Aktion mit einem Text. Sobald der Text auf einer Seite platziert wird, wird die dazugehörige Aktion ausgeführt.
-        Die Aktion kann man sich als unsichtbares Zeichen
-        vorstellen. Wenn der Publisher das unsichtbare Zeichen ausgibt, werden die Anweisungen in Aktion ausgeführt.</para>
+      <para>Assoziiert eine Aktion mit einem Text. Sobald der Text auf einer Seite platziert wird, wird die dazugehörige Aktion ausgeführt. Die Aktion kann man sich als unsichtbares Zeichen vorstellen. Wenn der Publisher das unsichtbare Zeichen ausgibt, werden die Anweisungen in Aktion ausgeführt.</para>
     </description>
     <childelements>
       <optional><cmd name="AddToList"/></optional>
@@ -385,8 +382,7 @@
       <para>Can be used inside of <cmd name="Action"/>. Not tested properly.</para>
     </description>
     <description xml:lang="de">
-      <para>Dieses Kommando kann innerhalb von <cmd name="Action"/> benutzt werden. Wenn es ausgeführt wird, wird eine Schlüssel/Wert-Kombination in eine Liste eingefügt. Dieser Befehl ist derzeitig nicht
-        vollständig getestet und wird noch überarbeitet.</para>
+      <para>Dieses Kommando kann innerhalb von <cmd name="Action"/> benutzt werden. Wenn es ausgeführt wird, wird eine Schlüssel/Wert-Kombination in eine Liste eingefügt. Dieser Befehl ist derzeitig nicht vollständig getestet und wird noch überarbeitet.</para>
     </description>
     <childelements/>
     <attribute en="select" de="auswahl" type="xpath" optional="no">
@@ -992,8 +988,7 @@
       <para>Part of a <cmd name="Switch"/> construct. All cases up to the first case which evaluates to »true« will be executed. If no cases match and there is a <cmd name="Otherwise"/>, this will be executed instead.</para>
     </description>
     <description xml:lang="de">
-      <para>Stellt einen Fall einer <cmd name="Switch"/> dar. Der erste <cmd name="Case"/>, der zutrifft, wird ausgeführt. Weitere Fälle werden nicht betrachtet. Wird kein Fall erfüllt, dann wird,
-        falls vorhanden, das Element <cmd name="Otherwise"/> ausgeführt.</para>
+      <para>Stellt einen Fall einer <cmd name="Switch"/> dar. Der erste <cmd name="Case"/>, der zutrifft, wird ausgeführt. Weitere Fälle werden nicht betrachtet. Wird kein Fall erfüllt, dann wird, falls vorhanden, das Element <cmd name="Otherwise"/> ausgeführt.</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -1618,8 +1613,7 @@
       <para>Define text formatting instructions. A textformat is used to align and indent text and create margins and rules before and after the text.</para>
     </description>
     <description xml:lang="de">
-      <para>Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen Absatz und
-        Textblock) zurückgegriffen werden.</para>
+      <para>Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen Absatz und Textblock) zurückgegriffen werden.</para>
     </description>
     <childelements/>
     <attribute en="hyphenchar" de="tennzeichen" optional="yes" type="text">
@@ -1739,8 +1733,7 @@
         <para>The number of rows with indentation given in the attribute <tt>indentation</tt>. If the number is negative, this determiens the number of rows that are <quote>not</quote> indented.</para>
       </description>
       <description xml:lang="de">
-        <para>Anzahl der Zeilen, die eingezogen werden (wenn <tt>einrückung</tt> angegeben ist) bzw. falls die Zahl negativ ist, die Anzahl der Zeilen, die <quote>nicht</quote> eingerückt
-          werden.</para>
+        <para>Anzahl der Zeilen, die eingezogen werden (wenn <tt>einrückung</tt> angegeben ist) bzw. falls die Zahl negativ ist, die Anzahl der Zeilen, die <quote>nicht</quote> eingerückt werden.</para>
       </description>
     </attribute>
     <attribute en="border-top" de="border-top" type="length" optional="yes">
@@ -2331,8 +2324,7 @@
       <para>Suggest a hyphenation. This hyphenation will be used in the running text. See the example.</para>
     </description>
     <description xml:lang="de">
-      <para>Erzeugt einen Trennvorschlag für die automatische Silbentrennung. Die Trennvorschläge werden dann benutzt, wenn die automatische Silbentrennung fehlerhaft trennt. Alle Trennstellen müssen
-        mit eine Bindestrich (-) markiert werden (s. Beispiel).</para>
+      <para>Erzeugt einen Trennvorschlag für die automatische Silbentrennung. Die Trennvorschläge werden dann benutzt, wenn die automatische Silbentrennung fehlerhaft trennt. Alle Trennstellen müssen mit eine Bindestrich (-) markiert werden (s. Beispiel).</para>
     </description>
     <childelements><text/></childelements>
     <example xml:lang="en">
@@ -2773,14 +2765,10 @@
   </command>
   <command en="LoadDataset" de="LadeDatensatzdatei">
     <description xml:lang="en">
-      <para>Load an XML file previously written by <cmd name="SaveDataset"/>. The regular data processing is interrupted and the contents of the data file is taken as a data source.
-        If the file does not exist, the call to <cmd name="LoadDataset"/> is ignored.
-      </para>
+      <para>Load an XML file previously written by <cmd name="SaveDataset"/>. The regular data processing is interrupted and the contents of the data file is taken as a data source. If the file does not exist, the call to <cmd name="LoadDataset"/> is ignored.</para>
     </description>
     <description xml:lang="de">
-      <para>Lädt eine Datensatzdatei, die in einem vorherigen Durchlauf des Publishers erzeugt wurde. Die »normale« Verarbeitung des Layoutregelwerks wird unterbrochen und mit dem Inhalt der
-        Datensatzdatei fortgeführt. Nachdem die Verarbeitung der neu geladenen Datensatzdatei beendet ist, wird die Verarbeitung des Layoutregelwerks mit dem ursprünglichen Datensatz fortgesetzt. Eine
-        ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</para>
+      <para>Lädt eine Datensatzdatei, die in einem vorherigen Durchlauf des Publishers erzeugt wurde. Die »normale« Verarbeitung des Layoutregelwerks wird unterbrochen und mit dem Inhalt der Datensatzdatei fortgeführt. Nachdem die Verarbeitung der neu geladenen Datensatzdatei beendet ist, wird die Verarbeitung des Layoutregelwerks mit dem ursprünglichen Datensatz fortgesetzt. Eine ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</para>
     </description>
     <childelements/>
     <attribute en="name" de="name" type="text" optional="no">
@@ -2934,8 +2922,7 @@
         <para>Minimum publisher version required. If major or minor version differ, give a warning. Format: 1.6.12 (revision number can be left out).</para>
       </description>
       <description xml:lang="de">
-        <para>Gibt die minimale Version des Publishers an. Format: 1.6.13. Die letzten Ziffern können weggelassen werden.
-          Falls die erste oder die zweite Ziffer der Versionsangabe unterschiedlich ist, wird eine Warnung ausgegeben.</para>
+        <para>Gibt die minimale Version des Publishers an. Format: 1.6.13. Die letzten Ziffern können weggelassen werden. Falls die erste oder die zweite Ziffer der Versionsangabe unterschiedlich ist, wird eine Warnung ausgegeben.</para>
       </description>
     </attribute>
     <attribute en="name" de="name" type="text" optional="yes">
@@ -3643,8 +3630,7 @@
         <para>The absolute number of the row for the cursor. If no row is given, the system tries to find a completely free row (perhaps on an empty page).</para>
       </description>
       <description xml:lang="de">
-        <para>Zeile für den virtuellen Cursor. Wird keine Zeile angegeben, dann sucht sich der Publisher selbständig eine freie Zeile (ggf. auf einer neuen Seite oder in einem neuen
-          Platzierungsrahmen).</para>
+        <para>Zeile für den virtuellen Cursor. Wird keine Zeile angegeben, dann sucht sich der Publisher selbständig eine freie Zeile (ggf. auf einer neuen Seite oder in einem neuen Platzierungsrahmen).</para>
       </description>
     </attribute>
     <attribute en="rows" de="zeilen" type="number" optional="yes">
@@ -3807,15 +3793,10 @@
     </attribute>
     <attribute en="cutmarks" de="beschnittmarken" optional="yes">
       <description xml:lang="en">
-        <para>Cut marks / crop marks will be placed in the PDF. The distance
-          of the marks from the imaginary center is determined by the attribute <tt>trim</tt>,
-          but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute
-          is <tt>no</tt>, that means no cut marks will be displayed.
-        </para>
+        <para>Cut marks / crop marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute <tt>trim</tt>, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is <tt>no</tt>, that means no cut marks will be displayed.</para>
       </description>
       <description xml:lang="de">
-        <para>Beschnittmarken (crop marks) werden ausgegeben. Der Abstand der Schnittmarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die
-          Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Schnittmarken ausgegeben.</para>
+        <para>Beschnittmarken (crop marks) werden ausgegeben. Der Abstand der Schnittmarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Schnittmarken ausgegeben.</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
@@ -3836,16 +3817,10 @@
     </attribute>
     <attribute en="trimmarks" de="beschnittzugabemarken" optional="yes" since="2.3.24">
       <description xml:lang="en">
-        <para>Trim marks will be placed in the PDF. The distance
-          of the marks from the imaginary center is determined by the attribute <tt>trim</tt>,
-          but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute
-          is <tt>no</tt>, that means no trim marks will be displayed. The trim marks show the
-          additional trim distance.
-        </para>
+        <para>Trim marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute <tt>trim</tt>, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is <tt>no</tt>, that means no trim marks will be displayed. The trim marks show the additional trim distance.</para>
       </description>
       <description xml:lang="de">
-        <para>Beschnittzugabemarken werden ausgegeben. Diese Marken zeigen, wie groß die Beschnittzugabe ist. Der Abstand der Beschnittzugabemarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die
-          Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Beschnittzugabemarken ausgegeben.</para>
+        <para>Beschnittzugabemarken werden ausgegeben. Diese Marken zeigen, wie groß die Beschnittzugabe ist. Der Abstand der Beschnittzugabemarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Beschnittzugabemarken ausgegeben.</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
@@ -4483,8 +4458,7 @@
         <para>Determines if the area of the object is marked as »allocated«. With allocate="no", the cursor position is not changed.</para>
       </description>
       <description xml:lang="de">
-        <para>Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei belegen=“nein” wird auch die aktuelle Zeile im Raster nicht verändert. Bei “auto” wird bei Bildern der
-          Bildumriss beachtet, sofern eine Umrissdatei vorliegt. Siehe die Beschreibung bei Bild</para>
+        <para>Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei belegen=“nein” wird auch die aktuelle Zeile im Raster nicht verändert. Bei “auto” wird bei Bildern der Bildumriss beachtet, sofern eine Umrissdatei vorliegt. Siehe die Beschreibung bei Bild</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
@@ -4508,8 +4482,7 @@
         <para>Name of the (positioning) area, the ojbect is placed in. If no area is given, the object is placed on the main area, the page (this is the area that contains all grid cells).</para>
       </description>
       <description xml:lang="de">
-        <para>Name des Bereichs (Platzierungsbereich), in dem das Objekt ausgegeben werden soll. Wird kein Bereich angegeben, so wird das Objekt auf der »Seite« (dem Bereich, der alle Rasterkästen
-          beinhaltet) ausgegeben.</para>
+        <para>Name des Bereichs (Platzierungsbereich), in dem das Objekt ausgegeben werden soll. Wird kein Bereich angegeben, so wird das Objekt auf der »Seite« (dem Bereich, der alle Rasterkästen beinhaltet) ausgegeben.</para>
       </description>
     </attribute>
     <attribute en="groupname" de="gruppenname" type="text" optional="yes">
@@ -4629,8 +4602,7 @@
         <para>If contents is a number: the grid cell from the left margin of the area. If it is a length: the absolute position from the left paper margin. If this attribute is omitted, the system tries to place the object by itself.</para>
       </description>
       <description xml:lang="de">
-        <para>Zahl: Die Zeile im Raster, in der das Objekt ausgegeben wird. Wird die Zeile nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe:
-          die Position von der oberen Blattkante.</para>
+        <para>Zahl: Die Spalte im Raster, in der das Objekt ausgegeben wird. Wird die Spalte nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe: die Position von der linken Blattkante.</para>
       </description>
     </attribute>
     <attribute en="keepposition" de="behalteposition" optional="yes">
@@ -4734,8 +4706,7 @@
         <para>The row where the object is placed. If none given, the publisher tries to find a row by itself. You can give a number (in grid cells) or an absolute value (from top left).</para>
       </description>
       <description xml:lang="de">
-        <para>Zahl: Die Zeile im Raster, in der das Objekt ausgegeben wird. Wird die Zeile nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe:
-          die Position von der oberen Blattkante.</para>
+        <para>Zahl: Die Zeile im Raster, in der das Objekt ausgegeben wird. Wird die Zeile nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe: die Position von der oberen Blattkante.</para>
       </description>
     </attribute>
     <attribute en="rotate" de="drehen" type="number" optional="yes">
@@ -4751,8 +4722,7 @@
         <para>Only used for multi-page table: the maximum height of tables.</para>
       </description>
       <description xml:lang="de">
-        <para>Die maximale Höhe in Rasterzellen, die das Objekt belegen darf. Wird nur für den automatischen Tabellenumbruch benötigt. Die umbrochenen Tabellen auf den Folgeseiten haben maximal die
-          angegebene Höhe.</para>
+        <para>Die maximale Höhe in Rasterzellen, die das Objekt belegen darf. Wird nur für den automatischen Tabellenumbruch benötigt. Die umbrochenen Tabellen auf den Folgeseiten haben maximal die angegebene Höhe.</para>
       </description>
     </attribute>
     <attribute en="valign" de="valign" optional="yes">
@@ -4760,8 +4730,7 @@
         <para>When an object is placed on the grid and it's height is not a multiple of grid height, there is a space left on the page between the object an the next grid cell. With this attribute you can instruct the software where to place the gap.</para>
       </description>
       <description xml:lang="de">
-        <para>Wird ein Objekt ausgegeben, das kein vielfaches der Rasterhöhe ist, dann gibt das Attribut die vertikale Ausrichtung an. Bottom beispielsweise bedeutet, dass der freie Platz oberhalb des
-          Objekts bleibt. Voreinstellung ist “top”.</para>
+        <para>Wird ein Objekt ausgegeben, das kein vielfaches der Rasterhöhe ist, dann gibt das Attribut die vertikale Ausrichtung an. Bottom beispielsweise bedeutet, dass der freie Platz oberhalb des Objekts bleibt. Voreinstellung ist “top”.</para>
       </description>
       <choice en="top" de="top">
         <description xml:lang="en">
@@ -4971,8 +4940,7 @@
       <para>Defines a rectangular area for objects.</para>
     </description>
     <description xml:lang="de">
-      <para>Beschreibt einen rechteckigen Bereich, in dem Elemente platziert werden können. Inhalte in diesen Bereichen werden bei Platzmangel automatisch in den nächsten Rahmen deselben Bereichs
-        platziert.</para>
+      <para>Beschreibt einen rechteckigen Bereich, in dem Elemente platziert werden können. Inhalte in diesen Bereichen werden bei Platzmangel automatisch in den nächsten Rahmen deselben Bereichs platziert.</para>
     </description>
     <childelements/>
     <attribute en="width" de="breite" type="number" optional="no">
@@ -5060,20 +5028,16 @@
   </command>
   <command en="Record" de="Datensatz">
     <description xml:lang="en">
-      <para>Contains the instructions when the publisher processes the element in the data file with the given name.
-        The record matching the root element will be called by the software automatically, all further data handling must be done
-      by the user.</para>
+      <para>Contains the instructions when the publisher processes the element in the data file with the given name. The record matching the root element will be called by the software automatically, all further data handling must be done by the user.</para>
     </description>
     <description xml:lang="de">
-      <para>Enthält die Anweisungen, die bei dem angegebenen Datensatz ausgeführt werden sollen. Der oberste Datensatz (d.h. direkt unterhalb des Wurzelelements) wird vom Publisher aufgerufen, alle
-        nachfolgenden Datensätze müssen über das Element BearbeiteKnoten aufgerufen werden.</para>
+      <para>Enthält die Anweisungen, die bei dem angegebenen Datensatz ausgeführt werden sollen. Der oberste Datensatz (d.h. direkt unterhalb des Wurzelelements) wird vom Publisher aufgerufen, alle nachfolgenden Datensätze müssen über das Element BearbeiteKnoten aufgerufen werden.</para>
     </description>
     <childelements>
       <oneOrMore>
         <reference name="Commands"/>
       </oneOrMore>
     </childelements>
-
     <attribute en="element" de="element" type="text" optional="no">
       <description xml:lang="en">
         <para>The name of the element the record matches.</para>
@@ -5247,8 +5211,7 @@
       <para>Saves an element/attribute structure to be used in the next publisher run. The contents must have a tree structure.</para>
     </description>
     <description xml:lang="de">
-      <para>Speichert eine XML-Datei auf Festplatte. Diese Datei muss als Kindelement hierarchische Struktur, zum Beispiel aus den Befehlen Element und Attribut enthalten, wahlweise zusammengesetzt
-        durch Variablen. Eine ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</para>
+      <para>Speichert eine XML-Datei auf Festplatte. Diese Datei muss als Kindelement hierarchische Struktur, zum Beispiel aus den Befehlen Element und Attribut enthalten, wahlweise zusammengesetzt durch Variablen. Eine ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -5743,12 +5706,10 @@
   </command>
   <command en="Switch" de="Fallunterscheidung">
     <description xml:lang="en">
-      <para>Create an if-then-else construct. The test attribute of each <cmd name="Case"/> commands is evaluated until it yields true.
-        The contents of the Case gets executed. If no test suceeds, the (optional) <cmd name="Otherwise"/> gets executed.</para>
+      <para>Create an if-then-else construct. The test attribute of each <cmd name="Case"/> commands is evaluated until it yields true. The contents of the Case gets executed. If no test suceeds, the (optional) <cmd name="Otherwise"/> gets executed.</para>
     </description>
     <description xml:lang="de">
-      <para>Erzeugt eine „Wenn-Dann-Abfrage“. Das heißt, für jedes Kindelement <cmd name="Case"/> wird überprüft, ob die Bedingung erfüllt ist. Wenn ja, dann wird der Inhalt des Kindelements <cmd name="Case"/> ausgeführt und die Verarbeitung hinter der Fallunterscheidung fortgesetzt. Wenn keine Bedingung erfüllt wurde und ein Element <cmd name="Otherwise"/> gefunden wurde, wird der
-        Inhalt des Elements <cmd name="Otherwise"/> ausgeführt. Durch das frühzeitige Abbrechen werden nachfolgende Fälle nicht weiter untersucht (siehe Beispiel).</para>
+      <para>Erzeugt eine „Wenn-Dann-Abfrage“. Das heißt, für jedes Kindelement <cmd name="Case"/> wird überprüft, ob die Bedingung erfüllt ist. Wenn ja, dann wird der Inhalt des Kindelements <cmd name="Case"/> ausgeführt und die Verarbeitung hinter der Fallunterscheidung fortgesetzt. Wenn keine Bedingung erfüllt wurde und ein Element <cmd name="Otherwise"/> gefunden wurde, wird der         Inhalt des Elements <cmd name="Otherwise"/> ausgeführt. Durch das frühzeitige Abbrechen werden nachfolgende Fälle nicht weiter untersucht (siehe Beispiel).</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -5927,12 +5888,10 @@
     </attribute>
     <attribute en="stretch" de="dehnen" optional="yes">
       <description xml:lang="en">
-        <para>If the table contents is narrow and stretch has the value no, the table only uses the minimal width. If the table
-          contents is wider than the value width or stretch has the value max, the table's width is the size given in the width attribute.</para>
+        <para>If the table contents is narrow and stretch has the value no, the table only uses the minimal width. If the table contents is wider than the value width or stretch has the value max, the table's width is the size given in the width attribute.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn der Tabelleninhalt schmal ist und dehnen den Wert nein hat, dann nimmt die Tabelle nur den benötigten Platz ein. Wenn der Tabelleninhalt breit ist oder dehnen den Wert max hat, dann
-          nimmt die Tabelle den Wert aus dem Attribut breite ein.</para>
+        <para>Wenn der Tabelleninhalt schmal ist und dehnen den Wert nein hat, dann nimmt die Tabelle nur den benötigten Platz ein. Wenn der Tabelleninhalt breit ist oder dehnen den Wert max hat, dann nimmt die Tabelle den Wert aus dem Attribut breite ein.</para>
       </description>
       <choice en="max" de="max">
         <description xml:lang="en">
@@ -6706,9 +6665,7 @@
         <para>The angle (counter clockwise) that the text gets turned.</para>
       </description>
       <description xml:lang="de">
-        <para>Winkel (Drehrichtung gegen den Uhrzeigersinn), um der der Text gedreht wird. Die Spalte und die Zeile,
-          in der der Text ausgegeben wird, bleibt gleich, die Breite und die Höhe des Textes
-          ändert sich gegenüber dem ursprünglichen Text.</para>
+        <para>Winkel (Drehrichtung gegen den Uhrzeigersinn), um der der Text gedreht wird. Die Spalte und die Zeile, in der der Text ausgegeben wird, bleibt gleich, die Breite und die Höhe des Textes ändert sich gegenüber dem ursprünglichen Text.</para>
       </description>
     </attribute>
     <attribute en="color" de="farbe" type="text" optional="yes">
