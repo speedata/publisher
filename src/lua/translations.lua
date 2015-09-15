@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2015-08-11 21:21)
+-- generated from genluatranslations.go (2015-09-15 15:45)
 -- do not edit!
 module(...)
 return {
@@ -142,6 +142,7 @@ return {
       ["Trennvorschlag"] = { "Hyphenation",
         },
       ["HLeerraum"] = { "HSpace",
+        ["breite"] = "width",
         },
       ["I"] = { "I",
         },

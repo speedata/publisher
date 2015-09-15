@@ -832,12 +832,18 @@ end
 --- ------
 --- Create a horizontal space that stretches up to infinity
 function commands.hspace( layoutxml,dataxml )
-    a = paragraph:new()
+    local width = publisher.read_attribute(layoutxml,dataxml,"width", "length_sp")
+    local a = paragraph:new()
     local n=node.new("glue")
     n.spec=node.new("glue_spec")
-    n.spec.width = 0
-    n.spec.stretch = 65536
-    n.spec.stretch_order = 3
+
+    if width == nil then
+        n.spec.width = 0
+        n.spec.stretch = 65536
+        n.spec.stretch_order = 3
+    else
+        n.spec.width = tonumber(width)
+    end
     a:append(n,{})
     return a
 end

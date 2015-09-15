@@ -1284,7 +1284,14 @@
    </define>
    <define name="e_HSpace">
       <element name="HLeerraum">
-         <a:documentation>Erzeugt einen horizontalen dehnbaren Lerrraum. Der Leerraum hat die minimale Größe 0 und die maximale Größe »unendlich«. Sinnvoll nutzbar in einzeiligen Absätzen.&#xA;      Im Fließtext wird es vermutlich unerwartete Ergebnisse hervorrufen. Der Leerraum in einer Zeile verteilt sich normalerweise gleichmäßig über jeden Wortzwischenraum. Wenn ein&#xA;      HLeerraum enthalten ist, erhalten alle Leerraume die minimale Breite, nur der dehnbare Leerraum hat den überschüssigen Leerraum »angehäuft«.</a:documentation>
+         <a:documentation>Zwei Modi: bei einer gegebenen Breite wird ein Leerraum mit dieser Breite erzeugt.
+      Ohne Breitenangabe: erzeugt einen horizontalen dehnbaren Lerrraum. Der Leerraum hat die minimale Größe 0 und die maximale Größe »unendlich«. Sinnvoll nutzbar in einzeiligen Absätzen. Im Fließtext wird es vermutlich unerwartete Ergebnisse hervorrufen. Der Leerraum in einer Zeile verteilt sich normalerweise gleichmäßig über jeden Wortzwischenraum. Wenn ein
+      HLeerraum enthalten ist, erhalten alle Leerraume die minimale Breite, nur der dehnbare Leerraum hat den überschüssigen Leerraum »angehäuft«.</a:documentation>
+         <optional>
+            <attribute name="breite">
+               <a:documentation>Optionale Breite des Leeraums</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

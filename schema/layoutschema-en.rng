@@ -1284,7 +1284,14 @@
    </define>
    <define name="e_HSpace">
       <element name="HSpace">
-         <a:documentation>Create a horizontal stretching space. The space will take up no width  as a minimum but is able to stretch up to infinity. Useful in single line contexts.&#xA;      In normal text there will surprising little stretching involved due to the global paragraph optimization alorithm.&#xA;        You will see that all other word spaces will have the minimum width and the excessive whitespace is accumulated at the strechable space.</a:documentation>
+         <a:documentation>Two modes: with a given width, the space takes up the given amount. 
+      With no width given: create a horizontal stretching space. The space will take up no width as a minimum but is able to stretch up to infinity. Useful in single line contexts. In normal text there will surprising little stretching involved due to the global paragraph optimization alorithm.
+        You will see that all other word spaces will have the minimum width and the excessive whitespace is accumulated at the strechable space.</a:documentation>
+         <optional>
+            <attribute name="width">
+               <a:documentation>Optional width of the space (a length).</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
