@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2015-09-15 15:45)
+-- generated from genluatranslations.go (2015-09-16 10:56)
 -- do not edit!
 module(...)
 return {
@@ -469,6 +469,7 @@ return {
       ["unten,rechts"] = "bottom,right",
       ["zentriert"] = "center",
       ["zentriert"] = "centered",
+      ["löschen"] = "clear",
       ["cmyk"] = "cmyk",
       ["collapse"] = "collapse",
       ["Code128"] = "Code128",

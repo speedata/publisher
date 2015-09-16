@@ -3712,6 +3712,8 @@
                   <a:documentation>Diese Zeile für zukünftige Kopfzeilen benutzen.</a:documentation>
                   <value>nein</value>
                   <a:documentation>Diese Zeile wird nicht besonders behandelt (Voreinstellung).</a:documentation>
+                  <value>löschen</value>
+                  <a:documentation>Kopf löschen. Weitere Seiten haben keine Kopfzeile bis eine neue gesetzt wird.</a:documentation>
                </choice>
             </attribute>
          </optional>

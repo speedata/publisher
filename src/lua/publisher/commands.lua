@@ -2655,7 +2655,6 @@ function commands.tr( layoutxml,dataxml )
         ["minheight"]       = "number",
         ["top-distance"]    = "rawstring",
         ["break-below"]     = "string",
-        ["sethead"]         = "boolean",
     }
 
     for attname,atttyp in pairs(attribute) do
@@ -2663,6 +2662,17 @@ function commands.tr( layoutxml,dataxml )
     end
 
     tab.align = publisher.read_attribute(layoutxml,dataxml,"align","string",nil,"align")
+    local sethead = publisher.read_attribute(layoutxml,dataxml,"sethead","string")
+    if sethead == "yes" then
+        tab.sethead = 1
+    elseif sethead == "clear" then
+        tab.sethead = 2
+    else
+        tab.sethead = 0
+    end
+
+
+
 
     if tab["top-distance"] then
         if tonumber(tab["top-distance"]) then

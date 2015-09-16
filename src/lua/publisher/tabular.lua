@@ -1065,11 +1065,7 @@ function typeset_row(self, tr_contents, current_row )
         err("(Internal error) Table is not complete.")
     end
     node.set_attribute(row,publisher.att_tr_shift_up,tr_contents.shiftup)
-    if tr_contents.sethead then
-        node.set_attribute(row,publisher.att_use_as_head,1)
-    end
-
-
+    node.set_attribute(row,publisher.att_use_as_head,tr_contents.sethead)
     return row
 end
 
@@ -1411,8 +1407,10 @@ function typeset_table(self)
     for i=1,#rows do
         -- We can mark a row as "use_as_head" to turn the row into a dynamic head
         local use_as_head = node.has_attribute(rows[i],publisher.att_use_as_head)
-        if use_as_head then
+        if use_as_head == 1 then
             tableheads_extra[#splits + 1] = node.copy(rows[i])
+        elseif use_as_head == 2 then
+            tableheads_extra[#splits + 1] = publisher.create_empty_hbox_with_width(1)
         end
         local shiftup = node.has_attribute(rows[i],publisher.att_tr_shift_up) or 0
         if shiftup > 0 then
@@ -1446,7 +1444,7 @@ function typeset_table(self)
             end
             -- ==0 can happen when there's not enough room for table head + first line
             if last_possible_split_is_after_line ~= 0 then
-                if node.has_attribute(rows[last_possible_split_is_after_line + 1],publisher.att_use_as_head) then
+                if node.has_attribute(rows[last_possible_split_is_after_line + 1],publisher.att_use_as_head) == 1 then
                     omit_head_on_pages[#splits + 1] = true
                 end
                 splits[#splits + 1] = last_possible_split_is_after_line

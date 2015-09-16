@@ -3712,6 +3712,8 @@
                   <a:documentation>Use this line for future table heads.</a:documentation>
                   <value>no</value>
                   <a:documentation>No special treatment of this line (default).</a:documentation>
+                  <value>clear</value>
+                  <a:documentation>Delete head. Next pages will have no head until new one is set with &#39;yes&#39;.</a:documentation>
                </choice>
             </attribute>
          </optional>

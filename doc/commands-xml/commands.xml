@@ -6986,6 +6986,14 @@
           <para>Diese Zeile wird nicht besonders behandelt (Voreinstellung).</para>
         </description>
       </choice>
+      <choice en="clear" de="löschen">
+        <description xml:lang="en">
+          <para>Delete head. Next pages will have no head until new one is set with 'yes'.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Kopf löschen. Weitere Seiten haben keine Kopfzeile bis eine neue gesetzt wird.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="top-distance" de="abstand-oben" optional="yes" type="numberorlength">
       <description xml:lang="en">
@@ -7444,6 +7452,7 @@ Message: "$i is: 3"]]></listing>
       <value key="bottom,right" context="*" en="bottom,right" de="unten,rechts"/>
       <value key="center" context="*" en="center" de="zentriert"/>
       <value key="centered" context="*" en="centered" de="zentriert"/>
+      <value key="clear" context="*" en="clear" de="löschen"/>
       <value key="cmyk" context="*" en="cmyk" de="cmyk"/>
       <value key="collapse" context="*" en="collapse" de="collapse"/>
       <value key="Code128" context="*" en="Code128" de="Code128"/>
