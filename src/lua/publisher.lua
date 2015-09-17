@@ -77,6 +77,7 @@ att_use_as_head           = 403
 --- at the top or the bottom of a table, unless forced to.
 att_is_table_row    = 500
 att_tr_dynamic_data = 501
+att_is_tableheadfoot = 502
 
 -- for border-collapse (vertical)
 att_tr_shift_up     = 550
@@ -92,6 +93,7 @@ origin_table = 1
 origin_vspace = 2
 origin_align_top = 3
 origin_image = 4
+
 
 
 user_defined_addtolist = 1
@@ -2536,6 +2538,36 @@ function mkbookmarknodes(level,open_p,title)
     return hlist
 end
 
+
+-- For debugging in tables
+function showtextatright(hbox,txt)
+    hbox = node.vpack(hbox)
+    local ff = fonts.lookup_fontfamily_name_number["__verysmall__"] or define_small_fontfamily()
+
+    local x = mknodes(tostring(txt),ff)
+    x = set_color_if_necessary(x,55)
+
+    local texthbox = node.hpack(x)
+    texthbox.depth = 0
+    texthbox.height = 0
+
+    local tail = node.tail(hbox)
+    texthbox = node.insert_after(hbox,tail,texthbox)
+    texthbox = node.hpack(texthbox)
+    texthbox.width = hbox.width
+    return texthbox
+end
+
+-- blue rule below the hbox for debugging purpose
+function addhrule(hbox)
+    local n = node.new("whatsit","pdf_literal")
+    n.data = string.format("q 0.3 w [2 1] 0 d 0 0 1 RG 0 %g  m %g %g l S Q",  sp_to_bp(hbox.height),  -sp_to_bp(hbox.width) ,  sp_to_bp(hbox.height) )
+    local tail = node.tail(hbox)
+    hbox = node.insert_after(hbox,tail,n)
+    hbox = node.hpack(hbox)
+    return hbox
+end
+
 function boxit( box )
     local box = node.hpack(box)
 
@@ -3217,6 +3249,40 @@ function define_default_fontfamily()
     fam.bolditalicscript = tmp
     fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
     fonts.lookup_fontfamily_name_number["text"]=#fonts.lookup_fontfamily_number_instance
+end
+
+function define_small_fontfamily()
+    local fam={
+        size         = 4 * factor,
+        baselineskip = 4 * factor,
+        scriptsize   = 4 * factor * 0.8,
+        scriptshift  = 4 * factor * 0.3,
+        name = "__verysmall__"
+    }
+    local ok,tmp
+    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Regular",fam.size)
+    fam.normal = tmp
+    fam.fontfaceregular = "TeXGyreHeros-Regular"
+    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Regular",fam.scriptsize)
+    fam.normalscript = tmp
+
+    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Bold",fam.size)
+    fam.bold = tmp
+    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Bold",fam.scriptsize)
+    fam.boldscript = tmp
+
+    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Italic",fam.size)
+    fam.italic = tmp
+    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Italic",fam.scriptsize)
+    fam.italicscript = tmp
+
+    ok,tmp = fonts.make_font_instance("TeXGyreHeros-BoldItalic",fam.size)
+    fam.bolditalic = tmp
+    ok,tmp = fonts.make_font_instance("TeXGyreHeros-BoldItalic",fam.scriptsize)
+    fam.bolditalicscript = tmp
+    fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
+    fonts.lookup_fontfamily_name_number["__verysmall__"]=#fonts.lookup_fontfamily_number_instance
+    return fonts.lookup_fontfamily_name_number["__verysmall__"]
 end
 
 

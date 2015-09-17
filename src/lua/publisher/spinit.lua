@@ -85,6 +85,12 @@ function sp_to_bp( sp )
   return math.round(sp / 65782 , 3)
 end
 
+function sp_to_pt( sp )
+  return math.round(sp / 65536 , 3)
+end
+
+
+
 --- Sum up the contents of the array entries. `first` and `last` are optional.
 function table.sum( tbl, first, last )
   local sum = 0

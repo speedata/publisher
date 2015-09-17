@@ -1243,6 +1243,9 @@ function typeset_table(self)
             node.set_attribute(rows[#rows],publisher.att_is_table_row,1)
 
             if break_above == false then
+                if publisher.options.trace then
+                    rows[#rows] = publisher.addhrule(rows[#rows])
+                end
                 node.set_attribute(rows[#rows],publisher.att_break_above,1)
                 break_above = true
             end
@@ -1431,6 +1434,12 @@ function typeset_table(self)
             extra_height = self.rowsep
         end
         extra_height = extra_height + ht_row
+
+        if publisher.options.trace then
+            local ht = tostring(sp_to_pt(ht_row)) .. "|" .. tostring(sp_to_pt(accumulated_height)) .. "|" .. tostring(sp_to_pt(extra_height))
+            rows[i] = publisher.showtextatright(rows[i],ht)
+        end
+
         local fits_in_table = accumulated_height + extra_height + space_above < pagegoal
         if not fits_in_table then
             if node.has_attribute(rows[i],publisher.att_use_as_head) == 1 then
