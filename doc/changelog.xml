@@ -1,5 +1,21 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.32" date="2015-09-18">
+      <en>Bugfix: height calculation in tables with row where break-below=no</en>
+      <de>Fehlerkorrektur: Höhenberechnung in Tabellen mit Zeilen bei denen umbruch-unten=nein ist.</de>
+    </entry>
+    <entry version="2.3.32" date="2015-09-18">
+      <en>Much better table debugging with --trace</en>
+      <de>Stark verbessertes Tabellen-Debugging mit --trace</de>
+    </entry>
+    <entry version="2.3.32" date="2015-09-18">
+      <en>Dynamic table heads can be removed</en>
+      <de>Dynamische Tabellenköpfe können gelöscht werden</de>
+    </entry>
+    <entry version="2.3.32" date="2015-09-18">
+      <en>Action / Mark can have multiple entries</en>
+      <de>Aktion / Marke kann mehrere Einträge enthalten</de>
+    </entry>
     <entry version="2.3.31" date="2015-09-12">
       <en>New xpath function 'contains()'</en>
       <de>Neue XPath-Funktion 'contains()'</de>
