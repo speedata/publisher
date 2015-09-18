@@ -77,7 +77,6 @@ att_use_as_head           = 403
 --- at the top or the bottom of a table, unless forced to.
 att_is_table_row    = 500
 att_tr_dynamic_data = 501
-att_is_tableheadfoot = 502
 
 -- for border-collapse (vertical)
 att_tr_shift_up     = 550

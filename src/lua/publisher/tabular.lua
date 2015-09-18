@@ -1226,6 +1226,8 @@ function typeset_table(self)
                 filter.tablehead_force_first = true
             elseif tr_contents.page == "odd" or tr_contents.page == "even" then
                 filter.tablehead = tr_contents.page
+            elseif tr_contents.page == "all" then
+                filter.tablehead = "none"
             end
 
         elseif eltname == "Tablefoot" then
@@ -1302,7 +1304,8 @@ function typeset_table(self)
     -- Return a boolean if we need to show the static header on this page
     local function showheader_static( tablepart )
         if tablepart_absolute == 1 and filter.tablehead_force_first then return true end
-        if not filter.tablehead then return true end
+        if filter.tablehead == nil then return false end
+        if filter.tablehead == "none" then return true end
         if math.fmod(tablepart_absolute,2) == math.fmod(startpage,2) then
             if filter.tablehead == "odd" then
                 return true
