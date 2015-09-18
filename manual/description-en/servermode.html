@@ -64,6 +64,10 @@
 
 <p>You can also submit additional variables: <code>/v0/publish?vars=var1%3Dvalue1</code>. This is similar to the command line parameter <code>--var</code>.  The parameter is URL-encoded in the form <code>var1=value1,var2=value2,var3=value3...</code>.</p>
 
+<h2><code>/v0/delete/&lt;id&gt;</code></h2>
+
+<p>GET: Remove the directory for this ID. Returns 200 if the ID is valid, 404 if not.</p>
+
 <h2><code>/v0/publish/&lt;id&gt;</code></h2>
 
 <p>A GET request with an id from the aforementioned POST request returns a JSON file with the following contents:</p>
@@ -178,7 +182,7 @@ start =
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.3.28 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/servermode.html">German</a>
+Version: 2.3.32 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/servermode.html">German</a>
 
 </body>
 </html>
