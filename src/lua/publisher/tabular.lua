@@ -1462,7 +1462,7 @@ function typeset_table(self)
                 startpage = startpage + 1
             end
             accumulated_height = ht_row
-            extra_height = self.rowsep
+            extra_height = self.rowsep + extra_height - ht_row
             current_page = current_page + 1
         else
             -- if it is not the first row in a table,

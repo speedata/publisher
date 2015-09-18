@@ -1,0 +1,33 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options trace="no" show-grid="yes" crop="5mm"/>
+  <Pageformat width="10cm" height="8cm"/>
+  <SetGrid nx="10" height="12pt"/>
+  <Record element="data">
+    <PlaceObject>
+      <Table>
+        <Tablehead>
+          <Tr backgroundcolor="gray">
+            <Td><Paragraph><Value>Head Head Head</Value></Paragraph></Td>
+          </Tr>
+        </Tablehead>
+        <Tr sethead="yes">
+          <Td>
+            <Paragraph><Value>Head hallo</Value></Paragraph>
+          </Td>
+        </Tr>
+        <Loop select="6">
+          <Loop select="4">
+            <Tr break-below="yes">
+              <Td><Paragraph><Value>Foo</Value></Paragraph></Td>
+            </Tr>
+            <Tr break-below="no"><Td><Paragraph><Value>Foo</Value></Paragraph></Td></Tr>
+          </Loop>
+        </Loop>
+
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
