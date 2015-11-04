@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.33" date="2015-11-04">
+      <en>Possible bug fix with LoadDataset/Windows</en>
+      <de>Fehlerkorrektur bei LoadDataset und Windows</de>
+    </entry>
     <entry version="2.3.32" date="2015-09-18">
       <en>Bugfix: height calculation in tables with row where break-below=no</en>
       <de>Fehlerkorrektur: Höhenberechnung in Tabellen mit Zeilen bei denen umbruch-unten=nein ist.</de>
