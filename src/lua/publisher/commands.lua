@@ -1114,8 +1114,8 @@ function commands.load_dataset( layoutxml,dataxml )
     assert(name)
     local filename = tex.jobname .. "-" .. name .. ".dataxml"
 
-    local ok,_ = lfs.attributes(filename)
-    if ok == nil then
+    local path = kpse.find_file(filename)
+    if path == nil then
         -- at the first run, the file does not exist. That's ok
         return
     end
