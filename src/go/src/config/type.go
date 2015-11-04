@@ -1,4 +1,4 @@
-// Copyright 2009  The "goconfig" Authors
+// Copyright 2009  The "config" Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,14 +16,50 @@ package config
 
 import (
 	"errors"
+	"fmt"
+	"os"
+	"regexp"
 	"strconv"
 	"strings"
 )
 
+// Substitutes values, calculated by callback, on matching regex
+func (c *Config) computeVar(beforeValue *string, regx *regexp.Regexp, headsz, tailsz int, withVar func(*string) string) (*string, error) {
+	var i int
+	computedVal := beforeValue
+	for i = 0; i < _DEPTH_VALUES; i++ { // keep a sane depth
+
+		vr := regx.FindStringSubmatchIndex(*computedVal)
+		if len(vr) == 0 {
+			break
+		}
+
+		varname := (*computedVal)[vr[headsz]:vr[headsz+1]]
+		varVal := withVar(&varname)
+		if varVal == "" {
+			return &varVal, errors.New(fmt.Sprintf("Option not found: %s", varname))
+		}
+
+		// substitute by new value and take off leading '%(' and trailing ')s'
+		//  %(foo)s => headsz=2, tailsz=2
+		//  ${foo}  => headsz=2, tailsz=1
+		newVal := (*computedVal)[0:vr[headsz]-headsz] + varVal + (*computedVal)[vr[headsz+1]+tailsz:]
+		computedVal = &newVal
+	}
+
+	if i == _DEPTH_VALUES {
+		retVal := ""
+		return &retVal,
+			fmt.Errorf("Possible cycle while unfolding variables: max depth of %d reached", _DEPTH_VALUES)
+	}
+
+	return computedVal, nil
+}
+
 // Bool has the same behaviour as String but converts the response to bool.
 // See "boolString" for string values converted to bool.
-func (self *Config) Bool(section string, option string) (value bool, err error) {
-	sv, err := self.String(section, option)
+func (c *Config) Bool(section string, option string) (value bool, err error) {
+	sv, err := c.String(section, option)
 	if err != nil {
 		return false, err
 	}
@@ -37,8 +73,8 @@ func (self *Config) Bool(section string, option string) (value bool, err error) 
 }
 
 // Float has the same behaviour as String but converts the response to float.
-func (self *Config) Float(section string, option string) (value float64, err error) {
-	sv, err := self.String(section, option)
+func (c *Config) Float(section string, option string) (value float64, err error) {
+	sv, err := c.String(section, option)
 	if err == nil {
 		value, err = strconv.ParseFloat(sv, 64)
 	}
@@ -47,8 +83,8 @@ func (self *Config) Float(section string, option string) (value float64, err err
 }
 
 // Int has the same behaviour as String but converts the response to int.
-func (self *Config) Int(section string, option string) (value int, err error) {
-	sv, err := self.String(section, option)
+func (c *Config) Int(section string, option string) (value int, err error) {
+	sv, err := c.String(section, option)
 	if err == nil {
 		value, err = strconv.Atoi(sv)
 	}
@@ -61,14 +97,24 @@ func (self *Config) Int(section string, option string) (value int, err error) {
 // the beginning of this documentation.
 //
 // It returns an error if either the section or the option do not exist.
-func (self *Config) RawString(section string, option string) (value string, err error) {
-	if _, ok := self.data[section]; ok {
-		if tValue, ok := self.data[section][option]; ok {
+func (c *Config) RawString(section string, option string) (value string, err error) {
+	if _, ok := c.data[section]; ok {
+		if tValue, ok := c.data[section][option]; ok {
 			return tValue.v, nil
 		}
-		return "", errors.New(optionError(option).Error())
 	}
-	return "", errors.New(sectionError(section).Error())
+	return c.RawStringDefault(option)
+}
+
+// RawStringDefault gets the (raw) string value for the given option from the
+// DEFAULT section.
+//
+// It returns an error if the option does not exist in the DEFAULT section.
+func (c *Config) RawStringDefault(option string) (value string, err error) {
+	if tValue, ok := c.data[DEFAULT_SECTION][option]; ok {
+		return tValue.v, nil
+	}
+	return "", OptionError(option)
 }
 
 // String gets the string value for the given option in the section.
@@ -78,41 +124,32 @@ func (self *Config) RawString(section string, option string) (value string, err 
 //
 // It returns an error if either the section or the option do not exist, or the
 // unfolding cycled.
-func (self *Config) String(section string, option string) (value string, err error) {
-	value, err = self.RawString(section, option)
+func (c *Config) String(section string, option string) (value string, err error) {
+	value, err = c.RawString(section, option)
 	if err != nil {
 		return "", err
 	}
 
-	var i int
-
-	for i = 0; i < _DEPTH_VALUES; i++ { // keep a sane depth
-		vr := varRegExp.FindString(value)
-		if len(vr) == 0 {
-			break
+	// % variables
+	computedVal, err := c.computeVar(&value, varRegExp, 2, 2, func(varName *string) string {
+		lowerVar := *varName
+		// search variable in default section as well as current section
+		varVal, _ := c.data[DEFAULT_SECTION][lowerVar]
+		if _, ok := c.data[section][lowerVar]; ok {
+			varVal = c.data[section][lowerVar]
 		}
+		return varVal.v
+	})
+	value = *computedVal
 
-		// Take off leading '%(' and trailing ')s'
-		noption := strings.TrimLeft(vr, "%(")
-		noption = strings.TrimRight(noption, ")s")
-
-		// Search variable in default section
-		nvalue, _ := self.data[_DEFAULT_SECTION][noption]
-		if _, ok := self.data[section][noption]; ok {
-			nvalue = self.data[section][noption]
-		}
-		if nvalue.v == "" {
-			return "", errors.New(optionError(noption).Error())
-		}
-
-		// substitute by new value and take off leading '%(' and trailing ')s'
-		value = strings.Replace(value, vr, nvalue.v, -1)
+	if err != nil {
+		return value, err
 	}
 
-	if i == _DEPTH_VALUES {
-		return "", errors.New("possible cycle while unfolding variables: " +
-			"max depth of " + strconv.Itoa(_DEPTH_VALUES) + " reached")
-	}
-
-	return value, nil
+	// $ environment variables
+	computedVal, err = c.computeVar(&value, envVarRegExp, 2, 1, func(varName *string) string {
+		return os.Getenv(*varName)
+	})
+	value = *computedVal
+	return value, err
 }

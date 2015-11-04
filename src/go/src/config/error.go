@@ -1,4 +1,4 @@
-// Copyright 2009  The "goconfig" Authors
+// Copyright 2009  The "config" Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@
 
 package config
 
-type sectionError string
+type SectionError string
 
-func (self sectionError) Error() string {
-	return "section not found: " + string(self)
+func (e SectionError) Error() string {
+	return "section not found: " + string(e)
 }
 
-type optionError string
+type OptionError string
 
-func (self optionError) Error() string {
-	return "option not found: " + string(self)
+func (e OptionError) Error() string {
+	return "option not found: " + string(e)
 }

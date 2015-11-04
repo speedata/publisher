@@ -1,4 +1,4 @@
-// Copyright 2009  The "goconfig" Authors
+// Copyright 2009  The "config" Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,62 +21,62 @@ package config
 //
 // It returns true if the new section was inserted, and false if the section
 // already existed.
-func (self *Config) AddSection(section string) bool {
-	// _DEFAULT_SECTION
+func (c *Config) AddSection(section string) bool {
+	// DEFAULT_SECTION
 	if section == "" {
 		return false
 	}
 
-	if _, ok := self.data[section]; ok {
+	if _, ok := c.data[section]; ok {
 		return false
 	}
 
-	self.data[section] = make(map[string]*tValue)
+	c.data[section] = make(map[string]*tValue)
 
 	// Section order
-	self.idSection[section] = self.lastIdSection
-	self.lastIdSection++
+	c.idSection[section] = c.lastIdSection
+	c.lastIdSection++
 
 	return true
 }
 
 // RemoveSection removes a section from the configuration.
 // It returns true if the section was removed, and false if section did not exist.
-func (self *Config) RemoveSection(section string) bool {
-	_, ok := self.data[section]
+func (c *Config) RemoveSection(section string) bool {
+	_, ok := c.data[section]
 
 	// Default section cannot be removed.
-	if !ok || section == _DEFAULT_SECTION {
+	if !ok || section == DEFAULT_SECTION {
 		return false
 	}
 
-	for o, _ := range self.data[section] {
-		delete(self.data[section], o) // *value
+	for o, _ := range c.data[section] {
+		delete(c.data[section], o) // *value
 	}
-	delete(self.data, section)
+	delete(c.data, section)
 
-	delete(self.lastIdOption, section)
-	delete(self.idSection, section)
+	delete(c.lastIdOption, section)
+	delete(c.idSection, section)
 
 	return true
 }
 
 // HasSection checks if the configuration has the given section.
 // (The default section always exists.)
-func (self *Config) HasSection(section string) bool {
-	_, ok := self.data[section]
+func (c *Config) HasSection(section string) bool {
+	_, ok := c.data[section]
 
 	return ok
 }
 
 // Sections returns the list of sections in the configuration.
-// (The default section always exists.)
-func (self *Config) Sections() (sections []string) {
-	sections = make([]string, len(self.idSection))
+// (The default section always exists).
+func (c *Config) Sections() (sections []string) {
+	sections = make([]string, len(c.idSection))
 	pos := 0 // Position in sections
 
-	for i := 0; i < self.lastIdSection; i++ {
-		for section, id := range self.idSection {
+	for i := 0; i < c.lastIdSection; i++ {
+		for section, id := range c.idSection {
 			if id == i {
 				sections[pos] = section
 				pos++

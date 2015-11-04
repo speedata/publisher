@@ -1,4 +1,4 @@
-// Copyright 2009  The "goconfig" Authors
+// Copyright 2009  The "config" Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,12 +17,12 @@ package config
 import (
 	"bufio"
 	"errors"
-	"io"
 	"os"
 	"strings"
+	"unicode"
 )
 
-// Base to read a file and get the configuration representation.
+// _read is the base to read a file and get the configuration representation.
 // That representation can be queried with GetString, etc.
 func _read(fname string, c *Config) (*Config, error) {
 	file, err := os.Open(fname)
@@ -41,7 +41,7 @@ func _read(fname string, c *Config) (*Config, error) {
 	return c, nil
 }
 
-// ReadDefault reads a configuration file and returns its representation.
+// Read reads a configuration file and returns its representation.
 // All arguments, except `fname`, are related to `New()`
 func Read(fname string, comment, separator string, preSpace, postSpace bool) (*Config, error) {
 	return _read(fname, New(comment, separator, preSpace, postSpace))
@@ -53,20 +53,13 @@ func ReadDefault(fname string) (*Config, error) {
 	return _read(fname, NewDefault())
 }
 
-// ===
+// * * *
 
-func (self *Config) read(buf *bufio.Reader) (err error) {
+func (c *Config) read(buf *bufio.Reader) (err error) {
 	var section, option string
-
-	for {
-		l, err := buf.ReadString('\n') // parse line-by-line
-		if err == io.EOF {
-			break
-		} else if err != nil {
-			return err
-		}
-
-		l = strings.TrimSpace(l)
+	var scanner = bufio.NewScanner(buf)
+	for scanner.Scan() {
+		l := strings.TrimRightFunc(stripComments(scanner.Text()), unicode.IsSpace)
 
 		// Switch written for readability (not performance)
 		switch {
@@ -74,19 +67,18 @@ func (self *Config) read(buf *bufio.Reader) (err error) {
 		case len(l) == 0, l[0] == '#', l[0] == ';':
 			continue
 
-		// Comment (for windows users)
-		case len(l) >= 3 && strings.ToLower(l[0:3]) == "rem":
-			continue
-
-		// New section
+		// New section. The [ must be at the start of the line
 		case l[0] == '[' && l[len(l)-1] == ']':
 			option = "" // reset multi-line value
 			section = strings.TrimSpace(l[1 : len(l)-1])
-			self.AddSection(section)
+			c.AddSection(section)
 
-		// No new section and no section defined so
-		//case section == "":
-		//return os.NewError("no section defined")
+		// Continuation of multi-line value
+		// starts with whitespace, we're in a section and working on an option
+		case section != "" && option != "" && (l[0] == ' ' || l[0] == '\t'):
+			prev, _ := c.RawString(section, option)
+			value := strings.TrimSpace(l)
+			c.AddOption(section, option, prev+"\n"+value)
 
 		// Other alternatives
 		default:
@@ -94,21 +86,15 @@ func (self *Config) read(buf *bufio.Reader) (err error) {
 
 			switch {
 			// Option and value
-			case i > 0:
-				i := strings.IndexAny(l, "=:")
+			case i > 0 && l[0] != ' ' && l[0] != '\t': // found an =: and it's not a multiline continuation
 				option = strings.TrimSpace(l[0:i])
-				value := stripQuotes(strings.TrimSpace(stripComments(l[i+1:])))
-				self.AddOption(section, option, value)
-			// Continuation of multi-line value
-			case section != "" && option != "":
-				prev, _ := self.RawString(section, option)
-				value := strings.TrimSpace(stripComments(l))
-				self.AddOption(section, option, prev+"\n"+value)
+				value := strings.TrimSpace(stripQuotes(l[i+1:]))
+				c.AddOption(section, option, value)
 
 			default:
 				return errors.New("could not parse line: " + l)
 			}
 		}
 	}
-	return nil
+	return scanner.Err()
 }

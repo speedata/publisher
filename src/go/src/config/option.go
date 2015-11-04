@@ -1,4 +1,4 @@
-// Copyright 2009  The "goconfig" Authors
+// Copyright 2009  The "config" Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,17 +23,17 @@ import "errors"
 //
 // It returns true if the option and value were inserted, and false if the value
 // was overwritten.
-func (self *Config) AddOption(section string, option string, value string) bool {
-	self.AddSection(section) // Make sure section exists
+func (c *Config) AddOption(section string, option string, value string) bool {
+	c.AddSection(section) // Make sure section exists
 
 	if section == "" {
-		section = _DEFAULT_SECTION
+		section = DEFAULT_SECTION
 	}
 
-	_, ok := self.data[section][option]
+	_, ok := c.data[section][option]
 
-	self.data[section][option] = &tValue{self.lastIdOption[section], value}
-	self.lastIdOption[section]++
+	c.data[section][option] = &tValue{c.lastIdOption[section], value}
+	c.lastIdOption[section]++
 
 	return !ok
 }
@@ -41,26 +41,26 @@ func (self *Config) AddOption(section string, option string, value string) bool 
 // RemoveOption removes a option and value from the configuration.
 // It returns true if the option and value were removed, and false otherwise,
 // including if the section did not exist.
-func (self *Config) RemoveOption(section string, option string) bool {
-	if _, ok := self.data[section]; !ok {
+func (c *Config) RemoveOption(section string, option string) bool {
+	if _, ok := c.data[section]; !ok {
 		return false
 	}
 
-	_, ok := self.data[section][option]
-	delete(self.data[section], option)
+	_, ok := c.data[section][option]
+	delete(c.data[section], option)
 
 	return ok
 }
 
 // HasOption checks if the configuration has the given option in the section.
 // It returns false if either the option or section do not exist.
-func (self *Config) HasOption(section string, option string) bool {
-	if _, ok := self.data[section]; !ok {
+func (c *Config) HasOption(section string, option string) bool {
+	if _, ok := c.data[section]; !ok {
 		return false
 	}
 
-	_, okd := self.data[_DEFAULT_SECTION][option]
-	_, oknd := self.data[section][option]
+	_, okd := c.data[DEFAULT_SECTION][option]
+	_, oknd := c.data[section][option]
 
 	return okd || oknd
 }
@@ -68,18 +68,43 @@ func (self *Config) HasOption(section string, option string) bool {
 // Options returns the list of options available in the given section.
 // It returns an error if the section does not exist and an empty list if the
 // section is empty. Options within the default section are also included.
-func (self *Config) Options(section string) (options []string, err error) {
-	if _, ok := self.data[section]; !ok {
-		return nil, errors.New(sectionError(section).Error())
+func (c *Config) Options(section string) (options []string, err error) {
+	if _, ok := c.data[section]; !ok {
+		return nil, errors.New(SectionError(section).Error())
 	}
 
-	options = make([]string, len(self.data[_DEFAULT_SECTION])+len(self.data[section]))
+	// Keep a map of option names we've seen to deduplicate.
+	optionMap := make(map[string]struct{},
+		len(c.data[DEFAULT_SECTION])+len(c.data[section]))
+	for s, _ := range c.data[DEFAULT_SECTION] {
+		optionMap[s] = struct{}{}
+	}
+	for s, _ := range c.data[section] {
+		optionMap[s] = struct{}{}
+	}
+
+	// Get the keys.
 	i := 0
-	for s, _ := range self.data[_DEFAULT_SECTION] {
-		options[i] = s
+	options = make([]string, len(optionMap))
+	for k, _ := range optionMap {
+		options[i] = k
 		i++
 	}
-	for s, _ := range self.data[section] {
+
+	return options, nil
+}
+
+// SectionOptions returns only the list of options available in the given section.
+// Unlike Options, SectionOptions doesn't return options in default section.
+// It returns an error if the section doesn't exist.
+func (c *Config) SectionOptions(section string) (options []string, err error) {
+	if _, ok := c.data[section]; !ok {
+		return nil, errors.New(SectionError(section).Error())
+	}
+
+	options = make([]string, len(c.data[section]))
+	i := 0
+	for s, _ := range c.data[section] {
 		options[i] = s
 		i++
 	}

@@ -1,4 +1,4 @@
-// Copyright 2009  The "goconfig" Authors
+// Copyright 2009  The "config" Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import (
 
 const (
 	// Default section name.
-	_DEFAULT_SECTION = "DEFAULT"
+	DEFAULT_SECTION = "DEFAULT"
 	// Maximum allowed depth when recursively substituing variable names.
 	_DEPTH_VALUES = 200
 
@@ -48,7 +48,8 @@ var (
 		"0":     false,
 	}
 
-	varRegExp = regexp.MustCompile(`%\(([a-zA-Z0-9_.\-]+)\)s`) // %(variable)s
+	varRegExp    = regexp.MustCompile(`%\(([a-zA-Z0-9_.\-]+)\)s`) // %(variable)s
+	envVarRegExp = regexp.MustCompile(`\${([a-zA-Z0-9_.\-]+)}`)   // ${envvar}
 )
 
 // Config is the representation of configuration settings.
@@ -56,7 +57,7 @@ type Config struct {
 	comment   string
 	separator string
 
-	// === Sections order
+	// Sections order
 	lastIdSection int            // Last section identifier
 	idSection     map[string]int // Section : position
 
@@ -67,7 +68,7 @@ type Config struct {
 	data map[string]map[string]*tValue
 }
 
-// Hold the input position for a value.
+// tValue holds the input position for a value.
 type tValue struct {
 	position int    // Option order
 	v        string // value
@@ -76,9 +77,9 @@ type tValue struct {
 // New creates an empty configuration representation.
 // This representation can be filled with AddSection and AddOption and then
 // saved to a file using WriteFile.
-// 
-// === Arguments
-// 
+//
+// == Arguments
+//
 // comment: has to be `DEFAULT_COMMENT` or `ALTERNATIVE_COMMENT`
 // separator: has to be `DEFAULT_SEPARATOR` or `ALTERNATIVE_SEPARATOR`
 // preSpace: indicate if is inserted a space before of the separator
@@ -92,7 +93,7 @@ func New(comment, separator string, preSpace, postSpace bool) *Config {
 		panic("separator character not valid")
 	}
 
-	// === Get spaces around separator
+	// == Get spaces around separator
 	if preSpace {
 		separator = " " + separator
 	}
@@ -100,7 +101,7 @@ func New(comment, separator string, preSpace, postSpace bool) *Config {
 	if postSpace {
 		separator += " "
 	}
-	// ===
+	//==
 
 	c := new(Config)
 
@@ -110,7 +111,7 @@ func New(comment, separator string, preSpace, postSpace bool) *Config {
 	c.lastIdOption = make(map[string]int)
 	c.data = make(map[string]map[string]*tValue)
 
-	c.AddSection(_DEFAULT_SECTION) // Default section always exists.
+	c.AddSection(DEFAULT_SECTION) // Default section always exists.
 
 	return c
 }
@@ -120,8 +121,24 @@ func NewDefault() *Config {
 	return New(DEFAULT_COMMENT, DEFAULT_SEPARATOR, false, true)
 }
 
-// === Utility
-// ===
+// Merge merges the given configuration "source" with this one ("target").
+//
+// Merging means that any option (under any section) from source that is not in
+// target will be copied into target. When the target already has an option with
+// the same name and section then it is overwritten (i.o.w. the source wins).
+func (target *Config) Merge(source *Config) {
+	if source == nil || source.data == nil || len(source.data) == 0 {
+		return
+	}
+
+	for section, option := range source.data {
+		for optionName, optionValue := range option {
+			target.AddOption(section, optionName, optionValue.v)
+		}
+	}
+}
+
+// == Utility
 
 // pgu: remove "quotes around text"
 func stripQuotes(l string) string {

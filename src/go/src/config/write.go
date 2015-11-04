@@ -1,4 +1,4 @@
-// Copyright 2009  The "goconfig" Authors
+// Copyright 2009  The "config" Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,14 +24,14 @@ import (
 // WriteFile saves the configuration representation to a file.
 // The desired file permissions must be passed as in os.Open. The header is a
 // string that is saved as a comment in the first line of the file.
-func (self *Config) WriteFile(fname string, perm os.FileMode, header string) error {
+func (c *Config) WriteFile(fname string, perm os.FileMode, header string) error {
 	file, err := os.OpenFile(fname, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, perm)
 	if err != nil {
 		return err
 	}
 
 	buf := bufio.NewWriter(file)
-	if err = self.write(buf, header); err != nil {
+	if err = c.write(buf, header); err != nil {
 		return err
 	}
 	buf.Flush()
@@ -39,24 +39,24 @@ func (self *Config) WriteFile(fname string, perm os.FileMode, header string) err
 	return file.Close()
 }
 
-func (self *Config) write(buf *bufio.Writer, header string) (err error) {
+func (c *Config) write(buf *bufio.Writer, header string) (err error) {
 	if header != "" {
 		// Add comment character after of each new line.
 		if i := strings.Index(header, "\n"); i != -1 {
-			header = strings.Replace(header, "\n", "\n"+self.comment, -1)
+			header = strings.Replace(header, "\n", "\n"+c.comment, -1)
 		}
 
-		if _, err = buf.WriteString(self.comment + header + "\n"); err != nil {
+		if _, err = buf.WriteString(c.comment + header + "\n"); err != nil {
 			return err
 		}
 	}
 
-	for _, orderedSection := range self.Sections() {
-		for section, sectionMap := range self.data {
+	for _, orderedSection := range c.Sections() {
+		for section, sectionMap := range c.data {
 			if section == orderedSection {
 
 				// Skip default section if empty.
-				if section == _DEFAULT_SECTION && len(sectionMap) == 0 {
+				if section == DEFAULT_SECTION && len(sectionMap) == 0 {
 					continue
 				}
 
@@ -65,15 +65,15 @@ func (self *Config) write(buf *bufio.Writer, header string) (err error) {
 				}
 
 				// Follow the input order in options.
-				for i := 0; i < self.lastIdOption[section]; i++ {
+				for i := 0; i < c.lastIdOption[section]; i++ {
 					for option, tValue := range sectionMap {
 
 						if tValue.position == i {
 							if _, err = buf.WriteString(fmt.Sprint(
-								option, self.separator, tValue.v, "\n")); err != nil {
+								option, c.separator, tValue.v, "\n")); err != nil {
 								return err
 							}
-							self.RemoveOption(section, option)
+							c.RemoveOption(section, option)
 							break
 						}
 					}
