@@ -3418,6 +3418,12 @@ function get_image(requeste_url)
     --  ["authority"] = "placekitten.com"
     --  ["host"] = "placekitten.com"
     -- },
+    if parsed_url.scheme == nil or parsed_url.scheme == "file" then
+        if type(parsed_url.path) == "string" then
+            -- let's assume its a file
+            return imageinfo("file:" .. parsed_url.path)
+        end
+    end
     local request_filename = parsed_url.host .. parsed_url.path
     if parsed_url.query then
         request_filename = request_filename .. "?" .. parsed_url.query

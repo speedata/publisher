@@ -2553,10 +2553,10 @@
     </attribute>
     <attribute en="href" de="href" type="text" optional="yes">
       <description xml:lang="en">
-        <para>An URL (http://....) of the image. Will be downloaded and cached in <tt>TEMPDIR/sp/images</tt> (which can be configured by setting the configuration file key <tt>imagecache</tt>) . Alternative to ›file‹.</para>
+        <para>An URL (<tt>http://</tt> or <tt>file:</tt>) of the image. If external, it will be downloaded and cached in <tt>TEMPDIR/sp/images</tt> (which can be configured by setting the configuration file key <tt>imagecache</tt>). Alternative to ›file‹. When <tt>file:</tt> is used as a protocol, it can be a relative path. If no protocol is given, <tt>file:</tt> is assumed.</para>
       </description>
       <description xml:lang="de">
-        <para>Eine URL (http://...) des Bildes. Wird herunter geladen und in <tt>TEMPDIR/sp/images</tt> (kann mit der Einstellung <tt>imagecache</tt> in der Konfigurationsdatei geändert werden) zwischengespeichert. Alternativ zur Angabe »datei«.</para>
+        <para>Eine URL (<tt>http://</tt> oder <tt>file:</tt>) des Bildes. Wenn extern (http), wird es herunter geladen und in <tt>TEMPDIR/sp/images</tt> (kann mit der Einstellung <tt>imagecache</tt> in der Konfigurationsdatei geändert werden) zwischengespeichert. Alternativ zur Angabe »datei«. Wenn kein Protokoll angegeben ist, wird <tt>file:</tt> angenommen. <tt>file:</tt> kann benutzt werden, um einen Pfad anzugeben.</para>
       </description>
     </attribute>
     <attribute en="file" de="datei" type="text" optional="yes">

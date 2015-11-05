@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.35" date="2015-11-05">
+      <en>Image/href can omit file: scheme</en>
+      <de>Bild/href: man kann das file: Schema weglassen.</de>
+    </entry>
     <entry version="2.3.34" date="2015-11-04">
       <en>Bugfix: configuration file requires end of line marker on last line</en>
       <de>Fehlerkorrektur: Konfigurationsdatei benötigt Zeilenende in der letzten Zeile</de>
