@@ -3446,7 +3446,10 @@ function get_image(requeste_url)
         err("404 when retrieving image %q",requeste_url)
         return imageinfo(nil) -- nil is "filenotfound.pdf"
     end
-
+    if #txt == 0 then
+        err("Empty image in href request")
+        return imageinfo(nil)
+    end
     -- Create the temporary directory if necessary
     if not lfs.isdir(imgcache) then
         local imgcachepaths = string.explode(imgcache,os_separator)
