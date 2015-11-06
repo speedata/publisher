@@ -2,7 +2,6 @@ package commandsxml
 
 import (
 	"encoding/xml"
-	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
@@ -78,12 +77,18 @@ type ChildelementsXML struct {
 	Text []byte `xml:",innerxml"`
 }
 
+type RulesXML struct {
+	Lang  string `xml:"lang,attr"`
+	Rules string `xml:",innerxml"`
+}
+
 type CommandsxmlCommand struct {
 	Description   []DescriptionXML       `xml:"description"`
 	En            string                 `xml:"en,attr"`
 	De            string                 `xml:"de,attr"`
 	Attributes    []CommandsxmlAttribute `xml:"attribute"`
 	Childelements ChildelementsXML       `xml:"childelements"`
+	Rules         []RulesXML             `xml:"rules"`
 }
 
 type CommandsxmlValue struct {
@@ -144,9 +149,6 @@ func ReadCommandsFile(basedir string) (*CommandsXML, error) {
 	err = xml.Unmarshal(commandsdata, c)
 	if err != nil {
 		return nil, err
-	}
-	if false {
-		fmt.Println(c.DefineAttrs)
 	}
 	for _, v := range c.Commands {
 		c.de[v.De] = v

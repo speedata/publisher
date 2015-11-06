@@ -78,3 +78,7 @@ After that, you need to supply the path to the RelaxNG schema file
 The dialog must be confirmed with `OK`. If you now open a layout XML
 file, it should be automatically connected to the schema and you get
 full editor support (command completion, tool tip help, validation).
+
+If the XML editor support RelaxNG with Schematron, it is advisable to activate
+that support for enhanced error reporting while editing.
+

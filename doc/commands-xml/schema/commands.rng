@@ -2,6 +2,7 @@
 <grammar
   xmlns="http://relaxng.org/ns/structure/1.0"
   xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+  xmlns:sch="http://purl.oclc.org/dsdl/schematron"
   datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
   ns="urn:speedata.de:2011/publisher/documentation">
 
@@ -296,6 +297,17 @@
               </zeroOrMore>
             </element>
           </oneOrMore>
+          <zeroOrMore>
+            <element name="rules">
+              <attribute name="xml:lang">
+                <choice>
+                  <value>en</value>
+                  <value>de</value>
+                </choice>
+              </attribute>
+              <ref name="any_content"/>
+            </element>
+          </zeroOrMore>
         </element>
       </oneOrMore>
       <element name="translations">
@@ -313,6 +325,34 @@
         </oneOrMore>
       </element>
     </element>
-
   </start>
+
+  <!-- This matches any element. One day it would be nice to restrict this to the schematron namespace  -->
+  <define name="any_content">
+    <interleave>
+      <zeroOrMore>
+        <ref name="any_element"/>
+      </zeroOrMore>
+      <text/>
+    </interleave>
+  </define>
+
+  <define name="any_element">
+    <element>
+      <anyName/>
+      <zeroOrMore>
+        <ref name="any_attribute"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="any_content"/>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="any_attribute">
+    <attribute>
+      <anyName/>
+    </attribute>
+  </define>
 </grammar>
+

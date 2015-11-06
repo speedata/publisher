@@ -76,3 +76,5 @@ Die Dialoge müssen mit `OK` bestätigt werden. Sobald ein Layoutregelwerk
 geöffnet wird, ist dem Dokument ein Schema zugeordnet man erhält die
 volle Editorunterstützung mit Autovervollständigung und Tooltips.
 
+Wenn der XML-Editor RelaxNG mit eingebetteten Schematron-Regeln unterstützt, ist es hilfreich, diese zu aktivieren. Dadurch werden zusätzliche Fehlerquellen während der Eingabe erkannt und gemeldet.
+

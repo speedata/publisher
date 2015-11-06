@@ -132,8 +132,15 @@ function define_font(name, size,extra_parameter)
 
         filename_with_path = kpse.filelist[name] or fontlist[name]
         if not filename_with_path then return false, string.format("Fontfile '%s' not found.", name) end
-
-        fonttable = fontloader.to_table(fontloader.open(filename_with_path))
+        local font, err = fontloader.open(filename_with_path)
+        if not font then
+            if type(err) == "string" then
+                return false, err
+            else
+                printtable("Font error",err)
+            end
+        end
+        fonttable = fontloader.to_table(font)
         if fonttable == nil then return false, string.format("Problem while loading font '%s'",tostring(filename_with_path))  end
 
         -- Store the table for quicker lookup later.

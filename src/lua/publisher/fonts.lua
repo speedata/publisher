@@ -96,7 +96,8 @@ function make_font_instance( name,size )
             used_fonts[num]=f
             return true, num
         else
-            return false, string.format("Font '%s' could not be loaded!",filename)
+            err(string.format("Font '%s' could not be loaded!",filename))
+            return false, f or ""
         end
     end
     return false, "Internal error"
