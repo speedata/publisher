@@ -7,6 +7,13 @@ File | Description
 {{ range $index, $entry :=  filelist . }}<a href="{{$entry.Link}}">{{$entry.Filename}}</a>| {{$entry.Description}}
 {{end}}
 
+{{ with thumbnail . }}
+{{ if $.IsEn}}Preview{{else}}Vorschau{{ end}}
+-----------------
+
+<img src="{{.}}" style="border: 1pt solid black;">
+{{ end}}
+
 <a href="{{ parentdir .}}">{{if .IsEn}}Parent directory{{else}}Übergeordnetes Verzeichnis{{end}}</a>
 
 {{end}}

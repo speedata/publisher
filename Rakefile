@@ -78,6 +78,7 @@ task :updateexamples do
 			Dir.chdir(dir) do
 				`sp`
 				`sp clean`
+				`convert publisher.pdf[0] -thumbnail 240  thumbnail.png`
 			end
 		end
 	end

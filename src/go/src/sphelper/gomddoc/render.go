@@ -62,9 +62,10 @@ func init() {
 	// `foo: bar' like key value lines
 	key_value_regexp = regexp.MustCompile(`^([^:]+):\s*(.*)$`)
 	ignoredFiles = map[string]bool{
-		".DS_Store":  true,
-		"index.md":   true,
-		".gitignore": true,
+		".DS_Store":     true,
+		"index.md":      true,
+		".gitignore":    true,
+		"thumbnail.png": false,
 	}
 }
 
@@ -243,6 +244,21 @@ func (md *MDDoc) parentdir(context mdTemplateData) string {
 	}
 	return "../index.html"
 }
+func (md *MDDoc) thumbnail(context mdTemplateData) string {
+	dir := filepath.Dir(context.Sourcefilename)
+	matches, err := filepath.Glob(dir + "/*")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, v := range matches {
+		fn := filepath.Base(v)
+		if fn == "thumbnail.png" {
+			return fn
+		}
+	}
+	return ""
+}
+
 func (md *MDDoc) filelist(context mdTemplateData) []mdFilelist {
 	dir := filepath.Dir(context.Sourcefilename)
 	matches, err := filepath.Glob(dir + "/*")
@@ -266,7 +282,7 @@ func (md *MDDoc) filelist(context mdTemplateData) []mdFilelist {
 
 		filename.Filename = fn
 		filename.Description = context.KeyValue[fn]
-		if !ignoredFiles[fn] {
+		if _, listed := ignoredFiles[fn]; !listed {
 			ret = append(ret, filename)
 		}
 	}
@@ -294,6 +310,7 @@ func (md *MDDoc) convertToHTML(filename string) {
 		"filelist":  md.filelist,
 		"img":       md.image,
 		"parentdir": md.parentdir,
+		"thumbnail": md.thumbnail,
 	}
 
 	// Now we can parse the template
