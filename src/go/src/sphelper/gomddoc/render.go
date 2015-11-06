@@ -92,7 +92,7 @@ func (md *MDDoc) getAssetsDir(context htmlTemplateData) string {
 }
 
 func (md *MDDoc) image(context mdTemplateData, imagename string) string {
-	return fmt.Sprintf(`<a href="../img/%s"><img src="../img/%s"></a>`, imagename, imagename)
+	return fmt.Sprintf(`<a href="../img/%s"><img src="../img/%s" style="max-width: 40%%"></a>`, imagename, imagename)
 }
 
 func (md *MDDoc) writeFeed(lang string) {

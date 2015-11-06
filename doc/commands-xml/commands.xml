@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<commands xmlns="urn:speedata.de:2011/publisher/documentation" xmlns:de="urn:speedata.de:2009/publisher/de">
+<commands xmlns="urn:speedata.de:2011/publisher/documentation"
+  xmlns:de="urn:speedata.de:2009/publisher/de"
+  xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+  >
   <define name="Switchcontents">
     <optional><cmd name="Action"/></optional>
     <optional><cmd name="Attribute"/></optional>
@@ -5522,6 +5525,20 @@
     <seealso>
       <cmd name="Value"/>
     </seealso>
+    <rules xml:lang="en">
+      <sch:pattern>
+        <sch:rule context="t:SetVariable">
+          <sch:assert test="not(  not(empty(@select)) and node()  )">SetVariable: either use select Attribute _or_ child elements, but not both.</sch:assert>
+        </sch:rule>
+      </sch:pattern>
+    </rules>
+    <rules xml:lang="de">
+      <sch:pattern>
+        <sch:rule context="t:Zuweisung">
+        <sch:assert test="not(  not(empty(@auswahl)) and node()  )">Zuweisung: entweder Attribut auswahl benutzen _oder_ Kindelemente, aber nicht beides.</sch:assert>
+      </sch:rule>
+      </sch:pattern>
+    </rules>
   </command>
   <command en="Sequence" de="Sequenz">
     <description xml:lang="en">
