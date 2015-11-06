@@ -14,6 +14,7 @@ rotating: Effekt von drehen und ursprung-x und ursprung-y
 runningsum: Tabelle mit dynamischen Kopf- und Fußzeilen
 simpletable: Einfache Tabelle
 textframe: Textcontainer mit Überlauf
+textframe2: Platzberechnung im Rahmen
 ---
 
 Beispiele

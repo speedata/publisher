@@ -8,12 +8,13 @@ grid: Typesetting on a grid
 helloworld: The classical hello world-example
 imageshape: Text flows around an image
 imagescaling: How width, height, and clip affects image display
-mailmerge: A letter to lot's of people
+mailmerge: A letter to lots of people
 planets: How to handle automatically generated table of contents etc.
 rotating: Shows the effect of origin-x and origin-y on PlaceObject/rotate
 runningsum: A table with a dynamic header and footer
 simpletable: A simple HTML like table
 textframe: Overflowing text containers
+textframe2: Find out how much space is left in a text frame
 ---
 
 Examples
