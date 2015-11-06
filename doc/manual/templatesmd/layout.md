@@ -2,7 +2,7 @@
 {{if .IsEn}}List of files{{else}}Dateiliste{{end}}
 =============
 
-File | Description
+{{ if $.IsEn}}File{{else}}Datei{{ end}} | {{ if $.IsEn}}Description{{else}}Beschreibung{{ end}}
 -----|------------
 {{ range $index, $entry :=  filelist . }}<a href="{{$entry.Link}}">{{$entry.Filename}}</a>| {{$entry.Description}}
 {{end}}
