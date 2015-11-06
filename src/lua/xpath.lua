@@ -77,7 +77,7 @@ end
 
 function M.is_attribute(dataxml,str,pos)
     local start,stop,attr
-    start,stop,attr = string.find(str,"^@([%w_]+)%s*",pos)
+    start,stop,attr = string.find(str,"^@([%w_-]+)%s*",pos)
     if attr then
         M.nextpos = stop + 1
         M.tok = dataxml[attr]
