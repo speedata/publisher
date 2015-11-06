@@ -293,7 +293,7 @@ function commands.bookmark( layoutxml,dataxml )
 
     if publisher.intextblockcontext == 0 then
         publisher.setup_page()
-        publisher.output_absolute_position(hlist,0,0)
+        publisher.output_absolute_position({nodelist = hlist, x = 0, y = 0})
     else
         local p = paragraph:new()
         p:append(hlist)
@@ -1913,7 +1913,14 @@ function commands.place_object( layoutxml,dataxml )
             if vreference == "bottom" then
                 top = top - object.height
             end
-            publisher.output_absolute_position(object,column + current_grid.extra_margin,top,allocate,objects[i].allocate_matrix)
+            publisher.output_absolute_position({
+                nodelist = object,
+                x        = column + current_grid.extra_margin,
+                y        = top,
+                rotate   = rotate,
+                origin_x = origin_x,
+                origin_y = origin_y,
+            })
         else
             -- Look for a place for the object
             -- local current_row = current_grid:current_row(area)

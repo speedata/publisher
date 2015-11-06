@@ -915,12 +915,29 @@ function load_xml(filename,filetype,options)
     return luxor.parse_xml_file(path, options,kpse.find_file)
 end
 
---- Place an object at a position given in scaled points (_x_ and _y_). `allocate` is ignored at at the moment.
-function output_absolute_position( nodelist,x,y,allocate,area )
+--- Place an object at a position given in scaled points (_x_ and _y_).
+---
+--- Parameter       | Description
+--- ----------------|----------------------------------------------
+--- nodelist        | The box to be placed
+--- x               | The horizontal distance from the left edge in grid cells
+--- y               | The vertical distance form the top edge in grid cells
+--- rotate          | Rotation counter clockwise in degrees (0-360).
+--- origin_x        | Origin X for rotation. Left is 0 and right is 100
+--- origin_y        | Origin Y for rotation. Top is 0 and bottom is 100
+function output_absolute_position(param)
+    local nodelist = param.nodelist
+    local x = param.x
+    local y = param.y
+
 
     if node.has_attribute(nodelist,att_shift_left) then
         x = x - node.has_attribute(nodelist,att_shift_left)
         y = y - node.has_attribute(nodelist,att_shift_up)
+    end
+
+    if param.rotate then
+        nodelist = rotate(nodelist,param.rotate, param.origin_x or 0, param.origin_y or 0)
     end
 
     local n = add_glue( nodelist ,"head",{ width = x })
