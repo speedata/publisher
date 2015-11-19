@@ -13,6 +13,7 @@
 
 require("i18n")
 local comm = require("publisher.comm")
+local u8fix = require('utf8fix')
 
 tex.enableprimitives('',tex.extraprimitives ())
 -- Lua 5.2 has table.unpack
@@ -174,13 +175,16 @@ function exit(graceful)
   errorlog:close()
   statusfile = io.open(string.format("%s.status",tex.jobname),"wb")
   statusfile:write(string.format("<Status>\n  <Errors>%d</Errors>\n",errcount))
-  -- for i=1,#publisher.messages do
-  --     if publisher.messages[i][2] then
-  --         statusfile:write(string.format("  <Error>%s</Error>\n", publisher.xml_escape(publisher.messages[i][1])))
-  --     else
-  --         statusfile:write(string.format("  <Message>%s</Message>\n", publisher.xml_escape(publisher.messages[i][1])))
-  --     end
-  -- end
+  for i=1,#publisher.messages do
+      local msg = publisher.xml_escape(publisher.messages[i][1])
+      -- The message can be in a non-utf8 encoding. See #65
+      msg = u8fix.sanitize(msg)
+      if publisher.messages[i][2] then
+          statusfile:write(string.format("  <Error>%s</Error>\n", msg))
+      else
+          statusfile:write(string.format("  <Message>%s</Message>\n", msg))
+      end
+  end
   statusfile:write(string.format("  <DurationSeconds>%d</DurationSeconds>\n",math.ceil(os.gettimeofday() - starttime)))
   statusfile:write("</Status>")
   statusfile:close()
