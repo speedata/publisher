@@ -1829,16 +1829,19 @@ function commands.place_object( layoutxml,dataxml )
 
     -- current_height is the remaining space on the current page in sp
     local areaheight = ( maxheight or current_grid:number_of_rows(area) ) * current_grid.gridheight
-    local optionen = {
-        current_height = math.min(current_grid:remaining_height_sp(row,area),areaheight),
-        ht_max     = areaheight,
-    }
+    local options = {}
+    options.ht_max= areaheight
+    if vreference == "bottom" then
+        options.current_height = areaheight
+    else
+        options.current_height = math.min(current_grid:remaining_height_sp(row,area),areaheight)
+    end
     if allocate == "no" then
-        optionen.current_height = areaheight
+        options.current_height = areaheight
     end
 
     local grid   = current_grid
-    local tab    = publisher.dispatch(layoutxml,dataxml,optionen)
+    local tab    = publisher.dispatch(layoutxml,dataxml,options)
 
     -- reset the current maxwidth
     xpath.set_variable("__maxwidth",current_maxwidth)
