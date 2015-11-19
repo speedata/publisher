@@ -174,13 +174,13 @@ function exit(graceful)
   errorlog:close()
   statusfile = io.open(string.format("%s.status",tex.jobname),"wb")
   statusfile:write(string.format("<Status>\n  <Errors>%d</Errors>\n",errcount))
-  for i=1,#publisher.messages do
-      if publisher.messages[i][2] then
-          statusfile:write(string.format("  <Error>%s</Error>\n", publisher.xml_escape(publisher.messages[i][1])))
-      else
-          statusfile:write(string.format("  <Message>%s</Message>\n", publisher.xml_escape(publisher.messages[i][1])))
-      end
-  end
+  -- for i=1,#publisher.messages do
+  --     if publisher.messages[i][2] then
+  --         statusfile:write(string.format("  <Error>%s</Error>\n", publisher.xml_escape(publisher.messages[i][1])))
+  --     else
+  --         statusfile:write(string.format("  <Message>%s</Message>\n", publisher.xml_escape(publisher.messages[i][1])))
+  --     end
+  -- end
   statusfile:write(string.format("  <DurationSeconds>%d</DurationSeconds>\n",math.ceil(os.gettimeofday() - starttime)))
   statusfile:write("</Status>")
   statusfile:close()
