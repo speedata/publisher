@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.36" date="2015-11-19">
+      <en>Workaround for broken publisher.status file</en>
+      <de>Provisorische Lösung für kaputte publisher.status-Datei</de>
+    </entry>
+    <entry version="2.3.36" date="2015-11-19">
+      <en>Table and vreference=bottom works.</en>
+      <de>Tabellen und vreferenz=unten funktionieren zusammen.</de>
+    </entry>
     <entry version="2.3.35" date="2015-11-06">
       <en>Schematron rules in RelaxNG schema</en>
       <de>Schematron-Regeln im RelaxNG Schema</de>
