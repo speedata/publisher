@@ -264,6 +264,9 @@ local function shaone(dataxml,arg)
 end
 
 local function decode_html( dataxml, arg )
+    if #arg == 0 then
+        return nil
+    end
     arg = arg[1]
     local ok
     if type(arg) == "string" then
