@@ -9,8 +9,8 @@
 
 dofile(arg[1])
 
-function get_ps_name( dateiname )
-  local info = fontloader.info(dateiname)
+function get_ps_name( filename )
+  local info = fontloader.info(filename)
   return info.fontname
 end
 

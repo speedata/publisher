@@ -6240,7 +6240,7 @@
   </command>
   <command en="Td" de="Td" css="td">
     <description xml:lang="en">
-      <para>Td wraps a table row, just like HTML.</para>
+      <para>Td wraps a table cell, just like HTML.</para>
     </description>
     <description xml:lang="de">
       <para>Erstellt eine Tabellenzelle, wie in HTML</para>
