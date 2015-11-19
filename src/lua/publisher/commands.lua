@@ -2060,6 +2060,11 @@ function commands.process_node(layoutxml,dataxml)
     if not dataxml_selection then return nil end
     for i=1,#dataxml_selection do
         element_name = dataxml_selection[i][".__local_name"]
+        local modeselector = publisher.data_dispatcher[mode]
+        if modeselector == nil then
+            err("No combination of mode %q element name %q is defined.",mode,element_name)
+            return
+        end
         layoutnode = publisher.data_dispatcher[mode][element_name]
         if layoutnode then
             log("Selecting node: %q, mode=%q, pos=%d",element_name,mode,pos)
