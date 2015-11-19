@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.37" date="2015-11-19">
+      <en>Bugfix for broken utf8/status file</en>
+      <de>Fehlerkorrektur für kaputte Status-Datei / utf8</de>
+    </entry>
     <entry version="2.3.36" date="2015-11-19">
       <en>Workaround for broken publisher.status file</en>
       <de>Provisorische Lösung für kaputte publisher.status-Datei</de>
