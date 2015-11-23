@@ -23,6 +23,18 @@ local att_italic         = 2
 local att_bold           = 3
 local att_script         = 4
 
+local glue_spec_node = node.id("glue_spec")
+local glue_node      = node.id("glue")
+local glyph_node     = node.id("glyph")
+local disc_node      = node.id("disc")
+local rule_node      = node.id("rule")
+local kern_node      = node.id("kern")
+local penalty_node   = node.id("penalty")
+local whatsit_node   = node.id("whatsit")
+local hlist_node     = node.id("hlist")
+local vlist_node     = node.id("vlist")
+
+
 --- Every font family ("text", "Chapter"), that is defined by DefineFontfamily gets an internal
 --- number. This number is stored here.
 lookup_fontfamily_name_number={}
@@ -111,7 +123,7 @@ function pre_linebreak( head )
     local first_head = head
 
     while head do
-        if head.id == 0 then -- hlist
+        if head.id == hlist_node then -- hlist
             pre_linebreak(head.list)
             if node.has_attribute(head,att_script) then
                 local sub_sup = node.has_attribute(head,att_script)
@@ -127,15 +139,15 @@ function pre_linebreak( head )
                 n.list = nil
                 node.free(n)
             end
-        elseif head.id == 1 then -- vlist
+        elseif head.id == vlist_node then -- vlist
             pre_linebreak(head.list)
-        elseif head.id == 2 then -- rule
-        elseif head.id == 7 then -- discretionary
+        elseif head.id == rule_node then -- rule
+        elseif head.id == disc_node then -- discretionary
             pre_linebreak(head.pre)
             pre_linebreak(head.post)
             pre_linebreak(head.replace)
-        elseif head.id == 8 then -- whatsit
-        elseif head.id == 10 then -- glue
+        elseif head.id == whatsit_node then -- whatsit
+        elseif head.id == glue_node then -- glue
             local gluespec = head.spec
             if gluespec then
                 if node.has_attribute(head,att_fontfamily) then
@@ -178,9 +190,9 @@ function pre_linebreak( head )
                 gluespec.shrink  = f.parameters.space_shrink
                 head.spec = gluespec
             end
-        elseif head.id == 11 then -- kern
-        elseif head.id == 12 then -- penalty
-        elseif head.id == 37 then -- glyph
+        elseif head.id == kern_node then -- kern
+        elseif head.id == penalty_node then -- penalty
+        elseif head.id == glyph_node then -- glyph
             if node.has_attribute(head,att_fontfamily) then
                 -- not local, so that we can access fontfamily later
                 fontfamily=node.has_attribute(head,att_fontfamily)

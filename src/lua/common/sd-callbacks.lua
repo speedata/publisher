@@ -103,7 +103,7 @@ function find_write_file(id_number,asked_name)
   return asked_name
 end
 local function read_xxx_file(name)
-  return nil,nil,0
+  return true,"",0
 end
 
 callback.register('open_read_file',reader)

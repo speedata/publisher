@@ -202,6 +202,7 @@ local function setup()
   tex.pdfadjustspacing = 2
   tex.pdfcompresslevel = 5
   tex.pdfoutput=1
+  tex.outputmode = 1
   tex.pdfminorversion = 6
   tex.lefthyphenmin  = 2
   tex.righthyphenmin = 3
