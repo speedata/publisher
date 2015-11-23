@@ -15,8 +15,13 @@ import (
 )
 
 var (
-	wg sync.WaitGroup
+	wg       sync.WaitGroup
+	finished chan bool
 )
+
+func init() {
+	finished = make(chan bool)
+}
 
 func fileExists(filename string) bool {
 	fi, err := os.Stat(filename)
@@ -27,11 +32,12 @@ func fileExists(filename string) bool {
 }
 
 func DoCompare(absdir string) {
-	compareStatus := make(chan compareStatus, 0)
-	compare := mkCompare(compareStatus)
+	cs := make(chan compareStatus, 0)
+	compare := mkCompare(cs)
 	filepath.Walk(absdir, compare)
-	go getCompareStatus(compareStatus)
+	go getCompareStatus(cs)
 	wg.Wait()
+	finished <- true
 }
 
 func compareTwoPages(sourcefile, referencefile, dummyfile, path string) float64 {
@@ -181,10 +187,14 @@ func getCompareStatus(cs chan compareStatus) {
 				fmt.Println("Comparison failed. Bad pages are:", st.badpages)
 				fmt.Println("Max delta is", st.delta)
 			}
+		case <-finished:
+			// now that we have read from the channel, we are all done
 		}
 	}
 }
 
+// Return a filepath.WalkFunc that looks into a directory, runs convert to generate the PNG files from the PDF and
+// compares the two resulting files. The function puts the result into the channel compareStatus.
 func mkCompare(status chan compareStatus) filepath.WalkFunc {
 	return func(path string, info os.FileInfo, err error) error {
 		if info == nil || !info.IsDir() {
