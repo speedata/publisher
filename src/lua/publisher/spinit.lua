@@ -197,6 +197,9 @@ end
 local function setup()
   tex.hoffset       = tex.sp("-1in")
   tex.voffset       = tex.hoffset
+  -- Future vesions of LuaTeX (0.85 and above) will probably need the following, but this changes the output slightly...
+  -- tex.pdfhorigin = tex.sp("0mm")
+  -- tex.pdfvorigin = tex.pdfhorigin
   tex.pdfpageheight = tex.sp("29.7cm")
   tex.pdfpagewidth  = tex.sp("21cm")
   tex.pdfprotrudechars = 2 -- margin protrusion
