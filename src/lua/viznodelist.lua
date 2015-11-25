@@ -329,33 +329,35 @@ local function dot_analyze_nodelist( head, options )
       end
     elseif typ == "math" then
       ret[#ret + 1] = draw_node(head, { "math", head.subtype == 0 and "on" or "off" })
-    elseif typ == "whatsit" and head.subtype == 7 then
-      ret[#ret + 1] = draw_node(head, { { "dir", head.dir } })
-    elseif typ == "whatsit" and head.subtype == 16 then
-      local wd  = string.format("width (pt): %gpt",  head.width / 2^16)
-      local ht  = string.format("height: %gpt", head.height / 2^16)
-      local dp  = string.format("depth %gpt",  head.depth / 2^16)
-      local objnum = string.format("objnum %d",head.objnum)
-      ret[#ret + 1] = draw_action(head.action)
-      ret[#ret + 1] = link_to(head.action,nodename,"action")
-      ret[#ret + 1] = draw_node(head, {{ "subtype", "pdf_start_link"}, {"width", wd},{"widthraw",head.width}, {"height" , ht}, {"depth",dp}, {"objnum", objnum}, {"action", "action"}})
-    elseif typ == "whatsit" and head.subtype == 39 then
-      local stack,cmd,data
-      stack = string.format("stack: %d",head.stack)
-      if status.luatex_version < 79 then
-        cmd = string.format("cmd: %d",  head.cmd)
-      else
-        cmd = string.format("cmd: %d",  head.command)
-      end
-
-      data  = string.format("data: %s", head.data)
-      ret[#ret + 1] = draw_node(head,{ {"subtype", "colorstack"},{"stack",stack},{"cmd",cmd},{"data",data} })
-    elseif typ == "whatsit" and head.subtype == 44 then
-      local uid,t, val
-      uid = string.format("user_id= %s",tostring(head.user_id))
-      t   = string.format("type = %s",tostring(head.type))
-      val  = string.format("value = %s", tostring(head.value))
-      ret[#ret + 1] = draw_node(head,{ {"subtype", "user_defined"},{"userid",uid},{"type",t},{"value",val} })
+    elseif typ == "whatsit" then
+        local st = get_subtype(head)
+        if st == "dir" then
+            ret[#ret + 1] = draw_node(head, { { "dir", head.dir } })
+        elseif st == "pdf_start_link" then
+            local wd  = string.format("width (pt): %gpt",  head.width / 2^16)
+            local ht  = string.format("height: %gpt", head.height / 2^16)
+            local dp  = string.format("depth %gpt",  head.depth / 2^16)
+            local objnum = string.format("objnum %d",head.objnum)
+            ret[#ret + 1] = draw_action(head.action)
+            ret[#ret + 1] = link_to(head.action,nodename,"action")
+            ret[#ret + 1] = draw_node(head, {{ "subtype", "pdf_start_link"}, {"width", wd},{"widthraw",head.width}, {"height" , ht}, {"depth",dp}, {"objnum", objnum}, {"action", "action"}})
+        elseif st == "pdf_colorstack" then
+            local stack,cmd,data
+            stack = string.format("stack: %d",head.stack)
+            if status.luatex_version < 79 then
+                cmd = string.format("cmd: %d",  head.cmd)
+            else
+                cmd = string.format("cmd: %d",  head.command)
+            end
+            data  = string.format("data: %s", head.data)
+            ret[#ret + 1] = draw_node(head,{ {"subtype", "colorstack"},{"stack",stack},{"cmd",cmd},{"data",data} })
+        elseif st == "user_defined" then
+            local uid,t, val
+            uid = string.format("user_id= %s",tostring(head.user_id))
+            t   = string.format("type = %s",tostring(head.type))
+            val  = string.format("value = %s", tostring(head.value))
+            ret[#ret + 1] = draw_node(head,{ {"subtype", "user_defined"},{"userid",uid},{"type",t},{"value",val} })
+        end
     else
       ret[#ret + 1] = draw_node(head, { })
     end
