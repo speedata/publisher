@@ -677,6 +677,10 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
     for _,td in ipairs(tr_contents) do
         local default_textformat_name
         local td_contents = publisher.element_contents(td)
+        if td_contents == nil then
+            err("No contents in Td")
+            return rowheight,rowspans,shiftup
+        end
         current_column = current_column + 1
 
 
@@ -830,7 +834,7 @@ function typeset_row(self, tr_contents, current_row )
     local rowspan, colspan
     local v,vlist,hlist
     local fill = { width = 0, stretch = 2^16, stretch_order = 3}
-
+    local td_contents
     current_column = 0
     for _,td in ipairs(tr_contents) do
         local default_textformat_name
@@ -838,6 +842,10 @@ function typeset_row(self, tr_contents, current_row )
         current_column = current_column + 1
 
         td_contents = publisher.element_contents(td)
+        if td_contents == nil then
+            err("td_contents is empty (nil)")
+            return publisher.emergency_block()
+        end
         rowspan = tonumber(td_contents.rowspan) or 1
         colspan = tonumber(td_contents.colspan) or 1
 

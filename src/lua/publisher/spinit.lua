@@ -105,8 +105,9 @@ end
 
 -- tbl .. tbl
 function table.__concat( tbl, other )
-  if not other then
-    printtable("fehler bei table.__concat",tbl)
+  if type(other) ~= "table" then
+      err("Internal error: table concat: second argument is not a table")
+      return
   end
   local ret = {}
   for i=1,#tbl do
