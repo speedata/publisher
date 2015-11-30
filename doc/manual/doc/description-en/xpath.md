@@ -93,6 +93,8 @@ sd:loremipsum() | Same as `sd:dummytext()`
 
 Function | Description
 ---------|------------
+abs()      |
+ceiling()  |
 concat( \<value\>,\<value\>, … ) | Create a new text value by concatinating the arguments.
 contains(\<haystack\>,\<needle\>)  | True if haystack contains needle.
 count(\<text\>) | Counts all child elements with the given name. Example: `count(article)` counts, how many child elements with the name `article` exists.
@@ -101,22 +103,19 @@ empty(\<attribute\>) | Checks, if an attribute is (not) available.
 false() | Return *false*.
 floor() | Returns the largest number with no fractional part that is not greater than the value of the argument.
 last() | Return the number of elements of the same named sibling elements. **Not yet XPath conform.**
+max()  |
+min()  |
+node()  |
 not() | Negates the value of the argument. Example: `not(true())` returns `false()`.
+normalize-space(\<text\>) | Return the text without leading and trailing spaces. All newlines will be changed to spaces. Multiple spaces/newlines will be changed to a single space.
 position() | Return the position of the current node.
 replace(\<input\>,\<regexp\>, \<replacement\>) | Replace the input using the regular expression with the given replacement text. Example: `replace("banana", "a", "o")` yields `bonono`.
 string(\<sequence\>) | Return the text value of the sequence e.g. the contents of the elemements.
 string-join(\<sequence\>,separator) | Return the string value of the sequence, where each element is separated by the separator.
 tokenize(\<input\>,\<regexp\>) | This function returns a sequence of strings. The input text is read from left to right. When the regular expression matches the current position, the text read so far from the last match is returned. Example (from the great XPath / XSLT book by M. Key): `tokenize("Go home, Jack!", "\W+")` returns the sequence `"Go", "home", "Jack", ""`.
+string-length(\<string\>) | Return the length of the string in characters. Multi-byte UTF-8 sequences are counted as 1.
 true() | Return *true*.
-normalize-space(\<text\>) | Return the text without leading and trailing spaces. All newlines will be changed to spaces. Multiple spaces/newlines will be changed to a single space.
+upper-case() |
 
-Todo document:
---------------
 
-- `abs()`
-- `ceiling()`
-- `max()`
-- `min()`
-- `node()`
-- `string()`
-- `upper-case()`
+

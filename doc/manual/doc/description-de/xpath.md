@@ -81,6 +81,8 @@ sd:loremipsum() | Alias für `sd:blindtext()`
 
 Funktion | Beschreibung
 ---------|-------------
+abs()      |
+ceiling()  |
 concat( \<Wert\>,\<Wert\>, … )|  Erzeugt einen neuen Text aus der Verkettung der einzelnen Werte.
 contains(\<heuhaufen\>,\<nadel\>)  | Wahr, wenn `heuhaufen` `nadel` enthält.
 count()|  Zählt alle Kindelemente mit dem angegebenen Namen. Beispiel: `count(eintrag)` zählt, wie viele Kindelemente mit den Namen `eintrag` existieren.
@@ -89,22 +91,17 @@ empty(\<Attribut\>)|  Prüft, ob ein Attribut (nicht) vorhanden ist.
 false()|  Gibt „Falsch“ zurück.
 floor()|  Gibt den abgerundeten Wert einer Zahl zurück.
 last()|  Gibt die Anzahl der Datensätze der gleichnamigen Geschwister-Elemente zurück. **Achtung: noch nicht XPath-konform.**
+normalize-space(\<text\>) | Gibt den Text ohne führende und nachstehende Leerzeichen zurück. Alle Zeilenvorschübe werden durch Leerzeichen ersetzt. Mehrfach hintereinander auftretende Leerzeichen/Zeilenvorschübe werden durch ein einzelnes Leerzeichen ersetzt.
+max()  |
+min()  |
+node()  |
 not()|  Negiert den Wahrheitswert des Arguments. Beispiel: `not(true())` ergibt `false()`.
 position()|  Ermittelt die Position des aktuellen Datensatzes.
 replace(\<Eingabe\>,\<Regexp\>, \<Ersetzung\>) | Ersetzt die Eingabe mit dem regulären Ausdruck durch den Ersetzungstext. Beispiel: `replace("banana", "a", "o")` ergibt `bonono`.
 string(\<Sequenz\>)|  Gibt den Textwert der Sequenz zurück, d.h. den Inhalt der Elemente.
 string-join(\<Sequenz\>, Separator)|  Gibt den Textwert der Sequenz zurück, wobei alle Elemente durch den Separator getrennt werden.
+string-length(\<string\>) | Gibt die Länge der Zeichenkette zurück. Multi-byte UTF-8 Sequenzen werden als eine Position gezählt.
 true()|  Gibt „Wahr“ zurück.
 tokenize(\<Eingabe\>,\<Regexp\>) |  Die Rückgabe ist eine Sequenz von Zeichenketten. Die Eingabe wird von links nach rechts gelesen. Sobald eine Stelle gefunden wird, auf die der Reguläre Ausdruck passt, wird die bisherige Eingabe zurück gegeben. Beispiel (aus M. Kays XPath / XSLT-Buch): `tokenize("Go home, Jack!", "\W+")` ergibt die Sequenz `"Go", "home", "Jack", ""`.
-normalize-space(\<text\>) | Gibt den Text ohne führende und nachstehende Leerzeichen zurück. Alle Zeilenvorschübe werden durch Leerzeichen ersetzt. Mehrfach hintereinander auftretende Leerzeichen/Zeilenvorschübe werden durch ein einzelnes Leerzeichen ersetzt.
+upper-case() |
 
-Todo Dokumentieren:
--------------------
-
-- `abs()`
-- `ceiling()`
-- `max()`
-- `min()`
-- `node()`
-- `string()`
-- `upper-case()`

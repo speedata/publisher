@@ -943,6 +943,11 @@ M.default_functions["string-join"] = function (dataxml,arg)
     return table.concat(ret,arg[#arg])
 end
 
+M.default_functions["string-length"] = function (dataxml,arg)
+    return string.len(arg[1])
+end
+
+
 return {
    get_variable      = M.get_variable,
    parse             = M.parse,
