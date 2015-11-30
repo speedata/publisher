@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.38" date="2015-11-30">
+      <en>New XPath function 'string-length()', bug fixes, prepare for LuaTeX 0.85</en>
+      <de>Neue XPath-Funktion 'string-length()', Fehlerkorrekturen, Vorbereitung auf LuaTeX 0.85</de>
+    </entry>
     <entry version="2.3.37" date="2015-11-19">
       <en>Bugfix for broken utf8/status file</en>
       <de>Fehlerkorrektur für kaputte Status-Datei / utf8</de>
