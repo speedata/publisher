@@ -1709,6 +1709,14 @@ function commands.paragraph( layoutxml,dataxml )
 end
 
 
+--- PDFOptions
+--- ------------
+--- Sets number of copies and such
+function commands.pdfoptions( layoutxml, dataxml )
+    local nc = publisher.read_attribute(layoutxml,dataxml,"numcopies", "number")
+    publisher.viewerpreferences.numcopies = nc or 1
+end
+
 --- PlaceObject
 --- -----------
 --- Emit a rectangular object. The object can be

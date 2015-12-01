@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2015-09-16 10:56)
+-- generated from genluatranslations.go (2015-12-01 14:36)
 -- do not edit!
 module(...)
 return {
@@ -275,6 +275,9 @@ return {
       ["Seitentyp"] = { "Pagetype",
         ["bedingung"] = "test",
         ["name"] = "name",
+        },
+      ["PDFOptionen"] = { "PDFOptions",
+        ["anzahlkopien"] = "numcopies",
         },
       ["ObjektAusgeben"] = { "PlaceObject",
         ["belegen"] = "allocate",

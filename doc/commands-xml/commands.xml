@@ -118,6 +118,7 @@
     <optional><cmd name="Pageformat"/></optional>
     <optional><cmd name="Options"/></optional>
     <optional><cmd name="Pagetype"/></optional>
+    <optional><cmd name="PDFOptions"></cmd></optional>
     <optional><cmd name="SetGrid"/></optional>
     <optional><cmd name="Hyphenation"/></optional>
     <optional><cmd name="SetVariable"/></optional>
@@ -4433,6 +4434,26 @@
     </example>
     <seealso><ref name="xpath"/>, <cmd name="AtPageCreation"/>,  <cmd name="AtPageShipout"/>,   <cmd name="PositioningArea"/>,  <cmd name="NewPage"/>
     </seealso>
+  </command>
+  <command en="PDFOptions" de="PDFOptionen">
+    <description xml:lang="en">
+      <para>Set PDF options like nuber of copies and such</para>
+    </description>
+    <description xml:lang="de">
+      <para>Setze PDF Optionen wie Anzahl der Kopien</para>
+    </description>
+    <childelements></childelements>
+    <attribute en="numcopies" de="anzahlkopien" optional="yes" type="number">
+      <description xml:lang="en">
+        <para>Set the number of copies. At most 5 are allowed in the PDF specification.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze Anzahl der Kopien. Maximal erlaubt sind 5 aufgrund der PDF-Spezifikation.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en"><listing><![CDATA[<PDFOptions numcopies="3"/>]]></listing></example>
+    <example xml:lang="de"><listing><![CDATA[<PDFOptionen anzahlkopien="4"/>]]></listing></example>
+    <seealso></seealso>
   </command>
   <command en="PlaceObject" de="ObjektAusgeben">
     <description xml:lang="en">

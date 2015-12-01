@@ -1567,6 +1567,9 @@
                <ref name="e_Pagetype"></ref>
             </optional>
             <optional>
+               <ref name="e_PDFOptions"></ref>
+            </optional>
+            <optional>
                <ref name="e_SetGrid"></ref>
             </optional>
             <optional>
@@ -2497,6 +2500,17 @@
                <ref name="e_Grid"></ref>
             </optional>
          </interleave>
+      </element>
+   </define>
+   <define name="e_PDFOptions">
+      <element name="PDFOptionen">
+         <a:documentation>Setze PDF Optionen wie Anzahl der Kopien</a:documentation>
+         <optional>
+            <attribute name="anzahlkopien">
+               <a:documentation>Setze Anzahl der Kopien. Maximal erlaubt sind 4 aufgrund der PDF-Spezifikation.</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_PlaceObject">

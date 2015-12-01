@@ -162,6 +162,9 @@ pagestore = {}
 -- to be used for translations
 translated_values = nil
 
+
+viewerpreferences = {}
+
 -- The spot colors used in the document (even when discarded)
 used_spotcolors = {}
 
@@ -471,6 +474,7 @@ local dispatch_table = {
     Pageformat              = commands.page_format,
     Pagetype                = commands.pagetype,
     Paragraph               = commands.paragraph,
+    PDFOptions              = commands.pdfoptions,
     PlaceObject             = commands.place_object,
     Position                = commands.position,
     PositioningArea         = commands.positioning_area,
@@ -846,12 +850,19 @@ function initialize_luatex_and_generate_pdf()
     end
 
     --- At this point, all pages are in the PDF
-
+    local vp = {}
+    if viewerpreferences.numcopies and viewerpreferences.numcopies > 1 and viewerpreferences.numcopies <= 5 then
+        vp[#vp + 1] = string.format("/NumCopies %d", viewerpreferences.numcopies)
+    end
+    local catalog = "/PageMode /UseOutlines"
+    if #vp > 0 then
+        catalog = catalog .. "/ViewerPreferences <<" .. table.concat(vp," ") .. ">>"
+    end
     if pdf.setinfo then
-        pdf.setcatalog([[ /PageMode /UseOutlines ]])
+        pdf.setcatalog(catalog)
         pdf.setinfo([[ /Creator	(speedata Publisher) /Producer(speedata Publisher, www.speedata.de) ]])
     else
-        pdf.catalog = [[ /PageMode /UseOutlines ]]
+        pdf.catalog = catalog
         pdf.info = [[ /Creator (speedata Publisher) /Producer(speedata Publisher, www.speedata.de) ]]
     end
 
