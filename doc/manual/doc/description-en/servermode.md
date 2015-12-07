@@ -42,7 +42,7 @@ If the JSON file is defective, the HTTP status code is 400 (bad request) and the
 
 A parameter can be specified to set the result name of the PDF (without extension):
 
-`/v0/publish?jobname=myfile` sets the jobname to "myfile", so `/v0/pdf/<id>` returns the data with the given filename (plus the `.pdf`) extension. This is done via the HTTP header `Content-Disposition`.
+`/v0/publish?jobname=myfile` sets the jobname to "myfile", so `/v0/pdf/<id>` returns the data with the given filename (plus the `.pdf`) extension. This is done via the HTTP header `Content-Disposition`. If the parameter is not supplied, the `jobname` is taken from the file `publisher.cfg`. If the file is not supplied or if the parameter is not set in that file, the `jobname` is set to `publisher`.
 
 You can also submit additional variables: `/v0/publish?vars=var1%3Dvalue1`. This is similar to the command line parameter `--var`.  The parameter is URL-encoded in the form `var1=value1,var2=value2,var3=value3...`.
 

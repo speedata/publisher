@@ -661,7 +661,7 @@ func main() {
 		command = op.Extra[0]
 	}
 
-	cfg, _ = configurator.ReadFiles(filepath.Join(homedir, ".publisher.cfg"), "/etc/speedata/publisher.cfg")
+	cfg, err = configurator.ReadFiles(filepath.Join(homedir, ".publisher.cfg"), "/etc/speedata/publisher.cfg")
 	if err != nil {
 		log.Fatal(err)
 	}

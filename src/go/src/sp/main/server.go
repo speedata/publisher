@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"configurator"
 	"encoding/base64"
 	"encoding/json"
 	"encoding/xml"
@@ -426,8 +427,14 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		f.Close()
 	}
-
 	jobname := r.FormValue("jobname")
+	if jobname == "" {
+		// let's try the config file
+		cd, err := configurator.ReadFiles(filepath.Join(tmpdir, "publisher.cfg"))
+		if err == nil {
+			jobname = cd.String("DEFAULT", "jobname")
+		}
+	}
 	if jobname != "" {
 		err = ioutil.WriteFile(filepath.Join(tmpdir, "jobname.txt"), []byte(jobname), 0644)
 		if err != nil {
