@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.40" date="2015-12-08">
+      <en>Bugfix when reading a config file</en>
+      <de>Fehlerkorrektur beim Einlesen der Konfigurationsdatei</de>
+    </entry>
     <entry version="2.3.39" date="2015-12-07">
       <en>Server mode honors jobname from publisher.cfg</en>
       <de>Server-Modus beachtet jobname aus der Datei publisher.cfg.</de>
