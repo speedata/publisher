@@ -112,6 +112,7 @@ position() | Return the position of the current node.
 replace(\<input\>,\<regexp\>, \<replacement\>) | Replace the input using the regular expression with the given replacement text. Example: `replace("banana", "a", "o")` yields `bonono`.
 string(\<sequence\>) | Return the text value of the sequence e.g. the contents of the elemements.
 string-join(\<sequence\>,separator) | Return the string value of the sequence, where each element is separated by the separator.
+substring(\<input>,\<start>,\<length>) | Return the part of the string `input` that starts at `start` and optionally has the given length.
 tokenize(\<input\>,\<regexp\>) | This function returns a sequence of strings. The input text is read from left to right. When the regular expression matches the current position, the text read so far from the last match is returned. Example (from the great XPath / XSLT book by M. Key): `tokenize("Go home, Jack!", "\W+")` returns the sequence `"Go", "home", "Jack", ""`.
 string-length(\<string\>) | Return the length of the string in characters. Multi-byte UTF-8 sequences are counted as 1.
 true() | Return *true*.

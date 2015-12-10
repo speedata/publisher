@@ -947,6 +947,16 @@ M.default_functions["string-length"] = function (dataxml,arg)
     return string.len(arg[1])
 end
 
+M.default_functions["substring"] = function (dataxml,arg)
+    local input = tostring(arg[1])
+    local start = tonumber(arg[2])
+    local length
+    if tonumber(arg[3]) then
+        length = arg[2] + tonumber(arg[3]) - 1
+    end
+    return string.sub(input,start,length)
+end
+
 
 return {
    get_variable      = M.get_variable,

@@ -101,6 +101,7 @@ replace(\<Eingabe\>,\<Regexp\>, \<Ersetzung\>) | Ersetzt die Eingabe mit dem reg
 string(\<Sequenz\>)|  Gibt den Textwert der Sequenz zurück, d.h. den Inhalt der Elemente.
 string-join(\<Sequenz\>, Separator)|  Gibt den Textwert der Sequenz zurück, wobei alle Elemente durch den Separator getrennt werden.
 string-length(\<string\>) | Gibt die Länge der Zeichenkette zurück. Multi-byte UTF-8 Sequenzen werden als eine Position gezählt.
+substring(\<input>,\<start>,\<length>) | Gibt einen Teil der Zeichenkette aus `input` zurück, die bei `start` anfängt und (optional) die Länge `length` hat.
 true()|  Gibt „Wahr“ zurück.
 tokenize(\<Eingabe\>,\<Regexp\>) |  Die Rückgabe ist eine Sequenz von Zeichenketten. Die Eingabe wird von links nach rechts gelesen. Sobald eine Stelle gefunden wird, auf die der Reguläre Ausdruck passt, wird die bisherige Eingabe zurück gegeben. Beispiel (aus M. Kays XPath / XSLT-Buch): `tokenize("Go home, Jack!", "\W+")` ergibt die Sequenz `"Go", "home", "Jack", ""`.
 upper-case() |
