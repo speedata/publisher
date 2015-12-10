@@ -581,7 +581,7 @@ func runPublisher() (exitstatus int) {
 func showCredits() {
 	fmt.Println("This is the speedata Publisher, version", version)
 	fmt.Println(`
-Copyright 2014 speedata UG (haftungsbeschränkt), Berlin. Licensed under
+Copyright 2015 speedata UG (haftungsbeschränkt), Berlin. Licensed under
 the GNU Affero GPL License, see
   https://raw.githubusercontent.com/speedata/publisher/develop/COPYING
 for details.
