@@ -237,7 +237,12 @@ local function groupheight(dataxml, arg )
 end
 
 local function odd(dataxml, arg )
-  return math.fmod(arg[1],2) ~= 0
+    local num = arg[1]
+    if not tonumber(num) then
+        err("sd:odd() - argument is not a number")
+        return false
+    end
+    return math.fmod(num,2) ~= 0
 end
 
 local function variable(dataxml, arg )
