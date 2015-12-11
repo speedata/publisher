@@ -40,8 +40,9 @@ The following XPath expressions are handled by the software:
     `( 6 + 4.5 ) * 2`
 -   Variables. Example: `$column + 2`
 -   Access to the current node (dot operator). Example: `. + 2`
--   Access to subelements. Examples: `productdata`, `node()`, `*`
+-   Access to subelements. Examples: `productdata`, `node()`, `*`, `foo/bar`
 -   Attribute access in the current node. Example `@a`
+-   Attribute access in subnodes, for example `foo/@bar`
 -   Boolean expressions: `<`, `>`, `<=`, `>=`, `=`, `!=`. Attention, the
     less than symbol `<` **must** be written in XML as `&lt;`, the
     symbol `>` **can** be written as `&gt;`. Example: `$number > 6`. Can

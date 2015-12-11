@@ -87,6 +87,52 @@ function M.is_attribute(dataxml,str,pos)
         if M.tok == nil then M.tok = nilmarker end
         return true
     end
+    local eltname
+    start,stop,eltname = string.find(str,"^(%a[%w/_*]*@%w+)%s*",pos)
+    if start then
+        local ret = {}
+        local attrname
+        M.nextpos = stop + 1
+        local tmp = { dataxml }
+        local ret
+
+        for part in string.gmatch(eltname,"([^/]+)") do
+            ret = {}
+            for i=1,#tmp do
+                for j=1,#tmp[i] do
+                    if part == "*" or part == tmp[i][j][".__local_name"] then
+                        if type(tmp[i][j]) == "table" then
+                            ret[#ret + 1] = tmp[i][j]
+                        end
+                    end
+                end
+            end
+            if string.sub(part,1,1) == "@" then
+                attrname = string.sub(part,2,-1)
+            end
+            if #ret ~= 0 then
+                tmp = ret
+            end
+        end
+        ret = {}
+        for i=1,#tmp do
+            if tmp[i][attrname] then
+                ret[#ret + 1] = tmp[i][attrname]
+            end
+        end
+        if #ret == 1 then
+            M.tok = ret[1]
+            return true
+        end
+        if #ret > 1 then
+            M.tok = ret
+            return true
+        end
+        if attrname and attrname ~= "" then
+            M.tok = ""
+            return true
+        end
+    end
     return false
 end
 

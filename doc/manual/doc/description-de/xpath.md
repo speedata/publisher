@@ -27,8 +27,9 @@ Folgende XPath-Ausdrücke erkennt das System:
     `( 6 + 4.5 ) * 2`
 -   Zugriff auf Variablen. Beispiel: `$spalte + 2`
 -   Zugriff auf den aktuellen Knoten (Punkt-Operator). Beispiel: `. + 2`
--   Zugriff auf Unterelemente. Beispiel: `produktdaten`, `node()`, `*`
+-   Zugriff auf Unterelemente. Beispiel: `produktdaten`, `node()`, `*`, `foo/bar`
 -   Zugriff auf Attribute im aktuellen Knoten. Beispiel `@a`
+-   Zugriff auf Attribute in Kindelementen, zum Beispiel `foo/@bar`.
 -   Boolesche Ausdrücke: `<`, `>`, `<=`, `>=`, `=`, `!=`. Vorsicht, das
     Zeichen `<` muss in XML als `&lt;` geschrieben werden, das Zeichen
     `>` kann als `&gt;` geschrieben werden. Beispiel: `$zahl > 6`. Kann
