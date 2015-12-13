@@ -1017,6 +1017,82 @@
       <cmd name="Switch"/>, <cmd name="Otherwise"/>
     </seealso>
   </command>
+  <command en="Circle" de="Kreis" css="circle" since="2.3.42">
+    <description xml:lang="en">
+      <para>Create a circle.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Erzeugt einen Kreis.</para>
+    </description>
+    <childelements/>
+    <attribute en="radiusx" de="radiusx" type="numberorlength" optional="no">
+      <description xml:lang="en">
+        <para>Radius of the circle in grid cells (horizontal) or as an absolute length. In the future, a radiusy will allow to create an ellipse.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Radius des Kreises in Rasterzellen (horizontal) oder als absolute Maßangabe. In zukünftigen Versionen wird mit radiusy eine Ellipse erzeugbar sein.</para>
+      </description>
+    </attribute>
+    <attribute en="backgroundcolor" de="hintergrundfarbe" type="text" optional="yes" css="background-color">
+      <description xml:lang="en">
+        <para>Color of the circle.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Farbe des Kreises.</para>
+      </description>
+    </attribute>
+    <attribute en="framecolor" de="rahmenfarbe" type="text" optional="yes" css="color">
+      <description xml:lang="en">
+        <para>Color of the circle line.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Farbe der Kreislinie.</para>
+      </description>
+    </attribute>
+    <attribute en="rulewidth" de="linienstärke" type="length" optional="yes">
+      <description xml:lang="en">
+        <para>The thickness of the border that is drawn around the object.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Dicke des Striches um den Kreis.</para>
+      </description>
+    </attribute>
+    <attribute en="class" de="class" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS class for the circle.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS Klasse für diesen Kreis.</para>
+      </description>
+    </attribute>
+    <attribute en="id" de="id" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS id for this circle.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS id für diesen Kreis.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<DefineColor name="mygreen" model="cmyk" c="22" m="0" y="55" k="0"/>
+<PlaceObject row="5" column="5" >
+    <Circle radiusx="10mm" backgroundcolor="blue" framecolor="mygreen" rulewidth="1mm"/>
+</PlaceObject>
+]]></listing>
+      <para>looks like</para>
+      <image file="circlewithborder.png"/>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<DefiniereFarbe name="meingrün" modell="cmyk" c="22" m="0" y="55" k="0"/>
+<ObjektAusgeben>
+  <Kreis radiusx="10mm" hintergrundfarbe="blue" rahmenfarbe="meingrün" linienstärke="1mm"/>
+</ObjektAusgeben>  
+]]></listing>
+      <para>erzeugt einen Kreis</para>
+      <image file="circlewithborder.png"/>
+    </example>
+    <seealso><cmd name="DefineColor"/>, <cmd name="PlaceObject"/></seealso>
+  </command>
   <command en="Color" de="Farbe">
     <description xml:lang="en">
       <para>Switch to another text color</para>
@@ -2084,6 +2160,7 @@
         <interleave>
           <optional><cmd name="Image"/></optional>
           <optional><cmd name="Box"/></optional>
+          <optional><cmd name="Circle"/></optional>
           <optional><cmd name="Rule"/></optional>
           <optional><cmd name="Textblock"/></optional>
           <optional><cmd name="Barcode"/></optional>
@@ -2146,7 +2223,7 @@
         <para>The thickness of the frame that is drawn around the object. Only makes sense in combination with the attribute 'frame'.</para>
       </description>
       <description xml:lang="de">
-        <para>Die Dicke des Rahmnes, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
+        <para>Die Dicke des Rahmens, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
       </description>
     </attribute>
     <attribute en="class" de="class" optional="yes" type="text">
@@ -4155,6 +4232,7 @@
     <childelements>
       <optional><cmd name="Image"/></optional>
       <optional><cmd name="Box"/></optional>
+      <optional><cmd name="Circle"/></optional>
       <optional><cmd name="Rule"/></optional>
       <optional><cmd name="Textblock"/></optional>
       <optional><cmd name="Barcode"/></optional>
@@ -4467,6 +4545,7 @@
         <interleave>
           <optional><cmd name="Image"/></optional>
           <optional><cmd name="Box"/></optional>
+          <optional><cmd name="Circle"/></optional>
           <optional><cmd name="Rule"/></optional>
           <optional><cmd name="Textblock"/></optional>
           <optional><cmd name="Barcode"/></optional>
@@ -4618,7 +4697,7 @@
         <para>The thickness of the frame that is drawn around the object. Only makes sense in combination with the attribute 'frame'.</para>
       </description>
       <description xml:lang="de">
-        <para>Die Dicke des Rahmnes, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
+        <para>Die Dicke des Rahmens, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
       </description>
     </attribute>
     <attribute en="column" de="spalte" type="numberorlength" optional="yes">
@@ -4867,6 +4946,7 @@
     <seealso>
       <cmd name="Image"/>,
       <cmd name="Box"/>,
+      <cmd name="Circle"/>
       <cmd name="Tablerule"/>,
       <cmd name="Table"/>,
       <cmd name="Textblock"/>,
@@ -4884,6 +4964,7 @@
     <childelements>
       <optional><cmd name="Image"/></optional>
       <optional><cmd name="Box"/></optional>
+      <optional><cmd name="Circle"/></optional>
       <optional><cmd name="Rule"/></optional>
       <optional><cmd name="Textblock"/></optional>
       <optional><cmd name="Barcode"/></optional>
@@ -7079,6 +7160,7 @@
         <interleave>
           <optional><cmd name="Image"/></optional>
           <optional><cmd name="Box"/></optional>
+          <optional><cmd name="Circle"/></optional>
           <optional><cmd name="Rule"/></optional>
           <optional><cmd name="Textblock"/></optional>
           <optional><cmd name="Barcode"/></optional>

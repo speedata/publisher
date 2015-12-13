@@ -435,6 +435,7 @@ local dispatch_table = {
     Bookmark                = commands.bookmark,
     Box                     = commands.box,
     Br                      = commands.br,
+    Circle                  = commands.circle,
     Color                   = commands.color,
     Column                  = commands.column,
     Columns                 = commands.columns,
@@ -1555,6 +1556,84 @@ function setpageresources()
     end
 end
 
+-- return the fill and stroke color of the given colorstring
+function fill_stroke_color( pdfcolor )
+    local a,b = string.match(pdfcolor,"^(.*rg)(.*RG)")
+    if a ~= nil then
+        return b,a
+    end
+    a,b = string.match(pdfcolor,"^(.*k)(.*K)")
+    if a ~= nil then
+        return b,a
+    end
+    a,b = string.match(pdfcolor,"^(.*G)(.*g)")
+    return b,a
+end
+
+--- Draw a circle
+---
+--- ![Control points in the circle](img/circlepoints.svg)
+---
+function circle( radiusx_sp, radiusy_sp, colorname,framecolorname,rulewidth_sp)
+    radiusx_sp, radiusy_sp = sp_to_bp(radiusx_sp), sp_to_bp(radiusy_sp)
+    rulewidth_sp = sp_to_bp(rulewidth_sp)
+    local paint = node.new("whatsit","pdf_literal")
+    local colentry = colors[colorname]
+    if not colentry then
+        err("Color %q unknown, reverting to black",colorname or "(no color name given)")
+        colentry = colors["black"]
+    end
+    local framecolentry = colors[framecolorname]
+    if not framecolentry then
+        err("Color %q unknown, reverting to black",framecolorname or "(no color name given)")
+        framecolentry = colors["black"]
+    end
+    local _,bordercolor = fill_stroke_color(colentry.pdfstring)
+    local fillcolor,_  =  fill_stroke_color(framecolentry.pdfstring)
+    local circle_bezier = 0.551915024494
+    fill_stroke_color(colentry.pdfstring)
+
+    local shift_down, shift_right = -radiusy_sp, 0
+    local x1 = math.round(   shift_right                                  ,3)
+    local x2 = math.round(   shift_right + circle_bezier * radiusx_sp     ,3)
+    local x3 = math.round(   shift_right + radiusx_sp                     ,3)
+    local x8 = math.round(   shift_right - radiusx_sp * circle_bezier     ,3)
+    local x9 = math.round(   shift_right - radiusx_sp                     ,3)
+
+    local y1 = math.round(   shift_down                                           ,3)
+    local y3 = math.round(   shift_down + radiusy_sp - radiusx_sp * circle_bezier ,3)
+    local y4 = math.round(   shift_down + radiusy_sp                              ,3)
+    local y5 = math.round(   shift_down + radiusy_sp + radiusy_sp * circle_bezier ,3)
+    local y6 = math.round(   shift_down + 2*radiusy_sp                            ,3)
+
+    local x4 = x3
+    local x5 = x3
+    local x6 = x2
+    local x7 = x1
+    local x10 = x9
+    local x11 = x9
+    local x12 = x8
+
+    local y2 = y1
+    local y7 = y6
+    local y8 = y6
+    local y9 = y5
+    local y10 = y4
+    local y11 = y3
+    local y12 = y1
+
+    local circle = {}
+    circle[#circle + 1] = string.format("q %g w %s %s %g %g m", math.round(rulewidth_sp,3), bordercolor,fillcolor, shift_right, shift_down)
+    circle[#circle + 1] = string.format("%g %g %g %g %g %g c",x2, y2, x3, y3, x4, y4)
+    circle[#circle + 1] = string.format("%g %g %g %g %g %g c",x5, y5, x6, y6, x7, y7)
+    circle[#circle + 1] = string.format("%g %g %g %g %g %g c",x8, y8, x9, y9, x10, y10)
+    circle[#circle + 1] = string.format("%g %g %g %g %g %g c",x11, y11, x12, y12, x1, y1)
+    circle[#circle + 1] = "b Q"
+    paint.data = table.concat(circle, " ")
+    local v = node.vpack(paint)
+    return v
+end
+
 --- Create a colored area. width and height are in scaled points.
 function box( width_sp,height_sp,colorname )
     local _width   = sp_to_bp(width_sp)
@@ -1566,7 +1645,6 @@ function box( width_sp,height_sp,colorname )
         err("Color %q unknown, reverting to black",colorname or "(no color name given)")
         colentry = colors["black"]
     end
-    -- a spot color
     paint.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colentry.pdfstring,_width,_height)
     paint.mode = 0
 
@@ -1736,6 +1814,14 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
         num = tonumber(val or default)
         if num then -- most likely really a number, we need to multiply with grid height
             ret = current_page.grid.gridheight * num
+        else
+            ret = val
+        end
+        return tex.sp(ret)
+    elseif typ=="width_sp" then
+        num = tonumber(val or default)
+        if num then -- most likely really a number, we need to multiply with grid width
+            ret = current_page.grid.gridwidth * num
         else
             ret = val
         end

@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2015-12-01 14:36)
+-- generated from genluatranslations.go (2015-12-13 17:08)
 -- do not edit!
 module(...)
 return {
@@ -55,6 +55,14 @@ return {
         },
       ["Fall"] = { "Case",
         ["bedingung"] = "test",
+        },
+      ["Kreis"] = { "Circle",
+        ["radiusx"] = "radiusx",
+        ["hintergrundfarbe"] = "backgroundcolor",
+        ["rahmenfarbe"] = "framecolor",
+        ["linienstärke"] = "rulewidth",
+        ["class"] = "class",
+        ["id"] = "id",
         },
       ["Farbe"] = { "Color",
         ["name"] = "name",

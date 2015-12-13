@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en" >
+  
+  <Pageformat width="5cm" height="5cm"/>
+  <Record element="data">
+    <PlaceObject row="4" column="4" >
+      <Circle radiusx="{radius/@value}" backgroundcolor="#9a2c1e" framecolor="green" rulewidth="2pt"/>
+    </PlaceObject>
+    <PlaceObject row="10" column="10">
+    </PlaceObject>
+  </Record>
+</Layout>

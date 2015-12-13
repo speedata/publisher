@@ -540,6 +540,40 @@
          </oneOrMore>
       </element>
    </define>
+   <define name="e_Circle">
+      <element name="Kreis">
+         <a:documentation>Erzeugt einen Kreis.</a:documentation>
+         <attribute name="radiusx">
+            <a:documentation>Radius des Kreises in Rasterzellen (horizontal) oder als absolute Maßangabe. In zukünftigen Versionen wird mit radiusy eine Ellipse erzeugbar sein.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="hintergrundfarbe">
+               <a:documentation>Farbe des Kreises.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="rahmenfarbe">
+               <a:documentation>Farbe der Kreislinie.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="linienstärke">
+               <a:documentation>Die Dicke des Striches um den Kreis.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS Klasse für diesen Kreis.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id für diesen Kreis.</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Color">
       <element name="Farbe">
          <a:documentation>Auf eine andere Textfarbe wechseln</a:documentation>
@@ -1195,7 +1229,7 @@
          </optional>
          <optional>
             <attribute name="linienstärke">
-               <a:documentation>Die Dicke des Rahmnes, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</a:documentation>
+               <a:documentation>Die Dicke des Rahmens, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1215,6 +1249,9 @@
                </optional>
                <optional>
                   <ref name="e_Box"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Circle"></ref>
                </optional>
                <optional>
                   <ref name="e_Rule"></ref>
@@ -2328,6 +2365,9 @@
             <ref name="e_Box"></ref>
          </optional>
          <optional>
+            <ref name="e_Circle"></ref>
+         </optional>
+         <optional>
             <ref name="e_Rule"></ref>
          </optional>
          <optional>
@@ -2507,7 +2547,7 @@
          <a:documentation>Setze PDF Optionen wie Anzahl der Kopien</a:documentation>
          <optional>
             <attribute name="anzahlkopien">
-               <a:documentation>Setze Anzahl der Kopien. Maximal erlaubt sind 4 aufgrund der PDF-Spezifikation.</a:documentation>
+               <a:documentation>Setze Anzahl der Kopien. Maximal erlaubt sind 5 aufgrund der PDF-Spezifikation.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>
@@ -2591,7 +2631,7 @@
          </optional>
          <optional>
             <attribute name="linienstärke">
-               <a:documentation>Die Dicke des Rahmnes, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</a:documentation>
+               <a:documentation>Die Dicke des Rahmens, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2700,6 +2740,9 @@
                   <ref name="e_Box"></ref>
                </optional>
                <optional>
+                  <ref name="e_Circle"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Rule"></ref>
                </optional>
                <optional>
@@ -2738,6 +2781,9 @@
          </optional>
          <optional>
             <ref name="e_Box"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Circle"></ref>
          </optional>
          <optional>
             <ref name="e_Rule"></ref>
@@ -3791,6 +3837,9 @@
                </optional>
                <optional>
                   <ref name="e_Box"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Circle"></ref>
                </optional>
                <optional>
                   <ref name="e_Rule"></ref>

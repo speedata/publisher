@@ -540,6 +540,40 @@
          </oneOrMore>
       </element>
    </define>
+   <define name="e_Circle">
+      <element name="Circle">
+         <a:documentation>Create a circle.</a:documentation>
+         <attribute name="radiusx">
+            <a:documentation>Radius of the circle in grid cells (horizontal) or as an absolute length. In the future, a radiusy will allow to create an ellipse.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="backgroundcolor">
+               <a:documentation>Color of the circle.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="framecolor">
+               <a:documentation>Color of the circle line.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="rulewidth">
+               <a:documentation>The thickness of the border that is drawn around the object.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS class for the circle.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id for this circle.</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Color">
       <element name="Color">
          <a:documentation>Switch to another text color</a:documentation>
@@ -1215,6 +1249,9 @@
                </optional>
                <optional>
                   <ref name="e_Box"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Circle"></ref>
                </optional>
                <optional>
                   <ref name="e_Rule"></ref>
@@ -2328,6 +2365,9 @@
             <ref name="e_Box"></ref>
          </optional>
          <optional>
+            <ref name="e_Circle"></ref>
+         </optional>
+         <optional>
             <ref name="e_Rule"></ref>
          </optional>
          <optional>
@@ -2507,7 +2547,7 @@
          <a:documentation>Set PDF options like nuber of copies and such</a:documentation>
          <optional>
             <attribute name="numcopies">
-               <a:documentation>Set the number of copies. At most 4 are allowed in the PDF specification.</a:documentation>
+               <a:documentation>Set the number of copies. At most 5 are allowed in the PDF specification.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>
@@ -2700,6 +2740,9 @@
                   <ref name="e_Box"></ref>
                </optional>
                <optional>
+                  <ref name="e_Circle"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Rule"></ref>
                </optional>
                <optional>
@@ -2738,6 +2781,9 @@
          </optional>
          <optional>
             <ref name="e_Box"></ref>
+         </optional>
+         <optional>
+            <ref name="e_Circle"></ref>
          </optional>
          <optional>
             <ref name="e_Rule"></ref>
@@ -3791,6 +3837,9 @@
                </optional>
                <optional>
                   <ref name="e_Box"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Circle"></ref>
                </optional>
                <optional>
                   <ref name="e_Rule"></ref>

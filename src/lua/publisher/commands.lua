@@ -301,6 +301,24 @@ function commands.bookmark( layoutxml,dataxml )
     end
 end
 
+--- Circle
+--- ------
+--- Draw a circle or an ellipse
+function commands.circle( layoutxml,dataxml )
+    local radiusx        = publisher.read_attribute(layoutxml,dataxml,"radiusx", "width_sp")
+    local framecolorname = publisher.read_attribute(layoutxml,dataxml,"framecolor","rawstring")
+    local rulewidth_sp   = publisher.read_attribute(layoutxml,dataxml,"rulewidth","length_sp", 0)
+    local colorname      = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
+    local class          = publisher.read_attribute(layoutxml,dataxml,"class",          "rawstring")
+    local id             = publisher.read_attribute(layoutxml,dataxml,"id",             "rawstring")
+
+    local css_rules = publisher.css:matches({element = 'circle', class=class,id=id}) or {}
+    colorname      = colorname      or css_rules["background-color"] or "black"
+    framecolorname = framecolorname or css_rules["color"]            or "black"
+
+    return publisher.circle(radiusx,radiusx,colorname,framecolorname,rulewidth_sp)
+end
+
 --- Color
 --- -----
 --- Set the color of the enclosed text.
