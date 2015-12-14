@@ -79,71 +79,40 @@ func addPublishrequestToQueue(id string) {
 	WorkQueue <- WorkRequest{Id: id}
 }
 
-// Wait until the file filename gets created in directory dir
-func watchDirectory(dir string, filename string) error {
-	watcher, err := fsnotify.NewWatcher()
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = watcher.WatchFlags(dir, fsnotify.FSN_CREATE)
-	if err != nil {
-		return err
-	}
-
-	for {
-		select {
-		case ev := <-watcher.Event:
-			if ev.IsCreate() {
-				x := filepath.Join(dir, filename)
-				if ev.Name == x {
-					return waitForFile2(ev.Name)
-				}
-			}
-		case err := <-watcher.Error:
-			return err
-		}
-	}
-	watcher.Close()
-	return nil
-}
-
-// Wait until the file filename has no more changes
-func waitForFile2(filename string) error {
-	watcher, err := fsnotify.NewWatcher()
-	if err != nil {
-		return err
-	}
-
-	err = watcher.Watch(filename)
-	if err != nil {
-		return err
-	}
-
-	for {
-		timer := time.NewTimer(100 * time.Millisecond)
-		select {
-		case <-watcher.Event:
-		case err := <-watcher.Error:
-			return err
-		case <-timer.C:
-			return nil
-		}
-		timer.Stop()
-	}
-	watcher.Close()
-	return nil
-}
-
 // Wait until filename in dir exists and is complete
-func waitForFile(dir, filename string) error {
-	f := filepath.Join(dir, filename)
-	_, err := os.Stat(f)
-	if err == nil {
-		// Exists, so we just need to wait for the last write
-		return waitForFile2(f)
-
+func waitForAllFiles(dir string) error {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		return err
 	}
-	return watchDirectory(dir, filename)
+	defer watcher.Close()
+	done := make(chan bool)
+	var goerr error
+	go func() {
+		for {
+			timer := time.NewTimer(100 * time.Millisecond)
+			select {
+			case event := <-watcher.Events:
+				if event.Op&fsnotify.Write == fsnotify.Write || event.Op&fsnotify.Create == fsnotify.Create {
+				}
+			case <-timer.C:
+				done <- true
+				return
+			case err := <-watcher.Errors:
+				goerr = err
+				done <- true
+			}
+			timer.Stop()
+		}
+
+	}()
+
+	err = watcher.Add(dir)
+	if err != nil {
+		return err
+	}
+	<-done
+	return goerr
 }
 
 // Request a JSON answer with the PDF and the status file.
@@ -302,7 +271,7 @@ func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	statusPath := filepath.Join(publishdir, "publisher.status")
-	err = waitForFile(publishdir, "publisher.status")
+	err = waitForAllFiles(publishdir)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintln(protocolFile, "Internal error 007:")

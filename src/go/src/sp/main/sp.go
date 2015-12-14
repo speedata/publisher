@@ -840,6 +840,9 @@ func main() {
 
 		for _, v := range strings.Split(events, ";") {
 			pattern_command := strings.Split(v, ":")
+			if len(pattern_command) < 2 {
+				log.Fatal("Something is wrong with the configuration file. hotfolder section correct?")
+			}
 			hotfolder_event := new(hotfolder.Event)
 			hotfolder_event.Pattern = regexp.MustCompile(pattern_command[0])
 			hotfolder_event.Command = &pattern_command[1]

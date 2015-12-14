@@ -9,6 +9,11 @@ import (
 	"time"
 )
 
+type Event struct {
+	Pattern *regexp.Regexp
+	Command *string
+}
+
 func f(filepath string, events []Event) {
 	script_pattern := regexp.MustCompile(`run\((.*)\)`)
 	for _, v := range events {
@@ -33,62 +38,47 @@ func f(filepath string, events []Event) {
 	}
 }
 
-func watchFile(filepath string, events []Event) {
-	log.Println("Watching file ", filepath)
-	watcher, err := fsnotify.NewWatcher()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = watcher.Watch(filepath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	for {
-		timer := time.NewTimer(500 * time.Millisecond)
-		select {
-		case <-watcher.Event:
-		case err := <-watcher.Error:
-			log.Println("error:", err)
-		case <-timer.C:
-			f(filepath, events)
-			return
-		}
-
-		timer.Stop()
-	}
-	watcher.Close()
-}
-
-type Event struct {
-	Pattern *regexp.Regexp
-	Command *string
-}
-
+// Wait until the file filename gets created in directory dir
 func watchDirectory(dir string, events []Event) {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = watcher.WatchFlags(dir, fsnotify.FSN_CREATE)
+	defer watcher.Close()
+
+	done := make(chan bool)
+	go func() {
+		fileStarted := make(map[string]bool)
+		for {
+			timer := time.NewTimer(100 * time.Millisecond)
+			select {
+			case event := <-watcher.Events:
+				if event.Op&fsnotify.Write == fsnotify.Write || event.Op&fsnotify.Create == fsnotify.Create {
+					fileStarted[event.Name] = true
+				}
+			case <-timer.C:
+				if len(fileStarted) > 0 {
+					for n, _ := range fileStarted {
+						f(n, events)
+						delete(fileStarted, n)
+					}
+				}
+			case err := <-watcher.Errors:
+				log.Println("error:", err)
+			}
+			timer.Stop()
+		}
+
+	}()
+
+	err = watcher.Add("/tmp/foo")
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	for {
-		select {
-		case ev := <-watcher.Event:
-			if ev.IsCreate() {
-				watchFile(ev.Name, events)
-			}
-		case err := <-watcher.Error:
-			log.Println("error:", err)
-
-		}
-	}
-	watcher.Close()
+	<-done
 }
 
+// Wait until filename in dir exists and is complete
 func Watch(dir string, events []Event) {
 	watchDirectory(dir, events)
 }
