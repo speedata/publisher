@@ -60,7 +60,7 @@
 
 <p>A parameter can be specified to set the result name of the PDF (without extension):</p>
 
-<p><code>/v0/publish?jobname=myfile</code> sets the jobname to &quot;myfile&quot;, so <code>/v0/pdf/&lt;id&gt;</code> returns the data with the given filename (plus the <code>.pdf</code>) extension. This is done via the HTTP header <code>Content-Disposition</code>.</p>
+<p><code>/v0/publish?jobname=myfile</code> sets the jobname to &quot;myfile&quot;, so <code>/v0/pdf/&lt;id&gt;</code> returns the data with the given filename (plus the <code>.pdf</code>) extension. This is done via the HTTP header <code>Content-Disposition</code>. If the parameter is not supplied, the <code>jobname</code> is taken from the file <code>publisher.cfg</code>. If the file is not supplied or if the parameter is not set in that file, the <code>jobname</code> is set to <code>publisher</code>.</p>
 
 <p>You can also submit additional variables: <code>/v0/publish?vars=var1%3Dvalue1</code>. This is similar to the command line parameter <code>--var</code>.  The parameter is URL-encoded in the form <code>var1=value1,var2=value2,var3=value3...</code>.</p>
 
@@ -182,7 +182,7 @@ start =
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.3.35 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/servermode.html">German</a>
+Version: 2.3.42 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/servermode.html">German</a>
 
 </body>
 </html>

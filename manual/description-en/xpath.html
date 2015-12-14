@@ -59,8 +59,9 @@ must return either <em>true</em> or <em>false</em>.</p>
 <code>( 6 + 4.5 ) * 2</code></li>
 <li>Variables. Example: <code>$column + 2</code></li>
 <li>Access to the current node (dot operator). Example: <code>. + 2</code></li>
-<li>Access to subelements. Examples: <code>productdata</code>, <code>node()</code>, <code>*</code></li>
+<li>Access to subelements. Examples: <code>productdata</code>, <code>node()</code>, <code>*</code>, <code>foo/bar</code></li>
 <li>Attribute access in the current node. Example <code>@a</code></li>
+<li>Attribute access in subnodes, for example <code>foo/@bar</code></li>
 <li>Boolean expressions: <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>=</code>, <code>!=</code>. Attention, the
 less than symbol <code>&lt;</code> <strong>must</strong> be written in XML as <code>&amp;lt;</code>, the
 symbol <code>&gt;</code> <strong>can</strong> be written as <code>&amp;gt;</code>. Example: <code>$number &gt; 6</code>. Can
@@ -247,6 +248,16 @@ XPath 2.0 standard.</p>
 
 <tbody>
 <tr>
+<td>abs()</td>
+<td></td>
+</tr>
+
+<tr>
+<td>ceiling()</td>
+<td></td>
+</tr>
+
+<tr>
 <td>concat( &lt;value&gt;,&lt;value&gt;, … )</td>
 <td>Create a new text value by concatinating the arguments.</td>
 </tr>
@@ -287,8 +298,28 @@ XPath 2.0 standard.</p>
 </tr>
 
 <tr>
+<td>max()</td>
+<td></td>
+</tr>
+
+<tr>
+<td>min()</td>
+<td></td>
+</tr>
+
+<tr>
+<td>node()</td>
+<td></td>
+</tr>
+
+<tr>
 <td>not()</td>
 <td>Negates the value of the argument. Example: <code>not(true())</code> returns <code>false()</code>.</td>
+</tr>
+
+<tr>
+<td>normalize-space(&lt;text&gt;)</td>
+<td>Return the text without leading and trailing spaces. All newlines will be changed to spaces. Multiple spaces/newlines will be changed to a single space.</td>
 </tr>
 
 <tr>
@@ -312,8 +343,18 @@ XPath 2.0 standard.</p>
 </tr>
 
 <tr>
+<td>substring(&lt;input&gt;,&lt;start&gt;,&lt;length&gt;)</td>
+<td>Return the part of the string <code>input</code> that starts at <code>start</code> and optionally has the given length.</td>
+</tr>
+
+<tr>
 <td>tokenize(&lt;input&gt;,&lt;regexp&gt;)</td>
 <td>This function returns a sequence of strings. The input text is read from left to right. When the regular expression matches the current position, the text read so far from the last match is returned. Example (from the great XPath / XSLT book by M. Key): <code>tokenize(&quot;Go home, Jack!&quot;, &quot;\W+&quot;)</code> returns the sequence <code>&quot;Go&quot;, &quot;home&quot;, &quot;Jack&quot;, &quot;&quot;</code>.</td>
+</tr>
+
+<tr>
+<td>string-length(&lt;string&gt;)</td>
+<td>Return the length of the string in characters. Multi-byte UTF-8 sequences are counted as 1.</td>
 </tr>
 
 <tr>
@@ -322,29 +363,17 @@ XPath 2.0 standard.</p>
 </tr>
 
 <tr>
-<td>normalize-space(&lt;text&gt;)</td>
-<td>Return the text without leading and trailing spaces. All newlines will be changed to spaces. Multiple spaces/newlines will be changed to a single space.</td>
+<td>upper-case()</td>
+<td></td>
 </tr>
 </tbody>
 </table>
-
-<h2>Todo document:</h2>
-
-<ul>
-<li><code>abs()</code></li>
-<li><code>ceiling()</code></li>
-<li><code>max()</code></li>
-<li><code>min()</code></li>
-<li><code>node()</code></li>
-<li><code>string()</code></li>
-<li><code>upper-case()</code></li>
-</ul>
 
 </div>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.3.35 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/xpath.html">German</a>
+Version: 2.3.42 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/xpath.html">German</a>
 
 </body>
 </html>

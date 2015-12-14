@@ -1,0 +1,69 @@
+<Layout 
+  xmlns="urn:speedata.de:2009/publisher/en" 
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options show-grid="yes"/>
+
+  <Pagetype name="foo" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+    <PositioningArea name="area">
+      <PositioningFrame width="5" height="40" row="1" column="1"/>
+      <PositioningFrame width="5" height="20" row="1" column="7"/>
+    </PositioningArea>
+  </Pagetype>
+  
+  <SetGrid height="12pt" nx="20"/>
+  
+  <Record element="data">
+    <PlaceObject area="area">
+      <Textblock>
+        <Paragraph><Value>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet I feel that I never was a greater artist than now. When, while the lovely valley teems with vapour around me, and the meridian sun strikes</Value></Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <NextRow area="area"/>
+    <PlaceObject area="area">
+      <Textblock>
+        <Paragraph>
+          <Value>Current row: </Value>
+          <Value select="sd:current-row('area')"/>
+          <Value>, number of rows: </Value>
+          <Value select="sd:number-of-rows('area')"/>
+          <Value>, frame number: </Value>
+          <Value select="sd:current-framenumber('area')"/>
+          <Value>, Remaining in this frame:</Value>
+          <Value select="sd:number-of-rows('area') - sd:current-row('area')"></Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+
+    <NextRow area="area"/>
+    <NextFrame area="area"/>
+
+    <PlaceObject area="area">
+      <Textblock>
+        <Paragraph><Value>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. </Value></Paragraph>
+      </Textblock>
+    </PlaceObject>
+
+    <NextRow area="area"/>
+
+    <PlaceObject area="area">
+      <Textblock>
+        <Paragraph>
+          <Value>Current row: </Value>
+          <Value select="sd:current-row('area')"/>
+          <Value>, number of rows: </Value>
+          <Value select="sd:number-of-rows('area')"/>
+          <Value>, frame number: </Value>
+          <Value select="sd:current-framenumber('area')"/>
+          <Value>, Remaining in this frame:</Value>
+          <Value select="sd:number-of-rows('area') - sd:current-row('area')"></Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <NewPage/>
+    
+  </Record>
+</Layout>
+
+

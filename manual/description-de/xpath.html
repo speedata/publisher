@@ -45,8 +45,9 @@ gerade aktuellen Datenknotens.</p>
 <code>( 6 + 4.5 ) * 2</code></li>
 <li>Zugriff auf Variablen. Beispiel: <code>$spalte + 2</code></li>
 <li>Zugriff auf den aktuellen Knoten (Punkt-Operator). Beispiel: <code>. + 2</code></li>
-<li>Zugriff auf Unterelemente. Beispiel: <code>produktdaten</code>, <code>node()</code>, <code>*</code></li>
+<li>Zugriff auf Unterelemente. Beispiel: <code>produktdaten</code>, <code>node()</code>, <code>*</code>, <code>foo/bar</code></li>
 <li>Zugriff auf Attribute im aktuellen Knoten. Beispiel <code>@a</code></li>
+<li>Zugriff auf Attribute in Kindelementen, zum Beispiel <code>foo/@bar</code>.</li>
 <li>Boolesche Ausdrücke: <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>=</code>, <code>!=</code>. Vorsicht, das
 Zeichen <code>&lt;</code> muss in XML als <code>&amp;lt;</code> geschrieben werden, das Zeichen
 <code>&gt;</code> kann als <code>&amp;gt;</code> geschrieben werden. Beispiel: <code>$zahl &gt; 6</code>. Kann
@@ -238,6 +239,16 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 
 <tbody>
 <tr>
+<td>abs()</td>
+<td></td>
+</tr>
+
+<tr>
+<td>ceiling()</td>
+<td></td>
+</tr>
+
+<tr>
 <td>concat( &lt;Wert&gt;,&lt;Wert&gt;, … )</td>
 <td>Erzeugt einen neuen Text aus der Verkettung der einzelnen Werte.</td>
 </tr>
@@ -278,6 +289,26 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 </tr>
 
 <tr>
+<td>normalize-space(&lt;text&gt;)</td>
+<td>Gibt den Text ohne führende und nachstehende Leerzeichen zurück. Alle Zeilenvorschübe werden durch Leerzeichen ersetzt. Mehrfach hintereinander auftretende Leerzeichen/Zeilenvorschübe werden durch ein einzelnes Leerzeichen ersetzt.</td>
+</tr>
+
+<tr>
+<td>max()</td>
+<td></td>
+</tr>
+
+<tr>
+<td>min()</td>
+<td></td>
+</tr>
+
+<tr>
+<td>node()</td>
+<td></td>
+</tr>
+
+<tr>
 <td>not()</td>
 <td>Negiert den Wahrheitswert des Arguments. Beispiel: <code>not(true())</code> ergibt <code>false()</code>.</td>
 </tr>
@@ -303,6 +334,16 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 </tr>
 
 <tr>
+<td>string-length(&lt;string&gt;)</td>
+<td>Gibt die Länge der Zeichenkette zurück. Multi-byte UTF-8 Sequenzen werden als eine Position gezählt.</td>
+</tr>
+
+<tr>
+<td>substring(&lt;input&gt;,&lt;start&gt;,&lt;length&gt;)</td>
+<td>Gibt einen Teil der Zeichenkette aus <code>input</code> zurück, die bei <code>start</code> anfängt und (optional) die Länge <code>length</code> hat.</td>
+</tr>
+
+<tr>
 <td>true()</td>
 <td>Gibt „Wahr“ zurück.</td>
 </tr>
@@ -313,29 +354,17 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 </tr>
 
 <tr>
-<td>normalize-space(&lt;text&gt;)</td>
-<td>Gibt den Text ohne führende und nachstehende Leerzeichen zurück. Alle Zeilenvorschübe werden durch Leerzeichen ersetzt. Mehrfach hintereinander auftretende Leerzeichen/Zeilenvorschübe werden durch ein einzelnes Leerzeichen ersetzt.</td>
+<td>upper-case()</td>
+<td></td>
 </tr>
 </tbody>
 </table>
-
-<h2>Todo Dokumentieren:</h2>
-
-<ul>
-<li><code>abs()</code></li>
-<li><code>ceiling()</code></li>
-<li><code>max()</code></li>
-<li><code>min()</code></li>
-<li><code>node()</code></li>
-<li><code>string()</code></li>
-<li><code>upper-case()</code></li>
-</ul>
 
 </div>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.3.35 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/xpath.html">Englisch</a>
+Version: 2.3.42 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/xpath.html">Englisch</a>
 
 </body>
 </html>
