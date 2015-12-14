@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.42" date="2015-12-13">
+      <en>Access foo/@bar attributes on sub elements</en>
+      <de>Zugriff auf foo/@bar Attribute in Kindelementen</de>
+    </entry>
+    <entry version="2.3.42" date="2015-12-13">
+      <en>New shape: Circle</en>
+      <de>Neue Form: Kreis</de>
+    </entry>
     <entry version="2.3.41" date="2015-12-10">
       <en>New xpath function substring()</en>
       <de>Neue XPath-Funktion substring()</de>
