@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.4.43" date="2015-12-15">
+      <en>Options / imagenotfound: error or warning</en>
+      <de>Optionen / bildnichtgefunden: fehler oder warnung</de>
+    </entry>
     <entry version="2.3.42" date="2015-12-13">
       <en>Access foo/@bar attributes on sub elements</en>
       <de>Zugriff auf foo/@bar Attribute in Kindelementen</de>
