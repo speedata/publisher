@@ -1086,7 +1086,7 @@
       <listing><![CDATA[<DefiniereFarbe name="meingrün" modell="cmyk" c="22" m="0" y="55" k="0"/>
 <ObjektAusgeben>
   <Kreis radiusx="10mm" hintergrundfarbe="blue" rahmenfarbe="meingrün" linienstärke="1mm"/>
-</ObjektAusgeben>  
+</ObjektAusgeben>
 ]]></listing>
       <para>erzeugt einen Kreis</para>
       <image file="circlewithborder.png"/>
@@ -3917,6 +3917,30 @@
         </description>
         <description xml:lang="de">
           <para>Zeilenenden in Daten beachten.</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="imagenotfound" de="bildnichtgefunden" optional="yes" since="2.3.43">
+      <description xml:lang="en">
+        <para>When an image is not found: should the publisher raise an error?</para>
+      </description>
+      <description xml:lang="de">
+        <para>Falls ein Bild nicht gefunden wird: soll eine Warnung oder ein Fehler ausgegeben werden?</para>
+      </description>
+      <choice en="warning" de="warnung">
+        <description xml:lang="en">
+          <para>Show a warning</para>
+        </description>
+        <description xml:lang="de">
+          <para>Eine Warnung ausgeben</para>
+        </description>
+      </choice>
+      <choice en="error" de="fehler">
+        <description xml:lang="en">
+          <para>Raise an error (default)</para>
+        </description>
+        <description xml:lang="de">
+          <para>Fehler ausgeben (Voreinstellung).</para>
         </description>
       </choice>
     </attribute>
@@ -7612,6 +7636,9 @@ Message: "$i is: 3"]]></listing>
       <value context="origin" key="bottom" en="bottom" de="unten" />
       <value context="origin" key="left" en="left" de="links" />
       <value context="origin" key="right" en="right" de="rechts" />
+
+      <value en="warning" de="warnung" context="*" key="warning"/>
+      <value en="error" de="fehler" context="*" key="error"/>
 
       <value context="*" key="English (Great Britan)" en="English (Great Britan)" de="Englisch (Großbritannien)"/>
       <value context="*" key="English (USA)" en="English (USA)" de="Englisch (USA)"/>

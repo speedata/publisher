@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2015-12-13 17:08)
+-- generated from genluatranslations.go (2015-12-15 10:50)
 -- do not edit!
 module(...)
 return {
@@ -243,16 +243,17 @@ return {
         ["farbprofil"] = "colorprofile",
         ["beschnitt"] = "crop",
         ["beschnittmarken"] = "cutmarks",
-        ["beschnittzugabemarken"] = "trimmarks",
-        ["beschnittzugabe"] = "trim",
+        ["ignorierezeilenende"] = "ignoreeol",
+        ["bildnichtgefunden"] = "imagenotfound",
         ["hauptsprache"] = "mainlanguage",
-        ["trace"] = "trace",
+        ["markerzurücksetzen"] = "resetmarks",
         ["startseite"] = "startpage",
         ["zeichne_raster"] = "show-grid",
         ["zeige_rasterbelegung"] = "show-gridallocation",
         ["zeige_silbentrennung"] = "show-hyphenation",
-        ["markerzurücksetzen"] = "resetmarks",
-        ["ignorierezeilenende"] = "ignoreeol",
+        ["trace"] = "trace",
+        ["beschnittzugabe"] = "trim",
+        ["beschnittzugabemarken"] = "trimmarks",
         },
       ["Sonst"] = { "Otherwise",
         },
@@ -262,10 +263,6 @@ return {
         ["zeile"] = "row",
         },
       ["Überlagern"] = { "Overlay",
-        },
-      ["Position"] = { "Position",
-        ["x"] = "x",
-        ["y"] = "y",
         },
       ["Absatz"] = { "Paragraph",
         ["erlaubeumbruch"] = "allowbreak",
@@ -311,6 +308,10 @@ return {
         ["valign"] = "valign",
         ["hreferenz"] = "hreference",
         ["vreferenz"] = "vreference",
+        },
+      ["Position"] = { "Position",
+        ["x"] = "x",
+        ["y"] = "y",
         },
       ["Platzierungsbereich"] = { "PositioningArea",
         ["name"] = "name",
@@ -470,6 +471,12 @@ return {
         ["bedingung"] = "test",
         },
   ["__values"] = {
+    ["align"] = {
+      ["center"] = "center",
+      ["left"] = "left",
+      ["right"] = "right",
+      ["justify"] = "justify",
+   },
     ["*"] = {
       ["alle"] = "all",
       ["artbox"] = "artbox",
@@ -514,6 +521,8 @@ return {
       ["vertikal"] = "vertical",
       ["ohne"] = "without",
       ["ja"] = "yes",
+      ["warnung"] = "warning",
+      ["fehler"] = "error",
       ["Englisch (Großbritannien)"] = "English (Great Britan)",
       ["Englisch (USA)"] = "English (USA)",
       ["Französisch"] = "French",
@@ -542,12 +551,6 @@ return {
       ["unten"] = "bottom",
       ["links"] = "left",
       ["rechts"] = "right",
-   },
-    ["align"] = {
-      ["center"] = "center",
-      ["left"] = "left",
-      ["right"] = "right",
-      ["justify"] = "justify",
    },
    } 
   },

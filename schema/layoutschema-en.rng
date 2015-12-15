@@ -2036,19 +2036,25 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="trimmarks">
-               <a:documentation>Trim marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute trim, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is no, that means no trim marks will be displayed. The trim marks show the additional trim distance.</a:documentation>
+            <attribute name="ignoreeol">
+               <a:documentation>Ignore newlines in data-xml</a:documentation>
                <choice>
                   <value>yes</value>
-                  <a:documentation>Show trim marks.</a:documentation>
+                  <a:documentation>Ignore newlines in data-xml</a:documentation>
                   <value>no</value>
-                  <a:documentation>Don&#39;t show trim marks (default).</a:documentation>
+                  <a:documentation>Respect newlines in data-xml</a:documentation>
                </choice>
             </attribute>
          </optional>
          <optional>
-            <attribute name="trim">
-               <a:documentation>The amount of bleed. Defaults to 0mm.</a:documentation>
+            <attribute name="imagenotfound">
+               <a:documentation>When an image is not found: should the publisher raise an error?</a:documentation>
+               <choice>
+                  <value>warning</value>
+                  <a:documentation>Show a warning</a:documentation>
+                  <value>error</value>
+                  <a:documentation>Raise an error (default)</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -2099,13 +2105,13 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="trace">
-               <a:documentation>Draw rectangles around objects for debugging purposes.</a:documentation>
+            <attribute name="resetmarks">
+               <a:documentation>Yes: ignore the marks file from previous run.</a:documentation>
                <choice>
                   <value>yes</value>
-                  <a:documentation>Verbose output in the log file and the PDF.</a:documentation>
+                  <a:documentation>Ignore marks from the previous run.</a:documentation>
                   <value>no</value>
-                  <a:documentation>Regular run (default).</a:documentation>
+                  <a:documentation>Use marks from the previous run (default).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -2148,24 +2154,29 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="resetmarks">
-               <a:documentation>Yes: ignore the marks file from previous run.</a:documentation>
+            <attribute name="trace">
+               <a:documentation>Draw rectangles around objects for debugging purposes.</a:documentation>
                <choice>
                   <value>yes</value>
-                  <a:documentation>Ignore marks from the previous run.</a:documentation>
+                  <a:documentation>Verbose output in the log file and the PDF.</a:documentation>
                   <value>no</value>
-                  <a:documentation>Use marks from the previous run (default).</a:documentation>
+                  <a:documentation>Regular run (default).</a:documentation>
                </choice>
             </attribute>
          </optional>
          <optional>
-            <attribute name="ignoreeol">
-               <a:documentation>Ignore newlines in data-xml</a:documentation>
+            <attribute name="trim">
+               <a:documentation>The amount of bleed. Defaults to 0mm.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="trimmarks">
+               <a:documentation>Trim marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute trim, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is no, that means no trim marks will be displayed. The trim marks show the additional trim distance.</a:documentation>
                <choice>
                   <value>yes</value>
-                  <a:documentation>Ignore newlines in data-xml</a:documentation>
+                  <a:documentation>Show trim marks.</a:documentation>
                   <value>no</value>
-                  <a:documentation>Respect newlines in data-xml</a:documentation>
+                  <a:documentation>Don&#39;t show trim marks (default).</a:documentation>
                </choice>
             </attribute>
          </optional>

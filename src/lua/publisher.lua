@@ -146,6 +146,7 @@ css = do_luafile("css.lua"):new()
 
 -- The defaults (set in the layout instructions file)
 options = {
+    imagenotfounderror = true,
     gridwidth   = tex.sp("10mm"),
     gridheight  = tex.sp("10mm"),
     gridcells_x = 0,
@@ -3620,7 +3621,11 @@ function imageinfo( filename,page,box )
     end
 
     if not find_file_location(filename) then
-        err("Image %q not found!",filename or "???")
+        if options.imagenotfounderror then
+            err("Image %q not found!",filename or "???")
+        else
+            warning("Image %q not found!",filename or "???")
+        end
         filename = "filenotfound.pdf"
         page = 1
     end
