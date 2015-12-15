@@ -3896,37 +3896,29 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="trimmarks" de="beschnittzugabemarken" optional="yes" since="2.3.24">
+    <attribute en="ignoreeol" de="ignorierezeilenende" optional="yes">
       <description xml:lang="en">
-        <para>Trim marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute <tt>trim</tt>, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is <tt>no</tt>, that means no trim marks will be displayed. The trim marks show the additional trim distance.</para>
+        <para>Ignore newlines in data-xml</para>
       </description>
       <description xml:lang="de">
-        <para>Beschnittzugabemarken werden ausgegeben. Diese Marken zeigen, wie groß die Beschnittzugabe ist. Der Abstand der Beschnittzugabemarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Beschnittzugabemarken ausgegeben.</para>
+        <para>Zeilenenden in Daten ignorieren.</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
-          <para>Show trim marks.</para>
+          <para>Ignore newlines in data-xml</para>
         </description>
         <description xml:lang="de">
-          <para>Beschnittzugabemarken anzeigen.</para>
+          <para>Zeilenenden in Daten ignorieren.</para>
         </description>
       </choice>
       <choice en="no" de="nein">
         <description xml:lang="en">
-          <para>Don't show trim marks (default).</para>
+          <para>Respect newlines in data-xml</para>
         </description>
         <description xml:lang="de">
-          <para>Beschnittzugabemarken nicht anzeigen (Voreinstellung).</para>
+          <para>Zeilenenden in Daten beachten.</para>
         </description>
       </choice>
-    </attribute>
-    <attribute en="trim" de="beschnittzugabe" type="length" optional="yes">
-      <description xml:lang="en">
-        <para>The amount of bleed. Defaults to 0mm.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die Größe des Beschnitts (bleed). Voreinstellung ist 0mm.</para>
-      </description>
     </attribute>
     <attribute en="mainlanguage" de="hauptsprache" optional="yes">
       <description xml:lang="en">
@@ -3937,27 +3929,27 @@
       </description>
       <referenceattribute name="languages" />
     </attribute>
-    <attribute en="trace" de="trace" optional="yes">
+    <attribute en="resetmarks" de="markerzurücksetzen" optional="yes">
       <description xml:lang="en">
-        <para>Draw rectangles around objects for debugging purposes.</para>
+        <para>Yes: ignore the marks file from previous run.</para>
       </description>
       <description xml:lang="de">
-        <para>Erzeugt zusätzliche Ausgaben in der Protokolldatei und optische Hilfen im PDF.</para>
+        <para>Wenn ja, werden die Marker des letzten Laufs ignoriert.</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
-          <para>Verbose output in the log file and the PDF.</para>
+          <para>Ignore marks from the previous run.</para>
         </description>
         <description xml:lang="de">
-          <para>Zusätzliche Ausgaben in der Logdatei und im PDF erzeugen.</para>
+          <para>Marker aus dem vorherigen Lauf ignorieren.</para>
         </description>
       </choice>
       <choice en="no" de="nein">
         <description xml:lang="en">
-          <para>Regular run (default).</para>
+          <para>Use marks from the previous run (default).</para>
         </description>
         <description xml:lang="de">
-          <para>Normaler Lauf (Voreinstellung).</para>
+          <para>Marker aus dem vorherigen Lauf weiter benutzen (Voreinstellung).</para>
         </description>
       </choice>
     </attribute>
@@ -4041,51 +4033,59 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="resetmarks" de="markerzurücksetzen" optional="yes">
+    <attribute en="trace" de="trace" optional="yes">
       <description xml:lang="en">
-        <para>Yes: ignore the marks file from previous run.</para>
+        <para>Draw rectangles around objects for debugging purposes.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn ja, werden die Marker des letzten Laufs ignoriert.</para>
+        <para>Erzeugt zusätzliche Ausgaben in der Protokolldatei und optische Hilfen im PDF.</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
-          <para>Ignore marks from the previous run.</para>
+          <para>Verbose output in the log file and the PDF.</para>
         </description>
         <description xml:lang="de">
-          <para>Marker aus dem vorherigen Lauf ignorieren.</para>
+          <para>Zusätzliche Ausgaben in der Logdatei und im PDF erzeugen.</para>
         </description>
       </choice>
       <choice en="no" de="nein">
         <description xml:lang="en">
-          <para>Use marks from the previous run (default).</para>
+          <para>Regular run (default).</para>
         </description>
         <description xml:lang="de">
-          <para>Marker aus dem vorherigen Lauf weiter benutzen (Voreinstellung).</para>
+          <para>Normaler Lauf (Voreinstellung).</para>
         </description>
       </choice>
     </attribute>
-    <attribute en="ignoreeol" de="ignorierezeilenende" optional="yes">
+    <attribute en="trim" de="beschnittzugabe" type="length" optional="yes">
       <description xml:lang="en">
-        <para>Ignore newlines in data-xml</para>
+        <para>The amount of bleed. Defaults to 0mm.</para>
       </description>
       <description xml:lang="de">
-        <para>Zeilenenden in Daten ignorieren.</para>
+        <para>Die Größe des Beschnitts (bleed). Voreinstellung ist 0mm.</para>
+      </description>
+    </attribute>
+    <attribute en="trimmarks" de="beschnittzugabemarken" optional="yes" since="2.3.24">
+      <description xml:lang="en">
+        <para>Trim marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute <tt>trim</tt>, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is <tt>no</tt>, that means no trim marks will be displayed. The trim marks show the additional trim distance.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Beschnittzugabemarken werden ausgegeben. Diese Marken zeigen, wie groß die Beschnittzugabe ist. Der Abstand der Beschnittzugabemarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Beschnittzugabemarken ausgegeben.</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
-          <para>Ignore newlines in data-xml</para>
+          <para>Show trim marks.</para>
         </description>
         <description xml:lang="de">
-          <para>Zeilenenden in Daten ignorieren.</para>
+          <para>Beschnittzugabemarken anzeigen.</para>
         </description>
       </choice>
       <choice en="no" de="nein">
         <description xml:lang="en">
-          <para>Respect newlines in data-xml</para>
+          <para>Don't show trim marks (default).</para>
         </description>
         <description xml:lang="de">
-          <para>Zeilenenden in Daten beachten.</para>
+          <para>Beschnittzugabemarken nicht anzeigen (Voreinstellung).</para>
         </description>
       </choice>
     </attribute>
