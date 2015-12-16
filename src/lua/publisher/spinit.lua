@@ -22,6 +22,7 @@ unpack = unpack or table.unpack
 function warning(...)
   local text = { ... }
   text[1] = gettext(text[1])
+  publisher.messages[#publisher.messages + 1] = { string.format(unpack(text)) , "warning" }
   errorlog:write("Warning: " .. string.format(unpack(text)) .. "\n")
   texio.write("Warning: " .. string.format(unpack(text)) .. "\n")
 end
@@ -30,7 +31,7 @@ local errcount=0
 function err(...)
   local text = { ... }
   text[1] = gettext(text[1])
-  publisher.messages[#publisher.messages + 1] = { string.format(unpack(text)) , true }
+  publisher.messages[#publisher.messages + 1] = { string.format(unpack(text)) , "error" }
   errcount =  errcount + 1
   errorlog:write("Error: " .. string.format(unpack(text)) .. "\n")
   texio.write("Error: " .. string.format(unpack(text)) .. "\n")
@@ -180,10 +181,12 @@ function exit(graceful)
       local msg = publisher.xml_escape(publisher.messages[i][1])
       -- The message can be in a non-utf8 encoding. See #65
       msg = u8fix.sanitize(msg)
-      if publisher.messages[i][2] then
+      if publisher.messages[i][2] == "error" then
           statusfile:write(string.format("  <Error>%s</Error>\n", msg))
-      else
+      elseif publisher.messages[i][2] == "message" then
           statusfile:write(string.format("  <Message>%s</Message>\n", msg))
+      elseif publisher.messages[i][2] == "warning" then
+          statusfile:write(string.format("  <Warning>%s</Warning>\n", msg))
       end
   end
   statusfile:write(string.format("  <DurationSeconds>%d</DurationSeconds>\n",math.ceil(os.gettimeofday() - starttime)))
