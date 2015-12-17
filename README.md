@@ -4,7 +4,7 @@ speedata Publisher
 About
 -----
 
-<p align="center"><img src="http://i.imgur.com/yzUJlVv.png"></p>
+<p align="center"><img src="https://i.imgur.com/yzUJlVv.png"></p>
 
 
 The speedata Publisher is a full featured database publishing software. It generates PDF files from XML data and XML layout instructions. It is used to make product catalogs and other documents with high demands on the layout.
@@ -17,12 +17,12 @@ Can I use this in production?
 
 Yes. Absolutely. We release stable (long term support) versions once in a while which are heavily tested in commercial environments and we release _unstable_ versions often. Note that these _unstable_ are still safe to use, they just might contain some experimental new features.
 
-Just get one of the ready-to-run packages from http://download.speedata.de/publisher/ and follow the directions inside the ZIP file (=just extract and set the PATH variable).
+Just get one of the ready-to-run packages from https://download.speedata.de/publisher/ and follow the directions inside the ZIP file (=just extract and set the PATH variable).
 
 
 Manual
 ------
-Our documentation is available online: http://speedata.github.io/publisher/manual/index.html and included in the distribution (`sp doc`).
+Our documentation is available online: https://speedata.github.io/publisher/manual/index.html and included in the distribution (`sp doc`).
 
 
 Bugs
@@ -37,7 +37,7 @@ License / Contributing
 
 The license is AGPLv3 for now, see the file COPYING in the root directory. This is not set in stone, we might choose a more liberal license in the future.
 
-We welcome contributions. Just [follow the github procedure (fork, pull requests)](http://help.github.com/send-pull-requests/).
+We welcome contributions. Just [follow the github procedure (fork, pull requests)](https://help.github.com/articles/using-pull-requests/).
 
 Contact / Support
 -----------------
@@ -47,5 +47,5 @@ We offer commercial support for the speedata Publisher. You can find the contact
 
 
 --------
-URL: <http://speedata.github.io/publisher/> <br />
+URL: <https://speedata.github.io/publisher/> <br />
 Source: <https://github.com/speedata/publisher/>
