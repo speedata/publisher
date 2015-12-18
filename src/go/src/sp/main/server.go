@@ -457,6 +457,7 @@ func v0StatusHandler(w http.ResponseWriter, r *http.Request) {
 		Errstatus string `json:"errorstatus"`
 		Result    string `json:"result"`
 		Message   string `json:"message"`
+		Finished  string `json:"finished"`
 	}
 	stat := statusresponse{}
 	id := mux.Vars(r)["id"]
@@ -525,7 +526,7 @@ func v0StatusHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Internal error 024")
 		return
 	}
-
+	stat.Finished = fi.ModTime().Format(time.RFC3339)
 	if v.Errors != 0 {
 		stat.Errstatus = "ok"
 		stat.Result = "failed"

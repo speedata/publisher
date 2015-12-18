@@ -92,6 +92,7 @@ Schlüssel   | Beschreibung
 `errorstatus` | Ist die Anfrage gültig? Mögliche Antworten `error` und `ok`. Wenn `error`, dann enthält der Schlüssel `message` den Grund für den Fehler, das Feld `result` ist in dem Fall ohne Bedeutung. Wenn `ok`, dann enthält das Feld `result` den Wert `not finished`, falls die PDF-Datei noch nicht erzeugt wurde.
 `result`      | Ist eine PDF-Datei erzeugt worden, enthält das Feld `result` `failed`, falls bei der PDF-Erzeugung Fehler aufgetreten sind, `not finished`, falls der Publishing-Prozess noch fortdauert, ansonsten `ok`.
 `message`     | Enthält eine informelle Nachricht zum Ergebnis. Bsp. `no errors found` oder `2 errors occurred during publishing run`.
+`finished`    | Enthält den Zeitstempel, zu dem das PDF fertig gestellt wurde. Format entspricht RFC3339, zum Beispiel `2015-12-25T12:03:04+01:00`.
 
 
 

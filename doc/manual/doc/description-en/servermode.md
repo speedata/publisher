@@ -91,7 +91,7 @@ Key           | Description
 `errorstatus` | Is the request valid? Possible answers are `error` and `ok`. If it is `error`, the value of the `message` contains the reason for the error, the value for the key `result` is without any meaning.
 `result`      | Contains `failed` if the PDF file is created but with errors. `not finished` if the PDF file is not finished, `ok` if everything went fine.
 `message`     | Contains an informal message, for example `no errors found` or `2 errors occurred during publishing run`.
-
+`finished`    | Time stamp when the PDF was finished written to. Format is RFC3339, for example `2015-12-25T12:03:04+01:00`.
 
 
 ## `/v0/format`
