@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.45" date="2015-12-18">
+      <en>API call /v0/status returns time stamp-</en>
+      <de>API Aufruf /v0/status gibt den Zeitstempel zurück.</de>
+    </entry>
     <entry version="2.3.44" date="2015-12-16">
       <en>Write warnings to status file</en>
       <de>Schreibe Warnungen in die status-Datei</de>
