@@ -88,7 +88,7 @@ function M.is_attribute(dataxml,str,pos)
         return true
     end
     local eltname
-    start,stop,eltname = string.find(str,"^(%a[%w/_*]*@[%w-]+)%s*",pos)
+    start,stop,eltname = string.find(str,"^(%a[%w/_*]*@[%w-_]+)%s*",pos)
     if start then
         local ret = {}
         local attrname
