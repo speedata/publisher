@@ -1,0 +1,36 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options show-grid="yes" mainlanguage="German" ignoreeol="yes"/>
+
+  <DefineFontfamily name="text" fontsize="11" leading="13">
+    <Regular fontface="TeXGyreHeros-Regular"/>
+  </DefineFontfamily>
+
+  <SetGrid width="5mm" height="13pt"/>
+
+  <Pagetype name="text" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+
+    <PositioningArea name="text">
+      <PositioningFrame width="18" height="32" row="1" column="1"/>
+      <PositioningFrame width="18" height="32" row="1" column="21"/>
+    </PositioningArea>
+  </Pagetype>
+
+  <Record element="data">
+    <PlaceObject column="1" row="12">
+      <Box width="18" height="18" backgroundcolor="#aaa"/>
+    </PlaceObject>
+
+    <ForAll select="Paragraph">
+      <Output area="text">
+        <Text>
+          <Paragraph fontface="text">
+            <Value select="string(.)"></Value>
+          </Paragraph>
+        </Text>
+      </Output>
+    </ForAll>
+  </Record>
+</Layout>

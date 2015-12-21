@@ -499,8 +499,8 @@ function Paragraph.vsplit( objects_t,frameheight )
         for i=1,#hlist do
             remaining_objects[#remaining_objects + 1] = hlist[i]
         end
-        objects_t[1] = join_table_to_box(remaining_objects)
     end
+    objects_t[1] = join_table_to_box(remaining_objects)
 
     --- It's a common situation where there is a single free row but the next material is
     --- too high for the row. So we return an empty list and hope that the calling function
