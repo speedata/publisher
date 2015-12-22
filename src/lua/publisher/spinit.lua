@@ -208,6 +208,7 @@ local function setup()
   tex.pdfprotrudechars = 2 -- margin protrusion
   tex.pdfadjustspacing = 2
   tex.pdfcompresslevel = 5
+  tex.pdfobjcompresslevel = 2
   tex.pdfoutput=1
   tex.outputmode = 1
   tex.pdfminorversion = 6
