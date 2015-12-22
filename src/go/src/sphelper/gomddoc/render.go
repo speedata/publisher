@@ -41,6 +41,7 @@ type clEntry struct {
 
 type clChapter struct {
 	Version string    `xml:"version,attr"`
+	Date    string    `xml:"date,attr"`
 	Entries []clEntry `xml:"entry"`
 }
 
@@ -346,7 +347,13 @@ func (md *MDDoc) convertToHTML(filename string) {
 		log.Fatal(err)
 	}
 
-	data := htmlTemplateData{kv["title"], string(out), kv["layout"], outfilename, isEn(filename)}
+	data := htmlTemplateData{
+		Title:          kv["title"],
+		Contents:       string(out),
+		Layout:         kv["layout"],
+		Sourcefilename: outfilename,
+		IsEn:           isEn(filename),
+	}
 	err = templates.ExecuteTemplate(outfile, "main.html", data)
 	if err != nil {
 		log.Fatal(err)

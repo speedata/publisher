@@ -1,3 +1,4 @@
+layout: main
 title: speedata Publisher manual
 ---
 Changelog ([feed](../changes-en.xml))
@@ -62,8 +63,8 @@ Version 2.0 (2014-07-01)
 -   New color model `gray` (1.7.1)
 -   `vreference` at [PlaceObject](../commands-en/placeobject.html).
 
-Version 1.8
------------
+Version 1.8 (2013-12-13)
+-----------------------
 
 -   Critical bugfix: don’t drop characters like à that contain a space
     character in the UTF-8 sequence.

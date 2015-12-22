@@ -61,7 +61,7 @@ Version 2.0 (2014-07-01)
     `show-gridallocation` um belegte Zellen zu zeigen.
 -   `vreferenz` bei [ObjektAusgeben](../commands-de/placeobject.html).
 
-Version 1.8
+Version 1.8 (2013-12-13)
 -----------
 
 -   Kritischer Fehler behoben: Zeichen wie à die einen Leerraum-Wert in
