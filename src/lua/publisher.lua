@@ -1017,8 +1017,8 @@ function output_at( param )
     local ht = nodelist.height + nodelist.depth
 
     -- For grid allocation
-    local width_gridcells = r:width_in_gridcells_sp(wd)
-    local height_gridcells  = r:height_in_gridcells_sp (ht)
+    local width_gridcells   = r:width_in_gridcells_sp(wd)
+    local height_gridcells  = r:height_in_gridcells_sp(ht)
 
     local delta_x, delta_y = r:position_grid_cell(x,y,area,wd,ht,valign)
 
@@ -1173,10 +1173,11 @@ function setup_page(pagenumber)
     -- pages[current_pagenumber] = nil
     pages[thispage] = current_page
 
-    local gridwidth, gridheight, nx, ny
+    local gridwidth, gridheight, nx, ny, dx, dy
     nx = options.gridcells_x
     ny = options.gridcells_y
     dx = options.gridcells_dx
+    dy = options.gridcells_dy
 
     local pagetype = detect_pagetype(thispage)
     if pagetype == false then return false end
@@ -1190,7 +1191,8 @@ function setup_page(pagenumber)
             gridheight = element_contents(j).height
             nx = element_contents(j).nx
             ny = element_contents(j).ny
-            dx = element_contents(j).ny
+            dx = element_contents(j).dx
+            dx = element_contents(j).dy
         end
     end
 
@@ -1202,7 +1204,7 @@ function setup_page(pagenumber)
         gridheight = options.gridheight
     end
 
-    current_page.grid:set_width_height({wd = gridwidth, ht = gridheight, nx = nx, ny = ny, dx = dx })
+    current_page.grid:set_width_height({wd = gridwidth, ht = gridheight, nx = nx, ny = ny, dx = dx, dy = dy })
 
     for _,j in ipairs(pagetype) do
         local eltname = elementname(j)
@@ -1829,7 +1831,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     elseif typ=="width_sp" then
         num = tonumber(val or default)
         if num then -- most likely really a number, we need to multiply with grid width
-            ret = current_page.grid.gridwidth * num
+            ret = current_page.grid:width_sp(num)
         else
             ret = val
         end
@@ -3257,11 +3259,14 @@ function get_remaining_height(area,allocate)
     local startcol = 1
     local row,firstrow,lastrow,maxrows
     firstrow = current_grid:current_row(area)
+    if not firstrow then
+        err("get remaining height: no current row")
+        firstrow = 1
+    end
     maxrows  = current_grid:number_of_rows(area)
     if allocate == "auto" then
         return (maxrows - firstrow + 1)  * current_grid.gridheight, firstrow, nil
     end
-
     if not current_grid:fits_in_row_area(startcol,cols,firstrow,area) then
         while firstrow <= maxrows do
             if current_grid:fits_in_row_area(startcol,cols,firstrow,area) then

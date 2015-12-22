@@ -237,9 +237,8 @@ function commands.box( layoutxml,dataxml )
     else
         width = tex.sp(width)
     end
-
     if tonumber(height) ~= nil then
-        height = current_grid.gridheight * height
+        height = current_grid:height_sp(tonumber(height))
     else
         height = tex.sp(height)
     end
@@ -1951,7 +1950,6 @@ function commands.place_object( layoutxml,dataxml )
         local width_in_gridcells   = current_grid:width_in_gridcells_sp(object.width)
         local height_in_gridcells  = current_grid:height_in_gridcells_sp (object.height + object.depth)
 
-
         if absolute_positioning then
             if hreference == "right" then
                 column = column - width_in_gridcells + 1
@@ -2203,7 +2201,7 @@ function commands.rule( layoutxml,dataxml )
         if direction == "horizontal" then
             length = publisher.current_grid:width_sp(length)
         elseif direction == "vertical" then
-            length = publisher.current_grid.gridheight * length
+            length = publisher.current_grid:height_sp(length)
         else
             err("Attribute »direction« with »Linie«: unknown direction: %q",direction)
         end
@@ -2337,8 +2335,10 @@ function commands.set_grid(layoutxml)
     local nx = publisher.read_attribute(layoutxml,dataxml,"nx",    "rawstring")
     local ny = publisher.read_attribute(layoutxml,dataxml,"ny",    "rawstring")
     local dx = publisher.read_attribute(layoutxml,dataxml,"dx",    "length_sp")
+    local dy = publisher.read_attribute(layoutxml,dataxml,"dy",    "length_sp")
 
     publisher.options.gridcells_dx = dx
+    publisher.options.gridcells_dy = dy
 
     local _nx = tonumber(nx)
     local _ny = tonumber(ny)

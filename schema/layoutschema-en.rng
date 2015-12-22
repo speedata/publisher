@@ -3183,6 +3183,11 @@
                <a:documentation>Distance between two grid cells (horizontal)</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="dy">
+               <a:documentation>Distance between two grid cells (horizontal)</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

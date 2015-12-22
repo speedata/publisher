@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2015-12-22 12:05)
+-- generated from genluatranslations.go (2015-12-22 23:40)
 -- do not edit!
 module(...)
 return {
@@ -356,6 +356,7 @@ return {
         ["nx"] = "nx",
         ["ny"] = "ny",
         ["dx"] = "dx",
+        ["dy"] = "dy",
         },
       ["Zuweisung"] = { "SetVariable",
         ["variable"] = "variable",

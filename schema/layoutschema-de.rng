@@ -3183,6 +3183,11 @@
                <a:documentation>Abstand zwischen zwei Rasterzellen (horizontal)</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="dy">
+               <a:documentation>Abstand zwischen zwei Rasterzellen (horizontal)</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

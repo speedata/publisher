@@ -183,6 +183,7 @@ function set_width_height(self, options)
     self.grid_nx    = options.nx
     self.grid_ny    = options.ny
     self.grid_dx    = options.dx or 0
+    self.grid_dy    = options.dy or 0
     calculate_number_gridcells(self)
     self.allocation_x_y = {}
     for i=1,self:number_of_columns() do
@@ -220,7 +221,10 @@ function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname,keepposition)
         frame_margin_left, frame_margin_top = 0,0
     else
         local area = self.positioning_frames[areaname]
-        assert(area,string.format("Area %q not known",tostring(areaname)))
+        if not area then
+            err("Area %q not known, expect many errors",tostring(areaname))
+            return
+        end
         local current_row = self:current_row(areaname)
         local block = area[self:framenumber(areaname)]
         frame_margin_left = block.column - 1
@@ -367,6 +371,15 @@ function width_sp(self, gridcells )
     return math.ceil(math.round(wd,3))
 end
 
+function height_sp(self, gridcells )
+    if not tonumber(gridcells) then
+        return tex.sp(gridcells)
+    end
+    local ht = self.gridheight * gridcells + (gridcells - 1 ) * self.grid_dy
+    return math.ceil(math.round(ht,3))
+end
+
+
 -- Return the number of grid cells for the given width (in scaled points)
 function width_in_gridcells_sp(self,width_sp)
     assert(self)
@@ -383,10 +396,17 @@ end
 
 -- Return the number of grid cells for the given height (in scaled points)
 function height_in_gridcells_sp(self,height_sp)
-    local ht =  height_sp / self.gridheight
-    -- We can easily get rounding errors when converting between sp and bp.
-    -- Problem: two table rows at 9.5bp are higher than 4 grid cells at 4.5bp
-    return math.ceil(math.round( ht,4))
+    assert(self)
+    if height_sp == 0 then return 0 end
+    local ht_sp = height_sp - self.gridheight
+    if ht_sp <= 0 then return 1 end
+
+    local ht_gridcells = 1
+    repeat
+        ht_gridcells = ht_gridcells + 1
+        ht_sp = ht_sp - self.gridheight - self.grid_dy
+    until ht_sp <= 500
+    return ht_gridcells
 end
 
 
@@ -399,44 +419,62 @@ function draw_grid(self)
     local paperheight_bp = sp_to_bp(tex.pageheight - self.extra_margin)
     local paperwidth_bp  = sp_to_bp(tex.pagewidth  - self.extra_margin)
     local x
+    local top, right
+    top = math.round(paperheight_bp + sp_to_bp(self.trim ),1)
+
+    local y = math.round(sp_to_bp(self.extra_margin - self.trim),2)
+
     local count_col = self:number_of_columns()
     for i=0, count_col do
         -- every 5 grid cells draw a grey rule
         if (i % 5 == 0) then color = "0.6" else color = "0.8" end
         -- every 10 grid cells draw a black rule
         if (i % 10 == 0) then color = "0.2" end
-
         -- left boundary of each grid cell (horizontal)
         if i < count_col then
-            x = sp_to_bp(i * ( self.gridwidth + self.grid_dx) + self.margin_left + self.extra_margin)
-            ret[#ret + 1] = string.format("%g G %g 0 m %g %g l S", color, math.round(x,1), math.round(x,1), math.round(paperheight_bp,1))
+            x = math.round( sp_to_bp(i * ( self.gridwidth + self.grid_dx) + self.margin_left + self.extra_margin) , 1)
+            ret[#ret + 1] = string.format("%g G %g %g m %g %g l S", color, x, y, x, top )
         end
 
         -- right boundary of each grid cell (horizontal)
         if i > 0 and self.grid_dx > 0  or i == count_col then
-            x = sp_to_bp(i * self.gridwidth +  ( i - 1 ) * self.grid_dx + self.margin_left + self.extra_margin)
-            ret[#ret + 1] = string.format("%g G %g 0 m %g %g l S", color, math.round(x,1), math.round(x,1), math.round(paperheight_bp,1))
+            x =  math.round( sp_to_bp(i * self.gridwidth +  ( i - 1 ) * self.grid_dx + self.margin_left + self.extra_margin) , 1)
+            ret[#ret + 1] = string.format("%g G %g %g m %g %g l S", color, x, y, x, top)
         end
     end
-    x = sp_to_bp(self.extra_margin)
-    local y
-    for i=0,self:number_of_rows() do
+    x = math.round(sp_to_bp(self.extra_margin - self.trim), 2)
+    local count_row = self:number_of_rows()
+    for i=0, count_row do
         -- every 5 grid cells draw a gray rule
         if (i % 5 == 0) then color = "0.6" else color = "0.8" end
         -- every 10 grid cells draw a black rule
         if (i % 10 == 0) then color = "0.2" end
-        y = sp_to_bp( i * self.gridheight  + self.margin_top )
-        ret[#ret + 1] = string.format("%g G %g %g m %g %g l S", color, math.round(x,2), math.round(paperheight_bp - y,2), math.round(paperwidth_bp,2), math.round(paperheight_bp - y,2))
+
+        -- top boundary of each grid cell
+        if i < count_row then
+            y = sp_to_bp( i * self.gridheight +  (i) * self.grid_dy +  self.margin_top)
+            y = math.round(  paperheight_bp - y  , 3)
+            right = math.round(paperwidth_bp  + sp_to_bp(self.trim),1)
+            ret[#ret + 1] = string.format("%s G %g %g m %g %g l S",color, x, y, right ,y)
+        end
+
+        -- bottom boundary of each grid cell
+        if i > 0 and self.grid_dy > 0  or i == count_row then
+            y = sp_to_bp( i * self.gridheight +  ( i - 1 ) * self.grid_dy +  self.margin_top)
+            y = math.round(  paperheight_bp - y  , 3)
+            right = math.round(paperwidth_bp,1)
+            ret[#ret + 1] = string.format("%s G %g %g m %g %g l S", color,x, y, right, y)
+        end
     end
     ret[#ret + 1] = "Q"
     ret[#ret + 1] = "q"
     local width,height
     for _,area in pairs(self.positioning_frames) do
         for _,frame in ipairs(area) do
-            x      = sp_to_bp(( frame.column - 1) * ( self.gridwidth + self.grid_dx) + self.extra_margin + self.margin_left)
-            y      = sp_to_bp( (frame.row - 1)  * self.gridheight  +  self.margin_top )
-            width  = sp_to_bp(frame.width * self.gridwidth + (frame.width - 1) * self.grid_dx)
-            height = sp_to_bp(frame.height  * self.gridheight )
+            x      = sp_to_bp(( frame.column - 1) * ( self.gridwidth  + self.grid_dx) + self.extra_margin + self.margin_left)
+            y      = sp_to_bp(( frame.row    - 1) * ( self.gridheight + self.grid_dy) + self.margin_top )
+            width  = sp_to_bp(frame.width  * self.gridwidth  + (frame.width  - 1) * self.grid_dx)
+            height = sp_to_bp(frame.height * self.gridheight + (frame.height - 1) * self.grid_dy)
             ret[#ret + 1] = string.format("q %s %g w %g %g %g %g re S Q", "1 0 0  RG",0.5, x,math.round(paperheight_bp - y,2),width,-height)
         end
     end
@@ -464,8 +502,8 @@ function draw_gridallocation(self)
         for x=1, self:number_of_columns() do
             if self.allocation_x_y[x][y] then
                 re_wd = sp_to_bp(self.gridwidth)
-                re_x = sp_to_bp (self.margin_left + self.extra_margin) + ( x - 1) * sp_to_bp(self.gridwidth + self.grid_dx)
-                re_y = paperheight - sp_to_bp(self.margin_top + self.extra_margin) - y * sp_to_bp(self.gridheight)
+                re_x = sp_to_bp (self.margin_left + self.extra_margin) + ( x - 1 ) * sp_to_bp(self.gridwidth + self.grid_dx)
+                re_y = paperheight - sp_to_bp(self.margin_top + self.extra_margin) - y * sp_to_bp(self.gridheight) - ( y - 1 ) * sp_to_bp(self.grid_dy)
                 if self.allocation_x_y[x][y] == 1 then
                     color = " 0 0 1 0 k "
                 elseif self.allocation_x_y[x][y] == 2 then
@@ -507,7 +545,7 @@ function position_grid_cell(self,x,y,areaname,wd,ht,valign)
     local numgridcells = math.floor(wd / self.gridwidth)
 
     x_sp = (frame_margin_left + x - 1) * (self.gridwidth + self.grid_dx) + self.margin_left + self.extra_margin
-    y_sp = (frame_margin_top  + y - 1) * self.gridheight  + self.margin_top  + self.extra_margin
+    y_sp = (frame_margin_top  + y - 1) * (self.gridheight + self.grid_dy) + self.margin_top  + self.extra_margin
     if valign then
         -- height mod cellheight = "overshoot"
         local overshoot = ht % self.gridheight
@@ -559,7 +597,8 @@ function calculate_number_gridcells(self)
 
         if self.grid_ny and self.grid_ny ~= 0 then
             self:set_number_of_rows( self.grid_ny )
-            self.gridheight = pagearea_y / self.grid_ny
+            local sum_distances = ( self.grid_ny - 1 )  * self.grid_dy
+            self.gridheight = math.floor( ( pagearea_y - sum_distances ) /  self.grid_ny, 0)
         else
             self:set_number_of_rows(math.ceil(math.round( pagearea_y /  self.gridheight ,4)))
         end
