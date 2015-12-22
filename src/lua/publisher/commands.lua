@@ -1525,6 +1525,11 @@ function commands.output( layoutxml,dataxml )
     local area     = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
     local allocate = publisher.read_attribute(layoutxml,dataxml,"allocate", "string", "yes")
     local row      = publisher.read_attribute(layoutxml,dataxml,"row","number")
+
+    local maxwidth = publisher.current_grid:width_sp(publisher.current_grid:number_of_columns(area))
+    local current_maxwidth = xpath.get_variable("__maxwidth")
+    xpath.set_variable("__maxwidth", maxwidth)
+
     local tab  = publisher.dispatch(layoutxml,dataxml)
     area = area or publisher.default_areaname
     local last_area = publisher.xpath.get_variable("__area")
@@ -1532,9 +1537,6 @@ function commands.output( layoutxml,dataxml )
     publisher.xpath.set_variable("__area",area)
     publisher.next_row(row,area,1)
 
-
-    local current_maxwidth = xpath.get_variable("__maxwidth")
-    xpath.set_variable("__maxwidth", publisher.current_grid:width_sp(publisher.current_grid:number_of_columns(area)))
 
     for i=1,#tab do
         local contents = publisher.element_contents(tab[i])
@@ -1560,7 +1562,7 @@ function commands.output( layoutxml,dataxml )
             parameters = {
                 area = area,
                 maxheight = maxht,
-                width = current_grid:number_of_columns(area) * current_grid.gridwidth,
+                width = maxwidth,
                 balance = contents.balance,
                 current_grid = current_grid,
                 allocate = allocate,
