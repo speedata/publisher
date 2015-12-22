@@ -2561,6 +2561,28 @@
                <a:documentation>Set the number of copies. At most 5 are allowed in the PDF specification.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="printscaling">
+               <a:documentation>Should the printer scale the pages?</a:documentation>
+               <choice>
+                  <value>appdefault</value>
+                  <a:documentation>Use the default from the PDF viewer</a:documentation>
+                  <value>none</value>
+                  <a:documentation>No page scaling</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="picktraybypdfsize">
+               <a:documentation>Activate the check box in the PDF viewer for choosing the paper tray based on the page size.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Activate checkbox</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Deactivate checkbox</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

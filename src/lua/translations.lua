@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2015-12-15 10:50)
+-- generated from genluatranslations.go (2015-12-22 12:05)
 -- do not edit!
 module(...)
 return {
@@ -283,6 +283,8 @@ return {
         },
       ["PDFOptionen"] = { "PDFOptions",
         ["anzahlkopien"] = "numcopies",
+        ["seitenskalierung"] = "printscaling",
+        ["fachauswahl"] = "picktraybypdfsize",
         },
       ["ObjektAusgeben"] = { "PlaceObject",
         ["belegen"] = "allocate",
@@ -479,6 +481,7 @@ return {
    },
     ["*"] = {
       ["alle"] = "all",
+      ["voreinstellung"] = "appdefault",
       ["artbox"] = "artbox",
       ["auto"] = "auto",
       ["bleedbox"] = "bleedbox",
@@ -506,6 +509,7 @@ return {
       ["mediabox"] = "mediabox",
       ["middle"] = "middle",
       ["nein"] = "no",
+      ["keine"] = "none",
       ["ungerade"] = "odd",
       ["QRCode"] = "QRCode",
       ["rgb"] = "rgb",

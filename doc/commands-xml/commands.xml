@@ -4537,7 +4537,7 @@
     <seealso><ref name="xpath"/>, <cmd name="AtPageCreation"/>,  <cmd name="AtPageShipout"/>,   <cmd name="PositioningArea"/>,  <cmd name="NewPage"/>
     </seealso>
   </command>
-  <command en="PDFOptions" de="PDFOptionen">
+  <command en="PDFOptions" de="PDFOptionen" since="2.3.39">
     <description xml:lang="en">
       <para>Set PDF options like nuber of copies and such</para>
     </description>
@@ -4552,6 +4552,54 @@
       <description xml:lang="de">
         <para>Setze Anzahl der Kopien. Maximal erlaubt sind 5 aufgrund der PDF-Spezifikation.</para>
       </description>
+    </attribute>
+    <attribute en="printscaling" de="seitenskalierung" optional="yes" since="2.3.46">
+      <description xml:lang="en">
+        <para>Should the printer scale the pages?</para>
+      </description>
+      <description xml:lang="de">
+        <para>Soll der Drucker die Seiten skalieren?</para>
+      </description>
+      <choice en="appdefault" de="voreinstellung">
+        <description xml:lang="en">
+          <para>Use the default from the PDF viewer</para>
+        </description>
+        <description xml:lang="de">
+          <para>Voreinstellung des PDF-Viewers benutzen</para>
+        </description>
+      </choice>
+      <choice en="none" de="keine">
+        <description xml:lang="en">
+          <para>No page scaling</para>
+        </description>
+        <description xml:lang="de">
+          <para>Keine Seitenskalierung</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="picktraybypdfsize" de="fachauswahl" optional="yes" since="2.3.46">
+      <description xml:lang="en">
+        <para>Activate the check box in the PDF viewer for choosing the paper tray based on the page size.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auswahlfeld im PDF-Viewer »Papierquelle gemäß PDF-Seitengröße auswählen«.</para>
+      </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Activate checkbox</para>
+        </description>
+        <description xml:lang="de">
+          <para>Checkbox aktivieren</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Deactivate checkbox</para>
+        </description>
+        <description xml:lang="de">
+          <para>Checkbox deaktivieren</para>
+        </description>
+      </choice>
     </attribute>
     <example xml:lang="en"><listing><![CDATA[<PDFOptions numcopies="3"/>]]></listing></example>
     <example xml:lang="de"><listing><![CDATA[<PDFOptionen anzahlkopien="4"/>]]></listing></example>
@@ -7588,6 +7636,7 @@ Message: "$i is: 3"]]></listing>
       <value key="alignright" context="align" en="right" de="right"/>
       <value key="alignjustify" context="align" en="justify" de="justify"/>
       <value key="all" context="*" en="all" de="alle"/>
+      <value key="appdefault" en="appdefault" de="voreinstellung" context="*"/>
       <value key="artbox" context="*" en="artbox" de="artbox"/>
       <value key="auto" context="*" en="auto" de="auto"/>
       <value key="bleedbox" context="*" en="bleedbox" de="bleedbox"/>
@@ -7615,6 +7664,7 @@ Message: "$i is: 3"]]></listing>
       <value key="mediabox" context="*" en="mediabox" de="mediabox"/>
       <value key="middle" context="*" en="middle" de="middle"/>
       <value key="no" context="*" en="no" de="nein"/>
+      <value key="none" en="none" de="keine" context="*"/>
       <value key="odd" context="*" en="odd" de="ungerade"/>
       <value key="QRCode" context="*" en="QRCode" de="QRCode"/>
       <value key="rgb" context="*" en="rgb" de="rgb"/>

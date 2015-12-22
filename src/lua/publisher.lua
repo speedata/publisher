@@ -856,6 +856,13 @@ function initialize_luatex_and_generate_pdf()
     if viewerpreferences.numcopies and viewerpreferences.numcopies > 1 and viewerpreferences.numcopies <= 5 then
         vp[#vp + 1] = string.format("/NumCopies %d", viewerpreferences.numcopies)
     end
+    if viewerpreferences.printscaling and viewerpreferences.printscaling ~= ""  then
+        vp[#vp + 1] = string.format("/PrintScaling /%s", viewerpreferences.printscaling)
+    end
+    if viewerpreferences.picktray ~= nil  then
+        vp[#vp + 1] = string.format("/PickTrayByPDFSize %s", viewerpreferences.picktray)
+    end
+
     local catalog = "/PageMode /UseOutlines"
     if #vp > 0 then
         catalog = catalog .. "/ViewerPreferences <<" .. table.concat(vp," ") .. ">>"

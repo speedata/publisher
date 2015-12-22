@@ -1732,10 +1732,23 @@ end
 
 --- PDFOptions
 --- ------------
---- Sets number of copies and such
+--- Sets number of copies and such. See #57
 function commands.pdfoptions( layoutxml, dataxml )
-    local nc = publisher.read_attribute(layoutxml,dataxml,"numcopies", "number")
+    local nc           = publisher.read_attribute(layoutxml,dataxml,"numcopies", "number")
+    local printscaling = publisher.read_attribute(layoutxml,dataxml,"printscaling", "string")
+    local picktray     = publisher.read_attribute(layoutxml,dataxml,"picktraybypdfsize", "boolean")
+
     publisher.viewerpreferences.numcopies = nc or 1
+    if printscaling == "appdefault" then
+        publisher.viewerpreferences.printscaling = "AppDefault"
+    elseif printscaling == "none" then
+        publisher.viewerpreferences.printscaling = "None"
+    else
+        publisher.viewerpreferences.printscaling = ""
+    end
+    if picktray ~= nil then
+        publisher.viewerpreferences.picktray = tostring(picktray)
+    end
 end
 
 --- PlaceObject

@@ -2561,6 +2561,28 @@
                <a:documentation>Setze Anzahl der Kopien. Maximal erlaubt sind 5 aufgrund der PDF-Spezifikation.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="seitenskalierung">
+               <a:documentation>Soll der Drucker die Seiten skalieren?</a:documentation>
+               <choice>
+                  <value>voreinstellung</value>
+                  <a:documentation>Voreinstellung des PDF-Viewers benutzen</a:documentation>
+                  <value>keine</value>
+                  <a:documentation>Keine Seitenskalierung</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fachauswahl">
+               <a:documentation>Auswahlfeld im PDF-Viewer »Papierquelle gemäß PDF-Seitengröße auswählen«.</a:documentation>
+               <choice>
+                  <value>ja</value>
+                  <a:documentation>Checkbox aktivieren</a:documentation>
+                  <value>nein</value>
+                  <a:documentation>Checkbox deaktivieren</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
