@@ -6660,7 +6660,7 @@
         <para>Bestimmt den Innenabstand einer Tabelle (rechts)</para>
       </description>
     </attribute>
-    <attribute en="background-text" de="background-text" optional="yes" css="background-text">
+    <attribute en="background-text" de="background-text" optional="yes" css="background-text" since="2.3.7">
       <description xml:lang="en">
         <para>A text that should be placed in the background of the table cell.</para>
       </description>
@@ -6668,7 +6668,7 @@
         <para>Ein Text, der in den Tabellenhintergrund gelegt wird.</para>
       </description>
     </attribute>
-    <attribute en="background-textcolor" de="background-textcolor" optional="yes" css="background-textcolor">
+    <attribute en="background-textcolor" de="background-textcolor" optional="yes" css="background-textcolor" since="2.3.7">
       <description xml:lang="en">
         <para>The color of the text in the background (if any).</para>
       </description>
@@ -6676,7 +6676,7 @@
         <para>Die Farbe des Hintergrundtexts, falls vorhanden.</para>
       </description>
     </attribute>
-    <attribute en="background-transform" de="background-transform" optional="yes" css="background-transform">
+    <attribute en="background-transform" de="background-transform" optional="yes" css="background-transform" since="2.3.7">
       <description xml:lang="en">
         <para>The transformation of the background text (if any). Currently supported: <tt>rotate(-40deg)</tt> (and other angles in the range 0 to -90).</para>
       </description>
@@ -6684,7 +6684,7 @@
         <para>Die Transformation des Hintergrundtexts (falls vorhanden). Derzeit wird folgende Angabe unterstützt: <tt>rotate(-40deg) (und andere Winkel im Bereich 0 bis -90).</tt></para>
       </description>
     </attribute>
-    <attribute en="background-size" de="background-size" optional="yes" css="background-size">
+    <attribute en="background-size" de="background-size" optional="yes" css="background-size" since="2.3.7">
       <description xml:lang="en">
         <para>Controls the size of the background text. Currently only 'contain' is allowed.</para>
       </description>
@@ -6700,7 +6700,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="background-font-family" de="background-font-family" optional="yes" css="background-font-family" type="text">
+    <attribute en="background-font-family" de="background-font-family" optional="yes" css="background-font-family" type="text" since="2.3.7">
       <description xml:lang="en">
         <para>Set the font family of the background text. Defaults to the table font.</para>
       </description>
