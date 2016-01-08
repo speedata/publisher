@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.46" date="2016-01-08">
+      <en>Vertical spacing between grid cells</en>
+      <de>Vertikaler Abstand zwischen Rasterzellen</de>
+    </entry>
+    <entry version="2.3.46" date="2016-01-08">
+      <en>PDF options PrintScaling and PickTrayByPDFSize</en>
+      <de>PDF Optionen Fachauswahl und Seitenskalierung</de>
+    </entry>
     <entry version="2.3.45" date="2015-12-18">
       <en>API call /v0/status returns time stamp-</en>
       <de>API Aufruf /v0/status gibt den Zeitstempel zurück.</de>
