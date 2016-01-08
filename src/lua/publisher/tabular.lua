@@ -102,6 +102,8 @@ function attach_objects_row( tab )
                         inline = {}
                     end
                     block[#block + 1] = eltcontents
+                elseif eltname == "Message" then
+                    -- ignore
                 else
                     warning("Unknown object in table: %s",eltname or "???")
                 end

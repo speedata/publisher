@@ -2705,7 +2705,18 @@ end
 --- ----
 --- A table row. Consists of several Td's
 function commands.tr( layoutxml,dataxml )
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = {}
+    local tab_tmp = publisher.dispatch(layoutxml,dataxml)
+    local eltname
+
+    -- filter things like <Message ...> that don't give sensible output
+    for i=1,#tab_tmp do
+        eltname = publisher.elementname(tab_tmp[i])
+
+        if eltname ~= "elementstructure" and eltname ~= "Message" then
+            tab[#tab + 1] = tab_tmp[i]
+        end
+    end
 
     local attribute = {
         ["data"]            = "xpath",
