@@ -863,6 +863,10 @@ function initialize_luatex_and_generate_pdf()
         vp[#vp + 1] = string.format("/PickTrayByPDFSize %s", viewerpreferences.picktray)
     end
 
+    if viewerpreferences.duplex ~= nil and viewerpreferences.duplex ~= "" then
+        vp[#vp + 1] = string.format("/Duplex /%s", viewerpreferences.duplex)
+    end
+
     local catalog = "/PageMode /UseOutlines"
     if #vp > 0 then
         catalog = catalog .. "/ViewerPreferences <<" .. table.concat(vp," ") .. ">>"

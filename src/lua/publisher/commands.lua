@@ -1738,6 +1738,7 @@ function commands.pdfoptions( layoutxml, dataxml )
     local nc           = publisher.read_attribute(layoutxml,dataxml,"numcopies", "number")
     local printscaling = publisher.read_attribute(layoutxml,dataxml,"printscaling", "string")
     local picktray     = publisher.read_attribute(layoutxml,dataxml,"picktraybypdfsize", "boolean")
+    local duplex       = publisher.read_attribute(layoutxml,dataxml,"duplex", "string")
 
     publisher.viewerpreferences.numcopies = nc or 1
     if printscaling == "appdefault" then
@@ -1749,6 +1750,15 @@ function commands.pdfoptions( layoutxml, dataxml )
     end
     if picktray ~= nil then
         publisher.viewerpreferences.picktray = tostring(picktray)
+    end
+    if duplex == "simplex" then
+        publisher.viewerpreferences.duplex = "Simplex"
+    elseif duplex == "duplexflipshortedge" then
+        publisher.viewerpreferences.duplex = "DuplexFlipShortEdge"
+    elseif duplex == "duplexfliplongedge" then
+        publisher.viewerpreferences.duplex = "DuplexFlipLongEdge"
+    else
+        publisher.viewerpreferences.duplex = ""
     end
 end
 

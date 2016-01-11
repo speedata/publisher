@@ -2557,6 +2557,19 @@
       <element name="PDFOptions">
          <a:documentation>Set PDF options like nuber of copies and such</a:documentation>
          <optional>
+            <attribute name="duplex">
+               <a:documentation>Set viewer preference to one or two page printing. Default: empty.</a:documentation>
+               <choice>
+                  <value>simplex</value>
+                  <a:documentation>One page per sheet</a:documentation>
+                  <value>duplexflipshortedge</value>
+                  <a:documentation>Two pages per sheet and flip on short edge</a:documentation>
+                  <value>duplexfliplongedge</value>
+                  <a:documentation>Two pages per sheet and flip on long edge</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="numcopies">
                <a:documentation>Set the number of copies. At most 5 are allowed in the PDF specification.</a:documentation>
             </attribute>

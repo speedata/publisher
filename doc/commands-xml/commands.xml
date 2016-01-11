@@ -4545,6 +4545,38 @@
       <para>Setze PDF Optionen wie Anzahl der Kopien</para>
     </description>
     <childelements></childelements>
+    <attribute en="duplex" de="beidseitig" optional="yes" since="2.3.47">
+      <description xml:lang="en">
+        <para>Set viewer preference to one or two page printing. Default: empty.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze PDF Anzeigeprogramm auf einseitigen oder doppelseitigen Druck. Voreinstellung: leer.</para>
+      </description>
+      <choice en="simplex" de="einseitig">
+        <description xml:lang="en">
+          <para>One page per sheet</para>
+        </description>
+        <description xml:lang="de">
+          <para>Eine Seite je Blatt</para>
+        </description>
+      </choice>
+      <choice en="duplexflipshortedge" de="beidseitigkurzekante">
+        <description xml:lang="en">
+          <para>Two pages per sheet and flip on short edge</para>
+        </description>
+        <description xml:lang="de">
+          <para>Beidseitig und an kurzer Kante umblättern</para>
+        </description>
+      </choice>
+      <choice en="duplexfliplongedge" de="beidseitiglangekante">
+        <description xml:lang="en">
+          <para>Two pages per sheet and flip on long edge</para>
+        </description>
+        <description xml:lang="de">
+          <para>Beidseitig und an langer Kante umblättern</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="numcopies" de="anzahlkopien" optional="yes" type="number">
       <description xml:lang="en">
         <para>Set the number of copies. At most 5 are allowed in the PDF specification.</para>
@@ -7658,6 +7690,8 @@ Message: "$i is: 3"]]></listing>
       <value key="collapse" context="*" en="collapse" de="collapse"/>
       <value key="Code128" context="*" en="Code128" de="Code128"/>
       <value key="cropbox" context="*" en="cropbox" de="cropbox"/>
+      <value context="*" key="duplexflipshortedge" en="duplexflipshortedge" de="beidseitigkurzekante" />
+      <value context="*" key="duplexfliplongedge" en="duplexfliplongedge" de="beidseitiglangekante" />
       <value key="EAN13" context="*" en="EAN13" de="EAN13"/>
       <value key="even" context="*" en="even" de="gerade"/>
       <value key="first" context="*" en="first" de="erste"/>
@@ -7679,6 +7713,7 @@ Message: "$i is: 3"]]></listing>
       <value key="right" context="*" en="right" de="rechts"/>
       <value key="rightaligned" context="*" en="rightaligned" de="rechtsbündig"/>
       <value key="separate" context="*" en="separate" de="separate"/>
+      <value context="*" key="simplex" en="simplex" de="einseitig" />
       <value key="solid" context="*" en="solid" de="durchgezogen"/>
       <value key="spotcolor" context="*" en="spotcolor" de="sonderfarbe"/>
       <value key="top" context="*" en="top" de="top"/>

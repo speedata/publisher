@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2015-12-22 23:40)
+-- generated from genluatranslations.go (2016-01-11 10:58)
 -- do not edit!
 module(...)
 return {
@@ -282,6 +282,7 @@ return {
         ["name"] = "name",
         },
       ["PDFOptionen"] = { "PDFOptions",
+        ["beidseitig"] = "duplex",
         ["anzahlkopien"] = "numcopies",
         ["seitenskalierung"] = "printscaling",
         ["fachauswahl"] = "picktraybypdfsize",
@@ -496,6 +497,8 @@ return {
       ["collapse"] = "collapse",
       ["Code128"] = "Code128",
       ["cropbox"] = "cropbox",
+      ["beidseitigkurzekante"] = "duplexflipshortedge",
+      ["beidseitiglangekante"] = "duplexfliplongedge",
       ["EAN13"] = "EAN13",
       ["gerade"] = "even",
       ["erste"] = "first",
@@ -517,6 +520,7 @@ return {
       ["rechts"] = "right",
       ["rechtsbündig"] = "rightaligned",
       ["separate"] = "separate",
+      ["einseitig"] = "simplex",
       ["durchgezogen"] = "solid",
       ["sonderfarbe"] = "spotcolor",
       ["top"] = "top",

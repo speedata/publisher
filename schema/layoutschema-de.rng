@@ -2557,6 +2557,19 @@
       <element name="PDFOptionen">
          <a:documentation>Setze PDF Optionen wie Anzahl der Kopien</a:documentation>
          <optional>
+            <attribute name="beidseitig">
+               <a:documentation>Setze PDF Anzeigeprogramm auf einseitigen oder doppelseitigen Druck. Voreinstellung: leer.</a:documentation>
+               <choice>
+                  <value>einseitig</value>
+                  <a:documentation>Eine Seite je Blatt</a:documentation>
+                  <value>beidseitigkurzekante</value>
+                  <a:documentation>Beidseitig und an kurzer Kante umblättern</a:documentation>
+                  <value>beidseitiglangekante</value>
+                  <a:documentation>Beidseitig und an langer Kante umblättern</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="anzahlkopien">
                <a:documentation>Setze Anzahl der Kopien. Maximal erlaubt sind 5 aufgrund der PDF-Spezifikation.</a:documentation>
             </attribute>
