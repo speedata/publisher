@@ -177,7 +177,7 @@ end
 
 function M.is_function(dataxml,str,pos,ns)
     local start,stop,prefix,fname
-    start,stop,prefix = string.find(str,"^(%S-):",pos)
+    start,stop,prefix = string.find(str,"^([^%(]+):",pos)
     if prefix then
         pos = stop + 1
     else
