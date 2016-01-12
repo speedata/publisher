@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.48" date="2016-01-12">
+      <en>Server mode: id always start with a non-zero value.</en>
+      <de>Server Modus: IDs starten immer mit einen nicht-Null Wert.</de>
+    </entry>
     <entry version="2.3.47" date="2016-01-11">
       <en>New PDFOption Duplex</en>
       <de>Neue PDFOption Duplex</de>
