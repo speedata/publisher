@@ -356,7 +356,7 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Always start with non-0 to avoid problems out of scope of the publisher
-	tmpdir, err := ioutil.TempDir(serverTemp, "S")
+	tmpdir, err := ioutil.TempDir(serverTemp, "1")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintln(protocolFile, "Internal error 013:")
