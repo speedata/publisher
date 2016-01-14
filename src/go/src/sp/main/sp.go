@@ -199,8 +199,8 @@ func getOption(optionname string) string {
 	if options[optionname] != "" {
 		return options[optionname]
 	}
-	if cfg.String("DEFAULT", optionname) != "" {
-		return cfg.String("DEFAULT", optionname)
+	if val := cfg.String("DEFAULT", optionname); val != "" {
+		return val
 	}
 	if defaults[optionname] != "" {
 		return defaults[optionname]
@@ -669,7 +669,9 @@ func main() {
 	// When the user requests another working directory, we should
 	// change into the given wd first, before reading the local
 	// options
+	wdIsSet := false
 	if wd := getOption("wd"); wd != "" {
+		wdIsSet = true
 		err := os.Chdir(wd)
 		if err != nil {
 			log.Fatal(err)
@@ -679,6 +681,20 @@ func main() {
 	}
 
 	cfg.ReadFile(filepath.Join(pwd, configfilename))
+
+	// ... but if the local config file has a wd=... option, we should honor this
+	// and also honor the settings in that publisher.cfg file
+	if !wdIsSet {
+		if wd := getOption("wd"); wd != "" {
+			err := os.Chdir(wd)
+			if err != nil {
+				log.Fatal(err)
+			}
+			log.Printf("Working directory now: %s", wd)
+			pwd = wd
+			cfg.ReadFile(filepath.Join(pwd, configfilename))
+		}
+	}
 
 	if add_local_path {
 		extra_dir = append(extra_dir, pwd)
