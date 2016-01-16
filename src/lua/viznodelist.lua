@@ -282,7 +282,15 @@ local function dot_analyze_nodelist( head, options )
 
   	    spec = spec .. shrink_order
   	  end
-      ret[#ret + 1] = draw_node(head,{ {"subtype", subtype},{"spec",spec} })
+
+      if head.leader then
+          ret[#ret + 1] = draw_node(head,{ {"subtype", subtype},{"spec",spec},{"leaders","leaders"} })
+          ret[#ret + 1] = dot_analyze_nodelist(head.leader,options)
+          ret[#ret + 1] = link_to(head.leader,nodename,"leaders")
+      else
+          ret[#ret + 1] = draw_node(head,{ {"subtype", subtype},{"spec",spec} })
+      end
+
   	elseif typ == "kern" then
       ret[#ret + 1] = draw_node(head,{ {"kern", string.format("kern: %gpt",head.kern / 2^16) } })
   	elseif typ == "rule" then
