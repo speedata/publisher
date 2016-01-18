@@ -5412,6 +5412,30 @@
         <para>Farbe der Linie. Vorgabe: Schwarz</para>
       </description>
     </attribute>
+    <attribute en="dashed" de="gestrichelt" optional="yes" since="2.3.50">
+      <description xml:lang="en">
+        <para>Use a dahsed rule instead of a solid rule.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Benutze eine gestrichelte Linie.</para>
+      </description>
+      <choice en="yes" de="ja">
+        <description xml:lang="en">
+          <para>Draw a dashed rule.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeichne eine gestrichelte Linie.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein">
+        <description xml:lang="en">
+          <para>Draw a solid rule.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeichne eine durchgezogene Linie.</para>
+        </description>
+      </choice>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Record element="data">
   <PlaceObject>

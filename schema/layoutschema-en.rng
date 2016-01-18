@@ -3041,6 +3041,17 @@
                <a:documentation>The color of the rule. Defaults to black.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="dashed">
+               <a:documentation>Use a dahsed rule instead of a solid rule.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Draw a dashed rule.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Draw a solid rule.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

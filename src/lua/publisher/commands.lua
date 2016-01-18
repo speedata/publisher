@@ -2215,6 +2215,7 @@ function commands.rule( layoutxml,dataxml )
     local direction     = publisher.read_attribute(layoutxml,dataxml,"direction",  "string")
     local length        = publisher.read_attribute(layoutxml,dataxml,"length",     "rawstring")
     local rulewidth     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",  "rawstring")
+    local dashed        = publisher.read_attribute(layoutxml,dataxml,"dashed",  "boolean")
     local color         = publisher.read_attribute(layoutxml,dataxml,"color",      "rawstring")
     local class         = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
     local id            = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
@@ -2248,13 +2249,19 @@ function commands.rule( layoutxml,dataxml )
         rulewidth = tex.sp(rulewidth)
     end
     rulewidth = math.round(sp_to_bp(rulewidth),3)
-
     local n = node.new("whatsit","pdf_literal")
     n.mode = 0
+    local dashpattern
+    if dashed then
+        -- 3 * rulewidth seems to be a reasonable dash pattern
+        dashpattern = string.format("[%g] 0 d",3 * rulewidth)
+    else
+        dashpattern = ""
+    end
     if direction == "horizontal" then
-        n.data = string.format("q %g w %s 0 0 m %g 0 l S Q",rulewidth,publisher.colors[colorname].pdfstring,length)
+        n.data = string.format("q %g w %s %s 0 0 m %g 0 l S Q",rulewidth, dashpattern, publisher.colors[colorname].pdfstring,length)
     elseif direction == "vertical" then
-        n.data = string.format("q %g w %s 0 0 m 0 %g l S Q",rulewidth,publisher.colors[colorname].pdfstring,-length)
+        n.data = string.format("q %g w %s %s 0 0 m 0 %g l S Q",rulewidth,dashpattern, publisher.colors[colorname].pdfstring,-length)
     else
         --
     end

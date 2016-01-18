@@ -3041,6 +3041,17 @@
                <a:documentation>Farbe der Linie. Vorgabe: Schwarz</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="gestrichelt">
+               <a:documentation>Benutze eine gestrichelte Linie.</a:documentation>
+               <choice>
+                  <value>ja</value>
+                  <a:documentation>Zeichne eine gestrichelte Linie.</a:documentation>
+                  <value>nein</value>
+                  <a:documentation>Zeichne eine durchgezogene Linie.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

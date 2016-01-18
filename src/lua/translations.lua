@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2016-01-17 20:49)
+-- generated from genluatranslations.go (2016-01-18 14:59)
 -- do not edit!
 module(...)
 return {
@@ -343,6 +343,7 @@ return {
         ["linienstärke"] = "rulewidth",
         ["länge"] = "length",
         ["farbe"] = "color",
+        ["gestrichelt"] = "dashed",
         },
       ["SpeichereDatensatzdatei"] = { "SaveDataset",
         ["dateiname"] = "filename",
