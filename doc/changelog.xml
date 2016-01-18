@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.51" date="2016-01-18">
+      <en>Temporary directory configurable.</en>
+      <de>Temporäres Verzeichnis konfigurierbar.</de>
+    </entry>
     <entry version="2.3.50" date="2016-01-18">
       <en>Dashed rules</en>
       <de>Gestrichelte Linien</de>
