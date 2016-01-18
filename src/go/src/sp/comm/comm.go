@@ -44,14 +44,13 @@ func getMessage(c net.Conn) (n int, typ string, message []byte, err error) {
 
 	message = make([]byte, messageLength)
 	var n_ int
-	n_, err = c.Read(message)
+	n_, err = io.ReadFull(c, message)
 	if err != nil {
-		log.Println("Can't read enough bytes", err)
 		return
 	}
 
 	if n_ != messageLength {
-		log.Println("not enough bytes read. Got ", n, " but expected ", messageLength)
+		log.Println("not enough bytes read. Got ", n_, " but expected ", messageLength)
 		err = errors.New("Message too short")
 		return
 	}
