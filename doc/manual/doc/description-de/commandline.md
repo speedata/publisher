@@ -28,6 +28,7 @@ Aufruf des Publishers über Kommandozeile
         --startpage=NUM          The first page number
         --show-gridallocation    Show the allocated grid cells
         --systemfonts            Use system fonts
+        --tempdir=DIR            Use this directory instead of the system temporary directory
         --trace                  Show debug messages and some tracing PDF output
         --timeout=SEC            Exit after SEC seconds
     -v, --var=VAR=VALUE          Set a variable for the publishing run
@@ -71,6 +72,7 @@ Parameter | Beschreibung
 `--startpage = NUM`| Die Seitennummer der ersten Seite.
 `--show-gridallocation`| Markiert die belegten Rasterzellen mit einer gelblichen Farbe. Doppelt belegte Zellen werden mit rot gekennzeichnet.
 `--systemfonts`| Lädt zusätzlich Systemschriftarten. Funktioniert nicht unter Windows XP.
+`--tempdir` | Benutze dieses Verzeichnis anstelle des Systemverzeichnisses für temporäre Dateien.
 `--timeout=SEC`| Beendet den Lauf nach SEC Sekunden mit Statuscode 1.
 `-v`, `--var=value`| Übergibt zusätzliche Variablen an den Publisher-Lauf. Diese können wie üblich mit `auswahl="$variable"` benutzt werden.
 `--varsfile=NAME` | Liest eine Datei ein, in der in jeder Zeile in der Form `variable=wert` Variablen definiert werden.

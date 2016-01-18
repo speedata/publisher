@@ -28,6 +28,7 @@ Running the speedata publisher on the command line
         --startpage=NUM          The first page number
         --show-gridallocation    Show the allocated grid cells
         --systemfonts            Use system fonts
+        --tempdir=DIR            Use this directory instead of the system temporary directory
         --trace                  Show debug messages and some tracing PDF output
         --timeout=SEC            Exit after SEC seconds
     -v, --var=VAR=VALUE          Set a variable for the publishing run
@@ -71,6 +72,7 @@ Parameter | Description
 `--show-gridallocation` | Show the allocated grid cells in yellowish color and double allocated grid cells in red.
 `--startpage=NUM` | The number of the first page.
 `--systemfonts` | Also use system fonts. Does not work on Windows XP.
+`--tempdir` | Use this directory instead of the system's temp dir.
 `--timeout=SEC` | Exit after SEC seconds with exit status 1.
 `-v`, `--var=value` | Passes additional variables to the publisher run. The variables can be accessed as usual with `select="$variable"`.
 `--varsfile=NAME` | Read an external file where each line has the format `variable=value` to add additional variables`

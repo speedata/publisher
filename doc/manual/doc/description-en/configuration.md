@@ -42,6 +42,7 @@ Value | Description
 `pathrewrite` | Comma separated list of entries of the form `A=B` which replace parts in `file:///...A...` to `file:///...B...`. Useful when you have absolute paths in the data which must be changed during the publishing process.
 `runs` | Set the number of runs.
 `startpage` | Number of the first page.
+`tempdir`  | Name of the temporary directory. Default is the system's temp.
 `timeout` | Maximum time of the publishing run. If time is exceeded, the publisher exits with status 1.
 `vars` | Comma separated list of variables and values in the form `var=value` to set additional variables.
 

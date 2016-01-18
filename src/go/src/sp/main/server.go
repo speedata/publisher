@@ -27,11 +27,6 @@ var (
 	protocolFile  *os.File
 )
 
-func init() {
-	serverTemp = filepath.Join(os.TempDir(), "publisher-server")
-
-}
-
 func makePublisherTemp() error {
 	fi, err := os.Stat(serverTemp)
 	if err != nil && !os.IsNotExist(err) {
@@ -585,8 +580,10 @@ func available(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func runServer(port string, address string) {
+func runServer(port string, address string, tempdir string) {
 	var err error
+	serverTemp = filepath.Join(tempdir, "publisher-server")
+
 	protocolFile, err = os.Create("publisher.protocol")
 	if err != nil {
 		log.Fatal(err)

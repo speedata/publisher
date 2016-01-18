@@ -91,6 +91,7 @@ func init() {
 		"port":       "5266",
 		"quiet":      "false",
 		"runs":       "1",
+		"tempdir":    os.TempDir(),
 	}
 
 	// The problem now is that we don't know where the executable file is
@@ -627,6 +628,7 @@ func main() {
 	op.On("--startpage NUM", "The first page number", layoutoptions)
 	op.On("--show-gridallocation", "Show the allocated grid cells", layoutoptions)
 	op.On("--systemfonts", "Use system fonts (not Win XP)", &useSystemFonts)
+	op.On("--tempdir=DIR", "Use this directory instead of the system temporary directory", options)
 	op.On("--trace", "Show debug messages and some tracing PDF output", layoutoptions)
 	op.On("--timeout SEC", "Exit after SEC seconds", options)
 	op.On("-v", "--var VAR=VALUE", "Set a variable for the publishing run", setVariable)
@@ -871,7 +873,7 @@ func main() {
 			log.Fatal("Problem with watch dir in section [hotfolder].")
 		}
 	case "server":
-		runServer(getOption("port"), getOption("address"))
+		runServer(getOption("port"), getOption("address"), getOption("tempdir"))
 	default:
 		log.Fatal("unknown command:", command)
 	}
