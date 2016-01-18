@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.50" date="2016-01-18">
+      <en>Dashed rules</en>
+      <de>Gestrichelte Linien</de>
+    </entry>
+    <entry version="2.3.50" date="2016-01-18">
+      <en>Leaders in HSpace</en>
+      <de>Führungslinien in HLeerraum</de>
+    </entry>
     <entry version="2.3.48" date="2016-01-12">
       <en>Server mode: id always start with a non-zero value.</en>
       <de>Server Modus: IDs starten immer mit einen nicht-Null Wert.</de>
