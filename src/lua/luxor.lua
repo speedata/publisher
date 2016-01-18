@@ -246,6 +246,12 @@ local function parse_xml(txt,options)
 	txt = string.gsub(txt,"<!%[CDATA%[(.-)%]%]>",replacecdata)
 
 	if string.byte(txt) ~= 60 then
+		local tmp
+		_,_,tmp = string.find(string.sub(txt,1,5),"(<.*)$")
+		if tmp == nil then
+			return nil, "Not an XML file"
+		end
+
 		_,_,txt = string.find(txt,"(<.*)$",pos)
 	end
 	if options.htmlentities then
