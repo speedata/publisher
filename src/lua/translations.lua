@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2016-01-11 10:58)
+-- generated from genluatranslations.go (2016-01-17 20:49)
 -- do not edit!
 module(...)
 return {
@@ -151,6 +151,8 @@ return {
         },
       ["HLeerraum"] = { "HSpace",
         ["breite"] = "width",
+        ["fülllinie"] = "leader",
+        ["fülllinienabstand"] = "leader-width",
         },
       ["I"] = { "I",
         },

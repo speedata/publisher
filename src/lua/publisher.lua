@@ -87,6 +87,9 @@ att_lineheight = 600
 -- server-mode / linebreaking
 att_keep = 700
 
+-- attributes for glue
+att_lederwd = 800
+
 -- Debugging / see att_origin
 origin_table = 1
 origin_vspace = 2
@@ -2776,15 +2779,16 @@ function set_color_if_necessary( nodelist,color )
 end
 
 function set_fontfamily_if_necessary(nodelist,fontfamily)
-    -- todo: test this FIXME
     -- if fontfamily == 0 then return end
     local fam
     while nodelist do
-        if nodelist.id==0 or nodelist.id==1 then
+        if nodelist.id==vlist_node or nodelist.id==hlist_node  then
             set_fontfamily_if_necessary(nodelist.list,fontfamily)
+        elseif nodelist.id == glue_node and nodelist.subtype == 100  then
+              set_fontfamily_if_necessary(nodelist.leader,fontfamily)
         else
             fam = node.has_attribute(nodelist,att_fontfamily)
-            if fam == 0 or ( fam == nil and nodelist.id == 2) then
+            if fam == 0 or ( fam == nil and nodelist.id == rule_node ) then
                 node.set_attribute(nodelist,att_fontfamily,fontfamily)
             end
         end

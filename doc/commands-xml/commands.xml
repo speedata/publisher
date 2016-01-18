@@ -2436,6 +2436,22 @@
         <para>Optionale Breite des Leeraums</para>
       </description>
     </attribute>
+    <attribute en="leader" de="fülllinie" optional="yes" since="2.3.50" type="text">
+      <description xml:lang="en">
+        <para>The text that should be displayed instead of the space. For example a dot (.).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Text, der anstelle des Leerraums angezeigt wird. Beispielsweise der Punkt (.).</para>
+      </description>
+    </attribute>
+    <attribute en="leader-width" de="fülllinienabstand" optional="yes" since="2.3.50" type="length">
+      <description xml:lang="en">
+        <para>Distance between two leader text starting points</para>
+      </description>
+      <description xml:lang="de">
+        <para>Absand zwischen zwei Startpunkten des Texts in der Führungslinie.</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
   <Textblock width="10">

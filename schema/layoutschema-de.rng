@@ -1331,6 +1331,16 @@
                <a:documentation>Optionale Breite des Leeraums</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="fülllinie">
+               <a:documentation>Der Text, der anstelle des Leerraums angezeigt wird. Beispielsweise der Punkt (.).</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fülllinienabstand">
+               <a:documentation>Absand zwischen zwei Startpunkten des Texts in der Führungslinie.</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

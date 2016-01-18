@@ -148,6 +148,36 @@ function pre_linebreak( head )
             pre_linebreak(head.replace)
         elseif head.id == whatsit_node then -- whatsit
         elseif head.id == glue_node then -- glue
+            if head.subtype == 100 then -- leader
+                local l = head.leader
+                local wd = node.has_attribute(l,800)
+
+                -- Set the font for the leader
+                pre_linebreak(l)
+
+                local tmpbox
+                if wd == -1 then
+                    tmpbox = node.hpack(l)
+                else
+                    -- \hbox{ 1fil, text, 1fil }
+                    local l1,l2
+                    l1=node.new("glue")
+                    l1.spec=node.new("glue_spec")
+                    l1.spec.width = 0
+                    l1.spec.stretch = 65536
+                    l1.spec.stretch_order = 2
+                    l1.spec.shrink = 65536
+                    l1.spec.shrink_order = 2
+                    l2=node.copy(l1)
+                    local newhead = node.insert_before(l,l,l1)
+
+                    local endoftext = node.tail(l)
+                    newhead = node.insert_after(newhead,endoftext,l2)
+                    tmpbox = node.hpack(newhead,wd,"exactly")
+                end
+                head.leader = tmpbox
+
+            end
             local gluespec = head.spec
             if gluespec then
                 if node.has_attribute(head,att_fontfamily) then

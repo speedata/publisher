@@ -1331,6 +1331,16 @@
                <a:documentation>Optional width of the space (a length).</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="leader">
+               <a:documentation>The text that should be displayed instead of the space. For example a dot (.).</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="leader-width">
+               <a:documentation>Distance between two leader text starting points</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

@@ -851,9 +851,17 @@ end
 --- ------
 --- Create a horizontal space that stretches up to infinity
 function commands.hspace( layoutxml,dataxml )
-    local width = publisher.read_attribute(layoutxml,dataxml,"width", "length_sp")
+    local width  = publisher.read_attribute(layoutxml,dataxml,"width", "length_sp")
+    local leadertext = publisher.read_attribute(layoutxml,dataxml,"leader", "rawstring")
+    local leaderwd = publisher.read_attribute(layoutxml,dataxml,"leader-width", "length_sp")
     local a = paragraph:new()
-    local n=node.new("glue")
+
+    -- It seems that it's safe to use 100 for leaders and leader-less-glue
+    local subtype = 0
+    if leadertext then
+        subtype = 100
+    end
+    local n=node.new("glue",subtype)
     n.spec=node.new("glue_spec")
 
     if width == nil then
@@ -862,6 +870,15 @@ function commands.hspace( layoutxml,dataxml )
         n.spec.stretch_order = 3
     else
         n.spec.width = tonumber(width)
+    end
+
+    if leadertext then
+        local lp = paragraph:new()
+        lp:append(leadertext)
+        -- With no given width, we ask the pre_linebreak_filter
+        -- to set the width of the hbox later on (after font setting)
+        node.set_attribute(lp.nodelist, publisher.att_lederwd, leaderwd or -1)
+        n.leader = lp.nodelist
     end
     a:append(n,{})
     return a
