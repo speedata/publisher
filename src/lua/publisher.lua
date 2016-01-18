@@ -3672,36 +3672,41 @@ function imageinfo( filename,page,box )
     --    <segment x1='2' y1='15' x2='27' y2='15' />
     --    <segment x1='1' y1='16' x2='28' y2='16' />
     --  </imageinfo>
-    local xmlfilename = string.gsub(filename,"(%..*)$",".xml")
+    local xmlfilename = string.gsub(filename,"(%..*)$","") .. ".xml"
+
     local mt
     if kpse.filelist[xmlfilename] then
-        mt = {}
-        local xmltab = load_xml(xmlfilename,"Imageinfo")
-        local segments = {}
-        local cells_x,cells_y
-        for _,v in ipairs(xmltab) do
-            if v[".__local_name"] == "cells_x" then
-                cells_x = v[1]
-            elseif v[".__local_name"] == "cells_y" then
-                cells_y = v[1]
-            elseif v[".__local_name"] == "segment" then
-                -- 0 based segments
-                segments[#segments + 1] = {v.x1,v.y1,v.x2,v.y2}
+        local xmltab,msg = load_xml(xmlfilename,"Imageinfo")
+        if not xmltab then
+            err(msg)
+        else
+            mt = {}
+            local segments = {}
+            local cells_x,cells_y
+            for _,v in ipairs(xmltab) do
+                if v[".__local_name"] == "cells_x" then
+                    cells_x = v[1]
+                elseif v[".__local_name"] == "cells_y" then
+                    cells_y = v[1]
+                elseif v[".__local_name"] == "segment" then
+                    -- 0 based segments
+                    segments[#segments + 1] = {v.x1,v.y1,v.x2,v.y2}
+                end
             end
-        end
-        -- we have parsed the file, let's build a beautiful 2dim array
-        mt.max_x = cells_x
-        mt.max_y = cells_y
-        for i=1,cells_y do
-            mt[i] = {}
-            for j=1,cells_x do
-                mt[i][j] = 0
+            -- we have parsed the file, let's build a beautiful 2dim array
+            mt.max_x = cells_x
+            mt.max_y = cells_y
+            for i=1,cells_y do
+                mt[i] = {}
+                for j=1,cells_x do
+                    mt[i][j] = 0
+                end
             end
-        end
-        for i,v in ipairs(segments) do
-            for x=v[1],v[3] do
-                for y=v[2],v[4] do
-                    mt[y][x] = 1
+            for i,v in ipairs(segments) do
+                for x=v[1],v[3] do
+                    for y=v[2],v[4] do
+                        mt[y][x] = 1
+                    end
                 end
             end
         end
