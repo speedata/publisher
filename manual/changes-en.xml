@@ -1,13 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (en)</title>
   <id>http://www.speedata.de</id>
-  <updated>2015-12-14T16:11:22+01:00</updated>
+  <updated>2016-01-19T11:20:43+01:00</updated>
   <subtitle>New revisions for download and changelog.</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.3.51</title>
+    <updated>2016-01-18T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-01-18:</id>
+    <content type="html">Temporary directory configurable.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.50</title>
+    <updated>2016-01-18T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-01-18:</id>
+    <content type="html">Dashed rules</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.50</title>
+    <updated>2016-01-18T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-01-18:</id>
+    <content type="html">Leaders in HSpace</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.48</title>
+    <updated>2016-01-12T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-01-12:</id>
+    <content type="html">Server mode: id always start with a non-zero value.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.47</title>
+    <updated>2016-01-11T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-01-11:</id>
+    <content type="html">New PDFOption Duplex</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.46</title>
+    <updated>2016-01-08T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-01-08:</id>
+    <content type="html">Vertical spacing between grid cells</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.46</title>
+    <updated>2016-01-08T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-01-08:</id>
+    <content type="html">PDF options PrintScaling and PickTrayByPDFSize</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.45</title>
+    <updated>2015-12-18T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-12-18:</id>
+    <content type="html">API call /v0/status returns time stamp-</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.44</title>
+    <updated>2015-12-16T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-12-16:</id>
+    <content type="html">Write warnings to status file</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.4.43</title>
+    <updated>2015-12-15T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2015-12-15:</id>
+    <content type="html">Options / imagenotfound: error or warning</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.3.42</title>
     <updated>2015-12-13T00:00:00Z</updated>

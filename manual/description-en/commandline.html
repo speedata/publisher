@@ -45,6 +45,7 @@ Usage: [parameter] command
     --startpage=NUM          The first page number
     --show-gridallocation    Show the allocated grid cells
     --systemfonts            Use system fonts
+    --tempdir=DIR            Use this directory instead of the system temporary directory
     --trace                  Show debug messages and some tracing PDF output
     --timeout=SEC            Exit after SEC seconds
 -v, --var=VAR=VALUE          Set a variable for the publishing run
@@ -171,6 +172,11 @@ Commands
 </tr>
 
 <tr>
+<td><code>--tempdir</code></td>
+<td>Use this directory instead of the system's temp dir.</td>
+</tr>
+
+<tr>
 <td><code>--timeout=SEC</code></td>
 <td>Exit after SEC seconds with exit status 1.</td>
 </tr>
@@ -282,7 +288,7 @@ events = layout\.xml:run(runpublisher);data\.xml:run(runpublisher)
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.3.42 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/commandline.html">German</a>
+Version: 2.3.51 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/commandline.html">German</a>
 
 </body>
 </html>
