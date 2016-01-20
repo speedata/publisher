@@ -2940,6 +2940,7 @@ function commands.text(layoutxml,dataxml)
     -- pull() gets called whenever we want to fill an area (perhaps the whole page).
     -- We get the height (parameter.maxheight) and the width (parameter.width)
     -- of the area to be filled.
+    local cg = publisher.current_grid
     tab.pull = function(parameter,state)
             -- When pull is called the first time the state is not set yet.
             -- Currently we format all sub-objects (paragraphs),
@@ -2952,7 +2953,10 @@ function commands.text(layoutxml,dataxml)
                 state.objects = objects
                 for i=1,#tab do
                     local contents = publisher.element_contents(tab[i])
-                    objects[#objects + 1] = contents:format(parameter.width,nil,parameter)
+                    local obj = contents:format(parameter.width,nil,parameter)
+                    objects[#objects + 1] = obj
+                    local ht_rows = cg:height_in_gridcells_sp(obj.height + obj.depth)
+                    cg:set_current_row(ht_rows + cg:current_row(parameter.area),parameter.area)
                 end
             end
             if #state.objects > 0 then
