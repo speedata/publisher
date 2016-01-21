@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.52" date="2016-01-21">
+      <en>Various bugfixes: multi paragraph Output with par shape, decode-html</en>
+      <de>Verschiedene Fehlerkorrekturn: mehrfache Absätze mit Absatzform, decode-html</de>
+    </entry>
     <entry version="2.3.51" date="2016-01-18">
       <en>Temporary directory configurable.</en>
       <de>Temporäres Verzeichnis konfigurierbar.</de>
@@ -36,7 +40,7 @@
       <en>Write warnings to status file</en>
       <de>Schreibe Warnungen in die status-Datei</de>
     </entry>
-    <entry version="2.4.43" date="2015-12-15">
+    <entry version="2.3.43" date="2015-12-15">
       <en>Options / imagenotfound: error or warning</en>
       <de>Optionen / bildnichtgefunden: fehler oder warnung</de>
     </entry>
