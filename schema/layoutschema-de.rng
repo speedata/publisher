@@ -3488,10 +3488,6 @@
                   <a:documentation>Nur auf der ersten Seite.</a:documentation>
                   <value>alle</value>
                   <a:documentation>Auf allen Seiten. Falls »first« definiert, erscheint der Tabellenkopf auf allen Seiten bis auf der ersten.</a:documentation>
-                  <value>ungerade</value>
-                  <a:documentation>Auf allen ungeraden Seiten.</a:documentation>
-                  <value>gerade</value>
-                  <a:documentation>Auf allen geraden Seiten.</a:documentation>
                </choice>
             </attribute>
          </optional>

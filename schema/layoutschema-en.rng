@@ -3488,10 +3488,6 @@
                   <a:documentation>Only appear on the first page.</a:documentation>
                   <value>all</value>
                   <a:documentation>All pages. If »first« is defined, the tablehead appears on all pages but the first.</a:documentation>
-                  <value>odd</value>
-                  <a:documentation>Appear on all odd pages.</a:documentation>
-                  <value>even</value>
-                  <a:documentation>Appear on all even pages.</a:documentation>
                </choice>
             </attribute>
          </optional>

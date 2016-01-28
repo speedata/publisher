@@ -6459,6 +6459,7 @@
           <para>Auf allen Seiten. Falls »first« definiert, erscheint der Tabellenkopf auf allen Seiten bis auf der ersten.</para>
         </description>
       </choice>
+      <!--
       <choice en="odd" de="ungerade">
         <description xml:lang="en">
           <para>Appear on all odd pages.</para>
@@ -6475,6 +6476,7 @@
           <para>Auf allen geraden Seiten.</para>
         </description>
       </choice>
+      -->
     </attribute>
     <remark xml:lang="en">
       <para>The contents of the table head gets repeated on every page of a broken table.</para>
