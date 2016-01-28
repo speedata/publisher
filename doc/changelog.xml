@@ -2,7 +2,7 @@
   <chapter version="2.4">
     <entry version="2.3.52" date="2016-01-21">
       <en>Various bugfixes: multi paragraph Output with par shape, decode-html</en>
-      <de>Verschiedene Fehlerkorrekturn: mehrfache Absätze mit Absatzform, decode-html</de>
+      <de>Verschiedene Fehlerkorrekturen: mehrfache Absätze mit Absatzform, decode-html</de>
     </entry>
     <entry version="2.3.51" date="2016-01-18">
       <en>Temporary directory configurable.</en>
