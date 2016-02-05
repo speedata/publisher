@@ -26,7 +26,7 @@ local fontloader   = require("fonts.fontloader")
 local paragraph    = require("paragraph")
 local fonts        = require("publisher.fonts")
 
-
+local env_publisherversion = os.getenv("PUBLISHERVERSION")
 
 module(...,package.seeall)
 
@@ -720,7 +720,7 @@ function initialize_luatex_and_generate_pdf()
 
     if layoutxml.version then
         local version_mismatch = false
-        local publisher_version = string.explode(os.getenv("PUBLISHERVERSION"),".")
+        local publisher_version = string.explode(env_publisherversion,".")
         local requested_version = string.explode(layoutxml.version,".")
         if publisher_version[1] ~= requested_version[1] then
             version_mismatch = true
@@ -730,7 +730,7 @@ function initialize_luatex_and_generate_pdf()
             version_mismatch = true
         end
         if version_mismatch then
-            err("Version mismatch. speedata Publisher is at version %s, requested version %s", os.getenv("PUBLISHERVERSION"), layoutxml.version)
+            err("Version mismatch. speedata Publisher is at version %s, requested version %s", env_publisherversion, layoutxml.version)
             exit()
         end
     end
@@ -874,12 +874,14 @@ function initialize_luatex_and_generate_pdf()
     if #vp > 0 then
         catalog = catalog .. "/ViewerPreferences <<" .. table.concat(vp," ") .. ">>"
     end
+    local creator = string.format("speedata Publisher %s, www.speedata.de",env_publisherversion)
+    local info = string.format("/Creator (%s) ",creator)
     if pdf.setinfo then
         pdf.setcatalog(catalog)
-        pdf.setinfo([[ /Creator	(speedata Publisher) /Producer(speedata Publisher, www.speedata.de) ]])
+        pdf.setinfo(info)
     else
         pdf.catalog = catalog
-        pdf.info = [[ /Creator (speedata Publisher) /Producer(speedata Publisher, www.speedata.de) ]]
+        pdf.info = info
     end
 
     --- Now put the bookmarks in the pdf
