@@ -25,12 +25,6 @@ def build_go(srcdir,destbin,goos,goarch,targettype)
 		ENV['GOOS'] = goos
 	end
 	publisher_version = @versions['publisher_version']
-	# let's always add the sha1 to the minor versions, so we
-	# _,minor,_ = publisher_version.split(/\./)
-	# if minor.to_i() % 2 == 1 then
-		rev = `git rev-parse HEAD`[0,8]
-		publisher_version = publisher_version + "-#{rev}"
-	# end
 	binaryname = goos == "windows" ? "sp.exe" : "sp"
     # Now compile the go executable
 	cmdline = "go build -ldflags '-X main.dest=#{targettype} -X main.version=#{publisher_version}' -o #{destbin}/#{binaryname} sp/main"
@@ -137,8 +131,8 @@ task :ghpages => [:sphelper] do
 		sh "tar --exclude='.DS_Store' -czf ../webpage/speedatapublisher-de.tgz speedatapublisher-de.docset"
 		sh "tar --exclude='.DS_Store' -czf ../webpage/speedatapublisher-en.tgz speedatapublisher-en.docset"
 	end
-	IO.write("webpage/speedata_Publisher_(en).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>http://speedata.github.io/publisher/speedatapublisher-en.tgz</url>\n</entry>\n")
-	IO.write("webpage/speedata_Publisher_(de).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>http://speedata.github.io/publisher/speedatapublisher-de.tgz</url>\n</entry>\n")
+	IO.write("webpage/speedata_Publisher_(en).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>https://speedata.github.io/publisher/speedatapublisher-en.tgz</url>\n</entry>\n")
+	IO.write("webpage/speedata_Publisher_(de).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>https://speedata.github.io/publisher/speedatapublisher-de.tgz</url>\n</entry>\n")
 end
 
 # For now: only a small test

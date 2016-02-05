@@ -2,14 +2,11 @@ package buildsp
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 
 	"sphelper/config"
-
-	"github.com/speedata/gogit"
 )
 
 func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype string) error {
@@ -25,18 +22,7 @@ func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype string) error
 		os.Setenv("GOOS", goos)
 	}
 
-	// We add the git sha1 to the version number
-	repo, err := gogit.OpenRepository(filepath.Join(cfg.Basedir(), ".git"))
-	if err != nil {
-		log.Fatal(err)
-	}
-	rev, err := repo.LookupReference("HEAD")
-	if err != nil {
-		log.Fatal(err)
-	}
-	headsha1 := rev.Target().String()[:8]
-
-	publisher_version := cfg.Publisherversion.String() + "-" + headsha1
+	publisher_version := cfg.Publisherversion.String()
 	binaryname := "sp"
 	if goos == "windows" {
 		binaryname += ".exe"
