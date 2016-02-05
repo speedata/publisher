@@ -33,7 +33,9 @@
     <optional><cmd name="NewPage"/></optional>
     <optional><cmd name="NextFrame"/></optional>
     <optional><cmd name="NextRow"/></optional>
+    <optional><cmd name="Options"/></optional>
     <optional><cmd name="Output"/></optional>
+    <optional><cmd name="Pageformat"/></optional>
     <optional><cmd name="Paragraph"/></optional>
     <optional><cmd name="PlaceObject"/></optional>
     <optional><cmd name="PositioningArea"/></optional>
@@ -46,6 +48,7 @@
     <optional><cmd name="Sub"/></optional>
     <optional><cmd name="Sup"/></optional>
     <optional><cmd name="Switch"/></optional>
+    <optional><cmd name="Table"/></optional>
     <optional><cmd name="Tablehead"/></optional>
     <optional><cmd name="Tablerule"/></optional>
     <optional><cmd name="Td"/></optional>
@@ -6507,6 +6510,7 @@
           <cmd name="Barcode"/>
           <cmd name="Box"/>
           <cmd name="Copy-of"/>
+          <cmd name="Frame"/>
           <cmd name="ForAll"/>
           <cmd name="Image"/>
           <cmd name="Loop"/>
@@ -6622,7 +6626,7 @@
         <para>Die Anzahl der Zeilen, die die Zelle überdecken soll. Voreinstellung ist 1.</para>
       </description>
     </attribute>
-    <attribute en="align" de="align" optional="yes" css="text-align">
+    <attribute en="align" de="align" optional="yes" css="text-align" allowxpath="yes">
       <description xml:lang="en">
         <para>Horizontal alignment of the cell contents. Defaults to left.</para>
       </description>

@@ -28,6 +28,7 @@ type CommandsxmlAttribute struct {
 	De          string           `xml:"de,attr"`
 	Choice      []ChoiceXML      `xml:"choice"`
 	Reference   NameAtt          `xml:"referenceattribute"`
+	AllowXPath  string           `xml:"allowxpath,attr"`
 }
 
 type DescriptionXML struct {
