@@ -1599,6 +1599,9 @@ end
 --- ![Control points in the circle](img/circlepoints.svg)
 ---
 function circle( radiusx_sp, radiusy_sp, colorname,framecolorname,rulewidth_sp)
+    if rulewidth_sp < 5 then
+        framecolorname = colorname
+    end
     radiusx_sp, radiusy_sp = sp_to_bp(radiusx_sp), sp_to_bp(radiusy_sp)
     rulewidth_sp = sp_to_bp(rulewidth_sp)
     local paint = node.new("whatsit","pdf_literal")
@@ -1612,10 +1615,10 @@ function circle( radiusx_sp, radiusy_sp, colorname,framecolorname,rulewidth_sp)
         err("Color %q unknown, reverting to black",framecolorname or "(no color name given)")
         framecolentry = colors["black"]
     end
-    local _,bordercolor = fill_stroke_color(colentry.pdfstring)
-    local fillcolor,_  =  fill_stroke_color(framecolentry.pdfstring)
+
+    local fillcolor, _    =  fill_stroke_color(colentry.pdfstring)
+    local  _, bordercolor =  fill_stroke_color(framecolentry.pdfstring)
     local circle_bezier = 0.551915024494
-    fill_stroke_color(colentry.pdfstring)
 
     local shift_down, shift_right = -radiusy_sp, 0
     local x1 = math.round(   shift_right                                  ,3)
