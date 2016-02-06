@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2016-01-18 14:59)
+-- generated from genluatranslations.go (2016-02-06 16:48)
 -- do not edit!
 module(...)
 return {
@@ -237,6 +237,7 @@ return {
       ["KeinUmbruch"] = { "NoBreak",
         ["maxbreite"] = "maxwidth",
         ["reduzieren"] = "reduce",
+        ["text"] = "text",
         ["faktor"] = "factor",
         },
       ["Ol"] = { "Ol",
@@ -499,12 +500,14 @@ return {
       ["cmyk"] = "cmyk",
       ["collapse"] = "collapse",
       ["Code128"] = "Code128",
+      ["abschneiden"] = "cut",
       ["cropbox"] = "cropbox",
       ["beidseitigkurzekante"] = "duplexflipshortedge",
       ["beidseitiglangekante"] = "duplexfliplongedge",
       ["EAN13"] = "EAN13",
       ["gerade"] = "even",
       ["erste"] = "first",
+      ["schriftgröße"] = "fontsize",
       ["vollständig"] = "full",
       ["graustufen"] = "gray",
       ["horizontal"] = "horizontal",

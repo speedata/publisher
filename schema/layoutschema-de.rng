@@ -2002,13 +2002,18 @@
                <a:documentation>Setzt die maximale Breite des Texts, wenn sie sich nicht aus der Umgebung herleiten lässt (wie beispielsweise Tabellenzellen).</a:documentation>
             </attribute>
          </optional>
+         <attribute name="reduzieren">
+            <a:documentation>Verringere die Textgröße falls notwendig.</a:documentation>
+            <choice>
+               <value>schriftgröße</value>
+               <a:documentation>Verkleinert durch Verringerung der Schriftgröße.</a:documentation>
+               <value>abschneiden</value>
+               <a:documentation>Fügt den Text im Attribut text als Platzhalter ein, wenn der Absatz zu lang ist.</a:documentation>
+            </choice>
+         </attribute>
          <optional>
-            <attribute name="reduzieren">
-               <a:documentation>Verringere die Textgröße falls notwendig.</a:documentation>
-               <choice>
-                  <value>schriftgröße</value>
-                  <a:documentation>Verkleinert durch Verringerung der Schriftgröße.</a:documentation>
-               </choice>
+            <attribute name="text">
+               <a:documentation>Der einzufügende Text, wenn der Absatz zu lang ist. Zum Beispiel &#39;...&#39;</a:documentation>
             </attribute>
          </optional>
          <optional>

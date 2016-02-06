@@ -1,0 +1,23 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options show-grid="yes"/>
+  <Pageformat width="7cm" height="5cm"/>
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="5">
+        <Paragraph>
+          <NoBreak reduce="cut" text="...">
+            <Value>The quick brown fox jumps over the lazy dog.</Value>
+          </NoBreak>
+        </Paragraph>
+        <Paragraph>
+          <NoBreak reduce="fontsize" factor="0.7">
+            <Value>The quick brown fox jumps over the lazy dog.</Value>
+          </NoBreak>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+
+  </Record>
+</Layout>

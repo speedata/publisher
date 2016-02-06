@@ -3778,7 +3778,7 @@
         <para>Setzt die maximale Breite des Texts, wenn sie sich nicht aus der Umgebung herleiten lässt (wie beispielsweise Tabellenzellen).</para>
       </description>
     </attribute>
-    <attribute en="reduce" de="reduzieren" optional="yes">
+    <attribute en="reduce" de="reduzieren" optional="no">
       <description xml:lang="en">
         <para>Reduce the text size if necessary.</para>
       </description>
@@ -3793,6 +3793,22 @@
           <para>Verkleinert durch Verringerung der Schriftgröße.</para>
         </description>
       </choice>
+      <choice en="cut" de="abschneiden" since="2.3.53">
+        <description xml:lang="en">
+          <para>Inserts text given in the attribute text if the paragraph is too long.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Fügt den Text im Attribut text als Platzhalter ein, wenn der Absatz zu lang ist.</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="text" de="text" optional="yes" since="2.3.53">
+      <description xml:lang="en">
+        <para>The text to be inserted if the paragraph should be cut. For example '...'</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der einzufügende Text, wenn der Absatz zu lang ist. Zum Beispiel '...'</para>
+      </description>
     </attribute>
     <attribute en="factor" de="faktor" optional="yes" type="number">
       <description xml:lang="en">
@@ -7735,12 +7751,14 @@ Message: "$i is: 3"]]></listing>
       <value key="cmyk" context="*" en="cmyk" de="cmyk"/>
       <value key="collapse" context="*" en="collapse" de="collapse"/>
       <value key="Code128" context="*" en="Code128" de="Code128"/>
-      <value key="cropbox" context="*" en="cropbox" de="cropbox"/>
+      <value context="*" key="cut" en="cut" de="abschneiden" />
+      <value context="*" key="cropbox" en="cropbox" de="cropbox"/>
       <value context="*" key="duplexflipshortedge" en="duplexflipshortedge" de="beidseitigkurzekante" />
       <value context="*" key="duplexfliplongedge" en="duplexfliplongedge" de="beidseitiglangekante" />
       <value key="EAN13" context="*" en="EAN13" de="EAN13"/>
       <value key="even" context="*" en="even" de="gerade"/>
       <value key="first" context="*" en="first" de="erste"/>
+      <value context="*" key="fontsize" en="fontsize" de="schriftgröße" />
       <value key="full" context="*" en="full" de="vollständig"/>
       <value key="gray" context="*" en="gray" de="graustufen"/>
       <value key="horizontal" context="*" en="horizontal" de="horizontal"/>

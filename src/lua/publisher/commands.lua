@@ -1411,14 +1411,10 @@ end
 --- -------
 --- Don't allow a linebreak of the contents. Reduce font size if necessary
 function commands.nobreak( layoutxml, dataxml )
-    -- local textformat    = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
-    -- local allowbreak    = publisher.read_attribute(layoutxml,dataxml,"allowbreak","rawstring")
-    -- local fontname      = publisher.read_attribute(layoutxml,dataxml,"fontface",  "rawstring")
-    -- local colorname     = publisher.read_attribute(layoutxml,dataxml,"color",     "rawstring")
-    -- local language_name = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
-
-    local current_maxwidth =publisher.read_attribute(layoutxml,dataxml,"maxwidth",  "length_sp", xpath.get_variable("__maxwidth"))
-    local shrinkfactor = publisher.read_attribute(layoutxml,dataxml,"factor", "rawstring",0.9)
+    local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth",  "length_sp", xpath.get_variable("__maxwidth"))
+    local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor", "rawstring",0.9)
+    local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce","string")
+    local text             = publisher.read_attribute(layoutxml,dataxml,"text","rawstring")
 
     local fontfamily = 0
     local languagecode = publisher.defaultlanguage
@@ -1442,30 +1438,48 @@ function commands.nobreak( layoutxml, dataxml )
         a:append(j,{fontfamily = 0, languagecode = languagecode, allowbreak = allowbreak})
     end
 
+    if strategy == "fontsize" then
+        local fam = publisher.current_fontfamily
+        local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[fam]
+        local strut
+        strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 })
 
-    local fam = publisher.current_fontfamily
-    local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[fam]
-    local strut
-    strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 })
-
-    local nl = node.hpack(node.copy_list(a.nodelist))
-    nl = node.insert_before(nl, nl , node.copy(strut))
-
-    while nl.next.width > current_maxwidth do
-        fam = publisher.fonts.clone_family(fam, {size = shrinkfactor})
-        local oldnl = nl
-        nl = node.copy_list(a.nodelist)
-        publisher.set_fontfamily_if_necessary(nl,fam)
-        -- pre_linebreak is necessary to set the different font widths
-        publisher.fonts.pre_linebreak(nl)
-        nl = node.hpack(nl)
+        local nl = node.hpack(node.copy_list(a.nodelist))
         nl = node.insert_before(nl, nl , node.copy(strut))
-    end
 
-    a.nodelist = nl
-    publisher.intextblockcontext = publisher.intextblockcontext - 1
+        while nl.next.width > current_maxwidth do
+            fam = publisher.fonts.clone_family(fam, {size = shrinkfactor})
+            local oldnl = nl
+            nl = node.copy_list(a.nodelist)
+            publisher.set_fontfamily_if_necessary(nl,fam)
+            -- pre_linebreak is necessary to set the different font widths
+            publisher.fonts.pre_linebreak(nl)
+            nl = node.hpack(nl)
+            nl = node.insert_before(nl, nl , node.copy(strut))
+        end
+
+        a.nodelist = nl
+        publisher.intextblockcontext = publisher.intextblockcontext - 1
+    elseif strategy == "cut" then
+        local nl = node.hpack(node.copy_list(a.nodelist))
+        if node.dimensions(nl) <= current_maxwidth then
+            return a
+        end
+        local txt = publisher.mknodes(text,fam,{})
+        txt = node.hpack(txt)
+        local wd_txt = node.dimensions(txt)
+        local head = nl.list
+        local wd = 0
+        while head and wd + wd_txt <= current_maxwidth do
+            head = head.next
+            wd = node.dimensions(nl.list,head)
+        end
+        a.nodelist = node.copy_list(nl.list,head)
+        node.insert_after(a.nodelist,node.tail(a.nodelist),txt)
+    end
     return a
 end
+
 
 --- Ordered list (`<Ol>`)
 --- ------------------

@@ -1876,7 +1876,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
             return tex.sp(val)
         end
     else
-        warning("read_attribut (2): unknown type: %s",type(val))
+        warning("read_attribute (2): unknown type: %s",type(val))
     end
     return val
 end

@@ -240,6 +240,7 @@
                     <attribute name="en"/>
                     <attribute name="de"/>
                     <optional><attribute name="context"/></optional>
+                    <optional><attribute name="since"/></optional>
                     <ref name="descriptions"/>
                   </element>
                 </zeroOrMore>
