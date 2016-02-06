@@ -283,6 +283,7 @@ end
 -- Return true if the object of width wd fits in the given row
 -- at the column.
 function fits_in_row(self,column,width,row)
+    column = math.ceil(column)
     if not column then return false end
     if column + width - 1 > self:number_of_columns() then return false end
     local max_x = column + width - 1
