@@ -1584,14 +1584,14 @@ end
 function fill_stroke_color( pdfcolor )
     local a,b = string.match(pdfcolor,"^(.*rg)(.*RG)")
     if a ~= nil then
-        return b,a
+        return a,b
     end
     a,b = string.match(pdfcolor,"^(.*k)(.*K)")
     if a ~= nil then
-        return b,a
+        return a,b
     end
     a,b = string.match(pdfcolor,"^(.*G)(.*g)")
-    return b,a
+    return a,b
 end
 
 --- Draw a circle
