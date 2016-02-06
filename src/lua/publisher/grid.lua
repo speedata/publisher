@@ -201,8 +201,8 @@ function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname,keepposition)
 
     -- when true, we don't want to move the cursor
     if not keepposition then
-        self:set_current_column(x + wd,areaname)
-        self:set_current_row(y,areaname)
+        self:set_current_column(math.ceil(x + wd),areaname)
+        self:set_current_row(   math.ceil(y)     ,areaname)
     end
 
     local grid_conflict = false
