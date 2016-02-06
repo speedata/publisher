@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.53" date="2016-02-06">
+      <en>Nobreak allows to cut text with ...</en>
+      <de>KeinUmbruch erlaubt das Abschneiden von Text mit ...</de>
+    </entry>
+    <entry version="2.3.53" date="2016-02-06">
+      <en>PDF producer is set to LuaTeX, creator is set to speedata Publisher - version number</en>
+      <de>PDF Producer wird auf LuaTeX gesetzt, Creator auf speedata Publisher - Versionsnummer</de>
+    </entry>
+    <entry version="2.3.53" date="2016-02-06">
+      <en>Various bugfixes</en>
+      <de>Diverse Fehlerkorrekturen</de>
+    </entry>
     <entry version="2.3.52" date="2016-01-21">
       <en>Various bugfixes: multi paragraph Output with par shape, decode-html</en>
       <de>Verschiedene Fehlerkorrekturen: mehrfache Absätze mit Absatzform, decode-html</de>
