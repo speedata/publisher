@@ -5565,7 +5565,7 @@
   </command>
   <command en="SavePages" de="SeitenSpeichern">
     <description xml:lang="en">
-      <para>Everything enclosed in <cmd name="SavePages"/> is saved internally and not placed into the PDF. Useful if the output migth be discarded.</para>
+      <para>Everything enclosed in <cmd name="SavePages"/> is saved internally and not placed into the PDF. Useful if the output might be discarded.</para>
     </description>
     <description xml:lang="de">
       <para>Alle Ausgaben innerhalb von <cmd name="SavePages"/> werden intern gespeichert und nicht ins PDF ausgegeben. Hilfreich wenn die Ausgabe ggf. verworfen werden soll.</para>

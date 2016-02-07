@@ -2272,6 +2272,10 @@ function commands.rule( layoutxml,dataxml )
     else
         dashpattern = ""
     end
+    if not publisher.colors[colorname] then
+        err("Rule: colorname %q unknown",tostring(colorname))
+        colorname = "black"
+    end
     if direction == "horizontal" then
         n.data = string.format("q %g w %s %s 0 0 m %g 0 l S Q",rulewidth, dashpattern, publisher.colors[colorname].pdfstring,length)
     elseif direction == "vertical" then
