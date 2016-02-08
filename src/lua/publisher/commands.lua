@@ -1505,11 +1505,11 @@ end
 function commands.options( layoutxml,dataxml )
     publisher.options.cutmarks           = publisher.read_attribute(layoutxml,dataxml,"cutmarks",    "boolean")
     publisher.options.trimmarks          = publisher.read_attribute(layoutxml,dataxml,"trimmarks",   "boolean")
-    publisher.options.showgrid           = publisher.read_attribute(layoutxml,dataxml,"show-grid",   "boolean")
-    publisher.options.showgridallocation = publisher.read_attribute(layoutxml,dataxml,"show-gridallocation","boolean")
+    local showgrid                       = publisher.read_attribute(layoutxml,dataxml,"show-grid",   "boolean")
+    local showgridallocation             = publisher.read_attribute(layoutxml,dataxml,"show-gridallocation","boolean")
     publisher.options.showhyphenation    = publisher.read_attribute(layoutxml,dataxml,"show-hyphenation","boolean")
     publisher.options.startpage          = publisher.read_attribute(layoutxml,dataxml,"startpage",   "number")
-    publisher.options.trace              = publisher.read_attribute(layoutxml,dataxml,"trace",       "boolean")
+    local trace                          = publisher.read_attribute(layoutxml,dataxml,"trace",       "boolean")
     publisher.options.trim               = publisher.read_attribute(layoutxml,dataxml,"trim",        "length")
     publisher.options.ignoreeol          = publisher.read_attribute(layoutxml,dataxml,"ignoreeol",   "boolean")
     publisher.options.resetmarks         = publisher.read_attribute(layoutxml,dataxml,"resetmarks",  "boolean",false)
@@ -1519,7 +1519,15 @@ function commands.options( layoutxml,dataxml )
     local mainlanguage                   = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","")
 
     publisher.options.imagenotfounderror = imagenotfound == "error"
-
+    if trace ~= nil then
+        publisher.options.trace = trace
+    end
+    if showgrid ~= nil then
+        publisher.options.showgrid = showgrid
+    end
+    if showgridallocation ~= nil then
+        publisher.options.showgridallocation = showgridallocation
+    end
     if mainlanguage ~= "" then
         publisher.set_mainlanguage(mainlanguage,true)
     end
@@ -2433,11 +2441,10 @@ end
 --- -----------
 --- Assign a value to a variable.
 function commands.setvariable( layoutxml,dataxml )
-    local trace_p = publisher.read_attribute(layoutxml,dataxml,"trace","boolean")
+    local trace_p   = publisher.read_attribute(layoutxml,dataxml,"trace","boolean")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
-
-    -- FIXME: wenn in der Variablen schon nodelisten sind, dann müssen diese gefreed werden!
-    local varname = publisher.read_attribute(layoutxml,dataxml,"variable","rawstring")
+    local varname   = publisher.read_attribute(layoutxml,dataxml,"variable","rawstring")
+    -- FIXME: if the variable contains nodes, the must be freed:
 
     trace("SetVariable, Variable = %q",varname or "???")
     if not varname then
