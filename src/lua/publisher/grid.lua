@@ -100,6 +100,9 @@ function get_parshape( self,row,areaname,framenumber )
             last_free_column = i
         end
     end
+    if not first_free_column then
+        return 0
+    end
     local x_start = ( first_free_column - 1) * self.gridwidth
     local x_end = ( last_free_column - first_free_column + 1 ) * self.gridwidth
     return {x_start,x_end}

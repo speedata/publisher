@@ -167,13 +167,16 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         local areaname = options.area
         local current_row    = cg:current_row(areaname)
         local number_of_rows = cg:number_of_rows(areaname)
-        -- printtable("cg:allocation_x_y",cg.allocation_x_y)
         parameter.parshape = {}
         local framenumber = cg:framenumber(areaname)
         local maxframes = cg:number_of_frames(areaname)
+        local pstmp
         while framenumber <= maxframes do
             for i = current_row,number_of_rows do
-                parameter.parshape[#parameter.parshape + 1] = cg:get_parshape(i,areaname,framenumber)
+                pstmp = cg:get_parshape(i,areaname,framenumber)
+                if pstmp ~= 0 then
+                    parameter.parshape[#parameter.parshape + 1] = pstmp
+                end
             end
             framenumber = framenumber + 1
             current_row = 1
