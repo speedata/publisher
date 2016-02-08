@@ -2399,6 +2399,9 @@
                   <a:documentation>Normales Verhalten, der Text hat eine rechteckige Form.</a:documentation>
                   <value>auto</value>
                   <a:documentation>Text fließt um belegte Bereiche.</a:documentation>
+                  <data type="string">
+                     <param name="pattern">\{.+\}</param>
+                  </data>
                </choice>
             </attribute>
          </optional>
@@ -3798,6 +3801,7 @@
          <oneOrMore>
             <choice>
                <ref name="e_Switch"></ref>
+               <ref name="e_Loop"></ref>
                <ref name="e_Paragraph"></ref>
                <ref name="e_Ol"></ref>
                <ref name="e_Ul"></ref>

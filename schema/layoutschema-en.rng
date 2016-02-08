@@ -2399,6 +2399,9 @@
                   <a:documentation>Regular behaviour: the text does not flow around objects.</a:documentation>
                   <value>auto</value>
                   <a:documentation>Text flows around allocated objects.</a:documentation>
+                  <data type="string">
+                     <param name="pattern">\{.+\}</param>
+                  </data>
                </choice>
             </attribute>
          </optional>
@@ -3142,7 +3145,7 @@
    </define>
    <define name="e_SavePages">
       <element name="SavePages">
-         <a:documentation>Everything enclosed in SavePages is saved internally and not placed into the PDF. Useful if the output migth be discarded.</a:documentation>
+         <a:documentation>Everything enclosed in SavePages is saved internally and not placed into the PDF. Useful if the output might be discarded.</a:documentation>
          <attribute name="name">
             <a:documentation>The name of the discarded output. For later retrieval with InsertPages.</a:documentation>
          </attribute>
@@ -3798,6 +3801,7 @@
          <oneOrMore>
             <choice>
                <ref name="e_Switch"></ref>
+               <ref name="e_Loop"></ref>
                <ref name="e_Paragraph"></ref>
                <ref name="e_Ol"></ref>
                <ref name="e_Ul"></ref>

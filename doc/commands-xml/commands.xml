@@ -4198,7 +4198,7 @@
     <childelements>
       <cmd name="Text"/>
     </childelements>
-    <attribute en="allocate" de="belegen" optional="yes">
+    <attribute en="allocate" de="belegen" optional="yes" allowxpath="yes">
       <description xml:lang="en">
         <para>Should text flow around already allocated objects? This is experimental: you need to set the grid height to the size of the body font (leading) and this works on the first page only.</para>
       </description>
@@ -6942,6 +6942,7 @@
       <oneOrMore>
         <choice>
           <cmd name="Switch"/>
+          <cmd name="Loop"/>
           <cmd name="Paragraph"/>
           <cmd name="Ol"/>
           <cmd name="Ul"/>
