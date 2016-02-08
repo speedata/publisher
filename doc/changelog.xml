@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.54" date="2016-02-08">
+      <en>New XPath function sd:randomitem(Value, Value, Value)</en>
+      <de>Neue XPath-Funktion sd:zufallswert(Wert, Wert, Wert)</de>
+    </entry>
     <entry version="2.3.53" date="2016-02-06">
       <en>Nobreak allows to cut text with ...</en>
       <de>KeinUmbruch erlaubt das Abschneiden von Text mit ...</de>
