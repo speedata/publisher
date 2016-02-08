@@ -79,6 +79,7 @@ sd:variable(\<Name\>, ...)|  ist dasselbe wie $Name, nur mit der Möglichkeit de
 sd:variable-vorhanden(\<Name\>)|  Prüft, ob eine Variable vorhanden ist.
 sd:blindtext() | Gibt den Blindtext "Lorem ipsum..." mit über 50 Wörtern zurück.
 sd:loremipsum() | Alias für `sd:blindtext()`
+sd:zufallswert(\<Wert\>,\<Wert\>, …) | Gibt einen der Werte zurück.
 
 Funktion | Beschreibung
 ---------|-------------

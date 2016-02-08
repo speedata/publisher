@@ -86,6 +86,7 @@ sd:odd(\<number\>) | True if number is odd.
 sd:groupwidth(\<string\>) | Return the number of gridcells of the given group’s width. The argument must be the name of an existing group. Example: `sd:groupwidth('My group')`
 sd:groupheight(\<string\>) | Return the given group’s height (in gridcells). See `sd:groupwidth(...)`
 sd:pagenumber(\<string\>) | Get the number of the page where the given mark is placed on. See the command [Mark](../commands-en/mark.html).
+sd:randomitem(\<Value\>,\<Value\>, …) | Return one of the values.
 sd:variable(\<name\>, ...) | The same as `$name`. This function allows variable names to be constructed dynamically. Example: `sd:variable('myvar',$num)` – if `$num` contains the number 3, the resulting variable name is `myvar3`.
 sd:variable-exists(\<name\>) | True if variable `name` exists.
 sd:sha1(\<value\>,\<value\>, …) | Return the SHA-1 sum of the concatenation of each value as a hex string. Example: `sd:sha1('hello ', 'world')` gives the string `2aae6c35c94fcfb415dbe95f408b9ce91ee846ed`.

@@ -298,6 +298,11 @@ local function count_saved_paged(dataxml,arg)
     return #publisher.pagestore[arg[1]]
 end
 
+local function randomitem(dataxml, arg)
+    local x = math.random(#arg)
+    return arg[x]
+end
+
 local function aspectratio( dataxml,arg )
   local filename = arg[1]
   local img = publisher.imageinfo(filename)
@@ -399,6 +404,9 @@ register("urn:speedata:2009/publisher/functions/de","bildhöhe",imageheight)
 register("urn:speedata:2009/publisher/functions/en","reset_alternating",reset_alternating) -- backward comp.
 register("urn:speedata:2009/publisher/functions/en","reset-alternating",reset_alternating)
 register("urn:speedata:2009/publisher/functions/de","alternierend_zurücksetzen",reset_alternating)
+
+register("urn:speedata:2009/publisher/functions/en","randomitem",randomitem)
+register("urn:speedata:2009/publisher/functions/de","zufallswert",randomitem)
 
 register("urn:speedata:2009/publisher/functions/en","count-saved-pages",count_saved_paged)
 register("urn:speedata:2009/publisher/functions/de","anzahl-gespeicherte-seiten",count_saved_paged)
