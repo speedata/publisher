@@ -3649,6 +3649,9 @@
                   <a:documentation>The contents is vertically centered.</a:documentation>
                   <value>bottom</value>
                   <a:documentation>The contents is aligend at the bottom edge of the cell.</a:documentation>
+                  <data type="string">
+                     <param name="pattern">\{.+\}</param>
+                  </data>
                </choice>
             </attribute>
          </optional>

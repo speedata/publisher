@@ -6682,7 +6682,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="valign" de="valign" optional="yes" css="vertical-align">
+    <attribute en="valign" de="valign" optional="yes" css="vertical-align" allowxpath="yes">
       <description xml:lang="en">
         <para>The vertical alignment of the cell.</para>
       </description>

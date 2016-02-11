@@ -3649,6 +3649,9 @@
                   <a:documentation>Der Zellinhalt vertikal zentriert.</a:documentation>
                   <value>bottom</value>
                   <a:documentation>Der Zellinhalt ist an der unteren Kante ausgerichtet.</a:documentation>
+                  <data type="string">
+                     <param name="pattern">\{.+\}</param>
+                  </data>
                </choice>
             </attribute>
          </optional>
