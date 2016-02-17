@@ -398,9 +398,12 @@ function width_in_gridcells_sp(self,width_sp)
     return wd_gridcells
 end
 
--- Return the number of grid cells for the given height (in scaled points)
-function height_in_gridcells_sp(self,height_sp)
+-- Return the number of grid cells for the given height (in scaled points).
+-- options: floor = true means we can round down the number of grid cells
+--                       if it is not an integer height
+function height_in_gridcells_sp(self,height_sp,options)
     assert(self)
+    options = options or {}
     if height_sp == 0 then return 0 end
     local ht_sp = height_sp - self.gridheight
     if ht_sp <= 0 then return 1 end
@@ -409,6 +412,9 @@ function height_in_gridcells_sp(self,height_sp)
     repeat
         ht_gridcells = ht_gridcells + 1
         ht_sp = ht_sp - self.gridheight - self.grid_dy
+        if ht_sp <= -100 and options.floor then
+            return ht_gridcells - 1
+        end
     until ht_sp <= 500
     return ht_gridcells
 end
