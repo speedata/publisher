@@ -2097,8 +2097,22 @@ end
 
 
 function addstrut(nodelist)
-    local fontfamily = node.has_attribute(nodelist, att_fontfamily)
-    if fontfamily == 0 then
+    local head = nodelist
+    while head do
+        if node.has_attribute(head, att_fontfamily) then
+            break
+        end
+        head = head.next
+    end
+    local fontfamily
+
+    if head == nil then
+        fontfamily = nil
+    else
+        fontfamily = node.has_attribute(head, att_fontfamily)
+    end
+
+    if fontfamily == nil or fontfamily == 0 then
         fontfamily = fonts.lookup_fontfamily_name_number["text"]
     end
 
