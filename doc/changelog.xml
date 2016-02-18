@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.55" date="2016-02-18">
+      <en>halign on PlaceObject</en>
+      <de>halign bei ObjektAusgeben</de>
+    </entry>
+    <entry version="2.3.55" date="2016-02-18">
+      <en>Much better wrap around with Output allocate="auto".</en>
+      <de>Verbessertes Umfließen von Objekten bei Ausgabe/belegen="auto".</de>
+    </entry>
     <entry version="2.3.54" date="2016-02-08">
       <en>New XPath function sd:randomitem(Value, Value, Value)</en>
       <de>Neue XPath-Funktion sd:zufallswert(Wert, Wert, Wert)</de>
