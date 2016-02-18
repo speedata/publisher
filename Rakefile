@@ -127,12 +127,19 @@ task :ghpages => [:sphelper] do
 	cp_r "#{builddir}/manual","webpage"
 	sh "#{installdir}/bin/sphelper dashdoc"
 
+	IO.write("webpage/speedata_Publisher_(en).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>https://download.speedata.de/publisher/dashdoc/speedatapublisher-en.tgz</url>\n</entry>\n")
+	IO.write("webpage/speedata_Publisher_(de).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>https://download.speedata.de/publisher/dashdoc/speedatapublisher-de.tgz</url>\n</entry>\n")
+end
+
+task :mkdashzip => [:sphelper] do
+	sh "#{installdir}/bin/sphelper doc"
+	cp_r "#{builddir}/manual","webpage"
+	sh "#{installdir}/bin/sphelper dashdoc"
+
 	Dir.chdir(builddir) do
 		sh "tar --exclude='.DS_Store' -czf ../webpage/speedatapublisher-de.tgz speedatapublisher-de.docset"
 		sh "tar --exclude='.DS_Store' -czf ../webpage/speedatapublisher-en.tgz speedatapublisher-en.docset"
 	end
-	IO.write("webpage/speedata_Publisher_(en).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>https://speedata.github.io/publisher/speedatapublisher-en.tgz</url>\n</entry>\n")
-	IO.write("webpage/speedata_Publisher_(de).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>https://speedata.github.io/publisher/speedatapublisher-de.tgz</url>\n</entry>\n")
 end
 
 # For now: only a small test
