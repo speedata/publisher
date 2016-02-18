@@ -1,13 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (de)</title>
   <id>http://www.speedata.de</id>
-  <updated>2016-01-19T11:20:43+01:00</updated>
+  <updated>2016-02-18T12:51:37+01:00</updated>
   <subtitle>Neue Versionen des Publishers zum Download und Liste der Änderungen</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.3.55</title>
+    <updated>2016-02-18T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-02-18:</id>
+    <content type="html">halign bei ObjektAusgeben</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.55</title>
+    <updated>2016-02-18T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-02-18:</id>
+    <content type="html">Verbessertes Umfließen von Objekten bei Ausgabe/belegen=&#34;auto&#34;.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.54</title>
+    <updated>2016-02-08T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-02-08:</id>
+    <content type="html">Neue XPath-Funktion sd:zufallswert(Wert, Wert, Wert)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.53</title>
+    <updated>2016-02-06T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-02-06:</id>
+    <content type="html">KeinUmbruch erlaubt das Abschneiden von Text mit ...</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.53</title>
+    <updated>2016-02-06T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-02-06:</id>
+    <content type="html">PDF Producer wird auf LuaTeX gesetzt, Creator auf speedata Publisher - Versionsnummer</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.53</title>
+    <updated>2016-02-06T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-02-06:</id>
+    <content type="html">Diverse Fehlerkorrekturen</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.52</title>
+    <updated>2016-01-21T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-01-21:</id>
+    <content type="html">Verschiedene Fehlerkorrekturen: mehrfache Absätze mit Absatzform, decode-html</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.3.51</title>
     <updated>2016-01-18T00:00:00Z</updated>
@@ -72,7 +121,7 @@
     <link href="http://www.speedata.de"></link>
   </entry>
   <entry>
-    <title>Version 2.4.43</title>
+    <title>Version 2.3.43</title>
     <updated>2015-12-15T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-12-15:</id>
     <content type="html">Optionen / bildnichtgefunden: fehler oder warnung</content>

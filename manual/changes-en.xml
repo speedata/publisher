@@ -1,13 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (en)</title>
   <id>http://www.speedata.de</id>
-  <updated>2016-01-19T11:20:43+01:00</updated>
+  <updated>2016-02-18T12:51:37+01:00</updated>
   <subtitle>New revisions for download and changelog.</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.3.55</title>
+    <updated>2016-02-18T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-02-18:</id>
+    <content type="html">halign on PlaceObject</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.55</title>
+    <updated>2016-02-18T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-02-18:</id>
+    <content type="html">Much better wrap around with Output allocate=&#34;auto&#34;.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.54</title>
+    <updated>2016-02-08T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-02-08:</id>
+    <content type="html">New XPath function sd:randomitem(Value, Value, Value)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.53</title>
+    <updated>2016-02-06T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-02-06:</id>
+    <content type="html">Nobreak allows to cut text with ...</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.53</title>
+    <updated>2016-02-06T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-02-06:</id>
+    <content type="html">PDF producer is set to LuaTeX, creator is set to speedata Publisher - version number</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.53</title>
+    <updated>2016-02-06T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-02-06:</id>
+    <content type="html">Various bugfixes</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.52</title>
+    <updated>2016-01-21T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-01-21:</id>
+    <content type="html">Various bugfixes: multi paragraph Output with par shape, decode-html</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.3.51</title>
     <updated>2016-01-18T00:00:00Z</updated>
@@ -72,7 +121,7 @@
     <link href="http://www.speedata.de"></link>
   </entry>
   <entry>
-    <title>Version 2.4.43</title>
+    <title>Version 2.3.43</title>
     <updated>2015-12-15T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-12-15:</id>
     <content type="html">Options / imagenotfound: error or warning</content>
