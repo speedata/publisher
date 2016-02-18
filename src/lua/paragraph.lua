@@ -163,23 +163,44 @@ function Paragraph:format(width_sp, default_textformat_name,options)
     local parameter = {}
 
     if options.allocate == "auto" then
+        -- Get the par shape
+        local lineheight = self.nodelist.height + self.nodelist.depth
+        local gridheight = current_grid:height_sp(1)
         local cg = options.current_grid
         local areaname = options.area
-        local current_row    = cg:current_row(areaname)
+        local startrow    = cg:current_row(areaname)
         local number_of_rows = cg:number_of_rows(areaname)
         parameter.parshape = {}
         local framenumber = cg:framenumber(areaname)
         local maxframes = cg:number_of_frames(areaname)
         local pstmp
+        local pstmmin
+        local nextrow
+        local ht = 0
         while framenumber <= maxframes do
-            for i = current_row,number_of_rows do
-                pstmp = cg:get_parshape(i,areaname,framenumber)
-                if pstmp ~= 0 then
-                    parameter.parshape[#parameter.parshape + 1] = pstmp
+            nextrow = startrow
+            for i = startrow,number_of_rows do
+                current_row = nextrow
+                -- parshape must be taken into account for all grid rows that
+                -- takes up the current text row
+                nextrow = math.ceil( (ht + lineheight)  / gridheight) + startrow
+                ht = ht + lineheight
+                -- now get the 'minimum' parshape
+                pstmmin = cg:get_parshape(current_row,areaname,framenumber)
+                if pstmmin ~= 0 then
+                    while current_row + 1 < nextrow do
+                        pstmp = cg:get_parshape(current_row + 1,areaname,framenumber)
+                        if pstmp ~= 0 then
+                            pstmmin[1] = math.max(pstmmin[1],pstmp[1])
+                            pstmmin[2] = math.min(pstmmin[2],pstmp[2])
+                        end
+                        current_row = current_row + 1
+                    end
+                    parameter.parshape[#parameter.parshape + 1] = pstmmin
                 end
             end
             framenumber = framenumber + 1
-            current_row = 1
+            startrow = 1
         end
     end
     local nodelist = node.copy_list(self.nodelist)

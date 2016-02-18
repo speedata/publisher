@@ -2978,6 +2978,7 @@ function commands.text(layoutxml,dataxml)
                 state.objects = objects
                 for i=1,#tab do
                     local contents = publisher.element_contents(tab[i])
+                    contents.nodelist = publisher.addstrut(contents.nodelist)
                     local obj = contents:format(parameter.width,nil,parameter)
                     objects[#objects + 1] = obj
                     local ht_rows = cg:height_in_gridcells_sp(obj.height + obj.depth,{floor = true})

@@ -2093,6 +2093,20 @@ function bigger_glue_spec( a,b )
     if a.width > b.width then return a else return b end
 end
 
+
+function addstrut(nodelist)
+    local fontfamily = node.has_attribute(nodelist, att_fontfamily)
+    if fontfamily == 0 then
+        fontfamily = fonts.lookup_fontfamily_name_number["text"]
+    end
+
+    local fi = fonts.lookup_fontfamily_number_instance[fontfamily]
+    local height = fi.baselineskip
+    local strut
+    strut = add_rule(nodelist,"head",{height = 0.75 * height, depth = 0.25 * height, width = 0 })
+    return strut
+end
+
 --- Create a `\hbox`. Return a nodelist. Parameter is one of
 ---
 --- * languagecode
@@ -2321,9 +2335,8 @@ function add_rule( nodelist,head_or_tail,parameters)
     if not nodelist then return n end
 
     if head_or_tail=="head" then
-        n.next = nodelist
-        nodelist.prev = n
-        return n
+        nodelist = node.insert_before(nodelist,nodelist,n)
+        return nodelist
     else
         local last=node.slide(nodelist)
         last.next = n
