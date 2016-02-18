@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2016-02-06 16:48)
+-- generated from genluatranslations.go (2016-02-18 11:56)
 -- do not edit!
 module(...)
 return {
@@ -305,6 +305,7 @@ return {
         ["linienstärke"] = "rulewidth",
         ["spalte"] = "column",
         ["behalteposition"] = "keepposition",
+        ["halign"] = "halign",
         ["seite"] = "page",
         ["ursprung-x"] = "origin-x",
         ["ursprung-y"] = "origin-y",

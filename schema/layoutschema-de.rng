@@ -2751,6 +2751,19 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="halign">
+               <a:documentation>Wird ein Objekt ausgegeben, das kein vielfaches der Rasterbreite ist, dann gibt das Attribut die horizontale Ausrichtung an. ›left‹ beispielsweise bedeutet, dass der freie Platz rechts des Objekts bleibt. Voreinstellung ist ›left‹.</a:documentation>
+               <choice>
+                  <value>left</value>
+                  <a:documentation>Das Objekt wird links ausgerichtet.</a:documentation>
+                  <value>center</value>
+                  <a:documentation>Das Objekt wird so platziert, dass der Leerraum links und rechts derselbe ist.</a:documentation>
+                  <value>right</value>
+                  <a:documentation>Das Objekt wird rechts ausgerichtet.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="seite">
                <a:documentation>Die Seite (später im PDF), auf der das Objekt erscheinen soll. Angabe als Zahl oder »next« für die nächste Seite.</a:documentation>
             </attribute>

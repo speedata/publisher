@@ -4871,6 +4871,38 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="halign" de="halign" optional="yes" since="2.3.55">
+      <description xml:lang="en">
+        <para>When an object is placed on the grid and it's width is not a multiple of grid width, there is a space left on the page between the object an the next grid cell. With this attribute you can instruct the software where to place the gap.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wird ein Objekt ausgegeben, das kein vielfaches der Rasterbreite ist, dann gibt das Attribut die horizontale Ausrichtung an. ›left‹ beispielsweise bedeutet, dass der freie Platz rechts des Objekts bleibt. Voreinstellung ist ›left‹.</para>
+      </description>
+      <choice en="left" de="left">
+        <description xml:lang="en">
+          <para>The object is aligned at the left.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Das Objekt wird links ausgerichtet.</para>
+        </description>
+      </choice>
+      <choice en="center" de="center">
+        <description xml:lang="en">
+          <para>The object is aligned so that the space to the left is the same as to the right.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Das Objekt wird so platziert, dass der Leerraum links und rechts derselbe ist.</para>
+        </description>
+      </choice>
+      <choice en="right" de="right">
+        <description xml:lang="en">
+          <para>The object is aligned to the right.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Das Objekt wird rechts ausgerichtet.</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="page" de="seite" type="number" optional="yes">
       <description xml:lang="en">
         <para>The page (later in the PDF), the object should appear on. Number of the keyword »next« for the next page.</para>

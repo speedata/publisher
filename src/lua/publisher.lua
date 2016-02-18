@@ -992,6 +992,7 @@ end
 --- allocate        | Mark these cells as 'occupied'
 --- area            | The area on which the object should be placed. Defaults to the page area.
 --- valign          |
+--- halign          |
 --- allocate_matrix | For image-shapes
 --- pagenumber      | The page the object should be placed
 --- keepposition    | Move the local cursor?
@@ -1018,6 +1019,7 @@ function output_at( param )
     local allocate_matrix = param.allocate_matrix
     local area = param.area or default_areaname
     local valign = param.valign
+    local halign = param.halign
     local keepposition = param.keepposition
 
     -- current_grid is important here, because it can be a group
@@ -1029,7 +1031,7 @@ function output_at( param )
     local width_gridcells   = r:width_in_gridcells_sp(wd)
     local height_gridcells  = r:height_in_gridcells_sp(ht)
 
-    local delta_x, delta_y = r:position_grid_cell(x,y,area,wd,ht,valign)
+    local delta_x, delta_y = r:position_grid_cell(x,y,area,wd,ht,valign,halign)
 
     if not delta_x then
         -- if delta_x is nil, delta_y has the error message

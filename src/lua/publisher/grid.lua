@@ -530,7 +530,7 @@ function draw_gridallocation(self)
 end
 
 -- Return the Position of the grid cell from the left and top border (in sp)
-function position_grid_cell(self,x,y,areaname,wd,ht,valign)
+function position_grid_cell(self,x,y,areaname,wd,ht,valign,halign)
     local x_sp, y_sp
     if not self.margin_left then return nil, "Left margin not defined. Perhaps the <Margin> command in Pagetype is missing?" end
     local frame_margin_left, frame_margin_top
@@ -565,6 +565,17 @@ function position_grid_cell(self,x,y,areaname,wd,ht,valign)
         elseif valign == "middle" then
             -- ( cellheight - "overshoot") / 2 = shift_down
             y_sp = y_sp + ( self.gridheight - overshoot ) / 2
+        end
+    end
+    if halign then
+        -- height mod cellwidth = "overshoot"
+        local overshoot = wd % self.gridwidth
+        if halign == "right" then
+            -- cellwidth - "overshoot" = shift_down
+            x_sp = x_sp + self.gridwidth - overshoot
+        elseif halign == "center" then
+            -- ( cellwidth - "overshoot") / 2 = shift_down
+            x_sp = x_sp + ( self.gridwidth - overshoot ) / 2
         end
     end
     return x_sp,y_sp

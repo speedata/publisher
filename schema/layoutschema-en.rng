@@ -2751,6 +2751,19 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="halign">
+               <a:documentation>When an object is placed on the grid and it&#39;s width is not a multiple of grid width, there is a space left on the page between the object an the next grid cell. With this attribute you can instruct the software where to place the gap.</a:documentation>
+               <choice>
+                  <value>left</value>
+                  <a:documentation>The object is aligned at the left.</a:documentation>
+                  <value>center</value>
+                  <a:documentation>The object is aligned so that the space to the left is the same as to the right.</a:documentation>
+                  <value>right</value>
+                  <a:documentation>The object is aligned to the right.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="page">
                <a:documentation>The page (later in the PDF), the object should appear on. Number of the keyword »next« for the next page.</a:documentation>
             </attribute>

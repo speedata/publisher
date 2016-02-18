@@ -1822,6 +1822,7 @@ function commands.place_object( layoutxml,dataxml )
     local background       = publisher.read_attribute(layoutxml,dataxml,"background",     "string")
     local groupname        = publisher.read_attribute(layoutxml,dataxml,"groupname",      "rawstring")
     local valign           = publisher.read_attribute(layoutxml,dataxml,"valign",         "string")
+    local halign           = publisher.read_attribute(layoutxml,dataxml,"halign",         "string")
     local hreference       = publisher.read_attribute(layoutxml,dataxml,"hreference",     "string")
     local vreference       = publisher.read_attribute(layoutxml,dataxml,"vreference",     "string")
     local rotate           = publisher.read_attribute(layoutxml,dataxml,"rotate",         "number")
@@ -2074,6 +2075,7 @@ function commands.place_object( layoutxml,dataxml )
                 allocate = ( allocate == "yes"),
                 area = area,
                 valign = valign,
+                halign = halign,
                 allocate_matrix = objects[i].allocate_matrix,
                 pagenumber = onpage,
                 keepposition = keepposition,
