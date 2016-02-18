@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.56" date="2016-02-18">
+      <en>Bufgix Ouptut/allocate="auto"</en>
+      <de>Fehlerkorrektur in Ausgabe/belegen="auto"</de>
+    </entry>
     <entry version="2.3.55" date="2016-02-18">
       <en>halign on PlaceObject</en>
       <de>halign bei ObjektAusgeben</de>
