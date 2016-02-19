@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.57" date="2016-02-19">
+      <en>New sp option --ignore-case for case insensitive file loading</en>
+      <de>Neue Option --ignore-case für den Klein- und Großbuchstabenunabhängigen Dateizugriff</de>
+    </entry>
     <entry version="2.3.56" date="2016-02-18">
       <en>Bufgix Ouptut/allocate="auto"</en>
       <de>Fehlerkorrektur in Ausgabe/belegen="auto"</de>
