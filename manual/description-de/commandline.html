@@ -32,6 +32,7 @@ Usage: [parameter] command
     --extra-xml=NAME         Add this file to the layout file
     --filter=FILTER          Run XPROC filter before publishing starts
     --grid                   Display background grid. Disable with --no-grid
+    --ignore-case            Ignore case when accessing files (on a case-insensitive file system)
     --[no-]local             Add local directory to the search path. Default is true.
     --layout=NAME            Name of the layout file. Defaults to 'layout.xml'
     --jobname=NAME           The name of the resulting PDF file (without
@@ -109,6 +110,11 @@ Commands
 <tr>
 <td><code>--grid</code></td>
 <td>Zeichnet das Raster. Mit <code>--no-grid</code> wird es ausgeschaltet. Konfigurierbar auch im <a href="../commands-de/options.html">Layout</a>.</td>
+</tr>
+
+<tr>
+<td><code>--ignore-case</code></td>
+<td>Ignoriere die Groß- und Kleinschreibung für Dateizugriff.</td>
 </tr>
 
 <tr>
@@ -283,7 +289,7 @@ events = layout\.xml:run(runpublisher);data\.xml:run(runpublisher)
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.3.55 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/commandline.html">Englisch</a>
+Version: 2.3.57 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/commandline.html">Englisch</a>
 
 </body>
 </html>
