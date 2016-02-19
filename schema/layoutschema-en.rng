@@ -421,6 +421,9 @@
                <ref name="e_DefineColor"></ref>
             </optional>
             <optional>
+               <ref name="e_DefineTextformat"></ref>
+            </optional>
+            <optional>
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
@@ -509,6 +512,9 @@
             </optional>
             <optional>
                <ref name="e_SetVariable"></ref>
+            </optional>
+            <optional>
+               <ref name="e_SetGrid"></ref>
             </optional>
             <optional>
                <ref name="e_SortSequence"></ref>
@@ -1083,6 +1089,9 @@
                   <ref name="e_DefineColor"></ref>
                </optional>
                <optional>
+                  <ref name="e_DefineTextformat"></ref>
+               </optional>
+               <optional>
                   <ref name="e_DefineFontfamily"></ref>
                </optional>
                <optional>
@@ -1171,6 +1180,9 @@
                </optional>
                <optional>
                   <ref name="e_SetVariable"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_SetGrid"></ref>
                </optional>
                <optional>
                   <ref name="e_SortSequence"></ref>
@@ -1731,6 +1743,9 @@
                   <ref name="e_DefineColor"></ref>
                </optional>
                <optional>
+                  <ref name="e_DefineTextformat"></ref>
+               </optional>
+               <optional>
                   <ref name="e_DefineFontfamily"></ref>
                </optional>
                <optional>
@@ -1819,6 +1834,9 @@
                </optional>
                <optional>
                   <ref name="e_SetVariable"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_SetGrid"></ref>
                </optional>
                <optional>
                   <ref name="e_SortSequence"></ref>
@@ -2260,6 +2278,9 @@
                <ref name="e_DefineColor"></ref>
             </optional>
             <optional>
+               <ref name="e_DefineTextformat"></ref>
+            </optional>
+            <optional>
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
@@ -2348,6 +2369,9 @@
             </optional>
             <optional>
                <ref name="e_SetVariable"></ref>
+            </optional>
+            <optional>
+               <ref name="e_SetGrid"></ref>
             </optional>
             <optional>
                <ref name="e_SortSequence"></ref>
@@ -4070,6 +4094,9 @@
                   <ref name="e_DefineColor"></ref>
                </optional>
                <optional>
+                  <ref name="e_DefineTextformat"></ref>
+               </optional>
+               <optional>
                   <ref name="e_DefineFontfamily"></ref>
                </optional>
                <optional>
@@ -4158,6 +4185,9 @@
                </optional>
                <optional>
                   <ref name="e_SetVariable"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_SetGrid"></ref>
                </optional>
                <optional>
                   <ref name="e_SortSequence"></ref>
@@ -4299,6 +4329,9 @@
                   <ref name="e_DefineColor"></ref>
                </optional>
                <optional>
+                  <ref name="e_DefineTextformat"></ref>
+               </optional>
+               <optional>
                   <ref name="e_DefineFontfamily"></ref>
                </optional>
                <optional>
@@ -4387,6 +4420,9 @@
                </optional>
                <optional>
                   <ref name="e_SetVariable"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_SetGrid"></ref>
                </optional>
                <optional>
                   <ref name="e_SortSequence"></ref>

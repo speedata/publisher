@@ -14,6 +14,7 @@
     <optional><cmd name="Columns"/></optional>
     <optional><cmd name="Copy-of"/></optional>
     <optional><cmd name="DefineColor"/></optional>
+    <optional><cmd name="DefineTextformat"/></optional>
     <optional><cmd name="DefineFontfamily"/></optional>
     <optional><cmd name="Element"/></optional>
     <optional><cmd name="EmptyLine"/></optional>
@@ -44,6 +45,7 @@
     <optional><cmd name="SaveDataset"/></optional>
     <optional><cmd name="SavePages"/></optional>
     <optional><cmd name="SetVariable"/></optional>
+    <optional><cmd name="SetGrid"/></optional>
     <optional><cmd name="SortSequence"/></optional>
     <optional><cmd name="Sub"/></optional>
     <optional><cmd name="Sup"/></optional>
