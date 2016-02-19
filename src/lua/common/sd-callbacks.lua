@@ -41,6 +41,8 @@ end
 
 function find_file_location( filename_or_uri )
   if filename_or_uri == "" then return nil end
+  local lowercase = os.getenv("SP_IGNORECASE") == "1"
+  if lowercase then filename_or_uri = unicode.utf8.lower(filename_or_uri) end
   local p = kpse.filelist[filename_or_uri]
   if p then return p end
 

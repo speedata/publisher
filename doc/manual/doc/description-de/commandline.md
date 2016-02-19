@@ -15,6 +15,7 @@ Aufruf des Publishers über Kommandozeile
         --extra-xml=NAME         Add this file to the layout file
         --filter=FILTER          Run XPROC filter before publishing starts
         --grid                   Display background grid. Disable with --no-grid
+        --ignore-case            Ignore case when accessing files (on a case-insensitive file system)
         --[no-]local             Add local directory to the search path. Default is true.
         --layout=NAME            Name of the layout file. Defaults to 'layout.xml'
         --jobname=NAME           The name of the resulting PDF file (without
@@ -61,6 +62,7 @@ Parameter | Beschreibung
 `--extra-xml=NAME` | Diese Datei den Layoutanweisungen hinzufügen. Ähnlich wie das Einbinden einer Datei über xinclude.
 `--filter=FILTER`| Führt die angegebene XPROC-Datei aus.
 `--grid`| Zeichnet das Raster. Mit `--no-grid` wird es ausgeschaltet. Konfigurierbar auch im [Layout](../commands-de/options.html).
+`--ignore-case`|  Ignoriere die Groß- und Kleinschreibung für Dateizugriff.
 `--layout=NAME`| Gibt den Namen des Layoutregelwerks an. Voreinstellung ist `layout.xml`. Ebenfalls [konfigurierbar](configuration.html).
 `--[no-]local`| Das aktuelle Verzeichnis wird (nicht) rekursiv dem Suchpfad hinzugefügt. Voreingestellt ist, dass das aktuelle Verzeichnis und  seine Unterverzeichnisse beachtet werden.
 `--jobname=NAME`| Bestimmt den Ausgabenamen. Voreinstellung ist `publisher.pdf`.

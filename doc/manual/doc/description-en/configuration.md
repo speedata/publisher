@@ -36,6 +36,7 @@ Value | Description
 `fontpath` | Set the path for system fonts. On Windows this is `%WINDIR%\Fonts`, on Mac OS X it defaults to `/Library/Fonts:/System/Library/Fonts`. Currently dysfunctional on Windows XP.
 `grid` | If `true`, the underlying grid is shown in the PDF file. For debugging purpose only.
 `imagecache` | Folder for cached images (`href="http://..."` only). Defaults to `$TMPDIR/sp/images`.
+`ignore-case` |  Ignore case when accessing files (on a case-insensitive file system).
 `jobname` | Name of the output file. Default is `publisher`.
 `layout` | Name of the layout rule set (XML). The default name is `layout.xml`.
 `opencommand` | Command that will be run to open the documentation and the PDF file. For MacOS X this should be `open`, for Linux `xdg-open` or `exo-open` (xfce).

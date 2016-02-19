@@ -15,6 +15,7 @@ Running the speedata publisher on the command line
         --extra-xml=NAME         Add this file to the layout file
         --filter=FILTER          Run XPROC filter before publishing starts
         --grid                   Display background grid. Disable with --no-grid
+        --ignore-case            Ignore case when accessing files (on a case-insensitive file system)
         --[no-]local             Add local directory to the search path. Default is true
         --layout=NAME            Name of the layout file. Defaults to 'layout.xml'
         --jobname=NAME           The name of the resulting PDF file (without
@@ -61,6 +62,7 @@ Parameter | Description
 `--extra-xml=NAME` | Add this file to the layout instructions. Similar to inclusion of the file with xinclude.
 `--filter=FILTER` | Run the given XPROC file.
 `--grid` | Show the grid. Can be turned off with `--no-grid`. Can be configured in the layout XML file: [Layout](../commands-en/options.html).
+`--ignore-case`|  Ignore case when accessing files (on a case-insensitive file system).
 `--layout=NAME` | Name of the layout XML file. Default is `layout.xml`. Can be[configured](configuration.html).
 `--[no-]local` | The current directory is (not) added to the search path recursively.The default is `--local` which means that the current directory and all its subdirectories is added to the search path. This allows you to run the publisher in any directory and put your assets in a subdirectory.
 `--jobname=NAME` | The name of the output file. Default is `publisher`. The extension(`.pdf`) is added automatically.

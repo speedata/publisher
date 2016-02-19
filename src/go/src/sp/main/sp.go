@@ -616,6 +616,7 @@ func main() {
 	op.On("--extra-xml NAME", "Add this file to the layout file", extraXML)
 	op.On("--filter FILTER", "Run XPROC filter before publishing starts", options)
 	op.On("--grid", "Display background grid. Disable with --no-grid", options)
+	op.On("--ignore-case", "Ignore case when accessing files (on a case-insensitive file system)", options)
 	op.On("--no-local", "Add local directory to the search path. Default is true", &add_local_path)
 	op.On("--layout NAME", "Name of the layout file. Defaults to 'layout.xml'", options)
 	op.On("--jobname NAME", "The name of the resulting PDF file (without extension), default is 'publisher'", options)
@@ -730,11 +731,19 @@ func main() {
 	}
 
 	os.Setenv("SD_EXTRA_XML", strings.Join(extraxml, ","))
-
+	verbose := false
 	if getOption("verbose") != "" {
+		verbose = true
 		os.Setenv("SP_VERBOSITY", "1")
 		fmt.Println("SD_EXTRA_DIRS:", os.Getenv("SD_EXTRA_DIRS"))
 		fmt.Println("SD_EXTRA_XML:", os.Getenv("SD_EXTRA_XML"))
+	}
+
+	if getOption("ignore-case") == "true" {
+		os.Setenv("SP_IGNORECASE", "1")
+		if verbose {
+			fmt.Println("Ignore case for file system access")
+		}
 	}
 
 	var exitstatus int

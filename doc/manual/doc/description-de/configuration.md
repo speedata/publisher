@@ -37,6 +37,7 @@ Wert | Beschreibung
 `fontpath` | Setzt den systemweiten Pfad für Fonts. Unter Windows ist dies `%WINDIR%\Fonts`, unter Mac OS X `/Library/Fonts:/System/Library/Fonts`. Funktioniert derzeit nicht unter Windows XP.
 `grid` | Bestimmt, ob das Raster angezeigt wird.
 `imagecache` | Ordner für zwichengespeicherte Bilder (nur `href="http://..."`). Voreinstellung: `$TMPDIR/sp/images`.
+`ignore-case` | Ignoriere die Groß- und Kleinschreibung für Dateizugriff.
 `jobname` | Name der Ausgabedatei
 `layout` | Name des Layoutregelwerks. `layout.xml` ist der voreingestellte Name.
 `opencommand` | Kommando für das automatische Öffnen der Dokumentation bzw. PDF-Datei. Für MacOS X sollte das `open` sein, für Linux `xdg-open` oder `exo-open` (xfce).
