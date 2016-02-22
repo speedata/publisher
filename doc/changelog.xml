@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.58" date="2016-02-22">
+      <en>Experimental HTML tables</en>
+      <de>Experimentelle HTML-Tabellen</de>
+    </entry>
     <entry version="2.3.57" date="2016-02-19">
       <en>New sp option --ignore-case for case insensitive file loading</en>
       <de>Neue Option --ignore-case für den Klein- und Großbuchstabenunabhängigen Dateizugriff</de>
