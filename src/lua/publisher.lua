@@ -95,6 +95,7 @@ origin_table = 1
 origin_vspace = 2
 origin_align_top = 3
 origin_image = 4
+origin_htmltable = 5
 
 
 
@@ -684,7 +685,7 @@ function initialize_luatex_and_generate_pdf()
     --- The default page type has 1cm margin
     local onecm=tex.sp("1cm")
     masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
-
+    xpath.set_variable("__maxwidth", tex.sp("190mm"))
     --- The `vars` file hold a lua document holding table
     local vars = loadfile(tex.jobname .. ".vars")()
     for k,v in pairs(vars) do
@@ -1922,7 +1923,12 @@ function parse_html( elt, parameter )
 
     if elt[".__local_name"] then
         local eltname = string.lower(elt[".__local_name"])
-        if eltname == "b" or eltname == "strong" then
+        if eltname == "table" then
+            -- Evil. Build a table in Publisher-mode and send it to the output
+            local x = parse_html_table(elt)
+            node.set_attribute(x[1],att_origin,origin_htmltable)
+            return x[1]
+        elseif eltname == "b" or eltname == "strong" then
             bold = 1
         elseif eltname == "i" then
             italic = 1
@@ -2012,6 +2018,85 @@ function parse_html( elt, parameter )
     end
 
     return a
+end
+
+function parse_html_table(elt)
+    local tbl
+    for i=1,#elt do
+        local thiselt = elt[i]
+        if type(thiselt) == "table" then
+            if thiselt[".__local_name"] == "tbody" then
+                tbl = parse_html_tbody(thiselt)
+            end
+        end
+    end
+    local tabular = publisher.tabular:new()
+    tabular.width = xpath.get_variable("__maxwidth")
+    tabular.tab = tbl
+    local fontname = "text"
+    local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+    local save_fontfamily = publisher.current_fontfamily
+    publisher.current_fontfamily = fontfamily
+
+    if fontfamily == nil then
+        err("Fontfamily %q not found.",fontname or "???")
+        fontfamily = 1
+    end
+
+    tabular.fontfamily = fontfamily
+    tabular.options ={ ht_max=99999*2^16 }
+    tabular.padding_left   = 0
+    tabular.padding_top    = 0
+    tabular.padding_right  = 0
+    tabular.padding_bottom = 0
+    tabular.colsep         = tex.sp("2pt")
+    tabular.rowsep         = 0
+
+    local n = tabular:make_table()
+    return n
+end
+
+function parse_html_tbody(body)
+    local ret = {}
+    for j=1,#body do
+        local tr = body[j]
+        if type(tr) == "table" then
+            if tr[".__local_name"] ~= "tr" then
+                err("not a table row")
+                return
+            end
+            ret[#ret + 1] = parse_html_tr(tr)
+        end
+    end
+    return ret
+end
+
+function parse_html_tr(tr)
+    local ret = {}
+    for j=1,#tr do
+        local td = tr[j]
+        if type(td) == "table" then
+            if td[".__local_name"] ~= "td" and td[".__local_name"] ~= "th" then
+                err("not a table cell")
+                return
+            end
+            local tmp = {}
+            for i=1,#td do
+                if type(td[i]) == "table" then
+                    local a = parse_html(td[i])
+                    set_fontfamily_if_necessary(a.nodelist,current_fontfamily)
+                    if td[".__local_name"] == "th" then
+                        a.textformat = "__centered"
+                        a:add_italic_bold(a.nodelist, {bold = 1})
+                    end
+                    local par = { elementname = "Paragraph" , contents = a }
+                    tmp[#tmp + 1] = { elementname = "Paragraph" , contents = a }
+                end
+            end
+            ret[#ret + 1] = { elementname = "Td", contents = tmp}
+        end
+    end
+    return { elementname = "Tr", contents = ret}
 end
 
 
@@ -2469,7 +2554,7 @@ function finish_par( nodelist,hsize,parameters )
     n = node.kerning(nodelist)
     -- FIXME: why do I call node.ligaturing()? I don't have any ligatures anyway
     -- n = node.ligaturing(n)
-
+    -- 15 is a parfillskip
     n,last = add_glue(n,"tail",{ subtype = 15, width = 0, stretch = 2^16, stretch_order = 2})
 end
 
@@ -2782,6 +2867,7 @@ end
 
 -- color is an integer
 function set_color_if_necessary( nodelist,color )
+    local attorigin = node.has_attribute(nodelist,att_origin)
     if not color then return nodelist end
 
     local colorname
@@ -2799,6 +2885,9 @@ function set_color_if_necessary( nodelist,color )
         colstart.command = 1
     end
     colstart.stack = 0
+    if attorigin then
+        node.set_attribute(colstart,att_origin,attorigin)
+    end
     colstart.next = nodelist
     nodelist.prev = colstart
 

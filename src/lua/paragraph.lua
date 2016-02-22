@@ -24,7 +24,7 @@ end
 
 function Paragraph:add_italic_bold( nodelist,parameter )
     -- FIXME(?): recurse, node.traverse() stops at hlists
-    for i in node.traverse_id(37,nodelist) do
+    for i in node.traverse_id(publisher.glyph_node,nodelist) do
         if parameter.bold == 1 then
             node.set_attribute(i,publisher.att_bold,1)
         end
@@ -49,6 +49,7 @@ end
 
 function Paragraph:set_color( color )
     if not color then return end
+    -- todo: why not use publisher.set_color_if_necessary??
 
     local colorname
     if color == -1 then
@@ -66,7 +67,13 @@ function Paragraph:set_color( color )
     colstart.stack = 0
     colstart.next = self.nodelist
     self.nodelist.prev = colstart
+    local attorigin = node.has_attribute(self.nodelist,publisher.att_origin)
+    if attorigin then
+        node.set_attribute(colstart,publisher.att_origin,attorigin)
+    end
+
     self.nodelist = colstart
+
     local colstop  = node.new("whatsit","pdf_colorstack")
     colstop.data  = ""
     if status.luatex_version < 79 then
@@ -501,6 +508,8 @@ function Paragraph.vsplit( objects_t,frameheight )
                     lineheight = hbox.spec.width
                 elseif hbox.id == publisher.rule_node then
                     lineheight = hbox.height + hbox.depth
+                elseif hbox.id == publisher.whatsit_node then
+                    -- ignore
                 else
                     w("unknown node 1: %d",hbox.id)
                 end

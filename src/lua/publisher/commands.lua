@@ -2617,7 +2617,7 @@ end
 --- Table
 --- -----
 --- Typesets tabular material. Mostly like an HTML table.
-function commands.table( layoutxml,dataxml,optionen )
+function commands.table( layoutxml,dataxml,options )
     local width          = publisher.read_attribute(layoutxml,dataxml,"width",         "length")
     local padding        = publisher.read_attribute(layoutxml,dataxml,"padding",       "length")
     local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","length")
@@ -2680,7 +2680,7 @@ function commands.table( layoutxml,dataxml,optionen )
     local tabular = publisher.tabular:new()
 
     tabular.tab = tab
-    tabular.optionen       = optionen or { ht_max=99999*2^16 } -- FIXME! Test - this is for tabular in tabular
+    tabular.options        = options or { ht_max=99999*2^16 } -- FIXME! Test - this is for tabular in tabular
     tabular.layoutxml      = layoutxml
     tabular.dataxml        = dataxml
     tabular.width          = width
@@ -2978,10 +2978,16 @@ function commands.text(layoutxml,dataxml)
                 local objects = {}
                 state.total_height = 0
                 state.objects = objects
+                local obj
                 for i=1,#tab do
                     local contents = publisher.element_contents(tab[i])
-                    contents.nodelist = publisher.addstrut(contents.nodelist)
-                    local obj = contents:format(parameter.width,nil,parameter)
+                    local tmp = node.has_attribute(contents.nodelist,publisher.att_origin)
+                    if tmp == publisher.origin_htmltable then
+                        obj = node.vpack(contents.nodelist)
+                    else
+                        contents.nodelist = publisher.addstrut(contents.nodelist)
+                        obj = contents:format(parameter.width,nil,parameter)
+                    end
                     objects[#objects + 1] = obj
                     local ht_rows = cg:height_in_gridcells_sp(obj.height + obj.depth,{floor = true})
                     cg:set_current_row(ht_rows + cg:current_row(parameter.area),parameter.area)
@@ -3088,10 +3094,13 @@ function commands.textblock( layoutxml,dataxml )
         else
             nodelist = paragraph.nodelist
             assert(nodelist)
-            publisher.set_fontfamily_if_necessary(nodelist,fontfamily)
-            paragraph.nodelist = publisher.set_color_if_necessary(nodelist,colortable)
-            node.slide(nodelist)
-            nodelist = paragraph:format(width_sp,textformat)
+            local tmp = node.has_attribute(nodelist,publisher.att_origin)
+            if tmp ~= publisher.origin_htmltable then
+                publisher.set_fontfamily_if_necessary(nodelist,fontfamily)
+                paragraph.nodelist = publisher.set_color_if_necessary(nodelist,colortable)
+                node.slide(nodelist)
+                nodelist = paragraph:format(width_sp,textformat)
+            end
 
             nodes[#nodes + 1] = nodelist
         end

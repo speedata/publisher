@@ -1306,8 +1306,8 @@ function typeset_table(self)
         tablefoot_last[1] = node.copy_list(tablefoot[1])
     end
 
-    local ht_current = self.optionen.current_height or self.optionen.ht_max
-    local ht_max     = self.optionen.ht_max
+    local ht_current = self.options.current_height or self.options.ht_max
+    local ht_max     = self.options.ht_max
     -- The maximum heights are saved here for each table. Currently all tables must have the same height (see the metatable)
     local pagegoals = {}
 
