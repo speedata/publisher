@@ -349,6 +349,8 @@ local function dot_analyze_nodelist( head, options )
             ret[#ret + 1] = draw_action(head.action)
             ret[#ret + 1] = link_to(head.action,nodename,"action")
             ret[#ret + 1] = draw_node(head, {{ "subtype", "pdf_start_link"}, {"width", wd},{"widthraw",head.width}, {"height" , ht}, {"depth",dp}, {"objnum", objnum}, {"action", "action"}})
+        elseif st == "pdf_literal" then
+            ret[#ret + 1] = draw_node(head,{ {"subtype", "literal"},{"data",data} })
         elseif st == "pdf_colorstack" then
             local stack,cmd,data
             stack = string.format("stack: %d",head.stack)
