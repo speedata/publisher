@@ -238,6 +238,7 @@
                <ref name="e_Color"></ref>
                <ref name="e_Fontface"></ref>
                <ref name="e_ForAll"></ref>
+               <ref name="e_Frame"></ref>
                <ref name="e_HSpace"></ref>
                <ref name="e_I"></ref>
                <ref name="e_Image"></ref>
@@ -421,10 +422,10 @@
                <ref name="e_DefineColor"></ref>
             </optional>
             <optional>
-               <ref name="e_DefineTextformat"></ref>
+               <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
-               <ref name="e_DefineFontfamily"></ref>
+               <ref name="e_DefineTextformat"></ref>
             </optional>
             <optional>
                <ref name="e_Element"></ref>
@@ -511,10 +512,10 @@
                <ref name="e_SavePages"></ref>
             </optional>
             <optional>
-               <ref name="e_SetVariable"></ref>
+               <ref name="e_SetGrid"></ref>
             </optional>
             <optional>
-               <ref name="e_SetGrid"></ref>
+               <ref name="e_SetVariable"></ref>
             </optional>
             <optional>
                <ref name="e_SortSequence"></ref>
@@ -604,6 +605,7 @@
                <ref name="e_Color"></ref>
                <ref name="e_Fontface"></ref>
                <ref name="e_ForAll"></ref>
+               <ref name="e_Frame"></ref>
                <ref name="e_HSpace"></ref>
                <ref name="e_I"></ref>
                <ref name="e_Image"></ref>
@@ -1030,6 +1032,7 @@
                <ref name="e_Color"></ref>
                <ref name="e_Fontface"></ref>
                <ref name="e_ForAll"></ref>
+               <ref name="e_Frame"></ref>
                <ref name="e_HSpace"></ref>
                <ref name="e_I"></ref>
                <ref name="e_Image"></ref>
@@ -1089,10 +1092,10 @@
                   <ref name="e_DefineColor"></ref>
                </optional>
                <optional>
-                  <ref name="e_DefineTextformat"></ref>
+                  <ref name="e_DefineFontfamily"></ref>
                </optional>
                <optional>
-                  <ref name="e_DefineFontfamily"></ref>
+                  <ref name="e_DefineTextformat"></ref>
                </optional>
                <optional>
                   <ref name="e_Element"></ref>
@@ -1179,10 +1182,10 @@
                   <ref name="e_SavePages"></ref>
                </optional>
                <optional>
-                  <ref name="e_SetVariable"></ref>
+                  <ref name="e_SetGrid"></ref>
                </optional>
                <optional>
-                  <ref name="e_SetGrid"></ref>
+                  <ref name="e_SetVariable"></ref>
                </optional>
                <optional>
                   <ref name="e_SortSequence"></ref>
@@ -1386,6 +1389,7 @@
                <ref name="e_Color"></ref>
                <ref name="e_Fontface"></ref>
                <ref name="e_ForAll"></ref>
+               <ref name="e_Frame"></ref>
                <ref name="e_HSpace"></ref>
                <ref name="e_I"></ref>
                <ref name="e_Image"></ref>
@@ -1411,12 +1415,6 @@
          </optional>
          <oneOrMore>
             <optional>
-               <ref name="e_Record"></ref>
-            </optional>
-            <optional>
-               <ref name="e_LoadFontfile"></ref>
-            </optional>
-            <optional>
                <ref name="e_DefineColor"></ref>
             </optional>
             <optional>
@@ -1426,19 +1424,25 @@
                <ref name="e_DefineTextformat"></ref>
             </optional>
             <optional>
-               <ref name="e_Pageformat"></ref>
+               <ref name="e_Hyphenation"></ref>
+            </optional>
+            <optional>
+               <ref name="e_LoadFontfile"></ref>
             </optional>
             <optional>
                <ref name="e_Options"></ref>
             </optional>
             <optional>
+               <ref name="e_Pageformat"></ref>
+            </optional>
+            <optional>
                <ref name="e_Pagetype"></ref>
             </optional>
             <optional>
-               <ref name="e_SetGrid"></ref>
+               <ref name="e_Record"></ref>
             </optional>
             <optional>
-               <ref name="e_Hyphenation"></ref>
+               <ref name="e_SetGrid"></ref>
             </optional>
             <optional>
                <ref name="e_SetVariable"></ref>
@@ -1620,12 +1624,6 @@
          </optional>
          <oneOrMore>
             <optional>
-               <ref name="e_Record"></ref>
-            </optional>
-            <optional>
-               <ref name="e_LoadFontfile"></ref>
-            </optional>
-            <optional>
                <ref name="e_DefineColor"></ref>
             </optional>
             <optional>
@@ -1635,10 +1633,16 @@
                <ref name="e_DefineTextformat"></ref>
             </optional>
             <optional>
-               <ref name="e_Pageformat"></ref>
+               <ref name="e_Hyphenation"></ref>
+            </optional>
+            <optional>
+               <ref name="e_LoadFontfile"></ref>
             </optional>
             <optional>
                <ref name="e_Options"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Pageformat"></ref>
             </optional>
             <optional>
                <ref name="e_Pagetype"></ref>
@@ -1647,10 +1651,10 @@
                <ref name="e_PDFOptions"></ref>
             </optional>
             <optional>
-               <ref name="e_SetGrid"></ref>
+               <ref name="e_Record"></ref>
             </optional>
             <optional>
-               <ref name="e_Hyphenation"></ref>
+               <ref name="e_SetGrid"></ref>
             </optional>
             <optional>
                <ref name="e_SetVariable"></ref>
@@ -1743,10 +1747,10 @@
                   <ref name="e_DefineColor"></ref>
                </optional>
                <optional>
-                  <ref name="e_DefineTextformat"></ref>
+                  <ref name="e_DefineFontfamily"></ref>
                </optional>
                <optional>
-                  <ref name="e_DefineFontfamily"></ref>
+                  <ref name="e_DefineTextformat"></ref>
                </optional>
                <optional>
                   <ref name="e_Element"></ref>
@@ -1833,10 +1837,10 @@
                   <ref name="e_SavePages"></ref>
                </optional>
                <optional>
-                  <ref name="e_SetVariable"></ref>
+                  <ref name="e_SetGrid"></ref>
                </optional>
                <optional>
-                  <ref name="e_SetGrid"></ref>
+                  <ref name="e_SetVariable"></ref>
                </optional>
                <optional>
                   <ref name="e_SortSequence"></ref>
@@ -2048,6 +2052,7 @@
                <ref name="e_Color"></ref>
                <ref name="e_Fontface"></ref>
                <ref name="e_ForAll"></ref>
+               <ref name="e_Frame"></ref>
                <ref name="e_HSpace"></ref>
                <ref name="e_I"></ref>
                <ref name="e_Image"></ref>
@@ -2278,10 +2283,10 @@
                <ref name="e_DefineColor"></ref>
             </optional>
             <optional>
-               <ref name="e_DefineTextformat"></ref>
+               <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
-               <ref name="e_DefineFontfamily"></ref>
+               <ref name="e_DefineTextformat"></ref>
             </optional>
             <optional>
                <ref name="e_Element"></ref>
@@ -2368,10 +2373,10 @@
                <ref name="e_SavePages"></ref>
             </optional>
             <optional>
-               <ref name="e_SetVariable"></ref>
+               <ref name="e_SetGrid"></ref>
             </optional>
             <optional>
-               <ref name="e_SetGrid"></ref>
+               <ref name="e_SetVariable"></ref>
             </optional>
             <optional>
                <ref name="e_SortSequence"></ref>
@@ -2571,6 +2576,7 @@
                <ref name="e_Color"></ref>
                <ref name="e_Fontface"></ref>
                <ref name="e_ForAll"></ref>
+               <ref name="e_Frame"></ref>
                <ref name="e_HSpace"></ref>
                <ref name="e_I"></ref>
                <ref name="e_Image"></ref>
@@ -4032,6 +4038,7 @@
                <ref name="e_Color"></ref>
                <ref name="e_Fontface"></ref>
                <ref name="e_ForAll"></ref>
+               <ref name="e_Frame"></ref>
                <ref name="e_HSpace"></ref>
                <ref name="e_I"></ref>
                <ref name="e_Image"></ref>
@@ -4094,10 +4101,10 @@
                   <ref name="e_DefineColor"></ref>
                </optional>
                <optional>
-                  <ref name="e_DefineTextformat"></ref>
+                  <ref name="e_DefineFontfamily"></ref>
                </optional>
                <optional>
-                  <ref name="e_DefineFontfamily"></ref>
+                  <ref name="e_DefineTextformat"></ref>
                </optional>
                <optional>
                   <ref name="e_Element"></ref>
@@ -4184,10 +4191,10 @@
                   <ref name="e_SavePages"></ref>
                </optional>
                <optional>
-                  <ref name="e_SetVariable"></ref>
+                  <ref name="e_SetGrid"></ref>
                </optional>
                <optional>
-                  <ref name="e_SetGrid"></ref>
+                  <ref name="e_SetVariable"></ref>
                </optional>
                <optional>
                   <ref name="e_SortSequence"></ref>
@@ -4329,10 +4336,10 @@
                   <ref name="e_DefineColor"></ref>
                </optional>
                <optional>
-                  <ref name="e_DefineTextformat"></ref>
+                  <ref name="e_DefineFontfamily"></ref>
                </optional>
                <optional>
-                  <ref name="e_DefineFontfamily"></ref>
+                  <ref name="e_DefineTextformat"></ref>
                </optional>
                <optional>
                   <ref name="e_Element"></ref>
@@ -4419,10 +4426,10 @@
                   <ref name="e_SavePages"></ref>
                </optional>
                <optional>
-                  <ref name="e_SetVariable"></ref>
+                  <ref name="e_SetGrid"></ref>
                </optional>
                <optional>
-                  <ref name="e_SetGrid"></ref>
+                  <ref name="e_SetVariable"></ref>
                </optional>
                <optional>
                   <ref name="e_SortSequence"></ref>
