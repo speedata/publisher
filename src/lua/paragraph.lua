@@ -493,7 +493,7 @@ function Paragraph.vsplit( objects_t,frameheight )
     local thisarea = {}
     local remaining_objects = {}
     local area_filled = false
-    local lineheight
+    local lineheight = 0
     while not area_filled do
         for i=1,#hlist do
             local hbox = table.remove(hlist,1)
