@@ -2985,7 +2985,7 @@ function commands.text(layoutxml,dataxml)
                     if tmp == publisher.origin_htmltable then
                         obj = node.vpack(contents.nodelist)
                     else
-                        contents.nodelist = publisher.addstrut(contents.nodelist)
+                        contents.nodelist = publisher.addstrut(contents.nodelist,publisher.origin_text)
                         obj = contents:format(parameter.width,nil,parameter)
                     end
                     objects[#objects + 1] = obj

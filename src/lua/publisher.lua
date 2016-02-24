@@ -96,8 +96,10 @@ origin_vspace = 2
 origin_align_top = 3
 origin_image = 4
 origin_htmltable = 5
-
-
+origin_finishpar = 6
+origin_text = 7
+origin_setcolor = 8
+origin_setcolorifnecessary = 9
 
 user_defined_addtolist = 1
 user_defined_bookmark  = 2
@@ -1926,8 +1928,12 @@ function parse_html( elt, parameter )
         if eltname == "table" then
             -- Evil. Build a table in Publisher-mode and send it to the output
             local x = parse_html_table(elt)
-            node.set_attribute(x[1],att_origin,origin_htmltable)
-            return x[1]
+            node.set_attribute(x,att_origin,origin_htmltable)
+            return x
+        elseif eltname == "p" then
+            a:append(elt[1])
+            a:append("\n")
+            return a
         elseif eltname == "b" or eltname == "strong" then
             bold = 1
         elseif eltname == "i" then
@@ -2007,13 +2013,15 @@ function parse_html( elt, parameter )
             a:append("\n",{})
         end
     end
-
+    -- Recurse into the children...
     for i=1,#elt do
         local typ = type(elt[i])
-        if  typ == "string" or typ == "number" or typ == "boolean" then
-            a:append(elt[i],{fontfamily = 0, bold = bold, italic = italic, underline = underline, allowbreak = allowbreak })
+        local options = {fontfamily = 0, bold = bold, italic = italic, underline = underline, allowbreak = allowbreak }
+        if typ == "string" or typ == "number" or typ == "boolean" then
+            a:append(elt[i],options)
         elseif typ == "table" then
-            a:append(parse_html(elt[i],{fontfamily = 0, bold = bold, italic = italic, underline = underline, allowbreak = allowbreak}))
+            local tmp = parse_html(elt[i],options)
+            a:append(tmp)
         end
     end
 
@@ -2053,7 +2061,7 @@ function parse_html_table(elt)
     tabular.rowsep         = 0
 
     local n = tabular:make_table()
-    return n
+    return n[1]
 end
 
 function parse_html_tbody(body)
@@ -2181,7 +2189,7 @@ function bigger_glue_spec( a,b )
 end
 
 
-function addstrut(nodelist)
+function addstrut(nodelist,where)
     local head = nodelist
     while head do
         if node.has_attribute(head, att_fontfamily) then
@@ -2205,6 +2213,9 @@ function addstrut(nodelist)
     local height = fi.baselineskip
     local strut
     strut = add_rule(nodelist,"head",{height = 0.75 * height, depth = 0.25 * height, width = 0 })
+    if where then
+        node.set_attribute(strut,att_origin,where)
+    end
     return strut
 end
 
@@ -2544,6 +2555,7 @@ function finish_par( nodelist,hsize,parameters )
         lang.hyphenate(nodelist)
     end
     local n = node.new("penalty")
+    node.set_attribute(n,att_origin,origin_finishpar)
     n.penalty = 10000
     local last = node.slide(nodelist)
 
@@ -2903,6 +2915,8 @@ function set_color_if_necessary( nodelist,color )
     last.next = colstop
     colstop.prev = last
 
+    node.set_attribute(colstart,att_origin,origin_setcolorifnecessary)
+    node.set_attribute(colstop,att_origin,origin_setcolorifnecessary)
     return colstart
 end
 

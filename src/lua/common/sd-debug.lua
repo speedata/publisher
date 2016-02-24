@@ -78,6 +78,7 @@ end
 function trace( ... )
   if publisher.options.trace then
     texio.write_nl("   |" .. string.format(...))
+    io.stdout:flush()
   end
 end
 function tracetable( name,tbl )
