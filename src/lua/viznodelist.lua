@@ -2,9 +2,9 @@
 --  viznodelist.lua
 --  speedata publisher
 --
---  Copyright 2010-2015 Patrick Gundlach.
---  See file COPYING in the root directory for license info.
-
+--  Written 2010-2016 by Patrick Gundlach.
+--  This file is released in the spirit of the well known MIT license
+--  (see https://opensource.org/licenses/MIT for more information)
 --
 -- visualizes nodelists using graphviz
 
@@ -27,8 +27,8 @@
 -- 3: the options table (optional). Known keywords:
 --    - showdisc = <boolean> (defaults to false)
 
--- 2010-08-29, Patrick Gundlach, gundlach@speedata.de
--- Status: experimental/usable, including debug info
+-- 2016-02-24, Patrick Gundlach, gundlach@speedata.de
+-- Status: usable, expect updates
 -- Newest file is at http://gist.github.com/556247
 
 
@@ -351,6 +351,12 @@ local function dot_analyze_nodelist( head, options )
             ret[#ret + 1] = draw_node(head, {{ "subtype", "pdf_start_link"}, {"width", wd},{"widthraw",head.width}, {"height" , ht}, {"depth",dp}, {"objnum", objnum}, {"action", "action"}})
         elseif st == "pdf_literal" then
             ret[#ret + 1] = draw_node(head,{ {"subtype", "literal"},{"data",data} })
+        elseif st == "pdf_refximage" then
+            local wd  = string.format("width (pt): %gpt",  head.width / 2^16)
+            local ht  = string.format("height: %gpt", head.height / 2^16)
+            local dp  = string.format("depth %gpt",  head.depth / 2^16)
+            local objnum = string.format("objnum %d",head.objnum or 0)
+            ret[#ret + 1] = draw_node(head,{ {"subtype", "image"},{"width", wd}, {"height" , ht}, {"depth",dp}, {"objnum", objnum} })
         elseif st == "pdf_colorstack" then
             local stack,cmd,data
             stack = string.format("stack: %d",head.stack)
@@ -367,6 +373,8 @@ local function dot_analyze_nodelist( head, options )
             t   = string.format("type = %s",tostring(head.type))
             val  = string.format("value = %s", tostring(head.value))
             ret[#ret + 1] = draw_node(head,{ {"subtype", "user_defined"},{"userid",uid},{"type",t},{"value",val} })
+        else
+            -- texio.write_nl(string.format("whatsit type %s not handled",st))
         end
     else
       ret[#ret + 1] = draw_node(head, { })
