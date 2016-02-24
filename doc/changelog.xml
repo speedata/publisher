@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.59" date="2016-02-24">
+      <en>Bugfix HTML tables</en>
+      <de>Fehlerkorrektur HTML-Tabellen</de>
+    </entry>
     <entry version="2.3.58" date="2016-02-22">
       <en>Experimental HTML tables</en>
       <de>Experimentelle HTML-Tabellen</de>
