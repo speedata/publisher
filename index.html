@@ -4,6 +4,24 @@
   <meta charset='utf-8'>
   <title>speedata Publisher</title>
   <link rel="stylesheet" href="css/normal.css" type="text/css">
+
+  <!-- Piwik -->
+  <!-- we remove the last digits from the IP address, so we can't identify anybody -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["setDomains", ["*.speedata.github.io/publisher"]]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//piwik.speedata.de/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', 4]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="//piwik.speedata.de/piwik.php?idsite=4" style="border:0;" alt="" /></p></noscript>
+<!-- End Piwik Code -->
 </head>
 
 <body>
@@ -69,15 +87,5 @@
     <div class='speedataline'></div>
     <a href="http://www.speedata.de/">www.speedata.de</a>
 
-<script type="text/javascript">
-var pkBaseURL = (("https:" == document.location.protocol) ? "https://mypiwikstats.luatex.de/" : "http://mypiwikstats.luatex.de/");
-document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
-</script><script type="text/javascript">
-try {
-var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 3);
-piwikTracker.trackPageView();
-piwikTracker.enableLinkTracking();
-} catch( err ) {}
-</script><noscript><p><img src="http://mypiwikstats.luatex.de/piwik.php?idsite=3" style="border:0" alt="" /></p></noscript>
 </body>
 </html>
