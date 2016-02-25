@@ -71,6 +71,8 @@ att_break_below_forbidden = 400
 att_break_above           = 401
 att_omit_at_top           = 402
 att_use_as_head           = 403
+-- HTML tables should not be paragraph:format()ted
+att_dont_format           = 404
 
 --- `att_is_table_row` is used in `tabular.lua` and if set to 1, it denotes
 --- a regular table row, and not a spacer. Spacers must not appear
@@ -95,7 +97,7 @@ origin_table = 1
 origin_vspace = 2
 origin_align_top = 3
 origin_image = 4
-origin_htmltable = 5
+
 origin_finishpar = 6
 origin_text = 7
 origin_setcolor = 8
@@ -1928,7 +1930,7 @@ function parse_html( elt, parameter )
         if eltname == "table" then
             -- Evil. Build a table in Publisher-mode and send it to the output
             local x = parse_html_table(elt)
-            node.set_attribute(x,att_origin,origin_htmltable)
+            node.set_attribute(x,att_dont_format,1)
             return x
         elseif eltname == "p" then
             a:append(elt[1])
@@ -2879,7 +2881,8 @@ end
 
 -- color is an integer
 function set_color_if_necessary( nodelist,color )
-    local attorigin = node.has_attribute(nodelist,att_origin)
+    local dontformat = node.has_attribute(nodelist,att_dont_format)
+
     if not color then return nodelist end
 
     local colorname
@@ -2897,9 +2900,10 @@ function set_color_if_necessary( nodelist,color )
         colstart.command = 1
     end
     colstart.stack = 0
-    if attorigin then
-        node.set_attribute(colstart,att_origin,attorigin)
+    if dontformat then
+        node.set_attribute(colstart,att_dont_format,dontformat)
     end
+
     colstart.next = nodelist
     nodelist.prev = colstart
 
@@ -2914,7 +2918,6 @@ function set_color_if_necessary( nodelist,color )
     local last = node.tail(nodelist)
     last.next = colstop
     colstop.prev = last
-
     node.set_attribute(colstart,att_origin,origin_setcolorifnecessary)
     node.set_attribute(colstop,att_origin,origin_setcolorifnecessary)
     return colstart

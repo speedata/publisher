@@ -2981,8 +2981,8 @@ function commands.text(layoutxml,dataxml)
                 local obj
                 for i=1,#tab do
                     local contents = publisher.element_contents(tab[i])
-                    local tmp = node.has_attribute(contents.nodelist,publisher.att_origin)
-                    if tmp == publisher.origin_htmltable then
+                    local tmp = node.has_attribute(contents.nodelist,publisher.att_dont_format)
+                    if tmp == 1 then
                         obj = node.vpack(contents.nodelist)
                     else
                         contents.nodelist = publisher.addstrut(contents.nodelist,publisher.origin_text)
@@ -3094,8 +3094,8 @@ function commands.textblock( layoutxml,dataxml )
         else
             nodelist = paragraph.nodelist
             assert(nodelist)
-            local tmp = node.has_attribute(nodelist,publisher.att_origin)
-            if tmp ~= publisher.origin_htmltable then
+            local tmp = node.has_attribute(nodelist,publisher.att_dont_format)
+            if tmp ~= 1 then
                 publisher.set_fontfamily_if_necessary(nodelist,fontfamily)
                 paragraph.nodelist = publisher.set_color_if_necessary(nodelist,colortable)
                 node.slide(nodelist)

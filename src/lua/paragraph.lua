@@ -67,9 +67,9 @@ function Paragraph:set_color( color )
     colstart.stack = 0
     colstart.next = self.nodelist
     self.nodelist.prev = colstart
-    local attorigin = node.has_attribute(self.nodelist,publisher.att_origin)
-    if attorigin then
-        node.set_attribute(colstart,publisher.att_origin,attorigin)
+    local dontformat = node.has_attribute(self.nodelist,publisher.att_dont_format)
+    if dontformat then
+        node.set_attribute(colstart,publisher.att_dont_format,dontformat)
     end
 
     self.nodelist = colstart
