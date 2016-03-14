@@ -321,22 +321,28 @@ function pre_linebreak( head )
 end
 
 --- Insert a horizontal rule in the nodelist that is used for underlining.
-function insert_underline( parent, head, start)
+function insert_underline( parent, head, start, typ)
     local wd = node.dimensions(parent.glue_set,parent.glue_sign, parent.glue_order,start,head)
     local ht = parent.height
     local dp = parent.depth
+    local dashpattern = ""
 
     -- wd, ht and dp are now in pdf points
     wd = wd / publisher.factor
     ht = ht / publisher.factor
     dp = dp / publisher.factor
-
     local rule = node.new("whatsit","pdf_literal")
     -- thickness: ht / ...
     -- downshift: dp/2
-    local rule_width = ht / 10
-    local shift_down = ( dp - rule_width ) / 2
-    rule.data = string.format("q 0 g 0 G 0 -%g %g -%g re f Q", shift_down, -wd, rule_width )
+    local rule_width = math.round(ht / 13,3)
+
+    if typ == 2 then
+        -- dashed
+        dashpattern = string.format("[%g] 0 d", 3 * rule_width)
+    end
+
+    local shift_down = ( dp - rule_width ) / 1.5
+    rule.data = string.format("q 0 g 0 G 0 %g w %s %g m %g %g l S Q", rule_width, dashpattern, -1 * shift_down, -wd, -1 * shift_down )
     rule.mode = 0
     parent.head = node.insert_before(parent.head,head,rule)
     return rule
@@ -347,13 +353,14 @@ end
 --- overall apperance of the paragraph is fixed at this time, we can only add
 --- deocration now.
 function post_linebreak( head, list_head)
-    start = nil
+    local atttype = nil
+    local start = nil
     while head do
-        if head.id == 0 then -- hlist
+        if head.id == hlist_node then -- hlist
             post_linebreak(head.list,head)
-        elseif head.id == 1 then -- vlist
+        elseif head.id == vlist_node then -- vlist
             post_linebreak(head.list,head)
-        elseif head.id == 7 then -- disc
+        elseif head.id == disc_node then -- disc
             if publisher.options.showhyphenation then
                 -- Insert a small tick where the disc node is
                 local n = node.new("whatsit","pdf_literal")
@@ -363,24 +370,25 @@ function post_linebreak( head, list_head)
                 -- hyphenation does not start right at the beginning of the list...
                 node.insert_before(list_head,head,n)
             end
-        elseif head.id == 10 then -- glue
+        elseif head.id == glue_node then -- glue
             local att_underline = node.has_attribute(head, publisher.att_underline)
             -- at rightskip we must underline (if start exists)
-            if att_underline ~= 1 or head.subtype == 9 then
+            if att_underline == nil or head.subtype == 9 then
                 if start then
-                    insert_underline(list_head, head, start)
+                    insert_underline(list_head, head, start,atttype)
                     start = nil
                 end
             end
-        elseif head.id == 37 then -- glyph
+        elseif head.id == glyph_node then -- glyph
             local att_underline = node.has_attribute(head, publisher.att_underline)
-            if att_underline == 1 then
+            if att_underline and att_underline > 0 then
                 if not start then
+                    atttype = att_underline
                     start = head
                 end
             else
                 if start then
-                    insert_underline(list_head, head, start)
+                    insert_underline(list_head, head, start, atttype)
                     start = nil
                 end
             end

@@ -4029,6 +4029,27 @@
    <define name="e_U">
       <element name="U">
          <a:documentation>Schaltet »Unterstreichen« ein.</a:documentation>
+         <optional>
+            <attribute name="gestrichelt">
+               <a:documentation>Benutze eine gestrichelte Linie.</a:documentation>
+               <choice>
+                  <value>ja</value>
+                  <a:documentation>Zeichne eine gestrichelte Linie.</a:documentation>
+                  <value>nein</value>
+                  <a:documentation>Zeichne eine durchgezogene Linie.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS Klasse für dieses Element.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id für dieses Element.</a:documentation>
+            </attribute>
+         </optional>
          <zeroOrMore>
             <choice>
                <ref name="e_A"></ref>

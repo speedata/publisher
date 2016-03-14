@@ -31,8 +31,8 @@ function Paragraph:add_italic_bold( nodelist,parameter )
         if parameter.italic == 1 then
             node.set_attribute(i,publisher.att_italic,1)
         end
-        if parameter.underline == 1 then
-            node.set_attribute(i,publisher.att_underline,1)
+        if parameter.underline then
+            node.set_attribute(i,publisher.att_underline,parameter.underline)
         end
     end
 end

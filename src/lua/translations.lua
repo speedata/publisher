@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2016-02-18 11:56)
+-- generated from genluatranslations.go (2016-03-14 14:58)
 -- do not edit!
 module(...)
 return {
@@ -463,6 +463,9 @@ return {
         ["ursprung-y"] = "origin-y",
         },
       ["U"] = { "U",
+        ["gestrichelt"] = "dashed",
+        ["class"] = "class",
+        ["id"] = "id",
         },
       ["Ul"] = { "Ul",
         },

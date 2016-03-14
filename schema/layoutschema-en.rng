@@ -3130,7 +3130,7 @@
          </optional>
          <optional>
             <attribute name="dashed">
-               <a:documentation>Use a dahsed rule instead of a solid rule.</a:documentation>
+               <a:documentation>Use a dashed rule instead of a solid rule.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>Draw a dashed rule.</a:documentation>
@@ -4029,6 +4029,27 @@
    <define name="e_U">
       <element name="U">
          <a:documentation>Underline text.</a:documentation>
+         <optional>
+            <attribute name="dashed">
+               <a:documentation>Use a dashed rule instead of a solid rule.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Draw a dashed rule.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Draw a solid rule.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS class for this element.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id for this element.</a:documentation>
+            </attribute>
+         </optional>
          <zeroOrMore>
             <choice>
                <ref name="e_A"></ref>

@@ -2338,8 +2338,9 @@ function mknodes(str,fontfamily,parameter)
 
             head,last = node.insert_after(head,last,n)
 
-            if parameter.underline == 1 then
-                node.set_attribute(n,att_underline,1)
+            -- can be 1 == solid or 2 == dashed
+            if parameter.underline then
+                node.set_attribute(n,att_underline,parameter.underline)
             end
             node.set_attribute(n,att_fontfamily,fontfamily)
         elseif s == 173 then -- soft hyphen
@@ -2384,8 +2385,8 @@ function mknodes(str,fontfamily,parameter)
                 node.set_attribute(n,att_tie_glue,1)
             end
 
-            if parameter.underline == 1 then
-                node.set_attribute(n,att_underline,1)
+            if parameter.underline then
+                node.set_attribute(n,att_underline,parameter.underline)
             end
             node.set_attribute(n,att_fontfamily,fontfamily)
 
@@ -2407,8 +2408,8 @@ function mknodes(str,fontfamily,parameter)
             if parameter.italic == 1 then
                 node.set_attribute(n,att_italic,1)
             end
-            if parameter.underline == 1 then
-                node.set_attribute(n,att_underline,1)
+            if parameter.underline then
+                node.set_attribute(n,att_underline,parameter.underline)
             end
             if last and last.id == glyph_node then
                 lastitemwasglyph = true

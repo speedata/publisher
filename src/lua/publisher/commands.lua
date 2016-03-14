@@ -2240,10 +2240,10 @@ function commands.rule( layoutxml,dataxml )
     local direction     = publisher.read_attribute(layoutxml,dataxml,"direction",  "string")
     local length        = publisher.read_attribute(layoutxml,dataxml,"length",     "rawstring")
     local rulewidth     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",  "rawstring")
-    local dashed        = publisher.read_attribute(layoutxml,dataxml,"dashed",  "boolean")
+    local dashed        = publisher.read_attribute(layoutxml,dataxml,"dashed",     "boolean")
     local color         = publisher.read_attribute(layoutxml,dataxml,"color",      "rawstring")
-    local class         = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
-    local id            = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
+    local class         = publisher.read_attribute(layoutxml,dataxml,"class",      "rawstring")
+    local id            = publisher.read_attribute(layoutxml,dataxml,"id",         "rawstring")
 
     local css_rules = publisher.css:matches({element = "rule", class=class,id=id}) or {}
 
@@ -3179,20 +3179,29 @@ end
 --- drawing a line underneath the text.
 function commands.underline( layoutxml,dataxml )
     trace("Underline")
+    local dashed = publisher.read_attribute(layoutxml,dataxml,"dashed", "boolean")
+    local class  = publisher.read_attribute(layoutxml,dataxml,"class",  "rawstring")
+    local id     = publisher.read_attribute(layoutxml,dataxml,"id",     "rawstring")
+
+    local css_rules = publisher.css:matches({element = 'u', class=class,id=id}) or {}
+    if dashed == nil then dashed = ( css_rules["border-style"] == "dashed") end
 
     local a = paragraph:new()
     local objects = {}
     local tab = publisher.dispatch(layoutxml,dataxml)
-
+    local underline = 1
+    if dashed then
+        underline = 2
+    end
     for i,j in ipairs(tab) do
         if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{underline = true})
+            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{underline = underline})
         else
             objects[#objects + 1] = publisher.element_contents(j)
         end
     end
     for _,j in ipairs(objects) do
-        a:append(j,{fontfamily = 0, underline = 1})
+        a:append(j,{fontfamily = 0, underline = underline})
     end
     return a
 end

@@ -5468,7 +5468,7 @@
     </attribute>
     <attribute en="dashed" de="gestrichelt" optional="yes" since="2.3.50">
       <description xml:lang="en">
-        <para>Use a dahsed rule instead of a solid rule.</para>
+        <para>Use a dashed rule instead of a solid rule.</para>
       </description>
       <description xml:lang="de">
         <para>Benutze eine gestrichelte Linie.</para>
@@ -7436,7 +7436,7 @@
     </example>
     <seealso><cmd name="PlaceObject"/></seealso>
   </command>
-  <command en="U" de="U">
+  <command en="U" de="U" css="u">
     <description xml:lang="en">
       <para>Underline text.</para>
     </description>
@@ -7446,6 +7446,46 @@
     <childelements>
       <reference name="Textvalues"/>
     </childelements>
+    <attribute en="dashed" de="gestrichelt" optional="yes" since="2.3.61" css="border-style">
+      <description xml:lang="en">
+        <para>Use a dashed rule instead of a solid rule.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Benutze eine gestrichelte Linie.</para>
+      </description>
+      <choice en="yes" de="ja" css="dashed">
+        <description xml:lang="en">
+          <para>Draw a dashed rule.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeichne eine gestrichelte Linie.</para>
+        </description>
+      </choice>
+      <choice en="no" de="nein" css="solid">
+        <description xml:lang="en">
+          <para>Draw a solid rule.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeichne eine durchgezogene Linie.</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="class" de="class" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS class for this element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS Klasse für dieses Element.</para>
+      </description>
+    </attribute>
+    <attribute en="id" de="id" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS id for this element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS id für dieses Element.</para>
+      </description>
+    </attribute>
     <remark xml:lang="en">
       <para>Currenty it doesn't work with margin protrusion.</para>
     </remark>
