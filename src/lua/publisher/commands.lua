@@ -1135,6 +1135,7 @@ function commands.load_fontfile( layoutxml,dataxml )
             onum = osf == true,
         },
     }
+    if publisher.lowercase then filename = unicode.utf8.lower(filename) end
     log("Load Fontfile %q",filename or "?")
     publisher.fonts.load_fontfile(name,filename,extra_parameter)
 end

@@ -369,6 +369,9 @@ intextblockcontext = 0
 masterpages = {}
 
 
+-- if true, look for lowercase files
+lowercase = false
+
 --- Text formats is a hash with arbitrary names as keys and the values
 --- are tables with alignment and indent. indent is the amount of
 --- indentation in sp. alignment is one of "leftaligned", "rightaligned",
@@ -658,6 +661,8 @@ function dothings()
     --- A4 paper is 210x297 mm
     set_pageformat(tex.sp("210mm"),tex.sp("297mm"))
     get_languagecode(os.getenv("SP_MAINLANGUAGE") or "en_GB")
+
+    lowercase = os.getenv("SP_IGNORECASE") == "1"
 
     --- The free font family `TeXGyreHeros` is a Helvetica clone and is part of the
     --- [The TeX Gyre Collection of Fonts](http://www.gust.org.pl/projects/e-foundry/tex-gyre).
