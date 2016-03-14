@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.61" date="2016-03-14">
+      <en>New feature U/dashed="yes"</en>
+      <de>Neues Feature. U/gestrichelt="ja"</de>
+    </entry>
     <entry version="2.3.60" date="2016-03-14">
       <en>Bugfix for HTML tables and sp --ignore-case / font files</en>
       <en>Fehlerkorrektur für HTML-Tabellen und sp --ignore-case / Schriftarten</en>
