@@ -156,6 +156,17 @@ task :qa do
 	sh "#{installdir}/bin/sp compare #{installdir}/qa"
 end
 
+desc "Clean QA intermediate files"
+task :cleanqa do
+	FileUtils.rm Dir.glob("qa/**/pagediff-*.png")
+	FileUtils.rm Dir.glob("qa/**/reference-*.png")
+	FileUtils.rm Dir.glob("qa/**/source-*.png")
+	FileUtils.rm Dir.glob("qa/**/publisher.vars")
+	FileUtils.rm Dir.glob("qa/**/publisher.status")
+	FileUtils.rm Dir.glob("qa/**/publisher.protocol")
+	FileUtils.rm Dir.glob("qa/**/publisher.pdf")
+end
+
 # The environment variable LUATEX_BIN must point to a directory with the following structure
 # ├── darwin
 # │   ├── amd64
