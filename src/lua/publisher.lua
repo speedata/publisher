@@ -1937,10 +1937,6 @@ function parse_html( elt, parameter )
             local x = parse_html_table(elt)
             node.set_attribute(x,att_dont_format,1)
             return x
-        elseif eltname == "p" then
-            a:append(elt[1])
-            a:append("\n")
-            return a
         elseif eltname == "b" or eltname == "strong" then
             bold = 1
         elseif eltname == "i" then
