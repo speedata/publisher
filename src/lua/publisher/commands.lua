@@ -1767,6 +1767,7 @@ function commands.paragraph( layoutxml,dataxml )
     a:set_color(colortable)
     publisher.intextblockcontext = publisher.intextblockcontext - 1
     publisher.current_fontfamily = save_fontfamily
+    a.nodelist = publisher.addstrut(a.nodelist)
     return a
 end
 

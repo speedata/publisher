@@ -1935,6 +1935,7 @@ function parse_html( elt, parameter )
         if eltname == "table" then
             -- Evil. Build a table in Publisher-mode and send it to the output
             local x = parse_html_table(elt)
+            x = node.hpack(x)
             node.set_attribute(x,att_dont_format,1)
             return x
         elseif eltname == "b" or eltname == "strong" then
@@ -2193,7 +2194,21 @@ end
 
 
 function addstrut(nodelist,where)
+    local strutheight = 0
     local head = nodelist
+    while head do
+        if head.id == hlist_node then
+            strutheight = head.height
+            if node.has_attribute(head,att_dont_format) then
+                -- 0.25 is the depth of the line, and hopefully
+                -- this is the highest thing in the line
+                head.shift = 0.25 * head.height
+            end
+        end
+        head = head.next
+
+    end
+    head = nodelist
     while head do
         if node.has_attribute(head, att_fontfamily) then
             break
@@ -2213,9 +2228,9 @@ function addstrut(nodelist,where)
     end
 
     local fi = fonts.lookup_fontfamily_number_instance[fontfamily]
-    local height = fi.baselineskip
+    strutheight = math.max(fi.baselineskip, strutheight)
     local strut
-    strut = add_rule(nodelist,"head",{height = 0.75 * height, depth = 0.25 * height, width = 0 })
+    strut = add_rule(nodelist,"head",{height = 0.75 * strutheight, depth = 0.25 * strutheight, width = 0 })
     if where then
         node.set_attribute(strut,att_origin,where)
     end
@@ -2733,28 +2748,34 @@ function do_linebreak( nodelist,hsize,parameters )
 
     -- Adjust line heights. Always take the largest font in a row.
     local head = j
-    local maxskip
+    local maxlineheight
+    local fam
     while head do
-        if head.id == 0 then -- hlist
+        if head.id == hlist_node then -- hlist
             local lineheight
-            maxskip = 0
+            maxlineheight = 0
             local head_list = head.list
             while head_list do
                 lineheight = lineheight or node.has_attribute(head_list,att_lineheight)
-                local fam = node.has_attribute(head_list,att_fontfamily)
-                if fam then
-                    -- Is this necessary anymore? FIXME
-                    if fam == 0 then fam = 1 end
-                    maxskip = math.max(fonts.lookup_fontfamily_number_instance[fam].baselineskip,maxskip)
+                -- There could be a hlist (HTML table for example) in the line
+                if head_list.id == hlist_node or head_list.id == vlist_node then
+                    maxlineheight = math.max(head_list.height,maxlineheight)
+                else
+                    fam = node.has_attribute(head_list,att_fontfamily)
+                    if fam then
+                        -- Is this necessary anymore? FIXME
+                        if fam == 0 then fam = 1 end
+                        maxlineheight = math.max(fonts.lookup_fontfamily_number_instance[fam].baselineskip,maxlineheight)
+                    end
                 end
                 head_list = head_list.next
             end
-            if lineheight and lineheight > 0.75 * maxskip then
+            if lineheight and lineheight > 0.75 * maxlineheight then
                 head.height = lineheight
-                head.depth  = 0.25 * maxskip
+                head.depth  = 0.25 * maxlineheight
             else
-                head.height = 0.75 * maxskip
-                head.depth  = 0.25 * maxskip
+                head.height = 0.75 * maxlineheight
+                head.depth  = 0.25 * maxlineheight
             end
         end
         head = head.next

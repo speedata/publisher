@@ -173,6 +173,13 @@ function Paragraph:format(width_sp, default_textformat_name,options)
 
     if options.allocate == "auto" then
         -- Get the par shape
+        local head = self.nodelist
+        while head do
+            head = head.next
+        end
+        if self.nodelist.id == publisher.glue_node then
+            local spec = self.nodelist.spec
+        end
         local lineheight = self.nodelist.height + self.nodelist.depth
         local gridheight = current_grid:height_sp(1)
         local cg = options.current_grid
