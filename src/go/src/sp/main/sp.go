@@ -779,6 +779,9 @@ func main() {
 
 	switch command {
 	case "run":
+		jobname := getOption("jobname")
+		finishedfilename := fmt.Sprintf("%s.finished", jobname)
+		os.Remove(finishedfilename)
 		if filter := getOption("filter"); filter != "" {
 			if filepath.Ext(filter) != ".xpl" {
 				filter = filter + ".xpl"
@@ -804,9 +807,11 @@ func main() {
 			}
 
 		}
+		ioutil.WriteFile(finishedfilename, []byte("finished\n"), 0600)
+
 		// open PDF if necessary
 		if getOption("autoopen") == "true" {
-			openFile(getOption("jobname") + ".pdf")
+			openFile(jobname + ".pdf")
 		}
 	case "compare":
 		if len(op.Extra) > 1 {
@@ -834,7 +839,7 @@ func main() {
 		}
 		for _, v := range files {
 			switch filepath.Ext(v) {
-			case ".vars", ".log", ".protocol", ".dataxml", ".status":
+			case ".vars", ".log", ".protocol", ".dataxml", ".status", ".finished":
 				log.Printf("Removing %s", v)
 				err = os.Remove(v)
 				if err != nil {

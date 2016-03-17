@@ -477,9 +477,10 @@ func v0StatusHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	statusPath := filepath.Join(publishdir, "publisher.status")
-	fi, err = os.Stat(statusPath)
+	finishedPath := filepath.Join(publishdir, "publisher.finished")
+	fi, err = os.Stat(finishedPath)
 	if err != nil && os.IsNotExist(err) {
-		// status does not exist yet, so it's in progress
+		// finished does not exist yet, so it's in progress
 		stat.Message = ""
 		stat.Result = "not finished"
 		stat.Errstatus = "ok"
