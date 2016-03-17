@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.62" date="2016-03-17">
+      <en>Various bugfixes: paragraph shape, server wait until run finished</en>
+      <de>Verschiedene Fehlerkorrenturen: Absatzform, Server wartet bis Durchlauf zuende</de>
+    </entry>
     <entry version="2.3.61" date="2016-03-14">
       <en>New feature U/dashed="yes"</en>
       <de>Neues Feature. U/gestrichelt="ja"</de>
