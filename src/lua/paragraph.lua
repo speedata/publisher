@@ -184,9 +184,6 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         -- Get the par shape
         local head = self.nodelist
         local lineheight = head.height + head.depth
-        if current_textformat.marginbottom then
-            lineheight = lineheight + current_textformat.marginbottom
-        end
         local gridheight = current_grid:height_sp(1)
         local cg = options.current_grid
         local areaname = options.area

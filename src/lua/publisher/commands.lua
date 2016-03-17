@@ -2981,6 +2981,8 @@ function commands.text(layoutxml,dataxml)
                 state.total_height = 0
                 state.objects = objects
                 local obj
+                local extra_accumulated = 0
+                local extra
                 for i=1,#tab do
                     local contents = publisher.element_contents(tab[i])
                     local tmp = node.has_attribute(contents.nodelist,publisher.att_dont_format)
@@ -2991,7 +2993,8 @@ function commands.text(layoutxml,dataxml)
                         obj = contents:format(parameter.width,nil,parameter)
                     end
                     objects[#objects + 1] = obj
-                    local ht_rows = cg:height_in_gridcells_sp(obj.height + obj.depth,{floor = true})
+                    local ht_rows, extra = cg:height_in_gridcells_sp(obj.height + obj.depth + extra_accumulated, {floor = true})
+                    extra_accumulated = extra
                     cg:set_current_row(ht_rows + cg:current_row(parameter.area),parameter.area)
                 end
             end
