@@ -171,16 +171,22 @@ function Paragraph:format(width_sp, default_textformat_name,options)
     options = options or {}
     local parameter = {}
 
+    local current_textformat_name,current_textformat
+    current_textformat_name = self.textformat or default_textformat_name
+
+    if publisher.textformats[current_textformat_name] then
+        current_textformat = publisher.textformats[current_textformat_name]
+    else
+        current_textformat = publisher.textformats["text"]
+    end
+
     if options.allocate == "auto" then
         -- Get the par shape
         local head = self.nodelist
-        while head do
-            head = head.next
+        local lineheight = head.height + head.depth
+        if current_textformat.marginbottom then
+            lineheight = lineheight + current_textformat.marginbottom
         end
-        if self.nodelist.id == publisher.glue_node then
-            local spec = self.nodelist.spec
-        end
-        local lineheight = self.nodelist.height + self.nodelist.depth
         local gridheight = current_grid:height_sp(1)
         local cg = options.current_grid
         local areaname = options.area
@@ -246,19 +252,6 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         if nodelist == nil then
             -- nothing after a <ul>/<ol>
             break
-        end
-
-        local current_textformat_name,current_textformat
-        if self.textformat then
-            current_textformat_name = self.textformat
-        else
-            current_textformat_name = default_textformat_name
-        end
-
-        if publisher.textformats[current_textformat_name] then
-            current_textformat = publisher.textformats[current_textformat_name]
-        else
-            current_textformat = publisher.textformats["text"]
         end
 
         local langs_num,langs
@@ -376,7 +369,6 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         if current_textformat.marginbottom and current_textformat.marginbottom ~= 0 then
             nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = current_textformat.marginbottom})
             node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
-            -- node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,7)
         end
         if current_textformat.breakbelow == false then
             node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,7)

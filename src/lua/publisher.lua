@@ -102,6 +102,7 @@ origin_finishpar = 6
 origin_text = 7
 origin_setcolor = 8
 origin_setcolorifnecessary = 9
+origin_paragraph = 10
 
 user_defined_addtolist = 1
 user_defined_bookmark  = 2
