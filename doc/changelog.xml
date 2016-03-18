@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.63" date="2016-03-18">
+      <en>Bufgfix line height calculation with Output/Text and allocation = auto</en>
+      <de>Fehlerkorektur Zeilenhöhe berechnen bei Ausgabe/Text und belegen=auto</de>
+    </entry>
     <entry version="2.3.62" date="2016-03-17">
       <en>Various bugfixes: paragraph shape, server wait until run finished</en>
       <de>Verschiedene Fehlerkorrenturen: Absatzform, Server wartet bis Durchlauf zuende</de>
