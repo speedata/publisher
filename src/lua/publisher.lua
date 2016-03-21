@@ -1945,6 +1945,12 @@ function parse_html( elt, parameter )
             italic = 1
         elseif eltname == "u" then
             underline = 1
+            if elt.class then
+                local css_rules = css:matches({element = 'u', class=elt.class}) or {}
+                if css_rules["border-style"] == "dashed" then
+                    underline = 2
+                end
+            end
         elseif eltname == "ul" then
             for i=1,#elt do
                 if type(elt[i]) == "string" then
