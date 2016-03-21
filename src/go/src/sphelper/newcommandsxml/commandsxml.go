@@ -343,10 +343,11 @@ type Command struct {
 
 func (c *Command) Parents(lang string) []*Command {
 	var cmds []*Command
+	mutex.Lock()
 	for k, _ := range c.parentelements {
 		cmds = append(cmds, k)
 	}
-
+	mutex.Unlock()
 	if lang == "en" {
 		sort.Sort(commandsbyen{cmds})
 	} else {
@@ -767,7 +768,10 @@ func (c *Command) Childelements(lang string) []*Command {
 	if c == nil {
 		return nil
 	}
-	if x := c.Children[lang]; x != nil {
+	mutex.Lock()
+	x := c.Children[lang]
+	mutex.Unlock()
+	if x != nil {
 		return x
 	}
 
@@ -776,15 +780,19 @@ func (c *Command) Childelements(lang string) []*Command {
 
 	cmds := getchildren(c.commands, dec)
 
+	mutex.Lock()
 	for _, v := range cmds {
 		v.parentelements[c] = true
 	}
+	mutex.Unlock()
 	if lang == "en" {
 		sort.Sort(commandsbyen{cmds})
 	} else {
 		sort.Sort(commandsbyde{cmds})
 	}
+	mutex.Lock()
 	c.Children[lang] = cmds
+	mutex.Unlock()
 	return cmds
 }
 
