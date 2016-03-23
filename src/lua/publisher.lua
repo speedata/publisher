@@ -2022,6 +2022,9 @@ function parse_html( elt, parameter )
             return a
         elseif string.match(eltname,"^[bB][rR]$") then
             a:append("\n",{})
+        elseif #elt == 0 then
+            -- dummy: insert U+200B ZERO WIDTH SPACE which results in a strut
+            a:append("\xE2\x80\x8B")
         end
     end
     -- Recurse into the children...
@@ -2332,7 +2335,6 @@ function mknodes(str,fontfamily,parameter)
             head,last = node.insert_after(head,last,p1)
             head,last = node.insert_after(head,last,g)
             head,last = node.insert_after(head,last,p2)
-
         elseif match(char,"^%s$") and last and last.id == glue_node and not node.has_attribute(last,att_tie_glue,1) then
             -- double space, use the bigger glue
             local tmp = node.new(glue_spec_node)
@@ -2378,6 +2380,10 @@ function mknodes(str,fontfamily,parameter)
             n = node.new(glue_node)
             n.spec = node.new(glue_spec_node)
             head, last = node.insert_after(head,last,n)
+        elseif s == 8203 then
+            -- U+200B ZERO WIDTH SPACE inserted in parse_html
+            head = addstrut(head)
+            last = node.tail(head)
         -- anchor is necessary. Otherwise à (C3A0) would match A0 - %s
         elseif match(char,"^%s$") then -- Space
             if breakatspace == false then
