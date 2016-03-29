@@ -1,13 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (de)</title>
   <id>http://www.speedata.de</id>
-  <updated>2016-02-22T21:34:56+01:00</updated>
+  <updated>2016-03-29T19:01:42+02:00</updated>
   <subtitle>Neue Versionen des Publishers zum Download und Liste der Änderungen</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.3.65</title>
+    <updated>2016-03-29T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-03-29:</id>
+    <content type="html">Verschiedene Fehlerkorrekturen zu HTML-Ausgabe und Ausgabe/Text</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.64</title>
+    <updated>2016-03-21T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-03-21:</id>
+    <content type="html">Unterstreichen in Daten beachtet CSS Styles</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.63</title>
+    <updated>2016-03-18T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-03-18:</id>
+    <content type="html">Fehlerkorektur Zeilenhöhe berechnen bei Ausgabe/Text und belegen=auto</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.62</title>
+    <updated>2016-03-17T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-03-17:</id>
+    <content type="html">Verschiedene Fehlerkorrenturen: Absatzform, Server wartet bis Durchlauf zuende</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.61</title>
+    <updated>2016-03-14T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-03-14:</id>
+    <content type="html">Neues Feature. U/gestrichelt=&#34;ja&#34;</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.60</title>
+    <updated>2016-03-14T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-03-14:</id>
+    <content type="html"></content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.59</title>
+    <updated>2016-02-24T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-02-24:</id>
+    <content type="html">Fehlerkorrektur HTML-Tabellen</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.3.58</title>
     <updated>2016-02-22T00:00:00Z</updated>
