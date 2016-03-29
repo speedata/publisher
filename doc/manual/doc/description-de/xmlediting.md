@@ -9,11 +9,11 @@ mitgelieferten RelaxNG-Schemas wird die Eingabe des Layoutregelwerks
 deutlich erleichtert. Dazu muss ein XML-Editor benutzt werden, der
 RelaxNG Schemas verarbeiten kann:
 
--   [OxygenXML](http://www.oxygenxml.com) (Mac, Windows, Linux)
+-   [OxygenXML](https://www.oxygenxml.com) (Mac, Windows, Linux)
 -   [XMLSpy](http://www.altova.com/xml-editor/) (Windows)
--   [XML Blueprint](http://www.xmlblueprint.com/) (nur Windows)
--   [GNU Emacs](http://www.gnu.org/software/emacs/) mit [nxml-mode](http://www.thaiopensource.com/nxml-mode/) (alle Betriebssysteme, kostenlos)
--   [jEdit](www.jedit.org) (Mac, Windows, Linux, kostenlos)
+-   [XML Blueprint](https://www.xmlblueprint.com/) (nur Windows)
+-   [GNU Emacs](https://www.gnu.org/software/emacs/) mit [nxml-mode](http://www.thaiopensource.com/nxml-mode/) (alle Betriebssysteme, kostenlos)
+-   [jEdit](http://www.jedit.org) (Mac, Windows, Linux, kostenlos)
 
 Das RelaxNG-Schema für das Layoutregelwerk liegt in der ZIP-Datei im
 Verzeichnis `share/schema/` unter dem Dateinamen `layoutschema-de.rng`

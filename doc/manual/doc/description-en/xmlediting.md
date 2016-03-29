@@ -12,11 +12,11 @@ with the support of RelaxNG. If you know of any other XML editors with
 RelaxNG support, please drop us a note at
 [info@speedata.de](mailto:info@speedata.de).
 
--   [OxygenXML](http://www.oxygenxml.com) (Mac, Windows, Linux)
+-   [OxygenXML](https://www.oxygenxml.com) (Mac, Windows, Linux)
 -   [XMLSpy](http://www.altova.com/xml-editor/) (Windows)
 -   [XML Blueprint](http://www.xmlblueprint.com/) (Windows only)
--   [GNU Emacs](http://www.gnu.org/software/emacs/) with [nxml-mode](http://www.thaiopensource.com/nxml-mode/) (all operating systems, free)
--   [jEdit](www.jedit.org) (Mac, Windows, Linux, free)
+-   [GNU Emacs](https://www.gnu.org/software/emacs/) with [nxml-mode](http://www.thaiopensource.com/nxml-mode/) (all operating systems, free)
+-   [jEdit](http://www.jedit.org) (Mac, Windows, Linux, kostenlos)
 
 The schema for editing the layout XML can be found in the directory
 `share/schema` in the file `layoutschema-en.rng`.

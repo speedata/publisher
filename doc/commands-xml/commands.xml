@@ -4724,7 +4724,7 @@
     </attribute>
     <attribute en="area" de="bereich" type="text" optional="yes">
       <description xml:lang="en">
-        <para>Name of the (positioning) area, the ojbect is placed in. If no area is given, the object is placed on the main area, the page (this is the area that contains all grid cells).</para>
+        <para>Name of the (positioning) area, the object is placed in. If no area is given, the object is placed on the main area, the page (this is the area that contains all grid cells).</para>
       </description>
       <description xml:lang="de">
         <para>Name des Bereichs (Platzierungsbereich), in dem das Objekt ausgegeben werden soll. Wird kein Bereich angegeben, so wird das Objekt auf der »Seite« (dem Bereich, der alle Rasterkästen beinhaltet) ausgegeben.</para>
