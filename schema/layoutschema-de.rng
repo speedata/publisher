@@ -3865,15 +3865,16 @@
          <a:documentation>Erzeugt einen Text, der über die Grenzen von Positionierungsrahmen umbrechen kann. Wird mit Ausgabe benutzt.</a:documentation>
          <oneOrMore>
             <choice>
-               <ref name="e_Switch"></ref>
-               <ref name="e_Paragraph"></ref>
-               <ref name="e_Ol"></ref>
-               <ref name="e_Ul"></ref>
-               <ref name="e_Copy-of"></ref>
                <ref name="e_Action"></ref>
                <ref name="e_Bookmark"></ref>
-               <ref name="e_Value"></ref>
+               <ref name="e_Copy-of"></ref>
                <ref name="e_ForAll"></ref>
+               <ref name="e_Loop"></ref>
+               <ref name="e_Ol"></ref>
+               <ref name="e_Paragraph"></ref>
+               <ref name="e_Switch"></ref>
+               <ref name="e_Ul"></ref>
+               <ref name="e_Value"></ref>
             </choice>
          </oneOrMore>
       </element>

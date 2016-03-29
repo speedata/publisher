@@ -7095,15 +7095,16 @@
     <childelements>
       <oneOrMore>
         <choice>
-          <cmd name="Switch"/>
-          <cmd name="Paragraph"/>
-          <cmd name="Ol"/>
-          <cmd name="Ul"/>
-          <cmd name="Copy-of"/>
           <cmd name="Action"/>
           <cmd name="Bookmark"/>
-          <cmd name="Value"/>
+          <cmd name="Copy-of"/>
           <cmd name="ForAll"/>
+          <cmd name="Loop"/>
+          <cmd name="Ol"/>
+          <cmd name="Paragraph"/>
+          <cmd name="Switch"/>
+          <cmd name="Ul"/>
+          <cmd name="Value"/>
         </choice>
       </oneOrMore>
     </childelements>

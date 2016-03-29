@@ -239,6 +239,7 @@
                   <element name="choice">
                     <attribute name="en"/>
                     <attribute name="de"/>
+                    <optional><attribute name="css"/></optional>
                     <optional><attribute name="context"/></optional>
                     <optional><attribute name="since"/></optional>
                     <ref name="descriptions"/>

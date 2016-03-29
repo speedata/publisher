@@ -2699,7 +2699,7 @@
          </optional>
          <optional>
             <attribute name="area">
-               <a:documentation>Name of the (positioning) area, the ojbect is placed in. If no area is given, the object is placed on the main area, the page (this is the area that contains all grid cells).</a:documentation>
+               <a:documentation>Name of the (positioning) area, the object is placed in. If no area is given, the object is placed on the main area, the page (this is the area that contains all grid cells).</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -3865,15 +3865,16 @@
          <a:documentation>Create a text that can be broken across text containers or pages. To be used with Output</a:documentation>
          <oneOrMore>
             <choice>
-               <ref name="e_Switch"></ref>
-               <ref name="e_Paragraph"></ref>
-               <ref name="e_Ol"></ref>
-               <ref name="e_Ul"></ref>
-               <ref name="e_Copy-of"></ref>
                <ref name="e_Action"></ref>
                <ref name="e_Bookmark"></ref>
-               <ref name="e_Value"></ref>
+               <ref name="e_Copy-of"></ref>
                <ref name="e_ForAll"></ref>
+               <ref name="e_Loop"></ref>
+               <ref name="e_Ol"></ref>
+               <ref name="e_Paragraph"></ref>
+               <ref name="e_Switch"></ref>
+               <ref name="e_Ul"></ref>
+               <ref name="e_Value"></ref>
             </choice>
          </oneOrMore>
       </element>
