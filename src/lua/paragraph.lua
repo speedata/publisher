@@ -531,7 +531,12 @@ function Paragraph.vsplit( objects_t,frameheight )
             remaining_objects[#remaining_objects + 1] = hlist[i]
         end
     end
-    objects_t[1] = join_table_to_box(remaining_objects)
+    -- Sometimes there is a single glue (margin-bottom) left, we should ignore it
+    if #remaining_objects == 1 and node.has_attribute(remaining_objects[1], publisher.att_omit_at_top)  then
+        -- ignore!?
+    else
+        objects_t[1] = join_table_to_box(remaining_objects)
+    end
 
     --- It's a common situation where there is a single free row but the next material is
     --- too high for the row. So we return an empty list and hope that the calling function
