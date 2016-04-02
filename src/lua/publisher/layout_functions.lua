@@ -194,7 +194,8 @@ local function format_number(dataxml,arg)
 end
 
 local function format_string( dataxml,arg )
-  return string.format(arg[2],arg[1])
+  local ret = string.format(arg[#arg],table.unpack(arg,1,#arg))
+  return ret
 end
 
 

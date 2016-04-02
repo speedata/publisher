@@ -65,7 +65,7 @@ sd:bildbreite(\<Dateiname oder URI-Schema\>)|  Breite des Bildes in Rasterzellen
 sd:bildhöhe(\<Dateiname oder URI-Schema\>)|  Höhe des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Höhe des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert.
 sd:datei-vorhanden(\<Dateiname oder URI-Schema\>)|  Wahr, wenn der Dateiname im Suchpfad existiert, ansonsten false.
 sd:formatiere-zahl(Zahl oder String, Tausenderzeichen, Kommazeichen)|  Formatiert die übergebene Zahl und fügt Tausender-Trennzeichen hinzu und ändert den Kommatrenner. Beispiel: `sd:formatiere-zahl(12345.67, '.',',')` ergibt die Zeichenkette `1.2345,67`.
-sd:formatiere-string(Zahl oder String,Formartierungsangaben)|  Gibt eine Zeichenkette zurück, die die gegebene Zahl mit den im zweiten Argument gegebenen Formatierungsanweisungen darstellt. Die Formatierungsanweisungen entsprechen der aus der Programmiersprache C bekannten `printf()`-Funktion.
+sd:formatiere-string(Objekt,Objekt,...,Formartierungsangaben)|  Gibt eine Zeichenkette zurück, die die gegebenen Objekte mit den im zweiten Argument gegebenen Formatierungsanweisungen darstellt. Die Formatierungsanweisungen entsprechen der aus der Programmiersprache C bekannten `printf()`-Funktion.
 sd:gerade(\<zahl\>)|  Wahr, wenn die angegebene Zahl gerade ist. Beispiel: `sd:gerade(sd:aktuelle-seite())`
 sd:html-dekodieren(\<Node\>)|  Wandelt Texte wie `&lt;i&gt;Kursiv&lt;/i&gt;` in entsprechendes HTML-Markup.
 sd:ungerade(\<zahl\>)|  Wahr, wenn die angegebene Zahl ungerade ist.

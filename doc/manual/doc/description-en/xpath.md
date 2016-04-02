@@ -80,7 +80,7 @@ sd:imageheight(\<filename or URI schema\>) | Natural height of the image in grid
 sd:imagewidth(\<filename or URI schema\>) | Natural width of the image in grid cells. Attention: if the image is not found, the width of the file-not-found placeholder will be returned. Therefore you need to check in advance if the image exists.
 sd:file-exists(\<filename or URI schema\>) | True if file exists in the current search path. Otherwise it returns false.
 sd:format-number(Number or string, thousands separator, comma separator) | Format the number and insert thousands separators and change comma separator. Example: `sd:format-number(12345.67, ',','.')` returns the string `12,345.67`.
-sd:format-string(Number or string,formatting instructions) | Return a text string with the number formatted as given by the formatting instructions. These instructions are the same as the instructions by the C function `printf()`.
+sd:format-string(object, object, ... ,formatting instructions) | Return a text string with the objects formatted as given by the formatting instructions. These instructions are the same as the instructions by the C function `printf()`.
 sd:even(\<number\>) | True if number is even. Example: `sd:even(sd:current-page())`
 sd:odd(\<number\>) | True if number is odd.
 sd:groupwidth(\<string\>) | Return the number of gridcells of the given group’s width. The argument must be the name of an existing group. Example: `sd:groupwidth('My group')`
