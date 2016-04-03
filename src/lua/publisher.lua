@@ -1263,6 +1263,18 @@ function setup_page(pagenumber)
         current_pagenumber = cpn
         pagebreak_impossible = false
     end
+
+    local css_rules
+    local cg = current_page.grid
+
+    for k,v in pairs(cg.positioning_frames) do
+        css_rules = publisher.css:matches({element = 'area', class=class,id=k}) or {}
+        if css_rules["border-width"] then
+            for i,frame in ipairs(v) do
+                frame.draw = { color = "green"}
+            end
+        end
+    end
     current_page = cp
 
 end
@@ -1715,6 +1727,8 @@ end
 function dothingsbeforeoutput(  )
     local current_page = pages[current_pagenumber]
     local r = current_page.grid
+    -- r should be cg
+    local cg = r
     local str
     find_user_defined_whatsits(pages[current_pagenumber].pagebox)
     local firstbox
@@ -1753,6 +1767,23 @@ function dothingsbeforeoutput(  )
             lit.prev = tail
         else
             firstbox = lit
+        end
+    end
+
+    for framename,v in pairs(r.positioning_frames) do
+        for _,frame in ipairs(v) do
+            if frame.draw then
+                local lit = node.new("whatsit","pdf_literal")
+                lit.mode = 1
+                lit.data = cg:draw_frame(frame)
+                if firstbox then
+                    local tail = node.tail(firstbox)
+                    tail.next = lit
+                    lit.prev = tail
+                else
+                    firstbox = lit
+                end
+            end
         end
     end
 

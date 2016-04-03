@@ -2257,7 +2257,7 @@ function commands.rule( layoutxml,dataxml )
         elseif direction == "vertical" then
             length = publisher.current_grid:height_sp(length)
         else
-            err("Attribute »direction« with »Linie«: unknown direction: %q",direction)
+            err("Attribute »direction« in »Rule«: unknown direction: %q",direction)
         end
     else
         length = tex.sp(length)

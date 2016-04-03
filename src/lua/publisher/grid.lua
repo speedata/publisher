@@ -422,6 +422,34 @@ function height_in_gridcells_sp(self,height_sp,options)
     return ht_gridcells, extra
 end
 
+-- Draw frame (return PDF-strings)
+function draw_frame(self,frame)
+    assert(self)
+    local ret = {}
+    ret[#ret + 1] = "q 0.2 w "
+    local paperheight_bp = sp_to_bp(tex.pageheight - self.extra_margin)
+    local paperwidth_bp  = sp_to_bp(tex.pagewidth  - self.extra_margin)
+    local x,y
+    local width,height
+    local colorname = frame.draw.color
+    local colentry = publisher.colors[colorname]
+    if not colentry then
+        err("Color %q unknown, reverting to black",colorname or "(no color name given)")
+        colentry = publisher.colors["black"]
+    end
+
+
+    x      = sp_to_bp(( frame.column - 1) * ( self.gridwidth  + self.grid_dx) + self.extra_margin + self.margin_left)
+    y      = sp_to_bp(( frame.row    - 1) * ( self.gridheight + self.grid_dy) + self.margin_top )
+    width  = sp_to_bp(frame.width  * self.gridwidth  + (frame.width  - 1) * self.grid_dx)
+    height = sp_to_bp(frame.height * self.gridheight + (frame.height - 1) * self.grid_dy)
+    ret[#ret + 1] = string.format("q %s %g w %g %g %g %g re S Q", colentry.pdfstring,0.5, x,math.round(paperheight_bp - y,2),width,-height)
+
+    ret[#ret + 1] = "Q"
+
+    return table.concat(ret,"\n")
+end
+
 
 -- Draw internal grid (return PDF-strings)
 function draw_grid(self)
