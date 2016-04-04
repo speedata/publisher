@@ -1,0 +1,32 @@
+<Layout version="2.3.58"
+    xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Pageformat width="148mm" height="9cm" />
+    <SetGrid nx="15" height="6pt"/>
+
+    <Pagetype name="right" test="true()">
+        <Margin left="10mm" right="10mm" top="10mm" bottom="10mm"/>
+        <PositioningArea name="page">
+            <PositioningFrame width="15" height="{sd:number-of-rows() - 10}" row="11" column="1"/>
+        </PositioningArea>
+    </Pagetype>
+
+    <Record element="data">
+        <PlaceObject row="1" column="1"  allocate="yes">
+            <Box width="15" height="10mm" backgroundcolor="goldenrod"/>
+        </PlaceObject>
+
+        <PlaceObject area="page" row="7">
+            <Box width="5" height="9" backgroundcolor="green"/>
+        </PlaceObject>
+        <Output area="page" allocate="auto" row="1">
+            <Text>
+                <Paragraph fontface="text">
+                    <Value select="sd:dummytext()"></Value>
+                </Paragraph>
+            </Text>
+        </Output>
+    </Record>
+
+ </Layout>

@@ -1,0 +1,22 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Options crop="2mm"/>
+    <SetGrid height="12pt" nx="20"/>
+    <Pageformat width="150mm" height="100mm"/>
+
+    <DefineFontfamily name="h1" fontsize="12" leading="14">
+        <Regular fontface="TeXGyreHeros-Regular"/>
+    </DefineFontfamily>
+
+    <Record element="data">
+        <PlaceObject>
+            <Box width="5" height="5" backgroundcolor="green"/>
+        </PlaceObject>
+        <Output row="1" allocate="auto">
+            <Text>
+                <Paragraph fontface="h1"><Value>Head1</Value></Paragraph>
+                <Paragraph fontface="text"><Value select="sd:dummytext()"/></Paragraph>
+            </Text>
+        </Output>
+    </Record>
+</Layout>

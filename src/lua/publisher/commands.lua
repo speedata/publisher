@@ -2983,6 +2983,8 @@ function commands.text(layoutxml,dataxml)
                 local obj
                 local extra_accumulated = 0
                 local extra
+                local startpage = publisher.current_pagenumber
+                local startrow =  cg:current_row(parameter.area)
                 for i=1,#tab do
                     local contents = publisher.element_contents(tab[i])
                     local tmp = node.has_attribute(contents.nodelist,publisher.att_dont_format)
@@ -2990,7 +2992,7 @@ function commands.text(layoutxml,dataxml)
                         obj = node.vpack(contents.nodelist)
                     else
                         contents.nodelist = publisher.addstrut(contents.nodelist,publisher.origin_text)
-                        obj = contents:format(parameter.width,nil,parameter)
+                        obj,startpage,startrow = contents:format(parameter.width,nil,parameter,startpage,startrow)
                     end
                     objects[#objects + 1] = obj
                     local ht_rows, extra = cg:height_in_gridcells_sp(obj.height + obj.depth + extra_accumulated, {floor = true})

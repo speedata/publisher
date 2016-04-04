@@ -1,0 +1,21 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Options show-grid="no" crop="yes"/>
+
+    <Pageformat width="7cm" height="5cm"/>
+    <SetGrid height="6pt" nx="6"/>
+
+    <Record element="data">
+        <PlaceObject row="10" column="1" keepposition="yes">
+            <Image file="_samplea.pdf" width="2"/>
+        </PlaceObject>
+        <Output allocate="auto" row="10">
+            <Text>
+                <Paragraph>
+                    <Value>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm.</Value>
+                </Paragraph>
+            </Text>
+        </Output>
+    </Record>
+</Layout>

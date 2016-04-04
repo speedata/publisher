@@ -1,0 +1,26 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options show-grid="yes" />
+
+  <Pageformat width="10cm" height="7cm"/>
+  <SetGrid height="6pt" nx="10"/>
+
+  <Record element="data">
+    <SetVariable variable="first" select="true()"/>
+    <Switch>
+      <Case test="$first">
+        <PlaceObject row="1">
+          <Image file="_samplea.pdf" width="4"/>
+        </PlaceObject>
+        <Output allocate="auto" row="1">
+          <Text>
+            <Paragraph>
+              <Value>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment;</Value>
+            </Paragraph>
+          </Text>
+        </Output>
+      </Case>
+    </Switch>
+  </Record>
+</Layout>

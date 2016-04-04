@@ -167,7 +167,8 @@ end
 
 --- Turn a node list into a shaped block of text.
 -- FIXME: document why splitting is needed (ul/li in data)
-function Paragraph:format(width_sp, default_textformat_name,options)
+function Paragraph:format(width_sp, default_textformat_name,options,startpage,startrow)
+    startpage = startpage or publisher.current_pagenumber
     options = options or {}
     local parameter = {}
 
@@ -183,44 +184,79 @@ function Paragraph:format(width_sp, default_textformat_name,options)
     if options.allocate == "auto" then
         -- Get the par shape
         local head = self.nodelist
+        -- I assume that every line has the same height
         local lineheight = head.height + head.depth
-        local gridheight = current_grid:height_sp(1)
-        local cg = options.current_grid
         local areaname = options.area
-        local startrow    = cg:current_row(areaname)
-        local number_of_rows = cg:number_of_rows(areaname)
+        local number_of_rows_in_grid
         parameter.parshape = {}
-        local framenumber = cg:framenumber(areaname)
-        local maxframes = cg:number_of_frames(areaname)
-        local pstmp
-        local pstmmin
-        local nextrow
-        local ht = 0
-        while framenumber <= maxframes do
-            nextrow = startrow
-            for i = startrow,number_of_rows do
-                current_row = nextrow
-                -- parshape must be taken into account for all grid rows that
-                -- takes up the current text row
-                nextrow = math.ceil( (ht + lineheight)  / gridheight) + startrow
-                ht = ht + lineheight
-                -- now get the 'minimum' parshape
-                pstmmin = cg:get_parshape(current_row,areaname,framenumber)
-                if pstmmin ~= 0 then
-                    while current_row + 1 < nextrow do
-                        pstmp = cg:get_parshape(current_row + 1,areaname,framenumber)
-                        if pstmp ~= 0 then
-                            pstmmin[1] = math.max(pstmmin[1],pstmp[1])
-                            pstmmin[2] = math.min(pstmmin[2],pstmp[2])
-                        end
-                        current_row = current_row + 1
-                    end
-                    parameter.parshape[#parameter.parshape + 1] = pstmmin
-                end
+        local framenumber,framewidth,maxframes
+        local pstmp,psmin
+        local startrow_g -- startrow  and nextrow in the grid
+        local cg -- current grid
+        local thispage = startpage
+        -- For every page that has "something" placed on it
+        while publisher.page_initialized_p(thispage) do
+            local par_row = 1
+            cg = publisher.pages[thispage].grid
+            local gridheight       = cg:height_sp(1)
+            if thispage == startpage then
+                startrow_g             = startrow or cg:current_row(areaname)
+            else
+                startrow_g = 1
             end
-            framenumber = framenumber + 1
-            startrow = 1
+            number_of_rows_in_grid = cg:number_of_rows(areaname)
+            framenumber            = cg:framenumber(areaname)
+            framewidth             = cg:number_of_columns(areaname)
+            maxframes              = cg:number_of_frames(areaname)
+            while framenumber <= maxframes do
+                local ht_from_top = ( startrow_g - 1) * gridheight
+                local maxht = number_of_rows_in_grid * gridheight
+                local baseline = ht_from_top + lineheight
+                while baseline <= maxht do
+                    -- min = top of the row, max = bottom of the row
+                    local mintmp = math.round(startrow_g + ( par_row - 1) * lineheight / gridheight,3)
+                    local min,max = math.floor(mintmp),math.ceil(baseline / gridheight)
+                    psmin = nil
+                    local has_parshape = false
+                    -- w("min %d,max %d",min,max)
+                    for i=min,max do
+                        pstmp = cg:get_parshape(i,areaname,framenumber)
+                        if pstmp == 0 then
+                        else
+                            has_parshape = true
+                            if psmin == nil then
+                                psmin = pstmp
+                            else
+                                psmin[1] = math.max(psmin[1],pstmp[1])
+                                psmin[2] = math.min(psmin[2],pstmp[2])
+                            end
+                        end
+                    end
+                    if has_parshape then
+                        parameter.parshape[#parameter.parshape + 1] = psmin
+                    else
+                        -- There is no par shape possible here, because there is an
+                        -- object that spans across the whole page (frame).
+                        -- parameter.parshape[#parameter.parshape + 1] = {0,0}
+                    end
+                    baseline = baseline + lineheight
+                    par_row = par_row + 1
+                end
+                framenumber = framenumber + 1
+                startrow_g = 1
+                -- We are in the next frame, so the min-calculation should start at 1
+                -- see test in output/frames
+                par_row = 1
+            end
+            thispage = thispage + 1
         end
+        -- At the end we reset the paragraph shape, so all the followgin lines (if there are any)
+        -- will be full width
+        if cg then
+            parameter.parshape[#parameter.parshape + 1] = {0,cg:width_sp(framewidth) }
+        end
+        startrow = startrow or startrow_g
+
     end
     local nodelist = node.copy_list(self.nodelist)
     local objects = {nodelist}
@@ -383,7 +419,24 @@ function Paragraph:format(width_sp, default_textformat_name,options)
     end
     nodelist = node.vpack(objects[1])
 
-    return nodelist
+    if options.allocate == "auto" then
+        if  publisher.pages[startpage] == nil then
+            publisher.setup_page(startpage)
+        end
+        local cg = publisher.pages[startpage].grid
+        local areaname = options.area
+        local frameheight = cg:number_of_rows(areaname)
+        local _,ht_sp,_ = node.dimensions(nodelist)
+        local ht_g = cg:height_in_gridcells_sp(ht_sp)
+        local maxht = cg:height_sp(cg:number_of_rows(areaname))
+        local startrow_sp = cg:height_sp(startrow)
+        if startrow_sp + nodelist.height > maxht then
+            startpage = startpage + 1
+        end
+        startrow = ( ht_g + startrow - 1 ) % ( frameheight ) + 1
+    end
+
+    return nodelist, startpage,startrow
 end
 
 function join_table_to_box(objects)

@@ -3485,7 +3485,27 @@ function get_remaining_height(area,allocate)
     end
     maxrows  = current_grid:number_of_rows(area)
     if allocate == "auto" then
-        return (maxrows - firstrow + 1)  * current_grid.gridheight, firstrow, nil
+        while firstrow <= maxrows and (not current_grid:row_has_some_space(firstrow,area)) do
+            firstrow = firstrow + 1
+        end
+
+        local row = firstrow + 1
+        while row <= maxrows and current_grid:row_has_some_space(row,area) do
+            row = row + 1
+        end
+
+        if row > maxrows then
+            return ( row - firstrow ) * current_grid.gridheight, firstrow
+        end
+        local lastrow = row
+        while not current_grid:fits_in_row_area(startcol,cols,lastrow,area) and lastrow <= maxrows do
+
+            lastrow = lastrow + 1
+        end
+        lastrow = lastrow - 1
+        if lastrow == firstrow then lastrow = nil end
+
+        return (row - firstrow) * current_grid.gridheight, firstrow,lastrow
     end
     if not current_grid:fits_in_row_area(startcol,cols,firstrow,area) then
         while firstrow <= maxrows do

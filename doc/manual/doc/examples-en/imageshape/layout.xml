@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Layout 
-  xmlns="urn:speedata.de:2009/publisher/en" 
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
-  
+
   <!-- 'table' / 'watch'  -->
   <SetVariable variable="type" select="'watch'"/>
 
@@ -13,17 +13,17 @@
   <LoadFontfile name="WarnockPro-Light" filename="WarnockPro-Light.otf" />
   <LoadFontfile name="WarnockPro-LightIt" filename="WarnockPro-LightIt.otf" />
   <LoadFontfile name="WarnockPro-Semibold" filename="WarnockPro-Semibold.otf" />
-  
+
   <DefineFontfamily name="text" fontsize="10" leading="12">
     <Regular fontface="WarnockPro-Light"/>
     <Italic fontface="WarnockPro-LightIt"/>
     <Bold fontface="WarnockPro-Semibold"/>
   </DefineFontfamily>
-  
+
   <DefineFontfamily name="title" fontsize="14" leading="14">
     <Regular fontface="WarnockPro-Semibold"/>
   </DefineFontfamily>
-  
+
   <Pagetype name="page" test="true()">
     <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
     <PositioningArea name="text">
@@ -31,9 +31,9 @@
       <PositioningFrame width="15" height="40" row="1" column="17"/>
     </PositioningArea>
   </Pagetype>
-  
+
   <DefineTextformat name="title" border-top="0.25pt" padding-top="4pt" border-bottom="0.25pt" margin-bottom="2pt"/>
-  
+
   <Record element="data">
     <Switch>
       <Case test="$type = 'table'">
@@ -72,6 +72,6 @@
       </Text>
     </Output>
   </Record>
-  
- 
+
+
 </Layout>
