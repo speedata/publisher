@@ -1607,6 +1607,9 @@ function commands.output( layoutxml,dataxml )
                 allocate = allocate,
             }
             obj,state,more_to_follow = contents.pull(parameters,state)
+            if not more_to_follow then
+                nextfreerow = nil
+            end
             if obj == nil then
                 break
             else
