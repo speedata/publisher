@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.66" date="2016-04-05">
+      <en>Change mechanism on image wrapping, only partly enabled.</en>
+      <de>Verändere den Mechanismus, wie Text Bilder umfließt.</de>
+    </entry>
     <entry version="2.3.65" date="2016-03-29">
       <en>Various bugfixes with HTML output and Output/Text</en>
       <de>Verschiedene Fehlerkorrekturen zu HTML-Ausgabe und Ausgabe/Text</de>
