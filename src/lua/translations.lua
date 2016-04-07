@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2016-03-14 14:58)
+-- generated from genluatranslations.go (2016-04-07 10:55)
 -- do not edit!
 module(...)
 return {
@@ -126,6 +126,7 @@ return {
       ["FürAlle"] = { "ForAll",
         ["auswahl"] = "select",
         ["umfang"] = "limit",
+        ["start"] = "start",
         },
       ["Rahmen"] = { "Frame",
         ["rahmen-unten-rechts-radius"] = "border-bottom-right-radius",

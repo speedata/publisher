@@ -694,6 +694,7 @@ end
 function commands.forall( layoutxml,dataxml )
     trace("ForAll")
     local limit = publisher.read_attribute(layoutxml,dataxml,"limit","number")
+    local start = publisher.read_attribute(layoutxml,dataxml,"start","number")
     local tab = {}
     local tmp_tab
     local current_position = publisher.xpath.get_variable("__position")
@@ -702,7 +703,10 @@ function commands.forall( layoutxml,dataxml )
     if limit > #selection then
         limit = #selection
     end
-    for i=1,limit do
+
+    start = start or 1
+
+    for i = start,limit do
         publisher.xpath.set_variable("__position",i)
         tmp_tab = publisher.dispatch(layoutxml,selection[i])
         for j=1,#tmp_tab do

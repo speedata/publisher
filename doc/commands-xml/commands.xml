@@ -20,6 +20,7 @@
     <optional><cmd name="EmptyLine"/></optional>
     <optional><cmd name="Fontface"/></optional>
     <optional><cmd name="ForAll"/></optional>
+    <optional><cmd name="Frame"/></optional>
     <optional><cmd name="Group"/></optional>
     <optional><cmd name="HSpace"/></optional>
     <optional><cmd name="Hyphenation"/></optional>
@@ -2116,6 +2117,14 @@
       </description>
       <description xml:lang="de">
         <para>Die Anzahl der Kinder wird durch die Zahl begrenzt.</para>
+      </description>
+    </attribute>
+    <attribute en="start" de="start" optional="yes" type="number" since="2.3.67">
+      <description xml:lang="en">
+        <para>The first entry to process. Default is 1.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der erste Eintrag der verarbeitet werden soll. Voreinstellung ist 1.</para>
       </description>
     </attribute>
     <example xml:lang="de">

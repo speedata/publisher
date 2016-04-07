@@ -440,6 +440,9 @@
                <ref name="e_ForAll"></ref>
             </optional>
             <optional>
+               <ref name="e_Frame"></ref>
+            </optional>
+            <optional>
                <ref name="e_Group"></ref>
             </optional>
             <optional>
@@ -1059,6 +1062,11 @@
                <a:documentation>Limits the number of children to the given number.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="start">
+               <a:documentation>The first entry to process. Default is 1.</a:documentation>
+            </attribute>
+         </optional>
          <oneOrMore>
             <interleave>
                <optional>
@@ -1108,6 +1116,9 @@
                </optional>
                <optional>
                   <ref name="e_ForAll"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Frame"></ref>
                </optional>
                <optional>
                   <ref name="e_Group"></ref>
@@ -1765,6 +1776,9 @@
                   <ref name="e_ForAll"></ref>
                </optional>
                <optional>
+                  <ref name="e_Frame"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Group"></ref>
                </optional>
                <optional>
@@ -2299,6 +2313,9 @@
             </optional>
             <optional>
                <ref name="e_ForAll"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Frame"></ref>
             </optional>
             <optional>
                <ref name="e_Group"></ref>
@@ -4141,6 +4158,9 @@
                   <ref name="e_ForAll"></ref>
                </optional>
                <optional>
+                  <ref name="e_Frame"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Group"></ref>
                </optional>
                <optional>
@@ -4374,6 +4394,9 @@
                </optional>
                <optional>
                   <ref name="e_ForAll"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Frame"></ref>
                </optional>
                <optional>
                   <ref name="e_Group"></ref>
