@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.67" date="2016-04-07">
+      <en>ForAll has a new attribute: start to give the starting point (default: 1)</en>
+      <de>FürAlle hat ein neues Attribut: start um den Startpunkt festzulegen (Voreinstellung ist 1)</de>
+    </entry>
     <entry version="2.3.66" date="2016-04-05">
       <en>Change mechanism on image wrapping, only partly enabled.</en>
       <de>Verändere den Mechanismus, wie Text Bilder umfließt.</de>
