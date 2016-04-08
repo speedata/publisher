@@ -110,6 +110,52 @@ func waitForAllFiles(dir string) error {
 	return goerr
 }
 
+// Wait until the file filename gets created in directory dir
+func waitForFile(dir string, filename string) error {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		return err
+	}
+	defer watcher.Close()
+	requestedFile := filepath.Join(dir, filename)
+	done := make(chan bool)
+	var goerr error
+	go func() {
+		fileStarted := make(map[string]bool)
+		for {
+			timer := time.NewTimer(100 * time.Millisecond)
+			select {
+			case event := <-watcher.Events:
+				if event.Op&fsnotify.Write == fsnotify.Write || event.Op&fsnotify.Create == fsnotify.Create {
+					fileStarted[event.Name] = true
+				}
+			case <-timer.C:
+				if len(fileStarted) > 0 {
+					for n, _ := range fileStarted {
+						delete(fileStarted, n)
+						if n == requestedFile {
+							done <- true
+							return
+						}
+					}
+				}
+			case err := <-watcher.Errors:
+				goerr = err
+				done <- true
+			}
+			timer.Stop()
+		}
+
+	}()
+
+	err = watcher.Add(dir)
+	if err != nil {
+		return err
+	}
+	<-done
+	return goerr
+}
+
 // Request a JSON answer with the PDF and the status file.
 func v0PublishIdHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
@@ -265,16 +311,14 @@ func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	statusPath := filepath.Join(publishdir, "publisher.status")
-	err = waitForAllFiles(publishdir)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintln(protocolFile, "Internal error 007:")
-		fmt.Fprintln(protocolFile, err)
-		fmt.Fprintln(w, "Internal error 007")
-		return
+	finishedPath := filepath.Join(publishdir, "publisher.finished")
+	fi, err = os.Stat(finishedPath)
+	if err != nil && os.IsNotExist(err) {
+		// not finished yet, wait
+		waitForFile(publishdir, "publisher.finished")
 	}
 
+	statusPath := filepath.Join(publishdir, "publisher.status")
 	data, err := ioutil.ReadFile(statusPath)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
