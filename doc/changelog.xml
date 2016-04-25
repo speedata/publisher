@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.69" date="2016-04-25">
+      <en>Bugfix indent and parshape with allocate="auto"</en>
+      <de>Fehlerkorrektur: einrücken und Absatzform (belegen="auto")</de>
+    </entry>
     <entry version="2.3.68" date="2016-04-08">
       <en>Bugfix: API /v0/pdf/&lt;id> must wait for the pdf file to finish. Error happens with mutliple runs</en>
       <de>Fehlerkorrektur: API /v0/pdf/&lt;id> muss auf die PDF-Datei warten. Fehler tritt bei mehreren Durchläufen auf</de>
