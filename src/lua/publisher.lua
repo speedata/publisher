@@ -3203,6 +3203,7 @@ function xml_escape( str )
         ["\""] = "&quot;",
         ["&"] = "&amp;",
     }
+    -- FIXME, str can be bool
     local ret = string.gsub(str,".",replace)
     return ret
 end

@@ -179,8 +179,17 @@ function Paragraph:format(width_sp, default_textformat_name,options)
     else
         current_textformat = publisher.textformats["text"]
     end
-
     if options.allocate == "auto" then
+        local indent = current_textformat.indent
+        local indent_this_row = function(row)
+            if not indent then return false end
+            local r = current_textformat.rows
+            if r == 0 then return false end
+            if  r < 0 then
+                return row > r * -1
+            end
+            return row <= r
+        end
         -- Get the par shape
         local head = self.nodelist
         local lineheight = head.height + head.depth
@@ -196,6 +205,8 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         local pstmmin
         local nextrow
         local ht = 0
+
+        local paragraphrow = 1
         while framenumber <= maxframes do
             nextrow = startrow
             for i = startrow,number_of_rows do
@@ -207,16 +218,25 @@ function Paragraph:format(width_sp, default_textformat_name,options)
                 -- now get the 'minimum' parshape
                 pstmmin = cg:get_parshape(current_row,areaname,framenumber)
                 if pstmmin ~= 0 then
+                    if indent_this_row(paragraphrow) then
+                        pstmmin[1] = pstmmin[1] + indent
+                        pstmmin[2] = pstmmin[2] - indent
+                    end
                     while current_row + 1 < nextrow do
                         pstmp = cg:get_parshape(current_row + 1,areaname,framenumber)
                         if pstmp ~= 0 then
-                            pstmmin[1] = math.max(pstmmin[1],pstmp[1])
-                            pstmmin[2] = math.min(pstmmin[2],pstmp[2])
+                            if indent_this_row(paragraphrow) then
+                                pstmp[1] = pstmp[1] + indent
+                                pstmp[2] = pstmp[2] - indent
+                            end
+                            pstmmin[1] = math.max(pstmmin[1] ,pstmp[1])
+                            pstmmin[2] = math.min(pstmmin[2] ,pstmp[2])
                         end
                         current_row = current_row + 1
                     end
                     parameter.parshape[#parameter.parshape + 1] = pstmmin
                 end
+                paragraphrow = paragraphrow + 1
             end
             framenumber = framenumber + 1
             startrow = 1
@@ -271,7 +291,6 @@ function Paragraph:format(width_sp, default_textformat_name,options)
 
         parameter.hangindent =    indent or current_textformat.indent or 0
         parameter.hangafter  =  ( rows   or current_textformat.rows   or 0 ) * -1
-
         parameter.disable_hyphenation = current_textformat.disable_hyphenation
 
         local ragged_shape

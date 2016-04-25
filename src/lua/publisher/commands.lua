@@ -2970,6 +2970,27 @@ function commands.text(layoutxml,dataxml)
     -- local balance = publisher.read_attribute(layoutxml,dataxml,"balance",   "rawstring")
     local tab = publisher.dispatch(layoutxml,dataxml)
 
+    local objects = {}
+    for i,j in ipairs(tab) do
+        local eltname = publisher.elementname(j)
+        trace("Textblock: Element = %q",tostring(eltname))
+        if eltname == "Paragraph" then
+            objects[#objects + 1] = publisher.element_contents(j)
+        elseif eltname == "Ul" or eltname == "Ol" then
+            for j,w in ipairs(publisher.element_contents(j)) do
+                objects[#objects + 1] = w
+            end
+        elseif eltname == "Text" then
+            assert(false)
+        elseif eltname == "Action" then
+            objects[#objects + 1] = publisher.element_contents(j)
+        elseif eltname == "Bookmark" then
+            objects[#objects + 1] = publisher.element_contents(j)
+        end
+    end
+    tab = objects
+
+
     tab.balance = balance
     -- pull returns 'obj', 'state', 'more_to_follow'
 
@@ -2993,7 +3014,7 @@ function commands.text(layoutxml,dataxml)
                 local startpage = publisher.current_pagenumber
                 local startrow =  cg:current_row(parameter.area)
                 for i=1,#tab do
-                    local contents = publisher.element_contents(tab[i])
+                    local contents = tab[i]
                     local tmp = node.has_attribute(contents.nodelist,publisher.att_dont_format)
                     if tmp == 1 then
                         obj = node.vpack(contents.nodelist)
@@ -3233,6 +3254,7 @@ function commands.ul(layoutxml,dataxml )
         a:append(publisher.element_contents(j),{})
         ret[#ret + 1] = a
     end
+
     return ret
 end
 
