@@ -61,9 +61,15 @@ var (
 // The LuaTeX process writes out a file called "publisher.status"
 // which is a valid XML file. Currently the only field is "Errors"
 // with the number of errors occured during the publisher run.
+type statuserror struct {
+	XMLName xml.Name `xml:"Error"`
+	Code    int      `xml:"code,attr"`
+	Error   string   `xml:",innerxml"`
+}
+
 type status struct {
 	XMLName xml.Name `xml:"Status"`
-	Error   []string
+	Error   []statuserror
 	Errors  int
 }
 
@@ -533,7 +539,7 @@ func runPublisher() (exitstatus int) {
 			exitstatus = 1
 			v := status{}
 			v.Errors = 1
-			v.Error = append(v.Error, "Error executing sdluatex")
+			v.Error = append(v.Error, statuserror{Error: "Error executing sdluatex", Code: 1})
 			data, err := xml.Marshal(v)
 			if err != nil {
 				log.Fatal(err)
@@ -554,8 +560,9 @@ func runPublisher() (exitstatus int) {
 		if err != nil {
 			log.Printf("Error reading status XML: %v", err)
 		} else {
-			if v.Errors != 0 {
-				exitstatus = 1
+			for _, er := range v.Error {
+				exitstatus = er.Code
+				break
 			}
 		}
 	}

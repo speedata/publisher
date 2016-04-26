@@ -1288,6 +1288,7 @@ function commands.message( layoutxml, dataxml )
     local contents
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
     local errcond   = publisher.read_attribute(layoutxml,dataxml,"error", "boolean",false)
+    local errorcode = publisher.read_attribute(layoutxml,dataxml,"errorcode", "number",1)
 
     if selection then
         local tmp = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
@@ -1336,7 +1337,7 @@ function commands.message( layoutxml, dataxml )
         end
     end
     if errcond then
-        err("%q", tostring(contents) or "?")
+        err(errorcode,"%q", tostring(contents) or "?")
     else
         publisher.messages[#publisher.messages + 1] = { contents, "message" }
         log("Message: %q", tostring(contents) or "?")

@@ -30,8 +30,13 @@ end
 local errcount=0
 function err(...)
   local text = { ... }
+  local errorcode = 1
+  -- if first arg is a number, this is the error code
+  if type(text[1]) == "number" then
+      errorcode = table.remove(text,1)
+  end
   text[1] = gettext(text[1])
-  publisher.messages[#publisher.messages + 1] = { string.format(unpack(text)) , "error" }
+  publisher.messages[#publisher.messages + 1] = { string.format(unpack(text)) , "error", errorcode }
   errcount =  errcount + 1
   errorlog:write("Error: " .. string.format(unpack(text)) .. "\n")
   texio.write("Error: " .. string.format(unpack(text)) .. "\n")
@@ -177,15 +182,16 @@ function exit(graceful)
   errorlog:close()
   statusfile = io.open(string.format("%s.status",tex.jobname),"wb")
   statusfile:write(string.format("<Status>\n  <Errors>%d</Errors>\n",errcount))
-  for i=1,#publisher.messages do
-      local msg = publisher.xml_escape(publisher.messages[i][1])
+  local msgs = publisher.messages
+  for i=1,#msgs do
+      local msg = publisher.xml_escape(msgs[i][1])
       -- The message can be in a non-utf8 encoding. See #65
       msg = u8fix.sanitize(msg)
-      if publisher.messages[i][2] == "error" then
-          statusfile:write(string.format("  <Error>%s</Error>\n", msg))
-      elseif publisher.messages[i][2] == "message" then
+      if msgs[i][2] == "error" then
+          statusfile:write(string.format("  <Error code='%d'>%s</Error>\n", msgs[i][3] or 1, msg))
+      elseif msgs[i][2] == "message" then
           statusfile:write(string.format("  <Message>%s</Message>\n", msg))
-      elseif publisher.messages[i][2] == "warning" then
+      elseif msgs[i][2] == "warning" then
           statusfile:write(string.format("  <Warning>%s</Warning>\n", msg))
       end
   end

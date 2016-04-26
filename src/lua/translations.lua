@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2016-04-07 10:55)
+-- generated from genluatranslations.go (2016-04-26 14:10)
 -- do not edit!
 module(...)
 return {
@@ -221,6 +221,7 @@ return {
       ["Nachricht"] = { "Message",
         ["auswahl"] = "select",
         ["fehler"] = "error",
+        ["fehlercode"] = "errorcode",
         },
       ["NeueSeite"] = { "NewPage",
         ["seitentyp"] = "pagetype",

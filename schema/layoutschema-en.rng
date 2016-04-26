@@ -1969,6 +1969,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="errorcode">
+               <a:documentation>If an error is raised, use this code on exit. Defaults to 1</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <ref name="e_Value"></ref>
          </optional>
       </element>

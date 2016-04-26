@@ -3593,6 +3593,14 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="errorcode" de="fehlercode" optional="yes" type="number" since="2.3.69">
+      <description xml:lang="en">
+        <para>If an error is raised, use this code on exit. Defaults to 1</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn ein Fehler ausgegeben wird, benutze diesen Fehlercode. Voreinstellung 1.</para>
+      </description>
+    </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<Message select="concat('Price: ',@price)" error="no"/>]]></listing>
     </example>
