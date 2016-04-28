@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.71" date="2016-04-28">
+      <en>New xpath function sd:allocated(x,y,name)</en>
+      <de>Neue XPath-Funktion sd:belegt(x,y,name)</de>
+    </entry>
     <entry version="2.3.70" date="2016-04-26">
       <en>Messages can set error code on error</en>
       <de>Nachrichten können einen Fehlercode setzen</de>
