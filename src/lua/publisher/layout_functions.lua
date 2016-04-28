@@ -12,14 +12,22 @@ local luxor = do_luafile("luxor.lua")
 local sha1  = require('sha1')
 local comm  = require("publisher.comm")
 
+local function allocated( dataxml,arg )
+    local x = arg[1]
+    local y = arg[2]
+    local areaname = arg[3]
+    publisher.setup_page()
+    return publisher.current_grid:isallocated(x,y,areaname)
+end
+
 local function current_page(  )
-  publisher.setup_page()
-  return publisher.current_pagenumber
+    publisher.setup_page()
+    return publisher.current_pagenumber
 end
 
 local function current_row(dataxml,arg)
-  publisher.setup_page()
-  return publisher.current_grid:current_row(arg and arg[1])
+    publisher.setup_page()
+    return publisher.current_grid:current_row(arg and arg[1])
 end
 
 --- Get the page number of a marker
@@ -392,6 +400,9 @@ register("urn:speedata:2009/publisher/functions/de","bildbreite",imagewidth)
 
 register("urn:speedata:2009/publisher/functions/en","imageheight",imageheight)
 register("urn:speedata:2009/publisher/functions/de","bildhöhe",imageheight)
+
+register("urn:speedata:2009/publisher/functions/en","allocated",allocated)
+register("urn:speedata:2009/publisher/functions/de","belegt",allocated)
 
 register("urn:speedata:2009/publisher/functions/en","keep-alternating",keepalternating)
 register("urn:speedata:2009/publisher/functions/de","alternierend-beibehalten",keepalternating)

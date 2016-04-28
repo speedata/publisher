@@ -61,6 +61,7 @@ XPath 2.0 standard.
 
 Function | Description
 ---------|------------
+sd:allocated(x,y,\<areaname\>) | Return true if the grid cell is allocated, false otherwise (since 2.3.71).
 sd:current-page() | Return the current page number.
 sd:current-row() | Return the current row.
 sd:current-column() | Return the current column.

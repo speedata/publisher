@@ -134,6 +134,30 @@ function number_of_columns(self,areaname)
     return width
 end
 
+function isallocated( self,x,y,areaname )
+    assert(self)
+    local areaname = areaname or publisher.default_areaname
+    local frame_margin_left, frame_margin_top
+    if areaname == publisher.default_areaname then
+        frame_margin_left, frame_margin_top = 0,0
+    else
+        local area = self.positioning_frames[areaname]
+        if not self.positioning_frames[areaname] then
+            err("Area %q unknown, using page",areaname)
+            areaname = publisher.default_areaname
+            frame_margin_left, frame_margin_top = 0,0
+        else
+            -- Todo: find the correct block because they can be of different width/height
+            local block = area[self:framenumber(areaname)]
+            frame_margin_left = block.column - 1
+            frame_margin_top = block.row - 1
+        end
+    end
+    x = x + frame_margin_left
+    y = y + frame_margin_top
+    return self.allocation_x_y[x][y] ~= nil
+end
+
 function set_number_of_rows( self,rows )
     assert(self)
     local areaname = publisher.default_areaname
