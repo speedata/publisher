@@ -61,10 +61,10 @@ XPath 2.0 standard.
 
 Function | Description
 ---------|------------
-sd:allocated(x,y,\<areaname\>) | Return true if the grid cell is allocated, false otherwise (since 2.3.71).
+sd:allocated(x,y,\<areaname\>,\<framenumber\>) | Return true if the grid cell is allocated, false otherwise (since 2.3.71).
 sd:current-page() | Return the current page number.
-sd:current-row() | Return the current row.
-sd:current-column() | Return the current column.
+sd:current-row(\<name\>) | Return the current row. If `name` is given, return the row of the given frame.
+sd:current-column(\<name\>) | Return the current column. If `name` is given, return the column of the given frame.
 sd:current-framenumber(\<name\>) | Return the current frame number of given positioning area.
 sd:alternating(\<type\>, \<text\>,\<text\>,.. ) | On each call the next element will be returned. You can define more alternating sequences by using distinct type values. Example: `sd:alternating("tbl", "White","Gray")` can be used for alternating color of table rules. To reset the state, use `sd:reset-alternating(<type>)`.
 sd:reset-alternating(\<type\>) | Reset alternating so the next `sd:alternating()` starts again from the first element.

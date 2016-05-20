@@ -50,8 +50,8 @@ Funktion | Beschreibung
 ---------|-------------
 sd:aktuelle-rahmennummer(\<name\>)|  Gibt die Nummer des aktuellen Rahmens im Platzierungsbereich zurück.
 sd:aktuelle-seite()|  Gibt die Seitennummer zurück.
-sd:aktuelle-zeile()|  Gibt die aktuelle Zeile zurück.
-sd:aktuelle-spalte()|  Gibt die aktuelle Spalte zurück.
+sd:aktuelle-zeile(\<name\>)|  Gibt die aktuelle Zeile zurück. Wenn `name` angegeben, gibt die Zeile des gegebenen Positionsrahmens zurück.
+sd:aktuelle-spalte(\<name\>)|  Gibt die aktuelle Spalte zurück. Wenn `name` angegeben, gibt die Spalte des gegebenen Positionsrahmens zurück.
 sd:alternierend(\<typ\>, \<text\>,\<text\>,.. )|  Bei jedem Aufruf wird das nächste Argument zurück gegeben. Wert des Typs ist beliebig, muss aber eindeutig sein. Beispiel: `sd:alternierend("tbl", "Weiß","Grau")` könnte für die Hintergrundfarbe von Tabellen benutzt werden.
 sd:alternierend-zurücksetzen(\<typ\>)|  Setzt den Zustand für `sd:alternierend()` für den angegebenen Typ zurück.
 sd:alternierend-beibehalten(\<typ\>)| Nutzt den aktuellen Wert von `sd:alternierend(<typ>)`, ohne diesen zu verändern.
@@ -61,7 +61,7 @@ sd:anzahl-seiten(\<Dateiname oder URI-Schema\>)|  Ermittelt die Anzahl der Seite
 sd:anzahl-spalten()|  Gibt die Anzahl der Spalten im aktuellen Raster.
 sd:anzahl-zeilen()|  Gibt die Anzahl der Zeilen im aktuellen Raster.
 sd:attr(\<Name\>, ...)|  ist dasselbe wie `@Name`, nur mit der Möglichkeit den Namen auch dynamisch (z.B. mit `concat()`) zu erzeugen. Siehe Beispiel bei `sd:variable()`.
-sd:belegt(x,y,\<Bereichsname\>) | Gibt wahr zurück, wenn die Zelle belegt ist (seit 2.3.71).
+sd:belegt(x,y,\<Bereichsname\>,\<Rahmennummer\>) | Gibt wahr zurück, wenn die Zelle belegt ist (seit 2.3.71).
 sd:bildbreite(\<Dateiname oder URI-Schema\>)|  Breite des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Breite des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert.
 sd:bildhöhe(\<Dateiname oder URI-Schema\>)|  Höhe des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Höhe des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert.
 sd:datei-vorhanden(\<Dateiname oder URI-Schema\>)|  Wahr, wenn der Dateiname im Suchpfad existiert, ansonsten false.

@@ -16,8 +16,9 @@ local function allocated( dataxml,arg )
     local x = arg[1]
     local y = arg[2]
     local areaname = arg[3]
+    local framenumber = arg[4]
     publisher.setup_page()
-    return publisher.current_grid:isallocated(x,y,areaname)
+    return publisher.current_grid:isallocated(x,y,areaname,framenumber)
 end
 
 local function current_page(  )

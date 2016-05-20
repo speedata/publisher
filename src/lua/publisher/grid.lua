@@ -134,7 +134,7 @@ function number_of_columns(self,areaname)
     return width
 end
 
-function isallocated( self,x,y,areaname )
+function isallocated( self,x,y,areaname,framenumber )
     assert(self)
     local areaname = areaname or publisher.default_areaname
     local frame_margin_left, frame_margin_top
@@ -148,10 +148,19 @@ function isallocated( self,x,y,areaname )
             frame_margin_left, frame_margin_top = 0,0
         else
             -- Todo: find the correct block because they can be of different width/height
-            local block = area[self:framenumber(areaname)]
+            framenumber = framenumber or self:framenumber(areaname)
+            local block = area[framenumber]
             frame_margin_left = block.column - 1
             frame_margin_top = block.row - 1
         end
+    end
+    if x > self:number_of_columns() then
+        err("x (%d) exceeds number of columns of the given area (%d) (including added offset of %d)",x,self:number_of_columns(areaname),frame_margin_left)
+        return false
+    end
+    if y > self:number_of_rows() then
+        err("y (%d) exceeds number of rows of the given area (%d)  (including added offset of %d)",y,self:number_of_rows(areaname),frame_margin_top)
+        return false
     end
     x = x + frame_margin_left
     y = y + frame_margin_top
