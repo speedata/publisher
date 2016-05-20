@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.73" date="2016-05-20">
+      <en>Allow frame number in sd:allocated()</en>
+      <de>Rahmennummer bei sd:belegt()</de>
+    </entry>
     <entry version="2.3.72" date="2016-04-28">
       <en>Bugfix: element names with dash accpeted</en>
       <de>Fehlerkorrektur: Elementnamen mit - akzeptiert</de>
