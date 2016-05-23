@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.74" date="2016-05-23">
+      <en>New API /v0/status to get all statuses</en>
+      <de>Neue API /v0/status für alle Stati</de>
+    </entry>
     <entry version="2.3.73" date="2016-05-20">
       <en>Allow frame number in sd:allocated()</en>
       <de>Rahmennummer bei sd:belegt()</de>
