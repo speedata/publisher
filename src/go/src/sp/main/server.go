@@ -491,22 +491,80 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// Get the status of the PDF (finished?)
-func v0StatusHandler(w http.ResponseWriter, r *http.Request) {
-	type statusresponse struct {
-		Errstatus string `json:"errorstatus"`
-		Result    string `json:"result"`
-		Message   string `json:"message"`
-		Finished  string `json:"finished"`
-	}
-	stat := statusresponse{}
-	id := mux.Vars(r)["id"]
+var (
+	NOTFINISHED   = errors.New("Not finished")
+	ERR_UNKNOWNID = errors.New("Unknown ID")
+)
+
+func getStatusForID(id string) (statusresponse, error) {
+	spstatus := statusresponse{}
 	publishdir := filepath.Join(serverTemp, id)
 	fi, err := os.Stat(publishdir)
 	if err != nil && os.IsNotExist(err) || !fi.IsDir() {
-		stat.Message = fmt.Sprintf("id %q unknown", id)
-		stat.Errstatus = "error"
-		stat.Result = "error"
+		return spstatus, ERR_UNKNOWNID
+	}
+
+	statusPath := filepath.Join(publishdir, "publisher.status")
+	finishedPath := filepath.Join(publishdir, "publisher.finished")
+	fi, err = os.Stat(finishedPath)
+	if err != nil && os.IsNotExist(err) {
+		return spstatus, NOTFINISHED
+	}
+	if err != nil {
+		return spstatus, errors.New(fmt.Sprintf("Error stat: %s", err))
+	}
+
+	data, err := ioutil.ReadFile(statusPath)
+	if err != nil {
+		return spstatus, errors.New(fmt.Sprintf("Error read: %s", err))
+	}
+
+	v := status{}
+	err = xml.Unmarshal(data, &v)
+	if err != nil {
+		return spstatus, errors.New(fmt.Sprintf("Error unmarshal XML: %s", err))
+	}
+
+	spstatus.Finished = fi.ModTime().Format(time.RFC3339)
+	if v.Errors != 0 {
+		spstatus.Errstatus = "ok"
+		spstatus.Result = "failed"
+		spstatus.Message = fmt.Sprintf("%d errors occurred during publishing run", v.Errors)
+	} else {
+		spstatus.Result = "finished"
+		spstatus.Errstatus = "ok"
+		spstatus.Message = "no errors found"
+	}
+	return spstatus, nil
+}
+
+type statusresponse struct {
+	Errstatus string `json:"errorstatus"`
+	Result    string `json:"result"`
+	Message   string `json:"message"`
+	Finished  string `json:"finished"`
+}
+
+// Get the status of the PDF (finished?)
+func v0StatusHandler(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	stat, err := getStatusForID(mux.Vars(r)["id"])
+	if err != nil {
+		switch err {
+		case ERR_UNKNOWNID:
+			stat.Message = fmt.Sprintf("id %q unknown", id)
+			stat.Errstatus = "error"
+			stat.Result = "error"
+		case NOTFINISHED:
+			// finished does not exist yet, so it's in progress
+			stat.Message = ""
+			stat.Result = "not finished"
+			stat.Errstatus = "ok"
+		default:
+			stat.Errstatus = "error"
+			stat.Message = err.Error()
+		}
+
 		buf, marshallerr := json.Marshal(stat)
 		if marshallerr != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -518,64 +576,6 @@ func v0StatusHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write(buf)
 		return
-	}
-
-	statusPath := filepath.Join(publishdir, "publisher.status")
-	finishedPath := filepath.Join(publishdir, "publisher.finished")
-	fi, err = os.Stat(finishedPath)
-	if err != nil && os.IsNotExist(err) {
-		// finished does not exist yet, so it's in progress
-		stat.Message = ""
-		stat.Result = "not finished"
-		stat.Errstatus = "ok"
-
-		buf, marshallerr := json.Marshal(stat)
-		if marshallerr != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintln(protocolFile, "Internal error 021:")
-			fmt.Fprintln(protocolFile, marshallerr)
-			fmt.Fprintln(w, "Internal error 021")
-			return
-		}
-		w.WriteHeader(http.StatusOK)
-		w.Write(buf)
-		return
-	}
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintln(protocolFile, "Internal error 022:")
-		fmt.Fprintln(protocolFile, err)
-		fmt.Fprintln(w, "Internal error 022")
-		return
-	}
-
-	data, err := ioutil.ReadFile(statusPath)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintln(protocolFile, "Internal error 023:")
-		fmt.Fprintln(protocolFile, err)
-		fmt.Fprintln(w, "Internal error 023")
-		return
-	}
-
-	v := status{}
-	err = xml.Unmarshal(data, &v)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintln(protocolFile, "Internal error 024:")
-		fmt.Fprintln(protocolFile, err)
-		fmt.Fprintln(w, "Internal error 024")
-		return
-	}
-	stat.Finished = fi.ModTime().Format(time.RFC3339)
-	if v.Errors != 0 {
-		stat.Errstatus = "ok"
-		stat.Result = "failed"
-		stat.Message = fmt.Sprintf("%d errors occurred during publishing run", v.Errors)
-	} else {
-		stat.Result = "finished"
-		stat.Errstatus = "ok"
-		stat.Message = "no errors found"
 	}
 
 	buf, marshallerr := json.Marshal(stat)
