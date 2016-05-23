@@ -79,7 +79,28 @@ Statuscode  | Beschreibung
 404 Not Found       | Id ungültig
 406  Not Acceptable | PDF wurde fehlerhaft generiert
 
+## `/v0/status`
 
+Liefert den Status aller Publishing-Läufe zurück, die mit `/v0/publish` gestartet wurden.
+
+Die zurückgegebene JSON-Datei hat folgende Schlüssel:
+
+    {
+      "1997009134": {
+        "errorstatus": "ok",
+        "result": "finished",
+        "message": "no errors found",
+        "finished": "2016-05-23T11:14:14+02:00"
+      },
+      "1997329145": {
+        "errorstatus": "ok",
+        "result": "finished",
+        "message": "no errors found",
+        "finished": "2016-05-23T11:14:14+02:00"
+      }
+    }
+
+Die einzelnen Felder haben dieselbe Bedeutung wie unter `/v0/status/<id>` beschrieben.
 
 ## `/v0/status/<id>`
 

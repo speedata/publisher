@@ -16,7 +16,7 @@ RelaxNG support, please drop us a note at
 -   [XMLSpy](http://www.altova.com/xml-editor/) (Windows)
 -   [XML Blueprint](http://www.xmlblueprint.com/) (Windows only)
 -   [GNU Emacs](https://www.gnu.org/software/emacs/) with [nxml-mode](http://www.thaiopensource.com/nxml-mode/) (all operating systems, free)
--   [jEdit](http://www.jedit.org) (Mac, Windows, Linux, kostenlos)
+-   [jEdit](http://www.jedit.org) (Mac, Windows, Linux, free)
 
 The schema for editing the layout XML can be found in the directory
 `share/schema` in the file `layoutschema-en.rng`.

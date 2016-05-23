@@ -79,6 +79,29 @@ Status code  | Description
 404 Not Found       | Id is invalid
 406  Not Acceptable | PDF has errors
 
+## `/v0/status`
+
+Return the status for all publishing runs, that were started with `/v0/publish`.
+
+The returned JSON file has the following format:
+
+    {
+      "1997009134": {
+        "errorstatus": "ok",
+        "result": "finished",
+        "message": "no errors found",
+        "finished": "2016-05-23T11:14:14+02:00"
+      },
+      "1997329145": {
+        "errorstatus": "ok",
+        "result": "finished",
+        "message": "no errors found",
+        "finished": "2016-05-23T11:14:14+02:00"
+      }
+    }
+
+See `/v0/status/<id>` for the meaning of the fields.
+
 
 ## `/v0/status/<id>`
 

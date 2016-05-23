@@ -545,6 +545,83 @@ type statusresponse struct {
 	Finished  string `json:"finished"`
 }
 
+// Return true if the given dir is a directory that contains
+// something that looks like a source to be published (layout.xml)
+func isPublishingDir(dir string) bool {
+	fi, err := os.Stat(dir)
+	if err != nil {
+		return false
+	}
+	if !fi.IsDir() {
+		return false
+	}
+	layoutxmlfi, err := os.Stat(filepath.Join(dir, "layout.xml"))
+	if err != nil {
+		return false
+	}
+	if layoutxmlfi.IsDir() {
+		return false
+	}
+	return true
+}
+
+// Return a string list of all IDs in the publishing dir, possibly empty
+func getAllIds() []string {
+	ret := []string{}
+
+	matches, err := filepath.Glob(serverTemp + "/*")
+	if err != nil {
+		fmt.Println(err)
+		return []string{}
+	}
+	serverTempWithSlash := serverTemp + "/"
+	for _, match := range matches {
+		if isPublishingDir(match) {
+			id := strings.TrimPrefix(match, serverTempWithSlash)
+			ret = append(ret, id)
+		}
+	}
+	return ret
+}
+
+func v0GetAllStatusHandler(w http.ResponseWriter, r *http.Request) {
+
+	allstatus := make(map[string]statusresponse)
+
+	for _, id := range getAllIds() {
+		stat, err := getStatusForID(id)
+		if err != nil {
+			switch err {
+			case ERR_UNKNOWNID:
+				stat.Message = fmt.Sprintf("id %q unknown", id)
+				stat.Errstatus = "error"
+				stat.Result = "error"
+			case NOTFINISHED:
+				// finished does not exist yet, so it's in progress
+				stat.Message = ""
+				stat.Result = "not finished"
+				stat.Errstatus = "ok"
+			default:
+				stat.Errstatus = "error"
+				stat.Message = err.Error()
+			}
+		}
+		allstatus[id] = stat
+	}
+
+	buf, marshallerr := json.Marshal(allstatus)
+	if marshallerr != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintln(protocolFile, "Internal error 003:")
+		fmt.Fprintln(protocolFile, marshallerr)
+		fmt.Fprintln(w, "Internal error 003")
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write(buf)
+	return
+}
+
 // Get the status of the PDF (finished?)
 func v0StatusHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
@@ -646,6 +723,7 @@ func runServer(port string, address string, tempdir string) {
 	v0 := r.PathPrefix("/v0").Subrouter()
 	v0.HandleFunc("/format", v0FormatHandler)
 	v0.HandleFunc("/publish", v0PublishHandler).Methods("POST")
+	v0.HandleFunc("/status", v0GetAllStatusHandler).Methods("GET")
 	v0.HandleFunc("/pdf/{id}", v0GetPDFHandler).Methods("GET")
 	v0.HandleFunc("/publish/{id}", v0PublishIdHandler).Methods("GET")
 	v0.HandleFunc("/status/{id}", v0StatusHandler).Methods("GET")
