@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.75" date="2016-05-31">
+      <en>New API /v0/data/&lt;id> to get the data.xml</en>
+      <de>Neue API /v0/data/&lt;id> um die Datendatei zu bekommen</de>
+    </entry>
+    <entry version="2.3.75" date="2016-05-31">
+      <en>Bugfix empty value should not make a space.</en>
+      <de>Fehlerkorrektur: leere Wert-Angaben erzeugen einen Leerraum</de>
+    </entry>
     <entry version="2.3.74" date="2016-05-23">
       <en>New API /v0/status to get all statuses</en>
       <de>Neue API /v0/status für alle Stati</de>
