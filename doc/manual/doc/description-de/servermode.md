@@ -4,9 +4,15 @@ title: Server-Modus
 Server-Modus
 ============
 
-(Experimentell)
+Wird der speedata Publisher im Server-Modus gestartet (`sp server`), erwartet
+das Programm HTTP-Anfragen auf Port 5266 (konfigurierbar).
 
-Wird der speedata Publisher im Server-Modus gestartet (`sp server`), erwartet das Programm HTTP-Anfragen auf Port 5266 (konfigurierbar).
+Der Servermodus ist
+ausschließlich in einer privaten Umgebung einzusetzen. Alle Anwender können
+über die API-Funktionen an alle erzeugen PDF-Dateien heran kommen. Das wird
+sich in einer anderen API-Version (v1 oder höher) ändern.
+
+
 
 ## `/available`
 
@@ -78,6 +84,18 @@ Statuscode  | Beschreibung
 200 OK              | PDF wurde fehlerfrei generiert
 404 Not Found       | Id ungültig
 406  Not Acceptable | PDF wurde fehlerhaft generiert
+
+## `/v0/data/<id>`
+
+Liefert die Daten-Datei, die vorab auf den Server kopiert wurde. Das Format kann über den URL-Parameter `format` angegeben werden:
+
+Format | Beschreibung
+-------|-------------
+`json` oder `JSON` | Liefert eine JSON-Datei im Format `{"dataxml":"<XML Text>"}`
+`base64` | Ergibt eine XML Datei, die base64 kodiert ist (`PGRhdGE+CiAgICA8....hPgo=`)
+(keine Angabe) | Schreibt eine XML Datei (`<data>...</data>`)
+
+Beispiel: `http://127.0.0.1:5266/v0/data/1347678770?format=base64`
 
 ## `/v0/status`
 

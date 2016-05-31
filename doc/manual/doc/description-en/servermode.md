@@ -4,9 +4,13 @@ title: Server-mode
 Server-mode
 ===========
 
-(Experimental)
+When the speedata Publisher is started in the server-mode (`sp server`), it
+expects HTTP-requests on port 5266 (configurable).
 
-When the speedata Publisher is started in the server-mode (`sp server`), it expects HTTP-requests on port 5266 (configurable). All of these API calls are experimental. So expect changes.
+The server mode must be used in a restricted envrionment. The current API (v0)
+exposes all PDF files and other private information to all users with access
+to the server. Future versions of the API might handle authentification.
+
 
 ## `/available`
 
@@ -78,6 +82,20 @@ Status code  | Description
 200 OK              | PDF rendered OK
 404 Not Found       | Id is invalid
 406  Not Acceptable | PDF has errors
+
+
+## `/v0/data/<id>`
+
+Return the data file that has been copied to the server before. The format can be set with the URL parameter `format`:
+
+Format | Description
+-------|-------------
+`json` or `JSON` | Return a JSON-file such as `{"dataxml":"<XML Text>"}`
+`base64` | The result is an XML file, that is encoded base64 (`PGRhdGE+CiAgICA8....hPgo=`)
+(no format) | Returns the XML file (`<data>...</data>`)
+
+Example: `http://127.0.0.1:5266/v0/data/1347678770?format=base64`
+
 
 ## `/v0/status`
 
