@@ -2317,16 +2317,11 @@ function mknodes(str,fontfamily,parameter)
     local head, last, n
     local char
 
-    -- if it's an empty string, we make it a space character (experimental)
+    -- if it's an empty string, we make a zero-width rule
     if string.len(str) == 0 then
-        n = node.new("glyph")
-        n.char = 32
-        n.font = instance
-        n.subtype = 1
-        n.char = s
-        n.lang = languagecode
-        node.set_attribute(n,att_fontfamily,fontfamily)
-        return n
+        -- a space char can have a width, so we return a zero width something
+        local strut = add_rule(nil,"head",{height = 1 * factor, depth = 0, width = 0 })
+        return strut
     end
     local lastitemwasglyph
     local newline = 10
