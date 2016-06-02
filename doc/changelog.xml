@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.3.76" date="2016-06-02">
+      <en>New API /v0/layout/&lt;id> to get the layout.xml</en>
+      <de>Neue API /v0/layout/&lt;id> um die Layoutdatei zu bekommen</de>
+    </entry>
     <entry version="2.3.75" date="2016-05-31">
       <en>New API /v0/data/&lt;id> to get the data.xml</en>
       <de>Neue API /v0/data/&lt;id> um die Datendatei zu bekommen</de>
