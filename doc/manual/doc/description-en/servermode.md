@@ -94,7 +94,7 @@ Format | Description
 `base64` | The result is an XML file, that is encoded base64 (`PGRhdGE+CiAgICA8....hPgo=`)
 (no format) | Returns the XML file (`<data>...</data>`)
 
-Example: `http://127.0.0.1:5266/v0/data/1347678770?format=base64`
+Example: `http://127.0.0.1:5266/v0/layout/1347678770?format=base64`
 
 ## `/v0/layout/<id>`
 
