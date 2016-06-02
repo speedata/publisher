@@ -413,6 +413,54 @@ func v0DataHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func v0LayoutHandler(w http.ResponseWriter, r *http.Request) {
+    id := mux.Vars(r)["id"]
+    fmt.Fprintf(protocolFile, "v0/pdf/%s\n", id)
+    publishdir := filepath.Join(serverTemp, id)
+    fi, err := os.Stat(publishdir)
+    if err != nil && os.IsNotExist(err) || !fi.IsDir() {
+        w.WriteHeader(http.StatusNotFound)
+        fmt.Fprintln(protocolFile, err)
+        return
+    }
+    val := r.URL.Query()
+    f, err := os.Open(filepath.Join(publishdir,"layout.xml"))
+    if err != nil {
+        writeInternalError(w)
+        return
+    }
+    defer f.Close()
+    switch val.Get("format") {
+        case "base64":
+            encoder := base64.NewEncoder(base64.StdEncoding,w)
+            io.Copy(encoder, f)
+            encoder.Close()
+        case "json", "JSON":
+            var buf []byte
+            buf, err = ioutil.ReadAll(f)
+            if err != nil {
+                writeInternalError(w)
+                return
+            }
+
+            a := struct {
+                Data string `json:"layoutxml"`
+            }{
+                Data: string(buf),
+            }
+
+            b, err := json.Marshal(a)
+            if err != nil {
+                writeInternalError(w)
+                return
+            }
+            fmt.Fprintln(w, string(b))
+        default:
+            w.Header().Set("Content-Type", "application/xml")
+            io.Copy(w, f)
+    }
+}
+
 func writeInternalError(w http.ResponseWriter) {
 	fmt.Fprintln(w, "Internal error")
 	return
@@ -782,6 +830,7 @@ func runServer(port string, address string, tempdir string) {
 	v0.HandleFunc("/status/{id}", v0StatusHandler).Methods("GET")
 	v0.HandleFunc("/delete/{id}", v0DeleteHandler).Methods("GET")
 	v0.HandleFunc("/data/{id}", v0DataHandler).Methods("GET")
+	v0.HandleFunc("/layout/{id}", v0LayoutHandler).Methods("GET")
 	http.Handle("/", r)
 	fmt.Printf("Listen on http://%s:%s\n", address, port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", address, port), nil))
