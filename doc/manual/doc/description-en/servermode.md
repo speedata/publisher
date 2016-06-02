@@ -90,12 +90,23 @@ Return the data file that has been copied to the server before. The format can b
 
 Format | Description
 -------|-------------
-`json` or `JSON` | Return a JSON-file such as `{"dataxml":"<XML Text>"}`
+`json` or `JSON` | Return a JSON-file such as `{"contents":"<XML Text>"}`
 `base64` | The result is an XML file, that is encoded base64 (`PGRhdGE+CiAgICA8....hPgo=`)
 (no format) | Returns the XML file (`<data>...</data>`)
 
-Example: `http://127.0.0.1:5266/v0/data/1347678770?format=base64`
+Example: `http://127.0.0.1:5266/v0/layout/1347678770?format=base64`
 
+## `/v0/layout/<id>`
+
+Return the layout file that has been copied to the server before. The format can be set with the URL parameter `format`:
+
+Format | Description
+-------|-------------
+`json` or `JSON` | Return a JSON-file such as `{"contents":"<XML Text>"}`
+`base64` | The result is an XML file, that is encoded base64 (`PGRhdGE+CiAgICA8....hPgo=`)
+(no format) | Returns the XML file (`<Layout>...</Layout>`)
+
+Example: `http://127.0.0.1:5266/v0/data/1347678770?format=base64`
 
 ## `/v0/status`
 

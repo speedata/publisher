@@ -365,9 +365,8 @@ func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, filepath.Join(publishdir, "publisher.pdf"))
 }
 
-func v0DataHandler(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["id"]
-	fmt.Fprintf(protocolFile, "/v0/pdf/%s\n", id)
+// Send the given file down the stream. Change format with ?format=json/base64/... Default is the unencoded / unchanged file
+func sendFile(id string, filename string, w http.ResponseWriter, r *http.Request) {
 	publishdir := filepath.Join(serverTemp, id)
 	fi, err := os.Stat(publishdir)
 	if err != nil && os.IsNotExist(err) || !fi.IsDir() {
@@ -376,7 +375,7 @@ func v0DataHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	val := r.URL.Query()
-	f, err := os.Open(filepath.Join(publishdir, "data.xml"))
+	f, err := os.Open(filepath.Join(publishdir, filename))
 	if err != nil {
 		writeInternalError(w)
 		return
@@ -396,7 +395,7 @@ func v0DataHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		a := struct {
-			Data string `json:"dataxml"`
+			Data string `json:"contents"`
 		}{
 			Data: string(buf),
 		}
@@ -411,6 +410,19 @@ func v0DataHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/xml")
 		io.Copy(w, f)
 	}
+
+}
+
+func v0DataHandler(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	fmt.Fprintf(protocolFile, "/v0/data/%s\n", id)
+	sendFile(id, "data.xml", w, r)
+}
+
+func v0LayoutHandler(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	fmt.Fprintf(protocolFile, "/v0/layout/%s\n", id)
+	sendFile(id, "layout.xml", w, r)
 }
 
 func writeInternalError(w http.ResponseWriter) {
@@ -782,6 +794,7 @@ func runServer(port string, address string, tempdir string) {
 	v0.HandleFunc("/status/{id}", v0StatusHandler).Methods("GET")
 	v0.HandleFunc("/delete/{id}", v0DeleteHandler).Methods("GET")
 	v0.HandleFunc("/data/{id}", v0DataHandler).Methods("GET")
+	v0.HandleFunc("/layout/{id}", v0LayoutHandler).Methods("GET")
 	http.Handle("/", r)
 	fmt.Printf("Listen on http://%s:%s\n", address, port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", address, port), nil))
