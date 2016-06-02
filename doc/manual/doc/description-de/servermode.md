@@ -91,11 +91,22 @@ Liefert die Daten-Datei, die vorab auf den Server kopiert wurde. Das Format kann
 
 Format | Beschreibung
 -------|-------------
-`json` oder `JSON` | Liefert eine JSON-Datei im Format `{"dataxml":"<XML Text>"}`
+`json` oder `JSON` | Liefert eine JSON-Datei im Format `{"contents":"<XML Text>"}`
 `base64` | Ergibt eine XML Datei, die base64 kodiert ist (`PGRhdGE+CiAgICA8....hPgo=`)
 (keine Angabe) | Schreibt eine XML Datei (`<data>...</data>`)
 
 Beispiel: `http://127.0.0.1:5266/v0/data/1347678770?format=base64`
+
+## `/v0/layout/<id>`
+Liefert das Layout XML, die vorab auf den Server kopiert wurde. Das Format kann über den URL-Parameter `format` angegeben werden:
+
+Format | Beschreibung
+-------|-------------
+`json` oder `JSON` | Liefert eine JSON-Datei im Format `{"contents":"<XML Text>"}`
+`base64` | Ergibt eine XML Datei, die base64 kodiert ist (`PGRhdGE+CiAgICA8....hPgo=`)
+(keine Angabe) | Schreibt eine XML Datei (`<Layout>...</Layout>`)
+
+Beispiel: `http://127.0.0.1:5266/v0/layout/1347678770?format=base64`
 
 ## `/v0/status`
 
