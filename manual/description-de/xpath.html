@@ -83,13 +83,13 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 </tr>
 
 <tr>
-<td>sd:aktuelle-zeile()</td>
-<td>Gibt die aktuelle Zeile zurück.</td>
+<td>sd:aktuelle-zeile(&lt;name&gt;)</td>
+<td>Gibt die aktuelle Zeile zurück. Wenn <code>name</code> angegeben, gibt die Zeile des gegebenen Positionsrahmens zurück.</td>
 </tr>
 
 <tr>
-<td>sd:aktuelle-spalte()</td>
-<td>Gibt die aktuelle Spalte zurück.</td>
+<td>sd:aktuelle-spalte(&lt;name&gt;)</td>
+<td>Gibt die aktuelle Spalte zurück. Wenn <code>name</code> angegeben, gibt die Spalte des gegebenen Positionsrahmens zurück.</td>
 </tr>
 
 <tr>
@@ -138,6 +138,11 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 </tr>
 
 <tr>
+<td>sd:belegt(x,y,&lt;Bereichsname&gt;,&lt;Rahmennummer&gt;)</td>
+<td>Gibt wahr zurück, wenn die Zelle belegt ist (seit 2.3.71).</td>
+</tr>
+
+<tr>
 <td>sd:bildbreite(&lt;Dateiname oder URI-Schema&gt;)</td>
 <td>Breite des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Breite des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert.</td>
 </tr>
@@ -158,8 +163,8 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 </tr>
 
 <tr>
-<td>sd:formatiere-string(Zahl oder String,Formartierungsangaben)</td>
-<td>Gibt eine Zeichenkette zurück, die die gegebene Zahl mit den im zweiten Argument gegebenen Formatierungsanweisungen darstellt. Die Formatierungsanweisungen entsprechen der aus der Programmiersprache C bekannten <code>printf()</code>-Funktion.</td>
+<td>sd:formatiere-string(Objekt,Objekt,...,Formartierungsangaben)</td>
+<td>Gibt eine Zeichenkette zurück, die die gegebenen Objekte mit den im zweiten Argument gegebenen Formatierungsanweisungen darstellt. Die Formatierungsanweisungen entsprechen der aus der Programmiersprache C bekannten <code>printf()</code>-Funktion.</td>
 </tr>
 
 <tr>
@@ -369,7 +374,7 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.3.65 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/xpath.html">Englisch</a>
+Version: 2.3.76 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/xpath.html">Englisch</a>
 
 </body>
 </html>

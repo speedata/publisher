@@ -20,9 +20,12 @@
 <div class="">
 <h1>Server-mode</h1>
 
-<p>(Experimental)</p>
+<p>When the speedata Publisher is started in the server-mode (<code>sp server</code>), it
+expects HTTP-requests on port 5266 (configurable).</p>
 
-<p>When the speedata Publisher is started in the server-mode (<code>sp server</code>), it expects HTTP-requests on port 5266 (configurable). All of these API calls are experimental. So expect changes.</p>
+<p>The server mode must be used in a restricted envrionment. The current API (v0)
+exposes all PDF files and other private information to all users with access
+to the server. Future versions of the API might handle authentification.</p>
 
 <h2><code>/available</code></h2>
 
@@ -118,6 +121,94 @@
 </tbody>
 </table>
 
+<h2><code>/v0/data/&lt;id&gt;</code></h2>
+
+<p>Return the data file that has been copied to the server before. The format can be set with the URL parameter <code>format</code>:</p>
+
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>json</code> or <code>JSON</code></td>
+<td>Return a JSON-file such as <code>{&quot;contents&quot;:&quot;&lt;XML Text&gt;&quot;}</code></td>
+</tr>
+
+<tr>
+<td><code>base64</code></td>
+<td>The result is an XML file, that is encoded base64 (<code>PGRhdGE+CiAgICA8....hPgo=</code>)</td>
+</tr>
+
+<tr>
+<td>(no format)</td>
+<td>Returns the XML file (<code>&lt;data&gt;...&lt;/data&gt;</code>)</td>
+</tr>
+</tbody>
+</table>
+
+<p>Example: <code>http://127.0.0.1:5266/v0/layout/1347678770?format=base64</code></p>
+
+<h2><code>/v0/layout/&lt;id&gt;</code></h2>
+
+<p>Return the layout file that has been copied to the server before. The format can be set with the URL parameter <code>format</code>:</p>
+
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>json</code> or <code>JSON</code></td>
+<td>Return a JSON-file such as <code>{&quot;contents&quot;:&quot;&lt;XML Text&gt;&quot;}</code></td>
+</tr>
+
+<tr>
+<td><code>base64</code></td>
+<td>The result is an XML file, that is encoded base64 (<code>PGRhdGE+CiAgICA8....hPgo=</code>)</td>
+</tr>
+
+<tr>
+<td>(no format)</td>
+<td>Returns the XML file (<code>&lt;Layout&gt;...&lt;/Layout&gt;</code>)</td>
+</tr>
+</tbody>
+</table>
+
+<p>Example: <code>http://127.0.0.1:5266/v0/data/1347678770?format=base64</code></p>
+
+<h2><code>/v0/status</code></h2>
+
+<p>Return the status for all publishing runs, that were started with <code>/v0/publish</code>.</p>
+
+<p>The returned JSON file has the following format:</p>
+
+<pre><code>{
+  &quot;1997009134&quot;: {
+    &quot;errorstatus&quot;: &quot;ok&quot;,
+    &quot;result&quot;: &quot;finished&quot;,
+    &quot;message&quot;: &quot;no errors found&quot;,
+    &quot;finished&quot;: &quot;2016-05-23T11:14:14+02:00&quot;
+  },
+  &quot;1997329145&quot;: {
+    &quot;errorstatus&quot;: &quot;ok&quot;,
+    &quot;result&quot;: &quot;finished&quot;,
+    &quot;message&quot;: &quot;no errors found&quot;,
+    &quot;finished&quot;: &quot;2016-05-23T11:14:14+02:00&quot;
+  }
+}
+</code></pre>
+
+<p>See <code>/v0/status/&lt;id&gt;</code> for the meaning of the fields.</p>
+
 <h2><code>/v0/status/&lt;id&gt;</code></h2>
 
 <p>Determines the current status of the publishing run, which was POSTed to <code>/v0/publish</code>.</p>
@@ -187,7 +278,7 @@ start =
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.3.65 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/servermode.html">German</a>
+Version: 2.3.76 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/servermode.html">German</a>
 
 </body>
 </html>

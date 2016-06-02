@@ -1,13 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (en)</title>
   <id>http://www.speedata.de</id>
-  <updated>2016-03-29T19:01:42+02:00</updated>
+  <updated>2016-06-02T14:22:48+02:00</updated>
   <subtitle>New revisions for download and changelog.</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.3.76</title>
+    <updated>2016-06-02T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-02:</id>
+    <content type="html">New API /v0/layout/&amp;lt;id&gt; to get the layout.xml</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.75</title>
+    <updated>2016-05-31T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-05-31:</id>
+    <content type="html">New API /v0/data/&amp;lt;id&gt; to get the data.xml</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.75</title>
+    <updated>2016-05-31T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-05-31:</id>
+    <content type="html">Bugfix empty value should not make a space.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.74</title>
+    <updated>2016-05-23T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-05-23:</id>
+    <content type="html">New API /v0/status to get all statuses</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.73</title>
+    <updated>2016-05-20T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-05-20:</id>
+    <content type="html">Allow frame number in sd:allocated()</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.72</title>
+    <updated>2016-04-28T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-04-28:</id>
+    <content type="html">Bugfix: element names with dash accpeted</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.71</title>
+    <updated>2016-04-28T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-04-28:</id>
+    <content type="html">New xpath function sd:allocated(x,y,name)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.70</title>
+    <updated>2016-04-26T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-04-26:</id>
+    <content type="html">Messages can set error code on error</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.69</title>
+    <updated>2016-04-25T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-04-25:</id>
+    <content type="html">Bugfix indent and parshape with allocate=&#34;auto&#34;</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.68</title>
+    <updated>2016-04-08T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-04-08:</id>
+    <content type="html">Bugfix: API /v0/pdf/&amp;lt;id&gt; must wait for the pdf file to finish. Error happens with mutliple runs</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.67</title>
+    <updated>2016-04-07T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-04-07:</id>
+    <content type="html">ForAll has a new attribute: start to give the starting point (default: 1)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.3.66</title>
+    <updated>2016-04-05T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-04-05:</id>
+    <content type="html">Change mechanism on image wrapping, only partly enabled.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.3.65</title>
     <updated>2016-03-29T00:00:00Z</updated>

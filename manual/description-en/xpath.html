@@ -87,18 +87,23 @@ XPath 2.0 standard.</p>
 
 <tbody>
 <tr>
+<td>sd:allocated(x,y,&lt;areaname&gt;,&lt;framenumber&gt;)</td>
+<td>Return true if the grid cell is allocated, false otherwise (since 2.3.71).</td>
+</tr>
+
+<tr>
 <td>sd:current-page()</td>
 <td>Return the current page number.</td>
 </tr>
 
 <tr>
-<td>sd:current-row()</td>
-<td>Return the current row.</td>
+<td>sd:current-row(&lt;name&gt;)</td>
+<td>Return the current row. If <code>name</code> is given, return the row of the given frame.</td>
 </tr>
 
 <tr>
-<td>sd:current-column()</td>
-<td>Return the current column.</td>
+<td>sd:current-column(&lt;name&gt;)</td>
+<td>Return the current column. If <code>name</code> is given, return the column of the given frame.</td>
 </tr>
 
 <tr>
@@ -182,8 +187,8 @@ XPath 2.0 standard.</p>
 </tr>
 
 <tr>
-<td>sd:format-string(Number or string,formatting instructions)</td>
-<td>Return a text string with the number formatted as given by the formatting instructions. These instructions are the same as the instructions by the C function <code>printf()</code>.</td>
+<td>sd:format-string(object, object, ... ,formatting instructions)</td>
+<td>Return a text string with the objects formatted as given by the formatting instructions. These instructions are the same as the instructions by the C function <code>printf()</code>.</td>
 </tr>
 
 <tr>
@@ -378,7 +383,7 @@ XPath 2.0 standard.</p>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.3.65 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/xpath.html">German</a>
+Version: 2.3.76 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/xpath.html">German</a>
 
 </body>
 </html>

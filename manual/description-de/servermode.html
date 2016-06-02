@@ -20,9 +20,13 @@
 <div class="">
 <h1>Server-Modus</h1>
 
-<p>(Experimentell)</p>
+<p>Wird der speedata Publisher im Server-Modus gestartet (<code>sp server</code>), erwartet
+das Programm HTTP-Anfragen auf Port 5266 (konfigurierbar).</p>
 
-<p>Wird der speedata Publisher im Server-Modus gestartet (<code>sp server</code>), erwartet das Programm HTTP-Anfragen auf Port 5266 (konfigurierbar).</p>
+<p>Der Servermodus ist
+ausschließlich in einer privaten Umgebung einzusetzen. Alle Anwender können
+über die API-Funktionen an alle erzeugen PDF-Dateien heran kommen. Das wird
+sich in einer anderen API-Version (v1 oder höher) ändern.</p>
 
 <h2><code>/available</code></h2>
 
@@ -119,6 +123,94 @@ Request) zurückgegeben, mit dem textuellen Inhalt der Fehlermeldung, z.B.:</p>
 </tbody>
 </table>
 
+<h2><code>/v0/data/&lt;id&gt;</code></h2>
+
+<p>Liefert die Daten-Datei, die vorab auf den Server kopiert wurde. Das Format kann über den URL-Parameter <code>format</code> angegeben werden:</p>
+
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>json</code> oder <code>JSON</code></td>
+<td>Liefert eine JSON-Datei im Format <code>{&quot;contents&quot;:&quot;&lt;XML Text&gt;&quot;}</code></td>
+</tr>
+
+<tr>
+<td><code>base64</code></td>
+<td>Ergibt eine XML Datei, die base64 kodiert ist (<code>PGRhdGE+CiAgICA8....hPgo=</code>)</td>
+</tr>
+
+<tr>
+<td>(keine Angabe)</td>
+<td>Schreibt eine XML Datei (<code>&lt;data&gt;...&lt;/data&gt;</code>)</td>
+</tr>
+</tbody>
+</table>
+
+<p>Beispiel: <code>http://127.0.0.1:5266/v0/data/1347678770?format=base64</code></p>
+
+<h2><code>/v0/layout/&lt;id&gt;</code></h2>
+
+<p>Liefert das Layout XML, die vorab auf den Server kopiert wurde. Das Format kann über den URL-Parameter <code>format</code> angegeben werden:</p>
+
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>json</code> oder <code>JSON</code></td>
+<td>Liefert eine JSON-Datei im Format <code>{&quot;contents&quot;:&quot;&lt;XML Text&gt;&quot;}</code></td>
+</tr>
+
+<tr>
+<td><code>base64</code></td>
+<td>Ergibt eine XML Datei, die base64 kodiert ist (<code>PGRhdGE+CiAgICA8....hPgo=</code>)</td>
+</tr>
+
+<tr>
+<td>(keine Angabe)</td>
+<td>Schreibt eine XML Datei (<code>&lt;Layout&gt;...&lt;/Layout&gt;</code>)</td>
+</tr>
+</tbody>
+</table>
+
+<p>Beispiel: <code>http://127.0.0.1:5266/v0/layout/1347678770?format=base64</code></p>
+
+<h2><code>/v0/status</code></h2>
+
+<p>Liefert den Status aller Publishing-Läufe zurück, die mit <code>/v0/publish</code> gestartet wurden.</p>
+
+<p>Die zurückgegebene JSON-Datei hat folgende Schlüssel:</p>
+
+<pre><code>{
+  &quot;1997009134&quot;: {
+    &quot;errorstatus&quot;: &quot;ok&quot;,
+    &quot;result&quot;: &quot;finished&quot;,
+    &quot;message&quot;: &quot;no errors found&quot;,
+    &quot;finished&quot;: &quot;2016-05-23T11:14:14+02:00&quot;
+  },
+  &quot;1997329145&quot;: {
+    &quot;errorstatus&quot;: &quot;ok&quot;,
+    &quot;result&quot;: &quot;finished&quot;,
+    &quot;message&quot;: &quot;no errors found&quot;,
+    &quot;finished&quot;: &quot;2016-05-23T11:14:14+02:00&quot;
+  }
+}
+</code></pre>
+
+<p>Die einzelnen Felder haben dieselbe Bedeutung wie unter <code>/v0/status/&lt;id&gt;</code> beschrieben.</p>
+
 <h2><code>/v0/status/&lt;id&gt;</code></h2>
 
 <p>Ermittelt den Status des Publisher-Laufs, der per POST-Request an <code>/v0/publish</code> gesendet wurde.</p>
@@ -188,7 +280,7 @@ start =
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.3.65 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/servermode.html">Englisch</a>
+Version: 2.3.76 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/servermode.html">Englisch</a>
 
 </body>
 </html>
