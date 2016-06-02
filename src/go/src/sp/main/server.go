@@ -413,7 +413,7 @@ func v0DataHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func v0LayoutHandler(w http.ReponseWriter, r *http.Request) {
+func v0LayoutHandler(w http.ResponseWriter, r *http.Request) {
     id := mux.Vars(r)["id"]
     fmt.Fprintf(protocolFile, "v0/pdf/%s\n", id)
     publishdir := filepath.Join(serverTemp, id)
