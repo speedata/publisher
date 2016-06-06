@@ -931,6 +931,7 @@ function commands.image( layoutxml,dataxml )
     local url       = publisher.read_attribute(layoutxml,dataxml,"href",       "rawstring")
     local dpiwarn   = publisher.read_attribute(layoutxml,dataxml,"dpiwarn",    "number")
     local rotate    = publisher.read_attribute(layoutxml,dataxml,"rotate",     "number")
+    local fallback  = publisher.read_attribute(layoutxml,dataxml,"fallback",   "rawstring")
 
     -- width = 100%  => take width from surrounding area
     -- auto on any value ({max,min}?{width,height}) is default
@@ -940,9 +941,9 @@ function commands.image( layoutxml,dataxml )
 
     local imageinfo
     if url ~= nil then
-        imageinfo = publisher.get_image(url)
+        imageinfo = publisher.get_image(url, fallback)
     else
-        imageinfo = publisher.new_image(filename,page,max_box_intern)
+        imageinfo = publisher.new_image(filename,page,max_box_intern, fallback)
     end
 
     local image = img.copy(imageinfo.img)

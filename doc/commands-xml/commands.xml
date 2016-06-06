@@ -2679,6 +2679,14 @@
         <para>Dateiname des Bildes. Kann entweder eine Datei im Suchpfad sein oder ein file-URI-Schema (z.B. <tt>file:///pfad/zum/bild.pdf</tt>).</para>
       </description>
     </attribute>
+    <attribute en="fallback" de="ersatz" optional="yes" since="2.3.77" allowxpath="yes">
+      <description xml:lang="en">
+        <para>The filename of the replacement image if the file is not found. If none given, a red 'file not found' image will gets displayed.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Dateiname für ein Ersatzbild, falls die Bilddatei nicht gefunden wurde. Wenn keiner angegeben wird, wird ein roter Platzhalter angezeigt.</para>
+      </description>
+    </attribute>
     <attribute en="page" de="seite" type="number" optional="yes">
       <description xml:lang="en">
         <para>The page number from the PDF. Default is 1 (include the first page).</para>

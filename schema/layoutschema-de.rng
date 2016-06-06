@@ -1500,6 +1500,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="ersatz">
+               <a:documentation>Der Dateiname für ein Ersatzbild, falls die Bilddatei nicht gefunden wurde. Wenn keine Angegeben wird, wird ein roter Platzhalter angezeigt.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="seite">
                <a:documentation>Die Seitenzahl aus dem PDF. Voreinstellung ist 1.</a:documentation>
             </attribute>

@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2016-04-26 14:10)
+-- generated from genluatranslations.go (2016-06-06 16:50)
 -- do not edit!
 module(...)
 return {
@@ -168,6 +168,7 @@ return {
         ["höhe"] = "height",
         ["href"] = "href",
         ["datei"] = "file",
+        ["ersatz"] = "fallback",
         ["seite"] = "page",
         ["natürliche-größe"] = "naturalsize",
         ["maxbreite"] = "maxwidth",

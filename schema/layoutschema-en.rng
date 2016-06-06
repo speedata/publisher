@@ -1500,6 +1500,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="fallback">
+               <a:documentation>The filename of the replacement image if the file is not found. If none given, a red &#39;file not found&#39; image will gets displayed.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="page">
                <a:documentation>The page number from the PDF. Default is 1 (include the first page).</a:documentation>
             </attribute>

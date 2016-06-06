@@ -3765,12 +3765,12 @@ end
 
 
 local images = {}
-function new_image( filename, page, box)
-    return imageinfo(filename,page,box)
+function new_image( filename, page, box,fallback)
+    return imageinfo(filename,page,box,fallback)
 end
 
 -- Retrieve image from an URL if its not cached
-function get_image(requeste_url)
+function get_image(requeste_url,fallback)
     local imgcache = os.getenv("IMGCACHE")
     local parsed_url = url.parse(requeste_url)
     -- http://placekitten.com/g/200/300?foo=bar gives
@@ -3813,11 +3813,11 @@ function get_image(requeste_url)
     txt, statuscode, c = http.request(requeste_url)
     if statuscode ~= 200 then
         err("404 when retrieving image %q",requeste_url)
-        return imageinfo(nil) -- nil is "filenotfound.pdf"
+        return imageinfo(nil,nil,nil,fallback) -- nil is "filenotfound.pdf"
     end
     if #txt == 0 then
         err("Empty image in href request")
-        return imageinfo(nil)
+        return imageinfo(nil,nil,nil,fallback)
     end
     -- Create the temporary directory if necessary
     if not lfs.isdir(imgcache) then
@@ -3837,29 +3837,38 @@ function get_image(requeste_url)
     local file,e = io.open(path_to_image,"wb")
     if file == nil then
         err("Could not open image file for writing into temp directory: %q",e)
-        return imageinfo(nil)
+        return imageinfo(nil,nil,nil,fallback)
     end
     local ok
     ok, e = file:write(txt)
     if not ok then
         err("Could not write image file into temp directory %q",e)
-        return imageinfo(nil)
+        return imageinfo(nil,nil,nil,fallback)
     end
     file:flush()
     file:close()
 
     -- Just re-run this function. The image is now cached
-    return get_image(requeste_url)
+    return get_image(requeste_url,fallback)
+end
+
+function get_fallback_image_name( filename, missingfilename )
+    if filename then
+        warning("Using fallback %q, missing file name is %q", filename, missingfilename)
+        return filename
+    else
+        return "filenotfound.pdf"
+    end
 end
 
 -- Box is none, media, crop, bleed, trim, art
-function imageinfo( filename,page,box )
+function imageinfo( filename,page,box,fallback )
     page = page or 1
     box = box or "crop"
     -- there is no filename, we should fail or throw an error
     if not filename then
         err("No filename given for image")
-        filename = "filenotfound.pdf"
+        filename = get_fallback_image_name(fallback)
     end
 
     local new_name = filename .. tostring(page) .. tostring(box)
@@ -3874,7 +3883,7 @@ function imageinfo( filename,page,box )
         else
             warning("Image %q not found!",filename or "???")
         end
-        filename = "filenotfound.pdf"
+        filename = get_fallback_image_name(fallback,filename)
         page = 1
     end
     -- example is wrong: one based index
