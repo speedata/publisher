@@ -858,7 +858,8 @@ function initialize_luatex_and_generate_pdf()
     --- emit last page if necessary
     -- current_pagestore_name is set when in SavePages and nil otherwise
     if page_initialized_p(current_pagenumber) and current_pagestore_name == nil then
-        dothingsbeforeoutput()
+        dothingsbeforeoutput(pages[current_pagenumber])
+
         local n = node.vpack(pages[current_pagenumber].pagebox)
 
         tex.box[666] = n
@@ -1307,13 +1308,8 @@ function new_page()
         setup_page()
         thispage = current_page
     end
-    if thispage.AtPageShipout then
-        pagebreak_impossible = true
-        dispatch(thispage.AtPageShipout)
-        pagebreak_impossible = false
-    end
 
-    dothingsbeforeoutput()
+    dothingsbeforeoutput(thispage)
 
     local n = node.vpack(pages[current_pagenumber].pagebox)
     if current_pagestore_name then
@@ -1724,7 +1720,14 @@ function box( width_sp,height_sp,colorname )
 end
 
 --- After everything is ready for page shipout, we add debug output and crop marks if necessary
-function dothingsbeforeoutput(  )
+function dothingsbeforeoutput( thispage )
+
+    if thispage and thispage.AtPageShipout then
+        pagebreak_impossible = true
+        dispatch(thispage.AtPageShipout)
+        pagebreak_impossible = false
+    end
+
     local current_page = pages[current_pagenumber]
     local r = current_page.grid
     -- r should be cg
