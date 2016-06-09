@@ -1,9 +1,15 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.4.1" date="2016-06-09">
+      <en>Bugfix: pagetype and NewPage, version assertion in Layout tag</en>
+      <de>Fehlerkorrektur: Seitentyp und NeueSeite, Versionszusicherung im Layout-Tag</de>
+    </entry>
     <entry version="2.4.0" date="2016-06-07">
       <en>Release version 2.4.0</en>
       <de>Veröffentlichung von Version 2.4.0</de>
     </entry>
+  </chapter>
+  <chapter version="2.3" date="2016-06-07">
     <entry version="2.3.77" date="2016-06-06">
       <en>Fallback filename for image (in case of image not found)</en>
       <de>Fallback für den Dateinamen bei Bild, im Falle dass die Bilddatei nicht gefunden wird.</de>

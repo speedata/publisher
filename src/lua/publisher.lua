@@ -733,11 +733,13 @@ function initialize_luatex_and_generate_pdf()
         local version_mismatch = false
         local publisher_version = string.explode(env_publisherversion,".")
         local requested_version = string.explode(layoutxml.version,".")
+
         if publisher_version[1] ~= requested_version[1] then
             version_mismatch = true
-        elseif publisher_version[2] ~= requested_version[2] then
+        elseif publisher_version[2] < requested_version[2] then
+            -- major number are same, minor are different
             version_mismatch = true
-        elseif requested_version[3] and publisher_version[3] < requested_version[3] then
+        elseif requested_version[3] and publisher_version[3] < requested_version[3] and publisher_version[2] == requested_version[2] then
             version_mismatch = true
         end
         if version_mismatch then
@@ -1135,19 +1137,20 @@ function detect_pagetype(pagenumber)
     local ret = nil
     for i=#masterpages,1,-1 do
         local pagetype = masterpages[i]
-        if pagetype.name == nextpage then
-            log("Page of type %q created (%d) - pagetype requested",pagetype.name or "<detect_pagetype>",pagenumber)
-            nextpage = nil
-            return pagetype.res
-        end
-
-
-        if xpath.parse(nil,pagetype.is_pagetype,pagetype.ns) == true then
-            log("Page of type %q created (%d)",pagetype.name or "<detect_pagetype>",pagenumber)
-            ret = pagetype.res
-            xpath.pop_state()
-            current_pagenumber = cp
-            return ret
+        if nextpage then
+            if pagetype.name == nextpage then
+                log("Page of type %q created (%d) - pagetype requested",pagetype.name or "<detect_pagetype>",pagenumber)
+                nextpage = nil
+                return pagetype.res
+            end
+        else
+           if xpath.parse(nil,pagetype.is_pagetype,pagetype.ns) == true then
+               log("Page of type %q created (%d)",pagetype.name or "<detect_pagetype>",pagenumber)
+               ret = pagetype.res
+               xpath.pop_state()
+               current_pagenumber = cp
+               return ret
+           end
         end
     end
     err("Can't find correct page type!")
