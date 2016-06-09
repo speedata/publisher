@@ -733,11 +733,13 @@ function initialize_luatex_and_generate_pdf()
         local version_mismatch = false
         local publisher_version = string.explode(env_publisherversion,".")
         local requested_version = string.explode(layoutxml.version,".")
+
         if publisher_version[1] ~= requested_version[1] then
             version_mismatch = true
-        elseif publisher_version[2] ~= requested_version[2] then
+        elseif publisher_version[2] < requested_version[2] then
+            -- major number are same, minor are different
             version_mismatch = true
-        elseif requested_version[3] and publisher_version[3] < requested_version[3] then
+        elseif requested_version[3] and publisher_version[3] < requested_version[3] and publisher_version[2] == requested_version[2] then
             version_mismatch = true
         end
         if version_mismatch then
