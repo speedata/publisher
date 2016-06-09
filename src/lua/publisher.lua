@@ -1137,19 +1137,20 @@ function detect_pagetype(pagenumber)
     local ret = nil
     for i=#masterpages,1,-1 do
         local pagetype = masterpages[i]
-        if pagetype.name == nextpage then
-            log("Page of type %q created (%d) - pagetype requested",pagetype.name or "<detect_pagetype>",pagenumber)
-            nextpage = nil
-            return pagetype.res
-        end
-
-
-        if xpath.parse(nil,pagetype.is_pagetype,pagetype.ns) == true then
-            log("Page of type %q created (%d)",pagetype.name or "<detect_pagetype>",pagenumber)
-            ret = pagetype.res
-            xpath.pop_state()
-            current_pagenumber = cp
-            return ret
+        if nextpage then
+            if pagetype.name == nextpage then
+                log("Page of type %q created (%d) - pagetype requested",pagetype.name or "<detect_pagetype>",pagenumber)
+                nextpage = nil
+                return pagetype.res
+            end
+        else
+           if xpath.parse(nil,pagetype.is_pagetype,pagetype.ns) == true then
+               log("Page of type %q created (%d)",pagetype.name or "<detect_pagetype>",pagenumber)
+               ret = pagetype.res
+               xpath.pop_state()
+               current_pagenumber = cp
+               return ret
+           end
         end
     end
     err("Can't find correct page type!")

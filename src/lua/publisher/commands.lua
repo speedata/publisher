@@ -1262,7 +1262,7 @@ function commands.margin( layoutxml,dataxml )
     local top    = publisher.read_attribute(layoutxml,dataxml,"top",  "length")
     local bottom = publisher.read_attribute(layoutxml,dataxml,"bottom", "length")
 
-    return function(_seite) _seite.grid:set_margin(left,top,right,bottom) end
+    return function(_page) _page.grid:set_margin(left,top,right,bottom) end
 end
 
 --- Mark
@@ -1911,6 +1911,11 @@ function commands.place_object( layoutxml,dataxml )
     -- remember the current maximum width for later
     local current_maxwidth = xpath.get_variable("__maxwidth")
     local mw = current_grid:number_of_columns(area)
+    if not mw then
+        err("Something is wrong with the curernt page, expect strange results")
+        return
+    end
+
     if absolute_positioning == false then
         if tonumber(column) then
             mw = current_grid:width_sp(mw - column + 1)
