@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (de)</title>
   <id>http://www.speedata.de</id>
-  <updated>2016-06-07T13:31:48+02:00</updated>
+  <updated>2016-06-10T10:02:11+02:00</updated>
   <subtitle>Neue Versionen des Publishers zum Download und Liste der Änderungen</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.5.1</title>
+    <updated>2016-06-10T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-10:</id>
+    <content type="html">Interpretiere &amp;lt;sub&gt; und &amp;lt;sup&gt; in den Daten.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.5.1</title>
+    <updated>2016-06-09T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-09:</id>
+    <content type="html">Fehlerkorrektur: Seitentyp und NeueSeite, Versionszusicherung im Layout-Tag</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.4.1</title>
+    <updated>2016-06-09T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-09:</id>
+    <content type="html">Fehlerkorrektur: Seitentyp und NeueSeite, Versionszusicherung im Layout-Tag</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.4.0</title>
     <updated>2016-06-07T00:00:00Z</updated>
