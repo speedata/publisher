@@ -1988,6 +1988,24 @@ function parse_html( elt, parameter )
                     underline = 2
                 end
             end
+        elseif eltname == "sub" then
+            for i=1,#elt do
+                if type(elt[i]) == "string" then
+                    a:script(elt[i],1,{fontfamily = 0, bold = bold, italic = italic, underline = underline })
+                elseif type(elt[i]) == "table" then
+                    a:script(parse_html(elt[i]),1,{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                end
+            end
+            elt = {}
+        elseif eltname == "sup" then
+            for i=1,#elt do
+                if type(elt[i]) == "string" then
+                    a:script(elt[i],2,{fontfamily = 0, bold = bold, italic = italic, underline = underline })
+                elseif type(elt[i]) == "table" then
+                    a:script(parse_html(elt[i]),2,{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                end
+            end
+            elt = {}
         elseif eltname == "ul" then
             for i=1,#elt do
                 if type(elt[i]) == "string" then
