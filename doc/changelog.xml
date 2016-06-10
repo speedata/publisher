@@ -1,4 +1,14 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
+  <chapter version="2.5">
+    <entry version="2.5.1" date="2016-06-10">
+      <en>Interpret &lt;sub> and &lt;sup> in data.</en>
+      <de>Interpretiere &lt;sub> und &lt;sup> in den Daten.</de>
+    </entry>
+    <entry version="2.5.1" date="2016-06-09">
+      <en>Bugfix: pagetype and NewPage, version assertion in Layout tag</en>
+      <de>Fehlerkorrektur: Seitentyp und NeueSeite, Versionszusicherung im Layout-Tag</de>
+    </entry>
+  </chapter>
   <chapter version="2.4">
     <entry version="2.4.1" date="2016-06-09">
       <en>Bugfix: pagetype and NewPage, version assertion in Layout tag</en>
