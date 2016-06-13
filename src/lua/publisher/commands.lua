@@ -1962,7 +1962,7 @@ function commands.place_object( layoutxml,dataxml )
             err("Unknown group %q in PlaceObject",groupname)
         else
             objects[1] = { object = node.copy(publisher.groups[groupname].contents),
-                objecttype = string.format("Gruppe (%s)", groupname)}
+                objecttype = string.format("Group (%s)", groupname)}
         end
     else
         for i,j in ipairs(tab) do
