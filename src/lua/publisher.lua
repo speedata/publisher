@@ -1284,18 +1284,19 @@ function setup_page(pagenumber)
 end
 
 --- Switch to the next frame in the given area.
-function next_area( areaname )
-    local current_framenumber = current_grid:framenumber(areaname)
+function next_area( areaname, grid )
+    grid = grid or current_grid
+    local current_framenumber = grid:framenumber(areaname)
     if not current_framenumber then
         err("Cannot determine current area number (areaname=%q)",areaname or "(undefined)")
         return
     end
-    if current_framenumber >= current_grid:number_of_frames(areaname) then
+    if current_framenumber >= grid:number_of_frames(areaname) then
         new_page()
     else
-        current_grid:set_framenumber(areaname, current_framenumber + 1)
+        grid:set_framenumber(areaname, current_framenumber + 1)
     end
-    current_grid:set_current_row(1,areaname)
+    grid:set_current_row(1,areaname)
 end
 
 --- Switch to a new page and shipout the current page.

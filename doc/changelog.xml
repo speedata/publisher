@@ -10,6 +10,10 @@
     </entry>
   </chapter>
   <chapter version="2.4">
+    <entry version="2.4.2" date="2016-06-13">
+      <en>A few bugfixes related to sd:current-framenumber(), minheight in Textblock and looking for next free row.</en>
+      <de>Einige Fehlerkorrekturen im Zusammenhangn mit sd:aktuelle-rahmennummer(), minhöhe im Textblock und der Suche nach der nächsten freien Zeile.</de>
+    </entry>
     <entry version="2.4.1" date="2016-06-09">
       <en>Bugfix: pagetype and NewPage, version assertion in Layout tag</en>
       <de>Fehlerkorrektur: Seitentyp und NeueSeite, Versionszusicherung im Layout-Tag</de>

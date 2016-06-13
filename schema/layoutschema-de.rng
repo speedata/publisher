@@ -1501,7 +1501,7 @@
          </optional>
          <optional>
             <attribute name="ersatz">
-               <a:documentation>Der Dateiname für ein Ersatzbild, falls die Bilddatei nicht gefunden wurde. Wenn keine Angegeben wird, wird ein roter Platzhalter angezeigt.</a:documentation>
+               <a:documentation>Der Dateiname für ein Ersatzbild, falls die Bilddatei nicht gefunden wurde. Wenn keiner angegeben wird, wird ein roter Platzhalter angezeigt.</a:documentation>
             </attribute>
          </optional>
          <optional>

@@ -1962,7 +1962,7 @@ function commands.place_object( layoutxml,dataxml )
             err("Unknown group %q in PlaceObject",groupname)
         else
             objects[1] = { object = node.copy(publisher.groups[groupname].contents),
-                objecttype = string.format("Gruppe (%s)", groupname)}
+                objecttype = string.format("Group (%s)", groupname)}
         end
     else
         for i,j in ipairs(tab) do
@@ -3208,7 +3208,8 @@ function commands.textblock( layoutxml,dataxml )
     trace("Textbock: end")
     publisher.intextblockcontext = publisher.intextblockcontext - 1
     if minheight then
-        nodelist.height = math.max(nodelist.height + nodelist.depth, minheight - nodelist.depth)
+        nodelist.height = math.max(nodelist.height + nodelist.depth, minheight )
+        nodelist.depth = 0
     end
     return nodelist
 end

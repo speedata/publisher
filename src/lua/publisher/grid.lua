@@ -407,20 +407,24 @@ function find_suitable_row( self,column, width,height,areaname)
         end
     end
     -- FIXME: inefficient algorithm
-    if self:number_of_rows(areaname) < self:current_row(areaname) + height - 1 then return nil end
+    if self:number_of_rows(areaname) < self:current_row(areaname) + height - 1 then
+        -- doesn't fit, so we try on the next page
+        publisher.next_area(areaname,self)
+        return self:find_suitable_row(column, width,height,areaname)
+    end
     for z = self:current_row(areaname) + frame_margin_top, self:number_of_rows(areaname) + frame_margin_top do
         if self:fits_in_row(column + frame_margin_left,width,z) then
 
             if self:number_of_rows(areaname) < z - frame_margin_top + height  - 1 then
                 return nil
             else
-                local passt = true
+                local fits = true
                 for current_row = z, z + height do
                     if not self:fits_in_row(column + frame_margin_left,width,current_row) then
-                        passt = false
+                        fits = false
                     end
                 end
-                if passt then
+                if fits then
                     return z - frame_margin_top
                 end
             end
