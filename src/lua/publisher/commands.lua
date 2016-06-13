@@ -3208,7 +3208,8 @@ function commands.textblock( layoutxml,dataxml )
     trace("Textbock: end")
     publisher.intextblockcontext = publisher.intextblockcontext - 1
     if minheight then
-        nodelist.height = math.max(nodelist.height + nodelist.depth, minheight - nodelist.depth)
+        nodelist.height = math.max(nodelist.height + nodelist.depth, minheight )
+        nodelist.depth = 0
     end
     return nodelist
 end
