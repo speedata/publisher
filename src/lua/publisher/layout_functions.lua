@@ -226,15 +226,14 @@ local function groupwidth(dataxml, arg )
     return 0
   end
 
-  local grid = publisher.current_grid
-  local width = grid:width_in_gridcells_sp(groupcontents.width)
+  local width = publisher.current_grid:width_in_gridcells_sp(groupcontents.width)
   return width
 end
 
 local function current_frame_number(dataxml,arg)
   local framename = arg[1]
   if framename == nil then return 1 end
-  local current_framenumber = current_grid:framenumber(framename)
+  local current_framenumber = publisher.current_grid:framenumber(framename)
   return current_framenumber
 end
 
