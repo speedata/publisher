@@ -1817,7 +1817,7 @@
     </attribute>
     <attribute en="rows" de="zeilen" type="number" optional="yes">
       <description xml:lang="en">
-        <para>The number of rows with indentation given in the attribute <tt>indentation</tt>. If the number is negative, this determiens the number of rows that are <quote>not</quote> indented.</para>
+        <para>The number of rows with indentation given in the attribute <tt>indentation</tt>. If the number is negative, this determines the number of rows that are <quote>not</quote> indented.</para>
       </description>
       <description xml:lang="de">
         <para>Anzahl der Zeilen, die eingezogen werden (wenn <tt>einrückung</tt> angegeben ist) bzw. falls die Zahl negativ ist, die Anzahl der Zeilen, die <quote>nicht</quote> eingerückt werden.</para>
@@ -4394,7 +4394,7 @@
     </childelements>
     <attribute en="allowbreak" de="erlaubeumbruch" type="text" optional="yes">
       <description xml:lang="en">
-        <para>(Experimental!) list of characters where a line beak is possible. Space character is not implied when this attribute is set.</para>
+        <para>(Experimental!) list of characters where a line break is possible. Space character is not implied when this attribute is set.</para>
       </description>
       <description xml:lang="de">
         <para>(Experimentell) Liste der Zeichen, bei denen ein Umbruch möglich ist. Das Leerzeichen wird nicht automatisch als Umbruchbunkt erkannt, wenn das Attribut angegeben ist.</para>
@@ -4452,7 +4452,7 @@
     <example xml:lang="en">
       <listing><![CDATA[<Textblock width="27">
   <Paragraph fontface="Title">
-    <Value>Hallo Welt</Value>
+    <Value>Hello World</Value>
   </Paragraph>
 </Textblock>
 ]]></listing>

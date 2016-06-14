@@ -934,7 +934,7 @@
          </optional>
          <optional>
             <attribute name="rows">
-               <a:documentation>The number of rows with indentation given in the attribute indentation. If the number is negative, this determiens the number of rows that are not indented.</a:documentation>
+               <a:documentation>The number of rows with indentation given in the attribute indentation. If the number is negative, this determines the number of rows that are not indented.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2519,7 +2519,7 @@
          <a:documentation>Insert a paragraph of text. The width of the paragraph is inherited from the surrounding element.</a:documentation>
          <optional>
             <attribute name="allowbreak">
-               <a:documentation>(Experimental!) list of characters where a line beak is possible. Space character is not implied when this attribute is set.</a:documentation>
+               <a:documentation>(Experimental!) list of characters where a line break is possible. Space character is not implied when this attribute is set.</a:documentation>
             </attribute>
          </optional>
          <optional>
