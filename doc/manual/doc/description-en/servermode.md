@@ -7,9 +7,9 @@ Server-mode
 When the speedata Publisher is started in the server-mode (`sp server`), it
 expects HTTP-requests on port 5266 (configurable).
 
-The server mode must be used in a restricted envrionment. The current API (v0)
+The server mode must be used in a restricted environment. The current API (v0)
 exposes all PDF files and other private information to all users with access
-to the server. Future versions of the API might handle authentification.
+to the server. Future versions of the API might handle authentication.
 
 
 ## `/available`
@@ -152,7 +152,7 @@ Generates hyphenation points for a text, that is given via POST-request. The tex
 
 The returned XML has the same format as the request.
 
-The XML-structure of the request and answer must confirm to the following RelqxNG-compact schema:
+The XML-structure of the request and answer must confirm to the following RelaxNG Compact schema:
 
     namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     start =

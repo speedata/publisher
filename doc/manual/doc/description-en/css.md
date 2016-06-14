@@ -50,7 +50,7 @@ each of the following CSS declarations have the same effect:
 }
 ````
 
-und
+and
 
     td {
       vertical-align: top ;

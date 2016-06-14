@@ -55,15 +55,15 @@ Description of the command line parameters
 Parameter | Description
 ----------|------------
 `--autoopen` | Opens the PDF file after running the publisher. Can also be set in the [configuration file](configuration.html).
-`--data=NAME` | Name of the data XML file. Default is `data.xml`. Can be set in the[configuration file](configuration.html). If the file name is a dash(`-`), the speedata publisher reads the XML data from standard input(STDIN).
+`--data=NAME` | Name of the data XML file. Default is `data.xml`. Can be set in the [configuration file](configuration.html). If the file name is a dash(`-`), the speedata publisher reads the XML data from standard input (STDIN).
 `--cutmarks` | Show cut marks. Can be also configured in the [Layout](../commands-en/options.html).
 `--dummy` | Only read the layout rules. A simple data file is assumed which only contains one element: `<data />`. This is for quick testing of layout files.
-`-x`, `--extra-dir` | Puts the given directory into the search path. All assets (images,fonts, XML data and layout rules) must be found in the seach path,which will be traversed recursively. This parameter can be given multiple times and preset in the [configurationfile](configuration.html).
+`-x`, `--extra-dir` | Puts the given directory into the search path. All assets (images, fonts, XML data and layout rules) must be found in the search path, which will be traversed recursively. This parameter can be given multiple times and preset in the [configuration file](configuration.html).
 `--extra-xml=NAME` | Add this file to the layout instructions. Similar to inclusion of the file with xinclude.
 `--filter=FILTER` | Run the given XPROC file.
 `--grid` | Show the grid. Can be turned off with `--no-grid`. Can be configured in the layout XML file: [Layout](../commands-en/options.html).
 `--ignore-case`|  Ignore case when accessing files (on a case-insensitive file system).
-`--layout=NAME` | Name of the layout XML file. Default is `layout.xml`. Can be[configured](configuration.html).
+`--layout=NAME` | Name of the layout XML file. Default is `layout.xml`. Can be [configured](configuration.html).
 `--[no-]local` | The current directory is (not) added to the search path recursively.The default is `--local` which means that the current directory and all its subdirectories is added to the search path. This allows you to run the publisher in any directory and put your assets in a subdirectory.
 `--jobname=NAME` | The name of the output file. Default is `publisher`. The extension(`.pdf`) is added automatically.
 `--mainlanguage=NAME` | Set the main language for the document (hyphenation). Allowed values are: `af`, `as`, `bg`, `ca`, `cs`, `cy`, `da`, `de`, `el`, `en`,`en_GB`, `en_US`, `eo`, `es`, `et`, `eu`, `fi`, `fr`, `ga`, `gl`,`gu`, `hi`, `hr`, `hu`, `hy`, `ia`, `id`, `is`, `it`, `ku`, `kn`,`la`, `lo`, `lt`, `ml`, `lv`, `ml`, `mn`, `mr`, `nb`, `nl`, `nn`,`or`, `pa`, `pl`, `pt`, `ro`, `ru`, `sa`, `sk`, `sl`, `sr`, `sv`,`ta`, `te`, `tk`, `tr`, `uk` and `zh`. See also the [language codelist](http://www.loc.gov/standards/iso639-2/php/code_list.php).
@@ -88,7 +88,7 @@ Commands
 Command   | Description
 ----------|------------
 `list-fonts` | Lists all fonts that are found in the search path. Together with `--xml` the output format can re used in the layout XML.
-`compare` | Recursively check a directory for layout changes. See the topic[about quality assurance](qualityassurance.html).
+`compare` | Recursively check a directory for layout changes. See the topic [about quality assurance](qualityassurance.html).
 `clean` | Remove temporary files from the publisher run. Keeps the PDF file.
 `doc` | Opens the HTML documentation.
 `run` | Starts the speedata publisher (this is the default command).
@@ -103,4 +103,4 @@ Command   | Description
 Parameter | Description
 ----------|------------
 `hotfolder` | Directory to be watched.
-`events` | Entries (separated by a semicolon) in the form `pattern:command`.The `pattern` is a regular expression. If this pattern matches a file, the command given in the configuration is executed. Currently only external programs can be run. These programs must be given in parentheses. The path to the file will be passed as the first argument. The hotfolder waits until the program is finished and removes the file afterwards.
+`events` | Entries (separated by a semicolon) in the form `pattern:command`. The `pattern` is a regular expression. If this pattern matches a file, the command given in the configuration is executed. Currently only external programs can be run. These programs must be given in parentheses. The path to the file will be passed as the first argument. The hotfolder waits until the program is finished and removes the file afterwards.
