@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.4">
+    <entry version="2.4.3" date="2016-06-17">
+      <en>Bugfix related to an improper fix in 2.4.2 / find next free row for an object</en>
+      <de>Fehlerkorrektur zu einem fehlerhaften Fix in 2.4.2 bzgl. der Suche nach der nächsten freien Zeile für ein Objekt.</de>
+    </entry>
     <entry version="2.4.2" date="2016-06-13">
       <en>A few bugfixes related to sd:current-framenumber(), minheight in Textblock and looking for next free row.</en>
       <de>Einige Fehlerkorrekturen im Zusammenhangn mit sd:aktuelle-rahmennummer(), minhöhe im Textblock und der Suche nach der nächsten freien Zeile.</de>
