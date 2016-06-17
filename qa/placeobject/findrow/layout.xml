@@ -1,0 +1,18 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="100mm" height="100mm"/>
+  <Options show-grid="no" trace="no"/>
+  <Record element="data">
+    <Loop select="5">
+      <PlaceObject>
+      <Table stretch="max">
+        <Tr minheight="2.5">
+          <Td><Paragraph><Value>dummy text</Value></Paragraph></Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+      <NextRow/>
+    </Loop>
+  </Record>  
+
+</Layout>

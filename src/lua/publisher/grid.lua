@@ -408,9 +408,13 @@ function find_suitable_row( self,column, width,height,areaname)
     end
     -- FIXME: inefficient algorithm
     if self:number_of_rows(areaname) < self:current_row(areaname) + height - 1 then
-        -- doesn't fit, so we try on the next page
-        publisher.next_area(areaname,self)
-        return self:find_suitable_row(column, width,height,areaname)
+        -- doesn't fit, so we try on the next area
+        if self:number_of_frames(areaname) > self:framenumber(areaname) then
+            publisher.next_area(areaname,self)
+            return self:find_suitable_row(column, width,height,areaname)
+        else
+            return
+        end
     end
     for z = self:current_row(areaname) + frame_margin_top, self:number_of_rows(areaname) + frame_margin_top do
         if self:fits_in_row(column + frame_margin_left,width,z) then
