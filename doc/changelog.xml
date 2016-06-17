@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.5">
+    <entry version="2.5.2" date="2016-06-13">
+      <en>(2.4.2) A few bugfixes related to sd:current-framenumber(), minheight in Textblock and looking for next free row.</en>
+      <de>(2.4.2) Einige Fehlerkorrekturen im Zusammenhangn mit sd:aktuelle-rahmennummer(), minhöhe im Textblock und der Suche nach der nächsten freien Zeile.</de>
+    </entry>
     <entry version="2.5.1" date="2016-06-10">
       <en>Interpret &lt;sub> and &lt;sup> in data.</en>
       <de>Interpretiere &lt;sub> und &lt;sup> in den Daten.</de>
