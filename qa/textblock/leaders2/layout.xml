@@ -1,0 +1,18 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  
+  <Options show-grid="no"/>
+  <Pageformat width="10cm" height="4cm"/>
+
+  <Record element="data">
+    <PlaceObject column="1">
+      <Table width="6" stretch="max">
+        <Columns><Column width="1*"/></Columns>
+          <Tr>
+            <Td padding-bottom="4pt"><Paragraph><Value>The quick brown fox jumps over the lazy</Value><HSpace leader="." leader-width="1.4mm"/><Value>1234</Value></Paragraph></Td>
+          </Tr>
+      </Table>
+    </PlaceObject>
+  </Record>
+
+</Layout>

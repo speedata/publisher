@@ -14,6 +14,10 @@
     </entry>
   </chapter>
   <chapter version="2.4">
+    <entry version="2.4.4" date="2016-06-18">
+      <en>Various bugfixes: leaders disappear on a linebreak, Nobreak allows setting for font family, escape attribute contents, fix for bad images.</en>
+      <de>Verschiede Fehlerkorrekturen: Führungspunkte verschwinden bei einem Zeilenwechsel, KeinUmbruch erlaubt die Angabe einer Schriftfamilie, Attribut-Werte werden nicht escaped, kaputte Bilder (ohne DPI-Angaben) werden besser behandelt.</de>
+    </entry>
     <entry version="2.4.3" date="2016-06-17">
       <en>Bugfix related to an improper fix in 2.4.2 / find next free row for an object</en>
       <de>Fehlerkorrektur zu einem fehlerhaften Fix in 2.4.2 bzgl. der Suche nach der nächsten freien Zeile für ein Objekt.</de>

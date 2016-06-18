@@ -3846,6 +3846,14 @@
         <para>Multiplikator für die Schriftgröße, wenn reduzieren=schriftgröße. Voreinstellung: 0.9. Das bedeutet, dass die Schriftgröße um 0,9 reduziert wird, bis der Text in die vorgegebene Breite hineinpasst.</para>
       </description>
     </attribute>
+    <attribute en="fontface" de="schriftart" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The name of the fontface for text to be reduced. The default is »text« (lowercase t).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name der Schriftart für den Text, der verkürzt werden soll. Voreinstellung ist »text« (mit kleinem t).</para>
+      </description>
+    </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<ObjektAusgeben>
   <Textblock breite="5">

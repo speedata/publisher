@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2016-06-06 16:50)
+-- generated from genluatranslations.go (2016-06-18 15:48)
 -- do not edit!
 module(...)
 return {
@@ -242,6 +242,7 @@ return {
         ["reduzieren"] = "reduce",
         ["text"] = "text",
         ["faktor"] = "factor",
+        ["schriftart"] = "fontface",
         },
       ["Ol"] = { "Ol",
         },

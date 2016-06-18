@@ -2067,6 +2067,11 @@
                <a:documentation>Multiplier for the font size when reduce=fontsize. Default value: 0.9. That means the font size gets decreased by 0.9 until the text fits the objects width.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="fontface">
+               <a:documentation>The name of the fontface for text to be reduced. The default is »text« (lowercase t).</a:documentation>
+            </attribute>
+         </optional>
          <zeroOrMore>
             <choice>
                <ref name="e_A"></ref>

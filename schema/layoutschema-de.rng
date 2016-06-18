@@ -2067,6 +2067,11 @@
                <a:documentation>Multiplikator für die Schriftgröße, wenn reduzieren=schriftgröße. Voreinstellung: 0.9. Das bedeutet, dass die Schriftgröße um 0,9 reduziert wird, bis der Text in die vorgegebene Breite hineinpasst.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="schriftart">
+               <a:documentation>Name der Schriftart für den Text, der verkürzt werden soll. Voreinstellung ist »text« (mit kleinem t).</a:documentation>
+            </attribute>
+         </optional>
          <zeroOrMore>
             <choice>
                <ref name="e_A"></ref>

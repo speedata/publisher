@@ -3235,7 +3235,7 @@ function xml_to_string( xml_element, level )
     str = str .. string.rep(" ",level) .. "<" .. xml_element[".__local_name"]
     for k,v in pairs(xml_element) do
         if type(k) == "string" and not k:match("^%.") then
-            str = str .. string.format(" %s=%q", k,v)
+            str = str .. string.format(" %s=%q", k,xml_escape(v))
         end
     end
     str = str .. ">\n"

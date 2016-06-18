@@ -123,7 +123,8 @@ function commands.attribute( layoutxml,dataxml )
     local attname   = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
 
     if not selection then return { [".__type"]="attribute", [attname] = "" } end
-    local ret = { [".__type"]="attribute", [attname] = publisher.xml_escape(xpath.textvalue(selection)) }
+    -- Escaping the xpath.textvalue makes & into &amp; etc.
+    local ret = { [".__type"]="attribute", [attname] = xpath.textvalue(selection) }
     return ret
 end
 
@@ -855,9 +856,9 @@ end
 --- ------
 --- Create a horizontal space that stretches up to infinity
 function commands.hspace( layoutxml,dataxml )
-    local width  = publisher.read_attribute(layoutxml,dataxml,"width", "length_sp")
+    local width      = publisher.read_attribute(layoutxml,dataxml,"width", "length_sp")
     local leadertext = publisher.read_attribute(layoutxml,dataxml,"leader", "rawstring")
-    local leaderwd = publisher.read_attribute(layoutxml,dataxml,"leader-width", "length_sp")
+    local leaderwd   = publisher.read_attribute(layoutxml,dataxml,"leader-width", "length_sp")
     local a = paragraph:new()
 
     -- It seems that it's safe to use 100 for leaders and leader-less-glue
@@ -884,7 +885,22 @@ function commands.hspace( layoutxml,dataxml )
         node.set_attribute(lp.nodelist, publisher.att_lederwd, leaderwd or -1)
         n.leader = lp.nodelist
     end
-    a:append(n,{})
+    local p1, p2
+    p1 = node.new("penalty")
+    p1.penalty = 0
+
+    p2 = node.new("penalty")
+    p2.penalty = 10000
+
+    local h1 = node.new("hlist")
+
+    node.insert_after(p1,p1,h1)
+    node.insert_after(p1,h1,p2)
+    node.insert_after(p1,p2,n)
+
+
+    a:append(p1,{})
+
     return a
 end
 
@@ -987,16 +1003,16 @@ function commands.image( layoutxml,dataxml )
     local overshoot
     if clip then
         local stretch_shrink
-        if width / image.width > height / image.height then
-            stretch_shrink = width / image.width
-            overshoot = math.round(  (image.height * stretch_shrink - height ) / publisher.factor / 2,3)
+        if width / image.xsize > height / image.ysize then
+            stretch_shrink = width / image.xsize
+            overshoot = math.round(  (image.ysize * stretch_shrink - height ) / publisher.factor / 2,3)
             overshoot = -overshoot
         else
-            stretch_shrink = height / image.height
-            overshoot = math.round(  (image.width * stretch_shrink - width) / publisher.factor / 2 ,3)
+            stretch_shrink = height / image.ysize
+            overshoot = math.round(  (image.xsize * stretch_shrink - width) / publisher.factor / 2 ,3)
         end
-        width = image.width   * stretch_shrink
-        height = image.height * stretch_shrink
+        width = image.xsize   * stretch_shrink
+        height = image.ysize * stretch_shrink
     end
 
     local shift_left,shift_up = 0,0
@@ -1418,12 +1434,22 @@ end
 --- -------
 --- Don't allow a linebreak of the contents. Reduce font size if necessary
 function commands.nobreak( layoutxml, dataxml )
-    local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth",  "length_sp", xpath.get_variable("__maxwidth"))
-    local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor", "rawstring",0.9)
-    local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce","string")
-    local text             = publisher.read_attribute(layoutxml,dataxml,"text","rawstring")
+    local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth", "length_sp", xpath.get_variable("__maxwidth"))
+    local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor",   "rawstring",0.9)
+    local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce",   "string")
+    local text             = publisher.read_attribute(layoutxml,dataxml,"text",     "rawstring")
+    local fontname         = publisher.read_attribute(layoutxml,dataxml,"fontface", "rawstring")
 
     local fontfamily = 0
+    if fontname then
+        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+        if fontfamily == nil then
+            err("Fontfamily %q not found.",fontname)
+            fontfamily = 0
+        end
+        publisher.current_fontfamily = fontfamily
+    end
+
     local languagecode = publisher.defaultlanguage
 
     publisher.intextblockcontext = publisher.intextblockcontext + 1
@@ -1442,7 +1468,7 @@ function commands.nobreak( layoutxml, dataxml )
         end
     end
     for _,j in ipairs(objects) do
-        a:append(j,{fontfamily = 0, languagecode = languagecode, allowbreak = allowbreak})
+        a:append(j,{fontfamily = fontfamily, languagecode = languagecode, allowbreak = allowbreak})
     end
 
     if strategy == "fontsize" then
@@ -1472,7 +1498,7 @@ function commands.nobreak( layoutxml, dataxml )
         if node.dimensions(nl) <= current_maxwidth then
             return a
         end
-        local txt = publisher.mknodes(text,fam,{})
+        local txt = publisher.mknodes(text,fontfamily,{})
         txt = node.hpack(txt)
         local wd_txt = node.dimensions(txt)
         local head = nl.list
