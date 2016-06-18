@@ -1419,12 +1419,22 @@ end
 --- -------
 --- Don't allow a linebreak of the contents. Reduce font size if necessary
 function commands.nobreak( layoutxml, dataxml )
-    local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth",  "length_sp", xpath.get_variable("__maxwidth"))
-    local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor", "rawstring",0.9)
-    local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce","string")
-    local text             = publisher.read_attribute(layoutxml,dataxml,"text","rawstring")
+    local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth", "length_sp", xpath.get_variable("__maxwidth"))
+    local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor",   "rawstring",0.9)
+    local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce",   "string")
+    local text             = publisher.read_attribute(layoutxml,dataxml,"text",     "rawstring")
+    local fontname         = publisher.read_attribute(layoutxml,dataxml,"fontface", "rawstring")
 
     local fontfamily = 0
+    if fontname then
+        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+        if fontfamily == nil then
+            err("Fontfamily %q not found.",fontname)
+            fontfamily = 0
+        end
+        publisher.current_fontfamily = fontfamily
+    end
+
     local languagecode = publisher.defaultlanguage
 
     publisher.intextblockcontext = publisher.intextblockcontext + 1
@@ -1443,7 +1453,7 @@ function commands.nobreak( layoutxml, dataxml )
         end
     end
     for _,j in ipairs(objects) do
-        a:append(j,{fontfamily = 0, languagecode = languagecode, allowbreak = allowbreak})
+        a:append(j,{fontfamily = fontfamily, languagecode = languagecode, allowbreak = allowbreak})
     end
 
     if strategy == "fontsize" then
@@ -1473,7 +1483,7 @@ function commands.nobreak( layoutxml, dataxml )
         if node.dimensions(nl) <= current_maxwidth then
             return a
         end
-        local txt = publisher.mknodes(text,fam,{})
+        local txt = publisher.mknodes(text,fontfamily,{})
         txt = node.hpack(txt)
         local wd_txt = node.dimensions(txt)
         local head = nl.list
