@@ -325,7 +325,7 @@ end
 local function aspectratio( dataxml,arg )
   local filename = arg[1]
   local img = publisher.imageinfo(filename)
-  return img.img.width / img.img.height
+  return img.img.xsize / img.img.ysize
 end
 
 local function loremipsum( )

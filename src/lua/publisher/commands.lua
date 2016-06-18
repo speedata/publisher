@@ -987,16 +987,16 @@ function commands.image( layoutxml,dataxml )
     local overshoot
     if clip then
         local stretch_shrink
-        if width / image.width > height / image.height then
-            stretch_shrink = width / image.width
-            overshoot = math.round(  (image.height * stretch_shrink - height ) / publisher.factor / 2,3)
+        if width / image.xsize > height / image.ysize then
+            stretch_shrink = width / image.xsize
+            overshoot = math.round(  (image.ysize * stretch_shrink - height ) / publisher.factor / 2,3)
             overshoot = -overshoot
         else
-            stretch_shrink = height / image.height
-            overshoot = math.round(  (image.width * stretch_shrink - width) / publisher.factor / 2 ,3)
+            stretch_shrink = height / image.ysize
+            overshoot = math.round(  (image.xsize * stretch_shrink - width) / publisher.factor / 2 ,3)
         end
-        width = image.width   * stretch_shrink
-        height = image.height * stretch_shrink
+        width = image.xsize   * stretch_shrink
+        height = image.ysize * stretch_shrink
     end
 
     local shift_left,shift_up = 0,0
