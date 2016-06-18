@@ -123,7 +123,8 @@ function commands.attribute( layoutxml,dataxml )
     local attname   = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
 
     if not selection then return { [".__type"]="attribute", [attname] = "" } end
-    local ret = { [".__type"]="attribute", [attname] = publisher.xml_escape(xpath.textvalue(selection)) }
+    -- Escaping the xpath.textvalue makes & into &amp; etc.
+    local ret = { [".__type"]="attribute", [attname] = xpath.textvalue(selection) }
     return ret
 end
 
