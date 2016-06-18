@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.5">
+    <entry version="2.5.3" date="2016-06-18">
+      <en>Include bugfixes from 2.4.4</en>
+      <de>Fehlerkorrekturen von 2.4.4 eingefügt</de>
+    </entry>
     <entry version="2.5.2" date="2016-06-13">
       <en>(2.4.2) A few bugfixes related to sd:current-framenumber(), minheight in Textblock and looking for next free row.</en>
       <de>(2.4.2) Einige Fehlerkorrekturen im Zusammenhangn mit sd:aktuelle-rahmennummer(), minhöhe im Textblock und der Suche nach der nächsten freien Zeile.</de>
