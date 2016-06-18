@@ -856,9 +856,9 @@ end
 --- ------
 --- Create a horizontal space that stretches up to infinity
 function commands.hspace( layoutxml,dataxml )
-    local width  = publisher.read_attribute(layoutxml,dataxml,"width", "length_sp")
+    local width      = publisher.read_attribute(layoutxml,dataxml,"width", "length_sp")
     local leadertext = publisher.read_attribute(layoutxml,dataxml,"leader", "rawstring")
-    local leaderwd = publisher.read_attribute(layoutxml,dataxml,"leader-width", "length_sp")
+    local leaderwd   = publisher.read_attribute(layoutxml,dataxml,"leader-width", "length_sp")
     local a = paragraph:new()
 
     -- It seems that it's safe to use 100 for leaders and leader-less-glue
@@ -885,7 +885,22 @@ function commands.hspace( layoutxml,dataxml )
         node.set_attribute(lp.nodelist, publisher.att_lederwd, leaderwd or -1)
         n.leader = lp.nodelist
     end
-    a:append(n,{})
+    local p1, p2
+    p1 = node.new("penalty")
+    p1.penalty = 0
+
+    p2 = node.new("penalty")
+    p2.penalty = 10000
+
+    local h1 = node.new("hlist")
+
+    node.insert_after(p1,p1,h1)
+    node.insert_after(p1,h1,p2)
+    node.insert_after(p1,p2,n)
+
+
+    a:append(p1,{})
+
     return a
 end
 
