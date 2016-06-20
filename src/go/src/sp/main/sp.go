@@ -250,7 +250,7 @@ func timeoutCatcher(seconds int) {
 	case <-timeout:
 		log.Printf("\n\nTimeout after %d seconds", seconds)
 		showDuration()
-		os.Exit(1)
+		os.Exit(-1)
 
 	}
 }
@@ -536,7 +536,7 @@ func runPublisher() (exitstatus int) {
 		go daemon.Run()
 		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, exec_name, jobname, inifile, layoutname, dataname, layoutoptions_cmdline)
 		if !run(cmdline) {
-			exitstatus = 1
+			exitstatus = -1
 			v := status{}
 			v.Errors = 1
 			v.Error = append(v.Error, statuserror{Error: "Error executing sdluatex", Code: 1})
