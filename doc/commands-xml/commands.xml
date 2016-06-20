@@ -6848,10 +6848,10 @@
     </attribute>
     <attribute en="background-size" de="background-size" optional="yes" css="background-size" since="2.3.7">
       <description xml:lang="en">
-        <para>Controls the size of the background text. Currently only 'contain' is allowed.</para>
+        <para>Controls the size of the background text. Currently only 'contain' and 'auto' is allowed.</para>
       </description>
       <description xml:lang="de">
-        <para>Bestimmt die Größe des Hintergrundtexts. Derzeit ist nur 'contain' erlaubt.</para>
+        <para>Bestimmt die Größe des Hintergrundtexts. Derzeit ist nur 'contain' und 'auto' erlaubt.</para>
       </description>
       <choice en="contain" de="contain">
         <description xml:lang="en">
@@ -6859,6 +6859,14 @@
         </description>
         <description xml:lang="de">
           <para>Der Text passt sich der Zellenhöhe an.</para>
+        </description>
+      </choice>
+      <choice en="auto" de="auto" since="2.5.4">
+        <description xml:lang="en">
+          <para>The background text is not scaled.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Hintergrundtext wird nicht sklaliert.</para>
         </description>
       </choice>
     </attribute>

@@ -1340,25 +1340,33 @@ function concat_transformation( a, b )
 end
 
 -- Place a text in the background
-function bgtext( box, textstring, angle, colorname, fontfamily )
+function bgtext( box, textstring, angle, colorname, fontfamily, bgsize)
     local colorindex = colors[colorname].index
     local boxheight, boxwidth = box.height, box.width
     local angle_rad = -1 * math.rad(angle)
     local sin = math.sin(angle_rad)
     local cos = math.cos(angle_rad)
+
     a = paragraph:new()
     a:append(textstring, {fontfamily = fontfamily})
     a:set_color(colorindex)
     local textbox = node.hpack(a.nodelist)
     local rotated_height = sin * textbox.width  + cos * textbox.height
-    local scale = boxheight  / rotated_height
+    local scale
+    local shift_up = 0
+    if bgsize == "contain" then
+        scale = boxheight  / rotated_height
+    else
+        scale = 1
+        shift_up = sp_to_bp((boxheight - rotated_height) / 2)
+    end
     local rotated_width  = sin * textbox.height + cos * textbox.width
     local shift_right = sp_to_bp( (boxwidth - rotated_width * scale ) / 2)
 
     -- rotate: [cos θ sin θ −sin θ cos θ 0 0 ]
-    local rotate_matrix = {   cos, sin, -1 * sin,   cos,           0, 0 }
-    local scale_matrix  = { scale,   0,        0, scale,           0, 0 }
-    local shift_matrix  = {     1,   0,        0,     1, shift_right, 0 }
+    local rotate_matrix = {   cos, sin, -1 * sin,   cos,           0, 0        }
+    local scale_matrix  = { scale,   0,        0, scale,           0, 0        }
+    local shift_matrix  = {     1,   0,        0,     1, shift_right, shift_up }
     local result_matrix
     result_matrix = concat_transformation(rotate_matrix,scale_matrix)
     result_matrix = concat_transformation(result_matrix,shift_matrix)

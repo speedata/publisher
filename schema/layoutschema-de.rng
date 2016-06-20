@@ -3776,6 +3776,8 @@
                <choice>
                   <value>contain</value>
                   <a:documentation>Der Text passt sich der Zellenhöhe an.</a:documentation>
+                  <value>auto</value>
+                  <a:documentation>Der Hintergrundtext wird nicht sklaliert.</a:documentation>
                </choice>
             </attribute>
          </optional>

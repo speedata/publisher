@@ -2928,10 +2928,7 @@ function commands.td( layoutxml,dataxml )
                 local x = string.match(v,"\"(.*)\"")
                 tab["background-text"] = x
             elseif k == "background-size" then
-                if v ~= "contain" then
-                    err("The background size of Td must be 'contain'")
-                end
-                tab["background-size"] = "contain"
+                tab["background-size"] = v
             else
                 tab[k] = v
             end

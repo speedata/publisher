@@ -1007,11 +1007,12 @@ function typeset_row(self, tr_contents, current_row )
 
         local bg = td_contents["background-text"]
         if bg then
-            local bgcolor = td_contents["background-textcolor"] or "black"
-            local angle = td_contents["background-angle"] or 0
+            local bgcolor  = td_contents["background-textcolor"] or "black"
+            local angle    = td_contents["background-angle"]     or 0
+            local bgsize   = td_contents["background-size"]      or "contain"
             local fontname = td_contents["background-font-family"]
             local ff = publisher.fonts.lookup_fontfamily_name_number[fontname]
-            hlist = publisher.bgtext(hlist,bg,angle,bgcolor, ff or self.fontfamily)
+            hlist = publisher.bgtext(hlist,bg,angle,bgcolor, ff or self.fontfamily,bgsize)
         end
 
         local head = hlist
