@@ -2517,8 +2517,12 @@ function commands.setvariable( layoutxml,dataxml )
                     end
                     ret = ret .. element_contents
                 elseif type(element_contents) == "string" then
-                    ret = ret or ""
-                    ret = ret .. element_contents
+                    local typ = type(ret)
+                    if  typ == "table" then
+                        ret[#ret + 1] = element_contents
+                    elseif typ == "string" then
+                        ret = ret .. element_contents
+                    end
                 elseif type(element_contents) == "number" then
                     ret = ret or ""
                     ret = ret .. tostring(element_contents)
