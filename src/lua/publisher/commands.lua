@@ -2009,6 +2009,7 @@ function commands.place_object( layoutxml,dataxml )
         end
     end
     for i=1,#objects do
+        current_grid = publisher.current_grid
         local framewidth
         object     = objects[i].object
         objecttype = objects[i].objecttype
@@ -2130,6 +2131,10 @@ function commands.place_object( layoutxml,dataxml )
             trace("object placed")
             row = nil -- the current rows is not valid anymore because an object is already rendered
         end -- no absolute positioning
+        if i < #objects then
+            publisher.next_area(area)
+            publisher.setup_page()
+        end
     end
     if not allocate == "yes" then
         current_grid:set_current_row(current_row_start)
