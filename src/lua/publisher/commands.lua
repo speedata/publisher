@@ -1890,6 +1890,7 @@ function commands.place_object( layoutxml,dataxml )
         err("Areas can't be combined with groups")
     end
     area = area or publisher.default_areaname
+    xpath.set_variable("__currentarea", area)
     framecolor = framecolor or "black"
 
     if column and not tonumber(column) then
@@ -2731,6 +2732,7 @@ function commands.table( layoutxml,dataxml,options )
     local tabular = publisher.tabular:new()
 
     tabular.tab = tab
+    tabular.getheight      = publisher.getheight
     tabular.options        = options or { ht_max=99999*2^16 } -- FIXME! Test - this is for tabular in tabular
     tabular.layoutxml      = layoutxml
     tabular.dataxml        = dataxml

@@ -1366,6 +1366,18 @@ function typeset_table(self)
                 elseif idx == -1 then
                     val = ht_current - ht_head - ht_footer
                 else
+                    if self.getheight then
+                        -- self.getheight is a function which expects a relative
+                        -- page number (1 = first page of table, 2 = second page of table...)
+                        -- The function might return nil, if it doesn't have enough information
+                        -- to obtain the max height
+                        local ht = self.getheight(idx)
+                        if ht then
+                            val = ht - ht_head - ht_footer
+                            tbl[idx] = val
+                            return val
+                        end
+                    end
                     val = ht_max - ht_head - ht_footer
                 end
                 tbl[idx] = val

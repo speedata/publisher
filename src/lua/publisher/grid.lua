@@ -42,6 +42,10 @@ function __tostring(self)
     return table.concat(ret,"\n")
 end
 
+function first_free_row( self,areaname )
+    return self:find_suitable_row(1, self:number_of_columns(areaname),1,areaname)
+end
+
 -- Return the remaining height in the area in scaled points
 function remaining_height_sp( self,row,areaname )
     if not self.positioning_frames[areaname] then
@@ -49,6 +53,7 @@ function remaining_height_sp( self,row,areaname )
         areaname = publisher.default_areaname
     end
     row = row or self:current_row(areaname)
+
     local thisframe = self.positioning_frames[areaname][self:framenumber(areaname)]
     local overshoot = math.max( (thisframe.height - thisframe["row"] + 1)  * self.gridheight - tex.pageheight ,0)
     local remaining_rows = self:number_of_rows(areaname) - row + 1
@@ -400,6 +405,7 @@ end
 -- row will be given. Is the page full (the object cannot be placed), the
 -- function returns nil.
 function find_suitable_row( self,column, width,height,areaname)
+    -- w("find_suitable_row in grid %q | areaname %q | column %d | width %d | height %d",self.pagenumber,areaname,column,width, height)
     if not column then return false end
     local frame_margin_left, frame_margin_top
     if areaname == publisher.default_areaname then

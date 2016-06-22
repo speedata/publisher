@@ -3702,6 +3702,22 @@ function deepcopy(t)
     return res
 end
 
+-- Return the height of the page given by the relative pagenumber
+-- (starting from the current_pagenumber).
+-- This is used in tables to get the hight of a page in a multi
+-- page table
+function getheight( relative_pagenumber )
+    local thispagenumber = current_pagenumber + relative_pagenumber - 1
+    -- w("getheight for page number %d which is page number %d in the PDF",relative_pagenumber,thispagenumber)
+    local thispage = pages[thispagenumber]
+    local areaname = xpath.get_variable("__currentarea")
+    if thispage then
+        local firstrow = thispage.grid:first_free_row(areaname)
+        local space = thispage.grid:remaining_height_sp(firstrow,areaname)
+        return space
+    end
+end
+
 
 --- Image handling
 --- --------------
