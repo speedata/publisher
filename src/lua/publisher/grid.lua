@@ -31,6 +31,17 @@ function new( self,pagenumber )
     return r
 end
 
+function __tostring(self)
+    local ret = {}
+    ret[#ret + 1] = string.format("Grid on page %s",tostring(self.pagenumber))
+    local areas = {}
+    for k,_ in pairs(self.positioning_frames) do
+        areas[#areas + 1] = string.format("%s (%d)",k,self:current_row(k))
+    end
+    ret[#ret + 1] = string.format("Known areas: %s",table.concat(areas,", "))
+    return table.concat(ret,"\n")
+end
+
 -- Return the remaining height in the area in scaled points
 function remaining_height_sp( self,row,areaname )
     if not self.positioning_frames[areaname] then
