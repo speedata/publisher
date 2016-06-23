@@ -46,11 +46,13 @@ end
 ---
 --- ![Objects in a table](../img/objectsintable.svg)
 --- The table is stored in the objects
-function attach_objects_row( tab )
+function attach_objects_row( self, tab )
     -- For each block object (container) there is one row in block
     local td_elementname
     local td_contents
+    local current_column = 0
     for _,td in ipairs(tab) do
+        current_column = current_column + 1
         td_elementname = publisher.elementname(td)
         td_contents    = publisher.element_contents(td)
         if td_elementname == "Td" then
@@ -77,7 +79,7 @@ function attach_objects_row( tab )
                     block[#block + 1] = {eltcontents}
                 elseif eltname == "Paragraph" or eltname == "Box" then
                     local default_textformat_name
-                    local alignment = td_contents.align or tab.align
+                    local alignment = td_contents.align or tab.align or self.align[current_column]
                     if     alignment=="center"  then  default_textformat_name = "__centered"
                     elseif alignment=="left"    then  default_textformat_name = "__leftaligned"
                     elseif alignment=="right"   then  default_textformat_name = "__rightaligned"
@@ -114,7 +116,7 @@ function attach_objects_row( tab )
             end
             td_contents.objects = block
         elseif td_elementname == "Tr" then -- probably from tablefoot/head
-            attach_objects_row(td_contents)
+            attach_objects_row(self,td_contents)
         elseif td_elementname == "Column" or td_elementname == "Tablerule" then
             -- ignore, they don't have objects
         else
@@ -123,9 +125,9 @@ function attach_objects_row( tab )
     end
 end
 
-function attach_objects( tab )
+function attach_objects( self, tab )
     for _,tr in ipairs(tab) do
-        attach_objects_row(publisher.element_contents(tr))
+        attach_objects_row(self, publisher.element_contents(tr))
     end
 end
 
@@ -264,6 +266,23 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
     end  -- ∀ columns
 end
 
+function collect_alignments( self )
+    for _,tr in ipairs(self.tab) do
+        local tr_contents      = publisher.element_contents(tr)
+        local tr_elementname = publisher.elementname(tr)
+        if tr_elementname == "Columns" then
+            local i = 0
+            for _,column in ipairs(tr_contents) do
+                if publisher.elementname(column)=="Column" then
+                    local column_contents = publisher.element_contents(column)
+                    i = i + 1
+                    self.align[i] =  column_contents.align
+                    self.valign[i] = column_contents.valign
+                end
+            end
+        end
+    end
+end
 
 --- Calculate the widths of the columns for the table.
 --- -------------------------------------------------
@@ -299,12 +318,10 @@ function calculate_columnwidth( self )
             local sum_real_widths = 0
             local count_columns = 0
             local pattern = "([0-9]+)%*"
-            for _,spalte in ipairs(tr_contents) do
-                if publisher.elementname(spalte)=="Column" then
-                    local column_contents = publisher.element_contents(spalte)
+            for _,column in ipairs(tr_contents) do
+                if publisher.elementname(column)=="Column" then
+                    local column_contents = publisher.element_contents(column)
                     i = i + 1
-                    self.align[i] =  column_contents.align
-                    self.valign[i] = column_contents.valign
                     if column_contents.width then
                         -- if I have something written in <column> I don't need to calculate column width:
                         columnwidths_given = true
@@ -674,7 +691,7 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
     -- its not trivial to find out in which column I am in.
     -- See the example in qa/tables/columnspread. Line three:
     -- The first cell is in column 1, the second cell is in column 4
-    current_column = 0
+    local current_column = 0
 
     for _,td in ipairs(tr_contents) do
         local default_textformat_name
@@ -1593,7 +1610,7 @@ function reformat_foot( self,pagenumber,max_splits)
         rownumber = self.tablefoot_contents[2]
     end
     local x = publisher.dispatch(y._layoutxml,y._dataxml)
-    attach_objects(x)
+    attach_objects(self, x)
     local tmp1,tmp2 = {},{}
     make_tablefoot(self,x,tmp1,tmp2,rownumber,true)
     calculate_height_and_connect_tablefoot(self,tmp1,tmp2)
@@ -1605,7 +1622,7 @@ function reformat_head( self,pagenumber)
     local y = self.tablehead_contents[1]
     local rownumber = self.tablehead_contents[2]
     local x = publisher.dispatch(y._layoutxml,y._dataxml)
-    attach_objects(x)
+    attach_objects( self, x)
     local tmp1,tmp2 = {}, {}
     make_tablehead(self,x,tmp1,tmp2,rownumber,true)
     calculate_height_and_connect_tablehead(self,tmp1,tmp2)
@@ -1615,7 +1632,8 @@ end
 
 function make_table( self )
     setmetatable(self.column_distances,{ __index = function() return self.colsep or 0 end })
-    attach_objects(self.tab)
+    collect_alignments(self)
+    attach_objects(self, self.tab)
     if calculate_columnwidth(self) ~= nil then
         err("Cannot print table")
         local x = node.new("vlist")
