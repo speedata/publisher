@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.5">
+    <entry version="2.5.5" date="2016-06-23">
+      <en>Various bugfixes / future objects and tables</en>
+      <de>Verschiedene Fehlerkorrekturen / Zukünftige Objekte und Tabellen</de>
+    </entry>
     <entry version="2.5.4" date="2016-06-20">
       <en>Allow control over size of background-text in Td.</en>
       <de>Kontrolle über die Größe des Hintergrundtexts in Td erlauben.</de>
