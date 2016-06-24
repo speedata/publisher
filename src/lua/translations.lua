@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2016-06-18 15:48)
+-- generated from genluatranslations.go (2016-06-24 19:19)
 -- do not edit!
 module(...)
 return {
@@ -334,6 +334,7 @@ return {
         ["spalte"] = "column",
         },
       ["BearbeiteKnoten"] = { "ProcessNode",
+        ["umfang"] = "limit",
         ["auswahl"] = "select",
         ["modus"] = "mode",
         },

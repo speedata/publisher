@@ -5314,6 +5314,14 @@
       <para>Bearbeitet alle angegebenen Datensätze. Die Elemente, für die die Regeln ausgeführt werden sollen, werden mit dem Attribut auswahl angegeben.</para>
     </description>
     <childelements/>
+    <attribute en="limit" de="umfang" optional="yes" since="2.5.6" type="number">
+      <description xml:lang="en">
+        <para>Limits the number of items processed with this command</para>
+      </description>
+      <description xml:lang="de">
+        <para>Beschränkt die Anzahl der Datensätze, die mit diesem Befehl verarbeitet werden.</para>
+      </description>
+    </attribute>
     <attribute en="select" de="auswahl" type="xpath" optional="no">
       <description xml:lang="en">
         <para>Selection of child elements, that are to be processed.</para>

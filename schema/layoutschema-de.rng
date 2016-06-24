@@ -3022,6 +3022,11 @@
    <define name="e_ProcessNode">
       <element name="BearbeiteKnoten">
          <a:documentation>Bearbeitet alle angegebenen Datensätze. Die Elemente, für die die Regeln ausgeführt werden sollen, werden mit dem Attribut auswahl angegeben.</a:documentation>
+         <optional>
+            <attribute name="umfang">
+               <a:documentation>Beschränkt die Anzahl der Datensätze, die mit diesem Befehl verarbeitet werden.</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="auswahl">
             <a:documentation>Auswahl der Kindelemente, die verarbeitet werden sollen.</a:documentation>
          </attribute>

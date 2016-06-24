@@ -2192,6 +2192,8 @@ function commands.process_node(layoutxml,dataxml)
     trace("process_node")
     local dataxml_selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     local mode              = publisher.read_attribute(layoutxml,dataxml,"mode","rawstring") or ""
+    local limit             = publisher.read_attribute(layoutxml,dataxml,"limit","number")
+
     -- To restore the current value of `__position`, we save it.
     -- The value of `__position` is available from xpath (function position()).
     local current_position = publisher.xpath.get_variable("__position")
@@ -2199,7 +2201,12 @@ function commands.process_node(layoutxml,dataxml)
     local layoutnode
     local pos = 1
     if not dataxml_selection then return nil end
-    for i=1,#dataxml_selection do
+    if limit then
+        limit = math.min(#dataxml_selection,limit)
+    else
+        limit = #dataxml_selection
+    end
+    for i=1, limit do
         element_name = dataxml_selection[i][".__local_name"]
         local modeselector = publisher.data_dispatcher[mode]
         if modeselector == nil then

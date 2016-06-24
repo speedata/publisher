@@ -3022,6 +3022,11 @@
    <define name="e_ProcessNode">
       <element name="ProcessNode">
          <a:documentation>Executes all given nodes. The elements, that are to be executed, are given with the attribute selection.</a:documentation>
+         <optional>
+            <attribute name="limit">
+               <a:documentation>Limits the number of items processed with this command</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="select">
             <a:documentation>Selection of child elements, that are to be processed.</a:documentation>
          </attribute>
