@@ -2150,37 +2150,7 @@ end
 
 --- ProcessRecord
 --- -------------
---- This command takes the contents from the given attribute `select` (an
---- XPath- expression) and process this. If you feed garbage in, well,
---- probably nothing useful comes out. (This should be the only command to
---- process data, but at the moment there is the _static_ ProcessNode).
-function commands.process_record( layoutxml,dataxml )
-    -- FIXME: remove this, not needed anymore
-    trace("ProcessRecord")
-    local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
-    local limit     = publisher.read_attribute(layoutxml,dataxml,"limit","number")
-
-    local record = xpath.parse(dataxml,selection,layoutxml[".__ns"])
-    local layoutknoten
-
-    if limit then
-        limit = math.min(#record,limit)
-    else
-        if record then
-            limit = #record or 0
-        else
-            limit = 0
-        end
-    end
-
-    for i=1,limit do
-        local eltname = dataxml[i]["inhalt"][".__local_name"]
-        layoutknoten=publisher.data_dispatcher[""][eltname]
-        log("Selecting node: %q",eltname or "???")
-        publisher.xpath.set_variable("__position",i)
-        publisher.dispatch(layoutknoten,publisher.element_contents(dataxml[i]))
-    end
-end
+--- (removed in 2.5.6)
 
 --- ProcessNode
 --- -----------
