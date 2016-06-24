@@ -3777,7 +3777,7 @@
          </optional>
          <optional>
             <attribute name="background-size">
-               <a:documentation>Bestimmt die Größe des Hintergrundtexts. Derzeit ist nur &#39;contain&#39; erlaubt.</a:documentation>
+               <a:documentation>Bestimmt die Größe des Hintergrundtexts. Derzeit ist nur &#39;contain&#39; und &#39;auto&#39; erlaubt.</a:documentation>
                <choice>
                   <value>contain</value>
                   <a:documentation>Der Text passt sich der Zellenhöhe an.</a:documentation>

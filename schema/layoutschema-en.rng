@@ -3777,7 +3777,7 @@
          </optional>
          <optional>
             <attribute name="background-size">
-               <a:documentation>Controls the size of the background text. Currently only &#39;contain&#39; is allowed.</a:documentation>
+               <a:documentation>Controls the size of the background text. Currently only &#39;contain&#39; and &#39;auto&#39; is allowed.</a:documentation>
                <choice>
                   <value>contain</value>
                   <a:documentation>Fill the height of the table cell.</a:documentation>
