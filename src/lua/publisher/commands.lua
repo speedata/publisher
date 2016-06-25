@@ -1645,6 +1645,7 @@ function commands.output( layoutxml,dataxml )
             if obj == nil then
                 break
             else
+                local ht = current_grid:height_in_gridcells_sp(obj.height)
                 publisher.output_at({nodelist = obj, x = 1, y = row, allocate = true, area = area})
                 -- We don't need to go to the next page when we are a the end
                 if nextfreerow then
@@ -1655,6 +1656,11 @@ function commands.output( layoutxml,dataxml )
                 else
                     if more_to_follow then
                         publisher.next_area(area)
+                    else
+                        -- We need to go down a bit to ensure that the next
+                        -- current row for allocation detection is not
+                        -- at the last position. See bug #89
+                        current_grid:set_current_row(row + ht,area)
                     end
                 end
             end
