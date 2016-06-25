@@ -249,6 +249,10 @@ function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname,keepposition)
     if not x then return false end
     local show_right  = false
     local show_bottom = false
+    x = math.floor(x)
+    y = math.floor(y)
+    wd = math.ceil(wd)
+    ht = math.ceil(ht)
     areaname = areaname or publisher.default_areaname
 
     -- when true, we don't want to move the cursor

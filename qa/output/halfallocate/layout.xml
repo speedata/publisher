@@ -1,0 +1,22 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Options show-gridallocation="no" show-grid="no"/>
+
+    <Pageformat width="148mm" height="60mm"/>
+    <SetGrid nx="25" height="6pt"/>
+
+    <Record element="data">
+        <SetVariable variable="currentrow" select="sd:current-row()"/>
+        <PlaceObject column="13.5" row="{$currentrow}" keepposition="yes">
+            <Box width="12.5" height="7" backgroundcolor="lightgreen"/>
+        </PlaceObject>
+        <Output allocate="auto" row="{$currentrow}">
+            <Text>
+                <Paragraph fontface="text" textformat="text">
+                    <Value select="sd:dummytext()"/>
+                </Paragraph>
+            </Text>
+        </Output>
+    </Record>
+</Layout>
