@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.5">
+    <entry version="2.5.6" date="2016-06-25">
+      <en>Remove obsolete command ProcessRecord, add limit option for ProcessNode, bugfix Output/Text paragraph shape (#89)</en>
+      <de>Lösche alten Befehl ProcessRecord, neue Option bei BearbeiteDatensatz: umfang, Fehlerkorrektur bei Ausgabe/Text (#89)</de>
+    </entry>
     <entry version="2.5.5" date="2016-06-23">
       <en>Various bugfixes / future objects and tables</en>
       <de>Verschiedene Fehlerkorrekturen / Zukünftige Objekte und Tabellen</de>
