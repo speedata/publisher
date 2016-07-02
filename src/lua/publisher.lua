@@ -1027,6 +1027,9 @@ function output_at( param )
         outputpage = param.pagenumber
     end
     local nodelist = param.nodelist
+    if options.trace then
+        nodelist = boxit(nodelist)
+    end
     local x = param.x
     local y = param.y
     local allocate = param.allocate
@@ -3917,6 +3920,10 @@ function imageinfo( filename,page,box,fallback )
     -- there is no filename, we should fail or throw an error
     if not filename then
         err("No filename given for image")
+        filename = get_fallback_image_name(fallback)
+    end
+    if type(filename) ~= "string" then
+        err("something is wrong with the filename for the image, not a string")
         filename = get_fallback_image_name(fallback)
     end
 

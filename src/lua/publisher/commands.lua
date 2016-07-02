@@ -1087,6 +1087,10 @@ end
 function commands.insert_pages( layoutxml,dataxml )
     local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
     local thispagestore = publisher.pagestore[pagestore_name]
+    if not thispagestore then
+        err("Saved pages not found.")
+        return
+    end
     for i=1,#thispagestore do
         tex.box[666] = thispagestore[i]
         tex.shipout(666)
