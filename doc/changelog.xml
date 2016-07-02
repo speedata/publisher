@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.5">
+    <entry version="2.5.8" date="2016-07-02">
+      <en>Bugfix get remaining height jumps to last line, even if “full”</en>
+      <de>Fehlerkorrektur beim Finden der nächsten freien Zeile</de>
+    </entry>
     <entry version="2.5.7" date="2016-06-25">
       <en>Bugfix allocation on non-integer columns</en>
       <de>Fehlerkorrektur bei Belegung von nicht-Ganzzahl Spalten</de>
