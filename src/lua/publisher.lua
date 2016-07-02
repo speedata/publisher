@@ -3536,7 +3536,7 @@ function get_remaining_height(area,allocate)
         end
         lastrow = lastrow - 1
         if lastrow == firstrow then lastrow = nil end
-
+        if lastrow >= maxrows then lastrow = nil end
         return (row - firstrow) * current_grid.gridheight, firstrow,lastrow
     end
     if not current_grid:fits_in_row_area(startcol,cols,firstrow,area) then
