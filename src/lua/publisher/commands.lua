@@ -1976,11 +1976,16 @@ function commands.place_object( layoutxml,dataxml )
     -- current_height is the remaining space on the current page in sp
     local areaheight = ( maxheight or current_grid:number_of_rows(area) ) * current_grid.gridheight
     local options = {}
-    options.ht_max= areaheight
-    if vreference == "bottom" then
-        options.current_height = areaheight
+    if publisher.current_group == nil then
+        options.ht_max = areaheight
+        if vreference == "bottom" then
+            options.current_height = areaheight
+        else
+            options.current_height = math.min(current_grid:remaining_height_sp(row,area),areaheight)
+        end
     else
-        options.current_height = math.min(current_grid:remaining_height_sp(row,area),areaheight)
+        options.ht_max = publisher.maxdimen
+        options.current_height = publisher.maxdimen
     end
     if allocate == "no" then
         options.current_height = areaheight
@@ -2143,8 +2148,11 @@ function commands.place_object( layoutxml,dataxml )
             row = nil -- the current rows is not valid anymore because an object is already rendered
         end -- no absolute positioning
         if i < #objects then
-            publisher.next_area(area)
-            publisher.setup_page()
+            -- don't switch when inside a group
+            if publisher.current_group == nil then
+                publisher.next_area(area)
+                publisher.setup_page()
+            end
         end
     end
     if not allocate == "yes" then
