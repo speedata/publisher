@@ -24,6 +24,7 @@
     <optional><cmd name="Group"/></optional>
     <optional><cmd name="HSpace"/></optional>
     <optional><cmd name="Hyphenation"/></optional>
+    <optional><cmd name="I"></cmd></optional>
     <optional><cmd name="Image"/></optional>
     <optional><cmd name="Include"/></optional>
     <optional><cmd name="InsertPages"/></optional>
@@ -7310,7 +7311,7 @@
         <para>Die Farbe der Zellen in der Zeile.</para>
       </description>
     </attribute>
-    <attribute en="break-below" de="umbruch-unten" optional="yes">
+    <attribute en="break-below" de="umbruch-unten" optional="yes" allowxpath="yes">
       <description xml:lang="en">
         <para>Allow a table break between this row and the following.</para>
       </description>

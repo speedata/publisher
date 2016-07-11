@@ -452,6 +452,9 @@
                <ref name="e_Hyphenation"></ref>
             </optional>
             <optional>
+               <ref name="e_I"></ref>
+            </optional>
+            <optional>
                <ref name="e_Image"></ref>
             </optional>
             <optional>
@@ -1130,6 +1133,9 @@
                   <ref name="e_Hyphenation"></ref>
                </optional>
                <optional>
+                  <ref name="e_I"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Image"></ref>
                </optional>
                <optional>
@@ -1793,6 +1799,9 @@
                   <ref name="e_Hyphenation"></ref>
                </optional>
                <optional>
+                  <ref name="e_I"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Image"></ref>
                </optional>
                <optional>
@@ -2340,6 +2349,9 @@
             </optional>
             <optional>
                <ref name="e_Hyphenation"></ref>
+            </optional>
+            <optional>
+               <ref name="e_I"></ref>
             </optional>
             <optional>
                <ref name="e_Image"></ref>
@@ -3967,6 +3979,9 @@
                   <a:documentation>Erlaubt einen Tabellenumbruch zwischen dieser und der nächsten Zeile (Voreinstellung).</a:documentation>
                   <value>nein</value>
                   <a:documentation>Verhindert einen Tabellenumbruch zwischen dieser und der nächsten Zeile.</a:documentation>
+                  <data type="string">
+                     <param name="pattern">\{.+\}</param>
+                  </data>
                </choice>
             </attribute>
          </optional>
@@ -4190,6 +4205,9 @@
                </optional>
                <optional>
                   <ref name="e_Hyphenation"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_I"></ref>
                </optional>
                <optional>
                   <ref name="e_Image"></ref>
@@ -4428,6 +4446,9 @@
                </optional>
                <optional>
                   <ref name="e_Hyphenation"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_I"></ref>
                </optional>
                <optional>
                   <ref name="e_Image"></ref>
