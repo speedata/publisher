@@ -7,19 +7,19 @@ First steps with the speedata Publisher (hello world)
 
 {{ img . "schema1.png" }}
 
-The speedata Publisher is a so called »database publishing system«. That means
-that the source of the  publising process is a data set. The ouput of the
+The speedata Publisher is a so-called "database publishing system". That means
+that the source of the publishing process is a data set. The output of the
 software is PDF. The layout of data in the PDF is controlled via an XML file,
 the layout file. The data also has to be in the XML format, therefore it might
 be necessary to convert other formats (Excel spreadsheet, database) into XML
 before starting the publishing process.
 
-This introduction coves the classical »hello world« example.
+This introduction coves the classical "hello world" example.
 
 Data file
 ---------
 
-There are no special requirements for the structure of the data XML source. As long as it is well-formed (see wikipedia), the speedata Publisher will handle it. For our example the following data file is perfect:
+There are no special requirements for the structure of the data XML source. As long as it is [well-formed](https://en.wikipedia.org/wiki/Well-formed_document), the speedata Publisher will handle it. For our example the following data file is perfect:
 
     <root greeting="Hello world"/>
 
@@ -28,8 +28,7 @@ Save this with the file name `data.xml` in an empty directory on your harddrive.
 Layout file
 ------------
 
-The layout file (file name `layout.xml`) contains the instructions how the data should be layed out. The root element is the element with the name `Layout` with the namespace `urn:speedata.de:2009/publisher/en`, which expects instructions written in English (such as [PlaceObject](../commands-en/placeobject.html)). The namespace `.../de` allows you to write the commands in German (e.g. [ObjektAusgeben](../commands-de/placeobject.html)). The hello world example uses the `.../en` namespace of course. The feature set of both instruction languages is identical. A minimal (and pointless) layout file is:
-
+The layout file (file name `layout.xml`) contains the instructions for how the data should be laid out. The root element is the element with the name `Layout` with the namespace `urn:speedata.de:2009/publisher/en`, which expects instructions written in English (such as [PlaceObject](../commands-en/placeobject.html)). The namespace `.../de` allows you to write the commands in German (e.g. [ObjektAusgeben](../commands-de/placeobject.html)). The hello world example uses the `.../en` namespace of course. The feature set of both instruction languages is identical. A minimal (and pointless) layout file is:
 
     <Layout xmlns="urn:speedata.de:2009/publisher/en" />
 
@@ -43,7 +42,7 @@ Data processing starts with the command `Record`:
     </Record>
 
 
-The instructions to place an object in the PDF is called (surprise!) [`PlaceObject`](../commands-en/placeobject.html). It expects the kind of object as its child element ([Image](../commands-de/image.html), [Box](../commands-de/box.html), [Rule](../commands-de/rule.html), [Frame](../commands-de/frame.html), [Barcode](../commands-de/barcode.html), [Table](../commands-de/table.html), [Textblock](../commands-de/textblock.html), [Transformation](../commands-de/transformation.html)). Textblock (a rectangular shaped text with a fixed width) expects one or more paragraphs as its child elements. The contents of the paragraph is encapsulated in the element `<Value>text that appears in the PDF</Value>`. Instead of giving the text within the element [Value](../commands-en/value.html), it is possible to use a subset of [XPath](xpath.html) expressions to select data from the data source. For example the familiar `@` notation for attribute access.
+The instruction to place an object in the PDF is called (surprise!) [`PlaceObject`](../commands-en/placeobject.html). It expects the kind of object as its child element ([Image](../commands-en/image.html), [Box](../commands-en/box.html), [Rule](../commands-en/rule.html), [Frame](../commands-en/frame.html), [Barcode](../commands-en/barcode.html), [Table](../commands-en/table.html), [Textblock](../commands-en/textblock.html), [Transformation](../commands-en/transformation.html)). Textblock (a rectangular shaped text with a fixed width) expects one or more paragraphs as its child elements. The content of the paragraph is encapsulated in the element `<Value>text that appears in the PDF</Value>`. Instead of giving the text within the element [Value](../commands-en/value.html), it is possible to use a subset of [XPath](xpath.html) expressions to select data from the data source. For example the familiar `@` notation for attribute access.
 
 The complete hello world example is simple:
 
