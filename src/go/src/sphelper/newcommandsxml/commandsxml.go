@@ -59,7 +59,7 @@ func (p *para) HTML(lang string) string {
 						if lang == "en" {
 							cmdname = x.NameEn
 						} else {
-							cmdname = x.NameDe
+							cmdname = x.NameEn
 						}
 					}
 				}
@@ -81,7 +81,6 @@ func (p *para) HTML(lang string) string {
 
 func (p *para) String(lang string) string {
 	ret := []string{}
-	c := p.commands
 	r := bytes.NewReader(p.Text)
 	dec := xml.NewDecoder(r)
 outer:
@@ -103,7 +102,7 @@ outer:
 						if lang == "en" {
 							cmdname = attribute.Value
 						} else {
-							cmdname = c.CommandsEn[attribute.Value].NameDe
+							cmdname = attribute.Value
 						}
 					}
 				}
@@ -217,12 +216,8 @@ func (a *Attribute) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error
 	return nil
 }
 
-func (a *Attribute) Name(lang string) string {
-	if lang == "en" {
-		return a.NameEn
-	} else {
-		return a.NameDe
-	}
+func (a *Attribute) Name() string {
+	return a.NameEn
 }
 
 func (a *Attribute) DescriptionHTML(lang string) template.HTML {
@@ -246,7 +241,7 @@ func (a *Attribute) DescriptionHTML(lang string) template.HTML {
 			name = c.NameEn
 			desc = c.DescriptionEn.HTML()
 		case "de":
-			name = c.NameDe
+			name = c.NameEn
 			desc = c.DescriptionDe.HTML()
 		}
 		ret = append(ret, "<tr><td><p>")
@@ -351,7 +346,7 @@ func (c *Command) Parents(lang string) []*Command {
 	if lang == "en" {
 		sort.Sort(commandsbyen{cmds})
 	} else {
-		sort.Sort(commandsbyde{cmds})
+		sort.Sort(commandsbyen{cmds})
 	}
 
 	return cmds
@@ -539,15 +534,6 @@ func (c *Command) DescriptionText(lang string) string {
 	return strings.Join(ret, "")
 }
 
-// Return the name of the command in the given language.
-func (c *Command) Name(lang string) string {
-	if lang == "en" {
-		return c.NameEn
-	} else {
-		return c.NameDe
-	}
-}
-
 type reference struct {
 	longnameEn string
 	longnameDe string
@@ -610,7 +596,7 @@ func (c *Command) Seealso(lang string) template.HTML {
 						if lang == "en" {
 							cmdname = x.NameEn
 						} else {
-							cmdname = x.NameDe
+							cmdname = x.NameEn
 						}
 					}
 				}
@@ -640,13 +626,9 @@ func (c *Command) Seealso(lang string) template.HTML {
 	return template.HTML(strings.Join(ret, ""))
 }
 
-func (c *Command) Attributes(lang string) []*Attribute {
+func (c *Command) Attributes() []*Attribute {
 	mutex.Lock()
-	if lang == "en" {
-		sort.Sort(attributesbyen{c.Attr})
-	} else {
-		sort.Sort(attributesbyde{c.Attr})
-	}
+	sort.Sort(attributesbyen{c.Attr})
 	ret := make([]*Attribute, len(c.Attr))
 	copy(ret, c.Attr)
 	mutex.Unlock()
@@ -788,7 +770,7 @@ func (c *Command) Childelements(lang string) []*Command {
 	if lang == "en" {
 		sort.Sort(commandsbyen{cmds})
 	} else {
-		sort.Sort(commandsbyde{cmds})
+		sort.Sort(commandsbyen{cmds})
 	}
 	mutex.Lock()
 	c.Children[lang] = cmds

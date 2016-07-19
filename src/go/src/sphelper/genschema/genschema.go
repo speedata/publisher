@@ -253,17 +253,5 @@ func DoThings(basedir string) error {
 		return err
 	}
 	err = ioutil.WriteFile(filepath.Join(basedir, "schema", "layoutschema-en.rng"), buf, 0644)
-	if err != nil {
-		return err
-	}
-
-	buf, err = genSchema(c, "de")
-	if err != nil {
-		return err
-	}
-	err = ioutil.WriteFile(filepath.Join(basedir, "schema", "layoutschema-de.rng"), buf, 0644)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }

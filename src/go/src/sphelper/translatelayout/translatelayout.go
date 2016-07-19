@@ -38,6 +38,9 @@ func Translate(basedir, inputfilename, outputfilename string) error {
 				if t.Name.Space == "urn:speedata.de:2009/publisher/en" {
 					sourcelang = "en"
 					destlang = "de"
+				} else {
+					sourcelang = "de"
+					destlang = "en"
 				}
 			}
 			outbuf.WriteByte('<')

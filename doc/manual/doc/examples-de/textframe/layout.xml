@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Layout xmlns="urn:speedata.de:2009/publisher/de">
-  <Optionen zeichne_raster="ja"/>
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+  <Options show-grid="yes"/>
 
-  <Seitenformat breite="16cm" höhe="12cm"/>
-  <SetzeRaster breite="1cm" höhe="12pt"/>
+  <Pageformat width="16cm" height="12cm"/>
+  <SetGrid width="1cm" height="12pt"/>
 
-  <Seitentyp name="page" bedingung="true()">
-    <Rand links="1cm" rechts="1cm" oben="1cm" unten="1cm"/>
-    <Platzierungsbereich name="text">
-      <Platzierungsrahmen breite="4" höhe="17" zeile="2" spalte="1"/>
-      <Platzierungsrahmen breite="4" höhe="10" zeile="3" spalte="6"/>
-      <Platzierungsrahmen breite="4" höhe="24" zeile="1" spalte="11"/>
-    </Platzierungsbereich>
-  </Seitentyp>
+  <Pagetype name="page" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+    <PositioningArea name="text">
+      <PositioningFrame width="4" height="17" row="2" column="1"/>
+      <PositioningFrame width="4" height="10" row="3" column="6"/>
+      <PositioningFrame width="4" height="24" row="1" column="11"/>
+    </PositioningArea>
+  </Pagetype>
 
-  <Datensatz element="data">
-    <Ausgabe bereich="text">
+  <Record element="data">
+    <Output area="text">
       <Text>
-        <Absatz>
-          <Wert auswahl="string(.)"/>
-        </Absatz>
+        <Paragraph>
+          <Value select="string(.)"/>
+        </Paragraph>
       </Text>
-    </Ausgabe>
-  </Datensatz>
+    </Output>
+  </Record>
 </Layout>

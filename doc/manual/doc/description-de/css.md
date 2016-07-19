@@ -11,7 +11,7 @@ Laden eines Stylesheets bzw. deklarieren der CSS-Regeln
 
 Im Publisher kann mit der Stylesheet-Anweisung eine CSS-Datei geladen werden bzw. innerhalb einer Stylesheet-Anweisung können CSS-Regeln deklariert werden:
 
-    <Stylesheet dateiname="regeln.css"/>
+    <Stylesheet filename="regeln.css"/>
 
 
 oder
@@ -22,20 +22,20 @@ oder
       }
     </Stylesheet>
 
-Mit diesen Regeln lassen sich einige der Befehle (derzeit `Absatz`, `Box`,
-`Linie`, `Rahmen`, `Tlinie`, `Td`) im Aussehen anpassen. Wie bei CSS üblich
+Mit diesen Regeln lassen sich einige der Befehle (derzeit `Paragraph`, `Box`,
+`Rule`, `Frame`, `Tablerule`, `Td`) im Aussehen anpassen. Wie bei CSS üblich,
 können die Eigenschaften über die Id, Klasse und über den Befehlsnamen
 angesprochen werden.
 
 So bewirken für diese Tabelle:
 
-    <ObjektAusgeben>
-      <Tabelle>
-        <Tr minhöhe="4">
-          <Td class="myclass" id="myid"><Absatz><Wert>Hallo Welt</Wert></Absatz></Td>
+    <PlaceObject>
+      <Table>
+        <Tr minheight="4">
+          <Td class="myclass" id="myid"><Paragraph><Value>Hallo Welt</Value></Paragraph></Td>
         </Tr>
-      </Tabelle>
-    </ObjektAusgeben>
+      </Table>
+    </PlaceObject>
 
 alle folgenden CSS-Anweisungen dasselbe
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <commands xmlns="urn:speedata.de:2011/publisher/documentation"
-  xmlns:de="urn:speedata.de:2009/publisher/de"
+  xmlns:de="urn:speedata.de:2009/publisher/en"
   xmlns:sch="http://purl.oclc.org/dsdl/schematron"
   >
   <define name="Switchcontents">
@@ -343,15 +343,15 @@
 </PlaceObject>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben>
-  <Textblock breite="10">
-    <Absatz>
-      <Wert>Siehe die </Wert>
-      <A href="http://www.speedata.de"><Wert>Homepage</Wert></A>
-      <Wert> für weitere Information.</Wert>
-    </Absatz>
+      <listing><![CDATA[<PlaceObject>
+  <Textblock width="10">
+    <Paragraph>
+      <Value>Siehe die </Value>
+      <A href="http://www.speedata.de"><Value>Homepage</Value></A>
+      <Value> für weitere Information.</Value>
+    </Paragraph>
   </Textblock>
-</ObjektAusgeben>
+</PlaceObject>
 ]]></listing>
     </example>
     <seealso/>
@@ -370,16 +370,16 @@
       </oneOrMore>
     </childelements>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben spalte="1">
-  <Textblock breite="40">
-    <Absatz>
-      <Textwert>Artikel: </Textwert><Textwert auswahl="@name" />
-    </Absatz>
-    <Aktion>
-      <ZurListeHinzufügen liste="inhalt" schlüssel="{@name}" auswahl="sd:aktuelle-seite()" />
-    </Aktion>
+      <listing><![CDATA[<PlaceObject column="1">
+  <Textblock width="40">
+    <Paragraph>
+      <Value>Artikel: </Value><Value select="@name" />
+    </Paragraph>
+    <Action>
+      <AddToList list="inhalt" key="{@name}" select="sd:current-page()" />
+    </Action>
   </Textblock>
-</ObjektAusgeben>]]></listing>
+</PlaceObject>]]></listing>
     </example>
     <info xml:lang="en">
       <para>See also the example at <cmd name="Mark"/>.</para>
@@ -423,16 +423,16 @@
     </attribute>
     <example xml:lang="de">
       <para>Die Liste wird erzeugt, falls sie noch nicht existiert.</para>
-      <listing><![CDATA[<ObjektAusgeben spalte="1">
-  <Textblock breite="40">
-    <Absatz>
-      <Textwert>Artikel: </Textwert><Textwert auswahl="@name" />
-    </Absatz>
-    <Aktion>
-      <ZurListeHinzufügen liste="inhalt" schlüssel="{@name}" auswahl="sd:aktuelle-seite()" />
-    </Aktion>
+      <listing><![CDATA[<PlaceObject column="1">
+  <Textblock width="40">
+    <Paragraph>
+      <Value>Artikel: </Value><Value select="@name" />
+    </Paragraph>
+    <Action>
+      <AddToList list="inhalt" key="{@name}" select="sd:current-page()" />
+    </Action>
   </Textblock>
-  </ObjektAusgeben>]]></listing>
+</PlaceObject>]]></listing>
       <para>Hier wird der Text ausgegeben und gleichzeitig ein Schlüssel/Wertepaar erzeugt mit dem Inhalt des Attributs name des aktuellen Datensatzes und der aktuellen Seite und in die Liste
         <tt>inhalt</tt> eingefügt.</para>
     </example>
@@ -463,15 +463,15 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<BeiSeitenAusgabe>
-  <ObjektAusgeben spalte="1">
-    <Textblock breite="20">
-      <Absatz>
-        <Wert auswahl="sd:aktuelle-seite()"/>
-      </Absatz>
+      <listing><![CDATA[<AtPageShipout>
+  <PlaceObject column="1">
+    <Textblock width="20">
+      <Paragraph>
+        <Value select="sd:current-page()"/>
+      </Paragraph>
     </Textblock>
-  </ObjektAusgeben>
-</BeiSeitenAusgabe>]]></listing>
+  </PlaceObject>
+</AtPageShipout>]]></listing>
     </example>
     <seealso><cmd name="AtPageCreation"/>, <cmd name="Pagetype"/></seealso>
   </command>
@@ -480,7 +480,7 @@
       <para>The contents of the element <cmd name="AtPageCreation"/> are executed the first time the page is accessed.</para>
     </description>
     <description xml:lang="de">
-      <para>Die Inhalte des Elements »BeiSeitenErzeugung« werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird.</para>
+      <para>Die Inhalte des Elements »AtPageCreation« werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird.</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -500,15 +500,15 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<BeiSeitenErzeugung>
-  <ObjektAusgeben spalte="1">
-    <Textblock breite="20">
-      <Absatz>
-        <Wert auswahl="sd:aktuelle-seite()"/>
-      </Absatz>
+      <listing><![CDATA[<AtPageCreation>
+  <PlaceObject column="1">
+    <Textblock width="20">
+      <Paragraph>
+        <Value select="sd:current-page()"/>
+      </Paragraph>
     </Textblock>
-  </ObjektAusgeben>
-</BeiSeitenErzeugung>]]></listing>
+  </PlaceObject>
+</AtPageCreation>]]></listing>
     </example>
     <seealso><cmd name="Pagetype"/>, <cmd name="AtPageShipout"/></seealso>
   </command>
@@ -544,8 +544,8 @@
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<Element name="Planetenverzeichnis">
-  <Attribut name="name" auswahl=" @name "/>
-  <Attribut name="seite" auswahl=" sd:aktuelle-seite()"/>
+  <Attribute name="name" select=" @name "/>
+  <Attribute name="seite" select=" sd:current-page()"/>
 </Element>]]></listing>
       <para>Erzeugt diese Datenstruktur:</para>
       <listing><![CDATA[<Planetenverzeichnis name=" (Inhalt von @name) " seite=" (aktuelle Seitennummer) " />]]></listing>
@@ -571,10 +571,10 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Textblock breite="10">
-  <Absatz>
-    <B><Wert>Text in Fett</Wert></B>
-  </Absatz>
+      <listing><![CDATA[<Textblock width="10">
+  <Paragraph>
+    <B><Value>Text in Fett</Value></B>
+  </Paragraph>
 </Textblock>
 ]]></listing>
     </example>
@@ -704,20 +704,20 @@
       <image file="speedata-publisher-qrcode.png" width="300"/>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben>
-  <Strichcode auswahl="'speedata Publisher'" typ="Code128" zeigetext="ja"/>
-</ObjektAusgeben>]]></listing>
+      <listing><![CDATA[<PlaceObject>
+  <Barcode select="'speedata Publisher'" type="Code128" showtext="yes"/>
+</PlaceObject>]]></listing>
       <para>ergibt</para>
       <image file="code128-speedata-publisher.png"/>
-      <listing><![CDATA[<ObjektAusgeben>
-  <Strichcode auswahl="4242002518169" typ="EAN13"/>
-</ObjektAusgeben>]]></listing>
+      <listing><![CDATA[<PlaceObject>
+  <Barcode select="4242002518169" type="EAN13"/>
+</PlaceObject>]]></listing>
       <para>wird zu</para>
       <image file="ean13-supertex.png" width="300"/>
       <para>und</para>
-      <listing><![CDATA[<ObjektAusgeben>
-  <Strichcode auswahl="'http://www.speedata.de'" typ="QRCode" höhe="5"/>
-</ObjektAusgeben>
+      <listing><![CDATA[<PlaceObject>
+  <Barcode select="'http://www.speedata.de'" type="QRCode" height="5"/>
+</PlaceObject>
 ]]></listing>
       <para>wird zu</para>
       <image file="speedata-publisher-qrcode.png" width="300"/>
@@ -748,26 +748,25 @@
 
 <DefineFontfamily name="text" fontsize="12" leading="14">
   <Regular fontface="Times"/>
-  <Bold fontface="Times bold"/>
-  <Italic fontface="Times italic"/>
+  <Bold    fontface="Times bold"/>
+  <Italic  fontface="Times italic"/>
   <BoldItalic fontface="Times bold italic" />
 </DefineFontfamily>
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<LadeSchriftdatei name="Times" dateiname="timesregular.otf" />
-<LadeSchriftdatei name="Times Fett" dateiname="timesbold.otf" />
-<LadeSchriftdatei name="Times Fett" dateiname="timesbold.otf" />
-<LadeSchriftdatei name="Times Kursiv" dateiname="timesitalic.otf" />
-<LadeSchriftdatei name="Times Fett Kursiv" dateiname="timesbolditalic.otf" />
+      <listing><![CDATA[<LoadFontfile name="Times" filename="timesregular.otf" />
+<LoadFontfile name="Times Fett" filename="timesbold.otf" />
+<LoadFontfile name="Times Kursiv" filename="timesitalic.otf" />
+<LoadFontfile name="Times Fett Kursiv" filename="timesbolditalic.otf" />
 ...
 
-<DefiniereSchriftfamilie name="text" schriftgröße="12" zeilenabstand="14">
-  <Normal     schriftart="Times"/>
-  <Fett       schriftart="Times Fett"/>
-  <Kursiv     schriftart="Times Kursiv"/>
-  <FettKursiv schriftart="Times Fett Kursiv"/>
-</DefiniereSchriftfamilie>]]></listing>
+<DefineFontfamily name="text" fontsize="12" leading="14">
+  <Regular    fontface="Times"/>
+  <Bold       fontface="Times Fett"/>
+  <Italic     fontface="Times Kursiv"/>
+  <BoldItalic fontface="Times Fett Kursiv"/>
+</DefineFontfamily>]]></listing>
     </example>
     <seealso>
       <cmd name="B"/>, <cmd name="BoldItalic"/>, <cmd name="Regular"/>, <cmd name="Italic"/>
@@ -804,19 +803,19 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<LadeSchriftdatei name="Times" dateiname="timesregular.otf" />
-<LadeSchriftdatei name="Times Fett" dateiname="timesbold.otf" />
-<LadeSchriftdatei name="Times Fett" dateiname="timesbold.otf" />
-<LadeSchriftdatei name="Times Kursiv" dateiname="timesitalic.otf" />
-<LadeSchriftdatei name="Times Fett Kursiv" dateiname="timesbolditalic.otf" />
+      <listing><![CDATA[<LoadFontfile name="Times" filename="timesregular.otf" />
+<LoadFontfile name="Times Fett" filename="timesbold.otf" />
+<LoadFontfile name="Times Fett" filename="timesbold.otf" />
+<LoadFontfile name="Times Kursiv" filename="timesitalic.otf" />
+<LoadFontfile name="Times Fett Kursiv" filename="timesbolditalic.otf" />
 ...
 
-<DefiniereSchriftfamilie name="text" schriftgröße="12" zeilenabstand="14">
-  <Normal     schriftart="Times"/>
-  <Fett       schriftart="Times Fett"/>
-  <Kursiv     schriftart="Times Kursiv"/>
-  <FettKursiv schriftart="Times Fett Kursiv"/>
-</DefiniereSchriftfamilie>]]></listing>
+<DefineFontfamily name="text" fontsize="12" leading="14">
+  <Regular     fontface="Times"/>
+  <Bold       fontface="Times Fett"/>
+  <Italic     fontface="Times Kursiv"/>
+  <BoldItalic fontface="Times Fett Kursiv"/>
+</DefineFontfamily>]]></listing>
     </example>
     <seealso>
       <cmd name="B"/>,
@@ -879,7 +878,7 @@
       <para>Create a bookmark on level 1 (top level) with the title stored in the variable <tt>title</tt>.</para>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Lesezeichen ebene="1" auswahl="$titel" offen='nein'/>]]></listing>
+      <listing><![CDATA[<Lesezeichen ebene="1" select="$titel" offen='nein'/>]]></listing>
       <para>Erzeugt ein Lesezeichen der Stufe 1 (höchste Stufe) mit dem Titel, der in der Variablen <tt>titel</tt> steht.</para>
     </example>
     <seealso>
@@ -923,7 +922,7 @@
         <para>Lets the box increase its size by the amount of trim given in the options. Useful for thumb indexes. The contents of the attribute is either »left«, »right«, »top« or »bottom« or any combination such as »top,right«.</para>
       </description>
       <description xml:lang="de">
-        <para>Lässt die Box am Rand größer werden. Wird z.B. für Daumenregister benutzt, die inkl. Beschnitt ganz zum Rand gehen sollen. Inhalt ist eine Ortsangabe bestehend aus den Werten »oben«, »unten«, »links« oder »rechts« bzw. eine Kombination wie »oben,rechts«.</para>
+        <para>Lässt die Box am Rand größer werden. Wird z.B. für Daumenregister benutzt, die inkl. Beschnitt ganz zum Rand gehen sollen. Inhalt ist eine Ortsangabe bestehend aus den Werten »top«, »bottom«, »left« oder »right« bzw. eine Kombination wie »top,right«.</para>
       </description>
     </attribute>
     <attribute en="class" de="class" optional="yes" type="text">
@@ -952,10 +951,10 @@
       <image file="greenbox.png"/>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<DefiniereFarbe name="meingrün" modell="cmyk" c="22" m="0" y="55" k="0"/>
-<ObjektAusgeben>
-  <Box breite="10" höhe="5" hintergrundfarbe="meingrün" />
-</ObjektAusgeben>
+      <listing><![CDATA[<DefineColor name="meingrün" model="cmyk" c="22" m="0" y="55" k="0"/>
+<PlaceObject>
+  <Box width="10" height="5" backgroundcolor="meingrün" />
+</PlaceObject>
 ]]></listing>
       <para>erzeugt ein farbiges Rechteck</para>
       <image file="greenbox.png"/>
@@ -983,14 +982,14 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="data">
-  <ObjektAusgeben spalte="1">
-    <Textblock breite="10">
-      <Absatz><Wert>Hallo</Wert><Br/><Wert>Welt</Wert>
-      </Absatz>
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject column="1">
+    <Textblock width="10">
+      <Paragraph><Value>Hallo</Value><Br/><Value>Welt</Value>
+      </Paragraph>
     </Textblock>
-  </ObjektAusgeben>
-</Datensatz>
+  </PlaceObject>
+</Record>
 ]]></listing>
     </example>
     <seealso/>
@@ -1000,7 +999,7 @@
       <para>Part of a <cmd name="Switch"/> construct. All cases up to the first case which evaluates to »true« will be executed. If no cases match and there is a <cmd name="Otherwise"/>, this will be executed instead.</para>
     </description>
     <description xml:lang="de">
-      <para>Stellt einen Fall einer <cmd name="Switch"/> dar. Der erste <cmd name="Case"/>, der zutrifft, wird ausgeführt. Weitere Fälle werden nicht betrachtet. Wird kein Fall erfüllt, dann wird, falls vorhanden, das Element <cmd name="Otherwise"/> ausgeführt.</para>
+      <para>Stellt einen Fall einer Fallunterscheidung (<cmd name="Switch"/>) dar. Der erste Fall, der zutrifft, wird ausgeführt. Weitere Fälle werden nicht betrachtet. Wird kein Fall erfüllt, dann wird, falls vorhanden, das Element <cmd name="Otherwise"/> ausgeführt.</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -1091,10 +1090,10 @@
       <image file="circlewithborder.png"/>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<DefiniereFarbe name="meingrün" modell="cmyk" c="22" m="0" y="55" k="0"/>
-<ObjektAusgeben>
-  <Kreis radiusx="10mm" hintergrundfarbe="blue" rahmenfarbe="meingrün" linienstärke="1mm"/>
-</ObjektAusgeben>
+      <listing><![CDATA[<DefineColor name="meingrün" model="cmyk" c="22" m="0" y="55" k="0"/>
+<PlaceObject>
+  <Circle radiusx="10mm" backgroundcolor="blue" framecolor="meingrün" rulewidth="1mm"/>
+</PlaceObject>
 ]]></listing>
       <para>erzeugt einen Kreis</para>
       <image file="circlewithborder.png"/>
@@ -1137,19 +1136,19 @@
 </Layout>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Layout xmlns:sd="urn:speedata:2009/publisher/functions/de" xmlns="urn:speedata.de:2009/publisher/de">
+      <listing><![CDATA[<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en" xmlns="urn:speedata.de:2009/publisher/en">
 
-  <DefiniereFarbe name="rot" wert="#f00"/>
+  <DefineColor name="rot" wert="#f00"/>
 
-  <Datensatz element="data">
-    <ObjektAusgeben>
+  <Record element="data">
+    <PlaceObject>
       <Textblock>
-        <Absatz>
-          <Wert>Hallo </Wert><Farbe name="rot"><Wert>Welt</Wert></Farbe>
-        </Absatz>
+        <Paragraph>
+          <Value>Hallo </Value><Color name="rot"><Value>Welt</Value></Color>
+        </Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-  </Datensatz>
+    </PlaceObject>
+  </Record>
 
 </Layout>
 ]]></listing>
@@ -1172,8 +1171,7 @@
       <para>The contents of a group is encapsulated in its own Element, as there are other elements that are part of the group definition (such as <cmd name="Grid"/>).</para>
     </remark>
     <remark xml:lang="de">
-      <para>Der Inhalt wird in einem extra Element gekapselt, damit die Gruppe später noch andere Elemente (z.B. Raster) beinhalten kann, ohne, dass die Angaben zu unübersichtlich werden. Das
-        Inhalt-Element wird voraussichtlich in zukünftigen Versionen wegfallen.</para>
+      <para>Der Inhalt wird in einem extra Element gekapselt, damit die Gruppe später noch andere Elemente (z.B. Raster) beinhalten kann, ohne, dass die Angaben zu unübersichtlich werden.</para>
     </remark>
     <example xml:lang="en"><listing><![CDATA[<Group name="examplegroup">
   <Contents>
@@ -1197,24 +1195,24 @@
 ]]></listing></example>
     <example xml:lang="de">
       <listing><![CDATA[<Gruppe name="Beispielgruppe">
-  <Inhalt>
-    <ObjektAusgeben spalte="3" zeile="2">
-      <Textblock breite="14">
-        <Absatz>
-          <Wert>Text</Wert>
-        </Absatz>
+  <Contents>
+    <PlaceObject column="3" row="2">
+      <Textblock width="14">
+        <Paragraph>
+          <Value>Text</Value>
+        </Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben spalte="2" zeile="4">
-      <Textblock breite="14">
-        <Absatz>
-          <Wert>Nächster Text</Wert>
-        </Absatz>
+    </PlaceObject>
+    <PlaceObject column="2" row="4">
+      <Textblock width="14">
+        <Paragraph>
+          <Value>Nächster Text</Value>
+        </Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-  </Inhalt>
+    </PlaceObject>
+  </Contents>
 </Gruppe>
-<ObjektAusgeben gruppenname="Beispielgruppe" spalte="1" zeile="1"/>]]></listing>
+<PlaceObject groupname="Beispielgruppe" column="1" row="1"/>]]></listing>
     </example>
     <seealso><cmd name="Group"/></seealso>
   </command>
@@ -1320,15 +1318,15 @@
       <para>This defines a table with five columns. The first column has a width of 14mm, the last of 5mm, the second column is two units wide (grid cells). The third and fourth column have a width of 1/6 and 5/6 of the remaining width.</para>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Tabelle>
-  <Spalten>
-    <Spalte breite="14mm" />
-    <Spalte breite="2" />
-    <Spalte breite="1*" align="right" valign="top" />
-    <Spalte breite="5*" />
-    <Spalte breite="5mm" hintergrundfarbe="grau" />
-  </Spalten>
-</Tabelle>]]></listing>
+      <listing><![CDATA[<Table>
+  <Columns>
+    <Column width="14mm" />
+    <Column width="2" />
+    <Column width="1*" align="right" valign="top" />
+    <Column width="5*" />
+    <Column width="5mm" backgroundcolor="grau" />
+  </Columns>
+</Table>]]></listing>
     </example>
     <seealso>
       <cmd name="Table"/>
@@ -1356,7 +1354,7 @@
         numbers before the * denote the fraction of the space. In the example below the third column gets 1/6 of the remaining width, the fourth column get 5/6.</para>
     </remark>
     <remark xml:lang="de">
-      <para>Die *-Breitenangaben im Element »Spalte« ermöglicht eine dynamische Aufteilung der Spaltenbreite. Dazu muss die Tabellenbreite vorgegeben sein und das Attribut dehnen bei Tabelle auf max
+      <para>Die *-Breitenangaben im Element »Column« ermöglicht eine dynamische Aufteilung der Spaltenbreite. Dazu muss die Tabellenbreite vorgegeben sein und das Attribut dehnen bei Tabelle auf max
         stehen. Die Spaltenbreiten berechnen sich wie folgt: erst werden die fixen Breitenangaben berücksichtigt. Anschließend werden die *-Spalten auf den verbleibenden Platz verteilt. Die Angaben
         vor den Sternchen dienen der Verteilung innerhalb der *-Spalten. Im Beispiel unten nimmt die vierte Spalte in etwa den fünffachen Platz der dritten Spalte ein. Angenommen die Tabelle sollte
         32mm breit werden. Die fixen Spalten nehmen davon 20mm in Anspruch, übrig bleiben 12 mm. Diese 12mm werden auf die beiden Spalten verteilt, 2mm entfallen auf die 1*-Spalte (1/6 von 12mm), 10mm
@@ -1374,15 +1372,15 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Tabelle>
-  <Spalten>
-    <Spalte breite="14mm" />
-    <Spalte breite="2" />
-    <Spalte breite="1*" align="right" valign="top" />
-    <Spalte breite="5*" />
-    <Spalte breite="5mm" hintergrundfarbe="grau" />
-  </Spalten>
-</Tabelle>]]></listing>
+      <listing><![CDATA[<Table>
+  <Columns>
+    <Column width="14mm" />
+    <Column width="2" />
+    <Column width="1*" align="right" valign="top" />
+    <Column width="5*" />
+    <Column width="5mm" backgroundcolor="grau" />
+  </Columns>
+</Table>]]></listing>
     </example>
     <seealso>
       <cmd name="Table"/>, <cmd name="Column"/>
@@ -1393,7 +1391,7 @@
       <para>Replace this element by the copy of the selection as an element structure. You can use it to construct more complex data structures.</para>
     </description>
     <description xml:lang="de">
-      <para>Ersetzt das Element Kopie-von mit Inhalt von <tt>auswahl</tt> als Elementstruktur. Dient zum „Zusammenbauen“ von Texten und Tabellen.</para>
+      <para>Ersetzt dieses Element mit Inhalt von <tt>auswahl</tt> als Elementstruktur. Dient zum „Zusammenbauen“ von Texten und Tabellen.</para>
     </description>
     <childelements/>
     <attribute en="select" de="auswahl" type="xpath" optional="no">
@@ -1427,26 +1425,26 @@
       <para>with the exception that the values of <tt>@name</tt> and <tt>@symbol</tt> can be evaluated before the text gets output.</para>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Zuweisung variable="meinabsatz">
-  <Absatz>
-    <Wert auswahl="@name"/><Wert>, Symbol=</Wert><Wert auswahl="@symbol"/>
-  </Absatz>
-</Zuweisung>
-<ObjektAusgeben>
-  <Textblock breite="14" schriftart="text">
-    <Kopie-von auswahl="$meinabsatz"/>
+      <listing><![CDATA[<SetVariable variable="meinabsatz">
+  <Paragraph>
+    <Value select="@name"/><Value>, Symbol=</Value><Value select="@symbol"/>
+  </Paragraph>
+</SetVariable>
+<PlaceObject>
+  <Textblock width="14" fontface="text">
+    <Copy-of select="$meinabsatz"/>
   </Textblock>
-</ObjektAusgeben>]]></listing>
+</PlaceObject>]]></listing>
       <para>ist dasselbe wie</para>
-      <listing><![CDATA[<ObjektAusgeben>
-  <Textblock breite="14" schriftart="text">
-    <Absatz>
-      <Wert auswahl="@name"/><Wert>, Symbol=</Wert><Wert auswahl="@symbol"/>
-    </Absatz>
+      <listing><![CDATA[<PlaceObject>
+  <Textblock width="14" fontface="text">
+    <Paragraph>
+      <Value select="@name"/><Value>, Symbol=</Value><Value select="@symbol"/>
+    </Paragraph>
   </Textblock>
-</ObjektAusgeben>
+</PlaceObject>
 ]]></listing>
-      <para>nur mit dem Unterschied, dass der Inhalt vom Absatz (<tt>@name</tt>, <tt>@symbol</tt>) ermittelt werden kann, bevor der Text ausgegeben wird. Die Zuweisung und die Textausgabe können in
+      <para>nur mit dem Unterschied, dass der Inhalt vom Paragraph (<tt>@name</tt>, <tt>@symbol</tt>) ermittelt werden kann, bevor der Text ausgegeben wird. Die Zuweisung und die Textausgabe können in
         verschiedenen Regeln stehen.</para>
     </example>
     <seealso><cmd name="Value"/>, <ref name="xpath"/>, <cmd name="SetVariable"/></seealso>
@@ -1464,7 +1462,7 @@
         <para>Color model to be used for the color. Currently “rgb”, “cmyk”, “gray” and “spotcolor” are supported.</para>
       </description>
       <description xml:lang="de">
-        <para>Das Farbmodell, das benutzt werden soll. Derzeit werdern »rgb«, »cmyk«, »graustufen« und »sonderfarbe« unterstützt.</para>
+        <para>Das Farbmodell, das benutzt werden soll. Derzeit werden »rgb«, »cmyk«, “gray” und spotcolor« unterstützt.</para>
       </description>
       <choice en="cmyk" de="cmyk">
         <description xml:lang="en">
@@ -1568,7 +1566,7 @@
         <para>The name of the spot color if model is »spotcolor«. The name must match the required color name, such as »PANTONE 116 C«.</para>
       </description>
       <description xml:lang="de">
-        <para>Der Name der Sonderfarbe wenn das Modell auf »sonderfarbe« eingestellt ist. Der muss den offiziellen Namen tragen, wie z.B. »PANTONE 116 C«.</para>
+        <para>Der Name der Sonderfarbe wenn das Modell auf »spotcolor« eingestellt ist. Der muss den offiziellen Namen tragen, wie z.B. »PANTONE 116 C«.</para>
       </description>
     </attribute>
     <attribute en="overprint" de="überdrucken" optional="yes">
@@ -1604,8 +1602,8 @@
       </description>
     </attribute>
     <example xml:lang="de">
-      <listing><![CDATA[<DefiniereFarbe name="Schwarz" modell="cmyk" c="0" m="0" y="0" k="100"/>
-<DefiniereFarbe name="Weiß" modell="rgb" r="100" g="100" b="100"/>]]></listing>
+      <listing><![CDATA[<DefineColor name="Schwarz" model="cmyk" c="0" m="0" y="0" k="100"/>
+<DefineColor name="Weiß" model="rgb" r="100" g="100" b="100"/>]]></listing>
     </example>
     <example xml:lang="en">
       <listing><![CDATA[<DefineColor name="black" model="cmyk" c="0" m="0" y="0" k="100"/>
@@ -1681,15 +1679,15 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<DefiniereSchriftfamilie name="Helvetica" schriftgröße="12" zeilenabstand="14">
-  <Normal schriftart="Helvetica Normal"/>
-  <Fett schriftart="Helvetica Fett"/>
-  <Kursiv schriftart="Helvetica Kursiv"/>
-  <FettKursiv schriftart="Helvetica Fett Kursiv"/>
-</DefiniereSchriftfamilie>]]></listing>
+      <listing><![CDATA[<DefineFontfamily name="Helvetica" fontsize="12" leading="14">
+  <Regular fontface="Helvetica Normal"/>
+  <Bold fontface="Helvetica Fett"/>
+  <Italic fontface="Helvetica Kursiv"/>
+  <BoldItalic fontface="Helvetica Fett Kursiv"/>
+</DefineFontfamily>]]></listing>
       <para>Anschließend kann im Text auf diese Schriftfamilie zugegriffen werden:</para>
-      <listing><![CDATA[<Textblock breite="18" spalte="1" schriftart="Helvetica">
-  <Absatz>
+      <listing><![CDATA[<Textblock width="18" column="1" fontface="Helvetica">
+  <Paragraph>
    ...]]></listing>
     </example>
     <seealso>
@@ -1701,7 +1699,7 @@
       <para>Define text formatting instructions. A textformat is used to align and indent text and create margins and rules before and after the text.</para>
     </description>
     <description xml:lang="de">
-      <para>Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen Absatz und Textblock) zurückgegriffen werden.</para>
+      <para>Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen Paragraph und Textblock) zurückgegriffen werden.</para>
     </description>
     <childelements/>
     <attribute en="hyphenchar" de="tennzeichen" optional="yes" type="text">
@@ -1717,7 +1715,7 @@
         <para>If no, prohibit orphans (first line of paragraph is on the previous page). Default: no.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn nein, Schusterjungen verhindern (erste Zeile eines Absatzes ist auf der vorherigen Seite). Voreinstellung ist nein.</para>
+        <para>Wenn nein, Schusterjungen verhindern (erste Zeile eines Paragraphes ist auf der vorherigen Seite). Voreinstellung ist nein.</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
@@ -1741,7 +1739,7 @@
         <para>If no, prohibit widows (last line of paragraph is on the next page). Default: no.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn nein, Hurenkinder verhindern (letzte Zeile eines Absatzes ist auf der nächsten Seite). Voreinstellung ist nein.</para>
+        <para>Wenn nein, Hurenkinder verhindern (letzte Zeile eines Paragraphes ist auf der nächsten Seite). Voreinstellung ist nein.</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
@@ -1813,7 +1811,7 @@
         <para>The amount of indentation.</para>
       </description>
       <description xml:lang="de">
-        <para>Die Länge des Absatzeinzugs.</para>
+        <para>Die Länge des Paragrapheinzugs.</para>
       </description>
     </attribute>
     <attribute en="rows" de="zeilen" type="number" optional="yes">
@@ -1845,7 +1843,7 @@
         <para>Distance between the bottom rule and the text of the next paragraph.</para>
       </description>
       <description xml:lang="de">
-        <para>Abstand zwischen der Linie unten und dem nachfolgenden Absatz.</para>
+        <para>Abstand zwischen der Linie unten und dem nachfolgenden Paragraph.</para>
       </description>
     </attribute>
     <attribute en="break-below" de="umbruch-unten" optional="yes">
@@ -1908,7 +1906,7 @@
           <para>Disable hyphenation.</para>
         </description>
         <description xml:lang="de">
-          <para>Silbentrennung für den Absatz verhindern.</para>
+          <para>Silbentrennung für den Paragraph verhindern.</para>
         </description>
       </choice>
     </attribute>
@@ -1934,15 +1932,15 @@
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<Layout>
-  <DefiniereTextformat name="Text mit Einrückung" ausrichtung="blocksatz" einrückung="1cm" />
+  <DefineTextformat name="Text mit Einrückung" alignment="blocksatz" indentation="1cm" />
   ...
-  <Datensatz element="...">
-    <Textblock breite="10" textformat="Text mit Einrückung">
-      <Absatz>
-        <Wert>Text ...</Wert>
-      </Absatz>
+  <Record element="...">
+    <Textblock width="10" textformat="Text mit Einrückung">
+      <Paragraph>
+        <Value>Text ...</Value>
+      </Paragraph>
     </Textblock>
-  </Datensatz>
+  </Record>
 </Layout>]]></listing>
     </example>
     <seealso>
@@ -1987,8 +1985,8 @@
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<Element name="artikelliste">
-  <Attribut name="name" auswahl=" @name "/>
-  <Attribut name="seite" auswahl=" sd:aktuelle-seite()"/>
+  <Attribute name="name" select=" @name "/>
+  <Attribute name="seite" select=" sd:current-page()"/>
 </Element>]]></listing>
     </example>
     <seealso>
@@ -2027,13 +2025,13 @@
 </Record>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben spalte="1">
-  <Bild breite="5" datei="cow.pdf"/>
-</ObjektAusgeben>
-<Leerzeile />
-<ObjektAusgeben spalte="2">
-  <Bild breite="3" datei="cow.pdf"/>
-</ObjektAusgeben>]]></listing>
+      <listing><![CDATA[<PlaceObject column="1">
+  <Image width="5" file="cow.pdf"/>
+</PlaceObject>
+<EmptyLine />
+<PlaceObject column="2">
+  <Image width="3" file="cow.pdf"/>
+</PlaceObject>]]></listing>
     </example>
     <seealso>
       <cmd name="NextRow"/>
@@ -2072,16 +2070,16 @@
 </Record>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben spalte="1">
-  <Textblock breite="20">
-    <Absatz schriftart="Groß">
-      <Wert>Groß</Wert>
-      <Schriftart schriftfamilie="text">
-        <Wert>normal</Wert><B><Wert>fett</Wert></B>
-      </Schriftart>
-    </Absatz>
+      <listing><![CDATA[<PlaceObject column="1">
+  <Textblock width="20">
+    <Paragraph fontface="Groß">
+      <Value>Groß</Value>
+      <Fontface schriftfamilie="text">
+        <Value>normal</Value><B><Value>fett</Value></B>
+      </Fontface>
+    </Paragraph>
   </Textblock>
-</ObjektAusgeben>
+</PlaceObject>
       ]]></listing>
     </example>
     <seealso>
@@ -2129,15 +2127,15 @@
       </description>
     </attribute>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="data">
-  <ObjektAusgeben>
-    <Tabelle breite="10">
-      <FürAlle auswahl="eintrag">
-        <Tr><Td><Absatz><Wert auswahl="string(.)"></Wert></Absatz></Td></Tr>
-      </FürAlle>
-    </Tabelle>
-  </ObjektAusgeben>
-</Datensatz>]]></listing>
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject>
+    <Table width="10">
+      <ForAll select="eintrag">
+        <Tr><Td><Paragraph><Value select="string(.)"></Value></Paragraph></Td></Tr>
+      </ForAll>
+    </Table>
+  </PlaceObject>
+</Record>]]></listing>
       <para>Erzeugt eine Tabellenzeile für alle Elemente <tt>eintrag</tt> im Datensatz <tt>data</tt>. So müsste in etwa ein entsprechender Eintrag in den Daten aussehen:</para>
       <listing><![CDATA[<data>
   <eintrag>a</eintrag>
@@ -2269,13 +2267,13 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="data">
-  <ObjektAusgeben>
-    <Rahmen rahmenfarbe="red" rahmen-unten-links-radius="10pt">
-      <Bild breite="20" datei="_samplea.pdf"></Bild>
-    </Rahmen>
-  </ObjektAusgeben>
-</Datensatz>
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject>
+    <Frame framecolor="red" border-bottom-left-radius="10pt">
+      <Image width="20" file="_samplea.pdf"></Bild>
+    </Frame>
+  </PlaceObject>
+</Record>
 ]]></listing>
     </example>
     <seealso><cmd name="PlaceObject"/></seealso>
@@ -2333,12 +2331,12 @@
 </Pagetype>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<SetzeRaster breite="5mm" höhe="14pt" />
+      <listing><![CDATA[<SetGrid width="5mm" height="14pt" />
 
-<Seitentyp name="Seite breit"  bedingung=" $var > 10 ">
-  <Rand links="1cm" rechts="2cm" oben="1cm" unten="1cm" />
-  <Raster breite="10mm" höhe="14pt" />
-</Seitentyp>]]></listing>
+<Pagetype name="Seite breit"  test=" $var > 10 ">
+  <Margin left="1cm" right="2cm" top="1cm" bottom="1cm" />
+  <Grid width="10mm" height="14pt" />
+</Pagetype>]]></listing>
       <para>Wenn diese Seite ausgewählt wird, gilt das dort angegebene Raster.</para>
     </example>
     <seealso>
@@ -2392,24 +2390,24 @@
 ]]></listing></example>
     <example xml:lang="de">
       <listing><![CDATA[<Gruppe name="Beispielgruppe">
-  <Inhalt>
-    <ObjektAusgeben spalte="3" zeile="2">
-      <Textblock breite="14">
-        <Absatz>
-          <Wert>Text</Wert>
-        </Absatz>
+  <Contents>
+    <PlaceObject column="3" row="2">
+      <Textblock width="14">
+        <Paragraph>
+          <Value>Text</Value>
+        </Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben spalte="2" zeile="4">
-      <Textblock breite="14">
-        <Absatz>
-          <Wert>Nächster Text</Wert>
-        </Absatz>
+    </PlaceObject>
+    <PlaceObject column="2" row="4">
+      <Textblock width="14">
+        <Paragraph>
+          <Value>Nächster Text</Value>
+        </Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-  </Inhalt>
+    </PlaceObject>
+  </Contents>
 </Gruppe>
-<ObjektAusgeben gruppenname="Beispielgruppe" spalte="1" zeile="1" />]]></listing>
+<PlaceObject groupname="Beispielgruppe" column="1" row="1" />]]></listing>
     </example>
     <seealso>
       <cmd name="PlaceObject"/>
@@ -2428,7 +2426,7 @@
       <listing><![CDATA[<Hyphenation>su-per-cal-ifrag-ilis-tic-ex-pi-ali-do-cious</Hyphenation>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Trennvorschlag>Au-to-bahn</Trennvorschlag>]]></listing>
+      <listing><![CDATA[<Hyphenation>Au-to-bahn</Hyphenation>]]></listing>
     </example>
     <seealso/>
   </command>
@@ -2476,11 +2474,11 @@
 </PlaceObject>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben>
-  <Textblock breite="10">
-    <Absatz><Wert>Hallo</Wert><HLeerraum/><Wert>Welt</Wert></Absatz>
+      <listing><![CDATA[<PlaceObject>
+  <Textblock width="10">
+    <Paragraph><Value>Hallo</Value><HSpace/><Value>Welt</Value></Paragraph>
   </Textblock>
-</ObjektAusgeben>]]></listing>
+</PlaceObject>]]></listing>
     </example>
     <seealso><cmd name="Paragraph"/></seealso>
   </command>
@@ -2504,10 +2502,10 @@
 </PlaceObject>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Textblock breite="10">
-  <Absatz>
-    <I><Wert>Kursiver Text</Wert></I>
-  </Absatz>
+      <listing><![CDATA[<Textblock width="10">
+  <Paragraph>
+    <I><Value>Kursiver Text</Value></I>
+  </Paragraph>
 </Textblock>]]></listing>
     </example>
     <seealso><cmd name="B"/></seealso>
@@ -2564,20 +2562,20 @@
     </example>
     <example xml:lang="de">
       <para>Die Hauptdatei</para>
-      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/de"
+      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/en"
        xmlns:xi="http://www.w3.org/2001/XInclude">
  <xi:include href="fontdefinitionen.xml" />
  ...]]></listing>
       <para>Die Datei <tt>fontdefinitionen.xml</tt>:</para>
-      <listing><![CDATA[<Include xmlns="urn:speedata.de:2009/publisher/de">
-  <LadeSchriftdatei name="Helvetica"
-                    dateiname="texgyreheros-regular.otf"/>
-  <LadeSchriftdatei name="Helvetica Fett"
-                    dateiname="texgyreheros-bold.otf"/>
-  <LadeSchriftdatei name="Helvetica Kursiv"
-                    dateiname="texgyreheros-italic.otf"/>
-  <LadeSchriftdatei name="Helvetica Fett Kursiv"
-                    dateiname="texgyreheros-bolditalic.otf"/>
+      <listing><![CDATA[<Include xmlns="urn:speedata.de:2009/publisher/en">
+  <LoadFontfile name="Helvetica"
+                    filename="texgyreheros-regular.otf"/>
+  <LoadFontfile name="Helvetica Fett"
+                    filename="texgyreheros-bold.otf"/>
+  <LoadFontfile name="Helvetica Kursiv"
+                    filename="texgyreheros-italic.otf"/>
+  <LoadFontfile name="Helvetica Fett Kursiv"
+                    filename="texgyreheros-bolditalic.otf"/>
 </Include>]]></listing>
     </example>
     <seealso>
@@ -2623,19 +2621,19 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="data">
-  <SeitenSpeichern name="foo">
-    <Schleife auswahl="100">
-      <ObjektAusgeben>
+      <listing><![CDATA[<Record element="data">
+  <SavePages name="foo">
+    <Loop select="100">
+      <PlaceObject>
         <Textblock>
-          <Absatz><Wert>Hallo Welt</Wert></Absatz>
+          <Paragraph><Value>Hallo Welt</Value></Paragraph>
         </Textblock>
-      </ObjektAusgeben>
-    </Schleife>
-  </SeitenSpeichern>
-  <Nachricht auswahl="sd:anzahl-gespeicherter-seiten('foo')"/>
-  <SeitenEinfügen name="foo"/>
-</Datensatz>
+      </PlaceObject>
+    </Loop>
+  </SavePages>
+  <Message select="sd:count-saved-pages('foo')"/>
+  <InsertPages name="foo"/>
+</Record>
 ]]></listing>
     </example>
     <seealso><cmd name="SavePages"/></seealso>
@@ -2733,7 +2731,7 @@
         <para>When yes, the image keeps its apsect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn ja, dann behält das Bild sein Seitenverhältnis wenn Breite und Höhe gegeben ist. Um das Bild einzupassen, wird ein Teil abgeschnitten.</para>
+        <para>Wenn 'yes', dann behält das Bild sein Seitenverhältnis wenn Breite und Höhe gegeben ist. Um das Bild einzupassen, wird ein Teil abgeschnitten.</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
@@ -2816,20 +2814,20 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="produktbild">
-  <ObjektAusgeben spalte="{ $spalte }">
-    <Bild breite="10" datei="{string(.)}" />
-  </ObjektAusgeben>
-</Datensatz>]]></listing>
+      <listing><![CDATA[<Record element="produktbild">
+  <PlaceObject column="{ $spalte }">
+    <Image width="10" file="{string(.)}" />
+  </PlaceObject>
+</Record>]]></listing>
       <para>Nimmt den Dateinamen des Bildes aus dem Elementinhalt »produktbild« aus der Datensatzdatei, z.B.</para>
       <listing><![CDATA[<produktbild>grafik.pdf</produktbild>]]></listing>
       <para>Folgendes Beispiel nimmt eine Seite aus einer PDF Datei:</para>
-      <listing><![CDATA[<ObjektAusgeben spalte="0mm" zeile="0mm">
-  <Bild breite="210mm" datei="katalog.pdf" seite="132" natürliche-größe="artbox" />
-</ObjektAusgeben>]]></listing>
+      <listing><![CDATA[<PlaceObject column="0mm" row="0mm">
+  <Image width="210mm" file="katalog.pdf" page="132" naturalsize="artbox" />
+</PlaceObject>]]></listing>
     </example>
     <info xml:lang="de">
-      <para>Die Anzahl der Seiten in einer PDF-Datei kann mit der XPath-Funktion <tt>sd:anzahl-seiten(&lt;dateiname oder URI&gt;)</tt> ermittelt werden.</para>
+      <para>Die Anzahl der Seiten in einer PDF-Datei kann mit der XPath-Funktion <tt>sd:number-of-pages(&lt;dateiname oder URI&gt;)</tt> ermittelt werden.</para>
     </info>
     <info xml:lang="en">
       <para>The number of pages in a PDF file can be determined with the XPath function <tt>sd:number-of-pages(&lt;filename or URI&gt;).</tt></para>
@@ -2867,15 +2865,15 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<LadeSchriftdatei name="Helvetica" dateiname="helvetica-regular.otf" />
+      <listing><![CDATA[<LoadFontfile name="Helvetica" filename="helvetica-regular.otf" />
 ...
 
-<DefiniereSchriftfamilie name="text" schriftgröße="12" zeilenabstand="14">
-  <Normal     schriftart="Helvetica"/>
-  <Fett       schriftart="Helvetica Fett"/>
-  <Kursiv     schriftart="Helvetica Kursiv"/>
-  <FettKursiv schriftart="Helvetica Fett Kursiv"/>
-</DefiniereSchriftfamilie>]]></listing>
+<DefineFontfamily name="text" fontsize="12" leading="14">
+  <Regular     fontface="Helvetica"/>
+  <Bold       fontface="Helvetica Fett"/>
+  <Italic     fontface="Helvetica Kursiv"/>
+  <BoldItalic fontface="Helvetica Fett Kursiv"/>
+</DefineFontfamily>]]></listing>
     </example>
     <seealso>
       <cmd name="Bold"/>
@@ -2909,13 +2907,13 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="planeten">
-  <Zuweisung variable="spalte" auswahl="2" />
-  <LadeDatensatzdatei name="toc"/>
-  <Zuweisung variable="Inhalt" auswahl="''"/>
-  <NeueSeite/>
-  <BearbeiteKnoten auswahl="planet"/>
-</Datensatz>]]></listing>
+      <listing><![CDATA[<Record element="planeten">
+  <SetVariable variable="spalte" select="2" />
+  <LoadDataset name="toc"/>
+  <SetVariable variable="Inhalt" select="''"/>
+  <NewPage/>
+  <ProcessNode select="planet"/>
+</Record>]]></listing>
     </example>
     <seealso>
       <cmd name="Element"/>,
@@ -3011,10 +3009,10 @@
       </choice>
     </attribute>
     <example xml:lang="de">
-      <listing><![CDATA[<LadeSchriftdatei name="Helvetica" dateiname="texgyreheros-regular.otf" />
-<LadeSchriftdatei name="Helvetica Fett" dateiname="texgyreheros-bold.otf" />
-<LadeSchriftdatei name="Helvetica Kursiv" dateiname="texgyreheros-italic.otf" />
-<LadeSchriftdatei name="Helvetica Fett Kursiv" dateiname="texgyreheros-bolditalic.otf" />]]></listing>
+      <listing><![CDATA[<LoadFontfile name="Helvetica" filename="texgyreheros-regular.otf" />
+<LoadFontfile name="Helvetica Fett" filename="texgyreheros-bold.otf" />
+<LoadFontfile name="Helvetica Kursiv" filename="texgyreheros-italic.otf" />
+<LoadFontfile name="Helvetica Fett Kursiv" filename="texgyreheros-bolditalic.otf" />]]></listing>
     </example>
     <info xml:lang="en">
       <para>The fonts are optionally taken from the local search path. On Windows the path <tt>%WINDIR%\Fonts</tt> (usually <tt>C:\Windows\Fonts</tt>) and on Mac OS X the paths <tt>/Library/Fonts</tt> and <tt>/System/Library/Fonts</tt> can be used as fallbacks for fonts. This can be configured with the setting <tt>fontpath</tt>.</para>
@@ -3112,54 +3110,51 @@
     </example>
     <example xml:lang="de">
       <para>Nachfolgend ein vollständiges Beispiel für ein Layoutregelwerk.</para>
-      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/de"
-  xmlns:sd="urn:speedata:2009/publisher/functions/de">
-  <Optionen
-    zeige_rasterbelegung="nein"
-    zeichne_raster="ja"
+      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Options
+    show-gridallocation="no"
+    show-grid="yes"
   />
 
-  <LadeSchriftdatei name="Helvetica Fett" dateiname="texgyreheros-bold.otf" />
+  <LoadFontfile name="Helvetica Fett" filename="texgyreheros-bold.otf" />
 
-  <DefiniereSchriftfamilie
-    name="Überschrift"
-    schriftgröße="12"
-    zeilenabstand="16">
-    <Normal schriftart="Helvetica Fett" />
-  </DefiniereSchriftfamilie>
+  <DefineFontfamily name="Überschrift" fontsize="12"  leading="16">
+    <Regular fontface="Helvetica Fett" />
+  </DefineFontfamily>
 
-  <Seitenformat breite="150mm" höhe="200mm" />
-  <SetzeRaster breite="4mm" höhe="14pt" />
+  <Pageformat width="150mm" height="200mm" />
+  <SetGrid width="4mm" height="14pt" />
 
-  <DefiniereTextformat name="text" ausrichtung="blocksatz" />
+  <DefineTextformat name="text" alignment="blocksatz" />
 
-  <Seitentyp name="rechte Seite" bedingung="sd:ungerade(sd:aktuelle-seite())">
-    <Rand links="2cm" rechts="1cm" oben="1cm" unten="1cm" />
-  </Seitentyp>
+  <Pagetype name="rechte Seite" test="sd:odd(sd:current-page())">
+    <Margin left="2cm" right="1cm" top="1cm" bottom="1cm" />
+  </Pagetype>
 
-  <Seitentyp name="linke Seite" bedingung="sd:gerade(sd:aktuelle-seite())">
-    <Rand links="1cm" rechts="2cm" oben="1cm" unten="1cm" />
-  </Seitentyp>
+  <Pagetype name="linke Seite" test="sd:even(sd:current-page())">
+    <Margin left="1cm" right="2cm" top="1cm" bottom="1cm" />
+  </Pagetype>
 
-  <Datensatz element="Produkt">
-    <Zuweisung variable="spalte" auswahl="2" />
-    <ObjektAusgeben spalte="1">
-      <Textblock breite="14" schriftart="Überschrift">
-        <Absatz>
-          <Wert auswahl="@name"/>
-        </Absatz>
+  <Record element="Produkt">
+    <SetVariable variable="spalte" select="2" />
+    <PlaceObject column="1">
+      <Textblock width="14" fontface="Überschrift">
+        <Paragraph>
+          <Value select="@name"/>
+        </Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <BearbeiteKnoten auswahl="produktbild" />
-    <NeueSeite />
-  </Datensatz>
+    </PlaceObject>
+    <ProcessNode select="produktbild" />
+    <NewPage />
+  </Record>
 
-  <Datensatz element="produktbild">
+  <Record element="produktbild">
     <NeueZeile zeilen="2"/>
-    <ObjektAusgeben spalte="1">
-      <Bild breite="10" datei="{string(.)}"/>
-    </ObjektAusgeben>
-  </Datensatz>
+    <PlaceObject column="1">
+      <Image width="10" file="{string(.)}"/>
+    </PlaceObject>
+  </Record>
 </Layout>
 ]]></listing>
     </example>
@@ -3190,15 +3185,15 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben>
-  <Textblock breite="10">
+      <listing><![CDATA[<PlaceObject>
+  <Textblock width="10">
     <Ol>
-      <Li><Wert>Erster Eintrag</Wert></Li>
-      <Li><Wert>Zweiter Eintrag</Wert></Li>
-      <Li><Wert>Dritter Eintrag</Wert></Li>
+      <Li><Value>Erster Eintrag</Value></Li>
+      <Li><Value>Zweiter Eintrag</Value></Li>
+      <Li><Value>Dritter Eintrag</Value></Li>
     </Ol>
   </Textblock>
-</ObjektAusgeben>
+</PlaceObject>
 ]]></listing>
     </example>
     <seealso><cmd name="Ol"/>, <cmd name="Ul"/></seealso>
@@ -3234,13 +3229,13 @@
       </description>
     </attribute>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben>
-  <Tabelle breite="10">
-    <Schleife auswahl="5" variable="i">
-      <Tr><Td><Absatz><Wert auswahl="$i"/></Absatz></Td></Tr>
-    </Schleife>
-  </Tabelle>
-</ObjektAusgeben>
+      <listing><![CDATA[<PlaceObject>
+  <Table width="10">
+    <Loop select="5" variable="i">
+      <Tr><Td><Paragraph><Value select="$i"/></Paragraph></Td></Tr>
+    </Loop>
+  </Table>
+</PlaceObject>
 ]]></listing>
     </example>
     <example xml:lang="en">
@@ -3344,54 +3339,54 @@
     </example>
     <example xml:lang="de">
       <para>Die Indexerstellung funktioniert in zwei Schritten. Im ersten Schritt werden die Daten in eine Elementstruktur gespeichert und mit diesem Befehl sortiert. Im zweiten Schritt wird die Elementstruktur ausgegeben (<cmd name="LoadDataset"/>).</para>
-      <listing><![CDATA[  <Datensatz element="data">
-     <LadeDatensatzdatei name="index"/>
-    <Zuweisung variable="indexeinträge">
+      <listing><![CDATA[  <Record element="data">
+     <LoadDataset name="index"/>
+    <SetVariable variable="indexeinträge">
       <Element name="indexeintrag">
-        <Attribut name="name" auswahl="'Giraffe'"/>
-        <Attribut name="seite" auswahl="1"/>
+        <Attribute name="name" select="'Giraffe'"/>
+        <Attribute name="seite" select="1"/>
       </Element>
       <Element name="indexeintrag">
-        <Attribut name="name" auswahl="'Garage'"/>
-        <Attribut name="seite" auswahl="2"/>
+        <Attribute name="name" select="'Garage'"/>
+        <Attribute name="seite" select="2"/>
       </Element>
       <Element name="indexeintrag">
-        <Attribut name="name" auswahl="'Grußwort'"/>
-        <Attribut name="seite" auswahl="3"/>
+        <Attribute name="name" select="'Grußwort'"/>
+        <Attribute name="seite" select="3"/>
       </Element>
       <Element name="indexeintrag">
-        <Attribut name="name" auswahl="'Aufzug'"/>
-        <Attribut name="seite" auswahl="4"/>
+        <Attribute name="name" select="'Aufzug'"/>
+        <Attribute name="seite" select="4"/>
       </Element>
-    </Zuweisung>
-    <SpeichereDatensatzdatei dateiname="index" elementname="Index">
-      <Indexerstellen auswahl="$indexeinträge" sortierschlüssel="name" abschnitt="teil"/>
-    </SpeichereDatensatzdatei>
-  </Datensatz>
+    </SetVariable>
+    <SaveDataset filename="index" elementname="Index">
+      <Makeindex select="$indexeinträge" sortkey="name" section="teil"/>
+    </SaveDataset>
+  </Record>
 
-  <Datensatz element="Index">
-    <FürAlle auswahl="teil">
-      <ObjektAusgeben spalte="1">
-        <Tabelle breite="3" dehnen="max">
+  <Record element="Index">
+    <ForAll select="teil">
+      <PlaceObject column="1">
+        <Table width="3" dehnen="max">
           <Tr>
             <Td border-bottom="0.4pt" colspan="2">
-              <Absatz><Wert auswahl="@name"></Wert></Absatz>
+              <Paragraph><Value select="@name"></Value></Paragraph>
             </Td>
           </Tr>
-          <FürAlle auswahl="indexeintrag">
+          <ForAll select="indexeintrag">
             <Tr>
               <Td>
-                <Absatz><Wert auswahl="@name"/></Absatz>
+                <Paragraph><Value select="@name"/></Paragraph>
               </Td>
               <Td>
-                <Absatz><Wert auswahl="@seite"/></Absatz>
+                <Paragraph><Value select="@seite"/></Paragraph>
               </Td>
             </Tr>
-          </FürAlle>
-        </Tabelle>
-      </ObjektAusgeben>
-    </FürAlle>
-  </Datensatz>
+          </ForAll>
+        </Table>
+      </PlaceObject>
+    </ForAll>
+  </Record>
 ]]></listing>
     </example>
     <seealso>
@@ -3442,7 +3437,7 @@
       <listing><![CDATA[<Margin left="2cm" right="1cm" top="1cm" bottom="1cm"/>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Rand links="2cm" rechts="1cm" oben="1cm" unten="1cm" />]]></listing>
+      <listing><![CDATA[<Margin left="2cm" right="1cm" top="1cm" bottom="1cm" />]]></listing>
     </example>
     <seealso/>
   </command>
@@ -3467,7 +3462,7 @@
         <para>When yes, append the current page to the previous values of the mark. Useful to get page ranges in an index. (Default is no.)</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn ja, dann wird die aktuelle Seitenzahl an den letzten Wert angehängt (mit Komma separiert). Nützlich, um Seitenzahlen wie S. 3-5 im Index zu erstellen. Voreinstellung ist nein.</para>
+        <para>Wenn 'yes', dann wird die aktuelle Seitenzahl an den letzten Wert angehängt (mit Komma separiert). Nützlich, um Seitenzahlen wie S. 3-5 im Index zu erstellen. Voreinstellung ist nein.</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
@@ -3520,36 +3515,36 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Seitenformat breite="210mm" höhe="4cm"/>
+      <listing><![CDATA[<Pageformat width="210mm" height="4cm"/>
 
-<Datensatz element="data">
-  <ObjektAusgeben>
-    <Textblock breite="10">
-      <Absatz>
-        <Wert>
+<Record element="data">
+  <PlaceObject>
+    <Textblock width="10">
+      <Paragraph>
+        <Value>
         Zeile
         Zeile
         Zeile
         Zeile
-        </Wert>
-      </Absatz>
+        </Value>
+      </Paragraph>
     </Textblock>
-    <Textblock breite="10">
-      <Aktion>
-        <Marke auswahl="'Textanfang'"/>
-      </Aktion>
-      <Absatz>
-        <Wert>
+    <Textblock width="10">
+      <Action>
+        <Marke select="'Textanfang'"/>
+      </Action>
+      <Paragraph>
+        <Value>
           Zeile
           Zeile
           Zeile
-        </Wert>
-      </Absatz>
+        </Value>
+      </Paragraph>
     </Textblock>
-  </ObjektAusgeben>
-  <NeueSeite/>
-  <Nachricht auswahl="sd:seitennummer('Textanfang')"/>
-</Datensatz>
+  </PlaceObject>
+  <NewPage/>
+  <Message select="sd:pagenumber('Textanfang')"/>
+</Record>
 ]]></listing>
     </example>
     <info xml:lang="en">
@@ -3614,12 +3609,12 @@
       <listing><![CDATA[<Message select="concat('Price: ',@price)" error="no"/>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="Datensatz">
-  <Nachricht>
-    <Wert>Attribut Preis: </Wert>
-    <Wert auswahl="@Preis"></Wert>
+      <listing><![CDATA[<Record element="Datensatz">
+  <Message>
+    <Value>Attribut Preis: </Value>
+    <Value select="@Preis"></Value>
   </Nachricht>
-</Datensatz>]]></listing>
+</Record>]]></listing>
     </example>
     <seealso/>
   </command>
@@ -3652,7 +3647,7 @@
         <para>The next current page will be a left or a right page. E.g. when on page 1 and openon="right" then page 2 is empty and the next current page is 3.</para>
       </description>
       <description xml:lang="de">
-        <para>Die nächste aktuelle Seite ist eine linke oder rechte Seite. Z.B. wenn auf Seite 1 ein Seitenwechsel erzwungen wird mit öffnenauf="rechts", dann wird Seite zwei leer und die nächste aktuelle Seite ist die Seite 3.</para>
+        <para>Die nächste aktuelle Seite ist eine linke oder rechte Seite. Z.B. wenn auf Seite 1 ein Seitenwechsel erzwungen wird mit openon="right", dann wird Seite zwei leer und die nächste aktuelle Seite ist die Seite 3.</para>
       </description>
       <choice en="left" de="links">
         <description xml:lang="en">
@@ -3688,23 +3683,23 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="data">
-  <ObjektAusgeben>
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject>
     <Textblock>
-      <Absatz>
-        <Wert>Das ist Seite 1</Wert>
-      </Absatz>
+      <Paragraph>
+        <Value>Das ist Seite 1</Value>
+      </Paragraph>
     </Textblock>
-  </ObjektAusgeben>
-  <NeueSeite öffnenauf="rechts"/>
-  <ObjektAusgeben>
+  </PlaceObject>
+  <NewPage openon="right"/>
+  <PlaceObject>
     <Textblock>
-      <Absatz>
-        <Wert>Das ist Seite 3</Wert>
-      </Absatz>
+      <Paragraph>
+        <Value>Das ist Seite 3</Value>
+      </Paragraph>
     </Textblock>
-  </ObjektAusgeben>
-</Datensatz>
+  </PlaceObject>
+</Record>
 ]]></listing>
     </example>
     <seealso><cmd name="Pagetype"/></seealso>
@@ -3729,9 +3724,9 @@
       <listing><![CDATA[<NextFrame area="articlearea"/>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="artikel">
-  <NächsterRahmen bereich="Titel" />
-</Datensatz>]]></listing>
+      <listing><![CDATA[<Record element="artikel">
+  <NextFrame area="Titel" />
+</Record>]]></listing>
     </example>
     <seealso>
       <cmd name="PositioningArea"/>
@@ -3780,12 +3775,12 @@
       <para>This places the image on row 5.</para>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="bild">
-  <NeueZeile zeile="5" />
-  <ObjektAusgeben spalte="{$spalte}">
-    <Bild breite="10" datei="{.}" />
-  </ObjektAusgeben>
-</Datensatz>]]></listing>
+      <listing><![CDATA[<Record element="bild">
+  <NeueZeile row="5" />
+  <PlaceObject column="{$spalte}">
+    <Image width="10" file="{.}" />
+  </PlaceObject>
+</Record>]]></listing>
     </example>
     <seealso>
       <cmd name="EmptyLine"/>
@@ -3827,7 +3822,7 @@
           <para>Inserts text given in the attribute text if the paragraph is too long.</para>
         </description>
         <description xml:lang="de">
-          <para>Fügt den Text im Attribut text als Platzhalter ein, wenn der Absatz zu lang ist.</para>
+          <para>Fügt den Text im Attribut text als Platzhalter ein, wenn der Paragraph zu lang ist.</para>
         </description>
       </choice>
     </attribute>
@@ -3836,7 +3831,7 @@
         <para>The text to be inserted if the paragraph should be cut. For example '...'</para>
       </description>
       <description xml:lang="de">
-        <para>Der einzufügende Text, wenn der Absatz zu lang ist. Zum Beispiel '...'</para>
+        <para>Der einzufügende Text, wenn der Paragraph zu lang ist. Zum Beispiel '...'</para>
       </description>
     </attribute>
     <attribute en="factor" de="faktor" optional="yes" type="number">
@@ -3844,7 +3839,7 @@
         <para>Multiplier for the font size when reduce=fontsize. Default value: 0.9. That means the font size gets decreased by 0.9 until the text fits the objects width.</para>
       </description>
       <description xml:lang="de">
-        <para>Multiplikator für die Schriftgröße, wenn reduzieren=schriftgröße. Voreinstellung: 0.9. Das bedeutet, dass die Schriftgröße um 0,9 reduziert wird, bis der Text in die vorgegebene Breite hineinpasst.</para>
+        <para>Multiplikator für die Schriftgröße, wenn reduce=fontsize. Voreinstellung: 0.9. Das bedeutet, dass die Schriftgröße um 0,9 reduziert wird, bis der Text in die vorgegebene Breite hineinpasst.</para>
       </description>
     </attribute>
     <attribute en="fontface" de="schriftart" type="text" optional="yes">
@@ -3856,17 +3851,17 @@
       </description>
     </attribute>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben>
-  <Textblock breite="5">
-    <Absatz>
-      <Wert>Seit zwei Jahren ist meine Arbeit in Düsseldorf. </Wert><Br/>
-      <KeinUmbruch reduzieren="schriftgröße" faktor="0.9">
-        <Wert>Meine Familie lebt dagegen in Hamburg.</Wert>
-      </KeinUmbruch>
-      <Wert> Und dazwischen ich, aber ganz cool.</Wert>
-    </Absatz>
+      <listing><![CDATA[<PlaceObject>
+  <Textblock width="5">
+    <Paragraph>
+      <Value>Seit zwei Jahren ist meine Arbeit in Düsseldorf. </Value><Br/>
+      <NoBreak reduce="fontsize" factor="0.9">
+        <Value>Meine Familie lebt dagegen in Hamburg.</Value>
+      </NoBreak>
+      <Value> Und dazwischen ich, aber ganz cool.</Value>
+    </Paragraph>
   </Textblock>
-</ObjektAusgeben>]]></listing>
+</PlaceObject>]]></listing>
     </example>
     <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
@@ -3907,15 +3902,15 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben>
-  <Textblock breite="10">
+      <listing><![CDATA[<PlaceObject>
+  <Textblock width="10">
     <Ol>
-      <Li><Wert>Erster Eintrag</Wert></Li>
-      <Li><Wert>Zweiter Eintrag</Wert></Li>
-      <Li><Wert>Dritter Eintrag</Wert></Li>
+      <Li><Value>Erster Eintrag</Value></Li>
+      <Li><Value>Zweiter Eintrag</Value></Li>
+      <Li><Value>Dritter Eintrag</Value></Li>
     </Ol>
   </Textblock>
-</ObjektAusgeben>
+</PlaceObject>
 ]]></listing>
     </example>
     <seealso><cmd name="Ul"/>, <cmd name="Li"/></seealso>
@@ -3941,7 +3936,7 @@
         <para>Crop the pages so that the pdf size of the page is at its minimum. Allowed values are yes, no and a length.</para>
       </description>
       <description xml:lang="de">
-        <para>Beschneidet eine Seite, so dass die Objekte auf einer Seite die Größe bestimmen. Erlabute Werte sind ja, nein und eine Längenangabe.</para>
+        <para>Beschneidet eine Seite, so dass die Objekte auf einer Seite die Größe bestimmen. Erlabute Werte sind 'yes', 'no' und eine Längenangabe.</para>
       </description>
     </attribute>
     <attribute en="cutmarks" de="beschnittmarken" optional="yes">
@@ -4030,7 +4025,7 @@
         <para>Yes: ignore the marks file from previous run.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn ja, werden die Marker des letzten Laufs ignoriert.</para>
+        <para>Wenn 'yes', werden die Marker des letzten Laufs ignoriert.</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
@@ -4062,7 +4057,7 @@
         <para>Draw the grid on the page.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn ja, dann zeichnet der Publisher das zugrunde liegende Raster auf die Seiten.</para>
+        <para>Wenn 'yes', dann zeichnet der Publisher das zugrunde liegende Raster auf die Seiten.</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
@@ -4086,7 +4081,7 @@
         <para>Draw allocated cells with yellow and conflicts with red markers.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn ja, dann markiert der Publisher die belegten Rasterzellen mit einer Hintergrundfarbe.</para>
+        <para>Wenn 'yes', dann markiert der Publisher die belegten Rasterzellen mit einer Hintergrundfarbe.</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
@@ -4110,7 +4105,7 @@
         <para>Draw little marks to show all hyphenation points.</para>
       </description>
       <description xml:lang="de">
-        <para>Bei ja markiert der speedata Publisher die möglichen Trennstellen für die Silbentrennung.</para>
+        <para>Bei 'yes' markiert der speedata Publisher die möglichen Trennstellen für die Silbentrennung.</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
@@ -4193,11 +4188,11 @@
     trim="3mm"/>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Optionen
-   zeige_rasterbelegung="nein"
-   zeichne_raster="ja"
-   beschnittmarken="ja"
-   beschnittzugabe="3mm"
+      <listing><![CDATA[<Options
+   show-gridallocation="nein"
+   show-grid="no"
+   cutmarks="yes"
+   trim="3mm"
   />
       ]]></listing>
     </example>
@@ -4230,7 +4225,7 @@
       <para>Still exerimental. This command is similar to <cmd name="PlaceObject"/> and is currently limited to output text which can be broken across positioning frames.</para>
     </description>
     <description xml:lang="de">
-      <para>Experimentell. Dieser Befehl ist ähnlich zu <cmd name="PlaceObject"/> und dient derzeit nur dazu, Text auszugeben, der auf mehrere Seite umbrachen werden kann.</para>
+      <para>Experimentell. Dieser Befehl ist ähnlich zu <cmd name="PlaceObject"/> und dient derzeit nur dazu, Text auszugeben, der auf mehrere Seite umbrochen werden kann.</para>
     </description>
     <childelements>
       <cmd name="Text"/>
@@ -4296,24 +4291,24 @@
   </Record>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[  <Seitentyp name="seite" bedingung="true()">
-    <Rand links="1cm" rechts="1cm" oben="1cm" unten="1cm"/>
-    <Platzierungsbereich name="text">
-      <Platzierungsrahmen breite="9" höhe="4" zeile="1" spalte="1"/>
-      <Platzierungsrahmen breite="9" höhe="4" zeile="1" spalte="11"/>
-      <Platzierungsrahmen breite="9" höhe="4" zeile="6" spalte="1"/>
-      <Platzierungsrahmen breite="9" höhe="4" zeile="6" spalte="11"/>
-    </Platzierungsbereich>
-  </Seitentyp>
-  <Datensatz element="data">
-    <Ausgabe bereich="text">
+      <listing><![CDATA[  <Pagetype name="seite" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+    <PositioningArea name="text">
+      <PositioningFrame width="9" height="4" row="1" column="1"/>
+      <PositioningFrame width="9" height="4" row="1" column="11"/>
+      <PositioningFrame width="9" height="4" row="6" column="1"/>
+      <PositioningFrame width="9" height="4" row="6" column="11"/>
+    </PositioningArea>
+  </Pagetype>
+  <Record element="data">
+    <Output area="text">
       <Text>
-        <Absatz schriftart="text">
-          <Wert>Kaum standen am folgenden...</Wert>
-        </Absatz>
+        <Paragraph fontface="text">
+          <Value>Kaum standen am folgenden...</Value>
+        </Paragraph>
       </Text>
-    </Ausgabe>
-  </Datensatz>
+    </Output>
+  </Record>
 ]]></listing>
     </example>
     <seealso/>
@@ -4365,26 +4360,26 @@
       <image file="overlay.png"/>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben>
-  <Tabelle>
+      <listing><![CDATA[<PlaceObject>
+  <Table>
     <Tr>
       <Td>
-        <Überlagern>
-          <Bild breite="5" höhe="4" datei="_samplea.pdf"/>
+        <Overlay>
+          <Image width="5" height="4" file="_samplea.pdf"/>
           <Position x="0" y="0">
-            <Box breite="2" höhe="2" hintergrundfarbe="#fff"/>
+            <Box width="2" height="2" backgroundcolor="#fff"/>
           </Position>
           <Position y="0" x="0">
-            <Strichcode auswahl="'speedata'" typ="QRCode" breite="2"/>
+            <Barcode select="'speedata'" type="QRCode" width="2"/>
           </Position>
-        </Überlagern>
+        </Overlay>
       </Td>
       <Td>
-        <Bild breite="5" höhe="4" datei="_sampleb.pdf"/>
+        <Image width="5" height="4" file="_sampleb.pdf"/>
       </Td>
     </Tr>
-  </Tabelle>
-</ObjektAusgeben>
+  </Table>
+</PlaceObject>
 ]]></listing>
       <para>ergibt folgende Ausgabe</para>
       <image file="overlay.png"/>
@@ -4396,7 +4391,7 @@
       <para>Insert a paragraph of text. The width of the paragraph is inherited from the surrounding element.</para>
     </description>
     <description xml:lang="de">
-      <para>Erzeugt einen Absatz innerhalb eines Textblocks.</para>
+      <para>Erzeugt einen Paragraph innerhalb eines Textblocks.</para>
     </description>
     <childelements>
       <reference name="Textvalues"/>
@@ -4414,7 +4409,7 @@
         <para>Color of the paragraph. Must be defined with <cmd name="DefineColor"/> before use.</para>
       </description>
       <description xml:lang="de">
-        <para>Farbe des Absatzes. Muss vorher mit <cmd name="DefineColor"/> definiert worden sein.</para>
+        <para>Farbe des Paragraphes. Muss vorher mit <cmd name="DefineColor"/> definiert worden sein.</para>
       </description>
     </attribute>
     <attribute en="textformat" de="textformat" type="text" optional="yes">
@@ -4447,7 +4442,7 @@
         <para>CSS class for this paragraph.</para>
       </description>
       <description xml:lang="de">
-        <para>CSS Klasse für diesen Absatz.</para>
+        <para>CSS Klasse für diesen Paragraph.</para>
       </description>
     </attribute>
     <attribute en="id" de="id" optional="yes" type="text">
@@ -4455,7 +4450,7 @@
         <para>CSS id for this paragraph.</para>
       </description>
       <description xml:lang="de">
-        <para>CSS id für diesen Absatz.</para>
+        <para>CSS id für diesen Paragraph.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -4467,21 +4462,21 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Textblock breite="27">
-  <Absatz schriftart="Überschrift">
-    <Wert>Hallo Welt</Wert>
-  </Absatz>
+      <listing><![CDATA[<Textblock width="27">
+  <Paragraph fontface="Überschrift">
+    <Value>Hallo Welt</Value>
+  </Paragraph>
 </Textblock>
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Textblock breite="27">
-  <Absatz schriftart="Überschrift" sprache="Deutsch">
-    <Wert auswahl="node()"/>
-  </Absatz>
+      <listing><![CDATA[<Textblock width="27">
+  <Paragraph fontface="Überschrift" sprache="Deutsch">
+    <Value select="node()"/>
+  </Paragraph>
   </Textblock>]]></listing>
       <para>wobei in den Daten ein Text steht, beispielsweise falls der aktuelle Knoten das Element <cmd name="Record"/> ist:</para>
-      <listing><![CDATA[<datensatz>Produktbeschreibung: die Artikelnummer <i>1234</i> setzt sich aus ... </datensatz>]]></listing>
+      <listing><![CDATA[<Record>Produktbeschreibung: die Artikelnummer <i>1234</i> setzt sich aus ... </Record>]]></listing>
     </example>
     <seealso><cmd name="Textblock"/>, <ref name="fonts"/></seealso>
   </command>
@@ -4513,7 +4508,7 @@
       <listing><![CDATA[<Pageformat width="150mm" height="150mm"/>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Seitenformat breite="150mm" höhe="150mm" />]]></listing>
+      <listing><![CDATA[<Pageformat width="150mm" height="150mm" />]]></listing>
     </example>
     <seealso/>
   </command>
@@ -4522,7 +4517,7 @@
       <para>Define a master page. A master page is chosen depending on the criterium given with the attribute »test«.</para>
     </description>
     <description xml:lang="de">
-      <para>Definiert eine Seitenvorlage. Anhand der Kriterien, die im Attribut bedingung angegeben werden, wählt das System eine Seitenvorlage aus.</para>
+      <para>Definiert eine Seitenvorlage. Anhand der Kriterien, die im Attribut test angegeben werden, wählt das System eine Seitenvorlage aus.</para>
     </description>
     <childelements>
       <cmd name="Margin"/>
@@ -4585,26 +4580,26 @@
 </Pagetype>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Seitentyp name="rechte Seite" bedingung=" sd:ungerade( sd:aktuelle-seite() ) ">]]></listing>
-      <listing><![CDATA[<Seitentyp name="linke Seite" bedingung=" sd:gerade( sd:aktuelle-seite() ) ">]]></listing>
-      <listing><![CDATA[<Seitentyp name="Hauptteil rechte Seite" bedingung=" sd:ungerade( sd:aktuelle-seite() )  and $kapitel='hauptteil' ">]]></listing>
-      <listing><![CDATA[<Seitentyp name="rechte Seite" bedingung="sd:ungerade( sd:aktuelle-seite() )">
-  <Rand links="1cm" rechts="1cm" oben="1cm" unten="1cm"/>
-  <BeiSeitenErzeugung>
-    <ObjektAusgeben spalte="1">
+      <listing><![CDATA[<Pagetype name="rechte Seite" test=" sd:odd( sd:current-page() ) ">]]></listing>
+      <listing><![CDATA[<Pagetype name="linke Seite" test=" sd:even( sd:current-page() ) ">]]></listing>
+      <listing><![CDATA[<Pagetype name="Hauptteil rechte Seite" test=" sd:odd( sd:current-page() )  and $kapitel='hauptteil' ">]]></listing>
+      <listing><![CDATA[<Pagetype name="rechte Seite" test="sd:odd( sd:current-page() )">
+  <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+  <AtPageCreation>
+    <PlaceObject column="1">
       ...
-    </ObjektAusgeben>
-  </BeiSeitenErzeugung>
-  <BeiSeitenAusgabe>
-    <ObjektAusgeben spalte="1">
+    </PlaceObject>
+  </AtPageCreation>
+  <AtPageShipout>
+    <PlaceObject column="1">
       ....
-    </ObjektAusgeben>
-  </BeiSeitenAusgabe>
-  <Platzierungsbereich name="rahmen1">
-    <Platzierungsrahmen breite="12" höhe="30" spalte="2" zeile="2"/>
-    <Platzierungsrahmen breite="12" höhe="30" spalte="16" zeile="2"/>
-  </Platzierungsbereich>
-</Seitentyp>]]></listing>
+    </PlaceObject>
+  </AtPageShipout>
+  <PositioningArea name="rahmen1">
+    <PositioningFrame width="12" height="30" column="2" row="2"/>
+    <PositioningFrame width="12" height="30" column="16" row="2"/>
+  </PositioningArea>
+</Pagetype>]]></listing>
     </example>
     <seealso><ref name="xpath"/>, <cmd name="AtPageCreation"/>,  <cmd name="AtPageShipout"/>,   <cmd name="PositioningArea"/>,  <cmd name="NewPage"/>
     </seealso>
@@ -4706,7 +4701,7 @@
       </choice>
     </attribute>
     <example xml:lang="en"><listing><![CDATA[<PDFOptions numcopies="3"/>]]></listing></example>
-    <example xml:lang="de"><listing><![CDATA[<PDFOptionen anzahlkopien="4"/>]]></listing></example>
+    <example xml:lang="de"><listing><![CDATA[<PDFOptionen numcopies="4"/>]]></listing></example>
     <seealso></seealso>
   </command>
   <command en="PlaceObject" de="ObjektAusgeben">
@@ -4841,14 +4836,14 @@
         <para>Fill the background of the object (full grid cells) with a color, given by backgroundcolor.</para>
       </description>
       <description xml:lang="de">
-        <para>Erzeugt einen farbigen Hintergrund für das Objekt. Das Attribut ›hintergrundfarbe‹ gibt die Farbe an.</para>
+        <para>Erzeugt einen farbigen Hintergrund für das Objekt. Das Attribut ›backgroundcolor‹ gibt die Farbe an.</para>
       </description>
       <choice en="full" de="vollständig">
         <description xml:lang="en">
           <para>Fill background with the given color (in backgroundcolor).</para>
         </description>
         <description xml:lang="de">
-          <para>Den Hintergrund in der angegebenen Farbe füllen (in hintergrundfarbe)</para>
+          <para>Den Hintergrund in der angegebenen Farbe füllen (in backgroundcolor)</para>
         </description>
       </choice>
       <choice en="without" de="ohne">
@@ -5132,17 +5127,17 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="bild">
-  <ObjektAusgeben spalte="12" rahmen="durchgezogen" rahmenfarbe="Rot">
-    <Bild breite="10" datei="_samplea.pdf" />
-  </ObjektAusgeben>
-</Datensatz>]]></listing>
+      <listing><![CDATA[<Record element="bild">
+  <PlaceObject column="12" frame="solid" framecolor="Rot">
+    <Image width="10" file="_samplea.pdf" />
+  </PlaceObject>
+</Record>]]></listing>
       <para>Absolute Platzierung:</para>
-      <listing><![CDATA[<Datensatz element="bild">
-  <ObjektAusgeben spalte="1cm" zeile="4cm" rahmen="durchgezogen" rahmenfarbe="Rot">
-    <Bild breite="10" datei="_samplea.pdf" />
-  </ObjektAusgeben>
-</Datensatz>]]></listing>
+      <listing><![CDATA[<Record element="bild">
+  <PlaceObject column="1cm" row="4cm" frame="solid" framecolor="Rot">
+    <Image width="10" file="_samplea.pdf" />
+  </PlaceObject>
+</Record>]]></listing>
     </example>
     <info xml:lang="en">
       <para>The objects can be placed in a grid (when the value in the attributes row and column are numbers) or they can be placed with absolute positions where the origin is at the top and left border of the page.</para>
@@ -5238,10 +5233,10 @@
 </Pagetype>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Platzierungsbereich name="rahmen1">
-  <Platzierungsrahmen breite="12" höhe="30" spalte="2" zeile="2"/>
-  <Platzierungsrahmen breite="12" höhe="30" spalte="16" zeile="2"/>
-</Platzierungsbereich>]]></listing>
+      <listing><![CDATA[<PositioningArea name="rahmen1">
+  <PositioningFrame width="12" height="30" column="2" row="2"/>
+  <PositioningFrame width="12" height="30" column="16" row="2"/>
+</PositioningArea>]]></listing>
     </example>
     <seealso>
       <cmd name="PositioningFrame"/>
@@ -5298,10 +5293,10 @@
 </Pagetype>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Platzierungsbereich name="rahmen1">
-  <Platzierungsrahmen breite="12" höhe="30" spalte="2" zeile="2"/>
-  <Platzierungsrahmen breite="12" höhe="30" spalte="16" zeile="2"/>
-</Platzierungsbereich>]]></listing>
+      <listing><![CDATA[<PositioningArea name="rahmen1">
+  <PositioningFrame width="12" height="30" column="2" row="2"/>
+  <PositioningFrame width="12" height="30" column="16" row="2"/>
+</PositioningArea>]]></listing>
     </example>
     <seealso>
       <cmd name="PositioningArea"/>
@@ -5343,7 +5338,7 @@
       <listing><![CDATA[<ProcessNode select="*" mode="sum" />]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<BearbeiteKnoten auswahl="*" modus="summe" />]]></listing>
+      <listing><![CDATA[<ProcessNode select="*" mode="summe" />]]></listing>
     </example>
     <seealso><cmd name="Record"/></seealso>
   </command>
@@ -5388,15 +5383,15 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="url" modus="ausgabe">
-  <ObjektAusgeben>
-    <Textblock breite="27" textformat="text">
-      <Absatz>
-        <A href="http://www.speedata.de"><Wert>Webseite von speedata</Wert></A>
-      </Absatz>
+      <listing><![CDATA[<Record element="url" mode="ausgabe">
+  <PlaceObject>
+    <Textblock width="27" textformat="text">
+      <Paragraph>
+        <A href="http://www.speedata.de"><Value>Webseite von speedata</Value></A>
+      </Paragraph>
     </Textblock>
-  </ObjektAusgeben>
-</Datensatz>
+  </PlaceObject>
+</Record>
 ]]></listing>
     </example>
     <seealso>
@@ -5436,15 +5431,15 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<LadeSchriftdatei name="Helvetica" dateiname="helvetica-regular.otf" />
+      <listing><![CDATA[<LoadFontfile name="Helvetica" filename="helvetica-regular.otf" />
 ...
 
-<DefiniereSchriftfamilie name="text" schriftgröße="12" zeilenabstand="14">
-  <Normal     schriftart="Helvetica"/>
-  <Fett       schriftart="Helvetica Fett"/>
-  <Kursiv     schriftart="Helvetica Kursiv"/>
-  <FettKursiv schriftart="Helvetica Fett Kursiv"/>
-</DefiniereSchriftfamilie>]]></listing>
+<DefineFontfamily name="text" fontsize="12" leading="14">
+  <Regular    fontface="Helvetica"/>
+  <Bold       fontface="Helvetica Fett"/>
+  <Italic     fontface="Helvetica Kursiv"/>
+  <BoldItalic fontface="Helvetica Fett Kursiv"/>
+</DefineFontfamily>]]></listing>
     </example>
     <seealso>
       <cmd name="Bold"/>
@@ -5540,11 +5535,11 @@
 </Record>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="data">
-  <ObjektAusgeben>
-    <Linie richtung="horizontal" länge="10" linienstärke="3"/>
-  </ObjektAusgeben>
-</Datensatz>
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject>
+    <Rule direction="horizontal" length="10" rulewidth="3"/>
+  </PlaceObject>
+</Record>
 ]]></listing>
     </example>
     <seealso>
@@ -5630,11 +5625,11 @@
       <listing><![CDATA[<SaveDataset filename="toc" elementname="Contents" select="$contents"/>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<SpeichereDatensatzdatei dateiname="toc" elementname="Inhalt">
-   <KopieVon auswahl="$Inhalt"/>
-</SpeichereDatensatzdatei>]]></listing>
+      <listing><![CDATA[<SaveDataset filename="toc" elementname="Inhalt">
+   <Copy-of select="$Inhalt"/>
+</SaveDataset>]]></listing>
       <para>Äquivalent dazu ist:</para>
-      <listing><![CDATA[<SpeichereDatensatzdatei dateiname="toc" elementname="Inhalt" auswahl="$Inhalt" />]]></listing>
+      <listing><![CDATA[<SaveDataset filename="toc" elementname="Inhalt" select="$Inhalt" />]]></listing>
     </example>
     <seealso>
       <cmd name="Element"/>, <cmd name="Attribute"/>, <cmd name="LoadDataset"/>, <ref name="directories"/>
@@ -5679,19 +5674,19 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="data">
-  <SeitenSpeichern name="foo">
-    <Schleife auswahl="100">
-      <ObjektAusgeben>
+      <listing><![CDATA[<Record element="data">
+  <SavePages name="foo">
+    <Loop select="100">
+      <PlaceObject>
         <Textblock>
-          <Absatz><Wert>Hallo Welt</Wert></Absatz>
+          <Paragraph><Value>Hallo Welt</Value></Paragraph>
         </Textblock>
-      </ObjektAusgeben>
-    </Schleife>
-  </SeitenSpeichern>
-  <Nachricht auswahl="sd:anzahl-gespeicherter-seiten('foo')"/>
-  <SeitenEinfügen name="foo"/>
-</Datensatz>
+      </PlaceObject>
+    </Loop>
+  </SavePages>
+  <Message select="sd:count-saved-pages('foo')"/>
+  <InsertPages name="foo"/>
+</Record>
 ]]></listing>
     </example>
     <seealso><cmd name="InsertPages"/></seealso>
@@ -5756,7 +5751,7 @@
       <listing><![CDATA[<SetGrid width="4mm" height="14pt"/>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<SetzeRaster breite="4mm" höhe="14pt" />]]></listing>
+      <listing><![CDATA[<SetGrid width="4mm" height="14pt" />]]></listing>
     </example>
     <seealso><cmd name="Grid"/></seealso>
   </command>
@@ -5841,36 +5836,36 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="produkt">
-  <Zuweisung variable="Textbreite" auswahl="5"/>
-  <ObjektAusgeben spalte="1">
-    <Textblock breite="{ $Textbreite }">
-      <Absatz>
-        <Wert auswahl="$Artikelnummer"/>
-      </Absatz>
+      <listing><![CDATA[<Record element="produkt">
+  <SetVariable variable="Textbreite" select="5"/>
+  <PlaceObject column="1">
+    <Textblock width="{ $Textbreite }">
+      <Paragraph>
+        <Value select="$Artikelnummer"/>
+      </Paragraph>
     </Textblock>
-  </ObjektAusgeben>
-</Datensatz>]]></listing>
+  </PlaceObject>
+</Record>]]></listing>
       <para>Folgendes Beispiel zeigt, wie mehrere Absätze in einer Variablen gespeichert werden, um sie anschließend in einem Textblock auszugeben.</para>
-      <listing><![CDATA[<Datensatz element="produkte">
-  <Zuweisung variable="Artikeltext"/>
-  <BearbeiteKnoten auswahl="artikel"/>
-  <ObjektAusgeben spalte="1">
-    <Textblock breite="10">
-      <Wert auswahl=" $Artikeltext "/>
+      <listing><![CDATA[<Record element="produkte">
+  <SetVariable variable="Artikeltext"/>
+  <ProcessNode select="artikel"/>
+  <PlaceObject column="1">
+    <Textblock width="10">
+      <Value select=" $Artikeltext "/>
     </Textblock>
-  </ObjektAusgeben>
-</Datensatz>
+  </PlaceObject>
+</Record>
 
-<Datensatz element="artikel">
-  <Zuweisung variable="Artikeltext">
+<Record element="artikel">
+  <SetVariable variable="Artikeltext">
     <!-- Der vorherige Inhalt wird hinzugefügt -->
-    <Wert auswahl="$Artikeltext"/>
-    <Absatz>
-      <Wert auswahl=" @beschreibung " />
-    </Absatz>
-  </Zuweisung>
-</Datensatz>]]></listing>
+    <Value select="$Artikeltext"/>
+    <Paragraph>
+      <Value select=" @beschreibung " />
+    </Paragraph>
+  </SetVariable>
+</Record>]]></listing>
     </example>
     <seealso>
       <cmd name="Value"/>
@@ -5995,19 +5990,19 @@
 </data>
 ]]></listing>
       <para>Layout:</para>
-      <listing><![CDATA[<Datensatz element="data">
-  <Zuweisung variable="unsorted" auswahl="*"/>
-  <Zuweisung variable="sorted">
-    <SortiereSequenz auswahl="$unsorted" kriterium="value"/>
-  </Zuweisung>
-  <ObjektAusgeben>
+      <listing><![CDATA[<Record element="data">
+  <SetVariable variable="unsorted" select="*"/>
+  <SetVariable variable="sorted">
+    <SortiereSequenz select="$unsorted" criterium="value"/>
+  </SetVariable>
+  <PlaceObject>
     <Textblock>
-      <FürAlle auswahl="$sorted">
-        <Absatz><Wert auswahl="@value"/></Absatz>
-      </FürAlle>
+      <ForAll select="$sorted">
+        <Paragraph><Value select="@value"/></Paragraph>
+      </ForAll>
     </Textblock>
-  </ObjektAusgeben>
-</Datensatz>
+  </PlaceObject>
+</Record>
 ]]></listing>
     </example>
     <seealso/>
@@ -6031,11 +6026,11 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben spalte="1">
-  <Textblock breite="20">
-    <Absatz><Wert>Text</Wert><Sub><Wert>tief</Wert></Sub></Absatz>
+      <listing><![CDATA[<PlaceObject column="1">
+  <Textblock width="20">
+    <Paragraph><Value>Text</Value><Sub><Value>tief</Value></Sub></Paragraph>
   </Textblock>
-</ObjektAusgeben>]]></listing>
+</PlaceObject>]]></listing>
     </example>
     <seealso>
       <cmd name="Sup"/>, <cmd name="Paragraph"/>
@@ -6060,11 +6055,11 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben spalte="1">
-  <Textblock breite="20">
-    <Absatz><Wert>Text</Wert><Sup><Wert>hoch</Wert></Sup></Absatz>
+      <listing><![CDATA[<PlaceObject column="1">
+  <Textblock width="20">
+    <Paragraph><Value>Text</Value><Sup><Value>hoch</Value></Sup></Paragraph>
   </Textblock>
-</ObjektAusgeben>]]></listing>
+</PlaceObject>]]></listing>
     </example>
     <seealso>
       <cmd name="Paragraph"/>
@@ -6108,58 +6103,58 @@
 </Record>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="...">
-  <Zuweisung variable="zähler" auswahl="3"/>
-  <Fallunterscheidung>
-    <Fall bedingung=" $zähler &lt; 5">
-      <Zuweisung variable="text" auswahl="'Kleiner als 5'" />
-    </Fall>
-    <Fall bedingung=" $zähler &lt; 20">
-      <Zuweisung variable="text" auswahl="'Kleiner als 20'" />
-    </Fall>
-    <Sonst>
-      <Zuweisung variable="text" auswahl="'Größer als oder gleich 20'" />
-    </Sonst>
-  </Fallunterscheidung>
-  <ObjektAusgeben spalte="1">
+      <listing><![CDATA[<Record element="...">
+  <SetVariable variable="zähler" select="3"/>
+  <Switch>
+    <Case test=" $zähler &lt; 5">
+      <SetVariable variable="text" select="'Kleiner als 5'" />
+    </Case>
+    <Case test=" $zähler &lt; 20">
+      <SetVariable variable="text" select="'Kleiner als 20'" />
+    </Case>
+    <Otherwise>
+      <SetVariable variable="text" select="'Größer als oder gleich 20'" />
+    </Otherwise>
+  </Switch>
+  <PlaceObject column="1">
     <Textblock>
-      <Absatz><Wert auswahl="$text" /></Absatz>
+      <Paragraph><Value select="$text" /></Paragraph>
     </Textblock>
-  </ObjektAusgeben>
-</Datensatz>]]></listing>
+  </PlaceObject>
+</Record>]]></listing>
     </example>
     <info xml:lang="en">
       <para>You have to be careful to encode the test with the rules of XML: that is »less« must be written as &amp;lt; as &lt; must not be part of text contents.</para>
       <para>A Switch may be part of nearly all commands. It dissolves and only the contents of the Case or Ohterwise gets replaced by the whole construct.</para>
     </info>
     <info xml:lang="de">
-      <para>»Größer« und »kleiner« Vergleiche müssen nach den Regeln von XML kodiert werden. Für »größer« kann das &gt; Zeichen oder &amp;gt; benutzt werden, »kleiner« muss zwingend als &amp;lt;
+      <para>»Größer« und »kleiner« Vergleiche müssen nach den Regeln von XML kodiert werden. Für »größer« kann das > Zeichen oder &amp;​gt; benutzt werden, »kleiner« muss zwingend als &amp;lt;
         ausgeschrieben sein, da das Zeichen &lt; nicht in einem XML Attribut vorkommen darf.</para>
-      <para>Eine Fallunterscheidung kann in fast allen Elementen vorkommen. Das Ergebnis der Fallunterscheidung (also vom benutzten Element Fall oder Sonst) wird an das umgebende Element
+      <para>Eine Fallunterscheidung kann in fast allen Elementen vorkommen. Das Ergebnis der Fallunterscheidung (also vom benutzten Element Case oder Otherwise) wird an das umgebende Element
         zurückgegeben. So wird beispielsweise aus</para>
       <listing><![CDATA[<Td>
-  <Absatz>
-    <Fallunterscheidung>
-      <Fall bedingung=" $zeile > 10 ">
-       <Wert>Zeile ist größer als 10</Wert>
-      </Fall>
-      <Sonst>
-        <Wert>Zeile ist kleiner oder gleich 10</Wert>
-      </Sonst>
-    </Fallunterscheidung>
-  </Absatz>
+  <Paragraph>
+    <Switch>
+      <Case test=" $zeile > 10 ">
+       <Value>Zeile ist größer als 10</Value>
+      </Case>
+      <Otherwise>
+        <Value>Zeile ist kleiner oder gleich 10</Value>
+      </Otherwise>
+    </Switch>
+  </Paragraph>
 </Td>]]></listing>
       <listing><![CDATA[<Td>
-  <Absatz>
-    <Wert>Zeile ist größer als 10</Wert>
-  </Absatz>
+  <Paragraph>
+    <Value>Zeile ist größer als 10</Value>
+  </Paragraph>
 </Td>
 ]]></listing>
       <para>oder</para>
       <listing><![CDATA[<Td>
-  <Absatz>
-    <Wert>Zeile ist kleiner oder gleich 10</Wert>
-  </Absatz>
+  <Paragraph>
+    <Value>Zeile ist kleiner oder gleich 10</Value>
+  </Paragraph>
 </Td>]]></listing>
       <para>je nach Inhalt der Variablen.</para>
     </info>
@@ -6207,7 +6202,7 @@
 </Stylesheet>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Stylesheet dateiname="style.css" />]]></listing>
+      <listing><![CDATA[<Stylesheet filename="style.css" />]]></listing>
       <listing><![CDATA[<Stylesheet>
   frame {
     border-bottom-right-radius: 1cm;
@@ -6345,7 +6340,7 @@
       <para>The table cells may contain Paragraphs, Images and other objects that are allowed in <cmd name="PlaceObject"/>.</para>
     </remark>
     <remark xml:lang="de">
-      <para>Die Tabellenzellen dürfen Absätze (Absatz), Bilder (Bild) und wiederum Tabellen enthalten.</para>
+      <para>Die Tabellenzellen dürfen Absätze (Paragraph), Bilder (Bild) und wiederum Tabellen enthalten.</para>
     </remark>
     <example xml:lang="en">
       <listing><![CDATA[
@@ -6412,50 +6407,50 @@
       <image file="table-en.png"/>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben spalte="1">
-  <Tabelle breite="29" padding="1mm" zeilenabstand="0mm" spaltenabstand="0pt" dehnen="max">
-    <Tabellenkopf>
-      <Tlinie linienstärke="1pt" />
+      <listing><![CDATA[<PlaceObject column="1">
+  <Table width="29" padding="1mm" leading="0mm" spaltenabstand="0pt" dehnen="max">
+    <Tablehead>
+      <Tablerule rulewidth="1pt" />
       <Tr>
-        <Td align="center"><Absatz><Wert>Platz</Wert></Absatz></Td>
-        <Td align="center"><Absatz><Wert>Club</Wert></Absatz></Td>
-        <Td align="center"><Absatz><Wert>Punkte</Wert></Absatz></Td>
-        <Td align="center"><Absatz><Wert>Differenz</Wert></Absatz></Td>
+        <Td align="center"><Paragraph><Value>Platz</Value></Paragraph></Td>
+        <Td align="center"><Paragraph><Value>Club</Value></Paragraph></Td>
+        <Td align="center"><Paragraph><Value>Punkte</Value></Paragraph></Td>
+        <Td align="center"><Paragraph><Value>Differenz</Value></Paragraph></Td>
       </Tr>
-      <Tlinie linienstärke="0.6pt" />
-    </Tabellenkopf>
+      <Tablerule rulewidth="0.6pt" />
+    </Tablehead>
     <Tr>
-      <Td align="center"><Absatz><Wert>1</Wert></Absatz></Td>
-      <Td><Absatz><Wert>FC Bayern München</Wert></Absatz></Td>
-      <Td align="center"><Absatz><Wert>56</Wert></Absatz></Td>
-      <Td align="center"><Absatz><Wert>+31</Wert></Absatz></Td>
-      <Td rowspan="2"><Absatz><Wert>CL</Wert></Absatz></Td>
+      <Td align="center"><Paragraph><Value>1</Value></Paragraph></Td>
+      <Td><Paragraph><Value>FC Bayern München</Value></Paragraph></Td>
+      <Td align="center"><Paragraph><Value>56</Value></Paragraph></Td>
+      <Td align="center"><Paragraph><Value>+31</Value></Paragraph></Td>
+      <Td rowspan="2"><Paragraph><Value>CL</Value></Paragraph></Td>
     </Tr>
     <Tr>
-      <Td align="center"><Absatz><Wert>2</Wert></Absatz></Td>
-      <Td><Absatz><Wert>FC Schalke 04</Wert></Absatz></Td>
-      <Td align="center"><Absatz><Wert>54</Wert></Absatz></Td>
-      <Td align="center"><Absatz><Wert>+22</Wert></Absatz></Td>
+      <Td align="center"><Paragraph><Value>2</Value></Paragraph></Td>
+      <Td><Paragraph><Value>FC Schalke 04</Value></Paragraph></Td>
+      <Td align="center"><Paragraph><Value>54</Value></Paragraph></Td>
+      <Td align="center"><Paragraph><Value>+22</Value></Paragraph></Td>
     </Tr>
     <Tr>
-      <Td align="center"><Absatz><Wert>3</Wert></Absatz></Td>
-      <Td><Absatz><Wert>Bayer 04 Leverkusen</Wert></Absatz></Td>
-      <Td align="center"><Absatz><Wert>53</Wert></Absatz></Td>
-      <Td align="center"><Absatz><Wert>+31</Wert></Absatz></Td>
-      <Td><Absatz><Wert>CL Qual.</Wert></Absatz></Td>
+      <Td align="center"><Paragraph><Value>3</Value></Paragraph></Td>
+      <Td><Paragraph><Value>Bayer 04 Leverkusen</Value></Paragraph></Td>
+      <Td align="center"><Paragraph><Value>53</Value></Paragraph></Td>
+      <Td align="center"><Paragraph><Value>+31</Value></Paragraph></Td>
+      <Td><Paragraph><Value>CL Qual.</Value></Paragraph></Td>
     </Tr>
     <Tr>
-      <Td align="center"><Absatz><Wert>4</Wert></Absatz></Td>
-      <Td><Absatz><Wert>Borussia Dortmund</Wert></Absatz></Td>
-      <Td align="center"><Absatz><Wert>45</Wert></Absatz></Td>
-      <Td align="center"><Absatz><Wert>+10</Wert></Absatz></Td>
-      <Td><Absatz><Wert>EL Qual.</Wert></Absatz></Td>
+      <Td align="center"><Paragraph><Value>4</Value></Paragraph></Td>
+      <Td><Paragraph><Value>Borussia Dortmund</Value></Paragraph></Td>
+      <Td align="center"><Paragraph><Value>45</Value></Paragraph></Td>
+      <Td align="center"><Paragraph><Value>+10</Value></Paragraph></Td>
+      <Td><Paragraph><Value>EL Qual.</Value></Paragraph></Td>
     </Tr>
-    <Tabellenfuß>
-      <Tlinie linienstärke="1pt" />
-    </Tabellenfuß>
-  </Tabelle>
-</ObjektAusgeben>]]></listing>
+    <Tablefoot>
+      <Tablerule rulewidth="1pt" />
+    </Tablefoot>
+  </Table>
+</PlaceObject>]]></listing>
       <image file="table-de.png"/>
     </example>
     <seealso>
@@ -6894,12 +6889,12 @@
     <remark xml:lang="de">
       <para>Die Kindelemente der Tabellenzelle können Blockobjekte oder Zeilenobjekte sein. Blockobjekte erzeugen eine neue Zeile, Zeilenobjekte werden von rechts nach links
         so lange in eine Zeile geschrieben, bis die Zeilenbreite einen Zeilenumbruch erzwingt. Blockobjekte sind <cmd name="Paragraph"/>, <cmd name="Table"/> und <cmd name="Box"/>, Zeilenobjekte sind <cmd name="Barcode"/> und <cmd name="Image"/>.</para>
-      <para>Das Attribut align erzeugt implizit ein Textformat (nur in Bezug auf Ausrichtung) für alle Kindelemente Absatz, sofern dort kein Textformat angegeben ist.</para>
+      <para>Das Attribut align erzeugt implizit ein Textformat (nur in Bezug auf Ausrichtung) für alle Kindelemente Paragraph, sofern dort kein Textformat angegeben ist.</para>
     </remark>
     <example xml:lang="de">
       <listing><![CDATA[<Tr>
-  <Td colspan="2" align="right"><Absatz><Wert>Text</Wert></Absatz></Td>
-  <Td rowspan="3"><Bild breite="3" datei="bildname.jpg"/></Td>
+  <Td colspan="2" align="right"><Paragraph><Value>Text</Value></Paragraph></Td>
+  <Td rowspan="3"><Image width="3" file="bildname.jpg"/></Td>
 </Tr>]]></listing>
     </example>
     <example xml:lang="en">
@@ -7002,14 +6997,14 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Tlinie linienstärke="1pt" />
+      <listing><![CDATA[<Tablerule rulewidth="1pt" />
 <Tr>
   <Td align="center">Platz</Td>
   <Td align="center">Club</Td>
   <Td align="center">Punkte</Td>
   <Td align="center">Differenz</Td>
 </Tr>
-<Tlinie linienstärke="0.6pt" />
+<Tablerule rulewidth="0.6pt" />
 ...]]></listing>
     </example>
     <seealso>
@@ -7123,13 +7118,13 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben spalte="3">
-  <Textblock breite="10" winkel="-20">
-    <Absatz>
-      <B><Wert>Text in Fett</Wert></B>
-    </Absatz>
+      <listing><![CDATA[<PlaceObject column="3">
+  <Textblock width="10" winkel="-20">
+    <Paragraph>
+      <B><Value>Text in Fett</Value></B>
+    </Paragraph>
   </Textblock>
-</ObjektAusgeben>]]></listing>
+</PlaceObject>]]></listing>
     </example>
     <seealso>
       <cmd name="DefineTextformat"/>, <cmd name="DefineColor"/>, <cmd name="Paragraph"/>, <cmd name="PlaceObject"/>
@@ -7178,22 +7173,22 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Seitentyp name="seite" bedingung="true()">
-  <Rand links="1cm" rechts="1cm" oben="1cm" unten="1cm"/>
-  <Platzierungsbereich name="text">
-    <Platzierungsrahmen breite="4" höhe="10" zeile="1" spalte="1"/>
-    <Platzierungsrahmen breite="4" höhe="10" zeile="1" spalte="6"/>
-  </Platzierungsbereich>
-</Seitentyp>
-<Datensatz element="data">
-  <Ausgabe bereich="text">
+      <listing><![CDATA[<Pagetype name="seite" test="true()">
+  <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+  <PositioningArea name="text">
+    <PositioningFrame width="4" height="10" row="1" column="1"/>
+    <PositioningFrame width="4" height="10" row="1" column="6"/>
+  </PositioningArea>
+</Pagetype>
+<Record element="data">
+  <Ausgabe area="text">
     <Text>
-      <Absatz>
-        <Wert auswahl="string(.)"/>
-      </Absatz>
+      <Paragraph>
+        <Value select="string(.)"/>
+      </Paragraph>
     </Text>
   </Ausgabe>
-</Datensatz>
+</Record>
 ]]></listing>
     </example>
     <seealso><cmd name="PlaceObject"/></seealso>
@@ -7383,9 +7378,6 @@
         <para>Todo: document</para>
       </description>
     </attribute>
-    <remark xml:lang="de">
-      <para>Das Attribut minhöhe war in einer vorigen Version minhoehe.</para>
-    </remark>
     <example xml:lang="en">
       <listing><![CDATA[<Tr minheight="8mm" backgroundcolor="yellow">
   <Td align="center"><Paragraph><Value>A</Value></Paragraph></Td>
@@ -7396,12 +7388,12 @@
 </Tr>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Tr minhöhe="8mm" hintergrundfarbe="gelb">
-  <Td align="center"><Absatz><Wert>4</Wert></Absatz></Td>
-  <Td><Absatz><Wert>Borussia Dortmund</Wert></Absatz></Td>
-  <Td align="center"><Absatz><Wert>45</Wert></Absatz></Td>
-  <Td align="center"><Absatz><Wert>+10</Wert></Absatz></Td>
-  <Td><Absatz><Wert>EL Qual.</Wert></Absatz></Td>
+      <listing><![CDATA[<Tr minheight"8mm" backgroundcolor="gelb">
+  <Td align="center"><Paragraph><Value>4</Value></Paragraph></Td>
+  <Td><Paragraph><Value>Borussia Dortmund</Value></Paragraph></Td>
+  <Td align="center"><Paragraph><Value>45</Value></Paragraph></Td>
+  <Td align="center"><Paragraph><Value>+10</Value></Paragraph></Td>
+  <Td><Paragraph><Value>EL Qual.</Value></Paragraph></Td>
 </Tr>]]></listing>
     </example>
     <seealso>
@@ -7457,17 +7449,17 @@
     </attribute>
 
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="data">
-  <ObjektAusgeben>
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject>
     <Transformation matrix="1 0 0 1 72 -72">
-      <Transformation matrix="1 0 0 0.5 0 0" ursprung-x="100">
+      <Transformation matrix="1 0 0 0.5 0 0" origin-x="100">
         <Transformation matrix="1 1 -1 1 0 0">
-          <Bild datei="_samplea.pdf" maxbreite="4" maxhöhe="4"></Bild>
+          <Image file="_samplea.pdf" maxwidth="4" maxheight"4"></Bild>
         </Transformation>
       </Transformation>
     </Transformation>
-  </ObjektAusgeben>
-</Datensatz>
+  </PlaceObject>
+</Record>
 ]]></listing>
     </example>
     <example xml:lang="en">
@@ -7558,13 +7550,13 @@
       ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben spalte="1" zeile="1">
-  <Textblock breite="18">
-    <Absatz>
-      <U><Wert>Unterstrichener Text</Wert></U>
-    </Absatz>
+      <listing><![CDATA[<PlaceObject column="1" row="1">
+  <Textblock width="18">
+    <Paragraph>
+      <U><Value>Unterstrichener Text</Value></U>
+    </Paragraph>
   </Textblock>
-</ObjektAusgeben>]]></listing>
+</PlaceObject>]]></listing>
     </example>
     <seealso>
       <cmd name="B"/>
@@ -7595,15 +7587,15 @@
 ]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<ObjektAusgeben>
-  <Textblock breite="10">
+      <listing><![CDATA[<PlaceObject>
+  <Textblock width="10">
     <Ul>
-      <Li><Wert>Erster Eintrag</Wert></Li>
-      <Li><Wert>Zweiter Eintrag</Wert></Li>
-      <Li><Wert>Dritter Eintrag</Wert></Li>
+      <Li><Value>Erster Eintrag</Value></Li>
+      <Li><Value>Zweiter Eintrag</Value></Li>
+      <Li><Value>Dritter Eintrag</Value></Li>
     </Ul>
   </Textblock>
-</ObjektAusgeben>
+</PlaceObject>
 ]]></listing>
     </example>
     <seealso><cmd name="Ol"/></seealso>
@@ -7646,13 +7638,13 @@ Message: "$i is: 2"
 Message: "$i is: 3"]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Datensatz element="data">
-  <Zuweisung variable="i" auswahl="0"/>
-  <Bis bedingung="$i = 4">
-    <Nachricht auswahl="concat('$i ist: ', $i)"/>
-    <Zuweisung variable="i" auswahl="$i + 1"/>
-  </Bis>
-</Datensatz>]]></listing>
+      <listing><![CDATA[<Record element="data">
+  <SetVariable variable="i" select="0"/>
+  <Until test="$i = 4">
+    <Message select="concat('$i ist: ', $i)"/>
+    <SetVariable variable="i" select="$i + 1"/>
+  </Until>
+</Record>]]></listing>
     </example>
     <seealso>
       <cmd name="Switch"/>,
@@ -7692,10 +7684,10 @@ Message: "$i is: 3"]]></listing>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<Textblock>
-  <Absatz>
-    <Wert>URL: </Wert>
-    <URL><Wert>http://www.speedata.de/publisher</Wert></URL>
-  </Absatz>
+  <Paragraph>
+    <Value>URL: </Value>
+    <URL><Value>http://www.speedata.de/publisher</Value></URL>
+  </Paragraph>
 </Textblock>]]></listing>
     </example>
     <seealso/>
@@ -7749,9 +7741,9 @@ Message: "$i is: 3"]]></listing>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<Textblock>
-  <Absatz>
-    <Wert auswahl="@name"/><Wert>, Symbol=</Wert><Wert auswahl="@symbol" />
-  </Absatz>
+  <Paragraph>
+    <Value select="@name"/><Value>, Symbol=</Value><Value select="@symbol" />
+  </Paragraph>
 </Textblock>]]></listing>
     </example>
     <seealso>
@@ -7780,10 +7772,10 @@ Message: "$i is: 3"]]></listing>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<Td valign="bottom">
-  <VLeerraum/>
+  <VSpace/>
   <!-- vertikal zentriertes Bild-->
-  <Bild breite="3" datei="article.pdf"/>
-  <VLeerraum/>
+  <Image width="3" file="article.pdf"/>
+  <VSpace/>
   <Paragraph><Value>Text am unteren Ende der Zelle</Value></Paragraph>
 </Td>
 ]]></listing>
@@ -7834,22 +7826,22 @@ Message: "$i is: 3"]]></listing>
     </example>
     <example xml:lang="de">
       <para>Folgendes Beispiel erzeugt einen Textblock mit dem Inhalt „Text Text Text“.</para>
-      <listing><![CDATA[<Datensatz element="url">
-  <Zuweisung variable="zaehler" auswahl="1"/>
-  <Zuweisung variable="text" auswahl="''"/>
-  <Solange bedingung=" $zaehler &lt;= 3 "> <!-- kleiner oder gleich -->
-    <Zuweisung variable="zaehler" auswahl=" $zaehler + 1"/>
-    <Zuweisung variable="text">
-      <Wert auswahl="$text"/>
-      <Wert auswahl="'Text '"/>
-    </Zuweisung>
-  </Solange>
-  <ObjektAusgeben spalte="1">
-    <Textblock breite="10">
-      <Absatz><Wert auswahl="$text"></Wert></Absatz>
+      <listing><![CDATA[<Record element="url">
+  <SetVariable variable="zaehler" select="1"/>
+  <SetVariable variable="text" select="''"/>
+  <While test=" $zaehler &lt;= 3 "> <!-- kleiner oder gleich -->
+    <SetVariable variable="zaehler" select=" $zaehler + 1"/>
+    <SetVariable variable="text">
+      <Value select="$text"/>
+      <Value select="'Text '"/>
+    </SetVariable>
+  </While>
+  <PlaceObject column="1">
+    <Textblock width="10">
+      <Paragraph><Value select="$text"></Value></Paragraph>
     </Textblock>
-  </ObjektAusgeben>
-</Datensatz>]]></listing>
+  </PlaceObject>
+</Record>]]></listing>
     </example>
     <seealso>
       <cmd name="Switch"/>,

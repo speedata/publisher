@@ -1,25 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Layout 
-  xmlns="urn:speedata.de:2009/publisher/de" 
-  xmlns:sd="urn:speedata:2009/publisher/functions/de">
-  <Optionen ignorierezeilenende="ja"/>
-
-  <LadeSchriftdatei name="WarnockPro-Light" dateiname="WarnockPro-Light.otf" />
-  <LadeSchriftdatei name="WarnockPro-LightIt" dateiname="WarnockPro-LightIt.otf" />
-  <LadeSchriftdatei name="WarnockPro-Semibold" dateiname="WarnockPro-Semibold.otf" />
-
-  <DefiniereSchriftfamilie name="text" schriftgröße="10" zeilenabstand="12">
-    <Normal schriftart="WarnockPro-Light"/>
-    <Kursiv schriftart="WarnockPro-LightIt"/>
-    <Fett schriftart="WarnockPro-Semibold"/>
-  </DefiniereSchriftfamilie>
-  <Datensatz element="data">
-    <ObjektAusgeben>
+<?xml version="1.0"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Options ignoreeol="yes"/>
+  
+  <LoadFontfile name="WarnockPro-Light" filename="WarnockPro-Light.otf"/>
+  <LoadFontfile name="WarnockPro-LightIt" filename="WarnockPro-LightIt.otf"/>
+  <LoadFontfile name="WarnockPro-Semibold" filename="WarnockPro-Semibold.otf"/>
+  
+  <DefineFontfamily name="text" fontsize="10" leading="12">
+    <Regular fontface="WarnockPro-Light"/>
+    <Italic fontface="WarnockPro-LightIt"/>
+    <Bold fontface="WarnockPro-Semibold"/>
+  </DefineFontfamily>
+  <Record element="data">
+    <PlaceObject>
       <Textblock>
-        <FürAlle auswahl="text">
-          <Absatz><Wert auswahl="."/></Absatz>
-        </FürAlle>
+        <ForAll select="text">
+          <Paragraph><Value select="."/></Paragraph>
+        </ForAll>
       </Textblock>
-    </ObjektAusgeben>
-  </Datensatz>
+    </PlaceObject>
+  </Record>
 </Layout>

@@ -1,178 +1,169 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Layout xmlns="urn:speedata.de:2009/publisher/de"
-  xmlns:sd="urn:speedata:2009/publisher/functions/de">
-  <Optionen
-    zeige_rasterbelegung="nein"
-    zeichne_raster="nein"
-    trace="nein"
-  />
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Options show-gridallocation="no" show-grid="no" trace="no"/>
 
-  <LadeSchriftdatei name="Helvetica" randausgleich="100" dateiname="texgyreheros-regular.otf" />
-  <LadeSchriftdatei name="Helvetica Fett" dateiname="texgyreheros-bold.otf" />
-  <LadeSchriftdatei name="Helvetica Kursiv" dateiname="texgyreheros-italic.otf" />
-  <LadeSchriftdatei name="Helvetica Fett Kursiv" dateiname="texgyreheros-bolditalic.otf" />
+  <LoadFontfile name="Helvetica" marginprotrusion="100" filename="texgyreheros-regular.otf"/>
+  <LoadFontfile name="Helvetica Fett" filename="texgyreheros-bold.otf"/>
+  <LoadFontfile name="Helvetica Kursiv" filename="texgyreheros-italic.otf"/>
+  <LoadFontfile name="Helvetica Fett Kursiv" filename="texgyreheros-bolditalic.otf"/>
 
 
-  <DefiniereSchriftfamilie name="Überschrift" schriftgröße="12" zeilenabstand="16">
-    <Normal schriftart="Helvetica" />
-    <Fett schriftart="Helvetica Fett" />
-    <FettKursiv schriftart="Helvetica Fett Kursiv"/>
-    <Kursiv schriftart="Helvetica Kursiv"/>
-  </DefiniereSchriftfamilie>
+  <DefineFontfamily name="Überschrift" fontsize="12" leading="16">
+    <Regular fontface="Helvetica"/>
+    <Bold fontface="Helvetica Fett"/>
+    <BoldItalic fontface="Helvetica Fett Kursiv"/>
+    <Italic fontface="Helvetica Kursiv"/>
+  </DefineFontfamily>
 
-  <DefiniereSchriftfamilie name="text" schriftgröße="12" zeilenabstand="13">
-    <Normal schriftart="Helvetica" />
-    <Fett schriftart="Helvetica Fett" />
-    <FettKursiv schriftart="Helvetica Fett Kursiv"/>
-    <Kursiv schriftart="Helvetica Kursiv"/>
-  </DefiniereSchriftfamilie>
+  <DefineFontfamily name="text" fontsize="12" leading="13">
+    <Regular fontface="Helvetica"/>
+    <Bold fontface="Helvetica Fett"/>
+    <BoldItalic fontface="Helvetica Fett Kursiv"/>
+    <Italic fontface="Helvetica Kursiv"/>
+  </DefineFontfamily>
 
-  <DefiniereSchriftfamilie name="Tabelle" schriftgröße="10" zeilenabstand="12">
-    <Normal schriftart="Helvetica"/>
-  </DefiniereSchriftfamilie>
+  <DefineFontfamily name="Tabelle" fontsize="10" leading="12">
+    <Regular fontface="Helvetica"/>
+  </DefineFontfamily>
 
-  <Seitenformat breite="150mm" höhe="200mm" />
-  <SetzeRaster breite="4mm" höhe="14pt" />
+  <Pageformat width="150mm" height="200mm"/>
+  <SetGrid width="4mm" height="14pt"/>
 
-  <DefiniereTextformat name="Seitenzahl rechts" ausrichtung="rechtsbündig"/>
-  <DefiniereTextformat name="text" ausrichtung="blocksatz" />
-  <DefiniereTextformat name="Text mit Einrückung" ausrichtung="blocksatz" einrückung="2em" />
+  <DefineTextformat name="Seitenzahl rechts" alignment="rightaligned"/>
+  <DefineTextformat name="text" alignment="justified"/>
+  <DefineTextformat name="Text mit Einrückung" alignment="justified" indentation="2em"/>
 
 
-  <Seitentyp name="rechte Seite" bedingung="sd:ungerade( sd:aktuelle-seite() )">
-    <Rand links="2cm" rechts="1cm" oben="1cm" unten="1cm" />
-    <BeiSeitenAusgabe>
-      <ObjektAusgeben spalte="{ sd:anzahl-spalten() - 3 }" zeile="{ sd:anzahl-zeilen() - 1}">
-        <Textblock breite="3">
-          <Absatz schriftart="text" textformat="Seitenzahl rechts"><Wert auswahl="sd:aktuelle-seite()"/></Absatz>
+  <Pagetype name="rechte Seite" test="sd:odd( sd:current-page() )">
+    <Margin left="2cm" right="1cm" top="1cm" bottom="1cm"></Margin>
+    <AtPageShipout>
+      <PlaceObject column="{ sd:number-of-columns() - 3 }" row="{ sd:number-of-rows() - 1}">
+        <Textblock width="3">
+          <Paragraph fontface="text" textformat="Seitenzahl rechts"><Value select="sd:current-page()"></Value></Paragraph>
         </Textblock>
-      </ObjektAusgeben>
-      <Nachricht auswahl="sd:aktuelle-seite()" />
-    </BeiSeitenAusgabe>
-  </Seitentyp>
+      </PlaceObject>
+    </AtPageShipout>
+  </Pagetype>
 
-  <Seitentyp name="linke Seite" bedingung="sd:gerade( sd:aktuelle-seite() )">
-    <Rand links="1cm" rechts="2cm" oben="1cm" unten="1cm" />
-    <BeiSeitenAusgabe>
-      <ObjektAusgeben spalte="1" zeile="{ sd:anzahl-zeilen() - 1 }">
-        <Textblock breite="3">
-          <Absatz schriftart="text" textformat="rechtsbündig"><Wert auswahl="sd:aktuelle-seite()"/></Absatz>
+  <Pagetype name="linke Seite" test="sd:gerade( sd:aktuelle-seite() )">
+    <Margin left="1cm" right="2cm" top="1cm" bottom="1cm"></Margin>
+    <AtPageShipout>
+      <PlaceObject column="1" row="{ sd:number-of-rows() - 1 }">
+        <Textblock width="3">
+          <Paragraph fontface="text" textformat="rechtsbündig"><Value select="sd:current-page()"></Value></Paragraph>
         </Textblock>
-      </ObjektAusgeben>
-      <Nachricht auswahl="sd:aktuelle-seite()" />
-    </BeiSeitenAusgabe>
-  </Seitentyp>
+      </PlaceObject>
+    </AtPageShipout>
+  </Pagetype>
 
-  <!-- Wird automatisch nach <LadeDatensatzdatei...> ausgeführt,
-       wenn dort Daten vorhanden sind (im zweiten Durchlauf) -->
-  <Datensatz element="Inhaltsverzeichnis">
-    <ObjektAusgeben spalte="3" belegen="ja">
-      <Textblock breite="20" schriftart="Überschrift">
-        <Absatz>
-          <Wert>Inhalt</Wert>
-        </Absatz>
+  <!--  Wird automatisch nach <LadeDatensatzdatei...> ausgeführt,
+       wenn dort Daten vorhanden sind (im zweiten Durchlauf)  -->
+  <Record element="Inhaltsverzeichnis">
+    <PlaceObject column="3" allocate="yes">
+      <Textblock width="20" fontface="Überschrift">
+        <Paragraph>
+          <Value>Inhalt</Value>
+        </Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <NeueZeile />
-    <ObjektAusgeben spalte="3">
-      <Textblock breite="20">
-        <FürAlle auswahl="Planetenverzeichnis">
-          <Absatz>
-            <Wert auswahl="@name" />
-            <Wert>, Seite </Wert>
-            <Wert auswahl="@seite" />
-          </Absatz>
-        </FürAlle>
+    </PlaceObject>
+    <NextRow/>
+    <PlaceObject column="3">
+      <Textblock width="20">
+        <ForAll select="Planetenverzeichnis">
+          <Paragraph>
+            <Value select="@name"/>
+            <Value>, Seite </Value>
+            <Value select="@seite"/>
+          </Paragraph>
+        </ForAll>
       </Textblock>
-    </ObjektAusgeben>
-  </Datensatz>
+    </PlaceObject>
+  </Record>
 
-  <!-- Wurzelelement -->
-  <Datensatz element="planeten">
-    <Zuweisung variable="spalte" auswahl="2" />
-    <LadeDatensatzdatei name="toc" />
-    <Zuweisung variable="Inhalt"/>
-    <NeueSeite />
+  <!--  Wurzelelement  -->
+  <Record element="planeten">
+    <SetVariable variable="spalte" select="2"/>
+    <LoadDataset name="toc"/>
+    <SetVariable variable="Inhalt"/>
+    <NewPage/>
 
-    <BearbeiteKnoten auswahl="planet" />
+    <ProcessNode select="planet"/>
 
-    <SpeichereDatensatzdatei dateiname="toc" elementname="Inhaltsverzeichnis" auswahl="$Inhalt" />
+    <SaveDataset filename="toc" elementname="Inhaltsverzeichnis" select="$Inhalt"/>
 
-  </Datensatz>
+  </Record>
 
-  <Datensatz element="planet">
-    <Zuweisung variable="Inhalt">
-      <Kopie-von auswahl="$Inhalt" />
+  <Record element="planet">
+    <SetVariable variable="Inhalt">
+      <Copy-of select="$Inhalt"/>
       <Element name="Planetenverzeichnis">
-        <Attribut name="name" auswahl=" @name " />
-        <Attribut name="seite" auswahl=" sd:aktuelle-seite()" />
+        <Attribute name="name" select=" @name "/>
+        <Attribute name="seite" select=" sd:current-page()"/>
       </Element>
-    </Zuweisung>
+    </SetVariable>
 
-    <ObjektAusgeben spalte="1">
-      <Textblock breite="20">
-        <Lesezeichen auswahl="@name" ebene="1"/>
-        <Absatz>
-          <Wert auswahl="@name" />
-        </Absatz>
+    <PlaceObject column="1">
+      <Textblock width="20">
+        <Bookmark select="@name" level="1"/>
+        <Paragraph>
+          <Value select="@name"/>
+        </Paragraph>
       </Textblock>
-    </ObjektAusgeben>
+    </PlaceObject>
 
-    <BearbeiteKnoten auswahl="url" />
-    <BearbeiteKnoten auswahl="bild" />
-    <BearbeiteKnoten auswahl="monde" />
-    <BearbeiteKnoten auswahl="beschreibung" />
+    <ProcessNode select="url"/>
+    <ProcessNode select="bild"/>
+    <ProcessNode select="monde"/>
+    <ProcessNode select="beschreibung"/>
 
-    <NeueSeite />
-  </Datensatz>
+    <NewPage></NewPage>
+  </Record>
 
-  <Datensatz element="url">
-    <ObjektAusgeben spalte="{ $spalte }">
-      <Textblock breite="29" textformat="text" schriftart="Überschrift">
-        <Absatz>
-          <Wert>URL: </Wert>
-          <A href="{string(.)}"><Wert auswahl="string(.)" /></A>
-        </Absatz>
+  <Record element="url">
+    <PlaceObject column="{ $spalte }">
+      <Textblock width="29" textformat="text" fontface="Überschrift">
+        <Paragraph>
+          <Value>URL: </Value>
+          <A href="{string(.)}"><Value select="string(.)"/></A>
+        </Paragraph>
       </Textblock>
-    </ObjektAusgeben>
+    </PlaceObject>
 
-  </Datensatz>
+  </Record>
 
-  <Datensatz element="bild">
-    <NeueZeile />
-    <NeueZeile />
-    <ObjektAusgeben spalte="{ $spalte }">
-      <Bild breite="10" datei="{.}" />
-    </ObjektAusgeben>
-  </Datensatz>
+  <Record element="bild">
+    <NextRow rows="2"/>
+    <PlaceObject column="{ $spalte }">
+      <Image width="10" file="{.}"/>
+    </PlaceObject>
+  </Record>
 
-  <Datensatz element="monde">
-    <ObjektAusgeben spalte="18">
-      <Textblock breite="7">
-        <Absatz>
+  <Record element="monde">
+    <PlaceObject column="18">
+      <Textblock width="7">
+        <Paragraph>
           <B>
-            <Wert>Monde</Wert>
+            <Value>Monde</Value>
           </B>
-        </Absatz>
+        </Paragraph>
         <Ul>
-          <FürAlle auswahl="mond">
-            <Li><Wert auswahl="string(.)"/></Li>
-          </FürAlle>
+          <ForAll select="mond">
+            <Li><Value select="string(.)"/></Li>
+          </ForAll>
         </Ul>
       </Textblock>
-    </ObjektAusgeben>
-    <NeueZeile />
-    <NeueZeile />
-  </Datensatz>
+    </PlaceObject>
+    <NextRow rows="2"/>
+  </Record>
 
-  <Datensatz element="beschreibung">
-    <ObjektAusgeben spalte="{ $spalte }">
-      <Textblock breite="28" schriftart="text" textformat="Text mit Einrückung">
-        <Absatz>
-          <Wert auswahl="normalize-space(string(.))" />
-        </Absatz>
+  <Record element="beschreibung">
+    <PlaceObject column="{ $spalte }">
+      <Textblock width="28" fontface="text" textformat="Text mit Einrückung">
+        <Paragraph>
+          <Value select="normalize-space(string(.))"/>
+        </Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-  </Datensatz>
+    </PlaceObject>
+  </Record>
 
 </Layout>

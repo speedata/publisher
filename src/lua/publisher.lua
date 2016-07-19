@@ -409,13 +409,6 @@ textformats = {
 ---     }
 bookmarks = {}
 
---- A table with key namespace prefix (`de` or `en`) and value namespace. Example:
----
----     {
----       [""] = "urn:speedata.de:2009/publisher/de"
----       sd = "urn:speedata:2009/publisher/functions/de"
----     }
-namespaces_layout = nil
 
 --- We need the separator for writing files in a directory structure (image cace for now)
 os_separator = "/"
@@ -722,6 +715,9 @@ function initialize_luatex_and_generate_pdf()
     if not (current_layoutlanguage=='de' or current_layoutlanguage=='en') then
         err("Cannot determine the language of the layout file.")
         exit()
+    end
+    if current_layoutlanguage == "de" then
+        warning("!!! The German layout instructions will be removed\nin version 3 of the publisher !!!")
     end
 
     if current_layoutlanguage ~= "en" then

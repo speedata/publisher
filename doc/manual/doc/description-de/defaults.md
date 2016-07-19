@@ -12,19 +12,19 @@ Schriftarten
 
 Die Distribution enthält die freie Schriftart TeXGyreHeros, einem hochwertigen Helvetica-Klon, in den Varianten Normal, Fett, Kursiv und Fettkursiv. Die Definitionen sind folgende:
 
-    <LadeSchriftdatei name="TeXGyreHeros-Regular" dateiname="texgyreheros-regular.otf" />
-    <LadeSchriftdatei name="TeXGyreHeros-Bold" dateiname="texgyreheros-bold.otf" />
-    <LadeSchriftdatei name="TeXGyreHeros-Italic" dateiname="texgyreheros-italic.otf" />
-    <LadeSchriftdatei name="TeXGyreHeros-BoldItalic" dateiname="texgyreheros-bolditalic.otf" />
+    <LoadFontfile name="TeXGyreHeros-Regular" filename="texgyreheros-regular.otf" />
+    <LoadFontfile name="TeXGyreHeros-Bold" filename="texgyreheros-bold.otf" />
+    <LoadFontfile name="TeXGyreHeros-Italic" filename="texgyreheros-italic.otf" />
+    <LoadFontfile name="TeXGyreHeros-BoldItalic" filename="texgyreheros-bolditalic.otf" />
 
 Die dazugehörige Schriftfamilie ist
 
-    <DefiniereSchriftfamilie name="text" schriftgröße="10" zeilenabstand="12">
+    <DefineFontfamily name="text" fontsize="10" leading="12">
       <Normal schriftart="TeXGyreHeros-Regular"/>
       <Fett schriftart="TeXGyreHeros-Bold"/>
       <Kursiv schriftart="TeXGyreHeros-Italic"/>
       <FettKursiv schriftart="TeXGyreHeros-BoldItalic"/>
-    </DefiniereSchriftfamilie>
+    </DefineFontfamily>
 
 und, da die Schriftfamilie `text` die Voreinstellung für alle Textausgaben ist, ist damit quasi Helvetica 10pt/12pt die Standard-Textschriftart. Durch überschreiben der Schriftfamilie `text` kann eine andere Voreinstellung festgelegt werden.
 
@@ -35,9 +35,9 @@ Das voreingestellte Seitenformat ist DIN A4 (210mm × 297mm).
 
 Die Seitevorlage für alle Seiten ist wie folgt definiert:
 
-    <Seitentyp name="Default Page" bedingung="true()">
-      <Rand links="1cm" rechts="1cm" oben="1cm" unten="1cm"/>
-    </Seitentyp>
+    <Pagetype name="Default Page" test="true()">
+      <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+    </Pagetype>
 
 Das Seitenraster beträgt 10mm × 10mm.
 
