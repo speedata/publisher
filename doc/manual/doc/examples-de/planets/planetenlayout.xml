@@ -45,7 +45,7 @@
     </AtPageShipout>
   </Pagetype>
 
-  <Pagetype name="linke Seite" test="sd:gerade( sd:aktuelle-seite() )">
+  <Pagetype name="linke Seite" test="sd:gerade( sd:current-page() )">
     <Margin left="1cm" right="2cm" top="1cm" bottom="1cm"></Margin>
     <AtPageShipout>
       <PlaceObject column="1" row="{ sd:number-of-rows() - 1 }">

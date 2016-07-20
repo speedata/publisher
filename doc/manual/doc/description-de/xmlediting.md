@@ -16,8 +16,7 @@ RelaxNG Schemas verarbeiten kann:
 -   [jEdit](http://www.jedit.org) (Mac, Windows, Linux, kostenlos)
 
 Das RelaxNG-Schema für das Layoutregelwerk liegt in der ZIP-Datei im
-Verzeichnis `share/schema/` unter dem Dateinamen `layoutschema-en.rng`
-bzw. `layoutschema-en.rng` für das englischsprachige Regelwerk.
+Verzeichnis `share/schema/` unter dem Dateinamen `layoutschema-en.rng` für das Regelwerk.
 
 Hinweis
 -------

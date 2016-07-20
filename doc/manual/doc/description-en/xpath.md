@@ -66,6 +66,7 @@ sd:current-page() | Return the current page number.
 sd:current-row(\<name\>) | Return the current row. If `name` is given, return the row of the given frame.
 sd:current-column(\<name\>) | Return the current column. If `name` is given, return the column of the given frame.
 sd:current-framenumber(\<name\>) | Return the current frame number of given positioning area.
+sd:count-saved-pages(\<name\>)  | Return the number of saved pages from `<SavePages>`.
 sd:alternating(\<type\>, \<text\>,\<text\>,.. ) | On each call the next element will be returned. You can define more alternating sequences by using distinct type values. Example: `sd:alternating("tbl", "White","Gray")` can be used for alternating color of table rules. To reset the state, use `sd:reset-alternating(<type>)`.
 sd:reset-alternating(\<type\>) | Reset alternating so the next `sd:alternating()` starts again from the first element.
 sd:keep-alternating(\<type\>) | Use the current value of `sd:alternating(<type>)` without changing the value.

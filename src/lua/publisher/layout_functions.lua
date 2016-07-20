@@ -313,7 +313,7 @@ local function decode_html( dataxml, arg )
   return arg
 end
 
-local function count_saved_paged(dataxml,arg)
+local function count_saved_pages(dataxml,arg)
     return #publisher.pagestore[arg[1]]
 end
 
@@ -352,8 +352,8 @@ register("urn:speedata:2009/publisher/functions/de","alternierend",alternating)
 register("urn:speedata:2009/publisher/functions/en","aspectratio",aspectratio)
 register("urn:speedata:2009/publisher/functions/de","seitenverhältnis",aspectratio)
 
-register("urn:speedata:2009/publisher/functions/en","count-saved-pages",count_saved_paged)
-register("urn:speedata:2009/publisher/functions/de","anzahl-gespeicherte-seiten",count_saved_paged)
+register("urn:speedata:2009/publisher/functions/en","count-saved-pages",count_saved_pages)
+register("urn:speedata:2009/publisher/functions/de","anzahl-gespeicherte-seiten",count_saved_pages)
 
 register("urn:speedata:2009/publisher/functions/en","current-page",current_page)
 register("urn:speedata:2009/publisher/functions/de","aktuelle-seite",current_page)

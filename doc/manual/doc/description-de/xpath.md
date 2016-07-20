@@ -55,7 +55,7 @@ sd:current-column(\<name\>)|  Gibt die aktuelle Spalte zurück. Wenn `name` ange
 sd:alternating(\<typ\>, \<text\>,\<text\>,.. )|  Bei jedem Aufruf wird das nächste Argument zurück gegeben. Wert des Typs ist beliebig, muss aber eindeutig sein. Beispiel: `sd:alternating("tbl", "Weiß","Grau")` könnte für die Hintergrundfarbe von Tabellen benutzt werden.
 sd:reset-alternating(\<typ\>)|  Setzt den Zustand für `sd:alternating()` für den angegebenen Typ zurück.
 sd:keep-alternating(\<typ\>)| Nutzt den aktuellen Wert von `sd:alternating(<typ>)`, ohne diesen zu verändern.
-sd:anzahl-gespeicherte-seiten(\<Name\>)|  Gibt die Anzahl der gespeicherten Seiten, die mit \<SeitenSpeichern\> zwischengspeichert wurden.
+sd:count-saved-pages(\<Name\>)|  Gibt die Anzahl der gespeicherten Seiten, die mit \<SavePages\> zwischen speichert wurden.
 sd:number-of-datasets(\<Sequenz\>)|  Gibt die Anzahl der Datensätze der Sequenz zurück.
 sd:number-of-pages(\<Dateiname oder URI-Schema\>)|  Ermittelt die Anzahl der Seiten der angegebenen (PDF-)Datei.
 sd:number-of-columns()|  Gibt die Anzahl der Spalten im aktuellen Raster.
@@ -66,8 +66,8 @@ sd:imagewidth(\<Dateiname oder URI-Schema\>)|  Breite des Bildes in Rasterzellen
 sd:imageheight(\<Dateiname oder URI-Schema\>)|  Höhe des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Höhe des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert.
 sd:file-exists(\<Dateiname oder URI-Schema\>)|  Wahr, wenn der Dateiname im Suchpfad existiert, ansonsten false.
 sd:format-number(Zahl oder String, Tausenderzeichen, Kommazeichen)|  Formatiert die übergebene Zahl und fügt Tausender-Trennzeichen hinzu und ändert den Kommatrenner. Beispiel: `sd:format-number(12345.67, '.',',')` ergibt die Zeichenkette `1.2345,67`.
-sd:format-string(Objekt,Objekt,...,Formartierungsangaben)|  Gibt eine Zeichenkette zurück, die die gegebenen Objekte mit den im zweiten Argument gegebenen Formatierungsanweisungen darstellt. Die Formatierungsanweisungen entsprechen der aus der Programmiersprache C bekannten `printf()`-Funktion.
-sd:even(\<zahl\>)|  Wahr, wenn die angegebene Zahl gerade ist. Beispiel: `sd:even(sd:aktuelle-seite())`
+sd:format-string(Objekt,Objekt,...,Formatierungsangaben)|  Gibt eine Zeichenkette zurück, die die gegebenen Objekte mit den im zweiten Argument gegebenen Formatierungsanweisungen darstellt. Die Formatierungsanweisungen entsprechen der aus der Programmiersprache C bekannten `printf()`-Funktion.
+sd:even(\<zahl\>)|  Wahr, wenn die angegebene Zahl gerade ist. Beispiel: `sd:even(sd:current-page())`
 sd:decode-html(\<Node\>)|  Wandelt Texte wie `&lt;i&gt;Kursiv&lt;/i&gt;` in entsprechendes HTML-Markup.
 sd:odd(\<zahl\>)|  Wahr, wenn die angegebene Zahl ungerade ist.
 sd:group-width(\<string\>)|  Gibt die Breite in Rasterzellen für die Gruppe im ersten Argument an. Beispiel: `sd:group-width('Beispielgruppe')`
