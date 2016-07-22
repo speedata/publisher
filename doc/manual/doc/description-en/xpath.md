@@ -35,7 +35,7 @@ The following XPath expressions are handled by the software:
 ------------------------------------------------------------
 
 -   Number: Return the value without change: `5`
--   Text: Return the text without chang: `'hello world'`
+-   Text: Return the text without change: `'hello world'`
 -   Arithmetic operation (`*`, `div`, `idiv`, `+`, `-`, `mod`). Example:
     `( 6 + 4.5 ) * 2`
 -   Variables. Example: `$column + 2`
