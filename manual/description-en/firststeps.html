@@ -22,18 +22,18 @@
 
 <p><a href="../img/schema1.png"><img src="../img/schema1.png" style="max-width: 40%"></a></p>
 
-<p>The speedata Publisher is a so called »database publishing system«. That means
-that the source of the  publising process is a data set. The ouput of the
+<p>The speedata Publisher is a so-called &quot;database publishing system&quot;. That means
+that the source of the publishing process is a data set. The output of the
 software is PDF. The layout of data in the PDF is controlled via an XML file,
 the layout file. The data also has to be in the XML format, therefore it might
 be necessary to convert other formats (Excel spreadsheet, database) into XML
 before starting the publishing process.</p>
 
-<p>This introduction coves the classical »hello world« example.</p>
+<p>This introduction coves the classical &quot;hello world&quot; example.</p>
 
 <h2>Data file</h2>
 
-<p>There are no special requirements for the structure of the data XML source. As long as it is well-formed (see wikipedia), the speedata Publisher will handle it. For our example the following data file is perfect:</p>
+<p>There are no special requirements for the structure of the data XML source. As long as it is <a href="https://en.wikipedia.org/wiki/Well-formed_document">well-formed</a>, the speedata Publisher will handle it. For our example the following data file is perfect:</p>
 
 <pre><code>&lt;root greeting=&quot;Hello world&quot;/&gt;
 </code></pre>
@@ -42,7 +42,7 @@ before starting the publishing process.</p>
 
 <h2>Layout file</h2>
 
-<p>The layout file (file name <code>layout.xml</code>) contains the instructions how the data should be layed out. The root element is the element with the name <code>Layout</code> with the namespace <code>urn:speedata.de:2009/publisher/en</code>, which expects instructions written in English (such as <a href="../commands-en/placeobject.html">PlaceObject</a>). The namespace <code>.../de</code> allows you to write the commands in German (e.g. <a href="../commands-de/placeobject.html">ObjektAusgeben</a>). The hello world example uses the <code>.../en</code> namespace of course. The feature set of both instruction languages is identical. A minimal (and pointless) layout file is:</p>
+<p>The layout file (file name <code>layout.xml</code>) contains the instructions for how the data should be laid out. The root element is the element with the name <code>Layout</code> with the namespace <code>urn:speedata.de:2009/publisher/en</code>, which expects instructions written in English (such as <a href="../commands-en/placeobject.html">PlaceObject</a>). The namespace <code>.../de</code> allows you to write the commands in German (e.g. <a href="../commands-de/placeobject.html">ObjektAusgeben</a>). The hello world example uses the <code>.../en</code> namespace of course. The feature set of both instruction languages is identical. A minimal (and pointless) layout file is:</p>
 
 <pre><code>&lt;Layout xmlns=&quot;urn:speedata.de:2009/publisher/en&quot; /&gt;
 </code></pre>
@@ -56,7 +56,7 @@ before starting the publishing process.</p>
 &lt;/Record&gt;
 </code></pre>
 
-<p>The instructions to place an object in the PDF is called (surprise!) <a href="../commands-en/placeobject.html"><code>PlaceObject</code></a>. It expects the kind of object as its child element (<a href="../commands-de/image.html">Image</a>, <a href="../commands-de/box.html">Box</a>, <a href="../commands-de/rule.html">Rule</a>, <a href="../commands-de/frame.html">Frame</a>, <a href="../commands-de/barcode.html">Barcode</a>, <a href="../commands-de/table.html">Table</a>, <a href="../commands-de/textblock.html">Textblock</a>, <a href="../commands-de/transformation.html">Transformation</a>). Textblock (a rectangular shaped text with a fixed width) expects one or more paragraphs as its child elements. The contents of the paragraph is encapsulated in the element <code>&lt;Value&gt;text that appears in the PDF&lt;/Value&gt;</code>. Instead of giving the text within the element <a href="../commands-en/value.html">Value</a>, it is possible to use a subset of <a href="xpath.html">XPath</a> expressions to select data from the data source. For example the familiar <code>@</code> notation for attribute access.</p>
+<p>The instruction to place an object in the PDF is called (surprise!) <a href="../commands-en/placeobject.html"><code>PlaceObject</code></a>. It expects the kind of object as its child element (<a href="../commands-en/image.html">Image</a>, <a href="../commands-en/box.html">Box</a>, <a href="../commands-en/rule.html">Rule</a>, <a href="../commands-en/frame.html">Frame</a>, <a href="../commands-en/barcode.html">Barcode</a>, <a href="../commands-en/table.html">Table</a>, <a href="../commands-en/textblock.html">Textblock</a>, <a href="../commands-en/transformation.html">Transformation</a>). Textblock (a rectangular shaped text with a fixed width) expects one or more paragraphs as its child elements. The content of the paragraph is encapsulated in the element <code>&lt;Value&gt;text that appears in the PDF&lt;/Value&gt;</code>. Instead of giving the text within the element <a href="../commands-en/value.html">Value</a>, it is possible to use a subset of <a href="xpath.html">XPath</a> expressions to select data from the data source. For example the familiar <code>@</code> notation for attribute access.</p>
 
 <p>The complete hello world example is simple:</p>
 
@@ -106,7 +106,7 @@ layout=&lt;layoutfile.xml&gt;
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.5.1 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/firststeps.html">German</a>
+Version: 2.5.9 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/firststeps.html">German</a>
 
 </body>
 </html>

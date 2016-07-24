@@ -1,68 +1,65 @@
-<Layout 
-  xmlns="urn:speedata.de:2009/publisher/de" 
-  xmlns:sd="urn:speedata:2009/publisher/functions/de">
+<?xml version="1.0"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <Optionen zeichne_raster="ja"/>
-  <Seitentyp name="" bedingung=""></Seitentyp>
-  
-  <Seitentyp name="seite" bedingung="true()">
-    <Rand links="1cm" rechts="1cm" oben="1cm" unten="1cm"/>
-    <Platzierungsbereich name="bereich">
-      <Platzierungsrahmen breite="5" höhe="40" zeile="1" spalte="1"/>
-      <Platzierungsrahmen breite="5" höhe="20" zeile="1" spalte="7"/>
-    </Platzierungsbereich>
-  </Seitentyp>
-  <SetzeRaster höhe="12pt" nx="20"/>
-  
-  <Datensatz element="data">
-    <ObjektAusgeben bereich="bereich">
+  <Options show-grid="yes"/>
+  <Pagetype name="" test=""/>
+
+  <Pagetype name="seite" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+    <PositioningArea name="bereich">
+      <PositioningFrame width="5" height="40" row="1" column="1"/>
+      <PositioningFrame width="5" height="20" row="1" column="7"/>
+    </PositioningArea>
+  </Pagetype>
+  <SetGrid height="12pt" nx="20"/>
+
+  <Record element="data">
+    <PlaceObject area="bereich">
       <Textblock>
-        <Absatz>
-          <Wert>Jemand musste Josef K. verleumdet haben, denn ohne dass er etwas Böses getan hätte, wurde er eines Morgens verhaftet. »Wie ein Hund!« sagte er, es war, als sollte die Scham ihn überleben. Als Gregor Samsa eines Morgens aus unruhigen Träumen erwachte, fand er sich in seinem Bett zu einem ungeheueren Ungeziefer verwandelt. Und es war ihnen wie eine Bestätigung ihrer neuen Träume und guten Absichten, als am Ziele ihrer Fahrt die Tochter als erste sich erhob und ihren jungen Körper dehnte. »Es ist ein eigentümlicher Apparat«, sagte der Offizier zu dem Forschungsreisenden und überblickte mit einem gewissermaßen bewundernden Blick den ihm doch wohlbekannten Apparat.</Wert>
-        </Absatz>
+        <Paragraph>
+          <Value>Jemand musste Josef K. verleumdet haben, denn ohne dass er etwas B&#xF6;ses getan h&#xE4;tte, wurde er eines Morgens verhaftet. &#xBB;Wie ein Hund!&#xAB; sagte er, es war, als sollte die Scham ihn &#xFC;berleben. Als Gregor Samsa eines Morgens aus unruhigen Tr&#xE4;umen erwachte, fand er sich in seinem Bett zu einem ungeheueren Ungeziefer verwandelt. Und es war ihnen wie eine Best&#xE4;tigung ihrer neuen Tr&#xE4;ume und guten Absichten, als am Ziele ihrer Fahrt die Tochter als erste sich erhob und ihren jungen K&#xF6;rper dehnte. &#xBB;Es ist ein eigent&#xFC;mlicher Apparat&#xAB;, sagte der Offizier zu dem Forschungsreisenden und &#xFC;berblickte mit einem gewisserma&#xDF;en bewundernden Blick den ihm doch wohlbekannten Apparat.</Value>
+        </Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <NeueZeile bereich="bereich"/>
-    <ObjektAusgeben bereich="bereich">
+    </PlaceObject>
+    <NextRow area="bereich"/>
+    <PlaceObject area="bereich">
       <Textblock>
-        <Absatz>
-          <Wert>Aktuelle zeile: </Wert>
-          <Wert auswahl="sd:aktuelle-zeile('bereich')"/>
-          <Wert>, Anzahl Zeilen: </Wert>
-          <Wert auswahl="sd:anzahl-zeilen('bereich')"/>
-          <Wert>, Rahmennummer: </Wert>
-          <Wert auswahl="sd:aktuelle-rahmennummer('bereich')"/>
-          <Wert>, Restzeilen im Rahmen:</Wert>
-          <Wert auswahl="sd:anzahl-zeilen('bereich') - sd:aktuelle-zeile('bereich')"></Wert>
-        </Absatz>
+        <Paragraph>
+          <Value>Aktuelle Zeile: </Value>
+          <Value select="sd:current-row('bereich')"/>
+          <Value>, Anzahl Zeilen: </Value>
+          <Value select="sd:number-of-rows('bereich')"/>
+          <Value>, Rahmennummer: </Value>
+          <Value select="sd:current-framenumber('bereich')"/>
+          <Value>, Restzeilen im Rahmen:</Value>
+          <Value select="sd:number-of-rows('bereich') - sd:current-row('bereich')"/>
+        </Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <NeueZeile bereich="bereich"/>
-    <NächsterRahmen bereich="bereich"/>
-    <ObjektAusgeben bereich="bereich">
+    </PlaceObject>
+    <NextRow area="bereich"/>
+    <NextFrame area="bereich"/>
+    <PlaceObject area="bereich">
       <Textblock>
-        <Absatz>
-          <Wert>Jemand musste Josef K. verleumdet haben, denn ohne dass er etwas Böses getan hätte, wurde er eines Morgens verhaftet. »Wie ein Hund!« sagte er, es war, als sollte die Scham ihn überleben. Als Gregor Samsa eines Morgens aus unruhigen Träumen erwachte, fand er sich in seinem Bett zu einem ungeheueren Ungeziefer verwandelt. </Wert>
-        </Absatz>
+        <Paragraph>
+          <Value>Jemand musste Josef K. verleumdet haben, denn ohne dass er etwas B&#xF6;ses getan h&#xE4;tte, wurde er eines Morgens verhaftet. &#xBB;Wie ein Hund!&#xAB; sagte er, es war, als sollte die Scham ihn &#xFC;berleben. Als Gregor Samsa eines Morgens aus unruhigen Tr&#xE4;umen erwachte, fand er sich in seinem Bett zu einem ungeheueren Ungeziefer verwandelt. </Value>
+        </Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <NeueZeile bereich="bereich"/>
-    <ObjektAusgeben bereich="bereich">
+    </PlaceObject>
+    <NextRow area="bereich"/>
+    <PlaceObject area="bereich">
       <Textblock>
-        <Absatz>
-          <Wert>Aktuelle zeile: </Wert>
-          <Wert auswahl="sd:aktuelle-zeile('bereich')"/>
-          <Wert>, Anzahl Zeilen: </Wert>
-          <Wert auswahl="sd:anzahl-zeilen('bereich')"/>
-          <Wert>, Rahmennummer: </Wert>
-          <Wert auswahl="sd:aktuelle-rahmennummer('bereich')"/>
-          <Wert>, Restzeilen im Rahmen:</Wert>
-          <Wert auswahl="sd:anzahl-zeilen('bereich') - sd:aktuelle-zeile('bereich')"></Wert>
-        </Absatz>
+        <Paragraph>
+          <Value>Aktuelle Zeile: </Value>
+          <Value select="sd:current-row('bereich')"/>
+          <Value>, Anzahl Zeilen: </Value>
+          <Value select="sd:number-of-rows('bereich')"/>
+          <Value>, Rahmennummer: </Value>
+          <Value select="sd:current-framenumber('bereich')"/>
+          <Value>, Restzeilen im Rahmen:</Value>
+          <Value select="sd:number-of-rows('bereich') - sd:current-row('bereich')"/>
+        </Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    
-  </Datensatz>
+    </PlaceObject>
+
+  </Record>
 </Layout>
-
-

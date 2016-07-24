@@ -29,7 +29,7 @@ eine XML-Datei gesteuert, der Layout-Datei. Die Datenquelle muss ebenfalls als X
 vorliegen. Somit ist für andere Datenformate (Excel, Datenbanken, ...) ein
 zusätzlicher Schritt notwendig, um sie nach XML zu konvertieren.</p>
 
-<p>Anhand des klassichen »Hello world« Beispiels soll eine einfache PDF-Datei erzeugt werden.</p>
+<p>Anhand des klassischen »Hello world« Beispiels soll eine einfache PDF-Datei erzeugt werden.</p>
 
 <h2>Daten-Datei</h2>
 
@@ -43,38 +43,38 @@ Datendatei gestellt, die über die üblichen XML-Regeln gehen (<a href="https://
 
 <h2>Layout-Datei</h2>
 
-<p>In der Layout-Datei (Dateiname <code>layout.xml</code>) stehen die Anweisungen, wie die Daten formatiert werden sollen. Das Wurzelelement ist das Element mit dem Namen <code>Layout</code> im Namensraum <code>urn:speedata.de:2009/publisher/de</code>. In diesem Namensraum werden deutschsprachige Elementnamen erwartet (z.B. <a href="../commands-de/placeobject.html">ObjektAusgeben</a>), im Namensraum <code>.../en</code> englischsprachige Namen (z.B. <a href="../commands-en/placeobject.html">PlaceObject</a>). Der Funktionsumfang der beiden Varianten ist identisch. Eine minimale (und sinnfreie) Layout-Datei ist:</p>
+<p>In der Layout-Datei (Dateiname <code>layout.xml</code>) stehen die Anweisungen, wie die Daten formatiert werden sollen. Das Wurzelelement ist das Element mit dem Namen <code>Layout</code> im Namensraum <code>urn:speedata.de:2009/publisher/en</code>. Eine minimale (und sinnfreie) Layout-Datei ist:</p>
 
-<pre><code>&lt;Layout xmlns=&quot;urn:speedata.de:2009/publisher/de&quot; /&gt;
+<pre><code>&lt;Layout xmlns=&quot;urn:speedata.de:2009/publisher/en&quot; /&gt;
 </code></pre>
 
 <p>Die Layout-Datei besteht aus einem deklarativen Teil (z.B. Seitenvorlagen, Farben und Schriftarten definieren) und einem ausführenden Teil (Kindelemente in den Daten durchgehen und Inhalte auslesen). Diese beiden Teile können auch vermischt werden.</p>
 
-<p>Die Datenverarbeitung beginnt grundsätzlich mit dem Befehl <code>Datensatz</code>:</p>
+<p>Die Datenverarbeitung beginnt grundsätzlich mit dem Befehl <code>Record</code>:</p>
 
-<pre><code>&lt;Datensatz element=&quot;(Name des Wurzelelements)&quot;&gt;
+<pre><code>&lt;Record element=&quot;(Name des Wurzelelements)&quot;&gt;
    ... Anweisungen für das Wurzelelement ...
-&lt;/Datensatz&gt;
+&lt;/Record&gt;
 </code></pre>
 
-<p>Die Anweisung, um ein Objekt auszugeben, heißt (tata!) <code>ObjektAusgeben</code>. Es erwartet als Kindelement den Typ des Objekts (<a href="../commands-de/image.html">Bild</a>, <a href="../commands-de/box.html">Box</a>, <a href="../commands-de/rule.html">Linie</a>, <a href="../commands-de/frame.html">Rahmen</a>, <a href="../commands-de/barcode.html">Strichcode</a>, <a href="../commands-de/table.html">Tabelle</a>, <a href="../commands-de/textblock.html">Textblock</a>, <a href="../commands-de/transformation.html">Transformation</a>). Textblock (ein Text mit einer festen breite - als Voreinstellung wird die Seitenbreite genommen) hingegen erwartet als Kindelemente einen oder mehrere Absätze. Inhalte werden in <code>&lt;Wert&gt; ... &lt;/Wert&gt;</code> Elemente geklammert. Anstatt den Text explizit anzugeben bei <a href="../commands-de/value.html">Wert</a>, erlaubt das Kommando auch eine Teilmenge an <a href="xpath.html">XPath-Ausdrücken</a> um z.B. mit der <code>@</code>-Notation auf Attributwerte zuzugreifen.</p>
+<p>Die Anweisung, um ein Objekt auszugeben, heißt <code>PlaceObject</code>. Es erwartet als Kindelement den Typ des Objekts (<a href="../commands-de/image.html">Image</a>, <a href="../commands-de/box.html">Box</a>, <a href="../commands-de/rule.html">Rule</a>, <a href="../commands-de/frame.html">Frame</a>, <a href="../commands-de/barcode.html">Barcode</a>, <a href="../commands-de/table.html">Table</a>, <a href="../commands-de/textblock.html">Textblock</a>, <a href="../commands-de/transformation.html">Transformation</a>). Textblock (ein Text mit einer festen breite - als Voreinstellung wird die Seitenbreite genommen) hingegen erwartet als Kindelemente einen oder mehrere Absätze. Inhalte werden in <code>&lt;Value&gt; ... &lt;/Value&gt;</code> Elemente geklammert. Anstatt den Text explizit anzugeben bei <a href="../commands-de/value.html">Value</a>, erlaubt das Kommando auch eine Teilmenge an <a href="xpath.html">XPath-Ausdrücken</a> um z.B. mit der <code>@</code>-Notation auf Attributwerte zuzugreifen.</p>
 
 <p>Damit ist das vollständige (minimale) »Hello World« Beispiel einfach:</p>
 
 <pre><code>&lt;Layout
-  xmlns=&quot;urn:speedata.de:2009/publisher/de&quot;
-  xmlns:sd=&quot;urn:speedata:2009/publisher/functions/de&quot;&gt;
+  xmlns=&quot;urn:speedata.de:2009/publisher/en&quot;
+  xmlns:sd=&quot;urn:speedata:2009/publisher/functions/en&quot;&gt;
 
 
-  &lt;Datensatz element=&quot;root&quot;&gt;
-    &lt;ObjektAusgeben&gt;
+  &lt;Record element=&quot;root&quot;&gt;
+    &lt;PlaceObject&gt;
       &lt;Textblock&gt;
-        &lt;Absatz&gt;
-          &lt;Wert auswahl=&quot;@greeting&quot;/&gt;
-        &lt;/Absatz&gt;
+        &lt;Paragraph&gt;
+          &lt;Value select=&quot;@greeting&quot;/&gt;
+        &lt;/Paragraph&gt;
       &lt;/Textblock&gt;
-    &lt;/ObjektAusgeben&gt;
-  &lt;/Datensatz&gt;
+    &lt;/PlaceObject&gt;
+  &lt;/Record&gt;
 &lt;/Layout&gt;
 </code></pre>
 
@@ -108,7 +108,7 @@ layout=&lt;Layoutdatei.xml&gt;
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.5.1 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/firststeps.html">Englisch</a>
+Version: 2.5.9 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/firststeps.html">Englisch</a>
 
 </body>
 </html>

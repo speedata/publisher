@@ -54,7 +54,7 @@ must return either <em>true</em> or <em>false</em>.</p>
 
 <ul>
 <li>Number: Return the value without change: <code>5</code></li>
-<li>Text: Return the text without chang: <code>'hello world'</code></li>
+<li>Text: Return the text without change: <code>'hello world'</code></li>
 <li>Arithmetic operation (<code>*</code>, <code>div</code>, <code>idiv</code>, <code>+</code>, <code>-</code>, <code>mod</code>). Example:
 <code>( 6 + 4.5 ) * 2</code></li>
 <li>Variables. Example: <code>$column + 2</code></li>
@@ -109,6 +109,11 @@ XPath 2.0 standard.</p>
 <tr>
 <td>sd:current-framenumber(&lt;name&gt;)</td>
 <td>Return the current frame number of given positioning area.</td>
+</tr>
+
+<tr>
+<td>sd:count-saved-pages(&lt;name&gt;)</td>
+<td>Return the number of saved pages from <code>&lt;SavePages&gt;</code>.</td>
 </tr>
 
 <tr>
@@ -202,13 +207,13 @@ XPath 2.0 standard.</p>
 </tr>
 
 <tr>
-<td>sd:groupwidth(&lt;string&gt;)</td>
-<td>Return the number of gridcells of the given group’s width. The argument must be the name of an existing group. Example: <code>sd:groupwidth('My group')</code></td>
+<td>sd:group-width(&lt;string&gt;)</td>
+<td>Return the number of gridcells of the given group’s width. The argument must be the name of an existing group. Example: <code>sd:group-width('My group')</code></td>
 </tr>
 
 <tr>
-<td>sd:groupheight(&lt;string&gt;)</td>
-<td>Return the given group’s height (in gridcells). See <code>sd:groupwidth(...)</code></td>
+<td>sd:group-height(&lt;string&gt;)</td>
+<td>Return the given group’s height (in gridcells). See <code>sd:group-width(...)</code></td>
 </tr>
 
 <tr>
@@ -383,7 +388,7 @@ XPath 2.0 standard.</p>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.5.1 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/xpath.html">German</a>
+Version: 2.5.9 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/xpath.html">German</a>
 
 </body>
 </html>

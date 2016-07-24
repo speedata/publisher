@@ -35,26 +35,24 @@ RelaxNG Schemas verarbeiten kann:</p>
 </ul>
 
 <p>Das RelaxNG-Schema für das Layoutregelwerk liegt in der ZIP-Datei im
-Verzeichnis <code>share/schema/</code> unter dem Dateinamen <code>layoutschema-de.rng</code>
-bzw. <code>layoutschema-en.rng</code> für das englischsprachige Regelwerk.</p>
+Verzeichnis <code>share/schema/</code> unter dem Dateinamen <code>layoutschema-en.rng</code> für das Regelwerk.</p>
 
 <h2>Hinweis</h2>
 
 <p>Der XML-Namensraum des Layoutregelwerks ist
-<code>urn:speedata.de:2009/publisher/de</code>. Daher muss das Layoutregelwerk,
+<code>urn:speedata.de:2009/publisher/en</code>. Daher muss das Layoutregelwerk,
 sofern es gegen das RelaxNG Schema validiert wird, wie folgt aussehen:</p>
 
-<pre><code>&lt;Layout xmlns=&quot;urn:speedata.de:2009/publisher/de&quot;&gt;
+<pre><code>&lt;Layout xmlns=&quot;urn:speedata.de:2009/publisher/en&quot;&gt;
  ...
 &lt;/Layout&gt;
 </code></pre>
 
-<p>Falls Layoutspezifische XPath-Funktionen benutzt werden, muss der
-Namensraum <code>urn:speedata:2009/publisher/functions/de</code> bzw. für englische
-Funktionen <code>urn:speedata:2009/publisher/functions/en</code> angegeben werden:</p>
+<p>Falls layoutspezifische XPath-Funktionen benutzt werden, muss der
+Namensraum <code>urn:speedata:2009/publisher/functions/en</code> angegeben werden:</p>
 
-<pre><code>&lt;Layout xmlns=&quot;urn:speedata.de:2009/publisher/de&quot;
-        xmlns:sd=&quot;urn:speedata:2009/publisher/functions/de&quot;&gt;
+<pre><code>&lt;Layout xmlns=&quot;urn:speedata.de:2009/publisher/en&quot;
+        xmlns:sd=&quot;urn:speedata:2009/publisher/functions/en&quot;&gt;
  ...
 &lt;/Layout&gt;
 </code></pre>
@@ -68,7 +66,7 @@ das Schema jedem Dokument einzeln zuzuweisen:</p>
 <p><a href="../img/oxygen-schemazuweisen.png"><img src="../img/oxygen-schemazuweisen.png" style="max-width: 40%"></a></p>
 
 <p>gibt es die dauerhafte Lösung, allen Dokumenten im Namensraum
-<code>urn:speedata.de:2009/publisher/de</code> das RelaxNG Schema zuzuweisen.</p>
+<code>urn:speedata.de:2009/publisher/en</code> das RelaxNG Schema zuzuweisen.</p>
 
 <p>Dazu erstellt man in den Einstellungen unter „Dokumenttypen Zuordnung“
 eine neue Regel.</p>
@@ -85,7 +83,7 @@ dieser Abbildung:</p>
 <p><a href="../img/namensraumzuordnung.png"><img src="../img/namensraumzuordnung.png" style="max-width: 40%"></a></p>
 
 <p>Anschließend muss noch der Pfad zur Schemadatei angegeben werden
-(<code>.../schema/layoutschema-de.rng</code>):</p>
+(<code>.../schema/layoutschema-en.rng</code>):</p>
 
 <p><a href="../img/schemazuweisung-oxygen.png"><img src="../img/schemazuweisung-oxygen.png" style="max-width: 40%"></a></p>
 
@@ -99,7 +97,7 @@ volle Editorunterstützung mit Autovervollständigung und Tooltips.</p>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.5.1 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/xmlediting.html">Englisch</a>
+Version: 2.5.9 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/xmlediting.html">Englisch</a>
 
 </body>
 </html>

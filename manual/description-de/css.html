@@ -26,7 +26,7 @@
 
 <p>Im Publisher kann mit der Stylesheet-Anweisung eine CSS-Datei geladen werden bzw. innerhalb einer Stylesheet-Anweisung können CSS-Regeln deklariert werden:</p>
 
-<pre><code>&lt;Stylesheet dateiname=&quot;regeln.css&quot;/&gt;
+<pre><code>&lt;Stylesheet filename=&quot;regeln.css&quot;/&gt;
 </code></pre>
 
 <p>oder</p>
@@ -38,20 +38,20 @@
 &lt;/Stylesheet&gt;
 </code></pre>
 
-<p>Mit diesen Regeln lassen sich einige der Befehle (derzeit <code>Absatz</code>, <code>Box</code>,
-<code>Linie</code>, <code>Rahmen</code>, <code>Tlinie</code>, <code>Td</code>) im Aussehen anpassen. Wie bei CSS üblich
+<p>Mit diesen Regeln lassen sich einige der Befehle (derzeit <code>Paragraph</code>, <code>Box</code>,
+<code>Rule</code>, <code>Frame</code>, <code>Tablerule</code>, <code>Td</code>) im Aussehen anpassen. Wie bei CSS üblich,
 können die Eigenschaften über die Id, Klasse und über den Befehlsnamen
 angesprochen werden.</p>
 
 <p>So bewirken für diese Tabelle:</p>
 
-<pre><code>&lt;ObjektAusgeben&gt;
-  &lt;Tabelle&gt;
-    &lt;Tr minhöhe=&quot;4&quot;&gt;
-      &lt;Td class=&quot;myclass&quot; id=&quot;myid&quot;&gt;&lt;Absatz&gt;&lt;Wert&gt;Hallo Welt&lt;/Wert&gt;&lt;/Absatz&gt;&lt;/Td&gt;
+<pre><code>&lt;PlaceObject&gt;
+  &lt;Table&gt;
+    &lt;Tr minheight=&quot;4&quot;&gt;
+      &lt;Td class=&quot;myclass&quot; id=&quot;myid&quot;&gt;&lt;Paragraph&gt;&lt;Value&gt;Hallo Welt&lt;/Value&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
     &lt;/Tr&gt;
-  &lt;/Tabelle&gt;
-&lt;/ObjektAusgeben&gt;
+  &lt;/Table&gt;
+&lt;/PlaceObject&gt;
 </code></pre>
 
 <p>alle folgenden CSS-Anweisungen dasselbe</p>
@@ -79,7 +79,7 @@ angesprochen werden.</p>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.5.1 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/css.html">Englisch</a>
+Version: 2.5.9 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/css.html">Englisch</a>
 
 </body>
 </html>

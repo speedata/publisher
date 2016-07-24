@@ -38,25 +38,25 @@
 internen Namen verbunden werden. Zweitens muss eine Schriftfamilie
 definiert werden, die mehrere Schriftdateien zu einer Familie gruppiert
 (Normal, Fett, Kursiv, Fettkursiv). Der erste Schritt wird mit dem
-Element <a href="../commands-de/loadfontfile.html">LadeSchriftdatei</a> gemacht:</p>
+Element <a href="../commands-de/loadfontfile.html">LoadFontfile</a> gemacht:</p>
 
-<pre><code>&lt;LadeSchriftdatei name=&quot;Helvetica&quot; dateiname=&quot;texgyreheros-regular.otf&quot; /&gt;
-&lt;LadeSchriftdatei name=&quot;Helvetica Fett&quot; dateiname=&quot;texgyreheros-bold.otf&quot; /&gt;
-&lt;LadeSchriftdatei name=&quot;Helvetica Kursiv&quot; dateiname=&quot;texgyreheros-italic.otf&quot; /&gt;
-&lt;LadeSchriftdatei name=&quot;Helvetica Fett Kursiv&quot; dateiname=&quot;texgyreheros-bolditalic.otf&quot; /&gt;
+<pre><code>&lt;LoadFontfile name=&quot;Helvetica&quot; filename=&quot;texgyreheros-regular.otf&quot; /&gt;
+&lt;LoadFontfile name=&quot;Helvetica Fett&quot; filename=&quot;texgyreheros-bold.otf&quot; /&gt;
+&lt;LoadFontfile name=&quot;Helvetica Kursiv&quot; filename=&quot;texgyreheros-italic.otf&quot; /&gt;
+&lt;LoadFontfile name=&quot;Helvetica Fett Kursiv&quot; filename=&quot;texgyreheros-bolditalic.otf&quot; /&gt;
 </code></pre>
 
 <p>Mit diesen Anweisungen sind die Schriftdateien unter den Namen
 <code>Helvetica</code>, <code>Helvetica Fett</code> u.s.w ansprechbar. Das wird dann im
 zweiten Schritt mit
-<a href="../commands-de/definefontfamily.html">DefiniereSchriftfamilie</a> gemacht:</p>
+<a href="../commands-de/definefontfamily.html">DefineFontfamily</a> gemacht:</p>
 
-<pre><code>&lt;DefiniereSchriftfamilie name=&quot;Überschrift&quot; schriftgröße=&quot;12&quot; zeilenabstand=&quot;14&quot;&gt;
-  &lt;Normal schriftart=&quot;Helvetica&quot;/&gt;
-  &lt;Fett schriftart=&quot;Helvetica Fett&quot;/&gt;
-  &lt;Kursiv schriftart=&quot;Helvetica Kursiv&quot;/&gt;
-  &lt;FettKursiv schriftart=&quot;Helvetica Fett Kursiv&quot;/&gt;
-&lt;/DefiniereSchriftfamilie&gt;
+<pre><code>&lt;DefineFontfamily name=&quot;Überschrift&quot; fontsize=&quot;12&quot; leading=&quot;14&quot;&gt;
+  &lt;Regular fontface=&quot;Helvetica&quot;/&gt;
+  &lt;Bold fontface=&quot;Helvetica Fett&quot;/&gt;
+  &lt;Italic fontface=&quot;Helvetica Kursiv&quot;/&gt;
+  &lt;BoldItalic fontface=&quot;Helvetica Fett Kursiv&quot;/&gt;
+&lt;/DefineFontfamily&gt;
 </code></pre>
 
 <p>Hier wird die Schriftfamilie <code>Überschrift</code> aus den vier oben definierten
@@ -64,7 +64,7 @@ Schriftdateien zusammengesetzt.</p>
 
 <h2>Tipp</h2>
 
-<p>Die <code>LadeSchriftdatei</code>- Anweisungen lassen sich mithilfe der
+<p>Die <code>LoadFontfile</code>- Anweisungen lassen sich mithilfe der
 Befehlszeile leicht erzeugen. Dazu muss der Publisher mit folgenden
 Anweisungen aufgerufen werden:</p>
 
@@ -80,7 +80,7 @@ geändert werden.</p>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.5.1 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/fonts.html">Englisch</a>
+Version: 2.5.9 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/fonts.html">Englisch</a>
 
 </body>
 </html>

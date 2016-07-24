@@ -1,13 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (en)</title>
   <id>http://www.speedata.de</id>
-  <updated>2016-06-10T10:02:11+02:00</updated>
+  <updated>2016-07-24T13:04:14+02:00</updated>
   <subtitle>New revisions for download and changelog.</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.5.9</title>
+    <updated>2016-07-06T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-07-06:</id>
+    <content type="html">Bugfix related to “jump to next area” and multipage table/</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.5.8</title>
+    <updated>2016-07-02T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-07-02:</id>
+    <content type="html">Bugfix get remaining height jumps to last line, even if “full”</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.5.7</title>
+    <updated>2016-06-25T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-25:</id>
+    <content type="html">Bugfix allocation on non-integer columns</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.5.6</title>
+    <updated>2016-06-25T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-25:</id>
+    <content type="html">Remove obsolete command ProcessRecord, add limit option for ProcessNode, bugfix Output/Text paragraph shape (#89)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.5.5</title>
+    <updated>2016-06-23T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-23:</id>
+    <content type="html">Various bugfixes / future objects and tables</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.5.4</title>
+    <updated>2016-06-20T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-20:</id>
+    <content type="html">Allow control over size of background-text in Td.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.5.3</title>
+    <updated>2016-06-18T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-18:</id>
+    <content type="html">Include bugfixes from 2.4.4</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.5.2</title>
+    <updated>2016-06-13T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-13:</id>
+    <content type="html">(2.4.2) A few bugfixes related to sd:current-framenumber(), minheight in Textblock and looking for next free row.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.5.1</title>
     <updated>2016-06-10T00:00:00Z</updated>
@@ -20,6 +76,27 @@
     <updated>2016-06-09T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-09:</id>
     <content type="html">Bugfix: pagetype and NewPage, version assertion in Layout tag</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.4.4</title>
+    <updated>2016-06-18T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-18:</id>
+    <content type="html">Various bugfixes: leaders disappear on a linebreak, Nobreak allows setting for font family, escape attribute contents, fix for bad images.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.4.3</title>
+    <updated>2016-06-17T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-17:</id>
+    <content type="html">Bugfix related to an improper fix in 2.4.2 / find next free row for an object</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.4.2</title>
+    <updated>2016-06-13T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-13:</id>
+    <content type="html">A few bugfixes related to sd:current-framenumber(), minheight in Textblock and looking for next free row.</content>
     <link href="http://www.speedata.de"></link>
   </entry>
   <entry>

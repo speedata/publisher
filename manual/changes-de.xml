@@ -1,13 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (de)</title>
   <id>http://www.speedata.de</id>
-  <updated>2016-06-10T10:02:11+02:00</updated>
+  <updated>2016-07-24T13:04:14+02:00</updated>
   <subtitle>Neue Versionen des Publishers zum Download und Liste der Änderungen</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.5.9</title>
+    <updated>2016-07-06T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-07-06:</id>
+    <content type="html">Fehlerkorrektur bzgl. langen Tabellen in Gruppen </content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.5.8</title>
+    <updated>2016-07-02T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-07-02:</id>
+    <content type="html">Fehlerkorrektur beim Finden der nächsten freien Zeile</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.5.7</title>
+    <updated>2016-06-25T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-25:</id>
+    <content type="html">Fehlerkorrektur bei Belegung von nicht-Ganzzahl Spalten</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.5.6</title>
+    <updated>2016-06-25T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-25:</id>
+    <content type="html">Lösche alten Befehl ProcessRecord, neue Option bei BearbeiteDatensatz: umfang, Fehlerkorrektur bei Ausgabe/Text (#89)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.5.5</title>
+    <updated>2016-06-23T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-23:</id>
+    <content type="html">Verschiedene Fehlerkorrekturen / Zukünftige Objekte und Tabellen</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.5.4</title>
+    <updated>2016-06-20T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-20:</id>
+    <content type="html">Kontrolle über die Größe des Hintergrundtexts in Td erlauben.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.5.3</title>
+    <updated>2016-06-18T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-18:</id>
+    <content type="html">Fehlerkorrekturen von 2.4.4 eingefügt</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.5.2</title>
+    <updated>2016-06-13T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-13:</id>
+    <content type="html">(2.4.2) Einige Fehlerkorrekturen im Zusammenhangn mit sd:aktuelle-rahmennummer(), minhöhe im Textblock und der Suche nach der nächsten freien Zeile.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.5.1</title>
     <updated>2016-06-10T00:00:00Z</updated>
@@ -20,6 +76,27 @@
     <updated>2016-06-09T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-09:</id>
     <content type="html">Fehlerkorrektur: Seitentyp und NeueSeite, Versionszusicherung im Layout-Tag</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.4.4</title>
+    <updated>2016-06-18T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-18:</id>
+    <content type="html">Verschiede Fehlerkorrekturen: Führungspunkte verschwinden bei einem Zeilenwechsel, KeinUmbruch erlaubt die Angabe einer Schriftfamilie, Attribut-Werte werden nicht escaped, kaputte Bilder (ohne DPI-Angaben) werden besser behandelt.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.4.3</title>
+    <updated>2016-06-17T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-17:</id>
+    <content type="html">Fehlerkorrektur zu einem fehlerhaften Fix in 2.4.2 bzgl. der Suche nach der nächsten freien Zeile für ein Objekt.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.4.2</title>
+    <updated>2016-06-13T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-06-13:</id>
+    <content type="html">Einige Fehlerkorrekturen im Zusammenhangn mit sd:aktuelle-rahmennummer(), minhöhe im Textblock und der Suche nach der nächsten freien Zeile.</content>
     <link href="http://www.speedata.de"></link>
   </entry>
   <entry>

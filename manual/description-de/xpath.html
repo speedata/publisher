@@ -21,18 +21,18 @@
 <h1>XPath Ausdrücke</h1>
 
 <p>Der Publisher akzeptiert in den den entsprechend markierten Attributen
-(zumeist <code>auswahl</code> und <code>bedingung</code>) XPath Ausdrücke. In allen anderen
+(zumeist <code>select</code> und <code>test</code>) XPath Ausdrücke. In allen anderen
 Attributen kann durch die geschweiften Klammern (<code>{</code> und <code>}</code>) ein XPath
 Ausdruck erzwungen werden. In diesem Beispiel werden im Attribut
-<code>breite</code> und im Element <code>Wert</code> die Werte dynamisch erzeugt, d.h. für die
+<code>width</code> und im Element <code>Value</code> die Werte dynamisch erzeugt, d.h. für die
 Angabe der Breite wird auf den Inhalt der Variablen <code>breite</code>
 zurückgegriffen, der Inhalt des Absatzes ist der Inhalt (Textwert) des
 gerade aktuellen Datenknotens.</p>
 
-<pre><code>&lt;Textblock breite=&quot;{$breite}&quot; schriftart=&quot;text&quot; textformat=&quot;Text mit Einrückung&quot;&gt;
-  &lt;Absatz&gt;
-    &lt;Wert auswahl=&quot;.&quot;/&gt;
-  &lt;/Absatz&gt;
+<pre><code>&lt;Textblock width=&quot;{$breite}&quot; fontface=&quot;text&quot; textformat=&quot;Text mit Einrückung&quot;&gt;
+  &lt;Paragraph&gt;
+    &lt;Value select=&quot;.&quot;/&gt;
+  &lt;/Paragraph&gt;
 &lt;/Textblock&gt;
 </code></pre>
 
@@ -73,62 +73,62 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 
 <tbody>
 <tr>
-<td>sd:aktuelle-rahmennummer(&lt;name&gt;)</td>
+<td>sd:current-framenumber(&lt;name&gt;)</td>
 <td>Gibt die Nummer des aktuellen Rahmens im Platzierungsbereich zurück.</td>
 </tr>
 
 <tr>
-<td>sd:aktuelle-seite()</td>
+<td>sd:current-page()</td>
 <td>Gibt die Seitennummer zurück.</td>
 </tr>
 
 <tr>
-<td>sd:aktuelle-zeile(&lt;name&gt;)</td>
+<td>sd:current-row(&lt;name&gt;)</td>
 <td>Gibt die aktuelle Zeile zurück. Wenn <code>name</code> angegeben, gibt die Zeile des gegebenen Positionsrahmens zurück.</td>
 </tr>
 
 <tr>
-<td>sd:aktuelle-spalte(&lt;name&gt;)</td>
+<td>sd:current-column(&lt;name&gt;)</td>
 <td>Gibt die aktuelle Spalte zurück. Wenn <code>name</code> angegeben, gibt die Spalte des gegebenen Positionsrahmens zurück.</td>
 </tr>
 
 <tr>
-<td>sd:alternierend(&lt;typ&gt;, &lt;text&gt;,&lt;text&gt;,.. )</td>
-<td>Bei jedem Aufruf wird das nächste Argument zurück gegeben. Wert des Typs ist beliebig, muss aber eindeutig sein. Beispiel: <code>sd:alternierend(&quot;tbl&quot;, &quot;Weiß&quot;,&quot;Grau&quot;)</code> könnte für die Hintergrundfarbe von Tabellen benutzt werden.</td>
+<td>sd:alternating(&lt;typ&gt;, &lt;text&gt;,&lt;text&gt;,.. )</td>
+<td>Bei jedem Aufruf wird das nächste Argument zurück gegeben. Wert des Typs ist beliebig, muss aber eindeutig sein. Beispiel: <code>sd:alternating(&quot;tbl&quot;, &quot;Weiß&quot;,&quot;Grau&quot;)</code> könnte für die Hintergrundfarbe von Tabellen benutzt werden.</td>
 </tr>
 
 <tr>
-<td>sd:alternierend-zurücksetzen(&lt;typ&gt;)</td>
-<td>Setzt den Zustand für <code>sd:alternierend()</code> für den angegebenen Typ zurück.</td>
+<td>sd:reset-alternating(&lt;typ&gt;)</td>
+<td>Setzt den Zustand für <code>sd:alternating()</code> für den angegebenen Typ zurück.</td>
 </tr>
 
 <tr>
-<td>sd:alternierend-beibehalten(&lt;typ&gt;)</td>
-<td>Nutzt den aktuellen Wert von <code>sd:alternierend(&lt;typ&gt;)</code>, ohne diesen zu verändern.</td>
+<td>sd:keep-alternating(&lt;typ&gt;)</td>
+<td>Nutzt den aktuellen Wert von <code>sd:alternating(&lt;typ&gt;)</code>, ohne diesen zu verändern.</td>
 </tr>
 
 <tr>
-<td>sd:anzahl-gespeicherte-seiten(&lt;Name&gt;)</td>
-<td>Gibt die Anzahl der gespeicherten Seiten, die mit &lt;SeitenSpeichern&gt; zwischengspeichert wurden.</td>
+<td>sd:count-saved-pages(&lt;Name&gt;)</td>
+<td>Gibt die Anzahl der gespeicherten Seiten, die mit &lt;SavePages&gt; zwischen speichert wurden.</td>
 </tr>
 
 <tr>
-<td>sd:anzahl-datensätze(&lt;Sequenz&gt;)</td>
+<td>sd:number-of-datasets(&lt;Sequenz&gt;)</td>
 <td>Gibt die Anzahl der Datensätze der Sequenz zurück.</td>
 </tr>
 
 <tr>
-<td>sd:anzahl-seiten(&lt;Dateiname oder URI-Schema&gt;)</td>
+<td>sd:number-of-pages(&lt;Dateiname oder URI-Schema&gt;)</td>
 <td>Ermittelt die Anzahl der Seiten der angegebenen (PDF-)Datei.</td>
 </tr>
 
 <tr>
-<td>sd:anzahl-spalten()</td>
+<td>sd:number-of-columns()</td>
 <td>Gibt die Anzahl der Spalten im aktuellen Raster.</td>
 </tr>
 
 <tr>
-<td>sd:anzahl-zeilen()</td>
+<td>sd:number-of-rows()</td>
 <td>Gibt die Anzahl der Zeilen im aktuellen Raster.</td>
 </tr>
 
@@ -138,72 +138,72 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 </tr>
 
 <tr>
-<td>sd:belegt(x,y,&lt;Bereichsname&gt;,&lt;Rahmennummer&gt;)</td>
+<td>sd:allocated(x,y,&lt;Bereichsname&gt;,&lt;Rahmennummer&gt;)</td>
 <td>Gibt wahr zurück, wenn die Zelle belegt ist (seit 2.3.71).</td>
 </tr>
 
 <tr>
-<td>sd:bildbreite(&lt;Dateiname oder URI-Schema&gt;)</td>
+<td>sd:imagewidth(&lt;Dateiname oder URI-Schema&gt;)</td>
 <td>Breite des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Breite des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert.</td>
 </tr>
 
 <tr>
-<td>sd:bildhöhe(&lt;Dateiname oder URI-Schema&gt;)</td>
+<td>sd:imageheight(&lt;Dateiname oder URI-Schema&gt;)</td>
 <td>Höhe des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Höhe des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert.</td>
 </tr>
 
 <tr>
-<td>sd:datei-vorhanden(&lt;Dateiname oder URI-Schema&gt;)</td>
+<td>sd:file-exists(&lt;Dateiname oder URI-Schema&gt;)</td>
 <td>Wahr, wenn der Dateiname im Suchpfad existiert, ansonsten false.</td>
 </tr>
 
 <tr>
-<td>sd:formatiere-zahl(Zahl oder String, Tausenderzeichen, Kommazeichen)</td>
-<td>Formatiert die übergebene Zahl und fügt Tausender-Trennzeichen hinzu und ändert den Kommatrenner. Beispiel: <code>sd:formatiere-zahl(12345.67, '.',',')</code> ergibt die Zeichenkette <code>1.2345,67</code>.</td>
+<td>sd:format-number(Zahl oder String, Tausenderzeichen, Kommazeichen)</td>
+<td>Formatiert die übergebene Zahl und fügt Tausender-Trennzeichen hinzu und ändert den Kommatrenner. Beispiel: <code>sd:format-number(12345.67, '.',',')</code> ergibt die Zeichenkette <code>1.2345,67</code>.</td>
 </tr>
 
 <tr>
-<td>sd:formatiere-string(Objekt,Objekt,...,Formartierungsangaben)</td>
+<td>sd:format-string(Objekt,Objekt,...,Formatierungsangaben)</td>
 <td>Gibt eine Zeichenkette zurück, die die gegebenen Objekte mit den im zweiten Argument gegebenen Formatierungsanweisungen darstellt. Die Formatierungsanweisungen entsprechen der aus der Programmiersprache C bekannten <code>printf()</code>-Funktion.</td>
 </tr>
 
 <tr>
-<td>sd:gerade(&lt;zahl&gt;)</td>
-<td>Wahr, wenn die angegebene Zahl gerade ist. Beispiel: <code>sd:gerade(sd:aktuelle-seite())</code></td>
+<td>sd:even(&lt;zahl&gt;)</td>
+<td>Wahr, wenn die angegebene Zahl gerade ist. Beispiel: <code>sd:even(sd:current-page())</code></td>
 </tr>
 
 <tr>
-<td>sd:html-dekodieren(&lt;Node&gt;)</td>
+<td>sd:decode-html(&lt;Node&gt;)</td>
 <td>Wandelt Texte wie <code>&amp;lt;i&amp;gt;Kursiv&amp;lt;/i&amp;gt;</code> in entsprechendes HTML-Markup.</td>
 </tr>
 
 <tr>
-<td>sd:ungerade(&lt;zahl&gt;)</td>
+<td>sd:odd(&lt;zahl&gt;)</td>
 <td>Wahr, wenn die angegebene Zahl ungerade ist.</td>
 </tr>
 
 <tr>
-<td>sd:gruppenbreite(&lt;string&gt;)</td>
-<td>Gibt die Breite in Rasterzellen für die Gruppe im ersten Argument an. Beispiel: <code>sd:gruppenbreite('Beispielgruppe')</code></td>
+<td>sd:group-width(&lt;string&gt;)</td>
+<td>Gibt die Breite in Rasterzellen für die Gruppe im ersten Argument an. Beispiel: <code>sd:group-width('Beispielgruppe')</code></td>
 </tr>
 
 <tr>
-<td>sd:gruppenhöhe(&lt;string&gt;)</td>
-<td>Gibt die Höhe in Rasterzellen für die Gruppe im ersten Argument an. Beispiel: <code>sd:gruppenbreite('Beispielgruppe')</code></td>
+<td>sd:group-height(&lt;string&gt;)</td>
+<td>Gibt die Höhe in Rasterzellen für die Gruppe im ersten Argument an. Beispiel: <code>sd:group-height('Beispielgruppe')</code></td>
 </tr>
 
 <tr>
-<td>sd:seitennummer(&lt;Marke&gt;)</td>
-<td>Liefert die Seitenzahl der Seite auf der die angegebene Marke ausgegeben wurde. Siehe den Befehl <a href="../commands-de/mark.html">Marke</a></td>
+<td>sd:pagenumber(&lt;Marke&gt;)</td>
+<td>Liefert die Seitenzahl der Seite auf der die angegebene Marke ausgegeben wurde. Siehe den Befehl <a href="../commands-de/mark.html">Mark</a></td>
 </tr>
 
 <tr>
-<td>sd:seitenverhältnis(&lt;Bildname&gt;)</td>
-<td>Gibt das Ergebnis der Divsion Bildbreite / Bildhöhe zurück. (D.h. &lt; 1 für Hochkantbilder, &gt; 1 für Querformat.)</td>
+<td>sd:aspectratio(&lt;Bildname&gt;)</td>
+<td>Gibt das Ergebnis der Division Bildbreite / Bildhöhe zurück. (D.h. &lt; 1 für Hochkantbilder, &gt; 1 für Querformat.)</td>
 </tr>
 
 <tr>
-<td>sd:seitenzahlen-zusammenfassen(&lt;Seitenzahlen&gt;,&lt;Trenner für Bereiche&gt;,&lt;Trenner für Leerraum&gt;)</td>
+<td>sd:merge-pagenumbers(&lt;Seitenzahlen&gt;,&lt;Trenner für Bereiche&gt;,&lt;Trenner für Leerraum&gt;)</td>
 <td>Fasst Seitenzahlenbereiche zusammen. Beispielsweise aus <code>&quot;1, 3, 4, 5&quot;</code> wird <code>1, 3–5</code>. Voreinstellung für den Trenner für Bereiche ist ein Halbgeviertstrich (–), Voreinstellung für den Trenner für Leerraum ist ', ' (Komma, Leerzeichen). Diese Funktion sortiert die Zahlen und löscht doppelte Einträge. Bei leerem Trenner für Bereiche werden Zahlen nicht zusammengeführt, sondern einzeln mit dem Trenner für Leerraum verbunden.</td>
 </tr>
 
@@ -218,22 +218,22 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 </tr>
 
 <tr>
-<td>sd:variable-vorhanden(&lt;Name&gt;)</td>
+<td>sd:variable-exists(&lt;Name&gt;)</td>
 <td>Prüft, ob eine Variable vorhanden ist.</td>
 </tr>
 
 <tr>
-<td>sd:blindtext()</td>
+<td>sd:dummytext()</td>
 <td>Gibt den Blindtext &quot;Lorem ipsum...&quot; mit über 50 Wörtern zurück.</td>
 </tr>
 
 <tr>
 <td>sd:loremipsum()</td>
-<td>Alias für <code>sd:blindtext()</code></td>
+<td>Alias für <code>sd:dummytext()</code></td>
 </tr>
 
 <tr>
-<td>sd:zufallswert(&lt;Wert&gt;,&lt;Wert&gt;, …)</td>
+<td>sd:randomitem(&lt;Wert&gt;,&lt;Wert&gt;, …)</td>
 <td>Gibt einen der Werte zurück.</td>
 </tr>
 </tbody>
@@ -374,7 +374,7 @@ Namensraum <code>urn:speedata:2009/publisher/functions/de</code> (im Folgenden m
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.5.1 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/xpath.html">Englisch</a>
+Version: 2.5.9 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/xpath.html">Englisch</a>
 
 </body>
 </html>

@@ -22,9 +22,9 @@
 
 <p>Fast alle Objekte, die im Publisher ausgegeben werden, können eine Farbe annehmen. Üblicherweise wird die Farbe bei dem Objekt selbst angegeben oder über CSS-Stylesheets gesteuert. Hier ein Beispiel für die direkte Farbgebung bei dem Objekt:</p>
 
-<pre><code>&lt;ObjektAusgeben&gt;
-  &lt;Box breite=&quot;5&quot; höhe=&quot;2&quot; hintergrundfarbe=&quot;Dunkelblau&quot; /&gt;
-&lt;/ObjektAusgeben&gt;
+<pre><code>&lt;PlaceObject&gt;
+  &lt;Box width=&quot;5&quot; height=&quot;2&quot; backgroundcolor=&quot;Dunkelblau&quot; /&gt;
+&lt;/PlaceObject&gt;
 </code></pre>
 
 <p>Oder sie wird indirekt per CSS festgelegt:</p>
@@ -35,44 +35,44 @@
   }
 &lt;/Stylesheet&gt;
 ...
-&lt;Datensatz element=&quot;data&quot;&gt;
-  &lt;ObjektAusgeben&gt;
-    &lt;Box breite=&quot;5&quot; höhe=&quot;2&quot; /&gt;
-  &lt;/ObjektAusgeben&gt;
-&lt;/Datensatz&gt;
+&lt;Record element=&quot;data&quot;&gt;
+  &lt;PlaceObject&gt;
+    &lt;Box width=&quot;5&quot; height=&quot;2&quot; /&gt;
+  &lt;/PlaceObject&gt;
+&lt;/Record&gt;
 </code></pre>
 
 <p>In beiden Fällen muss die Farbe »Dunkelblau« vorher festgelegt werden, z.B. mit:</p>
 
-<pre><code>&lt;DefiniereFarbe name=&quot;Dunkelblau&quot; modell=&quot;cmyk&quot; c=&quot;97&quot; m=&quot;77&quot; y=&quot;0&quot; k=&quot;3&quot;/&gt;
+<pre><code>&lt;DefineColor name=&quot;Dunkelblau&quot; model=&quot;cmyk&quot; c=&quot;97&quot; m=&quot;77&quot; y=&quot;0&quot; k=&quot;3&quot;/&gt;
 </code></pre>
 
 <p>Es gibt noch andere Methoden der Farbselektion.</p>
 
 <h2>Direkte Nutzung von CSS-Level-3 Farben</h2>
 
-<p>Die üblichen CSS-Farben (siehe den Befehl <a href="../commands-de/definecolor.html">DefiniereFarbe</a>) sind schon vordefiniert, allerdings im RGB-Farbraum, der sich vom Prinzip her nur für die Bildschirmdarstellung eignet. So ist folgende Ausgabe ohne vorherige Farbdefinition gültig:</p>
+<p>Die üblichen CSS-Farben (siehe den Befehl <a href="../commands-de/definecolor.html">DefineColor</a>) sind schon vordefiniert, allerdings im RGB-Farbraum, der sich vom Prinzip her nur für die Bildschirmdarstellung eignet. So ist folgende Ausgabe ohne vorherige Farbdefinition gültig:</p>
 
-<pre><code>&lt;ObjektAusgeben&gt;
-  &lt;Box breite=&quot;5&quot; höhe=&quot;2&quot; hintergrundfarbe=&quot;goldenrod&quot; /&gt;
-&lt;/ObjektAusgeben&gt;
+<pre><code>&lt;PlaceObject&gt;
+  &lt;Box width=&quot;5&quot; height=&quot;2&quot; backgroundcolor=&quot;goldenrod&quot; /&gt;
+&lt;/PlaceObject&gt;
 </code></pre>
 
 <h2>Direkte Nutzung von CSS-RGB-Werten</h2>
 
 <p>Alternativ zu den vordefinierten Namen kann im speedata Publisher auch die RGB-Hexwerte direkt angeben:</p>
 
-<pre><code>&lt;ObjektAusgeben&gt;
-  &lt;Box breite=&quot;5&quot; höhe=&quot;2&quot; hintergrundfarbe=&quot;#DAA520&quot; /&gt;
-&lt;/ObjektAusgeben&gt;
+<pre><code>&lt;PlaceObject&gt;
+  &lt;Box width=&quot;5&quot; height=&quot;2&quot; backgroundcolor=&quot;#DAA520&quot; /&gt;
+&lt;/PlaceObject&gt;
 </code></pre>
 
 <h2>Indirekte Farbdefinition</h2>
 
 <p>Die indirekte Farbdefiniton wurde oben schon gezeigt. Sie eignet sich insbesondere dann, wenn man einer Farbe einen symbolischen Namen zuordnen möchte.</p>
 
-<pre><code>&lt;DefiniereFarbe name=&quot;hintergrund&quot; modell=&quot;cmyk&quot; c=&quot;97&quot; m=&quot;77&quot; y=&quot;0&quot; k=&quot;3&quot;/&gt;
-&lt;DefiniereFarbe name=&quot;vordergrund&quot; modell=&quot;cmyk&quot; c=&quot;2&quot; m=&quot;12&quot; y=&quot;59&quot; k=&quot;1&quot;/&gt;
+<pre><code>&lt;DefineColor name=&quot;hintergrund&quot; model=&quot;cmyk&quot; c=&quot;97&quot; m=&quot;77&quot; y=&quot;0&quot; k=&quot;3&quot;/&gt;
+&lt;DefineColor name=&quot;vordergrund&quot; model=&quot;cmyk&quot; c=&quot;2&quot; m=&quot;12&quot; y=&quot;59&quot; k=&quot;1&quot;/&gt;
 </code></pre>
 
 <h2>Farbräume</h2>
@@ -81,24 +81,25 @@
 die Bildschirmausgabe ist der Farbraum »RGB« üblich. Dieser Farbraum eignet
 sich nicht für die Druckausgabe, da hier die Farben auf normalerweise einen
 weißen Untergrund aufgetragen werden und die Farben subtraktiv gemischt
-werden. Hier wird üblicherweise der Farbraum »CMYK« benutzt. Zwar kann man rechnerisch RGB in CMYK umwandeln, in der Praxis funktioniert das nur eingeschränkt. In der Druckausgabe ebenfalls üblich sind Graustufen und Schmuck- oder Sonderfarben (Z.B. HKS oder Pantone).</p>
+werden. Hier wird üblicherweise der Farbraum »CMYK« benutzt. Zwar kann man
+rechnerisch RGB in CMYK umwandeln, in der Praxis funktioniert das nur
+eingeschränkt. In der Druckausgabe ebenfalls üblich sind Graustufen und
+Schmuck- oder Sonderfarben (Z.B. HKS oder Pantone).</p>
 
 <h2>Sonderfarben / Schmuckfarben</h2>
 
 <p>Im Gegensatz zu den Farben aus dem RGB-Farbraum kann man im speedata Publisher Sonderfarben nur indirekt benutzen. Hier gibt es nämlich die Problematik, dass die Sonderfarben nur gedruckt werden, aber nicht am Bildschirm angezeigt werden können. Man muss für jede Sonderfarbe eine Ersatzfarbe angeben, die der Sonderfarbe möglichst nahe kommt. Diese wird verwendet, wenn die Sonderfarbe nicht zur Verfügung steht.</p>
 
-<p>Für die gängigen Pantone-Sonderfarben hat der speedata Publisher die Ersatzdefinitionen vordefinert. So ist die folgende Defintion ausreichend</p>
+<p>Für die gängigen Pantone-Sonderfarben hat der speedata Publisher die Ersatzdefinitionen vordefiniert. So ist die folgende Defintion ausreichend</p>
 
-<pre><code>&lt;DefiniereFarbe name=&quot;hintergrund&quot; modell=&quot;sonderfarbe&quot; farbname=&quot;PANTONE 115 C&quot; /&gt;
+<pre><code>&lt;DefineColor name=&quot;hintergrund&quot; model=&quot;spotcolor&quot; colorname=&quot;PANTONE 115 C&quot; /&gt;
 </code></pre>
 
 <p>um die Farbe »Pantone 115 C« im Drucker anzusteuern und auf dem Bildschirm auszugeben.</p>
 
-<p><DefiniereFarbe name="hintergrund" modell="sonderfarbe" farbname="PANTONE 115 C" /></p>
-
 <p>Eigene Farben muss man hingegen wie folgt definieren:</p>
 
-<pre><code>&lt;DefiniereFarbe name=&quot;hintergrund&quot; modell=&quot;sonderfarbe&quot; farbname=&quot;Lack&quot; c=&quot;12&quot; m=&quot;8&quot; y=&quot;20&quot; k=&quot;0&quot;  /&gt;
+<pre><code>&lt;DefineColor name=&quot;hintergrund&quot; model=&quot;spotcolor&quot; colorname=&quot;Lack&quot; c=&quot;12&quot; m=&quot;8&quot; y=&quot;20&quot; k=&quot;0&quot;  /&gt;
 </code></pre>
 
 <h2>Überdrucken</h2>
@@ -106,14 +107,14 @@ werden. Hier wird üblicherweise der Farbraum »CMYK« benutzt. Zwar kann man re
 <p>Bei indirekt definierten Farben kann man die Eigenschaft »überdrucken«
 einstellen. Das ist eine Anweisung an den Rastergrafikprozessor (RIP), die
 unterliegenden Farben beim Druck nicht auszusparen, sondern zusätzlich zu
-drucken. Dazu muss in der Farbdefinition »überdrucken=&quot;ja&quot;« gesetzt werden.
+drucken. Dazu muss in der Farbdefinition »overprint=&quot;yes&quot;« gesetzt werden.
 Das Ergebnis kann man mit den einschlägigen Preflight-Tools, wie z.B. Acrobat Professional, überprüfen.</p>
 
 </div>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.5.1 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/colors.html">Englisch</a>
+Version: 2.5.9 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/colors.html">Englisch</a>
 
 </body>
 </html>
