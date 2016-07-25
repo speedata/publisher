@@ -28,7 +28,7 @@ Save this with the file name `data.xml` in an empty directory on your harddrive.
 Layout file
 ------------
 
-The layout file (file name `layout.xml`) contains the instructions for how the data should be laid out. The root element is the element with the name `Layout` with the namespace `urn:speedata.de:2009/publisher/en`, which expects instructions written in English (such as [PlaceObject](../commands-en/placeobject.html)). The namespace `.../de` allows you to write the commands in German (e.g. [ObjektAusgeben](../commands-de/placeobject.html)). The hello world example uses the `.../en` namespace of course. The feature set of both instruction languages is identical. A minimal (and pointless) layout file is:
+The layout file (file name `layout.xml`) contains the instructions for how the data should be laid out. The root element is the element with the name `Layout` with the namespace `urn:speedata.de:2009/publisher/en`. A minimal (and pointless) layout file is:
 
     <Layout xmlns="urn:speedata.de:2009/publisher/en" />
 

@@ -9,7 +9,7 @@ _Remark: The support of CSS was introduced in version 2.2. At that time, it is m
 Loading a stylesheet and declaring CSS rules
 --------------------------------------------
 
-CSS Stylesheets are defined with the command `Stylesheet`:
+CSS stylesheets are defined with the command `Stylesheet`:
 
 
 

@@ -43,7 +43,7 @@ creates the correct PDF file. With
 
     sp --jobname reference clean
 
-the redundant and not needed temporaray files are removed. The directory
+the redundant and not needed temporary files are removed. The directory
 now looks like this:
 
     example/

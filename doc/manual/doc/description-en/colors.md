@@ -30,12 +30,12 @@ In both cases the color “background” has to be defined previously, for examp
 
     <DefineColor name="background" model="cmyk" c="97" m="77" y="0" k="3"/>
 
-There are other methos for color selection. See the following sections.
+There are other methods for color selection. See the following sections.
 
 Direct usage of CSS-level-3 colors
 ----------------------------------
 
-The standard CSS colors (see the command [DefineColor](../commands-en/definecolor.html)) are predefined, although in the RGB color space. This color space only suited for on screen preseentation. With the predefined colors you can use a command like this without further color declarations:
+The standard CSS colors (see the command [DefineColor](../commands-en/definecolor.html)) are predefined, although in the RGB color space. This color space only suited for on screen presentation. With the predefined colors you can use a command like this without further color declarations:
 
     <PlaceObject>
       <Box width="5" height="2" backgroundcolor="goldenrod" />
@@ -51,7 +51,7 @@ The color values can be given with the HTML/CSS hash values:
       <Box width="5" height="2" backgroundcolor="#DAA520" />
     </PlaceObject>
 
-Indirect color defintion
+Indirect color definition
 ------------------------
 
 The indirect color definition is shown in the first example above. It is useful when the color should have a symbolic name.

@@ -7,7 +7,7 @@ The speedata Publisher can create arbitrary types of directories. All
 lists: table of contents, list of articles or keyword index, are created
 by the same principle. The necessary data for the list (e.g. page
 number, article number) are saved in its own XML data structure, saved
-to the harddrive and used in the next publishing run.
+to the hard drive and used in the next publishing run.
 
 To make the speedata publisher run more than once, it needs to be
 instructed by a switch on the [command line](commandline.html)
@@ -60,7 +60,7 @@ Step 2: Save and load the list information
 ------------------------------------------
 
 The command [SaveDataset](../commands-en/savedataset.html) saves the
-given structure to the harddrive which can be loaded again (in the next
+given structure to the hard drive which can be loaded again (in the next
 run) with [LoadDataset](../commands-en/loaddataset.html). If the file
 does not exist when loading it with
 [LoadDataset](../commands-en/loaddataset.html) it will be silently
@@ -72,7 +72,7 @@ Step 3: Process the information
 
 Right after using [LoadDataset](../commands-en/loaddataset.html), data
 processing continues with the matching rule for the\
- data set file. In the example above, a rule that maches `articlelist`
+ data set file. In the example above, a rule that matches `articlelist`
 will be applied ([Record](../commands-en/record.html)
 element=“articlelist”). When this rule finishes, the layout continues
 right after `LoadDataset`.
