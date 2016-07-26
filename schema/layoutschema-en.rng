@@ -2166,44 +2166,44 @@
                <choice>
                   <value>German</value>
                   <a:documentation>Switch to German hyphenation patterns.</a:documentation>
-                  <value>English (Great Britan)</value>
-                  <a:documentation>Switch to English hyphenation patterns.</a:documentation>
+                  <value>English (Great Britain)</value>
+                  <a:documentation>Switch to British hyphenation patterns.</a:documentation>
                   <value>Czech</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Czech hyphenation patterns.</a:documentation>
                   <value>Danish</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Danish hyphenation patterns.</a:documentation>
                   <value>Dutch</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Dutch hyphenation patterns.</a:documentation>
                   <value>English (USA)</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to American English hyphenation patterns.</a:documentation>
                   <value>Finnish</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Finnish hyphenation patterns.</a:documentation>
                   <value>Greek</value>
-                  <a:documentation>Monotonic greek</a:documentation>
+                  <a:documentation>Switch to Monotonic Greek hyphenation patterns.</a:documentation>
                   <value>Ancient Greek</value>
-                  <a:documentation>Ancient Greek hyphenation patterns.</a:documentation>
+                  <a:documentation>Switch to Ancient Greek hyphenation patterns.</a:documentation>
                   <value>Hungarian</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Hungarian hyphenation patterns.</a:documentation>
                   <value>Italian</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Italian hyphenation patterns.</a:documentation>
                   <value>Norwegian Bokmål</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Norwegian Bokmål hyphenation patterns.</a:documentation>
                   <value>Norwegian Nynorsk</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Norwegian Nynorsk hyphenation patterns.</a:documentation>
                   <value>Polish</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Polish hyphenation patterns.</a:documentation>
                   <value>Portuguese</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Portuguese hyphenation patterns.</a:documentation>
                   <value>Russian</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Russian hyphenation patterns.</a:documentation>
                   <value>Serbian</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Serbian hyphenation patterns.</a:documentation>
                   <value>Spanish</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Spanish hyphenation patterns.</a:documentation>
                   <value>Swedish</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Swedish hyphenation patterns.</a:documentation>
                   <value>Turkish</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Turkish hyphenation patterns.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -2560,44 +2560,44 @@
                <choice>
                   <value>German</value>
                   <a:documentation>Switch to German hyphenation patterns.</a:documentation>
-                  <value>English (Great Britan)</value>
-                  <a:documentation>Switch to English hyphenation patterns.</a:documentation>
+                  <value>English (Great Britain)</value>
+                  <a:documentation>Switch to British hyphenation patterns.</a:documentation>
                   <value>Czech</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Czech hyphenation patterns.</a:documentation>
                   <value>Danish</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Danish hyphenation patterns.</a:documentation>
                   <value>Dutch</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Dutch hyphenation patterns.</a:documentation>
                   <value>English (USA)</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to American English hyphenation patterns.</a:documentation>
                   <value>Finnish</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Finnish hyphenation patterns.</a:documentation>
                   <value>Greek</value>
-                  <a:documentation>Monotonic greek</a:documentation>
+                  <a:documentation>Switch to Monotonic Greek hyphenation patterns.</a:documentation>
                   <value>Ancient Greek</value>
-                  <a:documentation>Ancient Greek hyphenation patterns.</a:documentation>
+                  <a:documentation>Switch to Ancient Greek hyphenation patterns.</a:documentation>
                   <value>Hungarian</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Hungarian hyphenation patterns.</a:documentation>
                   <value>Italian</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Italian hyphenation patterns.</a:documentation>
                   <value>Norwegian Bokmål</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Norwegian Bokmål hyphenation patterns.</a:documentation>
                   <value>Norwegian Nynorsk</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Norwegian Nynorsk hyphenation patterns.</a:documentation>
                   <value>Polish</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Polish hyphenation patterns.</a:documentation>
                   <value>Portuguese</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Portuguese hyphenation patterns.</a:documentation>
                   <value>Russian</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Russian hyphenation patterns.</a:documentation>
                   <value>Serbian</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Serbian hyphenation patterns.</a:documentation>
                   <value>Spanish</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Spanish hyphenation patterns.</a:documentation>
                   <value>Swedish</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Swedish hyphenation patterns.</a:documentation>
                   <value>Turkish</value>
-                  <a:documentation></a:documentation>
+                  <a:documentation>Switch to Turkish hyphenation patterns.</a:documentation>
                </choice>
             </attribute>
          </optional>
