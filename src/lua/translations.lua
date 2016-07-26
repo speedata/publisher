@@ -547,7 +547,7 @@ return {
       ["ja"] = "yes",
       ["warnung"] = "warning",
       ["fehler"] = "error",
-      ["Englisch (Großbritannien)"] = "English (Great Britan)",
+      ["Englisch (Großbritannien)"] = "English (Great Britain)",
       ["Englisch (USA)"] = "English (USA)",
       ["Französisch"] = "French",
       ["Deutsch"] = "German",
