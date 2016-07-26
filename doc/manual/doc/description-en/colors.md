@@ -74,7 +74,7 @@ of the problems that occur with spot colors is, that it is impossible to show
 a spot color on screen. Every such color has a CMYK substitute which is used
 when  the spot color is not available (screen or 4 color print).
 
-For the common Pantone colors the substitutions are predefined. The following color defintion is sufficient to use Pantone 115 C for printing and on screen rendering.
+For the common Pantone colors the substitutions are predefined. The following color definition is sufficient to use Pantone 115 C for printing and on screen rendering.
 
     <DefineColor name="background" model="spotcolor" colorname="PANTONE 115 C"/>
 
