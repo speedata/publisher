@@ -158,9 +158,9 @@
         <para>Auf Deutsche Trennmuster umschalten.</para>
       </description>
     </choice>
-    <choice en="English (Great Britan)" de="Englisch (Großbritannien)">
+    <choice en="English (Great Britain)" de="Englisch (Großbritannien)">
       <description xml:lang="en">
-        <para>Switch to English hyphenation patterns.</para>
+        <para>Switch to British hyphenation patterns.</para>
       </description>
       <description xml:lang="de">
         <para>Auf Englische Trennmuster umschalten.</para>
@@ -7916,7 +7916,7 @@ Message: "$i is: 3"]]></listing>
       <value en="warning" de="warnung" context="*" key="warning"/>
       <value en="error" de="fehler" context="*" key="error"/>
 
-      <value context="*" key="English (Great Britan)" en="English (Great Britan)" de="Englisch (Großbritannien)"/>
+      <value context="*" key="English (Great Britain)" en="English (Great Britan)" de="Englisch (Großbritannien)"/>
       <value context="*" key="English (USA)" en="English (USA)" de="Englisch (USA)"/>
       <value context="*" key="French" en="French" de="Französisch"/>
       <value context="*" key="German" en="German" de="Deutsch"/>
