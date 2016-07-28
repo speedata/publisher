@@ -6125,7 +6125,7 @@
     </example>
     <info xml:lang="en">
       <para>You have to be careful to encode the test with the rules of XML: that is »less« must be written as &amp;lt; as &lt; must not be part of text contents.</para>
-      <para>A Switch may be part of nearly all commands. It dissolves and only the contents of the Case or Ohterwise gets replaced by the whole construct.</para>
+      <para>A Switch may be part of nearly all commands. It dissolves and only the contents of the Case or Otherwise gets replaced by the whole construct.</para>
     </info>
     <info xml:lang="de">
       <para>»Größer« und »kleiner« Vergleiche müssen nach den Regeln von XML kodiert werden. Für »größer« kann das > Zeichen oder &amp;​gt; benutzt werden, »kleiner« muss zwingend als &amp;lt;
