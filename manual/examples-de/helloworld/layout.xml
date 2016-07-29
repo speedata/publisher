@@ -1,0 +1,19 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+
+  <Options trace="no" show-grid="no" mainlanguage="German" cutmarks="no"/>
+
+  <Record element="Wurzel">
+    <ProcessNode select="Kindelement"></ProcessNode>
+  </Record>
+
+  <Record element="Kindelement">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value select="@gruß"></Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+

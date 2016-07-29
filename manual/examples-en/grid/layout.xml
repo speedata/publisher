@@ -5,7 +5,7 @@
   <Options
     show-grid="yes"
     show-gridallocation="no"
-    mainlanguage="English (Great Britan)"/>
+    mainlanguage="English (Great Britain)"/>
 
 
   <LoadFontfile name="WarnockPro-Regular" filename="WarnockPro-Regular.otf" marginprotrusion="60"/>

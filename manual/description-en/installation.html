@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>speedata Publisher installation instructions</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="alternate" type="application/atom+xml"  title="changelog speedata Publisher (en)"  href="../changes-en.xml" />
+    <link rel="stylesheet" href="../assets/css/normal.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/colorbox.css" type="text/css" />
+    <script src="../assets/js/jquery.min.js" ></script>
+    <script src="../assets/js/jquery.colorbox-min.js" ></script>
+    <script>
+      $(document).ready(function(){
+         $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+      });
+    </script>
+</head>
+<body>
+<div id="logo"><a href="../index.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
+<div class="">
+<h1>How to install the speedata Publisher on your system</h1>
+
+<p>There are three ways to install speedata Publisher:</p>
+
+<ol>
+<li><p><strong>Binary packages</strong> (The recommended way): Go to <a href="https://download.speedata.de/publisher/">our download page</a> and download the latest package for your operating system. You can unzip the file anywhere in the filesystem you want. You don't need root/administrator rights to use the Publisher this way.</p></li>
+
+<li><p><strong>APT repository</strong>: If you have root or sudo rights on Debian or Ubuntu GNU/Linux (or a similar system), you can install the .deb files we have prepared from our APT repository. This is very easy, just follow a few steps:</p>
+
+<ol>
+<li><p>Add the following file to <code>/etc/apt/sources.list.d/speedata.list</code> for the development version (unstable):</p>
+
+<pre><code>deb https://software.speedata.de/download/devel stable main
+</code></pre>
+
+<p>or for the main (stable) releases:</p>
+
+<pre><code>deb https://software.speedata.de/download/public stable main
+</code></pre></li>
+
+<li><p>Add our GPG key to the system to make sure you get the correct software:</p>
+
+<pre><code>curl -O http://de.speedata.s3.amazonaws.com/gpgkey-speedata.txt
+sudo apt-key add gpgkey-speedata.txt
+</code></pre></li>
+
+<li><p>Now you can run <code>sudo apt update</code> and <code>apt get install speedata-publisher</code> and have a working installation. You can find the documentation in <code>/usr/share/doc/speedata-publisher/index.html</code> which should open with <code>sp doc</code> on a desktop system.</p></li>
+</ol></li>
+
+<li><p><strong>Build from source</strong>: For developers interested in contributing to speedata Publisher, the program and documentation can be built directly from source in the git repository using <a href="https://github.com/ruby/rake">rake</a>, if you have the <a href="https://golang.org/">Go language</a> version 1.5 or later installed. For example, on Debian or Ubuntu GNU/Linux, where Go is packaged as 'golang', you can use the commands:
+ </p></li>
+</ol>
+
+<pre><code>sudo apt install build-essential git rake golang
+git clone https://github.com/speedata/publisher.git
+cd publisher
+rake build
+rake doc
+</code></pre>
+
+<p>(Please note that the version of golang in Debian stable (jessie), version 1.3.3, is not recommended for building speedata Publisher. The current golang version 1.6.2 can be installed on this distribution with:</p>
+
+<pre><code>sudo apt install -t jessie-backports golang
+</code></pre>
+
+<p>as long as the jessie-backports repository is enabled in the <code>/etc/apt/sources.list</code> file on your machine).</p>
+
+<p>If you are building speedata Publisher from source, you will also need to install LuaTeX manually. The recommended way is to download a binary from <a href="https://download.speedata.de/extra/">https://download.speedata.de/extra/</a> and copy it into the bin/ directory of the Publisher. For example, to download and install LuajitTeX 0.79.1 on a Linux amd64 system, you could use the commands:</p>
+
+<pre><code>wget https://download.speedata.de/extra/luatex_079-win-mac-linux.zip
+unzip luatex_079-win-mac-linux.zip
+cp luatex/linux/amd64/0_79_1/sdluatex bin
+</code></pre>
+
+<p>After installation, you can run <code>bin/sdluatex --version</code> to confirm the program version.</p>
+
+<!--
+## Optional: Add `bin` directory to the PATH environment variable
+
+This step is required to run the `sp` program from paths other than the installation directory.
+
+Note: We have prepared installer files for windows, so you can skip this part if you use them.
+
+### Non-permanent: use the terminal to change to the `bin` directory of unzipped file:
+
+On Linux / Mac OS X:
+
+    $ cd speedata-publisher/bin
+    $ export PATH=$PATH:$PWD
+
+(the `$` is the command prompt)
+
+On Windows systems:
+
+    C:\>cd speedata-publisher\bin
+    C:\>set PATH=%PATH%;%CD%
+
+(where `C:\>` is the command prompt)
+
+The name of the directory will be different on your system.
+
+### Permanent
+
+On Linux
+
+Edit the startup file for your system. This depends heavily on your shell/distribution. Usually it is something like `.bashrc` or `.bash_profile` in your home  directory or `/etc/profile` for a system wide installation. Add a line like this:
+
+    export PATH=$PATH:/path/to/your/installation
+
+On Mac OS X:
+
+Add a file in `/etc/paths.d` with one line (the path do the bin directory):
+
+    $ cd speedata-publisher/bin
+    $ echo $PWD | sudo tee /etc/paths.d/speedata
+
+For a local installation see Linux
+
+On Windows:
+
+See http://www.computerhope.com/issues/ch000549.htm for instructions.
+ -->
+
+</div>
+
+
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
+Version: 2.5.9 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/installation.html">German</a>
+
+</body>
+</html>

@@ -47,11 +47,11 @@
 <pre><code>&lt;DefineColor name=&quot;background&quot; model=&quot;cmyk&quot; c=&quot;97&quot; m=&quot;77&quot; y=&quot;0&quot; k=&quot;3&quot;/&gt;
 </code></pre>
 
-<p>There are other methos for color selection. See the following sections.</p>
+<p>There are other methods for color selection. See the following sections.</p>
 
 <h2>Direct usage of CSS-level-3 colors</h2>
 
-<p>The standard CSS colors (see the command <a href="../commands-en/definecolor.html">DefineColor</a>) are predefined, although in the RGB color space. This color space only suited for on screen preseentation. With the predefined colors you can use a command like this without further color declarations:</p>
+<p>The standard CSS colors (see the command <a href="../commands-en/definecolor.html">DefineColor</a>) are predefined, although in the RGB color space. This color space only suited for on screen presentation. With the predefined colors you can use a command like this without further color declarations:</p>
 
 <pre><code>&lt;PlaceObject&gt;
   &lt;Box width=&quot;5&quot; height=&quot;2&quot; backgroundcolor=&quot;goldenrod&quot; /&gt;
@@ -67,7 +67,7 @@
 &lt;/PlaceObject&gt;
 </code></pre>
 
-<h2>Indirect color defintion</h2>
+<h2>Indirect color definition</h2>
 
 <p>The indirect color definition is shown in the first example above. It is useful when the color should have a symbolic name.</p>
 
@@ -87,7 +87,7 @@ of the problems that occur with spot colors is, that it is impossible to show
 a spot color on screen. Every such color has a CMYK substitute which is used
 when  the spot color is not available (screen or 4 color print).</p>
 
-<p>For the common Pantone colors the substitutions are predefined. The following color defintion is sufficient to use Pantone 115 C for printing and on screen rendering.</p>
+<p>For the common Pantone colors the substitutions are predefined. The following color definition is sufficient to use Pantone 115 C for printing and on screen rendering.</p>
 
 <pre><code>&lt;DefineColor name=&quot;background&quot; model=&quot;spotcolor&quot; colorname=&quot;PANTONE 115 C&quot;/&gt;
 </code></pre>
