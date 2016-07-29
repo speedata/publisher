@@ -8,7 +8,28 @@ There are three ways to install speedata Publisher:
 2. **Binary packages** (The recommended way): Go to [our download page](https://download.speedata.de/publisher/) and download the latest package for your operating system. You can unzip the file anywhere in the filesystem you want. You don't need root/administrator rights to use the Publisher this way.
 
 
-1. **APT repository**: If you have root or sudo rights on Debian or Ubuntu GNU/Linux (or a similar system), you can install the .deb files we have prepared from our APT repository. See [the wiki](https://github.com/speedata/publisher/wiki/Linux-packages) for details.
+1. **APT repository**: If you have root or sudo rights on Debian or Ubuntu GNU/Linux (or a similar system), you can install the .deb files we have prepared from our APT repository. This is very easy, just follow a few steps:
+
+  1. Add the following file to `/etc/apt/sources.list.d/speedata.list` for the development version (unstable):
+
+        ````
+        deb https://software.speedata.de/download/devel stable main
+        ````
+
+        or for the main (stable) releases:
+
+        ````
+        deb https://software.speedata.de/download/public stable main
+        ````
+
+  1. Add our GPG key to the system to make sure you get the correct software:
+
+        ````
+		curl -O http://de.speedata.s3.amazonaws.com/gpgkey-speedata.txt
+		sudo apt-key add gpgkey-speedata.txt
+        ````
+
+  1. Now you can run `sudo apt update` and `apt get install speedata-publisher` and have a working installation. You can find the documentation in `/usr/share/doc/speedata-publisher/index.html` which should open with `sp doc` on a desktop system.
 
 3. **Build from source**: For developers interested in contributing to speedata Publisher, the program and documentation can be built directly from source in the git repository using [rake](https://github.com/ruby/rake), if you have the [Go language](https://golang.org/) version 1.5 or later installed. For example, on Debian or Ubuntu GNU/Linux, where Go is packaged as 'golang', you can use the commands:
  
@@ -21,6 +42,7 @@ rake doc
 ```
 
 (Please note that the version of golang in Debian stable (jessie), version 1.3.3, is not recommended for building speedata Publisher. The current golang version 1.6.2 can be installed on this distribution with:
+
 ```
 sudo apt install -t jessie-backports golang
 ```
