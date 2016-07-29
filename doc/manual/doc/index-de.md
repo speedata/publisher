@@ -12,6 +12,7 @@ Einführung
 
 * [Erste Schritte mit dem speedata Publisher (Hello world)](description-de/firststeps.html)
 * [Aufruf des Publishers im Terminalfenster](description-de/publisherusage.html)
+* [Installationsanweisungen](description-de/installation.html)
 
 
 Referenz
