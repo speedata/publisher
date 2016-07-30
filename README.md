@@ -35,7 +35,7 @@ Please use the [github bug tracker](https://github.com/speedata/publisher/issues
 License / Contributing
 ----------------------
 
-The license is AGPLv3 for now, see the file COPYING in the root directory. This is not set in stone, we might choose a more liberal license in the future.
+The license is AGPLv3 for now, see the file COPYING in the root directory.
 
 We welcome contributions. Just [follow the github procedure (fork, pull requests)](https://help.github.com/articles/using-pull-requests/).
 
