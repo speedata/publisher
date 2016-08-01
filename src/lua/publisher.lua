@@ -36,6 +36,11 @@ do_luafile("layout_functions.lua")
 
 --- One big point (DTP point, PostScript point) is approx. 65781 scaled points.
 factor = 65781
+-- factor = 65781.7
+
+tenpoint_sp    = tex.sp("10pt")
+twelvepoint_sp = tex.sp("12pt")
+tenmm_sp       = tex.sp("10mm")
 
 --- Attributes
 --- ----------
@@ -156,8 +161,8 @@ css = do_luafile("css.lua"):new()
 -- The defaults (set in the layout instructions file)
 options = {
     imagenotfounderror = true,
-    gridwidth   = tex.sp("10mm"),
-    gridheight  = tex.sp("10mm"),
+    gridwidth   = tenmm_sp,
+    gridheight  = tenmm_sp,
     gridcells_x = 0,
     gridcells_y = 0,
 }
@@ -686,8 +691,7 @@ end
 function initialize_luatex_and_generate_pdf()
 
     --- The default page type has 1cm margin
-    local onecm=tex.sp("1cm")
-    masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
+    masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(tenmm_sp,tenmm_sp,tenmm_sp,tenmm_sp) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
     xpath.set_variable("__maxwidth", tex.sp("190mm"))
     --- The `vars` file hold a lua document holding table
     local vars = loadfile(tex.jobname .. ".vars")()
@@ -1183,7 +1187,7 @@ function setup_page(pagenumber)
     local trim_amount = tex.sp(options.trim or 0)
     local extra_margin
     if options.cutmarks or options.trimmarks then
-        extra_margin = tex.sp("1cm") + trim_amount
+        extra_margin = tenmm_sp + trim_amount
     elseif trim_amount > 0 then
         extra_margin = trim_amount
     end
@@ -3493,8 +3497,8 @@ function set_pageformat( wd,ht )
     tex.pdfpagewidth =  wd
     tex.pdfpageheight = ht
     -- why the + 2cm? is this for the trim-/art-/bleedbox? FIXME: document
-    tex.pdfpagewidth  = tex.pdfpagewidth   + tex.sp("2cm")
-    tex.pdfpageheight = tex.pdfpageheight  + tex.sp("2cm")
+    tex.pdfpagewidth  = tex.pdfpagewidth   + 2 * tenmm_sp
+    tex.pdfpageheight = tex.pdfpageheight  + 2 * tenmm_sp
 
     -- necessary? FIXME: check if necessary.
     tex.hsize = wd
@@ -3612,12 +3616,17 @@ end
 --- This function is only called once from `dothings()` during startup phase. We define
 --- a family with regular, bold, italic and bolditalic font with size 10pt (we always
 --- measure font size in dtp points)
+-- I can't explain the "- 1" in baselineskip. It used to be 12 * factor which is
+-- 65781 * 12 = 789372. Now it is 789381 - 1 = 789380. There is a problem with the qa test files
+-- when omitting the - 1. One explanation would be that when the grid height and the
+-- font height are exactly the same size, things will break. But we must fix this one
+-- day. See bug #99
 function define_default_fontfamily()
     local fam={
-        size         = 10 * factor,
-        baselineskip = 12 * factor,
-        scriptsize   = 10 * factor * 0.8,
-        scriptshift  = 10 * factor * 0.3,
+        size         = tenpoint_sp,
+        baselineskip = twelvepoint_sp - 1,
+        scriptsize   = tenpoint_sp * 0.8,
+        scriptshift  = tenpoint_sp * 0.3,
         name = "text"
     }
     local ok,tmp

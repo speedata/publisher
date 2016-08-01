@@ -182,7 +182,7 @@ function Paragraph:format(width_sp, default_textformat_name,options)
     if options.allocate == "auto" then
         local indent = current_textformat.indent
         local indent_this_row = function(row)
-            if not indent then return false end
+            if not indent  or indent == 0 then return false end
             local r = current_textformat.rows
             if r == 0 then return false end
             if  r < 0 then

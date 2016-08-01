@@ -100,6 +100,9 @@ function set_current_column( self,column,areaname )
     area.current_column = column
 end
 
+-- Return a table {a,b} where a is the first column
+-- (distance in sp from the left edge)
+-- and b is the width of the paragraph for the given row
 function get_parshape( self,row,areaname,framenumber )
     local frame_margin_left, frame_margin_top
     local area = self.positioning_frames[areaname]
@@ -121,6 +124,7 @@ function get_parshape( self,row,areaname,framenumber )
     end
     local x_start = ( first_free_column - 1) * self.gridwidth
     local x_end = ( last_free_column - first_free_column + 1 ) * self.gridwidth
+    -- w("get_parshape framenumber %d, row %d, {%d , %d}", framenumber, row, first_free_column - 1,last_free_column - first_free_column + 1)
     return {x_start,x_end}
 end
 
