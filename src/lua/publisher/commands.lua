@@ -559,6 +559,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
       err("DefineFontfamily: no size given.")
       return
     end
+    -- warning: this is not the same! See bug #99.
     if tonumber(size) == nil then
         size = tex.sp(size)
     else
@@ -3051,8 +3052,8 @@ function commands.text(layoutxml,dataxml)
                 local startrow =  cg:current_row(parameter.area)
                 for i=1,#tab do
                     local contents = tab[i]
-                    local tmp = node.has_attribute(contents.nodelist,publisher.att_dont_format)
-                    if tmp == 1 then
+                    local dont_format = node.has_attribute(contents.nodelist,publisher.att_dont_format)
+                    if dont_format == 1 then
                         obj = node.vpack(contents.nodelist)
                     else
                         contents.nodelist = publisher.addstrut(contents.nodelist,publisher.origin_text)
@@ -3061,7 +3062,7 @@ function commands.text(layoutxml,dataxml)
                     objects[#objects + 1] = obj
                     local ht_rows, extra = cg:height_in_gridcells_sp(obj.height + obj.depth + extra_accumulated, {floor = true})
                     extra_accumulated = extra
-                    cg:set_current_row(ht_rows + cg:current_row(parameter.area),parameter.area)
+                    cg:advance_cursor(ht_rows,parameter.area)
                 end
             end
             if #state.objects > 0 then

@@ -190,57 +190,103 @@ function Paragraph:format(width_sp, default_textformat_name,options)
             end
             return row <= r
         end
-        -- Get the par shape
-        local head = self.nodelist
-        local lineheight = head.height + head.depth
-        local gridheight = current_grid:height_sp(1)
-        local cg = options.current_grid
-        local areaname = options.area
-        local startrow    = cg:current_row(areaname)
-        local number_of_rows = cg:number_of_rows(areaname)
-        parameter.parshape = {}
-        local framenumber = cg:framenumber(areaname)
-        local maxframes = cg:number_of_frames(areaname)
-        local pstmp
-        local pstmmin
-        local nextrow
-        local ht = 0
-
-        local paragraphrow = 1
-        while framenumber <= maxframes do
-            nextrow = startrow
-            for i = startrow,number_of_rows do
-                current_row = nextrow
-                -- parshape must be taken into account for all grid rows that
-                -- takes up the current text row
-                nextrow = math.ceil( (ht + lineheight)  / gridheight) + startrow
-                ht = ht + lineheight
-                -- now get the 'minimum' parshape
-                pstmmin = cg:get_parshape(current_row,areaname,framenumber)
-                if pstmmin ~= 0 then
-                    if indent_this_row(paragraphrow) then
-                        pstmmin[1] = pstmmin[1] + indent
-                        pstmmin[2] = pstmmin[2] - indent
-                    end
-                    while current_row + 1 < nextrow do
-                        pstmp = cg:get_parshape(current_row + 1,areaname,framenumber)
-                        if pstmp ~= 0 then
-                            if indent_this_row(paragraphrow) then
-                                pstmp[1] = pstmp[1] + indent
-                                pstmp[2] = pstmp[2] - indent
-                            end
-                            pstmmin[1] = math.max(pstmmin[1] ,pstmp[1])
-                            pstmmin[2] = math.min(pstmmin[2] ,pstmp[2])
-                        end
-                        current_row = current_row + 1
-                    end
-                    parameter.parshape[#parameter.parshape + 1] = pstmmin
+        local set_parshape = function(parshape,ps,rows)
+            local psmin = {}
+            for _,row in ipairs(rows) do
+                if parshape[row] then
+                    local tmp = parshape[row]
+                    psmin[1] = math.max(ps[1] ,tmp[1])
+                    psmin[2] = math.min(ps[2] ,tmp[2])
+                    parshape[row] = psmin
+                else
+                    parshape[row] = ps
                 end
-                paragraphrow = paragraphrow + 1
             end
-            framenumber = framenumber + 1
-            startrow = 1
         end
+        local is_equal = function(a,b)
+            return math.abs(a - b) < 3000
+        end
+        -- Get the par shape
+        local lineheight = self.nodelist.height + self.nodelist.depth
+        local areaname = options.area
+        local cg = options.current_grid
+        local max_width = cg:width_sp(cg:number_of_columns(areaname))
+        local gridheight = cg.gridheight
+        local parshape = {}
+
+        -- local framenumber = cg:framenumber(areaname)
+        local maxframes   = cg:number_of_frames(areaname)
+
+        -- this is to remove rounding errors
+        local g_l = math.round(gridheight / lineheight,3)
+        gridheight = lineheight * g_l
+
+        local accumulated_height
+
+        -- The row for the paragraph shape. Not identical to the grid row
+        local current_row = 1
+
+        local grid_row
+
+        local lowest_grid_row = 0
+        -- grid_lower is the position of the end of the grid row
+        local grid_lower = gridheight
+        local framenumber, startrow_grid =  cg:get_advanced_cursor(areaname)
+        while framenumber <= maxframes do
+            grid_row = startrow_grid
+            accumulated_height = lowest_grid_row
+            grid_lower = lowest_grid_row + gridheight
+            lowest_grid_row = lowest_grid_row + cg:number_of_rows(areaname) * gridheight
+            while grid_row <=  cg:number_of_rows(areaname,framenumber) do
+                local rows = {}
+                local ps = cg:get_parshape(grid_row,areaname,framenumber)
+                -- ps is 0 when the line is completely allocated
+                if ps ~= 0 then
+                    if indent_this_row(current_row) then
+                        ps[1] = ps[1] + indent
+                        ps[2] = ps[2] - indent
+                    end
+                    -- accumulated_height starts with 0
+                    if accumulated_height <= grid_lower then
+                        -- When this paragraph row is within the grid row,
+                        -- it must be added to our list
+                        rows[#rows + 1] = current_row
+                    end
+
+                    while accumulated_height <= grid_lower do
+                        if is_equal(accumulated_height + lineheight,grid_lower) then
+                            -- if the current paragraph row ends "exactly" at the
+                            -- bottom of the grid line, we are done and can continue
+                            -- with the next paragraph row. The current paragraph row is
+                            -- already added to the list for this grid row (see above)
+                        elseif accumulated_height + lineheight < grid_lower then
+                            -- if the current paragraph row ends above the lower
+                            -- grid line, we need to add the next row to the
+                            -- current grid line.
+                            rows[#rows + 1] = current_row + 1
+                        else
+                            -- This is the case where the current paragraph row ends
+                            -- below the lower grid line. We don't need to increase
+                            -- the paragraph line number and the accumulated
+                            -- height, so we break out of the while loop
+                            break
+                        end
+
+                        current_row = current_row + 1
+                        accumulated_height = accumulated_height + lineheight
+                    end
+                    set_parshape(parshape,ps,rows)
+                    grid_lower = grid_lower + gridheight
+                end -- if ps ~= 0
+                grid_row = grid_row + 1
+            end
+            startrow_grid = 1
+            framenumber = framenumber + 1
+        end
+        -- This should be the last line in the parshape array, so the
+        -- rest of the lines in the paragraph have the full width
+        parshape[#parshape + 1] = {0,max_width}
+        parameter.parshape = parshape
     end
     local nodelist = node.copy_list(self.nodelist)
     local objects = {nodelist}

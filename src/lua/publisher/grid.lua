@@ -86,6 +86,7 @@ function set_current_row( self,row,areaname )
         areaname = publisher.default_areaname
     end
     local area = self.positioning_frames[areaname]
+    area.advance_rows = 0
     area.current_row = row
 end
 
@@ -98,6 +99,37 @@ function set_current_column( self,column,areaname )
     end
     local area = self.positioning_frames[areaname]
     area.current_column = column
+end
+
+-- The advance_cursor helps in output/text to maintain the
+-- current position of the start paragraph
+function advance_cursor( self,rows,areaname )
+    assert(self)
+    local areaname = areaname or publisher.default_areaname
+    if not self.positioning_frames[areaname] then
+        err("Area %q unknown, using page",areaname)
+        areaname = publisher.default_areaname
+    end
+    local area = self.positioning_frames[areaname]
+    area.advance_rows = area.advance_rows + rows
+end
+
+-- return framenumber,row
+function get_advanced_cursor( self,areaname )
+    assert(self)
+    local areaname = areaname or publisher.default_areaname
+    if not self.positioning_frames[areaname] then
+        err("Area %q unknown, using page",areaname)
+        areaname = publisher.default_areaname
+    end
+    local area = self.positioning_frames[areaname]
+    local current_frame = self:framenumber(areaname)
+    local ht = area[current_frame].height
+    if area.current_row + area.advance_rows > ht then
+        return current_frame + 1, area.current_row + area.advance_rows - ht
+    else
+        return current_frame, area.current_row + area.advance_rows
+    end
 end
 
 -- Return a table {a,b} where a is the first column
@@ -120,6 +152,7 @@ function get_parshape( self,row,areaname,framenumber )
         end
     end
     if not first_free_column then
+        -- w("get_parshape return 0")
         return 0
     end
     local x_start = ( first_free_column - 1) * self.gridwidth
@@ -128,14 +161,14 @@ function get_parshape( self,row,areaname,framenumber )
     return {x_start,x_end}
 end
 
-function number_of_rows(self,areaname)
+function number_of_rows(self,areaname,framenumber)
     assert(self)
     local areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
         err("Area %q unknown, using page (number-of-rows)",areaname)
         areaname = publisher.default_areaname
     end
-    local current_frame = self:framenumber(areaname)
+    local current_frame = framenumber or self:framenumber(areaname)
     local area = self.positioning_frames[areaname]
     local height = area[current_frame].height
     return height
