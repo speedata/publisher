@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.5">
+    <entry version="2.5.11" date="2016-08-02">
+      <en>Add padding-* to Stylesheet, allow image styling with CSS (padding only), add padding-* to Image</en>
+      <de>Füge padding-* zu Stylesheet hinzu, erlaube CSS für Image (derzeit nur padding), erlaube padding-* für Image</de>
+    </entry>
     <entry version="2.5.10" date="2016-08-02">
       <en>Many improvements for Text/Output and allocate="yes"</en>
       <de>Viele Verbesserungen für Text/Output und allocate="yes"</de>
