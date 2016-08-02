@@ -30,6 +30,7 @@ def build_go(srcdir,destbin,goos,goarch,targettype)
 	publisher_version = @versions['publisher_version']
 	binaryname = goos == "windows" ? "sp.exe" : "sp"
     # Now compile the go executable
+    separator = `go version`.match('go\d\.(\d)')[1].to_i < 5 ? " " : "="
 	cmdline = "go build -ldflags '-X main.dest#{separator}#{targettype} -X main.version#{separator}#{publisher_version}' -o #{destbin}/#{binaryname} sp/main"
 	sh cmdline do |ok, res|
 		if ! ok
@@ -267,7 +268,6 @@ task :zip => [:sphelper] do
 	cp_r(File.join("fonts"),targetfonts)
 	cp_r(Dir.glob("img/*"),File.join(targetsw,"img"))
 	cp_r(File.join("lib"),targetshare)
-	cp_r(File.join("schema","layoutschema-de.rng"),targetschema)
 	cp_r(File.join("schema","layoutschema-en.rng"),targetschema)
 
 	Dir.chdir("src") do
@@ -364,7 +364,6 @@ task :deb => [:sphelper] do
 	cp_r("fonts/.",targetfonts)
 	cp_r(Dir.glob("img/*"),targetimg)
 	cp_r("lib/.",targetlib)
-	cp_r(File.join("schema","layoutschema-de.rng"),targetschema)
 	cp_r(File.join("schema","layoutschema-en.rng"),targetschema)
 
 	Dir.chdir("src") do
