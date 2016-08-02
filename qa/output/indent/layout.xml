@@ -1,0 +1,23 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Pageformat width="300pt" height="10cm"/>
+  <DefineTextformat name="bullet" indentation="8pt" rows="-1"/>
+
+  <Record element="data">
+    <PlaceObject row="1" column="8">
+      <Box width="2" height="2" backgroundcolor="green"/>
+    </PlaceObject>
+    <ForAll select="ul">
+      <Output allocate="auto" row="1">
+        <Text>
+          <ForAll select="li" limit="2">
+            <Paragraph fontface="text"  textformat="bullet">
+              <Value>•</Value><HSpace width="1.5mm"/><Value select="sd:dummytext()"/>
+            </Paragraph>
+          </ForAll>
+        </Text>
+      </Output>
+    </ForAll>
+  </Record>
+</Layout>

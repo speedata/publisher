@@ -199,7 +199,7 @@ function Paragraph:format(width_sp, default_textformat_name,options)
                     psmin[2] = math.min(ps[2] ,tmp[2])
                     parshape[row] = psmin
                 else
-                    parshape[row] = ps
+                    parshape[row] = {ps[1],ps[2]}
                 end
             end
         end
@@ -227,7 +227,6 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         local current_row = 1
 
         local grid_row
-
         local lowest_grid_row = 0
         -- grid_lower is the position of the end of the grid row
         local grid_lower = gridheight
@@ -242,10 +241,6 @@ function Paragraph:format(width_sp, default_textformat_name,options)
                 local ps = cg:get_parshape(grid_row,areaname,framenumber)
                 -- ps is 0 when the line is completely allocated
                 if ps ~= 0 then
-                    if indent_this_row(current_row) then
-                        ps[1] = ps[1] + indent
-                        ps[2] = ps[2] - indent
-                    end
                     -- accumulated_height starts with 0
                     if accumulated_height <= grid_lower then
                         -- When this paragraph row is within the grid row,
@@ -275,6 +270,7 @@ function Paragraph:format(width_sp, default_textformat_name,options)
                         current_row = current_row + 1
                         accumulated_height = accumulated_height + lineheight
                     end
+                    -- w("rows %s",table.concat(rows,", "))
                     set_parshape(parshape,ps,rows)
                     grid_lower = grid_lower + gridheight
                 end -- if ps ~= 0
@@ -286,8 +282,15 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         -- This should be the last line in the parshape array, so the
         -- rest of the lines in the paragraph have the full width
         parshape[#parshape + 1] = {0,max_width}
+        for i,ps in ipairs(parshape) do
+            if indent_this_row(i) then
+                ps[1] = ps[1] + indent
+                ps[2] = ps[2] - indent
+            end
+        end
         parameter.parshape = parshape
     end
+
     local nodelist = node.copy_list(self.nodelist)
     local objects = {nodelist}
     local head = nodelist
