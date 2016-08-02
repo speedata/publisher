@@ -2678,6 +2678,22 @@
       <para>Bindet eine externe Grafik ein. Erlaubte Grafikformate sind PDF (.pdf), PNG (.png) und JPEG (.jpg).</para>
     </description>
     <childelements/>
+    <attribute en="class" de="class" optional="yes" type="text" since="2.5.11">
+      <description xml:lang="en">
+        <para>CSS class for this element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS Klasse für dieses Element.</para>
+      </description>
+    </attribute>
+    <attribute en="id" de="id" optional="yes" type="text" since="2.5.11">
+      <description xml:lang="en">
+        <para>CSS id for this element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS id für dieses Element.</para>
+      </description>
+    </attribute>
     <attribute en="width" de="breite" type="numberorlength" optional="yes">
       <description xml:lang="en">
         <para>Image width. One of 'auto' (default, take image width), '100%' (whole area width), length (such as '3cm') or number (in grid cells).</para>
@@ -2804,6 +2820,38 @@
       </description>
       <description xml:lang="de">
         <para>Warnung ausgeben, wenn das Bild eine geringere Auflösung bekommt als angegeben.</para>
+      </description>
+    </attribute>
+    <attribute en="padding-top" de="padding-top" type="length" optional="yes" css="padding-top" since="2.5.11">
+      <description xml:lang="en">
+        <para>Set the inner distance (width between contents and the border) to the top edge.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt den Innenabstand des Bildes (oben)</para>
+      </description>
+    </attribute>
+    <attribute en="padding-bottom" de="padding-bottom" type="length" optional="yes" css="padding-bottom" since="2.5.11">
+      <description xml:lang="en">
+        <para>Set the inner distance (width between contents and the border) to the bottom edge.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt den Innenabstand des Bildes (unten)</para>
+      </description>
+    </attribute>
+    <attribute en="padding-left" de="padding-left" type="length" optional="yes" css="padding-left" since="2.5.11">
+      <description xml:lang="en">
+        <para>Set the inner distance (width between contents and the border) to the left edge.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt den Innenabstand des Bildes (links)</para>
+      </description>
+    </attribute>
+    <attribute en="padding-right" de="padding-right" type="length" optional="yes" css="padding-right" since="2.5.11">
+      <description xml:lang="en">
+        <para>Set the inner distance (width between contents and the border) to the right edge.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt den Innenabstand des Bildes (rechts)</para>
       </description>
     </attribute>
     <attribute en="rotate" de="drehen" type="number" optional="yes">

@@ -1506,6 +1506,16 @@
       <element name="Image">
          <a:documentation>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg).</a:documentation>
          <optional>
+            <attribute name="class">
+               <a:documentation>CSS class for this element.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id for this element.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="width">
                <a:documentation>Image width. One of &#39;auto&#39; (default, take image width), &#39;100%&#39; (whole area width), length (such as &#39;3cm&#39;) or number (in grid cells).</a:documentation>
             </attribute>
@@ -1579,6 +1589,26 @@
          <optional>
             <attribute name="dpiwarn">
                <a:documentation>Warn if the image gets lower resultion than given.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-top">
+               <a:documentation>Set the inner distance (width between contents and the border) to the top edge.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-bottom">
+               <a:documentation>Set the inner distance (width between contents and the border) to the bottom edge.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-left">
+               <a:documentation>Set the inner distance (width between contents and the border) to the left edge.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-right">
+               <a:documentation>Set the inner distance (width between contents and the border) to the right edge.</a:documentation>
             </attribute>
          </optional>
          <optional>

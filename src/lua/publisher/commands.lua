@@ -236,7 +236,6 @@ function commands.box( layoutxml,dataxml )
         ["padding-bottom"]   = "length",
         ["padding-left"]     = "length",
     }
-
     local tab = {}
     if css_rules and type(css_rules) == "table" then
         for k,v in pairs(css_rules) do
@@ -991,6 +990,36 @@ function commands.image( layoutxml,dataxml )
     local dpiwarn   = publisher.read_attribute(layoutxml,dataxml,"dpiwarn",    "number")
     local rotate    = publisher.read_attribute(layoutxml,dataxml,"rotate",     "number")
     local fallback  = publisher.read_attribute(layoutxml,dataxml,"fallback",   "rawstring")
+    local class = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
+    local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
+
+    local css_rules = publisher.css:matches({element = 'img', class=class,id=id}) or {}
+
+    local attribute = {
+        ["padding-top"]      = "length",
+        ["padding-right"]    = "length",
+        ["padding-bottom"]   = "length",
+        ["padding-left"]     = "length",
+    }
+    local tab = {}
+    if css_rules and type(css_rules) == "table" then
+        for k,v in pairs(css_rules) do
+            tab[k]=v
+        end
+    end
+
+    local tmpattr
+    for attname,atttyp in pairs(attribute) do
+        tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
+        if tmpattr then
+            tab[attname] = tmpattr
+        end
+    end
+    if tab["padding-top"]    then tab.padding_top    = tex.sp(tab["padding-top"])    end
+    if tab["padding-bottom"] then tab.padding_bottom = tex.sp(tab["padding-bottom"]) end
+    if tab["padding-left"]   then tab.padding_left   = tex.sp(tab["padding-left"])   end
+    if tab["padding-right"]  then tab.padding_right  = tex.sp(tab["padding-right"])  end
+
 
     -- width = 100%  => take width from surrounding area
     -- auto on any value ({max,min}?{width,height}) is default
@@ -1060,6 +1089,22 @@ function commands.image( layoutxml,dataxml )
 
     local shift_left,shift_up = 0,0
 
+    if tab.padding_left then
+        width = width - tab.padding_left
+        shift_left = shift_left - tab.padding_left
+    end
+    if tab.padding_right then
+        width = width - tab.padding_right
+    end
+
+    if tab.padding_bottom then
+        height = height - tab.padding_bottom
+    end
+    if tab.padding_top then
+        height = height - tab.padding_top
+        shift_up = shift_up - tab.padding_top
+    end
+
     image.width  = width
     image.height = height
 
@@ -1118,9 +1163,9 @@ function commands.image( layoutxml,dataxml )
         box = node.hpack(img.node(image))
         node.set_attribute(box,publisher.att_origin,publisher.origin_image)
         node.set_attribute(box,publisher.att_lineheight,box.height)
+        node.set_attribute(box, publisher.att_shift_left, shift_left)
+        node.set_attribute(box, publisher.att_shift_up  , shift_up  )
     end
-    -- node.set_attribute(box, publisher.att_shift_left, shift_left)
-    -- node.set_attribute(box, publisher.att_shift_up  , shift_up  )
     return {box,imageinfo.allocate}
 end
 

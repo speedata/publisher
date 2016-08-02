@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2016-08-02 14:58)
+-- generated from genluatranslations.go (2016-08-02 20:16)
 -- do not edit!
 module(...)
 return {
@@ -168,6 +168,8 @@ return {
         ["name"] = "name",
         },
       ["Bild"] = { "Image",
+        ["class"] = "class",
+        ["id"] = "id",
         ["breite"] = "width",
         ["höhe"] = "height",
         ["href"] = "href",
@@ -182,6 +184,10 @@ return {
         ["minbreite"] = "minwidth",
         ["minhöhe"] = "minheight",
         ["dpiwarnung"] = "dpiwarn",
+        ["padding-top"] = "padding-top",
+        ["padding-bottom"] = "padding-bottom",
+        ["padding-left"] = "padding-left",
+        ["padding-right"] = "padding-right",
         ["drehen"] = "rotate",
         },
       ["Kursiv"] = { "Italic",
