@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2016-08-02 12:26)
+-- generated from genluatranslations.go (2016-08-02 14:58)
 -- do not edit!
 module(...)
 return {
@@ -44,12 +44,16 @@ return {
         ["offen"] = "open",
         },
       ["Box"] = { "Box",
-        ["breite"] = "width",
-        ["höhe"] = "height",
         ["hintergrundfarbe"] = "backgroundcolor",
         ["beschnitt"] = "bleed",
         ["class"] = "class",
+        ["höhe"] = "height",
         ["id"] = "id",
+        ["padding-top"] = "padding-top",
+        ["padding-bottom"] = "padding-bottom",
+        ["padding-left"] = "padding-left",
+        ["padding-right"] = "padding-right",
+        ["breite"] = "width",
         },
       ["Br"] = { "Br",
         },

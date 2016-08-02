@@ -893,22 +893,6 @@
       <para>Erzeugt einen rechteckigen gefärbten Bereich. Die Fläche muss mit den Rasterzellen übereinstimmen.</para>
     </description>
     <childelements/>
-    <attribute en="width" de="breite" type="numberorlength" optional="no">
-      <description xml:lang="en">
-        <para>Width of the box in grid cells or in absolute values.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Breite der Box in Rasterzellen.</para>
-      </description>
-    </attribute>
-    <attribute en="height" de="höhe" type="numberorlength" optional="no">
-      <description xml:lang="en">
-        <para>Height of the box in grid cells.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Höhe der Box in Rasterzellen.</para>
-      </description>
-    </attribute>
     <attribute en="backgroundcolor" de="hintergrundfarbe" type="text" optional="yes" css="background-color">
       <description xml:lang="en">
         <para>Color of the box.</para>
@@ -933,12 +917,60 @@
         <para>CSS Klasse für diese Box.</para>
       </description>
     </attribute>
+    <attribute en="height" de="höhe" type="numberorlength" optional="no">
+      <description xml:lang="en">
+        <para>Height of the box in grid cells.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Höhe der Box in Rasterzellen.</para>
+      </description>
+    </attribute>
     <attribute en="id" de="id" optional="yes" type="text">
       <description xml:lang="en">
         <para>CSS id for this box.</para>
       </description>
       <description xml:lang="de">
         <para>CSS id für diese Box.</para>
+      </description>
+    </attribute>
+    <attribute en="padding-top" de="padding-top" type="length" optional="yes" css="padding-top" since="2.5.10">
+      <description xml:lang="en">
+        <para>Set the inner distance (width between contents and the border) to the top edge.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt den Innenabstand der Box (oben)</para>
+      </description>
+    </attribute>
+    <attribute en="padding-bottom" de="padding-bottom" type="length" optional="yes" css="padding-bottom" since="2.5.10">
+      <description xml:lang="en">
+        <para>Set the inner distance (width between contents and the border) to the bottom edge.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt den Innenabstand der Box (unten)</para>
+      </description>
+    </attribute>
+    <attribute en="padding-left" de="padding-left" type="length" optional="yes" css="padding-left" since="2.5.10">
+      <description xml:lang="en">
+        <para>Set the inner distance (width between contents and the border) to the left edge.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt den Innenabstand der Box (links)</para>
+      </description>
+    </attribute>
+    <attribute en="padding-right" de="padding-right" type="length" optional="yes" css="padding-right" since="2.5.10">
+      <description xml:lang="en">
+        <para>Set the inner distance (width between contents and the border) to the right edge.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt den Innenabstand der Box (rechts)</para>
+      </description>
+    </attribute>
+    <attribute en="width" de="breite" type="numberorlength" optional="no">
+      <description xml:lang="en">
+        <para>Width of the box in grid cells or in absolute values.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Breite der Box in Rasterzellen.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -4224,20 +4256,20 @@
   </command>
   <command en="Output" de="Ausgabe">
     <description xml:lang="en">
-      <para>Still exerimental. This command is similar to <cmd name="PlaceObject"/> and is currently limited to output text which can be broken across positioning frames.</para>
+      <para>This command is similar to <cmd name="PlaceObject"/> and is currently limited to output text which can be broken across positioning frames and which can wrap around objects.</para>
     </description>
     <description xml:lang="de">
-      <para>Experimentell. Dieser Befehl ist ähnlich zu <cmd name="PlaceObject"/> und dient derzeit nur dazu, Text auszugeben, der auf mehrere Seite umbrochen werden kann.</para>
+      <para>Dieser Befehl ist ähnlich zu <cmd name="PlaceObject"/> und dient derzeit nur dazu, Text auszugeben, der auf mehrere Seite umbrochen werden kann und sich dem freien Platz auf der Seite anpassen kann.</para>
     </description>
     <childelements>
       <cmd name="Text"/>
     </childelements>
     <attribute en="allocate" de="belegen" optional="yes" allowxpath="yes">
       <description xml:lang="en">
-        <para>Should text flow around already allocated objects? This is experimental: you need to set the grid height to the size of the body font (leading) and this works on the first page only.</para>
+        <para>Should text flow around already allocated objects? This currently works on the current page only.</para>
       </description>
       <description xml:lang="de">
-        <para>Soll Text um schon vorhandene (belege) Bereiche fließen? Dieser Teil ist exprimentell. Die Rasterhöhe muss gleich dem Zeilenabstand der Textschriftart sein. Außerdem funktioniert dies nur auf der ersten Seite von <cmd name="Output"/></para>
+        <para>Soll Text um schon vorhandene (belegte) Bereiche fließen? Die Rasterhöhe muss gleich dem Zeilenabstand der Textschriftart sein. Außerdem funktioniert dies nur auf der aktuellen Seite.</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
@@ -6686,10 +6718,10 @@
     </attribute>
     <attribute en="class" de="class" type="text" optional="yes">
       <description xml:lang="en">
-        <para>The css class to be used for formatting the table cell (experimental).</para>
+        <para>The css class to be used for formatting the table cell.</para>
       </description>
       <description xml:lang="de">
-        <para>Die CSS-Klasse für die Formtierung. (Experimentell)</para>
+        <para>Die CSS-Klasse für die Formtierung.</para>
       </description>
     </attribute>
     <attribute en="id" de="id" optional="yes" type="text">
@@ -7451,7 +7483,7 @@
     </childelements>
     <attribute en="matrix" de="matrix" optional="yes" type="text">
       <description xml:lang="en">
-        <para>Experimental The transformation matrix for the object. Expected is a space separated string of six values.</para>
+        <para>The transformation matrix for the object. Expected is a space separated string of six values.</para>
       </description>
       <description xml:lang="de">
         <para>Die Transformations-Matrix für das Objekt. Erwartet wird eine Leerzeichen-separierte Zeichenkette mit sechs Werten.</para>

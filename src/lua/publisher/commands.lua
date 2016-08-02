@@ -230,6 +230,26 @@ function commands.box( layoutxml,dataxml )
     local css_rules = publisher.css:matches({element = 'box', class=class,id=id}) or {}
     colorname = colorname or css_rules["background-color"] or "black"
 
+    local attribute = {
+        ["padding-top"]      = "length",
+        ["padding-right"]    = "length",
+        ["padding-bottom"]   = "length",
+        ["padding-left"]     = "length",
+    }
+
+    local tab = {}
+    local tmpattr
+    for attname,atttyp in pairs(attribute) do
+        tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
+        if tmpattr then
+            tab[attname] = tmpattr
+        end
+    end
+    if tab["padding-top"]    then tab.padding_top    = tex.sp(tab["padding-top"])    end
+    if tab["padding-bottom"] then tab.padding_bottom = tex.sp(tab["padding-bottom"]) end
+    if tab["padding-left"]   then tab.padding_left   = tex.sp(tab["padding-left"])   end
+    if tab["padding-right"]  then tab.padding_right  = tex.sp(tab["padding-right"])  end
+
     local current_grid = publisher.current_grid
 
     -- Todo: document length or number
@@ -243,8 +263,24 @@ function commands.box( layoutxml,dataxml )
     else
         height = tex.sp(height)
     end
-
     local shift_left,shift_up = 0,0
+
+    if tab.padding_left then
+        width = width - tab.padding_left
+        shift_left = shift_left - tab.padding_left
+    end
+    if tab.padding_right then
+        width = width - tab.padding_right
+    end
+
+    if tab.padding_bottom then
+        height = height - tab.padding_bottom
+    end
+    if tab.padding_top then
+        height = height - tab.padding_top
+        shift_up = shift_up - tab.padding_top
+    end
+
 
     if bleed then
         local trim = publisher.options.trim or 0

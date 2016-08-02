@@ -349,12 +349,6 @@
    <define name="e_Box">
       <element name="Box">
          <a:documentation>Create a rectangular colored area. The area must fit the grid cells.</a:documentation>
-         <attribute name="width">
-            <a:documentation>Width of the box in grid cells or in absolute values.</a:documentation>
-         </attribute>
-         <attribute name="height">
-            <a:documentation>Height of the box in grid cells.</a:documentation>
-         </attribute>
          <optional>
             <attribute name="backgroundcolor">
                <a:documentation>Color of the box.</a:documentation>
@@ -370,11 +364,37 @@
                <a:documentation>CSS class for this box.</a:documentation>
             </attribute>
          </optional>
+         <attribute name="height">
+            <a:documentation>Height of the box in grid cells.</a:documentation>
+         </attribute>
          <optional>
             <attribute name="id">
                <a:documentation>CSS id for this box.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="padding-top">
+               <a:documentation>Set the inner distance (width between contents and the border) to the top edge.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-bottom">
+               <a:documentation>Set the inner distance (width between contents and the border) to the bottom edge.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-left">
+               <a:documentation>Set the inner distance (width between contents and the border) to the left edge.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-right">
+               <a:documentation>Set the inner distance (width between contents and the border) to the right edge.</a:documentation>
+            </attribute>
+         </optional>
+         <attribute name="width">
+            <a:documentation>Width of the box in grid cells or in absolute values.</a:documentation>
+         </attribute>
          <empty></empty>
       </element>
    </define>
@@ -2463,10 +2483,10 @@
    </define>
    <define name="e_Output">
       <element name="Output">
-         <a:documentation>Still exerimental. This command is similar to PlaceObject and is currently limited to output text which can be broken across positioning frames.</a:documentation>
+         <a:documentation>This command is similar to PlaceObject and is currently limited to output text which can be broken across positioning frames and which can wrap around objects.</a:documentation>
          <optional>
             <attribute name="allocate">
-               <a:documentation>Should text flow around already allocated objects? This is experimental: you need to set the grid height to the size of the body font (leading) and this works on the first page only.</a:documentation>
+               <a:documentation>Should text flow around already allocated objects? This currently works on the current page only.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>Regular behaviour: the text does not flow around objects.</a:documentation>
@@ -3872,7 +3892,7 @@
          </optional>
          <optional>
             <attribute name="fontface">
-               <a:documentation>The name of the font family. Defaults to text&#39;.</a:documentation>
+               <a:documentation>The name of the font family. Defaults to text.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -3921,7 +3941,7 @@
          </optional>
          <optional>
             <attribute name="fontface">
-               <a:documentation>The name of the font family. Defaults to text&#39;.</a:documentation>
+               <a:documentation>The name of the font family. Defaults to text.</a:documentation>
             </attribute>
          </optional>
          <optional>
