@@ -7062,7 +7062,7 @@
     </attribute>
     <attribute en="fontface" de="schriftart" type="text" optional="yes">
       <description xml:lang="en">
-        <para>The name of the font family. Defaults to <tt>text</tt>'.</para>
+        <para>The name of the font family. Defaults to <tt>text</tt>.</para>
       </description>
       <description xml:lang="de">
         <para>Name der Schriftfamilie, die benutzt werden soll.</para>
@@ -7155,6 +7155,30 @@
         </choice>
       </oneOrMore>
     </childelements>
+    <attribute en="color" de="farbe" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The name of the color of the text.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name der Farbe im Textblock.</para>
+      </description>
+    </attribute>
+    <attribute en="fontface" de="schriftart" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The name of the font family. Defaults to <tt>text</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name der Schriftfamilie, die benutzt werden soll. Voreinstellung ist <tt>text</tt></para>
+      </description>
+    </attribute>
+    <attribute en="textformat" de="textformat" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The name of the text format to be applied to the text. Defaults to <tt>text</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name des zu benutzenden Textformats. Wird kein Textformat angegeben, nimmt das System das Textformat <tt>text</tt>.</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Pagetype name="page" test="true()">
   <Margin left="1cm" right="1cm" top="1cm" bottom="1cm" />

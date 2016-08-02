@@ -3914,6 +3914,21 @@
    <define name="e_Text">
       <element name="Text">
          <a:documentation>Create a text that can be broken across text containers or pages. To be used with Output</a:documentation>
+         <optional>
+            <attribute name="color">
+               <a:documentation>The name of the color of the text.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fontface">
+               <a:documentation>The name of the font family. Defaults to text&#39;.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="textformat">
+               <a:documentation>The name of the text format to be applied to the text. Defaults to text.</a:documentation>
+            </attribute>
+         </optional>
          <oneOrMore>
             <choice>
                <ref name="e_Action"></ref>

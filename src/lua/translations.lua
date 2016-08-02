@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2016-06-24 19:19)
+-- generated from genluatranslations.go (2016-08-02 12:26)
 -- do not edit!
 module(...)
 return {
@@ -451,6 +451,9 @@ return {
         ["minhöhe"] = "minheight",
         },
       ["Text"] = { "Text",
+        ["farbe"] = "color",
+        ["schriftart"] = "fontface",
+        ["textformat"] = "textformat",
         },
       ["Tr"] = { "Tr",
         ["align"] = "align",

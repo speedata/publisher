@@ -3005,12 +3005,36 @@ end
 function commands.text(layoutxml,dataxml)
     -- balance is currently not supported
     -- local balance = publisher.read_attribute(layoutxml,dataxml,"balance",   "rawstring")
+    local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface","rawstring")
+    local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",   "rawstring", "black")
+    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
+
     local tab = publisher.dispatch(layoutxml,dataxml)
+
+    if not fontname then fontname = "text" end
+    fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+    if fontfamily == nil then
+        err("Fontfamily %q not found.",fontname or "???")
+        fontfamily = 1
+    end
+
+    local save_fontfamily = publisher.current_fontfamily
+    publisher.current_fontfamily = fontfamily
+
+
+    local colortable
+    if colorname then
+        if not publisher.colors[colorname] then
+            err("Color %q is not defined.",colorname)
+        else
+            colortable = publisher.colors[colorname].index
+        end
+    end
 
     local objects = {}
     for i,j in ipairs(tab) do
         local eltname = publisher.elementname(j)
-        trace("Textblock: Element = %q",tostring(eltname))
+        trace("Text: Element = %q",tostring(eltname))
         if eltname == "Paragraph" then
             objects[#objects + 1] = publisher.element_contents(j)
         elseif eltname == "Ul" or eltname == "Ol" then
@@ -3056,8 +3080,10 @@ function commands.text(layoutxml,dataxml)
                     if dont_format == 1 then
                         obj = node.vpack(contents.nodelist)
                     else
+                        contents.nodelist = publisher.set_color_if_necessary(contents.nodelist,colortable)
+                        publisher.set_fontfamily_if_necessary(contents.nodelist,fontfamily)
                         contents.nodelist = publisher.addstrut(contents.nodelist,publisher.origin_text)
-                        obj,startpage,startrow = contents:format(parameter.width,nil,parameter,startpage,startrow)
+                        obj,startpage,startrow = contents:format(parameter.width,textformat,parameter,startpage,startrow)
                     end
                     objects[#objects + 1] = obj
                     local ht_rows, extra = cg:height_in_gridcells_sp(obj.height + obj.depth + extra_accumulated, {floor = true})
