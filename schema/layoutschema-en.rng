@@ -3715,7 +3715,7 @@
          </optional>
          <optional>
             <attribute name="class">
-               <a:documentation>The css class to be used for formatting the table cell (experimental).</a:documentation>
+               <a:documentation>The css class to be used for formatting the table cell.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -4070,7 +4070,7 @@
          <a:documentation>Manipulate an object&#39;s appearance by applying a matrix. See the PDF reference 4.2.2 Common Transformations and following.</a:documentation>
          <optional>
             <attribute name="matrix">
-               <a:documentation>Experimental The transformation matrix for the object. Expected is a space separated string of six values.</a:documentation>
+               <a:documentation>The transformation matrix for the object. Expected is a space separated string of six values.</a:documentation>
             </attribute>
          </optional>
          <optional>

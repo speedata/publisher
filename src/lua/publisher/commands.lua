@@ -238,6 +238,12 @@ function commands.box( layoutxml,dataxml )
     }
 
     local tab = {}
+    if css_rules and type(css_rules) == "table" then
+        for k,v in pairs(css_rules) do
+            tab[k]=v
+        end
+    end
+
     local tmpattr
     for attname,atttyp in pairs(attribute) do
         tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
