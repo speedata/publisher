@@ -739,7 +739,7 @@ function initialize_luatex_and_generate_pdf()
         elseif publisher_version[2] < requested_version[2] then
             -- major number are same, minor are different
             version_mismatch = true
-        elseif requested_version[3] and publisher_version[3] < requested_version[3] and publisher_version[2] == requested_version[2] then
+        elseif tonumber(requested_version[3]) and tonumber(publisher_version[3]) < tonumber(requested_version[3]) and tonumber(publisher_version[2]) == requested_version[2] then
             version_mismatch = true
         end
         if version_mismatch then
