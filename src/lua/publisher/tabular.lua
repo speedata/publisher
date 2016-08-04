@@ -1482,8 +1482,7 @@ function typeset_table(self)
             local ht = tostring(sp_to_pt(ht_row)) .. "|" .. tostring(sp_to_pt(accumulated_height)) .. "|" .. tostring(sp_to_pt(extra_height))
             rows[i] = publisher.showtextatright(rows[i],ht)
         end
-
-        local fits_in_table = accumulated_height + extra_height + space_above < pagegoal
+        local fits_in_table = accumulated_height + extra_height + space_above <= pagegoal
         if not fits_in_table then
             if node.has_attribute(rows[i],publisher.att_use_as_head) == 1 then
                 -- the next line would be used as a header, so let's skip the

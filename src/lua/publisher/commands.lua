@@ -604,7 +604,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
     if tonumber(size) == nil then
         size = tex.sp(size)
     else
-        size = size * publisher.factor
+        size = tex.sp(tostring(size) .."pt")
     end
 
     if baselineskip == nil then
@@ -614,7 +614,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
     if tonumber(baselineskip) == nil then
         baselineskip = tex.sp(baselineskip)
     else
-        baselineskip = baselineskip * publisher.factor
+        baselineskip = tex.sp(tostring(baselineskip) .."pt")
     end
 
     fam.size         = size

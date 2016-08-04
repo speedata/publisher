@@ -3617,15 +3617,10 @@ end
 --- This function is only called once from `dothings()` during startup phase. We define
 --- a family with regular, bold, italic and bolditalic font with size 10pt (we always
 --- measure font size in dtp points)
--- I can't explain the "- 1" in baselineskip. It used to be 12 * factor which is
--- 65781 * 12 = 789372. Now it is 789381 - 1 = 789380. There is a problem with the qa test files
--- when omitting the - 1. One explanation would be that when the grid height and the
--- font height are exactly the same size, things will break. But we must fix this one
--- day. See bug #99
 function define_default_fontfamily()
     local fam={
         size         = tenpoint_sp,
-        baselineskip = twelvepoint_sp - 1,
+        baselineskip = twelvepoint_sp,
         scriptsize   = tenpoint_sp * 0.8,
         scriptshift  = tenpoint_sp * 0.3,
         name = "text"
