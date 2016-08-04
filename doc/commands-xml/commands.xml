@@ -2672,10 +2672,10 @@
   </command>
   <command en="Image" de="Bild">
     <description xml:lang="en">
-      <para>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg).</para>
+      <para>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg). See below for a limitation on the number of included PDF files.</para>
     </description>
     <description xml:lang="de">
-      <para>Bindet eine externe Grafik ein. Erlaubte Grafikformate sind PDF (.pdf), PNG (.png) und JPEG (.jpg).</para>
+      <para>Bindet eine externe Grafik ein. Erlaubte Grafikformate sind PDF (.pdf), PNG (.png) und JPEG (.jpg). Siehe unten für die Einschränkung eingebundener PDF-Dateien.</para>
     </description>
     <childelements/>
     <attribute en="class" de="class" optional="yes" type="text" since="2.5.11">
@@ -2908,9 +2908,11 @@
     </example>
     <info xml:lang="de">
       <para>Die Anzahl der Seiten in einer PDF-Datei kann mit der XPath-Funktion <tt>sd:number-of-pages(&lt;dateiname oder URI&gt;)</tt> ermittelt werden.</para>
+      <para>Vorsicht: die Anzahl der PDF-Dateien, die in einem Dokument eingebunden werden kann, ist begrenzt. Diese Grenze kann je nach System erhöht werden. Auf Mac OS X kann die Grenze mit <tt>ulimit -a</tt> angezeigt werden (open files) und mit beispielsweise <tt>ulimit -n 1024</tt> erhöht werden.</para>
     </info>
     <info xml:lang="en">
       <para>The number of pages in a PDF file can be determined with the XPath function <tt>sd:number-of-pages(&lt;filename or URI&gt;).</tt></para>
+      <para>Attention. The number of PDF files that can be included in a document is limited. This limit can be increased in is system dependant. On Mac OS X it can be queried with <tt>ulimit -a</tt> and set for example with <tt>ulimit -n 1024</tt>.</para>
     </info>
     <seealso><cmd name="PlaceObject"/></seealso>
   </command>

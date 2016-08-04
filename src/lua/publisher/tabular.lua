@@ -1010,18 +1010,6 @@ function typeset_row(self, tr_contents, current_row )
             hlist = publisher.background(hlist,color)
         end
 
-        -- local bg = td_contents["background-image"]
-        -- if bg then
-        --     local bgimages = {}
-        --     for bgimage in string.gmatch(bg, "url%((.-)%)") do
-        --         bgimages[#bgimages + 1] = bgimage
-        --     end
-        --     -- Let's assume there is only one image for now
-        --     if #bgimages > 0 then
-        --         hlist = publisher.bgimage(hlist,bgimages[1])
-        --     end
-        -- end
-
         local bg = td_contents["background-text"]
         if bg then
             local bgcolor  = td_contents["background-textcolor"] or "black"

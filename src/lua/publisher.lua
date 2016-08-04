@@ -1383,22 +1383,6 @@ function bgtext( box, textstring, angle, colorname, fontfamily, bgsize)
     return box
 end
 
--- Todo: size = contain, ...
-function bgimage( box, imagename )
-    local imginfo = new_image(imagename)
-    local image = img.copy(imginfo.img)
-    image.width = box.width
-    image.height = box.height
-
-    local imgnode = img.node(image)
-    local x = node.hpack(imgnode)
-    x.width = 0
-    x.height = 0
-    box = node.insert_before(box,box,x)
-    box = node.hpack(box)
-    return box
-end
-
 --- Draw a background behind the rectangular (box) object.
 function background( box, colorname )
     if not colors[colorname] then
