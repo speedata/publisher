@@ -1880,10 +1880,10 @@
     </attribute>
     <attribute en="break-below" de="umbruch-unten" optional="yes">
       <description xml:lang="en">
-        <para>(Dis-)Allow break below the text.</para>
+        <para>(Dis-)Allow break below the text. This only works if the following text is placed within the same <cmd name="PlaceObject"/> or <cmd name="Output"/> container.</para>
       </description>
       <description xml:lang="de">
-        <para>Umbruch unterhalb des Textes verbieten/erlauben.</para>
+        <para>Umbruch unterhalb des Textes verbieten/erlauben. Das funktioniert nur, wenn der nachfolgende Text innerhalb derselben <cmd name="PlaceObject"/> oder <cmd name="Output"/> Umgebung enthalten ist.</para>
       </description>
       <choice en="yes" de="ja">
         <description xml:lang="en">
@@ -1938,7 +1938,7 @@
           <para>Disable hyphenation.</para>
         </description>
         <description xml:lang="de">
-          <para>Silbentrennung für den Paragraph verhindern.</para>
+          <para>Silbentrennung für den Absatz verhindern.</para>
         </description>
       </choice>
     </attribute>
