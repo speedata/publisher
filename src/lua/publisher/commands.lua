@@ -194,13 +194,13 @@ function commands.bold( layoutxml,dataxml )
 
     for i,j in ipairs(tab) do
         if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{bold = true})
+            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{bold = true, allowbreak=publisher.allowbreak})
         else
             objects[#objects + 1] = publisher.element_contents(j)
         end
     end
     for _,j in ipairs(objects) do
-        a:append(j,{fontfamily = 0, bold = 1})
+        a:append(j,{fontfamily = 0, bold = 1, allowbreak=publisher.allowbreak})
     end
 
     return a
@@ -381,13 +381,13 @@ function commands.color( layoutxml, dataxml )
 
     for i,j in ipairs(tab) do
         if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{})
+            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{allowbreak=publisher.allowbreak})
         else
             objects[#objects + 1] = publisher.element_contents(j)
         end
     end
     for _,j in ipairs(objects) do
-        a:append(j,{})
+        a:append(j,{allowbreak=publisher.allowbreak})
     end
 
     a:set_color(colortable)
@@ -725,7 +725,7 @@ function commands.fontface( layoutxml,dataxml )
         local a = paragraph:new()
         local tab = publisher.dispatch(layoutxml,dataxml)
         for i,j in ipairs(tab) do
-            a:append(xpath.textvalue_raw(true,publisher.element_contents(j)),{fontfamily = familynumber})
+            a:append(xpath.textvalue_raw(true,publisher.element_contents(j)),{fontfamily = familynumber, allowbreak=publisher.allowbreak})
         end
         return a
     end
@@ -1197,13 +1197,13 @@ function commands.italic( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
         if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{italic = true})
+            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{italic = true, allowbreak=publisher.allowbreak})
         else
             objects[#objects + 1] = publisher.element_contents(j)
         end
     end
     for _,j in ipairs(objects) do
-        a:append(j,{fontfamily = 0, italic = 1})
+        a:append(j,{fontfamily = 0, italic = 1, allowbreak=publisher.allowbreak})
     end
     return a
 end
@@ -1839,6 +1839,7 @@ function commands.paragraph( layoutxml,dataxml )
     local colorname     = publisher.read_attribute(layoutxml,dataxml,"color",     "rawstring")
     local language_name = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
 
+    publisher.allowbreak = allowbreak
     colorname = colorname or css_rules["color"]
     fontname  = fontname  or css_rules["font-family"]
 
@@ -1888,6 +1889,9 @@ function commands.paragraph( layoutxml,dataxml )
             objects[#objects + 1] = contents
         end
     end
+
+    publisher.allowbreak = nil
+
     for _,j in ipairs(objects) do
         a:append(j,{fontfamily = fontfamily, languagecode = languagecode, allowbreak = allowbreak})
     end
@@ -3380,13 +3384,13 @@ function commands.underline( layoutxml,dataxml )
     end
     for i,j in ipairs(tab) do
         if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{underline = underline})
+            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{underline = underline, allowbreak=publisher.allowbreak})
         else
             objects[#objects + 1] = publisher.element_contents(j)
         end
     end
     for _,j in ipairs(objects) do
-        a:append(j,{fontfamily = 0, underline = underline})
+        a:append(j,{fontfamily = 0, underline = underline, allowbreak=publisher.allowbreak})
     end
     return a
 end
