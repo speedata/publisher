@@ -10,7 +10,7 @@
     </entry>
     <entry version="2.5.10" date="2016-08-02">
       <en>Remove all German commands from the manual</en>
-      <de>Ale Deutschen Befehel aus dem Handbuch gelöscht</de>
+      <de>Ale Deutschen Befehle aus dem Handbuch gelöscht</de>
     </entry>
     <entry version="2.5.10" date="2016-08-02">
       <en>New attributes for Text: fontface, color and textformat</en>
@@ -18,7 +18,7 @@
     </entry>
     <entry version="2.5.10" date="2016-08-02">
       <en>Improvements to the documentation (spelling fixes), Language string "English (Great Britan)" corrected</en>
-      <de>Verbeserungen in der Dokumentation (Tippfehler korrigiert), Sprachstring "English (Great Britan)" korrigiert</de>
+      <de>Verbesserungen in der Dokumentation (Tippfehler korrigiert), Sprachstring "English (Great Britan)" korrigiert</de>
     </entry>
     <entry version="2.5.9" date="2016-07-06">
       <en>Bugfix related to “jump to next area” and multipage table/</en>
@@ -50,7 +50,7 @@
     </entry>
     <entry version="2.5.2" date="2016-06-13">
       <en>(2.4.2) A few bugfixes related to sd:current-framenumber(), minheight in Textblock and looking for next free row.</en>
-      <de>(2.4.2) Einige Fehlerkorrekturen im Zusammenhangn mit sd:aktuelle-rahmennummer(), minhöhe im Textblock und der Suche nach der nächsten freien Zeile.</de>
+      <de>(2.4.2) Einige Fehlerkorrekturen im Zusammenhang mit sd:aktuelle-rahmennummer(), minhöhe im Textblock und der Suche nach der nächsten freien Zeile.</de>
     </entry>
     <entry version="2.5.1" date="2016-06-10">
       <en>Interpret &lt;sub> and &lt;sup> in data.</en>
@@ -64,7 +64,7 @@
   <chapter version="2.4">
     <entry version="2.4.4" date="2016-06-18">
       <en>Various bugfixes: leaders disappear on a linebreak, Nobreak allows setting for font family, escape attribute contents, fix for bad images.</en>
-      <de>Verschiede Fehlerkorrekturen: Führungspunkte verschwinden bei einem Zeilenwechsel, KeinUmbruch erlaubt die Angabe einer Schriftfamilie, Attribut-Werte werden nicht escaped, kaputte Bilder (ohne DPI-Angaben) werden besser behandelt.</de>
+      <de>Verschiedene Fehlerkorrekturen: Führungspunkte verschwinden bei einem Zeilenwechsel, KeinUmbruch erlaubt die Angabe einer Schriftfamilie, Attribut-Werte werden nicht escaped, kaputte Bilder (ohne DPI-Angaben) werden besser behandelt.</de>
     </entry>
     <entry version="2.4.3" date="2016-06-17">
       <en>Bugfix related to an improper fix in 2.4.2 / find next free row for an object</en>
@@ -72,7 +72,7 @@
     </entry>
     <entry version="2.4.2" date="2016-06-13">
       <en>A few bugfixes related to sd:current-framenumber(), minheight in Textblock and looking for next free row.</en>
-      <de>Einige Fehlerkorrekturen im Zusammenhangn mit sd:aktuelle-rahmennummer(), minhöhe im Textblock und der Suche nach der nächsten freien Zeile.</de>
+      <de>Einige Fehlerkorrekturen im Zusammenhang mit sd:aktuelle-rahmennummer(), minhöhe im Textblock und der Suche nach der nächsten freien Zeile.</de>
     </entry>
     <entry version="2.4.1" date="2016-06-09">
       <en>Bugfix: pagetype and NewPage, version assertion in Layout tag</en>
