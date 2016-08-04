@@ -30,7 +30,7 @@ func init() {
 	choiceElement = xml.StartElement{Name: xml.Name{Local: "choice"}}
 }
 
-func getChildElements(commands *commandsxml.CommandsXML, enc *xml.Encoder, children []byte, level int, lang string) {
+func getChildElements(commands *commandsxml.CommandsXML, enc *xml.Encoder, children []byte, lang string) {
 	if len(children) == 0 {
 		enc.EncodeToken(emptyElement.Copy())
 		enc.EncodeToken(emptyElement.End())
@@ -44,12 +44,8 @@ func getChildElements(commands *commandsxml.CommandsXML, enc *xml.Encoder, child
 		}
 		switch v := tok.(type) {
 		case xml.StartElement:
-			level++
 			switch v.Name.Local {
 			case "cmd":
-				if level == 1 {
-					enc.EncodeToken(optionalElement.Copy())
-				}
 				ref := refElement.Copy()
 				for _, attr := range v.Attr {
 					if attr.Name.Local == "name" {
@@ -70,7 +66,7 @@ func getChildElements(commands *commandsxml.CommandsXML, enc *xml.Encoder, child
 			case "reference":
 				for _, attr := range v.Attr {
 					if attr.Name.Local == "name" {
-						getChildElements(commands, enc, commands.GetDefine(attr.Value), level, lang)
+						getChildElements(commands, enc, commands.GetDefine(attr.Value), lang)
 					}
 				}
 			default:
@@ -81,15 +77,11 @@ func getChildElements(commands *commandsxml.CommandsXML, enc *xml.Encoder, child
 			switch v.Name.Local {
 			case "cmd":
 				enc.EncodeToken(refElement.End())
-				if level == 1 {
-					enc.EncodeToken(optionalElement.End())
-				}
 			case "choice":
 				enc.EncodeToken(choiceElement.End())
 			default:
 				enc.EncodeToken(v)
 			}
-			level--
 		}
 	}
 }
@@ -233,7 +225,7 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 				enc.EncodeToken(optionalElement.Copy().End())
 			}
 		}
-		getChildElements(commands, enc, cmd.Childelements.Text, 0, lang)
+		getChildElements(commands, enc, cmd.Childelements.Text, lang)
 		enc.EncodeToken(elt.End())
 		enc.EncodeToken(def.End())
 	}

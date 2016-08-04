@@ -76,6 +76,7 @@
     <element name="interleave">
       <oneOrMore>
         <interleave>
+          <optional><ref name="cmd"/></optional>
           <optional><ref name="zeroOrMore"></ref></optional>
           <optional><ref name="optional"/></optional>
           <optional><ref name="reference"/></optional>

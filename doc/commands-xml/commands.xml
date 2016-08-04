@@ -2385,8 +2385,10 @@
       <para>Erzeugt einen virtuellen Bereich, in dem Elemente platziert werden können. Ausgegeben werden die Gruppen anschließend mit <cmd name="PlaceObject"/>.</para>
     </description>
     <childelements>
-      <cmd name="Contents"/>
-      <cmd name="Grid"/>
+      <interleave>
+        <cmd name="Contents"/>
+        <optional><cmd name="Grid"/></optional>
+      </interleave>
     </childelements>
     <attribute en="name" de="name" type="text" optional="no">
       <description xml:lang="en">
@@ -3645,7 +3647,7 @@
       <para>Gibt eine Textmeldung auf der Konsole und in der Protokolldatei aus.</para>
     </description>
     <childelements>
-      <cmd name="Value"/>
+      <optional><cmd name="Value"/></optional>
     </childelements>
     <attribute en="select" de="auswahl" type="xpath" optional="yes">
       <description xml:lang="en">

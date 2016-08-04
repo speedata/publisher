@@ -13,9 +13,7 @@
          <attribute name="href">
             <a:documentation>The destination of the hyperlink (URI). Example: http://www.speedata.de</a:documentation>
          </attribute>
-         <optional>
-            <ref name="e_Value"></ref>
-         </optional>
+         <ref name="e_Value"></ref>
       </element>
    </define>
    <define name="e_Action">
@@ -977,7 +975,7 @@
          </optional>
          <optional>
             <attribute name="break-below">
-               <a:documentation>(Dis-)Allow break below the text.</a:documentation>
+               <a:documentation>(Dis-)Allow break below the text. This only works if the following text is placed within the same PlaceObject or Output container.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>Allow a break below this text (default).</a:documentation>
@@ -1377,12 +1375,12 @@
          <attribute name="name">
             <a:documentation>Name of the group that is created.</a:documentation>
          </attribute>
-         <optional>
+         <interleave>
             <ref name="e_Contents"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Grid"></ref>
-         </optional>
+            <optional>
+               <ref name="e_Grid"></ref>
+            </optional>
+         </interleave>
       </element>
    </define>
    <define name="e_Hyphenation">
@@ -1504,7 +1502,7 @@
    </define>
    <define name="e_Image">
       <element name="Image">
-         <a:documentation>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg).</a:documentation>
+         <a:documentation>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg). See below for a limitation on the number of included PDF files.</a:documentation>
          <optional>
             <attribute name="class">
                <a:documentation>CSS class for this element.</a:documentation>
@@ -1743,36 +1741,16 @@
    <define name="e_Li">
       <element name="Li">
          <a:documentation>List item in an ordered or unordered list.</a:documentation>
-         <optional>
-            <ref name="e_I"></ref>
-         </optional>
-         <optional>
-            <ref name="e_B"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Br"></ref>
-         </optional>
-         <optional>
-            <ref name="e_HSpace"></ref>
-         </optional>
-         <optional>
-            <ref name="e_U"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Sub"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Sup"></ref>
-         </optional>
-         <optional>
-            <ref name="e_URL"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Value"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Switch"></ref>
-         </optional>
+         <ref name="e_I"></ref>
+         <ref name="e_B"></ref>
+         <ref name="e_Br"></ref>
+         <ref name="e_HSpace"></ref>
+         <ref name="e_U"></ref>
+         <ref name="e_Sub"></ref>
+         <ref name="e_Sup"></ref>
+         <ref name="e_URL"></ref>
+         <ref name="e_Value"></ref>
+         <ref name="e_Switch"></ref>
       </element>
    </define>
    <define name="e_Loop">
@@ -2159,9 +2137,7 @@
    <define name="e_Ol">
       <element name="Ol">
          <a:documentation>Create an ordered list, just like in HTML</a:documentation>
-         <optional>
-            <ref name="e_Li"></ref>
-         </optional>
+         <ref name="e_Li"></ref>
       </element>
    </define>
    <define name="e_Options">
@@ -2538,9 +2514,7 @@
                <a:documentation>The starting row for the text.</a:documentation>
             </attribute>
          </optional>
-         <optional>
-            <ref name="e_Text"></ref>
-         </optional>
+         <ref name="e_Text"></ref>
       </element>
    </define>
    <define name="e_Overlay">
@@ -2707,9 +2681,7 @@
          <attribute name="name">
             <a:documentation>Name of the master page. It is for informational purpose and as a selection for NewPage.</a:documentation>
          </attribute>
-         <optional>
-            <ref name="e_Margin"></ref>
-         </optional>
+         <ref name="e_Margin"></ref>
          <optional>
             <oneOrMore>
                <ref name="e_PositioningArea"></ref>
@@ -3508,17 +3480,13 @@
    <define name="e_Sub">
       <element name="Sub">
          <a:documentation>Subscript text.</a:documentation>
-         <optional>
-            <ref name="e_Value"></ref>
-         </optional>
+         <ref name="e_Value"></ref>
       </element>
    </define>
    <define name="e_Sup">
       <element name="Sup">
          <a:documentation>Superscript text.</a:documentation>
-         <optional>
-            <ref name="e_Value"></ref>
-         </optional>
+         <ref name="e_Value"></ref>
       </element>
    </define>
    <define name="e_Switch">
@@ -4198,9 +4166,7 @@
    <define name="e_Ul">
       <element name="Ul">
          <a:documentation>Create an unordered list, just like in HTML</a:documentation>
-         <optional>
-            <ref name="e_Li"></ref>
-         </optional>
+         <ref name="e_Li"></ref>
       </element>
    </define>
    <define name="e_Until">
@@ -4386,36 +4352,16 @@
    <define name="e_URL">
       <element name="URL">
          <a:documentation>enables a better breaking of URLs.</a:documentation>
-         <optional>
-            <ref name="e_B"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Image"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Switch"></ref>
-         </optional>
-         <optional>
-            <ref name="e_I"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Fontface"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Sub"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Sup"></ref>
-         </optional>
-         <optional>
-            <ref name="e_U"></ref>
-         </optional>
-         <optional>
-            <ref name="e_URL"></ref>
-         </optional>
-         <optional>
-            <ref name="e_Value"></ref>
-         </optional>
+         <ref name="e_B"></ref>
+         <ref name="e_Image"></ref>
+         <ref name="e_Switch"></ref>
+         <ref name="e_I"></ref>
+         <ref name="e_Fontface"></ref>
+         <ref name="e_Sub"></ref>
+         <ref name="e_Sup"></ref>
+         <ref name="e_U"></ref>
+         <ref name="e_URL"></ref>
+         <ref name="e_Value"></ref>
       </element>
    </define>
    <define name="e_Value">
