@@ -2,8 +2,8 @@
 --  grid.lua
 --  speedata publisher
 --
---  Copyright 2010-2014 Patrick Gundlach.
---  See file COPYING in the root directory for license details.
+--  For a list of authors see `git blame'
+--  See file COPYING in the root directory for license info.
 
 file_start("grid.lua")
 
@@ -125,6 +125,9 @@ function get_advanced_cursor( self,areaname )
     local area = self.positioning_frames[areaname]
     local current_frame = self:framenumber(areaname)
     local ht = area[current_frame].height
+    if not area.current_row then
+        self:set_current_row(1,areaname)
+    end
     if area.current_row + area.advance_rows > ht then
         return current_frame + 1, area.current_row + area.advance_rows - ht
     else

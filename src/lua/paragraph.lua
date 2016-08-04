@@ -213,8 +213,6 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         local max_width = cg:width_sp(cg:number_of_columns(areaname))
         local gridheight = cg.gridheight
         local parshape = {}
-
-        -- local framenumber = cg:framenumber(areaname)
         local maxframes   = cg:number_of_frames(areaname)
 
         -- this is to remove rounding errors
@@ -225,59 +223,66 @@ function Paragraph:format(width_sp, default_textformat_name,options)
 
         -- The row for the paragraph shape. Not identical to the grid row
         local current_row = 1
-
         local grid_row
         local lowest_grid_row = 0
         -- grid_lower is the position of the end of the grid row
-        local grid_lower = gridheight
-        local framenumber, startrow_grid =  cg:get_advanced_cursor(areaname)
-        while framenumber <= maxframes do
-            grid_row = startrow_grid
-            accumulated_height = lowest_grid_row
-            grid_lower = lowest_grid_row + gridheight
-            lowest_grid_row = lowest_grid_row + cg:number_of_rows(areaname) * gridheight
-            while grid_row <=  cg:number_of_rows(areaname,framenumber) do
-                local rows = {}
-                local ps = cg:get_parshape(grid_row,areaname,framenumber)
-                -- ps is 0 when the line is completely allocated
-                if ps ~= 0 then
-                    -- accumulated_height starts with 0
-                    if accumulated_height <= grid_lower then
-                        -- When this paragraph row is within the grid row,
-                        -- it must be added to our list
-                        rows[#rows + 1] = current_row
-                    end
-
-                    while accumulated_height <= grid_lower do
-                        if is_equal(accumulated_height + lineheight,grid_lower) then
-                            -- if the current paragraph row ends "exactly" at the
-                            -- bottom of the grid line, we are done and can continue
-                            -- with the next paragraph row. The current paragraph row is
-                            -- already added to the list for this grid row (see above)
-                        elseif accumulated_height + lineheight < grid_lower then
-                            -- if the current paragraph row ends above the lower
-                            -- grid line, we need to add the next row to the
-                            -- current grid line.
-                            rows[#rows + 1] = current_row + 1
-                        else
-                            -- This is the case where the current paragraph row ends
-                            -- below the lower grid line. We don't need to increase
-                            -- the paragraph line number and the accumulated
-                            -- height, so we break out of the while loop
-                            break
+        local current_pagenumber = publisher.current_pagenumber
+        -- There might be material on one of the next pages. In this case,
+        -- and only in this case, the next page is already allocated
+        -- See bug #75 on github
+        while publisher.pages[current_pagenumber] do
+            cg = publisher.pages[current_pagenumber].grid
+            local grid_lower = gridheight
+            local framenumber, startrow_grid =  cg:get_advanced_cursor(areaname)
+            while framenumber <= maxframes do
+                grid_row = startrow_grid
+                accumulated_height = lowest_grid_row
+                grid_lower = lowest_grid_row + gridheight
+                lowest_grid_row = lowest_grid_row + cg:number_of_rows(areaname) * gridheight
+                while grid_row <=  cg:number_of_rows(areaname,framenumber) do
+                    local rows = {}
+                    local ps = cg:get_parshape(grid_row,areaname,framenumber)
+                    -- ps is 0 when the line is completely allocated
+                    if ps ~= 0 then
+                        -- accumulated_height starts with 0
+                        if accumulated_height <= grid_lower then
+                            -- When this paragraph row is within the grid row,
+                            -- it must be added to our list
+                            rows[#rows + 1] = current_row
                         end
 
-                        current_row = current_row + 1
-                        accumulated_height = accumulated_height + lineheight
+                            while accumulated_height <= grid_lower do
+                                if is_equal(accumulated_height + lineheight,grid_lower) then
+                                    -- if the current paragraph row ends "exactly" at the
+                                    -- bottom of the grid line, we are done and can continue
+                                    -- with the next paragraph row. The current paragraph row is
+                                    -- already added to the list for this grid row (see above)
+                                elseif accumulated_height + lineheight < grid_lower then
+                                    -- if the current paragraph row ends above the lower
+                                    -- grid line, we need to add the next row to the
+                                    -- current grid line.
+                                    rows[#rows + 1] = current_row + 1
+                                else
+                                    -- This is the case where the current paragraph row ends
+                                    -- below the lower grid line. We don't need to increase
+                                    -- the paragraph line number and the accumulated
+                                    -- height, so we break out of the while loop
+                                    break
+                                end
+
+                                current_row = current_row + 1
+                                accumulated_height = accumulated_height + lineheight
+                            end
+                            -- w("rows %s",table.concat(rows,", "))
+                            set_parshape(parshape,ps,rows)
+                            grid_lower = grid_lower + gridheight
+                        end -- if ps ~= 0
+                        grid_row = grid_row + 1
                     end
-                    -- w("rows %s",table.concat(rows,", "))
-                    set_parshape(parshape,ps,rows)
-                    grid_lower = grid_lower + gridheight
-                end -- if ps ~= 0
-                grid_row = grid_row + 1
+                    startrow_grid = 1
+                framenumber = framenumber + 1
             end
-            startrow_grid = 1
-            framenumber = framenumber + 1
+            current_pagenumber = current_pagenumber + 1
         end
         -- This should be the last line in the parshape array, so the
         -- rest of the lines in the paragraph have the full width
