@@ -17,7 +17,7 @@ Can I use this in production?
 
 Yes. Absolutely. We release stable (long term support) versions once in a while which are heavily tested in commercial environments and we release _unstable_ versions often. Note that these _unstable_ are still safe to use, they just might contain some experimental new features.
 
-Just get one of the ready-to-run packages from https://download.speedata.de/publisher/ and follow the directions inside the ZIP file (=just extract and set the PATH variable).
+Just get one of the ready-to-run packages from https://download.speedata.de/publisher/ and follow the directions inside the ZIP file (=just extract and set the PATH variable). See the [installation instructions in the manual](https://speedata.github.io/publisher/manual/description-en/installation.html).
 
 
 Manual
@@ -28,16 +28,15 @@ Our documentation is available online: https://speedata.github.io/publisher/manu
 Bugs
 ----
 
-Please use the [github bug tracker](https://github.com/speedata/publisher/issues) for reporting bugs.
-
+Please use the [github bug tracker](https://github.com/speedata/publisher/issues) for reporting bugs or write an email. See below for contact details.
 
 
 License / Contributing
 ----------------------
 
-The license is AGPLv3 for now, see the file COPYING in the root directory.
+The license is AGPLv3, see the file COPYING in the root directory.
 
-We welcome contributions. Just [follow the github procedure (fork, pull requests)](https://help.github.com/articles/using-pull-requests/).
+We welcome contributions. Just [follow the github procedure (fork, pull requests)](https://help.github.com/articles/using-pull-requests/). The [installation manual](https://speedata.github.io/publisher/manual/description-en/installation.html) has a section on building the binary from the source code.
 
 Contact / Support
 -----------------
