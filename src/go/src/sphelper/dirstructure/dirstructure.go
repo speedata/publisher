@@ -28,7 +28,7 @@ func MkBuilddir(cfg *config.Config, srcbindir string) error {
 		dest   string
 		reject []string
 	}{
-		{src: srcbindir, dest: filepath.Join(destdir, "bin")},
+		{src: srcbindir, dest: filepath.Join(destdir, "sdluatex")},
 		{src: filepath.Join(cfg.Builddir, "manual"), dest: filepath.Join(destdir, "share", "doc")},
 		{src: filepath.Join(cfg.Basedir(), "lib"), dest: filepath.Join(destdir, "share", "lib")},
 		{src: filepath.Join(cfg.Basedir(), "schema"), dest: filepath.Join(destdir, "share", "schema"), reject: []string{"changelog.rng", "readme.txt"}},

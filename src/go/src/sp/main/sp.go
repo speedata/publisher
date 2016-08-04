@@ -416,9 +416,16 @@ func getExecutablePath() string {
 	executable_name := "sdluatex" + exe_suffix
 	var p string
 
+	// 0 check the installdir/bin for sdluatex(.exe)
+	p = filepath.Join(installdir, "sdluatex", executable_name)
+	fi, _ := os.Stat(p)
+	if fi != nil {
+		return p
+	}
+
 	// 1 check the installdir/bin for sdluatex(.exe)
 	p = fmt.Sprintf("%s/bin/%s", installdir, executable_name)
-	fi, _ := os.Stat(p)
+	fi, _ = os.Stat(p)
 	if fi != nil {
 		return p
 	}
@@ -431,6 +438,13 @@ func getExecutablePath() string {
 
 	// 3 assume simple installation and take luatex(.exe)
 	executable_name = "luatex" + exe_suffix
+
+	// 3.5 check the installdir/bin for sdluatex(.exe)
+	p = filepath.Join(installdir, "sdluatex", executable_name)
+	fi, _ = os.Stat(p)
+	if fi != nil {
+		return p
+	}
 
 	// 4 check then installdir/bin for luatex(.exe)
 	p = fmt.Sprintf("%s/bin/%s", installdir, executable_name)
