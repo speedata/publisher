@@ -1,0 +1,33 @@
+<Layout version="2.5.11"
+    xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Pageformat width="148mm" height="100mm" />
+    <SetGrid nx="25" height="5pt"/>
+
+    <LoadFontfile name="Regular" filename="texgyreheros-regular.otf" />
+    <LoadFontfile name="Italic" filename="texgyreheros-italic.otf" />
+    <LoadFontfile name="Bold" filename="texgyreheros-bold.otf" />
+    <LoadFontfile name="BoldItalic" filename="texgyreheros-bolditalic.otf" />
+
+    <DefineFontfamily name="ff" fontsize="8" leading="10">
+        <Regular fontface="Regular"/>
+        <Bold fontface="Bold"/>
+    </DefineFontfamily>
+
+    <Record element="data" >
+        <PlaceObject row="1" column="14">
+            <Box width="12" height="18" backgroundcolor="limegreen"/>
+        </PlaceObject>
+        <Output allocate="auto" row="1">
+            <Text>
+                <Paragraph fontface="ff">
+                    <Loop select="2">
+                        <Value select="sd:dummytext()"/>
+                    </Loop>
+                </Paragraph>
+            </Text>
+        </Output>
+    </Record>
+</Layout>
+

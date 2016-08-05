@@ -742,11 +742,15 @@ function commands.forall( layoutxml,dataxml )
     local tmp_tab
     local current_position = publisher.xpath.get_variable("__position")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
+    if not selection then
+        err("Can't iterate over an unknown sequence")
+        return {}
+    end
+
     limit = limit or #selection
     if limit > #selection then
         limit = #selection
     end
-
     start = start or 1
 
     for i = start,limit do
@@ -3173,7 +3177,7 @@ function commands.text(layoutxml,dataxml)
                     else
                         contents.nodelist = publisher.set_color_if_necessary(contents.nodelist,colortable)
                         publisher.set_fontfamily_if_necessary(contents.nodelist,fontfamily)
-                        contents.nodelist = publisher.addstrut(contents.nodelist,publisher.origin_text)
+                        -- contents.nodelist = publisher.addstrut(contents.nodelist,publisher.origin_text)
                         obj,startpage,startrow = contents:format(parameter.width,textformat,parameter,startpage,startrow)
                     end
                     objects[#objects + 1] = obj

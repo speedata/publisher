@@ -180,6 +180,18 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         current_textformat = publisher.textformats["text"]
     end
     if options.allocate == "auto" then
+        local get_lineheight = function( nodelist )
+            local head = nodelist
+            while head do
+                if head.id == publisher.glyph_node  then
+                    local ffnumber = node.has_attribute(head,publisher.att_fontfamily)
+                    local fi = publisher.fonts.lookup_fontfamily_number_instance[ffnumber]
+                    return fi.baselineskip
+                end
+                head = head.next
+            end
+            return 0
+        end
         local indent = current_textformat.indent
         local indent_this_row = function(row)
             if not indent  or indent == 0 then return false end
@@ -207,64 +219,65 @@ function Paragraph:format(width_sp, default_textformat_name,options)
             return math.abs(a - b) < 3000
         end
         -- Get the par shape
-        local lineheight = self.nodelist.height + self.nodelist.depth
-        local areaname = options.area
-        local cg = options.current_grid
-        local max_width = cg:width_sp(cg:number_of_columns(areaname))
-        local gridheight = cg.gridheight
-        local parshape = {}
-        local maxframes   = cg:number_of_frames(areaname)
+        local lineheight = get_lineheight(self.nodelist)
+        if lineheight > 0 then
+            local areaname = options.area
+            local cg = options.current_grid
+            local max_width = cg:width_sp(cg:number_of_columns(areaname))
+            local gridheight = cg.gridheight
+            local parshape = {}
+            local maxframes   = cg:number_of_frames(areaname)
 
-        -- this is to remove rounding errors
-        local g_l = math.round(gridheight / lineheight,3)
-        gridheight = lineheight * g_l
+            -- this is to remove rounding errors
+            local g_l = math.round(gridheight / lineheight,3)
+            gridheight = lineheight * g_l
 
-        local accumulated_height
+            local accumulated_height
 
-        -- The row for the paragraph shape. Not identical to the grid row
-        local current_row = 1
-        local grid_row
-        local lowest_grid_row = 0
-        -- grid_lower is the position of the end of the grid row
-        local current_pagenumber = publisher.current_pagenumber
-        -- There might be material on one of the next pages. In this case,
-        -- and only in this case, the next page is already allocated
-        -- See bug #75 on github
-        local maxparshape
-        while publisher.pages[current_pagenumber] do
-            cg = publisher.pages[current_pagenumber].grid
-            local grid_lower = gridheight
-            local framenumber, startrow_grid =  cg:get_advanced_cursor(areaname)
-            -- Let's assume that the already typeset text ends at the next page
-            -- This is not a real fix, but good enough for the moment.
-            -- We need to fix the output/text collect routine
-            -- and typeset the text directly. See #100
-            if framenumber > maxframes then
-                -- w("framenumber %d > maxframes %d",framenumber,maxframes)
-                current_pagenumber = current_pagenumber + 1
-                maxparshape = {0,max_width}
-                framenumber = 1; startrow_grid = 1
-            else
-                maxparshape = nil
-            end
-            while framenumber <= maxframes do
-                grid_row = startrow_grid
-                accumulated_height = lowest_grid_row
-                grid_lower = lowest_grid_row + gridheight
-                lowest_grid_row = lowest_grid_row + cg:number_of_rows(areaname) * gridheight
-                while grid_row <=  cg:number_of_rows(areaname,framenumber) do
-                    local rows = {}
-                    -- maxparshape is only "active" when placed on future, non-initialized pages
-                    -- Hack!
-                    local ps = maxparshape or cg:get_parshape(grid_row,areaname,framenumber)
-                    -- ps is 0 when the line is completely allocated
-                    if ps ~= 0 then
-                        -- accumulated_height starts with 0
-                        if accumulated_height <= grid_lower then
-                            -- When this paragraph row is within the grid row,
-                            -- it must be added to our list
-                            rows[#rows + 1] = current_row
-                        end
+            -- The row for the paragraph shape. Not identical to the grid row
+            local current_row = 1
+            local grid_row
+            local lowest_grid_row = 0
+            -- grid_lower is the position of the end of the grid row
+            local current_pagenumber = publisher.current_pagenumber
+            -- There might be material on one of the next pages. In this case,
+            -- and only in this case, the next page is already allocated
+            -- See bug #75 on github
+            local maxparshape
+            while publisher.pages[current_pagenumber] do
+                cg = publisher.pages[current_pagenumber].grid
+                local grid_lower = gridheight
+                local framenumber, startrow_grid =  cg:get_advanced_cursor(areaname)
+                -- Let's assume that the already typeset text ends at the next page
+                -- This is not a real fix, but good enough for the moment.
+                -- We need to fix the output/text collect routine
+                -- and typeset the text directly. See #100
+                if framenumber > maxframes then
+                    -- w("framenumber %d > maxframes %d",framenumber,maxframes)
+                    current_pagenumber = current_pagenumber + 1
+                    maxparshape = {0,max_width}
+                    framenumber = 1; startrow_grid = 1
+                else
+                    maxparshape = nil
+                end
+                while framenumber <= maxframes do
+                    grid_row = startrow_grid
+                    accumulated_height = lowest_grid_row
+                    grid_lower = lowest_grid_row + gridheight
+                    lowest_grid_row = lowest_grid_row + cg:number_of_rows(areaname) * gridheight
+                    while grid_row <=  cg:number_of_rows(areaname,framenumber) do
+                        local rows = {}
+                        -- maxparshape is only "active" when placed on future, non-initialized pages
+                        -- Hack!
+                        local ps = maxparshape or cg:get_parshape(grid_row,areaname,framenumber)
+                        -- ps is 0 when the line is completely allocated
+                        if ps ~= 0 then
+                            -- accumulated_height starts with 0
+                            if accumulated_height <= grid_lower then
+                                -- When this paragraph row is within the grid row,
+                                -- it must be added to our list
+                                rows[#rows + 1] = current_row
+                            end
 
                             while accumulated_height <= grid_lower do
                                 if is_equal(accumulated_height + lineheight,grid_lower) then
@@ -295,20 +308,21 @@ function Paragraph:format(width_sp, default_textformat_name,options)
                         grid_row = grid_row + 1
                     end
                     startrow_grid = 1
-                framenumber = framenumber + 1
+                    framenumber = framenumber + 1
+                end
+                current_pagenumber = current_pagenumber + 1
             end
-            current_pagenumber = current_pagenumber + 1
-        end
-        -- This should be the last line in the parshape array, so the
-        -- rest of the lines in the paragraph have the full width
-        parshape[#parshape + 1] = {0,max_width}
-        for i,ps in ipairs(parshape) do
-            if indent_this_row(i) then
-                ps[1] = ps[1] + indent
-                ps[2] = ps[2] - indent
+            -- This should be the last line in the parshape array, so the
+            -- rest of the lines in the paragraph have the full width
+            parshape[#parshape + 1] = {0,max_width}
+            for i,ps in ipairs(parshape) do
+                if indent_this_row(i) then
+                    ps[1] = ps[1] + indent
+                    ps[2] = ps[2] - indent
+                end
             end
+            parameter.parshape = parshape
         end
-        parameter.parshape = parshape
     end
 
     local nodelist = node.copy_list(self.nodelist)
