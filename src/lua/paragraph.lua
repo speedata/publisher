@@ -230,10 +230,23 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         -- There might be material on one of the next pages. In this case,
         -- and only in this case, the next page is already allocated
         -- See bug #75 on github
+        local maxparshape
         while publisher.pages[current_pagenumber] do
             cg = publisher.pages[current_pagenumber].grid
             local grid_lower = gridheight
             local framenumber, startrow_grid =  cg:get_advanced_cursor(areaname)
+            -- Let's assume that the already typeset text ends at the next page
+            -- This is not a real fix, but good enough for the moment.
+            -- We need to fix the output/text collect routine
+            -- and typeset the text directly. See #100
+            if framenumber > maxframes then
+                -- w("framenumber %d > maxframes %d",framenumber,maxframes)
+                current_pagenumber = current_pagenumber + 1
+                maxparshape = {0,max_width}
+                framenumber = 1; startrow_grid = 1
+            else
+                maxparshape = nil
+            end
             while framenumber <= maxframes do
                 grid_row = startrow_grid
                 accumulated_height = lowest_grid_row
@@ -241,7 +254,9 @@ function Paragraph:format(width_sp, default_textformat_name,options)
                 lowest_grid_row = lowest_grid_row + cg:number_of_rows(areaname) * gridheight
                 while grid_row <=  cg:number_of_rows(areaname,framenumber) do
                     local rows = {}
-                    local ps = cg:get_parshape(grid_row,areaname,framenumber)
+                    -- maxparshape is only "active" when placed on future, non-initialized pages
+                    -- Hack!
+                    local ps = maxparshape or cg:get_parshape(grid_row,areaname,framenumber)
                     -- ps is 0 when the line is completely allocated
                     if ps ~= 0 then
                         -- accumulated_height starts with 0
