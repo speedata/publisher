@@ -26,6 +26,6 @@ This directory contains some examples. Run each of them in a separate directory 
 
 Have fun!
 
-More examples are in the [github repository](https://github.com/speedata/examples).
+**More examples are in the [github repository](https://github.com/speedata/examples).**
 
 {{template "filelist" .}}
