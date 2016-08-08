@@ -2350,6 +2350,22 @@
         <para>Anzahl der Rasterzellen in vertikaler Richtung.</para>
       </description>
     </attribute>
+    <attribute en="dx" de="dx" optional="yes" since="2.3.11">
+      <description xml:lang="en">
+        <para>Distance between two grid cells (horizontal)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Abstand zwischen zwei Rasterzellen (horizontal)</para>
+      </description>
+    </attribute>
+    <attribute en="dy" de="dy" optional="yes" since="2.3.46">
+      <description xml:lang="en">
+        <para>Distance between two grid cells (horizontal)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Abstand zwischen zwei Rasterzellen (horizontal)</para>
+      </description>
+    </attribute>
     <remark xml:lang="en">
       <para>nx and ny don't make sense in <cmd name="Group"/>.</para>
     </remark>

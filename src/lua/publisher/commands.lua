@@ -833,8 +833,10 @@ function commands.grid( layoutxml,dataxml )
     local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --pg
     local nx     = publisher.read_attribute(layoutxml,dataxml,"nx",     "rawstring")
     local ny     = publisher.read_attribute(layoutxml,dataxml,"ny",     "rawstring")
+    local dx     = publisher.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
+    local dy     = publisher.read_attribute(layoutxml,dataxml,"dy",     "length_sp")
 
-    return { width = width, height = height, nx = tonumber(nx), ny = tonumber(ny) }
+    return { width = width, height = height, nx = tonumber(nx), ny = tonumber(ny), dx = dx, dy = dy }
 end
 
 --- Group
@@ -1692,7 +1694,6 @@ function commands.output( layoutxml,dataxml )
     local area     = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
     local allocate = publisher.read_attribute(layoutxml,dataxml,"allocate", "string", "yes")
     local row      = publisher.read_attribute(layoutxml,dataxml,"row","number")
-
     local maxwidth = publisher.current_grid:width_sp(publisher.current_grid:number_of_columns(area))
     local current_maxwidth = xpath.get_variable("__maxwidth")
     xpath.set_variable("__maxwidth", maxwidth)
@@ -1704,6 +1705,8 @@ function commands.output( layoutxml,dataxml )
     publisher.xpath.set_variable("__area",area)
     publisher.next_row(row,area,1)
 
+
+    local current_grid
 
     for i=1,#tab do
         local contents = publisher.element_contents(tab[i])

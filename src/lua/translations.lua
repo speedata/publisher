@@ -1,4 +1,4 @@
--- generated from genluatranslations.go (2016-08-02 20:16)
+-- generated from genluatranslations.go (2016-08-08 15:47)
 -- do not edit!
 module(...)
 return {
@@ -148,6 +148,8 @@ return {
         ["höhe"] = "height",
         ["nx"] = "nx",
         ["ny"] = "ny",
+        ["dx"] = "dx",
+        ["dy"] = "dy",
         },
       ["Gruppe"] = { "Group",
         ["name"] = "name",

@@ -1366,6 +1366,16 @@
                <a:documentation>Number of grid cells in vertical direction.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="dx">
+               <a:documentation>Distance between two grid cells (horizontal)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="dy">
+               <a:documentation>Distance between two grid cells (horizontal)</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

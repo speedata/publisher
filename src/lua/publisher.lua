@@ -1221,7 +1221,7 @@ function setup_page(pagenumber)
             nx = element_contents(j).nx
             ny = element_contents(j).ny
             dx = element_contents(j).dx
-            dx = element_contents(j).dy
+            dy = element_contents(j).dy
         end
     end
 
