@@ -414,7 +414,7 @@ function row_has_some_space(self,row,areaname)
     end
 
     local width = self:number_of_columns(areaname)
-    local max_x = width - 1
+    local max_x = width
     for x = 1 + frame_margin_left, max_x + frame_margin_left  do
         if not(self.allocation_x_y[x][row + frame_margin_top]) then return true end
     end
