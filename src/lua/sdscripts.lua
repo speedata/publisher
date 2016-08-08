@@ -53,15 +53,6 @@ if cmd=="list-fonts" then
   for i,v in ipairs(filenames_sorted) do
     psname = get_ps_name(fontlist[v])
     if is_xml then
-      print(string.format('<LadeSchriftdatei name="%s" dateiname="%s" />',psname,v))
-    else
-      texio.write_nl(string.format("%-40s %s",v,psname))
-    end
-  end
-  texio.write_nl("----------------------------\n")
-  for i,v in ipairs(filenames_sorted) do
-    psname = get_ps_name(fontlist[v])
-    if is_xml then
       print(string.format('<LoadFontfile name="%s" filename="%s" />',psname,v))
     else
       texio.write_nl(string.format("%-40s %s",v,psname))
