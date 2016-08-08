@@ -30,5 +30,7 @@ die Beispiele einzeln selbst zu übersetzen.
 
 Dieselben Beispiele gibt es auch für das englischsprachige Regelwerk unterhalb von `doc/examples-en`.
 
+**Weitere Beispiele befinden sich im [github repository](https://github.com/speedata/examples).**
+
 
 {{template "filelist" .}}

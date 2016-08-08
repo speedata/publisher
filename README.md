@@ -11,6 +11,11 @@ The speedata Publisher is a full featured database publishing software. It gener
 
 Its built-in layout description language allows you to create almost arbitrary layouts, while keeping the job as simple as possible.
 
+Examples
+--------
+
+There are some examples in the [example repository on github](https://github.com/speedata/examples) and [in the manual](https://speedata.github.io/publisher/manual/examples-en/index.html), these might get merged into that repository.
+
 
 Can I use this in production?
 -----------------------------
