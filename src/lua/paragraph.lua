@@ -218,15 +218,28 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         local is_equal = function(a,b)
             return math.abs(a - b) < 3000
         end
+        -- First we need to get the starting page
+        local current_pagenumber = publisher.current_pagenumber
+        local areaname = options.area
+
+        local frame, _ = publisher.pages[current_pagenumber].grid:get_advanced_cursor(areaname)
+        if frame == publisher.maxframes then
+            -- signal for "page is full"
+            current_pagenumber = current_pagenumber + 1
+        end
+        if not publisher.pages[current_pagenumber] then
+            -- it might be that the page is full and there is no next page
+            -- then we set maxparshape to {0,maxwd} later on
+            current_pagenumber = current_pagenumber - 1
+        end
         -- Get the par shape
         local lineheight = get_lineheight(self.nodelist)
         if lineheight > 0 then
-            local areaname = options.area
-            local cg = options.current_grid
+            local cg = publisher.pages[current_pagenumber].grid
             local max_width = cg:width_sp(cg:number_of_columns(areaname))
             local gridheight = cg.gridheight
             local parshape = {}
-            local maxframes   = cg:number_of_frames(areaname)
+            local maxframes = cg:number_of_frames(areaname)
 
             -- this is to remove rounding errors
             local g_l = math.round(gridheight / lineheight,3)
@@ -238,8 +251,7 @@ function Paragraph:format(width_sp, default_textformat_name,options)
             local current_row = 1
             local grid_row
             local lowest_grid_row = 0
-            -- grid_lower is the position of the end of the grid row
-            local current_pagenumber = publisher.current_pagenumber
+
             -- There might be material on one of the next pages. In this case,
             -- and only in this case, the next page is already allocated
             -- See bug #75 on github

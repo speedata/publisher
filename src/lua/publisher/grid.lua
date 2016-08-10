@@ -103,6 +103,8 @@ end
 
 -- The advance_cursor helps in output/text to maintain the
 -- current position of the start paragraph
+-- Return the overshoot if the next page should start at
+-- a row > 1
 function advance_cursor( self,rows,areaname )
     assert(self)
     local areaname = areaname or publisher.default_areaname
@@ -111,7 +113,22 @@ function advance_cursor( self,rows,areaname )
         areaname = publisher.default_areaname
     end
     local area = self.positioning_frames[areaname]
-    area.advance_rows = area.advance_rows + rows
+    area.advance_rows = (area.advance_rows or 0) + rows
+    area.advance_frame = area.advance_frame or 1
+    local current_frame = self:framenumber(areaname)
+    local ht = area[current_frame].height
+    if area.advance_rows >= ht then
+        local overshoot = area.advance_rows - ht
+        if current_frame + area.advance_frame - 1 < #area then
+            area.advance_rows = overshoot
+            area.advance_frame = area.advance_frame + 1
+            overshoot = 0
+        else
+            area.advance_rows = ht
+        end
+        return overshoot
+    end
+    return 0
 end
 
 -- return framenumber,row
@@ -123,15 +140,20 @@ function get_advanced_cursor( self,areaname )
         areaname = publisher.default_areaname
     end
     local area = self.positioning_frames[areaname]
+    area.advance_frame = area.advance_frame or 1
     local current_frame = self:framenumber(areaname)
     local ht = area[current_frame].height
     if not area.current_row then
         self:set_current_row(1,areaname)
     end
+    local nextframe = current_frame + 1
+    if nextframe > #area then
+        nextframe = publisher.maxframes
+    end
     if area.current_row + area.advance_rows > ht then
-        return current_frame + 1, area.current_row + area.advance_rows - ht
+        return nextframe, area.advance_rows
     else
-        return current_frame, area.current_row + area.advance_rows
+        return current_frame + area.advance_frame - 1, area.current_row + area.advance_rows
     end
 end
 

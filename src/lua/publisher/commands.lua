@@ -3186,7 +3186,17 @@ function commands.text(layoutxml,dataxml)
                     objects[#objects + 1] = obj
                     local ht_rows, extra = cg:height_in_gridcells_sp(obj.height + obj.depth + extra_accumulated, {floor = true})
                     extra_accumulated = extra
-                    cg:advance_cursor(ht_rows,parameter.area)
+                    local overshoot = cg:advance_cursor(ht_rows,parameter.area)
+                    if overshoot > 0 then
+                        if cg:number_of_frames(parameter.area) > cg:framenumber(parameter.area) then
+                            cg:advance_cursor(overshoot,parameter.area)
+                        elseif publisher.pages[cg.pagenumber + 1] then
+                            -- fixme: it could be that the advance_cursor is so large that it should
+                            -- get to some future page..
+                            local next_page_grid = publisher.pages[cg.pagenumber + 1].grid
+                            next_page_grid:advance_cursor(overshoot,parameter.area)
+                        end
+                    end
                 end
             end
             if #state.objects > 0 then

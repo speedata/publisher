@@ -38,6 +38,9 @@ do_luafile("layout_functions.lua")
 factor = 65781
 -- factor = 65781.7
 
+-- no more than this number of frames is allowed on a page
+maxframes = 999
+
 tenpoint_sp    = tex.sp("10pt")
 twelvepoint_sp = tex.sp("12pt")
 tenmm_sp       = tex.sp("10mm")
@@ -525,12 +528,12 @@ local dispatch_table = {
 }
 
 
---- Return the value as an english string. The argument is in the
+--- Return the value as an English string. The argument is in the
 --- current language of the layout file (currently English and German).
 --- All translations are only valid in a context which defaults to the
 --- _global_ context.
 function translate_value( value,context )
-    -- If we don't have a values variable, it must be english
+    -- If we don't have a values variable, it must be English
     if translated_values == nil then return value end
     context = context or "*"
     return translated_values[context][value] or value
