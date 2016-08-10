@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.5">
+    <entry version="2.5.13" date="2016-08-10">
+      <en>Bugfix for large tables (> 200 pages?)</en>
+      <de>Fehlerkorrektur für lange Tabelen (> 200 Seiten?)</de>
+    </entry>
     <entry version="2.5.12" date="2016-08-08">
       <en>Bugfixes for paragraph shape, move LuaTeX binary to different directory</en>
       <de>Fehlerkorrekturen für Absatzformen, verschiebe LuaTeX-Binary in ein anderes Verzeichnis</de>
