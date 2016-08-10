@@ -1286,15 +1286,23 @@ function typeset_table(self)
         return publisher.empty_block()
     end
 
-    local tableheads_extra = {}
-
-
-    -- The dynamic table head on page n should be the same as on n - 1, unless changed
-    setmetatable(tableheads_extra, { __index = function(tbl,idx)
-        if idx < 1 then return nil end
-        return tbl[idx - 1]
+    -- I used to have a metatable with __index here, but this gives a stack overflow
+    -- for large indexes
+    local tableheads_extra = {
+        largest_index = 0
+    }
+    local function get_tableheads_extra( idx )
+        if idx == 0 then return nil end
+        if idx > tableheads_extra.largest_index then
+            return tableheads_extra[tableheads_extra.largest_index]
+         end
+        if tableheads_extra[idx] ~= nil then return tableheads_extra[idx] end
+        return get_tableheads_extra(idx - 1)
     end
-    })
+    local function set_tableheads_extra( idx, value)
+        tableheads_extra.largest_index = math.max( tableheads_extra.largest_index , idx )
+        tableheads_extra[idx] = value
+    end
 
     calculate_height_and_connect_tablehead(self,tablehead_first,tablehead)
     local ht_footer,  ht_footer_last = calculate_height_and_connect_tablefoot(self,tablefoot,tablefoot_last)
@@ -1341,7 +1349,8 @@ function typeset_table(self)
     local function showheader( tablepart )
         -- We can skip the dynamic header on pages where the first line is the next dynamic header
         if omit_head_on_pages[tablepart] then return false end
-        if tableheads_extra[tablepart_absolute] ~= nil then return true end
+
+        if get_tableheads_extra(tablepart_absolute) ~= nil then return true end
         return false
     end
 
@@ -1358,7 +1367,7 @@ function typeset_table(self)
             end
         end
         if showheader(i) then
-            ht = ht + tableheads_extra[i].height + self.rowsep
+            ht = ht + get_tableheads_extra(i).height + self.rowsep
         end
         return ht
     end
@@ -1392,8 +1401,8 @@ function typeset_table(self)
 
 
     local function get_tablehead( page )
-        if tableheads_extra[page] then
-            return node.copy_list(tableheads_extra[page])
+        if get_tableheads_extra(page) then
+            return node.copy_list(get_tableheads_extra(page))
         end
         local tmp = node.new("hlist")
         return tmp
@@ -1442,9 +1451,9 @@ function typeset_table(self)
         -- We can mark a row as "use_as_head" to turn the row into a dynamic head
         local use_as_head = node.has_attribute(rows[i],publisher.att_use_as_head)
         if use_as_head == 1 then
-            tableheads_extra[#splits + 1] = node.copy(rows[i])
+            set_tableheads_extra(#splits + 1,node.copy(rows[i]))
         elseif use_as_head == 2 then
-            tableheads_extra[#splits + 1] = publisher.create_empty_hbox_with_width(1)
+            set_tableheads_extra(#splits + 1,publisher.create_empty_hbox_with_width(1))
         end
         local shiftup = node.has_attribute(rows[i],publisher.att_tr_shift_up) or 0
         if shiftup > 0 then
