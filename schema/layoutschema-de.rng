@@ -29,7 +29,7 @@
    </define>
    <define name="e_AddToList">
       <element name="AddToList">
-         <a:documentation>Dieses Kommando kann innerhalb von  benutzt werden. Wenn es ausgeführt wird, wird eine Schlüssel/Wert-Kombination in eine Liste eingefügt. Dieser Befehl ist derzeitig nicht vollständig getestet und wird noch überarbeitet.</a:documentation>
+         <a:documentation>Dieses Kommando kann innerhalb von Action benutzt werden. Wenn es ausgeführt wird, wird eine Schlüssel/Wert-Kombination in eine Liste eingefügt. Dieser Befehl ist derzeitig nicht vollständig getestet und wird noch überarbeitet.</a:documentation>
          <attribute name="select">
             <a:documentation>Wert, der in der Liste gespeichert werden soll.</a:documentation>
          </attribute>
@@ -214,7 +214,7 @@
    </define>
    <define name="e_Attribute">
       <element name="Attribute">
-         <a:documentation>Erzeugt eine Datenstruktur, die mithilfe von  auf Festplatte gespeichert werden kann.</a:documentation>
+         <a:documentation>Erzeugt eine Datenstruktur, die mithilfe von SaveDataset auf Festplatte gespeichert werden kann.</a:documentation>
          <attribute name="name">
             <a:documentation>Name des Attributs, das erzeugt wird.</a:documentation>
          </attribute>
@@ -254,7 +254,7 @@
    </define>
    <define name="e_Barcode">
       <element name="Barcode">
-         <a:documentation>Erzeugt einen 1D oder 2D Strichcode (barcode), der in  ausgegeben werden kann.</a:documentation>
+         <a:documentation>Erzeugt einen 1D oder 2D Strichcode (barcode), der in PlaceObject ausgegeben werden kann.</a:documentation>
          <attribute name="select">
             <a:documentation>Wert, der als Strichcode kodiert werden soll.</a:documentation>
          </attribute>
@@ -404,7 +404,7 @@
    </define>
    <define name="e_Case">
       <element name="Case">
-         <a:documentation>Stellt einen Fall einer Fallunterscheidung () dar. Der erste Fall, der zutrifft, wird ausgeführt. Weitere Fälle werden nicht betrachtet. Wird kein Fall erfüllt, dann wird, falls vorhanden, das Element  ausgeführt.</a:documentation>
+         <a:documentation>Stellt einen Fall einer Fallunterscheidung (Switch) dar. Der erste Fall, der zutrifft, wird ausgeführt. Weitere Fälle werden nicht betrachtet. Wird kein Fall erfüllt, dann wird, falls vorhanden, das Element Otherwise ausgeführt.</a:documentation>
          <attribute name="test">
             <a:documentation>Für jeden Fall in einer Fallunterscheidung wird überprüft, ob die Bedingung erfüllt ist und bei Übereinstimmung die Kindelemente ausgeführt.</a:documentation>
          </attribute>
@@ -618,7 +618,7 @@
       <element name="Color">
          <a:documentation>Auf eine andere Textfarbe wechseln</a:documentation>
          <attribute name="name">
-            <a:documentation>Der Name der Farbe. Muss mit  vorher definiert werden.</a:documentation>
+            <a:documentation>Der Name der Farbe. Muss mit DefineColor vorher definiert werden.</a:documentation>
          </attribute>
          <zeroOrMore>
             <choice>
@@ -647,7 +647,7 @@
    </define>
    <define name="e_Contents">
       <element name="Contents">
-         <a:documentation>Kennzeichnet den Inhalt einer .</a:documentation>
+         <a:documentation>Kennzeichnet den Inhalt einer Group.</a:documentation>
          <oneOrMore>
             <optional>
                <ref name="e_Bookmark"></ref>
@@ -740,7 +740,7 @@
          </optional>
          <optional>
             <attribute name="align">
-               <a:documentation>Die horizontale Ausrichtung des Tabelleninhalts. Kann in einer Zelle () überschrieben werden.</a:documentation>
+               <a:documentation>Die horizontale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (Td) überschrieben werden.</a:documentation>
                <choice>
                   <value>left</value>
                   <a:documentation>Die Tabellenzellen dieser Spalte werden linksbündig ausgerichtet.</a:documentation>
@@ -874,7 +874,7 @@
    </define>
    <define name="e_DefineFontfamily">
       <element name="DefineFontfamily">
-         <a:documentation>Das Element  definiert eine Schriftfamilie, auf in den Elementen , ,  und  mit dem Attribut schriftart zugegriffen werden kann.</a:documentation>
+         <a:documentation>Das Element DefineFontfamily definiert eine Schriftfamilie, auf in den Elementen Paragraph, Textblock, Fontface und Table mit dem Attribut schriftart zugegriffen werden kann.</a:documentation>
          <attribute name="name">
             <a:documentation>Interner Name, unter dem die Schriftfamilie später angesprochen wird.</a:documentation>
          </attribute>
@@ -975,7 +975,7 @@
          </optional>
          <optional>
             <attribute name="break-below">
-               <a:documentation>Umbruch unterhalb des Textes verbieten/erlauben. Das funktioniert nur, wenn der nachfolgende Text innerhalb derselben  oder  Umgebung enthalten ist.</a:documentation>
+               <a:documentation>Umbruch unterhalb des Textes verbieten/erlauben. Das funktioniert nur, wenn der nachfolgende Text innerhalb derselben PlaceObject oder Output Umgebung enthalten ist.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>Umbruch unterhalb des Textes erlauben (Voreinstellung).</a:documentation>
@@ -1010,7 +1010,7 @@
    </define>
    <define name="e_Element">
       <element name="Element">
-         <a:documentation>Erzeugt eine Datenstruktur, die mithilfe von  auf Festplatte gespeichert werden kann.</a:documentation>
+         <a:documentation>Erzeugt eine Datenstruktur, die mithilfe von SaveDataset auf Festplatte gespeichert werden kann.</a:documentation>
          <attribute name="name">
             <a:documentation>Name des Elements, das erzeugt wird.</a:documentation>
          </attribute>
@@ -1345,7 +1345,7 @@
    </define>
    <define name="e_Grid">
       <element name="Grid">
-         <a:documentation>Überschreibt das allgemeine Raster aus .</a:documentation>
+         <a:documentation>Überschreibt das allgemeine Raster aus SetGrid.</a:documentation>
          <optional>
             <attribute name="width">
                <a:documentation>Breite einer Rasterzelle.</a:documentation>
@@ -1381,7 +1381,7 @@
    </define>
    <define name="e_Group">
       <element name="Group">
-         <a:documentation>Erzeugt einen virtuellen Bereich, in dem Elemente platziert werden können. Ausgegeben werden die Gruppen anschließend mit .</a:documentation>
+         <a:documentation>Erzeugt einen virtuellen Bereich, in dem Elemente platziert werden können. Ausgegeben werden die Gruppen anschließend mit PlaceObject.</a:documentation>
          <attribute name="name">
             <a:documentation>Der Name der anzulegenden Gruppe.</a:documentation>
          </attribute>
@@ -1403,7 +1403,7 @@
       <element name="HSpace">
          <a:documentation>Zwei Modi: bei einer gegebenen Breite wird ein Leerraum mit dieser Breite erzeugt.
       Ohne Breitenangabe: erzeugt einen horizontalen dehnbaren Lerrraum. Der Leerraum hat die minimale Größe 0 und die maximale Größe »unendlich«. Sinnvoll nutzbar in einzeiligen Absätzen. Im Fließtext wird es vermutlich unerwartete Ergebnisse hervorrufen. Der Leerraum in einer Zeile verteilt sich normalerweise gleichmäßig über jeden Wortzwischenraum. Wenn ein
-       enthalten ist, erhalten alle Leerraume die minimale Breite, nur der dehnbare Leerraum hat den überschüssigen Leerraum »angehäuft«.</a:documentation>
+      HSpace enthalten ist, erhalten alle Leerraume die minimale Breite, nur der dehnbare Leerraum hat den überschüssigen Leerraum »angehäuft«.</a:documentation>
          <optional>
             <attribute name="width">
                <a:documentation>Optionale Breite des Leerraums</a:documentation>
@@ -1649,7 +1649,7 @@
       <element name="LoadFontfile">
          <a:documentation>Das Element LadeSchriftdatei weist einer physikalischen Schriftdatei einem internen Namen zu.</a:documentation>
          <attribute name="name">
-            <a:documentation>Der interne Name, unter dem die Schriftart im Element  angesprochen wird.</a:documentation>
+            <a:documentation>Der interne Name, unter dem die Schriftart im Element DefineFontfamily angesprochen wird.</a:documentation>
          </attribute>
          <attribute name="filename">
             <a:documentation>Der Dateiname mit Endung, ohne Pfad.</a:documentation>
@@ -1691,7 +1691,7 @@
    </define>
    <define name="e_Layout">
       <element name="Layout">
-         <a:documentation>Das -Element ist das Wurzelelement im Regelwerk.</a:documentation>
+         <a:documentation>Das Layout-Element ist das Wurzelelement im Regelwerk.</a:documentation>
          <optional>
             <attribute name="version">
                <a:documentation>Gibt die minimale Version des Publishers an. Format: 1.6.13. Die letzten Ziffern können weggelassen werden. Falls die erste oder die zweite Ziffer der Versionsangabe unterschiedlich ist, wird eine Warnung ausgegeben.</a:documentation>
@@ -2006,7 +2006,7 @@
          <a:documentation>Gibt eine Textmeldung auf der Konsole und in der Protokolldatei aus.</a:documentation>
          <optional>
             <attribute name="select">
-               <a:documentation>Inhalt der Nachricht. Alternativ dazu: Kindelemente Wert innerhalb des Elements »«</a:documentation>
+               <a:documentation>Inhalt der Nachricht. Alternativ dazu: Kindelemente Wert innerhalb des Elements »Message«</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2198,7 +2198,7 @@
          </optional>
          <optional>
             <attribute name="mainlanguage">
-               <a:documentation>Die Sprache (Silbentrennung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist. Sie kann global über die Kommandozeile gesteuert werden oder für jeden  einzeln.</a:documentation>
+               <a:documentation>Die Sprache (Silbentrennung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist. Sie kann global über die Kommandozeile gesteuert werden oder für jeden Paragraph einzeln.</a:documentation>
                <choice>
                   <value>German</value>
                   <a:documentation>Auf deutsche Trennmuster umschalten.</a:documentation>
@@ -2324,7 +2324,7 @@
    </define>
    <define name="e_Otherwise">
       <element name="Otherwise">
-         <a:documentation>Zweig, der bei  ausgeführt wird, wenn kein  wahr ist.</a:documentation>
+         <a:documentation>Zweig, der bei Switch ausgeführt wird, wenn kein Case wahr ist.</a:documentation>
          <oneOrMore>
             <optional>
                <ref name="e_Action"></ref>
@@ -2499,7 +2499,7 @@
    </define>
    <define name="e_Output">
       <element name="Output">
-         <a:documentation>Dieser Befehl ist ähnlich zu  und dient derzeit nur dazu, Text auszugeben, der auf mehrere Seite umbrochen werden kann und sich dem freien Platz auf der Seite anpassen kann.</a:documentation>
+         <a:documentation>Dieser Befehl ist ähnlich zu PlaceObject und dient derzeit nur dazu, Text auszugeben, der auf mehrere Seite umbrochen werden kann und sich dem freien Platz auf der Seite anpassen kann.</a:documentation>
          <optional>
             <attribute name="allocate">
                <a:documentation>Soll Text um schon vorhandene (belegte) Bereiche fließen? Die Rasterhöhe muss gleich dem Zeilenabstand der Textschriftart sein. Außerdem funktioniert dies nur auf der aktuellen Seite.</a:documentation>
@@ -2575,7 +2575,7 @@
          </optional>
          <optional>
             <attribute name="color">
-               <a:documentation>Farbe des Absatzes. Muss vorher mit  definiert worden sein.</a:documentation>
+               <a:documentation>Farbe des Absatzes. Muss vorher mit DefineColor definiert worden sein.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2689,7 +2689,7 @@
             <a:documentation>Wenn der XPath-Ausdruck »wahr« ergibt, dann wird diese Seite als Vorlage genommen.</a:documentation>
          </attribute>
          <attribute name="name">
-            <a:documentation>Name der Seitenvorlage. Der Name ist zu Informationszwecken und zur Auswahl bei .</a:documentation>
+            <a:documentation>Name der Seitenvorlage. Der Name ist zu Informationszwecken und zur Auswahl bei NewPage.</a:documentation>
          </attribute>
          <ref name="e_Margin"></ref>
          <optional>
@@ -2988,7 +2988,7 @@
    </define>
    <define name="e_Position">
       <element name="Position">
-         <a:documentation>Ein Element zum aktuellen  hinzufügen.</a:documentation>
+         <a:documentation>Ein Element zum aktuellen Overlay hinzufügen.</a:documentation>
          <attribute name="x">
             <a:documentation>Die horizontale Position (0=links, 100=rechts).</a:documentation>
          </attribute>
@@ -3076,7 +3076,7 @@
          </attribute>
          <optional>
             <attribute name="mode">
-               <a:documentation>Name des Modus. Dieser muss bei  exakt übereinstimmen. Damit ist es möglich für dasselbe Element unterschiedliche Regeln aufzurufen.</a:documentation>
+               <a:documentation>Name des Modus. Dieser muss bei Record exakt übereinstimmen. Damit ist es möglich für dasselbe Element unterschiedliche Regeln aufzurufen.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>
@@ -3090,7 +3090,7 @@
          </attribute>
          <optional>
             <attribute name="mode">
-               <a:documentation>Name des Modus der mit dem in  übereinstimmt.</a:documentation>
+               <a:documentation>Name des Modus der mit dem in ProcessNode übereinstimmt.</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>
@@ -3239,7 +3239,7 @@
          </optional>
          <optional>
             <attribute name="attributes">
-               <a:documentation>Der Variablenname (als XPath-Ausdruck, also $foo), der -Elemente beinhaltet. Diese Attribute werden zum Wurzelelement hinzugefügt.</a:documentation>
+               <a:documentation>Der Variablenname (als XPath-Ausdruck, also $foo), der Attribute-Elemente beinhaltet. Diese Attribute werden zum Wurzelelement hinzugefügt.</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>
@@ -3269,9 +3269,9 @@
    </define>
    <define name="e_SavePages">
       <element name="SavePages">
-         <a:documentation>Alle Ausgaben innerhalb von  werden intern gespeichert und nicht ins PDF ausgegeben. Hilfreich wenn die Ausgabe ggf. verworfen werden soll.</a:documentation>
+         <a:documentation>Alle Ausgaben innerhalb von SavePages werden intern gespeichert und nicht ins PDF ausgegeben. Hilfreich wenn die Ausgabe ggf. verworfen werden soll.</a:documentation>
          <attribute name="name">
-            <a:documentation>Der Name der Ausgabe, die verworfen wird. Kann später mit  wiedergeholt werden.</a:documentation>
+            <a:documentation>Der Name der Ausgabe, die verworfen wird. Kann später mit InsertPages wiedergeholt werden.</a:documentation>
          </attribute>
          <oneOrMore>
             <interleave>
@@ -3501,7 +3501,7 @@
    </define>
    <define name="e_Switch">
       <element name="Switch">
-         <a:documentation>Erzeugt eine „Wenn-Dann-Abfrage“. Das heißt, für jedes Kindelement  wird überprüft, ob die Bedingung erfüllt ist. Wenn ja, dann wird der Inhalt des Kindelements  ausgeführt und die Verarbeitung hinter der Fallunterscheidung fortgesetzt. Wenn keine Bedingung erfüllt wurde und ein Element  gefunden wurde, wird der         Inhalt des Elements  ausgeführt. Durch das frühzeitige Abbrechen werden nachfolgende Fälle nicht weiter untersucht (siehe Beispiel).</a:documentation>
+         <a:documentation>Erzeugt eine „Wenn-Dann-Abfrage“. Das heißt, für jedes Kindelement Case wird überprüft, ob die Bedingung erfüllt ist. Wenn ja, dann wird der Inhalt des Kindelements Case ausgeführt und die Verarbeitung hinter der Fallunterscheidung fortgesetzt. Wenn keine Bedingung erfüllt wurde und ein Element Otherwise gefunden wurde, wird der         Inhalt des Elements Otherwise ausgeführt. Durch das frühzeitige Abbrechen werden nachfolgende Fälle nicht weiter untersucht (siehe Beispiel).</a:documentation>
          <oneOrMore>
             <ref name="e_Case"></ref>
          </oneOrMore>
@@ -3941,7 +3941,7 @@
    </define>
    <define name="e_Text">
       <element name="Text">
-         <a:documentation>Erzeugt einen Text, der über die Grenzen von Positionierungsrahmen umbrechen kann. Wird mit  benutzt.</a:documentation>
+         <a:documentation>Erzeugt einen Text, der über die Grenzen von Positionierungsrahmen umbrechen kann. Wird mit Output benutzt.</a:documentation>
          <optional>
             <attribute name="color">
                <a:documentation>Name der Farbe im Textblock.</a:documentation>
@@ -4404,7 +4404,7 @@
       <element name="While">
          <a:documentation>Erzeugt eine Schleife, die wiederholt durchlaufen wird. Die Kindelemente werden so oft ausgeführt, solange die Bedingung im Attribut bedingung wahr ergibt.</a:documentation>
          <attribute name="test">
-            <a:documentation>Für jedes Mal, das die Schleife durchlaufen werden soll, muss die Bedingung im Attribut erfüllt sein. Die Bedingung wird am Anfang der Schleife überprüft. Eine Schleife, bei der die Bedingung am Ende der Schleife geprüft wird, ist .</a:documentation>
+            <a:documentation>Für jedes Mal, das die Schleife durchlaufen werden soll, muss die Bedingung im Attribut erfüllt sein. Die Bedingung wird am Anfang der Schleife überprüft. Eine Schleife, bei der die Bedingung am Ende der Schleife geprüft wird, ist Until.</a:documentation>
          </attribute>
          <oneOrMore>
             <interleave>

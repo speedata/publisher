@@ -9,7 +9,7 @@ import (
 
 type ChoiceXML struct {
 	Description []DescriptionXML `xml:"description"`
-	En          string           `xml:"en,attr"`
+	Name        string           `xml:"en,attr"`
 }
 
 type NameAtt struct {
@@ -19,7 +19,7 @@ type NameAtt struct {
 type CommandsxmlAttribute struct {
 	Description []DescriptionXML `xml:"description"`
 	Optional    string           `xml:"optional,attr"`
-	En          string           `xml:"en,attr"`
+	Name        string           `xml:"en,attr"`
 	Choice      []ChoiceXML      `xml:"choice"`
 	Reference   NameAtt          `xml:"referenceattribute"`
 	AllowXPath  string           `xml:"allowxpath,attr"`
@@ -47,10 +47,7 @@ func (desc *DescriptionXML) UnmarshalXML(d *xml.Decoder, start xml.StartElement)
 			if v.Name.Local == "cmd" {
 				for _, attribute := range v.Attr {
 					if attribute.Name.Local == "name" {
-						switch desc.Lang {
-						case "en":
-							txt = append(txt, attribute.Value)
-						}
+						txt = append(txt, attribute.Value)
 					}
 				}
 			}
@@ -77,7 +74,7 @@ type RulesXML struct {
 
 type CommandsxmlCommand struct {
 	Description   []DescriptionXML       `xml:"description"`
-	En            string                 `xml:"en,attr"`
+	Name          string                 `xml:"en,attr"`
 	Attributes    []CommandsxmlAttribute `xml:"attribute"`
 	Childelements ChildelementsXML       `xml:"childelements"`
 	Rules         []RulesXML             `xml:"rules"`

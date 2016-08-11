@@ -2476,7 +2476,7 @@ function commands.save_dataset( layoutxml,dataxml )
     for i=1,#tab do
         if tab[i].elementname=="Element" then
             tmp[#tmp + 1] = publisher.element_contents(tab[i])
-        elseif tab[i].elementname=="SortiereSequenz" or tab[i].elementname=="Sequenz" or tab[i].elementname=="elementstructure" or tab[i].elementname=="Makeindex" then
+        elseif  tab[i].elementname=="elementstructure" or tab[i].elementname=="Makeindex" then
             for j=1,#publisher.element_contents(tab[i]) do
                 tmp[#tmp + 1] = publisher.element_contents(tab[i])[j]
             end

@@ -139,11 +139,11 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 			}
 		}
 		def := xml.StartElement{Name: xml.Name{Local: "define"}}
-		def.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: "e_" + cmd.En}}
+		def.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: "e_" + cmd.Name}}
 		enc.EncodeToken(def)
 
 		elt := xml.StartElement{Name: xml.Name{Local: "element"}}
-		elt.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: cmd.En}}
+		elt.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: cmd.Name}}
 		enc.EncodeToken(elt)
 
 		doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
@@ -156,7 +156,7 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 			}
 
 			attelt := attributeElement.Copy()
-			attelt.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: attr.En}}
+			attelt.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: attr.Name}}
 			enc.EncodeToken(attelt)
 
 			doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
@@ -168,7 +168,7 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 				enc.EncodeToken(choiceElement.Copy())
 				for _, choice := range attr.Choice {
 					enc.EncodeToken(valueElement.Copy())
-					enc.EncodeToken(xml.CharData(choice.En))
+					enc.EncodeToken(xml.CharData(choice.Name))
 					enc.EncodeToken(valueElement.End())
 
 					doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
@@ -199,7 +199,7 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 						enc.EncodeToken(choiceElement.Copy())
 						for _, choice := range attrdefinition.Choices {
 							enc.EncodeToken(valueElement.Copy())
-							enc.EncodeToken(xml.CharData(choice.En))
+							enc.EncodeToken(xml.CharData(choice.Name))
 							enc.EncodeToken(valueElement.End())
 
 							doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
