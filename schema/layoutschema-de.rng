@@ -11,7 +11,7 @@
       <element name="A">
          <a:documentation>Hyperlink auf eine URL einfügen.</a:documentation>
          <attribute name="href">
-            <a:documentation>Das Ziel des Hyperlinks. Beispiel: http://www.speedata.de</a:documentation>
+            <a:documentation>Das Ziel des Hyperlinks. Beispiel: https://www.speedata.de</a:documentation>
          </attribute>
          <ref name="e_Value"></ref>
       </element>
@@ -910,7 +910,7 @@
          </optional>
          <optional>
             <attribute name="orphan">
-               <a:documentation>Wenn nein, Schusterjungen verhindern (erste Zeile eines Paragraphes ist auf der vorherigen Seite). Voreinstellung ist nein.</a:documentation>
+               <a:documentation>Wenn nein, Schusterjungen verhindern (erste Zeile eines Absatzes ist auf der vorherigen Seite). Voreinstellung ist nein.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>Schusterjungen erlauben.</a:documentation>
@@ -921,7 +921,7 @@
          </optional>
          <optional>
             <attribute name="widow">
-               <a:documentation>Wenn nein, Hurenkinder verhindern (letzte Zeile eines Paragraphes ist auf der nächsten Seite). Voreinstellung ist nein.</a:documentation>
+               <a:documentation>Wenn nein, Hurenkinder verhindern (letzte Zeile eines Absatzes ist auf der nächsten Seite). Voreinstellung ist nein.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>Hurenkinder erlauben.</a:documentation>
@@ -1406,7 +1406,7 @@
        enthalten ist, erhalten alle Leerraume die minimale Breite, nur der dehnbare Leerraum hat den überschüssigen Leerraum »angehäuft«.</a:documentation>
          <optional>
             <attribute name="width">
-               <a:documentation>Optionale Breite des Leeraums</a:documentation>
+               <a:documentation>Optionale Breite des Leerraums</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2575,7 +2575,7 @@
          </optional>
          <optional>
             <attribute name="color">
-               <a:documentation>Farbe des Paragraphes. Muss vorher mit  definiert worden sein.</a:documentation>
+               <a:documentation>Farbe des Absatzes. Muss vorher mit  definiert worden sein.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2922,7 +2922,7 @@
                   <value>top</value>
                   <a:documentation>Das Objekt wird oben ausgerichtet.</a:documentation>
                   <value>middle</value>
-                  <a:documentation>Das Objekt wird so platziert, dass der Leerraum überhalb und unterhalb derselbe ist.</a:documentation>
+                  <a:documentation>Das Objekt wird so platziert, dass der Leerraum oberhalb und unterhalb derselbe ist.</a:documentation>
                   <value>bottom</value>
                   <a:documentation>Das Objekt wird unten ausgerichtet.</a:documentation>
                </choice>
@@ -3047,7 +3047,7 @@
    </define>
    <define name="e_PositioningFrame">
       <element name="PositioningFrame">
-         <a:documentation>Beschreibt einen rechteckigen Bereich, in dem Elemente platziert werden können. Inhalte in diesen Bereichen werden bei Platzmangel automatisch in den nächsten Rahmen deselben Bereichs platziert.</a:documentation>
+         <a:documentation>Beschreibt einen rechteckigen Bereich, in dem Elemente platziert werden können. Inhalte in diesen Bereichen werden bei Platzmangel automatisch in den nächsten Rahmen desselben Bereichs platziert.</a:documentation>
          <attribute name="width">
             <a:documentation>Breite des Rahmens in Rasterkästen</a:documentation>
          </attribute>
@@ -3481,7 +3481,7 @@
                <a:documentation>Wenn Duplikate gelöscht werden sollen, steht hier das Attribut mit dem Inhalt.</a:documentation>
             </attribute>
          </optional>
-         <attribute name="criterium">
+         <attribute name="criterion">
             <a:documentation>Attributname, nach dem sortiert werden soll.</a:documentation>
          </attribute>
          <empty></empty>
@@ -4083,7 +4083,7 @@
          </optional>
          <optional>
             <attribute name="origin-x">
-               <a:documentation>Der Ursprung für Matrix-Tranformation. Muss links, mitte oder rechts oder eine Zahl von 0 bis 100 (0 = links, 100 = rechts) sein.</a:documentation>
+               <a:documentation>Der Ursprung für Matrix-Transformation. Muss links, mitte oder rechts oder eine Zahl von 0 bis 100 (0 = links, 100 = rechts) sein.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -4396,7 +4396,7 @@
    </define>
    <define name="e_VSpace">
       <element name="VSpace">
-         <a:documentation>Erzeugt einen vertikal dehnbaren Lerrraum. Der Leerraum hat die minimale Höhe 0 und die maximale Höhe »unendlich«. Sinnvoll nutzbar in Tabellenzellen.</a:documentation>
+         <a:documentation>Erzeugt einen vertikal dehnbaren Leerraum. Der Leerraum hat die minimale Höhe 0 und die maximale Höhe »unendlich«. Sinnvoll nutzbar in Tabellenzellen.</a:documentation>
          <empty></empty>
       </element>
    </define>

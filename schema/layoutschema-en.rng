@@ -9,9 +9,9 @@
    </start>
    <define name="e_A">
       <element name="A">
-         <a:documentation>Insert Hyperlink to a URL.</a:documentation>
+         <a:documentation>Insert hyperlink to a URL.</a:documentation>
          <attribute name="href">
-            <a:documentation>The destination of the hyperlink (URI). Example: http://www.speedata.de</a:documentation>
+            <a:documentation>The destination of the hyperlink (URI). Example: https://www.speedata.de</a:documentation>
          </attribute>
          <ref name="e_Value"></ref>
       </element>
@@ -214,7 +214,7 @@
    </define>
    <define name="e_Attribute">
       <element name="Attribute">
-         <a:documentation>Create a data structure that can be saved to the harddrive with SaveDataset.</a:documentation>
+         <a:documentation>Create a data structure that can be saved to the hard drive with SaveDataset.</a:documentation>
          <attribute name="name">
             <a:documentation>Name of the attribute that is created.</a:documentation>
          </attribute>
@@ -226,7 +226,7 @@
    </define>
    <define name="e_B">
       <element name="B">
-         <a:documentation>Switch to fontface »bold«</a:documentation>
+         <a:documentation>Switch to font weight »bold«</a:documentation>
          <zeroOrMore>
             <choice>
                <ref name="e_A"></ref>
@@ -260,7 +260,7 @@
          </attribute>
          <optional>
             <attribute name="fontface">
-               <a:documentation>Name of the fontface of the text that can be placed beneath the barcode. Not used in all codes.</a:documentation>
+               <a:documentation>Name of the font of the text that can be placed beneath the barcode. Not used in all codes.</a:documentation>
             </attribute>
          </optional>
          <attribute name="type">
@@ -307,7 +307,7 @@
       <element name="Bold">
          <a:documentation>Name of the font face that should be used when switching to »bold«.</a:documentation>
          <attribute name="fontface">
-            <a:documentation>Name of the fontface for bold.</a:documentation>
+            <a:documentation>Name of the font for bold.</a:documentation>
          </attribute>
          <empty></empty>
       </element>
@@ -316,7 +316,7 @@
       <element name="BoldItalic">
          <a:documentation>Name of the font face that should be used when switching to »bold italic«.</a:documentation>
          <attribute name="fontface">
-            <a:documentation>Name of the fontface for bold italic.</a:documentation>
+            <a:documentation>Name of the font for bold italic.</a:documentation>
          </attribute>
          <empty></empty>
       </element>
@@ -1402,7 +1402,7 @@
    <define name="e_HSpace">
       <element name="HSpace">
          <a:documentation>Two modes: with a given width, the space takes up the given amount. 
-      With no width given: create a horizontal stretching space. The space will take up no width as a minimum but is able to stretch up to infinity. Useful in single line contexts. In normal text there will surprising little stretching involved due to the global paragraph optimization alorithm.
+      With no width given: create a horizontal stretching space. The space will take up no width as a minimum but is able to stretch up to infinity. Useful in single line contexts. In normal text there will surprising little stretching involved due to the global paragraph optimization algorithm.
         You will see that all other word spaces will have the minimum width and the excessive whitespace is accumulated at the strechable space.</a:documentation>
          <optional>
             <attribute name="width">
@@ -1575,7 +1575,7 @@
          </optional>
          <optional>
             <attribute name="clip">
-               <a:documentation>When yes, the image keeps its apsect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</a:documentation>
+               <a:documentation>When yes, the image keeps its aspect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>Keep the aspect ratio and cut off left/right or top/bottom edges.</a:documentation>
@@ -1586,7 +1586,7 @@
          </optional>
          <optional>
             <attribute name="minwidth">
-               <a:documentation>The nimimum width of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells), a length or the value »100%« for full width image.</a:documentation>
+               <a:documentation>The minimum width of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells), a length or the value »100%« for full width image.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1596,7 +1596,7 @@
          </optional>
          <optional>
             <attribute name="dpiwarn">
-               <a:documentation>Warn if the image gets lower resultion than given.</a:documentation>
+               <a:documentation>Warn if the image gets lower resolution than given.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2505,7 +2505,7 @@
                <a:documentation>Should text flow around already allocated objects? This currently works on the current page only.</a:documentation>
                <choice>
                   <value>yes</value>
-                  <a:documentation>Regular behaviour: the text does not flow around objects.</a:documentation>
+                  <a:documentation>Regular behavior: the text does not flow around objects.</a:documentation>
                   <value>auto</value>
                   <a:documentation>Text flows around allocated objects.</a:documentation>
                   <data type="string">
@@ -2684,7 +2684,7 @@
    </define>
    <define name="e_Pagetype">
       <element name="Pagetype">
-         <a:documentation>Define a master page. A master page is chosen depending on the criterium given with the attribute »test«.</a:documentation>
+         <a:documentation>Define a master page. A master page is chosen depending on the criterion given with the attribute »test«.</a:documentation>
          <attribute name="test">
             <a:documentation>If this xpath expression evaluates to true, this page is taken as a master page.</a:documentation>
          </attribute>
@@ -2715,7 +2715,7 @@
    </define>
    <define name="e_PDFOptions">
       <element name="PDFOptions">
-         <a:documentation>Set PDF options like nuber of copies and such</a:documentation>
+         <a:documentation>Set PDF options like number of copies and such</a:documentation>
          <optional>
             <attribute name="duplex">
                <a:documentation>Set viewer preference to one or two page printing. Default: empty.</a:documentation>
@@ -3179,7 +3179,7 @@
       <element name="Regular">
          <a:documentation>The (symbolic) name of the fontface for regular text, i.e. without bold or italic.</a:documentation>
          <attribute name="fontface">
-            <a:documentation>The symbolic name fo the font file.</a:documentation>
+            <a:documentation>The symbolic name of the font file.</a:documentation>
          </attribute>
          <empty></empty>
       </element>
@@ -3198,7 +3198,7 @@
          </attribute>
          <optional>
             <attribute name="rulewidth">
-               <a:documentation>The rule thicknes given in grid cells or as a length.</a:documentation>
+               <a:documentation>The rule thickness given in grid cells or as a length.</a:documentation>
             </attribute>
          </optional>
          <attribute name="length">
@@ -3481,7 +3481,7 @@
                <a:documentation>If this attribute is used then it contains the name of the data-attribute that gets evaluated when duplicates are eliminated.</a:documentation>
             </attribute>
          </optional>
-         <attribute name="criterium">
+         <attribute name="criterion">
             <a:documentation>Name of the attribute that is used as the sort key.</a:documentation>
          </attribute>
          <empty></empty>
@@ -3501,7 +3501,7 @@
    </define>
    <define name="e_Switch">
       <element name="Switch">
-         <a:documentation>Create an if-then-else construct. The test attribute of each Case commands is evaluated until it yields true. The contents of the Case gets executed. If no test suceeds, the (optional) Otherwise gets executed.</a:documentation>
+         <a:documentation>Create an if-then-else construct. The test attribute of each Case commands is evaluated until it yields true. The contents of the Case gets executed. If no test succeeds, the (optional) Otherwise gets executed.</a:documentation>
          <oneOrMore>
             <ref name="e_Case"></ref>
          </oneOrMore>
@@ -3683,22 +3683,22 @@
          </optional>
          <optional>
             <attribute name="border-left">
-               <a:documentation>The width (tickness) of the left border. The border is inside the cell.</a:documentation>
+               <a:documentation>The width (thickness) of the left border. The border is inside the cell.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="border-right">
-               <a:documentation>The width (tickness) of the right border. The border is inside the cell.</a:documentation>
+               <a:documentation>The width (thickness) of the right border. The border is inside the cell.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="border-top">
-               <a:documentation>The width (tickness) of the top border. The border is inside the cell.</a:documentation>
+               <a:documentation>The width (thickness) of the top border. The border is inside the cell.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="border-bottom">
-               <a:documentation>The width (tickness) of the bottom border. The border is inside the cell.</a:documentation>
+               <a:documentation>The width (thickness) of the bottom border. The border is inside the cell.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -3748,7 +3748,7 @@
                   <value>left</value>
                   <a:documentation>The contents is left aligned (ragged right). This is the default.</a:documentation>
                   <value>right</value>
-                  <a:documentation>The contents of the cell is right aligend.</a:documentation>
+                  <a:documentation>The contents of the cell is right aligned.</a:documentation>
                   <value>center</value>
                   <a:documentation>The contents of the cell is aligned at the center, with ragged right and left margin.</a:documentation>
                   <value>justify</value>
@@ -3764,11 +3764,11 @@
                <a:documentation>The vertical alignment of the cell.</a:documentation>
                <choice>
                   <value>top</value>
-                  <a:documentation>The contents is aligend at the top edge of the cell.</a:documentation>
+                  <a:documentation>The contents is aligned at the top edge of the cell.</a:documentation>
                   <value>middle</value>
                   <a:documentation>The contents is vertically centered.</a:documentation>
                   <value>bottom</value>
-                  <a:documentation>The contents is aligend at the bottom edge of the cell.</a:documentation>
+                  <a:documentation>The contents is aligned at the bottom edge of the cell.</a:documentation>
                   <data type="string">
                      <param name="pattern">\{.+\}</param>
                   </data>
@@ -3983,7 +3983,7 @@
                   <value>left</value>
                   <a:documentation>The contents is left aligned (ragged right). This is the default.</a:documentation>
                   <value>right</value>
-                  <a:documentation>The contents of the cell is right aligend.</a:documentation>
+                  <a:documentation>The contents of the cell is right aligned.</a:documentation>
                   <value>center</value>
                   <a:documentation>The contents of the cell is aligned at the center, with ragged right and left margin.</a:documentation>
                   <value>justify</value>
@@ -3993,7 +3993,7 @@
          </optional>
          <optional>
             <attribute name="valign">
-               <a:documentation>Vertical aligment of the table cells in this row.</a:documentation>
+               <a:documentation>Vertical alignment of the table cells in this row.</a:documentation>
                <choice>
                   <value>top</value>
                   <a:documentation>The objects in this row are aligned at the top.</a:documentation>
@@ -4006,7 +4006,7 @@
          </optional>
          <optional>
             <attribute name="minheight">
-               <a:documentation>Minimum rowheight in grid cells.</a:documentation>
+               <a:documentation>Minimum row height in grid cells.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -4088,7 +4088,7 @@
          </optional>
          <optional>
             <attribute name="origin-y">
-               <a:documentation>The vertical origin for the matrix tranformation. Must be top, center or bottom or a number from 0 to 100 (0 = top, 100 = bottom).</a:documentation>
+               <a:documentation>The vertical origin for the matrix transformation. Must be top, center or bottom or a number from 0 to 100 (0 = top, 100 = bottom).</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>

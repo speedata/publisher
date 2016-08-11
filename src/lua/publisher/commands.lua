@@ -2660,11 +2660,13 @@ end
 function commands.sort_sequence( layoutxml,dataxml )
     local selection        = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
     local removeduplicates = publisher.read_attribute(layoutxml,dataxml,"removeduplicates","rawstring")
+    local criterion        = publisher.read_attribute(layoutxml,dataxml,"criterion","rawstring")
     local criterium        = publisher.read_attribute(layoutxml,dataxml,"criterium","rawstring")
 
+    -- spelling error in schema
+    local sortkey = criterion or criterium
     local sequence = xpath.parse(dataxml,selection,layoutxml[".__ns"])
-    trace("SortSequence: Record = %q, criterium = %q",selection,criterium or "???")
-    local sortkey = criterium
+    trace("SortSequence: Record = %q, criterion = %q",selection,sortkey or "???")
     local tmp = {}
     if #sequence == 0 then
         tmp[1] = sequence

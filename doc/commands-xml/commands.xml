@@ -314,7 +314,7 @@
 
   <command en="A">
     <description xml:lang="en">
-      <para>Insert Hyperlink to a URL.</para>
+      <para>Insert hyperlink to a URL.</para>
     </description>
     <description xml:lang="de">
       <para>Hyperlink auf eine URL einfügen.</para>
@@ -324,10 +324,10 @@
     </childelements>
     <attribute en="href" type="text" optional="no">
       <description xml:lang="en">
-        <para>The destination of the hyperlink (URI). Example: <tt>http://www.speedata.de</tt></para>
+        <para>The destination of the hyperlink (URI). Example: <tt>https://www.speedata.de</tt></para>
       </description>
       <description xml:lang="de">
-        <para>Das Ziel des Hyperlinks. Beispiel: <tt>http://www.speedata.de</tt></para>
+        <para>Das Ziel des Hyperlinks. Beispiel: <tt>https://www.speedata.de</tt></para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -514,7 +514,7 @@
   </command>
   <command en="Attribute">
     <description xml:lang="en">
-      <para>Create a data structure that can be saved to the harddrive with <cmd name="SaveDataset"/>.</para>
+      <para>Create a data structure that can be saved to the hard drive with <cmd name="SaveDataset"/>.</para>
     </description>
     <description xml:lang="de">
       <para>Erzeugt eine Datenstruktur, die mithilfe von <cmd name="SaveDataset"/> auf Festplatte gespeichert werden kann.</para>
@@ -554,7 +554,7 @@
   </command>
   <command en="B">
     <description xml:lang="en">
-      <para>Switch to fontface »bold«</para>
+      <para>Switch to font weight »bold«</para>
     </description>
     <description xml:lang="de">
       <para>Schaltet auf »Fett« um.</para>
@@ -598,7 +598,7 @@
     </attribute>
     <attribute en="fontface" type="text" optional="yes">
       <description xml:lang="en">
-        <para>Name of the fontface of the text that can be placed beneath the barcode. Not used in all codes.</para>
+        <para>Name of the font of the text that can be placed beneath the barcode. Not used in all codes.</para>
       </description>
       <description xml:lang="de">
         <para>Name der Schriftart des Textes, der ggf. unterhalb des Strichcodes ausgegeben wird. Nicht in allen Codes verwendet.</para>
@@ -734,7 +734,7 @@
     <childelements/>
     <attribute en="fontface" type="text" optional="no">
       <description xml:lang="en">
-        <para>Name of the fontface for bold.</para>
+        <para>Name of the font for bold.</para>
       </description>
       <description xml:lang="de">
         <para>Name der Schriftart, die für eine fette Schrift benutzt werden soll.</para>
@@ -782,7 +782,7 @@
     <childelements/>
     <attribute en="fontface" type="text" optional="no">
       <description xml:lang="en">
-        <para>Name of the fontface for bold italic.</para>
+        <para>Name of the font for bold italic.</para>
       </description>
       <description xml:lang="de">
         <para>Name der Schriftart, die für eine Fett/Kursive Schrift benutzt werden soll.</para>
@@ -1747,7 +1747,7 @@
         <para>If no, prohibit orphans (first line of paragraph is on the previous page). Default: no.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn nein, Schusterjungen verhindern (erste Zeile eines Paragraphes ist auf der vorherigen Seite). Voreinstellung ist nein.</para>
+        <para>Wenn nein, Schusterjungen verhindern (erste Zeile eines Absatzes ist auf der vorherigen Seite). Voreinstellung ist nein.</para>
       </description>
       <choice en="yes">
         <description xml:lang="en">
@@ -1771,7 +1771,7 @@
         <para>If no, prohibit widows (last line of paragraph is on the next page). Default: no.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn nein, Hurenkinder verhindern (letzte Zeile eines Paragraphes ist auf der nächsten Seite). Voreinstellung ist nein.</para>
+        <para>Wenn nein, Hurenkinder verhindern (letzte Zeile eines Absatzes ist auf der nächsten Seite). Voreinstellung ist nein.</para>
       </description>
       <choice en="yes">
         <description xml:lang="en">
@@ -2483,7 +2483,7 @@
   <command en="HSpace">
     <description xml:lang="en">
       <para>Two modes: with a given width, the space takes up the given amount. </para>
-      <para>With no width given: create a horizontal stretching space. The space will take up no width as a minimum but is able to stretch up to infinity. Useful in single line contexts. In normal text there will surprising little stretching involved due to the global paragraph optimization alorithm.
+      <para>With no width given: create a horizontal stretching space. The space will take up no width as a minimum but is able to stretch up to infinity. Useful in single line contexts. In normal text there will surprising little stretching involved due to the global paragraph optimization algorithm.
         You will see that all other word spaces will have the minimum width and the excessive whitespace is accumulated at the strechable space.</para>
     </description>
     <description xml:lang="de">
@@ -2497,7 +2497,7 @@
         <para>Optional width of the space (a length).</para>
       </description>
       <description xml:lang="de">
-        <para>Optionale Breite des Leeraums</para>
+        <para>Optionale Breite des Leerraums</para>
       </description>
     </attribute>
     <attribute en="leader" optional="yes" since="2.3.50" type="text">
@@ -2794,7 +2794,7 @@
     </attribute>
     <attribute en="clip" optional="yes">
       <description xml:lang="en">
-        <para>When yes, the image keeps its apsect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</para>
+        <para>When yes, the image keeps its aspect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</para>
       </description>
       <description xml:lang="de">
         <para>Wenn 'yes', dann behält das Bild sein Seitenverhältnis wenn Breite und Höhe gegeben ist. Um das Bild einzupassen, wird ein Teil abgeschnitten.</para>
@@ -2818,7 +2818,7 @@
     </attribute>
     <attribute en="minwidth" type="numberorlength" optional="yes">
       <description xml:lang="en">
-        <para>The nimimum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value »100%« for full width image.</para>
+        <para>The minimum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value »100%« for full width image.</para>
       </description>
       <description xml:lang="de">
         <para>Die minimale Breite des Bilds. Nur, wenn ausschnitt="nein". Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</para>
@@ -2834,7 +2834,7 @@
     </attribute>
     <attribute en="dpiwarn" type="number" optional="yes">
       <description xml:lang="en">
-        <para>Warn if the image gets lower resultion than given.</para>
+        <para>Warn if the image gets lower resolution than given.</para>
       </description>
       <description xml:lang="de">
         <para>Warnung ausgeben, wenn das Bild eine geringere Auflösung bekommt als angegeben.</para>
@@ -4341,7 +4341,7 @@
       </description>
       <choice en="yes">
         <description xml:lang="en">
-          <para>Regular behaviour: the text does not flow around objects.</para>
+          <para>Regular behavior: the text does not flow around objects.</para>
         </description>
         <description xml:lang="de">
           <para>Normales Verhalten, der Text hat eine rechteckige Form.</para>
@@ -4511,7 +4511,7 @@
         <para>Color of the paragraph. Must be defined with <cmd name="DefineColor"/> before use.</para>
       </description>
       <description xml:lang="de">
-        <para>Farbe des Paragraphes. Muss vorher mit <cmd name="DefineColor"/> definiert worden sein.</para>
+        <para>Farbe des Absatzes. Muss vorher mit <cmd name="DefineColor"/> definiert worden sein.</para>
       </description>
     </attribute>
     <attribute en="textformat" type="text" optional="yes">
@@ -4616,7 +4616,7 @@
   </command>
   <command en="Pagetype">
     <description xml:lang="en">
-      <para>Define a master page. A master page is chosen depending on the criterium given with the attribute »test«.</para>
+      <para>Define a master page. A master page is chosen depending on the criterion given with the attribute »test«.</para>
     </description>
     <description xml:lang="de">
       <para>Definiert eine Seitenvorlage. Anhand der Kriterien, die im Attribut test angegeben werden, wählt das System eine Seitenvorlage aus.</para>
@@ -4708,7 +4708,7 @@
   </command>
   <command en="PDFOptions" since="2.3.39">
     <description xml:lang="en">
-      <para>Set PDF options like nuber of copies and such</para>
+      <para>Set PDF options like number of copies and such</para>
     </description>
     <description xml:lang="de">
       <para>Setze PDF Optionen wie Anzahl der Kopien</para>
@@ -5153,7 +5153,7 @@
           <para>The object is aligned so that the space at the top is the same as at the bottom.</para>
         </description>
         <description xml:lang="de">
-          <para>Das Objekt wird so platziert, dass der Leerraum überhalb und unterhalb derselbe ist.</para>
+          <para>Das Objekt wird so platziert, dass der Leerraum oberhalb und unterhalb derselbe ist.</para>
         </description>
       </choice>
       <choice en="bottom">
@@ -5350,7 +5350,7 @@
       <para>Defines a rectangular area for objects.</para>
     </description>
     <description xml:lang="de">
-      <para>Beschreibt einen rechteckigen Bereich, in dem Elemente platziert werden können. Inhalte in diesen Bereichen werden bei Platzmangel automatisch in den nächsten Rahmen deselben Bereichs platziert.</para>
+      <para>Beschreibt einen rechteckigen Bereich, in dem Elemente platziert werden können. Inhalte in diesen Bereichen werden bei Platzmangel automatisch in den nächsten Rahmen desselben Bereichs platziert.</para>
     </description>
     <childelements/>
     <attribute en="width" type="number" optional="no">
@@ -5510,7 +5510,7 @@
     <childelements/>
     <attribute en="fontface" type="text" optional="no">
       <description xml:lang="en">
-        <para>The symbolic name fo the font file.</para>
+        <para>The symbolic name of the font file.</para>
       </description>
       <description xml:lang="de">
         <para>Name der Schriftdatei, die geladen werden soll.</para>
@@ -5583,7 +5583,7 @@
     </attribute>
     <attribute en="rulewidth" type="numberorlength" optional="yes" css="height">
       <description xml:lang="en">
-        <para>The rule thicknes given in grid cells or as a length.</para>
+        <para>The rule thickness given in grid cells or as a length.</para>
       </description>
       <description xml:lang="de">
         <para>Dicke der Linie in Rasterzellen oder als absolute Angabe.</para>
@@ -6051,7 +6051,7 @@
         <para>Wenn Duplikate gelöscht werden sollen, steht hier das Attribut mit dem Inhalt.</para>
       </description>
     </attribute>
-    <attribute en="criterium" type="text" optional="no">
+    <attribute en="criterion" type="text" optional="no">
       <description xml:lang="en">
         <para>Name of the attribute that is used as the sort key.</para>
       </description>
@@ -6071,7 +6071,7 @@
       <listing><![CDATA[<Record element="data">
   <SetVariable variable="unsorted" select="*"/>
   <SetVariable variable="sorted">
-    <SortSequence select="$unsorted" criterium="value"/>
+    <SortSequence select="$unsorted" criterion="value"/>
   </SetVariable>
   <PlaceObject>
     <Textblock>
@@ -6095,7 +6095,7 @@
       <listing><![CDATA[<Record element="data">
   <SetVariable variable="unsorted" select="*"/>
   <SetVariable variable="sorted">
-    <SortiereSequenz select="$unsorted" criterium="value"/>
+    <SortiereSequenz select="$unsorted" criterion="value"/>
   </SetVariable>
   <PlaceObject>
     <Textblock>
@@ -6170,7 +6170,7 @@
   </command>
   <command en="Switch">
     <description xml:lang="en">
-      <para>Create an if-then-else construct. The test attribute of each <cmd name="Case"/> commands is evaluated until it yields true. The contents of the Case gets executed. If no test suceeds, the (optional) <cmd name="Otherwise"/> gets executed.</para>
+      <para>Create an if-then-else construct. The test attribute of each <cmd name="Case"/> commands is evaluated until it yields true. The contents of the Case gets executed. If no test succeeds, the (optional) <cmd name="Otherwise"/> gets executed.</para>
     </description>
     <description xml:lang="de">
       <para>Erzeugt eine „Wenn-Dann-Abfrage“. Das heißt, für jedes Kindelement <cmd name="Case"/> wird überprüft, ob die Bedingung erfüllt ist. Wenn ja, dann wird der Inhalt des Kindelements <cmd name="Case"/> ausgeführt und die Verarbeitung hinter der Fallunterscheidung fortgesetzt. Wenn keine Bedingung erfüllt wurde und ein Element <cmd name="Otherwise"/> gefunden wurde, wird der         Inhalt des Elements <cmd name="Otherwise"/> ausgeführt. Durch das frühzeitige Abbrechen werden nachfolgende Fälle nicht weiter untersucht (siehe Beispiel).</para>
@@ -6722,7 +6722,7 @@
     </attribute>
     <attribute en="border-left" type="length" optional="yes" css="border-left-width">
       <description xml:lang="en">
-        <para>The width (tickness) of the left border. The border is inside the cell.</para>
+        <para>The width (thickness) of the left border. The border is inside the cell.</para>
       </description>
       <description xml:lang="de">
         <para>Die Breite der Linie links. Die Linie liegt innerhalb der Zelle.</para>
@@ -6730,7 +6730,7 @@
     </attribute>
     <attribute en="border-right" type="length" optional="yes" css="border-right-width">
       <description xml:lang="en">
-        <para>The width (tickness) of the right border. The border is inside the cell.</para>
+        <para>The width (thickness) of the right border. The border is inside the cell.</para>
       </description>
       <description xml:lang="de">
         <para>Die Breite der Linie rechts. Die Linie liegt innerhalb der Zelle.</para>
@@ -6738,7 +6738,7 @@
     </attribute>
     <attribute en="border-top" type="length" optional="yes" css="border-top-width">
       <description xml:lang="en">
-        <para>The width (tickness) of the top border. The border is inside the cell.</para>
+        <para>The width (thickness) of the top border. The border is inside the cell.</para>
       </description>
       <description xml:lang="de">
         <para>Die Breite der Linie oben. Die Linie liegt innerhalb der Zelle.</para>
@@ -6746,7 +6746,7 @@
     </attribute>
     <attribute en="border-bottom" type="length" optional="yes" css="border-bottom-width">
       <description xml:lang="en">
-        <para>The width (tickness) of the bottom border. The border is inside the cell.</para>
+        <para>The width (thickness) of the bottom border. The border is inside the cell.</para>
       </description>
       <description xml:lang="de">
         <para>Die Breite der Linie unten. Die Linie liegt innerhalb der Zelle.</para>
@@ -6833,7 +6833,7 @@
       </choice>
       <choice en="right">
         <description xml:lang="en">
-          <para>The contents of the cell is right aligend.</para>
+          <para>The contents of the cell is right aligned.</para>
         </description>
         <description xml:lang="de">
           <para>Der Inhalt der Zelle ist rechtsbündig ausgerichtet.</para>
@@ -6865,7 +6865,7 @@
       </description>
       <choice en="top">
         <description xml:lang="en">
-          <para>The contents is aligend at the top edge of the cell.</para>
+          <para>The contents is aligned at the top edge of the cell.</para>
         </description>
         <description xml:lang="de">
           <para>Der Zellinhalt ist an der oberen Kante ausgerichtet.</para>
@@ -6881,7 +6881,7 @@
       </choice>
       <choice en="bottom">
         <description xml:lang="en">
-          <para>The contents is aligend at the bottom edge of the cell.</para>
+          <para>The contents is aligned at the bottom edge of the cell.</para>
         </description>
         <description xml:lang="de">
           <para>Der Zellinhalt ist an der unteren Kante ausgerichtet.</para>
@@ -7361,7 +7361,7 @@
       </choice>
       <choice en="right">
         <description xml:lang="en">
-          <para>The contents of the cell is right aligend.</para>
+          <para>The contents of the cell is right aligned.</para>
         </description>
         <description xml:lang="de">
           <para>Der Inhalt der Zelle ist rechtsbündig ausgerichtet.</para>
@@ -7386,7 +7386,7 @@
     </attribute>
     <attribute en="valign" optional="yes">
       <description xml:lang="en">
-        <para>Vertical aligment of the table cells in this row.</para>
+        <para>Vertical alignment of the table cells in this row.</para>
       </description>
       <description xml:lang="de">
         <para>Die vertikale Ausrichtung des Tabelleninhalts (gilt für die gesamte Zeile).</para>
@@ -7418,7 +7418,7 @@
     </attribute>
     <attribute en="minheight" type="number" optional="yes">
       <description xml:lang="en">
-        <para>Minimum rowheight in grid cells.</para>
+        <para>Minimum row height in grid cells.</para>
       </description>
       <description xml:lang="de">
         <para>Die Mindesthöhe der Zeile in Rasterzellen.</para>
@@ -7562,12 +7562,12 @@
         <para>The origin for matrix transformation. Must be left, center or right or a number from 0 to 100 (0 = left, 100 = right).</para>
       </description>
       <description xml:lang="de">
-        <para>Der Ursprung für Matrix-Tranformation. Muss links, mitte oder rechts oder eine Zahl von 0 bis 100 (0 = links, 100 = rechts) sein.</para>
+        <para>Der Ursprung für Matrix-Transformation. Muss links, mitte oder rechts oder eine Zahl von 0 bis 100 (0 = links, 100 = rechts) sein.</para>
       </description>
     </attribute>
     <attribute en="origin-y" optional="yes" type="text">
       <description xml:lang="en">
-        <para>The vertical origin for the matrix tranformation. Must be top, center or bottom or a number from 0 to 100 (0 = top, 100 = bottom).</para>
+        <para>The vertical origin for the matrix transformation. Must be top, center or bottom or a number from 0 to 100 (0 = top, 100 = bottom).</para>
       </description>
       <description xml:lang="de">
         <para>Der vertikale Ursprung der der Matrix-Transformation. Muss oben, mitte oder unten sein oder eine Zahl von 0 bis 100 (0 = oben, 100 = unten)</para>
@@ -7883,7 +7883,7 @@ Message: "$i is: 3"]]></listing>
       <para>Create a vertically stretching space. The space has a minimum height of 0 but is able to stretch up to infinity. Useful in table cells.</para>
     </description>
     <description xml:lang="de">
-      <para>Erzeugt einen vertikal dehnbaren Lerrraum. Der Leerraum hat die minimale Höhe 0 und die maximale Höhe »unendlich«. Sinnvoll nutzbar in Tabellenzellen.</para>
+      <para>Erzeugt einen vertikal dehnbaren Leerraum. Der Leerraum hat die minimale Höhe 0 und die maximale Höhe »unendlich«. Sinnvoll nutzbar in Tabellenzellen.</para>
     </description>
     <childelements/>
     <example xml:lang="en">
