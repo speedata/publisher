@@ -21,7 +21,6 @@ xpath = do_luafile("xpath.lua")
 
 local commands     = require("publisher.commands")
 local page         = require("publisher.page")
-local translations = require("translations")
 local fontloader   = require("fonts.fontloader")
 local paragraph    = require("paragraph")
 local fonts        = require("publisher.fonts")
@@ -176,9 +175,6 @@ groups    = {}
 
 -- sometimes we want to save pages for later reuse. Keys are pagestore names
 pagestore = {}
-
--- to be used for translations
-translated_values = nil
 
 
 viewerpreferences = {}
@@ -527,19 +523,6 @@ local dispatch_table = {
     While                   = commands.while_do,
 }
 
-
---- Return the value as an English string. The argument is in the
---- current language of the layout file (currently English and German).
---- All translations are only valid in a context which defaults to the
---- _global_ context.
-function translate_value( value,context )
-    -- If we don't have a values variable, it must be English
-    if translated_values == nil then return value end
-    context = context or "*"
-    return translated_values[context][value] or value
-end
-
-
 --- The returned table is an array with hashes. The keys of these
 --- hashes are `elementname` and `contents`. For example:
 ---
@@ -624,35 +607,6 @@ function page_initialized_p( pagenumber )
     return pages[pagenumber] ~= nil
 end
 
--- Translate attributes and elements to english, so that
--- we don't need to translate them later again and again and again
-function translate_layout(layoutxml,lang)
-    local x
-    for i=1,#layoutxml do
-        x = layoutxml[i]
-        if type(x) == "table" then
-            local y = x[".__local_name"]
-            local cmd = lang[y]
-            if not cmd then
-                if x[".__parent"][".__local_name"] ~= "Value" then
-                    err("Unknown command %q in Layoutfile",y)
-                end
-            else
-                x[".__local_name"] = cmd[1]
-                x[".__name"] = cmd[1]
-                for k,v in pairs(cmd) do
-                    if type(k) == "string" then
-                        if x[k] then
-                            x[v] = x[k]
-                        end
-                    end
-                end
-                translate_layout(x,lang)
-            end
-        end
-    end
-end
-
 
 --- Start the processing (`dothings()`)
 --- -------------------------------
@@ -724,12 +678,8 @@ function initialize_luatex_and_generate_pdf()
         exit()
     end
     if current_layoutlanguage == "de" then
-        warning("!!! The German layout instructions will be removed\nin version 3 of the publisher !!!")
-    end
-
-    if current_layoutlanguage ~= "en" then
-        translated_values = translations[current_layoutlanguage]["__values"]
-        translate_layout(layoutxml,translations[current_layoutlanguage])
+        err("The German layout instructions have been removed\nin version 2.7 of the publisher.")
+        exit()
     end
 
     if layoutxml.version then
@@ -1871,7 +1821,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     elseif typ=="rawstring" then
         return tostring(val)
     elseif typ=="string" then
-        return tostring(translate_value(val,context) or default)
+        return tostring(val or default)
     elseif typ=="number" then
         return tonumber(val)
         -- something like "3pt"
@@ -1903,11 +1853,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
         end
         return tex.sp(ret)
     elseif typ=="boolean" then
-        if val then
-            val = translate_value(val,context)
-        else
-            val = default
-        end
+        val = val or default
         if val=="yes" then
             return true
         elseif val=="no" then
@@ -1915,11 +1861,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
         end
         return nil
     elseif typ=="booleanorlength" then
-        if val then
-            val = translate_value(val,context)
-        else
-            val = default
-        end
+        val = val or default
         if val=="yes" then
             return true
         elseif val=="no" then

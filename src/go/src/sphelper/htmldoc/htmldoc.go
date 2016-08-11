@@ -69,9 +69,9 @@ func attributes(lang string, attributes []*commandsxml.Attribute) template.HTML 
 	for _, att := range attributes {
 		switch lang {
 		case "en":
-			ret = append(ret, fmt.Sprintf(`<a href="#%s"><span class="tt">%s</span></a>`, att.HTMLFragment(), att.NameEn))
+			ret = append(ret, fmt.Sprintf(`<a href="#%s"><span class="tt">%s</span></a>`, att.HTMLFragment(), att.Name))
 		case "de":
-			ret = append(ret, fmt.Sprintf(`<a href="#%s"><span class="tt">%s</span></a>`, att.HTMLFragment(), att.NameEn))
+			ret = append(ret, fmt.Sprintf(`<a href="#%s"><span class="tt">%s</span></a>`, att.HTMLFragment(), att.Name))
 		}
 	}
 	return template.HTML(strings.Join(ret, ", "))
@@ -88,7 +88,7 @@ func parentelements(lang string, cmd *commandsxml.Command) template.HTML {
 		return template.HTML("(" + translate(lang, "none") + ")")
 	}
 	for _, v := range x {
-		ret = append(ret, fmt.Sprintf(`<a href=%q>%s</a>`, v.Htmllink(), v.NameEn))
+		ret = append(ret, fmt.Sprintf(`<a href=%q>%s</a>`, v.Htmllink(), v.Name))
 	}
 	return template.HTML(strings.Join(ret, ", "))
 }
@@ -100,7 +100,7 @@ func childelements(lang string, children []*commandsxml.Command) template.HTML {
 
 	var ret []string
 	for _, cmd := range children {
-		ret = append(ret, fmt.Sprintf(`<a title="%s" href="%s">%s</a>`, html.EscapeString(cmd.DescriptionText(lang)), cmd.Htmllink(), cmd.NameEn))
+		ret = append(ret, fmt.Sprintf(`<a title="%s" href="%s">%s</a>`, html.EscapeString(cmd.DescriptionText(lang)), cmd.Htmllink(), cmd.Name))
 	}
 	return template.HTML(strings.Join(ret, ", "))
 }

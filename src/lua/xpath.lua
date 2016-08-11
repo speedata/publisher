@@ -1,5 +1,8 @@
--- xpath.lua
-
+--  xpath.lua
+--  speedata publisher
+--
+--  For a list of authors see `git blame'
+--  See file COPYING in the root directory for license info.
 local string = unicode.utf8
 local comm = require("publisher.comm")
 

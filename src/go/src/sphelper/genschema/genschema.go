@@ -144,7 +144,7 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 		enc.EncodeToken(def)
 
 		elt := xml.StartElement{Name: xml.Name{Local: "element"}}
-		elt.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: commands.TranslateCommand("en", lang, cmd.En)}}
+		elt.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: cmd.En}}
 		enc.EncodeToken(elt)
 
 		doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
@@ -156,9 +156,8 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 				enc.EncodeToken(optionalElement.Copy())
 			}
 
-			attname, _ := commands.TranslateAttribute("en", lang, cmd.En, attr.En, "-")
 			attelt := attributeElement.Copy()
-			attelt.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: attname}}
+			attelt.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: attr.En}}
 			enc.EncodeToken(attelt)
 
 			doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
@@ -170,7 +169,7 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 				enc.EncodeToken(choiceElement.Copy())
 				for _, choice := range attr.Choice {
 					enc.EncodeToken(valueElement.Copy())
-					enc.EncodeToken(xml.CharData(choice.GetValue(lang)))
+					enc.EncodeToken(xml.CharData(choice.En))
 					enc.EncodeToken(valueElement.End())
 
 					doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
@@ -201,7 +200,7 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 						enc.EncodeToken(choiceElement.Copy())
 						for _, choice := range attrdefinition.Choices {
 							enc.EncodeToken(valueElement.Copy())
-							enc.EncodeToken(xml.CharData(choice.GetValue(lang)))
+							enc.EncodeToken(xml.CharData(choice.En))
 							enc.EncodeToken(valueElement.End())
 
 							doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
@@ -213,13 +212,7 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 						enc.EncodeToken(choiceElement.End())
 					}
 				}
-				// 	attrsec := commands.GetDefineAttributes(attr.Reference.Name)
-				// 	b := bytes.NewBuffer(attrsec)
-				// 	d := xml.NewDecoder(b)
-				// 	d.DecodeElement(cmd, start)
-
 			}
-
 			enc.EncodeToken(attelt.End())
 			if attr.Optional == "yes" {
 				enc.EncodeToken(optionalElement.Copy().End())
