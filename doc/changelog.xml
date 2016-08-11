@@ -1,5 +1,8 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="2.5">
+  <chapter version="2.6">
+    
+  </chapter>
+  <chapter version="2.5" date="2016-08-11">
     <entry version="2.5.13" date="2016-08-10">
       <en>Bugfix for large tables (> 200 pages?)</en>
       <de>Fehlerkorrektur für lange Tabelen (> 200 Seiten?)</de>
@@ -69,7 +72,7 @@
       <de>Fehlerkorrektur: Seitentyp und NeueSeite, Versionszusicherung im Layout-Tag</de>
     </entry>
   </chapter>
-  <chapter version="2.4">
+  <chapter version="2.4" date="2016-06-18">
     <entry version="2.4.4" date="2016-06-18">
       <en>Various bugfixes: leaders disappear on a linebreak, Nobreak allows setting for font family, escape attribute contents, fix for bad images.</en>
       <de>Verschiedene Fehlerkorrekturen: Führungspunkte verschwinden bei einem Zeilenwechsel, KeinUmbruch erlaubt die Angabe einer Schriftfamilie, Attribut-Werte werden nicht escaped, kaputte Bilder (ohne DPI-Angaben) werden besser behandelt.</de>
