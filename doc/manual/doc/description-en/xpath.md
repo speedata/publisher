@@ -35,7 +35,7 @@ The following XPath expressions are handled by the software:
 ------------------------------------------------------------
 
 -   Number: Return the value without change: `5`
--   Text: Return the text without chang: `'hello world'`
+-   Text: Return the text without change: `'hello world'`
 -   Arithmetic operation (`*`, `div`, `idiv`, `+`, `-`, `mod`). Example:
     `( 6 + 4.5 ) * 2`
 -   Variables. Example: `$column + 2`
@@ -66,6 +66,7 @@ sd:current-page() | Return the current page number.
 sd:current-row(\<name\>) | Return the current row. If `name` is given, return the row of the given frame.
 sd:current-column(\<name\>) | Return the current column. If `name` is given, return the column of the given frame.
 sd:current-framenumber(\<name\>) | Return the current frame number of given positioning area.
+sd:count-saved-pages(\<name\>)  | Return the number of saved pages from `<SavePages>`.
 sd:alternating(\<type\>, \<text\>,\<text\>,.. ) | On each call the next element will be returned. You can define more alternating sequences by using distinct type values. Example: `sd:alternating("tbl", "White","Gray")` can be used for alternating color of table rules. To reset the state, use `sd:reset-alternating(<type>)`.
 sd:reset-alternating(\<type\>) | Reset alternating so the next `sd:alternating()` starts again from the first element.
 sd:keep-alternating(\<type\>) | Use the current value of `sd:alternating(<type>)` without changing the value.
@@ -84,8 +85,8 @@ sd:format-number(Number or string, thousands separator, comma separator) | Forma
 sd:format-string(object, object, ... ,formatting instructions) | Return a text string with the objects formatted as given by the formatting instructions. These instructions are the same as the instructions by the C function `printf()`.
 sd:even(\<number\>) | True if number is even. Example: `sd:even(sd:current-page())`
 sd:odd(\<number\>) | True if number is odd.
-sd:groupwidth(\<string\>) | Return the number of gridcells of the given group’s width. The argument must be the name of an existing group. Example: `sd:groupwidth('My group')`
-sd:groupheight(\<string\>) | Return the given group’s height (in gridcells). See `sd:groupwidth(...)`
+sd:group-width(\<string\>) | Return the number of gridcells of the given group’s width. The argument must be the name of an existing group. Example: `sd:group-width('My group')`
+sd:group-height(\<string\>) | Return the given group’s height (in gridcells). See `sd:group-width(...)`
 sd:pagenumber(\<string\>) | Get the number of the page where the given mark is placed on. See the command [Mark](../commands-en/mark.html).
 sd:randomitem(\<Value\>,\<Value\>, …) | Return one of the values.
 sd:variable(\<name\>, ...) | The same as `$name`. This function allows variable names to be constructed dynamically. Example: `sd:variable('myvar',$num)` – if `$num` contains the number 3, the resulting variable name is `myvar3`.
@@ -98,7 +99,7 @@ Function | Description
 ---------|------------
 abs()      |
 ceiling()  |
-concat( \<value\>,\<value\>, … ) | Create a new text value by concatinating the arguments.
+concat( \<value\>,\<value\>, … ) | Create a new text value by concatenating the arguments.
 contains(\<haystack\>,\<needle\>)  | True if haystack contains needle.
 count(\<text\>) | Counts all child elements with the given name. Example: `count(article)` counts, how many child elements with the name `article` exists.
 ceiling() | Returns the smallest number with no fractional part that is not less than the value of the given argument.
@@ -113,7 +114,7 @@ not() | Negates the value of the argument. Example: `not(true())` returns `false
 normalize-space(\<text\>) | Return the text without leading and trailing spaces. All newlines will be changed to spaces. Multiple spaces/newlines will be changed to a single space.
 position() | Return the position of the current node.
 replace(\<input\>,\<regexp\>, \<replacement\>) | Replace the input using the regular expression with the given replacement text. Example: `replace("banana", "a", "o")` yields `bonono`.
-string(\<sequence\>) | Return the text value of the sequence e.g. the contents of the elemements.
+string(\<sequence\>) | Return the text value of the sequence e.g. the contents of the elements.
 string-join(\<sequence\>,separator) | Return the string value of the sequence, where each element is separated by the separator.
 substring(\<input>,\<start>,\<length>) | Return the part of the string `input` that starts at `start` and optionally has the given length.
 tokenize(\<input\>,\<regexp\>) | This function returns a sequence of strings. The input text is read from left to right. When the regular expression matches the current position, the text read so far from the last match is returned. Example (from the great XPath / XSLT book by M. Key): `tokenize("Go home, Jack!", "\W+")` returns the sequence `"Go", "home", "Jack", ""`.

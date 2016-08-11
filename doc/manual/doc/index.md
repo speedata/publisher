@@ -11,6 +11,7 @@ Introduction
 
 * [First steps with the speedata Publisher (Hello world)](description-en/firststeps.html)
 * [Using the speedata Publisher](description-en/publisherusage.html)
+* [Installation instructions](description-en/installation.html)
 
 
 Reference

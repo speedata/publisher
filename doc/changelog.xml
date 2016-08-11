@@ -1,9 +1,100 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="2.4">
+  <chapter version="2.6">
+    
+  </chapter>
+  <chapter version="2.5" date="2016-08-11">
+    <entry version="2.5.13" date="2016-08-10">
+      <en>Bugfix for large tables (> 200 pages?)</en>
+      <de>Fehlerkorrektur für lange Tabelen (> 200 Seiten?)</de>
+    </entry>
+    <entry version="2.5.12" date="2016-08-08">
+      <en>Bugfixes for paragraph shape, move LuaTeX binary to different directory</en>
+      <de>Fehlerkorrekturen für Absatzformen, verschiebe LuaTeX-Binary in ein anderes Verzeichnis</de>
+    </entry>
+    <entry version="2.5.11" date="2016-08-02">
+      <en>Add padding-* to Stylesheet, allow image styling with CSS (padding only), add padding-* to Image</en>
+      <de>Füge padding-* zu Stylesheet hinzu, erlaube CSS für Image (derzeit nur padding), erlaube padding-* für Image</de>
+    </entry>
+    <entry version="2.5.10" date="2016-08-02">
+      <en>Many improvements for Text/Output and allocate="yes"</en>
+      <de>Viele Verbesserungen für Text/Output und allocate="yes"</de>
+    </entry>
+    <entry version="2.5.10" date="2016-08-02">
+      <en>Remove all German commands from the manual</en>
+      <de>Ale Deutschen Befehle aus dem Handbuch gelöscht</de>
+    </entry>
+    <entry version="2.5.10" date="2016-08-02">
+      <en>New attributes for Text: fontface, color and textformat</en>
+      <de>Neue Attribute für Text: fontface, color and textformat</de>
+    </entry>
+    <entry version="2.5.10" date="2016-08-02">
+      <en>Improvements to the documentation (spelling fixes), Language string "English (Great Britan)" corrected</en>
+      <de>Verbesserungen in der Dokumentation (Tippfehler korrigiert), Sprachstring "English (Great Britan)" korrigiert</de>
+    </entry>
+    <entry version="2.5.9" date="2016-07-06">
+      <en>Bugfix related to “jump to next area” and multipage table/</en>
+      <de>Fehlerkorrektur bzgl. langen Tabellen in Gruppen </de>
+    </entry>
+    <entry version="2.5.8" date="2016-07-02">
+      <en>Bugfix get remaining height jumps to last line, even if “full”</en>
+      <de>Fehlerkorrektur beim Finden der nächsten freien Zeile</de>
+    </entry>
+    <entry version="2.5.7" date="2016-06-25">
+      <en>Bugfix allocation on non-integer columns</en>
+      <de>Fehlerkorrektur bei Belegung von nicht-Ganzzahl Spalten</de>
+    </entry>
+    <entry version="2.5.6" date="2016-06-25">
+      <en>Remove obsolete command ProcessRecord, add limit option for ProcessNode, bugfix Output/Text paragraph shape (#89)</en>
+      <de>Lösche alten Befehl ProcessRecord, neue Option bei BearbeiteDatensatz: umfang, Fehlerkorrektur bei Ausgabe/Text (#89)</de>
+    </entry>
+    <entry version="2.5.5" date="2016-06-23">
+      <en>Various bugfixes / future objects and tables</en>
+      <de>Verschiedene Fehlerkorrekturen / Zukünftige Objekte und Tabellen</de>
+    </entry>
+    <entry version="2.5.4" date="2016-06-20">
+      <en>Allow control over size of background-text in Td.</en>
+      <de>Kontrolle über die Größe des Hintergrundtexts in Td erlauben.</de>
+    </entry>
+    <entry version="2.5.3" date="2016-06-18">
+      <en>Include bugfixes from 2.4.4</en>
+      <de>Fehlerkorrekturen von 2.4.4 eingefügt</de>
+    </entry>
+    <entry version="2.5.2" date="2016-06-13">
+      <en>(2.4.2) A few bugfixes related to sd:current-framenumber(), minheight in Textblock and looking for next free row.</en>
+      <de>(2.4.2) Einige Fehlerkorrekturen im Zusammenhang mit sd:aktuelle-rahmennummer(), minhöhe im Textblock und der Suche nach der nächsten freien Zeile.</de>
+    </entry>
+    <entry version="2.5.1" date="2016-06-10">
+      <en>Interpret &lt;sub> and &lt;sup> in data.</en>
+      <de>Interpretiere &lt;sub> und &lt;sup> in den Daten.</de>
+    </entry>
+    <entry version="2.5.1" date="2016-06-09">
+      <en>Bugfix: pagetype and NewPage, version assertion in Layout tag</en>
+      <de>Fehlerkorrektur: Seitentyp und NeueSeite, Versionszusicherung im Layout-Tag</de>
+    </entry>
+  </chapter>
+  <chapter version="2.4" date="2016-06-18">
+    <entry version="2.4.4" date="2016-06-18">
+      <en>Various bugfixes: leaders disappear on a linebreak, Nobreak allows setting for font family, escape attribute contents, fix for bad images.</en>
+      <de>Verschiedene Fehlerkorrekturen: Führungspunkte verschwinden bei einem Zeilenwechsel, KeinUmbruch erlaubt die Angabe einer Schriftfamilie, Attribut-Werte werden nicht escaped, kaputte Bilder (ohne DPI-Angaben) werden besser behandelt.</de>
+    </entry>
+    <entry version="2.4.3" date="2016-06-17">
+      <en>Bugfix related to an improper fix in 2.4.2 / find next free row for an object</en>
+      <de>Fehlerkorrektur zu einem fehlerhaften Fix in 2.4.2 bzgl. der Suche nach der nächsten freien Zeile für ein Objekt.</de>
+    </entry>
+    <entry version="2.4.2" date="2016-06-13">
+      <en>A few bugfixes related to sd:current-framenumber(), minheight in Textblock and looking for next free row.</en>
+      <de>Einige Fehlerkorrekturen im Zusammenhang mit sd:aktuelle-rahmennummer(), minhöhe im Textblock und der Suche nach der nächsten freien Zeile.</de>
+    </entry>
+    <entry version="2.4.1" date="2016-06-09">
+      <en>Bugfix: pagetype and NewPage, version assertion in Layout tag</en>
+      <de>Fehlerkorrektur: Seitentyp und NeueSeite, Versionszusicherung im Layout-Tag</de>
+    </entry>
     <entry version="2.4.0" date="2016-06-07">
       <en>Release version 2.4.0</en>
       <de>Veröffentlichung von Version 2.4.0</de>
     </entry>
+  </chapter>
+  <chapter version="2.3" date="2016-06-07">
     <entry version="2.3.77" date="2016-06-06">
       <en>Fallback filename for image (in case of image not found)</en>
       <de>Fallback für den Dateinamen bei Bild, im Falle dass die Bilddatei nicht gefunden wird.</de>

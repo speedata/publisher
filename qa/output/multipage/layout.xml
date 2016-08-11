@@ -1,0 +1,35 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en" version="2.5.12">
+    <Options show-grid="no" />
+    <SetGrid height="12pt" nx="10"/>
+
+    <Pageformat width="180mm" height="90mm"/>
+    <DefineTextformat name="text" orphan="yes" widow="yes"/>
+
+    <Record element="data">
+        <PlaceObject column="8" row="1">
+            <Box width="3" height="5" backgroundcolor="thistle" padding-left="2mm"
+                padding-bottom="2mm"/>
+        </PlaceObject>
+
+        <PlaceObject column="1" row="11">
+            <Box width="4" height="7" backgroundcolor="lightgreen" padding-top="2mm"
+                padding-right="2mm"/>
+        </PlaceObject>
+
+        <PlaceObject column="1" row="1" page="next">
+            <Box width="4" height="7" backgroundcolor="steelblue" padding-top="2mm"
+                padding-right="2mm"/>
+        </PlaceObject>
+
+        <Output allocate="auto" row="1">
+            <Text>
+                <Loop select="5">
+                    <Paragraph>
+                        <Value select="sd:dummytext()"/>
+                    </Paragraph>
+                </Loop>
+            </Text>
+        </Output>
+    </Record>
+</Layout>

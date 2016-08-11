@@ -2,8 +2,8 @@
 --  grid.lua
 --  speedata publisher
 --
---  Copyright 2010-2014 Patrick Gundlach.
---  See file COPYING in the root directory for license details.
+--  For a list of authors see `git blame'
+--  See file COPYING in the root directory for license info.
 
 file_start("grid.lua")
 
@@ -31,6 +31,21 @@ function new( self,pagenumber )
     return r
 end
 
+function __tostring(self)
+    local ret = {}
+    ret[#ret + 1] = string.format("Grid on page %s",tostring(self.pagenumber))
+    local areas = {}
+    for k,_ in pairs(self.positioning_frames) do
+        areas[#areas + 1] = string.format("%s (%d)",k,self:current_row(k))
+    end
+    ret[#ret + 1] = string.format("Known areas: %s",table.concat(areas,", "))
+    return table.concat(ret,"\n")
+end
+
+function first_free_row( self,areaname )
+    return self:find_suitable_row(1, self:number_of_columns(areaname),1,areaname)
+end
+
 -- Return the remaining height in the area in scaled points
 function remaining_height_sp( self,row,areaname )
     if not self.positioning_frames[areaname] then
@@ -38,6 +53,7 @@ function remaining_height_sp( self,row,areaname )
         areaname = publisher.default_areaname
     end
     row = row or self:current_row(areaname)
+
     local thisframe = self.positioning_frames[areaname][self:framenumber(areaname)]
     local overshoot = math.max( (thisframe.height - thisframe["row"] + 1)  * self.gridheight - tex.pageheight ,0)
     local remaining_rows = self:number_of_rows(areaname) - row + 1
@@ -70,6 +86,7 @@ function set_current_row( self,row,areaname )
         areaname = publisher.default_areaname
     end
     local area = self.positioning_frames[areaname]
+    area.advance_rows = 0
     area.current_row = row
 end
 
@@ -84,6 +101,65 @@ function set_current_column( self,column,areaname )
     area.current_column = column
 end
 
+-- The advance_cursor helps in output/text to maintain the
+-- current position of the start paragraph
+-- Return the overshoot if the next page should start at
+-- a row > 1
+function advance_cursor( self,rows,areaname )
+    assert(self)
+    local areaname = areaname or publisher.default_areaname
+    if not self.positioning_frames[areaname] then
+        err("Area %q unknown, using page",areaname)
+        areaname = publisher.default_areaname
+    end
+    local area = self.positioning_frames[areaname]
+    area.advance_rows = (area.advance_rows or 0) + rows
+    area.advance_frame = area.advance_frame or 1
+    local current_frame = self:framenumber(areaname)
+    local ht = area[current_frame].height
+    if area.advance_rows >= ht then
+        local overshoot = area.advance_rows - ht
+        if current_frame + area.advance_frame - 1 < #area then
+            area.advance_rows = overshoot
+            area.advance_frame = area.advance_frame + 1
+            overshoot = 0
+        else
+            area.advance_rows = ht
+        end
+        return overshoot
+    end
+    return 0
+end
+
+-- return framenumber,row
+function get_advanced_cursor( self,areaname )
+    assert(self)
+    local areaname = areaname or publisher.default_areaname
+    if not self.positioning_frames[areaname] then
+        err("Area %q unknown, using page",areaname)
+        areaname = publisher.default_areaname
+    end
+    local area = self.positioning_frames[areaname]
+    area.advance_frame = area.advance_frame or 1
+    local current_frame = self:framenumber(areaname)
+    local ht = area[current_frame].height
+    if not area.current_row then
+        self:set_current_row(1,areaname)
+    end
+    local nextframe = current_frame + 1
+    if nextframe > #area then
+        nextframe = publisher.maxframes
+    end
+    if area.current_row + area.advance_rows > ht then
+        return nextframe, area.advance_rows
+    else
+        return current_frame + area.advance_frame - 1, area.current_row + area.advance_rows
+    end
+end
+
+-- Return a table {a,b} where a is the first column
+-- (distance in sp from the left edge)
+-- and b is the width of the paragraph for the given row
 function get_parshape( self,row,areaname,framenumber )
     local frame_margin_left, frame_margin_top
     local area = self.positioning_frames[areaname]
@@ -101,21 +177,23 @@ function get_parshape( self,row,areaname,framenumber )
         end
     end
     if not first_free_column then
+        -- w("get_parshape return 0")
         return 0
     end
     local x_start = ( first_free_column - 1) * self.gridwidth
     local x_end = ( last_free_column - first_free_column + 1 ) * self.gridwidth
+    -- w("get_parshape framenumber %d, row %d, {%d , %d}", framenumber, row, first_free_column - 1,last_free_column - first_free_column + 1)
     return {x_start,x_end}
 end
 
-function number_of_rows(self,areaname)
+function number_of_rows(self,areaname,framenumber)
     assert(self)
     local areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
         err("Area %q unknown, using page (number-of-rows)",areaname)
         areaname = publisher.default_areaname
     end
-    local current_frame = self:framenumber(areaname)
+    local current_frame = framenumber or self:framenumber(areaname)
     local area = self.positioning_frames[areaname]
     local height = area[current_frame].height
     return height
@@ -233,6 +311,10 @@ function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname,keepposition)
     if not x then return false end
     local show_right  = false
     local show_bottom = false
+    x = math.floor(x)
+    y = math.floor(y)
+    wd = math.ceil(wd)
+    ht = math.ceil(ht)
     areaname = areaname or publisher.default_areaname
 
     -- when true, we don't want to move the cursor
@@ -354,7 +436,7 @@ function row_has_some_space(self,row,areaname)
     end
 
     local width = self:number_of_columns(areaname)
-    local max_x = width - 1
+    local max_x = width
     for x = 1 + frame_margin_left, max_x + frame_margin_left  do
         if not(self.allocation_x_y[x][row + frame_margin_top]) then return true end
     end
@@ -389,6 +471,7 @@ end
 -- row will be given. Is the page full (the object cannot be placed), the
 -- function returns nil.
 function find_suitable_row( self,column, width,height,areaname)
+    -- w("find_suitable_row in grid %q | areaname %q | column %d | width %d | height %d",self.pagenumber,areaname,column,width, height)
     if not column then return false end
     local frame_margin_left, frame_margin_top
     if areaname == publisher.default_areaname then
@@ -407,20 +490,28 @@ function find_suitable_row( self,column, width,height,areaname)
         end
     end
     -- FIXME: inefficient algorithm
-    if self:number_of_rows(areaname) < self:current_row(areaname) + height - 1 then return nil end
+    if self:number_of_rows(areaname) < self:current_row(areaname) + height - 1 then
+        -- doesn't fit, so we try on the next area
+        if self:number_of_frames(areaname) > self:framenumber(areaname) then
+            publisher.next_area(areaname,self)
+            return self:find_suitable_row(column, width,height,areaname)
+        else
+            return
+        end
+    end
     for z = self:current_row(areaname) + frame_margin_top, self:number_of_rows(areaname) + frame_margin_top do
         if self:fits_in_row(column + frame_margin_left,width,z) then
 
             if self:number_of_rows(areaname) < z - frame_margin_top + height  - 1 then
                 return nil
             else
-                local passt = true
+                local fits = true
                 for current_row = z, z + height do
                     if not self:fits_in_row(column + frame_margin_left,width,current_row) then
-                        passt = false
+                        fits = false
                     end
                 end
-                if passt then
+                if fits then
                     return z - frame_margin_top
                 end
             end

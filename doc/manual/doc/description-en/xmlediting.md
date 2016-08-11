@@ -40,9 +40,6 @@ declaration to the start tag:
      ...
     </Layout>
 
-Replace `en` by `de` if you wish to use the German layout rules / layout
-function instead of the English ones.
-
 Connecting the RelaxNG Schema with the Layout XML in the OxygenXML editor
 -------------------------------------------------------------------------
 

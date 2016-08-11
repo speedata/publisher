@@ -1,0 +1,36 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options show-grid="no" show-gridallocation="no" ignoreeol="yes"/>
+
+  <DefineTextformat name="text" indentation="20pt"/>
+  <SetGrid width="5mm" height="12pt"/>
+  <Pageformat width="170mm" height="100mm"/>
+
+  <Pagetype name="text" test="true()">
+    <Margin left="1,5cm" right="0,5cm" top="1cm" bottom="2cm"/>
+    <PositioningArea name="text">
+      <PositioningFrame width="13" height="9" row="1" column="1"/>
+      <PositioningFrame width="13" height="15" row="1" column="15"/>
+    </PositioningArea>
+  </Pagetype>
+
+  <Record element="data">
+    <PlaceObject column="10" row="1">
+      <Box width="8" height="3" backgroundcolor="lightgreen"/>
+    </PlaceObject>
+    <PlaceObject column="25" row="10">
+      <Box width="5" height="2" backgroundcolor="mediumorchid"/>
+    </PlaceObject>
+    <NextRow/>
+    <Output area="text" allocate="auto" row="1">
+      <Text>
+        <Loop select="2">
+          <Paragraph fontface="text">
+            <Value select="sd:dummytext()"/>
+          </Paragraph>
+        </Loop>
+      </Text>
+    </Output>
+  </Record>
+</Layout>

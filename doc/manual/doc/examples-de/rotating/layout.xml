@@ -1,311 +1,309 @@
-<Layout 
-  xmlns="urn:speedata.de:2009/publisher/de" 
-  xmlns:sd="urn:speedata:2009/publisher/functions/de">
-  
+<?xml version="1.0"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <DefiniereFarbe name="red" wert="#f00"></DefiniereFarbe>
-  <DefiniereFarbe name="green" wert="#0f0"></DefiniereFarbe>
-  <DefiniereFarbe name="blue" wert="#00f"></DefiniereFarbe>
-  <DefiniereFarbe name="gray" wert="#eee"></DefiniereFarbe>
- 
+  <DefineColor name="red" value="#f00"/>
+  <DefineColor name="green" value="#0f0"/>
+  <DefineColor name="blue" value="#00f"/>
+  <DefineColor name="gray" value="#eee"/>
 
-  <DefiniereTextformat name="text" ausrichtung="rechtsbündig"></DefiniereTextformat>
-  <DefiniereTextformat name="title" ausrichtung="linksbündig"></DefiniereTextformat>
-  
-  <Seitentyp name="page" bedingung="true()">
-    <Rand links="1cm" rechts="1cm" oben="4cm" unten="1cm"></Rand>
-    <BeiSeitenErzeugung>
-      <ObjektAusgeben zeile="1cm" spalte="1cm" belegen="nein">
+
+  <DefineTextformat name="text" alignment="rightaligned"/>
+  <DefineTextformat name="title" alignment="leftaligned"/>
+
+  <Pagetype name="page" test="true()">
+    <Margin left="1cm" right="1cm" top="4cm" bottom="1cm"/>
+    <AtPageCreation>
+      <PlaceObject row="1cm" column="1cm" allocate="no">
         <Textblock>
-          <Absatz textformat="title">
-            <Wert>Der Effekt von ursprung-x und ursprung-y mit »drehen«. Rot = -30°, Grün = 30° und Blau = 80°.</Wert>
-          </Absatz>
+          <Paragraph textformat="title">
+            <Value>Der Effekt von ursprung-x und ursprung-y mit »drehen«. Rot = -30°, Gr&#xFC;n = 30° und Blau = 80°.</Value>
+          </Paragraph>
         </Textblock>
-      </ObjektAusgeben>
-      <ObjektAusgeben spalte="2" zeile="2" belegen="nein">
-        <Box breite="4" höhe="2" hintergrundfarbe="gray"></Box>
-      </ObjektAusgeben>
-      <ObjektAusgeben spalte="2" zeile="5" belegen="nein">
-        <Box breite="4" höhe="2" hintergrundfarbe="gray"></Box>
-      </ObjektAusgeben>
-      <ObjektAusgeben spalte="2" zeile="10" belegen="nein">
-        <Box breite="4" höhe="2" hintergrundfarbe="gray"></Box>
-      </ObjektAusgeben>
-      
-    </BeiSeitenErzeugung>
-  </Seitentyp>
-  
-  <Datensatz element="data">
-    <ObjektAusgeben>
-      <Textblock><Absatz><Wert>links, unten</Wert></Absatz></Textblock>
-    </ObjektAusgeben>
+      </PlaceObject>
+      <PlaceObject column="2" row="2" allocate="no">
+        <Box width="4" height="2" backgroundcolor="gray"/>
+      </PlaceObject>
+      <PlaceObject column="2" row="5" allocate="no">
+        <Box width="4" height="2" backgroundcolor="gray"/>
+      </PlaceObject>
+      <PlaceObject column="2" row="10" allocate="no">
+        <Box width="4" height="2" backgroundcolor="gray"/>
+      </PlaceObject>
 
-   <ObjektAusgeben spalte="2">
-      <Linie richtung="vertikal" länge="15"></Linie>
-    </ObjektAusgeben>
+    </AtPageCreation>
+  </Pagetype>
 
-    <ObjektAusgeben zeile="4" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="-30" ursprung-x="links" ursprung-y="unten" spalte="2" zeile="2">
-      <Box breite="4" höhe="2" hintergrundfarbe="red"></Box>
-    </ObjektAusgeben>
+  <Record element="data">
+    <PlaceObject>
+      <Textblock><Paragraph><Value>links, unten</Value></Paragraph></Textblock>
+    </PlaceObject>
 
-    <ObjektAusgeben zeile="7" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="30" ursprung-x="links" ursprung-y="unten" spalte="2" zeile="5">
-      <Box breite="4" höhe="2" hintergrundfarbe="green"></Box>
-    </ObjektAusgeben>
+   <PlaceObject column="2">
+      <Rule direction="vertical" length="15"/>
+    </PlaceObject>
 
+    <PlaceObject row="4" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="-30" origin-x="left" origin-y="bottom" column="2" row="2">
+      <Box width="4" height="2" backgroundcolor="red"/>
+    </PlaceObject>
 
-    <ObjektAusgeben zeile="12" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="80" ursprung-x="links" ursprung-y="unten" spalte="2" zeile="10">
-      <Box breite="4" höhe="2" hintergrundfarbe="blue"></Box>
-    </ObjektAusgeben>
-
-    <NeueSeite></NeueSeite>
-    <ObjektAusgeben>
-      <Textblock><Absatz><Wert>links, mitte</Wert></Absatz></Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben spalte="2">
-      <Linie richtung="vertikal" länge="15"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben zeile="3" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="-30" ursprung-x="links" ursprung-y="mitte" spalte="2" zeile="2">
-      <Box breite="4" höhe="2" hintergrundfarbe="red"></Box>
-    </ObjektAusgeben>
-    <ObjektAusgeben zeile="6" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="30" ursprung-x="links" ursprung-y="mitte" spalte="2" zeile="5">
-      <Box breite="4" höhe="2" hintergrundfarbe="green"></Box>
-    </ObjektAusgeben>
-    <ObjektAusgeben zeile="11" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="80" ursprung-x="links" ursprung-y="mitte" spalte="2" zeile="10">
-      <Box breite="4" höhe="2" hintergrundfarbe="blue"></Box>
-    </ObjektAusgeben>
-
-    <NeueSeite></NeueSeite>
-    <ObjektAusgeben>
-      <Textblock><Absatz><Wert>links, oben</Wert></Absatz></Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben spalte="2">
-      <Linie richtung="vertikal" länge="15"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben zeile="2" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="-30" ursprung-x="links" ursprung-y="oben" spalte="2" zeile="2">
-     <Box breite="4" höhe="2" hintergrundfarbe="red"></Box>
-   </ObjektAusgeben>
+    <PlaceObject row="7" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="30" origin-x="left" origin-y="bottom" column="2" row="5">
+      <Box width="4" height="2" backgroundcolor="green"/>
+    </PlaceObject>
 
 
-    <ObjektAusgeben zeile="5" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="30" ursprung-x="links" ursprung-y="oben" spalte="2" zeile="5">
-      <Box breite="4" höhe="2" hintergrundfarbe="green"></Box>
-    </ObjektAusgeben>
+    <PlaceObject row="12" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="80" origin-x="left" origin-y="bottom" column="2" row="10">
+      <Box width="4" height="2" backgroundcolor="blue"/>
+    </PlaceObject>
+
+    <NewPage/>
+    <PlaceObject>
+      <Textblock><Paragraph><Value>links, mitte</Value></Paragraph></Textblock>
+    </PlaceObject>
+    <PlaceObject column="2">
+      <Rule direction="vertical" length="15"/>
+    </PlaceObject>
+    <PlaceObject row="3" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="-30" origin-x="left" origin-y="center" column="2" row="2">
+      <Box width="4" height="2" backgroundcolor="red"/>
+    </PlaceObject>
+    <PlaceObject row="6" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="30" origin-x="left" origin-y="center" column="2" row="5">
+      <Box width="4" height="2" backgroundcolor="green"/>
+    </PlaceObject>
+    <PlaceObject row="11" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="80" origin-x="left" origin-y="center" column="2" row="10">
+      <Box width="4" height="2" backgroundcolor="blue"/>
+    </PlaceObject>
+
+    <NewPage/>
+    <PlaceObject>
+      <Textblock><Paragraph><Value>links, oben</Value></Paragraph></Textblock>
+    </PlaceObject>
+    <PlaceObject column="2">
+      <Rule direction="vertical" length="15"/>
+    </PlaceObject>
+    <PlaceObject row="2" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="-30" origin-x="left" origin-y="top" column="2" row="2">
+     <Box width="4" height="2" backgroundcolor="red"/>
+   </PlaceObject>
 
 
-    <ObjektAusgeben zeile="10" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="80" ursprung-x="links" ursprung-y="oben" spalte="2" zeile="10">
-      <Box breite="4" höhe="2" hintergrundfarbe="blue"></Box>
-    </ObjektAusgeben>
-
-    <NeueSeite></NeueSeite>
-    
-
-    <ObjektAusgeben>
-        <Textblock><Absatz><Wert>mitte, unten</Wert></Absatz></Textblock>
-      </ObjektAusgeben>
-      <ObjektAusgeben spalte="4">
-        <Linie richtung="vertikal" länge="15"></Linie>
-      </ObjektAusgeben>
-      <ObjektAusgeben zeile="4" spalte="1">
-        <Linie richtung="horizontal" länge="10"></Linie>
-      </ObjektAusgeben>
-      <ObjektAusgeben drehen="-30" ursprung-x="mitte" ursprung-y="unten" spalte="2" zeile="2">
-        <Box breite="4" höhe="2" hintergrundfarbe="red"></Box>
-      </ObjektAusgeben>
+    <PlaceObject row="5" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="30" origin-x="left" origin-y="top" column="2" row="5">
+      <Box width="4" height="2" backgroundcolor="green"/>
+    </PlaceObject>
 
 
-      <ObjektAusgeben zeile="7" spalte="1">
-        <Linie richtung="horizontal" länge="10"></Linie>
-      </ObjektAusgeben>
-      <ObjektAusgeben drehen="30" ursprung-x="mitte" ursprung-y="unten" spalte="2" zeile="5">
-        <Box breite="4" höhe="2" hintergrundfarbe="green"></Box>
-      </ObjektAusgeben>
+    <PlaceObject row="10" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="80" origin-x="left" origin-y="top" column="2" row="10">
+      <Box width="4" height="2" backgroundcolor="blue"/>
+    </PlaceObject>
+
+    <NewPage/>
 
 
-      <ObjektAusgeben zeile="12" spalte="1">
-        <Linie richtung="horizontal" länge="10"></Linie>
-      </ObjektAusgeben>
-      <ObjektAusgeben drehen="80" ursprung-x="mitte" ursprung-y="unten" spalte="2" zeile="10">
-        <Box breite="4" höhe="2" hintergrundfarbe="blue"></Box>
-      </ObjektAusgeben>
-
-      <NeueSeite></NeueSeite>
-      <ObjektAusgeben>
-        <Textblock><Absatz><Wert>mitte, mitte</Wert></Absatz></Textblock>
-      </ObjektAusgeben>
-      <ObjektAusgeben spalte="4">
-        <Linie richtung="vertikal" länge="15"></Linie>
-      </ObjektAusgeben>
-      <ObjektAusgeben zeile="3" spalte="1">
-        <Linie richtung="horizontal" länge="10"></Linie>
-      </ObjektAusgeben>
-      <ObjektAusgeben drehen="-30" ursprung-x="mitte" ursprung-y="mitte" spalte="2" zeile="2">
-        <Box breite="4" höhe="2" hintergrundfarbe="red"></Box>
-      </ObjektAusgeben>
+    <PlaceObject>
+        <Textblock><Paragraph><Value>mitte, unten</Value></Paragraph></Textblock>
+      </PlaceObject>
+      <PlaceObject column="4">
+        <Rule direction="vertical" length="15"/>
+      </PlaceObject>
+      <PlaceObject row="4" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="-30" origin-x="center" origin-y="bottom" column="2" row="2">
+        <Box width="4" height="2" backgroundcolor="red"/>
+      </PlaceObject>
 
 
-      <ObjektAusgeben zeile="6" spalte="1">
-        <Linie richtung="horizontal" länge="10"></Linie>
-      </ObjektAusgeben>
-      <ObjektAusgeben drehen="30" ursprung-x="mitte" ursprung-y="mitte" spalte="2" zeile="5">
-        <Box breite="4" höhe="2" hintergrundfarbe="green"></Box>
-      </ObjektAusgeben>
+      <PlaceObject row="7" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="30" origin-x="center" origin-y="bottom" column="2" row="5">
+        <Box width="4" height="2" backgroundcolor="green"/>
+      </PlaceObject>
 
 
-      <ObjektAusgeben zeile="11" spalte="1">
-        <Linie richtung="horizontal" länge="10"></Linie>
-      </ObjektAusgeben>
-      <ObjektAusgeben drehen="80" ursprung-x="mitte" ursprung-y="mitte" spalte="2" zeile="10">
-        <Box breite="4" höhe="2" hintergrundfarbe="blue"></Box>
-      </ObjektAusgeben>
+      <PlaceObject row="12" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="80" origin-x="center" origin-y="bottom" column="2" row="10">
+        <Box width="4" height="2" backgroundcolor="blue"/>
+      </PlaceObject>
 
-      <NeueSeite></NeueSeite>
-      <ObjektAusgeben>
-        <Textblock><Absatz><Wert>mitte, oben</Wert></Absatz></Textblock>
-      </ObjektAusgeben>
-      <ObjektAusgeben spalte="4">
-        <Linie richtung="vertikal" länge="15"></Linie>
-      </ObjektAusgeben>
-      <ObjektAusgeben zeile="2" spalte="1">
-        <Linie richtung="horizontal" länge="10"></Linie>
-      </ObjektAusgeben>
-      <ObjektAusgeben drehen="-30" ursprung-x="mitte" ursprung-y="oben" spalte="2" zeile="2">
-        <Box breite="4" höhe="2" hintergrundfarbe="red"></Box>
-      </ObjektAusgeben>
-
-
-      <ObjektAusgeben zeile="5" spalte="1">
-        <Linie richtung="horizontal" länge="10"></Linie>
-      </ObjektAusgeben>
-      <ObjektAusgeben drehen="30" ursprung-x="mitte" ursprung-y="oben" spalte="2" zeile="5">
-        <Box breite="4" höhe="2" hintergrundfarbe="green"></Box>
-      </ObjektAusgeben>
+      <NewPage/>
+      <PlaceObject>
+        <Textblock><Paragraph><Value>mitte, mitte</Value></Paragraph></Textblock>
+      </PlaceObject>
+      <PlaceObject column="4">
+        <Rule direction="vertical" length="15"/>
+      </PlaceObject>
+      <PlaceObject row="3" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="-30" origin-x="center" origin-y="center" column="2" row="2">
+        <Box width="4" height="2" backgroundcolor="red"/>
+      </PlaceObject>
 
 
-      <ObjektAusgeben zeile="10" spalte="1">
-        <Linie richtung="horizontal" länge="10"></Linie>
-      </ObjektAusgeben>
-      <ObjektAusgeben drehen="80" ursprung-x="mitte" ursprung-y="oben" spalte="2" zeile="10">
-        <Box breite="4" höhe="2" hintergrundfarbe="blue"></Box>
-      </ObjektAusgeben>
+      <PlaceObject row="6" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="30" origin-x="center" origin-y="center" column="2" row="5">
+        <Box width="4" height="2" backgroundcolor="green"/>
+      </PlaceObject>
 
 
-    <NeueSeite></NeueSeite>
+      <PlaceObject row="11" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="80" origin-x="center" origin-y="center" column="2" row="10">
+        <Box width="4" height="2" backgroundcolor="blue"/>
+      </PlaceObject>
 
-    <ObjektAusgeben>
-      <Textblock><Absatz><Wert>rechts, unten</Wert></Absatz></Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben spalte="6">
-      <Linie richtung="vertikal" länge="15"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben zeile="4" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="-30" ursprung-x="rechts" ursprung-y="unten" spalte="2" zeile="2">
-      <Box breite="4" höhe="2" hintergrundfarbe="red"></Box>
-    </ObjektAusgeben>
-
-
-    <ObjektAusgeben zeile="7" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="30" ursprung-x="rechts" ursprung-y="unten" spalte="2" zeile="5">
-      <Box breite="4" höhe="2" hintergrundfarbe="green"></Box>
-    </ObjektAusgeben>
+      <NewPage/>
+      <PlaceObject>
+        <Textblock><Paragraph><Value>mitte, oben</Value></Paragraph></Textblock>
+      </PlaceObject>
+      <PlaceObject column="4">
+        <Rule direction="vertical" length="15"/>
+      </PlaceObject>
+      <PlaceObject row="2" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="-30" origin-x="center" origin-y="top" column="2" row="2">
+        <Box width="4" height="2" backgroundcolor="red"/>
+      </PlaceObject>
 
 
-    <ObjektAusgeben zeile="12" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="80" ursprung-x="rechts" ursprung-y="unten" spalte="2" zeile="10">
-      <Box breite="4" höhe="2" hintergrundfarbe="blue"></Box>
-    </ObjektAusgeben>
-
-    <NeueSeite></NeueSeite>
-    <ObjektAusgeben>
-      <Textblock><Absatz><Wert>rechts, mitte</Wert></Absatz></Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben spalte="6">
-      <Linie richtung="vertikal" länge="15"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben zeile="3" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="-30" ursprung-x="rechts" ursprung-y="mitte" spalte="2" zeile="2">
-      <Box breite="4" höhe="2" hintergrundfarbe="red"></Box>
-    </ObjektAusgeben>
+      <PlaceObject row="5" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="30" origin-x="center" origin-y="top" column="2" row="5">
+        <Box width="4" height="2" backgroundcolor="green"/>
+      </PlaceObject>
 
 
-    <ObjektAusgeben zeile="6" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="30" ursprung-x="rechts" ursprung-y="mitte" spalte="2" zeile="5">
-      <Box breite="4" höhe="2" hintergrundfarbe="green"></Box>
-    </ObjektAusgeben>
+      <PlaceObject row="10" column="1">
+        <Rule direction="horizontal" length="10"/>
+      </PlaceObject>
+      <PlaceObject rotate="80" origin-x="center" origin-y="top" column="2" row="10">
+        <Box width="4" height="2" backgroundcolor="blue"/>
+      </PlaceObject>
 
 
-    <ObjektAusgeben zeile="11" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="80" ursprung-x="rechts" ursprung-y="mitte" spalte="2" zeile="10">
-      <Box breite="4" höhe="2" hintergrundfarbe="blue"></Box>
-    </ObjektAusgeben>
+    <NewPage/>
 
-    <NeueSeite></NeueSeite>
-    <ObjektAusgeben>
-      <Textblock><Absatz><Wert>rechts, oben</Wert></Absatz></Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben spalte="6">
-      <Linie richtung="vertikal" länge="15"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben zeile="2" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="-30" ursprung-x="rechts" ursprung-y="oben" spalte="2" zeile="2">
-      <Box breite="4" höhe="2" hintergrundfarbe="red"></Box>
-    </ObjektAusgeben>
+    <PlaceObject>
+      <Textblock><Paragraph><Value>rechts, unten</Value></Paragraph></Textblock>
+    </PlaceObject>
+    <PlaceObject column="6">
+      <Rule direction="vertical" length="15"/>
+    </PlaceObject>
+    <PlaceObject row="4" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="-30" origin-x="right" origin-y="bottom" column="2" row="2">
+      <Box width="4" height="2" backgroundcolor="red"/>
+    </PlaceObject>
 
 
-    <ObjektAusgeben zeile="5" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="30" ursprung-x="rechts" ursprung-y="oben" spalte="2" zeile="5">
-      <Box breite="4" höhe="2" hintergrundfarbe="green"></Box>
-    </ObjektAusgeben>
+    <PlaceObject row="7" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="30" origin-x="right" origin-y="bottom" column="2" row="5">
+      <Box width="4" height="2" backgroundcolor="green"/>
+    </PlaceObject>
 
 
-    <ObjektAusgeben zeile="10" spalte="1">
-      <Linie richtung="horizontal" länge="10"></Linie>
-    </ObjektAusgeben>
-    <ObjektAusgeben drehen="80" ursprung-x="rechts" ursprung-y="oben" spalte="2" zeile="10">
-      <Box breite="4" höhe="2" hintergrundfarbe="blue"></Box>
-    </ObjektAusgeben>
+    <PlaceObject row="12" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="80" origin-x="right" origin-y="bottom" column="2" row="10">
+      <Box width="4" height="2" backgroundcolor="blue"/>
+    </PlaceObject>
 
-    </Datensatz>
+    <NewPage/>
+    <PlaceObject>
+      <Textblock><Paragraph><Value>rechts, mitte</Value></Paragraph></Textblock>
+    </PlaceObject>
+    <PlaceObject column="6">
+      <Rule direction="vertical" length="15"/>
+    </PlaceObject>
+    <PlaceObject row="3" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="-30" origin-x="right" origin-y="center" column="2" row="2">
+      <Box width="4" height="2" backgroundcolor="red"/>
+    </PlaceObject>
+
+
+    <PlaceObject row="6" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="30" origin-x="right" origin-y="center" column="2" row="5">
+      <Box width="4" height="2" backgroundcolor="green"/>
+    </PlaceObject>
+
+
+    <PlaceObject row="11" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="80" origin-x="right" origin-y="center" column="2" row="10">
+      <Box width="4" height="2" backgroundcolor="blue"/>
+    </PlaceObject>
+
+    <NewPage/>
+    <PlaceObject>
+      <Textblock><Paragraph><Value>rechts, oben</Value></Paragraph></Textblock>
+    </PlaceObject>
+    <PlaceObject column="6">
+      <Rule direction="vertical" length="15"/>
+    </PlaceObject>
+    <PlaceObject row="2" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="-30" origin-x="right" origin-y="top" column="2" row="2">
+      <Box width="4" height="2" backgroundcolor="red"/>
+    </PlaceObject>
+
+
+    <PlaceObject row="5" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="30" origin-x="right" origin-y="top" column="2" row="5">
+      <Box width="4" height="2" backgroundcolor="green"/>
+    </PlaceObject>
+
+
+    <PlaceObject row="10" column="1">
+      <Rule direction="horizontal" length="10"/>
+    </PlaceObject>
+    <PlaceObject rotate="80" origin-x="right" origin-y="top" column="2" row="10">
+      <Box width="4" height="2" backgroundcolor="blue"/>
+    </PlaceObject>
+
+    </Record>
 
 </Layout>

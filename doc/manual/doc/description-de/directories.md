@@ -20,7 +20,7 @@ Schritt 1: Sammeln der Informationen
 ------------------------------------
 
 Die beiden Befehle [Element](../commands-de/element.html) und
-[Attribut](../commands-de/attribute.html) dienen zur Strukturierung von
+[Attribute](../commands-de/attribute.html) dienen zur Strukturierung von
 Daten, die während der Verarbeitung gelesen werden. Mit diesen Befehlen
 lassen sich neue XML Datensatzdateien erzeugen. Die Datensatzdatei
 sollte eine Struktur haben, die sich für die automatische Verarbeitung
@@ -35,35 +35,35 @@ sinnvoll sein:
 
 Um diese Struktur im Layoutregelwerk zu erstellen, muss sie aus den
 Befehlen [Element](../commands-de/element.html) und
-[Attribut](../commands-de/attribute.html) wie folgt zusammengesetzt
+[Attribute](../commands-de/attribute.html) wie folgt zusammengesetzt
 werden:
 
     <Element name="Artikelverzeichnis">
       <Element name="Artikel">
-        <Attribut name="nummer" auswahl="1"/>
-        <Attribut name="seite" auswahl="10"/>
+        <Attribute name="nummer" select="1"/>
+        <Attribute name="seite" select="10"/>
       </Element>
       <Element name="Artikel">
-        <Attribut name="nummer" auswahl="2"/>
-        <Attribut name="seite" auswahl="12"/>
+        <Attribute name="nummer" select="2"/>
+        <Attribute name="seite" select="12"/>
       </Element>
       <Element name="Artikel">
-        <Attribut name="nummer" auswahl="3"/>
-        <Attribut name="seite" auswahl="14"/>
+        <Attribute name="nummer" select="3"/>
+        <Attribute name="seite" select="14"/>
       </Element>
     </Element>
 
 Anstelle der Befehle [Element](../commands-de/element.html) und
-[Attribut](../commands-de/attribute.html) können auch Variablen als
+[Attribute](../commands-de/attribute.html) können auch Variablen als
 Speicher benutzt werden (siehe Beispiel unten).
 
 Schritt 2: Speichern und Laden der Informationen
 ------------------------------------------------
 
 Mit dem Befehl
-[SpeichereDatensatzdatei](../commands-de/savedataset.html) wird die
+[SaveDataset](../commands-de/savedataset.html) wird die
 Struktur auf Festplatte gespeichert und mit
-[LadeDatensatzdatei](../commands-de/loaddataset.html) wird sie wieder
+[LoadDataset](../commands-de/loaddataset.html) wird sie wieder
 geladen. Existiert die Datei nicht, so wird kein Fehler gemeldet, da es
 sich um den ersten Durchlauf handeln könnte, wo die Datei naturgemäß
 noch nicht existiert.
@@ -75,13 +75,13 @@ Direkt nach dem Laden wird die XML-Verarbeitung mit dem ersten Element
 der gerade geladenen Struktur fortgesetzt, im Beispiel oben würde nach
 dem folgenden Befehl im Layoutregelwerk gesucht:
 
-    <Datensatz element="Artikelverzeichnis">
+    <Record element="Artikelverzeichnis">
       ...
-    </Datensatz>
+    </Record>
 
 Das heißt, dass die eigentliche Datenverarbeitung zeitweilig
 unterbrochen und mit dem neuen Datensatz aus
-[LadeDatensatzdatei](../commands-de/loaddataset.html) fortgeführt wird.
+[LoadDataset](../commands-de/loaddataset.html) fortgeführt wird.
 
 Beispiel
 --------
@@ -109,79 +109,79 @@ Im Layoutregelwerk muss diese den folgenden Aufbau haben:
 
     <Element name="Inhaltsverzeichnis">
       <Element name="Planetenverzeichnis">
-        <Attribut name="name" auswahl="'Merkur'"/>
-        <Attribut name="seite" auswahl="2"/>
+        <Attribute name="name" select="'Merkur'"/>
+        <Attribute name="seite" select="2"/>
       </Element>
       <Element name="Planetenverzeichnis">
-        <Attribut name="name" auswahl="'Venus'"/>
-        <Attribut name="seite" auswahl="3"/>
+        <Attribute name="name" select="'Venus'"/>
+        <Attribute name="seite" select="3"/>
       </Element>
       ...
       <Element name="Planetenverzeichnis">
-        <Attribut name="name" auswahl="'Uranus'"/>
-        <Attribut name="seite" auswahl="9"/>
+        <Attribute name="name" select="'Uranus'"/>
+        <Attribute name="seite" select="9"/>
       </Element>
     </Element>
 
 Natürlich soll die Information in den Attributen dynamisch erzeugt
 werden, dafür werden der XPath-Ausdruck `@name` und die XPath-Funktion
-`sd:aktuelle-seite()` benutzt.
+`sd:current-page()` benutzt.
 
 Im zweiten Durchlauf wird die Datei erfolgreich eingelesen und die
 Verarbeitung »springt« zum Datensatz `Inhaltsverzeichnis`, da es das
 Wurzelelement der neuen Datei ist. Hier wird im Layoutregelwerk das
 Inhaltsverzeichnis erstellt.
 
-    <Datensatz element="Inhaltsverzeichnis">
-      <Zuweisung variable="Inhaltsverzeichnis" auswahl="''"/>
-      <BearbeiteKnoten auswahl="Planetenverzeichnis"/>
-      <ObjektAusgeben spalte="3">
-        <Textblock breite="20" schriftart="Überschrift">
-          <Absatz><Wert>Inhalt</Wert></Absatz>
+    <Record element="Inhaltsverzeichnis">
+      <SetVariable variable="Inhaltsverzeichnis" select="''"/>
+      <ProcessNode select="Planetenverzeichnis"/>
+      <PlaceObject column="3">
+        <Textblock width="20" fontface="Überschrift">
+          <Paragraph><Value>Inhalt</Value></Paragraph>
         </Textblock>
-      </ObjektAusgeben>
-      <ObjektAusgeben spalte="3">
-        <Textblock breite="20">
-          <Wert auswahl="$Inhaltsverzeichnis"/>
+      </PlaceObject>
+      <PlaceObject column="3">
+        <Textblock width="20">
+          <Value select="$Inhaltsverzeichnis"/>
         </Textblock>
-      </ObjektAusgeben>
-    </Datensatz>
+      </PlaceObject>
+    </Record>
      
-    <Datensatz element="Planetenverzeichnis">
-      <Zuweisung variable="Inhaltsverzeichnis">
-        <Wert auswahl="$Inhaltsverzeichnis"/>
-        <Absatz>
-          <Wert auswahl="@name"/>
-          <Wert>, Seite </Wert>
-          <Wert auswahl="@seite"/>
-        </Absatz>
-      </Zuweisung>
-    </Datensatz>
+    <Record element="Planetenverzeichnis">
+      <SetVariable variable="Inhaltsverzeichnis">
+        <Value select="$Inhaltsverzeichnis"/>
+        <Paragraph>
+          <Value select="@name"/>
+          <Value>, Seite </Value>
+          <Value select="@seite"/>
+        </Paragraph>
+      </SetVariable>
+    </Record>
      
     <!-- Wurzelelement -->
-    <Datensatz element="planeten">
-      <Zuweisung variable="spalte" auswahl="2" />
+    <Record element="planeten">
+      <SetVariable variable="spalte" select="2" />
       <LadeDatensatzdatei name="toc"/>
-      <Zuweisung variable="Inhalt" auswahl="''"/>
-      <NeueSeite/>
-      <BearbeiteKnoten auswahl="planet"/>
-    </Datensatz>
+      <SetVariable variable="Inhalt" select="''"/>
+      <NewPage/>
+      <ProcessNode select="planet"/>
+    </Record>
      
-    <Datensatz element="planet">
-      <Zuweisung variable="Inhalt">
-        <Wert auswahl="$Inhalt"/>
+    <Record element="planet">
+      <SetVariable variable="Inhalt">
+        <Value select="$Inhalt"/>
         <Element name="Planetenverzeichnis">
-          <Attribut name="name" auswahl=" @name "/>
-          <Attribut name="seite" auswahl=" sd:aktuelle-seite()"/>
+          <Attribute name="name" select=" @name "/>
+          <Attribute name="seite" select=" sd:current-page()"/>
         </Element>
-      </Zuweisung>
+      </SetVariable>
      
-      <BearbeiteKnoten auswahl="url" />
+      <ProcessNode select="url" />
       ...
-      <NeueSeite />
-      <SpeichereDatensatzdatei dateiname="toc" elementname="Inhaltsverzeichnis" auswahl="$Inhalt"/>
-    </Datensatz>
+      <NewPage />
+      <SpeichereDatensatzdatei filename="toc" elementname="Inhaltsverzeichnis" select="$Inhalt"/>
+    </Record>
      
-    <Datensatz element="url">
+    <Record element="url">
       ...
-    </Datensatz>
+    </Record>

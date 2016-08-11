@@ -4,18 +4,18 @@ XPath Ausdrücke
 ===============
 
 Der Publisher akzeptiert in den den entsprechend markierten Attributen
-(zumeist `auswahl` und `bedingung`) XPath Ausdrücke. In allen anderen
+(zumeist `select` und `test`) XPath Ausdrücke. In allen anderen
 Attributen kann durch die geschweiften Klammern (`{` und `}`) ein XPath
 Ausdruck erzwungen werden. In diesem Beispiel werden im Attribut
-`breite` und im Element `Wert` die Werte dynamisch erzeugt, d.h. für die
+`width` und im Element `Value` die Werte dynamisch erzeugt, d.h. für die
 Angabe der Breite wird auf den Inhalt der Variablen `breite`
 zurückgegriffen, der Inhalt des Absatzes ist der Inhalt (Textwert) des
 gerade aktuellen Datenknotens.
 
-    <Textblock breite="{$breite}" schriftart="text" textformat="Text mit Einrückung">
-      <Absatz>
-        <Wert auswahl="."/>
-      </Absatz>
+    <Textblock width="{$breite}" fontface="text" textformat="Text mit Einrückung">
+      <Paragraph>
+        <Value select="."/>
+      </Paragraph>
     </Textblock>
 
 Folgende XPath-Ausdrücke erkennt das System:
@@ -48,39 +48,39 @@ Namensraum `urn:speedata:2009/publisher/functions/de` (im Folgenden mit
 
 Funktion | Beschreibung
 ---------|-------------
-sd:aktuelle-rahmennummer(\<name\>)|  Gibt die Nummer des aktuellen Rahmens im Platzierungsbereich zurück.
-sd:aktuelle-seite()|  Gibt die Seitennummer zurück.
-sd:aktuelle-zeile(\<name\>)|  Gibt die aktuelle Zeile zurück. Wenn `name` angegeben, gibt die Zeile des gegebenen Positionsrahmens zurück.
-sd:aktuelle-spalte(\<name\>)|  Gibt die aktuelle Spalte zurück. Wenn `name` angegeben, gibt die Spalte des gegebenen Positionsrahmens zurück.
-sd:alternierend(\<typ\>, \<text\>,\<text\>,.. )|  Bei jedem Aufruf wird das nächste Argument zurück gegeben. Wert des Typs ist beliebig, muss aber eindeutig sein. Beispiel: `sd:alternierend("tbl", "Weiß","Grau")` könnte für die Hintergrundfarbe von Tabellen benutzt werden.
-sd:alternierend-zurücksetzen(\<typ\>)|  Setzt den Zustand für `sd:alternierend()` für den angegebenen Typ zurück.
-sd:alternierend-beibehalten(\<typ\>)| Nutzt den aktuellen Wert von `sd:alternierend(<typ>)`, ohne diesen zu verändern.
-sd:anzahl-gespeicherte-seiten(\<Name\>)|  Gibt die Anzahl der gespeicherten Seiten, die mit \<SeitenSpeichern\> zwischengspeichert wurden.
-sd:anzahl-datensätze(\<Sequenz\>)|  Gibt die Anzahl der Datensätze der Sequenz zurück.
-sd:anzahl-seiten(\<Dateiname oder URI-Schema\>)|  Ermittelt die Anzahl der Seiten der angegebenen (PDF-)Datei.
-sd:anzahl-spalten()|  Gibt die Anzahl der Spalten im aktuellen Raster.
-sd:anzahl-zeilen()|  Gibt die Anzahl der Zeilen im aktuellen Raster.
+sd:current-framenumber(\<name\>)|  Gibt die Nummer des aktuellen Rahmens im Platzierungsbereich zurück.
+sd:current-page()|  Gibt die Seitennummer zurück.
+sd:current-row(\<name\>)|  Gibt die aktuelle Zeile zurück. Wenn `name` angegeben, gibt die Zeile des gegebenen Positionsrahmens zurück.
+sd:current-column(\<name\>)|  Gibt die aktuelle Spalte zurück. Wenn `name` angegeben, gibt die Spalte des gegebenen Positionsrahmens zurück.
+sd:alternating(\<typ\>, \<text\>,\<text\>,.. )|  Bei jedem Aufruf wird das nächste Argument zurück gegeben. Wert des Typs ist beliebig, muss aber eindeutig sein. Beispiel: `sd:alternating("tbl", "Weiß","Grau")` könnte für die Hintergrundfarbe von Tabellen benutzt werden.
+sd:reset-alternating(\<typ\>)|  Setzt den Zustand für `sd:alternating()` für den angegebenen Typ zurück.
+sd:keep-alternating(\<typ\>)| Nutzt den aktuellen Wert von `sd:alternating(<typ>)`, ohne diesen zu verändern.
+sd:count-saved-pages(\<Name\>)|  Gibt die Anzahl der gespeicherten Seiten, die mit \<SavePages\> zwischen speichert wurden.
+sd:number-of-datasets(\<Sequenz\>)|  Gibt die Anzahl der Datensätze der Sequenz zurück.
+sd:number-of-pages(\<Dateiname oder URI-Schema\>)|  Ermittelt die Anzahl der Seiten der angegebenen (PDF-)Datei.
+sd:number-of-columns()|  Gibt die Anzahl der Spalten im aktuellen Raster.
+sd:number-of-rows()|  Gibt die Anzahl der Zeilen im aktuellen Raster.
 sd:attr(\<Name\>, ...)|  ist dasselbe wie `@Name`, nur mit der Möglichkeit den Namen auch dynamisch (z.B. mit `concat()`) zu erzeugen. Siehe Beispiel bei `sd:variable()`.
-sd:belegt(x,y,\<Bereichsname\>,\<Rahmennummer\>) | Gibt wahr zurück, wenn die Zelle belegt ist (seit 2.3.71).
-sd:bildbreite(\<Dateiname oder URI-Schema\>)|  Breite des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Breite des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert.
-sd:bildhöhe(\<Dateiname oder URI-Schema\>)|  Höhe des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Höhe des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert.
-sd:datei-vorhanden(\<Dateiname oder URI-Schema\>)|  Wahr, wenn der Dateiname im Suchpfad existiert, ansonsten false.
-sd:formatiere-zahl(Zahl oder String, Tausenderzeichen, Kommazeichen)|  Formatiert die übergebene Zahl und fügt Tausender-Trennzeichen hinzu und ändert den Kommatrenner. Beispiel: `sd:formatiere-zahl(12345.67, '.',',')` ergibt die Zeichenkette `1.2345,67`.
-sd:formatiere-string(Objekt,Objekt,...,Formartierungsangaben)|  Gibt eine Zeichenkette zurück, die die gegebenen Objekte mit den im zweiten Argument gegebenen Formatierungsanweisungen darstellt. Die Formatierungsanweisungen entsprechen der aus der Programmiersprache C bekannten `printf()`-Funktion.
-sd:gerade(\<zahl\>)|  Wahr, wenn die angegebene Zahl gerade ist. Beispiel: `sd:gerade(sd:aktuelle-seite())`
-sd:html-dekodieren(\<Node\>)|  Wandelt Texte wie `&lt;i&gt;Kursiv&lt;/i&gt;` in entsprechendes HTML-Markup.
-sd:ungerade(\<zahl\>)|  Wahr, wenn die angegebene Zahl ungerade ist.
-sd:gruppenbreite(\<string\>)|  Gibt die Breite in Rasterzellen für die Gruppe im ersten Argument an. Beispiel: `sd:gruppenbreite('Beispielgruppe')`
-sd:gruppenhöhe(\<string\>)|  Gibt die Höhe in Rasterzellen für die Gruppe im ersten Argument an. Beispiel: `sd:gruppenbreite('Beispielgruppe')`
-sd:seitennummer(\<Marke\>)|  Liefert die Seitenzahl der Seite auf der die angegebene Marke ausgegeben wurde. Siehe den Befehl [Marke](../commands-de/mark.html)
-sd:seitenverhältnis(\<Bildname>) | Gibt das Ergebnis der Divsion Bildbreite / Bildhöhe zurück. (D.h. < 1 für Hochkantbilder, > 1 für Querformat.)
-sd:seitenzahlen-zusammenfassen(\<Seitenzahlen\>,\<Trenner für Bereiche\>,\<Trenner für Leerraum\>) | Fasst Seitenzahlenbereiche zusammen. Beispielsweise aus `"1, 3, 4, 5"` wird `1, 3–5`. Voreinstellung für den Trenner für Bereiche ist ein Halbgeviertstrich (–), Voreinstellung für den Trenner für Leerraum ist ', ' (Komma, Leerzeichen). Diese Funktion sortiert die Zahlen und löscht doppelte Einträge. Bei leerem Trenner für Bereiche werden Zahlen nicht zusammengeführt, sondern einzeln mit dem Trenner für Leerraum verbunden.
+sd:allocated(x,y,\<Bereichsname\>,\<Rahmennummer\>) | Gibt wahr zurück, wenn die Zelle belegt ist (seit 2.3.71).
+sd:imagewidth(\<Dateiname oder URI-Schema\>)|  Breite des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Breite des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert.
+sd:imageheight(\<Dateiname oder URI-Schema\>)|  Höhe des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Höhe des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert.
+sd:file-exists(\<Dateiname oder URI-Schema\>)|  Wahr, wenn der Dateiname im Suchpfad existiert, ansonsten false.
+sd:format-number(Zahl oder String, Tausenderzeichen, Kommazeichen)|  Formatiert die übergebene Zahl und fügt Tausender-Trennzeichen hinzu und ändert den Kommatrenner. Beispiel: `sd:format-number(12345.67, '.',',')` ergibt die Zeichenkette `1.2345,67`.
+sd:format-string(Objekt,Objekt,...,Formatierungsangaben)|  Gibt eine Zeichenkette zurück, die die gegebenen Objekte mit den im zweiten Argument gegebenen Formatierungsanweisungen darstellt. Die Formatierungsanweisungen entsprechen der aus der Programmiersprache C bekannten `printf()`-Funktion.
+sd:even(\<zahl\>)|  Wahr, wenn die angegebene Zahl gerade ist. Beispiel: `sd:even(sd:current-page())`
+sd:decode-html(\<Node\>)|  Wandelt Texte wie `&lt;i&gt;Kursiv&lt;/i&gt;` in entsprechendes HTML-Markup.
+sd:odd(\<zahl\>)|  Wahr, wenn die angegebene Zahl ungerade ist.
+sd:group-width(\<string\>)|  Gibt die Breite in Rasterzellen für die Gruppe im ersten Argument an. Beispiel: `sd:group-width('Beispielgruppe')`
+sd:group-height(\<string\>)|  Gibt die Höhe in Rasterzellen für die Gruppe im ersten Argument an. Beispiel: `sd:group-height('Beispielgruppe')`
+sd:pagenumber(\<Marke\>)|  Liefert die Seitenzahl der Seite auf der die angegebene Marke ausgegeben wurde. Siehe den Befehl [Mark](../commands-de/mark.html)
+sd:aspectratio(\<Bildname>) | Gibt das Ergebnis der Division Bildbreite / Bildhöhe zurück. (D.h. < 1 für Hochkantbilder, > 1 für Querformat.)
+sd:merge-pagenumbers(\<Seitenzahlen\>,\<Trenner für Bereiche\>,\<Trenner für Leerraum\>) | Fasst Seitenzahlenbereiche zusammen. Beispielsweise aus `"1, 3, 4, 5"` wird `1, 3–5`. Voreinstellung für den Trenner für Bereiche ist ein Halbgeviertstrich (–), Voreinstellung für den Trenner für Leerraum ist ', ' (Komma, Leerzeichen). Diese Funktion sortiert die Zahlen und löscht doppelte Einträge. Bei leerem Trenner für Bereiche werden Zahlen nicht zusammengeführt, sondern einzeln mit dem Trenner für Leerraum verbunden.
 sd:sha1(\<Wert\>,\<Wert\>, …)|  Erzeugt die SHA-1 Summe der Hintereinanderkettung der Werte als Hex-Zeichenkette. Beispiel: `sd:sha1('Hallo ', 'Welt')` ergibt die Zeichenkette `28cbbc72d6a52617a7abbfff6756d04bbad0106a`.
 sd:variable(\<Name\>, ...)|  ist dasselbe wie $Name, nur mit der Möglichkeit den Namen auch dynamisch zu erzeugen. Falls `$i` den Wert 3 enthält, liest `sd:variable('foo',$i)` den Inhalt der Variablen `$foo3`. Damit lassen sich Arrays abbilden.
-sd:variable-vorhanden(\<Name\>)|  Prüft, ob eine Variable vorhanden ist.
-sd:blindtext() | Gibt den Blindtext "Lorem ipsum..." mit über 50 Wörtern zurück.
-sd:loremipsum() | Alias für `sd:blindtext()`
-sd:zufallswert(\<Wert\>,\<Wert\>, …) | Gibt einen der Werte zurück.
+sd:variable-exists(\<Name\>)|  Prüft, ob eine Variable vorhanden ist.
+sd:dummytext() | Gibt den Blindtext "Lorem ipsum..." mit über 50 Wörtern zurück.
+sd:loremipsum() | Alias für `sd:dummytext()`
+sd:randomitem(\<Wert\>,\<Wert\>, …) | Gibt einen der Werte zurück.
 
 Funktion | Beschreibung
 ---------|-------------

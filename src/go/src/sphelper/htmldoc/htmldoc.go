@@ -71,18 +71,14 @@ func attributes(lang string, attributes []*commandsxml.Attribute) template.HTML 
 		case "en":
 			ret = append(ret, fmt.Sprintf(`<a href="#%s"><span class="tt">%s</span></a>`, att.HTMLFragment(), att.NameEn))
 		case "de":
-			ret = append(ret, fmt.Sprintf(`<a href="#%s"><span class="tt">%s</span></a>`, att.HTMLFragment(), att.NameDe))
+			ret = append(ret, fmt.Sprintf(`<a href="#%s"><span class="tt">%s</span></a>`, att.HTMLFragment(), att.NameEn))
 		}
 	}
 	return template.HTML(strings.Join(ret, ", "))
 }
 
-func sortedcommands(lang string, commands *commandsxml.Commands) []*commandsxml.Command {
-	if lang == "en" {
-		return commands.CommandsSortedEn
-	} else {
-		return commands.CommandsSortedDe
-	}
+func sortedcommands(commands *commandsxml.Commands) []*commandsxml.Command {
+	return commands.CommandsSortedEn
 }
 
 func parentelements(lang string, cmd *commandsxml.Command) template.HTML {
@@ -92,7 +88,7 @@ func parentelements(lang string, cmd *commandsxml.Command) template.HTML {
 		return template.HTML("(" + translate(lang, "none") + ")")
 	}
 	for _, v := range x {
-		ret = append(ret, fmt.Sprintf(`<a href=%q>%s</a>`, v.Htmllink(), v.Name(lang)))
+		ret = append(ret, fmt.Sprintf(`<a href=%q>%s</a>`, v.Htmllink(), v.NameEn))
 	}
 	return template.HTML(strings.Join(ret, ", "))
 }
@@ -104,7 +100,7 @@ func childelements(lang string, children []*commandsxml.Command) template.HTML {
 
 	var ret []string
 	for _, cmd := range children {
-		ret = append(ret, fmt.Sprintf(`<a title="%s" href="%s">%s</a>`, html.EscapeString(cmd.DescriptionText(lang)), cmd.Htmllink(), cmd.Name(lang)))
+		ret = append(ret, fmt.Sprintf(`<a title="%s" href="%s">%s</a>`, html.EscapeString(cmd.DescriptionText(lang)), cmd.Htmllink(), cmd.NameEn))
 	}
 	return template.HTML(strings.Join(ret, ", "))
 }
@@ -123,7 +119,7 @@ func atttypeinfo(att *commandsxml.Attribute, lang string) template.HTML {
 		"xpath":              `<a href="../description-de/xpath.html">XPath Ausdruck</a>`,
 		"text":               "Text",
 		"number":             "Zahl",
-		"yesnolength":        "ja, nein oder Längenangabe",
+		"yesnolength":        "yes, no oder Längenangabe",
 		"numberorlength":     "Zahl oder Längenangabe",
 		"numberlengthorstar": "Zahl, Maßangabe oder *-Angaben",
 		"zerotohundred":      "0 bis 100",

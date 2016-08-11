@@ -226,15 +226,14 @@ local function groupwidth(dataxml, arg )
     return 0
   end
 
-  local grid = publisher.current_grid
-  local width = grid:width_in_gridcells_sp(groupcontents.width)
+  local width = publisher.current_grid:width_in_gridcells_sp(groupcontents.width)
   return width
 end
 
 local function current_frame_number(dataxml,arg)
   local framename = arg[1]
   if framename == nil then return 1 end
-  local current_framenumber = current_grid:framenumber(framename)
+  local current_framenumber = publisher.current_grid:framenumber(framename)
   return current_framenumber
 end
 
@@ -314,7 +313,7 @@ local function decode_html( dataxml, arg )
   return arg
 end
 
-local function count_saved_paged(dataxml,arg)
+local function count_saved_pages(dataxml,arg)
     return #publisher.pagestore[arg[1]]
 end
 
@@ -326,7 +325,7 @@ end
 local function aspectratio( dataxml,arg )
   local filename = arg[1]
   local img = publisher.imageinfo(filename)
-  return img.img.width / img.img.height
+  return img.img.xsize / img.img.ysize
 end
 
 local function loremipsum( )
@@ -353,8 +352,8 @@ register("urn:speedata:2009/publisher/functions/de","alternierend",alternating)
 register("urn:speedata:2009/publisher/functions/en","aspectratio",aspectratio)
 register("urn:speedata:2009/publisher/functions/de","seitenverhältnis",aspectratio)
 
-register("urn:speedata:2009/publisher/functions/en","count-saved-pages",count_saved_paged)
-register("urn:speedata:2009/publisher/functions/de","anzahl-gespeicherte-seiten",count_saved_paged)
+register("urn:speedata:2009/publisher/functions/en","count-saved-pages",count_saved_pages)
+register("urn:speedata:2009/publisher/functions/de","anzahl-gespeicherte-seiten",count_saved_pages)
 
 register("urn:speedata:2009/publisher/functions/en","current-page",current_page)
 register("urn:speedata:2009/publisher/functions/de","aktuelle-seite",current_page)

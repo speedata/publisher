@@ -127,6 +127,7 @@ func runComparison(path string, status chan compareStatus) {
 	cmd.Dir = path
 	err = cmd.Run()
 	if err != nil {
+		log.Println(path)
 		log.Fatal("Error running command 'sp': ", err)
 	}
 	cmd = exec.Command("convert", "publisher.pdf", "source-%02d.png")

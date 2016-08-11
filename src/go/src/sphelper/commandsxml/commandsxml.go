@@ -216,17 +216,13 @@ func (c *CommandsXML) TranslateCommand(sourcelang, destlang, commandname string)
 		tmp := c.en[commandname]
 		return tmp.De
 	}
-	return "xxx"
+	return "?"
 }
 
 func (c *CommandsXML) TranslateAttribute(sourcelang, destlang, commandname, attname, attvalue string) (string, string) {
 	if sourcelang == destlang {
 		return attname, attvalue
 	}
-	// if sourcelang == "de" && destlang == "en" {
-	// 	tmp := c.de[commandname]
-	// 	return tmp.En
-	// }
 	if sourcelang == "en" && destlang == "de" {
 		for _, v := range c.en[commandname].Attributes {
 			if v.En == attname {
@@ -238,7 +234,20 @@ func (c *CommandsXML) TranslateAttribute(sourcelang, destlang, commandname, attn
 				return v.De, attvalue
 			}
 		}
-		return "yyy", "yyy"
+		return "(1)", ""
 	}
-	return "xxx", "xxx"
+	if sourcelang == "de" && destlang == "en" {
+		for _, v := range c.de[commandname].Attributes {
+			if v.De == attname {
+				for _, c := range v.Choice {
+					if attvalue == c.De {
+						return v.En, c.En
+					}
+				}
+				return v.En, attvalue
+			}
+		}
+		return "(2)", ""
+	}
+	return "", ""
 }

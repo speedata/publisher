@@ -40,7 +40,7 @@ end
 
 
 
-local function listen()
+local function connect()
     local port = os.getenv("SP_SERVERPORT")
     if not port then
         err("Port must be set (environment variable SP_SERVERPORT)")
@@ -57,7 +57,7 @@ local function listen()
 end
 
 return {
-    listen = listen,
+    connect = connect,
     tcp = tcp,
     sendmessage = sendmessage,
     get_string_messages = get_string_messages,

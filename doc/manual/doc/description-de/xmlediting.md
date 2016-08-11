@@ -16,26 +16,24 @@ RelaxNG Schemas verarbeiten kann:
 -   [jEdit](http://www.jedit.org) (Mac, Windows, Linux, kostenlos)
 
 Das RelaxNG-Schema für das Layoutregelwerk liegt in der ZIP-Datei im
-Verzeichnis `share/schema/` unter dem Dateinamen `layoutschema-de.rng`
-bzw. `layoutschema-en.rng` für das englischsprachige Regelwerk.
+Verzeichnis `share/schema/` unter dem Dateinamen `layoutschema-en.rng` für das Regelwerk.
 
 Hinweis
 -------
 
 Der XML-Namensraum des Layoutregelwerks ist
-`urn:speedata.de:2009/publisher/de`. Daher muss das Layoutregelwerk,
+`urn:speedata.de:2009/publisher/en`. Daher muss das Layoutregelwerk,
 sofern es gegen das RelaxNG Schema validiert wird, wie folgt aussehen:
 
-    <Layout xmlns="urn:speedata.de:2009/publisher/de">
+    <Layout xmlns="urn:speedata.de:2009/publisher/en">
      ...
     </Layout>
 
-Falls Layoutspezifische XPath-Funktionen benutzt werden, muss der
-Namensraum `urn:speedata:2009/publisher/functions/de` bzw. für englische
-Funktionen `urn:speedata:2009/publisher/functions/en` angegeben werden:
+Falls layoutspezifische XPath-Funktionen benutzt werden, muss der
+Namensraum `urn:speedata:2009/publisher/functions/en` angegeben werden:
 
-    <Layout xmlns="urn:speedata.de:2009/publisher/de"
-            xmlns:sd="urn:speedata:2009/publisher/functions/de">
+    <Layout xmlns="urn:speedata.de:2009/publisher/en"
+            xmlns:sd="urn:speedata:2009/publisher/functions/en">
      ...
     </Layout>
 
@@ -49,7 +47,7 @@ das Schema jedem Dokument einzeln zuzuweisen:
 {{ img . "oxygen-schemazuweisen.png" }}
 
 gibt es die dauerhafte Lösung, allen Dokumenten im Namensraum
-`urn:speedata.de:2009/publisher/de` das RelaxNG Schema zuzuweisen.
+`urn:speedata.de:2009/publisher/en` das RelaxNG Schema zuzuweisen.
 
 Dazu erstellt man in den Einstellungen unter „Dokumenttypen Zuordnung“
 eine neue Regel.
@@ -67,7 +65,7 @@ dieser Abbildung:
 
 
 Anschließend muss noch der Pfad zur Schemadatei angegeben werden
-(`.../schema/layoutschema-de.rng`):
+(`.../schema/layoutschema-en.rng`):
 
 
 {{ img . "schemazuweisung-oxygen.png" }}

@@ -123,7 +123,8 @@ function commands.attribute( layoutxml,dataxml )
     local attname   = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
 
     if not selection then return { [".__type"]="attribute", [attname] = "" } end
-    local ret = { [".__type"]="attribute", [attname] = publisher.xml_escape(xpath.textvalue(selection)) }
+    -- Escaping the xpath.textvalue makes & into &amp; etc.
+    local ret = { [".__type"]="attribute", [attname] = xpath.textvalue(selection) }
     return ret
 end
 
@@ -193,13 +194,13 @@ function commands.bold( layoutxml,dataxml )
 
     for i,j in ipairs(tab) do
         if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{bold = true})
+            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{bold = true, allowbreak=publisher.allowbreak})
         else
             objects[#objects + 1] = publisher.element_contents(j)
         end
     end
     for _,j in ipairs(objects) do
-        a:append(j,{fontfamily = 0, bold = 1})
+        a:append(j,{fontfamily = 0, bold = 1, allowbreak=publisher.allowbreak})
     end
 
     return a
@@ -229,6 +230,31 @@ function commands.box( layoutxml,dataxml )
     local css_rules = publisher.css:matches({element = 'box', class=class,id=id}) or {}
     colorname = colorname or css_rules["background-color"] or "black"
 
+    local attribute = {
+        ["padding-top"]      = "length",
+        ["padding-right"]    = "length",
+        ["padding-bottom"]   = "length",
+        ["padding-left"]     = "length",
+    }
+    local tab = {}
+    if css_rules and type(css_rules) == "table" then
+        for k,v in pairs(css_rules) do
+            tab[k]=v
+        end
+    end
+
+    local tmpattr
+    for attname,atttyp in pairs(attribute) do
+        tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
+        if tmpattr then
+            tab[attname] = tmpattr
+        end
+    end
+    if tab["padding-top"]    then tab.padding_top    = tex.sp(tab["padding-top"])    end
+    if tab["padding-bottom"] then tab.padding_bottom = tex.sp(tab["padding-bottom"]) end
+    if tab["padding-left"]   then tab.padding_left   = tex.sp(tab["padding-left"])   end
+    if tab["padding-right"]  then tab.padding_right  = tex.sp(tab["padding-right"])  end
+
     local current_grid = publisher.current_grid
 
     -- Todo: document length or number
@@ -242,8 +268,24 @@ function commands.box( layoutxml,dataxml )
     else
         height = tex.sp(height)
     end
-
     local shift_left,shift_up = 0,0
+
+    if tab.padding_left then
+        width = width - tab.padding_left
+        shift_left = shift_left - tab.padding_left
+    end
+    if tab.padding_right then
+        width = width - tab.padding_right
+    end
+
+    if tab.padding_bottom then
+        height = height - tab.padding_bottom
+    end
+    if tab.padding_top then
+        height = height - tab.padding_top
+        shift_up = shift_up - tab.padding_top
+    end
+
 
     if bleed then
         local trim = publisher.options.trim or 0
@@ -339,13 +381,13 @@ function commands.color( layoutxml, dataxml )
 
     for i,j in ipairs(tab) do
         if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{})
+            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{allowbreak=publisher.allowbreak})
         else
             objects[#objects + 1] = publisher.element_contents(j)
         end
     end
     for _,j in ipairs(objects) do
-        a:append(j,{})
+        a:append(j,{allowbreak=publisher.allowbreak})
     end
 
     a:set_color(colortable)
@@ -558,10 +600,11 @@ function commands.define_fontfamily( layoutxml,dataxml )
       err("DefineFontfamily: no size given.")
       return
     end
+    -- warning: this is not the same! See bug #99.
     if tonumber(size) == nil then
         size = tex.sp(size)
     else
-        size = size * publisher.factor
+        size = tex.sp(tostring(size) .."pt")
     end
 
     if baselineskip == nil then
@@ -571,7 +614,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
     if tonumber(baselineskip) == nil then
         baselineskip = tex.sp(baselineskip)
     else
-        baselineskip = baselineskip * publisher.factor
+        baselineskip = tex.sp(tostring(baselineskip) .."pt")
     end
 
     fam.size         = size
@@ -682,7 +725,7 @@ function commands.fontface( layoutxml,dataxml )
         local a = paragraph:new()
         local tab = publisher.dispatch(layoutxml,dataxml)
         for i,j in ipairs(tab) do
-            a:append(xpath.textvalue_raw(true,publisher.element_contents(j)),{fontfamily = familynumber})
+            a:append(xpath.textvalue_raw(true,publisher.element_contents(j)),{fontfamily = familynumber, allowbreak=publisher.allowbreak})
         end
         return a
     end
@@ -699,11 +742,15 @@ function commands.forall( layoutxml,dataxml )
     local tmp_tab
     local current_position = publisher.xpath.get_variable("__position")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
+    if not selection then
+        err("Can't iterate over an unknown sequence")
+        return {}
+    end
+
     limit = limit or #selection
     if limit > #selection then
         limit = #selection
     end
-
     start = start or 1
 
     for i = start,limit do
@@ -786,8 +833,10 @@ function commands.grid( layoutxml,dataxml )
     local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --pg
     local nx     = publisher.read_attribute(layoutxml,dataxml,"nx",     "rawstring")
     local ny     = publisher.read_attribute(layoutxml,dataxml,"ny",     "rawstring")
+    local dx     = publisher.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
+    local dy     = publisher.read_attribute(layoutxml,dataxml,"dy",     "length_sp")
 
-    return { width = width, height = height, nx = tonumber(nx), ny = tonumber(ny) }
+    return { width = width, height = height, nx = tonumber(nx), ny = tonumber(ny), dx = dx, dy = dy }
 end
 
 --- Group
@@ -855,9 +904,9 @@ end
 --- ------
 --- Create a horizontal space that stretches up to infinity
 function commands.hspace( layoutxml,dataxml )
-    local width  = publisher.read_attribute(layoutxml,dataxml,"width", "length_sp")
+    local width      = publisher.read_attribute(layoutxml,dataxml,"width", "length_sp")
     local leadertext = publisher.read_attribute(layoutxml,dataxml,"leader", "rawstring")
-    local leaderwd = publisher.read_attribute(layoutxml,dataxml,"leader-width", "length_sp")
+    local leaderwd   = publisher.read_attribute(layoutxml,dataxml,"leader-width", "length_sp")
     local a = paragraph:new()
 
     -- It seems that it's safe to use 100 for leaders and leader-less-glue
@@ -884,7 +933,22 @@ function commands.hspace( layoutxml,dataxml )
         node.set_attribute(lp.nodelist, publisher.att_lederwd, leaderwd or -1)
         n.leader = lp.nodelist
     end
-    a:append(n,{})
+    local p1, p2
+    p1 = node.new("penalty")
+    p1.penalty = 0
+
+    p2 = node.new("penalty")
+    p2.penalty = 10000
+
+    local h1 = node.new("hlist")
+
+    node.insert_after(p1,p1,h1)
+    node.insert_after(p1,h1,p2)
+    node.insert_after(p1,p2,n)
+
+
+    a:append(p1,{})
+
     return a
 end
 
@@ -932,6 +996,36 @@ function commands.image( layoutxml,dataxml )
     local dpiwarn   = publisher.read_attribute(layoutxml,dataxml,"dpiwarn",    "number")
     local rotate    = publisher.read_attribute(layoutxml,dataxml,"rotate",     "number")
     local fallback  = publisher.read_attribute(layoutxml,dataxml,"fallback",   "rawstring")
+    local class = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
+    local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
+
+    local css_rules = publisher.css:matches({element = 'img', class=class,id=id}) or {}
+
+    local attribute = {
+        ["padding-top"]      = "length",
+        ["padding-right"]    = "length",
+        ["padding-bottom"]   = "length",
+        ["padding-left"]     = "length",
+    }
+    local tab = {}
+    if css_rules and type(css_rules) == "table" then
+        for k,v in pairs(css_rules) do
+            tab[k]=v
+        end
+    end
+
+    local tmpattr
+    for attname,atttyp in pairs(attribute) do
+        tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
+        if tmpattr then
+            tab[attname] = tmpattr
+        end
+    end
+    if tab["padding-top"]    then tab.padding_top    = tex.sp(tab["padding-top"])    end
+    if tab["padding-bottom"] then tab.padding_bottom = tex.sp(tab["padding-bottom"]) end
+    if tab["padding-left"]   then tab.padding_left   = tex.sp(tab["padding-left"])   end
+    if tab["padding-right"]  then tab.padding_right  = tex.sp(tab["padding-right"])  end
+
 
     -- width = 100%  => take width from surrounding area
     -- auto on any value ({max,min}?{width,height}) is default
@@ -987,19 +1081,35 @@ function commands.image( layoutxml,dataxml )
     local overshoot
     if clip then
         local stretch_shrink
-        if width / image.width > height / image.height then
-            stretch_shrink = width / image.width
-            overshoot = math.round(  (image.height * stretch_shrink - height ) / publisher.factor / 2,3)
+        if width / image.xsize > height / image.ysize then
+            stretch_shrink = width / image.xsize
+            overshoot = math.round(  (image.ysize * stretch_shrink - height ) / publisher.factor / 2,3)
             overshoot = -overshoot
         else
-            stretch_shrink = height / image.height
-            overshoot = math.round(  (image.width * stretch_shrink - width) / publisher.factor / 2 ,3)
+            stretch_shrink = height / image.ysize
+            overshoot = math.round(  (image.xsize * stretch_shrink - width) / publisher.factor / 2 ,3)
         end
-        width = image.width   * stretch_shrink
-        height = image.height * stretch_shrink
+        width = image.xsize   * stretch_shrink
+        height = image.ysize * stretch_shrink
     end
 
     local shift_left,shift_up = 0,0
+
+    if tab.padding_left then
+        width = width - tab.padding_left
+        shift_left = shift_left - tab.padding_left
+    end
+    if tab.padding_right then
+        width = width - tab.padding_right
+    end
+
+    if tab.padding_bottom then
+        height = height - tab.padding_bottom
+    end
+    if tab.padding_top then
+        height = height - tab.padding_top
+        shift_up = shift_up - tab.padding_top
+    end
 
     image.width  = width
     image.height = height
@@ -1059,9 +1169,9 @@ function commands.image( layoutxml,dataxml )
         box = node.hpack(img.node(image))
         node.set_attribute(box,publisher.att_origin,publisher.origin_image)
         node.set_attribute(box,publisher.att_lineheight,box.height)
+        node.set_attribute(box, publisher.att_shift_left, shift_left)
+        node.set_attribute(box, publisher.att_shift_up  , shift_up  )
     end
-    -- node.set_attribute(box, publisher.att_shift_left, shift_left)
-    -- node.set_attribute(box, publisher.att_shift_up  , shift_up  )
     return {box,imageinfo.allocate}
 end
 
@@ -1071,6 +1181,10 @@ end
 function commands.insert_pages( layoutxml,dataxml )
     local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
     local thispagestore = publisher.pagestore[pagestore_name]
+    if not thispagestore then
+        err("Saved pages not found.")
+        return
+    end
     for i=1,#thispagestore do
         tex.box[666] = thispagestore[i]
         tex.shipout(666)
@@ -1089,13 +1203,13 @@ function commands.italic( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
         if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{italic = true})
+            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{italic = true, allowbreak=publisher.allowbreak})
         else
             objects[#objects + 1] = publisher.element_contents(j)
         end
     end
     for _,j in ipairs(objects) do
-        a:append(j,{fontfamily = 0, italic = 1})
+        a:append(j,{fontfamily = 0, italic = 1, allowbreak=publisher.allowbreak})
     end
     return a
 end
@@ -1262,7 +1376,7 @@ function commands.margin( layoutxml,dataxml )
     local top    = publisher.read_attribute(layoutxml,dataxml,"top",  "length")
     local bottom = publisher.read_attribute(layoutxml,dataxml,"bottom", "length")
 
-    return function(_seite) _seite.grid:set_margin(left,top,right,bottom) end
+    return function(_page) _page.grid:set_margin(left,top,right,bottom) end
 end
 
 --- Mark
@@ -1418,12 +1532,22 @@ end
 --- -------
 --- Don't allow a linebreak of the contents. Reduce font size if necessary
 function commands.nobreak( layoutxml, dataxml )
-    local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth",  "length_sp", xpath.get_variable("__maxwidth"))
-    local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor", "rawstring",0.9)
-    local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce","string")
-    local text             = publisher.read_attribute(layoutxml,dataxml,"text","rawstring")
+    local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth", "length_sp", xpath.get_variable("__maxwidth"))
+    local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor",   "rawstring",0.9)
+    local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce",   "string")
+    local text             = publisher.read_attribute(layoutxml,dataxml,"text",     "rawstring")
+    local fontname         = publisher.read_attribute(layoutxml,dataxml,"fontface", "rawstring")
 
     local fontfamily = 0
+    if fontname then
+        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+        if fontfamily == nil then
+            err("Fontfamily %q not found.",fontname)
+            fontfamily = 0
+        end
+        publisher.current_fontfamily = fontfamily
+    end
+
     local languagecode = publisher.defaultlanguage
 
     publisher.intextblockcontext = publisher.intextblockcontext + 1
@@ -1442,7 +1566,7 @@ function commands.nobreak( layoutxml, dataxml )
         end
     end
     for _,j in ipairs(objects) do
-        a:append(j,{fontfamily = 0, languagecode = languagecode, allowbreak = allowbreak})
+        a:append(j,{fontfamily = fontfamily, languagecode = languagecode, allowbreak = allowbreak})
     end
 
     if strategy == "fontsize" then
@@ -1472,7 +1596,7 @@ function commands.nobreak( layoutxml, dataxml )
         if node.dimensions(nl) <= current_maxwidth then
             return a
         end
-        local txt = publisher.mknodes(text,fam,{})
+        local txt = publisher.mknodes(text,fontfamily,{})
         txt = node.hpack(txt)
         local wd_txt = node.dimensions(txt)
         local head = nl.list
@@ -1570,7 +1694,6 @@ function commands.output( layoutxml,dataxml )
     local area     = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
     local allocate = publisher.read_attribute(layoutxml,dataxml,"allocate", "string", "yes")
     local row      = publisher.read_attribute(layoutxml,dataxml,"row","number")
-
     local maxwidth = publisher.current_grid:width_sp(publisher.current_grid:number_of_columns(area))
     local current_maxwidth = xpath.get_variable("__maxwidth")
     xpath.set_variable("__maxwidth", maxwidth)
@@ -1582,6 +1705,8 @@ function commands.output( layoutxml,dataxml )
     publisher.xpath.set_variable("__area",area)
     publisher.next_row(row,area,1)
 
+
+    local current_grid
 
     for i=1,#tab do
         local contents = publisher.element_contents(tab[i])
@@ -1619,6 +1744,7 @@ function commands.output( layoutxml,dataxml )
             if obj == nil then
                 break
             else
+                local ht = current_grid:height_in_gridcells_sp(obj.height)
                 publisher.output_at({nodelist = obj, x = 1, y = row, allocate = true, area = area})
                 -- We don't need to go to the next page when we are a the end
                 if nextfreerow then
@@ -1629,6 +1755,11 @@ function commands.output( layoutxml,dataxml )
                 else
                     if more_to_follow then
                         publisher.next_area(area)
+                    else
+                        -- We need to go down a bit to ensure that the next
+                        -- current row for allocation detection is not
+                        -- at the last position. See bug #89
+                        current_grid:set_current_row(row + ht,area)
                     end
                 end
             end
@@ -1715,6 +1846,7 @@ function commands.paragraph( layoutxml,dataxml )
     local colorname     = publisher.read_attribute(layoutxml,dataxml,"color",     "rawstring")
     local language_name = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
 
+    publisher.allowbreak = allowbreak
     colorname = colorname or css_rules["color"]
     fontname  = fontname  or css_rules["font-family"]
 
@@ -1764,6 +1896,9 @@ function commands.paragraph( layoutxml,dataxml )
             objects[#objects + 1] = contents
         end
     end
+
+    publisher.allowbreak = nil
+
     for _,j in ipairs(objects) do
         a:append(j,{fontfamily = fontfamily, languagecode = languagecode, allowbreak = allowbreak})
     end
@@ -1864,6 +1999,7 @@ function commands.place_object( layoutxml,dataxml )
         err("Areas can't be combined with groups")
     end
     area = area or publisher.default_areaname
+    xpath.set_variable("__currentarea", area)
     framecolor = framecolor or "black"
 
     if column and not tonumber(column) then
@@ -1911,6 +2047,11 @@ function commands.place_object( layoutxml,dataxml )
     -- remember the current maximum width for later
     local current_maxwidth = xpath.get_variable("__maxwidth")
     local mw = current_grid:number_of_columns(area)
+    if not mw then
+        err("Something is wrong with the curernt page, expect strange results")
+        return
+    end
+
     if absolute_positioning == false then
         if tonumber(column) then
             mw = current_grid:width_sp(mw - column + 1)
@@ -1934,11 +2075,16 @@ function commands.place_object( layoutxml,dataxml )
     -- current_height is the remaining space on the current page in sp
     local areaheight = ( maxheight or current_grid:number_of_rows(area) ) * current_grid.gridheight
     local options = {}
-    options.ht_max= areaheight
-    if vreference == "bottom" then
-        options.current_height = areaheight
+    if publisher.current_group == nil then
+        options.ht_max = areaheight
+        if vreference == "bottom" then
+            options.current_height = areaheight
+        else
+            options.current_height = math.min(current_grid:remaining_height_sp(row,area),areaheight)
+        end
     else
-        options.current_height = math.min(current_grid:remaining_height_sp(row,area),areaheight)
+        options.ht_max = publisher.maxdimen
+        options.current_height = publisher.maxdimen
     end
     if allocate == "no" then
         options.current_height = areaheight
@@ -1957,7 +2103,7 @@ function commands.place_object( layoutxml,dataxml )
             err("Unknown group %q in PlaceObject",groupname)
         else
             objects[1] = { object = node.copy(publisher.groups[groupname].contents),
-                objecttype = string.format("Gruppe (%s)", groupname)}
+                objecttype = string.format("Group (%s)", groupname)}
         end
     else
         for i,j in ipairs(tab) do
@@ -1978,6 +2124,7 @@ function commands.place_object( layoutxml,dataxml )
         end
     end
     for i=1,#objects do
+        current_grid = publisher.current_grid
         local framewidth
         object     = objects[i].object
         objecttype = objects[i].objecttype
@@ -2099,6 +2246,13 @@ function commands.place_object( layoutxml,dataxml )
             trace("object placed")
             row = nil -- the current rows is not valid anymore because an object is already rendered
         end -- no absolute positioning
+        if i < #objects then
+            -- don't switch when inside a group
+            if publisher.current_group == nil then
+                publisher.next_area(area)
+                publisher.setup_page()
+            end
+        end
     end
     if not allocate == "yes" then
         current_grid:set_current_row(current_row_start)
@@ -2113,37 +2267,7 @@ end
 
 --- ProcessRecord
 --- -------------
---- This command takes the contents from the given attribute `select` (an
---- XPath- expression) and process this. If you feed garbage in, well,
---- probably nothing useful comes out. (This should be the only command to
---- process data, but at the moment there is the _static_ ProcessNode).
-function commands.process_record( layoutxml,dataxml )
-    -- FIXME: remove this, not needed anymore
-    trace("ProcessRecord")
-    local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
-    local limit     = publisher.read_attribute(layoutxml,dataxml,"limit","number")
-
-    local record = xpath.parse(dataxml,selection,layoutxml[".__ns"])
-    local layoutknoten
-
-    if limit then
-        limit = math.min(#record,limit)
-    else
-        if record then
-            limit = #record or 0
-        else
-            limit = 0
-        end
-    end
-
-    for i=1,limit do
-        local eltname = dataxml[i]["inhalt"][".__local_name"]
-        layoutknoten=publisher.data_dispatcher[""][eltname]
-        log("Selecting node: %q",eltname or "???")
-        publisher.xpath.set_variable("__position",i)
-        publisher.dispatch(layoutknoten,publisher.element_contents(dataxml[i]))
-    end
-end
+--- (removed in 2.5.6)
 
 --- ProcessNode
 --- -----------
@@ -2155,6 +2279,8 @@ function commands.process_node(layoutxml,dataxml)
     trace("process_node")
     local dataxml_selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     local mode              = publisher.read_attribute(layoutxml,dataxml,"mode","rawstring") or ""
+    local limit             = publisher.read_attribute(layoutxml,dataxml,"limit","number")
+
     -- To restore the current value of `__position`, we save it.
     -- The value of `__position` is available from xpath (function position()).
     local current_position = publisher.xpath.get_variable("__position")
@@ -2162,7 +2288,12 @@ function commands.process_node(layoutxml,dataxml)
     local layoutnode
     local pos = 1
     if not dataxml_selection then return nil end
-    for i=1,#dataxml_selection do
+    if limit then
+        limit = math.min(#dataxml_selection,limit)
+    else
+        limit = #dataxml_selection
+    end
+    for i=1, limit do
         element_name = dataxml_selection[i][".__local_name"]
         local modeselector = publisher.data_dispatcher[mode]
         if modeselector == nil then
@@ -2486,8 +2617,12 @@ function commands.setvariable( layoutxml,dataxml )
                     end
                     ret = ret .. element_contents
                 elseif type(element_contents) == "string" then
-                    ret = ret or ""
-                    ret = ret .. element_contents
+                    local typ = type(ret)
+                    if  typ == "table" then
+                        ret[#ret + 1] = element_contents
+                    elseif typ == "string" then
+                        ret = ret .. element_contents
+                    end
                 elseif type(element_contents) == "number" then
                     ret = ret or ""
                     ret = ret .. tostring(element_contents)
@@ -2691,6 +2826,7 @@ function commands.table( layoutxml,dataxml,options )
     local tabular = publisher.tabular:new()
 
     tabular.tab = tab
+    tabular.getheight      = publisher.getheight
     tabular.options        = options or { ht_max=99999*2^16 } -- FIXME! Test - this is for tabular in tabular
     tabular.layoutxml      = layoutxml
     tabular.dataxml        = dataxml
@@ -2897,10 +3033,7 @@ function commands.td( layoutxml,dataxml )
                 local x = string.match(v,"\"(.*)\"")
                 tab["background-text"] = x
             elseif k == "background-size" then
-                if v ~= "contain" then
-                    err("The background size of Td must be 'contain'")
-                end
-                tab["background-size"] = "contain"
+                tab["background-size"] = v
             else
                 tab[k] = v
             end
@@ -2970,12 +3103,36 @@ end
 function commands.text(layoutxml,dataxml)
     -- balance is currently not supported
     -- local balance = publisher.read_attribute(layoutxml,dataxml,"balance",   "rawstring")
+    local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface","rawstring")
+    local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",   "rawstring", "black")
+    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
+
     local tab = publisher.dispatch(layoutxml,dataxml)
+
+    if not fontname then fontname = "text" end
+    fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+    if fontfamily == nil then
+        err("Fontfamily %q not found.",fontname or "???")
+        fontfamily = 1
+    end
+
+    local save_fontfamily = publisher.current_fontfamily
+    publisher.current_fontfamily = fontfamily
+
+
+    local colortable
+    if colorname then
+        if not publisher.colors[colorname] then
+            err("Color %q is not defined.",colorname)
+        else
+            colortable = publisher.colors[colorname].index
+        end
+    end
 
     local objects = {}
     for i,j in ipairs(tab) do
         local eltname = publisher.elementname(j)
-        trace("Textblock: Element = %q",tostring(eltname))
+        trace("Text: Element = %q",tostring(eltname))
         if eltname == "Paragraph" then
             objects[#objects + 1] = publisher.element_contents(j)
         elseif eltname == "Ul" or eltname == "Ol" then
@@ -3017,17 +3174,29 @@ function commands.text(layoutxml,dataxml)
                 local startrow =  cg:current_row(parameter.area)
                 for i=1,#tab do
                     local contents = tab[i]
-                    local tmp = node.has_attribute(contents.nodelist,publisher.att_dont_format)
-                    if tmp == 1 then
+                    local dont_format = node.has_attribute(contents.nodelist,publisher.att_dont_format)
+                    if dont_format == 1 then
                         obj = node.vpack(contents.nodelist)
                     else
-                        contents.nodelist = publisher.addstrut(contents.nodelist,publisher.origin_text)
-                        obj,startpage,startrow = contents:format(parameter.width,nil,parameter,startpage,startrow)
+                        contents.nodelist = publisher.set_color_if_necessary(contents.nodelist,colortable)
+                        publisher.set_fontfamily_if_necessary(contents.nodelist,fontfamily)
+                        -- contents.nodelist = publisher.addstrut(contents.nodelist,publisher.origin_text)
+                        obj,startpage,startrow = contents:format(parameter.width,textformat,parameter,startpage,startrow)
                     end
                     objects[#objects + 1] = obj
                     local ht_rows, extra = cg:height_in_gridcells_sp(obj.height + obj.depth + extra_accumulated, {floor = true})
                     extra_accumulated = extra
-                    cg:set_current_row(ht_rows + cg:current_row(parameter.area),parameter.area)
+                    local overshoot = cg:advance_cursor(ht_rows,parameter.area)
+                    if overshoot > 0 then
+                        if cg:number_of_frames(parameter.area) > cg:framenumber(parameter.area) then
+                            cg:advance_cursor(overshoot,parameter.area)
+                        elseif publisher.pages[cg.pagenumber + 1] then
+                            -- fixme: it could be that the advance_cursor is so large that it should
+                            -- get to some future page..
+                            local next_page_grid = publisher.pages[cg.pagenumber + 1].grid
+                            next_page_grid:advance_cursor(overshoot,parameter.area)
+                        end
+                    end
                 end
             end
             if #state.objects > 0 then
@@ -3203,7 +3372,8 @@ function commands.textblock( layoutxml,dataxml )
     trace("Textbock: end")
     publisher.intextblockcontext = publisher.intextblockcontext - 1
     if minheight then
-        nodelist.height = math.max(nodelist.height + nodelist.depth, minheight - nodelist.depth)
+        nodelist.height = math.max(nodelist.height + nodelist.depth, minheight )
+        nodelist.depth = 0
     end
     return nodelist
 end
@@ -3231,13 +3401,13 @@ function commands.underline( layoutxml,dataxml )
     end
     for i,j in ipairs(tab) do
         if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{underline = underline})
+            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{underline = underline, allowbreak=publisher.allowbreak})
         else
             objects[#objects + 1] = publisher.element_contents(j)
         end
     end
     for _,j in ipairs(objects) do
-        a:append(j,{fontfamily = 0, underline = underline})
+        a:append(j,{fontfamily = 0, underline = underline, allowbreak=publisher.allowbreak})
     end
     return a
 end

@@ -46,11 +46,13 @@ end
 ---
 --- ![Objects in a table](../img/objectsintable.svg)
 --- The table is stored in the objects
-function attach_objects_row( tab )
+function attach_objects_row( self, tab )
     -- For each block object (container) there is one row in block
     local td_elementname
     local td_contents
+    local current_column = 0
     for _,td in ipairs(tab) do
+        current_column = current_column + 1
         td_elementname = publisher.elementname(td)
         td_contents    = publisher.element_contents(td)
         if td_elementname == "Td" then
@@ -77,7 +79,7 @@ function attach_objects_row( tab )
                     block[#block + 1] = {eltcontents}
                 elseif eltname == "Paragraph" or eltname == "Box" then
                     local default_textformat_name
-                    local alignment = td_contents.align or tab.align
+                    local alignment = td_contents.align or tab.align or self.align[current_column]
                     if     alignment=="center"  then  default_textformat_name = "__centered"
                     elseif alignment=="left"    then  default_textformat_name = "__leftaligned"
                     elseif alignment=="right"   then  default_textformat_name = "__rightaligned"
@@ -114,7 +116,7 @@ function attach_objects_row( tab )
             end
             td_contents.objects = block
         elseif td_elementname == "Tr" then -- probably from tablefoot/head
-            attach_objects_row(td_contents)
+            attach_objects_row(self,td_contents)
         elseif td_elementname == "Column" or td_elementname == "Tablerule" then
             -- ignore, they don't have objects
         else
@@ -123,9 +125,9 @@ function attach_objects_row( tab )
     end
 end
 
-function attach_objects( tab )
+function attach_objects( self, tab )
     for _,tr in ipairs(tab) do
-        attach_objects_row(publisher.element_contents(tr))
+        attach_objects_row(self, publisher.element_contents(tr))
     end
 end
 
@@ -264,6 +266,23 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
     end  -- ∀ columns
 end
 
+function collect_alignments( self )
+    for _,tr in ipairs(self.tab) do
+        local tr_contents      = publisher.element_contents(tr)
+        local tr_elementname = publisher.elementname(tr)
+        if tr_elementname == "Columns" then
+            local i = 0
+            for _,column in ipairs(tr_contents) do
+                if publisher.elementname(column)=="Column" then
+                    local column_contents = publisher.element_contents(column)
+                    i = i + 1
+                    self.align[i] =  column_contents.align
+                    self.valign[i] = column_contents.valign
+                end
+            end
+        end
+    end
+end
 
 --- Calculate the widths of the columns for the table.
 --- -------------------------------------------------
@@ -299,12 +318,10 @@ function calculate_columnwidth( self )
             local sum_real_widths = 0
             local count_columns = 0
             local pattern = "([0-9]+)%*"
-            for _,spalte in ipairs(tr_contents) do
-                if publisher.elementname(spalte)=="Column" then
-                    local column_contents = publisher.element_contents(spalte)
+            for _,column in ipairs(tr_contents) do
+                if publisher.elementname(column)=="Column" then
+                    local column_contents = publisher.element_contents(column)
                     i = i + 1
-                    self.align[i] =  column_contents.align
-                    self.valign[i] = column_contents.valign
                     if column_contents.width then
                         -- if I have something written in <column> I don't need to calculate column width:
                         columnwidths_given = true
@@ -674,7 +691,7 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
     -- its not trivial to find out in which column I am in.
     -- See the example in qa/tables/columnspread. Line three:
     -- The first cell is in column 1, the second cell is in column 4
-    current_column = 0
+    local current_column = 0
 
     for _,td in ipairs(tr_contents) do
         local default_textformat_name
@@ -993,25 +1010,14 @@ function typeset_row(self, tr_contents, current_row )
             hlist = publisher.background(hlist,color)
         end
 
-        -- local bg = td_contents["background-image"]
-        -- if bg then
-        --     local bgimages = {}
-        --     for bgimage in string.gmatch(bg, "url%((.-)%)") do
-        --         bgimages[#bgimages + 1] = bgimage
-        --     end
-        --     -- Let's assume there is only one image for now
-        --     if #bgimages > 0 then
-        --         hlist = publisher.bgimage(hlist,bgimages[1])
-        --     end
-        -- end
-
         local bg = td_contents["background-text"]
         if bg then
-            local bgcolor = td_contents["background-textcolor"] or "black"
-            local angle = td_contents["background-angle"] or 0
+            local bgcolor  = td_contents["background-textcolor"] or "black"
+            local angle    = td_contents["background-angle"]     or 0
+            local bgsize   = td_contents["background-size"]      or "contain"
             local fontname = td_contents["background-font-family"]
             local ff = publisher.fonts.lookup_fontfamily_name_number[fontname]
-            hlist = publisher.bgtext(hlist,bg,angle,bgcolor, ff or self.fontfamily)
+            hlist = publisher.bgtext(hlist,bg,angle,bgcolor, ff or self.fontfamily,bgsize)
         end
 
         local head = hlist
@@ -1280,15 +1286,23 @@ function typeset_table(self)
         return publisher.empty_block()
     end
 
-    local tableheads_extra = {}
-
-
-    -- The dynamic table head on page n should be the same as on n - 1, unless changed
-    setmetatable(tableheads_extra, { __index = function(tbl,idx)
-        if idx < 1 then return nil end
-        return tbl[idx - 1]
+    -- I used to have a metatable with __index here, but this gives a stack overflow
+    -- for large indexes
+    local tableheads_extra = {
+        largest_index = 0
+    }
+    local function get_tableheads_extra( idx )
+        if idx == 0 then return nil end
+        if idx > tableheads_extra.largest_index then
+            return tableheads_extra[tableheads_extra.largest_index]
+         end
+        if tableheads_extra[idx] ~= nil then return tableheads_extra[idx] end
+        return get_tableheads_extra(idx - 1)
     end
-    })
+    local function set_tableheads_extra( idx, value)
+        tableheads_extra.largest_index = math.max( tableheads_extra.largest_index , idx )
+        tableheads_extra[idx] = value
+    end
 
     calculate_height_and_connect_tablehead(self,tablehead_first,tablehead)
     local ht_footer,  ht_footer_last = calculate_height_and_connect_tablefoot(self,tablefoot,tablefoot_last)
@@ -1335,7 +1349,8 @@ function typeset_table(self)
     local function showheader( tablepart )
         -- We can skip the dynamic header on pages where the first line is the next dynamic header
         if omit_head_on_pages[tablepart] then return false end
-        if tableheads_extra[tablepart_absolute] ~= nil then return true end
+
+        if get_tableheads_extra(tablepart_absolute) ~= nil then return true end
         return false
     end
 
@@ -1352,7 +1367,7 @@ function typeset_table(self)
             end
         end
         if showheader(i) then
-            ht = ht + tableheads_extra[i].height + self.rowsep
+            ht = ht + get_tableheads_extra(i).height + self.rowsep
         end
         return ht
     end
@@ -1365,6 +1380,18 @@ function typeset_table(self)
                 elseif idx == -1 then
                     val = ht_current - ht_head - ht_footer
                 else
+                    if self.getheight then
+                        -- self.getheight is a function which expects a relative
+                        -- page number (1 = first page of table, 2 = second page of table...)
+                        -- The function might return nil, if it doesn't have enough information
+                        -- to obtain the max height
+                        local ht = self.getheight(idx)
+                        if ht then
+                            val = ht - ht_head - ht_footer
+                            tbl[idx] = val
+                            return val
+                        end
+                    end
                     val = ht_max - ht_head - ht_footer
                 end
                 tbl[idx] = val
@@ -1374,8 +1401,8 @@ function typeset_table(self)
 
 
     local function get_tablehead( page )
-        if tableheads_extra[page] then
-            return node.copy_list(tableheads_extra[page])
+        if get_tableheads_extra(page) then
+            return node.copy_list(get_tableheads_extra(page))
         end
         local tmp = node.new("hlist")
         return tmp
@@ -1424,9 +1451,9 @@ function typeset_table(self)
         -- We can mark a row as "use_as_head" to turn the row into a dynamic head
         local use_as_head = node.has_attribute(rows[i],publisher.att_use_as_head)
         if use_as_head == 1 then
-            tableheads_extra[#splits + 1] = node.copy(rows[i])
+            set_tableheads_extra(#splits + 1,node.copy(rows[i]))
         elseif use_as_head == 2 then
-            tableheads_extra[#splits + 1] = publisher.create_empty_hbox_with_width(1)
+            set_tableheads_extra(#splits + 1,publisher.create_empty_hbox_with_width(1))
         end
         local shiftup = node.has_attribute(rows[i],publisher.att_tr_shift_up) or 0
         if shiftup > 0 then
@@ -1452,8 +1479,7 @@ function typeset_table(self)
             local ht = tostring(sp_to_pt(ht_row)) .. "|" .. tostring(sp_to_pt(accumulated_height)) .. "|" .. tostring(sp_to_pt(extra_height))
             rows[i] = publisher.showtextatright(rows[i],ht)
         end
-
-        local fits_in_table = accumulated_height + extra_height + space_above < pagegoal
+        local fits_in_table = accumulated_height + extra_height + space_above <= pagegoal
         if not fits_in_table then
             if node.has_attribute(rows[i],publisher.att_use_as_head) == 1 then
                 -- the next line would be used as a header, so let's skip the
@@ -1580,7 +1606,7 @@ function reformat_foot( self,pagenumber,max_splits)
         rownumber = self.tablefoot_contents[2]
     end
     local x = publisher.dispatch(y._layoutxml,y._dataxml)
-    attach_objects(x)
+    attach_objects(self, x)
     local tmp1,tmp2 = {},{}
     make_tablefoot(self,x,tmp1,tmp2,rownumber,true)
     calculate_height_and_connect_tablefoot(self,tmp1,tmp2)
@@ -1592,7 +1618,7 @@ function reformat_head( self,pagenumber)
     local y = self.tablehead_contents[1]
     local rownumber = self.tablehead_contents[2]
     local x = publisher.dispatch(y._layoutxml,y._dataxml)
-    attach_objects(x)
+    attach_objects( self, x)
     local tmp1,tmp2 = {}, {}
     make_tablehead(self,x,tmp1,tmp2,rownumber,true)
     calculate_height_and_connect_tablehead(self,tmp1,tmp2)
@@ -1602,7 +1628,8 @@ end
 
 function make_table( self )
     setmetatable(self.column_distances,{ __index = function() return self.colsep or 0 end })
-    attach_objects(self.tab)
+    collect_alignments(self)
+    attach_objects(self, self.tab)
     if calculate_columnwidth(self) ~= nil then
         err("Cannot print table")
         local x = node.new("vlist")

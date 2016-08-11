@@ -1,0 +1,36 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  version="2.5.7">
+
+  <SetGrid nx="40" height="12pt"/>
+  <Pageformat width="100mm" height="50mm"/>
+
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>Hello</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <Group name="tmp">
+      <Contents>
+        <PlaceObject>
+          <Table width="10">
+            <Loop select="100">
+              <Tr><Td><Paragraph><Value>tmp</Value></Paragraph></Td></Tr>
+            </Loop>
+          </Table>
+        </PlaceObject>
+      </Contents>
+    </Group>
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>Hello</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

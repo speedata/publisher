@@ -1,100 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Layout
-  xmlns="urn:speedata.de:2009/publisher/de"
-  xmlns:sd="urn:speedata:2009/publisher/functions/de">
-  <Optionen zeichne_raster="ja"/>
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Options show-grid="yes"/>
   
-  <Datensatz element="data">
-    <Zuweisung variable="img" auswahl="'ocean.pdf'"/>
-    <ObjektAusgeben>
+  <Record element="data">
+    <SetVariable variable="img" select="'ocean.pdf'"/>
+    <PlaceObject>
       <Textblock>
-        <Absatz><Wert>Mit ausschnitt="nein" (default) und maxbreite und maxhöhe</Wert></Absatz>
+        <Paragraph><Value>Mit ausschnitt="nein" (default) und maxbreite und maxhöhe</Value></Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
+    </PlaceObject>
+    <PlaceObject>
       <Textblock>
-        <Absatz><Wert>maxbreite="5" maxhöhe="5"</Wert></Absatz>
+        <Paragraph><Value>maxbreite="5" maxhöhe="5"</Value></Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
-      <Bild maxbreite="5" maxhöhe="5" datei="{$img}" ausschnitt="nein"/>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
+    </PlaceObject>
+    <PlaceObject>
+      <Image maxwidth="5" maxheight="5" file="{$img}" clip="no"/>
+    </PlaceObject>
+    <PlaceObject>
       <Textblock>
-        <Absatz><Wert>maxbreite="10" maxhöhe="5"</Wert></Absatz>
+        <Paragraph><Value>maxbreite="10" maxhöhe="5"</Value></Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
-      <Bild maxbreite="10" maxhöhe="5" datei="{$img}" ausschnitt="nein"/>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
+    </PlaceObject>
+    <PlaceObject>
+      <Image maxwidth="10" maxheight="5" file="{$img}" clip="no"/>
+    </PlaceObject>
+    <PlaceObject>
       <Textblock>
-        <Absatz><Wert>maxbreite="5" maxhöhe="10"</Wert></Absatz>
+        <Paragraph><Value>maxbreite="5" maxhöhe="10"</Value></Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
-      <Bild maxbreite="5" maxhöhe="10" datei="{$img}" ausschnitt="nein"/>
-    </ObjektAusgeben>
-    <NeueSeite/>
-    <ObjektAusgeben>
+    </PlaceObject>
+    <PlaceObject>
+      <Image maxwidth="5" maxheight="10" file="{$img}" clip="no"/>
+    </PlaceObject>
+    <NewPage></NewPage>
+    <PlaceObject>
       <Textblock>
-        <Absatz><Wert>Mit ausschnitt="nein"</Wert></Absatz>
+        <Paragraph><Value>Mit ausschnitt="nein"</Value></Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
+    </PlaceObject>
+    <PlaceObject>
       <Textblock>
-        <Absatz><Wert>breite="5" höhe="5"</Wert></Absatz>
+        <Paragraph><Value>breite="5" höhe="5"</Value></Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
-      <Bild breite="5" höhe="5" datei="{$img}" ausschnitt="nein"/>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
+    </PlaceObject>
+    <PlaceObject>
+      <Image width="5" height="5" file="{$img}" clip="no"/>
+    </PlaceObject>
+    <PlaceObject>
       <Textblock>
-        <Absatz><Wert>breite="10" höhe="5"</Wert></Absatz>
+        <Paragraph><Value>breite="10" höhe="5"</Value></Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
-      <Bild breite="10" höhe="5" datei="{$img}" ausschnitt="nein"/>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
+    </PlaceObject>
+    <PlaceObject>
+      <Image width="10" height="5" file="{$img}" clip="no"/>
+    </PlaceObject>
+    <PlaceObject>
       <Textblock>
-        <Absatz><Wert>breite="5" höhe="10"</Wert></Absatz>
+        <Paragraph><Value>breite="5" höhe="10"</Value></Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
-      <Bild breite="5" höhe="10" datei="{$img}" ausschnitt="nein"/>
-    </ObjektAusgeben>
-    <NeueSeite/>
-
-    <ObjektAusgeben>
+    </PlaceObject>
+    <PlaceObject>
+      <Image width="5" height="10" file="{$img}" clip="no"/>
+    </PlaceObject>
+    <NewPage/>
+    
+    <PlaceObject>
       <Textblock>
-        <Absatz><Wert>Mit ausschnitt="ja"</Wert></Absatz>
+        <Paragraph><Value>Mit ausschnitt="ja"</Value></Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
+    </PlaceObject>
+    <PlaceObject>
       <Textblock>
-        <Absatz><Wert>breite="5" höhe="5"</Wert></Absatz>
+        <Paragraph><Value>breite="5" höhe="5"</Value></Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
-      <Bild breite="5" höhe="5" datei="{$img}" ausschnitt="ja"/>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
+    </PlaceObject>
+    <PlaceObject>
+      <Image width="5" height="5" file="{$img}" clip="yes"/>
+    </PlaceObject>
+    <PlaceObject>
       <Textblock>
-        <Absatz><Wert>breite="10" höhe="5"</Wert></Absatz>
+        <Paragraph><Value>breite="10" höhe="5"</Value></Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
-      <Bild breite="10" höhe="5" datei="{$img}" ausschnitt="ja"/>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
+    </PlaceObject>
+    <PlaceObject>
+      <Image width="10" height="5" file="{$img}" clip="yes"/>
+    </PlaceObject>
+    <PlaceObject>
       <Textblock>
-        <Absatz><Wert>breite="5" höhe="10"</Wert></Absatz>
+        <Paragraph><Value>breite="5" höhe="10"</Value></Paragraph>
       </Textblock>
-    </ObjektAusgeben>
-    <ObjektAusgeben>
-      <Bild breite="5" höhe="10" datei="{$img}" ausschnitt="ja"/>
-    </ObjektAusgeben>
-  </Datensatz>
+    </PlaceObject>
+    <PlaceObject>
+      <Image width="5" height="10" file="{$img}" clip="yes"/>
+    </PlaceObject>
+  </Record>
 </Layout>

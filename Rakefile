@@ -9,6 +9,9 @@ installdir = Pathname.new(__FILE__).join("..")
 srcdir   = installdir.join("src")
 builddir = installdir.join("build")
 @versions = {}
+`go version`.match('go\d\.(\d)')[1].to_i < 5 ? separator = " " : separator = "="
+ENV['BUILDSEPERATOR'] = separator
+
 File.read("version").each_line do |line|
 	product,versionnumber = line.chomp.split(/=/) # / <-- ignore this slash
 	@versions[product]=versionnumber
@@ -27,7 +30,8 @@ def build_go(srcdir,destbin,goos,goarch,targettype)
 	publisher_version = @versions['publisher_version']
 	binaryname = goos == "windows" ? "sp.exe" : "sp"
     # Now compile the go executable
-	cmdline = "go build -ldflags '-X main.dest=#{targettype} -X main.version=#{publisher_version}' -o #{destbin}/#{binaryname} sp/main"
+    separator = `go version`.match('go\d\.(\d)')[1].to_i < 5 ? " " : "="
+	cmdline = "go build -ldflags '-X main.dest#{separator}#{targettype} -X main.version#{separator}#{publisher_version}' -o #{destbin}/#{binaryname} sp/main"
 	sh cmdline do |ok, res|
 		if ! ok
 	    	puts "Go compilation failed"
@@ -40,7 +44,7 @@ end
 desc "Build sphelper program"
 task :sphelper do
 	ENV["GOBIN"] = "#{installdir}/bin"
-	sh "go install -ldflags \"-X main.basedir=#{installdir}\"  sphelper/sphelper"
+	sh "go install -ldflags \"-X main.basedir#{separator}#{installdir}\"  sphelper/sphelper"
 end
 
 desc "Show rake description"
@@ -264,7 +268,6 @@ task :zip => [:sphelper] do
 	cp_r(File.join("fonts"),targetfonts)
 	cp_r(Dir.glob("img/*"),File.join(targetsw,"img"))
 	cp_r(File.join("lib"),targetshare)
-	cp_r(File.join("schema","layoutschema-de.rng"),targetschema)
 	cp_r(File.join("schema","layoutschema-en.rng"),targetschema)
 
 	Dir.chdir("src") do
@@ -361,7 +364,6 @@ task :deb => [:sphelper] do
 	cp_r("fonts/.",targetfonts)
 	cp_r(Dir.glob("img/*"),targetimg)
 	cp_r("lib/.",targetlib)
-	cp_r(File.join("schema","layoutschema-de.rng"),targetschema)
 	cp_r(File.join("schema","layoutschema-en.rng"),targetschema)
 
 	Dir.chdir("src") do

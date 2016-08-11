@@ -14,7 +14,7 @@ eine XML-Datei gesteuert, der Layout-Datei. Die Datenquelle muss ebenfalls als X
 vorliegen. Somit ist für andere Datenformate (Excel, Datenbanken, ...) ein
 zusätzlicher Schritt notwendig, um sie nach XML zu konvertieren.
 
-Anhand des klassichen »Hello world« Beispiels soll eine einfache PDF-Datei erzeugt werden.
+Anhand des klassischen »Hello world« Beispiels soll eine einfache PDF-Datei erzeugt werden.
 
 Daten-Datei
 -----------
@@ -29,37 +29,37 @@ und wird in der Datei `data.xml` in einem leeren Verzeichnis gespeichert.
 Layout-Datei
 ------------
 
-In der Layout-Datei (Dateiname `layout.xml`) stehen die Anweisungen, wie die Daten formatiert werden sollen. Das Wurzelelement ist das Element mit dem Namen `Layout` im Namensraum `urn:speedata.de:2009/publisher/de`. In diesem Namensraum werden deutschsprachige Elementnamen erwartet (z.B. [ObjektAusgeben](../commands-de/placeobject.html)), im Namensraum `.../en` englischsprachige Namen (z.B. [PlaceObject](../commands-en/placeobject.html)). Der Funktionsumfang der beiden Varianten ist identisch. Eine minimale (und sinnfreie) Layout-Datei ist:
+In der Layout-Datei (Dateiname `layout.xml`) stehen die Anweisungen, wie die Daten formatiert werden sollen. Das Wurzelelement ist das Element mit dem Namen `Layout` im Namensraum `urn:speedata.de:2009/publisher/en`. Eine minimale (und sinnfreie) Layout-Datei ist:
 
-    <Layout xmlns="urn:speedata.de:2009/publisher/de" />
+    <Layout xmlns="urn:speedata.de:2009/publisher/en" />
 
 Die Layout-Datei besteht aus einem deklarativen Teil (z.B. Seitenvorlagen, Farben und Schriftarten definieren) und einem ausführenden Teil (Kindelemente in den Daten durchgehen und Inhalte auslesen). Diese beiden Teile können auch vermischt werden.
 
-Die Datenverarbeitung beginnt grundsätzlich mit dem Befehl `Datensatz`:
+Die Datenverarbeitung beginnt grundsätzlich mit dem Befehl `Record`:
 
 
-    <Datensatz element="(Name des Wurzelelements)">
+    <Record element="(Name des Wurzelelements)">
        ... Anweisungen für das Wurzelelement ...
-    </Datensatz>
+    </Record>
 
-Die Anweisung, um ein Objekt auszugeben, heißt (tata!) `ObjektAusgeben`. Es erwartet als Kindelement den Typ des Objekts ([Bild](../commands-de/image.html), [Box](../commands-de/box.html), [Linie](../commands-de/rule.html), [Rahmen](../commands-de/frame.html), [Strichcode](../commands-de/barcode.html), [Tabelle](../commands-de/table.html), [Textblock](../commands-de/textblock.html), [Transformation](../commands-de/transformation.html)). Textblock (ein Text mit einer festen breite - als Voreinstellung wird die Seitenbreite genommen) hingegen erwartet als Kindelemente einen oder mehrere Absätze. Inhalte werden in `<Wert> ... </Wert>` Elemente geklammert. Anstatt den Text explizit anzugeben bei [Wert](../commands-de/value.html), erlaubt das Kommando auch eine Teilmenge an [XPath-Ausdrücken](xpath.html) um z.B. mit der `@`-Notation auf Attributwerte zuzugreifen.
+Die Anweisung, um ein Objekt auszugeben, heißt `PlaceObject`. Es erwartet als Kindelement den Typ des Objekts ([Image](../commands-de/image.html), [Box](../commands-de/box.html), [Rule](../commands-de/rule.html), [Frame](../commands-de/frame.html), [Barcode](../commands-de/barcode.html), [Table](../commands-de/table.html), [Textblock](../commands-de/textblock.html), [Transformation](../commands-de/transformation.html)). Textblock (ein Text mit einer festen breite - als Voreinstellung wird die Seitenbreite genommen) hingegen erwartet als Kindelemente einen oder mehrere Absätze. Inhalte werden in `<Value> ... </Value>` Elemente geklammert. Anstatt den Text explizit anzugeben bei [Value](../commands-de/value.html), erlaubt das Kommando auch eine Teilmenge an [XPath-Ausdrücken](xpath.html) um z.B. mit der `@`-Notation auf Attributwerte zuzugreifen.
 
 Damit ist das vollständige (minimale) »Hello World« Beispiel einfach:
 
     <Layout
-      xmlns="urn:speedata.de:2009/publisher/de"
-      xmlns:sd="urn:speedata:2009/publisher/functions/de">
+      xmlns="urn:speedata.de:2009/publisher/en"
+      xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
 
-      <Datensatz element="root">
-        <ObjektAusgeben>
+      <Record element="root">
+        <PlaceObject>
           <Textblock>
-            <Absatz>
-              <Wert auswahl="@greeting"/>
-            </Absatz>
+            <Paragraph>
+              <Value select="@greeting"/>
+            </Paragraph>
           </Textblock>
-        </ObjektAusgeben>
-      </Datensatz>
+        </PlaceObject>
+      </Record>
     </Layout>
 
 

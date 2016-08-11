@@ -36,6 +36,14 @@ do_luafile("layout_functions.lua")
 
 --- One big point (DTP point, PostScript point) is approx. 65781 scaled points.
 factor = 65781
+-- factor = 65781.7
+
+-- no more than this number of frames is allowed on a page
+maxframes = 999
+
+tenpoint_sp    = tex.sp("10pt")
+twelvepoint_sp = tex.sp("12pt")
+tenmm_sp       = tex.sp("10mm")
 
 --- Attributes
 --- ----------
@@ -156,8 +164,8 @@ css = do_luafile("css.lua"):new()
 -- The defaults (set in the layout instructions file)
 options = {
     imagenotfounderror = true,
-    gridwidth   = tex.sp("10mm"),
-    gridheight  = tex.sp("10mm"),
+    gridwidth   = tenmm_sp,
+    gridheight  = tenmm_sp,
     gridcells_x = 0,
     gridcells_y = 0,
 }
@@ -409,13 +417,6 @@ textformats = {
 ---     }
 bookmarks = {}
 
---- A table with key namespace prefix (`de` or `en`) and value namespace. Example:
----
----     {
----       [""] = "urn:speedata.de:2009/publisher/de"
----       sd = "urn:speedata:2009/publisher/functions/de"
----     }
-namespaces_layout = nil
 
 --- We need the separator for writing files in a directory structure (image cace for now)
 os_separator = "/"
@@ -494,7 +495,7 @@ local dispatch_table = {
     PositioningArea         = commands.positioning_area,
     PositioningFrame        = commands.positioning_frame,
     ProcessNode             = commands.process_node,
-    ProcessRecord           = commands.process_record,
+    ProcessRecord           = commands.process_node,
     Record                  = commands.record,
     Rule                    = commands.rule,
     SaveDataset             = commands.save_dataset,
@@ -527,12 +528,12 @@ local dispatch_table = {
 }
 
 
---- Return the value as an english string. The argument is in the
+--- Return the value as an English string. The argument is in the
 --- current language of the layout file (currently English and German).
 --- All translations are only valid in a context which defaults to the
 --- _global_ context.
 function translate_value( value,context )
-    -- If we don't have a values variable, it must be english
+    -- If we don't have a values variable, it must be English
     if translated_values == nil then return value end
     context = context or "*"
     return translated_values[context][value] or value
@@ -693,8 +694,7 @@ end
 function initialize_luatex_and_generate_pdf()
 
     --- The default page type has 1cm margin
-    local onecm=tex.sp("1cm")
-    masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(onecm,onecm,onecm,onecm) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
+    masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(tenmm_sp,tenmm_sp,tenmm_sp,tenmm_sp) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
     xpath.set_variable("__maxwidth", tex.sp("190mm"))
     --- The `vars` file hold a lua document holding table
     local vars = loadfile(tex.jobname .. ".vars")()
@@ -723,6 +723,9 @@ function initialize_luatex_and_generate_pdf()
         err("Cannot determine the language of the layout file.")
         exit()
     end
+    if current_layoutlanguage == "de" then
+        warning("!!! The German layout instructions will be removed\nin version 3 of the publisher !!!")
+    end
 
     if current_layoutlanguage ~= "en" then
         translated_values = translations[current_layoutlanguage]["__values"]
@@ -733,11 +736,13 @@ function initialize_luatex_and_generate_pdf()
         local version_mismatch = false
         local publisher_version = string.explode(env_publisherversion,".")
         local requested_version = string.explode(layoutxml.version,".")
+
         if publisher_version[1] ~= requested_version[1] then
             version_mismatch = true
-        elseif publisher_version[2] ~= requested_version[2] then
+        elseif publisher_version[2] < requested_version[2] then
+            -- major number are same, minor are different
             version_mismatch = true
-        elseif requested_version[3] and publisher_version[3] < requested_version[3] then
+        elseif tonumber(requested_version[3]) and tonumber(publisher_version[3]) < tonumber(requested_version[3]) and tonumber(publisher_version[2]) == requested_version[2] then
             version_mismatch = true
         end
         if version_mismatch then
@@ -1025,6 +1030,9 @@ function output_at( param )
         outputpage = param.pagenumber
     end
     local nodelist = param.nodelist
+    if options.trace then
+        nodelist = boxit(nodelist)
+    end
     local x = param.x
     local y = param.y
     local allocate = param.allocate
@@ -1135,19 +1143,20 @@ function detect_pagetype(pagenumber)
     local ret = nil
     for i=#masterpages,1,-1 do
         local pagetype = masterpages[i]
-        if pagetype.name == nextpage then
-            log("Page of type %q created (%d) - pagetype requested",pagetype.name or "<detect_pagetype>",pagenumber)
-            nextpage = nil
-            return pagetype.res
-        end
-
-
-        if xpath.parse(nil,pagetype.is_pagetype,pagetype.ns) == true then
-            log("Page of type %q created (%d)",pagetype.name or "<detect_pagetype>",pagenumber)
-            ret = pagetype.res
-            xpath.pop_state()
-            current_pagenumber = cp
-            return ret
+        if nextpage then
+            if pagetype.name == nextpage then
+                log("Page of type %q created (%d) - pagetype requested",pagetype.name or "<detect_pagetype>",pagenumber)
+                nextpage = nil
+                return pagetype.res
+            end
+        else
+           if xpath.parse(nil,pagetype.is_pagetype,pagetype.ns) == true then
+               log("Page of type %q created (%d)",pagetype.name or "<detect_pagetype>",pagenumber)
+               ret = pagetype.res
+               xpath.pop_state()
+               current_pagenumber = cp
+               return ret
+           end
         end
     end
     err("Can't find correct page type!")
@@ -1181,7 +1190,7 @@ function setup_page(pagenumber)
     local trim_amount = tex.sp(options.trim or 0)
     local extra_margin
     if options.cutmarks or options.trimmarks then
-        extra_margin = tex.sp("1cm") + trim_amount
+        extra_margin = tenmm_sp + trim_amount
     elseif trim_amount > 0 then
         extra_margin = trim_amount
     end
@@ -1215,7 +1224,7 @@ function setup_page(pagenumber)
             nx = element_contents(j).nx
             ny = element_contents(j).ny
             dx = element_contents(j).dx
-            dx = element_contents(j).dy
+            dy = element_contents(j).dy
         end
     end
 
@@ -1281,18 +1290,19 @@ function setup_page(pagenumber)
 end
 
 --- Switch to the next frame in the given area.
-function next_area( areaname )
-    local current_framenumber = current_grid:framenumber(areaname)
+function next_area( areaname, grid )
+    grid = grid or current_grid
+    local current_framenumber = grid:framenumber(areaname)
     if not current_framenumber then
         err("Cannot determine current area number (areaname=%q)",areaname or "(undefined)")
         return
     end
-    if current_framenumber >= current_grid:number_of_frames(areaname) then
+    if current_framenumber >= grid:number_of_frames(areaname) then
         new_page()
     else
-        current_grid:set_framenumber(areaname, current_framenumber + 1)
+        grid:set_framenumber(areaname, current_framenumber + 1)
     end
-    current_grid:set_current_row(1,areaname)
+    grid:set_current_row(1,areaname)
 end
 
 --- Switch to a new page and shipout the current page.
@@ -1336,47 +1346,39 @@ function concat_transformation( a, b )
 end
 
 -- Place a text in the background
-function bgtext( box, textstring, angle, colorname, fontfamily )
+function bgtext( box, textstring, angle, colorname, fontfamily, bgsize)
     local colorindex = colors[colorname].index
     local boxheight, boxwidth = box.height, box.width
     local angle_rad = -1 * math.rad(angle)
     local sin = math.sin(angle_rad)
     local cos = math.cos(angle_rad)
+
     a = paragraph:new()
     a:append(textstring, {fontfamily = fontfamily})
     a:set_color(colorindex)
     local textbox = node.hpack(a.nodelist)
     local rotated_height = sin * textbox.width  + cos * textbox.height
-    local scale = boxheight  / rotated_height
+    local scale
+    local shift_up = 0
+    if bgsize == "contain" then
+        scale = boxheight  / rotated_height
+    else
+        scale = 1
+        shift_up = sp_to_bp((boxheight - rotated_height) / 2)
+    end
     local rotated_width  = sin * textbox.height + cos * textbox.width
     local shift_right = sp_to_bp( (boxwidth - rotated_width * scale ) / 2)
 
     -- rotate: [cos θ sin θ −sin θ cos θ 0 0 ]
-    local rotate_matrix = {   cos, sin, -1 * sin,   cos,           0, 0 }
-    local scale_matrix  = { scale,   0,        0, scale,           0, 0 }
-    local shift_matrix  = {     1,   0,        0,     1, shift_right, 0 }
+    local rotate_matrix = {   cos, sin, -1 * sin,   cos,           0, 0        }
+    local scale_matrix  = { scale,   0,        0, scale,           0, 0        }
+    local shift_matrix  = {     1,   0,        0,     1, shift_right, shift_up }
     local result_matrix
     result_matrix = concat_transformation(rotate_matrix,scale_matrix)
     result_matrix = concat_transformation(result_matrix,shift_matrix)
     local matrixstring = string.format("%g %g %g %g %d %g",math.round(result_matrix[1],3),math.round(result_matrix[2],3),math.round(result_matrix[3],3),math.round(result_matrix[4],3),math.round(result_matrix[5],3),math.round(result_matrix[6],3))
     local x = matrix( textbox, matrixstring,0,0 )
     x = node.hpack(x)
-    x.width = 0
-    x.height = 0
-    box = node.insert_before(box,box,x)
-    box = node.hpack(box)
-    return box
-end
-
--- Todo: size = contain, ...
-function bgimage( box, imagename )
-    local imginfo = new_image(imagename)
-    local image = img.copy(imginfo.img)
-    image.width = box.width
-    image.height = box.height
-
-    local imgnode = img.node(image)
-    local x = node.hpack(imgnode)
     x.width = 0
     x.height = 0
     box = node.insert_before(box,box,x)
@@ -1985,6 +1987,24 @@ function parse_html( elt, parameter )
                     underline = 2
                 end
             end
+        elseif eltname == "sub" then
+            for i=1,#elt do
+                if type(elt[i]) == "string" then
+                    a:script(elt[i],1,{fontfamily = 0, bold = bold, italic = italic, underline = underline })
+                elseif type(elt[i]) == "table" then
+                    a:script(parse_html(elt[i]),1,{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                end
+            end
+            elt = {}
+        elseif eltname == "sup" then
+            for i=1,#elt do
+                if type(elt[i]) == "string" then
+                    a:script(elt[i],2,{fontfamily = 0, bold = bold, italic = italic, underline = underline })
+                elseif type(elt[i]) == "table" then
+                    a:script(parse_html(elt[i]),2,{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                end
+            end
+            elt = {}
         elseif eltname == "ul" then
             for i=1,#elt do
                 if type(elt[i]) == "string" then
@@ -3213,7 +3233,7 @@ function xml_to_string( xml_element, level )
     str = str .. string.rep(" ",level) .. "<" .. xml_element[".__local_name"]
     for k,v in pairs(xml_element) do
         if type(k) == "string" and not k:match("^%.") then
-            str = str .. string.format(" %s=%q", k,v)
+            str = str .. string.format(" %s=%q", k,xml_escape(v))
         end
     end
     str = str .. ">\n"
@@ -3233,7 +3253,8 @@ language_mapping = {
     ["Czech"]                        = "cs",
     ["Danish"]                       = "da",
     ["Dutch"]                        = "nl",
-    ["English (Great Britan)"]       = "en_GB",
+    ["English (Great Britain)"]      = "en_GB",
+    ["English (Great Britan)"]       = "en_GB", -- spelling problem with sp version < 2.5.10
     ["English (USA)"]                = "en_US",
     ["Finnish"]                      = "fi",
     ["French"]                       = "fr",
@@ -3464,8 +3485,8 @@ function set_pageformat( wd,ht )
     tex.pdfpagewidth =  wd
     tex.pdfpageheight = ht
     -- why the + 2cm? is this for the trim-/art-/bleedbox? FIXME: document
-    tex.pdfpagewidth  = tex.pdfpagewidth   + tex.sp("2cm")
-    tex.pdfpageheight = tex.pdfpageheight  + tex.sp("2cm")
+    tex.pdfpagewidth  = tex.pdfpagewidth   + 2 * tenmm_sp
+    tex.pdfpageheight = tex.pdfpageheight  + 2 * tenmm_sp
 
     -- necessary? FIXME: check if necessary.
     tex.hsize = wd
@@ -3503,7 +3524,7 @@ function get_remaining_height(area,allocate)
         end
         lastrow = lastrow - 1
         if lastrow == firstrow then lastrow = nil end
-
+        if lastrow >= maxrows then lastrow = nil end
         return (row - firstrow) * current_grid.gridheight, firstrow,lastrow
     end
     if not current_grid:fits_in_row_area(startcol,cols,firstrow,area) then
@@ -3585,10 +3606,10 @@ end
 --- measure font size in dtp points)
 function define_default_fontfamily()
     local fam={
-        size         = 10 * factor,
-        baselineskip = 12 * factor,
-        scriptsize   = 10 * factor * 0.8,
-        scriptshift  = 10 * factor * 0.3,
+        size         = tenpoint_sp,
+        baselineskip = twelvepoint_sp,
+        scriptsize   = tenpoint_sp * 0.8,
+        scriptshift  = tenpoint_sp * 0.3,
         name = "text"
     }
     local ok,tmp
@@ -3670,6 +3691,22 @@ function deepcopy(t)
     end
     setmetatable(res,mt)
     return res
+end
+
+-- Return the height of the page given by the relative pagenumber
+-- (starting from the current_pagenumber).
+-- This is used in tables to get the hight of a page in a multi
+-- page table
+function getheight( relative_pagenumber )
+    local thispagenumber = current_pagenumber + relative_pagenumber - 1
+    -- w("getheight for page number %d which is page number %d in the PDF",relative_pagenumber,thispagenumber)
+    local thispage = pages[thispagenumber]
+    local areaname = xpath.get_variable("__currentarea")
+    if thispage then
+        local firstrow = thispage.grid:first_free_row(areaname)
+        local space = thispage.grid:remaining_height_sp(firstrow,areaname)
+        return space
+    end
 end
 
 
@@ -3871,6 +3908,10 @@ function imageinfo( filename,page,box,fallback )
     -- there is no filename, we should fail or throw an error
     if not filename then
         err("No filename given for image")
+        filename = get_fallback_image_name(fallback)
+    end
+    if type(filename) ~= "string" then
+        err("something is wrong with the filename for the image, not a string")
         filename = get_fallback_image_name(fallback)
     end
 

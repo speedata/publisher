@@ -290,7 +290,7 @@ function main_loop()
   log("Start processing")
   setup()
   -- global tcp object
-  tcp = comm.listen()
+  tcp = comm.connect()
   call(publisher.dothings)
   exit(true)
 end

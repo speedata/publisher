@@ -10,7 +10,7 @@ imageshape: Umfließen von Bildern
 imagescaling: Skalierung von Bildern und Größenangaben
 mailmerge: Serienbriefe
 planets: Beispiele für automatisch generierte Listen
-rotating: Effekt von drehen und ursprung-x und ursprung-y
+rotating: Effekt von rotate und origin-x und origin-y
 runningsum: Tabelle mit dynamischen Kopf- und Fußzeilen
 simpletable: Einfache Tabelle
 textframe: Textcontainer mit Überlauf
@@ -29,6 +29,8 @@ Am besten ist es, sie in ein separates Verzeichnis zu kopieren und dort mit
 die Beispiele einzeln selbst zu übersetzen.
 
 Dieselben Beispiele gibt es auch für das englischsprachige Regelwerk unterhalb von `doc/examples-en`.
+
+**Weitere Beispiele befinden sich im [github repository](https://github.com/speedata/examples).**
 
 
 {{template "filelist" .}}
