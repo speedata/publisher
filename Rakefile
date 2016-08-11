@@ -82,7 +82,7 @@ task :updateexamples do
 	end
 end
 
-desc "Generate schema and translations from master"
+desc "Generate schema from master"
 task :schema => [:sphelper] do
   # generate the lua translation + schema
   sh "#{installdir}/bin/sphelper genschema"
@@ -269,6 +269,7 @@ task :zip => [:sphelper] do
 	cp_r(Dir.glob("img/*"),File.join(targetsw,"img"))
 	cp_r(File.join("lib"),targetshare)
 	cp_r(File.join("schema","layoutschema-en.rng"),targetschema)
+	cp_r(File.join("schema","layoutschema-de.rng"),targetschema)
 
 	Dir.chdir("src") do
 		cp_r(["tex","hyphenation"],targetsw)

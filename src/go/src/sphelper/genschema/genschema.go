@@ -3,7 +3,6 @@ package genschema
 import (
 	"bytes"
 	"encoding/xml"
-	"fmt"
 	"io/ioutil"
 	"path/filepath"
 
@@ -92,7 +91,7 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 	enc := xml.NewEncoder(&outbuf)
 	enc.Indent("", "   ")
 
-	namespace := fmt.Sprintf("urn:speedata.de:2009/publisher/%s", lang)
+	namespace := "urn:speedata.de:2009/publisher/en"
 	grammar := xml.StartElement{Name: xml.Name{Local: "grammar", Space: RELAXNG}}
 	grammar.Attr = []xml.Attr{
 		{Name: xml.Name{Local: "xmlns:a"}, Value: "http://relaxng.org/ns/compatibility/annotations/1.0"},
@@ -239,5 +238,13 @@ func DoThings(basedir string) error {
 		return err
 	}
 	err = ioutil.WriteFile(filepath.Join(basedir, "schema", "layoutschema-en.rng"), buf, 0644)
+	if err != nil {
+		return err
+	}
+	buf, err = genSchema(c, "de")
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(filepath.Join(basedir, "schema", "layoutschema-de.rng"), buf, 0644)
 	return err
 }
