@@ -54,5 +54,13 @@ func MkBuilddir(cfg *config.Config, srcbindir string) error {
 	for _, v := range exefiles {
 		os.Chmod(v, 0755)
 	}
+	exefiles, err = filepath.Glob(filepath.Join(destdir, "sdluatex", "*"))
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(-1)
+	}
+	for _, v := range exefiles {
+		os.Chmod(v, 0755)
+	}
 	return nil
 }
