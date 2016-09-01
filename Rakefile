@@ -9,8 +9,6 @@ installdir = Pathname.new(__FILE__).join("..")
 srcdir   = installdir.join("src")
 builddir = installdir.join("build")
 @versions = {}
-`go version`.match('go\d\.(\d)')[1].to_i < 5 ? separator = " " : separator = "="
-ENV['BUILDSEPERATOR'] = separator
 
 File.read("version").each_line do |line|
 	product,versionnumber = line.chomp.split(/=/) # / <-- ignore this slash
@@ -44,7 +42,8 @@ end
 desc "Build sphelper program"
 task :sphelper do
 	ENV["GOBIN"] = "#{installdir}/bin"
-	sh "go install -ldflags \"-X main.basedir#{separator}#{installdir}\"  sphelper/sphelper"
+	separator = `go version`.match('go\d\.(\d)')[1].to_i < 5 ? " " : "="
+	sh " go install -ldflags \"-X main.basedir#{separator}#{installdir} -X main.separator#{separator}#{separator}\"  sphelper/sphelper"
 end
 
 desc "Show rake description"

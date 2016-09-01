@@ -24,11 +24,9 @@ import (
 )
 
 var (
-	basedir string
+	basedir   string
+	separator string
 )
-
-func init() {
-}
 
 func makedoc(cfg *config.Config) error {
 	os.RemoveAll(filepath.Join(cfg.Builddir, "manual"))
@@ -71,7 +69,7 @@ func main() {
 
 	switch command {
 	case "build":
-		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local")
+		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local", separator)
 		if err != nil {
 			os.Exit(-1)
 		}
@@ -119,7 +117,7 @@ func main() {
 				if err != nil {
 					log.Fatal(err)
 				}
-				err = buildsp.BuildGo(cfg, filepath.Join(cfg.Builddir, "speedata-publisher", "bin"), platform, arch, "directory")
+				err = buildsp.BuildGo(cfg, filepath.Join(cfg.Builddir, "speedata-publisher", "bin"), platform, arch, "directory", separator)
 				if err != nil {
 					os.Exit(-1)
 				}
