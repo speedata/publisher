@@ -3156,6 +3156,9 @@ end
 
 --- Make a string XML safe
 function xml_escape( str )
+    if type(str) == "table" then
+        str = table.concat(str)
+    end
     if not str then return "" end
     local replace = {
         [">"] = "&gt;",
