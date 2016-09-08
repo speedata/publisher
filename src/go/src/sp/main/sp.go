@@ -497,6 +497,10 @@ func removeLogfile() {
 	os.Remove(getOption("jobname") + ".log")
 }
 
+func writeFinishedfile(path string) {
+	ioutil.WriteFile(path, []byte("finished\n"), 0600)
+}
+
 func runPublisher() (exitstatus int) {
 	log.Print("Run speedata publisher")
 	defer removeLogfile()
@@ -562,6 +566,7 @@ func runPublisher() (exitstatus int) {
 			if err != nil {
 				log.Fatal(err)
 			}
+			writeFinishedfile(fmt.Sprintf("%s.finished", getOption("jobname")))
 			os.Exit(-1)
 			break
 		}
@@ -828,7 +833,7 @@ func main() {
 			}
 
 		}
-		ioutil.WriteFile(finishedfilename, []byte("finished\n"), 0600)
+		writeFinishedfile(finishedfilename)
 
 		// open PDF if necessary
 		if getOption("autoopen") == "true" {
