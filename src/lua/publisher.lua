@@ -3840,6 +3840,10 @@ end
 function get_fallback_image_name( filename, missingfilename )
     if filename then
         warning("Using fallback %q, missing file name is %q", filename, missingfilename)
+        if not kpse.filelist[filename] then
+            err("fallback image %q not found",filename)
+            return "filenotfound.pdf"
+        end
         return filename
     else
         return "filenotfound.pdf"
