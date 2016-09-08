@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.7">
+    <entry version="2.7.1" date="2016-09-08">
+      <en>Fix error when fallback image is not found</en>
+      <de>Fehlerkorrektur wenn fallback-Bild nicht gefunden wurde.</de>
+    </entry>
+    <entry version="2.7.1" date="2016-09-08">
+      <en>Emtpy attributes in Attribute don't give a table value</en>
+      <de>Leere Attribute im Befehl Attribute erzeugen keine Tabelle</de>
+    </entry>
     <entry version="2.7.0" date="2016-08-18">
       <en>Disable German layoutrules, bugfix (#104) distribution error</en>
       <de>Schalte deutsche Layoutregeln ab, Fehlerkorrektur (104) Distribution ZIP-Datei</de>
