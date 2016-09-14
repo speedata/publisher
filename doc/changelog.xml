@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.7">
+    <entry version="2.7.2" date="2016-09-14">
+      <en>When PlaceObject goes past the right margin (for example in full width text), go to next row.</en>
+      <de>Wenn PlaceObject über den rechten Rand hinaus geht (z.B. bei Text in voller Breite), gehe zur nächsten Zeile.</de>
+    </entry>
     <entry version="2.7.1" date="2016-09-08">
       <en>Fix error when fallback image is not found</en>
       <de>Fehlerkorrektur wenn fallback-Bild nicht gefunden wurde.</de>
@@ -14,7 +18,10 @@
     </entry>
   </chapter>
   <chapter version="2.6">
-    
+    <entry version="2.6.1" date="2016-08-18">
+      <en>Bugfix for Mac and Linux ZIP files</en>
+      <de>Fehlerkorrektur für Mac und Linux ZIP-Dateien</de>
+    </entry>
   </chapter>
   <chapter version="2.5" date="2016-08-11">
     <entry version="2.5.13" date="2016-08-10">
