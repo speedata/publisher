@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.7">
+    <entry version="2.7.3" date="2016-09-14">
+      <en>New API /v0/statusfile/&lt;id> to get the file publisher.status.</en>
+      <de>Neue API /v0/statusfile/&lt; um die Datei publisher.status zu erhalten.</de>
+    </entry>
     <entry version="2.7.2" date="2016-09-14">
       <en>When PlaceObject goes past the right margin (for example in full width text), go to next row.</en>
       <de>Wenn PlaceObject über den rechten Rand hinaus geht (z.B. bei Text in voller Breite), gehe zur nächsten Zeile.</de>
