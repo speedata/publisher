@@ -1440,7 +1440,7 @@ function commands.message( layoutxml, dataxml )
                     ret = ret or ""
                     ret = ret .. tostring(contents)
                 elseif type(contents) == "nil" then
-                    -- ignorieren
+                    -- ignore
                 else
                     err("Unknown type: %q",type(contents))
                     ret = nil
@@ -2627,7 +2627,7 @@ function commands.setvariable( layoutxml,dataxml )
                     ret = ret or ""
                     ret = ret .. tostring(element_contents)
                 elseif type(element_contents) == "nil" then
-                    -- ignorieren
+                    -- ignore
                 else
                     err("Unknown type: %q",type(element_contents))
                     ret = nil
