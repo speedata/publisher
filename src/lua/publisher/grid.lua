@@ -90,6 +90,7 @@ function set_current_row( self,row,areaname )
     area.current_row = row
 end
 
+-- Set column for the given area (or the default area, if none given).
 function set_current_column( self,column,areaname )
     assert(self)
     local areaname = areaname or publisher.default_areaname
@@ -319,8 +320,14 @@ function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname,keepposition)
 
     -- when true, we don't want to move the cursor
     if not keepposition then
-        self:set_current_column(math.ceil(x + wd),areaname)
-        self:set_current_row(   math.ceil(y)     ,areaname)
+        local col = math.ceil(x + wd)
+        local rows = 0
+        if col > self:number_of_columns(areaname) then
+            col = 1
+            rows = 1
+        end
+        self:set_current_column(col,areaname)
+        self:set_current_row(math.ceil(y) + rows,areaname)
     end
 
     local grid_conflict = false

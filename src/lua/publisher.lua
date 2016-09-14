@@ -1020,6 +1020,7 @@ function output_at( param )
         extra_crop = param.framewidth
     end
 
+    -- set the crop area
     r:setarea(delta_x - extra_crop,delta_y - extra_crop, _wd + extra_crop, _ht + extra_crop + _dp)
 
     --- We don't necessarily output things on a page, we can output them in a virtual page, called _group_.

@@ -2220,7 +2220,8 @@ function commands.place_object( layoutxml,dataxml )
                     end
                 end
             end
-
+            -- if the object has no height (for example an Action node), we don't move the cursor
+            if height_in_gridcells == 0  then allocate = "no" end
             log("PlaceObject: %s in row %d and column %d, width=%d, height=%d (page %d)", objecttype, current_row, current_column_start,width_in_gridcells,height_in_gridcells,onpage or publisher.current_pagenumber)
             trace("PlaceObject: object placed at (%d,%d)",current_column_start,current_row)
             if hreference == "right" then
