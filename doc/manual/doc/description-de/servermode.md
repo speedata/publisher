@@ -108,6 +108,18 @@ Format | Beschreibung
 
 Beispiel: `http://127.0.0.1:5266/v0/layout/1347678770?format=base64`
 
+
+## `/v0/statusfile/<id>`
+Liefert die Datei `publisher.status`, die durch den Lauf erzeugt wurde. Das Format kann über den URL-Parameter `format` angegeben werden:
+
+Format | Beschreibung
+-------|-------------
+`json` oder `JSON` | Liefert eine JSON-Datei im Format `{"contents":"<XML Text>"}`
+`base64` | Ergibt eine XML Datei, die base64 kodiert ist (`PGRhdGE+CiAgICA8....hPgo=`)
+(keine Angabe) | Schreibt eine XML Datei (`<Status>...</Status>`)
+
+Beispiel: `http://127.0.0.1:5266/v0/statusfile/1347678770?format=base64`
+
 ## `/v0/status`
 
 Liefert den Status aller Publishing-Läufe zurück, die mit `/v0/publish` gestartet wurden.

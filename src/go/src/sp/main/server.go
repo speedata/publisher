@@ -425,6 +425,13 @@ func v0LayoutHandler(w http.ResponseWriter, r *http.Request) {
 	sendFile(id, "layout.xml", w, r)
 }
 
+// send the file publisher.status
+func v0StatusfileHandler(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	fmt.Fprintf(protocolFile, "/v0/statusfile/%s\n", id)
+	sendFile(id, "publisher.status", w, r)
+}
+
 func writeInternalError(w http.ResponseWriter) {
 	fmt.Fprintln(w, "Internal error")
 	return
@@ -795,6 +802,7 @@ func runServer(port string, address string, tempdir string) {
 	v0.HandleFunc("/delete/{id}", v0DeleteHandler).Methods("GET")
 	v0.HandleFunc("/data/{id}", v0DataHandler).Methods("GET")
 	v0.HandleFunc("/layout/{id}", v0LayoutHandler).Methods("GET")
+	v0.HandleFunc("/statusfile/{id}", v0StatusfileHandler).Methods("GET")
 	http.Handle("/", r)
 	fmt.Printf("Listen on http://%s:%s\n", address, port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", address, port), nil))
