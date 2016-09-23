@@ -418,6 +418,11 @@ function commands.columns( layoutxml,dataxml )
     return tab
 end
 
+function commands.compatibility( layoutxml,dataxml )
+    local movecorsoronrightedge = publisher.read_attribute(layoutxml,dataxml,"movecursoronplaceobject", "boolean","yes")
+    publisher.compatibility.movecorsoronrightedge = movecorsoronrightedge
+end
+
 --- CopyOf
 --- ------
 --- Return the contents of a variable. Warning: this function does not actually copy the contents, so the name is a bit misleading.

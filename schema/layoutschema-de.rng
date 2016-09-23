@@ -783,6 +783,23 @@
          </oneOrMore>
       </element>
    </define>
+   <define name="e_Compatibility">
+      <element name="Compatibility">
+         <a:documentation>Setzte Kompatibilität für ältere Layoutregeln</a:documentation>
+         <optional>
+            <attribute name="movecursoronplaceobject">
+               <a:documentation>Wechselt das Verhalten bei dem Objekte (platziert mit PlaceObject) am rechten Rand den Cursor in Spalte »Anzahl Spalten + 1« setzt.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Neues Verhalten (Voreinstellung): setzt den Cursor in Spalte 1 wenn ein Objekt an den rechten Rand stößt.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Altes Verhalten: setzt den Cursor auf die Spalte 1 hinter den rechten Rand des platzierten Objekts.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Copy-of">
       <element name="Copy-of">
          <a:documentation>Ersetzt dieses Element mit Inhalt von auswahl als Elementstruktur. Dient zum „Zusammenbauen“ von Texten und Tabellen.</a:documentation>
@@ -1703,6 +1720,9 @@
             </attribute>
          </optional>
          <oneOrMore>
+            <optional>
+               <ref name="e_Compatibility"></ref>
+            </optional>
             <optional>
                <ref name="e_DefineColor"></ref>
             </optional>

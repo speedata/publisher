@@ -176,6 +176,10 @@ groups    = {}
 -- sometimes we want to save pages for later reuse. Keys are pagestore names
 pagestore = {}
 
+-- See commands.compatibility
+compatibility = {
+    movecorsoronrightedge = true,
+}
 
 viewerpreferences = {}
 
@@ -449,6 +453,7 @@ local dispatch_table = {
     Color                   = commands.color,
     Column                  = commands.column,
     Columns                 = commands.columns,
+    Compatibility           = commands.compatibility,
     ["Copy-of"]             = commands.copy_of,
     DefineColor             = commands.define_color,
     DefineFontfamily        = commands.define_fontfamily,

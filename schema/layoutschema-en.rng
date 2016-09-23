@@ -783,6 +783,23 @@
          </oneOrMore>
       </element>
    </define>
+   <define name="e_Compatibility">
+      <element name="Compatibility">
+         <a:documentation>Set compatibility for older layouts</a:documentation>
+         <optional>
+            <attribute name="movecursoronplaceobject">
+               <a:documentation>Switch the old behavior where objects at the right page margin used in PlaceObject puts the cursor in #columns + 1.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>New behavior (default): set cursor in column 1 when an object goes to the right margin.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Old behavior: set the cursor to the column + 1 past the right edge of the placed object.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Copy-of">
       <element name="Copy-of">
          <a:documentation>Replace this element by the copy of the selection as an element structure. You can use it to construct more complex data structures.</a:documentation>
@@ -1703,6 +1720,9 @@
             </attribute>
          </optional>
          <oneOrMore>
+            <optional>
+               <ref name="e_Compatibility"></ref>
+            </optional>
             <optional>
                <ref name="e_DefineColor"></ref>
             </optional>

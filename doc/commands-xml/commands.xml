@@ -118,6 +118,7 @@
   </define>
 
   <define name="Toplevel">
+    <optional><cmd name="Compatibility"/></optional>
     <optional><cmd name="DefineColor"/></optional>
     <optional><cmd name="DefineFontfamily"/></optional>
     <optional><cmd name="DefineTextformat"/></optional>
@@ -1417,6 +1418,52 @@
     <seealso>
       <cmd name="Table"/>, <cmd name="Column"/>
     </seealso>
+  </command>
+  <command en="Compatibility">
+    <description xml:lang="en">
+      <para>Set compatibility for older layouts</para>
+    </description>
+    <description xml:lang="de">
+      <para>Setze Kompatibilität für ältere Layoutregeln</para>
+    </description>
+    <childelements></childelements>
+    <attribute en="movecursoronplaceobject" optional="yes" since="2.7.4">
+      <description xml:lang="en">
+        <para>Switch the old behavior where objects at the right page margin used in PlaceObject puts the cursor in #columns + 1.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wechselt das Verhalten bei dem Objekte (platziert mit PlaceObject) am rechten Rand den Cursor in Spalte »Anzahl Spalten + 1« setzt.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>New behavior (default): set cursor in column 1 when an object goes to the right margin.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Neues Verhalten (Voreinstellung): setzt den Cursor in Spalte 1 wenn ein Objekt an den rechten Rand stößt.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Old behavior: set the cursor to the column + 1 past the right edge of the placed object.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Altes Verhalten: setzt den Cursor auf die Spalte 1 hinter den rechten Rand des platzierten Objekts.</para>
+        </description>
+      </choice>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Compatibility
+    movecursoronplaceobject="no"
+/>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Compatibility
+    movecursoronplaceobject="no"
+/>
+]]></listing>
+    </example>
+    <seealso></seealso>
   </command>
   <command en="Copy-of">
     <description xml:lang="en">

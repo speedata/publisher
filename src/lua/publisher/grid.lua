@@ -322,7 +322,7 @@ function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname,keepposition)
     if not keepposition then
         local col = math.ceil(x + wd)
         local rows = 0
-        if col > self:number_of_columns(areaname) then
+        if col > self:number_of_columns(areaname) and publisher.compatibility.movecorsoronrightedge then
             col = 1
             rows = 1
         end
