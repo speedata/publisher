@@ -4110,6 +4110,14 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="defaultarea" optional="yes" since="2.7.4" type="text">
+      <description xml:lang="en">
+        <para>Name of the area that is used as a default for placing text (commands <cmd name="Output"/> and <cmd name="PlaceObject"/>). Default is <tt>_page</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name des Bereichs, der bei <cmd name="Output"/> und <cmd name="PlaceObject"/> benutzt wird. Die Seite hat den Namen <tt>_page</tt>.</para>
+      </description>
+    </attribute>
     <attribute en="ignoreeol" optional="yes">
       <description xml:lang="en">
         <para>Ignore newlines in data-xml</para>

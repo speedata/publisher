@@ -1319,7 +1319,7 @@ end
 function commands.emptyline( layoutxml,dataxml )
     trace("Emtpy row, current row is %d",publisher.current_grid:current_row())
     local areaname = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
-    local areaname = areaname or publisher.default_areaname
+    areaname = areaname or publisher.default_area or publisher.default_areaname
     local current_grid = publisher.current_grid
     local current_row = current_grid:find_suitable_row(1,current_grid:number_of_columns(),1,areaname)
     if not current_row then
@@ -1503,7 +1503,7 @@ function commands.next_row( layoutxml,dataxml )
     end
 
     rows = rows or 1
-    local areaname = areaname or publisher.default_areaname
+    local areaname = areaname or publisher.default_area or publisher.default_areaname
 
     publisher.next_row(rownumber,areaname,rows)
 end
@@ -1653,6 +1653,11 @@ function commands.options( layoutxml,dataxml )
     publisher.options.crop               = publisher.read_attribute(layoutxml,dataxml,"crop",        "booleanorlength",false)
     local imagenotfound                  = publisher.read_attribute(layoutxml,dataxml,"imagenotfound", "string","error")
     local mainlanguage                   = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","")
+    local default_area                   = publisher.read_attribute(layoutxml,dataxml,"defaultarea","rawstring")
+
+    if default_area then
+        publisher.default_area = default_area
+    end
 
     publisher.options.imagenotfounderror = imagenotfound == "error"
     if trace ~= nil then
@@ -1704,7 +1709,7 @@ function commands.output( layoutxml,dataxml )
     xpath.set_variable("__maxwidth", maxwidth)
 
     local tab  = publisher.dispatch(layoutxml,dataxml)
-    area = area or publisher.default_areaname
+    area = area or publisher.default_area or publisher.default_areaname
     local last_area = publisher.xpath.get_variable("__area")
     local state
     publisher.xpath.set_variable("__area",area)
@@ -2003,7 +2008,7 @@ function commands.place_object( layoutxml,dataxml )
     if publisher.current_group and area then
         err("Areas can't be combined with groups")
     end
-    area = area or publisher.default_areaname
+    area = area or publisher.default_area or publisher.default_areaname
     xpath.set_variable("__currentarea", area)
     framecolor = framecolor or "black"
 

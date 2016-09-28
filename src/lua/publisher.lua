@@ -141,7 +141,8 @@ alternating = {}
 alternating_value = {}
 
 
-default_areaname = "_default_area"
+default_areaname = "_page"
+default_area     = "_page"
 
 -- The name of the next requested page
 nextpage = nil
@@ -418,7 +419,7 @@ textformats = {
 bookmarks = {}
 
 
---- We need the separator for writing files in a directory structure (image cace for now)
+--- We need the separator for writing files in a directory structure (image cache for now)
 os_separator = "/"
 if os.type == "windows" then
     os_separator = "\\"
@@ -462,7 +463,7 @@ local dispatch_table = {
     EmptyLine               = commands.emptyline,
     Fontface                = commands.fontface,
     ForAll                  = commands.forall,
-    Frame                  = commands.frame,
+    Frame                   = commands.frame,
     Grid                    = commands.grid,
     Group                   = commands.group,
     HSpace                  = commands.hspace,
@@ -553,7 +554,7 @@ function dispatch(layoutxml,dataxml,options)
             if dispatch_table[eltname] ~= nil then
                 tmp = dispatch_table[eltname](j,dataxml,options)
 
-                -- Copy-of-elements can be resolveld immediately
+                -- Copy-of-elements can be resolved immediately
                 if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" or eltname == "Transformation" or eltname == "Frame" then
                     if type(tmp)=="table" then
                         for i=1,#tmp do
@@ -873,7 +874,7 @@ function initialize_luatex_and_generate_pdf()
     end
 end
 
---- Load an XML file from the harddrive. filename is without path but including extension,
+--- Load an XML file from the hard drive. filename is without path but including extension,
 --- filetype is a string representing the type of file read, such as "layout" or "data".
 --- The return value is a lua table representing the XML file.
 ---
@@ -1386,8 +1387,8 @@ function frame(obj)
     local b_t_l_radius_inner = math.round(math.max(sp_to_bp(obj.b_t_l_radius) - width / factor,0),3)
     local b_b_l_radius_inner = math.round(math.max(sp_to_bp(obj.b_b_l_radius) - width / factor,0),3)
 
-    -- See http://en.wikipedia.org/wiki/File:Circle_and_cubic_bezier.svg
-    -- http://en.wikipedia.org/wiki/Composite_B%C3%A9zier_curve
+    -- See https://en.wikipedia.org/wiki/File:Circle_and_cubic_bezier.svg
+    -- https://en.wikipedia.org/wiki/Composite_B%C3%A9zier_curve
     -- 0.5522847498
     -- http://spencermortensen.com/articles/bezier-circle/
     -- 0.551915024494

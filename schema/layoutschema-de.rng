@@ -785,7 +785,7 @@
    </define>
    <define name="e_Compatibility">
       <element name="Compatibility">
-         <a:documentation>Setzte Kompatibilität für ältere Layoutregeln</a:documentation>
+         <a:documentation>Setze Kompatibilität für ältere Layoutregeln</a:documentation>
          <optional>
             <attribute name="movecursoronplaceobject">
                <a:documentation>Wechselt das Verhalten bei dem Objekte (platziert mit PlaceObject) am rechten Rand den Cursor in Spalte »Anzahl Spalten + 1« setzt.</a:documentation>
@@ -2192,6 +2192,11 @@
                   <value>no</value>
                   <a:documentation>Beschnittmarken nicht anzeigen (Voreinstellung).</a:documentation>
                </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="defaultarea">
+               <a:documentation>Name des Bereichs, der bei Output und PlaceObject benutzt wird. Die Seite hat den Namen _page.</a:documentation>
             </attribute>
          </optional>
          <optional>

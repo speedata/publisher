@@ -2195,6 +2195,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="defaultarea">
+               <a:documentation>Name of the area that is used as a default for placing text (commands Output and PlaceObject). Default is _page.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="ignoreeol">
                <a:documentation>Ignore newlines in data-xml</a:documentation>
                <choice>

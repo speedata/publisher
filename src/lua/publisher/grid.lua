@@ -202,7 +202,7 @@ end
 
 function number_of_columns(self,areaname)
     assert(self)
-    local areaname = areaname or publisher.default_areaname
+    areaname = areaname or publisher.default_area
     if not self.positioning_frames[areaname] then
         err("Area %q unknown, using page (number-of-columns)",areaname)
         areaname = publisher.default_areaname
@@ -233,7 +233,7 @@ function isallocated( self,x,y,areaname,framenumber )
             frame_margin_top = block.row - 1
         end
     end
-    if x > self:number_of_columns() then
+    if x > self:number_of_columns(publisher.default_areaname) then
         err("x (%d) exceeds number of columns of the given area (%d) (including added offset of %d)",x,self:number_of_columns(areaname),frame_margin_left)
         return false
     end
@@ -301,7 +301,7 @@ function set_width_height(self, options)
     self.grid_dy    = options.dy or 0
     calculate_number_gridcells(self)
     self.allocation_x_y = {}
-    for i=1,self:number_of_columns() do
+    for i=1,self:number_of_columns(publisher.default_areaname) do
         self.allocation_x_y[i] = {}
     end
 end
@@ -410,7 +410,7 @@ end
 function fits_in_row(self,column,width,row)
     column = math.ceil(column)
     if not column then return false end
-    if column + width - 1 > self:number_of_columns() then return false end
+    if column + width - 1 > self:number_of_columns(publisher.default_areaname) then return false end
     local max_x = column + width - 1
     for x = column, max_x  do
         if self.allocation_x_y[x][row] then return false end
@@ -628,7 +628,7 @@ function draw_grid(self)
 
     local y = math.round(sp_to_bp(self.extra_margin - self.trim),2)
 
-    local count_col = self:number_of_columns()
+    local count_col = self:number_of_columns(publisher.default_areaname)
     for i=0, count_col do
         -- every 5 grid cells draw a grey rule
         if (i % 5 == 0) then color = "0.6" else color = "0.8" end
@@ -703,7 +703,7 @@ function draw_gridallocation(self)
     for y=1,self:number_of_rows() do
         local alloc_found = nil
 
-        for x=1, self:number_of_columns() do
+        for x=1, self:number_of_columns(publisher.default_areaname) do
             if self.allocation_x_y[x][y] then
                 re_wd = sp_to_bp(self.gridwidth)
                 re_x = sp_to_bp (self.margin_left + self.extra_margin) + ( x - 1 ) * sp_to_bp(self.gridwidth + self.grid_dx)
@@ -819,7 +819,7 @@ function calculate_number_gridcells(self)
         end
     end
 
-    log("Number of rows: %d, number of columns = %d",self:number_of_rows(), self:number_of_columns())
+    log("Number of rows: %d, number of columns = %d",self:number_of_rows(), self:number_of_columns(publisher.default_areaname))
 end
 
 -- Sets the used area for the page (used by crop="yes")
