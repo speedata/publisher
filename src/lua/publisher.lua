@@ -518,6 +518,7 @@ local dispatch_table = {
     Textblock               = commands.textblock,
     Text                    = commands.text,
     Tr                      = commands.tr,
+    Trace                   = commands.trace,
     Transformation          = commands.transformation,
     U                       = commands.underline,
     Ul                      = commands.ul,
@@ -986,7 +987,7 @@ function output_at( param )
         outputpage = param.pagenumber
     end
     local nodelist = param.nodelist
-    if options.trace then
+    if options.showobjects then
         nodelist = boxit(nodelist)
     end
     local x = param.x
@@ -2506,7 +2507,7 @@ function bullet_hbox( labelwidth )
     bullet.next = post_glue
     local bullet_hbox = node.hpack(pre_glue,labelwidth,"exactly")
 
-    if options.trace then
+    if options.showobjects then
         boxit(bullet_hbox)
     end
     node.set_attribute(bullet_hbox,att_indent,labelwidth)
@@ -2531,7 +2532,7 @@ function number_hbox( num, labelwidth )
     node.tail(digits).next = post_glue
     local digit_hbox = node.hpack(pre_glue,labelwidth,"exactly")
 
-    if options.trace then
+    if options.showobjects then
         boxit(digit_hbox)
     end
     node.set_attribute(digit_hbox,att_indent,labelwidth)

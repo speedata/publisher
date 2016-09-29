@@ -1742,6 +1742,9 @@
                <ref name="e_Stylesheet"></ref>
             </optional>
             <optional>
+               <ref name="e_Trace"></ref>
+            </optional>
+            <optional>
                <ref name="e_Include"></ref>
             </optional>
          </oneOrMore>
@@ -2258,50 +2261,6 @@
          <optional>
             <attribute name="startpage">
                <a:documentation>Gibt den Nummer der ersten Seite an.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="show-grid">
-               <a:documentation>Wenn &#39;yes&#39;, dann zeichnet der Publisher das zugrunde liegende Raster auf die Seiten.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Zeige das Raster.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Das Raster wird nicht angezeigt (Voreinstellung).</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="show-gridallocation">
-               <a:documentation>Wenn &#39;yes&#39;, dann markiert der Publisher die belegten Rasterzellen mit einer Hintergrundfarbe.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Zeige Rasterbelegung.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Rasterbelegung nicht zeigen (Voreinstellung).</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="show-hyphenation">
-               <a:documentation>Bei &#39;yes&#39; markiert der speedata Publisher die möglichen Trennstellen für die Silbentrennung.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Zeige Silbentrennungsmöglichkeiten.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Keine Silbentrennungsmöglichkeiten zeigen (Voreinstellung).</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="trace">
-               <a:documentation>Erzeugt zusätzliche Ausgaben in der Protokolldatei und optische Hilfen im PDF.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Zusätzliche Ausgaben in der Logdatei und im PDF erzeugen.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Normaler Lauf (Voreinstellung).</a:documentation>
-               </choice>
             </attribute>
          </optional>
          <optional>
@@ -3963,6 +3922,78 @@
                <ref name="e_Value"></ref>
             </choice>
          </oneOrMore>
+      </element>
+   </define>
+   <define name="e_Trace">
+      <element name="Trace">
+         <a:documentation>Setze Debugging-Schalter</a:documentation>
+         <optional>
+            <attribute name="assignments">
+               <a:documentation>Schreibt Zusweisungen (SetVariable) in die Logdatei.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zusätzliche Ausgaben in der Logdatei.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Normaler Lauf (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="grid">
+               <a:documentation>Wenn &#39;yes&#39;, dann zeichnet der Publisher das zugrunde liegende Raster auf die Seiten.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeige das Raster.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Das Raster wird nicht angezeigt (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="gridallocation">
+               <a:documentation>Wenn &#39;yes&#39;, dann markiert der Publisher die belegten Rasterzellen mit einer Hintergrundfarbe.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeige Rasterbelegung.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Rasterbelegung nicht zeigen (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="hyphenation">
+               <a:documentation>Bei &#39;yes&#39; markiert der speedata Publisher die möglichen Trennstellen für die Silbentrennung.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeige Silbentrennungsmöglichkeiten.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Keine Silbentrennungsmöglichkeiten zeigen (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="objects">
+               <a:documentation>Zeichnet Rechtecke um Objekte.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeichnet Rechtecke</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Keine Rechtecke um Objekte (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="verbose">
+               <a:documentation>Erzeugt zusätzliche Ausgaben in der Protokolldatei.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zusätzliche Ausgaben in der Logdatei.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Normaler Lauf (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Tr">

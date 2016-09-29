@@ -1640,13 +1640,27 @@ end
 --- -------
 --- This is a top-level element in the layout definition file. It saves the options such as `show-grid`.
 function commands.options( layoutxml,dataxml )
-    publisher.options.cutmarks           = publisher.read_attribute(layoutxml,dataxml,"cutmarks",    "boolean")
-    publisher.options.trimmarks          = publisher.read_attribute(layoutxml,dataxml,"trimmarks",   "boolean")
+    -- deprecated:
+    publisher.options.showhyphenation    = publisher.read_attribute(layoutxml,dataxml,"show-hyphenation","boolean")
     local showgrid                       = publisher.read_attribute(layoutxml,dataxml,"show-grid",   "boolean")
     local showgridallocation             = publisher.read_attribute(layoutxml,dataxml,"show-gridallocation","boolean")
-    publisher.options.showhyphenation    = publisher.read_attribute(layoutxml,dataxml,"show-hyphenation","boolean")
-    publisher.options.startpage          = publisher.read_attribute(layoutxml,dataxml,"startpage",   "number")
     local trace                          = publisher.read_attribute(layoutxml,dataxml,"trace",       "boolean")
+
+    if showgrid ~= nil then
+        publisher.options.showgrid = showgrid
+    end
+    if showgridallocation ~= nil then
+        publisher.options.showgridallocation = showgridallocation
+    end
+    if trace ~= nil then
+        publisher.options.trace = trace
+    end
+    --  ----
+
+
+    publisher.options.cutmarks           = publisher.read_attribute(layoutxml,dataxml,"cutmarks",    "boolean")
+    publisher.options.trimmarks          = publisher.read_attribute(layoutxml,dataxml,"trimmarks",   "boolean")
+    publisher.options.startpage          = publisher.read_attribute(layoutxml,dataxml,"startpage",   "number")
     publisher.options.trim               = publisher.read_attribute(layoutxml,dataxml,"trim",        "length")
     publisher.options.ignoreeol          = publisher.read_attribute(layoutxml,dataxml,"ignoreeol",   "boolean")
     publisher.options.resetmarks         = publisher.read_attribute(layoutxml,dataxml,"resetmarks",  "boolean",false)
@@ -1661,15 +1675,6 @@ function commands.options( layoutxml,dataxml )
     end
 
     publisher.options.imagenotfounderror = imagenotfound == "error"
-    if trace ~= nil then
-        publisher.options.trace = trace
-    end
-    if showgrid ~= nil then
-        publisher.options.showgrid = showgrid
-    end
-    if showgridallocation ~= nil then
-        publisher.options.showgridallocation = showgridallocation
-    end
     if mainlanguage ~= "" then
         publisher.set_mainlanguage(mainlanguage,true)
     end
@@ -2162,7 +2167,7 @@ function commands.place_object( layoutxml,dataxml )
             err("Something is wrong with <PlaceObject>, content is missing")
             return
         end
-        if publisher.options.trace then
+        if publisher.options.showobjects then
             publisher.boxit(object)
         end
         assert(object.width,"Can't determine object width")
@@ -2597,7 +2602,7 @@ end
 --- -----------
 --- Assign a value to a variable.
 function commands.setvariable( layoutxml,dataxml )
-    local trace_p   = publisher.read_attribute(layoutxml,dataxml,"trace","boolean")
+    local trace_p   = publisher.options.showassignments or publisher.read_attribute(layoutxml,dataxml,"trace","boolean")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
     local varname   = publisher.read_attribute(layoutxml,dataxml,"variable","rawstring")
     -- FIXME: if the variable contains nodes, the must be freed:
@@ -3109,6 +3114,37 @@ function commands.td( layoutxml,dataxml )
     if tab["padding-left"]   then tab.padding_left   = tex.sp(tab["padding-left"])   end
     if tab["padding-right"]  then tab.padding_right  = tex.sp(tab["padding-right"])  end
     return tab
+end
+
+--- Trace
+--- -----
+--- Set various tracing options
+function commands.trace(layoutxml,dataxml)
+    local assignments      = publisher.read_attribute(layoutxml,dataxml,"assignments",   "boolean")
+    local grid             = publisher.read_attribute(layoutxml,dataxml,"grid",          "boolean")
+    local gridallocation   = publisher.read_attribute(layoutxml,dataxml,"gridallocation","boolean")
+    local hyphenation      = publisher.read_attribute(layoutxml,dataxml,"hyphenation",   "boolean")
+    local objects          = publisher.read_attribute(layoutxml,dataxml,"objects",       "boolean")
+    local verbose          = publisher.read_attribute(layoutxml,dataxml,"verbose",       "boolean")
+
+    if assignments ~= nil then
+        publisher.options.showassignments = assignments
+    end
+    if grid ~= nil then
+        publisher.options.showgrid = grid
+    end
+    if gridallocation ~= nil then
+        publisher.options.showgridallocation = gridallocation
+    end
+    if hyphenation ~= nil then
+        publisher.options.showhyphenation = hyphenation
+    end
+    if objects ~= nil then
+        publisher.options.showobjects = objects
+    end
+    if verbose ~= nil then
+        publisher.options.trace = verbose
+    end
 end
 
 --- Text

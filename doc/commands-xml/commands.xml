@@ -130,6 +130,7 @@
     <optional><cmd name="SetGrid"/></optional>
     <optional><cmd name="SetVariable"/></optional>
     <optional><cmd name="Stylesheet"/></optional>
+    <optional><cmd name="Trace"/></optional>
   </define>
 
   <define name="Include">
@@ -4018,7 +4019,7 @@
   </command>
   <command en="Options">
     <description xml:lang="en">
-      <para>Set publisher specific options</para>
+      <para>Set publisher specific options.</para>
     </description>
     <description xml:lang="de">
       <para>Setzt Publisher-spezifische Optionen.</para>
@@ -4160,102 +4161,6 @@
       <description xml:lang="de">
         <para>Gibt den Nummer der ersten Seite an.</para>
       </description>
-    </attribute>
-    <attribute en="show-grid" optional="yes">
-      <description xml:lang="en">
-        <para>Draw the grid on the page.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Wenn 'yes', dann zeichnet der Publisher das zugrunde liegende Raster auf die Seiten.</para>
-      </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>Show the grid.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Zeige das Raster.</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>Don't show the grid (default).</para>
-        </description>
-        <description xml:lang="de">
-          <para>Das Raster wird nicht angezeigt (Voreinstellung).</para>
-        </description>
-      </choice>
-    </attribute>
-    <attribute en="show-gridallocation" optional="yes">
-      <description xml:lang="en">
-        <para>Draw allocated cells with yellow and conflicts with red markers.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Wenn 'yes', dann markiert der Publisher die belegten Rasterzellen mit einer Hintergrundfarbe.</para>
-      </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>Show grid allocation.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Zeige Rasterbelegung.</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>Don't show the grid allocation (default).</para>
-        </description>
-        <description xml:lang="de">
-          <para>Rasterbelegung nicht zeigen (Voreinstellung).</para>
-        </description>
-      </choice>
-    </attribute>
-    <attribute en="show-hyphenation" optional="yes">
-      <description xml:lang="en">
-        <para>Draw little marks to show all hyphenation points.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Bei 'yes' markiert der speedata Publisher die möglichen Trennstellen für die Silbentrennung.</para>
-      </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>Show hyphenation points.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Zeige Silbentrennungsmöglichkeiten.</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>Don't show any hyphenation points (default).</para>
-        </description>
-        <description xml:lang="de">
-          <para>Keine Silbentrennungsmöglichkeiten zeigen (Voreinstellung).</para>
-        </description>
-      </choice>
-    </attribute>
-    <attribute en="trace" optional="yes">
-      <description xml:lang="en">
-        <para>Draw rectangles around objects for debugging purposes.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Erzeugt zusätzliche Ausgaben in der Protokolldatei und optische Hilfen im PDF.</para>
-      </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>Verbose output in the log file and the PDF.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Zusätzliche Ausgaben in der Logdatei und im PDF erzeugen.</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>Regular run (default).</para>
-        </description>
-        <description xml:lang="de">
-          <para>Normaler Lauf (Voreinstellung).</para>
-        </description>
-      </choice>
     </attribute>
     <attribute en="trim" type="length" optional="yes">
       <description xml:lang="en">
@@ -7327,6 +7232,164 @@
 ]]></listing>
     </example>
     <seealso><cmd name="PlaceObject"/></seealso>
+  </command>
+  <command en="Trace" since="2.7.4">
+    <description xml:lang="en">
+      <para>Set debugging switches</para>
+    </description>
+    <description xml:lang="de">
+      <para>Setze Debugging-Schalter</para>
+    </description>
+    <childelements/>
+    <attribute en="assignments" optional="yes">
+      <description xml:lang="en">
+        <para>Write assignments (<cmd name="SetVariable"/>) to the log file.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Schreibt Zusweisungen (<cmd name="SetVariable"/>) in die Logdatei.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Verbose output in the protocol file.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zusätzliche Ausgaben in der Logdatei.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Regular run (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Normaler Lauf (Voreinstellung).</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="grid" optional="yes">
+      <description xml:lang="en">
+        <para>Draw the grid on the page.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn 'yes', dann zeichnet der Publisher das zugrunde liegende Raster auf die Seiten.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Show the grid.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeige das Raster.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Don't show the grid (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Das Raster wird nicht angezeigt (Voreinstellung).</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="gridallocation" optional="yes">
+      <description xml:lang="en">
+        <para>Draw allocated cells with yellow and conflicts with red markers.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn 'yes', dann markiert der Publisher die belegten Rasterzellen mit einer Hintergrundfarbe.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Show grid allocation.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeige Rasterbelegung.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Don't show the grid allocation (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Rasterbelegung nicht zeigen (Voreinstellung).</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="hyphenation" optional="yes">
+      <description xml:lang="en">
+        <para>Draw little marks to show all hyphenation points.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bei 'yes' markiert der speedata Publisher die möglichen Trennstellen für die Silbentrennung.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Show hyphenation points.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeige Silbentrennungsmöglichkeiten.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Don't show any hyphenation points (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Keine Silbentrennungsmöglichkeiten zeigen (Voreinstellung).</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="objects" optional="yes">
+      <description xml:lang="en">
+        <para>Draw rectangles around objects.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Zeichnet Rechtecke um Objekte.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Draw rectangles</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeichnet Rechtecke</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>No rectangles drawn around objects (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Keine Rechtecke um Objekte (Voreinstellung).</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="verbose" optional="yes">
+      <description xml:lang="en">
+        <para>Verbose output in the protocol file.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Erzeugt zusätzliche Ausgaben in der Protokolldatei.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Verbose output in the protocol file.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zusätzliche Ausgaben in der Logdatei.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Regular run (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Normaler Lauf (Voreinstellung).</para>
+        </description>
+      </choice>
+    </attribute>
+
+    <example xml:lang="en">
+      <listing><![CDATA[]]></listing>
+    </example>
+    <seealso></seealso>
   </command>
   <command en="Tr">
     <description xml:lang="en">
