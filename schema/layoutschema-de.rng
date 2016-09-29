@@ -1055,6 +1055,11 @@
    <define name="e_EmptyLine">
       <element name="EmptyLine">
          <a:documentation>Erzeugt eine leere (Raster-)Zeile. Ausgehend von der aktuellen Zeile wird die nächste freie Zeile gesucht. Das nächste Objekt wird in der nächsten Zeile ausgegeben.</a:documentation>
+         <optional>
+            <attribute name="area">
+               <a:documentation>Der Name des Bereichs.</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

@@ -1055,6 +1055,11 @@
    <define name="e_EmptyLine">
       <element name="EmptyLine">
          <a:documentation>Create an empty row an set the cursor to the next row.</a:documentation>
+         <optional>
+            <attribute name="area">
+               <a:documentation>The name of the area.</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

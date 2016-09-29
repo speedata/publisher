@@ -2082,6 +2082,14 @@
       <para>Erzeugt eine leere (Raster-)Zeile. Ausgehend von der aktuellen Zeile wird die nächste freie Zeile gesucht. Das nächste Objekt wird in der nächsten Zeile ausgegeben.</para>
     </description>
     <childelements/>
+    <attribute en="area" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>The name of the area.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name des Bereichs.</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Record element="data">
   <PlaceObject>
