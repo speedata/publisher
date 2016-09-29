@@ -1317,7 +1317,7 @@ end
 --- Create an empty row in the layout. Set the cursor to the next free line and
 --- let an empty row between.
 function commands.emptyline( layoutxml,dataxml )
-    trace("Emtpy row, current row is %d",publisher.current_grid:current_row())
+    trace("Empty row, current row is %d",publisher.current_grid:current_row())
     local areaname = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
     areaname = areaname or publisher.default_area or publisher.default_areaname
     local current_grid = publisher.current_grid
@@ -1713,7 +1713,7 @@ function commands.output( layoutxml,dataxml )
     local last_area = publisher.xpath.get_variable("__area")
     local state
     publisher.xpath.set_variable("__area",area)
-    publisher.next_row(row,area,1)
+    publisher.next_row(row,area,0)
 
 
     local current_grid

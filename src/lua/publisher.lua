@@ -3522,7 +3522,18 @@ function next_row(rownumber,areaname,rows)
         grid = current_page.grid
         grid:set_current_row(1)
     else
-        grid:set_current_row(current_row + rows - 1,areaname)
+        -- Version 2.7.3 and before had the problem that the cursor is past the right
+        -- edge. See bug #105 (https://github.com/speedata/publisher/issues/105) for
+        -- a description.
+        -- A <NextRow rows="1" /> would go to the next free row, which could be the current
+        -- row.
+        -- <NextRow rows="1" /> should instead go to the beginning of the next row. So a
+        -- <NextRow rows="1" /> directly after <PlaceObject>...</PlaceObject> width the right
+        -- edge at the right margin will leave one blank line.
+        -- The old behavior is to decrease 1 from the movement, which makes no sense these days.
+        local dec = 0
+        if grid:current_column(areaname) > 1 and not compatibility.movecorsoronrightedge then dec = 1 end
+        grid:set_current_row(current_row + rows - dec,areaname)
         grid:set_current_column(1,areaname)
     end
 end
