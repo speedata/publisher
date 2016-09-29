@@ -1317,7 +1317,8 @@ end
 --- Create an empty row in the layout. Set the cursor to the next free line and
 --- let an empty row between.
 function commands.emptyline( layoutxml,dataxml )
-    trace("Empty row, current row is %d",publisher.current_grid:current_row())
+    trace("EmptyLine, current row is %d",publisher.current_grid:current_row())
+    warning("EmptyLine is deprecated since 2.7.4. Use NextRow instead.")
     local areaname = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
     areaname = areaname or publisher.default_area or publisher.default_areaname
     local current_grid = publisher.current_grid

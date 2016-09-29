@@ -17,7 +17,6 @@
     <optional><cmd name="DefineFontfamily"/></optional>
     <optional><cmd name="DefineTextformat"/></optional>
     <optional><cmd name="Element"/></optional>
-    <optional><cmd name="EmptyLine"/></optional>
     <optional><cmd name="Fontface"/></optional>
     <optional><cmd name="ForAll"/></optional>
     <optional><cmd name="Frame"/></optional>
@@ -66,7 +65,6 @@
     <optional><cmd name="Bookmark"/></optional>
     <optional><cmd name="DefineColor"/></optional>
     <optional><cmd name="DefineFontfamily"/></optional>
-    <optional><cmd name="EmptyLine"/></optional>
     <optional><cmd name="ForAll"/></optional>
     <optional><cmd name="Group"/></optional>
     <optional><cmd name="Hyphenation"/></optional>
@@ -2074,56 +2072,6 @@
       <cmd name="SaveDataset"/>
     </seealso>
   </command>
-  <command en="EmptyLine">
-    <description xml:lang="en">
-      <para>Create an empty row an set the cursor to the next row.</para>
-    </description>
-    <description xml:lang="de">
-      <para>Erzeugt eine leere (Raster-)Zeile. Ausgehend von der aktuellen Zeile wird die nächste freie Zeile gesucht. Das nächste Objekt wird in der nächsten Zeile ausgegeben.</para>
-    </description>
-    <childelements/>
-    <attribute en="area" optional="yes" type="text">
-      <description xml:lang="en">
-        <para>The name of the area.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Der Name des Bereichs.</para>
-      </description>
-    </attribute>
-    <example xml:lang="en">
-      <listing><![CDATA[<Record element="data">
-  <PlaceObject>
-    <Textblock width="5">
-      <Paragraph>
-        <Value>Hallo</Value>
-      </Paragraph>
-    </Textblock>
-  </PlaceObject>
-
-  <EmptyLine/>
-
-  <PlaceObject>
-    <Textblock width="5">
-      <Paragraph>
-        <Value>Welt</Value>
-      </Paragraph>
-    </Textblock>
-  </PlaceObject>
-</Record>]]></listing>
-    </example>
-    <example xml:lang="de">
-      <listing><![CDATA[<PlaceObject column="1">
-  <Image width="5" file="cow.pdf"/>
-</PlaceObject>
-<EmptyLine />
-<PlaceObject column="2">
-  <Image width="3" file="cow.pdf"/>
-</PlaceObject>]]></listing>
-    </example>
-    <seealso>
-      <cmd name="NextRow"/>
-    </seealso>
-  </command>
   <command en="Fontface">
     <description xml:lang="en">
       <para>Switch to another font family.</para>
@@ -3487,7 +3435,6 @@
           </ForAll>
         </Table>
       </PlaceObject>
-      <EmptyLine/>
     </ForAll>
   </Record>
 ]]></listing>
@@ -3938,7 +3885,6 @@
 </Record>]]></listing>
     </example>
     <seealso>
-      <cmd name="EmptyLine"/>
     </seealso>
   </command>
   <command en="NoBreak" since="2.3.14">

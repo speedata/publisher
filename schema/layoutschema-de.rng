@@ -56,9 +56,6 @@
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
-               <ref name="e_EmptyLine"></ref>
-            </optional>
-            <optional>
                <ref name="e_ForAll"></ref>
             </optional>
             <optional>
@@ -139,9 +136,6 @@
             </optional>
             <optional>
                <ref name="e_DefineFontfamily"></ref>
-            </optional>
-            <optional>
-               <ref name="e_EmptyLine"></ref>
             </optional>
             <optional>
                <ref name="e_ForAll"></ref>
@@ -449,9 +443,6 @@
                <ref name="e_Element"></ref>
             </optional>
             <optional>
-               <ref name="e_EmptyLine"></ref>
-            </optional>
-            <optional>
                <ref name="e_Fontface"></ref>
             </optional>
             <optional>
@@ -657,9 +648,6 @@
             </optional>
             <optional>
                <ref name="e_DefineFontfamily"></ref>
-            </optional>
-            <optional>
-               <ref name="e_EmptyLine"></ref>
             </optional>
             <optional>
                <ref name="e_ForAll"></ref>
@@ -1052,17 +1040,6 @@
          </oneOrMore>
       </element>
    </define>
-   <define name="e_EmptyLine">
-      <element name="EmptyLine">
-         <a:documentation>Erzeugt eine leere (Raster-)Zeile. Ausgehend von der aktuellen Zeile wird die nächste freie Zeile gesucht. Das nächste Objekt wird in der nächsten Zeile ausgegeben.</a:documentation>
-         <optional>
-            <attribute name="area">
-               <a:documentation>Der Name des Bereichs.</a:documentation>
-            </attribute>
-         </optional>
-         <empty></empty>
-      </element>
-   </define>
    <define name="e_Fontface">
       <element name="Fontface">
          <a:documentation>Schaltet vorübergehend auf eine andere Schriftfamilie um.</a:documentation>
@@ -1150,9 +1127,6 @@
                </optional>
                <optional>
                   <ref name="e_Element"></ref>
-               </optional>
-               <optional>
-                  <ref name="e_EmptyLine"></ref>
                </optional>
                <optional>
                   <ref name="e_Fontface"></ref>
@@ -1841,9 +1815,6 @@
                   <ref name="e_Element"></ref>
                </optional>
                <optional>
-                  <ref name="e_EmptyLine"></ref>
-               </optional>
-               <optional>
                   <ref name="e_Fontface"></ref>
                </optional>
                <optional>
@@ -2394,9 +2365,6 @@
             </optional>
             <optional>
                <ref name="e_Element"></ref>
-            </optional>
-            <optional>
-               <ref name="e_EmptyLine"></ref>
             </optional>
             <optional>
                <ref name="e_Fontface"></ref>
@@ -3134,9 +3102,6 @@
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
-               <ref name="e_EmptyLine"></ref>
-            </optional>
-            <optional>
                <ref name="e_ForAll"></ref>
             </optional>
             <optional>
@@ -3313,9 +3278,6 @@
                </optional>
                <optional>
                   <ref name="e_DefineFontfamily"></ref>
-               </optional>
-               <optional>
-                  <ref name="e_EmptyLine"></ref>
                </optional>
                <optional>
                   <ref name="e_ForAll"></ref>
@@ -4257,9 +4219,6 @@
                   <ref name="e_Element"></ref>
                </optional>
                <optional>
-                  <ref name="e_EmptyLine"></ref>
-               </optional>
-               <optional>
                   <ref name="e_Fontface"></ref>
                </optional>
                <optional>
@@ -4476,9 +4435,6 @@
                </optional>
                <optional>
                   <ref name="e_Element"></ref>
-               </optional>
-               <optional>
-                  <ref name="e_EmptyLine"></ref>
                </optional>
                <optional>
                   <ref name="e_Fontface"></ref>
