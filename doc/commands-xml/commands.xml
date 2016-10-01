@@ -7385,7 +7385,30 @@
         </description>
       </choice>
     </attribute>
-
+    <attribute en="textformat" optional="yes">
+      <description xml:lang="en">
+        <para>Show textformt as a tooltip in the PDF</para>
+      </description>
+      <description xml:lang="de">
+        <para>Zeige Textformat als Tooltip im PDF</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Show textformat</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeige Textformat</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Don't show textformat (default)</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeige Textformat nicht (Voreinstellung).</para>
+        </description>
+      </choice>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[]]></listing>
     </example>

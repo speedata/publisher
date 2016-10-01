@@ -3993,6 +3993,17 @@
                </choice>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="textformat">
+               <a:documentation>Zeige Textformat als Tooltip im PDF</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeige Textformat</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Zeige Textformat nicht (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

@@ -59,8 +59,9 @@ att_underline      = 5
 att_indent         = 6 -- see textformats for details
 att_rows           = 7 -- see textformats for details
 
-att_origin         = 98 -- for debugging purpose
-att_debug          = 99 -- for debugging purposes
+-- for debugging purpose
+att_origin         = 98
+att_debug          = 99
 
 --- These attributes are for image shifting. The amount of shift up/left can
 --- be negative and is counted in scaled points.
@@ -97,7 +98,7 @@ att_lineheight = 600
 att_keep = 700
 
 -- attributes for glue
-att_lederwd = 800
+att_leaderwd = 800
 
 -- Debugging / see att_origin
 origin_table = 1
@@ -953,6 +954,23 @@ function output_absolute_position(param)
     local tail = node.tail(pages[current_pagenumber].pagebox)
     tail.next = n
     n.prev = tail
+end
+
+annotcount = 0
+
+function annotate_nodelist(nodelist,text)
+    text = text:gsub(" ","\\040")
+    local annot = node.new(whatsit_node,"pdf_annot")
+    local str = string.format([[ /Subtype /Widget /TU (%s) /T (tooltip zref@%d) /C [] /FT/Btn /F 768 /Ff 65536 /H/N /BS << /W 0 >>]],text,annotcount)
+    annotcount = annotcount + 1
+    annot.data = str
+    annot.width = nodelist.width
+    annot.height = nodelist.height
+    annot.depth = nodelist.depth
+
+    nodelist = node.insert_before(nodelist.head,nodelist.head,annot)
+    nodelist = node.hpack(nodelist)
+    return nodelist
 end
 
 --- Put the object (nodelist) on grid cell (x,y). If `allocate`=`true` then

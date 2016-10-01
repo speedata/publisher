@@ -549,7 +549,6 @@ function commands.define_textformat(layoutxml)
     else
         fmt.alignment = "justified"
     end
-
     fmt.orphan = orphan
     fmt.widow = widow
     fmt.disable_hyphenation = not hyphenate
@@ -935,7 +934,7 @@ function commands.hspace( layoutxml,dataxml )
         lp:append(leadertext)
         -- With no given width, we ask the pre_linebreak_filter
         -- to set the width of the hbox later on (after font setting)
-        node.set_attribute(lp.nodelist, publisher.att_lederwd, leaderwd or -1)
+        node.set_attribute(lp.nodelist, publisher.att_leaderwd, leaderwd or -1)
         n.leader = lp.nodelist
     end
     local p1, p2
@@ -3126,6 +3125,7 @@ function commands.trace(layoutxml,dataxml)
     local hyphenation      = publisher.read_attribute(layoutxml,dataxml,"hyphenation",   "boolean")
     local objects          = publisher.read_attribute(layoutxml,dataxml,"objects",       "boolean")
     local verbose          = publisher.read_attribute(layoutxml,dataxml,"verbose",       "boolean")
+    local textformat       = publisher.read_attribute(layoutxml,dataxml,"textformat",    "boolean")
 
     if assignments ~= nil then
         publisher.options.showassignments = assignments
@@ -3144,6 +3144,9 @@ function commands.trace(layoutxml,dataxml)
     end
     if verbose ~= nil then
         publisher.options.trace = verbose
+    end
+    if textformat ~= nil then
+        publisher.options.showtextformat = textformat
     end
 end
 
@@ -3230,7 +3233,6 @@ function commands.text(layoutxml,dataxml)
                     else
                         contents.nodelist = publisher.set_color_if_necessary(contents.nodelist,colortable)
                         publisher.set_fontfamily_if_necessary(contents.nodelist,fontfamily)
-                        -- contents.nodelist = publisher.addstrut(contents.nodelist,publisher.origin_text)
                         obj,startpage,startrow = contents:format(parameter.width,textformat,parameter,startpage,startrow)
                     end
                     objects[#objects + 1] = obj
@@ -3344,7 +3346,7 @@ function commands.textblock( layoutxml,dataxml )
         width_sp = math.floor(  (width_sp - columndistance * ( columns - 1 ) )   / columns)
     end
     for _,paragraph in ipairs(objects) do
-        if paragraph.id == 8 then -- whatsit
+        if paragraph.id == publisher.whatsit_node then
             -- todo: document how this can be!
             nodes[#nodes + 1] = paragraph
         else

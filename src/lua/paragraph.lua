@@ -495,6 +495,16 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         last.next = objects[i+1]
         objects[i+1].prev = last
     end
+    if publisher.options.showtextformat then
+        local each_line = objects[1]
+        while each_line do
+            if node.has_field(each_line,"head") then
+                each_line.head = publisher.annotate_nodelist(each_line,current_textformat_name or "text")
+            end
+            each_line = each_line.next
+        end
+    end
+
     nodelist = node.vpack(objects[1])
 
     return nodelist
