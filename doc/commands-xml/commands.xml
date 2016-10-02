@@ -1469,7 +1469,7 @@
       <para>Replace this element by the copy of the selection as an element structure. You can use it to construct more complex data structures.</para>
     </description>
     <description xml:lang="de">
-      <para>Ersetzt dieses Element mit Inhalt von <tt>auswahl</tt> als Elementstruktur. Dient zum „Zusammenbauen“ von Texten und Tabellen.</para>
+      <para>Ersetzt dieses Element mit Inhalt von <tt>select</tt> als Elementstruktur. Dient zum „Zusammenbauen“ von Texten und Tabellen.</para>
     </description>
     <childelements/>
     <attribute en="select" type="xpath" optional="no">
@@ -2129,7 +2129,7 @@
       <para>Executes the given commands for all elements in the data XML file that match the contents of the attribute <tt>select</tt>.</para>
     </description>
     <description xml:lang="de">
-      <para>Ruft die Kindelemente für alle Daten-Elemente auf, die auf das Muster bei <tt>auswahl</tt> passen.</para>
+      <para>Ruft die Kindelemente für alle Daten-Elemente auf, die auf das Muster bei <tt>select</tt> passen.</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -5323,7 +5323,7 @@
       <para>Executes all given nodes. The elements, that are to be executed, are given with the attribute <tt>selection</tt>.</para>
     </description>
     <description xml:lang="de">
-      <para>Bearbeitet alle angegebenen Datensätze. Die Elemente, für die die Regeln ausgeführt werden sollen, werden mit dem Attribut auswahl angegeben.</para>
+      <para>Bearbeitet alle angegebenen Datensätze. Die Elemente, für die die Regeln ausgeführt werden sollen, werden mit dem Attribut select angegeben.</para>
     </description>
     <childelements/>
     <attribute en="limit" optional="yes" since="2.5.6" type="number">
@@ -5920,7 +5920,7 @@
     <rules xml:lang="de">
       <sch:pattern>
         <sch:rule context="t:Zuweisung">
-        <sch:assert test="not(  not(empty(@auswahl)) and node()  )">Zuweisung: entweder Attribut auswahl benutzen _oder_ Kindelemente, aber nicht beides.</sch:assert>
+        <sch:assert test="not(  not(empty(@select)) and node()  )">Zuweisung: entweder Attribut select benutzen _oder_ Kindelemente, aber nicht beides.</sch:assert>
       </sch:rule>
       </sch:pattern>
     </rules>
@@ -7969,7 +7969,7 @@ Message: "$i is: 3"]]></listing>
       <para>Containing Br-tags will be interpreted as newlines.</para>
     </remark>
     <remark xml:lang="de">
-      <para>Der Inhalt kann entweder als XPath-Ausdruck im Attribut auswahl oder als Elementinhalt angegeben werden.</para>
+      <para>Der Inhalt kann entweder als XPath-Ausdruck im Attribut select oder als Elementinhalt angegeben werden.</para>
       <para>Innenliegende Br-Tags werden als Zeilenumbruch interpretiert.</para>
     </remark>
     <example xml:lang="en">
