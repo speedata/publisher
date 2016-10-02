@@ -2663,8 +2663,10 @@ function commands.setvariable( layoutxml,dataxml )
         end
     end
     if trace_p then
-        log("SetVariable, variable name = %q, value = %q",varname or "???", tostring(contents))
-        printtable("SetVariable",contents)
+        log("SetVariable, variable name = %q, type = %q, value = %q",varname or "(no variable name)", type(contents), tostring(contents))
+        if type(contents) == "table" then
+            printtable("SetVariable",contents)
+        end
     end
     publisher.flush_variable(varname)
     publisher.xpath.set_variable(varname,contents)

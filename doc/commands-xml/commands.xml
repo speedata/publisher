@@ -5815,6 +5815,30 @@
         <para>Inhalt, der der Variablen zugewiesen wird.</para>
       </description>
     </attribute>
+    <attribute en="trace" optional="yes">
+      <description xml:lang="en">
+        <para>Show information about the assignment in the log file.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Zeige Informationen über die Zuweisung in der Logdatei.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Show information.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeige Informationen.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Don't show information (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeige keine Informationen (Voreinstellung).</para>
+        </description>
+      </choice>
+    </attribute>
     <remark xml:lang="en"><para>Variables have global scope.</para></remark>
     <remark xml:lang="de"><para>Variablen haben eine globale Sichtbarkeit.</para></remark>
     <example xml:lang="en">
