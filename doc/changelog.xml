@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.7">
+    <entry version="2.7.4" date="2016-10-03">
+      <en>New command Trace for debugging selections. Remove show-* on Options.</en>
+      <de>Neuer Befehl Trace für verschiedene Debugging-Varianten, entferne show-* bei Optionen.</de>
+    </entry>
+    <entry version="2.7.4" date="2016-10-03">
+      <en>Behavior change with NextRow, remove command EmptyLine, compatibility switch with Compatibility.</en>
+      <de>Verhaltensänderung bei NextRow, EmptyLine wird nicht mehr unterstützt, Rückwärtskompatibilität mit dem Befehl Compatibility.</de>
+    </entry>
+    <entry version="2.7.4" date="2016-10-03">
+      <en>New Option: defaultarea.</en>
+      <de>Neue Option: defaultarea.</de>
+    </entry>
     <entry version="2.7.3" date="2016-09-14">
       <en>New API /v0/statusfile/&lt;id> to get the file publisher.status.</en>
       <de>Neue API /v0/statusfile/&lt; um die Datei publisher.status zu erhalten.</de>
