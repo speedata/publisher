@@ -183,7 +183,39 @@ to the server. Future versions of the API might handle authentication.</p>
 </tbody>
 </table>
 
-<p>Example: <code>http://127.0.0.1:5266/v0/data/1347678770?format=base64</code></p>
+<p>Example: <code>http://127.0.0.1:5266/v0/layout/1347678770?format=base64</code></p>
+
+<h2><code>/v0/statusfile/&lt;id&gt;</code></h2>
+
+<p>Return the file <code>publisher.status</code> that has been created during the last run. The format can be set with the URL parameter <code>format</code>:</p>
+
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>json</code> or <code>JSON</code></td>
+<td>Return a JSON-file such as <code>{&quot;contents&quot;:&quot;&lt;XML Text&gt;&quot;}</code></td>
+</tr>
+
+<tr>
+<td><code>base64</code></td>
+<td>The result is an XML file, that is encoded base64 (<code>PGRhdGE+CiAgICA8....hPgo=</code>)</td>
+</tr>
+
+<tr>
+<td>(no format)</td>
+<td>Returns the XML file (<code>&lt;Status&gt;...&lt;/Status&gt;</code>)</td>
+</tr>
+</tbody>
+</table>
+
+<p>Example: <code>http://127.0.0.1:5266/v0/statusfile/1347678770?format=base64</code></p>
 
 <h2><code>/v0/status</code></h2>
 
@@ -278,7 +310,7 @@ start =
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.6.0 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/servermode.html">German</a>
+Version: 2.7.4 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/servermode.html">German</a>
 
 </body>
 </html>
