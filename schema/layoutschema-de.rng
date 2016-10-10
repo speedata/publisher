@@ -790,7 +790,7 @@
    </define>
    <define name="e_Copy-of">
       <element name="Copy-of">
-         <a:documentation>Ersetzt dieses Element mit Inhalt von auswahl als Elementstruktur. Dient zum „Zusammenbauen“ von Texten und Tabellen.</a:documentation>
+         <a:documentation>Ersetzt dieses Element mit Inhalt von select als Elementstruktur. Dient zum „Zusammenbauen“ von Texten und Tabellen.</a:documentation>
          <attribute name="select">
             <a:documentation>Die Auswahl (eine Variable) die kopiert werden soll.</a:documentation>
          </attribute>
@@ -1073,7 +1073,7 @@
    </define>
    <define name="e_ForAll">
       <element name="ForAll">
-         <a:documentation>Ruft die Kindelemente für alle Daten-Elemente auf, die auf das Muster bei auswahl passen.</a:documentation>
+         <a:documentation>Ruft die Kindelemente für alle Daten-Elemente auf, die auf das Muster bei select passen.</a:documentation>
          <attribute name="select">
             <a:documentation>Wählt die Kindelemente aus.</a:documentation>
          </attribute>
@@ -1550,23 +1550,30 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="naturalsize">
-               <a:documentation>Die PDF-Box, die den sichtbaren Bereich angibt. Voreinstellung ist »cropbox«.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="maxwidth">
-               <a:documentation>Die maximale Breite des Bilds. Nur, wenn ausschnitt=&#34;nein&#34;. Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</a:documentation>
+               <a:documentation>Die maximale Breite des Bilds. Nur, wenn clip=&#34;no&#34;. Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="maxheight">
-               <a:documentation>Die maximale Breite des Bilds. Nur, wenn ausschnitt=&#34;nein&#34;. Angabe in absoluten Längen oder Anzahl Rasterzellen.</a:documentation>
+               <a:documentation>Die maximale Breite des Bilds. Nur, wenn clip=&#34;no&#34;. Angabe in absoluten Längen oder Anzahl Rasterzellen.</a:documentation>
             </attribute>
          </optional>
          <optional>
-            <attribute name="maxsize">
-               <a:documentation>Die PDF-Box, die die maximale Größe angibt. Voreinstellung ist »cropbox«.</a:documentation>
+            <attribute name="visiblebox">
+               <a:documentation>Die PDF-Box, die den sichtbaren Bereich angibt des eingebundenen PDFs angibt. Voreinstellung ist »cropbox«.</a:documentation>
+               <choice>
+                  <value>artbox</value>
+                  <a:documentation>Nutze die artbox als sichtbaren Bereich. Diese Box ist normalerweise in PDF-Dateien nicht enthalten.</a:documentation>
+                  <value>bleedbox</value>
+                  <a:documentation>Nutze die bleedbox des eingebundenen PDFs.</a:documentation>
+                  <value>cropbox</value>
+                  <a:documentation>Nutze die cropbox der eingebundenen PDF-Datei (Voreinstellung).</a:documentation>
+                  <value>mediabox</value>
+                  <a:documentation>Nutze die mediabox der eingebundenen PDF-Datei. Das ist die größte Box.</a:documentation>
+                  <value>trimbox</value>
+                  <a:documentation>Nutze die trimbox der eingebundenen PDF-Datei. Die trimbox ist die Papiergröße. Beispielsweise hat die trimbox eines A4-PDFs die Größe 210mm x 297mm.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -1582,12 +1589,12 @@
          </optional>
          <optional>
             <attribute name="minwidth">
-               <a:documentation>Die minimale Breite des Bilds. Nur, wenn ausschnitt=&#34;nein&#34;. Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</a:documentation>
+               <a:documentation>Die minimale Breite des Bilds. Nur, wenn clip=&#34;no&#34;. Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="minheight">
-               <a:documentation>Die minimale Breite des Bilds. Nur, wenn ausschnitt=&#34;nein&#34;. Angabe in absoluten Längen oder Anzahl Rasterzellen.</a:documentation>
+               <a:documentation>Die minimale Breite des Bilds. Nur, wenn clip=&#34;no&#34;. Angabe in absoluten Längen oder Anzahl Rasterzellen.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -3022,7 +3029,7 @@
    </define>
    <define name="e_ProcessNode">
       <element name="ProcessNode">
-         <a:documentation>Bearbeitet alle angegebenen Datensätze. Die Elemente, für die die Regeln ausgeführt werden sollen, werden mit dem Attribut auswahl angegeben.</a:documentation>
+         <a:documentation>Bearbeitet alle angegebenen Datensätze. Die Elemente, für die die Regeln ausgeführt werden sollen, werden mit dem Attribut select angegeben.</a:documentation>
          <optional>
             <attribute name="limit">
                <a:documentation>Beschränkt die Anzahl der Datensätze, die mit diesem Befehl verarbeitet werden.</a:documentation>
@@ -3346,7 +3353,7 @@
    </define>
       <sch:pattern>
         <sch:rule context="t:Zuweisung">
-        <sch:assert test="not(  not(empty(@auswahl)) and node()  )">Zuweisung: entweder Attribut auswahl benutzen _oder_ Kindelemente, aber nicht beides.</sch:assert>
+        <sch:assert test="not(  not(empty(@select)) and node()  )">Zuweisung: entweder Attribut select benutzen _oder_ Kindelemente, aber nicht beides.</sch:assert>
       </sch:rule>
       </sch:pattern>
     
@@ -3359,6 +3366,17 @@
          <optional>
             <attribute name="select">
                <a:documentation>Inhalt, der der Variablen zugewiesen wird.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="trace">
+               <a:documentation>Zeige Informationen über die Zuweisung in der Logdatei.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeige Informationen.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Zeige keine Informationen (Voreinstellung).</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <oneOrMore>

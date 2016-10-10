@@ -993,8 +993,9 @@ function commands.image( layoutxml,dataxml )
     local maxheight = publisher.read_attribute(layoutxml,dataxml,"maxheight",  "rawstring")
     local clip      = publisher.read_attribute(layoutxml,dataxml,"clip",       "boolean")
     local page      = publisher.read_attribute(layoutxml,dataxml,"page",       "number")
-    local nat_box   = publisher.read_attribute(layoutxml,dataxml,"naturalsize","string")
+    -- deprecated since 2.7.5
     local max_box   = publisher.read_attribute(layoutxml,dataxml,"maxsize",    "rawstring")
+    local vis_box   = publisher.read_attribute(layoutxml,dataxml,"visiblebox", "rawstring")
     local filename  = publisher.read_attribute(layoutxml,dataxml,"file",       "rawstring")
     local url       = publisher.read_attribute(layoutxml,dataxml,"href",       "rawstring")
     local dpiwarn   = publisher.read_attribute(layoutxml,dataxml,"dpiwarn",    "number")
@@ -1002,8 +1003,10 @@ function commands.image( layoutxml,dataxml )
     local fallback  = publisher.read_attribute(layoutxml,dataxml,"fallback",   "rawstring")
     local class = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
     local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
-
     local css_rules = publisher.css:matches({element = 'img', class=class,id=id}) or {}
+
+    -- fallback for older versions (< 2.7.5)
+    vis_box = vis_box or max_box
 
     local attribute = {
         ["padding-top"]      = "length",
@@ -1034,14 +1037,11 @@ function commands.image( layoutxml,dataxml )
     -- width = 100%  => take width from surrounding area
     -- auto on any value ({max,min}?{width,height}) is default
 
-    local nat_box_intern = box_lookup[nat_box] or "crop"
-    local max_box_intern = box_lookup[max_box] or "crop"
-
     local imageinfo
     if url ~= nil then
         imageinfo = publisher.get_image(url, fallback)
     else
-        imageinfo = publisher.new_image(filename,page,max_box_intern, fallback)
+        imageinfo = publisher.new_image(filename,page,box_lookup[vis_box] or "crop", fallback)
     end
 
     local image = img.copy(imageinfo.img)

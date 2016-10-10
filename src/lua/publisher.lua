@@ -3788,7 +3788,7 @@ end
 
 
 local images = {}
-function new_image( filename, page, box,fallback)
+function new_image(filename,page,box,fallback)
     return imageinfo(filename,page,box,fallback)
 end
 

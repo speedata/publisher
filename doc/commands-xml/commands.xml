@@ -2764,20 +2764,12 @@
         <para>Die Seitenzahl aus dem PDF. Voreinstellung ist 1.</para>
       </description>
     </attribute>
-    <attribute en="naturalsize" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>The PDF box that represents the visible area. Default is “cropbox”.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die PDF-Box, die den sichtbaren Bereich angibt. Voreinstellung ist »cropbox«.</para>
-      </description>
-    </attribute>
     <attribute en="maxwidth" type="numberorlength" optional="yes">
       <description xml:lang="en">
         <para>The maximum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value »100%« for full width image.</para>
       </description>
       <description xml:lang="de">
-        <para>Die maximale Breite des Bilds. Nur, wenn ausschnitt="nein". Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</para>
+        <para>Die maximale Breite des Bilds. Nur, wenn clip="no". Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</para>
       </description>
     </attribute>
     <attribute en="maxheight" type="numberorlength" optional="yes">
@@ -2785,16 +2777,56 @@
         <para>The maximum height of the image. Only used when clip="no". Value is a number (grid cells) or a length.</para>
       </description>
       <description xml:lang="de">
-        <para>Die maximale Breite des Bilds. Nur, wenn ausschnitt="nein". Angabe in absoluten Längen oder Anzahl Rasterzellen.</para>
+        <para>Die maximale Breite des Bilds. Nur, wenn clip="no". Angabe in absoluten Längen oder Anzahl Rasterzellen.</para>
       </description>
     </attribute>
-    <attribute en="maxsize" type="text" optional="yes">
+    <attribute en="visiblebox" optional="yes">
       <description xml:lang="en">
-        <para>The PDF box that represents the maximum width. Default is “cropbox”.</para>
+        <para>The PDF box that represents the visible area of the included image. Default is “cropbox”.</para>
       </description>
       <description xml:lang="de">
-        <para>Die PDF-Box, die die maximale Größe angibt. Voreinstellung ist »cropbox«.</para>
+        <para>Die PDF-Box, die den sichtbaren Bereich angibt des eingebundenen PDFs angibt. Voreinstellung ist »cropbox«.</para>
       </description>
+      <choice en="artbox">
+        <description xml:lang="en">
+          <para>Use the artbox as the visible area. The artbox is usually not contained in a PDF.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Nutze die artbox als sichtbaren Bereich. Diese Box ist normalerweise in PDF-Dateien nicht enthalten.</para>
+        </description>
+      </choice>
+      <choice en="bleedbox">
+        <description xml:lang="en">
+          <para>Use the bleedbox of the included PDF.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Nutze die bleedbox des eingebundenen PDFs.</para>
+        </description>
+      </choice>
+      <choice en="cropbox">
+        <description xml:lang="en">
+          <para>Use the cropbox of the included PDF (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Nutze die cropbox der eingebundenen PDF-Datei (Voreinstellung).</para>
+        </description>
+      </choice>
+      <choice en="mediabox">
+        <description xml:lang="en">
+          <para>Use the mediabox of the included PDF. This is the largest box.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Nutze die mediabox der eingebundenen PDF-Datei. Das ist die größte Box.</para>
+        </description>
+      </choice>
+      <choice en="trimbox">
+        <description xml:lang="en">
+          <para>Use the trimbox of the includes PDF. The trimbox is the final paper size. For example, the trim box of an A4 PDF is 210mm x 297mm.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Nutze die trimbox der eingebundenen PDF-Datei. Die trimbox ist die Papiergröße. Beispielsweise hat die trimbox eines A4-PDFs die Größe 210mm x 297mm.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="clip" optional="yes">
       <description xml:lang="en">
@@ -2825,7 +2857,7 @@
         <para>The minimum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value »100%« for full width image.</para>
       </description>
       <description xml:lang="de">
-        <para>Die minimale Breite des Bilds. Nur, wenn ausschnitt="nein". Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</para>
+        <para>Die minimale Breite des Bilds. Nur, wenn clip="no". Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</para>
       </description>
     </attribute>
     <attribute en="minheight" type="numberorlength" optional="yes">
@@ -2833,7 +2865,7 @@
         <para>The minimum height of the image. Only used when clip="no". Value is a number (grid cells) or a length.</para>
       </description>
       <description xml:lang="de">
-        <para>Die minimale Breite des Bilds. Nur, wenn ausschnitt="nein". Angabe in absoluten Längen oder Anzahl Rasterzellen.</para>
+        <para>Die minimale Breite des Bilds. Nur, wenn clip="no". Angabe in absoluten Längen oder Anzahl Rasterzellen.</para>
       </description>
     </attribute>
     <attribute en="dpiwarn" type="number" optional="yes">

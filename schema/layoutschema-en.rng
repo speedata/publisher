@@ -1550,11 +1550,6 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="naturalsize">
-               <a:documentation>The PDF box that represents the visible area. Default is “cropbox”.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="maxwidth">
                <a:documentation>The maximum width of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells), a length or the value »100%« for full width image.</a:documentation>
             </attribute>
@@ -1565,8 +1560,20 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="maxsize">
-               <a:documentation>The PDF box that represents the maximum width. Default is “cropbox”.</a:documentation>
+            <attribute name="visiblebox">
+               <a:documentation>The PDF box that represents the visible area of the included image. Default is “cropbox”.</a:documentation>
+               <choice>
+                  <value>artbox</value>
+                  <a:documentation>Use the artbox as the visible area. The artbox is usually not contained in a PDF.</a:documentation>
+                  <value>bleedbox</value>
+                  <a:documentation>Use the bleedbox of the included PDF.</a:documentation>
+                  <value>cropbox</value>
+                  <a:documentation>Use the cropbox of the included PDF (default).</a:documentation>
+                  <value>mediabox</value>
+                  <a:documentation>Use the mediabox of the included PDF. This is the largest box.</a:documentation>
+                  <value>trimbox</value>
+                  <a:documentation>Use the trimbox of the includes PDF. The trimbox is the final paper size. For example, the trim box of an A4 PDF is 210mm x 297mm.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -3359,6 +3366,17 @@
          <optional>
             <attribute name="select">
                <a:documentation>The value of the contents.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="trace">
+               <a:documentation>Show information about the assignment in the log file.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Show information.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Don&#39;t show information (default).</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <oneOrMore>
