@@ -1428,7 +1428,7 @@
     <childelements></childelements>
     <attribute en="movecursoronplaceobject" optional="yes" since="2.7.4">
       <description xml:lang="en">
-        <para>Switch the old behavior where objects at the right page margin used in PlaceObject puts the cursor in #columns + 1.</para>
+        <para>Switch the behavior where objects at the right page margin used in PlaceObject puts the cursor in #columns + 1.</para>
       </description>
       <description xml:lang="de">
         <para>Wechselt das Verhalten bei dem Objekte (platziert mit PlaceObject) am rechten Rand den Cursor in Spalte »Anzahl Spalten + 1« setzt.</para>

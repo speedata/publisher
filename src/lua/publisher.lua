@@ -181,7 +181,7 @@ pagestore = {}
 
 -- See commands.compatibility
 compatibility = {
-    movecorsoronrightedge = true,
+    movecursoronrightedge = true,
 }
 
 viewerpreferences = {}
@@ -3552,7 +3552,9 @@ function next_row(rownumber,areaname,rows)
         -- edge at the right margin will leave one blank line.
         -- The old behavior is to decrease 1 from the movement, which makes no sense these days.
         local dec = 0
-        if grid:current_column(areaname) > 1 and not compatibility.movecorsoronrightedge then dec = 1 end
+        if grid:current_column(areaname) > 1 then
+            dec = 1
+        end
         grid:set_current_row(current_row + rows - dec,areaname)
         grid:set_current_column(1,areaname)
     end

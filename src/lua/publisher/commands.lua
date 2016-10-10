@@ -419,8 +419,8 @@ function commands.columns( layoutxml,dataxml )
 end
 
 function commands.compatibility( layoutxml,dataxml )
-    local movecorsoronrightedge = publisher.read_attribute(layoutxml,dataxml,"movecursoronplaceobject", "boolean","yes")
-    publisher.compatibility.movecorsoronrightedge = movecorsoronrightedge
+    local movecursoronrightedge = publisher.read_attribute(layoutxml,dataxml,"movecursoronplaceobject", "boolean","yes")
+    publisher.compatibility.movecursoronrightedge = movecursoronrightedge
 end
 
 --- CopyOf
