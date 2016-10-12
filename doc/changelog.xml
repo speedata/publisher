@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.7">
+    <entry version="2.7.5" date="2016-10-12">
+      <en>New method for image caching. Rename Image/maxsize to visiblebox.</en>
+      <de>Neue Methode für Bild-Caching. Umbenennung von Image/maxsize nach visiblebox.</de>
+    </entry>
     <entry version="2.7.4" date="2016-10-03">
       <en>New command Trace for debugging selections. Remove show-* on Options.</en>
       <de>Neuer Befehl Trace für verschiedene Debugging-Varianten, entferne show-* bei Optionen.</de>
