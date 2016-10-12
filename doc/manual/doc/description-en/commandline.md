@@ -8,6 +8,7 @@ Running the speedata publisher on the command line
     -h, --help                   Show this help
         --autoopen               Open the PDF file (MacOS X and Linux only)
         --data=NAME              Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN
+        --cache=METHOD           Use cache method. One of 'fast' or 'optimal'. Default is 'optimal'
         --dummy                  Don't read a data file, use '<data />' as input
     -c, --config=NAME            Read the config file with the given NAME. Default: 'publisher.cfg'
         --[no-]cutmarks          Display cutmarks in the document
@@ -41,6 +42,7 @@ Running the speedata publisher on the command line
 
     Commands
           clean                  Remove publisher generated files
+          clearcache             Clear image cache
           compare                Compare files for quality assurance
           doc                    Open documentation
           list-fonts             List installed fonts (use together with --xml for copy/paste)
@@ -56,6 +58,7 @@ Parameter | Description
 ----------|------------
 `--autoopen` | Opens the PDF file after running the publisher. Can also be set in the [configuration file](configuration.html).
 `--data=NAME` | Name of the data XML file. Default is `data.xml`. Can be set in the [configuration file](configuration.html). If the file name is a dash(`-`), the speedata publisher reads the XML data from standard input (STDIN).
+`--cache=METHOD` | Caching-strategy for http* image requests. Use `fast` for file system lookup only or `optimal` for http checking on each request. https requests are currently always checked with the `optimal` strategy.
 `--cutmarks` | Show cut marks. Can be also configured in the [Layout](../commands-en/options.html).
 `--dummy` | Only read the layout rules. A simple data file is assumed which only contains one element: `<data />`. This is for quick testing of layout files.
 `-x`, `--extra-dir` | Puts the given directory into the search path. All assets (images, fonts, XML data and layout rules) must be found in the search path, which will be traversed recursively. This parameter can be given multiple times and preset in the [configuration file](configuration.html).
@@ -89,6 +92,7 @@ Command   | Description
 ----------|------------
 `list-fonts` | Lists all fonts that are found in the search path. Together with `--xml` the output format can re used in the layout XML.
 `compare` | Recursively check a directory for layout changes. See the topic [about quality assurance](qualityassurance.html).
+`clearcache` | Removes files from the image cache.
 `clean` | Remove temporary files from the publisher run. Keeps the PDF file.
 `doc` | Opens the HTML documentation.
 `run` | Starts the speedata publisher (this is the default command).

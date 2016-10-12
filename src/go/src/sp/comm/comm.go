@@ -10,8 +10,10 @@ import (
 	"os"
 	"strconv"
 
-	. "sp/logger"
+	"sp/cache"
 	"sp/xpath"
+
+	. "sp/logger"
 )
 
 func getMessage(c net.Conn) (n int, typ string, message []byte, err error) {
@@ -57,6 +59,12 @@ func getMessage(c net.Conn) (n int, typ string, message []byte, err error) {
 	return
 }
 
+// Messages are three letter words:
+// con - contains
+// tok - tokenize
+// rep - replace
+// dec - decode html
+// che - cache image
 func reader(message chan []byte, c net.Conn) {
 	_, typ, msg, err := getMessage(c)
 	if err != nil {
@@ -132,6 +140,13 @@ func reader(message chan []byte, c net.Conn) {
 			message <- []byte{}
 			return
 		}
+		write := fmt.Sprintf("0,str,%06d%s", len(res), res)
+		c.Write([]byte(write))
+		message <- []byte{}
+		return
+	case "che":
+		Trace("cache image")
+		res := cache.CacheImage(string(msg))
 		write := fmt.Sprintf("0,str,%06d%s", len(res), res)
 		c.Write([]byte(write))
 		message <- []byte{}

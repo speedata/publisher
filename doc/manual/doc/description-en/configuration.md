@@ -28,6 +28,7 @@ The following options are supported:
 Value | Description
 ------|------------
 `autoopen` | if `true`, the publisher opens the PDF file. Default: `false`. The  same effect can be achieved if you run `sp --autoopen`.
+`cache` | Caching-strategy for http* image requests. Use `fast` for file system lookup only or `optimal` for http checking on each request. https requests are currently always checked with the `optimal` strategy.
 `data` | Name of the data file (XML). If not given, the system uses `data.xml`.
 `dummy` | If `true`, the system won’t read the data file, instead it uses the single element `<data />` as its input.
 `extra-dir` | A list of directories in the file system separated by `;` (Windows) or `:` (Mac, Linux). These directories contain the images, fonts, source files and other assets that are used during the publisher run. Example for windows: `extra-dir=c:\myfonts`.

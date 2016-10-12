@@ -24,6 +24,7 @@ local page         = require("publisher.page")
 local fontloader   = require("fonts.fontloader")
 local paragraph    = require("paragraph")
 local fonts        = require("publisher.fonts")
+local comm         = require("publisher.comm")
 
 local env_publisherversion = os.getenv("PUBLISHERVERSION")
 
@@ -3794,10 +3795,13 @@ function new_image(filename,page,box,fallback)
     return imageinfo(filename,page,box,fallback)
 end
 
+local imgcache = os.getenv("IMGCACHE")
+local cachemethod = os.getenv("CACHEMETHOD")
+
 -- Retrieve image from an URL if its not cached
-function get_image(requeste_url,fallback)
-    local imgcache = os.getenv("IMGCACHE")
-    local parsed_url = url.parse(requeste_url)
+function get_image(requested_url,fallback)
+    assert(type(requested_url) == "string")
+    local parsed_url = url.parse(requested_url)
     -- http://placekitten.com/g/200/300?foo=bar gives
     -- x = {
     --  ["path"] = "/g/200/300"
@@ -3812,19 +3816,72 @@ function get_image(requeste_url,fallback)
             return imageinfo("file:" .. parsed_url.path)
         end
     end
-    local request_filename = parsed_url.host .. parsed_url.path
-    if parsed_url.query then
-        request_filename = request_filename .. "?" .. parsed_url.query
-    end
-    -- md5 should be over the complete part after the host
-    local mdfivesum = string.gsub(md5.sum(request_filename),".",function(chr) return string.format("%02x",string.byte(chr)) end)
+    -- not a file: request. I guess it should be a HTTP request.
+
+    local mdfivesum = string.gsub(md5.sum(requested_url),".",function(chr) return string.format("%02x",string.byte(chr)) end)
     local path_to_image = os.getenv("IMGCACHE") .. os_separator .. mdfivesum
 
-    if lfs.isfile(path_to_image) then
-        log("Image: string used for caching (-> md5): %q",request_filename)
-        log("Read image file from cache: %s",path_to_image)
-        return imageinfo(path_to_image)
+
+    -- This Lua interpreter is not linked with openssl, so for HTTPS requests I
+    -- use the Go interface, even when the Lua interface has been requested.
+    if parsed_url.scheme == "https" or cachemethod == "optimal" then
+        -- go / optimal
+        comm.sendmessage('che',requested_url)
+        local msg = comm.get_string_messages()
+        if msg[1] == "OK" then
+            return imageinfo(path_to_image,fallback)
+        else
+            err("Could not fetch image %q",requested_url)
+            return imageinfo(nil,nil,nil,fallback)
+        end
+    else
+        -- lua / fast
+        log("Image: string used for caching (-> md5): %q",requested_url)
+        if lfs.isfile(path_to_image) then
+            log("Read image file from cache: %s",path_to_image)
+            return imageinfo(path_to_image,fallback)
+        end
+        txt, statuscode, c = http.request(requested_url)
+        if statuscode ~= 200 then
+            err("404 when retrieving image %q",requested_url)
+            return imageinfo(nil,nil,nil,fallback) -- nil is "filenotfound.pdf"
+        end
+        if #txt == 0 then
+            err("Empty image in href request")
+            return imageinfo(nil,nil,nil,fallback)
+        end
+        -- Create the temporary directory if necessary
+        if not lfs.isdir(imgcache) then
+            local imgcachepaths = string.explode(imgcache,os_separator)
+            local tmp = ""
+            for i=2, #imgcachepaths do
+                tmp = tmp .. os_separator .. imgcachepaths[i]
+                if not lfs.isdir(tmp) then
+                    local ok,e = lfs.mkdir(tmp)
+                    if not ok then
+                        err("Could not create temporary directory for images: %q",tmp)
+                    end
+                end
+            end
+        end
+
+        local file,e = io.open(path_to_image,"wb")
+        if file == nil then
+            err("Could not open image file for writing into temp directory: %q",e)
+            return imageinfo(nil,nil,nil,fallback)
+        end
+        local ok
+        ok, e = file:write(txt)
+        if not ok then
+            err("Could not write image file into temp directory %q",e)
+            return imageinfo(nil,nil,nil,fallback)
+        end
+        file:flush()
+        file:close()
+
+        return imageinfo(path_to_image,fallback)
     end
+
 
     -- c = {
     --   ["last-modified"] = "Mon, 21 Oct 2013 12:45:54 GMT"
@@ -3834,47 +3891,7 @@ function get_image(requeste_url,fallback)
     --   ["content-length"] = "52484"
     --   ["content-type"] = "image/jpeg"
     -- }
-    log("Retrieving file: %q",tostring(requeste_url))
-    txt, statuscode, c = http.request(requeste_url)
-    if statuscode ~= 200 then
-        err("404 when retrieving image %q",requeste_url)
-        return imageinfo(nil,nil,nil,fallback) -- nil is "filenotfound.pdf"
-    end
-    if #txt == 0 then
-        err("Empty image in href request")
-        return imageinfo(nil,nil,nil,fallback)
-    end
-    -- Create the temporary directory if necessary
-    if not lfs.isdir(imgcache) then
-        local imgcachepaths = string.explode(imgcache,os_separator)
-        local tmp = ""
-        for i=2, #imgcachepaths do
-            tmp = tmp .. os_separator .. imgcachepaths[i]
-            if not lfs.isdir(tmp) then
-                local ok,e = lfs.mkdir(tmp)
-                if not ok then
-                    err("Could not create temporary directory for images: %q",tmp)
-                end
-            end
-        end
-    end
-
-    local file,e = io.open(path_to_image,"wb")
-    if file == nil then
-        err("Could not open image file for writing into temp directory: %q",e)
-        return imageinfo(nil,nil,nil,fallback)
-    end
-    local ok
-    ok, e = file:write(txt)
-    if not ok then
-        err("Could not write image file into temp directory %q",e)
-        return imageinfo(nil,nil,nil,fallback)
-    end
-    file:flush()
-    file:close()
-
-    -- Just re-run this function. The image is now cached
-    return get_image(requeste_url,fallback)
+    log("Retrieving file: %q",tostring(requested_url))
 end
 
 function get_fallback_image_name( filename, missingfilename )
