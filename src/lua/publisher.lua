@@ -3822,6 +3822,12 @@ function get_image(requested_url,fallback)
     local path_to_image = os.getenv("IMGCACHE") .. os_separator .. mdfivesum
 
 
+    if lfs.isfile(path_to_image) then
+        log("Read image file from cache: %s",path_to_image)
+        return imageinfo(path_to_image,fallback)
+    end
+
+
     -- This Lua interpreter is not linked with openssl, so for HTTPS requests I
     -- use the Go interface, even when the Lua interface has been requested.
     if parsed_url.scheme == "https" or cachemethod == "optimal" then
@@ -3837,10 +3843,6 @@ function get_image(requested_url,fallback)
     else
         -- lua / fast
         log("Image: string used for caching (-> md5): %q",requested_url)
-        if lfs.isfile(path_to_image) then
-            log("Read image file from cache: %s",path_to_image)
-            return imageinfo(path_to_image,fallback)
-        end
         txt, statuscode, c = http.request(requested_url)
         if statuscode ~= 200 then
             err("404 when retrieving image %q",requested_url)
