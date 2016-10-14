@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.7">
+    <entry version="2.7.6" date="2016-10-14">
+      <en>Better image cache - don't re-load images during the same run.</en>
+      <de>Verbesseter Bild-Cache. Bilder in einem Lauf nicht erneut herunter laden.</de>
+    </entry>
     <entry version="2.7.5" date="2016-10-12">
       <en>New method for image caching. Rename Image/maxsize to visiblebox.</en>
       <de>Neue Methode für Bild-Caching. Umbenennung von Image/maxsize nach visiblebox.</de>
