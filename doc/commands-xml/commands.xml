@@ -901,13 +901,77 @@
         <para>Farbe der Box.</para>
       </description>
     </attribute>
-    <attribute en="bleed" type="text" optional="yes">
+    <attribute en="bleed" optional="yes">
       <description xml:lang="en">
         <para>Lets the box increase its size by the amount of trim given in the options. Useful for thumb indexes. The contents of the attribute is either »left«, »right«, »top« or »bottom« or any combination such as »top,right«.</para>
       </description>
       <description xml:lang="de">
         <para>Lässt die Box am Rand größer werden. Wird z.B. für Daumenregister benutzt, die inkl. Beschnitt ganz zum Rand gehen sollen. Inhalt ist eine Ortsangabe bestehend aus den Werten »top«, »bottom«, »left« oder »right« bzw. eine Kombination wie »top,right«.</para>
       </description>
+      <choice en="top">
+        <description xml:lang="en">
+          <para>Increase the size to the top.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Vergrößere nach oben.</para>
+        </description>
+      </choice>
+      <choice en="left">
+        <description xml:lang="en">
+          <para>Increase the size to the left.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Vergrößere nach links.</para>
+        </description>
+      </choice>
+      <choice en="bottom">
+        <description xml:lang="en">
+          <para>Increase the size to the bottom.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Vergrößere nach unten.</para>
+        </description>
+      </choice>
+      <choice en="right">
+        <description xml:lang="en">
+          <para>Increase the size to the right.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Vergrößere nach rechts.</para>
+        </description>
+      </choice>
+      <choice en="top,left">
+        <description xml:lang="en">
+          <para>Increase the size to the top and left.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Vergrößere nach oben und links.</para>
+        </description>
+      </choice>
+      <choice en="top,right">
+        <description xml:lang="en">
+          <para>Increase the size to the top and right.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Vergrößere nach oben und rechts.</para>
+        </description>
+      </choice>
+      <choice en="bottom,left">
+        <description xml:lang="en">
+          <para>Increase the size to the bottom and left.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Vergrößere nach unten und links.</para>
+        </description>
+      </choice>
+      <choice en="bottom,right">
+        <description xml:lang="en">
+          <para>Increase the size to the bottom and right.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Vergrößere nach unten und rechts.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="class" optional="yes" type="text">
       <description xml:lang="en">
@@ -4194,15 +4258,15 @@
         <para>Gibt den Nummer der ersten Seite an.</para>
       </description>
     </attribute>
-    <attribute en="trim" type="length" optional="yes">
+    <attribute en="bleed" type="length" optional="yes">
       <description xml:lang="en">
         <para>The amount of bleed. Defaults to 0mm.</para>
       </description>
       <description xml:lang="de">
-        <para>Die Größe des Beschnitts (bleed). Voreinstellung ist 0mm.</para>
+        <para>Die Größe des Anschnitts (bleed). Voreinstellung ist 0mm.</para>
       </description>
     </attribute>
-    <attribute en="trimmarks" optional="yes" since="2.3.24">
+    <attribute en="bleedmarks" optional="yes" since="2.3.24">
       <description xml:lang="en">
         <para>Trim marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute <tt>trim</tt>, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is <tt>no</tt>, that means no trim marks will be displayed. The trim marks show the additional trim distance.</para>
       </description>
@@ -4226,6 +4290,12 @@
         </description>
       </choice>
     </attribute>
+    <remark xml:lang="en">
+      <para>Bleed used to be 'trim' in version 2.7.6 and before.</para>
+    </remark>
+    <remark xml:lang="de">
+      <para>Bleed war in Version 2.7.6 und vorher »trim«</para>
+    </remark>
     <example xml:lang="en">
       <listing><![CDATA[<Options
     show-gridallocation="no"

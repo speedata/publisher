@@ -349,6 +349,24 @@
          <optional>
             <attribute name="bleed">
                <a:documentation>Lets the box increase its size by the amount of trim given in the options. Useful for thumb indexes. The contents of the attribute is either »left«, »right«, »top« or »bottom« or any combination such as »top,right«.</a:documentation>
+               <choice>
+                  <value>top</value>
+                  <a:documentation>Increase the size to the top.</a:documentation>
+                  <value>left</value>
+                  <a:documentation>Increase the size to the left.</a:documentation>
+                  <value>bottom</value>
+                  <a:documentation>Increase the size to the bottom.</a:documentation>
+                  <value>right</value>
+                  <a:documentation>Increase the size to the right.</a:documentation>
+                  <value>top,left</value>
+                  <a:documentation>Increase the size to the top and left.</a:documentation>
+                  <value>top,right</value>
+                  <a:documentation>Increase the size to the top and right.</a:documentation>
+                  <value>bottom,left</value>
+                  <a:documentation>Increase the size to the bottom and left.</a:documentation>
+                  <value>bottom,right</value>
+                  <a:documentation>Increase the size to the bottom and right.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -776,7 +794,7 @@
          <a:documentation>Set compatibility for older layouts</a:documentation>
          <optional>
             <attribute name="movecursoronplaceobject">
-               <a:documentation>Switch the old behavior where objects at the right page margin used in PlaceObject puts the cursor in #columns + 1.</a:documentation>
+               <a:documentation>Switch the behavior where objects at the right page margin used in PlaceObject puts the cursor in #columns + 1.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>New behavior (default): set cursor in column 1 when an object goes to the right margin.</a:documentation>
@@ -2271,12 +2289,12 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="trim">
+            <attribute name="bleed">
                <a:documentation>The amount of bleed. Defaults to 0mm.</a:documentation>
             </attribute>
          </optional>
          <optional>
-            <attribute name="trimmarks">
+            <attribute name="bleedmarks">
                <a:documentation>Trim marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute trim, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is no, that means no trim marks will be displayed. The trim marks show the additional trim distance.</a:documentation>
                <choice>
                   <value>yes</value>

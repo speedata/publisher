@@ -349,6 +349,24 @@
          <optional>
             <attribute name="bleed">
                <a:documentation>Lässt die Box am Rand größer werden. Wird z.B. für Daumenregister benutzt, die inkl. Beschnitt ganz zum Rand gehen sollen. Inhalt ist eine Ortsangabe bestehend aus den Werten »top«, »bottom«, »left« oder »right« bzw. eine Kombination wie »top,right«.</a:documentation>
+               <choice>
+                  <value>top</value>
+                  <a:documentation>Vergrößere nach oben.</a:documentation>
+                  <value>left</value>
+                  <a:documentation>Vergrößere nach links.</a:documentation>
+                  <value>bottom</value>
+                  <a:documentation>Vergrößere nach unten.</a:documentation>
+                  <value>right</value>
+                  <a:documentation>Vergrößere nach rechts.</a:documentation>
+                  <value>top,left</value>
+                  <a:documentation>Vergrößere nach oben und links.</a:documentation>
+                  <value>top,right</value>
+                  <a:documentation>Vergrößere nach oben und rechts.</a:documentation>
+                  <value>bottom,left</value>
+                  <a:documentation>Vergrößere nach unten und links.</a:documentation>
+                  <value>bottom,right</value>
+                  <a:documentation>Vergrößere nach unten und rechts.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -2271,12 +2289,12 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="trim">
-               <a:documentation>Die Größe des Beschnitts (bleed). Voreinstellung ist 0mm.</a:documentation>
+            <attribute name="bleed">
+               <a:documentation>Die Größe des Anschnitts (bleed). Voreinstellung ist 0mm.</a:documentation>
             </attribute>
          </optional>
          <optional>
-            <attribute name="trimmarks">
+            <attribute name="bleedmarks">
                <a:documentation>Beschnittzugabemarken werden ausgegeben. Diese Marken zeigen, wie groß die Beschnittzugabe ist. Der Abstand der Beschnittzugabemarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Beschnittzugabemarken ausgegeben.</a:documentation>
                <choice>
                   <value>yes</value>
