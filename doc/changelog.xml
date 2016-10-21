@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.7">
+    <entry version="2.7.7" date="2016-10-21">
+      <en>Don't clear image cache before first run</en>
+      <de>Vor dem ersten Lauf den Cache nicht löschen.</de>
+    </entry>
     <entry version="2.7.6" date="2016-10-14">
       <en>Better image cache - don't re-load images during the same run.</en>
       <de>Verbesseter Bild-Cache. Bilder in einem Lauf nicht erneut herunter laden.</de>
