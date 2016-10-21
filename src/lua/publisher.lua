@@ -3822,7 +3822,7 @@ function get_image(requested_url,fallback)
     local path_to_image = os.getenv("IMGCACHE") .. os_separator .. mdfivesum
 
 
-    if lfs.isfile(path_to_image) then
+    if cachemethod == "fast" and lfs.isfile(path_to_image) then
         log("Read image file from cache: %s",path_to_image)
         return imageinfo(path_to_image,fallback)
     end
@@ -3832,6 +3832,7 @@ function get_image(requested_url,fallback)
     -- use the Go interface, even when the Lua interface has been requested.
     if parsed_url.scheme == "https" or cachemethod == "optimal" then
         -- go / optimal
+        log("Checking if image %q is up to date",requested_url)
         comm.sendmessage('che',requested_url)
         local msg = comm.get_string_messages()
         if msg[1] == "OK" then
@@ -3842,7 +3843,7 @@ function get_image(requested_url,fallback)
         end
     else
         -- lua / fast
-        log("Image: string used for caching (-> md5): %q",requested_url)
+        log("Download image %q, string used for caching (-> md5): %q",requested_url,mdfivesum)
         txt, statuscode, c = http.request(requested_url)
         if statuscode ~= 200 then
             err("404 when retrieving image %q",requested_url)

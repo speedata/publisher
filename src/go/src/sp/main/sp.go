@@ -572,6 +572,7 @@ func runPublisher() (exitstatus int) {
 			os.Exit(-1)
 			break
 		}
+		os.Setenv("CACHEMETHOD", "fast")
 	}
 	// todo: DRY code -> server/status
 	data, err := ioutil.ReadFile(fmt.Sprintf("%s.status", jobname))
@@ -810,13 +811,6 @@ func main() {
 
 	switch command {
 	case "run":
-		// if the cache method is not 'fast', we need to ask the caching system to get the image.
-		// The idea is to clear the cache at the beginning of the first run (--runs = x)
-		// and then leave the image in the cache, so the "fast" method is used after the first time
-		// the image is cached.
-		if getOption("cache") == "optimal" {
-			cache.Clear()
-		}
 		jobname := getOption("jobname")
 		finishedfilename := fmt.Sprintf("%s.finished", jobname)
 		os.Remove(finishedfilename)
