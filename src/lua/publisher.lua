@@ -2461,7 +2461,9 @@ function mknodes(str,fontfamily,parameter)
             head,last = node.insert_after(head,last,n)
             -- Some characters must be treated in a special way.
             -- Hyphens must be separated from words:
-            if ( n.char == 45 or n.char == 8211) and lastitemwasglyph then
+            if n.char == 8209 then -- non breaking hyphen
+                n.char = 45
+            elseif ( n.char == 45 or n.char == 8211) and lastitemwasglyph then
                 local pen = node.new("penalty")
                 pen.penalty = 10000
                 head = node.insert_before(head,last,pen)
