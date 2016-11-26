@@ -1539,7 +1539,7 @@ end
 function commands.nobreak( layoutxml, dataxml )
     local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth", "length_sp", xpath.get_variable("__maxwidth"))
     local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor",   "rawstring",0.9)
-    local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce",   "string")
+    local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce",   "string", "keeptogether")
     local text             = publisher.read_attribute(layoutxml,dataxml,"text",     "rawstring")
     local fontname         = publisher.read_attribute(layoutxml,dataxml,"fontface", "rawstring")
 
@@ -1612,6 +1612,8 @@ function commands.nobreak( layoutxml, dataxml )
         end
         a.nodelist = node.copy_list(nl.list,head)
         node.insert_after(a.nodelist,node.tail(a.nodelist),txt)
+    elseif strategy == "keeptogether" then -- default
+        a.nodelist = node.hpack(a.nodelist)
     end
     return a
 end

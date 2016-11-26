@@ -2119,15 +2119,19 @@
                <a:documentation>Setzt die maximale Breite des Texts, wenn sie sich nicht aus der Umgebung herleiten lässt (wie beispielsweise Tabellenzellen).</a:documentation>
             </attribute>
          </optional>
-         <attribute name="reduce">
-            <a:documentation>Verringere die Textgröße falls notwendig.</a:documentation>
-            <choice>
-               <value>fontsize</value>
-               <a:documentation>Verkleinert durch Verringerung der Schriftgröße.</a:documentation>
-               <value>cut</value>
-               <a:documentation>Fügt den Text im Attribut text als Platzhalter ein, wenn der Paragraph zu lang ist.</a:documentation>
-            </choice>
-         </attribute>
+         <optional>
+            <attribute name="reduce">
+               <a:documentation>Verringere die Textgröße falls notwendig.</a:documentation>
+               <choice>
+                  <value>fontsize</value>
+                  <a:documentation>Verkleinert durch Verringerung der Schriftgröße.</a:documentation>
+                  <value>cut</value>
+                  <a:documentation>Fügt den Text im Attribut text als Platzhalter ein, wenn der Paragraph zu lang ist.</a:documentation>
+                  <value>keeptogether</value>
+                  <a:documentation>Kein Zeilenumbruch innerhalb von NoBreak erlauben (Voreinstellung)</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="text">
                <a:documentation>Der einzufügende Text, wenn der Paragraph zu lang ist. Zum Beispiel &#39;...&#39;</a:documentation>

@@ -4000,7 +4000,7 @@
         <para>Setzt die maximale Breite des Texts, wenn sie sich nicht aus der Umgebung herleiten lässt (wie beispielsweise Tabellenzellen).</para>
       </description>
     </attribute>
-    <attribute en="reduce" optional="no">
+    <attribute en="reduce" optional="yes">
       <description xml:lang="en">
         <para>Reduce the text size if necessary.</para>
       </description>
@@ -4021,6 +4021,14 @@
         </description>
         <description xml:lang="de">
           <para>Fügt den Text im Attribut text als Platzhalter ein, wenn der Paragraph zu lang ist.</para>
+        </description>
+      </choice>
+      <choice en="keeptogether" since="2.7.9">
+        <description xml:lang="en">
+          <para>Don't allow a line break within NoBreak (default)</para>
+        </description>
+        <description xml:lang="de">
+          <para>Kein Zeilenumbruch innerhalb von NoBreak erlauben (Voreinstellung)</para>
         </description>
       </choice>
     </attribute>

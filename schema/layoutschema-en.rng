@@ -2119,15 +2119,19 @@
                <a:documentation>Set the maximum width of the text if it cannot be deduced from the current surrounding (such as table cells).</a:documentation>
             </attribute>
          </optional>
-         <attribute name="reduce">
-            <a:documentation>Reduce the text size if necessary.</a:documentation>
-            <choice>
-               <value>fontsize</value>
-               <a:documentation>Reduces the text by decreasing the font size.</a:documentation>
-               <value>cut</value>
-               <a:documentation>Inserts text given in the attribute text if the paragraph is too long.</a:documentation>
-            </choice>
-         </attribute>
+         <optional>
+            <attribute name="reduce">
+               <a:documentation>Reduce the text size if necessary.</a:documentation>
+               <choice>
+                  <value>fontsize</value>
+                  <a:documentation>Reduces the text by decreasing the font size.</a:documentation>
+                  <value>cut</value>
+                  <a:documentation>Inserts text given in the attribute text if the paragraph is too long.</a:documentation>
+                  <value>keeptogether</value>
+                  <a:documentation>Don&#39;t allow a line break within NoBreak (default)</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="text">
                <a:documentation>The text to be inserted if the paragraph should be cut. For example &#39;...&#39;</a:documentation>
