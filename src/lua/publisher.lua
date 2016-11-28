@@ -2280,6 +2280,7 @@ end
 function mknodes(str,fontfamily,parameter)
     -- instance is the internal fontnumber
     parameter = parameter or {}
+    local allowbreak = parameter.allowbreak or " -"
     local instance
     local instancename
     local languagecode = parameter.languagecode or defaultlanguage
@@ -2319,7 +2320,7 @@ function mknodes(str,fontfamily,parameter)
     local lastitemwasglyph
     local newline = 10
     local breakatspace = true
-    if parameter.allowbreak and not string.find(parameter.allowbreak, " ") then
+    if not string.find(allowbreak, " ") then
         breakatspace = false
     end
     -- There is a string with utf8 chars
@@ -2463,7 +2464,8 @@ function mknodes(str,fontfamily,parameter)
             -- Hyphens must be separated from words:
             if n.char == 8209 then -- non breaking hyphen
                 n.char = 45
-            elseif ( n.char == 45 or n.char == 8211) and lastitemwasglyph then
+            elseif ( n.char == 45 or n.char == 8211) and lastitemwasglyph and string.find(allowbreak, "-",1,true) then
+                -- only break if allowbreak contains the hyphen char
                 local pen = node.new("penalty")
                 pen.penalty = 10000
                 head = node.insert_before(head,last,pen)
@@ -2472,7 +2474,7 @@ function mknodes(str,fontfamily,parameter)
                 local g = node.new(glue_node)
                 g.spec = node.new(glue_spec_node)
                 head,last = node.insert_after(head,last,g)
-            elseif parameter.allowbreak and string.find(parameter.allowbreak, char,1,true) then
+            elseif string.find(allowbreak,char,1,true) then
                 -- allowbreak lists characters where the publisher may break lines
                 local pen = node.new("penalty")
                 pen.penalty = 0
