@@ -20,10 +20,10 @@ Die Distribution enthält die freie Schriftart TeXGyreHeros, einem hochwertigen 
 Die dazugehörige Schriftfamilie ist
 
     <DefineFontfamily name="text" fontsize="10" leading="12">
-      <Normal schriftart="TeXGyreHeros-Regular"/>
-      <Fett schriftart="TeXGyreHeros-Bold"/>
-      <Kursiv schriftart="TeXGyreHeros-Italic"/>
-      <FettKursiv schriftart="TeXGyreHeros-BoldItalic"/>
+      <Regular fontface="TeXGyreHeros-Regular"/>
+      <Bold fontface="TeXGyreHeros-Bold"/>
+      <Italic fontface="TeXGyreHeros-Italic"/>
+      <BoldItalic fontface="TeXGyreHeros-BoldItalic"/>
     </DefineFontfamily>
 
 und, da die Schriftfamilie `text` die Voreinstellung für alle Textausgaben ist, ist damit quasi Helvetica 10pt/12pt die Standard-Textschriftart. Durch überschreiben der Schriftfamilie `text` kann eine andere Voreinstellung festgelegt werden.
@@ -33,7 +33,7 @@ Seitenformat
 
 Das voreingestellte Seitenformat ist DIN A4 (210mm × 297mm).
 
-Die Seitevorlage für alle Seiten ist wie folgt definiert:
+Die Seitenvorlage für alle Seiten ist wie folgt definiert:
 
     <Pagetype name="Default Page" test="true()">
       <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>

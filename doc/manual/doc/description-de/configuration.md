@@ -68,6 +68,6 @@ Angaben in der Layoutdatei
 --------------------------
 
 Das Layoutregelwerk erlaubt manche Parameter zu setzen. Dazu gehören die
-Angaben, die im Element [Optionen](../commands-de/options.html) gesetzt
+Angaben, die im Element [Options](../commands-de/options.html) gesetzt
 werden.
 

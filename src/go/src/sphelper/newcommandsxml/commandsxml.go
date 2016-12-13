@@ -461,16 +461,71 @@ func (c *Command) RemarkHTML(lang string) template.HTML {
 }
 
 func (c *Command) InfoHTML(lang string) template.HTML {
-	var ret string
+	var r *bytes.Reader
 	switch lang {
 	case "en":
-		ret = c.InfoEn.HTML()
+		if x := c.InfoEn; x == nil {
+			return template.HTML("")
+		} else {
+			r = bytes.NewReader(x.Text)
+		}
 	case "de":
-		ret = c.InfoDe.HTML()
-	default:
-		ret = ""
+		if x := c.InfoDe; x == nil {
+			return template.HTML("")
+		} else {
+			r = bytes.NewReader(x.Text)
+		}
 	}
-	return template.HTML(ret)
+
+	var ret []string
+	dec := xml.NewDecoder(r)
+
+	inListing := false
+	for {
+		tok, err := dec.Token()
+		if err != nil && err == io.EOF {
+			break
+		}
+		if err != nil {
+			panic(err)
+		}
+		switch v := tok.(type) {
+		case xml.StartElement:
+			switch v.Name.Local {
+			case "listing":
+				inListing = true
+			case "image":
+				var fn, wd string
+				for _, a := range v.Attr {
+					wd = "max-width: 90%;"
+					if a.Name.Local == "file" {
+						fn = a.Value
+					} else if a.Name.Local == "width" {
+						wd = fmt.Sprintf(`width: %spx;`, a.Value)
+					}
+				}
+				ret = append(ret, fmt.Sprintf(`<img style="%s padding-left: 1em;" src="../img/%s">`, wd, fn))
+			case "para":
+				p := &para{}
+				p.commands = c.commands
+				err = dec.DecodeElement(p, &v)
+				if err != nil {
+					panic(err)
+				}
+				ret = append(ret, p.HTML(lang))
+			}
+		case xml.CharData:
+			if inListing {
+				ret = append(ret, `<pre class="syntax xml">`+html.EscapeString(string(v))+`</pre>`)
+			}
+		case xml.EndElement:
+			switch v.Name.Local {
+			case "listing":
+				inListing = false
+			}
+		}
+	}
+	return template.HTML(strings.Join(ret, ""))
 }
 
 func (c *Command) DescriptionText(lang string) string {

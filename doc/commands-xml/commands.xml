@@ -1325,7 +1325,7 @@
         <para>Width of the column. Argument can be a number (in grid cells) a length (e.g. 2cm) or a *-number (e.g. 4*).</para>
       </description>
       <description xml:lang="de">
-        <para>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm) oder in *-Angaben (z.B. 4*) angegeben werden.</para>
+        <para>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm) oder in <tt>*</tt>-Angaben (z.B. <tt>4*</tt>) angegeben werden.</para>
       </description>
     </attribute>
     <attribute en="align" optional="yes">
@@ -1737,10 +1737,10 @@
     </attribute>
     <attribute en="value" type="text" optional="yes">
       <description xml:lang="en">
-        <para>Hex value of the color, such as #FA5 or #FFAA55.</para>
+        <para>Hex value of the color, such as <tt>#FA5</tt> or <tt>#FFAA55</tt>.</para>
       </description>
       <description xml:lang="de">
-        <para>Der Hexwert der Farbe, wie beispielsweise #FA5 oder #FFAA55.</para>
+        <para>Der Hexwert der Farbe, wie beispielsweise <tt>#FA5</tt> oder <tt>#FFAA55</tt>.</para>
       </description>
     </attribute>
     <example xml:lang="de">
@@ -2556,8 +2556,8 @@
     </description>
     <description xml:lang="de">
       <para>Zwei Modi: bei einer gegebenen Breite wird ein Leerraum mit dieser Breite erzeugt.</para>
-      <para>Ohne Breitenangabe: erzeugt einen horizontalen dehnbaren Lerrraum. Der Leerraum hat die minimale Größe 0 und die maximale Größe »unendlich«. Sinnvoll nutzbar in einzeiligen Absätzen. Im Fließtext wird es vermutlich unerwartete Ergebnisse hervorrufen. Der Leerraum in einer Zeile verteilt sich normalerweise gleichmäßig über jeden Wortzwischenraum. Wenn ein
-      <cmd name="HSpace"/> enthalten ist, erhalten alle Leerraume die minimale Breite, nur der dehnbare Leerraum hat den überschüssigen Leerraum »angehäuft«.</para>
+      <para>Ohne Breitenangabe: erzeugt einen horizontalen dehnbaren Leerraum. Der Leerraum hat die minimale Größe 0 und die maximale Größe »unendlich«. Sinnvoll nutzbar in einzeiligen Absätzen. Im Fließtext wird es vermutlich unerwartete Ergebnisse hervorrufen. Der Leerraum in einer Zeile verteilt sich normalerweise gleichmäßig über jeden Wortzwischenraum. Wenn ein
+      <cmd name="HSpace"/> enthalten ist, erhalten alle Leerräume die minimale Breite, nur der dehnbare Leerraum hat den überschüssigen Leerraum »angehäuft«.</para>
     </description>
     <childelements/>
     <attribute en="width" optional="yes" type="length">
@@ -2587,14 +2587,18 @@
     <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
   <Textblock width="10">
-    <Paragraph><Value>Hello</Value><HSpace/><Value>World</Value></Paragraph>
+    <Paragraph>
+      <Value>Hello</Value><HSpace/><Value>World</Value>
+    </Paragraph>
   </Textblock>
 </PlaceObject>]]></listing>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<PlaceObject>
   <Textblock width="10">
-    <Paragraph><Value>Hallo</Value><HSpace/><Value>Welt</Value></Paragraph>
+    <Paragraph>
+      <Value>Hallo</Value><HSpace/><Value>Welt</Value>
+    </Paragraph>
   </Textblock>
 </PlaceObject>]]></listing>
     </example>
@@ -3125,7 +3129,7 @@
       <para>Load a font file (.otf, .ttf, .pfb) and associate it with an internal name.</para>
     </description>
     <description xml:lang="de">
-      <para>Das Element LadeSchriftdatei weist einer physikalischen Schriftdatei einem internen Namen zu.</para>
+      <para>Der Befehl LoadFontfile weist einer physikalischen Schriftdatei einen internen Namen zu.</para>
     </description>
     <childelements/>
     <attribute en="name" type="text" optional="no">
@@ -3473,7 +3477,7 @@
         <para>The xpath expression ($variable) that holds the element structure for the index.</para>
       </description>
       <description xml:lang="de">
-        <para>Der XPath-Ausdruck der die Elementstruktur für den Index enthält ($Variable).</para>
+        <para>Der XPath-Ausdruck der die Elementstruktur für den Index enthält (<tt>$Variable</tt>).</para>
       </description>
     </attribute>
     <attribute en="sortkey" type="text" optional="no">
@@ -3543,19 +3547,19 @@
     <SetVariable variable="indexeinträge">
       <Element name="indexeintrag">
         <Attribute name="name" select="'Giraffe'"/>
-        <Attribute name="seite" select="1"/>
+        <Attribute name="page" select="1"/>
       </Element>
       <Element name="indexeintrag">
         <Attribute name="name" select="'Garage'"/>
-        <Attribute name="seite" select="2"/>
+        <Attribute name="page" select="2"/>
       </Element>
       <Element name="indexeintrag">
         <Attribute name="name" select="'Grußwort'"/>
-        <Attribute name="seite" select="3"/>
+        <Attribute name="page" select="3"/>
       </Element>
       <Element name="indexeintrag">
         <Attribute name="name" select="'Aufzug'"/>
-        <Attribute name="seite" select="4"/>
+        <Attribute name="page" select="4"/>
       </Element>
     </SetVariable>
     <SaveDataset filename="index" elementname="Index">
@@ -3578,7 +3582,7 @@
                 <Paragraph><Value select="@name"/></Paragraph>
               </Td>
               <Td>
-                <Paragraph><Value select="@seite"/></Paragraph>
+                <Paragraph><Value select="@page"/></Paragraph>
               </Td>
             </Tr>
           </ForAll>
@@ -3588,6 +3592,12 @@
   </Record>
 ]]></listing>
     </example>
+    <info xml:lang="en">
+      <para>The attribute for the page number must be named <tt>page</tt>. This limitation will go away in a future version.</para>
+    </info>
+    <info xml:lang="de">
+      <para>Das Attribut für die Seitenzahl muss <tt>page</tt> heißen. Diese Einschränkung wird in einer zukünftigen Version aufgehoben sein.</para>
+    </info>
     <seealso>
       <cmd name="SaveDataset"/>
     </seealso>
@@ -4517,7 +4527,7 @@
       <para>Insert a paragraph of text. The width of the paragraph is inherited from the surrounding element.</para>
     </description>
     <description xml:lang="de">
-      <para>Erzeugt einen Paragraph innerhalb eines Textblocks.</para>
+      <para>Erzeugt einen Absatz innerhalb eines Textblocks.</para>
     </description>
     <childelements>
       <reference name="Textvalues"/>
@@ -4568,7 +4578,7 @@
         <para>CSS class for this paragraph.</para>
       </description>
       <description xml:lang="de">
-        <para>CSS Klasse für diesen Paragraph.</para>
+        <para>CSS Klasse für diesen Absatz.</para>
       </description>
     </attribute>
     <attribute en="id" optional="yes" type="text">
@@ -4576,7 +4586,7 @@
         <para>CSS id for this paragraph.</para>
       </description>
       <description xml:lang="de">
-        <para>CSS id für diesen Paragraph.</para>
+        <para>CSS id für diesen Absatz.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -4647,10 +4657,8 @@
     </description>
     <childelements>
       <cmd name="Margin"/>
-      <optional>
-        <oneOrMore><cmd name="PositioningArea"/></oneOrMore>
-      </optional>
       <interleave>
+        <optional><oneOrMore><cmd name="PositioningArea"/></oneOrMore></optional>
         <optional><cmd name="AtPageCreation"/></optional>
         <optional><cmd name="AtPageShipout"/></optional>
         <optional><cmd name="ForAll"/></optional>
@@ -4858,7 +4866,7 @@
         <para>Determines if the area of the object is marked as »allocated«. With allocate="no", the cursor position is not changed.</para>
       </description>
       <description xml:lang="de">
-        <para>Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei belegen=“nein” wird auch die aktuelle Zeile im Raster nicht verändert. Bei “auto” wird bei Bildern der Bildumriss beachtet, sofern eine Umrissdatei vorliegt. Siehe die Beschreibung bei Bild</para>
+        <para>Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei allocate=“no” wird auch die aktuelle Zeile im Raster nicht verändert.</para>
       </description>
       <choice en="yes">
         <description xml:lang="en">
@@ -5269,7 +5277,7 @@
       <para>The objects can be placed in a grid (when the value in the attributes row and column are numbers) or they can be placed with absolute positions where the origin is at the top and left border of the page.</para>
     </info>
     <info xml:lang="de">
-      <para>Die Ausgabe kann entweder im Raster erfolgen (Angabe bei zeile und spalte ist eine Zahl) oder als absolute Positionierung (die Angaben bei zeile und spalte müssen beide vorhanden sein und
+      <para>Die Ausgabe kann entweder im Raster erfolgen (Angabe bei <tt>row</tt> und <tt>column</tt> ist eine Zahl) oder als absolute Positionierung (die Angaben bei <tt>row</tt> und <tt>column</tt> müssen beide vorhanden sein und
         eine Maßgangabe sein).</para>
     </info>
     <seealso>
@@ -5716,10 +5724,10 @@
     </attribute>
     <attribute en="attributes" type="xpath" optional="yes">
       <description xml:lang="en">
-        <para>The variable (as an XPath expression, e.g. $foo) which contains <cmd name="Attribute"/> Elements. These attributes are added to the root element.</para>
+        <para>The variable (as an XPath expression, e.g. <tt>$foo</tt>) which contains <cmd name="Attribute"/> Elements. These attributes are added to the root element.</para>
       </description>
       <description xml:lang="de">
-        <para>Der Variablenname (als XPath-Ausdruck, also $foo), der <cmd name="Attribute"/>-Elemente beinhaltet. Diese Attribute werden zum Wurzelelement hinzugefügt.</para>
+        <para>Der Variablenname (als XPath-Ausdruck, also <tt>$foo</tt>), der <cmd name="Attribute"/>-Elemente beinhaltet. Diese Attribute werden zum Wurzelelement hinzugefügt.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -5830,7 +5838,7 @@
         <para>The width of a grid cell. Use either width or nx, not both.</para>
       </description>
       <description xml:lang="de">
-        <para>Breite einer Rasterzelle. Entweder breite oder nx benutzen, nicht beide.</para>
+        <para>Breite einer Rasterzelle. Entweder width oder nx benutzen, nicht beide.</para>
       </description>
     </attribute>
     <attribute en="height" type="length" optional="yes">
@@ -5846,7 +5854,7 @@
         <para>Specify the number of grid cells in horizontal direction. Use either nx or width, not both.</para>
       </description>
       <description xml:lang="de">
-        <para>Anzahl der Rasterzellen in horizontaler Richtung. Entweder nx oder breite angeben.</para>
+        <para>Anzahl der Rasterzellen in horizontaler Richtung. Entweder nx oder width angeben.</para>
       </description>
     </attribute>
     <attribute en="ny" type="number" optional="yes">
@@ -6073,6 +6081,28 @@
 
 ]]></listing>
     </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Record element="data">
+  <SetVariable variable="saveme">
+    <Sequence select="*" />
+  </SetVariable>
+  <PlaceObject>
+    <Textblock>
+      <ForAll select="$saveme">
+        <Paragraph><Value select="string(.)"></Value></Paragraph>
+      </ForAll>
+    </Textblock>
+  </PlaceObject>
+</Record>
+]]></listing>
+      <listing><![CDATA[<data>
+  <elt>one</elt>
+  <elt>two</elt>
+  <elt>three</elt>
+</data>
+
+]]></listing>
+    </example>
     <seealso/>
   </command>
   <command en="SortSequence">
@@ -6274,12 +6304,12 @@
 </Record>]]></listing>
     </example>
     <info xml:lang="en">
-      <para>You have to be careful to encode the test with the rules of XML: that is »less« must be written as &amp;lt; as &lt; must not be part of text contents.</para>
+      <para>You have to be careful to encode the test with the rules of XML: that is »less« must be written as <tt>&amp;lt;</tt>, since <tt>&lt;</tt> must not be part of text contents.</para>
       <para>A Switch may be part of nearly all commands. It dissolves and only the contents of the Case or Otherwise gets replaced by the whole construct.</para>
     </info>
     <info xml:lang="de">
-      <para>»Größer« und »kleiner« Vergleiche müssen nach den Regeln von XML kodiert werden. Für »größer« kann das > Zeichen oder &amp;​gt; benutzt werden, »kleiner« muss zwingend als &amp;lt;
-        ausgeschrieben sein, da das Zeichen &lt; nicht in einem XML Attribut vorkommen darf.</para>
+      <para>»Größer« und »kleiner« Vergleiche müssen nach den Regeln von XML kodiert werden. Für »größer« kann das <tt>></tt> Zeichen oder <tt>&amp;gt;</tt> benutzt werden, »kleiner« muss zwingend als <tt>&amp;lt;</tt>
+        ausgeschrieben sein, da das Zeichen <tt>&lt;</tt> nicht in einem XML Attribut vorkommen darf.</para>
       <para>Eine Fallunterscheidung kann in fast allen Elementen vorkommen. Das Ergebnis der Fallunterscheidung (also vom benutzten Element Case oder Otherwise) wird an das umgebende Element
         zurückgegeben. So wird beispielsweise aus</para>
       <listing><![CDATA[<Td>
@@ -7544,7 +7574,10 @@
       </choice>
     </attribute>
     <example xml:lang="en">
-      <listing><![CDATA[]]></listing>
+      <listing><![CDATA[<Trace textformat="yes"/>]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Trace textformat="yes"/>]]></listing>
     </example>
     <seealso></seealso>
   </command>

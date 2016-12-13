@@ -2678,12 +2678,12 @@
             <a:documentation>Name of the master page. It is for informational purpose and as a selection for NewPage.</a:documentation>
          </attribute>
          <ref name="e_Margin"></ref>
-         <optional>
-            <oneOrMore>
-               <ref name="e_PositioningArea"></ref>
-            </oneOrMore>
-         </optional>
          <interleave>
+            <optional>
+               <oneOrMore>
+                  <ref name="e_PositioningArea"></ref>
+               </oneOrMore>
+            </optional>
             <optional>
                <ref name="e_AtPageCreation"></ref>
             </optional>
