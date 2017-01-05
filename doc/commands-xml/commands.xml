@@ -684,6 +684,46 @@
         <para>Der Faktor, um den die äußeren und der innere Balken die normalen Balken übersteigt. Nur anwendbar bei EAN13.</para>
       </description>
     </attribute>
+    <attribute en="eclevel" optional="yes" since="2.7.10">
+      <description xml:lang="en">
+        <para>Set the error correction level for QR-codes. If not provided, the system uses the maximum level for minimum size. The higher the level, the more error correction is in the QR-code.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setzten den Fehlerkorrekturlevel für QR-Codes. Wenn nicht angegeben, nutzt das System den maximalen Leven für die kleinste QR-Code Größe. Je höher der Level, desto mehr Fehlerkorrektur ist im QR-Code.</para>
+      </description>
+      <choice en="L">
+        <description xml:lang="en">
+          <para>Set the lowest level (1) with approx. 7% recovery.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setzt den kleinsten Fehlerkorrekturwert (1) mit ca. 7% Korrektur.</para>
+        </description>
+      </choice>
+      <choice en="M">
+        <description xml:lang="en">
+          <para>Set the second lowest level (2) with approx. 15% recovery.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setzt den zweitkleinsten Fehlerkorrekturwert (2) mit ca. 15% Korrektur.</para>
+        </description>
+      </choice>
+      <choice en="Q">
+        <description xml:lang="en">
+          <para>Set the second highest level (3) with approx. 25% recovery.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setzt den zweitgrößten Fehlerkorrekturwert (3) mit ca. 25% Korrektur.</para>
+        </description>
+      </choice>
+      <choice en="H">
+        <description xml:lang="en">
+          <para>Set the highest level (4) with approx. 35% recovery.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setzt den größten Fehlerkorrekturwert (4) mit ca. 35% Korrektur.</para>
+        </description>
+      </choice>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
   <Barcode select="'speedata Publisher'" type="Code128" showtext="yes"/>

@@ -444,9 +444,9 @@ local function make_code(size,matrix)
   return v
 end
 
-local function qrcode(width,height,codeword)
+local function qrcode(width,height,codeword,eclevel)
   if not barcodes_qrencode then barcodes_qrencode = do_luafile("qrencode.lua") end
-  local ok, tab_or_message =  barcodes_qrencode.qrcode(codeword)
+  local ok, tab_or_message =  barcodes_qrencode.qrcode(codeword,eclevel)
   if not ok then
     err(tab_or_message)
     return nil

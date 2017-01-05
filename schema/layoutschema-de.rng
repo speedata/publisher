@@ -294,6 +294,21 @@
                <a:documentation>Der Faktor, um den die äußeren und der innere Balken die normalen Balken übersteigt. Nur anwendbar bei EAN13.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="eclevel">
+               <a:documentation>Setzten den Fehlerkorrekturlevel für QR-Codes. Wenn nicht angegeben, nutzt das System den maximalen Leven für die kleinste QR-Code Größe. Je höher der Level, desto mehr Fehlerkorrektur ist im QR-Code.</a:documentation>
+               <choice>
+                  <value>L</value>
+                  <a:documentation>Setzt den kleinsten Fehlerkorrekturwert (1) mit ca. 7% Korrektur.</a:documentation>
+                  <value>M</value>
+                  <a:documentation>Setzt den zweitkleinsten Fehlerkorrekturwert (2) mit ca. 15% Korrektur.</a:documentation>
+                  <value>Q</value>
+                  <a:documentation>Setzt den zweitgrößten Fehlerkorrekturwert (3) mit ca. 25% Korrektur.</a:documentation>
+                  <value>H</value>
+                  <a:documentation>Setzt den größten Fehlerkorrekturwert (4) mit ca. 35% Korrektur.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

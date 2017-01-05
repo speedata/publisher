@@ -155,10 +155,12 @@ function commands.barcode( layoutxml,dataxml )
     local width     = publisher.read_attribute(layoutxml,dataxml,"width"    ,"length_sp"     )
     local height    = publisher.read_attribute(layoutxml,dataxml,"height"   ,"height_sp"     )
     local typ       = publisher.read_attribute(layoutxml,dataxml,"type"     ,"rawstring"     )
+    local eclevel   = publisher.read_attribute(layoutxml,dataxml,"eclevel"  ,"rawstring"     )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select"   ,"xpath"         )
     local fontname  = publisher.read_attribute(layoutxml,dataxml,"fontface" ,"rawstring"     )
     local showtext  = publisher.read_attribute(layoutxml,dataxml,"showtext" ,"boolean", "yes")
     local overshoot = publisher.read_attribute(layoutxml,dataxml,"overshoot","number"        )
+
 
     width = width or xpath.get_variable("__maxwidth")
 
@@ -177,7 +179,14 @@ function commands.barcode( layoutxml,dataxml )
     elseif typ=="EAN13" then
         return barcodes.ean13(width,height,fontfamily,selection,showtext,overshoot)
     elseif typ=="QRCode" then
-        return barcodes.qrcode(width,height,selection)
+        if eclevel == "L" then eclevel = 1
+        elseif eclevel == "M" then eclevel = 2
+        elseif eclevel == "Q" then eclevel = 3
+        elseif eclevel == "H" then eclevel = 4
+        else
+            eclevel = nil
+        end
+        return barcodes.qrcode(width,height,selection,eclevel)
     else
         err("Unknown barcode type %q", typ or "?")
     end
