@@ -25,6 +25,7 @@ Usage: [parameter] command
 -h, --help                   Show this help
     --autoopen               Open the PDF file (MacOS X and Linux only)
     --data=NAME              Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN
+    --cache=METHOD           Use cache method. One of 'fast' or 'optimal'. Default is 'optimal'
     --dummy                  Don't read a data file, use '&lt;data /&gt;' as input
 -c, --config=NAME            Read the config file with the given NAME. Default: 'publisher.cfg'
     --[no-]cutmarks          Display cutmarks in the document
@@ -58,6 +59,7 @@ Usage: [parameter] command
 
 Commands
       clean                  Remove publisher generated files
+      clearcache             Clear image cache
       compare                Compare files for quality assurance
       doc                    Open documentation
       list-fonts             List installed fonts (use together with --xml for copy/paste)
@@ -85,6 +87,11 @@ Commands
 <tr>
 <td><code>--data=NAME</code></td>
 <td>Name of the data XML file. Default is <code>data.xml</code>. Can be set in the <a href="configuration.html">configuration file</a>. If the file name is a dash(<code>-</code>), the speedata publisher reads the XML data from standard input (STDIN).</td>
+</tr>
+
+<tr>
+<td><code>--cache=METHOD</code></td>
+<td>Caching-strategy for http* image requests. Use <code>fast</code> for file system lookup only or <code>optimal</code> for http checking on each request. https requests are currently always checked with the <code>optimal</code> strategy.</td>
 </tr>
 
 <tr>
@@ -236,6 +243,11 @@ Commands
 </tr>
 
 <tr>
+<td><code>clearcache</code></td>
+<td>Removes files from the image cache.</td>
+</tr>
+
+<tr>
 <td><code>clean</code></td>
 <td>Remove temporary files from the publisher run. Keeps the PDF file.</td>
 </tr>
@@ -294,7 +306,7 @@ events = layout\.xml:run(runpublisher);data\.xml:run(runpublisher)
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.7.4 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/commandline.html">German</a>
+Version: 2.7.10 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/commandline.html">German</a>
 
 </body>
 </html>

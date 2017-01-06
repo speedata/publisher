@@ -1,13 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (de)</title>
   <id>http://www.speedata.de</id>
-  <updated>2016-10-03T15:42:50+02:00</updated>
+  <updated>2017-01-06T10:59:21+01:00</updated>
   <subtitle>Neue Versionen des Publishers zum Download und Liste der Änderungen</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.7.10</title>
+    <updated>2017-01-06T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-01-06:</id>
+    <content type="html">Möglichkeit, den Level der Fehlerkorrektur zu setzen für QR-Codes.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.7.9</title>
+    <updated>2016-11-28T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-11-28:</id>
+    <content type="html">allowbreak=&#34; &#34; umbricht nicht mehr bei einem Trennstrich.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.7.9</title>
+    <updated>2016-11-26T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-11-26:</id>
+    <content type="html">NoBreak Voreinstellung ist nun &#39;keeptogether&#39;. Dies verhindert einen Zeilenumbruch.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.7.8</title>
+    <updated>2016-11-25T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-11-25:</id>
+    <content type="html">Wandle U+2011 (NON-BREAKING HYPHEN) in U+002D (HYPHEN-MINUS) um und füge keinen Umbruch ein.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.7.7</title>
+    <updated>2016-10-21T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-10-21:</id>
+    <content type="html">Vor dem ersten Lauf den Cache nicht löschen.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.7.6</title>
+    <updated>2016-10-14T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-10-14:</id>
+    <content type="html">Verbesseter Bild-Cache. Bilder in einem Lauf nicht erneut herunter laden.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.7.5</title>
+    <updated>2016-10-12T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2016-10-12:</id>
+    <content type="html">Neue Methode für Bild-Caching. Umbenennung von Image/maxsize nach visiblebox.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.7.4</title>
     <updated>2016-10-03T00:00:00Z</updated>

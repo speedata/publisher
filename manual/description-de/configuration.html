@@ -60,6 +60,11 @@ erkannt. Folgende Optionen werden unterstützt:</p>
 </tr>
 
 <tr>
+<td><code>cache</code></td>
+<td>Caching-Strategie für http* Bilddateien. Entweder <code>fast</code>, dann wird nur geschaut, ob die Bilddatei im Dateisystem vorhanden ist oder <code>optimal</code>, dann wird bei jedem Zugriff auf das Bild geprüft, ob das Bild aktualisiert werden muss. <code>https</code>-Requests werden derzeit mit der <code>optimal</code>-Strategie verwaltet.</td>
+</tr>
+
+<tr>
 <td><code>data</code></td>
 <td>Name der XML-Daten. Wenn nicht vorhanden, wird die Datei <code>daten.xml</code> geladen.</td>
 </tr>
@@ -96,7 +101,7 @@ erkannt. Folgende Optionen werden unterstützt:</p>
 
 <tr>
 <td><code>imagecache</code></td>
-<td>Ordner für zwichengespeicherte Bilder (nur <code>href=&quot;http://...&quot;</code>). Voreinstellung: <code>$TMPDIR/sp/images</code>.</td>
+<td>Ordner für zwischengespeicherte Bilder (nur <code>href=&quot;http://...&quot;</code>). Voreinstellung: <code>$TMPDIR/sp/images</code>.</td>
 </tr>
 
 <tr>
@@ -168,14 +173,14 @@ Abschnitt</a> aufgeführt.</p>
 <h2>Angaben in der Layoutdatei</h2>
 
 <p>Das Layoutregelwerk erlaubt manche Parameter zu setzen. Dazu gehören die
-Angaben, die im Element <a href="../commands-de/options.html">Optionen</a> gesetzt
+Angaben, die im Element <a href="../commands-de/options.html">Options</a> gesetzt
 werden.</p>
 
 </div>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.7.4 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/configuration.html">Englisch</a>
+Version: 2.7.10 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/configuration.html">Englisch</a>
 
 </body>
 </html>

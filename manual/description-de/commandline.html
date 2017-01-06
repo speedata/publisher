@@ -25,6 +25,7 @@ Usage: [parameter] command
 -h, --help                   Show this help
     --autoopen               Open the PDF file (MacOS X and Linux only)
     --data=NAME              Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN
+    --cache=METHOD           Use cache method. One of 'fast' or 'optimal'. Default is 'optimal'
     --dummy                  Don't read a data file, use '&lt;data /&gt;' as input
 -c, --config=NAME            Read the config file with the given NAME. Default: 'publisher.cfg'
     --[no-]cutmarks          Display cutmarks in the document
@@ -58,6 +59,7 @@ Usage: [parameter] command
 
 Commands
       clean                  Remove publisher generated files
+      clearcache             Clear image cache
       compare                Compare files for quality assurance
       doc                    Open documentation
       list-fonts             List installed fonts (use together with --xml for copy/paste)
@@ -80,6 +82,11 @@ Commands
 <tr>
 <td><code>--autoopen</code></td>
 <td>Öffnet die PDF-Datei nach dem Publisher-Durchlauf. Kann auch in der <a href="configuration.html">Konfigurationsdatei</a> eingestellt werden.  <code>--data=NAME</code></td>
+</tr>
+
+<tr>
+<td><code>--cache=METHOD</code></td>
+<td>Caching-Strategie für http* Bilddateien. Entweder <code>fast</code>, dann wird nur geschaut, ob die Bilddatei im Dateisystem vorhanden ist oder <code>optimal</code>, dann wird bei jedem Zugriff auf das Bild geprüft, ob das Bild aktualisiert werden muss. <code>https</code>-Requests werden derzeit mit der <code>optimal</code>-Strategie verwaltet.</td>
 </tr>
 
 <tr>
@@ -231,6 +238,11 @@ Commands
 </tr>
 
 <tr>
+<td><code>clearcache</code></td>
+<td>Entfernt Dateien vom Bild-Cache.</td>
+</tr>
+
+<tr>
 <td><code>clean</code></td>
 <td>Entfernt temporäre Dateien aus dem Publisher-Lauf. Behält die PDF Datei.</td>
 </tr>
@@ -289,7 +301,7 @@ events = layout\.xml:run(runpublisher);data\.xml:run(runpublisher)
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.7.4 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/commandline.html">Englisch</a>
+Version: 2.7.10 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/commandline.html">Englisch</a>
 
 </body>
 </html>
