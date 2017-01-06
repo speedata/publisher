@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.7">
+    <entry version="2.7.10" date="2017-01-06">
+      <en>Allow setting of error correction level for QR-codes.</en>
+      <de>Möglichkeit, den Level der Fehlerkorrektur zu setzen für QR-Codes.</de>
+    </entry>
     <entry version="2.7.9" date="2016-11-28">
       <en>allowbreak=" " does not break at a hyphen character anymore.</en>
       <de>allowbreak=" " umbricht nicht mehr bei einem Trennstrich.</de>
