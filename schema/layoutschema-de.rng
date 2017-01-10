@@ -593,6 +593,9 @@
                <ref name="e_Tr"></ref>
             </optional>
             <optional>
+               <ref name="e_Trace"></ref>
+            </optional>
+            <optional>
                <ref name="e_Until"></ref>
             </optional>
             <optional>
@@ -1279,6 +1282,9 @@
                   <ref name="e_Tr"></ref>
                </optional>
                <optional>
+                  <ref name="e_Trace"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Until"></ref>
                </optional>
                <optional>
@@ -1782,6 +1788,9 @@
                <ref name="e_Stylesheet"></ref>
             </optional>
             <optional>
+               <ref name="e_Switch"></ref>
+            </optional>
+            <optional>
                <ref name="e_Trace"></ref>
             </optional>
             <optional>
@@ -1973,6 +1982,9 @@
                </optional>
                <optional>
                   <ref name="e_Tr"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Trace"></ref>
                </optional>
                <optional>
                   <ref name="e_Until"></ref>
@@ -2485,6 +2497,9 @@
             </optional>
             <optional>
                <ref name="e_Tr"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Trace"></ref>
             </optional>
             <optional>
                <ref name="e_Until"></ref>
@@ -4433,6 +4448,9 @@
                   <ref name="e_Tr"></ref>
                </optional>
                <optional>
+                  <ref name="e_Trace"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Until"></ref>
                </optional>
                <optional>
@@ -4649,6 +4667,9 @@
                </optional>
                <optional>
                   <ref name="e_Tr"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Trace"></ref>
                </optional>
                <optional>
                   <ref name="e_Until"></ref>
