@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"path/filepath"
 
@@ -36,6 +37,10 @@ func CacheImage(url string) string {
 	resp, err := client.Get(url)
 	if err != nil {
 		return "ERR 3"
+	}
+	if resp.StatusCode == http.StatusNotFound {
+		os.Remove(outpath)
+		return "404"
 	}
 	outf, err := os.OpenFile(outpath, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0644)
 	if err != nil {
