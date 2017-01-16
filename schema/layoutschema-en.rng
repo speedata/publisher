@@ -2011,6 +2011,11 @@
          <attribute name="sortkey">
             <a:documentation>The name of the attribute holding the indexentry (that should be sorted).</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="pagenumber">
+               <a:documentation>The name of the attribute that holds the page numbers. Defaults to &#39;page&#39;.</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

@@ -1346,6 +1346,8 @@ function commands.makeindex( layoutxml,dataxml )
     local xpath       = publisher.read_attribute(layoutxml,dataxml,"select",  "xpathraw")
     local sortkey     = publisher.read_attribute(layoutxml,dataxml,"sortkey", "rawstring")
     local sectionname = publisher.read_attribute(layoutxml,dataxml,"section", "rawstring")
+    local pagenumbername = publisher.read_attribute(layoutxml,dataxml,"pagenumber", "rawstring","page")
+
     publisher.stable_sort(xpath,function(elta,eltb)
         return string.lower(elta[sortkey]) < string.lower(eltb[sortkey])
     end)
@@ -1368,7 +1370,11 @@ function commands.makeindex( layoutxml,dataxml )
             -- Add current entry to this section
             -- The current implementation only concatenates page numbers
             if xpath[i].name == lastname then
-                xpath[lastindex].page = xpath[lastindex].page .. ", " .. xpath[i].page
+                if not xpath[lastindex][pagenumbername] then
+                    err("Can't find the page number in the index entries. Did you set the pagenumber attribute in Makeindex?")
+                else
+                    xpath[lastindex][pagenumbername] = xpath[lastindex][pagenumbername] .. ", " .. xpath[i][pagenumbername]
+                end
             else
                 lastindex = i
                 lastname = xpath[i].name

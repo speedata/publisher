@@ -2011,6 +2011,11 @@
          <attribute name="sortkey">
             <a:documentation>Der Name des Attributs das den Indexeintrag enthält (der sortiert werden soll).</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="pagenumber">
+               <a:documentation>Der Name des Attributs der die Seitenzahl enthält. Voreinstellung ist &#39;page&#39;.</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
@@ -3552,7 +3557,7 @@
          </optional>
          <optional>
             <attribute name="stretch">
-               <a:documentation>Wenn der Tabelleninhalt schmal ist und dehnen den Wert nein hat, dann nimmt die Tabelle nur den benötigten Platz ein. Wenn der Tabelleninhalt breit ist oder dehnen den Wert max hat, dann nimmt die Tabelle den Wert aus dem Attribut breite ein.</a:documentation>
+               <a:documentation>Wenn der Tabelleninhalt schmal ist und stretch den Wert nein hat, dann nimmt die Tabelle nur den benötigten Platz ein. Wenn der Tabelleninhalt breit ist oder stretch den Wert max hat, dann nimmt die Tabelle den Wert aus dem Attribut breite ein.</a:documentation>
                <choice>
                   <value>max</value>
                   <a:documentation>Die Tabelle zur angegebenen Breite dehnen.</a:documentation>

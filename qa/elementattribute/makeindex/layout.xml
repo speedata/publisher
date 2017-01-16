@@ -1,0 +1,59 @@
+<Layout
+    xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat width="100mm" height="100mm"/>
+    <Record element="data">
+        <LoadDataset name="index"/>
+        <SetVariable variable="indexeinträge">
+            <Element name="indexeintrag">
+                <Attribute name="name" select="'Giraffe'"/>
+                <Attribute name="thepage" select="1"/>
+            </Element>
+            <Element name="indexeintrag">
+                <Attribute name="name" select="'Garage'"/>
+                <Attribute name="thepage" select="2"/>
+            </Element>
+            <Element name="indexeintrag">
+                <Attribute name="name" select="'Garage'"/>
+                <Attribute name="thepage" select="3"/>
+            </Element>
+            <Element name="indexeintrag">
+                <Attribute name="name" select="'Introduction'"/>
+                <Attribute name="thepage" select="3"/>
+            </Element>
+            <Element name="indexeintrag">
+                <Attribute name="name" select="'Lift'"/>
+                <Attribute name="thepage" select="4"/>
+            </Element>
+        </SetVariable>
+        <SaveDataset filename="index" elementname="Index">
+            <Makeindex select="$indexeinträge" sortkey="name" section="teil" pagenumber="thepage"/>
+        </SaveDataset>
+    </Record>
+    
+    <Record element="Index">
+        <ForAll select="teil">
+            <PlaceObject column="1">
+                <Table width="3" stretch="max">
+                    <Tr>
+                        <Td border-bottom="0.4pt" colspan="2">
+                            <Paragraph><Value select="@name"></Value></Paragraph>
+                        </Td>
+                    </Tr>
+                    <ForAll select="indexeintrag">
+                        <Tr>
+                            <Td>
+                                <Paragraph><Value select="@name"/></Paragraph>
+                            </Td>
+                            <Td>
+                                <Paragraph><Value select="@thepage"/></Paragraph>
+                            </Td>
+                        </Tr>
+                    </ForAll>
+                </Table>
+            </PlaceObject>
+        </ForAll>
+    </Record> 
+</Layout>
+
+
