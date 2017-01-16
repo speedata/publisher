@@ -327,7 +327,7 @@ function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname,keepposition)
             rows = 1
         end
         self:set_current_column(col,areaname)
-        self:set_current_row(math.ceil(y) + rows,areaname)
+        self:set_current_row(math.ceil(y + rows + ht  - 1) ,areaname)
     end
 
     local grid_conflict = false
