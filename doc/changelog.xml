@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.7">
+    <entry version="2.7.11" date="2017-01-16">
+      <en>Makeindex: make page number attribute variable</en>
+      <de>Makeindex: Seitenzahl-Attribut variabel machen</de>
+    </entry>
+    <entry version="2.7.11" date="2017-01-16">
+      <en>Bugfix: objects with ht > 0 and “jump to next row”</en>
+      <de>Fehlerkorrektur: Objekte mit Höhe > 0 und »springe zur nächsten Zeile«</de>
+    </entry>
+    <entry version="2.7.11" date="2017-01-16">
+      <en>Remove images from cache when 404.</en>
+      <de>Lösche Bilder vom Cache wenn 404-Fehler kommt.</de>
+    </entry>
     <entry version="2.7.10" date="2017-01-06">
       <en>Allow setting of error correction level for QR-codes.</en>
       <de>Möglichkeit, den Level der Fehlerkorrektur zu setzen für QR-Codes.</de>
