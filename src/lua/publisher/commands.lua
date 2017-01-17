@@ -1179,7 +1179,7 @@ function commands.image( layoutxml,dataxml )
         box.height = height - shift_up * 2
         box.width  = width  - shift_left * 2
     else
-        box = node.hpack(img.node(image))
+        box = node.vpack(img.node(image))
         node.set_attribute(box,publisher.att_origin,publisher.origin_image)
         node.set_attribute(box,publisher.att_lineheight,box.height)
         node.set_attribute(box, publisher.att_shift_left, shift_left)
