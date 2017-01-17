@@ -1,0 +1,33 @@
+<Layout
+    xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <!--<Trace grid="yes"/>-->
+    <Pageformat width="60mm" height="110mm"/>
+    <Pagetype name="test" test="true()">
+        <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+        <PositioningArea name="text">
+            <PositioningFrame width="4" height="9" row="1" column="1"/>
+        </PositioningArea>
+    </Pagetype>
+
+
+    <Pagetype name="first" test="sd:current-page() = 1">
+        <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+        <PositioningArea name="text">
+            <PositioningFrame width="4" height="5" row="1" column="1"/>
+        </PositioningArea>
+    </Pagetype>
+
+
+    <Record element="data">
+        <PlaceObject area="text">
+            <Table>
+                <Loop select="30">
+                    <Tr>
+                        <Td><Paragraph><Value>Hello, world!</Value></Paragraph></Td>
+                    </Tr>
+                </Loop>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>

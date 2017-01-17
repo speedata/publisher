@@ -3694,10 +3694,19 @@ function getheight( relative_pagenumber )
     local thispagenumber = current_pagenumber + relative_pagenumber - 1
     -- w("getheight for page number %d which is page number %d in the PDF",relative_pagenumber,thispagenumber)
     local thispage = pages[thispagenumber]
+    local cp, cg -- current page, current grid
+    if not thispage then
+        cp = current_page
+        cg = current_grid
+        setup_page(thispagenumber)
+        thispage = pages[thispagenumber]
+    end
     local areaname = xpath.get_variable("__currentarea")
     if thispage then
         local firstrow = thispage.grid:first_free_row(areaname)
         local space = thispage.grid:remaining_height_sp(firstrow,areaname)
+        current_grid = cg
+        current_page = cp
         return space
     end
 end
