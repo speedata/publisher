@@ -2871,7 +2871,8 @@ end
 
 -- For debugging in tables
 function showtextatright(hbox,txt)
-    hbox = node.vpack(hbox)
+    local vbox = node.vpack(hbox)
+    local tmp = node.has_attribute(hbox,att_tr_dynamic_data)
     local ff = fonts.lookup_fontfamily_name_number["__verysmall__"] or define_small_fontfamily()
 
     local x = mknodes(tostring(txt),ff)
@@ -2881,10 +2882,11 @@ function showtextatright(hbox,txt)
     texthbox.depth = 0
     texthbox.height = 0
 
-    local tail = node.tail(hbox)
-    texthbox = node.insert_after(hbox,tail,texthbox)
+    local tail = node.tail(vbox)
+    texthbox = node.insert_after(vbox,tail,texthbox)
     texthbox = node.hpack(texthbox)
-    texthbox.width = hbox.width
+    node.set_attribute(texthbox,att_tr_dynamic_data,tmp)
+    texthbox.width = vbox.width
     return texthbox
 end
 
