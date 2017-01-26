@@ -4,11 +4,9 @@
   xmlns="urn:speedata.de:2009/publisher/en">
 
   <Compatibility movecursoronplaceobject="no"/>
+  <Trace grid="no" gridallocation="no" objects="no"/>
 
-  <Options show-grid="no"
-    mainlanguage="English (Great Britain)"
-    show-gridallocation="no"
-    trace="no"/>
+  <Options mainlanguage="English (Great Britain)"/>
 
 
   <DefineColor name="gray"    model="cmyk" c="38" m="30" y="26" k="0"/>

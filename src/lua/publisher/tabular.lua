@@ -1475,10 +1475,11 @@ function typeset_table(self)
         end
         extra_height = extra_height + ht_row
 
-        if publisher.options.showobjects then
-            local ht = tostring(sp_to_pt(ht_row)) .. "|" .. tostring(sp_to_pt(accumulated_height)) .. "|" .. tostring(sp_to_pt(extra_height))
-            rows[i] = publisher.showtextatright(rows[i],ht)
-        end
+        -- This should be turned on with a separate switch in trace
+        -- if publisher.options.showobjects then
+        --     local ht = tostring(sp_to_pt(ht_row)) .. "|" .. tostring(sp_to_pt(accumulated_height)) .. "|" .. tostring(sp_to_pt(extra_height))
+        --     rows[i] = publisher.showtextatright(rows[i],ht)
+        -- end
         local fits_in_table = accumulated_height + extra_height + space_above <= pagegoal
         if not fits_in_table then
             if node.has_attribute(rows[i],publisher.att_use_as_head) == 1 then

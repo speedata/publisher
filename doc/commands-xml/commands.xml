@@ -691,7 +691,7 @@
         <para>Set the error correction level for QR-codes. If not provided, the system uses the maximum level for minimum size. The higher the level, the more error correction is in the QR-code.</para>
       </description>
       <description xml:lang="de">
-        <para>Setzten den Fehlerkorrekturlevel für QR-Codes. Wenn nicht angegeben, nutzt das System den maximalen Leven für die kleinste QR-Code Größe. Je höher der Level, desto mehr Fehlerkorrektur ist im QR-Code.</para>
+        <para>Setzt den Fehlerkorrekturlevel für QR-Codes. Wenn nicht angegeben, nutzt das System den maximalen Level für die kleinste QR-Code Größe. Je höher der Level, desto mehr Fehlerkorrektur ist im QR-Code.</para>
       </description>
       <choice en="L">
         <description xml:lang="en">
@@ -771,7 +771,7 @@
       <para>Name of the font face that should be used when switching to »bold«.</para>
     </description>
     <description xml:lang="de">
-      <para>Name der Schriftart, die für den Schriftschrift Fett benutzt werden soll.</para>
+      <para>Name der Schriftart, die für den Schnitt Fett benutzt werden soll.</para>
     </description>
     <childelements/>
     <attribute en="fontface" type="text" optional="no">
@@ -819,7 +819,7 @@
       <para>Name of the font face that should be used when switching to »bold italic«. </para>
     </description>
     <description xml:lang="de">
-      <para>Name der Schriftart, die für den Schriftschrift Fett-Kursiv benutzt werden soll.</para>
+      <para>Name der Schriftart, die für den Schnitt Fett-Kursiv benutzt werden soll.</para>
     </description>
     <childelements/>
     <attribute en="fontface" type="text" optional="no">
@@ -920,7 +920,7 @@
       <para>Create a bookmark on level 1 (top level) with the title stored in the variable <tt>title</tt>.</para>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Lesezeichen ebene="1" select="$titel" offen='nein'/>]]></listing>
+      <listing><![CDATA[<Lesezeichen level="1" select="$titel" open='nein'/>]]></listing>
       <para>Erzeugt ein Lesezeichen der Stufe 1 (höchste Stufe) mit dem Titel, der in der Variablen <tt>titel</tt> steht.</para>
     </example>
     <seealso>
@@ -1801,10 +1801,10 @@
   </command>
   <command en="DefineFontfamily">
     <description xml:lang="en">
-      <para>Defines a font family consisting of the shapes »regular», »bold«, »bold italic« and »italic«. To be used in <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface"/> and <cmd name="Table"/> with the attribute fontface.</para>
+      <para>Defines a font family consisting of the shapes »regular», »bold«, »bold italic« and »italic«. To be used in <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface"/> and <cmd name="Table"/> with the attribute <tt>fontface</tt>.</para>
     </description>
     <description xml:lang="de">
-      <para>Das Element <cmd name="DefineFontfamily"/> definiert eine Schriftfamilie, auf in den Elementen <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface"/> und <cmd name="Table"/> mit dem Attribut <tt>schriftart</tt> zugegriffen werden kann.</para>
+      <para>Das Element <cmd name="DefineFontfamily"/> definiert eine Schriftfamilie, auf in den Elementen <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface"/> und <cmd name="Table"/> mit dem Attribut <tt>fontface</tt> zugegriffen werden kann.</para>
     </description>
     <childelements>
       <interleave>
@@ -2216,7 +2216,7 @@
   <Textblock width="20">
     <Paragraph fontface="Groß">
       <Value>Groß</Value>
-      <Fontface schriftfamilie="text">
+      <Fontface fontfamily="text">
         <Value>normal</Value><B><Value>fett</Value></B>
       </Fontface>
     </Paragraph>
@@ -3203,7 +3203,7 @@
         <para>The amount of protrusion glyphs like -, . and - stick into the right margin. Highly font dependent. Defaults to 0.</para>
       </description>
       <description xml:lang="de">
-        <para>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark Schriftartabhängig.</para>
+        <para>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark abhängig von der benutzten Schriftart.</para>
       </description>
     </attribute>
     <attribute en="smallcaps" optional="yes">
