@@ -1555,7 +1555,9 @@ function typeset_table(self)
             end
             thissplittable[#thissplittable + 1] = publisher.make_glue({space_above})
             thissplittable[#thissplittable + 1] = rows[i]
-            thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep})
+            if i < #rows or self.tablefoot_contents then
+                thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep})
+            end
         end
 
         last_tr_data = node.has_attribute(thissplittable[#thissplittable - 1],publisher.att_tr_dynamic_data)
