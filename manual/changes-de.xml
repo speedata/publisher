@@ -1,13 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (de)</title>
   <id>http://www.speedata.de</id>
-  <updated>2017-01-06T10:59:21+01:00</updated>
+  <updated>2017-01-26T14:34:39+01:00</updated>
   <subtitle>Neue Versionen des Publishers zum Download und Liste der Änderungen</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.7.12</title>
+    <updated>2017-01-26T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-01-26:</id>
+    <content type="html">Neuer Befehl: DefineFontalias</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.7.12</title>
+    <updated>2017-01-26T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-01-26:</id>
+    <content type="html">Fehlerkorrekturen für mehrseitige Tabellen</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.7.11</title>
+    <updated>2017-01-16T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-01-16:</id>
+    <content type="html">Makeindex: Seitenzahl-Attribut variabel machen</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.7.11</title>
+    <updated>2017-01-16T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-01-16:</id>
+    <content type="html">Fehlerkorrektur: Objekte mit Höhe &gt; 0 und »springe zur nächsten Zeile«</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.7.11</title>
+    <updated>2017-01-16T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-01-16:</id>
+    <content type="html">Lösche Bilder vom Cache wenn 404-Fehler kommt.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.7.10</title>
     <updated>2017-01-06T00:00:00Z</updated>
