@@ -2114,7 +2114,7 @@ function commands.place_object( layoutxml,dataxml )
         if vreference == "bottom" then
             options.current_height = areaheight
         else
-            options.current_height = math.min(current_grid:remaining_height_sp(row,area),areaheight)
+            options.current_height = math.min(current_grid:remaining_height_sp(row,area,tonumber(column)),areaheight)
         end
     else
         options.ht_max = publisher.maxdimen

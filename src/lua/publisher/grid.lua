@@ -47,16 +47,19 @@ function first_free_row( self,areaname )
 end
 
 -- Return the remaining height in the area in scaled points
-function remaining_height_sp( self,row,areaname )
+function remaining_height_sp( self,row,areaname,column )
     if not self.positioning_frames[areaname] then
         err("Area %q unknown, using page",areaname)
         areaname = publisher.default_areaname
     end
     row = row or self:current_row(areaname)
-
+    local cur_col = self:current_column(areaname)
     local thisframe = self.positioning_frames[areaname][self:framenumber(areaname)]
     local overshoot = math.max( (thisframe.height - thisframe["row"] + 1)  * self.gridheight - tex.pageheight ,0)
     local remaining_rows = self:number_of_rows(areaname) - row + 1
+    if column and cur_col > column then
+        remaining_rows = remaining_rows - 1
+    end
     return self.gridheight * remaining_rows - overshoot
 end
 

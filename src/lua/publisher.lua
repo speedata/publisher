@@ -3690,8 +3690,8 @@ end
 
 -- Return the height of the page given by the relative pagenumber
 -- (starting from the current_pagenumber).
--- This is used in tables to get the hight of a page in a multi
--- page table
+-- This is used in tables to get the height of a page in a multi
+-- page table. Called from tabular.lua / set in commands.lua (#table)
 function getheight( relative_pagenumber )
     local thispagenumber = current_pagenumber + relative_pagenumber - 1
     -- w("getheight for page number %d which is page number %d in the PDF",relative_pagenumber,thispagenumber)
