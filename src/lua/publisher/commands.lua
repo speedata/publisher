@@ -596,6 +596,16 @@ function commands.define_textformat(layoutxml)
     publisher.textformats[name] = fmt
 end
 
+
+--- Define FontAlias
+--- -----------------
+--- Define a font alias.
+function commands.define_fontalias( layoutxml,dataxml )
+    local existing = publisher.read_attribute(layoutxml,dataxml,"existing", "rawstring" )
+    local alias    = publisher.read_attribute(layoutxml,dataxml,"alias",    "rawstring" )
+    publisher.fontaliases[alias] = existing
+end
+
 --- Define Fontfamily
 --- -----------------
 --- Define a font family. A font family must consist of a `Regular` shape, optional are `Bold`,
@@ -639,6 +649,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
     for i,v in ipairs(layoutxml) do
         elementname = v[".__local_name"]
         fontface    = publisher.read_attribute(v,dataxml,"fontface","rawstring")
+        fontface = publisher.get_fontname(fontface)
         if type(v) ~= "table" then
             -- ignore
         elseif elementname=="Regular" then

@@ -30,6 +30,14 @@ The corresponding font family is defined as:
 
 and since the font family named `text` is taken as the default for the paragraphs, without any change the text appears in Helvetica 10pt/12pt. With re-defining the font family `text` you can change the document font.
 
+The font aliases (since version 2.7.12) are defined for the default font:
+
+* `TeXGyreHeros-Regular`  -> `sans`
+* `TeXGyreHeros-Bold`  -> `sans-bold`
+* `TeXGyreHeros-Italic`  -> `sans-italic`
+* `TeXGyreHeros-BoldItalic`  -> `sans-bolditalic`
+
+
 Page size and margin
 --------------------
 

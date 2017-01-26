@@ -28,6 +28,13 @@ Die dazugehörige Schriftfamilie ist
 
 und, da die Schriftfamilie `text` die Voreinstellung für alle Textausgaben ist, ist damit quasi Helvetica 10pt/12pt die Standard-Textschriftart. Durch überschreiben der Schriftfamilie `text` kann eine andere Voreinstellung festgelegt werden.
 
+Die Fontaliase (seit Version 2.7.12) sind auch für die Standardschrift definiert:
+
+* `TeXGyreHeros-Regular`  -> `sans`
+* `TeXGyreHeros-Bold`  -> `sans-bold`
+* `TeXGyreHeros-Italic`  -> `sans-italic`
+* `TeXGyreHeros-BoldItalic`  -> `sans-bolditalic`
+
 Seitenformat
 ------------
 

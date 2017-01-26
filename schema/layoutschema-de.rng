@@ -56,6 +56,9 @@
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
+               <ref name="e_DefineFontalias"></ref>
+            </optional>
+            <optional>
                <ref name="e_ForAll"></ref>
             </optional>
             <optional>
@@ -136,6 +139,9 @@
             </optional>
             <optional>
                <ref name="e_DefineFontfamily"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineFontalias"></ref>
             </optional>
             <optional>
                <ref name="e_ForAll"></ref>
@@ -296,7 +302,7 @@
          </optional>
          <optional>
             <attribute name="eclevel">
-               <a:documentation>Setzten den Fehlerkorrekturlevel für QR-Codes. Wenn nicht angegeben, nutzt das System den maximalen Leven für die kleinste QR-Code Größe. Je höher der Level, desto mehr Fehlerkorrektur ist im QR-Code.</a:documentation>
+               <a:documentation>Setzt den Fehlerkorrekturlevel für QR-Codes. Wenn nicht angegeben, nutzt das System den maximalen Level für die kleinste QR-Code Größe. Je höher der Level, desto mehr Fehlerkorrektur ist im QR-Code.</a:documentation>
                <choice>
                   <value>L</value>
                   <a:documentation>Setzt den kleinsten Fehlerkorrekturwert (1) mit ca. 7% Korrektur.</a:documentation>
@@ -314,7 +320,7 @@
    </define>
    <define name="e_Bold">
       <element name="Bold">
-         <a:documentation>Name der Schriftart, die für den Schriftschrift Fett benutzt werden soll.</a:documentation>
+         <a:documentation>Name der Schriftart, die für den Schnitt Fett benutzt werden soll.</a:documentation>
          <attribute name="fontface">
             <a:documentation>Name der Schriftart, die für eine fette Schrift benutzt werden soll.</a:documentation>
          </attribute>
@@ -323,7 +329,7 @@
    </define>
    <define name="e_BoldItalic">
       <element name="BoldItalic">
-         <a:documentation>Name der Schriftart, die für den Schriftschrift Fett-Kursiv benutzt werden soll.</a:documentation>
+         <a:documentation>Name der Schriftart, die für den Schnitt Fett-Kursiv benutzt werden soll.</a:documentation>
          <attribute name="fontface">
             <a:documentation>Name der Schriftart, die für eine Fett/Kursive Schrift benutzt werden soll.</a:documentation>
          </attribute>
@@ -468,6 +474,9 @@
             </optional>
             <optional>
                <ref name="e_DefineFontfamily"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineFontalias"></ref>
             </optional>
             <optional>
                <ref name="e_DefineTextformat"></ref>
@@ -684,6 +693,9 @@
             </optional>
             <optional>
                <ref name="e_DefineFontfamily"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineFontalias"></ref>
             </optional>
             <optional>
                <ref name="e_ForAll"></ref>
@@ -913,9 +925,21 @@
          <empty></empty>
       </element>
    </define>
+   <define name="e_DefineFontalias">
+      <element name="DefineFontalias">
+         <a:documentation>Das Element DefineFontfamily definiert einen Fontalias</a:documentation>
+         <attribute name="existing">
+            <a:documentation>Der Name der existierenden Schriftfamilie.</a:documentation>
+         </attribute>
+         <attribute name="alias">
+            <a:documentation>Neuer (gleichberechtigter) Name der Schriftart</a:documentation>
+         </attribute>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_DefineFontfamily">
       <element name="DefineFontfamily">
-         <a:documentation>Das Element DefineFontfamily definiert eine Schriftfamilie, auf in den Elementen Paragraph, Textblock, Fontface und Table mit dem Attribut schriftart zugegriffen werden kann.</a:documentation>
+         <a:documentation>Das Element DefineFontfamily definiert eine Schriftfamilie, auf in den Elementen Paragraph, Textblock, Fontface und Table mit dem Attribut fontface zugegriffen werden kann.</a:documentation>
          <attribute name="name">
             <a:documentation>Interner Name, unter dem die Schriftfamilie später angesprochen wird.</a:documentation>
          </attribute>
@@ -1157,6 +1181,9 @@
                </optional>
                <optional>
                   <ref name="e_DefineFontfamily"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_DefineFontalias"></ref>
                </optional>
                <optional>
                   <ref name="e_DefineTextformat"></ref>
@@ -1498,6 +1525,9 @@
                <ref name="e_DefineColor"></ref>
             </optional>
             <optional>
+               <ref name="e_DefineFontalias"></ref>
+            </optional>
+            <optional>
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
@@ -1703,7 +1733,7 @@
          </optional>
          <optional>
             <attribute name="marginprotrusion">
-               <a:documentation>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark Schriftartabhängig.</a:documentation>
+               <a:documentation>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark abhängig von der benutzten Schriftart.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1750,6 +1780,9 @@
             </optional>
             <optional>
                <ref name="e_DefineColor"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineFontalias"></ref>
             </optional>
             <optional>
                <ref name="e_DefineFontfamily"></ref>
@@ -1859,6 +1892,9 @@
                </optional>
                <optional>
                   <ref name="e_DefineFontfamily"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_DefineFontalias"></ref>
                </optional>
                <optional>
                   <ref name="e_DefineTextformat"></ref>
@@ -2379,6 +2415,9 @@
             </optional>
             <optional>
                <ref name="e_DefineFontfamily"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineFontalias"></ref>
             </optional>
             <optional>
                <ref name="e_DefineTextformat"></ref>
@@ -3125,6 +3164,9 @@
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
+               <ref name="e_DefineFontalias"></ref>
+            </optional>
+            <optional>
                <ref name="e_ForAll"></ref>
             </optional>
             <optional>
@@ -3301,6 +3343,9 @@
                </optional>
                <optional>
                   <ref name="e_DefineFontfamily"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_DefineFontalias"></ref>
                </optional>
                <optional>
                   <ref name="e_ForAll"></ref>
@@ -4330,6 +4375,9 @@
                   <ref name="e_DefineFontfamily"></ref>
                </optional>
                <optional>
+                  <ref name="e_DefineFontalias"></ref>
+               </optional>
+               <optional>
                   <ref name="e_DefineTextformat"></ref>
                </optional>
                <optional>
@@ -4549,6 +4597,9 @@
                </optional>
                <optional>
                   <ref name="e_DefineFontfamily"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_DefineFontalias"></ref>
                </optional>
                <optional>
                   <ref name="e_DefineTextformat"></ref>

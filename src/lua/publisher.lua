@@ -371,6 +371,8 @@ current_grid = nil
 -- paragaph, table and textblock should set them
 current_fontfamily = 0
 
+fontaliases = {}
+
 -- Used when bookmarks are inserted in a non-text context
 intextblockcontext = 0
 
@@ -461,6 +463,7 @@ local dispatch_table = {
     ["Copy-of"]             = commands.copy_of,
     DefineColor             = commands.define_color,
     DefineFontfamily        = commands.define_fontfamily,
+    DefineFontalias         = commands.define_fontalias,
     DefineTextformat        = commands.define_textformat,
     Element                 = commands.element,
     EmptyLine               = commands.emptyline,
@@ -3593,6 +3596,20 @@ function emergency_block()
 end
 
 
+-- resolve all font aliases
+function get_fontname(fontname)
+    if not fontname then return nil end
+    local result = fontname
+    while true do
+        if fontaliases[result] then
+            result = fontaliases[result]
+        else
+            break
+        end
+    end
+    return result
+end
+
 
 --- Defaults
 --- --------
@@ -3631,6 +3648,10 @@ function define_default_fontfamily()
     fam.bolditalicscript = tmp
     fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
     fonts.lookup_fontfamily_name_number["text"]=#fonts.lookup_fontfamily_number_instance
+    fontaliases["sans"] = "TeXGyreHeros-Regular"
+    fontaliases["sans-bold"] = "TeXGyreHeros-Bold"
+    fontaliases["sans-italic"] = "TeXGyreHeros-Italic"
+    fontaliases["sans-bolditalic"] = "TeXGyreHeros-BoldItalic"
 end
 
 function define_small_fontfamily()

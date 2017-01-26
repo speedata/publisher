@@ -56,6 +56,9 @@
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
+               <ref name="e_DefineFontalias"></ref>
+            </optional>
+            <optional>
                <ref name="e_ForAll"></ref>
             </optional>
             <optional>
@@ -136,6 +139,9 @@
             </optional>
             <optional>
                <ref name="e_DefineFontfamily"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineFontalias"></ref>
             </optional>
             <optional>
                <ref name="e_ForAll"></ref>
@@ -470,6 +476,9 @@
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
+               <ref name="e_DefineFontalias"></ref>
+            </optional>
+            <optional>
                <ref name="e_DefineTextformat"></ref>
             </optional>
             <optional>
@@ -684,6 +693,9 @@
             </optional>
             <optional>
                <ref name="e_DefineFontfamily"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineFontalias"></ref>
             </optional>
             <optional>
                <ref name="e_ForAll"></ref>
@@ -910,6 +922,18 @@
                <a:documentation>Hex value of the color, such as #FA5 or #FFAA55.</a:documentation>
             </attribute>
          </optional>
+         <empty></empty>
+      </element>
+   </define>
+   <define name="e_DefineFontalias">
+      <element name="DefineFontalias">
+         <a:documentation>Defines a font alias</a:documentation>
+         <attribute name="existing">
+            <a:documentation>The name of the existing font family.</a:documentation>
+         </attribute>
+         <attribute name="alias">
+            <a:documentation>New (equivalent) name of the font</a:documentation>
+         </attribute>
          <empty></empty>
       </element>
    </define>
@@ -1157,6 +1181,9 @@
                </optional>
                <optional>
                   <ref name="e_DefineFontfamily"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_DefineFontalias"></ref>
                </optional>
                <optional>
                   <ref name="e_DefineTextformat"></ref>
@@ -1498,6 +1525,9 @@
                <ref name="e_DefineColor"></ref>
             </optional>
             <optional>
+               <ref name="e_DefineFontalias"></ref>
+            </optional>
+            <optional>
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
@@ -1752,6 +1782,9 @@
                <ref name="e_DefineColor"></ref>
             </optional>
             <optional>
+               <ref name="e_DefineFontalias"></ref>
+            </optional>
+            <optional>
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
@@ -1859,6 +1892,9 @@
                </optional>
                <optional>
                   <ref name="e_DefineFontfamily"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_DefineFontalias"></ref>
                </optional>
                <optional>
                   <ref name="e_DefineTextformat"></ref>
@@ -2379,6 +2415,9 @@
             </optional>
             <optional>
                <ref name="e_DefineFontfamily"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineFontalias"></ref>
             </optional>
             <optional>
                <ref name="e_DefineTextformat"></ref>
@@ -3125,6 +3164,9 @@
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
+               <ref name="e_DefineFontalias"></ref>
+            </optional>
+            <optional>
                <ref name="e_ForAll"></ref>
             </optional>
             <optional>
@@ -3301,6 +3343,9 @@
                </optional>
                <optional>
                   <ref name="e_DefineFontfamily"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_DefineFontalias"></ref>
                </optional>
                <optional>
                   <ref name="e_ForAll"></ref>
@@ -4330,6 +4375,9 @@
                   <ref name="e_DefineFontfamily"></ref>
                </optional>
                <optional>
+                  <ref name="e_DefineFontalias"></ref>
+               </optional>
+               <optional>
                   <ref name="e_DefineTextformat"></ref>
                </optional>
                <optional>
@@ -4549,6 +4597,9 @@
                </optional>
                <optional>
                   <ref name="e_DefineFontfamily"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_DefineFontalias"></ref>
                </optional>
                <optional>
                   <ref name="e_DefineTextformat"></ref>
