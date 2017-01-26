@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.7">
+    <entry version="2.7.12" date="2017-01-26">
+      <en>New command DefineFontalias</en>
+      <de>Neuer Befehl: DefineFontalias</de>
+    </entry>
+    <entry version="2.7.12" date="2017-01-26">
+      <en>Bugfixes for multipage tables</en>
+      <de>Fehlerkorrekturen für mehrseitige Tabellen</de>
+    </entry>
     <entry version="2.7.11" date="2017-01-16">
       <en>Makeindex: make page number attribute variable</en>
       <de>Makeindex: Seitenzahl-Attribut variabel machen</de>
