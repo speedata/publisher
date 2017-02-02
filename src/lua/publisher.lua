@@ -1265,7 +1265,7 @@ function setup_page(pagenumber)
         css_rules = publisher.css:matches({element = 'area', class=class,id=k}) or {}
         if css_rules["border-width"] then
             for i,frame in ipairs(v) do
-                frame.draw = { color = "green"}
+                frame.draw = { color = "green", width = css_rules["border-width"] }
             end
         end
     end
@@ -1764,7 +1764,7 @@ function dothingsbeforeoutput( thispage )
             if frame.draw then
                 local lit = node.new("whatsit","pdf_literal")
                 lit.mode = 1
-                lit.data = cg:draw_frame(frame)
+                lit.data = cg:draw_frame(frame,tex.sp(frame.draw.width))
                 if firstbox then
                     local tail = node.tail(firstbox)
                     tail.next = lit

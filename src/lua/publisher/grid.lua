@@ -589,10 +589,11 @@ function height_in_gridcells_sp(self,height_sp,options)
 end
 
 -- Draw frame (return PDF-strings)
-function draw_frame(self,frame)
+function draw_frame(self,frame,width_sp)
     assert(self)
     local ret = {}
-    ret[#ret + 1] = "q 0.2 w "
+    local wd = math.round(sp_to_bp(width_sp),3)
+    ret[#ret + 1] = string.format("q %g w ",wd)
     local paperheight_bp = sp_to_bp(tex.pageheight - self.extra_margin)
     local paperwidth_bp  = sp_to_bp(tex.pagewidth  - self.extra_margin)
     local x,y
@@ -609,7 +610,7 @@ function draw_frame(self,frame)
     y      = sp_to_bp(( frame.row    - 1) * ( self.gridheight + self.grid_dy) + self.margin_top )
     width  = sp_to_bp(frame.width  * self.gridwidth  + (frame.width  - 1) * self.grid_dx)
     height = sp_to_bp(frame.height * self.gridheight + (frame.height - 1) * self.grid_dy)
-    ret[#ret + 1] = string.format("q %s %g w %g %g %g %g re S Q", colentry.pdfstring,0.5, x,math.round(paperheight_bp - y,2),width,-height)
+    ret[#ret + 1] = string.format("q %s  %g %g %g %g re S Q", colentry.pdfstring, x,math.round(paperheight_bp - y,2),width,-height)
 
     ret[#ret + 1] = "Q"
 

@@ -927,7 +927,7 @@
    </define>
    <define name="e_DefineFontalias">
       <element name="DefineFontalias">
-         <a:documentation>Das Element DefineFontfamily definiert einen Fontalias</a:documentation>
+         <a:documentation>Definiert einen Alias für die Verwendung bei DefineFontfamily. Aliase werden rekursiv aufgelöst.</a:documentation>
          <attribute name="existing">
             <a:documentation>Der Name der existierenden Schriftfamilie.</a:documentation>
          </attribute>
@@ -1015,12 +1015,12 @@
          </optional>
          <optional>
             <attribute name="indentation">
-               <a:documentation>Die Länge des Paragrapheinzugs.</a:documentation>
+               <a:documentation>Die Länge des Absatzeinzugs.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="rows">
-               <a:documentation>Anzahl der Zeilen, die eingezogen werden (wenn einrückung angegeben ist) bzw. falls die Zahl negativ ist, die Anzahl der Zeilen, die nicht eingerückt werden.</a:documentation>
+               <a:documentation>Anzahl der Zeilen, die eingezogen werden (wenn indentation angegeben ist) bzw. falls die Zahl negativ ist, die Anzahl der Zeilen, die nicht eingerückt werden.</a:documentation>
             </attribute>
          </optional>
          <optional>

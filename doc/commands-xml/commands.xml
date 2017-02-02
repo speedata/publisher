@@ -924,7 +924,7 @@
       <para>Create a bookmark on level 1 (top level) with the title stored in the variable <tt>title</tt>.</para>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Lesezeichen level="1" select="$titel" open='nein'/>]]></listing>
+      <listing><![CDATA[<Bookmark level="1" select="$titel" open="no"/>]]></listing>
       <para>Erzeugt ein Lesezeichen der Stufe 1 (höchste Stufe) mit dem Titel, der in der Variablen <tt>titel</tt> steht.</para>
     </example>
     <seealso>
@@ -2053,7 +2053,7 @@
         <para>The amount of indentation.</para>
       </description>
       <description xml:lang="de">
-        <para>Die Länge des Paragrapheinzugs.</para>
+        <para>Die Länge des Absatzeinzugs.</para>
       </description>
     </attribute>
     <attribute en="rows" type="number" optional="yes">
@@ -2061,7 +2061,7 @@
         <para>The number of rows with indentation given in the attribute <tt>indentation</tt>. If the number is negative, this determines the number of rows that are <quote>not</quote> indented.</para>
       </description>
       <description xml:lang="de">
-        <para>Anzahl der Zeilen, die eingezogen werden (wenn <tt>einrückung</tt> angegeben ist) bzw. falls die Zahl negativ ist, die Anzahl der Zeilen, die <quote>nicht</quote> eingerückt werden.</para>
+        <para>Anzahl der Zeilen, die eingezogen werden (wenn <tt>indentation</tt> angegeben ist) bzw. falls die Zahl negativ ist, die Anzahl der Zeilen, die <quote>nicht</quote> eingerückt werden.</para>
       </description>
     </attribute>
     <attribute en="border-top" type="length" optional="yes">
@@ -2156,14 +2156,14 @@
       <para>The textformats <tt>text</tt>, <tt>centered</tt>, <tt>left</tt> and <tt>right</tt> are predefined. They stand for justified, centered, left aligned and right aligned text.</para>
     </remark>
     <remark xml:lang="de">
-      <para>Die Textformate <tt>text</tt>, <tt>zentriert</tt>, <tt>links</tt> und <tt>rechts</tt> sind vordefiniert. Sie stehen für blocksatz, zentriert, linksbündigen und rechtbündigen Text.</para>
+      <para>Die Textformate <tt>text</tt>, <tt>centered</tt>, <tt>left</tt> und <tt>right</tt> sind vordefiniert. Sie stehen für Blocksatz, Zentriert, linksbündigen und rechtsbündigen Text.</para>
     </remark>
     <example xml:lang="en">
       <listing><![CDATA[<DefineTextformat name="text with indentation" alignment="justified" indentation="1cm"/>
 
 <Record element="...">
   <PlaceObject>
-    <Textblock width="10" textformat="text with indentation">
+    <Textblock textformat="text with indentation">
     <Paragraph>
       <Value>Text ...</Value>
     </Paragraph>
@@ -2174,10 +2174,10 @@
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<Layout>
-  <DefineTextformat name="Text mit Einrückung" alignment="blocksatz" indentation="1cm" />
+  <DefineTextformat name="Text mit Einrückung" alignment="justified" indentation="1cm" />
   ...
   <Record element="...">
-    <Textblock width="10" textformat="Text mit Einrückung">
+    <Textblock textformat="Text mit Einrückung">
       <Paragraph>
         <Value>Text ...</Value>
       </Paragraph>

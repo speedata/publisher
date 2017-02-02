@@ -35,6 +35,18 @@ Die Fontaliase (seit Version 2.7.12) sind auch für die Standardschrift definier
 * `TeXGyreHeros-Italic`  -> `sans-italic`
 * `TeXGyreHeros-BoldItalic`  -> `sans-bolditalic`
 
+Textformate
+-----------
+
+Die folgenden Textformate sind definiert:
+
+~~~xml
+<DefineTextformat name="text" alignment="justified"/>
+<DefineTextformat name="centered" alignment="centered" />
+<DefineTextformat name="left" alignment="leftaligned"/>
+<DefineTextformat name="right" alignment="rightaligned"/>
+~~~
+
 Seitenformat
 ------------
 

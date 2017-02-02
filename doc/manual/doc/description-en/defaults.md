@@ -37,6 +37,18 @@ The font aliases (since version 2.7.12) are defined for the default font:
 * `TeXGyreHeros-Italic`  -> `sans-italic`
 * `TeXGyreHeros-BoldItalic`  -> `sans-bolditalic`
 
+Textformats
+-----------
+
+The following text formats are predefined:
+
+~~~xml
+<DefineTextformat name="text" alignment="justified"/>
+<DefineTextformat name="centered" alignment="centered" />
+<DefineTextformat name="left" alignment="leftaligned"/>
+<DefineTextformat name="right" alignment="rightaligned"/>
+~~~
+
 
 Page size and margin
 --------------------

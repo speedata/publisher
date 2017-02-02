@@ -927,7 +927,7 @@
    </define>
    <define name="e_DefineFontalias">
       <element name="DefineFontalias">
-         <a:documentation>Defines a font alias</a:documentation>
+         <a:documentation>Defines a font alias. When defining a font family, you can use the an alias for the fontname. Aliases are looked up recursively.</a:documentation>
          <attribute name="existing">
             <a:documentation>The name of the existing font family.</a:documentation>
          </attribute>
