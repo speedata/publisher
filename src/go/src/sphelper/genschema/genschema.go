@@ -3,7 +3,6 @@ package genschema
 import (
 	"bytes"
 	"encoding/xml"
-	"fmt"
 	"io/ioutil"
 	"path/filepath"
 
@@ -92,7 +91,7 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 	enc := xml.NewEncoder(&outbuf)
 	enc.Indent("", "   ")
 
-	namespace := fmt.Sprintf("urn:speedata.de:2009/publisher/%s", lang)
+	namespace := "urn:speedata.de:2009/publisher/en"
 	grammar := xml.StartElement{Name: xml.Name{Local: "grammar", Space: RELAXNG}}
 	grammar.Attr = []xml.Attr{
 		{Name: xml.Name{Local: "xmlns:a"}, Value: "http://relaxng.org/ns/compatibility/annotations/1.0"},
@@ -140,11 +139,11 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 			}
 		}
 		def := xml.StartElement{Name: xml.Name{Local: "define"}}
-		def.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: "e_" + cmd.En}}
+		def.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: "e_" + cmd.Name}}
 		enc.EncodeToken(def)
 
 		elt := xml.StartElement{Name: xml.Name{Local: "element"}}
-		elt.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: commands.TranslateCommand("en", lang, cmd.En)}}
+		elt.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: cmd.Name}}
 		enc.EncodeToken(elt)
 
 		doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
@@ -156,9 +155,8 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 				enc.EncodeToken(optionalElement.Copy())
 			}
 
-			attname, _ := commands.TranslateAttribute("en", lang, cmd.En, attr.En, "-")
 			attelt := attributeElement.Copy()
-			attelt.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: attname}}
+			attelt.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: attr.Name}}
 			enc.EncodeToken(attelt)
 
 			doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
@@ -170,7 +168,7 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 				enc.EncodeToken(choiceElement.Copy())
 				for _, choice := range attr.Choice {
 					enc.EncodeToken(valueElement.Copy())
-					enc.EncodeToken(xml.CharData(choice.GetValue(lang)))
+					enc.EncodeToken(xml.CharData(choice.Name))
 					enc.EncodeToken(valueElement.End())
 
 					doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
@@ -201,7 +199,7 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 						enc.EncodeToken(choiceElement.Copy())
 						for _, choice := range attrdefinition.Choices {
 							enc.EncodeToken(valueElement.Copy())
-							enc.EncodeToken(xml.CharData(choice.GetValue(lang)))
+							enc.EncodeToken(xml.CharData(choice.Name))
 							enc.EncodeToken(valueElement.End())
 
 							doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
@@ -213,13 +211,7 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 						enc.EncodeToken(choiceElement.End())
 					}
 				}
-				// 	attrsec := commands.GetDefineAttributes(attr.Reference.Name)
-				// 	b := bytes.NewBuffer(attrsec)
-				// 	d := xml.NewDecoder(b)
-				// 	d.DecodeElement(cmd, start)
-
 			}
-
 			enc.EncodeToken(attelt.End())
 			if attr.Optional == "yes" {
 				enc.EncodeToken(optionalElement.Copy().End())
@@ -246,5 +238,13 @@ func DoThings(basedir string) error {
 		return err
 	}
 	err = ioutil.WriteFile(filepath.Join(basedir, "schema", "layoutschema-en.rng"), buf, 0644)
+	if err != nil {
+		return err
+	}
+	buf, err = genSchema(c, "de")
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(filepath.Join(basedir, "schema", "layoutschema-de.rng"), buf, 0644)
 	return err
 }

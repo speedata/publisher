@@ -171,7 +171,6 @@
           <oneOrMore>
             <element name="choice">
               <attribute name="en"/>
-              <attribute name="de"/>
               <optional><attribute name="context"/></optional>
               <ref name="descriptions"/>
             </element>
@@ -181,7 +180,6 @@
       <oneOrMore>
         <element name="command">
           <attribute name="en"/>
-          <attribute name="de"/>
           <optional><attribute name="css"/></optional>
           <optional><attribute name="since"/></optional>
           <ref name="descriptions" />
@@ -201,7 +199,6 @@
           <zeroOrMore>
             <element name="attribute">
               <attribute name="en"/>
-              <attribute name="de"/>
               <attribute name="optional">
                 <choice>
                   <value>yes</value>
@@ -239,7 +236,6 @@
                 <zeroOrMore>
                   <element name="choice">
                     <attribute name="en"/>
-                    <attribute name="de"/>
                     <optional><attribute name="css"/></optional>
                     <optional><attribute name="context"/></optional>
                     <optional><attribute name="since"/></optional>
@@ -321,20 +317,6 @@
           </zeroOrMore>
         </element>
       </oneOrMore>
-      <element name="translations">
-        <oneOrMore>
-          <element name="values">
-            <oneOrMore>
-              <element name="value">
-                <attribute name="key"/>
-                <attribute name="en"/>
-                <attribute name="de"/>
-                <attribute name="context"/>
-              </element>
-            </oneOrMore>
-          </element>
-        </oneOrMore>
-      </element>
     </element>
   </start>
 

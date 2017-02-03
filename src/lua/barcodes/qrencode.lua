@@ -234,35 +234,38 @@ local function get_version_eclevel(len,mode,requested_ec_level)
 	local tab = { {10,9,8,8},{12,11,16,10},{14,13,16,12} }
 	local minversion = 40
 	local maxec_level = 1
-	for ec_level=1,4 do
-		if requested_ec_level == nil or ec_level >= requested_ec_level then
-			for version=1,#capacity do
-				bits = capacity[version][ec_level] * 8
-				bits = bits - 4 -- the mode indicator
-				if version < 10 then
-					digits = tab[1][local_mode]
-				elseif version < 27 then
-					digits = tab[2][local_mode]
-				elseif version <= 40 then
-					digits = tab[3][local_mode]
+	local min,max = 1, 4
+	if requested_ec_level and requested_ec_level >= 1 and requested_ec_level <= 4 then
+		min = requested_ec_level
+		max = requested_ec_level
+	end
+	for ec_level=min,max do
+		for version=1,#capacity do
+			bits = capacity[version][ec_level] * 8
+			bits = bits - 4 -- the mode indicator
+			if version < 10 then
+				digits = tab[1][local_mode]
+			elseif version < 27 then
+				digits = tab[2][local_mode]
+			elseif version <= 40 then
+				digits = tab[3][local_mode]
+			end
+			modebits = bits - digits
+			if local_mode == 1 then -- numeric
+				c = math.floor(modebits * 3 / 10)
+			elseif local_mode == 2 then -- alphanumeric
+				c = math.floor(modebits * 2 / 11)
+			elseif local_mode == 3 then -- binary
+				c = math.floor(modebits * 1 / 8)
+			else
+				c = math.floor(modebits * 1 / 13)
+			end
+			if c >= len then
+				if version <= minversion then
+					minversion = version
+					maxec_level = ec_level
 				end
-				modebits = bits - digits
-				if local_mode == 1 then -- numeric
-					c = math.floor(modebits * 3 / 10)
-				elseif local_mode == 2 then -- alphanumeric
-					c = math.floor(modebits * 2 / 11)
-				elseif local_mode == 3 then -- binary
-					c = math.floor(modebits * 1 / 8)
-				else
-					c = math.floor(modebits * 1 / 13)
-				end
-				if c >= len then
-					if version <= minversion then
-						minversion = version
-						maxec_level = ec_level
-					end
-					break
-				end
+				break
 			end
 		end
 	end
@@ -499,7 +502,7 @@ end
 
 -- Return a table that has 0's in the first entries and then the alpha
 -- representation of the generator polynominal
-function get_generator_polynominal_adjusted(num_ec_codewords,highest_exponent)
+local function get_generator_polynominal_adjusted(num_ec_codewords,highest_exponent)
 	local gp_alpha = {[0]=0}
 	for i=0,highest_exponent - num_ec_codewords - 1 do
 		gp_alpha[i] = 0
@@ -1062,7 +1065,7 @@ end
 -- We need up to 8 positions in the matrix. Only the last few bits may be less then 8.
 -- The function returns a table of (up to) 8 entries with subtables where
 -- the x coordinate is the first and the y coordinate is the second entry.
-function get_next_free_positions(matrix,x,y,dir,byte)
+local function get_next_free_positions(matrix,x,y,dir,byte)
 	local ret = {}
 	local count = 1
 	local mode = "right"
@@ -1303,8 +1306,8 @@ end
 --- 1. Return qrcode with least penalty
 -- If ec_level or mode is given, use the ones for generating the qrcode. (mode is not implemented yet)
 local function qrcode( str, ec_level, mode )
-	local arranged_data, version, ec_level, data_raw, mode, len_bitstring
-	version, ec_level, data_raw, mode, len_bitstring = get_version_eclevel_mode_bistringlength(str)
+	local arranged_data, version, data_raw, mode, len_bitstring
+	version, ec_level, data_raw, mode, len_bitstring = get_version_eclevel_mode_bistringlength(str,ec_level)
 	data_raw = data_raw .. len_bitstring
 	data_raw = data_raw .. encode_data(str,mode)
 	data_raw = add_pad_data(version,ec_level,data_raw)
@@ -1327,13 +1330,11 @@ if testing then
 		get_mode = get_mode,
 		get_length = get_length,
 		add_pad_data = add_pad_data,
-		get_generator_polynome_adjusted = get_generator_polynome_adjusted,
-		get_matrix = get_matrix,
+		get_generator_polynominal_adjusted = get_generator_polynominal_adjusted,
 		get_pixel_with_mask = get_pixel_with_mask,
-		print_pattern = print_pattern,
 		get_version_eclevel_mode_bistringlength = get_version_eclevel_mode_bistringlength,
 		remainder = remainder,
-		get_capacity_remainder = get_capacity_remainder,
+		--get_capacity_remainder = get_capacity_remainder,
 		arrange_codewords_and_calculate_ec = arrange_codewords_and_calculate_ec,
 		calculate_error_correction = calculate_error_correction,
 		convert_bitstring_to_bytes = convert_bitstring_to_bytes,

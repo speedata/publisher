@@ -8,6 +8,7 @@ Aufruf des Publishers über Kommandozeile
     -h, --help                   Show this help
         --autoopen               Open the PDF file (MacOS X and Linux only)
         --data=NAME              Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN
+        --cache=METHOD           Use cache method. One of 'fast' or 'optimal'. Default is 'optimal'
         --dummy                  Don't read a data file, use '<data />' as input
     -c, --config=NAME            Read the config file with the given NAME. Default: 'publisher.cfg'
         --[no-]cutmarks          Display cutmarks in the document
@@ -41,6 +42,7 @@ Aufruf des Publishers über Kommandozeile
 
     Commands
           clean                  Remove publisher generated files
+          clearcache             Clear image cache
           compare                Compare files for quality assurance
           doc                    Open documentation
           list-fonts             List installed fonts (use together with --xml for copy/paste)
@@ -56,6 +58,7 @@ Erklärung der Kommandozeilenparameter
 Parameter | Beschreibung
 ----------|-------------
 `--autoopen`| Öffnet die PDF-Datei nach dem Publisher-Durchlauf. Kann auch in der [Konfigurationsdatei](configuration.html) eingestellt werden.  `--data=NAME`| Gibt den Namen der XML-Daten an. Voreinstellung ist `data.xml`.   Ebenfalls [konfigurierbar](configuration.html). Wird als Dateiname ein Strich (`-`) angegeben, liest der Publisher die XML-Daten aus der Standard-Eingabe (STDIN).
+`--cache=METHOD` | Caching-Strategie für http* Bilddateien. Entweder `fast`, dann wird nur geschaut, ob die Bilddatei im Dateisystem vorhanden ist oder `optimal`, dann wird bei jedem Zugriff auf das Bild geprüft, ob das Bild aktualisiert werden muss. `https`-Requests werden derzeit mit der `optimal`-Strategie verwaltet.
 `--cutmarks` | Zeigt die Schnittmarken an. Einstellbar im [Layout](../commands-de/options.html).
 `--dummy`| Führt nur das Regelwerk aus. Als Dateninhalt wird `<data />` angenommen. Dient zum schnellen Testen von Regelwerken
 `-x`, `--extra-dir`| Bindet zusätzliche Verzeichnisse in den Publisherlauf ein. In diesen  Verzeichnissen werden alle Daten gesucht: Bilddaten, Regelwerke,  Datendateien und Schriftdateien. Dieses Argument kann mehrfach  angegeben werden und per [Konfigurationsdatei](configuration.html)  mit Werten vorbelegt werden.
@@ -89,6 +92,7 @@ Parameter | Beschreibung
 ----------|-------------
 `list-fonts`|  Listet alle Schriftdateien auf, die in den Publisher-Verzeichnissen gefunden werden. Zusammen mit `--xml` erlaubt dieses Kommando die Ausgabe per Copy&Paste in das Layoutregelwerk zu übernehmen.
 `compare`|  Überprüft rekursiv ein Verzeichnis auf Layout-Anderungen. Siehe den [Abschnitt über Qualitätssicherung](qualityassurance.html).
+`clearcache` | Entfernt Dateien vom Bild-Cache.
 `clean`|  Entfernt temporäre Dateien aus dem Publisher-Lauf. Behält die PDF Datei.
 `doc`|  Öffnet die Onlinehilfe.
 `run`|  Startet den Publisher Lauf.

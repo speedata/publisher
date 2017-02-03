@@ -47,16 +47,19 @@ function first_free_row( self,areaname )
 end
 
 -- Return the remaining height in the area in scaled points
-function remaining_height_sp( self,row,areaname )
+function remaining_height_sp( self,row,areaname,column )
     if not self.positioning_frames[areaname] then
         err("Area %q unknown, using page",areaname)
         areaname = publisher.default_areaname
     end
     row = row or self:current_row(areaname)
-
+    local cur_col = self:current_column(areaname)
     local thisframe = self.positioning_frames[areaname][self:framenumber(areaname)]
     local overshoot = math.max( (thisframe.height - thisframe["row"] + 1)  * self.gridheight - tex.pageheight ,0)
     local remaining_rows = self:number_of_rows(areaname) - row + 1
+    if column and cur_col > column then
+        remaining_rows = remaining_rows - 1
+    end
     return self.gridheight * remaining_rows - overshoot
 end
 
@@ -90,6 +93,7 @@ function set_current_row( self,row,areaname )
     area.current_row = row
 end
 
+-- Set column for the given area (or the default area, if none given).
 function set_current_column( self,column,areaname )
     assert(self)
     local areaname = areaname or publisher.default_areaname
@@ -201,7 +205,7 @@ end
 
 function number_of_columns(self,areaname)
     assert(self)
-    local areaname = areaname or publisher.default_areaname
+    areaname = areaname or publisher.default_area
     if not self.positioning_frames[areaname] then
         err("Area %q unknown, using page (number-of-columns)",areaname)
         areaname = publisher.default_areaname
@@ -232,7 +236,7 @@ function isallocated( self,x,y,areaname,framenumber )
             frame_margin_top = block.row - 1
         end
     end
-    if x > self:number_of_columns() then
+    if x > self:number_of_columns(publisher.default_areaname) then
         err("x (%d) exceeds number of columns of the given area (%d) (including added offset of %d)",x,self:number_of_columns(areaname),frame_margin_left)
         return false
     end
@@ -300,7 +304,7 @@ function set_width_height(self, options)
     self.grid_dy    = options.dy or 0
     calculate_number_gridcells(self)
     self.allocation_x_y = {}
-    for i=1,self:number_of_columns() do
+    for i=1,self:number_of_columns(publisher.default_areaname) do
         self.allocation_x_y[i] = {}
     end
 end
@@ -319,8 +323,14 @@ function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname,keepposition)
 
     -- when true, we don't want to move the cursor
     if not keepposition then
-        self:set_current_column(math.ceil(x + wd),areaname)
-        self:set_current_row(   math.ceil(y)     ,areaname)
+        local col = math.ceil(x + wd)
+        local rows = 0
+        if col > self:number_of_columns(areaname) and publisher.compatibility.movecursoronrightedge then
+            col = 1
+            rows = 1
+        end
+        self:set_current_column(col,areaname)
+        self:set_current_row(math.ceil(y + rows + ht  - 1) ,areaname)
     end
 
     local grid_conflict = false
@@ -403,7 +413,7 @@ end
 function fits_in_row(self,column,width,row)
     column = math.ceil(column)
     if not column then return false end
-    if column + width - 1 > self:number_of_columns() then return false end
+    if column + width - 1 > self:number_of_columns(publisher.default_areaname) then return false end
     local max_x = column + width - 1
     for x = column, max_x  do
         if self.allocation_x_y[x][row] then return false end
@@ -579,10 +589,11 @@ function height_in_gridcells_sp(self,height_sp,options)
 end
 
 -- Draw frame (return PDF-strings)
-function draw_frame(self,frame)
+function draw_frame(self,frame,width_sp)
     assert(self)
     local ret = {}
-    ret[#ret + 1] = "q 0.2 w "
+    local wd = math.round(sp_to_bp(width_sp),3)
+    ret[#ret + 1] = string.format("q %g w ",wd)
     local paperheight_bp = sp_to_bp(tex.pageheight - self.extra_margin)
     local paperwidth_bp  = sp_to_bp(tex.pagewidth  - self.extra_margin)
     local x,y
@@ -599,7 +610,7 @@ function draw_frame(self,frame)
     y      = sp_to_bp(( frame.row    - 1) * ( self.gridheight + self.grid_dy) + self.margin_top )
     width  = sp_to_bp(frame.width  * self.gridwidth  + (frame.width  - 1) * self.grid_dx)
     height = sp_to_bp(frame.height * self.gridheight + (frame.height - 1) * self.grid_dy)
-    ret[#ret + 1] = string.format("q %s %g w %g %g %g %g re S Q", colentry.pdfstring,0.5, x,math.round(paperheight_bp - y,2),width,-height)
+    ret[#ret + 1] = string.format("q %s  %g %g %g %g re S Q", colentry.pdfstring, x,math.round(paperheight_bp - y,2),width,-height)
 
     ret[#ret + 1] = "Q"
 
@@ -621,7 +632,7 @@ function draw_grid(self)
 
     local y = math.round(sp_to_bp(self.extra_margin - self.trim),2)
 
-    local count_col = self:number_of_columns()
+    local count_col = self:number_of_columns(publisher.default_areaname)
     for i=0, count_col do
         -- every 5 grid cells draw a grey rule
         if (i % 5 == 0) then color = "0.6" else color = "0.8" end
@@ -696,7 +707,7 @@ function draw_gridallocation(self)
     for y=1,self:number_of_rows() do
         local alloc_found = nil
 
-        for x=1, self:number_of_columns() do
+        for x=1, self:number_of_columns(publisher.default_areaname) do
             if self.allocation_x_y[x][y] then
                 re_wd = sp_to_bp(self.gridwidth)
                 re_x = sp_to_bp (self.margin_left + self.extra_margin) + ( x - 1 ) * sp_to_bp(self.gridwidth + self.grid_dx)
@@ -812,7 +823,7 @@ function calculate_number_gridcells(self)
         end
     end
 
-    log("Number of rows: %d, number of columns = %d",self:number_of_rows(), self:number_of_columns())
+    log("Number of rows: %d, number of columns = %d",self:number_of_rows(), self:number_of_columns(publisher.default_areaname))
 end
 
 -- Sets the used area for the page (used by crop="yes")

@@ -28,7 +28,7 @@ Es gibt drei Methoden, den Publisher zu installieren.
 		sudo apt-key add gpgkey-speedata.txt
         ````
 
-  1. Nun kann man mit  `sudo apt update` und `apt get install speedata-publisher` den Publisher installieren.. Die Dokumentation befindet sich in `/usr/share/doc/speedata-publisher/index.html`, die mit `sp doc` auf einem Desktop-System geöffnet werden kann.
+  1. Nun kann man mit  `sudo apt update` und `apt get install speedata-publisher` den Publisher installieren. Die Dokumentation befindet sich in `/usr/share/doc/speedata-publisher/index.html`, die mit `sp doc` auf einem Desktop-System geöffnet werden kann.
 
 3. **Aus den Quellen installieren**: Für die Entwickler, die am Publisher selbst Änderungen vornehmen möchten: Die Software und die Dokumentation kann aus dem Quellcode gebaut werden mithilfe des Befehls `rake`. Notwendig dafür sind die üblichen Entwicklungswerkzeuge und die [Programmiersprache Go](https://golang.org/) in Version 1.5 oder höher. Auf einem Debian oder Ubuntu GNU/Linux System kann man folgende Befehle nutzen:
 

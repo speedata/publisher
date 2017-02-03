@@ -9,9 +9,9 @@
    </start>
    <define name="e_A">
       <element name="A">
-         <a:documentation>Insert Hyperlink to a URL.</a:documentation>
+         <a:documentation>Insert hyperlink to a URL.</a:documentation>
          <attribute name="href">
-            <a:documentation>The destination of the hyperlink (URI). Example: http://www.speedata.de</a:documentation>
+            <a:documentation>The destination of the hyperlink (URI). Example: https://www.speedata.de</a:documentation>
          </attribute>
          <ref name="e_Value"></ref>
       </element>
@@ -56,7 +56,7 @@
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
-               <ref name="e_EmptyLine"></ref>
+               <ref name="e_DefineFontalias"></ref>
             </optional>
             <optional>
                <ref name="e_ForAll"></ref>
@@ -141,7 +141,7 @@
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
-               <ref name="e_EmptyLine"></ref>
+               <ref name="e_DefineFontalias"></ref>
             </optional>
             <optional>
                <ref name="e_ForAll"></ref>
@@ -214,7 +214,7 @@
    </define>
    <define name="e_Attribute">
       <element name="Attribute">
-         <a:documentation>Create a data structure that can be saved to the harddrive with SaveDataset.</a:documentation>
+         <a:documentation>Create a data structure that can be saved to the hard drive with SaveDataset.</a:documentation>
          <attribute name="name">
             <a:documentation>Name of the attribute that is created.</a:documentation>
          </attribute>
@@ -226,7 +226,7 @@
    </define>
    <define name="e_B">
       <element name="B">
-         <a:documentation>Switch to fontface »bold«</a:documentation>
+         <a:documentation>Switch to font weight »bold«</a:documentation>
          <zeroOrMore>
             <choice>
                <ref name="e_A"></ref>
@@ -260,7 +260,7 @@
          </attribute>
          <optional>
             <attribute name="fontface">
-               <a:documentation>Name of the fontface of the text that can be placed beneath the barcode. Not used in all codes.</a:documentation>
+               <a:documentation>Name of the font of the text that can be placed beneath the barcode. Not used in all codes.</a:documentation>
             </attribute>
          </optional>
          <attribute name="type">
@@ -300,6 +300,21 @@
                <a:documentation>The factor denoting the extra length of the outer and middle bar. Only useful with EAN13.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="eclevel">
+               <a:documentation>Set the error correction level for QR-codes. If not provided, the system uses the maximum level for minimum size. The higher the level, the more error correction is in the QR-code.</a:documentation>
+               <choice>
+                  <value>L</value>
+                  <a:documentation>Set the lowest level (1) with approx. 7% recovery.</a:documentation>
+                  <value>M</value>
+                  <a:documentation>Set the second lowest level (2) with approx. 15% recovery.</a:documentation>
+                  <value>Q</value>
+                  <a:documentation>Set the second highest level (3) with approx. 25% recovery.</a:documentation>
+                  <value>H</value>
+                  <a:documentation>Set the highest level (4) with approx. 35% recovery.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
@@ -307,7 +322,7 @@
       <element name="Bold">
          <a:documentation>Name of the font face that should be used when switching to »bold«.</a:documentation>
          <attribute name="fontface">
-            <a:documentation>Name of the fontface for bold.</a:documentation>
+            <a:documentation>Name of the font for bold.</a:documentation>
          </attribute>
          <empty></empty>
       </element>
@@ -316,7 +331,7 @@
       <element name="BoldItalic">
          <a:documentation>Name of the font face that should be used when switching to »bold italic«.</a:documentation>
          <attribute name="fontface">
-            <a:documentation>Name of the fontface for bold italic.</a:documentation>
+            <a:documentation>Name of the font for bold italic.</a:documentation>
          </attribute>
          <empty></empty>
       </element>
@@ -355,6 +370,24 @@
          <optional>
             <attribute name="bleed">
                <a:documentation>Lets the box increase its size by the amount of trim given in the options. Useful for thumb indexes. The contents of the attribute is either »left«, »right«, »top« or »bottom« or any combination such as »top,right«.</a:documentation>
+               <choice>
+                  <value>top</value>
+                  <a:documentation>Increase the size to the top.</a:documentation>
+                  <value>left</value>
+                  <a:documentation>Increase the size to the left.</a:documentation>
+                  <value>bottom</value>
+                  <a:documentation>Increase the size to the bottom.</a:documentation>
+                  <value>right</value>
+                  <a:documentation>Increase the size to the right.</a:documentation>
+                  <value>top,left</value>
+                  <a:documentation>Increase the size to the top and left.</a:documentation>
+                  <value>top,right</value>
+                  <a:documentation>Increase the size to the top and right.</a:documentation>
+                  <value>bottom,left</value>
+                  <a:documentation>Increase the size to the bottom and left.</a:documentation>
+                  <value>bottom,right</value>
+                  <a:documentation>Increase the size to the bottom and right.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -443,13 +476,13 @@
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
+               <ref name="e_DefineFontalias"></ref>
+            </optional>
+            <optional>
                <ref name="e_DefineTextformat"></ref>
             </optional>
             <optional>
                <ref name="e_Element"></ref>
-            </optional>
-            <optional>
-               <ref name="e_EmptyLine"></ref>
             </optional>
             <optional>
                <ref name="e_Fontface"></ref>
@@ -569,6 +602,9 @@
                <ref name="e_Tr"></ref>
             </optional>
             <optional>
+               <ref name="e_Trace"></ref>
+            </optional>
+            <optional>
                <ref name="e_Until"></ref>
             </optional>
             <optional>
@@ -659,7 +695,7 @@
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
-               <ref name="e_EmptyLine"></ref>
+               <ref name="e_DefineFontalias"></ref>
             </optional>
             <optional>
                <ref name="e_ForAll"></ref>
@@ -783,6 +819,23 @@
          </oneOrMore>
       </element>
    </define>
+   <define name="e_Compatibility">
+      <element name="Compatibility">
+         <a:documentation>Set compatibility for older layouts</a:documentation>
+         <optional>
+            <attribute name="movecursoronplaceobject">
+               <a:documentation>Switch the behavior where objects at the right page margin used in PlaceObject puts the cursor in #columns + 1.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>New behavior (default): set cursor in column 1 when an object goes to the right margin.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Old behavior: set the cursor to the column + 1 past the right edge of the placed object.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Copy-of">
       <element name="Copy-of">
          <a:documentation>Replace this element by the copy of the selection as an element structure. You can use it to construct more complex data structures.</a:documentation>
@@ -869,6 +922,18 @@
                <a:documentation>Hex value of the color, such as #FA5 or #FFAA55.</a:documentation>
             </attribute>
          </optional>
+         <empty></empty>
+      </element>
+   </define>
+   <define name="e_DefineFontalias">
+      <element name="DefineFontalias">
+         <a:documentation>Defines a font alias. When defining a font family, you can use the an alias for the fontname. Aliases are looked up recursively.</a:documentation>
+         <attribute name="existing">
+            <a:documentation>The name of the existing font family.</a:documentation>
+         </attribute>
+         <attribute name="alias">
+            <a:documentation>New (equivalent) name of the font</a:documentation>
+         </attribute>
          <empty></empty>
       </element>
    </define>
@@ -1035,12 +1100,6 @@
          </oneOrMore>
       </element>
    </define>
-   <define name="e_EmptyLine">
-      <element name="EmptyLine">
-         <a:documentation>Create an empty row an set the cursor to the next row.</a:documentation>
-         <empty></empty>
-      </element>
-   </define>
    <define name="e_Fontface">
       <element name="Fontface">
          <a:documentation>Switch to another font family.</a:documentation>
@@ -1124,13 +1183,13 @@
                   <ref name="e_DefineFontfamily"></ref>
                </optional>
                <optional>
+                  <ref name="e_DefineFontalias"></ref>
+               </optional>
+               <optional>
                   <ref name="e_DefineTextformat"></ref>
                </optional>
                <optional>
                   <ref name="e_Element"></ref>
-               </optional>
-               <optional>
-                  <ref name="e_EmptyLine"></ref>
                </optional>
                <optional>
                   <ref name="e_Fontface"></ref>
@@ -1248,6 +1307,9 @@
                </optional>
                <optional>
                   <ref name="e_Tr"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Trace"></ref>
                </optional>
                <optional>
                   <ref name="e_Until"></ref>
@@ -1402,7 +1464,7 @@
    <define name="e_HSpace">
       <element name="HSpace">
          <a:documentation>Two modes: with a given width, the space takes up the given amount. 
-      With no width given: create a horizontal stretching space. The space will take up no width as a minimum but is able to stretch up to infinity. Useful in single line contexts. In normal text there will surprising little stretching involved due to the global paragraph optimization alorithm.
+      With no width given: create a horizontal stretching space. The space will take up no width as a minimum but is able to stretch up to infinity. Useful in single line contexts. In normal text there will surprising little stretching involved due to the global paragraph optimization algorithm.
         You will see that all other word spaces will have the minimum width and the excessive whitespace is accumulated at the strechable space.</a:documentation>
          <optional>
             <attribute name="width">
@@ -1461,6 +1523,9 @@
          <oneOrMore>
             <optional>
                <ref name="e_DefineColor"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineFontalias"></ref>
             </optional>
             <optional>
                <ref name="e_DefineFontfamily"></ref>
@@ -1554,11 +1619,6 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="naturalsize">
-               <a:documentation>The PDF box that represents the visible area. Default is “cropbox”.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="maxwidth">
                <a:documentation>The maximum width of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells), a length or the value »100%« for full width image.</a:documentation>
             </attribute>
@@ -1569,13 +1629,25 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="maxsize">
-               <a:documentation>The PDF box that represents the maximum width. Default is “cropbox”.</a:documentation>
+            <attribute name="visiblebox">
+               <a:documentation>The PDF box that represents the visible area of the included image. Default is “cropbox”.</a:documentation>
+               <choice>
+                  <value>artbox</value>
+                  <a:documentation>Use the artbox as the visible area. The artbox is usually not contained in a PDF.</a:documentation>
+                  <value>bleedbox</value>
+                  <a:documentation>Use the bleedbox of the included PDF.</a:documentation>
+                  <value>cropbox</value>
+                  <a:documentation>Use the cropbox of the included PDF (default).</a:documentation>
+                  <value>mediabox</value>
+                  <a:documentation>Use the mediabox of the included PDF. This is the largest box.</a:documentation>
+                  <value>trimbox</value>
+                  <a:documentation>Use the trimbox of the includes PDF. The trimbox is the final paper size. For example, the trim box of an A4 PDF is 210mm x 297mm.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
             <attribute name="clip">
-               <a:documentation>When yes, the image keeps its apsect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</a:documentation>
+               <a:documentation>When yes, the image keeps its aspect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>Keep the aspect ratio and cut off left/right or top/bottom edges.</a:documentation>
@@ -1586,7 +1658,7 @@
          </optional>
          <optional>
             <attribute name="minwidth">
-               <a:documentation>The nimimum width of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells), a length or the value »100%« for full width image.</a:documentation>
+               <a:documentation>The minimum width of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells), a length or the value »100%« for full width image.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1596,7 +1668,7 @@
          </optional>
          <optional>
             <attribute name="dpiwarn">
-               <a:documentation>Warn if the image gets lower resultion than given.</a:documentation>
+               <a:documentation>Warn if the image gets lower resolution than given.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1704,7 +1776,13 @@
          </optional>
          <oneOrMore>
             <optional>
+               <ref name="e_Compatibility"></ref>
+            </optional>
+            <optional>
                <ref name="e_DefineColor"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineFontalias"></ref>
             </optional>
             <optional>
                <ref name="e_DefineFontfamily"></ref>
@@ -1741,6 +1819,12 @@
             </optional>
             <optional>
                <ref name="e_Stylesheet"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Switch"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Trace"></ref>
             </optional>
             <optional>
                <ref name="e_Include"></ref>
@@ -1810,13 +1894,13 @@
                   <ref name="e_DefineFontfamily"></ref>
                </optional>
                <optional>
+                  <ref name="e_DefineFontalias"></ref>
+               </optional>
+               <optional>
                   <ref name="e_DefineTextformat"></ref>
                </optional>
                <optional>
                   <ref name="e_Element"></ref>
-               </optional>
-               <optional>
-                  <ref name="e_EmptyLine"></ref>
                </optional>
                <optional>
                   <ref name="e_Fontface"></ref>
@@ -1936,6 +2020,9 @@
                   <ref name="e_Tr"></ref>
                </optional>
                <optional>
+                  <ref name="e_Trace"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Until"></ref>
                </optional>
                <optional>
@@ -1960,6 +2047,11 @@
          <attribute name="sortkey">
             <a:documentation>The name of the attribute holding the indexentry (that should be sorted).</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="pagenumber">
+               <a:documentation>The name of the attribute that holds the page numbers. Defaults to &#39;page&#39;.</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
@@ -2095,15 +2187,19 @@
                <a:documentation>Set the maximum width of the text if it cannot be deduced from the current surrounding (such as table cells).</a:documentation>
             </attribute>
          </optional>
-         <attribute name="reduce">
-            <a:documentation>Reduce the text size if necessary.</a:documentation>
-            <choice>
-               <value>fontsize</value>
-               <a:documentation>Reduces the text by decreasing the font size.</a:documentation>
-               <value>cut</value>
-               <a:documentation>Inserts text given in the attribute text if the paragraph is too long.</a:documentation>
-            </choice>
-         </attribute>
+         <optional>
+            <attribute name="reduce">
+               <a:documentation>Reduce the text size if necessary.</a:documentation>
+               <choice>
+                  <value>fontsize</value>
+                  <a:documentation>Reduces the text by decreasing the font size.</a:documentation>
+                  <value>cut</value>
+                  <a:documentation>Inserts text given in the attribute text if the paragraph is too long.</a:documentation>
+                  <value>keeptogether</value>
+                  <a:documentation>Don&#39;t allow a line break within NoBreak (default)</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="text">
                <a:documentation>The text to be inserted if the paragraph should be cut. For example &#39;...&#39;</a:documentation>
@@ -2152,7 +2248,7 @@
    </define>
    <define name="e_Options">
       <element name="Options">
-         <a:documentation>Set publisher specific options</a:documentation>
+         <a:documentation>Set publisher specific options.</a:documentation>
          <optional>
             <attribute name="colorprofile">
                <a:documentation>The filename of the color profile. The default profile is »ISO Coated v2 (ECI)«. Only used when spot colors are used.</a:documentation>
@@ -2172,6 +2268,11 @@
                   <value>no</value>
                   <a:documentation>Don&#39;t show crop marks (default).</a:documentation>
                </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="defaultarea">
+               <a:documentation>Name of the area that is used as a default for placing text (commands Output and PlaceObject). Default is _page.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2260,56 +2361,12 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="show-grid">
-               <a:documentation>Draw the grid on the page.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Show the grid.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Don&#39;t show the grid (default).</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="show-gridallocation">
-               <a:documentation>Draw allocated cells with yellow and conflicts with red markers.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Show grid allocation.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Don&#39;t show the grid allocation (default).</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="show-hyphenation">
-               <a:documentation>Draw little marks to show all hyphenation points.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Show hyphenation points.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Don&#39;t show any hyphenation points (default).</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="trace">
-               <a:documentation>Draw rectangles around objects for debugging purposes.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Verbose output in the log file and the PDF.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Regular run (default).</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="trim">
+            <attribute name="bleed">
                <a:documentation>The amount of bleed. Defaults to 0mm.</a:documentation>
             </attribute>
          </optional>
          <optional>
-            <attribute name="trimmarks">
+            <attribute name="bleedmarks">
                <a:documentation>Trim marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute trim, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is no, that means no trim marks will be displayed. The trim marks show the additional trim distance.</a:documentation>
                <choice>
                   <value>yes</value>
@@ -2360,13 +2417,13 @@
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
+               <ref name="e_DefineFontalias"></ref>
+            </optional>
+            <optional>
                <ref name="e_DefineTextformat"></ref>
             </optional>
             <optional>
                <ref name="e_Element"></ref>
-            </optional>
-            <optional>
-               <ref name="e_EmptyLine"></ref>
             </optional>
             <optional>
                <ref name="e_Fontface"></ref>
@@ -2486,6 +2543,9 @@
                <ref name="e_Tr"></ref>
             </optional>
             <optional>
+               <ref name="e_Trace"></ref>
+            </optional>
+            <optional>
                <ref name="e_Until"></ref>
             </optional>
             <optional>
@@ -2505,7 +2565,7 @@
                <a:documentation>Should text flow around already allocated objects? This currently works on the current page only.</a:documentation>
                <choice>
                   <value>yes</value>
-                  <a:documentation>Regular behaviour: the text does not flow around objects.</a:documentation>
+                  <a:documentation>Regular behavior: the text does not flow around objects.</a:documentation>
                   <value>auto</value>
                   <a:documentation>Text flows around allocated objects.</a:documentation>
                   <data type="string">
@@ -2684,7 +2744,7 @@
    </define>
    <define name="e_Pagetype">
       <element name="Pagetype">
-         <a:documentation>Define a master page. A master page is chosen depending on the criterium given with the attribute »test«.</a:documentation>
+         <a:documentation>Define a master page. A master page is chosen depending on the criterion given with the attribute »test«.</a:documentation>
          <attribute name="test">
             <a:documentation>If this xpath expression evaluates to true, this page is taken as a master page.</a:documentation>
          </attribute>
@@ -2692,12 +2752,12 @@
             <a:documentation>Name of the master page. It is for informational purpose and as a selection for NewPage.</a:documentation>
          </attribute>
          <ref name="e_Margin"></ref>
-         <optional>
-            <oneOrMore>
-               <ref name="e_PositioningArea"></ref>
-            </oneOrMore>
-         </optional>
          <interleave>
+            <optional>
+               <oneOrMore>
+                  <ref name="e_PositioningArea"></ref>
+               </oneOrMore>
+            </optional>
             <optional>
                <ref name="e_AtPageCreation"></ref>
             </optional>
@@ -2715,7 +2775,7 @@
    </define>
    <define name="e_PDFOptions">
       <element name="PDFOptions">
-         <a:documentation>Set PDF options like nuber of copies and such</a:documentation>
+         <a:documentation>Set PDF options like number of copies and such</a:documentation>
          <optional>
             <attribute name="duplex">
                <a:documentation>Set viewer preference to one or two page printing. Default: empty.</a:documentation>
@@ -3104,7 +3164,7 @@
                <ref name="e_DefineFontfamily"></ref>
             </optional>
             <optional>
-               <ref name="e_EmptyLine"></ref>
+               <ref name="e_DefineFontalias"></ref>
             </optional>
             <optional>
                <ref name="e_ForAll"></ref>
@@ -3179,7 +3239,7 @@
       <element name="Regular">
          <a:documentation>The (symbolic) name of the fontface for regular text, i.e. without bold or italic.</a:documentation>
          <attribute name="fontface">
-            <a:documentation>The symbolic name fo the font file.</a:documentation>
+            <a:documentation>The symbolic name of the font file.</a:documentation>
          </attribute>
          <empty></empty>
       </element>
@@ -3198,7 +3258,7 @@
          </attribute>
          <optional>
             <attribute name="rulewidth">
-               <a:documentation>The rule thicknes given in grid cells or as a length.</a:documentation>
+               <a:documentation>The rule thickness given in grid cells or as a length.</a:documentation>
             </attribute>
          </optional>
          <attribute name="length">
@@ -3285,7 +3345,7 @@
                   <ref name="e_DefineFontfamily"></ref>
                </optional>
                <optional>
-                  <ref name="e_EmptyLine"></ref>
+                  <ref name="e_DefineFontalias"></ref>
                </optional>
                <optional>
                   <ref name="e_ForAll"></ref>
@@ -3410,6 +3470,17 @@
                <a:documentation>The value of the contents.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="trace">
+               <a:documentation>Show information about the assignment in the log file.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Show information.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Don&#39;t show information (default).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <oneOrMore>
             <interleave>
                <optional>
@@ -3481,7 +3552,7 @@
                <a:documentation>If this attribute is used then it contains the name of the data-attribute that gets evaluated when duplicates are eliminated.</a:documentation>
             </attribute>
          </optional>
-         <attribute name="criterium">
+         <attribute name="criterion">
             <a:documentation>Name of the attribute that is used as the sort key.</a:documentation>
          </attribute>
          <empty></empty>
@@ -3501,7 +3572,7 @@
    </define>
    <define name="e_Switch">
       <element name="Switch">
-         <a:documentation>Create an if-then-else construct. The test attribute of each Case commands is evaluated until it yields true. The contents of the Case gets executed. If no test suceeds, the (optional) Otherwise gets executed.</a:documentation>
+         <a:documentation>Create an if-then-else construct. The test attribute of each Case commands is evaluated until it yields true. The contents of the Case gets executed. If no test succeeds, the (optional) Otherwise gets executed.</a:documentation>
          <oneOrMore>
             <ref name="e_Case"></ref>
          </oneOrMore>
@@ -3683,22 +3754,22 @@
          </optional>
          <optional>
             <attribute name="border-left">
-               <a:documentation>The width (tickness) of the left border. The border is inside the cell.</a:documentation>
+               <a:documentation>The width (thickness) of the left border. The border is inside the cell.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="border-right">
-               <a:documentation>The width (tickness) of the right border. The border is inside the cell.</a:documentation>
+               <a:documentation>The width (thickness) of the right border. The border is inside the cell.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="border-top">
-               <a:documentation>The width (tickness) of the top border. The border is inside the cell.</a:documentation>
+               <a:documentation>The width (thickness) of the top border. The border is inside the cell.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="border-bottom">
-               <a:documentation>The width (tickness) of the bottom border. The border is inside the cell.</a:documentation>
+               <a:documentation>The width (thickness) of the bottom border. The border is inside the cell.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -3748,7 +3819,7 @@
                   <value>left</value>
                   <a:documentation>The contents is left aligned (ragged right). This is the default.</a:documentation>
                   <value>right</value>
-                  <a:documentation>The contents of the cell is right aligend.</a:documentation>
+                  <a:documentation>The contents of the cell is right aligned.</a:documentation>
                   <value>center</value>
                   <a:documentation>The contents of the cell is aligned at the center, with ragged right and left margin.</a:documentation>
                   <value>justify</value>
@@ -3764,11 +3835,11 @@
                <a:documentation>The vertical alignment of the cell.</a:documentation>
                <choice>
                   <value>top</value>
-                  <a:documentation>The contents is aligend at the top edge of the cell.</a:documentation>
+                  <a:documentation>The contents is aligned at the top edge of the cell.</a:documentation>
                   <value>middle</value>
                   <a:documentation>The contents is vertically centered.</a:documentation>
                   <value>bottom</value>
-                  <a:documentation>The contents is aligend at the bottom edge of the cell.</a:documentation>
+                  <a:documentation>The contents is aligned at the bottom edge of the cell.</a:documentation>
                   <data type="string">
                      <param name="pattern">\{.+\}</param>
                   </data>
@@ -3973,6 +4044,89 @@
          </oneOrMore>
       </element>
    </define>
+   <define name="e_Trace">
+      <element name="Trace">
+         <a:documentation>Set debugging switches</a:documentation>
+         <optional>
+            <attribute name="assignments">
+               <a:documentation>Write assignments (SetVariable) to the log file.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Verbose output in the protocol file.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Regular run (default).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="grid">
+               <a:documentation>Draw the grid on the page.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Show the grid.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Don&#39;t show the grid (default).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="gridallocation">
+               <a:documentation>Draw allocated cells with yellow and conflicts with red markers.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Show grid allocation.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Don&#39;t show the grid allocation (default).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="hyphenation">
+               <a:documentation>Draw little marks to show all hyphenation points.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Show hyphenation points.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Don&#39;t show any hyphenation points (default).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="objects">
+               <a:documentation>Draw rectangles around objects.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Draw rectangles</a:documentation>
+                  <value>no</value>
+                  <a:documentation>No rectangles drawn around objects (default).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="verbose">
+               <a:documentation>Verbose output in the protocol file.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Verbose output in the protocol file.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Regular run (default).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="textformat">
+               <a:documentation>Show textformt as a tooltip in the PDF</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Show textformat</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Don&#39;t show textformat (default)</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Tr">
       <element name="Tr">
          <a:documentation>Tablerow</a:documentation>
@@ -3983,7 +4137,7 @@
                   <value>left</value>
                   <a:documentation>The contents is left aligned (ragged right). This is the default.</a:documentation>
                   <value>right</value>
-                  <a:documentation>The contents of the cell is right aligend.</a:documentation>
+                  <a:documentation>The contents of the cell is right aligned.</a:documentation>
                   <value>center</value>
                   <a:documentation>The contents of the cell is aligned at the center, with ragged right and left margin.</a:documentation>
                   <value>justify</value>
@@ -3993,7 +4147,7 @@
          </optional>
          <optional>
             <attribute name="valign">
-               <a:documentation>Vertical aligment of the table cells in this row.</a:documentation>
+               <a:documentation>Vertical alignment of the table cells in this row.</a:documentation>
                <choice>
                   <value>top</value>
                   <a:documentation>The objects in this row are aligned at the top.</a:documentation>
@@ -4006,7 +4160,7 @@
          </optional>
          <optional>
             <attribute name="minheight">
-               <a:documentation>Minimum rowheight in grid cells.</a:documentation>
+               <a:documentation>Minimum row height in grid cells.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -4088,7 +4242,7 @@
          </optional>
          <optional>
             <attribute name="origin-y">
-               <a:documentation>The vertical origin for the matrix tranformation. Must be top, center or bottom or a number from 0 to 100 (0 = top, 100 = bottom).</a:documentation>
+               <a:documentation>The vertical origin for the matrix transformation. Must be top, center or bottom or a number from 0 to 100 (0 = top, 100 = bottom).</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>
@@ -4221,13 +4375,13 @@
                   <ref name="e_DefineFontfamily"></ref>
                </optional>
                <optional>
+                  <ref name="e_DefineFontalias"></ref>
+               </optional>
+               <optional>
                   <ref name="e_DefineTextformat"></ref>
                </optional>
                <optional>
                   <ref name="e_Element"></ref>
-               </optional>
-               <optional>
-                  <ref name="e_EmptyLine"></ref>
                </optional>
                <optional>
                   <ref name="e_Fontface"></ref>
@@ -4345,6 +4499,9 @@
                </optional>
                <optional>
                   <ref name="e_Tr"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Trace"></ref>
                </optional>
                <optional>
                   <ref name="e_Until"></ref>
@@ -4442,13 +4599,13 @@
                   <ref name="e_DefineFontfamily"></ref>
                </optional>
                <optional>
+                  <ref name="e_DefineFontalias"></ref>
+               </optional>
+               <optional>
                   <ref name="e_DefineTextformat"></ref>
                </optional>
                <optional>
                   <ref name="e_Element"></ref>
-               </optional>
-               <optional>
-                  <ref name="e_EmptyLine"></ref>
                </optional>
                <optional>
                   <ref name="e_Fontface"></ref>
@@ -4566,6 +4723,9 @@
                </optional>
                <optional>
                   <ref name="e_Tr"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Trace"></ref>
                </optional>
                <optional>
                   <ref name="e_Until"></ref>

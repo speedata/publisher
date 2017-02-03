@@ -1,0 +1,42 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Trace grid="no" objects="yes"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Table width="10"
+        columndistance="3mm"
+        leading="2mm">
+        <Tr>
+          <Td padding-bottom="2mm">
+            <Paragraph><Value>1/1</Value></Paragraph>
+          </Td>
+          <Td border-left="1mm"
+            border-left-color="gray" padding-left="1mm">
+            <Paragraph><Value>1/2</Value></Paragraph>
+          </Td>
+          <Td border-right="1mm" align="center">
+            <Paragraph><Value>1/3</Value></Paragraph>
+          </Td>
+        </Tr>
+        <Tr backgroundcolor="yellow">
+          <Td>
+            <Paragraph><Value>2/1</Value></Paragraph>
+          </Td>
+          <Td
+            border-bottom="1mm"
+            border-right="1mm"
+            border-left="1mm"
+            rowspan="2" colspan="2" >
+            <Image width="5" file="ocean.pdf"/>
+          </Td>
+        </Tr>
+        <Tr align="center">
+          <Td border-top="2mm">
+            <Paragraph><Value>3/1</Value></Paragraph>
+          </Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>

@@ -2,7 +2,7 @@
     xmlns:sd="urn:speedata:2009/publisher/functions/en"
     version="2.5.11">
     <Stylesheet>
-        area {   border-width: 1pt;  }
+        area {   border-width: 0.5pt;  }
     </Stylesheet>
     <Pageformat width="60mm" height="45mm" />
     <DefineTextformat name="text" indentation="7pt" rows="-1" alignment="leftaligned"/>

@@ -21,10 +21,10 @@ xpath = do_luafile("xpath.lua")
 
 local commands     = require("publisher.commands")
 local page         = require("publisher.page")
-local translations = require("translations")
 local fontloader   = require("fonts.fontloader")
 local paragraph    = require("paragraph")
 local fonts        = require("publisher.fonts")
+local comm         = require("publisher.comm")
 
 local env_publisherversion = os.getenv("PUBLISHERVERSION")
 
@@ -60,8 +60,9 @@ att_underline      = 5
 att_indent         = 6 -- see textformats for details
 att_rows           = 7 -- see textformats for details
 
-att_origin         = 98 -- for debugging purpose
-att_debug          = 99 -- for debugging purposes
+-- for debugging purpose
+att_origin         = 98
+att_debug          = 99
 
 --- These attributes are for image shifting. The amount of shift up/left can
 --- be negative and is counted in scaled points.
@@ -98,7 +99,7 @@ att_lineheight = 600
 att_keep = 700
 
 -- attributes for glue
-att_lederwd = 800
+att_leaderwd = 800
 
 -- Debugging / see att_origin
 origin_table = 1
@@ -129,11 +130,12 @@ whatsit_node   = node.id("whatsit")
 hlist_node     = node.id("hlist")
 vlist_node     = node.id("vlist")
 
-local t = node.whatsits()
 for k,v in pairs(node.whatsits()) do
     if v == "user_defined" then
         -- for action/mark command
         user_defined_whatsit = k
+    elseif v == "pdf_refximage" then
+        pdf_refximage_whatsit = k
     end
 end
 
@@ -142,7 +144,8 @@ alternating = {}
 alternating_value = {}
 
 
-default_areaname = "_default_area"
+default_areaname = "_page"
+default_area     = "_page"
 
 -- The name of the next requested page
 nextpage = nil
@@ -177,9 +180,10 @@ groups    = {}
 -- sometimes we want to save pages for later reuse. Keys are pagestore names
 pagestore = {}
 
--- to be used for translations
-translated_values = nil
-
+-- See commands.compatibility
+compatibility = {
+    movecursoronrightedge = true,
+}
 
 viewerpreferences = {}
 
@@ -367,6 +371,8 @@ current_grid = nil
 -- paragaph, table and textblock should set them
 current_fontfamily = 0
 
+fontaliases = {}
+
 -- Used when bookmarks are inserted in a non-text context
 intextblockcontext = 0
 
@@ -418,7 +424,7 @@ textformats = {
 bookmarks = {}
 
 
---- We need the separator for writing files in a directory structure (image cace for now)
+--- We need the separator for writing files in a directory structure (image cache for now)
 os_separator = "/"
 if os.type == "windows" then
     os_separator = "\\"
@@ -453,15 +459,17 @@ local dispatch_table = {
     Color                   = commands.color,
     Column                  = commands.column,
     Columns                 = commands.columns,
+    Compatibility           = commands.compatibility,
     ["Copy-of"]             = commands.copy_of,
     DefineColor             = commands.define_color,
     DefineFontfamily        = commands.define_fontfamily,
+    DefineFontalias         = commands.define_fontalias,
     DefineTextformat        = commands.define_textformat,
     Element                 = commands.element,
     EmptyLine               = commands.emptyline,
     Fontface                = commands.fontface,
     ForAll                  = commands.forall,
-    Frame                  = commands.frame,
+    Frame                   = commands.frame,
     Grid                    = commands.grid,
     Group                   = commands.group,
     HSpace                  = commands.hspace,
@@ -516,6 +524,7 @@ local dispatch_table = {
     Textblock               = commands.textblock,
     Text                    = commands.text,
     Tr                      = commands.tr,
+    Trace                   = commands.trace,
     Transformation          = commands.transformation,
     U                       = commands.underline,
     Ul                      = commands.ul,
@@ -526,19 +535,6 @@ local dispatch_table = {
     VSpace                  = commands.vspace,
     While                   = commands.while_do,
 }
-
-
---- Return the value as an English string. The argument is in the
---- current language of the layout file (currently English and German).
---- All translations are only valid in a context which defaults to the
---- _global_ context.
-function translate_value( value,context )
-    -- If we don't have a values variable, it must be English
-    if translated_values == nil then return value end
-    context = context or "*"
-    return translated_values[context][value] or value
-end
-
 
 --- The returned table is an array with hashes. The keys of these
 --- hashes are `elementname` and `contents`. For example:
@@ -565,7 +561,7 @@ function dispatch(layoutxml,dataxml,options)
             if dispatch_table[eltname] ~= nil then
                 tmp = dispatch_table[eltname](j,dataxml,options)
 
-                -- Copy-of-elements can be resolveld immediately
+                -- Copy-of-elements can be resolved immediately
                 if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" or eltname == "Transformation" or eltname == "Frame" then
                     if type(tmp)=="table" then
                         for i=1,#tmp do
@@ -622,35 +618,6 @@ end
 
 function page_initialized_p( pagenumber )
     return pages[pagenumber] ~= nil
-end
-
--- Translate attributes and elements to english, so that
--- we don't need to translate them later again and again and again
-function translate_layout(layoutxml,lang)
-    local x
-    for i=1,#layoutxml do
-        x = layoutxml[i]
-        if type(x) == "table" then
-            local y = x[".__local_name"]
-            local cmd = lang[y]
-            if not cmd then
-                if x[".__parent"][".__local_name"] ~= "Value" then
-                    err("Unknown command %q in Layoutfile",y)
-                end
-            else
-                x[".__local_name"] = cmd[1]
-                x[".__name"] = cmd[1]
-                for k,v in pairs(cmd) do
-                    if type(k) == "string" then
-                        if x[k] then
-                            x[v] = x[k]
-                        end
-                    end
-                end
-                translate_layout(x,lang)
-            end
-        end
-    end
 end
 
 
@@ -724,12 +691,8 @@ function initialize_luatex_and_generate_pdf()
         exit()
     end
     if current_layoutlanguage == "de" then
-        warning("!!! The German layout instructions will be removed\nin version 3 of the publisher !!!")
-    end
-
-    if current_layoutlanguage ~= "en" then
-        translated_values = translations[current_layoutlanguage]["__values"]
-        translate_layout(layoutxml,translations[current_layoutlanguage])
+        err("The German layout instructions have been removed\nin version 2.7 of the publisher.")
+        exit()
     end
 
     if layoutxml.version then
@@ -851,12 +814,15 @@ function initialize_luatex_and_generate_pdf()
     xpath.set_variable("__position", 1)
     --- The rare case that the user has not any `Record` commands in the layout file:
     if not data_dispatcher[""] then
-        err("Can't find »Record« command for the root node.")
+        err("Can't find any »Record« commands in the layout file.")
         exit()
     end
     tmp = data_dispatcher[""][name]
     if tmp then
         dispatch(tmp,dataxml)
+    else
+        err("Can't find »Record« command for the root node.")
+        exit()
     end
 
 
@@ -918,7 +884,7 @@ function initialize_luatex_and_generate_pdf()
     end
 end
 
---- Load an XML file from the harddrive. filename is without path but including extension,
+--- Load an XML file from the hard drive. filename is without path but including extension,
 --- filetype is a string representing the type of file read, such as "layout" or "data".
 --- The return value is a lua table representing the XML file.
 ---
@@ -998,6 +964,23 @@ function output_absolute_position(param)
     n.prev = tail
 end
 
+annotcount = 0
+
+function annotate_nodelist(nodelist,text)
+    text = text:gsub(" ","\\040")
+    local annot = node.new(whatsit_node,"pdf_annot")
+    local str = string.format([[ /Subtype /Widget /TU (%s) /T (tooltip zref@%d) /C [] /FT/Btn /F 768 /Ff 65536 /H/N /BS << /W 0 >>]],text,annotcount)
+    annotcount = annotcount + 1
+    annot.data = str
+    annot.width = nodelist.width
+    annot.height = nodelist.height
+    annot.depth = nodelist.depth
+
+    nodelist = node.insert_before(nodelist.head,nodelist.head,annot)
+    nodelist = node.hpack(nodelist)
+    return nodelist
+end
+
 --- Put the object (nodelist) on grid cell (x,y). If `allocate`=`true` then
 --- mark cells as occupied.
 ---
@@ -1030,7 +1013,7 @@ function output_at( param )
         outputpage = param.pagenumber
     end
     local nodelist = param.nodelist
-    if options.trace then
+    if options.showobjects then
         nodelist = boxit(nodelist)
     end
     local x = param.x
@@ -1070,6 +1053,7 @@ function output_at( param )
         extra_crop = param.framewidth
     end
 
+    -- set the crop area
     r:setarea(delta_x - extra_crop,delta_y - extra_crop, _wd + extra_crop, _ht + extra_crop + _dp)
 
     --- We don't necessarily output things on a page, we can output them in a virtual page, called _group_.
@@ -1281,7 +1265,7 @@ function setup_page(pagenumber)
         css_rules = publisher.css:matches({element = 'area', class=class,id=k}) or {}
         if css_rules["border-width"] then
             for i,frame in ipairs(v) do
-                frame.draw = { color = "green"}
+                frame.draw = { color = "green", width = css_rules["border-width"] }
             end
         end
     end
@@ -1430,8 +1414,8 @@ function frame(obj)
     local b_t_l_radius_inner = math.round(math.max(sp_to_bp(obj.b_t_l_radius) - width / factor,0),3)
     local b_b_l_radius_inner = math.round(math.max(sp_to_bp(obj.b_b_l_radius) - width / factor,0),3)
 
-    -- See http://en.wikipedia.org/wiki/File:Circle_and_cubic_bezier.svg
-    -- http://en.wikipedia.org/wiki/Composite_B%C3%A9zier_curve
+    -- See https://en.wikipedia.org/wiki/File:Circle_and_cubic_bezier.svg
+    -- https://en.wikipedia.org/wiki/Composite_B%C3%A9zier_curve
     -- 0.5522847498
     -- http://spencermortensen.com/articles/bezier-circle/
     -- 0.551915024494
@@ -1780,7 +1764,7 @@ function dothingsbeforeoutput( thispage )
             if frame.draw then
                 local lit = node.new("whatsit","pdf_literal")
                 lit.mode = 1
-                lit.data = cg:draw_frame(frame)
+                lit.data = cg:draw_frame(frame,tex.sp(frame.draw.width))
                 if firstbox then
                     local tail = node.tail(firstbox)
                     tail.next = lit
@@ -1871,7 +1855,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     elseif typ=="rawstring" then
         return tostring(val)
     elseif typ=="string" then
-        return tostring(translate_value(val,context) or default)
+        return tostring(val or default)
     elseif typ=="number" then
         return tonumber(val)
         -- something like "3pt"
@@ -1903,11 +1887,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
         end
         return tex.sp(ret)
     elseif typ=="boolean" then
-        if val then
-            val = translate_value(val,context)
-        else
-            val = default
-        end
+        val = val or default
         if val=="yes" then
             return true
         elseif val=="no" then
@@ -1915,11 +1895,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
         end
         return nil
     elseif typ=="booleanorlength" then
-        if val then
-            val = translate_value(val,context)
-        else
-            val = default
-        end
+        val = val or default
         if val=="yes" then
             return true
         elseif val=="no" then
@@ -2310,6 +2286,7 @@ end
 function mknodes(str,fontfamily,parameter)
     -- instance is the internal fontnumber
     parameter = parameter or {}
+    local allowbreak = parameter.allowbreak or " -"
     local instance
     local instancename
     local languagecode = parameter.languagecode or defaultlanguage
@@ -2349,7 +2326,7 @@ function mknodes(str,fontfamily,parameter)
     local lastitemwasglyph
     local newline = 10
     local breakatspace = true
-    if parameter.allowbreak and not string.find(parameter.allowbreak, " ") then
+    if not string.find(allowbreak, " ") then
         breakatspace = false
     end
     -- There is a string with utf8 chars
@@ -2491,7 +2468,10 @@ function mknodes(str,fontfamily,parameter)
             head,last = node.insert_after(head,last,n)
             -- Some characters must be treated in a special way.
             -- Hyphens must be separated from words:
-            if ( n.char == 45 or n.char == 8211) and lastitemwasglyph then
+            if n.char == 8209 then -- non breaking hyphen
+                n.char = 45
+            elseif ( n.char == 45 or n.char == 8211) and lastitemwasglyph and string.find(allowbreak, "-",1,true) then
+                -- only break if allowbreak contains the hyphen char
                 local pen = node.new("penalty")
                 pen.penalty = 10000
                 head = node.insert_before(head,last,pen)
@@ -2500,7 +2480,7 @@ function mknodes(str,fontfamily,parameter)
                 local g = node.new(glue_node)
                 g.spec = node.new(glue_spec_node)
                 head,last = node.insert_after(head,last,g)
-            elseif parameter.allowbreak and string.find(parameter.allowbreak, char,1,true) then
+            elseif string.find(allowbreak,char,1,true) then
                 -- allowbreak lists characters where the publisher may break lines
                 local pen = node.new("penalty")
                 pen.penalty = 0
@@ -2557,7 +2537,7 @@ function bullet_hbox( labelwidth )
     bullet.next = post_glue
     local bullet_hbox = node.hpack(pre_glue,labelwidth,"exactly")
 
-    if options.trace then
+    if options.showobjects then
         boxit(bullet_hbox)
     end
     node.set_attribute(bullet_hbox,att_indent,labelwidth)
@@ -2582,7 +2562,7 @@ function number_hbox( num, labelwidth )
     node.tail(digits).next = post_glue
     local digit_hbox = node.hpack(pre_glue,labelwidth,"exactly")
 
-    if options.trace then
+    if options.showobjects then
         boxit(digit_hbox)
     end
     node.set_attribute(digit_hbox,att_indent,labelwidth)
@@ -2893,23 +2873,26 @@ end
 
 
 -- For debugging in tables
-function showtextatright(hbox,txt)
-    hbox = node.vpack(hbox)
-    local ff = fonts.lookup_fontfamily_name_number["__verysmall__"] or define_small_fontfamily()
+-- Currently not used until a new switch is built in
+-- function showtextatright(hbox,txt)
+--     local vbox = node.vpack(hbox)
+--     local tmp = node.has_attribute(hbox,att_tr_dynamic_data)
+--     local ff = fonts.lookup_fontfamily_name_number["__verysmall__"] or define_small_fontfamily()
 
-    local x = mknodes(tostring(txt),ff)
-    x = set_color_if_necessary(x,55)
+--     local x = mknodes(tostring(txt),ff)
+--     x = set_color_if_necessary(x,55)
 
-    local texthbox = node.hpack(x)
-    texthbox.depth = 0
-    texthbox.height = 0
+--     local texthbox = node.hpack(x)
+--     texthbox.depth = 0
+--     texthbox.height = 0
 
-    local tail = node.tail(hbox)
-    texthbox = node.insert_after(hbox,tail,texthbox)
-    texthbox = node.hpack(texthbox)
-    texthbox.width = hbox.width
-    return texthbox
-end
+--     local tail = node.tail(vbox)
+--     texthbox = node.insert_after(vbox,tail,texthbox)
+--     texthbox = node.hpack(texthbox)
+--     node.set_attribute(texthbox,att_tr_dynamic_data,tmp)
+--     texthbox.width = vbox.width
+--     return texthbox
+-- end
 
 -- blue rule below the hbox for debugging purpose
 function addhrule(hbox)
@@ -3214,6 +3197,9 @@ end
 
 --- Make a string XML safe
 function xml_escape( str )
+    if type(str) == "table" then
+        str = table.concat(str)
+    end
     if not str then return "" end
     local replace = {
         [">"] = "&gt;",
@@ -3570,7 +3556,20 @@ function next_row(rownumber,areaname,rows)
         grid = current_page.grid
         grid:set_current_row(1)
     else
-        grid:set_current_row(current_row + rows - 1,areaname)
+        -- Version 2.7.3 and before had the problem that the cursor is past the right
+        -- edge. See bug #105 (https://github.com/speedata/publisher/issues/105) for
+        -- a description.
+        -- A <NextRow rows="1" /> would go to the next free row, which could be the current
+        -- row.
+        -- <NextRow rows="1" /> should instead go to the beginning of the next row. So a
+        -- <NextRow rows="1" /> directly after <PlaceObject>...</PlaceObject> width the right
+        -- edge at the right margin will leave one blank line.
+        -- The old behavior is to decrease 1 from the movement, which makes no sense these days.
+        local dec = 0
+        if grid:current_column(areaname) > 1 then
+            dec = 1
+        end
+        grid:set_current_row(current_row + rows - dec,areaname)
         grid:set_current_column(1,areaname)
     end
 end
@@ -3596,6 +3595,20 @@ function emergency_block()
     return v
 end
 
+
+-- resolve all font aliases
+function get_fontname(fontname)
+    if not fontname then return nil end
+    local result = fontname
+    while true do
+        if fontaliases[result] then
+            result = fontaliases[result]
+        else
+            break
+        end
+    end
+    return result
+end
 
 
 --- Defaults
@@ -3635,6 +3648,10 @@ function define_default_fontfamily()
     fam.bolditalicscript = tmp
     fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
     fonts.lookup_fontfamily_name_number["text"]=#fonts.lookup_fontfamily_number_instance
+    fontaliases["sans"] = "TeXGyreHeros-Regular"
+    fontaliases["sans-bold"] = "TeXGyreHeros-Bold"
+    fontaliases["sans-italic"] = "TeXGyreHeros-Italic"
+    fontaliases["sans-bolditalic"] = "TeXGyreHeros-BoldItalic"
 end
 
 function define_small_fontfamily()
@@ -3695,16 +3712,25 @@ end
 
 -- Return the height of the page given by the relative pagenumber
 -- (starting from the current_pagenumber).
--- This is used in tables to get the hight of a page in a multi
--- page table
+-- This is used in tables to get the height of a page in a multi
+-- page table. Called from tabular.lua / set in commands.lua (#table)
 function getheight( relative_pagenumber )
     local thispagenumber = current_pagenumber + relative_pagenumber - 1
     -- w("getheight for page number %d which is page number %d in the PDF",relative_pagenumber,thispagenumber)
     local thispage = pages[thispagenumber]
+    local cp, cg -- current page, current grid
+    if not thispage then
+        cp = current_page
+        cg = current_grid
+        setup_page(thispagenumber)
+        thispage = pages[thispagenumber]
+    end
     local areaname = xpath.get_variable("__currentarea")
     if thispage then
         local firstrow = thispage.grid:first_free_row(areaname)
         local space = thispage.grid:remaining_height_sp(firstrow,areaname)
+        current_grid = cg
+        current_page = cp
         return space
     end
 end
@@ -3805,14 +3831,17 @@ end
 
 
 local images = {}
-function new_image( filename, page, box,fallback)
+function new_image(filename,page,box,fallback)
     return imageinfo(filename,page,box,fallback)
 end
 
+local imgcache = os.getenv("IMGCACHE")
+local cachemethod = os.getenv("CACHEMETHOD")
+
 -- Retrieve image from an URL if its not cached
-function get_image(requeste_url,fallback)
-    local imgcache = os.getenv("IMGCACHE")
-    local parsed_url = url.parse(requeste_url)
+function get_image(requested_url,fallback)
+    assert(type(requested_url) == "string")
+    local parsed_url = url.parse(requested_url)
     -- http://placekitten.com/g/200/300?foo=bar gives
     -- x = {
     --  ["path"] = "/g/200/300"
@@ -3827,19 +3856,75 @@ function get_image(requeste_url,fallback)
             return imageinfo("file:" .. parsed_url.path)
         end
     end
-    local request_filename = parsed_url.host .. parsed_url.path
-    if parsed_url.query then
-        request_filename = request_filename .. "?" .. parsed_url.query
-    end
-    -- md5 should be over the complete part after the host
-    local mdfivesum = string.gsub(md5.sum(request_filename),".",function(chr) return string.format("%02x",string.byte(chr)) end)
+    -- not a file: request. I guess it should be a HTTP request.
+
+    local mdfivesum = string.gsub(md5.sum(requested_url),".",function(chr) return string.format("%02x",string.byte(chr)) end)
     local path_to_image = os.getenv("IMGCACHE") .. os_separator .. mdfivesum
 
-    if lfs.isfile(path_to_image) then
-        log("Image: string used for caching (-> md5): %q",request_filename)
+
+    if cachemethod == "fast" and lfs.isfile(path_to_image) then
         log("Read image file from cache: %s",path_to_image)
-        return imageinfo(path_to_image)
+        return imageinfo(path_to_image,fallback)
     end
+
+
+    -- This Lua interpreter is not linked with openssl, so for HTTPS requests I
+    -- use the Go interface, even when the Lua interface has been requested.
+    if parsed_url.scheme == "https" or cachemethod == "optimal" then
+        -- go / optimal
+        log("Checking if image %q is up to date",requested_url)
+        comm.sendmessage('che',requested_url)
+        local msg = comm.get_string_messages()
+        if msg[1] == "OK" then
+            return imageinfo(path_to_image,fallback)
+        else
+            err("Could not fetch image %q",requested_url)
+            return imageinfo(nil,nil,nil,fallback)
+        end
+    else
+        -- lua / fast
+        log("Download image %q, string used for caching (-> md5): %q",requested_url,mdfivesum)
+        txt, statuscode, c = http.request(requested_url)
+        if statuscode ~= 200 then
+            err("404 when retrieving image %q",requested_url)
+            return imageinfo(nil,nil,nil,fallback) -- nil is "filenotfound.pdf"
+        end
+        if #txt == 0 then
+            err("Empty image in href request")
+            return imageinfo(nil,nil,nil,fallback)
+        end
+        -- Create the temporary directory if necessary
+        if not lfs.isdir(imgcache) then
+            local imgcachepaths = string.explode(imgcache,os_separator)
+            local tmp = ""
+            for i=2, #imgcachepaths do
+                tmp = tmp .. os_separator .. imgcachepaths[i]
+                if not lfs.isdir(tmp) then
+                    local ok,e = lfs.mkdir(tmp)
+                    if not ok then
+                        err("Could not create temporary directory for images: %q",tmp)
+                    end
+                end
+            end
+        end
+
+        local file,e = io.open(path_to_image,"wb")
+        if file == nil then
+            err("Could not open image file for writing into temp directory: %q",e)
+            return imageinfo(nil,nil,nil,fallback)
+        end
+        local ok
+        ok, e = file:write(txt)
+        if not ok then
+            err("Could not write image file into temp directory %q",e)
+            return imageinfo(nil,nil,nil,fallback)
+        end
+        file:flush()
+        file:close()
+
+        return imageinfo(path_to_image,fallback)
+    end
+
 
     -- c = {
     --   ["last-modified"] = "Mon, 21 Oct 2013 12:45:54 GMT"
@@ -3849,52 +3934,16 @@ function get_image(requeste_url,fallback)
     --   ["content-length"] = "52484"
     --   ["content-type"] = "image/jpeg"
     -- }
-    log("Retrieving file: %q",tostring(requeste_url))
-    txt, statuscode, c = http.request(requeste_url)
-    if statuscode ~= 200 then
-        err("404 when retrieving image %q",requeste_url)
-        return imageinfo(nil,nil,nil,fallback) -- nil is "filenotfound.pdf"
-    end
-    if #txt == 0 then
-        err("Empty image in href request")
-        return imageinfo(nil,nil,nil,fallback)
-    end
-    -- Create the temporary directory if necessary
-    if not lfs.isdir(imgcache) then
-        local imgcachepaths = string.explode(imgcache,os_separator)
-        local tmp = ""
-        for i=2, #imgcachepaths do
-            tmp = tmp .. os_separator .. imgcachepaths[i]
-            if not lfs.isdir(tmp) then
-                local ok,e = lfs.mkdir(tmp)
-                if not ok then
-                    err("Could not create temporary directory for images: %q",tmp)
-                end
-            end
-        end
-    end
-
-    local file,e = io.open(path_to_image,"wb")
-    if file == nil then
-        err("Could not open image file for writing into temp directory: %q",e)
-        return imageinfo(nil,nil,nil,fallback)
-    end
-    local ok
-    ok, e = file:write(txt)
-    if not ok then
-        err("Could not write image file into temp directory %q",e)
-        return imageinfo(nil,nil,nil,fallback)
-    end
-    file:flush()
-    file:close()
-
-    -- Just re-run this function. The image is now cached
-    return get_image(requeste_url,fallback)
+    log("Retrieving file: %q",tostring(requested_url))
 end
 
 function get_fallback_image_name( filename, missingfilename )
     if filename then
-        warning("Using fallback %q, missing file name is %q", filename, missingfilename)
+        warning("Using fallback %q, missing file name is %q", filename or "<filename>", missingfilename or "<empty>")
+        if not kpse.filelist[filename] then
+            err("fallback image %q not found",filename or "<filename>")
+            return "filenotfound.pdf"
+        end
         return filename
     else
         return "filenotfound.pdf"

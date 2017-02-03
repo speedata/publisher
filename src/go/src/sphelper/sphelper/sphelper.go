@@ -15,22 +15,18 @@ import (
 	"sphelper/config"
 	"sphelper/dashdoc"
 	"sphelper/dirstructure"
-	"sphelper/genluatranslations"
 	"sphelper/genschema"
 	"sphelper/gomddoc"
 	"sphelper/htmldoc"
 	"sphelper/sourcedoc"
-	"sphelper/translatelayout"
 
 	"github.com/speedata/optionparser"
 )
 
 var (
-	basedir string
+	basedir   string
+	separator string
 )
-
-func init() {
-}
 
 func makedoc(cfg *config.Config) error {
 	os.RemoveAll(filepath.Join(cfg.Builddir, "manual"))
@@ -51,9 +47,9 @@ func main() {
 	op.Command("dashdoc", "Generate speedata Publisher documentation (for dash)")
 	op.Command("doc", "Generate speedata Publisher documentation")
 	op.Command("dist", "Generate zip files and windows installers")
+	op.Command("genschema", "Generate schema (layoutschema-en.xml)")
 	op.Command("mkreadme", "Make readme for installation/distribution")
 	op.Command("sourcedoc", "Generate the source documentation")
-	op.Command("translate", "Translate layout")
 	err := op.Parse()
 	if err != nil {
 		log.Fatal(err)
@@ -73,7 +69,7 @@ func main() {
 
 	switch command {
 	case "build":
-		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local")
+		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local", separator)
 		if err != nil {
 			os.Exit(-1)
 		}
@@ -88,10 +84,6 @@ func main() {
 			log.Fatal(err)
 		}
 	case "genschema":
-		err = genluatranslations.DoThings(basedir)
-		if err != nil {
-			log.Fatal(err)
-		}
 		err = genschema.DoThings(basedir)
 		if err != nil {
 			log.Fatal(err)
@@ -125,7 +117,7 @@ func main() {
 				if err != nil {
 					log.Fatal(err)
 				}
-				err = buildsp.BuildGo(cfg, filepath.Join(cfg.Builddir, "speedata-publisher", "bin"), platform, arch, "directory")
+				err = buildsp.BuildGo(cfg, filepath.Join(cfg.Builddir, "speedata-publisher", "bin"), platform, arch, "directory", separator)
 				if err != nil {
 					os.Exit(-1)
 				}
@@ -194,23 +186,6 @@ func main() {
 		err := sourcedoc.GenSourcedoc(filepath.Join(cfg.Srcdir, "lua"), filepath.Join(cfg.Builddir, "sourcedoc"), filepath.Join(cfg.Basedir(), "doc", "sourcedoc", "assets"), filepath.Join(cfg.Basedir(), "doc", "sourcedoc", "img"))
 		if err != nil {
 			log.Fatal(err)
-		}
-	case "translate":
-		if len(op.Extra) > 1 {
-			if len(op.Extra) > 2 {
-				err = translatelayout.Translate(basedir, op.Extra[1], op.Extra[2])
-				if err != nil {
-					log.Fatal(err)
-				}
-			} else {
-				err = translatelayout.Translate(basedir, op.Extra[1], "")
-				if err != nil {
-					log.Fatal(err)
-				}
-			}
-		} else {
-			fmt.Println("translate needs the input and output filename: sphelper translate infile.xml [outfile.xml]")
-			os.Exit(-1)
 		}
 	default:
 		op.Help()

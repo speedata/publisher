@@ -7,14 +7,9 @@ import (
 	"strings"
 )
 
-var (
-	commandTranslationsEnDe map[string]string
-)
-
 type ChoiceXML struct {
 	Description []DescriptionXML `xml:"description"`
-	En          string           `xml:"en,attr"`
-	De          string           `xml:"de,attr"`
+	Name        string           `xml:"en,attr"`
 }
 
 type NameAtt struct {
@@ -24,8 +19,7 @@ type NameAtt struct {
 type CommandsxmlAttribute struct {
 	Description []DescriptionXML `xml:"description"`
 	Optional    string           `xml:"optional,attr"`
-	En          string           `xml:"en,attr"`
-	De          string           `xml:"de,attr"`
+	Name        string           `xml:"en,attr"`
 	Choice      []ChoiceXML      `xml:"choice"`
 	Reference   NameAtt          `xml:"referenceattribute"`
 	AllowXPath  string           `xml:"allowxpath,attr"`
@@ -53,12 +47,7 @@ func (desc *DescriptionXML) UnmarshalXML(d *xml.Decoder, start xml.StartElement)
 			if v.Name.Local == "cmd" {
 				for _, attribute := range v.Attr {
 					if attribute.Name.Local == "name" {
-						switch desc.Lang {
-						case "en":
-							txt = append(txt, attribute.Value)
-						case "de":
-							txt = append(txt, commandTranslationsEnDe[attribute.Value])
-						}
+						txt = append(txt, attribute.Value)
 					}
 				}
 			}
@@ -85,18 +74,10 @@ type RulesXML struct {
 
 type CommandsxmlCommand struct {
 	Description   []DescriptionXML       `xml:"description"`
-	En            string                 `xml:"en,attr"`
-	De            string                 `xml:"de,attr"`
+	Name          string                 `xml:"en,attr"`
 	Attributes    []CommandsxmlAttribute `xml:"attribute"`
 	Childelements ChildelementsXML       `xml:"childelements"`
 	Rules         []RulesXML             `xml:"rules"`
-}
-
-type CommandsxmlValue struct {
-	En      string `xml:"en,attr"`
-	De      string `xml:"de,attr"`
-	Key     string `xml:"key,attr"`
-	Context string `xml:"context,attr"`
 }
 
 type DefineXML struct {
@@ -110,22 +91,9 @@ type DefineAttrXML struct {
 }
 
 type CommandsXML struct {
-	Defines      []DefineXML                   `xml:"define"`
-	DefineAttrs  []DefineAttrXML               `xml:"defineattribute"`
-	Commands     []CommandsxmlCommand          `xml:"command"`
-	Translations []CommandsxmlValue            `xml:"translations>values>value"`
-	de           map[string]CommandsxmlCommand `xml:"-"`
-	en           map[string]CommandsxmlCommand `xml:"-"`
-}
-
-// first run, only parse the de/en
-type CommandsxmlCommandSimple struct {
-	En string `xml:"en,attr"`
-	De string `xml:"de,attr"`
-}
-
-type CommandsXMLSimple struct {
-	Commands []CommandsxmlCommandSimple `xml:"command"`
+	Defines     []DefineXML          `xml:"define"`
+	DefineAttrs []DefineAttrXML      `xml:"defineattribute"`
+	Commands    []CommandsxmlCommand `xml:"command"`
 }
 
 func ReadCommandsFile(basedir string) (*CommandsXML, error) {
@@ -133,27 +101,11 @@ func ReadCommandsFile(basedir string) (*CommandsXML, error) {
 	if err != nil {
 		return nil, err
 	}
-	cs := &CommandsXMLSimple{}
-	err = xml.Unmarshal(commandsdata, cs)
-	if err != nil {
-		return nil, err
-	}
-
 	c := &CommandsXML{}
-	c.de = make(map[string]CommandsxmlCommand)
-	c.en = make(map[string]CommandsxmlCommand)
-	commandTranslationsEnDe = make(map[string]string)
 
-	for _, v := range cs.Commands {
-		commandTranslationsEnDe[v.En] = v.De
-	}
 	err = xml.Unmarshal(commandsdata, c)
 	if err != nil {
 		return nil, err
-	}
-	for _, v := range c.Commands {
-		c.de[v.De] = v
-		c.en[v.En] = v
 	}
 	return c, err
 }
@@ -163,16 +115,6 @@ func (c *ChoiceXML) GetDescription(lang string) string {
 		if v.Lang == lang {
 			return v.Para
 		}
-	}
-	return ""
-}
-
-func (c *ChoiceXML) GetValue(lang string) string {
-	switch lang {
-	case "en":
-		return c.En
-	case "de":
-		return c.De
 	}
 	return ""
 }
@@ -202,52 +144,4 @@ func (c *CommandsxmlAttribute) GetDescription(lang string) string {
 		}
 	}
 	return ""
-}
-
-func (c *CommandsXML) TranslateCommand(sourcelang, destlang, commandname string) string {
-	if sourcelang == destlang {
-		return commandname
-	}
-	if sourcelang == "de" && destlang == "en" {
-		tmp := c.de[commandname]
-		return tmp.En
-	}
-	if sourcelang == "en" && destlang == "de" {
-		tmp := c.en[commandname]
-		return tmp.De
-	}
-	return "?"
-}
-
-func (c *CommandsXML) TranslateAttribute(sourcelang, destlang, commandname, attname, attvalue string) (string, string) {
-	if sourcelang == destlang {
-		return attname, attvalue
-	}
-	if sourcelang == "en" && destlang == "de" {
-		for _, v := range c.en[commandname].Attributes {
-			if v.En == attname {
-				for _, c := range v.Choice {
-					if attvalue == c.En {
-						return v.De, c.De
-					}
-				}
-				return v.De, attvalue
-			}
-		}
-		return "(1)", ""
-	}
-	if sourcelang == "de" && destlang == "en" {
-		for _, v := range c.de[commandname].Attributes {
-			if v.De == attname {
-				for _, c := range v.Choice {
-					if attvalue == c.De {
-						return v.En, c.En
-					}
-				}
-				return v.En, attvalue
-			}
-		}
-		return "(2)", ""
-	}
-	return "", ""
 }

@@ -1,6 +1,7 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
   <Pageformat width="100mm" height="100mm"/>
+  <Compatibility movecursoronplaceobject="no"/>
   <Options show-grid="no" trace="no"/>
   <Record element="data">
     <Loop select="5">

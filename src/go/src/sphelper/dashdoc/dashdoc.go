@@ -126,12 +126,12 @@ func DoThings(cfg *config.Config) error {
 		}
 
 		for _, v := range c.CommandsEn {
-			_, err = db.Exec(`INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES (?, ?, ?);`, v.NameEn, "Command", filepath.Join("commands-"+lang, v.Htmllink()))
+			_, err = db.Exec(`INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES (?, ?, ?);`, v.Name, "Command", filepath.Join("commands-"+lang, v.Htmllink()))
 			if err != nil {
 				return err
 			}
 			for _, attr := range v.Attributes() {
-				_, err = db.Exec(`INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES (?, ?, ?);`, attr.NameEn, "Function", filepath.Join("commands-"+lang, v.Htmllink()+"#"+attr.HTMLFragment()))
+				_, err = db.Exec(`INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES (?, ?, ?);`, attr.Name, "Function", filepath.Join("commands-"+lang, v.Htmllink()+"#"+attr.HTMLFragment()))
 				if err != nil {
 					return err
 				}

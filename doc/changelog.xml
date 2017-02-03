@@ -1,6 +1,95 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
+  <chapter version="2.7" date="2017-02-03">
+    <entry version="2.7.13" date="2017-02-03">
+      <en>Use tempdir setting to calculate imagecache.</en>
+      <de>Benutze Einstellung tempdir um imagecache zu ermitteln.</de>
+    </entry>
+    <entry version="2.7.12" date="2017-01-26">
+      <en>New command DefineFontalias</en>
+      <de>Neuer Befehl: DefineFontalias</de>
+    </entry>
+    <entry version="2.7.12" date="2017-01-26">
+      <en>Bugfixes for multipage tables</en>
+      <de>Fehlerkorrekturen für mehrseitige Tabellen</de>
+    </entry>
+    <entry version="2.7.11" date="2017-01-16">
+      <en>Makeindex: make page number attribute variable</en>
+      <de>Makeindex: Seitenzahl-Attribut variabel machen</de>
+    </entry>
+    <entry version="2.7.11" date="2017-01-16">
+      <en>Bugfix: objects with ht > 0 and “jump to next row”</en>
+      <de>Fehlerkorrektur: Objekte mit Höhe > 0 und »springe zur nächsten Zeile«</de>
+    </entry>
+    <entry version="2.7.11" date="2017-01-16">
+      <en>Remove images from cache when 404.</en>
+      <de>Lösche Bilder vom Cache wenn 404-Fehler kommt.</de>
+    </entry>
+    <entry version="2.7.10" date="2017-01-06">
+      <en>Allow setting of error correction level for QR-codes.</en>
+      <de>Möglichkeit, den Level der Fehlerkorrektur zu setzen für QR-Codes.</de>
+    </entry>
+    <entry version="2.7.9" date="2016-11-28">
+      <en>allowbreak=" " does not break at a hyphen character anymore.</en>
+      <de>allowbreak=" " umbricht nicht mehr bei einem Trennstrich.</de>
+    </entry>
+    <entry version="2.7.9" date="2016-11-26">
+      <en>NoBreak default is now 'keeptogether' which prevents a line break.</en>
+      <de>NoBreak Voreinstellung ist nun 'keeptogether'. Dies verhindert einen Zeilenumbruch.</de>
+    </entry>
+    <entry version="2.7.8" date="2016-11-25">
+      <en>Change U+2011 (NON-BREAKING HYPHEN) to U+002D (HYPHEN-MINUS) and don't insert a break.</en>
+      <de>Wandle U+2011 (NON-BREAKING HYPHEN) in U+002D (HYPHEN-MINUS) um und füge keinen Umbruch ein.</de>
+    </entry>
+    <entry version="2.7.7" date="2016-10-21">
+      <en>Don't clear image cache before first run</en>
+      <de>Vor dem ersten Lauf den Cache nicht löschen.</de>
+    </entry>
+    <entry version="2.7.6" date="2016-10-14">
+      <en>Better image cache - don't re-load images during the same run.</en>
+      <de>Verbesseter Bild-Cache. Bilder in einem Lauf nicht erneut herunter laden.</de>
+    </entry>
+    <entry version="2.7.5" date="2016-10-12">
+      <en>New method for image caching. Rename Image/maxsize to visiblebox.</en>
+      <de>Neue Methode für Bild-Caching. Umbenennung von Image/maxsize nach visiblebox.</de>
+    </entry>
+    <entry version="2.7.4" date="2016-10-03">
+      <en>New command Trace for debugging selections. Remove show-* on Options.</en>
+      <de>Neuer Befehl Trace für verschiedene Debugging-Varianten, entferne show-* bei Optionen.</de>
+    </entry>
+    <entry version="2.7.4" date="2016-10-03">
+      <en>Behavior change with NextRow, remove command EmptyLine, compatibility switch with Compatibility.</en>
+      <de>Verhaltensänderung bei NextRow, EmptyLine wird nicht mehr unterstützt, Rückwärtskompatibilität mit dem Befehl Compatibility.</de>
+    </entry>
+    <entry version="2.7.4" date="2016-10-03">
+      <en>New Option: defaultarea.</en>
+      <de>Neue Option: defaultarea.</de>
+    </entry>
+    <entry version="2.7.3" date="2016-09-14">
+      <en>New API /v0/statusfile/&lt;id> to get the file publisher.status.</en>
+      <de>Neue API /v0/statusfile/&lt; um die Datei publisher.status zu erhalten.</de>
+    </entry>
+    <entry version="2.7.2" date="2016-09-14">
+      <en>When PlaceObject goes past the right margin (for example in full width text), go to next row.</en>
+      <de>Wenn PlaceObject über den rechten Rand hinaus geht (z.B. bei Text in voller Breite), gehe zur nächsten Zeile.</de>
+    </entry>
+    <entry version="2.7.1" date="2016-09-08">
+      <en>Fix error when fallback image is not found</en>
+      <de>Fehlerkorrektur wenn fallback-Bild nicht gefunden wurde.</de>
+    </entry>
+    <entry version="2.7.1" date="2016-09-08">
+      <en>Emtpy attributes in Attribute don't give a table value</en>
+      <de>Leere Attribute im Befehl Attribute erzeugen keine Tabelle</de>
+    </entry>
+    <entry version="2.7.0" date="2016-08-18">
+      <en>Disable German layoutrules, bugfix (#104) distribution error</en>
+      <de>Schalte deutsche Layoutregeln ab, Fehlerkorrektur (104) Distribution ZIP-Datei</de>
+    </entry>
+  </chapter>
   <chapter version="2.6">
-    
+    <entry version="2.6.1" date="2016-08-18">
+      <en>Bugfix for Mac and Linux ZIP files</en>
+      <de>Fehlerkorrektur für Mac und Linux ZIP-Dateien</de>
+    </entry>
   </chapter>
   <chapter version="2.5" date="2016-08-11">
     <entry version="2.5.13" date="2016-08-10">

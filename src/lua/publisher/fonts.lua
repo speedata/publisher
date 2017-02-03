@@ -1,11 +1,11 @@
 --- Fonthandling after fontloading.
 --
 --  fonts.lua
---  publisher
+--  speedata publisher
 --
---  Copyright 2011 Patrick Gundlach.
---  See file COPYING in the root directory for license details.
-
+--  For a list of authors see `git blame'
+--  See file COPYING in the root directory for license info.
+--
 --- Loading a font is only one part of the story. Proper dealing with fonts
 --- requires post processing at various stages.
 
@@ -14,7 +14,7 @@ module(...,package.seeall)
 
 local lookup_fontname_filename={}
 local font_instances={}
--- Ersatz für fonts
+
 local used_fonts={}
 
 

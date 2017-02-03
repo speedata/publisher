@@ -2,6 +2,7 @@
 <Layout xmlns:sd="urn:speedata:2009/publisher/functions/en" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="urn:speedata.de:2009/publisher/en">
 
   <SetGrid width="2mm" height="10pt" />
+  <Compatibility movecursoronplaceobject="no"/>
   
   <DefineFontfamily name="text" fontsize="9" leading="10">
     <Regular fontface="TeXGyreHeros-Regular"/>

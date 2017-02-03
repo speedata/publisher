@@ -9,7 +9,7 @@ import (
 	"sphelper/config"
 )
 
-func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype string) error {
+func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype, separator string) error {
 	srcdir := cfg.Srcdir
 	os.Chdir(cfg.Basedir())
 
@@ -26,12 +26,6 @@ func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype string) error
 	binaryname := "sp"
 	if goos == "windows" {
 		binaryname += ".exe"
-	}
-	// separator should be " " or "=".
-	// Old versions of Go use " ", newer versions use "=" for setting the linker flags
-	separator := " "
-	if tmp := os.Getenv("BUILDSEPERATOR"); tmp != "" {
-		separator = tmp
 	}
 
 	// Now compile the go executable

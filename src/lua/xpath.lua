@@ -1,5 +1,8 @@
--- xpath.lua
-
+--  xpath.lua
+--  speedata publisher
+--
+--  For a list of authors see `git blame'
+--  See file COPYING in the root directory for license info.
 local string = unicode.utf8
 local comm = require("publisher.comm")
 
@@ -756,6 +759,8 @@ function M.parse(dataxml,str,ns)
     local r = M.parse_internal(dataxml,str,ns,1)
     if #r == 1 then
         return r[1]
+    elseif #r == 0 then
+        return ""
     end
     return r
 end
@@ -833,7 +838,7 @@ M.default_functions.count = function(dataxml, arg )
 end
 
 M.default_functions.empty = function( dataxml,arg )
-    if arg and arg[1] ~= nil then
+    if arg and arg[1] ~= nil and arg[1] ~= "" then
         return false
     end
     return true

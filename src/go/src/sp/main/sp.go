@@ -19,6 +19,7 @@ import (
 	"regexp"
 	"runtime"
 	"sp"
+	"sp/cache"
 	"strconv"
 	"strings"
 	"syscall"
@@ -91,13 +92,14 @@ func init() {
 		"data":       "data.xml",
 		"fontpath":   "",
 		"grid":       "",
-		"imagecache": filepath.Join(os.TempDir(), "sp", "images"),
+		"imagecache": "",
 		"jobname":    "publisher",
 		"layout":     "layout.xml",
 		"port":       "5266",
 		"quiet":      "false",
 		"runs":       "1",
 		"tempdir":    os.TempDir(),
+		"cache":      "optimal",
 	}
 
 	// The problem now is that we don't know where the executable file is
@@ -497,6 +499,10 @@ func removeLogfile() {
 	os.Remove(getOption("jobname") + ".log")
 }
 
+func writeFinishedfile(path string) {
+	ioutil.WriteFile(path, []byte("finished\n"), 0600)
+}
+
 func runPublisher() (exitstatus int) {
 	log.Print("Run speedata publisher")
 	defer removeLogfile()
@@ -562,9 +568,11 @@ func runPublisher() (exitstatus int) {
 			if err != nil {
 				log.Fatal(err)
 			}
+			writeFinishedfile(fmt.Sprintf("%s.finished", getOption("jobname")))
 			os.Exit(-1)
 			break
 		}
+		os.Setenv("CACHEMETHOD", "fast")
 	}
 	// todo: DRY code -> server/status
 	data, err := ioutil.ReadFile(fmt.Sprintf("%s.status", jobname))
@@ -628,6 +636,7 @@ func main() {
 	op := optionparser.NewOptionParser()
 	op.On("--address IPADDRESS", "Address to be used for the server mode. Defaults to 127.0.0.1", options)
 	op.On("--autoopen", "Open the PDF file (MacOS X and Linux only)", options)
+	op.On("--cache METHOD", "Use cache method. One of 'fast' or 'optimal'. Default is 'optimal'", options)
 	op.On("-c NAME", "--config", "Read the config file with the given NAME. Default: 'publisher.cfg'", &configfilename)
 	op.On("--credits", "Show credits and exit", showCredits)
 	op.On("--no-cutmarks", "Display cutmarks in the document", layoutoptions)
@@ -662,6 +671,7 @@ func main() {
 
 	op.Command("clean", "Remove publisher generated files")
 	op.Command("compare", "Compare files for quality assurance")
+	op.Command("clearcache", "Clear image cache")
 	op.Command("doc", "Open documentation")
 	op.Command("list-fonts", "List installed fonts (use together with --xml for copy/paste)")
 	op.Command("run", "Start publishing (default)")
@@ -731,10 +741,15 @@ func main() {
 		}
 		defaults["fontpath"] = ff
 	}
+
+	if getOption("imagecache") == "" {
+		options["imagecache"] = filepath.Join(getOption("tempdir"), "sp", "images")
+	}
 	os.Setenv("SP_MAINLANGUAGE", mainlanguage)
 	os.Setenv("SP_FONT_PATH", getOption("fontpath"))
 	os.Setenv("SP_PATH_REWRITE", getOption("pathrewrite"))
 	os.Setenv("IMGCACHE", getOption("imagecache"))
+	os.Setenv("CACHEMETHOD", getOption("cache"))
 
 	if ed := cfg.String("DEFAULT", "extra-dir"); ed != "" {
 		abspath, err := filepath.Abs(ed)
@@ -828,7 +843,7 @@ func main() {
 			}
 
 		}
-		ioutil.WriteFile(finishedfilename, []byte("finished\n"), 0600)
+		writeFinishedfile(finishedfilename)
 
 		// open PDF if necessary
 		if getOption("autoopen") == "true" {
@@ -852,6 +867,8 @@ func main() {
 		} else {
 			log.Println("Please give one directory")
 		}
+	case "clearcache":
+		cache.Clear()
 	case "clean":
 		jobname := getOption("jobname")
 		files, err := filepath.Glob(jobname + "*")

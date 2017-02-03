@@ -56,11 +56,7 @@ func (p *para) HTML(lang string) string {
 							fmt.Printf("There is an unknown cmd in the para section of %q\n", attribute.Value)
 							os.Exit(-1)
 						}
-						if lang == "en" {
-							cmdname = x.NameEn
-						} else {
-							cmdname = x.NameEn
-						}
+						cmdname = x.Name
 					}
 				}
 				ret = append(ret, fmt.Sprintf(`<a href=%q>%s</a>`, x.Htmllink(), cmdname))
@@ -99,11 +95,7 @@ outer:
 				var cmdname string
 				for _, attribute := range v.Attr {
 					if attribute.Name.Local == "name" {
-						if lang == "en" {
-							cmdname = attribute.Value
-						} else {
-							cmdname = attribute.Value
-						}
+						cmdname = attribute.Value
 					}
 				}
 				ret = append(ret, cmdname)
@@ -128,8 +120,7 @@ type define struct {
 type choice struct {
 	commands      *Commands
 	Text          []byte `xml:",innerxml"`
-	NameEn        string `xml:"en,attr"`
-	NameDe        string `xml:"de,attr"`
+	Name          string `xml:"en,attr"`
 	DescriptionEn *description
 	DescriptionDe *description
 }
@@ -139,8 +130,7 @@ type Attribute struct {
 	DescriptionEn *description
 	DescriptionDe *description
 	Choice        []*choice
-	NameEn        string
-	NameDe        string
+	Name          string
 	Css           string
 	Since         string
 	Type          string
@@ -204,9 +194,7 @@ func (a *Attribute) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error
 				for _, attribute := range v.Attr {
 					switch attribute.Name.Local {
 					case "en":
-						c.NameEn = attribute.Value
-					case "de":
-						c.NameDe = attribute.Value
+						c.Name = attribute.Value
 					}
 				}
 				a.Choice = append(a.Choice, c)
@@ -214,10 +202,6 @@ func (a *Attribute) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error
 		}
 	}
 	return nil
-}
-
-func (a *Attribute) Name() string {
-	return a.NameEn
 }
 
 func (a *Attribute) DescriptionHTML(lang string) template.HTML {
@@ -238,10 +222,10 @@ func (a *Attribute) DescriptionHTML(lang string) template.HTML {
 	for _, c := range a.Choice {
 		switch lang {
 		case "en":
-			name = c.NameEn
+			name = c.Name
 			desc = c.DescriptionEn.HTML()
 		case "de":
-			name = c.NameEn
+			name = c.Name
 			desc = c.DescriptionDe.HTML()
 		}
 		ret = append(ret, "<tr><td><p>")
@@ -257,7 +241,7 @@ func (a *Attribute) DescriptionHTML(lang string) template.HTML {
 }
 
 func (a *Attribute) HTMLFragment() string {
-	return a.NameEn
+	return a.Name
 }
 
 type Childelement struct {
@@ -329,8 +313,7 @@ type Command struct {
 	ExamplesDe     []*example
 	Childelement   *Childelement
 	Children       map[string][]*Command
-	NameEn         string
-	NameDe         string
+	Name           string
 	Css            string
 	Since          string
 	seealso        *seealso
@@ -343,17 +326,13 @@ func (c *Command) Parents(lang string) []*Command {
 		cmds = append(cmds, k)
 	}
 	mutex.Unlock()
-	if lang == "en" {
-		sort.Sort(commandsbyen{cmds})
-	} else {
-		sort.Sort(commandsbyen{cmds})
-	}
+	sort.Sort(commandsbyen{cmds})
 
 	return cmds
 }
 
 func (c *Command) String() string {
-	return c.NameEn
+	return c.Name
 }
 
 func (c *Command) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error {
@@ -406,9 +385,7 @@ func (c *Command) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error {
 				for _, attribute := range v.Attr {
 					switch attribute.Name.Local {
 					case "en":
-						a.NameEn = attribute.Value
-					case "de":
-						a.NameDe = attribute.Value
+						a.Name = attribute.Value
 					case "css":
 						a.Css = attribute.Value
 					case "since":
@@ -451,7 +428,7 @@ func (c *Command) Htmllink() string {
 	if c == nil {
 		return ""
 	}
-	tmp := url.URL{Path: strings.ToLower(c.NameEn)}
+	tmp := url.URL{Path: strings.ToLower(c.Name)}
 	filenameSansExtension := tmp.String()
 	return filenameSansExtension + ".html"
 }
@@ -484,16 +461,71 @@ func (c *Command) RemarkHTML(lang string) template.HTML {
 }
 
 func (c *Command) InfoHTML(lang string) template.HTML {
-	var ret string
+	var r *bytes.Reader
 	switch lang {
 	case "en":
-		ret = c.InfoEn.HTML()
+		if x := c.InfoEn; x == nil {
+			return template.HTML("")
+		} else {
+			r = bytes.NewReader(x.Text)
+		}
 	case "de":
-		ret = c.InfoDe.HTML()
-	default:
-		ret = ""
+		if x := c.InfoDe; x == nil {
+			return template.HTML("")
+		} else {
+			r = bytes.NewReader(x.Text)
+		}
 	}
-	return template.HTML(ret)
+
+	var ret []string
+	dec := xml.NewDecoder(r)
+
+	inListing := false
+	for {
+		tok, err := dec.Token()
+		if err != nil && err == io.EOF {
+			break
+		}
+		if err != nil {
+			panic(err)
+		}
+		switch v := tok.(type) {
+		case xml.StartElement:
+			switch v.Name.Local {
+			case "listing":
+				inListing = true
+			case "image":
+				var fn, wd string
+				for _, a := range v.Attr {
+					wd = "max-width: 90%;"
+					if a.Name.Local == "file" {
+						fn = a.Value
+					} else if a.Name.Local == "width" {
+						wd = fmt.Sprintf(`width: %spx;`, a.Value)
+					}
+				}
+				ret = append(ret, fmt.Sprintf(`<img style="%s padding-left: 1em;" src="../img/%s">`, wd, fn))
+			case "para":
+				p := &para{}
+				p.commands = c.commands
+				err = dec.DecodeElement(p, &v)
+				if err != nil {
+					panic(err)
+				}
+				ret = append(ret, p.HTML(lang))
+			}
+		case xml.CharData:
+			if inListing {
+				ret = append(ret, `<pre class="syntax xml">`+html.EscapeString(string(v))+`</pre>`)
+			}
+		case xml.EndElement:
+			switch v.Name.Local {
+			case "listing":
+				inListing = false
+			}
+		}
+	}
+	return template.HTML(strings.Join(ret, ""))
 }
 
 func (c *Command) DescriptionText(lang string) string {
@@ -590,14 +622,10 @@ func (c *Command) Seealso(lang string) template.HTML {
 					if attribute.Name.Local == "name" {
 						x = c.commands.CommandsEn[attribute.Value]
 						if x == nil {
-							fmt.Printf("There is an unknown cmd in the seealso section of %q (%q)\n", c.NameEn, attribute.Value)
+							fmt.Printf("There is an unknown cmd in the seealso section of %q (%q)\n", c.Name, attribute.Value)
 							os.Exit(-1)
 						}
-						if lang == "en" {
-							cmdname = x.NameEn
-						} else {
-							cmdname = x.NameEn
-						}
+						cmdname = x.Name
 					}
 				}
 				ret = append(ret, fmt.Sprintf(`<a href=%q>%s</a>`, x.Htmllink(), cmdname))
@@ -781,8 +809,6 @@ func (c *Command) Childelements(lang string) []*Command {
 type Commands struct {
 	defines          map[string]*define
 	CommandsEn       map[string]*Command
-	CommandsDe       map[string]*Command
-	CommandsSortedDe []*Command
 	CommandsSortedEn []*Command
 }
 
@@ -796,23 +822,16 @@ func (s sortattributes) Len() int      { return len(s) }
 func (s sortattributes) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
 
 type commandsbyen struct{ sortcommands }
-type commandsbyde struct{ sortcommands }
 type attributesbyen struct{ sortattributes }
-type attributesbyde struct{ sortattributes }
 
-func (s commandsbyde) Less(i, j int) bool { return s.sortcommands[i].NameDe < s.sortcommands[j].NameDe }
-func (s commandsbyen) Less(i, j int) bool { return s.sortcommands[i].NameEn < s.sortcommands[j].NameEn }
-func (s attributesbyde) Less(i, j int) bool {
-	return s.sortattributes[i].NameDe < s.sortattributes[j].NameDe
-}
+func (s commandsbyen) Less(i, j int) bool { return s.sortcommands[i].Name < s.sortcommands[j].Name }
 func (s attributesbyen) Less(i, j int) bool {
-	return s.sortattributes[i].NameEn < s.sortattributes[j].NameEn
+	return s.sortattributes[i].Name < s.sortattributes[j].Name
 }
 
 func ReadCommandsFile(r io.Reader) (*Commands, error) {
 	commands := &Commands{}
 	commands.defines = make(map[string]*define)
-	commands.CommandsDe = make(map[string]*Command)
 	commands.CommandsEn = make(map[string]*Command)
 	dec := xml.NewDecoder(r)
 	for {
@@ -847,17 +866,12 @@ func ReadCommandsFile(r io.Reader) (*Commands, error) {
 				if err != nil {
 					return nil, err
 				}
-				commands.CommandsSortedDe = append(commands.CommandsSortedDe, c)
 				commands.CommandsSortedEn = append(commands.CommandsSortedEn, c)
 
 				for _, attribute := range v.Attr {
-					if attribute.Name.Local == "de" {
-						commands.CommandsDe[attribute.Value] = c
-						c.NameDe = attribute.Value
-					}
 					if attribute.Name.Local == "en" {
 						commands.CommandsEn[attribute.Value] = c
-						c.NameEn = attribute.Value
+						c.Name = attribute.Value
 					}
 					if attribute.Name.Local == "css" {
 						c.Css = attribute.Value
@@ -869,7 +883,6 @@ func ReadCommandsFile(r io.Reader) (*Commands, error) {
 			}
 		}
 	}
-	sort.Sort(commandsbyde{commands.CommandsSortedDe})
 	sort.Sort(commandsbyen{commands.CommandsSortedEn})
 	return commands, nil
 }

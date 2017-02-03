@@ -1,0 +1,27 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  >
+
+  <Options crop="yes"/>
+
+  <DefineFontfamily name="title" fontsize="15" leading="17">
+    <Regular fontface="sans"/>
+    <Bold fontface="sans-bold"/>
+    <BoldItalic fontface="sans-bolditalic"/>
+    <Italic fontface="sans-italic"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock fontface="title" width="6">
+        <Paragraph>
+          <Value>Hello world! </Value>
+          <B><Value>Bold</Value></B>
+          <Value> </Value>
+          <I><Value>Italic</Value></I>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

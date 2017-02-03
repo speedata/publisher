@@ -1,0 +1,24 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="80mm" height="80mm" />
+
+  <Record element="data">
+    <Loop select="2">
+      <PlaceObject column="1">
+        <Table>
+          <Loop select="10" variable="i">
+            <Tr>
+              <Td>
+                <Paragraph>
+                  <Value>Row </Value>
+                  <Value select="$i"/>
+                </Paragraph>
+              </Td>
+            </Tr>
+          </Loop>
+        </Table>
+      </PlaceObject>
+    </Loop>
+  </Record>
+</Layout>

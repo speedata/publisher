@@ -1,9 +1,9 @@
---- For debugging help
+--- This file contains some debugging aids
 --
 --  sd-debug.lua
---  publisher
+--  speedata publisher
 --
---  Copyright 2010 Patrick Gundlach.
+--  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
 
 function w( ... )
@@ -36,7 +36,7 @@ do
   tables_printed = {}
   function printtable (ind,tbl_to_print,level)
     if type(tbl_to_print) ~= "table" then
-      log("printtable: %q ist keine Tabelle, es ist ein %s (%q)",tostring(ind),type(tbl_to_print),tostring(tbl_to_print))
+      log("printtable: %q is not a table, it is a %s (%q)",tostring(ind),type(tbl_to_print),tostring(tbl_to_print))
       return
     end
     level = level or 0
@@ -55,7 +55,10 @@ do
     level=level+1
 
     for k,l in pairs(tbl_to_print) do
-      if (type(l)=="table") then
+        if type(l) == "userdata" and node.is_node(l) then
+            l = nodelist_tostring(l)
+        end
+      if type(l)=="table" then
         if k ~= ".__parent" then
           printtable(k,l,level)
         else
@@ -87,4 +90,40 @@ function tracetable( name,tbl )
   end
 end
 
---- Debugging (Ende)
+
+function nodelist_tostring( head )
+    local ret = {}
+    while head do
+        if head.id == publisher.hlist_node or head.id == publisher.vlist_node then
+            ret[#ret + 1] = nodelist_tostring(head.head)
+        elseif head.id == publisher.glyph_node then
+            ret[#ret + 1] = unicode.utf8.char(head.char)
+        elseif head.id == publisher.rule_node then
+            if  head.width > 0 then
+                ret[#ret + 1] = "|"
+            end
+        elseif head.id == publisher.penalty_node then
+            if head.next and head.next.id == publisher.glue_node and head.next.next and head.next.next.id == publisher.penalty_node then
+                ret[#ret + 1] = "↩"
+                head = head.next
+                head = head.next
+            end
+        elseif head.id == publisher.glue_node then
+            ret[#ret + 1] = "·"
+        elseif head.id == publisher.whatsit_node then
+            if head.subtype == publisher.pdf_refximage_whatsit then
+                ret[#ret + 1] = string.format("⊡")
+            else
+                ret[#ret + 1] = "¿"
+            end
+        else
+            w(head.id)
+        end
+
+        head = head.next
+    end
+    return table.concat(ret,"")
+end
+
+
+--- Debugging (end)

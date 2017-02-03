@@ -1,6 +1,6 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
     xmlns:sd="urn:speedata:2009/publisher/functions/en" version="2.5.12">
-    <Options show-grid="no" />
+    <Trace grid="no" gridallocation="no"/>
     <SetGrid height="12pt" nx="10"/>
 
     <Pageformat width="180mm" height="90mm"/>
@@ -17,7 +17,7 @@
                 padding-right="2mm"/>
         </PlaceObject>
 
-        <PlaceObject column="1" row="1" page="next">
+        <PlaceObject column="1" row="1" page="next" keepposition="yes">
             <Box width="4" height="7" backgroundcolor="steelblue" padding-top="2mm"
                 padding-right="2mm"/>
         </PlaceObject>
