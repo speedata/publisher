@@ -92,7 +92,7 @@ func init() {
 		"data":       "data.xml",
 		"fontpath":   "",
 		"grid":       "",
-		"imagecache": filepath.Join(os.TempDir(), "sp", "images"),
+		"imagecache": "",
 		"jobname":    "publisher",
 		"layout":     "layout.xml",
 		"port":       "5266",
@@ -740,6 +740,10 @@ func main() {
 			log.Fatal(err)
 		}
 		defaults["fontpath"] = ff
+	}
+
+	if getOption("imagecache") == "" {
+		options["imagecache"] = filepath.Join(getOption("tempdir"), "sp", "images")
 	}
 	os.Setenv("SP_MAINLANGUAGE", mainlanguage)
 	os.Setenv("SP_FONT_PATH", getOption("fontpath"))
