@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.7">
+    <entry version="2.7.13" date="2017-02-03">
+      <en>Use tempdir setting to calculate imagecache.</en>
+      <de>Benutze Einstellung tempdir um imagecache zu ermitteln.</de>
+    </entry>
     <entry version="2.7.12" date="2017-01-26">
       <en>New command DefineFontalias</en>
       <de>Neuer Befehl: DefineFontalias</de>
