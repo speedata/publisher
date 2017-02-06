@@ -71,7 +71,7 @@ func watchDirectory(dir string, events []Event) {
 
 	}()
 
-	err = watcher.Add("/tmp/foo")
+	err = watcher.Add(dir)
 	if err != nil {
 		log.Fatal(err)
 	}
