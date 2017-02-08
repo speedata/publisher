@@ -4202,7 +4202,7 @@
          </optional>
          <optional>
             <attribute name="top-distance">
-               <a:documentation>Todo: document</a:documentation>
+               <a:documentation>Der Leerraum über dieser Zeile, wenn sie nicht die erste Zeile auf einer Seite/Bereich ist</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>

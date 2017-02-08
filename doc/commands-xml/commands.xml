@@ -7868,10 +7868,10 @@
     </attribute>
     <attribute en="top-distance" optional="yes" type="numberorlength">
       <description xml:lang="en">
-        <para>Todo: document</para>
+        <para>The space above this row if it is not the first line on a new page / area.</para>
       </description>
       <description xml:lang="de">
-        <para>Todo: document</para>
+        <para>Der Leerraum über dieser Zeile, wenn sie nicht die erste Zeile auf einer Seite/Bereich ist</para>
       </description>
     </attribute>
     <example xml:lang="en">

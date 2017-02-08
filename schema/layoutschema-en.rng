@@ -4202,7 +4202,7 @@
          </optional>
          <optional>
             <attribute name="top-distance">
-               <a:documentation>Todo: document</a:documentation>
+               <a:documentation>The space above this row if it is not the first line on a new page / area.</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>

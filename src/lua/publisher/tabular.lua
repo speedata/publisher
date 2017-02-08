@@ -1554,7 +1554,7 @@ function typeset_table(self)
             else
                 space_above = 0
             end
-            thissplittable[#thissplittable + 1] = publisher.make_glue({space_above})
+            thissplittable[#thissplittable + 1] = publisher.make_glue({ width = space_above})
             thissplittable[#thissplittable + 1] = rows[i]
             if i < #rows or self.tablefoot_contents then
                 thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep})

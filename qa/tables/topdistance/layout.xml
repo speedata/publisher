@@ -1,0 +1,29 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <!-- test top distance -->
+  <Pageformat width="50mm" height="60mm"/>
+  <Record element="data">
+    <PlaceObject>
+      <Table width="3" stretch="max">
+        <Loop select="2">
+        <Tr top-distance="10pt" backgroundcolor="lightgray">
+          <Td colspan="2">
+            <Paragraph><Value>Title</Value></Paragraph>
+          </Td>
+        </Tr>
+          <Loop select="2">
+            <Tr>
+              <Td>
+                <Paragraph><Value>Hello</Value></Paragraph>
+              </Td>
+              <Td>
+                <Paragraph><Value>World!</Value></Paragraph>
+              </Td>
+            </Tr>
+          </Loop>
+        </Loop>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
