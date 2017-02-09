@@ -1082,19 +1082,22 @@
          <oneOrMore>
             <interleave>
                <optional>
-                  <ref name="e_Element"></ref>
-               </optional>
-               <optional>
                   <ref name="e_Attribute"></ref>
                </optional>
                <optional>
                   <ref name="e_Copy-of"></ref>
                </optional>
                <optional>
-                  <ref name="e_Switch"></ref>
+                  <ref name="e_Element"></ref>
                </optional>
                <optional>
                   <ref name="e_ForAll"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Makeindex"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Switch"></ref>
                </optional>
             </interleave>
          </oneOrMore>
@@ -2967,7 +2970,7 @@
          </optional>
          <optional>
             <attribute name="rotate">
-               <a:documentation>Experimental/obsolete. Rotates the object.  The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</a:documentation>
+               <a:documentation>Rotates the object.  The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</a:documentation>
             </attribute>
          </optional>
          <optional>

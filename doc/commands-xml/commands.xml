@@ -2200,11 +2200,12 @@
     <childelements>
       <oneOrMore>
         <interleave>
-          <optional><cmd name="Element"/></optional>
           <optional><cmd name="Attribute"/></optional>
           <optional><cmd name="Copy-of"/></optional>
-          <optional><cmd name="Switch"/></optional>
+          <optional><cmd name="Element"/></optional>
           <optional><cmd name="ForAll"/></optional>
+          <optional><cmd name="Makeindex"/></optional>
+          <optional><cmd name="Switch"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>
@@ -3700,12 +3701,6 @@
   </Record>
 ]]></listing>
     </example>
-    <info xml:lang="en">
-      <para>The attribute for the page number must be named <tt>page</tt>. This limitation will go away in a future version.</para>
-    </info>
-    <info xml:lang="de">
-      <para>Das Attribut für die Seitenzahl muss <tt>page</tt> heißen. Diese Einschränkung wird in einer zukünftigen Version aufgehoben sein.</para>
-    </info>
     <seealso>
       <cmd name="SaveDataset"/>
     </seealso>
@@ -4260,7 +4255,7 @@
         <para>Crop the pages so that the pdf size of the page is at its minimum. Allowed values are yes, no and a length.</para>
       </description>
       <description xml:lang="de">
-        <para>Beschneidet eine Seite, so dass die Objekte auf einer Seite die Größe bestimmen. Erlabute Werte sind 'yes', 'no' und eine Längenangabe.</para>
+        <para>Beschneidet eine Seite, so dass die Objekte auf einer Seite die Größe bestimmen. Erlaubte Werte sind 'yes', 'no' und eine Längenangabe.</para>
       </description>
     </attribute>
     <attribute en="cutmarks" optional="yes">
@@ -5259,10 +5254,10 @@
     </attribute>
     <attribute en="rotate" type="number" optional="yes">
       <description xml:lang="en">
-        <para>Experimental/obsolete. Rotates the object.  The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</para>
+        <para>Rotates the object.  The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</para>
       </description>
       <description xml:lang="de">
-        <para>Experimentell / Obsolete. Dreht das Objekt. Ein Winkel > 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</para>
+        <para>Dreht das Objekt. Ein Winkel > 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</para>
       </description>
     </attribute>
     <attribute en="maxheight" type="number" optional="yes">

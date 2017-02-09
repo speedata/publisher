@@ -1082,19 +1082,22 @@
          <oneOrMore>
             <interleave>
                <optional>
-                  <ref name="e_Element"></ref>
-               </optional>
-               <optional>
                   <ref name="e_Attribute"></ref>
                </optional>
                <optional>
                   <ref name="e_Copy-of"></ref>
                </optional>
                <optional>
-                  <ref name="e_Switch"></ref>
+                  <ref name="e_Element"></ref>
                </optional>
                <optional>
                   <ref name="e_ForAll"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Makeindex"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Switch"></ref>
                </optional>
             </interleave>
          </oneOrMore>
@@ -2256,7 +2259,7 @@
          </optional>
          <optional>
             <attribute name="crop">
-               <a:documentation>Beschneidet eine Seite, so dass die Objekte auf einer Seite die Größe bestimmen. Erlabute Werte sind &#39;yes&#39;, &#39;no&#39; und eine Längenangabe.</a:documentation>
+               <a:documentation>Beschneidet eine Seite, so dass die Objekte auf einer Seite die Größe bestimmen. Erlaubte Werte sind &#39;yes&#39;, &#39;no&#39; und eine Längenangabe.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2967,7 +2970,7 @@
          </optional>
          <optional>
             <attribute name="rotate">
-               <a:documentation>Experimentell / Obsolete. Dreht das Objekt. Ein Winkel &gt; 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</a:documentation>
+               <a:documentation>Dreht das Objekt. Ein Winkel &gt; 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</a:documentation>
             </attribute>
          </optional>
          <optional>
