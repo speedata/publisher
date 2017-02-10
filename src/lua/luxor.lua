@@ -135,9 +135,10 @@ local function parse_doctype(txt,pos)
 	return newpos
 end
 
+-- PIs are ignored at the moment
 local function parse_pi(txt,pos)
-	local _,newpos,contents = string.find(txt,"<%?(.-)%?>",pos)
-	return {[".__type"]="pi", contents },newpos
+	local _,newpos,contents = string.find(txt,"<%?(.-)%?>%s*",pos)
+	return newpos + 1
 end
 
 local function parse_endelement( txt,pos )
@@ -149,12 +150,14 @@ local function parse_element( txt,pos,namespaces )
 	local second_nextchar
 	local contents
 	local _,_,nextchar = string.find(txt,"(.)",pos+1)
+	if nextchar == "?" then
+		-- jump over pi
+		pos = parse_pi(txt,pos)
+	end
 	if nextchar == "/" then -- </endelement
 		pos = parse_endelement(txt,pos)
 		return nil,pos
 		-- end element
-	elseif nextchar == "?" then
-		return parse_pi(txt,pos)
 	else
 		local elt,eltname,namespace,local_name,ns,xinclude
 		_,pos,eltname = string.find(txt,"([^/>%s]+)",pos + 1)
