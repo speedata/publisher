@@ -60,5 +60,23 @@ und
 
 Die Zuordnung vom Befehlsnamen in den CSS-Anweisungen und im Layout-Regelwerk sind im Handbuch in der Befehlsreferenz dokumentiert.
 
+Zugriff auf die Daten mit CSS
+-----------------------------
+
+Wenn die Daten z.B in folgender Form vorliegen:
+
+    <data>hello <green>green</green> world <br/>with a <span class="blue">span</span>.</data>
+
+kann man mit folgendem Stylesheet die gewünschten Farben erzeugen:
+
+    <Stylesheet>
+      green {
+        color: green;
+      }
+      .blue {
+        color: blue;
+      }
+    </Stylesheet>
+
 
 

@@ -58,3 +58,22 @@ and
 
 The mapping of the command names for the CSS rules and the layout rules are documented in the reference manual.
 
+Accessing the data with CSS
+-----------------------------
+
+If the data is in the following format:
+
+    <data>hello <green>green</green> world <br/>with a <span class="blue">span</span>.</data>
+
+you can get the desired colors with the following stylesheet:
+
+    <Stylesheet>
+      green {
+        color: green;
+      }
+      .blue {
+        color: blue;
+      }
+    </Stylesheet>
+
+

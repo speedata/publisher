@@ -1951,6 +1951,29 @@ function parse_html( elt, parameter )
             x = node.hpack(x)
             node.set_attribute(x,att_dont_format,1)
             return x
+        elseif eltname == "span" then
+            local css_rules = css:matches({element = 'span', class=elt.class}) or {}
+            local has_css = false
+            local colorindex
+
+            if css_rules["color"] then
+                has_css = true
+                colorindex = colors[css_rules["color"]].index
+            end
+            local td = css_rules["text-decoration"]
+            if  td and string.match(td,"underline") then
+               has_css = true
+                underline = 1
+            end
+            if has_css then
+                local b = paragraph:new()
+                if type(elt[1]) == "string" then
+                    b:append(elt[1],{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                    b:set_color(colorindex)
+                    a:append(b)
+                    elt = {}
+                end
+            end
         elseif eltname == "b" or eltname == "strong" then
             bold = 1
         elseif eltname == "i" then
@@ -2050,11 +2073,34 @@ function parse_html( elt, parameter )
                 a:append(enl)
             end
             return a
-        elseif string.match(eltname,"^[bB][rR]$") then
+        elseif eltname=="br" then
             a:append("\n",{})
         elseif #elt == 0 then
             -- dummy: insert U+200B ZERO WIDTH SPACE which results in a strut
             a:append("\xE2\x80\x8B")
+        else
+            local css_rules = css:matches({element = eltname, class=elt.class}) or {}
+            local has_css = false
+            local colorindex
+
+            if css_rules["color"] then
+                has_css = true
+                colorindex = colors[css_rules["color"]].index
+            end
+            local td = css_rules["text-decoration"]
+            if  td and string.match(td,"underline") then
+               has_css = true
+                underline = 1
+            end
+            if has_css then
+                local b = paragraph:new()
+                if type(elt[1]) == "string" then
+                    b:append(elt[1],{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                    b:set_color(colorindex)
+                    a:append(b)
+                    elt = {}
+                end
+            end
         end
     end
     -- Recurse into the children...
