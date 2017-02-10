@@ -1,9 +1,19 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="2.8">
+  <chapter version="2.9">
+    <entry version="2.9.2" date="2017-02-10">
+      <en>Bugfix for processing instructions in the XML file (will be ignored now)</en>
+      <de>Fehlerkorrektur für processing instructions im XML (werden ignoriert)</de>
+    </entry>
+    <entry version="2.9.2" date="2017-02-10">
+      <en>New feature: style &lt;span> and other elemnts in data with CSS.</en>
+      <de>Neues Feature: &lt;span> und andere Elemente in den Daten können mit CSS angesprochen werden.</de>
+    </entry>
     <entry version="2.9.1" date="2017-02-08">
       <en>Bugfix: top-distance in Tr</en>
       <de>Fehlerkorrektur: top-distance in Tr</de>
     </entry>
+  </chapter>
+  <chapter version="2.8">
     <entry version="2.8.1" date="2017-02-06">
       <en>Fix hotfolder (variable directory)</en>
       <de>Korrigiere Hotfolder (variables Verzeichnis)</de>
