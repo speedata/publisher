@@ -1858,6 +1858,17 @@ function commands.pagetype(layoutxml,dataxml)
     local tmp_tab = {}
     local test         = publisher.read_attribute(layoutxml,dataxml,"test","rawstring")
     local pagetypename = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
+    local defaultcolor = publisher.read_attribute(layoutxml,dataxml,"defaultcolor","rawstring")
+
+    local colortable
+    if defaultcolor then
+        if not publisher.colors[defaultcolor] then
+            err("Pagetype / defaultcolor: color %q is not defined yet.",defaultcolor)
+        else
+            colortable = publisher.colors[defaultcolor].index
+        end
+    end
+
     local tab = publisher.dispatch(layoutxml,dataxml)
 
     for i,j in ipairs(tab) do
@@ -1869,8 +1880,9 @@ function commands.pagetype(layoutxml,dataxml)
             tmp_tab [#tmp_tab + 1] = j
         end
     end
+    tmp_tab.defaultcolor = colortable
     -- assert(type(test())=="boolean")
-    publisher.masterpages[#publisher.masterpages + 1] = { is_pagetype = test, res = tmp_tab, name = pagetypename,ns=layoutxml[".__ns"] }
+    publisher.masterpages[#publisher.masterpages + 1] = { is_pagetype = test, res = tmp_tab, name = pagetypename,ns=layoutxml[".__ns"]}
 end
 
 --- Paragraph

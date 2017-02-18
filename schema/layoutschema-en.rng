@@ -2748,6 +2748,11 @@
    <define name="e_Pagetype">
       <element name="Pagetype">
          <a:documentation>Define a master page. A master page is chosen depending on the criterion given with the attribute »test«.</a:documentation>
+         <optional>
+            <attribute name="defaultcolor">
+               <a:documentation>The default text color for this page (unless overridden in Paragraph or Textblock). Defaults to &#39;black&#39;.</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="test">
             <a:documentation>If this xpath expression evaluates to true, this page is taken as a master page.</a:documentation>
          </attribute>

@@ -4768,6 +4768,14 @@
         <optional><cmd name="Grid"/></optional>
       </interleave>
     </childelements>
+    <attribute en="defaultcolor" optional="yes" type="text" since="2.9.3">
+      <description xml:lang="en">
+        <para>The default text color for this page (unless overridden in Paragraph or Textblock). Defaults to 'black'.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Textfarbe der Seite, sofern sie nicht in Textblock oder Paragraph überschrieben wird. Voreinstellung ist 'black'.</para>
+      </description>
+    </attribute>
     <attribute en="test" type="xpath" optional="no">
       <description xml:lang="en">
         <para>If this xpath expression evaluates to true, this page is taken as a master page.</para>

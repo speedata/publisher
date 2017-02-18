@@ -1,0 +1,42 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+   <Pageformat width="5cm" height="6cm"/>
+  <Pagetype name="true" test="sd:odd(sd:current-page())" defaultcolor="red">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"></Margin>
+  </Pagetype>
+  <DefineTextformat name="text" orphan="yes" widow="yes"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>Some text</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <PlaceObject>
+      <Textblock>
+        <Paragraph color="green">
+          <Value>Some text</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <PlaceObject>
+      <Textblock color="blue">
+        <Paragraph color="green">
+          <Value>Some text</Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>Some text</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <Output>
+      <Text>
+        <Paragraph>
+          <Value>The quick brown fox jumps over the laziest dog</Value>
+        </Paragraph>
+      </Text>
+    </Output>
+  </Record>
+</Layout>

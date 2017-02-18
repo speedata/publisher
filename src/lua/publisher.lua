@@ -830,11 +830,8 @@ function initialize_luatex_and_generate_pdf()
     -- current_pagestore_name is set when in SavePages and nil otherwise
     if page_initialized_p(current_pagenumber) and current_pagestore_name == nil then
         dothingsbeforeoutput(pages[current_pagenumber])
-
         local n = node.vpack(pages[current_pagenumber].pagebox)
-
-        tex.box[666] = n
-        tex.shipout(666)
+        shipout(n,current_pagenumber)
     end
 
     --- At this point, all pages are in the PDF
@@ -882,6 +879,19 @@ function initialize_luatex_and_generate_pdf()
         file:write("\n</marker>")
         file:close()
     end
+end
+
+
+
+function shipout(nodelist, pagenumber )
+    local colortable = pages[pagenumber].defaultcolor
+    if colortable and colortable ~= 1 then
+        nodelist = set_color_if_necessary(nodelist,colortable)
+        nodelist = node.vpack(nodelist)
+    end
+
+    tex.box[666] = nodelist
+    tex.shipout(666)
 end
 
 --- Load an XML file from the hard drive. filename is without path but including extension,
@@ -1221,7 +1231,7 @@ function setup_page(pagenumber)
     end
 
     current_page.grid:set_width_height({wd = gridwidth, ht = gridheight, nx = nx, ny = ny, dx = dx, dy = dy })
-
+    current_page.defaultcolor = pagetype.defaultcolor
     for _,j in ipairs(pagetype) do
         local eltname = elementname(j)
         if type(element_contents(j))=="function" and eltname=="Margin" then
@@ -1310,8 +1320,7 @@ function new_page()
         local thispagestore = pagestore[current_pagestore_name]
         thispagestore[#thispagestore + 1] = n
     else
-        tex.box[666] = n
-        tex.shipout(666)
+        shipout(n,current_pagenumber)
     end
     current_pagenumber = current_pagenumber + 1
     trace("page finished (new_page), setting current_pagenumber to %d",current_pagenumber)
@@ -3005,7 +3014,7 @@ function set_color_if_necessary( nodelist,color )
     else
         colorname = colortable[color]
     end
-
+    if colorname == "black" then return nodelist end
     local colstart = node.new("whatsit","pdf_colorstack")
     colstart.data  = colors[colorname].pdfstring
     if status.luatex_version < 79 then
