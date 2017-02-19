@@ -19,27 +19,9 @@
    <define name="e_Action">
       <element name="Action">
          <a:documentation>Associates an action with a text. Once the text is placed on the page, the associated action will be executed. The action can be compared to an invisible character. When the publisher outputs the character, the corresponding instructions will be run.</a:documentation>
-         <optional>
-            <ref name="e_AddToList"></ref>
-         </optional>
          <oneOrMore>
             <ref name="e_Mark"></ref>
          </oneOrMore>
-      </element>
-   </define>
-   <define name="e_AddToList">
-      <element name="AddToList">
-         <a:documentation>Can be used inside of Action. Not tested properly.</a:documentation>
-         <attribute name="select">
-            <a:documentation></a:documentation>
-         </attribute>
-         <attribute name="list">
-            <a:documentation></a:documentation>
-         </attribute>
-         <attribute name="key">
-            <a:documentation></a:documentation>
-         </attribute>
-         <empty></empty>
       </element>
    </define>
    <define name="e_AtPageShipout">
@@ -3324,9 +3306,6 @@
                <ref name="e_SortSequence"></ref>
             </optional>
             <optional>
-               <ref name="e_Sequence"></ref>
-            </optional>
-            <optional>
                <ref name="e_Copy-of"></ref>
             </optional>
             <optional>
@@ -3501,9 +3480,6 @@
                   <ref name="e_Copy-of"></ref>
                </optional>
                <optional>
-                  <ref name="e_Sequence"></ref>
-               </optional>
-               <optional>
                   <ref name="e_Element"></ref>
                </optional>
                <optional>
@@ -3538,15 +3514,6 @@
                </optional>
             </interleave>
          </oneOrMore>
-      </element>
-   </define>
-   <define name="e_Sequence">
-      <element name="Sequence">
-         <a:documentation>Return a selection of data. Probably not useful anymore as a separate command. Don&#39;t use this anymore!</a:documentation>
-         <attribute name="select">
-            <a:documentation>The data to be selected.</a:documentation>
-         </attribute>
-         <empty></empty>
       </element>
    </define>
    <define name="e_SortSequence">

@@ -2219,6 +2219,7 @@ function find_user_defined_whatsits( head )
             if head.subtype == user_defined_whatsit then
                 -- action
                 if head.user_id == user_defined_addtolist then
+                    -- this part is obsolete (2.9.3)
                     -- the value is the index of the hash of user_defined_functions
                     fun = user_defined_functions[head.value]
                     fun()

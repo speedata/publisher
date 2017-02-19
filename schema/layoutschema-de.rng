@@ -19,27 +19,9 @@
    <define name="e_Action">
       <element name="Action">
          <a:documentation>Assoziiert eine Aktion mit einem Text. Sobald der Text auf einer Seite platziert wird, wird die dazugehörige Aktion ausgeführt. Die Aktion kann man sich als unsichtbares Zeichen vorstellen. Wenn der Publisher das unsichtbare Zeichen ausgibt, werden die Anweisungen in Aktion ausgeführt.</a:documentation>
-         <optional>
-            <ref name="e_AddToList"></ref>
-         </optional>
          <oneOrMore>
             <ref name="e_Mark"></ref>
          </oneOrMore>
-      </element>
-   </define>
-   <define name="e_AddToList">
-      <element name="AddToList">
-         <a:documentation>Dieses Kommando kann innerhalb von Action benutzt werden. Wenn es ausgeführt wird, wird eine Schlüssel/Wert-Kombination in eine Liste eingefügt. Dieser Befehl ist derzeitig nicht vollständig getestet und wird noch überarbeitet.</a:documentation>
-         <attribute name="select">
-            <a:documentation>Wert, der in der Liste gespeichert werden soll.</a:documentation>
-         </attribute>
-         <attribute name="list">
-            <a:documentation>Die Liste, in der der Schlüssel bzw. Wert gespeichert wird.</a:documentation>
-         </attribute>
-         <attribute name="key">
-            <a:documentation>Name des Schlüssels, unter der der Wert abrufbar ist.</a:documentation>
-         </attribute>
-         <empty></empty>
       </element>
    </define>
    <define name="e_AtPageShipout">
@@ -1481,7 +1463,7 @@
          </optional>
          <optional>
             <attribute name="leader-width">
-               <a:documentation>Absand zwischen zwei Startpunkten des Texts in der Führungslinie.</a:documentation>
+               <a:documentation>Abstand zwischen zwei Startpunkten des Texts in der Führungslinie.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>
@@ -3324,9 +3306,6 @@
                <ref name="e_SortSequence"></ref>
             </optional>
             <optional>
-               <ref name="e_Sequence"></ref>
-            </optional>
-            <optional>
                <ref name="e_Copy-of"></ref>
             </optional>
             <optional>
@@ -3501,9 +3480,6 @@
                   <ref name="e_Copy-of"></ref>
                </optional>
                <optional>
-                  <ref name="e_Sequence"></ref>
-               </optional>
-               <optional>
                   <ref name="e_Element"></ref>
                </optional>
                <optional>
@@ -3538,15 +3514,6 @@
                </optional>
             </interleave>
          </oneOrMore>
-      </element>
-   </define>
-   <define name="e_Sequence">
-      <element name="Sequence">
-         <a:documentation>Gibt eine Datenselektion zurück. Wahrscheinlich nicht mehr als eigener Befehl vonnöten. Nicht mehr benutzen!</a:documentation>
-         <attribute name="select">
-            <a:documentation>Die Daten, die ausgewählt werden.</a:documentation>
-         </attribute>
-         <empty></empty>
       </element>
    </define>
    <define name="e_SortSequence">

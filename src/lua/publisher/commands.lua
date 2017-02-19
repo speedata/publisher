@@ -93,7 +93,7 @@ end
 
 
 
---- AddToList
+--- AddToList -- obsolete (2.9.3)
 --- ---------
 --- Return a number. This number is an index to the table `publisher.user_defined_functions` and the value
 --- is a function that sets a key of another table.
@@ -1435,9 +1435,9 @@ function commands.message( layoutxml, dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
     local errcond   = publisher.read_attribute(layoutxml,dataxml,"error", "boolean",false)
     local errorcode = publisher.read_attribute(layoutxml,dataxml,"errorcode", "number",1)
-
     if selection then
         local tmp = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
+
         local ret = {}
         if tmp then
             for i=1,#tmp do
@@ -2633,7 +2633,7 @@ end
 
 --- Sequence
 --- --------
---- Get parts of the data. Can be stored in a variable.
+--- Get parts of the data. Can be stored in a variable. Obsolete, can be removed (2.9.3).
 function commands.sequence( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     return selection
