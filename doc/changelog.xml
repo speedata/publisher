@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.9">
+    <entry version="2.9.3" date="2017-02-20">
+      <en>Bugfix resetmarks, new attribute defaultcolor on Pagetype, remove obsolete commands.</en>
+      <de>Fehlerkorrektur resetmarks, neues Attribut defaultcolor bei Pagetype, ungenutzte Befehle gelöscht.</de>
+    </entry>
     <entry version="2.9.2" date="2017-02-10">
       <en>Bugfix for processing instructions in the XML file (will be ignored now)</en>
       <de>Fehlerkorrektur für processing instructions im XML (werden ignoriert)</de>
