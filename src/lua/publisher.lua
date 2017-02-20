@@ -166,6 +166,7 @@ css = do_luafile("css.lua"):new()
 
 -- The defaults (set in the layout instructions file)
 options = {
+    resetmarks  = false,
     imagenotfounderror = true,
     gridwidth   = tenmm_sp,
     gridheight  = tenmm_sp,

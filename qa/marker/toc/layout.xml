@@ -1,0 +1,44 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="50mm" height="50mm"/>
+
+  <DefineFontfamily name="Überschrift" fontsize="18" leading="20">
+    <Regular fontface="sans"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <PlaceObject>
+      <Table padding="5pt">
+        <ForAll select="kapitel">
+          <Tr>
+            <Td><Paragraph><Value select="@titel"/></Paragraph></Td>
+            <Td><Paragraph><Value select="sd:pagenumber(@titel)"/></Paragraph></Td>
+          </Tr>
+        </ForAll>
+      </Table>
+    </PlaceObject>
+    <NewPage/>
+
+    <ProcessNode select="kapitel"/>
+  </Record>
+
+  <Record element="kapitel">
+
+    <PlaceObject>
+      <Textblock>
+        <Action>
+          <Mark select="@titel"/>
+        </Action>
+        <Paragraph fontface="Überschrift">
+          <Value select="@titel"/>
+        </Paragraph>
+        <Paragraph>
+          <Value select="text"/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <NewPage/>
+  </Record>
+</Layout>
+
