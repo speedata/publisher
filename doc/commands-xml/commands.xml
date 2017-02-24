@@ -442,12 +442,50 @@
     </example>
     <seealso><cmd name="Textblock"/>, <cmd name="Mark"/></seealso>
   </command>
-  <command en="AtPageShipout">
+  <command en="AtPageCreation">
     <description xml:lang="en">
-      <para>The enclosed instructions will be executed when the page is placed into the PDF file.</para>
+      <para>The contents of the element <cmd name="AtPageCreation"/> is executed the first time the page is accessed. This is used in <cmd name="Pagetype"/>.</para>
     </description>
     <description xml:lang="de">
-      <para>Die innerhalb dieses Befehls definierten Anweisungen werden ausgeführt, sobald die Seite ins PDF ausgegeben wird.</para>
+      <para>Die Inhalte des Elements »AtPageCreation« werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird. Dieser Befehl kann in einem Seitentyp (<cmd name="Pagetype"/>) benutzt werden.</para>
+    </description>
+    <childelements>
+      <oneOrMore>
+        <reference name="Commands"/>
+      </oneOrMore>
+    </childelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<AtPageCreation>
+  <PlaceObject column="1" row="1">
+    <Textblock>
+      <Paragraph>
+        <Value select="$pageheader"/>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</AtPageCreation>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <para>Dies gibt die Seitennummer im Kopf aus:</para>
+      <listing><![CDATA[<AtPageCreation>
+  <PlaceObject row="1" column="1">
+    <Textblock>
+      <Paragraph>
+        <Value select="sd:current-page()"/>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</AtPageCreation>]]></listing>
+    </example>
+    <seealso><cmd name="Pagetype"/>, <cmd name="AtPageShipout"/></seealso>
+  </command>
+  <command en="AtPageShipout">
+    <description xml:lang="en">
+      <para>The enclosed instructions will be executed when the page is placed into the PDF file. Used in <cmd name="Pagetype"/>.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Die innerhalb dieses Befehls definierten Anweisungen werden ausgeführt, sobald die Seite ins PDF ausgegeben wird. Wird in <cmd name="Pagetype"/> benutzt.</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -468,7 +506,7 @@
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<AtPageShipout>
-  <PlaceObject column="1">
+  <PlaceObject column="1" row="{sd:number-of-rows()}">
     <Textblock>
       <Paragraph>
         <Value select="sd:current-page()"/>
@@ -479,49 +517,12 @@
     </example>
     <seealso><cmd name="AtPageCreation"/>, <cmd name="Pagetype"/></seealso>
   </command>
-  <command en="AtPageCreation">
-    <description xml:lang="en">
-      <para>The contents of the element <cmd name="AtPageCreation"/> are executed the first time the page is accessed.</para>
-    </description>
-    <description xml:lang="de">
-      <para>Die Inhalte des Elements »AtPageCreation« werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird.</para>
-    </description>
-    <childelements>
-      <oneOrMore>
-        <reference name="Commands"/>
-      </oneOrMore>
-    </childelements>
-    <example xml:lang="en">
-      <listing><![CDATA[<AtPageCreation>
-  <PlaceObject column="1" row="1">
-    <Textblock>
-      <Paragraph>
-        <Value select="$pageheader"/>
-      </Paragraph>
-    </Textblock>
-  </PlaceObject>
-</AtPageCreation>
-]]></listing>
-    </example>
-    <example xml:lang="de">
-      <listing><![CDATA[<AtPageCreation>
-  <PlaceObject column="1">
-    <Textblock>
-      <Paragraph>
-        <Value select="sd:current-page()"/>
-      </Paragraph>
-    </Textblock>
-  </PlaceObject>
-</AtPageCreation>]]></listing>
-    </example>
-    <seealso><cmd name="Pagetype"/>, <cmd name="AtPageShipout"/></seealso>
-  </command>
   <command en="Attribute">
     <description xml:lang="en">
-      <para>Create a data structure that can be saved to the hard drive with <cmd name="SaveDataset"/>.</para>
+      <para>Create an attribute for the <cmd name="Element"/> data structure that can be saved to the hard drive with <cmd name="SaveDataset"/>.</para>
     </description>
     <description xml:lang="de">
-      <para>Erzeugt eine Datenstruktur, die mithilfe von <cmd name="SaveDataset"/> auf Festplatte gespeichert werden kann.</para>
+      <para>Erzeugt ein Attribut für die <cmd name="Element"/> Datenstruktur, die mithilfe von <cmd name="SaveDataset"/> auf Festplatte gespeichert werden kann.</para>
     </description>
     <childelements/>
     <attribute en="name" type="text" optional="no">
@@ -541,18 +542,21 @@
       </description>
     </attribute>
     <example xml:lang="en">
-      <listing><![CDATA[<Element name="planets">
-  <Attribute name="name" select=" @name "/>
-  <Attribute name="page" select=" sd:current-page()"/>
-</Element>]]></listing>
+      <listing><![CDATA[<Element name="Entry">
+  <Attribute name="chapter" select="@name"/>
+  <Attribute name="page" select="sd:current-page()"/>
+</Element>
+]]></listing>
+      <para>creates the following structure:</para>
+      <listing><![CDATA[<Entry name="(contents of @name)" page="(the current page number)" />]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Element name="Planetenverzeichnis">
-  <Attribute name="name" select=" @name "/>
-  <Attribute name="seite" select=" sd:current-page()"/>
+      <listing><![CDATA[<Element name="Eintrag">
+  <Attribute name="kapitelname" select="@name"/>
+  <Attribute name="seite" select="sd:current-page()"/>
 </Element>]]></listing>
       <para>Erzeugt diese Datenstruktur:</para>
-      <listing><![CDATA[<Planetenverzeichnis name=" (Inhalt von @name) " seite=" (aktuelle Seitennummer) " />]]></listing>
+      <listing><![CDATA[<Eintrag name=" (Inhalt von @name) " seite=" (aktuelle Seitennummer) " />]]></listing>
     </example>
     <seealso><cmd name="Element"/>, <cmd name="SaveDataset"/>, <ref name="directories"/></seealso>
   </command>
@@ -620,7 +624,7 @@
           <para>Create an »optimal« QR code in terms of error correction and size.</para>
         </description>
         <description xml:lang="de">
-          <para>Erzeugt einen QR code, der für den Inhalt die kleinstmögliche Größe und den besten Fehlerkorrekturwert hat.</para>
+          <para>Erzeugt einen QR-Code, der für den Inhalt die kleinstmögliche Größe und den besten Fehlerkorrekturwert hat, sofern kein Fehlerkorrekturlevel angegeben ist.</para>
         </description>
       </choice>
       <choice en="Code128">
@@ -757,14 +761,14 @@
   <Barcode select="4242002518169" type="EAN13"/>
 </PlaceObject>]]></listing>
       <para>wird zu</para>
-      <image file="ean13-supertex.png" width="300"/>
+      <image file="ean13-supertex.png" width="30%"/>
       <para>und</para>
       <listing><![CDATA[<PlaceObject>
   <Barcode select="'http://www.speedata.de'" type="QRCode" height="5"/>
 </PlaceObject>
 ]]></listing>
       <para>wird zu</para>
-      <image file="speedata-publisher-qrcode.png" width="300"/>
+      <image file="speedata-publisher-qrcode.png" width="30%"/>
     </example>
     <seealso><cmd name="PlaceObject"/></seealso>
   </command>
@@ -1236,7 +1240,7 @@
 </PlaceObject>
 ]]></listing>
       <para>erzeugt einen Kreis</para>
-      <image file="circlewithborder.png"/>
+      <image file="circlewithborder.png" width="30%"/>
     </example>
     <seealso><cmd name="DefineColor"/>, <cmd name="PlaceObject"/></seealso>
   </command>
@@ -1294,67 +1298,6 @@
 ]]></listing>
     </example>
     <seealso><cmd name="DefineColor"/></seealso>
-  </command>
-  <command en="Contents">
-    <description xml:lang="en">
-      <para>Marks the contents of a <cmd name="Group"/>.</para>
-    </description>
-    <description xml:lang="de">
-      <para>Kennzeichnet den Inhalt einer <cmd name="Group"/>.</para>
-    </description>
-    <childelements>
-      <oneOrMore>
-        <reference name="Commands"/>
-      </oneOrMore>
-    </childelements>
-    <remark xml:lang="en">
-      <para>The contents of a group is encapsulated in its own Element, as there are other elements that are part of the group definition (such as <cmd name="Grid"/>).</para>
-    </remark>
-    <remark xml:lang="de">
-      <para>Der Inhalt wird in einem extra Element gekapselt, damit die Gruppe später noch andere Elemente (z.B. Raster) beinhalten kann, ohne, dass die Angaben zu unübersichtlich werden.</para>
-    </remark>
-    <example xml:lang="en"><listing><![CDATA[<Group name="examplegroup">
-  <Contents>
-    <PlaceObject column="3" row="2">
-      <Textblock width="14">
-        <Paragraph>
-          <Value>Text</Value>
-        </Paragraph>
-      </Textblock>
-    </PlaceObject>
-    <PlaceObject column="2" row="4">
-      <Textblock width="14">
-        <Paragraph>
-          <Value>Some more text</Value>
-        </Paragraph>
-      </Textblock>
-    </PlaceObject>
-  </Contents>
-</Group>
-<PlaceObject groupname="examplegroup"/>
-]]></listing></example>
-    <example xml:lang="de">
-      <listing><![CDATA[<Gruppe name="Beispielgruppe">
-  <Contents>
-    <PlaceObject column="3" row="2">
-      <Textblock width="14">
-        <Paragraph>
-          <Value>Text</Value>
-        </Paragraph>
-      </Textblock>
-    </PlaceObject>
-    <PlaceObject column="2" row="4">
-      <Textblock width="14">
-        <Paragraph>
-          <Value>Nächster Text</Value>
-        </Paragraph>
-      </Textblock>
-    </PlaceObject>
-  </Contents>
-</Gruppe>
-<PlaceObject groupname="Beispielgruppe"/>]]></listing>
-    </example>
-    <seealso><cmd name="Group"/></seealso>
   </command>
   <command en="Column">
     <description xml:lang="en">
@@ -1445,28 +1388,10 @@
       </description>
     </attribute>
     <example xml:lang="en">
-      <listing><![CDATA[<Table>
-  <Columns>
-    <Column width="14mm" />
-    <Column width="2" />
-    <Column width="1*" align="right" valign="top" />
-    <Column width="5*" />
-    <Column width="5mm" backgroundcolor="gray" />
-  </Columns>
-</Table>
-]]></listing>
-      <para>This defines a table with five columns. The first column has a width of 14mm, the last of 5mm, the second column is two units wide (grid cells). The third and fourth column have a width of 1/6 and 5/6 of the remaining width.</para>
+      <para>See the example at <cmd name="Columns"/>.</para>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Table>
-  <Columns>
-    <Column width="14mm" />
-    <Column width="2" />
-    <Column width="1*" align="right" valign="top" />
-    <Column width="5*" />
-    <Column width="5mm" backgroundcolor="grau" />
-  </Columns>
-</Table>]]></listing>
+      <para>Siehe das Beispiel bei <cmd name="Columns"/>.</para>
     </example>
     <seealso>
       <cmd name="Table"/>
@@ -1494,11 +1419,11 @@
         numbers before the * denote the fraction of the space. In the example below the third column gets 1/6 of the remaining width, the fourth column get 5/6.</para>
     </remark>
     <remark xml:lang="de">
-      <para>Die *-Breitenangaben im Element »Column« ermöglicht eine dynamische Aufteilung der Spaltenbreite. Dazu muss die Tabellenbreite vorgegeben sein und das Attribut sretch bei Tabelle auf max
-        stehen. Die Spaltenbreiten berechnen sich wie folgt: erst werden die fixen Breitenangaben berücksichtigt. Anschließend werden die *-Spalten auf den verbleibenden Platz verteilt. Die Angaben
-        vor den Sternchen dienen der Verteilung innerhalb der *-Spalten. Im Beispiel unten nimmt die vierte Spalte in etwa den fünffachen Platz der dritten Spalte ein. Angenommen die Tabelle sollte
-        32mm breit werden. Die fixen Spalten nehmen davon 20mm in Anspruch, übrig bleiben 12 mm. Diese 12mm werden auf die beiden Spalten verteilt, 2mm entfallen auf die 1*-Spalte (1/6 von 12mm), 10mm
-        auf die 5*-Spalte (5/6 von 12mm).</para>
+      <para>Die <tt>*</tt>-Breitenangaben im Element »Column« ermöglicht eine dynamische Aufteilung der Spaltenbreite. Dazu muss die Tabellenbreite vorgegeben sein und das Attribut <tt>stretch</tt> bei Tabelle auf max
+        stehen. Die Spaltenbreiten berechnen sich wie folgt: erst werden die fixen Breitenangaben berücksichtigt. Anschließend werden die <tt>*</tt>-Spalten auf den verbleibenden Platz verteilt. Die Angaben
+        vor den Sternchen dienen der Verteilung innerhalb der <tt>*</tt>-Spalten. Im Beispiel unten nimmt die vierte Spalte in etwa den fünffachen Platz der dritten Spalte ein. Angenommen die Tabelle sollte
+        32mm breit werden. Die fixen Spalten nehmen davon 20mm in Anspruch, übrig bleiben 12 mm. Diese 12mm werden auf die beiden Spalten verteilt, 2mm entfallen auf die 1<tt>*</tt>-Spalte (1/6 von 12mm), 10mm
+        auf die 5<tt>*</tt>-Spalte (5/6 von 12mm).</para>
     </remark><example xml:lang="en">
       <listing><![CDATA[<Table>
   <Columns>
@@ -1507,6 +1432,9 @@
     <Column width="1*" align="right" valign="top" />
     <Column width="5*" />
     <Column width="5mm" backgroundcolor="gray" />
+    <Tr>
+       ....
+    </Tr>
   </Columns>
 </Table>
 ]]></listing>
@@ -1571,6 +1499,26 @@
 ]]></listing>
     </example>
     <seealso></seealso>
+  </command>
+  <command en="Contents">
+    <description xml:lang="en">
+      <para>Marks the contents of a <cmd name="Group"/>, a virtual area.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Kennzeichnet den Inhalt einer <cmd name="Group"/>, einer virtuellen Fläche.</para>
+    </description>
+    <childelements>
+      <oneOrMore>
+        <reference name="Commands"/>
+      </oneOrMore>
+    </childelements>
+    <example xml:lang="en">
+      <para>See the example at <cmd name="Group"/>.</para>
+    </example>
+    <example xml:lang="de">
+      <para>Siehe das Beispiel bei <cmd name="Group"/>.</para>
+    </example>
+    <seealso><cmd name="Group"/></seealso>
   </command>
   <command en="Copy-of">
     <description xml:lang="en">
@@ -2154,7 +2102,7 @@
       <para>The textformats <tt>text</tt>, <tt>centered</tt>, <tt>left</tt> and <tt>right</tt> are predefined. They stand for justified, centered, left aligned and right aligned text.</para>
     </remark>
     <remark xml:lang="de">
-      <para>Die Textformate <tt>text</tt>, <tt>centered</tt>, <tt>left</tt> und <tt>right</tt> sind vordefiniert. Sie stehen für Blocksatz, Zentriert, linksbündigen und rechtsbündigen Text.</para>
+      <para>Die Textformate <tt>text</tt>, <tt>centered</tt>, <tt>left</tt> und <tt>right</tt> sind vordefiniert. Sie stehen für Blocksatz, zentrierten, linksbündigen und rechtsbündigen Text.</para>
     </remark>
     <example xml:lang="en">
       <listing><![CDATA[<DefineTextformat name="text with indentation" alignment="justified" indentation="1cm"/>
@@ -3331,7 +3279,7 @@
       <para>This command is the root element in the Layout instructions.</para>
     </description>
     <description xml:lang="de">
-      <para>Das <cmd name="Layout"/>-Element ist das Wurzelelement im Regelwerk.</para>
+      <para>Das <cmd name="Layout"/>-Element ist das Wurzelelement im Layoutregelwerk.</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -3356,110 +3304,54 @@
       </description>
     </attribute>
     <example xml:lang="en">
-      <para>This is a complete example for a layout ruleset:</para>
-      <listing><![CDATA[<?xml version="1.0"?>
-<Layout
-  xmlns:sd="urn:speedata:2009/publisher/functions/en"
-  xmlns="urn:speedata.de:2009/publisher/en">
-  <Options
-    show-grid="yes"
-    show-gridallocation="no"
-  />
-
-  <LoadFontfile name="Helvetica Fett" filename="texgyreheros-bold.otf" />
-
-<DefineFontfamily
-    name="title"
-    fontsize="12"
-    leading="16">
-    <Regular fontface="Helvetica Fett" />
-  </DefineFontfamily>
-
-  <Pageformat width="150mm" height="200mm" />
-  <SetGrid width="4mm" height="14pt" />
-
-  <DefineTextformat name="text" alignment="justified" />
-
-  <Pagetype name="recto" test="sd:odd(sd:current-page())">
-    <Margin left="2cm" right="1cm" top="1cm" bottom="1cm" />
-  </Pagetype>
-
-  <Pagetype name="verso" test="sd:even(sd:current-page())">
-    <Margin left="1cm" right="2cm" top="1cm" bottom="1cm" />
-  </Pagetype>
-
-  <Record element="product">
-    <SetVariable variable="column" select="2" />
-    <PlaceObject>
-      <Textblock fontface="title">
-        <Paragraph>
-          <Value select="@name"/>
-        </Paragraph>
-      </Textblock>
-    </PlaceObject>
-    <ProcessNode select="productimage"/>
-    <NewPage/>
-  </Record>
-
-  <Record element="productimage">
-    <NextRow rows="2"/>
-    <PlaceObject>
-      <Image width="10" file="{string(.)}"/>
-    </PlaceObject>
-  </Record>
-
-</Layout>
-]]></listing>
-    </example>
-    <example xml:lang="de">
-      <para>Nachfolgend ein vollständiges Beispiel für ein Layoutregelwerk.</para>
+      <para>This is a complete example for a layout rule set. The first part is the data file (save as <tt>data.xml</tt>) and the second the layout instructions (<tt>layout.xml</tt>).</para>
+      <listing><![CDATA[<root>
+  <elt greeting="Hello world!" />
+</root>]]></listing>
       <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
-  <Options
-    show-gridallocation="no"
-    show-grid="yes"
-  />
 
-  <LoadFontfile name="Helvetica Fett" filename="texgyreheros-bold.otf" />
+  <Options mainlanguage="English (USA)"/>
 
-  <DefineFontfamily name="Überschrift" fontsize="12"  leading="16">
-    <Regular fontface="Helvetica Fett" />
-  </DefineFontfamily>
+  <Record element="root">
+    <ProcessNode select="elt"/>
+  </Record>
 
-  <Pageformat width="150mm" height="200mm" />
-  <SetGrid width="4mm" height="14pt" />
-
-  <DefineTextformat name="text" alignment="blocksatz" />
-
-  <Pagetype name="rechte Seite" test="sd:odd(sd:current-page())">
-    <Margin left="2cm" right="1cm" top="1cm" bottom="1cm" />
-  </Pagetype>
-
-  <Pagetype name="linke Seite" test="sd:even(sd:current-page())">
-    <Margin left="1cm" right="2cm" top="1cm" bottom="1cm" />
-  </Pagetype>
-
-  <Record element="Produkt">
-    <SetVariable variable="spalte" select="2" />
+  <Record element="elt">
     <PlaceObject>
-      <Textblock fontface="Überschrift">
+      <Textblock>
         <Paragraph>
-          <Value select="@name"/>
+          <Value select="@greeting"></Value>
         </Paragraph>
       </Textblock>
     </PlaceObject>
-    <ProcessNode select="produktbild" />
-    <NewPage />
+  </Record>
+</Layout>]]></listing>
+    </example>
+    <example xml:lang="de">
+      <para>Nachfolgend ein vollständiges Beispiel für ein Layoutregelwerk. Die erste Datei ist eine Datendatei und wird unter dem Namen <tt>data.xml</tt> gespeichert. Das zweite ist die eigentliche Layoutdatei (<tt>layout.xml</tt>).</para>
+      <listing><![CDATA[<root>
+  <elt gruß="Hallo Welt!" />
+</root>]]></listing>
+      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options mainlanguage="German"/>
+
+  <Record element="root">
+    <ProcessNode select="elt"/>
   </Record>
 
-  <Record element="produktbild">
-    <NeueZeile rows="2"/>
+  <Record element="elt">
     <PlaceObject>
-      <Image width="10" file="{string(.)}"/>
+      <Textblock>
+        <Paragraph>
+          <Value select="@gruß"></Value>
+        </Paragraph>
+      </Textblock>
     </PlaceObject>
   </Record>
-</Layout>
-]]></listing>
+</Layout>]]></listing>
     </example>
     <seealso>
       <cmd name="Include"/>
@@ -3473,7 +3365,7 @@
       <para>Listeneintrag in einer Aufzählungsliste (mit Aufzählungspunkten oder nummerierten Punkten).</para>
     </description>
     <childelements>
-      <cmd name="I"/><cmd name="B"/><cmd name="Br"/><cmd name="HSpace"/><cmd name="U"/><cmd name="Sub"/><cmd name="Sup"/><cmd name="URL"/><cmd name="Value"/><cmd name="Switch"/>
+      <reference name="Textvalues"/>
     </childelements>
     <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
@@ -4204,7 +4096,9 @@
       <para>Erzeugt eine nummerierte Aufzählungsliste wie in HTML</para>
     </description>
     <childelements>
-      <cmd name="Li"/>
+      <oneOrMore>
+        <cmd name="Li"/>
+      </oneOrMore>
     </childelements>
     <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
@@ -6227,8 +6121,7 @@
       </ForAll>
     </Textblock>
   </PlaceObject>
-</Record>
-]]></listing>
+</Record>]]></listing>
     </example>
     <seealso/>
   </command>
@@ -6632,51 +6525,46 @@
       <image file="table-en.png"/>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<PlaceObject>
-  <Table width="29" padding="1mm" leading="0mm" columndistance="0pt" stretch="max">
-    <Tablehead>
-      <Tablerule rulewidth="1pt" />
-      <Tr>
-        <Td align="center"><Paragraph><Value>Platz</Value></Paragraph></Td>
-        <Td align="center"><Paragraph><Value>Club</Value></Paragraph></Td>
-        <Td align="center"><Paragraph><Value>Punkte</Value></Paragraph></Td>
-        <Td align="center"><Paragraph><Value>Differenz</Value></Paragraph></Td>
-      </Tr>
-      <Tablerule rulewidth="0.6pt" />
-    </Tablehead>
-    <Tr>
-      <Td align="center"><Paragraph><Value>1</Value></Paragraph></Td>
-      <Td><Paragraph><Value>FC Bayern München</Value></Paragraph></Td>
-      <Td align="center"><Paragraph><Value>56</Value></Paragraph></Td>
-      <Td align="center"><Paragraph><Value>+31</Value></Paragraph></Td>
-      <Td rowspan="2"><Paragraph><Value>CL</Value></Paragraph></Td>
-    </Tr>
-    <Tr>
-      <Td align="center"><Paragraph><Value>2</Value></Paragraph></Td>
-      <Td><Paragraph><Value>FC Schalke 04</Value></Paragraph></Td>
-      <Td align="center"><Paragraph><Value>54</Value></Paragraph></Td>
-      <Td align="center"><Paragraph><Value>+22</Value></Paragraph></Td>
-    </Tr>
-    <Tr>
-      <Td align="center"><Paragraph><Value>3</Value></Paragraph></Td>
-      <Td><Paragraph><Value>Bayer 04 Leverkusen</Value></Paragraph></Td>
-      <Td align="center"><Paragraph><Value>53</Value></Paragraph></Td>
-      <Td align="center"><Paragraph><Value>+31</Value></Paragraph></Td>
-      <Td><Paragraph><Value>CL Qual.</Value></Paragraph></Td>
-    </Tr>
-    <Tr>
-      <Td align="center"><Paragraph><Value>4</Value></Paragraph></Td>
-      <Td><Paragraph><Value>Borussia Dortmund</Value></Paragraph></Td>
-      <Td align="center"><Paragraph><Value>45</Value></Paragraph></Td>
-      <Td align="center"><Paragraph><Value>+10</Value></Paragraph></Td>
-      <Td><Paragraph><Value>EL Qual.</Value></Paragraph></Td>
-    </Tr>
-    <Tablefoot>
-      <Tablerule rulewidth="1pt" />
-    </Tablefoot>
-  </Table>
-</PlaceObject>]]></listing>
-      <image file="table-de.png"/>
+      <para>Mit den folgenden Daten</para>
+      <listing><![CDATA[<data>
+  <row pos="1" verein="FC Bayern München" punkte="56" diff="+31" bemerkung="CL" />
+  <row pos="2" verein="FC Schalke 04" punkte="54" diff="+22" bemerkung="CL" />
+  <row pos="3" verein="Bayer 04 Leverkusen" punkte="53" diff="+31" bemerkung="CL Qual." />
+  <row pos="4" verein="Borussia Dortmund" punkte="45" diff="+10" bemerkung="EL Qual." />
+</data>
+]]></listing>
+      <para>Kann man die Tabelle über folgendes Layout ausgeben:</para>
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject>
+    <Table padding="1mm" stretch="max">
+      <Tablehead>
+        <Tablerule rulewidth="1pt" />
+        <Tr align="center">
+          <Td><Paragraph><Value>Platz</Value></Paragraph></Td>
+          <Td align="left"><Paragraph><Value>Club</Value></Paragraph></Td>
+          <Td><Paragraph><Value>Punkte</Value></Paragraph></Td>
+          <Td><Paragraph><Value>Differenz</Value></Paragraph></Td>
+          <Td align="left"><Paragraph><Value>Bemerkung</Value></Paragraph></Td>
+        </Tr>
+        <Tablerule rulewidth="0.6pt" />
+      </Tablehead>
+      <ForAll select="row">
+        <Tr align="center">
+          <Td><Paragraph><Value select="@pos"/></Paragraph></Td>
+          <Td align="left"><Paragraph><Value select="@verein"/></Paragraph></Td>
+          <Td><Paragraph><Value select="@punkte"/></Paragraph></Td>
+          <Td><Paragraph><Value select="@diff"/></Paragraph></Td>
+          <Td align="left"><Paragraph><Value select="@bemerkung"/></Paragraph></Td>
+        </Tr>
+      </ForAll>
+      <Tablefoot>
+        <Tablerule rulewidth="1pt" />
+      </Tablefoot>
+    </Table>
+  </PlaceObject>
+</Record>
+]]></listing>
+      <image file="table-de.png" width="100%"/>
     </example>
     <seealso>
       <cmd name="Tr"/>,  <cmd name="Td"/>, <cmd name="Tablerule"/>, <cmd name="PlaceObject"/>
@@ -8093,16 +7981,7 @@ Message: "$i is: 3"]]></listing>
       <para>Ermöglicht ein sinnvolles Umbrechen einer URL.</para>
     </description>
     <childelements>
-      <cmd name="B"/>
-      <cmd name="Image"/>
-      <cmd name="Switch"/>
-      <cmd name="I"/>
-      <cmd name="Fontface"/>
-      <cmd name="Sub"/>
-      <cmd name="Sup"/>
-      <cmd name="U"/>
-      <cmd name="URL"/>
-      <cmd name="Value"/>
+      <reference name="Textvalues"/>
     </childelements>
     <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>

@@ -24,9 +24,9 @@
          </oneOrMore>
       </element>
    </define>
-   <define name="e_AtPageShipout">
-      <element name="AtPageShipout">
-         <a:documentation>The enclosed instructions will be executed when the page is placed into the PDF file.</a:documentation>
+   <define name="e_AtPageCreation">
+      <element name="AtPageCreation">
+         <a:documentation>The contents of the element AtPageCreation is executed the first time the page is accessed. This is used in Pagetype.</a:documentation>
          <oneOrMore>
             <optional>
                <ref name="e_Bookmark"></ref>
@@ -109,9 +109,9 @@
          </oneOrMore>
       </element>
    </define>
-   <define name="e_AtPageCreation">
-      <element name="AtPageCreation">
-         <a:documentation>The contents of the element AtPageCreation are executed the first time the page is accessed.</a:documentation>
+   <define name="e_AtPageShipout">
+      <element name="AtPageShipout">
+         <a:documentation>The enclosed instructions will be executed when the page is placed into the PDF file. Used in Pagetype.</a:documentation>
          <oneOrMore>
             <optional>
                <ref name="e_Bookmark"></ref>
@@ -196,7 +196,7 @@
    </define>
    <define name="e_Attribute">
       <element name="Attribute">
-         <a:documentation>Create a data structure that can be saved to the hard drive with SaveDataset.</a:documentation>
+         <a:documentation>Create an attribute for the Element data structure that can be saved to the hard drive with SaveDataset.</a:documentation>
          <attribute name="name">
             <a:documentation>Name of the attribute that is created.</a:documentation>
          </attribute>
@@ -663,9 +663,79 @@
          </zeroOrMore>
       </element>
    </define>
+   <define name="e_Column">
+      <element name="Column">
+         <a:documentation>Set the properties of a column in the table.</a:documentation>
+         <optional>
+            <attribute name="width">
+               <a:documentation>Width of the column. Argument can be a number (in grid cells) a length (e.g. 2cm) or a *-number (e.g. 4*).</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="align">
+               <a:documentation>The horizontal alignment of the table cells in this column. Can be overridden in a cell (Td).</a:documentation>
+               <choice>
+                  <value>left</value>
+                  <a:documentation>The table cells are left aligned.</a:documentation>
+                  <value>center</value>
+                  <a:documentation>The table cells are horizontally centerd.</a:documentation>
+                  <value>right</value>
+                  <a:documentation>The table cells are right aligned.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="valign">
+               <a:documentation>The vertical alignment of the cells in this column. Can be overridden in a cell (Td).</a:documentation>
+               <choice>
+                  <value>top</value>
+                  <a:documentation>The table cells are top aligned.</a:documentation>
+                  <value>middle</value>
+                  <a:documentation>The table cells are vertically centered.</a:documentation>
+                  <value>bottom</value>
+                  <a:documentation>The table cells are aligned at the bottom.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="backgroundcolor">
+               <a:documentation>All cells in this column have this background color.</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
+      </element>
+   </define>
+   <define name="e_Columns">
+      <element name="Columns">
+         <a:documentation>Set the widths and other properties of the columns in a table.</a:documentation>
+         <oneOrMore>
+            <choice>
+               <ref name="e_Loop"></ref>
+               <ref name="e_Column"></ref>
+            </choice>
+         </oneOrMore>
+      </element>
+   </define>
+   <define name="e_Compatibility">
+      <element name="Compatibility">
+         <a:documentation>Set compatibility for older layouts</a:documentation>
+         <optional>
+            <attribute name="movecursoronplaceobject">
+               <a:documentation>Switch the behavior where objects at the right page margin used in PlaceObject puts the cursor in #columns + 1.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>New behavior (default): set cursor in column 1 when an object goes to the right margin.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Old behavior: set the cursor to the column + 1 past the right edge of the placed object.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Contents">
       <element name="Contents">
-         <a:documentation>Marks the contents of a Group.</a:documentation>
+         <a:documentation>Marks the contents of a Group, a virtual area.</a:documentation>
          <oneOrMore>
             <optional>
                <ref name="e_Bookmark"></ref>
@@ -746,76 +816,6 @@
                <ref name="e_While"></ref>
             </optional>
          </oneOrMore>
-      </element>
-   </define>
-   <define name="e_Column">
-      <element name="Column">
-         <a:documentation>Set the properties of a column in the table.</a:documentation>
-         <optional>
-            <attribute name="width">
-               <a:documentation>Width of the column. Argument can be a number (in grid cells) a length (e.g. 2cm) or a *-number (e.g. 4*).</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="align">
-               <a:documentation>The horizontal alignment of the table cells in this column. Can be overridden in a cell (Td).</a:documentation>
-               <choice>
-                  <value>left</value>
-                  <a:documentation>The table cells are left aligned.</a:documentation>
-                  <value>center</value>
-                  <a:documentation>The table cells are horizontally centerd.</a:documentation>
-                  <value>right</value>
-                  <a:documentation>The table cells are right aligned.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="valign">
-               <a:documentation>The vertical alignment of the cells in this column. Can be overridden in a cell (Td).</a:documentation>
-               <choice>
-                  <value>top</value>
-                  <a:documentation>The table cells are top aligned.</a:documentation>
-                  <value>middle</value>
-                  <a:documentation>The table cells are vertically centered.</a:documentation>
-                  <value>bottom</value>
-                  <a:documentation>The table cells are aligned at the bottom.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="backgroundcolor">
-               <a:documentation>All cells in this column have this background color.</a:documentation>
-            </attribute>
-         </optional>
-         <empty></empty>
-      </element>
-   </define>
-   <define name="e_Columns">
-      <element name="Columns">
-         <a:documentation>Set the widths and other properties of the columns in a table.</a:documentation>
-         <oneOrMore>
-            <choice>
-               <ref name="e_Loop"></ref>
-               <ref name="e_Column"></ref>
-            </choice>
-         </oneOrMore>
-      </element>
-   </define>
-   <define name="e_Compatibility">
-      <element name="Compatibility">
-         <a:documentation>Set compatibility for older layouts</a:documentation>
-         <optional>
-            <attribute name="movecursoronplaceobject">
-               <a:documentation>Switch the behavior where objects at the right page margin used in PlaceObject puts the cursor in #columns + 1.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>New behavior (default): set cursor in column 1 when an object goes to the right margin.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Old behavior: set the cursor to the column + 1 past the right edge of the placed object.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <empty></empty>
       </element>
    </define>
    <define name="e_Copy-of">
@@ -1820,16 +1820,29 @@
    <define name="e_Li">
       <element name="Li">
          <a:documentation>List item in an ordered or unordered list.</a:documentation>
-         <ref name="e_I"></ref>
-         <ref name="e_B"></ref>
-         <ref name="e_Br"></ref>
-         <ref name="e_HSpace"></ref>
-         <ref name="e_U"></ref>
-         <ref name="e_Sub"></ref>
-         <ref name="e_Sup"></ref>
-         <ref name="e_URL"></ref>
-         <ref name="e_Value"></ref>
-         <ref name="e_Switch"></ref>
+         <zeroOrMore>
+            <choice>
+               <ref name="e_A"></ref>
+               <ref name="e_Action"></ref>
+               <ref name="e_B"></ref>
+               <ref name="e_Br"></ref>
+               <ref name="e_Color"></ref>
+               <ref name="e_Fontface"></ref>
+               <ref name="e_ForAll"></ref>
+               <ref name="e_Frame"></ref>
+               <ref name="e_HSpace"></ref>
+               <ref name="e_I"></ref>
+               <ref name="e_Image"></ref>
+               <ref name="e_Loop"></ref>
+               <ref name="e_NoBreak"></ref>
+               <ref name="e_Sub"></ref>
+               <ref name="e_Sup"></ref>
+               <ref name="e_Switch"></ref>
+               <ref name="e_U"></ref>
+               <ref name="e_URL"></ref>
+               <ref name="e_Value"></ref>
+            </choice>
+         </zeroOrMore>
       </element>
    </define>
    <define name="e_Loop">
@@ -2228,7 +2241,9 @@
    <define name="e_Ol">
       <element name="Ol">
          <a:documentation>Create an ordered list, just like in HTML</a:documentation>
-         <ref name="e_Li"></ref>
+         <oneOrMore>
+            <ref name="e_Li"></ref>
+         </oneOrMore>
       </element>
    </define>
    <define name="e_Options">
@@ -4494,16 +4509,29 @@
    <define name="e_URL">
       <element name="URL">
          <a:documentation>enables a better breaking of URLs.</a:documentation>
-         <ref name="e_B"></ref>
-         <ref name="e_Image"></ref>
-         <ref name="e_Switch"></ref>
-         <ref name="e_I"></ref>
-         <ref name="e_Fontface"></ref>
-         <ref name="e_Sub"></ref>
-         <ref name="e_Sup"></ref>
-         <ref name="e_U"></ref>
-         <ref name="e_URL"></ref>
-         <ref name="e_Value"></ref>
+         <zeroOrMore>
+            <choice>
+               <ref name="e_A"></ref>
+               <ref name="e_Action"></ref>
+               <ref name="e_B"></ref>
+               <ref name="e_Br"></ref>
+               <ref name="e_Color"></ref>
+               <ref name="e_Fontface"></ref>
+               <ref name="e_ForAll"></ref>
+               <ref name="e_Frame"></ref>
+               <ref name="e_HSpace"></ref>
+               <ref name="e_I"></ref>
+               <ref name="e_Image"></ref>
+               <ref name="e_Loop"></ref>
+               <ref name="e_NoBreak"></ref>
+               <ref name="e_Sub"></ref>
+               <ref name="e_Sup"></ref>
+               <ref name="e_Switch"></ref>
+               <ref name="e_U"></ref>
+               <ref name="e_URL"></ref>
+               <ref name="e_Value"></ref>
+            </choice>
+         </zeroOrMore>
       </element>
    </define>
    <define name="e_Value">

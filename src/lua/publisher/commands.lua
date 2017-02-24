@@ -2716,7 +2716,7 @@ end
 
 --- SortSequence
 --- ------------
---- Sort a sequence. Warning: it changes the order in the variable.
+--- Sort a sequence.
 function commands.sort_sequence( layoutxml,dataxml )
     local selection        = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
     local removeduplicates = publisher.read_attribute(layoutxml,dataxml,"removeduplicates","rawstring")

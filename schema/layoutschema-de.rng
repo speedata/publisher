@@ -24,9 +24,9 @@
          </oneOrMore>
       </element>
    </define>
-   <define name="e_AtPageShipout">
-      <element name="AtPageShipout">
-         <a:documentation>Die innerhalb dieses Befehls definierten Anweisungen werden ausgeführt, sobald die Seite ins PDF ausgegeben wird.</a:documentation>
+   <define name="e_AtPageCreation">
+      <element name="AtPageCreation">
+         <a:documentation>Die Inhalte des Elements »AtPageCreation« werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird. Dieser Befehl kann in einem Seitentyp (Pagetype) benutzt werden.</a:documentation>
          <oneOrMore>
             <optional>
                <ref name="e_Bookmark"></ref>
@@ -109,9 +109,9 @@
          </oneOrMore>
       </element>
    </define>
-   <define name="e_AtPageCreation">
-      <element name="AtPageCreation">
-         <a:documentation>Die Inhalte des Elements »AtPageCreation« werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird.</a:documentation>
+   <define name="e_AtPageShipout">
+      <element name="AtPageShipout">
+         <a:documentation>Die innerhalb dieses Befehls definierten Anweisungen werden ausgeführt, sobald die Seite ins PDF ausgegeben wird. Wird in Pagetype benutzt.</a:documentation>
          <oneOrMore>
             <optional>
                <ref name="e_Bookmark"></ref>
@@ -196,7 +196,7 @@
    </define>
    <define name="e_Attribute">
       <element name="Attribute">
-         <a:documentation>Erzeugt eine Datenstruktur, die mithilfe von SaveDataset auf Festplatte gespeichert werden kann.</a:documentation>
+         <a:documentation>Erzeugt ein Attribut für die Element Datenstruktur, die mithilfe von SaveDataset auf Festplatte gespeichert werden kann.</a:documentation>
          <attribute name="name">
             <a:documentation>Name des Attributs, das erzeugt wird.</a:documentation>
          </attribute>
@@ -249,7 +249,7 @@
             <a:documentation>Typ des Strichcodes. Kann EAN13, Code128 oder QRCode sein.</a:documentation>
             <choice>
                <value>QRCode</value>
-               <a:documentation>Erzeugt einen QR code, der für den Inhalt die kleinstmögliche Größe und den besten Fehlerkorrekturwert hat.</a:documentation>
+               <a:documentation>Erzeugt einen QR-Code, der für den Inhalt die kleinstmögliche Größe und den besten Fehlerkorrekturwert hat, sofern kein Fehlerkorrekturlevel angegeben ist.</a:documentation>
                <value>Code128</value>
                <a:documentation>Erzeugt einen Code 128 Barcode für Ziffern und Text (ohne Umlaute)</a:documentation>
                <value>EAN13</value>
@@ -663,9 +663,79 @@
          </zeroOrMore>
       </element>
    </define>
+   <define name="e_Column">
+      <element name="Column">
+         <a:documentation>Gibt die Eigenschaften einer Spalte in einer Tabelle an.</a:documentation>
+         <optional>
+            <attribute name="width">
+               <a:documentation>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm) oder in *-Angaben (z.B. 4*) angegeben werden.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="align">
+               <a:documentation>Die horizontale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (Td) überschrieben werden.</a:documentation>
+               <choice>
+                  <value>left</value>
+                  <a:documentation>Die Tabellenzellen dieser Spalte werden linksbündig ausgerichtet.</a:documentation>
+                  <value>center</value>
+                  <a:documentation>Die Tabellenzellen dieser Spalte werden horizontal zentriert.</a:documentation>
+                  <value>right</value>
+                  <a:documentation>Die Tabellenzellen dieser Spalte werden rechtsbündig ausgerichtet.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="valign">
+               <a:documentation>Die vertikale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (Td) überschrieben werden.</a:documentation>
+               <choice>
+                  <value>top</value>
+                  <a:documentation>Die Tabellenzellen dieser Spalte werden oben ausgerichtet.</a:documentation>
+                  <value>middle</value>
+                  <a:documentation>Die Tabellenzellen dieser Spalte werden vertikal zentriert ausgerichtet.</a:documentation>
+                  <value>bottom</value>
+                  <a:documentation>Die Tabellenzellen dieser Spalte werden  unten ausgerichtet.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="backgroundcolor">
+               <a:documentation>Farbe der Tabellenspalte.</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
+      </element>
+   </define>
+   <define name="e_Columns">
+      <element name="Columns">
+         <a:documentation>Legt die Spaltenbreiten und andere Eigenschaften einer Tabelle fest.</a:documentation>
+         <oneOrMore>
+            <choice>
+               <ref name="e_Loop"></ref>
+               <ref name="e_Column"></ref>
+            </choice>
+         </oneOrMore>
+      </element>
+   </define>
+   <define name="e_Compatibility">
+      <element name="Compatibility">
+         <a:documentation>Setze Kompatibilität für ältere Layoutregeln</a:documentation>
+         <optional>
+            <attribute name="movecursoronplaceobject">
+               <a:documentation>Wechselt das Verhalten bei dem Objekte (platziert mit PlaceObject) am rechten Rand den Cursor in Spalte »Anzahl Spalten + 1« setzt.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Neues Verhalten (Voreinstellung): setzt den Cursor in Spalte 1 wenn ein Objekt an den rechten Rand stößt.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Altes Verhalten: setzt den Cursor auf die Spalte 1 hinter den rechten Rand des platzierten Objekts.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Contents">
       <element name="Contents">
-         <a:documentation>Kennzeichnet den Inhalt einer Group.</a:documentation>
+         <a:documentation>Kennzeichnet den Inhalt einer Group, einer virtuellen Fläche.</a:documentation>
          <oneOrMore>
             <optional>
                <ref name="e_Bookmark"></ref>
@@ -746,76 +816,6 @@
                <ref name="e_While"></ref>
             </optional>
          </oneOrMore>
-      </element>
-   </define>
-   <define name="e_Column">
-      <element name="Column">
-         <a:documentation>Gibt die Eigenschaften einer Spalte in einer Tabelle an.</a:documentation>
-         <optional>
-            <attribute name="width">
-               <a:documentation>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm) oder in *-Angaben (z.B. 4*) angegeben werden.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="align">
-               <a:documentation>Die horizontale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (Td) überschrieben werden.</a:documentation>
-               <choice>
-                  <value>left</value>
-                  <a:documentation>Die Tabellenzellen dieser Spalte werden linksbündig ausgerichtet.</a:documentation>
-                  <value>center</value>
-                  <a:documentation>Die Tabellenzellen dieser Spalte werden horizontal zentriert.</a:documentation>
-                  <value>right</value>
-                  <a:documentation>Die Tabellenzellen dieser Spalte werden rechtsbündig ausgerichtet.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="valign">
-               <a:documentation>Die vertikale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (Td) überschrieben werden.</a:documentation>
-               <choice>
-                  <value>top</value>
-                  <a:documentation>Die Tabellenzellen dieser Spalte werden oben ausgerichtet.</a:documentation>
-                  <value>middle</value>
-                  <a:documentation>Die Tabellenzellen dieser Spalte werden vertikal zentriert ausgerichtet.</a:documentation>
-                  <value>bottom</value>
-                  <a:documentation>Die Tabellenzellen dieser Spalte werden  unten ausgerichtet.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="backgroundcolor">
-               <a:documentation>Farbe der Tabellenspalte.</a:documentation>
-            </attribute>
-         </optional>
-         <empty></empty>
-      </element>
-   </define>
-   <define name="e_Columns">
-      <element name="Columns">
-         <a:documentation>Legt die Spaltenbreiten und andere Eigenschaften einer Tabelle fest.</a:documentation>
-         <oneOrMore>
-            <choice>
-               <ref name="e_Loop"></ref>
-               <ref name="e_Column"></ref>
-            </choice>
-         </oneOrMore>
-      </element>
-   </define>
-   <define name="e_Compatibility">
-      <element name="Compatibility">
-         <a:documentation>Setze Kompatibilität für ältere Layoutregeln</a:documentation>
-         <optional>
-            <attribute name="movecursoronplaceobject">
-               <a:documentation>Wechselt das Verhalten bei dem Objekte (platziert mit PlaceObject) am rechten Rand den Cursor in Spalte »Anzahl Spalten + 1« setzt.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Neues Verhalten (Voreinstellung): setzt den Cursor in Spalte 1 wenn ein Objekt an den rechten Rand stößt.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Altes Verhalten: setzt den Cursor auf die Spalte 1 hinter den rechten Rand des platzierten Objekts.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <empty></empty>
       </element>
    </define>
    <define name="e_Copy-of">
@@ -1748,7 +1748,7 @@
    </define>
    <define name="e_Layout">
       <element name="Layout">
-         <a:documentation>Das Layout-Element ist das Wurzelelement im Regelwerk.</a:documentation>
+         <a:documentation>Das Layout-Element ist das Wurzelelement im Layoutregelwerk.</a:documentation>
          <optional>
             <attribute name="version">
                <a:documentation>Gibt die minimale Version des Publishers an. Format: 1.6.13. Die letzten Ziffern können weggelassen werden. Falls die erste oder die zweite Ziffer der Versionsangabe unterschiedlich ist, wird eine Warnung ausgegeben.</a:documentation>
@@ -1820,16 +1820,29 @@
    <define name="e_Li">
       <element name="Li">
          <a:documentation>Listeneintrag in einer Aufzählungsliste (mit Aufzählungspunkten oder nummerierten Punkten).</a:documentation>
-         <ref name="e_I"></ref>
-         <ref name="e_B"></ref>
-         <ref name="e_Br"></ref>
-         <ref name="e_HSpace"></ref>
-         <ref name="e_U"></ref>
-         <ref name="e_Sub"></ref>
-         <ref name="e_Sup"></ref>
-         <ref name="e_URL"></ref>
-         <ref name="e_Value"></ref>
-         <ref name="e_Switch"></ref>
+         <zeroOrMore>
+            <choice>
+               <ref name="e_A"></ref>
+               <ref name="e_Action"></ref>
+               <ref name="e_B"></ref>
+               <ref name="e_Br"></ref>
+               <ref name="e_Color"></ref>
+               <ref name="e_Fontface"></ref>
+               <ref name="e_ForAll"></ref>
+               <ref name="e_Frame"></ref>
+               <ref name="e_HSpace"></ref>
+               <ref name="e_I"></ref>
+               <ref name="e_Image"></ref>
+               <ref name="e_Loop"></ref>
+               <ref name="e_NoBreak"></ref>
+               <ref name="e_Sub"></ref>
+               <ref name="e_Sup"></ref>
+               <ref name="e_Switch"></ref>
+               <ref name="e_U"></ref>
+               <ref name="e_URL"></ref>
+               <ref name="e_Value"></ref>
+            </choice>
+         </zeroOrMore>
       </element>
    </define>
    <define name="e_Loop">
@@ -2228,7 +2241,9 @@
    <define name="e_Ol">
       <element name="Ol">
          <a:documentation>Erzeugt eine nummerierte Aufzählungsliste wie in HTML</a:documentation>
-         <ref name="e_Li"></ref>
+         <oneOrMore>
+            <ref name="e_Li"></ref>
+         </oneOrMore>
       </element>
    </define>
    <define name="e_Options">
@@ -4494,16 +4509,29 @@
    <define name="e_URL">
       <element name="URL">
          <a:documentation>Ermöglicht ein sinnvolles Umbrechen einer URL.</a:documentation>
-         <ref name="e_B"></ref>
-         <ref name="e_Image"></ref>
-         <ref name="e_Switch"></ref>
-         <ref name="e_I"></ref>
-         <ref name="e_Fontface"></ref>
-         <ref name="e_Sub"></ref>
-         <ref name="e_Sup"></ref>
-         <ref name="e_U"></ref>
-         <ref name="e_URL"></ref>
-         <ref name="e_Value"></ref>
+         <zeroOrMore>
+            <choice>
+               <ref name="e_A"></ref>
+               <ref name="e_Action"></ref>
+               <ref name="e_B"></ref>
+               <ref name="e_Br"></ref>
+               <ref name="e_Color"></ref>
+               <ref name="e_Fontface"></ref>
+               <ref name="e_ForAll"></ref>
+               <ref name="e_Frame"></ref>
+               <ref name="e_HSpace"></ref>
+               <ref name="e_I"></ref>
+               <ref name="e_Image"></ref>
+               <ref name="e_Loop"></ref>
+               <ref name="e_NoBreak"></ref>
+               <ref name="e_Sub"></ref>
+               <ref name="e_Sup"></ref>
+               <ref name="e_Switch"></ref>
+               <ref name="e_U"></ref>
+               <ref name="e_URL"></ref>
+               <ref name="e_Value"></ref>
+            </choice>
+         </zeroOrMore>
       </element>
    </define>
    <define name="e_Value">
