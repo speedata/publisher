@@ -346,7 +346,7 @@
          <a:documentation>Create a rectangular colored area. The area must fit the grid cells.</a:documentation>
          <optional>
             <attribute name="backgroundcolor">
-               <a:documentation>Color of the box.</a:documentation>
+               <a:documentation>Color of the box. If the color name is a dash (-), a transparent background is used.</a:documentation>
             </attribute>
          </optional>
          <optional>

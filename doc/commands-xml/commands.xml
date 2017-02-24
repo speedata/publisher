@@ -943,10 +943,10 @@
     <childelements/>
     <attribute en="backgroundcolor" type="text" optional="yes" css="background-color">
       <description xml:lang="en">
-        <para>Color of the box.</para>
+        <para>Color of the box. If the color name is a dash (<tt>-</tt>), a transparent background is used.</para>
       </description>
       <description xml:lang="de">
-        <para>Farbe der Box.</para>
+        <para>Farbe der Box. Wird für die Farbe ein Strich angegeben (<tt>-</tt>), ist der Hintergrund transparent.</para>
       </description>
     </attribute>
     <attribute en="bleed" optional="yes">

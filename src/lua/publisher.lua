@@ -1680,38 +1680,40 @@ end
 
 --- Create a colored area. width and height are in scaled points.
 function box( width_sp,height_sp,colorname )
-    local _width   = sp_to_bp(width_sp)
-    local _height  = sp_to_bp(height_sp)
-
-    local paint = node.new("whatsit","pdf_literal")
-    local colentry = colors[colorname]
-    if not colentry then
-        err("Color %q unknown, reverting to black",colorname or "(no color name given)")
-        colentry = colors["black"]
-    end
-    paint.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colentry.pdfstring,_width,_height)
-    paint.mode = 0
-
     local h,v
-    local hglue,vglue
+    if colorname ~= "-" then
+        local _width   = sp_to_bp(width_sp)
+        local _height  = sp_to_bp(height_sp)
+        local paint = node.new("whatsit","pdf_literal")
+        local colentry = colors[colorname]
+        if not colentry then
+            err("Color %q unknown, reverting to black",colorname or "(no color name given)")
+            colentry = colors["black"]
+        end
+        paint.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colentry.pdfstring,_width,_height)
+        paint.mode = 0
 
-    hglue = node.new("glue",0)
-    hglue.spec = node.new("glue_spec")
-    hglue.spec.width         = 0
-    hglue.spec.stretch       = 2^16
-    hglue.spec.stretch_order = 3
-    h = node.insert_after(paint,paint,hglue)
+        local hglue
 
-    h = node.hpack(h,width_sp,"exactly")
+        hglue = node.new("glue",0)
+        hglue.spec = node.new("glue_spec")
+        hglue.spec.width         = 0
+        hglue.spec.stretch       = 2^16
+        hglue.spec.stretch_order = 3
+        h = node.insert_after(paint,paint,hglue)
 
-    vglue = node.new(glue_node,0)
+        h = node.hpack(h,width_sp,"exactly")
+    else
+        h = create_empty_hbox_with_width(width_sp)
+    end
+
+    local vglue = node.new(glue_node,0)
     vglue.spec = node.new("glue_spec")
     vglue.spec.width         = 0
     vglue.spec.stretch       = 2^16
     vglue.spec.stretch_order = 3
     v = node.insert_after(h,h,vglue)
     v = node.vpack(h,height_sp,"exactly")
-
     return v
 end
 

@@ -346,7 +346,7 @@
          <a:documentation>Erzeugt einen rechteckigen gefärbten Bereich. Die Fläche muss mit den Rasterzellen übereinstimmen.</a:documentation>
          <optional>
             <attribute name="backgroundcolor">
-               <a:documentation>Farbe der Box.</a:documentation>
+               <a:documentation>Farbe der Box. Wird für die Farbe ein Strich angegeben (-), ist der Hintergrund transparent.</a:documentation>
             </attribute>
          </optional>
          <optional>
