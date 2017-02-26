@@ -4311,17 +4311,13 @@
     </remark>
     <example xml:lang="en">
       <listing><![CDATA[<Options
-    show-gridallocation="no"
-    show-grid="yes"
     cutmarks="yes"
-    trim="3mm"/>]]></listing>
+    bleed="3mm"/>]]></listing>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<Options
-   show-gridallocation="nein"
-   show-grid="no"
    cutmarks="yes"
-   trim="3mm"
+   bleed="3mm"
   />
       ]]></listing>
     </example>
