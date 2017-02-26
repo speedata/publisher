@@ -2127,6 +2127,10 @@ function commands.place_object( layoutxml,dataxml )
     if not current_row_start then
         return nil
     end
+    -- jump to the next row if the requested column is < than the current column
+    if absolute_positioning == false and column and tonumber(column) < current_grid:current_column(area) then
+        publisher.next_row(nil,area,1)
+    end
     local current_column_start = column or current_grid:current_column(area)
 
     -- current_height is the remaining space on the current page in sp

@@ -325,12 +325,13 @@ function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname,keepposition)
     if not keepposition then
         local col = math.ceil(x + wd)
         local rows = 0
+        -- Only move the cursor if the current column is past the right edge of the paper
         if col > self:number_of_columns(areaname) and publisher.compatibility.movecursoronrightedge then
             col = 1
             rows = 1
+            self:set_current_row(math.ceil(y + rows + ht  - 1) ,areaname)
         end
         self:set_current_column(col,areaname)
-        self:set_current_row(math.ceil(y + rows + ht  - 1) ,areaname)
     end
 
     local grid_conflict = false
@@ -633,11 +634,14 @@ function draw_grid(self)
     local y = math.round(sp_to_bp(self.extra_margin - self.trim),2)
 
     local count_col = self:number_of_columns(publisher.default_areaname)
+    local gray1 = "0.6"
+    local gray2 = "0.8"
+    local gray3 = "0.2"
     for i=0, count_col do
         -- every 5 grid cells draw a grey rule
-        if (i % 5 == 0) then color = "0.6" else color = "0.8" end
+        if (i % 5 == 0) then color = gray1 else color = gray2 end
         -- every 10 grid cells draw a black rule
-        if (i % 10 == 0) then color = "0.2" end
+        if (i % 10 == 0) then color = gray3 end
         -- left boundary of each grid cell (horizontal)
         if i < count_col then
             x = math.round( sp_to_bp(i * ( self.gridwidth + self.grid_dx) + self.margin_left + self.extra_margin) , 1)
@@ -654,9 +658,9 @@ function draw_grid(self)
     local count_row = self:number_of_rows()
     for i=0, count_row do
         -- every 5 grid cells draw a gray rule
-        if (i % 5 == 0) then color = "0.6" else color = "0.8" end
+        if (i % 5 == 0) then color = gray1 else color = gray2 end
         -- every 10 grid cells draw a black rule
-        if (i % 10 == 0) then color = "0.2" end
+        if (i % 10 == 0) then color = gray3 end
 
         -- top boundary of each grid cell
         if i < count_row then

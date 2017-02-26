@@ -1,0 +1,15 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options crop="yes"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Image width="4" file="_samplea.pdf"/>
+    </PlaceObject>
+    <PlaceObject>
+      <Image width="4" file="_samplea.pdf"/>
+    </PlaceObject>
+  </Record>
+</Layout>
