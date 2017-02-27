@@ -78,7 +78,7 @@ sd:merge-pagenumbers(\<Seitenzahlen\>,\<Trenner für Bereiche\>,\<Trenner für L
 sd:sha1(\<Wert\>,\<Wert\>, …)|  Erzeugt die SHA-1 Summe der Hintereinanderkettung der Werte als Hex-Zeichenkette. Beispiel: `sd:sha1('Hallo ', 'Welt')` ergibt die Zeichenkette `28cbbc72d6a52617a7abbfff6756d04bbad0106a`.
 sd:variable(\<Name\>, ...)|  ist dasselbe wie $Name, nur mit der Möglichkeit den Namen auch dynamisch zu erzeugen. Falls `$i` den Wert 3 enthält, liest `sd:variable('foo',$i)` den Inhalt der Variablen `$foo3`. Damit lassen sich Arrays abbilden.
 sd:variable-exists(\<Name\>)|  Prüft, ob eine Variable vorhanden ist.
-sd:dummytext() | Gibt den Blindtext "Lorem ipsum..." mit über 50 Wörtern zurück.
+sd:dummytext(\<Anzahl>) | Gibt den Blindtext "Lorem ipsum..." mit über 50 Wörtern zurück. Wird Anzahl mal wiederholt, sofern angegeben.
 sd:loremipsum() | Alias für `sd:dummytext()`
 sd:randomitem(\<Wert\>,\<Wert\>, …) | Gibt einen der Werte zurück.
 

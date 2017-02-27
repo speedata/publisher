@@ -92,7 +92,7 @@ sd:randomitem(\<Value\>,\<Value\>, …) | Return one of the values.
 sd:variable(\<name\>, ...) | The same as `$name`. This function allows variable names to be constructed dynamically. Example: `sd:variable('myvar',$num)` – if `$num` contains the number 3, the resulting variable name is `myvar3`.
 sd:variable-exists(\<name\>) | True if variable `name` exists.
 sd:sha1(\<value\>,\<value\>, …) | Return the SHA-1 sum of the concatenation of each value as a hex string. Example: `sd:sha1('hello ', 'world')` gives the string `2aae6c35c94fcfb415dbe95f408b9ce91ee846ed`.
-sd:dummytext() | Returns the dummy text "Lorem ipsum..." (more than 50 words, enough for a paragraph)
+sd:dummytext(\<count>) | Returns the dummy text "Lorem ipsum..." (more than 50 words, enough for a paragraph). Repeated count times if provided.
 sd:loremipsum() | Same as `sd:dummytext()`
 
 Function | Description

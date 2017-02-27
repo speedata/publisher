@@ -328,7 +328,8 @@ local function aspectratio( dataxml,arg )
   return img.img.xsize / img.img.ysize
 end
 
-local function loremipsum( )
+local function loremipsum(dataxml,arg)
+    local count = arg and arg[1] or 1
     local lorem = [[
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
@@ -338,7 +339,7 @@ local function loremipsum( )
         occaecat cupidatat non proident, sunt in culpa qui officia deserunt
         mollit anim id est laborum.
     ]]
-    return lorem:gsub("^%s*(.-)%s*$","%1"):gsub("[%s\n]+"," ")
+    return string.rep(lorem:gsub("^%s*(.-)%s*$","%1"):gsub("[%s\n]+"," "),count)
 end
 
 local register = publisher.xpath.register_function
