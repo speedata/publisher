@@ -345,106 +345,72 @@ end
 local register = publisher.xpath.register_function
 
 register("urn:speedata:2009/publisher/functions/en","attr",attr)
-register("urn:speedata:2009/publisher/functions/de","attr",attr)
 
 register("urn:speedata:2009/publisher/functions/en","alternating",alternating)
-register("urn:speedata:2009/publisher/functions/de","alternierend",alternating)
 
 register("urn:speedata:2009/publisher/functions/en","aspectratio",aspectratio)
-register("urn:speedata:2009/publisher/functions/de","seitenverhältnis",aspectratio)
 
 register("urn:speedata:2009/publisher/functions/en","count-saved-pages",count_saved_pages)
-register("urn:speedata:2009/publisher/functions/de","anzahl-gespeicherte-seiten",count_saved_pages)
 
 register("urn:speedata:2009/publisher/functions/en","current-page",current_page)
-register("urn:speedata:2009/publisher/functions/de","aktuelle-seite",current_page)
 
 register("urn:speedata:2009/publisher/functions/en","current-row",current_row)
-register("urn:speedata:2009/publisher/functions/de","aktuelle-zeile",current_row)
 
 register("urn:speedata:2009/publisher/functions/en","current-framenumber",current_frame_number)
-register("urn:speedata:2009/publisher/functions/de","aktuelle-rahmennummer",current_frame_number)
 
 register("urn:speedata:2009/publisher/functions/en","current-column",current_column)
-register("urn:speedata:2009/publisher/functions/de","aktuelle-spalte",current_column)
 
 register("urn:speedata:2009/publisher/functions/en","decode-html",decode_html)
-register("urn:speedata:2009/publisher/functions/de","html-dekodieren",decode_html)
 
 register("urn:speedata:2009/publisher/functions/en","dummytext",loremipsum)
-register("urn:speedata:2009/publisher/functions/de","blindtext",loremipsum)
 register("urn:speedata:2009/publisher/functions/en","loremipsum",loremipsum)
-register("urn:speedata:2009/publisher/functions/de","loremipsum",loremipsum)
 
 register("urn:speedata:2009/publisher/functions/en","even",even)
-register("urn:speedata:2009/publisher/functions/de","gerade",even)
 
 register("urn:speedata:2009/publisher/functions/en","file-exists",file_exists)
-register("urn:speedata:2009/publisher/functions/de","datei-vorhanden",file_exists)
 
 register("urn:speedata:2009/publisher/functions/en","format-number",format_number)
-register("urn:speedata:2009/publisher/functions/de","formatiere-zahl",format_number)
 
 register("urn:speedata:2009/publisher/functions/en","format-string",format_string)
-register("urn:speedata:2009/publisher/functions/de","formatiere-string",format_string)
 
 register("urn:speedata:2009/publisher/functions/en","group-height",groupheight)
 register("urn:speedata:2009/publisher/functions/en","groupheight",groupheight)
-register("urn:speedata:2009/publisher/functions/de","gruppenhöhe",groupheight)
 
 register("urn:speedata:2009/publisher/functions/en","group-width",groupwidth)
 register("urn:speedata:2009/publisher/functions/en","groupwidth",groupwidth)
-register("urn:speedata:2009/publisher/functions/de","gruppenbreite",groupwidth)
 
 register("urn:speedata:2009/publisher/functions/en","imagewidth",imagewidth)
-register("urn:speedata:2009/publisher/functions/de","bildbreite",imagewidth)
 
 register("urn:speedata:2009/publisher/functions/en","imageheight",imageheight)
-register("urn:speedata:2009/publisher/functions/de","bildhöhe",imageheight)
 
 register("urn:speedata:2009/publisher/functions/en","allocated",allocated)
-register("urn:speedata:2009/publisher/functions/de","belegt",allocated)
 
 register("urn:speedata:2009/publisher/functions/en","keep-alternating",keepalternating)
-register("urn:speedata:2009/publisher/functions/de","alternierend-beibehalten",keepalternating)
 
 register("urn:speedata:2009/publisher/functions/en","merge-pagenumbers",merge_pagenumbers)
-register("urn:speedata:2009/publisher/functions/de","seitenzahlen-zusammenfassen",merge_pagenumbers)
 
 register("urn:speedata:2009/publisher/functions/en","number-of-datasets",number_of_datasets)
-register("urn:speedata:2009/publisher/functions/de","anzahl-datensätze",number_of_datasets)
-register("urn:speedata:2009/publisher/functions/de","anzahl-datensaetze",number_of_datasets)
 
 register("urn:speedata:2009/publisher/functions/en","number-of-rows",number_of_rows)
-register("urn:speedata:2009/publisher/functions/de","anzahl-zeilen",number_of_rows)
 
 register("urn:speedata:2009/publisher/functions/en","number-of-columns",number_of_columns)
-register("urn:speedata:2009/publisher/functions/de","anzahl-spalten",number_of_columns)
 
 register("urn:speedata:2009/publisher/functions/en","number-of-pages",number_of_pages)
-register("urn:speedata:2009/publisher/functions/de","anzahl-seiten",number_of_pages)
 
 register("urn:speedata:2009/publisher/functions/en","odd",odd)
-register("urn:speedata:2009/publisher/functions/de","ungerade",odd)
 
 register("urn:speedata:2009/publisher/functions/en","pagenumber",pagenumber)
-register("urn:speedata:2009/publisher/functions/de","seitennummer",pagenumber)
 
 register("urn:speedata:2009/publisher/functions/en","randomitem",randomitem)
-register("urn:speedata:2009/publisher/functions/de","zufallswert",randomitem)
 
 register("urn:speedata:2009/publisher/functions/en","reset_alternating",reset_alternating) -- backward comp.
 register("urn:speedata:2009/publisher/functions/en","reset-alternating",reset_alternating)
-register("urn:speedata:2009/publisher/functions/de","alternierend_zurücksetzen",reset_alternating)
 
 register("urn:speedata:2009/publisher/functions/en","sha1",shaone)
-register("urn:speedata:2009/publisher/functions/de","sha1",shaone)
 
 register("urn:speedata:2009/publisher/functions/en","variable",variable)
-register("urn:speedata:2009/publisher/functions/de","variable",variable)
 
 register("urn:speedata:2009/publisher/functions/en","variable-exists",variable_exists)
-register("urn:speedata:2009/publisher/functions/de","variable-vorhanden",variable_exists)
 
 
 file_end("layout_functions.lua")
