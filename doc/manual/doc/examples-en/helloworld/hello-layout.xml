@@ -1,11 +1,8 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en">
 
-  <Options
-    trace="no"
-    show-grid="no"
-    cutmarks="no"
-    show-gridallocation="no"
-   />
+  <Options cutmarks="no" />
+  <Trace grid="no" gridallocation="no" objects="no"/>
+
 
   <Record element="root">
     <ProcessNode select="elt"/>

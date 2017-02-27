@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
-  <Options show-gridallocation="no" show-grid="no" trace="no"/>
+  <Trace grid="no" gridallocation="no" objects="no"/>
 
   <LoadFontfile name="Helvetica" marginprotrusion="100" filename="texgyreheros-regular.otf"/>
   <LoadFontfile name="Helvetica Fett" filename="texgyreheros-bold.otf"/>

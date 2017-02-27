@@ -2,11 +2,8 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <Options
-    show-grid="yes"
-    show-gridallocation="no"
-    mainlanguage="English (Great Britain)"/>
-
+  <Options mainlanguage="English (Great Britain)"/>
+  <Trace grid="no" gridallocation="no"/>
 
   <LoadFontfile name="WarnockPro-Regular" filename="WarnockPro-Regular.otf" marginprotrusion="60"/>
   <DefineFontfamily name="Title" fontsize="14" leading="16">
