@@ -2815,6 +2815,22 @@
       <para>Bindet eine externe Grafik ein. Erlaubte Grafikformate sind PDF (.pdf), PNG (.png) und JPEG (.jpg). Siehe unten für die Einschränkung eingebundener PDF-Dateien.</para>
     </description>
     <childelements/>
+    <attribute en="bleed" optional="yes" since="2.9.5">
+      <description xml:lang="en">
+        <para>Should the image size increase by the amount of bleed setting (<cmd name="Options"/>)?</para>
+      </description>
+      <description xml:lang="de">
+        <para>Soll das Bild um die Beschnittzugabe (<cmd name="Options"/>) größer werden?</para>
+      </description>
+      <choice en="auto">
+        <description xml:lang="en">
+          <para>If the image has exactly the size of page, the size increases by the amount of the bleed setting.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Hat das Bild exakt dieselbe Größe wie die Seite, vergrößert sich das Bild um die Beschnittzugabe.</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="class" optional="yes" type="text" since="2.5.11">
       <description xml:lang="en">
         <para>CSS class for this element.</para>

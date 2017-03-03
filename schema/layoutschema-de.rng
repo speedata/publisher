@@ -1564,6 +1564,15 @@
       <element name="Image">
          <a:documentation>Bindet eine externe Grafik ein. Erlaubte Grafikformate sind PDF (.pdf), PNG (.png) und JPEG (.jpg). Siehe unten für die Einschränkung eingebundener PDF-Dateien.</a:documentation>
          <optional>
+            <attribute name="bleed">
+               <a:documentation>Soll das Bild um die Beschnittzugabe (Options) größer werden?</a:documentation>
+               <choice>
+                  <value>auto</value>
+                  <a:documentation>Hat das Bild exakt dieselbe Größe wie die Seite, vergrößert sich das Bild um die Beschnittzugabe.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="class">
                <a:documentation>CSS Klasse für dieses Element.</a:documentation>
             </attribute>

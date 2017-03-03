@@ -1007,6 +1007,7 @@ local box_lookup = {
 function commands.image( layoutxml,dataxml )
     local width     = publisher.read_attribute(layoutxml,dataxml,"width",      "rawstring")
     local height    = publisher.read_attribute(layoutxml,dataxml,"height",     "rawstring")
+    local bleed     = publisher.read_attribute(layoutxml,dataxml,"bleed" ,     "rawstring")
     local minwidth  = publisher.read_attribute(layoutxml,dataxml,"minwidth",   "rawstring")
     local minheight = publisher.read_attribute(layoutxml,dataxml,"minheight",  "rawstring")
     local maxwidth  = publisher.read_attribute(layoutxml,dataxml,"maxwidth",   "rawstring")
@@ -1094,6 +1095,19 @@ function commands.image( layoutxml,dataxml )
     minwidth  = publisher.set_image_length(minwidth, "width" ) or 0
     maxheight = publisher.set_image_length(maxheight,"height") or publisher.maxdimen
     maxwidth  = publisher.set_image_length(maxwidth, "width" ) or publisher.maxdimen
+
+    if bleed and bleed == "auto" then
+        if width == publisher.options.pagewidth then
+            tab.padding_left = tab.padding_left   or 0 - publisher.options.trim
+            tab.padding_right = tab.padding_right or 0 - publisher.options.trim
+        end
+        if height == publisher.options.pageheight then
+            tab.padding_top    = tab.padding_top     or 0 - publisher.options.trim
+            tab.padding_bottom = tab.padding_bottom  or 0 - publisher.options.trim
+        end
+    end
+
+
 
     if not clip then
         width, height = publisher.calculate_image_width_height( image, width,height,minwidth,minheight,maxwidth, maxheight )

@@ -1564,6 +1564,15 @@
       <element name="Image">
          <a:documentation>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg). See below for a limitation on the number of included PDF files.</a:documentation>
          <optional>
+            <attribute name="bleed">
+               <a:documentation>Should the image size increase by the amount of bleed setting (Options)?</a:documentation>
+               <choice>
+                  <value>auto</value>
+                  <a:documentation>If the image has exactly the size of page, the size increases by the amount of the bleed setting.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="class">
                <a:documentation>CSS class for this element.</a:documentation>
             </attribute>
