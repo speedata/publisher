@@ -631,6 +631,9 @@ function dothings()
     --- A4 paper is 210x297 mm
     set_pageformat(tex.sp("210mm"),tex.sp("297mm"))
     get_languagecode(os.getenv("SP_MAINLANGUAGE") or "en_GB")
+    xpath.set_variable("_bleed", "0mm")
+    xpath.set_variable("_pageheight", "297mm")
+    xpath.set_variable("_pagewidth", "210mm")
 
     lowercase = os.getenv("SP_IGNORECASE") == "1"
 

@@ -1729,6 +1729,7 @@ function commands.options( layoutxml,dataxml )
         publisher.set_mainlanguage(mainlanguage,true)
     end
     if publisher.options.trim then
+        xpath.set_variable("_bleed",publisher.options.trim)
         publisher.options.trim = tex.sp(publisher.options.trim)
     end
 end
@@ -1868,6 +1869,9 @@ function commands.page_format(layoutxml)
     trace("Pageformat")
     local width  = publisher.read_attribute(layoutxml,dataxml,"width","length")
     local height = publisher.read_attribute(layoutxml,dataxml,"height","length")
+    xpath.set_variable("_pageheight",height)
+    xpath.set_variable("_pagewidth",width)
+
     publisher.set_pageformat(tex.sp(width),tex.sp(height))
 end
 
