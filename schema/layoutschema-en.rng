@@ -1657,6 +1657,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="padding">
+               <a:documentation>Set padding for all four sides.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="padding-top">
                <a:documentation>Set the inner distance (width between contents and the border) to the top edge.</a:documentation>
             </attribute>

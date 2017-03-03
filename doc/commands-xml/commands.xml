@@ -2991,6 +2991,14 @@
         <para>Warnung ausgeben, wenn das Bild eine geringere Auflösung bekommt als angegeben.</para>
       </description>
     </attribute>
+    <attribute en="padding" optional="yes" since="2.9.5" type="length">
+      <description xml:lang="en">
+        <para>Set padding for all four sides.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze Padding für alle Seiten.</para>
+      </description>
+    </attribute>
     <attribute en="padding-top" type="length" optional="yes" css="padding-top" since="2.5.11">
       <description xml:lang="en">
         <para>Set the inner distance (width between contents and the border) to the top edge.</para>

@@ -1033,6 +1033,7 @@ function commands.image( layoutxml,dataxml )
         ["padding-right"]    = "length",
         ["padding-bottom"]   = "length",
         ["padding-left"]     = "length",
+        ["padding"]          = "length",
     }
     local tab = {}
     if css_rules and type(css_rules) == "table" then
@@ -1047,6 +1048,12 @@ function commands.image( layoutxml,dataxml )
         if tmpattr then
             tab[attname] = tmpattr
         end
+    end
+    if tab["padding"]        then
+        tab.padding_top     = tex.sp(tab["padding"])
+        tab.padding_bottom  = tab.padding_top
+        tab.padding_left    = tab.padding_top
+        tab.padding_right   = tab.padding_top
     end
     if tab["padding-top"]    then tab.padding_top    = tex.sp(tab["padding-top"])    end
     if tab["padding-bottom"] then tab.padding_bottom = tex.sp(tab["padding-bottom"]) end

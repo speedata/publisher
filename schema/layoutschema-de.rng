@@ -1657,6 +1657,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="padding">
+               <a:documentation>Setze Padding für alle Seiten.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="padding-top">
                <a:documentation>Bestimmt den Innenabstand des Bildes (oben)</a:documentation>
             </attribute>
