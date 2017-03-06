@@ -5,6 +5,9 @@
     <Pageformat width="60mm" height="110mm"/>
     <Pagetype name="test" test="true()">
         <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+        <PositioningArea name="dummy">
+            <PositioningFrame width="{sd:number-of-columns()}" height="9" row="1" column="1"/>
+        </PositioningArea>
         <PositioningArea name="text">
             <PositioningFrame width="4" height="9" row="1" column="1"/>
         </PositioningArea>

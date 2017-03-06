@@ -3780,10 +3780,12 @@ function getheight( relative_pagenumber )
     local thispagenumber = current_pagenumber + relative_pagenumber - 1
     -- w("getheight for page number %d which is page number %d in the PDF",relative_pagenumber,thispagenumber)
     local thispage = pages[thispagenumber]
-    local cp, cg -- current page, current grid
+    local cp, cg, cpn -- current page, current grid, current pagenumber
+    cpn = current_pagenumber
     if not thispage then
         cp = current_page
         cg = current_grid
+        current_pagenumber = thispagenumber or 0
         setup_page(thispagenumber)
         thispage = pages[thispagenumber]
     end
@@ -3791,6 +3793,7 @@ function getheight( relative_pagenumber )
     if thispage then
         local firstrow = thispage.grid:first_free_row(areaname)
         local space = thispage.grid:remaining_height_sp(firstrow,areaname)
+        current_pagenumber = cpn
         current_grid = cg
         current_page = cp
         return space
