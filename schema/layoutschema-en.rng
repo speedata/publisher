@@ -4334,7 +4334,16 @@
    <define name="e_Ul">
       <element name="Ul">
          <a:documentation>Create an unordered list, just like in HTML</a:documentation>
-         <ref name="e_Li"></ref>
+         <oneOrMore>
+            <interleave>
+               <optional>
+                  <ref name="e_Li"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_ForAll"></ref>
+               </optional>
+            </interleave>
+         </oneOrMore>
       </element>
    </define>
    <define name="e_Until">

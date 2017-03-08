@@ -2130,7 +2130,7 @@ function commands.place_object( layoutxml,dataxml )
     local current_maxwidth = xpath.get_variable("__maxwidth")
     local mw = current_grid:number_of_columns(area)
     if not mw then
-        err("Something is wrong with the curernt page, expect strange results")
+        err("Something is wrong with the current page, expect strange results")
         return
     end
 
