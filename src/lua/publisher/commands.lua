@@ -2039,7 +2039,7 @@ function commands.place_object( layoutxml,dataxml )
     local column           = publisher.read_attribute(layoutxml,dataxml,"column",         "rawstring")
     local row              = publisher.read_attribute(layoutxml,dataxml,"row",            "rawstring")
     local area             = publisher.read_attribute(layoutxml,dataxml,"area",           "rawstring")
-    local allocate         = publisher.read_attribute(layoutxml,dataxml,"allocate",       "string", "yes")
+    local allocate         = publisher.read_attribute(layoutxml,dataxml,"allocate",       "string")
     local framecolor       = publisher.read_attribute(layoutxml,dataxml,"framecolor",     "rawstring")
     local backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
     local rulewidth_sp     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",      "length_sp", 26312) -- 0.4bp
@@ -2139,9 +2139,11 @@ function commands.place_object( layoutxml,dataxml )
             mw = current_grid:width_sp(mw - column + 1)
         else
             mw = current_grid:width_sp(mw)
-       end
+        end
+        if not allocate then allocate = "yes" end
     else
         mw = tex.pdfpagewidth
+        if not allocate then allocate = "no" end
     end
     xpath.set_variable("__maxwidth", mw)
 
@@ -2259,6 +2261,8 @@ function commands.place_object( layoutxml,dataxml )
                 rotate   = rotate,
                 origin_x = origin_x,
                 origin_y = origin_y,
+                allocate = allocate == "yes",
+                allocate_matrix = objects[i].allocate_matrix,
             })
         else
             -- Look for a place for the object

@@ -951,10 +951,36 @@ end
 --- rotate          | Rotation counter clockwise in degrees (0-360).
 --- origin_x        | Origin X for rotation. Left is 0 and right is 100
 --- origin_y        | Origin Y for rotation. Top is 0 and bottom is 100
+--- allocate        | Should the touched cells be allocated?
 function output_absolute_position(param)
-    local nodelist = param.nodelist
     local x = param.x
     local y = param.y
+    local nodelist = param.nodelist
+
+    if param.allocate then
+        local startcol_sp = x - current_grid.margin_left
+        local startcol  = math.floor(math.round(startcol_sp / current_grid.gridwidth ,3)) + 1
+        local delta_x = startcol_sp - current_grid:width_sp(startcol - 1)
+        if delta_x < 100 then delta_x = 0 end
+
+        local wd_grid = current_grid:width_in_gridcells_sp(nodelist.width + delta_x)
+        local startrow_sp = y - current_grid.margin_top
+        local startrow  = math.floor(math.round(startrow_sp / current_grid.gridheight ,3)) + 1
+        local delta_y = startrow_sp - current_grid:height_sp(startrow - 1)
+        if delta_y < 100 then delta_y = 0 end
+        local ht_grid = current_grid:height_in_gridcells_sp(nodelist.height + delta_y)
+        local _x,_y,_wd,_ht = startcol,startrow,wd_grid,ht_grid
+        if _x < 1 then
+            _wd = _wd + _x - 1
+            _x = 1
+        end
+        if _y < 1 then
+            _ht = _ht + _y - 1
+            _y = 1
+        end
+        -- printtable("allocate_cells",{_x,_y,_wd,_ht})
+        current_grid:allocate_cells(_x,_y,_wd,_ht,param.allocate_matrix)
+    end
 
 
     if node.has_attribute(nodelist,att_shift_left) then
