@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.9">
+    <entry version="2.9.5" date="2017-03-09">
+      <en>Absolute positioning now allows allocate="yes".</en>
+      <de>Absolute Positionierung erlaubt allocate="yes".</de>
+    </entry>
+    <entry version="2.9.5" date="2017-03-09">
+      <en>New internal variables _bleed, _pagewidth, _pageheight</en>
+      <de>Neue interne Variablen _bleed, _pagewidth und _pageheight.</de>
+    </entry>
+    <entry version="2.9.5" date="2017-03-09">
+      <en>New attribute bleed="..." on Image.</en>
+      <de>Neues Attribut bleed="..." bei Image.</de>
+    </entry>
     <entry version="2.9.4" date="2017-02-24">
       <en>Box with backgroundcolor="-" only allocates cells.</en>
       <de>Box mit backgroundcolor="-" belegt nur die Zellen.</de>
