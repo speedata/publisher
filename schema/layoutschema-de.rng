@@ -2843,13 +2843,33 @@
          <a:documentation>Gibt ein rechteckiges Objekt (Bild, Tabelle, Box oder Textblock) aus.</a:documentation>
          <optional>
             <attribute name="allocate">
-               <a:documentation>Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei allocate=“no” wird auch die aktuelle Zeile im Raster nicht verändert.</a:documentation>
+               <a:documentation>Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei allocate=&#34;no&#34; wird auch die aktuelle Zeile im Raster nicht verändert.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>Platz im Raster reservieren (Voreinstellung für Platzierung im Raster).</a:documentation>
                   <value>no</value>
                   <a:documentation>Bereich nicht als Belegt markieren (Voreinstellung für absolute Positionierung)</a:documentation>
                </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="allocate-left">
+               <a:documentation>Zusätzliche Belegung links.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="allocate-right">
+               <a:documentation>Zusätzliche Belegung rechts.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="allocate-top">
+               <a:documentation>Zusätzliche Belegung oben.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="allocate-bottom">
+               <a:documentation>Zusätzliche Belegung unten.</a:documentation>
             </attribute>
          </optional>
          <optional>

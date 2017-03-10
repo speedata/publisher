@@ -4886,10 +4886,10 @@
     </childelements>
     <attribute en="allocate" optional="yes">
       <description xml:lang="en">
-        <para>Determines if the area of the object is marked as »allocated«. With allocate="no", the cursor position is not changed.</para>
+        <para>Determines if the area of the object is marked as »allocated«. With <tt>allocate="no"</tt>, the cursor position is not changed.</para>
       </description>
       <description xml:lang="de">
-        <para>Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei allocate=“no” wird auch die aktuelle Zeile im Raster nicht verändert.</para>
+        <para>Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei <tt>allocate="no"</tt> wird auch die aktuelle Zeile im Raster nicht verändert.</para>
       </description>
       <choice en="yes">
         <description xml:lang="en">
@@ -4907,6 +4907,38 @@
           <para>Bereich nicht als Belegt markieren (Voreinstellung für absolute Positionierung)</para>
         </description>
       </choice>
+    </attribute>
+    <attribute en="allocate-left" optional="yes" type="numberorlength" since="2.9.6">
+      <description xml:lang="en">
+        <para>Additional allocation area to the left.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Zusätzliche Belegung links.</para>
+      </description>
+    </attribute>
+    <attribute en="allocate-right" optional="yes" type="numberorlength" since="2.9.6">
+      <description xml:lang="en">
+        <para>Additional allocation area to the right.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Zusätzliche Belegung rechts.</para>
+      </description>
+    </attribute>
+    <attribute en="allocate-top" optional="yes" type="numberorlength" since="2.9.6">
+      <description xml:lang="en">
+        <para>Additional allocation area to the top.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Zusätzliche Belegung oben.</para>
+      </description>
+    </attribute>
+    <attribute en="allocate-bottom" optional="yes" type="numberorlength" since="2.9.6">
+      <description xml:lang="en">
+        <para>Additional allocation area to the bottom.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Zusätzliche Belegung unten.</para>
+      </description>
     </attribute>
     <attribute en="area" type="text" optional="yes">
       <description xml:lang="en">

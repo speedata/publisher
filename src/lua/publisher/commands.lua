@@ -2060,7 +2060,10 @@ function commands.place_object( layoutxml,dataxml )
     local b_t_r_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-right-radius",    "string")
     local b_t_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-left-radius",     "string")
     local b_b_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-bottom-left-radius",  "string")
-
+    local allocate_left    = publisher.read_attribute(layoutxml,dataxml,"allocate-left",  "width_sp")
+    local allocate_right   = publisher.read_attribute(layoutxml,dataxml,"allocate-right", "width_sp")
+    local allocate_top     = publisher.read_attribute(layoutxml,dataxml,"allocate-top",   "height_sp")
+    local allocate_bottom  = publisher.read_attribute(layoutxml,dataxml,"allocate-bottom","height_sp")
 
     if origin_x == "left" then
         origin_x = 0
@@ -2263,6 +2266,10 @@ function commands.place_object( layoutxml,dataxml )
                 origin_y = origin_y,
                 allocate = allocate == "yes",
                 allocate_matrix = objects[i].allocate_matrix,
+                allocate_left   = allocate_left,
+                allocate_right  = allocate_right,
+                allocate_top    = allocate_top,
+                allocate_bottom = allocate_bottom,
             })
         else
             -- Look for a place for the object
@@ -2333,6 +2340,10 @@ function commands.place_object( layoutxml,dataxml )
                 origin_x = origin_x,
                 origin_y = origin_y,
                 framewidth = framewidth,
+                allocate_left   = allocate_left,
+                allocate_right  = allocate_right,
+                allocate_top    = allocate_top,
+                allocate_bottom = allocate_bottom,
                 })
             trace("object placed")
             row = nil -- the current rows is not valid anymore because an object is already rendered

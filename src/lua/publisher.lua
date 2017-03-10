@@ -958,18 +958,37 @@ function output_absolute_position(param)
     local nodelist = param.nodelist
 
     if param.allocate then
+        local additional_width,additional_height = 0,0
+
         local startcol_sp = x - current_grid.margin_left
+        local startrow_sp = y - current_grid.margin_top
+
+        if param.allocate_left then
+          startcol_sp = startcol_sp - param.allocate_left
+          additional_width = additional_width + param.allocate_left
+        end
+        if param.allocate_right then
+          additional_width = additional_width + param.allocate_right
+        end
+        if param.allocate_top then
+          startrow_sp = startrow_sp - param.allocate_top
+          additional_height = additional_height + param.allocate_top
+        end
+        if param.allocate_bottom then
+          additional_height = additional_height + param.allocate_bottom
+        end
+
         local startcol  = math.floor(math.round(startcol_sp / current_grid.gridwidth ,3)) + 1
         local delta_x = startcol_sp - current_grid:width_sp(startcol - 1)
         if delta_x < 100 then delta_x = 0 end
 
-        local wd_grid = current_grid:width_in_gridcells_sp(nodelist.width + delta_x)
-        local startrow_sp = y - current_grid.margin_top
+        local wd_grid = current_grid:width_in_gridcells_sp(nodelist.width + delta_x + additional_width)
         local startrow  = math.floor(math.round(startrow_sp / current_grid.gridheight ,3)) + 1
         local delta_y = startrow_sp - current_grid:height_sp(startrow - 1)
         if delta_y < 100 then delta_y = 0 end
-        local ht_grid = current_grid:height_in_gridcells_sp(nodelist.height + delta_y)
+        local ht_grid = current_grid:height_in_gridcells_sp(nodelist.height + delta_y + additional_height)
         local _x,_y,_wd,_ht = startcol,startrow,wd_grid,ht_grid
+
         if _x < 1 then
             _wd = _wd + _x - 1
             _x = 1
@@ -1048,6 +1067,10 @@ function output_at( param )
         _ht = _ht + param.framewidth
     end
 
+    -- current_grid is important here, because it can be a group
+    local r = param.grid or current_grid
+
+
     local outputpage = current_pagenumber
     if param.pagenumber then
         outputpage = param.pagenumber
@@ -1058,6 +1081,26 @@ function output_at( param )
     end
     local x = param.x
     local y = param.y
+
+    local additional_width,additional_height = 0,0
+    local shift_left,shift_up = 0,0
+
+    if param.allocate_left and param.allocate_left > 100 then
+        shift_left = r:width_in_gridcells_sp(param.allocate_left)
+        additional_width = additional_width + r:width_in_gridcells_sp(param.allocate_left)
+    end
+    if param.allocate_right and param.allocate_right > 100 then
+        additional_width = additional_width + r:width_in_gridcells_sp(param.allocate_right)
+    end
+    if param.allocate_top and param.allocate_top > 100 then
+        shift_up = r:height_in_gridcells_sp(param.allocate_top)
+        additional_height = additional_height + r:height_in_gridcells_sp(param.allocate_top)
+    end
+    if param.allocate_bottom and param.allocate_bottom > 100 then
+        additional_height = additional_height + r:height_in_gridcells_sp(param.allocate_bottom)
+    end
+
+
     local allocate = param.allocate
     local allocate_matrix = param.allocate_matrix
     local area = param.area or default_areaname
@@ -1065,14 +1108,18 @@ function output_at( param )
     local halign = param.halign
     local keepposition = param.keepposition
 
-    -- current_grid is important here, because it can be a group
-    local r = param.grid or current_grid
     local wd = nodelist.width
     local ht = nodelist.height + nodelist.depth
 
     -- For grid allocation
     local width_gridcells   = r:width_in_gridcells_sp(wd)
+    if additional_width > 0 then
+        width_gridcells = width_gridcells + additional_width
+    end
     local height_gridcells  = r:height_in_gridcells_sp(ht)
+    if additional_height > 0 then
+        height_gridcells = height_gridcells + additional_height
+    end
 
     local delta_x, delta_y = r:position_grid_cell(x,y,area,wd,ht,valign,halign)
 
@@ -1131,12 +1178,12 @@ function output_at( param )
             group.contents = n
         end
         if allocate then
-            r:allocate_cells(x,y,width_gridcells,height_gridcells,allocate_matrix)
+            r:allocate_cells(x - shift_left,y - shift_up,width_gridcells,height_gridcells,allocate_matrix)
         end
     else
         -- Put it on the current page
         if allocate then
-            r:allocate_cells(x,y,width_gridcells,height_gridcells,allocate_matrix,area,keepposition)
+            r:allocate_cells(x - shift_left,y - shift_up,width_gridcells,height_gridcells,allocate_matrix,area,keepposition)
         end
         if param.rotate then
             nodelist = rotate(nodelist,param.rotate, param.origin_x or 0, param.origin_y or 0)
@@ -1914,6 +1961,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     elseif typ=="height_sp" then
         num = tonumber(val or default)
         if num then -- most likely really a number, we need to multiply with grid height
+            setup_page()
             ret = current_page.grid.gridheight * num
         else
             ret = val
@@ -1922,6 +1970,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     elseif typ=="width_sp" then
         num = tonumber(val or default)
         if num then -- most likely really a number, we need to multiply with grid width
+            setup_page()
             ret = current_page.grid:width_sp(num)
         else
             ret = val
