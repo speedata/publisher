@@ -339,7 +339,7 @@ local function loremipsum(dataxml,arg)
         occaecat cupidatat non proident, sunt in culpa qui officia deserunt
         mollit anim id est laborum.
     ]]
-    return string.rep(lorem:gsub("^%s*(.-)%s*$","%1"):gsub("[%s\n]+"," "),count)
+    return string.rep(lorem:gsub("^%s*(.-)%s*$","%1"):gsub("[%s\n]+"," "),count, " ")
 end
 
 local register = publisher.xpath.register_function
