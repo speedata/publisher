@@ -1096,19 +1096,6 @@ function commands.image( layoutxml,dataxml )
     maxheight = publisher.set_image_length(maxheight,"height") or publisher.maxdimen
     maxwidth  = publisher.set_image_length(maxwidth, "width" ) or publisher.maxdimen
 
-    if bleed and bleed == "auto" then
-        if width == publisher.options.pagewidth then
-            tab.padding_left = tab.padding_left   or 0 - publisher.options.trim
-            tab.padding_right = tab.padding_right or 0 - publisher.options.trim
-        end
-        if height == publisher.options.pageheight then
-            tab.padding_top    = tab.padding_top     or 0 - publisher.options.trim
-            tab.padding_bottom = tab.padding_bottom  or 0 - publisher.options.trim
-        end
-    end
-
-
-
     if not clip then
         width, height = publisher.calculate_image_width_height( image, width,height,minwidth,minheight,maxwidth, maxheight )
         if dpiwarn then
@@ -1122,6 +1109,27 @@ function commands.image( layoutxml,dataxml )
             end
         end
     end
+
+    if bleed and bleed == "auto" then
+        local col = xpath.get_variable("__column")
+        local row = xpath.get_variable("__row")
+        if col == 0 then
+            tab.padding_left = tab.padding_left or 0 - publisher.options.trim
+            if width == publisher.options.pagewidth then
+                tab.padding_right = tab.padding_right or 0 - publisher.options.trim
+            end
+        elseif publisher.options.pagewidth - col - width < 100 then
+            tab.padding_right = tab.padding_right or 0 - publisher.options.trim
+        end
+        if row == 0 then
+            tab.padding_top = tab.padding_top or 0 - publisher.options.trim
+            if height == publisher.options.pageheight then
+                tab.padding_bottom = tab.padding_bottom  or 0 - publisher.options.trim
+            end
+        end
+
+    end
+
 
     local overshoot
     if clip then
@@ -1138,11 +1146,11 @@ function commands.image( layoutxml,dataxml )
         height = image.ysize * stretch_shrink
     end
 
-    local shift_left,shift_up = 0,0
+    local padding_shift_left,padding_shift_up = 0,0
 
     if tab.padding_left then
         width = width - tab.padding_left
-        shift_left = shift_left - tab.padding_left
+        padding_shift_left = padding_shift_left - tab.padding_left
     end
     if tab.padding_right then
         width = width - tab.padding_right
@@ -1153,7 +1161,7 @@ function commands.image( layoutxml,dataxml )
     end
     if tab.padding_top then
         height = height - tab.padding_top
-        shift_up = shift_up - tab.padding_top
+        padding_shift_up = padding_shift_up - tab.padding_top
     end
 
     image.width  = width
@@ -1161,6 +1169,7 @@ function commands.image( layoutxml,dataxml )
 
     local box
     if clip then
+        local shift_left,shift_up = 0,0
         local a=node.new("whatsit","pdf_literal")
         local ht = math.round(height / publisher.factor,4)
         local wd = math.round(width  / publisher.factor,4)
@@ -1208,14 +1217,20 @@ function commands.image( layoutxml,dataxml )
         g = node.insert_after(g,g,box)
         box = node.vpack(g)
 
-        box.height = height - shift_up * 2
-        box.width  = width  - shift_left * 2
+        box.height = height -  2 * shift_up - padding_shift_up
+        box.width  = width  - 2 * shift_left - padding_shift_left
+
+        node.set_attribute(box, publisher.att_shift_left, padding_shift_left)
+        node.set_attribute(box, publisher.att_shift_up, padding_shift_up)
+
     else
         box = node.vpack(img.node(image))
         node.set_attribute(box,publisher.att_origin,publisher.origin_image)
         node.set_attribute(box,publisher.att_lineheight,box.height)
-        node.set_attribute(box, publisher.att_shift_left, shift_left)
-        node.set_attribute(box, publisher.att_shift_up  , shift_up  )
+        node.set_attribute(box, publisher.att_shift_left, padding_shift_left)
+        node.set_attribute(box, publisher.att_shift_up  , padding_shift_up  )
+        box.width = box.width - padding_shift_left
+        box.height = box.height - padding_shift_up
     end
     return {box,imageinfo.allocate}
 end
@@ -2109,6 +2124,9 @@ function commands.place_object( layoutxml,dataxml )
             return
         end
     end
+    xpath.set_variable("__row", row)
+    xpath.set_variable("__column", column)
+
 
     if onpage then
         if onpage == 'next' then

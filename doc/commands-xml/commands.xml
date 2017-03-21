@@ -2824,10 +2824,18 @@
       </description>
       <choice en="auto">
         <description xml:lang="en">
-          <para>If the image has exactly the size of page, the size increases by the amount of the bleed setting.</para>
+          <para>If the image touches a paper edge, extend the image in that direction.</para>
         </description>
         <description xml:lang="de">
-          <para>Hat das Bild exakt dieselbe Größe wie die Seite, vergrößert sich das Bild um die Beschnittzugabe.</para>
+          <para>Wenn das Bild die Papierkante berührt, vergrößere das Bild in diese Richtung.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Do not extend the image.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Das Bild nicht vergrößern.</para>
         </description>
       </choice>
     </attribute>

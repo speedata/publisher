@@ -1002,8 +1002,8 @@ function output_absolute_position(param)
 
 
     if node.has_attribute(nodelist,att_shift_left) then
-        x = x - node.has_attribute(nodelist,att_shift_left)
-        y = y - node.has_attribute(nodelist,att_shift_up)
+        x = x - ( node.has_attribute(nodelist,att_shift_left) or 0)
+        y = y - ( node.has_attribute(nodelist,att_shift_up) or 0)
     end
 
     if param.rotate then

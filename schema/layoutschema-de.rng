@@ -1568,7 +1568,9 @@
                <a:documentation>Soll das Bild um die Beschnittzugabe (Options) größer werden?</a:documentation>
                <choice>
                   <value>auto</value>
-                  <a:documentation>Hat das Bild exakt dieselbe Größe wie die Seite, vergrößert sich das Bild um die Beschnittzugabe.</a:documentation>
+                  <a:documentation>Wenn das Bild die Papierkante berührt, vergrößere das Bild in diese Richtung.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Das Bild nicht vergrößern.</a:documentation>
                </choice>
             </attribute>
          </optional>

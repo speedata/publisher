@@ -1568,7 +1568,9 @@
                <a:documentation>Should the image size increase by the amount of bleed setting (Options)?</a:documentation>
                <choice>
                   <value>auto</value>
-                  <a:documentation>If the image has exactly the size of page, the size increases by the amount of the bleed setting.</a:documentation>
+                  <a:documentation>If the image touches a paper edge, extend the image in that direction.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Do not extend the image.</a:documentation>
                </choice>
             </attribute>
          </optional>
