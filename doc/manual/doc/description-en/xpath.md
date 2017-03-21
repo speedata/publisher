@@ -68,6 +68,7 @@ sd:current-column(\<name\>) | Return the current column. If `name` is given, ret
 sd:current-framenumber(\<name\>) | Return the current frame number of given positioning area.
 sd:count-saved-pages(\<name\>)  | Return the number of saved pages from `<SavePages>`.
 sd:alternating(\<type\>, \<text\>,\<text\>,.. ) | On each call the next element will be returned. You can define more alternating sequences by using distinct type values. Example: `sd:alternating("tbl", "White","Gray")` can be used for alternating color of table rules. To reset the state, use `sd:reset-alternating(<type>)`.
+sd:first-free-row(<areaname>) | Return the first free row of this area (experimental).
 sd:reset-alternating(\<type\>) | Reset alternating so the next `sd:alternating()` starts again from the first element.
 sd:keep-alternating(\<type\>) | Use the current value of `sd:alternating(<type>)` without changing the value.
 sd:aspectratio(\<imagename>) | Return the result of the division width by height of the given image. (< 1 for portrait images, > 1 for landscape).

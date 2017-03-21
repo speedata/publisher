@@ -58,6 +58,14 @@ local function alternating(dataxml, arg )
   return val
 end
 
+local function first_free_row( dataxml, arg )
+  local ret = 0
+  if arg and arg[1] then
+      ret = publisher.current_grid:first_free_row(arg[1])
+  end
+  return ret
+end
+
 local function keepalternating(dataxml, arg )
   local alt_type = arg[1]
   return publisher.alternating_value[alt_type]
@@ -366,6 +374,8 @@ register("urn:speedata:2009/publisher/functions/en","dummytext",loremipsum)
 register("urn:speedata:2009/publisher/functions/en","loremipsum",loremipsum)
 
 register("urn:speedata:2009/publisher/functions/en","even",even)
+
+register("urn:speedata:2009/publisher/functions/en","first-free-row",first_free_row)
 
 register("urn:speedata:2009/publisher/functions/en","file-exists",file_exists)
 

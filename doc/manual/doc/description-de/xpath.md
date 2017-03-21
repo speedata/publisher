@@ -56,6 +56,7 @@ sd:alternating(\<typ\>, \<text\>,\<text\>,.. )|  Bei jedem Aufruf wird das näch
 sd:reset-alternating(\<typ\>)|  Setzt den Zustand für `sd:alternating()` für den angegebenen Typ zurück.
 sd:keep-alternating(\<typ\>)| Nutzt den aktuellen Wert von `sd:alternating(<typ>)`, ohne diesen zu verändern.
 sd:count-saved-pages(\<Name\>)|  Gibt die Anzahl der gespeicherten Seiten, die mit \<SavePages\> zwischen speichert wurden.
+sd:first-free-row(<areaname>) | Gibt die erste freie Zeile dieser Area zurück (experimentell).
 sd:number-of-datasets(\<Sequenz\>)|  Gibt die Anzahl der Datensätze der Sequenz zurück.
 sd:number-of-pages(\<Dateiname oder URI-Schema\>)|  Ermittelt die Anzahl der Seiten der angegebenen (PDF-)Datei.
 sd:number-of-columns()|  Gibt die Anzahl der Spalten im aktuellen Raster.
