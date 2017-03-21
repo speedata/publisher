@@ -6,7 +6,7 @@
   <!-- 'table' / 'watch'  -->
   <SetVariable variable="type" select="'watch'"/>
 
-  <Options show-gridallocation="no" show-grid="no"/>
+  <Trace grid="no" gridallocation="no"/>
   <SetGrid width="5mm" height="12pt"/>
 
   <Pageformat width="175mm" height="200mm"/>

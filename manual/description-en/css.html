@@ -72,11 +72,30 @@
 
 <p>The mapping of the command names for the CSS rules and the layout rules are documented in the reference manual.</p>
 
+<h2>Accessing the data with CSS</h2>
+
+<p>If the data is in the following format:</p>
+
+<pre><code>&lt;data&gt;hello &lt;green&gt;green&lt;/green&gt; world &lt;br/&gt;with a &lt;span class=&quot;blue&quot;&gt;span&lt;/span&gt;.&lt;/data&gt;
+</code></pre>
+
+<p>you can get the desired colors with the following stylesheet:</p>
+
+<pre><code>&lt;Stylesheet&gt;
+  green {
+    color: green;
+  }
+  .blue {
+    color: blue;
+  }
+&lt;/Stylesheet&gt;
+</code></pre>
+
 </div>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.8.0 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/css.html">German</a>
+Version: 2.9.6 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/css.html">German</a>
 
 </body>
 </html>

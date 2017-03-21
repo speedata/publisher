@@ -1,13 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (de)</title>
   <id>http://www.speedata.de</id>
-  <updated>2017-02-06T09:46:28+01:00</updated>
+  <updated>2017-03-21T12:52:28+01:00</updated>
   <subtitle>Neue Versionen des Publishers zum Download und Liste der Änderungen</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.9.6</title>
+    <updated>2017-03-21T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-03-21:</id>
+    <content type="html">Verbesserungen bei Image/bleed=&#34;auto&#34;, extra Belegungsrahmen bei PlaceObject</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.5</title>
+    <updated>2017-03-09T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-03-09:</id>
+    <content type="html">Absolute Positionierung erlaubt allocate=&#34;yes&#34;.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.5</title>
+    <updated>2017-03-09T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-03-09:</id>
+    <content type="html">Neue interne Variablen _bleed, _pagewidth und _pageheight.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.5</title>
+    <updated>2017-03-09T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-03-09:</id>
+    <content type="html">Neues Attribut bleed=&#34;...&#34; bei Image.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.4</title>
+    <updated>2017-02-24T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-02-24:</id>
+    <content type="html">Box mit backgroundcolor=&#34;-&#34; belegt nur die Zellen.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.3</title>
+    <updated>2017-02-20T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-02-20:</id>
+    <content type="html">Fehlerkorrektur resetmarks, neues Attribut defaultcolor bei Pagetype, ungenutzte Befehle gelöscht.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.2</title>
+    <updated>2017-02-10T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-02-10:</id>
+    <content type="html">Fehlerkorrektur für processing instructions im XML (werden ignoriert)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.2</title>
+    <updated>2017-02-10T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-02-10:</id>
+    <content type="html">Neues Feature: &amp;lt;span&gt; und andere Elemente in den Daten können mit CSS angesprochen werden.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.1</title>
+    <updated>2017-02-08T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-02-08:</id>
+    <content type="html">Fehlerkorrektur: top-distance in Tr</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.8.1</title>
+    <updated>2017-02-06T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-02-06:</id>
+    <content type="html">Korrigiere Hotfolder (variables Verzeichnis)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.7.13</title>
     <updated>2017-02-03T00:00:00Z</updated>
@@ -124,7 +194,7 @@
     <title>Version 2.7.3</title>
     <updated>2016-09-14T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-09-14:</id>
-    <content type="html">Neue API /v0/statusfile/&amp;lt; um die Datei publisher.status zu erhalten.</content>
+    <content type="html">Neue API /v0/statusfile/&amp;lt;id&gt; um die Datei publisher.status zu erhalten.</content>
     <link href="http://www.speedata.de"></link>
   </entry>
   <entry>
