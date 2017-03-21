@@ -978,17 +978,16 @@ function output_absolute_position(param)
           additional_height = additional_height + param.allocate_bottom
         end
 
-        local startcol  = math.floor(math.round(startcol_sp / current_grid.gridwidth ,3)) + 1
+        local startcol  = math.floor(math.round( (startcol_sp - current_grid.extra_margin) / current_grid.gridwidth ,3)) + 1
         local delta_x = startcol_sp - current_grid:width_sp(startcol - 1)
         if delta_x < 100 then delta_x = 0 end
 
-        local wd_grid = current_grid:width_in_gridcells_sp(nodelist.width + delta_x + additional_width)
-        local startrow  = math.floor(math.round(startrow_sp / current_grid.gridheight ,3)) + 1
+        local wd_grid = current_grid:width_in_gridcells_sp(nodelist.width + delta_x + additional_width - current_grid.extra_margin)
+        local startrow  = math.floor(math.round( (startrow_sp - current_grid.extra_margin) / current_grid.gridheight ,3)) + 1
         local delta_y = startrow_sp - current_grid:height_sp(startrow - 1)
         if delta_y < 100 then delta_y = 0 end
-        local ht_grid = current_grid:height_in_gridcells_sp(nodelist.height + delta_y + additional_height)
+        local ht_grid = current_grid:height_in_gridcells_sp(nodelist.height + delta_y + additional_height - current_grid.extra_margin)
         local _x,_y,_wd,_ht = startcol,startrow,wd_grid,ht_grid
-
         if _x < 1 then
             _wd = _wd + _x - 1
             _x = 1
