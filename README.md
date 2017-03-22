@@ -1,3 +1,6 @@
+[![Join the chat at https://gitter.im/speedata/publisher](https://badges.gitter.im/speedata/publisher.svg)](https://gitter.im/speedata/publisher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+
 speedata Publisher
 ==================
 
