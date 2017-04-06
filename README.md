@@ -17,7 +17,7 @@ Its built-in layout description language allows you to create almost arbitrary l
 Examples
 --------
 
-There are some examples in the [example repository on github](https://github.com/speedata/examples) and [in the manual](https://speedata.github.io/publisher/manual/examples-en/index.html), these might get merged into that repository.
+There are some examples in the [example repository on github](https://github.com/speedata/examples) and [in the manual](https://speedata.github.io/publisher/manual/examples-en/index.html). Also, there are lots of small examples in the `qa` subdirectory that is used for quality assurance.
 
 
 Can I use this in production?
