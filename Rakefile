@@ -43,7 +43,7 @@ desc "Build sphelper program"
 task :sphelper do
 	ENV["GOBIN"] = "#{installdir}/bin"
 	separator = `go version`.match('go\d\.(\d)')[1].to_i < 5 ? " " : "="
-	sh " go install -ldflags \"-X main.basedir#{separator}#{installdir} -X main.separator#{separator}#{separator}\"  sphelper/sphelper"
+	sh " go install -ldflags \"-X main.basedir#{separator}#{installdir} -X main.separator#{separator}#{separator} -s\"  sphelper/sphelper"
 end
 
 desc "Show rake description"
