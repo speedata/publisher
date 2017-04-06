@@ -175,7 +175,7 @@ function get_parshape( self,row,areaname,framenumber )
     local y = frame_margin_top + row
     for i=1,block.width do
         local x = frame_margin_left + i
-        if self.allocation_x_y[x][y] == nil then
+        if self.allocation_x_y[x] and self.allocation_x_y[x][y] == nil then
             first_free_column = first_free_column or i
             last_free_column = i
         end
