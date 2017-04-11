@@ -3480,7 +3480,7 @@ function commands.textblock( layoutxml,dataxml )
     if columns > 1 then
         local rows = {}
         local number_of_rows = 0
-        local neue_nodes = {}
+        local new_nodes = {}
         for i=1,#nodes do
             for n in node.traverse_id(0,nodes[i].list) do
                 number_of_rows = number_of_rows + 1
@@ -3507,9 +3507,9 @@ function commands.textblock( layoutxml,dataxml )
                 end
             end
             tail.next = nil
-            neue_nodes[#neue_nodes + 1] = node.hpack(hbox_current_row)
+            new_nodes[#new_nodes + 1] = node.hpack(hbox_current_row)
         end
-        nodes=neue_nodes
+        nodes=new_nodes
     end
 
     local tail
