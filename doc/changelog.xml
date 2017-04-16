@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.9">
+    <entry version="2.9.7" date="2017-04-16">
+      <en>New command Initial.</en>
+      <de>Neuer Befehl Initial.</de>
+    </entry>
     <entry version="2.9.6" date="2017-03-21">
       <en>Enhancements on Image/bleed="auto", extra allocation margin on PlaceObject</en>
       <de>Verbesserungen bei Image/bleed="auto", extra Belegungsrahmen bei PlaceObject</de>
