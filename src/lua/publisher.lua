@@ -112,6 +112,7 @@ origin_text = 7
 origin_setcolor = 8
 origin_setcolorifnecessary = 9
 origin_paragraph = 10
+origin_initial = 11
 
 user_defined_addtolist = 1
 user_defined_bookmark  = 2
@@ -478,6 +479,7 @@ local dispatch_table = {
     I                       = commands.italic,
     Image                   = commands.image,
     Include                 = commands.include,
+    Initial                 = commands.initial,
     InsertPages             = commands.insert_pages,
     Li                      = commands.li,
     LoadDataset             = commands.load_dataset,
@@ -2415,7 +2417,7 @@ end
 
 --- Create a `\hbox`. Return a nodelist. Parameter is one of
 ---
---- * languagecode
+--- * language code
 --- * bold (bold)
 --- * italic (italic)
 --- * underline

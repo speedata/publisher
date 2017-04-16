@@ -491,6 +491,9 @@
                <ref name="e_Image"></ref>
             </optional>
             <optional>
+               <ref name="e_Initial"></ref>
+            </optional>
+            <optional>
                <ref name="e_Include"></ref>
             </optional>
             <optional>
@@ -1201,6 +1204,9 @@
                   <ref name="e_Image"></ref>
                </optional>
                <optional>
+                  <ref name="e_Initial"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Include"></ref>
                </optional>
                <optional>
@@ -1549,6 +1555,25 @@
                <ref name="e_Switch"></ref>
             </optional>
          </oneOrMore>
+      </element>
+   </define>
+   <define name="e_Initial">
+      <element name="Initial">
+         <a:documentation>Einige Zeichen erscheinen in einer größeren Schriftart am Absatzanfang.</a:documentation>
+         <attribute name="fontface">
+            <a:documentation>Wähle die Fontfamilie. Derzeit wird nur der Schnitt Regular verwendet.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="padding-left">
+               <a:documentation>Fügt Leerraum links der Initiale ein.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-right">
+               <a:documentation>Fügt Leerraum right der Initiale ein.</a:documentation>
+            </attribute>
+         </optional>
+         <ref name="e_Value"></ref>
       </element>
    </define>
    <define name="e_InsertPages">
@@ -1939,6 +1964,9 @@
                </optional>
                <optional>
                   <ref name="e_Image"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Initial"></ref>
                </optional>
                <optional>
                   <ref name="e_Include"></ref>
@@ -2466,6 +2494,9 @@
                <ref name="e_Image"></ref>
             </optional>
             <optional>
+               <ref name="e_Initial"></ref>
+            </optional>
+            <optional>
                <ref name="e_Include"></ref>
             </optional>
             <optional>
@@ -2720,6 +2751,9 @@
             <attribute name="id">
                <a:documentation>CSS id für diesen Absatz.</a:documentation>
             </attribute>
+         </optional>
+         <optional>
+            <ref name="e_Initial"></ref>
          </optional>
          <zeroOrMore>
             <choice>
@@ -4443,6 +4477,9 @@
                   <ref name="e_Image"></ref>
                </optional>
                <optional>
+                  <ref name="e_Initial"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Include"></ref>
                </optional>
                <optional>
@@ -4678,6 +4715,9 @@
                </optional>
                <optional>
                   <ref name="e_Image"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Initial"></ref>
                </optional>
                <optional>
                   <ref name="e_Include"></ref>

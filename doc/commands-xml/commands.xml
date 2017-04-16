@@ -26,6 +26,7 @@
     <optional><cmd name="Hyphenation"/></optional>
     <optional><cmd name="I"></cmd></optional>
     <optional><cmd name="Image"/></optional>
+    <optional><cmd name="Initial"/></optional>
     <optional><cmd name="Include"/></optional>
     <optional><cmd name="InsertPages"/></optional>
     <optional><cmd name="Li"/></optional>
@@ -2751,6 +2752,70 @@
       <cmd name="Layout"/>
     </seealso>
   </command>
+  <command en="Initial" since="2.9.7">
+    <description xml:lang="en">
+      <para>Make some letters appear in a larger font at the beginning of the paragraph.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Einige Zeichen erscheinen in einer größeren Schriftart am Absatzanfang.</para>
+    </description>
+    <childelements>
+      <cmd name="Value"/>
+    </childelements>
+    <attribute en="fontface" optional="no">
+      <description xml:lang="en">
+        <para>Choose the font family. Only »Regular« shape is used at the moment.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wähle die Fontfamilie. Derzeit wird nur der Schnitt Regular verwendet.</para>
+      </description>
+    </attribute>
+    <attribute en="padding-left" optional="yes">
+      <description xml:lang="en">
+        <para>Insert space left of the initial.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Fügt Leerraum links der Initiale ein.</para>
+      </description>
+    </attribute>
+    <attribute en="padding-right" optional="yes">
+      <description xml:lang="en">
+        <para>Insert space right of the initial.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Fügt Leerraum right der Initiale ein.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Textblock>
+  <Paragraph>
+    <Initial fontface="Large" padding-right="2pt">
+      <Value select="'A'"/>
+    </Initial>
+    <Value>certain king had a beautiful garden,
+    and in the garden stood a tree which bore golden
+    apples.</Value>
+  </Paragraph>
+</Textblock>
+]]></listing>
+      <image file="initial-en.png" width="50%"/>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Textblock>
+  <Paragraph>
+    <Initial fontface="Large" padding-right="2pt">
+      <Value select="'E'"/>
+    </Initial>
+    <Value>s war einmal ein König und eine Königin,
+    die hatten keine Kinder, wünschten sich aber
+    tagtäglich ein Kind.</Value>
+  </Paragraph>
+</Textblock>
+]]></listing>
+      <image file="initial-de.png" width="50%"/>
+    </example>
+    <seealso></seealso>
+  </command>
   <command en="InsertPages">
     <description xml:lang="en">
       <para>Insert previously saved pages.</para>
@@ -4553,6 +4618,7 @@
       <para>Erzeugt einen Absatz innerhalb eines Textblocks.</para>
     </description>
     <childelements>
+      <optional><cmd name="Initial"/></optional>
       <reference name="Textvalues"/>
     </childelements>
     <attribute en="allowbreak" type="text" optional="yes">

@@ -1235,6 +1235,52 @@ function commands.image( layoutxml,dataxml )
     return {box,imageinfo.allocate}
 end
 
+--- Initial
+--- -------
+--- Insert a decorated letter (or more than one) at the beginning of the paragraph.
+function commands.initial( layoutxml,dataxml)
+    local fontname      = publisher.read_attribute(layoutxml,dataxml,"fontface",     "rawstring")
+    local padding_left  = publisher.read_attribute(layoutxml,dataxml,"padding-left", "length_sp",0)
+    local padding_right = publisher.read_attribute(layoutxml,dataxml,"padding-right","length_sp",0)
+    local fontfamily = 0
+    if fontname then
+        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+        if fontfamily == nil then
+            err("Fontfamily %q not found.",fontname)
+            fontfamily = 0
+        end
+    end
+    local fi = publisher.fonts.lookup_fontfamily_number_instance[fontfamily]
+
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    local initialvalue
+    for i,j in ipairs(tab) do
+        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
+            initialvalue = table.concat(publisher.element_contents(j))
+        else
+            initialvalue = publisher.element_contents(j)
+        end
+    end
+    local box
+    box = publisher.mknodes(initialvalue,fontfamily,{})
+    box = node.hpack(box)
+    local initialheight = box.height + box.depth
+    box.depth = 0
+    box.height = initialheight
+    local ht = fi.baselineskip - initialheight
+    if padding_left ~= 0 then
+        box = publisher.add_rule(box,"head",{height = 0, width = padding_left})
+    end
+    box = publisher.add_rule(box,"head",{height = fi.size - (fi.size - initialheight ) / 2, width = 0})
+    if padding_right ~= 0 then
+        box = publisher.add_rule(box,"tail",{height = 0, width = padding_right})
+    end
+    local x = node.hpack(box)
+    x.height = x.height + x.depth
+    x.depth = 0
+    return x
+end
+
 --- InsertPages
 --- -----------
 --- Insert previously saved pages with SavePages
@@ -1983,12 +2029,14 @@ function commands.paragraph( layoutxml,dataxml )
     local objects = {}
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
-        trace("Paragraph Elementname = %q",tostring(publisher.elementname(j)))
+        -- w("Paragraph Elementname = %q",tostring(publisher.elementname(j)))
         local contents = publisher.element_contents(j)
         if publisher.elementname(j) == "Value" and type(contents) == "table" and #contents == 1 and type(contents[1]) == "string"  then
             objects[#objects + 1] = contents[1]
         elseif publisher.elementname(j) == "Value" and type(contents) == "table" then
             objects[#objects + 1] = publisher.parse_html(contents,{allowbreak = allowbreak})
+        elseif publisher.elementname(j) == "Initial" then
+            a.initial = contents
         else
             objects[#objects + 1] = contents
         end

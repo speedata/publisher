@@ -491,6 +491,9 @@
                <ref name="e_Image"></ref>
             </optional>
             <optional>
+               <ref name="e_Initial"></ref>
+            </optional>
+            <optional>
                <ref name="e_Include"></ref>
             </optional>
             <optional>
@@ -1201,6 +1204,9 @@
                   <ref name="e_Image"></ref>
                </optional>
                <optional>
+                  <ref name="e_Initial"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Include"></ref>
                </optional>
                <optional>
@@ -1549,6 +1555,25 @@
                <ref name="e_Switch"></ref>
             </optional>
          </oneOrMore>
+      </element>
+   </define>
+   <define name="e_Initial">
+      <element name="Initial">
+         <a:documentation>Make some letters appear in a larger font at the beginning of the paragraph.</a:documentation>
+         <attribute name="fontface">
+            <a:documentation>Choose the font family. Only »Regular« shape is used at the moment.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="padding-left">
+               <a:documentation>Insert space left of the initial.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-right">
+               <a:documentation>Insert space right of the initial.</a:documentation>
+            </attribute>
+         </optional>
+         <ref name="e_Value"></ref>
       </element>
    </define>
    <define name="e_InsertPages">
@@ -1939,6 +1964,9 @@
                </optional>
                <optional>
                   <ref name="e_Image"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Initial"></ref>
                </optional>
                <optional>
                   <ref name="e_Include"></ref>
@@ -2466,6 +2494,9 @@
                <ref name="e_Image"></ref>
             </optional>
             <optional>
+               <ref name="e_Initial"></ref>
+            </optional>
+            <optional>
                <ref name="e_Include"></ref>
             </optional>
             <optional>
@@ -2720,6 +2751,9 @@
             <attribute name="id">
                <a:documentation>CSS id for this paragraph.</a:documentation>
             </attribute>
+         </optional>
+         <optional>
+            <ref name="e_Initial"></ref>
          </optional>
          <zeroOrMore>
             <choice>
@@ -4443,6 +4477,9 @@
                   <ref name="e_Image"></ref>
                </optional>
                <optional>
+                  <ref name="e_Initial"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Include"></ref>
                </optional>
                <optional>
@@ -4678,6 +4715,9 @@
                </optional>
                <optional>
                   <ref name="e_Image"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Initial"></ref>
                </optional>
                <optional>
                   <ref name="e_Include"></ref>
