@@ -69,17 +69,36 @@ end
 
 local XMLentities = { gt = ">", lt = "<", amp = "&",  apos = "'", quot = '"' }
 
+local function escape( txt )
+	txt = string.gsub(txt,"&(.-);",function (arg)
+		if string.find(arg,"^#x") then
+			return string.char(tonumber(string.sub(arg,3,-1),16))
+		elseif string.find(arg,"^#X") then
+			return string.char(tonumber(string.sub(arg,3,-1),16))
+		elseif string.find(arg,"^#") then
+			return string.char(string.sub(arg,2,-1))
+		end
+	end)
+	return txt
+end
+
 local function decode_xmlstring( txt )
-	return string.gsub(txt,"&(.-);",XMLentities)
+	txt = escape(txt)
+	txt = string.gsub(txt,"&(.-);",XMLentities)
+	return txt
 end
 
 
 local function _att_value( ... )
-	return decoder(select(1,...))
+	local txt = select(1,...)
+	txt = escape(txt)
+	return txt
 end
 
 local function _attribute( ... )
-	current_element[select(1,...)] = select(2,...)
+	local key, value = select(1,...), select(2,...)
+	value = decode_xmlstring(value)
+	current_element[key] = value
 end
 
 local quote = P'"'
@@ -263,15 +282,15 @@ local function parse_xml(txt,options)
 		decoder = decode_xmlstring
 	end
 
-	txt = string.gsub(txt,"&(.-);",function (arg)
-		if string.find(arg,"^#x") then
-			return string.char(tonumber(string.sub(arg,3,-1),16))
-		elseif string.find(arg,"^#X") then
-			return string.char(tonumber(string.sub(arg,3,-1),16))
-		elseif string.find(arg,"^#") then
-			return string.char(string.sub(arg,2,-1))
-		end
-	end)
+	-- txt = string.gsub(txt,"&(.-);",function (arg)
+	-- 	if string.find(arg,"^#x") then
+	-- 		return string.char(tonumber(string.sub(arg,3,-1),16))
+	-- 	elseif string.find(arg,"^#X") then
+	-- 		return string.char(tonumber(string.sub(arg,3,-1),16))
+	-- 	elseif string.find(arg,"^#") then
+	-- 		return string.char(string.sub(arg,2,-1))
+	-- 	end
+	-- end)
 
 	txt = txt.gsub(txt,"\13\n?","\n")
 

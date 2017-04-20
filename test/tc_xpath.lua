@@ -14,8 +14,8 @@ xpath.set_variable("foo-bar",'foobar')
 
 local data_src=[[
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-foo ?>
-<root one="1" foo='no' empty="">
+ <?xml-foo ?>
+<root one="1" foo='no' empty="" quotationmarks="&#34;text&#34;">
  <?xml-foo ?>
  <sub foo="baz">123</sub>
  <sub foo="bar">contents</sub>
@@ -245,6 +245,8 @@ end
 
 function test_attribute()
     assert_equal(xpath.parse(data, "@one" ),'1')
+    assert_equal(xpath.parse(data, "@quotationmarks" ),'"text"')
+    assert_false(secondoftwo(xpath.parse_raw( data, "  @undefined='foo' ",namespace ))[1])
     assert_false(secondoftwo(xpath.parse_raw( data, "  @undefined='foo' ",namespace ))[1])
     assert_true(secondoftwo(xpath.parse_raw( data, "  @undefined != 'foo' ",namespace ))[1])
     assert_false(secondoftwo(xpath.parse_raw( data, "  @undefined != @undefined ",namespace ))[1])
