@@ -330,6 +330,8 @@ function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname,keepposition)
             col = 1
             rows = 1
             self:set_current_row(math.ceil(y + rows + ht  - 1) ,areaname)
+        else
+            self:set_current_row(y,areaname)
         end
         self:set_current_column(col,areaname)
     end
