@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.9">
+    <entry version="2.9.8" date="2017-04-24">
+      <en>Bugfix XML attributes with quotation marks</en>
+      <de>Fehlerkorrektur XML Attribute mit Anführungszeichen</de>
+    </entry>
     <entry version="2.9.7" date="2017-04-16">
       <en>New command Initial.</en>
       <de>Neuer Befehl Initial.</de>
