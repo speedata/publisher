@@ -1560,6 +1560,11 @@
    <define name="e_Initial">
       <element name="Initial">
          <a:documentation>Einige Zeichen erscheinen in einer größeren Schriftart am Absatzanfang.</a:documentation>
+         <optional>
+            <attribute name="color">
+               <a:documentation>Setze die Farbe der Initiale. Voreingestellt ist Schwarz.</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="fontface">
             <a:documentation>Wähle die Fontfamilie. Derzeit wird nur der Schnitt Regular verwendet.</a:documentation>
          </attribute>

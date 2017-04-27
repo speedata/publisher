@@ -1240,6 +1240,7 @@ end
 --- Insert a decorated letter (or more than one) at the beginning of the paragraph.
 function commands.initial( layoutxml,dataxml)
     local fontname      = publisher.read_attribute(layoutxml,dataxml,"fontface",     "rawstring")
+    local colorname     = publisher.read_attribute(layoutxml,dataxml,"color",        "rawstring")
     local padding_left  = publisher.read_attribute(layoutxml,dataxml,"padding-left", "length_sp",0)
     local padding_right = publisher.read_attribute(layoutxml,dataxml,"padding-right","length_sp",0)
     local fontfamily = 0
@@ -1250,6 +1251,7 @@ function commands.initial( layoutxml,dataxml)
             fontfamily = 0
         end
     end
+
     local fi = publisher.fonts.lookup_fontfamily_number_instance[fontfamily]
 
     local tab = publisher.dispatch(layoutxml,dataxml)
@@ -1263,6 +1265,16 @@ function commands.initial( layoutxml,dataxml)
     end
     local box
     box = publisher.mknodes(initialvalue,fontfamily,{})
+
+    if colorname then
+        if not publisher.colors[colorname] then
+            err("Color %q is not defined yet.",colorname)
+        else
+            local colortable
+            colortable = publisher.colors[colorname].index
+            box = publisher.set_color_if_necessary(box,colortable)
+        end
+    end
     box = node.hpack(box)
     local initialheight = box.height + box.depth
     box.depth = 0

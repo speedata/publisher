@@ -2762,6 +2762,14 @@
     <childelements>
       <cmd name="Value"/>
     </childelements>
+    <attribute en="color" optional="yes" since="2.9.0" type="text" allowxpath="yes">
+      <description xml:lang="en">
+        <para>Set the color of the initial. Defaults to black.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze die Farbe der Initiale. Voreingestellt ist Schwarz.</para>
+      </description>
+    </attribute>
     <attribute en="fontface" optional="no">
       <description xml:lang="en">
         <para>Choose the font family. Only »Regular« shape is used at the moment.</para>
