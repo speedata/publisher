@@ -41,6 +41,9 @@
                <ref name="e_DefineFontalias"></ref>
             </optional>
             <optional>
+               <ref name="e_DefineTextformat"></ref>
+            </optional>
+            <optional>
                <ref name="e_ForAll"></ref>
             </optional>
             <optional>
@@ -124,6 +127,9 @@
             </optional>
             <optional>
                <ref name="e_DefineFontalias"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineTextformat"></ref>
             </optional>
             <optional>
                <ref name="e_ForAll"></ref>
@@ -751,6 +757,9 @@
             </optional>
             <optional>
                <ref name="e_DefineFontalias"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineTextformat"></ref>
             </optional>
             <optional>
                <ref name="e_ForAll"></ref>
@@ -3247,6 +3256,9 @@
                <ref name="e_DefineFontalias"></ref>
             </optional>
             <optional>
+               <ref name="e_DefineTextformat"></ref>
+            </optional>
+            <optional>
                <ref name="e_ForAll"></ref>
             </optional>
             <optional>
@@ -3423,6 +3435,9 @@
                </optional>
                <optional>
                   <ref name="e_DefineFontalias"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_DefineTextformat"></ref>
                </optional>
                <optional>
                   <ref name="e_ForAll"></ref>

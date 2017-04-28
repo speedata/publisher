@@ -69,6 +69,7 @@
     <optional><cmd name="DefineColor"/></optional>
     <optional><cmd name="DefineFontfamily"/></optional>
     <optional><cmd name="DefineFontalias"/></optional>
+    <optional><cmd name="DefineTextformat"/></optional>
     <optional><cmd name="ForAll"/></optional>
     <optional><cmd name="Group"/></optional>
     <optional><cmd name="Hyphenation"/></optional>
