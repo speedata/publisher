@@ -2986,7 +2986,7 @@ function commands.table( layoutxml,dataxml,options )
     end
 
     if not fontname then fontname = "text" end
-    fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+    local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
     local save_fontfamily = publisher.current_fontfamily
     publisher.current_fontfamily = fontfamily
 
