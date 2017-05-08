@@ -1291,12 +1291,21 @@ function setup_page(pagenumber)
         if type(element_contents(j))=="function" and eltname=="Margin" then
             element_contents(j)(current_page)
         elseif eltname=="Grid" then
-            gridwidth  = element_contents(j).width
-            gridheight = element_contents(j).height
-            nx = element_contents(j).nx
-            ny = element_contents(j).ny
-            dx = element_contents(j).dx
-            dy = element_contents(j).dy
+            local layoutxml = element_contents(j).layoutxml
+            local dataxml = element_contents(j).dataxml
+            local width  = publisher.read_attribute(layoutxml,dataxml,"width",  "length_sp")
+            local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --pg
+            local nx     = publisher.read_attribute(layoutxml,dataxml,"nx",     "rawstring")
+            local ny     = publisher.read_attribute(layoutxml,dataxml,"ny",     "rawstring")
+            local dx     = publisher.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
+            local dy     = publisher.read_attribute(layoutxml,dataxml,"dy",     "length_sp")
+
+            gridwidth  = width
+            gridheight = height
+            nx = nx
+            ny = ny
+            dx = dx
+            dy = dy
         end
     end
 

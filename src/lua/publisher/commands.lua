@@ -860,7 +860,8 @@ function commands.grid( layoutxml,dataxml )
     local dx     = publisher.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
     local dy     = publisher.read_attribute(layoutxml,dataxml,"dy",     "length_sp")
 
-    return { width = width, height = height, nx = tonumber(nx), ny = tonumber(ny), dx = dx, dy = dy }
+    -- layoutxml and dataxml are used when determining the grid of a pagetype
+    return { width = width, height = height, nx = tonumber(nx), ny = tonumber(ny), dx = dx, dy = dy , layoutxml = layoutxml, dataxml = dataxml }
 end
 
 --- Group
