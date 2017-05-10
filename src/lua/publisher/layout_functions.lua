@@ -239,6 +239,7 @@ local function groupwidth(dataxml, arg )
 end
 
 local function current_frame_number(dataxml,arg)
+  publisher.setup_page()
   local framename = arg[1]
   if framename == nil then return 1 end
   local current_framenumber = publisher.current_grid:framenumber(framename)
