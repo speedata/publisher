@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.9">
+    <entry version="2.9.10" date="2017-05-10">
+      <en>New command: Groupcontents to insert a group in a Td. Bugfix XPath parser, sd:current-framenumber().</en>
+      <de>Neuer Befehl: Groupcontents. Damit wird eine Gruppe in eine Tabellenzelle eingefügt. Fehlerkorrektur beim XPath-Parser und bei sd:current-framenumber(). </de>
+    </entry>
     <entry version="2.9.9" date="2017-05-08">
       <en>Lazy evaluation of Grid in Pagetype (#130), bugfix nested tables (#129), improved Initials (color), bugfix cursor movement (#128)</en>
       <de>Lazy Evaluation des Rasters in Pagetype (#130), Fehlerkorrektur geschachtelte Tabellen (#129), verbesserte Initialen (Farbe), Fehlerkorrektur Cursor (#128)</de>
