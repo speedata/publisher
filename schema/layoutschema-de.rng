@@ -2899,7 +2899,7 @@
    </define>
    <define name="e_PlaceObject">
       <element name="PlaceObject">
-         <a:documentation>Gibt ein rechteckiges Objekt (Bild, Tabelle, Box oder Textblock) aus.</a:documentation>
+         <a:documentation>Gibt ein rechteckiges Objekt (Bild, Tabelle, Box, Barcode oder Textblock) aus.</a:documentation>
          <optional>
             <attribute name="allocate">
                <a:documentation>Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei allocate=&#34;no&#34; wird auch die aktuelle Zeile im Raster nicht verändert.</a:documentation>
@@ -2985,6 +2985,9 @@
                   <a:documentation>Den Hintergrund in der angegebenen Farbe füllen (in backgroundcolor)</a:documentation>
                   <value>without</value>
                   <a:documentation>Leerer Hintergrund</a:documentation>
+                  <data type="string">
+                     <param name="pattern">\{.+\}</param>
+                  </data>
                </choice>
             </attribute>
          </optional>

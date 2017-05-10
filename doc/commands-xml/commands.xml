@@ -5002,10 +5002,10 @@
   </command>
   <command en="PlaceObject">
     <description xml:lang="en">
-      <para>Outputs a rectangular object (image, table, box or textblock).</para>
+      <para>Outputs a rectangular object (image, table, box, barcode or textblock).</para>
     </description>
     <description xml:lang="de">
-      <para>Gibt ein rechteckiges Objekt (Bild, Tabelle, Box oder Textblock) aus.</para>
+      <para>Gibt ein rechteckiges Objekt (Bild, Tabelle, Box, Barcode oder Textblock) aus.</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -5159,7 +5159,7 @@
         <para>Die Farbe des Rahmens, wenn ein Rahmen ausgegeben wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
       </description>
     </attribute>
-    <attribute en="background" optional="yes">
+    <attribute en="background" optional="yes" allowxpath="yes">
       <description xml:lang="en">
         <para>Fill the background of the object (full grid cells) with a color, given by backgroundcolor.</para>
       </description>

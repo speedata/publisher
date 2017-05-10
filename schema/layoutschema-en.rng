@@ -2899,7 +2899,7 @@
    </define>
    <define name="e_PlaceObject">
       <element name="PlaceObject">
-         <a:documentation>Outputs a rectangular object (image, table, box or textblock).</a:documentation>
+         <a:documentation>Outputs a rectangular object (image, table, box, barcode or textblock).</a:documentation>
          <optional>
             <attribute name="allocate">
                <a:documentation>Determines if the area of the object is marked as »allocated«. With allocate=&#34;no&#34;, the cursor position is not changed.</a:documentation>
@@ -2985,6 +2985,9 @@
                   <a:documentation>Fill background with the given color (in backgroundcolor).</a:documentation>
                   <value>without</value>
                   <a:documentation>Empty background</a:documentation>
+                  <data type="string">
+                     <param name="pattern">\{.+\}</param>
+                  </data>
                </choice>
             </attribute>
          </optional>
