@@ -925,6 +925,15 @@ function commands.group( layoutxml,dataxml )
     publisher.current_grid = save_grid
 end
 
+--- Groupcontents
+--- -----
+--- Insert the contents of a virtual area into a table cell.
+function commands.groupcontents( layoutxml,dataxml )
+    local name = publisher.read_attribute(layoutxml,dataxml,"name", "rawstring")
+    local g = publisher.groups[name]
+    return {node.copy(g.contents)}
+end
+
 --- HSpace
 --- ------
 --- Create a horizontal space that stretches up to infinity

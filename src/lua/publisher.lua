@@ -474,6 +474,7 @@ local dispatch_table = {
     Frame                   = commands.frame,
     Grid                    = commands.grid,
     Group                   = commands.group,
+    Groupcontents           = commands.groupcontents,
     HSpace                  = commands.hspace,
     Hyphenation             = commands.hyphenation,
     I                       = commands.italic,

@@ -1455,6 +1455,15 @@
          </interleave>
       </element>
    </define>
+   <define name="e_Groupcontents">
+      <element name="Groupcontents">
+         <a:documentation>Insert the contents of a group (a virtual area)</a:documentation>
+         <attribute name="name">
+            <a:documentation>The name of the group</a:documentation>
+         </attribute>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Hyphenation">
       <element name="Hyphenation">
          <a:documentation>Suggest a hyphenation. This hyphenation will be used in the running text. See the example.</a:documentation>
@@ -3988,6 +3997,7 @@
                <ref name="e_Box"></ref>
                <ref name="e_Copy-of"></ref>
                <ref name="e_Frame"></ref>
+               <ref name="e_Groupcontents"></ref>
                <ref name="e_ForAll"></ref>
                <ref name="e_Image"></ref>
                <ref name="e_Loop"></ref>
