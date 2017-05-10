@@ -91,7 +91,7 @@ function M.is_attribute(dataxml,str,pos)
         return true
     end
     local eltname
-    start,stop,eltname = string.find(str,"^(%a[%w/_*]*@[%w-_]+)%s*",pos)
+    start,stop,eltname = string.find(str,"^(%a[%w-/_*]*@[%w-_]+)%s*",pos)
     if start then
         local ret = {}
         local attrname
@@ -281,8 +281,7 @@ function M.is_nodeselector( dataxml,str,pos,ns )
         return true
     end
     local eltname
-    start,stop,eltname = string.find(str,"^(%a[-%w/_*]*)%s*",pos)
-
+    start,stop,eltname = string.find(str,"^(%a[%w-/_*]*)%s*",pos)
     if start then
         local ret = {}
         M.nextpos = stop + 1

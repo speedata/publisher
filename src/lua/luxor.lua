@@ -282,16 +282,6 @@ local function parse_xml(txt,options)
 		decoder = decode_xmlstring
 	end
 
-	-- txt = string.gsub(txt,"&(.-);",function (arg)
-	-- 	if string.find(arg,"^#x") then
-	-- 		return string.char(tonumber(string.sub(arg,3,-1),16))
-	-- 	elseif string.find(arg,"^#X") then
-	-- 		return string.char(tonumber(string.sub(arg,3,-1),16))
-	-- 	elseif string.find(arg,"^#") then
-	-- 		return string.char(string.sub(arg,2,-1))
-	-- 	end
-	-- end)
-
 	txt = txt.gsub(txt,"\13\n?","\n")
 
 	if options.ignoreeol == true then
