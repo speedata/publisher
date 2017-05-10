@@ -1,13 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (en)</title>
   <id>http://www.speedata.de</id>
-  <updated>2017-03-21T12:52:28+01:00</updated>
+  <updated>2017-05-10T19:37:32+02:00</updated>
   <subtitle>New revisions for download and changelog.</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.9.10</title>
+    <updated>2017-05-10T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-05-10:</id>
+    <content type="html">New command: Groupcontents to insert a group in a Td. Bugfix XPath parser, sd:current-framenumber().</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.9</title>
+    <updated>2017-05-08T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-05-08:</id>
+    <content type="html">Lazy evaluation of Grid in Pagetype (#130), bugfix nested tables (#129), improved Initials (color), bugfix cursor movement (#128)</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.8</title>
+    <updated>2017-04-24T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-04-24:</id>
+    <content type="html">Bugfix XML attributes with quotation marks</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.7</title>
+    <updated>2017-04-16T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-04-16:</id>
+    <content type="html">New command Initial.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.9.6</title>
     <updated>2017-03-21T00:00:00Z</updated>
