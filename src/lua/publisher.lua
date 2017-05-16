@@ -891,10 +891,15 @@ end
 
 
 function shipout(nodelist, pagenumber )
-    local colortable = pages[pagenumber].defaultcolor
-    if colortable and colortable ~= 1 then
-        nodelist = set_color_if_necessary(nodelist,colortable)
-        nodelist = node.vpack(nodelist)
+    local colorname = pages[pagenumber].defaultcolor
+    if colorname then
+        if not colors[colorname] then
+            err("Pagetype / defaultcolor: color %q is not defined yet.",colorname)
+        else
+            local colorindex = colors[colorname].index
+            nodelist = set_color_if_necessary(nodelist,colorindex)
+            nodelist = node.vpack(nodelist)
+        end
     end
 
     tex.box[666] = nodelist
@@ -1319,7 +1324,12 @@ function setup_page(pagenumber)
     end
 
     current_page.grid:set_width_height({wd = gridwidth, ht = gridheight, nx = nx, ny = ny, dx = dx, dy = dy })
-    current_page.defaultcolor = pagetype.defaultcolor
+
+    -- The default color is applied during shipout
+    if pagetype.layoutxml and pagetype.layoutxml.defaultcolor then
+        current_page.defaultcolor = read_attribute(pagetype.layoutxml,nil,"defaultcolor","rawstring")
+    end
+
     for _,j in ipairs(pagetype) do
         local eltname = elementname(j)
         if type(element_contents(j))=="function" and eltname=="Margin" then

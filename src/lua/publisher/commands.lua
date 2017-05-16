@@ -1963,19 +1963,12 @@ end
 --- This command should be probably called Masterpage or something similar.
 function commands.pagetype(layoutxml,dataxml)
     trace("Command: Pagetype")
-    local tmp_tab = {}
+    local tmp_tab = {
+        layoutxml = layoutxml
+    }
     local test         = publisher.read_attribute(layoutxml,dataxml,"test","rawstring")
     local pagetypename = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
-    local defaultcolor = publisher.read_attribute(layoutxml,dataxml,"defaultcolor","rawstring")
-
-    local colortable
-    if defaultcolor then
-        if not publisher.colors[defaultcolor] then
-            err("Pagetype / defaultcolor: color %q is not defined yet.",defaultcolor)
-        else
-            colortable = publisher.colors[defaultcolor].index
-        end
-    end
+    -- evaluate the default color for this page later on, so we can set it dynamically (XPath)
 
     local tab = publisher.dispatch(layoutxml,dataxml)
 
@@ -1988,8 +1981,6 @@ function commands.pagetype(layoutxml,dataxml)
             tmp_tab [#tmp_tab + 1] = j
         end
     end
-    tmp_tab.defaultcolor = colortable
-    -- assert(type(test())=="boolean")
     publisher.masterpages[#publisher.masterpages + 1] = { is_pagetype = test, res = tmp_tab, name = pagetypename,ns=layoutxml[".__ns"]}
 end
 
