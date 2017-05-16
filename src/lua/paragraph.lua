@@ -394,10 +394,19 @@ function Paragraph:format(width_sp, default_textformat_name,options)
             parameter.hangindent =  parameter.hangindent + self.initial.width
             local i_ht = self.initial.height + self.initial.depth
             local nl_ht = nodelist.height + nodelist.depth
+            local maxindent = 0
+            -- get max indent
             if parameter.parshape then
                 for i=1,math.round(i_ht / nl_ht,0) do
-                    parameter.parshape[i][1] = parameter.parshape[i][1] + self.initial.width
-                    parameter.parshape[i][2] = parameter.parshape[i][2] - self.initial.width
+                    maxindent = math.max(parameter.parshape[i][1],maxindent)
+                end
+            end
+            local curindent
+            if parameter.parshape then
+                for i=1,math.round(i_ht / nl_ht,0) do
+                    curindent = maxindent - parameter.parshape[i][1]
+                    parameter.parshape[i][1] = maxindent + self.initial.width
+                    parameter.parshape[i][2] = parameter.parshape[i][2] - self.initial.width - curindent
                 end
             else
                 parameter.hangafter  =  math.max( parameter.hangafter, math.ceil(math.round(i_ht / nl_ht,1)))
