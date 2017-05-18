@@ -50,7 +50,7 @@ end
 function Paragraph:set_color( color )
     if not color then return end
     -- todo: why not use publisher.set_color_if_necessary??
-
+    if not self.nodelist then return end
     local colorname
     if color == -1 then
         colorname = "black"
