@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.9">
+    <entry version="2.9.11" date="2017-05-18">
+      <en>Lazy evaluation of defaultcolor / Pagetype, minor bugfixes.</en>
+      <de>Späte Auswertung von defaultcolor bei Pagetype, kleinere Fehlerkorrekturen.</de>
+    </entry>
     <entry version="2.9.10" date="2017-05-10">
       <en>New command: Groupcontents to insert a group in a Td. Bugfix XPath parser, sd:current-framenumber().</en>
       <de>Neuer Befehl: Groupcontents. Damit wird eine Gruppe in eine Tabellenzelle eingefügt. Fehlerkorrektur beim XPath-Parser und bei sd:current-framenumber(). </de>
