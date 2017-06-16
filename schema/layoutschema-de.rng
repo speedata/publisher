@@ -3194,6 +3194,11 @@
          <attribute name="name">
             <a:documentation>Name des Platzierungsbereichs</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="framecolor">
+               <a:documentation>Setze die Farbe im Modus wenn die Platzierungsbereiche angezeigt werden (grid=yes). Voreinstellung ist &#39;red&#39;.</a:documentation>
+            </attribute>
+         </optional>
          <oneOrMore>
             <interleave>
                <optional>

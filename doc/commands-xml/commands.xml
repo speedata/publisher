@@ -5551,6 +5551,14 @@
         <para>Name des Platzierungsbereichs</para>
       </description>
     </attribute>
+    <attribute en="framecolor" optional="yes" since="2.9.12" type="text">
+      <description xml:lang="en">
+        <para>Set the color of the frame in grid=yes mode. Defaults to 'red'</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze die Farbe im Modus wenn die Platzierungsbereiche angezeigt werden (grid=yes). Voreinstellung ist 'red'.</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Pagetype name="right page" test="sd:odd( sd:current-page() )">
   <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>

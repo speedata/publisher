@@ -2533,10 +2533,13 @@ end
 function commands.positioning_area( layoutxml,dataxml )
     -- Warning: if we call publisher.dispatch now, the xpath functions
     -- might depend on values on the _current_ page, which is not set!
+    local colorname = publisher.read_attribute(layoutxml,dataxml,"framecolor", "rawstring")
+    local name      = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
+    local colorindex
     local tab = {}
+    tab.colorname = colorname
     tab.layoutxml = layoutxml
     tab.dataxml = dataxml
-    local name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
     tab.name = name
     return tab
 end

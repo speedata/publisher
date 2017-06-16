@@ -1349,6 +1349,7 @@ function setup_page(pagenumber)
             for i,k in ipairs(tab) do
                 current_positioning_area[#current_positioning_area + 1] = element_contents(k)
             end
+            current_positioning_area.colorname = element_contents(j).colorname
         else
             err("Element name %q unknown (setup_page())",eltname or "<create_page>")
         end

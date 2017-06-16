@@ -3194,6 +3194,11 @@
          <attribute name="name">
             <a:documentation>Name of the area.</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="framecolor">
+               <a:documentation>Set the color of the frame in grid=yes mode. Defaults to &#39;red&#39;</a:documentation>
+            </attribute>
+         </optional>
          <oneOrMore>
             <interleave>
                <optional>
