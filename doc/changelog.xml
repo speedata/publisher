@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.9">
+    <entry version="2.9.12" date="2017-06-16">
+      <en>Bugfix PlaceObject/hreference=right and absolute positioning</en>
+      <de>Fehlerkorrektur PlaceObject/hreference=right und absoluter Platzierung.</de>
+    </entry>
     <entry version="2.9.11" date="2017-05-18">
       <en>Lazy evaluation of defaultcolor / Pagetype, minor bugfixes.</en>
       <de>Späte Auswertung von defaultcolor bei Pagetype, kleinere Fehlerkorrekturen.</de>
