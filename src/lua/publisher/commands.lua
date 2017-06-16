@@ -931,6 +931,10 @@ end
 function commands.groupcontents( layoutxml,dataxml )
     local name = publisher.read_attribute(layoutxml,dataxml,"name", "rawstring")
     local g = publisher.groups[name]
+    if not g then
+        err("group %q does not exist!",tostring(name))
+        return {publisher.emergency_block()}
+    end
     return {node.copy(g.contents)}
 end
 
