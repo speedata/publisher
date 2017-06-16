@@ -2334,7 +2334,7 @@ function commands.place_object( layoutxml,dataxml )
 
         if absolute_positioning then
             if hreference == "right" then
-                column = column - width_in_gridcells + 1
+                column = column - object.width
             end
             local top = row + current_grid.extra_margin
             if vreference == "bottom" then
