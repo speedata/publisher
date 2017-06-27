@@ -2196,6 +2196,15 @@ function parse_html( elt, parameter )
             local css_rules = css:matches({element = eltname, class=elt.class}) or {}
             local has_css = false
             local colorindex
+            local fontfamily = 0
+            local ff = css_rules["font-family"]
+            if ff then
+                has_css = true
+                local tmp = publisher.fonts.lookup_fontfamily_name_number[ff]
+                if tmp then
+                    fontfamily = tmp
+                end
+            end
 
             if css_rules["color"] then
                 has_css = true
@@ -2209,7 +2218,7 @@ function parse_html( elt, parameter )
             if has_css then
                 local b = paragraph:new()
                 if type(elt[1]) == "string" then
-                    b:append(elt[1],{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                    b:append(elt[1],{fontfamily = fontfamily, bold = bold, italic = italic, underline = underline})
                     b:set_color(colorindex)
                     a:append(b)
                     elt = {}
