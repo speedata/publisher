@@ -755,6 +755,7 @@ func main() {
 	if getOption("imagecache") == "" {
 		options["imagecache"] = filepath.Join(getOption("tempdir"), "sp", "images")
 	}
+	os.Setenv("SP_TEMPDIR", getOption("tempdir"))
 	os.Setenv("SP_MAINLANGUAGE", mainlanguage)
 	os.Setenv("SP_FONT_PATH", getOption("fontpath"))
 	os.Setenv("SP_PATH_REWRITE", getOption("pathrewrite"))

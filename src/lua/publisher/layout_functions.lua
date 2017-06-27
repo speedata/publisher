@@ -66,6 +66,25 @@ local function first_free_row( dataxml, arg )
   return ret
 end
 
+-- Read the contents given in arg[1] and write it to a temporary file.
+-- Return the name of the file. Useful in conjunction with sd:decode-base64()
+-- and Image to read an image from the data.
+local function filecontents( dataxml,arg )
+      local tmpdir = os.getenv("SP_TEMPDIR")
+      lfs.mkdir(tmpdir)
+      local filename = publisher.string_random(20)
+      local path = tmpdir .. publisher.os_separator .. filename
+      local file,e = io.open(path,"wb")
+      if file == nil then
+          err("Could not write filecontents into temp directory: %q",e)
+          return nil
+      end
+      file:write(arg[1])
+      file:close()
+      return path
+end
+
+
 local function keepalternating(dataxml, arg )
   local alt_type = arg[1]
   return publisher.alternating_value[alt_type]
@@ -322,6 +341,23 @@ local function decode_html( dataxml, arg )
   return arg
 end
 
+local function decode_base64(dataxml,arg)
+    local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+    local data = tostring(arg[1])
+    data = string.gsub(data, '[^'..b..'=]', '')
+    return (data:gsub('.', function(x)
+        if (x == '=') then return '' end
+        local r,f='',(b:find(x)-1)
+        for i=6,1,-1 do r=r..(f%2^i-f%2^(i-1)>0 and '1' or '0') end
+        return r;
+    end):gsub('%d%d%d?%d?%d?%d?%d?%d?', function(x)
+        if (#x ~= 8) then return '' end
+        local c=0
+        for i=1,8 do c=c+(x:sub(i,i)=='1' and 2^(8-i) or 0) end
+        return string.char(c)
+    end))
+end
+
 local function count_saved_pages(dataxml,arg)
     return #publisher.pagestore[arg[1]]
 end
@@ -371,12 +407,16 @@ register("urn:speedata:2009/publisher/functions/en","current-column",current_col
 
 register("urn:speedata:2009/publisher/functions/en","decode-html",decode_html)
 
+register("urn:speedata:2009/publisher/functions/en","decode-base64",decode_base64)
+
 register("urn:speedata:2009/publisher/functions/en","dummytext",loremipsum)
 register("urn:speedata:2009/publisher/functions/en","loremipsum",loremipsum)
 
 register("urn:speedata:2009/publisher/functions/en","even",even)
 
 register("urn:speedata:2009/publisher/functions/en","first-free-row",first_free_row)
+
+register("urn:speedata:2009/publisher/functions/en","filecontents",filecontents)
 
 register("urn:speedata:2009/publisher/functions/en","file-exists",file_exists)
 

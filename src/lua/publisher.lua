@@ -4323,5 +4323,24 @@ function flush_variable( varname )
 end
 
 
+-- random string https://gist.github.com/haggen/2fd643ea9a261fea2094
+
+local charset = {}
+
+-- qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890
+for i = 48,  57 do table.insert(charset, string.char(i)) end
+for i = 65,  90 do table.insert(charset, string.char(i)) end
+for i = 97, 122 do table.insert(charset, string.char(i)) end
+
+function string_random(length)
+  -- math.randomseed(os.time())
+
+  if length > 0 then
+    return string_random(length - 1) .. charset[math.random(1, #charset)]
+  else
+    return ""
+  end
+end
+
 file_end("publisher.lua")
 
