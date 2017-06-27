@@ -63,10 +63,6 @@ local html5entities = { apos = "'",
 	["zwj"] = "‍",     ["zwnj"] = "‌",
 }
 
-local function decode_xmlstring_html(txt)
-	return string.gsub(txt,"&(.-);",html5entities)
-end
-
 local XMLentities = { gt = ">", lt = "<", amp = "&",  apos = "'", quot = '"' }
 
 local function escape( txt )
@@ -79,6 +75,12 @@ local function escape( txt )
 			return string.char(string.sub(arg,2,-1))
 		end
 	end)
+	return txt
+end
+
+local function decode_xmlstring_html(txt)
+	txt = escape(txt)
+	txt = string.gsub(txt,"&(.-);",html5entities)
 	return txt
 end
 
