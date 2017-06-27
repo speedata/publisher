@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.9">
+    <entry version="2.9.14" date="2017-06-27">
+      <en>Allow font-family setting in CSS for custom element.</en>
+      <de>CSS verarbeitet font-family für eigene Elemente.</de>
+    </entry>
     <entry version="2.9.13" date="2017-06-27">
       <en>Bugfix numerical entities in data. New: base64 decode, filecontents.</en>
       <de>Fehlerkorrektur: nummerischen Entitäten in Daten. Neu: base64 dekodieren, filecontents.</de>
