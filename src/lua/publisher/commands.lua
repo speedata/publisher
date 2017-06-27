@@ -2144,6 +2144,11 @@ function commands.place_object( layoutxml,dataxml )
     local allocate_right   = publisher.read_attribute(layoutxml,dataxml,"allocate-right", "width_sp")
     local allocate_top     = publisher.read_attribute(layoutxml,dataxml,"allocate-top",   "height_sp")
     local allocate_bottom  = publisher.read_attribute(layoutxml,dataxml,"allocate-bottom","height_sp")
+    local class            = publisher.read_attribute(layoutxml,dataxml,"class",      "rawstring")
+    local id               = publisher.read_attribute(layoutxml,dataxml,"id",         "rawstring")
+
+    local css_rules = publisher.css:matches({element = "placeojbect", class=class,id=id}) or {}
+
 
     if origin_x == "left" then
         origin_x = 0
@@ -2303,8 +2308,9 @@ function commands.place_object( layoutxml,dataxml )
         object     = objects[i].object
         objecttype = objects[i].objecttype
 
-        if background  == "full" then
-            object = publisher.background(object,backgroundcolor)
+
+        if background == "full" or css_rules["background-color"] then
+            object = publisher.background(object,backgroundcolor or css_rules["background-color"])
         end
         if frame == "solid" then
             framewidth = rulewidth_sp

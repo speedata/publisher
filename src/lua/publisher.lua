@@ -1480,6 +1480,8 @@ end
 
 --- Draw a background behind the rectangular (box) object.
 function background( box, colorname )
+    -- color '-' means 'no color'
+    if colorname == "-" then return box end
     if not colors[colorname] then
         warning("Background: Color %q is not defined",colorname)
         return box
@@ -3373,6 +3375,10 @@ end
 
 --- See commands#save_dataset() for  documentation on the data structure for `xml_element`.
 function xml_to_string( xml_element, level )
+    if type(xml_element) ~= "table" then
+        err("xml_to_string is not a table, but a %s %q",type(xml_element),tostring(xml_element))
+        return "error in publisher run"
+    end
     level = level or 0
     local str = ""
     str = str .. string.rep(" ",level) .. "<" .. xml_element[".__local_name"]
@@ -4132,6 +4138,7 @@ function imageinfo( filename,page,box,fallback )
         return images[new_name]
     end
 
+    log("Searching for image %q",tostring(filename))
     if not find_file_location(filename) then
         if options.imagenotfounderror then
             err("Image %q not found!",filename or "???")
