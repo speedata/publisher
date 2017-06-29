@@ -2,7 +2,8 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <Options show-grid="yes" cutmarks="no" trim="0mm"/>
+  <Options cutmarks="no" bleed="0mm"/>
+  <Trace grid="yes"/>
 
   <Pageformat width="100mm" height="100mm"/>
   <SetGrid height="12pt" nx="4"/>

@@ -9,7 +9,7 @@
   <DefineColor name="blue" value="#00f"/>
   <DefineColor name="yellow" value="#ff0"/>
   
-  <Options show-grid="yes" trace="no"/>
+  <Trace grid="yes"/>
 
   <Record element="data">
     <PlaceObject>
