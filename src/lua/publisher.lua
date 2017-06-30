@@ -2447,6 +2447,36 @@ function addstrut(nodelist,where)
     return strut
 end
 
+
+-- Remove the first \n in a paragraph value table. See #132
+function remove_first_whitespace ( tbl )
+    for i=1,#tbl do
+        if type(tbl[i]) == "string" then
+            tbl[i] = string.gsub(tbl[i],"^[\n\t ]*(.-)$","%1")
+            return true
+        end
+        if type(tbl[i]) == "table" then
+            local ret = remove_first_whitespace(tbl[i])
+            if ret then return true end
+        end
+    end
+end
+
+-- Remove the final \n in a paragraph value table. See #132
+function remove_last_whitespace ( tbl )
+    for i=#tbl,1,-1 do
+        if type(tbl[i]) == "string" then
+            tbl[i] = string.gsub(tbl[i],"^(.-)[\n\t ]*$","%1")
+            return true
+        end
+        if type(tbl[i]) == "table" then
+            local ret = remove_last_whitespace(tbl[i])
+            if ret then return true end
+        end
+    end
+end
+
+
 --- Create a `\hbox`. Return a nodelist. Parameter is one of
 ---
 --- * language code

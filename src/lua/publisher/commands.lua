@@ -2048,9 +2048,12 @@ function commands.paragraph( layoutxml,dataxml )
     for _,j in ipairs(tab) do
         -- w("Paragraph Elementname = %q",tostring(publisher.elementname(j)))
         local contents = publisher.element_contents(j)
+        -- w("Paragraph type(contents) %q", type(contents))
         if publisher.elementname(j) == "Value" and type(contents) == "table" and #contents == 1 and type(contents[1]) == "string"  then
             objects[#objects + 1] = contents[1]
         elseif publisher.elementname(j) == "Value" and type(contents) == "table" then
+            publisher.remove_first_whitespace(contents)
+            publisher.remove_last_whitespace(contents)
             objects[#objects + 1] = publisher.parse_html(contents,{allowbreak = allowbreak})
         elseif publisher.elementname(j) == "Initial" then
             a.initial = contents
