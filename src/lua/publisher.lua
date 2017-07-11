@@ -2452,7 +2452,7 @@ end
 function remove_first_whitespace ( tbl )
     for i=1,#tbl do
         if type(tbl[i]) == "string" then
-            tbl[i] = string.gsub(tbl[i],"^[\n\t ]*(.-)$","%1")
+            tbl[i] = string.gsub(tbl[i],"^[\n\t]*(.-)$","%1")
             return true
         end
         if type(tbl[i]) == "table" then
@@ -2466,7 +2466,7 @@ end
 function remove_last_whitespace ( tbl )
     for i=#tbl,1,-1 do
         if type(tbl[i]) == "string" then
-            tbl[i] = string.gsub(tbl[i],"^(.-)[\n\t ]*$","%1")
+            tbl[i] = string.gsub(tbl[i],"^(.-)[\n\t]*$","%1")
             return true
         end
         if type(tbl[i]) == "table" then
