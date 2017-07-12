@@ -1422,6 +1422,10 @@ function new_page()
         shipout(n,current_pagenumber)
     end
     current_pagenumber = current_pagenumber + 1
+    if nextpage then
+        pages[current_pagenumber] = nil
+        setup_page(current_pagenumber)
+    end
     trace("page finished (new_page), setting current_pagenumber to %d",current_pagenumber)
 end
 
