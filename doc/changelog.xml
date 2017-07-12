@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="2.9">
+    <entry version="2.9.15" date="2017-07-12">
+      <en>Force pagetype if provided at NewPage, strip NL/Tab at beginning / end of paragraph.</en>
+      <de>PageType erzwingen bei NewPage, entferne NL/Tab beim Anfang und Ende eines Absatzes.</de>
+    </entry>
     <entry version="2.9.14" date="2017-06-27">
       <en>Allow font-family setting in CSS for custom element.</en>
       <de>CSS verarbeitet font-family für eigene Elemente.</de>
