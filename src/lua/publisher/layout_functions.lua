@@ -309,36 +309,30 @@ local function variable_exists(dataxml,arg)
   return var ~= nil
 end
 
+-- SHA-1
 local function shaone(dataxml,arg)
     local message = table.concat(arg)
     local ret = sha1.sha1(message)
     return ret
 end
 
+-- Turn &lt;b&gt;Hello&lt;b /&gt; into an HTML table and then into XML structure.
 local function decode_html( dataxml, arg )
-    if #arg == 0 then
-        return nil
+    if arg == nil then
+        arg = dataxml
     end
-    arg = arg[1]
-    local ok
+    arg = table_textvalue(arg)
     if type(arg) == "string" then
         comm.sendmessage('dec',arg)
         local msg = comm.get_string_messages()
+        if string.match(msg[1],"^err: ") then
+            log("Line number in the following error message is not correct:")
+            err(string.match(msg[1],"^err: (.*)$"))
+            return nil
+        end
         local ret = luxor.parse_xml("<dummy>" .. msg[1] .. "</dummy>")
         return ret
     end
-  for i=1,#arg do
-    for j=1,#arg[i] do
-      local txt = arg[i][j]
-      if type(txt) == "string" then
-        if string.find(txt,"<") then
-          local x = luxor.parse_xml(txt)
-          arg[i][j] = x
-        end
-      end
-    end
-  end
-  return arg
 end
 
 local function decode_base64(dataxml,arg)
