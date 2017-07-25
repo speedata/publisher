@@ -1,5 +1,8 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="2.9">
+  <chapter version="3.0.0">
+    
+  </chapter>
+  <chapter version="2.9" date="2017-07-25">
     <entry version="2.9.15" date="2017-07-12">
       <en>Force pagetype if provided at NewPage, strip NL/Tab at beginning / end of paragraph.</en>
       <de>PageType erzwingen bei NewPage, entferne NL/Tab beim Anfang und Ende eines Absatzes.</de>
