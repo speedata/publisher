@@ -136,9 +136,7 @@ func reader(message chan []byte, c net.Conn) {
 		Trace("decode_html")
 		res, err := xpath.HtmlToXml(string(msg))
 		if err != nil {
-			log.Println(err)
-			message <- []byte{}
-			return
+			res = "err: " + err.Error()
 		}
 		write := fmt.Sprintf("0,str,%06d%s", len(res), res)
 		c.Write([]byte(write))

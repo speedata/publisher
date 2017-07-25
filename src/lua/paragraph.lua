@@ -50,7 +50,7 @@ end
 function Paragraph:set_color( color )
     if not color then return end
     -- todo: why not use publisher.set_color_if_necessary??
-
+    if not self.nodelist then return end
     local colorname
     if color == -1 then
         colorname = "black"
@@ -355,7 +355,7 @@ function Paragraph:format(width_sp, default_textformat_name,options)
     for i=1,#objects do
         nodelist = objects[i]
 
-        -- The first whatist (type user_defined_marker) is not necessary
+        -- The first whatsit (type user_defined_marker) is not necessary
         -- for this. It indicates a new line and we have done this in
         -- the previous.
         if nodelist.id == publisher.whatsit_node and nodelist.subtype == publisher.user_defined_whatsit and nodelist.user_id == publisher.user_defined_marker then
@@ -384,8 +384,35 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         local indent = node.has_attribute(nodelist,publisher.att_indent)
         local rows   = node.has_attribute(nodelist,publisher.att_rows)
 
+        local initial_indent = 0
+        local initial_row = 0
+
         parameter.hangindent =    indent or current_textformat.indent or 0
-        parameter.hangafter  =  ( rows   or current_textformat.rows   or 0 ) * -1
+        parameter.hangafter  =  ( rows   or current_textformat.rows   or 0 )
+
+        if self.initial then
+            parameter.hangindent =  parameter.hangindent + self.initial.width
+            local i_ht = self.initial.height + self.initial.depth
+            local nl_ht = nodelist.height + nodelist.depth
+            local maxindent = 0
+            -- get max indent
+            if parameter.parshape then
+                for i=1,math.round(i_ht / nl_ht,0) do
+                    maxindent = math.max(parameter.parshape[i][1],maxindent)
+                end
+            end
+            local curindent
+            if parameter.parshape then
+                for i=1,math.round(i_ht / nl_ht,0) do
+                    curindent = maxindent - parameter.parshape[i][1]
+                    parameter.parshape[i][1] = maxindent + self.initial.width
+                    parameter.parshape[i][2] = parameter.parshape[i][2] - self.initial.width - curindent
+                end
+            else
+                parameter.hangafter  =  math.max( parameter.hangafter, math.ceil(math.round(i_ht / nl_ht,1)))
+            end
+        end
+        parameter.hangafter = parameter.hangafter * -1
         parameter.disable_hyphenation = current_textformat.disable_hyphenation
 
         local ragged_shape
@@ -506,6 +533,25 @@ function Paragraph:format(width_sp, default_textformat_name,options)
     end
 
     nodelist = node.vpack(objects[1])
+    if self.initial then
+        local initial_hlist = self.initial
+        local ht = initial_hlist.height
+
+
+        initial_hlist.shift = -initial_hlist.width
+        node.set_attribute(self.initial,publisher.att_origin,publisher.origin_initial)
+        local i = publisher.martrix
+
+
+        initial_hlist = node.vpack(initial_hlist)
+        initial_hlist.shift = -ht / 2
+        initial_hlist.width = 0
+        initial_hlist.height = 0
+        initial_hlist.depth  = 0
+
+        nodelist.head.head = node.insert_before(nodelist.head.head,nodelist.head.head,initial_hlist)
+    end
+
 
     return nodelist
 end

@@ -91,7 +91,7 @@ function M.is_attribute(dataxml,str,pos)
         return true
     end
     local eltname
-    start,stop,eltname = string.find(str,"^(%a[%w/_*]*@[%w-_]+)%s*",pos)
+    start,stop,eltname = string.find(str,"^(%a[%w-/_*]*@[%w-_]+)%s*",pos)
     if start then
         local ret = {}
         local attrname
@@ -281,8 +281,7 @@ function M.is_nodeselector( dataxml,str,pos,ns )
         return true
     end
     local eltname
-    start,stop,eltname = string.find(str,"^(%a[-%w/_*]*)%s*",pos)
-
+    start,stop,eltname = string.find(str,"^(%a[%w-/_*]*)%s*",pos)
     if start then
         local ret = {}
         M.nextpos = stop + 1
@@ -442,6 +441,7 @@ end
 -- Return a table with one entry for each comma separated expression.
 -- Each expression is the stack (table) of operators/operands
 function M.get_expr(dataxml,str,ns,pos)
+    M.str = str
     local ret = {}
     pos = string.find(str,"%S",pos)
     while true do
@@ -503,7 +503,7 @@ function M.eval_addition(first,second,operator)
         first = tonumber(first)
     end
     if first == nil then
-        err("The first operand of +/- is not a number. Evaluating to 0")
+        err("The first operand of +/- is not a number. Evaluating to 0 (%q)",M.str)
         return 0
     end
     if type(second)=='string' then

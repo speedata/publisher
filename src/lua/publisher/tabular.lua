@@ -96,7 +96,7 @@ function attach_objects_row( self, tab )
                         inline = {}
                     end
                     block[#block + 1] = {eltcontents}
-                elseif eltname == "Table" then
+                elseif eltname == "Table" or eltname == "Groupcontents" then
                     -- block
                     if #inline > 0 then
                         -- add current inline to the list of blocks
@@ -1554,7 +1554,7 @@ function typeset_table(self)
             else
                 space_above = 0
             end
-            thissplittable[#thissplittable + 1] = publisher.make_glue({space_above})
+            thissplittable[#thissplittable + 1] = publisher.make_glue({ width = space_above})
             thissplittable[#thissplittable + 1] = rows[i]
             if i < #rows or self.tablefoot_contents then
                 thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep})

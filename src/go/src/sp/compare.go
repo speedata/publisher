@@ -31,6 +31,8 @@ func fileExists(filename string) bool {
 	return !fi.IsDir()
 }
 
+// DoCompare starts comparing the files in the
+// current directory and its subdirectory
 func DoCompare(absdir string) {
 	cs := make(chan compareStatus, 0)
 	compare := mkCompare(cs)
@@ -75,14 +77,13 @@ func compareTwoPages(sourcefile, referencefile, dummyfile, path string) float64 
 			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
 				if status.ExitStatus() == 1 {
 					// comparison ok with differences
-					delta, err := strconv.ParseFloat(strings.Split(string(line), " ")[0], 32)
-					if err != nil {
-						log.Fatal(err)
+					delta, nerr := strconv.ParseFloat(strings.Split(string(line), " ")[0], 32)
+					if nerr != nil {
+						log.Fatal(nerr)
 					}
 					return delta
-				} else {
-					log.Fatal(err)
 				}
+				log.Fatal(err)
 			}
 		} else {
 			log.Fatalf("cmd.Wait: %v", err)
@@ -92,15 +93,15 @@ func compareTwoPages(sourcefile, referencefile, dummyfile, path string) float64 
 }
 
 func newer(src, dest string) bool {
-	dest_fi, err := os.Stat(dest)
+	destFi, err := os.Stat(dest)
 	if err != nil {
 		return true
 	}
-	src_fi, err := os.Stat(src)
+	srcFi, err := os.Stat(src)
 	if err != nil {
 		panic(fmt.Sprintf("Source %s does not exist!", src))
 	}
-	return dest_fi.ModTime().Before(src_fi.ModTime())
+	return destFi.ModTime().Before(srcFi.ModTime())
 }
 
 func runComparison(path string, status chan compareStatus) {

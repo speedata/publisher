@@ -68,10 +68,13 @@ sd:current-column(\<name\>) | Return the current column. If `name` is given, ret
 sd:current-framenumber(\<name\>) | Return the current frame number of given positioning area.
 sd:count-saved-pages(\<name\>)  | Return the number of saved pages from `<SavePages>`.
 sd:alternating(\<type\>, \<text\>,\<text\>,.. ) | On each call the next element will be returned. You can define more alternating sequences by using distinct type values. Example: `sd:alternating("tbl", "White","Gray")` can be used for alternating color of table rules. To reset the state, use `sd:reset-alternating(<type>)`.
+sd:filecontents(\<binarycontent>) | Save the given contents into a file and return the file name.
+sd:first-free-row(<areaname>) | Return the first free row of this area (experimental).
 sd:reset-alternating(\<type\>) | Reset alternating so the next `sd:alternating()` starts again from the first element.
 sd:keep-alternating(\<type\>) | Use the current value of `sd:alternating(<type>)` without changing the value.
 sd:aspectratio(\<imagename>) | Return the result of the division width by height of the given image. (< 1 for portrait images, > 1 for landscape).
 sd:attr(\<name\>, ...)|  Is the same as `@name`, but can be used to dynamically construct the attribute name. See example at `sd:variable()`.
+sd:decode-base64(\<contents\>) | Expect a string encoded in base64 and return the binary contents.
 sd:decode-html(\<node\>) | Change text such as `&lt;i&gt;italic&lt;/i&gt;` into HTML markup.
 sd:merge-pagenumbers(\<pagenumbers\>,\<separator for range\>,\<separator for space\>) | Merge page numbers. For example the numbers `"1, 3, 4, 5"` are merged into `1, 3–5`. Defaults for the separator for the range is an en-dash (–), default for the spacing separator is ', ' (comma, space). This function sorts the page numbers and removes duplicates. When the separator for range is empty, the page numbers are separated each with the separator for the space.
 sd:number-of-datasets(\<Sequence\>) | Return the number of records of the sequence.
@@ -92,7 +95,7 @@ sd:randomitem(\<Value\>,\<Value\>, …) | Return one of the values.
 sd:variable(\<name\>, ...) | The same as `$name`. This function allows variable names to be constructed dynamically. Example: `sd:variable('myvar',$num)` – if `$num` contains the number 3, the resulting variable name is `myvar3`.
 sd:variable-exists(\<name\>) | True if variable `name` exists.
 sd:sha1(\<value\>,\<value\>, …) | Return the SHA-1 sum of the concatenation of each value as a hex string. Example: `sd:sha1('hello ', 'world')` gives the string `2aae6c35c94fcfb415dbe95f408b9ce91ee846ed`.
-sd:dummytext() | Returns the dummy text "Lorem ipsum..." (more than 50 words, enough for a paragraph)
+sd:dummytext(\<count>) | Returns the dummy text "Lorem ipsum..." (more than 50 words, enough for a paragraph). Repeated count times if provided.
 sd:loremipsum() | Same as `sd:dummytext()`
 
 Function | Description

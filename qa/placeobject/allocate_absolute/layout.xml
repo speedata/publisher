@@ -1,0 +1,10 @@
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en">
+  <Pageformat width="10cm" height="10cm"/>
+  <Trace gridallocation="yes" grid="yes"/>
+  <Record element="data">
+    <PlaceObject column="32mm" row="32mm" allocate="yes" allocate-left="1mm" allocate-right="1mm" allocate-top="3mm" allocate-bottom="3mm">
+      <Box width="26mm" height="26mm" backgroundcolor="lightblue"/>
+    </PlaceObject>
+  </Record>
+</Layout>

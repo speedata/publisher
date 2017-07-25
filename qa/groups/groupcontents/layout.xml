@@ -1,0 +1,23 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="70mm" height="60mm"/>
+
+  <Record element="data">
+    <Group name="foo">
+      <Contents>
+        <PlaceObject column="1">
+          <Image file="_samplea.pdf" width="5"/>
+        </PlaceObject>
+      </Contents>
+    </Group>
+
+    <PlaceObject>
+      <Table>
+        <Tr>
+          <Td><Groupcontents name="foo"/></Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>

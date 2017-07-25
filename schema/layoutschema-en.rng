@@ -19,32 +19,14 @@
    <define name="e_Action">
       <element name="Action">
          <a:documentation>Associates an action with a text. Once the text is placed on the page, the associated action will be executed. The action can be compared to an invisible character. When the publisher outputs the character, the corresponding instructions will be run.</a:documentation>
-         <optional>
-            <ref name="e_AddToList"></ref>
-         </optional>
          <oneOrMore>
             <ref name="e_Mark"></ref>
          </oneOrMore>
       </element>
    </define>
-   <define name="e_AddToList">
-      <element name="AddToList">
-         <a:documentation>Can be used inside of Action. Not tested properly.</a:documentation>
-         <attribute name="select">
-            <a:documentation></a:documentation>
-         </attribute>
-         <attribute name="list">
-            <a:documentation></a:documentation>
-         </attribute>
-         <attribute name="key">
-            <a:documentation></a:documentation>
-         </attribute>
-         <empty></empty>
-      </element>
-   </define>
-   <define name="e_AtPageShipout">
-      <element name="AtPageShipout">
-         <a:documentation>The enclosed instructions will be executed when the page is placed into the PDF file.</a:documentation>
+   <define name="e_AtPageCreation">
+      <element name="AtPageCreation">
+         <a:documentation>The contents of the element AtPageCreation is executed the first time the page is accessed. This is used in Pagetype.</a:documentation>
          <oneOrMore>
             <optional>
                <ref name="e_Bookmark"></ref>
@@ -57,6 +39,9 @@
             </optional>
             <optional>
                <ref name="e_DefineFontalias"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineTextformat"></ref>
             </optional>
             <optional>
                <ref name="e_ForAll"></ref>
@@ -127,9 +112,9 @@
          </oneOrMore>
       </element>
    </define>
-   <define name="e_AtPageCreation">
-      <element name="AtPageCreation">
-         <a:documentation>The contents of the element AtPageCreation are executed the first time the page is accessed.</a:documentation>
+   <define name="e_AtPageShipout">
+      <element name="AtPageShipout">
+         <a:documentation>The enclosed instructions will be executed when the page is placed into the PDF file. Used in Pagetype.</a:documentation>
          <oneOrMore>
             <optional>
                <ref name="e_Bookmark"></ref>
@@ -142,6 +127,9 @@
             </optional>
             <optional>
                <ref name="e_DefineFontalias"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineTextformat"></ref>
             </optional>
             <optional>
                <ref name="e_ForAll"></ref>
@@ -214,7 +202,7 @@
    </define>
    <define name="e_Attribute">
       <element name="Attribute">
-         <a:documentation>Create a data structure that can be saved to the hard drive with SaveDataset.</a:documentation>
+         <a:documentation>Create an attribute for the Element data structure that can be saved to the hard drive with SaveDataset.</a:documentation>
          <attribute name="name">
             <a:documentation>Name of the attribute that is created.</a:documentation>
          </attribute>
@@ -364,7 +352,7 @@
          <a:documentation>Create a rectangular colored area. The area must fit the grid cells.</a:documentation>
          <optional>
             <attribute name="backgroundcolor">
-               <a:documentation>Color of the box.</a:documentation>
+               <a:documentation>Color of the box. If the color name is a dash (-), a transparent background is used.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -507,6 +495,9 @@
             </optional>
             <optional>
                <ref name="e_Image"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Initial"></ref>
             </optional>
             <optional>
                <ref name="e_Include"></ref>
@@ -681,91 +672,6 @@
          </zeroOrMore>
       </element>
    </define>
-   <define name="e_Contents">
-      <element name="Contents">
-         <a:documentation>Marks the contents of a Group.</a:documentation>
-         <oneOrMore>
-            <optional>
-               <ref name="e_Bookmark"></ref>
-            </optional>
-            <optional>
-               <ref name="e_DefineColor"></ref>
-            </optional>
-            <optional>
-               <ref name="e_DefineFontfamily"></ref>
-            </optional>
-            <optional>
-               <ref name="e_DefineFontalias"></ref>
-            </optional>
-            <optional>
-               <ref name="e_ForAll"></ref>
-            </optional>
-            <optional>
-               <ref name="e_Group"></ref>
-            </optional>
-            <optional>
-               <ref name="e_Hyphenation"></ref>
-            </optional>
-            <optional>
-               <ref name="e_Include"></ref>
-            </optional>
-            <optional>
-               <ref name="e_InsertPages"></ref>
-            </optional>
-            <optional>
-               <ref name="e_LoadDataset"></ref>
-            </optional>
-            <optional>
-               <ref name="e_Loop"></ref>
-            </optional>
-            <optional>
-               <ref name="e_Message"></ref>
-            </optional>
-            <optional>
-               <ref name="e_NewPage"></ref>
-            </optional>
-            <optional>
-               <ref name="e_NextFrame"></ref>
-            </optional>
-            <optional>
-               <ref name="e_NextRow"></ref>
-            </optional>
-            <optional>
-               <ref name="e_Output"></ref>
-            </optional>
-            <optional>
-               <ref name="e_Pagetype"></ref>
-            </optional>
-            <optional>
-               <ref name="e_PlaceObject"></ref>
-            </optional>
-            <optional>
-               <ref name="e_ProcessNode"></ref>
-            </optional>
-            <optional>
-               <ref name="e_SaveDataset"></ref>
-            </optional>
-            <optional>
-               <ref name="e_SavePages"></ref>
-            </optional>
-            <optional>
-               <ref name="e_SetVariable"></ref>
-            </optional>
-            <optional>
-               <ref name="e_SortSequence"></ref>
-            </optional>
-            <optional>
-               <ref name="e_Switch"></ref>
-            </optional>
-            <optional>
-               <ref name="e_Until"></ref>
-            </optional>
-            <optional>
-               <ref name="e_While"></ref>
-            </optional>
-         </oneOrMore>
-      </element>
-   </define>
    <define name="e_Column">
       <element name="Column">
          <a:documentation>Set the properties of a column in the table.</a:documentation>
@@ -834,6 +740,94 @@
             </attribute>
          </optional>
          <empty></empty>
+      </element>
+   </define>
+   <define name="e_Contents">
+      <element name="Contents">
+         <a:documentation>Marks the contents of a Group, a virtual area.</a:documentation>
+         <oneOrMore>
+            <optional>
+               <ref name="e_Bookmark"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineColor"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineFontfamily"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineFontalias"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineTextformat"></ref>
+            </optional>
+            <optional>
+               <ref name="e_ForAll"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Group"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Hyphenation"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Include"></ref>
+            </optional>
+            <optional>
+               <ref name="e_InsertPages"></ref>
+            </optional>
+            <optional>
+               <ref name="e_LoadDataset"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Loop"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Message"></ref>
+            </optional>
+            <optional>
+               <ref name="e_NewPage"></ref>
+            </optional>
+            <optional>
+               <ref name="e_NextFrame"></ref>
+            </optional>
+            <optional>
+               <ref name="e_NextRow"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Output"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Pagetype"></ref>
+            </optional>
+            <optional>
+               <ref name="e_PlaceObject"></ref>
+            </optional>
+            <optional>
+               <ref name="e_ProcessNode"></ref>
+            </optional>
+            <optional>
+               <ref name="e_SaveDataset"></ref>
+            </optional>
+            <optional>
+               <ref name="e_SavePages"></ref>
+            </optional>
+            <optional>
+               <ref name="e_SetVariable"></ref>
+            </optional>
+            <optional>
+               <ref name="e_SortSequence"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Switch"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Until"></ref>
+            </optional>
+            <optional>
+               <ref name="e_While"></ref>
+            </optional>
+         </oneOrMore>
       </element>
    </define>
    <define name="e_Copy-of">
@@ -1082,19 +1076,22 @@
          <oneOrMore>
             <interleave>
                <optional>
-                  <ref name="e_Element"></ref>
-               </optional>
-               <optional>
                   <ref name="e_Attribute"></ref>
                </optional>
                <optional>
                   <ref name="e_Copy-of"></ref>
                </optional>
                <optional>
-                  <ref name="e_Switch"></ref>
+                  <ref name="e_Element"></ref>
                </optional>
                <optional>
                   <ref name="e_ForAll"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Makeindex"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Switch"></ref>
                </optional>
             </interleave>
          </oneOrMore>
@@ -1214,6 +1211,9 @@
                </optional>
                <optional>
                   <ref name="e_Image"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Initial"></ref>
                </optional>
                <optional>
                   <ref name="e_Include"></ref>
@@ -1455,6 +1455,15 @@
          </interleave>
       </element>
    </define>
+   <define name="e_Groupcontents">
+      <element name="Groupcontents">
+         <a:documentation>Insert the contents of a group (a virtual area)</a:documentation>
+         <attribute name="name">
+            <a:documentation>The name of the group</a:documentation>
+         </attribute>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Hyphenation">
       <element name="Hyphenation">
          <a:documentation>Suggest a hyphenation. This hyphenation will be used in the running text. See the example.</a:documentation>
@@ -1566,6 +1575,30 @@
          </oneOrMore>
       </element>
    </define>
+   <define name="e_Initial">
+      <element name="Initial">
+         <a:documentation>Make some letters appear in a larger font at the beginning of the paragraph.</a:documentation>
+         <optional>
+            <attribute name="color">
+               <a:documentation>Set the color of the initial. Defaults to black.</a:documentation>
+            </attribute>
+         </optional>
+         <attribute name="fontface">
+            <a:documentation>Choose the font family. Only »Regular« shape is used at the moment.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="padding-left">
+               <a:documentation>Insert space left of the initial.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-right">
+               <a:documentation>Insert space right of the initial.</a:documentation>
+            </attribute>
+         </optional>
+         <ref name="e_Value"></ref>
+      </element>
+   </define>
    <define name="e_InsertPages">
       <element name="InsertPages">
          <a:documentation>Insert previously saved pages.</a:documentation>
@@ -1578,6 +1611,17 @@
    <define name="e_Image">
       <element name="Image">
          <a:documentation>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg). See below for a limitation on the number of included PDF files.</a:documentation>
+         <optional>
+            <attribute name="bleed">
+               <a:documentation>Should the image size increase by the amount of bleed setting (Options)?</a:documentation>
+               <choice>
+                  <value>auto</value>
+                  <a:documentation>If the image touches a paper edge, extend the image in that direction.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Do not extend the image.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="class">
                <a:documentation>CSS class for this element.</a:documentation>
@@ -1669,6 +1713,11 @@
          <optional>
             <attribute name="dpiwarn">
                <a:documentation>Warn if the image gets lower resolution than given.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding">
+               <a:documentation>Set padding for all four sides.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1835,16 +1884,29 @@
    <define name="e_Li">
       <element name="Li">
          <a:documentation>List item in an ordered or unordered list.</a:documentation>
-         <ref name="e_I"></ref>
-         <ref name="e_B"></ref>
-         <ref name="e_Br"></ref>
-         <ref name="e_HSpace"></ref>
-         <ref name="e_U"></ref>
-         <ref name="e_Sub"></ref>
-         <ref name="e_Sup"></ref>
-         <ref name="e_URL"></ref>
-         <ref name="e_Value"></ref>
-         <ref name="e_Switch"></ref>
+         <zeroOrMore>
+            <choice>
+               <ref name="e_A"></ref>
+               <ref name="e_Action"></ref>
+               <ref name="e_B"></ref>
+               <ref name="e_Br"></ref>
+               <ref name="e_Color"></ref>
+               <ref name="e_Fontface"></ref>
+               <ref name="e_ForAll"></ref>
+               <ref name="e_Frame"></ref>
+               <ref name="e_HSpace"></ref>
+               <ref name="e_I"></ref>
+               <ref name="e_Image"></ref>
+               <ref name="e_Loop"></ref>
+               <ref name="e_NoBreak"></ref>
+               <ref name="e_Sub"></ref>
+               <ref name="e_Sup"></ref>
+               <ref name="e_Switch"></ref>
+               <ref name="e_U"></ref>
+               <ref name="e_URL"></ref>
+               <ref name="e_Value"></ref>
+            </choice>
+         </zeroOrMore>
       </element>
    </define>
    <define name="e_Loop">
@@ -1925,6 +1987,9 @@
                </optional>
                <optional>
                   <ref name="e_Image"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Initial"></ref>
                </optional>
                <optional>
                   <ref name="e_Include"></ref>
@@ -2243,7 +2308,9 @@
    <define name="e_Ol">
       <element name="Ol">
          <a:documentation>Create an ordered list, just like in HTML</a:documentation>
-         <ref name="e_Li"></ref>
+         <oneOrMore>
+            <ref name="e_Li"></ref>
+         </oneOrMore>
       </element>
    </define>
    <define name="e_Options">
@@ -2448,6 +2515,9 @@
             </optional>
             <optional>
                <ref name="e_Image"></ref>
+            </optional>
+            <optional>
+               <ref name="e_Initial"></ref>
             </optional>
             <optional>
                <ref name="e_Include"></ref>
@@ -2705,6 +2775,9 @@
                <a:documentation>CSS id for this paragraph.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <ref name="e_Initial"></ref>
+         </optional>
          <zeroOrMore>
             <choice>
                <ref name="e_A"></ref>
@@ -2745,6 +2818,11 @@
    <define name="e_Pagetype">
       <element name="Pagetype">
          <a:documentation>Define a master page. A master page is chosen depending on the criterion given with the attribute »test«.</a:documentation>
+         <optional>
+            <attribute name="defaultcolor">
+               <a:documentation>The default text color for this page (unless overridden in Paragraph or Textblock). Defaults to &#39;black&#39;.</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="test">
             <a:documentation>If this xpath expression evaluates to true, this page is taken as a master page.</a:documentation>
          </attribute>
@@ -2821,7 +2899,7 @@
    </define>
    <define name="e_PlaceObject">
       <element name="PlaceObject">
-         <a:documentation>Outputs a rectangular object (image, table, box or textblock).</a:documentation>
+         <a:documentation>Outputs a rectangular object (image, table, box, barcode or textblock).</a:documentation>
          <optional>
             <attribute name="allocate">
                <a:documentation>Determines if the area of the object is marked as »allocated«. With allocate=&#34;no&#34;, the cursor position is not changed.</a:documentation>
@@ -2831,6 +2909,26 @@
                   <value>no</value>
                   <a:documentation>Don&#39;t allocate space in the grid (default for absolute positioning).</a:documentation>
                </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="allocate-left">
+               <a:documentation>Additional allocation area to the left.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="allocate-right">
+               <a:documentation>Additional allocation area to the right.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="allocate-top">
+               <a:documentation>Additional allocation area to the top.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="allocate-bottom">
+               <a:documentation>Additional allocation area to the bottom.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2887,6 +2985,9 @@
                   <a:documentation>Fill background with the given color (in backgroundcolor).</a:documentation>
                   <value>without</value>
                   <a:documentation>Empty background</a:documentation>
+                  <data type="string">
+                     <param name="pattern">\{.+\}</param>
+                  </data>
                </choice>
             </attribute>
          </optional>
@@ -2967,7 +3068,7 @@
          </optional>
          <optional>
             <attribute name="rotate">
-               <a:documentation>Experimental/obsolete. Rotates the object.  The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</a:documentation>
+               <a:documentation>Rotates the object.  The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -3093,6 +3194,11 @@
          <attribute name="name">
             <a:documentation>Name of the area.</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="framecolor">
+               <a:documentation>Set the color of the frame in grid=yes mode. Defaults to &#39;red&#39;</a:documentation>
+            </attribute>
+         </optional>
          <oneOrMore>
             <interleave>
                <optional>
@@ -3165,6 +3271,9 @@
             </optional>
             <optional>
                <ref name="e_DefineFontalias"></ref>
+            </optional>
+            <optional>
+               <ref name="e_DefineTextformat"></ref>
             </optional>
             <optional>
                <ref name="e_ForAll"></ref>
@@ -3316,9 +3425,6 @@
                <ref name="e_SortSequence"></ref>
             </optional>
             <optional>
-               <ref name="e_Sequence"></ref>
-            </optional>
-            <optional>
                <ref name="e_Copy-of"></ref>
             </optional>
             <optional>
@@ -3346,6 +3452,9 @@
                </optional>
                <optional>
                   <ref name="e_DefineFontalias"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_DefineTextformat"></ref>
                </optional>
                <optional>
                   <ref name="e_ForAll"></ref>
@@ -3493,9 +3602,6 @@
                   <ref name="e_Copy-of"></ref>
                </optional>
                <optional>
-                  <ref name="e_Sequence"></ref>
-               </optional>
-               <optional>
                   <ref name="e_Element"></ref>
                </optional>
                <optional>
@@ -3530,15 +3636,6 @@
                </optional>
             </interleave>
          </oneOrMore>
-      </element>
-   </define>
-   <define name="e_Sequence">
-      <element name="Sequence">
-         <a:documentation>Return a selection of data. Probably not useful anymore as a separate command. Don&#39;t use this anymore!</a:documentation>
-         <attribute name="select">
-            <a:documentation>The data to be selected.</a:documentation>
-         </attribute>
-         <empty></empty>
       </element>
    </define>
    <define name="e_SortSequence">
@@ -3908,6 +4005,7 @@
                <ref name="e_Box"></ref>
                <ref name="e_Copy-of"></ref>
                <ref name="e_Frame"></ref>
+               <ref name="e_Groupcontents"></ref>
                <ref name="e_ForAll"></ref>
                <ref name="e_Image"></ref>
                <ref name="e_Loop"></ref>
@@ -4202,7 +4300,7 @@
          </optional>
          <optional>
             <attribute name="top-distance">
-               <a:documentation>Todo: document</a:documentation>
+               <a:documentation>The space above this row if it is not the first line on a new page / area.</a:documentation>
             </attribute>
          </optional>
          <oneOrMore>
@@ -4330,7 +4428,16 @@
    <define name="e_Ul">
       <element name="Ul">
          <a:documentation>Create an unordered list, just like in HTML</a:documentation>
-         <ref name="e_Li"></ref>
+         <oneOrMore>
+            <interleave>
+               <optional>
+                  <ref name="e_Li"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_ForAll"></ref>
+               </optional>
+            </interleave>
+         </oneOrMore>
       </element>
    </define>
    <define name="e_Until">
@@ -4406,6 +4513,9 @@
                </optional>
                <optional>
                   <ref name="e_Image"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Initial"></ref>
                </optional>
                <optional>
                   <ref name="e_Include"></ref>
@@ -4519,16 +4629,29 @@
    <define name="e_URL">
       <element name="URL">
          <a:documentation>enables a better breaking of URLs.</a:documentation>
-         <ref name="e_B"></ref>
-         <ref name="e_Image"></ref>
-         <ref name="e_Switch"></ref>
-         <ref name="e_I"></ref>
-         <ref name="e_Fontface"></ref>
-         <ref name="e_Sub"></ref>
-         <ref name="e_Sup"></ref>
-         <ref name="e_U"></ref>
-         <ref name="e_URL"></ref>
-         <ref name="e_Value"></ref>
+         <zeroOrMore>
+            <choice>
+               <ref name="e_A"></ref>
+               <ref name="e_Action"></ref>
+               <ref name="e_B"></ref>
+               <ref name="e_Br"></ref>
+               <ref name="e_Color"></ref>
+               <ref name="e_Fontface"></ref>
+               <ref name="e_ForAll"></ref>
+               <ref name="e_Frame"></ref>
+               <ref name="e_HSpace"></ref>
+               <ref name="e_I"></ref>
+               <ref name="e_Image"></ref>
+               <ref name="e_Loop"></ref>
+               <ref name="e_NoBreak"></ref>
+               <ref name="e_Sub"></ref>
+               <ref name="e_Sup"></ref>
+               <ref name="e_Switch"></ref>
+               <ref name="e_U"></ref>
+               <ref name="e_URL"></ref>
+               <ref name="e_Value"></ref>
+            </choice>
+         </zeroOrMore>
       </element>
    </define>
    <define name="e_Value">
@@ -4630,6 +4753,9 @@
                </optional>
                <optional>
                   <ref name="e_Image"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Initial"></ref>
                </optional>
                <optional>
                   <ref name="e_Include"></ref>

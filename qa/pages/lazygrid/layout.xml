@@ -1,0 +1,40 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="80mm" height="50mm" />
+  <Trace grid="yes"/>
+
+  <!-- dummy: -->
+  <SetVariable variable="ht" select="'12pt'"/>
+  <Pagetype name="a" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm" />
+    <Grid height="{$ht}" nx="10"/>
+  </Pagetype>
+
+  <Record element="data">
+    <SetVariable variable="ht" select="'12pt'"/>
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>text</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>text</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <SetVariable variable="ht" select="'1cm'"/>
+    <NewPage/>
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>text</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

@@ -58,6 +58,33 @@ local function alternating(dataxml, arg )
   return val
 end
 
+local function first_free_row( dataxml, arg )
+  local ret = 0
+  if arg and arg[1] then
+      ret = publisher.current_grid:first_free_row(arg[1])
+  end
+  return ret
+end
+
+-- Read the contents given in arg[1] and write it to a temporary file.
+-- Return the name of the file. Useful in conjunction with sd:decode-base64()
+-- and Image to read an image from the data.
+local function filecontents( dataxml,arg )
+      local tmpdir = os.getenv("SP_TEMPDIR")
+      lfs.mkdir(tmpdir)
+      local filename = publisher.string_random(20)
+      local path = tmpdir .. publisher.os_separator .. filename
+      local file,e = io.open(path,"wb")
+      if file == nil then
+          err("Could not write filecontents into temp directory: %q",e)
+          return nil
+      end
+      file:write(arg[1])
+      file:close()
+      return path
+end
+
+
 local function keepalternating(dataxml, arg )
   local alt_type = arg[1]
   return publisher.alternating_value[alt_type]
@@ -231,6 +258,7 @@ local function groupwidth(dataxml, arg )
 end
 
 local function current_frame_number(dataxml,arg)
+  publisher.setup_page()
   local framename = arg[1]
   if framename == nil then return 1 end
   local current_framenumber = publisher.current_grid:framenumber(framename)
@@ -281,36 +309,47 @@ local function variable_exists(dataxml,arg)
   return var ~= nil
 end
 
+-- SHA-1
 local function shaone(dataxml,arg)
     local message = table.concat(arg)
     local ret = sha1.sha1(message)
     return ret
 end
 
+-- Turn &lt;b&gt;Hello&lt;b /&gt; into an HTML table and then into XML structure.
 local function decode_html( dataxml, arg )
-    if #arg == 0 then
-        return nil
+    if arg == nil then
+        arg = dataxml
     end
-    arg = arg[1]
-    local ok
+    arg = table_textvalue(arg)
     if type(arg) == "string" then
         comm.sendmessage('dec',arg)
         local msg = comm.get_string_messages()
+        if string.match(msg[1],"^err: ") then
+            log("Line number in the following error message is not correct:")
+            err(string.match(msg[1],"^err: (.*)$"))
+            return nil
+        end
         local ret = luxor.parse_xml("<dummy>" .. msg[1] .. "</dummy>")
         return ret
     end
-  for i=1,#arg do
-    for j=1,#arg[i] do
-      local txt = arg[i][j]
-      if type(txt) == "string" then
-        if string.find(txt,"<") then
-          local x = luxor.parse_xml(txt)
-          arg[i][j] = x
-        end
-      end
-    end
-  end
-  return arg
+end
+
+local function decode_base64(dataxml,arg)
+    local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+    local data = tostring(arg[1])
+    data = string.gsub(data, '[^'..b..'=]', '')
+    return (data:gsub('.', function(x)
+        if (x == '=') then return '' end
+        local r,f='',(b:find(x)-1)
+        for i=6,1,-1 do r=r..(f%2^i-f%2^(i-1)>0 and '1' or '0') end
+        return r;
+    end):gsub('%d%d%d?%d?%d?%d?%d?%d?', function(x)
+        if (#x ~= 8) then return '' end
+        local c=0
+        for i=1,8 do c=c+(x:sub(i,i)=='1' and 2^(8-i) or 0) end
+        return string.char(c)
+    end))
 end
 
 local function count_saved_pages(dataxml,arg)
@@ -328,7 +367,8 @@ local function aspectratio( dataxml,arg )
   return img.img.xsize / img.img.ysize
 end
 
-local function loremipsum( )
+local function loremipsum(dataxml,arg)
+    local count = arg and arg[1] or 1
     local lorem = [[
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
@@ -338,112 +378,84 @@ local function loremipsum( )
         occaecat cupidatat non proident, sunt in culpa qui officia deserunt
         mollit anim id est laborum.
     ]]
-    return lorem:gsub("^%s*(.-)%s*$","%1"):gsub("[%s\n]+"," ")
+    return string.rep(lorem:gsub("^%s*(.-)%s*$","%1"):gsub("[%s\n]+"," "),count, " ")
 end
 
 local register = publisher.xpath.register_function
 
 register("urn:speedata:2009/publisher/functions/en","attr",attr)
-register("urn:speedata:2009/publisher/functions/de","attr",attr)
 
 register("urn:speedata:2009/publisher/functions/en","alternating",alternating)
-register("urn:speedata:2009/publisher/functions/de","alternierend",alternating)
 
 register("urn:speedata:2009/publisher/functions/en","aspectratio",aspectratio)
-register("urn:speedata:2009/publisher/functions/de","seitenverhältnis",aspectratio)
 
 register("urn:speedata:2009/publisher/functions/en","count-saved-pages",count_saved_pages)
-register("urn:speedata:2009/publisher/functions/de","anzahl-gespeicherte-seiten",count_saved_pages)
 
 register("urn:speedata:2009/publisher/functions/en","current-page",current_page)
-register("urn:speedata:2009/publisher/functions/de","aktuelle-seite",current_page)
 
 register("urn:speedata:2009/publisher/functions/en","current-row",current_row)
-register("urn:speedata:2009/publisher/functions/de","aktuelle-zeile",current_row)
 
 register("urn:speedata:2009/publisher/functions/en","current-framenumber",current_frame_number)
-register("urn:speedata:2009/publisher/functions/de","aktuelle-rahmennummer",current_frame_number)
 
 register("urn:speedata:2009/publisher/functions/en","current-column",current_column)
-register("urn:speedata:2009/publisher/functions/de","aktuelle-spalte",current_column)
 
 register("urn:speedata:2009/publisher/functions/en","decode-html",decode_html)
-register("urn:speedata:2009/publisher/functions/de","html-dekodieren",decode_html)
+
+register("urn:speedata:2009/publisher/functions/en","decode-base64",decode_base64)
 
 register("urn:speedata:2009/publisher/functions/en","dummytext",loremipsum)
-register("urn:speedata:2009/publisher/functions/de","blindtext",loremipsum)
 register("urn:speedata:2009/publisher/functions/en","loremipsum",loremipsum)
-register("urn:speedata:2009/publisher/functions/de","loremipsum",loremipsum)
 
 register("urn:speedata:2009/publisher/functions/en","even",even)
-register("urn:speedata:2009/publisher/functions/de","gerade",even)
+
+register("urn:speedata:2009/publisher/functions/en","first-free-row",first_free_row)
+
+register("urn:speedata:2009/publisher/functions/en","filecontents",filecontents)
 
 register("urn:speedata:2009/publisher/functions/en","file-exists",file_exists)
-register("urn:speedata:2009/publisher/functions/de","datei-vorhanden",file_exists)
 
 register("urn:speedata:2009/publisher/functions/en","format-number",format_number)
-register("urn:speedata:2009/publisher/functions/de","formatiere-zahl",format_number)
 
 register("urn:speedata:2009/publisher/functions/en","format-string",format_string)
-register("urn:speedata:2009/publisher/functions/de","formatiere-string",format_string)
 
 register("urn:speedata:2009/publisher/functions/en","group-height",groupheight)
 register("urn:speedata:2009/publisher/functions/en","groupheight",groupheight)
-register("urn:speedata:2009/publisher/functions/de","gruppenhöhe",groupheight)
 
 register("urn:speedata:2009/publisher/functions/en","group-width",groupwidth)
 register("urn:speedata:2009/publisher/functions/en","groupwidth",groupwidth)
-register("urn:speedata:2009/publisher/functions/de","gruppenbreite",groupwidth)
 
 register("urn:speedata:2009/publisher/functions/en","imagewidth",imagewidth)
-register("urn:speedata:2009/publisher/functions/de","bildbreite",imagewidth)
 
 register("urn:speedata:2009/publisher/functions/en","imageheight",imageheight)
-register("urn:speedata:2009/publisher/functions/de","bildhöhe",imageheight)
 
 register("urn:speedata:2009/publisher/functions/en","allocated",allocated)
-register("urn:speedata:2009/publisher/functions/de","belegt",allocated)
 
 register("urn:speedata:2009/publisher/functions/en","keep-alternating",keepalternating)
-register("urn:speedata:2009/publisher/functions/de","alternierend-beibehalten",keepalternating)
 
 register("urn:speedata:2009/publisher/functions/en","merge-pagenumbers",merge_pagenumbers)
-register("urn:speedata:2009/publisher/functions/de","seitenzahlen-zusammenfassen",merge_pagenumbers)
 
 register("urn:speedata:2009/publisher/functions/en","number-of-datasets",number_of_datasets)
-register("urn:speedata:2009/publisher/functions/de","anzahl-datensätze",number_of_datasets)
-register("urn:speedata:2009/publisher/functions/de","anzahl-datensaetze",number_of_datasets)
 
 register("urn:speedata:2009/publisher/functions/en","number-of-rows",number_of_rows)
-register("urn:speedata:2009/publisher/functions/de","anzahl-zeilen",number_of_rows)
 
 register("urn:speedata:2009/publisher/functions/en","number-of-columns",number_of_columns)
-register("urn:speedata:2009/publisher/functions/de","anzahl-spalten",number_of_columns)
 
 register("urn:speedata:2009/publisher/functions/en","number-of-pages",number_of_pages)
-register("urn:speedata:2009/publisher/functions/de","anzahl-seiten",number_of_pages)
 
 register("urn:speedata:2009/publisher/functions/en","odd",odd)
-register("urn:speedata:2009/publisher/functions/de","ungerade",odd)
 
 register("urn:speedata:2009/publisher/functions/en","pagenumber",pagenumber)
-register("urn:speedata:2009/publisher/functions/de","seitennummer",pagenumber)
 
 register("urn:speedata:2009/publisher/functions/en","randomitem",randomitem)
-register("urn:speedata:2009/publisher/functions/de","zufallswert",randomitem)
 
 register("urn:speedata:2009/publisher/functions/en","reset_alternating",reset_alternating) -- backward comp.
 register("urn:speedata:2009/publisher/functions/en","reset-alternating",reset_alternating)
-register("urn:speedata:2009/publisher/functions/de","alternierend_zurücksetzen",reset_alternating)
 
 register("urn:speedata:2009/publisher/functions/en","sha1",shaone)
-register("urn:speedata:2009/publisher/functions/de","sha1",shaone)
 
 register("urn:speedata:2009/publisher/functions/en","variable",variable)
-register("urn:speedata:2009/publisher/functions/de","variable",variable)
 
 register("urn:speedata:2009/publisher/functions/en","variable-exists",variable_exists)
-register("urn:speedata:2009/publisher/functions/de","variable-vorhanden",variable_exists)
 
 
 file_end("layout_functions.lua")

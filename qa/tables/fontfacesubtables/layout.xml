@@ -1,0 +1,38 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="80mm" height="50mm" />
+
+  <DefineFontfamily name="sans" fontsize="14" leading="16">
+    <Regular fontface="sans"/>
+  </DefineFontfamily>
+  <DefineFontfamily name="text" fontsize="10" leading="12">
+    <Regular fontface="sans"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <PlaceObject>
+      <Table stretch="no" fontface="sans">
+        <Tr>
+          <Td>
+            <Paragraph>
+              <Value>AAAAAA</Value>
+            </Paragraph>
+          </Td>
+          <Td>
+            <Table width="5">
+              <Tr>
+                <Td>
+                  <Paragraph>
+                    <Value>BBBB</Value>
+                  </Paragraph>
+                </Td>
+              </Tr>
+            </Table>
+          </Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+
+  </Record>
+</Layout>

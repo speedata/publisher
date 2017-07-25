@@ -25,38 +25,52 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/speedata/optionparser"
 	"sp/comm"
+
+	"github.com/speedata/optionparser"
+)
+
+const (
+	cmdRun        = "run"
+	cmdServer     = "server"
+	cmdCompare    = "compare"
+	cmdClean      = "clean"
+	cmdClearcache = "clearcache"
+	cmdDoc        = "doc"
+	cmdListFonts  = "list-fonts"
+	cmdWatch      = "watch"
+
+	strTrue string = "true"
 )
 
 var (
-	options               map[string]string
-	defaults              map[string]string
-	layoutoptions         map[string]string
-	variables             map[string]string
-	installdir            string
-	bindir                string
-	libdir                string
-	srcdir                string
-	path_to_documentation string // Where the documentation (index.html) is
-	inifile               string
-	dest                  string // The platform which this script runs on.
-	version               string
-	homecfg               string
-	systemcfg             string
-	pwd                   string
-	exe_suffix            string
-	homedir               string
-	add_local_path        bool // Add pwd recursively to extra-dir
-	useSystemFonts        bool
-	configfilename        string
-	mainlanguage          string
-	extra_dir             []string
-	extraxml              []string
-	starttime             time.Time
-	cfg                   *configurator.ConfigData
-	running_processes     []*os.Process
-	daemon                *comm.Server
+	options             map[string]string
+	defaults            map[string]string
+	layoutoptions       map[string]string
+	variables           map[string]string
+	installdir          string
+	bindir              string
+	libdir              string
+	srcdir              string
+	pathToDocumentation string // Where the documentation (index.html) is
+	inifile             string
+	dest                string // The platform which this script runs on.
+	version             string
+	homecfg             string
+	systemcfg           string
+	pwd                 string
+	exeSuffix           string
+	homedir             string
+	addLocalPath        bool // Add pwd recursively to extra-dir
+	useSystemFonts      bool
+	configfilename      string
+	mainlanguage        string
+	extraDir            []string
+	extraxml            []string
+	starttime           time.Time
+	cfg                 *configurator.ConfigData
+	runningProcess      []*os.Process
+	daemon              *comm.Server
 )
 
 // The LuaTeX process writes out a file called "publisher.status"
@@ -134,15 +148,15 @@ func init() {
 	switch runtime.GOOS {
 	case "darwin":
 		defaults["opencommand"] = "open"
-		exe_suffix = ""
+		exeSuffix = ""
 		homedir = os.Getenv("HOME")
 	case "linux":
 		defaults["opencommand"] = "xdg-open"
 		homedir = os.Getenv("HOME")
-		exe_suffix = ""
+		exeSuffix = ""
 	case "windows":
 		defaults["opencommand"] = "cmd /C start"
-		exe_suffix = ".exe"
+		exeSuffix = ".exe"
 
 		me, err := user.Current()
 		if err != nil {
@@ -150,7 +164,7 @@ func init() {
 		}
 		homedir = me.HomeDir
 	}
-	add_local_path = true
+	addLocalPath = true
 	useSystemFonts = false
 	configfilename = "publisher.cfg"
 	mainlanguage = "en_GB"
@@ -170,11 +184,11 @@ func init() {
 		srcdir = "/usr/share/speedata-publisher/sw"
 		os.Setenv("PUBLISHER_BASE_PATH", "/usr/share/speedata-publisher")
 		os.Setenv("LUA_PATH", fmt.Sprintf("%s/lua/?.lua;%s/lua/common/?.lua;", srcdir, srcdir))
-		path_to_documentation = "/usr/share/doc/speedata-publisher/" + indexpage
+		pathToDocumentation = "/usr/share/doc/speedata-publisher/" + indexpage
 	case "directory":
 		libdir = filepath.Join(installdir, "share", "lib")
 		srcdir = filepath.Join(installdir, "sw")
-		path_to_documentation = filepath.Join(installdir, "share/doc/"+indexpage)
+		pathToDocumentation = filepath.Join(installdir, "share/doc/"+indexpage)
 		os.Setenv("PUBLISHER_BASE_PATH", srcdir)
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
 	default:
@@ -183,9 +197,9 @@ func init() {
 		srcdir = filepath.Join(installdir, "src")
 		os.Setenv("PUBLISHER_BASE_PATH", srcdir)
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
-		extra_dir = append(extra_dir, filepath.Join(installdir, "fonts"))
-		extra_dir = append(extra_dir, filepath.Join(installdir, "img"))
-		path_to_documentation = filepath.Join(installdir, "/build/manual/"+indexpage)
+		extraDir = append(extraDir, filepath.Join(installdir, "fonts"))
+		extraDir = append(extraDir, filepath.Join(installdir, "img"))
+		pathToDocumentation = filepath.Join(installdir, "/build/manual/"+indexpage)
 	}
 	inifile = filepath.Join(srcdir, "lua/sdini.lua")
 	os.Setenv("PUBLISHERVERSION", version)
@@ -205,16 +219,13 @@ func getOptionSection(optionname string, section string) string {
 }
 
 func getOption(optionname string) string {
-	if options[optionname] != "" {
-		return options[optionname]
+	if o := options[optionname]; o != "" {
+		return o
 	}
 	if val := cfg.String("DEFAULT", optionname); val != "" {
 		return val
 	}
-	if defaults[optionname] != "" {
-		return defaults[optionname]
-	}
-	return ""
+	return defaults[optionname]
 }
 
 // Open the given file with the system's default program
@@ -263,7 +274,7 @@ func sigTermCatcher() {
 	signal.Notify(ch, syscall.SIGTERM)
 	sig := <-ch
 	log.Printf("Signal received: %v", sig)
-	for _, proc := range running_processes {
+	for _, proc := range runningProcess {
 		err := proc.Kill()
 		if err != nil {
 			log.Fatal(err)
@@ -278,7 +289,7 @@ func sigIntCatcher() {
 	signal.Notify(ch, syscall.SIGINT)
 	sig := <-ch
 	log.Printf("Signal received: %v", sig)
-	for _, proc := range running_processes {
+	for _, proc := range runningProcess {
 		err := proc.Kill()
 		if err != nil {
 			log.Fatal(err)
@@ -290,7 +301,7 @@ func sigIntCatcher() {
 
 // Run the given command line
 func run(cmdline string) (success bool) {
-	var cmdline_array []string
+	var commandlineArray []string
 	// The cmdline can have quoted strings. We remove the quotation marks
 	// by this ugly construct. That way strings such as "--data=foo\ bar" can
 	// be passed to the subprocess.
@@ -298,13 +309,13 @@ func run(cmdline string) (success bool) {
 	ret := j.FindAllStringSubmatch(cmdline, -1)
 	for _, m := range ret {
 		if m[2] != "" {
-			cmdline_array = append(cmdline_array, m[2])
+			commandlineArray = append(commandlineArray, m[2])
 		} else {
-			cmdline_array = append(cmdline_array, m[0])
+			commandlineArray = append(commandlineArray, m[0])
 		}
 	}
-	cmd := exec.Command(cmdline_array[0])
-	cmd.Args = cmdline_array
+	cmd := exec.Command(commandlineArray[0])
+	cmd.Args = commandlineArray
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		log.Fatal(err)
@@ -323,9 +334,9 @@ func run(cmdline string) (success bool) {
 		success = false
 		return
 	}
-	running_processes = append(running_processes, cmd.Process)
+	runningProcess = append(runningProcess, cmd.Process)
 
-	if getOption("quiet") == "true" {
+	if getOption("quiet") == strTrue {
 		go io.Copy(ioutil.Discard, stdout)
 		go io.Copy(ioutil.Discard, stderr)
 	} else {
@@ -396,7 +407,7 @@ func saveVariables() {
 
 // add the command line argument (extra-dir) into the slice
 func extradir(arg string) {
-	extra_dir = append(extra_dir, arg)
+	extraDir = append(extraDir, arg)
 }
 
 // Add the commandline argument to the list of additional XML files for the layout
@@ -415,47 +426,47 @@ func getExecutablePath() string {
 	// 4 check then installdir/bin for luatex(.exe)
 	// 5 check PATH for luatex(.exe)
 	// 6 panic!
-	executable_name := "sdluatex" + exe_suffix
+	executableName := "sdluatex" + exeSuffix
 	var p string
 
 	// 0 check the installdir/bin for sdluatex(.exe)
-	p = filepath.Join(installdir, "sdluatex", executable_name)
+	p = filepath.Join(installdir, "sdluatex", executableName)
 	fi, _ := os.Stat(p)
 	if fi != nil {
 		return p
 	}
 
 	// 1 check the installdir/bin for sdluatex(.exe)
-	p = fmt.Sprintf("%s/bin/%s", installdir, executable_name)
+	p = fmt.Sprintf("%s/bin/%s", installdir, executableName)
 	fi, _ = os.Stat(p)
 	if fi != nil {
 		return p
 	}
 
 	// 2 check PATH for sdluatex(.exe)
-	p, _ = exec.LookPath(executable_name)
+	p, _ = exec.LookPath(executableName)
 	if p != "" {
 		return p
 	}
 
 	// 3 assume simple installation and take luatex(.exe)
-	executable_name = "luatex" + exe_suffix
+	executableName = "luatex" + exeSuffix
 
 	// 3.5 check the installdir/bin for sdluatex(.exe)
-	p = filepath.Join(installdir, "sdluatex", executable_name)
+	p = filepath.Join(installdir, "sdluatex", executableName)
 	fi, _ = os.Stat(p)
 	if fi != nil {
 		return p
 	}
 
 	// 4 check then installdir/bin for luatex(.exe)
-	p = fmt.Sprintf("%s/bin/%s", installdir, executable_name)
+	p = fmt.Sprintf("%s/bin/%s", installdir, executableName)
 	fi, _ = os.Stat(p)
 	if fi != nil {
 		return p
 	}
 	// 5 check PATH for luatex(.exe)
-	p, _ = exec.LookPath(executable_name)
+	p, _ = exec.LookPath(executableName)
 	if p != "" {
 		return p
 	}
@@ -473,7 +484,7 @@ func versioninfo() {
 
 // copy a file from srcpath to destpath and make
 // directory if necessary
-func copy_file(srcpath, destpath string) error {
+func copyFile(srcpath, destpath string) error {
 
 	dir := filepath.Dir(destpath)
 	err := os.MkdirAll(dir, os.ModePerm)
@@ -521,29 +532,28 @@ func runPublisher() (exitstatus int) {
 	layoutoptions["grid"] = getOption("grid")
 
 	// layoutoptions are passed as a command line argument to the publisher
-	var layoutoptions_ary []string
+	var layoutoptionsSlice []string
 	if layoutoptions["grid"] != "" {
-		layoutoptions_ary = append(layoutoptions_ary, `showgrid=`+layoutoptions["grid"])
+		layoutoptionsSlice = append(layoutoptionsSlice, `showgrid=`+layoutoptions["grid"])
 	}
 	if layoutoptions["show-gridallocation"] != "" {
-		layoutoptions_ary = append(layoutoptions_ary, `showgridallocation=`+layoutoptions["show-gridallocation"])
+		layoutoptionsSlice = append(layoutoptionsSlice, `showgridallocation=`+layoutoptions["show-gridallocation"])
 	}
 	if layoutoptions["startpage"] != "" {
-		layoutoptions_ary = append(layoutoptions_ary, `startpage=`+layoutoptions["startpage"])
+		layoutoptionsSlice = append(layoutoptionsSlice, `startpage=`+layoutoptions["startpage"])
 	}
 	if layoutoptions["cutmarks"] != "" {
-		layoutoptions_ary = append(layoutoptions_ary, `cutmarks=`+layoutoptions["cutmarks"])
+		layoutoptionsSlice = append(layoutoptionsSlice, `cutmarks=`+layoutoptions["cutmarks"])
 	}
 	if layoutoptions["trace"] != "" {
-		layoutoptions_ary = append(layoutoptions_ary, `trace=`+layoutoptions["trace"])
+		layoutoptionsSlice = append(layoutoptionsSlice, `trace=`+layoutoptions["trace"])
 	}
-	layoutoptions_cmdline := strings.Join(layoutoptions_ary, ",")
+	layoutoptionsCommandline := strings.Join(layoutoptionsSlice, ",")
 	jobname := getOption("jobname")
 	layoutname := getOption("layout")
 	dataname := getOption("data")
-	exec_name := getExecutablePath()
-	dummy_data := getOption("dummy")
-	if dummy_data == "true" {
+	execName := getExecutablePath()
+	if dummyData := getOption("dummy"); dummyData == strTrue {
 		dataname = "-dummy"
 	}
 	os.Setenv("SP_JOBNAME", jobname)
@@ -554,15 +564,15 @@ func runPublisher() (exitstatus int) {
 	}
 	for i := 1; i <= runs; i++ {
 		go daemon.Run()
-		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, exec_name, jobname, inifile, layoutname, dataname, layoutoptions_cmdline)
+		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, execName, jobname, inifile, layoutname, dataname, layoutoptionsCommandline)
 		if !run(cmdline) {
 			exitstatus = -1
 			v := status{}
 			v.Errors = 1
 			v.Error = append(v.Error, statuserror{Error: "Error executing sdluatex", Code: 1})
-			data, err := xml.Marshal(v)
-			if err != nil {
-				log.Fatal(err)
+			data, nerr := xml.Marshal(v)
+			if nerr != nil {
+				log.Fatal(nerr)
 			}
 			err = ioutil.WriteFile(fmt.Sprintf("%s.status", jobname), data, 0600)
 			if err != nil {
@@ -594,12 +604,12 @@ func runPublisher() (exitstatus int) {
 	if p != "" {
 		pdffilename := jobname + ".pdf"
 		protocolfilename := jobname + ".protocol"
-		err = copy_file(pdffilename, filepath.Join(p, pdffilename))
+		err = copyFile(pdffilename, filepath.Join(p, pdffilename))
 		if err != nil {
 			log.Println(err)
 			return
 		}
-		err = copy_file(protocolfilename, filepath.Join(p, protocolfilename))
+		err = copyFile(protocolfilename, filepath.Join(p, protocolfilename))
 		if err != nil {
 			log.Println(err)
 			return
@@ -611,7 +621,7 @@ func runPublisher() (exitstatus int) {
 func showCredits() {
 	fmt.Println("This is the speedata Publisher, version", version)
 	fmt.Println(`
-Copyright 2015 speedata UG (haftungsbeschränkt), Berlin. Licensed under
+Copyright 2017 speedata GmbH, Berlin. Licensed under
 the GNU Affero GPL License, see
   https://raw.githubusercontent.com/speedata/publisher/develop/COPYING
 for details.
@@ -647,7 +657,7 @@ func main() {
 	op.On("--filter FILTER", "Run XPROC filter before publishing starts", options)
 	op.On("--grid", "Display background grid. Disable with --no-grid", options)
 	op.On("--ignore-case", "Ignore case when accessing files (on a case-insensitive file system)", options)
-	op.On("--no-local", "Add local directory to the search path. Default is true", &add_local_path)
+	op.On("--no-local", "Add local directory to the search path. Default is true", &addLocalPath)
 	op.On("--layout NAME", "Name of the layout file. Defaults to 'layout.xml'", options)
 	op.On("--jobname NAME", "The name of the resulting PDF file (without extension), default is 'publisher'", options)
 	op.On("--mainlanguage NAME", "The document's main language in locale format, for example 'en' or 'en_US'.", &mainlanguage)
@@ -669,14 +679,14 @@ func main() {
 	op.On("--wd DIR", "Change working directory", options)
 	op.On("--xml", "Output as (pseudo-)XML (for list-fonts)", options)
 
-	op.Command("clean", "Remove publisher generated files")
-	op.Command("compare", "Compare files for quality assurance")
-	op.Command("clearcache", "Clear image cache")
-	op.Command("doc", "Open documentation")
-	op.Command("list-fonts", "List installed fonts (use together with --xml for copy/paste)")
-	op.Command("run", "Start publishing (default)")
-	op.Command("server", "Run as http-api server on localhost port 5266 (configure with --address and --port)")
-	op.Command("watch", "Start watchdog / hotfolder")
+	op.Command(cmdClean, "Remove publisher generated files")
+	op.Command(cmdCompare, "Compare files for quality assurance")
+	op.Command(cmdClearcache, "Clear image cache")
+	op.Command(cmdDoc, "Open documentation")
+	op.Command(cmdListFonts, "List installed fonts (use together with --xml for copy/paste)")
+	op.Command(cmdRun, "Start publishing (default)")
+	op.Command(cmdServer, "Run as http-api server on localhost port 5266 (configure with --address and --port)")
+	op.Command(cmdWatch, "Start watchdog / hotfolder")
 	err := op.Parse()
 	if err != nil {
 		log.Fatal("Parse error: ", err)
@@ -686,7 +696,7 @@ func main() {
 	switch len(op.Extra) {
 	case 0:
 		// no command given, run is the default command
-		command = "run"
+		command = cmdRun
 	case 1:
 		// great
 		command = op.Extra[0]
@@ -730,8 +740,8 @@ func main() {
 		}
 	}
 
-	if add_local_path {
-		extra_dir = append(extra_dir, pwd)
+	if addLocalPath {
+		extraDir = append(extraDir, pwd)
 	}
 	if useSystemFonts {
 		// FontFolder() is system dependent and defined in extra files
@@ -745,6 +755,7 @@ func main() {
 	if getOption("imagecache") == "" {
 		options["imagecache"] = filepath.Join(getOption("tempdir"), "sp", "images")
 	}
+	os.Setenv("SP_TEMPDIR", getOption("tempdir"))
 	os.Setenv("SP_MAINLANGUAGE", mainlanguage)
 	os.Setenv("SP_FONT_PATH", getOption("fontpath"))
 	os.Setenv("SP_PATH_REWRITE", getOption("pathrewrite"))
@@ -756,9 +767,9 @@ func main() {
 		if err != nil {
 			log.Fatal("Cannot find directory", ed)
 		}
-		extra_dir = append(extra_dir, abspath)
+		extraDir = append(extraDir, abspath)
 	}
-	os.Setenv("SD_EXTRA_DIRS", strings.Join(extra_dir, string(filepath.ListSeparator)))
+	os.Setenv("SD_EXTRA_DIRS", strings.Join(extraDir, string(filepath.ListSeparator)))
 
 	if extraxmloption := getOption("extraxml"); extraxmloption != "" {
 		for _, xmlfile := range strings.Split(extraxmloption, ",") {
@@ -775,7 +786,7 @@ func main() {
 		fmt.Println("SD_EXTRA_XML:", os.Getenv("SD_EXTRA_XML"))
 	}
 
-	if getOption("ignore-case") == "true" {
+	if getOption("ignore-case") == strTrue {
 		os.Setenv("SP_IGNORECASE", "1")
 		if verbose {
 			fmt.Println("Ignore case for file system access")
@@ -785,7 +796,7 @@ func main() {
 	var exitstatus int
 	if getOption("profile") != "" {
 		fmt.Println("Profiling publisher run. Removing lprof_* now.")
-		os.Setenv("SD_PROFILER", "true")
+		os.Setenv("SD_PROFILER", strTrue)
 		files, err := filepath.Glob("lprof_*")
 		if err != nil {
 			log.Fatal(err)
@@ -809,12 +820,12 @@ func main() {
 
 	// There is no need for the internal daemon when we do the other commands
 	switch command {
-	case "run", "server":
+	case cmdRun, cmdServer:
 		daemon = comm.NewServer()
 	}
 
 	switch command {
-	case "run":
+	case cmdRun:
 		jobname := getOption("jobname")
 		finishedfilename := fmt.Sprintf("%s.finished", jobname)
 		os.Remove(finishedfilename)
@@ -846,10 +857,10 @@ func main() {
 		writeFinishedfile(finishedfilename)
 
 		// open PDF if necessary
-		if getOption("autoopen") == "true" {
+		if getOption("autoopen") == strTrue {
 			openFile(jobname + ".pdf")
 		}
-	case "compare":
+	case cmdCompare:
 		if len(op.Extra) > 1 {
 			dir := op.Extra[1]
 			fi, err := os.Stat(dir)
@@ -867,9 +878,9 @@ func main() {
 		} else {
 			log.Println("Please give one directory")
 		}
-	case "clearcache":
+	case cmdClearcache:
 		cache.Clear()
-	case "clean":
+	case cmdClean:
 		jobname := getOption("jobname")
 		files, err := filepath.Glob(jobname + "*")
 		if err != nil {
@@ -892,39 +903,39 @@ func main() {
 				}
 			}
 		}
-	case "doc":
-		openFile(path_to_documentation)
+	case cmdDoc:
+		openFile(pathToDocumentation)
 		os.Exit(0)
-	case "list-fonts":
+	case cmdListFonts:
 		var xml string
-		if getOption("xml") == "true" {
+		if getOption("xml") == strTrue {
 			xml = "xml"
 		}
 
 		cmdline := fmt.Sprintf(`"%s" --luaonly "%s/lua/sdscripts.lua" "%s" list-fonts %s`, getExecutablePath(), srcdir, inifile, xml)
 		run(cmdline)
-	case "watch":
-		watch_dir := getOptionSection("hotfolder", "hotfolder")
+	case cmdWatch:
+		watchDir := getOptionSection("hotfolder", "hotfolder")
 		events := getOptionSection("events", "hotfolder")
-		var hotfolder_events []hotfolder.Event
+		var hotfolderEvents []hotfolder.Event
 
 		for _, v := range strings.Split(events, ";") {
-			pattern_command := strings.Split(v, ":")
-			if len(pattern_command) < 2 {
+			patternCommand := strings.Split(v, ":")
+			if len(patternCommand) < 2 {
 				log.Fatal("Something is wrong with the configuration file. hotfolder section correct?")
 			}
-			hotfolder_event := new(hotfolder.Event)
-			hotfolder_event.Pattern = regexp.MustCompile(pattern_command[0])
-			hotfolder_event.Command = &pattern_command[1]
-			hotfolder_events = append(hotfolder_events, *hotfolder_event)
+			hotfolderEvent := new(hotfolder.Event)
+			hotfolderEvent.Pattern = regexp.MustCompile(patternCommand[0])
+			hotfolderEvent.Command = &patternCommand[1]
+			hotfolderEvents = append(hotfolderEvents, *hotfolderEvent)
 		}
 
-		if watch_dir != "" {
-			hotfolder.Watch(watch_dir, hotfolder_events)
+		if watchDir != "" {
+			hotfolder.Watch(watchDir, hotfolderEvents)
 		} else {
 			log.Fatal("Problem with watch dir in section [hotfolder].")
 		}
-	case "server":
+	case cmdServer:
 		runServer(getOption("port"), getOption("address"), getOption("tempdir"))
 	default:
 		log.Fatal("unknown command:", command)

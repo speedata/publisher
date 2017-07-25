@@ -1,0 +1,23 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Pageformat width="111mm" height="100mm"/>
+  <SetGrid nx="21" height="12pt"/>
+  <Trace grid="no"/>
+  <Options ignoreeol="no"/>
+
+  <Record element="data">
+      <PlaceObject column="12" allocate-left="1" >
+        <Box width="10" height="12" backgroundcolor="-"/>
+      </PlaceObject>
+
+    <Output allocate="auto" row="1">
+      <Text fontface="text" >
+        <Paragraph>
+          <Value select="."/>
+        </Paragraph>
+      </Text>
+    </Output>
+  </Record>
+</Layout>

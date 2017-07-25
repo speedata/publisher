@@ -93,7 +93,7 @@ end
 
 
 
---- AddToList
+--- AddToList -- obsolete (2.9.3)
 --- ---------
 --- Return a number. This number is an index to the table `publisher.user_defined_functions` and the value
 --- is a function that sets a key of another table.
@@ -860,7 +860,8 @@ function commands.grid( layoutxml,dataxml )
     local dx     = publisher.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
     local dy     = publisher.read_attribute(layoutxml,dataxml,"dy",     "length_sp")
 
-    return { width = width, height = height, nx = tonumber(nx), ny = tonumber(ny), dx = dx, dy = dy }
+    -- layoutxml and dataxml are used when determining the grid of a pagetype
+    return { width = width, height = height, nx = tonumber(nx), ny = tonumber(ny), dx = dx, dy = dy , layoutxml = layoutxml, dataxml = dataxml }
 end
 
 --- Group
@@ -922,6 +923,19 @@ function commands.group( layoutxml,dataxml )
 
     publisher.current_group  = save_groupname
     publisher.current_grid = save_grid
+end
+
+--- Groupcontents
+--- -----
+--- Insert the contents of a virtual area into a table cell.
+function commands.groupcontents( layoutxml,dataxml )
+    local name = publisher.read_attribute(layoutxml,dataxml,"name", "rawstring")
+    local g = publisher.groups[name]
+    if not g then
+        err("group %q does not exist!",tostring(name))
+        return {publisher.emergency_block()}
+    end
+    return {node.copy(g.contents)}
 end
 
 --- HSpace
@@ -1007,6 +1021,7 @@ local box_lookup = {
 function commands.image( layoutxml,dataxml )
     local width     = publisher.read_attribute(layoutxml,dataxml,"width",      "rawstring")
     local height    = publisher.read_attribute(layoutxml,dataxml,"height",     "rawstring")
+    local bleed     = publisher.read_attribute(layoutxml,dataxml,"bleed" ,     "rawstring")
     local minwidth  = publisher.read_attribute(layoutxml,dataxml,"minwidth",   "rawstring")
     local minheight = publisher.read_attribute(layoutxml,dataxml,"minheight",  "rawstring")
     local maxwidth  = publisher.read_attribute(layoutxml,dataxml,"maxwidth",   "rawstring")
@@ -1033,6 +1048,7 @@ function commands.image( layoutxml,dataxml )
         ["padding-right"]    = "length",
         ["padding-bottom"]   = "length",
         ["padding-left"]     = "length",
+        ["padding"]          = "length",
     }
     local tab = {}
     if css_rules and type(css_rules) == "table" then
@@ -1047,6 +1063,12 @@ function commands.image( layoutxml,dataxml )
         if tmpattr then
             tab[attname] = tmpattr
         end
+    end
+    if tab["padding"]        then
+        tab.padding_top     = tex.sp(tab["padding"])
+        tab.padding_bottom  = tab.padding_top
+        tab.padding_left    = tab.padding_top
+        tab.padding_right   = tab.padding_top
     end
     if tab["padding-top"]    then tab.padding_top    = tex.sp(tab["padding-top"])    end
     if tab["padding-bottom"] then tab.padding_bottom = tex.sp(tab["padding-bottom"]) end
@@ -1102,6 +1124,27 @@ function commands.image( layoutxml,dataxml )
         end
     end
 
+    if bleed and bleed == "auto" then
+        local col = xpath.get_variable("__column")
+        local row = xpath.get_variable("__row")
+        if col == 0 then
+            tab.padding_left = tab.padding_left or 0 - publisher.options.trim
+            if width == publisher.options.pagewidth then
+                tab.padding_right = tab.padding_right or 0 - publisher.options.trim
+            end
+        elseif publisher.options.pagewidth - col - width < 100 then
+            tab.padding_right = tab.padding_right or 0 - publisher.options.trim
+        end
+        if row == 0 then
+            tab.padding_top = tab.padding_top or 0 - publisher.options.trim
+            if height == publisher.options.pageheight then
+                tab.padding_bottom = tab.padding_bottom  or 0 - publisher.options.trim
+            end
+        end
+
+    end
+
+
     local overshoot
     if clip then
         local stretch_shrink
@@ -1117,11 +1160,11 @@ function commands.image( layoutxml,dataxml )
         height = image.ysize * stretch_shrink
     end
 
-    local shift_left,shift_up = 0,0
+    local padding_shift_left,padding_shift_up = 0,0
 
     if tab.padding_left then
         width = width - tab.padding_left
-        shift_left = shift_left - tab.padding_left
+        padding_shift_left = padding_shift_left - tab.padding_left
     end
     if tab.padding_right then
         width = width - tab.padding_right
@@ -1132,7 +1175,7 @@ function commands.image( layoutxml,dataxml )
     end
     if tab.padding_top then
         height = height - tab.padding_top
-        shift_up = shift_up - tab.padding_top
+        padding_shift_up = padding_shift_up - tab.padding_top
     end
 
     image.width  = width
@@ -1140,6 +1183,7 @@ function commands.image( layoutxml,dataxml )
 
     local box
     if clip then
+        local shift_left,shift_up = 0,0
         local a=node.new("whatsit","pdf_literal")
         local ht = math.round(height / publisher.factor,4)
         local wd = math.round(width  / publisher.factor,4)
@@ -1187,16 +1231,80 @@ function commands.image( layoutxml,dataxml )
         g = node.insert_after(g,g,box)
         box = node.vpack(g)
 
-        box.height = height - shift_up * 2
-        box.width  = width  - shift_left * 2
+        box.height = height -  2 * shift_up - padding_shift_up
+        box.width  = width  - 2 * shift_left - padding_shift_left
+
+        node.set_attribute(box, publisher.att_shift_left, padding_shift_left)
+        node.set_attribute(box, publisher.att_shift_up, padding_shift_up)
+
     else
         box = node.vpack(img.node(image))
         node.set_attribute(box,publisher.att_origin,publisher.origin_image)
         node.set_attribute(box,publisher.att_lineheight,box.height)
-        node.set_attribute(box, publisher.att_shift_left, shift_left)
-        node.set_attribute(box, publisher.att_shift_up  , shift_up  )
+        node.set_attribute(box, publisher.att_shift_left, padding_shift_left)
+        node.set_attribute(box, publisher.att_shift_up  , padding_shift_up  )
+        box.width = box.width - padding_shift_left
+        box.height = box.height - padding_shift_up
     end
     return {box,imageinfo.allocate}
+end
+
+--- Initial
+--- -------
+--- Insert a decorated letter (or more than one) at the beginning of the paragraph.
+function commands.initial( layoutxml,dataxml)
+    local fontname      = publisher.read_attribute(layoutxml,dataxml,"fontface",     "rawstring")
+    local colorname     = publisher.read_attribute(layoutxml,dataxml,"color",        "rawstring")
+    local padding_left  = publisher.read_attribute(layoutxml,dataxml,"padding-left", "length_sp",0)
+    local padding_right = publisher.read_attribute(layoutxml,dataxml,"padding-right","length_sp",0)
+    local fontfamily = 0
+    if fontname then
+        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+        if fontfamily == nil then
+            err("Fontfamily %q not found.",fontname)
+            fontfamily = 0
+        end
+    end
+
+    local fi = publisher.fonts.lookup_fontfamily_number_instance[fontfamily]
+
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    local initialvalue
+    for i,j in ipairs(tab) do
+        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
+            initialvalue = table.concat(publisher.element_contents(j))
+        else
+            initialvalue = publisher.element_contents(j)
+        end
+    end
+    local box
+    box = publisher.mknodes(initialvalue,fontfamily,{})
+
+    if colorname then
+        if not publisher.colors[colorname] then
+            err("Color %q is not defined yet.",colorname)
+        else
+            local colortable
+            colortable = publisher.colors[colorname].index
+            box = publisher.set_color_if_necessary(box,colortable)
+        end
+    end
+    box = node.hpack(box)
+    local initialheight = box.height + box.depth
+    box.depth = 0
+    box.height = initialheight
+    local ht = fi.baselineskip - initialheight
+    if padding_left ~= 0 then
+        box = publisher.add_rule(box,"head",{height = 0, width = padding_left})
+    end
+    box = publisher.add_rule(box,"head",{height = fi.size - (fi.size - initialheight ) / 2, width = 0})
+    if padding_right ~= 0 then
+        box = publisher.add_rule(box,"tail",{height = 0, width = padding_right})
+    end
+    local x = node.hpack(box)
+    x.height = x.height + x.depth
+    x.depth = 0
+    return x
 end
 
 --- InsertPages
@@ -1435,9 +1543,9 @@ function commands.message( layoutxml, dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
     local errcond   = publisher.read_attribute(layoutxml,dataxml,"error", "boolean",false)
     local errorcode = publisher.read_attribute(layoutxml,dataxml,"errorcode", "number",1)
-
     if selection then
         local tmp = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
+
         local ret = {}
         if tmp then
             for i=1,#tmp do
@@ -1708,6 +1816,7 @@ function commands.options( layoutxml,dataxml )
         publisher.set_mainlanguage(mainlanguage,true)
     end
     if publisher.options.trim then
+        xpath.set_variable("_bleed",publisher.options.trim)
         publisher.options.trim = tex.sp(publisher.options.trim)
     end
 end
@@ -1847,6 +1956,9 @@ function commands.page_format(layoutxml)
     trace("Pageformat")
     local width  = publisher.read_attribute(layoutxml,dataxml,"width","length")
     local height = publisher.read_attribute(layoutxml,dataxml,"height","length")
+    xpath.set_variable("_pageheight",height)
+    xpath.set_variable("_pagewidth",width)
+
     publisher.set_pageformat(tex.sp(width),tex.sp(height))
 end
 
@@ -1855,9 +1967,13 @@ end
 --- This command should be probably called Masterpage or something similar.
 function commands.pagetype(layoutxml,dataxml)
     trace("Command: Pagetype")
-    local tmp_tab = {}
+    local tmp_tab = {
+        layoutxml = layoutxml
+    }
     local test         = publisher.read_attribute(layoutxml,dataxml,"test","rawstring")
     local pagetypename = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
+    -- evaluate the default color for this page later on, so we can set it dynamically (XPath)
+
     local tab = publisher.dispatch(layoutxml,dataxml)
 
     for i,j in ipairs(tab) do
@@ -1869,8 +1985,7 @@ function commands.pagetype(layoutxml,dataxml)
             tmp_tab [#tmp_tab + 1] = j
         end
     end
-    -- assert(type(test())=="boolean")
-    publisher.masterpages[#publisher.masterpages + 1] = { is_pagetype = test, res = tmp_tab, name = pagetypename,ns=layoutxml[".__ns"] }
+    publisher.masterpages[#publisher.masterpages + 1] = { is_pagetype = test, res = tmp_tab, name = pagetypename,ns=layoutxml[".__ns"]}
 end
 
 --- Paragraph
@@ -1931,12 +2046,17 @@ function commands.paragraph( layoutxml,dataxml )
     local objects = {}
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
-        trace("Paragraph Elementname = %q",tostring(publisher.elementname(j)))
+        -- w("Paragraph Elementname = %q",tostring(publisher.elementname(j)))
         local contents = publisher.element_contents(j)
+        -- w("Paragraph type(contents) %q", type(contents))
         if publisher.elementname(j) == "Value" and type(contents) == "table" and #contents == 1 and type(contents[1]) == "string"  then
             objects[#objects + 1] = contents[1]
         elseif publisher.elementname(j) == "Value" and type(contents) == "table" then
+            publisher.remove_first_whitespace(contents)
+            publisher.remove_last_whitespace(contents)
             objects[#objects + 1] = publisher.parse_html(contents,{allowbreak = allowbreak})
+        elseif publisher.elementname(j) == "Initial" then
+            a.initial = contents
         else
             objects[#objects + 1] = contents
         end
@@ -2002,7 +2122,7 @@ function commands.place_object( layoutxml,dataxml )
     local column           = publisher.read_attribute(layoutxml,dataxml,"column",         "rawstring")
     local row              = publisher.read_attribute(layoutxml,dataxml,"row",            "rawstring")
     local area             = publisher.read_attribute(layoutxml,dataxml,"area",           "rawstring")
-    local allocate         = publisher.read_attribute(layoutxml,dataxml,"allocate",       "string", "yes")
+    local allocate         = publisher.read_attribute(layoutxml,dataxml,"allocate",       "string")
     local framecolor       = publisher.read_attribute(layoutxml,dataxml,"framecolor",     "rawstring")
     local backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
     local rulewidth_sp     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",      "length_sp", 26312) -- 0.4bp
@@ -2023,6 +2143,14 @@ function commands.place_object( layoutxml,dataxml )
     local b_t_r_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-right-radius",    "string")
     local b_t_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-left-radius",     "string")
     local b_b_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-bottom-left-radius",  "string")
+    local allocate_left    = publisher.read_attribute(layoutxml,dataxml,"allocate-left",  "width_sp")
+    local allocate_right   = publisher.read_attribute(layoutxml,dataxml,"allocate-right", "width_sp")
+    local allocate_top     = publisher.read_attribute(layoutxml,dataxml,"allocate-top",   "height_sp")
+    local allocate_bottom  = publisher.read_attribute(layoutxml,dataxml,"allocate-bottom","height_sp")
+    local class            = publisher.read_attribute(layoutxml,dataxml,"class",      "rawstring")
+    local id               = publisher.read_attribute(layoutxml,dataxml,"id",         "rawstring")
+
+    local css_rules = publisher.css:matches({element = "placeojbect", class=class,id=id}) or {}
 
 
     if origin_x == "left" then
@@ -2069,6 +2197,9 @@ function commands.place_object( layoutxml,dataxml )
             return
         end
     end
+    xpath.set_variable("__row", row)
+    xpath.set_variable("__column", column)
+
 
     if onpage then
         if onpage == 'next' then
@@ -2093,7 +2224,7 @@ function commands.place_object( layoutxml,dataxml )
     local current_maxwidth = xpath.get_variable("__maxwidth")
     local mw = current_grid:number_of_columns(area)
     if not mw then
-        err("Something is wrong with the curernt page, expect strange results")
+        err("Something is wrong with the current page, expect strange results")
         return
     end
 
@@ -2102,9 +2233,11 @@ function commands.place_object( layoutxml,dataxml )
             mw = current_grid:width_sp(mw - column + 1)
         else
             mw = current_grid:width_sp(mw)
-       end
+        end
+        if not allocate then allocate = "yes" end
     else
         mw = tex.pdfpagewidth
+        if not allocate then allocate = "no" end
     end
     xpath.set_variable("__maxwidth", mw)
 
@@ -2114,6 +2247,10 @@ function commands.place_object( layoutxml,dataxml )
     local current_row_start  = current_grid:current_row(area)
     if not current_row_start then
         return nil
+    end
+    -- jump to the next row if the requested column is < than the current column
+    if absolute_positioning == false and column and tonumber(column) < current_grid:current_column(area) then
+        publisher.next_row(nil,area,1)
     end
     local current_column_start = column or current_grid:current_column(area)
 
@@ -2174,8 +2311,9 @@ function commands.place_object( layoutxml,dataxml )
         object     = objects[i].object
         objecttype = objects[i].objecttype
 
-        if background  == "full" then
-            object = publisher.background(object,backgroundcolor)
+
+        if background == "full" or css_rules["background-color"] then
+            object = publisher.background(object,backgroundcolor or css_rules["background-color"])
         end
         if frame == "solid" then
             framewidth = rulewidth_sp
@@ -2205,7 +2343,7 @@ function commands.place_object( layoutxml,dataxml )
 
         if absolute_positioning then
             if hreference == "right" then
-                column = column - width_in_gridcells + 1
+                column = column - object.width
             end
             local top = row + current_grid.extra_margin
             if vreference == "bottom" then
@@ -2218,6 +2356,12 @@ function commands.place_object( layoutxml,dataxml )
                 rotate   = rotate,
                 origin_x = origin_x,
                 origin_y = origin_y,
+                allocate = allocate == "yes",
+                allocate_matrix = objects[i].allocate_matrix,
+                allocate_left   = allocate_left,
+                allocate_right  = allocate_right,
+                allocate_top    = allocate_top,
+                allocate_bottom = allocate_bottom,
             })
         else
             -- Look for a place for the object
@@ -2288,6 +2432,10 @@ function commands.place_object( layoutxml,dataxml )
                 origin_x = origin_x,
                 origin_y = origin_y,
                 framewidth = framewidth,
+                allocate_left   = allocate_left,
+                allocate_right  = allocate_right,
+                allocate_top    = allocate_top,
+                allocate_bottom = allocate_bottom,
                 })
             trace("object placed")
             row = nil -- the current rows is not valid anymore because an object is already rendered
@@ -2398,10 +2546,13 @@ end
 function commands.positioning_area( layoutxml,dataxml )
     -- Warning: if we call publisher.dispatch now, the xpath functions
     -- might depend on values on the _current_ page, which is not set!
+    local colorname = publisher.read_attribute(layoutxml,dataxml,"framecolor", "rawstring")
+    local name      = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
+    local colorindex
     local tab = {}
+    tab.colorname = colorname
     tab.layoutxml = layoutxml
     tab.dataxml = dataxml
-    local name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
     tab.name = name
     return tab
 end
@@ -2621,7 +2772,7 @@ end
 
 --- Sequence
 --- --------
---- Get parts of the data. Can be stored in a variable.
+--- Get parts of the data. Can be stored in a variable. Obsolete, can be removed (2.9.3).
 function commands.sequence( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     return selection
@@ -2704,7 +2855,7 @@ end
 
 --- SortSequence
 --- ------------
---- Sort a sequence. Warning: it changes the order in the variable.
+--- Sort a sequence.
 function commands.sort_sequence( layoutxml,dataxml )
     local selection        = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
     local removeduplicates = publisher.read_attribute(layoutxml,dataxml,"removeduplicates","rawstring")
@@ -2852,7 +3003,7 @@ function commands.table( layoutxml,dataxml,options )
     end
 
     if not fontname then fontname = "text" end
-    fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+    local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
     local save_fontfamily = publisher.current_fontfamily
     publisher.current_fontfamily = fontfamily
 
@@ -3406,7 +3557,7 @@ function commands.textblock( layoutxml,dataxml )
     if columns > 1 then
         local rows = {}
         local number_of_rows = 0
-        local neue_nodes = {}
+        local new_nodes = {}
         for i=1,#nodes do
             for n in node.traverse_id(0,nodes[i].list) do
                 number_of_rows = number_of_rows + 1
@@ -3433,9 +3584,9 @@ function commands.textblock( layoutxml,dataxml )
                 end
             end
             tail.next = nil
-            neue_nodes[#neue_nodes + 1] = node.hpack(hbox_current_row)
+            new_nodes[#new_nodes + 1] = node.hpack(hbox_current_row)
         end
-        nodes=neue_nodes
+        nodes=new_nodes
     end
 
     local tail

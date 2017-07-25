@@ -501,7 +501,7 @@ func (c *Command) InfoHTML(lang string) template.HTML {
 					if a.Name.Local == "file" {
 						fn = a.Value
 					} else if a.Name.Local == "width" {
-						wd = fmt.Sprintf(`width: %spx;`, a.Value)
+						wd = fmt.Sprintf(`width: %s;`, a.Value)
 					}
 				}
 				ret = append(ret, fmt.Sprintf(`<img style="%s padding-left: 1em;" src="../img/%s">`, wd, fn))
@@ -705,7 +705,7 @@ func (c *Command) Example(lang string) template.HTML {
 					if a.Name.Local == "file" {
 						fn = a.Value
 					} else if a.Name.Local == "width" {
-						wd = fmt.Sprintf(`width: %spx;`, a.Value)
+						wd = fmt.Sprintf(`width: %s;`, a.Value)
 					}
 				}
 				ret = append(ret, fmt.Sprintf(`<img style="%s padding-left: 1em;" src="../img/%s">`, wd, fn))

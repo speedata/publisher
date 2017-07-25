@@ -9,7 +9,6 @@ import (
 	"errors"
 	"fmt"
 	"fsnotify"
-	"github.com/gorilla/mux"
 	"io"
 	"io/ioutil"
 	"log"
@@ -19,6 +18,13 @@ import (
 	"runtime"
 	"strings"
 	"time"
+
+	"github.com/gorilla/mux"
+)
+
+const (
+	statusError       = "error"
+	statusNotFinished = "not finished"
 )
 
 var (
@@ -42,12 +48,9 @@ func makePublisherTemp() error {
 	// if it exists and is a directory, that's fine
 	if fi.IsDir() {
 		return nil
-	} else {
-		// not a directory, panic!
-		return errors.New("Internal error: serverTemp exists, but is not a directory.")
 	}
-
-	return nil
+	// not a directory, panic!
+	return errors.New("internal error: serverTemp exists, but is not a directory")
 }
 
 func encodeFileToBase64(filename string) (string, error) {
@@ -71,7 +74,7 @@ func encodeFileToBase64(filename string) (string, error) {
 
 func addPublishrequestToQueue(id string) {
 	fmt.Fprintf(protocolFile, "Add request %s to queue.\n", id)
-	WorkQueue <- WorkRequest{Id: id}
+	WorkQueue <- WorkRequest{ID: id}
 }
 
 // Wait until filename in dir exists and is complete
@@ -93,8 +96,8 @@ func waitForAllFiles(dir string) error {
 			case <-timer.C:
 				done <- true
 				return
-			case err := <-watcher.Errors:
-				goerr = err
+			case nerr := <-watcher.Errors:
+				goerr = nerr
 				done <- true
 			}
 			timer.Stop()
@@ -131,7 +134,7 @@ func waitForFile(dir string, filename string) error {
 				}
 			case <-timer.C:
 				if len(fileStarted) > 0 {
-					for n, _ := range fileStarted {
+					for n := range fileStarted {
 						delete(fileStarted, n)
 						if n == requestedFile {
 							done <- true
@@ -139,8 +142,8 @@ func waitForFile(dir string, filename string) error {
 						}
 					}
 				}
-			case err := <-watcher.Errors:
-				goerr = err
+			case nerr := <-watcher.Errors:
+				goerr = nerr
 				done <- true
 			}
 			timer.Stop()
@@ -157,7 +160,7 @@ func waitForFile(dir string, filename string) error {
 }
 
 // Request a JSON answer with the PDF and the status file.
-func v0PublishIdHandler(w http.ResponseWriter, r *http.Request) {
+func v0PublishIDHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	response := struct {
 		Status     string `json:"status"`
@@ -169,7 +172,7 @@ func v0PublishIdHandler(w http.ResponseWriter, r *http.Request) {
 	publishdir := filepath.Join(serverTemp, id)
 	fi, err := os.Stat(publishdir)
 	if err != nil && os.IsNotExist(err) || !fi.IsDir() {
-		response.Status = "error"
+		response.Status = statusError
 		response.Blob = "id unknown"
 		buf, marshallerr := json.Marshal(response)
 		if marshallerr != nil {
@@ -191,8 +194,8 @@ func v0PublishIdHandler(w http.ResponseWriter, r *http.Request) {
 	fi, err = os.Stat(finishedfile)
 	if err != nil && os.IsNotExist(err) {
 		// status does not exist yet, so it's in progress
-		response.Blob = "not finished"
-		response.Status = "error"
+		response.Blob = statusNotFinished
+		response.Status = statusError
 		buf, marshallerr := json.Marshal(response)
 		if marshallerr != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -230,7 +233,7 @@ func v0PublishIdHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if response.Blob == "" {
-		response.Status = "error"
+		response.Status = statusError
 		response.Path = ""
 	}
 
@@ -257,7 +260,7 @@ func v0PublishIdHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Return full path to directory on success, empty string on failure
-func checkIdExists(id string) string {
+func checkIDExists(id string) string {
 	publishdir := filepath.Join(serverTemp, id)
 	fi, err := os.Stat(publishdir)
 	if err != nil {
@@ -269,9 +272,8 @@ func checkIdExists(id string) string {
 	}
 	if a, err := filepath.Rel(filepath.Join(publishdir, ".."), serverTemp); err != nil && a == "." {
 		return ""
-	} else {
-		return publishdir
 	}
+	return publishdir
 }
 
 // Delete the folder with the given ID
@@ -280,7 +282,7 @@ func v0DeleteHandler(w http.ResponseWriter, r *http.Request) {
 	// Deleted? 200
 	id := mux.Vars(r)["id"]
 	fmt.Fprintf(protocolFile, "/v0/delete/%s\n", id)
-	if d := checkIdExists(id); d != "" {
+	if d := checkIDExists(id); d != "" {
 		err := os.RemoveAll(d)
 		if err != nil {
 			fmt.Fprintln(protocolFile, err)
@@ -490,11 +492,11 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 	for k, v := range files {
 		bb := bytes.NewBuffer([]byte(v.(string)))
 		b64reader := base64.NewDecoder(base64.StdEncoding, bb)
-		f, err := os.Create(filepath.Join(tmpdir, k))
-		if err != nil {
+		f, nerr := os.Create(filepath.Join(tmpdir, k))
+		if nerr != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprintln(protocolFile, "Internal error 015:")
-			fmt.Fprintln(protocolFile, err)
+			fmt.Fprintln(protocolFile, nerr)
 			fmt.Fprintln(w, "Internal error 015")
 			return
 		}
@@ -511,8 +513,8 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 	jobname := r.FormValue("jobname")
 	if jobname == "" {
 		// let's try the config file
-		cd, err := configurator.ReadFiles(filepath.Join(tmpdir, "publisher.cfg"))
-		if err == nil {
+		cd, nerr := configurator.ReadFiles(filepath.Join(tmpdir, "publisher.cfg"))
+		if nerr == nil {
 			jobname = cd.String("DEFAULT", "jobname")
 		}
 	}
@@ -545,9 +547,9 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 	addPublishrequestToQueue(id)
 
 	jsonid := struct {
-		Id string `json:"id"`
+		ID string `json:"id"`
 	}{
-		Id: id,
+		ID: id,
 	}
 	buf, marshallerr := json.Marshal(jsonid)
 	if marshallerr != nil {
@@ -564,8 +566,10 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 var (
-	NOTFINISHED   = errors.New("Not finished")
-	ERR_UNKNOWNID = errors.New("Unknown ID")
+	// ErrNotfinished is returned when the PDF generation still runs
+	ErrNotfinished = errors.New(statusNotFinished)
+	// ErrUnknownID is returned when an unknown ID is encountered
+	ErrUnknownID = errors.New("Unknown ID")
 )
 
 func getStatusForID(id string) (statusresponse, error) {
@@ -573,28 +577,28 @@ func getStatusForID(id string) (statusresponse, error) {
 	publishdir := filepath.Join(serverTemp, id)
 	fi, err := os.Stat(publishdir)
 	if err != nil && os.IsNotExist(err) || !fi.IsDir() {
-		return spstatus, ERR_UNKNOWNID
+		return spstatus, ErrUnknownID
 	}
 
 	statusPath := filepath.Join(publishdir, "publisher.status")
 	finishedPath := filepath.Join(publishdir, "publisher.finished")
 	fi, err = os.Stat(finishedPath)
 	if err != nil && os.IsNotExist(err) {
-		return spstatus, NOTFINISHED
+		return spstatus, ErrNotfinished
 	}
 	if err != nil {
-		return spstatus, errors.New(fmt.Sprintf("Error stat: %s", err))
+		return spstatus, fmt.Errorf("Error stat: %s", err)
 	}
 
 	data, err := ioutil.ReadFile(statusPath)
 	if err != nil {
-		return spstatus, errors.New(fmt.Sprintf("Error read: %s", err))
+		return spstatus, fmt.Errorf("Error read: %s", err)
 	}
 
 	v := status{}
 	err = xml.Unmarshal(data, &v)
 	if err != nil {
-		return spstatus, errors.New(fmt.Sprintf("Error unmarshal XML: %s", err))
+		return spstatus, fmt.Errorf("Error unmarshal XML: %s", err)
 	}
 
 	spstatus.Finished = fi.ModTime().Format(time.RFC3339)
@@ -664,17 +668,17 @@ func v0GetAllStatusHandler(w http.ResponseWriter, r *http.Request) {
 		stat, err := getStatusForID(id)
 		if err != nil {
 			switch err {
-			case ERR_UNKNOWNID:
+			case ErrUnknownID:
 				stat.Message = fmt.Sprintf("id %q unknown", id)
-				stat.Errstatus = "error"
-				stat.Result = "error"
-			case NOTFINISHED:
+				stat.Errstatus = statusError
+				stat.Result = statusError
+			case ErrNotfinished:
 				// finished does not exist yet, so it's in progress
 				stat.Message = ""
-				stat.Result = "not finished"
+				stat.Result = statusNotFinished
 				stat.Errstatus = "ok"
 			default:
-				stat.Errstatus = "error"
+				stat.Errstatus = statusError
 				stat.Message = err.Error()
 			}
 		}
@@ -700,17 +704,17 @@ func v0StatusHandler(w http.ResponseWriter, r *http.Request) {
 	stat, err := getStatusForID(mux.Vars(r)["id"])
 	if err != nil {
 		switch err {
-		case ERR_UNKNOWNID:
+		case ErrUnknownID:
 			stat.Message = fmt.Sprintf("id %q unknown", id)
-			stat.Errstatus = "error"
-			stat.Result = "error"
-		case NOTFINISHED:
+			stat.Errstatus = statusError
+			stat.Result = statusError
+		case ErrNotfinished:
 			// finished does not exist yet, so it's in progress
 			stat.Message = ""
-			stat.Result = "not finished"
+			stat.Result = statusNotFinished
 			stat.Errstatus = "ok"
 		default:
-			stat.Errstatus = "error"
+			stat.Errstatus = statusError
 			stat.Message = err.Error()
 		}
 
@@ -797,7 +801,7 @@ func runServer(port string, address string, tempdir string) {
 	v0.HandleFunc("/publish", v0PublishHandler).Methods("POST")
 	v0.HandleFunc("/status", v0GetAllStatusHandler).Methods("GET")
 	v0.HandleFunc("/pdf/{id}", v0GetPDFHandler).Methods("GET")
-	v0.HandleFunc("/publish/{id}", v0PublishIdHandler).Methods("GET")
+	v0.HandleFunc("/publish/{id}", v0PublishIDHandler).Methods("GET")
 	v0.HandleFunc("/status/{id}", v0StatusHandler).Methods("GET")
 	v0.HandleFunc("/delete/{id}", v0DeleteHandler).Methods("GET")
 	v0.HandleFunc("/data/{id}", v0DataHandler).Methods("GET")

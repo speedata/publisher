@@ -13,7 +13,10 @@ xpath.set_variable("isfalse",false)
 xpath.set_variable("foo-bar",'foobar')
 
 local data_src=[[
-<root one="1" foo='no' empty="">
+<?xml version="1.0" encoding="UTF-8"?>
+ <?xml-foo ?>
+<root one="1" foo='no' empty="" quotationmarks="&#34;text&#34;">
+ <?xml-foo ?>
  <sub foo="baz">123</sub>
  <sub foo="bar">contents</sub>
 </root>
@@ -28,10 +31,14 @@ local with_underscore_src=[[<root>
  <foo_bar>Hello world</foo_bar>
 </root>]]
 
+local with_dash_src=[[<root>
+ <foo-bar>Hello world</foo-bar>
+</root>]]
 
 
 local data = luxor.parse_xml(data_src)
 local with_underscore = luxor.parse_xml(with_underscore_src)
+local with_dash = luxor.parse_xml(with_dash_src)
 local mixed_elements = luxor.parse_xml(mixed_elements_src)
 local namespace = { sd = "foo" }
 
@@ -213,6 +220,7 @@ function test_parse_arithmetic(  )
   assert_equal(xpath.parse( data, " sd:return-ten() mod 2 ", namespace ), 0)
   assert_equal(xpath.parse( data, " 6 + 5"                     , namespace ), 11)
   assert_equal(xpath.parse( data, " 6 - 5"                     , namespace ), 1)
+  assert_equal(xpath.parse( data, " 6-5"                     , namespace ), 1)
   assert_equal(xpath.parse( data, " 6 + 5 + 3"                 , namespace ), 14)
   assert_equal(xpath.parse( data, " 10 - 10 - 5 "              , namespace ), -5)
   assert_equal(xpath.parse( data, " 4 * 2 + 6"                 , namespace ), 14)
@@ -242,6 +250,8 @@ end
 
 function test_attribute()
     assert_equal(xpath.parse(data, "@one" ),'1')
+    assert_equal(xpath.parse(data, "@quotationmarks" ),'"text"')
+    assert_false(secondoftwo(xpath.parse_raw( data, "  @undefined='foo' ",namespace ))[1])
     assert_false(secondoftwo(xpath.parse_raw( data, "  @undefined='foo' ",namespace ))[1])
     assert_true(secondoftwo(xpath.parse_raw( data, "  @undefined != 'foo' ",namespace ))[1])
     assert_false(secondoftwo(xpath.parse_raw( data, "  @undefined != @undefined ",namespace ))[1])
@@ -266,5 +276,6 @@ end
 
 function test_other()
   assert_equal(secondoftwo(xpath.parse_raw(with_underscore," string(foo_bar) ",namespace))[1], "Hello world")
+  assert_equal(secondoftwo(xpath.parse_raw(with_dash," string(foo-bar) ",namespace))[1], "Hello world")
 end
 

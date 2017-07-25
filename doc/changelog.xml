@@ -1,4 +1,81 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
+  <chapter version="3.0.0">
+
+  </chapter>
+  <chapter version="2.9" date="2017-07-25">
+    <entry version="2.9.15" date="2017-07-12">
+      <en>Force pagetype if provided at NewPage, strip NL/Tab at beginning / end of paragraph.</en>
+      <de>PageType erzwingen bei NewPage, entferne NL/Tab beim Anfang und Ende eines Absatzes.</de>
+    </entry>
+    <entry version="2.9.14" date="2017-06-27">
+      <en>Allow font-family setting in CSS for custom element.</en>
+      <de>CSS verarbeitet font-family für eigene Elemente.</de>
+    </entry>
+    <entry version="2.9.13" date="2017-06-27">
+      <en>Bugfix numerical entities in data. New: base64 decode, filecontents.</en>
+      <de>Fehlerkorrektur: nummerischen Entitäten in Daten. Neu: base64 dekodieren, filecontents.</de>
+    </entry>
+    <entry version="2.9.12" date="2017-06-16">
+      <en>Bugfix PlaceObject/hreference=right and absolute positioning</en>
+      <de>Fehlerkorrektur PlaceObject/hreference=right und absoluter Platzierung.</de>
+    </entry>
+    <entry version="2.9.11" date="2017-05-18">
+      <en>Lazy evaluation of defaultcolor / Pagetype, minor bugfixes.</en>
+      <de>Späte Auswertung von defaultcolor bei Pagetype, kleinere Fehlerkorrekturen.</de>
+    </entry>
+    <entry version="2.9.10" date="2017-05-10">
+      <en>New command: Groupcontents to insert a group in a Td. Bugfix XPath parser, sd:current-framenumber().</en>
+      <de>Neuer Befehl: Groupcontents. Damit wird eine Gruppe in eine Tabellenzelle eingefügt. Fehlerkorrektur beim XPath-Parser und bei sd:current-framenumber(). </de>
+    </entry>
+    <entry version="2.9.9" date="2017-05-08">
+      <en>Lazy evaluation of Grid in Pagetype (#130), bugfix nested tables (#129), improved Initials (color), bugfix cursor movement (#128)</en>
+      <de>Lazy Evaluation des Rasters in Pagetype (#130), Fehlerkorrektur geschachtelte Tabellen (#129), verbesserte Initialen (Farbe), Fehlerkorrektur Cursor (#128)</de>
+    </entry>
+    <entry version="2.9.8" date="2017-04-24">
+      <en>Bugfix XML attributes with quotation marks</en>
+      <de>Fehlerkorrektur XML Attribute mit Anführungszeichen</de>
+    </entry>
+    <entry version="2.9.7" date="2017-04-16">
+      <en>New command Initial.</en>
+      <de>Neuer Befehl Initial.</de>
+    </entry>
+    <entry version="2.9.6" date="2017-03-21">
+      <en>Enhancements on Image/bleed="auto", extra allocation margin on PlaceObject</en>
+      <de>Verbesserungen bei Image/bleed="auto", extra Belegungsrahmen bei PlaceObject</de>
+    </entry>
+    <entry version="2.9.5" date="2017-03-09">
+      <en>Absolute positioning now allows allocate="yes".</en>
+      <de>Absolute Positionierung erlaubt allocate="yes".</de>
+    </entry>
+    <entry version="2.9.5" date="2017-03-09">
+      <en>New internal variables _bleed, _pagewidth, _pageheight</en>
+      <de>Neue interne Variablen _bleed, _pagewidth und _pageheight.</de>
+    </entry>
+    <entry version="2.9.5" date="2017-03-09">
+      <en>New attribute bleed="..." on Image.</en>
+      <de>Neues Attribut bleed="..." bei Image.</de>
+    </entry>
+    <entry version="2.9.4" date="2017-02-24">
+      <en>Box with backgroundcolor="-" only allocates cells.</en>
+      <de>Box mit backgroundcolor="-" belegt nur die Zellen.</de>
+    </entry>
+    <entry version="2.9.3" date="2017-02-20">
+      <en>Bugfix resetmarks, new attribute defaultcolor on Pagetype, remove obsolete commands.</en>
+      <de>Fehlerkorrektur resetmarks, neues Attribut defaultcolor bei Pagetype, ungenutzte Befehle gelöscht.</de>
+    </entry>
+    <entry version="2.9.2" date="2017-02-10">
+      <en>Bugfix for processing instructions in the XML file (will be ignored now)</en>
+      <de>Fehlerkorrektur für processing instructions im XML (werden ignoriert)</de>
+    </entry>
+    <entry version="2.9.2" date="2017-02-10">
+      <en>New feature: style &lt;span> and other elemnts in data with CSS.</en>
+      <de>Neues Feature: &lt;span> und andere Elemente in den Daten können mit CSS angesprochen werden.</de>
+    </entry>
+    <entry version="2.9.1" date="2017-02-08">
+      <en>Bugfix: top-distance in Tr</en>
+      <de>Fehlerkorrektur: top-distance in Tr</de>
+    </entry>
+  </chapter>
   <chapter version="2.8">
     <entry version="2.8.1" date="2017-02-06">
       <en>Fix hotfolder (variable directory)</en>
@@ -72,7 +149,7 @@
     </entry>
     <entry version="2.7.3" date="2016-09-14">
       <en>New API /v0/statusfile/&lt;id> to get the file publisher.status.</en>
-      <de>Neue API /v0/statusfile/&lt; um die Datei publisher.status zu erhalten.</de>
+      <de>Neue API /v0/statusfile/&lt;id> um die Datei publisher.status zu erhalten.</de>
     </entry>
     <entry version="2.7.2" date="2016-09-14">
       <en>When PlaceObject goes past the right margin (for example in full width text), go to next row.</en>

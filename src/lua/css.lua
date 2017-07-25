@@ -1,3 +1,10 @@
+--- This file contains the code for the CSS parser.
+--
+--  css.lua
+--  speedata publisher
+--
+--  For a list of authors see `git blame'
+--  See file COPYING in the root directory for license info.
 
 local explode = string.explode
 local string = unicode.utf8
@@ -106,7 +113,6 @@ local function matches_selector(tbl,selector )
   -- todo: element_required is probably never false since the publisher always presents an element name
 
   local return_false = false
-
   string.gsub(selector,"[%.#]?[^%s.#]+",function ( x )
     if string.match(x,"^#") then
       if not id_required then
@@ -121,7 +127,7 @@ local function matches_selector(tbl,selector )
         return_false = true
       end
       class_found = true
-      if class and string.match(class,escape_lua_pattern(string.sub(x,2))) then
+      if class and string.match(class,escape_lua_pattern(string.sub(x,2)).. "$") then
         class_matches = true
       end
     else
@@ -141,6 +147,7 @@ local function matches_selector(tbl,selector )
   return element_found == element_matches and class_found == class_matches and id_found == id_matches and (class_found or element_found or id_found)
 end
 
+-- tbl = element, class, id
 local function matches(self,tbl,level)
   level = level or 1
   local rules,interesting_part,parts

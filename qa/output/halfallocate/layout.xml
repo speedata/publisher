@@ -1,8 +1,6 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
     xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-    <Options show-gridallocation="no" show-grid="no"/>
-
     <Pageformat width="148mm" height="60mm"/>
     <SetGrid nx="25" height="6pt"/>
 

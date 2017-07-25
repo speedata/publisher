@@ -1,10 +1,10 @@
-<Layout 
-    xmlns="urn:speedata.de:2009/publisher/en" 
+<Layout
+    xmlns="urn:speedata.de:2009/publisher/en"
     xmlns:sd="urn:speedata:2009/publisher/functions/en">
     <Pageformat width="180mm" height="180mm" />
-    
+
     <SetGrid nx="4" dx="5mm" height="12pt"/>
-    <Options show-grid="yes" show-gridallocation="no"/>
+    <Trace grid="yes" gridallocation="no"/>
 
     <Pagetype name="page" test="true()">
         <Margin left="10mm" right="10mm" top="10mm" bottom="10mm"/>
@@ -19,18 +19,18 @@
             <PositioningFrame width="1" height="38" row="1" column="4"/>
         </PositioningArea>
     </Pagetype>
-    
+
 
     <Record element="data">
         <PlaceObject row="1" column="1" area="page">
             <Image width="1" height="8" file="_sampleb.pdf"/>
         </PlaceObject>
-        
+
         <Output area="text">
             <Text>
                 <Paragraph><Value select="string(.)"></Value></Paragraph>
             </Text>
         </Output>
-        
+
     </Record>
 </Layout>

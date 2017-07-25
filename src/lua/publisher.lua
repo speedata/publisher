@@ -112,6 +112,7 @@ origin_text = 7
 origin_setcolor = 8
 origin_setcolorifnecessary = 9
 origin_paragraph = 10
+origin_initial = 11
 
 user_defined_addtolist = 1
 user_defined_bookmark  = 2
@@ -166,6 +167,7 @@ css = do_luafile("css.lua"):new()
 
 -- The defaults (set in the layout instructions file)
 options = {
+    resetmarks  = false,
     imagenotfounderror = true,
     gridwidth   = tenmm_sp,
     gridheight  = tenmm_sp,
@@ -472,11 +474,13 @@ local dispatch_table = {
     Frame                   = commands.frame,
     Grid                    = commands.grid,
     Group                   = commands.group,
+    Groupcontents           = commands.groupcontents,
     HSpace                  = commands.hspace,
     Hyphenation             = commands.hyphenation,
     I                       = commands.italic,
     Image                   = commands.image,
     Include                 = commands.include,
+    Initial                 = commands.initial,
     InsertPages             = commands.insert_pages,
     Li                      = commands.li,
     LoadDataset             = commands.load_dataset,
@@ -630,6 +634,9 @@ function dothings()
     --- A4 paper is 210x297 mm
     set_pageformat(tex.sp("210mm"),tex.sp("297mm"))
     get_languagecode(os.getenv("SP_MAINLANGUAGE") or "en_GB")
+    xpath.set_variable("_bleed", "0mm")
+    xpath.set_variable("_pageheight", "297mm")
+    xpath.set_variable("_pagewidth", "210mm")
 
     lowercase = os.getenv("SP_IGNORECASE") == "1"
 
@@ -705,7 +712,7 @@ function initialize_luatex_and_generate_pdf()
         elseif publisher_version[2] < requested_version[2] then
             -- major number are same, minor are different
             version_mismatch = true
-        elseif tonumber(requested_version[3]) and tonumber(publisher_version[3]) < tonumber(requested_version[3]) and tonumber(publisher_version[2]) == requested_version[2] then
+        elseif tonumber(requested_version[3]) and tonumber(publisher_version[3]) < tonumber(requested_version[3]) and tonumber(publisher_version[2]) == tonumber(requested_version[2]) then
             version_mismatch = true
         end
         if version_mismatch then
@@ -830,11 +837,8 @@ function initialize_luatex_and_generate_pdf()
     -- current_pagestore_name is set when in SavePages and nil otherwise
     if page_initialized_p(current_pagenumber) and current_pagestore_name == nil then
         dothingsbeforeoutput(pages[current_pagenumber])
-
         local n = node.vpack(pages[current_pagenumber].pagebox)
-
-        tex.box[666] = n
-        tex.shipout(666)
+        shipout(n,current_pagenumber)
     end
 
     --- At this point, all pages are in the PDF
@@ -882,6 +886,24 @@ function initialize_luatex_and_generate_pdf()
         file:write("\n</marker>")
         file:close()
     end
+end
+
+
+
+function shipout(nodelist, pagenumber )
+    local colorname = pages[pagenumber].defaultcolor
+    if colorname then
+        if not colors[colorname] then
+            err("Pagetype / defaultcolor: color %q is not defined yet.",colorname)
+        else
+            local colorindex = colors[colorname].index
+            nodelist = set_color_if_necessary(nodelist,colorindex)
+            nodelist = node.vpack(nodelist)
+        end
+    end
+
+    tex.box[666] = nodelist
+    tex.shipout(666)
 end
 
 --- Load an XML file from the hard drive. filename is without path but including extension,
@@ -937,15 +959,59 @@ end
 --- rotate          | Rotation counter clockwise in degrees (0-360).
 --- origin_x        | Origin X for rotation. Left is 0 and right is 100
 --- origin_y        | Origin Y for rotation. Top is 0 and bottom is 100
+--- allocate        | Should the touched cells be allocated?
 function output_absolute_position(param)
-    local nodelist = param.nodelist
     local x = param.x
     local y = param.y
+    local nodelist = param.nodelist
+
+    if param.allocate then
+        local additional_width,additional_height = 0,0
+
+        local startcol_sp = x - current_grid.margin_left
+        local startrow_sp = y - current_grid.margin_top
+
+        if param.allocate_left then
+          startcol_sp = startcol_sp - param.allocate_left
+          additional_width = additional_width + param.allocate_left
+        end
+        if param.allocate_right then
+          additional_width = additional_width + param.allocate_right
+        end
+        if param.allocate_top then
+          startrow_sp = startrow_sp - param.allocate_top
+          additional_height = additional_height + param.allocate_top
+        end
+        if param.allocate_bottom then
+          additional_height = additional_height + param.allocate_bottom
+        end
+
+        local startcol  = math.floor(math.round( (startcol_sp - current_grid.extra_margin) / current_grid.gridwidth ,3)) + 1
+        local delta_x = startcol_sp - current_grid:width_sp(startcol - 1)
+        if delta_x < 100 then delta_x = 0 end
+
+        local wd_grid = current_grid:width_in_gridcells_sp(nodelist.width + delta_x + additional_width - current_grid.extra_margin)
+        local startrow  = math.floor(math.round( (startrow_sp - current_grid.extra_margin) / current_grid.gridheight ,3)) + 1
+        local delta_y = startrow_sp - current_grid:height_sp(startrow - 1)
+        if delta_y < 100 then delta_y = 0 end
+        local ht_grid = current_grid:height_in_gridcells_sp(nodelist.height + delta_y + additional_height - current_grid.extra_margin)
+        local _x,_y,_wd,_ht = startcol,startrow,wd_grid,ht_grid
+        if _x < 1 then
+            _wd = _wd + _x - 1
+            _x = 1
+        end
+        if _y < 1 then
+            _ht = _ht + _y - 1
+            _y = 1
+        end
+        -- printtable("allocate_cells",{_x,_y,_wd,_ht})
+        current_grid:allocate_cells(_x,_y,_wd,_ht,param.allocate_matrix)
+    end
 
 
     if node.has_attribute(nodelist,att_shift_left) then
-        x = x - node.has_attribute(nodelist,att_shift_left)
-        y = y - node.has_attribute(nodelist,att_shift_up)
+        x = x - ( node.has_attribute(nodelist,att_shift_left) or 0)
+        y = y - ( node.has_attribute(nodelist,att_shift_up) or 0)
     end
 
     if param.rotate then
@@ -1008,6 +1074,10 @@ function output_at( param )
         _ht = _ht + param.framewidth
     end
 
+    -- current_grid is important here, because it can be a group
+    local r = param.grid or current_grid
+
+
     local outputpage = current_pagenumber
     if param.pagenumber then
         outputpage = param.pagenumber
@@ -1018,6 +1088,26 @@ function output_at( param )
     end
     local x = param.x
     local y = param.y
+
+    local additional_width,additional_height = 0,0
+    local shift_left,shift_up = 0,0
+
+    if param.allocate_left and param.allocate_left > 100 then
+        shift_left = r:width_in_gridcells_sp(param.allocate_left)
+        additional_width = additional_width + r:width_in_gridcells_sp(param.allocate_left)
+    end
+    if param.allocate_right and param.allocate_right > 100 then
+        additional_width = additional_width + r:width_in_gridcells_sp(param.allocate_right)
+    end
+    if param.allocate_top and param.allocate_top > 100 then
+        shift_up = r:height_in_gridcells_sp(param.allocate_top)
+        additional_height = additional_height + r:height_in_gridcells_sp(param.allocate_top)
+    end
+    if param.allocate_bottom and param.allocate_bottom > 100 then
+        additional_height = additional_height + r:height_in_gridcells_sp(param.allocate_bottom)
+    end
+
+
     local allocate = param.allocate
     local allocate_matrix = param.allocate_matrix
     local area = param.area or default_areaname
@@ -1025,14 +1115,18 @@ function output_at( param )
     local halign = param.halign
     local keepposition = param.keepposition
 
-    -- current_grid is important here, because it can be a group
-    local r = param.grid or current_grid
     local wd = nodelist.width
     local ht = nodelist.height + nodelist.depth
 
     -- For grid allocation
     local width_gridcells   = r:width_in_gridcells_sp(wd)
+    if additional_width > 0 then
+        width_gridcells = width_gridcells + additional_width
+    end
     local height_gridcells  = r:height_in_gridcells_sp(ht)
+    if additional_height > 0 then
+        height_gridcells = height_gridcells + additional_height
+    end
 
     local delta_x, delta_y = r:position_grid_cell(x,y,area,wd,ht,valign,halign)
 
@@ -1091,12 +1185,12 @@ function output_at( param )
             group.contents = n
         end
         if allocate then
-            r:allocate_cells(x,y,width_gridcells,height_gridcells,allocate_matrix)
+            r:allocate_cells(x - shift_left,y - shift_up,width_gridcells,height_gridcells,allocate_matrix)
         end
     else
         -- Put it on the current page
         if allocate then
-            r:allocate_cells(x,y,width_gridcells,height_gridcells,allocate_matrix,area,keepposition)
+            r:allocate_cells(x - shift_left,y - shift_up,width_gridcells,height_gridcells,allocate_matrix,area,keepposition)
         end
         if param.rotate then
             nodelist = rotate(nodelist,param.rotate, param.origin_x or 0, param.origin_y or 0)
@@ -1203,12 +1297,21 @@ function setup_page(pagenumber)
         if type(element_contents(j))=="function" and eltname=="Margin" then
             element_contents(j)(current_page)
         elseif eltname=="Grid" then
-            gridwidth  = element_contents(j).width
-            gridheight = element_contents(j).height
-            nx = element_contents(j).nx
-            ny = element_contents(j).ny
-            dx = element_contents(j).dx
-            dy = element_contents(j).dy
+            local layoutxml = element_contents(j).layoutxml
+            local dataxml = element_contents(j).dataxml
+            local width  = publisher.read_attribute(layoutxml,dataxml,"width",  "length_sp")
+            local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --pg
+            local nx     = publisher.read_attribute(layoutxml,dataxml,"nx",     "rawstring")
+            local ny     = publisher.read_attribute(layoutxml,dataxml,"ny",     "rawstring")
+            local dx     = publisher.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
+            local dy     = publisher.read_attribute(layoutxml,dataxml,"dy",     "length_sp")
+
+            gridwidth  = width
+            gridheight = height
+            nx = nx
+            ny = ny
+            dx = dx
+            dy = dy
         end
     end
 
@@ -1221,6 +1324,11 @@ function setup_page(pagenumber)
     end
 
     current_page.grid:set_width_height({wd = gridwidth, ht = gridheight, nx = nx, ny = ny, dx = dx, dy = dy })
+
+    -- The default color is applied during shipout
+    if pagetype.layoutxml and pagetype.layoutxml.defaultcolor then
+        current_page.defaultcolor = read_attribute(pagetype.layoutxml,nil,"defaultcolor","rawstring")
+    end
 
     for _,j in ipairs(pagetype) do
         local eltname = elementname(j)
@@ -1241,6 +1349,7 @@ function setup_page(pagenumber)
             for i,k in ipairs(tab) do
                 current_positioning_area[#current_positioning_area + 1] = element_contents(k)
             end
+            current_positioning_area.colorname = element_contents(j).colorname
         else
             err("Element name %q unknown (setup_page())",eltname or "<create_page>")
         end
@@ -1310,10 +1419,13 @@ function new_page()
         local thispagestore = pagestore[current_pagestore_name]
         thispagestore[#thispagestore + 1] = n
     else
-        tex.box[666] = n
-        tex.shipout(666)
+        shipout(n,current_pagenumber)
     end
     current_pagenumber = current_pagenumber + 1
+    if nextpage then
+        pages[current_pagenumber] = nil
+        setup_page(current_pagenumber)
+    end
     trace("page finished (new_page), setting current_pagenumber to %d",current_pagenumber)
 end
 
@@ -1372,6 +1484,8 @@ end
 
 --- Draw a background behind the rectangular (box) object.
 function background( box, colorname )
+    -- color '-' means 'no color'
+    if colorname == "-" then return box end
     if not colors[colorname] then
         warning("Background: Color %q is not defined",colorname)
         return box
@@ -1670,38 +1784,40 @@ end
 
 --- Create a colored area. width and height are in scaled points.
 function box( width_sp,height_sp,colorname )
-    local _width   = sp_to_bp(width_sp)
-    local _height  = sp_to_bp(height_sp)
-
-    local paint = node.new("whatsit","pdf_literal")
-    local colentry = colors[colorname]
-    if not colentry then
-        err("Color %q unknown, reverting to black",colorname or "(no color name given)")
-        colentry = colors["black"]
-    end
-    paint.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colentry.pdfstring,_width,_height)
-    paint.mode = 0
-
     local h,v
-    local hglue,vglue
+    if colorname ~= "-" then
+        local _width   = sp_to_bp(width_sp)
+        local _height  = sp_to_bp(height_sp)
+        local paint = node.new("whatsit","pdf_literal")
+        local colentry = colors[colorname]
+        if not colentry then
+            err("Color %q unknown, reverting to black",colorname or "(no color name given)")
+            colentry = colors["black"]
+        end
+        paint.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colentry.pdfstring,_width,_height)
+        paint.mode = 0
 
-    hglue = node.new("glue",0)
-    hglue.spec = node.new("glue_spec")
-    hglue.spec.width         = 0
-    hglue.spec.stretch       = 2^16
-    hglue.spec.stretch_order = 3
-    h = node.insert_after(paint,paint,hglue)
+        local hglue
 
-    h = node.hpack(h,width_sp,"exactly")
+        hglue = node.new("glue",0)
+        hglue.spec = node.new("glue_spec")
+        hglue.spec.width         = 0
+        hglue.spec.stretch       = 2^16
+        hglue.spec.stretch_order = 3
+        h = node.insert_after(paint,paint,hglue)
 
-    vglue = node.new(glue_node,0)
+        h = node.hpack(h,width_sp,"exactly")
+    else
+        h = create_empty_hbox_with_width(width_sp)
+    end
+
+    local vglue = node.new(glue_node,0)
     vglue.spec = node.new("glue_spec")
     vglue.spec.width         = 0
     vglue.spec.stretch       = 2^16
     vglue.spec.stretch_order = 3
     v = node.insert_after(h,h,vglue)
     v = node.vpack(h,height_sp,"exactly")
-
     return v
 end
 
@@ -1873,6 +1989,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     elseif typ=="height_sp" then
         num = tonumber(val or default)
         if num then -- most likely really a number, we need to multiply with grid height
+            setup_page()
             ret = current_page.grid.gridheight * num
         else
             ret = val
@@ -1881,6 +1998,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     elseif typ=="width_sp" then
         num = tonumber(val or default)
         if num then -- most likely really a number, we need to multiply with grid width
+            setup_page()
             ret = current_page.grid:width_sp(num)
         else
             ret = val
@@ -1951,6 +2069,29 @@ function parse_html( elt, parameter )
             x = node.hpack(x)
             node.set_attribute(x,att_dont_format,1)
             return x
+        elseif eltname == "span" then
+            local css_rules = css:matches({element = 'span', class=elt.class}) or {}
+            local has_css = false
+            local colorindex
+
+            if css_rules["color"] then
+                has_css = true
+                colorindex = colors[css_rules["color"]].index
+            end
+            local td = css_rules["text-decoration"]
+            if  td and string.match(td,"underline") then
+               has_css = true
+                underline = 1
+            end
+            if has_css then
+                local b = paragraph:new()
+                if type(elt[1]) == "string" then
+                    b:append(elt[1],{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                    b:set_color(colorindex)
+                    a:append(b)
+                    elt = {}
+                end
+            end
         elseif eltname == "b" or eltname == "strong" then
             bold = 1
         elseif eltname == "i" then
@@ -2050,11 +2191,43 @@ function parse_html( elt, parameter )
                 a:append(enl)
             end
             return a
-        elseif string.match(eltname,"^[bB][rR]$") then
+        elseif eltname=="br" then
             a:append("\n",{})
         elseif #elt == 0 then
             -- dummy: insert U+200B ZERO WIDTH SPACE which results in a strut
             a:append("\xE2\x80\x8B")
+        else
+            local css_rules = css:matches({element = eltname, class=elt.class}) or {}
+            local has_css = false
+            local colorindex
+            local fontfamily = 0
+            local ff = css_rules["font-family"]
+            if ff then
+                has_css = true
+                local tmp = publisher.fonts.lookup_fontfamily_name_number[ff]
+                if tmp then
+                    fontfamily = tmp
+                end
+            end
+
+            if css_rules["color"] then
+                has_css = true
+                colorindex = colors[css_rules["color"]].index
+            end
+            local td = css_rules["text-decoration"]
+            if  td and string.match(td,"underline") then
+               has_css = true
+                underline = 1
+            end
+            if has_css then
+                local b = paragraph:new()
+                if type(elt[1]) == "string" then
+                    b:append(elt[1],{fontfamily = fontfamily, bold = bold, italic = italic, underline = underline})
+                    b:set_color(colorindex)
+                    a:append(b)
+                    elt = {}
+                end
+            end
         end
     end
     -- Recurse into the children...
@@ -2164,6 +2337,7 @@ function find_user_defined_whatsits( head )
             if head.subtype == user_defined_whatsit then
                 -- action
                 if head.user_id == user_defined_addtolist then
+                    -- this part is obsolete (2.9.3)
                     -- the value is the index of the hash of user_defined_functions
                     fun = user_defined_functions[head.value]
                     fun()
@@ -2277,9 +2451,39 @@ function addstrut(nodelist,where)
     return strut
 end
 
+
+-- Remove the first \n in a paragraph value table. See #132
+function remove_first_whitespace ( tbl )
+    for i=1,#tbl do
+        if type(tbl[i]) == "string" then
+            tbl[i] = string.gsub(tbl[i],"^[\n\t]*(.-)$","%1")
+            return true
+        end
+        if type(tbl[i]) == "table" then
+            local ret = remove_first_whitespace(tbl[i])
+            if ret then return true end
+        end
+    end
+end
+
+-- Remove the final \n in a paragraph value table. See #132
+function remove_last_whitespace ( tbl )
+    for i=#tbl,1,-1 do
+        if type(tbl[i]) == "string" then
+            tbl[i] = string.gsub(tbl[i],"^(.-)[\n\t]*$","%1")
+            return true
+        end
+        if type(tbl[i]) == "table" then
+            local ret = remove_last_whitespace(tbl[i])
+            if ret then return true end
+        end
+    end
+end
+
+
 --- Create a `\hbox`. Return a nodelist. Parameter is one of
 ---
---- * languagecode
+--- * language code
 --- * bold (bold)
 --- * italic (italic)
 --- * underline
@@ -2959,7 +3163,7 @@ function set_color_if_necessary( nodelist,color )
     else
         colorname = colortable[color]
     end
-
+    if colorname == "black" then return nodelist end
     local colstart = node.new("whatsit","pdf_colorstack")
     colstart.data  = colors[colorname].pdfstring
     if status.luatex_version < 79 then
@@ -3214,6 +3418,10 @@ end
 
 --- See commands#save_dataset() for  documentation on the data structure for `xml_element`.
 function xml_to_string( xml_element, level )
+    if type(xml_element) ~= "table" then
+        err("xml_to_string is not a table, but a %s %q",type(xml_element),tostring(xml_element))
+        return "error in publisher run"
+    end
     level = level or 0
     local str = ""
     str = str .. string.rep(" ",level) .. "<" .. xml_element[".__local_name"]
@@ -3718,10 +3926,12 @@ function getheight( relative_pagenumber )
     local thispagenumber = current_pagenumber + relative_pagenumber - 1
     -- w("getheight for page number %d which is page number %d in the PDF",relative_pagenumber,thispagenumber)
     local thispage = pages[thispagenumber]
-    local cp, cg -- current page, current grid
+    local cp, cg, cpn -- current page, current grid, current pagenumber
+    cpn = current_pagenumber
     if not thispage then
         cp = current_page
         cg = current_grid
+        current_pagenumber = thispagenumber or 0
         setup_page(thispagenumber)
         thispage = pages[thispagenumber]
     end
@@ -3729,6 +3939,7 @@ function getheight( relative_pagenumber )
     if thispage then
         local firstrow = thispage.grid:first_free_row(areaname)
         local space = thispage.grid:remaining_height_sp(firstrow,areaname)
+        current_pagenumber = cpn
         current_grid = cg
         current_page = cp
         return space
@@ -3970,6 +4181,7 @@ function imageinfo( filename,page,box,fallback )
         return images[new_name]
     end
 
+    log("Searching for image %q",tostring(filename))
     if not find_file_location(filename) then
         if options.imagenotfounderror then
             err("Image %q not found!",filename or "???")
@@ -4160,6 +4372,25 @@ function flush_variable( varname )
     end
 end
 
+
+-- random string https://gist.github.com/haggen/2fd643ea9a261fea2094
+
+local charset = {}
+
+-- qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890
+for i = 48,  57 do table.insert(charset, string.char(i)) end
+for i = 65,  90 do table.insert(charset, string.char(i)) end
+for i = 97, 122 do table.insert(charset, string.char(i)) end
+
+function string_random(length)
+  -- math.randomseed(os.time())
+
+  if length > 0 then
+    return string_random(length - 1) .. charset[math.random(1, #charset)]
+  else
+    return ""
+  end
+end
 
 file_end("publisher.lua")
 

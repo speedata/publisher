@@ -1,7 +1,7 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <Options show-grid="no" show-gridallocation="no" ignoreeol="yes"/>
+  <Options ignoreeol="yes"/>
 
   <DefineTextformat name="text" indentation="20pt"/>
   <SetGrid width="5mm" height="12pt"/>

@@ -1,0 +1,25 @@
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en" xmlns="urn:speedata.de:2009/publisher/en">
+  <Pageformat width="50mm" height="60mm"/>
+  <Record element="data">
+    <PlaceObject row="3">
+      <Table width="10">
+        <Tr>
+          <Td>
+            <Paragraph>
+              <Value>one</Value>
+            </Paragraph>
+          </Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+    <NextRow rows="1"/>
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>two</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+

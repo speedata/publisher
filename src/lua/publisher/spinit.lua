@@ -125,6 +125,21 @@ function table.__concat( tbl, other )
   return ret
 end
 
+-- Get the text value of a table. Only the indexes 1,...#table are taken into account.
+-- The function recurses nested tables.
+function table_textvalue( tbl )
+    local ret = {}
+    if not tbl then return "" end
+    for _,v in ipairs(tbl) do
+        if type(v) == "string" then
+            ret[#ret + 1] = v
+        elseif type(v) == "table" then
+            ret[#ret + 1] = table_textvalue(v)
+        end
+    end
+    return table.concat(ret)
+end
+
 --- Round the given `numb` to `idp` digits. From [the Lua wiki](http://lua-users.org/wiki/SimpleRound)
 function math.round(num, idp)
   if idp and idp>0 then
@@ -173,12 +188,8 @@ function exit(graceful)
   log("Stop processing data")
   log("%d errors occurred",errcount)
   log("Duration: %3f seconds",os.gettimeofday() - starttime)
-  log("node_mem_usage=%s",status.node_mem_usage)
-  log("luastate_bytes=%d",status.luastate_bytes / 1024)
   errorlog:write("---------------------------------------------\n")
   errorlog:write(string.format("Duration: %3f seconds\n",os.gettimeofday() - starttime))
-  errorlog:write(string.format("\nnode_mem_usage=%s",status.node_mem_usage))
-  errorlog:write(string.format("luastate_bytes=%d",status.luastate_bytes / 1024))
   errorlog:close()
   statusfile = io.open(string.format("%s.status",tex.jobname),"wb")
   statusfile:write(string.format("<Status>\n  <Errors>%d</Errors>\n",errcount))

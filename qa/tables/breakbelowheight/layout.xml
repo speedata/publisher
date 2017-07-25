@@ -2,7 +2,8 @@
   xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <Options trace="no" show-grid="yes" crop="5mm"/>
+  <Options crop="5mm"/>
+  <Trace grid="yes" objects="no"/>
   <Pageformat width="10cm" height="8cm"/>
   <SetGrid nx="10" height="12pt"/>
   <Record element="data">

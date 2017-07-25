@@ -10,8 +10,9 @@ import (
 	"path/filepath"
 )
 
+// WorkRequest contains an ID
 type WorkRequest struct {
-	Id string
+	ID string
 }
 
 var (
@@ -47,7 +48,7 @@ type Worker struct {
 	QuitChan    chan bool
 }
 
-// Create, and return the worker.
+// NewWorker creates and return the worker
 func NewWorker(id int, workerQueue chan chan WorkRequest) Worker {
 	worker := Worker{
 		ID:          id,
@@ -58,8 +59,7 @@ func NewWorker(id int, workerQueue chan chan WorkRequest) Worker {
 	return worker
 }
 
-// This function "starts" the worker by starting a goroutine, that is
-// an infinite "for-select" loop.
+// Start the worker by starting a goroutine, that is  an infinite "for-select" loop.
 func (w Worker) Start() {
 	go func() {
 		for {
@@ -69,19 +69,19 @@ func (w Worker) Start() {
 			select {
 			case work := <-w.Work:
 				// Receive a work request.
-				fmt.Fprintf(protocolFile, "Running speedata publisher for id %s\n", work.Id)
-				dir := filepath.Join(serverTemp, work.Id)
+				fmt.Fprintf(protocolFile, "Running speedata publisher for id %s\n", work.ID)
+				dir := filepath.Join(serverTemp, work.ID)
 				// Force the jobname, so the result is always 'publisher.pdf'
 				params := []string{"--jobname", "publisher"}
 				if _, err := os.Stat(filepath.Join(dir, "extravars")); err == nil {
 					params = append(params, "--varsfile")
 					params = append(params, "extravars")
 				}
-				cmd := exec.Command(filepath.Join(bindir, "sp"+exe_suffix), params...)
+				cmd := exec.Command(filepath.Join(bindir, "sp"+exeSuffix), params...)
 				cmd.Dir = dir
 				cmd.Run()
-				ioutil.WriteFile(filepath.Join(dir, work.Id+"finished.txt"), []byte("finished"), 0600)
-				fmt.Fprintf(protocolFile, "Id %s finished\n", work.Id)
+				ioutil.WriteFile(filepath.Join(dir, work.ID+"finished.txt"), []byte("finished"), 0600)
+				fmt.Fprintf(protocolFile, "Id %s finished\n", work.ID)
 			case <-w.QuitChan:
 				// We have been asked to stop.
 				return
