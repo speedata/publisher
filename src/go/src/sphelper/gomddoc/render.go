@@ -100,7 +100,7 @@ func (md *MDDoc) image(context mdTemplateData, imagename string) string {
 func (md *MDDoc) writeFeed(lang string) {
 	feed := &feeds.Feed{
 		Title:   fmt.Sprintf("speedata Publisher changelog (%s)", lang),
-		Link:    &feeds.Link{Href: "http://www.speedata.de"},
+		Link:    &feeds.Link{Href: "https://www.speedata.de"},
 		Author:  &feeds.Author{"speedata", "info@speedata.de"},
 		Created: time.Now(),
 	}
@@ -123,7 +123,7 @@ func (md *MDDoc) writeFeed(lang string) {
 			} else {
 				i.Description = entry.De.Text
 			}
-			i.Link = &feeds.Link{Href: "http://www.speedata.de"}
+			i.Link = &feeds.Link{Href: "https://www.speedata.de"}
 
 			feed.Items = append(feed.Items, i)
 		}

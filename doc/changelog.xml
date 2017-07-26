@@ -177,7 +177,7 @@
   <chapter version="2.5" date="2016-08-11">
     <entry version="2.5.13" date="2016-08-10">
       <en>Bugfix for large tables (> 200 pages?)</en>
-      <de>Fehlerkorrektur für lange Tabelen (> 200 Seiten?)</de>
+      <de>Fehlerkorrektur für lange Tabellen (> 200 Seiten?)</de>
     </entry>
     <entry version="2.5.12" date="2016-08-08">
       <en>Bugfixes for paragraph shape, move LuaTeX binary to different directory</en>
