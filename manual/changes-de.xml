@@ -1,13 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (de)</title>
   <id>http://www.speedata.de</id>
-  <updated>2017-05-10T19:37:32+02:00</updated>
+  <updated>2017-07-26T09:40:09+02:00</updated>
   <subtitle>Neue Versionen des Publishers zum Download und Liste der Änderungen</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.9.15</title>
+    <updated>2017-07-12T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-07-12:</id>
+    <content type="html">PageType erzwingen bei NewPage, entferne NL/Tab beim Anfang und Ende eines Absatzes.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.14</title>
+    <updated>2017-06-27T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-06-27:</id>
+    <content type="html">CSS verarbeitet font-family für eigene Elemente.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.13</title>
+    <updated>2017-06-27T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-06-27:</id>
+    <content type="html">Fehlerkorrektur: nummerischen Entitäten in Daten. Neu: base64 dekodieren, filecontents.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.12</title>
+    <updated>2017-06-16T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-06-16:</id>
+    <content type="html">Fehlerkorrektur PlaceObject/hreference=right und absoluter Platzierung.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.11</title>
+    <updated>2017-05-18T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-05-18:</id>
+    <content type="html">Späte Auswertung von defaultcolor bei Pagetype, kleinere Fehlerkorrekturen.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.9.10</title>
     <updated>2017-05-10T00:00:00Z</updated>

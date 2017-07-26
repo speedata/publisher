@@ -122,6 +122,11 @@ XPath 2.0 standard.</p>
 </tr>
 
 <tr>
+<td>sd:filecontents(&lt;binarycontent&gt;)</td>
+<td>Save the given contents into a file and return the file name.</td>
+</tr>
+
+<tr>
 <td>sd:first-free-row(<areaname>)</td>
 <td>Return the first free row of this area (experimental).</td>
 </tr>
@@ -144,6 +149,11 @@ XPath 2.0 standard.</p>
 <tr>
 <td>sd:attr(&lt;name&gt;, ...)</td>
 <td>Is the same as <code>@name</code>, but can be used to dynamically construct the attribute name. See example at <code>sd:variable()</code>.</td>
+</tr>
+
+<tr>
+<td>sd:decode-base64(&lt;contents&gt;)</td>
+<td>Expect a string encoded in base64 and return the binary contents.</td>
 </tr>
 
 <tr>
@@ -393,7 +403,7 @@ XPath 2.0 standard.</p>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 2.9.10 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/xpath.html">German</a>
+Version: 3.0.0 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/xpath.html">German</a>
 
 </body>
 </html>

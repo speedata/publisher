@@ -1,13 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (en)</title>
   <id>http://www.speedata.de</id>
-  <updated>2017-05-10T19:37:32+02:00</updated>
+  <updated>2017-07-26T09:40:09+02:00</updated>
   <subtitle>New revisions for download and changelog.</subtitle>
   <link href="http://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 2.9.15</title>
+    <updated>2017-07-12T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-07-12:</id>
+    <content type="html">Force pagetype if provided at NewPage, strip NL/Tab at beginning / end of paragraph.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.14</title>
+    <updated>2017-06-27T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-06-27:</id>
+    <content type="html">Allow font-family setting in CSS for custom element.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.13</title>
+    <updated>2017-06-27T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-06-27:</id>
+    <content type="html">Bugfix numerical entities in data. New: base64 decode, filecontents.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.12</title>
+    <updated>2017-06-16T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-06-16:</id>
+    <content type="html">Bugfix PlaceObject/hreference=right and absolute positioning</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 2.9.11</title>
+    <updated>2017-05-18T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-05-18:</id>
+    <content type="html">Lazy evaluation of defaultcolor / Pagetype, minor bugfixes.</content>
+    <link href="http://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 2.9.10</title>
     <updated>2017-05-10T00:00:00Z</updated>
