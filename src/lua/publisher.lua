@@ -444,6 +444,9 @@ glue_stretch2.spec.stretch_order = 2
 
 messages = {}
 
+-- For attached files. Each of this numbers should appear in the catalog
+filespecnumbers = {}
+
 --- The dispatch table maps every element in the layout xml to a command in the `commands.lua` file.
 local dispatch_table = {
     A                       = commands.a,
@@ -452,6 +455,7 @@ local dispatch_table = {
     AtPageCreation          = commands.atpagecreation,
     AtPageShipout           = commands.atpageshipout,
     Attribute               = commands.attribute,
+    AttachFile              = commands.attachfile,
     B                       = commands.bold,
     Barcode                 = commands.barcode,
     Bookmark                = commands.bookmark,
@@ -658,7 +662,7 @@ function dothings()
     else
         initialize_luatex_and_generate_pdf()
         -- The last thing is to put a stamp in the PDF
-        pdf.immediateobj("(Created with the speedata Publisher - www.speedata.de)")
+        pdf.obj({type="raw",string="(Created with the speedata Publisher - www.speedata.de)", immediate = true, objcompression = false})
     end
 end
 
@@ -832,6 +836,13 @@ function initialize_luatex_and_generate_pdf()
         exit()
     end
 
+    local pdfcatalog = {}
+
+    -- For now only one file can be attached
+    if #filespecnumbers > 0 then
+      pdfcatalog[#pdfcatalog + 1] = string.format([[ /Names << /EmbeddedFiles <<  /Names [(ZUGFeRD-invoice.xml) %d 0 R ] >> >> /Metadata %d 0 R ]],filespecnumbers[1][1],filespecnumbers[1][2])
+      pdfcatalog[#pdfcatalog + 1] = string.format([[ /AF %d 0 R ]],filespecnumbers[1][3])
+    end
 
     --- emit last page if necessary
     -- current_pagestore_name is set when in SavePages and nil otherwise
@@ -857,12 +868,16 @@ function initialize_luatex_and_generate_pdf()
         vp[#vp + 1] = string.format("/Duplex /%s", viewerpreferences.duplex)
     end
 
-    local catalog = "/PageMode /UseOutlines"
+    pdfcatalog[#pdfcatalog + 1] = "/PageMode /UseOutlines"
+
     if #vp > 0 then
-        catalog = catalog .. "/ViewerPreferences <<" .. table.concat(vp," ") .. ">>"
+        pdfcatalog[#pdfcatalog + 1] = "/ViewerPreferences <<" .. table.concat(vp," ") .. ">>"
     end
     local creator = string.format("speedata Publisher %s, www.speedata.de",env_publisherversion)
     local info = string.format("/Creator (%s) ",creator)
+
+    local catalog = table.concat(pdfcatalog," ")
+
     if pdf.setinfo then
         pdf.setcatalog(catalog)
         pdf.setinfo(info)
@@ -4384,13 +4399,164 @@ for i = 97, 122 do table.insert(charset, string.char(i)) end
 
 function string_random(length)
   -- math.randomseed(os.time())
-
   if length > 0 then
     return string_random(length - 1) .. charset[math.random(1, #charset)]
   else
     return ""
   end
 end
+
+    local metadata = [[<?xpacket begin="ï»¿" id="W5M0MpCehiHzreSzNTczkc9d"?><x:xmpmeta xmlns:x="adobe:ns:meta/">
+ <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description xmlns:pdfaid="http://www.aiim.org/pdfa/ns/id/" rdf:about="">
+   <pdfaid:part>3</pdfaid:part>
+   <pdfaid:conformance>B</pdfaid:conformance>
+  </rdf:Description>
+  <rdf:Description xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:about="">
+   <dc:title>
+    <rdf:Alt>
+     <rdf:li xml:lang="x-default">ZUGFeRD Rechnung</rdf:li>
+    </rdf:Alt>
+   </dc:title>
+   <dc:creator>
+    <rdf:Seq>
+    <rdf:li>speedata Publisher</rdf:li>
+</rdf:Seq>
+   </dc:creator>
+  <dc:description>
+<rdf:Alt>
+<rdf:li xml:lang="x-default"/>
+</rdf:Alt>
+</dc:description>
+</rdf:Description>
+  <rdf:Description xmlns:pdf="http://ns.adobe.com/pdf/1.3/" rdf:about="">
+   <pdf:Producer>speedata Publisher</pdf:Producer>
+  </rdf:Description>
+  <rdf:Description xmlns:xmp="http://ns.adobe.com/xap/1.0/" rdf:about="">
+   <xmp:CreatorTool>speedata invoicing platform</xmp:CreatorTool>
+   <xmp:CreateDate>2014-06-24T14:01:21+02:00</xmp:CreateDate>
+  <xmp:ModifyDate>2014-10-06T16:13:53+02:00</xmp:ModifyDate>
+</rdf:Description>
+ <rdf:Description xmlns:pdfaExtension="http://www.aiim.org/pdfa/ns/extension/" xmlns:pdfaField="http://www.aiim.org/pdfa/ns/field#" xmlns:pdfaProperty="http://www.aiim.org/pdfa/ns/property#" xmlns:pdfaSchema="http://www.aiim.org/pdfa/ns/schema#" xmlns:pdfaType="http://www.aiim.org/pdfa/ns/type#" rdf:about="">
+<pdfaExtension:schemas>
+<rdf:Bag>
+<rdf:li rdf:parseType="Resource">
+<pdfaSchema:schema>ZUGFeRD PDFA Extension Schema</pdfaSchema:schema>
+<pdfaSchema:namespaceURI>urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#</pdfaSchema:namespaceURI>
+<pdfaSchema:prefix>zf</pdfaSchema:prefix>
+<pdfaSchema:property>
+<rdf:Seq>
+<rdf:li rdf:parseType="Resource">
+<pdfaProperty:name>DocumentFileName</pdfaProperty:name>
+<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+<pdfaProperty:category>external</pdfaProperty:category>
+<pdfaProperty:description>name of the embedded XML invoice file</pdfaProperty:description>
+</rdf:li>
+<rdf:li rdf:parseType="Resource">
+<pdfaProperty:name>DocumentType</pdfaProperty:name>
+<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+<pdfaProperty:category>external</pdfaProperty:category>
+<pdfaProperty:description>INVOICE</pdfaProperty:description>
+</rdf:li>
+<rdf:li rdf:parseType="Resource">
+<pdfaProperty:name>Version</pdfaProperty:name>
+<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+<pdfaProperty:category>external</pdfaProperty:category>
+<pdfaProperty:description>The actual version of the ZUGFeRD data</pdfaProperty:description>
+</rdf:li>
+<rdf:li rdf:parseType="Resource">
+<pdfaProperty:name>ConformanceLevel</pdfaProperty:name>
+<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+<pdfaProperty:category>external</pdfaProperty:category>
+<pdfaProperty:description>The conformance level of the ZUGFeRD data</pdfaProperty:description>
+</rdf:li>
+</rdf:Seq>
+</pdfaSchema:property>
+</rdf:li>
+</rdf:Bag>
+</pdfaExtension:schemas>
+</rdf:Description>
+<rdf:Description xmlns:zf="urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#"
+  rdf:about="" zf:ConformanceLevel="BASIC" zf:DocumentFileName="ZUGFeRD-invoice.xml" zf:DocumentType="INVOICE" zf:Version="1.0"/>
+</rdf:RDF>
+</x:xmpmeta><?xpacket end="w"?>
+]]
+
+
+
+function attach_file_pdf(filename,description,mimetype)
+    local path = kpse.find_file(filename)
+    if path == nil then
+        err("Cannot find file %q",filename)
+        return
+    end
+    local statt = lfs.attributes(path)
+    local destfilename = "ZUGFeRD-invoice.xml"
+    local fileobjectnum = pdf.immediateobj("streamfile",
+        path,
+        string.format([[/Params <</ModDate (%s)>> /Subtype /%s /Type /EmbeddedFile ]],
+            pdfdate(statt.modification),
+            escape_pdfname(mimetype)))
+
+    local filespecnum = pdf.immediateobj(string.format([[<<
+  /AFRelationship /Alternative
+  /Desc (%s)
+  /EF <<
+    /F %d 0 R
+    /UF %d 0 R
+  >>
+  /F (%s)
+  /Type /Filespec
+  /UF %s
+>>]],escape_pdfstring(description), fileobjectnum,fileobjectnum,destfilename,utf8_to_utf16_string_pdf(destfilename)))
+    local metadataobjnum = pdf.obj({type = "stream",
+                 string = metadata,
+                 immediate = true,
+                 attr = [[  /Subtype /XML /Type /Metadata  ]],
+                 compresslevel = 0,
+                 })
+    local afdatanum = pdf.immediateobj( string.format("[ %d 0 R ]",filespecnum))
+    filespecnumbers[#filespecnumbers + 1] = {filespecnum,metadataobjnum,afdatanum}
+end
+
+-- %a  abbreviated weekday name (e.g., Wed)
+-- %A  full weekday name (e.g., Wednesday)
+-- %b  abbreviated month name (e.g., Sep)
+-- %B  full month name (e.g., September)
+-- %c  date and time (e.g., 09/16/98 23:48:10)
+-- %d  day of the month (16) [01-31]
+-- %H  hour, using a 24-hour clock (23) [00-23]
+-- %I  hour, using a 12-hour clock (11) [01-12]
+-- %M  minute (48) [00-59]
+-- %m  month (09) [01-12]
+-- %p  either "am" or "pm" (pm)
+-- %S  second (10) [00-61]
+-- %w  weekday (3) [0-6 = Sunday-Saturday]
+-- %x  date (e.g., 09/16/98)
+-- %X  time (e.g., 23:48:10)
+-- %Y  full year (1998)
+-- %y  two-digit year (98) [00-99]
+-- %%  the character `%´
+
+-- Return a string that is a valid PDF date entry such as "D:20170721195500+02'00'"
+-- Input is an epoch number such as 1500645681
+function pdfdate(num)
+    local ret = os.date("D:%Y%m%d%H%M%S+00'00'",num)
+    return ret
+end
+
+function escape_pdfstring( str )
+    return str
+end
+
+function escape_pdfname( str )
+    return string.gsub(str,'/','#2f')
+end
+
+function pdf_u_escape( str )
+    -- body
+end
+
 
 file_end("publisher.lua")
 

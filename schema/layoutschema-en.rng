@@ -200,6 +200,25 @@
          </oneOrMore>
       </element>
    </define>
+   <define name="e_AttachFile">
+      <element name="AttachFile">
+         <a:documentation></a:documentation>
+         <attribute name="filename">
+            <a:documentation></a:documentation>
+         </attribute>
+         <attribute name="description">
+            <a:documentation></a:documentation>
+         </attribute>
+         <attribute name="type">
+            <a:documentation>The type of the included file. Currently only ZUGFeRD is supported.</a:documentation>
+            <choice>
+               <value>ZUGFeRD invoice</value>
+               <a:documentation>The attached file is an XML file containing a ZUGFeRD invoice</a:documentation>
+            </choice>
+         </attribute>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Attribute">
       <element name="Attribute">
          <a:documentation>Create an attribute for the Element data structure that can be saved to the hard drive with SaveDataset.</a:documentation>
@@ -1824,6 +1843,9 @@
             </attribute>
          </optional>
          <oneOrMore>
+            <optional>
+               <ref name="e_AttachFile"></ref>
+            </optional>
             <optional>
                <ref name="e_Compatibility"></ref>
             </optional>

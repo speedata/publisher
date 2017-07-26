@@ -121,6 +121,7 @@
   </define>
 
   <define name="Toplevel">
+    <optional><cmd name="AttachFile"/></optional>
     <optional><cmd name="Compatibility"/></optional>
     <optional><cmd name="DefineColor"/></optional>
     <optional><cmd name="DefineFontalias"/></optional>
@@ -518,6 +519,52 @@
 </AtPageShipout>]]></listing>
     </example>
     <seealso><cmd name="AtPageCreation"/>, <cmd name="Pagetype"/></seealso>
+  </command>
+  <command en="AttachFile" since="2.9.16">
+    <description xml:lang="en">
+      <para></para>
+    </description>
+    <description xml:lang="de">
+      <para></para>
+    </description>
+    <childelements></childelements>
+    <attribute en="filename" optional="no" type="text">
+      <description xml:lang="en">
+        <para></para>
+      </description>
+      <description xml:lang="de">
+        <para></para>
+      </description>
+    </attribute>
+    <attribute en="description" optional="no" type="text">
+      <description xml:lang="en">
+        <para></para>
+      </description>
+      <description xml:lang="de">
+        <para></para>
+      </description>
+    </attribute>
+    <attribute en="type" optional="no">
+      <description xml:lang="en">
+        <para>The type of the included file. Currently only ZUGFeRD is supported.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Typ der eingebundenen Datei. Derzeit wird nur ZUGFeRD unterstützt.</para>
+      </description>
+      <choice en="ZUGFeRD invoice">
+        <description xml:lang="en">
+          <para>The attached file is an XML file containing a ZUGFeRD invoice</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die eingebundene Datei ist eine ZUGFeRD XML-Datei</para>
+        </description>
+      </choice>
+    </attribute>
+
+    <example xml:lang="en">
+      <listing></listing>
+    </example>
+    <seealso></seealso>
   </command>
   <command en="Attribute">
     <description xml:lang="en">
@@ -8097,7 +8144,7 @@
         <interleave>
           <optional><cmd name="Li"/></optional>
           <optional><cmd name="ForAll"/></optional>
-        </interleave>  
+        </interleave>
       </oneOrMore>
    </childelements>
     <example xml:lang="en">

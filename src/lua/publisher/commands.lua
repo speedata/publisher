@@ -128,6 +128,19 @@ function commands.attribute( layoutxml,dataxml )
     return ret
 end
 
+
+function commands.attachfile( layoutxml,dataxml )
+    local filename = publisher.read_attribute(layoutxml,dataxml,"filename","rawstring")
+    local description = publisher.read_attribute(layoutxml,dataxml,"description","rawstring")
+    local filetype = publisher.read_attribute(layoutxml,dataxml,"type","rawstring")
+    local expected = "ZUGFeRD invoice"
+    if filetype ~= expected then
+        err("AttachFile: type must be %q but got %q",expected,filetype)
+    else
+        publisher.attach_file_pdf(filename,description,"text/xml")
+    end
+end
+
 --- AtPageCreation
 --- -------------
 --- Run these commands when a page is created (as soon as the first element is written to it).
