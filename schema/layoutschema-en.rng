@@ -24,10 +24,22 @@
          </oneOrMore>
       </element>
    </define>
+   <define name="e_AddSearchpath">
+      <element name="AddSearchpath">
+         <a:documentation>Add a directory on the harddrive to be added to the publisher&#39;s search path.</a:documentation>
+         <attribute name="select">
+            <a:documentation>The path to be added. System dependent.</a:documentation>
+         </attribute>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_AtPageCreation">
       <element name="AtPageCreation">
          <a:documentation>The contents of the element AtPageCreation is executed the first time the page is accessed. This is used in Pagetype.</a:documentation>
          <oneOrMore>
+            <optional>
+               <ref name="e_AddSearchpath"></ref>
+            </optional>
             <optional>
                <ref name="e_Bookmark"></ref>
             </optional>
@@ -117,6 +129,9 @@
          <a:documentation>The enclosed instructions will be executed when the page is placed into the PDF file. Used in Pagetype.</a:documentation>
          <oneOrMore>
             <optional>
+               <ref name="e_AddSearchpath"></ref>
+            </optional>
+            <optional>
                <ref name="e_Bookmark"></ref>
             </optional>
             <optional>
@@ -202,12 +217,12 @@
    </define>
    <define name="e_AttachFile">
       <element name="AttachFile">
-         <a:documentation></a:documentation>
+         <a:documentation>Attach a ZUGFeRD file.</a:documentation>
          <attribute name="filename">
-            <a:documentation></a:documentation>
+            <a:documentation>The name of the local file to be attached to the PDF.</a:documentation>
          </attribute>
          <attribute name="description">
-            <a:documentation></a:documentation>
+            <a:documentation>Textual description of the attached file (for the PDF viewer).</a:documentation>
          </attribute>
          <attribute name="type">
             <a:documentation>The type of the included file. Currently only ZUGFeRD is supported.</a:documentation>
@@ -451,6 +466,9 @@
          <oneOrMore>
             <optional>
                <ref name="e_Action"></ref>
+            </optional>
+            <optional>
+               <ref name="e_AddSearchpath"></ref>
             </optional>
             <optional>
                <ref name="e_Attribute"></ref>
@@ -765,6 +783,9 @@
       <element name="Contents">
          <a:documentation>Marks the contents of a Group, a virtual area.</a:documentation>
          <oneOrMore>
+            <optional>
+               <ref name="e_AddSearchpath"></ref>
+            </optional>
             <optional>
                <ref name="e_Bookmark"></ref>
             </optional>
@@ -1167,6 +1188,9 @@
             <interleave>
                <optional>
                   <ref name="e_Action"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_AddSearchpath"></ref>
                </optional>
                <optional>
                   <ref name="e_Attribute"></ref>
@@ -1847,6 +1871,9 @@
                <ref name="e_AttachFile"></ref>
             </optional>
             <optional>
+               <ref name="e_AddSearchpath"></ref>
+            </optional>
+            <optional>
                <ref name="e_Compatibility"></ref>
             </optional>
             <optional>
@@ -1946,6 +1973,9 @@
             <interleave>
                <optional>
                   <ref name="e_Action"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_AddSearchpath"></ref>
                </optional>
                <optional>
                   <ref name="e_Attribute"></ref>
@@ -2474,6 +2504,9 @@
          <oneOrMore>
             <optional>
                <ref name="e_Action"></ref>
+            </optional>
+            <optional>
+               <ref name="e_AddSearchpath"></ref>
             </optional>
             <optional>
                <ref name="e_Attribute"></ref>
@@ -3283,6 +3316,9 @@
          </optional>
          <oneOrMore>
             <optional>
+               <ref name="e_AddSearchpath"></ref>
+            </optional>
+            <optional>
                <ref name="e_Bookmark"></ref>
             </optional>
             <optional>
@@ -3463,6 +3499,9 @@
          </attribute>
          <oneOrMore>
             <interleave>
+               <optional>
+                  <ref name="e_AddSearchpath"></ref>
+               </optional>
                <optional>
                   <ref name="e_Bookmark"></ref>
                </optional>
@@ -4474,6 +4513,9 @@
                   <ref name="e_Action"></ref>
                </optional>
                <optional>
+                  <ref name="e_AddSearchpath"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Attribute"></ref>
                </optional>
                <optional>
@@ -4712,6 +4754,9 @@
             <interleave>
                <optional>
                   <ref name="e_Action"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_AddSearchpath"></ref>
                </optional>
                <optional>
                   <ref name="e_Attribute"></ref>

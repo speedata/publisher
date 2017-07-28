@@ -113,6 +113,23 @@ function commands.add_to_list( layoutxml,dataxml )
     return udef.last
 end
 
+--- AddSearchpath
+--- -------------
+--- Add the given path to the global search path for image loading etc.
+function commands.add_searchpath( layoutxml,dataxml )
+    local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
+    if not selection then
+        err("AddSearchpath: Can't add an empty search path")
+        return
+    end
+    selection = table_textvalue(selection)
+    if not lfs.isdir(selection) then
+        err("AddSearchpath: The path %q does not exist",selection)
+        return
+    end
+    log("Add search path: %q",selection)
+    kpse.add_dir(selection)
+end
 
 --- Attribute
 --- ---------

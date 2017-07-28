@@ -5,6 +5,7 @@
   >
   <define name="Switchcontents">
     <optional><cmd name="Action"/></optional>
+    <optional><cmd name="AddSearchpath"/></optional>
     <optional><cmd name="Attribute"/></optional>
     <optional><cmd name="B"/></optional>
     <optional><cmd name="Barcode"/></optional>
@@ -65,6 +66,7 @@
   </define>
 
   <define name="Commands">
+    <optional><cmd name="AddSearchpath"/></optional>
     <optional><cmd name="Bookmark"/></optional>
     <optional><cmd name="DefineColor"/></optional>
     <optional><cmd name="DefineFontfamily"/></optional>
@@ -122,6 +124,7 @@
 
   <define name="Toplevel">
     <optional><cmd name="AttachFile"/></optional>
+    <optional><cmd name="AddSearchpath"/></optional>
     <optional><cmd name="Compatibility"/></optional>
     <optional><cmd name="DefineColor"/></optional>
     <optional><cmd name="DefineFontalias"/></optional>
@@ -444,6 +447,40 @@
 ]]></listing>
     </example>
     <seealso><cmd name="Textblock"/>, <cmd name="Mark"/></seealso>
+  </command>
+  <command en="AddSearchpath" since="3.1.1">
+    <description xml:lang="en">
+      <para>Add a directory on the harddrive to be added to the publisher's search path.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Ein Verzeichnis auf der Festplatte, das zum Suchpfad des Publishers hinzugefügt wird.</para>
+    </description>
+    <childelements/>
+    <attribute en="select" optional="no" type="xpath">
+      <description xml:lang="en">
+        <para>The path to be added. System dependent.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Pfad, der hinzugefügt werden soll. Systemabhängig.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Switch>
+  <Case test="sd:variable-exists('searchpath')">
+    <AddSearchpath select="$searchpath" />
+  </Case>
+</Switch>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Switch>
+  <Case test="sd:variable-exists('searchpath')">
+    <AddSearchpath select="$searchpath" />
+  </Case>
+</Switch>
+]]></listing>
+    </example>
+    <seealso></seealso>
   </command>
   <command en="AtPageCreation">
     <description xml:lang="en">

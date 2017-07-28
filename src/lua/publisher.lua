@@ -452,6 +452,7 @@ local dispatch_table = {
     A                       = commands.a,
     Action                  = commands.action,
     AddToList               = commands.add_to_list,
+    AddSearchpath           = commands.add_searchpath,
     AtPageCreation          = commands.atpagecreation,
     AtPageShipout           = commands.atpageshipout,
     Attribute               = commands.attribute,
