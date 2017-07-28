@@ -520,28 +520,28 @@
     </example>
     <seealso><cmd name="AtPageCreation"/>, <cmd name="Pagetype"/></seealso>
   </command>
-  <command en="AttachFile" since="2.9.16">
+  <command en="AttachFile" since="3.1.1">
     <description xml:lang="en">
-      <para></para>
+      <para>Attach a ZUGFeRD file.</para>
     </description>
     <description xml:lang="de">
-      <para></para>
+      <para>Binde eine ZUGFeRD Datei ein.</para>
     </description>
-    <childelements></childelements>
+    <childelements/>
     <attribute en="filename" optional="no" type="text">
       <description xml:lang="en">
-        <para></para>
+        <para>The name of the local file to be attached to the PDF.</para>
       </description>
       <description xml:lang="de">
-        <para></para>
+        <para>Der Name der Datei, die in die PDF-Datei eingebettet werden soll.</para>
       </description>
     </attribute>
     <attribute en="description" optional="no" type="text">
       <description xml:lang="en">
-        <para></para>
+        <para>Textual description of the attached file (for the PDF viewer).</para>
       </description>
       <description xml:lang="de">
-        <para></para>
+        <para>Textuelle Beschreibung der einzubindenden Datei (für den PDF-Viewer).</para>
       </description>
     </attribute>
     <attribute en="type" optional="no">
@@ -560,11 +560,13 @@
         </description>
       </choice>
     </attribute>
-
     <example xml:lang="en">
-      <listing></listing>
+      <listing><![CDATA[<AttachFile filename="invoice.xml" description="A ZUGFeRD invoice." type="ZUGFeRD invoice"/>]]></listing>
     </example>
-    <seealso></seealso>
+    <example xml:lang="de">
+      <listing><![CDATA[<AttachFile filename="invoice.xml" description="ZUGFeRD Rechnung" type="ZUGFeRD invoice"/>]]></listing>
+    </example>
+    <seealso/>
   </command>
   <command en="Attribute">
     <description xml:lang="en">
