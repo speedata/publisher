@@ -128,8 +128,9 @@ end
 -- Get the text value of a table. Only the indexes 1,...#table are taken into account.
 -- The function recurses nested tables.
 function table_textvalue( tbl )
-    local ret = {}
     if not tbl then return "" end
+    if type(tbl) ~= "table" then return tostring(tbl) end
+    local ret = {}
     for _,v in ipairs(tbl) do
         if type(v) == "string" then
             ret[#ret + 1] = v

@@ -230,8 +230,12 @@ local function format_number(dataxml,arg)
 end
 
 local function format_string( dataxml,arg )
-  local ret = string.format(arg[#arg],table.unpack(arg,1,#arg))
-  return ret
+    local argument = {}
+    for i=1,#arg - 1 do
+        argument[#argument + 1] = table_textvalue(arg[i])
+    end
+    local ret = string.format(arg[#arg],table.unpack(argument))
+    return ret
 end
 
 

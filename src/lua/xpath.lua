@@ -944,9 +944,9 @@ M.default_functions["replace"] = function(dataxml,arg)
         warning("replace: one of the arguments is empty")
         return ""
     end
-    comm.sendmessage('rep',arg[1])
-    comm.sendmessage('str',arg[2])
-    comm.sendmessage('str',arg[3])
+    comm.sendmessage('rep',table_textvalue(arg[1]))
+    comm.sendmessage('str',table_textvalue(arg[2]))
+    comm.sendmessage('str',table_textvalue(arg[3]))
     local msg = comm.get_string_messages()
     trace("Replace: %s",msg[1])
     return msg[1]
