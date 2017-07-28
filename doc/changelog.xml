@@ -1,6 +1,15 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="3.0.0">
-    
+  <chapter version="3.1">
+    <entry version="3.1.1" date="2017-07-28">
+      <en>ZUGFeRD integration, new commands AttachFile and AddSearchpath</en>
+      <de>ZUGFeRD Integration, neue Befehle AttachFile und AddSearchpath</de>
+    </entry>
+  </chapter>
+  <chapter version="3.0">
+    <entry version="3.0.0" date="2017-07-25">
+      <en>Release version 3.0</en>
+      <de>Veröffentliche Version 3.0</de>
+    </entry>
   </chapter>
   <chapter version="2.9" date="2017-07-25">
     <entry version="2.9.15" date="2017-07-12">
