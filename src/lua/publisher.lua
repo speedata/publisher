@@ -4407,7 +4407,8 @@ function string_random(length)
   end
 end
 
-    local metadata = [[<?xpacket begin="ï»¿" id="W5M0MpCehiHzreSzNTczkc9d"?><x:xmpmeta xmlns:x="adobe:ns:meta/">
+    local metadata = string.format([[<?xpacket begin=%q id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/">
  <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description xmlns:pdfaid="http://www.aiim.org/pdfa/ns/id/" rdf:about="">
    <pdfaid:part>3</pdfaid:part>
@@ -4481,7 +4482,7 @@ end
   rdf:about="" zf:ConformanceLevel="BASIC" zf:DocumentFileName="ZUGFeRD-invoice.xml" zf:DocumentType="INVOICE" zf:Version="1.0"/>
 </rdf:RDF>
 </x:xmpmeta><?xpacket end="w"?>
-]]
+]],"\239\187\191")
 
 
 
