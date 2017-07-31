@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.2" date="2017-07-31">
+      <en>Bugfix for underline.</en>
+      <de>Fehlerkorrektur für Unterstreichen.</de>
+    </entry>
     <entry version="3.1.1" date="2017-07-28">
       <en>ZUGFeRD integration, new commands AttachFile and AddSearchpath</en>
       <de>ZUGFeRD Integration, neue Befehle AttachFile und AddSearchpath</de>
