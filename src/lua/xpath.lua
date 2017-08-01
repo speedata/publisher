@@ -475,6 +475,13 @@ function M.eval_comparison(first,second,operator)
     elseif type(second) == "number" then
         first = tonumber(first)
     end
+    if type(first) == "table" then
+        first = table_textvalue(first)
+    end
+    if type(second) == "table" then
+        second = table_textvalue(second)
+    end
+
     if operator == "<" then
         return first < second
     elseif operator == ">" then
