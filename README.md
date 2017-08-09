@@ -10,9 +10,11 @@ About
 <p align="center"><img src="https://i.imgur.com/yzUJlVv.png"></p>
 
 
-The speedata Publisher is a full featured database publishing software. It generates PDF files from XML data and XML layout instructions. It is used to make product catalogs and other documents with high demands on the layout.
+The speedata Publisher is a full featured and mature database publishing software. It generates PDF files from XML data and XML layout instructions. It is used to make product catalogs and other documents with high demands on the layout.
 
 Its built-in layout description language allows you to create almost arbitrary layouts, while keeping the job as simple as possible.
+
+Think of it as »XSL-FO on stereoids« or »server side InDesign«.
 
 Examples
 --------

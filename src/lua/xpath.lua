@@ -910,7 +910,7 @@ M.default_functions.node = function(dataxml)
     return tab
 end
 
-M.default_functions.string = function(dataxml,arg)
+M.default_functions["string"] = function(dataxml,arg)
     local ret
     if type(arg)=="table" then
         ret = {}
