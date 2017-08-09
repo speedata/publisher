@@ -2202,6 +2202,7 @@ function commands.place_object( layoutxml,dataxml )
         err("Areas can't be combined with groups")
     end
     area = area or publisher.default_area or publisher.default_areaname
+    local save_current_area = xpath.get_variable("__currentarea")
     xpath.set_variable("__currentarea", area)
     framecolor = framecolor or "black"
 
@@ -2486,6 +2487,7 @@ function commands.place_object( layoutxml,dataxml )
         publisher.setup_page()
         current_grid = publisher.pages[publisher.current_pagenumber].grid
     end
+    xpath.set_variable("__currentarea",save_current_area)
     trace("objects placed")
 end
 
