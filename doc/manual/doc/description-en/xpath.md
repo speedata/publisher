@@ -67,6 +67,7 @@ sd:current-row(\<name\>) | Return the current row. If `name` is given, return th
 sd:current-column(\<name\>) | Return the current column. If `name` is given, return the column of the given frame.
 sd:current-framenumber(\<name\>) | Return the current frame number of given positioning area.
 sd:count-saved-pages(\<name\>)  | Return the number of saved pages from `<SavePages>`.
+sd:dimexpr(\<string>) | Evaluate the string as a dimension with a unit. Handy if you want to add / multiply two lengths.
 sd:alternating(\<type\>, \<text\>,\<text\>,.. ) | On each call the next element will be returned. You can define more alternating sequences by using distinct type values. Example: `sd:alternating("tbl", "White","Gray")` can be used for alternating color of table rules. To reset the state, use `sd:reset-alternating(<type>)`.
 sd:filecontents(\<binarycontent>) | Save the given contents into a file and return the file name.
 sd:first-free-row(<areaname>) | Return the first free row of this area (experimental).

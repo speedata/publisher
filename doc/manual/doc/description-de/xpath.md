@@ -53,6 +53,7 @@ sd:current-page()|  Gibt die Seitennummer zurück.
 sd:current-row(\<name\>)|  Gibt die aktuelle Zeile zurück. Wenn `name` angegeben, gibt die Zeile des gegebenen Positionsrahmens zurück.
 sd:current-column(\<name\>)|  Gibt die aktuelle Spalte zurück. Wenn `name` angegeben, gibt die Spalte des gegebenen Positionsrahmens zurück.
 sd:alternating(\<typ\>, \<text\>,\<text\>,.. )|  Bei jedem Aufruf wird das nächste Argument zurück gegeben. Wert des Typs ist beliebig, muss aber eindeutig sein. Beispiel: `sd:alternating("tbl", "Weiß","Grau")` könnte für die Hintergrundfarbe von Tabellen benutzt werden.
+sd:dimexpr(\<string>) | Evaluiert den String als Dimension mit Einheit. Praktisch um Maßangaben zu addieren / multiplizieren.
 sd:reset-alternating(\<typ\>)|  Setzt den Zustand für `sd:alternating()` für den angegebenen Typ zurück.
 sd:keep-alternating(\<typ\>)| Nutzt den aktuellen Wert von `sd:alternating(<typ>)`, ohne diesen zu verändern.
 sd:count-saved-pages(\<Name\>)|  Gibt die Anzahl der gespeicherten Seiten, die mit \<SavePages\> zwischen speichert wurden.

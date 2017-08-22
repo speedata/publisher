@@ -31,6 +31,18 @@ local function current_row(dataxml,arg)
     return publisher.current_grid:current_row(arg and arg[1])
 end
 
+-- Evaluate the string arg as a dimension. The return value is a string with the dimension "sp".
+local function dimexpression( dataxml,arg )
+    arg = table.concat(arg)
+    local save_dim = is_dim
+    is_dim = true
+    xpath.push_state()
+    local ret = xpath.parse(dataxml,arg,"")
+    xpath.pop_state()
+    is_dim = save_dim
+    return ret .. "sp"
+end
+
 --- Get the page number of a marker
 local function pagenumber(dataxml,arg)
   local m = publisher.markers[arg[1]]
@@ -388,6 +400,8 @@ end
 local register = publisher.xpath.register_function
 
 register("urn:speedata:2009/publisher/functions/en","attr",attr)
+
+register("urn:speedata:2009/publisher/functions/en","dimexpr",dimexpression)
 
 register("urn:speedata:2009/publisher/functions/en","alternating",alternating)
 

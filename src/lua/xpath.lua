@@ -507,14 +507,22 @@ function M.eval_addition(first,second,operator)
         return 0
     end
     if type(first)=='string' then
-        first = tonumber(first)
+        if is_dim then
+            first = tex.sp(first)
+        else
+            first = tonumber(first)
+        end
     end
     if first == nil then
         err("The first operand of +/- is not a number. Evaluating to 0 (%q)",M.str)
         return 0
     end
     if type(second)=='string' then
-        second = tonumber(second)
+        if is_dim then
+            second = tex.sp(second)
+        else
+            second = tonumber(second)
+        end
     end
     if second == nil then
         err("The second operand of +/- is not a number. Evaluating to 0")
@@ -550,14 +558,22 @@ function M.eval_multiplication(first,second,operator)
         return 0
     end
     if type(first)=='string' then
-        first = tonumber(first)
+        if is_dim then
+            first = tex.sp(first)
+        else
+            first = tonumber(first)
+        end
     end
     if first == nil then
         err("The first operand of the multiplication is not a number. Evaluating to 0")
         return 0
     end
     if type(second)=='string' then
-        second = tonumber(second)
+        if is_dim then
+            second = tex.sp(second)
+        else
+            second = tonumber(second)
+        end
     end
     if second == nil then
         err("The second operand of the multiplication is not a number. Evaluating to 0")
