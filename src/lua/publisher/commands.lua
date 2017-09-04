@@ -1778,6 +1778,7 @@ function commands.nobreak( layoutxml, dataxml )
         node.insert_after(a.nodelist,node.tail(a.nodelist),txt)
     elseif strategy == "keeptogether" then -- default
         a.nodelist = node.hpack(a.nodelist)
+        a.nodelist = publisher.addstrut(a.nodelist,"head")
     end
     return a
 end
