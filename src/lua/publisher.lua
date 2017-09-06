@@ -4068,7 +4068,7 @@ local imgcache = os.getenv("IMGCACHE")
 local cachemethod = os.getenv("CACHEMETHOD")
 
 -- Retrieve image from an URL if its not cached
-function get_image(requested_url,fallback)
+function get_image(requested_url,page,box,fallback)
     assert(type(requested_url) == "string")
     local parsed_url = url.parse(requested_url)
     -- http://placekitten.com/g/200/300?foo=bar gives
@@ -4082,7 +4082,7 @@ function get_image(requested_url,fallback)
     if parsed_url.scheme == nil or parsed_url.scheme == "file" then
         if type(parsed_url.path) == "string" then
             -- let's assume its a file
-            return imageinfo("file:" .. parsed_url.path)
+            return imageinfo("file:" .. parsed_url.path,page,box,fallback)
         end
     end
     -- not a file: request. I guess it should be a HTTP request.
@@ -4093,7 +4093,7 @@ function get_image(requested_url,fallback)
 
     if cachemethod == "fast" and lfs.isfile(path_to_image) then
         log("Read image file from cache: %s",path_to_image)
-        return imageinfo(path_to_image,fallback)
+        return imageinfo(path_to_image,page,box,fallback)
     end
 
 
@@ -4105,7 +4105,7 @@ function get_image(requested_url,fallback)
         comm.sendmessage('che',requested_url)
         local msg = comm.get_string_messages()
         if msg[1] == "OK" then
-            return imageinfo(path_to_image,fallback)
+            return imageinfo(path_to_image,page,box,fallback)
         else
             err("Could not fetch image %q",requested_url)
             return imageinfo(nil,nil,nil,fallback)
@@ -4151,7 +4151,7 @@ function get_image(requested_url,fallback)
         file:flush()
         file:close()
 
-        return imageinfo(path_to_image,fallback)
+        return imageinfo(path_to_image,page,box,fallback)
     end
 
 

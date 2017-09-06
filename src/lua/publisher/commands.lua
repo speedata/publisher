@@ -1111,7 +1111,7 @@ function commands.image( layoutxml,dataxml )
 
     local imageinfo
     if url ~= nil then
-        imageinfo = publisher.get_image(url, fallback)
+        imageinfo = publisher.get_image(url, page,box_lookup[vis_box] or "crop", fallback)
     else
         imageinfo = publisher.new_image(filename,page,box_lookup[vis_box] or "crop", fallback)
     end
