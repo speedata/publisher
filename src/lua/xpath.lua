@@ -78,6 +78,19 @@ function M.is_number(str,pos)
     return false
 end
 
+function M.is_dimension(str,pos)
+    if not is_dim then return false end
+    local start,stop,num
+    start, stop, num = string.find(str,"^([%-+]?%d+%.?%d*%a+)%s*",pos)
+    if num then
+        M.nextpos = stop + 1
+        M.tok = num
+        return true
+    end
+    return false
+end
+
+
 function M.is_attribute(dataxml,str,pos)
     local start,stop,attr
     start,stop,attr = string.find(str,"^@([%w_-]+)%s*",pos)
@@ -308,7 +321,9 @@ end
 
 function M.get_operand(dataxml,str,pos,ns)
     local start, stop
-    if M.is_number(str,pos) then
+    if M.is_dimension(str,pos) then
+         return M.tok
+    elseif M.is_number(str,pos) then
          return tonumber(M.tok)
     elseif M.is_ifthenelse(dataxml,str,pos,ns) then
         return M.tok
