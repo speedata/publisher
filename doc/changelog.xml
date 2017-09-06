@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.4" date="2017-09-06">
+      <en>Bugfix: Image/page does not work with href</en>
+      <de>Fehlerkorrektur: Image/page geht nicht mit href zusammen</de>
+    </entry>
     <entry version="3.1.3" date="2017-08-22">
       <en>New xpath function <tt>sd:dimexpr()</tt> for calculation with dimensions</en>
       <de>Neue XPath-Funktion <tt>sd:dimexpr()</tt> für Berechnungen mit Längenangaben</de>
