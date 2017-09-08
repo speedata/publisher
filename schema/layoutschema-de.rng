@@ -1104,6 +1104,17 @@
                </choice>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="tab">
+               <a:documentation>Was ist beim Tabulator (&amp; #09;) zu tun?</a:documentation>
+               <choice>
+                  <value>space</value>
+                  <a:documentation>Tabulator als Leerzeichen interpretieren</a:documentation>
+                  <value>hspace</value>
+                  <a:documentation>Interpretiere Tabulator als dehnbaren Leerraum</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

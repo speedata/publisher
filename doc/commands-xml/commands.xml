@@ -2186,6 +2186,30 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="tab" optional="yes" since="3.1.5">
+      <description xml:lang="en">
+        <para>What to do on the tab (&amp; #09;) character.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Was ist beim Tabulator (&amp; #09;) zu tun?</para>
+      </description>
+      <choice en="space">
+        <description xml:lang="en">
+          <para>Use tab as space</para>
+        </description>
+        <description xml:lang="de">
+          <para>Tabulator als Leerzeichen interpretieren</para>
+        </description>
+      </choice>
+      <choice en="hspace">
+        <description xml:lang="en">
+          <para>Use tab as a stretching space</para>
+        </description>
+        <description xml:lang="de">
+          <para>Interpretiere Tabulator als dehnbaren Leerraum</para>
+        </description>
+      </choice>
+    </attribute>
     <remark xml:lang="en">
       <para>The textformats <tt>text</tt>, <tt>centered</tt>, <tt>left</tt> and <tt>right</tt> are predefined. They stand for justified, centered, left aligned and right aligned text.</para>
     </remark>

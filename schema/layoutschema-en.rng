@@ -1104,6 +1104,17 @@
                </choice>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="tab">
+               <a:documentation>What to do on the tab (&amp; #09;) character.</a:documentation>
+               <choice>
+                  <value>space</value>
+                  <a:documentation>Use tab as space</a:documentation>
+                  <value>hspace</value>
+                  <a:documentation>Use tab as a stretching space</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

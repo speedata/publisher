@@ -580,6 +580,7 @@ function commands.define_textformat(layoutxml)
     local widow         = publisher.read_attribute(layoutxml,dataxml,"widow",         "boolean", false)
     local hyphenate     = publisher.read_attribute(layoutxml,dataxml,"hyphenate",     "boolean", true)
     local hyphenchar    = publisher.read_attribute(layoutxml,dataxml,"hyphenchar",    "rawstring")
+    local tab           = publisher.read_attribute(layoutxml,dataxml,"tab",           "rawstring")
 
     local fmt = {}
 
@@ -621,6 +622,7 @@ function commands.define_textformat(layoutxml)
     end
 
     fmt.breakbelow = breakbelow
+    fmt.tab = tab
 
 
     publisher.textformats[name] = fmt

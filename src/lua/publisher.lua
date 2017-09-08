@@ -2628,6 +2628,13 @@ function mknodes(str,fontfamily,parameter)
             n = node.new(glue_node)
             n.spec = node.new(glue_spec_node)
             head, last = node.insert_after(head,last,n)
+        elseif s == 9 and parameter.tab == 'hspace' then
+            local n=node.new("glue",subtype)
+            n.spec=node.new("glue_spec")
+            n.spec.width = 0
+            n.spec.stretch = 65536
+            n.spec.stretch_order = 3
+            head, last = node.insert_after(head,last,n)
         elseif s == 8203 then
             -- U+200B ZERO WIDTH SPACE inserted in parse_html
             head = addstrut(head)
