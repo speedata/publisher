@@ -369,7 +369,13 @@ local function decode_base64(dataxml,arg)
 end
 
 local function count_saved_pages(dataxml,arg)
-    return #publisher.pagestore[arg[1]]
+    local tmp = publisher.pagestore[arg[1]]
+    if not tmp then
+        err("count-saved-pages(): no saved pages found. Return 0")
+        return 0
+    else
+        return #tmp
+    end
 end
 
 local function randomitem(dataxml, arg)
