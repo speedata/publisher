@@ -2039,6 +2039,8 @@ function commands.paragraph( layoutxml,dataxml )
     local colorname     = publisher.read_attribute(layoutxml,dataxml,"color",     "rawstring")
     local language_name = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
 
+    if textformat and not publisher.textformats[textformat] then err("Paragraph: textformat %q unknown",tostring(textformat)) end
+
     publisher.allowbreak = allowbreak
     colorname = colorname or css_rules["color"]
     fontname  = fontname  or css_rules["font-family"]
@@ -2183,7 +2185,7 @@ function commands.place_object( layoutxml,dataxml )
     local class            = publisher.read_attribute(layoutxml,dataxml,"class",      "rawstring")
     local id               = publisher.read_attribute(layoutxml,dataxml,"id",         "rawstring")
 
-    local css_rules = publisher.css:matches({element = "placeojbect", class=class,id=id}) or {}
+    local css_rules = publisher.css:matches({element = "placeobject", class=class,id=id}) or {}
 
 
     if origin_x == "left" then
@@ -3503,6 +3505,8 @@ function commands.textblock( layoutxml,dataxml )
         local v = node.vpack(rule)
         return v
     end
+
+    if textformat and not publisher.textformats[textformat] then err("Textblock: textformat %q unknown",tostring(textformat)) end
 
     publisher.intextblockcontext = publisher.intextblockcontext + 1
 

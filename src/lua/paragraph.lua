@@ -141,7 +141,7 @@ function Paragraph:append( whatever,parameter )
     parameter = parameter or {}
     local tab
     tab = publisher.textformats[self.textformat or 'text']
-    parameter.tab = tab.tab
+    parameter.tab = ( tab and tab.tab ) or {}
 
     if type(whatever)=="string" or type(whatever)=="number" then
         self:add_to_nodelist(publisher.mknodes(whatever,parameter.fontfamily,parameter))
