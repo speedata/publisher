@@ -45,6 +45,7 @@ Wert | Beschreibung
 `pathrewrite` | Kommaseparierte Liste der Form Pfadteil=Pfadteil. Beispiel: `/media/=%(projectdir)s/myfiles/`. Das würde absolute Pfadangaben wie `file:///media/XYZ` in `file:///Pfad/zum/Projekt/myfiles/XYZ` ändern.
 `runs` | Setzt die Anzahl der Durchläufe fest.
 `startpage` | Nummer der ersten Seite.
+`systemfonts` | Wenn Wert = 'true', dann wird in den Systemverzeichnissen nach Schriftdateien gesucht.
 `tempdir`  | Name des temporären Verzeichnisses. Voreinstellung ist die des Systems.
 `timeout` | Maximale Dauer des Publishing-Laufs. Wenn dieser überschritten wird, bricht der Lauf mit Fehler 1 ab.
 `vars` | Kommaseparierte Liste der Form `var=wert` um Variablen in der Konfigurationsdatei festzulegen.

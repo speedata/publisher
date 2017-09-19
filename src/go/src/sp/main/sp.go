@@ -743,6 +743,16 @@ func main() {
 	if addLocalPath {
 		extraDir = append(extraDir, pwd)
 	}
+
+	// if the user sets systemfonts=true in the config file, we should honor this.
+	if optSystemfonts := getOption("systemfonts"); optSystemfonts != "" {
+		if optSystemfonts == "true" {
+			useSystemFonts = true
+		} else if optSystemfonts == "false" {
+			useSystemFonts = false
+		}
+	}
+
 	if useSystemFonts {
 		// FontFolder() is system dependent and defined in extra files
 		ff, err := FontFolder()
