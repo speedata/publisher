@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.6" date="2017-09-27">
+      <en>Various bugfixes</en>
+      <de>Verschiedene Fehlerkorrekturen</de>
+    </entry>
     <entry version="3.1.5" date="2017-09-08">
       <en>New feature: DefineTextformat/tab=hspace change tab into a stretching space</en>
       <de>Neues Feature: DefineTextformat/tab=hspace ändert den Tabulator in einen dehnbaren Leerraum.</de>
