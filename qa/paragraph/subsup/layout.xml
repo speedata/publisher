@@ -1,0 +1,21 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  version="3.1.5">
+  <Options crop="2mm"/>
+  <Record element="data">
+    <PlaceObject>
+      <Table>
+        <Tr>
+          <Td>
+            <Paragraph>
+              <Value select="foo"/>
+              <Value>X</Value>
+              <Fontface fontfamily="text"><Sup><Value>xx</Value></Sup></Fontface>
+              <Value>X</Value>
+            </Paragraph>
+          </Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
