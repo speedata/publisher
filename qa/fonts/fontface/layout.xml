@@ -8,12 +8,12 @@
         <Tr>
           <Td>
             <Paragraph>
-              <Value select="foo"/>
-            </Paragraph>
-            <Paragraph>
               <Value>X</Value>
               <Fontface fontfamily="text"><Sup><Value>x</Value></Sup><Sub><Value>x</Value></Sub></Fontface>
               <Value>X</Value>
+            </Paragraph>
+            <Paragraph>
+              <Fontface fontfamily="text"><Value select="@title"/></Fontface>
             </Paragraph>
           </Td>
         </Tr>
