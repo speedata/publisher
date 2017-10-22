@@ -1317,17 +1317,17 @@ function setup_page(pagenumber)
             local dataxml = element_contents(j).dataxml
             local width  = publisher.read_attribute(layoutxml,dataxml,"width",  "length_sp")
             local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --pg
-            local nx     = publisher.read_attribute(layoutxml,dataxml,"nx",     "rawstring")
-            local ny     = publisher.read_attribute(layoutxml,dataxml,"ny",     "rawstring")
-            local dx     = publisher.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
-            local dy     = publisher.read_attribute(layoutxml,dataxml,"dy",     "length_sp")
+            local _nx     = publisher.read_attribute(layoutxml,dataxml,"nx",     "number")
+            local _ny     = publisher.read_attribute(layoutxml,dataxml,"ny",     "number")
+            local _dx     = publisher.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
+            local _dy     = publisher.read_attribute(layoutxml,dataxml,"dy",     "length_sp")
 
             gridwidth  = width
             gridheight = height
-            nx = nx
-            ny = ny
-            dx = dx
-            dy = dy
+            nx = _nx
+            ny = _ny
+            dx = _dx
+            dy = _dy
         end
     end
 
