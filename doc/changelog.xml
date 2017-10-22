@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.17" date="2017-10-22">
+      <en>Various bugfixes (Grid, Fontface)</en>
+      <de>Verschiedene Fehlerkorrekturen (Raster, Fontface)</de>
+    </entry>
     <entry version="3.1.6" date="2017-09-27">
       <en>Various bugfixes</en>
       <de>Verschiedene Fehlerkorrekturen</de>
