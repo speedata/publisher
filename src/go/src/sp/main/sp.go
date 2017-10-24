@@ -550,8 +550,8 @@ func runPublisher() (exitstatus int) {
 	}
 	layoutoptionsCommandline := strings.Join(layoutoptionsSlice, ",")
 	jobname := getOption("jobname")
-	layoutname := getOption("layout")
-	dataname := getOption("data")
+	layoutname := filepath.Clean(getOption("layout"))
+	dataname := filepath.Clean(getOption("data"))
 	execName := getExecutablePath()
 	if dummyData := getOption("dummy"); dummyData == strTrue {
 		dataname = "-dummy"
