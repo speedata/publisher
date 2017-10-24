@@ -97,33 +97,6 @@ task :sourcedoc => [:sphelper] do
 	end
 end
 
-desc "Update program messages"
-task :messages do
-	lang = "de_DE"
-	Dir.chdir(srcdir) do
-		srcfiles = Dir.glob("lua/**/*.lua")
-		# xgettext creates the pot file
-		sh 'xgettext --from-code="UTF-8" -k"log" -k"err" -k"warning" -s -o po/publisher.pot ' + srcfiles.join(" ")
-		# msgmerge moves new messages to the po file
-		sh "msgmerge -s -U po/#{lang}.po po/publisher.pot"
-		# msgfmt creates the mo file
-		sh "msgfmt -c -v -o po/#{lang}.mo po/#{lang}.po"
-	end
-end
-
-desc "New language for program messages"
-task :newmsglang, :lang do |t,args|
-	unless args[:lang]
-		raise "No language given. Use rake newmsglang[de_DE] to create a new language template."
-	end
-	Dir.chdir(srcdir) do
-		lang = args[:lang]
-		srcfiles = Dir.glob("lua/**/*.lua")
-		sh 'xgettext --from-code="UTF-8" -k"log" -k"err" -k"warning" -s -o po/publisher.pot ' + srcfiles.join(" ")
-		sh "msginit -l #{lang} -o po/#{lang}.po -i po/publisher.pot"
-	end
-end
-
 desc "Update gh-pages"
 task :ghpages => [:sphelper] do
 	sh "#{installdir}/bin/sphelper doc"
