@@ -748,6 +748,16 @@
                <a:documentation>Farbe der Tabellenspalte.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="padding-left">
+               <a:documentation>Setze das linke padding für diese Spalte</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-right">
+               <a:documentation>Setze das rechte padding für diese Spalte</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

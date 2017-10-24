@@ -443,6 +443,8 @@ function commands.column( layoutxml,dataxml )
     ret.backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
     ret.align            = publisher.read_attribute(layoutxml,dataxml,"align","string")
     ret.valign           = publisher.read_attribute(layoutxml,dataxml,"valign","string")
+    ret.padding_left     = publisher.read_attribute(layoutxml,dataxml,"padding-left","length_sp")
+    ret.padding_right    = publisher.read_attribute(layoutxml,dataxml,"padding-right","length_sp")
 
     return ret
 end

@@ -14,11 +14,13 @@ local dynamic_data = {}
 function new( self )
     assert(self)
     local t = {
-        rowheights     = {},
-        colwidths      = {},
-        align          = {},
-        valign         = {},
-        skip           = {},
+        rowheights        = {},
+        colwidths         = {},
+        align             = {},
+        valign            = {},
+        padding_left_col  = {},
+        padding_right_col = {},
+        skip              = {},
         tablefoot_last_contents,
         tablefoot_contents,
         tablewidth_target,
@@ -120,7 +122,7 @@ function attach_objects_row( self, tab )
         elseif td_elementname == "Column" or td_elementname == "Tablerule" then
             -- ignore, they don't have objects
         else
-            w("unknown element name %s",td_elementname)
+           -- w("unknown element name %s",td_elementname)
         end
     end
 end
@@ -209,8 +211,8 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
 
         local td_borderleft  = tex.sp(td_contents["border-left"]  or 0)
         local td_borderright = tex.sp(td_contents["border-right"] or 0)
-        local padding_left   = td_contents.padding_left  or self.padding_left
-        local padding_right  = td_contents.padding_right or self.padding_right
+        local padding_left   = td_contents.padding_left  or self.padding_left_col[current_column]  or self.padding_left
+        local padding_right  = td_contents.padding_right or self.padding_right_col[current_column] or self.padding_right
 
         for _,blockobject in ipairs(td_contents.objects) do
             for i=1,#blockobject do
@@ -276,8 +278,10 @@ function collect_alignments( self )
                 if publisher.elementname(column)=="Column" then
                     local column_contents = publisher.element_contents(column)
                     i = i + 1
-                    self.align[i] =  column_contents.align
-                    self.valign[i] = column_contents.valign
+                    self.align[i]             = column_contents.align
+                    self.valign[i]            = column_contents.valign
+                    self.padding_left_col[i]  = column_contents.padding_left
+                    self.padding_right_col[i] = column_contents.padding_right
                 end
             end
         end
@@ -707,9 +711,8 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
         local td_borderright  = tex.sp(td_contents["border-right"]  or 0)
         local td_bordertop    = tex.sp(td_contents["border-top"]    or 0)
         local td_borderbottom = tex.sp(td_contents["border-bottom"] or 0)
-
-        local padding_left   = td_contents.padding_left   or self.padding_left
-        local padding_right  = td_contents.padding_right  or self.padding_right
+        local padding_left   = td_contents.padding_left   or self.padding_left_col[current_column]  or self.padding_left
+        local padding_right  = td_contents.padding_right  or self.padding_right_col[current_column] or self.padding_right
         local padding_top    = td_contents.padding_top    or self.padding_top
         local padding_bottom = td_contents.padding_bottom or self.padding_bottom
 
@@ -874,8 +877,8 @@ function typeset_row(self, tr_contents, current_row )
         local td_bordertop    = tex.sp(td_contents["border-top"]    or 0)
         local td_borderbottom = tex.sp(td_contents["border-bottom"] or 0)
 
-        local padding_left    = td_contents.padding_left   or self.padding_left
-        local padding_right   = td_contents.padding_right  or self.padding_right
+        local padding_left    = td_contents.padding_left   or self.padding_left_col[current_column]  or self.padding_left
+        local padding_right   = td_contents.padding_right  or self.padding_right_col[current_column] or  self.padding_right
         local padding_top     = td_contents.padding_top    or self.padding_top
         local padding_bottom  = td_contents.padding_bottom or self.padding_bottom
 

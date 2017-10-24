@@ -1475,6 +1475,22 @@
         <para>Farbe der Tabellenspalte.</para>
       </description>
     </attribute>
+    <attribute en="padding-left" optional="yes" since="3.1.8" type="length">
+      <description xml:lang="en">
+        <para>Set the left padding for the column</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze das linke padding für diese Spalte</para>
+      </description>
+    </attribute>
+    <attribute en="padding-right" optional="yes" since="3.1.8" type="length">
+      <description xml:lang="en">
+        <para>Set the right padding for the column</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze das rechte padding für diese Spalte</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <para>See the example at <cmd name="Columns"/>.</para>
     </example>

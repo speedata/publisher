@@ -748,6 +748,16 @@
                <a:documentation>All cells in this column have this background color.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="padding-left">
+               <a:documentation>Set the left padding for the column</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-right">
+               <a:documentation>Set the right padding for the column</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
