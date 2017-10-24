@@ -3887,6 +3887,9 @@
                <optional>
                   <ref name="e_Tr"></ref>
                </optional>
+               <optional>
+                  <ref name="e_Switch"></ref>
+               </optional>
             </interleave>
          </oneOrMore>
       </element>
