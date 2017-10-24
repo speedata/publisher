@@ -977,6 +977,12 @@ M.default_functions["tokenize"] = function(dataxml,arg)
     return msg
 end
 
+M.default_functions["round"] = function( dataxml,arg )
+    local arg1 = arg[1]
+    local arg2 = arg[2] or 0
+    return math.round(arg1,arg2)
+end
+
 M.default_functions["replace"] = function(dataxml,arg)
     if arg[1] == nil or arg[2] == nil or arg[3] == nil then
         warning("replace: one of the arguments is empty")
