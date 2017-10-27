@@ -36,5 +36,6 @@ Weiterführende Themen
  * [Bearbeiten des Layoutregelwerks](description-de/xmlediting.html)
  * [Schnittmarken und Beschnittzugabe](description-de/cutmarks.html)
  * [Server-Modus](description-de/servermode.html)
+ * [Pre-Processing](description-de/luafilter.html)
  * [Qualitätssicherung](description-de/qualityassurance.html)
  * [Beispiele](examples-de/index.html)

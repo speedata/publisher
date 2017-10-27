@@ -14,7 +14,7 @@ Running the speedata publisher on the command line
         --[no-]cutmarks          Display cutmarks in the document
     -x, --extra-dir=DIR          Additional directory for file search
         --extra-xml=NAME         Add this file to the layout file
-        --filter=FILTER          Run XPROC filter before publishing starts
+        --filter=FILTER          Run XProc/Lua filter before publishing starts
         --grid                   Display background grid. Disable with --no-grid
         --ignore-case            Ignore case when accessing files (on a case-insensitive file system)
         --[no-]local             Add local directory to the search path. Default is true
@@ -63,7 +63,7 @@ Parameter | Description
 `--dummy` | Only read the layout rules. A simple data file is assumed which only contains one element: `<data />`. This is for quick testing of layout files.
 `-x`, `--extra-dir` | Puts the given directory into the search path. All assets (images, fonts, XML data and layout rules) must be found in the search path, which will be traversed recursively. This parameter can be given multiple times and preset in the [configuration file](configuration.html).
 `--extra-xml=NAME` | Add this file to the layout instructions. Similar to inclusion of the file with xinclude.
-`--filter=FILTER` | Run the given XPROC file.
+`--filter=FILTER` | Run the given XProc or Lua file.
 `--grid` | Show the grid. Can be turned off with `--no-grid`. Can be configured in the layout XML file: [Layout](../commands-en/options.html).
 `--ignore-case`|  Ignore case when accessing files (on a case-insensitive file system).
 `--layout=NAME` | Name of the layout XML file. Default is `layout.xml`. Can be [configured](configuration.html).

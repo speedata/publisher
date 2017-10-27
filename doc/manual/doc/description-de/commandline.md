@@ -14,7 +14,7 @@ Aufruf des Publishers über Kommandozeile
         --[no-]cutmarks          Display cutmarks in the document
     -x, --extra-dir=DIR          Additional directory for file search
         --extra-xml=NAME         Add this file to the layout file
-        --filter=FILTER          Run XPROC filter before publishing starts
+        --filter=FILTER          Run XProc/Lua filter before publishing starts
         --grid                   Display background grid. Disable with --no-grid
         --ignore-case            Ignore case when accessing files (on a case-insensitive file system)
         --[no-]local             Add local directory to the search path. Default is true.
@@ -63,7 +63,7 @@ Parameter | Beschreibung
 `--dummy`| Führt nur das Regelwerk aus. Als Dateninhalt wird `<data />` angenommen. Dient zum schnellen Testen von Regelwerken
 `-x`, `--extra-dir`| Bindet zusätzliche Verzeichnisse in den Publisherlauf ein. In diesen  Verzeichnissen werden alle Daten gesucht: Bilddaten, Regelwerke,  Datendateien und Schriftdateien. Dieses Argument kann mehrfach  angegeben werden und per [Konfigurationsdatei](configuration.html)  mit Werten vorbelegt werden.
 `--extra-xml=NAME` | Diese Datei den Layoutanweisungen hinzufügen. Ähnlich wie das Einbinden einer Datei über xinclude.
-`--filter=FILTER`| Führt die angegebene XPROC-Datei aus.
+`--filter=FILTER`| Führt die angegebene XProc-Datei bzw. Lua-Datei aus.
 `--grid`| Zeichnet das Raster. Mit `--no-grid` wird es ausgeschaltet. Konfigurierbar auch im [Layout](../commands-de/options.html).
 `--ignore-case`|  Ignoriere die Groß- und Kleinschreibung für Dateizugriff.
 `--layout=NAME`| Gibt den Namen des Layoutregelwerks an. Voreinstellung ist `layout.xml`. Ebenfalls [konfigurierbar](configuration.html).

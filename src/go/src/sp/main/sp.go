@@ -639,8 +639,9 @@ This software is built upon and contains third party libraries including:
 LuaTeX (http://www.luatex.org/)
 goconfig (https://github.com/Unknwon/goconfig)
 TeX Gyre Heros fonts (http://www.gust.org.pl/projects/e-foundry/tex-gyre/heros)
-Parts of the Go library (https://code.google.com/p/go/)
+Parts of the Go library (https://golang.org/)
 Blackfriday (https://github.com/russross/blackfriday)
+Shopify Lua (github.com/Shopify/go-lua)
 
 Contact:
    gundlach@speedata.de
