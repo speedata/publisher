@@ -510,6 +510,14 @@ func removeLogfile() {
 	os.Remove(getOption("jobname") + ".log")
 }
 
+func fileExists(filename string) bool {
+	fi, err := os.Stat(filename)
+	if err != nil {
+		return false
+	}
+	return !fi.IsDir()
+}
+
 func writeFinishedfile(path string) {
 	ioutil.WriteFile(path, []byte("finished\n"), 0600)
 }
@@ -654,7 +662,7 @@ func main() {
 	op.On("--dummy", "Don't read a data file, use '<data />' as input", options)
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
 	op.On("--extra-xml NAME", "Add this file to the layout file", extraXML)
-	op.On("--filter FILTER", "Run XPROC filter before publishing starts", options)
+	op.On("--filter FILTER", "Run XProc or Lua filter before publishing starts", options)
 	op.On("--grid", "Display background grid. Disable with --no-grid", options)
 	op.On("--ignore-case", "Ignore case when accessing files (on a case-insensitive file system)", options)
 	op.On("--no-local", "Add local directory to the search path. Default is true", &addLocalPath)
@@ -709,7 +717,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	// When the user requests another working directory, we should
 	// change into the given wd first, before reading the local
 	// options
@@ -839,14 +846,37 @@ func main() {
 		jobname := getOption("jobname")
 		finishedfilename := fmt.Sprintf("%s.finished", jobname)
 		os.Remove(finishedfilename)
+
 		if filter := getOption("filter"); filter != "" {
-			if filepath.Ext(filter) != ".xpl" {
-				filter = filter + ".xpl"
+			filterext := filepath.Ext(filter)
+			switch filterext {
+			case ".lua":
+				if !fileExists(filter) {
+					fmt.Printf("Lua file %q not found\n", filter)
+					exitstatus = 1
+				} else {
+					runLuaScript(filter)
+				}
+			case ".xpl":
+				if !fileExists(filter) {
+					fmt.Printf("XProc file %q not found\n", filter)
+					exitstatus = 1
+				} else {
+					runXProcPipeline(filter)
+				}
+			default:
+				if fileExists(filter + ".lua") {
+					runLuaScript(filter + ".lua")
+				} else if fileExists(filter + ".xpl") {
+					runXProcPipeline(filter + ".xpl")
+				} else {
+					fmt.Printf("Cannot find filter %q\n", filter)
+					exitstatus = 1
+				}
 			}
-			log.Println("Run filter: ", filter)
-			os.Setenv("CLASSPATH", libdir+"/calabash.jar:"+libdir+"/saxon9he.jar")
-			cmdline := "java com.xmlcalabash.drivers.Main " + filter
-			run(cmdline)
+		}
+		if exitstatus == 1 {
+			os.Exit(exitstatus)
 		}
 		exitstatus = runPublisher()
 		// profiler requested?
