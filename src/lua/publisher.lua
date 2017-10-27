@@ -3455,7 +3455,11 @@ function xml_to_string( xml_element, level )
     end
     str = str .. ">\n"
     for i,v in ipairs(xml_element) do
-        str = str .. xml_to_string(v,level + 1)
+        if type(v) == "string" and v == "" then
+            -- ok, nothing do do
+        else
+            str = str .. xml_to_string(v,level + 1)
+        end
     end
     str = str .. string.rep(" ",level) .. "</" .. xml_element[".__local_name"] .. ">\n"
     return str
