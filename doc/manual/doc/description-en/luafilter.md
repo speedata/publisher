@@ -15,7 +15,20 @@ or
 The Lua script is run before any rendering gets done, so the main application is probably the transformation of input data into a format that is suitable for the speedata Publisher.
 
 You can use anything that is allowed in Lua.
-Additionally the publisher provides the module `runtime` which contains the following entries:
+Additionally the publisher provides the modules `csv, `runtime` and `xml` which contain the following entries:
+
+**Note**: the API is subject to change!
+
+csv
+---
+
+`csv.decode(filename)`: loads a CSV (comma separated values) file and returns (first argument) the boolean success. If true, the second return value contains the table, if false, the second return value contains an error message (string).
+
+The table has at index 1..n the rows of the CSV file and each rows is a table in which the index 1..m is each table cell.
+
+
+runtime
+-------
 
 Value | Description
 ------|-------------
@@ -31,3 +44,35 @@ Value | Description
         os.exit(-1)
     end
 
+
+
+xml
+---
+
+`xml.encode_table(table)`: Create an XML file from a table. It returns (first argument) the boolean “success”. If false, the second return value contains an error message (string).
+
+The table has the following structure
+
+A comment has the form
+
+    comment = {
+             _type = "comment",
+             _value = "This is a comment!"
+       }
+
+and an element:
+
+    element = {
+        ["_type"] = "element",
+        ["_name"] = "root",
+        attribute1 = "value1",
+        attribute2 = "value2",
+        child1,
+        child2,
+        child3,
+        ...
+    }
+
+`child1`, ... are strings, elements or comments.
+
+The XML file gets written with the name `data.xml`

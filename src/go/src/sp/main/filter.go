@@ -5,15 +5,11 @@ import (
 	"os"
 	"path/filepath"
 
+	"sp/main/luacsv"
+	"sp/main/luaxml"
+
 	"github.com/Shopify/go-lua"
 )
-
-// Return success
-func runXProcPipeline(filename string) bool {
-	os.Setenv("CLASSPATH", libdir+"/calabash.jar:"+libdir+"/saxon9he.jar")
-	cmdline := "java com.xmlcalabash.drivers.Main " + filename
-	return run(cmdline)
-}
 
 func saxon(l *lua.State) int {
 	if l.Top() < 3 {
@@ -71,15 +67,18 @@ func runLuaScript(filename string) bool {
 	l := lua.NewState()
 	lua.OpenLibraries(l)
 
-	require := func(l *lua.State) int {
+	requireRuntime := func(l *lua.State) int {
 		lua.NewLibrary(l, runtimeLib)
 		return 1
 	}
-	lua.Require(l, "runtime", require, true)
+	lua.Require(l, "runtime", requireRuntime, true)
 	wd, _ := os.Getwd()
 	l.PushString(wd)
 	l.SetField(-2, "projectdir")
 	l.Pop(1)
+
+	luaxml.Open(l)
+	luacsv.Open(l)
 
 	if err := lua.DoFile(l, filename); err != nil {
 		fmt.Println(err)
