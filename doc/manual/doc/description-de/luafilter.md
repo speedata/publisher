@@ -23,18 +23,29 @@ Zusätzlich stellt der Publisher mehrere Module (`csv`, `runtime` und `xml`) zur
 csv
 ---
 
-`csv.decode(dateiname)`: lädt eine CSV-Datei und erzeugt eine Tabelle mit den
+`csv.decode(dateiname, parameter)`: lädt eine CSV-Datei und erzeugt eine Tabelle mit den
 Werten. Die Zeilen sind in den Werten 1-n in der Tabelle gespeichert und
 enthalten selber wiederum die Werte in den Indices 1-n. Rückgabewert 1 ist ein
 bool (success), Wert 2 ist die Tabelle, wenn der erste Werte `true` ist bzw.
-eine Fehlermeldung, wenn der erste Wert `false` ist.
+eine Fehlermeldung, wenn der erste Wert `false` ist. Der Wert Parameter ist eine optionale Tabelle und steuert die CSV-Eingabe. Es können folgende Werte gesteuert werden:
+
+Wert | Beschreibung
+-----|---------------
+charset | Wenn die CSV-Datei Latin-1 kodiert ist, muss dieser Wert auf `ISO-8859-1` stehen. Andere Kodierungen auf Anfrage.
+separator | Entweder ein Komma (Voreinstellung), ein Semikolon oder das entsprechend genutzte Trennzeichen.
+columns | Eine Tabelle, die die gewünschten Spalten in ihrer Reihenfolge enthalten. Z.B. `{3,2,1}` für die ersten drei Spalten in umgekehrter Reihenfolge.
+
+
+Beispiel:
+
+    csv.decode("myfile.csv", { charset = "ISO-8859-1", separator = ";", columns = {1,2,5} })
 
 
 
 runtime
 --------
 
-Wert | Description
+Wert | Beschreibung
 ------|-------------
 `projectdir` | Ein string-Wert, der das aktuelle Projektverzeichnis enthält (das Verzeichnis mit der `layout.xml` bzw. `publisher.cfg`-Datei)
 `run_saxon`  | Eine Funktion, die `saxon` aufruft. Sie erwartet drei string-Argumente (das Stylesheet, die Eingabe- und die Ausgabedatei) und ein optionales Argument das als Parameter an saxon übergeben wird. Die Rückgabe ist ein boolean, der true ist, wenn der Befehl fehlerfrei ausgeführt wurde. Ansonsten wird ein zweiter Rückgabewert (string) zurück gegeben, der die Fehlermeldung enthält.

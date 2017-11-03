@@ -22,9 +22,22 @@ Additionally the publisher provides the modules `csv, `runtime` and `xml` which 
 csv
 ---
 
-`csv.decode(filename)`: loads a CSV (comma separated values) file and returns (first argument) the boolean success. If true, the second return value contains the table, if false, the second return value contains an error message (string).
+`csv.decode(filename,parameter)`: loads a CSV (comma separated values) file and returns (first argument) the boolean success. If true, the second return value contains the table, if false, the second return value contains an error message (string). The value parameter is an optional table which controls the CSV input and output. You can provide the following values:
+
+Value | Description
+-----|---------------
+charset | If the CSV file is encoded in Latin-1, you have to set this to the value `ISO-8859-1`. Ask us for more character sets.
+separator | The value of the field separator. Defaults to a comma, but can be any character.
+columns | A table that has the required columns in the given order. For example `{3,2,1}` limits the output to the first three columns in reverse order.
+
+Example:
+
+    csv.decode("myfile.csv", { charset = "ISO-8859-1", separator = ";", columns = {1,2,5} })
+
 
 The table has at index 1..n the rows of the CSV file and each rows is a table in which the index 1..m is each table cell.
+
+
 
 
 runtime
