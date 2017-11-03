@@ -1,8 +1,12 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.10" date="2017-11-03">
+      <en>Enhance Lua CSV reader</en>
+      <de>Verbessere den Lua-CSV-Reader</de>
+    </entry>
     <entry version="3.1.9" date="2017-10-31">
       <en>New Lua based pre-processing</en>
-      <de>Neue Lua-basiertes Pre-processing</de>
+      <de>Neues Lua-basiertes Pre-processing</de>
     </entry>
     <entry version="3.1.8" date="2017-10-24">
       <en>New xpath function round, padding-* in Column</en>
