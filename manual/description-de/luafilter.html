@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vorverarbeitung mit dem Lua-Filter</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="alternate" type="application/atom+xml"  title="Liste der Änderungen speedata Publisher (de)"  href="../changes-de.xml" />
+    <link rel="stylesheet" href="../assets/css/normal.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/css/colorbox.css" type="text/css" />
+    <script src="../assets/js/jquery.min.js" ></script>
+    <script src="../assets/js/jquery.colorbox-min.js" ></script>
+    <script>
+      $(document).ready(function(){
+         $(".figure").colorbox({ rel: 'group1', opacity:0.5 });
+      });
+    </script>
+</head>
+<body>
+<div id="logo"><a href="../index-de.html"><img src="../assets/images/publisher_logo.png" alt="Start page"></a></div>
+<div class="">
+<p>Die Möglichkeit, ein Lua-Skript vor dem Publishing-Lauf zu starten, gibt es seit Version 3.1.9.</p>
+
+<p>Die Kommandozeile und die Konfiguration ist dieselbe wie für den XProc-Filter:</p>
+
+<pre><code>sp --filter myfile.lua
+</code></pre>
+
+<p>oder</p>
+
+<pre><code>filter=myfile.lua
+</code></pre>
+
+<p>Das Lua-Skript wird ausgeführt, bevor die Erzeugung der PDF-Datei beginnt.
+Daher ist die Hauptanwendung dieses Pre-Processing wohl die Transformation von Daten in ein Format, das für den speedata Publisher geeignet ist.</p>
+
+<p>In dem Skript ist die volle Unterstützung für Lua gegeben.
+Zusätzlich stellt der Publisher mehrere Module (<code>csv</code>, <code>runtime</code> und <code>xml</code>) zur Verfügung, die folgende Einträge beinhalten:</p>
+
+<p><strong>Hinweis</strong> Die API wird sich noch verändern!</p>
+
+<h2>csv</h2>
+
+<p><code>csv.decode(dateiname, parameter)</code>: lädt eine CSV-Datei und erzeugt eine Tabelle mit den
+Werten. Die Zeilen sind in den Werten 1-n in der Tabelle gespeichert und
+enthalten selber wiederum die Werte in den Indices 1-n. Rückgabewert 1 ist ein
+bool (success), Wert 2 ist die Tabelle, wenn der erste Werte <code>true</code> ist bzw.
+eine Fehlermeldung, wenn der erste Wert <code>false</code> ist. Der Wert Parameter ist eine optionale Tabelle und steuert die CSV-Eingabe. Es können folgende Werte gesteuert werden:</p>
+
+<table>
+<thead>
+<tr>
+<th>Wert</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>charset</td>
+<td>Wenn die CSV-Datei Latin-1 kodiert ist, muss dieser Wert auf <code>ISO-8859-1</code> stehen. Andere Kodierungen auf Anfrage.</td>
+</tr>
+
+<tr>
+<td>separator</td>
+<td>Entweder ein Komma (Voreinstellung), ein Semikolon oder das entsprechend genutzte Trennzeichen.</td>
+</tr>
+
+<tr>
+<td>columns</td>
+<td>Eine Tabelle, die die gewünschten Spalten in ihrer Reihenfolge enthalten. Z.B. <code>{3,2,1}</code> für die ersten drei Spalten in umgekehrter Reihenfolge.</td>
+</tr>
+</tbody>
+</table>
+
+<p>Beispiel:</p>
+
+<pre><code>csv.decode(&quot;myfile.csv&quot;, { charset = &quot;ISO-8859-1&quot;, separator = &quot;;&quot;, columns = {1,2,5} })
+</code></pre>
+
+<h2>runtime</h2>
+
+<table>
+<thead>
+<tr>
+<th>Wert</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>projectdir</code></td>
+<td>Ein string-Wert, der das aktuelle Projektverzeichnis enthält (das Verzeichnis mit der <code>layout.xml</code> bzw. <code>publisher.cfg</code>-Datei)</td>
+</tr>
+
+<tr>
+<td><code>run_saxon</code></td>
+<td>Eine Funktion, die <code>saxon</code> aufruft. Sie erwartet drei string-Argumente (das Stylesheet, die Eingabe- und die Ausgabedatei) und ein optionales Argument das als Parameter an saxon übergeben wird. Die Rückgabe ist ein boolean, der true ist, wenn der Befehl fehlerfrei ausgeführt wurde. Ansonsten wird ein zweiter Rückgabewert (string) zurück gegeben, der die Fehlermeldung enthält.</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code>ok, err = runtime.run_saxon(&quot;transformation.xsl&quot;,&quot;source.xml&quot;,&quot;data.xml&quot;,&quot;param1=Wert1 param2=Wert2&quot;)
+
+-- stop the publishing process if an error occurs
+if not ok then
+    print(err)
+    os.exit(-1)
+end
+</code></pre>
+
+<h2>xml</h2>
+
+<p><code>xml.encode_table(dateiname)</code>: Erzeugt eine XML-Datei aus einer Tabelle. Rückgabewert 1 ist ein
+bool (success), Wert 2 ist die Fehlermeldung, wenn der erste Wert <code>false</code> ist.
+Die Tabelle hat folgende Stuktur:</p>
+
+<p>Ein Kommentar hat die Form:</p>
+
+<pre><code>comment = {
+         _type = &quot;comment&quot;,
+         _value = &quot; Das ist ein Kommentar! &quot;
+   }
+</code></pre>
+
+<p>und ein Element:</p>
+
+<pre><code>element = {
+    [&quot;_type&quot;] = &quot;element&quot;,
+    [&quot;_name&quot;] = &quot;root&quot;,
+    attribute1 = &quot;value1&quot;,
+    attribute2 = &quot;value2&quot;,
+    child1,
+    child2,
+    child3,
+    ...
+}
+</code></pre>
+
+<p><code>child1</code>, ... sind entweder Zeichenketten, Elemente oder Kommentare.</p>
+
+<p>Die XML-Datei wird unter dem Namen <code>data.xml</code> gespeichert.</p>
+
+</div>
+
+
+<div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
+Version: 3.1.10 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/luafilter.html">Englisch</a>
+
+</body>
+</html>

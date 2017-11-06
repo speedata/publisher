@@ -31,7 +31,7 @@ Usage: [parameter] command
     --[no-]cutmarks          Display cutmarks in the document
 -x, --extra-dir=DIR          Additional directory for file search
     --extra-xml=NAME         Add this file to the layout file
-    --filter=FILTER          Run XPROC filter before publishing starts
+    --filter=FILTER          Run XProc/Lua filter before publishing starts
     --grid                   Display background grid. Disable with --no-grid
     --ignore-case            Ignore case when accessing files (on a case-insensitive file system)
     --[no-]local             Add local directory to the search path. Default is true
@@ -116,7 +116,7 @@ Commands
 
 <tr>
 <td><code>--filter=FILTER</code></td>
-<td>Run the given XPROC file.</td>
+<td>Run the given XProc or Lua file.</td>
 </tr>
 
 <tr>
@@ -306,7 +306,7 @@ events = layout\.xml:run(runpublisher);data\.xml:run(runpublisher)
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 3.0.0 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/commandline.html">German</a>
+Version: 3.1.10 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/commandline.html">German</a>
 
 </body>
 </html>

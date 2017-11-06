@@ -1,1348 +1,1425 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (de)</title>
-  <id>http://www.speedata.de</id>
-  <updated>2017-07-26T09:40:09+02:00</updated>
+  <id>https://www.speedata.de</id>
+  <updated>2017-11-06T11:01:02+01:00</updated>
   <subtitle>Neue Versionen des Publishers zum Download und Liste der Änderungen</subtitle>
-  <link href="http://www.speedata.de"></link>
+  <link href="https://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
   <entry>
+    <title>Version 3.1.10</title>
+    <updated>2017-11-03T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-11-03:</id>
+    <content type="html">Verbessere den Lua-CSV-Reader</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.9</title>
+    <updated>2017-10-31T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-10-31:</id>
+    <content type="html">Neues Lua-basiertes Pre-processing</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.8</title>
+    <updated>2017-10-24T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-10-24:</id>
+    <content type="html">Neue XPath-Funktion round(), padding-* in Column</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.7</title>
+    <updated>2017-10-22T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-10-22:</id>
+    <content type="html">Verschiedene Fehlerkorrekturen (Raster, Fontface)</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.6</title>
+    <updated>2017-09-27T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-09-27:</id>
+    <content type="html">Verschiedene Fehlerkorrekturen</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.5</title>
+    <updated>2017-09-08T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-09-08:</id>
+    <content type="html">Neues Feature: DefineTextformat/tab=hspace ändert den Tabulator in einen dehnbaren Leerraum.</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.4</title>
+    <updated>2017-09-06T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-09-06:</id>
+    <content type="html">Fehlerkorrektur: Image/page geht nicht mit href zusammen</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.3</title>
+    <updated>2017-08-22T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-08-22:</id>
+    <content type="html">Neue XPath-Funktion &lt;tt&gt;sd:dimexpr()&lt;/tt&gt; für Berechnungen mit Längenangaben</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.2</title>
+    <updated>2017-07-31T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-07-31:</id>
+    <content type="html">Fehlerkorrektur für Unterstreichen.</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.1</title>
+    <updated>2017-07-28T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-07-28:</id>
+    <content type="html">ZUGFeRD Integration, neue Befehle AttachFile und AddSearchpath</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.0.0</title>
+    <updated>2017-07-25T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-07-25:</id>
+    <content type="html">Veröffentliche Version 3.0</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
     <title>Version 2.9.15</title>
     <updated>2017-07-12T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-07-12:</id>
     <content type="html">PageType erzwingen bei NewPage, entferne NL/Tab beim Anfang und Ende eines Absatzes.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.14</title>
     <updated>2017-06-27T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-06-27:</id>
     <content type="html">CSS verarbeitet font-family für eigene Elemente.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.13</title>
     <updated>2017-06-27T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-06-27:</id>
     <content type="html">Fehlerkorrektur: nummerischen Entitäten in Daten. Neu: base64 dekodieren, filecontents.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.12</title>
     <updated>2017-06-16T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-06-16:</id>
     <content type="html">Fehlerkorrektur PlaceObject/hreference=right und absoluter Platzierung.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.11</title>
     <updated>2017-05-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-05-18:</id>
     <content type="html">Späte Auswertung von defaultcolor bei Pagetype, kleinere Fehlerkorrekturen.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.10</title>
     <updated>2017-05-10T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-05-10:</id>
     <content type="html">Neuer Befehl: Groupcontents. Damit wird eine Gruppe in eine Tabellenzelle eingefügt. Fehlerkorrektur beim XPath-Parser und bei sd:current-framenumber(). </content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.9</title>
     <updated>2017-05-08T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-05-08:</id>
     <content type="html">Lazy Evaluation des Rasters in Pagetype (#130), Fehlerkorrektur geschachtelte Tabellen (#129), verbesserte Initialen (Farbe), Fehlerkorrektur Cursor (#128)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.8</title>
     <updated>2017-04-24T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-04-24:</id>
     <content type="html">Fehlerkorrektur XML Attribute mit Anführungszeichen</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.7</title>
     <updated>2017-04-16T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-04-16:</id>
     <content type="html">Neuer Befehl Initial.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.6</title>
     <updated>2017-03-21T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-03-21:</id>
     <content type="html">Verbesserungen bei Image/bleed=&#34;auto&#34;, extra Belegungsrahmen bei PlaceObject</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.5</title>
     <updated>2017-03-09T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-03-09:</id>
     <content type="html">Absolute Positionierung erlaubt allocate=&#34;yes&#34;.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.5</title>
     <updated>2017-03-09T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-03-09:</id>
     <content type="html">Neue interne Variablen _bleed, _pagewidth und _pageheight.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.5</title>
     <updated>2017-03-09T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-03-09:</id>
     <content type="html">Neues Attribut bleed=&#34;...&#34; bei Image.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.4</title>
     <updated>2017-02-24T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-02-24:</id>
     <content type="html">Box mit backgroundcolor=&#34;-&#34; belegt nur die Zellen.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.3</title>
     <updated>2017-02-20T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-02-20:</id>
     <content type="html">Fehlerkorrektur resetmarks, neues Attribut defaultcolor bei Pagetype, ungenutzte Befehle gelöscht.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.2</title>
     <updated>2017-02-10T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-02-10:</id>
     <content type="html">Fehlerkorrektur für processing instructions im XML (werden ignoriert)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.2</title>
     <updated>2017-02-10T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-02-10:</id>
     <content type="html">Neues Feature: &amp;lt;span&gt; und andere Elemente in den Daten können mit CSS angesprochen werden.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.9.1</title>
     <updated>2017-02-08T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-02-08:</id>
     <content type="html">Fehlerkorrektur: top-distance in Tr</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.8.1</title>
     <updated>2017-02-06T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-02-06:</id>
     <content type="html">Korrigiere Hotfolder (variables Verzeichnis)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.13</title>
     <updated>2017-02-03T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-02-03:</id>
     <content type="html">Benutze Einstellung tempdir um imagecache zu ermitteln.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.12</title>
     <updated>2017-01-26T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-01-26:</id>
     <content type="html">Neuer Befehl: DefineFontalias</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.12</title>
     <updated>2017-01-26T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-01-26:</id>
     <content type="html">Fehlerkorrekturen für mehrseitige Tabellen</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.11</title>
     <updated>2017-01-16T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-01-16:</id>
     <content type="html">Makeindex: Seitenzahl-Attribut variabel machen</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.11</title>
     <updated>2017-01-16T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-01-16:</id>
     <content type="html">Fehlerkorrektur: Objekte mit Höhe &gt; 0 und »springe zur nächsten Zeile«</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.11</title>
     <updated>2017-01-16T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-01-16:</id>
     <content type="html">Lösche Bilder vom Cache wenn 404-Fehler kommt.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.10</title>
     <updated>2017-01-06T00:00:00Z</updated>
     <id>tag:www.speedata.de,2017-01-06:</id>
     <content type="html">Möglichkeit, den Level der Fehlerkorrektur zu setzen für QR-Codes.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.9</title>
     <updated>2016-11-28T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-11-28:</id>
     <content type="html">allowbreak=&#34; &#34; umbricht nicht mehr bei einem Trennstrich.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.9</title>
     <updated>2016-11-26T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-11-26:</id>
     <content type="html">NoBreak Voreinstellung ist nun &#39;keeptogether&#39;. Dies verhindert einen Zeilenumbruch.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.8</title>
     <updated>2016-11-25T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-11-25:</id>
     <content type="html">Wandle U+2011 (NON-BREAKING HYPHEN) in U+002D (HYPHEN-MINUS) um und füge keinen Umbruch ein.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.7</title>
     <updated>2016-10-21T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-10-21:</id>
     <content type="html">Vor dem ersten Lauf den Cache nicht löschen.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.6</title>
     <updated>2016-10-14T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-10-14:</id>
     <content type="html">Verbesseter Bild-Cache. Bilder in einem Lauf nicht erneut herunter laden.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.5</title>
     <updated>2016-10-12T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-10-12:</id>
     <content type="html">Neue Methode für Bild-Caching. Umbenennung von Image/maxsize nach visiblebox.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.4</title>
     <updated>2016-10-03T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-10-03:</id>
     <content type="html">Neuer Befehl Trace für verschiedene Debugging-Varianten, entferne show-* bei Optionen.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.4</title>
     <updated>2016-10-03T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-10-03:</id>
     <content type="html">Verhaltensänderung bei NextRow, EmptyLine wird nicht mehr unterstützt, Rückwärtskompatibilität mit dem Befehl Compatibility.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.4</title>
     <updated>2016-10-03T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-10-03:</id>
     <content type="html">Neue Option: defaultarea.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.3</title>
     <updated>2016-09-14T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-09-14:</id>
     <content type="html">Neue API /v0/statusfile/&amp;lt;id&gt; um die Datei publisher.status zu erhalten.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.2</title>
     <updated>2016-09-14T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-09-14:</id>
     <content type="html">Wenn PlaceObject über den rechten Rand hinaus geht (z.B. bei Text in voller Breite), gehe zur nächsten Zeile.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.1</title>
     <updated>2016-09-08T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-09-08:</id>
     <content type="html">Fehlerkorrektur wenn fallback-Bild nicht gefunden wurde.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.1</title>
     <updated>2016-09-08T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-09-08:</id>
     <content type="html">Leere Attribute im Befehl Attribute erzeugen keine Tabelle</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.7.0</title>
     <updated>2016-08-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-08-18:</id>
     <content type="html">Schalte deutsche Layoutregeln ab, Fehlerkorrektur (104) Distribution ZIP-Datei</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.6.1</title>
     <updated>2016-08-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-08-18:</id>
     <content type="html">Fehlerkorrektur für Mac und Linux ZIP-Dateien</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.13</title>
     <updated>2016-08-10T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-08-10:</id>
-    <content type="html">Fehlerkorrektur für lange Tabelen (&gt; 200 Seiten?)</content>
-    <link href="http://www.speedata.de"></link>
+    <content type="html">Fehlerkorrektur für lange Tabellen (&gt; 200 Seiten?)</content>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.12</title>
     <updated>2016-08-08T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-08-08:</id>
     <content type="html">Fehlerkorrekturen für Absatzformen, verschiebe LuaTeX-Binary in ein anderes Verzeichnis</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.11</title>
     <updated>2016-08-02T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-08-02:</id>
     <content type="html">Füge padding-* zu Stylesheet hinzu, erlaube CSS für Image (derzeit nur padding), erlaube padding-* für Image</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.10</title>
     <updated>2016-08-02T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-08-02:</id>
     <content type="html">Viele Verbesserungen für Text/Output und allocate=&#34;yes&#34;</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.10</title>
     <updated>2016-08-02T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-08-02:</id>
     <content type="html">Ale Deutschen Befehle aus dem Handbuch gelöscht</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.10</title>
     <updated>2016-08-02T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-08-02:</id>
     <content type="html">Neue Attribute für Text: fontface, color and textformat</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.10</title>
     <updated>2016-08-02T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-08-02:</id>
     <content type="html">Verbesserungen in der Dokumentation (Tippfehler korrigiert), Sprachstring &#34;English (Great Britan)&#34; korrigiert</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.9</title>
     <updated>2016-07-06T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-07-06:</id>
     <content type="html">Fehlerkorrektur bzgl. langen Tabellen in Gruppen </content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.8</title>
     <updated>2016-07-02T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-07-02:</id>
     <content type="html">Fehlerkorrektur beim Finden der nächsten freien Zeile</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.7</title>
     <updated>2016-06-25T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-25:</id>
     <content type="html">Fehlerkorrektur bei Belegung von nicht-Ganzzahl Spalten</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.6</title>
     <updated>2016-06-25T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-25:</id>
     <content type="html">Lösche alten Befehl ProcessRecord, neue Option bei BearbeiteDatensatz: umfang, Fehlerkorrektur bei Ausgabe/Text (#89)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.5</title>
     <updated>2016-06-23T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-23:</id>
     <content type="html">Verschiedene Fehlerkorrekturen / Zukünftige Objekte und Tabellen</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.4</title>
     <updated>2016-06-20T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-20:</id>
     <content type="html">Kontrolle über die Größe des Hintergrundtexts in Td erlauben.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.3</title>
     <updated>2016-06-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-18:</id>
     <content type="html">Fehlerkorrekturen von 2.4.4 eingefügt</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.2</title>
     <updated>2016-06-13T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-13:</id>
     <content type="html">(2.4.2) Einige Fehlerkorrekturen im Zusammenhang mit sd:aktuelle-rahmennummer(), minhöhe im Textblock und der Suche nach der nächsten freien Zeile.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.1</title>
     <updated>2016-06-10T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-10:</id>
     <content type="html">Interpretiere &amp;lt;sub&gt; und &amp;lt;sup&gt; in den Daten.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.5.1</title>
     <updated>2016-06-09T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-09:</id>
     <content type="html">Fehlerkorrektur: Seitentyp und NeueSeite, Versionszusicherung im Layout-Tag</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.4.4</title>
     <updated>2016-06-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-18:</id>
     <content type="html">Verschiedene Fehlerkorrekturen: Führungspunkte verschwinden bei einem Zeilenwechsel, KeinUmbruch erlaubt die Angabe einer Schriftfamilie, Attribut-Werte werden nicht escaped, kaputte Bilder (ohne DPI-Angaben) werden besser behandelt.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.4.3</title>
     <updated>2016-06-17T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-17:</id>
     <content type="html">Fehlerkorrektur zu einem fehlerhaften Fix in 2.4.2 bzgl. der Suche nach der nächsten freien Zeile für ein Objekt.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.4.2</title>
     <updated>2016-06-13T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-13:</id>
     <content type="html">Einige Fehlerkorrekturen im Zusammenhang mit sd:aktuelle-rahmennummer(), minhöhe im Textblock und der Suche nach der nächsten freien Zeile.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.4.1</title>
     <updated>2016-06-09T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-09:</id>
     <content type="html">Fehlerkorrektur: Seitentyp und NeueSeite, Versionszusicherung im Layout-Tag</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.4.0</title>
     <updated>2016-06-07T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-07:</id>
     <content type="html">Veröffentlichung von Version 2.4.0</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.77</title>
     <updated>2016-06-06T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-06:</id>
     <content type="html">Fallback für den Dateinamen bei Bild, im Falle dass die Bilddatei nicht gefunden wird.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.76</title>
     <updated>2016-06-02T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-06-02:</id>
     <content type="html">Neue API /v0/layout/&amp;lt;id&gt; um die Layoutdatei zu bekommen</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.75</title>
     <updated>2016-05-31T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-05-31:</id>
     <content type="html">Neue API /v0/data/&amp;lt;id&gt; um die Datendatei zu bekommen</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.75</title>
     <updated>2016-05-31T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-05-31:</id>
     <content type="html">Fehlerkorrektur: leere Wert-Angaben erzeugen einen Leerraum</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.74</title>
     <updated>2016-05-23T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-05-23:</id>
     <content type="html">Neue API /v0/status für alle Stati</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.73</title>
     <updated>2016-05-20T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-05-20:</id>
     <content type="html">Rahmennummer bei sd:belegt()</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.72</title>
     <updated>2016-04-28T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-04-28:</id>
     <content type="html">Fehlerkorrektur: Elementnamen mit - akzeptiert</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.71</title>
     <updated>2016-04-28T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-04-28:</id>
     <content type="html">Neue XPath-Funktion sd:belegt(x,y,name)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.70</title>
     <updated>2016-04-26T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-04-26:</id>
     <content type="html">Nachrichten können einen Fehlercode setzen</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.69</title>
     <updated>2016-04-25T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-04-25:</id>
     <content type="html">Fehlerkorrektur: einrücken und Absatzform (belegen=&#34;auto&#34;)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.68</title>
     <updated>2016-04-08T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-04-08:</id>
     <content type="html">Fehlerkorrektur: API /v0/pdf/&amp;lt;id&gt; muss auf die PDF-Datei warten. Fehler tritt bei mehreren Durchläufen auf</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.67</title>
     <updated>2016-04-07T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-04-07:</id>
     <content type="html">FürAlle hat ein neues Attribut: start um den Startpunkt festzulegen (Voreinstellung ist 1)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.66</title>
     <updated>2016-04-05T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-04-05:</id>
     <content type="html">Verändere den Mechanismus, wie Text Bilder umfließt.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.65</title>
     <updated>2016-03-29T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-03-29:</id>
     <content type="html">Verschiedene Fehlerkorrekturen zu HTML-Ausgabe und Ausgabe/Text</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.64</title>
     <updated>2016-03-21T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-03-21:</id>
     <content type="html">Unterstreichen in Daten beachtet CSS Styles</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.63</title>
     <updated>2016-03-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-03-18:</id>
     <content type="html">Fehlerkorektur Zeilenhöhe berechnen bei Ausgabe/Text und belegen=auto</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.62</title>
     <updated>2016-03-17T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-03-17:</id>
     <content type="html">Verschiedene Fehlerkorrenturen: Absatzform, Server wartet bis Durchlauf zuende</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.61</title>
     <updated>2016-03-14T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-03-14:</id>
     <content type="html">Neues Feature. U/gestrichelt=&#34;ja&#34;</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.60</title>
     <updated>2016-03-14T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-03-14:</id>
     <content type="html"></content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.59</title>
     <updated>2016-02-24T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-02-24:</id>
     <content type="html">Fehlerkorrektur HTML-Tabellen</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.58</title>
     <updated>2016-02-22T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-02-22:</id>
     <content type="html">Experimentelle HTML-Tabellen</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.57</title>
     <updated>2016-02-19T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-02-19:</id>
     <content type="html">Neue Option --ignore-case für den Klein- und Großbuchstabenunabhängigen Dateizugriff</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.56</title>
     <updated>2016-02-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-02-18:</id>
     <content type="html">Fehlerkorrektur in Ausgabe/belegen=&#34;auto&#34;</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.55</title>
     <updated>2016-02-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-02-18:</id>
     <content type="html">halign bei ObjektAusgeben</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.55</title>
     <updated>2016-02-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-02-18:</id>
     <content type="html">Verbessertes Umfließen von Objekten bei Ausgabe/belegen=&#34;auto&#34;.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.54</title>
     <updated>2016-02-08T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-02-08:</id>
     <content type="html">Neue XPath-Funktion sd:zufallswert(Wert, Wert, Wert)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.53</title>
     <updated>2016-02-06T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-02-06:</id>
     <content type="html">KeinUmbruch erlaubt das Abschneiden von Text mit ...</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.53</title>
     <updated>2016-02-06T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-02-06:</id>
     <content type="html">PDF Producer wird auf LuaTeX gesetzt, Creator auf speedata Publisher - Versionsnummer</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.53</title>
     <updated>2016-02-06T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-02-06:</id>
     <content type="html">Diverse Fehlerkorrekturen</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.52</title>
     <updated>2016-01-21T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-01-21:</id>
     <content type="html">Verschiedene Fehlerkorrekturen: mehrfache Absätze mit Absatzform, decode-html</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.51</title>
     <updated>2016-01-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-01-18:</id>
     <content type="html">Temporäres Verzeichnis konfigurierbar.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.50</title>
     <updated>2016-01-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-01-18:</id>
     <content type="html">Gestrichelte Linien</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.50</title>
     <updated>2016-01-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-01-18:</id>
     <content type="html">Führungslinien in HLeerraum</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.48</title>
     <updated>2016-01-12T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-01-12:</id>
     <content type="html">Server Modus: IDs starten immer mit einen nicht-Null Wert.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.47</title>
     <updated>2016-01-11T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-01-11:</id>
     <content type="html">Neue PDFOption Duplex</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.46</title>
     <updated>2016-01-08T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-01-08:</id>
     <content type="html">Vertikaler Abstand zwischen Rasterzellen</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.46</title>
     <updated>2016-01-08T00:00:00Z</updated>
     <id>tag:www.speedata.de,2016-01-08:</id>
     <content type="html">PDF Optionen Fachauswahl und Seitenskalierung</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.45</title>
     <updated>2015-12-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-12-18:</id>
     <content type="html">API Aufruf /v0/status gibt den Zeitstempel zurück.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.44</title>
     <updated>2015-12-16T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-12-16:</id>
     <content type="html">Schreibe Warnungen in die status-Datei</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.43</title>
     <updated>2015-12-15T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-12-15:</id>
     <content type="html">Optionen / bildnichtgefunden: fehler oder warnung</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.42</title>
     <updated>2015-12-13T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-12-13:</id>
     <content type="html">Zugriff auf foo/@bar Attribute in Kindelementen</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.42</title>
     <updated>2015-12-13T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-12-13:</id>
     <content type="html">Neue Form: Kreis</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.41</title>
     <updated>2015-12-10T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-12-10:</id>
     <content type="html">Neue XPath-Funktion substring()</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.40</title>
     <updated>2015-12-08T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-12-08:</id>
     <content type="html">Fehlerkorrektur beim Einlesen der Konfigurationsdatei</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.39</title>
     <updated>2015-12-07T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-12-07:</id>
     <content type="html">Server-Modus beachtet jobname aus der Datei publisher.cfg.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.38</title>
     <updated>2015-11-30T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-11-30:</id>
     <content type="html">Neue XPath-Funktion &#39;string-length()&#39;, Fehlerkorrekturen, Vorbereitung auf LuaTeX 0.85</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.37</title>
     <updated>2015-11-19T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-11-19:</id>
     <content type="html">Fehlerkorrektur für kaputte Status-Datei / utf8</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.36</title>
     <updated>2015-11-19T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-11-19:</id>
     <content type="html">Provisorische Lösung für kaputte publisher.status-Datei</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.36</title>
     <updated>2015-11-19T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-11-19:</id>
     <content type="html">Tabellen und vreferenz=unten funktionieren zusammen.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.35</title>
     <updated>2015-11-06T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-11-06:</id>
     <content type="html">Schematron-Regeln im RelaxNG Schema</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.35</title>
     <updated>2015-11-05T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-11-05:</id>
     <content type="html">Bild/href: man kann das file: Schema weglassen.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.34</title>
     <updated>2015-11-04T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-11-04:</id>
     <content type="html">Fehlerkorrektur: Konfigurationsdatei benötigt Zeilenende in der letzten Zeile</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.33</title>
     <updated>2015-11-04T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-11-04:</id>
     <content type="html">Fehlerkorrektur bei LoadDataset und Windows</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.32</title>
     <updated>2015-09-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-09-18:</id>
     <content type="html">Fehlerkorrektur: Höhenberechnung in Tabellen mit Zeilen bei denen umbruch-unten=nein ist.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.32</title>
     <updated>2015-09-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-09-18:</id>
     <content type="html">Stark verbessertes Tabellen-Debugging mit --trace</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.32</title>
     <updated>2015-09-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-09-18:</id>
     <content type="html">Dynamische Tabellenköpfe können gelöscht werden</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.32</title>
     <updated>2015-09-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-09-18:</id>
     <content type="html">Aktion / Marke kann mehrere Einträge enthalten</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.31</title>
     <updated>2015-09-12T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-09-12:</id>
     <content type="html">Neue XPath-Funktion &#39;contains()&#39;</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.30</title>
     <updated>2015-09-08T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-09-08:</id>
     <content type="html">Neuer API-Aufruf /v0/delete/id um den Publishing-Aufruf zu löschen</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.30</title>
     <updated>2015-09-08T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-09-08:</id>
     <content type="html">Neue XPath-Funktion sd:alternierend-beibehalten() um den aktuellen Wert weiter zu benutzen.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.29</title>
     <updated>2015-08-24T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-08-24:</id>
     <content type="html">Fehlerkorrektur im Server-Modus auf Windows</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.28</title>
     <updated>2015-08-11T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-08-11:</id>
     <content type="html">Textblock kann eine minimale Höhe haben.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.28</title>
     <updated>2015-08-07T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-08-07:</id>
     <content type="html">Option crop kann eine Längenangabe verarbeiten.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.27</title>
     <updated>2015-08-07T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-08-07:</id>
     <content type="html">Fehlerkorrektur für Überlagern: Bild kann über eine anderes Element überlagert werden.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.26</title>
     <updated>2015-08-07T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-08-07:</id>
     <content type="html">Neuer Befehl Überlagern um Objekte übereinanderzulegen.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.25</title>
     <updated>2015-08-05T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-08-05:</id>
     <content type="html">Neue Kommandozeilenoption --extra-xml und neue Konfiguration extraxml um zusätzliche XML-Dateien den Layoutanweisungen hinzuzufügen (wie xinclude).</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.25</title>
     <updated>2015-08-05T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-08-05:</id>
     <content type="html">Neue Option in der Konfigurationsdatei um zusätzliche Variablen zu definieren.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.25</title>
     <updated>2015-08-05T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-08-05:</id>
     <content type="html">Neuer Parameter vars im Server-Modus, um zusätzliche Variablen für den Publishing-Prozess anzugeben.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.25</title>
     <updated>2015-08-05T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-08-05:</id>
     <content type="html">Neue Kommandozeilenoption --varsfile um weitere Variablen zu definieren.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.24</title>
     <updated>2015-06-26T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-06-26:</id>
     <content type="html">Neue Option »beschnittzugabemarken«, Darstellung der Trim-Box wenn show-grid angeschaltet ist.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.23</title>
     <updated>2015-06-25T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-06-25:</id>
     <content type="html">Fehlerbehebung in der Breitenberechnung im Raster</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.22</title>
     <updated>2015-06-19T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-06-19:</id>
     <content type="html">Fehlerkorrektur bei dx und nx in SetzeRaster</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.21</title>
     <updated>2015-05-30T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-05-30:</id>
     <content type="html">Neue Option »beschnitt« für Seiten mit einer CropBox, die den Objekten auf der Seite entspricht.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.20</title>
     <updated>2015-04-21T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-04-21:</id>
     <content type="html">Fehlerkorrektur: Breite bei Tabelle und Linie in Kombination mit Rasterzellenabstand</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.19</title>
     <updated>2015-04-20T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-04-20:</id>
     <content type="html">Platzierungsrahmen dürfen nun auf Daten zugreifen ({@attrib} zum Beispiel)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.19</title>
     <updated>2015-04-20T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-04-20:</id>
     <content type="html">Fehlerkorrektur/Workaround für einen Fehler in zentrierten Td-Zellen mit mehreren Zeilen.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.18</title>
     <updated>2015-04-08T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-04-08:</id>
     <content type="html">Fehlerkorrekturen: replace() und $1, $2, ... / &amp;lt;Td align=&#34;center&#34;&gt;...&amp;lt;/Td&gt; Inhalte mit mehrern Zeilen.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.17</title>
     <updated>2015-03-25T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-03-25:</id>
     <content type="html">Experimentelle Garbage-Collection bei Zuweisung.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.16</title>
     <updated>2015-03-11T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-03-11:</id>
     <content type="html">Befehl KeinUmbruch um einen Zeilenumbruch innerhalb des Elements zu verhindern.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.15</title>
     <updated>2015-03-09T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-03-09:</id>
     <content type="html">API Änderungen: jobname ist per URL-Parameter konfigurierbar, bessere Fehlermeldungen</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.14</title>
     <updated>2015-03-04T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-03-04:</id>
     <content type="html">Server-Modus: /v0/pdf/&amp;lt;id&amp;gt; gibt das PDF zurück</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.14</title>
     <updated>2015-03-03T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-03-03:</id>
     <content type="html">Server-Modus: Zeitstempel für /v0/publish/&amp;lt;id&amp;gt;</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.12</title>
     <updated>2015-02-27T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-02-27:</id>
     <content type="html">Neuer API Aufruf /available -&gt; 200 OK, /v0/publish gibt 201 zurück</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.11</title>
     <updated>2015-02-26T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-02-26:</id>
     <content type="html">Rasterabstand horizontal kann eingestellt werden.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.10</title>
     <updated>2015-02-25T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-02-25:</id>
     <content type="html">Fehlerkorrektur: Indexeintrag ohne Inhalt lässt den Publisher abstürzen.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.9</title>
     <updated>2015-02-24T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-02-24:</id>
     <content type="html">Fehlerkorrekturen (sp server-Modus .protocol Datei, Endlosschleife bei fehlerhaften UTF8-Daten)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.9</title>
     <updated>2015-02-23T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-02-23:</id>
     <content type="html">Leere Attribute (attr=&#34;&#34;) werden als nil behandelt. empty(@attr) gibt jetzt true() zurück.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.8</title>
     <updated>2015-02-21T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-02-21:</id>
     <content type="html">Drehung in 90°-Schritten bei Bildern</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.8</title>
     <updated>2015-02-21T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-02-21:</id>
     <content type="html">Neue XPath-Funktion sd:seitenverhältnis(&#39;bildname.png&#39;)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.8</title>
     <updated>2015-02-21T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-02-21:</id>
     <content type="html">Einfache if/then/else Ausdrücke in XPath</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.7</title>
     <updated>2015-02-19T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-02-19:</id>
     <content type="html">Hintergrundtext für Tabellenzellen (td)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.6</title>
     <updated>2015-02-12T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-02-12:</id>
     <content type="html">Die Datei publisher.status enthält die Nachrichten und Fehlermeldungen.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.4</title>
     <updated>2015-01-27T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-01-27:</id>
     <content type="html">Fehlerkorrektur: Sonderfarben gelten nun für Striche und Flächen</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.3</title>
     <updated>2015-01-26T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-01-26:</id>
     <content type="html">Ein paar CSS-Regeln für Linie, direkte Farbdefinition.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.3.2</title>
     <updated>2015-01-22T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-01-22:</id>
     <content type="html">Neuer Server-Modus für entferntes Publishing.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.36</title>
     <updated>2015-01-15T00:00:00Z</updated>
     <id>tag:www.speedata.de,2015-01-15:</id>
     <content type="html">Alle CSS Level 3 Farben hinzugefügt (siehe http://www.w3.org/TR/css3-color/ für eine Liste)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.35</title>
     <updated>2014-12-19T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-12-19:</id>
     <content type="html">Lesezeichen auf allen Ebenen erlauben (experimentell)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.34</title>
     <updated>2014-12-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-12-18:</id>
     <content type="html">Neue Funktion sd:attr(), um auf Attribute mit dynamischen Namen zuzugreifen.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.32</title>
     <updated>2014-12-01T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-12-01:</id>
     <content type="html">Der XML-Parser beachtet --extra-dir bei XInclude</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.28</title>
     <updated>2014-11-11T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-11-11:</id>
     <content type="html">Trennzeichen kann in Textformat festgelegt werden.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.27</title>
     <updated>2014-11-06T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-11-06:</id>
     <content type="html">Neues Beispiel &#34;Serienbriefe&#34;</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.26</title>
     <updated>2014-10-29T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-10-29:</id>
     <content type="html">Neuer Befehl: Rahmen. Kann als Beschneidungspfad für innenliegende Ojbekte genommen werden.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.23</title>
     <updated>2014-10-13T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-10-13:</id>
     <content type="html">Abgerundete Ecken bei ObjektAusgeben / Rahmen</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.22</title>
     <updated>2014-10-09T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-10-09:</id>
     <content type="html">Transformationen können in ObjektAusgeben geschachltelt werden.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.21</title>
     <updated>2014-10-08T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-10-08:</id>
     <content type="html">Benutzerdefinierte Sonderfarben</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.21</title>
     <updated>2014-10-07T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-10-07:</id>
     <content type="html">Transformations-Ursprung bei drehen und matrix (ObjektAusgeben)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.20</title>
     <updated>2014-09-16T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-09-16:</id>
     <content type="html">Kopie-von zerstört nicht den Inhalt.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.18</title>
     <updated>2014-09-09T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-09-09:</id>
     <content type="html">Eine Transformationsmatrix kann bei ObjektAusgeben angegeben werden.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.16</title>
     <updated>2014-08-22T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-08-22:</id>
     <content type="html">Zeilen dürfen bei / nicht mehr umbrochen werden, außer in erlaubeumbruch enthält den Schrägstrich.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.15</title>
     <updated>2014-08-18T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-08-18:</id>
     <content type="html">Experimenteller Servermodus (/v0/format)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.14</title>
     <updated>2014-08-15T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-08-15:</id>
     <content type="html">Silbentrennung bei DefiniereTextformat an- und ausschaltbar</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.13</title>
     <updated>2014-08-12T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-08-12:</id>
     <content type="html">Grundlegende Unterstützung von tokenize() und replace(), erste Funktionalität des Server-Modus.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.13</title>
     <updated>2014-08-07T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-08-07:</id>
     <content type="html">Farben können die Eigenschaft »überdrucken« haben.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.13</title>
     <updated>2014-08-06T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-08-06:</id>
     <content type="html">Sonderfarben (PANTONE und HKS)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.12</title>
     <updated>2014-07-25T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-07-25:</id>
     <content type="html">Neuer Befehl »Farbe« um vorübergehend die Textfarbe zu ändern.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.10</title>
     <updated>2014-07-03T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-07-03:</id>
     <content type="html">Das Verhalten von erlaubeumbruch bei Absatz wurde geändert. Das Leerzeichen muss explizit angegeben werden.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.10</title>
     <updated>2014-06-29T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-06-29:</id>
     <content type="html">Neue XPath-Funktion sd:blindtext() und sd:loremipsum() für Beispieltext (lorem ipsum)</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.9</title>
     <updated>2014-06-27T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-06-27:</id>
     <content type="html">XInclude wieder aktiviert.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.8</title>
     <updated>2014-06-24T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-06-24:</id>
     <content type="html">Tabellenzeilen (Tr) können als Tabellenkopf wiederbenutzt werden.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.8</title>
     <updated>2014-06-24T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-06-24:</id>
     <content type="html">Seitenzahlen zusammenfassen verarbeitet Seitenbereiche.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.7</title>
     <updated>2014-06-06T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-06-06:</id>
     <content type="html">Fehlerkorrektur für Tabellen in Tabellen, die rechtsbündig gesetzt werden sollen.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.6</title>
     <updated>2014-06-05T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-06-05:</id>
     <content type="html">Experimentelle Option &#39;erlaubeumbruch&#39; bei Absatz um eine Liste der möglichen Trennpunkte anzugeben.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.6</title>
     <updated>2014-05-28T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-05-28:</id>
     <content type="html">sp --quiet unterdrückt die Ausgabe</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.6</title>
     <updated>2014-05-28T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-05-28:</id>
     <content type="html">sp compare parallelisiert für höhrere Geschwindigkeit.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.5</title>
     <updated>2014-05-28T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-05-28:</id>
     <content type="html">Fehlerbehebung bei Tabellenzellen mit align=&#34;center&#34; und fixer Breite.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.3</title>
     <updated>2014-05-20T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-05-20:</id>
     <content type="html">Trennung im zweiten Wort in zusammengesetzten Wörtern erlauben, Umbruch möglich nach &#34;/&#34; </content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.1</title>
     <updated>2014-05-19T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-05-19:</id>
     <content type="html">Neue Implementierung des Textumbruchs in Spalten. Vollständig abwärtskompatibel.</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
   <entry>
     <title>Version 2.1.0</title>
     <updated>2014-05-15T00:00:00Z</updated>
     <id>tag:www.speedata.de,2014-05-15:</id>
     <content type="html">Neues Verhalten von Elementen in Tabellenzellen (Td). Nun wird, soweit sinnvoll, die Logik von HTML angewandt (siehe &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements&#34;&gt;HTML Blockelemente&lt;/a&gt;).</content>
-    <link href="http://www.speedata.de"></link>
+    <link href="https://www.speedata.de"></link>
   </entry>
 </feed>
