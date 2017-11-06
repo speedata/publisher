@@ -161,14 +161,8 @@ function pre_linebreak( head )
                 else
                     -- \hbox{ 1fil, text, 1fil }
                     local l1,l2
-                    l1=node.new("glue")
-                    l1.spec=node.new("glue_spec")
-                    l1.spec.width = 0
-                    l1.spec.stretch = 65536
-                    l1.spec.stretch_order = 2
-                    l1.spec.shrink = 65536
-                    l1.spec.shrink_order = 2
-                    l2=node.copy(l1)
+                    l1 = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 2, shrink = 2^16, shrink_order = 2})
+                    l2 = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 2, shrink = 2^16, shrink_order = 2})
                     local newhead = node.insert_before(l,l,l1)
 
                     local endoftext = node.tail(l)
@@ -178,7 +172,15 @@ function pre_linebreak( head )
                 head.leader = tmpbox
 
             end
-            local gluespec = head.spec
+            local gluespec
+            local writable
+            if node.has_field(head,"spec") then
+                gluespec = head.spec
+                writable = gluespec.writable
+            else
+                gluespec = head
+                writable = true
+            end
             if gluespec then
                 if node.has_attribute(head,att_fontfamily) then
                     local fontfamily=node.has_attribute(head,att_fontfamily)
@@ -200,7 +202,7 @@ function pre_linebreak( head )
                     end
                     if not f then f=publisher.options.defaultfont
                     end
-                    if gluespec.stretch_order == 0 and gluespec.writable then
+                    if gluespec.stretch_order == 0 and writable then
                         gluespec.width=f.parameters.space
                         gluespec.stretch=f.parameters.space_stretch
                         gluespec.shrink=f.parameters.space_shrink

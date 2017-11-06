@@ -435,11 +435,7 @@ maxdimen = 1073741823
 
 -- It's convenient to just copy the stretching glue instead of writing
 -- the stretch etc. over and over again.
-glue_stretch2 = node.new("glue")
-glue_stretch2.spec = node.new("glue_spec")
-glue_stretch2.spec.stretch = 2^16
-glue_stretch2.spec.stretch_order = 2
-
+glue_stretch2 = set_glue(nil, { stretch = 2^16, stretch_order = 2 })
 messages = {}
 
 -- For attached files. Each of this numbers should appear in the catalog
@@ -903,7 +899,6 @@ function initialize_luatex_and_generate_pdf()
         file:close()
     end
 end
-
 
 
 function shipout(nodelist, pagenumber )
@@ -1813,13 +1808,7 @@ function box( width_sp,height_sp,colorname )
         paint.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colentry.pdfstring,_width,_height)
         paint.mode = 0
 
-        local hglue
-
-        hglue = node.new("glue",0)
-        hglue.spec = node.new("glue_spec")
-        hglue.spec.width         = 0
-        hglue.spec.stretch       = 2^16
-        hglue.spec.stretch_order = 3
+        local hglue = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3 })
         h = node.insert_after(paint,paint,hglue)
 
         h = node.hpack(h,width_sp,"exactly")
@@ -1827,11 +1816,7 @@ function box( width_sp,height_sp,colorname )
         h = create_empty_hbox_with_width(width_sp)
     end
 
-    local vglue = node.new(glue_node,0)
-    vglue.spec = node.new("glue_spec")
-    vglue.spec.width         = 0
-    vglue.spec.stretch       = 2^16
-    vglue.spec.stretch_order = 3
+    local vglue = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3 })
     v = node.insert_after(h,h,vglue)
     v = node.vpack(h,height_sp,"exactly")
     return v
@@ -2415,6 +2400,10 @@ leftskip.stretch_order = 3
 
 --- Return the larger glue(spec) values
 function bigger_glue_spec( a,b )
+    if node.has_field(a,"spec") then
+        a = a.spec
+        b = b.spec
+    end
     if a.stretch_order > b.stretch_order then return a end
     if b.stretch_order > a.stretch_order then return b end
     if a.stretch > b.stretch then return a end
@@ -2570,10 +2559,7 @@ function mknodes(str,fontfamily,parameter)
             p1 = node.new("penalty")
             p1.penalty = 10000
 
-            g = node.new("glue")
-            g.spec = node.new("glue_spec")
-            g.spec.stretch = 2^16
-            g.spec.stretch_order = 2
+            g = set_glue(nil,{stretch = 2^16, stretch_order = 2})
 
             p2 = node.new("penalty")
             p2.penalty = -10000
@@ -2583,23 +2569,23 @@ function mknodes(str,fontfamily,parameter)
             head,last = node.insert_after(head,last,p2)
         elseif match(char,"^%s$") and last and last.id == glue_node and not node.has_attribute(last,att_tie_glue,1) then
             -- double space, use the bigger glue
-            local tmp = node.new(glue_spec_node)
-            tmp.width   = space
-            tmp.shrink  = shrink
-            tmp.stretch = stretch
-            last.spec = bigger_glue_spec(last.spec,tmp)
+            local tmp = set_glue(nil, {width = space, shrink = shrink, stretch = stretch})
+            local tmp2 = bigger_glue_spec(last,tmp)
+            if node.has_field(tmp,"spec") then
+                last.spec = tmp2
+            else
+                last.width = tmp2.width
+                last.stretch = tmp2.stretch
+                last.shrink = tmp2.shrink
+                last.stretch_order = tmp2.stretch_order
+                last.shrink_order = tmp2.shrink_order
+            end
         elseif s == 160 then -- non breaking space U+00A0
             n = node.new("penalty")
             n.penalty = 10000
 
             head,last = node.insert_after(head,last,n)
-
-            n = node.new("glue")
-            n.spec = node.new("glue_spec")
-            n.spec.width   = space
-            n.spec.shrink  = shrink
-            n.spec.stretch = stretch
-
+            n = set_glue(nil,{width = width, shrink = shrink, stretch = stretch})
             node.set_attribute(n,att_tie_glue,1)
 
             head,last = node.insert_after(head,last,n)
@@ -2623,15 +2609,10 @@ function mknodes(str,fontfamily,parameter)
             n.penalty = 10000
             head, last = node.insert_after(head,last,n)
 
-            n = node.new(glue_node)
-            n.spec = node.new(glue_spec_node)
+            n = set_glue(nil)
             head, last = node.insert_after(head,last,n)
         elseif s == 9 and parameter.tab == 'hspace' then
-            local n=node.new("glue",subtype)
-            n.spec=node.new("glue_spec")
-            n.spec.width = 0
-            n.spec.stretch = 65536
-            n.spec.stretch_order = 3
+            local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
             head, last = node.insert_after(head,last,n)
         elseif s == 8203 then
             -- U+200B ZERO WIDTH SPACE inserted in parse_html
@@ -2652,11 +2633,8 @@ function mknodes(str,fontfamily,parameter)
                 n.penalty = 0
                 head,last = node.insert_after(head,last,n)
             end
-            n = node.new("glue")
-            n.spec = node.new("glue_spec")
-            n.spec.width   = space
-            n.spec.shrink  = shrink
-            n.spec.stretch = stretch
+
+            n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch})
 
             if breakatspace == false then
                 node.set_attribute(n,att_tie_glue,1)
@@ -2704,8 +2682,7 @@ function mknodes(str,fontfamily,parameter)
                 head = node.insert_before(head,last,pen)
                 local disc = node.new("disc")
                 head,last = node.insert_after(head,last,disc)
-                local g = node.new(glue_node)
-                g.spec = node.new(glue_spec_node)
+                local g = set_glue(nil)
                 head,last = node.insert_after(head,last,g)
             elseif string.find(allowbreak,char,1,true) then
                 -- allowbreak lists characters where the publisher may break lines
@@ -2750,16 +2727,10 @@ end
 function bullet_hbox( labelwidth )
     local bullet, pre_glue, post_glue
     bullet = mknodes("•",nil,{})
-
-    pre_glue = node.new("glue")
-    pre_glue.spec = node.new("glue_spec")
-    pre_glue.spec.stretch = 65536
-    pre_glue.spec.stretch_order = 3
+    pre_glue = set_glue(nil,{stretch = 2^16, stretch_order = 3})
     pre_glue.next = bullet
 
-    post_glue = node.new("glue")
-    post_glue.spec = node.new("glue_spec")
-    post_glue.spec.width = 4 * 2^16
+    post_glue = set_glue(nil,{width = 4 * 2^16})
     post_glue.prev = bullet
     bullet.next = post_glue
     local bullet_hbox = node.hpack(pre_glue,labelwidth,"exactly")
@@ -2776,15 +2747,10 @@ end
 function number_hbox( num, labelwidth )
     local pre_glue, post_glue
     local digits = mknodes( tostring(num) .. ".",nil,{})
-    pre_glue = node.new("glue")
-    pre_glue.spec = node.new("glue_spec")
-    pre_glue.spec.stretch = 65536
-    pre_glue.spec.stretch_order = 3
+    pre_glue = set_glue(nil,{stretch = 2^16, stretch_order = 3})
     pre_glue.next = digits
 
-    post_glue = node.new("glue")
-    post_glue.spec = node.new("glue_spec")
-    post_glue.spec.width = 4 * 2^16
+    post_glue = set_glue(nil,{width = 4 * 2^16})
     post_glue.prev = node.tail(digits)
     node.tail(digits).next = post_glue
     local digit_hbox = node.hpack(pre_glue,labelwidth,"exactly")
@@ -2805,11 +2771,8 @@ end
 function add_glue( nodelist,head_or_tail,parameter)
     parameter = parameter or {}
 
-    local n=node.new("glue", parameter.subtype or 0)
-    n.spec = node.new("glue_spec")
-    n.spec.width         = parameter.width
-    n.spec.stretch       = parameter.stretch
-    n.spec.stretch_order = parameter.stretch_order
+    local n = set_glue(nil, parameter)
+    n.subtype = parameter.subtype or 0
 
     if nodelist == nil then return n end
 
@@ -2827,12 +2790,7 @@ function add_glue( nodelist,head_or_tail,parameter)
 end
 
 function make_glue( parameter )
-    local n = node.new("glue")
-    n.spec = node.new("glue_spec")
-    n.spec.width         = parameter.width
-    n.spec.stretch       = parameter.stretch
-    n.spec.stretch_order = parameter.stretch_order
-    return n
+    return set_glue(nil, parameter)
 end
 
 function finish_par( nodelist,hsize,parameters )
@@ -2889,13 +2847,10 @@ function fix_justification( nodelist,alignment,parent)
                 if n.id == glyph_node then
                     font_before_glue = n.font
                 elseif n.id == glue_node then
-                    if n.subtype==0 and font_before_glue and n.spec.width > 0 and head.glue_sign == 1 then
+                    if n.subtype==0 and font_before_glue and get_glue_value(n,"width") > 0 and head.glue_sign == 1 then
                         local fonttable = font.fonts[font_before_glue]
                         if not fonttable then fonttable = font.fonts[1] err("Some font not found") end
-                        spec_new = node.new("glue_spec")
-                        spec_new.width = fonttable.parameters.space
-                        spec_new.shrink_order = head.glue_order
-                        n.spec = spec_new
+                        set_glue_values(n,{width = fonttable.parameters.space, shrink_order = head.glue_order, stretch = 0, stretch_order = 0})
                     end
                 end
             end
@@ -2918,9 +2873,7 @@ function fix_justification( nodelist,alignment,parent)
 
                 local wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)
 
-                local leftskip_node = node.new("glue")
-                leftskip_node.spec = node.new("glue_spec")
-                leftskip_node.spec.width = goal - wd
+                local leftskip_node = set_glue(nil,{width = goal - wd})
                 head.head = node.insert_before(head.head,head.head,leftskip_node)
             end
 
@@ -2943,9 +2896,7 @@ function fix_justification( nodelist,alignment,parent)
 
                 local wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)
 
-                local leftskip_node = node.new("glue")
-                leftskip_node.spec = node.new("glue_spec")
-                leftskip_node.spec.width = ( goal - wd ) / 2
+                local leftskip_node = set_glue(nil,{width = ( goal - wd ) / 2 })
                 head.head = node.insert_before(head.head,head.head,leftskip_node)
             end
         elseif head.id == 1 then -- vlist
@@ -2995,14 +2946,17 @@ function do_linebreak( nodelist,hsize,parameters )
         pdfignoreddimen   = pdfignoreddimen,
     }
 
-    setmetatable(parameters,{__index=default_parameters})
+    -- This could be done with a meta table, but somehow ltx 104 doesn't like it
+    for k,v in pairs(parameters) do
+        default_parameters[k] = v
+    end
 
     -- Try to break the paragraph until there is no line
     -- longer than expected
     local j
     local c = 0
     while true do
-        j = tex.linebreak(node.copy_list(nodelist),parameters)
+        j = tex.linebreak(node.copy_list(nodelist),default_parameters)
         if not check_if_a_line_exeeds(j,hsize,j.glue_set, j.glue_sign,j.glue_order) then
             break
         end
@@ -3054,11 +3008,7 @@ function do_linebreak( nodelist,hsize,parameters )
 end
 
 function create_empty_hbox_with_width( wd )
-    local n=node.new("glue")
-    n.spec = node.new("glue_spec")
-    n.spec.width         = 0
-    n.spec.stretch       = 2^16
-    n.spec.stretch_order = 3
+    local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
     n = node.hpack(n,wd,"exactly")
     return n
 end

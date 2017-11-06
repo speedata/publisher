@@ -429,21 +429,29 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         end
 
         -- If there is ragged shape (i.e. not a rectangle of text) then we should turn off
-        -- font expansion. This is done by setting tex.pdfadjustspacing to 0 temporarily
+        -- font expansion. This is done by setting tex.(pdf)adjustspacing to 0 temporarily
         if ragged_shape then
             local save_tolerance     = parameter.tolerance
             local save_hyphenpenalty = parameter.hyphenpenalty
             parameter.tolerance     = 5000
             parameter.hyphenpenalty = 200
 
-            local adjspace = tex.pdfadjustspacing
+            -- tex.pdf... is LuaTeX < 1
+            local adjspace
+            if status.luatex_version >= 100 then
+                adjspace = tex.adjustspacing
+            else
+                adjspace = tex.pdfadjustspacing
+            end
             tex.pdfadjustspacing = 0
+            tex.adjustspacing = 0
             nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
 
             parameter.tolerance     = save_tolerance
             parameter.hyphenpenalty = save_hyphenpenalty
 
             tex.pdfadjustspacing = adjspace
+            tex.adjustspacing = adjspace
             publisher.fix_justification(nodelist,current_textformat.alignment)
         else
             nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
@@ -458,7 +466,7 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         -- it's always 0 anyway (hopefully!)
         local line = nodelist.head
         while line do
-            if line.id == 10 then
+            if line.id == publisher.glue_node then
                 line.prev.next = line.next
                 if line.next then
                     line.next.prev = line.prev
@@ -677,7 +685,7 @@ function Paragraph.vsplit( objects_t,frameheight )
                 if hbox.id == publisher.hlist_node or hbox.id == publisher.vlist_node then
                     lineheight = hbox.height + hbox.depth
                 elseif hbox.id == publisher.glue_node then
-                    lineheight = hbox.spec.width
+                    lineheight = get_glue_value(hbox,"width")
                 elseif hbox.id == publisher.rule_node then
                     lineheight = hbox.height + hbox.depth
                 elseif hbox.id == publisher.whatsit_node then
@@ -685,7 +693,8 @@ function Paragraph.vsplit( objects_t,frameheight )
                 else
                     w("unknown node 1: %d",hbox.id)
                 end
-                if accumulated_height + lineheight <= goal then
+                -- 20 is some rounding error
+                if accumulated_height + lineheight <= goal + 20 then
                     thisarea[#thisarea + 1] = hbox
                     accumulated_height = accumulated_height + lineheight
                 else

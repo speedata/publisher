@@ -41,6 +41,7 @@ Wert | Beschreibung
 `ignore-case` | Ignoriere die Groß- und Kleinschreibung für Dateizugriff.
 `jobname` | Name der Ausgabedatei
 `layout` | Name des Layoutregelwerks. `layout.xml` ist der voreingestellte Name.
+`luatex` | Pfad zum Lua(jit)TeX binary. Experimentell! Das ist nur für eigene Experimente gedacht, nicht für den produktiven Einsatz.
 `opencommand` | Kommando für das automatische Öffnen der Dokumentation bzw. PDF-Datei. Für MacOS X sollte das `open` sein, für Linux `xdg-open` oder `exo-open` (xfce).
 `pathrewrite` | Kommaseparierte Liste der Form Pfadteil=Pfadteil. Beispiel: `/media/=%(projectdir)s/myfiles/`. Das würde absolute Pfadangaben wie `file:///media/XYZ` in `file:///Pfad/zum/Projekt/myfiles/XYZ` ändern.
 `runs` | Setzt die Anzahl der Durchläufe fest.

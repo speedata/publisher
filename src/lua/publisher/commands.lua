@@ -991,16 +991,14 @@ function commands.hspace( layoutxml,dataxml )
     if leadertext then
         subtype = 100
     end
-    local n=node.new("glue",subtype)
-    n.spec=node.new("glue_spec")
+    local n
 
     if width == nil then
-        n.spec.width = 0
-        n.spec.stretch = 65536
-        n.spec.stretch_order = 3
+        n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
     else
-        n.spec.width = tonumber(width)
+        n = set_glue(nil,{width = tonumber(width)})
     end
+    n.subtype = subtype
 
     if leadertext then
         local lp = paragraph:new()
@@ -1258,15 +1256,11 @@ function commands.image( layoutxml,dataxml )
         node.insert_after(box,node.tail(box),pdf_restore)
         box = node.vpack(box)
 
-        local g = node.new("glue")
-        g.spec = node.new("glue_spec")
-        g.spec.width = -1 * shift_left
+        local g = set_glue(nil,{width = -1 * shift_left})
         g = node.insert_after(g,g,box)
         box = node.hpack(g)
 
-        g = node.new("glue")
-        g.spec = node.new("glue_spec")
-        g.spec.width = -1 * shift_up
+        local g = set_glue(nil,{width = -1 * shift_up})
         g = node.insert_after(g,g,box)
         box = node.vpack(g)
 
@@ -3617,9 +3611,7 @@ function commands.textblock( layoutxml,dataxml )
             hbox_current_row = rows[i] -- first column
             local tail = hbox_current_row
             for j=2,columns do -- second and following columns
-                local g1 = node.new("glue")
-                g1.spec = node.new("glue_spec")
-                g1.spec.width = columndistance
+                local g1 = set_glue(nil,{width = columndistance})
                 tail.next = g1
                 g1.prev = tail
                 current_row = (j - 1) * rows_in_multicolumn + i
@@ -3765,11 +3757,7 @@ end
 --- ------
 --- Create a vertical space that stretches up to infinity
 function commands.vspace( layoutxml,dataxml )
-    local n=node.new("glue")
-    n.spec=node.new("glue_spec")
-    n.spec.width = 0
-    n.spec.stretch = 65536
-    n.spec.stretch_order = 3
+    local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
     node.set_attribute(n,publisher.att_origin,publisher.origin_vspace)
     return n
 end

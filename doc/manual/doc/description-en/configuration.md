@@ -40,6 +40,7 @@ Value | Description
 `ignore-case` |  Ignore case when accessing files (on a case-insensitive file system).
 `jobname` | Name of the output file. Default is `publisher`.
 `layout` | Name of the layout rule set (XML). The default name is `layout.xml`.
+`luatex` | Path to the Lua(jit)TeX binary. Experimental! This is provided for your experiments, not for production use.
 `opencommand` | Command that will be run to open the documentation and the PDF file. For MacOS X this should be `open`, for Linux `xdg-open` or `exo-open` (xfce).
 `pathrewrite` | Comma separated list of entries of the form `A=B` which replace parts in `file:///...A...` to `file:///...B...`. Useful when you have absolute paths in the data which must be changed during the publishing process.
 `runs` | Set the number of runs.

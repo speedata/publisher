@@ -145,6 +145,52 @@ function math.round(num, idp)
   return math.floor(num + 0.5)
 end
 
+function set_glue( gluenode, values )
+    local n
+    if gluenode == nil then
+        n = node.new("glue")
+    else
+        n = gluenode
+    end
+    local spec
+
+    if node.has_field(n,"spec") then
+        spec = node.new("glue_spec")
+        n.spec = spec
+    else
+        spec = n
+    end
+    values = values or {}
+    for k,v in pairs(values) do
+        spec[k] = v
+    end
+    return n
+end
+
+function set_glue_values( n , values)
+    local spec
+
+    if node.has_field(n,"spec") then
+        spec = n.spec
+    else
+        spec = n
+    end
+
+    for k,v in pairs(values) do
+        spec[k]=v
+    end
+
+end
+
+function get_glue_value( n, value )
+    local spec
+    if node.has_field(n,"spec") then
+        spec = n.spec
+    else
+        spec = n
+    end
+    return spec[value]
+end
 
 --- This is like the original `tex.sp` except that it changes `pt` to `bp` and `pp` to `pt`.
 --- We do that because in the dtp world when we say 12pt, we always mean 12*1/72 inch.
@@ -211,15 +257,20 @@ function exit(graceful)
 end
 
 local function setup()
-  tex.hoffset       = tex.sp("-1in")
-  tex.voffset       = tex.hoffset
-  -- Future vesions of LuaTeX (0.85 and above) will probably need the following, but this changes the output slightly...
-  -- tex.pdfhorigin = tex.sp("0mm")
-  -- tex.pdfvorigin = tex.pdfhorigin
+    if status.luatex_version >= 100 then
+        tex.pdfhorigin = tex.sp("0mm")
+        tex.pdfvorigin = tex.pdfhorigin
+        pdf.setminorversion(6)
+    else
+        tex.hoffset       = tex.sp("-1in")
+        tex.voffset       = tex.hoffset
+    end
+    tex.pdfadjustspacing = 2
+    tex.adjustspacing = 2
   tex.pdfpageheight = tex.sp("29.7cm")
   tex.pdfpagewidth  = tex.sp("21cm")
   tex.pdfprotrudechars = 2 -- margin protrusion
-  tex.pdfadjustspacing = 2
+  tex.protrudechars = 2 -- margin protrusion
   tex.pdfcompresslevel = 5
   tex.pdfobjcompresslevel = 2
   tex.pdfoutput=1

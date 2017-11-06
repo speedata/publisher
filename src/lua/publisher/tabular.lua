@@ -916,15 +916,12 @@ function typeset_row(self, tr_contents, current_row )
             ht = self.rowheights[current_row]
         end
 
-        local g = node.new("glue")
-        g.spec = node.new("glue_spec")
-        g.spec.width = padding_top
+        local g = set_glue(nil,{width = padding_top})
         node.set_attribute(g,publisher.att_origin,publisher.origin_align_top)
 
         local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
         if valign ~= "top" then
-            g.spec.stretch = 2^16
-            g.spec.stretch_order = 2
+            set_glue_values(g,{stretch = 2^16, stretch_order = 2})
         end
 
         local cell_start = g
@@ -948,14 +945,11 @@ function typeset_row(self, tr_contents, current_row )
         tail.next = cell
         cell.prev = tail
 
-        g = node.new("glue")
-        g.spec = node.new("glue_spec")
-        g.spec.width = padding_bottom
+        local g = set_glue(nil,{width = padding_bottom})
 
         local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
         if valign ~= "bottom" then
-            g.spec.stretch = 2^16
-            g.spec.stretch_order = 2
+            set_glue_values(g,{stretch = 2^16, stretch_order = 2})
         end
 
 
@@ -967,9 +961,7 @@ function typeset_row(self, tr_contents, current_row )
         --- ![Table cell vertical](../img/tablecell1.svg)
         ---
         --- Now we need to add the left and the right glue
-        g = node.new("glue")
-        g.spec = node.new("glue_spec")
-        g.spec.width = padding_left
+        g = set_glue(nil,{width = padding_left})
 
         cell_start = g
         local ht_border = 0
@@ -990,9 +982,7 @@ function typeset_row(self, tr_contents, current_row )
         current.next = vlist
         current = vlist
 
-        g = node.new("glue")
-        g.spec = node.new("glue_spec")
-        g.spec.width = padding_right
+        g = set_glue(nil,{width = padding_right})
 
         current.next = g
         current = g
@@ -1037,11 +1027,7 @@ function typeset_row(self, tr_contents, current_row )
         end
 
         -- What is this for?
-        local gl = node.new("glue")
-        gl.spec = node.new("glue_spec")
-        gl.spec.width = 0
-        gl.spec.shrink = 2^16
-        gl.spec.shrink_order = 2
+        local gl = set_glue(nil,{width = 0, shrink = 2^16, shrink_order = 2})
         node.slide(head).next = gl
 
         --- This is our table cell now:

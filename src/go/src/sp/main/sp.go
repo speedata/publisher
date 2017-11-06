@@ -426,6 +426,9 @@ func getExecutablePath() string {
 	// 4 check then installdir/bin for luatex(.exe)
 	// 5 check PATH for luatex(.exe)
 	// 6 panic!
+	if luatex := getOption("luatex"); luatex != "" {
+		return luatex
+	}
 	executableName := "sdluatex" + exeSuffix
 	var p string
 
