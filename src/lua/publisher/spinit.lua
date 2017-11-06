@@ -261,6 +261,9 @@ local function setup()
         tex.pdfhorigin = tex.sp("0mm")
         tex.pdfvorigin = tex.pdfhorigin
         pdf.setminorversion(6)
+        pdf.setsuppressoptionalinfo(143)
+        pdf.setcompresslevel(9)
+        pdf.setobjcompresslevel(9)
     else
         tex.hoffset       = tex.sp("-1in")
         tex.voffset       = tex.hoffset
