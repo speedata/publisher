@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"sp/main/luacsv"
+	"sp/main/luaxlsx"
 	"sp/main/luaxml"
 
 	"github.com/Shopify/go-lua"
@@ -79,6 +80,7 @@ func runLuaScript(filename string) bool {
 
 	luaxml.Open(l)
 	luacsv.Open(l)
+	luaxlsx.Open(l)
 
 	if err := lua.DoFile(l, filename); err != nil {
 		fmt.Println(err)
