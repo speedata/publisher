@@ -2585,7 +2585,7 @@ function mknodes(str,fontfamily,parameter)
             n.penalty = 10000
 
             head,last = node.insert_after(head,last,n)
-            n = set_glue(nil,{width = width, shrink = shrink, stretch = stretch})
+            n = set_glue(nil,{width = space, shrink = shrink, stretch = stretch})
             node.set_attribute(n,att_tie_glue,1)
 
             head,last = node.insert_after(head,last,n)
@@ -2850,7 +2850,15 @@ function fix_justification( nodelist,alignment,parent)
                     if n.subtype==0 and font_before_glue and get_glue_value(n,"width") > 0 and head.glue_sign == 1 then
                         local fonttable = font.fonts[font_before_glue]
                         if not fonttable then fonttable = font.fonts[1] err("Some font not found") end
-                        set_glue_values(n,{width = fonttable.parameters.space, shrink_order = head.glue_order, stretch = 0, stretch_order = 0})
+                        if node.has_field(n,"spec") then
+                            spec_new = node.new("glue_spec")
+                            spec_new.width = fonttable.parameters.space
+                            spec_new.shrink_order = head.glue_order
+                            n.spec = spec_new
+                        else
+                            -- somewhat it looks as if this is not the equivalent of the above. Fixme!
+                            set_glue_values(n,{width = fonttable.parameters.space, shrink_order = head.glue_order, stretch = 0, stretch_order = 0})
+                        end
                     end
                 end
             end
