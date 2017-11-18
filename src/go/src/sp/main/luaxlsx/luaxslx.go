@@ -16,6 +16,94 @@ func lerr(l *lua.State, errormessage string) int {
 	return 2
 }
 
+var spreadsheetMetamethods = []lua.RegistryFunction{
+	{"__index", indexSpreadSheet},
+	{"__len", lengthSpreadSheet},
+}
+
+var worksheetMetamethods = []lua.RegistryFunction{
+	{"__call", callWorksheet},
+	{"__index", indexWorksheet},
+}
+
+func indexSpreadSheet(l *lua.State) int {
+	var idx int
+	if i, ok := l.ToInteger(2); ok {
+		idx = i
+	} else {
+		return 0
+	}
+	l.Pop(1)
+	ss := l.ToUserData(1)
+	if spreadsheet, ok := ss.(*goxlsx.Spreadsheet); ok {
+		ws, err := spreadsheet.GetWorksheet(idx - 1)
+		if err != nil {
+			return 0
+		}
+		l.Pop(1)
+
+		l.PushUserData(ws)
+		lua.NewMetaTable(l, "worksheet")
+		lua.SetFunctions(l, worksheetMetamethods, 0)
+
+		l.SetMetaTable(1)
+		return 1
+	}
+	return 0
+}
+
+func lengthSpreadSheet(l *lua.State) int {
+	ss := l.ToUserData(1)
+	if spreadsheet, ok := ss.(*goxlsx.Spreadsheet); ok {
+		l.PushInteger(spreadsheet.NumWorksheets())
+		return 1
+	} else {
+		fmt.Println("!ok")
+		return lerr(l, "Cannot get the number of worksheets in the spreadsheet")
+	}
+	return 0
+}
+
+func indexWorksheet(l *lua.State) int {
+	var arg string
+	if str, ok := l.ToString(-1); !ok {
+		return 0
+	} else {
+		arg = str
+	}
+
+	ws := l.ToUserData(1)
+	if worksheet, ok := ws.(*goxlsx.Worksheet); ok {
+		switch arg {
+		case "minrow":
+			l.PushInteger(worksheet.MinRow)
+		case "maxrow":
+			l.PushInteger(worksheet.MaxRow)
+		case "mincol":
+			l.PushInteger(worksheet.MinColumn)
+		case "maxcol":
+			l.PushInteger(worksheet.MaxColumn)
+		case "name":
+			l.PushString(worksheet.Name)
+		}
+
+		return 1
+	}
+	return 0
+}
+
+// Get the contents of a table cell.
+func callWorksheet(l *lua.State) int {
+	x, _ := l.ToInteger(-2)
+	y, _ := l.ToInteger(-1)
+	ws := l.ToUserData(1)
+	if worksheet, ok := ws.(*goxlsx.Worksheet); ok {
+		l.PushString(worksheet.Cell(x, y))
+		return 1
+	}
+	return 0
+}
+
 func openfile(l *lua.State) int {
 	if l.Top() < 1 {
 		return lerr(l, "The first argument of open must be the filename of the Excel file.")
@@ -32,163 +120,15 @@ func openfile(l *lua.State) int {
 	}
 
 	l.PushUserData(sh)
+	lua.NewMetaTable(l, "spreadsheet")
+	lua.SetFunctions(l, spreadsheetMetamethods, 0)
+	l.SetMetaTable(1)
 
-	return 1
-}
-
-func numWorksheets(l *lua.State) int {
-	if l.Top() < 1 {
-		return lerr(l, "The first argument of num_worksheets must be the spreadsheet object.")
-	}
-	sh := l.ToUserData(1)
-	l.Pop(1)
-	var spreadsheet *goxlsx.Spreadsheet
-	var ok bool
-
-	if spreadsheet, ok = sh.(*goxlsx.Spreadsheet); !ok {
-		return lerr(l, "first argument must be the spreadsheet object")
-	}
-	l.PushInteger(spreadsheet.NumWorksheets())
-	return 1
-}
-
-func getWorksheet(l *lua.State) int {
-	if l.Top() < 2 {
-		return lerr(l, "get_worksheet requires two parameters. The spreadsheet and the index (starting from 0) .")
-	}
-	sh := l.ToUserData(-2)
-	var spreadsheet *goxlsx.Spreadsheet
-	var ok bool
-	if spreadsheet, ok = sh.(*goxlsx.Spreadsheet); !ok {
-		return lerr(l, "first argument must be the spreadsheet object")
-	}
-	var num int
-	if num, ok = l.ToInteger(-1); !ok {
-		return lerr(l, "second argument must be a number")
-	}
-	l.Pop(2)
-
-	ws, err := spreadsheet.GetWorksheet(num)
-	if err != nil {
-		return lerr(l, err.Error())
-	}
-
-	l.PushUserData(ws)
-	return 1
-}
-
-func cell(l *lua.State) int {
-	if l.Top() < 3 {
-		return lerr(l, "cell requires three parameters. The worksheet and x and y coordinate (starting at 1,1).")
-	}
-	var worksheet *goxlsx.Worksheet
-	var ok bool
-	var x, y int
-	ws := l.ToUserData(-3)
-	if worksheet, ok = ws.(*goxlsx.Worksheet); !ok {
-		return lerr(l, "first argument must be the worksheet object")
-	}
-
-	if x, ok = l.ToInteger(-2); !ok {
-		return lerr(l, "second argument must be a number (column)")
-	}
-	if y, ok = l.ToInteger(-1); !ok {
-		return lerr(l, "third argument must be a number (row)")
-	}
-	l.Pop(3)
-
-	l.PushString(worksheet.Cell(x, y))
-	return 1
-}
-
-// Gets a worksheet and removes the value at index
-func getLuaWorksheet(l *lua.State, index int) (*goxlsx.Worksheet, error) {
-	var worksheet *goxlsx.Worksheet
-	var ok bool
-
-	ws := l.ToUserData(index)
-	l.Remove(index)
-	if worksheet, ok = ws.(*goxlsx.Worksheet); !ok {
-		return nil, fmt.Errorf("The argument must be the worksheet object")
-	}
-	return worksheet, nil
-}
-
-func wsname(l *lua.State) int {
-	if l.Top() < 1 {
-		return lerr(l, "wsname requires the worksheet object as the first argument.")
-	}
-
-	ws, err := getLuaWorksheet(l, 1)
-	if err != nil {
-		return lerr(l, "first argument must be a worksheet object")
-	}
-	l.PushString(ws.Name)
-	return 1
-}
-
-func wsmaxrow(l *lua.State) int {
-	if l.Top() < 1 {
-		return lerr(l, "wsmaxrow requires the worksheet object as the first argument.")
-	}
-
-	ws, err := getLuaWorksheet(l, 1)
-	if err != nil {
-		return lerr(l, "first argument must be a worksheet object")
-	}
-	l.PushInteger(ws.MaxRow)
-	return 1
-}
-
-func wsminrow(l *lua.State) int {
-	if l.Top() < 1 {
-		return lerr(l, "wsminrow requires the worksheet object as the first argument.")
-	}
-
-	ws, err := getLuaWorksheet(l, 1)
-	if err != nil {
-		return lerr(l, "first argument must be a worksheet object")
-	}
-	l.PushInteger(ws.MinRow)
-	return 1
-}
-
-func wsmaxcol(l *lua.State) int {
-	if l.Top() < 1 {
-		return lerr(l, "wsmaxcol requires the worksheet object as the first argument.")
-	}
-
-	ws, err := getLuaWorksheet(l, 1)
-	if err != nil {
-		return lerr(l, "first argument must be a worksheet object")
-	}
-	l.PushInteger(ws.MaxColumn)
-	return 1
-}
-
-func wsmincol(l *lua.State) int {
-	if l.Top() < 1 {
-		return lerr(l, "wsmincol requires the worksheet object as the first argument.")
-	}
-
-	ws, err := getLuaWorksheet(l, 1)
-	if err != nil {
-		return lerr(l, "first argument must be a worksheet object")
-	}
-	l.PushInteger(ws.MinColumn)
 	return 1
 }
 
 var xlsxlib = []lua.RegistryFunction{
 	{"open", openfile},
-	{"num_worksheets", numWorksheets},
-	{"get_worksheet", getWorksheet},
-	{"cell", cell},
-	{"wsname", wsname},
-	{"wsmaxrow", wsmaxrow},
-	{"wsminrow", wsminrow},
-	{"wsmaxcol", wsmaxcol},
-	{"wsmincol", wsmincol},
 }
 
 func Open(l *lua.State) {
@@ -198,5 +138,4 @@ func Open(l *lua.State) {
 	}
 	lua.Require(l, "xlsx", requireXSLX, true)
 	l.Pop(1)
-
 }
