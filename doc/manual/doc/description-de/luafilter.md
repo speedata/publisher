@@ -95,3 +95,42 @@ und ein Element:
 Die XML-Datei wird unter dem Namen `data.xml` gespeichert.
 
 
+xlsx
+----
+
+`open(dateiname)`: lädt die angegebene Excel-Datei (Dateiendung `.xlsx`) und liefert im Erfolgsfall ein Objekt zurück, mit der auf den Inhalt zugegriffen werden kann. Im Fehlerfall gibt sie `false` und eine textuelle Fehlermeldung zurück.
+
+Benutzung:
+
+    spreadsheet, err = xlsx.open("myfile.xlsx")
+    if not spreadsheet then
+        print(err)
+        os.exit(-1)
+    end
+
+
+Das Objekt `spreadsheet` beinhaltet die einzelnen Arbeitsblätter (Worksheets). Die Anzahl der Arbeitsblätter lässt sich über den length-Operator feststellen und die einzelnen Arbeitsblätter per Index (1 ist das erste Arbeitsblatt).
+
+    numWorksheets = #spreadsheet
+    ws = spreadsheet[1]
+
+Mit dem Objekt `ws` kann direkt auf die Zelleninhalte zugegriffen werden.
+Dazu wird es als Funktion aufgerufen und liefert eine Zeichenkette zurück.
+Die erste Zelle oben links hat die Koordinaten 1,1, die erste Zelle in der zweiten Zeile 1,2 und so weiter.
+
+    cell1 = ws(1,1)
+    cell2 = ws(1,2)
+
+Ebenfalls kann man verschiedene Eigenschaften des Arbeitsblattes in den Feldern des ws-Objekts ermitteln:
+
+
+Wert    | Beschreibung
+--------|-------------
+minrow  | Erste Zeile, in der Daten enthalten sind
+maxrow  | Letzte Zeile, in der Daten enthalten sind
+mincol  | Erste Spalte, in der Daten enthalten sind
+maxcol  | Letzte Spalte, in der Daten enthalten sind
+name    | Name des Arbeitsblattes
+
+
+

@@ -89,3 +89,45 @@ and an element:
 `child1`, ... are strings, elements or comments.
 
 The XML file gets written with the name `data.xml`
+
+
+xlsx
+----
+
+`open(filename)`: loads the given Excel file (file extension `.xlsx`) and in case of success returns an object which can be used to access the contents of the spreadsheet. In case of an error it returns two arguments. The first argument is `false` and the second argument contains the error message.
+
+Usage:
+
+    spreadsheet, err = xlsx.open("myfile.xlsx")
+    if not spreadsheet then
+        print(err)
+        os.exit(-1)
+    end
+
+
+The object `spreadsheet` contains the worksheets. The number of worksheets can be obtained by the length operator (#) and each worksheet is indexed stating from one:
+
+    numWorksheets = #spreadsheet
+    ws = spreadsheet[1]
+
+The object `ws` can be used to get the contents of each cell.
+Use the object as a function call with the coordinates as the arguments.
+It returns the cell contents as a string.
+The top left cell has the coordinate (1,1), the first cell in the second row (1,2) and so on.
+
+    cell1 = ws(1,1)
+    cell2 = ws(1,2)
+
+Some properties can be queried in the worksheet object:
+
+Value    | Description
+--------|-------------
+minrow  | First row that contains data
+maxrow  | Last row that contains data
+mincol  | First column that contains data
+maxcol  | Last column that contains data
+name    | Name of the worksheet
+
+
+
+
