@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.11" date="2017-11-23">
+      <en>Add Excel reader and RelaxNG validaton</en>
+      <de>Lese Excel-Dateien und validiere RelaxNG</de>
+    </entry>
+    <entry version="3.1.11" date="2017-11-06">
+      <en>Add basic support for LuaTeX 1.0.4</en>
+      <de>Füge grundlegende Unterstützung für LuaTeX 1.0.4 hinzu</de>
+    </entry>
     <entry version="3.1.10" date="2017-11-03">
       <en>Enhance Lua CSV reader</en>
       <de>Verbessere den Lua-CSV-Reader</de>
