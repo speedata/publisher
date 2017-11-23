@@ -47,6 +47,8 @@ Value | Description
 ------|-------------
 `projectdir` | A value that contains the current working directory (the one with the `layout.xml` and `publisher.cfg`)
 `run_saxon`  | A function that calls the external Java-program `saxon`. It accepts three mandatory arguments (the transformation stylesheet, the input file and the output file) and an optional argument that is passed as the parameter string to saxon. The function returns a boolean value (success) and optionally a string in case of a `false` success value.
+`validate_relaxng`  | A function that validates an XML file against a RelaxNG schema. The first argument is the XML file, the second argument the RelaxNG schema. You can use relative paths for both.
+
 
 
     ok, err = runtime.run_saxon("transformation.xsl","source.xml","data.xml","param1=value1 param2=value2")
@@ -54,6 +56,14 @@ Value | Description
     -- stop the publishing process if an error occurs
     if not ok then
         print(err)
+        os.exit(-1)
+    end
+
+Validation:
+
+    ok, msg = runtime.validate_relaxng("layout.xml","../schema/layoutschema-de.rng")
+    if not ok then
+        print(msg)
         os.exit(-1)
     end
 

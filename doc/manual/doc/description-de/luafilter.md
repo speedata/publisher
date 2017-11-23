@@ -49,7 +49,10 @@ Wert | Beschreibung
 ------|-------------
 `projectdir` | Ein string-Wert, der das aktuelle Projektverzeichnis enthält (das Verzeichnis mit der `layout.xml` bzw. `publisher.cfg`-Datei)
 `run_saxon`  | Eine Funktion, die `saxon` aufruft. Sie erwartet drei string-Argumente (das Stylesheet, die Eingabe- und die Ausgabedatei) und ein optionales Argument das als Parameter an saxon übergeben wird. Die Rückgabe ist ein boolean, der true ist, wenn der Befehl fehlerfrei ausgeführt wurde. Ansonsten wird ein zweiter Rückgabewert (string) zurück gegeben, der die Fehlermeldung enthält.
+`validate_relaxng`  | Eine Funktion, die eine XML-Datei gegen ein RelaxNG-Schema prüft. Das erste Argument ist die XML-Datei, das zweite Argument die Schemadatei. Es können relative Pfade angegeben werden.
 
+
+Konvertierung:
 
     ok, err = runtime.run_saxon("transformation.xsl","source.xml","data.xml","param1=Wert1 param2=Wert2")
 
@@ -58,6 +61,15 @@ Wert | Beschreibung
         print(err)
         os.exit(-1)
     end
+
+Validierung:
+
+    ok, msg = runtime.validate_relaxng("layout.xml","../schema/layoutschema-de.rng")
+    if not ok then
+        print(msg)
+        os.exit(-1)
+    end
+
 
 
 
