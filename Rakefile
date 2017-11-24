@@ -338,13 +338,14 @@ task :deb => [:sphelper] do
 	cp_r(Dir.glob("img/*"),targetimg)
 	cp_r("lib/.",targetlib)
 	cp_r(File.join("schema","layoutschema-en.rng"),targetschema)
+	cp_r(File.join("schema","layoutschema-de.rng"),targetschema)
 
 	Dir.chdir("src") do
 		cp_r(["tex","hyphenation"],targetsw)
 		# do not copy every Lua file to the dest
 		# and leave out .gitignore and others
 		Dir.glob("**/*.lua").reject { |x|
-		    x =~  /viznode|fileutils/
+		    x =~  /viznode|fileutils|Shopify/
 		}.each { |x|
 		  mkdir_p(targetsw.join(File.dirname(x)))
 		  cp(x,targetsw.join(File.dirname(x)))
