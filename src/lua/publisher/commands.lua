@@ -2247,8 +2247,9 @@ function commands.place_object( layoutxml,dataxml )
     end
 
     publisher.setup_page(onpage)
-
-    local cg = publisher.current_grid
+    -- current_grid should be local. But then the test tables/futureobjects fails
+    -- FIXME: check why the test fails
+    -- local current_grid
     if onpage then
         current_grid = publisher.pages[onpage].grid
     else
@@ -2309,7 +2310,6 @@ function commands.place_object( layoutxml,dataxml )
         options.current_height = areaheight
     end
 
-    local grid   = current_grid
     local tab    = publisher.dispatch(layoutxml,dataxml,options)
 
     -- reset the current maxwidth
@@ -2343,7 +2343,9 @@ function commands.place_object( layoutxml,dataxml )
         end
     end
     for i=1,#objects do
-        current_grid = publisher.current_grid
+        if not onpage then
+            current_grid = publisher.current_grid
+        end
         local framewidth
         object     = objects[i].object
         objecttype = objects[i].objecttype

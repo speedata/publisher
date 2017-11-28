@@ -1,7 +1,7 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <Options show-grid="no" trace="no"/>
+  <Trace objects="no" grid="no"/>
   <SetGrid nx="10" height="12pt"/>
   <Pageformat width="5cm" height="6cm"/>
 

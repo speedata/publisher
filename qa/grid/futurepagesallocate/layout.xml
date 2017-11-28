@@ -1,0 +1,29 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <SetGrid nx="11" height="12pt"/>
+    <Pageformat width="60mm" height="63mm"/>
+    <Trace grid="no" gridallocation="no"/>
+
+    <Pagetype name="x" test="true()">
+        <Margin left="2mm" right="2mm" top="2mm" bottom="2mm"/>
+        <PositioningArea name="text">
+            <PositioningFrame width="5" height="{sd:number-of-rows()}" row="1" column="1"/>
+            <PositioningFrame width="5" height="{sd:number-of-rows()}" row="1" column="7"/>
+        </PositioningArea>
+    </Pagetype>
+
+    <Record element="data">
+        <Loop select="2" variable="i">
+            <PlaceObject row="3" column="3" page="{$i}" keepposition="yes">
+                <Image file="_samplea.pdf" width="5" height="6"/>
+            </PlaceObject>
+        </Loop>
+        <Output allocate="auto" row="{sd:current-row()}" area="text">
+            <Text>
+                <Paragraph>
+                    <Value select="sd:dummytext(1)"/>
+                </Paragraph>
+            </Text>
+        </Output>
+    </Record>
+</Layout>
