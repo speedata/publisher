@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.12" date="2017-11-28">
+      <en>Bugfix for future pages</en>
+      <de>Fehlerkorrektur für »zukünftige Seiten«</de>
+    </entry>
     <entry version="3.1.11" date="2017-11-23">
       <en>Add Excel reader and RelaxNG validaton</en>
       <de>Lese Excel-Dateien und validiere RelaxNG</de>
