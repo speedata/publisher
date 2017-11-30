@@ -3067,28 +3067,6 @@ function mkbookmarknodes(level,open_p,title)
 end
 
 
--- For debugging in tables
--- Currently not used until a new switch is built in
--- function showtextatright(hbox,txt)
---     local vbox = node.vpack(hbox)
---     local tmp = node.has_attribute(hbox,att_tr_dynamic_data)
---     local ff = fonts.lookup_fontfamily_name_number["__verysmall__"] or define_small_fontfamily()
-
---     local x = mknodes(tostring(txt),ff)
---     x = set_color_if_necessary(x,55)
-
---     local texthbox = node.hpack(x)
---     texthbox.depth = 0
---     texthbox.height = 0
-
---     local tail = node.tail(vbox)
---     texthbox = node.insert_after(vbox,tail,texthbox)
---     texthbox = node.hpack(texthbox)
---     node.set_attribute(texthbox,att_tr_dynamic_data,tmp)
---     texthbox.width = vbox.width
---     return texthbox
--- end
-
 -- blue rule below the hbox for debugging purpose
 function addhrule(hbox)
     local n = node.new("whatsit","pdf_literal")
