@@ -3154,36 +3154,40 @@ function set_color_if_necessary( nodelist,color )
     else
         colorname = colortable[color]
     end
-    if colorname == "black" then return nodelist end
-    local colstart = node.new("whatsit","pdf_colorstack")
-    colstart.data  = colors[colorname].pdfstring
-    if status.luatex_version < 79 then
-        colstart.cmd = 1
+    -- When we uncomment the if .. end here, the typesetting
+    -- process is much slower. See #143
+    -- if colorname == "black" then return nodelist end
+    local colstart, colstop
+    if colorname == "black" then
+        colstart = node.new("whatsit","pdf_literal")
+        colstop  = node.new("whatsit","pdf_literal")
     else
-        colstart.command = 1
+        colstart = node.new("whatsit","pdf_colorstack")
+        colstop  = node.new("whatsit","pdf_colorstack")
+        colstart.data = colors[colorname].pdfstring
+        colstop.data  = ""
+        if status.luatex_version < 79 then
+            colstart.cmd = 1
+            colstop.cmd  = 2
+        else
+            colstart.command = 1
+            colstop.command  = 2
+        end
+        colstart.stack = 0
+        colstop.stack  = 0
     end
-    colstart.stack = 0
+
     if dontformat then
         node.set_attribute(colstart,att_dont_format,dontformat)
     end
 
-    colstart.next = nodelist
-    nodelist.prev = colstart
-
-    local colstop  = node.new("whatsit","pdf_colorstack")
-    colstop.data  = ""
-    if status.luatex_version < 79 then
-        colstop.cmd = 2
-    else
-        colstop.command = 2
-    end
-    colstop.stack = 0
+    nodelist = node.insert_before(nodelist,nodelist,colstart)
     local last = node.tail(nodelist)
-    last.next = colstop
-    colstop.prev = last
+    nodelist = node.insert_after(nodelist,tail,colstop)
+
     node.set_attribute(colstart,att_origin,origin_setcolorifnecessary)
     node.set_attribute(colstop,att_origin,origin_setcolorifnecessary)
-    return colstart
+    return nodelist
 end
 
 function set_fontfamily_if_necessary(nodelist,fontfamily)

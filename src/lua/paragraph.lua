@@ -397,7 +397,8 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         if self.initial then
             parameter.hangindent =  parameter.hangindent + self.initial.width
             local i_ht = self.initial.height + self.initial.depth
-            local nl_ht = nodelist.height + nodelist.depth
+            local _w, _h, _d = node.dimensions(nodelist)
+            local nl_ht = _h + _d
             local maxindent = 0
             -- get max indent
             if parameter.parshape then
