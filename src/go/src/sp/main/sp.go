@@ -4,10 +4,8 @@ package main
 
 import (
 	"bufio"
-	"configurator"
 	"encoding/xml"
 	"fmt"
-	"hotfolder"
 	"io"
 	"io/ioutil"
 	"log"
@@ -18,13 +16,15 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
-	"sp"
-	"sp/cache"
 	"strconv"
 	"strings"
 	"syscall"
 	"time"
 
+	"configurator"
+	"hotfolder"
+	"sp"
+	"sp/cache"
 	"sp/comm"
 
 	"github.com/speedata/optionparser"

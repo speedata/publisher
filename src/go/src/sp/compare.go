@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"strings"
 	"sync"
@@ -15,8 +16,9 @@ import (
 )
 
 var (
-	wg       sync.WaitGroup
-	finished chan bool
+	wg        sync.WaitGroup
+	finished  chan bool
+	exeSuffix string
 )
 
 func init() {
@@ -34,6 +36,12 @@ func fileExists(filename string) bool {
 // DoCompare starts comparing the files in the
 // current directory and its subdirectory
 func DoCompare(absdir string) {
+	switch runtime.GOOS {
+	case "windows":
+		exeSuffix = ".exe"
+	default:
+		exeSuffix = ""
+	}
 	cs := make(chan compareStatus, 0)
 	compare := mkCompare(cs)
 	filepath.Walk(absdir, compare)
@@ -49,7 +57,7 @@ func compareTwoPages(sourcefile, referencefile, dummyfile, path string) float64 
 		return 99.0
 	}
 
-	cmd := exec.Command("compare", "-metric", "mae", sourcefile, referencefile, dummyfile)
+	cmd := exec.Command("compare"+exeSuffix, "-metric", "mae", sourcefile, referencefile, dummyfile)
 	cmd.Dir = path
 	// err == 1 looks like an indicator that the comparison is OK but some diffs in the images
 	// err == 2 seems to be a fatal error
@@ -124,14 +132,14 @@ func runComparison(path string, status chan compareStatus) {
 		}
 	}
 
-	cmd := exec.Command("sp")
+	cmd := exec.Command("sp" + exeSuffix)
 	cmd.Dir = path
 	err = cmd.Run()
 	if err != nil {
 		log.Println(path)
 		log.Fatal("Error running command 'sp': ", err)
 	}
-	cmd = exec.Command("convert", "publisher.pdf", "source-%02d.png")
+	cmd = exec.Command("convert"+exeSuffix, "publisher.pdf", "source-%02d.png")
 	cmd.Dir = path
 	cmd.Run()
 	if err != nil {
@@ -142,7 +150,7 @@ func runComparison(path string, status chan compareStatus) {
 	// we only do that when the pdf is newer than the png files
 	// (that is: the pdf has been updated)
 	if newer(filepath.Join(path, "reference.pdf"), filepath.Join(path, "reference-00.png")) {
-		cmd := exec.Command("convert", "reference.pdf", "reference-%02d.png")
+		cmd := exec.Command("convert"+exeSuffix, "reference.pdf", "reference-%02d.png")
 		cmd.Dir = path
 		err = cmd.Run()
 		if err != nil {
