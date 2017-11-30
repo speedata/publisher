@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.13" date="2017-11-30">
+      <en>Use exeSufix for sp compare on Windows</en>
+      <de>Benutze exeSufix für sp compare auf Windows</de>
+    </entry>
+    <entry version="3.1.13" date="2017-11-30">
+      <en>Bugfix for Output/allocate="auto"</en>
+      <de>Fehlerkorektur für Output/allocate="auto"</de>
+    </entry>
     <entry version="3.1.12" date="2017-11-28">
       <en>Bugfix for future pages</en>
       <de>Fehlerkorrektur für »zukünftige Seiten«</de>
