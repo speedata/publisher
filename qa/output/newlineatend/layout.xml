@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    version="3.1.12">
+
+    <Pageformat width="90mm" height="100mm"/>
+    <Options ignoreeol="yes" crop="3mm"/>
+    <SetGrid height="8.5pt" width="2mm"/>
+
+    <DefineFontfamily name="text" fontsize="7.7pt" leading="8.5pt">
+        <Regular fontface="sans"/>
+        <Italic fontface="sans-italic"/>
+    </DefineFontfamily>
+
+    <Record element="foo" >
+        <Output  allocate="auto" row="1">
+            <Text>
+                <Paragraph>
+                    <Value select="p"/>
+                </Paragraph>
+            </Text>
+        </Output>
+    </Record>
+</Layout>
