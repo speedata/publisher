@@ -101,6 +101,10 @@ att_keep = 700
 -- attributes for glue
 att_leaderwd = 800
 
+-- mknodes
+att_newline = 900
+
+
 -- Debugging / see att_origin
 origin_table = 1
 origin_vspace = 2
@@ -2549,10 +2553,12 @@ function mknodes(str,fontfamily,parameter)
             local dummypenalty
             dummypenalty = node.new("penalty")
             dummypenalty.penalty = 10000
+            node.set_attribute(dummypenalty,att_newline,1)
             head,last = node.insert_after(head,last,dummypenalty)
 
             local strut
             strut = add_rule(nil,"head",{height = 8 * factor, depth = 3 * factor, width = 0 })
+            node.set_attribute(strut,att_newline,1)
             head,last = node.insert_after(head,last,strut)
 
             local p1,g,p2
@@ -2563,6 +2569,10 @@ function mknodes(str,fontfamily,parameter)
 
             p2 = node.new("penalty")
             p2.penalty = -10000
+
+            node.set_attribute(p1,att_newline,1)
+            node.set_attribute(p2,att_newline,1)
+            node.set_attribute(g,att_newline,1)
 
             head,last = node.insert_after(head,last,p1)
             head,last = node.insert_after(head,last,g)

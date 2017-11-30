@@ -428,6 +428,15 @@ function Paragraph:format(width_sp, default_textformat_name,options)
             end
         end
 
+
+        -- if the last items are newline nodes, clear them (see #142)
+        local tail = node.slide(nodelist)
+        while tail and node.has_attribute(tail,publisher.att_newline) do
+            nodelist = node.remove(nodelist,tail)
+            tail = node.tail(nodelist)
+        end
+
+
         -- If there is ragged shape (i.e. not a rectangle of text) then we should turn off
         -- font expansion. This is done by setting tex.(pdf)adjustspacing to 0 temporarily
         if ragged_shape then
