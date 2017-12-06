@@ -266,6 +266,7 @@
                <ref name="e_NoBreak"></ref>
                <ref name="e_Sub"></ref>
                <ref name="e_Sup"></ref>
+               <ref name="e_Span"></ref>
                <ref name="e_Switch"></ref>
                <ref name="e_U"></ref>
                <ref name="e_URL"></ref>
@@ -701,6 +702,7 @@
                <ref name="e_NoBreak"></ref>
                <ref name="e_Sub"></ref>
                <ref name="e_Sup"></ref>
+               <ref name="e_Span"></ref>
                <ref name="e_Switch"></ref>
                <ref name="e_U"></ref>
                <ref name="e_URL"></ref>
@@ -1181,6 +1183,7 @@
                <ref name="e_NoBreak"></ref>
                <ref name="e_Sub"></ref>
                <ref name="e_Sup"></ref>
+               <ref name="e_Span"></ref>
                <ref name="e_Switch"></ref>
                <ref name="e_U"></ref>
                <ref name="e_URL"></ref>
@@ -1577,6 +1580,7 @@
                <ref name="e_NoBreak"></ref>
                <ref name="e_Sub"></ref>
                <ref name="e_Sup"></ref>
+               <ref name="e_Span"></ref>
                <ref name="e_Switch"></ref>
                <ref name="e_U"></ref>
                <ref name="e_URL"></ref>
@@ -1971,6 +1975,7 @@
                <ref name="e_NoBreak"></ref>
                <ref name="e_Sub"></ref>
                <ref name="e_Sup"></ref>
+               <ref name="e_Span"></ref>
                <ref name="e_Switch"></ref>
                <ref name="e_U"></ref>
                <ref name="e_URL"></ref>
@@ -2370,6 +2375,7 @@
                <ref name="e_NoBreak"></ref>
                <ref name="e_Sub"></ref>
                <ref name="e_Sup"></ref>
+               <ref name="e_Span"></ref>
                <ref name="e_Switch"></ref>
                <ref name="e_U"></ref>
                <ref name="e_URL"></ref>
@@ -2871,6 +2877,7 @@
                <ref name="e_NoBreak"></ref>
                <ref name="e_Sub"></ref>
                <ref name="e_Sup"></ref>
+               <ref name="e_Span"></ref>
                <ref name="e_Switch"></ref>
                <ref name="e_U"></ref>
                <ref name="e_URL"></ref>
@@ -3737,6 +3744,60 @@
          <empty></empty>
       </element>
    </define>
+   <define name="e_Span">
+      <element name="Span">
+         <a:documentation>Surround text by styling options.</a:documentation>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS class for this element.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id for this element.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="background-color">
+               <a:documentation>The background color of the content</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="background-padding-top">
+               <a:documentation>The top padding of the background color (can be negative)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="background-padding-bottom">
+               <a:documentation>The bottom padding of the background color (can be negative)</a:documentation>
+            </attribute>
+         </optional>
+         <zeroOrMore>
+            <choice>
+               <ref name="e_A"></ref>
+               <ref name="e_Action"></ref>
+               <ref name="e_B"></ref>
+               <ref name="e_Br"></ref>
+               <ref name="e_Color"></ref>
+               <ref name="e_Fontface"></ref>
+               <ref name="e_ForAll"></ref>
+               <ref name="e_Frame"></ref>
+               <ref name="e_HSpace"></ref>
+               <ref name="e_I"></ref>
+               <ref name="e_Image"></ref>
+               <ref name="e_Loop"></ref>
+               <ref name="e_NoBreak"></ref>
+               <ref name="e_Sub"></ref>
+               <ref name="e_Sup"></ref>
+               <ref name="e_Span"></ref>
+               <ref name="e_Switch"></ref>
+               <ref name="e_U"></ref>
+               <ref name="e_URL"></ref>
+               <ref name="e_Value"></ref>
+            </choice>
+         </zeroOrMore>
+      </element>
+   </define>
    <define name="e_Sub">
       <element name="Sub">
          <a:documentation>Subscript text.</a:documentation>
@@ -4502,6 +4563,7 @@
                <ref name="e_NoBreak"></ref>
                <ref name="e_Sub"></ref>
                <ref name="e_Sup"></ref>
+               <ref name="e_Span"></ref>
                <ref name="e_Switch"></ref>
                <ref name="e_U"></ref>
                <ref name="e_URL"></ref>
@@ -4734,6 +4796,7 @@
                <ref name="e_NoBreak"></ref>
                <ref name="e_Sub"></ref>
                <ref name="e_Sup"></ref>
+               <ref name="e_Span"></ref>
                <ref name="e_Switch"></ref>
                <ref name="e_U"></ref>
                <ref name="e_URL"></ref>

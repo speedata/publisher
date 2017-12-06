@@ -322,7 +322,31 @@ function pre_linebreak( head )
     return true
 end
 
---- Insert a horizontal rule in the nodelist that is used for underlining.
+function insert_backgroundcolor( parent, head, start, bgcolorindex, bg_padding_top, bg_padding_bottom )
+    bg_padding_top    = bg_padding_top or 0
+    bg_padding_bottom = bg_padding_bottom or 0
+    local wd = node.dimensions(parent.glue_set,parent.glue_sign, parent.glue_order,start,head)
+    local ht = parent.height
+    local dp = parent.depth
+
+    local colorname = publisher.colortable[bgcolorindex]
+    local pdfstring = publisher.colors[colorname].pdfstring
+
+    -- wd, ht and dp are now in pdf points
+    wd = wd / publisher.factor
+    ht = ht / publisher.factor
+    dp = dp / publisher.factor
+    bg_padding_top    = bg_padding_top    / publisher.factor
+    bg_padding_bottom = bg_padding_bottom / publisher.factor
+    local rule = node.new("whatsit","pdf_literal")
+
+    rule.data = string.format("q %s 0 %g %g %g re f Q", pdfstring, -dp - bg_padding_bottom ,  wd, ht + dp + bg_padding_top + bg_padding_bottom )
+    rule.mode = 0
+    parent.head = node.insert_before(parent.head,start,rule)
+    return rule
+end
+
+--- Insert a horizontal rule in the nodelist that is used for underlining. typ is 1 (solid) or 2 (dashed)
 function insert_underline( parent, head, start, typ)
     local wd = node.dimensions(parent.glue_set,parent.glue_sign, parent.glue_order,start,head)
     local ht = parent.height
@@ -352,11 +376,17 @@ end
 
 --- In the post_linebreak function we manipulate the paragraph that doesn't
 --- affect it's typesetting. Underline and 'showhyphens' is done here. The
---- overall apperance of the paragraph is fixed at this time, we can only add
---- deocration now.
+--- overall appearance of the paragraph is fixed at this time, we can only add
+--- decoration now.
 function post_linebreak( head, list_head)
-    local atttype = nil
-    local start = nil
+    local underlinetype = nil
+    local start_underline = nil
+
+    local bgcolorindex = nil
+    local start_bgcolor = nil
+    local bg_padding_top = 0
+    local bg_padding_bottom = 0
+
     while head do
         if head.id == hlist_node then -- hlist
             post_linebreak(head.list,head)
@@ -374,24 +404,47 @@ function post_linebreak( head, list_head)
             end
         elseif head.id == glue_node then -- glue
             local att_underline = node.has_attribute(head, publisher.att_underline)
+            local att_bgcolor   = node.has_attribute(head, publisher.att_bgcolor)
             -- at rightskip we must underline (if start exists)
             if att_underline == nil or head.subtype == 9 then
-                if start then
-                    insert_underline(list_head, head, start,atttype)
-                    start = nil
+                if start_underline then
+                    insert_underline(list_head, head, start_underline,underlinetype)
+                    start_underline = nil
+                end
+            end
+            if att_bgcolor == nil or head.subtype == 9 then
+                if start_bgcolor then
+                    insert_backgroundcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom)
+                    start_bgcolor = nil
                 end
             end
         elseif head.id == glyph_node then -- glyph
             local att_underline = node.has_attribute(head, publisher.att_underline)
+            local att_bgcolor   = node.has_attribute(head, publisher.att_bgcolor)
+            local att_bgpaddingtop    = node.has_attribute(head, publisher.att_bgpaddingtop)
+            local att_bgpaddingbottom = node.has_attribute(head, publisher.att_bgpaddingbottom)
             if att_underline and att_underline > 0 then
-                if not start then
-                    atttype = att_underline
-                    start = head
+                if not start_underline then
+                    underlinetype = att_underline
+                    start_underline = head
                 end
             else
-                if start then
-                    insert_underline(list_head, head, start, atttype)
-                    start = nil
+                if start_underline then
+                    insert_underline(list_head, head, start_underline, underlinetype)
+                    start_underline = nil
+                end
+            end
+            if att_bgcolor and att_bgcolor > 0 then
+                if not start_bgcolor then
+                    bgcolorindex = att_bgcolor
+                    bg_padding_top    = att_bgpaddingtop
+                    bg_padding_bottom = att_bgpaddingbottom
+                    start_bgcolor = head
+                end
+            else
+                if start_bgcolor then
+                    insert_backgroundcolor(list_head, head, start_bgcolor, bgcolorindex,bg_padding_top,bg_padding_bottom)
+                    start_bgcolor = nil
                 end
             end
         end

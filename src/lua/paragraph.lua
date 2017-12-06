@@ -22,6 +22,7 @@ function Paragraph:new( textformat  )
     return instance
 end
 
+-- Add italic/bold/underline/... attribtes to node
 function Paragraph:add_italic_bold( nodelist,parameter )
     -- FIXME(?): recurse, node.traverse() stops at hlists
     for i in node.traverse_id(publisher.glyph_node,nodelist) do

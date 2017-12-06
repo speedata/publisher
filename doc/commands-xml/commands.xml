@@ -114,6 +114,7 @@
         <cmd name="NoBreak"/>
         <cmd name="Sub"/>
         <cmd name="Sup"/>
+        <cmd name="Span"/>
         <cmd name="Switch"/>
         <cmd name="U"/>
         <cmd name="URL"/>
@@ -6449,6 +6450,57 @@
 </Record>]]></listing>
     </example>
     <seealso/>
+  </command>
+  <command en="Span" css="span" since="3.1.15">
+    <description xml:lang="en">
+      <para>Surround text by styling options.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Text mit Style-Optionen umgeben.</para>
+    </description>
+    <attribute en="class" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS class for this element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS Klasse für dieses Element.</para>
+      </description>
+    </attribute>
+    <attribute en="id" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS id for this element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS id für dieses Element.</para>
+      </description>
+    </attribute>
+    <attribute en="background-color" type="text" optional="yes" css="background-color">
+      <description xml:lang="en">
+        <para>The background color of the content</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Hintergrundfarbe des Inhalts.</para>
+      </description>
+    </attribute>
+    <attribute en="background-padding-top" type="length" optional="yes" css="background-padding-top">
+      <description xml:lang="en">
+        <para>The top padding of the background color (can be negative)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Innenabstand (oben) der Hintergrundfarbe (kann negativ sein)</para>
+      </description>
+    </attribute>
+    <attribute en="background-padding-bottom" type="length" optional="yes" css="background-padding-bottom">
+      <description xml:lang="en">
+        <para>The bottom padding of the background color (can be negative)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Innenabstand (unten) der Hintergrundfarbe (kann negativ sein)</para>
+      </description>
+    </attribute>
+    <childelements>
+      <reference name="Textvalues"/>
+    </childelements>
   </command>
   <command en="Sub">
     <description xml:lang="en">

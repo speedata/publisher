@@ -59,6 +59,9 @@ att_script         = 4
 att_underline      = 5
 att_indent         = 6 -- see textformats for details
 att_rows           = 7 -- see textformats for details
+att_bgcolor        = 8 -- similar to underline
+att_bgpaddingtop   = 9
+att_bgpaddingbottom   = 10
 
 -- for debugging purpose
 att_origin         = 98
@@ -519,6 +522,7 @@ local dispatch_table = {
     SetGrid                 = commands.set_grid,
     SetVariable             = commands.setvariable,
     SortSequence            = commands.sort_sequence,
+    Span                    = commands.span,
     Stylesheet              = commands.stylesheet,
     Sub                     = commands.sub,
     Sup                     = commands.sup,
@@ -2052,19 +2056,34 @@ marker.value = 1
 --- Convert `<b>`, `<u>` and `<i>` in text to publisher recognized elements.
 function parse_html( elt, parameter )
     local a = paragraph:new()
+    parameter = parameter or {}
     local bold,italic,underline,allowbreak
-    if parameter then
-        if parameter.underline then
-            underline = 1
-        end
-        if parameter.bold then
-            bold = 1
-        end
-        if parameter.italic then
-            italic = 1
-        end
-        allowbreak = parameter.allowbreak
+    local backgroundcolor   = parameter.backgroundcolor
+    local bg_padding_top    = parameter.bg_padding_top
+    local bg_padding_bottom = parameter.bg_padding_bottom
+
+    if parameter.underline then
+        underline = 1
     end
+    if parameter.bold then
+        bold = 1
+    end
+    if parameter.italic then
+        italic = 1
+    end
+    allowbreak = parameter.allowbreak
+
+    local defaults = {
+       fontfamily = 0,
+       bold = bold,
+       italic = italic,
+       underline = underline,
+       allowbreak = allowbreak,
+       backgroundcolor=backgroundcolor,
+       bg_padding_top = bg_padding_top,
+       bg_padding_bottom = bg_padding_bottom
+    }
+    local options = setmetatable({}, {__index = defaults})
 
     if elt[".__local_name"] then
         local eltname = string.lower(elt[".__local_name"])
@@ -2077,12 +2096,19 @@ function parse_html( elt, parameter )
         elseif eltname == "span" then
             local css_rules = css:matches({element = 'span', class=elt.class}) or {}
             local has_css = false
-            local colorindex
+            local fg_colorindex
+            local bg_colorindex
 
             if css_rules["color"] then
                 has_css = true
-                colorindex = colors[css_rules["color"]].index
+                fg_colorindex = colors[css_rules["color"]].index
             end
+            local bgcolor = css_rules["background-color"]
+            if bgcolor then
+                has_css = true
+                bg_colorindex = colors[bgcolor].index
+            end
+
             local td = css_rules["text-decoration"]
             if  td and string.match(td,"underline") then
                has_css = true
@@ -2091,39 +2117,46 @@ function parse_html( elt, parameter )
             if has_css then
                 local b = paragraph:new()
                 if type(elt[1]) == "string" then
-                    b:append(elt[1],{fontfamily = 0, bold = bold, italic = italic, underline = underline})
-                    b:set_color(colorindex)
+                    options["backgroundcolor"] = bg_colorindex
+                    if css_rules["background-padding-top"] then
+                        options["bg_padding_top"]    = tex.sp(css_rules["background-padding-top"])
+                    end
+                    if css_rules["background-padding-bottom"] then
+                        options["bg_padding_bottom"] = tex.sp(css_rules["background-padding-bottom"])
+                    end
+                    b:append(elt[1],options)
+                    b:set_color(fg_colorindex)
                     a:append(b)
                     elt = {}
                 end
             end
         elseif eltname == "b" or eltname == "strong" then
-            bold = 1
+            options.bold = 1
         elseif eltname == "i" then
-            italic = 1
+            options.italic = 1
         elseif eltname == "u" then
-            underline = 1
+            options.underline = 1
             if elt.class then
                 local css_rules = css:matches({element = 'u', class=elt.class}) or {}
                 if css_rules["border-style"] == "dashed" then
-                    underline = 2
+                    options.underline = 2
                 end
             end
         elseif eltname == "sub" then
             for i=1,#elt do
                 if type(elt[i]) == "string" then
-                    a:script(elt[i],1,{fontfamily = 0, bold = bold, italic = italic, underline = underline })
+                    a:script(elt[i],1,options)
                 elseif type(elt[i]) == "table" then
-                    a:script(parse_html(elt[i]),1,{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                    a:script(parse_html(elt[i]),1,options)
                 end
             end
             elt = {}
         elseif eltname == "sup" then
             for i=1,#elt do
                 if type(elt[i]) == "string" then
-                    a:script(elt[i],2,{fontfamily = 0, bold = bold, italic = italic, underline = underline })
+                    a:script(elt[i],2,options)
                 elseif type(elt[i]) == "table" then
-                    a:script(parse_html(elt[i]),2,{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                    a:script(parse_html(elt[i]),2,options)
                 end
             end
             elt = {}
@@ -2139,7 +2172,7 @@ function parse_html( elt, parameter )
                     a:append(node.copy(marker))
                     local bul = bullet_hbox(tex.sp("2.5mm"))
                     a:append(bul)
-                    a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                    a:append(parse_html(elt[i]),options)
                     a:append("\n",{})
                 end
             end
@@ -2159,7 +2192,7 @@ function parse_html( elt, parameter )
                     a:append(node.copy(marker))
                     local num = number_hbox(counter,tex.sp("4mm"))
                     a:append(num)
-                    a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                    a:append(parse_html(elt[i]),options)
                     a:append("\n",{})
                 end
             end
@@ -2170,9 +2203,9 @@ function parse_html( elt, parameter )
                 warning("html a link has no href")
                 for i=1,#elt do
                     if type(elt[i]) == "string" then
-                        a:append(elt[i],{fontfamily = 0, bold = bold, italic = italic, underline = underline })
+                        a:append(elt[i],options)
                     elseif type(elt[i]) == "table" then
-                        a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                        a:append(parse_html(elt[i]),options)
                     end
                 end
             else
@@ -2187,9 +2220,9 @@ function parse_html( elt, parameter )
                 a:append(stl)
                 for i=1,#elt do
                     if type(elt[i]) == "string" then
-                        a:append(elt[i],{fontfamily = 0, bold = bold, italic = italic, underline = underline })
+                        a:append(elt[i],options)
                     elseif type(elt[i]) == "table" then
-                        a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                        a:append(parse_html(elt[i]),options)
                     end
                 end
                 local enl = node.new("whatsit","pdf_end_link")
@@ -2227,7 +2260,7 @@ function parse_html( elt, parameter )
             if has_css then
                 local b = paragraph:new()
                 if type(elt[1]) == "string" then
-                    b:append(elt[1],{fontfamily = fontfamily, bold = bold, italic = italic, underline = underline})
+                    b:append(elt[1],options)
                     b:set_color(colorindex)
                     a:append(b)
                     elt = {}
@@ -2238,7 +2271,6 @@ function parse_html( elt, parameter )
     -- Recurse into the children...
     for i=1,#elt do
         local typ = type(elt[i])
-        local options = {fontfamily = 0, bold = bold, italic = italic, underline = underline, allowbreak = allowbreak }
         if typ == "string" or typ == "number" or typ == "boolean" then
             a:append(elt[i],options)
         elseif typ == "table" then
@@ -2604,6 +2636,12 @@ function mknodes(str,fontfamily,parameter)
             if parameter.underline then
                 node.set_attribute(n,att_underline,parameter.underline)
             end
+
+            if parameter.backgroundcolor then
+                node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
+                node.set_attribute(n,att_bgpaddingtop,parameter.bg_padding_top)
+                node.set_attribute(n,att_bgpaddingbottom,parameter.bg_padding_bottom)
+            end
             node.set_attribute(n,att_fontfamily,fontfamily)
         elseif s == 173 then -- soft hyphen
             -- The soft hyphen is used in server-mode /v0/format
@@ -2653,6 +2691,11 @@ function mknodes(str,fontfamily,parameter)
             if parameter.underline then
                 node.set_attribute(n,att_underline,parameter.underline)
             end
+            if parameter.backgroundcolor then
+                node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
+                node.set_attribute(n,att_bgpaddingtop,parameter.bg_padding_top)
+                node.set_attribute(n,att_bgpaddingbottom,parameter.bg_padding_bottom)
+            end
             node.set_attribute(n,att_fontfamily,fontfamily)
 
             head,last = node.insert_after(head,last,n)
@@ -2675,6 +2718,11 @@ function mknodes(str,fontfamily,parameter)
             end
             if parameter.underline then
                 node.set_attribute(n,att_underline,parameter.underline)
+            end
+            if parameter.backgroundcolor then
+                node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
+                node.set_attribute(n,att_bgpaddingtop,parameter.bg_padding_top)
+                node.set_attribute(n,att_bgpaddingbottom,parameter.bg_padding_bottom)
             end
             if last and last.id == glyph_node then
                 lastitemwasglyph = true

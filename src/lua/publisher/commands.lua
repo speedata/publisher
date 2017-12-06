@@ -2936,6 +2936,58 @@ function commands.sort_sequence( layoutxml,dataxml )
     return tmp
 end
 
+
+--- Span
+--- ---------
+--- Surround text by some style like underline or (background-)color
+function commands.span( layoutxml,dataxml )
+    local backgroundcolor    = publisher.read_attribute(layoutxml,dataxml,"background-color",  "rawstring")
+    local bg_padding_top     = publisher.read_attribute(layoutxml,dataxml,"background-padding-top",  "length_sp")
+    local bg_padding_bottom  = publisher.read_attribute(layoutxml,dataxml,"background-padding-bottom",  "length_sp")
+    local class  = publisher.read_attribute(layoutxml,dataxml,"class",  "rawstring")
+    local id     = publisher.read_attribute(layoutxml,dataxml,"id",     "rawstring")
+
+    local css_rules = publisher.css:matches({element = 'span', class=class,id=id}) or {}
+    if dashed == nil then dashed = ( css_rules["border-style"] == "dashed") end
+    if backgroundcolor == nil then backgroundcolor = css_rules["background-color"]  end
+    if bg_padding_top == nil then
+        if css_rules["background-padding-top"] then
+            bg_padding_top =  tex.sp(css_rules["background-padding-top"])
+        end
+    end
+    if bg_padding_bottom == nil then
+        if css_rules["background-padding-bottom"] then
+            bg_padding_bottom =  tex.sp(css_rules["background-padding-bottom"])
+        end
+    end
+    local colornumber = nil
+    if backgroundcolor then
+        colornumber = publisher.colors[backgroundcolor].index
+    end
+
+    local a = paragraph:new()
+    local params = {
+        underline = underline,
+        allowbreak=publisher.allowbreak,
+        backgroundcolor = colornumber,
+        bg_padding_top = bg_padding_top,
+        bg_padding_bottom = bg_padding_bottom
+    }
+    local objects = {}
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    for i,j in ipairs(tab) do
+        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
+            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),params)
+        else
+            objects[#objects + 1] = publisher.element_contents(j)
+        end
+    end
+
+    for _,j in ipairs(objects) do
+        a:append(j,params)
+    end
+    return a
+end
 --- Stylesheet
 --- ----------
 --- Load a CSS file or read the command's value.
