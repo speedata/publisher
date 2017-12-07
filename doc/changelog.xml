@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.15" date="2017-12-07">
+      <en>New command Span for background color</en>
+      <de>Neuer Befehl Span für farbige Hintergründe</de>
+    </entry>
     <entry version="3.1.14" date="2017-12-01">
       <en>speedup</en>
       <de>Geschwindigkeit erhöht</de>
