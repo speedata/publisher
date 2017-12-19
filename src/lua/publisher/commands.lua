@@ -782,14 +782,19 @@ function commands.fontface( layoutxml,dataxml )
     else
         local a = paragraph:new()
         local tab = publisher.dispatch(layoutxml,dataxml)
+        local objects = {}
+
         for i,j in ipairs(tab) do
-            local n = publisher.elementname(j)
-            local c = publisher.element_contents(j)
-            if n == "Value" then
-                c = xpath.textvalue_raw(true,c)
+            if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
+                objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{allowbreak=publisher.allowbreak})
+            else
+                objects[#objects + 1] = publisher.element_contents(j)
             end
-            a:append(c,{fontfamily = familynumber, allowbreak=publisher.allowbreak})
         end
+        for _,j in ipairs(objects) do
+            a:append(j,{fontfamily = familynumber, allowbreak=publisher.allowbreak})
+        end
+
         return a
     end
 end

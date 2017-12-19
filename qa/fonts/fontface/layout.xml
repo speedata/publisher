@@ -15,6 +15,9 @@
             <Paragraph>
               <Fontface fontfamily="text"><Value select="@title"/></Fontface>
             </Paragraph>
+            <Paragraph>
+              <Fontface fontfamily="text"><Value select="."/></Fontface>
+            </Paragraph>
           </Td>
         </Tr>
       </Table>
