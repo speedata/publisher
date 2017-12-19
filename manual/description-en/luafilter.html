@@ -94,6 +94,11 @@ Additionally the publisher provides the modules <code>csv,</code>runtime<code>an
 <td><code>run_saxon</code></td>
 <td>A function that calls the external Java-program <code>saxon</code>. It accepts three mandatory arguments (the transformation stylesheet, the input file and the output file) and an optional argument that is passed as the parameter string to saxon. The function returns a boolean value (success) and optionally a string in case of a <code>false</code> success value.</td>
 </tr>
+
+<tr>
+<td><code>validate_relaxng</code></td>
+<td>A function that validates an XML file against a RelaxNG schema. The first argument is the XML file, the second argument the RelaxNG schema. You can use relative paths for both.</td>
+</tr>
 </tbody>
 </table>
 
@@ -102,6 +107,15 @@ Additionally the publisher provides the modules <code>csv,</code>runtime<code>an
 -- stop the publishing process if an error occurs
 if not ok then
     print(err)
+    os.exit(-1)
+end
+</code></pre>
+
+<p>Validation:</p>
+
+<pre><code>ok, msg = runtime.validate_relaxng(&quot;layout.xml&quot;,&quot;../schema/layoutschema-de.rng&quot;)
+if not ok then
+    print(msg)
     os.exit(-1)
 end
 </code></pre>
@@ -138,11 +152,77 @@ end
 
 <p>The XML file gets written with the name <code>data.xml</code></p>
 
+<h2>xlsx</h2>
+
+<p><code>open(filename)</code>: loads the given Excel file (file extension <code>.xlsx</code>) and in case of success returns an object which can be used to access the contents of the spreadsheet. In case of an error it returns two arguments. The first argument is <code>false</code> and the second argument contains the error message.</p>
+
+<p>Usage:</p>
+
+<pre><code>spreadsheet, err = xlsx.open(&quot;myfile.xlsx&quot;)
+if not spreadsheet then
+    print(err)
+    os.exit(-1)
+end
+</code></pre>
+
+<p>The object <code>spreadsheet</code> contains the worksheets. The number of worksheets can be obtained by the length operator (#) and each worksheet is indexed stating from one:</p>
+
+<pre><code>numWorksheets = #spreadsheet
+ws = spreadsheet[1]
+</code></pre>
+
+<p>The object <code>ws</code> can be used to get the contents of each cell.
+Use the object as a function call with the coordinates as the arguments.
+It returns the cell contents as a string.
+The top left cell has the coordinate (1,1), the first cell in the second row (1,2) and so on.</p>
+
+<pre><code>cell1 = ws(1,1)
+cell2 = ws(1,2)
+</code></pre>
+
+<p>Some properties can be queried in the worksheet object:</p>
+
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>minrow</td>
+<td>First row that contains data</td>
+</tr>
+
+<tr>
+<td>maxrow</td>
+<td>Last row that contains data</td>
+</tr>
+
+<tr>
+<td>mincol</td>
+<td>First column that contains data</td>
+</tr>
+
+<tr>
+<td>maxcol</td>
+<td>Last column that contains data</td>
+</tr>
+
+<tr>
+<td>name</td>
+<td>Name of the worksheet</td>
+</tr>
+</tbody>
+</table>
+
 </div>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 3.1.10 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/luafilter.html">German</a>
+Version: 3.1.16 | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Element reference</a> | Other language:  <a href="../description-de/luafilter.html">German</a>
 
 </body>
 </html>

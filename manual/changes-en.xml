@@ -1,13 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (en)</title>
   <id>https://www.speedata.de</id>
-  <updated>2017-11-06T11:01:02+01:00</updated>
+  <updated>2017-12-19T13:05:00+01:00</updated>
   <subtitle>New revisions for download and changelog.</subtitle>
   <link href="https://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 3.1.16</title>
+    <updated>2017-12-19T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-12-19:</id>
+    <content type="html">Allow other namespaces in Layout file</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.16</title>
+    <updated>2017-12-19T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-12-19:</id>
+    <content type="html">Bugfix for FontFace</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.15</title>
+    <updated>2017-12-07T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-12-07:</id>
+    <content type="html">New command Span for background color</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.14</title>
+    <updated>2017-12-01T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-12-01:</id>
+    <content type="html">speedup</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.13</title>
+    <updated>2017-11-30T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-11-30:</id>
+    <content type="html">Use exeSufix for sp compare on Windows</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.13</title>
+    <updated>2017-11-30T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-11-30:</id>
+    <content type="html">Bugfix for Output/allocate=&#34;auto&#34;</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.12</title>
+    <updated>2017-11-28T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-11-28:</id>
+    <content type="html">Bugfix for future pages</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.11</title>
+    <updated>2017-11-23T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-11-23:</id>
+    <content type="html">Add Excel reader and RelaxNG validaton</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.11</title>
+    <updated>2017-11-06T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2017-11-06:</id>
+    <content type="html">Add basic support for LuaTeX 1.0.4</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 3.1.10</title>
     <updated>2017-11-03T00:00:00Z</updated>

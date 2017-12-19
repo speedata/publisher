@@ -97,14 +97,30 @@ eine Fehlermeldung, wenn der erste Wert <code>false</code> ist. Der Wert Paramet
 <td><code>run_saxon</code></td>
 <td>Eine Funktion, die <code>saxon</code> aufruft. Sie erwartet drei string-Argumente (das Stylesheet, die Eingabe- und die Ausgabedatei) und ein optionales Argument das als Parameter an saxon übergeben wird. Die Rückgabe ist ein boolean, der true ist, wenn der Befehl fehlerfrei ausgeführt wurde. Ansonsten wird ein zweiter Rückgabewert (string) zurück gegeben, der die Fehlermeldung enthält.</td>
 </tr>
+
+<tr>
+<td><code>validate_relaxng</code></td>
+<td>Eine Funktion, die eine XML-Datei gegen ein RelaxNG-Schema prüft. Das erste Argument ist die XML-Datei, das zweite Argument die Schemadatei. Es können relative Pfade angegeben werden.</td>
+</tr>
 </tbody>
 </table>
+
+<p>Konvertierung:</p>
 
 <pre><code>ok, err = runtime.run_saxon(&quot;transformation.xsl&quot;,&quot;source.xml&quot;,&quot;data.xml&quot;,&quot;param1=Wert1 param2=Wert2&quot;)
 
 -- stop the publishing process if an error occurs
 if not ok then
     print(err)
+    os.exit(-1)
+end
+</code></pre>
+
+<p>Validierung:</p>
+
+<pre><code>ok, msg = runtime.validate_relaxng(&quot;layout.xml&quot;,&quot;../schema/layoutschema-de.rng&quot;)
+if not ok then
+    print(msg)
     os.exit(-1)
 end
 </code></pre>
@@ -141,11 +157,76 @@ Die Tabelle hat folgende Stuktur:</p>
 
 <p>Die XML-Datei wird unter dem Namen <code>data.xml</code> gespeichert.</p>
 
+<h2>xlsx</h2>
+
+<p><code>open(dateiname)</code>: lädt die angegebene Excel-Datei (Dateiendung <code>.xlsx</code>) und liefert im Erfolgsfall ein Objekt zurück, mit der auf den Inhalt zugegriffen werden kann. Im Fehlerfall gibt sie <code>false</code> und eine textuelle Fehlermeldung zurück.</p>
+
+<p>Benutzung:</p>
+
+<pre><code>spreadsheet, err = xlsx.open(&quot;myfile.xlsx&quot;)
+if not spreadsheet then
+    print(err)
+    os.exit(-1)
+end
+</code></pre>
+
+<p>Das Objekt <code>spreadsheet</code> beinhaltet die einzelnen Arbeitsblätter (Worksheets). Die Anzahl der Arbeitsblätter lässt sich über den length-Operator feststellen und die einzelnen Arbeitsblätter per Index (1 ist das erste Arbeitsblatt).</p>
+
+<pre><code>numWorksheets = #spreadsheet
+ws = spreadsheet[1]
+</code></pre>
+
+<p>Mit dem Objekt <code>ws</code> kann direkt auf die Zelleninhalte zugegriffen werden.
+Dazu wird es als Funktion aufgerufen und liefert eine Zeichenkette zurück.
+Die erste Zelle oben links hat die Koordinaten 1,1, die erste Zelle in der zweiten Zeile 1,2 und so weiter.</p>
+
+<pre><code>cell1 = ws(1,1)
+cell2 = ws(1,2)
+</code></pre>
+
+<p>Ebenfalls kann man verschiedene Eigenschaften des Arbeitsblattes in den Feldern des ws-Objekts ermitteln:</p>
+
+<table>
+<thead>
+<tr>
+<th>Wert</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>minrow</td>
+<td>Erste Zeile, in der Daten enthalten sind</td>
+</tr>
+
+<tr>
+<td>maxrow</td>
+<td>Letzte Zeile, in der Daten enthalten sind</td>
+</tr>
+
+<tr>
+<td>mincol</td>
+<td>Erste Spalte, in der Daten enthalten sind</td>
+</tr>
+
+<tr>
+<td>maxcol</td>
+<td>Letzte Spalte, in der Daten enthalten sind</td>
+</tr>
+
+<tr>
+<td>name</td>
+<td>Name des Arbeitsblattes</td>
+</tr>
+</tbody>
+</table>
+
 </div>
 
 
 <div style="clear:both; border-bottom: 1px solid #a0a0a0; width: 100%; margin-top: 30px;"></div>
-Version: 3.1.10 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/luafilter.html">Englisch</a>
+Version: 3.1.16 | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="../description-en/luafilter.html">Englisch</a>
 
 </body>
 </html>
