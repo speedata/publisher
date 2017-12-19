@@ -316,6 +316,7 @@ type Command struct {
 	Name           string
 	Css            string
 	Since          string
+	Deprecated     bool
 	seealso        *seealso
 }
 
@@ -878,6 +879,9 @@ func ReadCommandsFile(r io.Reader) (*Commands, error) {
 					}
 					if attribute.Name.Local == "since" {
 						c.Since = attribute.Value
+					}
+					if attribute.Name.Local == "deprecated" {
+						c.Deprecated = attribute.Value == "yes"
 					}
 				}
 			}

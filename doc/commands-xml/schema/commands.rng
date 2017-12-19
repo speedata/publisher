@@ -182,6 +182,12 @@
           <attribute name="en"/>
           <optional><attribute name="css"/></optional>
           <optional><attribute name="since"/></optional>
+          <optional><attribute name="deprecated">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute></optional>
           <ref name="descriptions" />
           <element name="childelements">
             <zeroOrMore>
