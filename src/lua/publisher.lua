@@ -486,6 +486,7 @@ local dispatch_table = {
     I                       = commands.italic,
     Image                   = commands.image,
     Include                 = commands.include,
+    Layout                  = commands.include,
     Initial                 = commands.initial,
     InsertPages             = commands.insert_pages,
     Li                      = commands.li,
@@ -587,7 +588,15 @@ function dispatch(layoutxml,dataxml,options)
                     ret[#ret + 1] =   { elementname = eltname, contents = tmp }
                 end
             else
-                err("Unknown element found in layoutfile: %q", j[".__local_name"] or "???")
+                local prefix, localname = table.unpack( string.explode(j[".__name"],":"))
+                if localname == nil then
+                    -- no prefix given, string.explode is wrong about the components
+                    -- Therefore we need to swap the both
+                    prefix, localname = "", prefix
+                end
+                if j[".__ns"][prefix] == "urn:speedata.de:2009/publisher/en" then
+                    err("Unknown element found in layoutfile: %q", j[".__local_name"] or "???")
+                end
             end
         end
     end

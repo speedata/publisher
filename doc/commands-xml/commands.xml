@@ -30,6 +30,7 @@
     <optional><cmd name="Initial"/></optional>
     <optional><cmd name="Include"/></optional>
     <optional><cmd name="InsertPages"/></optional>
+    <optional><cmd name="Layout"/></optional>
     <optional><cmd name="Li"/></optional>
     <optional><cmd name="LoadDataset"/></optional>
     <optional><cmd name="LoadFontfile"/></optional>
@@ -77,6 +78,7 @@
     <optional><cmd name="Hyphenation"/></optional>
     <optional><cmd name="Include"/></optional>
     <optional><cmd name="InsertPages"/></optional>
+    <optional><cmd name="Layout"/></optional>
     <optional><cmd name="LoadDataset"/></optional>
     <optional><cmd name="Loop"/></optional>
     <optional><cmd name="Message"/></optional>
@@ -1514,6 +1516,7 @@
       <oneOrMore>
         <choice>
           <cmd name="Loop"/>
+          <cmd name="Switch"/>
           <cmd name="Column"/>
         </choice>
       </oneOrMore>
@@ -2864,7 +2867,7 @@
     </example>
     <seealso><cmd name="B"/></seealso>
   </command>
-  <command en="Include">
+  <command en="Include" deprecated="yes">
     <description xml:lang="en">
       <para>Toplevel element for included layout files.</para>
     </description>
@@ -2932,9 +2935,31 @@
                     filename="texgyreheros-bolditalic.otf"/>
 </Include>]]></listing>
     </example>
+    <info xml:lang="en">
+      <para>This command is obsolete. Use <cmd name="Layout"/> instead.</para>
+    </info>
+    <info xml:lang="de">
+      <para>Dieser Befehl ist obsolete. Benutze <cmd name="Layout"/> anstelle von Include.</para>
+    </info>
     <seealso>
       <cmd name="Layout"/>
     </seealso>
+    <!--
+    <rules xml:lang="en">
+      <sch:pattern>
+        <sch:rule context="t:Include">
+          <sch:assert test="false()">Include is obsolete, use the top level command Layout instead.</sch:assert>
+        </sch:rule>
+      </sch:pattern>
+    </rules>
+    <rules xml:lang="de">
+      <sch:pattern>
+        <sch:rule context="t:Include">
+          <sch:assert test="false()">Bitte Layout anstelle von Include benutzen, Include wird nicht weiter unterstützt.</sch:assert>
+        </sch:rule>
+      </sch:pattern>
+    </rules>
+     -->
   </command>
   <command en="Initial" since="2.9.7">
     <description xml:lang="en">
@@ -3573,6 +3598,7 @@
     <childelements>
       <oneOrMore>
         <reference name="Toplevel"/>
+        <optional><cmd name="Layout"/></optional>
         <optional><cmd name="Include"/></optional>
       </oneOrMore>
     </childelements>
@@ -3642,9 +3668,7 @@
   </Record>
 </Layout>]]></listing>
     </example>
-    <seealso>
-      <cmd name="Include"/>
-    </seealso>
+    <seealso/>
   </command>
   <command en="Li">
     <description xml:lang="en">
@@ -6458,6 +6482,9 @@
     <description xml:lang="de">
       <para>Text mit Style-Optionen umgeben.</para>
     </description>
+    <childelements>
+      <reference name="Textvalues"/>
+    </childelements>
     <attribute en="class" optional="yes" type="text">
       <description xml:lang="en">
         <para>CSS class for this element.</para>
@@ -6498,9 +6525,39 @@
         <para>Der Innenabstand (unten) der Hintergrundfarbe (kann negativ sein)</para>
       </description>
     </attribute>
-    <childelements>
-      <reference name="Textvalues"/>
-    </childelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<Stylesheet>
+  .green { background-color: lightgreen; }
+</Stylesheet>
+
+<Record element="data">
+  <PlaceObject>
+    <Textblock>
+      <Paragraph>
+        <Span class="green"><Value>green</Value></Span>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Stylesheet>
+  .green { background-color: lightgreen; }
+</Stylesheet>
+
+<Record element="data">
+  <PlaceObject>
+    <Textblock>
+      <Paragraph>
+        <Span class="green"><Value>green</Value></Span>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>
+]]></listing>
+    </example>
+    <seealso></seealso>
   </command>
   <command en="Sub">
     <description xml:lang="en">

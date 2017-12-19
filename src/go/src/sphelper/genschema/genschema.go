@@ -3,6 +3,7 @@ package genschema
 import (
 	"bytes"
 	"encoding/xml"
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
 
@@ -87,6 +88,7 @@ func getChildElements(commands *commandsxml.CommandsXML, enc *xml.Encoder, child
 
 func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 	var outbuf bytes.Buffer
+	var interleave, group xml.StartElement
 
 	enc := xml.NewEncoder(&outbuf)
 	enc.Indent("", "   ")
@@ -145,6 +147,14 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 		elt := xml.StartElement{Name: xml.Name{Local: "element"}}
 		elt.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: cmd.Name}}
 		enc.EncodeToken(elt)
+
+		if cmd.Name != "Include" {
+			interleave = xml.StartElement{Name: xml.Name{Local: "interleave"}}
+			enc.EncodeToken(interleave)
+
+			group = xml.StartElement{Name: xml.Name{Local: "group"}}
+			enc.EncodeToken(group)
+		}
 
 		doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
 		enc.EncodeToken(doc)
@@ -218,9 +228,73 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 			}
 		}
 		getChildElements(commands, enc, cmd.Childelements.Text, lang)
+
+		if cmd.Name != "Include" {
+			enc.EncodeToken(group.End())
+
+			ref := xml.StartElement{Name: xml.Name{Local: "ref"}}
+			ref.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: "foreign-nodes"}}
+			enc.EncodeToken(ref)
+			enc.EncodeToken(ref.End())
+			enc.EncodeToken(interleave.End())
+		}
 		enc.EncodeToken(elt.End())
 		enc.EncodeToken(def.End())
 	}
+
+	enc.Flush()
+	// See feature request #144
+	fmt.Fprintln(&outbuf, `
+	<!-- This pattern allows any element from any namespace -->
+	<define name="anything">
+      <zeroOrMore>
+         <choice>
+            <element>
+               <anyName/>
+               <ref name="anything"/>
+            </element>
+            <attribute>
+               <anyName/>
+            </attribute>
+            <text/>
+         </choice>
+      </zeroOrMore>
+   </define>
+   <define name="foreign-elements">
+      <zeroOrMore>
+         <element>
+            <anyName>
+               <except>
+                  <nsName ns=""/>
+                  <nsName ns="urn:speedata.de:2009/publisher/en"/>
+                  <nsName ns="urn:speedata:2009/publisher/functions/en"/>
+               </except>
+            </anyName>
+            <ref name="anything"/>
+         </element>
+      </zeroOrMore>
+   </define>
+   <define name="foreign-attributes">
+      <zeroOrMore>
+         <attribute>
+            <anyName>
+               <except>
+                  <nsName ns=""/>
+                  <nsName ns="urn:speedata.de:2009/publisher/en"/>
+                  <nsName ns="urn:speedata:2009/publisher/functions/en"/>
+               </except>
+            </anyName>
+         </attribute>
+      </zeroOrMore>
+   </define>
+   <define name="foreign-nodes">
+      <zeroOrMore>
+         <choice>
+            <ref name="foreign-attributes"/>
+            <ref name="foreign-elements"/>
+         </choice>
+      </zeroOrMore>
+   </define>`)
 
 	enc.EncodeToken(grammar.End())
 	enc.EncodeToken(xml.CharData("\n"))
