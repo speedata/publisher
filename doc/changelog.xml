@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.16" date="2017-12-19">
+      <en>Allow other namespaces in Layout file</en>
+      <de>Andere Namensräume in der Layoutdatei erlauben</de>
+    </entry>
+    <entry version="3.1.16" date="2017-12-19">
+      <en>Bugfix for FontFace</en>
+      <de>Fehlerkorrektur für FontFix</de>
+    </entry>
     <entry version="3.1.15" date="2017-12-07">
       <en>New command Span for background color</en>
       <de>Neuer Befehl Span für farbige Hintergründe</de>
