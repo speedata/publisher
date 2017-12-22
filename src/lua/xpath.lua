@@ -221,6 +221,9 @@ function M.is_function(dataxml,str,pos,ns)
             else
                 -- function has some xpath contents in it, we need to parse it
                 local contents = M.parse_internal(dataxml,str,ns,pos)
+                if contents == nil and M.err ~= nil then
+                    return nil
+                end
                 M.tok = y(dataxml,contents)
             end
             if M.tok == nil then M.tok = nilmarker end
@@ -461,6 +464,13 @@ function M.get_expr(dataxml,str,ns,pos)
     pos = string.find(str,"%S",pos)
     while true do
         local end_of_expression
+        local a = string.find(str,"^%s*%)",pos)
+        if a then
+            M.err = true
+            M.errmsg = string.format("XPath error: looking for an expression but found a closing paren")
+            return nil
+        end
+
         ret[#ret + 1],end_of_expression = M.get_single_expr(dataxml,str,pos,ns)
         if end_of_expression then break end
         local start,stop = string.find(str,"^%s*,%s*",M.nextpos)
@@ -759,7 +769,9 @@ end
 
 function M.parse_internal(dataxml,str,ns,pos)
     local r = M.get_expr(dataxml,str,ns,pos)
-
+    if not r then
+        return nil
+    end
     local ret = {}
     for i=1,#r do
         if type(r[i]) == "table" then
