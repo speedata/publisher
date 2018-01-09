@@ -30,7 +30,7 @@ Yes. Absolutely. We release stable (long term support) versions once in a while 
 Installation
 ------------
 
-Just get one of the ready-to-run packages from <https://download.speedata.de/publisher/> and follow the directions inside the ZIP file (=just extract and set the PATH variable). See the [installation instructions in the manual](https://speedata.github.io/publisher/manual/description-en/installation.html).
+Just get one of the ready-to-run packages from <https://download.speedata.de/> and follow the directions inside the ZIP file (=just extract and set the PATH variable). See the [installation instructions in the manual](https://speedata.github.io/publisher/manual/description-en/installation.html).
 
 
 Manual

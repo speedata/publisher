@@ -121,7 +121,7 @@ function table.__concat( tbl, other )
 end
 
 -- Get the text value of a table. Only the indexes 1,...#table are taken into account.
--- The function recurses nested tables.
+-- The function recurses into nested tables.
 function table_textvalue( tbl )
     if not tbl then return "" end
     if type(tbl) ~= "table" then return tostring(tbl) end

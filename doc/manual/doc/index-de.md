@@ -6,6 +6,9 @@ title: Handbuch speedata Publisher
 speedata Publisher Dokumentation
 ================================
 
+Hinweis: ein etwas ausführlicheres Handbuch gibt es auch online unter <https://doc.speedata.de/publisher/de/>
+
+
 Einführung
 ----------
 

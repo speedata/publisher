@@ -152,7 +152,8 @@ eachindex:
 	return nil
 }
 
-// ------------
+// Encode the table given in the first argument to an XML file and
+// write this to the hard drive with the name `data.xml`
 func encodeTable(l *lua.State) int {
 	var b bytes.Buffer
 	enc := xml.NewEncoder(&b)
