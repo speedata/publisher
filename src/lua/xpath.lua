@@ -467,7 +467,7 @@ function M.get_expr(dataxml,str,ns,pos)
         local a = string.find(str,"^%s*%)",pos)
         if a then
             M.err = true
-            M.errmsg = string.format("XPath error: looking for an expression but found a closing paren")
+            M.errmsg = "XPath error: looking for an expression but found a closing parentheses"
             return nil
         end
 

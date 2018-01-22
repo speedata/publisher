@@ -52,6 +52,7 @@
     <optional><cmd name="SetGrid"/></optional>
     <optional><cmd name="SetVariable"/></optional>
     <optional><cmd name="SortSequence"/></optional>
+    <optional><cmd name="Span"/></optional>
     <optional><cmd name="Sub"/></optional>
     <optional><cmd name="Sup"/></optional>
     <optional><cmd name="Switch"/></optional>
@@ -5148,7 +5149,7 @@
       </choice>
     </attribute>
     <example xml:lang="en"><listing><![CDATA[<PDFOptions numcopies="3"/>]]></listing></example>
-    <example xml:lang="de"><listing><![CDATA[<PDFOptionen numcopies="4"/>]]></listing></example>
+    <example xml:lang="de"><listing><![CDATA[<PDFOptions numcopies="4"/>]]></listing></example>
     <seealso></seealso>
   </command>
   <command en="PlaceObject">

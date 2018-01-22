@@ -887,6 +887,10 @@ function initialize_luatex_and_generate_pdf()
     if #vp > 0 then
         pdfcatalog[#pdfcatalog + 1] = "/ViewerPreferences <<" .. table.concat(vp," ") .. ">>"
     end
+    -- Title   The document’s title.
+    -- Author  The name of the person who created the document.
+    -- Subject  The subject of the document.
+    -- Keywords  Keywords associated with the document.
     local creator = string.format("speedata Publisher %s, www.speedata.de",env_publisherversion)
     local info = string.format("/Creator (%s) ",creator)
 
@@ -4572,11 +4576,6 @@ end
 function escape_pdfname( str )
     return string.gsub(str,'/','#2f')
 end
-
-function pdf_u_escape( str )
-    -- body
-end
-
 
 file_end("publisher.lua")
 
