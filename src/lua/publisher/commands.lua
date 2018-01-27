@@ -1598,35 +1598,25 @@ function commands.message( layoutxml, dataxml )
         contents = tab
     end
     if type(contents)=="table" then
-        local ret
+        local ret = {}
         for i=1,#contents do
             local eltname = publisher.elementname(contents[i])
             local contents = publisher.element_contents(contents[i])
-
             if eltname == "Sequence" or eltname == "Value" then
                 if type(contents) == "table" then
-                    ret = ret or {}
-                    if getmetatable(ret) == nil then
-                        setmetatable(ret,{ __concat = table.__concat })
-                    end
-                    ret = ret .. contents
+                    ret[#ret + 1] = table.concat(contents)
                 elseif type(contents) == "string" then
-                    ret = ret or ""
-                    ret = ret .. contents
+                    ret[#ret + 1] = contents
                 elseif type(contents) == "number" then
-                    ret = ret or ""
-                    ret = ret .. tostring(contents)
+                    ret[#ret + 1] = tostring(contents)
                 elseif type(contents) == "nil" then
                     -- ignore
                 else
-                    err("Unknown type: %q",type(contents))
-                    ret = nil
+                    err("Message: unknown type in value: %q",type(contents))
                 end
             end
         end
-        if ret then
-            contents = ret
-        end
+        contents = table.concat(ret)
     end
     if errcond then
         err(errorcode,"%q", tostring(contents) or "?")
