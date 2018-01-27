@@ -300,7 +300,8 @@ func sigIntCatcher() {
 }
 
 // Run the given command line
-func run(cmdline string) (success bool) {
+func run(cmdline string) (errorcode int) {
+	errorcode = 0
 	var commandlineArray []string
 	// The cmdline can have quoted strings. We remove the quotation marks
 	// by this ugly construct. That way strings such as "--data=foo\ bar" can
@@ -331,7 +332,7 @@ func run(cmdline string) (success bool) {
 	err = cmd.Start()
 	if err != nil {
 		fmt.Println(err)
-		success = false
+		errorcode = -1
 		return
 	}
 	runningProcess = append(runningProcess, cmd.Process)
@@ -349,15 +350,13 @@ func run(cmdline string) (success bool) {
 		io.Copy(stdin, os.Stdin)
 		stdin.Close()
 	}
-	err = cmd.Wait()
-
-	if err != nil {
+	if err := cmd.Wait(); err != nil {
 		showDuration()
 		log.Print(err)
-		success = false
-		return
+		if _, ok := err.(*exec.ExitError); ok {
+			return -1
+		}
 	}
-	success = cmd.ProcessState.Success()
 	return
 }
 
@@ -580,7 +579,7 @@ func runPublisher() (exitstatus int) {
 	for i := 1; i <= runs; i++ {
 		go daemon.Run()
 		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, execName, jobname, inifile, layoutname, dataname, layoutoptionsCommandline)
-		if !run(cmdline) {
+		if run(cmdline) < 0 {
 			exitstatus = -1
 			v := status{}
 			v.Errors = 1

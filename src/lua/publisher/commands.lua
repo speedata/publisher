@@ -1580,7 +1580,9 @@ function commands.message( layoutxml, dataxml )
     local contents
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
     local errcond   = publisher.read_attribute(layoutxml,dataxml,"error", "boolean",false)
+    local exitnow   = publisher.read_attribute(layoutxml,dataxml,"exit",  "boolean",false)
     local errorcode = publisher.read_attribute(layoutxml,dataxml,"errorcode", "number",1)
+
     if selection then
         local tmp = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
 
@@ -1623,6 +1625,10 @@ function commands.message( layoutxml, dataxml )
     else
         publisher.messages[#publisher.messages + 1] = { contents, "message" }
         log("Message: %q", tostring(contents) or "?")
+    end
+    if exitnow then
+        err(-1,"Exiting on user request.")
+        quit()
     end
 end
 

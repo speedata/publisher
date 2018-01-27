@@ -2534,6 +2534,17 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="exit">
+                     <a:documentation>Soll sich der Publisher beenden?</a:documentation>
+                     <choice>
+                        <value>no</value>
+                        <a:documentation>Der speedata Publisher erzeugt weiterhin die PDF-Datei</a:documentation>
+                        <value>yes</value>
+                        <a:documentation>Der speedata Publisher beendet sich ohne die PDF-Datei fertig zu stellen.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <ref name="e_Value"></ref>
                </optional>
             </group>

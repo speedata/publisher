@@ -750,7 +750,7 @@ func v0FormatHandler(w http.ResponseWriter, req *http.Request) {
 		go daemon.Run()
 		daemonStarted = true
 		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode --ini "--lua=%s" publisher.tex ___server___`, getExecutablePath(), inifile)
-		if !run(cmdline) {
+		if run(cmdline) != 0 {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprintln(w, "Child process not started")
 			fmt.Fprintln(protocolFile, "Child process not started")

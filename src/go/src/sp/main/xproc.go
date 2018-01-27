@@ -8,5 +8,5 @@ import (
 func runXProcPipeline(filename string) bool {
 	os.Setenv("CLASSPATH", libdir+"/calabash.jar:"+libdir+"/saxon9he.jar")
 	cmdline := "java com.xmlcalabash.drivers.Main " + filename
-	return run(cmdline)
+	return (run(cmdline) == 0)
 }

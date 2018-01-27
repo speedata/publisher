@@ -4121,6 +4121,18 @@
         <para>Wenn ein Fehler ausgegeben wird, benutze diesen Fehlercode. Voreinstellung 1.</para>
       </description>
     </attribute>
+    <attribute en="exit" optional="yes" since="3.1.17">
+      <description xml:lang="en"><para>Tells the software to exit immediatley.</para></description>
+      <description xml:lang="de"><para>Soll sich der Publisher beenden?</para></description>
+      <choice en="no">
+        <description xml:lang="en"><para>The speedata Publisher continues with the PDF creation.</para></description>
+        <description xml:lang="de"><para>Der speedata Publisher erzeugt weiterhin die PDF-Datei</para></description>
+      </choice>
+      <choice en="yes">
+        <description xml:lang="en"><para>The speedata Publisher exits without finishing the PDF file.</para></description>
+        <description xml:lang="de"><para>Der speedata Publisher beendet sich ohne die PDF-Datei fertig zu stellen.</para></description>
+      </choice>
+    </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<Message select="concat('Price: ',@price)" error="no"/>]]></listing>
     </example>

@@ -97,8 +97,8 @@ func saxon(l *lua.State) int {
 	l.Pop(3)
 
 	cmd := fmt.Sprintf("java -jar %s -xsl:%s -s:%s -o:%s %s", filepath.Join(libdir, "saxon9804he.jar"), xsl, src, out, param)
-	success := run(cmd)
-	l.PushBoolean(success)
+	exitcode := run(cmd)
+	l.PushBoolean(exitcode == 0)
 	l.PushString(cmd)
 	return 2
 }

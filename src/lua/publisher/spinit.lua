@@ -256,6 +256,10 @@ function exit(graceful)
   end
 end
 
+function quit()
+    os.exit(-1)
+end
+
 local function setup()
     if status.luatex_version >= 100 then
         tex.pdfhorigin = tex.sp("0mm")
