@@ -2530,7 +2530,7 @@
                </optional>
                <optional>
                   <attribute name="errorcode">
-                     <a:documentation>Wenn ein Fehler ausgegeben wird, benutze diesen Fehlercode. Voreinstellung 1.</a:documentation>
+                     <a:documentation>Wenn ein Fehler ausgegeben wird, benutze diesen Fehlercode. Voreinstellung 1. Negative Werte sind für interne Zwecke reserviert.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -2545,7 +2545,9 @@
                   </attribute>
                </optional>
                <optional>
-                  <ref name="e_Value"></ref>
+                  <oneOrMore>
+                     <ref name="e_Value"></ref>
+                  </oneOrMore>
                </optional>
             </group>
             <ref name="foreign-nodes"></ref>

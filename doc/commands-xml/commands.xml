@@ -4079,7 +4079,7 @@
       <para>Gibt eine Textmeldung auf der Konsole und in der Protokolldatei aus.</para>
     </description>
     <childelements>
-      <optional><cmd name="Value"/></optional>
+      <optional><oneOrMore><cmd name="Value"/></oneOrMore></optional>
     </childelements>
     <attribute en="select" type="xpath" optional="yes">
       <description xml:lang="en">
@@ -4115,10 +4115,10 @@
     </attribute>
     <attribute en="errorcode" optional="yes" type="number" since="2.3.69">
       <description xml:lang="en">
-        <para>If an error is raised, use this code on exit. Defaults to 1</para>
+        <para>If an error is raised, use this code on exit. Defaults to 1. Negative values are reserved for system purpose.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn ein Fehler ausgegeben wird, benutze diesen Fehlercode. Voreinstellung 1.</para>
+        <para>Wenn ein Fehler ausgegeben wird, benutze diesen Fehlercode. Voreinstellung 1. Negative Werte sind für interne Zwecke reserviert.</para>
       </description>
     </attribute>
     <attribute en="exit" optional="yes" since="3.1.17">
