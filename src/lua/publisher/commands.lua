@@ -1830,8 +1830,6 @@ function commands.options( layoutxml,dataxml )
         publisher.options.trace = trace
     end
     --  ----
-
-
     publisher.options.cutmarks           = publisher.read_attribute(layoutxml,dataxml,"cutmarks",    "boolean")
     publisher.options.trimmarks          = publisher.read_attribute(layoutxml,dataxml,"trimmarks",   "boolean")
     publisher.options.trimmarks          = publisher.read_attribute(layoutxml,dataxml,"bleedmarks",  "boolean",publisher.options.trimmarks)
@@ -1842,6 +1840,7 @@ function commands.options( layoutxml,dataxml )
     publisher.options.resetmarks         = publisher.read_attribute(layoutxml,dataxml,"resetmarks",  "boolean",false)
     publisher.options.colorprofile       = publisher.read_attribute(layoutxml,dataxml,"colorprofile","rawstring")
     publisher.options.crop               = publisher.read_attribute(layoutxml,dataxml,"crop",        "booleanorlength",false)
+    publisher.options.warnmissingglyphs  = publisher.read_attribute(layoutxml,dataxml,"warnmissingglyphs", "boolean",true)
     local imagenotfound                  = publisher.read_attribute(layoutxml,dataxml,"imagenotfound", "string","error")
     local mainlanguage                   = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","")
     local default_area                   = publisher.read_attribute(layoutxml,dataxml,"defaultarea","rawstring")

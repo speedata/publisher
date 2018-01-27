@@ -4585,6 +4585,22 @@
         <para>Gibt den Nummer der ersten Seite an.</para>
       </description>
     </attribute>
+    <attribute en="warnmissingglyphs" optional="yes" since="3.1.17">
+      <description xml:lang="en">
+        <para>Issue a warning if glyphs are missing from a font.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Gibt eine Warnung aus, wenn ein Zeichen fehlt.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en"><para>Show warning (default)</para></description>
+        <description xml:lang="de"><para>Zeige Warnung (Voreinstellung)</para></description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en"><para>Do not show a warning</para></description>
+        <description xml:lang="de"><para>Zeige keine Warnung</para></description>
+      </choice>
+    </attribute>
     <attribute en="bleed" type="length" optional="yes">
       <description xml:lang="en">
         <para>The amount of bleed. Defaults to 0mm.</para>

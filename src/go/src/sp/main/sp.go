@@ -541,6 +541,7 @@ func runPublisher() (exitstatus int) {
 	f.Close()
 
 	layoutoptions["grid"] = getOption("grid")
+	layoutoptions["warnmissingglyphs"] = getOption("warnmissingglyphs")
 
 	// layoutoptions are passed as a command line argument to the publisher
 	var layoutoptionsSlice []string
@@ -558,6 +559,9 @@ func runPublisher() (exitstatus int) {
 	}
 	if layoutoptions["trace"] != "" {
 		layoutoptionsSlice = append(layoutoptionsSlice, `trace=`+layoutoptions["trace"])
+	}
+	if layoutoptions["warnmissingglyphs"] != "" {
+		layoutoptionsSlice = append(layoutoptionsSlice, `warnmissingglyphs=`+layoutoptions["warnmissingglyphs"])
 	}
 	layoutoptionsCommandline := strings.Join(layoutoptionsSlice, ",")
 	jobname := getOption("jobname")

@@ -2810,6 +2810,17 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="warnmissingglyphs">
+                     <a:documentation>Gibt eine Warnung aus, wenn ein Zeichen fehlt.</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Zeige Warnung (Voreinstellung)</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Zeige keine Warnung</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="bleed">
                      <a:documentation>Die Größe des Anschnitts (bleed). Voreinstellung ist 0mm.</a:documentation>
                   </attribute>

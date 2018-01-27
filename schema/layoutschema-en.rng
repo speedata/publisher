@@ -2810,6 +2810,17 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="warnmissingglyphs">
+                     <a:documentation>Issue a warning if glyphs are missing from a font.</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Show warning (default)</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Do not show a warning</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="bleed">
                      <a:documentation>The amount of bleed. Defaults to 0mm.</a:documentation>
                   </attribute>

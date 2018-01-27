@@ -791,6 +791,12 @@ function initialize_luatex_and_generate_pdf()
         options.showgridallocation = true
     end
 
+    if options.warnmissingglyphs == "false" then
+        options.warnmissingglyphs = false
+    elseif options.warnmissingglyphs == "true" then
+        options.warnmissingglyphs = true
+    end
+
     --- Set the starting page (which must be a number)
     if options.startpage then
         local num = options.startpage
