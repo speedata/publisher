@@ -2823,13 +2823,13 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="warnmissingglyphs">
-                     <a:documentation>Gibt eine Warnung aus, wenn ein Zeichen fehlt.</a:documentation>
+                  <attribute name="reportmissingglyphs">
+                     <a:documentation>Gibt einen Fehler aus, wenn ein Zeichen in einer Schriftart fehlt.</a:documentation>
                      <choice>
                         <value>yes</value>
-                        <a:documentation>Zeige Warnung (Voreinstellung)</a:documentation>
+                        <a:documentation>Zeige Fehlermeldung (Voreinstellung)</a:documentation>
                         <value>no</value>
-                        <a:documentation>Zeige keine Warnung</a:documentation>
+                        <a:documentation>Zeige keine Fehlermeldung</a:documentation>
                      </choice>
                   </attribute>
                </optional>

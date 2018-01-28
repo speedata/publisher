@@ -4597,20 +4597,20 @@
         <para>Gibt den Nummer der ersten Seite an.</para>
       </description>
     </attribute>
-    <attribute en="warnmissingglyphs" optional="yes" since="3.1.17">
+    <attribute en="reportmissingglyphs" optional="yes" since="3.1.17">
       <description xml:lang="en">
-        <para>Issue a warning if glyphs are missing from a font.</para>
+        <para>Issue an error if glyphs are missing from a font.</para>
       </description>
       <description xml:lang="de">
-        <para>Gibt eine Warnung aus, wenn ein Zeichen fehlt.</para>
+        <para>Gibt einen Fehler aus, wenn ein Zeichen in einer Schriftart fehlt.</para>
       </description>
       <choice en="yes">
-        <description xml:lang="en"><para>Show warning (default)</para></description>
-        <description xml:lang="de"><para>Zeige Warnung (Voreinstellung)</para></description>
+        <description xml:lang="en"><para>Show error message (default)</para></description>
+        <description xml:lang="de"><para>Zeige Fehlermeldung (Voreinstellung)</para></description>
       </choice>
       <choice en="no">
-        <description xml:lang="en"><para>Do not show a warning</para></description>
-        <description xml:lang="de"><para>Zeige keine Warnung</para></description>
+        <description xml:lang="en"><para>Do not show an error message</para></description>
+        <description xml:lang="de"><para>Zeige keine Fehlermeldung</para></description>
       </choice>
     </attribute>
     <attribute en="bleed" type="length" optional="yes">

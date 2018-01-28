@@ -180,6 +180,7 @@ options = {
     gridheight  = tenmm_sp,
     gridcells_x = 0,
     gridcells_y = 0,
+    reportmissingglyphs = true,
 }
 
 -- List of virtual areas. Key is the group name and value is
@@ -791,10 +792,10 @@ function initialize_luatex_and_generate_pdf()
         options.showgridallocation = true
     end
 
-    if options.warnmissingglyphs == "false" then
-        options.warnmissingglyphs = false
-    elseif options.warnmissingglyphs == "true" then
-        options.warnmissingglyphs = true
+    if options.reportmissingglyphs == "false" then
+        options.reportmissingglyphs = false
+    elseif options.reportmissingglyphs == "true" then
+        options.reportmissingglyphs = true
     end
 
     --- Set the starting page (which must be a number)

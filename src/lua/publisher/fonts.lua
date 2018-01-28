@@ -386,8 +386,7 @@ function post_linebreak( head, list_head)
     local start_bgcolor = nil
     local bg_padding_top = 0
     local bg_padding_bottom = 0
-    local warnmissingglyphs = publisher.options.warnmissingglyphs
-
+    local reportmissingglyphs = publisher.options.reportmissingglyphs
     while head do
         if head.id == hlist_node then -- hlist
             post_linebreak(head.list,head)
@@ -420,10 +419,10 @@ function post_linebreak( head, list_head)
                 end
             end
         elseif head.id == glyph_node then -- glyph
-            if warnmissingglyphs then
+            if reportmissingglyphs then
                 local thisfont = used_fonts[head.font]
                 if not thisfont.characters[head.char] then
-                    warning("Glyph %x (hex) is missing from the font %q",head.char,thisfont.name)
+                    err("Glyph %x (hex) is missing from the font %q",head.char,thisfont.name)
                 end
             end
             local att_underline = node.has_attribute(head, publisher.att_underline)
