@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.17" date="2018-01-28">
+      <en>Report glyphs missing from a font</en>
+      <de>Fehlende Zeichen werden angemerkt</de>
+    </entry>
+    <entry version="3.1.17" date="2018-01-28">
+      <en>exit="yes" at Message to quit a publishing run</en>
+      <de>exit="yes" bei Message um den Publishing-Durchlauf zu beenden</de>
+    </entry>
     <entry version="3.1.16" date="2017-12-19">
       <en>Allow other namespaces in Layout file</en>
       <de>Andere Namensräume in der Layoutdatei erlauben</de>
