@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.18" date="2018-01-29">
+      <en>Fix fontmapping problem</en>
+      <de>Löse Problem mit Zeichenzuordnung</de>
+    </entry>
     <entry version="3.1.17" date="2018-01-28">
       <en>Report glyphs missing from a font</en>
       <de>Fehlende Zeichen werden angemerkt</de>
