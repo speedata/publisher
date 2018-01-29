@@ -149,28 +149,20 @@ function define_font(name, size,extra_parameter)
         fonttable.filename_with_path = filename_with_path
         local is_unicode = (fonttable.pfminfo.unicoderanges ~= nil)
 
-        --- We require a mapping glyph number -> unicode codepoint. The problem is
-        --- that TTF/OTF fonts have a different encoding mechanism. TTF/OTF can be
-        --- accessed via the table `fonttable.map.backmap` (the key is the glyph
-        --- number, the value is glyph name). For Type 1 fonts we use
-        --- `glyph.unicode` and `glyph.name` for the codepoint and the name.
+        --- We require a mapping glyph number -> unicode codepoint.
+        --- I used to have two different means of unicode -> glyph mapping.
+        --- The type1 fonts got the unicode point with `g.unicode`, the
+        --- The ttf/otf font got the point with `fonttable.map.backmap[i]`
+        --- Somehow this worked a few years until Arial Narrow could not display
+        --- a semicolon (see issue #152). Now I hope that g.unicode is good enough
+        --- for both type of fonts (unicode and non-unicode).
         ---
         --- For kerning a mapping glyphname -> codepoint is needed.
-        if is_unicode then
-            -- TTF/OTF, use map.backmap
-            for i = 1,#fonttable.glyphs do
-                local g=fonttable.glyphs[i]
-                lookup_codepoint_by_name[g.name] = fonttable.map.backmap[i]
-                lookup_codepoint_by_number[i]    = fonttable.map.backmap[i]
-            end
-        else
-            -- Type1, use glyph.unicode
-            for i = 1,#fonttable.glyphs do
-                local g=fonttable.glyphs[i]
-                lookup_codepoint_by_name[g.name] = g.unicode
-                lookup_codepoint_by_number[i]    = g.unicode
-            end
-        end -- is unicode
+        for i = 1,#fonttable.glyphs do
+            local g=fonttable.glyphs[i]
+            lookup_codepoint_by_name[g.name] = g.unicode
+            lookup_codepoint_by_number[i]    = g.unicode
+        end
         fonttable.lookup_codepoint_by_name   = lookup_codepoint_by_name
         fonttable.lookup_codepoint_by_number = lookup_codepoint_by_number
     end
