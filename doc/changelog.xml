@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.19" date="2018-01-30">
+      <en>Allow setting of PDF title and author</en>
+      <de>PDF Titel und Autor setzen ist nun möglich</de>
+    </entry>
     <entry version="3.1.18" date="2018-01-29">
       <en>Fix fontmapping problem</en>
       <de>Löse Problem mit Zeichenzuordnung</de>
