@@ -4436,6 +4436,7 @@ function string_random(length)
   end
 end
 
+function getmetadata( conformancelevel )
     local metadata = string.format([[<?xpacket begin=%q id="W5M0MpCehiHzreSzNTczkc9d"?>
 <x:xmpmeta xmlns:x="adobe:ns:meta/">
  <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
@@ -4508,11 +4509,13 @@ end
 </pdfaExtension:schemas>
 </rdf:Description>
 <rdf:Description xmlns:zf="urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#"
-  rdf:about="" zf:ConformanceLevel="BASIC" zf:DocumentFileName="ZUGFeRD-invoice.xml" zf:DocumentType="INVOICE" zf:Version="1.0"/>
+  rdf:about="" zf:ConformanceLevel="%s" zf:DocumentFileName="ZUGFeRD-invoice.xml" zf:DocumentType="INVOICE" zf:Version="1.0"/>
 </rdf:RDF>
 </x:xmpmeta><?xpacket end="w"?>
-]],"\239\187\191")
+]],"\239\187\191",conformancelevel)
 
+    return metadata
+end
 
 
 function attach_file_pdf(filename,description,mimetype)
@@ -4523,6 +4526,10 @@ function attach_file_pdf(filename,description,mimetype)
     end
     local statt = lfs.attributes(path)
     local destfilename = "ZUGFeRD-invoice.xml"
+    local zugferdfile = io.open(path)
+    local zugferdcontents = zugferdfile:read("*all")
+    zugferdfile:close()
+    local conformancelevel = string.upper(string.match(zugferdcontents, "urn:ferd:CrossIndustryDocument:invoice:1p0:(.-)<"))
     local fileobjectnum = pdf.immediateobj("streamfile",
         path,
         string.format([[/Params <</ModDate (%s)>> /Subtype /%s /Type /EmbeddedFile ]],
@@ -4540,8 +4547,9 @@ function attach_file_pdf(filename,description,mimetype)
   /Type /Filespec
   /UF %s
 >>]],escape_pdfstring(description), fileobjectnum,fileobjectnum,destfilename,utf8_to_utf16_string_pdf(destfilename)))
+        -- BASIC, COMFORT, EXTENDED
     local metadataobjnum = pdf.obj({type = "stream",
-                 string = metadata,
+                 string = getmetadata(conformancelevel),
                  immediate = true,
                  attr = [[  /Subtype /XML /Type /Metadata  ]],
                  compresslevel = 0,
