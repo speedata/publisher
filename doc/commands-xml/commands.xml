@@ -69,6 +69,7 @@
 
   <define name="Commands">
     <optional><cmd name="AddSearchpath"/></optional>
+    <optional><cmd name="AttachFile"/></optional>
     <optional><cmd name="Bookmark"/></optional>
     <optional><cmd name="DefineColor"/></optional>
     <optional><cmd name="DefineFontfamily"/></optional>
@@ -88,6 +89,7 @@
     <optional><cmd name="NextRow"/></optional>
     <optional><cmd name="Output"/></optional>
     <optional><cmd name="Pagetype"/></optional>
+    <optional><cmd name="PDFOptions"/></optional>
     <optional><cmd name="PlaceObject"/></optional>
     <optional><cmd name="ProcessNode"/></optional>
     <optional><cmd name="SaveDataset"/></optional>
@@ -5088,6 +5090,22 @@
       <para>Setze PDF Optionen wie Anzahl der Kopien</para>
     </description>
     <childelements></childelements>
+    <attribute en="author" optional="yes" type="text" since="3.1.18">
+      <description xml:lang="en">
+        <para>Set the author of the document</para>
+      </description>
+      <description xml:lang="de">
+        <para>Legt den Autor des Dokuments fest</para>
+      </description>
+    </attribute>
+    <attribute en="title" optional="yes" type="text" since="3.1.18">
+      <description xml:lang="en">
+        <para>Set the title of the document</para>
+      </description>
+      <description xml:lang="de">
+        <para>Legt den Titel des Dokuments fest</para>
+      </description>
+    </attribute>
     <attribute en="duplex" optional="yes" since="2.3.47">
       <description xml:lang="en">
         <para>Set viewer preference to one or two page printing. Default: empty.</para>

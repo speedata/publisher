@@ -2125,6 +2125,10 @@ function commands.pdfoptions( layoutxml, dataxml )
     local printscaling = publisher.read_attribute(layoutxml,dataxml,"printscaling", "string")
     local picktray     = publisher.read_attribute(layoutxml,dataxml,"picktraybypdfsize", "boolean")
     local duplex       = publisher.read_attribute(layoutxml,dataxml,"duplex", "string")
+    local title        = publisher.read_attribute(layoutxml,dataxml,"title", "string")
+    local author       = publisher.read_attribute(layoutxml,dataxml,"author", "string")
+    publisher.options.documenttitle = title
+    publisher.options.documentauthor = author
 
     publisher.viewerpreferences.numcopies = nc or 1
     if printscaling == "appdefault" then

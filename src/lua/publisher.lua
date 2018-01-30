@@ -604,16 +604,6 @@ function dispatch(layoutxml,dataxml,options)
     return ret
 end
 
---- Convert the argument `str` (in UTF-8) to a string suitable for writing into the PDF file. The returned string starts with `<feff` and ends with `>`
-function utf8_to_utf16_string_pdf( str )
-    local ret = {}
-    for s in string.utfvalues(str) do
-        ret[#ret + 1] = fontloader.to_utf16(s)
-    end
-    local utf16str = "<feff" .. table.concat(ret) .. ">"
-    return utf16str
-end
-
 --- Bookmarks are collected and later processed. This function (recursively)
 --- creates TeX code from the generated tables.
 function bookmarkstotex( tbl )
@@ -899,7 +889,16 @@ function initialize_luatex_and_generate_pdf()
     -- Subject  The subject of the document.
     -- Keywords  Keywords associated with the document.
     local creator = string.format("speedata Publisher %s, www.speedata.de",env_publisherversion)
-    local info = string.format("/Creator (%s) ",creator)
+    local infos = { string.format("/Creator (%s)",creator) }
+
+    if options.documenttitle and options.documenttitle ~= "" then
+        infos[#infos + 1] = string.format("/Title %s",utf8_to_utf16_string_pdf(options.documenttitle))
+    end
+    if options.documentauthor and options.documentauthor ~= "" then
+        infos[#infos + 1] = string.format("/Author %s", utf8_to_utf16_string_pdf(options.documentauthor))
+    end
+
+    local info = table.concat(infos, " ")
 
     local catalog = table.concat(pdfcatalog," ")
 
@@ -4436,7 +4435,7 @@ function string_random(length)
   end
 end
 
-function getmetadata( conformancelevel )
+function getmetadata( conformancelevel, title, author )
     local metadata = string.format([[<?xpacket begin=%q id="W5M0MpCehiHzreSzNTczkc9d"?>
 <x:xmpmeta xmlns:x="adobe:ns:meta/">
  <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
@@ -4447,12 +4446,12 @@ function getmetadata( conformancelevel )
   <rdf:Description xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:about="">
    <dc:title>
     <rdf:Alt>
-     <rdf:li xml:lang="x-default">ZUGFeRD Rechnung</rdf:li>
+     <rdf:li xml:lang="x-default">%s</rdf:li>
     </rdf:Alt>
    </dc:title>
    <dc:creator>
     <rdf:Seq>
-    <rdf:li>speedata Publisher</rdf:li>
+    <rdf:li>%s</rdf:li>
 </rdf:Seq>
    </dc:creator>
   <dc:description>
@@ -4512,7 +4511,7 @@ function getmetadata( conformancelevel )
   rdf:about="" zf:ConformanceLevel="%s" zf:DocumentFileName="ZUGFeRD-invoice.xml" zf:DocumentType="INVOICE" zf:Version="1.0"/>
 </rdf:RDF>
 </x:xmpmeta><?xpacket end="w"?>
-]],"\239\187\191",conformancelevel)
+]],"\239\187\191",title,author,conformancelevel)
 
     return metadata
 end
@@ -4549,7 +4548,7 @@ function attach_file_pdf(filename,description,mimetype)
 >>]],escape_pdfstring(description), fileobjectnum,fileobjectnum,destfilename,utf8_to_utf16_string_pdf(destfilename)))
         -- BASIC, COMFORT, EXTENDED
     local metadataobjnum = pdf.obj({type = "stream",
-                 string = getmetadata(conformancelevel),
+                 string = getmetadata(conformancelevel, options.documenttitle or "ZUGFeRD Rechnung",options.documentauthor or "The Author"),
                  immediate = true,
                  attr = [[  /Subtype /XML /Type /Metadata  ]],
                  compresslevel = 0,
@@ -4590,6 +4589,16 @@ end
 
 function escape_pdfname( str )
     return string.gsub(str,'/','#2f')
+end
+
+--- Convert the argument `str` (in UTF-8) to a string suitable for writing into the PDF file. The returned string starts with `<feff` and ends with `>`
+function utf8_to_utf16_string_pdf( str )
+    local ret = {}
+    for s in string.utfvalues(str) do
+        ret[#ret + 1] = fontloader.to_utf16(s)
+    end
+    local utf16str = "<feff" .. table.concat(ret) .. ">"
+    return utf16str
 end
 
 file_end("publisher.lua")

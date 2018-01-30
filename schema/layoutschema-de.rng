@@ -58,6 +58,9 @@
                      <ref name="e_AddSearchpath"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_AttachFile"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Bookmark"></ref>
                   </optional>
                   <optional>
@@ -113,6 +116,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Pagetype"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_PDFOptions"></ref>
                   </optional>
                   <optional>
                      <ref name="e_PlaceObject"></ref>
@@ -157,6 +163,9 @@
                      <ref name="e_AddSearchpath"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_AttachFile"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Bookmark"></ref>
                   </optional>
                   <optional>
@@ -212,6 +221,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Pagetype"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_PDFOptions"></ref>
                   </optional>
                   <optional>
                      <ref name="e_PlaceObject"></ref>
@@ -914,6 +926,9 @@
                      <ref name="e_AddSearchpath"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_AttachFile"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Bookmark"></ref>
                   </optional>
                   <optional>
@@ -969,6 +984,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Pagetype"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_PDFOptions"></ref>
                   </optional>
                   <optional>
                      <ref name="e_PlaceObject"></ref>
@@ -3306,6 +3324,16 @@
             <group>
                <a:documentation>Setze PDF Optionen wie Anzahl der Kopien</a:documentation>
                <optional>
+                  <attribute name="author">
+                     <a:documentation>Legt den Autor des Dokuments fest</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="title">
+                     <a:documentation>Legt den Titel des Dokuments fest</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="duplex">
                      <a:documentation>Setze PDF Anzeigeprogramm auf einseitigen oder doppelseitigen Druck. Voreinstellung: leer.</a:documentation>
                      <choice>
@@ -3745,6 +3773,9 @@
                      <ref name="e_AddSearchpath"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_AttachFile"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Bookmark"></ref>
                   </optional>
                   <optional>
@@ -3800,6 +3831,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Pagetype"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_PDFOptions"></ref>
                   </optional>
                   <optional>
                      <ref name="e_PlaceObject"></ref>
@@ -3952,6 +3986,9 @@
                         <ref name="e_AddSearchpath"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_AttachFile"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Bookmark"></ref>
                      </optional>
                      <optional>
@@ -4007,6 +4044,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Pagetype"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_PDFOptions"></ref>
                      </optional>
                      <optional>
                         <ref name="e_PlaceObject"></ref>
