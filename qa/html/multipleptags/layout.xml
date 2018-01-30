@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    version="3.1.18">
+    <Options crop="2mm"/>
+    <SetGrid height="12pt" width="1cm"/>
+    <Record element="foo" >
+        <PlaceObject>
+            <Textblock width="5">
+                <Paragraph><Value select="sd:decode-html(.)"/></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

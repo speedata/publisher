@@ -2090,7 +2090,17 @@ function commands.paragraph( layoutxml,dataxml )
         elseif publisher.elementname(j) == "Value" and type(contents) == "table" then
             if i == 1 then publisher.remove_first_whitespace(contents) end
             if i == #tab then publisher.remove_last_whitespace(contents) end
-            objects[#objects + 1] = publisher.parse_html(contents,{allowbreak = allowbreak})
+            for i=1,#contents do
+                if type(contents[i]) == "table" then
+                    objects[#objects + 1] = publisher.parse_html(contents[i],{allowbreak = allowbreak})
+                    if contents[i][".__local_name"] == "p" and i < #contents then
+                        objects[#objects + 1] = "\n"
+                    end
+                else
+                    objects[#objects + 1] = contents[i]
+                end
+            end
+            publisher.remove_last_whitespace(objects)
         elseif publisher.elementname(j) == "Initial" then
             a.initial = contents
         else
