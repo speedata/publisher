@@ -421,7 +421,7 @@ function post_linebreak( head, list_head)
         elseif head.id == glyph_node then -- glyph
             if reportmissingglyphs then
                 local thisfont = used_fonts[head.font]
-                if not thisfont.characters[head.char] then
+                if thisfont and not thisfont.characters[head.char] then
                     err("Glyph %x (hex) is missing from the font %q",head.char,thisfont.name)
                 end
             end
