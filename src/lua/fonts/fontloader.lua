@@ -68,15 +68,15 @@ function find_feature_string(f,featurename)
         return ret
     end
     for i=1,#f.gsub do
-        local gsub_tabelle=f.gsub[i]
-        if gsub_tabelle.features then
-            for j = 1,#gsub_tabelle.features do
-                local gtf = gsub_tabelle.features[j]
+        local gsub_table=f.gsub[i]
+        if gsub_table.features then
+            for j = 1,#gsub_table.features do
+                local gtf = gsub_table.features[j]
                 if gtf.tag==featurename and features_scripts_matches(gtf.scripts,"latn","dflt") then
-                    if #gsub_tabelle.subtables ~= 1 then
+                    if #gsub_table.subtables ~= 1 then
                         -- w("warning: #subtables in gpos != 1")
                     end
-                    ret[#ret + 1] = gsub_tabelle.subtables[1].name
+                    ret[#ret + 1] = gsub_table.subtables[1].name
                 end
             end
         end
@@ -188,14 +188,16 @@ function define_font(name, size,extra_parameter)
     -- in mind when filling the characters subtable.
     f.characters    = { }
     f.fontloader    = fonttable
-    if extra_parameter and extra_parameter.otfeatures and extra_parameter.otfeatures.smcp then
-        f.smcp = find_feature_string(fonttable,"smcp")
-    end
-    if extra_parameter and extra_parameter.otfeatures and extra_parameter.otfeatures.onum then
-        f.onum = find_feature_string(fonttable,"onum")
+    f.otfeatures    = {}
+
+    if extra_parameter and extra_parameter.otfeatures then
+        for of,enabled in pairs(extra_parameter.otfeatures) do
+            if enabled then
+                f.otfeatures[#f.otfeatures + 1] = find_feature_string(fonttable,of)
+            end
+        end
     end
 
-    f.otfeatures    = extra_parameter.otfeatures             -- OpenType Features (smcp,...)
     f.name          = fonttable.fontname
     f.fullname      = fonttable.fontname
     f.designsize    = size

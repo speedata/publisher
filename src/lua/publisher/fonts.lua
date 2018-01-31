@@ -258,61 +258,44 @@ function pre_linebreak( head )
                 else
                     head.font = tmp_fontnum
                 end
-                -- check for small caps
+                -- check for font features
                 local f = used_fonts[tmp_fontnum]
-                if f and f.otfeatures and f.otfeatures.onum == true then
-                    local glyphno,lookups
-                    local glyph_lookuptable
-                    if f.characters[head.char] then
-                        glyphno = f.characters[head.char].index
-                        lookups = f.fontloader.glyphs[glyphno].lookups
-                        for _,v in ipairs(f.onum) do
-                            if lookups then
-                                glyph_lookuptable = lookups[v]
-                                if glyph_lookuptable then
-                                    if glyph_lookuptable[1].type == "substitution" then
-                                        head.char=f.fontloader.lookup_codepoint_by_name[glyph_lookuptable[1].specification.variant]
-                                    end
-                                end
-                            end
-                        end
-                    end -- if f.characters[head.char]
-                end -- if onum
-
-                if f and f.otfeatures and f.otfeatures.smcp == true then
-                    local glyphno,lookups
-                    local glyph_lookuptable
-                    if f.characters[head.char] then
-                        glyphno = f.characters[head.char].index
-                        lookups = f.fontloader.glyphs[glyphno].lookups
-                        for _,v in ipairs(f.smcp) do
-                            if lookups then
-                                glyph_lookuptable = lookups[v]
-                                if glyph_lookuptable then
-                                    local glt1 = glyph_lookuptable[1]
-                                    if glt1.type == "substitution" then
-                                        head.char=f.fontloader.lookup_codepoint_by_name[glt1.specification.variant]
-                                    elseif glt1.type == "multiple" then
-                                        local lastnode
-                                        for i,v in ipairs(string.explode(glt1.specification.components)) do
-                                            if i==1 then
-                                                head.char=f.fontloader.lookup_codepoint_by_name[v]
-                                            else
-                                                local n = node.new("glyph")
-                                                n.next = head.next
-                                                n.font = tmp_fontnum
-                                                n.lang = 0
-                                                n.char = f.fontloader.lookup_codepoint_by_name[v]
-                                                head.next = n
-                                                head = n
+                if f and f.otfeatures then
+                    for _,featurename in ipairs(f.otfeatures) do
+                        local glyphno,lookups
+                        local glyph_lookuptable
+                        if f.characters[head.char] then
+                            glyphno = f.characters[head.char].index
+                            lookups = f.fontloader.glyphs[glyphno].lookups
+                            for _,v in ipairs(featurename) do
+                                if lookups then
+                                    glyph_lookuptable = lookups[v]
+                                    if glyph_lookuptable then
+                                        local glt1 = glyph_lookuptable[1]
+                                        if glt1.type == "substitution" then
+                                            head.char=f.fontloader.lookup_codepoint_by_name[glt1.specification.variant]
+                                        elseif glt1.type == "multiple" then
+                                            local lastnode
+                                            for i,v in ipairs(string.explode(glt1.specification.components)) do
+                                                if i==1 then
+                                                    head.char=f.fontloader.lookup_codepoint_by_name[v]
+                                                else
+                                                    local n = node.new("glyph")
+                                                    n.next = head.next
+                                                    n.font = tmp_fontnum
+                                                    n.lang = 0
+                                                    n.char = f.fontloader.lookup_codepoint_by_name[v]
+                                                    head.next = n
+                                                    head = n
+                                                end
                                             end
                                         end
                                     end
                                 end
-                            end
+                            end -- if f.characters[head.char]
                         end
-                    end -- if f.characters[head.char]
-                end -- f.otfeatures.smcp == true
+                    end -- for featurename, enabled in pairs
+                end -- if  f and otffeatures
             end -- fontfamily?
         else
             warning("Unknown node: %q",head.id)
