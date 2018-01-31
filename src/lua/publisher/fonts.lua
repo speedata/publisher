@@ -289,11 +289,12 @@ function pre_linebreak( head )
                             if lookups then
                                 glyph_lookuptable = lookups[v]
                                 if glyph_lookuptable then
-                                    if glyph_lookuptable[1].type == "substitution" then
-                                        head.char=f.fontloader.lookup_codepoint_by_name[glyph_lookuptable[1].specification.variant]
-                                    elseif glyph_lookuptable[1].type == "multiple" then
+                                    local glt1 = glyph_lookuptable[1]
+                                    if glt1.type == "substitution" then
+                                        head.char=f.fontloader.lookup_codepoint_by_name[glt1.specification.variant]
+                                    elseif glt1.type == "multiple" then
                                         local lastnode
-                                        for i,v in ipairs(string.explode(glyph_lookuptable[1].specification.components)) do
+                                        for i,v in ipairs(string.explode(glt1.specification.components)) do
                                             if i==1 then
                                                 head.char=f.fontloader.lookup_codepoint_by_name[v]
                                             else

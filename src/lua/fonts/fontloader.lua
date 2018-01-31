@@ -154,14 +154,17 @@ function define_font(name, size,extra_parameter)
         --- The type1 fonts got the unicode point with `g.unicode`, the
         --- The ttf/otf font got the point with `fonttable.map.backmap[i]`
         --- Somehow this worked a few years until Arial Narrow could not display
-        --- a semicolon (see issue #152). Now I hope that g.unicode is good enough
-        --- for both type of fonts (unicode and non-unicode).
-        ---
+        --- a semicolon (see issue #152).
+        --- Now I use g.unicode if present, otherwise map.backmap.
+        --- See issue #154
+
         --- For kerning a mapping glyphname -> codepoint is needed.
         for i = 1,#fonttable.glyphs do
             local g=fonttable.glyphs[i]
-            lookup_codepoint_by_name[g.name] = g.unicode
-            lookup_codepoint_by_number[i]    = g.unicode
+            local cp = g.unicode
+            if cp == -1 then cp = fonttable.map.backmap[i] end
+            lookup_codepoint_by_name[g.name] = cp
+            lookup_codepoint_by_number[i]    = cp
         end
         fonttable.lookup_codepoint_by_name   = lookup_codepoint_by_name
         fonttable.lookup_codepoint_by_number = lookup_codepoint_by_number
