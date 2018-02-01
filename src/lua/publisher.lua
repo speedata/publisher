@@ -2748,6 +2748,12 @@ function mknodes(str,fontfamily,parameter)
             end
 
             head,last = node.insert_after(head,last,n)
+            if s > 12033 then
+                local pen = node.new("penalty")
+                pen.penalty = 0
+                head,last = node.insert_after(head,last,pen)
+            end
+
             -- Some characters must be treated in a special way.
             -- Hyphens must be separated from words:
             if n.char == 8209 then -- non breaking hyphen
