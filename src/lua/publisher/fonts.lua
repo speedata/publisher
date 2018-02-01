@@ -78,7 +78,7 @@ function table.find(tab,key)
 end
 
 
--- Return false, errormessage in case of failure, true, number otherwise. number
+-- Return false, error message in case of failure, true, number otherwise. number
 -- is the internal font number. After calling this method, the font can be used
 -- with the key { filename,size}
 function make_font_instance( name,size )
@@ -93,9 +93,14 @@ function make_font_instance( name,size )
     end
     local filename,parameter = unpack(lookup_fontname_filename[name])
     assert(filename)
-    local k = {filename = filename, size = size}
+    local k = {filename = filename, fontsize = size}
+
     if parameter.otfeatures then
-        k.smcp = parameter.otfeatures.smcp
+        for fea,enabled in pairs(parameter.otfeatures) do
+            if enabled then
+                k[fea] = true
+            end
+        end
     end
     local fontnumber = table.find(font_instances,k)
     if fontnumber then
@@ -261,13 +266,13 @@ function pre_linebreak( head )
                 -- check for font features
                 local f = used_fonts[tmp_fontnum]
                 if f and f.otfeatures then
-                    for _,featurename in ipairs(f.otfeatures) do
+                    for _,featuretable in ipairs(f.otfeatures) do
                         local glyphno,lookups
                         local glyph_lookuptable
                         if f.characters[head.char] then
                             glyphno = f.characters[head.char].index
                             lookups = f.fontloader.glyphs[glyphno].lookups
-                            for _,v in ipairs(featurename) do
+                            for _,v in ipairs(featuretable) do
                                 if lookups then
                                     glyph_lookuptable = lookups[v]
                                     if glyph_lookuptable then
@@ -294,7 +299,7 @@ function pre_linebreak( head )
                                 end
                             end -- if f.characters[head.char]
                         end
-                    end -- for featurename, enabled in pairs
+                    end -- for featuretable, enabled in pairs
                 end -- if  f and otffeatures
             end -- fontfamily?
         else

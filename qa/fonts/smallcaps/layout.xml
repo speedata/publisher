@@ -4,16 +4,24 @@
     version="3.1.19">
     <Options crop="2mm"/>
 
-    <LoadFontfile name="FiraSans-Regular" filename="FiraSans-Regular.otf" smallcaps="yes" />
-    <DefineFontfamily name="text" fontsize="10" leading="12">
-        <Regular fontface="FiraSans-Regular"/>
+    <LoadFontfile name="fira-smcp" filename="FiraSans-Regular.otf" smallcaps="yes" />
+    <LoadFontfile name="fira-osf" filename="FiraSans-Regular.otf" oldstylefigures="yes" smallcaps="yes" />
+    <DefineFontfamily name="smcp" fontsize="10" leading="12">
+        <Regular fontface="fira-smcp"/>
+    </DefineFontfamily>
+    <DefineFontfamily name="osf" fontsize="10" leading="12">
+        <Regular fontface="fira-osf"></Regular>
     </DefineFontfamily>
 
     <Record element="data">
+        <SetVariable variable="testtext" select="'Hello world, 1234567890'"/>
         <PlaceObject>
             <Textblock width="4">
-                <Paragraph>
-                    <Value>Small caps</Value>
+                <Paragraph fontface="osf">
+                    <Value select="$testtext"/>
+                </Paragraph>
+                <Paragraph fontface="smcp">
+                    <Value select="$testtext"/>
                 </Paragraph>
             </Textblock>
         </PlaceObject>
