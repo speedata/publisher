@@ -1,13 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (en)</title>
   <id>https://www.speedata.de</id>
-  <updated>2017-12-19T13:05:00+01:00</updated>
+  <updated>2018-02-01T07:15:05+01:00</updated>
   <subtitle>New revisions for download and changelog.</subtitle>
   <link href="https://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 3.1.19</title>
+    <updated>2018-01-30T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2018-01-30:</id>
+    <content type="html">Allow setting of PDF title and author</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.18</title>
+    <updated>2018-01-29T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2018-01-29:</id>
+    <content type="html">Fix fontmapping problem</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.17</title>
+    <updated>2018-01-28T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2018-01-28:</id>
+    <content type="html">Report glyphs missing from a font</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.17</title>
+    <updated>2018-01-28T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2018-01-28:</id>
+    <content type="html">exit=&#34;yes&#34; at Message to quit a publishing run</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 3.1.16</title>
     <updated>2017-12-19T00:00:00Z</updated>
