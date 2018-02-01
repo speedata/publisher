@@ -1415,6 +1415,7 @@ function commands.load_fontfile( layoutxml,dataxml )
     local filename         = publisher.read_attribute(layoutxml,dataxml,"filename",        "rawstring")
     local name             = publisher.read_attribute(layoutxml,dataxml,"name",            "rawstring")
     local osf              = publisher.read_attribute(layoutxml,dataxml,"oldstylefigures", "boolean")
+    local features         = publisher.read_attribute(layoutxml,dataxml,"features",        "rawstring")
 
     local extra_parameter = {
         space            = space      or 25,
@@ -1424,6 +1425,13 @@ function commands.load_fontfile( layoutxml,dataxml )
             onum = osf == true,
         },
     }
+    if features then
+        for i,v in ipairs(string.explode(features,",")) do
+            extra_parameter.otfeatures[v] = true
+         end
+     end
+
+
     if publisher.lowercase then filename = unicode.utf8.lower(filename) end
     log("Load Fontfile %q",filename or "?")
     publisher.fonts.load_fontfile(name,filename,extra_parameter)
