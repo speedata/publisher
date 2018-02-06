@@ -4220,6 +4220,17 @@
                <attribute name="criterion">
                   <a:documentation>Name of the attribute that is used as the sort key.</a:documentation>
                </attribute>
+               <optional>
+                  <attribute name="numerical">
+                     <a:documentation>Sort alphabetical or numerical</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Sort alphabetical</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Sort alphabetical (default)</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
                <empty></empty>
             </group>
             <ref name="foreign-nodes"></ref>

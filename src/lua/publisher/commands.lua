@@ -2922,6 +2922,7 @@ function commands.sort_sequence( layoutxml,dataxml )
     local selection        = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
     local removeduplicates = publisher.read_attribute(layoutxml,dataxml,"removeduplicates","rawstring")
     local criterion        = publisher.read_attribute(layoutxml,dataxml,"criterion","rawstring")
+    local numerical        = publisher.read_attribute(layoutxml,dataxml,"numerical",   "boolean")
     local criterium        = publisher.read_attribute(layoutxml,dataxml,"criterium","rawstring")
 
     -- spelling error in schema
@@ -2937,7 +2938,12 @@ function commands.sort_sequence( layoutxml,dataxml )
         end
     end
 
-    table.sort(tmp, function(a,b) return a[sortkey]  < b[sortkey] end)
+    if numerical then
+        table.sort(tmp, function(a,b) return tonumber(a[sortkey]) < tonumber(b[sortkey]) end)
+    else
+        table.sort(tmp, function(a,b) return a[sortkey] < b[sortkey] end)
+    end
+
 
     if removeduplicates then
         local ret = {}

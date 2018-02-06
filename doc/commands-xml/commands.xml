@@ -6473,6 +6473,30 @@
         <para>Attributname, nach dem sortiert werden soll.</para>
       </description>
     </attribute>
+    <attribute en="numerical" optional="yes" since="3.1.21">
+      <description xml:lang="en">
+        <para>Sort alphabetical or numerical</para>
+      </description>
+      <description xml:lang="de">
+        <para>Sortiere alphabetisch oder nummerisch</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Sort alphabetical</para>
+        </description>
+        <description xml:lang="de">
+          <para>Sortiere nummerisch</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Sort alphabetical (default)</para>
+        </description>
+        <description xml:lang="de">
+          <para>Sortiere alphabetisch (Voreinstellung)</para>
+        </description>
+      </choice>
+    </attribute>
     <example xml:lang="en">
       <para>Data:</para>
       <listing><![CDATA[<data>
