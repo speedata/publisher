@@ -5,7 +5,7 @@
   <Pageformat width="50mm" height="50mm"/>
   
   <LoadFontfile name="t" filename="texgyreheros-regular.otf" />
-  <LoadFontfile name="t-smcp" filename="texgyreheros-regular.otf" smallcaps="yes" />
+  <LoadFontfile name="t-smcp" filename="texgyreheros-regular.otf" smallcaps="yes" oldstylefigures="yes" />
   
   <DefineFontfamily name="text" fontsize="10" leading="12">
     <Regular fontface="t"/>
