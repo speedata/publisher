@@ -342,7 +342,7 @@
     </childelements>
     <attribute en="href" type="text" optional="no">
       <description xml:lang="en">
-        <para>The destination of the hyperlink (URI). Example: <tt>https://www.speedata.de</tt></para>
+        <para>The target of the hyperlink (URI). Example: <tt>https://www.speedata.de</tt></para>
       </description>
       <description xml:lang="de">
         <para>Das Ziel des Hyperlinks. Beispiel: <tt>https://www.speedata.de</tt></para>
