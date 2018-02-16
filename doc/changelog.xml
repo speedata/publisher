@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.21" date="2018-02-16">
+      <en>Bugfix for multipage table</en>
+      <de>Fehlerkorrektur für mehrseitige Tabellen</de>
+    </entry>
+    <entry version="3.1.21" date="2018-02-16">
+      <en>New standard fonts</en>
+      <de>Neue Default-Fonts</de>
+    </entry>
     <entry version="3.1.20" date="2018-02-01">
       <en>Lot's of font improvements, first attempt to get chinese right</en>
       <de>Viele Verbesserungen im Font-Bereich, erste Versuche, Chinesisch korrekt zu setzen</de>
