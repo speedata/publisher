@@ -246,7 +246,12 @@ local function format_string( dataxml,arg )
     for i=1,#arg - 1 do
         argument[#argument + 1] = table_textvalue(arg[i])
     end
-    local ret = string.format(arg[#arg],table.unpack(argument))
+    local unpacked = table.unpack(argument)
+    if unpacked == nil or unpacked == "" then
+        err("format-string: first arguments are empty")
+        return ""
+    end
+    local ret = string.format(arg[#arg],unpacked)
     return ret
 end
 
