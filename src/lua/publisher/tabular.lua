@@ -1175,11 +1175,11 @@ local function calculate_height_and_connect_tablefoot(self,tablefoot,tablefoot_l
     end
 
     if #tablefoot > 0 then
-        ht_footer = ht_footer + tablefoot[#tablefoot].height + ( #tablefoot - 1 ) * self.rowsep
+        ht_footer = ht_footer + tablefoot[#tablefoot].height + #tablefoot * self.rowsep
     end
 
     if #tablefoot_last > 0 then
-        ht_footer_last = ht_footer_last + tablefoot_last[#tablefoot_last].height + ( #tablefoot_last - 1 ) * self.rowsep
+        ht_footer_last = ht_footer_last + tablefoot_last[#tablefoot_last].height + #tablefoot_last * self.rowsep
     else
         ht_footer_last = ht_footer
     end
@@ -1462,7 +1462,7 @@ function typeset_table(self)
         if break_above_allowed then
             last_possible_split_is_after_line = i - 1
             accumulated_height = accumulated_height + extra_height
-            extra_height = self.rowsep
+            extra_height = 0
         end
         extra_height = extra_height + ht_row
 
@@ -1502,6 +1502,7 @@ function typeset_table(self)
                 extra_height = extra_height + space_above
             end
         end
+        extra_height = extra_height + self.rowsep
     end
     splits[#splits + 1] = #rows
 

@@ -1,0 +1,58 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  version="3.1.20">
+  <Pageformat width="60mm" height="110mm" />
+  <SetGrid height="24pt" nx="10"/>
+
+  <Trace assignments="no" objects="yes" verbose="no" grid="yes" gridallocation="no" hyphenation="no" textformat="no" />
+
+  <Pagetype name="x" test="true()">
+    <Margin left="5mm" right="5mm" top="5mm" bottom="5mm"/>
+    <PositioningArea name="area">
+      <PositioningFrame row="1" column="1" width="10" height="10"/>
+    </PositioningArea>
+  </Pagetype>
+
+  <Record element="data">
+    <PlaceObject area="area">
+      <Table leading="17pt">
+        <Tablefoot>
+          <Tr minheight="1">
+            <Td><Paragraph><Value>foot</Value></Paragraph></Td>
+          </Tr>
+        </Tablefoot>
+        <Tr>
+          <Td>
+            <Paragraph><Value>1</Value></Paragraph>
+          </Td>
+        </Tr>
+        <Tr>
+          <Td>
+            <Paragraph>
+              <Value>2<br/>b<br/>c<br/>d</Value>
+            </Paragraph>
+          </Td>
+        </Tr>
+        <Tr>
+          <Td><Paragraph><Value>3</Value></Paragraph></Td>
+        </Tr>
+        <Tr break-below="no" backgroundcolor="green">
+          <Td>
+            <Paragraph><Value>x</Value></Paragraph>
+          </Td>
+        </Tr>
+        <Tr>
+          <Td>
+            <Paragraph>
+              <Value>a<br/>b<br/>c<br/>d</Value>
+            </Paragraph>
+          </Td>
+        </Tr>
+        <Tr>
+          <Td><Paragraph><Value>a</Value></Paragraph></Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
