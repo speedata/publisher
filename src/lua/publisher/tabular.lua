@@ -404,6 +404,8 @@ function calculate_columnwidth( self )
                     self:calculate_columnwidths_for_row(row_contents,current_row,colspans,colmin,colmax)
                 end
             end
+        elseif tr_elementname == "Columns" then
+            -- ignore
         else
             warning("Unknown Element: %q",tr_elementname or "?")
         end -- if it's really a row
