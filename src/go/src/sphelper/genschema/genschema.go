@@ -170,6 +170,11 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 			attelt.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: attr.Name}}
 			enc.EncodeToken(attelt)
 
+			doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
+			enc.EncodeToken(doc)
+			enc.EncodeToken(xml.CharData(attr.GetDescription(lang)))
+			enc.EncodeToken(doc.End())
+
 			if len(attr.Choice) > 0 {
 				enc.EncodeToken(choiceElement.Copy())
 				for _, choice := range attr.Choice {
