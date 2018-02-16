@@ -148,6 +148,11 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 		elt.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: cmd.Name}}
 		enc.EncodeToken(elt)
 
+		doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
+		enc.EncodeToken(doc)
+		enc.EncodeToken(xml.CharData(cmd.GetCommandDescription(lang)))
+		enc.EncodeToken(doc.End())
+
 		if cmd.Name != "Include" {
 			interleave = xml.StartElement{Name: xml.Name{Local: "interleave"}}
 			enc.EncodeToken(interleave)
@@ -156,10 +161,6 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 			enc.EncodeToken(group)
 		}
 
-		doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
-		enc.EncodeToken(doc)
-		enc.EncodeToken(xml.CharData(cmd.GetCommandDescription(lang)))
-		enc.EncodeToken(doc.End())
 		for _, attr := range cmd.Attributes {
 			if attr.Optional == "yes" {
 				enc.EncodeToken(optionalElement.Copy())
@@ -168,11 +169,6 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 			attelt := attributeElement.Copy()
 			attelt.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: attr.Name}}
 			enc.EncodeToken(attelt)
-
-			doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
-			enc.EncodeToken(doc)
-			enc.EncodeToken(xml.CharData(attr.GetDescription(lang)))
-			enc.EncodeToken(doc.End())
 
 			if len(attr.Choice) > 0 {
 				enc.EncodeToken(choiceElement.Copy())
