@@ -3207,7 +3207,7 @@ function set_color_if_necessary( nodelist,color )
     end
     -- When we uncomment the if .. end here, the typesetting
     -- process is much slower. See #143
-    -- if colorname == "black" then return nodelist end
+    if colorname == "black" then return nodelist end
     local colstart, colstop
     if colorname == "black" then
         colstart = node.new("whatsit","pdf_literal")
