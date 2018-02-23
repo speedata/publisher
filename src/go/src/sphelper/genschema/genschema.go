@@ -34,6 +34,7 @@ func getChildElements(commands *commandsxml.CommandsXML, enc *xml.Encoder, child
 	if len(children) == 0 {
 		enc.EncodeToken(emptyElement.Copy())
 		enc.EncodeToken(emptyElement.End())
+		return
 	}
 	buf := bytes.NewBuffer(children)
 	dec := xml.NewDecoder(buf)
@@ -153,7 +154,8 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 		enc.EncodeToken(xml.CharData(cmd.GetCommandDescription(lang)))
 		enc.EncodeToken(doc.End())
 
-		if cmd.Name != "Include" {
+		// if the child elements contents is "empty", there is no need for allowing foreign nodes (1/2)
+		if cmd.Name != "Include" && len(cmd.Childelements.Text) > 0 {
 			interleave = xml.StartElement{Name: xml.Name{Local: "interleave"}}
 			enc.EncodeToken(interleave)
 
@@ -201,6 +203,16 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 				}
 
 				enc.EncodeToken(choiceElement.End())
+			} else if attr.Type == "yesnonumber" {
+				data := xml.StartElement{Name: xml.Name{Local: "data"}}
+				data.Attr = []xml.Attr{{Name: xml.Name{Local: "type"}, Value: "string"}}
+				enc.EncodeToken(data)
+				param := xml.StartElement{Name: xml.Name{Local: "param"}}
+				param.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: "pattern"}}
+				enc.EncodeToken(param)
+				enc.EncodeToken(xml.CharData(`[0-9]+|yes|no`))
+				enc.EncodeToken(param.End())
+				enc.EncodeToken(data.End())
 			}
 
 			if attr.Reference.Name != "" {
@@ -230,7 +242,8 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 		}
 		getChildElements(commands, enc, cmd.Childelements.Text, lang)
 
-		if cmd.Name != "Include" {
+		// if the child elements contents is "empty", there is no need for allowing foreign nodes (2/2)
+		if cmd.Name != "Include" && len(cmd.Childelements.Text) > 0 {
 			enc.EncodeToken(group.End())
 
 			ref := xml.StartElement{Name: xml.Name{Local: "ref"}}

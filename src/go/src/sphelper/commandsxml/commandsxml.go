@@ -22,6 +22,7 @@ type CommandsxmlAttribute struct {
 	Name        string           `xml:"en,attr"`
 	Choice      []ChoiceXML      `xml:"choice"`
 	Reference   NameAtt          `xml:"referenceattribute"`
+	Type        string           `xml:"type,attr"`
 	AllowXPath  string           `xml:"allowxpath,attr"`
 }
 

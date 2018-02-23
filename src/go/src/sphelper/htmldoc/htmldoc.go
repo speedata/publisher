@@ -120,6 +120,7 @@ func atttypeinfo(att *commandsxml.Attribute, lang string) template.HTML {
 		"text":               "Text",
 		"number":             "Zahl",
 		"yesnolength":        "yes, no oder Längenangabe",
+		"yesnonumber":        "yes, no oder Zahl",
 		"numberorlength":     "Zahl oder Längenangabe",
 		"numberlengthorstar": "Zahl, Maßangabe oder *-Angaben",
 		"zerotohundred":      "0 bis 100",
@@ -129,6 +130,7 @@ func atttypeinfo(att *commandsxml.Attribute, lang string) template.HTML {
 		"numberorlength":     "number or length",
 		"numberlengthorstar": "Number, length or *-numbers",
 		"yesnolength":        "yes, no or length",
+		"yesnonumber":        "yes, no or number",
 		"zerotohundred":      "0 up to 100",
 	}
 	ret := []string{}

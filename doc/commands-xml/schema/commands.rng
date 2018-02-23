@@ -217,6 +217,7 @@
               <optional>
                 <attribute name="since"/>
               </optional>
+              <optional><attribute name="lastchanged"/></optional>
               <optional>
                 <attribute name="allowxpath">
                   <choice>
@@ -237,6 +238,7 @@
                     <value>length</value>
                     <value>numberlengthorstar</value>
                     <value>yesnolength</value>
+                    <value>yesnonumber</value>
                   </choice>
                 </attribute>
                 <zeroOrMore>
