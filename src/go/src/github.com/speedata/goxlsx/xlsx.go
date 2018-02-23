@@ -165,7 +165,8 @@ func (ws *Worksheet) Cell(column, row int) string {
 	if xrow.Cells[column] == nil {
 		return ""
 	}
-	return xrow.Cells[column].Value
+	val := xrow.Cells[column].Value
+	return strings.Replace(val, "_x000D_", "", -1)
 }
 
 // Cell returns the contents of cell at column, row, where 1,1 is the top left corner.
