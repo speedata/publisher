@@ -490,21 +490,14 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         local c = 0
         while line do
             c = c + 1
-            if c == 1 then
-                -- orphan, but ignore on one-line texts
-                if current_textformat.orphan == false and line.next then
-                    node.set_attribute(line,publisher.att_break_below_forbidden,1)
-                end
+            if c < current_textformat.orphan and line.next then
+                node.set_attribute(line,publisher.att_break_below_forbidden,1)
             end
-            if line.id == 0 and line.next ~= nil and line.next.next == nil then
-                -- widow
-                if current_textformat.widow == false then
-                    node.set_attribute(line,publisher.att_break_below_forbidden,2)
-                end
+            if less_or_equal_than_n_lines(line, current_textformat.widow) then
+               node.set_attribute(line,publisher.att_break_below_forbidden,2)
             end
             line = line.next
         end
-
 
         publisher.fonts.post_linebreak(nodelist)
 
@@ -575,8 +568,24 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         nodelist.head.head = node.insert_before(nodelist.head.head,nodelist.head.head,initial_hlist)
     end
 
-
     return nodelist
+end
+
+-- Return true iff the paragraph has at lines ore less text
+-- lines left over and is not at the last line.
+function less_or_equal_than_n_lines( nodelist, lines )
+    if lines == 0 then return false end
+    local has_n_lines = false
+    for i=1,lines - 1 do
+        if nodelist.id == publisher.hlist_node and nodelist.next then
+            nodelist = nodelist.next
+        else
+            if i == 1 then
+                return false
+            end
+        end
+    end
+    return nodelist.next == nil
 end
 
 function join_table_to_box(objects)

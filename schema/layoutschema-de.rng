@@ -37,15 +37,10 @@
    <define name="e_AddSearchpath">
       <element name="AddSearchpath">
          <a:documentation>Ein Verzeichnis auf der Festplatte, das zum Suchpfad des Publishers hinzugefügt wird.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="select">
-                  <a:documentation>Der Pfad, der hinzugefügt werden soll. Systemabhängig.</a:documentation>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="select">
+            <a:documentation>Der Pfad, der hinzugefügt werden soll. Systemabhängig.</a:documentation>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_AtPageCreation">
@@ -261,42 +256,32 @@
    <define name="e_AttachFile">
       <element name="AttachFile">
          <a:documentation>Binde eine ZUGFeRD Datei ein.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="filename">
-                  <a:documentation>Der Name der Datei, die in die PDF-Datei eingebettet werden soll.</a:documentation>
-               </attribute>
-               <attribute name="description">
-                  <a:documentation>Textuelle Beschreibung der einzubindenden Datei (für den PDF-Viewer).</a:documentation>
-               </attribute>
-               <attribute name="type">
-                  <a:documentation>Der Typ der eingebundenen Datei. Derzeit wird nur ZUGFeRD unterstützt.</a:documentation>
-                  <choice>
-                     <value>ZUGFeRD invoice</value>
-                     <a:documentation>Die eingebundene Datei ist eine ZUGFeRD XML-Datei</a:documentation>
-                  </choice>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="filename">
+            <a:documentation>Der Name der Datei, die in die PDF-Datei eingebettet werden soll.</a:documentation>
+         </attribute>
+         <attribute name="description">
+            <a:documentation>Textuelle Beschreibung der einzubindenden Datei (für den PDF-Viewer).</a:documentation>
+         </attribute>
+         <attribute name="type">
+            <a:documentation>Der Typ der eingebundenen Datei. Derzeit wird nur ZUGFeRD unterstützt.</a:documentation>
+            <choice>
+               <value>ZUGFeRD invoice</value>
+               <a:documentation>Die eingebundene Datei ist eine ZUGFeRD XML-Datei</a:documentation>
+            </choice>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Attribute">
       <element name="Attribute">
          <a:documentation>Erzeugt ein Attribut für die Element Datenstruktur, die mithilfe von SaveDataset auf Festplatte gespeichert werden kann.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="name">
-                  <a:documentation>Name des Attributs, das erzeugt wird.</a:documentation>
-               </attribute>
-               <attribute name="select">
-                  <a:documentation>Der Inhalt des Attributs</a:documentation>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="name">
+            <a:documentation>Name des Attributs, das erzeugt wird.</a:documentation>
+         </attribute>
+         <attribute name="select">
+            <a:documentation>Der Inhalt des Attributs</a:documentation>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_B">
@@ -336,214 +321,184 @@
    <define name="e_Barcode">
       <element name="Barcode">
          <a:documentation>Erzeugt einen 1D oder 2D Strichcode (barcode), der in PlaceObject ausgegeben werden kann.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="select">
-                  <a:documentation>Wert, der als Strichcode kodiert werden soll.</a:documentation>
-               </attribute>
-               <optional>
-                  <attribute name="fontface">
-                     <a:documentation>Name der Schriftart des Textes, der ggf. unterhalb des Strichcodes ausgegeben wird. Nicht in allen Codes verwendet.</a:documentation>
-                  </attribute>
-               </optional>
-               <attribute name="type">
-                  <a:documentation>Typ des Strichcodes. Kann EAN13, Code128 oder QRCode sein.</a:documentation>
-                  <choice>
-                     <value>QRCode</value>
-                     <a:documentation>Erzeugt einen QR-Code, der für den Inhalt die kleinstmögliche Größe und den besten Fehlerkorrekturwert hat, sofern kein Fehlerkorrekturlevel angegeben ist.</a:documentation>
-                     <value>Code128</value>
-                     <a:documentation>Erzeugt einen Code 128 Barcode für Ziffern und Text (ohne Umlaute)</a:documentation>
-                     <value>EAN13</value>
-                     <a:documentation>Erzeugt einen EAN13 Barcode mit genau 13 Ziffern.</a:documentation>
-                  </choice>
-               </attribute>
-               <optional>
-                  <attribute name="width">
-                     <a:documentation>Breite des Strichcodes</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="height">
-                     <a:documentation>Höhe des Strichcodes.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="showtext">
-                     <a:documentation>Bestimmt, ob unterhalb des Barcodes der Text erscheint.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Text unterhalb des Barcodes schreiben.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Keinen Text anzeigen.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="overshoot">
-                     <a:documentation>Der Faktor, um den die äußeren und der innere Balken die normalen Balken übersteigt. Nur anwendbar bei EAN13.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="eclevel">
-                     <a:documentation>Setzt den Fehlerkorrekturlevel für QR-Codes. Wenn nicht angegeben, nutzt das System den maximalen Level für die kleinste QR-Code Größe. Je höher der Level, desto mehr Fehlerkorrektur ist im QR-Code.</a:documentation>
-                     <choice>
-                        <value>L</value>
-                        <a:documentation>Setzt den kleinsten Fehlerkorrekturwert (1) mit ca. 7% Korrektur.</a:documentation>
-                        <value>M</value>
-                        <a:documentation>Setzt den zweitkleinsten Fehlerkorrekturwert (2) mit ca. 15% Korrektur.</a:documentation>
-                        <value>Q</value>
-                        <a:documentation>Setzt den zweitgrößten Fehlerkorrekturwert (3) mit ca. 25% Korrektur.</a:documentation>
-                        <value>H</value>
-                        <a:documentation>Setzt den größten Fehlerkorrekturwert (4) mit ca. 35% Korrektur.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="select">
+            <a:documentation>Wert, der als Strichcode kodiert werden soll.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="fontface">
+               <a:documentation>Name der Schriftart des Textes, der ggf. unterhalb des Strichcodes ausgegeben wird. Nicht in allen Codes verwendet.</a:documentation>
+            </attribute>
+         </optional>
+         <attribute name="type">
+            <a:documentation>Typ des Strichcodes. Kann EAN13, Code128 oder QRCode sein.</a:documentation>
+            <choice>
+               <value>QRCode</value>
+               <a:documentation>Erzeugt einen QR-Code, der für den Inhalt die kleinstmögliche Größe und den besten Fehlerkorrekturwert hat, sofern kein Fehlerkorrekturlevel angegeben ist.</a:documentation>
+               <value>Code128</value>
+               <a:documentation>Erzeugt einen Code 128 Barcode für Ziffern und Text (ohne Umlaute)</a:documentation>
+               <value>EAN13</value>
+               <a:documentation>Erzeugt einen EAN13 Barcode mit genau 13 Ziffern.</a:documentation>
+            </choice>
+         </attribute>
+         <optional>
+            <attribute name="width">
+               <a:documentation>Breite des Strichcodes</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="height">
+               <a:documentation>Höhe des Strichcodes.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="showtext">
+               <a:documentation>Bestimmt, ob unterhalb des Barcodes der Text erscheint.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Text unterhalb des Barcodes schreiben.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Keinen Text anzeigen.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="overshoot">
+               <a:documentation>Der Faktor, um den die äußeren und der innere Balken die normalen Balken übersteigt. Nur anwendbar bei EAN13.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="eclevel">
+               <a:documentation>Setzt den Fehlerkorrekturlevel für QR-Codes. Wenn nicht angegeben, nutzt das System den maximalen Level für die kleinste QR-Code Größe. Je höher der Level, desto mehr Fehlerkorrektur ist im QR-Code.</a:documentation>
+               <choice>
+                  <value>L</value>
+                  <a:documentation>Setzt den kleinsten Fehlerkorrekturwert (1) mit ca. 7% Korrektur.</a:documentation>
+                  <value>M</value>
+                  <a:documentation>Setzt den zweitkleinsten Fehlerkorrekturwert (2) mit ca. 15% Korrektur.</a:documentation>
+                  <value>Q</value>
+                  <a:documentation>Setzt den zweitgrößten Fehlerkorrekturwert (3) mit ca. 25% Korrektur.</a:documentation>
+                  <value>H</value>
+                  <a:documentation>Setzt den größten Fehlerkorrekturwert (4) mit ca. 35% Korrektur.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Bold">
       <element name="Bold">
          <a:documentation>Name der Schriftart, die für den Schnitt Fett benutzt werden soll.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="fontface">
-                  <a:documentation>Name der Schriftart, die für eine fette Schrift benutzt werden soll.</a:documentation>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="fontface">
+            <a:documentation>Name der Schriftart, die für eine fette Schrift benutzt werden soll.</a:documentation>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_BoldItalic">
       <element name="BoldItalic">
          <a:documentation>Name der Schriftart, die für den Schnitt Fett-Kursiv benutzt werden soll.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="fontface">
-                  <a:documentation>Name der Schriftart, die für eine Fett/Kursive Schrift benutzt werden soll.</a:documentation>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="fontface">
+            <a:documentation>Name der Schriftart, die für eine Fett/Kursive Schrift benutzt werden soll.</a:documentation>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Bookmark">
       <element name="Bookmark">
          <a:documentation>Erstellt ein Lesezeichen für den PDF Betrachter (z.B. Adobe Reader). Wenn der Leser auf das Lesezeichen klickt, springt der PDF Betrachter an diese Stelle im Dokument.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="select">
-                  <a:documentation>Titel des Lesezeichens</a:documentation>
-               </attribute>
-               <attribute name="level">
-                  <a:documentation>Hierarchieebene. 1 ist die höchste Ebene, zwei die nächst tiefere Ebene etc.</a:documentation>
-               </attribute>
-               <optional>
-                  <attribute name="open">
-                     <a:documentation>Bestimmt, ob die Kind-Lesezeichen dargestellt werden sollen oder nicht.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Zeige Kinder.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Verstecke Kinder.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="select">
+            <a:documentation>Titel des Lesezeichens</a:documentation>
+         </attribute>
+         <attribute name="level">
+            <a:documentation>Hierarchieebene. 1 ist die höchste Ebene, zwei die nächst tiefere Ebene etc.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="open">
+               <a:documentation>Bestimmt, ob die Kind-Lesezeichen dargestellt werden sollen oder nicht.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeige Kinder.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Verstecke Kinder.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Box">
       <element name="Box">
          <a:documentation>Erzeugt einen rechteckigen gefärbten Bereich. Die Fläche muss mit den Rasterzellen übereinstimmen.</a:documentation>
-         <interleave>
-            <group>
-               <optional>
-                  <attribute name="backgroundcolor">
-                     <a:documentation>Farbe der Box. Wird für die Farbe ein Strich angegeben (-), ist der Hintergrund transparent.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="bleed">
-                     <a:documentation>Lässt die Box am Rand größer werden. Wird z.B. für Daumenregister benutzt, die inkl. Beschnitt ganz zum Rand gehen sollen. Inhalt ist eine Ortsangabe bestehend aus den Werten »top«, »bottom«, »left« oder »right« bzw. eine Kombination wie »top,right«.</a:documentation>
-                     <choice>
-                        <value>top</value>
-                        <a:documentation>Vergrößere nach oben.</a:documentation>
-                        <value>left</value>
-                        <a:documentation>Vergrößere nach links.</a:documentation>
-                        <value>bottom</value>
-                        <a:documentation>Vergrößere nach unten.</a:documentation>
-                        <value>right</value>
-                        <a:documentation>Vergrößere nach rechts.</a:documentation>
-                        <value>top,left</value>
-                        <a:documentation>Vergrößere nach oben und links.</a:documentation>
-                        <value>top,right</value>
-                        <a:documentation>Vergrößere nach oben und rechts.</a:documentation>
-                        <value>bottom,left</value>
-                        <a:documentation>Vergrößere nach unten und links.</a:documentation>
-                        <value>bottom,right</value>
-                        <a:documentation>Vergrößere nach unten und rechts.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="class">
-                     <a:documentation>CSS Klasse für diese Box.</a:documentation>
-                  </attribute>
-               </optional>
-               <attribute name="height">
-                  <a:documentation>Höhe der Box in Rasterzellen.</a:documentation>
-               </attribute>
-               <optional>
-                  <attribute name="id">
-                     <a:documentation>CSS id für diese Box.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="padding-top">
-                     <a:documentation>Bestimmt den Innenabstand der Box (oben)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="padding-bottom">
-                     <a:documentation>Bestimmt den Innenabstand der Box (unten)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="padding-left">
-                     <a:documentation>Bestimmt den Innenabstand der Box (links)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="padding-right">
-                     <a:documentation>Bestimmt den Innenabstand der Box (rechts)</a:documentation>
-                  </attribute>
-               </optional>
-               <attribute name="width">
-                  <a:documentation>Breite der Box in Rasterzellen.</a:documentation>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <optional>
+            <attribute name="backgroundcolor">
+               <a:documentation>Farbe der Box. Wird für die Farbe ein Strich angegeben (-), ist der Hintergrund transparent.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="bleed">
+               <a:documentation>Lässt die Box am Rand größer werden. Wird z.B. für Daumenregister benutzt, die inkl. Beschnitt ganz zum Rand gehen sollen. Inhalt ist eine Ortsangabe bestehend aus den Werten »top«, »bottom«, »left« oder »right« bzw. eine Kombination wie »top,right«.</a:documentation>
+               <choice>
+                  <value>top</value>
+                  <a:documentation>Vergrößere nach oben.</a:documentation>
+                  <value>left</value>
+                  <a:documentation>Vergrößere nach links.</a:documentation>
+                  <value>bottom</value>
+                  <a:documentation>Vergrößere nach unten.</a:documentation>
+                  <value>right</value>
+                  <a:documentation>Vergrößere nach rechts.</a:documentation>
+                  <value>top,left</value>
+                  <a:documentation>Vergrößere nach oben und links.</a:documentation>
+                  <value>top,right</value>
+                  <a:documentation>Vergrößere nach oben und rechts.</a:documentation>
+                  <value>bottom,left</value>
+                  <a:documentation>Vergrößere nach unten und links.</a:documentation>
+                  <value>bottom,right</value>
+                  <a:documentation>Vergrößere nach unten und rechts.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS Klasse für diese Box.</a:documentation>
+            </attribute>
+         </optional>
+         <attribute name="height">
+            <a:documentation>Höhe der Box in Rasterzellen.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id für diese Box.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-top">
+               <a:documentation>Bestimmt den Innenabstand der Box (oben)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-bottom">
+               <a:documentation>Bestimmt den Innenabstand der Box (unten)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-left">
+               <a:documentation>Bestimmt den Innenabstand der Box (links)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-right">
+               <a:documentation>Bestimmt den Innenabstand der Box (rechts)</a:documentation>
+            </attribute>
+         </optional>
+         <attribute name="width">
+            <a:documentation>Breite der Box in Rasterzellen.</a:documentation>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Br">
       <element name="Br">
          <a:documentation>Fügt einen Zeilenumbruch ein</a:documentation>
-         <interleave>
-            <group>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Case">
@@ -747,40 +702,35 @@
    <define name="e_Circle">
       <element name="Circle">
          <a:documentation>Erzeugt einen Kreis.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="radiusx">
-                  <a:documentation>Radius des Kreises in Rasterzellen (horizontal) oder als absolute Maßangabe. In zukünftigen Versionen wird mit radiusy eine Ellipse erzeugbar sein.</a:documentation>
-               </attribute>
-               <optional>
-                  <attribute name="backgroundcolor">
-                     <a:documentation>Farbe des Kreises.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="framecolor">
-                     <a:documentation>Farbe der Kreislinie.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="rulewidth">
-                     <a:documentation>Die Dicke des Striches um den Kreis.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="class">
-                     <a:documentation>CSS Klasse für diesen Kreis.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="id">
-                     <a:documentation>CSS id für diesen Kreis.</a:documentation>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="radiusx">
+            <a:documentation>Radius des Kreises in Rasterzellen (horizontal) oder als absolute Maßangabe. In zukünftigen Versionen wird mit radiusy eine Ellipse erzeugbar sein.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="backgroundcolor">
+               <a:documentation>Farbe des Kreises.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="framecolor">
+               <a:documentation>Farbe der Kreislinie.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="rulewidth">
+               <a:documentation>Die Dicke des Striches um den Kreis.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS Klasse für diesen Kreis.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id für diesen Kreis.</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Color">
@@ -823,58 +773,53 @@
    <define name="e_Column">
       <element name="Column">
          <a:documentation>Gibt die Eigenschaften einer Spalte in einer Tabelle an.</a:documentation>
-         <interleave>
-            <group>
-               <optional>
-                  <attribute name="width">
-                     <a:documentation>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm) oder in *-Angaben (z.B. 4*) angegeben werden.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="align">
-                     <a:documentation>Die horizontale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (Td) überschrieben werden.</a:documentation>
-                     <choice>
-                        <value>left</value>
-                        <a:documentation>Die Tabellenzellen dieser Spalte werden linksbündig ausgerichtet.</a:documentation>
-                        <value>center</value>
-                        <a:documentation>Die Tabellenzellen dieser Spalte werden horizontal zentriert.</a:documentation>
-                        <value>right</value>
-                        <a:documentation>Die Tabellenzellen dieser Spalte werden rechtsbündig ausgerichtet.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="valign">
-                     <a:documentation>Die vertikale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (Td) überschrieben werden.</a:documentation>
-                     <choice>
-                        <value>top</value>
-                        <a:documentation>Die Tabellenzellen dieser Spalte werden oben ausgerichtet.</a:documentation>
-                        <value>middle</value>
-                        <a:documentation>Die Tabellenzellen dieser Spalte werden vertikal zentriert ausgerichtet.</a:documentation>
-                        <value>bottom</value>
-                        <a:documentation>Die Tabellenzellen dieser Spalte werden  unten ausgerichtet.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="backgroundcolor">
-                     <a:documentation>Farbe der Tabellenspalte.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="padding-left">
-                     <a:documentation>Setze das linke padding für diese Spalte</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="padding-right">
-                     <a:documentation>Setze das rechte padding für diese Spalte</a:documentation>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <optional>
+            <attribute name="width">
+               <a:documentation>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm) oder in *-Angaben (z.B. 4*) angegeben werden.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="align">
+               <a:documentation>Die horizontale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (Td) überschrieben werden.</a:documentation>
+               <choice>
+                  <value>left</value>
+                  <a:documentation>Die Tabellenzellen dieser Spalte werden linksbündig ausgerichtet.</a:documentation>
+                  <value>center</value>
+                  <a:documentation>Die Tabellenzellen dieser Spalte werden horizontal zentriert.</a:documentation>
+                  <value>right</value>
+                  <a:documentation>Die Tabellenzellen dieser Spalte werden rechtsbündig ausgerichtet.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="valign">
+               <a:documentation>Die vertikale Ausrichtung des Tabelleninhalts. Kann in einer Zelle (Td) überschrieben werden.</a:documentation>
+               <choice>
+                  <value>top</value>
+                  <a:documentation>Die Tabellenzellen dieser Spalte werden oben ausgerichtet.</a:documentation>
+                  <value>middle</value>
+                  <a:documentation>Die Tabellenzellen dieser Spalte werden vertikal zentriert ausgerichtet.</a:documentation>
+                  <value>bottom</value>
+                  <a:documentation>Die Tabellenzellen dieser Spalte werden  unten ausgerichtet.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="backgroundcolor">
+               <a:documentation>Farbe der Tabellenspalte.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-left">
+               <a:documentation>Setze das linke padding für diese Spalte</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-right">
+               <a:documentation>Setze das rechte padding für diese Spalte</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Columns">
@@ -897,23 +842,18 @@
    <define name="e_Compatibility">
       <element name="Compatibility">
          <a:documentation>Setze Kompatibilität für ältere Layoutregeln</a:documentation>
-         <interleave>
-            <group>
-               <optional>
-                  <attribute name="movecursoronplaceobject">
-                     <a:documentation>Wechselt das Verhalten bei dem Objekte (platziert mit PlaceObject) am rechten Rand den Cursor in Spalte »Anzahl Spalten + 1« setzt.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Neues Verhalten (Voreinstellung): setzt den Cursor in Spalte 1 wenn ein Objekt an den rechten Rand stößt.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Altes Verhalten: setzt den Cursor auf die Spalte 1 hinter den rechten Rand des platzierten Objekts.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <optional>
+            <attribute name="movecursoronplaceobject">
+               <a:documentation>Wechselt das Verhalten bei dem Objekte (platziert mit PlaceObject) am rechten Rand den Cursor in Spalte »Anzahl Spalten + 1« setzt.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Neues Verhalten (Voreinstellung): setzt den Cursor in Spalte 1 wenn ein Objekt an den rechten Rand stößt.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Altes Verhalten: setzt den Cursor auf die Spalte 1 hinter den rechten Rand des platzierten Objekts.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Contents">
@@ -1024,117 +964,102 @@
    <define name="e_Copy-of">
       <element name="Copy-of">
          <a:documentation>Ersetzt dieses Element mit Inhalt von select als Elementstruktur. Dient zum „Zusammenbauen“ von Texten und Tabellen.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="select">
-                  <a:documentation>Die Auswahl (eine Variable) die kopiert werden soll.</a:documentation>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="select">
+            <a:documentation>Die Auswahl (eine Variable) die kopiert werden soll.</a:documentation>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_DefineColor">
       <element name="DefineColor">
          <a:documentation>Definiert Farben, die später im Layout benutzt werden können</a:documentation>
-         <interleave>
-            <group>
-               <optional>
-                  <attribute name="model">
-                     <a:documentation>Das Farbmodell, das benutzt werden soll. Derzeit werden »rgb«, »cmyk«, “gray” und spotcolor« unterstützt.</a:documentation>
-                     <choice>
-                        <value>cmyk</value>
-                        <a:documentation>CMYK (Türkis, Magenta, Gelb und Schwarz)</a:documentation>
-                        <value>rgb</value>
-                        <a:documentation>RGB (Rot, Grün, Blau)</a:documentation>
-                        <value>gray</value>
-                        <a:documentation>Graustufen (0=Schwarz)</a:documentation>
-                        <value>spotcolor</value>
-                        <a:documentation>Eine PANTONE oder HKS Farbe.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <attribute name="name">
-                  <a:documentation>Name der Farbe, die definiert wird.</a:documentation>
-               </attribute>
-               <optional>
-                  <attribute name="r">
-                     <a:documentation>Rot Anteil bei RGB</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="g">
-                     <a:documentation>Grün Anteil bei RGB</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="b">
-                     <a:documentation>Blau Anteil bei RGB</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="c">
-                     <a:documentation>Cyan Anteil bei CMYK</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="m">
-                     <a:documentation>Magenta Anteil bei CMYK</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="y">
-                     <a:documentation>Gelb Anteil bei CMYK</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="k">
-                     <a:documentation>Schwarz (key) Anteil bei CMYK</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="colorname">
-                     <a:documentation>Der Name der Sonderfarbe wenn das Modell auf »spotcolor« eingestellt ist. Der muss den offiziellen Namen tragen, wie z.B. »PANTONE 116 C«.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="overprint">
-                     <a:documentation>Überdrucken für diese Farbe anschalten</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Überdrucken für diese Farbe anschalten.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Überdrucken für diese Farbe ausschalten (Voreinstellung).</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="value">
-                     <a:documentation>Der Hexwert der Farbe, wie beispielsweise #FA5 oder #FFAA55.</a:documentation>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <optional>
+            <attribute name="model">
+               <a:documentation>Das Farbmodell, das benutzt werden soll. Derzeit werden »rgb«, »cmyk«, “gray” und spotcolor« unterstützt.</a:documentation>
+               <choice>
+                  <value>cmyk</value>
+                  <a:documentation>CMYK (Türkis, Magenta, Gelb und Schwarz)</a:documentation>
+                  <value>rgb</value>
+                  <a:documentation>RGB (Rot, Grün, Blau)</a:documentation>
+                  <value>gray</value>
+                  <a:documentation>Graustufen (0=Schwarz)</a:documentation>
+                  <value>spotcolor</value>
+                  <a:documentation>Eine PANTONE oder HKS Farbe.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <attribute name="name">
+            <a:documentation>Name der Farbe, die definiert wird.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="r">
+               <a:documentation>Rot Anteil bei RGB</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="g">
+               <a:documentation>Grün Anteil bei RGB</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="b">
+               <a:documentation>Blau Anteil bei RGB</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="c">
+               <a:documentation>Cyan Anteil bei CMYK</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="m">
+               <a:documentation>Magenta Anteil bei CMYK</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="y">
+               <a:documentation>Gelb Anteil bei CMYK</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="k">
+               <a:documentation>Schwarz (key) Anteil bei CMYK</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="colorname">
+               <a:documentation>Der Name der Sonderfarbe wenn das Modell auf »spotcolor« eingestellt ist. Der muss den offiziellen Namen tragen, wie z.B. »PANTONE 116 C«.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="overprint">
+               <a:documentation>Überdrucken für diese Farbe anschalten</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Überdrucken für diese Farbe anschalten.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Überdrucken für diese Farbe ausschalten (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="value">
+               <a:documentation>Der Hexwert der Farbe, wie beispielsweise #FA5 oder #FFAA55.</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_DefineFontalias">
       <element name="DefineFontalias">
          <a:documentation>Definiert einen Alias für die Verwendung bei DefineFontfamily. Aliase werden rekursiv aufgelöst.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="existing">
-                  <a:documentation>Der Name der existierenden Schriftfamilie.</a:documentation>
-               </attribute>
-               <attribute name="alias">
-                  <a:documentation>Neuer (gleichberechtigter) Name der Schriftart</a:documentation>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="existing">
+            <a:documentation>Der Name der existierenden Schriftfamilie.</a:documentation>
+         </attribute>
+         <attribute name="alias">
+            <a:documentation>Neuer (gleichberechtigter) Name der Schriftart</a:documentation>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_DefineFontfamily">
@@ -1173,125 +1098,114 @@
    <define name="e_DefineTextformat">
       <element name="DefineTextformat">
          <a:documentation>Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen Paragraph und Textblock) zurückgegriffen werden.</a:documentation>
-         <interleave>
-            <group>
-               <optional>
-                  <attribute name="hyphenchar">
-                     <a:documentation>Das Zeichen, das für Trennung benutzt wird (Voreinstellung: -)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="orphan">
-                     <a:documentation>Wenn nein, Schusterjungen verhindern (erste Zeile eines Absatzes ist auf der vorherigen Seite). Voreinstellung ist nein.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Schusterjungen erlauben.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Schusterjungen verhindern (Voreinstellung).</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="widow">
-                     <a:documentation>Wenn nein, Hurenkinder verhindern (letzte Zeile eines Absatzes ist auf der nächsten Seite). Voreinstellung ist nein.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Hurenkinder erlauben.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Hurenkinder verhindern (Voreinstellung).</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <attribute name="name">
-                  <a:documentation>Name des Textformats, unter dem es später im Layoutregelwerk angesprochen wird.</a:documentation>
-               </attribute>
-               <optional>
-                  <attribute name="alignment">
-                     <a:documentation>Bestimmt die Formatierung des Textes.</a:documentation>
-                     <choice>
-                        <value>justified</value>
-                        <a:documentation>Der Text hat eine rechteckige Form.</a:documentation>
-                        <value>leftaligned</value>
-                        <a:documentation>Der Text flattert am rechten Rand.</a:documentation>
-                        <value>rightaligned</value>
-                        <a:documentation>Der Text flattert am linken Rand</a:documentation>
-                        <value>centered</value>
-                        <a:documentation>Der Text ist im Flattersatz an beiden Rändern (rechts und links) gesetzt.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="indentation">
-                     <a:documentation>Die Länge des Absatzeinzugs.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="rows">
-                     <a:documentation>Anzahl der Zeilen, die eingezogen werden (wenn indentation angegeben ist) bzw. falls die Zahl negativ ist, die Anzahl der Zeilen, die nicht eingerückt werden.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="border-top">
-                     <a:documentation>Die Dicke der Linie über dem Text</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="border-bottom">
-                     <a:documentation>Die Dicke der Linie unter dem Text</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="margin-bottom">
-                     <a:documentation>Abstand zwischen der Linie unten und dem nachfolgenden Paragraph.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="break-below">
-                     <a:documentation>Umbruch unterhalb des Textes verbieten/erlauben. Das funktioniert nur, wenn der nachfolgende Text innerhalb derselben PlaceObject oder Output Umgebung enthalten ist.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Umbruch unterhalb des Textes erlauben (Voreinstellung).</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Seitenumbruch unterhalb des Textes verhindern.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="padding-top">
-                     <a:documentation>Abstand zwischen der Oberkante des Texts und der Linie oben.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="margin-top">
-                     <a:documentation>Abstand zwischen der Linie oben und dem vorhergehenden Text.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="hyphenate">
-                     <a:documentation>Silbentrennung erlauben oder abschalten (Voreinstellung ist an).</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Silbentrennung erlauben (Voreinstellung).</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Silbentrennung für den Absatz verhindern.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="tab">
-                     <a:documentation>Was ist beim Tabulator (&amp; #09;) zu tun?</a:documentation>
-                     <choice>
-                        <value>space</value>
-                        <a:documentation>Tabulator als Leerzeichen interpretieren</a:documentation>
-                        <value>hspace</value>
-                        <a:documentation>Interpretiere Tabulator als dehnbaren Leerraum</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <optional>
+            <attribute name="hyphenchar">
+               <a:documentation>Das Zeichen, das für Trennung benutzt wird (Voreinstellung: -)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="orphan">
+               <a:documentation>Wenn »yes«, Schusterjungen erlauben (erste Zeile eines Absatzes ist auf der vorherigen Seite). Wenn eine Zahl angegeben wird, ist dies die Anzahl der Zeilen, die zusammengehalten werden. Voreinstellung ist »no«.</a:documentation>
+               <data type="string">
+                  <param name="pattern">[0-9]+|yes|no</param>
+               </data>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="widow">
+               <a:documentation>Wenn »yes«, Hurenkinder erlauben (letzte Zeile eines Absatzes ist auf der nächsten Seite). Wenn eine Zahl angegeben wird, ist dies die Anzahl der Zeilen, die zusammengehalten werden. Voreinstellung ist »no«.</a:documentation>
+               <data type="string">
+                  <param name="pattern">[0-9]+|yes|no</param>
+               </data>
+            </attribute>
+         </optional>
+         <attribute name="name">
+            <a:documentation>Name des Textformats, unter dem es später im Layoutregelwerk angesprochen wird.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="alignment">
+               <a:documentation>Bestimmt die Formatierung des Textes.</a:documentation>
+               <choice>
+                  <value>justified</value>
+                  <a:documentation>Der Text hat eine rechteckige Form.</a:documentation>
+                  <value>leftaligned</value>
+                  <a:documentation>Der Text flattert am rechten Rand.</a:documentation>
+                  <value>rightaligned</value>
+                  <a:documentation>Der Text flattert am linken Rand</a:documentation>
+                  <value>centered</value>
+                  <a:documentation>Der Text ist im Flattersatz an beiden Rändern (rechts und links) gesetzt.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="indentation">
+               <a:documentation>Die Länge des Absatzeinzugs.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="rows">
+               <a:documentation>Anzahl der Zeilen, die eingezogen werden (wenn indentation angegeben ist) bzw. falls die Zahl negativ ist, die Anzahl der Zeilen, die nicht eingerückt werden.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="border-top">
+               <a:documentation>Die Dicke der Linie über dem Text</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="border-bottom">
+               <a:documentation>Die Dicke der Linie unter dem Text</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="margin-bottom">
+               <a:documentation>Abstand zwischen der Linie unten und dem nachfolgenden Paragraph.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="break-below">
+               <a:documentation>Umbruch unterhalb des Textes verbieten/erlauben. Das funktioniert nur, wenn der nachfolgende Text innerhalb derselben PlaceObject oder Output Umgebung enthalten ist.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Umbruch unterhalb des Textes erlauben (Voreinstellung).</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Seitenumbruch unterhalb des Textes verhindern.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-top">
+               <a:documentation>Abstand zwischen der Oberkante des Texts und der Linie oben.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="margin-top">
+               <a:documentation>Abstand zwischen der Linie oben und dem vorhergehenden Text.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="hyphenate">
+               <a:documentation>Silbentrennung erlauben oder abschalten (Voreinstellung ist an).</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Silbentrennung erlauben (Voreinstellung).</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Silbentrennung für den Absatz verhindern.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="tab">
+               <a:documentation>Was ist beim Tabulator (&amp; #09;) zu tun?</a:documentation>
+               <choice>
+                  <value>space</value>
+                  <a:documentation>Tabulator als Leerzeichen interpretieren</a:documentation>
+                  <value>hspace</value>
+                  <a:documentation>Interpretiere Tabulator als dehnbaren Leerraum</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Element">
@@ -1665,42 +1579,37 @@
    <define name="e_Grid">
       <element name="Grid">
          <a:documentation>Überschreibt das allgemeine Raster aus SetGrid.</a:documentation>
-         <interleave>
-            <group>
-               <optional>
-                  <attribute name="width">
-                     <a:documentation>Breite einer Rasterzelle.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="height">
-                     <a:documentation>Höhe einer Rasterzelle.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="nx">
-                     <a:documentation>Anzahl der Rasterzellen in horizontaler Richtung.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="ny">
-                     <a:documentation>Anzahl der Rasterzellen in vertikaler Richtung.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="dx">
-                     <a:documentation>Abstand zwischen zwei Rasterzellen (horizontal)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="dy">
-                     <a:documentation>Abstand zwischen zwei Rasterzellen (horizontal)</a:documentation>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <optional>
+            <attribute name="width">
+               <a:documentation>Breite einer Rasterzelle.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="height">
+               <a:documentation>Höhe einer Rasterzelle.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="nx">
+               <a:documentation>Anzahl der Rasterzellen in horizontaler Richtung.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="ny">
+               <a:documentation>Anzahl der Rasterzellen in vertikaler Richtung.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="dx">
+               <a:documentation>Abstand zwischen zwei Rasterzellen (horizontal)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="dy">
+               <a:documentation>Abstand zwischen zwei Rasterzellen (horizontal)</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Group">
@@ -1725,15 +1634,10 @@
    <define name="e_Groupcontents">
       <element name="Groupcontents">
          <a:documentation>Fügt den Inhalt der Gruppe ein (einer virtuellen Fläche)</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="name">
-                  <a:documentation>Der Name der Gruppe</a:documentation>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="name">
+            <a:documentation>Der Name der Gruppe</a:documentation>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Hyphenation">
@@ -1752,27 +1656,22 @@
          <a:documentation>Zwei Modi: bei einer gegebenen Breite wird ein Leerraum mit dieser Breite erzeugt.
       Ohne Breitenangabe: erzeugt einen horizontalen dehnbaren Leerraum. Der Leerraum hat die minimale Größe 0 und die maximale Größe »unendlich«. Sinnvoll nutzbar in einzeiligen Absätzen. Im Fließtext wird es vermutlich unerwartete Ergebnisse hervorrufen. Der Leerraum in einer Zeile verteilt sich normalerweise gleichmäßig über jeden Wortzwischenraum. Wenn ein
       HSpace enthalten ist, erhalten alle Leerräume die minimale Breite, nur der dehnbare Leerraum hat den überschüssigen Leerraum »angehäuft«.</a:documentation>
-         <interleave>
-            <group>
-               <optional>
-                  <attribute name="width">
-                     <a:documentation>Optionale Breite des Leerraums</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="leader">
-                     <a:documentation>Der Text, der anstelle des Leerraums angezeigt wird. Beispielsweise der Punkt (.).</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="leader-width">
-                     <a:documentation>Abstand zwischen zwei Startpunkten des Texts in der Führungslinie.</a:documentation>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <optional>
+            <attribute name="width">
+               <a:documentation>Optionale Breite des Leerraums</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="leader">
+               <a:documentation>Der Text, der anstelle des Leerraums angezeigt wird. Beispielsweise der Punkt (.).</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="leader-width">
+               <a:documentation>Abstand zwischen zwei Startpunkten des Texts in der Führungslinie.</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_I">
@@ -1895,237 +1794,212 @@
    <define name="e_InsertPages">
       <element name="InsertPages">
          <a:documentation>Fügt zuvor gespeicherte Seiten ein.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="name">
-                  <a:documentation>Der Name der gespeicherten Seiten.</a:documentation>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="name">
+            <a:documentation>Der Name der gespeicherten Seiten.</a:documentation>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Image">
       <element name="Image">
          <a:documentation>Bindet eine externe Grafik ein. Erlaubte Grafikformate sind PDF (.pdf), PNG (.png) und JPEG (.jpg). Siehe unten für die Einschränkung eingebundener PDF-Dateien.</a:documentation>
-         <interleave>
-            <group>
-               <optional>
-                  <attribute name="bleed">
-                     <a:documentation>Soll das Bild um die Beschnittzugabe (Options) größer werden?</a:documentation>
-                     <choice>
-                        <value>auto</value>
-                        <a:documentation>Wenn das Bild die Papierkante berührt, vergrößere das Bild in diese Richtung.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Das Bild nicht vergrößern.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="class">
-                     <a:documentation>CSS Klasse für dieses Element.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="id">
-                     <a:documentation>CSS id für dieses Element.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="width">
-                     <a:documentation>Bildbreite. Angabe in der Form &#39;auto&#39; (Voreinstellung, natürliche Bildbreite), &#39;100%&#39; (Breite des aktuellen Platzierungsbereichs), Längenangabe wie &#39;4cm&#39; oder Zahl (Anzahl von Rasterspalten)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="height">
-                     <a:documentation>Bildhöhe. Angabe in der Form &#39;auto&#39; (Voreinstellung, natürliche Bildbreite), Längenangabe wie &#39;4cm&#39; oder Zahl (Anzahl von Rasterspalten)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="href">
-                     <a:documentation>Eine URL (http:// oder file:) des Bildes. Wenn extern (http), wird es herunter geladen und in TEMPDIR/sp/images (kann mit der Einstellung imagecache in der Konfigurationsdatei geändert werden) zwischengespeichert. Alternativ zur Angabe »datei«. Wenn kein Protokoll angegeben ist, wird file: angenommen. file: kann benutzt werden, um einen Pfad anzugeben.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="file">
-                     <a:documentation>Dateiname des Bildes. Kann entweder eine Datei im Suchpfad sein oder ein file-URI-Schema (z.B. file:///pfad/zum/bild.pdf).</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="fallback">
-                     <a:documentation>Der Dateiname für ein Ersatzbild, falls die Bilddatei nicht gefunden wurde. Wenn keiner angegeben wird, wird ein roter Platzhalter angezeigt.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="page">
-                     <a:documentation>Die Seitenzahl aus dem PDF. Voreinstellung ist 1.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="maxwidth">
-                     <a:documentation>Die maximale Breite des Bilds. Nur, wenn clip=&#34;no&#34;. Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="maxheight">
-                     <a:documentation>Die maximale Breite des Bilds. Nur, wenn clip=&#34;no&#34;. Angabe in absoluten Längen oder Anzahl Rasterzellen.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="visiblebox">
-                     <a:documentation>Die PDF-Box, die den sichtbaren Bereich angibt des eingebundenen PDFs angibt. Voreinstellung ist »cropbox«.</a:documentation>
-                     <choice>
-                        <value>artbox</value>
-                        <a:documentation>Nutze die artbox als sichtbaren Bereich. Diese Box ist normalerweise in PDF-Dateien nicht enthalten.</a:documentation>
-                        <value>bleedbox</value>
-                        <a:documentation>Nutze die bleedbox des eingebundenen PDFs.</a:documentation>
-                        <value>cropbox</value>
-                        <a:documentation>Nutze die cropbox der eingebundenen PDF-Datei (Voreinstellung).</a:documentation>
-                        <value>mediabox</value>
-                        <a:documentation>Nutze die mediabox der eingebundenen PDF-Datei. Das ist die größte Box.</a:documentation>
-                        <value>trimbox</value>
-                        <a:documentation>Nutze die trimbox der eingebundenen PDF-Datei. Die trimbox ist die Papiergröße. Beispielsweise hat die trimbox eines A4-PDFs die Größe 210mm x 297mm.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="clip">
-                     <a:documentation>Wenn &#39;yes&#39;, dann behält das Bild sein Seitenverhältnis wenn Breite und Höhe gegeben ist. Um das Bild einzupassen, wird ein Teil abgeschnitten.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Seitenverhältnis beibehalten und linken und rechten oder oberen und unteren Rand abschneiden.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Bild verzerren, damit es in den vorgegebenen Rahmen passt.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="minwidth">
-                     <a:documentation>Die minimale Breite des Bilds. Nur, wenn clip=&#34;no&#34;. Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="minheight">
-                     <a:documentation>Die minimale Breite des Bilds. Nur, wenn clip=&#34;no&#34;. Angabe in absoluten Längen oder Anzahl Rasterzellen.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="dpiwarn">
-                     <a:documentation>Warnung ausgeben, wenn das Bild eine geringere Auflösung bekommt als angegeben.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="padding">
-                     <a:documentation>Setze Padding für alle Seiten.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="padding-top">
-                     <a:documentation>Bestimmt den Innenabstand des Bildes (oben)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="padding-bottom">
-                     <a:documentation>Bestimmt den Innenabstand des Bildes (unten)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="padding-left">
-                     <a:documentation>Bestimmt den Innenabstand des Bildes (links)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="padding-right">
-                     <a:documentation>Bestimmt den Innenabstand des Bildes (rechts)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="rotate">
-                     <a:documentation>Dreht das Bild in 90°-Schritten. Ein Winkel &gt; 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</a:documentation>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <optional>
+            <attribute name="bleed">
+               <a:documentation>Soll das Bild um die Beschnittzugabe (Options) größer werden?</a:documentation>
+               <choice>
+                  <value>auto</value>
+                  <a:documentation>Wenn das Bild die Papierkante berührt, vergrößere das Bild in diese Richtung.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Das Bild nicht vergrößern.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS Klasse für dieses Element.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id für dieses Element.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="width">
+               <a:documentation>Bildbreite. Angabe in der Form &#39;auto&#39; (Voreinstellung, natürliche Bildbreite), &#39;100%&#39; (Breite des aktuellen Platzierungsbereichs), Längenangabe wie &#39;4cm&#39; oder Zahl (Anzahl von Rasterspalten)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="height">
+               <a:documentation>Bildhöhe. Angabe in der Form &#39;auto&#39; (Voreinstellung, natürliche Bildbreite), Längenangabe wie &#39;4cm&#39; oder Zahl (Anzahl von Rasterspalten)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="href">
+               <a:documentation>Eine URL (http:// oder file:) des Bildes. Wenn extern (http), wird es herunter geladen und in TEMPDIR/sp/images (kann mit der Einstellung imagecache in der Konfigurationsdatei geändert werden) zwischengespeichert. Alternativ zur Angabe »datei«. Wenn kein Protokoll angegeben ist, wird file: angenommen. file: kann benutzt werden, um einen Pfad anzugeben.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="file">
+               <a:documentation>Dateiname des Bildes. Kann entweder eine Datei im Suchpfad sein oder ein file-URI-Schema (z.B. file:///pfad/zum/bild.pdf).</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fallback">
+               <a:documentation>Der Dateiname für ein Ersatzbild, falls die Bilddatei nicht gefunden wurde. Wenn keiner angegeben wird, wird ein roter Platzhalter angezeigt.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="page">
+               <a:documentation>Die Seitenzahl aus dem PDF. Voreinstellung ist 1.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="maxwidth">
+               <a:documentation>Die maximale Breite des Bilds. Nur, wenn clip=&#34;no&#34;. Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="maxheight">
+               <a:documentation>Die maximale Breite des Bilds. Nur, wenn clip=&#34;no&#34;. Angabe in absoluten Längen oder Anzahl Rasterzellen.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="visiblebox">
+               <a:documentation>Die PDF-Box, die den sichtbaren Bereich angibt des eingebundenen PDFs angibt. Voreinstellung ist »cropbox«.</a:documentation>
+               <choice>
+                  <value>artbox</value>
+                  <a:documentation>Nutze die artbox als sichtbaren Bereich. Diese Box ist normalerweise in PDF-Dateien nicht enthalten.</a:documentation>
+                  <value>bleedbox</value>
+                  <a:documentation>Nutze die bleedbox des eingebundenen PDFs.</a:documentation>
+                  <value>cropbox</value>
+                  <a:documentation>Nutze die cropbox der eingebundenen PDF-Datei (Voreinstellung).</a:documentation>
+                  <value>mediabox</value>
+                  <a:documentation>Nutze die mediabox der eingebundenen PDF-Datei. Das ist die größte Box.</a:documentation>
+                  <value>trimbox</value>
+                  <a:documentation>Nutze die trimbox der eingebundenen PDF-Datei. Die trimbox ist die Papiergröße. Beispielsweise hat die trimbox eines A4-PDFs die Größe 210mm x 297mm.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="clip">
+               <a:documentation>Wenn &#39;yes&#39;, dann behält das Bild sein Seitenverhältnis wenn Breite und Höhe gegeben ist. Um das Bild einzupassen, wird ein Teil abgeschnitten.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Seitenverhältnis beibehalten und linken und rechten oder oberen und unteren Rand abschneiden.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Bild verzerren, damit es in den vorgegebenen Rahmen passt.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="minwidth">
+               <a:documentation>Die minimale Breite des Bilds. Nur, wenn clip=&#34;no&#34;. Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="minheight">
+               <a:documentation>Die minimale Breite des Bilds. Nur, wenn clip=&#34;no&#34;. Angabe in absoluten Längen oder Anzahl Rasterzellen.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="dpiwarn">
+               <a:documentation>Warnung ausgeben, wenn das Bild eine geringere Auflösung bekommt als angegeben.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding">
+               <a:documentation>Setze Padding für alle Seiten.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-top">
+               <a:documentation>Bestimmt den Innenabstand des Bildes (oben)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-bottom">
+               <a:documentation>Bestimmt den Innenabstand des Bildes (unten)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-left">
+               <a:documentation>Bestimmt den Innenabstand des Bildes (links)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-right">
+               <a:documentation>Bestimmt den Innenabstand des Bildes (rechts)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="rotate">
+               <a:documentation>Dreht das Bild in 90°-Schritten. Ein Winkel &gt; 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Italic">
       <element name="Italic">
          <a:documentation>Dient als Festlegung des Schriftschnittes, wenn Formatierung I (Kursiv) angegeben ist.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="fontface">
-                  <a:documentation>Name der Schriftart, die für eine kursive Schrift benutzt werden soll.</a:documentation>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="fontface">
+            <a:documentation>Name der Schriftart, die für eine kursive Schrift benutzt werden soll.</a:documentation>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_LoadDataset">
       <element name="LoadDataset">
          <a:documentation>Lädt eine Datensatzdatei, die in einem vorherigen Durchlauf des Publishers erzeugt wurde. Die »normale« Verarbeitung des Layoutregelwerks wird unterbrochen und mit dem Inhalt der Datensatzdatei fortgeführt. Nachdem die Verarbeitung der neu geladenen Datensatzdatei beendet ist, wird die Verarbeitung des Layoutregelwerks mit dem ursprünglichen Datensatz fortgesetzt. Eine ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="name">
-                  <a:documentation>Name der Dateisatzdatei. Beispiel: toc</a:documentation>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="name">
+            <a:documentation>Name der Dateisatzdatei. Beispiel: toc</a:documentation>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_LoadFontfile">
       <element name="LoadFontfile">
          <a:documentation>Der Befehl LoadFontfile weist einer physikalischen Schriftdatei einen internen Namen zu.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="name">
-                  <a:documentation>Der interne Name, unter dem die Schriftart im Element DefineFontfamily angesprochen wird.</a:documentation>
-               </attribute>
-               <attribute name="filename">
-                  <a:documentation>Der Dateiname mit Endung, ohne Pfad.</a:documentation>
-               </attribute>
-               <optional>
-                  <attribute name="space">
-                     <a:documentation>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="marginprotrusion">
-                     <a:documentation>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark abhängig von der benutzten Schriftart.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="smallcaps">
-                     <a:documentation>Schalter, ob die Schriftart als Kapitälchen dargestellt werden soll.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Kapitälchen benutzen.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Nicht auf Kapitälchen umschalten (Voreinstellung).</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="oldstylefigures">
-                     <a:documentation>Schalter, ob auf Mediävalziffern umgeschaltet wird (OpenType Feature »onum«).</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Mediävalziffern benutzen.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Normale Ziffern benutzen.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="name">
+            <a:documentation>Der interne Name, unter dem die Schriftart im Element DefineFontfamily angesprochen wird.</a:documentation>
+         </attribute>
+         <attribute name="filename">
+            <a:documentation>Der Dateiname mit Endung, ohne Pfad.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="space">
+               <a:documentation>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="marginprotrusion">
+               <a:documentation>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark abhängig von der benutzten Schriftart.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="smallcaps">
+               <a:documentation>Schalter, ob die Schriftart als Kapitälchen dargestellt werden soll.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Kapitälchen benutzen.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Nicht auf Kapitälchen umschalten (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="oldstylefigures">
+               <a:documentation>Schalter, ob auf Mediävalziffern umgeschaltet wird (OpenType Feature »onum«).</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Mediävalziffern benutzen.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Normale Ziffern benutzen.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Layout">
@@ -2455,74 +2329,59 @@
    <define name="e_Makeindex">
       <element name="Makeindex">
          <a:documentation>Eine Liste von Elementen sortieren und aufteilen um einen Index zu erzeugen.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="section">
-                  <a:documentation>Erzeuge ein XML-Element mit diesem Namen für jeden Abschnitt (Buchstabe) in dem Index.</a:documentation>
-               </attribute>
-               <attribute name="select">
-                  <a:documentation>Der XPath-Ausdruck der die Elementstruktur für den Index enthält ($Variable).</a:documentation>
-               </attribute>
-               <attribute name="sortkey">
-                  <a:documentation>Der Name des Attributs das den Indexeintrag enthält (der sortiert werden soll).</a:documentation>
-               </attribute>
-               <optional>
-                  <attribute name="pagenumber">
-                     <a:documentation>Der Name des Attributs der die Seitenzahl enthält. Voreinstellung ist &#39;page&#39;.</a:documentation>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="section">
+            <a:documentation>Erzeuge ein XML-Element mit diesem Namen für jeden Abschnitt (Buchstabe) in dem Index.</a:documentation>
+         </attribute>
+         <attribute name="select">
+            <a:documentation>Der XPath-Ausdruck der die Elementstruktur für den Index enthält ($Variable).</a:documentation>
+         </attribute>
+         <attribute name="sortkey">
+            <a:documentation>Der Name des Attributs das den Indexeintrag enthält (der sortiert werden soll).</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="pagenumber">
+               <a:documentation>Der Name des Attributs der die Seitenzahl enthält. Voreinstellung ist &#39;page&#39;.</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Margin">
       <element name="Margin">
          <a:documentation>Enthält die Angaben über den Seitenrand des zu druckbaren Bereich.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="left">
-                  <a:documentation>Rand links</a:documentation>
-               </attribute>
-               <attribute name="right">
-                  <a:documentation>Rand rechts</a:documentation>
-               </attribute>
-               <attribute name="top">
-                  <a:documentation>Rand oben</a:documentation>
-               </attribute>
-               <attribute name="bottom">
-                  <a:documentation>Rand unten</a:documentation>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="left">
+            <a:documentation>Rand links</a:documentation>
+         </attribute>
+         <attribute name="right">
+            <a:documentation>Rand rechts</a:documentation>
+         </attribute>
+         <attribute name="top">
+            <a:documentation>Rand oben</a:documentation>
+         </attribute>
+         <attribute name="bottom">
+            <a:documentation>Rand unten</a:documentation>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Mark">
       <element name="Mark">
          <a:documentation>Setzt eine unsichtbare Markierung in die Ausgabe. Das ist hilfreich, um die Seitenzahl zu bestimmen, auf der die Marke gelandet ist.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="select">
-                  <a:documentation>Der Name des Markers, der gesetzt wird.</a:documentation>
-               </attribute>
-               <optional>
-                  <attribute name="append">
-                     <a:documentation>Wenn &#39;yes&#39;, dann wird die aktuelle Seitenzahl an den letzten Wert angehängt (mit Komma separiert). Nützlich, um Seitenzahlen wie S. 3-5 im Index zu erstellen. Voreinstellung ist nein.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Die Seitenzahl an die vorherigen Werte anhängen.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Den vorherigen Wert ersetzen.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="select">
+            <a:documentation>Der Name des Markers, der gesetzt wird.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="append">
+               <a:documentation>Wenn &#39;yes&#39;, dann wird die aktuelle Seitenzahl an den letzten Wert angehängt (mit Komma separiert). Nützlich, um Seitenzahlen wie S. 3-5 im Index zu erstellen. Voreinstellung ist nein.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Die Seitenzahl an die vorherigen Werte anhängen.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Den vorherigen Wert ersetzen.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Message">
@@ -2575,73 +2434,58 @@
    <define name="e_NewPage">
       <element name="NewPage">
          <a:documentation>Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn später Text o.ä. ausgegeben wird.</a:documentation>
-         <interleave>
-            <group>
-               <optional>
-                  <attribute name="pagetype">
-                     <a:documentation>Der Name des Seitentyps der für die nächste Seite genommen werden soll.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="skippagetype">
-                     <a:documentation>Der Seitentyp der leeren Seite, falls sie eingefügt wird.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="openon">
-                     <a:documentation>Die nächste aktuelle Seite ist eine linke oder rechte Seite. Z.B. wenn auf Seite 1 ein Seitenwechsel erzwungen wird mit openon=&#34;right&#34;, dann wird Seite zwei leer und die nächste aktuelle Seite ist die Seite 3.</a:documentation>
-                     <choice>
-                        <value>left</value>
-                        <a:documentation>Die nächsten Objekte werden auf einer linken Seite ausgegeben.</a:documentation>
-                        <value>right</value>
-                        <a:documentation>Die nächsten Objekte werden auf einer rechten Seite ausgegeben.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <optional>
+            <attribute name="pagetype">
+               <a:documentation>Der Name des Seitentyps der für die nächste Seite genommen werden soll.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="skippagetype">
+               <a:documentation>Der Seitentyp der leeren Seite, falls sie eingefügt wird.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="openon">
+               <a:documentation>Die nächste aktuelle Seite ist eine linke oder rechte Seite. Z.B. wenn auf Seite 1 ein Seitenwechsel erzwungen wird mit openon=&#34;right&#34;, dann wird Seite zwei leer und die nächste aktuelle Seite ist die Seite 3.</a:documentation>
+               <choice>
+                  <value>left</value>
+                  <a:documentation>Die nächsten Objekte werden auf einer linken Seite ausgegeben.</a:documentation>
+                  <value>right</value>
+                  <a:documentation>Die nächsten Objekte werden auf einer rechten Seite ausgegeben.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_NextFrame">
       <element name="NextFrame">
          <a:documentation>Schaltet auf den nächsten freien Rahmen eines Platzierungsbereichs um.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="area">
-                  <a:documentation>Name des Platzierungsbereich, in dem der nächste Rahmen gesucht werden soll.</a:documentation>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="area">
+            <a:documentation>Name des Platzierungsbereich, in dem der nächste Rahmen gesucht werden soll.</a:documentation>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_NextRow">
       <element name="NextRow">
          <a:documentation>Der virtuelle Cursor wird auf die nächste freie Zeile gesetzt.</a:documentation>
-         <interleave>
-            <group>
-               <optional>
-                  <attribute name="area">
-                     <a:documentation>Name des Bereichs, in dem der Cursor bewegt wird.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="row">
-                     <a:documentation>Zeile für den virtuellen Cursor. Wird keine Zeile angegeben, dann sucht sich der Publisher selbständig eine freie Zeile (ggf. auf einer neuen Seite oder in einem neuen Platzierungsrahmen).</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="rows">
-                     <a:documentation>Anzahl der Zeilen, die frei gehalten werden sollen. Vorgabe: 1.</a:documentation>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <optional>
+            <attribute name="area">
+               <a:documentation>Name des Bereichs, in dem der Cursor bewegt wird.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="row">
+               <a:documentation>Zeile für den virtuellen Cursor. Wird keine Zeile angegeben, dann sucht sich der Publisher selbständig eine freie Zeile (ggf. auf einer neuen Seite oder in einem neuen Platzierungsrahmen).</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="rows">
+               <a:documentation>Anzahl der Zeilen, die frei gehalten werden sollen. Vorgabe: 1.</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_NoBreak">
@@ -2727,150 +2571,145 @@
    <define name="e_Options">
       <element name="Options">
          <a:documentation>Setzt Publisher-spezifische Optionen.</a:documentation>
-         <interleave>
-            <group>
-               <optional>
-                  <attribute name="colorprofile">
-                     <a:documentation>Der Dateiname des Farbprofils. Das voreingestellte Profil ist »ISO Coated v2 (ECI)«. Farbprofile werden nur geladen, wenn Sonderfarben benutzt werden.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="crop">
-                     <a:documentation>Beschneidet eine Seite, so dass die Objekte auf einer Seite die Größe bestimmen. Erlaubte Werte sind &#39;yes&#39;, &#39;no&#39; und eine Längenangabe.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="cutmarks">
-                     <a:documentation>Beschnittmarken (crop marks) werden ausgegeben. Der Abstand der Schnittmarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Schnittmarken ausgegeben.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Beschnittmarken anzeigen.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Beschnittmarken nicht anzeigen (Voreinstellung).</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="defaultarea">
-                     <a:documentation>Name des Bereichs, der bei Output und PlaceObject benutzt wird. Die Seite hat den Namen _page.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="ignoreeol">
-                     <a:documentation>Zeilenenden in Daten ignorieren.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Zeilenenden in Daten ignorieren.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Zeilenenden in Daten beachten.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="imagenotfound">
-                     <a:documentation>Falls ein Bild nicht gefunden wird: soll eine Warnung oder ein Fehler ausgegeben werden?</a:documentation>
-                     <choice>
-                        <value>warning</value>
-                        <a:documentation>Eine Warnung ausgeben</a:documentation>
-                        <value>error</value>
-                        <a:documentation>Fehler ausgeben (Voreinstellung).</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="mainlanguage">
-                     <a:documentation>Die Sprache (Silbentrennung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist. Sie kann global über die Kommandozeile gesteuert werden oder für jeden Paragraph einzeln.</a:documentation>
-                     <choice>
-                        <value>German</value>
-                        <a:documentation>Auf deutsche Trennmuster umschalten.</a:documentation>
-                        <value>English (Great Britain)</value>
-                        <a:documentation>Auf GB-englische Trennmuster umschalten.</a:documentation>
-                        <value>Czech</value>
-                        <a:documentation>Auf tschechische Trennmuster umschalten.</a:documentation>
-                        <value>Danish</value>
-                        <a:documentation>Auf dänische Trennmuster umschalten.</a:documentation>
-                        <value>Dutch</value>
-                        <a:documentation>Auf niederländische Trennmuster umschalten.</a:documentation>
-                        <value>English (USA)</value>
-                        <a:documentation>Auf US-englische Trennmuster umschalten.</a:documentation>
-                        <value>Finnish</value>
-                        <a:documentation>Auf finnische Trennmuster umschalten.</a:documentation>
-                        <value>Greek</value>
-                        <a:documentation>Neugriechisch</a:documentation>
-                        <value>Ancient Greek</value>
-                        <a:documentation>Altgriechische Trennmuster.</a:documentation>
-                        <value>Hungarian</value>
-                        <a:documentation>Auf ungarische Trennmuster umschalten.</a:documentation>
-                        <value>Italian</value>
-                        <a:documentation>Auf italienische Trennmuster umschalten.</a:documentation>
-                        <value>Norwegian Bokmål</value>
-                        <a:documentation>Auf norwegische Trennmuster umschalten (Bokmål).</a:documentation>
-                        <value>Norwegian Nynorsk</value>
-                        <a:documentation>Auf norwegische Trennmuster umschalten (Nynorsk).</a:documentation>
-                        <value>Polish</value>
-                        <a:documentation>Auf polnische Trennmuster umschalten.</a:documentation>
-                        <value>Portuguese</value>
-                        <a:documentation>Auf portugiesische Trennmuster umschalten.</a:documentation>
-                        <value>Russian</value>
-                        <a:documentation>Auf russische Trennmuster umschalten.</a:documentation>
-                        <value>Serbian</value>
-                        <a:documentation>Auf serbische Trennmuster umschalten.</a:documentation>
-                        <value>Spanish</value>
-                        <a:documentation>Auf spanische Trennmuster umschalten.</a:documentation>
-                        <value>Swedish</value>
-                        <a:documentation>Auf schwedische Trennmuster umschalten.</a:documentation>
-                        <value>Turkish</value>
-                        <a:documentation>Auf türkische Trennmuster umschalten.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="resetmarks">
-                     <a:documentation>Wenn &#39;yes&#39;, werden die Marker des letzten Laufs ignoriert.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Marker aus dem vorherigen Lauf ignorieren.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Marker aus dem vorherigen Lauf weiter benutzen (Voreinstellung).</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="startpage">
-                     <a:documentation>Gibt den Nummer der ersten Seite an.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="reportmissingglyphs">
-                     <a:documentation>Gibt einen Fehler aus, wenn ein Zeichen in einer Schriftart fehlt.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Zeige Fehlermeldung (Voreinstellung)</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Zeige keine Fehlermeldung</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="bleed">
-                     <a:documentation>Die Größe des Anschnitts (bleed). Voreinstellung ist 0mm.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="bleedmarks">
-                     <a:documentation>Beschnittzugabemarken werden ausgegeben. Diese Marken zeigen, wie groß die Beschnittzugabe ist. Der Abstand der Beschnittzugabemarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Beschnittzugabemarken ausgegeben.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Beschnittzugabemarken anzeigen.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Beschnittzugabemarken nicht anzeigen (Voreinstellung).</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <optional>
+            <attribute name="colorprofile">
+               <a:documentation>Der Dateiname des Farbprofils. Das voreingestellte Profil ist »ISO Coated v2 (ECI)«. Farbprofile werden nur geladen, wenn Sonderfarben benutzt werden.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="crop">
+               <a:documentation>Beschneidet eine Seite, so dass die Objekte auf einer Seite die Größe bestimmen. Erlaubte Werte sind &#39;yes&#39;, &#39;no&#39; und eine Längenangabe.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="cutmarks">
+               <a:documentation>Beschnittmarken (crop marks) werden ausgegeben. Der Abstand der Schnittmarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Schnittmarken ausgegeben.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Beschnittmarken anzeigen.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Beschnittmarken nicht anzeigen (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="defaultarea">
+               <a:documentation>Name des Bereichs, der bei Output und PlaceObject benutzt wird. Die Seite hat den Namen _page.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="ignoreeol">
+               <a:documentation>Zeilenenden in Daten ignorieren.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeilenenden in Daten ignorieren.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Zeilenenden in Daten beachten.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="imagenotfound">
+               <a:documentation>Falls ein Bild nicht gefunden wird: soll eine Warnung oder ein Fehler ausgegeben werden?</a:documentation>
+               <choice>
+                  <value>warning</value>
+                  <a:documentation>Eine Warnung ausgeben</a:documentation>
+                  <value>error</value>
+                  <a:documentation>Fehler ausgeben (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="mainlanguage">
+               <a:documentation>Die Sprache (Silbentrennung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist. Sie kann global über die Kommandozeile gesteuert werden oder für jeden Paragraph einzeln.</a:documentation>
+               <choice>
+                  <value>German</value>
+                  <a:documentation>Auf deutsche Trennmuster umschalten.</a:documentation>
+                  <value>English (Great Britain)</value>
+                  <a:documentation>Auf GB-englische Trennmuster umschalten.</a:documentation>
+                  <value>Czech</value>
+                  <a:documentation>Auf tschechische Trennmuster umschalten.</a:documentation>
+                  <value>Danish</value>
+                  <a:documentation>Auf dänische Trennmuster umschalten.</a:documentation>
+                  <value>Dutch</value>
+                  <a:documentation>Auf niederländische Trennmuster umschalten.</a:documentation>
+                  <value>English (USA)</value>
+                  <a:documentation>Auf US-englische Trennmuster umschalten.</a:documentation>
+                  <value>Finnish</value>
+                  <a:documentation>Auf finnische Trennmuster umschalten.</a:documentation>
+                  <value>Greek</value>
+                  <a:documentation>Neugriechisch</a:documentation>
+                  <value>Ancient Greek</value>
+                  <a:documentation>Altgriechische Trennmuster.</a:documentation>
+                  <value>Hungarian</value>
+                  <a:documentation>Auf ungarische Trennmuster umschalten.</a:documentation>
+                  <value>Italian</value>
+                  <a:documentation>Auf italienische Trennmuster umschalten.</a:documentation>
+                  <value>Norwegian Bokmål</value>
+                  <a:documentation>Auf norwegische Trennmuster umschalten (Bokmål).</a:documentation>
+                  <value>Norwegian Nynorsk</value>
+                  <a:documentation>Auf norwegische Trennmuster umschalten (Nynorsk).</a:documentation>
+                  <value>Polish</value>
+                  <a:documentation>Auf polnische Trennmuster umschalten.</a:documentation>
+                  <value>Portuguese</value>
+                  <a:documentation>Auf portugiesische Trennmuster umschalten.</a:documentation>
+                  <value>Russian</value>
+                  <a:documentation>Auf russische Trennmuster umschalten.</a:documentation>
+                  <value>Serbian</value>
+                  <a:documentation>Auf serbische Trennmuster umschalten.</a:documentation>
+                  <value>Spanish</value>
+                  <a:documentation>Auf spanische Trennmuster umschalten.</a:documentation>
+                  <value>Swedish</value>
+                  <a:documentation>Auf schwedische Trennmuster umschalten.</a:documentation>
+                  <value>Turkish</value>
+                  <a:documentation>Auf türkische Trennmuster umschalten.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="resetmarks">
+               <a:documentation>Wenn &#39;yes&#39;, werden die Marker des letzten Laufs ignoriert.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Marker aus dem vorherigen Lauf ignorieren.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Marker aus dem vorherigen Lauf weiter benutzen (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="startpage">
+               <a:documentation>Gibt den Nummer der ersten Seite an.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="reportmissingglyphs">
+               <a:documentation>Gibt einen Fehler aus, wenn ein Zeichen in einer Schriftart fehlt.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeige Fehlermeldung (Voreinstellung)</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Zeige keine Fehlermeldung</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="bleed">
+               <a:documentation>Die Größe des Anschnitts (bleed). Voreinstellung ist 0mm.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="bleedmarks">
+               <a:documentation>Beschnittzugabemarken werden ausgegeben. Diese Marken zeigen, wie groß die Beschnittzugabe ist. Der Abstand der Beschnittzugabemarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Beschnittzugabemarken ausgegeben.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Beschnittzugabemarken anzeigen.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Beschnittzugabemarken nicht anzeigen (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Otherwise">
@@ -3263,18 +3102,13 @@
    <define name="e_Pageformat">
       <element name="Pageformat">
          <a:documentation>Legt die Größe des Ausgabemediums (z.B. DIN A4) fest. Voreinstellung ist eine Breite von 210mm und eine Höhe von 297mm.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="width">
-                  <a:documentation>Breite des Ausgabemediums.</a:documentation>
-               </attribute>
-               <attribute name="height">
-                  <a:documentation>Höhe des Ausgabemediums.</a:documentation>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="width">
+            <a:documentation>Breite des Ausgabemediums.</a:documentation>
+         </attribute>
+         <attribute name="height">
+            <a:documentation>Höhe des Ausgabemediums.</a:documentation>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Pagetype">
@@ -3321,62 +3155,57 @@
    <define name="e_PDFOptions">
       <element name="PDFOptions">
          <a:documentation>Setze PDF Optionen wie Anzahl der Kopien</a:documentation>
-         <interleave>
-            <group>
-               <optional>
-                  <attribute name="author">
-                     <a:documentation>Legt den Autor des Dokuments fest</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="title">
-                     <a:documentation>Legt den Titel des Dokuments fest</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="duplex">
-                     <a:documentation>Setze PDF Anzeigeprogramm auf einseitigen oder doppelseitigen Druck. Voreinstellung: leer.</a:documentation>
-                     <choice>
-                        <value>simplex</value>
-                        <a:documentation>Eine Seite je Blatt</a:documentation>
-                        <value>duplexflipshortedge</value>
-                        <a:documentation>Beidseitig und an kurzer Kante umblättern</a:documentation>
-                        <value>duplexfliplongedge</value>
-                        <a:documentation>Beidseitig und an langer Kante umblättern</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="numcopies">
-                     <a:documentation>Setze Anzahl der Kopien. Maximal erlaubt sind 5 aufgrund der PDF-Spezifikation.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="printscaling">
-                     <a:documentation>Soll der Drucker die Seiten skalieren?</a:documentation>
-                     <choice>
-                        <value>appdefault</value>
-                        <a:documentation>Voreinstellung des PDF-Viewers benutzen</a:documentation>
-                        <value>none</value>
-                        <a:documentation>Keine Seitenskalierung</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="picktraybypdfsize">
-                     <a:documentation>Auswahlfeld im PDF-Viewer »Papierquelle gemäß PDF-Seitengröße auswählen«.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Checkbox aktivieren</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Checkbox deaktivieren</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <optional>
+            <attribute name="author">
+               <a:documentation>Legt den Autor des Dokuments fest</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="title">
+               <a:documentation>Legt den Titel des Dokuments fest</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="duplex">
+               <a:documentation>Setze PDF Anzeigeprogramm auf einseitigen oder doppelseitigen Druck. Voreinstellung: leer.</a:documentation>
+               <choice>
+                  <value>simplex</value>
+                  <a:documentation>Eine Seite je Blatt</a:documentation>
+                  <value>duplexflipshortedge</value>
+                  <a:documentation>Beidseitig und an kurzer Kante umblättern</a:documentation>
+                  <value>duplexfliplongedge</value>
+                  <a:documentation>Beidseitig und an langer Kante umblättern</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="numcopies">
+               <a:documentation>Setze Anzahl der Kopien. Maximal erlaubt sind 5 aufgrund der PDF-Spezifikation.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="printscaling">
+               <a:documentation>Soll der Drucker die Seiten skalieren?</a:documentation>
+               <choice>
+                  <value>appdefault</value>
+                  <a:documentation>Voreinstellung des PDF-Viewers benutzen</a:documentation>
+                  <value>none</value>
+                  <a:documentation>Keine Seitenskalierung</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="picktraybypdfsize">
+               <a:documentation>Auswahlfeld im PDF-Viewer »Papierquelle gemäß PDF-Seitengröße auswählen«.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Checkbox aktivieren</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Checkbox deaktivieren</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_PlaceObject">
@@ -3711,48 +3540,38 @@
    <define name="e_PositioningFrame">
       <element name="PositioningFrame">
          <a:documentation>Beschreibt einen rechteckigen Bereich, in dem Elemente platziert werden können. Inhalte in diesen Bereichen werden bei Platzmangel automatisch in den nächsten Rahmen desselben Bereichs platziert.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="width">
-                  <a:documentation>Breite des Rahmens in Rasterkästen</a:documentation>
-               </attribute>
-               <attribute name="height">
-                  <a:documentation>Höhe des Rahmens in Rasterkästen</a:documentation>
-               </attribute>
-               <attribute name="row">
-                  <a:documentation>Erste Zeile des Rahmens</a:documentation>
-               </attribute>
-               <attribute name="column">
-                  <a:documentation>Erste Spalte des Rahmens</a:documentation>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="width">
+            <a:documentation>Breite des Rahmens in Rasterkästen</a:documentation>
+         </attribute>
+         <attribute name="height">
+            <a:documentation>Höhe des Rahmens in Rasterkästen</a:documentation>
+         </attribute>
+         <attribute name="row">
+            <a:documentation>Erste Zeile des Rahmens</a:documentation>
+         </attribute>
+         <attribute name="column">
+            <a:documentation>Erste Spalte des Rahmens</a:documentation>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_ProcessNode">
       <element name="ProcessNode">
          <a:documentation>Bearbeitet alle angegebenen Datensätze. Die Elemente, für die die Regeln ausgeführt werden sollen, werden mit dem Attribut select angegeben.</a:documentation>
-         <interleave>
-            <group>
-               <optional>
-                  <attribute name="limit">
-                     <a:documentation>Beschränkt die Anzahl der Datensätze, die mit diesem Befehl verarbeitet werden.</a:documentation>
-                  </attribute>
-               </optional>
-               <attribute name="select">
-                  <a:documentation>Auswahl der Kindelemente, die verarbeitet werden sollen.</a:documentation>
-               </attribute>
-               <optional>
-                  <attribute name="mode">
-                     <a:documentation>Name des Modus. Dieser muss bei Record exakt übereinstimmen. Damit ist es möglich für dasselbe Element unterschiedliche Regeln aufzurufen.</a:documentation>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <optional>
+            <attribute name="limit">
+               <a:documentation>Beschränkt die Anzahl der Datensätze, die mit diesem Befehl verarbeitet werden.</a:documentation>
+            </attribute>
+         </optional>
+         <attribute name="select">
+            <a:documentation>Auswahl der Kindelemente, die verarbeitet werden sollen.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="mode">
+               <a:documentation>Name des Modus. Dieser muss bei Record exakt übereinstimmen. Damit ist es möglich für dasselbe Element unterschiedliche Regeln aufzurufen.</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Record">
@@ -3871,59 +3690,49 @@
    <define name="e_Regular">
       <element name="Regular">
          <a:documentation>Dient als Festlegung des Schriftschnittes, wenn keine Formatierung angegeben ist.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="fontface">
-                  <a:documentation>Name der Schriftdatei, die geladen werden soll.</a:documentation>
-               </attribute>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="fontface">
+            <a:documentation>Name der Schriftdatei, die geladen werden soll.</a:documentation>
+         </attribute>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Rule">
       <element name="Rule">
          <a:documentation>Zeichnet eine horizontale oder vertikale Linie im Raster.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="direction">
-                  <a:documentation>Bestimmt die Ausrichtung der Linie.</a:documentation>
-                  <choice>
-                     <value>horizontal</value>
-                     <a:documentation>Horizontale Linie</a:documentation>
-                     <value>vertical</value>
-                     <a:documentation>Vertikale Linie</a:documentation>
-                  </choice>
-               </attribute>
-               <optional>
-                  <attribute name="rulewidth">
-                     <a:documentation>Dicke der Linie in Rasterzellen oder als absolute Angabe.</a:documentation>
-                  </attribute>
-               </optional>
-               <attribute name="length">
-                  <a:documentation>Länge der Linie in Rasterzellen oder als absolute Angabe.</a:documentation>
-               </attribute>
-               <optional>
-                  <attribute name="color">
-                     <a:documentation>Farbe der Linie. Vorgabe: Schwarz</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="dashed">
-                     <a:documentation>Benutze eine gestrichelte Linie.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Zeichne eine gestrichelte Linie.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Zeichne eine durchgezogene Linie.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="direction">
+            <a:documentation>Bestimmt die Ausrichtung der Linie.</a:documentation>
+            <choice>
+               <value>horizontal</value>
+               <a:documentation>Horizontale Linie</a:documentation>
+               <value>vertical</value>
+               <a:documentation>Vertikale Linie</a:documentation>
+            </choice>
+         </attribute>
+         <optional>
+            <attribute name="rulewidth">
+               <a:documentation>Dicke der Linie in Rasterzellen oder als absolute Angabe.</a:documentation>
+            </attribute>
+         </optional>
+         <attribute name="length">
+            <a:documentation>Länge der Linie in Rasterzellen oder als absolute Angabe.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="color">
+               <a:documentation>Farbe der Linie. Vorgabe: Schwarz</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="dashed">
+               <a:documentation>Benutze eine gestrichelte Linie.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeichne eine gestrichelte Linie.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Zeichne eine durchgezogene Linie.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_SaveDataset">
@@ -4085,42 +3894,37 @@
    <define name="e_SetGrid">
       <element name="SetGrid">
          <a:documentation>Setzt die Größe und Höhe eines Rasterkästchens. In dem Seitenraster können Elemente platziert werden.</a:documentation>
-         <interleave>
-            <group>
-               <optional>
-                  <attribute name="width">
-                     <a:documentation>Breite einer Rasterzelle. Entweder width oder nx benutzen, nicht beide.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="height">
-                     <a:documentation>Höhe einer Rasterzelle. Entweder höhe oder ny angeben, nicht beide.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="nx">
-                     <a:documentation>Anzahl der Rasterzellen in horizontaler Richtung. Entweder nx oder width angeben.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="ny">
-                     <a:documentation>Gibt die Anzahl der Rasterzellen in vertikaler Richtung an. Entweder ny oder höhe angeben.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="dx">
-                     <a:documentation>Abstand zwischen zwei Rasterzellen (horizontal)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="dy">
-                     <a:documentation>Abstand zwischen zwei Rasterzellen (horizontal)</a:documentation>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <optional>
+            <attribute name="width">
+               <a:documentation>Breite einer Rasterzelle. Entweder width oder nx benutzen, nicht beide.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="height">
+               <a:documentation>Höhe einer Rasterzelle. Entweder höhe oder ny angeben, nicht beide.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="nx">
+               <a:documentation>Anzahl der Rasterzellen in horizontaler Richtung. Entweder nx oder width angeben.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="ny">
+               <a:documentation>Gibt die Anzahl der Rasterzellen in vertikaler Richtung an. Entweder ny oder höhe angeben.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="dx">
+               <a:documentation>Abstand zwischen zwei Rasterzellen (horizontal)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="dy">
+               <a:documentation>Abstand zwischen zwei Rasterzellen (horizontal)</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
       <sch:pattern>
@@ -4207,34 +4011,29 @@
    <define name="e_SortSequence">
       <element name="SortSequence">
          <a:documentation>Sortiert eine Liste.</a:documentation>
-         <interleave>
-            <group>
-               <attribute name="select">
-                  <a:documentation>Datensatz, der sortiert werden soll</a:documentation>
-               </attribute>
-               <optional>
-                  <attribute name="removeduplicates">
-                     <a:documentation>Wenn Duplikate gelöscht werden sollen, steht hier das Attribut mit dem Inhalt.</a:documentation>
-                  </attribute>
-               </optional>
-               <attribute name="criterion">
-                  <a:documentation>Attributname, nach dem sortiert werden soll.</a:documentation>
-               </attribute>
-               <optional>
-                  <attribute name="numerical">
-                     <a:documentation>Sortiere alphabetisch oder nummerisch</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Sortiere nummerisch</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Sortiere alphabetisch (Voreinstellung)</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <attribute name="select">
+            <a:documentation>Datensatz, der sortiert werden soll</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="removeduplicates">
+               <a:documentation>Wenn Duplikate gelöscht werden sollen, steht hier das Attribut mit dem Inhalt.</a:documentation>
+            </attribute>
+         </optional>
+         <attribute name="criterion">
+            <a:documentation>Attributname, nach dem sortiert werden soll.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="numerical">
+               <a:documentation>Sortiere alphabetisch oder nummerisch</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Sortiere nummerisch</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Sortiere alphabetisch (Voreinstellung)</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Span">
@@ -4705,37 +4504,32 @@
    <define name="e_Tablerule">
       <element name="Tablerule">
          <a:documentation>Erzeugt eine horizontale Linie in einer Tabelle</a:documentation>
-         <interleave>
-            <group>
-               <optional>
-                  <attribute name="rulewidth">
-                     <a:documentation>Die »Dicke« der Linie. Voreinstellung ist 0.25 Punkt.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="color">
-                     <a:documentation>Farbe der Linie. (Default: Schwarz)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="start">
-                     <a:documentation>Die erste Spalte der Linie. Voreinstellung ist 1.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="class">
-                     <a:documentation>CSS Klasse für dieses Element.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="id">
-                     <a:documentation>CSS id für dieses Element.</a:documentation>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <optional>
+            <attribute name="rulewidth">
+               <a:documentation>Die »Dicke« der Linie. Voreinstellung ist 0.25 Punkt.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="color">
+               <a:documentation>Farbe der Linie. (Default: Schwarz)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="start">
+               <a:documentation>Die erste Spalte der Linie. Voreinstellung ist 1.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS Klasse für dieses Element.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id für dieses Element.</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Textblock">
@@ -4844,89 +4638,84 @@
    <define name="e_Trace">
       <element name="Trace">
          <a:documentation>Setze Debugging-Schalter</a:documentation>
-         <interleave>
-            <group>
-               <optional>
-                  <attribute name="assignments">
-                     <a:documentation>Schreibt Zusweisungen (SetVariable) in die Logdatei.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Zusätzliche Ausgaben in der Logdatei.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Normaler Lauf (Voreinstellung).</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="grid">
-                     <a:documentation>Wenn &#39;yes&#39;, dann zeichnet der Publisher das zugrunde liegende Raster auf die Seiten.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Zeige das Raster.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Das Raster wird nicht angezeigt (Voreinstellung).</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="gridallocation">
-                     <a:documentation>Wenn &#39;yes&#39;, dann markiert der Publisher die belegten Rasterzellen mit einer Hintergrundfarbe.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Zeige Rasterbelegung.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Rasterbelegung nicht zeigen (Voreinstellung).</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="hyphenation">
-                     <a:documentation>Bei &#39;yes&#39; markiert der speedata Publisher die möglichen Trennstellen für die Silbentrennung.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Zeige Silbentrennungsmöglichkeiten.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Keine Silbentrennungsmöglichkeiten zeigen (Voreinstellung).</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="objects">
-                     <a:documentation>Zeichnet Rechtecke um Objekte.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Zeichnet Rechtecke</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Keine Rechtecke um Objekte (Voreinstellung).</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="verbose">
-                     <a:documentation>Erzeugt zusätzliche Ausgaben in der Protokolldatei.</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Zusätzliche Ausgaben in der Logdatei.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Normaler Lauf (Voreinstellung).</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="textformat">
-                     <a:documentation>Zeige Textformat als Tooltip im PDF</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Zeige Textformat</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Zeige Textformat nicht (Voreinstellung).</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <optional>
+            <attribute name="assignments">
+               <a:documentation>Schreibt Zusweisungen (SetVariable) in die Logdatei.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zusätzliche Ausgaben in der Logdatei.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Normaler Lauf (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="grid">
+               <a:documentation>Wenn &#39;yes&#39;, dann zeichnet der Publisher das zugrunde liegende Raster auf die Seiten.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeige das Raster.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Das Raster wird nicht angezeigt (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="gridallocation">
+               <a:documentation>Wenn &#39;yes&#39;, dann markiert der Publisher die belegten Rasterzellen mit einer Hintergrundfarbe.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeige Rasterbelegung.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Rasterbelegung nicht zeigen (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="hyphenation">
+               <a:documentation>Bei &#39;yes&#39; markiert der speedata Publisher die möglichen Trennstellen für die Silbentrennung.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeige Silbentrennungsmöglichkeiten.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Keine Silbentrennungsmöglichkeiten zeigen (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="objects">
+               <a:documentation>Zeichnet Rechtecke um Objekte.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeichnet Rechtecke</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Keine Rechtecke um Objekte (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="verbose">
+               <a:documentation>Erzeugt zusätzliche Ausgaben in der Protokolldatei.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zusätzliche Ausgaben in der Logdatei.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Normaler Lauf (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="textformat">
+               <a:documentation>Zeige Textformat als Tooltip im PDF</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeige Textformat</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Zeige Textformat nicht (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Tr">
@@ -5427,12 +5216,7 @@
    <define name="e_VSpace">
       <element name="VSpace">
          <a:documentation>Erzeugt einen vertikal dehnbaren Leerraum. Der Leerraum hat die minimale Höhe 0 und die maximale Höhe »unendlich«. Sinnvoll nutzbar in Tabellenzellen.</a:documentation>
-         <interleave>
-            <group>
-               <empty></empty>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
+         <empty></empty>
       </element>
    </define>
    <define name="e_While">

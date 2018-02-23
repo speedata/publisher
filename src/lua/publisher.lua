@@ -402,15 +402,15 @@ lowercase = false
 --- indentation in sp. alignment is one of "leftaligned", "rightaligned",
 --- "centered" and "justified"
 textformats = {
-    text           = { indent = 0, alignment="justified",   rows = 1, orphan = false, widow = false},
-    __centered     = { indent = 0, alignment="centered",    rows = 1},
-    __leftaligned  = { indent = 0, alignment="leftaligned", rows = 1},
-    __rightaligned = { indent = 0, alignment="rightaligned",rows = 1},
-    __justified    = { indent = 0, alignment="justified",   rows = 1},
-    justified      = { indent = 0, alignment="justified",   rows = 1},
-    centered       = { indent = 0, alignment="centered",    rows = 1},
-    left           = { indent = 0, alignment="leftaligned", rows = 1},
-    right          = { indent = 0, alignment="rightaligned",rows = 1},
+    text           = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2},
+    __centered     = { indent = 0, alignment="centered",    rows = 1, orphan = 2, widow = 2},
+    __leftaligned  = { indent = 0, alignment="leftaligned", rows = 1, orphan = 2, widow = 2},
+    __rightaligned = { indent = 0, alignment="rightaligned",rows = 1, orphan = 2, widow = 2},
+    __justified    = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2},
+    justified      = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2},
+    centered       = { indent = 0, alignment="centered",    rows = 1, orphan = 2, widow = 2},
+    left           = { indent = 0, alignment="leftaligned", rows = 1, orphan = 2, widow = 2},
+    right          = { indent = 0, alignment="rightaligned",rows = 1, orphan = 2, widow = 2},
 }
 
 
@@ -2040,6 +2040,15 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
             return false
         end
         return nil
+    elseif typ=="booleanornumber" then
+        val = val or default
+        if val=="yes" then
+            return true
+        elseif val=="no" then
+            return false
+        else
+            return tonumber(val)
+        end
     elseif typ=="booleanorlength" then
         val = val or default
         if val=="yes" then

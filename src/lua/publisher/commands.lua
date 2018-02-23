@@ -578,8 +578,8 @@ function commands.define_textformat(layoutxml)
     local paddingtop    = publisher.read_attribute(layoutxml,dataxml,"padding-top",   "rawstring")
     local paddingbottom = publisher.read_attribute(layoutxml,dataxml,"padding-bottom","rawstring")
     local breakbelow    = publisher.read_attribute(layoutxml,dataxml,"break-below",   "boolean", true)
-    local orphan        = publisher.read_attribute(layoutxml,dataxml,"orphan",        "boolean", false)
-    local widow         = publisher.read_attribute(layoutxml,dataxml,"widow",         "boolean", false)
+    local orphan        = publisher.read_attribute(layoutxml,dataxml,"orphan",        "booleanornumber", false)
+    local widow         = publisher.read_attribute(layoutxml,dataxml,"widow",         "booleanornumber", false)
     local hyphenate     = publisher.read_attribute(layoutxml,dataxml,"hyphenate",     "boolean", true)
     local hyphenchar    = publisher.read_attribute(layoutxml,dataxml,"hyphenchar",    "rawstring")
     local tab           = publisher.read_attribute(layoutxml,dataxml,"tab",           "rawstring")
@@ -591,8 +591,22 @@ function commands.define_textformat(layoutxml)
     else
         fmt.alignment = "justified"
     end
-    fmt.orphan = orphan
-    fmt.widow = widow
+    if orphan == false then
+        fmt.orphan = 2
+    elseif tonumber(orphan) then
+        fmt.orphan = tonumber(orphan)
+    else
+        fmt.orphan = 0
+    end
+
+    if widow == false then
+        fmt.widow = 2
+    elseif tonumber(widow) then
+        fmt.widow = tonumber(widow)
+    else
+        fmt.widow = 0
+    end
+
     fmt.disable_hyphenation = not hyphenate
     fmt.hyphenchar = hyphenchar
 

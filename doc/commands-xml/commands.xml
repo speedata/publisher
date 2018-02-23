@@ -2009,53 +2009,21 @@
         <para>Das Zeichen, das für Trennung benutzt wird (Voreinstellung: -)</para>
       </description>
     </attribute>
-    <attribute en="orphan" optional="yes">
+    <attribute en="orphan" optional="yes" type="yesnonumber" lastchanged="3.1.22">
       <description xml:lang="en">
-        <para>If no, prohibit orphans (first line of paragraph is on the previous page). Default: no.</para>
+        <para>If yes, allow orphans (first line of paragraph is on the previous page). If you provide a number, it is the number of lines that must be kept together. Default: no.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn nein, Schusterjungen verhindern (erste Zeile eines Absatzes ist auf der vorherigen Seite). Voreinstellung ist nein.</para>
+        <para>Wenn »yes«, Schusterjungen erlauben (erste Zeile eines Absatzes ist auf der vorherigen Seite). Wenn eine Zahl angegeben wird, ist dies die Anzahl der Zeilen, die zusammengehalten werden. Voreinstellung ist »no«.</para>
       </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>Allow orphans.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Schusterjungen erlauben.</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>Prevent orphans (default).</para>
-        </description>
-        <description xml:lang="de">
-          <para>Schusterjungen verhindern (Voreinstellung).</para>
-        </description>
-      </choice>
     </attribute>
-    <attribute en="widow" optional="yes">
+    <attribute en="widow" optional="yes" type="yesnonumber" lastchanged="3.1.22">
       <description xml:lang="en">
-        <para>If no, prohibit widows (last line of paragraph is on the next page). Default: no.</para>
+        <para>If yes, allow widows (last line of paragraph is on the next page). If you provide a number, it is the number of lines that must be kept together.  Default: no.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn nein, Hurenkinder verhindern (letzte Zeile eines Absatzes ist auf der nächsten Seite). Voreinstellung ist nein.</para>
+        <para>Wenn »yes«, Hurenkinder erlauben (letzte Zeile eines Absatzes ist auf der nächsten Seite). Wenn eine Zahl angegeben wird, ist dies die Anzahl der Zeilen, die zusammengehalten werden. Voreinstellung ist »no«.</para>
       </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>Allow widows.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Hurenkinder erlauben.</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>Prevent widows (default).</para>
-        </description>
-        <description xml:lang="de">
-          <para>Hurenkinder verhindern (Voreinstellung).</para>
-        </description>
-      </choice>
     </attribute>
     <attribute en="name" type="text" optional="no">
       <description xml:lang="en">
