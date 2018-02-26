@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>speedata Publisher changelog (de)</title>
   <id>https://www.speedata.de</id>
-  <updated>2018-02-01T07:15:05+01:00</updated>
+  <updated>2018-02-26T10:25:45+01:00</updated>
   <subtitle>Neue Versionen des Publishers zum Download und Liste der Änderungen</subtitle>
   <link href="https://www.speedata.de"></link>
   <author>
     <name>speedata</name>
     <email>info@speedata.de</email>
   </author>
+  <entry>
+    <title>Version 3.1.21</title>
+    <updated>2018-02-16T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2018-02-16:</id>
+    <content type="html">Fehlerkorrektur für mehrseitige Tabellen</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.21</title>
+    <updated>2018-02-16T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2018-02-16:</id>
+    <content type="html">Neue Default-Fonts</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
+  <entry>
+    <title>Version 3.1.20</title>
+    <updated>2018-02-01T00:00:00Z</updated>
+    <id>tag:www.speedata.de,2018-02-01:</id>
+    <content type="html">Viele Verbesserungen im Font-Bereich, erste Versuche, Chinesisch korrekt zu setzen</content>
+    <link href="https://www.speedata.de"></link>
+  </entry>
   <entry>
     <title>Version 3.1.19</title>
     <updated>2018-01-30T00:00:00Z</updated>
