@@ -918,10 +918,14 @@ M.default_functions.last = function( dataxml )
 end
 
 M.default_functions.max = function(dataxml,arg)
-    local max = arg[1]
+    local max = tonumber(arg[1])
+    if not max then
+        err("First argument in max() is not a number, returning 0")
+        return 0
+    end
     for i=2,#arg do
-        if arg[i] > max then
-            max = arg[i]
+        if tonumber(arg[i]) and tonumber(arg[i]) > max then
+            max = tonumber(arg[i])
         end
     end
     return max
