@@ -2947,6 +2947,7 @@ function commands.sort_sequence( layoutxml,dataxml )
     local criterion        = publisher.read_attribute(layoutxml,dataxml,"criterion","rawstring")
     local numerical        = publisher.read_attribute(layoutxml,dataxml,"numerical",   "boolean")
     local criterium        = publisher.read_attribute(layoutxml,dataxml,"criterium","rawstring")
+    local order            = publisher.read_attribute(layoutxml,dataxml,"order","rawstring","ascending")
 
     -- spelling error in schema
     local sortkey = criterion or criterium
@@ -2961,12 +2962,19 @@ function commands.sort_sequence( layoutxml,dataxml )
         end
     end
 
-    if numerical then
-        table.sort(tmp, function(a,b) return tonumber(a[sortkey]) < tonumber(b[sortkey]) end)
+    local compare
+    if order == "ascending" then
+        compare = function( a,b )  return a < b end
     else
-        table.sort(tmp, function(a,b) return a[sortkey] < b[sortkey] end)
+        compare = function( a,b )  return a > b end
     end
 
+
+    if numerical then
+        table.sort(tmp, function(a,b) return compare(tonumber(a[sortkey]), tonumber(b[sortkey])) end)
+    else
+        table.sort(tmp, function(a,b) return compare(a[sortkey],b[sortkey]) end)
+    end
 
     if removeduplicates then
         local ret = {}

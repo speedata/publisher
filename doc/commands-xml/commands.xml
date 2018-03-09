@@ -6465,6 +6465,30 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="order" optional="yes" since="3.1.22">
+      <description xml:lang="en">
+        <para>Select the sorting order</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wähle die Sortierreihenfolge</para>
+      </description>
+      <choice en="ascending">
+        <description xml:lang="en">
+          <para>Use ascending sort order (default)</para>
+        </description>
+        <description xml:lang="de">
+          <para>Benutze aufsteigende Sortierreihenfolge (Voreinstellung)</para>
+        </description>
+      </choice>
+      <choice en="descending">
+        <description xml:lang="en">
+          <para>Use descending sort order</para>
+        </description>
+        <description xml:lang="de">
+          <para>Benutze absteigende Sortierreihenfolge</para>
+        </description>
+      </choice>
+    </attribute>
     <example xml:lang="en">
       <para>Data:</para>
       <listing><![CDATA[<data>
