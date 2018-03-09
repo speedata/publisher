@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.22" date="2018-03-09">
+      <en>PlaceObject: enhance absolute positioning</en>
+      <de>PlaceObject: Absolute Positionierung verbessern</de>
+    </entry>
+    <entry version="3.1.22" date="2018-03-09">
+      <en>SortSequence: allow descending sort</en>
+      <de>SortSequence: umgekehrte Reihenfolge erlauben</de>
+    </entry>
+    <entry version="3.1.22" date="2018-03-09">
+      <en>More detailled setting of orphan/widow</en>
+      <de>Detaillierte Optionen für Schusterjungen und Hurenkinder</de>
+    </entry>
     <entry version="3.1.21" date="2018-02-16">
       <en>Bugfix for multipage table</en>
       <de>Fehlerkorrektur für mehrseitige Tabellen</de>
