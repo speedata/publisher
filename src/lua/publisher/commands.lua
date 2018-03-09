@@ -2248,31 +2248,6 @@ function commands.place_object( layoutxml,dataxml )
     xpath.set_variable("__currentarea", area)
     framecolor = framecolor or "black"
 
-    if column and not tonumber(column) then
-        -- looks like column is a string
-        absolute_positioning = true
-        column = tex.sp(column)
-    end
-    if row then
-        local tmp = tonumber(row)
-        if not tmp then
-            -- looks row is a string
-            absolute_positioning = true
-            row = tex.sp(row)
-        else
-            row = tmp
-        end
-    end
-
-    if absolute_positioning then
-        if not ( row and column ) then
-            err("»Column« and »Row« must be given with absolute positioning (PlaceObject).")
-            return
-        end
-    end
-    xpath.set_variable("__row", row)
-    xpath.set_variable("__column", column)
-
 
     if onpage then
         if onpage == 'next' then
@@ -2291,6 +2266,40 @@ function commands.place_object( layoutxml,dataxml )
     else
         current_grid = publisher.current_grid
     end
+
+
+
+    if ( column and not tonumber(column) ) or ( row and not tonumber(row)) then
+        absolute_positioning = true
+    end
+
+    if column and absolute_positioning then
+        if tonumber(column) then
+            -- looks like column is a string
+            column = current_grid:width_sp(column)
+        else
+            column = tex.sp(column)
+        end
+    end
+
+    if row and absolute_positioning then
+        if tonumber(row) then
+            row = current_grid:height_sp(row)
+        else
+            row = tex.sp(row)
+        end
+    end
+
+    if absolute_positioning then
+        if not ( row and column ) then
+            err("»Column« and »Row« must be given with absolute positioning (PlaceObject).")
+            return
+        end
+    end
+    xpath.set_variable("__row", row)
+    xpath.set_variable("__column", column)
+
+
 
 
 
