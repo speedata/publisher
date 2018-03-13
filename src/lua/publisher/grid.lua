@@ -552,6 +552,21 @@ function height_sp(self, gridcells )
     return math.ceil(math.round(ht,3))
 end
 
+function posx_sp(self, gridcells )
+    if not tonumber(gridcells) then
+        return tex.sp(gridcells)
+    end
+    local wd = self.gridwidth * gridcells + gridcells * self.grid_dx
+    return math.ceil(math.round(wd,3))
+end
+
+function posy_sp(self, gridcells )
+    if not tonumber(gridcells) then
+        return tex.sp(gridcells)
+    end
+    local ht = self.gridheight * gridcells + gridcells * self.grid_dy
+    return math.ceil(math.round(ht,3))
+end
 
 -- Return the number of grid cells for the given width (in scaled points)
 function width_in_gridcells_sp(self,width_sp)

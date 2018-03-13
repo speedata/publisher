@@ -2276,7 +2276,7 @@ function commands.place_object( layoutxml,dataxml )
     if column and absolute_positioning then
         if tonumber(column) then
             -- looks like column is a string
-            column = current_grid:width_sp(column)
+            column = current_grid:posx_sp(column)
         else
             column = tex.sp(column)
         end
@@ -2284,7 +2284,7 @@ function commands.place_object( layoutxml,dataxml )
 
     if row and absolute_positioning then
         if tonumber(row) then
-            row = current_grid:height_sp(row)
+            row = current_grid:posy_sp(row)
         else
             row = tex.sp(row)
         end
