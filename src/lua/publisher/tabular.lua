@@ -334,7 +334,7 @@ function calculate_columnwidth( self )
                             count_stars = count_stars + width_stars
                         else
                             if tonumber(column_contents.width) then
-                                self.colwidths[i] = publisher.current_grid.gridwidth * column_contents.width
+                                self.colwidths[i] = publisher.current_grid:width_sp(column_contents.width)
                             else
                                 self.colwidths[i] = tex.sp(column_contents.width)
                             end
