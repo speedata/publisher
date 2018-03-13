@@ -689,7 +689,13 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
     local min_lineheight = fam.baselineskip
 
     if tr_contents.minheight then
-        rowheight = math.max(publisher.current_grid:height_sp(tr_contents.minheight), min_lineheight)
+        local minht
+        if tonumber(tr_contents.minheight) then
+            minht = publisher.current_grid:height_sp(tr_contents.minheight)
+        else
+            minht = tex.sp(tr_contents.minheight)
+        end
+        rowheight = math.max(minht, min_lineheight)
     else
         rowheight = min_lineheight
     end

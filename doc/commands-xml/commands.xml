@@ -8110,12 +8110,12 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="minheight" type="number" optional="yes">
+    <attribute en="minheight" type="numberorlength" optional="yes">
       <description xml:lang="en">
-        <para>Minimum row height in grid cells.</para>
+        <para>Minimum row height in grid cells or length.</para>
       </description>
       <description xml:lang="de">
-        <para>Die Mindesthöhe der Zeile in Rasterzellen.</para>
+        <para>Die Mindesthöhe der Zeile in Rasterzellen oder als Längenangabe.</para>
       </description>
     </attribute>
     <attribute en="backgroundcolor" type="text" optional="yes">

@@ -3282,7 +3282,7 @@ function commands.tr( layoutxml,dataxml )
         ["data"]            = "xpath",
         ["valign"]          = "string",
         ["backgroundcolor"] = "rawstring",
-        ["minheight"]       = "number",
+        ["minheight"]       = "length",
         ["top-distance"]    = "rawstring",
         ["break-below"]     = "string",
     }
