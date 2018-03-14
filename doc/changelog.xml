@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.23" date="2018-03-14">
+      <en>Tr/minheight allows length units</en>
+      <de>Tr/minheight erlaubt Längenangaben</de>
+    </entry>
     <entry version="3.1.22" date="2018-03-09">
       <en>PlaceObject: enhance absolute positioning</en>
       <de>PlaceObject: Absolute Positionierung verbessern</de>
