@@ -3124,7 +3124,7 @@ function commands.table( layoutxml,dataxml,options )
     local autostretch    = publisher.read_attribute(layoutxml,dataxml,"stretch",       "string")
     local eval           = publisher.read_attribute(layoutxml,dataxml,"eval",          "xpath")
     local collapse       = publisher.read_attribute(layoutxml,dataxml,"border-collapse",  "string", "separate")
-
+    local balance        = publisher.read_attribute(layoutxml,dataxml,"balance",       "boolean", false)
 
     -- FIXME: leading -> rowdistance or so
     padding        = tex.sp(padding        or "0pt")
@@ -3195,6 +3195,11 @@ function commands.table( layoutxml,dataxml,options )
     tabular.bordercollapse_vertical   = collapse == "collapse"
     if columndistance > 0 then tabular.bordercollapse_horizontal = false end
     if rowdistance    > 0 then tabular.bordercollapse_vertical   = false end
+    if balance then
+        tabular.split = publisher.current_grid:number_of_frames(xpath.get_variable("__currentarea"))
+    else
+        tabular.split = 1
+    end
 
     xpath.set_variable("_last_tr_data","")
 

@@ -1288,17 +1288,36 @@ function typeset_table(self)
     local tableheads_extra = {
         largest_index = 0
     }
-    local function get_tableheads_extra( idx )
-        if idx == 0 then return nil end
-        if idx > tableheads_extra.largest_index then
-            return tableheads_extra[tableheads_extra.largest_index]
-         end
-        if tableheads_extra[idx] ~= nil then return tableheads_extra[idx] end
-        return get_tableheads_extra(idx - 1)
+    local function get_tableheads_extra( idx, maxrow )
+        -- maxrow = maxrow or
+        idx = idx - 1
+        if idx < 1 then return nil end
+        local maxidx = tableheads_extra.largest_index
+        local id = math.min(idx,maxidx)
+        if tableheads_extra[id] ~= nil then
+            local subidx = #tableheads_extra[id]
+            if maxrow == nil then
+                return tableheads_extra[id][subidx].nodelist
+            end
+            local entry
+            while subidx > 0 do
+                entry = tableheads_extra[id][subidx]
+                if entry.rownumber <= maxrow then
+                    return entry.nodelist
+                end
+                subidx = subidx - 1
+            end
+            return get_tableheads_extra(id  , maxrow)
+        end
+        if idx == 1 then return nil end
+        return get_tableheads_extra(idx)
     end
-    local function set_tableheads_extra( idx, value)
-        tableheads_extra.largest_index = math.max( tableheads_extra.largest_index , idx )
-        tableheads_extra[idx] = value
+
+    local function set_tableheads_extra( idx, nodelist, rownumber )
+        local foo = math.max( tableheads_extra.largest_index , idx )
+        tableheads_extra.largest_index = foo
+        tableheads_extra[idx] = tableheads_extra[idx] or {}
+        tableheads_extra[idx][#tableheads_extra[idx] + 1]  = { nodelist = nodelist, rownumber = rownumber }
     end
 
     calculate_height_and_connect_tablehead(self,tablehead_first,tablehead)
@@ -1343,11 +1362,11 @@ function typeset_table(self)
     end
 
     -- Return a boolean if we need to show the dynamic header on this page
-    local function showheader( tablepart )
+    local function showheader( tablepart, rowmax )
         -- We can skip the dynamic header on pages where the first line is the next dynamic header
         if omit_head_on_pages[tablepart] then return false end
 
-        if get_tableheads_extra(tablepart_absolute) ~= nil then return true end
+        if get_tableheads_extra(tablepart_absolute,rowmax) ~= nil then return true end
         return false
     end
 
@@ -1397,9 +1416,10 @@ function typeset_table(self)
     end})
 
 
-    local function get_tablehead( page )
-        if get_tableheads_extra(page) then
-            return node.copy_list(get_tableheads_extra(page))
+    local function get_tablehead( page,maxrow )
+        local nl = get_tableheads_extra(page,maxrow)
+        if nl then
+            return node.copy_list(nl)
         end
         local tmp = node.new("hlist")
         return tmp
@@ -1448,15 +1468,14 @@ function typeset_table(self)
         -- We can mark a row as "use_as_head" to turn the row into a dynamic head
         local use_as_head = node.has_attribute(rows[i],publisher.att_use_as_head)
         if use_as_head == 1 then
-            set_tableheads_extra(#splits + 1,node.copy(rows[i]))
+            set_tableheads_extra(#splits,node.copy(rows[i]),i)
         elseif use_as_head == 2 then
-            set_tableheads_extra(#splits + 1,publisher.create_empty_hbox_with_width(1))
+            set_tableheads_extra(#splits,publisher.create_empty_hbox_with_width(1),i)
         end
         local shiftup = node.has_attribute(rows[i],publisher.att_tr_shift_up) or 0
         if shiftup > 0 then
             rows[i].height = rows[i].height - shiftup
         end
-
 
         pagegoal = pagegoals[current_page]
         ht_row = rows[i].height + rows[i].depth
@@ -1511,9 +1530,27 @@ function typeset_table(self)
         extra_height = extra_height + self.rowsep
     end
     splits[#splits + 1] = #rows
+    local tosplit = self.split
+
+    local additional_splits = ( #splits - 1 ) % tosplit
+    if additional_splits > 0 then
+        local sum_rows = splits[#splits] - splits[#splits - additional_splits]
+
+        for i=1,additional_splits do
+            table.remove(splits)
+        end
+        local percolumn =  math.ceil( sum_rows / tosplit )
+
+        for i=1,tosplit do
+            splits[#splits + 1] = splits[#splits] + percolumn
+            sum_rows = sum_rows - percolumn
+            if sum_rows < percolumn then
+                percolumn = sum_rows
+            end
+        end
+    end
 
     local first_row_in_new_table
-
     local last_tr_data
     tablepart_absolute = 0
     for s=2,#splits do
@@ -1541,8 +1578,8 @@ function typeset_table(self)
             if showheader_static(s-1) then
                 thissplittable[#thissplittable + 1] = get_tablehead_static(s-1)
             end
-            if showheader(s-1) then
-                thissplittable[#thissplittable + 1] = get_tablehead(s-1)
+            if showheader(s-1, splits[s]) then
+                thissplittable[#thissplittable + 1] = get_tablehead(s-1, splits[s - 1])
             end
         end
 

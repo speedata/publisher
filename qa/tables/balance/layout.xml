@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en" >
+
+  <SetGrid nx="12" height="12pt"/>
+
+  <Pageformat width="210mm" height="90mm"/>
+  <Pagetype name="b" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+    <PositioningArea name="x">
+      <PositioningFrame width="4" height="{sd:number-of-rows()}" row="1" column="1"/>
+      <PositioningFrame width="4" height="{sd:number-of-rows()}" row="1" column="5"/>
+      <PositioningFrame width="4" height="{sd:number-of-rows()}" row="1" column="9"/>
+    </PositioningArea>
+  </Pagetype>
+
+  <Record element="data">
+    <PlaceObject area="x">
+      <Table balance="yes">
+        <Loop select="3" variable="i">
+          <Tr sethead="yes" backgroundcolor="lightgray" >
+            <Td><Paragraph><Value>head</Value><Value select="$i"></Value></Paragraph></Td>
+          </Tr>
+          <Loop select="26" variable="j">
+            <Tr>
+              <Td>
+                <Paragraph><Value>Row </Value><Value select="$j"/></Paragraph>
+              </Td>
+            </Tr>
+          </Loop>
+        </Loop>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>

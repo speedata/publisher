@@ -6951,6 +6951,30 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="balance" optional="yes" since="3.1.24">
+      <description xml:lang="en">
+        <para>Tries to balance the table on the last page according to the number of frames. Experimental! </para>
+      </description>
+      <description xml:lang="de">
+        <para>Versucht die letzte Seite anhand der Anzahl der Rahmen auszubalancieren. Experimentell</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Tries to balance.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Versucht die Spalten auszugleichen.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>First column will filled first, default</para>
+        </description>
+        <description xml:lang="de">
+          <para>Erste Spalte wird zuerst ausgefüllt</para>
+        </description>
+      </choice>
+    </attribute>
     <remark xml:lang="en">
       <para>The table cells may contain Paragraphs, Images and other objects that are allowed in <cmd name="PlaceObject"/>.</para>
     </remark>

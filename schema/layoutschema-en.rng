@@ -4217,6 +4217,17 @@
                      </choice>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="balance">
+                     <a:documentation>Tries to balance the table on the last page according to the number of frames. Experimental!</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Tries to balance.</a:documentation>
+                        <value>no</value>
+                        <a:documentation>First column will filled first, default</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
                <oneOrMore>
                   <interleave>
                      <optional>

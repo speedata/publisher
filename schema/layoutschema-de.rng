@@ -4217,6 +4217,17 @@
                      </choice>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="balance">
+                     <a:documentation>Versucht die letzte Seite anhand der Anzahl der Rahmen auszubalancieren. Experimentell</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Versucht die Spalten auszugleichen.</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Erste Spalte wird zuerst ausgefüllt</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
                <oneOrMore>
                   <interleave>
                      <optional>
