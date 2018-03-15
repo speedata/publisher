@@ -8158,7 +8158,7 @@
         <para>Auf diese Daten können im Tabellenkopf und Tabellenfuß mit <tt>$_last_tr_data</tt> zugegriffen werden.</para>
       </description>
     </attribute>
-    <attribute en="sethead" optional="yes">
+    <attribute en="sethead" optional="yes" allowxpath="yes">
       <description xml:lang="en">
         <para>Use this line for future table heads.</para>
       </description>

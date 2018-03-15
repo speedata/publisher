@@ -4033,6 +4033,17 @@
                </choice>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="order">
+               <a:documentation>Wähle die Sortierreihenfolge</a:documentation>
+               <choice>
+                  <value>ascending</value>
+                  <a:documentation>Benutze aufsteigende Sortierreihenfolge (Voreinstellung)</a:documentation>
+                  <value>descending</value>
+                  <a:documentation>Benutze absteigende Sortierreihenfolge</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
@@ -4753,7 +4764,7 @@
                </optional>
                <optional>
                   <attribute name="minheight">
-                     <a:documentation>Die Mindesthöhe der Zeile in Rasterzellen.</a:documentation>
+                     <a:documentation>Die Mindesthöhe der Zeile in Rasterzellen oder als Längenangabe.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -4790,6 +4801,9 @@
                         <a:documentation>Diese Zeile wird nicht besonders behandelt (Voreinstellung).</a:documentation>
                         <value>clear</value>
                         <a:documentation>Kopf löschen. Weitere Seiten haben keine Kopfzeile bis eine neue gesetzt wird.</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
                      </choice>
                   </attribute>
                </optional>

@@ -4033,6 +4033,17 @@
                </choice>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="order">
+               <a:documentation>Select the sorting order</a:documentation>
+               <choice>
+                  <value>ascending</value>
+                  <a:documentation>Use ascending sort order (default)</a:documentation>
+                  <value>descending</value>
+                  <a:documentation>Use descending sort order</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
@@ -4753,7 +4764,7 @@
                </optional>
                <optional>
                   <attribute name="minheight">
-                     <a:documentation>Minimum row height in grid cells.</a:documentation>
+                     <a:documentation>Minimum row height in grid cells or length.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -4790,6 +4801,9 @@
                         <a:documentation>No special treatment of this line (default).</a:documentation>
                         <value>clear</value>
                         <a:documentation>Delete head. Next pages will have no head until new one is set with &#39;yes&#39;.</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
                      </choice>
                   </attribute>
                </optional>
