@@ -897,6 +897,12 @@ function initialize_luatex_and_generate_pdf()
     if options.documentauthor and options.documentauthor ~= "" then
         infos[#infos + 1] = string.format("/Author %s", utf8_to_utf16_string_pdf(options.documentauthor))
     end
+    if options.documentsubject and options.documentsubject ~= "" then
+        infos[#infos + 1] = string.format("/Subject %s", utf8_to_utf16_string_pdf(options.documentsubject))
+    end
+    if options.documentkeywords and options.documentkeywords ~= "" then
+        infos[#infos + 1] = string.format("/Keywords %s", utf8_to_utf16_string_pdf(options.documentkeywords))
+    end
 
     local info = table.concat(infos, " ")
 

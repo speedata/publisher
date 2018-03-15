@@ -3161,6 +3161,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="subject">
+               <a:documentation>Set the subject of the document</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="title">
                <a:documentation>Set the title of the document</a:documentation>
             </attribute>
@@ -3176,6 +3181,11 @@
                   <value>duplexfliplongedge</value>
                   <a:documentation>Two pages per sheet and flip on long edge</a:documentation>
                </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="keywords">
+               <a:documentation>Set the keywords of the document (comma separated list).</a:documentation>
             </attribute>
          </optional>
          <optional>

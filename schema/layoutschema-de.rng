@@ -3161,6 +3161,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="subject">
+               <a:documentation>Legt den Betreff (subject) des Dokuments fest</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="title">
                <a:documentation>Legt den Titel des Dokuments fest</a:documentation>
             </attribute>
@@ -3176,6 +3181,11 @@
                   <value>duplexfliplongedge</value>
                   <a:documentation>Beidseitig und an langer Kante umblättern</a:documentation>
                </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="keywords">
+               <a:documentation>Legt die Schlüsselwörter des Dokuments fest (kommaseparierte Liste)</a:documentation>
             </attribute>
          </optional>
          <optional>

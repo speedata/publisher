@@ -5066,6 +5066,14 @@
         <para>Legt den Autor des Dokuments fest</para>
       </description>
     </attribute>
+    <attribute en="subject" optional="yes" type="text" since="3.1.24">
+      <description xml:lang="en">
+        <para>Set the subject of the document</para>
+      </description>
+      <description xml:lang="de">
+        <para>Legt den Betreff (subject) des Dokuments fest</para>
+      </description>
+    </attribute>
     <attribute en="title" optional="yes" type="text" since="3.1.18">
       <description xml:lang="en">
         <para>Set the title of the document</para>
@@ -5105,6 +5113,14 @@
           <para>Beidseitig und an langer Kante umblättern</para>
         </description>
       </choice>
+    </attribute>
+    <attribute en="keywords" optional="yes" type="text" since="3.1.24">
+      <description xml:lang="en">
+        <para>Set the keywords of the document (comma separated list).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Legt die Schlüsselwörter des Dokuments fest (kommaseparierte Liste)</para>
+      </description>
     </attribute>
     <attribute en="numcopies" optional="yes" type="number">
       <description xml:lang="en">
