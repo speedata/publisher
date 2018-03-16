@@ -665,7 +665,7 @@ func main() {
 	op.On("-c NAME", "--config", "Read the config file with the given NAME. Default: 'publisher.cfg'", &configfilename)
 	op.On("--credits", "Show credits and exit", showCredits)
 	op.On("--no-cutmarks", "Display cutmarks in the document", layoutoptions)
-	op.On("--data NAME", "Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN", options)
+	op.On("--data NAME", "Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN (only 1 run possible).", options)
 	op.On("--dummy", "Don't read a data file, use '<data />' as input", options)
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
 	op.On("--extra-xml NAME", "Add this file to the layout file", extraXML)
