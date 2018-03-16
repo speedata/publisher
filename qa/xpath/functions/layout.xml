@@ -21,7 +21,10 @@
             </Otherwise>
           </Switch>
         </ForAll>
-     </Textblock>
+        <!-- foo does not exist -->
+        <Paragraph><Value select="foo = ''"/></Paragraph>
+        <Paragraph><Value select="count(foo)"/></Paragraph>
+      </Textblock>
     </PlaceObject>
   </Record>
 

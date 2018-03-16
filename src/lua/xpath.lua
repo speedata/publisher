@@ -299,6 +299,7 @@ function M.is_nodeselector( dataxml,str,pos,ns )
     local eltname
     start,stop,eltname = string.find(str,"^(%a[%w-/_*]*)%s*",pos)
     if start then
+        local something_found = false
         local ret = {}
         M.nextpos = stop + 1
         local tmp = { dataxml }
@@ -308,6 +309,7 @@ function M.is_nodeselector( dataxml,str,pos,ns )
                 for j=1,#tmp[i] do
                     if part == "*" or part == tmp[i][j][".__local_name"] then
                         if type(tmp[i][j]) == "table" then
+                            something_found = true
                             ret[#ret + 1] = tmp[i][j]
                         end
                     end
@@ -315,7 +317,11 @@ function M.is_nodeselector( dataxml,str,pos,ns )
             end
             tmp = ret
         end
-        M.tok = tmp
+        if something_found then
+            M.tok = tmp
+        else
+            M.tok = nilmarker
+        end
         return true
     end
     return false
@@ -920,7 +926,9 @@ end
 M.default_functions.max = function(dataxml,arg)
     local max = tonumber(arg[1])
     if not max then
-        err("First argument in max() is not a number, returning 0")
+        if err then
+            err("First argument in max() is not a number, returning 0")
+        end
         return 0
     end
     for i=2,#arg do
