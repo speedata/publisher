@@ -1533,6 +1533,9 @@ function typeset_table(self)
     local tosplit = self.split
 
     local additional_splits = ( #splits - 1 ) % tosplit
+    if tosplit > 1 then
+        if additional_splits == 0 then additional_splits = tosplit end
+    end
     if additional_splits > 0 then
         local sum_rows = splits[#splits] - splits[#splits - additional_splits]
 
