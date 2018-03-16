@@ -2247,7 +2247,7 @@ function commands.place_object( layoutxml,dataxml )
         origin_y = 100
     end
 
-    if publisher.current_group and area then
+    if publisher.current_group and area and area ~= publisher.default_areaname then
         err("Areas can't be combined with groups")
     end
     area = area or publisher.default_area or publisher.default_areaname
