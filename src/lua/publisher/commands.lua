@@ -2228,7 +2228,9 @@ function commands.place_object( layoutxml,dataxml )
     local id               = publisher.read_attribute(layoutxml,dataxml,"id",         "rawstring")
 
     local css_rules = publisher.css:matches({element = "placeobject", class=class,id=id}) or {}
-
+    if rotate and tonumber(rotate) % 360 ~= 0 then
+        allocate = "no"
+    end
 
     if origin_x == "left" then
         origin_x = 0

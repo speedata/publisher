@@ -5527,10 +5527,10 @@
     </attribute>
     <attribute en="rotate" type="number" optional="yes">
       <description xml:lang="en">
-        <para>Rotates the object.  The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</para>
+        <para>Rotates the object.  The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise. When the angle is != 0 then grid allocation is turned off.</para>
       </description>
       <description xml:lang="de">
-        <para>Dreht das Objekt. Ein Winkel > 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</para>
+        <para>Dreht das Objekt. Ein Winkel > 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn. Wenn der Winkel ungleich 0 ist, wird die Rasterbelegung abgeschaltet.</para>
       </description>
     </attribute>
     <attribute en="maxheight" type="number" optional="yes">
