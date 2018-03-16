@@ -1289,7 +1289,6 @@ end
 
 --- _Must_ be called before something can be put on the page. Looks for hooks to be run before page creation.
 function setup_page(pagenumber)
-    trace("setup_page")
     if current_group then return end
     local thispage
     if pagenumber then
@@ -3987,28 +3986,48 @@ end
 -- (starting from the current_pagenumber).
 -- This is used in tables to get the height of a page in a multi
 -- page table. Called from tabular.lua / set in commands.lua (#table)
-function getheight( relative_pagenumber )
-    local thispagenumber = current_pagenumber + relative_pagenumber - 1
-    -- w("getheight for page number %d which is page number %d in the PDF",relative_pagenumber,thispagenumber)
-    local thispage = pages[thispagenumber]
-    local cp, cg, cpn -- current page, current grid, current pagenumber
+function getheight( relative_framenumber )
+    local grid = current_grid
+    local cp, cg, cpn, cfn -- current page, current grid, current pagenumber, current frame number
+    cp = current_page
+    cg = current_grid
     cpn = current_pagenumber
-    if not thispage then
-        cp = current_page
-        cg = current_grid
-        current_pagenumber = thispagenumber or 0
-        setup_page(thispagenumber)
-        thispage = pages[thispagenumber]
-    end
+
     local areaname = xpath.get_variable("__currentarea")
-    if thispage then
-        local firstrow = thispage.grid:first_free_row(areaname)
-        local space = thispage.grid:remaining_height_sp(firstrow,areaname)
-        current_pagenumber = cpn
-        current_grid = cg
-        current_page = cp
-        return space
+    local number_of_frames = grid:number_of_frames(areaname)
+    local current_framenumber = grid:framenumber(areaname)
+    cfn = current_framenumber
+
+    local thispagenumber = current_pagenumber
+    local thispage
+    c = 1
+    while c < relative_framenumber do
+        if grid:number_of_frames(areaname) == current_framenumber then
+            thispagenumber = thispagenumber + 1
+            thispage = pages[thispagenumber]
+            -- be aware that setup_page(..,) calls setup_page() but without
+            -- parameter. Therefore the current_pagenumber has to be set
+            current_pagenumber = thispagenumber
+            if not thispage then
+                setup_page(thispagenumber)
+            end
+            current_framenumber = 1
+        else
+            current_framenumber = current_framenumber + 1
+        end
+        current_page = pages[thispagenumber]
+        current_pagenumber = thispagenumber
+        current_grid = current_page.grid
+        c = c + 1
     end
+    local firstrow = current_grid:first_free_row(areaname)
+    local remaining_height = current_grid:remaining_height_sp(firstrow,areaname)
+    current_pagenumber = cpn
+    current_grid = cg
+    current_page = cp
+    current_grid:set_framenumber(areaname,cfn)
+
+    return remaining_height
 end
 
 
