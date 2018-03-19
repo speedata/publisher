@@ -28,8 +28,7 @@ def build_go(srcdir,destbin,goos,goarch,targettype)
 	publisher_version = @versions['publisher_version']
 	binaryname = goos == "windows" ? "sp.exe" : "sp"
     # Now compile the go executable
-	separator = `go version`.match('go\d\.(\d+)')[1].to_i < 5 ? " " : "="
-	cmdline = "go build -ldflags '-X main.dest#{separator}#{targettype} -X main.version#{separator}#{publisher_version}' -o #{destbin}/#{binaryname} sp/main"
+	cmdline = "go build -ldflags '-X main.dest=#{targettype} -X main.version=#{publisher_version}' -o #{destbin}/#{binaryname} sp/main"
 	sh cmdline do |ok, res|
 		if ! ok
 	    	puts "Go compilation failed"
@@ -42,8 +41,7 @@ end
 desc "Build sphelper program"
 task :sphelper do
 	ENV["GOBIN"] = "#{installdir}/bin"
-	separator = `go version`.match('go\d\.(\d+)')[1].to_i < 5 ? " " : "="
-	sh " go install -ldflags \"-X main.basedir#{separator}#{installdir} -X main.separator#{separator}#{separator} -s\"  sphelper/sphelper"
+	sh " go install -ldflags \"-X main.basedir=#{installdir} -s\"  sphelper/sphelper"
 end
 
 desc "Show rake description"
