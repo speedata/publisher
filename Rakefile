@@ -1,4 +1,3 @@
-
 require "pathname"
 require 'rake/clean'
 
@@ -62,6 +61,13 @@ end
 desc "Generate documentation"
 task :doc => [:sphelper] do
 	sh "#{installdir}/bin/sphelper doc"
+	puts "done"
+end
+
+# without ugly urls
+desc "Generate site documentation"
+task :sitedoc => [:sphelper] do
+	sh "#{installdir}/bin/sphelper sitedoc"
 	puts "done"
 end
 

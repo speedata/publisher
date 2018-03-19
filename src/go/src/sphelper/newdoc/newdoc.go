@@ -143,7 +143,7 @@ func atttypeinfo(att *commandsxml.Attribute, lang string) string {
 	return string(strings.Join(ret, ", "))
 }
 
-func DoThings(cfg *config.Config) error {
+func DoThings(cfg *config.Config, sitedoc bool) error {
 	r, err := os.Open(filepath.Join(cfg.Basedir(), "doc", "commands-xml", "commands.xml"))
 	if err != nil {
 		return err
@@ -222,7 +222,11 @@ func DoThings(cfg *config.Config) error {
 		return err
 	}
 
-	cmd = exec.Command("hugo")
+	if sitedoc {
+		cmd = exec.Command("hugo", "--canonifyURLs=false", "--uglyURLs=false")
+	} else {
+		cmd = exec.Command("hugo")
+	}
 	cmd.Dir = newmanualhugopath
 	cmd.Env = append(os.Environ(), fmt.Sprintf("PUBLISHER_VERSION=%s", cfg.Publisherversion))
 	cmd.Run()

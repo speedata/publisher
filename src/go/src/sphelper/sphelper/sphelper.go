@@ -13,7 +13,7 @@ import (
 
 	"sphelper/buildsp"
 	"sphelper/config"
-	"sphelper/dashdoc"
+	// "sphelper/dashdoc"
 	"sphelper/dirstructure"
 	"sphelper/genschema"
 	"sphelper/gomddoc"
@@ -28,7 +28,8 @@ var (
 	basedir string
 )
 
-func makedoc(cfg *config.Config) error {
+// sitedoc: make hugo without ugly URLs
+func makedoc(cfg *config.Config, sitedoc bool) error {
 	os.RemoveAll(filepath.Join(cfg.Builddir, "manual"))
 	err := gomddoc.DoThings(cfg)
 	if err != nil {
@@ -38,7 +39,7 @@ func makedoc(cfg *config.Config) error {
 	if err != nil {
 		return err
 	}
-	err = newdoc.DoThings(cfg)
+	err = newdoc.DoThings(cfg, sitedoc)
 	if err != nil {
 		return err
 	}
@@ -52,8 +53,9 @@ func main() {
 	op := optionparser.NewOptionParser()
 	op.On("--basedir DIR", "Base dir", &commandlinebasedir)
 	op.Command("build", "Build go binary")
-	op.Command("dashdoc", "Generate speedata Publisher documentation (for dash)")
+	// op.Command("dashdoc", "Generate speedata Publisher documentation (for dash)")
 	op.Command("doc", "Generate speedata Publisher documentation")
+	op.Command("sitedoc", "Generate speedata Publisher documentation without ugly URLs for Hugo")
 	op.Command("dist", "Generate zip files and windows installers")
 	op.Command("genschema", "Generate schema (layoutschema-en.xml)")
 	op.Command("mkreadme", "Make readme for installation/distribution")
@@ -82,15 +84,21 @@ func main() {
 			os.Exit(-1)
 		}
 	case "doc":
-		err = makedoc(cfg)
+		err = makedoc(cfg, false)
 		if err != nil {
 			log.Fatal(err)
 		}
-	case "dashdoc":
-		err = dashdoc.DoThings(cfg)
+
+	case "sitedoc":
+		err = makedoc(cfg, true)
 		if err != nil {
 			log.Fatal(err)
 		}
+	// case "dashdoc":
+	// 	err = dashdoc.DoThings(cfg)
+	// 	if err != nil {
+	// 		log.Fatal(err)
+	// 	}
 	case "genschema":
 		err = genschema.DoThings(basedir)
 		if err != nil {
@@ -99,7 +107,7 @@ func main() {
 	case "dist":
 		fmt.Println("Generate ZIP files and windows installer")
 		os.RemoveAll(cfg.Builddir)
-		makedoc(cfg)
+		makedoc(cfg, false)
 		destdir := filepath.Join(cfg.Builddir, "speedata-publisher")
 		var srcbindir string
 		if srcbindir = os.Getenv("LUATEX_BIN"); srcbindir == "" || !fileutils.IsDir(srcbindir) {
