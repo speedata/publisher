@@ -101,27 +101,6 @@ task :sourcedoc => [:sphelper] do
 	end
 end
 
-desc "Update gh-pages"
-task :ghpages => [:sphelper] do
-	sh "#{installdir}/bin/sphelper doc"
-	# cp_r "#{builddir}/manual","webpage"
-	# sh "#{installdir}/bin/sphelper dashdoc"
-
-#	IO.write("webpage/speedata_Publisher_(en).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>https://download.speedata.de/private/dashdoc/speedatapublisher-en.tgz</url>\n</entry>\n")
-#	IO.write("webpage/speedata_Publisher_(de).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>https://download.speedata.de/private/dashdoc/speedatapublisher-de.tgz</url>\n</entry>\n")
-end
-
-task :mkdashzip => [:sphelper] do
-	sh "#{installdir}/bin/sphelper doc"
-	cp_r "#{builddir}/manual","webpage"
-	sh "#{installdir}/bin/sphelper dashdoc"
-
-	Dir.chdir(builddir) do
-		sh "tar --exclude='.DS_Store' -czf ../webpage/speedatapublisher-de.tgz speedatapublisher-de.docset"
-		sh "tar --exclude='.DS_Store' -czf ../webpage/speedatapublisher-en.tgz speedatapublisher-en.docset"
-	end
-end
-
 # For now: only a small test
 desc "Test source code"
 task :test do

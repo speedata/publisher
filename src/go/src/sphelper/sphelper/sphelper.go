@@ -13,7 +13,6 @@ import (
 
 	"sphelper/buildsp"
 	"sphelper/config"
-	// "sphelper/dashdoc"
 	"sphelper/dirstructure"
 	"sphelper/genschema"
 	"sphelper/gomddoc"
@@ -53,7 +52,6 @@ func main() {
 	op := optionparser.NewOptionParser()
 	op.On("--basedir DIR", "Base dir", &commandlinebasedir)
 	op.Command("build", "Build go binary")
-	// op.Command("dashdoc", "Generate speedata Publisher documentation (for dash)")
 	op.Command("doc", "Generate speedata Publisher documentation")
 	op.Command("sitedoc", "Generate speedata Publisher documentation without ugly URLs for Hugo")
 	op.Command("dist", "Generate zip files and windows installers")
@@ -94,11 +92,6 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-	// case "dashdoc":
-	// 	err = dashdoc.DoThings(cfg)
-	// 	if err != nil {
-	// 		log.Fatal(err)
-	// 	}
 	case "genschema":
 		err = genschema.DoThings(basedir)
 		if err != nil {
