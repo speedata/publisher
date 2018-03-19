@@ -1,0 +1,720 @@
+:imagesdir: ref/img
+:idprefix: xxx-
+:leveloffset: +1
+
+
+ifndef::backend-docbook5[]
+
+[.multicol]
+<<cmd-a,A>>  +
+<<cmd-action,Action>>  +
+<<cmd-addsearchpath,Addsearchpath>>  +
+<<cmd-atpagecreation,AtPageCreation>>  +
+<<cmd-atpageshipout,AtPageShipout>>  +
+<<cmd-attachfile,AttachFile>>  +
+<<cmd-attribute,Attribute>>  +
+<<cmd-b,B>>  +
+<<cmd-barcode,Barcode>>  +
+<<cmd-bold,Bold>>  +
+<<cmd-bolditalic,BoldItalic>>  +
+<<cmd-bookmark,Bookmark>>  +
+<<cmd-box,Box>>  +
+<<cmd-br,Br>>  +
+<<cmd-case,Case>>  +
+<<cmd-circle,Circle>>  +
+<<cmd-color,Color>>  +
+<<cmd-column,Column>>  +
+<<cmd-columns,Columns>>  +
+<<cmd-compatibility,Compatibility>>  +
+<<cmd-contents,Contents>>  +
+<<cmd-copy_of,Copy-of>>  +
+<<cmd-definecolor,DefineColor>>  +
+<<cmd-definefontalias,DefineFontalias>>  +
+<<cmd-definefontfamily,DefineFontfamily>>  +
+<<cmd-definetextformat,DefineTextformat>>  +
+<<cmd-element,Element>>  +
+<<cmd-fontface,Fontface>>  +
+<<cmd-forall,ForAll>>  +
+<<cmd-frame,Frame>>  +
+<<cmd-grid,Grid>>  +
+<<cmd-group,Group>>  +
+<<cmd-groupcontents,Groupcontents>>  +
+<<cmd-hspace,HSpace>>  +
+<<cmd-hyphenation,Hyphenation>>  +
+<<cmd-i,I>>  +
+<<cmd-image,Image>>  +
+<<cmd-include,Include>>  +
+<<cmd-initial,Initial>>  +
+<<cmd-insertpages,InsertPages>>  +
+<<cmd-italic,Italic>>  +
+<<cmd-layout,Layout>>  +
+<<cmd-li,Li>>  +
+<<cmd-loaddataset,LoadDataset>>  +
+<<cmd-loadfontfile,LoadFontfile>>  +
+<<cmd-loop,Loop>>  +
+<<cmd-makeindex,Makeindex>>  +
+<<cmd-margin,Margin>>  +
+<<cmd-mark,Mark>>  +
+<<cmd-message,Message>>  +
+<<cmd-newpage,NewPage>>  +
+<<cmd-nextframe,NextFrame>>  +
+<<cmd-nextrow,NextRow>>  +
+<<cmd-nobreak,NoBreak>>  +
+<<cmd-ol,Ol>>  +
+<<cmd-options,Options>>  +
+<<cmd-otherwise,Otherwise>>  +
+<<cmd-output,Output>>  +
+<<cmd-overlay,Overlay>>  +
+<<cmd-pageformat,Pageformat>>  +
+<<cmd-pagetype,Pagetype>>  +
+<<cmd-paragraph,Paragraph>>  +
+<<cmd-pdfoptions,PDFOptions>>  +
+<<cmd-placeobject,PlaceObject>>  +
+<<cmd-position,Position>>  +
+<<cmd-positioningarea,PositioningArea>>  +
+<<cmd-positioningframe,PositioningFrame>>  +
+<<cmd-processnode,ProcessNode>>  +
+<<cmd-record,Record>>  +
+<<cmd-regular,Regular>>  +
+<<cmd-rule,Rule>>  +
+<<cmd-savedataset,SaveDataset>>  +
+<<cmd-savepages,SavePages>>  +
+<<cmd-setgrid,SetGrid>>  +
+<<cmd-setvariable,SetVariable>>  +
+<<cmd-sortsequence,SortSequence>>  +
+<<cmd-stylesheet,Stylesheet>>  +
+<<cmd-span,Span>>  +
+<<cmd-sub,Sub>>  +
+<<cmd-sup,Sup>>  +
+<<cmd-switch,Switch>>  +
+<<cmd-table,Table>>  +
+<<cmd-tablefoot,Tablefoot>>  +
+<<cmd-tablehead,Tablehead>>  +
+<<cmd-tablerule,Tablerule>>  +
+<<cmd-td,Td>>  +
+<<cmd-text,Text>>  +
+<<cmd-textblock,Textblock>>  +
+<<cmd-tr,Tr>>  +
+<<cmd-trace,Trace>>  +
+<<cmd-transformation,Transformation>>  +
+<<cmd-u,U>>  +
+<<cmd-ul,Ul>>  +
+<<cmd-until,Until>>  +
+<<cmd-url,URL>>  +
+<<cmd-value,Value>>  +
+<<cmd-vspace,VSpace>>  +
+<<cmd-while,While>>  +
+endif::[]
+
+
+include::ref/a.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-textformatierung,Textformatierung>>.
+
+include::ref/action.adoc[]
+
+== Siehe auch
+
+Den Befehl <<cmd-mark,`Mark`>> und das Kapitel <<ch-verzeichnisseerstellen-marker,Verzeichnisse erstellen (Marker)>>
+
+
+include::ref/addsearchpath.adoc[]
+
+== Siehe auch
+
+
+include::ref/atpagecreation.adoc[]
+
+== Siehe auch
+
+Befehle <<cmd-atpageshipout,`AtPageShipout`>> und <<cmd-pagetype,`Pagetype`>> sowie das Kapitel <<ch-seitentypen,Seitentypen>>.
+
+
+include::ref/atpageshipout.adoc[]
+
+== Siehe auch
+
+Befehle <<cmd-atpagecreation,`AtPageCreation`>> und <<cmd-pagetype,`Pagetype`>> sowie das Kapitel <<ch-seitentypen,Seitentypen>>.
+
+include::ref/attachfile.adoc[]
+
+== Siehe auch
+
+
+include::ref/attribute.adoc[]
+
+== Siehe auch
+
+Befehle <<cmd-element,`Element`>>, <<cmd-loaddataset,`LoadDataset`>> und <<cmd-savedataset,`SaveDataset`>> sowie den Abschnitt <<ch-xmlstrukturen,Erzeugen von XML-Strukturen>>.
+
+
+include::ref/b.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-textformatierung,Textformatierung>> sowie die Befehle <<cmd-i,`<I>`>> und <<cmd-u,`<U>`>>.
+
+include::ref/barcode.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-objekteausgeben-barcode,`<Barcode>` im Grundlagenkapitel>>.
+
+
+include::ref/bold.adoc[]
+
+== Siehe auch
+
+Befehl <<cmd-definefontfamily,`DefineFontfamily`>>, Kapitel <<ch-einbindungschriftarten>>.
+
+
+include::ref/bolditalic.adoc[]
+
+== Siehe auch
+
+Befehl <<cmd-definefontfamily,`DefineFontfamily`>>, Kapitel <<ch-einbindungschriftarten>>.
+
+include::ref/bookmark.adoc[]
+
+== Siehe auch
+
+Kapitel <<ch-bookmarks,über Lesezeichen>>.
+
+include::ref/box.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-objekteausgeben-box,`<Box>` im Grundlagenkapitel>>.
+
+include::ref/br.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-textformatierung,Textformatierung>>.
+
+include::ref/case.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-fallunterscheidungen,Programmierung>>.
+
+
+include::ref/circle.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-objekteausgeben-circle,`<Circle>` im Grundlagenkapitel>>.
+
+include::ref/color.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-textformatierung,Textformatierung>>, das Kapitel <<ch-farben,über Farben>> und den Befehl <<cmd-definecolor,`<DefineColor>`>>.
+
+include::ref/column.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-tab-spaltenbreiten,Spaltenangaben>> im Kapitel Tabellen.
+
+
+include::ref/columns.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-tab-spaltenbreiten,Spaltenangaben>> im Kapitel Tabellen.
+
+
+include::ref/compatibility.adoc[]
+include::ref/contents.adoc[]
+
+== Siehe auch
+
+Den Befehl <<cmd-group,Group>> und das Kapitel über <<ch-gruppen,Gruppen>>.
+
+include::ref/copy-of.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-copyof,`<Copy-of>`>>.
+
+include::ref/definecolor.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-farben,Farben>>.
+
+include::ref/definefontalias.adoc[]
+
+== Siehe auch
+
+Das Kapitel über <<ch-einbindungschriftarten>> und den Befehl <<cmd-definefontfamily,`<DefineFontfamily>`>> sowie <<cmd-loadfontfile,`<LoadFontfile>`>>.
+
+include::ref/definefontfamily.adoc[]
+
+== Siehe auch
+
+Das Kapitel über <<ch-einbindungschriftarten>> und den Befehl <<cmd-definefontalias,`<DefineFontalias>`>> sowie <<cmd-loadfontfile,`<LoadFontfile>`>>.
+
+include::ref/definetextformat.adoc[]
+
+== Siehe auch
+
+Das Kapitel über <<ch-textformate,Textformate>>.
+
+include::ref/element.adoc[]
+
+== Siehe auch
+
+Befehle <<cmd-attribute,`Attribute`>>, <<cmd-loaddataset,`LoadDataset`>> und <<cmd-savedataset,`SaveDataset`>> sowie den Abschnitt <<ch-xmlstrukturen,Erzeugen von XML-Strukturen>>.
+
+
+include::ref/fontface.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-textformatierung,Textformatierung>>.
+
+
+include::ref/forall.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-datenstrukturierung,Datenstrukturierung>>.
+
+include::ref/frame.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-objekteausgeben-frame,Rahmen im Grundlagenkapitel>>.
+
+include::ref/grid.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-raster,Raster>> und das Kapitel über <<ch-gruppen,Gruppen>>.
+
+
+include::ref/group.adoc[]
+
+== Siehe auch
+
+Das Kapitel über <<ch-gruppen,Gruppen>>.
+
+include::ref/groupcontents.adoc[]
+
+== Siehe auch
+
+Das Kapitel über <<ch-gruppen,Gruppen>>.
+
+
+include::ref/hspace.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-textformatierung,Textformatierung>>.
+
+include::ref/hyphenation.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-silbentrennung-sprache,Silbentrennung und Sprache>>.
+
+include::ref/i.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-textformatierung,Textformatierung>> sowie die Befehle <<cmd-b,`<B>`>> und <<cmd-u,`<U>`>>.
+
+include::ref/image.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-objekteausgeben-bilder,`<Image>` im Grundlagenkapitel>>.
+
+
+include::ref/include.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-include,Regelwerke in einzelne Dateien teilen>>.
+
+
+include::ref/initial.adoc[]
+
+== Siehe auch
+
+
+
+
+include::ref/insertpages.adoc[]
+
+
+== Siehe auch
+
+Den Befehl <<cmd-savepages,`<SavePages>`>> und den Abschnitt <<ch-savepages,Virtuelle Seiten>>.
+
+
+include::ref/italic.adoc[]
+
+== Siehe auch
+
+Befehl <<cmd-definefontfamily,`DefineFontfamily`>>, Kapitel <<ch-einbindungschriftarten>>.
+
+
+include::ref/layout.adoc[]
+include::ref/li.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-aufzaehlungslisten,Aufzählungslisten>> sowie die Befehle <<cmd-ol,`<Ol>`>> und <<cmd-ul,`<Ul>`>>.
+
+include::ref/loaddataset.adoc[]
+
+== Siehe auch
+
+Befehle <<cmd-element,`Element`>>, <<cmd-attribute,`Attribute`>> und <<cmd-savedataset,`SaveDataset`>> sowie den Abschnitt <<ch-xmlstrukturen,Erzeugen von XML-Strukturen>>.
+
+include::ref/loadfontfile.adoc[]
+
+== Siehe auch
+
+Befehl <<cmd-definefontfamily,`DefineFontfamily`>>, Kapitel <<ch-einbindungschriftarten>>.
+
+
+include::ref/loop.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-programmierung-schleifen,Programmierung>>.
+
+include::ref/makeindex.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-indexerstellen,Stichwortverzeichnisse>>.
+
+
+include::ref/margin.adoc[]
+
+== Siehe auch
+
+Den Befehl <<cmd-pagetype,`Pagetype`>>, das Kapitel <<ch-seitentypen,Seitentypen>>.
+
+include::ref/mark.adoc[]
+
+== Siehe auch
+
+Den Befehl <<cmd-action,`Action`>> und das Kapitel <<ch-verzeichnisseerstellen-marker,Verzeichnisse erstellen (Marker)>>.
+
+include::ref/message.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-tracing,Fehlersuche>>.
+
+include::ref/newpage.adoc[]
+
+
+
+include::ref/nextframe.adoc[]
+
+== Siehe auch
+
+Den Abschnitt <<ch-naechster-rahmen,Überlauf in den nächsten Rahmen>> im Kapitel über Seitenbereiche.
+
+
+include::ref/nextrow.adoc[]
+
+== Siehe auch
+
+Den Abschnitt <<ch-cursor,Cursor>> im Kapitel über Seitenbereiche.
+
+
+include::ref/nobreak.adoc[]
+
+== Siehe auch
+
+Den Abschnitt <<ch-nobreak,Verhindern von Textumbruch>> im Grundlagenkapitel.
+
+
+
+include::ref/ol.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-aufzaehlungslisten,Aufzählungslisten>> sowie die Befehle <<cmd-li,`<Li>`>> und <<cmd-ol,`<Ol>`>>.
+
+
+include::ref/options.adoc[]
+== Siehe auch
+
+<<ch-kommandozeile,Starten des Publishers über Kommandozeile>>, <<ch-konfiguration,Konfigurieren des Publishers>>
+
+include::ref/otherwise.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-fallunterscheidungen,Programmierung>>.
+
+
+include::ref/output.adoc[]
+
+== Siehe auch
+
+Den Befehl <<ch-objekteausgebentext,`<Text>` im Grundlagenkapitel>>.
+
+
+
+include::ref/overlay.adoc[]
+== Siehe auch
+
+Den Abschnitt <<ch-bildhintertext,Bild hinter dem Text>> im Kapitel über Tabellen.
+
+
+include::ref/pageformat.adoc[]
+
+== Siehe auch
+
+Den Abschnitt <<ch-druckausgabe,Druckausgabe>>.
+
+
+include::ref/pagetype.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-seitentypen,Seitentypen>>.
+
+
+include::ref/paragraph.adoc[]
+== Siehe auch
+
+Das Kapitel <<ch-textformatierung,Textformatierung>>.
+
+
+
+include::ref/pdfoptions.adoc[]
+
+== Siehe auch
+
+Den Abschnitt <<ch-druckausgabe,Druckausgabe>>.
+
+
+include::ref/placeobject.adoc[]
+
+== Siehe auch
+
+Die ausführliche Beschreibung in <<ch-objekteausgeben,Objekte ausgeben>>.
+
+
+include::ref/position.adoc[]
+
+== Siehe auch
+
+Den Abschnitt <<ch-bildhintertext,Bild hinter dem Text>> im Kapitel über Tabellen.
+
+include::ref/positioningarea.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-positioningarea,Bereiche auf der Seite>>.
+
+
+include::ref/positioningframe.adoc[]
+== Siehe auch
+
+Das Kapitel <<ch-positioningarea,Bereiche auf der Seite>>.
+
+
+include::ref/processnode.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-datenstrukturierung,Datenstrukturierung>>.
+
+include::ref/record.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-datenstrukturierung,Datenstrukturierung>>.
+
+include::ref/regular.adoc[]
+
+== Siehe auch
+
+Befehl <<cmd-definefontfamily,`DefineFontfamily`>>, Kapitel <<ch-einbindungschriftarten>>.
+
+
+include::ref/rule.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-objekteausgeben-rule,Linien im Grundlagenkapitel>>.
+
+include::ref/savedataset.adoc[]
+
+== Siehe auch
+
+Befehle <<cmd-attribute,`<Attribute>`>>, <<cmd-element,`<Element>`>> und <<cmd-loaddataset,`<LoadDataset>`>> sowie den Abschnitt <<ch-xmlstrukturen,Erzeugen von XML-Strukturen>>.
+
+
+include::ref/savepages.adoc[]
+== Siehe auch
+
+Den Befehl <<cmd-insertpages,`<InsertPages>`>> und den Abschnitt <<ch-savepages,Virtuelle Seiten>>.
+
+include::ref/setgrid.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-raster,Raster>>.
+
+include::ref/setvariable.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-programmierung,Programmierung>>.
+
+
+include::ref/sortsequence.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-sortierenvondaten,Sortieren von Daten>>.
+
+include::ref/stylesheet.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-css,über CSS>>.
+
+include::ref/span.adoc[]
+
+== Siehe auch
+
+
+
+include::ref/sub.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-textformatierung,Textformatierung>> sowie den Befehl <<cmd-sup,`<Sup>`>>
+
+include::ref/sup.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-textformatierung,Textformatierung>> sowie den Befehl <<cmd-sub,`<Sub>`>>
+
+include::ref/switch.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-fallunterscheidungen,Programmierung>>.
+
+
+include::ref/table.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-tabellen2,Tabellen>>.
+
+
+include::ref/tablefoot.adoc[]
+== Siehe auch
+
+Befehl <<cmd-table,Table>>, Kapitel über Tabellen.
+
+include::ref/tablehead.adoc[]
+== Siehe auch
+
+Befehl <<cmd-table,Table>>, Kapitel über Tabellen.
+
+include::ref/tablerule.adoc[]
+== Siehe auch
+
+Befehl <<cmd-table,Table>>, Kapitel über Tabellen.
+
+include::ref/td.adoc[]
+== Siehe auch
+
+Befehl <<cmd-table,Table>>, Kapitel über Tabellen.
+
+include::ref/text.adoc[]
+
+== Siehe auch
+
+Den Befehl <<ch-objekteausgebentext,`<Text>` im Grundlagenkapitel>>.
+
+include::ref/textblock.adoc[]
+
+== Siehe auch
+
+Den Befehl <<ch-objekteausgebentextblock,`<Textblock>` im Grundlagenkapitel>>.
+
+include::ref/tr.adoc[]
+
+== Siehe auch
+
+Befehl <<cmd-table,Table>>, Kapitel über Tabellen.
+
+include::ref/trace.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-tracing,Fehlersuche>>.
+
+
+include::ref/transformation.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-objekteausgeben-transoformation,`<Transformation>` im Grundlagenkapitel>>.
+
+include::ref/u.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-textformatierung,Textformatierung>> sowie die Befehle <<cmd-b,`<B>`>> und <<cmd-i,`<I>`>>.
+
+include::ref/ul.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-aufzaehlungslisten,Aufzählungslisten>> sowie die Befehle <<cmd-li,`<Li>`>> und <<cmd-ol,`<Ol>`>>.
+
+
+include::ref/until.adoc[]
+
+== Siehe auch
+
+Das Kapitel <<ch-programmierung-schleifen,Schleifen>> im Kapitel Programmierung.
+
+include::ref/url.adoc[]
+
+
+== Siehe auch
+
+Den Abschnitt über <<ch-umbrechenurl,Umbrechen von URLs>> im Kapitel über Textformatierung.
+
+
+
+
+include::ref/value.adoc[]
+include::ref/vspace.adoc[]
+
+== Siehe auch
+
+Den Abschnitt <<ch-tab-zellen-und-zeilen,Tabellenzellen und Tabellenzeilen>> im Kapitel Tabellen.
+
+
+include::ref/while.adoc[]
+
+== Siehe auch
+
+Den Abschnitt <<ch-programmierung-schleifen,Schleifen>> im Kapitel Programmierung.
+
+
+:leveloffset: -1

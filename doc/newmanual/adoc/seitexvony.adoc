@@ -1,0 +1,126 @@
+[[ch-seitexvony]]
+= Seitenzahlen: Seite x von y
+
+Um die Länge des Dokuments in Seiten anzugeben, ist ein zweiter Durchlauf des Publishers
+notwendig:
+Am Ende des ersten Durchlaufs wird die aktuelle (= letzte)
+Seitennummer gespeichert, die man anschließend in den folgenden Durchläufen
+nutzen kann.
+
+Das folgende Beispiel erzeugt einige Seiten mit Ausgaben in der Form `Seite 1 von ??`.
+Das dient als Basis für die Ergänzungen.
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="data">
+    <!-- ?? ist zunächst ein Platzhalter, der später überschrieben wird -->
+    <SetVariable variable="maxseiten" select="'??'"/>
+
+    <Loop select="10" variable="i">
+      <PlaceObject>
+        <Textblock>
+          <Paragraph>
+            <Value
+              select="concat('Seite ', sd:current-page(), ' von ', $maxseiten )"/>
+          </Paragraph>
+        </Textblock>
+      </PlaceObject>
+      <SetVariable variable="letzteseite" select="sd:current-page()"/>
+      <NewPage/>
+    </Loop>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+Am Ende der letzte Seite kann die Information mithilfe von `<SaveDataset>` für den nächsten Lauf zwischengespeichert werden:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<SetVariable variable="attSeitenzahl">
+  <Attribute name="anzahlseiten" select="$letzteseite"/>
+</SetVariable>
+<SaveDataset
+  filename="seitenzahl"
+  elementname="seiteninfo"
+  attributes="$attSeitenzahl"/>
+-------------------------------------------------------------------------------
+
+`<SaveDataset>` erwartet eine XML-Struktur  bei der
+Attribute im Element `<Attribute>` und, Elemente in `<Element>` gespeichert werden, wobei dieser Befehl wiederum `<Attribute>` als Kindelemente haben kann.
+Diese Struktur wird als XML auf die Festplatte gespeichert und hat in diesem Beispiel die folgende Form:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<seiteninfo anzahlseiten="10" />
+-------------------------------------------------------------------------------
+
+
+Zu Beginn des Laufs kann nun die Datei eingelesen werden, falls sie existiert (d.h. im ersten Lauf wird kein Fehler erzeugt, weil die Datei noch nicht erzeugt wurde):
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Record element="data">
+  <SetVariable variable="maxseiten" select="'??'"/>
+  <LoadDataset name="seitenzahl"/>
+  ...
+-------------------------------------------------------------------------------
+
+und dazu
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Record element="seiteninfo">
+  <SetVariable variable="maxseiten" select="@anzahlseiten"/>
+</Record>
+-------------------------------------------------------------------------------
+
+Der Datensatz `seiteninfo` wird dann aufgerufen, wenn die XML-Datei `seitenzahl` eingelesen wird.
+Es wird nichts anderes gemacht, als die kurz vorher definierte Variable `maxseiten` mit dem korrekten Inhalt zu überschreiben.
+
+Das vollständige Beispiel sieht nun so aus:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <!-- wird erst ausgeführt, wenn die XML-Datei 'seitenzahl'
+       existiert, d. h. erst ab dem zweiten Durchlauf -->
+  <Record element="seiteninfo">
+    <SetVariable variable="maxseiten" select="@anzahlseiten"/>
+  </Record>
+
+  <!-- start der Datenverarbeitung -->
+  <Record element="data">
+    <SetVariable variable="maxseiten" select="'??'"/>
+    <LoadDataset name="seitenzahl"/>
+    <Loop select="10" variable="i">
+      <PlaceObject>
+        <Textblock>
+          <Paragraph>
+            <Value
+              select="concat('Seite ', sd:current-page(), ' von ', $maxseiten )"/>
+          </Paragraph>
+        </Textblock>
+      </PlaceObject>
+      <SetVariable variable="letzteseite" select="sd:current-page()"/>
+      <NewPage/>
+    </Loop>
+    <!--  Nun steht die Anzahl der Seiten zur Verfügung  -->
+    <SetVariable variable="attSeitenzahl">
+      <Attribute name="anzahlseiten" select="$letzteseite"/>
+    </SetVariable>
+    <SaveDataset
+      filename="seitenzahl"
+      elementname="seiteninfo"
+      attributes="$attSeitenzahl"/>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+

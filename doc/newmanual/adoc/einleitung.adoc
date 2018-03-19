@@ -1,0 +1,62 @@
+[[ch-einleitung]]
+= Einleitung
+
+Der speedata Publisher ist eine Software, um vollautomatisch aus XML-Daten heraus PDF-Dateien zu erstellen.
+Die Daten können beispielsweise Produktdaten, strukturierte Texte oder andere Inhalte sein.
+
+image::xmltopdf.png[width=50%,scaledwidth=100%]
+
+
+Die Anweisungen, wie etwas dargestellt werden soll, liegen getrennt von den Daten vor.
+Sie sind in einer speziell für diesen Zweck entwickelten Programmiersprache formuliert.
+
+
+[[ch-wofuer_das_ganze]]
+== Wofür das Ganze?
+
+Mit dem speedata Publisher lassen sich viele verschiedene Dokumente erstellen.
+Klassische Anwendungsfälle sind
+
+* Produktkataloge
+* Reiseführer
+* Preislisten
+* Datenblätter
+
+und viele andere Dokumente, bei denen es darauf ankommt, reproduzierbar, schnell und zuverlässig ein Ergebnis zu erhalten, das auch noch »schön« ist.
+
+== Schön und vollautomatisch
+
+Der speedata Publisher ist eine nicht-interaktive Publishing-Software.
+Das heißt, es gibt keine graphische Oberfläche (GUI).
+Alle Anweisungen müssen vor dem Publikationsprozess feststehen und legen fest, wie die Daten im PDF angeordnet werden.
+Durch die einzigartige Kombination von ausgefeilten Algorithmen und Programmierbarkeit lassen sich äußerst flexible Layouts realisieren, die bisher nur interaktiven Desktop-Publishing (DTP) Programmen wie InDesign von Adobe vorbehalten war.
+
+
+
+== Wo bekommt man die Software und wie wird sie gestartet?
+
+Die Software kann kostenlos heruntergeladen werden (siehe Kapitel <<ch-installation,Installation>>) und wird über die Konsole bzw. Shell gestartet.
+Der Befehl, um den Publisher zu starten, heißt `sp`.
+Damit lässt sich alle Funktionalität nutzen.
+Parameter können über die Kommandozeile  oder über eine Konfigurationsdatei angegeben werden.
+
+
+[source,shell,subs="verbatim,quotes"]
+-------------------------------------------------------------------------------
+*$* sp
+-------------------------------------------------------------------------------
+
+Erläuterungen zum Starten des Publishers gibt es im Abschnitt über die <<ch-kommandozeile,Kommandozeile>>.
+
+
+== Beispiele
+
+Auf Github gibt es ein eigenes Repository mit Bespielen (https://github.com/speedata/examples).
+Dort sind vollständige Dokumente hinterlegt, anhand derer man verschiedene Funktionen ausprobieren kann.
+
+.Beispiele aus dem Repository
+image::beispiele.png[width=100%]
+
+
+
+// EOF

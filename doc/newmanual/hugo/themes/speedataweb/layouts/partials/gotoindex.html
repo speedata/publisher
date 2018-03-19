@@ -1,0 +1,13 @@
+{{ $here := .}}
+{{ $indexPagePath := printf "%s" "_index.md" -}}
+<a href="{{ range where .Site.Pages "Type" "page" -}}
+    {{- if eq .File.Path $indexPagePath -}}
+    {{- $pathOfhere :=  substr $here.RelPermalink 1 -}}
+    {{- $arrayOfDirsAndFiles := split $pathOfhere "/" -}}
+    {{- $pageToLink := . -}}
+    {{- $dirsToGoBack := sub (len $arrayOfDirsAndFiles) (1) -}}
+       {{- if gt $dirsToGoBack 0 -}}
+         {{- range (first $dirsToGoBack $arrayOfDirsAndFiles) -}}../{{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}index.html">Startseite</a>

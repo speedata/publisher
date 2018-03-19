@@ -98,11 +98,11 @@ end
 desc "Update gh-pages"
 task :ghpages => [:sphelper] do
 	sh "#{installdir}/bin/sphelper doc"
-	cp_r "#{builddir}/manual","webpage"
-	sh "#{installdir}/bin/sphelper dashdoc"
+	# cp_r "#{builddir}/manual","webpage"
+	# sh "#{installdir}/bin/sphelper dashdoc"
 
-	IO.write("webpage/speedata_Publisher_(en).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>https://download.speedata.de/private/dashdoc/speedatapublisher-en.tgz</url>\n</entry>\n")
-	IO.write("webpage/speedata_Publisher_(de).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>https://download.speedata.de/private/dashdoc/speedatapublisher-de.tgz</url>\n</entry>\n")
+#	IO.write("webpage/speedata_Publisher_(en).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>https://download.speedata.de/private/dashdoc/speedatapublisher-en.tgz</url>\n</entry>\n")
+#	IO.write("webpage/speedata_Publisher_(de).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>https://download.speedata.de/private/dashdoc/speedatapublisher-de.tgz</url>\n</entry>\n")
 end
 
 task :mkdashzip => [:sphelper] do

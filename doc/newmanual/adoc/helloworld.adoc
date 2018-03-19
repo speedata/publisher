@@ -1,0 +1,97 @@
+[[ch-hallowelt]]
+= Hallo Welt!
+
+Der Klassiker: »((Hallo Welt))!«.
+Oder: wie sieht ein einfaches Dokument aus?
+Wie schon beschrieben, besteht die Eingabe für den Publisher aus zwei Dateien: der Datendatei und der Layoutdatei.
+Beide müssen im XML-Format vorliegen und immer vorhanden sein.
+Die Datendatei speichert man unter dem Namen `data.xml` und die Layoutdatei unter `layout.xml`.
+Diese beiden Dateien erstellt man am besten mit einem XML-Editor, es reicht für die ersten Schritte ein einfacher Texteditor wie https://atom.io/[Atom] oder https://macromates.com/[Textmate].
+
+Die Datendatei für das »Hallo Welt« Beispiel mit dem Namen `data.xml`:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<data>Hallo Welt!</data>
+-------------------------------------------------------------------------------
+
+Das reicht für das einfache Beispiel aus.
+Die Layoutdatei ist etwas umfangreicher (speichern unter `layout.xml)`:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value select="."/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+Diese beiden Dateien werden in einem sonst leeren Verzeichnis gespeichert.
+Auf der Kommandozeile wechselt man nun in dieses Verzeichnis (mit `cd <Verzeichnisname>`) und ruft den Publisher über den Befehl
+
+[source,shell,subs="verbatim,quotes"]
+-------------------------------------------------------------------------------
+*$* sp
+-------------------------------------------------------------------------------
+
+auf.
+Das `$`-Zeichen soll den Prompt **darstellen** und wird _nicht_ mit eingegeben.
+Wenn alles glatt läuft, ist das Ergebnis eine PDF-Datei mit dem Namen `publisher.pdf` im gleichen Verzeichnis.
+
+TIP: Unter Windows wird unter Umständen gefragt, ob der Publisher eine Netzwerkverbindung öffnen darf.
+Das ist harmlos: beim Start des Publishers werden zwei Prozesse gestartet, die über eine Netzwerkverbindung miteinander kommunizieren.
+
+TIP: Ebenfalls für Windows-Benutzer: wenn der Publisher das PDF nicht erzeugen kann, liegt das manchmal daran, dass dieselbe Datei noch in einem Fenster geöffnet ist.
+Das kann der Adobe Reader sein, aber auch der Windows Explorer.
+
+
+[[ch-hallowelt-erlaeutert]]
+== Das »Hallo Welt!« Beispiel erläutert
+
+Hier folgt eine kurze Erklärung der beiden Dateien.
+Die Datendatei kann beliebig strukturiert sein, solange der Inhalt wohlgeformtes XML ist (siehe <<app-glossar,Glossar>>).
+
+[source, xml]
+-------------------------------------------------------------------------------
+<data>Hallo Welt!</data>
+-------------------------------------------------------------------------------
+
+Die Layoutdatei ist etwas komplizierter, zumindest auf den ersten Blick.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout  <!--1-->
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="data">  <!--2-->
+    <PlaceObject>  <!--3-->
+      <Textblock>
+        <Paragraph>
+          <Value select="."/> <!--4-->
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+<1> Das Wurzelelement heißt `Layout` und hat den Namensraum `urn:speedata.de:2009/publisher/en`. Der zweite Namensraum ist für die eingebauten Funktionen notwendig, wird aber in dem Beispiel nicht genutzt. (Tipp: trotzdem immer im Layout angeben, damit später keine Überraschungen auftauchen.)
+<2> Hier startet die Datenverarbeitung. Das Wurzelelement der Datendatei wird bei dem Attribut `element` angegeben.
+<3> `<PlaceObject>` ist der Befehl, um Dinge (Texte, Bilder, Kästchen, ...) in das PDF auszugeben.
+<4> Der Punkt beim Attribut `select` bedeutet »das aktuelle Element«, in diesem Fall das Wurzelelement.
+Hier wird der Textwert des Elements ausgegeben, also die Zeichenkette `Hallo Welt!`
+
+Mehr soll an dieser Stelle nicht erörtert werden.
+Vielmehr gibt es ein Verweis auf die entsprechenden Kapitel in dieser Anleitung: Unter <<ch-organisationdaten,Organisation der Daten für die Datenverarbeitung>> wird beschrieben, wie die Datendatei und die Layoutdatei zu strukturieren sind, und unter <<ch-objekteausgeben,Ausgabe von Objekten>> wird der Befehl `PlaceObject` beschrieben.
+
+// EOF

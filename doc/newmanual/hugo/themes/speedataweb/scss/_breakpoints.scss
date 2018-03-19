@@ -1,0 +1,36 @@
+/*** mobile first! ***/
+
+/*****************************************************************************/
+/*																			 */
+/*                            		      max-desktop--,      				 */
+/*                     		  max-tablet-quer--,       ,					 */
+/*                	        max-tablet--,      ,	   ,					 */
+/*         		  max-phone-quer--,     ,      ,	   , 					 */
+/* 		  max-large-phone--,      ,     ,      ,	   ,					 */
+/*     max-phone----,      ,      ,     ,      ,	   ,					 */
+/*                  ,      ,      ,     ,	   ,	   ,   					 */
+/*      		   320    480    600   768   1024   1280   1800				 */
+/*                  '	   '      '     '      '      '      '-- maxSize	 */
+/*                  '	   '      '     '      '      '-- desktop 			 */
+/*                  ' 	   '      '     '      '-- tablet-quer 				 */
+/*                  '	   '      '     '-- tablet 							 */
+/*                  '	   '      '-- phone-quer 							 */
+/*                  '	   '-- large-phone 									 */
+/*					'-- phone			  								     */
+/*																			 */
+/*****************************************************************************/
+
+$phone :  "screen and (min-width: 320px)";
+$large-phone :  "screen and (min-width: 480px)";
+$phone-quer :  "screen and (min-width: 600px)";
+$tablet : "screen and (min-width: 768px)";
+$tablet-quer : "screen and (min-width: 1024px)";
+$desktop : "screen and (min-width: 1280px)";
+$maxSize : "screen and (min-width: 1800px)";
+
+$max-phone :  "screen and (max-width: 319px)";
+$max-large-phone :  "screen and (max-width: 479px)";
+$max-phone-quer :  "screen and (max-width: 599px)";
+$max-tablet :  "screen and (max-width: 767px)";
+$max-tablet-quer : "screen and (max-width: 1023px)";
+$max-desktop : "screen and (max-width: 1279px)";

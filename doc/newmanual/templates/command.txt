@@ -1,0 +1,46 @@
+[.commanddetail]
+[[{{.Command.CmdLink}}]]
+= {{ .Command.Name }}
+
+{{  .Command.DescriptionAdoc .Lang }}
+
+
+
+[.Flushleft]
+== {{ translate .Lang "Child elements" }}
+
+{{ childelements .Lang (.Command.Childelements .Lang ) }}
+
+[.Flushleft]
+== {{ translate .Lang "Parent elements" }}
+
+{{ parentelements .Lang .Command }}
+
+
+== {{ translate $.Lang "Attributes" }}
+{{ with .Command.Attributes }}
+{{ range $.Command.Attributes }}
+[[{{.Attlink $.Command}}]]`{{.Name}}` ({{atttypeinfo . $.Lang}}{{ with .Css }}, {{ translate $.Lang "CSS property"}}: {{.}}{{end}})::
+  {{.DescriptionAdoc $.Lang }}
+{{ end }}{{else}}(keine){{ end }}
+
+{{ with (.Command.RemarkAdoc $.Lang)}}
+== {{ translate $.Lang "Remarks" }}
+{{ . }}
+{{ end }}
+
+
+== {{ translate .Lang "Example" }}
+
+{{ .Command.ExampleAdoc .Lang }}
+
+
+
+{{ with (.Command.InfoAdoc $.Lang) }}[.Flushleft]
+== {{ translate $.Lang "Info" }}
+{{.}}
+{{end}}
+
+
+
+//

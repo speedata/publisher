@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>{{ with .Title}}{{.}}{{ else }}speedata GmbH{{end}}</title>
+
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<meta name="robots" content="index,follow" />
+	<meta name="googlebot" content="index,follow" />
+	<link rel="icon" href="/favicon.png" type="image/png">
+
+	<link rel="stylesheet" href="/css/style.css" />
+	<link rel="stylesheet" href="/font-awesome-4.7.0/css/font-awesome.min.css">
+
+{{ if eq .Site.Params.type "website"}}
+	<link rel="stylesheet" href="/css/juxtapose.css">
+	<link rel="stylesheet" type="text/css" href="/css/magnific-popup.css">
+	<link rel="stylesheet" type="text/css" href="/css/iconfont.css">
+{{ else }}
+	<link rel="stylesheet" type="text/css" href="/css/roboto.css">
+{{ end }}
+
+</head>
+<body class="{{.Site.Params.type }}{{if .Page.IsHome}}{{ if eq .Site.Params.type "website"}} startseite{{end}}{{end}}">
+
+

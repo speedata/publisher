@@ -1,0 +1,18 @@
+{{if eq .Site.Params.type "handbuch"}}
+<div id="navi3">
+	<p>Weiterführende Links:</p>
+	<ul>
+		<li><a href="https://blog.speedata.de">Blog</a></li>
+		<li><a href="https://www.speedata.de">Webseite</a></li>
+	</ul>
+</div>
+{{ else }}
+<div id="navi3">
+	<p>Jetzt mehr erfahren:</p>
+	<ul>
+		<li><a href="/unternehmen/termin">Anrufen</a></li>
+		<li><a href="/unternehmen/termin">E-Mail</a></li>
+		<li><a href="/unternehmen/termin">Termin</a></li>
+	</ul>
+</div>
+{{ end }}

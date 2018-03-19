@@ -1,0 +1,41 @@
+:page: _page
+
+[appendix,glossary]
+[[app-glossar]]
+= Glossar
+
+Area::
+  Siehe Platzierungsbereich.
+
+Database Publishing::
+  Allgemeiner Begriff der eine Reihe von Techniken beschreibt, um (XML) Daten in ein Ausgabeformat (z. B. PDF) zu bringen, oftmals mithilfe von Adobe InDesign.
+
+Gruppe::
+  Virtuelle Bereiche, die Anfangs die Größe (0,0) haben und je nach Inhalt wachsen.
+
+Layoutfunktion::
+  Funktionen, die wie XPath-Funktionen aufgebaut sind und Bezug zu Layoutfragen haben. Mithilfe dieser Funktionen lässt sich z. B. die Breite von Gruppen bestimmen oder die aktuelle Seitenzahl ausgeben.
+
+Layoutregelwerk::
+  Eine XML-Datei mit dem Wurzelelement `<Layout>`, die Layoutanweisungen enthält. Regelwerk deswegen, weil dort die Regeln definiert werden, nach denen die Daten im PDF angeordnet werden.
+
+Platzierungsbereich::
+  Auch `<PositioningArea>`. Enthält einen oder mehrere rechteckige Bereiche (Textrahmen), die unter demselben Namen angesprochen werden. Wird für jede Seite neu definiert. Die ganze Seite hat dem Namen `{page}`.
+
+Textrahmen::
+  Auch Platzierungsrahmen oder `<PositioningFrame>`. Teile eines Platzierungsbereichs.
+
+
+Wohlgeformt::
+  Eine XML-Datei ist wohlgeformt, wenn mindestens die folgenden Bedingungen erfüllt sind (aus der https://de.wikipedia.org/wiki/Extensible_Markup_Language#Wohlgeformtheit[Wikipedia]):
++
+  * Das Dokument besitzt genau ein Wurzelelement. Als Wurzelelement wird dabei das jeweils äußerste Element bezeichnet, z. B. `<html>` in XHTML.
+  * Alle Elemente mit Inhalt besitzen einen Beginn- und einen End-Auszeichner (-Tag) (z. B. `<eintrag>Eintrag 1</eintrag>`). Elemente ohne Inhalt können auch in sich geschlossen sein, wenn sie aus nur einem Auszeichner bestehen, der mit `/>` abschließt (z. B. `<eintrag />`).
+  * Die Beginn- und End-Auszeichner sind ebenentreu-paarig verschachtelt. Das bedeutet, dass alle Elemente geschlossen werden müssen, bevor die End-Auszeichner des entsprechenden Elternelements oder die Beginn-Auszeichner eines Geschwisterelements erscheinen.
+  * Ein Element darf nicht mehrere Attribute mit demselben Namen besitzen.
+  * Attributeigenschaften müssen in Anführungszeichen stehen.
+  * Die Beginn- und End-Auszeichner beachten die Groß- und Kleinschreibung (z. B. `<eintrag></Eintrag>` ist nicht gültig).
+
+XPath::
+   Computersprache, die auf Datenabfragen in XML-Bäumen spezialisiert ist. Typische Fragen sind »Welchen Inhalt hat das Attribut `name`?« oder Gibt es ein Kindelement mit dem Namen `Kapitel`?«. Die Sprache wird oftmals zusammen mit XSLT (XSL Transformation) verwendet. Eine Teilmenge der XPath-Sprache ist im Publisher eingebaut.
+

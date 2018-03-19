@@ -34,9 +34,9 @@
          <h3>{{ translate $.Lang "Remarks" }}</h3>{{.}}{{end}}
 
          <h2>{{ translate .Lang "Example" }}</h2>
-         {{ .Command.Example .Lang }}
+         {{ .Command.ExampleHTML .Lang }}
          {{ with (.Command.InfoHTML $.Lang) }}<h2>{{ translate $.Lang "Info" }}</h2>{{.}}{{end}}
-         {{ with (.Command.Seealso $.Lang)}} <h2>{{ translate $.Lang "See also"}}</h2>{{ . }}{{end}}
+         {{ with (.Command.SeealsoHTML $.Lang)}} <h2>{{ translate $.Lang "See also"}}</h2>{{ . }}{{end}}
       </div>
       <div id="elementref">
          <h1>{{ translate .Lang "Commands" }}</h1>

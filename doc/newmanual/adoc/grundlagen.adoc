@@ -1,0 +1,41 @@
+[.split]
+[[ch-grundlagen]]
+= Grundlagen
+
+Das Studium dieses Kapitels sollte ausreichen, um Layoutregelwerke selbständig zu erstellen.
+Gelegentlich werden weiterführende Themen in einem späteren Kapitel vertieft.
+Beispielsweise werden für Tabellen nur die wichtigsten Formatierungen behandelt, ein eigenes Kapitel (Kapitel <<ch-tabellen2>>) beschreibt Tabellen im Detail.
+In solchen Fällen gibt es natürlich einen Querverweis.
+
+TIP: Noch ein Hinweis für das Handbuch. Viele Beispiele zeigen nur die Layout-Datei und nicht die dazugehörigen Daten. Es wird in der Datendatei dann immer die einfache Struktur `<data />` vorausgesetzt. Zu erkennen ist das daran, dass im Layout `<Record element="data">` enthalten ist. Am einfachsten ist es, den Publisher mit `sp --dummy` zu starten, das simuliert diese Datendatei.
+
+
+:leveloffset: +1
+
+
+include::xmleditor.adoc[]
+
+include::eingabeformat.adoc[]
+
+include::objekteausgeben.adoc[]
+
+include::raster.adoc[]
+
+include::positionierungsrahmen.adoc[]
+
+
+include::dateiorganisation.adoc[]
+
+
+include::silbentrennungsprache.adoc[]
+
+
+include::schriftarteneinbinden.adoc[]
+
+include::textformate.adoc[]
+
+include::textformatierung.adoc[]
+
+include::farben.adoc[]
+
+:leveloffset: -1

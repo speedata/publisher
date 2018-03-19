@@ -1,0 +1,36 @@
+/* ASPECT RATIOS */
+$ratios : (1, 1), (16, 9);
+
+	@media #{$phone-quer} {
+		@each $width, $height in $ratios {
+			.aspectRatio_#{$width}_#{$height} {
+				position: relative;
+				display: block;
+				&:before {
+					content: "";
+					display: block;
+					padding-top: ($height / $width) * 100%;
+				}
+			}
+		}
+
+		.aspectRatioContent {
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			display: table-cell;
+			text-align:center;
+			vertical-align:middle;
+			overflow:hidden;
+		}
+
+		.aspectRatioContent img {
+			max-height:101%;
+			max-width:101%;
+		}
+	}

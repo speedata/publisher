@@ -1,0 +1,22 @@
+{{$currentPage := . }}
+{{ with .Site.GetPage "page" ( .Get 0 ) }}
+	{{ $pathOfCurrentPage :=  substr $currentPage.Page.RelPermalink 1 }}
+	{{ $arrayOfDirsAndFiles := split $pathOfCurrentPage "/" }}
+
+	{{$pageToLink := .}}
+	{{$pathOfCurrentPage :=  substr $pageToLink.RelPermalink 1 }}
+	{{ $dirsToGoBack := sub (len $arrayOfDirsAndFiles) (1) }}
+
+	{{ if gt $dirsToGoBack 0 }}
+		{{ range (first $dirsToGoBack $arrayOfDirsAndFiles) }}
+			../
+		{{end}}
+	{{end}}
+	{{ $pathOfCurrentPage }}
+{{ end }}
+{{ $pageName := printf "%s" "_index.md" }}
+{{ if eq ($pageName) ( .Get 0 ) }}
+	index.html
+{{ end }}
+
+

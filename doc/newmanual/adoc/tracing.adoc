@@ -1,0 +1,151 @@
+[[ch-tracing]]
+= Fehlersuche / Debugging
+
+Nicht immer klappt die Ausgabe, wie sie soll.
+Manchmal sind Objekte zu breit, manchmal wird das falsche Textformat genommen und gelegentlich sieht die Tabelle nicht so aus, wie sie eigentlich sollte.
+Damit die Fehlersuche nicht zu schwierig wird, gibt es im speedata Publisher diverse Hilfen.
+Dafür gibt es den Befehl `<Trace>`, der verschiedene Schalter anbietet.
+Dies sind (mit Voreinstellung):
+
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Trace
+    assignments="no"
+    objects="no"
+    verbose="no"
+    grid="no"
+    gridallocation="no"
+    hyphenation="no"
+    textformat="no"
+    />
+-------------------------------------------------------------------------------
+
+
+
+`assignments`::
+  Gibt auf der Konsole den Wert der Zuweisung (`<SetVariable>`) aus.
+
+`objects`::
+  Zeichnet eine Linie um einzelne Objekte.
+
+`verbose`::
+  Erhöht die Ausgabe auf der Konsole (Protokoll-Datei).
+
+`grid`::
+  Zeichnet das Raster. Siehe Abschnitt <<ch-raster>>.
+
+`gridallocation`::
+  Zeichnet die Rasterbelegung. Siehe Abschnitt <<ch-raster>>.
+
+`hyphenation`::
+  Markiert die Stellen, an denen die Wörter umbrochen werden dürfen (Silbentrennung).
+
+`textformat`::
+  Erzeugt über jeder Textzeile einen Tooltip, der das benutzte Textformat anzeigt. Siehe das Beispiel im Abschnit <<ch-textformate-tracing,Textformate>>.
+
+
+==  Nachrichten
+
+Neben den Möglichkeiten, die der Befehl `<Trace>` liefert, gibt es noch die Möglichkeit, Nachrichten in der Logdatei auszugeben:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Message select="'Hallo Welt!'"/>
+<Message select="sd:current-page()"/>
+-------------------------------------------------------------------------------
+
+Die Ausgaben erscheinen in der Logdatei (`publisher.protocol`) (((Protokolldatei)))
+
+
+-------------------------------------------------------------------------------
+Message: "Hallo Welt!"
+Message: "1"
+-------------------------------------------------------------------------------
+
+// Die dritte Nachricht wird nur so ausgegeben, wenn die Gruppe nicht existiert.
+Den Befehl `<Message>` kann man mit `error="yes"` anweisen, eine Fehlermeldung auszugeben (anstelle einer Nachricht).
+Ebenso kann man den Fehlercode bestimmen, der beim Beenden des Publishers zurückgegeben wird.
+Siehe <<cmd-message,den Befehl `<Message>` in der Referenz>>.
+
+
+== Statusdatei und Protokolldatei
+
+Zum Ende des Laufs werden zwei Dateien auf die Festplatte geschrieben, die bei der Fehlersuche behilflich sein können.
+Die Datei `publisher.status` ist eine XML-Datei, die die Fehlermeldungen und anderen Nachrichten (über den Befehl `<Message>`) enthält.
+Das Beispiel oben mit den zwei Nachrichten ergibt die folgende Datei:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Status>
+  <Errors>0</Errors>
+  <Message>Hallo Welt!</Message>
+  <Message>1</Message>
+  <DurationSeconds>1</DurationSeconds>
+</Status>
+-------------------------------------------------------------------------------
+
+Ebenso wird eine etwas ausführlichere Protokolldatei (`publisher.protocol`) geschrieben, die verschiedene Informationen enthält.
+
+
+-------------------------------------------------------------------------------
+Protocol file for speedata Publisher (2.9.2)
+Time: Mon Feb 20 11:03:25 2017
+---------------------------------------------
+Start processing
+Talking to server on port 56486
+LuaTeX version 79.1
+Loading hyphenation patterns "hyph-en-gb.pat.txt".
+Language id: 0
+Loading layout instructions "/tmp/layout.xml"
+DefineFontfamily, family=2, name="Überschrift"
+Loading aux file "/tmp/publisher-aux.xml"
+Loading data file "/tmp/data.xml"
+Page of type "Default Page" created (1)
+Number of rows: 28, number of columns = 19
+PlaceObject: Textblock in row 1 and column 1, width=19, height=1 (page 1)
+Message: "Hallo Welt!"
+Message: "1"
+Stop processing data
+0 errors occurred
+Duration: 0.223866 seconds
+-------------------------------------------------------------------------------
+
+
+
+
+
+////
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Trace objects="yes"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Table columndistance="2pt" leading="2pt">
+        <Loop select="5" variable="i">
+          <Tr>
+            <Loop select="4" variable="j">
+              <Td>
+                <Paragraph>
+                  <Value select="concat('Zelle ',$i', '/', $j)"/>
+                </Paragraph>
+              </Td>
+            </Loop>
+          </Tr>
+        </Loop>
+      </Table>
+    </PlaceObject>
+
+  </Record>
+
+</Layout>
+
+////
+
+// Ende

@@ -1,0 +1,55 @@
+  <script type="text/javascript" src="/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/js/{{.Site.Params.type}}.js"></script>
+{{ if eq .Site.Params.type "website"}}
+	<script src="/js/juxtapose.min.js"></script>
+  <script type="text/javascript" src="/js/magnific-popup.js" ></script>
+  <script type="text/javascript" src="/js/imagesloaded.pkgd.min.js"></script>
+  <script type="text/javascript" src="/js/masonry.pkgd.min.js"></script>
+{{ end }}
+
+<div id="topButton"></div>
+
+{{ if eq .Site.Params.type "website"}}
+
+   {{ if eq (getenv "HUGO_ENV") "server" }}
+   <!-- Piwik -->
+   <script type="text/javascript">
+     var _paq = _paq || [];
+     _paq.push(["setDomains", ["*.www.speedata.de"]]);
+     _paq.push(['trackPageView']);
+     _paq.push(['enableLinkTracking']);
+     (function() {
+       var u="//piwik.speedata.de/";
+       _paq.push(['setTrackerUrl', u+'piwik.php']);
+       _paq.push(['setSiteId', 1]);
+       var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+       g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+     })();
+   </script>
+   <noscript><p><img src="//piwik.speedata.de/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
+   <!-- End Piwik Code -->
+   {{end}}
+{{end}}
+
+{{ if eq .Site.Params.type "handbuch"}}
+   {{ if eq (getenv "HUGO_ENV") "server" }}
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["setDomains", ["*.doc.speedata.de/publisher/de"]]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//piwik.speedata.de/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', 7]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="//piwik.speedata.de/piwik.php?idsite=7" style="border:0;" alt="" /></p></noscript>
+<!-- End Piwik Code -->
+{{end }}{{end}}
+</body>
+</html>
+

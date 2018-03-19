@@ -18,6 +18,7 @@ import (
 	"sphelper/genschema"
 	"sphelper/gomddoc"
 	"sphelper/htmldoc"
+	"sphelper/newdoc"
 	"sphelper/sourcedoc"
 
 	"github.com/speedata/optionparser"
@@ -33,7 +34,15 @@ func makedoc(cfg *config.Config) error {
 	if err != nil {
 		return err
 	}
-	return htmldoc.DoThings(cfg)
+	err = htmldoc.DoThings(cfg)
+	if err != nil {
+		return err
+	}
+	err = newdoc.DoThings(cfg)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func main() {

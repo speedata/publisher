@@ -1,0 +1,218 @@
+[[ch-indexerstellen,Stichwortverzeichnisse]]
+= Sortierung von Stichwortverzeichnissen
+
+In der Regel sind Stichwortverzeichnisse am Ende eines Dokuments zu finden, um in gedruckten Werken relevante Seiten schnell aufzufinden.
+Bei diesen Stichworten kann es sich um Wörter oder auch um Artikelnummern oder andere Bezeichnungen handeln.
+
+Im Gegensatz zum Inhaltsverzeichnis (das meist vorne in einer Publikation ist), müssen die Daten nur zusammengestellt werden, ein Zwischenspeichern für den nächsten Lauf entfällt in der Regel.
+
+[discrete]
+== Beispiel
+
+.Stichwortverzeichnis aus dem Beispiel
+image::stichwortverzeichnis.png[width=30%,scaledwidth=50%]
+
+Die Beispiele sind naturgemäß immer etwas konstruiert, das ist hier ganz besonders der Fall.
+Der Index wird in der Praxis natürlich anders zusammengestellt.
+Da hier nur die Sortierung gezeigt werden soll, wird das Stichwort und die Seitenzahl vorgegeben:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<data>
+  <stichwort wort="Giraffe" seite="1"/>
+  <stichwort wort="Garage" seite="2"/>
+  <stichwort wort="Grußwort" seite="3"/>
+  <stichwort wort="Aufzug" seite="4"/>
+</data>
+-------------------------------------------------------------------------------
+
+Die Layoutdatei besteht aus drei Abschnitten, die einzeln erläutert werden.
+
+[[lst-stichwort-geruest]]
+.Das Gerüst für die Sortierung und Ausgabe des Stichwortverzeichnisses
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="data"> <!--1-->
+    ...
+  </Record>
+
+  <Record element="stichwort"> <!--2-->
+    ...
+  </Record>
+
+  <Record element="Index"> <!--3-->
+    ...
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+<1> Der Rahmen, der erst die Einträge zusammenbaut, sortiert und anschließend ausgibt.
+<2> Hier werden die Einträge einzeln in der Variablen `indexeinträge` gespeichert.
+<3> Die sortierten Einträge werden in einer Tabelle ausgegeben.
+
+Der Abschnitt `data` ist der erste Teil aus dem vorherigen Listing:.
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+  <Record element="data">
+    <SetVariable variable="indexeinträge"/> <!--1-->
+    <ProcessNode select="stichwort"/>
+
+    <SetVariable variable="index">  <!--2-->
+      <Element name="Index">
+        <Makeindex select="$indexeinträge" sortkey="name" section="section"
+                   pagenumber="page" />
+      </Element>
+    </SetVariable>
+
+    <ProcessNode select="$index"/>  <!--3-->
+  </Record>
+-------------------------------------------------------------------------------
+<1> Eine leere Variable `indexeinträge` wird deklariert. Diese wird im Record `stichwort` mit den einzelnen Elementen gefüllt (s.u.).
+<2> Die nun gefüllte Variable `indexeinträge` wird um das Eltern-Element `Index` ergänzt, sortiert und in `$index` gespeichert.
+<3> Hier wird der Inhalt der Variablen `$index` als Datenstruktur interpretiert und ausgeführt (siehe die Ergänzung unten).
+
+
+Der Befehl `<Makeindex>` sortiert und gruppiert die Daten, die im Attribut `select` übergeben werden. Die Sortierung erfolgt anhand des Attributs, der bei `sortkey` angegeben ist. Die Gruppierung erfolgt anhand des ersten Buchstabens des Sortierschlüssels. Die Elementstruktur, die mit dem Befehl `<Makeindex>` aufgebaut wird, ist folgende:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Index>
+  <section name="A">
+    <indexeintrag name="Aufzug" page="4"/>
+  </section>
+  <section name="G">
+    <indexeintrag name="Garage" page="2"/>
+    <indexeintrag name="Giraffe" page="1"/>
+    <indexeintrag name="Grußwort" page="3"/>
+  </section>
+</Index>
+-------------------------------------------------------------------------------
+
+
+
+Der Abschnitt zum Element `stichwort` (einfügen an Stelle 1 im Listing <<lst-stichwort-geruest>>) ist einfach gehalten, und entspricht dem »Copy-of« Muster (siehe <<ch-copyof>>). Hier wird die Variable `indexeinträge` um jeweils einen Eintrag ergänzt.
+
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+  <Record element="stichwort">
+    <SetVariable variable="indexeinträge">
+      <Copy-of select="$indexeinträge"/>
+      <Element name="indexeintrag">
+        <Attribute name="name" select="@wort"/> <!--1-->
+        <Attribute name="page" select="@seite"/>
+      </Element>
+    </SetVariable>
+  </Record>
+-------------------------------------------------------------------------------
+<1> In der aktuellen Publisher-Version muss der Eintrag, der sortiert wird, in einem Attribut mit dem Namen `name` gespeichert werden.
+
+
+Im letzten Teil wird die Tabelle ausgegeben (einfügen an Stelle 3 im Listing <<lst-stichwort-geruest>>).
+Für jeden Abschnitt (Element `section` in `<Makeindex>`) wird eine Zeile in Hellgrau ausgegeben mit dem Sortierschlüssel.
+Anschließend wird für jeden Eintrag innerhalb dieses Abschnittes eine Zeile mit dem Namen des Eintrags und der Seitenzahl ausgegeben.
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+  <Record element="Index">
+    <PlaceObject column="1">
+      <Table width="3" stretch="max">
+        <ForAll select="section">
+          <Tr break-below="no" top-distance="10pt">
+            <Td colspan="2" backgroundcolor="lightgray">
+              <Paragraph><Value select="@name"></Value></Paragraph>
+            </Td>
+          </Tr>
+          <ForAll select="indexeintrag">
+            <Tr>
+              <Td>
+                <Paragraph><Value select="@name"/></Paragraph>
+              </Td>
+              <Td align="right">
+                <Paragraph><Value select="@page"/></Paragraph>
+              </Td>
+            </Tr>
+          </ForAll>
+        </ForAll>
+      </Table>
+    </PlaceObject>
+  </Record>
+-------------------------------------------------------------------------------
+
+////
+
+
+<Index>
+  <section name="A">
+    <indexeintrag name="Aufzug" page="4"/>
+  </section>
+  <section name="G">
+    <indexeintrag name="Garage" page="2"/>
+    <indexeintrag name="Giraffe" page="1"/>
+    <indexeintrag name="Grußwort" page="3"/>
+  </section>
+</Index>
+
+
+
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+
+  <Record element="stichwort">
+    <SetVariable variable="indexeinträge">
+      <Copy-of select="$indexeinträge"/>
+      <Element name="indexeintrag">
+        <Attribute name="name" select="@wort"/>
+        <Attribute name="page" select="@seite"/>
+      </Element>
+    </SetVariable>
+  </Record>
+
+  <Record element="data">
+    <SetVariable variable="indexeinträge"/>
+    <ProcessNode select="stichwort"/>
+
+    <SetVariable variable="index">
+      <Element name="Index">
+        <Makeindex select="$indexeinträge" sortkey="name" section="teil" pagenumber="page" />
+      </Element>
+    </SetVariable>
+
+    <ProcessNode select="$index"/>
+  </Record>
+
+  <Record element="Index">
+    <PlaceObject column="1">
+      <Table width="3" stretch="max">
+        <ForAll select="teil">
+          <Tr break-below="no" top-distance="10pt">
+            <Td colspan="2" backgroundcolor="lightgray">
+              <Paragraph><Value select="@name"></Value></Paragraph>
+            </Td>
+          </Tr>
+          <ForAll select="indexeintrag">
+            <Tr>
+              <Td>
+                <Paragraph><Value select="@name"/></Paragraph>
+              </Td>
+              <Td align="right">
+                <Paragraph><Value select="@page"/></Paragraph>
+              </Td>
+            </Tr>
+          </ForAll>
+        </ForAll>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
+////
+
+
+
+
+// Ende

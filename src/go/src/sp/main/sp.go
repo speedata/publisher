@@ -173,9 +173,9 @@ func init() {
 	re := regexp.MustCompile("^(d|D)(e|E)")
 	var indexpage string
 	if re.MatchString(os.Getenv("LANG")) {
-		indexpage = "index-de.html"
+		indexpage = filepath.Join("de", "index.html")
 	} else {
-		indexpage = "index.html"
+		indexpage = filepath.Join("en", "index.html")
 	}
 
 	switch dest {

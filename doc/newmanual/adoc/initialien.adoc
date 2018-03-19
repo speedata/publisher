@@ -1,0 +1,55 @@
+= Initialen
+
+
+Für Initialen (große Buchstaben am Anfang eines Absatzes) gibt es keine vorgefertigte Lösung im speedata Publisher.
+
+////
+
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <SetGrid height="12pt" width="4pt"/>
+  <Trace objects="no"/>
+  <Options ignoreeol="yes"/>
+
+  <Pagetype name="true" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+    <PositioningArea name="text">
+      <PositioningFrame width="30" height="10" row="1" column="1"/>
+    </PositioningArea>
+  </Pagetype>
+
+  <DefineTextformat name="initial" indentation="18pt" rows="2"/>
+
+  <LoadFontfile name="serif" filename="dollr.pfb" marginprotrusion="100"/>
+
+  <DefineFontfamily name="initiale" fontsize="28" leading="28">
+    <Regular fontface="serif"/>
+  </DefineFontfamily>
+  <DefineFontfamily name="text" fontsize="10" leading="12">
+    <Regular fontface="serif"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <PlaceObject allocate="no" column="1" row="1">
+      <Table>
+        <Tr valign="top">
+          <Td>
+            <Paragraph fontface="initiale">
+              <Value>E</Value>
+            </Paragraph>
+          </Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+    <Output row="1" allocate="auto" area="text">
+      <Text textformat="initial">
+        <Paragraph>
+          <Value>s war einmal ein König und eine Königin, sie wünschten sich nichts mehr als ein  Kind. Nach langem Warten bekam die Königin endlich ein Mädchen. Es war ein wunderschönes  Kind. Der König und die Königin machten ein großes Fest und luden dazu das ganze Volk
+            und alle guten Feen ein.</Value>
+        </Paragraph>
+      </Text>
+    </Output>
+  </Record>
+</Layout>
+////
