@@ -7,12 +7,14 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"sphelper/fileutils"
 	"strings"
 	"sync"
 	"text/template"
+	"time"
 
+	"sphelper/changelog"
 	"sphelper/config"
+	"sphelper/fileutils"
 	commandsxml "sphelper/newcommandsxml"
 )
 
@@ -59,6 +61,8 @@ func translate(lang, text string) string {
 		return "CSS Eigenschaft"
 	case "since version":
 		return "seit Version"
+	case "Changelog":
+		return "Liste der Änderungen"
 	}
 	return "--"
 }
@@ -195,14 +199,16 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 	if err != nil {
 		return err
 	}
-	cmd := exec.Command("asciidoctor", "-b", "docbook", adocfile, "-D", cfg.Builddir)
+	var cmd *exec.Cmd
+
+	cmd = exec.Command("asciidoctor", "-b", "docbook", adocfile, "-D", cfg.Builddir)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()
 	if err != nil {
 		return err
 	}
-	contentpath, err := filepath.Abs(newmanualhugopath)
+	newmanualhugopath, err = filepath.Abs(newmanualhugopath)
 	if err != nil {
 		return err
 	}
@@ -214,12 +220,67 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 	if err != nil {
 		return err
 	}
-	cmd = exec.Command("java", "-jar", filepath.Join(cfg.Basedir(), "lib", "saxon9804he.jar"), fmt.Sprintf("-xsl:%s", xsltfile), "-o:publisherhandbuch.txt", docbookfile, fmt.Sprintf("outputdir=file:%s", contentpath), fmt.Sprintf("version=%s", cfg.Publisherversion))
+
+	cmd = exec.Command("java", "-jar", filepath.Join(cfg.Basedir(), "lib", "saxon9804he.jar"), fmt.Sprintf("-xsl:%s", xsltfile), "-o:publisherhandbuch.txt", docbookfile, fmt.Sprintf("outputdir=file:%s", newmanualhugopath), fmt.Sprintf("version=%s", cfg.Publisherversion))
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()
 	if err != nil {
 		return err
+	}
+
+	// do the changelog
+	cl, err := changelog.ReadChangelog(cfg)
+	if err != nil {
+		return err
+	}
+
+	contentpath := filepath.Join(newmanualhugopath, "content")
+
+	clw, err := os.Create(filepath.Join(contentpath, "ch-changelog.md"))
+	if err != nil {
+		return err
+	}
+	defer clw.Close()
+	fmt.Fprintln(clw, "+++\ntitle = \"Changelog\"\n+++\n")
+	fmt.Fprintln(clw, "\n#", translate("de", "Changelog"))
+
+	type release struct {
+		date    time.Time
+		version string
+		entries []string
+	}
+
+	for _, chap := range cl.Chapter {
+		fmt.Fprintf(clw, "## %s\n\n", chap.Version)
+		version := ""
+		var rr []release
+		var r release
+		for _, entry := range chap.Entries {
+			if entry.Version != version {
+				if version != "" {
+					rr = append(rr, r)
+				}
+				d, err := time.Parse("2006-01-02", entry.Date)
+				if err != nil {
+					return err
+				}
+				r = release{date: d, version: entry.Version}
+				version = entry.Version
+			}
+			r.entries = append(r.entries, entry.De.Text)
+		}
+		rr = append(rr, r)
+
+		fmt.Fprintln(clw, "\n<dl>")
+		for _, r := range rr {
+			fmt.Fprintf(clw, "<dt>%s &nbsp;&nbsp;&nbsp;&nbsp;(%s)</dt><dd><ul>\n", r.version, r.date.Format("2.1.2006"))
+			for _, e := range r.entries {
+				fmt.Fprintf(clw, "<li>%s</li>\n", e)
+			}
+			fmt.Fprintln(clw, "</ul>")
+		}
+		fmt.Fprintln(clw, "</dl>\n")
 	}
 
 	if sitedoc {
@@ -230,7 +291,6 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 	cmd.Dir = newmanualhugopath
 	cmd.Env = append(os.Environ(), fmt.Sprintf("PUBLISHER_VERSION=%s", cfg.Publisherversion))
 	cmd.Run()
-
 	if err != nil {
 		return err
 	}

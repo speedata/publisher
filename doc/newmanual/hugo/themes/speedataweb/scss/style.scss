@@ -424,11 +424,15 @@ ul.prevnext {
 	ol {
 		list-style:decimal;
 		list-style-position:outside;
-		padding-left:36px;
-
+		padding-left:18px;
+		.website & {
+			padding-left:36px;
+		}
 		li {
-			font-size:40px;
-			line-height:24px;
+			.website & {
+				font-size:40px;
+				line-height:24px;
+			}
 			margin-bottom:0.2em !important;
 			span {
 				@extend %default;

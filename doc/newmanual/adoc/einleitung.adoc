@@ -51,7 +51,7 @@ Erläuterungen zum Starten des Publishers gibt es im Abschnitt über die <<ch-ko
 
 == Beispiele
 
-Auf Github gibt es ein eigenes Repository mit Bespielen (https://github.com/speedata/examples).
+Auf Github gibt es ein eigenes Repository mit Beispielen (https://github.com/speedata/examples).
 Dort sind vollständige Dokumente hinterlegt, anhand derer man verschiedene Funktionen ausprobieren kann.
 
 .Beispiele aus dem Repository

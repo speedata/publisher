@@ -44,6 +44,7 @@ ifdef::backend-docbook5[]
 - <<app-massangaben,Längenangaben und Maßeinheiten>>
 - <<ch-xpathfunktionen,XPath- und Layoutfunktionen>>
 - <<ch-internevariablen,Interne Variablen>>
+- <<ch-changelog,Liste der Änderungen>>
 - <<app-glossar,Glossar>>
 - <<ch-befehlsreferenz,Befehlsreferenz>>
 
@@ -70,7 +71,7 @@ include::konfigurationsdatei.adoc[]
 include::massangaben.adoc[]
 include::xpathfunktionen.adoc[]
 include::variablen.adoc[]
-
+include::changelog.adoc[]
 include::glossar.adoc[]
 
 [appendix]

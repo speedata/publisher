@@ -1,0 +1,6 @@
+[[ch-changelog]]
+= Liste der Änderungen
+
+
+Diese Datei wird in `newdoc.go` ersetzt durch die Liste der Änderungen aus dem `changelog.xml`.
+

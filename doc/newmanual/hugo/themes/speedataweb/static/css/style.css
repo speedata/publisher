@@ -2038,12 +2038,17 @@ ul.prevnext li.next:after {
 #main ol {
   list-style: decimal;
   list-style-position: outside;
+  padding-left: 18px;
+}
+.website #main ol {
   padding-left: 36px;
 }
 #main ol li {
+  margin-bottom: 0.2em !important;
+}
+.website #main ol li {
   font-size: 40px;
   line-height: 24px;
-  margin-bottom: 0.2em !important;
 }
 #main li {
   -webkit-column-break-inside: avoid;
