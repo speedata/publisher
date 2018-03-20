@@ -274,5 +274,7 @@ end
 function test_other()
   assert_equal(secondoftwo(xpath.parse_raw(with_underscore," string(foo_bar) ",namespace))[1], "Hello world")
   assert_equal(secondoftwo(xpath.parse_raw(with_dash," foo/bar-bar/@att ",namespace))[1], "xx")
+  assert_false(secondoftwo(xpath.parse_raw(data,  " a = '*'",namespace))[1] )
+  assert_false(secondoftwo(xpath.parse_raw(data,  " a = '+'",namespace))[1] )
 end
 

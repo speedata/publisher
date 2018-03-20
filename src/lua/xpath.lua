@@ -358,7 +358,7 @@ function M.is_additive_expr(dataxml,str,pos,ns)
     local start,stop,op
     start,stop,op = string.find(str,"^([%+%-])%s*",pos)
     if start then
-        M.tok = op
+        M.tok = "\1" .. op
         M.nextpos = stop + 1
         return true
     end
@@ -370,7 +370,7 @@ function M.is_comparison_epxr(dataxml,str,pos,ns)
     start,stop,op = string.find(str,"^([><=!]+)%s*",pos)
     if start then
         M.nextpos = stop + 1
-        M.tok = op
+        M.tok = "\1" .. op
         return true
     end
     return false
@@ -381,13 +381,13 @@ function M.is_andor_expr(dataxml,str,pos,ns)
     local start,stop,op
     start,stop,op = string.find(str,"^and%s*",pos)
     if start then
-        M.tok = "and"
+        M.tok = "\1and"
         M.nextpos = stop + 1
         return true
     end
     start,stop,op = string.find(str,"^or%s*",pos)
     if start then
-        M.tok = "or"
+        M.tok = "\1or"
         M.nextpos = stop + 1
         return true
     end
@@ -412,26 +412,26 @@ function M.is_multiplicative_expr(dataxml,str,pos,ns)
     pos = pos or M.nextpos
     start,stop = string.find(str,"^%*%s*",pos)
     if start then
-        M.tok = "*"
+        M.tok = "\1*"
         M.nextpos = stop + 1
         return true
     end
     -- "div" | "idiv" | "mod"
     start,stop = string.find(str,"^div%s*",pos)
     if start then
-        M.tok = "div"
+        M.tok = "\1div"
         M.nextpos = stop + 1
         return true
     end
     start,stop = string.find(str,"^mod%s*",pos)
     if start then
-        M.tok = "mod"
+        M.tok = "\1mod"
         M.nextpos = stop + 1
         return true
     end
     start,stop = string.find(str,"^idiv%s*",pos)
     if start then
-        M.tok = "idiv"
+        M.tok = "\1idiv"
         M.nextpos = stop + 1
         return true
     end
@@ -492,7 +492,7 @@ function M.eval_comparison(first,second,operator)
     -- IIRC this is in the XPath sepc TODO: check
     -- nilmarker is the code for "nil"
     if first == nilmarker and second ~= nilmarker or first ~= nilmarker and second == nilmarker then
-        if operator ~= "!=" then
+        if operator ~= "\1!=" then
             return false
         else
             return true
@@ -513,17 +513,17 @@ function M.eval_comparison(first,second,operator)
         second = table_textvalue(second)
     end
 
-    if operator == "<" then
+    if operator == "\1<" then
         return first < second
-    elseif operator == ">" then
+    elseif operator == "\1>" then
         return first > second
-    elseif operator == ">=" then
+    elseif operator == "\1>=" then
         return first >= second
-    elseif operator == "<=" then
+    elseif operator == "\1<=" then
         return first <= second
-    elseif operator == "=" then
+    elseif operator == "\1=" then
         return first == second
-    elseif operator == "!=" then
+    elseif operator == "\1!=" then
         return first ~= second
     end
 end
@@ -545,7 +545,9 @@ function M.eval_addition(first,second,operator)
         end
     end
     if first == nil then
-        err("The first operand of +/- is not a number. Evaluating to 0 (%q)",M.str)
+        if err then
+            err("The first operand of +/- is not a number. Evaluating to 0 (%q)",M.str)
+        end
         return 0
     end
     if type(second)=='string' then
@@ -560,9 +562,9 @@ function M.eval_addition(first,second,operator)
         return 0
     end
 
-    if operator == "+" then
+    if operator == "\1+" then
         return first + second
-    elseif operator == "-" then
+    elseif operator == "\1-" then
         return first - second
     end
 end
@@ -596,7 +598,9 @@ function M.eval_multiplication(first,second,operator)
         end
     end
     if first == nil then
-        err("The first operand of the multiplication is not a number. Evaluating to 0")
+        if err then
+            err("The first operand of the multiplication is not a number. Evaluating to 0")
+        end
         return 0
     end
     if type(second)=='string' then
@@ -611,13 +615,13 @@ function M.eval_multiplication(first,second,operator)
         return 0
     end
 
-    if operator == "*" then
+    if operator == "\1*" then
         return first * second
-    elseif operator == "mod" then
+    elseif operator == "\1mod" then
         return math.fmod(first,second)
-    elseif operator == "div" then
+    elseif operator == "\1div" then
         return first / second
-    elseif operator =="idiv" then
+    elseif operator =="\1idiv" then
         local a = first / second
         if a > 0 then
             return math.floor(a)
@@ -674,7 +678,7 @@ function M.reduce( tab )
     i = 1
     while i <= max do
         op = tab[i]
-        if op == "*" or op == "mod" or op == "div" or op == "idiv" then
+        if op == "\1*" or op == "\1mod" or op == "\1div" or op == "\1idiv" then
             operator_found = true
             second = table.remove(tab,i + 1)
             table.remove(tab,i)
@@ -689,7 +693,7 @@ function M.reduce( tab )
     i = 1
     while i <= max do
         op = tab[i]
-        if op == "+" or op == "-" then
+        if op == "\1+" or op == "\1-" then
             operator_found = true
             second = table.remove(tab,i + 1)
             table.remove(tab,i)
@@ -706,7 +710,7 @@ function M.reduce( tab )
     i = 2
     while i <= max do
         op = tab[i]
-        if op == "<" or op == ">" or op == "<=" or op == ">=" or op == "!=" or op == "=" then
+        if op == "\1<" or op == "\1>" or op == "\1<=" or op == "\1>=" or op == "\1!=" or op == "\1=" then
             operator_found = true
             second = table.remove(tab,i + 1)
             table.remove(tab,i)
@@ -723,7 +727,7 @@ function M.reduce( tab )
     i = 1
     while i <= max do
         op = tab[i]
-        if op == "and" then
+        if op == "\1and" then
             operator_found = true
             second = table.remove(tab,i + 1)
             table.remove(tab,i)
@@ -741,7 +745,7 @@ function M.reduce( tab )
     i = 1
     while i <= max do
         op = tab[i]
-        if op == "or" then
+        if op == "\1or" then
             operator_found = true
             second = table.remove(tab,i + 1)
             table.remove(tab,i)
