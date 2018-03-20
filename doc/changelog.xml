@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.25" date="2018-03-20">
+      <en>Bugfix with XPath operators (#165)</en>
+      <de>Fehlerkorrektur bei XPath (#165)</de>
+    </entry>
+    <entry version="3.1.25" date="2018-03-20">
+      <en>Updated the German documentation</en>
+      <de>Das neue deutsche Handbuch einbegunden</de>
+    </entry>
     <entry version="3.1.24" date="2018-03-16">
       <en>New feature: Table/balance="yes"</en>
       <de>Neues Feature: Table/balance="yes" für Spaltenausgleich.</de>
