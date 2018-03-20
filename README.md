@@ -19,7 +19,7 @@ Think of it as »XSL-FO on stereoids« or »server side InDesign«.
 Examples
 --------
 
-There are some examples in the [example repository on github](https://github.com/speedata/examples) and [in the manual](https://speedata.github.io/publisher/manual/examples-en/index.html). Also, there are lots of small examples in the `qa` subdirectory that is used for quality assurance.
+There are some examples in the [example repository on github](https://github.com/speedata/examples). Also, there are lots of small examples in the `qa` subdirectory that is used for quality assurance.
 
 
 Can I use this in production?
@@ -30,12 +30,12 @@ Yes. Absolutely. We release stable (long term support) versions once in a while 
 Installation
 ------------
 
-Just get one of the ready-to-run packages from <https://download.speedata.de/> and follow the directions inside the ZIP file (=just extract and set the PATH variable). See the [installation instructions in the manual](https://speedata.github.io/publisher/manual/description-en/installation.html).
+Just get one of the ready-to-run packages from <https://download.speedata.de/> and follow the directions inside the ZIP file (=just extract and set the PATH variable). See the [installation instructions in the manual](https://doc.speedata.de/publisher/en/description-en/installation.html).
 
 
 Manual
 ------
-Our documentation is available online: <https://speedata.github.io/publisher/manual/index.html> and included in the distribution (`sp doc`).
+Our documentation is available online: <https://doc.speedata.de/> and included in the distribution (`sp doc`).
 
 
 Bugs
@@ -49,7 +49,7 @@ License / Contributing
 
 The license is AGPLv3, see the file COPYING in the root directory.
 
-We welcome contributions. Just [follow the github procedure (fork, pull requests)](https://help.github.com/articles/using-pull-requests/). The [installation manual](https://speedata.github.io/publisher/manual/description-en/installation.html) has a section on building the binary from the source code.
+We welcome contributions. Just [follow the github procedure (fork, pull requests)](https://help.github.com/articles/using-pull-requests/). The [installation manual](https://doc.speedata.de/publisher/en/description-en/installation.html) has a section on building the binary from the source code.
 
 Contact / Support
 -----------------
