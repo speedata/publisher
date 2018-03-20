@@ -407,6 +407,7 @@ textformats = {
     __leftaligned  = { indent = 0, alignment="leftaligned", rows = 1, orphan = 2, widow = 2},
     __rightaligned = { indent = 0, alignment="rightaligned",rows = 1, orphan = 2, widow = 2},
     __justified    = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2},
+    __fivemm       = { indent = tex.sp("5mm"), alignment="justified",   rows = 1, orphan = 2, widow = 2},
     justified      = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2},
     centered       = { indent = 0, alignment="centered",    rows = 1, orphan = 2, widow = 2},
     left           = { indent = 0, alignment="leftaligned", rows = 1, orphan = 2, widow = 2},

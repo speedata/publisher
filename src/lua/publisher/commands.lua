@@ -1816,7 +1816,6 @@ end
 function commands.ol(layoutxml,dataxml )
     local ret = {}
     local labelwidth = tex.sp("5mm")
-    publisher.textformats.__fivemm = {indent = labelwidth, alignment="justified",   rows = -1}
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
         local a = paragraph:new("__fivemm")
@@ -3816,7 +3815,6 @@ end
 function commands.ul(layoutxml,dataxml )
     local ret = {}
     local labelwidth = tex.sp("5mm")
-    publisher.textformats.__fivemm = {indent = labelwidth, alignment="justified",   rows = -1}
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
         local a = paragraph:new("__fivemm")
