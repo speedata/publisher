@@ -5,8 +5,9 @@ Der speedata Publisher kann als »Watchdog« ein Verzeichnis beobachten, um bei 
 Ein solches Verzeichnis wird auch _hotfolder_ genannt.
 Man kann Regeln angeben, was passiert, wenn eine bestimmte Datei in dieses Verzeichnis geschrieben wird.
 
-Der Hotfolder wird wie die der Publisher über die Datei `publisher.cfg` konfiguriert.
+WARNING: Der Publisher löscht die XML-Datei aus dem Verzeichnis, sobald sie verarbeitet wird.
 
+Der Hotfolder wird wie die der Publisher über die Datei `publisher.cfg` konfiguriert.
 
 -------------------------------------------------------------------------------
 [hotfolder]

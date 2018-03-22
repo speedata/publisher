@@ -1236,6 +1236,9 @@
                      <optional>
                         <ref name="e_Switch"></ref>
                      </optional>
+                     <optional>
+                        <ref name="e_SortSequence"></ref>
+                     </optional>
                   </interleave>
                </oneOrMore>
             </group>
@@ -3391,7 +3394,7 @@
                </optional>
                <optional>
                   <attribute name="rotate">
-                     <a:documentation>Rotates the object.  The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</a:documentation>
+                     <a:documentation>Rotates the object.  The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise. When the angle is != 0 then grid allocation is turned off.</a:documentation>
                   </attribute>
                </optional>
                <optional>

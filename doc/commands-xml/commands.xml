@@ -2255,6 +2255,7 @@
           <optional><cmd name="ForAll"/></optional>
           <optional><cmd name="Makeindex"/></optional>
           <optional><cmd name="Switch"/></optional>
+          <optional><cmd name="SortSequence"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>

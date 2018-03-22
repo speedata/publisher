@@ -54,12 +54,10 @@ We welcome contributions. Just [follow the github procedure (fork, pull requests
 Contact / Support
 -----------------
 
-We offer commercial support for the speedata Publisher. You can find the contact information [on the wiki](https://github.com/speedata/publisher/wiki/contact).
-
+We offer commercial support for the speedata Publisher. You can find the contact information [on the webpage](https://www.speedata.de/imprint/).
 
 
 --------
-URL: <https://speedata.github.io/publisher/> <br>
 Source: <https://github.com/speedata/publisher/> <br>
 Blog (German): <https://blog.speedata.de/> <br>
-Webpage (German): <https://www.speedata.de/>
+Webpage: <https://www.speedata.de/>

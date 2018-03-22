@@ -1236,6 +1236,9 @@
                      <optional>
                         <ref name="e_Switch"></ref>
                      </optional>
+                     <optional>
+                        <ref name="e_SortSequence"></ref>
+                     </optional>
                   </interleave>
                </oneOrMore>
             </group>
@@ -3391,7 +3394,7 @@
                </optional>
                <optional>
                   <attribute name="rotate">
-                     <a:documentation>Dreht das Objekt. Ein Winkel &gt; 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</a:documentation>
+                     <a:documentation>Dreht das Objekt. Ein Winkel &gt; 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn. Wenn der Winkel ungleich 0 ist, wird die Rasterbelegung abgeschaltet.</a:documentation>
                   </attribute>
                </optional>
                <optional>

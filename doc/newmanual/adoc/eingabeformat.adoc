@@ -8,7 +8,7 @@ Sie können jedes Datenformat benutzen, solange es XML ist.
 
 
 Die erste Voraussetzung ist, dass die Datenquelle im XML-Format (Extensible Markup Language) vorliegt.
-Andere Formate werden mit dem Publisher nicht verarbeitet.
+Andere Formate werden mit dem Publisher nicht verarbeitet (mithilfe des <<luafilter,Lua Filters>> können auch CSV- und Excel-Dateien  verarbeitet werden).
 In der Praxis spielt das keine Rolle, weil alle (strukturierten) Daten in das XML-Format  konvertiert werden können.
 
 Häufig wird gefragt, wie denn das Daten-XML aufgebaut sein muss.
