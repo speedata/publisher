@@ -169,8 +169,12 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 
 	os.RemoveAll(newmanualdestpath)
 
+	// Copy the adoc and hugo files from the main dir into the build dir.
+	// In the adoc path we add the reference files from commands.xml (subdir ref),
+	// then build the docbook file and finally create the hugo site from the docbook file.
 	fileutils.CpR(filepath.Join(newmanualsourcepath, "adoc"), newmanualadocpath)
 	fileutils.CpR(filepath.Join(newmanualsourcepath, "hugo"), newmanualhugopath)
+	fileutils.CpR(filepath.Join(newmanualadocpath, "img"), filepath.Join(newmanualhugopath, "static", "img"))
 
 	refdir := filepath.Join(newmanualadocpath, "ref")
 	err = os.MkdirAll(refdir, 0755)

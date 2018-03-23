@@ -831,38 +831,38 @@
   <Barcode select="'speedata Publisher'" type="Code128" showtext="yes"/>
 </PlaceObject>]]></listing>
       <para>gives</para>
-      <image file="code128-speedata-publisher.png"/>
+      <image file="ref-code128-speedata-publisher.png"/>
       <listing><![CDATA[<PlaceObject>
   <Barcode select="4242002518169" type="EAN13"/>
 </PlaceObject>]]></listing>
       <para>becomes</para>
-      <image file="ean13-supertex.png" width="300"/>
+      <image file="ref-ean13-supertex.png" width="300"/>
       <para>And finally the QR code</para>
       <listing><![CDATA[<PlaceObject>
   <Barcode select="'http://www.speedata.de'" type="QRCode" height="5"/>
 </PlaceObject>
 ]]></listing>
       <para>looks like (surprise!)</para>
-      <image file="speedata-publisher-qrcode.png" width="300"/>
+      <image file="ref-speedata-publisher-qrcode.png" width="300"/>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<PlaceObject>
   <Barcode select="'speedata Publisher'" type="Code128" showtext="yes"/>
 </PlaceObject>]]></listing>
       <para>ergibt</para>
-      <image file="code128-speedata-publisher.png"/>
+      <image file="ref-code128-speedata-publisher.png"/>
       <listing><![CDATA[<PlaceObject>
   <Barcode select="4242002518169" type="EAN13"/>
 </PlaceObject>]]></listing>
       <para>wird zu</para>
-      <image file="ean13-supertex.png" width="30%"/>
+      <image file="ref-ean13-supertex.png" width="30%"/>
       <para>und</para>
       <listing><![CDATA[<PlaceObject>
   <Barcode select="'http://www.speedata.de'" type="QRCode" height="5"/>
 </PlaceObject>
 ]]></listing>
       <para>wird zu</para>
-      <image file="speedata-publisher-qrcode.png" width="30%"/>
+      <image file="ref-speedata-publisher-qrcode.png" width="30%"/>
     </example>
     <seealso><cmd name="PlaceObject"/></seealso>
   </command>
@@ -1186,7 +1186,7 @@
 </PlaceObject>
 ]]></listing>
       <para>looks like</para>
-      <image file="greenbox.png"/>
+      <image file="ref-greenbox.png"/>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<DefineColor name="meingrün" model="cmyk" c="22" m="0" y="55" k="0"/>
@@ -1195,7 +1195,7 @@
 </PlaceObject>
 ]]></listing>
       <para>erzeugt ein farbiges Rechteck</para>
-      <image file="greenbox.png"/>
+      <image file="ref-greenbox.png"/>
     </example>
     <seealso><cmd name="DefineColor"/>, <cmd name="PlaceObject"/></seealso>
   </command>
@@ -1325,7 +1325,7 @@
 </PlaceObject>
 ]]></listing>
       <para>looks like</para>
-      <image file="circlewithborder.png"/>
+      <image file="ref-circlewithborder.png"/>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<DefineColor name="meingrün" model="cmyk" c="22" m="0" y="55" k="0"/>
@@ -1334,7 +1334,7 @@
 </PlaceObject>
 ]]></listing>
       <para>erzeugt einen Kreis</para>
-      <image file="circlewithborder.png" width="30%"/>
+      <image file="ref-circlewithborder.png" width="30%"/>
     </example>
     <seealso><cmd name="DefineColor"/>, <cmd name="PlaceObject"/></seealso>
   </command>
@@ -2987,7 +2987,7 @@
   </Paragraph>
 </Textblock>
 ]]></listing>
-      <image file="initial-en.png" width="50%"/>
+      <image file="ref-initial-en.png" width="50%"/>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<Textblock>
@@ -3001,7 +3001,7 @@
   </Paragraph>
 </Textblock>
 ]]></listing>
-      <image file="initial-de.png" width="50%"/>
+      <image file="ref-initial-de.png" width="50%"/>
     </example>
     <seealso></seealso>
   </command>
@@ -4822,7 +4822,7 @@
 </PlaceObject>
 ]]></listing>
       <para>ergibt folgende Ausgabe</para>
-      <image file="overlay.png"/>
+      <image file="ref-overlay.png"/>
     </example>
     <seealso><cmd name="Position"/></seealso>
   </command>
@@ -7060,7 +7060,7 @@
   <entry pos="4" name="GNK Dinamo Zagreb" p="6"
   	  tw="0" td="1" tl="5" tf="1"  ta="14" tpm="-13" pts="1" />
 </data>]]></listing>
-      <image file="table-en.png"/>
+      <image file="ref-table-en.png"/>
     </example>
     <example xml:lang="de">
       <para>Mit den folgenden Daten</para>
@@ -7102,7 +7102,7 @@
   </PlaceObject>
 </Record>
 ]]></listing>
-      <image file="table-de.png" width="100%"/>
+      <image file="ref-table-de.png" width="100%"/>
     </example>
     <seealso>
       <cmd name="Tr"/>,  <cmd name="Td"/>, <cmd name="Tablerule"/>, <cmd name="PlaceObject"/>
