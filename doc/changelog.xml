@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.27" date="2018-03-23">
+      <en>Another bugfix with Tables</en>
+      <de>Weitere Fehlerkorrektur bei Tabellen</de>
+    </entry>
     <entry version="3.1.26" date="2018-03-23">
       <en>Bugfix with Tables (#166)</en>
       <de>Fehlerkorrektur bei Tabellen (#166)</de>
