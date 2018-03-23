@@ -522,6 +522,8 @@ function calculate_columnwidth( self )
         for i=1,#colmax do
             if shrink_factor[i] then
                 self.colwidths[i] = col_r[i] -  shrink_factor[i] / sum_shrinkfactor * excess
+            elseif colmax[i] == 0 then
+                self.colwidths[i] = 0
             end
         end
         return
