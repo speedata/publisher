@@ -697,6 +697,7 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
         else
             minht = tex.sp(tr_contents.minheight)
         end
+        minht = minht or 0
         rowheight = math.max(minht, min_lineheight)
     else
         rowheight = min_lineheight
