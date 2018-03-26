@@ -32,7 +32,7 @@ Im Folgenden werden die Anwendungsmöglichkeiten beschrieben, ganz zum Schluss g
 
 == Validieren von Eingabedaten
 
-Um RelaxNG-Dateien zu validieren gibt es mehrere Möglichkeiten. Neben einen Variante, direkt im XML Editor das Schema zu validieren (siehe den entsprechenden <<ch-schemavalidierung, Abschnitt im Handbuch>>) gibt es die Möglichkeit,  ein externes Programm dafür zu nutzen.
+Um RELAX NG-Dateien zu validieren gibt es mehrere Möglichkeiten. Neben einen Variante, direkt im XML Editor das Schema zu validieren (siehe den entsprechenden <<ch-schemavalidierung, Abschnitt im Handbuch>>) gibt es die Möglichkeit,  ein externes Programm dafür zu nutzen.
 Eines davon ist Jing. Es wird mit dem Publisher mitgeliefert.
 
 In der Lua-Vorverarbeitung gibt es eine Funktion, die die Validierung übernimmt:
@@ -66,7 +66,7 @@ auf. Vor jedem Lauf wird nun überprüft, ob die Layoutdatei dem Schema entspric
 
 
 TIP: Man kann nicht nur die Layoutdatei auf Korrektheit überprüfen, sondern auch alle anderen XML-Dateien.
-Hierzu muss man sich jedoch ein eigenes RelaxNG-Schema erstellen.
+Hierzu muss man sich jedoch ein eigenes RELAX NG-Schema erstellen.
 Eine Anleitung dazu ist unter https://speedata.github.io/relaxngtutorial-de/ verfügbar.
 Je nach Datendatei ist das auch recht einfach.
 Insbesondere wenn man immer wieder Daten aus fremden Quellen geliefert bekommt, kann man sich so sicher sein, dass die gewünschte Struktur eingehalten wird.
@@ -223,7 +223,7 @@ Eine Zeichenkette, die das aktuelle Projektverzeichnis enthält (das Verzeichnis
 
 `validate_relaxng(‹xmldatei›,‹schemadatei›)`::
 
-Diese Funktion validiert die angegebene XML-Datei mit dem im zweiten Parameter angegebenen RelaxNG (XML-Syntax) Schema.
+Diese Funktion validiert die angegebene XML-Datei mit dem im zweiten Parameter angegebenen RELAX NG (XML-Syntax) Schema.
 Die Rückgabe ist ein boolean-Wert, der true ist, wenn der Befehl fehlerfrei ausgeführt wurde. Ansonsten wird ein zweiter Rückgabewert (string) zurück gegeben, der die Fehlermeldung enthält.
 
 `run_saxon(‹XSL›,‹Quelldatei›,‹Ausgabedatei›,‹Parameter›)`::

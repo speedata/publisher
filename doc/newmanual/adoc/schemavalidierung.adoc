@@ -26,7 +26,7 @@ Gute XML-Editoren bewirken noch viel mehr, als nur die erleichterte Eingabe von 
 
 == Was ist ein Schema?
 
-In einem Schema (z. B. https://de.wikipedia.org/wiki/XML_Schema[XML-Schema] oder https://de.wikipedia.org/wiki/RELAX_NG[RelaxNG]) stehen Informationen über den erlaubten Aufbau einer XML-Datei.
+In einem Schema (z. B. https://de.wikipedia.org/wiki/XML_Schema[XML-Schema] oder https://de.wikipedia.org/wiki/RELAX_NG[RELAX NG]) stehen Informationen über den erlaubten Aufbau einer XML-Datei.
 So steht im Schema, das mit dem speedata Publisher mitgeliefert wird, beispielsweise:
 
 * Das Wurzelelement muss `<Layout>` heißen
@@ -54,7 +54,7 @@ image::29-autocomplete2.png[width=90%,scaledwidth=100%]
 
 
 
-== Einbinden des RelaxNG-Schemas
+== Einbinden des RELAX NG-Schemas
 
 Wie das Schema eingebunden wird, ist abhängig vom Editor.
 Für oXygen XML kann z. B. man in den Einstellungen eine neue Dokumenttypen-Zuordnung erstellen.
@@ -71,7 +71,7 @@ endif::[]
 
 
 [[abb-29-doczuordnung2]]
-.Als Schema RelaxNG + Schematron einstellen in der oXygen XML-Konfiguration
+.Als Schema RELAX NG + Schematron einstellen in der oXygen XML-Konfiguration
 image::29-doczuordnung2.png[width=80%,scaledwidth=100%]
 
 

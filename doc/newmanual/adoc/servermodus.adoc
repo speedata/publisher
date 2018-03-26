@@ -212,6 +212,8 @@ Die zurückgegebene JSON Datei hat folgende Schlüssel:
 GET: Löscht das Verzeichnis mit dieser id. Gibt 200 zurück, wenn die id vorhanden ist, 404 falls nicht.
 
 
+// Nicht dokumentieren: wird irgendwann mal nicht mehr unterstützt
+
 // == `/v0/format`
 
 // Diese Schnittstelle fällt ein wenig aus dem Rahmen, weil sie nichts mit der Datenverarbeitung zu tun hat.
@@ -220,7 +222,7 @@ GET: Löscht das Verzeichnis mit dieser id. Gibt 200 zurück, wenn die id vorhan
 
 // Die Rückgabe erfolgt in demselben Format wie die Anfrage.
 
-// Die XML-Struktur der Anfrage als auch der Rückgabe muss folgendem RelaxNG-Compact-Schema entsprechen:
+// Die XML-Struktur der Anfrage als auch der Rückgabe muss folgendem RELAX NG-Compact-Schema entsprechen:
 
 // --------
 // namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
