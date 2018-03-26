@@ -10,7 +10,7 @@
     </entry>
     <entry version="3.1.26" date="2018-03-20">
       <en>Bugfix with Ul/Li</en>
-      <en>Fehlerkorrektur bei Ul/Li</en>
+      <de>Fehlerkorrektur bei Ul/Li</de>
     </entry>
     <entry version="3.1.25" date="2018-03-20">
       <en>Bugfix with XPath operators (#165)</en>

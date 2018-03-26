@@ -42,36 +42,36 @@ Ein einfaches Beispiel für die Anordnung:
 
 [source, xml]
 -------------------------------------------------------------------------------
-<Produktdaten>
-  <GlobaleEinstellungen>
+<productdata>
+  <globalsettings>
     ...
-  </GlobaleEinstellungen>
-  <Artikelgruppe name="Innenleuchten" nummer="123">
-    <Artikel nummer="123-12345">
-      <Eigenschaft1>...</Eigenschaft1>
-      <Eigenschaft2>...</Eigenschaft2>
-    </Artikel>
-    <Artikel nummer="123-12346">
-      <Eigenschaft1>...</Eigenschaft1>
-      <Eigenschaft2>...</Eigenschaft2>
-    </Artikel>
-  </Artikelgruppe>
-  <Artikelgruppe name="Außenleuchten" nummer="124">
-    <Artikel nummer="124-23456">
-      <Eigenschaft1>...</Eigenschaft1>
-      <Eigenschaft2>...</Eigenschaft2>
-    </Artikel>
-    <Artikel nummer="124-54321">
-      <Eigenschaft1>...</Eigenschaft1>
-      <Eigenschaft2>...</Eigenschaft2>
-    </Artikel>
-  </Artikelgruppe>
-</Produktdaten>
+  </globalsettings>
+  <articlegroup name="interior lights" number="123">
+    <article number="123-12345">
+      <property1>...</property1>
+      <property2>...</property2>
+    </article>
+    <article number="123-12346">
+      <property1>...</property1>
+      <property2>...</property2>
+    </article>
+  </articlegroup>
+  <articlegroup name="Außenleuchten" number="124">
+    <article number="124-23456">
+      <property1>...</property1>
+      <property2>...</property2>
+    </article>
+    <article number="124-54321">
+      <property1>...</property1>
+      <property2>...</property2>
+    </article>
+  </articlegroup>
+</productdata>
 -------------------------------------------------------------------------------
 
 Redundanz schadet hier nicht, im Gegenteil.
 Da im Beispiel die Artikelgruppe eine eindeutige Ziffernfolge (123 bzw. 124) hat, würde bei den Artikeln die letzten fünf Ziffern ausreichen.
-Man kann ja die Zahl aus `Artikelgruppe/@nummer`, `-` und `Artikel/@nummer` selbst zusammenbauen.
+Man kann ja die Zahl aus `articlegroup/@number`, `-` und `article/@number` selbst zusammenbauen.
 Um sich den Schritt zu sparen, speichert man am Artikel einfach die vollständige Nummer.
 
 Um es zusammenzufassen: Wenn Sie die Möglichkeit haben, auf die Strukturierung der Daten Einfluss zu nehmen: speichern Sie lieber zu viele Informationen, als zu wenige.
@@ -87,16 +87,16 @@ Im Folgenden wird von dieser einfachen Datendatei ausgegangen:
 
 [source, xml]
 -------------------------------------------------------------------------------
-<katalog>
-  <artikel nr="12345" preis="99,95" ve="1">
-    <beschreibung>Text</beschreibung>
-    <bild hauptbild="ja">art12345.pdf</bild>
-  </artikel>
-  <artikel nr="56789" preis="45,95" ve="5">
-    <beschreibung>Text für 56789</beschreibung>
-    <bild>art56789.pdf</bild>
-  </artikel>
-</katalog>
+<catalog>
+  <article nr="12345" price="99,95" quantity="1">
+    <description>Text</description>
+    <image mainimage="yes">art12345.pdf</image>
+  </article>
+  <article nr="56789" price="45,95" quantity="5">
+    <description>Text für 56789</description>
+    <image>art56789.pdf</image>
+  </article>
+</catalog>
 -------------------------------------------------------------------------------
 
 Diese Datendatei wird unter dem Namen `data.xml` gespeichert, damit der Publisher sie finden kann.
@@ -105,28 +105,6 @@ Diese Datendatei wird unter dem Namen `data.xml` gespeichert, damit der Publishe
 Die Layout-Datei (Name: `layout.xml`) wird beim Einlesen ausgeführt: alle Befehle mit dem Namen `<Record>` werden für die spätere Verarbeitung gespeichert, alle anderen Befehle haben sofortige Wirkung.
 D. h. wenn ein Befehl wie `<DefineColor>` auf der obersten Ebene im Layoutregelwerk enthalten ist, wird er ausgeführt, bevor die eigentliche Datenverarbeitung beginnt.
 
-// Eine (sinnlose) minimale Layoutdatei wäre diese hier:
-
-// [source, xml]
-// -------------------------------------------------------------------------------
-// <Layout xmlns="urn:speedata.de:2009/publisher/en"
-//   xmlns:sd="urn:speedata:2009/publisher/functions/en">
-
-// </Layout>
-// -------------------------------------------------------------------------------
-
-// Startet man den Publisher mit dieser Layoutdatei und der oben angegebenen Datendatei (`sp` auf der Kommandozeile aufrufen), dann wird folgende Fehlermeldung ausgegeben:
-
-
-// [source, text]
-// -------------------------------------------------------------------------------
-// Kann den Befehl »Record« für das Wurzelelement nicht finden.
-// -------------------------------------------------------------------------------
-
-
-// Das heißt, der Publisher weiß nicht, wo er anfangen soll zu arbeiten.
-// Also wird die Layoutdatei wie folgt erweitert:
-
 Eine minimale Layoutdatei für oben gezeigte Datenstrukturierung ist:
 
 [source, xml]
@@ -134,7 +112,7 @@ Eine minimale Layoutdatei für oben gezeigte Datenstrukturierung ist:
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <Record element="katalog">
+  <Record element="catalog">
 
   </Record>
 
@@ -170,7 +148,7 @@ Die für die Verarbeitung notwendige Struktur ist folgende:(((`Record`)))(((`Pro
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <Record element="katalog">
+  <Record element="catalog">
     <!--1-->
     <ProcessNode select="*"/> <!--2-->
     <!--3-->
@@ -192,32 +170,32 @@ Innerhalb des unteren `<Record>`-Befehls kann man nun auf Kindelemente und Attri
 Beispiele:
 
 * `@nr` ergibt im ersten Aufruf die Zeichenkette `12345`, im zweiten Durchlauf `56789`.
-* `beschreibung` ergibt eine Sequenz mit einem Element, dem Inhalt `Text` (erster Artikel).
-* `bild/@hauptbild` ist im ersten Fall die Zeichenkette `"ja"` (der Inhalt des Attributs `hauptbild`), im zweiten Fall die leere Zeichenkette `""`, weil das Attribut dort nicht vorhanden ist.
+* `description` ergibt eine Sequenz mit einem Element, dem Inhalt `Text` (erster Artikel).
+* `image/@mainimage` ist im ersten Fall die Zeichenkette `"ja"` (der Inhalt des Attributs `mainimage`), im zweiten Fall die leere Zeichenkette `""`, weil das Attribut dort nicht vorhanden ist.
 
 Die Details hierzu finden sich im Abschnitt über die <<ch-xpathfunktionen,XPath-Funktionen>>.
 
 Alternativ zur Vorgehensweise mit `<ProcessNode>` und dem Gegenstück `<Record>` kann auch mit ((`<ForAll>`)) auf Kindelemente zugegriffen werden.
-Das nachfolgende Beispiel erzeugt für jedes Kindelement mit dem Namen `artikel` eine Tabellenzeile:
+Das nachfolgende Beispiel erzeugt für jedes Kindelement mit dem Namen `article` eine Tabellenzeile:
 
 [source, xml]
 -------------------------------------------------------------------------------
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <Record element="katalog">
+  <Record element="catalog">
     <PlaceObject>
       <Table stretch="max"> <!--1-->
         <Tablehead> <!--2-->
           <Tr backgroundcolor="gray">
             <Td>
-              <Paragraph><Value>Artikelnummer</Value></Paragraph>
+              <Paragraph><Value>Article number</Value></Paragraph>
             </Td>
-              <Paragraph><Value>Beschreibung</Value></Paragraph>
+              <Paragraph><Value>Description</Value></Paragraph>
             </Td>
           </Tr>
         </Tablehead>
-        <ForAll select="artikel"> <!--3-->
+        <ForAll select="article"> <!--3-->
           <Tr>
             <Td>
               <Paragraph><Value select="@nr"/></Paragraph>

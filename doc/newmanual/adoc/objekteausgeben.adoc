@@ -115,10 +115,10 @@ Sind diese in den Absätzen deklariert, so haben die Vorrang vor denen, die im T
 -------------------------------------------------------------------------------
 <Textblock color="blue">
   <Paragraph color="green">
-    <Value>Grüner Text</Value>
+    <Value>green text</Value>
   </Paragraph>
   <Paragraph>
-    <Value>Und hier blauer Text (Vorgabe in Textblock)</Value>
+    <Value>this text is in blue (given by Textblock)</Value>
   </Paragraph>
 </Textblock>
 -------------------------------------------------------------------------------
@@ -427,7 +427,7 @@ Barcodes bzw. QR-Codes werden über den Befehl `<Barcode>` eingebunden:
 [source, xml]
 -------------------------------------------------------------------------------
 <PlaceObject>
-  <Barcode select="'Hallo Welt'" type="QRCode" width="5"/>
+  <Barcode select="'Hello world'" type="QRCode" width="5"/>
 </PlaceObject>
 -------------------------------------------------------------------------------
 

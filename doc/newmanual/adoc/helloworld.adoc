@@ -12,7 +12,7 @@ Die Datendatei für das »Hallo Welt« Beispiel mit dem Namen `data.xml`:
 
 [source, xml]
 -------------------------------------------------------------------------------
-<data>Hallo Welt!</data>
+<data>Hello world!</data>
 -------------------------------------------------------------------------------
 
 Das reicht für das einfache Beispiel aus.
@@ -63,7 +63,7 @@ Die Datendatei kann beliebig strukturiert sein, solange der Inhalt wohlgeformtes
 
 [source, xml]
 -------------------------------------------------------------------------------
-<data>Hallo Welt!</data>
+<data>Hello world!</data>
 -------------------------------------------------------------------------------
 
 Die Layoutdatei ist etwas komplizierter, zumindest auf den ersten Blick.
@@ -89,7 +89,7 @@ Die Layoutdatei ist etwas komplizierter, zumindest auf den ersten Blick.
 <2> Hier startet die Datenverarbeitung. Das Wurzelelement der Datendatei wird bei dem Attribut `element` angegeben.
 <3> `<PlaceObject>` ist der Befehl, um Dinge (Texte, Bilder, Kästchen, ...) in das PDF auszugeben.
 <4> Der Punkt beim Attribut `select` bedeutet »das aktuelle Element«, in diesem Fall das Wurzelelement.
-Hier wird der Textwert des Elements ausgegeben, also die Zeichenkette `Hallo Welt!`
+Hier wird der Textwert des Elements ausgegeben, also die Zeichenkette `Hello world!`
 
 Mehr soll an dieser Stelle nicht erörtert werden.
 Vielmehr gibt es ein Verweis auf die entsprechenden Kapitel in dieser Anleitung: Unter <<ch-organisationdaten,Organisation der Daten für die Datenverarbeitung>> wird beschrieben, wie die Datendatei und die Layoutdatei zu strukturieren sind, und unter <<ch-objekteausgeben,Ausgabe von Objekten>> wird der Befehl `PlaceObject` beschrieben.

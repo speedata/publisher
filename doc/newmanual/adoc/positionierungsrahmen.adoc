@@ -9,10 +9,10 @@ Die Seiten kann man in virtuelle Bereiche unterteilen. Dazu gibt man im Seitenty
 -------------------------------------------------------------------------------
 <Pagetype name="seite" test="true()">
   <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
-  <PositioningArea name="Kopfbereich">
+  <PositioningArea name="pagehead">
     <PositioningFrame width="19" height="2" row="1" column="1"/>
   </PositioningArea>
-  <PositioningArea name="links">
+  <PositioningArea name="left">
     <PositioningFrame width="4" height="{sd:number-of-rows() - 3}" row="4" column="2"/>
   </PositioningArea>
   <PositioningArea name="text">
@@ -27,26 +27,26 @@ Hier werden drei Bereiche definiert, die man mit dem Attribut `area="..."` anspr
 [source, xml]
 -------------------------------------------------------------------------------
 <Record element="data">
-  <PlaceObject area="Kopfbereich">
+  <PlaceObject area="pagehead">
     <Textblock>
       <Paragraph>
-        <Value>Kopfbereich, Höhe der Area: </Value>
-        <Value select="sd:number-of-rows('Kopfbereich')"></Value>
+        <Value>pagehead, height of the area: </Value>
+        <Value select="sd:number-of-rows('pagehead')"></Value>
       </Paragraph>
     </Textblock>
   </PlaceObject>
-  <PlaceObject area="links">
+  <PlaceObject area="left">
     <Textblock>
       <Paragraph>
-        <Value>links, Höhe: </Value>
-        <Value select="sd:number-of-rows('links')"></Value>
+        <Value>left, height: </Value>
+        <Value select="sd:number-of-rows('left')"></Value>
       </Paragraph>
     </Textblock>
   </PlaceObject>
   <PlaceObject area="text">
     <Textblock>
       <Paragraph>
-        <Value>text, Breite: </Value>
+        <Value>text, width: </Value>
         <Value select="sd:number-of-columns('text')"></Value>
       </Paragraph>
     </Textblock>
@@ -112,38 +112,6 @@ endif::[]
 [[abb-cursor]]
 .Das Verhalten von NextRow
 image::cursor.png[width=100%]
-
-////
-<Layout
-  xmlns="urn:speedata.de:2009/publisher/en"
-  xmlns:sd="urn:speedata:2009/publisher/functions/en">
-
-  <Trace grid="yes"/>
-
-  <Record element="data">
-    <PlaceObject>
-      <Box width="{sd:number-of-columns()}" height="1"/>
-    </PlaceObject>
-    <NextRow rows="1" />
-    <PlaceObject>
-      <Box width="{sd:number-of-columns()}" height="1"/>
-    </PlaceObject>
-
-    <NextRow rows="2" />
-
-    <PlaceObject>
-      <Box width="4" height="1"/>
-    </PlaceObject>
-    <!--1-->
-    <NextRow rows="1" />
-    <PlaceObject>
-      <Box width="4" height="1"/>
-    </PlaceObject>
-
-  </Record>
-</Layout>
-////
-
 
 
 [[ch-naechster-rahmen]]

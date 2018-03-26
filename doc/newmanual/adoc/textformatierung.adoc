@@ -30,22 +30,22 @@ Mit einer ähnlichen Funktionalität gibt es die folgenden Befehle:
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
     <PlaceObject>
-      <Textblock>
+      <Textblock width="11">
         <Paragraph>
           <Value>Text</Value>
-          <Sub><Value>Tiefergestellt</Value></Sub>
+          <Sub><Value>sub</Value></Sub>
           <Value> </Value>
-          <Sup><Value>Hochgestellt</Value></Sup>
+          <Sup><Value>sup</Value></Sup>
           <Value> </Value>
-          <U><Value>Unterstrichen</Value></U>
+          <U><Value>underline</Value></U>
           <Value> </Value>
-          <Color name="green"><Value>Grün</Value></Color>
+          <Color name="green"><Value>green</Value></Color>
           <Value> </Value>
           <A href="https://www.speedata.de">
-            <Value>Link zur Homepage</Value>
+            <Value>link to the homepage</Value>
           </A>
           <HSpace leader=" . "/>
-          <Value>rechter Rand.</Value>
+          <Value>right margin.</Value>
         </Paragraph>
       </Textblock>
     </PlaceObject>

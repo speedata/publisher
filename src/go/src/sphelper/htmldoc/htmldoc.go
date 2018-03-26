@@ -7,7 +7,6 @@ import (
 	"html/template"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"sync"
 
@@ -19,11 +18,6 @@ var (
 	wg        sync.WaitGroup
 	templates *template.Template
 )
-
-func init() {
-	runtime.GOMAXPROCS(runtime.NumCPU())
-
-}
 
 func translate(lang, text string) string {
 	if lang == "en" {

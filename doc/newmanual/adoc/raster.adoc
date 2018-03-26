@@ -71,14 +71,14 @@ Das eignet sich beispielsweise für Logos oder Hintergrundbilder, die an einer f
 Diese beiden Varianten sind innerhalb einer Ausgabe mit `<PlaceObject>` nicht kombinierbar: man muss sich für eine der beiden Varianten entscheiden.
 
 [source, xml]
-.Rasterbasierte Ausgabe (oben) und absolute Ausgabe (unten). Bei der rasterbasierten Ausgabe sind die Angaben Koordinaten im Seitenraster, wobei die linke obere Ecke die Position 1,1 ist.
+.Rasterbasierte Ausgabe (oben) und absolute Ausgabe (unten). Bei der rasterbasierten Ausgabe sind die Angaben Koordinaten im Seitenraster, wobei die linke obere Ecke die Position 1,1 ist. Bei der absoluten Positionierung ist die Angabe gemessen von der linken oberen Ecke. Sobald eine der beiden Angaben eine Längenangabe ist, wird die absolute Positionierung genommen.
 -------------------------------------------------------------------------------
-<!-- Platzierung im Raster -->
+<!-- grid -->
 <PlaceObject row="4" column="5">
     <Image file="_samplea.pdf" width="5"/>
 </PlaceObject>
 
-<!-- Die Position wird von der linken oberen Kante des Papiers gemessen -->
+<!-- absolute  -->
 <PlaceObject row="12mm" column="5cm">
     <Image file="_samplea.pdf" width="5"/>
 </PlaceObject>
@@ -246,7 +246,7 @@ endif::[]
 -------------------------------------------------------------------------------
 ...
 PlaceObject: Image in row 1 and column 1, width=4, height=4 (page 1)
-Warning: Rasterkonflikt
+Warning: Conflict in grid
 ...
 -------------------------------------------------------------------------------
 
@@ -303,12 +303,12 @@ Ohne die explizite `<Grid ... />`-Angabe wird das Raster der Seite genommen.
         <PlaceObject>
           <Table width="4" stretch="max">
             <Tr>
-              <Td><Paragraph><Value>Spalte 1/1</Value></Paragraph></Td>
-              <Td><Paragraph><Value>Spalte 2/1</Value></Paragraph></Td>
+              <Td><Paragraph><Value>Cell 1/1</Value></Paragraph></Td>
+              <Td><Paragraph><Value>Cell 2/1</Value></Paragraph></Td>
             </Tr>
             <Tr>
-              <Td><Paragraph><Value>Spalte 1/2</Value></Paragraph></Td>
-              <Td><Paragraph><Value>Spalte 2/2</Value></Paragraph></Td>
+              <Td><Paragraph><Value>Cell 1/2</Value></Paragraph></Td>
+              <Td><Paragraph><Value>Cell 2/2</Value></Paragraph></Td>
             </Tr>
           </Table>
         </PlaceObject>

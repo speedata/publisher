@@ -29,7 +29,9 @@ $fontHandbuchMono:  'Roboto Mono', monospace;
     position: relative;
     text-align:left;
     @media #{$phone-quer} {
-        text-align:center;
+        .website & {
+            text-align:center;
+        }
     }
     line-height: 1.2;
     font-family: $fontWebsiteAlt;

@@ -185,7 +185,7 @@ img {
   hyphens: auto;
 }
 @media screen and (min-width: 600px) {
-  .headline-1, h1, .headline-2, h2, .headline-3, h3, .headline-4, h4, .headline-5, h5, .headline-6, h6 {
+  .website .headline-1, .website h1, .website .headline-2, .website h2, .website .headline-3, .website h3, .website .headline-4, .website h4, .website .headline-5, .website h5, .website .headline-6, .website h6 {
     text-align: center;
   }
 }
@@ -2645,6 +2645,27 @@ h1:hover .anchorLink, h2:hover .anchorLink {
 }
 @media screen and (min-width: 1024px) {
   #version {
+    bottom: 10px;
+    left: 50px;
+    font-size: 100%;
+  }
+}
+
+#sprachwahl {
+  position: absolute;
+  bottom: 5px;
+  left: 70px;
+  font-size: 70%;
+}
+#sprachwahl a {
+  color: #000;
+  text-decoration: none;
+}
+#sprachwahl a.active {
+  font-weight: bold;
+}
+@media screen and (min-width: 1024px) {
+  #sprachwahl {
     bottom: 10px;
     left: 50px;
     font-size: 100%;

@@ -51,14 +51,13 @@ Alternativ dazu kann man den Mechanismus über XInclude(((`Include`))) benutzen,
 
 [source,xml]
 -------
-<Include
+<Layout
   xmlns="urn:speedata.de:2009/publisher/en">
 
-  <LoadFontfile name="DejaVuSerif"
-        filename="DejaVuSerif.ttf" />
+  <LoadFontfile name="DejaVuSerif" filename="DejaVuSerif.ttf" />
   ...
 
-</Include>
+</Layout>
 -------
 
 

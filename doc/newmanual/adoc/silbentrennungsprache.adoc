@@ -67,7 +67,7 @@ Mittels(((`Hyphenation`)))
 
 [source, xml]
 -------------------------------------------------------------------------------
-<Hyphenation>trenn-stelle</Hyphenation>
+<Hyphenation>er-go-no-mic</Hyphenation>
 -------------------------------------------------------------------------------
 
 

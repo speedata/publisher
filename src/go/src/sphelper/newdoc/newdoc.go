@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"sync"
 	"text/template"
@@ -22,11 +21,6 @@ var (
 	wg        sync.WaitGroup
 	templates *template.Template
 )
-
-func init() {
-	runtime.GOMAXPROCS(runtime.NumCPU())
-
-}
 
 func translate(lang, text string) string {
 	if lang == "en" {
@@ -169,14 +163,7 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 
 	os.RemoveAll(newmanualdestpath)
 
-	// Copy the adoc and hugo files from the main dir into the build dir.
-	// In the adoc path we add the reference files from commands.xml (subdir ref),
-	// then build the docbook file and finally create the hugo site from the docbook file.
-	fileutils.CpR(filepath.Join(newmanualsourcepath, "adoc"), newmanualadocpath)
-	fileutils.CpR(filepath.Join(newmanualsourcepath, "hugo"), newmanualhugopath)
-	fileutils.CpR(filepath.Join(newmanualadocpath, "img"), filepath.Join(newmanualhugopath, "static", "img"))
-
-	refdir := filepath.Join(newmanualadocpath, "ref")
+	refdir := filepath.Join(newmanualsourcepath, "adoc", "ref")
 	err = os.MkdirAll(refdir, 0755)
 	if err != nil {
 		return err
@@ -201,6 +188,14 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 		go builddoc(c, v, "de", fullpath)
 	}
 	wg.Wait()
+
+	// Copy the adoc and hugo files from the main dir into the build dir.
+	// In the adoc path we add the reference files from commands.xml (subdir ref),
+	// then build the docbook file and finally create the hugo site from the docbook file.
+	fileutils.CpR(filepath.Join(newmanualsourcepath, "adoc"), newmanualadocpath)
+	fileutils.CpR(filepath.Join(newmanualsourcepath, "hugo"), newmanualhugopath)
+	fileutils.CpR(filepath.Join(newmanualadocpath, "img"), filepath.Join(newmanualhugopath, "static", "img"))
+
 	adocfile, err := filepath.Abs(filepath.Join(newmanualadocpath, "publisherhandbuch.adoc"))
 	if err != nil {
 		return err

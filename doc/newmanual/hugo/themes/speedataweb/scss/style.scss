@@ -834,6 +834,25 @@ $gutterWidth : 30px;
 
 	}
 }
+#sprachwahl {
+	position:absolute;
+	bottom:5px;
+	left:70px;
+	font-size:70%;
+	a {
+		color:#000;
+		text-decoration:none;
+		&.active {
+			font-weight:bold;
+		}
+	}
+	@media #{$tablet_quer} {
+		bottom:10px;
+		left:50px;
+		font-size:100%;
+
+	}
+}
 .screen-reader-text {
 	display:none;
 }

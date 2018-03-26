@@ -23,7 +23,7 @@ Im zweiten Schritt nutzt man dann diese internen Namen, um Familien zu definiere
 
 [source,xml]
 -------
-<DefineFontfamily name="textschrift" fontsize="9" leading="11">
+<DefineFontfamily name="textfont" fontsize="9" leading="11">
   <Regular fontface="MinionRegular"/>
   <Bold fontface="MinionBold"/>
   <Italic fontface="MinionItalic"/>
@@ -46,10 +46,10 @@ Temporär kann mit dem Befehl `<Fontface fontfamily="...">` auf eine andere Fami
 [source, xml]
 -------------------------------------------------------------------------------
 <Paragraph>
-  <Fontface fontfamily="Überschrift">
-    <Value>Vorwort</Value>
+  <Fontface fontfamily="title">
+    <Value>Preface</Value>
   </Fontface>
-  <Value> weiter im Text</Value>
+  <Value> more text</Value>
 </Paragraph>
 -------------------------------------------------------------------------------
 
@@ -60,20 +60,20 @@ Die direkteste ist mit den Befehlen `B` und `I` umzuschalten, diese können auch
 
 [source,xml]
 -------
- <PlaceObject>
-   <Textblock fontface="textschrift">
-     <Paragraph>
-       <Value>Mit </Value>
-       <B><Value>Blindheit</Value></B>
-       <Value> per </Value>
-       <I><Value>Definition</Value>
-         <Value> </Value>
-         <B><Value>geschlagen,</Value></B>
-       </I>
-       <Value> dennoch nicht unsichtbar.</Value>
-     </Paragraph>
-   </Textblock>
- </PlaceObject>
+<PlaceObject>
+  <Textblock fontface="textfont">
+    <Paragraph>
+      <Value>A wonderful </Value>
+      <B><Value>serenity</Value></B>
+      <Value> has taken possession </Value>
+      <I><Value>of my</Value>
+        <Value> </Value>
+        <B><Value>entire soul,</Value></B>
+      </I>
+      <Value> like these sweet mornings.</Value>
+    </Paragraph>
+  </Textblock>
+</PlaceObject>
 -------
 
 [[abb-14-auszeichnungimlayout]]
