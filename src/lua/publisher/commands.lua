@@ -23,7 +23,13 @@ commands = {}
 function commands.a( layoutxml,dataxml )
     trace("A")
     local href = publisher.read_attribute(layoutxml,dataxml,"href","rawstring")
-    local ai = node.new("action")
+    local an = publisher.action_node
+    local ai
+    if an then
+        ai = node.new("action")
+    else
+        ai = node.new("whatsit",publisher.pdf_action_whatsit)
+    end
     ai.action_type = 3
     ai.data = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",href)
     local stl = node.new("whatsit","pdf_start_link")

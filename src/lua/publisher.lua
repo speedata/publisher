@@ -137,6 +137,8 @@ penalty_node   = node.id("penalty")
 whatsit_node   = node.id("whatsit")
 hlist_node     = node.id("hlist")
 vlist_node     = node.id("vlist")
+action_node    = node.id("action")
+
 
 for k,v in pairs(node.whatsits()) do
     if v == "user_defined" then
@@ -144,6 +146,8 @@ for k,v in pairs(node.whatsits()) do
         user_defined_whatsit = k
     elseif v == "pdf_refximage" then
         pdf_refximage_whatsit = k
+    elseif v == "pdf_action" then
+        pdf_action_whatsit = k
     end
 end
 
