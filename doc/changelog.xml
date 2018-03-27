@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.1">
+    <entry version="3.1.28" date="2018-03-27">
+      <en>Documentation enhancements</en>
+      <de>Verbesserungen im Handbuch</de>
+    </entry>
     <entry version="3.1.27" date="2018-03-23">
       <en>Another bugfix with Tables</en>
       <de>Weitere Fehlerkorrektur bei Tabellen</de>
