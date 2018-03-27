@@ -7,9 +7,14 @@
     green {
       color: green;
     }
-    span {
+    .blue {
       color: blue;
     }
+    .bgcolor {
+       background-color: red;
+       background-padding-top: -1pt;
+       background-padding-bottom: -1pt;
+       }
   </Stylesheet>
 
   <Record element="data">

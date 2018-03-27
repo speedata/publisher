@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Pageformat width="100mm" height="60mm"/>
+
+  <DefineFontfamily name="doubleheight" fontsize="20" leading="24">
+    <Regular fontface="sans-bold"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Initial fontface="doubleheight">
+            <Value>F</Value>
+          </Initial>
+          <Value select="sd:dummytext()"/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

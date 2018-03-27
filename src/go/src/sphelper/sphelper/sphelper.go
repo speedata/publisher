@@ -13,28 +13,36 @@ import (
 
 	"sphelper/buildsp"
 	"sphelper/config"
-	"sphelper/dashdoc"
 	"sphelper/dirstructure"
 	"sphelper/genschema"
 	"sphelper/gomddoc"
 	"sphelper/htmldoc"
+	"sphelper/newdoc"
 	"sphelper/sourcedoc"
 
 	"github.com/speedata/optionparser"
 )
 
 var (
-	basedir   string
-	separator string
+	basedir string
 )
 
-func makedoc(cfg *config.Config) error {
+// sitedoc: make hugo without ugly URLs
+func makedoc(cfg *config.Config, sitedoc bool) error {
 	os.RemoveAll(filepath.Join(cfg.Builddir, "manual"))
 	err := gomddoc.DoThings(cfg)
 	if err != nil {
 		return err
 	}
-	return htmldoc.DoThings(cfg)
+	err = htmldoc.DoThings(cfg)
+	if err != nil {
+		return err
+	}
+	err = newdoc.DoThings(cfg, sitedoc)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func main() {
@@ -44,8 +52,8 @@ func main() {
 	op := optionparser.NewOptionParser()
 	op.On("--basedir DIR", "Base dir", &commandlinebasedir)
 	op.Command("build", "Build go binary")
-	op.Command("dashdoc", "Generate speedata Publisher documentation (for dash)")
 	op.Command("doc", "Generate speedata Publisher documentation")
+	op.Command("sitedoc", "Generate speedata Publisher documentation without ugly URLs for Hugo")
 	op.Command("dist", "Generate zip files and windows installers")
 	op.Command("genschema", "Generate schema (layoutschema-en.xml)")
 	op.Command("mkreadme", "Make readme for installation/distribution")
@@ -69,17 +77,18 @@ func main() {
 
 	switch command {
 	case "build":
-		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local", separator)
+		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local")
 		if err != nil {
 			os.Exit(-1)
 		}
 	case "doc":
-		err = makedoc(cfg)
+		err = makedoc(cfg, false)
 		if err != nil {
 			log.Fatal(err)
 		}
-	case "dashdoc":
-		err = dashdoc.DoThings(cfg)
+
+	case "sitedoc":
+		err = makedoc(cfg, true)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -91,7 +100,7 @@ func main() {
 	case "dist":
 		fmt.Println("Generate ZIP files and windows installer")
 		os.RemoveAll(cfg.Builddir)
-		makedoc(cfg)
+		makedoc(cfg, false)
 		destdir := filepath.Join(cfg.Builddir, "speedata-publisher")
 		var srcbindir string
 		if srcbindir = os.Getenv("LUATEX_BIN"); srcbindir == "" || !fileutils.IsDir(srcbindir) {
@@ -117,7 +126,7 @@ func main() {
 				if err != nil {
 					log.Fatal(err)
 				}
-				err = buildsp.BuildGo(cfg, filepath.Join(cfg.Builddir, "speedata-publisher", "bin"), platform, arch, "directory", separator)
+				err = buildsp.BuildGo(cfg, filepath.Join(cfg.Builddir, "speedata-publisher", "bin"), platform, arch, "directory")
 				if err != nil {
 					os.Exit(-1)
 				}

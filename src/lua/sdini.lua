@@ -72,7 +72,7 @@ kpse.filelist = {}
 local jobname = os.getenv("SP_JOBNAME")
 local lowercase = os.getenv("SP_IGNORECASE") == "1"
 local currentdir = lfs.currentdir()
-local function add_dir( dir )
+function kpse.add_dir( dir )
   for i in dirtree(dir) do
     local filename = i:gsub(".*/([^/]+)$","%1")
     if lowercase then filename = unicode.utf8.lower(filename) end
@@ -86,7 +86,7 @@ local function add_dir( dir )
   end
 end
 
-add_dir(basedir)
+kpse.add_dir(basedir)
 if os.type == "windows" then
   path_separator = ";"
 else
@@ -96,7 +96,7 @@ end
 if extra_dirs then
   for _,d in ipairs(string.explode(extra_dirs,path_separator)) do
     if lfs.attributes(d,"mode")=="directory" then
-      add_dir(d)
+      kpse.add_dir(d)
     end
   end
 end

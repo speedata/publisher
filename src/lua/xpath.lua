@@ -78,6 +78,19 @@ function M.is_number(str,pos)
     return false
 end
 
+function M.is_dimension(str,pos)
+    if not is_dim then return false end
+    local start,stop,num
+    start, stop, num = string.find(str,"^([%-+]?%d+%.?%d*%a+)%s*",pos)
+    if num then
+        M.nextpos = stop + 1
+        M.tok = num
+        return true
+    end
+    return false
+end
+
+
 function M.is_attribute(dataxml,str,pos)
     local start,stop,attr
     start,stop,attr = string.find(str,"^@([%w_-]+)%s*",pos)
@@ -208,6 +221,9 @@ function M.is_function(dataxml,str,pos,ns)
             else
                 -- function has some xpath contents in it, we need to parse it
                 local contents = M.parse_internal(dataxml,str,ns,pos)
+                if contents == nil and M.err ~= nil then
+                    return nil
+                end
                 M.tok = y(dataxml,contents)
             end
             if M.tok == nil then M.tok = nilmarker end
@@ -283,6 +299,7 @@ function M.is_nodeselector( dataxml,str,pos,ns )
     local eltname
     start,stop,eltname = string.find(str,"^(%a[%w-/_*]*)%s*",pos)
     if start then
+        local something_found = false
         local ret = {}
         M.nextpos = stop + 1
         local tmp = { dataxml }
@@ -292,6 +309,7 @@ function M.is_nodeselector( dataxml,str,pos,ns )
                 for j=1,#tmp[i] do
                     if part == "*" or part == tmp[i][j][".__local_name"] then
                         if type(tmp[i][j]) == "table" then
+                            something_found = true
                             ret[#ret + 1] = tmp[i][j]
                         end
                     end
@@ -299,7 +317,11 @@ function M.is_nodeselector( dataxml,str,pos,ns )
             end
             tmp = ret
         end
-        M.tok = tmp
+        if something_found then
+            M.tok = tmp
+        else
+            M.tok = nilmarker
+        end
         return true
     end
     return false
@@ -308,7 +330,9 @@ end
 
 function M.get_operand(dataxml,str,pos,ns)
     local start, stop
-    if M.is_number(str,pos) then
+    if M.is_dimension(str,pos) then
+         return M.tok
+    elseif M.is_number(str,pos) then
          return tonumber(M.tok)
     elseif M.is_ifthenelse(dataxml,str,pos,ns) then
         return M.tok
@@ -334,7 +358,7 @@ function M.is_additive_expr(dataxml,str,pos,ns)
     local start,stop,op
     start,stop,op = string.find(str,"^([%+%-])%s*",pos)
     if start then
-        M.tok = op
+        M.tok = "\1" .. op
         M.nextpos = stop + 1
         return true
     end
@@ -346,7 +370,7 @@ function M.is_comparison_epxr(dataxml,str,pos,ns)
     start,stop,op = string.find(str,"^([><=!]+)%s*",pos)
     if start then
         M.nextpos = stop + 1
-        M.tok = op
+        M.tok = "\1" .. op
         return true
     end
     return false
@@ -357,13 +381,13 @@ function M.is_andor_expr(dataxml,str,pos,ns)
     local start,stop,op
     start,stop,op = string.find(str,"^and%s*",pos)
     if start then
-        M.tok = "and"
+        M.tok = "\1and"
         M.nextpos = stop + 1
         return true
     end
     start,stop,op = string.find(str,"^or%s*",pos)
     if start then
-        M.tok = "or"
+        M.tok = "\1or"
         M.nextpos = stop + 1
         return true
     end
@@ -388,26 +412,26 @@ function M.is_multiplicative_expr(dataxml,str,pos,ns)
     pos = pos or M.nextpos
     start,stop = string.find(str,"^%*%s*",pos)
     if start then
-        M.tok = "*"
+        M.tok = "\1*"
         M.nextpos = stop + 1
         return true
     end
     -- "div" | "idiv" | "mod"
     start,stop = string.find(str,"^div%s*",pos)
     if start then
-        M.tok = "div"
+        M.tok = "\1div"
         M.nextpos = stop + 1
         return true
     end
     start,stop = string.find(str,"^mod%s*",pos)
     if start then
-        M.tok = "mod"
+        M.tok = "\1mod"
         M.nextpos = stop + 1
         return true
     end
     start,stop = string.find(str,"^idiv%s*",pos)
     if start then
-        M.tok = "idiv"
+        M.tok = "\1idiv"
         M.nextpos = stop + 1
         return true
     end
@@ -446,6 +470,13 @@ function M.get_expr(dataxml,str,ns,pos)
     pos = string.find(str,"%S",pos)
     while true do
         local end_of_expression
+        local a = string.find(str,"^%s*%)",pos)
+        if a then
+            M.err = true
+            M.errmsg = "XPath error: looking for an expression but found a closing parentheses"
+            return nil
+        end
+
         ret[#ret + 1],end_of_expression = M.get_single_expr(dataxml,str,pos,ns)
         if end_of_expression then break end
         local start,stop = string.find(str,"^%s*,%s*",M.nextpos)
@@ -461,7 +492,7 @@ function M.eval_comparison(first,second,operator)
     -- IIRC this is in the XPath sepc TODO: check
     -- nilmarker is the code for "nil"
     if first == nilmarker and second ~= nilmarker or first ~= nilmarker and second == nilmarker then
-        if operator ~= "!=" then
+        if operator ~= "\1!=" then
             return false
         else
             return true
@@ -475,17 +506,24 @@ function M.eval_comparison(first,second,operator)
     elseif type(second) == "number" then
         first = tonumber(first)
     end
-    if operator == "<" then
+    if type(first) == "table" then
+        first = table_textvalue(first)
+    end
+    if type(second) == "table" then
+        second = table_textvalue(second)
+    end
+
+    if operator == "\1<" then
         return first < second
-    elseif operator == ">" then
+    elseif operator == "\1>" then
         return first > second
-    elseif operator == ">=" then
+    elseif operator == "\1>=" then
         return first >= second
-    elseif operator == "<=" then
+    elseif operator == "\1<=" then
         return first <= second
-    elseif operator == "=" then
+    elseif operator == "\1=" then
         return first == second
-    elseif operator == "!=" then
+    elseif operator == "\1!=" then
         return first ~= second
     end
 end
@@ -500,23 +538,33 @@ function M.eval_addition(first,second,operator)
         return 0
     end
     if type(first)=='string' then
-        first = tonumber(first)
+        if is_dim then
+            first = tex.sp(first)
+        else
+            first = tonumber(first)
+        end
     end
     if first == nil then
-        err("The first operand of +/- is not a number. Evaluating to 0 (%q)",M.str)
+        if err then
+            err("The first operand of +/- is not a number. Evaluating to 0 (%q)",M.str)
+        end
         return 0
     end
     if type(second)=='string' then
-        second = tonumber(second)
+        if is_dim then
+            second = tex.sp(second)
+        else
+            second = tonumber(second)
+        end
     end
     if second == nil then
         err("The second operand of +/- is not a number. Evaluating to 0")
         return 0
     end
 
-    if operator == "+" then
+    if operator == "\1+" then
         return first + second
-    elseif operator == "-" then
+    elseif operator == "\1-" then
         return first - second
     end
 end
@@ -543,27 +591,37 @@ function M.eval_multiplication(first,second,operator)
         return 0
     end
     if type(first)=='string' then
-        first = tonumber(first)
+        if is_dim then
+            first = tex.sp(first)
+        else
+            first = tonumber(first)
+        end
     end
     if first == nil then
-        err("The first operand of the multiplication is not a number. Evaluating to 0")
+        if err then
+            err("The first operand of the multiplication is not a number. Evaluating to 0")
+        end
         return 0
     end
     if type(second)=='string' then
-        second = tonumber(second)
+        if is_dim then
+            second = tex.sp(second)
+        else
+            second = tonumber(second)
+        end
     end
     if second == nil then
         err("The second operand of the multiplication is not a number. Evaluating to 0")
         return 0
     end
 
-    if operator == "*" then
+    if operator == "\1*" then
         return first * second
-    elseif operator == "mod" then
+    elseif operator == "\1mod" then
         return math.fmod(first,second)
-    elseif operator == "div" then
+    elseif operator == "\1div" then
         return first / second
-    elseif operator =="idiv" then
+    elseif operator =="\1idiv" then
         local a = first / second
         if a > 0 then
             return math.floor(a)
@@ -620,7 +678,7 @@ function M.reduce( tab )
     i = 1
     while i <= max do
         op = tab[i]
-        if op == "*" or op == "mod" or op == "div" or op == "idiv" then
+        if op == "\1*" or op == "\1mod" or op == "\1div" or op == "\1idiv" then
             operator_found = true
             second = table.remove(tab,i + 1)
             table.remove(tab,i)
@@ -635,7 +693,7 @@ function M.reduce( tab )
     i = 1
     while i <= max do
         op = tab[i]
-        if op == "+" or op == "-" then
+        if op == "\1+" or op == "\1-" then
             operator_found = true
             second = table.remove(tab,i + 1)
             table.remove(tab,i)
@@ -652,7 +710,7 @@ function M.reduce( tab )
     i = 2
     while i <= max do
         op = tab[i]
-        if op == "<" or op == ">" or op == "<=" or op == ">=" or op == "!=" or op == "=" then
+        if op == "\1<" or op == "\1>" or op == "\1<=" or op == "\1>=" or op == "\1!=" or op == "\1=" then
             operator_found = true
             second = table.remove(tab,i + 1)
             table.remove(tab,i)
@@ -669,7 +727,7 @@ function M.reduce( tab )
     i = 1
     while i <= max do
         op = tab[i]
-        if op == "and" then
+        if op == "\1and" then
             operator_found = true
             second = table.remove(tab,i + 1)
             table.remove(tab,i)
@@ -687,7 +745,7 @@ function M.reduce( tab )
     i = 1
     while i <= max do
         op = tab[i]
-        if op == "or" then
+        if op == "\1or" then
             operator_found = true
             second = table.remove(tab,i + 1)
             table.remove(tab,i)
@@ -721,7 +779,9 @@ end
 
 function M.parse_internal(dataxml,str,ns,pos)
     local r = M.get_expr(dataxml,str,ns,pos)
-
+    if not r then
+        return nil
+    end
     local ret = {}
     for i=1,#r do
         if type(r[i]) == "table" then
@@ -868,10 +928,16 @@ M.default_functions.last = function( dataxml )
 end
 
 M.default_functions.max = function(dataxml,arg)
-    local max = arg[1]
+    local max = tonumber(arg[1])
+    if not max then
+        if err then
+            err("First argument in max() is not a number, returning 0")
+        end
+        return 0
+    end
     for i=2,#arg do
-        if arg[i] > max then
-            max = arg[i]
+        if tonumber(arg[i]) and tonumber(arg[i]) > max then
+            max = tonumber(arg[i])
         end
     end
     return max
@@ -903,7 +969,7 @@ M.default_functions.node = function(dataxml)
     return tab
 end
 
-M.default_functions.string = function(dataxml,arg)
+M.default_functions["string"] = function(dataxml,arg)
     local ret
     if type(arg)=="table" then
         ret = {}
@@ -939,14 +1005,20 @@ M.default_functions["tokenize"] = function(dataxml,arg)
     return msg
 end
 
+M.default_functions["round"] = function( dataxml,arg )
+    local arg1 = arg[1]
+    local arg2 = arg[2] or 0
+    return math.round(arg1,arg2)
+end
+
 M.default_functions["replace"] = function(dataxml,arg)
     if arg[1] == nil or arg[2] == nil or arg[3] == nil then
         warning("replace: one of the arguments is empty")
         return ""
     end
-    comm.sendmessage('rep',arg[1])
-    comm.sendmessage('str',arg[2])
-    comm.sendmessage('str',arg[3])
+    comm.sendmessage('rep',table_textvalue(arg[1]))
+    comm.sendmessage('str',table_textvalue(arg[2]))
+    comm.sendmessage('str',table_textvalue(arg[3]))
     local msg = comm.get_string_messages()
     trace("Replace: %s",msg[1])
     return msg[1]
@@ -954,7 +1026,7 @@ end
 
 M.default_functions["contains"] = function(dataxml,arg)
     if arg[1] == nil or arg[2] == nil  then
-        warning("contains(): one of the arguments is empty")
+        -- warning("contains(): one of the arguments is empty")
         return false
     end
     if type(arg[1]) ~= "string" or type(arg[2]) ~= "string"  then

@@ -1,0 +1,37 @@
+[.split]
+[[ch-kochbuch]]
+= Kochbuch
+
+In diesem Abschnitt werden konkrete Anwendungen gezeigt, zwar mit konstruierten Daten, aber mit in der Praxis auftretende Anforderungen.
+Die letzten drei Kapitel (Inhaltsverzeichnis, Index und Seite X von Y) werden über denselben Mechanismus mit der XML-Elementstruktur (Kapitel <<ch-xmlstrukturen>>) realisiert.
+
+include::griffmarken.adoc[leveloffset=+1]
+
+// include::initialien.adoc[leveloffset=+1]
+
+include::mehrseitigepdf.adoc[leveloffset=+1]
+
+include::optimierungmitgruppen.adoc[leveloffset=+1]
+
+
+[[ch-verzeichnisseerstellen-marker]]
+== Verzeichnisse erstellen
+
+Dieses Kapitel widmet sich der Erstellung von Verzeichnissen.
+Es gibt prinzipiell zwei Varianten, ein Verzeichnis zu erzeugen.
+Daher handelt der nächste Abschnitt von dem eingebauten Mechanismus der Marker (`<Mark>`), die  darauf folgenden Abschnitte von den Weg per `<Element>` und `<Attribute>` und dem manuellen Speichern der Daten für einen weiteren Durchlauf.
+
+TIP: Damit der Publisher mehrfach durchläuft, muss der Parameter `runs` auf der Kommandozeile bzw. in der Konfigurationsdatei gesetzt werden, beispielsweise mit `sp --runs=2` (Kommandozeile) bzw. `runs = 2` (Konfigurationsdatei).
+
+
+include::verzeichnisseerstellenmarker.adoc[leveloffset=+2]
+
+include::verzeichnisseerstellen.adoc[leveloffset=+2]
+
+include::indexerstellen.adoc[leveloffset=+2]
+
+include::seitexvony.adoc[leveloffset=+1]
+
+include::fakinglists.adoc[leveloffset=+1]
+
+

@@ -31,6 +31,18 @@ local function current_row(dataxml,arg)
     return publisher.current_grid:current_row(arg and arg[1])
 end
 
+-- Evaluate the string arg as a dimension. The return value is a string with the dimension "sp".
+local function dimexpression( dataxml,arg )
+    arg = table.concat(arg)
+    local save_dim = is_dim
+    is_dim = true
+    xpath.push_state()
+    local ret = xpath.parse(dataxml,arg,"")
+    xpath.pop_state()
+    is_dim = save_dim
+    return ret .. "sp"
+end
+
 --- Get the page number of a marker
 local function pagenumber(dataxml,arg)
   local m = publisher.markers[arg[1]]
@@ -230,8 +242,17 @@ local function format_number(dataxml,arg)
 end
 
 local function format_string( dataxml,arg )
-  local ret = string.format(arg[#arg],table.unpack(arg,1,#arg))
-  return ret
+    local argument = {}
+    for i=1,#arg - 1 do
+        argument[#argument + 1] = table_textvalue(arg[i])
+    end
+    local unpacked = table.unpack(argument)
+    if unpacked == nil or unpacked == "" then
+        err("format-string: first arguments are empty")
+        return ""
+    end
+    local ret = string.format(arg[#arg],unpacked)
+    return ret
 end
 
 
@@ -353,7 +374,13 @@ local function decode_base64(dataxml,arg)
 end
 
 local function count_saved_pages(dataxml,arg)
-    return #publisher.pagestore[arg[1]]
+    local tmp = publisher.pagestore[arg[1]]
+    if not tmp then
+        err("count-saved-pages(): no saved pages found. Return 0")
+        return 0
+    else
+        return #tmp
+    end
 end
 
 local function randomitem(dataxml, arg)
@@ -384,6 +411,8 @@ end
 local register = publisher.xpath.register_function
 
 register("urn:speedata:2009/publisher/functions/en","attr",attr)
+
+register("urn:speedata:2009/publisher/functions/en","dimexpr",dimexpression)
 
 register("urn:speedata:2009/publisher/functions/en","alternating",alternating)
 

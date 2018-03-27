@@ -4,10 +4,8 @@ package main
 
 import (
 	"bufio"
-	"configurator"
 	"encoding/xml"
 	"fmt"
-	"hotfolder"
 	"io"
 	"io/ioutil"
 	"log"
@@ -18,13 +16,15 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
-	"sp"
-	"sp/cache"
 	"strconv"
 	"strings"
 	"syscall"
 	"time"
 
+	"configurator"
+	"hotfolder"
+	"sp"
+	"sp/cache"
 	"sp/comm"
 
 	"github.com/speedata/optionparser"
@@ -173,9 +173,9 @@ func init() {
 	re := regexp.MustCompile("^(d|D)(e|E)")
 	var indexpage string
 	if re.MatchString(os.Getenv("LANG")) {
-		indexpage = "index-de.html"
+		indexpage = filepath.Join("de", "index.html")
 	} else {
-		indexpage = "index.html"
+		indexpage = filepath.Join("en", "index.html")
 	}
 
 	switch dest {
@@ -300,7 +300,8 @@ func sigIntCatcher() {
 }
 
 // Run the given command line
-func run(cmdline string) (success bool) {
+func run(cmdline string) (errorcode int) {
+	errorcode = 0
 	var commandlineArray []string
 	// The cmdline can have quoted strings. We remove the quotation marks
 	// by this ugly construct. That way strings such as "--data=foo\ bar" can
@@ -331,7 +332,7 @@ func run(cmdline string) (success bool) {
 	err = cmd.Start()
 	if err != nil {
 		fmt.Println(err)
-		success = false
+		errorcode = -1
 		return
 	}
 	runningProcess = append(runningProcess, cmd.Process)
@@ -349,15 +350,13 @@ func run(cmdline string) (success bool) {
 		io.Copy(stdin, os.Stdin)
 		stdin.Close()
 	}
-	err = cmd.Wait()
-
-	if err != nil {
+	if err := cmd.Wait(); err != nil {
 		showDuration()
 		log.Print(err)
-		success = false
-		return
+		if _, ok := err.(*exec.ExitError); ok {
+			return -1
+		}
 	}
-	success = cmd.ProcessState.Success()
 	return
 }
 
@@ -426,6 +425,9 @@ func getExecutablePath() string {
 	// 4 check then installdir/bin for luatex(.exe)
 	// 5 check PATH for luatex(.exe)
 	// 6 panic!
+	if luatex := getOption("luatex"); luatex != "" {
+		return luatex
+	}
 	executableName := "sdluatex" + exeSuffix
 	var p string
 
@@ -510,6 +512,14 @@ func removeLogfile() {
 	os.Remove(getOption("jobname") + ".log")
 }
 
+func fileExists(filename string) bool {
+	fi, err := os.Stat(filename)
+	if err != nil {
+		return false
+	}
+	return !fi.IsDir()
+}
+
 func writeFinishedfile(path string) {
 	ioutil.WriteFile(path, []byte("finished\n"), 0600)
 }
@@ -530,6 +540,7 @@ func runPublisher() (exitstatus int) {
 	f.Close()
 
 	layoutoptions["grid"] = getOption("grid")
+	layoutoptions["reportmissingglyphs"] = getOption("reportmissingglyphs")
 
 	// layoutoptions are passed as a command line argument to the publisher
 	var layoutoptionsSlice []string
@@ -548,10 +559,13 @@ func runPublisher() (exitstatus int) {
 	if layoutoptions["trace"] != "" {
 		layoutoptionsSlice = append(layoutoptionsSlice, `trace=`+layoutoptions["trace"])
 	}
+	if layoutoptions["reportmissingglyphs"] != "" {
+		layoutoptionsSlice = append(layoutoptionsSlice, `reportmissingglyphs=`+layoutoptions["reportmissingglyphs"])
+	}
 	layoutoptionsCommandline := strings.Join(layoutoptionsSlice, ",")
 	jobname := getOption("jobname")
-	layoutname := getOption("layout")
-	dataname := getOption("data")
+	layoutname := filepath.Clean(getOption("layout"))
+	dataname := filepath.Clean(getOption("data"))
 	execName := getExecutablePath()
 	if dummyData := getOption("dummy"); dummyData == strTrue {
 		dataname = "-dummy"
@@ -565,7 +579,7 @@ func runPublisher() (exitstatus int) {
 	for i := 1; i <= runs; i++ {
 		go daemon.Run()
 		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, execName, jobname, inifile, layoutname, dataname, layoutoptionsCommandline)
-		if !run(cmdline) {
+		if run(cmdline) < 0 {
 			exitstatus = -1
 			v := status{}
 			v.Errors = 1
@@ -631,8 +645,9 @@ This software is built upon and contains third party libraries including:
 LuaTeX (http://www.luatex.org/)
 goconfig (https://github.com/Unknwon/goconfig)
 TeX Gyre Heros fonts (http://www.gust.org.pl/projects/e-foundry/tex-gyre/heros)
-Parts of the Go library (https://code.google.com/p/go/)
+Parts of the Go library (https://golang.org/)
 Blackfriday (https://github.com/russross/blackfriday)
+Shopify Lua (github.com/Shopify/go-lua)
 
 Contact:
    gundlach@speedata.de
@@ -650,11 +665,11 @@ func main() {
 	op.On("-c NAME", "--config", "Read the config file with the given NAME. Default: 'publisher.cfg'", &configfilename)
 	op.On("--credits", "Show credits and exit", showCredits)
 	op.On("--no-cutmarks", "Display cutmarks in the document", layoutoptions)
-	op.On("--data NAME", "Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN", options)
+	op.On("--data NAME", "Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN (only 1 run possible).", options)
 	op.On("--dummy", "Don't read a data file, use '<data />' as input", options)
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
 	op.On("--extra-xml NAME", "Add this file to the layout file", extraXML)
-	op.On("--filter FILTER", "Run XPROC filter before publishing starts", options)
+	op.On("--filter FILTER", "Run XProc or Lua filter before publishing starts", options)
 	op.On("--grid", "Display background grid. Disable with --no-grid", options)
 	op.On("--ignore-case", "Ignore case when accessing files (on a case-insensitive file system)", options)
 	op.On("--no-local", "Add local directory to the search path. Default is true", &addLocalPath)
@@ -709,7 +724,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	// When the user requests another working directory, we should
 	// change into the given wd first, before reading the local
 	// options
@@ -743,6 +757,16 @@ func main() {
 	if addLocalPath {
 		extraDir = append(extraDir, pwd)
 	}
+
+	// if the user sets systemfonts=true in the config file, we should honor this.
+	if optSystemfonts := getOption("systemfonts"); optSystemfonts != "" {
+		if optSystemfonts == "true" {
+			useSystemFonts = true
+		} else if optSystemfonts == "false" {
+			useSystemFonts = false
+		}
+	}
+
 	if useSystemFonts {
 		// FontFolder() is system dependent and defined in extra files
 		ff, err := FontFolder()
@@ -829,14 +853,37 @@ func main() {
 		jobname := getOption("jobname")
 		finishedfilename := fmt.Sprintf("%s.finished", jobname)
 		os.Remove(finishedfilename)
+
 		if filter := getOption("filter"); filter != "" {
-			if filepath.Ext(filter) != ".xpl" {
-				filter = filter + ".xpl"
+			filterext := filepath.Ext(filter)
+			switch filterext {
+			case ".lua":
+				if !fileExists(filter) {
+					fmt.Printf("Lua file %q not found\n", filter)
+					exitstatus = 1
+				} else {
+					runLuaScript(filter)
+				}
+			case ".xpl":
+				if !fileExists(filter) {
+					fmt.Printf("XProc file %q not found\n", filter)
+					exitstatus = 1
+				} else {
+					runXProcPipeline(filter)
+				}
+			default:
+				if fileExists(filter + ".lua") {
+					runLuaScript(filter + ".lua")
+				} else if fileExists(filter + ".xpl") {
+					runXProcPipeline(filter + ".xpl")
+				} else {
+					fmt.Printf("Cannot find filter %q\n", filter)
+					exitstatus = 1
+				}
 			}
-			log.Println("Run filter: ", filter)
-			os.Setenv("CLASSPATH", libdir+"/calabash.jar:"+libdir+"/saxon9he.jar")
-			cmdline := "java com.xmlcalabash.drivers.Main " + filter
-			run(cmdline)
+		}
+		if exitstatus == 1 {
+			os.Exit(exitstatus)
 		}
 		exitstatus = runPublisher()
 		// profiler requested?

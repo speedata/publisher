@@ -100,7 +100,7 @@ func (md *MDDoc) image(context mdTemplateData, imagename string) string {
 func (md *MDDoc) writeFeed(lang string) {
 	feed := &feeds.Feed{
 		Title:   fmt.Sprintf("speedata Publisher changelog (%s)", lang),
-		Link:    &feeds.Link{Href: "http://www.speedata.de"},
+		Link:    &feeds.Link{Href: "https://www.speedata.de"},
 		Author:  &feeds.Author{"speedata", "info@speedata.de"},
 		Created: time.Now(),
 	}
@@ -123,7 +123,7 @@ func (md *MDDoc) writeFeed(lang string) {
 			} else {
 				i.Description = entry.De.Text
 			}
-			i.Link = &feeds.Link{Href: "http://www.speedata.de"}
+			i.Link = &feeds.Link{Href: "https://www.speedata.de"}
 
 			feed.Items = append(feed.Items, i)
 		}
@@ -152,7 +152,7 @@ func DoThings(cfg *config.Config) error {
 
 	md := MDDoc{}
 	md.root = "doc"
-	md.dest = filepath.Join(cfg.Builddir, "manual")
+	md.dest = filepath.Join(cfg.Builddir, "manual", "en")
 	md.basedir = "."
 	md.changelog = parseChangelog(filepath.Join(cfg.Basedir(), "doc", "changelog.xml"))
 	md.assets = filepath.Join(cfg.Basedir(), "assets")
@@ -183,7 +183,6 @@ func DoThings(cfg *config.Config) error {
 	}
 
 	md.writeFeed("en")
-	md.writeFeed("de")
 	return nil
 }
 
@@ -366,40 +365,14 @@ func (md *MDDoc) pathToRoot(path string) string {
 	return strings.Repeat("../", len(path_elements)-1)
 }
 
-// Return a relative link to the other language (en <---> de)
+// Return a relative link to German manual
 func (md *MDDoc) otherLanguage(path string) string {
 	switch strings.TrimPrefix(path, md.dest+"/") {
 	case "index.html":
-		return "index-de.html"
-	case "index-de.html":
-		return "index.html"
+		return "../de/index.html"
 	}
 	path_elements := strings.Split(strings.TrimPrefix(path, md.dest+"/"), "/")
-	path_components := 0
-	var paths []string
-
-	for i, dir := range path_elements {
-		if i == len(path_elements)-1 {
-			paths = append(paths, dir)
-		} else if i == 0 {
-			if strings.Contains(dir, "-en") {
-				paths = append(paths, strings.Replace(dir, "-en", "-de", -1))
-			} else {
-				paths = append(paths, strings.Replace(dir, "-de", "-en", -1))
-			}
-			path_components++
-		} else {
-			path_components++
-			paths = append(paths, dir)
-		}
-	}
-	paths_final := make([]string, path_components+len(paths))
-	for i := 0; i < path_components; i++ {
-		paths_final[i] = ".."
-	}
-	copy(paths_final[path_components:], paths)
-
-	return filepath.Join(paths_final...)
+	return strings.Repeat("../", len(path_elements)) + "de/index.html"
 }
 
 func (md *MDDoc) footerHTML(path string) string {
@@ -409,11 +382,7 @@ func (md *MDDoc) footerHTML(path string) string {
 	} else if strings.HasSuffix(path, "description-de/changelog.html") {
 		clpart = ` | <a href="../changes-de.xml">Liste der Änderungen (atom feed)</a>`
 	}
-	if isEn(path) {
-		return fmt.Sprintf(`Version: %s | <a href="%s">Start page</a> | <a href="%scommands-en/layout.html">Element reference</a> | Other language:  <a href="%s">German</a>%s`, md.Version, md.rootDoc(path), md.pathToRoot(path), md.otherLanguage(path), clpart)
-	} else {
-		return fmt.Sprintf(`Version: %s | <a href="%s">Startseite</a> | <a href="%scommands-de/layout.html">Elementreferenz</a> | Andere Sprache:  <a href="%s">Englisch</a>%s`, md.Version, md.rootDoc(path), md.pathToRoot(path), md.otherLanguage(path), clpart)
-	}
+	return fmt.Sprintf(`Version: %s | <a href="%s">Start page</a> | <a href="%scommands-en/layout.html">Element reference</a> | Other language:  <a href="%s">German</a>%s`, md.Version, md.rootDoc(path), md.pathToRoot(path), md.otherLanguage(path), clpart)
 }
 
 func isEn(path string) bool {

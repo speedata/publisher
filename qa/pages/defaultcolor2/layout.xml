@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  version="3.1.20">
+  <Pageformat width="4cm" height="4cm"></Pageformat>
+  <Trace grid="yes" gridallocation="yes"/>
+
+  <Pagetype name="x" test="true()" defaultcolor="black">
+    <Margin left="10mm" right="10mm" top="1cm" bottom="10mm"/>
+  </Pagetype>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph><Value>xxxxx</Value></Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+
+</Layout>

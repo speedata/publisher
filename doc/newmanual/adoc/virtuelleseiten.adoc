@@ -1,0 +1,178 @@
+[[ch-savepages]]
+= Virtuelle Seiten
+
+Mit den Virtuellen Seiten kann man, ähnlich wie bei den Virtuellen Bereichen (Gruppen), Seiten erzeugen und wieder verwerfen.
+Dazu gibt es die Befehle `<SavePages>` und `<InsertPages>` und die Layoutfunktion `sd:count-saved-pages()`.
+Der erste Befehl bewirkt, dass die Ausgaben innerhalb des Befehls nicht in das PDF geschrieben werden.
+Mit dem zweiten Befehl kann man diese gespeicherten Seiten ausgeben.
+Die Layoutfunktion ermittelt die Anzahl der gespeicherten Seiten.
+
+
+[discrete]
+== Beispiel
+
+Es sollen Text und ein Bild auf genau einer Seite angezeigt werden, wobei das Bild möglichst groß und am besten im Textfluss angezeigt werden soll.
+Es soll nun so lange mit verschiedenen Parametern der Text gesetzt werden, bis Text und Bild genau auf eine Seite passen, also die Seitenzahl aus `sd:count-saved-pages()` den Wert 1 ergibt.
+
+Die Datendatei `data.xml` ist wie folgt aufgebaut:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<Journal>
+  <Artikel ueberschrift="Gummibärchen">
+    <Text>
+      <Absatz>Freilebende Gummibärchen gibt es nicht.
+        Man kauft sie in Packungen an der
+        Kinokasse. Dieser Kauf ist der Beginn
+        einer fast erotischen und sehr ambivalenten
+        Beziehung Gummibärchen-Mensch. Zuerst genießt man.
+        Dieser Genuß umfaßt alle Sinne.
+        Man wühlt in den Gummibärchen, man fühlt sie.
+      </Absatz>
+    </Text>
+  </Artikel>
+</Journal>
+-------------------------------------------------------------------------------
+
+Die Layoutdatei ist etwas umfangreicher und wird in mehreren Etappen erläutert:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options ignoreeol="yes" mainlanguage="German"/> <!--1-->
+
+  <DefineFontfamily name="Title" fontsize="16" leading="16"> <!--2-->
+    <Regular fontface="sans-bold"/>
+  </DefineFontfamily>
+
+  <SetGrid width="5mm" height="12pt"/> <!--3-->
+
+  <Pagetype name="text" test="true()">
+    <Margin left="1.5cm" right="0.5cm" top="1cm" bottom="2cm"/>
+
+    <PositioningArea name="Überschrift"> <!--4-->
+      <PositioningFrame width="27" height="8" row="1" column="1"/>
+    </PositioningArea>
+
+    <PositioningArea name="text"> <!--5-->
+      <PositioningFrame width="13" height="51" row="9" column="1"/>
+      <PositioningFrame width="13" height="51" row="9" column="15"/>
+    </PositioningArea>
+  </Pagetype>
+-------------------------------------------------------------------------------
+<1> Der Kopf ist wieder wie üblich. Die Option `ignoreeol`(((ignoreeol))) besagt, dass die Zeilenumbrüche in den Daten ignoriert werden sollen.
+<2> Anschließend wird die Schriftgröße für die Überschrift eingestellt. Der Fließtext nutzt die voreingestellte Schriftart mit der Größe 10/12 Punkt.
+<3> Wenn man die Rasterhöhe gleich dem normalen Zeilenabstand setzt, kann man leicht registerhaltigen Satz erreichen. Der Seitentyp definiert zwei Seitenbereiche (siehe Abschnitt <<ch-positioningarea>>).
+<4> Der Bereich für die Überschrift umfasst die ersten 8 Zeilen und ist unabhängig vom Textbereich.
+<5> Der Bereich für den Text besteht aus zwei Spalten.
+
+
+
+Es folgt die eigentliche Datenverarbeitung.
+Anfangs werden die Vorgaben zur Bildposition und Bildgröße festgelegt.
+Die Variable `i` wählt dann die Vorgabe 1, 2 oder 3 aus.
+
+[source, xml]
+-------------------------------------------------------------------------------
+  <Record element="Journal">
+
+    <!-- Variante 1: Das Bild geht über die ganze Breite -->
+    <SetVariable variable="bildbreite1" select="38"/>
+    <SetVariable variable="bildspalte1" select="1"/>
+
+    <!-- Variante 2: Das Bild fängt in der zweiten Spalte an -->
+    <SetVariable variable="bildbreite2" select="24"/>
+    <SetVariable variable="bildspalte2" select="15"/>
+
+    <!-- Variante 3: Das Bild erscheint am rechten Rand -->
+    <SetVariable variable="bildbreite3" select="10"/>
+    <SetVariable variable="bildspalte3" select="29"/>
+-------------------------------------------------------------------------------
+
+Nun folgt die Entscheidung über virtuelle Seiten.
+
+[source, xml]
+-------------------------------------------------------------------------------
+    <SetVariable variable="i" select="0"/>
+    <Until test="$i = 3"> <!--1-->
+      <SetVariable variable="i" select="$i + 1"/>
+
+      <SavePages name="seitemitbild"> <!--2-->
+        <!--3-->
+        <PlaceObject column="{sd:variable('bildspalte',$i)}" row="9">
+          <Image width="{sd:variable('bildbreite',$i)}" file="_sampleb.pdf"/>
+        </PlaceObject>
+        <NextRow/>
+
+        <PlaceObject column="{sd:variable('bildspalte',$i)}"> <!--4-->
+          <Table stretch="max" padding="3pt">
+            <Tr>
+              <Td padding-left="10pt" align="left">
+                <Paragraph>
+                  <I><Value>Bildunterschrift</Value></I>
+                </Paragraph>
+              </Td>
+            </Tr>
+            <Tablerule rulewidth="20pt" color="white"/>
+          </Table>
+        </PlaceObject>
+
+        <ProcessNode select="Artikel"/> <!--5-->
+      </SavePages>
+
+      <Switch> <!--6-->
+        <Case test="sd:count-saved-pages('seitemitbild') = 1 ">
+          <SetVariable variable="i" select="3"/>
+        </Case>
+      </Switch>
+
+    </Until>
+    <InsertPages name="seitemitbild"/> <!--7-->
+  </Record>
+-------------------------------------------------------------------------------
+<1> Die Schleife wird für die Werte i = 1, i = 2 und i = 3 durchlaufen.
+<2> Ab hier werden die Inhalte zwischengespeichert.
+<3> Hier wird das Bild mit den Vorgaben ausgegeben.
+<4> Hier die Bildunterschrift.
+<5> Nun wird der Text ausgegeben.
+<6> Falls die gewünschte Seitenzahl (1) erreicht ist, wird i auf 3 gesetzt, um die Schleife vorzeitig abzubrechen.
+<7> Jetzt werden die gespeicherten Seiten ausgegeben.
+
+
+Was jetzt noch fehlt ist ist die Ausgabe des Textes.
+Die wird oben in `<ProcessNode select="Artikel"/>` angestoßen.
+Da dies ein Beispiel ist, erzeugen wir einen Absatz in einer Schleife.
+
+[source, xml]
+-------------------------------------------------------------------------------
+  <Record element="Artikel">
+    <Output area="Überschrift">
+      <Text>
+        <Paragraph textformat="Title" fontface="Title">
+          <Color name="green">
+            <Value select="@ueberschrift"/>
+          </Color>
+        </Paragraph>
+      </Text>
+    </Output>
+
+    <Loop select="7" variable="c">
+      <Output area="text" allocate="auto">
+        <Text>
+          <Paragraph fontface="text">
+            <Value select="Text/Absatz"/>
+          </Paragraph>
+        </Text>
+      </Output>
+    </Loop>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+.Seitenaufbau mit 7 bzw. 12 Absätzen. Im ersten Fall wird die Vorgabe »2« angewendet, im zweiten Fall die Vorgabe »3«
+image::07-savepages.png[width=70%,scaledwidth=100%]
+

@@ -10,8 +10,6 @@
 
 
 -- file_start("spinit.lua")
-
-require("i18n")
 local comm = require("publisher.comm")
 local u8fix = require('utf8fix')
 
@@ -21,7 +19,6 @@ unpack = unpack or table.unpack
 
 function warning(...)
   local text = { ... }
-  text[1] = gettext(text[1])
   publisher.messages[#publisher.messages + 1] = { string.format(unpack(text)) , "warning" }
   errorlog:write("Warning: " .. string.format(unpack(text)) .. "\n")
   texio.write("Warning: " .. string.format(unpack(text)) .. "\n")
@@ -35,7 +32,6 @@ function err(...)
   if type(text[1]) == "number" then
       errorcode = table.remove(text,1)
   end
-  text[1] = gettext(text[1])
   publisher.messages[#publisher.messages + 1] = { string.format(unpack(text)) , "error", errorcode }
   errcount =  errcount + 1
   errorlog:write("Error: " .. string.format(unpack(text)) .. "\n")
@@ -53,7 +49,6 @@ end
 
 function log(...)
   local text = { ... }
-  text[1] = gettext(text[1])
   local res = call(string.format,unpack(text))
   texio.write(res .. "\n")
   if io.type(errorlog) == "file" then
@@ -126,10 +121,11 @@ function table.__concat( tbl, other )
 end
 
 -- Get the text value of a table. Only the indexes 1,...#table are taken into account.
--- The function recurses nested tables.
+-- The function recurses into nested tables.
 function table_textvalue( tbl )
+    if not tbl then return nil end
+    if type(tbl) ~= "table" then return tostring(tbl) end
     local ret = {}
-    if not tbl then return "" end
     for _,v in ipairs(tbl) do
         if type(v) == "string" then
             ret[#ret + 1] = v
@@ -149,6 +145,52 @@ function math.round(num, idp)
   return math.floor(num + 0.5)
 end
 
+function set_glue( gluenode, values )
+    local n
+    if gluenode == nil then
+        n = node.new("glue")
+    else
+        n = gluenode
+    end
+    local spec
+
+    if node.has_field(n,"spec") then
+        spec = node.new("glue_spec")
+        n.spec = spec
+    else
+        spec = n
+    end
+    values = values or {}
+    for k,v in pairs(values) do
+        spec[k] = v
+    end
+    return n
+end
+
+function set_glue_values( n , values)
+    local spec
+
+    if node.has_field(n,"spec") then
+        spec = n.spec
+    else
+        spec = n
+    end
+
+    for k,v in pairs(values) do
+        spec[k]=v
+    end
+
+end
+
+function get_glue_value( n, value )
+    local spec
+    if node.has_field(n,"spec") then
+        spec = n.spec
+    else
+        spec = n
+    end
+    return spec[value]
+end
 
 --- This is like the original `tex.sp` except that it changes `pt` to `bp` and `pp` to `pt`.
 --- We do that because in the dtp world when we say 12pt, we always mean 12*1/72 inch.
@@ -214,16 +256,28 @@ function exit(graceful)
   end
 end
 
+function quit()
+    os.exit(-1)
+end
+
 local function setup()
-  tex.hoffset       = tex.sp("-1in")
-  tex.voffset       = tex.hoffset
-  -- Future vesions of LuaTeX (0.85 and above) will probably need the following, but this changes the output slightly...
-  -- tex.pdfhorigin = tex.sp("0mm")
-  -- tex.pdfvorigin = tex.pdfhorigin
+    if status.luatex_version >= 100 then
+        tex.pdfhorigin = tex.sp("0mm")
+        tex.pdfvorigin = tex.pdfhorigin
+        pdf.setminorversion(6)
+        pdf.setsuppressoptionalinfo(143)
+        pdf.setcompresslevel(9)
+        pdf.setobjcompresslevel(9)
+    else
+        tex.hoffset       = tex.sp("-1in")
+        tex.voffset       = tex.hoffset
+    end
+    tex.pdfadjustspacing = 2
+    tex.adjustspacing = 2
   tex.pdfpageheight = tex.sp("29.7cm")
   tex.pdfpagewidth  = tex.sp("21cm")
   tex.pdfprotrudechars = 2 -- margin protrusion
-  tex.pdfadjustspacing = 2
+  tex.protrudechars = 2 -- margin protrusion
   tex.pdfcompresslevel = 5
   tex.pdfobjcompresslevel = 2
   tex.pdfoutput=1

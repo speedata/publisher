@@ -365,12 +365,7 @@ local function code128(width,height,fontfamily,text,showtext)
   local vbox
   if showtext then
     local textbox,vkern,hglue_left,hglue_right
-
-    hglue_right = node.new("glue")
-    hglue_right.spec = node.new("glue_spec")
-    hglue_right.spec.width = 0
-    hglue_right.spec.stretch = 2^16
-    hglue_right.spec.stretch_order = 2
+    hglue_right = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 2})
 
     hglue_left=node.copy(hglue_right)
     hglue_left.next=textnodelist

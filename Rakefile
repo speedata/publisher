@@ -1,4 +1,3 @@
-
 require "pathname"
 require 'rake/clean'
 
@@ -28,8 +27,7 @@ def build_go(srcdir,destbin,goos,goarch,targettype)
 	publisher_version = @versions['publisher_version']
 	binaryname = goos == "windows" ? "sp.exe" : "sp"
     # Now compile the go executable
-    separator = `go version`.match('go\d\.(\d)')[1].to_i < 5 ? " " : "="
-	cmdline = "go build -ldflags '-X main.dest#{separator}#{targettype} -X main.version#{separator}#{publisher_version}' -o #{destbin}/#{binaryname} sp/main"
+	cmdline = "go build -ldflags '-X main.dest=#{targettype} -X main.version=#{publisher_version}' -o #{destbin}/#{binaryname} sp/main"
 	sh cmdline do |ok, res|
 		if ! ok
 	    	puts "Go compilation failed"
@@ -42,8 +40,7 @@ end
 desc "Build sphelper program"
 task :sphelper do
 	ENV["GOBIN"] = "#{installdir}/bin"
-	separator = `go version`.match('go\d\.(\d)')[1].to_i < 5 ? " " : "="
-	sh " go install -ldflags \"-X main.basedir#{separator}#{installdir} -X main.separator#{separator}#{separator} -s\"  sphelper/sphelper"
+	sh " go install -ldflags \"-X main.basedir=#{installdir} -s\"  sphelper/sphelper"
 end
 
 desc "Show rake description"
@@ -64,6 +61,13 @@ end
 desc "Generate documentation"
 task :doc => [:sphelper] do
 	sh "#{installdir}/bin/sphelper doc"
+	puts "done"
+end
+
+# without ugly urls
+desc "Generate site documentation"
+task :sitedoc => [:sphelper] do
+	sh "#{installdir}/bin/sphelper sitedoc"
 	puts "done"
 end
 
@@ -94,54 +98,6 @@ task :sourcedoc => [:sphelper] do
 		sh "open #{builddir}/sourcedoc/publisher.html"
 	else
 		puts "Generated source documentation in \n#{builddir}/sourcedoc/publisher.html"
-	end
-end
-
-desc "Update program messages"
-task :messages do
-	lang = "de_DE"
-	Dir.chdir(srcdir) do
-		srcfiles = Dir.glob("lua/**/*.lua")
-		# xgettext creates the pot file
-		sh 'xgettext --from-code="UTF-8" -k"log" -k"err" -k"warning" -s -o po/publisher.pot ' + srcfiles.join(" ")
-		# msgmerge moves new messages to the po file
-		sh "msgmerge -s -U po/#{lang}.po po/publisher.pot"
-		# msgfmt creates the mo file
-		sh "msgfmt -c -v -o po/#{lang}.mo po/#{lang}.po"
-	end
-end
-
-desc "New language for program messages"
-task :newmsglang, :lang do |t,args|
-	unless args[:lang]
-		raise "No language given. Use rake newmsglang[de_DE] to create a new language template."
-	end
-	Dir.chdir(srcdir) do
-		lang = args[:lang]
-		srcfiles = Dir.glob("lua/**/*.lua")
-		sh 'xgettext --from-code="UTF-8" -k"log" -k"err" -k"warning" -s -o po/publisher.pot ' + srcfiles.join(" ")
-		sh "msginit -l #{lang} -o po/#{lang}.po -i po/publisher.pot"
-	end
-end
-
-desc "Update gh-pages"
-task :ghpages => [:sphelper] do
-	sh "#{installdir}/bin/sphelper doc"
-	cp_r "#{builddir}/manual","webpage"
-	sh "#{installdir}/bin/sphelper dashdoc"
-
-	IO.write("webpage/speedata_Publisher_(en).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>https://download.speedata.de/publisher/dashdoc/speedatapublisher-en.tgz</url>\n</entry>\n")
-	IO.write("webpage/speedata_Publisher_(de).xml","<entry>\n  <version>#{@versions['publisher_version']}</version>\n  <url>https://download.speedata.de/publisher/dashdoc/speedatapublisher-de.tgz</url>\n</entry>\n")
-end
-
-task :mkdashzip => [:sphelper] do
-	sh "#{installdir}/bin/sphelper doc"
-	cp_r "#{builddir}/manual","webpage"
-	sh "#{installdir}/bin/sphelper dashdoc"
-
-	Dir.chdir(builddir) do
-		sh "tar --exclude='.DS_Store' -czf ../webpage/speedatapublisher-de.tgz speedatapublisher-de.docset"
-		sh "tar --exclude='.DS_Store' -czf ../webpage/speedatapublisher-en.tgz speedatapublisher-en.docset"
 	end
 end
 
@@ -365,13 +321,14 @@ task :deb => [:sphelper] do
 	cp_r(Dir.glob("img/*"),targetimg)
 	cp_r("lib/.",targetlib)
 	cp_r(File.join("schema","layoutschema-en.rng"),targetschema)
+	cp_r(File.join("schema","layoutschema-de.rng"),targetschema)
 
 	Dir.chdir("src") do
 		cp_r(["tex","hyphenation"],targetsw)
 		# do not copy every Lua file to the dest
 		# and leave out .gitignore and others
 		Dir.glob("**/*.lua").reject { |x|
-		    x =~  /viznode|fileutils/
+		    x =~  /viznode|fileutils|Shopify/
 		}.each { |x|
 		  mkdir_p(targetsw.join(File.dirname(x)))
 		  cp(x,targetsw.join(File.dirname(x)))

@@ -1,0 +1,132 @@
+$fontWebsiteLesetext: 'sana', sans-serif;
+$fontWebsiteAlt: 'sanaAlt', sans-serif;
+$fontWebsiteMono: 'Roboto Mono', monospace;
+
+$fontHandbuchLesetext: 'Roboto', sans-serif;
+$fontHandbuchAlt: 'Roboto', sans-serif;
+$fontHandbuchMono:  'Roboto Mono', monospace;
+
+%default {
+    font-size: 17px;
+    line-height: 1.5;
+    font-family: $fontWebsiteLesetext;
+    .handbuch & {
+        font-family: $fontHandbuchLesetext;
+        font-weight: 300;
+    }
+    font-weight: normal;
+    margin-top:1.2em;
+    margin-bottom:1.2em;
+    @include hyphens("auto");
+}
+%navigation {
+    font-family: $fontWebsiteAlt;
+    .handbuch & {
+        font-family: $fontHandbuchAlt;
+    }
+}
+%headlines {
+    position: relative;
+    text-align:left;
+    @media #{$phone-quer} {
+        .website & {
+            text-align:center;
+        }
+    }
+    line-height: 1.2;
+    font-family: $fontWebsiteAlt;
+    .handbuch & {
+        font-family: $fontHandbuchLesetext;
+    }
+    font-weight: 500;
+    margin:0;
+    margin-top:1em;
+    margin-bottom:0.7em;
+    @include hyphens("auto");
+    .box &, .intro & {
+        margin-top: 0px;
+    }
+}
+.headline-1 {
+    @extend %headlines;
+    font-size: 30px;
+    @media #{$phone-quer} {
+        font-size: 35px;
+    }
+    .handbuch & {
+        text-align: left;
+    }
+}
+.headline-2 {
+    @extend %headlines;
+    font-size: 28px;
+
+}
+.headline-3 {
+    @extend %headlines;
+    font-size: 22px;
+}
+.headline-4, .headline-5, .headline-6 {
+    @extend %headlines;
+    font-size: 17px;
+}
+span.TeX-e {
+    position: relative;
+    top: 0.4ex;
+    left: -0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+span.TeX-x {
+    position: relative;
+    left: -0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+pre, code {
+    font-family: $fontWebsiteMono;
+    .handbuch & {
+        font-family: $fontHandbuchMono;
+    }
+    line-height: 140%;
+    width: 100%;
+    overflow: auto;
+    @include hyphens(none);
+}
+pre {
+    font-weight: 300; // font-size:85%;
+    background-color: $codeblockBG;
+}
+.caption {
+    @extend %default;
+    font-size: 90%;
+    font-style: italic;
+    padding: 0px 20px;
+    margin-top: 5px;
+    color: rgba(0, 0, 0, .6);
+}
+.centeredParagraph {
+    width:100%;
+    margin:50px auto 0px auto;
+    .button {
+        padding-left:50px !important;
+        padding-right:50px !important;
+        display:block;
+        &:hover {
+            color:#fff !important;
+        }
+    }
+    @media #{$phone-quer} {
+        margin:50px auto 0px auto;
+        %headlines {
+            text-align:center;
+        }
+        width:50%;
+
+        .button {
+            padding-left:0 !important;
+            padding-right:0 !important;
+
+        }
+    }
+}

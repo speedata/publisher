@@ -7,11 +7,10 @@ import (
 	"html/template"
 	"os"
 	"path/filepath"
-	"runtime"
-	"sphelper/config"
 	"strings"
 	"sync"
 
+	"sphelper/config"
 	commandsxml "sphelper/newcommandsxml"
 )
 
@@ -19,11 +18,6 @@ var (
 	wg        sync.WaitGroup
 	templates *template.Template
 )
-
-func init() {
-	runtime.GOMAXPROCS(runtime.NumCPU())
-
-}
 
 func translate(lang, text string) string {
 	if lang == "en" {
@@ -107,11 +101,7 @@ func childelements(lang string, children []*commandsxml.Command) template.HTML {
 
 // Version | Startpage | ...
 func footer(version, lang string, command *commandsxml.Command) template.HTML {
-	if lang == "en" {
-		return template.HTML(fmt.Sprintf(`Version: %s | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Command reference</a> | Other language: <a href="../commands-de/%s">German</a>`, version, command.Htmllink()))
-	} else {
-		return template.HTML(fmt.Sprintf(`Version: %s | <a href="../index-de.html">Startseite</a> | <a href="../commands-de/layout.html">Befehlsreferenz</a> | Andere Sprache: <a href="../commands-en/%s">Englisch</a>`, version, command.Htmllink()))
-	}
+	return template.HTML(fmt.Sprintf(`Version: %s | <a href="../index.html">Start page</a> | <a href="../commands-en/layout.html">Command reference</a> | Other language: <a href="../../de/index.html">German</a>`, version))
 }
 
 func atttypeinfo(att *commandsxml.Attribute, lang string) template.HTML {
@@ -120,6 +110,7 @@ func atttypeinfo(att *commandsxml.Attribute, lang string) template.HTML {
 		"text":               "Text",
 		"number":             "Zahl",
 		"yesnolength":        "yes, no oder Längenangabe",
+		"yesnonumber":        "yes, no oder Zahl",
 		"numberorlength":     "Zahl oder Längenangabe",
 		"numberlengthorstar": "Zahl, Maßangabe oder *-Angaben",
 		"zerotohundred":      "0 bis 100",
@@ -129,6 +120,7 @@ func atttypeinfo(att *commandsxml.Attribute, lang string) template.HTML {
 		"numberorlength":     "number or length",
 		"numberlengthorstar": "Number, length or *-numbers",
 		"yesnolength":        "yes, no or length",
+		"yesnonumber":        "yes, no or number",
 		"zerotohundred":      "0 up to 100",
 	}
 	ret := []string{}
@@ -167,7 +159,7 @@ func DoThings(cfg *config.Config) error {
 	for _, cmd := range c.CommandsEn {
 		cmd.Childelements("en")
 	}
-	outdir := filepath.Join(cfg.Builddir, "manual")
+	outdir := filepath.Join(cfg.Builddir, "manual", "en")
 	err = os.MkdirAll(outdir, 0755)
 	if err != nil {
 		return err
@@ -187,10 +179,9 @@ func DoThings(cfg *config.Config) error {
 		return err
 	}
 	os.MkdirAll(filepath.Join(outdir, "commands-en"), 0755)
-	os.MkdirAll(filepath.Join(outdir, "commands-de"), 0755)
 
 	version := cfg.Publisherversion.String()
-	for _, lang := range []string{"de", "en"} {
+	for _, lang := range []string{"en"} {
 		for _, v := range c.CommandsEn {
 			fullpath := filepath.Join(outdir, "commands-"+lang, v.Htmllink())
 			wg.Add(1)

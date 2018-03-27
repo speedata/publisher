@@ -3,6 +3,7 @@ package genschema
 import (
 	"bytes"
 	"encoding/xml"
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
 
@@ -33,6 +34,7 @@ func getChildElements(commands *commandsxml.CommandsXML, enc *xml.Encoder, child
 	if len(children) == 0 {
 		enc.EncodeToken(emptyElement.Copy())
 		enc.EncodeToken(emptyElement.End())
+		return
 	}
 	buf := bytes.NewBuffer(children)
 	dec := xml.NewDecoder(buf)
@@ -87,6 +89,7 @@ func getChildElements(commands *commandsxml.CommandsXML, enc *xml.Encoder, child
 
 func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 	var outbuf bytes.Buffer
+	var interleave, group xml.StartElement
 
 	enc := xml.NewEncoder(&outbuf)
 	enc.Indent("", "   ")
@@ -150,6 +153,16 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 		enc.EncodeToken(doc)
 		enc.EncodeToken(xml.CharData(cmd.GetCommandDescription(lang)))
 		enc.EncodeToken(doc.End())
+
+		// if the child elements contents is "empty", there is no need for allowing foreign nodes (1/2)
+		if cmd.Name != "Include" && len(cmd.Childelements.Text) > 0 {
+			interleave = xml.StartElement{Name: xml.Name{Local: "interleave"}}
+			enc.EncodeToken(interleave)
+
+			group = xml.StartElement{Name: xml.Name{Local: "group"}}
+			enc.EncodeToken(group)
+		}
+
 		for _, attr := range cmd.Attributes {
 			if attr.Optional == "yes" {
 				enc.EncodeToken(optionalElement.Copy())
@@ -190,6 +203,16 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 				}
 
 				enc.EncodeToken(choiceElement.End())
+			} else if attr.Type == "yesnonumber" {
+				data := xml.StartElement{Name: xml.Name{Local: "data"}}
+				data.Attr = []xml.Attr{{Name: xml.Name{Local: "type"}, Value: "string"}}
+				enc.EncodeToken(data)
+				param := xml.StartElement{Name: xml.Name{Local: "param"}}
+				param.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: "pattern"}}
+				enc.EncodeToken(param)
+				enc.EncodeToken(xml.CharData(`[0-9]+|yes|no`))
+				enc.EncodeToken(param.End())
+				enc.EncodeToken(data.End())
 			}
 
 			if attr.Reference.Name != "" {
@@ -218,9 +241,74 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 			}
 		}
 		getChildElements(commands, enc, cmd.Childelements.Text, lang)
+
+		// if the child elements contents is "empty", there is no need for allowing foreign nodes (2/2)
+		if cmd.Name != "Include" && len(cmd.Childelements.Text) > 0 {
+			enc.EncodeToken(group.End())
+
+			ref := xml.StartElement{Name: xml.Name{Local: "ref"}}
+			ref.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: "foreign-nodes"}}
+			enc.EncodeToken(ref)
+			enc.EncodeToken(ref.End())
+			enc.EncodeToken(interleave.End())
+		}
 		enc.EncodeToken(elt.End())
 		enc.EncodeToken(def.End())
 	}
+
+	enc.Flush()
+	// See feature request #144
+	fmt.Fprintln(&outbuf, `
+	<!-- This pattern allows any element from any namespace -->
+	<define name="anything">
+      <zeroOrMore>
+         <choice>
+            <element>
+               <anyName/>
+               <ref name="anything"/>
+            </element>
+            <attribute>
+               <anyName/>
+            </attribute>
+            <text/>
+         </choice>
+      </zeroOrMore>
+   </define>
+   <define name="foreign-elements">
+      <zeroOrMore>
+         <element>
+            <anyName>
+               <except>
+                  <nsName ns=""/>
+                  <nsName ns="urn:speedata.de:2009/publisher/en"/>
+                  <nsName ns="urn:speedata:2009/publisher/functions/en"/>
+               </except>
+            </anyName>
+            <ref name="anything"/>
+         </element>
+      </zeroOrMore>
+   </define>
+   <define name="foreign-attributes">
+      <zeroOrMore>
+         <attribute>
+            <anyName>
+               <except>
+                  <nsName ns=""/>
+                  <nsName ns="urn:speedata.de:2009/publisher/en"/>
+                  <nsName ns="urn:speedata:2009/publisher/functions/en"/>
+               </except>
+            </anyName>
+         </attribute>
+      </zeroOrMore>
+   </define>
+   <define name="foreign-nodes">
+      <zeroOrMore>
+         <choice>
+            <ref name="foreign-attributes"/>
+            <ref name="foreign-elements"/>
+         </choice>
+      </zeroOrMore>
+   </define>`)
 
 	enc.EncodeToken(grammar.End())
 	enc.EncodeToken(xml.CharData("\n"))

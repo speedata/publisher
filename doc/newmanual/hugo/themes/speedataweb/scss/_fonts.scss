@@ -1,0 +1,70 @@
+/*Sana Sans*/
+@font-face {
+    font-family: 'sana';
+    font-weight:normal;
+    font-style:normal;
+    src: url('../sana-webfont/sansregular.eot');
+    src: url('../sana-webfont/sansregular.eot?#iefix') format('embedded-opentype'), url('../sana-webfont/sansregular.woff2') format('woff2'), url('../sana-webfont/sansregular.woff') format('woff'), url('../sana-webfont/sansregular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'sana';
+    font-weight:700;
+    font-style:normal;
+    src: url('../sana-webfont/sansbold.eot');
+    src: url('../sana-webfont/sansbold.eot?#iefix') format('embedded-opentype'), url('../sana-webfont/sansbold.woff2') format('woff2'), url('../sana-webfont/sansbold.woff') format('woff'), url('../sana-webfont/sansbold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'sana';
+    font-weight:bold;
+    font-style:italic;
+
+    src: url('../sana-webfont/sansbolditalic.eot');
+    src: url('../sana-webfont/sansbolditalic.eot?#iefix') format('embedded-opentype'), url('../sana-webfont/sansbolditalic.woff2') format('woff2'), url('../sana-webfont/sansbolditalic.woff') format('woff'), url('../sana-webfont/sansbolditalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'sana';
+    font-weight:normal;
+    font-style:italic;
+    src: url('../sana-webfont/sansitalic.eot');
+    src: url('../sana-webfont/sansitalic.eot?#iefix') format('embedded-opentype'), url('../sana-webfont/sansitalic.woff2') format('woff2'), url('../sana-webfont/sansitalic.woff') format('woff'), url('../sana-webfont/sansitalic.ttf') format('truetype');
+}
+
+/*Sana Sans Alt*/
+@font-face {
+    font-family: 'sanaAlt';
+    font-weight:normal;
+    font-style:normal;
+	src: url('../sana-webfont/altregular.eot');
+    src: url('../sana-webfont/altregular.eot?#iefix') format('embedded-opentype'), url('../sana-webfont/altregular.woff2') format('woff2'), url('../sana-webfont/altregular.woff') format('woff'), url('../sana-webfont/altregular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'sanaAlt';
+    font-weight:bold;
+    font-style:normal;
+	src: url('../sana-webfont/altbold.eot');
+    src: url('../sana-webfont/altbold.eot?#iefix') format('embedded-opentype'), url('../sana-webfont/altbold.woff2') format('woff2'), url('../sana-webfont/altbold.woff') format('woff'), url('../sana-webfont/altbold.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'sanaAlt';
+    font-weight:bold;
+    font-style:italic;
+	src: url('../sana-webfont/altbolditalic.eot');
+    src: url('../sana-webfont/altbolditalic.eot?#iefix') format('embedded-opentype'), url('../sana-webfont/altbolditalic.woff2') format('woff2'), url('../sana-webfont/altbolditalic.woff') format('woff'), url('../sana-webfont/altbolditalic.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'sanaAlt';
+    font-weight:normal;
+    font-style:italic;
+	src: url('../sana-webfont/altitalic.eot');
+    src: url('../sana-webfont/altitalic.eot?#iefix') format('embedded-opentype'), url('../sana-webfont/altitalic.woff2') format('woff2'), url('../sana-webfont/altitalic.woff') format('woff'), url('../sana-webfont/altitalic.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'sanaAlt';
+    font-weight:500;
+    font-style:normal;
+	src: url('../sana-webfont/altmedium.eot');
+    src: url('../sana-webfont/altmedium.eot?#iefix') format('embedded-opentype'), url('../sana-webfont/altmedium.woff2') format('woff2'), url('../sana-webfont/altmedium.woff') format('woff'), url('../sana-webfont/altmedium.ttf') format('truetype');
+}

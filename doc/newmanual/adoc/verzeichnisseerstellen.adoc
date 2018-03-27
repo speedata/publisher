@@ -1,0 +1,228 @@
+[[ch-verzeichnisseerstellen]]
+= Verzeichnisse erstellen (XML-Struktur)
+
+Im vorherigen Kapitel wurden Verzeichnisse über die Marker erstellt.
+In diesem Kapitel wird ein Mechanismus benutzt, der etwas mehr manuelle Arbeit bedeutet, aber flexibler ist.
+
+Der speedata Publisher kann beliebige Verzeichnistypen erstellen.
+Ob Inhaltsverzeichnis, Artikelliste oder Stichwortindex – alle Listen funktionieren nach demselben Prinzip:
+die notwendigen Daten (z. B. Seitenzahlen, Artikelnummern) werden explizit in einer eigenen Datenstruktur gespeichert, auf Festplatte geschrieben.
+Beim nächsten Lauf des Publishers werden diese Daten eingelesen und stehen zur Verfügung.
+
+== Schritt 1: Sammeln der Informationen
+
+Die beiden Befehle <<cmd-element,`<Element>`>> und <<cmd-attribute,`<Attribute>`>> dienen zur Strukturierung von Daten, die während der Verarbeitung gelesen werden.
+Das ist schon im Kapitel <<ch-xmlstrukturen>> beschrieben worden.
+Mit diesen Befehlen lassen sich neue XML Datensatzdateien erzeugen.
+Folgende Struktur könnte für eine Artikelliste sinnvoll sein:
+
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+<Artikelverzeichnis>
+  <Artikel nummer="1" seite="10"/>
+  <Artikel nummer="2" seite="12"/>
+  <Artikel nummer="3" seite="14"/>
+</Artikelverzeichnis>
+-------------------------------------------------------------------------------
+
+
+Um diese Struktur im Layoutregelwerk zu erstellen, muss sie aus den Befehlen `<Element>` und `<Attribute>` wie folgt zusammengesetzt werden:
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+<Element name="Artikelverzeichnis">
+  <Element name="Artikel">
+    <Attribute name="nummer" select="1"/>
+    <Attribute name="seite" select="10"/>
+  </Element>
+  <Element name="Artikel">
+    <Attribute name="nummer" select="2"/>
+    <Attribute name="seite" select="12"/>
+  </Element>
+  <Element name="Artikel">
+    <Attribute name="nummer" select="3"/>
+    <Attribute name="seite" select="14"/>
+  </Element>
+</Element>
+-------------------------------------------------------------------------------
+
+
+== Schritt 2: Speichern und Laden der Informationen
+
+
+Mit dem Befehl <<cmd-savedataset,`<SaveDataset>`>>  wird diese Struktur auf die Festplatte gespeichert und mit <<cmd-loaddataset,`<LoadDataset>`>> wird sie wieder geladen.
+Existiert die Datei beim Laden nicht, so wird kein Fehler gemeldet, da es sich um den ersten Durchlauf handeln könnte, wo die Datei naturgemäß noch nicht existiert.
+
+== Schritt 3: Verarbeiten der Informationen
+
+Direkt nach dem Laden wird die XML-Verarbeitung mit dem ersten Element der gerade geladenen Struktur fortgesetzt, im Beispiel oben würde nach dem folgenden Befehl im Layoutregelwerk gesucht:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Record element="Artikelverzeichnis">
+  ...
+</Record>
+-------------------------------------------------------------------------------
+
+Das heißt, dass die eigentliche Datenverarbeitung zeitweilig unterbrochen und mit dem neuen Datensatz aus <<cmd-loaddataset,`<LoadDataset>`>> fortgeführt wird.
+
+== Beispiel
+
+Das ist dasselbe Beispiel wie aus dem vorherigen Abschnitt (<<ch-verzeichnisseerstellen-marker>>). Als Beispiel wird eine einfache Datendatei genommen:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<data>
+  <kapitel titel="Vorwort">
+    <text>...</text>
+  </kapitel>
+  <kapitel titel="Einleitung">
+    <text>...</text>
+  </kapitel>
+  <kapitel titel="Schlusswort">
+    <text>...</text>
+  </kapitel>
+</data>
+-------------------------------------------------------------------------------
+
+Die mit dem folgenden Layout ausgegeben wird:
+
+.Grundgerüst für die Ausgabe eines Inhaltsverzeichnisses über die XML-Struktur. Der Code wird im Laufe des Abschnitts ergänzt.
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <DefineFontfamily name="Überschrift" fontsize="18" leading="20">
+    <Regular fontface="sans"/>
+  </DefineFontfamily>
+
+  <!--1-->
+
+  <!--2-->
+  <Record element="data">
+    <ProcessNode select="kapitel"/>
+  </Record>
+
+  <Record element="kapitel">
+    <!--3-->
+    <PlaceObject>
+      <Textblock>
+        <Paragraph fontface="Überschrift">
+          <Value select="@titel"/>
+        </Paragraph>
+        <Paragraph>
+          <Value select="text"/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <NewPage/>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+<1> Die Ausgabe des eigentlichen Inhaltsverzeichnisses wird hier eingefügt.
+<2> Der Abschnitt `data` wird erweitert um das Laden und Speichern der XML-Daten für das Verzeichnis
+<3> Hier wird Code eingefügt, der die XML-Struktur zusammenbaut (siehe unten)
+
+Nun wird eine Variable definiert (`entries`), die die Informationen über die Kapitelanfänge enthält.
+Die Zielstruktur soll folgende sein:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<tableofcontent>
+  <entry chaptername="Vorwort" page="2"/>
+  <entry chaptername="Einleitung" page="3"/>
+  <entry chaptername="Schlusswort" page="4"/>
+</tableofcontent>
+-------------------------------------------------------------------------------
+
+// A beginn
+
+Im Abschnitt `kapitel` (Punkt 3 im Layout oben) wird oben der Code eingefügt, um die Variable `entries` mit den Inhalten zu füllen:
+
+[source, xml]
+-------------------------------------------------------------------------------
+  <Record element="kapitel">
+    <SetVariable variable="entries">
+      <Copy-of select="$entries"/>
+      <Element name="entry">
+        <Attribute name="chaptername" select="@titel"/>
+        <Attribute name="page" select="sd:current-page()"/>
+      </Element>
+    </SetVariable>
+
+    <PlaceObject>
+    ...
+-------------------------------------------------------------------------------
+
+
+Es wird also mittels `<Copy-of>` jeweils etwas neues zu einer Variablen hinzugefügt.
+
+// A Ende
+
+// B Beginn
+
+Die Struktur muss am Anfang geladen und am Ende des Durchlaufs gespeichert werden, damit sie immer aktuell ist.
+Wenn die Datei `toc` noch nicht vorhanden ist, wird der Befehl einfach übergangen.
+Der neue Abschnitt `data` sieht nun so aus und wird an die Stelle 2 im Layout oben eingefügt (anstelle des dort vorhandenen Records):
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+  <Record element="data">
+    <LoadDataset name="toc"/>
+    <SetVariable variable="entries"/>
+    <ProcessNode select="kapitel"/>
+    <SaveDataset filename="toc" elementname="tableofcontent"
+                 select="$entries"/>
+  </Record>
+-------------------------------------------------------------------------------
+
+// B Ende
+
+// C Beginn
+
+Beim nächsten Durchlauf greift der Befehl `<LoadDataset>` und öffnet die zuvor gespeicherte XML-Datei.
+Im Layoutregelwerk wird ein Abschnitt für das Element `tableofcontent` gesucht, das ja das Wurzelelement der gespeicherten Datei ist.
+Das muss noch in das Layoutregelwerk eingefügt werden (Stelle 1 im Layout oben):
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+  <Record element="tableofcontent">
+    <PlaceObject>
+      <Table padding="5pt">
+        <ForAll select="entry">
+          <Tr>
+            <Td><Paragraph><Value select="@chaptername"/></Paragraph></Td>
+            <Td><Paragraph><Value select="@page"/></Paragraph></Td>
+          </Tr>
+        </ForAll>
+      </Table>
+    </PlaceObject>
+    <NewPage/>
+  </Record>
+-------------------------------------------------------------------------------
+
+Es wird eine Tabelle ausgegeben mit einer Zeile für jedes Kindelement `entry`.
+Durch den anschließenden Seitenumbruch wird der nachfolgende Text nach hinten geschoben.
+Dadurch muss man das Dokument drei Mal durchlaufen lassen, bevor das Inhaltsverzeichnis korrekt ist:
+
+. Im ersten Durchlauf wird die Datenstruktur zusammengestellt.
+. Anschließend kann das Inhaltsverzeichnis erstellt werden, durch den Seitenumbruch verschiebt sich der Inhalt um eine Seite nach hinten, die Datenstruktur wird entsprechend aktualisiert.
+. Erst im dritten Durchlauf ist das Inhaltsverzeichnis korrekt.
+
+Wenn man weiß, dass das Inhaltsverzeichnis nur eine Seite in Anspruch nehmen wird, dann kann man den Seitenumbruch auch schon im ersten Durchlauf einfügen.
+Damit spart man sich einen Durchlauf.
+
+
+// C Ende
+
+
+
+
+
+// Ende

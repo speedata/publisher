@@ -1,0 +1,31 @@
+{{ $here := .}}
+<div id="navi">
+{{ if eq .Site.Params.type "handbuch"}}
+	<div id="searchmobil">
+		{{ partial "searchmanual.html" . }}
+	</div>
+	<ul id="navi2mobile">
+		{{ partial "tableofcontent.html" . }}
+	</ul>
+{{ else }}
+	<ul>
+	{{ range .Site.Menus.main }}
+		<li{{if or ($here.HasMenuCurrent "main" .) ($here.IsMenuCurrent "main" .) }} class="active"{{end}}><a href="{{.URL}}">{{ .Name }}</a>
+			{{ if .HasChildren }}
+				<ul>
+		    	{{ range .Children }}
+		    		<li {{if $here.IsMenuCurrent "main" . }} class="active"{{end}}><a href="{{.URL}}">{{ .Name }}</a></li>
+		    	{{ end }}
+		    	</ul>
+		   	{{end}}
+		</li>
+	{{end}}
+	</ul>
+	<ul id="navi2mobile">
+		<li><a href="https://blog.speedata.de" target="_blank">Blog</a></li>
+		<li {{if eq .Title "contact" }}class="active"{{end}}><a href="/impressum">Impressum und Kontakt</a></li>
+		<li {{if eq .Title "privacystatement"}}class="active"{{end}}><a href="/datenschutz">Datenschutz</a></li>
+	</ul>
+{{end}}
+
+</div>

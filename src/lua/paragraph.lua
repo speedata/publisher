@@ -22,6 +22,7 @@ function Paragraph:new( textformat  )
     return instance
 end
 
+-- Add italic/bold/underline/... attribtes to node
 function Paragraph:add_italic_bold( nodelist,parameter )
     -- FIXME(?): recurse, node.traverse() stops at hlists
     for i in node.traverse_id(publisher.glyph_node,nodelist) do
@@ -139,6 +140,10 @@ end
 
 function Paragraph:append( whatever,parameter )
     parameter = parameter or {}
+    local tab
+    tab = publisher.textformats[self.textformat or 'text']
+    parameter.tab = ( tab and tab.tab ) or {}
+
     if type(whatever)=="string" or type(whatever)=="number" then
         self:add_to_nodelist(publisher.mknodes(whatever,parameter.fontfamily,parameter))
     elseif type(whatever)=="table" and whatever.nodelist then
@@ -393,7 +398,8 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         if self.initial then
             parameter.hangindent =  parameter.hangindent + self.initial.width
             local i_ht = self.initial.height + self.initial.depth
-            local nl_ht = nodelist.height + nodelist.depth
+            local _w, _h, _d = node.dimensions(nodelist)
+            local nl_ht = _h + _d
             local maxindent = 0
             -- get max indent
             if parameter.parshape then
@@ -424,22 +430,39 @@ function Paragraph:format(width_sp, default_textformat_name,options)
             end
         end
 
+
+        -- if the last items are newline nodes, clear them (see #142)
+        local tail = node.slide(nodelist)
+        while tail and node.has_attribute(tail,publisher.att_newline) do
+            nodelist = node.remove(nodelist,tail)
+            tail = node.tail(nodelist)
+        end
+
+
         -- If there is ragged shape (i.e. not a rectangle of text) then we should turn off
-        -- font expansion. This is done by setting tex.pdfadjustspacing to 0 temporarily
+        -- font expansion. This is done by setting tex.(pdf)adjustspacing to 0 temporarily
         if ragged_shape then
             local save_tolerance     = parameter.tolerance
             local save_hyphenpenalty = parameter.hyphenpenalty
             parameter.tolerance     = 5000
             parameter.hyphenpenalty = 200
 
-            local adjspace = tex.pdfadjustspacing
+            -- tex.pdf... is LuaTeX < 1
+            local adjspace
+            if status.luatex_version >= 100 then
+                adjspace = tex.adjustspacing
+            else
+                adjspace = tex.pdfadjustspacing
+            end
             tex.pdfadjustspacing = 0
+            tex.adjustspacing = 0
             nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
 
             parameter.tolerance     = save_tolerance
             parameter.hyphenpenalty = save_hyphenpenalty
 
             tex.pdfadjustspacing = adjspace
+            tex.adjustspacing = adjspace
             publisher.fix_justification(nodelist,current_textformat.alignment)
         else
             nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
@@ -454,7 +477,7 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         -- it's always 0 anyway (hopefully!)
         local line = nodelist.head
         while line do
-            if line.id == 10 then
+            if line.id == publisher.glue_node then
                 line.prev.next = line.next
                 if line.next then
                     line.next.prev = line.prev
@@ -467,21 +490,14 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         local c = 0
         while line do
             c = c + 1
-            if c == 1 then
-                -- orphan, but ignore on one-line texts
-                if current_textformat.orphan == false and line.next then
-                    node.set_attribute(line,publisher.att_break_below_forbidden,1)
-                end
+            if c < current_textformat.orphan and line.next then
+                node.set_attribute(line,publisher.att_break_below_forbidden,1)
             end
-            if line.id == 0 and line.next ~= nil and line.next.next == nil then
-                -- widow
-                if current_textformat.widow == false then
-                    node.set_attribute(line,publisher.att_break_below_forbidden,2)
-                end
+            if less_or_equal_than_n_lines(line, current_textformat.widow) then
+               node.set_attribute(line,publisher.att_break_below_forbidden,2)
             end
             line = line.next
         end
-
 
         publisher.fonts.post_linebreak(nodelist)
 
@@ -552,8 +568,24 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         nodelist.head.head = node.insert_before(nodelist.head.head,nodelist.head.head,initial_hlist)
     end
 
-
     return nodelist
+end
+
+-- Return true iff the paragraph has at lines ore less text
+-- lines left over and is not at the last line.
+function less_or_equal_than_n_lines( nodelist, lines )
+    if lines == 0 then return false end
+    local has_n_lines = false
+    for i=1,lines - 1 do
+        if nodelist.id == publisher.hlist_node and nodelist.next then
+            nodelist = nodelist.next
+        else
+            if i == 1 then
+                return false
+            end
+        end
+    end
+    return nodelist.next == nil
 end
 
 function join_table_to_box(objects)
@@ -673,7 +705,7 @@ function Paragraph.vsplit( objects_t,frameheight )
                 if hbox.id == publisher.hlist_node or hbox.id == publisher.vlist_node then
                     lineheight = hbox.height + hbox.depth
                 elseif hbox.id == publisher.glue_node then
-                    lineheight = hbox.spec.width
+                    lineheight = get_glue_value(hbox,"width")
                 elseif hbox.id == publisher.rule_node then
                     lineheight = hbox.height + hbox.depth
                 elseif hbox.id == publisher.whatsit_node then
@@ -681,7 +713,8 @@ function Paragraph.vsplit( objects_t,frameheight )
                 else
                     w("unknown node 1: %d",hbox.id)
                 end
-                if accumulated_height + lineheight <= goal then
+                -- 20 is some rounding error
+                if accumulated_height + lineheight <= goal + 20 then
                     thisarea[#thisarea + 1] = hbox
                     accumulated_height = accumulated_height + lineheight
                 else

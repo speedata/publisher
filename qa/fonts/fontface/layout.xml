@@ -1,0 +1,26 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  version="3.1.5">
+  <Options crop="2mm"/>
+  <Record element="data">
+    <PlaceObject>
+      <Table>
+        <Tr>
+          <Td>
+            <Paragraph>
+              <Value>X</Value>
+              <Fontface fontfamily="text"><Sup><Value>x</Value></Sup><Sub><Value>x</Value></Sub></Fontface>
+              <Value>X</Value>
+            </Paragraph>
+            <Paragraph>
+              <Fontface fontfamily="text"><Value select="@title"/></Fontface>
+            </Paragraph>
+            <Paragraph>
+              <Fontface fontfamily="text"><Value select="."/></Fontface>
+            </Paragraph>
+          </Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>

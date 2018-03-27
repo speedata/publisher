@@ -1,0 +1,78 @@
+[[ch-druckausgabe]]
+
+= Druckausgabe / Schnittmarken
+
+Ein druckbares PDF unterscheidet sich in der Regel nicht oder nur sehr wenig von einem PDF, das ausschließlich am Bildschirm gelesen wird. Ein paar Punkte, die man für die Ausgabe in eine Druckerei beachten sollte:
+
+Format::
+  Während die heutigen Bildschirme tendenziell im Querformat (16:10 oder ähnliche Seitenverhältnisse) sind, ist die übliche Druckseite Hochformat.
+  Im Befehl `<Pageformat>` sollte man die gewünschte Größe (Endformat) angeben.
+  Beschnittmarken und Beschnittzugabe können separat gesteuert werden (siehe unten bzw. den Befehl <<cmd-options,`<Options>`>>)
+
+Farben::
+  Da Druckfarben fast immer auf weißem Papier aufgebracht werden, müssen diese anders angegeben werden als auf dem Bildschirm, die auf dunklem Untergrund LEDs zum leuchten bringen.
+  Es sollte darauf geachtet werden, alle Farben entweder im CMYK-Farbraum zu definieren oder im Graustufenmodus.
+  Man kann zwar rechnerisch RGB-Werte in CMYK umwandeln, doch in der Praxis funktioniert das nur mäßig gut.
+
+Bilder::
+  Auch hier sollte man darauf achten, ausschließlich Bilder im CMYK-Farbraum einzubinden.
+  Der Publisher übernimmt die Bilder ohne Änderungen oder Konvertierung in das PDF.
+  Das heißt, das Ausgangsmaterial sollte schon für den Druck geeignet sein.
+
+Qualität (Pixelzahl) der Bilder::
+  Manchmal wird gesagt, dass nur Bilder mit mindestens 300 DPI (Punkte pro Zoll) eingebunden werden sollen.
+  Die Angabe der DPI-Zahl ist oftmals unsinnig, da sie willkürlich im Bild festgelegt werden kann.
+  Es kommt auf die tatsächliche Anzahl der Pixel je Zoll nach der Skalierung im Publisher an.
+  Der Publisher kann eine Warnung ausgeben, wenn diese unter einen bestimmten Wert ist (Attribut `dpiwarn`, siehe <<cmd-image,`<Image>`>>).
+
+Schriftarten::
+  Der Publisher bindet automatisch alle benutzten Schriftarten in das PDF ein (subsetting - nur die tatsächlich benutzten Buchstaben und Zeichen werden eingebettet).
+
+
+
+== Schnittmarken
+
+Wird keine gesonderte Einstellung vorgenommen, so erzeugt der speedata Publisher ein PDF, das genau der Größe der angegebenen Seiten hat.
+Um Beschnittzugabe oder Schnittmarken einzuschalten, müssen diese im Element <<cmd-options,`<Options>`>> aktiviert werden:
+
+
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+    <Options
+       cutmarks="yes"
+       bleed="3mm"
+      />
+-------------------------------------------------------------------------------
+
+
+
+Diese Anweisungen erzeugen Schnittmarken, die eine Länge von 1cm haben und 3mm vom inneren Seitenrand (TrimBox) entfernt sind.
+Der Abstand ergibt sich aus der Angabe beim Attribut `bleed`.
+
+Die erzeugte PDF-Datei enthält immer die folgenden Boxen:
+außen ist die *MediaBox*, die Beschnittzugabe wird durch die *BleedBox* markiert und die eigentliche Seite durch die *TrimBox*.
+Wenn keine Beschnittzugabe angegeben ist, fallen die *BleedBox* und die *TrimBox* aufeinander.
+Werden keine Schnittmarken erzeugt, so fällt die *MediaBox* mit der *TrimBox* zusammen, so dass ohne Angaben von Schnittmarken und Beschnittzugabe alle drei Boxen dieselben Ausmaße haben.
+
+[discrete]
+== Beispiel
+
+Im  Beispiel
+ifdef::backend-docbook99[]
+in Abbildung <<abb-cropmarks>>.
+endif::[]
+gehen die Schnittmarken bis zur blauen Linie, die die Beschnittzugabe kennzeichnet.
+Die grüne Linie zeigt das Endformat der Seite (Screenshot aus dem Adobe Acrobat).
+
+
+[[abb-cropmarks]]
+.Schnittmarken und Beschnittzugabe im Adobe Acrobat
+image::schnittmarken.png[width=40%,scaledwidth=80%]
+
+
+TIP: Der Befehl `<PDFOptions>` bietet die Möglichkeit, Voreinstellungen für den Druckdialog im PDF-Anzeigeprogramm festzulegen.
+Diese werden nur von manchen Programmen unterstützt (hauptsächlich Adobe Acrobat Reader) und sind plattformabhängig.
+
+
+// Ende

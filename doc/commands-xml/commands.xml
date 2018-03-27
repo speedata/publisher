@@ -5,6 +5,7 @@
   >
   <define name="Switchcontents">
     <optional><cmd name="Action"/></optional>
+    <optional><cmd name="AddSearchpath"/></optional>
     <optional><cmd name="Attribute"/></optional>
     <optional><cmd name="B"/></optional>
     <optional><cmd name="Barcode"/></optional>
@@ -29,6 +30,7 @@
     <optional><cmd name="Initial"/></optional>
     <optional><cmd name="Include"/></optional>
     <optional><cmd name="InsertPages"/></optional>
+    <optional><cmd name="Layout"/></optional>
     <optional><cmd name="Li"/></optional>
     <optional><cmd name="LoadDataset"/></optional>
     <optional><cmd name="LoadFontfile"/></optional>
@@ -50,6 +52,7 @@
     <optional><cmd name="SetGrid"/></optional>
     <optional><cmd name="SetVariable"/></optional>
     <optional><cmd name="SortSequence"/></optional>
+    <optional><cmd name="Span"/></optional>
     <optional><cmd name="Sub"/></optional>
     <optional><cmd name="Sup"/></optional>
     <optional><cmd name="Switch"/></optional>
@@ -65,6 +68,8 @@
   </define>
 
   <define name="Commands">
+    <optional><cmd name="AddSearchpath"/></optional>
+    <optional><cmd name="AttachFile"/></optional>
     <optional><cmd name="Bookmark"/></optional>
     <optional><cmd name="DefineColor"/></optional>
     <optional><cmd name="DefineFontfamily"/></optional>
@@ -75,6 +80,7 @@
     <optional><cmd name="Hyphenation"/></optional>
     <optional><cmd name="Include"/></optional>
     <optional><cmd name="InsertPages"/></optional>
+    <optional><cmd name="Layout"/></optional>
     <optional><cmd name="LoadDataset"/></optional>
     <optional><cmd name="Loop"/></optional>
     <optional><cmd name="Message"/></optional>
@@ -83,6 +89,7 @@
     <optional><cmd name="NextRow"/></optional>
     <optional><cmd name="Output"/></optional>
     <optional><cmd name="Pagetype"/></optional>
+    <optional><cmd name="PDFOptions"/></optional>
     <optional><cmd name="PlaceObject"/></optional>
     <optional><cmd name="ProcessNode"/></optional>
     <optional><cmd name="SaveDataset"/></optional>
@@ -112,6 +119,7 @@
         <cmd name="NoBreak"/>
         <cmd name="Sub"/>
         <cmd name="Sup"/>
+        <cmd name="Span"/>
         <cmd name="Switch"/>
         <cmd name="U"/>
         <cmd name="URL"/>
@@ -121,6 +129,8 @@
   </define>
 
   <define name="Toplevel">
+    <optional><cmd name="AttachFile"/></optional>
+    <optional><cmd name="AddSearchpath"/></optional>
     <optional><cmd name="Compatibility"/></optional>
     <optional><cmd name="DefineColor"/></optional>
     <optional><cmd name="DefineFontalias"/></optional>
@@ -332,7 +342,7 @@
     </childelements>
     <attribute en="href" type="text" optional="no">
       <description xml:lang="en">
-        <para>The destination of the hyperlink (URI). Example: <tt>https://www.speedata.de</tt></para>
+        <para>The target of the hyperlink (URI). Example: <tt>https://www.speedata.de</tt></para>
       </description>
       <description xml:lang="de">
         <para>Das Ziel des Hyperlinks. Beispiel: <tt>https://www.speedata.de</tt></para>
@@ -444,6 +454,40 @@
     </example>
     <seealso><cmd name="Textblock"/>, <cmd name="Mark"/></seealso>
   </command>
+  <command en="AddSearchpath" since="3.1.1">
+    <description xml:lang="en">
+      <para>Add a directory on the harddrive to be added to the publisher's search path.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Ein Verzeichnis auf der Festplatte, das zum Suchpfad des Publishers hinzugefügt wird.</para>
+    </description>
+    <childelements/>
+    <attribute en="select" optional="no" type="xpath">
+      <description xml:lang="en">
+        <para>The path to be added. System dependent.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Pfad, der hinzugefügt werden soll. Systemabhängig.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Switch>
+  <Case test="sd:variable-exists('searchpath')">
+    <AddSearchpath select="$searchpath" />
+  </Case>
+</Switch>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Switch>
+  <Case test="sd:variable-exists('searchpath')">
+    <AddSearchpath select="$searchpath" />
+  </Case>
+</Switch>
+]]></listing>
+    </example>
+    <seealso></seealso>
+  </command>
   <command en="AtPageCreation">
     <description xml:lang="en">
       <para>The contents of the element <cmd name="AtPageCreation"/> is executed the first time the page is accessed. This is used in <cmd name="Pagetype"/>.</para>
@@ -518,6 +562,54 @@
 </AtPageShipout>]]></listing>
     </example>
     <seealso><cmd name="AtPageCreation"/>, <cmd name="Pagetype"/></seealso>
+  </command>
+  <command en="AttachFile" since="3.1.1">
+    <description xml:lang="en">
+      <para>Attach a ZUGFeRD file.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Binde eine ZUGFeRD Datei ein.</para>
+    </description>
+    <childelements/>
+    <attribute en="filename" optional="no" type="text">
+      <description xml:lang="en">
+        <para>The name of the local file to be attached to the PDF.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name der Datei, die in die PDF-Datei eingebettet werden soll.</para>
+      </description>
+    </attribute>
+    <attribute en="description" optional="no" type="text">
+      <description xml:lang="en">
+        <para>Textual description of the attached file (for the PDF viewer).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Textuelle Beschreibung der einzubindenden Datei (für den PDF-Viewer).</para>
+      </description>
+    </attribute>
+    <attribute en="type" optional="no">
+      <description xml:lang="en">
+        <para>The type of the included file. Currently only ZUGFeRD is supported.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Typ der eingebundenen Datei. Derzeit wird nur ZUGFeRD unterstützt.</para>
+      </description>
+      <choice en="ZUGFeRD invoice">
+        <description xml:lang="en">
+          <para>The attached file is an XML file containing a ZUGFeRD invoice</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die eingebundene Datei ist eine ZUGFeRD XML-Datei</para>
+        </description>
+      </choice>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<AttachFile filename="invoice.xml" description="A ZUGFeRD invoice." type="ZUGFeRD invoice"/>]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<AttachFile filename="invoice.xml" description="ZUGFeRD Rechnung" type="ZUGFeRD invoice"/>]]></listing>
+    </example>
+    <seealso/>
   </command>
   <command en="Attribute">
     <description xml:lang="en">
@@ -739,38 +831,38 @@
   <Barcode select="'speedata Publisher'" type="Code128" showtext="yes"/>
 </PlaceObject>]]></listing>
       <para>gives</para>
-      <image file="code128-speedata-publisher.png"/>
+      <image file="ref-code128-speedata-publisher.png"/>
       <listing><![CDATA[<PlaceObject>
   <Barcode select="4242002518169" type="EAN13"/>
 </PlaceObject>]]></listing>
       <para>becomes</para>
-      <image file="ean13-supertex.png" width="300"/>
+      <image file="ref-ean13-supertex.png" width="300"/>
       <para>And finally the QR code</para>
       <listing><![CDATA[<PlaceObject>
   <Barcode select="'http://www.speedata.de'" type="QRCode" height="5"/>
 </PlaceObject>
 ]]></listing>
       <para>looks like (surprise!)</para>
-      <image file="speedata-publisher-qrcode.png" width="300"/>
+      <image file="ref-speedata-publisher-qrcode.png" width="300"/>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<PlaceObject>
   <Barcode select="'speedata Publisher'" type="Code128" showtext="yes"/>
 </PlaceObject>]]></listing>
       <para>ergibt</para>
-      <image file="code128-speedata-publisher.png"/>
+      <image file="ref-code128-speedata-publisher.png"/>
       <listing><![CDATA[<PlaceObject>
   <Barcode select="4242002518169" type="EAN13"/>
 </PlaceObject>]]></listing>
       <para>wird zu</para>
-      <image file="ean13-supertex.png" width="30%"/>
+      <image file="ref-ean13-supertex.png" width="30%"/>
       <para>und</para>
       <listing><![CDATA[<PlaceObject>
   <Barcode select="'http://www.speedata.de'" type="QRCode" height="5"/>
 </PlaceObject>
 ]]></listing>
       <para>wird zu</para>
-      <image file="speedata-publisher-qrcode.png" width="30%"/>
+      <image file="ref-speedata-publisher-qrcode.png" width="30%"/>
     </example>
     <seealso><cmd name="PlaceObject"/></seealso>
   </command>
@@ -1094,7 +1186,7 @@
 </PlaceObject>
 ]]></listing>
       <para>looks like</para>
-      <image file="greenbox.png"/>
+      <image file="ref-greenbox.png"/>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<DefineColor name="meingrün" model="cmyk" c="22" m="0" y="55" k="0"/>
@@ -1103,7 +1195,7 @@
 </PlaceObject>
 ]]></listing>
       <para>erzeugt ein farbiges Rechteck</para>
-      <image file="greenbox.png"/>
+      <image file="ref-greenbox.png"/>
     </example>
     <seealso><cmd name="DefineColor"/>, <cmd name="PlaceObject"/></seealso>
   </command>
@@ -1233,7 +1325,7 @@
 </PlaceObject>
 ]]></listing>
       <para>looks like</para>
-      <image file="circlewithborder.png"/>
+      <image file="ref-circlewithborder.png"/>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<DefineColor name="meingrün" model="cmyk" c="22" m="0" y="55" k="0"/>
@@ -1242,7 +1334,7 @@
 </PlaceObject>
 ]]></listing>
       <para>erzeugt einen Kreis</para>
-      <image file="circlewithborder.png" width="30%"/>
+      <image file="ref-circlewithborder.png" width="30%"/>
     </example>
     <seealso><cmd name="DefineColor"/>, <cmd name="PlaceObject"/></seealso>
   </command>
@@ -1389,6 +1481,22 @@
         <para>Farbe der Tabellenspalte.</para>
       </description>
     </attribute>
+    <attribute en="padding-left" optional="yes" since="3.1.8" type="length">
+      <description xml:lang="en">
+        <para>Set the left padding for the column</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze das linke padding für diese Spalte</para>
+      </description>
+    </attribute>
+    <attribute en="padding-right" optional="yes" since="3.1.8" type="length">
+      <description xml:lang="en">
+        <para>Set the right padding for the column</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze das rechte padding für diese Spalte</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <para>See the example at <cmd name="Columns"/>.</para>
     </example>
@@ -1411,6 +1519,7 @@
       <oneOrMore>
         <choice>
           <cmd name="Loop"/>
+          <cmd name="Switch"/>
           <cmd name="Column"/>
         </choice>
       </oneOrMore>
@@ -1900,53 +2009,21 @@
         <para>Das Zeichen, das für Trennung benutzt wird (Voreinstellung: -)</para>
       </description>
     </attribute>
-    <attribute en="orphan" optional="yes">
+    <attribute en="orphan" optional="yes" type="yesnonumber" lastchanged="3.1.22">
       <description xml:lang="en">
-        <para>If no, prohibit orphans (first line of paragraph is on the previous page). Default: no.</para>
+        <para>If yes, allow orphans (first line of paragraph is on the previous page). If you provide a number, it is the number of lines that must be kept together. Default: no.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn nein, Schusterjungen verhindern (erste Zeile eines Absatzes ist auf der vorherigen Seite). Voreinstellung ist nein.</para>
+        <para>Wenn »yes«, Schusterjungen erlauben (erste Zeile eines Absatzes ist auf der vorherigen Seite). Wenn eine Zahl angegeben wird, ist dies die Anzahl der Zeilen, die zusammengehalten werden. Voreinstellung ist »no«.</para>
       </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>Allow orphans.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Schusterjungen erlauben.</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>Prevent orphans (default).</para>
-        </description>
-        <description xml:lang="de">
-          <para>Schusterjungen verhindern (Voreinstellung).</para>
-        </description>
-      </choice>
     </attribute>
-    <attribute en="widow" optional="yes">
+    <attribute en="widow" optional="yes" type="yesnonumber" lastchanged="3.1.22">
       <description xml:lang="en">
-        <para>If no, prohibit widows (last line of paragraph is on the next page). Default: no.</para>
+        <para>If yes, allow widows (last line of paragraph is on the next page). If you provide a number, it is the number of lines that must be kept together.  Default: no.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn nein, Hurenkinder verhindern (letzte Zeile eines Absatzes ist auf der nächsten Seite). Voreinstellung ist nein.</para>
+        <para>Wenn »yes«, Hurenkinder erlauben (letzte Zeile eines Absatzes ist auf der nächsten Seite). Wenn eine Zahl angegeben wird, ist dies die Anzahl der Zeilen, die zusammengehalten werden. Voreinstellung ist »no«.</para>
       </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>Allow widows.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Hurenkinder erlauben.</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>Prevent widows (default).</para>
-        </description>
-        <description xml:lang="de">
-          <para>Hurenkinder verhindern (Voreinstellung).</para>
-        </description>
-      </choice>
     </attribute>
     <attribute en="name" type="text" optional="no">
       <description xml:lang="en">
@@ -2100,6 +2177,30 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="tab" optional="yes" since="3.1.5">
+      <description xml:lang="en">
+        <para>What to do on the tab (&amp; #09;) character.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Was ist beim Tabulator (&amp; #09;) zu tun?</para>
+      </description>
+      <choice en="space">
+        <description xml:lang="en">
+          <para>Use tab as space</para>
+        </description>
+        <description xml:lang="de">
+          <para>Tabulator als Leerzeichen interpretieren</para>
+        </description>
+      </choice>
+      <choice en="hspace">
+        <description xml:lang="en">
+          <para>Use tab as a stretching space</para>
+        </description>
+        <description xml:lang="de">
+          <para>Interpretiere Tabulator als dehnbaren Leerraum</para>
+        </description>
+      </choice>
+    </attribute>
     <remark xml:lang="en">
       <para>The textformats <tt>text</tt>, <tt>centered</tt>, <tt>left</tt> and <tt>right</tt> are predefined. They stand for justified, centered, left aligned and right aligned text.</para>
     </remark>
@@ -2154,6 +2255,7 @@
           <optional><cmd name="ForAll"/></optional>
           <optional><cmd name="Makeindex"/></optional>
           <optional><cmd name="Switch"/></optional>
+          <optional><cmd name="SortSequence"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>
@@ -2737,7 +2839,7 @@
     </example>
     <seealso><cmd name="B"/></seealso>
   </command>
-  <command en="Include">
+  <command en="Include" deprecated="yes">
     <description xml:lang="en">
       <para>Toplevel element for included layout files.</para>
     </description>
@@ -2805,9 +2907,31 @@
                     filename="texgyreheros-bolditalic.otf"/>
 </Include>]]></listing>
     </example>
+    <info xml:lang="en">
+      <para>This command is obsolete. Use <cmd name="Layout"/> instead.</para>
+    </info>
+    <info xml:lang="de">
+      <para>Dieser Befehl ist obsolete. Benutze <cmd name="Layout"/> anstelle von Include.</para>
+    </info>
     <seealso>
       <cmd name="Layout"/>
     </seealso>
+    <!--
+    <rules xml:lang="en">
+      <sch:pattern>
+        <sch:rule context="t:Include">
+          <sch:assert test="false()">Include is obsolete, use the top level command Layout instead.</sch:assert>
+        </sch:rule>
+      </sch:pattern>
+    </rules>
+    <rules xml:lang="de">
+      <sch:pattern>
+        <sch:rule context="t:Include">
+          <sch:assert test="false()">Bitte Layout anstelle von Include benutzen, Include wird nicht weiter unterstützt.</sch:assert>
+        </sch:rule>
+      </sch:pattern>
+    </rules>
+     -->
   </command>
   <command en="Initial" since="2.9.7">
     <description xml:lang="en">
@@ -2863,7 +2987,7 @@
   </Paragraph>
 </Textblock>
 ]]></listing>
-      <image file="initial-en.png" width="50%"/>
+      <image file="ref-initial-en.png" width="50%"/>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<Textblock>
@@ -2877,7 +3001,7 @@
   </Paragraph>
 </Textblock>
 ]]></listing>
-      <image file="initial-de.png" width="50%"/>
+      <image file="ref-initial-de.png" width="50%"/>
     </example>
     <seealso></seealso>
   </command>
@@ -3446,6 +3570,7 @@
     <childelements>
       <oneOrMore>
         <reference name="Toplevel"/>
+        <optional><cmd name="Layout"/></optional>
         <optional><cmd name="Include"/></optional>
       </oneOrMore>
     </childelements>
@@ -3515,9 +3640,7 @@
   </Record>
 </Layout>]]></listing>
     </example>
-    <seealso>
-      <cmd name="Include"/>
-    </seealso>
+    <seealso/>
   </command>
   <command en="Li">
     <description xml:lang="en">
@@ -3927,7 +4050,7 @@
       <para>Gibt eine Textmeldung auf der Konsole und in der Protokolldatei aus.</para>
     </description>
     <childelements>
-      <optional><cmd name="Value"/></optional>
+      <optional><oneOrMore><cmd name="Value"/></oneOrMore></optional>
     </childelements>
     <attribute en="select" type="xpath" optional="yes">
       <description xml:lang="en">
@@ -3963,11 +4086,23 @@
     </attribute>
     <attribute en="errorcode" optional="yes" type="number" since="2.3.69">
       <description xml:lang="en">
-        <para>If an error is raised, use this code on exit. Defaults to 1</para>
+        <para>If an error is raised, use this code on exit. Defaults to 1. Negative values are reserved for system purpose.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn ein Fehler ausgegeben wird, benutze diesen Fehlercode. Voreinstellung 1.</para>
+        <para>Wenn ein Fehler ausgegeben wird, benutze diesen Fehlercode. Voreinstellung 1. Negative Werte sind für interne Zwecke reserviert.</para>
       </description>
+    </attribute>
+    <attribute en="exit" optional="yes" since="3.1.17">
+      <description xml:lang="en"><para>Tells the software to exit immediatley.</para></description>
+      <description xml:lang="de"><para>Soll sich der Publisher beenden?</para></description>
+      <choice en="no">
+        <description xml:lang="en"><para>The speedata Publisher continues with the PDF creation.</para></description>
+        <description xml:lang="de"><para>Der speedata Publisher erzeugt weiterhin die PDF-Datei</para></description>
+      </choice>
+      <choice en="yes">
+        <description xml:lang="en"><para>The speedata Publisher exits without finishing the PDF file.</para></description>
+        <description xml:lang="de"><para>Der speedata Publisher beendet sich ohne die PDF-Datei fertig zu stellen.</para></description>
+      </choice>
     </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<Message select="concat('Price: ',@price)" error="no"/>]]></listing>
@@ -4433,6 +4568,22 @@
         <para>Gibt den Nummer der ersten Seite an.</para>
       </description>
     </attribute>
+    <attribute en="reportmissingglyphs" optional="yes" since="3.1.17">
+      <description xml:lang="en">
+        <para>Issue an error if glyphs are missing from a font.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Gibt einen Fehler aus, wenn ein Zeichen in einer Schriftart fehlt.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en"><para>Show error message (default)</para></description>
+        <description xml:lang="de"><para>Zeige Fehlermeldung (Voreinstellung)</para></description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en"><para>Do not show an error message</para></description>
+        <description xml:lang="de"><para>Zeige keine Fehlermeldung</para></description>
+      </choice>
+    </attribute>
     <attribute en="bleed" type="length" optional="yes">
       <description xml:lang="en">
         <para>The amount of bleed. Defaults to 0mm.</para>
@@ -4671,7 +4822,7 @@
 </PlaceObject>
 ]]></listing>
       <para>ergibt folgende Ausgabe</para>
-      <image file="overlay.png"/>
+      <image file="ref-overlay.png"/>
     </example>
     <seealso><cmd name="Position"/></seealso>
   </command>
@@ -4908,6 +5059,30 @@
       <para>Setze PDF Optionen wie Anzahl der Kopien</para>
     </description>
     <childelements></childelements>
+    <attribute en="author" optional="yes" type="text" since="3.1.18">
+      <description xml:lang="en">
+        <para>Set the author of the document</para>
+      </description>
+      <description xml:lang="de">
+        <para>Legt den Autor des Dokuments fest</para>
+      </description>
+    </attribute>
+    <attribute en="subject" optional="yes" type="text" since="3.1.24">
+      <description xml:lang="en">
+        <para>Set the subject of the document</para>
+      </description>
+      <description xml:lang="de">
+        <para>Legt den Betreff (subject) des Dokuments fest</para>
+      </description>
+    </attribute>
+    <attribute en="title" optional="yes" type="text" since="3.1.18">
+      <description xml:lang="en">
+        <para>Set the title of the document</para>
+      </description>
+      <description xml:lang="de">
+        <para>Legt den Titel des Dokuments fest</para>
+      </description>
+    </attribute>
     <attribute en="duplex" optional="yes" since="2.3.47">
       <description xml:lang="en">
         <para>Set viewer preference to one or two page printing. Default: empty.</para>
@@ -4939,6 +5114,14 @@
           <para>Beidseitig und an langer Kante umblättern</para>
         </description>
       </choice>
+    </attribute>
+    <attribute en="keywords" optional="yes" type="text" since="3.1.24">
+      <description xml:lang="en">
+        <para>Set the keywords of the document (comma separated list).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Legt die Schlüsselwörter des Dokuments fest (kommaseparierte Liste)</para>
+      </description>
     </attribute>
     <attribute en="numcopies" optional="yes" type="number">
       <description xml:lang="en">
@@ -4997,7 +5180,7 @@
       </choice>
     </attribute>
     <example xml:lang="en"><listing><![CDATA[<PDFOptions numcopies="3"/>]]></listing></example>
-    <example xml:lang="de"><listing><![CDATA[<PDFOptionen numcopies="4"/>]]></listing></example>
+    <example xml:lang="de"><listing><![CDATA[<PDFOptions numcopies="4"/>]]></listing></example>
     <seealso></seealso>
   </command>
   <command en="PlaceObject">
@@ -5345,10 +5528,10 @@
     </attribute>
     <attribute en="rotate" type="number" optional="yes">
       <description xml:lang="en">
-        <para>Rotates the object.  The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</para>
+        <para>Rotates the object.  The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise. When the angle is != 0 then grid allocation is turned off.</para>
       </description>
       <description xml:lang="de">
-        <para>Dreht das Objekt. Ein Winkel > 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</para>
+        <para>Dreht das Objekt. Ein Winkel > 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn. Wenn der Winkel ungleich 0 ist, wird die Rasterbelegung abgeschaltet.</para>
       </description>
     </attribute>
     <attribute en="maxheight" type="number" optional="yes">
@@ -6275,6 +6458,54 @@
         <para>Attributname, nach dem sortiert werden soll.</para>
       </description>
     </attribute>
+    <attribute en="numerical" optional="yes" since="3.1.21">
+      <description xml:lang="en">
+        <para>Sort alphabetical or numerical</para>
+      </description>
+      <description xml:lang="de">
+        <para>Sortiere alphabetisch oder nummerisch</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Sort alphabetical</para>
+        </description>
+        <description xml:lang="de">
+          <para>Sortiere nummerisch</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Sort alphabetical (default)</para>
+        </description>
+        <description xml:lang="de">
+          <para>Sortiere alphabetisch (Voreinstellung)</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="order" optional="yes" since="3.1.22">
+      <description xml:lang="en">
+        <para>Select the sorting order</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wähle die Sortierreihenfolge</para>
+      </description>
+      <choice en="ascending">
+        <description xml:lang="en">
+          <para>Use ascending sort order (default)</para>
+        </description>
+        <description xml:lang="de">
+          <para>Benutze aufsteigende Sortierreihenfolge (Voreinstellung)</para>
+        </description>
+      </choice>
+      <choice en="descending">
+        <description xml:lang="en">
+          <para>Use descending sort order</para>
+        </description>
+        <description xml:lang="de">
+          <para>Benutze absteigende Sortierreihenfolge</para>
+        </description>
+      </choice>
+    </attribute>
     <example xml:lang="en">
       <para>Data:</para>
       <listing><![CDATA[<data>
@@ -6323,6 +6554,90 @@
 </Record>]]></listing>
     </example>
     <seealso/>
+  </command>
+  <command en="Span" css="span" since="3.1.15">
+    <description xml:lang="en">
+      <para>Surround text by styling options.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Text mit Style-Optionen umgeben.</para>
+    </description>
+    <childelements>
+      <reference name="Textvalues"/>
+    </childelements>
+    <attribute en="class" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS class for this element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS Klasse für dieses Element.</para>
+      </description>
+    </attribute>
+    <attribute en="id" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS id for this element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS id für dieses Element.</para>
+      </description>
+    </attribute>
+    <attribute en="background-color" type="text" optional="yes" css="background-color">
+      <description xml:lang="en">
+        <para>The background color of the content</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Hintergrundfarbe des Inhalts.</para>
+      </description>
+    </attribute>
+    <attribute en="background-padding-top" type="length" optional="yes" css="background-padding-top">
+      <description xml:lang="en">
+        <para>The top padding of the background color (can be negative)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Innenabstand (oben) der Hintergrundfarbe (kann negativ sein)</para>
+      </description>
+    </attribute>
+    <attribute en="background-padding-bottom" type="length" optional="yes" css="background-padding-bottom">
+      <description xml:lang="en">
+        <para>The bottom padding of the background color (can be negative)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Innenabstand (unten) der Hintergrundfarbe (kann negativ sein)</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Stylesheet>
+  .green { background-color: lightgreen; }
+</Stylesheet>
+
+<Record element="data">
+  <PlaceObject>
+    <Textblock>
+      <Paragraph>
+        <Span class="green"><Value>green</Value></Span>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Stylesheet>
+  .green { background-color: lightgreen; }
+</Stylesheet>
+
+<Record element="data">
+  <PlaceObject>
+    <Textblock>
+      <Paragraph>
+        <Span class="green"><Value>green</Value></Span>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>
+]]></listing>
+    </example>
+    <seealso></seealso>
   </command>
   <command en="Sub">
     <description xml:lang="en">
@@ -6653,6 +6968,30 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="balance" optional="yes" since="3.1.24">
+      <description xml:lang="en">
+        <para>Tries to balance the table on the last page according to the number of frames. Experimental! </para>
+      </description>
+      <description xml:lang="de">
+        <para>Versucht die letzte Seite anhand der Anzahl der Rahmen auszubalancieren. Experimentell</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Tries to balance.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Versucht die Spalten auszugleichen.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>First column will filled first, default</para>
+        </description>
+        <description xml:lang="de">
+          <para>Erste Spalte wird zuerst ausgefüllt</para>
+        </description>
+      </choice>
+    </attribute>
     <remark xml:lang="en">
       <para>The table cells may contain Paragraphs, Images and other objects that are allowed in <cmd name="PlaceObject"/>.</para>
     </remark>
@@ -6721,7 +7060,7 @@
   <entry pos="4" name="GNK Dinamo Zagreb" p="6"
   	  tw="0" td="1" tl="5" tf="1"  ta="14" tpm="-13" pts="1" />
 </data>]]></listing>
-      <image file="table-en.png"/>
+      <image file="ref-table-en.png"/>
     </example>
     <example xml:lang="de">
       <para>Mit den folgenden Daten</para>
@@ -6763,7 +7102,7 @@
   </PlaceObject>
 </Record>
 ]]></listing>
-      <image file="table-de.png" width="100%"/>
+      <image file="ref-table-de.png" width="100%"/>
     </example>
     <seealso>
       <cmd name="Tr"/>,  <cmd name="Td"/>, <cmd name="Tablerule"/>, <cmd name="PlaceObject"/>
@@ -6782,6 +7121,7 @@
           <optional><cmd name="Tablerule"/></optional>
           <optional><cmd name="Copy-of"/></optional>
           <optional><cmd name="Tr"/></optional>
+          <optional><cmd name="Switch"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>
@@ -7183,7 +7523,7 @@
           <para>The background text is not scaled.</para>
         </description>
         <description xml:lang="de">
-          <para>Der Hintergrundtext wird nicht sklaliert.</para>
+          <para>Der Hintergrundtext wird nicht skaliert.</para>
         </description>
       </choice>
     </attribute>
@@ -7811,12 +8151,12 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="minheight" type="number" optional="yes">
+    <attribute en="minheight" type="numberorlength" optional="yes">
       <description xml:lang="en">
-        <para>Minimum row height in grid cells.</para>
+        <para>Minimum row height in grid cells or length.</para>
       </description>
       <description xml:lang="de">
-        <para>Die Mindesthöhe der Zeile in Rasterzellen.</para>
+        <para>Die Mindesthöhe der Zeile in Rasterzellen oder als Längenangabe.</para>
       </description>
     </attribute>
     <attribute en="backgroundcolor" type="text" optional="yes">
@@ -7859,7 +8199,7 @@
         <para>Auf diese Daten können im Tabellenkopf und Tabellenfuß mit <tt>$_last_tr_data</tt> zugegriffen werden.</para>
       </description>
     </attribute>
-    <attribute en="sethead" optional="yes">
+    <attribute en="sethead" optional="yes" allowxpath="yes">
       <description xml:lang="en">
         <para>Use this line for future table heads.</para>
       </description>
@@ -8097,7 +8437,7 @@
         <interleave>
           <optional><cmd name="Li"/></optional>
           <optional><cmd name="ForAll"/></optional>
-        </interleave>  
+        </interleave>
       </oneOrMore>
    </childelements>
     <example xml:lang="en">

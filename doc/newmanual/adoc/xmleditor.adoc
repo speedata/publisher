@@ -1,0 +1,49 @@
+[[ch-erstellenlayoutwerk]]
+= Erstellen eines Layoutregelwerks
+
+== XML-Editor
+
+Durch die Benutzung von Standard XML (UTF-8) lässt sich das Layoutregelwerk mit jedem Texteditor bearbeiten.
+
+Mithilfe des mitgelieferten https://de.wikipedia.org/wiki/RELAX_NG[RELAX NG-Schemas] wird die Eingabe des Layoutregelwerks deutlich erleichtert.
+So ein Schema kann man sich als computerlesbare Anleitung vorstellen, welche Befehle an welcher Stelle im Layout erscheinen dürfen.
+Die Anleitung enthält auch Informationen über die jeweils erlaubten Parameter.
+Zusätzlich gibt das Schema auch Hilfe, in dem jeder Befehl und Parameter kurz erläutert wird.
+Kurzum: wenn der Editor dieses Schema einbinden kann und auch »versteht«, ist das eine nicht zu unterschätzende Eingabehilfe.
+Man verringert die Fehlerzahl und die Eingabezeit deutlich, das Bearbeiten des Layoutregelwerks fängt dann an, richtig Spaß zu machen (glauben Sie mir).
+
+Um dieses Schema einzubinden, muss ein passender XML-Editor benutzt werden, der RELAX NG-Schemata verarbeiten kann, z. B.:
+
+-   https://www.oxygenxml.com[OxygenXML] (Mac, Windows, Linux)
+-   https://atom.io/[Atom] (Mac, Windows, Linux, kostenlos)
+
+Die ersten beiden Editoren bieten hervorragende Cross-Plattform Unterstützung für das RELAX NG-Schema.
+
+-   https://www.altova.com/xml-editor/[XMLSpy] (Windows)
+-   https://www.xmlblueprint.com/[XML Blueprint] (Windows)
+-   https://www.gnu.org/software/emacs/[GNU Emacs] mit http://www.thaiopensource.com/nxml-mode/[nxml-mode] (alle Betriebssysteme, kostenlos)
+-   http://www.jedit.org[jEdit] (Mac, Windows, Linux, kostenlos)
+
+Das RELAX NG-Schema für das Layoutregelwerk liegt in der ZIP-Datei im Verzeichnis `share/schema/` unter dem Dateinamen `layoutschema-en.rng`.
+
+Für den ((Atom))-Editor heißt das Paket `language-speedata-publisher`. Die Installationsanleitung ist auf der Github-Seite unter https://github.com/speedata/atom-schema-speedata zu finden.
+
+
+== Namensraum des Layoutregelwerks
+
+
+Der XML-Namensraum des Layoutregelwerks ist `urn:speedata.de:2009/publisher/en`.
+Die zusätzlichen XPath-Funktionen liegen im Namensraum `urn:speedata:2009/publisher/functions/en`.
+Daher sollte ein Layoutregelwerk immer diesen Rahmen haben:
+
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+        xmlns:sd="urn:speedata:2009/publisher/functions/en">
+ ...
+</Layout>
+-------------------------------------------------------------------------------
+
+Dann lassen sich die speedata-eigenen Funktionen mit dem Präfix `sd:` aufrufen, zum Beispiel: `sd:current-page()` um die aktuelle Seitenzahl zu ermitteln.

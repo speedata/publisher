@@ -1,0 +1,139 @@
+.panel-pricing {
+  -moz-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  -webkit-transition: all .3s ease;
+}
+.panel-pricing:hover {
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+}
+.panel-pricing .panel-heading {
+  padding: 20px 10px;
+  border-bottom:0;
+}
+.panel-pricing .panel-heading .fa {
+  margin-top: 10px;
+  font-size: 58px;
+}
+.panel-pricing .list-group-item {
+  color: #777777;
+  border-bottom: 1px solid rgba(250, 250, 250, 0.5);
+}
+.panel-pricing .list-group-item:last-child {
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+.panel-pricing .list-group-item:first-child {
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+}
+.panel-pricing .panel-body {
+  background-color: #f0f0f0;
+
+  color: #777777;
+  padding: 10px;
+  margin: 0px;
+}
+
+.panel {
+    border-radius:10px;
+    border-width:2px;
+}
+.panel-heading {
+  border-radius: 10px 10px 0px 0px;
+  background-color:none;
+}
+.panel-footer {
+  background-color:#fff !important;
+  border-radius: 0 0 10px 10px;
+}
+.panel-pricing .list-group-item {
+  border:none;
+  color:#000;
+}
+
+
+@each $i, $color in
+  ('1', $gelb),
+  ('2', $orange),
+  ('3', $darkgreen),
+  ('4', $lightgreen) {
+
+    .panel-#{$i} {
+     border-color:$color
+    }
+    .panel-#{$i}>.panel-heading {
+     color:#000;
+     border-color:$color
+    }
+    .panel-#{$i}>.panel-heading+.panel-collapse>.panel-body {
+     border-top-color:$color
+    }
+    .panel-#{$i} ul li.list-group-item.panel-body {
+      background-color:#fff;
+    }
+    .panel-#{$i} ul li.list-group-item.panel-body:first-child {
+      background-color:lighten($color, 30%);
+      border-top:2px solid $color;
+      border-width:2px !important;
+    }
+    .panel-#{$i} ul li.list-group-item.panel-body:last-child {
+      border-bottom:2px solid $color;
+    }
+
+    .panel-#{$i}>.panel-heading .badge {
+     color:lighten($color, 30%);
+     background-color:#000
+    }
+    .panel-#{$i}>.panel-footer+.panel-collapse>.panel-body {
+     border-bottom-color:$color
+    }
+    .btn-#{$i} {
+     background-color:$color;
+     border-color:$color;
+    }
+    .btn-#{$i}:hover,.btn-#{$i}:focus,.btn-#{$i}.focus,.btn-#{$i}:active,.btn-#{$i}.active,.open>.dropdown-toggle.btn-#{$i} {
+     background-color:lighten($color, 10%);
+     border-color:lighten($color, 10%);
+    }
+
+    .btn-#{$i}.disabled,.btn-#{$i}[disabled],fieldset[disabled] .btn-#{$i},.btn-#{$i}.disabled:hover,.btn-#{$i}[disabled]:hover,fieldset[disabled] .btn-#{$i}:hover,.btn-#{$i}.disabled:focus,.btn-#{$i}[disabled]:focus,fieldset[disabled] .btn-#{$i}:focus,.btn-#{$i}.disabled.focus,.btn-#{$i}[disabled].focus,fieldset[disabled] .btn-#{$i}.focus,.btn-#{$i}.disabled:active,.btn-#{$i}[disabled]:active,fieldset[disabled] .btn-#{$i}:active,.btn-#{$i}.disabled.active,.btn-#{$i}[disabled].active,fieldset[disabled] .btn-#{$i}.active {
+     background-color:$color;
+     border-color:$color;
+    }
+}
+
+
+#plans {
+  .item {
+    margin-bottom:0;
+  }
+  @media #{$max-tablet-quer} {
+    padding:0px 10px;
+    .item {
+      margin-top: 30px;
+    }
+
+  }
+  ul {
+    margin:0;
+  }
+  h3, p {
+    margin:0;
+  }
+  li {
+    @extend %default;
+    padding:5px;
+    margin:0;
+    text-align:left;
+    padding-left: 36px !important;
+    text-indent: -16px !important;
+    &.list-group-item.panel-body.text-center {
+      padding-left:0 !important;
+      text-indent:0 !important;
+    }
+  }
+  .text-center {
+    @extend .text-center;
+  }
+
+}

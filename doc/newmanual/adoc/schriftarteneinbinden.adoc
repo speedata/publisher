@@ -1,0 +1,283 @@
+[[ch-einbindungschriftarten,Einbinden von Schriftarten]]
+= Einbinden von Schriftarten
+
+Das Einbinden von ((Schriftarten)) in den gängigen Formaten ist sehr einfach.
+Unterstützt werden die Formate Type1 (Dateien `.pfb` und `.afm`) sowie
+TrueType und OpenType (Dateien `.ttf` und `.otf`).
+// TrueType collections sind
+// prinzipiell möglich, aber noch nicht freigeschaltet (hier hätte ich gerne ein
+// paar Testfälle).
+
+Um dem Publisher Schriftarten bekannt zu machen und zu nutzen, sind
+zwei Schritte notwendig. Der erste Schritt ist das Laden einer
+Schriftdatei:
+
+
+[source, xml]
+----
+<LoadFontfile name="MinionRegular" filename="MinionPro-Regular.otf" />
+----
+
+Das weist dem Dateinamen `MinionPro-Regular.otf` den internen Namen `MinionRegular` zu.
+Im zweiten Schritt nutzt man dann diese internen Namen, um Familien zu definieren:
+
+[source,xml]
+-------
+<DefineFontfamily name="textfont" fontsize="9" leading="11">
+  <Regular fontface="MinionRegular"/>
+  <Bold fontface="MinionBold"/>
+  <Italic fontface="MinionItalic"/>
+  <BoldItalic fontface="MinionBoldItalic"/>
+</DefineFontfamily>
+-------
+
+Die lezten drei Schnitte (Fett, Kursiv und Fettkursiv) müssen nicht angegeben werden, wenn sie im Layout nicht benutzt werden.
+`fontsize` bezeichnet die Schrifthöhe in Punkt, `leading` den Abstand zwischen zwei Grundlinien.
+
+
+.Schriftgröße und Zeilenabstand
+image::14-fontsize-leading.png[width=100%]
+
+
+Benutzt wird die Schriftart auf verschiedene Weise: in den Befehlen  `<Textblock>`, `<Text>`, `<Paragraph>`, `<Table>`, `<NoBreak>` und `<Barcode>` kann mit dem Attribut `fontface` eine Schriftart mitgegeben werden, z. B. `<Paragraph fontface="textschrift">`.
+Temporär kann mit dem Befehl `<Fontface fontfamily="...">` auf eine andere Familie umgeschaltet werden:(((`Fontface`)))
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph>
+  <Fontface fontfamily="title">
+    <Value>Preface</Value>
+  </Fontface>
+  <Value> more text</Value>
+</Paragraph>
+-------------------------------------------------------------------------------
+
+== Textauszeichnung im Layoutregelwerk
+
+Um auf die Schnitte Fett, Kursiv und Fett-kursiv umzuschalten, gibt es verschiedene Möglichkeiten.
+Die direkteste ist mit den Befehlen `B` und `I` umzuschalten, diese können auch ineinander geschachtelt werden:
+
+[source,xml]
+-------
+<PlaceObject>
+  <Textblock fontface="textfont">
+    <Paragraph>
+      <Value>A wonderful </Value>
+      <B><Value>serenity</Value></B>
+      <Value> has taken possession </Value>
+      <I><Value>of my</Value>
+        <Value> </Value>
+        <B><Value>entire soul,</Value></B>
+      </I>
+      <Value> like these sweet mornings.</Value>
+    </Paragraph>
+  </Textblock>
+</PlaceObject>
+-------
+
+[[abb-14-auszeichnungimlayout]]
+.Auszeichnungen im Layout. Unterstreichen (nicht gezeigt) geht mit dem Befehl `<U>`.
+image::14-fonts.png[width=100%]
+
+
+== Textauszeichnung in den Daten
+
+Sind in den Daten Auszeichnungen vorhanden (z. B. als HTML-Tags), dann geht das prinzipiell genau so:
+
+[source,xml]
+-------
+<PlaceObject>
+  <Textblock fontface="textschrift">
+    <Paragraph>
+      <Value select="."/>
+    </Paragraph>
+  </Textblock>
+</PlaceObject>
+-------
+
+mit den dazugehörigen Daten:
+
+[source,xml]
+-------
+<data>Mit <b>Blindheit</b> per <i>Definition <b>geschlagen,</b></i>
+  dennoch nicht unsichtbar.</data>
+-------
+
+Das Ergebnis ist dasselbe wie oben.
+In den Daten können die Tags auch groß geschrieben werden: `<B>` anstatt `<b>`.
+Schachtelung ist ebenfalls erlaubt und auch hier wird mit `<u>` unterstrichen.
+
+TIP: Sollten die Daten nicht als wohlgeformtes XML sondern beispielsweise im HTML Format vorliegen, kann man die Layoutfunktion `sd:decode-html()` benutzen, sie zu interpretieren.
+
+
+== OpenType Features
+
+Das OpenType Format kennt sogenannte OpenType Features, wie z. B. Mediävalziffern oder Kapitälchen.
+Manche dieser Features können bei `LoadFontfile` aktiviert werden.
+
+
+[source,xml]
+-------
+<!-- Mediävalziffern -->
+<LoadFontfile name="MinionRegular" filename="MinionPro-Regular.otf" oldstylefigures="yes" />
+
+<!-- Kapitälchen -->
+<LoadFontfile name="MinionRegular" filename="MinionPro-Regular.otf" smallcaps="yes" />
+-------
+
+
+.Mediävalziffern (links) machen das Lesen der Ziffern oftmals angenehmer. Echte Kapitälchen (rechts) unterscheiden sich deutlich von rechnerisch verkleinerten Großbuchstaben. Die Strichstärke und Proportionen müssen angepasst werden.
+image::opentypefeatures.png[width=100%]
+
+// [[ch-schrift-kapitaelchen]]
+// === Kapitälchen
+
+// [source,xml]
+// -------
+// -------
+
+
+// .
+// image::14-smcp.png[]
+
+
+// Falls OpenType Features in der Schriftart vorhanden sind, aber nicht mit dem Publisher aktiviert werden können, bitte ich um eine (Fehler-)Meldung.
+
+
+[[ch-optischerrandausgleich]]
+== Optischer Randausgleich
+
+
+Mit dem Parameter `marginprotrusion` (Prozentangabe) beim Befehl `<LoadFontfile>`  kann man bestimmen, wie weit bestimmte Zeichen (Komma, Punkt und
+Bindestrich) rechts in den Rand hineinragen. Damit kann man einen optisch
+ruhigeren Rand bei Blocksatz erreichen:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options mainlanguage="German" />
+  <LoadFontfile name="main"
+                filename="MinionPro-Regular.otf"
+                marginprotrusion="100" />
+
+  <DefineFontfamily name="text" fontsize="10" leading="12">
+    <Regular fontface="main"/>
+  </DefineFontfamily>
+
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="4">
+        <Paragraph>
+          <Value select="."/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+
+Die dazugehörige Datendatei (`data.xml`) ist folgende:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<data>Also schön, Guido Heffels, nachfolgend meine Textempfehlung
+    für das Blindtextbuch. Sie mögen denken, aus welchem Anlass es
+    unbedingt eine solche poesiealbumhafte Antiquität sein muss, und
+    genau das sollen Sie ja auch.</data>
+-------------------------------------------------------------------------------
+
+.Links: Komma und Bindestrich ragen in den rechten Rand hinein. Rechts: ohne optischen Randausgleich.
+image::optischerrandausgleich.png[width=100%]
+
+
+[[sec-fontverzeichnis,Speicherort]]
+== In welchem Verzeichnis müssen die Schriftdateien liegen?
+
+// Der Publisher durchsucht das aktuelle Verzeichnis und alle Kindverzeichnisse nach Dateien, die für den Durchlauf benutzt werden können.
+// Daher kann man einfach im Verzeichnis mit dem Layout und den Daten ein Verzeichnis »Fonts« erstellen und die Schriftdateien hinein kopieren.
+// Der Name ist aber egal, ebenfalls die Tiefe des Verzeichnisses.
+// Weitere Verzeichnisbäume kann man mit  der Konfiguration `extra-dir` bestimmen (siehe Kapitel <<ch-konfiguration,über Konfiguration>>).
+
+Die Organisation der Dateien, und damit der Schriftarten, wird im Verzeichnis <<ch-organisationdaten,Dateiorganisation>> beschrieben.
+Mit `sp --systemfonts` (((Systemschriftarten))) beim Aufruf  des Publishers kann man auf die systemweiten Schriftdateien zugreifen.
+
+== Tipps und Tricks
+
+Um sich Arbeit bei der Schriftdefinition zu sparen, kann man den Befehl
+
+-------
+$ sp list-fonts --xml
+-------
+
+benutzen.
+Dieser listet dann alle gefundenen Schriftdateien auf, zusammen mit einer Zeile, die direkt in das Layout übernommen werden kann.
+
+-------
+$ sp list-fonts --xml
+<LoadFontfile name="DejaVuSans-Bold"
+              filename="DejaVuSans-Bold.ttf" />
+<LoadFontfile name="DejaVuSans-BoldOblique"
+              filename="DejaVuSans-BoldOblique.ttf" />
+<LoadFontfile name="DejaVuSans-ExtraLight"
+              filename="DejaVuSans-ExtraLight.ttf" />
+...
+-------
+
+
+TIP: Wenn keine Schriftart für einen Absatz oder einen Textblock (etc.) angegeben wird, nutzt das System die Schriftfamilie `text`, die im Publisher auch vordefiniert ist und überschrieben werden kann. Sie den Anhang <<app-voreinstellungenimpublisher,Voreinstellungen im Publisher>>.
+
+
+
+
+== Aliasnamen
+
+Es gibt einen Befehl,  um einen alternativen Namen für einen existierenden Fontnamen zu der Liste der bekannten Fontnamen hinzuzufügen:
+
+[source,xml]
+-------
+<DefineFontalias existing="..." alias="..."/>
+-------
+
+Die Befehle
+
+[source,xml]
+-------
+<LoadFontfile name="DejaVuSerif"
+        filename="DejaVuSerif.ttf" />
+<LoadFontfile name="DejaVuSerif-Bold"
+        filename="DejaVuSerif-Bold.ttf" />
+<LoadFontfile name="DejaVuSerif-BoldItalic"
+        filename="DejaVuSerif-BoldItalic.ttf" />
+<LoadFontfile name="DejaVuSerif-Italic"
+        filename="DejaVuSerif-Italic.ttf" />
+
+<DefineFontalias existing="DejaVuSerif" alias="serif"/>
+<DefineFontalias existing="DejaVuSerif-Bold" alias="serif-bold"/>
+<DefineFontalias existing="DejaVuSerif-Italic" alias="serif-italic"/>
+<DefineFontalias existing="DejaVuSerif-BoldItalic"
+         alias="serif-bolditalic"/>
+-------
+
+erlauben es nun, die Schriftfamilien allgemein wie folgt zu definieren:
+
+
+[source,xml]
+-------
+<DefineFontfamily name="title" fontsize="15" leading="17">
+  <Regular fontface="serif"/>
+  <Bold fontface="serif-bold"/>
+  <BoldItalic fontface="serif-bolditalic"/>
+  <Italic fontface="serif-italic"/>
+</DefineFontfamily>
+-------
+
+also unabhängig von der tatsächlich genutzten Schriftart.
+Mit den im Abschnitt <<ch-include>> beschriebenen Möglichkeiten kann man nun die Fontdefinition in eine separate Datei auslagern und bei Bedarf schnell zwischen verschiedenen Schriftarten wählen, in dem die gewünschten Dateien eingebunden werden.
+
+// Ende

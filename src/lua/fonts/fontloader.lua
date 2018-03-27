@@ -61,22 +61,19 @@ function to_utf16(codepoint)
 end
 
 --- Return the string that is responsible for the OpenType feature `featurename`.
---- Currently only lookups are for script `latn` and language `dflt`.
+--- Currently only gsub lookups are supported for script `latn` and language `dflt`.
 function find_feature_string(f,featurename)
     local ret = {}
     if f.gsub==nil then
         return ret
     end
     for i=1,#f.gsub do
-        local gsub_tabelle=f.gsub[i]
-        if gsub_tabelle.features then
-            for j = 1,#gsub_tabelle.features do
-                local gtf = gsub_tabelle.features[j]
+        local gsub_table=f.gsub[i]
+        if gsub_table.features then
+            for j = 1,#gsub_table.features do
+                local gtf = gsub_table.features[j]
                 if gtf.tag==featurename and features_scripts_matches(gtf.scripts,"latn","dflt") then
-                    if #gsub_tabelle.subtables ~= 1 then
-                        -- w("warning: #subtables in gpos != 1")
-                    end
-                    ret[#ret + 1] = gsub_tabelle.subtables[1].name
+                    ret[#ret + 1] = gsub_table.subtables[1].name
                 end
             end
         end
@@ -120,6 +117,7 @@ end
 function define_font(name, size,extra_parameter)
     local extra_parameter = extra_parameter or {}
     local fonttable
+    local missing_features = {}
 
     if lookup_fonttable_from_filename[name] then
         fonttable=lookup_fonttable_from_filename[name]
@@ -149,28 +147,23 @@ function define_font(name, size,extra_parameter)
         fonttable.filename_with_path = filename_with_path
         local is_unicode = (fonttable.pfminfo.unicoderanges ~= nil)
 
-        --- We require a mapping glyph number -> unicode codepoint. The problem is
-        --- that TTF/OTF fonts have a different encoding mechanism. TTF/OTF can be
-        --- accessed via the table `fonttable.map.backmap` (the key is the glyph
-        --- number, the value is glyph name). For Type 1 fonts we use
-        --- `glyph.unicode` and `glyph.name` for the codepoint and the name.
-        ---
+        --- We require a mapping glyph number -> unicode codepoint.
+        --- I used to have two different means of unicode -> glyph mapping.
+        --- The type1 fonts got the unicode point with `g.unicode`, the
+        --- The ttf/otf font got the point with `fonttable.map.backmap[i]`
+        --- Somehow this worked a few years until Arial Narrow could not display
+        --- a semicolon (see issue #152).
+        --- Now I use g.unicode if present, otherwise map.backmap.
+        --- See issue #154
+
         --- For kerning a mapping glyphname -> codepoint is needed.
-        if is_unicode then
-            -- TTF/OTF, use map.backmap
-            for i = 1,#fonttable.glyphs do
-                local g=fonttable.glyphs[i]
-                lookup_codepoint_by_name[g.name] = fonttable.map.backmap[i]
-                lookup_codepoint_by_number[i]    = fonttable.map.backmap[i]
-            end
-        else
-            -- Type1, use glyph.unicode
-            for i = 1,#fonttable.glyphs do
-                local g=fonttable.glyphs[i]
-                lookup_codepoint_by_name[g.name] = g.unicode
-                lookup_codepoint_by_number[i]    = g.unicode
-            end
-        end -- is unicode
+        for i = 1,#fonttable.glyphs do
+            local g=fonttable.glyphs[i]
+            local cp = g.unicode
+            if cp == -1 then cp = fonttable.map.backmap[i] end
+            lookup_codepoint_by_name[g.name] = cp
+            lookup_codepoint_by_number[i]    = cp
+        end
         fonttable.lookup_codepoint_by_name   = lookup_codepoint_by_name
         fonttable.lookup_codepoint_by_number = lookup_codepoint_by_number
     end
@@ -193,14 +186,8 @@ function define_font(name, size,extra_parameter)
     -- in mind when filling the characters subtable.
     f.characters    = { }
     f.fontloader    = fonttable
-    if extra_parameter and extra_parameter.otfeatures and extra_parameter.otfeatures.smcp then
-        f.smcp = find_feature_string(fonttable,"smcp")
-    end
-    if extra_parameter and extra_parameter.otfeatures and extra_parameter.otfeatures.onum then
-        f.onum = find_feature_string(fonttable,"onum")
-    end
+    f.otfeatures    = {}
 
-    f.otfeatures    = extra_parameter.otfeatures             -- OpenType Features (smcp,...)
     f.name          = fonttable.fontname
     f.fullname      = fonttable.fontname
     f.designsize    = size
@@ -246,6 +233,7 @@ function define_font(name, size,extra_parameter)
             width = glyph.width * mag,
             name  = glyph.name,
             expansion_factor = 1000,
+            lookups = glyph.lookups,
         }
 
         -- Height and depth of the glyph
@@ -282,6 +270,109 @@ function define_font(name, size,extra_parameter)
             end
         end
         f.characters[codepoint].kerns = kerns
+    end
+
+    -- create a virtual font to fake a feature
+    local needs_virtual_font = false
+    local new_f
+    if extra_parameter and extra_parameter.otfeatures then
+        for of,enabled in pairs(extra_parameter.otfeatures) do
+            if enabled then
+                if of == "tnum" or of == "lnum" then
+                    missing_features[#missing_features + 1] = of
+                    needs_virtual_font = true
+                else
+                    local featuret = find_feature_string(fonttable,of)
+                    if featuret and #featuret > 0 then
+                        f.otfeatures[#f.otfeatures + 1] = featuret
+                    else
+                        missing_features[#missing_features + 1] = of
+                    end
+                end
+            end
+        end
+    end
+
+    for _,feature in ipairs(missing_features) do
+        if feature == "tnum" then
+            needs_virtual_font = true
+            break
+        end
+    end
+    -- first define a virtual font
+    if needs_virtual_font then
+        local num = font.define(f)
+        new_f = {
+            fonts = {{ id = num }},
+        }
+        new_f.name          = f.name
+        new_f.fullname      = f.fullname
+        new_f.designsize    = f.designsize
+        new_f.size          = f.size
+        new_f.direction     = f.direction
+        new_f.filename      = f.filename
+        new_f.encodingbytes = f.encodingbytes
+        new_f.tounicode     = f.tounicode
+        new_f.stretch       = f.stretch
+        new_f.shrink        = f.shrink
+        new_f.step          = f.step
+        new_f.auto_expand   = f.auto_expand
+        new_f.parameters    = f.parameters
+        new_f.characters = {}
+        new_f.otfeatures = f.otfeatures
+        new_f.fontloader = f.fontloader
+        for i,v in pairs(f.characters) do
+            new_f.characters[i] = {
+                index = v.index,
+                width = v.width,
+                height = v.height,
+                depth = v.depth,
+                commands =  { {'char',i} },
+                lookups = v.lookups,
+                kers = v.kerns,
+            }
+        end
+
+        -- now we can add features to the font
+        for _,feature in ipairs(missing_features) do
+            if feature == "lnum" then
+                local featuret = find_feature_string(fonttable,"lnum")
+                if featuret and #featuret > 0 then
+                    featuret = featuret[1]
+                end
+                for i=48,57 do
+                    local lookups = new_f.characters[i].lookups
+                    if lookups and lookups[featuret] then
+                        destname = lookups[featuret][1].specification.variant
+                        local dest = fonttable.lookup_codepoint_by_name[destname]
+                        new_f.characters[i] = new_f.characters[dest]
+                    end
+                end
+            end
+        end
+
+        for _,feature in ipairs(missing_features) do
+            if feature == "tnum" then
+                local maxfigurewidth = 0
+                local glyphwd
+                for i=48,57 do
+                    maxfigurewidth = math.max(maxfigurewidth,new_f.characters[i].width)
+                end
+                for i=48,57 do
+                    local thisglyph = new_f.characters[i]
+                    glyphwd = thisglyph.width
+                    if maxfigurewidth ~= glyphwd then
+                        thisglyph.width = maxfigurewidth
+                        thisglyph.commands = {
+                           {'right', ( maxfigurewidth - glyphwd ) / 2 },
+                           thisglyph.commands[1]
+                        }
+                    end
+                end
+            end
+        end
+
+        return true,new_f
     end
 
     return true,f

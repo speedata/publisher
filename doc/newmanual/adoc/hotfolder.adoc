@@ -1,0 +1,50 @@
+[[ch-hotfolder,Hotfolder]]
+= Starten des Publishers über den Hotfolder
+
+Der speedata Publisher kann als »Watchdog« ein Verzeichnis beobachten, um bei Veränderungen automatisch zu starten.
+Ein solches Verzeichnis wird auch _hotfolder_ genannt.
+Man kann Regeln angeben, was passiert, wenn eine bestimmte Datei in dieses Verzeichnis geschrieben wird.
+
+WARNING: Der Publisher löscht die XML-Datei aus dem Verzeichnis, sobald sie verarbeitet wird.
+
+Der Hotfolder wird wie die der Publisher über die Datei `publisher.cfg` konfiguriert.
+
+-------------------------------------------------------------------------------
+[hotfolder]
+hotfolder = /Users/speedata/tmp/hotfolder
+events = layout\.xml:run(runpublisher);data\.xml:run(runpublisher)
+-------------------------------------------------------------------------------
+
+Die Konfiguration besteht aus zwei Teilen: Der Eintrag `hotfolder` zeigt zum (leeren) Verzeichnis, in das die Dateien geschrieben werden.
+Die Einträge unter `events` folgen dem Muster:
+
+----
+<Regulärer Ausdruck>:run(<Programmname>)
+----
+Mehrere Einträge werden mit Semikolon getrennt.
+
+Im Beispiel wird, wenn eine der Dateien `layout.xml` oder `data.xml` in das Verzeichnis `/Users/speedata/tmp/hotfolder` geschrieben wird, das Programm `runpublisher` angestoßen.
+Das Programm `runpublisher` könnte ein Shellskript sein, das den Publisher aufruft:
+
+
+[source, shell]
+-------------------------------------------------------------------------------
+#!/bin/sh
+
+{
+ echo "Running speedata Publisher ($1)"
+ cd /Users/speedata/tmp/hotfolder
+ sp
+} > /tmp/publisher.log 2> /tmp/publisher.err
+-------------------------------------------------------------------------------
+
+In der Regel ist dies natürlich etwas umfangreicher, für einfache Anwendungen reicht dies aus.
+Das Programm, das in `run()` konfiguriert ist, bekommt als einziges Argument den vollen Pfad zur Datei im Hotfolder übergeben.
+
+TIP: Es müssen nicht nur XML-Dateien sein, auf die der Watchdog des Publishers reagiert. Es können beliebige Dateien sein, die über den Regulären Ausdruck angegeben werden.
+
+// Ende
+
+
+
+

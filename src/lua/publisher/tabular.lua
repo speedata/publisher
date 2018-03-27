@@ -14,11 +14,13 @@ local dynamic_data = {}
 function new( self )
     assert(self)
     local t = {
-        rowheights     = {},
-        colwidths      = {},
-        align          = {},
-        valign         = {},
-        skip           = {},
+        rowheights        = {},
+        colwidths         = {},
+        align             = {},
+        valign            = {},
+        padding_left_col  = {},
+        padding_right_col = {},
+        skip              = {},
         tablefoot_last_contents,
         tablefoot_contents,
         tablewidth_target,
@@ -120,7 +122,7 @@ function attach_objects_row( self, tab )
         elseif td_elementname == "Column" or td_elementname == "Tablerule" then
             -- ignore, they don't have objects
         else
-            w("unknown element name %s",td_elementname)
+           -- w("unknown element name %s",td_elementname)
         end
     end
 end
@@ -209,8 +211,8 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
 
         local td_borderleft  = tex.sp(td_contents["border-left"]  or 0)
         local td_borderright = tex.sp(td_contents["border-right"] or 0)
-        local padding_left   = td_contents.padding_left  or self.padding_left
-        local padding_right  = td_contents.padding_right or self.padding_right
+        local padding_left   = td_contents.padding_left  or self.padding_left_col[current_column]  or self.padding_left
+        local padding_right  = td_contents.padding_right or self.padding_right_col[current_column] or self.padding_right
 
         for _,blockobject in ipairs(td_contents.objects) do
             for i=1,#blockobject do
@@ -276,8 +278,10 @@ function collect_alignments( self )
                 if publisher.elementname(column)=="Column" then
                     local column_contents = publisher.element_contents(column)
                     i = i + 1
-                    self.align[i] =  column_contents.align
-                    self.valign[i] = column_contents.valign
+                    self.align[i]             = column_contents.align
+                    self.valign[i]            = column_contents.valign
+                    self.padding_left_col[i]  = column_contents.padding_left
+                    self.padding_right_col[i] = column_contents.padding_right
                 end
             end
         end
@@ -330,7 +334,7 @@ function calculate_columnwidth( self )
                             count_stars = count_stars + width_stars
                         else
                             if tonumber(column_contents.width) then
-                                self.colwidths[i] = publisher.current_grid.gridwidth * column_contents.width
+                                self.colwidths[i] = publisher.current_grid:width_sp(column_contents.width)
                             else
                                 self.colwidths[i] = tex.sp(column_contents.width)
                             end
@@ -400,6 +404,8 @@ function calculate_columnwidth( self )
                     self:calculate_columnwidths_for_row(row_contents,current_row,colspans,colmin,colmax)
                 end
             end
+        elseif tr_elementname == "Columns" then
+            -- ignore
         else
             warning("Unknown Element: %q",tr_elementname or "?")
         end -- if it's really a row
@@ -516,6 +522,8 @@ function calculate_columnwidth( self )
         for i=1,#colmax do
             if shrink_factor[i] then
                 self.colwidths[i] = col_r[i] -  shrink_factor[i] / sum_shrinkfactor * excess
+            elseif colmax[i] == 0 then
+                self.colwidths[i] = 0
             end
         end
         return
@@ -683,7 +691,14 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
     local min_lineheight = fam.baselineskip
 
     if tr_contents.minheight then
-        rowheight = math.max(publisher.current_grid:height_sp(tr_contents.minheight), min_lineheight)
+        local minht
+        if tonumber(tr_contents.minheight) then
+            minht = publisher.current_grid:height_sp(tr_contents.minheight)
+        else
+            minht = tex.sp(tr_contents.minheight)
+        end
+        minht = minht or 0
+        rowheight = math.max(minht, min_lineheight)
     else
         rowheight = min_lineheight
     end
@@ -707,9 +722,8 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
         local td_borderright  = tex.sp(td_contents["border-right"]  or 0)
         local td_bordertop    = tex.sp(td_contents["border-top"]    or 0)
         local td_borderbottom = tex.sp(td_contents["border-bottom"] or 0)
-
-        local padding_left   = td_contents.padding_left   or self.padding_left
-        local padding_right  = td_contents.padding_right  or self.padding_right
+        local padding_left   = td_contents.padding_left   or self.padding_left_col[current_column]  or self.padding_left
+        local padding_right  = td_contents.padding_right  or self.padding_right_col[current_column] or self.padding_right
         local padding_top    = td_contents.padding_top    or self.padding_top
         local padding_bottom = td_contents.padding_bottom or self.padding_bottom
 
@@ -874,8 +888,8 @@ function typeset_row(self, tr_contents, current_row )
         local td_bordertop    = tex.sp(td_contents["border-top"]    or 0)
         local td_borderbottom = tex.sp(td_contents["border-bottom"] or 0)
 
-        local padding_left    = td_contents.padding_left   or self.padding_left
-        local padding_right   = td_contents.padding_right  or self.padding_right
+        local padding_left    = td_contents.padding_left   or self.padding_left_col[current_column]  or self.padding_left
+        local padding_right   = td_contents.padding_right  or self.padding_right_col[current_column] or  self.padding_right
         local padding_top     = td_contents.padding_top    or self.padding_top
         local padding_bottom  = td_contents.padding_bottom or self.padding_bottom
 
@@ -913,15 +927,12 @@ function typeset_row(self, tr_contents, current_row )
             ht = self.rowheights[current_row]
         end
 
-        local g = node.new("glue")
-        g.spec = node.new("glue_spec")
-        g.spec.width = padding_top
+        local g = set_glue(nil,{width = padding_top})
         node.set_attribute(g,publisher.att_origin,publisher.origin_align_top)
 
         local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
         if valign ~= "top" then
-            g.spec.stretch = 2^16
-            g.spec.stretch_order = 2
+            set_glue_values(g,{stretch = 2^16, stretch_order = 2})
         end
 
         local cell_start = g
@@ -945,14 +956,11 @@ function typeset_row(self, tr_contents, current_row )
         tail.next = cell
         cell.prev = tail
 
-        g = node.new("glue")
-        g.spec = node.new("glue_spec")
-        g.spec.width = padding_bottom
+        local g = set_glue(nil,{width = padding_bottom})
 
         local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
         if valign ~= "bottom" then
-            g.spec.stretch = 2^16
-            g.spec.stretch_order = 2
+            set_glue_values(g,{stretch = 2^16, stretch_order = 2})
         end
 
 
@@ -964,9 +972,7 @@ function typeset_row(self, tr_contents, current_row )
         --- ![Table cell vertical](../img/tablecell1.svg)
         ---
         --- Now we need to add the left and the right glue
-        g = node.new("glue")
-        g.spec = node.new("glue_spec")
-        g.spec.width = padding_left
+        g = set_glue(nil,{width = padding_left})
 
         cell_start = g
         local ht_border = 0
@@ -987,9 +993,7 @@ function typeset_row(self, tr_contents, current_row )
         current.next = vlist
         current = vlist
 
-        g = node.new("glue")
-        g.spec = node.new("glue_spec")
-        g.spec.width = padding_right
+        g = set_glue(nil,{width = padding_right})
 
         current.next = g
         current = g
@@ -1034,11 +1038,7 @@ function typeset_row(self, tr_contents, current_row )
         end
 
         -- What is this for?
-        local gl = node.new("glue")
-        gl.spec = node.new("glue_spec")
-        gl.spec.width = 0
-        gl.spec.shrink = 2^16
-        gl.spec.shrink_order = 2
+        local gl = set_glue(nil,{width = 0, shrink = 2^16, shrink_order = 2})
         node.slide(head).next = gl
 
         --- This is our table cell now:
@@ -1184,11 +1184,11 @@ local function calculate_height_and_connect_tablefoot(self,tablefoot,tablefoot_l
     end
 
     if #tablefoot > 0 then
-        ht_footer = ht_footer + tablefoot[#tablefoot].height + ( #tablefoot - 1 ) * self.rowsep
+        ht_footer = ht_footer + tablefoot[#tablefoot].height + #tablefoot * self.rowsep
     end
 
     if #tablefoot_last > 0 then
-        ht_footer_last = ht_footer_last + tablefoot_last[#tablefoot_last].height + ( #tablefoot_last - 1 ) * self.rowsep
+        ht_footer_last = ht_footer_last + tablefoot_last[#tablefoot_last].height + #tablefoot_last * self.rowsep
     else
         ht_footer_last = ht_footer
     end
@@ -1291,17 +1291,36 @@ function typeset_table(self)
     local tableheads_extra = {
         largest_index = 0
     }
-    local function get_tableheads_extra( idx )
-        if idx == 0 then return nil end
-        if idx > tableheads_extra.largest_index then
-            return tableheads_extra[tableheads_extra.largest_index]
-         end
-        if tableheads_extra[idx] ~= nil then return tableheads_extra[idx] end
-        return get_tableheads_extra(idx - 1)
+    local function get_tableheads_extra( idx, maxrow )
+        -- maxrow = maxrow or
+        idx = idx - 1
+        if idx < 1 then return nil end
+        local maxidx = tableheads_extra.largest_index
+        local id = math.min(idx,maxidx)
+        if tableheads_extra[id] ~= nil then
+            local subidx = #tableheads_extra[id]
+            if maxrow == nil then
+                return tableheads_extra[id][subidx].nodelist
+            end
+            local entry
+            while subidx > 0 do
+                entry = tableheads_extra[id][subidx]
+                if entry.rownumber <= maxrow then
+                    return entry.nodelist
+                end
+                subidx = subidx - 1
+            end
+            return get_tableheads_extra(id  , maxrow)
+        end
+        if idx == 1 then return nil end
+        return get_tableheads_extra(idx)
     end
-    local function set_tableheads_extra( idx, value)
-        tableheads_extra.largest_index = math.max( tableheads_extra.largest_index , idx )
-        tableheads_extra[idx] = value
+
+    local function set_tableheads_extra( idx, nodelist, rownumber )
+        local foo = math.max( tableheads_extra.largest_index , idx )
+        tableheads_extra.largest_index = foo
+        tableheads_extra[idx] = tableheads_extra[idx] or {}
+        tableheads_extra[idx][#tableheads_extra[idx] + 1]  = { nodelist = nodelist, rownumber = rownumber }
     end
 
     calculate_height_and_connect_tablehead(self,tablehead_first,tablehead)
@@ -1346,11 +1365,11 @@ function typeset_table(self)
     end
 
     -- Return a boolean if we need to show the dynamic header on this page
-    local function showheader( tablepart )
+    local function showheader( tablepart, rowmax )
         -- We can skip the dynamic header on pages where the first line is the next dynamic header
         if omit_head_on_pages[tablepart] then return false end
 
-        if get_tableheads_extra(tablepart_absolute) ~= nil then return true end
+        if get_tableheads_extra(tablepart_absolute,rowmax) ~= nil then return true end
         return false
     end
 
@@ -1400,9 +1419,10 @@ function typeset_table(self)
     end})
 
 
-    local function get_tablehead( page )
-        if get_tableheads_extra(page) then
-            return node.copy_list(get_tableheads_extra(page))
+    local function get_tablehead( page,maxrow )
+        local nl = get_tableheads_extra(page,maxrow)
+        if nl then
+            return node.copy_list(nl)
         end
         local tmp = node.new("hlist")
         return tmp
@@ -1451,15 +1471,14 @@ function typeset_table(self)
         -- We can mark a row as "use_as_head" to turn the row into a dynamic head
         local use_as_head = node.has_attribute(rows[i],publisher.att_use_as_head)
         if use_as_head == 1 then
-            set_tableheads_extra(#splits + 1,node.copy(rows[i]))
+            set_tableheads_extra(#splits,node.copy(rows[i]),i)
         elseif use_as_head == 2 then
-            set_tableheads_extra(#splits + 1,publisher.create_empty_hbox_with_width(1))
+            set_tableheads_extra(#splits,publisher.create_empty_hbox_with_width(1),i)
         end
         local shiftup = node.has_attribute(rows[i],publisher.att_tr_shift_up) or 0
         if shiftup > 0 then
             rows[i].height = rows[i].height - shiftup
         end
-
 
         pagegoal = pagegoals[current_page]
         ht_row = rows[i].height + rows[i].depth
@@ -1471,7 +1490,7 @@ function typeset_table(self)
         if break_above_allowed then
             last_possible_split_is_after_line = i - 1
             accumulated_height = accumulated_height + extra_height
-            extra_height = self.rowsep
+            extra_height = 0
         end
         extra_height = extra_height + ht_row
 
@@ -1511,11 +1530,33 @@ function typeset_table(self)
                 extra_height = extra_height + space_above
             end
         end
+        extra_height = extra_height + self.rowsep
     end
     splits[#splits + 1] = #rows
+    local tosplit = self.split
+
+    local additional_splits = ( #splits - 1 ) % tosplit
+    if tosplit > 1 then
+        if additional_splits == 0 then additional_splits = tosplit end
+    end
+    if additional_splits > 0 then
+        local sum_rows = splits[#splits] - splits[#splits - additional_splits]
+
+        for i=1,additional_splits do
+            table.remove(splits)
+        end
+        local percolumn =  math.ceil( sum_rows / tosplit )
+
+        for i=1,tosplit do
+            splits[#splits + 1] = splits[#splits] + percolumn
+            sum_rows = sum_rows - percolumn
+            if sum_rows < percolumn then
+                percolumn = sum_rows
+            end
+        end
+    end
 
     local first_row_in_new_table
-
     local last_tr_data
     tablepart_absolute = 0
     for s=2,#splits do
@@ -1543,8 +1584,8 @@ function typeset_table(self)
             if showheader_static(s-1) then
                 thissplittable[#thissplittable + 1] = get_tablehead_static(s-1)
             end
-            if showheader(s-1) then
-                thissplittable[#thissplittable + 1] = get_tablehead(s-1)
+            if showheader(s-1, splits[s]) then
+                thissplittable[#thissplittable + 1] = get_tablehead(s-1, splits[s - 1])
             end
         end
 

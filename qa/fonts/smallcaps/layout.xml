@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    version="3.1.19">
+    <Options crop="2mm"/>
+
+    <LoadFontfile name="fira-smcp" filename="FiraSans-Regular.otf" smallcaps="yes" />
+    <LoadFontfile name="fira-osf" filename="FiraSans-Regular.otf" oldstylefigures="yes" smallcaps="yes" />
+    <DefineFontfamily name="smcp" fontsize="10" leading="12">
+        <Regular fontface="fira-smcp"/>
+    </DefineFontfamily>
+    <DefineFontfamily name="osf" fontsize="10" leading="12">
+        <Regular fontface="fira-osf"></Regular>
+    </DefineFontfamily>
+
+    <Record element="data">
+        <SetVariable variable="testtext" select="'Hello world, 1234567890'"/>
+        <PlaceObject>
+            <Textblock width="4">
+                <Paragraph fontface="osf">
+                    <Value select="$testtext"/>
+                </Paragraph>
+                <Paragraph fontface="smcp">
+                    <Value select="$testtext"/>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

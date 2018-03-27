@@ -78,7 +78,7 @@ function table.find(tab,key)
 end
 
 
--- Return false, errormessage in case of failure, true, number otherwise. number
+-- Return false, error message in case of failure, true, number otherwise. number
 -- is the internal font number. After calling this method, the font can be used
 -- with the key { filename,size}
 function make_font_instance( name,size )
@@ -93,9 +93,14 @@ function make_font_instance( name,size )
     end
     local filename,parameter = unpack(lookup_fontname_filename[name])
     assert(filename)
-    local k = {filename = filename, size = size}
+    local k = {filename = filename, fontsize = size}
+
     if parameter.otfeatures then
-        k.smcp = parameter.otfeatures.smcp
+        for fea,enabled in pairs(parameter.otfeatures) do
+            if enabled then
+                k[fea] = true
+            end
+        end
     end
     local fontnumber = table.find(font_instances,k)
     if fontnumber then
@@ -161,14 +166,8 @@ function pre_linebreak( head )
                 else
                     -- \hbox{ 1fil, text, 1fil }
                     local l1,l2
-                    l1=node.new("glue")
-                    l1.spec=node.new("glue_spec")
-                    l1.spec.width = 0
-                    l1.spec.stretch = 65536
-                    l1.spec.stretch_order = 2
-                    l1.spec.shrink = 65536
-                    l1.spec.shrink_order = 2
-                    l2=node.copy(l1)
+                    l1 = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 2, shrink = 2^16, shrink_order = 2})
+                    l2 = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 2, shrink = 2^16, shrink_order = 2})
                     local newhead = node.insert_before(l,l,l1)
 
                     local endoftext = node.tail(l)
@@ -178,7 +177,15 @@ function pre_linebreak( head )
                 head.leader = tmpbox
 
             end
-            local gluespec = head.spec
+            local gluespec
+            local writable
+            if node.has_field(head,"spec") then
+                gluespec = head.spec
+                writable = gluespec.writable
+            else
+                gluespec = head
+                writable = true
+            end
             if gluespec then
                 if node.has_attribute(head,att_fontfamily) then
                     local fontfamily=node.has_attribute(head,att_fontfamily)
@@ -200,7 +207,7 @@ function pre_linebreak( head )
                     end
                     if not f then f=publisher.options.defaultfont
                     end
-                    if gluespec.stretch_order == 0 and gluespec.writable then
+                    if gluespec.stretch_order == 0 and writable then
                         gluespec.width=f.parameters.space
                         gluespec.stretch=f.parameters.space_stretch
                         gluespec.shrink=f.parameters.space_shrink
@@ -256,60 +263,44 @@ function pre_linebreak( head )
                 else
                     head.font = tmp_fontnum
                 end
-                -- check for small caps
+                -- check for font features
                 local f = used_fonts[tmp_fontnum]
-                if f and f.otfeatures and f.otfeatures.onum == true then
-                    local glyphno,lookups
-                    local glyph_lookuptable
-                    if f.characters[head.char] then
-                        glyphno = f.characters[head.char].index
-                        lookups = f.fontloader.glyphs[glyphno].lookups
-                        for _,v in ipairs(f.onum) do
-                            if lookups then
-                                glyph_lookuptable = lookups[v]
-                                if glyph_lookuptable then
-                                    if glyph_lookuptable[1].type == "substitution" then
-                                        head.char=f.fontloader.lookup_codepoint_by_name[glyph_lookuptable[1].specification.variant]
-                                    end
-                                end
-                            end
-                        end
-                    end -- if f.characters[head.char]
-                end -- if onum
-
-                if f and f.otfeatures and f.otfeatures.smcp == true then
-                    local glyphno,lookups
-                    local glyph_lookuptable
-                    if f.characters[head.char] then
-                        glyphno = f.characters[head.char].index
-                        lookups = f.fontloader.glyphs[glyphno].lookups
-                        for _,v in ipairs(f.smcp) do
-                            if lookups then
-                                glyph_lookuptable = lookups[v]
-                                if glyph_lookuptable then
-                                    if glyph_lookuptable[1].type == "substitution" then
-                                        head.char=f.fontloader.lookup_codepoint_by_name[glyph_lookuptable[1].specification.variant]
-                                    elseif glyph_lookuptable[1].type == "multiple" then
-                                        local lastnode
-                                        for i,v in ipairs(string.explode(glyph_lookuptable[1].specification.components)) do
-                                            if i==1 then
-                                                head.char=f.fontloader.lookup_codepoint_by_name[v]
-                                            else
-                                                local n = node.new("glyph")
-                                                n.next = head.next
-                                                n.font = tmp_fontnum
-                                                n.lang = 0
-                                                n.char = f.fontloader.lookup_codepoint_by_name[v]
-                                                head.next = n
-                                                head = n
+                if f and f.otfeatures then
+                    for _,featuretable in ipairs(f.otfeatures) do
+                        local glyphno,lookups
+                        local glyph_lookuptable
+                        if f.characters[head.char] then
+                            glyphno = f.characters[head.char].index
+                            lookups = f.fontloader.glyphs[glyphno].lookups
+                            for _,v in ipairs(featuretable) do
+                                if lookups then
+                                    glyph_lookuptable = lookups[v]
+                                    if glyph_lookuptable then
+                                        local glt1 = glyph_lookuptable[1]
+                                        if glt1.type == "substitution" then
+                                            head.char=f.fontloader.lookup_codepoint_by_name[glt1.specification.variant]
+                                        elseif glt1.type == "multiple" then
+                                            local lastnode
+                                            for i,v in ipairs(string.explode(glt1.specification.components)) do
+                                                if i==1 then
+                                                    head.char=f.fontloader.lookup_codepoint_by_name[v]
+                                                else
+                                                    local n = node.new("glyph")
+                                                    n.next = head.next
+                                                    n.font = tmp_fontnum
+                                                    n.lang = 0
+                                                    n.char = f.fontloader.lookup_codepoint_by_name[v]
+                                                    head.next = n
+                                                    head = n
+                                                end
                                             end
                                         end
                                     end
                                 end
-                            end
+                            end -- if f.characters[head.char]
                         end
-                    end -- if f.characters[head.char]
-                end -- f.otfeatures.smcp == true
+                    end -- for featuretable, enabled in pairs
+                end -- if  f and otffeatures
             end -- fontfamily?
         else
             warning("Unknown node: %q",head.id)
@@ -320,7 +311,31 @@ function pre_linebreak( head )
     return true
 end
 
---- Insert a horizontal rule in the nodelist that is used for underlining.
+function insert_backgroundcolor( parent, head, start, bgcolorindex, bg_padding_top, bg_padding_bottom )
+    bg_padding_top    = bg_padding_top or 0
+    bg_padding_bottom = bg_padding_bottom or 0
+    local wd = node.dimensions(parent.glue_set,parent.glue_sign, parent.glue_order,start,head)
+    local ht = parent.height
+    local dp = parent.depth
+
+    local colorname = publisher.colortable[bgcolorindex]
+    local pdfstring = publisher.colors[colorname].pdfstring
+
+    -- wd, ht and dp are now in pdf points
+    wd = wd / publisher.factor
+    ht = ht / publisher.factor
+    dp = dp / publisher.factor
+    bg_padding_top    = bg_padding_top    / publisher.factor
+    bg_padding_bottom = bg_padding_bottom / publisher.factor
+    local rule = node.new("whatsit","pdf_literal")
+
+    rule.data = string.format("q %s 0 %g %g %g re f Q", pdfstring, -dp - bg_padding_bottom ,  wd, ht + dp + bg_padding_top + bg_padding_bottom )
+    rule.mode = 0
+    parent.head = node.insert_before(parent.head,start,rule)
+    return rule
+end
+
+--- Insert a horizontal rule in the nodelist that is used for underlining. typ is 1 (solid) or 2 (dashed)
 function insert_underline( parent, head, start, typ)
     local wd = node.dimensions(parent.glue_set,parent.glue_sign, parent.glue_order,start,head)
     local ht = parent.height
@@ -342,7 +357,7 @@ function insert_underline( parent, head, start, typ)
     end
 
     local shift_down = ( dp - rule_width ) / 1.5
-    rule.data = string.format("q 0 g 0 G 0 %g w %s %g m %g %g l S Q", rule_width, dashpattern, -1 * shift_down, -wd, -1 * shift_down )
+    rule.data = string.format("q 0 g 0 G %g w %s  0 %g m %g %g l S Q", rule_width, dashpattern, -1 * shift_down, -wd, -1 * shift_down )
     rule.mode = 0
     parent.head = node.insert_before(parent.head,head,rule)
     return rule
@@ -350,11 +365,17 @@ end
 
 --- In the post_linebreak function we manipulate the paragraph that doesn't
 --- affect it's typesetting. Underline and 'showhyphens' is done here. The
---- overall apperance of the paragraph is fixed at this time, we can only add
---- deocration now.
+--- overall appearance of the paragraph is fixed at this time, we can only add
+--- decoration now.
 function post_linebreak( head, list_head)
-    local atttype = nil
-    local start = nil
+    local underlinetype = nil
+    local start_underline = nil
+
+    local bgcolorindex = nil
+    local start_bgcolor = nil
+    local bg_padding_top = 0
+    local bg_padding_bottom = 0
+    local reportmissingglyphs = publisher.options.reportmissingglyphs
     while head do
         if head.id == hlist_node then -- hlist
             post_linebreak(head.list,head)
@@ -372,24 +393,53 @@ function post_linebreak( head, list_head)
             end
         elseif head.id == glue_node then -- glue
             local att_underline = node.has_attribute(head, publisher.att_underline)
+            local att_bgcolor   = node.has_attribute(head, publisher.att_bgcolor)
             -- at rightskip we must underline (if start exists)
             if att_underline == nil or head.subtype == 9 then
-                if start then
-                    insert_underline(list_head, head, start,atttype)
-                    start = nil
+                if start_underline then
+                    insert_underline(list_head, head, start_underline,underlinetype)
+                    start_underline = nil
+                end
+            end
+            if att_bgcolor == nil or head.subtype == 9 then
+                if start_bgcolor then
+                    insert_backgroundcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom)
+                    start_bgcolor = nil
                 end
             end
         elseif head.id == glyph_node then -- glyph
+            if reportmissingglyphs then
+                local thisfont = used_fonts[head.font]
+                if thisfont and not thisfont.characters[head.char] then
+                    err("Glyph %x (hex) is missing from the font %q",head.char,thisfont.name)
+                end
+            end
             local att_underline = node.has_attribute(head, publisher.att_underline)
+            local att_bgcolor   = node.has_attribute(head, publisher.att_bgcolor)
+            local att_bgpaddingtop    = node.has_attribute(head, publisher.att_bgpaddingtop)
+            local att_bgpaddingbottom = node.has_attribute(head, publisher.att_bgpaddingbottom)
             if att_underline and att_underline > 0 then
-                if not start then
-                    atttype = att_underline
-                    start = head
+                if not start_underline then
+                    underlinetype = att_underline
+                    start_underline = head
                 end
             else
-                if start then
-                    insert_underline(list_head, head, start, atttype)
-                    start = nil
+                if start_underline then
+                    insert_underline(list_head, head, start_underline, underlinetype)
+                    start_underline = nil
+                end
+            end
+            if att_bgcolor and att_bgcolor > 0 then
+                if not start_bgcolor then
+                    bgcolorindex = att_bgcolor
+                    bg_padding_top    = att_bgpaddingtop
+                    bg_padding_bottom = att_bgpaddingbottom
+                    start_bgcolor = head
+                end
+            else
+                if start_bgcolor then
+                    insert_backgroundcolor(list_head, head, start_bgcolor, bgcolorindex,bg_padding_top,bg_padding_bottom)
+                    start_bgcolor = nil
                 end
             end
         end

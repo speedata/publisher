@@ -182,6 +182,12 @@
           <attribute name="en"/>
           <optional><attribute name="css"/></optional>
           <optional><attribute name="since"/></optional>
+          <optional><attribute name="deprecated">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute></optional>
           <ref name="descriptions" />
           <element name="childelements">
             <zeroOrMore>
@@ -211,6 +217,7 @@
               <optional>
                 <attribute name="since"/>
               </optional>
+              <optional><attribute name="lastchanged"/></optional>
               <optional>
                 <attribute name="allowxpath">
                   <choice>
@@ -231,6 +238,7 @@
                     <value>length</value>
                     <value>numberlengthorstar</value>
                     <value>yesnolength</value>
+                    <value>yesnonumber</value>
                   </choice>
                 </attribute>
                 <zeroOrMore>

@@ -1,0 +1,68 @@
+:hexcolor: #FF1393
+[[ch-farben]]
+= Farben
+
+Die Ausgabe von Farben im speedata Publisher ist sehr einfach.
+In der Regel reicht eine Angabe bei dem Objekt, das ausgegeben werden soll:
+
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+    <PlaceObject column="4" row="4">
+      <Circle
+         radiusx="2"
+         backgroundcolor="deeppink"
+         framecolor="mediumaquamarine"
+         rulewidth="8pt"/>
+    </PlaceObject>
+-------------------------------------------------------------------------------
+
+
+.Nicht jede Farbkombination ist schön
+image::kreismitfarbe.png[width=20%,scaledwidth=50%]
+
+Die Farben können auch als Hexadezimalwert angegeben werden, wie bei HTML.
+Dem drei oder sechsstelligen Wert muss ein Doppelkreuz vorangestellt sein, zum Beispiel: `...color="{hexcolor}"`.
+
+Möchte man Farben in einem anderen Farbraum (CMYK, Grau, Sonderfarben) ausgeben, müssen diese vorher definiert werden:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<DefineColor name="logofarbe" model="spotcolor"
+             colorname="PANTONE 116 C" />
+
+<Record element="data">
+  <PlaceObject>
+    <Box width="5" height="2" backgroundcolor="logofarbe"/>
+  </PlaceObject>
+</Record>
+-------------------------------------------------------------------------------
+
+
+.Diverse Sonderfarben sind im Publisher vorgegeben, so die Farbe Pantone 116.
+image::box116c.png[]
+
+
+Wird eine eigene Sonderfarbe definiert, die noch nicht im Publisher enthalten ist, müssen CMYK-Werte angegeben weren, damit im PDF ein Ersatz dargestellt werden kann.
+Sonderfarben sind im PDF an sich unbekannt und nur als Anweisung für den Drucker vorhanden.
+Daher müssen im PDF ebenfalls Anweisungen enthalten sein, wie diese Farbe am Bildschirm oder auf Druckern, die diese Sonderfarbe nicht enthalten, ausgegeben werden.
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<DefineColor
+    name="meinefarbe"
+    model="spotcolor"
+    colorname="speedatagrün"
+    c="56" m="7" y="98" k="21" />
+-------------------------------------------------------------------------------
+
+Hier wird eine Farbe definiert, die im Publisher bei den Ausgabebefehlen unter dem Namen `meinefarbe` angesprochen wird.
+Im PDF wird diese Farbe unter dem Namen `speedatagrün` geführt und in der Ausgabe erscheint diese dann in einem dunklen grün.
+
+.Die neue Farbe erscheint im PDF als eigener Farbkanal
+image::speedatagruen.png[width=90%,scaledwidth=100%]
+
+* Überdrucken
+

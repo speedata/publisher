@@ -1,0 +1,155 @@
+{{ $here := .}}
+{{ $isUglyURL := findRE ".html$" (ref $here "search.md")  }}
+{{partial "header.html" .}}
+
+{{ if eq .Site.Params.type "handbuch" }}
+      <div id="pageWrapper" class="clearfix">
+        <div id="sitemap">
+            {{ partial "searchmanual.html" . }}
+        	<ul>
+ 				{{ partial "tableofcontent.html" . }}
+ 			</ul>
+ 			<br />
+       </div>
+{{end}}
+    <div id="page" class="inhalt">
+
+		<div id="header">
+			<div class="boxatthetop">
+				{{ if eq .Site.Params.type "handbuch" }}
+				<div id="version">Version {{ with (getenv "PUBLISHER_VERSION")}}{{.}}{{ else }}{{ .Site.Params.version}}{{end}}</div>
+				{{end}}
+			</div>
+
+			<div id="pullContainer" class="hideDesktop">
+				<a href="#" id="pull"><i class="fa fa-bars fa-2x" aria-hidden="true"></i></a>
+			</div>
+
+			{{ partial "menu.html"  . }}
+
+			<div id="logo">
+				<img src="/images/logo.png" alt="speedata – Überholen wir den Mainstream" />
+			</div>
+
+		</div>
+		<div id="main">
+
+	{{/*
+
+	Beim Handbuch wird grundsätzlich ein wrapper drumherum geschrieben,
+	bei der Webseite nur bei Bedarf.
+
+	*/}}
+	{{ if eq .Site.Params.type "handbuch" }}
+       <script src="/js/lunr.js"></script>
+       <script src="/js/lunr.stemmer.support.js"></script>
+       <script src="/js/lunr.de.js"></script>
+
+	  <div class="wrapper">
+        <p>Suche: <input id="search" type="text" /></p>
+        <p>Ergebnisse:</p>
+        <ul id="results"></ul>
+
+        <script>
+         function getSource() {
+             var pages = [];
+
+             {{range .Site.Pages}}
+             {{ if not ( eq .File.LogicalName "_index.md" ) }}
+             pages.push({
+                 "title": {{.Title}},
+                 "content": {{ replaceRE "\nKindelemente .*?\nElternelemente .*?\nAttribute .*?\n" "\n"  .Plain}},
+                 "href":  {{ if $isUglyURL}}{{ print "." ( relref . .File.LogicalName ) }}{{ else }}{{ ref . .File.LogicalName}}{{end}}
+             })
+             {{end}}
+             {{end}}
+
+             return pages
+         }
+
+         function initLunr(pages) {
+            var idx = lunr(function () {
+                this.use(lunr.de);
+                this.ref('href');
+                this.field('content');
+                this.field('title',{boost: 10});
+
+                pages.forEach(function (page) {
+                   this.add(page)
+                }, this)
+              })
+             return idx
+         }
+         function search(idx, term, pages) {
+             return idx.search(term).map(function(result) {
+                 return pages.filter(function(page) {
+                     return page.href === result.ref;
+                 })[0];
+             });
+         }
+
+         function updateFromSearch(results, dest) {
+             dest.innerHTML = results.reduce(
+                 function(acc, page) {
+                     return acc + "<li><a href=\""+page.href+"\">"+page.title+"</a></li>"
+                 },
+                 ""
+             )
+         }
+
+         function doSearch(idx, term, pages, dest) {
+             var results = search(idx, term, pages);
+
+             if (results.length === 0) {
+                 dest.innerHTML = "Keine Ergebnisse";
+                 return
+             }
+
+             updateFromSearch(results, dest)
+         }
+
+         function initUI(pages, idx) {
+             var results = document.getElementById("results"),
+                 search = document.getElementById("search");
+
+             search.addEventListener("input", function(e) {
+                 doSearch(idx, e.target.value, pages, results)
+             });
+         }
+
+         function getQueryStringValue (key) {
+            key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx control chars
+            var match = location.search.match(new RegExp("[?&]" + key + "=([^&]+)(&|$)"));
+            return match && decodeURIComponent(match[1].replace(/\+/g, " "));
+        }
+
+         (function (pages) {
+             var lunr = initLunr(pages);
+
+             initUI(pages, lunr);
+
+             // set up initial search from querystring
+             var search = document.getElementById("search"),
+                 results = document.getElementById("results"),
+                 term = getQueryStringValue("q");
+
+             search.value = term;
+             doSearch(lunr, term, pages, results);
+         })(getSource())
+        </script>
+		</div>
+	{{else}}
+	  {{ .Content }}
+	{{end}}
+		</div>
+			<div id="footer">
+				<div class="boxattheend"></div>
+				{{ partial "footermenu.html"  . }}
+				{{ partial "footermenu2.html" . }}
+			</div>
+		</div>
+{{ if eq .Site.Params.type "handbuch" }}
+	</div>
+{{end}}
+{{partial "footer.html" .}}
+

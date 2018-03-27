@@ -16,12 +16,16 @@ import (
 )
 
 var (
-	multipleSpace *regexp.Regexp
-	mutex         = &sync.Mutex{}
+	multipleSpace       *regexp.Regexp
+	everysecondast      *regexp.Regexp
+	everysecondbacktick *regexp.Regexp
+	mutex               = &sync.Mutex{}
 )
 
 func init() {
 	multipleSpace = regexp.MustCompile(`\s+`)
+	everysecondast = regexp.MustCompile(`(?s)(.*?)\*(.*?)\*`)
+	everysecondbacktick = regexp.MustCompile("(?s)(.*?\\S)`(\\*)`")
 }
 
 type para struct {
@@ -73,6 +77,57 @@ func (p *para) HTML(lang string) string {
 		}
 	}
 	return "<p>" + strings.Join(ret, "") + "</p>"
+}
+
+func (p *para) Adoc(lang string) string {
+	ret := []string{}
+	c := p.commands
+	r := bytes.NewReader(p.Text)
+	dec := xml.NewDecoder(r)
+
+	for {
+		tok, err := dec.Token()
+		if err != nil && err == io.EOF {
+			break
+		}
+		if err != nil {
+			panic(err)
+		}
+		switch v := tok.(type) {
+		case xml.StartElement:
+			switch v.Name.Local {
+			case "cmd":
+				var x *Command
+				var cmdname string
+				for _, attribute := range v.Attr {
+					if attribute.Name.Local == "name" {
+						x = c.CommandsEn[attribute.Value]
+						if x == nil {
+							fmt.Printf("There is an unknown cmd in the para section of %q\n", attribute.Value)
+							os.Exit(-1)
+						}
+						cmdname = x.Name
+					}
+				}
+				ret = append(ret, fmt.Sprintf(`<<%s,%s>>`, x.CmdLink(), cmdname))
+			case "tt":
+				ret = append(ret, "`")
+			}
+		case xml.CharData:
+			ret = append(ret, string(v.Copy()))
+		case xml.EndElement:
+			switch v.Name.Local {
+			case "tt":
+				ret = append(ret, "`")
+			}
+		}
+	}
+	ret = append(ret, "\n\n")
+	a := strings.Join(ret, "")
+	a = everysecondast.ReplaceAllString(a, "$1\\*$2*")
+	a = everysecondbacktick.ReplaceAllString(a, "$1`$2`")
+	a = strings.Replace(a, "&", "\\&", -1)
+	return a
 }
 
 func (p *para) String(lang string) string {
@@ -165,6 +220,16 @@ func (c *choice) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error {
 	return nil
 }
 
+// cmd-commandname-attname
+func (a *Attribute) Attlink(cmd *Command) string {
+	ret := []string{}
+	ret = append(ret, cmd.CmdLink())
+	tmp := strings.ToLower(a.Name)
+	tmp = strings.Replace(tmp, ":", "_", -1)
+	ret = append(ret, tmp)
+	return strings.Join(ret, "-")
+}
+
 func (a *Attribute) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error {
 	for {
 		tok, err := dec.Token()
@@ -240,6 +305,32 @@ func (a *Attribute) DescriptionHTML(lang string) template.HTML {
 	return template.HTML(strings.Join(ret, "\n"))
 }
 
+func (a *Attribute) DescriptionAdoc(lang string) string {
+	var ret []string
+	switch lang {
+	case "en":
+		ret = append(ret, a.DescriptionEn.Adoc())
+	case "de":
+		ret = append(ret, a.DescriptionDe.Adoc())
+	default:
+		return ""
+	}
+	var name string
+	var desc string
+	for _, c := range a.Choice {
+		switch lang {
+		case "en":
+			name = c.Name
+			desc = c.DescriptionEn.Adoc()
+		case "de":
+			name = c.Name
+			desc = c.DescriptionDe.Adoc()
+		}
+		ret = append(ret, "\n`"+name+"`:::\n"+desc)
+	}
+	return string(strings.Join(ret, "\n"))
+}
+
 func (a *Attribute) HTMLFragment() string {
 	return a.Name
 }
@@ -299,6 +390,39 @@ func (d *description) HTML() string {
 	return strings.Join(ret, "")
 }
 
+func (d *description) Adoc() string {
+	if d == nil {
+		return ""
+	}
+	r := bytes.NewReader(d.Text)
+	dec := xml.NewDecoder(r)
+	var ret []string
+	for {
+		tok, err := dec.Token()
+		if err != nil && err == io.EOF {
+			break
+		}
+		if err != nil {
+			panic(err)
+		}
+		switch v := tok.(type) {
+		case xml.StartElement:
+			switch v.Name.Local {
+			case "para":
+				p := &para{}
+				p.commands = d.commands
+				err = dec.DecodeElement(p, &v)
+				if err != nil {
+					panic(err)
+				}
+				ret = append(ret, p.Adoc(d.Lang))
+
+			}
+		}
+	}
+	return strings.Join(ret, "")
+}
+
 type Command struct {
 	commands       *Commands
 	parentelements map[*Command]bool
@@ -316,6 +440,7 @@ type Command struct {
 	Name           string
 	Css            string
 	Since          string
+	Deprecated     bool
 	seealso        *seealso
 }
 
@@ -424,6 +549,15 @@ func (c *Command) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error {
 	return nil
 }
 
+func (c *Command) Adoclink() string {
+	if c == nil {
+		return ""
+	}
+	tmp := url.URL{Path: strings.ToLower(c.Name)}
+	filenameSansExtension := tmp.String()
+	return filenameSansExtension + ".adoc"
+}
+
 func (c *Command) Htmllink() string {
 	if c == nil {
 		return ""
@@ -431,6 +565,17 @@ func (c *Command) Htmllink() string {
 	tmp := url.URL{Path: strings.ToLower(c.Name)}
 	filenameSansExtension := tmp.String()
 	return filenameSansExtension + ".html"
+}
+
+// cmd-atpageshipout
+func (c *Command) CmdLink() string {
+	if c == nil {
+		return ""
+	}
+	tmp := url.URL{Path: strings.ToLower(c.Name)}
+	filenameSansExtension := tmp.String()
+	filenameSansExtension = strings.Replace(filenameSansExtension, "-", "_", -1)
+	return "cmd-" + filenameSansExtension
 }
 
 //
@@ -447,6 +592,19 @@ func (c *Command) DescriptionHTML(lang string) template.HTML {
 	return template.HTML(ret)
 }
 
+func (c *Command) DescriptionAdoc(lang string) string {
+	var ret string
+	switch lang {
+	case "en":
+		ret = c.DescriptionEn.Adoc()
+	case "de":
+		ret = c.DescriptionDe.Adoc()
+	default:
+		ret = ""
+	}
+	return ret
+}
+
 func (c *Command) RemarkHTML(lang string) template.HTML {
 	var ret string
 	switch lang {
@@ -458,6 +616,19 @@ func (c *Command) RemarkHTML(lang string) template.HTML {
 		ret = ""
 	}
 	return template.HTML(ret)
+}
+
+func (c *Command) RemarkAdoc(lang string) string {
+	var ret string
+	switch lang {
+	case "en":
+		ret = c.RemarkEn.Adoc()
+	case "de":
+		ret = c.RemarkDe.Adoc()
+	default:
+		ret = ""
+	}
+	return ret
 }
 
 func (c *Command) InfoHTML(lang string) template.HTML {
@@ -528,6 +699,83 @@ func (c *Command) InfoHTML(lang string) template.HTML {
 	return template.HTML(strings.Join(ret, ""))
 }
 
+func (c *Command) InfoAdoc(lang string) string {
+	var r *bytes.Reader
+	switch lang {
+	case "en":
+		if x := c.InfoEn; x == nil {
+			return ""
+		} else {
+			r = bytes.NewReader(x.Text)
+		}
+	case "de":
+		if x := c.InfoDe; x == nil {
+			return ""
+		} else {
+			r = bytes.NewReader(x.Text)
+		}
+	}
+
+	var ret []string
+	dec := xml.NewDecoder(r)
+
+	inListing := false
+	for {
+		tok, err := dec.Token()
+		if err != nil && err == io.EOF {
+			break
+		}
+		if err != nil {
+			panic(err)
+		}
+		switch v := tok.(type) {
+		case xml.StartElement:
+			switch v.Name.Local {
+			case "listing":
+				inListing = true
+			case "image":
+				var fn, wd string
+				for _, a := range v.Attr {
+					wd = "auto"
+					if a.Name.Local == "file" {
+						fn = a.Value
+					} else if a.Name.Local == "width" {
+						wd = fmt.Sprintf(`%s`, a.Value)
+					}
+				}
+				ret = append(ret, fmt.Sprintf("\nimage::%s[width=%s]\n", fn, wd))
+			case "para":
+				p := &para{}
+				p.commands = c.commands
+				err = dec.DecodeElement(p, &v)
+				if err != nil {
+					panic(err)
+				}
+				ret = append(ret, "\n")
+				ret = append(ret, p.Adoc(lang))
+				ret = append(ret, "\n")
+			}
+		case xml.CharData:
+			if inListing {
+				ret = append(ret, `[source, xml]
+-------------------------------------------------------------------------------
+`)
+				ret = append(ret, string(v))
+				ret = append(ret, `
+-------------------------------------------------------------------------------
+`)
+
+			}
+		case xml.EndElement:
+			switch v.Name.Local {
+			case "listing":
+				inListing = false
+			}
+		}
+	}
+	return strings.Join(ret, "")
+}
+
 func (c *Command) DescriptionText(lang string) string {
 	var r *bytes.Reader
 	switch lang {
@@ -567,9 +815,10 @@ func (c *Command) DescriptionText(lang string) string {
 }
 
 type reference struct {
-	longnameEn string
-	longnameDe string
-	pagename   string
+	longnameEn  string
+	longnameDe  string
+	pagename    string
+	chaptername string
 }
 
 var (
@@ -579,24 +828,24 @@ var (
 func init() {
 	references = map[string]reference{
 		"fonts": {
-			"How to use fonts", "Einbinden von Schriftarten", "fonts.html",
+			"How to use fonts", "Einbinden von Schriftarten", "fonts.html", "",
 		},
 		"directories": {
-			"How to generate a table of contents and other directories", "Wie werden Verzeichnisse erstellt?", "directories.html",
+			"How to generate a table of contents and other directories", "Wie werden Verzeichnisse erstellt?", "directories.html", "",
 		},
 		"cutmarks": {
-			"Cutmarks and bleed", "Schnittmarken und Beschnittzugabe", "cutmarks.html",
+			"Cutmarks and bleed", "Schnittmarken und Beschnittzugabe", "cutmarks.html", "",
 		},
 		"xpath": {
-			"XPath expressions", "XPath-Ausdrücke", "xpath.html",
+			"XPath expressions", "XPath-Ausdrücke", "xpath.html", "ch-xpathfunktionen",
 		},
 		"css": {
-			"Using CSS with the speedata Publisher", "CSS im speedata Publisher", "css.html",
+			"Using CSS with the speedata Publisher", "CSS im speedata Publisher", "css.html", "",
 		},
 	}
 }
 
-func (c *Command) Seealso(lang string) template.HTML {
+func (c *Command) SeealsoHTML(lang string) template.HTML {
 	if c.seealso == nil {
 		return ""
 	}
@@ -654,6 +903,64 @@ func (c *Command) Seealso(lang string) template.HTML {
 	return template.HTML(strings.Join(ret, ""))
 }
 
+func (c *Command) SeealsoAdoc(lang string) string {
+	if c.seealso == nil {
+		return ""
+	}
+	ret := []string{}
+	r := bytes.NewReader(c.seealso.Text)
+	dec := xml.NewDecoder(r)
+	for {
+		tok, err := dec.Token()
+		if err != nil && err == io.EOF {
+			break
+		}
+		if err != nil {
+			panic(err)
+		}
+
+		switch v := tok.(type) {
+		case xml.StartElement:
+			switch v.Name.Local {
+			case "cmd":
+				var x *Command
+				var cmdname string
+				for _, attribute := range v.Attr {
+					if attribute.Name.Local == "name" {
+						x = c.commands.CommandsEn[attribute.Value]
+						if x == nil {
+							fmt.Printf("There is an unknown cmd in the seealso section of %q (%q)\n", c.Name, attribute.Value)
+							os.Exit(-1)
+						}
+						cmdname = x.Name
+					}
+				}
+				ret = append(ret, fmt.Sprintf(`<a href=%q>%s</a>`, x.Htmllink(), cmdname))
+			case "ref":
+				var nameatt string
+				for _, attribute := range v.Attr {
+					if attribute.Name.Local == "name" {
+						nameatt = attribute.Value
+					}
+				}
+				if x, ok := references[nameatt]; ok {
+					switch lang {
+					case "en":
+						ret = append(ret, fmt.Sprintf(`<<%s,%s>>`, x.pagename, x.longnameEn))
+					case "de":
+						ret = append(ret, fmt.Sprintf(`<<%s,%s>>`, x.pagename, x.longnameDe))
+					}
+				} else {
+					ret = append(ret, nameatt)
+				}
+			}
+		case xml.CharData:
+			ret = append(ret, string(v.Copy()))
+		}
+	}
+	return strings.Join(ret, "")
+}
+
 func (c *Command) Attributes() []*Attribute {
 	mutex.Lock()
 	sort.Sort(attributesbyen{c.Attr})
@@ -663,7 +970,84 @@ func (c *Command) Attributes() []*Attribute {
 	return ret
 }
 
-func (c *Command) Example(lang string) template.HTML {
+func (c *Command) ExampleAdoc(lang string) string {
+	var r *bytes.Reader
+	switch lang {
+	case "en":
+		if x := c.ExamplesEn; len(x) == 0 {
+			return ""
+		} else {
+			r = bytes.NewReader(x[0].Text)
+		}
+	case "de":
+		if x := c.ExamplesDe; len(x) == 0 {
+			return ""
+		} else {
+			r = bytes.NewReader(x[0].Text)
+		}
+	default:
+		return ""
+	}
+	var ret []string
+	dec := xml.NewDecoder(r)
+
+	inListing := false
+	for {
+		tok, err := dec.Token()
+		if err != nil && err == io.EOF {
+			break
+		}
+		if err != nil {
+			panic(err)
+		}
+		switch v := tok.(type) {
+		case xml.StartElement:
+			switch v.Name.Local {
+			case "listing":
+				inListing = true
+			case "image":
+				var fn, wd string
+				for _, a := range v.Attr {
+					wd = "auto"
+					if a.Name.Local == "file" {
+						fn = a.Value
+					} else if a.Name.Local == "width" {
+						wd = fmt.Sprintf(`%s`, a.Value)
+					}
+				}
+				ret = append(ret, fmt.Sprintf("\nimage::%s[width=%s]\n", fn, wd))
+			case "para":
+				p := &para{}
+				p.commands = c.commands
+				err = dec.DecodeElement(p, &v)
+				if err != nil {
+					panic(err)
+				}
+				ret = append(ret, "\n")
+				ret = append(ret, p.HTML(lang))
+				ret = append(ret, "\n")
+			}
+		case xml.CharData:
+			if inListing {
+				ret = append(ret, `[source, xml]
+-------------------------------------------------------------------------------
+`)
+				ret = append(ret, string(v))
+				ret = append(ret, `
+-------------------------------------------------------------------------------
+`)
+			}
+		case xml.EndElement:
+			switch v.Name.Local {
+			case "listing":
+				inListing = false
+			}
+		}
+	}
+	return strings.Join(ret, "")
+}
+
+func (c *Command) ExampleHTML(lang string) template.HTML {
 	var r *bytes.Reader
 	switch lang {
 	case "en":
@@ -878,6 +1262,9 @@ func ReadCommandsFile(r io.Reader) (*Commands, error) {
 					}
 					if attribute.Name.Local == "since" {
 						c.Since = attribute.Value
+					}
+					if attribute.Name.Local == "deprecated" {
+						c.Deprecated = attribute.Value == "yes"
 					}
 				}
 			}

@@ -1,6 +1,5 @@
 module(...,package.seeall)
 
-
 xpath = do_luafile("xpath.lua")
 luxor = do_luafile("luxor.lua")
 
@@ -31,9 +30,7 @@ local with_underscore_src=[[<root>
  <foo_bar>Hello world</foo_bar>
 </root>]]
 
-local with_dash_src=[[<root>
- <foo-bar>Hello world</foo-bar>
-</root>]]
+local with_dash_src=[[<foo att="Hello world">xx<bar-bar att="xx"></bar-bar></foo>]]
 
 
 local data = luxor.parse_xml(data_src)
@@ -108,7 +105,6 @@ function test_xpathfunctions()
     assert_equal(secondoftwo(xpath.parse_raw( data, " normalize-space('  foo bar baz     ') ",namespace ))[1], "foo bar baz")
     assert_equal(secondoftwo(xpath.parse_raw( data, " upper-case('äöüaou') ",namespace ))[1], "ÄÖÜAOU")
     assert_equal(secondoftwo(xpath.parse_raw( data, " max(1,2,3) ",namespace ))[1], 3)
-    assert_equal(secondoftwo(xpath.parse_raw( data, " max('a','b','c') ",namespace ))[1], 'c')
     assert_equal(secondoftwo(xpath.parse_raw( data, " min(1,2,3) ",namespace ))[1], 1)
     assert_equal(secondoftwo(xpath.parse_raw( data, " last() ",namespace ))[1], 1)
 end
@@ -130,6 +126,7 @@ function test_numdatasets()
     assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " count(one/subone)",namespace ))[1], 2)
     assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " count(*[1])",namespace ))[1], 1)
     assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " count(two/*)",namespace ))[1], 2)
+    assert_equal(secondoftwo(xpath.parse_raw( mixed_elements, " count(nonexist)",namespace ))[1], 0)
 end
 
 
@@ -276,6 +273,8 @@ end
 
 function test_other()
   assert_equal(secondoftwo(xpath.parse_raw(with_underscore," string(foo_bar) ",namespace))[1], "Hello world")
-  assert_equal(secondoftwo(xpath.parse_raw(with_dash," string(foo-bar) ",namespace))[1], "Hello world")
+  assert_equal(secondoftwo(xpath.parse_raw(with_dash," foo/bar-bar/@att ",namespace))[1], "xx")
+  assert_false(secondoftwo(xpath.parse_raw(data,  " a = '*'",namespace))[1] )
+  assert_false(secondoftwo(xpath.parse_raw(data,  " a = '+'",namespace))[1] )
 end
 

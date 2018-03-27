@@ -1,0 +1,21 @@
+#baseURL = "https://doc.speedata.de/publisher/de/"
+baseURL = ""
+languageCode = "de"
+
+disableKinds = ["taxonomy", "taxonomyTerm", "RSS", "sitemap", "robotsTXT"]
+
+relativeURLs = true
+canonifyURLs = true
+uglyURLs = true
+permalinks = ":slug"
+pygmentsCodeFences = true
+pygmentsStyle = "manni"
+pygmentsUseClasses = true
+
+
+theme = "speedataweb"
+
+title = "speedata Handbuch"
+
+[params]
+  type = "handbuch"

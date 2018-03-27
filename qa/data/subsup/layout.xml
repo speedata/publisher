@@ -1,7 +1,6 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
-  xmlns:sd="urn:speedata:2009/publisher/functions/en"
-  >
-  
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
   <Pageformat width="15cm" height="4cm"/>
   <Record element="data">
     <PlaceObject>
@@ -12,5 +11,5 @@
       </Textblock>
     </PlaceObject>
   </Record>
-  
+
 </Layout>

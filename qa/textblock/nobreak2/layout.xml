@@ -1,0 +1,22 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" 
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  version="3.1.3">
+
+  <Pageformat width="140mm" height="50mm" />
+  
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>A wonderful serenity has taken possession of </Value>
+          <NoBreak><Value>my entire soul</Value></NoBreak>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+  
+  <DefineFontfamily name="text" fontsize="16" leading="19">
+    <Regular fontface="sans"/>
+  </DefineFontfamily>
+  
+</Layout>

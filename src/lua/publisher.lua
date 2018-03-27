@@ -59,6 +59,9 @@ att_script         = 4
 att_underline      = 5
 att_indent         = 6 -- see textformats for details
 att_rows           = 7 -- see textformats for details
+att_bgcolor        = 8 -- similar to underline
+att_bgpaddingtop   = 9
+att_bgpaddingbottom   = 10
 
 -- for debugging purpose
 att_origin         = 98
@@ -101,6 +104,10 @@ att_keep = 700
 -- attributes for glue
 att_leaderwd = 800
 
+-- mknodes
+att_newline = 900
+
+
 -- Debugging / see att_origin
 origin_table = 1
 origin_vspace = 2
@@ -130,6 +137,8 @@ penalty_node   = node.id("penalty")
 whatsit_node   = node.id("whatsit")
 hlist_node     = node.id("hlist")
 vlist_node     = node.id("vlist")
+action_node    = node.id("action")
+
 
 for k,v in pairs(node.whatsits()) do
     if v == "user_defined" then
@@ -137,6 +146,8 @@ for k,v in pairs(node.whatsits()) do
         user_defined_whatsit = k
     elseif v == "pdf_refximage" then
         pdf_refximage_whatsit = k
+    elseif v == "pdf_action" then
+        pdf_action_whatsit = k
     end
 end
 
@@ -173,6 +184,7 @@ options = {
     gridheight  = tenmm_sp,
     gridcells_x = 0,
     gridcells_y = 0,
+    reportmissingglyphs = true,
 }
 
 -- List of virtual areas. Key is the group name and value is
@@ -394,17 +406,16 @@ lowercase = false
 --- indentation in sp. alignment is one of "leftaligned", "rightaligned",
 --- "centered" and "justified"
 textformats = {
-    text           = { indent = 0, alignment="justified",   rows = 1, orphan = false, widow = false},
-    __centered     = { indent = 0, alignment="centered",    rows = 1},
-    __leftaligned  = { indent = 0, alignment="leftaligned", rows = 1},
-    __rightaligned = { indent = 0, alignment="rightaligned",rows = 1},
-    __justified    = { indent = 0, alignment="justified",   rows = 1},
-    centered       = { indent = 0, alignment="centered",    rows = 1},
-    left           = { indent = 0, alignment="leftaligned", rows = 1},
-    right          = { indent = 0, alignment="rightaligned",rows = 1},
-    zentriert      = { indent = 0, alignment="centered",    rows = 1},
-    links          = { indent = 0, alignment="leftaligned", rows = 1},
-    rechts         = { indent = 0, alignment="rightaligned",rows = 1},
+    text           = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2},
+    __centered     = { indent = 0, alignment="centered",    rows = 1, orphan = 2, widow = 2},
+    __leftaligned  = { indent = 0, alignment="leftaligned", rows = 1, orphan = 2, widow = 2},
+    __rightaligned = { indent = 0, alignment="rightaligned",rows = 1, orphan = 2, widow = 2},
+    __justified    = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2},
+    __fivemm       = { indent = tex.sp("5mm"), alignment="justified",   rows = 1, orphan = 2, widow = 2},
+    justified      = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2},
+    centered       = { indent = 0, alignment="centered",    rows = 1, orphan = 2, widow = 2},
+    left           = { indent = 0, alignment="leftaligned", rows = 1, orphan = 2, widow = 2},
+    right          = { indent = 0, alignment="rightaligned",rows = 1, orphan = 2, widow = 2},
 }
 
 
@@ -437,21 +448,22 @@ maxdimen = 1073741823
 
 -- It's convenient to just copy the stretching glue instead of writing
 -- the stretch etc. over and over again.
-glue_stretch2 = node.new("glue")
-glue_stretch2.spec = node.new("glue_spec")
-glue_stretch2.spec.stretch = 2^16
-glue_stretch2.spec.stretch_order = 2
-
+glue_stretch2 = set_glue(nil, { stretch = 2^16, stretch_order = 2 })
 messages = {}
+
+-- For attached files. Each of this numbers should appear in the catalog
+filespecnumbers = {}
 
 --- The dispatch table maps every element in the layout xml to a command in the `commands.lua` file.
 local dispatch_table = {
     A                       = commands.a,
     Action                  = commands.action,
     AddToList               = commands.add_to_list,
+    AddSearchpath           = commands.add_searchpath,
     AtPageCreation          = commands.atpagecreation,
     AtPageShipout           = commands.atpageshipout,
     Attribute               = commands.attribute,
+    AttachFile              = commands.attachfile,
     B                       = commands.bold,
     Barcode                 = commands.barcode,
     Bookmark                = commands.bookmark,
@@ -480,6 +492,7 @@ local dispatch_table = {
     I                       = commands.italic,
     Image                   = commands.image,
     Include                 = commands.include,
+    Layout                  = commands.include,
     Initial                 = commands.initial,
     InsertPages             = commands.insert_pages,
     Li                      = commands.li,
@@ -516,6 +529,7 @@ local dispatch_table = {
     SetGrid                 = commands.set_grid,
     SetVariable             = commands.setvariable,
     SortSequence            = commands.sort_sequence,
+    Span                    = commands.span,
     Stylesheet              = commands.stylesheet,
     Sub                     = commands.sub,
     Sup                     = commands.sup,
@@ -580,21 +594,19 @@ function dispatch(layoutxml,dataxml,options)
                     ret[#ret + 1] =   { elementname = eltname, contents = tmp }
                 end
             else
-                err("Unknown element found in layoutfile: %q", j[".__local_name"] or "???")
+                local prefix, localname = table.unpack( string.explode(j[".__name"],":"))
+                if localname == nil then
+                    -- no prefix given, string.explode is wrong about the components
+                    -- Therefore we need to swap the both
+                    prefix, localname = "", prefix
+                end
+                if j[".__ns"][prefix] == "urn:speedata.de:2009/publisher/en" then
+                    err("Unknown element found in layoutfile: %q", j[".__local_name"] or "???")
+                end
             end
         end
     end
     return ret
-end
-
---- Convert the argument `str` (in UTF-8) to a string suitable for writing into the PDF file. The returned string starts with `<feff` and ends with `>`
-function utf8_to_utf16_string_pdf( str )
-    local ret = {}
-    for s in string.utfvalues(str) do
-        ret[#ret + 1] = fontloader.to_utf16(s)
-    end
-    local utf16str = "<feff" .. table.concat(ret) .. ">"
-    return utf16str
 end
 
 --- Bookmarks are collected and later processed. This function (recursively)
@@ -658,7 +670,7 @@ function dothings()
     else
         initialize_luatex_and_generate_pdf()
         -- The last thing is to put a stamp in the PDF
-        pdf.immediateobj("(Created with the speedata Publisher - www.speedata.de)")
+        pdf.obj({type="raw",string="(Created with the speedata Publisher - www.speedata.de)", immediate = true, objcompression = false})
     end
 end
 
@@ -708,7 +720,9 @@ function initialize_luatex_and_generate_pdf()
         local requested_version = string.explode(layoutxml.version,".")
 
         if publisher_version[1] ~= requested_version[1] then
-            version_mismatch = true
+            if tonumber(publisher_version[1]) < tonumber(requested_version[1]) then
+                version_mismatch = true
+            end
         elseif publisher_version[2] < requested_version[2] then
             -- major number are same, minor are different
             version_mismatch = true
@@ -773,6 +787,12 @@ function initialize_luatex_and_generate_pdf()
         options.showgridallocation = true
     end
 
+    if options.reportmissingglyphs == "false" then
+        options.reportmissingglyphs = false
+    elseif options.reportmissingglyphs == "true" then
+        options.reportmissingglyphs = true
+    end
+
     --- Set the starting page (which must be a number)
     if options.startpage then
         local num = options.startpage
@@ -832,6 +852,13 @@ function initialize_luatex_and_generate_pdf()
         exit()
     end
 
+    local pdfcatalog = {}
+
+    -- For now only one file can be attached
+    if #filespecnumbers > 0 then
+      pdfcatalog[#pdfcatalog + 1] = string.format([[ /Names << /EmbeddedFiles <<  /Names [(ZUGFeRD-invoice.xml) %d 0 R ] >> >> /Metadata %d 0 R ]],filespecnumbers[1][1],filespecnumbers[1][2])
+      pdfcatalog[#pdfcatalog + 1] = string.format([[ /AF %d 0 R ]],filespecnumbers[1][3])
+    end
 
     --- emit last page if necessary
     -- current_pagestore_name is set when in SavePages and nil otherwise
@@ -857,12 +884,35 @@ function initialize_luatex_and_generate_pdf()
         vp[#vp + 1] = string.format("/Duplex /%s", viewerpreferences.duplex)
     end
 
-    local catalog = "/PageMode /UseOutlines"
+    pdfcatalog[#pdfcatalog + 1] = "/PageMode /UseOutlines"
+
     if #vp > 0 then
-        catalog = catalog .. "/ViewerPreferences <<" .. table.concat(vp," ") .. ">>"
+        pdfcatalog[#pdfcatalog + 1] = "/ViewerPreferences <<" .. table.concat(vp," ") .. ">>"
     end
+    -- Title   The document’s title.
+    -- Author  The name of the person who created the document.
+    -- Subject  The subject of the document.
+    -- Keywords  Keywords associated with the document.
     local creator = string.format("speedata Publisher %s, www.speedata.de",env_publisherversion)
-    local info = string.format("/Creator (%s) ",creator)
+    local infos = { string.format("/Creator (%s)",creator) }
+
+    if options.documenttitle and options.documenttitle ~= "" then
+        infos[#infos + 1] = string.format("/Title %s",utf8_to_utf16_string_pdf(options.documenttitle))
+    end
+    if options.documentauthor and options.documentauthor ~= "" then
+        infos[#infos + 1] = string.format("/Author %s", utf8_to_utf16_string_pdf(options.documentauthor))
+    end
+    if options.documentsubject and options.documentsubject ~= "" then
+        infos[#infos + 1] = string.format("/Subject %s", utf8_to_utf16_string_pdf(options.documentsubject))
+    end
+    if options.documentkeywords and options.documentkeywords ~= "" then
+        infos[#infos + 1] = string.format("/Keywords %s", utf8_to_utf16_string_pdf(options.documentkeywords))
+    end
+
+    local info = table.concat(infos, " ")
+
+    local catalog = table.concat(pdfcatalog," ")
+
     if pdf.setinfo then
         pdf.setcatalog(catalog)
         pdf.setinfo(info)
@@ -887,7 +937,6 @@ function initialize_luatex_and_generate_pdf()
         file:close()
     end
 end
-
 
 
 function shipout(nodelist, pagenumber )
@@ -1245,7 +1294,6 @@ end
 
 --- _Must_ be called before something can be put on the page. Looks for hooks to be run before page creation.
 function setup_page(pagenumber)
-    trace("setup_page")
     if current_group then return end
     local thispage
     if pagenumber then
@@ -1301,17 +1349,17 @@ function setup_page(pagenumber)
             local dataxml = element_contents(j).dataxml
             local width  = publisher.read_attribute(layoutxml,dataxml,"width",  "length_sp")
             local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --pg
-            local nx     = publisher.read_attribute(layoutxml,dataxml,"nx",     "rawstring")
-            local ny     = publisher.read_attribute(layoutxml,dataxml,"ny",     "rawstring")
-            local dx     = publisher.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
-            local dy     = publisher.read_attribute(layoutxml,dataxml,"dy",     "length_sp")
+            local _nx     = publisher.read_attribute(layoutxml,dataxml,"nx",     "number")
+            local _ny     = publisher.read_attribute(layoutxml,dataxml,"ny",     "number")
+            local _dx     = publisher.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
+            local _dy     = publisher.read_attribute(layoutxml,dataxml,"dy",     "length_sp")
 
             gridwidth  = width
             gridheight = height
-            nx = nx
-            ny = ny
-            dx = dx
-            dy = dy
+            nx = _nx
+            ny = _ny
+            dx = _dx
+            dy = _dy
         end
     end
 
@@ -1797,13 +1845,7 @@ function box( width_sp,height_sp,colorname )
         paint.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colentry.pdfstring,_width,_height)
         paint.mode = 0
 
-        local hglue
-
-        hglue = node.new("glue",0)
-        hglue.spec = node.new("glue_spec")
-        hglue.spec.width         = 0
-        hglue.spec.stretch       = 2^16
-        hglue.spec.stretch_order = 3
+        local hglue = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3 })
         h = node.insert_after(paint,paint,hglue)
 
         h = node.hpack(h,width_sp,"exactly")
@@ -1811,11 +1853,7 @@ function box( width_sp,height_sp,colorname )
         h = create_empty_hbox_with_width(width_sp)
     end
 
-    local vglue = node.new(glue_node,0)
-    vglue.spec = node.new("glue_spec")
-    vglue.spec.width         = 0
-    vglue.spec.stretch       = 2^16
-    vglue.spec.stretch_order = 3
+    local vglue = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3 })
     v = node.insert_after(h,h,vglue)
     v = node.vpack(h,height_sp,"exactly")
     return v
@@ -2012,6 +2050,15 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
             return false
         end
         return nil
+    elseif typ=="booleanornumber" then
+        val = val or default
+        if val=="yes" then
+            return true
+        elseif val=="no" then
+            return false
+        else
+            return tonumber(val)
+        end
     elseif typ=="booleanorlength" then
         val = val or default
         if val=="yes" then
@@ -2047,19 +2094,34 @@ marker.value = 1
 --- Convert `<b>`, `<u>` and `<i>` in text to publisher recognized elements.
 function parse_html( elt, parameter )
     local a = paragraph:new()
+    parameter = parameter or {}
     local bold,italic,underline,allowbreak
-    if parameter then
-        if parameter.underline then
-            underline = 1
-        end
-        if parameter.bold then
-            bold = 1
-        end
-        if parameter.italic then
-            italic = 1
-        end
-        allowbreak = parameter.allowbreak
+    local backgroundcolor   = parameter.backgroundcolor
+    local bg_padding_top    = parameter.bg_padding_top
+    local bg_padding_bottom = parameter.bg_padding_bottom
+
+    if parameter.underline then
+        underline = 1
     end
+    if parameter.bold then
+        bold = 1
+    end
+    if parameter.italic then
+        italic = 1
+    end
+    allowbreak = parameter.allowbreak
+
+    local defaults = {
+       fontfamily = 0,
+       bold = bold,
+       italic = italic,
+       underline = underline,
+       allowbreak = allowbreak,
+       backgroundcolor=backgroundcolor,
+       bg_padding_top = bg_padding_top,
+       bg_padding_bottom = bg_padding_bottom
+    }
+    local options = setmetatable({}, {__index = defaults})
 
     if elt[".__local_name"] then
         local eltname = string.lower(elt[".__local_name"])
@@ -2072,12 +2134,19 @@ function parse_html( elt, parameter )
         elseif eltname == "span" then
             local css_rules = css:matches({element = 'span', class=elt.class}) or {}
             local has_css = false
-            local colorindex
+            local fg_colorindex
+            local bg_colorindex
 
             if css_rules["color"] then
                 has_css = true
-                colorindex = colors[css_rules["color"]].index
+                fg_colorindex = colors[css_rules["color"]].index
             end
+            local bgcolor = css_rules["background-color"]
+            if bgcolor then
+                has_css = true
+                bg_colorindex = colors[bgcolor].index
+            end
+
             local td = css_rules["text-decoration"]
             if  td and string.match(td,"underline") then
                has_css = true
@@ -2086,39 +2155,46 @@ function parse_html( elt, parameter )
             if has_css then
                 local b = paragraph:new()
                 if type(elt[1]) == "string" then
-                    b:append(elt[1],{fontfamily = 0, bold = bold, italic = italic, underline = underline})
-                    b:set_color(colorindex)
+                    options["backgroundcolor"] = bg_colorindex
+                    if css_rules["background-padding-top"] then
+                        options["bg_padding_top"]    = tex.sp(css_rules["background-padding-top"])
+                    end
+                    if css_rules["background-padding-bottom"] then
+                        options["bg_padding_bottom"] = tex.sp(css_rules["background-padding-bottom"])
+                    end
+                    b:append(elt[1],options)
+                    b:set_color(fg_colorindex)
                     a:append(b)
                     elt = {}
                 end
             end
         elseif eltname == "b" or eltname == "strong" then
-            bold = 1
+            options.bold = 1
         elseif eltname == "i" then
-            italic = 1
+            options.italic = 1
         elseif eltname == "u" then
-            underline = 1
+            options.underline = 1
             if elt.class then
                 local css_rules = css:matches({element = 'u', class=elt.class}) or {}
                 if css_rules["border-style"] == "dashed" then
-                    underline = 2
+                    options.underline = 2
                 end
             end
         elseif eltname == "sub" then
             for i=1,#elt do
                 if type(elt[i]) == "string" then
-                    a:script(elt[i],1,{fontfamily = 0, bold = bold, italic = italic, underline = underline })
+                    a:script(elt[i],1,options)
                 elseif type(elt[i]) == "table" then
-                    a:script(parse_html(elt[i]),1,{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                    a:script(parse_html(elt[i]),1,options)
                 end
             end
             elt = {}
         elseif eltname == "sup" then
             for i=1,#elt do
                 if type(elt[i]) == "string" then
-                    a:script(elt[i],2,{fontfamily = 0, bold = bold, italic = italic, underline = underline })
+                    a:script(elt[i],2,options)
                 elseif type(elt[i]) == "table" then
-                    a:script(parse_html(elt[i]),2,{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                    a:script(parse_html(elt[i]),2,options)
                 end
             end
             elt = {}
@@ -2134,7 +2210,7 @@ function parse_html( elt, parameter )
                     a:append(node.copy(marker))
                     local bul = bullet_hbox(tex.sp("2.5mm"))
                     a:append(bul)
-                    a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                    a:append(parse_html(elt[i]),options)
                     a:append("\n",{})
                 end
             end
@@ -2154,7 +2230,7 @@ function parse_html( elt, parameter )
                     a:append(node.copy(marker))
                     local num = number_hbox(counter,tex.sp("4mm"))
                     a:append(num)
-                    a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                    a:append(parse_html(elt[i]),options)
                     a:append("\n",{})
                 end
             end
@@ -2165,9 +2241,9 @@ function parse_html( elt, parameter )
                 warning("html a link has no href")
                 for i=1,#elt do
                     if type(elt[i]) == "string" then
-                        a:append(elt[i],{fontfamily = 0, bold = bold, italic = italic, underline = underline })
+                        a:append(elt[i],options)
                     elseif type(elt[i]) == "table" then
-                        a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                        a:append(parse_html(elt[i]),options)
                     end
                 end
             else
@@ -2182,9 +2258,9 @@ function parse_html( elt, parameter )
                 a:append(stl)
                 for i=1,#elt do
                     if type(elt[i]) == "string" then
-                        a:append(elt[i],{fontfamily = 0, bold = bold, italic = italic, underline = underline })
+                        a:append(elt[i],options)
                     elseif type(elt[i]) == "table" then
-                        a:append(parse_html(elt[i]),{fontfamily = 0, bold = bold, italic = italic, underline = underline})
+                        a:append(parse_html(elt[i]),options)
                     end
                 end
                 local enl = node.new("whatsit","pdf_end_link")
@@ -2222,7 +2298,7 @@ function parse_html( elt, parameter )
             if has_css then
                 local b = paragraph:new()
                 if type(elt[1]) == "string" then
-                    b:append(elt[1],{fontfamily = fontfamily, bold = bold, italic = italic, underline = underline})
+                    b:append(elt[1],options)
                     b:set_color(colorindex)
                     a:append(b)
                     elt = {}
@@ -2233,7 +2309,6 @@ function parse_html( elt, parameter )
     -- Recurse into the children...
     for i=1,#elt do
         local typ = type(elt[i])
-        local options = {fontfamily = 0, bold = bold, italic = italic, underline = underline, allowbreak = allowbreak }
         if typ == "string" or typ == "number" or typ == "boolean" then
             a:append(elt[i],options)
         elseif typ == "table" then
@@ -2399,6 +2474,10 @@ leftskip.stretch_order = 3
 
 --- Return the larger glue(spec) values
 function bigger_glue_spec( a,b )
+    if node.has_field(a,"spec") then
+        a = a.spec
+        b = b.spec
+    end
     if a.stretch_order > b.stretch_order then return a end
     if b.stretch_order > a.stretch_order then return b end
     if a.stretch > b.stretch then return a end
@@ -2544,46 +2623,49 @@ function mknodes(str,fontfamily,parameter)
             local dummypenalty
             dummypenalty = node.new("penalty")
             dummypenalty.penalty = 10000
+            node.set_attribute(dummypenalty,att_newline,1)
             head,last = node.insert_after(head,last,dummypenalty)
 
             local strut
             strut = add_rule(nil,"head",{height = 8 * factor, depth = 3 * factor, width = 0 })
+            node.set_attribute(strut,att_newline,1)
             head,last = node.insert_after(head,last,strut)
 
             local p1,g,p2
             p1 = node.new("penalty")
             p1.penalty = 10000
 
-            g = node.new("glue")
-            g.spec = node.new("glue_spec")
-            g.spec.stretch = 2^16
-            g.spec.stretch_order = 2
+            g = set_glue(nil,{stretch = 2^16, stretch_order = 2})
 
             p2 = node.new("penalty")
             p2.penalty = -10000
+
+            node.set_attribute(p1,att_newline,1)
+            node.set_attribute(p2,att_newline,1)
+            node.set_attribute(g,att_newline,1)
 
             head,last = node.insert_after(head,last,p1)
             head,last = node.insert_after(head,last,g)
             head,last = node.insert_after(head,last,p2)
         elseif match(char,"^%s$") and last and last.id == glue_node and not node.has_attribute(last,att_tie_glue,1) then
             -- double space, use the bigger glue
-            local tmp = node.new(glue_spec_node)
-            tmp.width   = space
-            tmp.shrink  = shrink
-            tmp.stretch = stretch
-            last.spec = bigger_glue_spec(last.spec,tmp)
+            local tmp = set_glue(nil, {width = space, shrink = shrink, stretch = stretch})
+            local tmp2 = bigger_glue_spec(last,tmp)
+            if node.has_field(tmp,"spec") then
+                last.spec = tmp2
+            else
+                last.width = tmp2.width
+                last.stretch = tmp2.stretch
+                last.shrink = tmp2.shrink
+                last.stretch_order = tmp2.stretch_order
+                last.shrink_order = tmp2.shrink_order
+            end
         elseif s == 160 then -- non breaking space U+00A0
             n = node.new("penalty")
             n.penalty = 10000
 
             head,last = node.insert_after(head,last,n)
-
-            n = node.new("glue")
-            n.spec = node.new("glue_spec")
-            n.spec.width   = space
-            n.spec.shrink  = shrink
-            n.spec.stretch = stretch
-
+            n = set_glue(nil,{width = space, shrink = shrink, stretch = stretch})
             node.set_attribute(n,att_tie_glue,1)
 
             head,last = node.insert_after(head,last,n)
@@ -2591,6 +2673,12 @@ function mknodes(str,fontfamily,parameter)
             -- can be 1 == solid or 2 == dashed
             if parameter.underline then
                 node.set_attribute(n,att_underline,parameter.underline)
+            end
+
+            if parameter.backgroundcolor then
+                node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
+                node.set_attribute(n,att_bgpaddingtop,parameter.bg_padding_top)
+                node.set_attribute(n,att_bgpaddingbottom,parameter.bg_padding_bottom)
             end
             node.set_attribute(n,att_fontfamily,fontfamily)
         elseif s == 173 then -- soft hyphen
@@ -2607,8 +2695,10 @@ function mknodes(str,fontfamily,parameter)
             n.penalty = 10000
             head, last = node.insert_after(head,last,n)
 
-            n = node.new(glue_node)
-            n.spec = node.new(glue_spec_node)
+            n = set_glue(nil)
+            head, last = node.insert_after(head,last,n)
+        elseif s == 9 and parameter.tab == 'hspace' then
+            local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
             head, last = node.insert_after(head,last,n)
         elseif s == 8203 then
             -- U+200B ZERO WIDTH SPACE inserted in parse_html
@@ -2629,11 +2719,8 @@ function mknodes(str,fontfamily,parameter)
                 n.penalty = 0
                 head,last = node.insert_after(head,last,n)
             end
-            n = node.new("glue")
-            n.spec = node.new("glue_spec")
-            n.spec.width   = space
-            n.spec.shrink  = shrink
-            n.spec.stretch = stretch
+
+            n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch})
 
             if breakatspace == false then
                 node.set_attribute(n,att_tie_glue,1)
@@ -2641,6 +2728,11 @@ function mknodes(str,fontfamily,parameter)
 
             if parameter.underline then
                 node.set_attribute(n,att_underline,parameter.underline)
+            end
+            if parameter.backgroundcolor then
+                node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
+                node.set_attribute(n,att_bgpaddingtop,parameter.bg_padding_top)
+                node.set_attribute(n,att_bgpaddingbottom,parameter.bg_padding_bottom)
             end
             node.set_attribute(n,att_fontfamily,fontfamily)
 
@@ -2665,11 +2757,22 @@ function mknodes(str,fontfamily,parameter)
             if parameter.underline then
                 node.set_attribute(n,att_underline,parameter.underline)
             end
+            if parameter.backgroundcolor then
+                node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
+                node.set_attribute(n,att_bgpaddingtop,parameter.bg_padding_top)
+                node.set_attribute(n,att_bgpaddingbottom,parameter.bg_padding_bottom)
+            end
             if last and last.id == glyph_node then
                 lastitemwasglyph = true
             end
 
             head,last = node.insert_after(head,last,n)
+            if s > 12033 then
+                local pen = node.new("penalty")
+                pen.penalty = 0
+                head,last = node.insert_after(head,last,pen)
+            end
+
             -- Some characters must be treated in a special way.
             -- Hyphens must be separated from words:
             if n.char == 8209 then -- non breaking hyphen
@@ -2681,8 +2784,7 @@ function mknodes(str,fontfamily,parameter)
                 head = node.insert_before(head,last,pen)
                 local disc = node.new("disc")
                 head,last = node.insert_after(head,last,disc)
-                local g = node.new(glue_node)
-                g.spec = node.new(glue_spec_node)
+                local g = set_glue(nil)
                 head,last = node.insert_after(head,last,g)
             elseif string.find(allowbreak,char,1,true) then
                 -- allowbreak lists characters where the publisher may break lines
@@ -2727,16 +2829,10 @@ end
 function bullet_hbox( labelwidth )
     local bullet, pre_glue, post_glue
     bullet = mknodes("•",nil,{})
-
-    pre_glue = node.new("glue")
-    pre_glue.spec = node.new("glue_spec")
-    pre_glue.spec.stretch = 65536
-    pre_glue.spec.stretch_order = 3
+    pre_glue = set_glue(nil,{stretch = 2^16, stretch_order = 3})
     pre_glue.next = bullet
 
-    post_glue = node.new("glue")
-    post_glue.spec = node.new("glue_spec")
-    post_glue.spec.width = 4 * 2^16
+    post_glue = set_glue(nil,{width = 4 * 2^16})
     post_glue.prev = bullet
     bullet.next = post_glue
     local bullet_hbox = node.hpack(pre_glue,labelwidth,"exactly")
@@ -2753,15 +2849,10 @@ end
 function number_hbox( num, labelwidth )
     local pre_glue, post_glue
     local digits = mknodes( tostring(num) .. ".",nil,{})
-    pre_glue = node.new("glue")
-    pre_glue.spec = node.new("glue_spec")
-    pre_glue.spec.stretch = 65536
-    pre_glue.spec.stretch_order = 3
+    pre_glue = set_glue(nil,{stretch = 2^16, stretch_order = 3})
     pre_glue.next = digits
 
-    post_glue = node.new("glue")
-    post_glue.spec = node.new("glue_spec")
-    post_glue.spec.width = 4 * 2^16
+    post_glue = set_glue(nil,{width = 4 * 2^16})
     post_glue.prev = node.tail(digits)
     node.tail(digits).next = post_glue
     local digit_hbox = node.hpack(pre_glue,labelwidth,"exactly")
@@ -2782,11 +2873,8 @@ end
 function add_glue( nodelist,head_or_tail,parameter)
     parameter = parameter or {}
 
-    local n=node.new("glue", parameter.subtype or 0)
-    n.spec = node.new("glue_spec")
-    n.spec.width         = parameter.width
-    n.spec.stretch       = parameter.stretch
-    n.spec.stretch_order = parameter.stretch_order
+    local n = set_glue(nil, parameter)
+    n.subtype = parameter.subtype or 0
 
     if nodelist == nil then return n end
 
@@ -2804,12 +2892,7 @@ function add_glue( nodelist,head_or_tail,parameter)
 end
 
 function make_glue( parameter )
-    local n = node.new("glue")
-    n.spec = node.new("glue_spec")
-    n.spec.width         = parameter.width
-    n.spec.stretch       = parameter.stretch
-    n.spec.stretch_order = parameter.stretch_order
-    return n
+    return set_glue(nil, parameter)
 end
 
 function finish_par( nodelist,hsize,parameters )
@@ -2866,13 +2949,18 @@ function fix_justification( nodelist,alignment,parent)
                 if n.id == glyph_node then
                     font_before_glue = n.font
                 elseif n.id == glue_node then
-                    if n.subtype==0 and font_before_glue and n.spec.width > 0 and head.glue_sign == 1 then
+                    if n.subtype==0 and font_before_glue and get_glue_value(n,"width") > 0 and head.glue_sign == 1 then
                         local fonttable = font.fonts[font_before_glue]
                         if not fonttable then fonttable = font.fonts[1] err("Some font not found") end
-                        spec_new = node.new("glue_spec")
-                        spec_new.width = fonttable.parameters.space
-                        spec_new.shrink_order = head.glue_order
-                        n.spec = spec_new
+                        if node.has_field(n,"spec") then
+                            spec_new = node.new("glue_spec")
+                            spec_new.width = fonttable.parameters.space
+                            spec_new.shrink_order = head.glue_order
+                            n.spec = spec_new
+                        else
+                            -- somewhat it looks as if this is not the equivalent of the above. Fixme!
+                            set_glue_values(n,{width = fonttable.parameters.space, shrink_order = head.glue_order, stretch = 0, stretch_order = 0})
+                        end
                     end
                 end
             end
@@ -2895,9 +2983,7 @@ function fix_justification( nodelist,alignment,parent)
 
                 local wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)
 
-                local leftskip_node = node.new("glue")
-                leftskip_node.spec = node.new("glue_spec")
-                leftskip_node.spec.width = goal - wd
+                local leftskip_node = set_glue(nil,{width = goal - wd})
                 head.head = node.insert_before(head.head,head.head,leftskip_node)
             end
 
@@ -2920,9 +3006,7 @@ function fix_justification( nodelist,alignment,parent)
 
                 local wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)
 
-                local leftskip_node = node.new("glue")
-                leftskip_node.spec = node.new("glue_spec")
-                leftskip_node.spec.width = ( goal - wd ) / 2
+                local leftskip_node = set_glue(nil,{width = ( goal - wd ) / 2 })
                 head.head = node.insert_before(head.head,head.head,leftskip_node)
             end
         elseif head.id == 1 then -- vlist
@@ -2972,14 +3056,17 @@ function do_linebreak( nodelist,hsize,parameters )
         pdfignoreddimen   = pdfignoreddimen,
     }
 
-    setmetatable(parameters,{__index=default_parameters})
+    -- This could be done with a meta table, but somehow ltx 104 doesn't like it
+    for k,v in pairs(parameters) do
+        default_parameters[k] = v
+    end
 
     -- Try to break the paragraph until there is no line
     -- longer than expected
     local j
     local c = 0
     while true do
-        j = tex.linebreak(node.copy_list(nodelist),parameters)
+        j = tex.linebreak(node.copy_list(nodelist),default_parameters)
         if not check_if_a_line_exeeds(j,hsize,j.glue_set, j.glue_sign,j.glue_order) then
             break
         end
@@ -3031,11 +3118,7 @@ function do_linebreak( nodelist,hsize,parameters )
 end
 
 function create_empty_hbox_with_width( wd )
-    local n=node.new("glue")
-    n.spec = node.new("glue_spec")
-    n.spec.width         = 0
-    n.spec.stretch       = 2^16
-    n.spec.stretch_order = 3
+    local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
     n = node.hpack(n,wd,"exactly")
     return n
 end
@@ -3075,28 +3158,6 @@ function mkbookmarknodes(level,open_p,title)
     return hlist
 end
 
-
--- For debugging in tables
--- Currently not used until a new switch is built in
--- function showtextatright(hbox,txt)
---     local vbox = node.vpack(hbox)
---     local tmp = node.has_attribute(hbox,att_tr_dynamic_data)
---     local ff = fonts.lookup_fontfamily_name_number["__verysmall__"] or define_small_fontfamily()
-
---     local x = mknodes(tostring(txt),ff)
---     x = set_color_if_necessary(x,55)
-
---     local texthbox = node.hpack(x)
---     texthbox.depth = 0
---     texthbox.height = 0
-
---     local tail = node.tail(vbox)
---     texthbox = node.insert_after(vbox,tail,texthbox)
---     texthbox = node.hpack(texthbox)
---     node.set_attribute(texthbox,att_tr_dynamic_data,tmp)
---     texthbox.width = vbox.width
---     return texthbox
--- end
 
 -- blue rule below the hbox for debugging purpose
 function addhrule(hbox)
@@ -3163,36 +3224,40 @@ function set_color_if_necessary( nodelist,color )
     else
         colorname = colortable[color]
     end
+    -- When we uncomment the if .. end here, the typesetting
+    -- process is much slower. See #143
     if colorname == "black" then return nodelist end
-    local colstart = node.new("whatsit","pdf_colorstack")
-    colstart.data  = colors[colorname].pdfstring
-    if status.luatex_version < 79 then
-        colstart.cmd = 1
+    local colstart, colstop
+    if colorname == "black" then
+        colstart = node.new("whatsit","pdf_literal")
+        colstop  = node.new("whatsit","pdf_literal")
     else
-        colstart.command = 1
+        colstart = node.new("whatsit","pdf_colorstack")
+        colstop  = node.new("whatsit","pdf_colorstack")
+        colstart.data = colors[colorname].pdfstring
+        colstop.data  = ""
+        if status.luatex_version < 79 then
+            colstart.cmd = 1
+            colstop.cmd  = 2
+        else
+            colstart.command = 1
+            colstop.command  = 2
+        end
+        colstart.stack = 0
+        colstop.stack  = 0
     end
-    colstart.stack = 0
+
     if dontformat then
         node.set_attribute(colstart,att_dont_format,dontformat)
     end
 
-    colstart.next = nodelist
-    nodelist.prev = colstart
-
-    local colstop  = node.new("whatsit","pdf_colorstack")
-    colstop.data  = ""
-    if status.luatex_version < 79 then
-        colstop.cmd = 2
-    else
-        colstop.command = 2
-    end
-    colstop.stack = 0
+    nodelist = node.insert_before(nodelist,nodelist,colstart)
     local last = node.tail(nodelist)
-    last.next = colstop
-    colstop.prev = last
+    nodelist = node.insert_after(nodelist,tail,colstop)
+
     node.set_attribute(colstart,att_origin,origin_setcolorifnecessary)
     node.set_attribute(colstop,att_origin,origin_setcolorifnecessary)
-    return colstart
+    return nodelist
 end
 
 function set_fontfamily_if_necessary(nodelist,fontfamily)
@@ -3432,7 +3497,11 @@ function xml_to_string( xml_element, level )
     end
     str = str .. ">\n"
     for i,v in ipairs(xml_element) do
-        str = str .. xml_to_string(v,level + 1)
+        if type(v) == "string" and v == "" then
+            -- ok, nothing do do
+        else
+            str = str .. xml_to_string(v,level + 1)
+        end
     end
     str = str .. string.rep(" ",level) .. "</" .. xml_element[".__local_name"] .. ">\n"
     return str
@@ -3922,28 +3991,48 @@ end
 -- (starting from the current_pagenumber).
 -- This is used in tables to get the height of a page in a multi
 -- page table. Called from tabular.lua / set in commands.lua (#table)
-function getheight( relative_pagenumber )
-    local thispagenumber = current_pagenumber + relative_pagenumber - 1
-    -- w("getheight for page number %d which is page number %d in the PDF",relative_pagenumber,thispagenumber)
-    local thispage = pages[thispagenumber]
-    local cp, cg, cpn -- current page, current grid, current pagenumber
+function getheight( relative_framenumber )
+    local grid = current_grid
+    local cp, cg, cpn, cfn -- current page, current grid, current pagenumber, current frame number
+    cp = current_page
+    cg = current_grid
     cpn = current_pagenumber
-    if not thispage then
-        cp = current_page
-        cg = current_grid
-        current_pagenumber = thispagenumber or 0
-        setup_page(thispagenumber)
-        thispage = pages[thispagenumber]
-    end
+
     local areaname = xpath.get_variable("__currentarea")
-    if thispage then
-        local firstrow = thispage.grid:first_free_row(areaname)
-        local space = thispage.grid:remaining_height_sp(firstrow,areaname)
-        current_pagenumber = cpn
-        current_grid = cg
-        current_page = cp
-        return space
+    local number_of_frames = grid:number_of_frames(areaname)
+    local current_framenumber = grid:framenumber(areaname)
+    cfn = current_framenumber
+
+    local thispagenumber = current_pagenumber
+    local thispage
+    c = 1
+    while c < relative_framenumber do
+        if grid:number_of_frames(areaname) == current_framenumber then
+            thispagenumber = thispagenumber + 1
+            thispage = pages[thispagenumber]
+            -- be aware that setup_page(..,) calls setup_page() but without
+            -- parameter. Therefore the current_pagenumber has to be set
+            current_pagenumber = thispagenumber
+            if not thispage then
+                setup_page(thispagenumber)
+            end
+            current_framenumber = 1
+        else
+            current_framenumber = current_framenumber + 1
+        end
+        current_page = pages[thispagenumber]
+        current_pagenumber = thispagenumber
+        current_grid = current_page.grid
+        c = c + 1
     end
+    local firstrow = current_grid:first_free_row(areaname)
+    local remaining_height = current_grid:remaining_height_sp(firstrow,areaname)
+    current_pagenumber = cpn
+    current_grid = cg
+    current_page = cp
+    current_grid:set_framenumber(areaname,cfn)
+
+    return remaining_height
 end
 
 
@@ -4050,7 +4139,7 @@ local imgcache = os.getenv("IMGCACHE")
 local cachemethod = os.getenv("CACHEMETHOD")
 
 -- Retrieve image from an URL if its not cached
-function get_image(requested_url,fallback)
+function get_image(requested_url,page,box,fallback)
     assert(type(requested_url) == "string")
     local parsed_url = url.parse(requested_url)
     -- http://placekitten.com/g/200/300?foo=bar gives
@@ -4064,7 +4153,7 @@ function get_image(requested_url,fallback)
     if parsed_url.scheme == nil or parsed_url.scheme == "file" then
         if type(parsed_url.path) == "string" then
             -- let's assume its a file
-            return imageinfo("file:" .. parsed_url.path)
+            return imageinfo("file:" .. parsed_url.path,page,box,fallback)
         end
     end
     -- not a file: request. I guess it should be a HTTP request.
@@ -4075,7 +4164,7 @@ function get_image(requested_url,fallback)
 
     if cachemethod == "fast" and lfs.isfile(path_to_image) then
         log("Read image file from cache: %s",path_to_image)
-        return imageinfo(path_to_image,fallback)
+        return imageinfo(path_to_image,page,box,fallback)
     end
 
 
@@ -4087,7 +4176,7 @@ function get_image(requested_url,fallback)
         comm.sendmessage('che',requested_url)
         local msg = comm.get_string_messages()
         if msg[1] == "OK" then
-            return imageinfo(path_to_image,fallback)
+            return imageinfo(path_to_image,page,box,fallback)
         else
             err("Could not fetch image %q",requested_url)
             return imageinfo(nil,nil,nil,fallback)
@@ -4133,7 +4222,7 @@ function get_image(requested_url,fallback)
         file:flush()
         file:close()
 
-        return imageinfo(path_to_image,fallback)
+        return imageinfo(path_to_image,page,box,fallback)
     end
 
 
@@ -4384,12 +4473,177 @@ for i = 97, 122 do table.insert(charset, string.char(i)) end
 
 function string_random(length)
   -- math.randomseed(os.time())
-
   if length > 0 then
     return string_random(length - 1) .. charset[math.random(1, #charset)]
   else
     return ""
   end
+end
+
+function getmetadata( conformancelevel, title, author )
+    local metadata = string.format([[<?xpacket begin=%q id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/">
+ <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description xmlns:pdfaid="http://www.aiim.org/pdfa/ns/id/" rdf:about="">
+   <pdfaid:part>3</pdfaid:part>
+   <pdfaid:conformance>B</pdfaid:conformance>
+  </rdf:Description>
+  <rdf:Description xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:about="">
+   <dc:title>
+    <rdf:Alt>
+     <rdf:li xml:lang="x-default">%s</rdf:li>
+    </rdf:Alt>
+   </dc:title>
+   <dc:creator>
+    <rdf:Seq>
+    <rdf:li>%s</rdf:li>
+</rdf:Seq>
+   </dc:creator>
+  <dc:description>
+<rdf:Alt>
+<rdf:li xml:lang="x-default"/>
+</rdf:Alt>
+</dc:description>
+</rdf:Description>
+  <rdf:Description xmlns:pdf="http://ns.adobe.com/pdf/1.3/" rdf:about="">
+   <pdf:Producer>speedata Publisher</pdf:Producer>
+  </rdf:Description>
+  <rdf:Description xmlns:xmp="http://ns.adobe.com/xap/1.0/" rdf:about="">
+   <xmp:CreatorTool>speedata invoicing platform</xmp:CreatorTool>
+   <xmp:CreateDate>2014-06-24T14:01:21+02:00</xmp:CreateDate>
+  <xmp:ModifyDate>2014-10-06T16:13:53+02:00</xmp:ModifyDate>
+</rdf:Description>
+ <rdf:Description xmlns:pdfaExtension="http://www.aiim.org/pdfa/ns/extension/" xmlns:pdfaField="http://www.aiim.org/pdfa/ns/field#" xmlns:pdfaProperty="http://www.aiim.org/pdfa/ns/property#" xmlns:pdfaSchema="http://www.aiim.org/pdfa/ns/schema#" xmlns:pdfaType="http://www.aiim.org/pdfa/ns/type#" rdf:about="">
+<pdfaExtension:schemas>
+<rdf:Bag>
+<rdf:li rdf:parseType="Resource">
+<pdfaSchema:schema>ZUGFeRD PDFA Extension Schema</pdfaSchema:schema>
+<pdfaSchema:namespaceURI>urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#</pdfaSchema:namespaceURI>
+<pdfaSchema:prefix>zf</pdfaSchema:prefix>
+<pdfaSchema:property>
+<rdf:Seq>
+<rdf:li rdf:parseType="Resource">
+<pdfaProperty:name>DocumentFileName</pdfaProperty:name>
+<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+<pdfaProperty:category>external</pdfaProperty:category>
+<pdfaProperty:description>name of the embedded XML invoice file</pdfaProperty:description>
+</rdf:li>
+<rdf:li rdf:parseType="Resource">
+<pdfaProperty:name>DocumentType</pdfaProperty:name>
+<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+<pdfaProperty:category>external</pdfaProperty:category>
+<pdfaProperty:description>INVOICE</pdfaProperty:description>
+</rdf:li>
+<rdf:li rdf:parseType="Resource">
+<pdfaProperty:name>Version</pdfaProperty:name>
+<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+<pdfaProperty:category>external</pdfaProperty:category>
+<pdfaProperty:description>The actual version of the ZUGFeRD data</pdfaProperty:description>
+</rdf:li>
+<rdf:li rdf:parseType="Resource">
+<pdfaProperty:name>ConformanceLevel</pdfaProperty:name>
+<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+<pdfaProperty:category>external</pdfaProperty:category>
+<pdfaProperty:description>The conformance level of the ZUGFeRD data</pdfaProperty:description>
+</rdf:li>
+</rdf:Seq>
+</pdfaSchema:property>
+</rdf:li>
+</rdf:Bag>
+</pdfaExtension:schemas>
+</rdf:Description>
+<rdf:Description xmlns:zf="urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#"
+  rdf:about="" zf:ConformanceLevel="%s" zf:DocumentFileName="ZUGFeRD-invoice.xml" zf:DocumentType="INVOICE" zf:Version="1.0"/>
+</rdf:RDF>
+</x:xmpmeta><?xpacket end="w"?>
+]],"\239\187\191",title,author,conformancelevel)
+
+    return metadata
+end
+
+
+function attach_file_pdf(filename,description,mimetype)
+    local path = kpse.find_file(filename)
+    if path == nil then
+        err("Cannot find file %q",filename)
+        return
+    end
+    local statt = lfs.attributes(path)
+    local destfilename = "ZUGFeRD-invoice.xml"
+    local zugferdfile = io.open(path)
+    local zugferdcontents = zugferdfile:read("*all")
+    zugferdfile:close()
+    local conformancelevel = string.upper(string.match(zugferdcontents, "urn:ferd:CrossIndustryDocument:invoice:1p0:(.-)<"))
+    local fileobjectnum = pdf.immediateobj("streamfile",
+        path,
+        string.format([[/Params <</ModDate (%s)>> /Subtype /%s /Type /EmbeddedFile ]],
+            pdfdate(statt.modification),
+            escape_pdfname(mimetype)))
+
+    local filespecnum = pdf.immediateobj(string.format([[<<
+  /AFRelationship /Alternative
+  /Desc (%s)
+  /EF <<
+    /F %d 0 R
+    /UF %d 0 R
+  >>
+  /F (%s)
+  /Type /Filespec
+  /UF %s
+>>]],escape_pdfstring(description), fileobjectnum,fileobjectnum,destfilename,utf8_to_utf16_string_pdf(destfilename)))
+        -- BASIC, COMFORT, EXTENDED
+    local metadataobjnum = pdf.obj({type = "stream",
+                 string = getmetadata(conformancelevel, options.documenttitle or "ZUGFeRD Rechnung",options.documentauthor or "The Author"),
+                 immediate = true,
+                 attr = [[  /Subtype /XML /Type /Metadata  ]],
+                 compresslevel = 0,
+                 })
+    local afdatanum = pdf.immediateobj( string.format("[ %d 0 R ]",filespecnum))
+    filespecnumbers[#filespecnumbers + 1] = {filespecnum,metadataobjnum,afdatanum}
+end
+
+-- %a  abbreviated weekday name (e.g., Wed)
+-- %A  full weekday name (e.g., Wednesday)
+-- %b  abbreviated month name (e.g., Sep)
+-- %B  full month name (e.g., September)
+-- %c  date and time (e.g., 09/16/98 23:48:10)
+-- %d  day of the month (16) [01-31]
+-- %H  hour, using a 24-hour clock (23) [00-23]
+-- %I  hour, using a 12-hour clock (11) [01-12]
+-- %M  minute (48) [00-59]
+-- %m  month (09) [01-12]
+-- %p  either "am" or "pm" (pm)
+-- %S  second (10) [00-61]
+-- %w  weekday (3) [0-6 = Sunday-Saturday]
+-- %x  date (e.g., 09/16/98)
+-- %X  time (e.g., 23:48:10)
+-- %Y  full year (1998)
+-- %y  two-digit year (98) [00-99]
+-- %%  the character `%´
+
+-- Return a string that is a valid PDF date entry such as "D:20170721195500+02'00'"
+-- Input is an epoch number such as 1500645681
+function pdfdate(num)
+    local ret = os.date("D:%Y%m%d%H%M%S+00'00'",num)
+    return ret
+end
+
+function escape_pdfstring( str )
+    return str
+end
+
+function escape_pdfname( str )
+    return string.gsub(str,'/','#2f')
+end
+
+--- Convert the argument `str` (in UTF-8) to a string suitable for writing into the PDF file. The returned string starts with `<feff` and ends with `>`
+function utf8_to_utf16_string_pdf( str )
+    local ret = {}
+    for s in string.utfvalues(str) do
+        ret[#ret + 1] = fontloader.to_utf16(s)
+    end
+    local utf16str = "<feff" .. table.concat(ret) .. ">"
+    return utf16str
 end
 
 file_end("publisher.lua")

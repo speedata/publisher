@@ -13,7 +13,9 @@ function w( ... )
     texio.write_nl(debug.traceback())
   else
     texio.write("-----> " .. fmt .. "\n")
-    errorlog:write("-----> " .. fmt .. "\n")
+    if errorlog then
+        errorlog:write("-----> " .. fmt .. "\n")
+    end
   end
   io.stdout:flush()
 end
