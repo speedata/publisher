@@ -1,11 +1,10 @@
-#baseURL = "https://doc.speedata.de/publisher/de/"
 baseURL = ""
 languageCode = "de"
 
 disableKinds = ["taxonomy", "taxonomyTerm", "RSS", "sitemap", "robotsTXT"]
 
 relativeURLs = true
-canonifyURLs = true
+canonifyURLs = false
 uglyURLs = true
 permalinks = ":slug"
 pygmentsCodeFences = true
