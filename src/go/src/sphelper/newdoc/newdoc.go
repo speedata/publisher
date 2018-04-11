@@ -285,10 +285,9 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 	}
 
 	if sitedoc {
-		cmd = exec.Command("hugo", "--canonifyURLs=false", "--uglyURLs=false")
-	} else {
-		cmd = exec.Command("hugo")
+		cmd.Env = append(os.Environ(), "HUGO_UGLYURLS=false")
 	}
+	cmd = exec.Command("hugo")
 	cmd.Dir = newmanualhugopath
 	cmd.Env = append(os.Environ(), fmt.Sprintf("PUBLISHER_VERSION=%s", cfg.Publisherversion))
 	cmd.Run()
