@@ -1,10 +1,4 @@
 {{ $here := .}}
-{{ (relref $here "search.md") }}
-{{ if findRE ".html$" (ref $here "search.md")  }}
-    {{ replace (relref $here "search.md") "search.html" "index.html" }}
-{{ else }}
-    {{ replace (ref $here "search.md") "search/" "" }}
-{{ end }}
 {{ $indexPagePath := printf "%s" "_index.md" -}}
 
 {{ if findRE ".html$" (ref $here "search.md")  }}
