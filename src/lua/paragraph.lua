@@ -524,6 +524,9 @@ function Paragraph:format(width_sp, default_textformat_name,options)
             nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = current_textformat.marginbottom})
             node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
         end
+
+        node.set_attribute(nodelist.list,publisher.att_margin_newcolumn, current_textformat.colpaddingtop or 0)
+
         if current_textformat.breakbelow == false then
             node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,7)
         end
@@ -623,9 +626,7 @@ end
 --- is material left over for a next area, the `objects_t` table is changed and vsplit gets called again.
 --- Making `objects_t` empty is a signal for the function calling vsplit (commands/text) that all
 --- text has been put into the PDF.
-function Paragraph.vsplit( objects_t,frameheight )
-    trace("vsplit")
-
+function Paragraph.vsplit( objects_t,frameheight, balance )
     --- Step 1: collect all the objects in one big table.
     --- ------------------------------------------------
     --- The objects that are not allowed to break are temporarily
@@ -635,25 +636,38 @@ function Paragraph.vsplit( objects_t,frameheight )
     --- ![Step 1](img/vsplit2.png)
     --- (assuming that there is a `break-below="no"` for the text format of the header).
     local hlist = {}
+    local ht_hlist = 0
+
+    -- We need the height for the decision to balance the text
+    local ht_hlist = 0
+
 
     -- a list for hboxes with break_below = true
     local tmplist = {}
-    local tmp
-    local numlists = #objects_t
+    local count_lists = #objects_t
     local vlist = table.remove(objects_t,1)
     local i = 1
+    local margin_newcolumn
     while vlist do
         local head = vlist.head
         while head do
-            if i == numlists and head.next == nil then
+            local tmp_margin_newcolumn = node.has_attribute(head, publisher.att_margin_newcolumn)
+
+            if tmp_margin_newcolumn then
+                margin_newcolumn = tmp_margin_newcolumn
+            end
+            node.set_attribute(head,publisher.att_margin_newcolumn,margin_newcolumn)
+
+            if i == count_lists and head.next == nil then
                 -- the last object must not be in the tmplist
                 node.unset_attribute(head,publisher.att_break_below_forbidden)
             end
             head.prev = nil
-            local break_forbidden = node.has_attribute(head,publisher.att_break_below_forbidden)
-            if break_forbidden then
+            local break_below_forbidden = node.has_attribute(head,publisher.att_break_below_forbidden)
+            if break_below_forbidden then
+                node.unset_attribute(head,publisher.att_margin_newcolumn)
                 tmplist[#tmplist + 1] = head
-                tmp = head.next
+                local tmp = head.next
                 head.next = nil
                 head = tmp
             else
@@ -662,16 +676,21 @@ function Paragraph.vsplit( objects_t,frameheight )
                 if #tmplist > 0 then
                     tmplist[#tmplist + 1] = head
 
-                    tmp = head.next
+                    local tmp = head.next
                     head.next = nil
                     head = tmp
 
+                    local margin_newcolumn_tmplist = node.has_attribute(tmplist[1], publisher.att_margin_newcolumn)
                     local vbox = join_table_to_box(tmplist)
+                    node.set_attribute(vbox,publisher.att_margin_newcolumn,margin_newcolumn_tmplist)
+
                     hlist[#hlist + 1] = vbox
+                    ht_hlist = ht_hlist + vbox.height + vbox.depth
                     tmplist = {}
                 else
                     hlist[#hlist + 1] = head
-                    tmp = head.next
+                    ht_hlist = ht_hlist + head.height + head.depth
+                    local tmp = head.next
                     head.next = nil
                     head = tmp
                 end
@@ -679,6 +698,27 @@ function Paragraph.vsplit( objects_t,frameheight )
         end
         vlist = table.remove(objects_t,1)
         i = i + 1
+    end
+    -- the hlist now has lot's of rows. Widows/orphans are packed together in a vbox with n hboxes.
+
+    if balance > 1 and ht_hlist < balance * frameheight then
+        -- TODO: splitpos should be based on the actual height
+        local splitpos = math.ceil(#hlist / balance)
+
+        local margin_newcolumn_obj1 = node.has_attribute(hlist[1], publisher.att_margin_newcolumn)
+        if margin_newcolumn_obj1 and margin_newcolumn_obj1 > 0 then
+            table.insert(hlist,1,publisher.add_glue(nil,"head",{width=margin_newcolumn_obj1}))
+            splitpos = splitpos + 1
+        end
+        local obj1 = join_table_to_box({table.unpack(hlist,1,splitpos)})
+
+        local margin_newcolumn_obj2 = node.has_attribute(hlist[splitpos + 1], publisher.att_margin_newcolumn)
+        if margin_newcolumn_obj2 and margin_newcolumn_obj2 > 0 then
+            table.insert(hlist,splitpos + 1,publisher.add_glue(nil,"head",{width=margin_newcolumn_obj2}))
+        end
+
+        local obj2 = join_table_to_box({table.unpack(hlist,splitpos + 1)})
+        return obj1, obj2
     end
     --- Step 2: Fill vbox (the return value)
     --- ------------------------------------
@@ -697,17 +737,22 @@ function Paragraph.vsplit( objects_t,frameheight )
     while not area_filled do
         for i=1,#hlist do
             local hbox = table.remove(hlist,1)
-
             if #thisarea == 0 and node.has_attribute(hbox, publisher.att_omit_at_top) then
                 -- When the margin-below appears at the top of the new frame, we just ignore
                 -- it. Too bad Lua doesn't have a 'next' in for-loops
             else
+                local margin_newcolumn = node.has_attribute(hbox, publisher.att_margin_newcolumn)
+                if margin_newcolumn and margin_newcolumn > 0 and #thisarea == 0 then
+                    thisarea[#thisarea + 1] = publisher.add_glue(nil,"head",{width=margin_newcolumn})
+                    lineheight = margin_newcolumn
+                end
+
                 if hbox.id == publisher.hlist_node or hbox.id == publisher.vlist_node then
-                    lineheight = hbox.height + hbox.depth
+                    lineheight = lineheight +  hbox.height + hbox.depth
                 elseif hbox.id == publisher.glue_node then
-                    lineheight = get_glue_value(hbox,"width")
+                    lineheight = lineheight + get_glue_value(hbox,"width")
                 elseif hbox.id == publisher.rule_node then
-                    lineheight = hbox.height + hbox.depth
+                    lineheight = lineheight + hbox.height + hbox.depth
                 elseif hbox.id == publisher.whatsit_node then
                     -- ignore
                 else
@@ -717,6 +762,7 @@ function Paragraph.vsplit( objects_t,frameheight )
                 if accumulated_height + lineheight <= goal + 20 then
                     thisarea[#thisarea + 1] = hbox
                     accumulated_height = accumulated_height + lineheight
+                    lineheight = 0
                 else
                     -- objects > goal
                     -- This is case (a)

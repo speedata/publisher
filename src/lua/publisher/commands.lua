@@ -582,6 +582,7 @@ function commands.define_textformat(layoutxml)
     local margintop     = publisher.read_attribute(layoutxml,dataxml,"margin-top",    "rawstring")
     local marginbottom  = publisher.read_attribute(layoutxml,dataxml,"margin-bottom", "rawstring")
     local paddingtop    = publisher.read_attribute(layoutxml,dataxml,"padding-top",   "rawstring")
+    local colpaddingtop = publisher.read_attribute(layoutxml,dataxml,"column-padding-top", "length_sp")
     local paddingbottom = publisher.read_attribute(layoutxml,dataxml,"padding-bottom","rawstring")
     local breakbelow    = publisher.read_attribute(layoutxml,dataxml,"break-below",   "boolean", true)
     local orphan        = publisher.read_attribute(layoutxml,dataxml,"orphan",        "booleanornumber", false)
@@ -589,8 +590,9 @@ function commands.define_textformat(layoutxml)
     local hyphenate     = publisher.read_attribute(layoutxml,dataxml,"hyphenate",     "boolean", true)
     local hyphenchar    = publisher.read_attribute(layoutxml,dataxml,"hyphenchar",    "rawstring")
     local tab           = publisher.read_attribute(layoutxml,dataxml,"tab",           "rawstring")
-
-    local fmt = {}
+    local fmt = {
+        colpaddingtop = colpaddingtop,
+    }
 
     if alignment == "leftaligned" or alignment == "rightaligned" or alignment == "centered" then
         fmt.alignment = alignment
@@ -1909,7 +1911,10 @@ function commands.output( layoutxml,dataxml )
     local area     = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
     local allocate = publisher.read_attribute(layoutxml,dataxml,"allocate", "string", "yes")
     local row      = publisher.read_attribute(layoutxml,dataxml,"row","number")
+    local balance  = publisher.read_attribute(layoutxml,dataxml,"balance", "boolean", false)
+
     local maxwidth = publisher.current_grid:width_sp(publisher.current_grid:number_of_columns(area))
+
     local current_maxwidth = xpath.get_variable("__maxwidth")
     xpath.set_variable("__maxwidth", maxwidth)
 
@@ -1920,6 +1925,12 @@ function commands.output( layoutxml,dataxml )
     publisher.xpath.set_variable("__area",area)
     publisher.next_row(row,area,0)
 
+    local tosplit
+    if balance then
+        tosplit = publisher.current_grid:number_of_frames(area)
+    else
+        tosplit = 1
+    end
 
     local current_grid
 
@@ -1943,21 +1954,33 @@ function commands.output( layoutxml,dataxml )
             maxht,row,nextfreerow = publisher.get_remaining_height(area,allocate)
             current_grid = publisher.current_grid
             current_row = publisher.current_grid:current_row(area)
-
             parameters = {
                 area = area,
                 maxheight = maxht,
                 width = maxwidth,
-                balance = contents.balance,
                 current_grid = current_grid,
                 allocate = allocate,
             }
+            if current_grid:framenumber(area) == 1 then
+                parameters.balance = tosplit
+            else
+                parameters.balance = 1
+            end
+
             obj,state,more_to_follow = contents.pull(parameters,state)
             if not more_to_follow then
                 nextfreerow = nil
             end
             if obj == nil then
                 break
+            elseif state.split then
+                local obj1 = obj
+                local obj2 = state.split
+                local ht = current_grid:height_in_gridcells_sp(obj.height)
+                publisher.output_at({nodelist = obj1, x = 1, y = row, allocate = true, area = area})
+                publisher.next_area(area)
+                publisher.output_at({nodelist = obj2, x = 1, y = row, allocate = true, area = area})
+                current_grid:set_framenumber(area,1)
             else
                 local ht = current_grid:height_in_gridcells_sp(obj.height)
                 publisher.output_at({nodelist = obj, x = 1, y = row, allocate = true, area = area})
@@ -3604,8 +3627,13 @@ function commands.text(layoutxml,dataxml)
             end
             if #state.objects > 0 then
                 local obj
-                obj = paragraph.vsplit(state.objects,parameter.maxheight)
-                return obj,state, #state.objects > 0
+                obj1, obj2 = paragraph.vsplit(state.objects,parameter.maxheight,parameter.balance)
+                if obj2 then
+                    state.split = obj2
+                    return obj1, state, false
+                else
+                    return obj1,state, #state.objects > 0
+                end
             else
                 return nil,nil, false
             end

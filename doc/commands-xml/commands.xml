@@ -2025,6 +2025,14 @@
         <para>Wenn »yes«, Hurenkinder erlauben (letzte Zeile eines Absatzes ist auf der nächsten Seite). Wenn eine Zahl angegeben wird, ist dies die Anzahl der Zeilen, die zusammengehalten werden. Voreinstellung ist »no«.</para>
       </description>
     </attribute>
+    <attribute en="column-padding-top" optional="yes" since="3.2.1">
+      <description xml:lang="en">
+        <para>The height of the padding that is inserted in a column (at the top) with Output/Text</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Höhe des Innenabstands in einer Spalte (oben) mit Output/Text</para>
+      </description>
+    </attribute>
     <attribute en="name" type="text" optional="no">
       <description xml:lang="en">
         <para>Name of the textformat that is used later in the layout.</para>
@@ -4701,6 +4709,30 @@
       <description xml:lang="de">
         <para>Der Name des Platzierungsbereichs für den Text.</para>
       </description>
+    </attribute>
+    <attribute en="balance" optional="yes" since="3.2.1">
+      <description xml:lang="en">
+        <para>Balance text on the last page (experimental)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Text auf der letzten Seite ausbalancieren (experimentell)</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Balance the last page</para>
+        </description>
+        <description xml:lang="de">
+          <para>Letzte Seite ausbalancieren</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Do not balance the last page (default)</para>
+        </description>
+        <description xml:lang="de">
+          <para>Letzte Seite nicht ausbalancieren (Voreinstellung)</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="row" optional="yes" type="number">
       <description xml:lang="en">

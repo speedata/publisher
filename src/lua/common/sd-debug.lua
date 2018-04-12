@@ -119,7 +119,7 @@ function nodelist_tostring( head )
                 ret[#ret + 1] = "¿"
             end
         else
-            w(head.id)
+            -- w(head.id)
         end
 
         head = head.next
