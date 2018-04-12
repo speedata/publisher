@@ -1119,6 +1119,11 @@
                </data>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="column-padding-top">
+               <a:documentation>The height of the padding that is inserted in a column (at the top) with Output/Text</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="name">
             <a:documentation>Name of the textformat that is used later in the layout.</a:documentation>
          </attribute>
@@ -2932,6 +2937,17 @@
                <optional>
                   <attribute name="area">
                      <a:documentation>The name of the positioning frame for the text.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="balance">
+                     <a:documentation>Balance text on the last page (experimental)</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Balance the last page</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Do not balance the last page (default)</a:documentation>
+                     </choice>
                   </attribute>
                </optional>
                <optional>

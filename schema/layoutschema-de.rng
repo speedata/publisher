@@ -1119,6 +1119,11 @@
                </data>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="column-padding-top">
+               <a:documentation>Die Höhe des Innenabstands in einer Spalte (oben) mit Output/Text</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="name">
             <a:documentation>Name des Textformats, unter dem es später im Layoutregelwerk angesprochen wird.</a:documentation>
          </attribute>
@@ -2932,6 +2937,17 @@
                <optional>
                   <attribute name="area">
                      <a:documentation>Der Name des Platzierungsbereichs für den Text.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="balance">
+                     <a:documentation>Text auf der letzten Seite ausbalancieren (experimentell)</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Letzte Seite ausbalancieren</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Letzte Seite nicht ausbalancieren (Voreinstellung)</a:documentation>
+                     </choice>
                   </attribute>
                </optional>
                <optional>
