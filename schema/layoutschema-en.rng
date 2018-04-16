@@ -2951,8 +2951,24 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="last-padding-bottom-max">
+                     <a:documentation>The maximum padding on the last page when valign-last is set to bottom</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="row">
                      <a:documentation>The starting row for the text.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="valign-last">
+                     <a:documentation>When balancing: align the last columns at the top (default) or bottom (experimental).</a:documentation>
+                     <choice>
+                        <value>top</value>
+                        <a:documentation>Top alignment (default)</a:documentation>
+                        <value>bottom</value>
+                        <a:documentation>Align at the bottom</a:documentation>
+                     </choice>
                   </attribute>
                </optional>
                <ref name="e_Text"></ref>
