@@ -1912,6 +1912,8 @@ function commands.output( layoutxml,dataxml )
     local allocate = publisher.read_attribute(layoutxml,dataxml,"allocate", "string", "yes")
     local row      = publisher.read_attribute(layoutxml,dataxml,"row","number")
     local balance  = publisher.read_attribute(layoutxml,dataxml,"balance", "boolean", false)
+    local valignlast = publisher.read_attribute(layoutxml,dataxml,"valign-last","rawstring")
+    local lastpaddingbottommax = publisher.read_attribute(layoutxml,dataxml,"last-padding-bottom-max","length_sp")
 
     local maxwidth = publisher.current_grid:width_sp(publisher.current_grid:number_of_columns(area))
 
@@ -1966,6 +1968,8 @@ function commands.output( layoutxml,dataxml )
             else
                 parameters.balance = 1
             end
+            parameters.valignlast = valignlast
+            parameters.lastpaddingbottommax = lastpaddingbottommax
 
             obj,state,more_to_follow = contents.pull(parameters,state)
             if not more_to_follow then
@@ -3528,8 +3532,6 @@ end
 --- ----
 --- Text is currently the only function / command that implements the pull-interface defined by output.
 function commands.text(layoutxml,dataxml)
-    -- balance is currently not supported
-    -- local balance = publisher.read_attribute(layoutxml,dataxml,"balance",   "rawstring")
     local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface","rawstring")
     local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",   "rawstring", "black")
     local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
@@ -3577,7 +3579,6 @@ function commands.text(layoutxml,dataxml)
     tab = objects
 
 
-    tab.balance = balance
     -- pull returns 'obj', 'state', 'more_to_follow'
 
     -- pull() gets called whenever we want to fill an area (perhaps the whole page).
@@ -3626,8 +3627,7 @@ function commands.text(layoutxml,dataxml)
                 end
             end
             if #state.objects > 0 then
-                local obj
-                obj1, obj2 = paragraph.vsplit(state.objects,parameter.maxheight,parameter.balance)
+                local obj1, obj2 = paragraph.vsplit(state.objects,parameter)
                 if obj2 then
                     state.split = obj2
                     return obj1, state, false

@@ -626,7 +626,7 @@ end
 --- is material left over for a next area, the `objects_t` table is changed and vsplit gets called again.
 --- Making `objects_t` empty is a signal for the function calling vsplit (commands/text) that all
 --- text has been put into the PDF.
-function Paragraph.vsplit( objects_t,frameheight, balance )
+function Paragraph.vsplit( objects_t, parameter )
     --- Step 1: collect all the objects in one big table.
     --- ------------------------------------------------
     --- The objects that are not allowed to break are temporarily
@@ -635,6 +635,12 @@ function Paragraph.vsplit( objects_t,frameheight, balance )
     ---
     --- ![Step 1](img/vsplit2.png)
     --- (assuming that there is a `break-below="no"` for the text format of the header).
+    local balance = parameter.balance
+    local valignlast = parameter.valignlast
+    local frameheight = parameter.maxheight
+    local lastpaddingbottommax = parameter.lastpaddingbottommax
+
+
     local hlist = {}
     local ht_hlist = 0
 
@@ -718,6 +724,15 @@ function Paragraph.vsplit( objects_t,frameheight, balance )
         end
 
         local obj2 = join_table_to_box({table.unpack(hlist,splitpos + 1)})
+        if valignlast == "bottom" then
+            local remaining_height = frameheight - math.max(obj1.height, obj2.height)
+
+            if remaining_height > lastpaddingbottommax then
+                remaining_height = remaining_height - lastpaddingbottommax
+            end
+            obj1.head = publisher.add_glue(obj1.head,"head",{width = remaining_height} )
+            obj2.head = publisher.add_glue(obj2.head,"head",{width = remaining_height} )
+        end
         return obj1, obj2
     end
     --- Step 2: Fill vbox (the return value)

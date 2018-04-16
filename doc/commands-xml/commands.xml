@@ -4734,6 +4734,14 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="last-padding-bottom-max" optional="yes" since="3.2.1" type="length">
+      <description xml:lang="en">
+        <para>The maximum padding on the last page when valign-last is set to bottom</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der maximale Innenabstand auf der letzten Seite, wenn valign-last auf 'bottom' gesetzt ist.</para>
+      </description>
+    </attribute>
     <attribute en="row" optional="yes" type="number">
       <description xml:lang="en">
         <para>The starting row for the text.</para>
@@ -4741,6 +4749,30 @@
       <description xml:lang="de">
         <para>Die Startzeile für den Text</para>
       </description>
+    </attribute>
+    <attribute en="valign-last" optional="yes" since="3.2.1">
+      <description xml:lang="en">
+        <para>When balancing: align the last columns at the top (default) or bottom (experimental).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn Spaltenausgleich eingeschaltet ist: Ausrichtung der letzten Seite oben oder unten (experimentell).</para>
+      </description>
+      <choice en="top">
+        <description xml:lang="en">
+          <para>Top alignment (default)</para>
+        </description>
+        <description xml:lang="de">
+          <para>Oben ausrichten (Voreinstellung)</para>
+        </description>
+      </choice>
+      <choice en="bottom">
+        <description xml:lang="en">
+          <para>Align at the bottom</para>
+        </description>
+        <description xml:lang="de">
+          <para>Unten ausrichten</para>
+        </description>
+      </choice>
     </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Pagetype name="page" test="true()">

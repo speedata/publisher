@@ -2951,8 +2951,24 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="last-padding-bottom-max">
+                     <a:documentation>Der maximale Innenabstand auf der letzten Seite, wenn valign-last auf &#39;bottom&#39; gesetzt ist.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="row">
                      <a:documentation>Die Startzeile für den Text</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="valign-last">
+                     <a:documentation>Wenn Spaltenausgleich eingeschaltet ist: Ausrichtung der letzten Seite oben oder unten (experimentell).</a:documentation>
+                     <choice>
+                        <value>top</value>
+                        <a:documentation>Oben ausrichten (Voreinstellung)</a:documentation>
+                        <value>bottom</value>
+                        <a:documentation>Unten ausrichten</a:documentation>
+                     </choice>
                   </attribute>
                </optional>
                <ref name="e_Text"></ref>
