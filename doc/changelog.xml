@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.3">
+    <entry version="3.3.2" date="2018-04-20">
+      <en>Bugfix height calculation Output/Text and balance="yes"</en>
+      <de>Bugfix Höhenberechnung Output/Text und balance="yes"</de>
+    </entry>
     <entry version="3.3.1" date="2018-04-16">
       <en>Balance: padding-bottom and valign on last page</en>
       <de>Balance: padding-bottom und valign auf der letzten Seite</de>
