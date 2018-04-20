@@ -695,7 +695,11 @@ function Paragraph.vsplit( objects_t, parameter )
                     tmplist = {}
                 else
                     hlist[#hlist + 1] = head
-                    ht_hlist = ht_hlist + head.height + head.depth
+                    if head.id == publisher.glue_node then
+                        ht_hlist = publisher.get_glue_size(head)
+                    else
+                        ht_hlist = ht_hlist + ( head.height or 0 ) + ( head.depth or 0 )
+                    end
                     local tmp = head.next
                     head.next = nil
                     head = tmp
