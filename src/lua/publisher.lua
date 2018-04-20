@@ -2866,6 +2866,19 @@ function number_hbox( num, labelwidth )
     return digit_hbox
 end
 
+-- just the plain size, not included the stretch or shrink
+function get_glue_size( n )
+    local spec
+
+    if node.has_field(n,"spec") then
+        spec = node.new("glue_spec")
+        n.spec = spec
+    else
+        spec = n
+    end
+    return spec.width
+end
+
 
 -- Add a glue to the front or tail of the given nodelist. `head_or_tail` is
 -- either the string `head` or `tail`. `parameter` is a table with the keys
