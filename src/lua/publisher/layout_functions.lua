@@ -17,17 +17,17 @@ local function allocated( dataxml,arg )
     local y = arg[2]
     local areaname = arg[3]
     local framenumber = arg[4]
-    publisher.setup_page()
+    publisher.setup_page(nil,"layout_functions#allocated")
     return publisher.current_grid:isallocated(x,y,areaname,framenumber)
 end
 
 local function current_page(  )
-    publisher.setup_page()
+    publisher.setup_page(nil,"layout_functions#current_page")
     return publisher.current_pagenumber
 end
 
 local function current_row(dataxml,arg)
-    publisher.setup_page()
+    publisher.setup_page(nil,"layout_functions#current_row")
     return publisher.current_grid:current_row(arg and arg[1])
 end
 
@@ -54,7 +54,7 @@ local function pagenumber(dataxml,arg)
 end
 
 local function current_column(dataxml,arg)
-  publisher.setup_page()
+  publisher.setup_page(nil,"layout_functions#current_column")
   return publisher.current_grid:current_column(arg and arg[1])
 end
 
@@ -120,7 +120,7 @@ local function number_of_datasets(dataxml,d)
 end
 
 local function number_of_columns(dataxml,arg)
-  publisher.setup_page()
+  publisher.setup_page(nil,"layout_functions#number_of_columns")
   return publisher.current_grid:number_of_columns(arg and arg[1])
 end
 
@@ -189,7 +189,7 @@ local function merge_pagenumbers(dataxml,arg )
 end
 
 local function number_of_rows(dataxml,arg)
-  publisher.setup_page()
+  publisher.setup_page(nil,"layout_functions#number_of_rows")
   return publisher.current_grid:number_of_rows(arg and arg[1])
 end
 
@@ -202,7 +202,7 @@ end
 local function imagewidth(dataxml, arg )
   local filename = arg[1]
   local img = publisher.imageinfo(filename)
-  publisher.setup_page()
+  publisher.setup_page(nil,"layout_functions#imagewidth")
   local tmp = publisher.current_grid:width_in_gridcells_sp(img.img.width)
   return tmp
 end
@@ -210,7 +210,7 @@ end
 local function imageheight(dataxml, arg )
   local filename = arg[1]
   local img = publisher.imageinfo(filename)
-  publisher.setup_page()
+  publisher.setup_page(nil,"layout_functions#imageheight")
   return publisher.current_grid:height_in_gridcells_sp(img.img.height)
 end
 
@@ -261,7 +261,7 @@ local function even(dataxml, arg )
 end
 
 local function groupwidth(dataxml, arg )
-  publisher.setup_page()
+  publisher.setup_page(nil,"layout_functions#groupwidth")
   local groupname=arg[1]
   if not publisher.groups[groupname] then
     err("Can't find group with the name %q",groupname)
@@ -279,7 +279,7 @@ local function groupwidth(dataxml, arg )
 end
 
 local function current_frame_number(dataxml,arg)
-  publisher.setup_page()
+  publisher.setup_page(nil,"layout_functions#current_framenumber")
   local framename = arg[1]
   if framename == nil then return 1 end
   local current_framenumber = publisher.current_grid:framenumber(framename)
@@ -287,7 +287,7 @@ local function current_frame_number(dataxml,arg)
 end
 
 local function groupheight(dataxml, arg )
-  publisher.setup_page()
+  publisher.setup_page(nil,"layout_functions#groupheight")
   local groupname=arg[1]
   if not publisher.groups[groupname] then
     err("Can't find group with the name %q",groupname)

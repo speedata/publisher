@@ -378,7 +378,7 @@ function commands.bookmark( layoutxml,dataxml )
     local hlist = publisher.mkbookmarknodes(level,open_p,title)
 
     if publisher.intextblockcontext == 0 then
-        publisher.setup_page()
+        publisher.setup_page(nil,"commands#bookmark")
         publisher.output_absolute_position({nodelist = hlist, x = 0, y = 0})
     else
         local p = paragraph:new()
@@ -936,7 +936,7 @@ end
 function commands.group( layoutxml,dataxml )
     local elementname
     local grid
-    publisher.setup_page()
+    publisher.setup_page(nil,"commands#group")
     local groupname = publisher.read_attribute(layoutxml,dataxml,"name", "rawstring")
 
     if publisher.groups[groupname] == nil then
@@ -1674,7 +1674,7 @@ end
 --- --------
 --- Go to the next row in the current area.
 function commands.next_row( layoutxml,dataxml )
-    publisher.setup_page()
+    publisher.setup_page(nil,"commands#next_row")
     local rownumber = publisher.read_attribute(layoutxml,dataxml,"row", "rawstring")
     local areaname  = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
     local rows      = publisher.read_attribute(layoutxml,dataxml,"rows","rawstring")
@@ -1907,7 +1907,7 @@ end
 ---  1. `state`: The table that is passed to the next iteration of `pull()`
 ---  1. `more_to_follow`: boolean which indicates that there is output left for the next area
 function commands.output( layoutxml,dataxml )
-    publisher.setup_page()
+    publisher.setup_page(nil,"commands#output")
     local area     = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
     local allocate = publisher.read_attribute(layoutxml,dataxml,"allocate", "string", "yes")
     local row      = publisher.read_attribute(layoutxml,dataxml,"row","number")
@@ -1952,7 +1952,7 @@ function commands.output( layoutxml,dataxml )
         -- Currently only the command Text implements pull.
         while true do
             objcount = objcount + 1
-            publisher.setup_page()
+            publisher.setup_page(nil,"commands#output")
             maxht,row,nextfreerow = publisher.get_remaining_height(area,allocate)
             current_grid = publisher.current_grid
             current_row = publisher.current_grid:current_row(area)
@@ -2296,7 +2296,7 @@ function commands.place_object( layoutxml,dataxml )
         end
     end
 
-    publisher.setup_page(onpage)
+    publisher.setup_page(onpage,"commands#PlaceObject")
     -- current_grid should be local. But then the test tables/futureobjects fails
     -- FIXME: check why the test fails
     -- local current_grid
@@ -2526,7 +2526,7 @@ function commands.place_object( layoutxml,dataxml )
                     if not current_row then
                         warning("No suitable row found for object")
                         publisher.next_area(area)
-                        publisher.setup_page()
+                        publisher.setup_page(nil,"commands#PlaceObject")
                         current_grid = publisher.current_grid
                         current_row = current_grid:current_row(area)
                     end
@@ -2567,7 +2567,7 @@ function commands.place_object( layoutxml,dataxml )
             -- don't switch when inside a group
             if publisher.current_group == nil then
                 publisher.next_area(area)
-                publisher.setup_page()
+                publisher.setup_page(nil,"commands#PlaceObject")
             end
         end
     end
@@ -2576,7 +2576,7 @@ function commands.place_object( layoutxml,dataxml )
     end
 
     if onpage then
-        publisher.setup_page()
+        publisher.setup_page(nil,"commands#PlaceObject")
         current_grid = publisher.pages[publisher.current_pagenumber].grid
     end
     xpath.set_variable("__currentarea",save_current_area)
@@ -3169,7 +3169,7 @@ function commands.table( layoutxml,dataxml,options )
     padding        = tex.sp(padding        or "0pt")
     columndistance = tex.sp(columndistance or "0pt")
     rowdistance    = tex.sp(rowdistance    or "0pt")
-    publisher.setup_page()
+    publisher.setup_page(nil,"commands#table")
 
     if width == nil then
         if xpath.get_variable("__maxwidth") == nil then
