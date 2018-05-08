@@ -1294,7 +1294,7 @@ function detect_pagetype(pagenumber)
 end
 
 --- _Must_ be called before something can be put on the page. Looks for hooks to be run before page creation.
-function setup_page(pagenumber)
+function setup_page(pagenumber,fromwhere)
     if current_group then return end
     local thispage
     if pagenumber then
@@ -1457,7 +1457,7 @@ function new_page()
     local thispage = pages[current_pagenumber]
     if not thispage then
         -- new_page() is called without anything on the page yet
-        setup_page()
+        setup_page(nil,"new_page")
         thispage = current_page
     end
 
@@ -2028,7 +2028,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     elseif typ=="height_sp" then
         num = tonumber(val or default)
         if num then -- most likely really a number, we need to multiply with grid height
-            setup_page()
+            setup_page(nil,"read_attribute height_sp")
             ret = current_page.grid.gridheight * num
         else
             ret = val
@@ -2037,7 +2037,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     elseif typ=="width_sp" then
         num = tonumber(val or default)
         if num then -- most likely really a number, we need to multiply with grid width
-            setup_page()
+            setup_page(nil,"read_attribute width_sp")
             ret = current_page.grid:width_sp(num)
         else
             ret = val
@@ -3155,7 +3155,7 @@ end
 function mkbookmarknodes(level,open_p,title)
     -- The bookmarks need three values, the level, the name and if it is
     -- open or closed
-    setup_page()
+    setup_page(nil, "mkbookmarknodes")
     local openclosed
     if open_p then openclosed = 1 else openclosed = 2 end
     level = level or 1
@@ -3843,7 +3843,7 @@ function next_row(rownumber,areaname,rows)
     current_row = grid:find_suitable_row(1,grid:number_of_columns(areaname),rows,areaname)
     if not current_row then
         next_area(areaname)
-        setup_page()
+        setup_page(nil,"next_row")
         grid = current_page.grid
         grid:set_current_row(1)
     else
@@ -4028,7 +4028,7 @@ function getheight( relative_framenumber )
             -- parameter. Therefore the current_pagenumber has to be set
             current_pagenumber = thispagenumber
             if not thispage then
-                setup_page(thispagenumber)
+                setup_page(thispagenumber,"getheight")
             end
             current_framenumber = 1
         else
