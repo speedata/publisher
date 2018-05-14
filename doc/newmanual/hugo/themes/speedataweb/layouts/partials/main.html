@@ -16,6 +16,8 @@
 			<div class="boxatthetop">
 				{{ if eq .Site.Params.type "handbuch" }}
 				<div id="version">Version {{ with (getenv "PUBLISHER_VERSION")}}{{.}}{{ else }}{{ .Site.Params.version}}{{end}}</div>
+				{{else}}
+					<div id="sprachwahl">{{ T "sprache" }}: {{ upper .Site.Language.Lang }} | {{ range .Translations }}<a class="active" href="{{ .Permalink }}">{{ upper .Lang }}</a>{{ end }}</div>
 				{{end}}
 			</div><!-- boxatthetop -->
 
@@ -27,9 +29,13 @@
 
 			<div id="logo">
 				{{ if eq .Site.Params.type "website" }}
-					<a href="/">
+					<a href="/{{ .Site.Language.Lang }}">
 				{{end}}
+				{{  if eq .Site.Language.Lang "en" }}
+					<img src="/images/logo-int.png" alt="speedata – Let's surpass the mainstream" />
+					{{ else }}
 					<img src="/images/logo.png" alt="speedata – Überholen wir den Mainstream" />
+					{{ end}}
 				{{ if eq .Site.Params.type "website" }}
 					</a>
 				{{end}}

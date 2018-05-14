@@ -1,0 +1,27 @@
+[impressum]
+other = "Imprint and Contact"
+
+[datenschutz]
+other = "Privacy"
+
+[mehrerfahren]
+other = "Please contact us"
+
+[anrufen]
+other = "Call"
+
+[email]
+other = "E-mail"
+
+[termin]
+other = "Appointment"
+
+[sprache]
+other = "Language"
+
+
+[before]
+other = "Before"
+
+[after]
+other = "After"

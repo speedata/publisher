@@ -8,8 +8,8 @@
 	<div id="navi2">
 		<ul>
 			<li><a href="https://blog.speedata.de" target="_blank">Blog</a></li>
-			<li {{if eq .Title "contact" }}class="active"{{end}}><a href="/impressum">Impressum und Kontakt</a></li>
-			<li {{if eq .Title "privacystatement"}}class="active"{{end}}><a href="/datenschutz">Datenschutz</a></li>
+			<li {{if eq .Title "contact" }}class="active"{{end}}><a href="{{ relref . "/impressum" }}">{{ T "impressum" }}</a></li>
+			<li {{if eq .Title "privacystatement"}}class="active"{{end}}><a href="{{ relref . "/datenschutz" }}">{{ T "datenschutz" }}</a></li>
 		</ul>
 	</div>
 {{end}}

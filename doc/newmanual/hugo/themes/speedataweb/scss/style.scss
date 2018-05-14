@@ -919,14 +919,17 @@ div.jx-image.jx-right div.jx-label {
 }
 /* icons */
 
-.ic {
-	font-size:50px;
-	line-height:50px;
+.svgicon {
 	height:50px;
 	display:block;
 	text-align:center;
 	margin-bottom:10px;
+	img {
+		height: 50px;
+	}
 }
+
+
 .iconList {
 	.item {
 		@extend .clearfix;
@@ -951,7 +954,7 @@ div.jx-image.jx-right div.jx-label {
 				border-radius: 10px;
 
 			}
-			span.ic {
+			span.svgicon {
 				position:absolute;
 				margin:25px;
 				text-align:center;
