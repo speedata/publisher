@@ -2753,13 +2753,15 @@ div.jx-image.jx-right div.jx-label {
 }
 
 /* icons */
-.ic {
-  font-size: 50px;
-  line-height: 50px;
+.svgicon {
   height: 50px;
   display: block;
   text-align: center;
   margin-bottom: 10px;
+}
+
+.svgicon img {
+  height: 50px;
 }
 
 .iconList .item .icon {
@@ -2768,6 +2770,7 @@ div.jx-image.jx-right div.jx-label {
   margin: auto;
   position: relative;
 }
+
 @media screen and (min-width: 600px) {
   .iconList .item .icon {
     margin: 0;
@@ -2789,7 +2792,8 @@ div.jx-image.jx-right div.jx-label {
   transform: rotate(-11deg);
   border-radius: 10px;
 }
-.iconList .item .icon span.ic {
+
+.iconList .item .icon span.svgicon {
   position: absolute;
   margin: 25px;
   text-align: center;

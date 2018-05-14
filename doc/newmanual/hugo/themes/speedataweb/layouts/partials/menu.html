@@ -10,11 +10,11 @@
 {{ else }}
 	<ul>
 	{{ range .Site.Menus.main }}
-		<li{{if or ($here.HasMenuCurrent "main" .) ($here.IsMenuCurrent "main" .) }} class="active"{{end}}><a href="{{.URL}}">{{ .Name }}</a>
+		<li{{if or ($here.HasMenuCurrent "main" .) ($here.IsMenuCurrent "main" .) }} class="active"{{end}}><a href="{{.URL  | absLangURL}}">{{ .Name }}</a>
 			{{ if .HasChildren }}
 				<ul>
 		    	{{ range .Children }}
-		    		<li {{if $here.IsMenuCurrent "main" . }} class="active"{{end}}><a href="{{.URL}}">{{ .Name }}</a></li>
+		    		<li {{if $here.IsMenuCurrent "main" . }} class="active"{{end}}><a href="{{.URL | absLangURL}}">{{ .Name }}</a></li>
 		    	{{ end }}
 		    	</ul>
 		   	{{end}}
@@ -23,8 +23,8 @@
 	</ul>
 	<ul id="navi2mobile">
 		<li><a href="https://blog.speedata.de" target="_blank">Blog</a></li>
-		<li {{if eq .Title "contact" }}class="active"{{end}}><a href="/impressum">Impressum und Kontakt</a></li>
-		<li {{if eq .Title "privacystatement"}}class="active"{{end}}><a href="/datenschutz">Datenschutz</a></li>
+		<li {{if eq .Title "contact" }}class="active"{{end}}><a href="/imprint">{{ T "impressum" }}</a></li>
+		<li {{if eq .Title "privacystatement"}}class="active"{{end}}><a href="/privacy">{{ T "datenschutz" }}</a></li>
 	</ul>
 {{end}}
 

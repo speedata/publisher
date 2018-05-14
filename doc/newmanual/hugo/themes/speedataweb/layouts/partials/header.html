@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="{{ .Site.Language.Lang }}">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>{{ with .Title}}{{.}}{{ else }}speedata GmbH{{end}}</title>
+	<title>speedata{{ with .Title}}: {{.}}{{end}}</title>
 
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -16,13 +16,14 @@
 	<link rel="stylesheet" href="/font-awesome-4.7.0/css/font-awesome.min.css">
 
 {{ if eq .Site.Params.type "website"}}
+	<meta property="og:image" content="/images/ogslogan.png">
 	<link rel="stylesheet" href="/css/juxtapose.css">
 	<link rel="stylesheet" type="text/css" href="/css/magnific-popup.css">
-	<link rel="stylesheet" type="text/css" href="/css/iconfont.css">
 {{ else }}
 	<link rel="stylesheet" type="text/css" href="/css/roboto.css">
 {{ end }}
 
+    {{ partial ( printf "include-%s.html"  .Site.Params.type ) . }}
 </head>
 <body class="{{.Site.Params.type }}{{if .Page.IsHome}}{{ if eq .Site.Params.type "website"}} startseite{{end}}{{end}}">
 
