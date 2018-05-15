@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.3">
+    <entry version="3.3.3" date="2018-05-15">
+      <en>Bugfix: allow page format taken from the data source.</en>
+      <de>Fehlerkorrektur: Seitenformat kann von der Datenquellen genommen werden.</de>
+    </entry>
+    <entry version="3.3.3" date="2018-04-25">
+      <en>Fix QR code generation.</en>
+      <de>Korrigiere QR-Code Erzeugung.</de>
+    </entry>
     <entry version="3.3.2" date="2018-04-20">
       <en>Bugfix height calculation Output/Text and balance="yes"</en>
       <de>Bugfix Höhenberechnung Output/Text und balance="yes"</de>
