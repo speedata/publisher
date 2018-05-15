@@ -2040,7 +2040,7 @@ end
 --- PageFormat
 --- ----------
 --- Set the dimensions of the page
-function commands.page_format(layoutxml)
+function commands.page_format(layoutxml,dataxml)
     trace("Pageformat")
     local width  = publisher.read_attribute(layoutxml,dataxml,"width","length")
     local height = publisher.read_attribute(layoutxml,dataxml,"height","length")
