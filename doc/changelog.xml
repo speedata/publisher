@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.3">
+    <entry version="3.3.4" date="2018-05-16">
+      <en>Bugfixes for ctrl-c when running sp (#167) and Output/balance="yes".</en>
+      <de>Fehlerkorrektur für Strg-c, um den Publisher-Durchlauf zu beenden und Output/balance="yes"</de>
+    </entry>
     <entry version="3.3.3" date="2018-05-15">
       <en>Bugfix: allow page format taken from the data source.</en>
       <de>Fehlerkorrektur: Seitenformat kann von der Datenquellen genommen werden.</de>
