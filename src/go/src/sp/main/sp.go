@@ -275,10 +275,7 @@ func sigTermCatcher() {
 	sig := <-ch
 	log.Printf("Signal received: %v", sig)
 	for _, proc := range runningProcess {
-		err := proc.Kill()
-		if err != nil {
-			log.Fatal(err)
-		}
+		proc.Kill()
 	}
 	showDuration()
 	os.Exit(0)
@@ -289,11 +286,10 @@ func sigIntCatcher() {
 	signal.Notify(ch, syscall.SIGINT)
 	sig := <-ch
 	log.Printf("Signal received: %v", sig)
+	// some process (such as java xproc pipelines) are still in the runningProcess queue, so
+	// let's try to kill these processes as well, and let's ignore the error of the kill command.
 	for _, proc := range runningProcess {
-		err := proc.Kill()
-		if err != nil {
-			log.Fatal(err)
-		}
+		proc.Kill()
 	}
 	showDuration()
 	os.Exit(0)
