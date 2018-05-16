@@ -721,23 +721,32 @@ function Paragraph.vsplit( objects_t, parameter )
             splitpos = splitpos + 1
         end
         local obj1 = join_table_to_box({table.unpack(hlist,1,splitpos)})
-
-        local margin_newcolumn_obj2 = node.has_attribute(hlist[splitpos + 1], publisher.att_margin_newcolumn)
-        if margin_newcolumn_obj2 and margin_newcolumn_obj2 > 0 then
-            table.insert(hlist,splitpos + 1,publisher.add_glue(nil,"head",{width=margin_newcolumn_obj2}))
-        end
-
-        local obj2 = join_table_to_box({table.unpack(hlist,splitpos + 1)})
-        if valignlast == "bottom" then
-            local remaining_height = frameheight - math.max(obj1.height, obj2.height)
-
-            if remaining_height > lastpaddingbottommax then
-                remaining_height = remaining_height - lastpaddingbottommax
+        if hlist[splitpos + 1] then
+            local margin_newcolumn_obj2 = node.has_attribute(hlist[splitpos + 1], publisher.att_margin_newcolumn)
+            if margin_newcolumn_obj2 and margin_newcolumn_obj2 > 0 then
+                table.insert(hlist,splitpos + 1,publisher.add_glue(nil,"head",{width=margin_newcolumn_obj2}))
             end
-            obj1.head = publisher.add_glue(obj1.head,"head",{width = remaining_height} )
-            obj2.head = publisher.add_glue(obj2.head,"head",{width = remaining_height} )
+            local obj2 = join_table_to_box({table.unpack(hlist,splitpos + 1)})
+            if valignlast == "bottom" then
+                local remaining_height = frameheight - math.max(obj1.height, obj2.height)
+
+                if remaining_height > lastpaddingbottommax then
+                    remaining_height = remaining_height - lastpaddingbottommax
+                end
+                obj1.head = publisher.add_glue(obj1.head,"head",{width = remaining_height} )
+                obj2.head = publisher.add_glue(obj2.head,"head",{width = remaining_height} )
+            end
+            return obj1, obj2
+        else
+            if valignlast == "bottom" then
+                local remaining_height = frameheight - obj1.height
+                if remaining_height > lastpaddingbottommax then
+                    remaining_height = remaining_height - lastpaddingbottommax
+                end
+                obj1.head = publisher.add_glue(obj1.head,"head",{width = remaining_height} )
+            end
+            return obj1
         end
-        return obj1, obj2
     end
     --- Step 2: Fill vbox (the return value)
     --- ------------------------------------
