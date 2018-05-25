@@ -224,6 +224,14 @@
         <para>Auf finnische Trennmuster umschalten.</para>
       </description>
     </choice>
+    <choice en="French">
+      <description xml:lang="en">
+        <para>Switch to French hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Französische Trennmuster</para>
+      </description>
+    </choice>
     <choice en="Greek">
       <description xml:lang="en">
         <para>Switch to Monotonic Greek hyphenation patterns.</para>

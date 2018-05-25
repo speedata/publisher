@@ -2645,6 +2645,8 @@
                   <a:documentation>Auf US-englische Trennmuster umschalten.</a:documentation>
                   <value>Finnish</value>
                   <a:documentation>Auf finnische Trennmuster umschalten.</a:documentation>
+                  <value>French</value>
+                  <a:documentation>Französische Trennmuster</a:documentation>
                   <value>Greek</value>
                   <a:documentation>Neugriechisch</a:documentation>
                   <value>Ancient Greek</value>
@@ -3063,6 +3065,8 @@
                         <a:documentation>Auf US-englische Trennmuster umschalten.</a:documentation>
                         <value>Finnish</value>
                         <a:documentation>Auf finnische Trennmuster umschalten.</a:documentation>
+                        <value>French</value>
+                        <a:documentation>Französische Trennmuster</a:documentation>
                         <value>Greek</value>
                         <a:documentation>Neugriechisch</a:documentation>
                         <value>Ancient Greek</value>

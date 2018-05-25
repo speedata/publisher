@@ -2645,6 +2645,8 @@
                   <a:documentation>Switch to American English hyphenation patterns.</a:documentation>
                   <value>Finnish</value>
                   <a:documentation>Switch to Finnish hyphenation patterns.</a:documentation>
+                  <value>French</value>
+                  <a:documentation>Switch to French hyphenation patterns.</a:documentation>
                   <value>Greek</value>
                   <a:documentation>Switch to Monotonic Greek hyphenation patterns.</a:documentation>
                   <value>Ancient Greek</value>
@@ -3063,6 +3065,8 @@
                         <a:documentation>Switch to American English hyphenation patterns.</a:documentation>
                         <value>Finnish</value>
                         <a:documentation>Switch to Finnish hyphenation patterns.</a:documentation>
+                        <value>French</value>
+                        <a:documentation>Switch to French hyphenation patterns.</a:documentation>
                         <value>Greek</value>
                         <a:documentation>Switch to Monotonic Greek hyphenation patterns.</a:documentation>
                         <value>Ancient Greek</value>
