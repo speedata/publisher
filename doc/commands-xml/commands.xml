@@ -1719,26 +1719,34 @@
       </description>
       <choice en="cmyk">
         <description xml:lang="en">
-          <para>CMYK (cyan, magenta, yellow, key/black)</para>
+          <para>CMYK (cyan, magenta, yellow, key/black), values between 0 and 100 (100 = full intensity)</para>
         </description>
         <description xml:lang="de">
-          <para>CMYK (Türkis, Magenta, Gelb und Schwarz)</para>
+          <para>CMYK (Türkis, Magenta, Gelb und Schwarz), Werte zwischen 0 und 100 (100 = volle Intensität)</para>
         </description>
       </choice>
       <choice en="rgb">
         <description xml:lang="en">
-          <para>RGB (red, green, blue)</para>
+          <para>rgb (red, green, blue), values between 0 and 100, 100 means full intensity</para>
         </description>
         <description xml:lang="de">
-          <para>RGB (Rot, Grün, Blau)</para>
+          <para>RGB (Rot, Grün, Blau), Werte zwischen 0 und 100, 100 bedeutet volle Intensität</para>
+        </description>
+      </choice>
+      <choice en="RGB">
+        <description xml:lang="en">
+          <para>rgb (red, green, blue), values between 0 and 255, 255 means full intensity</para>
+        </description>
+        <description xml:lang="de">
+          <para>RGB (Rot, Grün, Blau), Werte zwischen 0 und 255, 255 bedeutet volle Intensität</para>
         </description>
       </choice>
       <choice en="gray">
         <description xml:lang="en">
-          <para>Gray (0=Black)</para>
+          <para>Gray (0=black, 100=white)</para>
         </description>
         <description xml:lang="de">
-          <para>Graustufen (0=Schwarz)</para>
+          <para>Graustufen (0=Schwarz,100=Weiß)</para>
         </description>
       </choice>
       <choice en="spotcolor">
