@@ -978,11 +978,13 @@
                <a:documentation>Color model to be used for the color. Currently “rgb”, “cmyk”, “gray” and “spotcolor” are supported.</a:documentation>
                <choice>
                   <value>cmyk</value>
-                  <a:documentation>CMYK (cyan, magenta, yellow, key/black)</a:documentation>
+                  <a:documentation>CMYK (cyan, magenta, yellow, key/black), values between 0 and 100 (100 = full intensity)</a:documentation>
                   <value>rgb</value>
-                  <a:documentation>RGB (red, green, blue)</a:documentation>
+                  <a:documentation>rgb (red, green, blue), values between 0 and 100, 100 means full intensity</a:documentation>
+                  <value>RGB</value>
+                  <a:documentation>rgb (red, green, blue), values between 0 and 255, 255 means full intensity</a:documentation>
                   <value>gray</value>
-                  <a:documentation>Gray (0=Black)</a:documentation>
+                  <a:documentation>Gray (0=black, 100=white)</a:documentation>
                   <value>spotcolor</value>
                   <a:documentation>Use a PANTONE or HKS color.</a:documentation>
                </choice>

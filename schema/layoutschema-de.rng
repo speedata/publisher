@@ -978,11 +978,13 @@
                <a:documentation>Das Farbmodell, das benutzt werden soll. Derzeit werden »rgb«, »cmyk«, “gray” und spotcolor« unterstützt.</a:documentation>
                <choice>
                   <value>cmyk</value>
-                  <a:documentation>CMYK (Türkis, Magenta, Gelb und Schwarz)</a:documentation>
+                  <a:documentation>CMYK (Türkis, Magenta, Gelb und Schwarz), Werte zwischen 0 und 100 (100 = volle Intensität)</a:documentation>
                   <value>rgb</value>
-                  <a:documentation>RGB (Rot, Grün, Blau)</a:documentation>
+                  <a:documentation>RGB (Rot, Grün, Blau), Werte zwischen 0 und 100, 100 bedeutet volle Intensität</a:documentation>
+                  <value>RGB</value>
+                  <a:documentation>RGB (Rot, Grün, Blau), Werte zwischen 0 und 255, 255 bedeutet volle Intensität</a:documentation>
                   <value>gray</value>
-                  <a:documentation>Graustufen (0=Schwarz)</a:documentation>
+                  <a:documentation>Graustufen (0=Schwarz,100=Weiß)</a:documentation>
                   <value>spotcolor</value>
                   <a:documentation>Eine PANTONE oder HKS Farbe.</a:documentation>
                </choice>
