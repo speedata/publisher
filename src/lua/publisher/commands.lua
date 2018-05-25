@@ -2174,7 +2174,7 @@ function commands.paragraph( layoutxml,dataxml )
     end
     if #objects == 0 then
         -- nothing got through, why?? check
-        warning("No contents found in paragraph.")
+        -- warning("No contents found in paragraph.")
         a:append("",{fontfamily = fontfamily,languagecode = languagecode})
     end
 
