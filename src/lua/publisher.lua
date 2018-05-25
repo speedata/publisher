@@ -2171,7 +2171,7 @@ function parse_html( elt, parameter )
             end
         elseif eltname == "b" or eltname == "strong" then
             options.bold = 1
-        elseif eltname == "i" then
+        elseif eltname == "i" or eltname == "em" then
             options.italic = 1
         elseif eltname == "u" then
             options.underline = 1
