@@ -3289,22 +3289,36 @@ end
 --- ---------
 --- A horizontal rule that is placed between two rows.
 function commands.tablerule( layoutxml,dataxml )
-    local rulewidth = publisher.read_attribute(layoutxml,dataxml,"rulewidth","length")
-    local color     = publisher.read_attribute(layoutxml,dataxml,"color","rawstring")
-    local start     = publisher.read_attribute(layoutxml,dataxml,"start","number")
     local class     = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
     local id        = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
 
     local css_rules = publisher.css:matches({element = "tablerule", class=class,id=id}) or {}
 
+    local tab = {}
     local tmp = css_rules["height"]
     if tmp then
-        rulewidth = tex.sp(tmp)
+        tab.rulewidth = tex.sp(tmp)
     end
 
-    rulewidth = rulewidth or tex.sp("0.25pt")
-    color     = color     or css_rules["background-color"]
-    start     = start     or tonumber(css_rules["rule-start"])
+
+    local attribute = {
+        ["rulewidth"] = "length",
+        ["color"]     = "rawstring",
+        ["start"]     = "number",
+    }
+
+    local tmpattr
+    for attname,atttyp in pairs(attribute) do
+        tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
+        if tmpattr then
+            tab[attname] = tmpattr
+        end
+    end
+
+
+    rulewidth = tab.rulewidth or tex.sp("0.25pt")
+    color     = tab.color     or css_rules["background-color"]
+    start     = tab.start     or tonumber(css_rules["rule-start"])
 
 
     return { rulewidth = rulewidth, farbe = color, start = start }
@@ -3316,7 +3330,27 @@ end
 function commands.tr( layoutxml,dataxml )
     local tab = {}
     local tab_tmp = publisher.dispatch(layoutxml,dataxml)
+
+    local class = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
+    local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
+    local css_rules = publisher.css:matches({element = "tr", class=class,id=id})
+
+    if css_rules and type(css_rules) == "table" then
+        for k,v in pairs(css_rules) do
+            if k == "vertical-align" then
+                tab.valign = v
+            elseif k == "background-color" then
+                tab.backgroundcolor = v
+            else
+                tab[k] = v
+            end
+        end
+
+    end
+
+
     local eltname
+
 
     -- filter things like <Message ...> that don't give sensible output
     for i=1,#tab_tmp do
@@ -3336,8 +3370,12 @@ function commands.tr( layoutxml,dataxml )
         ["break-below"]     = "string",
     }
 
+    local tmpattr
     for attname,atttyp in pairs(attribute) do
-        tab[attname] = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
+        tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
+        if tmpattr then
+            tab[attname] = tmpattr
+        end
     end
 
     tab.align = publisher.read_attribute(layoutxml,dataxml,"align","string",nil,"align")
@@ -3349,9 +3387,6 @@ function commands.tr( layoutxml,dataxml )
     else
         tab.sethead = 0
     end
-
-
-
 
     if tab["top-distance"] then
         if tonumber(tab["top-distance"]) then
