@@ -3027,6 +3027,8 @@
 ]]></listing>
       <image file="ref-initial-de.png" width="50%"/>
     </example>
+    <info xml:lang="en"><para>Make sure you set the font face for the surrounding Paragraph to get the spacing right (it defaults to text).</para></info>
+    <info xml:lang="de"><para>Bitte stellen Sie sicher, dass die Schriftart für den Absatz korrekt eingestellt ist (Voreinstellung: text). Auf dieser Einstellung beruht die Höhenberechnung.</para></info>
     <seealso></seealso>
   </command>
   <command en="InsertPages">
