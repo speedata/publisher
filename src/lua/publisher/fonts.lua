@@ -93,7 +93,7 @@ function make_font_instance( name,size )
     end
     local filename,parameter = unpack(lookup_fontname_filename[name])
     assert(filename)
-    local k = {filename = filename, fontsize = size}
+    local k = {filename = filename, fontsize = size, space = parameter.space}
 
     if parameter.otfeatures then
         for fea,enabled in pairs(parameter.otfeatures) do

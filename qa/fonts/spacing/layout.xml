@@ -1,0 +1,33 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options crop="2mm"/>
+  <LoadFontfile name="a" filename="texgyreheros-regular.otf" />
+  <LoadFontfile name="b" filename="texgyreheros-regular.otf" space="10" />
+
+  <DefineFontfamily name="a" fontsize="30" leading="33">
+    <Regular fontface="a"/>
+  </DefineFontfamily>
+
+  <DefineFontfamily name="b" fontsize="30" leading="33">
+    <Regular fontface="b"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph fontface="a">
+          <Value>large space between words</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <PlaceObject>
+      <Textblock>
+        <Paragraph fontface="b">
+          <Value>small space between words</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+
+</Layout>
