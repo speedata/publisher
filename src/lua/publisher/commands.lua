@@ -1535,20 +1535,20 @@ end
 --- ---------
 --- Generate an index from data
 function commands.makeindex( layoutxml,dataxml )
-    local xpath       = publisher.read_attribute(layoutxml,dataxml,"select",  "xpathraw")
+    local selection   = publisher.read_attribute(layoutxml,dataxml,"select",  "xpathraw")
     local sortkey     = publisher.read_attribute(layoutxml,dataxml,"sortkey", "rawstring")
     local sectionname = publisher.read_attribute(layoutxml,dataxml,"section", "rawstring")
     local pagenumbername = publisher.read_attribute(layoutxml,dataxml,"pagenumber", "rawstring","page")
 
-    publisher.stable_sort(xpath,function(elta,eltb)
+    publisher.stable_sort(selection,function(elta,eltb)
         return string.lower(elta[sortkey]) < string.lower(eltb[sortkey])
     end)
 
     local section, lastname, lastindex
     local lastfirstletter = ""
     local ret = {}
-    for i=1,#xpath do
-        local tmp = string.sub(xpath[i][sortkey],1,1)
+    for i=1,#selection do
+        local tmp = string.sub(selection[i][sortkey],1,1)
         if tmp == nil or tmp == "" then
             err("Incorrect index entry - no contents?")
         else
@@ -1561,16 +1561,16 @@ function commands.makeindex( layoutxml,dataxml )
             end
             -- Add current entry to this section
             -- The current implementation only concatenates page numbers
-            if xpath[i].name == lastname then
-                if not xpath[lastindex][pagenumbername] then
+            if selection[i].name == lastname then
+                if not selection[lastindex][pagenumbername] then
                     err("Can't find the page number in the index entries. Did you set the pagenumber attribute in Makeindex?")
                 else
-                    xpath[lastindex][pagenumbername] = xpath[lastindex][pagenumbername] .. ", " .. xpath[i][pagenumbername]
+                    selection[lastindex][pagenumbername] = selection[lastindex][pagenumbername] .. ", " .. selection[i][pagenumbername]
                 end
             else
                 lastindex = i
-                lastname = xpath[i].name
-                section[#section + 1] = xpath[i]
+                lastname = selection[i].name
+                section[#section + 1] = selection[i]
             end
             lastfirstletter = startletter
         end
@@ -3321,7 +3321,7 @@ function commands.tablerule( layoutxml,dataxml )
     start     = tab.start     or tonumber(css_rules["rule-start"])
 
 
-    return { rulewidth = rulewidth, farbe = color, start = start }
+    return { rulewidth = rulewidth, color = color, start = start }
 end
 
 --- Tr
