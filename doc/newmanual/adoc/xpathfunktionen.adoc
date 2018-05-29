@@ -183,6 +183,9 @@ nicht zusammengeführt, sondern einzeln mit dem Trenner für Leerraum verbunden.
 `last()`::
    Gibt die Anzahl der Datensätze der gleichnamigen Geschwister-Elemente zurück.
 
+`local-name()`::
+   Liefert den Namen des aktuellen Knotens zurück (ohne Namensraum).
+
 `normalize-space(<text>)`::
    Gibt den Text ohne führende und nachstehende Leerzeichen zurück. Alle Zeilenvorschübe werden durch Leerzeichen ersetzt. Mehrfach hintereinander auftretende Leerzeichen/Zeilenvorschübe werden durch ein einzelnes Leerzeichen ersetzt.
 
