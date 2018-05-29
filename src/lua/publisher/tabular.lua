@@ -550,9 +550,9 @@ function calculate_columnwidth( self )
 end
 
 -- Typeset a table cell. Return a vlist, tightly packed (i.e. all vspace are 0).
-function pack_cell(self, blockobject, width, horizontal_alignment)
+function pack_cell(self, blockobjects, width, horizontal_alignment)
     local cell
-    for _,blockobject in ipairs(blockobject) do
+    for _,blockobject in ipairs(blockobjects) do
         local cellrow = nil
         local current_width = 0
         if node.is_node(blockobject) then
@@ -1110,7 +1110,7 @@ local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current
             current_row = current_row + 1
             current_tablehead_type[#current_tablehead_type + 1] = self:typeset_row(row_contents,current_row)
         elseif row_elementname == "Tablerule" then
-            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.farbe)
+            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color)
             current_tablehead_type[#current_tablehead_type + 1] = node.hpack(tmp)
         end
     end
@@ -1141,7 +1141,7 @@ local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_
             current_row = current_row + 1
             current_tablefoot_type[#current_tablefoot_type + 1] = self:typeset_row(row_contents,current_row)
         elseif row_elementname == "Tablerule" then
-            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.farbe)
+            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color)
             current_tablefoot_type[#current_tablefoot_type + 1] = node.hpack(tmp)
         end
     end
@@ -1232,7 +1232,7 @@ function typeset_table(self)
                 end
                 offset = sum
             end
-            tmp = publisher.colorbar(self.tablewidth_target - offset,tex.sp(tr_contents.rulewidth or "0.25pt"),0,tr_contents.farbe)
+            tmp = publisher.colorbar(self.tablewidth_target - offset,tex.sp(tr_contents.rulewidth or "0.25pt"),0,tr_contents.color)
             tmp = publisher.add_glue(tmp,"head",{width = offset})
             rows[#rows + 1] = node.hpack(tmp)
 
