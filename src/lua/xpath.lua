@@ -1086,6 +1086,9 @@ M.default_functions["substring"] = function (dataxml,arg)
     return string.sub(input,start,length)
 end
 
+M.default_functions["local-name"] = function (dataxml,arg)
+    return dataxml[".__local_name"]
+end
 
 return {
    get_variable      = M.get_variable,
