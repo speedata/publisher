@@ -575,6 +575,11 @@ func (c *Command) CmdLink() string {
 	tmp := url.URL{Path: strings.ToLower(c.Name)}
 	filenameSansExtension := tmp.String()
 	filenameSansExtension = strings.Replace(filenameSansExtension, "-", "_", -1)
+	// this works around a bug in Hugo
+	// https://github.com/gohugoio/hugo/issues/4666
+	if strings.HasSuffix(filenameSansExtension, "index") {
+		filenameSansExtension = strings.TrimSuffix(filenameSansExtension, "index") + "index_"
+	}
 	return "cmd-" + filenameSansExtension
 }
 
