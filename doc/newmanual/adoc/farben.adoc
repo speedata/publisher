@@ -29,12 +29,12 @@ Möchte man Farben in einem anderen Farbraum (CMYK, Grau, Sonderfarben) ausgeben
 
 [source, xml]
 -------------------------------------------------------------------------------
-<DefineColor name="logofarbe" model="spotcolor"
+<DefineColor name="logocolor" model="spotcolor"
              colorname="PANTONE 116 C" />
 
 <Record element="data">
   <PlaceObject>
-    <Box width="5" height="2" backgroundcolor="logofarbe"/>
+    <Box width="5" height="2" backgroundcolor="logocolor"/>
   </PlaceObject>
 </Record>
 -------------------------------------------------------------------------------
