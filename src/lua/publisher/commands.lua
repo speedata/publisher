@@ -1014,6 +1014,7 @@ end
 --- Create a horizontal space that stretches up to infinity
 function commands.hspace( layoutxml,dataxml )
     local width      = publisher.read_attribute(layoutxml,dataxml,"width", "length_sp")
+    local minwidth      = publisher.read_attribute(layoutxml,dataxml,"minwidth", "length_sp")
     local leadertext = publisher.read_attribute(layoutxml,dataxml,"leader", "rawstring")
     local leaderwd   = publisher.read_attribute(layoutxml,dataxml,"leader-width", "length_sp")
     local a = paragraph:new()
@@ -1026,7 +1027,7 @@ function commands.hspace( layoutxml,dataxml )
     local n
 
     if width == nil then
-        n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
+        n = set_glue(nil,{width = minwidth or 0, stretch = 2^16, stretch_order = 3})
     else
         n = set_glue(nil,{width = tonumber(width)})
     end

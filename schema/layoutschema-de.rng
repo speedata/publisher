@@ -1667,6 +1667,11 @@
       Ohne Breitenangabe: erzeugt einen horizontalen dehnbaren Leerraum. Der Leerraum hat die minimale Größe 0 und die maximale Größe »unendlich«. Sinnvoll nutzbar in einzeiligen Absätzen. Im Fließtext wird es vermutlich unerwartete Ergebnisse hervorrufen. Der Leerraum in einer Zeile verteilt sich normalerweise gleichmäßig über jeden Wortzwischenraum. Wenn ein
       HSpace enthalten ist, erhalten alle Leerräume die minimale Breite, nur der dehnbare Leerraum hat den überschüssigen Leerraum »angehäuft«.</a:documentation>
          <optional>
+            <attribute name="minwidth">
+               <a:documentation>Die (optionale) minimale Breite des eingefügten Leerraums.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="width">
                <a:documentation>Optionale Breite des Leerraums</a:documentation>
             </attribute>

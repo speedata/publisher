@@ -2791,6 +2791,10 @@
       <cmd name="HSpace"/> enthalten ist, erhalten alle Leerräume die minimale Breite, nur der dehnbare Leerraum hat den überschüssigen Leerraum »angehäuft«.</para>
     </description>
     <childelements/>
+    <attribute en="minwidth" optional="yes" type="length" since="3.3.5">
+      <description xml:lang="en"><para>The (optional) minimum width of the inserted space.</para></description>
+      <description xml:lang="de"><para>Die (optionale) minimale Breite des eingefügten Leerraums.</para></description>
+    </attribute>
     <attribute en="width" optional="yes" type="length">
       <description xml:lang="en">
         <para>Optional width of the space (a length).</para>
