@@ -155,7 +155,7 @@ function pre_linebreak( head )
         elseif head.id == glue_node then -- glue
             if head.subtype == 100 then -- leader
                 local l = head.leader
-                local wd = node.has_attribute(l,800)
+                local wd = node.has_attribute(l,publisher.att_leaderwd)
 
                 -- Set the font for the leader
                 pre_linebreak(l)
@@ -174,6 +174,7 @@ function pre_linebreak( head )
                     newhead = node.insert_after(newhead,endoftext,l2)
                     tmpbox = node.hpack(newhead,wd,"exactly")
                 end
+                node.set_attribute(tmpbox,publisher.att_leaderwd,wd)
                 head.leader = tmpbox
 
             end

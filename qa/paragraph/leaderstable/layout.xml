@@ -1,0 +1,31 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options crop="2mm"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Table stretch="max" width="5">
+        <Tr>
+          <Td>
+            <Paragraph>
+              <Value>A</Value>
+              <HSpace leader="." leader-width="5mm"/>
+              <Value>B</Value>
+            </Paragraph>
+          </Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+     <PlaceObject column="1">
+      <Textblock width="5">
+        <Paragraph>
+          <Value>A</Value>
+          <HSpace leader="." leader-width="5mm"/>
+          <Value>B</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+   </Record>
+
+</Layout>
