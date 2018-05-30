@@ -1,5 +1,29 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.3">
+    <entry version="3.3.5" date="2018-05-30">
+      <en>New attribute <tt>minwidth</tt> to set the <tt>HSpace</tt> width.</en>
+      <de>Neues Attribut <tt>minwidth</tt> um die minimale Breite des Leerraums bei <tt>HSpace</tt> einzustellen.</de>
+    </entry>
+    <entry version="3.3.5" date="2018-05-29">
+      <en>Various bug fixes (leaders in table, documentation links, <tt>space="..."</tt> with <tt>LoadFontfile</tt>)</en>
+      <de>Verschiedene Fehlerkorrekturen: leaders in Tabellen, Dokumentationslinks, <tt>space="..."</tt> bei <tt>LoadFontfile</tt></de>
+    </entry>
+    <entry version="3.3.5" date="2018-05-29">
+      <en>New xpath function <tt>local-name()</tt></en>
+      <de>Neue XPath-Funktion <tt>local-name()</tt></de>
+    </entry>
+    <entry version="3.3.5" date="2018-05-25">
+      <en>HTML text now allows the em tag</en>
+      <de>HTML erlaubt nun auch em</de>
+    </entry>
+    <entry version="3.3.5" date="2018-05-25">
+      <en>“New” color model RGB for values between 0 and 255</en>
+      <de>»Neues« Farbschema RGB für Werte zwischen 0 und 255</de>
+    </entry>
+    <entry version="3.3.5" date="2018-05-25">
+      <en>Add language “French” to schema.</en>
+      <de>Sprache »French« zum Schema hinzufügen</de>
+    </entry>
     <entry version="3.3.4" date="2018-05-16">
       <en>Bugfixes for ctrl-c when running sp (#167) and Output/balance="yes".</en>
       <de>Fehlerkorrektur für Strg-c, um den Publisher-Durchlauf zu beenden und Output/balance="yes"</de>
@@ -526,7 +550,7 @@
     </entry>
     <entry version="2.3.60" date="2016-03-14">
       <en>Bugfix for HTML tables and sp --ignore-case / font files</en>
-      <en>Fehlerkorrektur für HTML-Tabellen und sp --ignore-case / Schriftarten</en>
+      <de>Fehlerkorrektur für HTML-Tabellen und sp --ignore-case / Schriftarten</de>
     </entry>
     <entry version="2.3.59" date="2016-02-24">
       <en>Bugfix HTML tables</en>
