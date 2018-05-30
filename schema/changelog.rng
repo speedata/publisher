@@ -5,14 +5,21 @@
   ns="urn:speedata.de:2014/changelog">
 
   <define name="html">
-    <mixed>
-      <zeroOrMore>
-        <element name="a">
-          <attribute name="href" />
-          <text />
-        </element>
-      </zeroOrMore>
-    </mixed>
+      <interleave>
+        <zeroOrMore>
+          <text/>
+        </zeroOrMore>
+        <zeroOrMore>
+          <element name="a">
+            <attribute name="href" />
+            <text />
+          </element>  
+        </zeroOrMore>
+        <zeroOrMore>
+          <element name="tt"><text/></element>
+        </zeroOrMore>
+        
+      </interleave>
   </define>
 
   <start>
@@ -20,6 +27,9 @@
       <oneOrMore>
         <element name="chapter">
           <attribute name="version" />
+          <optional>
+            <attribute name="date"/>
+          </optional>
           <oneOrMore>
             <element name="entry">
               <attribute name="version" />
