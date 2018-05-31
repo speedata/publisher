@@ -5,7 +5,7 @@ disableKinds = ["taxonomy", "taxonomyTerm", "RSS", "sitemap", "robotsTXT"]
 
 relativeURLs = true
 canonifyURLs = false
-uglyURLs = true
+uglyURLs = false
 permalinks = ":slug"
 pygmentsCodeFences = true
 pygmentsStyle = "manni"
