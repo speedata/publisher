@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.3">
+    <entry version="3.3.6" date="2018-06-01">
+      <en>Bugfix in textformat/spacebelow (#171)</en>
+      <de>Fehlerkorrektur in Textformat/spacebelow (#171)</de>
+    </entry>
     <entry version="3.3.5" date="2018-05-30">
       <en>New attribute <tt>minwidth</tt> to set the <tt>HSpace</tt> width.</en>
       <de>Neues Attribut <tt>minwidth</tt> um die minimale Breite des Leerraums bei <tt>HSpace</tt> einzustellen.</de>
