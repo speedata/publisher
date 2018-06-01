@@ -2871,8 +2871,7 @@ function get_glue_size( n )
     local spec
 
     if node.has_field(n,"spec") then
-        spec = node.new("glue_spec")
-        n.spec = spec
+        spec = n.spec
     else
         spec = n
     end

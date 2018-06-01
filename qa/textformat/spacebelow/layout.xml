@@ -1,0 +1,19 @@
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en" xmlns="urn:speedata.de:2009/publisher/en">
+
+  <Options crop="5mm"/>
+
+  <DefineTextformat name="spacebelow" alignment="justified" margin-bottom="12pt"/>
+    <SetGrid height="12pt" nx="20"/>
+
+  <Record element="data">
+    <Loop select="2">
+      <Output allocate="auto" >
+        <Text>
+          <Paragraph textformat="spacebelow" fontface="text">
+            <Value select="sd:dummytext()"/>
+          </Paragraph>
+        </Text>
+      </Output>
+    </Loop>
+  </Record>
+</Layout>
