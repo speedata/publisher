@@ -62,23 +62,23 @@ Anstelle eines Absatzes kann auch eine Aufzählungsliste erscheinen.
 Diese wird mit `<Ol>`  bzw. `<Ul>` für eine Liste mit Nummerierung (ordered list) und eine Liste mit Punkten (unordered list) angegeben.
 Die einzelnen Punkte müssen mit `<Li>` ausgezeichnet werden.
 
-[source, xml]
+[source, xml,indent=0]
 -------------------------------------------------------------------------------
-<PlaceObject>
-  <Textblock>
-    <Ol>
-      <Li><Value>Eins</Value></Li>
-      <Li><Value>Zwei</Value></Li>
-    </Ol>
-    <Ul>
-      <Li><Value>Eins</Value></Li>
-      <Li><Value>Zwei</Value></Li>
-    </Ul>
-  </Textblock>
-</PlaceObject>
+    <PlaceObject>
+      <Textblock>
+        <Ol>
+          <Li><Value>One</Value></Li>
+          <Li><Value>Two</Value></Li>
+        </Ol>
+        <Ul>
+          <Li><Value>One</Value></Li>
+          <Li><Value>Two</Value></Li>
+        </Ul>
+      </Textblock>
+    </PlaceObject>
 -------------------------------------------------------------------------------
 
-image::olul.png[width=20%,,scaledwidth=60%]
+image::olul.png[width=20%,scaledwidth=30%]
 
 
 TIP: Dieses Feature ist noch nicht wirklich robust. Die Listen können (derzeit) nicht geschachtelt werden. Es empfiehlt sich zu schauen, ob die Listen auch korrekt ausgegeben werden.
@@ -90,32 +90,29 @@ Manche Überschriften und Eigennamen sollen nicht umbrochen werden. Dafür gibt 
 Ein etwas übertriebenes Beispiel ist:
 
 
-[source, xml]
+[source, xml,indent=0]
 -------------------------------------------------------------------------------
-<PlaceObject>
-  <Textblock>
-    <Paragraph>
-      <Value>Ein langer Text, der nur zur Illustration dient, </Value>
-      <NoBreak><Value>während dies nicht umbrochen werden darf.</Value></NoBreak>
-    </Paragraph>
-  </Textblock>
-</PlaceObject>
+    <PlaceObject>
+      <Textblock width="10cm">
+        <Paragraph>
+          <Value>A wonderful serenity has taken possession </Value>
+          <NoBreak><Value>of my entire soul, like these sweet mornings...</Value></NoBreak>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
 -------------------------------------------------------------------------------
 
 
 ////
-<Layout
-  xmlns="urn:speedata.de:2009/publisher/en"
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
-
-  <Pageformat width="150mm" height="10cm"/>
   <Trace grid="yes"/>
-
   <Record element="data">
     <PlaceObject>
-      <Textblock>
+      <Textblock width="10cm">
         <Paragraph>
-          <Value>Ein langer Text, der nur zur Illustration dient, </Value><NoBreak><Value>während dies nicht umbrochen werden darf.</Value></NoBreak>
+          <Value>A wonderful serenity has taken possession </Value>
+          <NoBreak><Value>of my entire soul, like these sweet mornings...</Value></NoBreak>
         </Paragraph>
       </Textblock>
     </PlaceObject>
@@ -132,16 +129,15 @@ Siehe die Abbildung~<<abb-nobreak2>>.
 endif::[]
 // ~
 
-[source, xml]
+[source, xml,indent=0]
 -------------------------------------------------------------------------------
-<Textblock>
-  <Paragraph>
-    <Value>Ein langer Text, der nur zur Illustration dient, </Value>
-    <NoBreak maxwidth="6" reduce="cut" text="...">
-      <Value>während dies nicht umbrochen werden darf.</Value>
-    </NoBreak>
-  </Paragraph>
-</Textblock>
+      <Textblock width="10cm">
+        <Paragraph>
+          <NoBreak maxwidth="10" reduce="cut" text="...">
+            <Value>A wonderful serenity has taken possession of my entire soul, like these sweet mornings...</Value>
+          </NoBreak>
+        </Paragraph>
+      </Textblock>
 -------------------------------------------------------------------------------
 
 [[abb-nobreak2]]
@@ -167,9 +163,9 @@ Es wird kein Hyperlink erzeugt, dafür ist der Befehl `<A>` zuständig.
   <Pageformat width="90mm" height="5cm"/>
   <Record element="data">
     <PlaceObject>
-      <Textblock>
+      <Textblock width="35">
         <Paragraph>
-          <URL><Value>https://download.speedata.de/publisher/development/</Value></URL>
+          <URL><Value>https://github.com/speedata/publisher/issues</Value></URL>
         </Paragraph>
       </Textblock>
     </PlaceObject>
@@ -182,6 +178,8 @@ ergibt
 
 
 image::url.png[width=70%]
+
+(Siehe auch https://github.com/speedata/publisher/issues/173)
 
 
 ////

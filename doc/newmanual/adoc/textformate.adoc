@@ -36,17 +36,17 @@ Um Umbrüche an diesen Stellen zu unterbinden, kann die Textformat-Eigenschaft `
   <Pageformat width="100mm" height="70mm"/>
   <Trace textformat="yes"/>
 
-  <DefineTextformat name="Titel" break-below="no"/>
+  <DefineTextformat name="keeptogether" break-below="no"/>
 
-  <DefineFontfamily name="Titel" fontsize="18" leading="20">
+  <DefineFontfamily name="h1" fontsize="18" leading="20">
     <Regular fontface="sans-bold"/>
   </DefineFontfamily>
 
   <Record element="data">
     <Output>
       <Text>
-        <Paragraph fontface="Titel" textformat="Titel">
-          <Value>Überschrift</Value>
+        <Paragraph fontface="h1" textformat="keeptogether">
+          <Value>A Title</Value>
         </Paragraph>
         <Paragraph>
           <Value select="sd:dummytext()"/>
@@ -67,23 +67,26 @@ Um dennoch einen Text an einem Stück auszugeben, der erst aus den Daten zusamme
 .Mit Variablen und <Copy-of> kann man Texte zusammensetzen und an einem Stück ausgeben.
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
-    <SetVariable variable="überschrift">
-      <Paragraph fontface="Titel" textformat="Titel">
-        <Value>Überschrift</Value>
+  <Record element="data">
+    <SetVariable variable="mytitle">
+      <Paragraph fontface="h1" textformat="keeptogether">
+        <Value>A Title</Value>
       </Paragraph>
     </SetVariable>
-    <SetVariable variable="text">
+
+    <SetVariable variable="mytext">
       <Paragraph>
         <Value select="sd:dummytext()"/>
       </Paragraph>
     </SetVariable>
-    ...
+
     <Output>
       <Text>
-       <Copy-of select="$überschrift"/>
-       <Copy-of select="$text"/>
+        <Copy-of select="$mytitle"/>
+        <Copy-of select="$mytext"/>
       </Text>
     </Output>
+  </Record>
 -------------------------------------------------------------------------------
 
 [[ch-textformate-tracing]]
@@ -94,7 +97,7 @@ Der Befehl `<Trace textformat="yes"/>` aktiviert »tooltips« im PDF über den T
 
 [[abb-tracetextformat]]
 .Tooltip mit dem Textformat
-image::tracetextformat.png[width=50%]
+image::tracetextformat.png[width=100%]
 
 
 // ENDE
