@@ -3475,7 +3475,6 @@ function commands.td( layoutxml,dataxml )
                 tab[k] = v
             end
         end
-
     end
 
     local attribute = {
@@ -3501,6 +3500,7 @@ function commands.td( layoutxml,dataxml )
         ["border-right-color"]     = "rawstring",
         ["border-top-color"]       = "rawstring",
         ["border-bottom-color"]    = "rawstring",
+        ["rotate"] = "number",
     }
 
     local tmpattr

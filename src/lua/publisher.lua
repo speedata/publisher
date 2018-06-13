@@ -3450,6 +3450,37 @@ function rotate( nodelist,angle,origin_x,origin_y )
     return tmp
 end
 
+--- Rotate a table cell clockwise with a given angle (in degrees).
+-- This is a simple and very basic implementation which needs to be extended in the future.
+function rotateTd( nodelist,angle, width_sp)
+    local angle_rad = -1 * math.rad(angle)
+
+    local wd,ht = nodelist.width, nodelist.height + nodelist.depth
+    nodelist.width = 0
+    nodelist.height = 0
+    nodelist.depth = 0
+    local halfwd_bp = sp_to_bp((width_sp - ht ) / 2  )
+    local ht_bp = sp_to_bp( ht * math.max(0,math.cos(angle_rad)  ))
+
+    -- positive would be counter clockwise, but CSS is clowckwise. So we multiply by -1
+    local sin = math.round(math.sin(angle_rad),3)
+    local cos = math.round(math.cos(angle_rad),3)
+    local q = node.new("whatsit","pdf_literal")
+    q.mode = 0
+
+    q.data = string.format("q %g %g %g %g %g %g cm ",cos,sin, -1 * sin,cos,halfwd_bp,ht_bp)
+    q.next = nodelist
+    local tail = node.tail(nodelist)
+    local Q = node.new("whatsit","pdf_literal")
+    Q.data = "Q"
+    tail.next = Q
+    local tmp = node.vpack(q)
+    tmp.width  = 0
+    tmp.height = 0
+    tmp.depth = 0
+    return tmp
+end
+
 
 --- Rotate a text on a given angle (`angle` on textblock).
 function rotate_textblock( nodelist,angle )

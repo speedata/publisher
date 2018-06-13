@@ -1,0 +1,25 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options crop="2mm" />
+  <Trace objects="yes"/>
+  <Record element="data">
+    <PlaceObject>
+      <Table width="300pt">
+        <Columns>
+          <Column width="1*"/>
+          <Column width="1*"/>
+          <Column width="1*"/>
+          <Column width="1*"/>
+        </Columns>
+        <Tr minheight="2cm" valign="bottom">
+          <Td align="center"><Paragraph><B><Value>First column</Value></B></Paragraph></Td>
+          <Td align="center"><Paragraph><Value>2nd</Value></Paragraph></Td>
+          <Td align="left" rotate="-60"><Paragraph><NoBreak><B><Value>Some title</Value></B></NoBreak></Paragraph></Td>
+          <Td align="center"><Paragraph><Value>4th</Value></Paragraph></Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>

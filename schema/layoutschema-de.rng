@@ -4557,6 +4557,11 @@
                      <a:documentation>Setzt die Fontfamilie für den Hintergrundtext. Voreinstellung ist die Fontfamilie für die Tabelle.</a:documentation>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="rotate">
+                     <a:documentation>Drehe den Inhalt (im Uhrzeigersinn) der Tabellenzelle. Experimentell und derzeit nur für Textinhalte.</a:documentation>
+                  </attribute>
+               </optional>
                <zeroOrMore>
                   <choice>
                      <ref name="e_Barcode"></ref>
