@@ -90,6 +90,7 @@ function attach_objects_row( self, tab )
                     -- box doesn't have field textformat
                     if type(eltcontents) == "table" then
                         eltcontents.textformat = eltcontents.textformat or default_textformat_name or "__leftaligned"
+                        eltcontents.rotate = eltcontents.rotate
                     end
                     -- block
                     if #inline > 0 then
@@ -117,6 +118,7 @@ function attach_objects_row( self, tab )
                 block[#block + 1] = inline
             end
             td_contents.objects = block
+            td_contents.objects.rotate = td_contents.rotate
         elseif td_elementname == "Tr" then -- probably from tablefoot/head
             attach_objects_row(self,td_contents)
         elseif td_elementname == "Column" or td_elementname == "Tablerule" then
@@ -551,6 +553,7 @@ end
 
 -- Typeset a table cell. Return a vlist, tightly packed (i.e. all vspace are 0).
 function pack_cell(self, blockobjects, width, horizontal_alignment)
+    local rotate = tonumber(blockobjects.rotate)
     local cell
     for _,blockobject in ipairs(blockobjects) do
         local cellrow = nil
@@ -564,10 +567,15 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
                 if type(inlineobject) == "table" then
                     if width then
                         -- ok, a paragraph with a certain width, that we can typeset
-                        if     horizontal_alignment=="center"  then  default_textformat_name = "__centered"
-                        elseif horizontal_alignment=="left"    then  default_textformat_name = "__leftaligned"
-                        elseif horizontal_alignment=="right"   then  default_textformat_name = "__rightaligned"
-                        elseif horizontal_alignment=="justify" then  default_textformat_name = "__justified"
+                        if rotate then
+                            default_textformat_name = "__leftaligned"
+                            horizontal_alignment = "left"
+                        else
+                            if     horizontal_alignment=="center"  then  default_textformat_name = "__centered"
+                            elseif horizontal_alignment=="left"    then  default_textformat_name = "__leftaligned"
+                            elseif horizontal_alignment=="right"   then  default_textformat_name = "__rightaligned"
+                            elseif horizontal_alignment=="justify" then  default_textformat_name = "__justified"
+                            end
                         end
                         if not default_textformat_name then
                             if inlineobject.textformat then
@@ -629,6 +637,9 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
     -- if there are no objects in a row, we create a dummy object
     -- so the row can be created and vpack does not fall over a nil
     cell = cell or node.new("hlist")
+    if tonumber(blockobjects.rotate) then
+        cell = publisher.rotateTd(cell,blockobjects.rotate,width)
+    end
 
     local n = cell
     while n do

@@ -4557,6 +4557,11 @@
                      <a:documentation>Set the font family of the background text. Defaults to the table font.</a:documentation>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="rotate">
+                     <a:documentation>Rotate the contents of the table cell. Positive values return clockwise. This is experimental and currently only for text.</a:documentation>
+                  </attribute>
+               </optional>
                <zeroOrMore>
                   <choice>
                      <ref name="e_Barcode"></ref>
