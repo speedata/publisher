@@ -49,18 +49,18 @@ Bei Angabe von `stretch="no"` (Voreinstellung) beim Befehl `<Table>` nimmt die T
       <Table padding="2mm" stretch="no" >
         <Tr>
           <Td>
-            <Paragraph><Value>Zeile 1 / Zelle 1</Value></Paragraph>
+            <Paragraph><Value>Row 1 / Column 1</Value></Paragraph>
           </Td>
           <Td>
-            <Paragraph><Value>Zeile 1 / Zelle 2</Value></Paragraph>
+            <Paragraph><Value>Row 1 / Column 2</Value></Paragraph>
           </Td>
         </Tr>
         <Tr>
           <Td>
-            <Paragraph><Value>Zeile 2 / Zelle 1</Value></Paragraph>
+            <Paragraph><Value>Row 2 / Column 1</Value></Paragraph>
           </Td>
           <Td>
-            <Paragraph><Value>Zeile 2 / Zelle 2</Value></Paragraph>
+            <Paragraph><Value>Row 2 / Column 2</Value></Paragraph>
           </Td>
         </Tr>
       </Table>
@@ -286,7 +286,7 @@ Ausgangspunkt ist eine einfache Tabelle:
           <Tr>
             <Td>
               <Paragraph>
-                <Value>Tabelleninhalt</Value>
+                <Value>Tablecontents</Value>
               </Paragraph>
             </Td>
           </Tr>
@@ -305,7 +305,7 @@ Die Kopfzeile definiert man in der Tabelle wie folgt (als Kindelement des Elemen
   <Tr backgroundcolor="gray">
     <Td>
       <Paragraph>
-        <Value>Kopf</Value>
+        <Value>Head</Value>
       </Paragraph>
     </Td>
   </Tr>
@@ -318,14 +318,15 @@ Man kann die Kopfzeile für die erste Seite separat definieren, in dem man das A
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
 <Tablehead page="all">
-  ... Kopf für alle Seiten ...
+  <!--1-->
 </Tablehead>
-<!-- wenn page="first" wie unten definiert wird,
-     gilt die obige Definition für alle aber nicht für die erste Seite -->
+
 <Tablehead page="first">
-  ... Kopf für die erste Seite ...
+  <!--2-->
 </Tablehead>
 -------------------------------------------------------------------------------
+<1> Tabellenkopf für alle Seiten
+<2> Wenn `page="first"` wie hier definiert wird, gilt die obige Definition (1) für alle Seiten, jedoch nicht für die erste Seite, denn hier gilt (2).
 
 Mit dieser Variante kann man nicht nur den (sich wiederholenden) Tabellenkopf bestimmen, sondern auch den Tabellenfuß.
 Das geht analog zu `<Tablehead>`, nur dass die Seitenauswahl anstelle von `first` `last` erlaubt.
@@ -336,7 +337,7 @@ Das geht analog zu `<Tablehead>`, nur dass die Seitenauswahl anstelle von `first
   <Tr backgroundcolor="gray">
     <Td>
       <Paragraph>
-        <Value>Fuß letzte Seite</Value>
+        <Value>Table foot last page</Value>
       </Paragraph>
     </Td>
   </Tr>
@@ -345,7 +346,7 @@ Das geht analog zu `<Tablehead>`, nur dass die Seitenauswahl anstelle von `first
   <Tr backgroundcolor="gray">
     <Td>
       <Paragraph>
-        <Value>Fuß alle Seiten</Value>
+        <Value>Table foot for all pages</Value>
       </Paragraph>
     </Td>
   </Tr>
@@ -369,7 +370,7 @@ Beide Varianten können kombiniert werden.
 <Tr sethead="yes" backgroundcolor="lightgray">
   <Td>
     <Paragraph>
-      <Value>Neuer Kopf 2</Value>
+      <Value>New head</Value>
     </Paragraph>
   </Td>
 </Tr>
@@ -388,8 +389,8 @@ Es gibt zwei Abschnitte in der Tabelle mit zwei und acht Zeilen. Die Datei `data
 [source, xml]
 -------------------------------------------------------------------------------
 <data>
-  <abschnitt name="Abschnitt 1" zeilen="2"/>
-  <abschnitt name="Abschnitt 2" zeilen="8"/>
+  <section name="section 1" rows="2"/>
+  <section name="section 2" rows="8"/>
 </data>
 -------------------------------------------------------------------------------
 
@@ -405,7 +406,7 @@ In einer Schleife werden die gewünschten Zeilen ausgegeben.
   <Record element="data">
     <PlaceObject>
       <Table padding="1mm" stretch="max">
-        <ForAll select="abschnitt">
+        <ForAll select="section">
           <Tr sethead="yes" backgroundcolor="lightgray">
             <Td>
               <Paragraph>
@@ -413,11 +414,11 @@ In einer Schleife werden die gewünschten Zeilen ausgegeben.
               </Paragraph>
             </Td>
           </Tr>
-          <Loop select="@zeilen" variable="i">
+          <Loop select="@rows" variable="i">
             <Tr>
               <Td>
                 <Paragraph>
-                  <Value select="concat('Zeile ', $i)"/>
+                  <Value select="concat('Row ', $i)"/>
                 </Paragraph>
               </Td>
             </Tr>

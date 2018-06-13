@@ -1,5 +1,6 @@
 baseURL = ""
 languageCode = "de"
+DefaultContentLanguage = "de"
 
 disableKinds = ["taxonomy", "taxonomyTerm", "RSS", "sitemap", "robotsTXT"]
 

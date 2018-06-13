@@ -100,8 +100,8 @@ mit den dazugehörigen Daten:
 
 [source,xml]
 -------
-<data>Mit <b>Blindheit</b> per <i>Definition <b>geschlagen,</b></i>
-  dennoch nicht unsichtbar.</data>
+<data>A wonderful <b>serenity</b> has taken possession <i>of my <b>entire soul,,</b></i>
+  ike these sweet mornings.</data>
 -------
 
 Das Ergebnis ist dasselbe wie oben.
@@ -119,16 +119,48 @@ Manche dieser Features können bei `LoadFontfile` aktiviert werden.
 
 [source,xml]
 -------
-<!-- Mediävalziffern -->
-<LoadFontfile name="MinionRegular" filename="MinionPro-Regular.otf" oldstylefigures="yes" />
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-<!-- Kapitälchen -->
-<LoadFontfile name="MinionRegular" filename="MinionPro-Regular.otf" smallcaps="yes" />
+  <!-- Oldstyle figures / text figures -->
+  <LoadFontfile
+    name="MinionRegular-osf"
+    filename="MinionPro-Regular.otf"
+    oldstylefigures="yes" />
+
+  <!-- Small caps -->
+  <LoadFontfile
+    name="MinionRegular-smcp"
+    filename="MinionPro-Regular.otf"
+    smallcaps="yes" />
+
+  <DefineFontfamily name="osftext" fontsize="10" leading="12">
+    <Regular fontface="MinionRegular-osf"/>
+  </DefineFontfamily>
+
+  <DefineFontfamily name="smcptext" fontsize="10" leading="12">
+    <Regular fontface="MinionRegular-smcp"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph fontface="osftext">
+          <Value>Text with oldstyle figures 1234567890</Value>
+        </Paragraph>
+        <Paragraph fontface="smcptext">
+          <Value>Text with small caps 1234567890</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
 -------
 
 
-.Mediävalziffern (links) machen das Lesen der Ziffern oftmals angenehmer. Echte Kapitälchen (rechts) unterscheiden sich deutlich von rechnerisch verkleinerten Großbuchstaben. Die Strichstärke und Proportionen müssen angepasst werden.
-image::opentypefeatures.png[width=100%]
+.Mediävalziffern (oben) machen das Lesen der Ziffern oftmals angenehmer. Echte Kapitälchen (unten) unterscheiden sich deutlich von rechnerisch verkleinerten Großbuchstaben. Die Strichstärke und Proportionen müssen angepasst werden. Je nach verwendeter Schriftart schaltet `smallcaps` auch auf  »Mediävalziffern« um.
+image::osfsmcp.png[width=100%]
 
 // [[ch-schrift-kapitaelchen]]
 // === Kapitälchen
@@ -186,14 +218,18 @@ Die dazugehörige Datendatei (`data.xml`) ist folgende:
 
 [source, xml]
 -------------------------------------------------------------------------------
-<data>Also schön, Guido Heffels, nachfolgend meine Textempfehlung
-    für das Blindtextbuch. Sie mögen denken, aus welchem Anlass es
-    unbedingt eine solche poesiealbumhafte Antiquität sein muss, und
-    genau das sollen Sie ja auch.</data>
+<data>A wonderful serenity has taken possession of my entire
+  soul, like these sweet mornings of spring which I enjoy
+  with my whole heart. I am alone, and feel the charm of
+  existence in this spot, which was created for the bliss of
+  souls like mine. I am so happy, my dear friend, so
+  absorbed in the exquisite sense of mere tranquil
+  existence, that I neglect my talents.</data>
 -------------------------------------------------------------------------------
 
-.Links: Komma und Bindestrich ragen in den rechten Rand hinein. Rechts: ohne optischen Randausgleich.
-image::optischerrandausgleich.png[width=100%]
+
+.Links: Komma, Punkt und Bindestrich ragen in den rechten Rand hinein. Rechts: ohne optischen Randausgleich.
+image::marginprotrusion.png[width=100%]
 
 
 [[sec-fontverzeichnis,Speicherort]]

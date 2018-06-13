@@ -26,9 +26,9 @@ Ein Beispiel:
 [source, xml]
 -------------------------------------------------------------------------------
 <data>
-  <artikel artikelnummer="1" />
-  <artikel artikelnummer="2" />
-  <artikel artikelnummer="3" />
+  <article number="1" />
+  <article number="2" />
+  <article number="3" />
 </data>
 -------------------------------------------------------------------------------
 
@@ -39,12 +39,12 @@ Ein Beispiel:
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
   <Record element="data">
-    <ProcessNode select="artikel"/>
+    <ProcessNode select="article"/>
     <Message select="$nr"/>
   </Record>
 
-  <Record element="artikel">
-    <SetVariable variable="nr" select="@artikelnummer"/>
+  <Record element="article">
+    <SetVariable variable="nr" select="@number"/>
   </Record>
 
 </Layout>
@@ -63,7 +63,7 @@ In Variablen können nicht nur einfache Werte gespeichert werden, sondern auch k
 <Record element="data">
   <SetVariable variable="foo">
     <Paragraph>
-      <Value>Hallo Welt!</Value>
+      <Value>Hello world!</Value>
     </Paragraph>
   </SetVariable>
 
@@ -75,12 +75,12 @@ In Variablen können nicht nur einfache Werte gespeichert werden, sondern auch k
 </Record>
 -------------------------------------------------------------------------------
 
-Ergibt die erwartete Ausgabe von »Hallo Welt!«. Ein Anwendungsfall ist, Tabellenbreitendeklarationen zu speichern:
+Ergibt die erwartete Ausgabe von »Hello world!«. Ein Anwendungsfall ist, Tabellenbreitendeklarationen zu speichern:
 
 
 [source, xml]
 -------------------------------------------------------------------------------
-<SetVariable variable="tabellenspalten">
+<SetVariable variable="tablecolumns">
   <Columns>
     <Column width="1cm"/>
     <Column width="4mm"/>
@@ -95,7 +95,7 @@ um diese dann anschließend in mehreren Tabellen zu benutzen:
 -------------------------------------------------------------------------------
 <PlaceObject>
   <Table>
-    <Copy-of select="$tabellenspalten"/>
+    <Copy-of select="$tablecolumns"/>
     <Tr>
       ..
     </Tr>
@@ -125,11 +125,11 @@ damit wird der neue Wert an die vorherigen angehängt.
 .Ein Beispiel für Copy-of in der Praxis ist das Zusammenbauen von XML-Strukturen, mit denen Informationen gespeichert werden können. Ausführlich beschreiben wird dieses Beispiel im Kochbuch (Kaptiel 8), dort im Abschnitt Verzeichnisse erstellen (XML-Struktur).
 [source, xml]
 -------------------------------------------------------------------------------
-<SetVariable variable="kapitel">
-  <Copy-of select="$kapitel"/>
-  <Element name="Eintrag">
-    <Attribute name="kapitelname" select="@name"/>
-    <Attribute name="seite" select="sd:current-page()"/>
+<SetVariable variable="chapter">
+  <Copy-of select="$chapter"/>
+  <Element name="entry">
+    <Attribute name="chaptername" select="@name"/>
+    <Attribute name="page" select="sd:current-page()"/>
   </Element>
 </SetVariable>
 -------------------------------------------------------------------------------
@@ -147,7 +147,7 @@ Die Syntax hierfür ist `if (Bedingung) then ... else ...`.
 <PlaceObject>
   <Textblock>
     <Paragraph>
-      <Value select="if (sd:odd(sd:current-page())) then 'Ungerade Seite' else 'Gerade Seite'"/>
+      <Value select="if (sd:odd(sd:current-page())) then 'recto' else 'verso'"/>
     </Paragraph>
   </Textblock>
 </PlaceObject>
@@ -261,19 +261,31 @@ Das Feld a1, a2, ..., ai könnte wie folgt belegt werden:
 
 [source, xml]
 -------------------------------------------------------------------------------
-<SetVariable variable="{ concat('a',1) }" select="'Wert für A1'"/>
-<SetVariable variable="{ concat('a',2) }" select="'Wert für A2'"/>
+<SetVariable variable="{ concat('a',1) }" select="'Value for a1'"/>
+<SetVariable variable="{ concat('a',2) }" select="'Value for a2'"/>
 ...
 -------------------------------------------------------------------------------
 
-Natürlich könnte auch direkt `a1` als Variablenname angegeben werden.
+Natürlich könnte hier auch direkt `a1` als Variablenname angegeben werden.
+In diesem Beispiel könnte sowohl der Präfix als auch der Suffix dynamisch erzeugt werden:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<SetVariable variable="prefix" select="'a'" />
+<SetVariable variable="{ concat($prefix,1) }" select="'Value for a1'"/>
+<SetVariable variable="{ concat($prefix,2) }" select="'Value for a2'"/>
+...
+-------------------------------------------------------------------------------
+
+
 Der lesende Zugriff geht über `sd:variable(...):`
 
 
 [source, xml]
 -------------------------------------------------------------------------------
-<Message select="sd:variable('a',1)"/>
-<Message select="sd:variable('a',2)"/>
+<SetVariable variable="prefix" select="'a'" />
+<Message select="sd:variable($prefix,1)"/>
+<Message select="sd:variable($prefix,2)"/>
 ...
 -------------------------------------------------------------------------------
 

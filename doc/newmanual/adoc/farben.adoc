@@ -52,14 +52,14 @@ Daher müssen im PDF ebenfalls Anweisungen enthalten sein, wie diese Farbe am Bi
 [source, xml]
 -------------------------------------------------------------------------------
 <DefineColor
-    name="meinefarbe"
+    name="mycolor"
     model="spotcolor"
-    colorname="speedatagrün"
+    colorname="speedatagreen"
     c="56" m="7" y="98" k="21" />
 -------------------------------------------------------------------------------
 
-Hier wird eine Farbe definiert, die im Publisher bei den Ausgabebefehlen unter dem Namen `meinefarbe` angesprochen wird.
-Im PDF wird diese Farbe unter dem Namen `speedatagrün` geführt und in der Ausgabe erscheint diese dann in einem dunklen grün.
+Hier wird eine Farbe definiert, die im Publisher bei den Ausgabebefehlen unter dem Namen `mycolor` angesprochen wird.
+Im PDF wird diese Farbe unter dem Namen `speedatagreen` geführt und in der Ausgabe erscheint diese dann in einem dunklen grün.
 
 .Die neue Farbe erscheint im PDF als eigener Farbkanal
 image::speedatagruen.png[width=90%,scaledwidth=100%]

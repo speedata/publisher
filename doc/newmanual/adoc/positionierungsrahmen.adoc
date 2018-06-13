@@ -159,20 +159,20 @@ Man kann auch den Wechsel eines Rahmens erzwingen. Mit `<NextFrame>` und der Ang
 
 
 
-== Der Default-Bereich
+// == Der Default-Bereich
 
-Wird die Angabe des Bereichs (`area="..."`) bei den Ausgabebefehlen weggelassen, so wird die ganze Seite genommen (innerhalb des Seitenrands natürlich).
-Über die Optionen kann man steuern, dass standardmäßig ein anderer Bereich genommen wird.
+// Wird die Angabe des Bereichs (`area="..."`) bei den Ausgabebefehlen weggelassen, so wird die ganze Seite genommen (innerhalb des Seitenrands natürlich).
+// Über die Optionen kann man steuern, dass standardmäßig ein anderer Bereich genommen wird.
 
 
-[source, xml]
--------------------------------------------------------------------------------
-<Options defaultarea="text"/>
--------------------------------------------------------------------------------
+// [source, xml]
+// -------------------------------------------------------------------------------
+// <Options defaultarea="text"/>
+// -------------------------------------------------------------------------------
 
-Nun wird bei den Ausgaben immer dieser Bereich genommen, sofern nichts anderes angegeben ist.
-Die Seite kann unter dem Namen `{page}` angesprochen werden.
-Das ist der Bereich, der normalerweise benutzt wird, wenn keine Angabe bei `area` gemacht wird.
+// Nun wird bei den Ausgaben immer dieser Bereich genommen, sofern nichts anderes angegeben ist.
+// Die Seite kann unter dem Namen `{page}` angesprochen werden.
+// Das ist der Bereich, der normalerweise benutzt wird, wenn keine Angabe bei `area` gemacht wird.
 
 
 

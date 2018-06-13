@@ -154,7 +154,7 @@ Im Dateisystem können sie entweder mit einem absoluten Pfad angesprochen werden
 
 [source, xml]
 -------------------------------------------------------------------------------
-<Image href="file:///Pfad/zum/Bild.pdf"  />
+<Image href="file:///path/to/the/image.pdf"  />
 -------------------------------------------------------------------------------
 
 oder als Datei in einem der Unterverzeichnisse des Suchpfads, wie in den Beispielen oben.

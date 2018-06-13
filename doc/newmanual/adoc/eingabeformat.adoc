@@ -56,7 +56,7 @@ Ein einfaches Beispiel für die Anordnung:
       <property2>...</property2>
     </article>
   </articlegroup>
-  <articlegroup name="Außenleuchten" number="124">
+  <articlegroup name="exterior lights" number="124">
     <article number="124-23456">
       <property1>...</property1>
       <property2>...</property2>
@@ -89,11 +89,11 @@ Im Folgenden wird von dieser einfachen Datendatei ausgegangen:
 -------------------------------------------------------------------------------
 <catalog>
   <article nr="12345" price="99,95" quantity="1">
-    <description>Text</description>
+    <description>Text for atricle 12345</description>
     <image mainimage="yes">art12345.pdf</image>
   </article>
   <article nr="56789" price="45,95" quantity="5">
-    <description>Text für 56789</description>
+    <description>Text for atricle 56789</description>
     <image>art56789.pdf</image>
   </article>
 </catalog>
@@ -201,7 +201,7 @@ Das nachfolgende Beispiel erzeugt für jedes Kindelement mit dem Namen `article`
               <Paragraph><Value select="@nr"/></Paragraph>
             </Td>
             <Td>
-              <Paragraph><Value select="beschreibung"/></Paragraph>
+              <Paragraph><Value select="description"/></Paragraph>
             </Td>
           </Tr>
         </ForAll>
