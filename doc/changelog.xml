@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.3">
+    <entry version="3.3.7" date="2018-06-13">
+      <en>Text rotation in table cells (Td)</en>
+      <de>Textdrehungen in Tabellenzellen (Td)</de>
+    </entry>
     <entry version="3.3.6" date="2018-06-01">
       <en>Bugfix in textformat/spacebelow (#171)</en>
       <de>Fehlerkorrektur in Textformat/spacebelow (#171)</de>
