@@ -149,6 +149,8 @@ for k,v in pairs(node.whatsits()) do
         pdf_refximage_whatsit = k
     elseif v == "pdf_action" then
         pdf_action_whatsit = k
+    elseif v == "pdf_dest" then
+        pdf_dest_whatsit = k
     end
 end
 
@@ -3167,6 +3169,9 @@ function mkbookmarknodes(level,open_p,title)
     udw.value = string.format("%d+%d+%d+%s",level,openclosed,counter,title)
     n.next = udw
     udw.prev = n
+    -- this hlist sometimes gets reused, for example with Td/sethead=yes.
+    -- therefore we need to find it in tabular#remove_bookmark_nodes()
+    -- and remove them.
     local hlist = node.hpack(n)
     return hlist
 end
@@ -3462,7 +3467,7 @@ function rotateTd( nodelist,angle, width_sp)
     local halfwd_bp = sp_to_bp((width_sp - ht ) / 2  )
     local ht_bp = sp_to_bp( ht * math.max(0,math.cos(angle_rad)  ))
 
-    -- positive would be counter clockwise, but CSS is clowckwise. So we multiply by -1
+    -- positive would be counter clockwise, but CSS is clockwise. So we multiply by -1
     local sin = math.round(math.sin(angle_rad),3)
     local cos = math.round(math.cos(angle_rad),3)
     local q = node.new("whatsit","pdf_literal")
