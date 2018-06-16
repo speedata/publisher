@@ -1206,7 +1206,22 @@ local function calculate_height_and_connect_tablefoot(self,tablefoot,tablefoot_l
     return ht_footer, ht_footer_last
 end
 
---------
+
+-- This is called for Td/sethead=yes for the copies
+-- of the first head. It removes the pdf_dest nodes for bookmark destinations.
+function remove_bookmark_nodes( nodelist )
+    local head = nodelist
+    while head do
+        if head.id == publisher.hlist_node or head.id == publisher.vlist_node then
+            head.list = remove_bookmark_nodes(head.list)
+        elseif head.id == publisher.whatsit_node and head.subtype == publisher.pdf_dest_whatsit then
+            node.flush_list(head)
+            return nil
+        end
+        head = head.next
+    end
+    return nodelist
+end
 
 function typeset_table(self)
     trace("table: typeset table")
@@ -1328,8 +1343,10 @@ function typeset_table(self)
     end
 
     local function set_tableheads_extra( idx, nodelist, rownumber )
-        local foo = math.max( tableheads_extra.largest_index , idx )
-        tableheads_extra.largest_index = foo
+        -- nodelist is a copied list, but the pdf_dest whatsits must not
+        -- go into the output.
+        remove_bookmark_nodes(nodelist)
+        tableheads_extra.largest_index = math.max( tableheads_extra.largest_index , idx )
         tableheads_extra[idx] = tableheads_extra[idx] or {}
         tableheads_extra[idx][#tableheads_extra[idx] + 1]  = { nodelist = nodelist, rownumber = rownumber }
     end
