@@ -9,6 +9,9 @@ Sonst könnten Kollisionen bei der Namensvergabe entstehen.
 `_bleed`::
   Der Wert der Beschnittzugabe.
 
+`_jobname`::
+  Der Wert der auf der Kommandozeile angegeben ist.
+
 `_last_tr_data`::
   Der letzte Wert (`data="..."`) in einer Tabellenzeile.  Siehe Abschnitt <<ch-tab-kopf_fuss_uebertrag,Kopf- und Fußzeilen mit Übertrag>>.
 
