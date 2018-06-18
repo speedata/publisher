@@ -106,6 +106,7 @@ func footer(version, lang string, command *commandsxml.Command) template.HTML {
 
 func atttypeinfo(att *commandsxml.Attribute, lang string) template.HTML {
 	atttypesDe := map[string]string{
+		"boolean":            "yes oder no",
 		"xpath":              `<a href="../description-de/xpath.html">XPath Ausdruck</a>`,
 		"text":               "Text",
 		"number":             "Zahl",
@@ -116,6 +117,7 @@ func atttypeinfo(att *commandsxml.Attribute, lang string) template.HTML {
 		"zerotohundred":      "0 bis 100",
 	}
 	atttypesEn := map[string]string{
+		"boolean":            "yes or no",
 		"xpath":              `<a href="../description-en/xpath.html">XPath Expression</a>`,
 		"numberorlength":     "number or length",
 		"numberlengthorstar": "Number, length or *-numbers",

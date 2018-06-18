@@ -234,6 +234,7 @@
                     <value>number</value>
                     <value>numberorlength</value>
                     <value>text</value>
+                    <value>boolean</value>
                     <value>zerotohundred</value>
                     <value>length</value>
                     <value>numberlengthorstar</value>

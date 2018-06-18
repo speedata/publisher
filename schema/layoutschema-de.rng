@@ -2413,6 +2413,10 @@
          <optional>
             <attribute name="pdftarget">
                <a:documentation>Setze ein PDF-Ziel, das mit A referenziert werden kann.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
             </attribute>
          </optional>
          <empty></empty>
