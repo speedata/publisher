@@ -1,5 +1,21 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.3">
+    <entry version="3.3.8" date="2018-06-18">
+      <en>SaveDataset: rename attribute <tt>filename</tt> to <tt>name</tt>.</en>
+      <de>SaveDataset: Attribut <tt>filename</tt> umbenannt nach <tt>name</tt>.</de>
+    </entry>
+    <entry version="3.3.8" date="2018-06-18">
+      <en>Hyperlinks within documents</en>
+      <de>Hyperlinks innerhalb von Dokumenten</de>
+    </entry>
+    <entry version="3.3.8" date="2018-06-18">
+      <en>Allow bookmarks in dynamic table headers (Tr/sethead='yes')</en>
+      <de>Bookmarks in dynamischen Tabellenköpfen erlabut (Tr/sethead='yes')</de>
+    </entry>
+    <entry version="3.3.8" date="2018-06-18">
+      <en>XPath: fix comparison of elements and atomic values.</en>
+      <de>XPath: korrigiere Vergleich von Elementen und einzelnen Werten.</de>
+    </entry>
     <entry version="3.3.7" date="2018-06-13">
       <en>Text rotation in table cells (Td)</en>
       <de>Textdrehungen in Tabellenzellen (Td)</de>
