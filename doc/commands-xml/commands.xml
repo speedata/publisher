@@ -348,12 +348,20 @@
     <childelements>
       <cmd name="Value"/>
     </childelements>
-    <attribute en="href" type="text" optional="no">
+    <attribute en="href" type="text" optional="yes">
       <description xml:lang="en">
         <para>The target of the hyperlink (URI). Example: <tt>https://www.speedata.de</tt></para>
       </description>
       <description xml:lang="de">
         <para>Das Ziel des Hyperlinks. Beispiel: <tt>https://www.speedata.de</tt></para>
+      </description>
+    </attribute>
+    <attribute en="link" type="text" optional="yes" since="3.3.8">
+      <description xml:lang="en">
+        <para>The target of the document link (a Mark). Example: <tt>article123</tt></para>
+      </description>
+      <description xml:lang="de">
+        <para>Das Ziel des Dokumentlinks. Beispiel: <tt>article123</tt>. Ziele werden mit Action/Mark erzeugt</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -3997,6 +4005,14 @@
           <para>Den vorherigen Wert ersetzen.</para>
         </description>
       </choice>
+    </attribute>
+    <attribute en="pdftarget" optional="yes" since="3.3.8" type="yesnolength">
+      <description xml:lang="en">
+        <para>Set a pdf target that can be referenced by <cmd name="A"/></para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze ein PDF-Ziel, das mit <cmd name="A"/> referenziert werden kann.</para>
+      </description>
     </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Pageformat width="210mm" height="4cm"/>

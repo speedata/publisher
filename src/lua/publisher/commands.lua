@@ -23,6 +23,7 @@ commands = {}
 function commands.a( layoutxml,dataxml )
     trace("A")
     local href = publisher.read_attribute(layoutxml,dataxml,"href","rawstring")
+    local link = publisher.read_attribute(layoutxml,dataxml,"link","rawstring")
     local an = publisher.action_node
     local ai
     if an then
@@ -31,7 +32,11 @@ function commands.a( layoutxml,dataxml )
         ai = node.new("whatsit",publisher.pdf_action_whatsit)
     end
     ai.action_type = 3
-    ai.data = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",href)
+    if link then
+        ai.data = string.format("/Subtype/Link/A<</Type/Action/S/GoTo/D(mark%s)>>",link)
+    else
+        ai.data = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",href)
+    end
     local stl = node.new("whatsit","pdf_start_link")
     stl.action = ai
     stl.width = -1073741824
@@ -90,6 +95,10 @@ function commands.action( layoutxml,dataxml)
                 end
                 n.type = 115  -- type 115: "value is a string"
                 n.value = v.selection
+                if v.pdftarget then
+                    local d = publisher.mkstringdest("mark" .. v.selection)
+                    p:append(d)
+                end
                 p:append(n)
             end
         end
@@ -1598,10 +1607,11 @@ end
 function commands.mark( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     local append    = publisher.read_attribute(layoutxml,dataxml,"append","boolean")
+    local pdftarget = publisher.read_attribute(layoutxml,dataxml,"pdftarget","boolean")
     local ret = {}
     if type(selection) == "table" then
         for _,v in ipairs(selection) do
-            ret[#ret + 1] = { selection = v, append = append }
+            ret[#ret + 1] = { selection = v, append = append, pdftarget = pdftarget }
         end
         return ret
     else
