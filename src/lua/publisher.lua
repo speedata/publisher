@@ -652,6 +652,7 @@ function dothings()
     xpath.set_variable("_bleed", "0mm")
     xpath.set_variable("_pageheight", "297mm")
     xpath.set_variable("_pagewidth", "210mm")
+    xpath.set_variable("_jobname", tex.jobname)
 
     lowercase = os.getenv("SP_IGNORECASE") == "1"
 
