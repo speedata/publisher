@@ -56,6 +56,8 @@ func readStrings(data []byte) ([]string, error) {
 		}
 		switch x := token.(type) {
 		case xml.StartElement:
+			// when there is no char data, there must be an empty string for sharedStrings
+			buf = []byte{}
 			switch x.Name.Local {
 			case "sst":
 				// root element
