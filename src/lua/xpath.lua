@@ -502,8 +502,14 @@ function M.eval_comparison(first,second,operator)
     end
 
     if type(first) == "number" then
+        if type(second) == "table" then
+            second = table_textvalue(second)
+        end
         second = tonumber(second)
     elseif type(second) == "number" then
+        if type(first) == "table" then
+            first = table_textvalue(first)
+        end
         first = tonumber(first)
     end
     if type(first) == "table" then
