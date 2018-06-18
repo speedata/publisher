@@ -3808,7 +3808,7 @@
          <a:documentation>Speichert eine XML-Datei auf Festplatte. Diese Datei muss als Kindelement hierarchische Struktur, zum Beispiel aus den Befehlen Element und Attribut enthalten, wahlweise zusammengesetzt durch Variablen. Eine ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</a:documentation>
          <interleave>
             <group>
-               <attribute name="filename">
+               <attribute name="name">
                   <a:documentation>Name der Dateisatzdatei. Beispiel: toc</a:documentation>
                </attribute>
                <attribute name="elementname">

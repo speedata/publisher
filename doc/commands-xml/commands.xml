@@ -6184,7 +6184,7 @@
         <optional><cmd name="ForAll"/></optional>
       </oneOrMore>
     </childelements>
-    <attribute en="filename" type="text" optional="no">
+    <attribute en="name" type="text" optional="no">
       <description xml:lang="en">
         <para>Name of the file. Example: toc</para>
       </description>

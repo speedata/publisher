@@ -2781,12 +2781,16 @@ end
 --- Write a Lua table representing an XML file to the disk. See `#load_dataset` for the opposite.
 function commands.save_dataset( layoutxml,dataxml )
     local towrite, tmp,tab
-    local filename    = publisher.read_attribute(layoutxml,dataxml,"filename",  "rawstring")
+    -- filename is obsolete, LoadDataset has "name" too. And it is actually not a filename, just part
+    -- of it.
+    local filename    = publisher.read_attribute(layoutxml,dataxml,"filename",   "rawstring")
+    local name        = publisher.read_attribute(layoutxml,dataxml,"name",       "rawstring")
     local elementname = publisher.read_attribute(layoutxml,dataxml,"elementname","rawstring")
-    local selection   = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
-    local attributes  = publisher.read_attribute(layoutxml,dataxml,"attributes","xpathraw")
+    local selection   = publisher.read_attribute(layoutxml,dataxml,"select",     "rawstring")
+    local attributes  = publisher.read_attribute(layoutxml,dataxml,"attributes", "xpathraw")
+    name = name or filename
 
-    assert(filename)
+    assert(name)
     assert(elementname)
 
     tmp = {}
@@ -2841,7 +2845,7 @@ function commands.save_dataset( layoutxml,dataxml )
     ---      },
     ---    },
     tmp[".__local_name"] = elementname
-    local full_filename = tex.jobname .. "-" .. filename .. ".dataxml"
+    local full_filename = tex.jobname .. "-" .. name .. ".dataxml"
     local file = io.open(full_filename,"wb")
     towrite = publisher.xml_to_string(tmp)
     file:write(towrite)
