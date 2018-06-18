@@ -3459,18 +3459,26 @@
   </command>
   <command en="LoadDataset">
     <description xml:lang="en">
-      <para>Load an XML file previously written by <cmd name="SaveDataset"/>. The regular data processing is interrupted and the contents of the data file is taken as a data source. If the file does not exist, the call to <cmd name="LoadDataset"/> is ignored.</para>
+      <para>Load an XML file previously written by <cmd name="SaveDataset"/> (attribute name) or a well formed XML file (attribute filename). The regular data processing is interrupted and the contents of the data file is taken as a data source. If the file does not exist, the call to <cmd name="LoadDataset"/> is ignored.</para>
     </description>
     <description xml:lang="de">
-      <para>Lädt eine Datensatzdatei, die in einem vorherigen Durchlauf des Publishers erzeugt wurde. Die »normale« Verarbeitung des Layoutregelwerks wird unterbrochen und mit dem Inhalt der Datensatzdatei fortgeführt. Nachdem die Verarbeitung der neu geladenen Datensatzdatei beendet ist, wird die Verarbeitung des Layoutregelwerks mit dem ursprünglichen Datensatz fortgesetzt. Eine ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</para>
+      <para>Lädt eine Datensatzdatei, die in einem vorherigen Durchlauf des Publishers erzeugt wurde (Attribut name), oder eine reguläre XML-Datei (Attribut filename). Die »normale« Verarbeitung des Layoutregelwerks wird unterbrochen und mit dem Inhalt der Datensatzdatei fortgeführt. Nachdem die Verarbeitung der neu geladenen Datensatzdatei beendet ist, wird die Verarbeitung des Layoutregelwerks mit dem ursprünglichen Datensatz fortgesetzt. Eine ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</para>
     </description>
     <childelements/>
-    <attribute en="name" type="text" optional="no">
+    <attribute en="name" type="text" optional="yes">
       <description xml:lang="en">
         <para>Name of the data file. Example: toc</para>
       </description>
       <description xml:lang="de">
         <para>Name der Dateisatzdatei. Beispiel: toc</para>
+      </description>
+    </attribute>
+    <attribute en="filename" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>Filename of the XML file to load. Example: <tt>myfile.xml</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name der XML-Datei, die geladen werden soll. Beispiel: <tt>meinedatei.xml</tt>.</para>
       </description>
     </attribute>
     <example xml:lang="en">
