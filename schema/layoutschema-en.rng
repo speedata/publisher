@@ -12,9 +12,16 @@
          <a:documentation>Insert hyperlink to a URL.</a:documentation>
          <interleave>
             <group>
-               <attribute name="href">
-                  <a:documentation>The target of the hyperlink (URI). Example: https://www.speedata.de</a:documentation>
-               </attribute>
+               <optional>
+                  <attribute name="href">
+                     <a:documentation>The target of the hyperlink (URI). Example: https://www.speedata.de</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="link">
+                     <a:documentation>The target of the document link (a Mark). Example: article123</a:documentation>
+                  </attribute>
+               </optional>
                <ref name="e_Value"></ref>
             </group>
             <ref name="foreign-nodes"></ref>
@@ -2394,6 +2401,11 @@
                   <value>no</value>
                   <a:documentation>Replace the previous value.</a:documentation>
                </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="pdftarget">
+               <a:documentation>Set a pdf target that can be referenced by A</a:documentation>
             </attribute>
          </optional>
          <empty></empty>

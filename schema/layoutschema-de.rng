@@ -12,9 +12,16 @@
          <a:documentation>Hyperlink auf eine URL einfügen.</a:documentation>
          <interleave>
             <group>
-               <attribute name="href">
-                  <a:documentation>Das Ziel des Hyperlinks. Beispiel: https://www.speedata.de</a:documentation>
-               </attribute>
+               <optional>
+                  <attribute name="href">
+                     <a:documentation>Das Ziel des Hyperlinks. Beispiel: https://www.speedata.de</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="link">
+                     <a:documentation>Das Ziel des Dokumentlinks. Beispiel: article123. Ziele werden mit Action/Mark erzeugt</a:documentation>
+                  </attribute>
+               </optional>
                <ref name="e_Value"></ref>
             </group>
             <ref name="foreign-nodes"></ref>
@@ -2394,6 +2401,11 @@
                   <value>no</value>
                   <a:documentation>Den vorherigen Wert ersetzen.</a:documentation>
                </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="pdftarget">
+               <a:documentation>Setze ein PDF-Ziel, das mit A referenziert werden kann.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>

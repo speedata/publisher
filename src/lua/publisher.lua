@@ -3142,7 +3142,7 @@ do
     local destcounter = 0
     -- Create a pdf anchor (dest object). It returns a whatsit node and the
     -- number of the anchor, so it can be used in a pdf link or an outline.
-    function mkdest()
+    function mknumdest()
         destcounter = destcounter + 1
         local d = node.new("whatsit","pdf_dest")
         d.named_id = 0
@@ -3150,6 +3150,26 @@ do
         d.dest_type = 3
         return d, destcounter
     end
+end
+
+-- See PDF v1.7 spec 8.2 Document-Level Navigation
+-- dest_type:
+-- xyz   = 0  goto the current position
+-- fit   = 1  fit the page in the window
+-- fith  = 2  fit the width of the page
+-- fitv  = 3  fit the height of the page
+-- fitb  = 4  fit the ‘Bounding Box’ of the page
+-- fitbh = 5  fit the width of ‘Bounding Box’ of the page
+-- fitbv = 6  fit the height of ‘Bounding Box’ of the page
+-- fitr  = 7 ?
+
+
+function mkstringdest(name)
+    local d = node.new("whatsit","pdf_dest")
+    d.named_id = 1
+    d.dest_id = name
+    d.dest_type = 0
+    return d
 end
 
 -- Generate a hlist with necessary nodes for the bookmarks. To be inserted into a vlist that gets shipped out
@@ -3162,7 +3182,7 @@ function mkbookmarknodes(level,open_p,title)
     level = level or 1
     title = title or "no title for bookmark given"
 
-    local n,counter = mkdest()
+    local n,counter = mknumdest()
     local udw = node.new("whatsit","user_defined")
     udw.user_id = user_defined_bookmark
     udw.type = 115 -- a string
