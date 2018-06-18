@@ -33,7 +33,7 @@ function commands.a( layoutxml,dataxml )
     end
     ai.action_type = 3
     if link then
-        ai.data = string.format("/Subtype/Link/A<</Type/Action/S/GoTo/D(mark%s)>>",link)
+        ai.data = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/GoTo/D(mark%s)>>",link)
     else
         ai.data = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",href)
     end
