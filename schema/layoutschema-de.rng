@@ -1973,10 +1973,17 @@
    </define>
    <define name="e_LoadDataset">
       <element name="LoadDataset">
-         <a:documentation>Lädt eine Datensatzdatei, die in einem vorherigen Durchlauf des Publishers erzeugt wurde. Die »normale« Verarbeitung des Layoutregelwerks wird unterbrochen und mit dem Inhalt der Datensatzdatei fortgeführt. Nachdem die Verarbeitung der neu geladenen Datensatzdatei beendet ist, wird die Verarbeitung des Layoutregelwerks mit dem ursprünglichen Datensatz fortgesetzt. Eine ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</a:documentation>
-         <attribute name="name">
-            <a:documentation>Name der Dateisatzdatei. Beispiel: toc</a:documentation>
-         </attribute>
+         <a:documentation>Lädt eine Datensatzdatei, die in einem vorherigen Durchlauf des Publishers erzeugt wurde (Attribut name), oder eine reguläre XML-Datei (Attribut filename). Die »normale« Verarbeitung des Layoutregelwerks wird unterbrochen und mit dem Inhalt der Datensatzdatei fortgeführt. Nachdem die Verarbeitung der neu geladenen Datensatzdatei beendet ist, wird die Verarbeitung des Layoutregelwerks mit dem ursprünglichen Datensatz fortgesetzt. Eine ausführlichere Erläuterung findet sich im Abschnitt über automatisch generierte Verzeichnisse.</a:documentation>
+         <optional>
+            <attribute name="name">
+               <a:documentation>Name der Dateisatzdatei. Beispiel: toc</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="filename">
+               <a:documentation>Name der XML-Datei, die geladen werden soll. Beispiel: meinedatei.xml.</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

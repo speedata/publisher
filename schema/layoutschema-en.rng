@@ -1973,10 +1973,17 @@
    </define>
    <define name="e_LoadDataset">
       <element name="LoadDataset">
-         <a:documentation>Load an XML file previously written by SaveDataset. The regular data processing is interrupted and the contents of the data file is taken as a data source. If the file does not exist, the call to LoadDataset is ignored.</a:documentation>
-         <attribute name="name">
-            <a:documentation>Name of the data file. Example: toc</a:documentation>
-         </attribute>
+         <a:documentation>Load an XML file previously written by SaveDataset (attribute name) or a well formed XML file (attribute filename). The regular data processing is interrupted and the contents of the data file is taken as a data source. If the file does not exist, the call to LoadDataset is ignored.</a:documentation>
+         <optional>
+            <attribute name="name">
+               <a:documentation>Name of the data file. Example: toc</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="filename">
+               <a:documentation>Filename of the XML file to load. Example: myfile.xml.</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

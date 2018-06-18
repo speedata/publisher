@@ -1479,17 +1479,24 @@ end
 --- Load a data file (XML) and start processing its contents by calling the `Record`
 --- elements in the layout file.
 function commands.load_dataset( layoutxml,dataxml )
+    local path
+    local filename = publisher.read_attribute(layoutxml,dataxml,"filename", "rawstring")
     local name = publisher.read_attribute(layoutxml,dataxml,"name", "rawstring")
-    assert(name)
-    local filename = tex.jobname .. "-" .. name .. ".dataxml"
+    if filename then
+        path = kpse.find_file(filename)
+    elseif name then
+        name = tex.jobname .. "-" .. name .. ".dataxml"
+        path = kpse.find_file(name)
+    else
+        err("LoadDataset: no (file)name given.")
+    end
 
-    local path = kpse.find_file(filename)
     if path == nil then
         -- at the first run, the file does not exist. That's ok
         return
     end
 
-    local tmp_data = publisher.load_xml(filename)
+    local tmp_data = publisher.load_xml(name or filename)
     local root_name = tmp_data[".__local_name"]
 
     log("Selecting node: %q, mode=%q",root_name,"")
