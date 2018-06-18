@@ -3808,7 +3808,7 @@
          <a:documentation>Saves an element/attribute structure to be used in the next publisher run. The contents must have a tree structure.</a:documentation>
          <interleave>
             <group>
-               <attribute name="filename">
+               <attribute name="name">
                   <a:documentation>Name of the file. Example: toc</a:documentation>
                </attribute>
                <attribute name="elementname">
