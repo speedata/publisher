@@ -4014,7 +4014,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="pdftarget" optional="yes" since="3.3.8" type="yesnolength">
+    <attribute en="pdftarget" optional="yes" since="3.3.8" type="boolean">
       <description xml:lang="en">
         <para>Set a pdf target that can be referenced by <cmd name="A"/></para>
       </description>

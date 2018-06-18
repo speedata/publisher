@@ -2413,6 +2413,10 @@
          <optional>
             <attribute name="pdftarget">
                <a:documentation>Set a pdf target that can be referenced by A</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
             </attribute>
          </optional>
          <empty></empty>

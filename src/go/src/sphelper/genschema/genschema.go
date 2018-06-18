@@ -213,6 +213,15 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 				enc.EncodeToken(xml.CharData(`[0-9]+|yes|no`))
 				enc.EncodeToken(param.End())
 				enc.EncodeToken(data.End())
+			} else if attr.Type == "boolean" {
+				enc.EncodeToken(choiceElement.Copy())
+				enc.EncodeToken(valueElement.Copy())
+				enc.EncodeToken(xml.CharData("yes"))
+				enc.EncodeToken(valueElement.End())
+				enc.EncodeToken(valueElement.Copy())
+				enc.EncodeToken(xml.CharData("no"))
+				enc.EncodeToken(valueElement.End())
+				enc.EncodeToken(choiceElement.End())
 			}
 
 			if attr.Reference.Name != "" {
