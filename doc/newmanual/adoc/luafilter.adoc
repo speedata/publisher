@@ -104,7 +104,7 @@ end
 == Erstellen von XML-Dateien
 
 Man kann die zu verarbeitende Datendatei auch mit dem Lua-Skript erstellen.
-Dazu gibt es im Modul `xml` die Funktion `encode_xml()`, die aus einer Lua-Tabelle eine XML-Datei erstellt.
+Dazu gibt es im Modul `xml` die Funktion `encode_table()`, die aus einer Lua-Tabelle eine XML-Datei erstellt.
 
 Das Skript
 
