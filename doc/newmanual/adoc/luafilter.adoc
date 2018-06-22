@@ -40,6 +40,7 @@ In der Lua-Vorverarbeitung gibt es eine Funktion, die die Validierung übernimmt
 
 [source, lua]
 -------------------------------------------------------------------------------
+runtime = require("runtime")
 runtime.validate_relaxng(‹xmldatei›,‹schemadatei›)
 -------------------------------------------------------------------------------
 
@@ -48,6 +49,7 @@ Die Funktion liefert im Fehlerfall `false` und die Fehlermeldung zurück. Beispi
 [source, lua]
 -------------------------------------------------------------------------------
 -- die Pfade natürlich anpassen!
+runtime = require("runtime")
 ok, msg = runtime.validate_relaxng("layout.xml","../schema/layoutschema-de.rng")
 if not ok then
     print(msg)
@@ -83,6 +85,7 @@ Der Aufruf ist folgender:
 
 [source, lua]
 -------------------------------------------------------------------------------
+runtime = require("runtime")
 runtime.run_saxon(‹XSL›,‹Quelldatei›,‹Ausgabedatei›,‹Parameter›)
 -------------------------------------------------------------------------------
 
@@ -92,11 +95,12 @@ Die Parameter haben die Form `keyword=value` und werden durch Leerzeichen getren
 
 [source, lua]
 -------------------------------------------------------------------------------
-ok, err = runtime.run_saxon("transformation.xsl","quelldatei.xml","data.xml")
+runtime = require("runtime")
+ok, msg = runtime.run_saxon("transformation.xsl","quelldatei.xml","data.xml")
 
 -- den Publishing-Prozess abbrechen, wenn die Transformation fehl schlägt.
 if not ok then
-    print(err)
+    print(msg)
     os.exit(-1)
 end
 -------------------------------------------------------------------------------
@@ -111,6 +115,7 @@ Das Skript
 
 [source, lua]
 -------------------------------------------------------------------------------
+xml = require("xml")
 tbl = {
     ["_type"] = "element",
     ["_name"] = "data",
@@ -150,6 +155,7 @@ Dazu gibt es im Modul `xlsx` die Funktion `open()`, die eine vorhandene Datei ö
 
 [source, lua]
 -------------------------------------------------------------------------------
+xlsx = require("xlsx")
 spreadsheet, err = xlsx.open("myfile.xlsx")
 if not spreadsheet then
     print(err)
@@ -195,8 +201,9 @@ Die Struktur ist jedoch einfacher, da es nur ein »Arbeitsblatt« gibt.
 
 [source, lua]
 -------------------------------------------------------------------------------
-ok, ret = csv.decode("meinedatei.csv",{columns = {1,2,3}})
-if not ok then
+csv = require("csv")
+csvtab, msg = csv.decode("myfile.csv",{columns = {1,2,3}})
+if not csvtab then
     print(ret)
     os.exit(-1)
 end

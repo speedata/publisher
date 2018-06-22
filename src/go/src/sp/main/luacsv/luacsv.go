@@ -9,71 +9,48 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/Shopify/go-lua"
+	"github.com/yuin/gopher-lua"
 	"golang.org/x/text/encoding/charmap"
 )
 
-// Lua error message in the form of bool, string.
-// bool indicates success, string the error message in case of a false value.
-func lerr(l *lua.State, errormessage string) int {
+func lerr(l *lua.LState, errormessage string) int {
 	l.SetTop(0)
-	l.PushBoolean(false)
-	l.PushString(errormessage)
+	l.Push(lua.LFalse)
+	l.Push(lua.LString(errormessage))
 	return 2
 }
 
-func decode(l *lua.State) int {
-	if l.Top() < 1 {
+func decode(l *lua.LState) int {
+	if l.GetTop() < 1 {
 		return lerr(l, "The first argument of decode must be the filename of the CSV.")
 	}
-	filename, ok := l.ToString(1)
-	if !ok {
-		return lerr(l, "first argument must be a string")
-	}
+	filename := l.CheckString(1)
+
 	columns := []int{}
 	var charset, separator string
 
-	if l.Top() > 0 {
-		// hopefully the next argument is a table
-		if l.IsTable(2) {
-			l.PushString("charset")
-			l.Table(2)
-			if str, ok := l.ToString(-1); ok {
-				charset = str
+	if l.GetTop() > 1 {
+		if tbl := l.CheckTable(-1); tbl.Type() == lua.LTTable {
+			val := tbl.RawGetString("charset")
+			if val.Type() == lua.LTString {
+				charset = val.String()
 			}
-			l.Pop(1)
-
-			l.PushString("separator")
-			l.Table(2)
-			if str, ok := l.ToString(-1); ok {
-				separator = str
+			val = tbl.RawGetString("separator")
+			if val.Type() == lua.LTString {
+				separator = val.String()
 			}
-			l.Pop(1)
-
-			l.PushString("columns")
-			l.Table(2)
-			if l.IsTable(-1) {
-				l.Length(-1)
-				var length int
-				if i, ok := l.ToInteger(-1); !ok {
-					return lerr(l, "Should be an int")
-				} else {
-					length = i
-				}
-
-				l.Pop(1)
-				for i := 1; i <= length; i++ {
-					l.PushInteger(i)
-					l.Table(-2)
-					col := lua.CheckInteger(l, -1)
-					columns = append(columns, col)
-					l.Pop(1)
+			val = tbl.RawGetString("columns")
+			if cols, ok := val.(*lua.LTable); ok {
+				for i := 1; i <= cols.Len(); i++ {
+					val = cols.RawGetInt(i)
+					if f, ok := val.(lua.LNumber); ok {
+						columns = append(columns, int(f))
+					}
 				}
 			}
-			l.Pop(1)
 		}
-		l.SetTop(0)
 	}
+
 	var err error
 	var rd io.Reader
 
@@ -107,41 +84,33 @@ func decode(l *lua.State) int {
 	if err != nil {
 		return lerr(l, err.Error())
 	}
-
-	l.NewTable()
+	rows := l.NewTable()
 	for i, row := range records {
-		l.PushInteger(i + 1)
-		l.NewTable()
-		// -1 inner table
-		// -2 int (i + 1)
-		// -3 outer table
+		if i == 0 && len(columns) == 0 {
+			for z := 1; z <= len(row); z++ {
+				columns = append(columns, z)
+			}
+		}
+		col := l.NewTable()
 		for j, entry := range columns {
 			if entry-1 < 0 || entry > len(row) {
 				return lerr(l, fmt.Sprintf("Column %d out of range. Must be between 1 and %d (# of columns)", entry, len(row)))
 			}
-			l.PushInteger(j + 1)
-			l.PushString(row[entry-1])
-			l.SetTable(-3)
+			col.RawSetInt(j+1, lua.LString(row[entry-1]))
 		}
-		l.SetTable(-3)
+		rows.RawSetInt(i+1, col)
 	}
 
-	// return "ok" and the table
-	l.PushBoolean(true)
-	l.Insert(-2)
-	return 2
+	l.Push(rows)
+	return 1
 }
 
-var csvlib = []lua.RegistryFunction{
-	{"decode", decode},
+var exports = map[string]lua.LGFunction{
+	"decode": decode,
 }
 
-func Open(l *lua.State) {
-	requireCSV := func(l *lua.State) int {
-		lua.NewLibrary(l, csvlib)
-		return 1
-	}
-	lua.Require(l, "csv", requireCSV, true)
-	l.Pop(1)
-
+func Open(l *lua.LState) int {
+	mod := l.SetFuncs(l.NewTable(), exports)
+	l.Push(mod)
+	return 1
 }
