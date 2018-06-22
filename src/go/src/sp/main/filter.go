@@ -12,30 +12,21 @@ import (
 	"sp/main/luaxlsx"
 	"sp/main/luaxml"
 
-	"github.com/Shopify/go-lua"
+	"github.com/yuin/gopher-lua"
 )
 
-// Lua error message in the form of bool, string.
-// bool indicates success, string the error message in case of a false value.
-func lerr(l *lua.State, errormessage string) int {
+func lerr(l *lua.LState, errormessage string) int {
 	l.SetTop(0)
-	l.PushBoolean(false)
-	l.PushString(errormessage)
+	l.Push(lua.LFalse)
+	l.Push(lua.LString(errormessage))
 	return 2
 }
 
-func validateRelaxNG(l *lua.State) int {
-	var xml, schema string
-	var ok bool
-	xml, ok = l.ToString(1)
-	if !ok {
-		return lerr(l, "first argument must be a string")
-	}
-	schema, ok = l.ToString(2)
-	if !ok {
-		return lerr(l, "second argument must be a string")
-	}
-	cmd := exec.Command("java", "-jar", filepath.Join(libdir, "jing.jar"), schema, xml)
+func validateRelaxNG(l *lua.LState) int {
+	xmlfile := l.CheckString(1)
+	rngfile := l.CheckString(2)
+
+	cmd := exec.Command("java", "-jar", filepath.Join(libdir, "jing.jar"), rngfile, xmlfile)
 
 	stdoutPipe, err := cmd.StdoutPipe()
 	if err != nil {
@@ -53,83 +44,60 @@ func validateRelaxNG(l *lua.State) int {
 	if err != nil {
 		return lerr(l, b.String())
 	}
-	l.PushBoolean(true)
+
+	l.Push(lua.LTrue)
 	return 1
 }
 
-func saxon(l *lua.State) int {
-	if l.Top() < 3 {
-		fmt.Println("command requires 3 or 4 arguments")
-		return 0
+func runSaxon(l *lua.LState) int {
+	if l.GetTop() < 3 {
+		return lerr(l, "command requires 3 or 4 arguments")
 	}
+	xsl := l.CheckString(1)
+	src := l.CheckString(2)
+	out := l.CheckString(3)
 	var param string
-	var ok bool
-
-	if l.Top() == 4 {
-		param, ok = l.ToString(-1)
-		if !ok {
-			return lerr(l, "fourth argument must be a string")
-		}
-		l.Pop(1)
+	if l.GetTop() > 3 {
+		param = l.CheckString(4)
 	}
-
-	xsl, ok := l.ToString(-3)
-	if !ok {
-		l.SetTop(0)
-		l.PushBoolean(false)
-		l.PushString("Something is wrong with the first argument")
-		return 2
-	}
-	src, ok := l.ToString(-2)
-	if !ok {
-		l.SetTop(0)
-		l.PushBoolean(false)
-		l.PushString("Something is wrong with the second argument")
-		return 2
-	}
-	out, ok := l.ToString(-1)
-	if !ok {
-		l.SetTop(0)
-		l.PushBoolean(false)
-		l.PushString("Something is wrong with the third argument")
-		return 2
-	}
-	l.Pop(3)
-
 	cmd := fmt.Sprintf("java -jar %s -xsl:%s -s:%s -o:%s %s", filepath.Join(libdir, "saxon9804he.jar"), xsl, src, out, param)
 	exitcode := run(cmd)
-	l.PushBoolean(exitcode == 0)
-	l.PushString(cmd)
+	if exitcode == 0 {
+		l.Push(lua.LTrue)
+	} else {
+		l.Push(lua.LFalse)
+	}
+
+	l.Push(lua.LString(cmd))
 	return 2
 }
 
-var runtimeLib = []lua.RegistryFunction{
-	{"run_saxon", saxon},
-	{"validate_relaxng", validateRelaxNG},
+var exports = map[string]lua.LGFunction{
+	"validate_relaxng": validateRelaxNG,
+	"run_saxon":        runSaxon,
+}
+
+func runtimeLoader(l *lua.LState) int {
+	mod := l.SetFuncs(l.NewTable(), exports)
+	wd, _ := os.Getwd()
+	l.SetField(mod, "projectdir", lua.LString(wd))
+	l.Push(mod)
+	return 1
+
 }
 
 func runLuaScript(filename string) bool {
 	l := lua.NewState()
-	lua.OpenLibraries(l)
+	defer l.Close()
 
-	requireRuntime := func(l *lua.State) int {
-		lua.NewLibrary(l, runtimeLib)
-		return 1
-	}
-	lua.Require(l, "runtime", requireRuntime, true)
-	wd, _ := os.Getwd()
-	l.PushString(wd)
-	l.SetField(-2, "projectdir")
-	l.Pop(1)
+	l.PreloadModule("runtime", runtimeLoader)
+	l.PreloadModule("csv", luacsv.Open)
+	l.PreloadModule("xml", luaxml.Open)
+	l.PreloadModule("xlsx", luaxlsx.Open)
 
-	luaxml.Open(l)
-	luacsv.Open(l)
-	luaxlsx.Open(l)
-
-	if err := lua.DoFile(l, filename); err != nil {
+	if err := l.DoFile(filename); err != nil {
 		fmt.Println(err)
 		return false
 	}
-
 	return true
 }

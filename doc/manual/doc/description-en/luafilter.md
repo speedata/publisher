@@ -32,12 +32,15 @@ columns | A table that has the required columns in the given order. For example 
 
 Example:
 
-    csv.decode("myfile.csv", { charset = "ISO-8859-1", separator = ";", columns = {1,2,5} })
+    csv = require("csv")
+    result, msg = csv.decode("myfile.csv", { charset = "ISO-8859-1", separator = ";", columns = {1,2,5} })
+    if not result then
+        print(msg)
+        os.exit(-1)
+    end
 
 
 The table has at index 1..n the rows of the CSV file and each rows is a table in which the index 1..m is each table cell.
-
-
 
 
 runtime
@@ -51,6 +54,7 @@ Value | Description
 
 
 
+    runtime = require("runtime")
     ok, err = runtime.run_saxon("transformation.xsl","source.xml","data.xml","param1=value1 param2=value2")
 
     -- stop the publishing process if an error occurs
@@ -100,6 +104,15 @@ and an element:
 
 The XML file gets written with the name `data.xml`
 
+Example:
+
+    xml = require("xml")
+    ok, msg = xml.encode_table(tbl)
+    if not ok then
+        print(msg)
+        os.exit(-1)
+    end
+
 
 xlsx
 ----
@@ -108,6 +121,7 @@ xlsx
 
 Usage:
 
+    xlsx = require("xlsx")
     spreadsheet, err = xlsx.open("myfile.xlsx")
     if not spreadsheet then
         print(err)
