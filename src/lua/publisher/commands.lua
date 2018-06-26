@@ -1802,15 +1802,21 @@ function commands.nobreak( layoutxml, dataxml )
         strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 })
 
         local nl
+        local loops = 0
 
         repeat
-            fam = publisher.fonts.clone_family(fam, {size = shrinkfactor})
+            loops = loops + 1
+            if loops > 100 then
+                err("Nobreak: More than 100 loops, giving up")
+                break
+            end
             nl = node.copy_list(a.nodelist)
             publisher.set_fontfamily_if_necessary(nl,fam)
             -- pre_linebreak is necessary to set the different font widths
             publisher.fonts.pre_linebreak(nl)
             nl = node.hpack(nl)
             nl = node.insert_before(nl, nl , node.copy(strut))
+            fam = publisher.fonts.clone_family(fam, {size = shrinkfactor})
         until nl.next.width <= current_maxwidth
 
         a.nodelist = nl
