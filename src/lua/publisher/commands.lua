@@ -1801,24 +1801,25 @@ function commands.nobreak( layoutxml, dataxml )
         local strut
         strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 })
 
-        local nl = node.hpack(node.copy_list(a.nodelist))
-        nl = node.insert_before(nl, nl , node.copy(strut))
+        local nl
 
-        while nl.next.width > current_maxwidth do
+        repeat
             fam = publisher.fonts.clone_family(fam, {size = shrinkfactor})
-            local oldnl = nl
             nl = node.copy_list(a.nodelist)
             publisher.set_fontfamily_if_necessary(nl,fam)
             -- pre_linebreak is necessary to set the different font widths
             publisher.fonts.pre_linebreak(nl)
             nl = node.hpack(nl)
             nl = node.insert_before(nl, nl , node.copy(strut))
-        end
+        until nl.next.width <= current_maxwidth
 
         a.nodelist = nl
         publisher.intextblockcontext = publisher.intextblockcontext - 1
     elseif strategy == "cut" then
-        local nl = node.hpack(node.copy_list(a.nodelist))
+        local nl = node.copy_list(a.nodelist)
+        publisher.set_fontfamily_if_necessary(nl,publisher.current_fontfamily)
+        publisher.fonts.pre_linebreak(nl)
+        nl = node.hpack(nl)
         if node.dimensions(nl) <= current_maxwidth then
             return a
         end
