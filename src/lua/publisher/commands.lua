@@ -1659,6 +1659,11 @@ function commands.message( layoutxml, dataxml )
             local contents = publisher.element_contents(contents[i])
             if eltname == "Sequence" or eltname == "Value" then
                 if type(contents) == "table" then
+                    for k,v in pairs(contents) do
+                        if type(v) == "boolean" then
+                            contents[k] = v and "True" or "False"
+                        end
+                    end
                     ret[#ret + 1] = table.concat(contents)
                 elseif type(contents) == "string" then
                     ret[#ret + 1] = contents
