@@ -2099,6 +2099,9 @@
                      <ref name="e_Stylesheet"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Loop"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Switch"></ref>
                   </optional>
                   <optional>

@@ -146,6 +146,7 @@
     <optional><cmd name="SetGrid"/></optional>
     <optional><cmd name="SetVariable"/></optional>
     <optional><cmd name="Stylesheet"/></optional>
+    <optional><cmd name="Loop"/></optional>
     <optional><cmd name="Switch"/></optional>
     <optional><cmd name="Trace"/></optional>
   </define>
