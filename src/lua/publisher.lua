@@ -3148,7 +3148,7 @@ do
         local d = node.new("whatsit","pdf_dest")
         d.named_id = 0
         d.dest_id = destcounter
-        d.dest_type = 3
+        d.dest_type = 0
         return d, destcounter
     end
 end
