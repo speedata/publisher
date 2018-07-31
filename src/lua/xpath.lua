@@ -950,9 +950,9 @@ M.default_functions.max = function(dataxml,arg)
 end
 
 M.default_functions.min = function(dataxml,arg)
-    local min = arg[1]
+    local min = tonumber(arg[1])
     for i=2,#arg do
-        if arg[i] < min then
+        if tonumber(arg[i]) < min then
             min = arg[i]
         end
     end
