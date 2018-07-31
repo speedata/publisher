@@ -44,6 +44,8 @@ maxframes = 999
 tenpoint_sp    = tex.sp("10pt")
 twelvepoint_sp = tex.sp("12pt")
 tenmm_sp       = tex.sp("10mm")
+onemm_sp       = tex.sp("1mm")
+onein_sp       = tex.sp("1in")
 
 --- Attributes
 --- ----------
