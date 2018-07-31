@@ -1,5 +1,21 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.3">
+    <entry version="3.3.10" date="2018-07-31">
+      <en>sd:group-height() with a second argument, a unit.</en>
+      <de>sd:group-height() mit einem zweiten Argument (Einheit), die Ausgabe ist das Vielfache der Einheit.</de>
+    </entry>
+    <entry version="3.3.10" date="2018-07-11">
+      <en>Bookmarks don't change the zoom of the PDF</en>
+      <de>Bookmarks ändern nicht den Zoom-Faktor des PDFs</de>
+    </entry>
+    <entry version="3.3.10" date="2018-06-26">
+      <en>Bugfix for NoBreak</en>
+      <de>Fehlerkorrektur für NoBreak</de>
+    </entry>
+    <entry version="3.3.10" date="2018-06-22">
+      <en>New Lua implementation for the filter (yuin/gopher-lua instead of Shopify/go-lua)</en>
+      <de>Neue Lua-Implementierung für den Filter (yuin/gopher-lua anstelle von Shopify/go-lua)</de>
+    </entry>
     <entry version="3.3.9" date="2018-06-18">
       <en>Various bugfixes, expose <tt>$_jobname</tt></en>
       <de>Verschiedene Fehlerkorrekturen, Zugriff auf <tt>$_jobname</tt></de>
