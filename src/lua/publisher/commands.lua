@@ -604,6 +604,7 @@ function commands.define_textformat(layoutxml)
     local hyphenate     = publisher.read_attribute(layoutxml,dataxml,"hyphenate",     "boolean", true)
     local hyphenchar    = publisher.read_attribute(layoutxml,dataxml,"hyphenchar",    "rawstring")
     local tab           = publisher.read_attribute(layoutxml,dataxml,"tab",           "rawstring")
+    local filllastline  = publisher.read_attribute(layoutxml,dataxml,"fill-last-line","number")
     local fmt = {
         colpaddingtop = colpaddingtop,
     }
@@ -662,6 +663,9 @@ function commands.define_textformat(layoutxml)
     fmt.breakbelow = breakbelow
     fmt.tab = tab
 
+    if filllastline then
+        fmt.filllastline = filllastline
+    end
 
     publisher.textformats[name] = fmt
 end

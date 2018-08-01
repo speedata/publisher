@@ -1149,6 +1149,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="fill-last-line">
+               <a:documentation>Ensure the length of the last line in a paragraph. Values from 0 (no change) to 100 (last line is full). Handle with care. Default is 0.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="hyphenchar">
                <a:documentation>The character used for hyphenation (default: -)</a:documentation>
             </attribute>

@@ -382,6 +382,24 @@ function Paragraph:format(width_sp, default_textformat_name,options)
                 lang.prehyphenchar(l.l,unicode.utf8.byte(current_textformat.hyphenchar))
             end
         end
+        if current_textformat.filllastline then
+            local min_width_sp = current_textformat.filllastline / 100 * width_sp
+            local head = nodelist
+            while head do
+                local _w,_h,_d = node.dimensions(head)
+                if head.id == publisher.glue_node and head.subtype ~= 15 and (_w < min_width_sp) then
+                    local prev = head.prev
+                    prev.next = nil
+                    head.prev = nil
+                    head = node.hpack(head)
+                    prev.next = head
+                    head.prev = prev
+                    break
+                end
+
+            head = head.next
+            end
+        end
 
         publisher.fonts.pre_linebreak(nodelist)
 

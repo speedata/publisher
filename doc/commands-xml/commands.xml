@@ -2114,6 +2114,14 @@
         <para>Die Höhe des Innenabstands in einer Spalte (oben) mit Output/Text</para>
       </description>
     </attribute>
+    <attribute en="fill-last-line" optional="yes" since="3.3.11" type="zerotohundred">
+      <description xml:lang="en">
+        <para>Ensure the length of the last line in a paragraph. Values from 0 (no change) to 100 (last line is full). Handle with care. Default is 0.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Mindestlänge der letzten Zeile im Absatz. Prozentangabe (0 bis 100). Mit Vorsicht anzuwenden. Voreinstellung ist 0.</para>
+      </description>
+    </attribute>
     <attribute en="hyphenchar" optional="yes" type="text">
       <description xml:lang="en">
         <para>The character used for hyphenation (default: -)</para>
