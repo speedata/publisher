@@ -707,13 +707,45 @@
     <para>Erzeugt einen 1D oder 2D Strichcode (barcode), der in <cmd name="PlaceObject"/> ausgegeben werden kann.</para>
   </description>
     <childelements/>
-    <attribute en="select" type="xpath" optional="no">
+    <attribute en="eclevel" optional="yes" since="2.7.10">
       <description xml:lang="en">
-        <para>The data to be encoded in the barcode.</para>
+        <para>Set the error correction level for QR-codes. If not provided, the system uses the maximum level for minimum size. The higher the level, the more error correction is in the QR-code.</para>
       </description>
       <description xml:lang="de">
-        <para>Wert, der als Strichcode kodiert werden soll.</para>
+        <para>Setzt den Fehlerkorrekturlevel für QR-Codes. Wenn nicht angegeben, nutzt das System den maximalen Level für die kleinste QR-Code Größe. Je höher der Level, desto mehr Fehlerkorrektur ist im QR-Code.</para>
       </description>
+      <choice en="L">
+        <description xml:lang="en">
+          <para>Set the lowest level (1) with approx. 7% recovery.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setzt den kleinsten Fehlerkorrekturwert (1) mit ca. 7% Korrektur.</para>
+        </description>
+      </choice>
+      <choice en="M">
+        <description xml:lang="en">
+          <para>Set the second lowest level (2) with approx. 15% recovery.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setzt den zweitkleinsten Fehlerkorrekturwert (2) mit ca. 15% Korrektur.</para>
+        </description>
+      </choice>
+      <choice en="Q">
+        <description xml:lang="en">
+          <para>Set the second highest level (3) with approx. 25% recovery.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setzt den zweitgrößten Fehlerkorrekturwert (3) mit ca. 25% Korrektur.</para>
+        </description>
+      </choice>
+      <choice en="H">
+        <description xml:lang="en">
+          <para>Set the highest level (4) with approx. 35% recovery.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setzt den größten Fehlerkorrekturwert (4) mit ca. 35% Korrektur.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="fontface" type="text" optional="yes">
       <description xml:lang="en">
@@ -722,6 +754,54 @@
       <description xml:lang="de">
         <para>Name der Schriftart des Textes, der ggf. unterhalb des Strichcodes ausgegeben wird. Nicht in allen Codes verwendet.</para>
       </description>
+    </attribute>
+    <attribute en="height" type="numberorlength" optional="yes">
+      <description xml:lang="en">
+        <para>Height of the barcode.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Höhe des Strichcodes.</para>
+      </description>
+    </attribute>
+    <attribute en="overshoot" optional="yes" type="number">
+      <description xml:lang="en">
+        <para>The factor denoting the extra length of the outer and middle bar. Only useful with EAN13.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Faktor, um den die äußeren und der innere Balken die normalen Balken übersteigt. Nur anwendbar bei EAN13.</para>
+      </description>
+    </attribute>
+    <attribute en="select" type="xpath" optional="no">
+      <description xml:lang="en">
+        <para>The data to be encoded in the barcode.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wert, der als Strichcode kodiert werden soll.</para>
+      </description>
+    </attribute>
+    <attribute en="showtext" optional="yes">
+      <description xml:lang="en">
+        <para>Should the text be written under the barcode?</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt, ob unterhalb des Barcodes der Text erscheint.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Write text beneath the barcode.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Text unterhalb des Barcodes schreiben.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Don't display text.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Keinen Text anzeigen.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="type" optional="no">
       <description xml:lang="en">
@@ -762,86 +842,6 @@
       <description xml:lang="de">
         <para>Breite des Strichcodes</para>
       </description>
-    </attribute>
-    <attribute en="height" type="numberorlength" optional="yes">
-      <description xml:lang="en">
-        <para>Height of the barcode.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Höhe des Strichcodes.</para>
-      </description>
-    </attribute>
-    <attribute en="showtext" optional="yes">
-      <description xml:lang="en">
-        <para>Should the text be written under the barcode?</para>
-      </description>
-      <description xml:lang="de">
-        <para>Bestimmt, ob unterhalb des Barcodes der Text erscheint.</para>
-      </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>Write text beneath the barcode.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Text unterhalb des Barcodes schreiben.</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>Don't display text.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Keinen Text anzeigen.</para>
-        </description>
-      </choice>
-    </attribute>
-    <attribute en="overshoot" optional="yes" type="number">
-      <description xml:lang="en">
-        <para>The factor denoting the extra length of the outer and middle bar. Only useful with EAN13.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Der Faktor, um den die äußeren und der innere Balken die normalen Balken übersteigt. Nur anwendbar bei EAN13.</para>
-      </description>
-    </attribute>
-    <attribute en="eclevel" optional="yes" since="2.7.10">
-      <description xml:lang="en">
-        <para>Set the error correction level for QR-codes. If not provided, the system uses the maximum level for minimum size. The higher the level, the more error correction is in the QR-code.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Setzt den Fehlerkorrekturlevel für QR-Codes. Wenn nicht angegeben, nutzt das System den maximalen Level für die kleinste QR-Code Größe. Je höher der Level, desto mehr Fehlerkorrektur ist im QR-Code.</para>
-      </description>
-      <choice en="L">
-        <description xml:lang="en">
-          <para>Set the lowest level (1) with approx. 7% recovery.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Setzt den kleinsten Fehlerkorrekturwert (1) mit ca. 7% Korrektur.</para>
-        </description>
-      </choice>
-      <choice en="M">
-        <description xml:lang="en">
-          <para>Set the second lowest level (2) with approx. 15% recovery.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Setzt den zweitkleinsten Fehlerkorrekturwert (2) mit ca. 15% Korrektur.</para>
-        </description>
-      </choice>
-      <choice en="Q">
-        <description xml:lang="en">
-          <para>Set the second highest level (3) with approx. 25% recovery.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Setzt den zweitgrößten Fehlerkorrekturwert (3) mit ca. 25% Korrektur.</para>
-        </description>
-      </choice>
-      <choice en="H">
-        <description xml:lang="en">
-          <para>Set the highest level (4) with approx. 35% recovery.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Setzt den größten Fehlerkorrekturwert (4) mit ca. 35% Korrektur.</para>
-        </description>
-      </choice>
     </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
@@ -992,14 +992,6 @@
       <para>Erstellt ein Lesezeichen für den PDF Betrachter (z.B. Adobe Reader). Wenn der Leser auf das Lesezeichen klickt, springt der PDF Betrachter an diese Stelle im Dokument.</para>
     </description>
     <childelements/>
-    <attribute en="select" type="xpath" optional="no">
-      <description xml:lang="en">
-        <para>Title of the bookmark</para>
-      </description>
-      <description xml:lang="de">
-        <para>Titel des Lesezeichens</para>
-      </description>
-    </attribute>
     <attribute en="level" type="number" optional="no">
       <description xml:lang="en">
         <para>1 is the top level, 2 is the next level, etc.</para>
@@ -1031,6 +1023,14 @@
           <para>Verstecke Kinder.</para>
         </description>
       </choice>
+    </attribute>
+    <attribute en="select" type="xpath" optional="no">
+      <description xml:lang="en">
+        <para>Title of the bookmark</para>
+      </description>
+      <description xml:lang="de">
+        <para>Titel des Lesezeichens</para>
+      </description>
     </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Bookmark level="1" select="$title" open="no" />]]></listing>
@@ -1287,36 +1287,12 @@
       <para>Erzeugt einen Kreis.</para>
     </description>
     <childelements/>
-    <attribute en="radiusx" type="numberorlength" optional="no">
-      <description xml:lang="en">
-        <para>Radius of the circle in grid cells (horizontal) or as an absolute length. In the future, a radiusy will allow to create an ellipse.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Radius des Kreises in Rasterzellen (horizontal) oder als absolute Maßangabe. In zukünftigen Versionen wird mit radiusy eine Ellipse erzeugbar sein.</para>
-      </description>
-    </attribute>
     <attribute en="backgroundcolor" type="text" optional="yes" css="background-color">
       <description xml:lang="en">
         <para>Color of the circle.</para>
       </description>
       <description xml:lang="de">
         <para>Farbe des Kreises.</para>
-      </description>
-    </attribute>
-    <attribute en="framecolor" type="text" optional="yes" css="color">
-      <description xml:lang="en">
-        <para>Color of the circle line.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Farbe der Kreislinie.</para>
-      </description>
-    </attribute>
-    <attribute en="rulewidth" type="length" optional="yes">
-      <description xml:lang="en">
-        <para>The thickness of the border that is drawn around the object.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die Dicke des Striches um den Kreis.</para>
       </description>
     </attribute>
     <attribute en="class" optional="yes" type="text">
@@ -1327,12 +1303,36 @@
         <para>CSS Klasse für diesen Kreis.</para>
       </description>
     </attribute>
+    <attribute en="framecolor" type="text" optional="yes" css="color">
+      <description xml:lang="en">
+        <para>Color of the circle line.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Farbe der Kreislinie.</para>
+      </description>
+    </attribute>
     <attribute en="id" optional="yes" type="text">
       <description xml:lang="en">
         <para>CSS id for this circle.</para>
       </description>
       <description xml:lang="de">
         <para>CSS id für diesen Kreis.</para>
+      </description>
+    </attribute>
+    <attribute en="radiusx" type="numberorlength" optional="no">
+      <description xml:lang="en">
+        <para>Radius of the circle in grid cells (horizontal) or as an absolute length. In the future, a radiusy will allow to create an ellipse.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Radius des Kreises in Rasterzellen (horizontal) oder als absolute Maßangabe. In zukünftigen Versionen wird mit radiusy eine Ellipse erzeugbar sein.</para>
+      </description>
+    </attribute>
+    <attribute en="rulewidth" type="length" optional="yes">
+      <description xml:lang="en">
+        <para>The thickness of the border that is drawn around the object.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Dicke des Striches um den Kreis.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -1418,14 +1418,6 @@
       <para>Gibt die Eigenschaften einer Spalte in einer Tabelle an.</para>
     </description>
     <childelements/>
-    <attribute en="width" type="numberlengthorstar" optional="yes">
-      <description xml:lang="en">
-        <para>Width of the column. Argument can be a number (in grid cells) a length (e.g. 2cm) or a *-number (e.g. 4*).</para>
-      </description>
-      <description xml:lang="de">
-        <para>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm) oder in <tt>*</tt>-Angaben (z.B. <tt>4*</tt>) angegeben werden.</para>
-      </description>
-    </attribute>
     <attribute en="align" optional="yes">
       <description xml:lang="en">
         <para>The horizontal alignment of the table cells in this column. Can be overridden in a cell (<cmd name="Td"/>).</para>
@@ -1458,6 +1450,38 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="backgroundcolor" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>All cells in this column have this background color.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Farbe der Tabellenspalte.</para>
+      </description>
+    </attribute>
+    <attribute en="padding-left" optional="yes" since="3.1.8" type="length">
+      <description xml:lang="en">
+        <para>Set the left padding for the column</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze das linke padding für diese Spalte</para>
+      </description>
+    </attribute>
+    <attribute en="padding-right" optional="yes" since="3.1.8" type="length">
+      <description xml:lang="en">
+        <para>Set the right padding for the column</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze das rechte padding für diese Spalte</para>
+      </description>
+    </attribute>
+    <attribute en="width" type="numberlengthorstar" optional="yes">
+      <description xml:lang="en">
+        <para>Width of the column. Argument can be a number (in grid cells) a length (e.g. 2cm) or a *-number (e.g. 4*).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm) oder in <tt>*</tt>-Angaben (z.B. <tt>4*</tt>) angegeben werden.</para>
+      </description>
+    </attribute>
     <attribute en="valign" optional="yes">
       <description xml:lang="en">
         <para>The vertical alignment of the cells in this column. Can be overridden in a cell (<cmd name="Td"/>).</para>
@@ -1489,30 +1513,6 @@
           <para>Die Tabellenzellen dieser Spalte werden  unten ausgerichtet.</para>
         </description>
       </choice>
-    </attribute>
-    <attribute en="backgroundcolor" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>All cells in this column have this background color.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Farbe der Tabellenspalte.</para>
-      </description>
-    </attribute>
-    <attribute en="padding-left" optional="yes" since="3.1.8" type="length">
-      <description xml:lang="en">
-        <para>Set the left padding for the column</para>
-      </description>
-      <description xml:lang="de">
-        <para>Setze das linke padding für diese Spalte</para>
-      </description>
-    </attribute>
-    <attribute en="padding-right" optional="yes" since="3.1.8" type="length">
-      <description xml:lang="en">
-        <para>Set the right padding for the column</para>
-      </description>
-      <description xml:lang="de">
-        <para>Setze das rechte padding für diese Spalte</para>
-      </description>
     </attribute>
     <example xml:lang="en">
       <para>See the example at <cmd name="Columns"/>.</para>
@@ -1719,6 +1719,14 @@
       <para>Definiert Farben, die später im Layout benutzt werden können</para>
     </description>
     <childelements/>
+    <attribute en="colorname" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The name of the spot color if model is »spotcolor«. The name must match the required color name, such as »PANTONE 116 C«.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name der Sonderfarbe wenn das Modell auf »spotcolor« eingestellt ist. Der muss den offiziellen Namen tragen, wie z.B. »PANTONE 116 C«.</para>
+      </description>
+    </attribute>
     <attribute en="model" optional="yes">
       <description xml:lang="en">
         <para>Color model to be used for the color. Currently “rgb”, “cmyk”, “gray” and “spotcolor” are supported.</para>
@@ -1773,6 +1781,38 @@
       </description>
       <description xml:lang="de">
         <para>Name der Farbe, die definiert wird.</para>
+      </description>
+    </attribute>
+    <attribute en="overprint" optional="yes">
+      <description xml:lang="en">
+        <para>Enable overprint for this color.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Überdrucken für diese Farbe anschalten</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Enable overprint for this color.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Überdrucken für diese Farbe anschalten.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Disable overprint for this color (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Überdrucken für diese Farbe ausschalten (Voreinstellung).</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="value" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>Hex value of the color, such as <tt>#FA5</tt> or <tt>#FFAA55</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Hexwert der Farbe, wie beispielsweise <tt>#FA5</tt> oder <tt>#FFAA55</tt>.</para>
       </description>
     </attribute>
     <attribute en="r" type="zerotohundred" optional="yes">
@@ -1831,46 +1871,6 @@
         <para>Schwarz (key) Anteil bei CMYK</para>
       </description>
     </attribute>
-    <attribute en="colorname" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>The name of the spot color if model is »spotcolor«. The name must match the required color name, such as »PANTONE 116 C«.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Der Name der Sonderfarbe wenn das Modell auf »spotcolor« eingestellt ist. Der muss den offiziellen Namen tragen, wie z.B. »PANTONE 116 C«.</para>
-      </description>
-    </attribute>
-    <attribute en="overprint" optional="yes">
-      <description xml:lang="en">
-        <para>Enable overprint for this color.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Überdrucken für diese Farbe anschalten</para>
-      </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>Enable overprint for this color.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Überdrucken für diese Farbe anschalten.</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>Disable overprint for this color (default).</para>
-        </description>
-        <description xml:lang="de">
-          <para>Überdrucken für diese Farbe ausschalten (Voreinstellung).</para>
-        </description>
-      </choice>
-    </attribute>
-    <attribute en="value" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>Hex value of the color, such as <tt>#FA5</tt> or <tt>#FFAA55</tt>.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Der Hexwert der Farbe, wie beispielsweise <tt>#FA5</tt> oder <tt>#FFAA55</tt>.</para>
-      </description>
-    </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<DefineColor name="Schwarz" model="cmyk" c="0" m="0" y="0" k="100"/>
 <DefineColor name="Weiß" model="rgb" r="100" g="100" b="100"/>]]></listing>
@@ -1893,20 +1893,20 @@
       <para>Definiert einen Alias für die Verwendung bei <cmd name="DefineFontfamily"/>. Aliase werden rekursiv aufgelöst.</para>
     </description>
     <childelements/>
-    <attribute en="existing" type="text" optional="no">
-      <description xml:lang="en">
-        <para>The name of the existing font family.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Der Name der existierenden Schriftfamilie.</para>
-      </description>
-    </attribute>
     <attribute en="alias" type="text" optional="no">
       <description xml:lang="en">
         <para>New (equivalent) name of the font</para>
       </description>
       <description xml:lang="de">
         <para>Neuer (gleichberechtigter) Name der Schriftart</para>
+      </description>
+    </attribute>
+    <attribute en="existing" type="text" optional="no">
+      <description xml:lang="en">
+        <para>The name of the existing font family.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name der existierenden Schriftfamilie.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -1954,14 +1954,6 @@
         <optional><cmd name="BoldItalic"/></optional>
       </interleave>
     </childelements>
-    <attribute en="name" type="text" optional="no">
-      <description xml:lang="en">
-        <para>The symbolic name that is used as a reference to access this font family.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Interner Name, unter dem die Schriftfamilie später angesprochen wird.</para>
-      </description>
-    </attribute>
     <attribute en="fontsize" type="number" optional="no">
       <description xml:lang="en">
         <para>Font size in pt (PostScript points). Number without unit.</para>
@@ -1976,6 +1968,14 @@
       </description>
       <description xml:lang="de">
         <para>Abstand zwischen zwei Grundlinien in pt (PostScript-Punkte).</para>
+      </description>
+    </attribute>
+    <attribute en="name" type="text" optional="no">
+      <description xml:lang="en">
+        <para>The symbolic name that is used as a reference to access this font family.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Interner Name, unter dem die Schriftfamilie später angesprochen wird.</para>
       </description>
     </attribute>
     <remark xml:lang="en">
@@ -2026,46 +2026,6 @@
       <para>Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen Paragraph und Textblock) zurückgegriffen werden.</para>
     </description>
     <childelements/>
-    <attribute en="hyphenchar" optional="yes" type="text">
-      <description xml:lang="en">
-        <para>The character used for hyphenation (default: -)</para>
-      </description>
-      <description xml:lang="de">
-        <para>Das Zeichen, das für Trennung benutzt wird (Voreinstellung: -)</para>
-      </description>
-    </attribute>
-    <attribute en="orphan" optional="yes" type="yesnonumber" lastchanged="3.1.22">
-      <description xml:lang="en">
-        <para>If yes, allow orphans (first line of paragraph is on the previous page). If you provide a number, it is the number of lines that must be kept together. Default: no.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Wenn »yes«, Schusterjungen erlauben (erste Zeile eines Absatzes ist auf der vorherigen Seite). Wenn eine Zahl angegeben wird, ist dies die Anzahl der Zeilen, die zusammengehalten werden. Voreinstellung ist »no«.</para>
-      </description>
-    </attribute>
-    <attribute en="widow" optional="yes" type="yesnonumber" lastchanged="3.1.22">
-      <description xml:lang="en">
-        <para>If yes, allow widows (last line of paragraph is on the next page). If you provide a number, it is the number of lines that must be kept together.  Default: no.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Wenn »yes«, Hurenkinder erlauben (letzte Zeile eines Absatzes ist auf der nächsten Seite). Wenn eine Zahl angegeben wird, ist dies die Anzahl der Zeilen, die zusammengehalten werden. Voreinstellung ist »no«.</para>
-      </description>
-    </attribute>
-    <attribute en="column-padding-top" optional="yes" since="3.2.1">
-      <description xml:lang="en">
-        <para>The height of the padding that is inserted in a column (at the top) with Output/Text</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die Höhe des Innenabstands in einer Spalte (oben) mit Output/Text</para>
-      </description>
-    </attribute>
-    <attribute en="name" type="text" optional="no">
-      <description xml:lang="en">
-        <para>Name of the textformat that is used later in the layout.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Name des Textformats, unter dem es später im Layoutregelwerk angesprochen wird.</para>
-      </description>
-    </attribute>
     <attribute en="alignment" optional="yes">
       <description xml:lang="en">
         <para>Determines the formatting of the text.</para>
@@ -2106,22 +2066,6 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="indentation" type="length" optional="yes">
-      <description xml:lang="en">
-        <para>The amount of indentation.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die Länge des Absatzeinzugs.</para>
-      </description>
-    </attribute>
-    <attribute en="rows" type="number" optional="yes">
-      <description xml:lang="en">
-        <para>The number of rows with indentation given in the attribute <tt>indentation</tt>. If the number is negative, this determines the number of rows that are <quote>not</quote> indented.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Anzahl der Zeilen, die eingezogen werden (wenn <tt>indentation</tt> angegeben ist) bzw. falls die Zahl negativ ist, die Anzahl der Zeilen, die <quote>nicht</quote> eingerückt werden.</para>
-      </description>
-    </attribute>
     <attribute en="border-top" type="length" optional="yes">
       <description xml:lang="en">
         <para>The thickness of the rule above the text.</para>
@@ -2136,14 +2080,6 @@
       </description>
       <description xml:lang="de">
         <para>Die Dicke der Linie unter dem Text</para>
-      </description>
-    </attribute>
-    <attribute en="margin-bottom" type="length" optional="yes">
-      <description xml:lang="en">
-        <para>Distance between the bottom rule and the text of the next paragraph.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Abstand zwischen der Linie unten und dem nachfolgenden Paragraph.</para>
       </description>
     </attribute>
     <attribute en="break-below" optional="yes">
@@ -2170,20 +2106,20 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="padding-top" type="length" optional="yes">
+    <attribute en="column-padding-top" optional="yes" since="3.2.1">
       <description xml:lang="en">
-        <para>Distance between the top of the text and the top rule.</para>
+        <para>The height of the padding that is inserted in a column (at the top) with Output/Text</para>
       </description>
       <description xml:lang="de">
-        <para>Abstand zwischen der Oberkante des Texts und der Linie oben.</para>
+        <para>Die Höhe des Innenabstands in einer Spalte (oben) mit Output/Text</para>
       </description>
     </attribute>
-    <attribute en="margin-top" type="length" optional="yes">
+    <attribute en="hyphenchar" optional="yes" type="text">
       <description xml:lang="en">
-        <para>Distance between the top rule and the text of the previous paragraph.</para>
+        <para>The character used for hyphenation (default: -)</para>
       </description>
       <description xml:lang="de">
-        <para>Abstand zwischen der Linie oben und dem vorhergehenden Text.</para>
+        <para>Das Zeichen, das für Trennung benutzt wird (Voreinstellung: -)</para>
       </description>
     </attribute>
     <attribute en="hyphenate" optional="yes">
@@ -2210,6 +2146,62 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="indentation" type="length" optional="yes">
+      <description xml:lang="en">
+        <para>The amount of indentation.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Länge des Absatzeinzugs.</para>
+      </description>
+    </attribute>
+    <attribute en="margin-bottom" type="length" optional="yes">
+      <description xml:lang="en">
+        <para>Distance between the bottom rule and the text of the next paragraph.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Abstand zwischen der Linie unten und dem nachfolgenden Paragraph.</para>
+      </description>
+    </attribute>
+    <attribute en="margin-top" type="length" optional="yes">
+      <description xml:lang="en">
+        <para>Distance between the top rule and the text of the previous paragraph.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Abstand zwischen der Linie oben und dem vorhergehenden Text.</para>
+      </description>
+    </attribute>
+    <attribute en="name" type="text" optional="no">
+      <description xml:lang="en">
+        <para>Name of the textformat that is used later in the layout.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name des Textformats, unter dem es später im Layoutregelwerk angesprochen wird.</para>
+      </description>
+    </attribute>
+    <attribute en="orphan" optional="yes" type="yesnonumber" lastchanged="3.1.22">
+      <description xml:lang="en">
+        <para>If yes, allow orphans (first line of paragraph is on the previous page). If you provide a number, it is the number of lines that must be kept together. Default: no.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn »yes«, Schusterjungen erlauben (erste Zeile eines Absatzes ist auf der vorherigen Seite). Wenn eine Zahl angegeben wird, ist dies die Anzahl der Zeilen, die zusammengehalten werden. Voreinstellung ist »no«.</para>
+      </description>
+    </attribute>
+    <attribute en="padding-top" type="length" optional="yes">
+      <description xml:lang="en">
+        <para>Distance between the top of the text and the top rule.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Abstand zwischen der Oberkante des Texts und der Linie oben.</para>
+      </description>
+    </attribute>
+    <attribute en="rows" type="number" optional="yes">
+      <description xml:lang="en">
+        <para>The number of rows with indentation given in the attribute <tt>indentation</tt>. If the number is negative, this determines the number of rows that are <quote>not</quote> indented.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Anzahl der Zeilen, die eingezogen werden (wenn <tt>indentation</tt> angegeben ist) bzw. falls die Zahl negativ ist, die Anzahl der Zeilen, die <quote>nicht</quote> eingerückt werden.</para>
+      </description>
+    </attribute>
     <attribute en="tab" optional="yes" since="3.1.5">
       <description xml:lang="en">
         <para>What to do on the tab (&amp; #09;) character.</para>
@@ -2233,6 +2225,14 @@
           <para>Interpretiere Tabulator als dehnbaren Leerraum</para>
         </description>
       </choice>
+    </attribute>
+    <attribute en="widow" optional="yes" type="yesnonumber" lastchanged="3.1.22">
+      <description xml:lang="en">
+        <para>If yes, allow widows (last line of paragraph is on the next page). If you provide a number, it is the number of lines that must be kept together.  Default: no.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn »yes«, Hurenkinder erlauben (letzte Zeile eines Absatzes ist auf der nächsten Seite). Wenn eine Zahl angegeben wird, ist dies die Anzahl der Zeilen, die zusammengehalten werden. Voreinstellung ist »no«.</para>
+      </description>
     </attribute>
     <remark xml:lang="en">
       <para>The textformats <tt>text</tt>, <tt>centered</tt>, <tt>left</tt> and <tt>right</tt> are predefined. They stand for justified, centered, left aligned and right aligned text.</para>
@@ -2468,6 +2468,14 @@
         </interleave>
       </oneOrMore>
     </childelements>
+    <attribute en="backgroundcolor" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>Color of the background if ›background‹ is set to ›full‹.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Hintergrundfarbe wenn das Objekt mit einer Farbe hinterlegt werden soll.</para>
+      </description>
+    </attribute>
     <attribute en="border-bottom-right-radius" css="border-bottom-right-radius" optional="yes" type="length">
       <description xml:lang="en">
         <para>Radius of corner bottom right.</para>
@@ -2506,14 +2514,6 @@
       </description>
       <description xml:lang="de">
         <para>Die Farbe des Rahmens, wenn ein Rahmen ausgegeben wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
-      </description>
-    </attribute>
-    <attribute en="backgroundcolor" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>Color of the background if ›background‹ is set to ›full‹.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Hintergrundfarbe wenn das Objekt mit einer Farbe hinterlegt werden soll.</para>
       </description>
     </attribute>
     <attribute en="rulewidth" type="length" optional="yes">
@@ -2800,18 +2800,6 @@
       <cmd name="HSpace"/> enthalten ist, erhalten alle Leerräume die minimale Breite, nur der dehnbare Leerraum hat den überschüssigen Leerraum »angehäuft«.</para>
     </description>
     <childelements/>
-    <attribute en="minwidth" optional="yes" type="length" since="3.3.5">
-      <description xml:lang="en"><para>The (optional) minimum width of the inserted space.</para></description>
-      <description xml:lang="de"><para>Die (optionale) minimale Breite des eingefügten Leerraums.</para></description>
-    </attribute>
-    <attribute en="width" optional="yes" type="length">
-      <description xml:lang="en">
-        <para>Optional width of the space (a length).</para>
-      </description>
-      <description xml:lang="de">
-        <para>Optionale Breite des Leerraums</para>
-      </description>
-    </attribute>
     <attribute en="leader" optional="yes" since="2.3.50" type="text">
       <description xml:lang="en">
         <para>The text that should be displayed instead of the space. For example a dot (.).</para>
@@ -2826,6 +2814,18 @@
       </description>
       <description xml:lang="de">
         <para>Abstand zwischen zwei Startpunkten des Texts in der Führungslinie.</para>
+      </description>
+    </attribute>
+    <attribute en="minwidth" optional="yes" type="length" since="3.3.5">
+      <description xml:lang="en"><para>The (optional) minimum width of the inserted space.</para></description>
+      <description xml:lang="de"><para>Die (optionale) minimale Breite des eingefügten Leerraums.</para></description>
+    </attribute>
+    <attribute en="width" optional="yes" type="length">
+      <description xml:lang="en">
+        <para>Optional width of the space (a length).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Optionale Breite des Leerraums</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -3108,6 +3108,22 @@
       <para>Bindet eine externe Grafik ein. Erlaubte Grafikformate sind PDF (.pdf), PNG (.png) und JPEG (.jpg). Siehe unten für die Einschränkung eingebundener PDF-Dateien.</para>
     </description>
     <childelements/>
+    <attribute en="class" optional="yes" type="text" since="2.5.11">
+      <description xml:lang="en">
+        <para>CSS class for this element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS Klasse für dieses Element.</para>
+      </description>
+    </attribute>
+    <attribute en="id" optional="yes" type="text" since="2.5.11">
+      <description xml:lang="en">
+        <para>CSS id for this element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS id für dieses Element.</para>
+      </description>
+    </attribute>
     <attribute en="bleed" optional="yes" since="2.9.5">
       <description xml:lang="en">
         <para>Should the image size increase by the amount of bleed setting (<cmd name="Options"/>)?</para>
@@ -3132,28 +3148,52 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="class" optional="yes" type="text" since="2.5.11">
+    <attribute en="clip" optional="yes">
       <description xml:lang="en">
-        <para>CSS class for this element.</para>
+        <para>When yes, the image keeps its aspect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</para>
       </description>
       <description xml:lang="de">
-        <para>CSS Klasse für dieses Element.</para>
+        <para>Wenn 'yes', dann behält das Bild sein Seitenverhältnis wenn Breite und Höhe gegeben ist. Um das Bild einzupassen, wird ein Teil abgeschnitten.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Keep the aspect ratio and cut off left/right or top/bottom edges.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Seitenverhältnis beibehalten und linken und rechten oder oberen und unteren Rand abschneiden.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Distort the image to make it fit in the given area.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Bild verzerren, damit es in den vorgegebenen Rahmen passt.</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="dpiwarn" type="number" optional="yes">
+      <description xml:lang="en">
+        <para>Warn if the image gets lower resolution than given.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Warnung ausgeben, wenn das Bild eine geringere Auflösung bekommt als angegeben.</para>
       </description>
     </attribute>
-    <attribute en="id" optional="yes" type="text" since="2.5.11">
+    <attribute en="fallback" optional="yes" since="2.3.77" allowxpath="yes">
       <description xml:lang="en">
-        <para>CSS id for this element.</para>
+        <para>The filename of the replacement image if the file is not found. If none given, a red 'file not found' image will gets displayed.</para>
       </description>
       <description xml:lang="de">
-        <para>CSS id für dieses Element.</para>
+        <para>Der Dateiname für ein Ersatzbild, falls die Bilddatei nicht gefunden wurde. Wenn keiner angegeben wird, wird ein roter Platzhalter angezeigt.</para>
       </description>
     </attribute>
-    <attribute en="width" type="numberorlength" optional="yes">
+    <attribute en="file" type="text" optional="yes">
       <description xml:lang="en">
-        <para>Image width. One of 'auto' (default, take image width), '100%' (whole area width), length (such as '3cm') or number (in grid cells).</para>
+        <para>Filename of the image. Can be a file in the search path or a file-URI for absolute paths (e.g. <tt>file:///path/to/image.pdf</tt>).</para>
       </description>
       <description xml:lang="de">
-        <para>Bildbreite. Angabe in der Form 'auto' (Voreinstellung, natürliche Bildbreite), '100%' (Breite des aktuellen Platzierungsbereichs), Längenangabe wie '4cm' oder Zahl (Anzahl von Rasterspalten)</para>
+        <para>Dateiname des Bildes. Kann entweder eine Datei im Suchpfad sein oder ein file-URI-Schema (z.B. <tt>file:///pfad/zum/bild.pdf</tt>).</para>
       </description>
     </attribute>
     <attribute en="height" type="numberorlength" optional="yes">
@@ -3170,22 +3210,6 @@
       </description>
       <description xml:lang="de">
         <para>Eine URL (<tt>http://</tt> oder <tt>file:</tt>) des Bildes. Wenn extern (http), wird es herunter geladen und in <tt>TEMPDIR/sp/images</tt> (kann mit der Einstellung <tt>imagecache</tt> in der Konfigurationsdatei geändert werden) zwischengespeichert. Alternativ zur Angabe »datei«. Wenn kein Protokoll angegeben ist, wird <tt>file:</tt> angenommen. <tt>file:</tt> kann benutzt werden, um einen Pfad anzugeben.</para>
-      </description>
-    </attribute>
-    <attribute en="file" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>Filename of the image. Can be a file in the search path or a file-URI for absolute paths (e.g. <tt>file:///path/to/image.pdf</tt>).</para>
-      </description>
-      <description xml:lang="de">
-        <para>Dateiname des Bildes. Kann entweder eine Datei im Suchpfad sein oder ein file-URI-Schema (z.B. <tt>file:///pfad/zum/bild.pdf</tt>).</para>
-      </description>
-    </attribute>
-    <attribute en="fallback" optional="yes" since="2.3.77" allowxpath="yes">
-      <description xml:lang="en">
-        <para>The filename of the replacement image if the file is not found. If none given, a red 'file not found' image will gets displayed.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Der Dateiname für ein Ersatzbild, falls die Bilddatei nicht gefunden wurde. Wenn keiner angegeben wird, wird ein roter Platzhalter angezeigt.</para>
       </description>
     </attribute>
     <attribute en="page" type="number" optional="yes">
@@ -3210,6 +3234,70 @@
       </description>
       <description xml:lang="de">
         <para>Die maximale Breite des Bilds. Nur, wenn clip="no". Angabe in absoluten Längen oder Anzahl Rasterzellen.</para>
+      </description>
+    </attribute>
+    <attribute en="minwidth" type="numberorlength" optional="yes">
+      <description xml:lang="en">
+        <para>The minimum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value »100%« for full width image.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die minimale Breite des Bilds. Nur, wenn clip="no". Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</para>
+      </description>
+    </attribute>
+    <attribute en="minheight" type="numberorlength" optional="yes">
+      <description xml:lang="en">
+        <para>The minimum height of the image. Only used when clip="no". Value is a number (grid cells) or a length.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die minimale Breite des Bilds. Nur, wenn clip="no". Angabe in absoluten Längen oder Anzahl Rasterzellen.</para>
+      </description>
+    </attribute>
+    <attribute en="padding" optional="yes" since="2.9.5" type="length">
+      <description xml:lang="en">
+        <para>Set padding for all four sides.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze Padding für alle Seiten.</para>
+      </description>
+    </attribute>
+    <attribute en="padding-top" type="length" optional="yes" css="padding-top" since="2.5.11">
+      <description xml:lang="en">
+        <para>Set the inner distance (width between contents and the border) to the top edge.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt den Innenabstand des Bildes (oben)</para>
+      </description>
+    </attribute>
+    <attribute en="padding-bottom" type="length" optional="yes" css="padding-bottom" since="2.5.11">
+      <description xml:lang="en">
+        <para>Set the inner distance (width between contents and the border) to the bottom edge.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt den Innenabstand des Bildes (unten)</para>
+      </description>
+    </attribute>
+    <attribute en="padding-left" type="length" optional="yes" css="padding-left" since="2.5.11">
+      <description xml:lang="en">
+        <para>Set the inner distance (width between contents and the border) to the left edge.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt den Innenabstand des Bildes (links)</para>
+      </description>
+    </attribute>
+    <attribute en="padding-right" type="length" optional="yes" css="padding-right" since="2.5.11">
+      <description xml:lang="en">
+        <para>Set the inner distance (width between contents and the border) to the right edge.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt den Innenabstand des Bildes (rechts)</para>
+      </description>
+    </attribute>
+    <attribute en="rotate" type="number" optional="yes">
+      <description xml:lang="en">
+        <para>Rotate the image in steps of 90°. The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Dreht das Bild in 90°-Schritten. Ein Winkel > 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</para>
       </description>
     </attribute>
     <attribute en="visiblebox" optional="yes">
@@ -3260,100 +3348,12 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="clip" optional="yes">
+    <attribute en="width" type="numberorlength" optional="yes">
       <description xml:lang="en">
-        <para>When yes, the image keeps its aspect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</para>
+        <para>Image width. One of 'auto' (default, take image width), '100%' (whole area width), length (such as '3cm') or number (in grid cells).</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn 'yes', dann behält das Bild sein Seitenverhältnis wenn Breite und Höhe gegeben ist. Um das Bild einzupassen, wird ein Teil abgeschnitten.</para>
-      </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>Keep the aspect ratio and cut off left/right or top/bottom edges.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Seitenverhältnis beibehalten und linken und rechten oder oberen und unteren Rand abschneiden.</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>Distort the image to make it fit in the given area.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Bild verzerren, damit es in den vorgegebenen Rahmen passt.</para>
-        </description>
-      </choice>
-    </attribute>
-    <attribute en="minwidth" type="numberorlength" optional="yes">
-      <description xml:lang="en">
-        <para>The minimum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value »100%« for full width image.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die minimale Breite des Bilds. Nur, wenn clip="no". Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</para>
-      </description>
-    </attribute>
-    <attribute en="minheight" type="numberorlength" optional="yes">
-      <description xml:lang="en">
-        <para>The minimum height of the image. Only used when clip="no". Value is a number (grid cells) or a length.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die minimale Breite des Bilds. Nur, wenn clip="no". Angabe in absoluten Längen oder Anzahl Rasterzellen.</para>
-      </description>
-    </attribute>
-    <attribute en="dpiwarn" type="number" optional="yes">
-      <description xml:lang="en">
-        <para>Warn if the image gets lower resolution than given.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Warnung ausgeben, wenn das Bild eine geringere Auflösung bekommt als angegeben.</para>
-      </description>
-    </attribute>
-    <attribute en="padding" optional="yes" since="2.9.5" type="length">
-      <description xml:lang="en">
-        <para>Set padding for all four sides.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Setze Padding für alle Seiten.</para>
-      </description>
-    </attribute>
-    <attribute en="padding-top" type="length" optional="yes" css="padding-top" since="2.5.11">
-      <description xml:lang="en">
-        <para>Set the inner distance (width between contents and the border) to the top edge.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Bestimmt den Innenabstand des Bildes (oben)</para>
-      </description>
-    </attribute>
-    <attribute en="padding-bottom" type="length" optional="yes" css="padding-bottom" since="2.5.11">
-      <description xml:lang="en">
-        <para>Set the inner distance (width between contents and the border) to the bottom edge.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Bestimmt den Innenabstand des Bildes (unten)</para>
-      </description>
-    </attribute>
-    <attribute en="padding-left" type="length" optional="yes" css="padding-left" since="2.5.11">
-      <description xml:lang="en">
-        <para>Set the inner distance (width between contents and the border) to the left edge.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Bestimmt den Innenabstand des Bildes (links)</para>
-      </description>
-    </attribute>
-    <attribute en="padding-right" type="length" optional="yes" css="padding-right" since="2.5.11">
-      <description xml:lang="en">
-        <para>Set the inner distance (width between contents and the border) to the right edge.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Bestimmt den Innenabstand des Bildes (rechts)</para>
-      </description>
-    </attribute>
-    <attribute en="rotate" type="number" optional="yes">
-      <description xml:lang="en">
-        <para>Rotate the image in steps of 90°. The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Dreht das Bild in 90°-Schritten. Ein Winkel > 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</para>
+        <para>Bildbreite. Angabe in der Form 'auto' (Voreinstellung, natürliche Bildbreite), '100%' (Breite des aktuellen Platzierungsbereichs), Längenangabe wie '4cm' oder Zahl (Anzahl von Rasterspalten)</para>
       </description>
     </attribute>
     <remark xml:lang="en">
@@ -3528,14 +3528,6 @@
         <para>Der Dateiname mit Endung, ohne Pfad.</para>
       </description>
     </attribute>
-    <attribute en="space" type="zerotohundred" optional="yes">
-      <description xml:lang="en">
-        <para>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße.</para>
-      </description>
-    </attribute>
     <attribute en="marginprotrusion" type="zerotohundred" optional="yes">
       <description xml:lang="en">
         <para>The amount of protrusion glyphs like -, . and - stick into the right margin. Highly font dependent. Defaults to 0.</para>
@@ -3543,6 +3535,30 @@
       <description xml:lang="de">
         <para>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark abhängig von der benutzten Schriftart.</para>
       </description>
+    </attribute>
+    <attribute en="oldstylefigures" optional="yes">
+      <description xml:lang="en">
+        <para>Use oldstyle figures if the font includes them. (OpenType feature »onum«)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Schalter, ob auf Mediävalziffern umgeschaltet wird (OpenType Feature »onum«).</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Use oldstyle figures.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Mediävalziffern benutzen.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Use lining figures.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Normale Ziffern benutzen.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="smallcaps" optional="yes">
       <description xml:lang="en">
@@ -3568,29 +3584,13 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="oldstylefigures" optional="yes">
+    <attribute en="space" type="zerotohundred" optional="yes">
       <description xml:lang="en">
-        <para>Use oldstyle figures if the font includes them. (OpenType feature »onum«)</para>
+        <para>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size.</para>
       </description>
       <description xml:lang="de">
-        <para>Schalter, ob auf Mediävalziffern umgeschaltet wird (OpenType Feature »onum«).</para>
+        <para>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße.</para>
       </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>Use oldstyle figures.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Mediävalziffern benutzen.</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>Use lining figures.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Normale Ziffern benutzen.</para>
-        </description>
-      </choice>
     </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<LoadFontfile name="Helvetica" filename="texgyreheros-regular.otf" />
@@ -3787,6 +3787,14 @@
       <para>Eine Liste von Elementen sortieren und aufteilen um einen Index zu erzeugen.</para>
     </description>
     <childelements/>
+    <attribute en="pagenumber" optional="yes" type="text" since="2.7.11">
+      <description xml:lang="en">
+        <para>The name of the attribute that holds the page numbers. Defaults to 'page'.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name des Attributs der die Seitenzahl enthält. Voreinstellung ist 'page'.</para>
+      </description>
+    </attribute>
     <attribute en="section" type="text" optional="no">
       <description xml:lang="en">
         <para>Create an XML-element with this name for every section (letter) in the index.</para>
@@ -3809,14 +3817,6 @@
       </description>
       <description xml:lang="de">
         <para>Der Name des Attributs das den Indexeintrag enthält (der sortiert werden soll).</para>
-      </description>
-    </attribute>
-    <attribute en="pagenumber" optional="yes" type="text" since="2.7.11">
-      <description xml:lang="en">
-        <para>The name of the attribute that holds the page numbers. Defaults to 'page'.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Der Name des Attributs der die Seitenzahl enthält. Voreinstellung ist 'page'.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -3983,14 +3983,6 @@
       <para>Setzt eine unsichtbare Markierung in die Ausgabe. Das ist hilfreich, um die Seitenzahl zu bestimmen, auf der die Marke gelandet ist.</para>
     </description>
     <childelements/>
-    <attribute en="select" type="xpath" optional="no">
-      <description xml:lang="en">
-        <para>The name of the mark to be set.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Der Name des Markers, der gesetzt wird.</para>
-      </description>
-    </attribute>
     <attribute en="append" optional="yes">
       <description xml:lang="en">
         <para>When yes, append the current page to the previous values of the mark. Useful to get page ranges in an index. (Default is no.)</para>
@@ -4014,6 +4006,14 @@
           <para>Den vorherigen Wert ersetzen.</para>
         </description>
       </choice>
+    </attribute>
+    <attribute en="select" type="xpath" optional="no">
+      <description xml:lang="en">
+        <para>The name of the mark to be set.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name des Markers, der gesetzt wird.</para>
+      </description>
     </attribute>
     <attribute en="pdftarget" optional="yes" since="3.3.8" type="boolean">
       <description xml:lang="en">
@@ -4180,22 +4180,6 @@
       <para>Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn später Text o.ä. ausgegeben wird.</para>
     </description>
     <childelements/>
-    <attribute en="pagetype" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>The name of the next page type that should be used.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Der Name des Seitentyps der für die nächste Seite genommen werden soll.</para>
-      </description>
-    </attribute>
-    <attribute en="skippagetype" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>The pagetype of the blank page if inserted (see the attribute openon).</para>
-      </description>
-      <description xml:lang="de">
-        <para>Der Seitentyp der leeren Seite, falls sie eingefügt wird.</para>
-      </description>
-    </attribute>
     <attribute en="openon" optional="yes">
       <description xml:lang="en">
         <para>The next current page will be a left or a right page. E.g. when on page 1 and openon="right" then page 2 is empty and the next current page is 3.</para>
@@ -4219,6 +4203,22 @@
           <para>Die nächsten Objekte werden auf einer rechten Seite ausgegeben.</para>
         </description>
       </choice>
+    </attribute>
+    <attribute en="pagetype" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The name of the next page type that should be used.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name des Seitentyps der für die nächste Seite genommen werden soll.</para>
+      </description>
+    </attribute>
+    <attribute en="skippagetype" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The pagetype of the blank page if inserted (see the attribute openon).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Seitentyp der leeren Seite, falls sie eingefügt wird.</para>
+      </description>
     </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Record element="data">
@@ -4486,6 +4486,38 @@
       <para>Setzt Publisher-spezifische Optionen.</para>
     </description>
     <childelements/>
+    <attribute en="bleed" type="length" optional="yes">
+      <description xml:lang="en">
+        <para>The amount of bleed. Defaults to 0mm.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Größe des Anschnitts (bleed). Voreinstellung ist 0mm.</para>
+      </description>
+    </attribute>
+    <attribute en="bleedmarks" optional="yes" since="2.3.24">
+      <description xml:lang="en">
+        <para>Trim marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute <tt>trim</tt>, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is <tt>no</tt>, that means no trim marks will be displayed. The trim marks show the additional trim distance.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Beschnittzugabemarken werden ausgegeben. Diese Marken zeigen, wie groß die Beschnittzugabe ist. Der Abstand der Beschnittzugabemarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Beschnittzugabemarken ausgegeben.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Show trim marks.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Beschnittzugabemarken anzeigen.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Don't show trim marks (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Beschnittzugabemarken nicht anzeigen (Voreinstellung).</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="colorprofile" type="text" optional="yes">
       <description xml:lang="en">
         <para>The filename of the color profile. The default profile is »ISO Coated v2 (ECI)«. Only used when spot colors are used.</para>
@@ -4615,14 +4647,6 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="startpage" type="number" optional="yes">
-      <description xml:lang="en">
-        <para>Set the number of the first page.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Gibt den Nummer der ersten Seite an.</para>
-      </description>
-    </attribute>
     <attribute en="reportmissingglyphs" optional="yes" since="3.1.17">
       <description xml:lang="en">
         <para>Issue an error if glyphs are missing from a font.</para>
@@ -4639,37 +4663,13 @@
         <description xml:lang="de"><para>Zeige keine Fehlermeldung</para></description>
       </choice>
     </attribute>
-    <attribute en="bleed" type="length" optional="yes">
+    <attribute en="startpage" type="number" optional="yes">
       <description xml:lang="en">
-        <para>The amount of bleed. Defaults to 0mm.</para>
+        <para>Set the number of the first page.</para>
       </description>
       <description xml:lang="de">
-        <para>Die Größe des Anschnitts (bleed). Voreinstellung ist 0mm.</para>
+        <para>Gibt den Nummer der ersten Seite an.</para>
       </description>
-    </attribute>
-    <attribute en="bleedmarks" optional="yes" since="2.3.24">
-      <description xml:lang="en">
-        <para>Trim marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute <tt>trim</tt>, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is <tt>no</tt>, that means no trim marks will be displayed. The trim marks show the additional trim distance.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Beschnittzugabemarken werden ausgegeben. Diese Marken zeigen, wie groß die Beschnittzugabe ist. Der Abstand der Beschnittzugabemarken vom gedachten Mittelpunkt ergibt sich durch die Beschnittzugabe, mindestens beträgt sie jedoch 5pt. Die Länge der Schnittmarke ist 1cm. Voreinstellung ist nein, d.h. es werden keine Beschnittzugabemarken ausgegeben.</para>
-      </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>Show trim marks.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Beschnittzugabemarken anzeigen.</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>Don't show trim marks (default).</para>
-        </description>
-        <description xml:lang="de">
-          <para>Beschnittzugabemarken nicht anzeigen (Voreinstellung).</para>
-        </description>
-      </choice>
     </attribute>
     <remark xml:lang="en">
       <para>Bleed used to be 'trim' in version 2.7.6 and before.</para>
@@ -4948,6 +4948,22 @@
       <optional><cmd name="Initial"/></optional>
       <reference name="Textvalues"/>
     </childelements>
+    <attribute en="class" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS class for this paragraph.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS Klasse für diesen Absatz.</para>
+      </description>
+    </attribute>
+    <attribute en="id" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS id for this paragraph.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS id für diesen Absatz.</para>
+      </description>
+    </attribute>
     <attribute en="allowbreak" type="text" optional="yes">
       <description xml:lang="en">
         <para>(Experimental!) list of characters where a line break is possible. Space character is not implied when this attribute is set.</para>
@@ -4962,14 +4978,6 @@
       </description>
       <description xml:lang="de">
         <para>Farbe des Absatzes. Muss vorher mit <cmd name="DefineColor"/> definiert worden sein.</para>
-      </description>
-    </attribute>
-    <attribute en="textformat" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>Name of the textformat that is applied to the paragraph. If none is specified the textformat <tt>text</tt> is used.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Name des zu benutzenden Textformats. Wird kein Textformat angegeben, nimmt das System das Textformat <tt>text</tt>.</para>
       </description>
     </attribute>
     <attribute en="fontface" css="font-family" type="text" optional="yes">
@@ -4989,20 +4997,12 @@
       </description>
       <referenceattribute name="languages" />
     </attribute>
-    <attribute en="class" optional="yes" type="text">
+    <attribute en="textformat" type="text" optional="yes">
       <description xml:lang="en">
-        <para>CSS class for this paragraph.</para>
+        <para>Name of the textformat that is applied to the paragraph. If none is specified the textformat <tt>text</tt> is used.</para>
       </description>
       <description xml:lang="de">
-        <para>CSS Klasse für diesen Absatz.</para>
-      </description>
-    </attribute>
-    <attribute en="id" optional="yes" type="text">
-      <description xml:lang="en">
-        <para>CSS id for this paragraph.</para>
-      </description>
-      <description xml:lang="de">
-        <para>CSS id für diesen Absatz.</para>
+        <para>Name des zu benutzenden Textformats. Wird kein Textformat angegeben, nimmt das System das Textformat <tt>text</tt>.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -5040,20 +5040,20 @@
       <para>Legt die Größe des Ausgabemediums (z.B. DIN A4) fest. Voreinstellung ist eine Breite von 210mm und eine Höhe von 297mm.</para>
     </description>
     <childelements/>
-    <attribute en="width" type="length" optional="no">
-      <description xml:lang="en">
-        <para>Width of the PDF pages.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Breite des Ausgabemediums.</para>
-      </description>
-    </attribute>
     <attribute en="height" type="length" optional="no">
       <description xml:lang="en">
         <para>The height of the PDF pages.</para>
       </description>
       <description xml:lang="de">
         <para>Höhe des Ausgabemediums.</para>
+      </description>
+    </attribute>
+    <attribute en="width" type="length" optional="no">
+      <description xml:lang="en">
+        <para>Width of the PDF pages.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Breite des Ausgabemediums.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -5089,20 +5089,20 @@
         <para>Die Textfarbe der Seite, sofern sie nicht in Textblock oder Paragraph überschrieben wird. Voreinstellung ist 'black'.</para>
       </description>
     </attribute>
-    <attribute en="test" type="xpath" optional="no">
-      <description xml:lang="en">
-        <para>If this xpath expression evaluates to true, this page is taken as a master page.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Wenn der XPath-Ausdruck »wahr« ergibt, dann wird diese Seite als Vorlage genommen.</para>
-      </description>
-    </attribute>
     <attribute en="name" type="text" optional="no">
       <description xml:lang="en">
         <para>Name of the master page. It is for informational purpose and as a selection for <cmd name="NewPage"/>.</para>
       </description>
       <description xml:lang="de">
         <para>Name der Seitenvorlage. Der Name ist zu Informationszwecken und zur Auswahl bei <cmd name="NewPage"/>.</para>
+      </description>
+    </attribute>
+    <attribute en="test" type="xpath" optional="no">
+      <description xml:lang="en">
+        <para>If this xpath expression evaluates to true, this page is taken as a master page.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn der XPath-Ausdruck »wahr« ergibt, dann wird diese Seite als Vorlage genommen.</para>
       </description>
     </attribute>
     <remark xml:lang="en">
@@ -5178,22 +5178,6 @@
         <para>Legt den Autor des Dokuments fest</para>
       </description>
     </attribute>
-    <attribute en="subject" optional="yes" type="text" since="3.1.24">
-      <description xml:lang="en">
-        <para>Set the subject of the document</para>
-      </description>
-      <description xml:lang="de">
-        <para>Legt den Betreff (subject) des Dokuments fest</para>
-      </description>
-    </attribute>
-    <attribute en="title" optional="yes" type="text" since="3.1.18">
-      <description xml:lang="en">
-        <para>Set the title of the document</para>
-      </description>
-      <description xml:lang="de">
-        <para>Legt den Titel des Dokuments fest</para>
-      </description>
-    </attribute>
     <attribute en="duplex" optional="yes" since="2.3.47">
       <description xml:lang="en">
         <para>Set viewer preference to one or two page printing. Default: empty.</para>
@@ -5242,6 +5226,30 @@
         <para>Setze Anzahl der Kopien. Maximal erlaubt sind 5 aufgrund der PDF-Spezifikation.</para>
       </description>
     </attribute>
+    <attribute en="picktraybypdfsize" optional="yes" since="2.3.46">
+      <description xml:lang="en">
+        <para>Activate the check box in the PDF viewer for choosing the paper tray based on the page size.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auswahlfeld im PDF-Viewer »Papierquelle gemäß PDF-Seitengröße auswählen«.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Activate checkbox</para>
+        </description>
+        <description xml:lang="de">
+          <para>Checkbox aktivieren</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Deactivate checkbox</para>
+        </description>
+        <description xml:lang="de">
+          <para>Checkbox deaktivieren</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="printscaling" optional="yes" since="2.3.46">
       <description xml:lang="en">
         <para>Should the printer scale the pages?</para>
@@ -5266,29 +5274,21 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="picktraybypdfsize" optional="yes" since="2.3.46">
+    <attribute en="subject" optional="yes" type="text" since="3.1.24">
       <description xml:lang="en">
-        <para>Activate the check box in the PDF viewer for choosing the paper tray based on the page size.</para>
+        <para>Set the subject of the document</para>
       </description>
       <description xml:lang="de">
-        <para>Auswahlfeld im PDF-Viewer »Papierquelle gemäß PDF-Seitengröße auswählen«.</para>
+        <para>Legt den Betreff (subject) des Dokuments fest</para>
       </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>Activate checkbox</para>
-        </description>
-        <description xml:lang="de">
-          <para>Checkbox aktivieren</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>Deactivate checkbox</para>
-        </description>
-        <description xml:lang="de">
-          <para>Checkbox deaktivieren</para>
-        </description>
-      </choice>
+    </attribute>
+    <attribute en="title" optional="yes" type="text" since="3.1.18">
+      <description xml:lang="en">
+        <para>Set the title of the document</para>
+      </description>
+      <description xml:lang="de">
+        <para>Legt den Titel des Dokuments fest</para>
+      </description>
     </attribute>
     <example xml:lang="en"><listing><![CDATA[<PDFOptions numcopies="3"/>]]></listing></example>
     <example xml:lang="de"><listing><![CDATA[<PDFOptions numcopies="4"/>]]></listing></example>
@@ -5381,12 +5381,36 @@
         <para>Name des Bereichs (Platzierungsbereich), in dem das Objekt ausgegeben werden soll. Wird kein Bereich angegeben, so wird das Objekt auf der »Seite« (dem Bereich, der alle Rasterkästen beinhaltet) ausgegeben.</para>
       </description>
     </attribute>
-    <attribute en="groupname" type="text" optional="yes">
+    <attribute en="background" optional="yes" allowxpath="yes">
       <description xml:lang="en">
-        <para>The name of the group that gets output. When given a groupname, PlaceObject should not contain any objects.</para>
+        <para>Fill the background of the object (full grid cells) with a color, given by backgroundcolor.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn eine Gruppe ausgegeben werden soll, muss der Name hier angegeben werden.</para>
+        <para>Erzeugt einen farbigen Hintergrund für das Objekt. Das Attribut ›backgroundcolor‹ gibt die Farbe an.</para>
+      </description>
+      <choice en="full">
+        <description xml:lang="en">
+          <para>Fill background with the given color (in backgroundcolor).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Den Hintergrund in der angegebenen Farbe füllen (in backgroundcolor)</para>
+        </description>
+      </choice>
+      <choice en="without">
+        <description xml:lang="en">
+          <para>Empty background</para>
+        </description>
+        <description xml:lang="de">
+          <para>Leerer Hintergrund</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="backgroundcolor" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>Color of the background if ›background‹ is set to ›full‹.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Hintergrundfarbe wenn das Objekt mit einer Farbe hinterlegt werden soll.</para>
       </description>
     </attribute>
     <attribute en="border-bottom-right-radius" optional="yes" type="length">
@@ -5421,6 +5445,14 @@
         <para>Radius der Ecke unten links.</para>
       </description>
     </attribute>
+    <attribute en="column" type="numberorlength" optional="yes">
+      <description xml:lang="en">
+        <para>If contents is a number: the grid cell from the left margin of the area. If it is a length: the absolute position from the left paper margin. If this attribute is omitted, the system tries to place the object by itself.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Zahl: Die Spalte im Raster, in der das Objekt ausgegeben wird. Wird die Spalte nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe: die Position von der linken Blattkante.</para>
+      </description>
+    </attribute>
     <attribute en="frame" optional="yes">
       <description xml:lang="en">
         <para>Draw a frame around the object. You need to supply the frame color.</para>
@@ -5453,75 +5485,35 @@
         <para>Die Farbe des Rahmens, wenn ein Rahmen ausgegeben wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
       </description>
     </attribute>
-    <attribute en="background" optional="yes" allowxpath="yes">
+    <attribute en="groupname" type="text" optional="yes">
       <description xml:lang="en">
-        <para>Fill the background of the object (full grid cells) with a color, given by backgroundcolor.</para>
+        <para>The name of the group that gets output. When given a groupname, PlaceObject should not contain any objects.</para>
       </description>
       <description xml:lang="de">
-        <para>Erzeugt einen farbigen Hintergrund für das Objekt. Das Attribut ›backgroundcolor‹ gibt die Farbe an.</para>
+        <para>Wenn eine Gruppe ausgegeben werden soll, muss der Name hier angegeben werden.</para>
       </description>
-      <choice en="full">
+    </attribute>
+    <attribute en="hreference" optional="yes">
+      <description xml:lang="en">
+        <para>Determines the placement of the object relative to the given column. If 'left' (which is the default), the given column is the left border of the object. If 'right', the column determines the right edge of the object.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt, ob die angegebene Spalte die linke oder die rechte Kante vom Objekt bezeichnet.</para>
+      </description>
+      <choice en="left">
         <description xml:lang="en">
-          <para>Fill background with the given color (in backgroundcolor).</para>
+          <para>The object is placed in given column.</para>
         </description>
         <description xml:lang="de">
-          <para>Den Hintergrund in der angegebenen Farbe füllen (in backgroundcolor)</para>
+          <para>Das Objekt wird in der angegebenen Spalte platziert.</para>
         </description>
       </choice>
-      <choice en="without">
+      <choice en="right">
         <description xml:lang="en">
-          <para>Empty background</para>
+          <para>The given columns determines the right edge of the border.</para>
         </description>
         <description xml:lang="de">
-          <para>Leerer Hintergrund</para>
-        </description>
-      </choice>
-    </attribute>
-    <attribute en="backgroundcolor" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>Color of the background if ›background‹ is set to ›full‹.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Hintergrundfarbe wenn das Objekt mit einer Farbe hinterlegt werden soll.</para>
-      </description>
-    </attribute>
-    <attribute en="rulewidth" type="length" optional="yes">
-      <description xml:lang="en">
-        <para>The thickness of the frame that is drawn around the object. Only makes sense in combination with the attribute 'frame'.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die Dicke des Rahmens, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
-      </description>
-    </attribute>
-    <attribute en="column" type="numberorlength" optional="yes">
-      <description xml:lang="en">
-        <para>If contents is a number: the grid cell from the left margin of the area. If it is a length: the absolute position from the left paper margin. If this attribute is omitted, the system tries to place the object by itself.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Zahl: Die Spalte im Raster, in der das Objekt ausgegeben wird. Wird die Spalte nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe: die Position von der linken Blattkante.</para>
-      </description>
-    </attribute>
-    <attribute en="keepposition" optional="yes">
-      <description xml:lang="en">
-        <para>Don't move the virtual cursor to the next free space</para>
-      </description>
-      <description xml:lang="de">
-        <para>Den virtuellen Cursor nicht verändern.</para>
-      </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>Don't move the virtual cursor.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Den virtuellen Cursor nicht verändern.</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>Move the virtual cursor (default).</para>
-        </description>
-        <description xml:lang="de">
-          <para>Den virtuellen Cursor verschieben (Voreinstellung)</para>
+          <para>Das Objekt wird mit dem rechten Rand in der gegebenen Spalte ausgerichtet.</para>
         </description>
       </choice>
     </attribute>
@@ -5557,12 +5549,36 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="page" type="number" optional="yes">
+    <attribute en="keepposition" optional="yes">
       <description xml:lang="en">
-        <para>The page (later in the PDF), the object should appear on. Number of the keyword »next« for the next page.</para>
+        <para>Don't move the virtual cursor to the next free space</para>
       </description>
       <description xml:lang="de">
-        <para>Die Seite (später im PDF), auf der das Objekt erscheinen soll. Angabe als Zahl oder »next« für die nächste Seite.</para>
+        <para>Den virtuellen Cursor nicht verändern.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Don't move the virtual cursor.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Den virtuellen Cursor nicht verändern.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Move the virtual cursor (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Den virtuellen Cursor verschieben (Voreinstellung)</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="maxheight" type="number" optional="yes">
+      <description xml:lang="en">
+        <para>Only used for multi-page table: the maximum height of tables.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die maximale Höhe in Rasterzellen, die das Objekt belegen darf. Wird nur für den automatischen Tabellenumbruch benötigt. Die umbrochenen Tabellen auf den Folgeseiten haben maximal die angegebene Höhe.</para>
       </description>
     </attribute>
     <attribute en="origin-x" optional="yes">
@@ -5629,6 +5645,14 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="page" type="number" optional="yes">
+      <description xml:lang="en">
+        <para>The page (later in the PDF), the object should appear on. Number of the keyword »next« for the next page.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Seite (später im PDF), auf der das Objekt erscheinen soll. Angabe als Zahl oder »next« für die nächste Seite.</para>
+      </description>
+    </attribute>
     <attribute en="row" type="numberorlength" optional="yes">
       <description xml:lang="en">
         <para>The row where the object is placed. If none given, the publisher tries to find a row by itself. You can give a number (in grid cells) or an absolute value (from top left).</para>
@@ -5645,12 +5669,12 @@
         <para>Dreht das Objekt. Ein Winkel > 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn. Wenn der Winkel ungleich 0 ist, wird die Rasterbelegung abgeschaltet.</para>
       </description>
     </attribute>
-    <attribute en="maxheight" type="number" optional="yes">
+    <attribute en="rulewidth" type="length" optional="yes">
       <description xml:lang="en">
-        <para>Only used for multi-page table: the maximum height of tables.</para>
+        <para>The thickness of the frame that is drawn around the object. Only makes sense in combination with the attribute 'frame'.</para>
       </description>
       <description xml:lang="de">
-        <para>Die maximale Höhe in Rasterzellen, die das Objekt belegen darf. Wird nur für den automatischen Tabellenumbruch benötigt. Die umbrochenen Tabellen auf den Folgeseiten haben maximal die angegebene Höhe.</para>
+        <para>Die Dicke des Rahmens, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
       </description>
     </attribute>
     <attribute en="valign" optional="yes">
@@ -5682,30 +5706,6 @@
         </description>
         <description xml:lang="de">
           <para>Das Objekt wird unten ausgerichtet.</para>
-        </description>
-      </choice>
-    </attribute>
-    <attribute en="hreference" optional="yes">
-      <description xml:lang="en">
-        <para>Determines the placement of the object relative to the given column. If 'left' (which is the default), the given column is the left border of the object. If 'right', the column determines the right edge of the object.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Bestimmt, ob die angegebene Spalte die linke oder die rechte Kante vom Objekt bezeichnet.</para>
-      </description>
-      <choice en="left">
-        <description xml:lang="en">
-          <para>The object is placed in given column.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Das Objekt wird in der angegebenen Spalte platziert.</para>
-        </description>
-      </choice>
-      <choice en="right">
-        <description xml:lang="en">
-          <para>The given columns determines the right edge of the border.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Das Objekt wird mit dem rechten Rand in der gegebenen Spalte ausgerichtet.</para>
         </description>
       </choice>
     </attribute>
@@ -6983,12 +6983,92 @@
         </interleave>
       </oneOrMore>
     </childelements>
+    <attribute en="balance" optional="yes" since="3.1.24">
+      <description xml:lang="en">
+        <para>Tries to balance the table on the last page according to the number of frames. Experimental! </para>
+      </description>
+      <description xml:lang="de">
+        <para>Versucht die letzte Seite anhand der Anzahl der Rahmen auszubalancieren. Experimentell</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Tries to balance.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Versucht die Spalten auszugleichen.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>First column will filled first, default</para>
+        </description>
+        <description xml:lang="de">
+          <para>Erste Spalte wird zuerst ausgefüllt</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="border-collapse" optional="yes">
+      <description xml:lang="en">
+        <para>Determine if adjacent table cells share borders. The behavior of border-collapse="collapse" is undefined when the table has columndistance or rowdistance set to a non-zero value and if the adjacent borders don't have the same width and color.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt, ob benachbarte Zellen die Rahmen teilen. Das Verhalten von border-collapse="collapse" ist nicht definiert wenn die Tablle einen Zeilen- oder Spaltenabstand &gt; 0 haben oder wenn die benachbarten Zellen nicht dieselbe Strichstärke und -farbe haben.</para>
+      </description>
+      <choice en="separate">
+        <description xml:lang="en">
+          <para>The borders are part of the cell and not shared with its neighbors.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Rahmen sind Teil der Zelle und werden nicht mit den Nachbarzellen geteilt.</para>
+        </description>
+      </choice>
+      <choice en="collapse">
+        <description xml:lang="en">
+          <para>The borders of neighboring cells overlap.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Rahmen benachbarter Zellen überlappen sich.</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="columndistance" type="length" optional="yes">
+      <description xml:lang="en">
+        <para>Distance between two table columns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Abstand zwischen zwei Spalten.</para>
+      </description>
+    </attribute>
     <attribute en="eval" type="xpath" optional="yes">
       <description xml:lang="en">
         <para>Evaluates the given XPath expression and discards its output.</para>
       </description>
       <description xml:lang="de">
         <para>Wertet den angegebenen XPath-Ausdruck aus und ignoriert dessen Ausgabe.</para>
+      </description>
+    </attribute>
+    <attribute en="fontface" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>Name of the font family for the table. If not given, the font face ‘text’ is used.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name der Schriftfamilie, die benutzt werden soll. Wenn keine Schriftart angegeben ist, wird auf die Schriftart ›text‹ umgeschaltet.</para>
+      </description>
+    </attribute>
+    <attribute en="leading" type="length" optional="yes">
+      <description xml:lang="en">
+        <para>The distance between two rows.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Abstand zwischen zwei Zeilen.</para>
+      </description>
+    </attribute>
+    <attribute en="padding" type="length" optional="yes">
+      <description xml:lang="en">
+        <para>The distance between the table border and the table contents.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Innenabstand innerhalb einer Tabellenzelle.</para>
       </description>
     </attribute>
     <attribute en="stretch" optional="yes">
@@ -7022,86 +7102,6 @@
       <description xml:lang="de">
         <para>Der Bereich, den die Tabelle (maximal) im Raster belegt. Angabe in Rasterzellen oder absoluten Längenangaben. Voreinstellung ist der verfügbare Platz.</para>
       </description>
-    </attribute>
-    <attribute en="padding" type="length" optional="yes">
-      <description xml:lang="en">
-        <para>The distance between the table border and the table contents.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Der Innenabstand innerhalb einer Tabellenzelle.</para>
-      </description>
-    </attribute>
-    <attribute en="fontface" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>Name of the font family for the table. If not given, the font face ‘text’ is used.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Name der Schriftfamilie, die benutzt werden soll. Wenn keine Schriftart angegeben ist, wird auf die Schriftart ›text‹ umgeschaltet.</para>
-      </description>
-    </attribute>
-    <attribute en="columndistance" type="length" optional="yes">
-      <description xml:lang="en">
-        <para>Distance between two table columns.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Der Abstand zwischen zwei Spalten.</para>
-      </description>
-    </attribute>
-    <attribute en="leading" type="length" optional="yes">
-      <description xml:lang="en">
-        <para>The distance between two rows.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Der Abstand zwischen zwei Zeilen.</para>
-      </description>
-    </attribute>
-    <attribute en="border-collapse" optional="yes">
-      <description xml:lang="en">
-        <para>Determine if adjacent table cells share borders. The behavior of border-collapse="collapse" is undefined when the table has columndistance or rowdistance set to a non-zero value and if the adjacent borders don't have the same width and color.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Bestimmt, ob benachbarte Zellen die Rahmen teilen. Das Verhalten von border-collapse="collapse" ist nicht definiert wenn die Tablle einen Zeilen- oder Spaltenabstand &gt; 0 haben oder wenn die benachbarten Zellen nicht dieselbe Strichstärke und -farbe haben.</para>
-      </description>
-      <choice en="separate">
-        <description xml:lang="en">
-          <para>The borders are part of the cell and not shared with its neighbors.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Die Rahmen sind Teil der Zelle und werden nicht mit den Nachbarzellen geteilt.</para>
-        </description>
-      </choice>
-      <choice en="collapse">
-        <description xml:lang="en">
-          <para>The borders of neighboring cells overlap.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Die Rahmen benachbarter Zellen überlappen sich.</para>
-        </description>
-      </choice>
-    </attribute>
-    <attribute en="balance" optional="yes" since="3.1.24">
-      <description xml:lang="en">
-        <para>Tries to balance the table on the last page according to the number of frames. Experimental! </para>
-      </description>
-      <description xml:lang="de">
-        <para>Versucht die letzte Seite anhand der Anzahl der Rahmen auszubalancieren. Experimentell</para>
-      </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>Tries to balance.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Versucht die Spalten auszugleichen.</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>First column will filled first, default</para>
-        </description>
-        <description xml:lang="de">
-          <para>Erste Spalte wird zuerst ausgefüllt</para>
-        </description>
-      </choice>
     </attribute>
     <remark xml:lang="en">
       <para>The table cells may contain Paragraphs, Images and other objects that are allowed in <cmd name="PlaceObject"/>.</para>
@@ -7374,12 +7374,124 @@
         </choice>
       </zeroOrMore>
     </childelements>
+    <attribute en="class" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The css class to be used for formatting the table cell.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die CSS-Klasse für die Formtierung.</para>
+      </description>
+    </attribute>
+    <attribute en="id" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>CSS id for this table cell.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS id für diese Tabellenzelle.</para>
+      </description>
+    </attribute>
+    <attribute en="align" optional="yes" css="text-align" allowxpath="yes">
+      <description xml:lang="en">
+        <para>Horizontal alignment of the cell contents. Defaults to left.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die horizontale Ausrichtung des Tabelleninhalts</para>
+      </description>
+      <choice en="left">
+        <description xml:lang="en">
+          <para>The contents is left aligned (ragged right). This is the default.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Inhalt der Zelle ist am linken Rand ausgerichtet. (Voreinstellung)</para>
+        </description>
+      </choice>
+      <choice en="right">
+        <description xml:lang="en">
+          <para>The contents of the cell is right aligned.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Inhalt der Zelle ist rechtsbündig ausgerichtet.</para>
+        </description>
+      </choice>
+      <choice en="center">
+        <description xml:lang="en">
+          <para>The contents of the cell is aligned at the center, with ragged right and left margin.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Inhalt der Zelle ist auf der Mittelachse ausgerichtet mit links und rechts Flatterrand.</para>
+        </description>
+      </choice>
+      <choice en="justify">
+        <description xml:lang="en">
+          <para>Justified text with straight margins.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Text im Blocksatz.</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="backgroundcolor" css="background-color" type="text" optional="yes">
       <description xml:lang="en">
         <para>The name of the background color (if the cell should get a background).</para>
       </description>
       <description xml:lang="de">
         <para>Der Name der Hintergrundfarbe, wenn die Zelle eingefärbt werden soll.</para>
+      </description>
+    </attribute>
+    <attribute en="background-font-family" optional="yes" css="background-font-family" type="text" since="2.3.7">
+      <description xml:lang="en">
+        <para>Set the font family of the background text. Defaults to the table font.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setzt die Fontfamilie für den Hintergrundtext. Voreinstellung ist die Fontfamilie für die Tabelle.</para>
+      </description>
+    </attribute>
+    <attribute en="background-textcolor" optional="yes" css="background-textcolor" since="2.3.7">
+      <description xml:lang="en">
+        <para>The color of the text in the background (if any).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Farbe des Hintergrundtexts, falls vorhanden.</para>
+      </description>
+    </attribute>
+    <attribute en="background-size" optional="yes" css="background-size" since="2.3.7">
+      <description xml:lang="en">
+        <para>Controls the size of the background text. Currently only 'contain' and 'auto' is allowed.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt die Größe des Hintergrundtexts. Derzeit ist nur 'contain' und 'auto' erlaubt.</para>
+      </description>
+      <choice en="contain">
+        <description xml:lang="en">
+          <para>Fill the height of the table cell.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Text passt sich der Zellenhöhe an.</para>
+        </description>
+      </choice>
+      <choice en="auto" since="2.5.4">
+        <description xml:lang="en">
+          <para>The background text is not scaled.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Hintergrundtext wird nicht skaliert.</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="background-transform" optional="yes" css="background-transform" since="2.3.7">
+      <description xml:lang="en">
+        <para>The transformation of the background text (if any). Currently supported: <tt>rotate(-40deg)</tt> (and other angles in the range 0 to -90).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Transformation des Hintergrundtexts (falls vorhanden). Derzeit wird folgende Angabe unterstützt: <tt>rotate(-40deg) (und andere Winkel im Bereich 0 bis -90).</tt></para>
+      </description>
+    </attribute>
+    <attribute en="background-text" optional="yes" css="background-text" since="2.3.7">
+      <description xml:lang="en">
+        <para>A text that should be placed in the background of the table cell.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Ein Text, der in den Tabellenhintergrund gelegt wird.</para>
       </description>
     </attribute>
     <attribute en="border-left" type="length" optional="yes" css="border-left-width">
@@ -7446,22 +7558,6 @@
         <para>Die Farbe der Linie unten.</para>
       </description>
     </attribute>
-    <attribute en="class" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>The css class to be used for formatting the table cell.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die CSS-Klasse für die Formtierung.</para>
-      </description>
-    </attribute>
-    <attribute en="id" optional="yes" type="text">
-      <description xml:lang="en">
-        <para>CSS id for this table cell.</para>
-      </description>
-      <description xml:lang="de">
-        <para>CSS id für diese Tabellenzelle.</para>
-      </description>
-    </attribute>
     <attribute en="colspan" type="number" optional="yes">
       <description xml:lang="en">
         <para>The number of columns this cell spans. Defaults to 1.</para>
@@ -7469,86 +7565,6 @@
       <description xml:lang="de">
         <para>Die Anzahl der Spalten, die die Zelle überdecken soll. Voreinstellung ist 1.</para>
       </description>
-    </attribute>
-    <attribute en="rowspan" type="number" optional="yes">
-      <description xml:lang="en">
-        <para>The number of rows for this cell. Defaults to 1.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die Anzahl der Zeilen, die die Zelle überdecken soll. Voreinstellung ist 1.</para>
-      </description>
-    </attribute>
-    <attribute en="align" optional="yes" css="text-align" allowxpath="yes">
-      <description xml:lang="en">
-        <para>Horizontal alignment of the cell contents. Defaults to left.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die horizontale Ausrichtung des Tabelleninhalts</para>
-      </description>
-      <choice en="left">
-        <description xml:lang="en">
-          <para>The contents is left aligned (ragged right). This is the default.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Der Inhalt der Zelle ist am linken Rand ausgerichtet. (Voreinstellung)</para>
-        </description>
-      </choice>
-      <choice en="right">
-        <description xml:lang="en">
-          <para>The contents of the cell is right aligned.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Der Inhalt der Zelle ist rechtsbündig ausgerichtet.</para>
-        </description>
-      </choice>
-      <choice en="center">
-        <description xml:lang="en">
-          <para>The contents of the cell is aligned at the center, with ragged right and left margin.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Der Inhalt der Zelle ist auf der Mittelachse ausgerichtet mit links und rechts Flatterrand.</para>
-        </description>
-      </choice>
-      <choice en="justify">
-        <description xml:lang="en">
-          <para>Justified text with straight margins.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Text im Blocksatz.</para>
-        </description>
-      </choice>
-    </attribute>
-    <attribute en="valign" optional="yes" css="vertical-align" allowxpath="yes">
-      <description xml:lang="en">
-        <para>The vertical alignment of the cell.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die vertikale Ausrichtung des Zelleninhalts.</para>
-      </description>
-      <choice en="top">
-        <description xml:lang="en">
-          <para>The contents is aligned at the top edge of the cell.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Der Zellinhalt ist an der oberen Kante ausgerichtet.</para>
-        </description>
-      </choice>
-      <choice en="middle">
-        <description xml:lang="en">
-          <para>The contents is vertically centered.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Der Zellinhalt vertikal zentriert.</para>
-        </description>
-      </choice>
-      <choice en="bottom">
-        <description xml:lang="en">
-          <para>The contents is aligned at the bottom edge of the cell.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Der Zellinhalt ist an der unteren Kante ausgerichtet.</para>
-        </description>
-      </choice>
     </attribute>
     <attribute en="padding" type="length" optional="yes" css="padding">
       <description xml:lang="en">
@@ -7590,60 +7606,12 @@
         <para>Bestimmt den Innenabstand einer Tabelle (rechts)</para>
       </description>
     </attribute>
-    <attribute en="background-text" optional="yes" css="background-text" since="2.3.7">
+    <attribute en="rowspan" type="number" optional="yes">
       <description xml:lang="en">
-        <para>A text that should be placed in the background of the table cell.</para>
+        <para>The number of rows for this cell. Defaults to 1.</para>
       </description>
       <description xml:lang="de">
-        <para>Ein Text, der in den Tabellenhintergrund gelegt wird.</para>
-      </description>
-    </attribute>
-    <attribute en="background-textcolor" optional="yes" css="background-textcolor" since="2.3.7">
-      <description xml:lang="en">
-        <para>The color of the text in the background (if any).</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die Farbe des Hintergrundtexts, falls vorhanden.</para>
-      </description>
-    </attribute>
-    <attribute en="background-transform" optional="yes" css="background-transform" since="2.3.7">
-      <description xml:lang="en">
-        <para>The transformation of the background text (if any). Currently supported: <tt>rotate(-40deg)</tt> (and other angles in the range 0 to -90).</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die Transformation des Hintergrundtexts (falls vorhanden). Derzeit wird folgende Angabe unterstützt: <tt>rotate(-40deg) (und andere Winkel im Bereich 0 bis -90).</tt></para>
-      </description>
-    </attribute>
-    <attribute en="background-size" optional="yes" css="background-size" since="2.3.7">
-      <description xml:lang="en">
-        <para>Controls the size of the background text. Currently only 'contain' and 'auto' is allowed.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Bestimmt die Größe des Hintergrundtexts. Derzeit ist nur 'contain' und 'auto' erlaubt.</para>
-      </description>
-      <choice en="contain">
-        <description xml:lang="en">
-          <para>Fill the height of the table cell.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Der Text passt sich der Zellenhöhe an.</para>
-        </description>
-      </choice>
-      <choice en="auto" since="2.5.4">
-        <description xml:lang="en">
-          <para>The background text is not scaled.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Der Hintergrundtext wird nicht skaliert.</para>
-        </description>
-      </choice>
-    </attribute>
-    <attribute en="background-font-family" optional="yes" css="background-font-family" type="text" since="2.3.7">
-      <description xml:lang="en">
-        <para>Set the font family of the background text. Defaults to the table font.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Setzt die Fontfamilie für den Hintergrundtext. Voreinstellung ist die Fontfamilie für die Tabelle.</para>
+        <para>Die Anzahl der Zeilen, die die Zelle überdecken soll. Voreinstellung ist 1.</para>
       </description>
     </attribute>
     <attribute en="rotate" optional="yes" since="3.3.7" type="number">
@@ -7653,6 +7621,38 @@
       <description xml:lang="de">
         <para>Drehe den Inhalt (im Uhrzeigersinn) der Tabellenzelle. Experimentell und derzeit nur für Textinhalte.</para>
       </description>
+    </attribute>
+    <attribute en="valign" optional="yes" css="vertical-align" allowxpath="yes">
+      <description xml:lang="en">
+        <para>The vertical alignment of the cell.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die vertikale Ausrichtung des Zelleninhalts.</para>
+      </description>
+      <choice en="top">
+        <description xml:lang="en">
+          <para>The contents is aligned at the top edge of the cell.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Zellinhalt ist an der oberen Kante ausgerichtet.</para>
+        </description>
+      </choice>
+      <choice en="middle">
+        <description xml:lang="en">
+          <para>The contents is vertically centered.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Zellinhalt vertikal zentriert.</para>
+        </description>
+      </choice>
+      <choice en="bottom">
+        <description xml:lang="en">
+          <para>The contents is aligned at the bottom edge of the cell.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Zellinhalt ist an der unteren Kante ausgerichtet.</para>
+        </description>
+      </choice>
     </attribute>
     <remark xml:lang="en">
       <para>The child elements of the table cells are either block objects that start a new line or inline objects that are placed horizontally next to each other (from left to right) until the width of the table cell forces a line break.
@@ -7822,30 +7822,6 @@
         <para>Name der Farbe im Textblock.</para>
       </description>
     </attribute>
-    <attribute en="width" type="number" optional="yes">
-      <description xml:lang="en">
-        <para>Number of columns for the text. If not given, the surrounding element determines the width of the element.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Anzahl der Spalten, die der Text einnehmen soll. Wenn das Attribut nicht angegeben wird, so bestimmt das umliegende Element die Breite.</para>
-      </description>
-    </attribute>
-    <attribute en="fontface" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>The name of the font family. Defaults to <tt>text</tt>.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Name der Schriftfamilie, die benutzt werden soll.</para>
-      </description>
-    </attribute>
-    <attribute en="textformat" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>The name of the text format to be applied to the text. Defaults to <tt>text</tt>.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Name des zu benutzenden Textformats. Wird kein Textformat angegeben, nimmt das System das Textformat <tt>text</tt>.</para>
-      </description>
-    </attribute>
     <attribute en="columns" type="number" optional="yes">
       <description xml:lang="en">
         <para>Number of columns in the textblock.</para>
@@ -7862,12 +7838,36 @@
         <para>Abstand zwischen zwei Spalten. Voreinstellung: 3mm.</para>
       </description>
     </attribute>
+    <attribute en="fontface" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The name of the font family. Defaults to <tt>text</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name der Schriftfamilie, die benutzt werden soll.</para>
+      </description>
+    </attribute>
     <attribute en="minheight" optional="yes" type="numberorlength" since="2.3.28">
       <description xml:lang="en">
         <para>The minimum height of the textblock, given as a length or number (grid cells).</para>
       </description>
       <description xml:lang="de">
         <para>Die minimale Höhe des Textblocks als Längenangabe oder als Maßeinheit.</para>
+      </description>
+    </attribute>
+    <attribute en="textformat" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The name of the text format to be applied to the text. Defaults to <tt>text</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name des zu benutzenden Textformats. Wird kein Textformat angegeben, nimmt das System das Textformat <tt>text</tt>.</para>
+      </description>
+    </attribute>
+    <attribute en="width" type="number" optional="yes">
+      <description xml:lang="en">
+        <para>Number of columns for the text. If not given, the surrounding element determines the width of the element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Anzahl der Spalten, die der Text einnehmen soll. Wenn das Attribut nicht angegeben wird, so bestimmt das umliegende Element die Breite.</para>
       </description>
     </attribute>
     <remark xml:lang="en">
@@ -8238,46 +8238,6 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="valign" optional="yes">
-      <description xml:lang="en">
-        <para>Vertical alignment of the table cells in this row.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die vertikale Ausrichtung des Tabelleninhalts (gilt für die gesamte Zeile).</para>
-      </description>
-      <choice en="top">
-        <description xml:lang="en">
-          <para>The objects in this row are aligned at the top.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Die Objekte dieser Zeile werden oben ausgerichtet.</para>
-        </description>
-      </choice>
-      <choice en="middle">
-        <description xml:lang="en">
-          <para>The objects in this row are aligned at the middle axis.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Die Objekte dieser Zeile werden auf der Mittelachse ausgerichtet.</para>
-        </description>
-      </choice>
-      <choice en="bottom">
-        <description xml:lang="en">
-          <para>The objects in this row are aligned at the bottom.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Die Objekte dieser Zeile werden am unteren Rand ausgerichtet.</para>
-        </description>
-      </choice>
-    </attribute>
-    <attribute en="minheight" type="numberorlength" optional="yes">
-      <description xml:lang="en">
-        <para>Minimum row height in grid cells or length.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die Mindesthöhe der Zeile in Rasterzellen oder als Längenangabe.</para>
-      </description>
-    </attribute>
     <attribute en="backgroundcolor" type="text" optional="yes">
       <description xml:lang="en">
         <para>Background color of each cell in this row.</para>
@@ -8316,6 +8276,14 @@
       </description>
       <description xml:lang="de">
         <para>Auf diese Daten können im Tabellenkopf und Tabellenfuß mit <tt>$_last_tr_data</tt> zugegriffen werden.</para>
+      </description>
+    </attribute>
+    <attribute en="minheight" type="numberorlength" optional="yes">
+      <description xml:lang="en">
+        <para>Minimum row height in grid cells or length.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Mindesthöhe der Zeile in Rasterzellen oder als Längenangabe.</para>
       </description>
     </attribute>
     <attribute en="sethead" optional="yes" allowxpath="yes">
@@ -8357,6 +8325,38 @@
       <description xml:lang="de">
         <para>Der Leerraum über dieser Zeile, wenn sie nicht die erste Zeile auf einer Seite/Bereich ist</para>
       </description>
+    </attribute>
+    <attribute en="valign" optional="yes">
+      <description xml:lang="en">
+        <para>Vertical alignment of the table cells in this row.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die vertikale Ausrichtung des Tabelleninhalts (gilt für die gesamte Zeile).</para>
+      </description>
+      <choice en="top">
+        <description xml:lang="en">
+          <para>The objects in this row are aligned at the top.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Objekte dieser Zeile werden oben ausgerichtet.</para>
+        </description>
+      </choice>
+      <choice en="middle">
+        <description xml:lang="en">
+          <para>The objects in this row are aligned at the middle axis.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Objekte dieser Zeile werden auf der Mittelachse ausgerichtet.</para>
+        </description>
+      </choice>
+      <choice en="bottom">
+        <description xml:lang="en">
+          <para>The objects in this row are aligned at the bottom.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Objekte dieser Zeile werden am unteren Rand ausgerichtet.</para>
+        </description>
+      </choice>
     </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Tr minheight="8mm" backgroundcolor="yellow">

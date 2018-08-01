@@ -328,12 +328,48 @@
    <define name="e_Barcode">
       <element name="Barcode">
          <a:documentation>Print a 1d or 2d barcode. To be used in PlaceObject.</a:documentation>
+         <optional>
+            <attribute name="eclevel">
+               <a:documentation>Set the error correction level for QR-codes. If not provided, the system uses the maximum level for minimum size. The higher the level, the more error correction is in the QR-code.</a:documentation>
+               <choice>
+                  <value>L</value>
+                  <a:documentation>Set the lowest level (1) with approx. 7% recovery.</a:documentation>
+                  <value>M</value>
+                  <a:documentation>Set the second lowest level (2) with approx. 15% recovery.</a:documentation>
+                  <value>Q</value>
+                  <a:documentation>Set the second highest level (3) with approx. 25% recovery.</a:documentation>
+                  <value>H</value>
+                  <a:documentation>Set the highest level (4) with approx. 35% recovery.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fontface">
+               <a:documentation>Name of the font of the text that can be placed beneath the barcode. Not used in all codes.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="height">
+               <a:documentation>Height of the barcode.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="overshoot">
+               <a:documentation>The factor denoting the extra length of the outer and middle bar. Only useful with EAN13.</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="select">
             <a:documentation>The data to be encoded in the barcode.</a:documentation>
          </attribute>
          <optional>
-            <attribute name="fontface">
-               <a:documentation>Name of the font of the text that can be placed beneath the barcode. Not used in all codes.</a:documentation>
+            <attribute name="showtext">
+               <a:documentation>Should the text be written under the barcode?</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Write text beneath the barcode.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Don&#39;t display text.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <attribute name="type">
@@ -350,42 +386,6 @@
          <optional>
             <attribute name="width">
                <a:documentation>Width of the barcode</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="height">
-               <a:documentation>Height of the barcode.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="showtext">
-               <a:documentation>Should the text be written under the barcode?</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Write text beneath the barcode.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Don&#39;t display text.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="overshoot">
-               <a:documentation>The factor denoting the extra length of the outer and middle bar. Only useful with EAN13.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="eclevel">
-               <a:documentation>Set the error correction level for QR-codes. If not provided, the system uses the maximum level for minimum size. The higher the level, the more error correction is in the QR-code.</a:documentation>
-               <choice>
-                  <value>L</value>
-                  <a:documentation>Set the lowest level (1) with approx. 7% recovery.</a:documentation>
-                  <value>M</value>
-                  <a:documentation>Set the second lowest level (2) with approx. 15% recovery.</a:documentation>
-                  <value>Q</value>
-                  <a:documentation>Set the second highest level (3) with approx. 25% recovery.</a:documentation>
-                  <value>H</value>
-                  <a:documentation>Set the highest level (4) with approx. 35% recovery.</a:documentation>
-               </choice>
             </attribute>
          </optional>
          <empty></empty>
@@ -412,9 +412,6 @@
    <define name="e_Bookmark">
       <element name="Bookmark">
          <a:documentation>Create a bookmark for the PDF viewer (e.g. Adobe Reader). When the user clicks on a bookmark, the PDF viewer jumps to that place in the document.</a:documentation>
-         <attribute name="select">
-            <a:documentation>Title of the bookmark</a:documentation>
-         </attribute>
          <attribute name="level">
             <a:documentation>1 is the top level, 2 is the next level, etc.</a:documentation>
          </attribute>
@@ -429,6 +426,9 @@
                </choice>
             </attribute>
          </optional>
+         <attribute name="select">
+            <a:documentation>Title of the bookmark</a:documentation>
+         </attribute>
          <empty></empty>
       </element>
    </define>
@@ -709,22 +709,9 @@
    <define name="e_Circle">
       <element name="Circle">
          <a:documentation>Create a circle.</a:documentation>
-         <attribute name="radiusx">
-            <a:documentation>Radius of the circle in grid cells (horizontal) or as an absolute length. In the future, a radiusy will allow to create an ellipse.</a:documentation>
-         </attribute>
          <optional>
             <attribute name="backgroundcolor">
                <a:documentation>Color of the circle.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="framecolor">
-               <a:documentation>Color of the circle line.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="rulewidth">
-               <a:documentation>The thickness of the border that is drawn around the object.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -733,8 +720,21 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="framecolor">
+               <a:documentation>Color of the circle line.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="id">
                <a:documentation>CSS id for this circle.</a:documentation>
+            </attribute>
+         </optional>
+         <attribute name="radiusx">
+            <a:documentation>Radius of the circle in grid cells (horizontal) or as an absolute length. In the future, a radiusy will allow to create an ellipse.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="rulewidth">
+               <a:documentation>The thickness of the border that is drawn around the object.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>
@@ -781,11 +781,6 @@
       <element name="Column">
          <a:documentation>Set the properties of a column in the table.</a:documentation>
          <optional>
-            <attribute name="width">
-               <a:documentation>Width of the column. Argument can be a number (in grid cells) a length (e.g. 2cm) or a *-number (e.g. 4*).</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="align">
                <a:documentation>The horizontal alignment of the table cells in this column. Can be overridden in a cell (Td).</a:documentation>
                <choice>
@@ -795,19 +790,6 @@
                   <a:documentation>The table cells are horizontally centerd.</a:documentation>
                   <value>right</value>
                   <a:documentation>The table cells are right aligned.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="valign">
-               <a:documentation>The vertical alignment of the cells in this column. Can be overridden in a cell (Td).</a:documentation>
-               <choice>
-                  <value>top</value>
-                  <a:documentation>The table cells are top aligned.</a:documentation>
-                  <value>middle</value>
-                  <a:documentation>The table cells are vertically centered.</a:documentation>
-                  <value>bottom</value>
-                  <a:documentation>The table cells are aligned at the bottom.</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -824,6 +806,24 @@
          <optional>
             <attribute name="padding-right">
                <a:documentation>Set the right padding for the column</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="width">
+               <a:documentation>Width of the column. Argument can be a number (in grid cells) a length (e.g. 2cm) or a *-number (e.g. 4*).</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="valign">
+               <a:documentation>The vertical alignment of the cells in this column. Can be overridden in a cell (Td).</a:documentation>
+               <choice>
+                  <value>top</value>
+                  <a:documentation>The table cells are top aligned.</a:documentation>
+                  <value>middle</value>
+                  <a:documentation>The table cells are vertically centered.</a:documentation>
+                  <value>bottom</value>
+                  <a:documentation>The table cells are aligned at the bottom.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <empty></empty>
@@ -981,6 +981,11 @@
       <element name="DefineColor">
          <a:documentation>Colors defined with DefineColors can be referenced later by their name.</a:documentation>
          <optional>
+            <attribute name="colorname">
+               <a:documentation>The name of the spot color if model is »spotcolor«. The name must match the required color name, such as »PANTONE 116 C«.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="model">
                <a:documentation>Color model to be used for the color. Currently “rgb”, “cmyk”, “gray” and “spotcolor” are supported.</a:documentation>
                <choice>
@@ -1000,6 +1005,22 @@
          <attribute name="name">
             <a:documentation>The name of the color to be defined.</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="overprint">
+               <a:documentation>Enable overprint for this color.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Enable overprint for this color.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Disable overprint for this color (default).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="value">
+               <a:documentation>Hex value of the color, such as #FA5 or #FFAA55.</a:documentation>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="r">
                <a:documentation>Red part with RGB</a:documentation>
@@ -1035,38 +1056,17 @@
                <a:documentation>Black part with CMYK</a:documentation>
             </attribute>
          </optional>
-         <optional>
-            <attribute name="colorname">
-               <a:documentation>The name of the spot color if model is »spotcolor«. The name must match the required color name, such as »PANTONE 116 C«.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="overprint">
-               <a:documentation>Enable overprint for this color.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Enable overprint for this color.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Disable overprint for this color (default).</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="value">
-               <a:documentation>Hex value of the color, such as #FA5 or #FFAA55.</a:documentation>
-            </attribute>
-         </optional>
          <empty></empty>
       </element>
    </define>
    <define name="e_DefineFontalias">
       <element name="DefineFontalias">
          <a:documentation>Defines a font alias. When defining a font family, you can use the an alias for the fontname. Aliases are looked up recursively.</a:documentation>
-         <attribute name="existing">
-            <a:documentation>The name of the existing font family.</a:documentation>
-         </attribute>
          <attribute name="alias">
             <a:documentation>New (equivalent) name of the font</a:documentation>
+         </attribute>
+         <attribute name="existing">
+            <a:documentation>The name of the existing font family.</a:documentation>
          </attribute>
          <empty></empty>
       </element>
@@ -1076,14 +1076,14 @@
          <a:documentation>Defines a font family consisting of the shapes »regular», »bold«, »bold italic« and »italic«. To be used in Paragraph, Textblock, Fontface and Table with the attribute fontface.</a:documentation>
          <interleave>
             <group>
-               <attribute name="name">
-                  <a:documentation>The symbolic name that is used as a reference to access this font family.</a:documentation>
-               </attribute>
                <attribute name="fontsize">
                   <a:documentation>Font size in pt (PostScript points). Number without unit.</a:documentation>
                </attribute>
                <attribute name="leading">
                   <a:documentation>Distance between two baselines in pt (PostScript points). Without unit.</a:documentation>
+               </attribute>
+               <attribute name="name">
+                  <a:documentation>The symbolic name that is used as a reference to access this font family.</a:documentation>
                </attribute>
                <interleave>
                   <optional>
@@ -1108,35 +1108,6 @@
       <element name="DefineTextformat">
          <a:documentation>Define text formatting instructions. A textformat is used to align and indent text and create margins and rules before and after the text.</a:documentation>
          <optional>
-            <attribute name="hyphenchar">
-               <a:documentation>The character used for hyphenation (default: -)</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="orphan">
-               <a:documentation>If yes, allow orphans (first line of paragraph is on the previous page). If you provide a number, it is the number of lines that must be kept together. Default: no.</a:documentation>
-               <data type="string">
-                  <param name="pattern">[0-9]+|yes|no</param>
-               </data>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="widow">
-               <a:documentation>If yes, allow widows (last line of paragraph is on the next page). If you provide a number, it is the number of lines that must be kept together.  Default: no.</a:documentation>
-               <data type="string">
-                  <param name="pattern">[0-9]+|yes|no</param>
-               </data>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="column-padding-top">
-               <a:documentation>The height of the padding that is inserted in a column (at the top) with Output/Text</a:documentation>
-            </attribute>
-         </optional>
-         <attribute name="name">
-            <a:documentation>Name of the textformat that is used later in the layout.</a:documentation>
-         </attribute>
-         <optional>
             <attribute name="alignment">
                <a:documentation>Determines the formatting of the text.</a:documentation>
                <choice>
@@ -1152,16 +1123,6 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="indentation">
-               <a:documentation>The amount of indentation.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="rows">
-               <a:documentation>The number of rows with indentation given in the attribute indentation. If the number is negative, this determines the number of rows that are not indented.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="border-top">
                <a:documentation>The thickness of the rule above the text.</a:documentation>
             </attribute>
@@ -1169,11 +1130,6 @@
          <optional>
             <attribute name="border-bottom">
                <a:documentation>The thickness of the rule below the text.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="margin-bottom">
-               <a:documentation>Distance between the bottom rule and the text of the next paragraph.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1188,13 +1144,13 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="padding-top">
-               <a:documentation>Distance between the top of the text and the top rule.</a:documentation>
+            <attribute name="column-padding-top">
+               <a:documentation>The height of the padding that is inserted in a column (at the top) with Output/Text</a:documentation>
             </attribute>
          </optional>
          <optional>
-            <attribute name="margin-top">
-               <a:documentation>Distance between the top rule and the text of the previous paragraph.</a:documentation>
+            <attribute name="hyphenchar">
+               <a:documentation>The character used for hyphenation (default: -)</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1209,6 +1165,42 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="indentation">
+               <a:documentation>The amount of indentation.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="margin-bottom">
+               <a:documentation>Distance between the bottom rule and the text of the next paragraph.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="margin-top">
+               <a:documentation>Distance between the top rule and the text of the previous paragraph.</a:documentation>
+            </attribute>
+         </optional>
+         <attribute name="name">
+            <a:documentation>Name of the textformat that is used later in the layout.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="orphan">
+               <a:documentation>If yes, allow orphans (first line of paragraph is on the previous page). If you provide a number, it is the number of lines that must be kept together. Default: no.</a:documentation>
+               <data type="string">
+                  <param name="pattern">[0-9]+|yes|no</param>
+               </data>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="padding-top">
+               <a:documentation>Distance between the top of the text and the top rule.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="rows">
+               <a:documentation>The number of rows with indentation given in the attribute indentation. If the number is negative, this determines the number of rows that are not indented.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="tab">
                <a:documentation>What to do on the tab (&amp; #09;) character.</a:documentation>
                <choice>
@@ -1217,6 +1209,14 @@
                   <value>hspace</value>
                   <a:documentation>Use tab as a stretching space</a:documentation>
                </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="widow">
+               <a:documentation>If yes, allow widows (last line of paragraph is on the next page). If you provide a number, it is the number of lines that must be kept together.  Default: no.</a:documentation>
+               <data type="string">
+                  <param name="pattern">[0-9]+|yes|no</param>
+               </data>
             </attribute>
          </optional>
          <empty></empty>
@@ -1513,6 +1513,11 @@
          <interleave>
             <group>
                <optional>
+                  <attribute name="backgroundcolor">
+                     <a:documentation>Color of the background if ›background‹ is set to ›full‹.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="border-bottom-right-radius">
                      <a:documentation>Radius of corner bottom right.</a:documentation>
                   </attribute>
@@ -1535,11 +1540,6 @@
                <optional>
                   <attribute name="framecolor">
                      <a:documentation>The color of the frame around the object. Only makes sense in combination with the attribute &#39;frame&#39;.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="backgroundcolor">
-                     <a:documentation>Color of the background if ›background‹ is set to ›full‹.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -1674,16 +1674,6 @@
       With no width given: create a horizontal stretching space. The space will take up no width as a minimum but is able to stretch up to infinity. Useful in single line contexts. In normal text there will surprising little stretching involved due to the global paragraph optimization algorithm.
         You will see that all other word spaces will have the minimum width and the excessive whitespace is accumulated at the strechable space.</a:documentation>
          <optional>
-            <attribute name="minwidth">
-               <a:documentation>The (optional) minimum width of the inserted space.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="width">
-               <a:documentation>Optional width of the space (a length).</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="leader">
                <a:documentation>The text that should be displayed instead of the space. For example a dot (.).</a:documentation>
             </attribute>
@@ -1691,6 +1681,16 @@
          <optional>
             <attribute name="leader-width">
                <a:documentation>Distance between two leader text starting points</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="minwidth">
+               <a:documentation>The (optional) minimum width of the inserted space.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="width">
+               <a:documentation>Optional width of the space (a length).</a:documentation>
             </attribute>
          </optional>
          <empty></empty>
@@ -1826,6 +1826,16 @@
       <element name="Image">
          <a:documentation>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg). See below for a limitation on the number of included PDF files.</a:documentation>
          <optional>
+            <attribute name="class">
+               <a:documentation>CSS class for this element.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id for this element.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="bleed">
                <a:documentation>Should the image size increase by the amount of bleed setting (Options)?</a:documentation>
                <choice>
@@ -1837,18 +1847,29 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="class">
-               <a:documentation>CSS class for this element.</a:documentation>
+            <attribute name="clip">
+               <a:documentation>When yes, the image keeps its aspect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Keep the aspect ratio and cut off left/right or top/bottom edges.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Distort the image to make it fit in the given area.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
-            <attribute name="id">
-               <a:documentation>CSS id for this element.</a:documentation>
+            <attribute name="dpiwarn">
+               <a:documentation>Warn if the image gets lower resolution than given.</a:documentation>
             </attribute>
          </optional>
          <optional>
-            <attribute name="width">
-               <a:documentation>Image width. One of &#39;auto&#39; (default, take image width), &#39;100%&#39; (whole area width), length (such as &#39;3cm&#39;) or number (in grid cells).</a:documentation>
+            <attribute name="fallback">
+               <a:documentation>The filename of the replacement image if the file is not found. If none given, a red &#39;file not found&#39; image will gets displayed.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="file">
+               <a:documentation>Filename of the image. Can be a file in the search path or a file-URI for absolute paths (e.g. file:///path/to/image.pdf).</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1859,16 +1880,6 @@
          <optional>
             <attribute name="href">
                <a:documentation>An URL (http:// or file:) of the image. If external, it will be downloaded and cached in TEMPDIR/sp/images (which can be configured by setting the configuration file key imagecache). Alternative to ›file‹. When file: is used as a protocol, it can be a relative path. If no protocol is given, file: is assumed.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="file">
-               <a:documentation>Filename of the image. Can be a file in the search path or a file-URI for absolute paths (e.g. file:///path/to/image.pdf).</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="fallback">
-               <a:documentation>The filename of the replacement image if the file is not found. If none given, a red &#39;file not found&#39; image will gets displayed.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1887,34 +1898,6 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="visiblebox">
-               <a:documentation>The PDF box that represents the visible area of the included image. Default is “cropbox”.</a:documentation>
-               <choice>
-                  <value>artbox</value>
-                  <a:documentation>Use the artbox as the visible area. The artbox is usually not contained in a PDF.</a:documentation>
-                  <value>bleedbox</value>
-                  <a:documentation>Use the bleedbox of the included PDF.</a:documentation>
-                  <value>cropbox</value>
-                  <a:documentation>Use the cropbox of the included PDF (default).</a:documentation>
-                  <value>mediabox</value>
-                  <a:documentation>Use the mediabox of the included PDF. This is the largest box.</a:documentation>
-                  <value>trimbox</value>
-                  <a:documentation>Use the trimbox of the includes PDF. The trimbox is the final paper size. For example, the trim box of an A4 PDF is 210mm x 297mm.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="clip">
-               <a:documentation>When yes, the image keeps its aspect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Keep the aspect ratio and cut off left/right or top/bottom edges.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Distort the image to make it fit in the given area.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="minwidth">
                <a:documentation>The minimum width of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells), a length or the value »100%« for full width image.</a:documentation>
             </attribute>
@@ -1922,11 +1905,6 @@
          <optional>
             <attribute name="minheight">
                <a:documentation>The minimum height of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells) or a length.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="dpiwarn">
-               <a:documentation>Warn if the image gets lower resolution than given.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1957,6 +1935,28 @@
          <optional>
             <attribute name="rotate">
                <a:documentation>Rotate the image in steps of 90°. The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="visiblebox">
+               <a:documentation>The PDF box that represents the visible area of the included image. Default is “cropbox”.</a:documentation>
+               <choice>
+                  <value>artbox</value>
+                  <a:documentation>Use the artbox as the visible area. The artbox is usually not contained in a PDF.</a:documentation>
+                  <value>bleedbox</value>
+                  <a:documentation>Use the bleedbox of the included PDF.</a:documentation>
+                  <value>cropbox</value>
+                  <a:documentation>Use the cropbox of the included PDF (default).</a:documentation>
+                  <value>mediabox</value>
+                  <a:documentation>Use the mediabox of the included PDF. This is the largest box.</a:documentation>
+                  <value>trimbox</value>
+                  <a:documentation>Use the trimbox of the includes PDF. The trimbox is the final paper size. For example, the trim box of an A4 PDF is 210mm x 297mm.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="width">
+               <a:documentation>Image width. One of &#39;auto&#39; (default, take image width), &#39;100%&#39; (whole area width), length (such as &#39;3cm&#39;) or number (in grid cells).</a:documentation>
             </attribute>
          </optional>
          <empty></empty>
@@ -1997,13 +1997,19 @@
             <a:documentation>The name (with extension) of the font file.</a:documentation>
          </attribute>
          <optional>
-            <attribute name="space">
-               <a:documentation>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size.</a:documentation>
+            <attribute name="marginprotrusion">
+               <a:documentation>The amount of protrusion glyphs like -, . and - stick into the right margin. Highly font dependent. Defaults to 0.</a:documentation>
             </attribute>
          </optional>
          <optional>
-            <attribute name="marginprotrusion">
-               <a:documentation>The amount of protrusion glyphs like -, . and - stick into the right margin. Highly font dependent. Defaults to 0.</a:documentation>
+            <attribute name="oldstylefigures">
+               <a:documentation>Use oldstyle figures if the font includes them. (OpenType feature »onum«)</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Use oldstyle figures.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Use lining figures.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -2018,14 +2024,8 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="oldstylefigures">
-               <a:documentation>Use oldstyle figures if the font includes them. (OpenType feature »onum«)</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Use oldstyle figures.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Use lining figures.</a:documentation>
-               </choice>
+            <attribute name="space">
+               <a:documentation>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>
@@ -2361,6 +2361,11 @@
    <define name="e_Makeindex">
       <element name="Makeindex">
          <a:documentation>Sort and split a list of elements to make an index.</a:documentation>
+         <optional>
+            <attribute name="pagenumber">
+               <a:documentation>The name of the attribute that holds the page numbers. Defaults to &#39;page&#39;.</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="section">
             <a:documentation>Create an XML-element with this name for every section (letter) in the index.</a:documentation>
          </attribute>
@@ -2370,11 +2375,6 @@
          <attribute name="sortkey">
             <a:documentation>The name of the attribute holding the indexentry (that should be sorted).</a:documentation>
          </attribute>
-         <optional>
-            <attribute name="pagenumber">
-               <a:documentation>The name of the attribute that holds the page numbers. Defaults to &#39;page&#39;.</a:documentation>
-            </attribute>
-         </optional>
          <empty></empty>
       </element>
    </define>
@@ -2399,9 +2399,6 @@
    <define name="e_Mark">
       <element name="Mark">
          <a:documentation>Sets an invisible mark into the output. This is helpful when you want to know on which page the mark is placed on.</a:documentation>
-         <attribute name="select">
-            <a:documentation>The name of the mark to be set.</a:documentation>
-         </attribute>
          <optional>
             <attribute name="append">
                <a:documentation>When yes, append the current page to the previous values of the mark. Useful to get page ranges in an index. (Default is no.)</a:documentation>
@@ -2413,6 +2410,9 @@
                </choice>
             </attribute>
          </optional>
+         <attribute name="select">
+            <a:documentation>The name of the mark to be set.</a:documentation>
+         </attribute>
          <optional>
             <attribute name="pdftarget">
                <a:documentation>Set a pdf target that can be referenced by A</a:documentation>
@@ -2476,16 +2476,6 @@
       <element name="NewPage">
          <a:documentation>Finishes the current page and creates a new one (only if new material for the page is available).</a:documentation>
          <optional>
-            <attribute name="pagetype">
-               <a:documentation>The name of the next page type that should be used.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="skippagetype">
-               <a:documentation>The pagetype of the blank page if inserted (see the attribute openon).</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="openon">
                <a:documentation>The next current page will be a left or a right page. E.g. when on page 1 and openon=&#34;right&#34; then page 2 is empty and the next current page is 3.</a:documentation>
                <choice>
@@ -2494,6 +2484,16 @@
                   <value>right</value>
                   <a:documentation>The next objects will be placed on a right page.</a:documentation>
                </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="pagetype">
+               <a:documentation>The name of the next page type that should be used.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="skippagetype">
+               <a:documentation>The pagetype of the blank page if inserted (see the attribute openon).</a:documentation>
             </attribute>
          </optional>
          <empty></empty>
@@ -2613,6 +2613,22 @@
       <element name="Options">
          <a:documentation>Set publisher specific options.</a:documentation>
          <optional>
+            <attribute name="bleed">
+               <a:documentation>The amount of bleed. Defaults to 0mm.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="bleedmarks">
+               <a:documentation>Trim marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute trim, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is no, that means no trim marks will be displayed. The trim marks show the additional trim distance.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Show trim marks.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Don&#39;t show trim marks (default).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="colorprofile">
                <a:documentation>The filename of the color profile. The default profile is »ISO Coated v2 (ECI)«. Only used when spot colors are used.</a:documentation>
             </attribute>
@@ -2721,11 +2737,6 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="startpage">
-               <a:documentation>Set the number of the first page.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="reportmissingglyphs">
                <a:documentation>Issue an error if glyphs are missing from a font.</a:documentation>
                <choice>
@@ -2737,19 +2748,8 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="bleed">
-               <a:documentation>The amount of bleed. Defaults to 0mm.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="bleedmarks">
-               <a:documentation>Trim marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute trim, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is no, that means no trim marks will be displayed. The trim marks show the additional trim distance.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Show trim marks.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Don&#39;t show trim marks (default).</a:documentation>
-               </choice>
+            <attribute name="startpage">
+               <a:documentation>Set the number of the first page.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>
@@ -3061,6 +3061,16 @@
          <interleave>
             <group>
                <optional>
+                  <attribute name="class">
+                     <a:documentation>CSS class for this paragraph.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="id">
+                     <a:documentation>CSS id for this paragraph.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="allowbreak">
                      <a:documentation>(Experimental!) list of characters where a line break is possible. Space character is not implied when this attribute is set.</a:documentation>
                   </attribute>
@@ -3068,11 +3078,6 @@
                <optional>
                   <attribute name="color">
                      <a:documentation>Color of the paragraph. Must be defined with DefineColor before use.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="textformat">
-                     <a:documentation>Name of the textformat that is applied to the paragraph. If none is specified the textformat text is used.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -3130,13 +3135,8 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="class">
-                     <a:documentation>CSS class for this paragraph.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="id">
-                     <a:documentation>CSS id for this paragraph.</a:documentation>
+                  <attribute name="textformat">
+                     <a:documentation>Name of the textformat that is applied to the paragraph. If none is specified the textformat text is used.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -3174,11 +3174,11 @@
    <define name="e_Pageformat">
       <element name="Pageformat">
          <a:documentation>The size of the PDF pages. Defaults to 210mm width and 297mm height (A4)</a:documentation>
-         <attribute name="width">
-            <a:documentation>Width of the PDF pages.</a:documentation>
-         </attribute>
          <attribute name="height">
             <a:documentation>The height of the PDF pages.</a:documentation>
+         </attribute>
+         <attribute name="width">
+            <a:documentation>Width of the PDF pages.</a:documentation>
          </attribute>
          <empty></empty>
       </element>
@@ -3193,11 +3193,11 @@
                      <a:documentation>The default text color for this page (unless overridden in Paragraph or Textblock). Defaults to &#39;black&#39;.</a:documentation>
                   </attribute>
                </optional>
-               <attribute name="test">
-                  <a:documentation>If this xpath expression evaluates to true, this page is taken as a master page.</a:documentation>
-               </attribute>
                <attribute name="name">
                   <a:documentation>Name of the master page. It is for informational purpose and as a selection for NewPage.</a:documentation>
+               </attribute>
+               <attribute name="test">
+                  <a:documentation>If this xpath expression evaluates to true, this page is taken as a master page.</a:documentation>
                </attribute>
                <ref name="e_Margin"></ref>
                <interleave>
@@ -3233,16 +3233,6 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="subject">
-               <a:documentation>Set the subject of the document</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="title">
-               <a:documentation>Set the title of the document</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="duplex">
                <a:documentation>Set viewer preference to one or two page printing. Default: empty.</a:documentation>
                <choice>
@@ -3266,6 +3256,17 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="picktraybypdfsize">
+               <a:documentation>Activate the check box in the PDF viewer for choosing the paper tray based on the page size.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Activate checkbox</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Deactivate checkbox</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="printscaling">
                <a:documentation>Should the printer scale the pages?</a:documentation>
                <choice>
@@ -3277,14 +3278,13 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="picktraybypdfsize">
-               <a:documentation>Activate the check box in the PDF viewer for choosing the paper tray based on the page size.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Activate checkbox</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Deactivate checkbox</a:documentation>
-               </choice>
+            <attribute name="subject">
+               <a:documentation>Set the subject of the document</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="title">
+               <a:documentation>Set the title of the document</a:documentation>
             </attribute>
          </optional>
          <empty></empty>
@@ -3332,8 +3332,22 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="groupname">
-                     <a:documentation>The name of the group that gets output. When given a groupname, PlaceObject should not contain any objects.</a:documentation>
+                  <attribute name="background">
+                     <a:documentation>Fill the background of the object (full grid cells) with a color, given by backgroundcolor.</a:documentation>
+                     <choice>
+                        <value>full</value>
+                        <a:documentation>Fill background with the given color (in backgroundcolor).</a:documentation>
+                        <value>without</value>
+                        <a:documentation>Empty background</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="backgroundcolor">
+                     <a:documentation>Color of the background if ›background‹ is set to ›full‹.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -3357,6 +3371,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="column">
+                     <a:documentation>If contents is a number: the grid cell from the left margin of the area. If it is a length: the absolute position from the left paper margin. If this attribute is omitted, the system tries to place the object by itself.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="frame">
                      <a:documentation>Draw a frame around the object. You need to supply the frame color.</a:documentation>
                      <choice>
@@ -3373,42 +3392,18 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="background">
-                     <a:documentation>Fill the background of the object (full grid cells) with a color, given by backgroundcolor.</a:documentation>
+                  <attribute name="groupname">
+                     <a:documentation>The name of the group that gets output. When given a groupname, PlaceObject should not contain any objects.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="hreference">
+                     <a:documentation>Determines the placement of the object relative to the given column. If &#39;left&#39; (which is the default), the given column is the left border of the object. If &#39;right&#39;, the column determines the right edge of the object.</a:documentation>
                      <choice>
-                        <value>full</value>
-                        <a:documentation>Fill background with the given color (in backgroundcolor).</a:documentation>
-                        <value>without</value>
-                        <a:documentation>Empty background</a:documentation>
-                        <data type="string">
-                           <param name="pattern">\{.+\}</param>
-                        </data>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="backgroundcolor">
-                     <a:documentation>Color of the background if ›background‹ is set to ›full‹.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="rulewidth">
-                     <a:documentation>The thickness of the frame that is drawn around the object. Only makes sense in combination with the attribute &#39;frame&#39;.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="column">
-                     <a:documentation>If contents is a number: the grid cell from the left margin of the area. If it is a length: the absolute position from the left paper margin. If this attribute is omitted, the system tries to place the object by itself.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="keepposition">
-                     <a:documentation>Don&#39;t move the virtual cursor to the next free space</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Don&#39;t move the virtual cursor.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>Move the virtual cursor (default).</a:documentation>
+                        <value>left</value>
+                        <a:documentation>The object is placed in given column.</a:documentation>
+                        <value>right</value>
+                        <a:documentation>The given columns determines the right edge of the border.</a:documentation>
                      </choice>
                   </attribute>
                </optional>
@@ -3426,8 +3421,19 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="page">
-                     <a:documentation>The page (later in the PDF), the object should appear on. Number of the keyword »next« for the next page.</a:documentation>
+                  <attribute name="keepposition">
+                     <a:documentation>Don&#39;t move the virtual cursor to the next free space</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Don&#39;t move the virtual cursor.</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Move the virtual cursor (default).</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="maxheight">
+                     <a:documentation>Only used for multi-page table: the maximum height of tables.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -3457,6 +3463,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="page">
+                     <a:documentation>The page (later in the PDF), the object should appear on. Number of the keyword »next« for the next page.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="row">
                      <a:documentation>The row where the object is placed. If none given, the publisher tries to find a row by itself. You can give a number (in grid cells) or an absolute value (from top left).</a:documentation>
                   </attribute>
@@ -3467,8 +3478,8 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="maxheight">
-                     <a:documentation>Only used for multi-page table: the maximum height of tables.</a:documentation>
+                  <attribute name="rulewidth">
+                     <a:documentation>The thickness of the frame that is drawn around the object. Only makes sense in combination with the attribute &#39;frame&#39;.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -3481,17 +3492,6 @@
                         <a:documentation>The object is aligned so that the space at the top is the same as at the bottom.</a:documentation>
                         <value>bottom</value>
                         <a:documentation>The object is aligned at the bottom.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="hreference">
-                     <a:documentation>Determines the placement of the object relative to the given column. If &#39;left&#39; (which is the default), the given column is the left border of the object. If &#39;right&#39;, the column determines the right edge of the object.</a:documentation>
-                     <choice>
-                        <value>left</value>
-                        <a:documentation>The object is placed in given column.</a:documentation>
-                        <value>right</value>
-                        <a:documentation>The given columns determines the right edge of the border.</a:documentation>
                      </choice>
                   </attribute>
                </optional>
@@ -4248,8 +4248,50 @@
          <interleave>
             <group>
                <optional>
+                  <attribute name="balance">
+                     <a:documentation>Tries to balance the table on the last page according to the number of frames. Experimental!</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Tries to balance.</a:documentation>
+                        <value>no</value>
+                        <a:documentation>First column will filled first, default</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="border-collapse">
+                     <a:documentation>Determine if adjacent table cells share borders. The behavior of border-collapse=&#34;collapse&#34; is undefined when the table has columndistance or rowdistance set to a non-zero value and if the adjacent borders don&#39;t have the same width and color.</a:documentation>
+                     <choice>
+                        <value>separate</value>
+                        <a:documentation>The borders are part of the cell and not shared with its neighbors.</a:documentation>
+                        <value>collapse</value>
+                        <a:documentation>The borders of neighboring cells overlap.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="columndistance">
+                     <a:documentation>Distance between two table columns.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="eval">
                      <a:documentation>Evaluates the given XPath expression and discards its output.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="fontface">
+                     <a:documentation>Name of the font family for the table. If not given, the font face ‘text’ is used.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="leading">
+                     <a:documentation>The distance between two rows.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding">
+                     <a:documentation>The distance between the table border and the table contents.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -4266,48 +4308,6 @@
                <optional>
                   <attribute name="width">
                      <a:documentation>The maximum width of the table (in grid cells or absolute values). Defaults to the available space.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="padding">
-                     <a:documentation>The distance between the table border and the table contents.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="fontface">
-                     <a:documentation>Name of the font family for the table. If not given, the font face ‘text’ is used.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="columndistance">
-                     <a:documentation>Distance between two table columns.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="leading">
-                     <a:documentation>The distance between two rows.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="border-collapse">
-                     <a:documentation>Determine if adjacent table cells share borders. The behavior of border-collapse=&#34;collapse&#34; is undefined when the table has columndistance or rowdistance set to a non-zero value and if the adjacent borders don&#39;t have the same width and color.</a:documentation>
-                     <choice>
-                        <value>separate</value>
-                        <a:documentation>The borders are part of the cell and not shared with its neighbors.</a:documentation>
-                        <value>collapse</value>
-                        <a:documentation>The borders of neighboring cells overlap.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="balance">
-                     <a:documentation>Tries to balance the table on the last page according to the number of frames. Experimental!</a:documentation>
-                     <choice>
-                        <value>yes</value>
-                        <a:documentation>Tries to balance.</a:documentation>
-                        <value>no</value>
-                        <a:documentation>First column will filled first, default</a:documentation>
-                     </choice>
                   </attribute>
                </optional>
                <oneOrMore>
@@ -4429,8 +4429,67 @@
          <interleave>
             <group>
                <optional>
+                  <attribute name="class">
+                     <a:documentation>The css class to be used for formatting the table cell.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="id">
+                     <a:documentation>CSS id for this table cell.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="align">
+                     <a:documentation>Horizontal alignment of the cell contents. Defaults to left.</a:documentation>
+                     <choice>
+                        <value>left</value>
+                        <a:documentation>The contents is left aligned (ragged right). This is the default.</a:documentation>
+                        <value>right</value>
+                        <a:documentation>The contents of the cell is right aligned.</a:documentation>
+                        <value>center</value>
+                        <a:documentation>The contents of the cell is aligned at the center, with ragged right and left margin.</a:documentation>
+                        <value>justify</value>
+                        <a:documentation>Justified text with straight margins.</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="backgroundcolor">
                      <a:documentation>The name of the background color (if the cell should get a background).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="background-font-family">
+                     <a:documentation>Set the font family of the background text. Defaults to the table font.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="background-textcolor">
+                     <a:documentation>The color of the text in the background (if any).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="background-size">
+                     <a:documentation>Controls the size of the background text. Currently only &#39;contain&#39; and &#39;auto&#39; is allowed.</a:documentation>
+                     <choice>
+                        <value>contain</value>
+                        <a:documentation>Fill the height of the table cell.</a:documentation>
+                        <value>auto</value>
+                        <a:documentation>The background text is not scaled.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="background-transform">
+                     <a:documentation>The transformation of the background text (if any). Currently supported: rotate(-40deg) (and other angles in the range 0 to -90).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="background-text">
+                     <a:documentation>A text that should be placed in the background of the table cell.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -4474,57 +4533,8 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="class">
-                     <a:documentation>The css class to be used for formatting the table cell.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="id">
-                     <a:documentation>CSS id for this table cell.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
                   <attribute name="colspan">
                      <a:documentation>The number of columns this cell spans. Defaults to 1.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="rowspan">
-                     <a:documentation>The number of rows for this cell. Defaults to 1.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="align">
-                     <a:documentation>Horizontal alignment of the cell contents. Defaults to left.</a:documentation>
-                     <choice>
-                        <value>left</value>
-                        <a:documentation>The contents is left aligned (ragged right). This is the default.</a:documentation>
-                        <value>right</value>
-                        <a:documentation>The contents of the cell is right aligned.</a:documentation>
-                        <value>center</value>
-                        <a:documentation>The contents of the cell is aligned at the center, with ragged right and left margin.</a:documentation>
-                        <value>justify</value>
-                        <a:documentation>Justified text with straight margins.</a:documentation>
-                        <data type="string">
-                           <param name="pattern">\{.+\}</param>
-                        </data>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="valign">
-                     <a:documentation>The vertical alignment of the cell.</a:documentation>
-                     <choice>
-                        <value>top</value>
-                        <a:documentation>The contents is aligned at the top edge of the cell.</a:documentation>
-                        <value>middle</value>
-                        <a:documentation>The contents is vertically centered.</a:documentation>
-                        <value>bottom</value>
-                        <a:documentation>The contents is aligned at the bottom edge of the cell.</a:documentation>
-                        <data type="string">
-                           <param name="pattern">\{.+\}</param>
-                        </data>
-                     </choice>
                   </attribute>
                </optional>
                <optional>
@@ -4553,39 +4563,29 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="background-text">
-                     <a:documentation>A text that should be placed in the background of the table cell.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="background-textcolor">
-                     <a:documentation>The color of the text in the background (if any).</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="background-transform">
-                     <a:documentation>The transformation of the background text (if any). Currently supported: rotate(-40deg) (and other angles in the range 0 to -90).</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="background-size">
-                     <a:documentation>Controls the size of the background text. Currently only &#39;contain&#39; and &#39;auto&#39; is allowed.</a:documentation>
-                     <choice>
-                        <value>contain</value>
-                        <a:documentation>Fill the height of the table cell.</a:documentation>
-                        <value>auto</value>
-                        <a:documentation>The background text is not scaled.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="background-font-family">
-                     <a:documentation>Set the font family of the background text. Defaults to the table font.</a:documentation>
+                  <attribute name="rowspan">
+                     <a:documentation>The number of rows for this cell. Defaults to 1.</a:documentation>
                   </attribute>
                </optional>
                <optional>
                   <attribute name="rotate">
                      <a:documentation>Rotate the contents of the table cell. Positive values return clockwise. This is experimental and currently only for text.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="valign">
+                     <a:documentation>The vertical alignment of the cell.</a:documentation>
+                     <choice>
+                        <value>top</value>
+                        <a:documentation>The contents is aligned at the top edge of the cell.</a:documentation>
+                        <value>middle</value>
+                        <a:documentation>The contents is vertically centered.</a:documentation>
+                        <value>bottom</value>
+                        <a:documentation>The contents is aligned at the bottom edge of the cell.</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
+                     </choice>
                   </attribute>
                </optional>
                <zeroOrMore>
@@ -4657,21 +4657,6 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="width">
-                     <a:documentation>Number of columns for the text. If not given, the surrounding element determines the width of the element.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="fontface">
-                     <a:documentation>The name of the font family. Defaults to text.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="textformat">
-                     <a:documentation>The name of the text format to be applied to the text. Defaults to text.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
                   <attribute name="columns">
                      <a:documentation>Number of columns in the textblock.</a:documentation>
                   </attribute>
@@ -4682,8 +4667,23 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="fontface">
+                     <a:documentation>The name of the font family. Defaults to text.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="minheight">
                      <a:documentation>The minimum height of the textblock, given as a length or number (grid cells).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="textformat">
+                     <a:documentation>The name of the text format to be applied to the text. Defaults to text.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="width">
+                     <a:documentation>Number of columns for the text. If not given, the surrounding element determines the width of the element.</a:documentation>
                   </attribute>
                </optional>
                <oneOrMore>
@@ -4848,24 +4848,6 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="valign">
-                     <a:documentation>Vertical alignment of the table cells in this row.</a:documentation>
-                     <choice>
-                        <value>top</value>
-                        <a:documentation>The objects in this row are aligned at the top.</a:documentation>
-                        <value>middle</value>
-                        <a:documentation>The objects in this row are aligned at the middle axis.</a:documentation>
-                        <value>bottom</value>
-                        <a:documentation>The objects in this row are aligned at the bottom.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="minheight">
-                     <a:documentation>Minimum row height in grid cells or length.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
                   <attribute name="backgroundcolor">
                      <a:documentation>Background color of each cell in this row.</a:documentation>
                   </attribute>
@@ -4890,6 +4872,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="minheight">
+                     <a:documentation>Minimum row height in grid cells or length.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="sethead">
                      <a:documentation>Use this line for future table heads.</a:documentation>
                      <choice>
@@ -4908,6 +4895,19 @@
                <optional>
                   <attribute name="top-distance">
                      <a:documentation>The space above this row if it is not the first line on a new page / area.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="valign">
+                     <a:documentation>Vertical alignment of the table cells in this row.</a:documentation>
+                     <choice>
+                        <value>top</value>
+                        <a:documentation>The objects in this row are aligned at the top.</a:documentation>
+                        <value>middle</value>
+                        <a:documentation>The objects in this row are aligned at the middle axis.</a:documentation>
+                        <value>bottom</value>
+                        <a:documentation>The objects in this row are aligned at the bottom.</a:documentation>
+                     </choice>
                   </attribute>
                </optional>
                <oneOrMore>
