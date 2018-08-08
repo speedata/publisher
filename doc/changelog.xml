@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.3">
+    <entry version="3.3.11" date="2018-08-08">
+      <en>Bugfix for tables spanning multiple frames (#191)</en>
+      <de>Fehlerkorrektur für Tabellen, die sich über mehrere Bereiche erstrecken (#191)</de>
+    </entry>
+    <entry version="3.3.11" date="2018-08-08">
+      <en>Ensure minimal length of last line of a paragraph (#188)</en>
+      <de>Sicherstellen, dass die letzte Zeile eines Absatzes eine minimale Länge hat (#188)</de>
+    </entry>
     <entry version="3.3.10" date="2018-07-31">
       <en>sd:group-height() with a second argument, a unit.</en>
       <de>sd:group-height() mit einem zweiten Argument (Einheit), die Ausgabe ist das Vielfache der Einheit.</de>
