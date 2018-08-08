@@ -42,17 +42,17 @@ function __tostring(self)
     return table.concat(ret,"\n")
 end
 
-function first_free_row( self,areaname )
-    return self:find_suitable_row(1, self:number_of_columns(areaname),1,areaname)
+function first_free_row( self,areaname, framenumber )
+    return self:find_suitable_row(1, self:number_of_columns(areaname),1,areaname,framenumber)
 end
 
 -- Return the remaining height in the area in scaled points
-function remaining_height_sp( self,row,areaname,column )
+function remaining_height_sp( self,row,areaname,column,framenumber )
     if not self.positioning_frames[areaname] then
         err("Area %q unknown, using page",areaname)
         areaname = publisher.default_areaname
     end
-    row = row or self:current_row(areaname)
+    row = row or self:current_row(areaname,framenumber)
     local cur_col = self:current_column(areaname)
     local thisframe = self.positioning_frames[areaname][self:framenumber(areaname)]
     local overshoot = math.max( (thisframe.height - thisframe["row"] + 1)  * self.gridheight - tex.pageheight ,0)
@@ -63,13 +63,16 @@ function remaining_height_sp( self,row,areaname,column )
     return self.gridheight * remaining_rows - overshoot
 end
 
-function current_row( self,areaname )
+function current_row( self,areaname,framenumber )
     assert(self)
     local areaname = areaname or publisher.default_areaname
     area = self.positioning_frames[areaname]
     if not area then
         err("Area %q not known",tostring(areaname))
         return nil
+    end
+    if framenumber and self:framenumber(areaname) < framenumber then
+        return 1
     end
     return area.current_row or 1
 end
@@ -277,6 +280,7 @@ function number_of_frames( self,areaname )
     return #area
 end
 
+-- Return the current frame number for the given area
 function framenumber( self,areaname )
     local areaname = areaname or publisher.default_areaname
     local area = self.positioning_frames[areaname]
@@ -483,8 +487,8 @@ end
 -- Starting column is @column@, If the page size is not know yet, the next free
 -- row will be given. Is the page full (the object cannot be placed), the
 -- function returns nil.
-function find_suitable_row( self,column, width,height,areaname)
-    -- w("find_suitable_row in grid %q | areaname %q | column %d | width %d | height %d",self.pagenumber,areaname,column,width, height)
+function find_suitable_row( self,column, width,height,areaname, framenumber)
+    -- w("find_suitable_row in grid page %q | areaname %q | column %d | width %d | height %d | framenumber %d",self.pagenumber,areaname,column,width, height,framenumber or -1)
     if not column then return false end
     local frame_margin_left, frame_margin_top
     if areaname == publisher.default_areaname then
@@ -496,12 +500,13 @@ function find_suitable_row( self,column, width,height,areaname)
             areaname = publisher.default_areaname
             frame_margin_left, frame_margin_top = 0,0
         else
-            -- Todo: find the correct block becuse they can be of different width/height
-            local block = area[self:framenumber(areaname)]
+            framenumber = framenumber or self:framenumber(areaname)
+            local block = area[framenumber]
             frame_margin_left = block.column - 1
             frame_margin_top = block.row - 1
         end
     end
+
     -- FIXME: inefficient algorithm
     if self:number_of_rows(areaname) < self:current_row(areaname) + height - 1 then
         -- doesn't fit, so we try on the next area
@@ -512,7 +517,7 @@ function find_suitable_row( self,column, width,height,areaname)
             return
         end
     end
-    for z = self:current_row(areaname) + frame_margin_top, self:number_of_rows(areaname) + frame_margin_top do
+    for z = self:current_row(areaname,framenumber) + frame_margin_top, self:number_of_rows(areaname) + frame_margin_top do
         if self:fits_in_row(column + frame_margin_left,width,z) then
 
             if self:number_of_rows(areaname) < z - frame_margin_top + height  - 1 then

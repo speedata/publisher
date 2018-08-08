@@ -4097,8 +4097,8 @@ function getheight( relative_framenumber )
         current_grid = current_page.grid
         c = c + 1
     end
-    local firstrow = current_grid:first_free_row(areaname)
-    local remaining_height = current_grid:remaining_height_sp(firstrow,areaname)
+    local firstrow = current_grid:first_free_row(areaname,current_framenumber)
+    local remaining_height = current_grid:remaining_height_sp(firstrow,areaname,current_framenumber)
     current_pagenumber = cpn
     current_grid = cg
     current_page = cp
