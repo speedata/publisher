@@ -1795,37 +1795,36 @@ function circle( radiusx_sp, radiusy_sp, colorname,framecolorname,rulewidth_sp)
     local  _, bordercolor =  fill_stroke_color(framecolentry.pdfstring)
     local circle_bezier = 0.551915024494
 
-    local shift_down, shift_right = -radiusy_sp, 0
-    local x1 = math.round(   shift_right                                  ,3)
-    local x2 = math.round(   shift_right + circle_bezier * radiusx_sp     ,3)
-    local x3 = math.round(   shift_right + radiusx_sp                     ,3)
-    local x8 = math.round(   shift_right - radiusx_sp * circle_bezier     ,3)
-    local x9 = math.round(   shift_right - radiusx_sp                     ,3)
+    local shift_dn, shift_rt = math.round(-radiusy_sp, 3), math.round(-radiusx_sp, 3)
+    local dx = radiusx_sp * (1 - circle_bezier)
+    local dy = radiusy_sp * (1 - circle_bezier)
 
-    local y1 = math.round(   shift_down                                           ,3)
-    local y3 = math.round(   shift_down + radiusy_sp - radiusx_sp * circle_bezier ,3)
-    local y4 = math.round(   shift_down + radiusy_sp                              ,3)
-    local y5 = math.round(   shift_down + radiusy_sp + radiusy_sp * circle_bezier ,3)
-    local y6 = math.round(   shift_down + 2*radiusy_sp                            ,3)
-
-    local x4 = x3
-    local x5 = x3
-    local x6 = x2
-    local x7 = x1
-    local x10 = x9
-    local x11 = x9
-    local x12 = x8
-
-    local y2 = y1
-    local y7 = y6
-    local y8 = y6
-    local y9 = y5
-    local y10 = y4
-    local y11 = y3
-    local y12 = y1
-
+    local x1 = shift_rt
+    local y1 = shift_dn + math.round(radiusy_sp,3)
+    local x2 = x1
+    local y2 = shift_dn + math.round(radiusy_sp * 2 - dy, 3)
+    local x3 = shift_rt + math.round(dx, 3)
+    local y3 = shift_dn + math.round(radiusy_sp * 2, 3)
+    local x4 = shift_rt + math.round(radiusx_sp, 3)
+    local y4 = shift_dn + math.round(radiusy_sp * 2, 3)
+    local x5 = shift_rt + math.round(radiusx_sp * 2 - dx, 3)
+    local y5 = y3
+    local x6 = shift_rt + math.round(radiusx_sp * 2, 3)
+    local y6 = y2
+    local x7 = x6
+    local y7 = y1
+    local x8 = x6
+    local y8 = shift_dn + math.round(dy, 3)
+    local x9 = x5
+    local y9 = shift_dn;
+    local x10 = x4
+    local y10 = y9
+    local x11 = x3
+    local y11 = y9
+    local x12 = x1
+    local y12 = y8
     local circle = {}
-    circle[#circle + 1] = string.format("q %g w %s %s %g %g m", math.round(rulewidth_sp,3), bordercolor,fillcolor, shift_right, shift_down)
+    circle[#circle + 1] = string.format("q %g w %s %s %g %g m", math.round(rulewidth_sp,3), bordercolor, fillcolor, x1, y1)
     circle[#circle + 1] = string.format("%g %g %g %g %g %g c",x2, y2, x3, y3, x4, y4)
     circle[#circle + 1] = string.format("%g %g %g %g %g %g c",x5, y5, x6, y6, x7, y7)
     circle[#circle + 1] = string.format("%g %g %g %g %g %g c",x8, y8, x9, y9, x10, y10)

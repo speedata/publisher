@@ -401,6 +401,7 @@ end
 --- Draw a circle or an ellipse
 function commands.circle( layoutxml,dataxml )
     local radiusx        = publisher.read_attribute(layoutxml,dataxml,"radiusx", "width_sp")
+    local radiusy        = publisher.read_attribute(layoutxml,dataxml,"radiusy", "height_sp", radiusx)
     local framecolorname = publisher.read_attribute(layoutxml,dataxml,"framecolor","rawstring")
     local rulewidth_sp   = publisher.read_attribute(layoutxml,dataxml,"rulewidth","length_sp", 0)
     local colorname      = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
@@ -411,7 +412,7 @@ function commands.circle( layoutxml,dataxml )
     colorname      = colorname      or css_rules["background-color"] or "black"
     framecolorname = framecolorname or css_rules["color"]            or "black"
 
-    return publisher.circle(radiusx,radiusx,colorname,framecolorname,rulewidth_sp)
+    return publisher.circle(radiusx,radiusy,colorname,framecolorname,rulewidth_sp)
 end
 
 --- Color
