@@ -1,10 +1,8 @@
-patches
-webpage
-build
-temp
-.rake_t_cache
+/patches
+/webpage
+/build
+/temp
+/.rake_t_cache
 publisher.protocol
-.idea
-.idea/
-publisher.iml
-examples
+/examples
+/atom-schema-speedata
