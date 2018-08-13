@@ -119,8 +119,27 @@ end
 
 function Paragraph:max_width()
     assert(self)
-    local wd = node.dimensions(self.nodelist)
-    return wd
+    local objects = {}
+    local head = self.nodelist
+    local firstglyph = head
+    while head do
+        if node.has_attribute(head,publisher.att_newline,1) then
+            if firstglyph ~= head then
+                objects[#objects + 1] = node.copy_list(firstglyph,head)
+            end
+            firstglyph = head.next
+        end
+        head = head.next
+    end
+    objects[#objects + 1] = node.copy_list(firstglyph,head)
+    local maxwd = 0
+    local wd
+    for i,v in ipairs(objects) do
+        local wd = node.dimensions(v)
+        maxwd = math.max(maxwd,wd)
+    end
+
+    return maxwd
 end
 
 function Paragraph:script( whatever,scr,parameter )
