@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.3">
+    <entry version="3.3.12" date="2018-08-13">
+      <en>Bugfix for table cell width calculation (#194)</en>
+      <de>Fehlerkorrektur bei der Berechnung der Breite von Tabellenzellen</de>
+    </entry>
+    <entry version="3.3.12" date="2018-08-13">
+      <en>Ellipsis can be drawn using the circle command.</en>
+      <de>Ellipsen können mit dem Befehl circle erzeugt werden.</de>
+    </entry>
     <entry version="3.3.11" date="2018-08-08">
       <en>Bugfix for tables spanning multiple frames (#191)</en>
       <de>Fehlerkorrektur für Tabellen, die sich über mehrere Bereiche erstrecken (#191)</de>
