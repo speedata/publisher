@@ -217,7 +217,7 @@ nicht zusammengeführt, sondern einzeln mit dem Trenner für Leerraum verbunden.
    Gibt die Länge der Zeichenkette zurück. Multibyte UTF-8 Sequenzen werden als eine Position gezählt.
 
 `substring(<input>,<start>[,<length>])`::
-   Gibt einen Teil der Zeichenkette aus `input` zurück, die bei `start` anfängt und (optional) die Länge `length` hat. `substring('Goldfarb', 5, 3)` gibt `far` zurück.
+   Gibt einen Teil der Zeichenkette aus `input` zurück, die bei `start` anfängt und (optional) die Länge `length` hat. `substring('Goldfarb', 5, 3)` gibt `far` zurück. `start` kann auch (entgegen der XPath-Spezifikation) auch negativ sein, dann wird vom Ende der Eingabe gezählt.
 
 `true()`::
    Gibt „Wahr“ zurück.
