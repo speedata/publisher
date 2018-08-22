@@ -106,6 +106,7 @@ att_keep = 700
 
 -- attributes for glue
 att_leaderwd = 800
+att_tablenewpage = 801
 
 -- mknodes
 att_newline = 900
@@ -540,6 +541,7 @@ local dispatch_table = {
     Sup                     = commands.sup,
     Switch                  = commands.switch,
     Table                   = commands.table,
+    TableNewPage            = commands.talbenewpage,
     Tablefoot               = commands.tablefoot,
     Tablehead               = commands.tablehead,
     Tablerule               = commands.tablerule,

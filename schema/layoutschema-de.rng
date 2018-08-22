@@ -708,38 +708,33 @@
    </define>
    <define name="e_Circle">
       <element name="Circle">
-         <a:documentation>Erzeugt einen Kreis oder eine Ellipse.</a:documentation>
+         <a:documentation>Erzeugt einen Kreis.</a:documentation>
          <optional>
             <attribute name="backgroundcolor">
-               <a:documentation>Farbe des Kreises bzw. der Ellipse.</a:documentation>
+               <a:documentation>Farbe des Kreises.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="class">
-               <a:documentation>CSS Klasse für diesen Kreis bzw. diese Ellipse.</a:documentation>
+               <a:documentation>CSS Klasse für diesen Kreis.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="framecolor">
-               <a:documentation>Farbe der Kreis- bzw. Ellipsenlinie.</a:documentation>
+               <a:documentation>Farbe der Kreislinie.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="id">
-               <a:documentation>CSS id für diesen Kreis bzw. diese Ellipse.</a:documentation>
+               <a:documentation>CSS id für diesen Kreis.</a:documentation>
             </attribute>
          </optional>
          <attribute name="radiusx">
-            <a:documentation>Radius des Kreises oder der Ellipse in Rasterzellen (horizontal) oder als absolute Maßangabe.</a:documentation>
+            <a:documentation>Radius des Kreises in Rasterzellen (horizontal) oder als absolute Maßangabe. In zukünftigen Versionen wird mit radiusy eine Ellipse erzeugbar sein.</a:documentation>
          </attribute>
          <optional>
-            <attribute name="radiusy">
-               <a:documentation>Radius des Kreises oder der Ellipse in Rasterzellen (vertikal) oder als absolute Maßangabe.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="rulewidth">
-               <a:documentation>Die Dicke des Striches um den Kreis bzw. die Ellipse.</a:documentation>
+               <a:documentation>Die Dicke des Striches um den Kreis.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>
@@ -4329,6 +4324,9 @@
                         <ref name="e_Tablefoot"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_TableNewPage"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Columns"></ref>
                      </optional>
                      <optional>
@@ -4431,6 +4429,12 @@
             </group>
             <ref name="foreign-nodes"></ref>
          </interleave>
+      </element>
+   </define>
+   <define name="e_TableNewPage">
+      <element name="TableNewPage">
+         <a:documentation>Wechselt auf eine neue Seite innerhalb einer Tabelle.</a:documentation>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Td">

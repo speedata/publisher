@@ -6980,6 +6980,7 @@
         <interleave>
           <optional><cmd name="Tablehead"/></optional>
           <optional><cmd name="Tablefoot"/></optional>
+          <optional><cmd name="TableNewPage"/></optional>
           <optional><cmd name="Columns"/></optional>
           <optional><cmd name="Tr"/></optional>
           <optional><cmd name="Copy-of"/></optional>
@@ -7355,6 +7356,46 @@
     <seealso>
       <cmd name="Tablefoot"/>
     </seealso>
+  </command>
+  <command en="TableNewPage" since="3.3.13">
+    <description xml:lang="en">
+      <para>Switches to a new page within the table.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Wechselt auf eine neue Seite innerhalb einer Tabelle.</para>
+    </description>
+    <childelements></childelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<PlaceObject>
+  <Table stretch="max">
+    <Tr>
+      <Td><Paragraph><Value>One</Value></Paragraph></Td>
+    </Tr>
+    <TableNewPage/>
+    <Tr>
+      <Td><Paragraph><Value>Two</Value></Paragraph></Td>
+    </Tr>
+  </Table>
+</PlaceObject>
+]]></listing>
+      <para>The second row of the table is on the next page.</para>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<PlaceObject>
+  <Table stretch="max">
+    <Tr>
+      <Td><Paragraph><Value>One</Value></Paragraph></Td>
+    </Tr>
+    <TableNewPage/>
+    <Tr>
+      <Td><Paragraph><Value>Two</Value></Paragraph></Td>
+    </Tr>
+  </Table>
+</PlaceObject>
+]]></listing>
+      <para>Die zweite Zeile der Tabelle ist auf der zweiten Seite.</para>
+    </example>
+    <seealso></seealso>
   </command>
   <command en="Td" css="td">
     <description xml:lang="en">

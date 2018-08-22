@@ -3249,7 +3249,7 @@ function commands.table( layoutxml,dataxml,options )
     local tab_tmp = publisher.dispatch(layoutxml,dataxml)
     for i=1,#tab_tmp do
         local eltname = publisher.elementname(tab_tmp[i])
-        if eltname == "Tr" or eltname == "Columns" or eltname == "Tablehead" or eltname == "Tablefoot" or eltname == "Tablerule" then
+        if eltname == "Tr" or eltname == "Columns" or eltname == "Tablehead" or eltname == "Tablefoot" or eltname == "Tablerule" or eltname == "TableNewPage" then
             tab[#tab + 1] = tab_tmp[i]
         else
             if eltname and eltname ~= "elementstructure" then
@@ -3322,6 +3322,13 @@ function commands.tablehead( layoutxml,dataxml )
     tab._layoutxml = layoutxml
     tab._dataxml = dataxml
     return tab
+end
+
+--- TableNewPage
+--- ---------
+--- Pagebreak inside a table
+function commands.talbenewpage( layoutxml, dataxml )
+    return {}
 end
 
 --- Tablerule

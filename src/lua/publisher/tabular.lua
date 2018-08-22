@@ -121,7 +121,7 @@ function attach_objects_row( self, tab )
             td_contents.objects.rotate = td_contents.rotate
         elseif td_elementname == "Tr" then -- probably from tablefoot/head
             attach_objects_row(self,td_contents)
-        elseif td_elementname == "Column" or td_elementname == "Tablerule" then
+        elseif td_elementname == "Column" or td_elementname == "Tablerule" or td_elementname == "TableNewPage" then
             -- ignore, they don't have objects
         else
            -- w("unknown element name %s",td_elementname)
@@ -406,7 +406,7 @@ function calculate_columnwidth( self )
                     self:calculate_columnwidths_for_row(row_contents,current_row,colspans,colmin,colmax)
                 end
             end
-        elseif tr_elementname == "Columns" then
+        elseif tr_elementname == "Columns" or tr_elementname == "TableNewPage" then
             -- ignore
         else
             warning("Unknown Element: %q",tr_elementname or "?")
@@ -799,7 +799,7 @@ function calculate_rowheights(self)
         local tr_contents = publisher.element_contents(tr)
         local eltname = publisher.elementname(tr)
 
-        if eltname == "Tablerule" or eltname == "Columns" then
+        if eltname == "Tablerule" or eltname == "Columns" or eltname == "TableNewPage" then
             -- ignore
         elseif eltname == "Tablehead" then
             local last_shiftup_head = 0
@@ -1301,7 +1301,10 @@ function typeset_table(self)
                 node.set_attribute(rows[#rows],publisher.att_break_below_forbidden,1)
                 break_above = false
             end
-
+        elseif eltname == "TableNewPage" then
+            local tf = node.new("hlist")
+            node.set_attribute(tf,publisher.att_tablenewpage, 1)
+            rows[#rows + 1] = tf
         else
             warning("Unknown contents in »Table« %s",eltname or "?" )
         end -- if it's a table cell
@@ -1527,8 +1530,10 @@ function typeset_table(self)
         --     local ht = tostring(sp_to_pt(ht_row)) .. "|" .. tostring(sp_to_pt(accumulated_height)) .. "|" .. tostring(sp_to_pt(extra_height))
         --     rows[i] = publisher.showtextatright(rows[i],ht)
         -- end
+        local tablenewpage = node.has_attribute(rows[i],publisher.att_tablenewpage)
+
         local fits_in_table = accumulated_height + extra_height + space_above <= pagegoal
-        if not fits_in_table then
+        if tablenewpage or not fits_in_table then
             if node.has_attribute(rows[i],publisher.att_use_as_head) == 1 then
                 -- the next line would be used as a header, so let's skip the
                 -- header on this page

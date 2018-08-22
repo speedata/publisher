@@ -708,35 +708,30 @@
    </define>
    <define name="e_Circle">
       <element name="Circle">
-         <a:documentation>Create a circle or ellipse.</a:documentation>
+         <a:documentation>Create a circle.</a:documentation>
          <optional>
             <attribute name="backgroundcolor">
-               <a:documentation>Color of the circle or ellipse.</a:documentation>
+               <a:documentation>Color of the circle.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="class">
-               <a:documentation>CSS class for the circle or ellipse.</a:documentation>
+               <a:documentation>CSS class for the circle.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="framecolor">
-               <a:documentation>Color of the circle or ellipse line.</a:documentation>
+               <a:documentation>Color of the circle line.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="id">
-               <a:documentation>CSS id for this circle or ellipse.</a:documentation>
+               <a:documentation>CSS id for this circle.</a:documentation>
             </attribute>
          </optional>
          <attribute name="radiusx">
-            <a:documentation>Radius of the circle or ellipse in grid cells (horizontal) or as an absolute length.</a:documentation>
+            <a:documentation>Radius of the circle in grid cells (horizontal) or as an absolute length. In the future, a radiusy will allow to create an ellipse.</a:documentation>
          </attribute>
-         <optional>
-            <attribute name="radiusy">
-               <a:documentation>Radius of the circle or ellipse in grid cells (vertical) or as an absolute length.</a:documentation>
-            </attribute>
-         </optional>
          <optional>
             <attribute name="rulewidth">
                <a:documentation>The thickness of the border that is drawn around the object.</a:documentation>
@@ -4329,6 +4324,9 @@
                         <ref name="e_Tablefoot"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_TableNewPage"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Columns"></ref>
                      </optional>
                      <optional>
@@ -4431,6 +4429,12 @@
             </group>
             <ref name="foreign-nodes"></ref>
          </interleave>
+      </element>
+   </define>
+   <define name="e_TableNewPage">
+      <element name="TableNewPage">
+         <a:documentation>Switches to a new page within the table.</a:documentation>
+         <empty></empty>
       </element>
    </define>
    <define name="e_Td">
