@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.3">
+    <entry version="3.3.13" date="2018-08-22">
+      <en>New command TableNewPage to eject a page within a table</en>
+      <de>Neuer Befehl TableNewPage um in einer Table eine neue Seite zu beginnen.</de>
+    </entry>
+    <entry version="3.3.13" date="2018-08-22">
+      <en>Access user variables within the Lua filter</en>
+      <de>Zugriff auf Benutzer-Variablen im Lua-Filter</de>
+    </entry>
+    <entry version="3.3.13" date="2018-08-22">
+      <en>New xpath function lower-case()</en>
+      <de>Neue XPath-Funktion lower-case()</de>
+    </entry>
     <entry version="3.3.12" date="2018-08-13">
       <en>Bugfix for table cell width calculation (#194)</en>
       <de>Fehlerkorrektur bei der Berechnung der Breite von Tabellenzellen</de>
