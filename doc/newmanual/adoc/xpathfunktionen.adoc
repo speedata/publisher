@@ -186,6 +186,9 @@ nicht zusammengeführt, sondern einzeln mit dem Trenner für Leerraum verbunden.
 `local-name()`::
    Liefert den Namen des aktuellen Knotens zurück (ohne Namensraum).
 
+`lower-case(<text>)`::
+   Gibt den Text als Kleinbuchstaben zurück. `lower-case('Text')` ergibt `text`.
+
 `normalize-space(<text>)`::
    Gibt den Text ohne führende und nachstehende Leerzeichen zurück. Alle Zeilenvorschübe werden durch Leerzeichen ersetzt. Mehrfach hintereinander auftretende Leerzeichen/Zeilenvorschübe werden durch ein einzelnes Leerzeichen ersetzt.
 

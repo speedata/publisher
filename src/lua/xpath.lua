@@ -1058,6 +1058,16 @@ M.default_functions["upper-case"] = function(dataxml,arg)
     end
 end
 
+M.default_functions["lower-case"] = function(dataxml,arg)
+    local str = arg and arg[1]
+    if str then
+        return string.lower(arg[1])
+    else
+        warning("No string given for lower-case()")
+        return ""
+    end
+end
+
 M.default_functions["true"] = function()
     return true
 end

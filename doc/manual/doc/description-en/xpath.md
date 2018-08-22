@@ -112,6 +112,7 @@ false() | Return *false*.
 floor() | Returns the largest number with no fractional part that is not greater than the value of the argument.
 last() | Return the number of elements of the same named sibling elements. **Not yet XPath conform.**
 local-name() | Return the local name (without namespace) of the current element.
+lower-case(\<text>)  | Return the text in lowercase letters.
 max()  |
 min()  |
 node()  |
