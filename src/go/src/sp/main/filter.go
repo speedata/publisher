@@ -79,11 +79,22 @@ var exports = map[string]lua.LGFunction{
 
 func runtimeLoader(l *lua.LState) int {
 	mod := l.SetFuncs(l.NewTable(), exports)
-	wd, _ := os.Getwd()
-	l.SetField(mod, "projectdir", lua.LString(wd))
+	fillRuntimeModule(l, mod)
 	l.Push(mod)
 	return 1
 
+}
+
+// Set projectdir and variables table
+func fillRuntimeModule(l *lua.LState, mod lua.LValue) {
+	lvars := l.NewTable()
+	for k, v := range variables {
+		lvars.RawSetString(k, lua.LString(v))
+	}
+	l.SetField(mod, "variables", lvars)
+
+	wd, _ := os.Getwd()
+	l.SetField(mod, "projectdir", lua.LString(wd))
 }
 
 func runLuaScript(filename string) bool {

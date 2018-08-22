@@ -49,6 +49,7 @@ runtime
 Value | Description
 ------|-------------
 `projectdir` | A value that contains the current working directory (the one with the `layout.xml` and `publisher.cfg`)
+`variables`  | A table that contains all the variables given on the command line (`-v`) or in the configuration file (`vars=...`).
 `run_saxon`  | A function that calls the external Java-program `saxon`. It accepts three mandatory arguments (the transformation stylesheet, the input file and the output file) and an optional argument that is passed as the parameter string to saxon. The function returns a boolean value (success) and optionally a string in case of a `false` success value.
 `validate_relaxng`  | A function that validates an XML file against a RelaxNG schema. The first argument is the XML file, the second argument the RelaxNG schema. You can use relative paths for both.
 

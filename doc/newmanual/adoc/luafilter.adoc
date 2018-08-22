@@ -227,6 +227,9 @@ In diesem Modul werden alle Funktionen und Einstellungen gesammelt, die eher all
 
 Eine Zeichenkette, die das aktuelle Projektverzeichnis enthält (das Verzeichnis mit der `layout.xml` bzw. `publisher.cfg`-Datei)
 
+`projectdir`::
+
+Eine Tabelle mit alle Variablen, die per `-v` auf der Kommandozeile oder `vars=...` in der Konfigurationsdatei angegeben wurden.
 
 `validate_relaxng(‹xmldatei›,‹schemadatei›)`::
 

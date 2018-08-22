@@ -356,7 +356,7 @@ func run(cmdline string) (errorcode int) {
 	return
 }
 
-func saveVariables() {
+func readVariables() {
 	if fn := getOption("varsfile"); fn != "" {
 		// Read vars-file
 		f, err := os.Open(fn)
@@ -386,7 +386,9 @@ func saveVariables() {
 			}
 		}
 	}
+}
 
+func saveVariables() {
 	jobname := getOption("jobname")
 	f, err := os.Create(jobname + ".vars")
 	if err != nil {
@@ -837,6 +839,8 @@ func main() {
 		log.Printf("Setting timeout to %d seconds", num)
 		go timeoutCatcher(num)
 	}
+
+	readVariables()
 
 	// There is no need for the internal daemon when we do the other commands
 	switch command {
