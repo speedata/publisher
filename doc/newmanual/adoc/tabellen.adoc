@@ -98,7 +98,7 @@ Dh. in der Zeile
 haben alle Spalten bis auf die letzte die Ausrichtung »linksbündig«.
 
 In der Zeile kann auch die Hintergrundfarbe für die einzelnen Spalten festgelegt werden (`backgroundcolor`).
-Ebenso kann die minimale Höhe (`minheight`, Angabe in Rasterzellen) und der Abstand oberhalb der Zelle, sofern sie nicht auf einen Seitenumbruch folgt, festgelegt werden.
+Ebenso kann die minimale Höhe (`minheight`, Angabe in Rasterzellen bzw. einer Maßangabe) und der Abstand oberhalb der Zelle, sofern sie nicht auf einen Seitenumbruch folgt, festgelegt werden.
 
 [discrete]
 === Zellen
@@ -715,7 +715,7 @@ Schaltet man nun bei `<Table balance="yes">`, so wird die Tabelle wie folgt ausg
 image::ch-tab-tables-balanced.svg[width=50%,scaledwidth=100%]
 
 
-Damit das funktioniert, muss die Tabelle in einem Positionierungsbereich ausgegeben werden, nicht auf einer Seite. Die Anzahl der Spalten, auf die ausgeglichen werden soll, bestimmt sich durch die Anzahl der Positionierungsrahmen, die der Bereich enthält. Hier ein konkretes Beispiel:
+Damit das funktioniert, muss die Tabelle in einem Platzierungsbereich ausgegeben werden, nicht auf einer Seite. Die Anzahl der Spalten, auf die ausgeglichen werden soll, bestimmt sich durch die Anzahl der Platzierungsrahmen, die der Bereich enthält. Hier ein konkretes Beispiel:
 
 
 [source, xml]
@@ -759,6 +759,11 @@ image::ch-tab-balanceyes.png[width=50%,scaledwidth=100%]
 
 Die Angabe wird immer auf der letzte Seite einer Tabelle beachtet, da die vorherigen Seiten den Platz sowieso vollständig ausfüllen.
 
+
+[[ch-tab-seitenwechsel]]
+== Seitenwechsel in Tabellen
+
+Ist eine Tabelle größer als der zur Verfügung stehende Platz auf der Seite, so wird die Tabelle auf der nächsten Seite bzw. im nächsten Platzierungsrahmen fortgeführt. Um solch einen Seitenwechsel zu erzwingen, gibt es <<cmd-tablenewpage,den Befehl `<TableNewPage>`>>.
 
 
 

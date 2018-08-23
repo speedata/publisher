@@ -88,6 +88,7 @@ ifndef::backend-docbook5[]
 <<cmd-switch,Switch>>  +
 <<cmd-table,Table>>  +
 <<cmd-tablefoot,Tablefoot>>  +
+<<cmd-tablenewpage,TableNewPage>>  +
 <<cmd-tablehead,Tablehead>>  +
 <<cmd-tablerule,Tablerule>>  +
 <<cmd-td,Td>>  +
@@ -620,26 +621,31 @@ include::ref/table.adoc[]
 
 Das Kapitel <<ch-tabellen2,Tabellen>>.
 
+include::ref/tablenewpage.adoc[]
+== Siehe auch
+
+Befehl <<cmd-table,`<Table>`>>, <<ch-tabellen2, Kapitel über Tabellen>>.
+
 
 include::ref/tablefoot.adoc[]
 == Siehe auch
 
-Befehl <<cmd-table,Table>>, Kapitel über Tabellen.
+Befehl <<cmd-table,`<Table>`>>, <<ch-tabellen2, Kapitel über Tabellen>>.
 
 include::ref/tablehead.adoc[]
 == Siehe auch
 
-Befehl <<cmd-table,Table>>, Kapitel über Tabellen.
+Befehl <<cmd-table,`<Table>`>>, <<ch-tabellen2, Kapitel über Tabellen>>.
 
 include::ref/tablerule.adoc[]
 == Siehe auch
 
-Befehl <<cmd-table,Table>>, Kapitel über Tabellen.
+Befehl <<cmd-table,`<Table>`>>, <<ch-tabellen2, Kapitel über Tabellen>>.
 
 include::ref/td.adoc[]
 == Siehe auch
 
-Befehl <<cmd-table,Table>>, Kapitel über Tabellen.
+Befehl <<cmd-table,`<Table>`>>, <<ch-tabellen2, Kapitel über Tabellen>>.
 
 include::ref/text.adoc[]
 

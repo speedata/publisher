@@ -51,10 +51,10 @@ Beispiel: die Funktion `sd:current-row()`  kann auch mit Parameter `sd:current-r
    Gibt die Seitennummer zurück.
 
 `sd:current-row([<area>])`::
-   Gibt die aktuelle Zeile zurück. Wenn `area` angegeben, gibt die Zeile des gegebenen Positionsrahmens zurück.
+   Gibt die aktuelle Zeile zurück. Wenn `area` angegeben, gibt die Zeile des gegebenen Platzierungsbereichs zurück.
 
 `sd:current-column([<area>])`::
-   Gibt die aktuelle Spalte zurück. Wenn `area` angegeben, gibt die Spalte des gegebenen Positionsrahmens zurück.
+   Gibt die aktuelle Spalte zurück. Wenn `area` angegeben, gibt die Spalte des gegebenen Platzierungsbereichs zurück.
 
 `sd:alternating(<typ>, <text>[,<text>,...])`::
    Bei jedem Aufruf wird das nächste Argument zurück gegeben. Wert des Typs ist beliebig, muss aber eindeutig sein. Beispiel: `sd:alternating("tbl", "Weiß","Grau")` könnte für die Hintergrundfarbe von Tabellen benutzt werden. Beispiel siehe <<ch-wechselnde-zeilenfarben>>.

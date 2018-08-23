@@ -57,6 +57,7 @@
     <optional><cmd name="Sup"/></optional>
     <optional><cmd name="Switch"/></optional>
     <optional><cmd name="Table"/></optional>
+    <optional><cmd name="TableNewPage"/></optional>
     <optional><cmd name="Tablehead"/></optional>
     <optional><cmd name="Tablerule"/></optional>
     <optional><cmd name="Td"/></optional>

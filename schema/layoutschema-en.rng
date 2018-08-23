@@ -677,6 +677,9 @@
                      <ref name="e_Table"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_TableNewPage"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Tablehead"></ref>
                   </optional>
                   <optional>
@@ -1480,6 +1483,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Table"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_TableNewPage"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Tablehead"></ref>
@@ -2333,6 +2339,9 @@
                         <ref name="e_Table"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_TableNewPage"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Tablehead"></ref>
                      </optional>
                      <optional>
@@ -2924,6 +2933,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Table"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_TableNewPage"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Tablehead"></ref>
@@ -5250,6 +5262,9 @@
                         <ref name="e_Table"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_TableNewPage"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Tablehead"></ref>
                      </optional>
                      <optional>
@@ -5513,6 +5528,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Table"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_TableNewPage"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Tablehead"></ref>
