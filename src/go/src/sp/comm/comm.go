@@ -167,7 +167,7 @@ type Server struct {
 }
 
 func NewServer() *Server {
-	l, err := net.Listen("tcp", ":0")
+	l, err := net.Listen("tcp", "127.0.0.1:")
 	if err != nil {
 		log.Fatalf("net.Listen %s", err)
 	}
