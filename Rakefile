@@ -126,6 +126,18 @@ task :cleanqa do
 	FileUtils.rm Dir.glob("qa/**/publisher.pdf")
 end
 
+desc "Regenerate reference.pdf for qa"
+task :regenerateqa do
+	Dir.glob("qa/**/") do |d|
+		Dir.chdir(d) do
+			if test(?f,"layout.xml") then
+				sh "sp --jobname reference"
+				sh "sp --jobname reference clean"
+			end
+		end
+	end
+end
+
 # The environment variable LUATEX_BIN must point to a directory with the following structure
 # ├── darwin
 # │   ├── amd64
