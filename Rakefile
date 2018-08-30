@@ -40,7 +40,7 @@ end
 desc "Build sphelper program"
 task :sphelper do
 	ENV["GOBIN"] = "#{installdir}/bin"
-	sh " go install -ldflags \"-X main.basedir=#{installdir} -s\"  sphelper/sphelper"
+	sh "go install -ldflags \"-X main.basedir=#{installdir} -s\"  sphelper/sphelper"
 end
 
 desc "Show rake description"
@@ -161,7 +161,7 @@ end
 # The task looks for a directory named "default" and uses the binary files in that directory
 desc "Make ZIP files for all platforms and installer for windows"
 task :dist => [:sphelper] do
-	sh "#{installdir}/bin/sphelper dist windows/amd64 windows/386 linux/amd64 linux/386 darwin/amd64 darwin/386"
+	sh "#{installdir}/bin/sphelper dist windows/386 linux/amd64 darwin/amd64"
 end
 
 desc "Make ZIP files - set NODOC=true for stripped zip file"
@@ -194,18 +194,11 @@ task :zip => [:sphelper] do
 	execfilename = "sdluatex"
 	if test(?f, srcbindir +"/sdluatex") then
 		cp_r(srcbindir +"/sdluatex",targetbin)
-	elsif test(?f,srcbindir +"/luatex.exe") then
-		cp_r(Dir.glob(srcbindir +"/*") ,targetbin)
-		File.open(targetbin + "/texmf.cnf", "w") { |file| file.write("#dummy\n") }
-		platform = "windows"
-		execfilename = "luatex.exe"
 	elsif test(?f,srcbindir +"/sdluatex.exe") then
 		cp_r(Dir.glob(srcbindir +"/*") ,targetbin)
 		File.open(targetbin + "/texmf.cnf", "w") { |file| file.write("#dummy\n") }
 		platform = "windows"
 		execfilename = "sdluatex.exe"
-	elsif test(?f,srcbindir +"/luatex") then
-		cp_r(srcbindir +"/luatex","#{targetbin}/sdluatex")
 	end
 	cmd = "file #{targetbin}/#{execfilename}"
 	res = `#{cmd}`.gsub(/^.*luatex.*:/,'')
