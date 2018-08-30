@@ -921,7 +921,8 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-			sp.DoCompare(absDir)
+			// true = write HTML file to $TEMPDIR
+			sp.DoCompare(absDir, true)
 		} else {
 			log.Println("Please give one directory")
 		}

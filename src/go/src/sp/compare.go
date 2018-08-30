@@ -2,7 +2,9 @@ package sp
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
+	"html/template"
 	"log"
 	"math"
 	"os"
@@ -15,14 +17,23 @@ import (
 	"syscall"
 )
 
+type compareStatus struct {
+	Path     string
+	Badpages []int
+	Delta    float64
+}
+
 var (
 	wg        sync.WaitGroup
 	finished  chan bool
 	exeSuffix string
+	cs        []compareStatus
+	mutex     *sync.Mutex
 )
 
 func init() {
 	finished = make(chan bool)
+	mutex = &sync.Mutex{}
 }
 
 func fileExists(filename string) bool {
@@ -34,20 +45,24 @@ func fileExists(filename string) bool {
 }
 
 // DoCompare starts comparing the files in the
-// current directory and its subdirectory
-func DoCompare(absdir string) {
+// current directory and its subdirectory.
+// This is the function to be called (first).
+func DoCompare(absdir string, withHTML bool) {
 	switch runtime.GOOS {
 	case "windows":
 		exeSuffix = ".exe"
 	default:
 		exeSuffix = ""
 	}
-	cs := make(chan compareStatus, 0)
-	compare := mkCompare(cs)
-	filepath.Walk(absdir, compare)
-	go getCompareStatus(cs)
+	statuschan := make(chan compareStatus, 0)
+	compareFunc := mkCompare(statuschan)
+	filepath.Walk(absdir, compareFunc)
+	go getCompareStatus(statuschan)
 	wg.Wait()
 	finished <- true
+	if withHTML {
+		mkWebPage()
+	}
 }
 
 func compareTwoPages(sourcefile, referencefile, dummyfile, path string) float64 {
@@ -112,10 +127,9 @@ func newer(src, dest string) bool {
 	return destFi.ModTime().Before(srcFi.ModTime())
 }
 
-func runComparison(path string, status chan compareStatus) {
+func runComparison(path string, statuschan chan compareStatus) {
 	cs := compareStatus{}
-	cs.path = path
-
+	cs.Path = path
 	sourceFiles, err := filepath.Glob(filepath.Join(path, "source-*.png"))
 	if err != nil {
 		log.Fatal(err)
@@ -168,34 +182,88 @@ func runComparison(path string, status chan compareStatus) {
 		referenceFile := fmt.Sprintf("reference-%02d.png", i)
 		dummyFile := fmt.Sprintf("pagediff-%02d.png", i)
 		if delta := compareTwoPages(sourceFile, referenceFile, dummyFile, path); delta > 0 {
-			cs.delta = math.Max(cs.delta, delta)
+			cs.Delta = math.Max(cs.Delta, delta)
 			if delta > 0.3 {
-				cs.badpages = append(cs.badpages, i)
+				cs.Badpages = append(cs.Badpages, i)
 			}
 		}
 	}
 
-	status <- cs
+	statuschan <- cs
 	wg.Done()
 }
 
-type compareStatus struct {
-	path     string
-	badpages []int
-	diff     bool
-	delta    float64
+func mkWebPage() error {
+	if len(cs) == 0 {
+		return nil
+	}
+	tmpl := `<!DOCTYPE html>
+<html>
+<head>
+	<title>Bilder</title>
+	<style type="text/css">
+		img { height: 150px ; border: 1px solid black; }
+		tr.img td	{ border-bottom: 1px solid black; }
+		tr  {vertical-align: top;}
+	</style>
+</head>
+<body>
+	<table>
+	{{ range .CompareStatus -}}
+	{{ $path := .Path}}
+	<tr>
+		<td colspan="1">{{ .Path }}</td>
+	</tr>
+	<tr>
+		<td>
+		{{range .Badpages}}{{.}}: <a href="{{ $path}}/{{. | printf "pagediff-%.2d.png" }}"><img src="{{ $path}}/{{. | printf "pagediff-%.2d.png" }}" ></a>{{end}}
+		</td>
+	</tr>
+	{{- end }}
+</table>
+</body>
+</html>
+`
+
+	var buf bytes.Buffer
+
+	t := template.Must(template.New("html").Parse(tmpl))
+	data := struct {
+		CompareStatus []compareStatus
+	}{
+		CompareStatus: cs,
+	}
+	err := t.Execute(&buf, data)
+	if err != nil {
+		return err
+	}
+	outfile := "compare-report.html"
+	f, err := os.Create(outfile)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	_, err = buf.WriteTo(f)
+	if err != nil {
+		return err
+	}
+	fmt.Println("Output written to", outfile)
+	return nil
 }
 
-func getCompareStatus(cs chan compareStatus) {
+func getCompareStatus(statuschan chan compareStatus) {
 	for {
 		select {
-		case st := <-cs:
-			if len(st.badpages) > 0 {
+		case st := <-statuschan:
+			if len(st.Badpages) > 0 {
+				mutex.Lock()
+				cs = append(cs, st)
+				mutex.Unlock()
 				fmt.Println("---------------------------")
 				fmt.Println("Finished with comparison in")
-				fmt.Println(st.path)
-				fmt.Println("Comparison failed. Bad pages are:", st.badpages)
-				fmt.Println("Max delta is", st.delta)
+				fmt.Println(st.Path)
+				fmt.Println("Comparison failed. Bad pages are:", st.Badpages)
+				fmt.Println("Max delta is", st.Delta)
 			}
 		case <-finished:
 			// now that we have read from the channel, we are all done
@@ -205,14 +273,14 @@ func getCompareStatus(cs chan compareStatus) {
 
 // Return a filepath.WalkFunc that looks into a directory, runs convert to generate the PNG files from the PDF and
 // compares the two resulting files. The function puts the result into the channel compareStatus.
-func mkCompare(status chan compareStatus) filepath.WalkFunc {
+func mkCompare(statuschan chan compareStatus) filepath.WalkFunc {
 	return func(path string, info os.FileInfo, err error) error {
 		if info == nil || !info.IsDir() {
 			return nil
 		}
 		if _, err := os.Stat(filepath.Join(path, "reference.pdf")); err == nil {
 			wg.Add(1)
-			go runComparison(path, status)
+			go runComparison(path, statuschan)
 		}
 		return nil
 	}
