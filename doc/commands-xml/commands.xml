@@ -1538,6 +1538,7 @@
         <choice>
           <cmd name="Loop"/>
           <cmd name="Switch"/>
+          <cmd name="ForAll"/>
           <cmd name="Column"/>
         </choice>
       </oneOrMore>
@@ -6414,9 +6415,10 @@
           <optional><cmd name="Tr"/></optional>
           <optional><cmd name="Td"/></optional>
           <optional><cmd name="Columns"/></optional>
+          <optional><cmd name="TableNewPage"/></optional>
           <optional><cmd name="Tablerule"/></optional>
-          <optional><cmd name="SortSequence"/></optional>
           <optional><cmd name="Tablehead"/></optional>
+          <optional><cmd name="SortSequence"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>

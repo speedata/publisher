@@ -841,6 +841,7 @@
                   <choice>
                      <ref name="e_Loop"></ref>
                      <ref name="e_Switch"></ref>
+                     <ref name="e_ForAll"></ref>
                      <ref name="e_Column"></ref>
                   </choice>
                </oneOrMore>
@@ -4092,13 +4093,16 @@
                         <ref name="e_Columns"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_TableNewPage"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Tablerule"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_SortSequence"></ref>
+                        <ref name="e_Tablehead"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_Tablehead"></ref>
+                        <ref name="e_SortSequence"></ref>
                      </optional>
                   </interleave>
                </oneOrMore>
