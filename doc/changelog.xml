@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.3">
+    <entry version="3.3.14" date="2018-08-30">
+      <en>Update to LuaTeX version 1.0.7</en>
+      <de>Update auf LuaTeX Version 1.0.7</de>
+    </entry>
+    <entry version="3.3.14" date="2018-08-30">
+      <en>sp compare HTML status report</en>
+      <de>sp compare HTML Statusreport</de>
+    </entry>
+    <entry version="3.3.14" date="2018-08-30">
+      <en>limit TCP connection to localhost</en>
+      <de>TCP Verbindung auf localhost beschränken</de>
+    </entry>
     <entry version="3.3.13" date="2018-08-22">
       <en>New command TableNewPage to eject a page within a table</en>
       <de>Neuer Befehl TableNewPage um in einer Table eine neue Seite zu beginnen.</de>
