@@ -25,7 +25,7 @@ Damit ist in der Windows-Shell das Programm `sp` überall aufrufbar.
 +
 Die aus dem ZIP extrahierte Struktur darf nicht verändert werden (z.B. verschieben des Binaries), der speedata Publisher erwartet das vorgegebene Dateilayout.
 
-. **APT Repository**: Falls Administratorrechte auf einem Debian oder Ubuntu GNU/Linux System vorhanden sind, kann man einfach die `.deb`-Datei installieren.
+. **APT Repository**: Falls Administratorrechte auf einem Debian oder Ubuntu GNU/Linux System vorhanden sind, kann man einfach die `.deb`-Datei installieren. Hinweis: es wird bis auf weiteres nur die 64-Bit Plattform unterstützt.
 
 .. Erstelle die Datei `/etc/apt/sources.list.d/speedata.list` mit dem Inhalt (Entwicklungsversion - development):
 +
@@ -64,12 +64,12 @@ rake doc
 
 Falls der speedata Publisher aus den Quellen gebaut wird, muss noch LuaTeX hinzugefügt werden.
 Der vorgeschlagene Weg ist, unter <https://download.speedata.de/#extra> die Binärpakete zu laden und das passende Paket in das bin-Verzeichnis zu kopieren.
-Beispielsweise um LuajitTeX 0.79.1 auf einem Linux AMD64 System zu nutzen kann man die folgenden Befehle nutzen:
+Beispielsweise um LuajitTeX 1.0.7 auf einem Linux AMD64 System zu nutzen, kann man die folgenden Befehle ausführen:
 +
 -------------------------------------------------------------------------------
-wget https://download.speedata.de/files/extra/luatex_079-win-mac-linux.zip
-unzip luatex_079-win-mac-linux.zip
-cp luatex/linux/amd64/0_79_1/sdluatex bin
+wget https://download.speedata.de/files/extra/luatex_107-win-mac-linux.zip
+unzip luatex_107-win-mac-linux.zip
+cp luatex/linux/amd64/1_0_7/sdluatex bin
 -------------------------------------------------------------------------------
 +
 Nach der Installation kann man `bin/sdluatex --version` aufrufen, um zu überprüfen, ob es die richtige Version ist.

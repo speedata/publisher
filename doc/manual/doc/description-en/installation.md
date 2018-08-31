@@ -5,10 +5,13 @@ title: speedata Publisher installation instructions
 
 There are three ways to install speedata Publisher:
 
-2. **Binary packages** (The recommended way): Go to [our download page](https://download.speedata.de/) and download the latest package for your operating system. You can unzip the file anywhere in the filesystem you want. You don't need root/administrator rights to use the Publisher this way.
+2. **Binary packages** (The recommended way): Go to [our download page](https://download.speedata.de/) and download the latest package for your operating system.
+You can unzip the file anywhere in the filesystem you want.
+You don't need root/administrator rights to use the Publisher this way.
+There are extra installer packages for windows, if you don't want to set the PATH variable yourself.
 
 
-1. **APT repository**: If you have root or sudo rights on Debian or Ubuntu GNU/Linux (or a similar system), you can install the .deb files we have prepared from our APT repository. This is very easy, just follow a few steps:
+1. **APT repository**: If you have root or sudo rights on Debian or Ubuntu GNU/Linux (or a similar system), you can install the .deb files we have prepared from our APT repository. (For now, only the 64 bit architecture is supported.) This is very easy, just follow a few steps:
 
   1. Add the following file to `/etc/apt/sources.list.d/speedata.list` for the development version (unstable):
 
@@ -48,12 +51,13 @@ sudo apt install -t jessie-backports golang
 ```
 as long as the jessie-backports repository is enabled in the `/etc/apt/sources.list` file on your machine).
 
-If you are building speedata Publisher from source, you will also need to install LuaTeX manually. The recommended way is to download a binary from <https://download.speedata.de/#extra> and copy it into the bin/ directory of the Publisher. For example, to download and install LuajitTeX 0.79.1 on a Linux amd64 system, you could use the commands:
+If you are building speedata Publisher from source, you will also need to install LuaTeX manually. The recommended way is to download a binary from <https://download.speedata.de/#extra> and copy it into the bin/ directory of the Publisher.
+For example, to download and install LuajitTeX 1.0.7 on a Linux amd64 system, you could use the commands:
 
 ```
-wget https://download.speedata.de/files/extra/luatex_079-win-mac-linux.zip
-unzip luatex_079-win-mac-linux.zip
-cp luatex/linux/amd64/0_79_1/sdluatex bin
+wget https://download.speedata.de/files/extra/luatex_107-win-mac-linux.zip
+unzip luatex_107-win-mac-linux.zip
+cp luatex/linux/amd64/1_0_7/sdluatex bin
 ```
 
 After installation, you can run `bin/sdluatex --version` to confirm the program version.
