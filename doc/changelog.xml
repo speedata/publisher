@@ -1,4 +1,10 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
+  <chapter version="3.4">
+    <entry version="3.4.0" date="2018-09-03">
+      <en>Release version 3.4.0</en>
+      <de>Veröffentliche Version 3.4.0</de>
+    </entry>
+  </chapter>
   <chapter version="3.3">
     <entry version="3.3.14" date="2018-08-30">
       <en>Update to LuaTeX version 1.0.7</en>
