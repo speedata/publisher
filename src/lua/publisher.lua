@@ -24,7 +24,8 @@ local page         = require("publisher.page")
 local fontloader   = require("fonts.fontloader")
 local paragraph    = require("paragraph")
 local fonts        = require("publisher.fonts")
-local comm         = require("publisher.comm")
+
+splib        = require("splib")
 
 local env_publisherversion = os.getenv("PUBLISHERVERSION")
 
@@ -4246,12 +4247,12 @@ function get_image(requested_url,page,box,fallback)
     if parsed_url.scheme == "https" or cachemethod == "optimal" then
         -- go / optimal
         log("Checking if image %q is up to date",requested_url)
-        comm.sendmessage('che',requested_url)
-        local msg = comm.get_string_messages()
-        if msg[1] == "OK" then
+        local msg = publisher.splib.cacheimage(requested_url)
+        if msg == "OK" then
             return imageinfo(path_to_image,page,box,fallback)
         else
             err("Could not fetch image %q",requested_url)
+            w("msg: %q",msg)
             return imageinfo(nil,nil,nil,fallback)
         end
     else

@@ -10,7 +10,7 @@ file_start("layout_functions.lua")
 
 local luxor = do_luafile("luxor.lua")
 local sha1  = require('sha1')
-local comm  = require("publisher.comm")
+
 
 local function allocated( dataxml,arg )
     local x = arg[1]
@@ -362,14 +362,12 @@ local function decode_html( dataxml, arg )
     end
     arg = table_textvalue(arg)
     if type(arg) == "string" then
-        comm.sendmessage('dec',arg)
-        local msg = comm.get_string_messages()
-        if string.match(msg[1],"^err: ") then
-            log("Line number in the following error message is not correct:")
-            err(string.match(msg[1],"^err: (.*)$"))
+        local msg = publisher.splib.htmltoxml(arg)
+        if msg == nil then
+            err("decode-html failed")
             return nil
         end
-        local ret = luxor.parse_xml("<dummy>" .. msg[1] .. "</dummy>")
+        local ret = luxor.parse_xml("<dummy>" .. msg .. "</dummy>")
         return ret
     end
 end
@@ -426,7 +424,17 @@ local function loremipsum(dataxml,arg)
     return string.rep(lorem:gsub("^%s*(.-)%s*$","%1"):gsub("[%s\n]+"," "),count, " ")
 end
 
+local function doubleit(dataxml,arg)
+    if arg and arg[1] then
+        local x = publisher.splib.doubleit(arg[1])
+        return x
+    end
+    return 0
+end
+
 local register = publisher.xpath.register_function
+
+register("urn:speedata:2009/publisher/functions/en","doubleit",doubleit)
 
 register("urn:speedata:2009/publisher/functions/en","attr",attr)
 

@@ -8,9 +8,9 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"sp/main/luacsv"
-	"sp/main/luaxlsx"
-	"sp/main/luaxml"
+	"sp/sp/luacsv"
+	"sp/sp/luaxlsx"
+	"sp/sp/luaxml"
 
 	"github.com/yuin/gopher-lua"
 )

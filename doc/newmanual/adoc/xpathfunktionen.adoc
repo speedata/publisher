@@ -226,7 +226,7 @@ nicht zusammengeführt, sondern einzeln mit dem Trenner für Leerraum verbunden.
    Gibt „Wahr“ zurück.
 
 `tokenize(<Eingabe>,<Regexp>)`::
-   Die Rückgabe ist eine Sequenz von Zeichenketten. Die Eingabe wird von links nach rechts gelesen. Sobald eine Stelle gefunden wird, auf die der Reguläre Ausdruck passt, wird die bisherige Eingabe zurück gegeben. Beispiel (aus M. Kays XPath / XSLT-Buch): `tokenize("Go home, Jack!", "W+")` ergibt die Sequenz `"Go", "home", "Jack", ""`.
+   Die Rückgabe ist eine Sequenz von Zeichenketten. Die Eingabe wird von links nach rechts gelesen. Sobald eine Stelle gefunden wird, auf die der Reguläre Ausdruck passt, wird die bisherige Eingabe zurück gegeben. Beispiel (aus M. Kays XPath / XSLT-Buch): `tokenize("Go home, Jack!", "\W+")` ergibt die Sequenz `"Go", "home", "Jack", ""`.
 
 `upper-case()`::
 	Wandelt den Text in Großbuchstaben: `upper-case('Text')` ergibt `TEXT`.

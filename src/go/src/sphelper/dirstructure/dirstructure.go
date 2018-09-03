@@ -9,12 +9,8 @@ import (
 	"sphelper/fileutils"
 )
 
+// build dir contains the documentation
 func MkBuilddir(cfg *config.Config, srcbindir string) error {
-	// build dir contains the documentation
-	if false {
-		fmt.Println("xx")
-	}
-
 	var err error
 
 	destdir := filepath.Join(cfg.Builddir, "speedata-publisher")

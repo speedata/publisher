@@ -24,8 +24,6 @@ import (
 	"configurator"
 	"hotfolder"
 	"sp"
-	"sp/cache"
-	"sp/comm"
 
 	"github.com/speedata/optionparser"
 )
@@ -70,7 +68,6 @@ var (
 	starttime           time.Time
 	cfg                 *configurator.ConfigData
 	runningProcess      []*os.Process
-	daemon              *comm.Server
 )
 
 // The LuaTeX process writes out a file called "publisher.status"
@@ -116,28 +113,12 @@ func init() {
 		"cache":      "optimal",
 	}
 
-	// The problem now is that we don't know where the executable file is
-	// if it's in the PATH, it has no ../ prefix
-	// if it is relative, make an absolute path from it.
-	if execdir := filepath.Base(os.Args[0]); execdir == os.Args[0] {
-		// most likely an absolute path
-		bindir, err = exec.LookPath(execdir)
-		if err != nil {
-			log.Fatal(err)
-		}
-		bindir = filepath.Dir(bindir)
-	} else {
-		// a relative path hopefully
-		bindir, err = filepath.Abs(filepath.Dir(os.Args[0]))
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-	bindir, err = filepath.Abs(bindir)
-	if err != nil {
+	// Let's try to find out the installation dir
+	if execlocation, err := os.Executable(); err != nil {
 		log.Fatal(err)
+	} else {
+		bindir = filepath.Dir(execlocation)
 	}
-
 	installdir = filepath.Join(bindir, "..")
 
 	if version == "" {
@@ -203,6 +184,7 @@ func init() {
 	}
 	inifile = filepath.Join(srcdir, "lua/sdini.lua")
 	os.Setenv("PUBLISHERVERSION", version)
+	os.Setenv("LD_LIBRARY_PATH", libdir)
 }
 
 func getOptionSection(optionname string, section string) string {
@@ -575,8 +557,7 @@ func runPublisher() (exitstatus int) {
 		log.Fatal(err)
 	}
 	for i := 1; i <= runs; i++ {
-		go daemon.Run()
-		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, execName, jobname, inifile, layoutname, dataname, layoutoptionsCommandline)
+		cmdline := fmt.Sprintf(`"%s" --shell-escape --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, execName, jobname, inifile, layoutname, dataname, layoutoptionsCommandline)
 		if run(cmdline) < 0 {
 			exitstatus = -1
 			v := status{}
@@ -667,7 +648,7 @@ func main() {
 	op.On("--dummy", "Don't read a data file, use '<data />' as input", options)
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
 	op.On("--extra-xml NAME", "Add this file to the layout file", extraXML)
-	op.On("--filter FILTER", "Run XProc or Lua filter before publishing starts", options)
+	op.On("--filter FILTER", "Run Lua filter before publishing starts", options)
 	op.On("--grid", "Display background grid. Disable with --no-grid", options)
 	op.On("--ignore-case", "Ignore case when accessing files (on a case-insensitive file system)", options)
 	op.On("--no-local", "Add local directory to the search path. Default is true", &addLocalPath)
@@ -842,12 +823,6 @@ func main() {
 
 	readVariables()
 
-	// There is no need for the internal daemon when we do the other commands
-	switch command {
-	case cmdRun, cmdServer:
-		daemon = comm.NewServer()
-	}
-
 	switch command {
 	case cmdRun:
 		jobname := getOption("jobname")
@@ -927,7 +902,8 @@ func main() {
 			log.Println("Please give one directory")
 		}
 	case cmdClearcache:
-		cache.Clear()
+		ic := getOption("imagecache")
+		os.RemoveAll(ic)
 	case cmdClean:
 		jobname := getOption("jobname")
 		files, err := filepath.Glob(jobname + "*")
@@ -987,9 +963,6 @@ func main() {
 		runServer(getOption("port"), getOption("address"), getOption("tempdir"))
 	default:
 		log.Fatal("unknown command:", command)
-	}
-	if daemon != nil {
-		daemon.Close()
 	}
 	showDuration()
 	os.Exit(exitstatus)

@@ -37,12 +37,6 @@ def build_go(srcdir,destbin,goos,goarch,targettype)
 	return true
 end
 
-desc "Build sphelper program"
-task :sphelper do
-	ENV["GOBIN"] = "#{installdir}/bin"
-	sh "go install -ldflags \"-X main.basedir=#{installdir} -s\"  sphelper/sphelper"
-end
-
 desc "Show rake description"
 task :default do
 	puts
@@ -53,9 +47,22 @@ task :default do
 	puts
 end
 
+desc "Build sphelper program"
+task :sphelper do
+	sh "go install -ldflags \"-X main.basedir=#{installdir} -s\"  sphelper/sphelper"
+	FileUtils::cp("#{srcdir}/go/bin/sphelper","#{installdir}/bin")
+end
+
+
 desc "Compile and install necessary software"
 task :build => [:sphelper] do
 	sh "#{installdir}/bin/sphelper build"
+	FileUtils::cp("#{srcdir}/go/bin/sp","#{installdir}/bin")
+end
+
+desc "Compile and install helper library"
+task :buildlib => [:sphelper] do
+	sh "#{installdir}/bin/sphelper buildlib"
 end
 
 desc "Generate documentation"

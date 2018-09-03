@@ -10,7 +10,6 @@
 
 
 -- file_start("spinit.lua")
-local comm = require("publisher.comm")
 local u8fix = require('utf8fix')
 
 tex.enableprimitives('',tex.extraprimitives ())
@@ -224,9 +223,6 @@ end
 --- Stop the data processing and write PDF. If `graceful` is not given or `false` then
 --- `os.exit()` gets called. This is the last function to be called.
 function exit(graceful)
-  if tcp then
-    tcp:close()
-  end
   log("Stop processing data")
   log("%d errors occurred",errcount)
   log("Duration: %3f seconds",os.gettimeofday() - starttime)
@@ -354,8 +350,6 @@ require("publisher")
 function main_loop()
   log("Start processing")
   setup()
-  -- global tcp object
-  tcp = comm.connect()
   call(publisher.dothings)
   exit(true)
 end
@@ -369,14 +363,6 @@ function main_loop_profiling()
   profiler.stop()
   exit(true)
 end
-
---- I don't remember what made LuaTeX 0.61 so interesting. But there was a reason, I guess.
-if status.luatex_version < 61 then
-  texio.write_nl("Requires LuaTeX version ≥ 0.61. Abort\n")
-  os.exit(-1)
-end
-
-
 
 errorlog = io.open(string.format("%s.protocol",tex.jobname),"ab")
 errorlog:write("---------------------------------------------\n")

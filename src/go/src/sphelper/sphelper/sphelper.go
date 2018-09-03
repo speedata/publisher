@@ -11,6 +11,7 @@ import (
 	"strings"
 	texttemplate "text/template"
 
+	"sphelper/buildlib"
 	"sphelper/buildsp"
 	"sphelper/config"
 	"sphelper/dirstructure"
@@ -52,6 +53,7 @@ func main() {
 	op := optionparser.NewOptionParser()
 	op.On("--basedir DIR", "Base dir", &commandlinebasedir)
 	op.Command("build", "Build go binary")
+	op.Command("buildlib", "Build sp library")
 	op.Command("doc", "Generate speedata Publisher documentation")
 	op.Command("sitedoc", "Generate speedata Publisher documentation without ugly URLs for Hugo")
 	op.Command("dist", "Generate zip files and windows installers")
@@ -78,6 +80,11 @@ func main() {
 	switch command {
 	case "build":
 		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local")
+		if err != nil {
+			os.Exit(-1)
+		}
+	case "buildlib":
+		err := buildlib.BuildLib(cfg)
 		if err != nil {
 			os.Exit(-1)
 		}

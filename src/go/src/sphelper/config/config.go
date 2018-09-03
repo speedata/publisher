@@ -10,9 +10,9 @@ import (
 )
 
 type Config struct {
-	basedir          string
-	Srcdir, Builddir string
-	Publisherversion Version
+	basedir                  string
+	Srcdir, Builddir, Libdir string
+	Publisherversion         Version
 }
 
 type Version struct {
@@ -29,6 +29,7 @@ func (cfg *Config) SetBasedir(basedir string) {
 	cfg.basedir = basedir
 	cfg.Srcdir = filepath.Join(basedir, "src")
 	cfg.Builddir = filepath.Join(basedir, "build")
+	cfg.Libdir = filepath.Join(basedir, "lib")
 }
 
 func (cfg *Config) Basedir() string {

@@ -744,35 +744,6 @@ func v0StatusHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func v0FormatHandler(w http.ResponseWriter, req *http.Request) {
-	if !daemonStarted {
-		// The daemon is notneeded in server mode, unless we need to talk to the client.
-		go daemon.Run()
-		daemonStarted = true
-		cmdline := fmt.Sprintf(`"%s" --interaction nonstopmode --ini "--lua=%s" publisher.tex ___server___`, getExecutablePath(), inifile)
-		if run(cmdline) != 0 {
-			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintln(w, "Child process not started")
-			fmt.Fprintln(protocolFile, "Child process not started")
-			return
-		}
-	}
-
-	if req.ContentLength > 65536 {
-		log.Println("content length for POST request too large, max size 64k")
-		return
-	}
-	buf := make([]byte, req.ContentLength)
-	n, err := req.Body.Read(buf)
-	if err != nil && err != io.EOF {
-		log.Println(err)
-		return
-	}
-	daemon.StringMessage("fmt", string(buf[:n]))
-
-	w.Write(<-daemon.Message)
-}
-
 func available(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	return
@@ -797,7 +768,6 @@ func runServer(port string, address string, tempdir string) {
 	r := mux.NewRouter()
 	r.HandleFunc("/available", available)
 	v0 := r.PathPrefix("/v0").Subrouter()
-	v0.HandleFunc("/format", v0FormatHandler)
 	v0.HandleFunc("/publish", v0PublishHandler).Methods("POST")
 	v0.HandleFunc("/status", v0GetAllStatusHandler).Methods("GET")
 	v0.HandleFunc("/pdf/{id}", v0GetPDFHandler).Methods("GET")

@@ -4,7 +4,6 @@
 --  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
 local string = unicode.utf8
-local comm = require("publisher.comm")
 
 local stack = {}
 
@@ -1004,11 +1003,7 @@ M.default_functions["tokenize"] = function(dataxml,arg)
         err("tokenize: one of the arguments is empty")
         return ""
     end
-    comm.sendmessage('tok',arg[1])
-    comm.sendmessage('str',arg[2])
-    local msg = comm.get_string_messages()
-    tracetable("tokenize()", msg)
-    return msg
+    return publisher.splib.tokenize(dataxml,arg)
 end
 
 M.default_functions["round"] = function( dataxml,arg )
@@ -1022,12 +1017,7 @@ M.default_functions["replace"] = function(dataxml,arg)
         warning("replace: one of the arguments is empty")
         return ""
     end
-    comm.sendmessage('rep',table_textvalue(arg[1]))
-    comm.sendmessage('str',table_textvalue(arg[2]))
-    comm.sendmessage('str',table_textvalue(arg[3]))
-    local msg = comm.get_string_messages()
-    trace("Replace: %s",msg[1])
-    return msg[1]
+    return publisher.splib.replace(arg[1],arg[2],arg[3])
 end
 
 M.default_functions["contains"] = function(dataxml,arg)
@@ -1039,11 +1029,7 @@ M.default_functions["contains"] = function(dataxml,arg)
         err("contains(): one of the arguments is not a string")
         return false
     end
-    comm.sendmessage('con',arg[1])
-    comm.sendmessage('str',arg[2])
-    local msg = comm.get_string_messages()
-    trace("Contains: %s",msg[1])
-    return msg[1] == "true"
+    return publisher.splib.contains(arg[1],arg[2])
 end
 
 
