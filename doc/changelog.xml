@@ -1,4 +1,10 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
+  <chapter version="3.5">
+    <entry version="3.5.1" date="2018-09-05">
+      <en>First release with dynamic library, mainly for testing</en>
+      <de>Erstes Release mit dynamischer Bibliothek, hauptsächlich für Tests</de>
+    </entry>
+  </chapter>
   <chapter version="3.4">
     <entry version="3.4.0" date="2018-09-03">
       <en>Release version 3.4.0</en>
