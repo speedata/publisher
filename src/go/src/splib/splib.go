@@ -22,7 +22,7 @@ import (
 // Convert a string slice to a C char* array and add a NULL pointer.
 func toCharArray(s []string) **C.char {
 	cArray := C.malloc(C.size_t(len(s)+1) * C.size_t(unsafe.Sizeof(uintptr(0))))
-	a := (*[1<<30 - 1]*C.char)(cArray)
+	a := (*[1<<29 - 1]*C.char)(cArray)
 	for idx, substring := range s {
 		a[idx] = C.CString(substring)
 	}

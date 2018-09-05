@@ -296,7 +296,7 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 	}
 	cmd.Dir = newmanualhugopath
 	cmd.Env = append(os.Environ(), fmt.Sprintf("PUBLISHER_VERSION=%s", cfg.Publisherversion))
-	cmd.Run()
+	err = cmd.Run()
 	if err != nil {
 		return err
 	}

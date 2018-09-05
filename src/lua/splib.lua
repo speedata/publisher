@@ -2,6 +2,15 @@ local ffi = require("ffi")
 
 module(...,package.seeall)
 
+if os.name == "windows" then
+    ffi.cdef[[
+typedef char _check_for_32_bit_pointer_matching_GoInt[sizeof(void*)==32/8 ? 1:-1];
+]]
+    else ffi.cdef[[
+typedef char _check_for_64_bit_pointer_matching_GoInt[sizeof(void*)==64/8 ? 1:-1];
+]]
+end
+
 ffi.cdef[[
 typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
@@ -24,7 +33,6 @@ typedef double _Complex GoComplex128;
   static assertion to make sure the file is being used on architecture
   at least with matching size of GoInt.
 */
-typedef char _check_for_64_bit_pointer_matching_GoInt[sizeof(void*)==64/8 ? 1:-1];
 
 typedef _GoString_ GoString;
 typedef void *GoMap;
@@ -41,8 +49,7 @@ extern char* CacheImage(GoString p0);
 
 
 ]]
-
-ld = ffi.load("splib")
+ld = ffi.load("libsplib")
 
 local function c(str)
     return ffi.new("GoString",str,#str)

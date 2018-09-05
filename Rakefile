@@ -57,12 +57,12 @@ end
 desc "Compile and install necessary software"
 task :build => [:sphelper] do
 	sh "#{installdir}/bin/sphelper build"
-	FileUtils::cp("#{srcdir}/go/bin/sp","#{installdir}/bin")
 end
 
 desc "Compile and install helper library"
 task :buildlib => [:sphelper] do
 	sh "#{installdir}/bin/sphelper buildlib"
+	FileUtils.cp_r("#{builddir}/dylib/.","#{installdir}/lib/")
 end
 
 desc "Generate documentation"

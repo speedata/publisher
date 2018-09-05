@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"sphelper/fileutils"
 	"strings"
 	texttemplate "text/template"
@@ -84,8 +85,9 @@ func main() {
 			os.Exit(-1)
 		}
 	case "buildlib":
-		err := buildlib.BuildLib(cfg)
+		err := buildlib.BuildLib(cfg, runtime.GOOS, runtime.GOARCH)
 		if err != nil {
+			fmt.Println(err)
 			os.Exit(-1)
 		}
 	case "doc":
@@ -129,13 +131,32 @@ func main() {
 				if err != nil {
 					log.Fatal(err)
 				}
+
 				err = dirstructure.MkBuilddir(cfg, bindir)
 				if err != nil {
 					log.Fatal(err)
 				}
-				err = buildsp.BuildGo(cfg, filepath.Join(cfg.Builddir, "speedata-publisher", "bin"), platform, arch, "directory")
+
+				buildbindir := filepath.Join(cfg.Builddir, "speedata-publisher", "bin")
+				buildsdluatexdir := filepath.Join(cfg.Builddir, "speedata-publisher", "sdluatex")
+				err = buildsp.BuildGo(cfg, buildbindir, platform, arch, "directory")
 				if err != nil {
 					os.Exit(-1)
+				}
+
+				err = buildlib.BuildLib(cfg, platform, arch)
+				if err != nil {
+					fmt.Println(err)
+					os.Exit(-1)
+				}
+
+				switch platform {
+				case "windows":
+					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dll"), filepath.Join(buildsdluatexdir, "libsplib.dll"))
+				case "linux":
+					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(cfg.Builddir, "speedata-publisher", "share", "lib", "libsplib.so"))
+				case "darwin":
+					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dylib"), filepath.Join(cfg.Builddir, "speedata-publisher", "share", "lib", "libsplib.dylib"))
 				}
 
 				os.Chdir(cfg.Builddir)

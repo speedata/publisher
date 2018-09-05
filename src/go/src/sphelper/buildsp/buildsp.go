@@ -24,10 +24,13 @@ func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype string) error
 
 	publisher_version := cfg.Publisherversion.String()
 
-	os.Unsetenv("GOBIN")
+	binaryname := "sp"
+	if goos == "windows" {
+		binaryname = "sp.exe"
+	}
 
 	// Now compile the go executable
-	arguments := []string{"install", "-ldflags", fmt.Sprintf("-X main.dest=%s -X main.version=%s -s", targettype, publisher_version), "sp/sp"}
+	arguments := []string{"build", "-ldflags", fmt.Sprintf("-X main.dest=%s -X main.version=%s -s", targettype, publisher_version), "-o", filepath.Join(destbin, binaryname), "sp/sp"}
 	cmd := exec.Command("go", arguments...)
 	outbuf, err := cmd.CombinedOutput()
 	if err != nil {
