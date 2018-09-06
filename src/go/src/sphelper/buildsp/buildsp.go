@@ -9,7 +9,7 @@ import (
 	"sphelper/config"
 )
 
-func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype string) error {
+func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype, location string) error {
 	srcdir := cfg.Srcdir
 	os.Chdir(cfg.Basedir())
 
@@ -28,9 +28,11 @@ func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype string) error
 	if goos == "windows" {
 		binaryname = "sp.exe"
 	}
-
+	if location == "" {
+		location = filepath.Join(destbin, binaryname)
+	}
 	// Now compile the go executable
-	arguments := []string{"build", "-ldflags", fmt.Sprintf("-X main.dest=%s -X main.version=%s -s", targettype, publisher_version), "-o", filepath.Join(destbin, binaryname), "sp/sp"}
+	arguments := []string{"build", "-ldflags", fmt.Sprintf("-X main.dest=%s -X main.version=%s -s", targettype, publisher_version), "-o", location, "sp/sp"}
 	cmd := exec.Command("go", arguments...)
 	outbuf, err := cmd.CombinedOutput()
 	if err != nil {

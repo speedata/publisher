@@ -263,7 +263,7 @@ desc "Prepare a .deb directory"
 task :deb => [:sphelper] do
 	srcbindir = ENV["LUATEX_BIN"] || ""
 	if ! test(?d,srcbindir) then
-		puts "Environment variable LUATEX_BIN does not exist.\nMake sure it points to a path which contains `luatex'.\nUse like this: rake zip LUATEX_BIN=/path/to/bin\nAborting"
+		puts "Environment variable LUATEX_BIN does not exist.\nMake sure it points to a path which contains `sdluatex'.\nUse like this: rake deb LUATEX_BIN=/path/to/bin\nAborting"
 		next
 	end
 	publisher_version = @versions['publisher_version']
@@ -326,12 +326,22 @@ task :deb => [:sphelper] do
 		puts res
 		next
 	end
+	sh "#{installdir}/bin/sphelper builddeb #{platform} #{arch} #{targetbin}/sp"
+	sh "#{installdir}/bin/sphelper buildlib"
 
-	if build_go(srcdir,targetbin,platform,arch,"linux-usr") == false then next end
 
 	cp_r("fonts/.",targetfonts)
 	cp_r(Dir.glob("img/*"),targetimg)
-	cp_r("lib/.",targetlib)
+	Dir.chdir("lib") do
+		Dir.glob("*").reject { |x|
+			x =~ /libsplib|imageedit/
+		}.each { |x|
+			  mkdir_p(targetlib.join(File.dirname(x)))
+			  cp(x,targetlib.join(File.dirname(x)))
+		}
+	end
+	cp_r(Dir.glob("#{builddir}/dylib/libsplib.so"),targetlib)
+
 	cp_r(File.join("schema","layoutschema-en.rng"),targetschema)
 	cp_r(File.join("schema","layoutschema-de.rng"),targetschema)
 
@@ -339,7 +349,7 @@ task :deb => [:sphelper] do
 		cp_r(["tex","hyphenation"],targetsw)
 		# do not copy every Lua file to the dest
 		# and leave out .gitignore and others
-		Dir.glob("**/*.lua").reject { |x|
+		Dir.glob("lua/**/*.lua").reject { |x|
 		    x =~  /viznode|fileutils|Shopify/
 		}.each { |x|
 		  mkdir_p(targetsw.join(File.dirname(x)))

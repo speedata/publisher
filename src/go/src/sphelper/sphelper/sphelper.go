@@ -55,6 +55,7 @@ func main() {
 	op.On("--basedir DIR", "Base dir", &commandlinebasedir)
 	op.Command("build", "Build go binary")
 	op.Command("buildlib", "Build sp library")
+	op.Command("builddeb", "Build sp binary for debian (/usr/)")
 	op.Command("doc", "Generate speedata Publisher documentation")
 	op.Command("sitedoc", "Generate speedata Publisher documentation without ugly URLs for Hugo")
 	op.Command("dist", "Generate zip files and windows installers")
@@ -80,12 +81,22 @@ func main() {
 
 	switch command {
 	case "build":
-		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local")
+		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local", "")
 		if err != nil {
 			os.Exit(-1)
 		}
 	case "buildlib":
 		err := buildlib.BuildLib(cfg, runtime.GOOS, runtime.GOARCH)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(-1)
+		}
+	case "builddeb":
+		if len(op.Extra) != 4 {
+			fmt.Println("Need three arguments: sphelper builddeb <platform> <arch> <dest>")
+			os.Exit(-1)
+		}
+		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), op.Extra[1], op.Extra[2], "linux-usr", op.Extra[3])
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(-1)
@@ -139,7 +150,7 @@ func main() {
 
 				buildbindir := filepath.Join(cfg.Builddir, "speedata-publisher", "bin")
 				buildsdluatexdir := filepath.Join(cfg.Builddir, "speedata-publisher", "sdluatex")
-				err = buildsp.BuildGo(cfg, buildbindir, platform, arch, "directory")
+				err = buildsp.BuildGo(cfg, buildbindir, platform, arch, "directory", "")
 				if err != nil {
 					os.Exit(-1)
 				}
