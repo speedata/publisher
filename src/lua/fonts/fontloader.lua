@@ -196,7 +196,7 @@ function define_font(name, size,extra_parameter)
     f.filename      = fonttable.filename_with_path
     f.type          = 'real'
     f.encodingbytes = 2
-    f.tounicode     = 1
+    f.tounicode     = 0
     f.stretch       = 40
     f.shrink        = 30
     f.step          = 10
