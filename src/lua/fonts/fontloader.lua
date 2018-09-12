@@ -156,16 +156,38 @@ function define_font(name, size,extra_parameter)
         --- Now I use g.unicode if present, otherwise map.backmap.
         --- See issue #154
 
-        --- For kerning a mapping glyphname -> codepoint is needed.
-        for i = 1,#fonttable.glyphs do
-            local g=fonttable.glyphs[i]
+        local glyphtable = {}
+        if fonttable.subfonts and #fonttable.subfonts > 0 then
+            -- this looks like a CID-keyed font such as Noto
+            for _,subfont in pairs(fonttable.subfonts) do
+                for glyphno,g in pairs(subfont.glyphs) do
+                    -- hyphen
+                    if g.unicode == 8209 then
+                        g.unicode = 45
+                    end
+                    glyphtable[#glyphtable + 1] = g
+                    glyphtable[#glyphtable].glyphno = glyphno
+                end
+            end
+        else
+            -- all regular
+            for glyphno,g in pairs(fonttable.glyphs) do
+                glyphtable[#glyphtable + 1] = g
+                glyphtable[#glyphtable].glyphno = glyphno
+            end
+        end
+            --- For kerning a mapping glyphname -> codepoint is needed.
+
+        for i = 1,#glyphtable do
+            local g=glyphtable[i]
             local cp = g.unicode
             if cp == -1 then cp = fonttable.map.backmap[i] end
             lookup_codepoint_by_name[g.name] = cp
-            lookup_codepoint_by_number[i]    = cp
+            lookup_codepoint_by_number[g.glyphno]    = cp
         end
         fonttable.lookup_codepoint_by_name   = lookup_codepoint_by_name
         fonttable.lookup_codepoint_by_number = lookup_codepoint_by_number
+        fonttable.glyphtable = glyphtable
     end
 
     --- A this point we have taken the `fonttable` from memory or from `fontloader#to_table()`. The next
@@ -219,57 +241,59 @@ function define_font(name, size,extra_parameter)
     f.cidinfo = fonttable.cidinfo
 
 
-    for i=1,#fonttable.glyphs do
-        local glyph     = fonttable.glyphs[i]
-        local codepoint = fonttable.lookup_codepoint_by_number[i]
+    for i=1,#fonttable.glyphtable do
+        local glyph     = fonttable.glyphtable[i]
+        local glyphno   = glyph.glyphno
+        local codepoint = fonttable.lookup_codepoint_by_number[glyphno]
 
         -- TeX uses U+002D HYPHEN-MINUS for hyphen, correct would be U+2012 HYPHEN.
         -- Because font vendors all have different ideas of hyphen, we just map all
         -- occurrences of *HYPHEN* to 0x2D (decimal 45)
         if glyph.name:lower():match("^hyphen$") then codepoint=45  end
+        if codepoint then
+            f.characters[codepoint] = {
+                index = glyphno,
+                width = glyph.width * mag,
+                name  = glyph.name,
+                expansion_factor = 1000,
+                lookups = glyph.lookups,
+            }
 
-        f.characters[codepoint] = {
-            index = i,
-            width = glyph.width * mag,
-            name  = glyph.name,
-            expansion_factor = 1000,
-            lookups = glyph.lookups,
-        }
+            -- Height and depth of the glyph
+            if glyph.boundingbox[4] then f.characters[codepoint].height = glyph.boundingbox[4] * mag  end
+            if glyph.boundingbox[2] then f.characters[codepoint].depth = -glyph.boundingbox[2] * mag  end
 
-        -- Height and depth of the glyph
-        if glyph.boundingbox[4] then f.characters[codepoint].height = glyph.boundingbox[4] * mag  end
-        if glyph.boundingbox[2] then f.characters[codepoint].depth = -glyph.boundingbox[2] * mag  end
-
-        --- We change the `tounicode` entry for entries with a period. Sometimes fonts
-        --- have entries like `a.sc` or `a.c2sc` for smallcaps letter a. We are
-        --- only interested in the part before the period.
-        --- _This solution might not be perfect_.
-        if glyph.name:match("%.") then
-            local destname = glyph.name:gsub("^([^%.]*)%..*$","%1")
-            local cp = fonttable.lookup_codepoint_by_name[destname]
-            if cp then
-                f.characters[codepoint].tounicode=to_utf16(cp)
-            end
-        end
-
-
-        --- Margin protrusion is enabled in `spinit.lua`.
-        if (glyph.name=="hyphen" or glyph.name=="period" or glyph.name=="comma") and extra_parameter and type(extra_parameter.marginprotrusion) == "number" then
-            f.characters[codepoint]["right_protruding"] = glyph.width * extra_parameter.marginprotrusion / 100
-        end
-
-        --- We do kerning by default. In the future we could turn it off.
-        local kerns={}
-        if glyph.kerns then
-            for _,kern in pairs(glyph.kerns) do
-                local dest = fonttable.lookup_codepoint_by_name[kern.char]
-                if dest and dest > 0 then
-                    kerns[dest] = kern.off * mag
-                else
+            --- We change the `tounicode` entry for entries with a period. Sometimes fonts
+            --- have entries like `a.sc` or `a.c2sc` for smallcaps letter a. We are
+            --- only interested in the part before the period.
+            --- _This solution might not be perfect_.
+            if glyph.name:match("%.") then
+                local destname = glyph.name:gsub("^([^%.]*)%..*$","%1")
+                local cp = fonttable.lookup_codepoint_by_name[destname]
+                if cp then
+                    f.characters[codepoint].tounicode=to_utf16(cp)
                 end
             end
+
+
+            --- Margin protrusion is enabled in `spinit.lua`.
+            if (glyph.name=="hyphen" or glyph.name=="period" or glyph.name=="comma") and extra_parameter and type(extra_parameter.marginprotrusion) == "number" then
+                f.characters[codepoint]["right_protruding"] = glyph.width * extra_parameter.marginprotrusion / 100
+            end
+
+            --- We do kerning by default. In the future we could turn it off.
+            local kerns={}
+            if glyph.kerns then
+                for _,kern in pairs(glyph.kerns) do
+                    local dest = fonttable.lookup_codepoint_by_name[kern.char]
+                    if dest and dest > 0 then
+                        kerns[dest] = kern.off * mag
+                    else
+                    end
+                end
+            end
+            f.characters[codepoint].kerns = kerns
         end
-        f.characters[codepoint].kerns = kerns
     end
 
     -- create a virtual font to fake a feature
