@@ -3591,7 +3591,6 @@ language_mapping = {
     ["Danish"]                       = "da",
     ["Dutch"]                        = "nl",
     ["English (Great Britain)"]      = "en_GB",
-    ["English (Great Britan)"]       = "en_GB", -- spelling problem with sp version < 2.5.10
     ["English (USA)"]                = "en_US",
     ["Finnish"]                      = "fi",
     ["French"]                       = "fr",
