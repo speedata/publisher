@@ -1180,7 +1180,7 @@
          </optional>
          <optional>
             <attribute name="margin-bottom">
-               <a:documentation>Abstand zwischen der Linie unten und dem nachfolgenden Paragraph.</a:documentation>
+               <a:documentation>Abstand zwischen der Linie unten und dem nachfolgenden Absatz.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -4656,6 +4656,15 @@
          <optional>
             <attribute name="start">
                <a:documentation>Die erste Spalte der Linie. Voreinstellung ist 1.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="break-below">
+               <a:documentation>Erlaube einen Umbruch unterhalb der Linie?</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
             </attribute>
          </optional>
          <optional>

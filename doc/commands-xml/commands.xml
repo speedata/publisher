@@ -2169,7 +2169,7 @@
         <para>Distance between the bottom rule and the text of the next paragraph.</para>
       </description>
       <description xml:lang="de">
-        <para>Abstand zwischen der Linie unten und dem nachfolgenden Paragraph.</para>
+        <para>Abstand zwischen der Linie unten und dem nachfolgenden Absatz.</para>
       </description>
     </attribute>
     <attribute en="margin-top" type="length" optional="yes">
@@ -7788,6 +7788,14 @@
       </description>
       <description xml:lang="de">
         <para>Die erste Spalte der Linie. Voreinstellung ist 1.</para>
+      </description>
+    </attribute>
+    <attribute en="break-below" optional="yes" type="boolean" since="3.5.2">
+      <description xml:lang="en">
+        <para>Allow break below the table rule?</para>
+      </description>
+      <description xml:lang="de">
+        <para>Erlaube einen Umbruch unterhalb der Linie?</para>
       </description>
     </attribute>
     <attribute en="class" optional="yes" type="text">

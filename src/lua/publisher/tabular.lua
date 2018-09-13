@@ -1261,6 +1261,16 @@ function typeset_table(self)
             tmp = publisher.colorbar(self.tablewidth_target - offset,tex.sp(tr_contents.rulewidth or "0.25pt"),0,tr_contents.color)
             tmp = publisher.add_glue(tmp,"head",{width = offset})
             rows[#rows + 1] = node.hpack(tmp)
+            if break_above == false then
+                if publisher.options.showobjects then
+                    rows[#rows] = publisher.addhrule(rows[#rows])
+                end
+                node.set_attribute(rows[#rows],publisher.att_break_above,1)
+                break_above = true
+            end
+            if tr_contents.breakbelow == false then
+                break_above = false
+            end
 
         elseif eltname == "Tablehead" then
             current_row = make_tablehead(self,tr_contents,tablehead_first,tablehead,current_row)

@@ -3348,26 +3348,26 @@ function commands.tablerule( layoutxml,dataxml )
 
 
     local attribute = {
-        ["rulewidth"] = "length",
-        ["color"]     = "rawstring",
-        ["start"]     = "number",
+        ["rulewidth"]   = "length",
+        ["color"]       = "rawstring",
+        ["start"]       = "number",
+        ["break-below"] = "boolean",
     }
 
     local tmpattr
     for attname,atttyp in pairs(attribute) do
         tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
-        if tmpattr then
+        if tmpattr ~= nil then
             tab[attname] = tmpattr
         end
     end
+    if tab["break-below"] == nil then tab["break-below"] = true end
 
+    rulewidth  = tab.rulewidth or tex.sp("0.25pt")
+    color      = tab.color     or css_rules["background-color"]
+    start      = tab.start     or tonumber(css_rules["rule-start"])
 
-    rulewidth = tab.rulewidth or tex.sp("0.25pt")
-    color     = tab.color     or css_rules["background-color"]
-    start     = tab.start     or tonumber(css_rules["rule-start"])
-
-
-    return { rulewidth = rulewidth, color = color, start = start }
+    return { rulewidth = rulewidth, color = color, start = start, breakbelow = tab["break-below"] }
 end
 
 --- Tr

@@ -4659,6 +4659,15 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="break-below">
+               <a:documentation>Allow break below the table rule?</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="class">
                <a:documentation>CSS class for this element.</a:documentation>
             </attribute>
