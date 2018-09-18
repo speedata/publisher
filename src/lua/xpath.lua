@@ -1037,7 +1037,7 @@ end
 M.default_functions["upper-case"] = function(dataxml,arg)
     local str = arg and arg[1]
     if str then
-        return string.upper(arg[1])
+        return string.upper(tostring(arg[1]))
     else
         warning("No string given for upper-case()")
         return ""
@@ -1047,7 +1047,7 @@ end
 M.default_functions["lower-case"] = function(dataxml,arg)
     local str = arg and arg[1]
     if str then
-        return string.lower(arg[1])
+        return string.lower(tostring(arg[1]))
     else
         warning("No string given for lower-case()")
         return ""

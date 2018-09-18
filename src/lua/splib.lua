@@ -72,6 +72,9 @@ local function contains(haystack,needle)
 end
 
 local function replace(text, rexpr, repl)
+    text  = tostring(text)
+    rexpr = tostring(rexpr)
+    repl  = tostring(repl)
     local ret = ld.Replace(c(text),c(rexpr),c(repl))
     return ffi.string(ret)
 end
