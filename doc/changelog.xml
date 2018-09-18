@@ -1,8 +1,28 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.5">
+    <entry version="3.5.2" date="2018-09-28">
+      <en>Letter spacing in Span.</en>
+      <de>Sperrung in Span.</de>
+    </entry>
+    <entry version="3.5.2" date="2018-09-28">
+      <en>Break-below works with Tablerule.</en>
+      <de>Break-below funktioniert mit Tabellenlinien.</de>
+    </entry>
+    <entry version="3.5.2" date="2018-09-28">
+      <en>CID-keyd fonts can be used.</en>
+      <de>CID Schriftarten könnne benutzt werden.</de>
+    </entry>
+    <entry version="3.5.2" date="2018-09-28">
+      <en>Bugfixes for <tt>upper-case()</tt>, <tt>lower-case()</tt> and <tt>replace()</tt>.</en>
+      <de>Fehlerkorrektur für <tt>upper-case()</tt>, <tt>lower-case()</tt> und <tt>replace()</tt>.</de>
+    </entry>
+    <entry version="3.5.2" date="2018-09-28">
+      <en>Various bugfixes introduced by LuaTeX 1.0.7.</en>
+      <de>Verschiedene Fehlerkorrekturen für LuaTeX 1.0.7.</de>
+    </entry>
     <entry version="3.5.1" date="2018-09-05">
-      <en>First release with dynamic library, mainly for testing</en>
-      <de>Erstes Release mit dynamischer Bibliothek, hauptsächlich für Tests</de>
+      <en>First release with dynamic library, mainly for testing.</en>
+      <de>Erstes Release mit dynamischer Bibliothek, hauptsächlich für Tests.</de>
     </entry>
   </chapter>
   <chapter version="3.4">
