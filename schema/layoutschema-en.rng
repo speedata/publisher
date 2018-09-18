@@ -4180,6 +4180,11 @@
                      <a:documentation>The bottom padding of the background color (can be negative)</a:documentation>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="letter-spacing">
+                     <a:documentation>Increase spacing between glyphs.</a:documentation>
+                  </attribute>
+               </optional>
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>

@@ -2127,7 +2127,8 @@ function parse_html( elt, parameter )
        allowbreak = allowbreak,
        backgroundcolor=backgroundcolor,
        bg_padding_top = bg_padding_top,
-       bg_padding_bottom = bg_padding_bottom
+       bg_padding_bottom = bg_padding_bottom,
+       letterspacing = parameter.letterspacing
     }
     local options = setmetatable({}, {__index = defaults})
 
@@ -2769,6 +2770,12 @@ function mknodes(str,fontfamily,parameter)
                 node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
                 node.set_attribute(n,att_bgpaddingtop,parameter.bg_padding_top)
                 node.set_attribute(n,att_bgpaddingbottom,parameter.bg_padding_bottom)
+            end
+            if parameter.letterspacing then
+                local k = node.new("kern")
+                k.kern = parameter.letterspacing
+                head,last = node.insert_after(head,last,k)
+                lastitemwasglyph = true
             end
             if last and last.id == glyph_node then
                 lastitemwasglyph = true

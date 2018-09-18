@@ -6727,6 +6727,14 @@
         <para>Der Innenabstand (unten) der Hintergrundfarbe (kann negativ sein)</para>
       </description>
     </attribute>
+    <attribute en="letter-spacing" optional="yes" type="length" css="letter-spacing" since="3.5.2">
+      <description xml:lang="en">
+        <para>Increase spacing between glyphs.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Erhöhe Leerrraum zwischen Zeichen.</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Stylesheet>
   .green { background-color: lightgreen; }

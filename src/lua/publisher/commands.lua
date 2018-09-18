@@ -3084,12 +3084,24 @@ end
 --- Surround text by some style like underline or (background-)color
 function commands.span( layoutxml,dataxml )
     local backgroundcolor    = publisher.read_attribute(layoutxml,dataxml,"background-color",  "rawstring")
+    local letterspacing      = publisher.read_attribute(layoutxml,dataxml,"letter-spacing",  "booleanorlength")
     local bg_padding_top     = publisher.read_attribute(layoutxml,dataxml,"background-padding-top",  "length_sp")
     local bg_padding_bottom  = publisher.read_attribute(layoutxml,dataxml,"background-padding-bottom",  "length_sp")
-    local class  = publisher.read_attribute(layoutxml,dataxml,"class",  "rawstring")
-    local id     = publisher.read_attribute(layoutxml,dataxml,"id",     "rawstring")
 
-    local css_rules = publisher.css:matches({element = 'span', class=class,id=id}) or {}
+    local class              = publisher.read_attribute(layoutxml,dataxml,"class",  "rawstring")
+    local id                 = publisher.read_attribute(layoutxml,dataxml,"id",     "rawstring")
+    local css_rules          = publisher.css:matches({element = 'span', class=class,id=id}) or {}
+
+
+    if letterspacing == nil then
+        if css_rules["letter-spacing"] then
+            letterspacing = tex.sp(css_rules["letter-spacing"])
+        end
+    elseif letterspacing == true then
+        -- FIXME: this is just a dummy value
+        letterspacing = tex.sp("2pt")
+    end
+
     if dashed == nil then dashed = ( css_rules["border-style"] == "dashed") end
     if backgroundcolor == nil then backgroundcolor = css_rules["background-color"]  end
     if bg_padding_top == nil then
@@ -3113,7 +3125,8 @@ function commands.span( layoutxml,dataxml )
         allowbreak=publisher.allowbreak,
         backgroundcolor = colornumber,
         bg_padding_top = bg_padding_top,
-        bg_padding_bottom = bg_padding_bottom
+        bg_padding_bottom = bg_padding_bottom,
+        letterspacing = letterspacing,
     }
     local objects = {}
     local tab = publisher.dispatch(layoutxml,dataxml)

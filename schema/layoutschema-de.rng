@@ -4180,6 +4180,11 @@
                      <a:documentation>Der Innenabstand (unten) der Hintergrundfarbe (kann negativ sein)</a:documentation>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="letter-spacing">
+                     <a:documentation>Erhöhe Leerrraum zwischen Zeichen.</a:documentation>
+                  </attribute>
+               </optional>
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
