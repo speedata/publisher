@@ -195,16 +195,20 @@ end
 --- We do that because in the dtp world when we say 12pt, we always mean 12*1/72 inch.
 local orig_texsp = tex.sp
 function tex.sp( number_or_string )
-  if type(number_or_string) == "string" then
-    local tmp = string.gsub(number_or_string,"(%d)pt","%1bp"):gsub("(%d)pp","%1pt")
-    local ret = { pcall(orig_texsp,tmp) }
-    if ret[1]==false then
-      err("Could not convert dimension %q",number_or_string)
-      return nil
+    if number_or_string == "0" or number_or_string == 0 then
+        return 0
     end
-    return unpack(ret,2)
-  end
-  return orig_texsp(number_or_string)
+
+    if type(number_or_string) == "string" then
+        local tmp = string.gsub(number_or_string,"(%d)pt","%1bp"):gsub("(%d)pp","%1pt")
+        local ret = { pcall(orig_texsp,tmp) }
+        if ret[1]==false then
+            err("Could not convert dimension %q",number_or_string)
+            return nil
+        end
+        return unpack(ret,2)
+    end
+    return orig_texsp(number_or_string)
 end
 
 local _assert = assert
