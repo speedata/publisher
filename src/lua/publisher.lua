@@ -644,6 +644,17 @@ function page_initialized_p( pagenumber )
     return pages[pagenumber] ~= nil
 end
 
+-- return an action node or a whatsit with pdf_action subtype.
+function get_action_node( action_type )
+    local ai
+    if action_node then
+        ai = node.new("action")
+    else
+        ai = node.new("whatsit",publisher.pdf_action_whatsit)
+    end
+    ai.action_type = action_type
+    return ai
+end
 
 --- Start the processing (`dothings()`)
 --- -------------------------------
@@ -2256,8 +2267,7 @@ function parse_html( elt, parameter )
                     end
                 end
             else
-                local ai = node.new("action")
-                ai.action_type = 3
+                local ai = get_action_node(3)
                 ai.data = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",elt.href)
                 local stl = node.new("whatsit","pdf_start_link")
                 stl.action = ai

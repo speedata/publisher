@@ -24,21 +24,14 @@ function commands.a( layoutxml,dataxml )
     trace("A")
     local href = publisher.read_attribute(layoutxml,dataxml,"href","rawstring")
     local link = publisher.read_attribute(layoutxml,dataxml,"link","rawstring")
-    local an = publisher.action_node
-    local ai
-    if an then
-        ai = node.new("action")
-    else
-        ai = node.new("whatsit",publisher.pdf_action_whatsit)
-    end
-    ai.action_type = 3
+    local an = publisher.get_action_node(3)
     if link then
-        ai.data = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/GoTo/D(mark%s)>>",link)
+        an.data = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/GoTo/D(mark%s)>>",link)
     else
-        ai.data = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",href)
+        an.data = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",href)
     end
     local stl = node.new("whatsit","pdf_start_link")
-    stl.action = ai
+    stl.action = an
     stl.width = -1073741824
     stl.height = -1073741824
     stl.depth = -1073741824

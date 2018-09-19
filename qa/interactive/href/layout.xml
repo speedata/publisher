@@ -1,0 +1,18 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options crop="3mm" />
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="5cm">
+        <Paragraph>
+          <A href="https://www.speedata.de/">
+            <Value>Link via &lt;A&gt;</Value>
+          </A>
+          <Value select="sd:decode-html(.)"></Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
