@@ -1645,7 +1645,7 @@ function typeset_table(self)
             end
         end
 
-        last_tr_data = node.has_attribute(thissplittable[#thissplittable - 1],publisher.att_tr_dynamic_data)
+        last_tr_data = thissplittable[#thissplittable - 1] and node.has_attribute(thissplittable[#thissplittable - 1],publisher.att_tr_dynamic_data)
 
         -- only reformat the foot when we have dynamic data _and_ have a foot to reformat.
         if last_tr_data and self.tablefoot_contents then
