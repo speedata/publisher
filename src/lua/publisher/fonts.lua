@@ -35,6 +35,20 @@ local hlist_node     = node.id("hlist")
 local vlist_node     = node.id("vlist")
 
 
+for k,v in pairs(node.whatsits()) do
+    if v == "user_defined" then
+        -- for action/mark command
+        user_defined_whatsit = k
+    elseif v == "pdf_refximage" then
+        pdf_refximage_whatsit = k
+    elseif v == "pdf_action" then
+        pdf_action_whatsit = k
+    elseif v == "pdf_dest" then
+        pdf_dest_whatsit = k
+    end
+end
+
+
 --- Every font family ("text", "Chapter"), that is defined by DefineFontfamily gets an internal
 --- number. This number is stored here.
 lookup_fontfamily_name_number={}
@@ -152,6 +166,32 @@ function pre_linebreak( head )
             pre_linebreak(head.post)
             pre_linebreak(head.replace)
         elseif head.id == whatsit_node then -- whatsit
+            if head.subtype == pdf_dest_whatsit then
+                local dest_fontfamily = node.has_attribute(head,publisher.att_fontfamily)
+                if dest_fontfamily then
+                    local tmpnext = head.next
+                    local tmpprev = head.prev
+                    head.next = nil
+                    head.prev = nil
+                    local instance = lookup_fontfamily_number_instance[dest_fontfamily]
+                    local f = used_fonts[instance.normal]
+                    local g = publisher.make_glue({width = f.size})
+
+                    local h = node.insert_after(head,head,g)
+
+                    h = node.vpack(h)
+
+                    if tmpprev then
+                        tmpprev.next = h
+                        h.prev = tmpprev
+                    end
+
+                    if tmpnext then
+                        tmpnext.prev = h
+                        h.next = tmpnext
+                    end
+                end
+            end
         elseif head.id == glue_node then -- glue
             if head.subtype == 100 then -- leader
                 local l = head.leader

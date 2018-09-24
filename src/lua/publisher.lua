@@ -958,7 +958,6 @@ function initialize_luatex_and_generate_pdf()
     end
 end
 
-
 function shipout(nodelist, pagenumber )
     local colorname = pages[pagenumber].defaultcolor
     if colorname then
@@ -3191,6 +3190,7 @@ function mkstringdest(name)
     d.named_id = 1
     d.dest_id = name
     d.dest_type = 0
+    node.set_attribute(d,att_fontfamily,0)
     return d
 end
 
