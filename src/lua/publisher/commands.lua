@@ -89,7 +89,7 @@ function commands.action( layoutxml,dataxml)
                 n.type = 115  -- type 115: "value is a string"
                 n.value = v.selection
                 if v.pdftarget then
-                    local d = publisher.mkstringdest("mark" .. v.selection)
+                    local d = publisher.mkstringdest("mark" .. tostring(v.selection))
                     p:append(d)
                 end
                 p:append(n)
@@ -1576,7 +1576,7 @@ function commands.makeindex( layoutxml,dataxml )
             end
             -- Add current entry to this section
             -- The current implementation only concatenates page numbers
-            if selection[i].name == lastname then
+            if selection[i].name == lastname and pagenumbername ~= "" then
                 if not selection[lastindex][pagenumbername] then
                     err("Can't find the page number in the index entries. Did you set the pagenumber attribute in Makeindex?")
                 else

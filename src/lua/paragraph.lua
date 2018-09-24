@@ -158,6 +158,7 @@ function Paragraph:script( whatever,scr,parameter )
 end
 
 function Paragraph:append( whatever,parameter )
+    -- w("Paragraph:append, type(whatever) = %s",type(whatever))
     parameter = parameter or {}
     local tab
     tab = publisher.textformats[self.textformat or 'text']
