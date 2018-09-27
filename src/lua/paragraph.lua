@@ -144,8 +144,8 @@ end
 
 function Paragraph:script( whatever,scr,parameter )
     local nl
-    if type(whatever)=="string" or type(whatever)=="number" then
-        nl = publisher.mknodes(whatever,parameter.fontfamily,parameter)
+    if type(whatever)=="string" or type(whatever)=="number" or type(whatever) == "table" then
+        nl = publisher.mknodes(table_textvalue(whatever),parameter.fontfamily,parameter)
     else
         assert(false,string.format("superscript, type()=%s",type(whatever)))
     end
