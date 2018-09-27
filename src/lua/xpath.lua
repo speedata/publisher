@@ -1029,7 +1029,8 @@ M.default_functions["contains"] = function(dataxml,arg)
         err("contains(): one of the arguments is not a string")
         return false
     end
-    return publisher.splib.contains(arg[1],arg[2])
+    local ret = publisher.splib.contains(arg[1],arg[2])
+    return ret == "true"
 end
 
 
