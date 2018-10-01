@@ -40,20 +40,26 @@ typedef void *GoChan;
 typedef struct { void *t; void *v; } GoInterface;
 typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 
-
+extern void Init();
 extern char* Contains(GoString p0, GoString p1);
 extern char** Tokenize(GoString p0, GoString p1);
 extern char* Replace(GoString p0, GoString p1, GoString p2);
 extern char* HtmlToXml(GoString p0);
 extern char* CacheImage(GoString p0);
-
+extern void BuildFilelist();
+extern char* LookupFile(GoString p0);
+extern char** ListFonts();
 
 ]]
+
 ld = ffi.load("libsplib")
+
+ld.Init()
 
 local function c(str)
     return ffi.new("GoString",str,#str)
 end
+
 
 local function tokenize(dataxml,arg)
     local ret = ld.Tokenize(c(arg[1]),c(arg[2]))
@@ -94,11 +100,40 @@ local function cacheimage(url)
     return ffi.string(ret)
 end
 
+local function buildfilelist()
+    ld.BuildFilelist()
+    return
+end
+
+local function lookupfile(filename)
+    local ret = ld.LookupFile(c(filename))
+    local _ret = ffi.string(ret)
+    if _ret == "" then return nil end
+
+    return ffi.string(ret)
+end
+
+
+local function listfonts()
+    local ret = ld.ListFonts()
+    local tbl = {}
+    local i = 0
+    while ret[i] ~= nil do
+        tbl[#tbl + 1] = ffi.string(ret[i])
+        i = i + 1
+    end
+    return tbl
+end
+
+
 
 return {
     cacheimage = cacheimage,
     contains = contains,
     htmltoxml = htmltoxml,
     replace = replace,
-    tokenize = tokenize
+    tokenize = tokenize,
+    buildfilelist = buildfilelist,
+    lookupfile = lookupfile,
+    listfonts = listfonts,
 }

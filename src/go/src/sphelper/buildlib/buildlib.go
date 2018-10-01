@@ -36,5 +36,11 @@ func BuildLib(cfg *config.Config, goos string, goarch string) error {
 	cmd.Env = append(cmd.Env, "CGO_ENABLED=1")
 	cmd.Env = append(cmd.Env, "GOPATH="+filepath.Join(srcdir, "go"))
 	cmd.Env = append(cmd.Env, "PATH="+os.Getenv("PATH"))
-	return cmd.Run()
+	outbuf, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Println(string(outbuf))
+		return err
+	}
+	return nil
+
 }

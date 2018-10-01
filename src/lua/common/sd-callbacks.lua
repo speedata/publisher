@@ -11,20 +11,21 @@
 local verbosity = os.getenv("SP_VERBOSITY")
 local url = require("socket_url")
 
+local trace_callbacks = false
+
 -- Lua 5.2 has table.unpack
 unpack = unpack or table.unpack
 
+
 local function reader( asked_name )
-  local tab = { }
-  tab.file = io.open(asked_name,"rb")
-  tab.reader = function (t)
-                  local f = t.file
-                  return f:read('*l')
-               end
-  tab.close = function (t)
-                  t.file:close()
-              end
-  return tab
+    if trace_callbacks then
+        w("reader, asked_name = %q",tostring(asked_name))
+    end
+    return {
+        file   = io.open(asked_name,"rb"),
+        reader = function (t) local f = t.file return f:read('*l')  end,
+        close  = function (t) t.file:close() end
+    }
 end
 
 local rewrite_tbl = {}
@@ -40,10 +41,14 @@ end
 
 
 function find_file_location( filename_or_uri )
+    if trace_callbacks then
+        w("find_file_location, filename_or_uri = %q",tostring(filename_or_uri))
+    end
+
   if filename_or_uri == "" then return nil end
   local lowercase = os.getenv("SP_IGNORECASE") == "1"
   if lowercase then filename_or_uri = unicode.utf8.lower(filename_or_uri) end
-  local p = kpse.filelist[filename_or_uri]
+  local p = kpse.find_file(filename_or_uri)
   if p then return p end
 
   if lfs.isfile(filename_or_uri) then return filename_or_uri end
@@ -85,26 +90,47 @@ function find_file_location( filename_or_uri )
 end
 
 local function find_xxx_file( asked_name )
+    if trace_callbacks then
+        w("find_xxx_file, asked_name = %q",tostring(asked_name))
+    end
+
   local file = find_file_location(asked_name)
   return file
 end
+
 local function return_asked_name( asked_name )
+    if trace_callbacks then
+        w("return_asked_name, asked_name = %q",tostring(asked_name))
+    end
   return asked_name
 end
+
 local function read_font_file( name )
+    if trace_callbacks then
+        w("read_font_file, name = %q",tostring(name))
+    end
   local f = io.open(name,"rb")
   local buf = f:read("*all")
   f:close()
   return true,buf,buf:len()
 end
 local function find_read_file( id_number,asked_name )
+    if trace_callbacks then
+        w("find_read_file, id_number %q asked_name = %q",tostring(id_number), tostring(asked_name))
+    end
   local file = kpse.find_file(asked_name)
   return file
 end
 function find_write_file(id_number,asked_name)
+    if trace_callbacks then
+        w("find_write_file, id_number %q asked_name = %q",tostring(id_number), tostring(asked_name))
+    end
   return asked_name
 end
 local function read_xxx_file(name)
+    if trace_callbacks then
+        w("read_xxx_file, name = %q",tostring(name))
+    end
   return true,"",0
 end
 

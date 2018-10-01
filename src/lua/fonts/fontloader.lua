@@ -89,21 +89,6 @@ end
 local lookup_fonttable_from_filename = {}
 
 
---- For define_font() we extend our file list
-local fontlist = {}
-
-local fp = os.getenv("SP_FONT_PATH")
-if fp ~= "" then
-  for _,dir in ipairs(string.explode(fp,":")) do
-    for i in dirtree(dir) do
-      local filename = i:gsub(".*/([^/]+)$","%1")
-      fontlist[filename] = i
-    end
-  end
-end
-
-
-
 --- Return a TeX usable font table, or _nil_ plus an error message.
 --- The parameter `name` is the filename (without path), `size` is
 --- given in scaled points, `extra_parameter` is a table such as:
@@ -128,7 +113,7 @@ function define_font(name, size,extra_parameter)
         local lookup_codepoint_by_name   = {}
         local lookup_codepoint_by_number = {}
 
-        filename_with_path = kpse.filelist[name] or fontlist[name]
+        filename_with_path = kpse.find_file(name)
         if not filename_with_path then return false, string.format("Fontfile '%s' not found.", name) end
         local font, err = fontloader.open(filename_with_path)
         if not font then

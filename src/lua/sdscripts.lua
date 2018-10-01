@@ -6,6 +6,7 @@
 --  See file COPYING in the root directory for license info.
 --
 
+splib        = require("splib")
 
 dofile(arg[1])
 
@@ -18,18 +19,12 @@ local cmd = arg[2]
 
 local fontlist = {}
 
-local fp = os.getenv("SP_FONT_PATH")
-if fp ~= "" then
-  for _,dir in ipairs(string.explode(fp,":")) do
-    for i in dirtree(dir) do
-      local filename = i:gsub(".*/([^/]+)$","%1")
-      fontlist[filename] = i
-    end
-  end
+
+local shortname
+for _,v in pairs(splib.listfonts()) do
+    _,shortname,_ = string.match(v, "(.-)([^\\/]-%.?([^%.\\/]*))$")
+    fontlist[shortname] = v
 end
-
-
-for k,v in pairs(kpse.filelist) do fontlist[k] = v end
 
 if cmd=="list-fonts" then
   local is_xml = arg[3]=="xml"

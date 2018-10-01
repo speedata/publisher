@@ -19,6 +19,18 @@ import (
 	"github.com/gregjones/httpcache/diskcache"
 )
 
+var (
+	files   map[string]string
+	wd      string
+	jobname string
+)
+
+//export Init
+func Init() {
+	wd, _ = os.Getwd()
+	jobname = os.Getenv("SP_JOBNAME")
+}
+
 // Convert a string slice to a C char* array and add a NULL pointer.
 func toCharArray(s []string) **C.char {
 	cArray := C.malloc(C.size_t(len(s)+1) * C.size_t(unsafe.Sizeof(uintptr(0))))
@@ -151,6 +163,71 @@ func CacheImage(url string) *C.char {
 
 	io.Copy(outf, resp.Body)
 	return s2c("OK")
+}
+
+func addFileToList(path string, info os.FileInfo, err error) error {
+	if info != nil {
+		if !info.IsDir() {
+			cmp := filepath.Join(wd, jobname+".pdf")
+			if cmp != path {
+				files[filepath.Base(path)] = path
+			}
+		}
+	}
+	return nil
+}
+
+//export BuildFilelist
+func BuildFilelist() {
+	files = make(map[string]string)
+
+	basepath := os.Getenv("PUBLISHER_BASE_PATH")
+	extraDirs := os.Getenv("SD_EXTRA_DIRS")
+	filepath.Walk(filepath.Join(basepath), addFileToList)
+	if fp := os.Getenv("SP_FONT_PATH"); fp != "" {
+		for _, p := range filepath.SplitList(fp) {
+			filepath.Walk(p, addFileToList)
+		}
+	}
+	for _, p := range filepath.SplitList(extraDirs) {
+		filepath.Walk(p, addFileToList)
+	}
+
+	if os.Getenv("SP_IGNORECASE") == "1" {
+		newMap := make(map[string]string, len(files))
+		for k, v := range files {
+			newMap[strings.ToLower(k)] = v
+		}
+		files = newMap
+	}
+
+}
+
+//export LookupFile
+func LookupFile(path string) *C.char {
+	if ret, ok := files[path]; ok {
+		return s2c(ret)
+	}
+	if _, err := os.Stat(path); err == nil {
+		return s2c(path)
+	}
+	return s2c("")
+}
+
+func isFont(filename string) bool {
+	lc := strings.ToLower(filename)
+	return strings.HasSuffix(lc, ".pfb") || strings.HasSuffix(lc, ".ttf") || strings.HasSuffix(lc, ".otf")
+}
+
+//export ListFonts
+func ListFonts() **C.char {
+	var res []string
+	for _, f := range files {
+		if isFont(f) {
+			res = append(res, f)
+		}
+	}
+	return toCharArray(res)
 }
 
 func main() {}

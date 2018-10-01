@@ -9,9 +9,9 @@
 -- BUG on windows: http://lua-users.org/lists/lua-l/2012-08/msg00052.html
 -- ! in LUA_PATH gets replaced by $PWD
 package.path=os.getenv("LUA_PATH")
+local splib = require("splib")
 
 texio.write("Loading file sdini.lua ...")
-
 callback.register('start_run',function() return true end)
 
 
@@ -20,9 +20,9 @@ texconfig.max_print_line=99999
 texconfig.formatname="sd-format"
 texconfig.trace_file_names = false
 
-local basedir=os.getenv("PUBLISHER_BASE_PATH")
-local extra_dirs = os.getenv("SD_EXTRA_DIRS")
+splib.buildfilelist()
 kpse = {}
+
 
 function file_start( filename )
   if log then
@@ -35,76 +35,17 @@ function file_end( filename )
   end
 end
 
-function dirtree(dir)
-  assert(dir and dir ~= "", "directory parameter is missing or empty")
-  if string.sub(dir, -1) == "/" then
-    dir=string.sub(dir, 1, -2)
-  end
 
-  local function yieldtree(dir)
-    local dirs = {}
-    for entry in lfs.dir(dir) do
-      if not entry:match("^%.") then
-        entry=dir.."/"..entry
-        local attr=lfs.attributes(entry)
-        if attr then
-     	  if attr.mode ~= "directory" then
-     	    coroutine.yield(entry,attr)
-     	  end
-     	  if attr.mode == "directory" then
-            table.insert(dirs, entry)
-     	  end
-        end
-      end
-    end
-    for i = 1, #dirs do
-      yieldtree(dirs[i])
-    end
-  end
-
-  return coroutine.wrap(function() yieldtree(dir) end)
-end
-
-kpse.filelist = {}
-
--- only set when running the publisher, not with list-fonts
--- so jobname can be nil
-local jobname = os.getenv("SP_JOBNAME")
-local lowercase = os.getenv("SP_IGNORECASE") == "1"
-local currentdir = lfs.currentdir()
-function kpse.add_dir( dir )
-  for i in dirtree(dir) do
-    local filename = i:gsub(".*/([^/]+)$","%1")
-    if lowercase then filename = unicode.utf8.lower(filename) end
-    if jobname and ( i == currentdir .. "/" .. jobname .. ".pdf" ) then
-        -- ignore
-    else
-        if kpse.filelist[filename] == nil then
-            kpse.filelist[filename] = i
+function kpse.find_file(filename)
+    local fn = splib.lookupfile(filename)
+    if fn == nil then return nil end
+    if os.name == "windows" then
+        if string.match(fn,"[\128-\255]") then
+            err("Files must only contain ascii characters on Windos")
         end
     end
-  end
-end
 
-kpse.add_dir(basedir)
-if os.type == "windows" then
-  path_separator = ";"
-else
-  path_separator = ":"
-end
-
-if extra_dirs then
-  for _,d in ipairs(string.explode(extra_dirs,path_separator)) do
-    if lfs.attributes(d,"mode")=="directory" then
-      kpse.add_dir(d)
-    end
-  end
-end
-
-
-function kpse.find_file(filename,what)
-  if not filename then return nil end
-  return kpse.filelist[filename] or kpse.filelist[filename .. ".tex"]
+    return fn
 end
 
 function do_luafile(filename)

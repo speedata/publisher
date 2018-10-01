@@ -830,7 +830,7 @@ function initialize_luatex_and_generate_pdf()
 
     local auxfilename = tex.jobname .. "-aux.xml"
     -- load help file if it exists
-    if kpse.filelist[auxfilename] and options.resetmarks == false then
+    if kpse.find_file(auxfilename) and options.resetmarks == false then
         local mark_tab = load_xml(auxfilename,"aux file",{ htmlentities = true, ignoreeol = true })
         for i=1,#mark_tab do
             local mt = mark_tab[i]
@@ -4330,7 +4330,7 @@ end
 function get_fallback_image_name( filename, missingfilename )
     if filename then
         warning("Using fallback %q, missing file name is %q", filename or "<filename>", missingfilename or "<empty>")
-        if not kpse.filelist[filename] then
+        if not kpse.find_file(filename) then
             err("fallback image %q not found",filename or "<filename>")
             return "filenotfound.pdf"
         end
@@ -4396,7 +4396,7 @@ function imageinfo( filename,page,box,fallback )
     local xmlfilename = string.gsub(filename,"(%..*)$","") .. ".xml"
 
     local mt
-    if kpse.filelist[xmlfilename] then
+    if kpse.find_file(xmlfilename) then
         local xmltab,msg = load_xml(xmlfilename,"Imageinfo")
         if not xmltab then
             err(msg)
