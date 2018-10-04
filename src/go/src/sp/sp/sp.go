@@ -556,8 +556,13 @@ func runPublisher() (exitstatus int) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	cmdx := ""
+	if runtime.GOOS == "windows" {
+		// to allow UT8 filenames
+		cmdx = "--cmdx"
+	}
 	for i := 1; i <= runs; i++ {
-		cmdline := fmt.Sprintf(`"%s" --shell-escape --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, execName, jobname, inifile, layoutname, dataname, layoutoptionsCommandline)
+		cmdline := fmt.Sprintf(`"%s" %s --shell-escape --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, execName, cmdx, jobname, inifile, layoutname, dataname, layoutoptionsCommandline)
 		if run(cmdline) < 0 {
 			exitstatus = -1
 			v := status{}
