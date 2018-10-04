@@ -544,8 +544,8 @@ func runPublisher() (exitstatus int) {
 	}
 	layoutoptionsCommandline := strings.Join(layoutoptionsSlice, ",")
 	jobname := getOption("jobname")
-	layoutname := filepath.Clean(getOption("layout"))
-	dataname := filepath.Clean(getOption("data"))
+	layoutname := getOption("layout")
+	dataname := getOption("data")
 	execName := getExecutablePath()
 	if dummyData := getOption("dummy"); dummyData == strTrue {
 		dataname = "-dummy"
@@ -767,7 +767,17 @@ func main() {
 	os.Setenv("SP_MAINLANGUAGE", mainlanguage)
 	os.Setenv("SP_FONT_PATH", getOption("fontpath"))
 	os.Setenv("SP_PATH_REWRITE", getOption("pathrewrite"))
-	os.Setenv("IMGCACHE", getOption("imagecache"))
+
+	ic := getOption("imagecache")
+	if finfo, err := os.Stat(ic); err == nil {
+		if !finfo.IsDir() {
+			fmt.Println("Image cache is not a directory. Please remove it before running sp")
+			fmt.Println(ic)
+			os.Exit(1)
+		}
+	}
+
+	os.Setenv("IMGCACHE", ic)
 	os.Setenv("CACHEMETHOD", getOption("cache"))
 
 	if ed := cfg.String("DEFAULT", "extra-dir"); ed != "" {

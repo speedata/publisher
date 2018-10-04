@@ -124,7 +124,7 @@ local function number_of_columns(dataxml,arg)
   return publisher.current_grid:number_of_columns(arg and arg[1])
 end
 
---- Merge numbers like '1,2,3,4,5, 8, 9,10,11' into '1-5, 8-10'
+--- Merge numbers like '1,2,3,4,5, 8, 9,10' into '1-5, 8-10'
 local function merge_pagenumbers(dataxml,arg )
     local pagenumbers_string = string.gsub(arg[1] or "","%s","")
     local mergechar = arg[2] or "–"
@@ -218,7 +218,7 @@ local function file_exists(dataxml, arg )
     local filename = arg[1]
     if not filename then return false end
     if filename == "" then return false end
-    return find_file_location(filename) ~= nil
+    return kpse.find_file(filename) ~= nil
 end
 
 --- Insert 1000's separator and comma separator

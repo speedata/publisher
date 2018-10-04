@@ -660,7 +660,7 @@ end
 --- -------------------------------
 --- This is the entry point of the processing. It is called from publisher.spinit#main_loop.
 function dothings()
-    log("LuaTeX version %d.%d",tex.luatexversion,tex.luatexrevision)
+    log("Running LuaTeX version %d on %s",tex.luatexversion,os.name)
     --- First we set some defaults.
     --- A4 paper is 210x297 mm
     set_pageformat(tex.sp("210mm"),tex.sp("297mm"))
@@ -4225,107 +4225,6 @@ function new_image(filename,page,box,fallback)
     return imageinfo(filename,page,box,fallback)
 end
 
-local imgcache = os.getenv("IMGCACHE")
-local cachemethod = os.getenv("CACHEMETHOD")
-
--- Retrieve image from an URL if its not cached
-function get_image(requested_url,page,box,fallback)
-    assert(type(requested_url) == "string")
-    local parsed_url = url.parse(requested_url)
-    -- http://placekitten.com/g/200/300?foo=bar gives
-    -- x = {
-    --  ["path"] = "/g/200/300"
-    --  ["scheme"] = "http"
-    --  ["query"] = "foo=bar"
-    --  ["authority"] = "placekitten.com"
-    --  ["host"] = "placekitten.com"
-    -- },
-    if parsed_url.scheme == nil or parsed_url.scheme == "file" then
-        if type(parsed_url.path) == "string" then
-            -- let's assume its a file
-            return imageinfo("file:" .. parsed_url.path,page,box,fallback)
-        end
-    end
-    -- not a file: request. I guess it should be a HTTP request.
-
-    local mdfivesum = string.gsub(md5.sum(requested_url),".",function(chr) return string.format("%02x",string.byte(chr)) end)
-    local path_to_image = os.getenv("IMGCACHE") .. os_separator .. mdfivesum
-
-
-    if cachemethod == "fast" and lfs.isfile(path_to_image) then
-        log("Read image file from cache: %s",path_to_image)
-        return imageinfo(path_to_image,page,box,fallback)
-    end
-
-
-    -- This Lua interpreter is not linked with openssl, so for HTTPS requests I
-    -- use the Go interface, even when the Lua interface has been requested.
-    if parsed_url.scheme == "https" or cachemethod == "optimal" then
-        -- go / optimal
-        log("Checking if image %q is up to date",requested_url)
-        local msg = publisher.splib.cacheimage(requested_url)
-        if msg == "OK" then
-            return imageinfo(path_to_image,page,box,fallback)
-        else
-            err("Could not fetch image %q",requested_url)
-            w("msg: %q",msg)
-            return imageinfo(nil,nil,nil,fallback)
-        end
-    else
-        -- lua / fast
-        log("Download image %q, string used for caching (-> md5): %q",requested_url,mdfivesum)
-        txt, statuscode, c = http.request(requested_url)
-        if statuscode ~= 200 then
-            err("404 when retrieving image %q",requested_url)
-            return imageinfo(nil,nil,nil,fallback) -- nil is "filenotfound.pdf"
-        end
-        if #txt == 0 then
-            err("Empty image in href request")
-            return imageinfo(nil,nil,nil,fallback)
-        end
-        -- Create the temporary directory if necessary
-        if not lfs.isdir(imgcache) then
-            local imgcachepaths = string.explode(imgcache,os_separator)
-            local tmp = ""
-            for i=2, #imgcachepaths do
-                tmp = tmp .. os_separator .. imgcachepaths[i]
-                if not lfs.isdir(tmp) then
-                    local ok,e = lfs.mkdir(tmp)
-                    if not ok then
-                        err("Could not create temporary directory for images: %q",tmp)
-                    end
-                end
-            end
-        end
-
-        local file,e = io.open(path_to_image,"wb")
-        if file == nil then
-            err("Could not open image file for writing into temp directory: %q",e)
-            return imageinfo(nil,nil,nil,fallback)
-        end
-        local ok
-        ok, e = file:write(txt)
-        if not ok then
-            err("Could not write image file into temp directory %q",e)
-            return imageinfo(nil,nil,nil,fallback)
-        end
-        file:flush()
-        file:close()
-
-        return imageinfo(path_to_image,page,box,fallback)
-    end
-
-
-    -- c = {
-    --   ["last-modified"] = "Mon, 21 Oct 2013 12:45:54 GMT"
-    --   ["connection"] = "close"
-    --   ["accept-ranges"] = "bytes"
-    --   ["date"] = "Thu, 13 Feb 2014 16:29:11 GMT"
-    --   ["content-length"] = "52484"
-    --   ["content-type"] = "image/jpeg"
-    -- }
-    log("Retrieving file: %q",tostring(requested_url))
-end
 
 function get_fallback_image_name( filename, missingfilename )
     if filename then
@@ -4361,7 +4260,7 @@ function imageinfo( filename,page,box,fallback )
     end
 
     log("Searching for image %q",tostring(filename))
-    if not find_file_location(filename) then
+    if not kpse.find_file(filename) then
         if options.imagenotfounderror then
             err("Image %q not found!",filename or "???")
         else
@@ -4393,40 +4292,43 @@ function imageinfo( filename,page,box,fallback )
     --    <segment x1='2' y1='15' x2='27' y2='15' />
     --    <segment x1='1' y1='16' x2='28' y2='16' />
     --  </imageinfo>
-    local xmlfilename = string.gsub(filename,"(%..*)$","") .. ".xml"
-
     local mt
-    if kpse.find_file(xmlfilename) then
-        local xmltab,msg = load_xml(xmlfilename,"Imageinfo")
-        if not xmltab then
-            err(msg)
-        else
-            mt = {}
-            local segments = {}
-            local cells_x,cells_y
-            for _,v in ipairs(xmltab) do
-                if v[".__local_name"] == "cells_x" then
-                    cells_x = v[1]
-                elseif v[".__local_name"] == "cells_y" then
-                    cells_y = v[1]
-                elseif v[".__local_name"] == "segment" then
-                    -- 0 based segments
-                    segments[#segments + 1] = {v.x1,v.y1,v.x2,v.y2}
+    -- don't request XML shape file for http locations
+    if not string.match(filename, "^https?://") then
+        local xmlfilename = string.gsub(filename,"(%..*)$","") .. ".xml"
+
+        if kpse.find_file(xmlfilename) then
+            local xmltab,msg = load_xml(xmlfilename,"Imageinfo")
+            if not xmltab then
+                err(msg)
+            else
+                mt = {}
+                local segments = {}
+                local cells_x,cells_y
+                for _,v in ipairs(xmltab) do
+                    if v[".__local_name"] == "cells_x" then
+                        cells_x = v[1]
+                    elseif v[".__local_name"] == "cells_y" then
+                        cells_y = v[1]
+                    elseif v[".__local_name"] == "segment" then
+                        -- 0 based segments
+                        segments[#segments + 1] = {v.x1,v.y1,v.x2,v.y2}
+                    end
                 end
-            end
-            -- we have parsed the file, let's build a beautiful 2dim array
-            mt.max_x = cells_x
-            mt.max_y = cells_y
-            for i=1,cells_y do
-                mt[i] = {}
-                for j=1,cells_x do
-                    mt[i][j] = 0
+                -- we have parsed the file, let's build a beautiful 2dim array
+                mt.max_x = cells_x
+                mt.max_y = cells_y
+                for i=1,cells_y do
+                    mt[i] = {}
+                    for j=1,cells_x do
+                        mt[i][j] = 0
+                    end
                 end
-            end
-            for i,v in ipairs(segments) do
-                for x=v[1],v[3] do
-                    for y=v[2],v[4] do
-                        mt[y][x] = 1
+                for i,v in ipairs(segments) do
+                    for x=v[1],v[3] do
+                        for y=v[2],v[4] do
+                            mt[y][x] = 1
+                        end
                     end
                 end
             end

@@ -154,7 +154,7 @@ Im Dateisystem können sie entweder mit einem absoluten Pfad angesprochen werden
 
 [source, xml]
 -------------------------------------------------------------------------------
-<Image href="file:///path/to/the/image.pdf"  />
+<Image file="file:///path/to/the/image.pdf"  />
 -------------------------------------------------------------------------------
 
 oder als Datei in einem der Unterverzeichnisse des Suchpfads, wie in den Beispielen oben.
@@ -171,7 +171,7 @@ Die Syntax ist analog zum Beispiel mit dem absoluten Pfad:
 
   <Record element="data">
     <PlaceObject>
-      <Image href="http://placekitten.com/g/400/300" width="5"/>
+      <Image file="http://placekitten.com/g/400/300" width="5"/>
     </PlaceObject>
   </Record>
 </Layout>
@@ -185,7 +185,6 @@ Bei jedem Request wird überprüft, ob das Bild noch aktuell ist und ggf. nicht 
 Ist das Bild auf dem Server gelöscht, wird es auch im lokalen System gelöscht.
 
 Mit `sp --cache=fast` kann man auf die schnelle Caching-Methode zurückgreifen, die das Bild nur einmal vom Server herunter lädt und dann nicht wieder auf Aktualität prüft.
-Das funktioniert derzeit nur beim ungesicherten http Protokoll.
 
 Mit dem Befehl `sp clearcache` wird der Zwischenspeicher gelöscht.
 

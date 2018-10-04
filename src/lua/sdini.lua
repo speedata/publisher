@@ -37,15 +37,11 @@ end
 
 
 function kpse.find_file(filename)
-    local fn = splib.lookupfile(filename)
-    if fn == nil then return nil end
-    if os.name == "windows" then
-        if string.match(fn,"[\128-\255]") then
-            err("Files must only contain ascii characters on Windos")
-        end
-    end
+    return splib.lookupfile(filename)
+end
 
-    return fn
+function kpse.add_dir(dirname)
+    return splib.add_dir(dirname)
 end
 
 function do_luafile(filename)

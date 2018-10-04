@@ -41,11 +41,11 @@ typedef struct { void *t; void *v; } GoInterface;
 typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 
 extern void Init();
+extern void AddDir(GoString p0);
 extern char* Contains(GoString p0, GoString p1);
 extern char** Tokenize(GoString p0, GoString p1);
 extern char* Replace(GoString p0, GoString p1, GoString p2);
 extern char* HtmlToXml(GoString p0);
-extern char* CacheImage(GoString p0);
 extern void BuildFilelist();
 extern char* LookupFile(GoString p0);
 extern char** ListFonts();
@@ -95,14 +95,12 @@ local function htmltoxml(input)
     end
 end
 
-local function cacheimage(url)
-    local ret = ld.CacheImage(c(url))
-    return ffi.string(ret)
-end
-
 local function buildfilelist()
     ld.BuildFilelist()
-    return
+end
+
+local function add_dir(dirname)
+    ld.AddDir(c(dirname))
 end
 
 local function lookupfile(filename)
@@ -112,7 +110,6 @@ local function lookupfile(filename)
 
     return ffi.string(ret)
 end
-
 
 local function listfonts()
     local ret = ld.ListFonts()
@@ -125,15 +122,14 @@ local function listfonts()
     return tbl
 end
 
-
-
 return {
-    cacheimage = cacheimage,
-    contains = contains,
-    htmltoxml = htmltoxml,
-    replace = replace,
-    tokenize = tokenize,
+    add_dir       = add_dir,
+    contains      = contains,
+    htmltoxml     = htmltoxml,
+    replace       = replace,
+    tokenize      = tokenize,
     buildfilelist = buildfilelist,
-    lookupfile = lookupfile,
-    listfonts = listfonts,
+    lookupfile    = lookupfile,
+    listfonts     = listfonts,
 }
+

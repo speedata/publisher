@@ -26,7 +26,7 @@ erkannt. Folgende Optionen werden unterstützt:
 `autoopen`::
   wenn hier `true` anstelle von `false` steht, wird das PDF nach dem Publisher Durchlauf automatisch geöffnet. Derselbe Effekt lässt sich über die Kommandozeile mit `--autoopen` erreichen.
 `cache`::
-  Caching-Strategie für http(s) Bilddateien. Entweder `fast`, dann wird nur geschaut, ob die Bilddatei im Dateisystem vorhanden ist oder `optimal`, dann wird bei jedem Zugriff auf das Bild geprüft, ob das Bild aktualisiert werden muss. `https`-Requests werden derzeit mit der `optimal`-Strategie verwaltet.
+  Caching-Strategie für http(s) Dateien. Entweder `fast`, dann wird nur geschaut, ob die Datei im Dateisystem vorhanden ist oder `optimal`, dann wird bei jedem Zugriff auf die Datei geprüft, ob sie aktualisiert werden muss.
 `data`::
   Name der XML-Daten. Wenn nicht vorhanden, wird die Datei `daten.xml` geladen.
 `dummy`::
@@ -42,7 +42,7 @@ erkannt. Folgende Optionen werden unterstützt:
 `grid`::
   Bestimmt, ob das Raster angezeigt wird.
 `imagecache`::
-  Ordner für zwischengespeicherte Bilder (nur `href="http://..."`). Voreinstellung: `$TMPDIR/sp/images`.
+  Ordner für zwischengespeicherte Dateien (nur `file="http://..."`). Voreinstellung: `$TMPDIR/sp/images`.
 `ignore-case`::
   Ignoriere die Groß- und Kleinschreibung für Dateizugriff.
 `jobname`::

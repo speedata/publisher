@@ -38,6 +38,7 @@ ifdef::backend-docbook5[]
 == Referenz
 
 - <<ch-installation,Installationsanleitung>>
+- <<ch-dateinamen,Dateinamen im Publisher>>
 - <<app-voreinstellungenimpublisher,Voreinstellungen im speedata Publisher>>
 - <<ch-kommandozeile,Starten des Publishers über die Kommandozeile>>
 - <<ch-konfiguration,Konfiguration des Publishers>>
@@ -65,6 +66,7 @@ include::kochbuch.adoc[]
 
 :sectnums!:
 include::installation.adoc[]
+include::filenames.adoc[]
 include::voreinstellungen.adoc[]
 include::kommandozeile.adoc[]
 include::konfigurationsdatei.adoc[]

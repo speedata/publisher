@@ -1881,17 +1881,12 @@
          </optional>
          <optional>
             <attribute name="file">
-               <a:documentation>Filename of the image. Can be a file in the search path or a file-URI for absolute paths (e.g. file:///path/to/image.pdf).</a:documentation>
+               <a:documentation>Filename of the image. Can be a file in the search path, an absolute file name, a file-URI for absolute paths (e.g. file:///path/to/image.pdf) or a location on the web (http, https).</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="height">
                <a:documentation>Image height. One of &#39;auto&#39; (default, take image width), length (such as &#39;3cm&#39;) or number (in grid cells).</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="href">
-               <a:documentation>An URL (http:// or file:) of the image. If external, it will be downloaded and cached in TEMPDIR/sp/images (which can be configured by setting the configuration file key imagecache). Alternative to ›file‹. When file: is used as a protocol, it can be a relative path. If no protocol is given, file: is assumed.</a:documentation>
             </attribute>
          </optional>
          <optional>

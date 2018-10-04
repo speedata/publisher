@@ -332,7 +332,7 @@ include::ref/image.adoc[]
 
 == Siehe auch
 
-Den Abschnitt über <<ch-objekteausgeben-bilder,`<Image>` im Grundlagenkapitel>>.
+Den Abschnitt über <<ch-objekteausgeben-bilder,`<Image>` im Grundlagenkapitel>>, <<ch-dateinamen,Dateinamen im Publisher>>
 
 
 include::ref/include.adoc[]

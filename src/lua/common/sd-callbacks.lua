@@ -1,15 +1,16 @@
+--- This is the location for file related callbacks.
+-- TeX uses the kpathsea library, which I disable right away (`texconfig.kpse_init=false` in sdini.lua).
+-- We still use the namespace kpse.
 --
 --  sd-callbacks.lua
 --  speedata publisher
 --
---  Copyright 2010-2014 Patrick Gundlach.
+--  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
 
 
 -- necessary callbacks if we want to use LuaTeX without kpathsea
 
-local verbosity = os.getenv("SP_VERBOSITY")
-local url = require("socket_url")
 
 local trace_callbacks = false
 
@@ -39,63 +40,13 @@ if os.getenv("SP_PATH_REWRITE") ~= nil then
     end
 end
 
-
-function find_file_location( filename_or_uri )
-    if trace_callbacks then
-        w("find_file_location, filename_or_uri = %q",tostring(filename_or_uri))
-    end
-
-  if filename_or_uri == "" then return nil end
-  local lowercase = os.getenv("SP_IGNORECASE") == "1"
-  if lowercase then filename_or_uri = unicode.utf8.lower(filename_or_uri) end
-  local p = kpse.find_file(filename_or_uri)
-  if p then return p end
-
-  if lfs.isfile(filename_or_uri) then return filename_or_uri end
-  if filename_or_uri == "pdftex.map" then return nil end
-  -- not in the search path or its subdirectories
-  local url_table = url.parse(filename_or_uri)
-  -- If we didn't find a file:// or something similar,
-  -- we don't try to find the file.
-  if not ( url_table and url_table.scheme ) then
-    return nil
-  end
-
-  if url_table.scheme ~= "file" then
-    err("Locating file -- scheme %q not supported. Requested file: %q",url_table.scheme or "(unable to parse scheme)",filename_or_uri or "(none)")
-    return nil
-  end
-  local decoded_path = url.unescape(url_table.path)
-
-  local path = decoded_path
-  for k,v in pairs(rewrite_tbl) do
-      path = string.gsub(path,k,v)
-  end
-  -- remove first slash if on windows (/c:/foo/bar.png -> c:/foo/bar.png)
-  if path ~= decoded_path then
-    if verbosity and tonumber(verbosity) > 0 then
-      log("Path rewrite: %q -> %q", decoded_path,path)
-    end
-  end
-
-  local _,_, windows_path = string.find(path,"^/(.:.*)$")
-  if windows_path then
-    path = windows_path
-  end
-  x = lfs.attributes(path)
-  if not lfs.attributes(path) then
-    return nil
-  end
-  return path
-end
-
 local function find_xxx_file( asked_name )
     if trace_callbacks then
         w("find_xxx_file, asked_name = %q",tostring(asked_name))
     end
 
-  local file = find_file_location(asked_name)
-  return file
+    local file = kpse.find_file(asked_name)
+    return file
 end
 
 local function return_asked_name( asked_name )

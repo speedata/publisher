@@ -1881,17 +1881,12 @@
          </optional>
          <optional>
             <attribute name="file">
-               <a:documentation>Dateiname des Bildes. Kann entweder eine Datei im Suchpfad sein oder ein file-URI-Schema (z.B. file:///pfad/zum/bild.pdf).</a:documentation>
+               <a:documentation>Dateiname des Bildes. Kann entweder eine Datei im Suchpfad sein, ein absoluter Dateiname, ein file-URI-Schema (z.B. file:///pfad/zum/bild.pdf) oder eine Quelle im Web (http/https).</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="height">
                <a:documentation>Bildhöhe. Angabe in der Form &#39;auto&#39; (Voreinstellung, natürliche Bildbreite), Längenangabe wie &#39;4cm&#39; oder Zahl (Anzahl von Rasterspalten)</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="href">
-               <a:documentation>Eine URL (http:// oder file:) des Bildes. Wenn extern (http), wird es herunter geladen und in TEMPDIR/sp/images (kann mit der Einstellung imagecache in der Konfigurationsdatei geändert werden) zwischengespeichert. Alternativ zur Angabe »datei«. Wenn kein Protokoll angegeben ist, wird file: angenommen. file: kann benutzt werden, um einen Pfad anzugeben.</a:documentation>
             </attribute>
          </optional>
          <optional>

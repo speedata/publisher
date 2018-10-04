@@ -3200,10 +3200,10 @@
     </attribute>
     <attribute en="file" type="text" optional="yes">
       <description xml:lang="en">
-        <para>Filename of the image. Can be a file in the search path or a file-URI for absolute paths (e.g. <tt>file:///path/to/image.pdf</tt>).</para>
+        <para>Filename of the image. Can be a file in the search path, an absolute file name, a file-URI for absolute paths (e.g. <tt>file:///path/to/image.pdf</tt>) or a location on the web (http, https).</para>
       </description>
       <description xml:lang="de">
-        <para>Dateiname des Bildes. Kann entweder eine Datei im Suchpfad sein oder ein file-URI-Schema (z.B. <tt>file:///pfad/zum/bild.pdf</tt>).</para>
+        <para>Dateiname des Bildes. Kann entweder eine Datei im Suchpfad sein, ein absoluter Dateiname, ein file-URI-Schema (z.B. <tt>file:///pfad/zum/bild.pdf</tt>) oder eine Quelle im Web (http/https).</para>
       </description>
     </attribute>
     <attribute en="height" type="numberorlength" optional="yes">
@@ -3212,14 +3212,6 @@
       </description>
       <description xml:lang="de">
         <para>Bildhöhe. Angabe in der Form 'auto' (Voreinstellung, natürliche Bildbreite), Längenangabe wie '4cm' oder Zahl (Anzahl von Rasterspalten)</para>
-      </description>
-    </attribute>
-    <attribute en="href" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>An URL (<tt>http://</tt> or <tt>file:</tt>) of the image. If external, it will be downloaded and cached in <tt>TEMPDIR/sp/images</tt> (which can be configured by setting the configuration file key <tt>imagecache</tt>). Alternative to ›file‹. When <tt>file:</tt> is used as a protocol, it can be a relative path. If no protocol is given, <tt>file:</tt> is assumed.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Eine URL (<tt>http://</tt> oder <tt>file:</tt>) des Bildes. Wenn extern (http), wird es herunter geladen und in <tt>TEMPDIR/sp/images</tt> (kann mit der Einstellung <tt>imagecache</tt> in der Konfigurationsdatei geändert werden) zwischengespeichert. Alternativ zur Angabe »datei«. Wenn kein Protokoll angegeben ist, wird <tt>file:</tt> angenommen. <tt>file:</tt> kann benutzt werden, um einen Pfad anzugeben.</para>
       </description>
     </attribute>
     <attribute en="page" type="number" optional="yes">

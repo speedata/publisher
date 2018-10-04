@@ -1157,11 +1157,9 @@ function commands.image( layoutxml,dataxml )
     -- auto on any value ({max,min}?{width,height}) is default
 
     local imageinfo
-    if url ~= nil then
-        imageinfo = publisher.get_image(url, page,box_lookup[vis_box] or "crop", fallback)
-    else
-        imageinfo = publisher.new_image(filename,page,box_lookup[vis_box] or "crop", fallback)
-    end
+    filename = filename or url
+    imageinfo = publisher.new_image(filename,page,box_lookup[vis_box] or "crop", fallback)
+
 
     local image = img.copy(imageinfo.img)
     if rotate then
