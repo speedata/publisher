@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.5">
+    <entry version="3.5.4" date="2108-10-04">
+      <en>New file loader allows many ways to include files.</en>
+      <de>Neuer Dateiloader erlaubt vielfältige Arten der Dateieinbindung.</de>
+    </entry>
+    <entry version="3.5.4" date="2018-10-04">
+      <en>Allow inclusion of files with non-ascii characters on Windows.</en>
+      <de>Erlaube das Einbinden von Dateien mit nicht-Ascii-Dateinamen unter Windows.</de>
+    </entry>
     <entry version="3.5.3" date="2018-09-25">
       <en>Various bugfixes (HTML-linking in data, pdf-dest link too low #198)</en>
       <de>Verschiedene Fehlerkorrekturen (HTML-Links in Daten, PDF-dest zu tief #198)</de>
