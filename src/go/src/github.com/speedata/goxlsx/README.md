@@ -15,8 +15,9 @@ package main
 
 import (
     "fmt"
-    "github.com/speedata/goxlsx"
     "log"
+
+    "github.com/speedata/goxlsx"
 )
 
 func main() {
@@ -41,7 +42,7 @@ Other:
 -----
 
 Status: usable<br>
-Maturity level: 1/5 (expect changes!)<br>
+Maturity level: 3/5 (used in production, but expect changes)<br>
 Supported/maintained: yes<br>
 Contribution welcome: yes (pull requests, issues)<br>
 Main page: https://github.com/speedata/goxlsx<br>

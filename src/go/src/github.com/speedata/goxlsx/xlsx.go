@@ -10,7 +10,16 @@ import (
 	"io"
 	"strconv"
 	"strings"
+	"time"
 )
+
+var (
+	ExcelNulltime time.Time
+)
+
+func init() {
+	ExcelNulltime = time.Date(1899, time.December, 30, 0, 0, 0, 0, time.UTC)
+}
 
 // NumWorksheets returns the number of worksheets in a file.
 func (s *Spreadsheet) NumWorksheets() int {
@@ -171,7 +180,7 @@ func (ws *Worksheet) Cell(column, row int) string {
 	return strings.Replace(val, "_x000D_", "", -1)
 }
 
-// Cell returns the contents of cell at column, row, where 1,1 is the top left corner.
+// Cellf returns the contents of cell at column, row, where 1,1 is the top left corner.
 // The return value is always a float64 and an error code != nil if the cell contents can't be
 // decoded as a float.
 func (ws *Worksheet) Cellf(column, row int) (float64, error) {
@@ -186,6 +195,24 @@ func (ws *Worksheet) Cellf(column, row int) (float64, error) {
 	tmpstr = xrow.Cells[column].Value
 	flt, err := strconv.ParseFloat(tmpstr, 64)
 	return flt, err
+}
+
+// Return value as time. If the time cannot be parsed, it returns ExcelNullTime.
+func DateFromString(strfloat string) time.Time {
+	if strfloat == "" {
+		return ExcelNulltime
+	}
+	fl, err := strconv.ParseFloat(strfloat, 40)
+	if err != nil {
+		return ExcelNulltime
+	}
+	dur := time.Duration(fl * 60 * 60 * 24)
+	return ExcelNulltime.Add(dur * 1000 * 1000 * 1000)
+}
+
+// Return value as time. If the time cannot be parsed, it returns ExcelNullTime.
+func (ws *Worksheet) Cellt(column, row int) time.Time {
+	return DateFromString(ws.Cell(column, row))
 }
 
 func (s *Spreadsheet) readWorksheet(data []byte) (*Worksheet, error) {
@@ -223,10 +250,16 @@ func (s *Spreadsheet) readWorksheet(data []byte) (*Worksheet, error) {
 			case "dimension":
 				for _, a := range x.Attr {
 					if a.Name.Local == "ref" {
-						// example: ref="A1:AC101"
+						// example: ref="A1:AC101" or (see #1) "A1" without the second part
 						tmp := strings.Split(a.Value, ":")
-						ws.MinColumn, ws.MinRow = stringToPosition(tmp[0])
-						ws.MaxColumn, ws.MaxRow = stringToPosition(tmp[1])
+						if len(tmp) == 1 {
+							// no area, just a single cell
+							ws.MinColumn, ws.MinRow = stringToPosition(tmp[0])
+							ws.MaxColumn, ws.MaxRow = ws.MinColumn, ws.MinRow
+						} else {
+							ws.MinColumn, ws.MinRow = stringToPosition(tmp[0])
+							ws.MaxColumn, ws.MaxRow = stringToPosition(tmp[1])
+						}
 					}
 				}
 			case "row":
