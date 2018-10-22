@@ -23,7 +23,5 @@ sp --dummy --data https://raw.githubusercontent.com/speedata/examples/master/tec
 -------------------------------------------------------------------------------
 
 aufzurufen.
-Erst wird die Resource auf dem lokalen Rechner zwischengespeichert und dann von dort aus geladen.
-
-
+Erst wird die Ressource auf dem lokalen Rechner zwischengespeichert und dann von dort aus geladen.
 

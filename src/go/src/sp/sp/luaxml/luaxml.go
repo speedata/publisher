@@ -107,6 +107,10 @@ func encodeItem(tbl *lua.LTable, enc *xml.Encoder) error {
 // Encode the table given in the first argument to an XML file and
 // write this to the hard drive with the name `data.xml`
 func encodeTable(l *lua.LState) int {
+	filename := "data.xml"
+	if l.GetTop() > 1 {
+		filename = l.CheckString(2)
+	}
 	var b bytes.Buffer
 	enc := xml.NewEncoder(&b)
 	if tbl := l.CheckTable(1); tbl.Type() == lua.LTTable {

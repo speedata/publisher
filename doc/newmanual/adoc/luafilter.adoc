@@ -204,7 +204,7 @@ Die Struktur ist jedoch einfacher, da es nur ein »Arbeitsblatt« gibt.
 csv = require("csv")
 csvtab, msg = csv.decode("myfile.csv",{columns = {1,2,3}})
 if not csvtab then
-    print(ret)
+    print(msg)
     os.exit(-1)
 end
 -------------------------------------------------------------------------------
@@ -246,10 +246,12 @@ Mit dem XML-Modul werden XML-Dateien erzeugt.
 Zuerst muss die XML-Struktur in einer Lua-Tabelle erzeugt werden, anschließend wird sie mit `encode_table()` unter dem Namen `data.xml` gespeichert.
 
 
-`xml.encode_table(‹tabelle›)`::
+`xml.encode_table(‹tabelle›,[dateiname])`::
 
-Erzeugt eine XML-Datei (`data.xml`) der übergebenen Tabelle. Rückgabewert 1 ist ein bool (success), Wert 2 ist die Fehlermeldung, wenn der erste Wert `false`  ist. Die Tabelle hat folgende Struktur:
-
+Erzeugt eine XML-Datei (`data.xml` bzw. der optional gegebene Dateiname) der übergebenen Tabelle.
+Rückgabewert 1 ist ein bool (success), Wert 2 ist die Fehlermeldung, wenn der erste Wert `false` ist.
+Die Tabelle hat folgende Struktur:
++
 [source, lua]
 -------------------------------------------------------------------------------
 element = {
@@ -263,11 +265,9 @@ element = {
     ...
 }
 -------------------------------------------------------------------------------
-
-
++
 `child1`, `...` sind entweder Zeichenketten, Elemente oder Kommentare. Kommentare haben folgende Form:
-
-
++
 [source, lua]
 -------------------------------------------------------------------------------
 comment = {
@@ -284,17 +284,18 @@ CSV-Dateien
 `decode(‹dateiname›,‹parameter›)`::
 
 Liest eine CSV-Datei ein. Der Rückgabewert ist eine Tabelle bzw. im Fehlerfall `false` und eine Fehlermeldung.
-
++
 Die `parameter` werden in einer Tabelle kodiert:
-
-`charset`::
++
+`charset`:::
 Wenn die CSV-Datei Latin-1 kodiert ist, muss dieser Wert auf ISO-8859-1 stehen. Andere Kodierungen auf Anfrage.
-`separator`::
+`separator`:::
 Entweder ein Komma (Voreinstellung), ein Semikolon oder das entsprechend genutzte Trennzeichen.
 
-`columns`::
+`columns`:::
 
-Eine Tabelle, die die gewünschten Spalten in ihrer Reihenfolge enthalten. Z.B. {3,2,1} für die ersten drei Spalten in umgekehrter Reihenfolge.
+Eine Tabelle, die die gewünschten Spalten in ihrer Reihenfolge enthält.
+Z.B. `{3,2,1}` für die ersten drei Spalten in umgekehrter Reihenfolge.
 
 === `xlsx`
 
@@ -303,17 +304,29 @@ Liest eine Excel-Datei ein.
 `open(‹dateiname›)`::
 
 Öffnet die angegebene Datei. Der Rückgabewert ist ein `spreadsheet`-Objekt bzw. im Fehlerfall `false` und eine Fehlermeldung.
-
++
 Das `spreadsheet`-Objekt beinhaltet die einzelnen Arbeitsblätter. Die Anzahl der Arbeitsblätter kann mit dem `#`-Operator ermittelt werden. Auf die einzelnen Arbeitsblätter kann man mit dem Index-Operator `[]` zugreifen, wobei das erste Arbeitsblatt den Index 1 hat.
-
++
 Die einzelnen Arbeitsblätter können als Funktion mit zwei Parametern benutzt werden (siehe Beispiel oben).
 Die Parameter sind die x und y Koordinaten der auszulesenden Zelle, die erste Zelle oben links hat die Koordinate 1,1.
 Die Ausmaße des Inhalts kann über die Parameter `minrow`, `maxrow`, `mincol` und und `maxcol` ermittelt werden.
-Der Name ist im Parmeter `name` enthalten.
+Der Name ist im Parameter `name` enthalten.
 
 
+`string_to_date(‹string›)`::
 
-
-
-
+Wandelt eine Zahl (kodiert als Zeichenkette) in ein Datum um.
+Rückgabe ist eine Tabelle mit den Schlüsseln `day`, `month`, `year`, `hour`, `minute` und `second`. Beispiel: `xlsx.string_to_date("43458")` ergibt
++
+[source, lua]
+-------------------------------------------------------------------------------
+{
+  ["day"] = "24"
+  ["month"] = "12"
+  ["year"] = "2018"
+  ["hour"] = "0"
+  ["minute"] = "0"
+  ["second"] = "0"
+}
+-------------------------------------------------------------------------------
 

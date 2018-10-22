@@ -95,6 +95,21 @@ func callWorksheet(l *lua.LState) int {
 	return 1
 }
 
+// Return a table with keys day,month,year,hour,minute and second
+func stringToDate(l *lua.LState) int {
+	n := l.CheckString(1)
+	t := goxlsx.DateFromString(n)
+	date := l.NewTable()
+	date.RawSetString("day", lua.LNumber(t.Day()))
+	date.RawSetString("month", lua.LNumber(t.Month()))
+	date.RawSetString("year", lua.LNumber(t.Year()))
+	date.RawSetString("hour", lua.LNumber(t.Hour()))
+	date.RawSetString("minute", lua.LNumber(t.Minute()))
+	date.RawSetString("second", lua.LNumber(t.Second()))
+	l.Push(date)
+	return 1
+}
+
 func openfile(l *lua.LState) int {
 	if l.GetTop() < 1 {
 		return lerr(l, "The first argument of open must be the filename of the Excel file.")
@@ -120,7 +135,8 @@ func openfile(l *lua.LState) int {
 }
 
 var exports = map[string]lua.LGFunction{
-	"open": openfile,
+	"open":           openfile,
+	"string_to_date": stringToDate,
 }
 
 func Open(l *lua.LState) int {
