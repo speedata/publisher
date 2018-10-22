@@ -285,17 +285,18 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 		}
 		fmt.Fprintln(clw, "</dl>\n")
 	}
-
+	fmt.Println("generating doc")
+	cmd = exec.Command("hugo")
 	if sitedoc {
-		// cmd.Env = append(os.Environ(), "HUGO_UGLYURLS=false")
-		cmd = exec.Command("hugo", "--uglyURLs=false")
+		cmd.Env = append(os.Environ(), "HUGO_UGLYURLS=false")
 	} else {
-		fmt.Println("generating doc")
-		// cmd.Env = append(os.Environ(), "HUGO_UGLYURLS=true")
-		cmd = exec.Command("hugo", "--uglyURLs=true")
+		cmd.Env = append(os.Environ(), "HUGO_UGLYURLS=true")
 	}
 	cmd.Dir = newmanualhugopath
-	cmd.Env = append(os.Environ(), fmt.Sprintf("PUBLISHER_VERSION=%s", cfg.Publisherversion))
+	cmd.Env = append(cmd.Env, fmt.Sprintf("PUBLISHER_VERSION=%s", cfg.Publisherversion))
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
 	err = cmd.Run()
 	if err != nil {
 		return err
