@@ -5,10 +5,10 @@ How to configure the speedata publisher
 
 The speedata publisher can be configured in several ways:
 
-1.  The file `publisher.cfg` in `/etc/speedata/`, in the home directory
-    (with a leading dot) and in the current working directory
-2.  Parameters given on the command line
-3.  Options given in the layout file
+1.  The file `publisher.cfg` in `/etc/speedata/`, in the home directory (with a leading dot) and in the current working directory (Linux, Mac)
+2.  The file `%APPDATA%\speedata\publisher.cfg` on Windows.
+3.  Parameters given on the command line
+4.  Options given in the layout file
 
 The file `publisher.cfg`
 ------------------------

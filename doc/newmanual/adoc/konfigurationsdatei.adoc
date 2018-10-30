@@ -4,7 +4,8 @@
 
 Der Publisher ist auf verschiedene Weisen zu konfigurieren:
 
-.  Die Datei `publisher.cfg` in `/etc/speedata/`, im Homeverzeichnis (mit Punkt davor) bzw. im aktuellen Verzeichnis
+.  Die Datei `publisher.cfg` in `/etc/speedata/`, im Homeverzeichnis (mit Punkt davor) und im aktuellen Verzeichnis (Linux, Mac)
+.  Die Datei `%APPDATA%\\speedata\\publisher.cfg` und im aktuellen Verzeichnis (Windows)
 .  Die Parameter auf der Kommandozeile
 .  Die Angaben in der Layoutdatei
 

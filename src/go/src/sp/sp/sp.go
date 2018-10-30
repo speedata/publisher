@@ -704,7 +704,12 @@ func main() {
 		command = op.Extra[0]
 	}
 
-	cfg, err = configurator.ReadFiles(filepath.Join(homedir, ".publisher.cfg"), "/etc/speedata/publisher.cfg")
+	switch runtime.GOOS {
+	case "windows":
+		cfg, err = configurator.ReadFiles(filepath.Join(os.Getenv("APPDATA"), "speedata", "publisher.cfg"))
+	default:
+		cfg, err = configurator.ReadFiles(filepath.Join(homedir, ".publisher.cfg"), "/etc/speedata/publisher.cfg")
+	}
 	if err != nil {
 		log.Fatal(err)
 	}
