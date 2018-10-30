@@ -56,6 +56,10 @@ func ReadDefault(fname string) (*Config, error) {
 // * * *
 
 func (c *Config) read(buf *bufio.Reader) (err error) {
+	r, _, _ := buf.ReadRune()
+	if r != '\uFEFF' {
+		buf.UnreadRune() // Not a BOM -- put the rune back
+	}
 	var section, option string
 	var scanner = bufio.NewScanner(buf)
 	for scanner.Scan() {

@@ -1,8 +1,9 @@
 package configurator
 
 import (
-	"config"
 	"os"
+
+	"config"
 )
 
 type ConfigData struct {
