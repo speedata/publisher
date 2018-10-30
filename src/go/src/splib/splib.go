@@ -154,4 +154,13 @@ func ListFonts() **C.char {
 	return toCharArray(res)
 }
 
+//export ConvertSVGImage
+func ConvertSVGImage(path string) *C.char {
+	ret, err := splibaux.ConvertSVGImage(path)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return s2c(ret)
+}
+
 func main() {}

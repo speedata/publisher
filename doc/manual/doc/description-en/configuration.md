@@ -38,6 +38,7 @@ Value | Description
 `grid` | If `true`, the underlying grid is shown in the PDF file. For debugging purpose only.
 `imagecache` | Folder for cached images (`href="http://..."` only). Defaults to `$TMPDIR/sp/images`.
 `ignore-case` |  Ignore case when accessing files (on a case-insensitive file system).
+`inkscape` | The path to the program `inkscape` when you need on the fly SVG to PDF conversion.
 `jobname` | Name of the output file. Default is `publisher`.
 `layout` | Name of the layout rule set (XML). The default name is `layout.xml`.
 `luatex` | Path to the Lua(jit)TeX binary. Experimental! This is provided for your experiments, not for production use.

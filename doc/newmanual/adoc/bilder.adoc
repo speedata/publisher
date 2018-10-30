@@ -16,19 +16,16 @@ Bilder in das PDF einfügen ist sehr einfach, es reicht ein kurzer Befehl:
 </Record>
 -------------------------------------------------------------------------------
 
-Das Bild  `{samplea}` ist (wie `{sampleb}`) Bestandteil des Publishers
-und für Testzwecke gut nutzbar. Als Bildformate sind PDF, PNG und JPEG
-möglich. Andere Formate müssen vor der Verarbeitung in eines dieser Formate
-konvertiert werden. Das Format, das in der Praxis am wenigsten Probleme
+Das Bild  `{samplea}` ist (wie `{sampleb}`) Bestandteil des Publishers und für Testzwecke gut nutzbar.
+Als Bildformate sind PDF, PNG und JPEG möglich.
+Andere Formate müssen vor der Verarbeitung in eines dieser Formate konvertiert werden.
+Wenn das Programm inkscape installiert ist, wird das genutzt um Dateien im SVG-Format automatisch nach PDF zu konviertieren.
+Das Format, das in der Praxis am wenigsten Probleme
 bereitet ist PDF. Hier können auch Farbprofile eingebettet werden.
 
-Die Bilder
-werden bei der Verarbeitung im Publisher nicht verändert, das heißt, sie
-behalten unter anderem ihre ursprüngliche (Datei-)Größe bei. Bei sehr großen
-Bildern ist die Verarbeitungsgeschwindigkeit geringer und die Größe der
-resultierenden PDF-Datei nimmt natürlich zu. Daher kann es sich lohnen, für
-die Verarbeitung spezielle Versionen mit kleineren Dateigrößen bereit zu
-halten.
+Die Bilder werden bei der Verarbeitung im Publisher nicht verändert, das heißt, sie behalten unter anderem ihre ursprüngliche (Datei-)Größe bei.
+Bei sehr großen Bildern ist die Verarbeitungsgeschwindigkeit geringer und die Größe der resultierenden PDF-Datei nimmt natürlich zu.
+Daher kann es sich lohnen, für die Verarbeitung spezielle Versionen mit kleineren Dateigrößen bereit zu halten.
 
 [[ch-breite-hoehe-bilder]]
 == Breite und Höhe der Bilder

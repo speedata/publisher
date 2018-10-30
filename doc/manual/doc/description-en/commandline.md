@@ -17,6 +17,7 @@ Running the speedata publisher on the command line
         --filter=FILTER          Run XProc/Lua filter before publishing starts
         --grid                   Display background grid. Disable with --no-grid
         --ignore-case            Ignore case when accessing files (on a case-insensitive file system)
+        --inkscape=PATH          Set the path to the inkscape program
         --[no-]local             Add local directory to the search path. Default is true
         --layout=NAME            Name of the layout file. Defaults to 'layout.xml'
         --jobname=NAME           The name of the resulting PDF file (without
@@ -66,6 +67,7 @@ Parameter | Description
 `--filter=FILTER` | Run the given XProc or Lua file.
 `--grid` | Show the grid. Can be turned off with `--no-grid`. Can be configured in the layout XML file: [Layout](../commands-en/options.html).
 `--ignore-case`|  Ignore case when accessing files (on a case-insensitive file system).
+`--inkscape=PATH` | Set the path to the inkscape program, if you need SVG->PDF conversion.
 `--layout=NAME` | Name of the layout XML file. Default is `layout.xml`. Can be [configured](configuration.html).
 `--[no-]local` | The current directory is (not) added to the search path recursively.The default is `--local` which means that the current directory and all its subdirectories is added to the search path. This allows you to run the publisher in any directory and put your assets in a subdirectory.
 `--jobname=NAME` | The name of the output file. Default is `publisher`. The extension(`.pdf`) is added automatically.

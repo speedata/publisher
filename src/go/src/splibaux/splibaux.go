@@ -1,12 +1,15 @@
 package splibaux
 
 import (
+	"crypto/md5"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -161,4 +164,48 @@ func ListFonts() []string {
 	}
 	return res
 
+}
+
+func ConvertSVGImage(filename string) (string, error) {
+	svgfile, err := GetFullPath(filename)
+	if err != nil {
+		return "", err
+	}
+	rawimgcache := os.Getenv("IMGCACHE")
+	if rawimgcache == "" {
+		rawimgcache = filepath.Join(os.TempDir(), "imagecache")
+	}
+	err = os.MkdirAll(rawimgcache, 0755)
+	if err != nil {
+		return "", err
+	}
+
+	hashedFilename := fmt.Sprintf("%x", md5.Sum([]byte(svgfile)))
+	pdffile := filepath.Join(rawimgcache, hashedFilename+".pdf")
+
+	if _, err := os.Stat(pdffile); err == nil {
+		return pdffile, nil
+	}
+
+	binaryname := os.Getenv("SP_INKSCAPE")
+	if binaryname == "" {
+		fmt.Println("SP_INKSCAPE should be set. Why is it empty?")
+		binaryname = "inkscape"
+	}
+
+	fmt.Print("Running inkscape on ", svgfile, "...")
+	switch runtime.GOOS {
+	case "windows":
+		if !strings.HasSuffix(binaryname, ".exe") {
+			binaryname = binaryname + ".exe"
+		}
+	}
+	cmd := exec.Command(binaryname, "--export-pdf", pdffile, svgfile)
+	out, err := cmd.CombinedOutput()
+	fmt.Println("done. Output follows (if any):")
+	fmt.Println(string(out))
+	if err != nil {
+		return "", err
+	}
+	return pdffile, nil
 }

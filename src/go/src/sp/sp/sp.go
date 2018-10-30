@@ -111,6 +111,7 @@ func init() {
 		"runs":       "1",
 		"tempdir":    os.TempDir(),
 		"cache":      "optimal",
+		"inkscape":   "inkscape",
 	}
 
 	// Let's try to find out the installation dir
@@ -619,7 +620,7 @@ func runPublisher() (exitstatus int) {
 func showCredits() {
 	fmt.Println("This is the speedata Publisher, version", version)
 	fmt.Println(`
-Copyright 2017 speedata GmbH, Berlin. Licensed under
+Copyright 2018 speedata GmbH, Berlin. Licensed under
 the GNU Affero GPL License, see
   https://raw.githubusercontent.com/speedata/publisher/develop/COPYING
 for details.
@@ -636,7 +637,7 @@ Shopify Lua (github.com/Shopify/go-lua)
 Contact:
    gundlach@speedata.de
 or see the web page
-   https://github.com/speedata/publisher/wiki/contact`)
+   https://www.speedata.de/imprint/`)
 
 	os.Exit(0)
 }
@@ -655,6 +656,7 @@ func main() {
 	op.On("--extra-xml NAME", "Add this file to the layout file", extraXML)
 	op.On("--filter FILTER", "Run Lua filter before publishing starts", options)
 	op.On("--grid", "Display background grid. Disable with --no-grid", options)
+	op.On("--inkscape PATH", "Set the path to the inkscape program", options)
 	op.On("--ignore-case", "Ignore case when accessing files (on a case-insensitive file system)", options)
 	op.On("--no-local", "Add local directory to the search path. Default is true", &addLocalPath)
 	op.On("--layout NAME", "Name of the layout file. Defaults to 'layout.xml'", options)
@@ -772,6 +774,7 @@ func main() {
 	os.Setenv("SP_MAINLANGUAGE", mainlanguage)
 	os.Setenv("SP_FONT_PATH", getOption("fontpath"))
 	os.Setenv("SP_PATH_REWRITE", getOption("pathrewrite"))
+	os.Setenv("SP_INKSCAPE", getOption("inkscape"))
 
 	ic := getOption("imagecache")
 	if finfo, err := os.Stat(ic); err == nil {

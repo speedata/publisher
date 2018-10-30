@@ -46,6 +46,8 @@ erkannt. Folgende Optionen werden unterstützt:
   Ordner für zwischengespeicherte Dateien (nur `file="http://..."`). Voreinstellung: `$TMPDIR/sp/images`.
 `ignore-case`::
   Ignoriere die Groß- und Kleinschreibung für Dateizugriff.
+`inkscape`::
+  Pfad zum Inkscape-Programm.
 `jobname`::
   Name der Ausgabedatei ohne Dateiendung. Voreinstellung ist `publisher`.
 `layout`::

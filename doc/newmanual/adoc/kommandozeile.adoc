@@ -55,6 +55,8 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
    Zeichnet das Raster. Mit `--no-grid` wird es ausgeschaltet. Konfigurierbar auch im <<cmd-trace,Layout>> über den Befehl `<Trace>`.
 `--ignore-case`::
     Ignoriere die Groß- und Kleinschreibung für Dateizugriff.
+`--inkscape=PATH`::
+   Set the path to the inkscape program.
 `--layout=NAME`::
    Gibt den Namen des Layoutregelwerks an. Voreinstellung ist `layout.xml`.
 `--local`::

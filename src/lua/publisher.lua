@@ -4336,6 +4336,11 @@ function imageinfo( filename,page,box,fallback )
     end
 
     if not images[new_name] then
+        if string.match(filename, ".svg$") then
+            filename = splib.convert_svg_image(filename)
+            if filename == nil or filename == "" then filename = "filenotfound.pdf" else log("Using converted file %q instead",filename) end
+
+        end
         local image_info = img.scan{filename = filename, pagebox = box, page=page }
         images[new_name] = { img = image_info, allocate = mt }
     end

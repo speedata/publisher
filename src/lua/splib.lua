@@ -49,6 +49,7 @@ extern char* HtmlToXml(GoString p0);
 extern void BuildFilelist();
 extern char* LookupFile(GoString p0);
 extern char** ListFonts();
+extern char* ConvertSVGImage(GoString p0);
 
 ]]
 
@@ -122,6 +123,15 @@ local function listfonts()
     return tbl
 end
 
+local function convertSVGImage(filename)
+    local ret = ld.ConvertSVGImage(c(filename))
+    local _ret = ffi.string(ret)
+    if _ret == "" then return nil end
+
+    return ffi.string(ret)
+end
+
+
 return {
     add_dir       = add_dir,
     contains      = contains,
@@ -131,5 +141,6 @@ return {
     buildfilelist = buildfilelist,
     lookupfile    = lookupfile,
     listfonts     = listfonts,
+    convert_svg_image = convertSVGImage,
 }
 
