@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.5">
+    <entry version="3.5.5" date="2018-10-30">
+      <en>SVG on the fly conversion with Inkscape.</en>
+      <de>Konvertiere SVG automatisch mit Inkscape.</de>
+    </entry>
+    <entry version="3.5.5" date="2018-10-30">
+      <en>Optional filename in Lua-filter XML-writer.</en>
+      <de>Optionaler Dateiname im XML-Writer des Luafilters.</de>
+    </entry>
     <entry version="3.5.4" date="2108-10-04">
       <en>New file loader allows many ways to include files.</en>
       <de>Neuer Dateiloader erlaubt vielfältige Arten der Dateieinbindung.</de>
