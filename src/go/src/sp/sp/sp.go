@@ -852,7 +852,9 @@ func main() {
 					fmt.Printf("Lua file %q not found\n", filter)
 					exitstatus = 1
 				} else {
-					runLuaScript(filter)
+					if !runLuaScript(filter) {
+						exitstatus = 1
+					}
 				}
 			case ".xpl":
 				if !fileExists(filter) {
@@ -863,7 +865,9 @@ func main() {
 				}
 			default:
 				if fileExists(filter + ".lua") {
-					runLuaScript(filter + ".lua")
+					if !runLuaScript(filter + ".lua") {
+						exitstatus = 1
+					}
 				} else if fileExists(filter + ".xpl") {
 					runXProcPipeline(filter + ".xpl")
 				} else {

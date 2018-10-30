@@ -123,7 +123,7 @@ func encodeTable(l *lua.LState) int {
 	l.SetTop(0)
 	l.Push(lua.LTrue)
 	enc.Flush()
-	ioutil.WriteFile("data.xml", b.Bytes(), 0644)
+	ioutil.WriteFile(filename, b.Bytes(), 0644)
 	return 1
 }
 

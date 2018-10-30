@@ -1479,9 +1479,11 @@ function commands.load_dataset( layoutxml,dataxml )
     local filename = publisher.read_attribute(layoutxml,dataxml,"filename", "rawstring")
     local name = publisher.read_attribute(layoutxml,dataxml,"name", "rawstring")
     if filename then
+        log("Loading data file %q",filename)
         path = kpse.find_file(filename)
     elseif name then
         name = tex.jobname .. "-" .. name .. ".dataxml"
+        log("Loading data file %q",name)
         path = kpse.find_file(name)
     else
         err("LoadDataset: no (file)name given.")
