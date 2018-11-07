@@ -4621,6 +4621,7 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_Barcode"></ref>
+                     <ref name="e_Bookmark"></ref>
                      <ref name="e_Box"></ref>
                      <ref name="e_Copy-of"></ref>
                      <ref name="e_Frame"></ref>

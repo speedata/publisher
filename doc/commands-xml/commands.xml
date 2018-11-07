@@ -7411,6 +7411,7 @@
       <zeroOrMore>
         <choice>
           <cmd name="Barcode"/>
+          <cmd name="Bookmark"/>
           <cmd name="Box"/>
           <cmd name="Copy-of"/>
           <cmd name="Frame"/>
