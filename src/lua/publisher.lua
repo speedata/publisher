@@ -2541,6 +2541,7 @@ function addstrut(nodelist,where)
     local fi = fonts.lookup_fontfamily_number_instance[fontfamily]
     strutheight = math.max(fi.baselineskip, strutheight)
     local strut
+    -- for debugging purposes set width to 20000:
     strut = add_rule(nodelist,"head",{height = 0.75 * strutheight, depth = 0.25 * strutheight, width = 0 })
     if where then
         node.set_attribute(strut,att_origin,where)
@@ -2791,7 +2792,8 @@ function mknodes(str,fontfamily,parameter)
             end
 
             head,last = node.insert_after(head,last,n)
-            if s > 12033 then
+            -- CJK
+            if s >= 12032 then
                 local pen = node.new("penalty")
                 pen.penalty = 0
                 head,last = node.insert_after(head,last,pen)
@@ -3322,20 +3324,23 @@ end
 
 function set_fontfamily_if_necessary(nodelist,fontfamily)
     -- if fontfamily == 0 then return end
+
     local fam
     while nodelist do
         if nodelist.id==vlist_node or nodelist.id==hlist_node  then
-            set_fontfamily_if_necessary(nodelist.list,fontfamily)
+            fam = set_fontfamily_if_necessary(nodelist.list,fontfamily)
         elseif nodelist.id == glue_node and nodelist.subtype == 100  then
-              set_fontfamily_if_necessary(nodelist.leader,fontfamily)
+            fam = set_fontfamily_if_necessary(nodelist.leader,fontfamily)
         else
             fam = node.has_attribute(nodelist,att_fontfamily)
             if fam == 0 or ( fam == nil and nodelist.id == rule_node ) then
                 node.set_attribute(nodelist,att_fontfamily,fontfamily)
+                fam = fontfamily
             end
         end
         nodelist=nodelist.next
     end
+    return fam
 end
 
 function set_sub_supscript( nodelist,script )
@@ -3500,34 +3505,38 @@ end
 --- Rotate a table cell clockwise with a given angle (in degrees).
 -- This is a simple and very basic implementation which needs to be extended in the future.
 function rotateTd( nodelist,angle, width_sp)
+    -- positive would be counter clockwise, but CSS is clockwise. So we multiply by -1
     local angle_rad = -1 * math.rad(angle)
 
-    local wd,ht = nodelist.width, nodelist.height + nodelist.depth
+    -- When text is roated, it needs to get shifted to the right and to the bottom
+    local shift_x, shift_y = 0,0
+    local _wd,_ht,_dp = nodelist.width, nodelist.height,nodelist.depth
+    local ht = _ht + _dp
+
+    shift_y = -1 * sp_to_bp(ht - ht * math.cos(angle_rad)  )
     nodelist.width = 0
     nodelist.height = 0
     nodelist.depth = 0
-    local halfwd_bp = sp_to_bp((width_sp - ht ) / 2  )
-    local ht_bp = sp_to_bp( ht * math.max(0,math.cos(angle_rad)  ))
 
-    -- positive would be counter clockwise, but CSS is clockwise. So we multiply by -1
     local sin = math.round(math.sin(angle_rad),3)
     local cos = math.round(math.cos(angle_rad),3)
+
     local q = node.new("whatsit","pdf_literal")
     q.mode = 0
+    q.data = string.format("q %g %g %g %g %g %g cm ",cos,sin, -1 * sin,cos,shift_x,shift_y)
 
-    q.data = string.format("q %g %g %g %g %g %g cm ",cos,sin, -1 * sin,cos,halfwd_bp,ht_bp)
-    q.next = nodelist
-    local tail = node.tail(nodelist)
     local Q = node.new("whatsit","pdf_literal")
     Q.data = "Q"
-    tail.next = Q
-    local tmp = node.vpack(q)
-    tmp.width  = 0
-    tmp.height = 0
-    tmp.depth = 0
-    return tmp
-end
 
+    _,q = node.insert_before(nodelist,nodelist,q)
+    _,Q = node.insert_after(q,nodelist,Q)
+    q = node.vpack(q)
+
+    q.width  = _wd
+    q.height = _ht
+    q.depth  = _dp
+    return q
+end
 
 --- Rotate a text on a given angle (`angle` on textblock).
 function rotate_textblock( nodelist,angle )

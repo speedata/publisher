@@ -215,7 +215,7 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
         local td_borderright = tex.sp(td_contents["border-right"] or 0)
         local padding_left   = td_contents.padding_left  or self.padding_left_col[current_column]  or self.padding_left
         local padding_right  = td_contents.padding_right or self.padding_right_col[current_column] or self.padding_right
-
+        local cellheight = 0
         for _,blockobject in ipairs(td_contents.objects) do
             for i=1,#blockobject do
                 local inlineobject = blockobject[i]
@@ -223,7 +223,10 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
                     trace("table: check for nodelist (%s)",tostring(inlineobject.nodelist ~= nil))
 
                     if inlineobject.nodelist then
-                        publisher.set_fontfamily_if_necessary(inlineobject.nodelist,self.fontfamily)
+                        local fam = publisher.set_fontfamily_if_necessary(inlineobject.nodelist,self.fontfamily)
+                        if td_contents.rotate then
+                            cellheight = publisher.fonts.lookup_fontfamily_number_instance[fam].size
+                        end
                         publisher.fonts.pre_linebreak(inlineobject.nodelist)
                     end
 
@@ -260,6 +263,10 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
         -- colspan?
         min_wd = min_wd or 0
         max_wd = max_wd or 0
+        if td_contents.rotate then
+            local angle_rad = -1 * math.rad(td_contents.rotate)
+            max_wd = max_wd * math.cos(angle_rad) + cellheight * math.sin(angle_rad)
+        end
         if colspan > 1 then
             colspans[#colspans + 1] = { start = current_column, stop = current_column + colspan - 1, max_wd = max_wd, min_wd = min_wd }
             current_column = current_column + colspan - 1
@@ -568,8 +575,8 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
                     if width then
                         -- ok, a paragraph with a certain width, that we can typeset
                         if rotate then
-                            default_textformat_name = "__leftaligned"
-                            horizontal_alignment = "left"
+                            -- default_textformat_name = "__leftaligned"
+                            -- horizontal_alignment = "left"
                         else
                             if     horizontal_alignment=="center"  then  default_textformat_name = "__centered"
                             elseif horizontal_alignment=="left"    then  default_textformat_name = "__leftaligned"
@@ -587,6 +594,10 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
                             end
                         end
                         publisher.set_fontfamily_if_necessary(inlineobject.nodelist,self.fontfamily)
+                        if rotate then
+                            local max_width = inlineobject:max_width()
+                            width = max_width
+                        end
                         local v = inlineobject:format(width,default_textformat_name)
                         cell = node.insert_after(cell,node.tail(cell),v)
                     else
@@ -770,8 +781,15 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
         local alignment = td_contents.align or tr_contents.align or self.align[current_column]
         local cell = self:pack_cell(td_contents.objects,wd - padding_left - padding_right - td_borderleft - td_borderright,alignment)
         td_contents.cell = cell
-
-        tmp = cell.height + cell.depth +  padding_top + padding_bottom + td_borderbottom + td_bordertop
+        local tmp = cell.height + cell.depth
+        if td_contents.rotate then
+            local _w, _h, _d = node.dimensions(cell)
+            -- positive would be counter clockwise, but CSS is clockwise. So we multiply by -1
+            local angle_rad = -1 * math.rad(td_contents.rotate)
+            -- not 100% accurate.
+            tmp = math.sin(angle_rad) * _w + _h * math.cos(angle_rad)
+        end
+        tmp = tmp + padding_top + padding_bottom + td_borderbottom + td_bordertop
         if rowspan > 1 then
             rowspans[#rowspans + 1] =  { start = current_row, stop = current_row + rowspan - 1, ht = tmp }
             td_contents.rowspan_internal = rowspans[#rowspans]
@@ -942,6 +960,10 @@ function typeset_row(self, tr_contents, current_row )
         node.set_attribute(g,publisher.att_origin,publisher.origin_align_top)
 
         local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
+        if td_contents.rotate then
+            -- Rotated objects should be bottom aligned until we do better calculation (1/2)
+            valign = "bottom"
+        end
         if valign ~= "top" then
             set_glue_values(g,{stretch = 2^16, stretch_order = 2})
         end
@@ -970,6 +992,10 @@ function typeset_row(self, tr_contents, current_row )
         local g = set_glue(nil,{width = padding_bottom})
 
         local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
+        if td_contents.rotate then
+            -- Rotated objects should be bottom aligned until we do better calculation (2/2)
+            valign = "bottom"
+        end
         if valign ~= "bottom" then
             set_glue_values(g,{stretch = 2^16, stretch_order = 2})
         end
