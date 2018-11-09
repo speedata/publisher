@@ -65,6 +65,7 @@ var (
 	mainlanguage        string
 	extraDir            []string
 	extraxml            []string
+	prependxml          []string
 	starttime           time.Time
 	cfg                 *configurator.ConfigData
 	runningProcess      []*os.Process
@@ -395,6 +396,11 @@ func extraXML(arg string) {
 	extraxml = append(extraxml, arg)
 }
 
+// Add the commandline argument to the list of additional XML files for the layout
+func prependXML(arg string) {
+	prependxml = append(prependxml, arg)
+}
+
 /// We don't know where the executable is. On systems where we have
 /// LuaTeX, we don't want to interfere with the binary so we
 /// install a binary called sdluatex (linux package). Therefore
@@ -654,6 +660,7 @@ func main() {
 	op.On("--dummy", "Don't read a data file, use '<data />' as input", options)
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
 	op.On("--extra-xml NAME", "Add this file to the layout file", extraXML)
+	op.On("--prepend-xml NAME", "Add this file in front of the layout file", prependXML)
 	op.On("--filter FILTER", "Run Lua filter before publishing starts", options)
 	op.On("--grid", "Display background grid. Disable with --no-grid", options)
 	op.On("--inkscape PATH", "Set the path to the inkscape program", options)
@@ -803,13 +810,21 @@ func main() {
 		}
 	}
 
+	if prependxmloption := getOption("prependxml"); prependxmloption != "" {
+		for _, xmlfile := range strings.Split(prependxmloption, ",") {
+			prependxml = append(prependxml, xmlfile)
+		}
+	}
+
 	os.Setenv("SD_EXTRA_XML", strings.Join(extraxml, ","))
+	os.Setenv("SD_PREPEND_XML", strings.Join(prependxml, ","))
 	verbose := false
 	if getOption("verbose") != "" {
 		verbose = true
 		os.Setenv("SP_VERBOSITY", "1")
 		fmt.Println("SD_EXTRA_DIRS:", os.Getenv("SD_EXTRA_DIRS"))
 		fmt.Println("SD_EXTRA_XML:", os.Getenv("SD_EXTRA_XML"))
+		fmt.Println("SD_PREPEND_XML:", os.Getenv("SD_PREPEND_XML"))
 	}
 
 	if getOption("ignore-case") == strTrue {
