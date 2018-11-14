@@ -5,13 +5,20 @@
 --  for a list of authors see `git blame'
 --  see file copying in the root directory for license info.
 
+local colorprofiles = {
+   ["FOGRA39"] =  { identifier = "FOGRA39", objectid = 0, registry = "http://www.color.org", info = "Coated FOGRA39 (ISO 12647-2:2004)", condition = "Offset printing, according to ISO 12647-2:2004/Amd 1, OFCOM, paper type 1 or 2 = coated art, 115 g/m2, tone value increase curves A (CMY) and B (K)", filename = "ISOcoated_v2_eci.icc", colors = 4 }
+}
+
+local currentcolorprofile = colorprofiles["FOGRA39"]
+
+
 
 local colorprofile_objectid = 0
-local colorprofile_filename = "ISOcoated_v2_eci.icc"
+local colorprofile_filename = nil
 
 -- index: color number
 -- value: { colorname, pdfobject for the color definition }
--- The object number is 0 until the color is acutally used (by color.pdfstring)
+-- The object number is 0 until the color is actually used (by color.pdfstring)
 local colorobjects = {}
 
 local set_colorprofile_filename, write_colorprofile, use_color, getresource, register
@@ -1194,23 +1201,56 @@ local spotcolors =  {
 }
 
 
--- The color profile defaults to 'ISO coated v2'
+-- The color profile defaults to 'ISO coated v2'. This is obsolete and only for backwards compatibility
 function set_colorprofile_filename(fn)
-    colorprofile_filename = fn
+    for k,v in pairs(colorprofiles) do
+        if v.filename == fn then
+            currentcolorprofile = v.identifier
+            return
+        end
+    end
+    currentcolorprofile = {identifier = fn, filename = fn, colors = 4, objectid = 0}
+    colorprofiles[fn] = currentcolorprofile
+end
+
+-- set the default color profile
+function set_colorprofile(name)
+    local tmp = colorprofiles[name]
+    if not tmp then
+        err("Color profile with ID %q not found. Using default %q",tostring(name),"FOGRA39")
+        currentcolorprofile = colorprofiles["FOGRA39"]
+    else
+        currentcolorprofile = tmp
+    end
+end
+
+-- get the current color profile
+function get_colorprofile( )
+    return currentcolorprofile
+end
+
+-- register a color profile
+function register_colorprofile( name, options )
+    colorprofiles[name] = { identifier = name }
+    local cp = colorprofiles[name]
+    for k,v in pairs(options) do
+        cp[k] = v
+    end
 end
 
 -- Make sure that the color profile is written to the PDF.
 function write_colorprofile()
-    if colorprofile_objectid == 0 then
+    if currentcolorprofile.objectid == nil or currentcolorprofile.objectid == 0 then
+        local colorprofile_filename = currentcolorprofile.filename
         log("Loading colorprofile %s",colorprofile_filename)
         local path = kpse.find_file(colorprofile_filename)
         if not path then
             err("colorprofile not found %s",tostring(colorprofile_filename))
         else
-            colorprofile_objectid = pdf.immediateobj("streamfile",path, "/N 4")
+            currentcolorprofile.objectid = pdf.immediateobj("streamfile",path,  string.format("/N %d",currentcolorprofile.colors or 4))
         end
     end
-    return colorprofile_objectid
+    return currentcolorprofile.objectid
 end
 
 -- DefineColor registers the colors
@@ -1266,5 +1306,9 @@ return {
     getresource               = getresource,
     register                  = register,
     set_colorprofile_filename = set_colorprofile_filename,
+    write_colorprofile        = write_colorprofile,
+    set_colorprofile          = set_colorprofile,
+    register_colorprofile     = register_colorprofile,
+    get_colorprofile          = get_colorprofile,
 }
 

@@ -570,6 +570,22 @@ function commands.define_color( layoutxml,dataxml )
     publisher.colors[name]=color
 end
 
+
+--- DefineColorprofile
+--- -----------
+--- Associate a name with a color profile.
+function commands.define_colorprofile( layoutxml,dataxml )
+    local condition  = publisher.read_attribute(layoutxml,dataxml,"condition", "string",info)
+    local colors     = publisher.read_attribute(layoutxml,dataxml,"colors",    "number" , 4)
+    local filename   = publisher.read_attribute(layoutxml,dataxml,"filename",  "rawstring")
+    local identifier = publisher.read_attribute(layoutxml,dataxml,"identifier","string",name)
+    local info       = publisher.read_attribute(layoutxml,dataxml,"info",      "rawstring")
+    local name       = publisher.read_attribute(layoutxml,dataxml,"name",      "rawstring")
+    local registry   = publisher.read_attribute(layoutxml,dataxml,"registry",  "string","http://www.color.org")
+    spotcolors.register_colorprofile(name,{filename = filename, identifier = identifier, condition = condition, registry = registry, colors = colors, info = info })
+end
+
+
 --- Define Textformat
 --- ----------------
 --- A text format defines the alignment and indentation of a paragraph.
@@ -2218,6 +2234,7 @@ end
 --- ------------
 --- Sets number of copies and such. See #57
 function commands.pdfoptions( layoutxml, dataxml )
+    local format       = publisher.read_attribute(layoutxml,dataxml,"format",    "rawstring")
     local nc           = publisher.read_attribute(layoutxml,dataxml,"numcopies", "number")
     local printscaling = publisher.read_attribute(layoutxml,dataxml,"printscaling", "string")
     local picktray     = publisher.read_attribute(layoutxml,dataxml,"picktraybypdfsize", "boolean")
@@ -2226,6 +2243,7 @@ function commands.pdfoptions( layoutxml, dataxml )
     local author       = publisher.read_attribute(layoutxml,dataxml,"author",   "string")
     local subject      = publisher.read_attribute(layoutxml,dataxml,"subject",  "string")
     local keywords     = publisher.read_attribute(layoutxml,dataxml,"keywords", "string")
+    local colorprofile = publisher.read_attribute(layoutxml,dataxml,"colorprofile", "rawstring")
 
     publisher.options.documenttitle    = title
     publisher.options.documentauthor   = author
@@ -2251,6 +2269,20 @@ function commands.pdfoptions( layoutxml, dataxml )
         publisher.viewerpreferences.duplex = "DuplexFlipLongEdge"
     else
         publisher.viewerpreferences.duplex = ""
+    end
+    if colorprofile then
+        spotcolors.set_colorprofile(colorprofile)
+    end
+
+    if format then
+        publisher.options.format = format
+        if format == "PDF/X-3" or format == "PDF/X-4" then
+            pdf.setobjcompresslevel(0)
+            if not title then publisher.options.documenttitle = "document" end
+        end
+        if format == "PDF/X-3" then
+            publisher.options.format = "PDF/X-3:2002"
+        end
     end
 end
 

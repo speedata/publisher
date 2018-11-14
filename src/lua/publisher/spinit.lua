@@ -262,8 +262,8 @@ end
 
 local function setup()
     if status.luatex_version >= 100 then
-        tex.pdfhorigin = tex.sp("0mm")
-        tex.pdfvorigin = tex.pdfhorigin
+        tex.pdfhorigin = 0
+        tex.pdfvorigin = 0
         pdf.setminorversion(6)
         pdf.setsuppressoptionalinfo(143)
         pdf.setcompresslevel(9)
@@ -271,6 +271,9 @@ local function setup()
     else
         tex.hoffset       = tex.sp("-1in")
         tex.voffset       = tex.hoffset
+        tex.pdfcompresslevel    = 5
+        tex.pdfobjcompresslevel = 2
+        tex.pdfminorversion = 6
     end
     tex.pdfadjustspacing = 2
     tex.adjustspacing = 2
@@ -278,11 +281,8 @@ local function setup()
   tex.pdfpagewidth  = tex.sp("21cm")
   tex.pdfprotrudechars = 2 -- margin protrusion
   tex.protrudechars = 2 -- margin protrusion
-  tex.pdfcompresslevel = 5
-  tex.pdfobjcompresslevel = 2
   tex.pdfoutput=1
   tex.outputmode = 1
-  tex.pdfminorversion = 6
   tex.lefthyphenmin  = 2
   tex.righthyphenmin = 3
   tex.hfuzz    = publisher.maxdimen

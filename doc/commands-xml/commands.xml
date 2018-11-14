@@ -134,6 +134,7 @@
     <optional><cmd name="AddSearchpath"/></optional>
     <optional><cmd name="Compatibility"/></optional>
     <optional><cmd name="DefineColor"/></optional>
+    <optional><cmd name="DefineColorprofile"/></optional>
     <optional><cmd name="DefineFontalias"/></optional>
     <optional><cmd name="DefineFontfamily"/></optional>
     <optional><cmd name="DefineTextformat"/></optional>
@@ -1712,6 +1713,100 @@
         verschiedenen Regeln stehen.</para>
     </example>
     <seealso><cmd name="Value"/>, <ref name="xpath"/>, <cmd name="SetVariable"/></seealso>
+  </command>
+  <command en="DefineColorprofile" since="3.5.7">
+    <description xml:lang="en">
+      <para>Associate an external color profile with a name. To be used in PDFOptions.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Weist einem externen Farbprofil einem Namen zu. Für PDFOptions.</para>
+    </description>
+    <childelements/>
+    <attribute en="condition" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>Description of the output condition.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Beschreibung der Ausgabebedingung.</para>
+      </description>
+    </attribute>
+    <attribute en="colors" optional="no" type="number">
+      <description xml:lang="en">
+        <para>Number of the colors in this color profile</para>
+      </description>
+      <description xml:lang="de">
+        <para>Anzahl der Farben in dem Farbprofil</para>
+      </description>
+    </attribute>
+    <attribute en="filename" optional="no" type="text">
+      <description xml:lang="en">
+        <para>Filename of the color profile.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Dateiname des Farbprofils.</para>
+      </description>
+    </attribute>
+    <attribute en="identifier" optional="no" type="text">
+      <description xml:lang="en">
+        <para>The official identifier for the registry.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der offizielle Name in der Registrierung.</para>
+      </description>
+    </attribute>
+    <attribute en="info" optional="no" type="text">
+      <description xml:lang="en">
+        <para>Short text about the color profile.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Zusammenfassung des Profils.</para>
+      </description>
+    </attribute>
+    <attribute en="name" optional="no" type="text">
+      <description xml:lang="en">
+        <para>The internal name of the color profile. To be used in <cmd name="PDFOptions"/>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der interne Name des Farbprofils. Für <cmd name="PDFOptions"/>.</para>
+      </description>
+    </attribute>
+    <attribute en="registry" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>The name of the registry. Defaults to <tt>http://www.color.org/</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name der Registrierung. Voreinstellung ist <tt>http://www.color.org/</tt>.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<DefineColorprofile
+  name="fogra51"
+  identifier="FOGRA51"
+  condition="Offset printing, according to ISO 12647-2:2013, 115 g/m2, tone value increase curves A (CMYK)"
+  filename="PSOcoated_v3.icc"
+  info="Coated FOGRA 51 (ISO 12647-2:2013)"
+  registry="http://www.color.org"
+  colors="4"
+/>
+
+<PDFOptions format="PDF/X-3" colorprofile="fogra51"/>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<DefineColorprofile
+  name="fogra51"
+  identifier="FOGRA51"
+  condition="Offset printing, according to ISO 12647-2:2013, 115 g/m2, tone value increase curves A (CMYK)"
+  filename="PSOcoated_v3.icc"
+  info="Coated FOGRA 51 (ISO 12647-2:2013)"
+  registry="http://www.color.org"
+  colors="4"
+/>
+
+<PDFOptions format="PDF/X-3" colorprofile="fogra51"/>
+]]></listing>
+    </example>
+    <seealso><cmd name="PDFOptions"/></seealso>
   </command>
   <command en="DefineColor">
     <description xml:lang="en">
@@ -4520,14 +4615,6 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="colorprofile" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>The filename of the color profile. The default profile is »ISO Coated v2 (ECI)«. Only used when spot colors are used.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Der Dateiname des Farbprofils. Das voreingestellte Profil ist »ISO Coated v2 (ECI)«. Farbprofile werden nur geladen, wenn Sonderfarben benutzt werden.</para>
-      </description>
-    </attribute>
     <attribute en="crop" optional="yes" since="2.3.21" type="yesnolength">
       <description xml:lang="en">
         <para>Crop the pages so that the pdf size of the page is at its minimum. Allowed values are yes, no and a length.</para>
@@ -5172,6 +5259,38 @@
       <para>Setze PDF Optionen wie Anzahl der Kopien</para>
     </description>
     <childelements></childelements>
+    <attribute en="format" optional="yes" since="3.5.7">
+      <description xml:lang="en">
+        <para>Set the output format. Currently limited to <tt>PDF/X-3</tt> and <tt>PDF/X-4</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setzt das Ausgabeformat. Derzeit nur <tt>PDF/X-3</tt> und <tt>PDF/X-4</tt> möglich.</para>
+      </description>
+      <choice en="PDF/X-3">
+        <description xml:lang="en">
+          <para>Set the output to <tt>PDF/X-3</tt>.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setzt die Ausgabe auf <tt>PDF/X-3</tt>.</para>
+        </description>
+      </choice>
+      <choice en="PDF/X-4">
+        <description xml:lang="en">
+          <para>Set the output to <tt>PDF/X-4</tt>.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setzt die Ausgabe auf <tt>PDF/X-4</tt>.</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="colorprofile" optional="yes" since="3.5.7">
+      <description xml:lang="en">
+        <para>Set the name of the color profile. Has to be defined with <cmd name="DefineColorprofile"/>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setzt das Farbprofile. Muss mit <cmd name="DefineColorprofile"/> registriert worden sein.</para>
+      </description>
+    </attribute>
     <attribute en="author" optional="yes" type="text" since="3.1.18">
       <description xml:lang="en">
         <para>Set the author of the document</para>

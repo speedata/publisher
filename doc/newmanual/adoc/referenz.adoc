@@ -28,6 +28,7 @@ ifndef::backend-docbook5[]
 <<cmd-contents,Contents>>  +
 <<cmd-copy_of,Copy-of>>  +
 <<cmd-definecolor,DefineColor>>  +
+<<cmd-definecolorprofile,DefineColorprofile>>  +
 <<cmd-definefontalias,DefineFontalias>>  +
 <<cmd-definefontfamily,DefineFontfamily>>  +
 <<cmd-definetextformat,DefineTextformat>>  +
@@ -241,6 +242,12 @@ include::ref/copy-of.adoc[]
 Den Abschnitt über <<ch-copyof,`<Copy-of>`>>.
 
 include::ref/definecolor.adoc[]
+
+== Siehe auch
+
+Den Abschnitt über <<ch-farben,Farben>>.
+
+include::ref/definecolorprofile.adoc[]
 
 == Siehe auch
 

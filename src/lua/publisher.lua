@@ -24,6 +24,8 @@ local page         = require("publisher.page")
 local fontloader   = require("fonts.fontloader")
 local paragraph    = require("paragraph")
 local fonts        = require("publisher.fonts")
+local uuid         = require("uuid")
+uuid.randomseed(tex.randomseed)
 
 splib        = require("splib")
 
@@ -483,6 +485,7 @@ local dispatch_table = {
     Compatibility           = commands.compatibility,
     ["Copy-of"]             = commands.copy_of,
     DefineColor             = commands.define_color,
+    DefineColorprofile      = commands.define_colorprofile,
     DefineFontfamily        = commands.define_fontfamily,
     DefineFontalias         = commands.define_fontalias,
     DefineTextformat        = commands.define_textformat,
@@ -656,6 +659,10 @@ function get_action_node( action_type )
     return ai
 end
 
+local function getcreator()
+    return string.format("speedata Publisher %s, www.speedata.de",env_publisherversion)
+end
+
 --- Start the processing (`dothings()`)
 --- -------------------------------
 --- This is the entry point of the processing. It is called from publisher.spinit#main_loop.
@@ -755,9 +762,6 @@ function initialize_luatex_and_generate_pdf()
         end
     end
 
-    -- We define two graphic states for overprinting on and off.
-    GS_State_OP_On  = pdf.immediateobj([[<< /Type/ExtGState /OP true /OPM 1 >>]])
-    GS_State_OP_Off = pdf.immediateobj([[<< /Type/ExtGState /OP false >>]])
     tmp = os.getenv("SD_PREPEND_XML")
     if tmp and tmp ~= "" then
         for i,v in ipairs(string.explode(tmp,",")) do
@@ -772,6 +776,10 @@ function initialize_luatex_and_generate_pdf()
     end
 
     dispatch(layoutxml)
+
+    -- We define two graphic states for overprinting on and off.
+    GS_State_OP_On  = pdf.immediateobj([[<< /Type/ExtGState /OP true /OPM 1 >>]])
+    GS_State_OP_Off = pdf.immediateobj([[<< /Type/ExtGState /OP false >>]])
 
     --- override options set in the `<Options>` element
     if arg[4] then
@@ -832,6 +840,7 @@ function initialize_luatex_and_generate_pdf()
 
     if options.colorprofile then
         spotcolors.set_colorprofile_filename(options.colorprofile)
+        warning("Options / colorprofile is obsolete. Use DefineColorprofile and PDFOptions / colorprofile instead.")
     end
 
     local auxfilename = tex.jobname .. "-aux.xml"
@@ -919,7 +928,7 @@ function initialize_luatex_and_generate_pdf()
     -- Author  The name of the person who created the document.
     -- Subject  The subject of the document.
     -- Keywords  Keywords associated with the document.
-    local creator = string.format("speedata Publisher %s, www.speedata.de",env_publisherversion)
+    local creator = getcreator()
     local infos = { string.format("/Creator (%s)",creator) }
 
     if options.documenttitle and options.documenttitle ~= "" then
@@ -933,6 +942,30 @@ function initialize_luatex_and_generate_pdf()
     end
     if options.documentkeywords and options.documentkeywords ~= "" then
         infos[#infos + 1] = string.format("/Keywords %s", utf8_to_utf16_string_pdf(options.documentkeywords))
+    end
+
+    if options.format then
+        infos[#infos + 1] = string.format("/GTS_PDFXVersion (%s)",options.format)
+        local metadataobjnum = pdf.obj({ type="stream", string = getmetadata(), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0,})
+        pdfcatalog[#pdfcatalog + 1] = string.format("/Metadata %d 0 R",metadataobjnum )
+        local colorprofileobjnum = spotcolors.write_colorprofile()
+        local cp = spotcolors.get_colorprofile()
+
+        local outputintentsobjnum = pdf.obj({type = "raw",  immediate = true , string = string.format([[<<
+  /DestOutputProfile %d 0 R
+  /Info %s
+  /OutputCondition %s
+  /OutputConditionIdentifier %s
+  /RegistryName %s
+  /S /GTS_PDFX
+  /Type /OutputIntent
+>>]],colorprofileobjnum,
+utf8_to_utf16_string_pdf(cp.info),
+utf8_to_utf16_string_pdf(cp.condition),
+utf8_to_utf16_string_pdf(cp.identifier),
+utf8_to_utf16_string_pdf(cp.registry))})
+        local outputintentsarrayobjnum = pdf.obj({type="raw", string = string.format("[ %d 0 R ]",outputintentsobjnum), immediate = true })
+        pdfcatalog[#pdfcatalog + 1] = string.format("/OutputIntents %d 0 R",outputintentsarrayobjnum )
     end
 
     local info = table.concat(infos, " ")
@@ -4492,7 +4525,47 @@ function string_random(length)
   end
 end
 
-function getmetadata( conformancelevel, title, author )
+function getmetadata()
+    local now = pdf.getcreationdate()
+    local isoformatted = string.format("%s-%s-%sT%s:%s:%s+%s:%s",string.sub(now,3,6),string.sub(now,7,8),string.sub(now,9,10),string.sub(now,11,12),string.sub(now,13,14),string.sub(now,15,16),string.sub(now,18,19),string.sub(now,21,22))
+    local docid = uuid()
+    local instanceid = uuid()
+    local fmt = options.format
+    local md = string.format([[<?xpacket begin=%q id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.6-c015 91.163280, 2018/06/22-11:31:03        ">
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about=""
+            xmlns:xmp="http://ns.adobe.com/xap/1.0/"
+            xmlns:pdf="http://ns.adobe.com/pdf/1.3/"
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
+            xmlns:pdfxid="http://www.npes.org/pdfx/ns/id/"
+            xmlns:pdfx="http://ns.adobe.com/pdfx/1.3/">
+         <xmp:CreateDate>%s</xmp:CreateDate>
+         <xmp:CreatorTool>%s</xmp:CreatorTool>
+         <xmp:ModifyDate>%s</xmp:ModifyDate>
+         <xmp:MetadataDate>%s</xmp:MetadataDate>
+         <pdf:Trapped>False</pdf:Trapped>
+         <dc:format>application/pdf</dc:format>
+         <dc:title>
+            <rdf:Alt>
+               <rdf:li xml:lang="x-default">%s</rdf:li>
+            </rdf:Alt>
+         </dc:title>
+         <xmpMM:DocumentID>uuid:%s</xmpMM:DocumentID>
+         <xmpMM:InstanceID>uuid:%s</xmpMM:InstanceID>
+         <xmpMM:RenditionClass>default</xmpMM:RenditionClass>
+         <xmpMM:VersionID>1</xmpMM:VersionID>
+         <pdfxid:GTS_PDFXVersion>%s</pdfxid:GTS_PDFXVersion>
+         <pdfx:GTS_PDFXVersion>%s</pdfx:GTS_PDFXVersion>
+      </rdf:Description>
+   </rdf:RDF>
+</x:xmpmeta>
+]],"\239\187\191",isoformatted,getcreator(), isoformatted,isoformatted,xml_escape(options.documenttitle),docid,instanceid,fmt,fmt)
+    return md
+end
+
+function getzugferdmetadata( conformancelevel, title, author )
     local metadata = string.format([[<?xpacket begin=%q id="W5M0MpCehiHzreSzNTczkc9d"?>
 <x:xmpmeta xmlns:x="adobe:ns:meta/">
  <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
@@ -4605,7 +4678,7 @@ function attach_file_pdf(filename,description,mimetype)
 >>]],escape_pdfstring(description), fileobjectnum,fileobjectnum,destfilename,utf8_to_utf16_string_pdf(destfilename)))
         -- BASIC, COMFORT, EXTENDED
     local metadataobjnum = pdf.obj({type = "stream",
-                 string = getmetadata(conformancelevel, options.documenttitle or "ZUGFeRD Rechnung",options.documentauthor or "The Author"),
+                 string = getzugferdmetadata(conformancelevel, options.documenttitle or "ZUGFeRD Rechnung",options.documentauthor or "The Author"),
                  immediate = true,
                  attr = [[  /Subtype /XML /Type /Metadata  ]],
                  compresslevel = 0,

@@ -981,6 +981,37 @@
          <empty></empty>
       </element>
    </define>
+   <define name="e_DefineColorprofile">
+      <element name="DefineColorprofile">
+         <a:documentation>Weist einem externen Farbprofil einem Namen zu. Für PDFOptions.</a:documentation>
+         <optional>
+            <attribute name="condition">
+               <a:documentation>Beschreibung der Ausgabebedingung.</a:documentation>
+            </attribute>
+         </optional>
+         <attribute name="colors">
+            <a:documentation>Anzahl der Farben in dem Farbprofil</a:documentation>
+         </attribute>
+         <attribute name="filename">
+            <a:documentation>Dateiname des Farbprofils.</a:documentation>
+         </attribute>
+         <attribute name="identifier">
+            <a:documentation>Der offizielle Name in der Registrierung.</a:documentation>
+         </attribute>
+         <attribute name="info">
+            <a:documentation>Zusammenfassung des Profils.</a:documentation>
+         </attribute>
+         <attribute name="name">
+            <a:documentation>Der interne Name des Farbprofils. Für PDFOptions.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="registry">
+               <a:documentation>Der Name der Registrierung. Voreinstellung ist http://www.color.org/.</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_DefineColor">
       <element name="DefineColor">
          <a:documentation>Definiert Farben, die später im Layout benutzt werden können</a:documentation>
@@ -2067,6 +2098,9 @@
                      <ref name="e_DefineColor"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_DefineColorprofile"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_DefineFontalias"></ref>
                   </optional>
                   <optional>
@@ -2636,11 +2670,6 @@
                   <value>no</value>
                   <a:documentation>Beschnittzugabemarken nicht anzeigen (Voreinstellung).</a:documentation>
                </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="colorprofile">
-               <a:documentation>Der Dateiname des Farbprofils. Das voreingestellte Profil ist »ISO Coated v2 (ECI)«. Farbprofile werden nur geladen, wenn Sonderfarben benutzt werden.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -3240,6 +3269,22 @@
    <define name="e_PDFOptions">
       <element name="PDFOptions">
          <a:documentation>Setze PDF Optionen wie Anzahl der Kopien</a:documentation>
+         <optional>
+            <attribute name="format">
+               <a:documentation>Setzt das Ausgabeformat. Derzeit nur PDF/X-3 und PDF/X-4 möglich.</a:documentation>
+               <choice>
+                  <value>PDF/X-3</value>
+                  <a:documentation>Setzt die Ausgabe auf PDF/X-3.</a:documentation>
+                  <value>PDF/X-4</value>
+                  <a:documentation>Setzt die Ausgabe auf PDF/X-4.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="colorprofile">
+               <a:documentation>Setzt das Farbprofile. Muss mit DefineColorprofile registriert worden sein.</a:documentation>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="author">
                <a:documentation>Legt den Autor des Dokuments fest</a:documentation>
