@@ -114,6 +114,8 @@ att_tablenewpage = 801
 -- mknodes
 att_newline = 900
 
+-- PDF/UA - tagged PDF
+att_role  = 1000
 
 -- Debugging / see att_origin
 origin_table = 1
@@ -386,6 +388,10 @@ end
 data_dispatcher = {}
 user_defined_functions = { last = 0}
 markers = {}
+
+-- PDF/UA - the /S /Document StructElem
+local ktree = pdf.reserveobj()
+
 
 -- We will have to remember the current group and grid
 current_group = nil
@@ -663,6 +669,18 @@ local function getcreator()
     return string.format("speedata Publisher %s, www.speedata.de",env_publisherversion)
 end
 
+local roles = { H1 = 1, H2 = 2, H3 = 3, H4 = 4, H5 = 5, H6 = 6, P = 7  }
+local roles_a = {}
+for k,v in pairs(roles) do
+    roles_a[v] = k
+end
+
+function get_rolenum( rolestring )
+    local ret = roles[rolestring]
+    if ret then return ret end
+    err("Unknown role %q",tostring(rolestring))
+end
+
 --- Start the processing (`dothings()`)
 --- -------------------------------
 --- This is the entry point of the processing. It is called from publisher.spinit#main_loop.
@@ -921,9 +939,6 @@ function initialize_luatex_and_generate_pdf()
 
     pdfcatalog[#pdfcatalog + 1] = "/PageMode /UseOutlines"
 
-    if #vp > 0 then
-        pdfcatalog[#pdfcatalog + 1] = "/ViewerPreferences <<" .. table.concat(vp," ") .. ">>"
-    end
     -- Title   The document’s title.
     -- Author  The name of the person who created the document.
     -- Subject  The subject of the document.
@@ -945,27 +960,57 @@ function initialize_luatex_and_generate_pdf()
     end
 
     if options.format then
-        infos[#infos + 1] = string.format("/GTS_PDFXVersion (%s)",options.format)
-        local metadataobjnum = pdf.obj({ type="stream", string = getmetadata(), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0,})
-        pdfcatalog[#pdfcatalog + 1] = string.format("/Metadata %d 0 R",metadataobjnum )
-        local colorprofileobjnum = spotcolors.write_colorprofile()
-        local cp = spotcolors.get_colorprofile()
+        local metadataobjnum
+        if options.format == "PDF/X-3:2002" or options.format == "PDF/X-4" then
+            infos[#infos + 1] = string.format("/GTS_PDFXVersion (%s)",options.format)
+            metadataobjnum = pdf.obj({ type="stream", string = getmetadata(), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0,})
+            local colorprofileobjnum = spotcolors.write_colorprofile()
+            local cp = spotcolors.get_colorprofile()
+            local outputintentsobjnum = pdf.obj({type = "raw",  immediate = true , string = string.format([[<<  /DestOutputProfile %d 0 R /Info %s /OutputCondition %s    /OutputConditionIdentifier %s   /RegistryName %s    /S /GTS_PDFX   /Type /OutputIntent  >>]],colorprofileobjnum,
+ utf8_to_utf16_string_pdf(cp.info),
+ utf8_to_utf16_string_pdf(cp.condition),
+ utf8_to_utf16_string_pdf(cp.identifier),
+ utf8_to_utf16_string_pdf(cp.registry))})
+            local outputintentsarrayobjnum = pdf.obj({type="raw", string = string.format("[ %d 0 R ]",outputintentsobjnum), immediate = true })
+            pdfcatalog[#pdfcatalog + 1] = string.format("/OutputIntents %d 0 R",outputintentsarrayobjnum )
+        end
+        if options.format == "PDF/UA" then
+            pdfcatalog[#pdfcatalog + 1] = string.format("/Lang (de)  /MarkInfo <<  /Marked true >> ")
+            metadataobjnum = pdf.obj({ type="stream", string = getuametadata(), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0,})
+            vp[#vp + 1] = "/DisplayDocTitle true"
 
-        local outputintentsobjnum = pdf.obj({type = "raw",  immediate = true , string = string.format([[<<
-  /DestOutputProfile %d 0 R
-  /Info %s
-  /OutputCondition %s
-  /OutputConditionIdentifier %s
-  /RegistryName %s
-  /S /GTS_PDFX
-  /Type /OutputIntent
->>]],colorprofileobjnum,
-utf8_to_utf16_string_pdf(cp.info),
-utf8_to_utf16_string_pdf(cp.condition),
-utf8_to_utf16_string_pdf(cp.identifier),
-utf8_to_utf16_string_pdf(cp.registry))})
-        local outputintentsarrayobjnum = pdf.obj({type="raw", string = string.format("[ %d 0 R ]",outputintentsobjnum), immediate = true })
-        pdfcatalog[#pdfcatalog + 1] = string.format("/OutputIntents %d 0 R",outputintentsarrayobjnum )
+            local parenttree = pdf.reserveobj()
+
+            local structtreeroot = pdf.obj({ type = "raw", string = string.format("<</Type /StructTreeRoot /K %d 0 R /ParentTree %d 0 R >>",ktree,parenttree), immediate = true})
+            local numentries = { "<< /Nums [" }
+            for i,v in ipairs(pdfuapages) do
+                numentries[#numentries + 1] = string.format("%d %d 0 R ",i-1, v.page_structelem_array)
+            end
+            numentries[#numentries + 1] = "] >>"
+            pdf.obj({type = "raw", string = string.format(table.concat(numentries)), objnum = parenttree, immediate = true})
+
+            -- ktree
+            local ktreeentries = {"<< /K ["}
+
+            for _,v in ipairs(pdfuapages) do
+                for _,w in ipairs(v.structelementobjects) do
+                    ktreeentries[#ktreeentries + 1] = string.format("%d 0 R", w)
+                end
+            end
+            ktreeentries[#ktreeentries + 1] = "] /S /Document /Type /StructElem"
+            ktreeentries[#ktreeentries + 1] = string.format("/P %d 0 R",structtreeroot)
+            ktreeentries[#ktreeentries + 1] = ">>"
+            pdf.obj({type = "raw", string = table.concat( ktreeentries," " ), objnum = ktree, immediate = true})
+
+            pdfcatalog[#pdfcatalog + 1] = string.format("/StructTreeRoot %d 0 R",structtreeroot)
+        end
+
+        if #vp > 0 then
+            pdfcatalog[#pdfcatalog + 1] = "/ViewerPreferences <<" .. table.concat(vp," ") .. ">>"
+        end
+        if metadataobjnum then
+            pdfcatalog[#pdfcatalog + 1] = string.format("/Metadata %d 0 R",metadataobjnum )
+        end
     end
 
     local info = table.concat(infos, " ")
@@ -997,6 +1042,49 @@ utf8_to_utf16_string_pdf(cp.registry))})
     end
 end
 
+-- format: { pagenumber = 1, page_structelem_array = objnum, structelementobjects = {}}
+-- where objnum is an array such as [5 0 R 6 0 R]
+-- which contains the references to all StructElemns used on the page
+-- That is: objects 5 and 6 are /Type /StructElem
+pdfuapages = {}
+
+do
+    local objcount
+    local structelementobjects
+    function find_role_attributes( nodelist,parenttree, page )
+        local head = nodelist
+        while head do
+            entry = nil
+            if head.id == hlist_node or head.id == vlist_node then
+                find_role_attributes(head.list, parenttree, page)
+            elseif node.has_attribute(head,att_role) then
+                local r = node.has_attribute(head,att_role)
+                r = roles_a[r]
+                head.data = string.format("/%s<</MCID %d>>BDC", r,objcount)
+                local structelement = pdf.obj({type = "raw",string = string.format("<< /Type/StructElem /K %d /P %d 0 R /Pg %d 0 R /S /%s >>", objcount, parenttree, page,r), immediate = true})
+                structelementobjects[#structelementobjects + 1] = structelement
+                objcount = objcount + 1
+            end
+            head = head.next
+        end
+    end
+
+
+    -- called once for each page
+    function insert_struct_elements( nodelist,pagenumber )
+        structelementobjects = {}
+        objcount = 0
+        local parenttree = ktree
+        local thispage = pdf.pageref(pagenumber)
+
+        find_role_attributes(nodelist,parenttree,thispage)
+
+        local thispageobj = pdf.reserveobj()
+        pdf.obj({type = "raw", immediate = true, objnum = thispageobj, string = string.format("[%s 0 R]", table.concat(structelementobjects, " 0 R ") )  })
+        pdfuapages[#pdfuapages + 1] = {pagenumber = pagenumber,page_structelem_array = thispageobj, structelementobjects = structelementobjects }
+    end
+end
+
 function shipout(nodelist, pagenumber )
     local colorname = pages[pagenumber].defaultcolor
     if colorname then
@@ -1008,7 +1096,9 @@ function shipout(nodelist, pagenumber )
             nodelist = node.vpack(nodelist)
         end
     end
-
+    if options.format == "PDF/UA" then
+        insert_struct_elements(nodelist,pagenumber)
+    end
     tex.box[666] = nodelist
     tex.shipout(666)
 end
@@ -1952,9 +2042,11 @@ function dothingsbeforeoutput( thispage )
     end
 
     -- White background
-    firstbox = node.new("whatsit","pdf_literal")
-    firstbox.data = string.format("q 0 0 0 0 k  1 0 0 1 0 0 cm %g %g %g %g re f Q",sp_to_bp(x), sp_to_bp(y),wd ,ht)
-    firstbox.mode = 1
+    if options.format ~= "PDF/UA" then
+        firstbox = node.new("whatsit","pdf_literal")
+        firstbox.data = string.format("q 0 0 0 0 k  1 0 0 1 0 0 cm %g %g %g %g re f Q",sp_to_bp(x), sp_to_bp(y),wd ,ht)
+        firstbox.mode = 1
+    end
 
     if options.showgridallocation then
         local lit = node.new("whatsit","pdf_literal")
@@ -1999,7 +2091,11 @@ function dothingsbeforeoutput( thispage )
             firstbox = lit
         end
     end
-    r:trimbox(options.crop)
+    if options.format == "PDF/UA" then
+        r:trimbox(options.crop, string.format("/StructParents %d",#pdfuapages))
+    else
+        r:trimbox(options.crop)
+    end
 
     if options.cutmarks then
         local lit = node.new("whatsit","pdf_literal")
@@ -4524,6 +4620,46 @@ function string_random(length)
     return ""
   end
 end
+
+function getuametadata()
+    local docid = uuid()
+    local instanceid = uuid()
+    local now = pdf.getcreationdate()
+
+    local isoformatted = string.format("%s-%s-%sT%s:%s:%s+%s:%s",string.sub(now,3,6),string.sub(now,7,8),string.sub(now,9,10),string.sub(now,11,12),string.sub(now,13,14),string.sub(now,15,16),string.sub(now,18,19),string.sub(now,21,22))
+
+    md = string.format([[<?xpacket begin=%q id="W5M0MpCehiHzreSzNTczkc9d"?>
+       <x:xmpmeta xmlns:x="adobe:ns:meta/">
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description rdf:about="" xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/">
+          <xmpMM:DocumentID>uuid:%s</xmpMM:DocumentID>
+          <xmpMM:InstanceID>uuid:%s</xmpMM:InstanceID>
+        </rdf:Description>
+        <rdf:Description rdf:about="" xmlns:pdfuaid="http://www.aiim.org/pdfua/ns/id/">
+          <pdfuaid:part>1</pdfuaid:part>
+        </rdf:Description>
+        <rdf:Description rdf:about="" xmlns:xmp="http://ns.adobe.com/xap/1.0/">
+           <xmp:CreateDate>%s</xmp:CreateDate>
+           <xmp:ModifyDate>%s</xmp:ModifyDate>
+           <xmp:MetadataDate>%s</xmp:MetadataDate>
+           <xmp:CreatorTool>%s</xmp:CreatorTool>
+        </rdf:Description>
+        <rdf:Description rdf:about="" xmlns:pdf="http://ns.adobe.com/pdf/1.3/">
+          <pdf:Producer>speedata Publisher</pdf:Producer>
+        </rdf:Description>
+        <rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:title>
+            <rdf:Alt>
+              <rdf:li xml:lang="x-default">%s</rdf:li>
+            </rdf:Alt>
+          </dc:title>
+        </rdf:Description>
+      </rdf:RDF>
+    </x:xmpmeta>
+<?xpacket end="r"?>]],"\239\187\191",docid,instanceid, isoformatted,isoformatted,isoformatted,getcreator(),xml_escape(options.documenttitle))
+    return md
+end
+
 
 function getmetadata()
     local now = pdf.getcreationdate()

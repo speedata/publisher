@@ -5077,6 +5077,30 @@
         <para>Name der Schriftart. Voreinstellung ist »text« (mit kleinem t).</para>
       </description>
     </attribute>
+    <attribute en="role" optional="yes" since="3.5.7">
+      <description xml:lang="en">
+        <para>The role for PDF/UA (accessibility, tagged PDF)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</para>
+      </description>
+      <choice en="H1">
+        <description xml:lang="en">
+          <para>Heading level 1</para>
+        </description>
+        <description xml:lang="de">
+          <para>Überschrift Ebene 1</para>
+        </description>
+      </choice>
+      <choice en="P">
+        <description xml:lang="en">
+          <para>A paragraph.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Ein Absatz</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="language" optional="yes">
       <description xml:lang="en">
         <para>Name of the language for hyphenation.</para>
@@ -5280,6 +5304,14 @@
         </description>
         <description xml:lang="de">
           <para>Setzt die Ausgabe auf <tt>PDF/X-4</tt>.</para>
+        </description>
+      </choice>
+      <choice en="PDF/UA">
+        <description xml:lang="en">
+          <para>Set the output to <tt>PDF/UA</tt>.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setzt die Ausgabe auf <tt>PDF/UA</tt>.</para>
         </description>
       </choice>
     </attribute>

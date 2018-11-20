@@ -883,11 +883,11 @@ function setarea( self, x, y, wd, ht)
     end
 end
 
-function trimbox( self, crop )
+function trimbox( self, crop, extrapageattributes )
     assert(self)
     local x,y,wd,ht =  sp_to_bp(self.extra_margin), sp_to_bp(self.extra_margin) , sp_to_bp(tex.pagewidth - self.extra_margin), sp_to_bp(tex.pageheight - self.extra_margin)
     local b_x,b_y,b_wd,b_ht = sp_to_bp(self.extra_margin - self.trim), sp_to_bp(self.extra_margin - self.trim) , sp_to_bp(tex.pagewidth - self.extra_margin + self.trim), sp_to_bp(tex.pageheight - self.extra_margin + self.trim)
-    local attrstring = {}
+    local attrstring = {extrapageattributes}
     attrstring[#attrstring + 1] = string.format("/TrimBox [ %g %g %g %g]",x,y,wd,ht)
     attrstring[#attrstring + 1] = string.format("/BleedBox [%g %g %g %g]",b_x,b_y,b_wd,b_ht)
     if crop == true then

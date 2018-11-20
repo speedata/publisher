@@ -3128,6 +3128,17 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="role">
+                     <a:documentation>The role for PDF/UA (accessibility, tagged PDF)</a:documentation>
+                     <choice>
+                        <value>H1</value>
+                        <a:documentation>Heading level 1</a:documentation>
+                        <value>P</value>
+                        <a:documentation>A paragraph.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="language">
                      <a:documentation>Name of the language for hyphenation.</a:documentation>
                      <choice>
@@ -3277,6 +3288,8 @@
                   <a:documentation>Set the output to PDF/X-3.</a:documentation>
                   <value>PDF/X-4</value>
                   <a:documentation>Set the output to PDF/X-4.</a:documentation>
+                  <value>PDF/UA</value>
+                  <a:documentation>Set the output to PDF/UA.</a:documentation>
                </choice>
             </attribute>
          </optional>

@@ -3128,6 +3128,17 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="role">
+                     <a:documentation>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</a:documentation>
+                     <choice>
+                        <value>H1</value>
+                        <a:documentation>Überschrift Ebene 1</a:documentation>
+                        <value>P</value>
+                        <a:documentation>Ein Absatz</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="language">
                      <a:documentation>Name der Sprache für die Silbentrennung.</a:documentation>
                      <choice>
@@ -3277,6 +3288,8 @@
                   <a:documentation>Setzt die Ausgabe auf PDF/X-3.</a:documentation>
                   <value>PDF/X-4</value>
                   <a:documentation>Setzt die Ausgabe auf PDF/X-4.</a:documentation>
+                  <value>PDF/UA</value>
+                  <a:documentation>Setzt die Ausgabe auf PDF/UA.</a:documentation>
                </choice>
             </attribute>
          </optional>

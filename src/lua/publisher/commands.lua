@@ -2142,6 +2142,7 @@ function commands.paragraph( layoutxml,dataxml )
     local fontname      = publisher.read_attribute(layoutxml,dataxml,"fontface",  "rawstring")
     local colorname     = publisher.read_attribute(layoutxml,dataxml,"color",     "rawstring")
     local language_name = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
+    local role          = publisher.read_attribute(layoutxml,dataxml,"role",      "string")
 
     if textformat and not publisher.textformats[textformat] then err("Paragraph: textformat %q unknown",tostring(textformat)) end
 
@@ -2216,6 +2217,23 @@ function commands.paragraph( layoutxml,dataxml )
     for _,j in ipairs(objects) do
         a:append(j,{fontfamily = fontfamily, languagecode = languagecode, allowbreak = allowbreak})
     end
+
+    -- PDF/UA
+    if publisher.options.format == "PDF/UA" then
+        local bdc = node.new("whatsit","pdf_literal")
+        node.set_attribute(bdc,publisher.att_role, publisher.get_rolenum(role))
+
+        local emc = node.new("whatsit","pdf_literal")
+        bdc.data = ""
+        emc.data = "EMC"
+        bdc.mode = 1
+        emc.mode = 1
+        a.nodelist = node.insert_before(a.nodelist,a.nodelist,bdc)
+
+        local tail = node.tail(a.nodelist)
+        node.insert_after(a.nodelist,tail, emc)
+    end
+
     if #objects == 0 then
         -- nothing got through, why?? check
         -- warning("No contents found in paragraph.")
@@ -2228,7 +2246,6 @@ function commands.paragraph( layoutxml,dataxml )
     a.nodelist = publisher.addstrut(a.nodelist, publisher.origin_paragraph)
     return a
 end
-
 
 --- PDFOptions
 --- ------------
@@ -2276,7 +2293,8 @@ function commands.pdfoptions( layoutxml, dataxml )
 
     if format then
         publisher.options.format = format
-        if format == "PDF/X-3" or format == "PDF/X-4" then
+        pdf.setcompresslevel(0)
+        if format == "PDF/X-3" or format == "PDF/X-4" or format == "PDF/UA" then
             pdf.setobjcompresslevel(0)
             if not title then publisher.options.documenttitle = "document" end
         end
@@ -2645,6 +2663,7 @@ function commands.place_object( layoutxml,dataxml )
         current_grid = publisher.pages[publisher.current_pagenumber].grid
     end
     xpath.set_variable("__currentarea",save_current_area)
+
     trace("objects placed")
 end
 
@@ -3830,22 +3849,18 @@ function commands.textblock( layoutxml,dataxml )
 
     for i,j in ipairs(tab) do
         local eltname = publisher.elementname(j)
-        trace("Textblock: Element = %q",tostring(eltname))
         if eltname == "Paragraph" then
             objects[#objects + 1] = publisher.element_contents(j)
         elseif eltname == "Ul" or eltname == "Ol" then
             for j,w in ipairs(publisher.element_contents(j)) do
                 objects[#objects + 1] = w
             end
-        elseif eltname == "Text" then
-            assert(false)
         elseif eltname == "Action" then
             objects[#objects + 1] = publisher.element_contents(j)
         elseif eltname == "Bookmark" then
             objects[#objects + 1] = publisher.element_contents(j)
         end
     end
-    trace("Textblock: #objects=%d",#objects)
 
     if columns > 1 then
         width_sp = math.floor(  (width_sp - columndistance * ( columns - 1 ) )   / columns)
