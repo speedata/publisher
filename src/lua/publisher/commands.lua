@@ -2500,6 +2500,9 @@ function commands.place_object( layoutxml,dataxml )
                 objects[#objects + 1] = {object = object[1], objecttype = objecttype, allocate_matrix = object[2] }
             else
                 if type(object)=="table" then
+                    -- last page of balanced objects must not change active frame
+                    -- see last lines of placeobject
+                    objects.balance = object.balance
                     for i=1,#object do
                         objects[#objects + 1] = {object = object[i], objecttype = objecttype }
                     end
@@ -2651,6 +2654,11 @@ function commands.place_object( layoutxml,dataxml )
             if publisher.current_group == nil then
                 publisher.next_area(area)
                 publisher.setup_page(nil,"commands#PlaceObject")
+            end
+        else
+            if objects.balance then
+                -- a split table and the last object.
+                current_grid:set_framenumber(area,1)
             end
         end
     end
@@ -3344,6 +3352,7 @@ function commands.table( layoutxml,dataxml,options )
     xpath.set_variable("_last_tr_data","")
 
     local n = tabular:make_table()
+    n.balance = balance
     -- Helpful for debugging purpose:
     -- for i=1,#n do
     --     node.set_attribute(n[i],publisher.att_origin,publisher.origin_table)
