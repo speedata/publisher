@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.5">
+    <entry version="3.5.7" date="2018-11-21">
+      <en>Bugfix table split and cursor movement (#202).</en>
+      <de>Fehlerkorrektur bei Tabellenausgleich und Cursorpositionierung (#202).</de>
+    </entry>
+    <entry version="3.5.7" date="2018-11-21">
+      <en>Support for PDF/X-3 and PDF/X-4.</en>
+      <de>Unterstützung für PDF/X-3 und PDF/X-4.</de>
+    </entry>
+    <entry version="3.5.7" date="2018-11-21">
+      <en>Basic support for PDF/UA (accessibility).</en>
+      <de>Grundlegende Unterstützung für PDF/UA (Barrierefreiheit).</de>
+    </entry>
     <entry version="3.5.6" date="2018-11-09">
       <en>Better handling of rotation in table cells.</en>
       <de>Rotation in Tabellenzellen verbessert.</de>
@@ -21,8 +33,8 @@
       <de>Erlaube das Einbinden von Dateien mit nicht-Ascii-Dateinamen unter Windows.</de>
     </entry>
     <entry version="3.5.3" date="2018-09-25">
-      <en>Various bugfixes (HTML-linking in data, pdf-dest link too low #198)</en>
-      <de>Verschiedene Fehlerkorrekturen (HTML-Links in Daten, PDF-dest zu tief #198)</de>
+      <en>Various bugfixes (HTML-linking in data, pdf-dest link too low #198).</en>
+      <de>Verschiedene Fehlerkorrekturen (HTML-Links in Daten, PDF-dest zu tief #198).</de>
     </entry>
     <entry version="3.5.2" date="2018-09-18">
       <en>Letter spacing in Span.</en>
