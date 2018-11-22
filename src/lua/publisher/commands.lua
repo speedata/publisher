@@ -3352,7 +3352,9 @@ function commands.table( layoutxml,dataxml,options )
     xpath.set_variable("_last_tr_data","")
 
     local n = tabular:make_table()
-    n.balance = balance
+    if not node.is_node(n) then
+        n.balance = balance
+    end
     -- Helpful for debugging purpose:
     -- for i=1,#n do
     --     node.set_attribute(n[i],publisher.att_origin,publisher.origin_table)
