@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.5">
+    <entry version="3.5.8" date="2018-11-28">
+      <en>Fix a few minor errors.</en>
+      <de>Kleine Fehlerkorrekturen.</de>
+    </entry>
     <entry version="3.5.7" date="2018-11-21">
       <en>Bugfix table split and cursor movement (#202).</en>
       <de>Fehlerkorrektur bei Tabellenausgleich und Cursorpositionierung (#202).</de>
