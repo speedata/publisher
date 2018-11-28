@@ -16,24 +16,25 @@ type WorkRequest struct {
 }
 
 var (
-	WorkerQueue chan chan WorkRequest
-	WorkQueue   = make(chan WorkRequest, 100)
+	workerQueue chan chan WorkRequest         //
+	workQueue   = make(chan WorkRequest, 100) // workque
 )
 
-func StartDispatcher(nworkers int) {
+// startDispatcher starts the worker queue with the number of processors
+func startDispatcher(nworkers int) {
 	// First, initialize the channel we are going to but the workers' work channels into.
-	WorkerQueue = make(chan chan WorkRequest, nworkers)
+	workerQueue = make(chan chan WorkRequest, nworkers)
 	// Now, create all of our workers.
 	for i := 1; i <= nworkers; i++ {
-		NewWorker(i, WorkerQueue).Start()
+		NewWorker(i, workerQueue).Start()
 	}
 	go func() {
 		for {
 			select {
-			case work := <-WorkQueue:
+			case work := <-workQueue:
 				go func() {
 					// Dispatching work request
-					worker := <-WorkerQueue
+					worker := <-workerQueue
 					worker <- work
 				}()
 			}
@@ -41,7 +42,8 @@ func StartDispatcher(nworkers int) {
 	}()
 }
 
-type Worker struct {
+// Worker needs documentation
+type worker struct {
 	ID          int
 	Work        chan WorkRequest
 	WorkerQueue chan chan WorkRequest
@@ -49,8 +51,8 @@ type Worker struct {
 }
 
 // NewWorker creates and return the worker
-func NewWorker(id int, workerQueue chan chan WorkRequest) Worker {
-	worker := Worker{
+func NewWorker(id int, workerQueue chan chan WorkRequest) worker {
+	worker := worker{
 		ID:          id,
 		Work:        make(chan WorkRequest),
 		WorkerQueue: workerQueue,
@@ -60,7 +62,7 @@ func NewWorker(id int, workerQueue chan chan WorkRequest) Worker {
 }
 
 // Start the worker by starting a goroutine, that is  an infinite "for-select" loop.
-func (w Worker) Start() {
+func (w worker) Start() {
 	go func() {
 		for {
 			// Add ourselves into the worker queue.
@@ -93,7 +95,7 @@ func (w Worker) Start() {
 // Stop tells the worker to stop listening for work requests.
 //
 // Note that the worker will only stop *after* it has finished its work.
-func (w Worker) Stop() {
+func (w worker) Stop() {
 	go func() {
 		w.QuitChan <- true
 	}()

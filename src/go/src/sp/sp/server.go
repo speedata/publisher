@@ -74,7 +74,7 @@ func encodeFileToBase64(filename string) (string, error) {
 
 func addPublishrequestToQueue(id string) {
 	fmt.Fprintf(protocolFile, "Add request %s to queue.\n", id)
-	WorkQueue <- WorkRequest{ID: id}
+	workQueue <- WorkRequest{ID: id}
 }
 
 // Wait until filename in dir exists and is complete
@@ -763,7 +763,7 @@ func runServer(port string, address string, tempdir string) {
 	options["quiet"] = "true"
 	options["autoopen"] = "false"
 
-	StartDispatcher(runtime.NumCPU())
+	startDispatcher(runtime.NumCPU())
 
 	r := mux.NewRouter()
 	r.HandleFunc("/available", available)

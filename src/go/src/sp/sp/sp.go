@@ -38,7 +38,12 @@ const (
 	cmdListFonts  = "list-fonts"
 	cmdWatch      = "watch"
 
-	strTrue string = "true"
+	osWindows = "windows"
+	osLinux   = "linux"
+	osDarwin  = "darwin"
+
+	stringFalse = "false"
+	stringTrue  = "true"
 )
 
 var (
@@ -108,7 +113,7 @@ func init() {
 		"jobname":    "publisher",
 		"layout":     "layout.xml",
 		"port":       "5266",
-		"quiet":      "false",
+		"quiet":      stringFalse,
 		"runs":       "1",
 		"tempdir":    os.TempDir(),
 		"cache":      "optimal",
@@ -129,15 +134,15 @@ func init() {
 
 	// log.Print("Built for platform: ",dest)
 	switch runtime.GOOS {
-	case "darwin":
+	case osDarwin:
 		defaults["opencommand"] = "open"
 		exeSuffix = ""
 		homedir = os.Getenv("HOME")
-	case "linux":
+	case osLinux:
 		defaults["opencommand"] = "xdg-open"
 		homedir = os.Getenv("HOME")
 		exeSuffix = ""
-	case "windows":
+	case osWindows:
 		defaults["opencommand"] = "cmd /C start"
 		exeSuffix = ".exe"
 
@@ -196,6 +201,7 @@ func getOptionSection(optionname string, section string) string {
 	if cfg.String(section, optionname) != "" {
 		return cfg.String(section, optionname)
 	}
+
 	if defaults[optionname] != "" {
 		return defaults[optionname]
 	}
@@ -317,7 +323,7 @@ func run(cmdline string) (errorcode int) {
 	}
 	runningProcess = append(runningProcess, cmd.Process)
 
-	if getOption("quiet") == strTrue {
+	if getOption("quiet") == stringTrue {
 		go io.Copy(ioutil.Discard, stdout)
 		go io.Copy(ioutil.Discard, stderr)
 	} else {
@@ -554,7 +560,7 @@ func runPublisher() (exitstatus int) {
 	layoutname := getOption("layout")
 	dataname := getOption("data")
 	execName := getExecutablePath()
-	if dummyData := getOption("dummy"); dummyData == strTrue {
+	if dummyData := getOption("dummy"); dummyData == stringTrue {
 		dataname = "-dummy"
 	}
 	os.Setenv("SP_JOBNAME", jobname)
@@ -564,7 +570,7 @@ func runPublisher() (exitstatus int) {
 		log.Fatal(err)
 	}
 	cmdx := ""
-	if runtime.GOOS == "windows" {
+	if runtime.GOOS == osWindows {
 		// to allow UT8 filenames
 		cmdx = "--cmdx"
 	}
@@ -714,7 +720,7 @@ func main() {
 	}
 
 	switch runtime.GOOS {
-	case "windows":
+	case osWindows:
 		cfg, err = configurator.ReadFiles(filepath.Join(os.Getenv("APPDATA"), "speedata", "publisher.cfg"))
 	default:
 		cfg, err = configurator.ReadFiles(filepath.Join(homedir, ".publisher.cfg"), "/etc/speedata/publisher.cfg")
@@ -760,7 +766,7 @@ func main() {
 	if optSystemfonts := getOption("systemfonts"); optSystemfonts != "" {
 		if optSystemfonts == "true" {
 			useSystemFonts = true
-		} else if optSystemfonts == "false" {
+		} else if optSystemfonts == stringFalse {
 			useSystemFonts = false
 		}
 	}
@@ -827,7 +833,7 @@ func main() {
 		fmt.Println("SD_PREPEND_XML:", os.Getenv("SD_PREPEND_XML"))
 	}
 
-	if getOption("ignore-case") == strTrue {
+	if getOption("ignore-case") == stringTrue {
 		os.Setenv("SP_IGNORECASE", "1")
 		if verbose {
 			fmt.Println("Ignore case for file system access")
@@ -837,7 +843,7 @@ func main() {
 	var exitstatus int
 	if getOption("profile") != "" {
 		fmt.Println("Profiling publisher run. Removing lprof_* now.")
-		os.Setenv("SD_PROFILER", strTrue)
+		os.Setenv("SD_PROFILER", stringTrue)
 		files, err := filepath.Glob("lprof_*")
 		if err != nil {
 			log.Fatal(err)
@@ -921,7 +927,7 @@ func main() {
 		writeFinishedfile(finishedfilename)
 
 		// open PDF if necessary
-		if getOption("autoopen") == strTrue {
+		if getOption("autoopen") == stringTrue {
 			openFile(jobname + ".pdf")
 		}
 	case cmdCompare:
@@ -974,7 +980,7 @@ func main() {
 		os.Exit(0)
 	case cmdListFonts:
 		var xml string
-		if getOption("xml") == strTrue {
+		if getOption("xml") == stringTrue {
 			xml = "xml"
 		}
 
