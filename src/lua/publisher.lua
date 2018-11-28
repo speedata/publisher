@@ -3207,7 +3207,11 @@ local function check_if_a_line_exeeds(nodelist,wd,glue_set,glue_sign,glue_order)
 end
 
 function do_linebreak( nodelist,hsize,parameters )
-    assert(nodelist,"No nodelist found for line breaking.")
+    if nodelist == nil then
+        err("No nodelist found for line breaking.")
+        return box(tenmm_sp,tenmm_sp,"black")
+    end
+
     parameters = parameters or {}
     finish_par(nodelist,hsize,parameters)
 
