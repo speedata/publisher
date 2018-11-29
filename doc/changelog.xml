@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.5">
+    <entry version="3.5.9" date="2018-11-29">
+      <en>Default margin now 1cm, bugfix for dynamic table head and balance="yes".</en>
+      <de>Seitenrand 1cm als Voreinstellung. Fehlerkorrektur bei dynamischen Tabellenkopf und balance="yes".</de>
+    </entry>
     <entry version="3.5.8" date="2018-11-28">
       <en>Fix a few minor errors.</en>
       <de>Kleine Fehlerkorrekturen.</de>
