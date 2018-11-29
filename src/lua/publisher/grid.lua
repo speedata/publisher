@@ -816,10 +816,10 @@ end
 -- Arguments must be in sp (''scaled points'')
 function set_margin(self,left,top,right,bottom)
     assert(bottom,"Four arguments must be given.")
-    self.margin_left  = to_sp(left)
-    self.margin_right = to_sp(right)
-    self.margin_top   = to_sp(top)
-    self.margin_bottom  = to_sp(bottom)
+    self.margin_left   = left
+    self.margin_right  = right
+    self.margin_top    = top
+    self.margin_bottom = bottom
 end
 
 --- ![width calculation](../img/gridnx.svg)

@@ -1614,10 +1614,10 @@ end
 --- ------
 --- Set margin for this page.
 function commands.margin( layoutxml,dataxml )
-    local left   = publisher.read_attribute(layoutxml,dataxml,"left", "length")
-    local right  = publisher.read_attribute(layoutxml,dataxml,"right","length")
-    local top    = publisher.read_attribute(layoutxml,dataxml,"top",  "length")
-    local bottom = publisher.read_attribute(layoutxml,dataxml,"bottom", "length")
+    local left   = publisher.read_attribute(layoutxml,dataxml,"left", "length_sp")
+    local right  = publisher.read_attribute(layoutxml,dataxml,"right","length_sp")
+    local top    = publisher.read_attribute(layoutxml,dataxml,"top",  "length_sp")
+    local bottom = publisher.read_attribute(layoutxml,dataxml,"bottom", "length_sp")
 
     return function(_page) _page.grid:set_margin(left,top,right,bottom) end
 end

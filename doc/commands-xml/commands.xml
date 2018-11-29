@@ -5185,7 +5185,7 @@
       <para>Definiert eine Seitenvorlage. Anhand der Kriterien, die im Attribut test angegeben werden, wählt das System eine Seitenvorlage aus.</para>
     </description>
     <childelements>
-      <cmd name="Margin"/>
+      <optional><cmd name="Margin"/></optional>
       <interleave>
         <optional><oneOrMore><cmd name="PositioningArea"/></oneOrMore></optional>
         <optional><cmd name="AtPageCreation"/></optional>

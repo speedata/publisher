@@ -27,6 +27,8 @@ function page.new( self,width,height,additional_margin, trim,pagenumber )
 
   s.grid.extra_margin      = additional_margin
   s.grid.trim = trim
+  -- default margin: 1cm
+  s.grid:set_margin(publisher.tenmm_sp,publisher.tenmm_sp,publisher.tenmm_sp,publisher.tenmm_sp)
 
   tex.pagewidth  = width   + additional_margin * 2
   tex.pageheight = height  + additional_margin * 2

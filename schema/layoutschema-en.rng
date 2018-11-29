@@ -3252,7 +3252,9 @@
                <attribute name="test">
                   <a:documentation>If this xpath expression evaluates to true, this page is taken as a master page.</a:documentation>
                </attribute>
-               <ref name="e_Margin"></ref>
+               <optional>
+                  <ref name="e_Margin"></ref>
+               </optional>
                <interleave>
                   <optional>
                      <oneOrMore>

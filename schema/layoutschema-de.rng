@@ -3252,7 +3252,9 @@
                <attribute name="test">
                   <a:documentation>Wenn der XPath-Ausdruck »wahr« ergibt, dann wird diese Seite als Vorlage genommen.</a:documentation>
                </attribute>
-               <ref name="e_Margin"></ref>
+               <optional>
+                  <ref name="e_Margin"></ref>
+               </optional>
                <interleave>
                   <optional>
                      <oneOrMore>
