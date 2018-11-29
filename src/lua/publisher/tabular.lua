@@ -1624,6 +1624,17 @@ function typeset_table(self)
             end
         end
     end
+    for i=2,#splits - 1 do
+        r = splits[i]
+        if rows[r+1] then
+            if node.has_attribute(rows[r + 1],publisher.att_use_as_head) == 1 then
+                omit_head_on_pages[i] = true
+            end
+        else
+            -- no head in last column
+            omit_head_on_pages[i] = true
+        end
+    end
 
     local first_row_in_new_table
     local last_tr_data
