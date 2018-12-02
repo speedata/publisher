@@ -91,7 +91,7 @@ Hierzu wird XInclude(((`Include`))) genutzt.
   <xi:include href="article0001.xml"/>
   <xi:include href="article0002.xml"/>
   ...
-</data>
+</catalog>
 -------
 
 Im Wurzelknoten (im obigen Beispiel 'catalog') muss der Namensraum für XInclude deklariert werden. 
