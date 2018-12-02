@@ -79,5 +79,22 @@ Anschließend kann diese Datei eingebunden werden mit
 
 Der Namensraum für XInclude muss wie oben deklariert werden, sonst gibt es einen Syntaxfehler in der XML-Datei.
 
+[[ch-include_data]]
+== Daten in einzelne Dateien aufteilen
+Auch die Datendatei kann in mehrere Dateien aufgeteilt werden.
+Hierzu wird XInclude(((`Include`))) genutzt. 
+
+[source,xml]
+-------
+<catalog xmlns:xi="http://www.w3.org/2001/XInclude">
+  <xi:include href="globalsettings.xml"/>
+  <xi:include href="article0001.xml"/>
+  <xi:include href="article0002.xml"/>
+  ...
+</catalog>
+-------
+
+Im Wurzelknoten (im obigen Beispiel 'catalog') muss der Namensraum für XInclude deklariert werden. 
+
 
 // Ende

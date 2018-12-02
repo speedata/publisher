@@ -3942,7 +3942,7 @@ function commands.textblock( layoutxml,dataxml )
         nodes[i].prev = tail
     end
 
-    trace("Textbock: vpack()")
+    trace("Textblock: vpack()")
     nodelist = node.vpack(nodes[1])
     if angle then
         nodelist = publisher.rotate_textblock(nodelist,angle)
@@ -3950,7 +3950,7 @@ function commands.textblock( layoutxml,dataxml )
 
     publisher.current_fontfamily = save_fontfamily
     xpath.set_variable("__maxwidth", save_width)
-    trace("Textbock: end")
+    trace("Textblock: end")
     publisher.intextblockcontext = publisher.intextblockcontext - 1
     if minheight then
         nodelist.height = math.max(nodelist.height + nodelist.depth, minheight )
