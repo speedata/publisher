@@ -167,7 +167,8 @@ local function parse_endelement( txt,pos )
 	return endpos
 end
 
-local function parse_element( txt,pos,namespaces )
+local function parse_element( txt,pos,namespaces,options )
+	options = options or {}
 	local second_nextchar
 	local contents
 	local _,_,nextchar = string.find(txt,"(.)",pos+1)
@@ -186,7 +187,7 @@ local function parse_element( txt,pos,namespaces )
 		_,_,namespace,local_name = string.find(eltname,"^(.-):(.*)$")
 		ns = elt[".__ns"]
 		if ns and ns[namespace] == "http://www.w3.org/2001/XInclude" and local_name == "include" then
-			xinclude = parse_xml_file(elt["href"])
+			xinclude = parse_xml_file(elt["href"],options)
 		end
 		if namespace then
 			if ns and ns[namespace] then
@@ -226,7 +227,7 @@ local function parse_element( txt,pos,namespaces )
 					elt[#elt + 1] = decoder(contents)
 				end
 			end
-			contents, pos = parse_element(txt,start,elt[".__ns"])
+			contents, pos = parse_element(txt,start,elt[".__ns"],options)
 			if contents then
 				if type(contents) == "string" then
 					if contents ~= "" then
@@ -304,7 +305,7 @@ local function parse_xml(txt,options)
 
 	local ret
 	while true do
-		ret,pos = parse_element(txt,pos,{})
+		ret,pos = parse_element(txt,pos,{},options)
 		if type(ret) == "table" then break end
 		_,pos = string.find(txt,"<",pos)
 	end
