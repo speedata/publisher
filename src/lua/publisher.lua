@@ -1,5 +1,5 @@
 --- Here goes everything that does not belong anywhere else. Other parts are font handling, the command
---- list, page and gridsetup, debugging and initialization. We start with the function publisher#dothings that
+--- list, page and grid setup, debugging and initialization. We start with the function publisher#dothings that
 --- initializes some variables and starts processing (publisher#dispatch())
 --
 --  publisher.lua
@@ -62,8 +62,8 @@ att_italic         = 2
 att_bold           = 3
 att_script         = 4
 att_underline      = 5
-att_indent         = 6 -- see textformats for details
-att_rows           = 7 -- see textformats for details
+att_indent         = 6 -- see text formats for details
+att_rows           = 7 -- see text formats for details
 att_bgcolor        = 8 -- similar to underline
 att_bgpaddingtop   = 9
 att_bgpaddingbottom   = 10
@@ -104,7 +104,7 @@ att_tr_shift_up     = 550
 -- Force a hbox line height
 att_lineheight = 600
 
--- server-mode / linebreaking
+-- server-mode / line breaking (not used anymore?)
 att_keep = 700
 
 -- attributes for glue
@@ -179,7 +179,7 @@ current_layoutlanguage = nil
 -- The document language
 defaultlanguage = 0
 
--- Startpage
+-- Start page
 current_pagenumber = 1
 
 pages = {}
@@ -397,7 +397,7 @@ local ktree = pdf.reserveobj()
 current_group = nil
 current_grid = nil
 
--- paragaph, table and textblock should set them
+-- paragraph, table and textblock should set them
 current_fontfamily = 0
 
 fontaliases = {}
@@ -406,7 +406,7 @@ fontaliases = {}
 intextblockcontext = 0
 
 -- The array 'masterpages' has tables similar to these:
--- { is_pagetype = test, res = tab, name = pagetypename }
+-- { is_pagetype = test, res = tab, name = name_of_page_type }
 -- where `is_pagetype` is an xpath expression to be evaluated,
 -- `res` is a table with layoutxml instructions
 -- `name` is a string.
@@ -1201,7 +1201,7 @@ function output_absolute_position(param)
             _ht = _ht + _y - 1
             _y = 1
         end
-        -- printtable("allocate_cells",{_x,_y,_wd,_ht})
+
         current_grid:allocate_cells(_x,_y,_wd,_ht,param.allocate_matrix)
     end
 
@@ -1496,7 +1496,7 @@ function setup_page(pagenumber,fromwhere)
             local layoutxml = element_contents(j).layoutxml
             local dataxml = element_contents(j).dataxml
             local width  = publisher.read_attribute(layoutxml,dataxml,"width",  "length_sp")
-            local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --pg
+            local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --PG
             local _nx     = publisher.read_attribute(layoutxml,dataxml,"nx",     "number")
             local _ny     = publisher.read_attribute(layoutxml,dataxml,"ny",     "number")
             local _dx     = publisher.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
@@ -1521,7 +1521,7 @@ function setup_page(pagenumber,fromwhere)
 
     current_page.grid:set_width_height({wd = gridwidth, ht = gridheight, nx = nx, ny = ny, dx = dx, dy = dy })
 
-    -- The default color is applied during shipout
+    -- The default color is applied during ship-out
     if pagetype.layoutxml and pagetype.layoutxml.defaultcolor then
         current_page.defaultcolor = read_attribute(pagetype.layoutxml,nil,"defaultcolor","rawstring")
     end
@@ -1594,7 +1594,7 @@ function next_area( areaname, grid )
     grid:set_current_row(1,areaname)
 end
 
---- Switch to a new page and shipout the current page.
+--- Switch to a new page and ship out the current page.
 --- This new page is only created if something is typeset on it.
 function new_page()
     trace("publisher new_page")
@@ -1705,10 +1705,9 @@ function background( box, colorname )
     end
 end
 
---- Draw a frame around the given TeX box with color `colorname`.
+--- Draw a frame around the given TeX box with color `obj.colorname`.
 --- The control points of the frame are
 --- ![control points](img/roundedcorners.svg)
-
 function frame(obj)
     local  box, colorname, width
     box          = obj.box
@@ -1877,7 +1876,7 @@ function usespotcolor(num)
     used_spotcolors[num] = true
 end
 
--- Set the PDF pageresources for the current page.
+-- Set the PDF page-resources for the current page.
 function setpageresources()
 
     local gstateresource = string.format(" /ExtGState << /GS0 %d 0 R /GS1 %d 0 R >>", GS_State_OP_On, GS_State_OP_Off)
@@ -1897,7 +1896,7 @@ function setpageresources()
     end
 end
 
--- return the fill and stroke color of the given colorstring
+-- return the fill and stroke color of the given color string
 function fill_stroke_color( pdfcolor )
     local a,b = string.match(pdfcolor,"^(.*rg)(.*RG)")
     if a ~= nil then
@@ -2006,7 +2005,7 @@ function box( width_sp,height_sp,colorname )
     return v
 end
 
---- After everything is ready for page shipout, we add debug output and crop marks if necessary
+--- After everything is ready for page ship-out, we add debug output and crop marks if necessary
 function dothingsbeforeoutput( thispage )
 
     if thispage and thispage.AtPageShipout then
@@ -2131,7 +2130,7 @@ function dothingsbeforeoutput( thispage )
     end
 end
 
---- Read the contents of the attribute `attname_english`. `typ` is one of
+--- Read the contents of the attribute `attname`. `typ` is one of
 --- `string`, `number`, `length` and `boolean`.
 --- `default` gives something that is to be returned if no attribute with this name is present.
 function read_attribute( layoutxml,dataxml,attname,typ,default,context)
@@ -2553,7 +2552,7 @@ function parse_html_tr(tr)
 end
 
 
---- Look for `user_defined` at end of page (shipout) and runs actions encoded in them.
+--- Look for `user_defined` at end of page (ship-out) and runs actions encoded in them.
 function find_user_defined_whatsits( head )
     local fun
     while head do
@@ -2721,7 +2720,7 @@ end
 --- * italic (italic)
 --- * underline
 function mknodes(str,fontfamily,parameter)
-    -- instance is the internal fontnumber
+    -- instance is the internal font number
     parameter = parameter or {}
     local allowbreak = parameter.allowbreak or " -"
     local instance
@@ -2766,7 +2765,7 @@ function mknodes(str,fontfamily,parameter)
     if not string.find(allowbreak, " ") then
         breakatspace = false
     end
-    -- There is a string with utf8 chars
+    -- There is a string with UTF-8 chars
     for s in string.utfvalues(str) do
         local char = unicode.utf8.char(s)
         -- If the next char is a newline (&#x0A;) a \\ is inserted
@@ -3097,7 +3096,7 @@ function fix_justification( nodelist,alignment,parent)
         if head.id == 0 then -- hlist
 
             -- we are on a line now. We assume that the spacing needs correction.
-            -- The goal depends on the current line (parshape!)
+            -- The goal depends on the current line (par shape!)
             local goal
             if head.width == 1 then
                 goal, _, _ = node.dimensions(head.glue_set, head.glue_sign, head.glue_order, head.head)
@@ -3131,7 +3130,7 @@ function fix_justification( nodelist,alignment,parent)
                             spec_new.shrink_order = head.glue_order
                             n.spec = spec_new
                         else
-                            -- somewhat it looks as if this is not the equivalent of the above. Fixme!
+                            -- somewhat it looks as if this is not the equivalent of the above. FIXME!
                             set_glue_values(n,{width = fonttable.parameters.space, shrink_order = head.glue_order, stretch = 0, stretch_order = 0})
                         end
                     end
@@ -3233,7 +3232,7 @@ function do_linebreak( nodelist,hsize,parameters )
         pdfignoreddimen   = pdfignoreddimen,
     }
 
-    -- This could be done with a meta table, but somehow ltx 104 doesn't like it
+    -- This could be done with a meta table, but somehow LuaTeX 104 doesn't like it
     for k,v in pairs(parameters) do
         default_parameters[k] = v
     end
@@ -3462,8 +3461,6 @@ function set_color_if_necessary( nodelist,color )
 end
 
 function set_fontfamily_if_necessary(nodelist,fontfamily)
-    -- if fontfamily == 0 then return end
-
     local fam
     while nodelist do
         if nodelist.id==vlist_node or nodelist.id==hlist_node  then
@@ -3575,7 +3572,7 @@ function montage( nodelist_background,nodelist_foreground, origin_x, origin_y )
     return hbox
 end
 
---- Apply transformation matrix to object given at _nodelist_. Called from commmands#transformation.
+--- Apply transformation matrix to object given at _nodelist_. Called from commands#transformation.
 function matrix( nodelist,matrix,origin_x,origin_y )
     local wd,ht = nodelist.width, nodelist.height + nodelist.depth
     local tbl = explode(matrix,"[^\t ]+")
@@ -3617,7 +3614,7 @@ function rotate( nodelist,angle,origin_x,origin_y )
     nodelist.height = 0
     nodelist.depth = 0
 
-    -- positive would be counter clockwise, but CSS is clowckwise. So we multiply by -1
+    -- positive would be counter clockwise, but CSS is clockwise. So we multiply by -1
     local angle_rad = -1 * math.rad(angle)
     local sin = math.round(math.sin(angle_rad),3)
     local cos = math.round(math.cos(angle_rad),3)
@@ -3647,7 +3644,7 @@ function rotateTd( nodelist,angle, width_sp)
     -- positive would be counter clockwise, but CSS is clockwise. So we multiply by -1
     local angle_rad = -1 * math.rad(angle)
 
-    -- When text is roated, it needs to get shifted to the right and to the bottom
+    -- When text is rotated, it needs to get shifted to the right and to the bottom
     local shift_x, shift_y = 0,0
     local _wd,_ht,_dp = nodelist.width, nodelist.height,nodelist.depth
     local ht = _ht + _dp
@@ -3774,67 +3771,6 @@ language_mapping = {
     ["Swedish"]                      = "sv",
     ["Turkish"]                      = "tr",
 }
-
---- Supported language names. Not all are currently available from the publisher
----
----     af, Afrikaans - Afrikaans
----     as, Assamese - Assamesisch
----     bg, Bulgarian - Bulgarisch
----     ca, Catalan - Katalanisch
----     cs, Czech - Tschechisch
----     cy, Welsh - Kymrisch
----     da, Danish - Dänisch
----     de, German - Deutsch
----     el, Greek - Neugriechisch
----     en, English - Englisch
----     eo, Esperanto - Esperanto
----     es, Spanish - Spanisch
----     et, Estonian - Estnisch
----     eu, Basque - Baskisch
----     fi, Finnish - Finnisch
----     fr, French - Französisch
----     ga, Irish - Irisch
----     gl, Galician - Galicisch
----     grc, Ancient Greek - Altgriechisch
----     gu, Gujarati - Gujarati
----     hi, Hindi - Hindi
----     hr, Croatian - Kroatisch
----     hu, Hungarian - Ungarisch
----     hy, Armenian - Armenisch
----     ia, Interlingua - Interlingua
----     id, Indonesian - Bahasa Melayu
----     is, Icelandic - Isländisch
----     it, Italian - Italienisch
----     ku, Kurdish - Kurdisch
----     kn, Kannada - Kannada
----     la, Latin - Latein
----     lo, Lao - Laotisch
----     lt, Lithuanian - Litauisch
----     ml, Malayalam - Malayalam
----     lv, Latvian - Lettisch
----     ml, Malayalam - Malayalam
----     mn, Mongolian - Mongolisch
----     mr, Marathi - Marathi
----     nb, Norwegian Bokmål - Bokmål
----     nl, Dutch - Niederländisch
----     nn, Norwegian Nynorsk - Nynorsk
----     or, Oriya - Oriya
----     pa, Panjabi - Pandschabi
----     pl, Polish - Polnisch
----     pt, Portuguese - Portugiesisch
----     ro, Romanian - Rumänisch
----     ru, Russian - Russisch
----     sa, Sanskrit - Sanskrit
----     sk, Slovak - Slowakisch
----     sl, Slovenian - Slowenisch
----     sr, Serbian - Serbisch
----     sv, Swedish - Schwedisch
----     ta, Tamil - Tamil
----     te, Telugu - Telugu
----     tk, Turkmen - Turkmenisch
----     tr, Turkish - Türkisch
----     uk, Ukrainian - Ukrainisch
----     zh, Chinese - Chinesisch
 
 
 language_filename = {
@@ -3985,7 +3921,7 @@ function set_pageformat( wd,ht )
     options.pageheight  = ht
     tex.pdfpagewidth =  wd
     tex.pdfpageheight = ht
-    -- why the + 2cm? is this for the trim-/art-/bleedbox? FIXME: document
+    -- why the + 2cm? is this for the trim-/art-/bleed box? FIXME: document
     tex.pdfpagewidth  = tex.pdfpagewidth   + 2 * tenmm_sp
     tex.pdfpageheight = tex.pdfpageheight  + 2 * tenmm_sp
 
@@ -4225,13 +4161,13 @@ function deepcopy(t)
     return res
 end
 
--- Return the height of the page given by the relative pagenumber
+-- Return the height of the page given by the relative page number
 -- (starting from the current_pagenumber).
 -- This is used in tables to get the height of a page in a multi
 -- page table. Called from tabular.lua / set in commands.lua (#table)
 function getheight( relative_framenumber )
     local grid = current_grid
-    local cp, cg, cpn, cfn -- current page, current grid, current pagenumber, current frame number
+    local cp, cg, cpn, cfn -- current page, current grid, current page number, current frame number
     cp = current_page
     cg = current_grid
     cpn = current_pagenumber
@@ -4617,7 +4553,6 @@ for i = 65,  90 do table.insert(charset, string.char(i)) end
 for i = 97, 122 do table.insert(charset, string.char(i)) end
 
 function string_random(length)
-  -- math.randomseed(os.time())
   if length > 0 then
     return string_random(length - 1) .. charset[math.random(1, #charset)]
   else

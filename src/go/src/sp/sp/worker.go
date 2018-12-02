@@ -26,7 +26,7 @@ func startDispatcher(nworkers int) {
 	workerQueue = make(chan chan WorkRequest, nworkers)
 	// Now, create all of our workers.
 	for i := 1; i <= nworkers; i++ {
-		NewWorker(i, workerQueue).Start()
+		newWorker(i, workerQueue).Start()
 	}
 	go func() {
 		for {
@@ -51,7 +51,7 @@ type worker struct {
 }
 
 // NewWorker creates and return the worker
-func NewWorker(id int, workerQueue chan chan WorkRequest) worker {
+func newWorker(id int, workerQueue chan chan WorkRequest) worker {
 	worker := worker{
 		ID:          id,
 		Work:        make(chan WorkRequest),

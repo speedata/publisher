@@ -78,7 +78,7 @@ var (
 
 // The LuaTeX process writes out a file called "publisher.status"
 // which is a valid XML file. Currently the only field is "Errors"
-// with the number of errors occured during the publisher run.
+// with the number of errors occurred during the publisher run.
 type statuserror struct {
 	XMLName xml.Name `xml:"Error"`
 	Code    int      `xml:"code,attr"`
@@ -233,7 +233,7 @@ func openFile(filename string) {
 	}
 }
 
-// Put string a=b into the variabls map
+// Put string a=b into the variables map
 func setVariable(str string) {
 	a := strings.Split(str, "=")
 	variables[a[0]] = a[1]
@@ -258,7 +258,7 @@ func timeoutCatcher(seconds int) {
 	}
 }
 
-// fixme: move the next two functions into one function
+// FIXME: move the next two functions into one function
 func sigTermCatcher() {
 	ch := make(chan os.Signal)
 	signal.Notify(ch, syscall.SIGTERM)
@@ -397,12 +397,12 @@ func extradir(arg string) {
 	extraDir = append(extraDir, arg)
 }
 
-// Add the commandline argument to the list of additional XML files for the layout
+// Add the command line argument to the list of additional XML files for the layout
 func extraXML(arg string) {
 	extraxml = append(extraxml, arg)
 }
 
-// Add the commandline argument to the list of additional XML files for the layout
+// Add the command line argument to the list of additional XML files for the layout
 func prependXML(arg string) {
 	prependxml = append(prependxml, arg)
 }
@@ -410,7 +410,7 @@ func prependXML(arg string) {
 /// We don't know where the executable is. On systems where we have
 /// LuaTeX, we don't want to interfere with the binary so we
 /// install a binary called sdluatex (linux package). Therefore
-/// we check for `sdluatex` and `luatex`, of the former is not found.
+/// we check for `sdluatex` and `luatex`, if the former is not found.
 func getExecutablePath() string {
 	// 1 check the installdir/bin for sdluatex(.exe)
 	// 2 check PATH for sdluatex(.exe)
@@ -610,7 +610,7 @@ func runPublisher() (exitstatus int) {
 		}
 	}
 
-	// If user supplied an outpath, copy the PDF and the protocol to that path
+	// If user supplied an outputdir, copy the PDF and the protocol to that path
 	p := getOption("outputdir")
 	if p != "" {
 		pdffilename := jobname + ".pdf"
@@ -644,7 +644,7 @@ goconfig (https://github.com/Unknwon/goconfig)
 TeX Gyre Heros fonts (http://www.gust.org.pl/projects/e-foundry/tex-gyre/heros)
 Parts of the Go library (https://golang.org/)
 Blackfriday (https://github.com/russross/blackfriday)
-Shopify Lua (github.com/Shopify/go-lua)
+GopherLua (github.com/yuin/gopher-lua)
 
 Contact:
    gundlach@speedata.de

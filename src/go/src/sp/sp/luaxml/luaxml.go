@@ -97,10 +97,7 @@ func encodeItem(tbl *lua.LTable, enc *xml.Encoder) error {
 		return encodeElement(tbl, enc)
 	case "comment":
 		return encodeComment(tbl, enc)
-	default:
-		return nil
 	}
-
 	return nil
 }
 
@@ -131,6 +128,7 @@ var exports = map[string]lua.LGFunction{
 	"encode_table": encodeTable,
 }
 
+// Open starts this lua instance
 func Open(l *lua.LState) int {
 	mod := l.SetFuncs(l.NewTable(), exports)
 	l.Push(mod)

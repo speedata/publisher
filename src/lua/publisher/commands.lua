@@ -59,9 +59,9 @@ end
 
 --- Action
 --- ------
---- Create a whatsit node of type 44 (`user_defined`). The action
+--- Create a whatsit node of type `user_defined`. The action
 --- `AddToList` is not well tested. Actions are
---- processed  after page shipout. The idea behind that is that we don't
+--- processed  after page ship out. The idea behind that is that we don't
 --- really know in advance which elements are put on a page and which are
 --- broken to the next page. This way we can find out exactly where something
 --- is  placed.
@@ -142,7 +142,7 @@ end
 --- Attribute
 --- ---------
 --- Create an attribute to be used in a XML structure. The XML structure can be formed via
---- Element and Attribute commands and writen to disk with SaveDataset.
+--- Element and Attribute commands and written to disk with SaveDataset.
 function commands.attribute( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpath")
     local attname   = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
@@ -371,7 +371,7 @@ function commands.bookmark( layoutxml,dataxml )
     --- So we can safely insert the destination in our text flow but save the
     --- destination code (a number) for later. There is a slight problem now: as
     --- the text flow is asynchronous, we evaluate the bookmark during page
-    --- shipout. Then we have the correct order (hopefully)
+    --- ship out. Then we have the correct order (hopefully)
     local title  = publisher.read_attribute(layoutxml,dataxml,"select","xpath")
     local level  = publisher.read_attribute(layoutxml,dataxml,"level", "number")
     local open_p = publisher.read_attribute(layoutxml,dataxml,"open",  "boolean")
@@ -445,7 +445,7 @@ end
 
 --- Column
 --- ------
---- Set defintions for a specific column of a table.
+--- Set definitions for a specific column of a table.
 function commands.column( layoutxml,dataxml )
     local ret = {}
     ret.width            = publisher.read_attribute(layoutxml,dataxml,"width","rawstring")
@@ -948,7 +948,7 @@ end
 --- Set the grid in a group (also in a pagetype?)
 function commands.grid( layoutxml,dataxml )
     local width  = publisher.read_attribute(layoutxml,dataxml,"width",  "length_sp")
-    local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --pg
+    local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --PG
     local nx     = publisher.read_attribute(layoutxml,dataxml,"nx",     "rawstring")
     local ny     = publisher.read_attribute(layoutxml,dataxml,"ny",     "rawstring")
     local dx     = publisher.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
@@ -1775,7 +1775,7 @@ end
 
 --- NoBreak
 --- -------
---- Don't allow a linebreak of the contents. Reduce font size if necessary
+--- Don't allow a line break of the contents. Reduce font size if necessary
 function commands.nobreak( layoutxml, dataxml )
     local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth", "length_sp", xpath.get_variable("__maxwidth"))
     local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor",   "rawstring",0.9)
@@ -2101,7 +2101,7 @@ end
 
 --- PageType
 --- --------
---- This command should be probably called Masterpage or something similar.
+--- This command should be probably called master page or something similar.
 function commands.pagetype(layoutxml,dataxml)
     trace("Command: Pagetype")
     local tmp_tab = {
@@ -2380,7 +2380,7 @@ function commands.place_object( layoutxml,dataxml )
     end
 
     publisher.setup_page(onpage,"commands#PlaceObject")
-    -- current_grid should be local. But then the test tables/futureobjects fails
+    -- current_grid should be local. But then the test tables/future objects fails
     -- FIXME: check why the test fails
     -- local current_grid
     if onpage then
@@ -2501,7 +2501,7 @@ function commands.place_object( layoutxml,dataxml )
             else
                 if type(object)=="table" then
                     -- last page of balanced objects must not change active frame
-                    -- see last lines of placeobject
+                    -- see last lines of place_object
                     objects.balance = object.balance
                     for i=1,#object do
                         objects[#objects + 1] = {object = object[i], objecttype = objecttype }
@@ -2832,7 +2832,7 @@ function commands.rule( layoutxml,dataxml )
     n.mode = 0
     local dashpattern
     if dashed then
-        -- 3 * rulewidth seems to be a reasonable dash pattern
+        -- 3 * rule width seems to be a reasonable dash pattern
         dashpattern = string.format("[%g] 0 d",3 * rulewidth)
     else
         dashpattern = ""
@@ -3274,7 +3274,7 @@ function commands.table( layoutxml,dataxml,options )
     local collapse       = publisher.read_attribute(layoutxml,dataxml,"border-collapse",  "string", "separate")
     local balance        = publisher.read_attribute(layoutxml,dataxml,"balance",       "boolean", false)
 
-    -- FIXME: leading -> rowdistance or so
+    -- FIXME: leading -> row distance or so
     padding        = tex.sp(padding        or "0pt")
     columndistance = tex.sp(columndistance or "0pt")
     rowdistance    = tex.sp(rowdistance    or "0pt")
@@ -3394,7 +3394,7 @@ end
 
 --- TableNewPage
 --- ---------
---- Pagebreak inside a table
+--- Page break inside a table
 function commands.talbenewpage( layoutxml, dataxml )
     return {}
 end
@@ -3515,7 +3515,7 @@ end
 
 --- Transformation
 --- --------------
---- Apply a transformation on an object for PlaceObject. Transformaitons can be nested.
+--- Apply a transformation on an object for PlaceObject. Transformations can be nested.
 function commands.transformation( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     local matrix   = publisher.read_attribute(layoutxml,dataxml,"matrix",  "rawstring")
@@ -3772,7 +3772,7 @@ function commands.text(layoutxml,dataxml)
                         if cg:number_of_frames(parameter.area) > cg:framenumber(parameter.area) then
                             cg:advance_cursor(overshoot,parameter.area)
                         elseif publisher.pages[cg.pagenumber + 1] then
-                            -- fixme: it could be that the advance_cursor is so large that it should
+                            -- FIXME: it could be that the advance_cursor is so large that it should
                             -- get to some future page..
                             local next_page_grid = publisher.pages[cg.pagenumber + 1].grid
                             next_page_grid:advance_cursor(overshoot,parameter.area)
@@ -3958,7 +3958,6 @@ function commands.textblock( layoutxml,dataxml )
     end
     return nodelist
 end
-
 
 --- Underline
 --- ---------
