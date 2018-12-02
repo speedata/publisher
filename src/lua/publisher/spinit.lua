@@ -356,16 +356,6 @@ function main_loop()
     exit(true)
 end
 
-function main_loop_profiling()
-  require("profiler")
-  log("Start processing")
-  setup()
-  profiler.start()
-  publisher.dothings()
-  profiler.stop()
-  exit(true)
-end
-
 errorlog = io.open(string.format("%s.protocol",tex.jobname),"ab")
 errorlog:write("---------------------------------------------\n")
 
@@ -373,8 +363,4 @@ starttime = os.gettimeofday()
 
 font.cache = 'no'
 
-if os.getenv("SD_PROFILER") == "true" then
-    main_loop_profiling()
-else
-    main_loop()
-end
+main_loop()

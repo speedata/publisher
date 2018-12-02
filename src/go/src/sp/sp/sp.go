@@ -677,7 +677,6 @@ func main() {
 	op.On("--mainlanguage NAME", "The document's main language in locale format, for example 'en' or 'en_US'.", &mainlanguage)
 	op.On("--outputdir=DIR", "Copy PDF and protocol to this directory", options)
 	op.On("--port PORT", "Port to be used for the server mode. Defaults to 5266", options)
-	op.On("--profile", "Run publisher with profiling on (internal use)", options)
 	op.On("--quiet", "Run publisher in silent mode", options)
 	op.On("--runs NUM", "Number of publishing runs ", options)
 	op.On("--startpage NUM", "The first page number", layoutoptions)
@@ -841,20 +840,6 @@ func main() {
 	}
 
 	var exitstatus int
-	if getOption("profile") != "" {
-		fmt.Println("Profiling publisher run. Removing lprof_* now.")
-		os.Setenv("SD_PROFILER", stringTrue)
-		files, err := filepath.Glob("lprof_*")
-		if err != nil {
-			log.Fatal(err)
-		}
-		for _, filename := range files {
-			err = os.Remove(filename)
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
-	}
 
 	if seconds := getOption("timeout"); seconds != "" {
 		num, err := strconv.Atoi(seconds)
@@ -909,21 +894,6 @@ func main() {
 			os.Exit(exitstatus)
 		}
 		exitstatus = runPublisher()
-		// profiler requested?
-		if getOption("profile") != "" {
-			fmt.Println("Run 'summary.lua' on resulting lprof_* file.")
-			files, err := filepath.Glob("lprof_*")
-			if err != nil {
-				log.Fatal(err)
-			}
-			if len(files) != 1 {
-				log.Println("Profiling not done, expecting exactly one file matching lprof_*.")
-			} else {
-				cmdline := fmt.Sprintf(`"%s" --luaonly "%s/lua/summary.lua"  -v %s`, getExecutablePath(), srcdir, files[0])
-				run(cmdline)
-			}
-
-		}
 		writeFinishedfile(finishedfilename)
 
 		// open PDF if necessary
