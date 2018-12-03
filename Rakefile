@@ -7,15 +7,13 @@ CLOBBER.include("build/sourcedoc","src/go/sp/sp","src/go/sp/docgo", "src/go/sp/b
 installdir = Pathname.new(__FILE__).join("..")
 srcdir   = installdir.join("src")
 builddir = installdir.join("build")
+ENV['GOBIN'] = installdir.join("bin").to_s
 @versions = {}
 
 File.read("version").each_line do |line|
 	product,versionnumber = line.chomp.split(/=/) # / <-- ignore this slash
 	@versions[product]=versionnumber
 end
-
-ENV['GOPATH'] = "#{srcdir}/go"
-
 
 def build_go(srcdir,destbin,goos,goarch,targettype)
 	if goarch
@@ -50,7 +48,6 @@ end
 desc "Build sphelper program"
 task :sphelper do
 	sh "go install -ldflags \"-X main.basedir=#{installdir} -s\"  sphelper/sphelper"
-	FileUtils::cp("#{srcdir}/go/bin/sphelper","#{installdir}/bin")
 end
 
 
