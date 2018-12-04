@@ -171,20 +171,60 @@
   </define>
 
   <defineattribute name="languages">
-    <choice en="German">
+    <choice en="Ancient Greek">
       <description xml:lang="en">
-        <para>Switch to German hyphenation patterns.</para>
+        <para>Switch to Ancient Greek hyphenation patterns.</para>
       </description>
       <description xml:lang="de">
-        <para>Auf deutsche Trennmuster umschalten.</para>
+        <para>Altgriechische Trennmuster.</para>
       </description>
     </choice>
-    <choice en="English (Great Britain)">
+    <choice en="Armenian">
       <description xml:lang="en">
-        <para>Switch to British hyphenation patterns.</para>
+        <para>Switch to Armenian hyphenation patterns.</para>
       </description>
       <description xml:lang="de">
-        <para>Auf GB-englische Trennmuster umschalten.</para>
+        <para>Auf armenische Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Bahasa Indonesia">
+      <description xml:lang="en">
+        <para>Switch to Bahasa Indonesia hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf indonesische Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Basque">
+      <description xml:lang="en">
+        <para>Switch to Basque hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf baskische Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Bulgarian">
+      <description xml:lang="en">
+        <para>Switch to Bulgarian (latin alphabet) hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf bulgarische (latainisches Alphabet) Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Catalan">
+      <description xml:lang="en">
+        <para>Switch to Catalan hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf katalanische Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Croatian">
+      <description xml:lang="en">
+        <para>Switch to Croatian hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf kroatische Trennmuster umschalten.</para>
       </description>
     </choice>
     <choice en="Czech">
@@ -211,12 +251,36 @@
         <para>Auf niederländische Trennmuster umschalten.</para>
       </description>
     </choice>
+    <choice en="English (Great Britain)">
+      <description xml:lang="en">
+        <para>Switch to British hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf GB-englische Trennmuster umschalten.</para>
+      </description>
+    </choice>
     <choice en="English (USA)">
       <description xml:lang="en">
         <para>Switch to American English hyphenation patterns.</para>
       </description>
       <description xml:lang="de">
         <para>Auf US-englische Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Esperanto">
+      <description xml:lang="en">
+        <para>Switch to Esperanto hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf Esperatnto Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Estonian">
+      <description xml:lang="en">
+        <para>Switch to Turkish hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf estnische Trennmuster umschalten.</para>
       </description>
     </choice>
     <choice en="Finnish">
@@ -235,6 +299,22 @@
         <para>Französische Trennmuster</para>
       </description>
     </choice>
+    <choice en="Galician">
+      <description xml:lang="en">
+        <para>Switch to Turkish hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf galicische Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="German">
+      <description xml:lang="en">
+        <para>Switch to German hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf deutsche Trennmuster umschalten.</para>
+      </description>
+    </choice>
     <choice en="Greek">
       <description xml:lang="en">
         <para>Switch to Monotonic Greek hyphenation patterns.</para>
@@ -243,12 +323,12 @@
         <para>Neugriechisch</para>
       </description>
     </choice>
-    <choice en="Ancient Greek">
+    <choice en="Gujarati">
       <description xml:lang="en">
-        <para>Switch to Ancient Greek hyphenation patterns.</para>
+        <para>Switch to Turkish hyphenation patterns.</para>
       </description>
       <description xml:lang="de">
-        <para>Altgriechische Trennmuster.</para>
+        <para>Auf Gujarati Trennmuster umschalten.</para>
       </description>
     </choice>
     <choice en="Hungarian">
@@ -259,12 +339,76 @@
         <para>Auf ungarische Trennmuster umschalten.</para>
       </description>
     </choice>
+    <choice en="Hindi">
+      <description xml:lang="en">
+        <para>Switch to Hindi hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf Hindi Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Icelandic">
+      <description xml:lang="en">
+        <para>Switch to Turkish hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf isländische Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Irish">
+      <description xml:lang="en">
+        <para>Switch to Turkish hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf irische Trennmuster umschalten.</para>
+      </description>
+    </choice>
     <choice en="Italian">
       <description xml:lang="en">
         <para>Switch to Italian hyphenation patterns.</para>
       </description>
       <description xml:lang="de">
         <para>Auf italienische Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Kannada">
+      <description xml:lang="en">
+        <para>Switch to Kannada hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf kanaresische Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Kurmanji">
+      <description xml:lang="en">
+        <para>Switch to Kurmanji hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf Kurmandschi Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Latvian">
+      <description xml:lang="en">
+        <para>Switch to Latvian hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf lettische Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Lithuanian">
+      <description xml:lang="en">
+        <para>Switch to Lithuanian hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf litauische Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Malayalam">
+      <description xml:lang="en">
+        <para>Switch to Malayalam hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf Malayalam Trennmuster umschalten.</para>
       </description>
     </choice>
     <choice en="Norwegian Bokmål">
@@ -299,6 +443,14 @@
         <para>Auf portugiesische Trennmuster umschalten.</para>
       </description>
     </choice>
+    <choice en="Romanian">
+      <description xml:lang="en">
+        <para>Switch to Romanian hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf rumänische Trennmuster umschalten.</para>
+      </description>
+    </choice>
     <choice en="Russian">
       <description xml:lang="en">
         <para>Switch to Russian hyphenation patterns.</para>
@@ -313,6 +465,22 @@
       </description>
       <description xml:lang="de">
         <para>Auf serbische Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Slovak">
+      <description xml:lang="en">
+        <para>Switch to Slovak hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf slowakische Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Slovenian">
+      <description xml:lang="en">
+        <para>Switch to Slovenian hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf slowenische Trennmuster umschalten.</para>
       </description>
     </choice>
     <choice en="Spanish">
@@ -337,6 +505,22 @@
       </description>
       <description xml:lang="de">
         <para>Auf türkische Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Ukrainian">
+      <description xml:lang="en">
+        <para>Switch to Ukrainian hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf ukrainische Trennmuster umschalten.</para>
+      </description>
+    </choice>
+    <choice en="Welsh">
+      <description xml:lang="en">
+        <para>Switch to Welsh hyphenation patterns.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf walisische Trennmuster umschalten.</para>
       </description>
     </choice>
   </defineattribute>
@@ -4778,8 +4962,6 @@
   />
       ]]></listing>
     </example>
-    <info xml:lang="en"><para>The available languages are: <tt>Ancient Greek</tt>, <tt>Czech</tt>, <tt>Danish</tt>, <tt>Dutch</tt>, <tt>English (Great Britain)</tt>, <tt>English (USA)</tt>, <tt>Finnish</tt>, <tt>French</tt>, <tt>German</tt>, <tt>Greek</tt>, <tt>Hungarian</tt>, <tt>Italian</tt>, <tt>Norwegian Bokmål</tt>, <tt>Norwegian Nynorsk</tt>, <tt>Polish</tt>, <tt>Portuguese</tt>, <tt>Russian</tt>, <tt>Serbian</tt>, <tt>Spanish</tt>, <tt>Swedish</tt>, <tt>Turkish</tt>.</para></info>
-    <info xml:lang="de"><para>Die verfügbaren Sprachen sind: <tt>Ancient Greek</tt>, <tt>Czech</tt>, <tt>Danish</tt>, <tt>Dutch</tt>, <tt>English (Great Britain)</tt>, <tt>English (USA)</tt>, <tt>Finnish</tt>, <tt>French</tt>, <tt>German</tt>, <tt>Greek</tt>, <tt>Hungarian</tt>, <tt>Italian</tt>, <tt>Norwegian Bokmål</tt>, <tt>Norwegian Nynorsk</tt>, <tt>Polish</tt>, <tt>Portuguese</tt>, <tt>Russian</tt>, <tt>Serbian</tt>, <tt>Spanish</tt>, <tt>Swedish</tt>, <tt>Turkish</tt>.</para></info>
     <seealso><ref name="cutmarks"/></seealso>
   </command>
   <command en="Otherwise">

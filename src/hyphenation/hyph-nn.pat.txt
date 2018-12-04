@@ -11,7 +11,7 @@
 .ad1s2
 .af7f
 .af5t4
-.af5f6u
+.af5f8u
 .ag6na.
 .ag6ne.
 .ag4r
@@ -25,6 +25,7 @@
 .ak6r
 .ak8sa.
 .ak4se.
+.ak6s3t
 .ak6ta
 .ak4te.
 .akte4r
@@ -48,6 +49,7 @@
 .al8me.
 .al5m6in
 .al4na
+.alpe5
 .al6s7k
 .als5o
 .alt4a
@@ -68,6 +70,7 @@
 .an4de.
 .an5d4ra
 .an4d5ø
+.and6ø6v
 .an3er
 .anes5
 .an4ga.
@@ -119,6 +122,7 @@
 .ar6r7u
 .ar6ta.
 .ar4te.
+.ar3t4h
 .ar9ti
 .ar6va.
 .ar4ve.
@@ -218,6 +222,7 @@
 .bu6da.
 .bu3d6r
 .bu4et
+.bul4k5
 .bus6sy
 .by6de.
 .by8ta.
@@ -254,6 +259,7 @@
 .de6r3i4
 .de7r4i5v
 .de4r5om
+.de8ru
 .de6s5m
 .de4so
 .de4sto
@@ -363,6 +369,7 @@
 .els6t
 .el6ta.
 .el6te.
+.elve7l8
 .el6veg
 .em3b2
 .emfa9
@@ -425,7 +432,7 @@
 .es6te.
 .es7tet
 .es5ti
-.est3r
+.es6t6r
 .es7tu
 .et8la.
 .et8le.
@@ -437,8 +444,9 @@
 .et6se.
 .ets4i
 .et1te4
-.et6ter
+.et6ter5
 .et6ti
+.euro5
 .ev8ja
 .ev4je.
 .ev4ne.
@@ -449,6 +457,7 @@
 .fa4ne.
 .fan3t4o
 .fe4e
+.fei8e
 .feil5i
 .fe2l
 .fela9
@@ -463,12 +472,14 @@
 .fe8sl
 .fe8st5
 .fes3t6e
+.fett5a
 .fi4b5
 .fi6a
 .fi4le.
 .fire5o6g5
 .fis6k
 .fjel4
+.fjor4d3
 .fla4t5o
 .fo4bi.
 .fol2
@@ -513,6 +524,7 @@
 .gi4s
 .gis7p
 .gi8v3a
+.gje8n7
 .gl6
 .glo6i
 .glo9v
@@ -543,6 +555,7 @@
 .ha6vi
 .he4er.
 .hei5e
+.hel3u
 .he2n
 .hen3i2
 .he6r5i6
@@ -551,6 +564,7 @@
 .he7r6oi
 .he7r6ol
 .he9r8os
+.he8ru
 .hes4s5
 .het6s5
 .het7s6e
@@ -567,9 +581,12 @@
 .ho8ta.
 .ho8va.
 .hu4di
+.hull7s
+.hu4s3en
 .hus6val
 .hvit3
 .hvi3t4e
+.hvo8r5
 .hy6ra.
 .hy4re.
 .høi5
@@ -591,6 +608,7 @@
 .ik2
 .ik6k
 .ikke5
+.ikkes8
 .i3k6l
 .ik5t
 .ik8te.
@@ -646,7 +664,7 @@
 .is8na.
 .is8ne.
 .is5pa
-.i5spe
+.i5s8pe
 .is3s4
 .is6sa.
 .is4se.
@@ -686,6 +704,9 @@
 .je4ta
 .ji4
 .jo8en.
+.jor8d7r
+.jor8d7s8
+.jor8d7u
 .jo4se.
 .ju6a
 .ju6la
@@ -696,6 +717,7 @@
 .kaf2
 .ka6la.
 .ka6li.
+.kal7t8
 .kalve5l8
 .ka5me
 .ka3na
@@ -705,6 +727,7 @@
 .ka5r6a5v
 .ka6re.
 .ka5rin
+.kar8t7r
 .ka4te.
 .ka5t6h
 .kau9k
@@ -728,8 +751,10 @@
 .kli5ne
 .klo9va
 .kly7sa
+.klø7s8
 .kna7se
 .kne4p3r
+.kne7r8
 .ko6da.
 .ko7gr
 .ko4la
@@ -744,6 +769,7 @@
 .ko4te.
 .ko6ve.
 .kring5s
+.kru4s3t
 .ks6
 .ku5f4l
 .ku4le
@@ -766,12 +792,15 @@
 .la4ge.
 .la5ger
 .la4ma.
+.lapp8e7
+.lap5s4e5
 .la6ta.
 .la4te.
 .la3tr
 .la4va
 .la3ve
 .la4ve.
+.la6v5æ
 .le8ar
 .le4da.
 .le4de.
@@ -783,7 +812,8 @@
 .le4ge.
 .le4gel
 .le8gi.
-.lei5er.
+.lei8e
+.lei7er.
 .lei4ve
 .le4ke.
 .le4k5r
@@ -812,7 +842,7 @@
 .li2k
 .lik5k6
 .lik3o
-.lik3s
+.lik3s4
 .li4ma
 .link6
 .li6ra
@@ -826,7 +856,7 @@
 .li4v5en
 .liv8s7u6
 .liv4s5v
-.lo4e
+.lo5e6
 .lo6ge.
 .lo8gi.
 .lo6g5r
@@ -866,6 +896,10 @@
 .lø8ne.
 .lø6pa.
 .lø4pe.
+.lø8s7a
+.lø8s7i
+.lø8s7m
+.lø8s7p
 .løv5i
 .løye5ne
 .lå8ma
@@ -875,6 +909,7 @@
 .m8
 .ma4ge.
 .mag9r
+.mah6
 .ma3ka
 .ma4ke.
 .mak6t5at
@@ -882,11 +917,13 @@
 .ma4le.
 .ma4li.
 .ma4na.
+.mande8l
 .ma4ne.
 .ma4ni.
 .ma4ra.
 .ma4re.
 .ma4ri.
+.mar8sj7ø
 .ma4sa.
 .ma4si
 .ma6st
@@ -907,6 +944,7 @@
 .me4l5ø
 .me4ne.
 .me3ri
+.me8s7al
 .me4sk
 .me2t6a3
 .me3ta4ll
@@ -965,7 +1003,12 @@
 .ne4d5i
 .ne4d3r
 .ned3s4
+.ne4f5r
+.ne4g7
 .nei5e
+.ne6k6r
+.ne4o7
+.ne4o8n
 .ne8pa.
 .ne6pe.
 .ne2s
@@ -993,6 +1036,7 @@
 .no4va.
 .nu4e
 .ny5a
+.ny3o
 .ny8sa.
 .ny6se.
 .ny4te.
@@ -1006,6 +1050,7 @@
 .obo5e
 .od4da.
 .od4de.
+.odel8s7
 .od8la.
 .od8le.
 .offsi6
@@ -1021,6 +1066,7 @@
 .oli5
 .ol8la
 .ol8le.
+.oli5v6
 .ol6m
 .om1
 .om4ar.
@@ -1058,6 +1104,7 @@
 .ort6
 .or6va
 .osa5
+.os3el
 .os4k
 .os4s
 .os4te.
@@ -1075,9 +1122,12 @@
 .over5k8
 .ov8re
 .ov5u
+.ov6ul
 .p6
 .pa8la.
 .pa4le.
+.pal6i
+.pa8n7a
 .pa5n6e
 .pa6n7eu
 .pa5n6i
@@ -1089,6 +1139,8 @@
 .pe4ne.
 .pe2p
 .pep3r
+.pe8ri7
+.per6m7
 .pe8sa.
 .pese5t
 .pe4st
@@ -1116,6 +1168,7 @@
 .po6st
 .po8ta.
 .po6tek
+.pro7k8
 .ps2
 .pøn3
 .pøn9s6
@@ -1284,7 +1337,7 @@
 .si4ve.
 .sje4i
 .sju5o6g5
-.sk4
+.sk6
 .ska7ka
 .ska5ke
 .skat4
@@ -1299,6 +1352,8 @@
 .sku6m5
 .sky6f7la
 .skå5ra
+.sle6s5v
+.sli6b7r
 .slim5
 .slotts5
 .slu9ka
@@ -1306,6 +1361,7 @@
 .slø5se
 .sma4s
 .smas5k
+.smi6g7r
 .smo9g
 .små3
 .små7k6
@@ -1314,6 +1370,7 @@
 .småt5t
 .sn4
 .sne3
+.sne4k
 .snitt5s6
 .snø3k
 .soa8
@@ -1355,6 +1412,7 @@
 .svar5s
 .sver8n
 .syd5
+.sy3d6a
 .sy5d6e
 .sy6na.
 .sy4ne.
@@ -1426,6 +1484,7 @@
 .to4ra.
 .to4re.
 .to6reb
+.tor6g5a
 .to3ro
 .torsk6e5
 .tor4s5v
@@ -1443,6 +1502,7 @@
 .tre5o6g5
 .tre6skja
 .tre3s8ko
+.tre7sl
 .tre3sp
 .tre5s6t
 .ts2
@@ -1534,6 +1594,7 @@
 .u1p
 .u4pi
 .up2l
+.up4p3
 .u2ra
 .u5raf
 .ur6an
@@ -1636,7 +1697,6 @@
 .vi4d5å4
 .vi2e
 .vi4ka.
-.vil5l6a5l
 .vil5l6a5t
 .vi6ma.
 .vi8me.
@@ -1660,6 +1720,7 @@
 .vå4r3
 .vårs6
 .wa4r
+.we4g
 .wi6e
 .xe2
 .y6
@@ -1877,7 +1938,7 @@ a4d5øy
 2a1e2
 4aea
 a4ed
-ae3de
+8a7ede
 aed7r
 aek5t
 a4el.
@@ -2004,6 +2065,7 @@ ai5ne
 a3ing
 a1inn
 ai4n5o4
+ain8sm
 ai1ro
 ais4e
 ai4s3k
@@ -2129,6 +2191,7 @@ ak6tre
 akt3rå
 akt5s4la
 5aktue
+ak8t7æ
 akut2
 2akv
 ak3val
@@ -2258,6 +2321,7 @@ al6løs.
 al4løse
 al8løst
 al6lå
+8almal
 al6mek
 al4met
 4aln
@@ -2425,9 +2489,11 @@ and5s6tre
 a2ned
 an5egg
 a4n5elv
+ane8l7u
 a2nem
 2anen
 2aner
+a8n7erme
 ane3ru
 a5nes.
 a4nest
@@ -2535,6 +2601,7 @@ ansport7s6
 an1st6
 6anstar
 ans4te4
+an8s7tu
 6ans6ti
 2ansu
 an9s6und
@@ -2935,6 +3002,7 @@ as4t5enh
 a1stj
 a9stof
 a5stok
+as5t6os
 ast5ov
 ast5ren
 as4tro
@@ -3128,6 +3196,7 @@ austi6s
 aus6t7ise
 aus6ton
 au5str
+au6stra
 au6stri
 au1su
 au4sun
@@ -3155,6 +3224,7 @@ a9var.
 av3art
 avar6ta.
 4avas
+avat6a
 5avbi
 1avd
 3avdel
@@ -3251,7 +3321,7 @@ bad1s
 ba2k
 ba5kan7
 ba3kar
-bakars9
+bakars7
 ba3ken
 ba4k5end
 baken6de.
@@ -3403,7 +3473,7 @@ be6ef
 b4ef
 befa5re
 be3g
-bega9
+bega7
 be4ga.
 be4gi.
 be4gn
@@ -3450,7 +3520,7 @@ be5nat
 be3ne
 4bened
 be4nest
-ben5gu
+ben5g
 be5ni
 ben5s4i
 ben5skj
@@ -3551,6 +3621,7 @@ bik6ki
 bi5k4l
 4bi7kr
 bi6la.
+bi4l5ap
 bi4las
 bi4lau
 bi3let
@@ -3617,7 +3688,7 @@ b8larar
 b3lat
 bla4u
 b4lef
-bleie5
+blei8e5
 blei5er
 b4lek
 ble4k3a
@@ -3648,7 +3719,7 @@ blå5n
 blå3r
 blå7sa
 blå5se.
-2b1m
+6b5m
 6bn
 b3ne.
 b3ner
@@ -3776,7 +3847,7 @@ bru5sa
 brus4l
 1bry
 bryn4s
-b4rø
+3b4rø
 brø5de
 bråe6
 brå9ne
@@ -3883,7 +3954,7 @@ by4ste
 by5tar
 by4te.
 by1tr
-2byv
+2by5v
 bæ5rar
 bæ6rar.
 bæ4re.
@@ -3953,6 +4024,7 @@ ca5s4til
 cas5to
 ca1t
 cath5
+ca3th6r
 ca4to.
 6cb
 4cc
@@ -3996,7 +4068,7 @@ chel5s
 che7te
 chi4li
 4ch3h
-2chm
+6ch5m
 4chn
 ch5ne
 chom4
@@ -4133,7 +4205,7 @@ da4man
 da3mas
 da4me.
 da3men
-6d5ameri
+4d7ameri
 dame3s
 dame5t6
 da3mo
@@ -4178,7 +4250,7 @@ dar8ve.
 4dasjef
 da4sk
 da9sko
-6dastr
+6dast6r
 6dasu
 data5
 4da4tal
@@ -4195,12 +4267,14 @@ dau5go
 2daut
 2dav
 d5avb
+d5avis
 d1avl
 d3av5s
 4daø
 2d1b2
 dba8le.
 dba4ne.
+dbe5s6t
 dbe8ta.
 dbe6te.
 dbling7
@@ -4222,6 +4296,7 @@ dder5s
 d4desu
 ddie8
 d7dom
+d8d7orm
 d4d1re
 dd5run
 ddsa4
@@ -4295,6 +4370,8 @@ de3ist
 dekk3a
 dek4kan
 dek4kel
+dekk8s
+dekk7s6t
 de6k6kv
 dek2l
 6dekly
@@ -4348,6 +4425,7 @@ del6tala
 del3te
 del7tr
 6deluk
+de8l7ur
 del5ve
 4dely
 4delæ
@@ -4377,6 +4455,8 @@ d2en.
 4dena
 de7nak
 6d5en6den.
+8d7en6dene
+6d5en6der.
 de5neb
 4dened
 6denel
@@ -4609,6 +4689,7 @@ di3ori
 dio5tr
 2dip
 3dipl
+dippe7
 4dired
 4direg
 4d5irs
@@ -4662,6 +4743,7 @@ dka8ra.
 dki6
 d5kj
 dko2r
+8d7out
 dku4le.
 4d1l4
 d3la
@@ -4690,6 +4772,7 @@ dlø8pa.
 d5lå
 dlå9re
 2d1m
+4d1t
 dme6la.
 dmo4e
 dmors6
@@ -4879,6 +4962,7 @@ d4røm
 drø6re.
 d7røt
 drø3ve
+5d8røye
 d1råd
 drå4de.
 3dråp
@@ -4928,6 +5012,7 @@ d2s1i
 d3s2id
 d7sida
 ds5ident
+d4s5ide4o3
 ds3idr
 d7sil
 ds5ind
@@ -4948,7 +5033,7 @@ d6s5kjøt
 ds1ko
 d5skot
 ds3kro
-ds1kv
+d4s1kv
 ds1l
 ds5la.
 ds5lan
@@ -4971,6 +5056,7 @@ d3spek
 d3spel
 ds2pi
 d9s8py
+6d7run
 ds5s4
 dst4
 ds3tak
@@ -5010,7 +5096,7 @@ ds1yt
 d2s1ø
 d6sør
 ds1å6
-4d1t
+6dt.
 d3t4a
 dta6la.
 dta4le.
@@ -5021,6 +5107,7 @@ dt4eng
 dterle7
 dte4se.
 d5t4et
+d4tg
 d3ti
 dt6j
 d7to
@@ -5055,6 +5142,7 @@ dun5s6
 dun7sta
 7duo
 d3upk
+dupp6e5
 3dur
 du6ra.
 du6re.
@@ -5071,11 +5159,11 @@ duss4
 dust4
 du2sv
 2d1ut
+d6utt
 du6va.
 du4ve.
 2d1v
-dva6la.
-dva6lel
+5d8va6le
 dva4ne.
 dve6s
 dve6va
@@ -5146,6 +5234,7 @@ då8ra.
 då5ri
 d3ås.
 då8sa.
+d8åse
 då7sem
 d7åt.
 2ea
@@ -5277,6 +5366,7 @@ edi6gj
 ed4is
 edi3si
 edi4s5k
+3e4dit
 e7div
 edle6ge.
 ed8ob
@@ -5323,7 +5413,7 @@ eem6na
 ee4n
 e5enb
 een3in
-een6k
+e5en6k
 een5t
 e3epl
 ee8ra
@@ -5456,7 +5546,7 @@ ei5det
 e6i2do
 e1idr
 ei3d4u
-ei7e
+e8i7e
 eie5d
 ei8eg
 eie2n
@@ -5642,6 +5732,7 @@ ek3sel
 ek4sig
 eks1k
 ek4ska
+ek8sn
 1eksp
 eks5pe
 ek4sta
@@ -5663,6 +5754,7 @@ ek5tiv
 4ekto
 ektori6a
 ek4t3ra
+e6k6t7ro
 e1ku
 eku4le.
 e1k2v
@@ -6031,6 +6123,7 @@ enn7ø
 2eno
 en3ok
 en3og
+e8n7old
 en3om.
 en1op
 e6n5ord
@@ -6151,6 +6244,7 @@ e6peu
 3epid
 epi6ka.
 epi7kr
+8e7pin
 3episo
 ep2l
 e8plen
@@ -6488,6 +6582,7 @@ e4s3ant
 es5arab
 es5arv
 esbi9e
+es8ce
 2ese
 es5ege
 es3ei4d
@@ -6610,7 +6705,7 @@ ess5tue
 esstu8en.
 4essu
 es2s1v
-es7så
+es6s5å
 e7stad
 es5tae
 es7takt
@@ -6698,6 +6793,7 @@ e3tal
 eta3la
 eta4la.
 et5ald
+8e7tank
 eta5le
 4e5tall
 etal6list
@@ -6734,6 +6830,7 @@ e5tet.
 e7tets
 4eté
 4eth
+et6her
 2eti
 e3tit
 2e1tj
@@ -7046,8 +7143,8 @@ fe7ene
 2fef
 2fe3g
 2fehj
-fei5en
-fei5er.
+fei9en
+fei9er
 feig4de
 fei5ge
 feil5es
@@ -7154,6 +7251,7 @@ f2feb
 f2fe3d
 f2fee
 f6feh
+ffel7t8
 f2fem
 f6ferdi
 ffe4rer
@@ -7173,6 +7271,7 @@ f2fj
 ff3la
 ffla8ga
 ff9leg
+ff5lek
 ff3li
 f2fo
 ff4ol
@@ -7181,7 +7280,7 @@ ff1ro
 ff5sl
 ff5t4
 ffu6r
-ff5ut
+f6f7ut
 f3fæ
 f4fø
 2f3g2
@@ -7290,6 +7389,7 @@ f4las
 fle6i
 f4lek
 f6lel
+fle6r5u6
 fle4sl
 f4lett
 f3lev
@@ -7363,7 +7463,7 @@ forlø9se
 formo9r
 for3n
 foro6
-for5p
+for5p4
 for3se
 forsi9da
 forsi7de.
@@ -7380,7 +7480,7 @@ for3t4v
 for3u4l
 for7v6
 forva9re
-for5æ4
+fo8r5æ4
 for5ø4
 for9å
 fo9se
@@ -7448,6 +7548,7 @@ frus1
 fruta6le.
 f1ryt
 frø5b
+f4røk
 frø7ko
 frå9r
 fråve4
@@ -7498,6 +7599,7 @@ fter5s
 f4test
 f4teta
 f4t5ett
+f8t7id
 ft3ind
 f2t5i4s
 ft5l
@@ -7575,6 +7677,7 @@ fø4dek
 fø5den
 fø4des
 fø5des.
+fødsel8s7
 fø1f
 2føk
 fø4le.
@@ -7602,6 +7705,7 @@ ga4ded
 2gadm
 4g5adr
 ga4e5k
+gaffel5
 6gaflo
 g3aft
 6gah
@@ -7672,8 +7776,7 @@ gass3l
 5gast
 gas5te
 ga5sto
-gas7t6ra
-gas9tri
+ga6s6t6r
 g2at
 ga4te.
 ga5tens
@@ -7922,7 +8025,7 @@ ges8ti.
 gest5rid
 gestri8de.
 6gestå
-2gesu
+2ge9s8u
 ges5vik.
 2gesy
 6gesæ
@@ -8001,6 +8104,7 @@ gg8re.
 gg3red
 gg7rek
 gg5s4par
+ggs7s
 gg3sto
 gg4sy
 gg3sø
@@ -8095,6 +8199,7 @@ gi7va
 4givo
 4givu
 1gj
+8gjag
 2g1jak
 g5jarn
 2gjaz
@@ -8102,6 +8207,7 @@ gje5f
 4g3jeg
 gjels4
 gje2n
+gjen7n8
 gjen1opp3s4
 gjen5s8
 6gjent
@@ -8127,6 +8233,7 @@ gl5art
 glar7v
 1g2las
 7glase
+gla6s7k
 g6lass
 6glast
 g5last.
@@ -8134,7 +8241,7 @@ g5last.
 g5lau
 gl6e
 gle6dero
-g2lef
+4g3lef
 gle3ge
 gleg8ga
 6glei
@@ -8184,6 +8291,7 @@ g4los
 glo5ste
 6glov
 gls4
+8glu
 5glug
 g5luk
 6glun
@@ -8229,7 +8337,7 @@ g6netr
 g2nev
 g4nib
 g4nid
-g6nik
+5g6nik
 gning4
 gnings5
 gni4s
@@ -8302,7 +8410,7 @@ g5orv
 gor8va
 go5rø
 gos3p
-4gost
+8g7ost
 6goto
 got6r
 4gov
@@ -8356,6 +8464,9 @@ grib3
 4grid
 4grif
 4g1rig
+7g6rip
+gri4s5o
+gri4s5ø
 gri5sete
 4grit
 gro9ar
@@ -8364,6 +8475,7 @@ grom5m
 g4ron
 gro5sk
 gro3ve
+gro6v5in
 4g5rui
 4g3rul
 grun7g
@@ -8395,6 +8507,7 @@ g5salge
 gsam3
 gs3amb
 gs7amn
+g7s8ang
 g3s6ank
 g5sard
 g2sas
@@ -8464,6 +8577,8 @@ g9s6mert
 g7snel
 g5sog
 gs9ope
+g7s8opp
+g7s8oppe
 g5spal
 g3spel
 gs2pi
@@ -8655,6 +8770,8 @@ hal4so
 hal4s3t
 ha5lu
 hal4v5
+hal5v6ar
+hal5v6o
 ha5ma
 ha8me.
 ham6nest
@@ -8672,6 +8789,7 @@ han2n3
 han4ne
 han6nel
 han5nen
+han5n4es
 han5n4o5
 han3se
 han4sk
@@ -8705,6 +8823,7 @@ ha4ve.
 ha4veg
 ha4vei
 have3s
+ha8v7ert
 ha1vi
 ha4vo
 hav4sl
@@ -8924,6 +9043,7 @@ hu4le.
 hu4leg
 hu5les
 hu4lev
+hul5v
 hu5ma
 hun6des
 hun2n3
@@ -9011,6 +9131,7 @@ h6å
 hå7a
 hå8le
 hå6na.
+hån8dr
 hånd5skr
 hå5nel
 hå6pa.
@@ -9293,7 +9414,7 @@ ig5ett
 ig4ged
 igges4
 ig4gra
-igg9s2
+igg7s2
 i6gh
 i2g1ia
 i5gib
@@ -9341,6 +9462,7 @@ ihu5le.
 i1i
 i5in
 i7is.
+i4is8e
 i6ita
 i1j
 2ik
@@ -9360,7 +9482,7 @@ i6kasa
 ika3sp
 i2ke.
 i2ked
-ik9ei
+ik8ei
 i9keleg
 i5keli
 ike5lu
@@ -9552,6 +9674,7 @@ ilset8je
 il3sl
 ilsla7
 ilsle7ge
+il6s7li
 ils4mu
 ils2p
 ils2t
@@ -9651,6 +9774,7 @@ i4nask
 i4nasp
 i4n5ass
 ina4t5ak
+ina7t8r
 i6nau
 in7auk
 in5avl
@@ -9718,6 +9842,7 @@ ings5om
 ingst8
 ings5v
 6ingu
+in4g5un
 in2g5ø
 i7nia
 ini9ar.
@@ -9775,6 +9900,7 @@ i5noar
 i4nod
 inok6
 in7oks
+in7org
 in1s
 4ins.
 8insa
@@ -9855,6 +9981,7 @@ in3øv
 4io
 io1a4
 i2ob
+io8d8
 io4dere
 i1off
 io5gn
@@ -10131,6 +10258,7 @@ is4vak
 is7w
 isy8na
 isy5r
+i7s8ys
 is5yt
 i2s1øk
 i4søy
@@ -10302,7 +10430,7 @@ iv2sn
 iv4so
 ivs5v
 i2v3un
-iv7y
+i5v6y
 ivyr8ke.
 i9væ
 iv7åpn
@@ -10342,10 +10470,12 @@ ja4j
 jak4kel
 jak7kele
 jak4ko
+ja8k7ok
 jakk5s4
 ja1k8r
 ja8kre
 jaktel
+jakts8
 ja7ku
 ja3lo
 ja1lu
@@ -10383,7 +10513,7 @@ jeb9b
 je4deb
 6je4dek
 4jedr
-jeep1
+je4ep1
 6jeev
 2jef
 je4f3et
@@ -10440,11 +10570,13 @@ jem5se
 jem4sti
 2je7na
 jen1d
+jendis5
 4jendr
 je3ne.
 je7ne8s
 4jenet
 jen5ged
+jen7g8la
 jeng5s4
 2jeni
 jen3k
@@ -10535,6 +10667,7 @@ jo4da.
 jo6dat
 jo6dis
 jo4fl
+jojo5
 jok9ker
 jokk9o8
 jol5t6
@@ -10579,6 +10712,7 @@ ju8are
 1jub
 jubi3
 ju9bo
+juda8s7
 ju3de
 ju2do
 ju7doe
@@ -10731,7 +10865,8 @@ kal2e
 3kalen
 ka5lev
 5kalis
-k6alk
+k6al8k5
+kal7k6e
 5kalky
 kal7la
 kal6lero
@@ -10829,8 +10964,10 @@ kas4sak
 kas4so
 ka4st
 8kas5to
+ka6su8s7
 kas2t3r
 1ka7t6a
+ka8tak8
 ka3ted
 3kateg
 ka3tet
@@ -10839,6 +10976,7 @@ ka4t5op
 4ka1t4r
 kat7s
 kat5ta
+kat6tak
 kat4tel
 kat6term
 katte5s
@@ -10999,6 +11137,7 @@ ken5t6r
 6ke3ny
 6kenø
 2keo
+ke7of
 ke3on
 4kep
 5kepi.
@@ -11168,6 +11307,7 @@ ki3k2r
 kik4s
 ki8la.
 3kilde
+6kildr
 ki4le.
 ki5li
 4kilj
@@ -11200,6 +11340,7 @@ kinnsi8da
 kinnsi8de.
 kinn4sp
 ki2no
+kin5ov
 2kins
 kinsi6de.
 2kint
@@ -11251,6 +11392,7 @@ kje1s
 kje6t5r
 kjet5t
 6kjor
+k8juk
 kju5le.
 kju5len
 kju9r
@@ -11259,7 +11401,7 @@ k5jødi
 1kjøp
 3kjøri
 kjø4tr
-2kk
+8kk
 k1ka
 k2kab
 kk3aft
@@ -11352,6 +11494,7 @@ k4kosi
 k6kosk
 k4kost
 kk3ove
+kk5p
 k4kra
 kk5ram
 kk3rap
@@ -11367,7 +11510,7 @@ kk3ru
 kk4rus
 kk7rø
 kk7rå
-kk7s
+k8k7s
 kks6al
 kk4sar
 kk5sed
@@ -11386,7 +11529,7 @@ kks7tep
 kkst4r
 kk8s7va
 kk5s4å7
-kk3t2
+kk7t8
 kk5uk
 k4kuni
 k2k1u6t
@@ -11468,10 +11611,11 @@ k4nedi
 kne8se.
 k4nest
 kn5f
+knas8t7a8
 3k4nip
 knippe6
 kni2t3
-3k2niv
+7k6niv
 kno7g
 kno6kl
 5knop
@@ -11527,6 +11671,7 @@ k3okku
 4koko
 2koku
 kolba5
+kol8d7a
 2kole
 ko4leg
 ko4lei
@@ -11624,6 +11769,7 @@ ko6sta
 kost7as
 kos6t5ers
 kost5j
+ko8s8t7ø8
 4kosø
 kotes7
 ko5t4i
@@ -11672,6 +11818,7 @@ krei5s
 kre4kli
 2krel
 k5rela
+kre8m7o
 4k3renn
 4krent
 6kreo
@@ -11785,6 +11932,7 @@ k4s3ins
 k7sio
 ksi3st
 k4siti
+6ksj
 ks9kab
 k6s3kal
 k6skio
@@ -11803,17 +11951,18 @@ ksla8ga.
 ks5lo
 k7s6lu
 k8s7lug
-ks5løs
+k8s5løs
 kslø8va
 kslø8ve.
 k5s4mak
 ks4mel
+k8smid
 ksmå
 k5s4no
 k7s8nø
 k1so
 k6s7oa
-k6sod
+k6s5o6d
 k4sog
 k4somb
 k2s1or
@@ -11828,7 +11977,7 @@ kspor6t5r
 ks1pr
 k8sr
 k3spy
-kss6
+k8s7s
 ks3sm
 k5stad
 k4stak
@@ -11858,12 +12007,14 @@ ks3tyv
 k2stå
 k1su
 k6sun
+k8suni
 ks1v
 k9s8vake
 ksva8ne.
 ks5veg
 k7s6vert
 k5s4vin
+k8svis
 ks5w
 ksy8na
 ksy8s7m
@@ -11975,6 +12126,7 @@ ktu9er.
 k4tuk
 kt7und
 k2t1ut
+kt8yo
 kt7yrk
 ktyr8ke.
 ktør7
@@ -11997,6 +12149,7 @@ ku4f3l
 k5u4gr
 ku7is
 kuit6
+ku7k8l
 6kuldi
 kuld3r
 ku4led
@@ -12067,7 +12220,10 @@ kvari6e5n
 kva9se
 kve3d2
 kve7e
+kve8g7r
+k4veik
 k6veil
+7k8vein
 kvei9se
 1k4vel
 kve5la
@@ -12185,6 +12341,7 @@ la4ke.
 4lakj
 l2akk
 la2kr
+8l7aksel
 l7aksj
 l5aksl
 4lakt
@@ -12218,6 +12375,7 @@ lan6g5ø6
 l3anno
 la4nor
 6l5ansi
+lan8s7p
 lan5ti
 4lanv
 l3anvi
@@ -12225,6 +12383,8 @@ l3anvi
 la6pal
 la7pi
 la8pl
+lap8p7r8
+lapp7s8
 lap5sa
 lap5sen
 lap5s4i
@@ -12299,7 +12459,7 @@ lav5inn
 7lavå
 1law
 la6y5
-2l1b2
+6l1b2
 lba3de
 lba4k
 lba5ke.
@@ -12442,9 +12602,11 @@ leg3s4
 6lehau
 6lehave
 le3ido
+lei8e
 l6eie.
 lei5ende
 lei4e5ne
+lei9er
 l6ei8et
 leig6d
 lei4ger
@@ -12954,6 +13116,7 @@ l3kede
 lkeei4
 l6keh
 l5keleg
+l8k7els
 l3ken
 l7ker.
 l4kera
@@ -12964,6 +13127,7 @@ l5kestad
 l5ket.
 l5kets
 lk2l
+l7k8lem
 lk4li
 l5k4lu
 l6k5nin
@@ -12981,7 +13145,7 @@ lku8t
 lk9ute
 l6kveg
 lkå1
-2l1l
+6l1l
 l5la6a
 ll6a5f
 l2lak
@@ -13234,6 +13398,7 @@ lo1re
 4l1org
 lor4g5l
 lorie6
+6lorm
 lo1ro
 lo7rød
 lo7sa
@@ -13404,6 +13569,7 @@ l8s7s
 l4s3tak
 l4s3tal
 l6stank
+8l7s8tat
 l6ste.
 ls4ted
 l4steg
@@ -13474,6 +13640,7 @@ lto9ar
 l3tog
 lto4s
 lt3ost
+lt8ep
 lt2r
 l3tra
 lt3reg
@@ -13598,6 +13765,7 @@ lva6la
 l4va4m
 l4vana
 lv8and
+lv7a8p
 l7var.
 lv7asa
 l4v5ass
@@ -13626,6 +13794,7 @@ lv1j
 lvly8se.
 l6v3n
 lv1of
+lvoks6
 lv9op
 lvo8re.
 lvor4s
@@ -13638,7 +13807,6 @@ lv5se
 lv7s6k
 lvs6l
 lv9ta
-l5vøe
 lv1å
 l3våg
 lvå4p4
@@ -13687,6 +13855,7 @@ ly4teri
 lyte5s
 l5y4tin
 ly1tr
+ly5vak
 ly3ve
 l3z
 l6z5b
@@ -13935,7 +14104,7 @@ ma1un
 5maur
 mau7su
 2mav
-ma6ve.
+5m6a6ve
 ma5ven
 m7avh
 m5avk
@@ -14075,6 +14244,8 @@ melvi6
 4me5l4å5
 2mem
 me6mo.
+me6n5e6d
+me6n5ers
 4m5enga
 men5k
 menle6ge.
@@ -14132,9 +14303,10 @@ me4råk
 mes5ke
 2me1sl
 mes6le
-4me3so
+4me3s4o
 2mesp
 5mess
+messe7s8
 7mest.
 4mesta
 5meste.
@@ -14149,6 +14321,7 @@ me5stro
 2mesy
 2mesø
 4metab
+metall7s8
 4me9tap
 me4tar
 me3te
@@ -14323,7 +14496,7 @@ ml5ja
 mly6se.
 mlø6pe.
 mløy3
-2m1m4
+2m7m4
 m6mai
 mma5kl
 mmal5
@@ -14538,7 +14711,9 @@ ms5kab
 mska9k
 ms6kin
 msk5ing
+ms3k4n
 ms3kor
+ms5kren
 msk8u
 ms3lan
 ms6lega
@@ -14556,6 +14731,7 @@ ms3ori
 ms1ov
 ms3s2
 m4s3tal
+ms8tav
 m8s7te.
 ms7tea
 ms2ti
@@ -14831,6 +15007,7 @@ na7o
 na5pe
 nape4s
 nap3s4
+na7p8
 n4ar.
 na4rap
 2narb
@@ -14841,6 +15018,7 @@ nar7ei
 nari4e5n
 7nariksk
 4narkiv
+8n7arm
 6n5armé
 6n5arme
 nar8ma.
@@ -14904,7 +15082,7 @@ n3che
 nch3ei
 n6cot
 n2cy1
-6nd
+8nd
 n7daa.
 n6dabi
 n4dad
@@ -14936,6 +15114,7 @@ nde4le.
 n4delik
 ndel4sk
 ndel4st
+nde6lt
 n2dem
 n5dem.
 nde5mo
@@ -14967,6 +15146,7 @@ nd4lem
 nd4lese
 nd4lest
 nd4lev
+n8d7m
 ndo9a
 n6dob
 n6d5okk
@@ -15025,7 +15205,7 @@ nea4g
 ne7a6le
 ne5alp
 ne5als
-nea9m
+nea9m6
 ne9a8r9an
 nea9ren
 ne1as
@@ -15075,6 +15255,7 @@ n5eig
 n2e1in
 n3eini
 5neir
+5n6eisk
 2nej
 2nek
 ne4ka.
@@ -15232,7 +15413,6 @@ nes6sam
 nes4stu
 5nest.
 4nestas
-nes9tas.
 nes9te.
 4nesto
 nes5tor
@@ -15250,6 +15430,7 @@ neså5re
 3net.
 2neta
 4netaks
+n7e8tas
 neta6le.
 ne3te
 5nete.
@@ -15306,7 +15487,7 @@ nfor9en.
 nfos4
 nfø5des
 nføy8ed
-6ng
+8ng
 n8g8ad
 n4gaf
 n6gag
@@ -15512,6 +15693,7 @@ ni4umf
 2niut
 4niva
 2nive
+ni8v7eg
 niv5ei8
 4n5ivo
 niv3s2
@@ -15577,6 +15759,7 @@ n6kot
 n6kov
 n1kr
 n3krav
+n7k8ry
 nk1s2
 nk4tak
 nk6tal
@@ -15619,6 +15802,7 @@ nmo6se.
 nmusik7k
 nmå6la.
 4nn
+nn4ab
 n2nad
 nn5ad.
 nn9aft
@@ -15672,7 +15856,7 @@ n4nesø
 n4nete
 n2nev
 n2ney
-nn3g2
+nn7g8
 nnhø8re.
 n4nid
 nn3ide
@@ -15785,6 +15969,7 @@ non5t
 2noo
 2nop
 n1opp
+nopp7s8
 no1r4a
 no5ran
 no5rar
@@ -15943,7 +16128,9 @@ n6skja
 n6skjele
 ns5kjen
 n3skjæ
+n8s7kåp
 nskog6s
+ns4kolli
 ns5kor
 ns3kro
 nsku9et
@@ -16021,6 +16208,7 @@ nst3ut
 n1su
 ns1uk
 n4sung
+n5sup
 ns5vang
 nsva9ra
 n2s3ve
@@ -16355,7 +16543,7 @@ ob1re
 ob1ri
 3obser
 ob5st
-2obu
+2o3bu
 2oby
 obyl5
 o5bø
@@ -16469,6 +16657,7 @@ o2ga.
 og7ank
 o4gare
 o2g7av
+4oge
 o2ge.
 o4ged
 og1ei
@@ -16510,6 +16699,7 @@ o4g3ri
 og3ryd
 o4g5rø
 og5rå
+og3s4
 ogs4a
 ogs6an
 og3s2e
@@ -16582,6 +16772,7 @@ ok4ke5s
 ok3kje
 ok3ko.
 ok5kol
+okk8s7m
 ok4kun
 4okl
 ok8la.
@@ -16624,6 +16815,7 @@ ok6s5vi
 oks6tr
 ok5ta
 3oktan
+ok8t8a8v7
 ok3ti
 ok5to
 okto4r5i
@@ -16634,6 +16826,7 @@ oku8le.
 oku6t
 ok7ute
 o5kva
+o6kvak
 o3kvi
 ok5øy
 o3kå
@@ -16652,7 +16845,7 @@ olbo7ge.
 ol4bol
 olbu7
 2old
-ol9dan
+ol7dan
 ol5de.
 ol4dem
 ol4dest
@@ -16745,6 +16938,7 @@ o6l7os.
 o6l7o6se
 o6l5osf
 olo5ve
+o8l7ovn
 ol4ped
 ol7so
 ols8t
@@ -16862,6 +17056,7 @@ on3app
 o6narb
 o4n3arg
 o4n3arv
+o7n8a7sj
 onat5r
 o2n1a4v
 on5b
@@ -17070,6 +17265,7 @@ or4d5ise
 ord3it
 1ordn
 ordre8gi.
+or7d6rø
 ordsa6me.
 ords6e
 ord3st
@@ -17138,6 +17334,7 @@ ork7s2
 6orl
 orla7te
 or5le
+orm6al5t
 orm5ang
 or6map
 or5mel
@@ -17199,7 +17396,7 @@ orte5i6g
 or4tek
 or3tem
 or6t5erf
-or4t5erm
+or8t7erm
 or5tii
 or7til
 or5tis
@@ -17227,7 +17424,6 @@ orv3s
 4ory
 o7rya
 or1yn
-o9r4ære
 2orø
 or9ø8k
 orøk8t
@@ -17275,7 +17471,7 @@ os8k3v
 os2l
 os3le
 oslo1
-os3lod
+os2lo5d4
 os5lu
 os5lø
 os9ma
@@ -17318,6 +17514,7 @@ o4stin
 os5tis
 ost1o
 os6tons
+os6trad
 ost5ran
 ost3re
 o3stro
@@ -17355,6 +17552,7 @@ otel8lø
 o4tena
 o4t5ende
 oten8de.
+oten4s5p
 o2teo
 o4teram
 o4teret
@@ -17537,8 +17735,10 @@ pak4kas
 pakke4s
 pakk7esl
 4pakti
+pa3kv
 3pa1la
 pa3le
+pa6le4o7
 pa7lim
 pal5in
 pal1j
@@ -17553,6 +17753,7 @@ pan9de
 pa5ne
 pang5s6
 pan3ka
+n7k8rea
 9panne.
 pan5se
 pan5sl
@@ -17728,6 +17929,7 @@ pe4ral
 4perap
 pera5t
 4perate
+5p6erc
 4pered
 4perei
 4perek
@@ -17741,7 +17943,7 @@ perie8ns
 4pe5rik
 peri3s4
 4perit
-per5k
+per7k8
 per6les
 per5mu
 per5n
@@ -17772,6 +17974,7 @@ pes4n
 3pest.
 5peste.
 pes5til
+pe7t8
 4petab
 peta6ka
 4petal
@@ -17818,6 +18021,7 @@ pgjer4
 phav2
 pha9va
 phavs5
+3p4her
 phe9te
 phe7va
 phe5ve
@@ -17876,9 +18080,10 @@ pin4sl
 pi2nø
 pio6n5an
 pion5s
-3pi2p
+7pi2p
 pi4pi
 pip9la
+p8pip
 pi4rar
 pi4res
 pi4rut
@@ -17913,7 +18118,7 @@ p4lak
 p4lan.
 plan7de
 4plane.
-plan5g
+4p5lan5g
 plan5s
 plap3
 4p1lar
@@ -17923,6 +18128,7 @@ p2lat
 platina5
 2ple.
 2pled
+p8legi
 4pleis
 p2lek
 p6le5n4u
@@ -18059,6 +18265,7 @@ pp5e4tas
 p4pete
 pp5ett
 p2peu
+pph8
 p1pi
 pp1id
 p2p1il
@@ -18130,6 +18337,7 @@ pren4s
 6pres.
 pres6sak
 p6restas
+pre7t6en7
 4prett
 p3rif
 pri5ke
@@ -18251,6 +18459,7 @@ p4tut
 pu4br
 5puc
 6pu6dy
+p5ugl
 pu2k
 pu7la
 pu8le.
@@ -18632,7 +18841,7 @@ r2dit
 r2diu
 rd5je
 r1dju
-rd7m
+r8d7m
 rd3n
 rdnæ4
 r9dob
@@ -18753,7 +18962,7 @@ rei3si
 rei7ska
 reis6led
 re7ism
-rei7va
+rei7v4a
 rei5ve
 2rej
 6rek.
@@ -18938,6 +19147,7 @@ re3str
 1resu
 6resuk
 4resun
+re3s4ve
 re3svi
 2resy
 2resø
@@ -19044,7 +19254,7 @@ rg5rab
 rg3rea
 rg3rel
 rg5reps
-rg5rin
+r6g5ri
 r3gru
 rg5sc
 rgs6kor
@@ -19243,7 +19453,6 @@ riti9da
 ri5t6o
 ri5tr
 rit1s6
-ritt8s7t
 ri6tun
 4rity
 2riun
@@ -19270,7 +19479,7 @@ r4jeti
 r4jetr
 r4jetu
 rju6la
-2r1k
+8r1k
 rk3akt
 r6kanf
 r4kao
@@ -19349,7 +19558,7 @@ rk5to
 rku4le.
 r6k7u6t
 r4k5ve6d
-rk9vei
+rk5vei
 r5kvel
 r4kver
 rk3ves
@@ -19439,7 +19648,7 @@ rmål4
 r6m5åp
 r9mår
 r6m7åta
-2rn
+4rn
 r3na
 r4n1ak
 r4n3ald
@@ -19464,6 +19673,7 @@ r3nell
 r3nels
 r4n3eng
 r4nenh
+rne7p
 r4nerei
 r6neris
 rne3ro
@@ -19639,7 +19849,7 @@ rove5re
 rov5sm
 rovve6
 rò6te.
-2r1p
+8r1p
 r5pa
 r6parb
 r5pefo
@@ -19650,13 +19860,14 @@ r5pet
 rp6j
 rp2l
 rp3lad
+4rp3n
 rprø5ve
 r3pu
 rpun7g
 r6p5ut.
 r6p5øy
 r2påk
-2r1r
+8r1r
 r8raa
 r2rag
 rra3r
@@ -19784,7 +19995,7 @@ rs6nev
 r1so
 rso9a
 rs5oml
-rso6n5
+rs8o6n5
 rso7n6al
 rso5n8e
 rso5n6i
@@ -19889,6 +20100,7 @@ r6tesk
 r6testi
 r4teta
 r4tete
+rteus8
 r4tev
 r4th
 rtian8d
@@ -19968,6 +20180,7 @@ r6t5ås3
 ru3and
 6ruav
 ru6avh
+rub6a
 ru8bl
 ru5bo
 ru4di.
@@ -20037,6 +20250,7 @@ rut4re
 ru6trø
 rutto5
 2rutv
+rut5ø
 ru5va
 ru4ved
 ru4veg
@@ -20050,6 +20264,7 @@ ru6v7is
 rv4a
 rva7ka
 rva6la
+r8v7arb
 rve3de
 rve4den
 r4ve5dr
@@ -20215,7 +20430,9 @@ sa4do
 sae5d
 3saen
 7saer
+5safa
 1safe
+4s3affæ
 5saga
 sa4ga.
 sa4gas
@@ -20314,13 +20531,14 @@ san4d5ø
 5sang.
 3sange
 4s3angr
+8s7angst
 s7anken
 2s1anl
 s5anm
 san5ne
 6sanno
 sa2no
-s5anor
+4s5anor
 san5os
 san1s
 5s4ans.
@@ -20406,12 +20624,14 @@ s6bug
 sbul3
 sby8ta
 4sca
+5s4can
 1sce
 2scel
 s4cene
 s3cer
-6sch.
+6s6ch.
 8schl.
+sch8m
 6s7cl
 4sco.
 6scoc
@@ -20571,6 +20791,7 @@ sem4na
 sem5pe
 2semå
 s2en.
+se5nak
 6senau
 sen9d8a
 sen6dela
@@ -20703,6 +20924,7 @@ se5tero
 se8ti.
 s3e4tik
 s3e4tis
+se8t7ja
 4setje
 5setje.
 7setl
@@ -20744,7 +20966,7 @@ se3vr
 9sér
 4sés
 2sév
-2s1f
+4s3f
 sfa4ne.
 6sfe
 sfe6et.
@@ -20757,7 +20979,7 @@ sforlø9
 sfra5s
 sfri5e6re
 sfyrs5
-3sfæ
+5s4fæ
 sfø9ren
 sfø5rer
 sfø5ri
@@ -20778,17 +21000,18 @@ s3hau
 shea4
 s5hei5
 7sh6e4rif
+8s5hett
 s4hi.
 s6hip
 sh5isk
 4shj
 6s7hopp
 3short
-3show
+5show
 6shs
 2shu
 4s5hy
-s5hø
+s5h6ø
 shø8l
 shø6va
 shø6ve.
@@ -20803,7 +21026,7 @@ si2bl
 3si2da
 3si4de.
 3si3den
-si4deo
+si4de5o
 s4ider
 si5der.
 si4dete
@@ -20921,6 +21144,7 @@ si9våt
 2sj.
 s2ja.
 8s5ja9g
+7s8jakk.
 4sjam
 s4jan
 4sjanl
@@ -20966,6 +21190,7 @@ s6j3t6sj
 sju1a
 6sjub
 6s7jug
+4s5juks
 sju8la
 4sjun
 4sjur
@@ -20976,7 +21201,7 @@ sjø1p
 sjø9rø
 sjø1s2
 sjø3t8
-6sk.
+8sk.
 1ska
 2ska.
 4skab
@@ -20989,6 +21214,7 @@ s2kad
 ska5lar
 2skam
 s4kaml
+8s7kamp
 4s5kana
 4skande
 4skane
@@ -21005,6 +21231,7 @@ sk5arab
 sk7arbe
 5skard
 4s5kark
+5s6karp
 6skars
 4skart
 3s8karv
@@ -21054,7 +21281,7 @@ s6kill
 ski6net
 ski4nin
 5sk8inns5
-skino6
+4skino6
 5skiol
 5skip
 2skir
@@ -21085,6 +21312,7 @@ s5klas
 sk9leg
 s6klei
 sk3lek
+7s8klero
 sk5ling
 sk5lit
 s4k5luf
@@ -21109,6 +21337,7 @@ s5k6ome
 sk5ord
 s6korpi
 s7kors
+s8korst
 4skort
 2skos
 s2kot
@@ -21192,6 +21421,7 @@ s5laks
 3slakt
 3slal
 4s3land
+4s5langs
 slap5pe
 s5laran
 s5lare
@@ -21199,14 +21429,13 @@ s5lare
 s1lat
 sla4te.
 4s1lau
-s5laus
+8s5laus
 sla1v
 3slave
 sla4vin
 2sle.
 s8leda
-7slegare
-5s6legas
+4slega
 s4legi
 s4legn
 s6legr
@@ -21265,6 +21494,7 @@ sly8et.
 1s4lyn
 4s5lys
 sly8t
+6s7lær
 slæ6rari
 2sløn
 8s5løp
@@ -21288,7 +21518,7 @@ sma6d
 3smak.
 5s4maken
 sma9let
-4sman
+8sman
 s4med.
 s4mede
 6s5medi
@@ -21342,6 +21572,7 @@ s4nab
 4sne.
 4sneb
 4sned
+5s8nedd
 s6nee
 s4neg
 3snei
@@ -21415,7 +21646,7 @@ solei5er
 so4lene
 sol5f6
 1so7li
-2solj
+8s7olj
 so2lo
 so8lo.
 sol3s2
@@ -21424,6 +21655,7 @@ so4lum
 so4lø
 3som.
 so6mend
+s3omf
 4s3omfa
 4s1omg
 5somh
@@ -21529,6 +21761,7 @@ s2pel
 spe4leg
 spe4les
 5spelet
+8s7peng
 3s4penn
 s4pent
 s5pep
@@ -21575,6 +21808,7 @@ spo5v
 5spran
 6s3preg
 5sprei
+8s7preik
 s4prek
 spre5ke
 s3prem
@@ -21585,12 +21819,12 @@ s6print
 s5prio
 8sprinsi
 8s3pris
-8s7pro
 6s5prob
 s3prod
 4sprof
-5sprog.
-5sproge
+5s6prog
+6s7progn
+6s7progr
 5s6pross
 1spru
 s4pry
@@ -21690,6 +21924,7 @@ s5s6jarg
 ss4kape
 ss3kar
 sska8ra
+ss3kn
 ss3kof
 s7skog
 s4skor
@@ -21699,6 +21934,7 @@ ss4kå
 ss5kål
 s7skåp
 s2sl
+s8slip
 ss1lo
 ss5ly
 s2sm
@@ -21731,10 +21967,11 @@ ss5tren
 ss4trå
 ss3tus
 ss3t4v
-s2sul
+s2s3ul
 s3sur
 ssva7ra
 ss1ve
+ss8vek
 ssy6na
 ssy5r
 ss7øye
@@ -21799,6 +22036,7 @@ st7c
 s4teda
 5stedt
 s2tee
+ste4en
 2s4tef
 3s6teg.
 stega6l
@@ -21858,6 +22096,7 @@ s6teri6v
 4s3term
 6sterr
 ste5run
+ster8ø
 2stes
 s4tese
 ste7sle
@@ -21882,7 +22121,8 @@ st5he
 s5tibe
 s9tibl
 3stic
-6s5tid
+s6tick
+6s7tid
 s6tidel
 sti5en
 s2tif
@@ -21927,7 +22167,7 @@ s6tint
 4stiå
 s4tja
 5stjel
-4s3tjen
+8s7tjene
 s6t5jent
 3stjer
 4stju
@@ -21974,7 +22214,7 @@ stra8na.
 5strand
 4strane
 6strans
-4strap
+6strap
 4strar
 st7ras.
 st7rast.
@@ -21985,6 +22225,7 @@ s4tred
 st5reis
 7strek.
 st5rekl
+strek4sa8
 6streni
 st5rer.
 6strers
@@ -22011,9 +22252,11 @@ st5rum.
 2stry
 6stryg
 s7trykt
+st5ryt
 4s3træ
 1s2trø
 6s5trøb
+s5trøkk
 st6røm
 4strør
 4strøs
@@ -22038,7 +22281,7 @@ stue5re
 6s3tung
 6stunn
 3s8tunt
-6stur
+6s5tur
 2s4tut
 2stv
 s3t4ved
@@ -22117,7 +22360,7 @@ su4o
 su4pe.
 super3
 supi9
-sup4r
+su8p4r
 su8pre
 sur5d
 su4re.
@@ -22178,6 +22421,7 @@ s4verm
 7s4vev
 s4vie
 svi6e3l
+8svift
 4svig
 svi5ke.
 6svikg
@@ -22188,8 +22432,10 @@ svi5ke.
 s6vindel
 svi4nes
 sving5s4
+8s7vink
 ll6svint
 4svir
+6s7virk2
 2svis
 svi4sa.
 svi4se
@@ -22219,11 +22465,12 @@ sy4ker
 sy5kere
 2syko
 sy6kog
-s4ym
+7s4ym
 sy7me
 s2yn
 4s5yndl
 synk4
+sy6n5o6
 syn6sk
 syn3te
 sy4ra
@@ -22236,7 +22483,7 @@ syr4ke.
 3sy1s
 sy4se
 sy2sl
-sy2s3t
+sy6s7t
 sys4tr
 2sy2t
 sy5ten
@@ -22406,7 +22653,7 @@ tal4leg
 8t7allerg
 tall7es
 tal8lign
-tall6s9a
+tall6s7a
 tal4ly
 tal3op
 6talter
@@ -22420,8 +22667,10 @@ t4ame
 4tamet
 tam4i
 2ta3m4o
+tam5v
 t6an.
 ta2na
+tan5ab
 4t3anal
 ta3nar
 ta5nas
@@ -22499,6 +22748,7 @@ ta4sil
 ta4si5s4
 tas4p
 tas5s4
+tas8tas
 6ta7sto
 ta7str
 4tasu
@@ -22761,6 +23011,7 @@ ten5øks
 5teon
 4teop
 te6ora
+te6ori
 4teord
 2teov
 2tep
@@ -22960,6 +23211,7 @@ t4gå.
 t4hap
 t4hea3
 thei5m
+t6hesi
 tho7li
 tho3re
 3thr
@@ -23146,6 +23398,7 @@ ti8støy
 2tisy
 2tit
 ti7ta
+ti8tar
 ti3te
 ti1tj
 3titl
@@ -23179,8 +23432,7 @@ tjen6st
 2tjer
 t5jev
 2t1ji
-5t6jingan
-5t6jingar
+6t5jing
 2tjo
 t5jord
 2tjub
@@ -23355,6 +23607,7 @@ tore4t
 tor5ete
 4torga
 tor5int
+tor7k8u
 tor7me
 torm5s
 tor5na
@@ -23396,8 +23649,10 @@ tr4
 8tr.
 6t9rabat
 3trafi
+tra7in
 tra8ka.
 trak7to
+tra7mu
 t5rane
 3t6rans
 tran7ske
@@ -23460,6 +23715,7 @@ t4ri5ne
 4t5ring
 3trinn
 7t6rio
+6t5risk
 t4rist
 tri5to
 t4riu
@@ -23629,6 +23885,7 @@ t4stilk
 t4stin
 t4stit
 t2s1tj
+t8stolk
 ts5ton
 ts5tors
 ts5tree
@@ -23655,7 +23912,7 @@ ts5øv
 tsøy8er
 ts1å
 tsåt8
-6tt
+8tt
 t1ta
 t3ta.
 t2tab
@@ -23730,7 +23987,7 @@ t5tet.
 t4teta
 t4tete
 t1té
-t4th
+t8th
 tt5he
 tti5a
 t4tidel
@@ -23862,6 +24119,7 @@ tus5u
 t5utj
 t5utk
 t1utr
+tut8t7rå
 tut6tenk
 tut5tor
 tutt5ov
@@ -23892,7 +24150,8 @@ tvi4sa.
 tvi4se.
 6t7vo
 3tvung
-6twa2
+6tw
+twa2
 1tyd
 tyg9gel
 tyg5ges
@@ -24086,6 +24345,7 @@ uem8na
 u1e2n
 uend5r
 u7ene
+u8e7net
 uensar4
 ue7o
 u1er
@@ -24249,7 +24509,7 @@ u1la
 u4la.
 ula7d
 u6l1af
-ul3aks
+u8l7aks
 ul5art
 ul4det
 u4lef
@@ -24271,7 +24531,7 @@ u5lest.
 u5leste.
 u2leu
 u1lé
-ul4f5l
+ul5f6l
 ul4fo
 ul4fr
 u3l4i
@@ -24284,6 +24544,7 @@ uli5ne
 u7linj
 ul1j
 ul5ka
+ul5k6e
 ul4k3v
 ul4lag
 ul4lam
@@ -24399,6 +24660,7 @@ umsku8le.
 um2sn
 um4sor
 ums3t
+ums4tø
 6um7t
 umta8l
 um5ut
@@ -24473,6 +24735,8 @@ uno7t
 4uns
 un6sj5i
 un3skr
+un5s6kv
+un5sn
 un5s4p
 un3stek
 unst5e6l
@@ -24509,6 +24773,7 @@ uper3a
 upe6ren
 u4peta
 6upf
+up6h
 u3pi
 u8pi.
 up3ins
@@ -24618,8 +24883,9 @@ uro3s4
 uro4sta
 uro8ta
 ur4pel
+ur7pi
 ur6p9ut
-ur3re
+ur7re
 ursa8ka
 ur4sal
 ur4s3el
@@ -24658,6 +24924,7 @@ ur1øy
 u9sane
 us3ang
 u9sar.
+u8s7arb
 u7saren
 u6s7ark
 us7au
@@ -24698,6 +24965,7 @@ us1ko
 u1skr
 us7kru
 usk7u6t
+u8s7kå
 us4ky
 us1l
 usle6ge.
@@ -24848,6 +25116,7 @@ u3tros
 u5t6rul
 ut4rø
 ut9rød
+u7t8råk
 1ut1s4
 4uts.
 4utsei
@@ -24866,6 +25135,7 @@ ut1tr
 ut4tra
 3uttry
 utt1s2
+ut8tår
 u1tu
 utu5e
 u6t5un
@@ -25073,6 +25343,7 @@ ve4gut
 ve4g5å
 2veh
 1vei1e
+vei8eb
 vei3en
 4veill
 6veit
@@ -25217,6 +25488,7 @@ vest5o4v
 4vestr
 4vestu
 4vestø
+ve3sv
 vesva7
 5vesynds
 2vesø
@@ -25321,6 +25593,7 @@ vi2lø
 4vim
 vim7p
 vim7u
+vin6d5au
 4vindl
 5vindu
 vine5st
@@ -25547,6 +25820,7 @@ v1s2t2
 vste6ma.
 vs3til
 vs1v
+v6s7va
 vsø6ke.
 vsøl5
 v2s5øy
@@ -25566,6 +25840,7 @@ v5t4i
 vti8na
 vti8ne.
 v5t4r
+vt7s
 v3t2v
 vty8e
 1vu
@@ -25597,6 +25872,7 @@ væ1ra
 væ9ret
 væ8ta.
 v3ø4d
+8v7øks
 vø4l
 vø7li
 vøm4met
@@ -25670,7 +25946,7 @@ wn5s
 wob5
 wou6
 wout7
-ws5
+w3s4
 ws6k
 wurs6
 wy2
@@ -25746,6 +26022,7 @@ y1dr
 y4d4r5au
 yd1re
 yd5rem
+y8d7ri
 y4dro
 y4d4r5oks
 yd3si
@@ -25854,7 +26131,9 @@ yk5kesj
 ykke6s5ta
 yk1kj
 ykk5ni
-ykk4s5k
+ykk8s5k
+ykk8s5o
+ykk8s5s
 yk8k5vi6
 yk4ky
 yk1la
@@ -25952,6 +26231,7 @@ yn8teg
 ynt5ei
 yn4tek
 yn6tete
+yn8t7r
 yo4gat
 yo6gi.
 y1om
@@ -25993,6 +26273,7 @@ yr5av
 yr7da
 yr5dø
 y7real
+y8r7edd
 yre3in
 y5reis
 yrek4
@@ -26068,6 +26349,7 @@ y4råv
 2ys
 y1sa
 ys6a7kers
+y8s7al
 ys4e
 yse4bu
 y4sed
@@ -26075,7 +26357,7 @@ y4see
 yse5ei
 y2seg
 y2sek
-ys7ekte
+y8s7ekte
 y2sem
 y4sera
 yse7rid
@@ -26110,6 +26392,7 @@ ys4s3ei
 ys4s3ek
 ys4s5il
 ys2sj
+ys8s7ko
 ys4sku
 ys2so
 ys2sp
@@ -26131,10 +26414,13 @@ ys7tesl
 y2s3ti
 yst3op
 yst3r
+ys8tra
 ys5t6ry
+y7s8tu
 ys6ty
 y1su
 ys1ve
+y8s7øm
 ys5år
 y1ta
 y4t3ana
@@ -26227,7 +26513,7 @@ zen3s
 4z3ense
 4z3ent
 z1f
-z1g
+8z1g
 5zha
 z3hi
 z5hu
@@ -26347,6 +26633,7 @@ z2z3el
 æ5ta
 4æte
 æ4te.
+æt6he
 æt4r
 æt4ta
 æ5va
@@ -26360,6 +26647,7 @@ z2z3el
 øbe6lev
 øbe4li
 ø2bl
+ø3b6li
 øbl9u
 øb4r
 ød3ag
@@ -26427,6 +26715,8 @@ z2z3el
 ø1h
 ø4i
 øi4e
+øi5er.
+øi5e4ne.
 ø5ing
 ø5isk
 ø4it
@@ -26536,6 +26826,7 @@ z2z3el
 ø3nes.
 ø9nese
 ønhø8re.
+øn8k7r
 4ønn
 øn4nal
 ønni4
@@ -26583,6 +26874,7 @@ z2z3el
 øpsla8ga
 øps8leg
 øp5ste
+øp7s8tik
 øp4s5ø
 ø1ra
 ø2ra.
@@ -26702,6 +26994,7 @@ z2z3el
 ø4slu
 øs2me
 ø1s2p
+øss8n
 øs8tas
 øst9ast
 øs6teg
@@ -26724,6 +27017,7 @@ z2z3el
 ø6tef
 ø6tege
 ø2tei
+øte5k
 ø2t5eks
 ø2tel
 ø5tela.
@@ -26818,6 +27112,7 @@ z2z3el
 øyte5s6
 øyti7da
 øy1tr
+øyt5s
 øy2t3y6
 øy5tø
 øy4vei
@@ -26868,6 +27163,7 @@ z2z3el
 å7ens
 å3er
 å3e6re.
+å7e8ri
 å1f
 åfe6
 åfø5re
@@ -26946,6 +27242,7 @@ z2z3el
 åle9s6und
 å4lete
 å2lev
+ål5g
 ålgå6
 å6lio
 ål5j
@@ -26972,6 +27269,7 @@ z2z3el
 åm4li.
 åm1om
 åm5øy
+8åna
 å3nar
 å9nas
 ånd3r
@@ -27065,6 +27363,7 @@ z2z3el
 ås9kene
 ås8ki
 å1skj
+å2s3kjør
 ås7kop
 å1skr
 å5sku
@@ -27078,6 +27377,7 @@ z2z3el
 ås5se
 ås3si
 åss3k
+å8s7s6kå
 4å1st
 å7stei
 åsu4
@@ -27085,7 +27385,7 @@ z2z3el
 ås7ut
 ås7væ
 ås5øy
-åså9
+åså7
 å1ta
 å4ta.
 åtaks5
