@@ -2,13 +2,11 @@ package main
 
 import (
 	"bytes"
-	"configurator"
 	"encoding/base64"
 	"encoding/json"
 	"encoding/xml"
 	"errors"
 	"fmt"
-	"fsnotify"
 	"io"
 	"io/ioutil"
 	"log"
@@ -19,7 +17,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fsnotify/fsnotify"
 	"github.com/gorilla/mux"
+	"github.com/speedata/configurator"
 )
 
 const (
@@ -78,40 +78,40 @@ func addPublishrequestToQueue(id string) {
 }
 
 // Wait until filename in dir exists and is complete
-func waitForAllFiles(dir string) error {
-	watcher, err := fsnotify.NewWatcher()
-	if err != nil {
-		return err
-	}
-	defer watcher.Close()
-	done := make(chan bool)
-	var goerr error
-	go func() {
-		for {
-			timer := time.NewTimer(100 * time.Millisecond)
-			select {
-			case event := <-watcher.Events:
-				if event.Op&fsnotify.Write == fsnotify.Write || event.Op&fsnotify.Create == fsnotify.Create {
-				}
-			case <-timer.C:
-				done <- true
-				return
-			case nerr := <-watcher.Errors:
-				goerr = nerr
-				done <- true
-			}
-			timer.Stop()
-		}
+// func waitForAllFiles(dir string) error {
+// 	watcher, err := fsnotify.NewWatcher()
+// 	if err != nil {
+// 		return err
+// 	}
+// 	defer watcher.Close()
+// 	done := make(chan bool)
+// 	var goerr error
+// 	go func() {
+// 		for {
+// 			timer := time.NewTimer(100 * time.Millisecond)
+// 			select {
+// 			case event := <-watcher.Events:
+// 				if event.Op&fsnotify.Write == fsnotify.Write || event.Op&fsnotify.Create == fsnotify.Create {
+// 				}
+// 			case <-timer.C:
+// 				done <- true
+// 				return
+// 			case nerr := <-watcher.Errors:
+// 				goerr = nerr
+// 				done <- true
+// 			}
+// 			timer.Stop()
+// 		}
 
-	}()
+// 	}()
 
-	err = watcher.Add(dir)
-	if err != nil {
-		return err
-	}
-	<-done
-	return goerr
-}
+// 	err = watcher.Add(dir)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	<-done
+// 	return goerr
+// }
 
 // Wait until the file filename gets created in directory dir
 func waitForFile(dir string, filename string) error {

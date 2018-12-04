@@ -21,10 +21,10 @@ import (
 	"syscall"
 	"time"
 
-	"configurator"
-	"hotfolder"
 	"sp"
 
+	"github.com/speedata/configurator"
+	"github.com/speedata/hotfolder"
 	"github.com/speedata/optionparser"
 )
 
@@ -96,7 +96,6 @@ func init() {
 	log.SetFlags(0)
 	starttime = time.Now()
 	go sigIntCatcher()
-	go sigTermCatcher()
 	pwd, err = os.Getwd()
 	if err != nil {
 		log.Fatal(err)
@@ -239,6 +238,7 @@ func setVariable(str string) {
 	variables[a[0]] = a[1]
 }
 
+// Prints the total run time in the log file.
 func showDuration() {
 	log.Printf("Total run time: %v\n", time.Now().Sub(starttime))
 }
@@ -254,26 +254,12 @@ func timeoutCatcher(seconds int) {
 		log.Printf("\n\nTimeout after %d seconds", seconds)
 		showDuration()
 		os.Exit(-1)
-
 	}
-}
-
-// FIXME: move the next two functions into one function
-func sigTermCatcher() {
-	ch := make(chan os.Signal)
-	signal.Notify(ch, syscall.SIGTERM)
-	sig := <-ch
-	log.Printf("Signal received: %v", sig)
-	for _, proc := range runningProcess {
-		proc.Kill()
-	}
-	showDuration()
-	os.Exit(0)
 }
 
 func sigIntCatcher() {
 	ch := make(chan os.Signal)
-	signal.Notify(ch, syscall.SIGINT)
+	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
 	sig := <-ch
 	log.Printf("Signal received: %v", sig)
 	// some process (such as java xproc pipelines) are still in the runningProcess queue, so
