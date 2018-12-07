@@ -281,6 +281,8 @@ func mkCompare(statuschan chan compareStatus) filepath.WalkFunc {
 		if _, err := os.Stat(filepath.Join(path, "reference.pdf")); err == nil {
 			wg.Add(1)
 			go runComparison(path, statuschan)
+		} else if _, err := os.Stat(filepath.Join(path, "layout.xml")); err == nil {
+			fmt.Println("Warning: directory", path, "has layout.xml but not reference.pdf")
 		}
 		return nil
 	}
