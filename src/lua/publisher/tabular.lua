@@ -1047,7 +1047,9 @@ function typeset_row(self, tr_contents, current_row )
             -- prio: Td.backgroundcolor, then Tr.backgroundcolor, then Column.backgroundcolor
             local color = self.columncolors[current_column]
             color = tr_contents.backgroundcolor or color
-            color = td_contents.backgroundcolor or color
+            if td_contents.backgroundcolor and td_contents.backgroundcolor ~= "-" then
+                color = td_contents.backgroundcolor
+            end
             hlist = publisher.background(hlist,color)
         end
 
