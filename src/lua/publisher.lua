@@ -2368,6 +2368,7 @@ function parse_html( elt, parameter )
                 end
             end
             a:append(node.copy(marker))
+            a:append(paragraph:new())
             return a
         elseif eltname == "ol" then
             local counter = 0
@@ -2388,6 +2389,7 @@ function parse_html( elt, parameter )
                 end
             end
             a:append(node.copy(marker))
+            a:append(paragraph:new())
             return a
         elseif eltname == "a" then
             if elt.href == nil then
