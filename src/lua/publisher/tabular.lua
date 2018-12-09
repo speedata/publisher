@@ -357,6 +357,13 @@ function calculate_columnwidth( self )
                 count_columns = i
             end
 
+            -- if stretch="no", we don't need to stretch/shrink anything
+            -- sum_real_widths == 0 happens when there are only * widths
+            -- given in the <Column width="..."/>  setting.
+            if self.autostretch ~= "max" and sum_real_widths ~= 0 then
+                self.tablewidth_target = sum_real_widths
+            end
+
             if columnwidths_given and count_stars == 0 then return end
 
             if count_stars > 0 then
@@ -364,8 +371,7 @@ function calculate_columnwidth( self )
 
                 -- now we know the number of *-columns and the sum of the fix colums, so that
                 -- we can distribute the remaining space
-                local to_distribute =  self.tablewidth_target - sum_real_widths - table.sum(self.column_distances,1,count_columns - 1)
-
+                local to_distribute = self.tablewidth_target - table.sum(self.column_distances,1,count_columns - 1)
                 i = 0
                 for _,column in ipairs(tr_contents) do
                     if publisher.elementname(column)=="Column" then
