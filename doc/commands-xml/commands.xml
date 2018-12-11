@@ -63,6 +63,7 @@
     <optional><cmd name="Td"/></optional>
     <optional><cmd name="Tr"/></optional>
     <optional><cmd name="Trace"/></optional>
+    <optional><cmd name="U"></cmd></optional>
     <optional><cmd name="Until"/></optional>
     <optional><cmd name="Value"/></optional>
     <optional><cmd name="While"/></optional>
