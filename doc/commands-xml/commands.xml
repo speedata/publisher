@@ -583,7 +583,7 @@
       <para>Associates an action with a text. Once the text is placed on the page, the associated action will be executed. The action can be compared to an invisible character. When the publisher outputs the character, the corresponding instructions will be run.</para>
     </description>
     <description xml:lang="de">
-      <para>Assoziiert eine Aktion mit einem Text. Sobald der Text auf einer Seite platziert wird, wird die dazugehörige Aktion ausgeführt. Die Aktion kann man sich als unsichtbares Zeichen vorstellen. Wenn der Publisher das unsichtbare Zeichen ausgibt, werden die Anweisungen in Aktion ausgeführt.</para>
+      <para>Assoziiert eine Aktion mit einem Text. Sobald der Text auf einer Seite platziert wird, wird die dazugehörige Aktion ausgeführt. Die Aktion kann man sich als unsichtbares Zeichen vorstellen. Wenn der Publisher das unsichtbare Zeichen ausgibt, werden die Anweisungen in der Aktion ausgeführt.</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -697,7 +697,7 @@
       <para>The contents of the element <cmd name="AtPageCreation"/> is executed the first time the page is accessed. This is used in <cmd name="Pagetype"/>.</para>
     </description>
     <description xml:lang="de">
-      <para>Die Inhalte des Elements »AtPageCreation« werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird. Dieser Befehl kann in einem Seitentyp (<cmd name="Pagetype"/>) benutzt werden.</para>
+      <para>Die Inhalte des Elements <cmd name="AtPageCreation"/> werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird. Dieser Befehl kann in einem Seitentyp (<cmd name="Pagetype"/>) benutzt werden.</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -846,7 +846,7 @@
 </Element>
 ]]></listing>
       <para>creates the following structure:</para>
-      <listing><![CDATA[<Entry name="(contents of @name)" page="(the current page number)" />]]></listing>
+      <listing><![CDATA[<Entry chapter="(contents of @name)" page="(the current page number)" />]]></listing>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<Element name="Eintrag">
@@ -854,7 +854,7 @@
   <Attribute name="seite" select="sd:current-page()"/>
 </Element>]]></listing>
       <para>Erzeugt diese Datenstruktur:</para>
-      <listing><![CDATA[<Eintrag name=" (Inhalt von @name) " seite=" (aktuelle Seitennummer) " />]]></listing>
+      <listing><![CDATA[<Eintrag kapitelname=" (Inhalt von @name) " seite=" (aktuelle Seitennummer) " />]]></listing>
     </example>
     <seealso><cmd name="Element"/>, <cmd name="SaveDataset"/>, <ref name="directories"/></seealso>
   </command>
@@ -1468,10 +1468,10 @@
   </command>
   <command en="Circle" css="circle" since="2.3.42">
     <description xml:lang="en">
-      <para>Create a circle.</para>
+      <para>Create a circle or ellipse.</para>
     </description>
     <description xml:lang="de">
-      <para>Erzeugt einen Kreis.</para>
+      <para>Erzeugt einen Kreis oder eine Ellipse.</para>
     </description>
     <childelements/>
     <attribute en="backgroundcolor" type="text" optional="yes" css="background-color">
@@ -1508,10 +1508,18 @@
     </attribute>
     <attribute en="radiusx" type="numberorlength" optional="no">
       <description xml:lang="en">
-        <para>Radius of the circle in grid cells (horizontal) or as an absolute length. In the future, a radiusy will allow to create an ellipse.</para>
+        <para>Radius of the circle in grid cells (horizontal) or as an absolute length. Use with <tt>radiusy</tt> to create an ellipse.</para>
       </description>
       <description xml:lang="de">
-        <para>Radius des Kreises in Rasterzellen (horizontal) oder als absolute Maßangabe. In zukünftigen Versionen wird mit radiusy eine Ellipse erzeugbar sein.</para>
+        <para>Radius des Kreises in Rasterzellen (horizontal) oder als absolute Maßangabe. In Verbindung mit <tt>radiusy</tt> lässt sich eine Ellipse erzeugen.</para>
+      </description>
+    </attribute>
+    <attribute en="radiusy" type="numberorlength" optional="yes">
+      <description xml:lang="en">
+        <para>Radius of the ellipse in grid cells (vertical) or as an absolute length.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Radius der Ellipse in Rasterzellen (vertikal) oder als absolute Maßangabe.</para>
       </description>
     </attribute>
     <attribute en="rulewidth" type="length" optional="yes">
@@ -1730,16 +1738,16 @@
       </oneOrMore>
     </childelements>
     <remark xml:lang="en">
-      <para>The *-widths in the command »Column« allow dynamic cell widths. For that the total width of the table must be set and the attribute (on <cmd name="Table"/>) »stretch« must be set to »max«.
-        The widths of the columns are calculated as follows: first the absolute widths are taken into account. After that, the *-columns are distributed across the remaining space. The
-        numbers before the * denote the fraction of the space. In the example below the third column gets 1/6 of the remaining width, the fourth column get 5/6.</para>
+      <para>The <tt>*</tt> widths in the command »Column« allow dynamic cell widths. For that the total width of the table must be set and the attribute (on <cmd name="Table"/>) <tt>stretch</tt> must be set to <tt>max</tt>.
+        The widths of the columns are calculated as follows: first the absolute widths are taken into account. After that, the <tt>*</tt> columns are distributed across the remaining space. The
+        numbers before the <tt>*</tt> denote the fraction of the space. In the example below the third column gets 1/6 of the remaining width, the fourth column get 5/6.</para>
     </remark>
     <remark xml:lang="de">
-      <para>Die <tt>*</tt>-Breitenangaben im Element »Column« ermöglicht eine dynamische Aufteilung der Spaltenbreite. Dazu muss die Tabellenbreite vorgegeben sein und das Attribut <tt>stretch</tt> bei Tabelle auf max
+      <para>Die <tt>*</tt>-Breitenangaben im Element »Column« ermöglicht eine dynamische Aufteilung der Spaltenbreite. Dazu muss die Tabellenbreite vorgegeben sein und das Attribut <tt>stretch</tt> bei <cmd name="Table"/> auf <tt>max</tt>
         stehen. Die Spaltenbreiten berechnen sich wie folgt: erst werden die fixen Breitenangaben berücksichtigt. Anschließend werden die <tt>*</tt>-Spalten auf den verbleibenden Platz verteilt. Die Angaben
         vor den Sternchen dienen der Verteilung innerhalb der <tt>*</tt>-Spalten. Im Beispiel unten nimmt die vierte Spalte in etwa den fünffachen Platz der dritten Spalte ein. Angenommen die Tabelle sollte
-        32mm breit werden. Die fixen Spalten nehmen davon 20mm in Anspruch, übrig bleiben 12 mm. Diese 12mm werden auf die beiden Spalten verteilt, 2mm entfallen auf die 1<tt>*</tt>-Spalte (1/6 von 12mm), 10mm
-        auf die 5<tt>*</tt>-Spalte (5/6 von 12mm).</para>
+        32mm breit werden. Die fixen Spalten nehmen davon 20mm in Anspruch, übrig bleiben 12 mm. Diese 12mm werden auf die beiden Spalten verteilt, 2mm entfallen auf die <tt>1*</tt>-Spalte (1/6 von 12mm), 10mm
+        auf die <tt>5*</tt>-Spalte (5/6 von 12mm).</para>
     </remark><example xml:lang="en">
       <listing><![CDATA[<Table>
   <Columns>
@@ -1841,7 +1849,7 @@
       <para>Replace this element by the copy of the selection as an element structure. You can use it to construct more complex data structures.</para>
     </description>
     <description xml:lang="de">
-      <para>Ersetzt dieses Element mit Inhalt von <tt>select</tt> als Elementstruktur. Dient zum „Zusammenbauen“ von Texten und Tabellen.</para>
+      <para>Ersetzt dieses Element mit dem Inhalt von <tt>select</tt> als Elementstruktur. Dient zum „Zusammenbauen“ von Texten und Tabellen.</para>
     </description>
     <childelements/>
     <attribute en="select" type="xpath" optional="no">
@@ -3727,7 +3735,7 @@
 ...
 
 <DefineFontfamily name="text" fontsize="12" leading="14">
-  <Regular     fontface="Helvetica"/>
+  <Regular    fontface="Helvetica"/>
   <Bold       fontface="Helvetica Fett"/>
   <Italic     fontface="Helvetica Kursiv"/>
   <BoldItalic fontface="Helvetica Fett Kursiv"/>
@@ -8372,13 +8380,13 @@
   </PositioningArea>
 </Pagetype>
 <Record element="data">
-  <Ausgabe area="text">
+  <Output area="text">
     <Text>
       <Paragraph>
         <Value select="string(.)"/>
       </Paragraph>
     </Text>
-  </Ausgabe>
+  </Output>
 </Record>
 ]]></listing>
     </example>
@@ -8905,10 +8913,10 @@
       </description>
     </attribute>
     <remark xml:lang="en">
-      <para>Currenty it doesn't work with margin protrusion.</para>
+      <para>Currently doesn't work with margin protrusion.</para>
     </remark>
     <remark xml:lang="de">
-      <para>Funktioniert derzeit nicht zusammen mit optischen Randausgleich.</para>
+      <para>Funktioniert derzeit nicht zusammen mit optischem Randausgleich.</para>
     </remark>
     <example xml:lang="en">
       <listing><![CDATA[
@@ -8985,7 +8993,7 @@
       <para>Create a loop. All child elements are executed repeatedly until the given condition is true.</para>
     </description>
     <description xml:lang="de">
-      <para>Erzeugt eine Schleife. Die Kindelemente werden so oft ausgeführt, bis die Bedingung im Attribut bedingung wahr ergibt.</para>
+      <para>Erzeugt eine Schleife. Die Kindelemente werden so oft ausgeführt, bis die Bedingung im Attribut »wahr« ergibt.</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -8999,7 +9007,7 @@
         <para>Every time after the the loop is executed, the condition is evaluated. If it is true, the loop exits.</para>
       </description>
       <description xml:lang="de">
-        <para>Nach jedem Schleifendurchlauf wird die Bedingung überprüft. Wenn sie wahr ergibt, wird die Schleife verlassen.</para>
+        <para>Nach jedem Schleifendurchlauf wird die Bedingung überprüft. Wenn sie »wahr« ergibt, wird die Schleife verlassen.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -9155,10 +9163,10 @@ Message: "$i is: 3"]]></listing>
   </command>
   <command en="While">
     <description xml:lang="en">
-      <para>Create a loop. All child elements are executed, as long as the condition in the test attribute evaluates to true.</para>
+      <para>Create a loop. All child elements are executed as long as the condition in the test attribute evaluates to true.</para>
     </description>
     <description xml:lang="de">
-      <para>Erzeugt eine Schleife, die wiederholt durchlaufen wird. Die Kindelemente werden so oft ausgeführt, solange die Bedingung im Attribut bedingung wahr ergibt.</para>
+      <para>Erzeugt eine Schleife, die wiederholt durchlaufen wird. Die Kindelemente werden so oft ausgeführt, solange die Bedingung im Attribut »wahr« ergibt.</para>
     </description>
     <childelements>
       <oneOrMore>

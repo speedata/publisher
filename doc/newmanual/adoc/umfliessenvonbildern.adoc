@@ -120,7 +120,7 @@ Die Datei `taschenuhr.pdf` kann eine Umrissdatei mit demselben Namen und der End
 image::taschenuhr.png[width=50%,scaledwidth=100%]
 
 
-TIP: Diese Funktionalität ist noch experimentell. Die nächsten Versionen des Publishers haben  wahrscheinlich Verbesserungen bei diesem Feature. Der Umriss eines Bildes kann mit dem Programm `ìmageshaper` unter <https://github.com/speedata/imageshaper> erzeugt werden.
+TIP: Diese Funktionalität ist noch experimentell. Die nächsten Versionen des Publishers haben wahrscheinlich Verbesserungen bei diesem Feature. Der Umriss eines Bildes kann mit dem Programm `imageshaper` unter <https://github.com/speedata/imageshaper> erzeugt werden.
 
 Ein vollständige Beispiel ist unter https://github.com/speedata/examples/tree/master/imageshape zu finden.
 
