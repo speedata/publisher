@@ -1052,11 +1052,15 @@ function typeset_row(self, tr_contents, current_row )
         if tr_contents.backgroundcolor or td_contents.backgroundcolor or self.columncolors[current_column] then
             -- prio: Td.backgroundcolor, then Tr.backgroundcolor, then Column.backgroundcolor
             local color = self.columncolors[current_column]
-            color = tr_contents.backgroundcolor or color
+            if tr_contents.backgroundcolor and tr_contents.backgroundcolor ~= "-" then
+                color = tr_contents.backgroundcolor
+            end
             if td_contents.backgroundcolor and td_contents.backgroundcolor ~= "-" then
                 color = td_contents.backgroundcolor
             end
-            hlist = publisher.background(hlist,color)
+            if color and color ~= "-" then
+                hlist = publisher.background(hlist,color)
+            end
         end
 
         local bg = td_contents["background-text"]
