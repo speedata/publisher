@@ -1,0 +1,118 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+	<Record element="data">
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<Value>Width, no stretch, column width provided.</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+		<PlaceObject>
+			<Table width="150mm">
+				<Columns>
+					<Column width="7mm" align="left"/>
+					<Column width="1*" align="right"/>
+					<Column width="7mm" align="right"/>
+				</Columns>
+				<Tr valign="top">
+					<Td border-left="0.4pt" border-right="0.2pt"><Paragraph><Value>A</Value></Paragraph></Td>
+					<Td border-left="0.2pt" border-right="0.2pt"><Paragraph><Value>B</Value></Paragraph></Td>
+					<Td border-left="0.2pt" border-right="0.4pt"><Paragraph><Value>C</Value></Paragraph></Td>
+				</Tr>
+				<Tablerule/>
+			</Table>
+		</PlaceObject>
+		<NextRow/>
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<Value>Width, no stretch, column width not provided.</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+		<PlaceObject>
+			<Table width="150mm">
+				<Tr valign="top">
+					<Td border-left="0.4pt" border-right="0.2pt"><Paragraph><Value>A</Value></Paragraph></Td>
+					<Td border-left="0.2pt" border-right="0.2pt"><Paragraph><Value>B</Value></Paragraph></Td>
+					<Td border-left="0.2pt" border-right="0.4pt"><Paragraph><Value>C</Value></Paragraph></Td>
+				</Tr>
+				<Tablerule/>
+			</Table>
+		</PlaceObject>
+		<NextRow/>
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<Value>No width, stretch, column width provided.</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+		<PlaceObject>
+			<Table stretch="max">
+				<Columns>
+					<Column width="7mm" align="left"/>
+					<Column width="1*" align="right"/>
+					<Column width="7mm" align="right"/>
+				</Columns>
+				<Tr valign="top">
+					<Td border-left="0.4pt" border-right="0.2pt"><Paragraph><Value>A</Value></Paragraph></Td>
+					<Td border-left="0.2pt" border-right="0.2pt"><Paragraph><Value>B</Value></Paragraph></Td>
+					<Td border-left="0.2pt" border-right="0.4pt"><Paragraph><Value>C</Value></Paragraph></Td>
+				</Tr>
+				<Tablerule/>
+			</Table>
+		</PlaceObject>
+
+		<NextRow/>
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<Value>No width, no stretch, column width provided.</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+		<PlaceObject>
+			<Table>
+				<Columns>
+					<Column width="7mm" align="left"/>
+					<Column width="1*" align="right"/>
+					<Column width="7mm" align="right"/>
+				</Columns>
+				<Tr valign="top">
+					<Td border-left="0.4pt" border-right="0.2pt"><Paragraph><Value>A</Value></Paragraph></Td>
+					<Td border-left="0.2pt" border-right="0.2pt"><Paragraph><Value>B</Value></Paragraph></Td>
+					<Td border-left="0.2pt" border-right="0.4pt"><Paragraph><Value>C</Value></Paragraph></Td>
+				</Tr>
+				<Tablerule/>
+			</Table>
+		</PlaceObject>
+		<NextRow/>
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<Value>No width, no stretch, column width provided. No *-columns.</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+		<PlaceObject>
+			<Table>
+				<Columns>
+					<Column width="7mm" align="left"/>
+					<Column width="5cm" align="right"/>
+					<Column width="7mm" align="right"/>
+				</Columns>
+				<Tr valign="top">
+					<Td border-left="0.4pt" border-right="0.2pt"><Paragraph><Value>A</Value></Paragraph></Td>
+					<Td border-left="0.2pt" border-right="0.2pt"><Paragraph><Value>B</Value></Paragraph></Td>
+					<Td border-left="0.2pt" border-right="0.4pt"><Paragraph><Value>C</Value></Paragraph></Td>
+				</Tr>
+				<Tablerule/>
+			</Table>
+		</PlaceObject>
+
+	</Record>
+
+</Layout>
