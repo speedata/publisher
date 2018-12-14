@@ -896,6 +896,7 @@ function commands.frame( layoutxml,dataxml )
     local rulewidth_sp     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",                  "length_sp", 26312) -- 0.4bp
     local class            = publisher.read_attribute(layoutxml,dataxml,"class",                      "rawstring")
     local id               = publisher.read_attribute(layoutxml,dataxml,"id",                         "rawstring")
+    local clip             = publisher.read_attribute(layoutxml,dataxml,"clip",                       "boolean", true)
 
     local css_rules = publisher.css:matches({element = 'frame', class=class,id=id}) or {}
 
@@ -913,6 +914,7 @@ function commands.frame( layoutxml,dataxml )
             end
             tab[i].contents = publisher.frame({
                 box       = contents,
+                clip      = clip,
                 colorname = framecolor,
                 rulewidth = rulewidth_sp,
                 b_b_r_radius = tex.sp(b_b_r_radius or 0),
@@ -929,6 +931,7 @@ function commands.frame( layoutxml,dataxml )
                     end
                     contents[j] = publisher.frame({
                         box       = contents[j],
+                        clip      = clip,
                         colorname = framecolor,
                         rulewidth = rulewidth_sp,
                         b_b_r_radius = tex.sp(b_b_r_radius or 0),

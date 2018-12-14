@@ -1809,17 +1809,20 @@ function frame(obj)
     xx15, yy15 = math.round(xx15,3), math.round(yy15,3)
     xx16, yy16 = math.round(xx16,3), math.round(yy16,3)
 
-    local n_clip = node.new("whatsit","pdf_literal")
-    local rule_clip = {}
-    rule_clip[#rule_clip + 1] = string.format("%g %g m",xx1,yy1)
-    rule_clip[#rule_clip + 1] = string.format("%g %g l",xx2,yy2)
-    rule_clip[#rule_clip + 1] = string.format("%g %g %g %g %g %g c", xx3,yy3, xx4,yy4, xx5, yy5 )
-    rule_clip[#rule_clip + 1] = string.format("%g %g l",xx6, yy6)
-    rule_clip[#rule_clip + 1] = string.format("%g %g %g %g %g %g c", xx7,yy7,xx8,yy8, xx9,yy9  )
-    rule_clip[#rule_clip + 1] = string.format("%g %g l",xx10, yy10)
-    rule_clip[#rule_clip + 1] = string.format("%g %g %g %g %g %g c", xx11,yy11,xx12,yy12, xx13,yy13  )
-    rule_clip[#rule_clip + 1] = string.format("%g %g l",xx14,yy14 )
-    rule_clip[#rule_clip + 1] = string.format("%g %g %g %g %g %g c W n ", xx15,yy15,xx16,yy16, xx1,yy1  )
+    local n_clip, rule_clip
+    if obj.clip then
+        n_clip = node.new("whatsit","pdf_literal")
+        rule_clip = {}
+        rule_clip[#rule_clip + 1] = string.format("%g %g m",xx1,yy1)
+        rule_clip[#rule_clip + 1] = string.format("%g %g l",xx2,yy2)
+        rule_clip[#rule_clip + 1] = string.format("%g %g %g %g %g %g c", xx3,yy3, xx4,yy4, xx5, yy5 )
+        rule_clip[#rule_clip + 1] = string.format("%g %g l",xx6, yy6)
+        rule_clip[#rule_clip + 1] = string.format("%g %g %g %g %g %g c", xx7,yy7,xx8,yy8, xx9,yy9  )
+        rule_clip[#rule_clip + 1] = string.format("%g %g l",xx10, yy10)
+        rule_clip[#rule_clip + 1] = string.format("%g %g %g %g %g %g c", xx11,yy11,xx12,yy12, xx13,yy13  )
+        rule_clip[#rule_clip + 1] = string.format("%g %g l",xx14,yy14 )
+        rule_clip[#rule_clip + 1] = string.format("%g %g %g %g %g %g c W n ", xx15,yy15,xx16,yy16, xx1,yy1  )
+    end
 
     local n = node.new("whatsit","pdf_literal")
     local rule = {}
@@ -1855,14 +1858,20 @@ function frame(obj)
     rule[#rule + 1] = "Q"
 
     n.data      = table.concat(rule,      " ")
-    n_clip.data = table.concat(rule_clip, " ")
+    if (obj.clip==true) then
+        n_clip.data = table.concat(rule_clip, " ")
+    end
 
     local pdf_save    = node.new("whatsit","pdf_save")
     local pdf_restore = node.new("whatsit","pdf_restore")
 
     node.insert_after(pdf_save,pdf_save,n)
-    node.insert_after(n,n,n_clip)
-    node.insert_after(n_clip,n_clip,box)
+    if (obj.clip==true) then
+        node.insert_after(n,n,n_clip)
+        node.insert_after(n_clip,n_clip,box)
+    else
+        node.insert_after(n,n,box)
+    end
 
     local hvbox = node.hpack(pdf_save)
     hvbox.depth = 0
