@@ -2847,10 +2847,10 @@
       </description>
       <choice en="yes">
         <description xml:lang="en">
-          <para>The contents are clipped at the frame border.</para>
+          <para>The contents are clipped at the frame border (default).</para>
         </description>
         <description xml:lang="de">
-          <para>Die Inhalte werden an dessen Rändern des Rahmens abgeschnitten.</para>
+          <para>Die Inhalte werden an dessen Rändern des Rahmens abgeschnitten (Voreinstellung).</para>
         </description>
       </choice>
       <choice en="no">
