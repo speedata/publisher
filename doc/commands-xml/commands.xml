@@ -2838,6 +2838,30 @@
         <para>CSS id für dieses Element.</para>
       </description>
     </attribute>
+    <attribute en="clip" optional="yes" type="boolean" since="3.5.10">
+      <description xml:lang="en">
+        <para>Constrain the contents of the frame to its area or allow them to protrude.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt, ob die Inhalte des Rahmens auf dessen Fläche begrenzt werden sollen, oder ob sie darüber hinaus ragen dürfen.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>The contents are clipped at the frame border (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Inhalte werden an dessen Rändern des Rahmens abgeschnitten (Voreinstellung).</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>The contents are not clipped.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Inhalte nicht abschneiden.</para>
+        </description>
+      </choice>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Record element="data">
   <PlaceObject>
