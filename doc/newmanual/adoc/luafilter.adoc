@@ -7,8 +7,6 @@ Lua ist eine einfache, aber mächtige Programmiersprache, die dafür vorgesehen 
 
 Im https://github.com/speedata/examples/tree/master/technical[Beispiele-Repository] gibt es zwei Anwendungsfälle zum anschauen.
 
-_In den älteren Versionen des Publishers gab es die Möglichkeit, einen XProc-Filter zu benutzen. Das funktioniert aus Kompatibilitätsgründen noch, wird aber nicht weiter beschrieben._
-
 == Aufruf des Lua-Skripts
 
 Gestartet wird der Filter entweder über die Kommandozeile

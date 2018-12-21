@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strings"
 	"bytes"
 	"fmt"
 	"io"
@@ -56,19 +57,22 @@ func runSaxon(l *lua.LState) int {
 	xsl := l.CheckString(1)
 	src := l.CheckString(2)
 	out := l.CheckString(3)
-	var param string
+
+	cmd := []string{"-jar",filepath.Join(libdir, "saxon9804he.jar"),  fmt.Sprintf("-xsl:%s",xsl),fmt.Sprintf("-s:%s",src),fmt.Sprintf("-o:%s",out)}
+
+	// fourth argument param is optional
 	if l.GetTop() > 3 {
-		param = l.CheckString(4)
+		cmd = append(cmd,l.CheckString(4))
 	}
-	cmd := fmt.Sprintf("java -jar %s -xsl:%s -s:%s -o:%s %s", filepath.Join(libdir, "saxon9804he.jar"), xsl, src, out, param)
-	exitcode := run(cmd)
+	env := []string{}
+	exitcode := run("java", cmd,env)
+
 	if exitcode == 0 {
 		l.Push(lua.LTrue)
 	} else {
 		l.Push(lua.LFalse)
 	}
-
-	l.Push(lua.LString(cmd))
+	l.Push(lua.LString( "java " + strings.Join(cmd," ")))
 	return 2
 }
 
@@ -85,7 +89,7 @@ func runtimeLoader(l *lua.LState) int {
 
 }
 
-// Set projectdir and variables table
+// set projectdir and variables table
 func fillRuntimeModule(l *lua.LState, mod lua.LValue) {
 	lvars := l.NewTable()
 	for k, v := range variables {

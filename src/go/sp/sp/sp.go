@@ -243,6 +243,15 @@ func showDuration() {
 	log.Printf("Total run time: %v\n", time.Now().Sub(starttime))
 }
 
+// Kill all running child processes
+// some process (such as java xproc pipelines) are still in the runningProcess queue, so
+// let's try to kill these processes as well, and let's ignore the error of the kill command.
+func killallProcesses() {
+	for _, proc := range runningProcess {
+		proc.Kill()
+	}
+}
+
 func timeoutCatcher(seconds int) {
 	timeout := make(chan bool, 1)
 	go func() {
@@ -252,6 +261,7 @@ func timeoutCatcher(seconds int) {
 	select {
 	case <-timeout:
 		log.Printf("\n\nTimeout after %d seconds", seconds)
+		killallProcesses()
 		showDuration()
 		os.Exit(-1)
 	}
@@ -262,33 +272,16 @@ func sigIntCatcher() {
 	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
 	sig := <-ch
 	log.Printf("Signal received: %v", sig)
-	// some process (such as java xproc pipelines) are still in the runningProcess queue, so
-	// let's try to kill these processes as well, and let's ignore the error of the kill command.
-	for _, proc := range runningProcess {
-		proc.Kill()
-	}
+	killallProcesses()
 	showDuration()
 	os.Exit(0)
 }
 
 // Run the given command line
-func run(cmdline string) (errorcode int) {
+func run(command string, cmdline []string, environ []string) (errorcode int) {
 	errorcode = 0
-	var commandlineArray []string
-	// The cmdline can have quoted strings. We remove the quotation marks
-	// by this ugly construct. That way strings such as "--data=foo\ bar" can
-	// be passed to the subprocess.
-	j := regexp.MustCompile("([^ \"]+)|\"([^\"]+)\"")
-	ret := j.FindAllStringSubmatch(cmdline, -1)
-	for _, m := range ret {
-		if m[2] != "" {
-			commandlineArray = append(commandlineArray, m[2])
-		} else {
-			commandlineArray = append(commandlineArray, m[0])
-		}
-	}
-	cmd := exec.Command(commandlineArray[0])
-	cmd.Args = commandlineArray
+	cmd := exec.Command(command, cmdline...)
+	cmd.Env = append(os.Environ(), environ...)
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		log.Fatal(err)
@@ -507,10 +500,18 @@ func runPublisher() (exitstatus int) {
 	log.Print("Run speedata publisher")
 	defer removeLogfile()
 
+	cmdline := []string{}
+	if runtime.GOOS == osWindows {
+		// to allow UT8 filenames
+		cmdline = append(cmdline, "--cmdx")
+	}
+
+	jobname := getOption("jobname")
+
 	exitstatus = 0
 	saveVariables()
 
-	f, err := os.Create(getOption("jobname") + ".protocol")
+	f, err := os.Create(jobname + ".protocol")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -542,27 +543,24 @@ func runPublisher() (exitstatus int) {
 		layoutoptionsSlice = append(layoutoptionsSlice, `reportmissingglyphs=`+layoutoptions["reportmissingglyphs"])
 	}
 	layoutoptionsCommandline := strings.Join(layoutoptionsSlice, ",")
-	jobname := getOption("jobname")
 	layoutname := getOption("layout")
 	dataname := getOption("data")
-	execName := getExecutablePath()
+
 	if dummyData := getOption("dummy"); dummyData == stringTrue {
 		dataname = "-dummy"
 	}
-	os.Setenv("SP_JOBNAME", jobname)
 
 	runs, err := strconv.Atoi(getOption("runs"))
 	if err != nil {
 		log.Fatal(err)
 	}
-	cmdx := ""
-	if runtime.GOOS == osWindows {
-		// to allow UT8 filenames
-		cmdx = "--cmdx"
-	}
+
+	cmdline = append(cmdline, "--shell-escape", "--interaction", "nonstopmode", fmt.Sprintf("--jobname=%s", jobname))
+	cmdline = append(cmdline, "--ini", fmt.Sprintf("--lua=%s", inifile), "publisher.tex")
+	cmdline = append(cmdline, layoutname, dataname, layoutoptionsCommandline)
+	env := []string{"LC_ALL=C", "SP_JOBNAME=%s" + jobname}
 	for i := 1; i <= runs; i++ {
-		cmdline := fmt.Sprintf(`"%s" %s --shell-escape --interaction nonstopmode "--jobname=%s" --ini "--lua=%s" publisher.tex %q %q %q`, execName, cmdx, jobname, inifile, layoutname, dataname, layoutoptionsCommandline)
-		if run(cmdline) < 0 {
+		if run(getExecutablePath(), cmdline, env) < 0 {
 			exitstatus = -1
 			v := status{}
 			v.Errors = 1
@@ -857,19 +855,13 @@ func main() {
 					}
 				}
 			case ".xpl":
-				if !fileExists(filter) {
-					fmt.Printf("XProc file %q not found\n", filter)
-					exitstatus = 1
-				} else {
-					runXProcPipeline(filter)
-				}
+				fmt.Println("XProc filter not supported anymore.")
+				exitstatus = 1
 			default:
 				if fileExists(filter + ".lua") {
 					if !runLuaScript(filter + ".lua") {
 						exitstatus = 1
 					}
-				} else if fileExists(filter + ".xpl") {
-					runXProcPipeline(filter + ".xpl")
 				} else {
 					fmt.Printf("Cannot find filter %q\n", filter)
 					exitstatus = 1
@@ -939,9 +931,8 @@ func main() {
 		if getOption("xml") == stringTrue {
 			xml = "xml"
 		}
-
-		cmdline := fmt.Sprintf(`"%s" --luaonly "%s/lua/sdscripts.lua" "%s" list-fonts %s`, getExecutablePath(), srcdir, inifile, xml)
-		run(cmdline)
+		cmdline := []string{"--luaonly", filepath.Join(srcdir, "lua", "sdscripts.lua"), inifile, "list-fonts", xml}
+		run(getExecutablePath(), cmdline, []string{"LC_ALL=C"})
 	case cmdWatch:
 		watchDir := getOptionSection("hotfolder", "hotfolder")
 		events := getOptionSection("events", "hotfolder")

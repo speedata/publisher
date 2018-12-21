@@ -3,7 +3,7 @@ title: Pre-processing with a Lua filter
 
 The ability to run a Lua script before the publishing run is available since version 3.1.9.
 
-The command line/configuration interface is the same as for the XProc filter:
+The command line/configuration interface is:
 
     sp --filter myfile.lua
 

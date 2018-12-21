@@ -27,8 +27,6 @@ include::seitentypen.adoc[leveloffset=+1]
 
 include::hotfolder.adoc[leveloffset=+1]
 
-// include::xproc.adoc[leveloffset=+1]
-
 include::luafilter.adoc[leveloffset=+1]
 
 include::schemavalidierung.adoc[leveloffset=+1]
