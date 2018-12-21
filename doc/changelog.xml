@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.5">
+    <entry version="3.5.10" date="2018-12-21">
+      <en>Various bugfixes. New attribute clip with Frame. Update hyphenation patterns. XInclude for data. Move to Go 1.11 modules.</en>
+      <de>Verschiedene Fehlerkorrekturen. Neues Attribut clip bei Frame. Trennmuster aktualisiert. XInclude für Datendateien. Benutze Go 1.11 Module.</de>
+    </entry>
     <entry version="3.5.9" date="2018-11-29">
       <en>Default margin now 1cm, bugfix for dynamic table head and balance="yes".</en>
       <de>Seitenrand 1cm als Voreinstellung. Fehlerkorrektur bei dynamischen Tabellenkopf und balance="yes".</de>
