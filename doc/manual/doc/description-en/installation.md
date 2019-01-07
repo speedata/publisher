@@ -34,7 +34,7 @@ There are extra installer packages for windows, if you don't want to set the PAT
 
   1. Now you can run `sudo apt update` and `apt get install speedata-publisher` and have a working installation. You can find the documentation in `/usr/share/doc/speedata-publisher/index.html` which should open with `sp doc` on a desktop system.
 
-3. **Build from source**: For developers interested in contributing to speedata Publisher, the program and documentation can be built directly from source in the git repository using [rake](https://github.com/ruby/rake), if you have the [Go language](https://golang.org/) version 1.5 or later installed. For example, on Debian or Ubuntu GNU/Linux, where Go is packaged as 'golang', you can use the commands:
+3. **Build from source**: For developers interested in contributing to speedata Publisher, the program and documentation can be built directly from source in the git repository using [rake](https://github.com/ruby/rake), if you have the [Go language](https://golang.org/) version 1.11 or later installed. For example, on Debian or Ubuntu GNU/Linux, where Go is packaged as 'golang', you can use the commands:
  
 ```
 sudo apt install build-essential git rake golang
@@ -43,13 +43,6 @@ cd publisher
 rake build
 rake doc
 ```
-
-(Please note that the version of golang in Debian stable (jessie), version 1.3.3, is not recommended for building speedata Publisher. The current golang version 1.6.2 can be installed on this distribution with:
-
-```
-sudo apt install -t jessie-backports golang
-```
-as long as the jessie-backports repository is enabled in the `/etc/apt/sources.list` file on your machine).
 
 If you are building speedata Publisher from source, you will also need to install LuaTeX manually. The recommended way is to download a binary from <https://download.speedata.de/#extra> and copy it into the bin/ directory of the Publisher.
 For example, to download and install LuajitTeX 1.0.7 on a Linux amd64 system, you could use the commands:
