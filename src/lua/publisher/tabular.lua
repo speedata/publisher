@@ -27,6 +27,8 @@ function new( self )
         columncolors  = {},
         -- The distance between column i and i+1, currently not used
         column_distances = {},
+        -- number of frames the table is split across, initialise to a sane default value
+        split = 1,
     }
 
     setmetatable(t, self)
