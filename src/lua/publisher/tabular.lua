@@ -226,7 +226,7 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
 
                     if inlineobject.nodelist then
                         local fam = publisher.set_fontfamily_if_necessary(inlineobject.nodelist,self.fontfamily)
-                        if td_contents.rotate then
+                        if td_contents.rotate and td_contents.rotate ~= 0  then
                             cellheight = publisher.fonts.lookup_fontfamily_number_instance[fam].size
                         end
                         publisher.fonts.pre_linebreak(inlineobject.nodelist)
@@ -265,7 +265,7 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
         -- colspan?
         min_wd = min_wd or 0
         max_wd = max_wd or 0
-        if td_contents.rotate then
+        if td_contents.rotate and td_contents.rotate ~= 0  then
             local angle_rad = -1 * math.rad(td_contents.rotate)
             max_wd = max_wd * math.cos(angle_rad) + cellheight * math.sin(angle_rad)
         end
@@ -582,7 +582,7 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
                 if type(inlineobject) == "table" then
                     if width then
                         -- ok, a paragraph with a certain width, that we can typeset
-                        if rotate then
+                        if rotate and rotate ~= 0 then
                             -- default_textformat_name = "__leftaligned"
                             -- horizontal_alignment = "left"
                         else
@@ -602,7 +602,7 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
                             end
                         end
                         publisher.set_fontfamily_if_necessary(inlineobject.nodelist,self.fontfamily)
-                        if rotate then
+                        if rotate and rotate ~= 0 then
                             local max_width = inlineobject:max_width()
                             width = max_width
                         end
@@ -656,7 +656,7 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
     -- if there are no objects in a row, we create a dummy object
     -- so the row can be created and vpack does not fall over a nil
     cell = cell or node.new("hlist")
-    if tonumber(blockobjects.rotate) then
+    if tonumber(blockobjects.rotate) and tonumber(blockobjects.rotate) ~= 0 then
         cell = publisher.rotateTd(cell,blockobjects.rotate,width)
     end
 
@@ -790,7 +790,7 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
         local cell = self:pack_cell(td_contents.objects,wd - padding_left - padding_right - td_borderleft - td_borderright,alignment)
         td_contents.cell = cell
         local tmp = cell.height + cell.depth
-        if td_contents.rotate then
+        if td_contents.rotate and td_contents.rotate ~= 0 then
             local _w, _h, _d = node.dimensions(cell)
             -- positive would be counter clockwise, but CSS is clockwise. So we multiply by -1
             local angle_rad = -1 * math.rad(td_contents.rotate)
@@ -968,7 +968,7 @@ function typeset_row(self, tr_contents, current_row )
         node.set_attribute(g,publisher.att_origin,publisher.origin_align_top)
 
         local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
-        if td_contents.rotate then
+        if td_contents.rotate and td_contents.rotate ~= 0 then
             -- Rotated objects should be bottom aligned until we do better calculation (1/2)
             valign = "bottom"
         end
@@ -1000,7 +1000,7 @@ function typeset_row(self, tr_contents, current_row )
         local g = set_glue(nil,{width = padding_bottom})
 
         local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
-        if td_contents.rotate then
+        if td_contents.rotate and td_contents.rotate ~= 0  then
             -- Rotated objects should be bottom aligned until we do better calculation (2/2)
             valign = "bottom"
         end
