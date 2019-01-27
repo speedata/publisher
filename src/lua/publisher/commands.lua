@@ -2662,6 +2662,8 @@ function commands.place_object( layoutxml,dataxml )
             if objects.balance then
                 -- a split table and the last object.
                 current_grid:set_framenumber(area,1)
+                local first_free_row = current_grid:first_free_row(area,1)
+                current_grid:set_current_row(first_free_row,area)
             end
         end
     end
