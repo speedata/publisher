@@ -1,6 +1,10 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.5">
-    <entry version="3.5.10" date="2019-01-27">
+    <entry version="3.5.11" date="2019-01-27">
+      <en>Bugfix: set row when balancing tables.</en>
+      <de>Tabellen-Ausgleich: setze aktuelle Ausgabezeile.</de>
+    </entry>
+    <entry version="3.5.11" date="2019-01-27">
       <en>Row height in table balancing taken into account.</en>
       <de>Tabellen-Ausgleich beachtet die Zeilenhöhe.</de>
     </entry>
