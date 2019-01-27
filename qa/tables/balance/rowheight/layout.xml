@@ -1,0 +1,30 @@
+<Layout
+    xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="120mm" width="130mm"/>
+
+    <Pagetype name="t" test="true()">
+        <PositioningArea name="foo">
+            <PositioningFrame height="10" width="5" row="1" column="1"/>
+            <PositioningFrame height="10" width="5" row="1" column="7"/>
+        </PositioningArea>
+    </Pagetype>
+
+    <Record element="data">
+        <PlaceObject area="foo">
+            <Table balance="yes">
+                <Columns>
+                    <Column width="1*"/>
+                </Columns>
+                <Tr><Td><Paragraph><Value select="sd:dummytext()"/></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>Some text</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>Some text</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>Some text</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>Some text</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>Some text</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>Some text</Value></Paragraph></Td></Tr>
+            </Table>
+
+        </PlaceObject>
+    </Record>
+</Layout>

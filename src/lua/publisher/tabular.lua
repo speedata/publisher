@@ -1455,6 +1455,10 @@ function typeset_table(self)
     end
 
 
+    --- Table splitting
+    --- ===============
+    --- Table splitting is done in several steps and we need helper functions to generate the dynamic headers
+    --- and to get the height of these headers
     local function get_height_header(i)
         local ht = 0
         if showheader_static(i) then
@@ -1615,29 +1619,90 @@ function typeset_table(self)
         end
         extra_height = extra_height + self.rowsep
     end
+    -- This is the last split
     splits[#splits + 1] = #rows
+
+
+    --- Table balancing
+    --- ===============
+    --- When the user has requested table balancing, we need to find out how many frames
+    --- the table spans. If there is only one frame, no balancing has to be done.
+    --- If there are more frames, we need to find out the “empty” frames.
+
+    -- tosplit is the total number of frames on the last page (used or unused)
     local tosplit = self.split
 
-    local additional_splits = ( #splits - 1 ) % tosplit
-    if tosplit > 1 then
-        if additional_splits == 0 then additional_splits = tosplit end
-    end
-    if additional_splits > 0 then
-        local sum_rows = splits[#splits] - splits[#splits - additional_splits]
+    -- used_frames is the number of frames used by the table w/o split.
+    local used_frames = ( #splits - 1 ) % tosplit
 
-        for i=1,additional_splits do
+    -- This can be 0 (all columns used).
+    -- So the number is set to the amount of tosplit in order to balance all columns.
+    if used_frames == 0 then used_frames = tosplit end
+
+    -- Now that we know the #frames to be split, we can count the lines.
+    -- Remember: the split table looks like this:
+    --     splits = {
+    --       [1] = "0"
+    --       [2] = "26"
+    --       [3] = "44"
+    --     }
+    -- Where 44 is the total number of rows. This has to be the last entry in the splits table.
+    -- Each entry means that there is a split after that line. So in the example above,
+    -- line 26 is in the first frame, 27 to 44 in the last frame.
+
+    -- tosplit > 1 ==> needs balancing (otherwise only one frame or no splitting)
+    if tosplit > 1 then
+        -- first, we remove the split marks for the used frames.
+        -- (If we omitted the rest of the balance routine, the resulting table would be empty for that page.)
+        for i=1,used_frames  do
             table.remove(splits)
         end
-        local percolumn =  math.ceil( sum_rows / tosplit )
 
-        for i=1,tosplit do
-            splits[#splits + 1] = splits[#splits] + percolumn
-            sum_rows = sum_rows - percolumn
-            if sum_rows < percolumn then
-                percolumn = sum_rows
+        local sum_ht = 0
+        -- first row is needed for height calculation
+        local first_row_in_new_table = splits[#splits] + 1
+
+        -- Now this is the total height of the remaining rows.
+        -- We need to take the dynamic headers into account (TODO).
+        for i = first_row_in_new_table, #rows  do
+            sum_ht = sum_ht + rows[i].height + rows[i].depth
+        end
+
+        -- percolumn_goal is the optimum height for each column
+        local percolumn_goal =  math.ceil( sum_ht / tosplit )
+        local sum_frame = 0
+        for i = first_row_in_new_table, #rows do
+            sum_frame = sum_frame + rows[i].height + rows[i].depth
+
+            -- When stepped over the goal, move this line to the next frame.
+            -- With dynamic headers, we have to look backwards to avoid a
+            -- dynamic header at the bottom which gets repeated anyway.
+            if sum_frame > percolumn_goal then
+                if rows[i - 1] and node.has_attribute(rows[i - 1],publisher.att_use_as_head) == 1 then
+                    splits[#splits + 1] = i - 2
+                else
+                    splits[#splits + 1] = i
+                end
+                tosplit = tosplit - 1
+
+                -- When there is more than one column left, we should adjust the percolumn_goal. (should we?)
+                if tosplit > 0 then
+                    percolumn_goal = percolumn_goal - math.ceil( (sum_frame - percolumn_goal )  / tosplit )
+                end
+                sum_frame = 0
             end
         end
+
+        -- Add the last row to the splits table, unless by coincidence the
+        -- split has already done that.
+        if splits[#splits] ~= #rows then
+            splits[#splits + 1] = #rows
+        end
     end
+
+    --- Table cleanup. This is for dynamic headers which get repeated on the top of
+    --- each split. We omit the repetition, if the top entry in a frame is already
+    --- a dynamic head.
     for i=2,#splits - 1 do
         r = splits[i]
         if rows[r+1] then
