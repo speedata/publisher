@@ -2424,10 +2424,6 @@ function commands.place_object( layoutxml,dataxml )
     xpath.set_variable("__row", row)
     xpath.set_variable("__column", column)
 
-
-
-
-
     -- remember the current maximum width for later
     local current_maxwidth = xpath.get_variable("__maxwidth")
     local mw = current_grid:number_of_columns(area)

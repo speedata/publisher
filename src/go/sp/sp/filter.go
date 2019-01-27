@@ -1,13 +1,13 @@
 package main
 
 import (
-	"strings"
 	"bytes"
 	"fmt"
 	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"sp/sp/luacsv"
 	"sp/sp/luaxlsx"
@@ -58,21 +58,21 @@ func runSaxon(l *lua.LState) int {
 	src := l.CheckString(2)
 	out := l.CheckString(3)
 
-	cmd := []string{"-jar",filepath.Join(libdir, "saxon9804he.jar"),  fmt.Sprintf("-xsl:%s",xsl),fmt.Sprintf("-s:%s",src),fmt.Sprintf("-o:%s",out)}
+	cmd := []string{"-jar", filepath.Join(libdir, "saxon9804he.jar"), fmt.Sprintf("-xsl:%s", xsl), fmt.Sprintf("-s:%s", src), fmt.Sprintf("-o:%s", out)}
 
 	// fourth argument param is optional
 	if l.GetTop() > 3 {
-		cmd = append(cmd,l.CheckString(4))
+		cmd = append(cmd, l.CheckString(4))
 	}
 	env := []string{}
-	exitcode := run("java", cmd,env)
+	exitcode := run("java", cmd, env)
 
 	if exitcode == 0 {
 		l.Push(lua.LTrue)
 	} else {
 		l.Push(lua.LFalse)
 	}
-	l.Push(lua.LString( "java " + strings.Join(cmd," ")))
+	l.Push(lua.LString("java " + strings.Join(cmd, " ")))
 	return 2
 }
 

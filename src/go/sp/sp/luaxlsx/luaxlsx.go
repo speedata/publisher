@@ -2,7 +2,7 @@ package luaxlsx
 
 import (
 	"github.com/speedata/goxlsx"
-	"github.com/yuin/gopher-lua"
+	lua "github.com/yuin/gopher-lua"
 )
 
 func lerr(l *lua.LState, errormessage string) int {
@@ -139,6 +139,7 @@ var exports = map[string]lua.LGFunction{
 	"string_to_date": stringToDate,
 }
 
+// Open sets up the XSLX Lua module.
 func Open(l *lua.LState) int {
 	mod := l.SetFuncs(l.NewTable(), exports)
 	l.Push(mod)
