@@ -1658,12 +1658,12 @@ function typeset_table(self)
             table.remove(splits)
         end
 
-        local sum_ht = 0
         -- first row is needed for height calculation
         local first_row_in_new_table = splits[#splits] + 1
 
         -- Now this is the total height of the remaining rows.
         -- We need to take the dynamic headers into account (TODO).
+        local sum_ht = 0
         for i = first_row_in_new_table, #rows  do
             sum_ht = sum_ht + rows[i].height + rows[i].depth
         end
@@ -1671,18 +1671,16 @@ function typeset_table(self)
         -- percolumn_goal is the optimum height for each column
         local percolumn_goal =  math.ceil( sum_ht / tosplit )
         local sum_frame = 0
+        local break_below_allowed
         for i = first_row_in_new_table, #rows do
+            break_below_allowed = ( node.has_attribute(rows[i],publisher.att_break_below_forbidden) ~= 1)
+            if break_below_allowed then
+                last_possible_split_is_after_line = i
+            end
             sum_frame = sum_frame + rows[i].height + rows[i].depth
-
             -- When stepped over the goal, move this line to the next frame.
-            -- With dynamic headers, we have to look backwards to avoid a
-            -- dynamic header at the bottom which gets repeated anyway.
             if sum_frame > percolumn_goal then
-                if rows[i - 1] and node.has_attribute(rows[i - 1],publisher.att_use_as_head) == 1 then
-                    splits[#splits + 1] = i - 2
-                else
-                    splits[#splits + 1] = i
-                end
+                splits[#splits + 1] = last_possible_split_is_after_line
                 tosplit = tosplit - 1
 
                 -- When there is more than one column left, we should adjust the percolumn_goal. (should we?)
