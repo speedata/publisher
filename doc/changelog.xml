@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.5">
+    <entry version="3.5.12" date="2019-01-31">
+      <en>Bugfix for table balancing and break-below=no</en>
+      <de>Fehlerkorrektur für Tabellenausgleich und break-below=no</de>
+    </entry>
     <entry version="3.5.11" date="2019-01-27">
       <en>Bugfix: set row when balancing tables.</en>
       <de>Tabellen-Ausgleich: setze aktuelle Ausgabezeile.</de>
