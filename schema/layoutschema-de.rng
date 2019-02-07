@@ -30,7 +30,7 @@
    </define>
    <define name="e_Action">
       <element name="Action">
-         <a:documentation>Assoziiert eine Aktion mit einem Text. Sobald der Text auf einer Seite platziert wird, wird die dazugehörige Aktion ausgeführt. Die Aktion kann man sich als unsichtbares Zeichen vorstellen. Wenn der Publisher das unsichtbare Zeichen ausgibt, werden die Anweisungen in Aktion ausgeführt.</a:documentation>
+         <a:documentation>Assoziiert eine Aktion mit einem Text. Sobald der Text auf einer Seite platziert wird, wird die dazugehörige Aktion ausgeführt. Die Aktion kann man sich als unsichtbares Zeichen vorstellen. Wenn der Publisher das unsichtbare Zeichen ausgibt, werden die Anweisungen in der Aktion ausgeführt.</a:documentation>
          <interleave>
             <group>
                <oneOrMore>
@@ -52,7 +52,7 @@
    </define>
    <define name="e_AtPageCreation">
       <element name="AtPageCreation">
-         <a:documentation>Die Inhalte des Elements »AtPageCreation« werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird. Dieser Befehl kann in einem Seitentyp (Pagetype) benutzt werden.</a:documentation>
+         <a:documentation>Die Inhalte des Elements AtPageCreation werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird. Dieser Befehl kann in einem Seitentyp (Pagetype) benutzt werden.</a:documentation>
          <interleave>
             <group>
                <oneOrMore>
@@ -714,7 +714,7 @@
    </define>
    <define name="e_Circle">
       <element name="Circle">
-         <a:documentation>Erzeugt einen Kreis.</a:documentation>
+         <a:documentation>Erzeugt einen Kreis oder eine Ellipse.</a:documentation>
          <optional>
             <attribute name="backgroundcolor">
                <a:documentation>Farbe des Kreises.</a:documentation>
@@ -736,8 +736,13 @@
             </attribute>
          </optional>
          <attribute name="radiusx">
-            <a:documentation>Radius des Kreises in Rasterzellen (horizontal) oder als absolute Maßangabe. In zukünftigen Versionen wird mit radiusy eine Ellipse erzeugbar sein.</a:documentation>
+            <a:documentation>Radius des Kreises in Rasterzellen (horizontal) oder als absolute Maßangabe. In Verbindung mit radiusy lässt sich eine Ellipse erzeugen.</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="radiusy">
+               <a:documentation>Radius der Ellipse in Rasterzellen (vertikal) oder als absolute Maßangabe.</a:documentation>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="rulewidth">
                <a:documentation>Die Dicke des Striches um den Kreis.</a:documentation>
@@ -977,7 +982,7 @@
    </define>
    <define name="e_Copy-of">
       <element name="Copy-of">
-         <a:documentation>Ersetzt dieses Element mit Inhalt von select als Elementstruktur. Dient zum „Zusammenbauen“ von Texten und Tabellen.</a:documentation>
+         <a:documentation>Ersetzt dieses Element mit dem Inhalt von select als Elementstruktur. Dient zum „Zusammenbauen“ von Texten und Tabellen.</a:documentation>
          <attribute name="select">
             <a:documentation>Die Auswahl (eine Variable) die kopiert werden soll.</a:documentation>
          </attribute>
@@ -1604,6 +1609,17 @@
                <optional>
                   <attribute name="id">
                      <a:documentation>CSS id für dieses Element.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="clip">
+                     <a:documentation>Bestimmt, ob die Inhalte des Rahmens auf dessen Fläche begrenzt werden sollen, oder ob sie darüber hinaus ragen dürfen.</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Die Inhalte werden an dessen Rändern des Rahmens abgeschnitten (Voreinstellung).</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Die Inhalte nicht abschneiden.</a:documentation>
+                     </choice>
                   </attribute>
                </optional>
                <oneOrMore>
@@ -5272,11 +5288,11 @@
    </define>
    <define name="e_Until">
       <element name="Until">
-         <a:documentation>Erzeugt eine Schleife. Die Kindelemente werden so oft ausgeführt, bis die Bedingung im Attribut bedingung wahr ergibt.</a:documentation>
+         <a:documentation>Erzeugt eine Schleife. Die Kindelemente werden so oft ausgeführt, bis die Bedingung im Attribut »wahr« ergibt.</a:documentation>
          <interleave>
             <group>
                <attribute name="test">
-                  <a:documentation>Nach jedem Schleifendurchlauf wird die Bedingung überprüft. Wenn sie wahr ergibt, wird die Schleife verlassen.</a:documentation>
+                  <a:documentation>Nach jedem Schleifendurchlauf wird die Bedingung überprüft. Wenn sie »wahr« ergibt, wird die Schleife verlassen.</a:documentation>
                </attribute>
                <oneOrMore>
                   <interleave>
@@ -5543,7 +5559,7 @@
    </define>
    <define name="e_While">
       <element name="While">
-         <a:documentation>Erzeugt eine Schleife, die wiederholt durchlaufen wird. Die Kindelemente werden so oft ausgeführt, solange die Bedingung im Attribut bedingung wahr ergibt.</a:documentation>
+         <a:documentation>Erzeugt eine Schleife, die wiederholt durchlaufen wird. Die Kindelemente werden so oft ausgeführt, solange die Bedingung im Attribut »wahr« ergibt.</a:documentation>
          <interleave>
             <group>
                <attribute name="test">

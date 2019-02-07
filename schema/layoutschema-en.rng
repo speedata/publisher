@@ -714,7 +714,7 @@
    </define>
    <define name="e_Circle">
       <element name="Circle">
-         <a:documentation>Create a circle.</a:documentation>
+         <a:documentation>Create a circle or ellipse.</a:documentation>
          <optional>
             <attribute name="backgroundcolor">
                <a:documentation>Color of the circle.</a:documentation>
@@ -736,8 +736,13 @@
             </attribute>
          </optional>
          <attribute name="radiusx">
-            <a:documentation>Radius of the circle in grid cells (horizontal) or as an absolute length. In the future, a radiusy will allow to create an ellipse.</a:documentation>
+            <a:documentation>Radius of the circle in grid cells (horizontal) or as an absolute length. Use with radiusy to create an ellipse.</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="radiusy">
+               <a:documentation>Radius of the ellipse in grid cells (vertical) or as an absolute length.</a:documentation>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="rulewidth">
                <a:documentation>The thickness of the border that is drawn around the object.</a:documentation>
@@ -1604,6 +1609,17 @@
                <optional>
                   <attribute name="id">
                      <a:documentation>CSS id for this element.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="clip">
+                     <a:documentation>Constrain the contents of the frame to its area or allow them to protrude.</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>The contents are clipped at the frame border (default).</a:documentation>
+                        <value>no</value>
+                        <a:documentation>The contents are not clipped.</a:documentation>
+                     </choice>
                   </attribute>
                </optional>
                <oneOrMore>
@@ -5543,7 +5559,7 @@
    </define>
    <define name="e_While">
       <element name="While">
-         <a:documentation>Create a loop. All child elements are executed, as long as the condition in the test attribute evaluates to true.</a:documentation>
+         <a:documentation>Create a loop. All child elements are executed as long as the condition in the test attribute evaluates to true.</a:documentation>
          <interleave>
             <group>
                <attribute name="test">
