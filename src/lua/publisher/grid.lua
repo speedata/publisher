@@ -790,7 +790,7 @@ function position_grid_cell(self,x,y,areaname,wd,ht,valign,halign)
     if valign then
         -- height mod cellheight = "overshoot"
         local overshoot = ht % self.gridheight
-        if valign == "bottom" then
+        if valign == "bottom" and overshoot > 0 then
             -- cellheight - "overshoot" = shift_down
             y_sp = y_sp + self.gridheight - overshoot
         elseif valign == "middle" then

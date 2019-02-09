@@ -1,0 +1,11 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Pageformat height="5cm" width="7cm"/>
+
+  <Record element="data">
+    <PlaceObject column="1" row="1" valign="bottom" >
+      <Box height="2" width="2"  backgroundcolor="yellow"/>
+    </PlaceObject>
+  </Record>
+</Layout>
