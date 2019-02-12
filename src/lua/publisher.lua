@@ -2691,6 +2691,12 @@ function addstrut(nodelist,where)
     if where then
         node.set_attribute(strut,att_origin,where)
     end
+    -- We need to set the font family of the rule (strut).
+    -- When setting the line height, the “highest“ font is taken
+    -- into account. And when an element does not have a font family
+    -- assigned, the default font is used. This is not a problem with
+    -- fonts and leading > 12pt, but for smaller ones. See bug #221.
+    node.set_attribute(strut,att_fontfamily,fontfamily)
     return strut
 end
 
