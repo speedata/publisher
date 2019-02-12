@@ -63,7 +63,14 @@ Die folgenden Textformate sind definiert:
 <DefineTextformat name="centered" alignment="centered" />
 <DefineTextformat name="left" alignment="leftaligned"/>
 <DefineTextformat name="right" alignment="rightaligned"/>
+
+<DefineTextformat name="__justified" alignment="justified"/>
+<DefineTextformat name="__centered" alignment="centered" />
+<DefineTextformat name="__leftaligned" alignment="leftaligned"/>
+<DefineTextformat name="__rightaligned" alignment="rightaligned"/>
 -------------------------------------------------------------------------------
+
+Die letzten vier werden in Tabellen benutzt. Siehe <<ch-tab-textformats,den Abschnitt über Textformate in Tabellen>>.
 
 
 == Seitenformat

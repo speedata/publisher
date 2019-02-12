@@ -1,6 +1,10 @@
 :lasttrdata: _last_tr_data
 :loopcounter: _loopcounter
 :samplea: _samplea
+:leftaligned: __leftaligned
+:rightaligned: __rightaligned
+:centered: __centered
+:justified: __justified
 
 [[ch-tabellen2]]
 = Tabellen
@@ -167,6 +171,39 @@ Zwischen einzelnen Zeilen können Linien gezeichnet werden.
 
 Die Angabe der Startspalte (`startcolumn`) ist möglich.
 
+[[ch-tab-textformats]]
+== Textformate in Tabellen
+
+Im Gegensatz zu den Textformaten in Texten (siehe den Abschnitt über <<ch-textformate,Textformate>>), ist das voreingestellte Textformat (und damit die Textausrichtung) von der Ausrichtung der Tabellenzelle abhängig.
+
+[options="header"]
+|=======
+|Ausrichtung bei `<Td>` | Textformat | Beschreibung
+|`left` |`{leftaligned}`| Linksbündig, Flattersatz rechts
+|`right` |`{rightaligned}`| Rechtsbündig, Flattersatz links
+|`center` |`{centered}` | Zentriert, Flattersatz auf beiden Seiten
+|`justify` |`{justified}` | Blocksatz, rechts- und linksbündig
+|=======
+
+Das bedeutet, dass die beiden Beispiele identisch sind:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Td align="left">
+  <Paragraph>
+    <Value>....</Value>
+  </Paragraph>
+</Td>
+
+<Td align="left">
+  <Paragraph textformat="__leftaligned">
+    <Value>....</Value>
+  </Paragraph>
+</Td>
+
+-------------------------------------------------------------------------------
+
+Damit können z.B. durch die Veränderung des Textformats `{leftaligned}` alle Tabellenzellen mit linksbündiger Ausrichtung formatiert werden.
 
 [[ch-tab-colspan-rwospan]]
 == Colspan und Rowspan

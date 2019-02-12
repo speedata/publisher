@@ -478,6 +478,29 @@
     <xsl:apply-templates/>
   </xsl:template>
 
+  <xsl:template match="informaltable">
+    <xsl:apply-templates select="tgroup/thead/row" />
+    <xsl:value-of select="for $i in 1 to xs:integer(tgroup/@cols)  - 1  return '-------------|'"/>
+    <xsl:text>-----&#x0a;</xsl:text>
+    <xsl:apply-templates select="tgroup/tbody/row" />
+  </xsl:template>
+
+  <xsl:template match="row">
+    <xsl:variable name="foo" as="item()+">
+      <xsl:apply-templates select="entry"></xsl:apply-templates>
+    </xsl:variable>
+    <xsl:value-of select="string-join($foo,'|')"/>
+    <xsl:text>&#x0a;</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="entry">
+    <xsl:variable name="bar">
+      <xsl:apply-templates></xsl:apply-templates>
+    </xsl:variable>
+    <xsl:value-of select="normalize-space($bar)"/>
+  </xsl:template>
+
+
   <xsl:template match="*">
   <xsl:message select="local-name()"/>
   </xsl:template>
