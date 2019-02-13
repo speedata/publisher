@@ -209,7 +209,7 @@
         <para>Switch to Bulgarian (latin alphabet) hyphenation patterns.</para>
       </description>
       <description xml:lang="de">
-        <para>Auf bulgarische (latainisches Alphabet) Trennmuster umschalten.</para>
+        <para>Auf bulgarische (lateinisches Alphabet) Trennmuster umschalten.</para>
       </description>
     </choice>
     <choice en="Catalan">
@@ -273,7 +273,7 @@
         <para>Switch to Esperanto hyphenation patterns.</para>
       </description>
       <description xml:lang="de">
-        <para>Auf Esperatnto Trennmuster umschalten.</para>
+        <para>Auf Esperanto Trennmuster umschalten.</para>
       </description>
     </choice>
     <choice en="Estonian">
@@ -660,7 +660,7 @@
   </command>
   <command en="AddSearchpath" since="3.1.1">
     <description xml:lang="en">
-      <para>Add a directory on the harddrive to be added to the publisher's search path.</para>
+      <para>Add a directory on the hard-drive to be added to the publisher's search path.</para>
     </description>
     <description xml:lang="de">
       <para>Ein Verzeichnis auf der Festplatte, das zum Suchpfad des Publishers hinzugefügt wird.</para>
@@ -1630,7 +1630,7 @@
       </choice>
       <choice en="center">
         <description xml:lang="en">
-          <para>The table cells are horizontally centerd.</para>
+          <para>The table cells are horizontally centered.</para>
         </description>
         <description xml:lang="de">
           <para>Die Tabellenzellen dieser Spalte werden horizontal zentriert.</para>
@@ -2217,7 +2217,7 @@
 <DefineFontalias existing="DejaVuSerif-Bold" alias="serif-bold"/>
 <DefineFontalias existing="DejaVuSerif-Italic" alias="serif-italic"/>
 <DefineFontalias existing="DejaVuSerif-BoldItalic" alias="serif-bolditalic"/>]]></listing>
-      <para>Eine neue Schriftfamilie kann nun so definert werden:</para>
+      <para>Eine neue Schriftfamilie kann nun so definiert werden:</para>
       <listing><![CDATA[<DefineFontfamily name="Überschrift" fontsize="15" leading="17">
   <Regular fontface="serif"/>
   <Bold fontface="serif-bold"/>
@@ -2572,7 +2572,7 @@
   </command>
   <command en="Element">
     <description xml:lang="en">
-      <para>Create a data structure that can be used to save on the harddrive between consecutive runs (with <cmd name="SaveDataset"/>).</para>
+      <para>Create a data structure that can be used to save on the hard-drive between consecutive runs (with <cmd name="SaveDataset"/>).</para>
     </description>
     <description xml:lang="de">
       <para>Erzeugt eine Datenstruktur, die mithilfe von <cmd name="SaveDataset"/> auf Festplatte gespeichert werden kann.</para>
@@ -3676,7 +3676,7 @@
       area (the cropbox) that is used for bleeding.</para>
     </remark>
     <remark xml:lang="de">
-      <para>Die Werte der Attribute natürliche-größe und maximale-größe können artbox, bleedbox, cropbox, mediabox und trimbox sein. Diese beiden Angaben werden dafür benutzt, um das eingebundene Bild
+      <para>Die Werte der Attribute naturalsize und maxsize können artbox, bleedbox, cropbox, mediabox und trimbox sein. Diese beiden Angaben werden dafür benutzt, um das eingebundene Bild
         für den Anschnitt zu vergrößern. Im zweiten Beispiel unten ist der gewünschte Bildausschnitt in der »artbox« definiert, die Grafik in der PDF-Datei hat aber noch eine Beschnittzugabe, deren
         Ausmaß hier in der »cropbox« beschrieben ist. Die im zweiten Beispiel angegebene Breite entspricht der Papierbreite, so dass das der Inhalt der »artbox« 21cm breit dargestellt wird, der
         Anschnitt um das Bild herum aber weiterhin existiert.</para>
@@ -4462,7 +4462,7 @@
       </description>
     </attribute>
     <attribute en="exit" optional="yes" since="3.1.17">
-      <description xml:lang="en"><para>Tells the software to exit immediatley.</para></description>
+      <description xml:lang="en"><para>Tells the software to exit immediately.</para></description>
       <description xml:lang="de"><para>Soll sich der Publisher beenden?</para></description>
       <choice en="no">
         <description xml:lang="en"><para>The speedata Publisher continues with the PDF creation.</para></description>
@@ -5435,7 +5435,7 @@
     </attribute>
     <remark xml:lang="en">
       <para>The contents of the element at <cmd name="AtPageCreation"/> is executed, as soon as something will be placed on the page. The commands inside <cmd name="AtPageShipout"/> are executed when switching to a new page.</para>
-      <para>Whe creating a new page, all page tyes are tried in reversed order. That means that the later defined master pages have a higher priority. This is important if more than one test in a pagetype defintion evaluates to true.</para>
+      <para>When creating a new page, all page types are tried in reversed order. That means that the later defined master pages have a higher priority. This is important if more than one test in a pagetype definition evaluates to true.</para>
     </remark>
     <remark xml:lang="de">
       <para>Die Inhalte des Elements <cmd name="AtPageCreation"/> werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird, bei <cmd name="AtPageShipout"/> werden die Inhalte ausgeführt, sobald
@@ -6943,14 +6943,14 @@
         <para>Sort alphabetical or numerical</para>
       </description>
       <description xml:lang="de">
-        <para>Sortiere alphabetisch oder nummerisch</para>
+        <para>Sortiere alphabetisch oder numerisch</para>
       </description>
       <choice en="yes">
         <description xml:lang="en">
           <para>Sort alphabetical</para>
         </description>
         <description xml:lang="de">
-          <para>Sortiere nummerisch</para>
+          <para>Sortiere numerisch</para>
         </description>
       </choice>
       <choice en="no">
@@ -7090,7 +7090,7 @@
         <para>Increase spacing between glyphs.</para>
       </description>
       <description xml:lang="de">
-        <para>Erhöhe Leerrraum zwischen Zeichen.</para>
+        <para>Erhöhe Leerraum zwischen Zeichen.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -8251,7 +8251,7 @@
     </attribute>
     <attribute en="columns" type="number" optional="yes">
       <description xml:lang="en">
-        <para>Number of columns in the textblock. Do not use multicolumns for any other purpuses than simple text.</para>
+        <para>Number of columns in the textblock. Do not use multi columns for any other purposes than simple text.</para>
       </description>
       <description xml:lang="de">
         <para>Anzahl der Spalten in dem Textblock. Mehrere Spalten nur für normalen Text benutzen.</para>
@@ -9125,7 +9125,7 @@ Message: "$i is: 3"]]></listing>
       </description>
     </attribute>
     <remark xml:lang="en">
-      <para>The value can be passed to the outer elment either as an XPath expression or as the contents of this element.</para>
+      <para>The value can be passed to the outer element either as an XPath expression or as the contents of this element.</para>
       <para>Containing Br-tags will be interpreted as newlines.</para>
     </remark>
     <remark xml:lang="de">
@@ -9210,7 +9210,7 @@ Message: "$i is: 3"]]></listing>
       </description>
     </attribute>
     <example xml:lang="en">
-      <para>The following example creates a textblock with thre times the contents 'Text Text Text '.</para>
+      <para>The following example creates a textblock with three times the contents 'Text Text Text '.</para>
       <listing><![CDATA[<Record element="data">
   <SetVariable variable="counter" select="1"/>
   <SetVariable variable="text" select="''"/>
