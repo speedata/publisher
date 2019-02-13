@@ -3510,11 +3510,14 @@ function break_url( nodelist )
         p = node.new("penalty")
 
         if n.char == slash then
-            p.penalty=-50
+            p.penalty=-10
         else
             p.penalty=-5
         end
         p.next = n.next
+        if n.next and n.next.prev then
+            n.next.prev = p
+        end
         n.next = p
         p.prev = n
     end
