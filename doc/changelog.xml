@@ -1,5 +1,21 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.5">
+    <entry version="3.5.13" date="2019-02-13">
+      <en>Bugfix for valign="botton" in PlaceObject (#222)</en>
+      <de>Fehlerkorrektur für valign="botton" in PlaceObject (#222)</de>
+    </entry>
+    <entry version="3.5.13" date="2019-02-13">
+      <en>Fix leading in paragraphs for small fonts (#221)</en>
+      <de>Fehlerkorrektur Zeilenabstand in Absätzen für kleine Schriftgrade (#221)</de>
+    </entry>
+    <entry version="3.5.13" date="2019-02-13">
+      <en>Fix URL breaking (#173)</en>
+      <de>Fehlerkorrektur URL Umbruch (#173)</de>
+    </entry>
+    <entry version="3.5.13" date="2019-02-13">
+      <en>Fix textformat tracing (#172)</en>
+      <de>Fehlerkorrektur Textformat tracing (#172)</de>
+    </entry>
     <entry version="3.5.12" date="2019-01-31">
       <en>Bugfix for table balancing and break-below=no</en>
       <de>Fehlerkorrektur für Tabellenausgleich und break-below=no</de>
