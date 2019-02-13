@@ -1,5 +1,11 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="3.5">
+  <chapter version="3.6">
+    <entry version="3.6.0" date="2019-02-13">
+      <en>Release version 3.6.0</en>
+      <de>Veröffentliche Version 3.6.0</de>
+    </entry>
+  </chapter>
+  <chapter version="3.5" date="2019-02-13">
     <entry version="3.5.13" date="2019-02-13">
       <en>Bugfix for valign="botton" in PlaceObject (#222)</en>
       <de>Fehlerkorrektur für valign="botton" in PlaceObject (#222)</de>
