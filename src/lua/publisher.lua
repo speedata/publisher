@@ -1227,21 +1227,21 @@ function output_absolute_position(param)
     n.prev = tail
 end
 
-annotcount = 0
-
-function annotate_nodelist(nodelist,text)
-    text = text:gsub(" ","\\040")
-    local annot = node.new(whatsit_node,"pdf_annot")
-    local str = string.format([[ /Subtype /Widget /TU (%s) /T (tooltip zref@%d) /C [] /FT/Btn /F 768 /Ff 65536 /H/N /BS << /W 0 >>]],text,annotcount)
-    annotcount = annotcount + 1
-    annot.data = str
-    annot.width = nodelist.width
-    annot.height = nodelist.height
-    annot.depth = nodelist.depth
-
-    nodelist = node.insert_before(nodelist.head,nodelist.head,annot)
-    nodelist = node.hpack(nodelist)
-    return nodelist
+-- annotate_nodelist is used for tooltips when debugging text formats.
+do
+    local annotcount = 0
+    function annotate_nodelist(nodelist,text)
+        text = text:gsub(" ","\\040")
+        local annot = node.new(whatsit_node,"pdf_annot")
+        local str = string.format([[ /Subtype /Widget /TU (%s) /T (tooltip zref@%d) /C [] /FT/Btn /F 768 /Ff 65536 /H/N /BS << /W 0 >>]],text,annotcount)
+        annotcount = annotcount + 1
+        annot.data = str
+        annot.width = nodelist.width
+        annot.height = nodelist.height
+        annot.depth = nodelist.depth
+        nodelist = node.insert_before(nodelist.head,nodelist.head,annot)
+        return nodelist
+    end
 end
 
 --- Put the object (nodelist) on grid cell (x,y). If `allocate`=`true` then
