@@ -4878,7 +4878,7 @@
                </optional>
                <optional>
                   <attribute name="columns">
-                     <a:documentation>Anzahl der Spalten in dem Textblock.</a:documentation>
+                     <a:documentation>Anzahl der Spalten in dem Textblock. Mehrere Spalten nur für normalen Text benutzen.</a:documentation>
                   </attribute>
                </optional>
                <optional>

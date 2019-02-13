@@ -4878,7 +4878,7 @@
                </optional>
                <optional>
                   <attribute name="columns">
-                     <a:documentation>Number of columns in the textblock.</a:documentation>
+                     <a:documentation>Number of columns in the textblock. Do not use multicolumns for any other purpuses than simple text.</a:documentation>
                   </attribute>
                </optional>
                <optional>

@@ -8251,10 +8251,10 @@
     </attribute>
     <attribute en="columns" type="number" optional="yes">
       <description xml:lang="en">
-        <para>Number of columns in the textblock.</para>
+        <para>Number of columns in the textblock. Do not use multicolumns for any other purpuses than simple text.</para>
       </description>
       <description xml:lang="de">
-        <para>Anzahl der Spalten in dem Textblock.</para>
+        <para>Anzahl der Spalten in dem Textblock. Mehrere Spalten nur für normalen Text benutzen.</para>
       </description>
     </attribute>
     <attribute en="columndistance" type="numberorlength" optional="yes">
@@ -8299,10 +8299,12 @@
     </attribute>
     <remark xml:lang="en">
       <para>The textformat change the appearance of the paragraphs. They have to be previously defined by <cmd name="DefineTextformat"/>.</para>
+      <para>Be careful when using multi column typesetting. This will only work with simple text, not with lists or so.</para>
     </remark>
     <remark xml:lang="de">
       <para>Durch die Angabe eines Textformats wird das Aussehen der Absätze beeinflusst. Textformate müssen vorher mit <cmd name="DefineTextformat"/> festgelegt werden.
         Wenn kein Textformat angegeben wird, nimmt das System das Textformat <tt>text</tt>.</para>
+      <para>Vorsichtig sein bei Mehrspaltensatz. Dieser darf nur für einfache Texte benutzt werden, nicht für Aufzählungslisten oder ähnliches.</para>
     </remark>
     <example xml:lang="en">
       <listing><![CDATA[<Record element="data">
