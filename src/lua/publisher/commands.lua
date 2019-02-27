@@ -2246,7 +2246,12 @@ function commands.paragraph( layoutxml,dataxml )
     a:set_color(colortable)
     publisher.intextblockcontext = publisher.intextblockcontext - 1
     publisher.current_fontfamily = save_fontfamily
-    a.nodelist = publisher.addstrut(a.nodelist, publisher.origin_paragraph)
+    -- We used to set a strut (an invisible rule) at the beginning of each paragraph
+    -- to maintain a certain line height.
+    -- This is problematic because sometimes the font is not set when we collect
+    -- material for a paragraph (when fontface is not given).
+    -- So how high should the rule be?
+    -- a.nodelist = publisher.addstrut(a.nodelist)
     return a
 end
 

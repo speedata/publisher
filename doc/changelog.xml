@@ -92,7 +92,7 @@
     </entry>
     <entry version="3.5.2" date="2018-09-18">
       <en>CID-keyd fonts can be used.</en>
-      <de>CID Schriftarten könnne benutzt werden.</de>
+      <de>CID Schriftarten können benutzt werden.</de>
     </entry>
     <entry version="3.5.2" date="2018-09-18">
       <en>Bugfixes for <tt>upper-case()</tt>, <tt>lower-case()</tt> and <tt>replace()</tt>.</en>
