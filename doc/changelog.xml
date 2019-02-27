@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.6">
+    <entry version="3.6.1" date="2019-02-27">
+      <en>Bugfix for incorrect line heights in tables and small fonts (#225).</en>
+      <de>Fehlerkorrektur für falsche Zeilenhöhen in Tabellen und kleinen Schriftgraden (#225).</de>
+    </entry>
     <entry version="3.6.0" date="2019-02-13">
       <en>Release version 3.6.0</en>
       <de>Veröffentliche Version 3.6.0</de>
