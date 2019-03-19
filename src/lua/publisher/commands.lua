@@ -2216,6 +2216,19 @@ function commands.paragraph( layoutxml,dataxml )
     end
 
     publisher.allowbreak = nil
+    -- let's check if the start of the nodelist is penalty / hlist / penalty from
+    -- a leading hspace (see #226)
+    -- Not sure that this is the proper fix, but it seems to work.
+    if objects and objects[1] and type(objects[1]) == "table" and node.is_node(objects[1].nodelist) then
+        local nl = objects[1].nodelist
+        if nl.id == publisher.penalty_node and nl.next and nl.next.id == publisher.hlist_node and nl.next.next and nl.next.next.id == publisher.penalty_node and nl.next.next.next then
+            for i=1,3 do
+                nl = node.free(nl)
+            end
+            nl.prev = nil
+            objects[1].nodelist = nl
+        end
+    end
 
     for _,j in ipairs(objects) do
         a:append(j,{fontfamily = fontfamily, languagecode = languagecode, allowbreak = allowbreak})
