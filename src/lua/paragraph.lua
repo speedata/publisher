@@ -475,6 +475,7 @@ function Paragraph:format(width_sp, default_textformat_name,options)
             nodelist = node.remove(nodelist,tail)
             tail = node.tail(nodelist)
         end
+        if nodelist == nil then return node.new("vlist") end
 
 
         -- If there is ragged shape (i.e. not a rectangle of text) then we should turn off
