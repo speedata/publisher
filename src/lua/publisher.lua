@@ -4450,7 +4450,7 @@ function imageinfo( filename,page,box,fallback )
             if filename == nil or filename == "" then filename = "filenotfound.pdf" else log("Using converted file %q instead",filename) end
 
         end
-        local image_info = img.scan{filename = filename, pagebox = box, page=page }
+        local image_info = img.scan{filename = filename, pagebox = box, page=page,keepopen=true }
         images[new_name] = { img = image_info, allocate = mt }
     end
     return images[new_name]
