@@ -1,4 +1,10 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
+  <chapter version="3.7">
+    <entry version="3.7.1" date="2019-04-02">
+      <en>Some bug fixes (#221, #225, #226, #228, #229).</en>
+      <de>Fehlerkorrekturen (#221, #225, #226, #228, #229).</de>
+    </entry>
+  </chapter>
   <chapter version="3.6">
     <entry version="3.6.0" date="2019-02-13">
       <en>Release version 3.6.0</en>
