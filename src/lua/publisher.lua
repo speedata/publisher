@@ -3161,6 +3161,7 @@ function fix_justification( nodelist,alignment,parent)
                 local tmp = rightskip_node.prev
                 while tmp and ( tmp.id == glue_node or tmp.id == penalty_node ) do
                     tmp = tmp.prev
+                    if tmp == nil then break end
                     head.head = node.remove(head.head,tmp.next)
                 end
 
