@@ -126,12 +126,9 @@ local mt = {
 }
 
 local function read_attributes(txt,pos,namespaces)
-	current_element = setmetatable({[".__ns"] = {}},mt)
+	current_element = setmetatable({[".__ns"] = namespaces},mt)
 	local ns,prefix
 	ns = current_element[".__ns"]
-	for key,value in next,namespaces,nil do
-		ns[key] = value
-	end
 	pos = lpeg.match(attributes,txt,pos)
 	for key,value in next,current_element,nil do
 		if key == "xmlns" then
@@ -168,6 +165,7 @@ local function parse_endelement( txt,pos )
 end
 
 local function parse_element( txt,pos,namespaces,options )
+	namespaces = setmetatable({}, {__index=namespaces})
 	options = options or {}
 	local second_nextchar
 	local contents
@@ -181,25 +179,26 @@ local function parse_element( txt,pos,namespaces,options )
 		return nil,pos
 		-- end element
 	else
-		local elt,eltname,namespace,local_name,ns,xinclude
+		local elt,eltname,prefix,local_name,ns,xinclude
 		_,pos,eltname = string.find(txt,"([^/>%s]+)",pos + 1)
 		pos, elt = read_attributes(txt,pos + 1,namespaces)
-		_,_,namespace,local_name = string.find(eltname,"^(.-):(.*)$")
+		_,_,prefix,local_name = string.find(eltname,"^(.-):(.*)$")
 		ns = elt[".__ns"]
-		if ns and ns[namespace] == "http://www.w3.org/2001/XInclude" and local_name == "include" then
+		for k,v in pairs(ns) do
+			namespaces[k] = v
+		end
+		if namespaces[prefix] == "http://www.w3.org/2001/XInclude" and local_name == "include" then
 			xinclude = parse_xml_file(elt["href"],options)
 		end
-		if namespace then
-			if ns and ns[namespace] then
-				elt[".__namespace"] = ns[namespace]
+		if prefix then
+			if namespaces[prefix] then
+				elt[".__namespace"] = ns[prefix]
 				elt[".__local_name"] = local_name
 			else
-				print("unknown namespace!!!")
+				print("unknown namespace for prefix " .. prefix)
 			end
 		else
-			if ns then
-				elt[".__namespace"] = ns[""]
-			end
+			elt[".__namespace"] = ns[""]
 			elt[".__local_name"] = eltname
 		end
 		elt[".__name"] = eltname
@@ -227,7 +226,7 @@ local function parse_element( txt,pos,namespaces,options )
 					elt[#elt + 1] = decoder(contents)
 				end
 			end
-			contents, pos = parse_element(txt,start,elt[".__ns"],options)
+			contents, pos = parse_element(txt,start,namespaces,options)
 			if contents then
 				if type(contents) == "string" then
 					if contents ~= "" then

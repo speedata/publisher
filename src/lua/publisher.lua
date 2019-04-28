@@ -3734,19 +3734,34 @@ end
 
 --- See commands#save_dataset() for  documentation on the data structure for `xml_element`.
 function xml_to_string( xml_element, level )
+    local str = ""
+    if type(xml_element) == "string" then
+        return xml_escape(xml_element)
+    end
     if type(xml_element) ~= "table" then
         err("xml_to_string is not a table, but a %s %q",type(xml_element),tostring(xml_element))
         return "error in publisher run"
     end
     level = level or 0
-    local str = ""
-    str = str .. string.rep(" ",level) .. "<" .. xml_element[".__local_name"]
+    str = str ..  "<" .. ( xml_element[".__name"] or xml_element[".__local_name"] or "xxx")
     for k,v in pairs(xml_element) do
         if type(k) == "string" and not k:match("^%.") then
             str = str .. string.format(" %s=%q", k,xml_escape(v))
         end
     end
-    str = str .. ">\n"
+    if xml_element[".__ns"] then
+        for k,v in pairs(xml_element[".__ns"]) do
+            if type(k) == "string" then
+                if k == "" then
+                    k = "xmlns"
+                else
+                    k = "xmlns:" .. k
+                end
+                str = str .. string.format(" %s=%q", k,xml_escape(v))
+            end
+        end
+    end
+    str = str .. ">"
     for i,v in ipairs(xml_element) do
         if type(v) == "string" and v == "" then
             -- ok, nothing do do
@@ -3754,7 +3769,7 @@ function xml_to_string( xml_element, level )
             str = str .. xml_to_string(v,level + 1)
         end
     end
-    str = str .. string.rep(" ",level) .. "</" .. xml_element[".__local_name"] .. ">\n"
+    str = str ..  "</" .. ( xml_element[".__name"] or xml_element[".__local_name"] or "xxxx") .. ">"
     return str
 end
 
@@ -4748,22 +4763,13 @@ function getzugferdmetadata( conformancelevel, title, author )
 end
 
 
-function attach_file_pdf(filename,description,mimetype)
-    local path = kpse.find_file(filename)
-    if path == nil then
-        err("Cannot find file %q",filename)
-        return
-    end
-    local statt = lfs.attributes(path)
+function attach_file_pdf(zugferdcontents,description,mimetype,modificationtime)
     local destfilename = "ZUGFeRD-invoice.xml"
-    local zugferdfile = io.open(path)
-    local zugferdcontents = zugferdfile:read("*all")
-    zugferdfile:close()
     local conformancelevel = string.upper(string.match(zugferdcontents, "urn:ferd:CrossIndustryDocument:invoice:1p0:(.-)<"))
-    local fileobjectnum = pdf.immediateobj("streamfile",
-        path,
+    local fileobjectnum = pdf.immediateobj("stream",
+        zugferdcontents,
         string.format([[/Params <</ModDate (%s)>> /Subtype /%s /Type /EmbeddedFile ]],
-            pdfdate(statt.modification),
+            pdfdate(modificationtime),
             escape_pdfname(mimetype)))
 
     local filespecnum = pdf.immediateobj(string.format([[<<

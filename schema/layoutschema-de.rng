@@ -263,9 +263,11 @@
    <define name="e_AttachFile">
       <element name="AttachFile">
          <a:documentation>Binde eine ZUGFeRD Datei ein.</a:documentation>
-         <attribute name="filename">
-            <a:documentation>Der Name der Datei, die in die PDF-Datei eingebettet werden soll.</a:documentation>
-         </attribute>
+         <optional>
+            <attribute name="filename">
+               <a:documentation>Der Name der Datei, die in die PDF-Datei eingebettet werden soll.</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="description">
             <a:documentation>Textuelle Beschreibung der einzubindenden Datei (für den PDF-Viewer).</a:documentation>
          </attribute>
@@ -276,6 +278,11 @@
                <a:documentation>Die eingebundene Datei ist eine ZUGFeRD XML-Datei</a:documentation>
             </choice>
          </attribute>
+         <optional>
+            <attribute name="select">
+               <a:documentation>Der Inhalt des ZUGFeRD-Datei. Alternativ zum Lesen von der Festplatte.</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
@@ -2753,7 +2760,7 @@
                   <value>Basque</value>
                   <a:documentation>Auf baskische Trennmuster umschalten.</a:documentation>
                   <value>Bulgarian</value>
-                  <a:documentation>Auf bulgarische (latainisches Alphabet) Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Auf bulgarische (lateinisches Alphabet) Trennmuster umschalten.</a:documentation>
                   <value>Catalan</value>
                   <a:documentation>Auf katalanische Trennmuster umschalten.</a:documentation>
                   <value>Croatian</value>
@@ -2769,7 +2776,7 @@
                   <value>English (USA)</value>
                   <a:documentation>Auf US-englische Trennmuster umschalten.</a:documentation>
                   <value>Esperanto</value>
-                  <a:documentation>Auf Esperatnto Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Auf Esperanto Trennmuster umschalten.</a:documentation>
                   <value>Estonian</value>
                   <a:documentation>Auf estnische Trennmuster umschalten.</a:documentation>
                   <value>Finnish</value>
@@ -3225,7 +3232,7 @@
                         <value>Basque</value>
                         <a:documentation>Auf baskische Trennmuster umschalten.</a:documentation>
                         <value>Bulgarian</value>
-                        <a:documentation>Auf bulgarische (latainisches Alphabet) Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Auf bulgarische (lateinisches Alphabet) Trennmuster umschalten.</a:documentation>
                         <value>Catalan</value>
                         <a:documentation>Auf katalanische Trennmuster umschalten.</a:documentation>
                         <value>Croatian</value>
@@ -3241,7 +3248,7 @@
                         <value>English (USA)</value>
                         <a:documentation>Auf US-englische Trennmuster umschalten.</a:documentation>
                         <value>Esperanto</value>
-                        <a:documentation>Auf Esperatnto Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Auf Esperanto Trennmuster umschalten.</a:documentation>
                         <value>Estonian</value>
                         <a:documentation>Auf estnische Trennmuster umschalten.</a:documentation>
                         <value>Finnish</value>
@@ -4302,10 +4309,10 @@
          </attribute>
          <optional>
             <attribute name="numerical">
-               <a:documentation>Sortiere alphabetisch oder nummerisch</a:documentation>
+               <a:documentation>Sortiere alphabetisch oder numerisch</a:documentation>
                <choice>
                   <value>yes</value>
-                  <a:documentation>Sortiere nummerisch</a:documentation>
+                  <a:documentation>Sortiere numerisch</a:documentation>
                   <value>no</value>
                   <a:documentation>Sortiere alphabetisch (Voreinstellung)</a:documentation>
                </choice>
@@ -4357,7 +4364,7 @@
                </optional>
                <optional>
                   <attribute name="letter-spacing">
-                     <a:documentation>Erhöhe Leerrraum zwischen Zeichen.</a:documentation>
+                     <a:documentation>Erhöhe Leerraum zwischen Zeichen.</a:documentation>
                   </attribute>
                </optional>
                <zeroOrMore>

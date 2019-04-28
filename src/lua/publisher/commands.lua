@@ -156,13 +156,32 @@ end
 
 function commands.attachfile( layoutxml,dataxml )
     local filename = publisher.read_attribute(layoutxml,dataxml,"filename","rawstring")
+    local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
+    local zugferdcontents
+    local modificationtime
+    if selection ~= nil then
+        zugferdcontents = publisher.xml_to_string(selection[1],0)
+        modificationtime = os.time()
+    else
+        local path = kpse.find_file(filename)
+        if path == nil then
+            err("Cannot find file %q",filename)
+            return
+        end
+        local stat = lfs.attributes(path)
+        modificationtime = stat.modification
+        local zugferdfile = io.open(path)
+
+        zugferdcontents = zugferdfile:read("*all")
+        zugferdfile:close()
+    end
     local description = publisher.read_attribute(layoutxml,dataxml,"description","rawstring")
     local filetype = publisher.read_attribute(layoutxml,dataxml,"type","rawstring")
     local expected = "ZUGFeRD invoice"
     if filetype ~= expected then
         err("AttachFile: type must be %q but got %q",expected,filetype)
     else
-        publisher.attach_file_pdf(filename,description,"text/xml")
+        publisher.attach_file_pdf(zugferdcontents,description,"text/xml",modificationtime)
     end
 end
 

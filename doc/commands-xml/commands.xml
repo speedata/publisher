@@ -775,7 +775,7 @@
       <para>Binde eine ZUGFeRD Datei ein.</para>
     </description>
     <childelements/>
-    <attribute en="filename" optional="no" type="text">
+    <attribute en="filename" optional="yes" type="text">
       <description xml:lang="en">
         <para>The name of the local file to be attached to the PDF.</para>
       </description>
@@ -807,11 +807,25 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="select" type="xpath" optional="yes" since="3.7.2">
+      <description xml:lang="en">
+        <para>The contents of the ZUGFeRD file. Alternative to reading a file from the hard-drive.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Inhalt des ZUGFeRD-Datei. Alternativ zum Lesen von der Festplatte.</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<AttachFile filename="invoice.xml" description="A ZUGFeRD invoice." type="ZUGFeRD invoice"/>]]></listing>
     </example>
+    <example xml:lang="en">
+      <listing><![CDATA[<AttachFile select="CrossIndustryDocument" description="A ZUGFeRD invoice." type="ZUGFeRD invoice"/>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<AttachFile filename="invoice.xml" description="ZUGFeRD Rechnung" type="ZUGFeRD invoice"/>]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<AttachFile select="CrossIndustryDocument" description="ZUGFeRD Rechnung" type="ZUGFeRD invoice"/>]]></listing>
     </example>
     <seealso/>
   </command>

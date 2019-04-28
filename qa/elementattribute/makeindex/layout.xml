@@ -26,7 +26,7 @@
                 <Attribute name="thepage" select="4"/>
             </Element>
         </SetVariable>
-        <SaveDataset filename="index" elementname="Index">
+        <SaveDataset name="index" elementname="Index">
             <Makeindex select="$indexeinträge" sortkey="name" section="teil" pagenumber="thepage"/>
         </SaveDataset>
     </Record>

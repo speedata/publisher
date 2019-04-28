@@ -43,7 +43,7 @@
    </define>
    <define name="e_AddSearchpath">
       <element name="AddSearchpath">
-         <a:documentation>Add a directory on the harddrive to be added to the publisher&#39;s search path.</a:documentation>
+         <a:documentation>Add a directory on the hard-drive to be added to the publisher&#39;s search path.</a:documentation>
          <attribute name="select">
             <a:documentation>The path to be added. System dependent.</a:documentation>
          </attribute>
@@ -263,9 +263,11 @@
    <define name="e_AttachFile">
       <element name="AttachFile">
          <a:documentation>Attach a ZUGFeRD file.</a:documentation>
-         <attribute name="filename">
-            <a:documentation>The name of the local file to be attached to the PDF.</a:documentation>
-         </attribute>
+         <optional>
+            <attribute name="filename">
+               <a:documentation>The name of the local file to be attached to the PDF.</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="description">
             <a:documentation>Textual description of the attached file (for the PDF viewer).</a:documentation>
          </attribute>
@@ -276,6 +278,11 @@
                <a:documentation>The attached file is an XML file containing a ZUGFeRD invoice</a:documentation>
             </choice>
          </attribute>
+         <optional>
+            <attribute name="select">
+               <a:documentation>The contents of the ZUGFeRD file. Alternative to reading a file from the harddrive.</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
@@ -798,7 +805,7 @@
                   <value>left</value>
                   <a:documentation>The table cells are left aligned.</a:documentation>
                   <value>center</value>
-                  <a:documentation>The table cells are horizontally centerd.</a:documentation>
+                  <a:documentation>The table cells are horizontally centered.</a:documentation>
                   <value>right</value>
                   <a:documentation>The table cells are right aligned.</a:documentation>
                </choice>
@@ -1272,7 +1279,7 @@
    </define>
    <define name="e_Element">
       <element name="Element">
-         <a:documentation>Create a data structure that can be used to save on the harddrive between consecutive runs (with SaveDataset).</a:documentation>
+         <a:documentation>Create a data structure that can be used to save on the hard-drive between consecutive runs (with SaveDataset).</a:documentation>
          <interleave>
             <group>
                <attribute name="name">
@@ -2522,7 +2529,7 @@
                </optional>
                <optional>
                   <attribute name="exit">
-                     <a:documentation>Tells the software to exit immediatley.</a:documentation>
+                     <a:documentation>Tells the software to exit immediately.</a:documentation>
                      <choice>
                         <value>no</value>
                         <a:documentation>The speedata Publisher continues with the PDF creation.</a:documentation>
@@ -4878,7 +4885,7 @@
                </optional>
                <optional>
                   <attribute name="columns">
-                     <a:documentation>Number of columns in the textblock. Do not use multicolumns for any other purpuses than simple text.</a:documentation>
+                     <a:documentation>Number of columns in the textblock. Do not use multi columns for any other purposes than simple text.</a:documentation>
                   </attribute>
                </optional>
                <optional>
