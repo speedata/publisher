@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.2" date="2019-04-28">
+      <en>Bugfix: TD with align=right containing only one or more spaces (#230)</en>
+      <de>Fehlerkorrektur: TD mit align=right und nur Leerzeichen im Inhalt (#230).</de>
+    </entry>
+    <entry version="3.7.2" date="2019-04-28">
+      <en>AttachFile can select an XML node from data instead of reading from an external resource.</en>
+      <de>AttachFile kann die Daten von einem XML-Knoten lesen (anstelle einer externen Ressource).</de>
+    </entry>
     <entry version="3.7.1" date="2019-04-02">
       <en>Some bug fixes (#221, #225, #226, #228, #229).</en>
       <de>Fehlerkorrekturen (#221, #225, #226, #228, #229).</de>
