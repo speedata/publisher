@@ -279,8 +279,13 @@
             </choice>
          </attribute>
          <optional>
+            <attribute name="name">
+               <a:documentation>Set the (PDF) name of the included file. Defaults to ZUGFeRD-invoice.xml.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="select">
-               <a:documentation>The contents of the ZUGFeRD file. Alternative to reading a file from the harddrive.</a:documentation>
+               <a:documentation>The contents of the ZUGFeRD file. Alternative to reading a file from the hard-drive.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>

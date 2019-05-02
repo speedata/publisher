@@ -4763,8 +4763,7 @@ function getzugferdmetadata( conformancelevel, title, author )
 end
 
 
-function attach_file_pdf(zugferdcontents,description,mimetype,modificationtime)
-    local destfilename = "ZUGFeRD-invoice.xml"
+function attach_file_pdf(zugferdcontents,description,mimetype,modificationtime,destfilename)
     local conformancelevel = string.upper(string.match(zugferdcontents, "urn:ferd:CrossIndustryDocument:invoice:1p0:(.-)<"))
     local fileobjectnum = pdf.immediateobj("stream",
         zugferdcontents,

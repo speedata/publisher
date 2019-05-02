@@ -279,6 +279,11 @@
             </choice>
          </attribute>
          <optional>
+            <attribute name="name">
+               <a:documentation>Name der eingebunden Datei im PDF. Voreinstellung ist ZUGFeRD-invoice.xml.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="select">
                <a:documentation>Der Inhalt des ZUGFeRD-Datei. Alternativ zum Lesen von der Festplatte.</a:documentation>
             </attribute>

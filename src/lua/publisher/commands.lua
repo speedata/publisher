@@ -157,6 +157,7 @@ end
 function commands.attachfile( layoutxml,dataxml )
     local filename = publisher.read_attribute(layoutxml,dataxml,"filename","rawstring")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
+    local destfilename = publisher.read_attribute(layoutxml,dataxml,"name","string", "ZUGFeRD-invoice.xml")
     local zugferdcontents
     local modificationtime
     if selection ~= nil then
@@ -181,7 +182,7 @@ function commands.attachfile( layoutxml,dataxml )
     if filetype ~= expected then
         err("AttachFile: type must be %q but got %q",expected,filetype)
     else
-        publisher.attach_file_pdf(zugferdcontents,description,"text/xml",modificationtime)
+        publisher.attach_file_pdf(zugferdcontents,description,"text/xml",modificationtime,destfilename)
     end
 end
 
