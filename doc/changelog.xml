@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.3" date="2019-05-02">
+      <en>AttachFile: set the PDF name of the included file.</en>
+      <de>AttachFile: setze den PDF-Namen der eingebundenen Datei.</de>
+    </entry>
     <entry version="3.7.2" date="2019-04-28">
       <en>Bugfix: TD with align=right containing only one or more spaces (#230)</en>
       <de>Fehlerkorrektur: TD mit align=right und nur Leerzeichen im Inhalt (#230).</de>
