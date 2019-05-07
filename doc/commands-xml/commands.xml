@@ -89,6 +89,7 @@
     <optional><cmd name="NewPage"/></optional>
     <optional><cmd name="NextFrame"/></optional>
     <optional><cmd name="NextRow"/></optional>
+    <optional><cmd name="Options"/></optional>
     <optional><cmd name="Output"/></optional>
     <optional><cmd name="Pagetype"/></optional>
     <optional><cmd name="PDFOptions"/></optional>
@@ -4942,7 +4943,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="mainlanguage" optional="yes">
+    <attribute en="mainlanguage" optional="yes" allowxpath="yes">
       <description xml:lang="en">
         <para>The default language for text (hyphenation). You can also set the default language on the command line and locally set it at <cmd name="Paragraph"/>.</para>
       </description>

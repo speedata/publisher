@@ -114,6 +114,9 @@
                      <ref name="e_NextRow"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Options"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Output"></ref>
                   </optional>
                   <optional>
@@ -217,6 +220,9 @@
                   </optional>
                   <optional>
                      <ref name="e_NextRow"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Options"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Output"></ref>
@@ -949,6 +955,9 @@
                   </optional>
                   <optional>
                      <ref name="e_NextRow"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Options"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Output"></ref>
@@ -2756,6 +2765,9 @@
             <attribute name="mainlanguage">
                <a:documentation>Die Sprache (Silbentrennung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist. Sie kann global über die Kommandozeile gesteuert werden oder für jeden Paragraph einzeln.</a:documentation>
                <choice>
+                  <data type="string">
+                     <param name="pattern">\{.+\}</param>
+                  </data>
                   <value>Ancient Greek</value>
                   <a:documentation>Altgriechische Trennmuster.</a:documentation>
                   <value>Armenian</value>
@@ -3933,6 +3945,9 @@
                      <ref name="e_NextRow"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Options"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Output"></ref>
                   </optional>
                   <optional>
@@ -4134,6 +4149,9 @@
                      </optional>
                      <optional>
                         <ref name="e_NextRow"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Options"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Output"></ref>

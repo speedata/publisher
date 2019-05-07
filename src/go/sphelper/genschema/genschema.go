@@ -11,6 +11,7 @@ import (
 )
 
 const (
+	// RELAXNG is the Relax NG Namespace
 	RELAXNG string = "http://relaxng.org/ns/structure/1.0"
 )
 
@@ -229,6 +230,17 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 				for _, attrdefinition := range d {
 					if attr.Reference.Name == attrdefinition.Name {
 						enc.EncodeToken(choiceElement.Copy())
+						if attr.AllowXPath == "yes" {
+							data := xml.StartElement{Name: xml.Name{Local: "data"}}
+							data.Attr = []xml.Attr{{Name: xml.Name{Local: "type"}, Value: "string"}}
+							enc.EncodeToken(data)
+							param := xml.StartElement{Name: xml.Name{Local: "param"}}
+							param.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: "pattern"}}
+							enc.EncodeToken(param)
+							enc.EncodeToken(xml.CharData(`\{.+\}`))
+							enc.EncodeToken(param.End())
+							enc.EncodeToken(data.End())
+						}
 						for _, choice := range attrdefinition.Choices {
 							enc.EncodeToken(valueElement.Copy())
 							enc.EncodeToken(xml.CharData(choice.Name))
@@ -325,6 +337,7 @@ func genSchema(commands *commandsxml.CommandsXML, lang string) ([]byte, error) {
 	return outbuf.Bytes(), nil
 }
 
+// DoThings creates two schema files for »en« and »de«
 func DoThings(basedir string) error {
 	c, err := commandsxml.ReadCommandsFile(basedir)
 	if err != nil {
