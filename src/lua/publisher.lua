@@ -3789,6 +3789,7 @@ language_mapping = {
     ["Czech"]                        = "cs",
     ["Danish"]                       = "da",
     ["Dutch"]                        = "nl",
+    ["English"]                      = "en_GB",
     ["English (Great Britain)"]      = "en_GB",
     ["English (USA)"]                = "en_US",
     ["Esperanto"]                    = "eo",
@@ -3836,8 +3837,8 @@ language_filename = {
     ["de"]    = "de-1996",
     ["el"]    = "el-monoton",
     ["en"]    = "en-gb",
-    ["en_GB"] = "en-gb",
-    ["en_US"] = "en-us",
+    ["en_gb"] = "en-gb",
+    ["en_us"] = "en-us",
     ["eo"]    = "eo",
     ["es"]    = "es",
     ["et"]    = "et",
@@ -3889,7 +3890,7 @@ function get_language(id_or_locale_or_name)
     if num then
         return languages_id_lang[num]
     end
-    local locale = id_or_locale_or_name
+    local locale = string.lower(id_or_locale_or_name)
 
     if language_mapping[id_or_locale_or_name] then
         locale = language_mapping[id_or_locale_or_name]
@@ -3932,6 +3933,10 @@ end
 --- The language name is something like `German` or a locale.
 function get_languagecode( locale_or_name )
     local tmp = get_language(locale_or_name)
+    if type(tmp) ~= "table" then
+        err("get_languagecode: return value should be a table. Something is wrong.")
+        return 0
+    end
     return tmp.id
 end
 
