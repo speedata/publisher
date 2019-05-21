@@ -239,16 +239,19 @@ function isallocated( self,x,y,areaname,framenumber )
             frame_margin_top = block.row - 1
         end
     end
-    if x > self:number_of_columns(publisher.default_areaname) then
-        err("x (%d) exceeds number of columns of the given area (%d) (including added offset of %d)",x,self:number_of_columns(areaname),frame_margin_left)
+
+    if x > self:number_of_columns(areaname) then
+        err("sd:allocated() out of bounds. x (%d) > #cols (%d) of the area %q.",x,self:number_of_columns(areaname),areaname)
         return false
     end
-    if y > self:number_of_rows() then
-        err("y (%d) exceeds number of rows of the given area (%d)  (including added offset of %d)",y,self:number_of_rows(areaname),frame_margin_top)
+    if y > self:number_of_rows(areaname) then
+        err("sd:allocated() out of bounds. y (%d) > #rows (%d) of the area %q.",y,self:number_of_rows(areaname),areaname)
         return false
     end
+
     x = x + frame_margin_left
     y = y + frame_margin_top
+
     return self.allocation_x_y[x][y] ~= nil
 end
 
