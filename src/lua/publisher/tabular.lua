@@ -1678,8 +1678,10 @@ function typeset_table(self)
                 last_possible_split_is_after_line = i
             end
             sum_frame = sum_frame + rows[i].height + rows[i].depth
+
             -- When stepped over the goal, move this line to the next frame.
-            if sum_frame > percolumn_goal then
+            -- See #232 for a situation where the second test is necessary.
+            if sum_frame > percolumn_goal and last_possible_split_is_after_line ~= splits[#splits] then
                 splits[#splits + 1] = last_possible_split_is_after_line
                 tosplit = tosplit - 1
 

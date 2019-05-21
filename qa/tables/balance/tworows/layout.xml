@@ -1,0 +1,50 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Pageformat height="13cm" width="21cm"/>
+  <Options ignoreeol="yes" mainlanguage="English (Great Britain)"/>
+
+  <SetGrid nx="12" height="13pt"/>
+
+  <Pagetype name="t" test="true()">
+    <PositioningArea name="area">
+      <PositioningFrame width="6" height="22" row="1" column="1"/>
+      <PositioningFrame width="6" height="22" row="1" column="7"/>
+    </PositioningArea>
+  </Pagetype>
+
+  <Record element="table" >
+    <SetVariable variable="c" select="0"/>
+    <PlaceObject area="area" >
+      <Table stretch="max" width="6"  balance="yes">
+        <Columns>
+          <Column width="1*"/>
+        </Columns>
+        <ForAll select="*">
+
+          <Switch>
+            <Case test="local-name() = 'head'">
+              <SetVariable variable="c" select="$c + 1"/>
+              <Tr sethead="yes" break-below="no" minheight="13pt">
+                <Td backgroundcolor="gray">
+                  <Paragraph><Value select="$c"></Value></Paragraph>
+                </Td>
+              </Tr>
+            </Case>
+            <Otherwise>
+              <Loop select="@count">
+                <SetVariable variable="c" select="$c + 1"/>
+                <Tr>
+                  <Td valign="top">
+                    <Paragraph><Value select="$c"></Value></Paragraph>
+                  </Td>
+                </Tr>
+              </Loop>
+            </Otherwise>
+          </Switch>
+        </ForAll>
+
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
