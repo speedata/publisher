@@ -2861,7 +2861,7 @@
         <para>CSS id für dieses Element.</para>
       </description>
     </attribute>
-    <attribute en="clip" optional="yes" type="boolean" since="3.5.10">
+    <attribute en="clip" optional="yes" since="3.5.10">
       <description xml:lang="en">
         <para>Constrain the contents of the frame to its area or allow them to protrude.</para>
       </description>
