@@ -1,0 +1,38 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Pageformat height="7cm" width="7cm"/>
+
+  <Options mainlanguage="German"/>
+
+
+  <SetGrid nx="2" height="8pt"/>
+
+  <DefineFontfamily name="Fußzeile" fontsize="6" leading="8">
+    <Regular fontface="sans"/>
+  </DefineFontfamily>
+
+
+  <Record element="data">
+    <PlaceObject column="1" row="{sd:number-of-rows()}" vreference="bottom" valign="bottom">
+      <Table fontface="Fußzeile" stretch="max" >
+        <Columns>
+          <Column width="1*"/>
+          <Column width="1*"/>
+        </Columns>
+        <Tr valign="top">
+          <Td><Paragraph><Value>a</Value></Paragraph></Td>
+          <Td><Paragraph><Value>a</Value><Br/><Value>b</Value><Br/><Value>c</Value></Paragraph></Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+    <PlaceObject column="1" row="1">
+      <Textblock>
+        <Paragraph>
+          <Value select="sd:allocated(1,15)"/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

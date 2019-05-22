@@ -1320,7 +1320,7 @@ function output_at( param )
     if additional_width > 0 then
         width_gridcells = width_gridcells + additional_width
     end
-    local height_gridcells  = r:height_in_gridcells_sp(ht)
+    local height_gridcells  = r:height_in_gridcells_sp(ht,{floor = (param.vreference == "bottom") })
     if additional_height > 0 then
         height_gridcells = height_gridcells + additional_height
     end

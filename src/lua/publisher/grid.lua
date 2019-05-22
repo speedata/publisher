@@ -597,6 +597,8 @@ function height_in_gridcells_sp(self,height_sp,options)
     assert(self)
     local extra
     options = options or {}
+    local threshold = 500
+    if options.floor then threshold = 0 end
     if height_sp == 0 then return 0,0 end
     local ht_sp = height_sp - self.gridheight
     if ht_sp <= 0 then return 1, self.gridheight + ht_sp end
@@ -605,11 +607,11 @@ function height_in_gridcells_sp(self,height_sp,options)
     repeat
         ht_gridcells = ht_gridcells + 1
         ht_sp = ht_sp - self.gridheight - self.grid_dy
-        if ht_sp <= -100 and options.floor then
+        if options.extrathreshold and ht_sp <= options.extrathreshold then
             extra = self.gridheight + ht_sp
             return ht_gridcells - 1, extra
         end
-    until ht_sp <= 500
+    until ht_sp <= threshold
     extra = ht_sp
     return ht_gridcells, extra
 end

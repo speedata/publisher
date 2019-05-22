@@ -2585,7 +2585,7 @@ function commands.place_object( layoutxml,dataxml )
         end
         assert(object.width,"Can't determine object width")
         local width_in_gridcells   = current_grid:width_in_gridcells_sp(object.width)
-        local height_in_gridcells  = current_grid:height_in_gridcells_sp (object.height + object.depth)
+        local height_in_gridcells  = current_grid:height_in_gridcells_sp(object.height + object.depth,{floor = ( valign == "bottom" )})
 
         if absolute_positioning then
             if hreference == "right" then
@@ -2682,6 +2682,7 @@ function commands.place_object( layoutxml,dataxml )
                 allocate_right  = allocate_right,
                 allocate_top    = allocate_top,
                 allocate_bottom = allocate_bottom,
+                vreference = vreference,
                 })
             trace("object placed")
             row = nil -- the current rows is not valid anymore because an object is already rendered
@@ -3804,7 +3805,7 @@ function commands.text(layoutxml,dataxml)
                         obj,startpage,startrow = contents:format(parameter.width,textformat,parameter,startpage,startrow)
                     end
                     objects[#objects + 1] = obj
-                    local ht_rows, extra = cg:height_in_gridcells_sp(obj.height + obj.depth + extra_accumulated, {floor = true})
+                    local ht_rows, extra = cg:height_in_gridcells_sp(obj.height + obj.depth + extra_accumulated, {extrathreshold = -100})
                     extra_accumulated = extra
                     local overshoot = cg:advance_cursor(ht_rows,parameter.area)
                     if overshoot > 0 then

@@ -3,7 +3,8 @@
 
     <SetGrid height="6pt" width="12pt"/>
     <Pageformat width="150mm" height="70mm"/>
-    <Options show-grid="no" crop="2mm"/>
+    <Options crop="2mm"/>
+    <Trace grid="no"/>
 
     <DefineFontfamily name="text" fontsize="10" leading="12">
         <Regular fontface="TeXGyreHeros-Regular"/>
