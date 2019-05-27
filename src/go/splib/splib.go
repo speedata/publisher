@@ -16,10 +16,6 @@ import (
 	"splibaux"
 )
 
-//export Init
-func Init() {
-}
-
 // Convert a string slice to a C char* array and add a NULL pointer.
 func toCharArray(s []string) **C.char {
 	cArray := C.malloc(C.size_t(len(s)+1) * C.size_t(unsafe.Sizeof(uintptr(0))))
@@ -36,8 +32,8 @@ func s2c(input string) *C.char {
 	return C.CString(input)
 }
 
-//export Contains
-func Contains(haystack string, needle string) *C.char {
+//export contains
+func contains(haystack string, needle string) *C.char {
 	var ret string
 	if strings.Contains(haystack, needle) {
 		ret = "true"
@@ -47,8 +43,8 @@ func Contains(haystack string, needle string) *C.char {
 	return C.CString(ret)
 }
 
-//export Tokenize
-func Tokenize(text, rexpr string) **C.char {
+//export tokenize
+func tokenize(text, rexpr string) **C.char {
 	r := regexp.MustCompile(rexpr)
 	idx := r.FindAllStringIndex(text, -1)
 	pos := 0
@@ -61,8 +57,8 @@ func Tokenize(text, rexpr string) **C.char {
 	return toCharArray(res)
 }
 
-//export Replace
-func Replace(text string, rexpr string, repl string) *C.char {
+//export replace
+func replace(text string, rexpr string, repl string) *C.char {
 	r := regexp.MustCompile(rexpr)
 
 	// xpath uses $12 for $12 or $1, depending on the existence of $12 or $1.
@@ -79,8 +75,8 @@ func Replace(text string, rexpr string, repl string) *C.char {
 	return C.CString(str)
 }
 
-//export HtmlToXml
-func HtmlToXml(input string) *C.char {
+//export htmlToXml
+func htmlToXml(input string) *C.char {
 	input = "<toplevel·toplevel>" + input + "</toplevel·toplevel>"
 	r := strings.NewReader(input)
 	var w bytes.Buffer
@@ -118,10 +114,10 @@ func HtmlToXml(input string) *C.char {
 	return C.CString(w.String())
 }
 
-//export BuildFilelist
-func BuildFilelist() {
 	paths := []string{os.Getenv("PUBLISHER_BASE_PATH")}
 
+//export buildFilelist
+func buildFilelist() {
 	if fp := os.Getenv("SP_FONT_PATH"); fp != "" {
 		for _, p := range filepath.SplitList(fp) {
 			paths = append(paths, p)
@@ -134,13 +130,13 @@ func BuildFilelist() {
 	splibaux.BuildFilelist(paths)
 }
 
-//export AddDir
-func AddDir(p string) {
+//export addDir
+func addDir(p string) {
 	splibaux.AddDir(p)
 }
 
-//export LookupFile
-func LookupFile(path string) *C.char {
+//export lookupFile
+func lookupFile(path string) *C.char {
 	ret, err := splibaux.GetFullPath(path)
 	if err != nil {
 		fmt.Println(err)
@@ -148,14 +144,14 @@ func LookupFile(path string) *C.char {
 	return s2c(ret)
 }
 
-//export ListFonts
-func ListFonts() **C.char {
+//export listFonts
+func listFonts() **C.char {
 	res := splibaux.ListFonts()
 	return toCharArray(res)
 }
 
-//export ConvertSVGImage
-func ConvertSVGImage(path string) *C.char {
+//export convertSVGImage
+func convertSVGImage(path string) *C.char {
 	ret, err := splibaux.ConvertSVGImage(path)
 	if err != nil {
 		fmt.Println(err)

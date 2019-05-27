@@ -40,22 +40,19 @@ typedef void *GoChan;
 typedef struct { void *t; void *v; } GoInterface;
 typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 
-extern void Init();
-extern void AddDir(GoString p0);
-extern char* Contains(GoString p0, GoString p1);
-extern char** Tokenize(GoString p0, GoString p1);
-extern char* Replace(GoString p0, GoString p1, GoString p2);
-extern char* HtmlToXml(GoString p0);
-extern void BuildFilelist();
-extern char* LookupFile(GoString p0);
-extern char** ListFonts();
-extern char* ConvertSVGImage(GoString p0);
+extern void addDir(GoString p0);
+extern char* contains(GoString p0, GoString p1);
+extern char** tokenize(GoString p0, GoString p1);
+extern char* replace(GoString p0, GoString p1, GoString p2);
+extern char* htmlToXml(GoString p0);
+extern void buildFilelist();
+extern char* lookupFile(GoString p0);
+extern char** listFonts();
+extern char* convertSVGImage(GoString p0);
 
 ]]
 
 ld = ffi.load("libsplib")
-
-ld.Init()
 
 local function c(str)
     return ffi.new("GoString",str,#str)
@@ -63,7 +60,7 @@ end
 
 
 local function tokenize(dataxml,arg)
-    local ret = ld.Tokenize(c(arg[1]),c(arg[2]))
+    local ret = ld.tokenize(c(arg[1]),c(arg[2]))
     local tbl = {}
     local i = 0
     while ret[i] ~= nil do
@@ -74,7 +71,7 @@ local function tokenize(dataxml,arg)
 end
 
 local function contains(haystack,needle)
-    local ret = ld.Contains(c(haystack),c(needle))
+    local ret = ld.contains(c(haystack),c(needle))
     return ffi.string(ret)
 end
 
@@ -82,12 +79,12 @@ local function replace(text, rexpr, repl)
     text  = tostring(text)
     rexpr = tostring(rexpr)
     repl  = tostring(repl)
-    local ret = ld.Replace(c(text),c(rexpr),c(repl))
+    local ret = ld.replace(c(text),c(rexpr),c(repl))
     return ffi.string(ret)
 end
 
 local function htmltoxml(input)
-    local ret = ld.HtmlToXml(c(input))
+    local ret = ld.htmlToXml(c(input))
     if ret == nil then
         err("sd:decode")
         return nil
@@ -97,15 +94,15 @@ local function htmltoxml(input)
 end
 
 local function buildfilelist()
-    ld.BuildFilelist()
+    ld.buildFilelist()
 end
 
 local function add_dir(dirname)
-    ld.AddDir(c(dirname))
+    ld.addDir(c(dirname))
 end
 
 local function lookupfile(filename)
-    local ret = ld.LookupFile(c(filename))
+    local ret = ld.lookupFile(c(filename))
     local _ret = ffi.string(ret)
     if _ret == "" then return nil end
 
@@ -113,7 +110,7 @@ local function lookupfile(filename)
 end
 
 local function listfonts()
-    local ret = ld.ListFonts()
+    local ret = ld.listFonts()
     local tbl = {}
     local i = 0
     while ret[i] ~= nil do
@@ -124,7 +121,7 @@ local function listfonts()
 end
 
 local function convertSVGImage(filename)
-    local ret = ld.ConvertSVGImage(c(filename))
+    local ret = ld.convertSVGImage(c(filename))
     local _ret = ffi.string(ret)
     if _ret == "" then return nil end
 
