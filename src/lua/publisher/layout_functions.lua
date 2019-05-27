@@ -424,17 +424,7 @@ local function loremipsum(dataxml,arg)
     return string.rep(lorem:gsub("^%s*(.-)%s*$","%1"):gsub("[%s\n]+"," "),count, " ")
 end
 
-local function doubleit(dataxml,arg)
-    if arg and arg[1] then
-        local x = publisher.splib.doubleit(arg[1])
-        return x
-    end
-    return 0
-end
-
 local register = publisher.xpath.register_function
-
-register("urn:speedata:2009/publisher/functions/en","doubleit",doubleit)
 
 register("urn:speedata:2009/publisher/functions/en","attr",attr)
 
