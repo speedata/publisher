@@ -182,7 +182,10 @@ func init() {
 		// local git installation
 		libdir = filepath.Join(installdir, "lib")
 		srcdir = filepath.Join(installdir, "src")
-		os.Setenv("PUBLISHER_BASE_PATH", srcdir)
+		os.Setenv("PUBLISHER_BASE_PATH", strings.Join([]string{
+			filepath.Join(srcdir, "lua"),
+			filepath.Join(srcdir, "tex"),
+			filepath.Join(srcdir, "hyphenation")}, string(os.PathListSeparator)))
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
 		extraDir = append(extraDir, filepath.Join(installdir, "fonts"))
 		extraDir = append(extraDir, filepath.Join(installdir, "img"))

@@ -114,10 +114,9 @@ func htmlToXml(input string) *C.char {
 	return C.CString(w.String())
 }
 
-	paths := []string{os.Getenv("PUBLISHER_BASE_PATH")}
-
 //export buildFilelist
 func buildFilelist() {
+	paths := filepath.SplitList(os.Getenv("PUBLISHER_BASE_PATH"))
 	if fp := os.Getenv("SP_FONT_PATH"); fp != "" {
 		for _, p := range filepath.SplitList(fp) {
 			paths = append(paths, p)
