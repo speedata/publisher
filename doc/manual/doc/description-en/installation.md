@@ -45,12 +45,12 @@ rake doc
 ```
 
 If you are building speedata Publisher from source, you will also need to install LuaTeX manually. The recommended way is to download a binary from <https://download.speedata.de/#extra> and copy it into the bin/ directory of the Publisher.
-For example, to download and install LuajitTeX 1.0.7 on a Linux amd64 system, you could use the commands:
+For example, to download and install LuajitTeX 1.10 on a Linux amd64 system, you could use the commands:
 
 ```
-wget https://download.speedata.de/files/extra/luatex_107-win-mac-linux.zip
-unzip luatex_107-win-mac-linux.zip
-cp luatex/linux/amd64/1_0_7/sdluatex bin
+wget https://download.speedata.de/files/extra/luatex_110-win-mac-linux.zip
+unzip luatex_110-win-mac-linux.zip
+cp luatex/linux/amd64/1_10/sdluatex bin
 ```
 
 After installation, you can run `bin/sdluatex --version` to confirm the program version.

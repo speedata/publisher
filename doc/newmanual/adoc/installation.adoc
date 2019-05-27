@@ -50,7 +50,7 @@ sudo apt-key add gpgkey-speedata.txt
 Die Dokumentation befindet sich in `/usr/share/doc/speedata-publisher/index.html`, die mit `sp doc` auf einem Desktop-System geöffnet werden kann.
 
 . **Aus den Quellen installieren**: Für die Entwickler, die am Publisher selbst Änderungen vornehmen möchten: Die Software und die Dokumentation kann aus dem Quellcode gebaut werden mithilfe des Befehls `rake`.
-Notwendig dafür sind die üblichen Entwicklungswerkzeuge und die Programmiersprache Go (https://golang.org/) in Version 1.10 oder höher.
+Notwendig dafür sind die üblichen Entwicklungswerkzeuge und die Programmiersprache Go (https://golang.org/) in Version 1.11 oder höher.
 Auf einem Debian oder Ubuntu GNU/Linux System kann man folgende Befehle nutzen:
 +
 -------------------------------------------------------------------------------
@@ -73,14 +73,13 @@ rake doc
 +
 Falls der speedata Publisher aus den Quellen gebaut wird, muss noch LuaTeX hinzugefügt werden.
 Der vorgeschlagene Weg ist, unter <https://download.speedata.de/#extra> die Binärpakete zu laden und das passende Paket in das bin-Verzeichnis zu kopieren.
-Beispielsweise um LuajitTeX 1.0.7 auf einem Linux AMD64 System zu nutzen, kann man die folgenden Befehle ausführen:
+Beispielsweise um LuajitTeX 1.10 auf einem Linux AMD64 System zu nutzen, kann man die folgenden Befehle ausführen:
 +
 -------------------------------------------------------------------------------
-wget https://download.speedata.de/files/extra/luatex_107-win-mac-linux.zip
-unzip luatex_107-win-mac-linux.zip
-cp luatex/linux/amd64/1_0_7/sdluatex bin
+wget https://download.speedata.de/files/extra/luatex_110-win-mac-linux.zip
+unzip luatex_110-win-mac-linux.zip
+cp luatex/linux/amd64/1_10/sdluatex bin
 -------------------------------------------------------------------------------
 +
 Nach der Installation kann man `bin/sdluatex --version` aufrufen, um zu überprüfen, ob es die richtige Version ist.
-
 
