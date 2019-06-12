@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.5" date="2019-06-12">
+      <en>Bugfix textformat/fill-last-line (#234).</en>
+      <de>Fehlerkorrektur textformat/fill-last-line (#234).</de>
+    </entry>
+    <entry version="3.7.5" date="2019-06-12">
+      <en>Bugfix valign=bottom (#233).</en>
+      <de>Fehlerkorrektur valign=bottom (#233).</de>
+    </entry>
     <entry version="3.7.4" date="2019-05-21">
       <en>Bugfix table balancing (#232).</en>
       <de>Fehlerkorrektur Tabellenausgleich (#232).</de>
