@@ -407,6 +407,7 @@ function Paragraph:format(width_sp, default_textformat_name,options)
             local head = nodelist
             while head do
                 local _w,_h,_d = node.dimensions(head)
+                -- glue subtype 15 == parfillskip
                 if head.id == publisher.glue_node and head.subtype ~= 15 and (_w < min_width_sp) then
                     local prev = head.prev
                     prev.next = nil

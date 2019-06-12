@@ -3271,6 +3271,7 @@ function do_linebreak( nodelist,hsize,parameters )
     local head = j
     local maxlineheight
     local fam
+    local _h
     while head do
         if head.id == hlist_node then -- hlist
             local lineheight
@@ -3280,7 +3281,10 @@ function do_linebreak( nodelist,hsize,parameters )
                 lineheight = lineheight or node.has_attribute(head_list,att_lineheight)
                 -- There could be a hlist (HTML table for example) in the line
                 if head_list.id == hlist_node or head_list.id == vlist_node then
-                    maxlineheight = math.max(head_list.height,maxlineheight)
+                    if head_list.head then
+                        _, _h, _ = node.dimensions(head_list.head)
+                        maxlineheight = math.max(_h,maxlineheight)
+                    end
                 else
                     fam = node.has_attribute(head_list,att_fontfamily)
                     if fam then

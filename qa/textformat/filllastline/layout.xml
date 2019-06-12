@@ -1,0 +1,31 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <SetGrid height="8.5pt" nx="10"/>
+  <Pageformat height="150mm" width="150mm"/>
+
+  <DefineFontfamily name="text" fontsize="7.7pt" leading="8.5pt">
+    <Regular fontface="sans"/>
+  </DefineFontfamily>
+
+  <DefineTextformat name="text" fill-last-line="40"/>
+
+  <Record element="data">
+    <Output>
+      <Text textformat="text">
+        <Paragraph>
+          <Value>A wonderful serenity </Value>
+          <Value>Ü</Value>
+        </Paragraph>
+      </Text>
+    </Output>
+   <Output>
+      <Text>
+        <Paragraph>
+          <Value>X</Value>
+        </Paragraph>
+      </Text>
+    </Output>
+  </Record>
+</Layout>
