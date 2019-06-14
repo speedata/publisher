@@ -1862,6 +1862,8 @@ function commands.nobreak( layoutxml, dataxml )
         until nl.next.width <= current_maxwidth
 
         a.nodelist = nl
+        node.set_attribute(a.nodelist,publisher.att_fontfamily,fam)
+
         publisher.intextblockcontext = publisher.intextblockcontext - 1
     elseif strategy == "cut" then
         local nl = node.copy_list(a.nodelist)
@@ -1881,10 +1883,12 @@ function commands.nobreak( layoutxml, dataxml )
             wd = node.dimensions(nl.list,head)
         end
         a.nodelist = node.copy_list(nl.list,head)
+        node.set_attribute(a.nodelist,publisher.att_fontfamily,fontfamily)
         node.insert_after(a.nodelist,node.tail(a.nodelist),txt)
     elseif strategy == "keeptogether" then -- default
         a.nodelist = node.hpack(a.nodelist)
         a.nodelist = publisher.addstrut(a.nodelist,"head")
+        node.set_attribute(a.nodelist,publisher.att_fontfamily,fontfamily)
     end
     return a
 end
@@ -2284,7 +2288,7 @@ function commands.paragraph( layoutxml,dataxml )
     -- This is problematic because sometimes the font is not set when we collect
     -- material for a paragraph (when fontface is not given).
     -- So how high should the rule be?
-    -- a.nodelist = publisher.addstrut(a.nodelist)
+    a.nodelist = publisher.addstrut(a.nodelist)
     return a
 end
 

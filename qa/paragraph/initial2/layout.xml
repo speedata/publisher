@@ -1,0 +1,24 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <SetGrid height="8.5pt" nx="10"/>
+  <Pageformat height="150mm" width="150mm"/>
+
+  <DefineFontfamily name="init" fontsize="26" leading="24">
+    <Regular fontface="sans"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Initial fontface="init" >
+            <Value>1</Value>
+          </Initial>
+          <Value select="sd:dummytext()"/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

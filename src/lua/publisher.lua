@@ -3485,7 +3485,7 @@ function set_fontfamily_if_necessary(nodelist,fontfamily)
             fam = set_fontfamily_if_necessary(nodelist.leader,fontfamily)
         else
             fam = node.has_attribute(nodelist,att_fontfamily)
-            if fam == 0 or ( fam == nil and nodelist.id == rule_node ) then
+            if fam == 0 then
                 node.set_attribute(nodelist,att_fontfamily,fontfamily)
                 fam = fontfamily
             end
