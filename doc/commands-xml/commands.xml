@@ -2611,6 +2611,7 @@
           <optional><cmd name="Makeindex"/></optional>
           <optional><cmd name="Switch"/></optional>
           <optional><cmd name="SortSequence"/></optional>
+          <optional><cmd name="Value"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>
@@ -4443,7 +4444,18 @@
       <para>Gibt eine Textmeldung auf der Konsole und in der Protokolldatei aus.</para>
     </description>
     <childelements>
-      <optional><oneOrMore><cmd name="Value"/></oneOrMore></optional>
+      <interleave>
+        <optional>
+          <oneOrMore>
+            <cmd name="Value"/>
+          </oneOrMore>
+        </optional>
+        <optional>
+          <oneOrMore>
+            <cmd name="Element"/>
+          </oneOrMore>
+        </optional>
+      </interleave>
     </childelements>
     <attribute en="select" type="xpath" optional="yes">
       <description xml:lang="en">

@@ -1325,6 +1325,9 @@
                      <optional>
                         <ref name="e_SortSequence"></ref>
                      </optional>
+                     <optional>
+                        <ref name="e_Value"></ref>
+                     </optional>
                   </interleave>
                </oneOrMore>
             </group>
@@ -2555,11 +2558,18 @@
                      </choice>
                   </attribute>
                </optional>
-               <optional>
-                  <oneOrMore>
-                     <ref name="e_Value"></ref>
-                  </oneOrMore>
-               </optional>
+               <interleave>
+                  <optional>
+                     <oneOrMore>
+                        <ref name="e_Value"></ref>
+                     </oneOrMore>
+                  </optional>
+                  <optional>
+                     <oneOrMore>
+                        <ref name="e_Element"></ref>
+                     </oneOrMore>
+                  </optional>
+               </interleave>
             </group>
             <ref name="foreign-nodes"></ref>
          </interleave>

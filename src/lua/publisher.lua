@@ -3747,25 +3747,29 @@ function xml_to_string( xml_element, level )
         return "error in publisher run"
     end
     level = level or 0
-    str = str ..  "<" .. ( xml_element[".__name"] or xml_element[".__local_name"] or "xxx")
-    for k,v in pairs(xml_element) do
-        if type(k) == "string" and not k:match("^%.") then
-            str = str .. string.format(" %s=%q", k,xml_escape(v))
-        end
-    end
-    if xml_element[".__ns"] then
-        for k,v in pairs(xml_element[".__ns"]) do
-            if type(k) == "string" then
-                if k == "" then
-                    k = "xmlns"
-                else
-                    k = "xmlns:" .. k
-                end
+    local eltname = xml_element[".__name"] or xml_element[".__local_name"] or ""
+    if level == 0 and eltname == "" then eltname = "xxx" end
+    if eltname ~= "" then
+        str = str ..  "<" .. eltname
+        for k,v in pairs(xml_element) do
+            if type(k) == "string" and not k:match("^%.") then
                 str = str .. string.format(" %s=%q", k,xml_escape(v))
             end
         end
+        if xml_element[".__ns"] then
+            for k,v in pairs(xml_element[".__ns"]) do
+                if type(k) == "string" then
+                    if k == "" then
+                        k = "xmlns"
+                    else
+                        k = "xmlns:" .. k
+                    end
+                    str = str .. string.format(" %s=%q", k,xml_escape(v))
+                end
+            end
+        end
+        str = str .. ">"
     end
-    str = str .. ">"
     for i,v in ipairs(xml_element) do
         if type(v) == "string" and v == "" then
             -- ok, nothing do do
@@ -3773,9 +3777,30 @@ function xml_to_string( xml_element, level )
             str = str .. xml_to_string(v,level + 1)
         end
     end
-    str = str ..  "</" .. ( xml_element[".__name"] or xml_element[".__local_name"] or "xxxx") .. ">"
+    if eltname ~= "" then
+        str = str ..  "</" .. eltname .. ">"
+    end
     return str
 end
+
+function xml_stringvalue( self )
+    local ret = {}
+    for i=1,#self do
+        local val = self[i]
+        if type(val) == "table" then
+            ret[#ret + 1] = xml_stringvalue(val)
+        else
+            ret[#ret + 1] = tostring(val)
+        end
+    end
+    return table.concat(ret)
+end
+
+xml_stringvalue_mt = {
+    __tostring = xml_stringvalue
+}
+
+
 
 --- Hyphenation and language handling
 --- ---------------------------------

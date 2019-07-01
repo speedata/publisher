@@ -810,13 +810,12 @@ end
 --- -------
 --- Create an element for use with Attribute and SaveDataset
 function commands.element( layoutxml,dataxml )
-    local elementname = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
-
-    local ret = { [".__local_name"] = elementname }
+    local ret = { [".__local_name"] = publisher.read_attribute(layoutxml,dataxml,"name","rawstring") }
 
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,v in ipairs(tab) do
         local contents = publisher.element_contents(v)
+        local eltname = publisher.elementname(v)
         if contents[".__type"]=="attribute" then
             -- Attribute
             for _k,_v in pairs(contents) do
@@ -824,6 +823,8 @@ function commands.element( layoutxml,dataxml )
                     ret[_k] = _v
                 end
             end
+        elseif eltname == "Value" then
+            ret[#ret + 1] = contents
         else
             -- .__local_name can be nil if we add Elements in another Element
             -- The Elements are stored in sub-tables
@@ -836,7 +837,6 @@ function commands.element( layoutxml,dataxml )
             end
         end
     end
-
     return ret
 end
 
@@ -1689,6 +1689,7 @@ function commands.message( layoutxml, dataxml )
         local tab = publisher.dispatch(layoutxml,dataxml)
         contents = tab
     end
+    local ignore_message = false
     if type(contents)=="table" then
         local ret = {}
         for i=1,#contents do
@@ -1711,19 +1712,26 @@ function commands.message( layoutxml, dataxml )
                 else
                     err("Message: unknown type in value: %q",type(contents))
                 end
+            elseif eltname == "Element" then
+                ignore_message = true
+                publisher.messages[#publisher.messages + 1] = { contents, "element" }
+            else
+                err("Unknown element name in <Message> %q",tostring(eltname))
             end
         end
         contents = table.concat(ret)
     end
-    if errcond then
-        err(errorcode,"%q", tostring(contents) or "?")
-    else
-        publisher.messages[#publisher.messages + 1] = { contents, "message" }
-        log("Message: %q", tostring(contents) or "?")
-    end
-    if exitnow then
-        err(-1,"Exiting on user request.")
-        quit()
+    if not ignore_message then
+        if errcond then
+            err(errorcode,"%s", tostring(contents) or "?")
+        else
+            publisher.messages[#publisher.messages + 1] = { contents, "message" }
+            log("Message: %q", tostring(contents) or "?")
+        end
+        if exitnow then
+            err(-1,"Exiting on user request.")
+            quit()
+        end
     end
 end
 
@@ -4091,6 +4099,7 @@ function commands.value( layoutxml,dataxml )
         local ok
         ok, tab = xpath.parse_raw(dataxml,selection,layoutxml[".__ns"])
         if not ok then err(tab) return end
+        -- tab can now contain markup coming from data.xml such as <sup>...</sup>
     else
         -- Change all br elements to \n
         for i=1,#layoutxml do

@@ -218,6 +218,12 @@ function assert( what,msg)
   return what
 end
 
+local function fixup_msg(msg)
+    msg = publisher.xml_escape(msg)
+    -- The message can be in a non-UTF-8 encoding. See #65
+    msg = u8fix.sanitize(msg)
+    return msg
+end
 
 ---   I/O, Control flow
 --- -------------------
@@ -235,15 +241,14 @@ function exit(graceful)
     statusfile:write(string.format("<Status>\n  <Errors>%d</Errors>\n",errcount))
     local msgs = publisher.messages
     for i=1,#msgs do
-        local msg = publisher.xml_escape(msgs[i][1])
-        -- The message can be in a non-UTF-8 encoding. See #65
-        msg = u8fix.sanitize(msg)
         if msgs[i][2] == "error" then
-            statusfile:write(string.format("  <Error code='%d'>%s</Error>\n", msgs[i][3] or 1, msg))
+            statusfile:write(string.format("  <Error code='%d'>%s</Error>\n", msgs[i][3] or 1,fixup_msg(msgs[i][1])))
         elseif msgs[i][2] == "message" then
-            statusfile:write(string.format("  <Message>%s</Message>\n", msg))
+            statusfile:write(string.format("  <Message>%s</Message>\n",fixup_msg(msgs[i][1])))
         elseif msgs[i][2] == "warning" then
-            statusfile:write(string.format("  <Warning>%s</Warning>\n", msg))
+            statusfile:write(string.format("  <Warning>%s</Warning>\n",fixup_msg(msgs[i][1])))
+        elseif msgs[i][2] == "element" then
+            statusfile:write(string.format("  %s\n",publisher.xml_to_string(msgs[i][1])))
         end
     end
     statusfile:write(string.format("  <DurationSeconds>%d</DurationSeconds>\n",math.ceil(os.gettimeofday() - starttime)))
