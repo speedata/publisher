@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.6" date="2019-07-01">
+      <en>Allow elements in Message.</en>
+      <de>Elemente in Message erlauben.</de>
+    </entry>
+    <entry version="3.7.6" date="2019-07-01">
+      <en>New XPath function number().</en>
+      <de>Neue XPath Funktion number().</de>
+    </entry>
+    <entry version="3.7.6" date="2019-07-01">
+      <en>Bugfix initials and line height.</en>
+      <de>Fehlerkorrektur Initialen und Zeilenhöhe.</de>
+    </entry>
     <entry version="3.7.5" date="2019-06-12">
       <en>Bugfix textformat/fill-last-line (#234).</en>
       <de>Fehlerkorrektur textformat/fill-last-line (#234).</de>
