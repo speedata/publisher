@@ -2607,6 +2607,7 @@
           <optional><cmd name="Copy-of"/></optional>
           <optional><cmd name="Element"/></optional>
           <optional><cmd name="ForAll"/></optional>
+          <optional><cmd name="Loop"/></optional>
           <optional><cmd name="Makeindex"/></optional>
           <optional><cmd name="Switch"/></optional>
           <optional><cmd name="SortSequence"/></optional>
@@ -5908,7 +5909,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="halign" optional="yes" since="2.3.55">
+    <attribute en="halign" optional="yes" since="2.3.55" allowxpath="yes">
       <description xml:lang="en">
         <para>When an object is placed on the grid and it's width is not a multiple of grid width, there is a space left on the page between the object an the next grid cell. With this attribute you can instruct the software where to place the gap.</para>
       </description>

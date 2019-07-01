@@ -1314,6 +1314,9 @@
                         <ref name="e_ForAll"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Loop"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Makeindex"></ref>
                      </optional>
                      <optional>
@@ -3634,6 +3637,9 @@
                         <a:documentation>Das Objekt wird so platziert, dass der Leerraum links und rechts derselbe ist.</a:documentation>
                         <value>right</value>
                         <a:documentation>Das Objekt wird rechts ausgerichtet.</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
                      </choice>
                   </attribute>
                </optional>

@@ -1314,6 +1314,9 @@
                         <ref name="e_ForAll"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Loop"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Makeindex"></ref>
                      </optional>
                      <optional>
@@ -3634,6 +3637,9 @@
                         <a:documentation>The object is aligned so that the space to the left is the same as to the right.</a:documentation>
                         <value>right</value>
                         <a:documentation>The object is aligned to the right.</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
                      </choice>
                   </attribute>
                </optional>
