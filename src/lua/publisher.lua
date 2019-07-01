@@ -4773,7 +4773,14 @@ end
 
 
 function attach_file_pdf(zugferdcontents,description,mimetype,modificationtime,destfilename)
-    local conformancelevel = string.upper(string.match(zugferdcontents, "urn:ferd:CrossIndustryDocument:invoice:1p0:(.-)<"))
+
+    local conformancelevel = string.match(zugferdcontents, "urn:ferd:CrossIndustryDocument:invoice:1p0:(.-)<")
+    if not conformancelevel then
+        err("No ZUGFeRD contents found")
+        return
+    else
+        conformancelevel = string.upper(conformancelevel)
+    end
     local fileobjectnum = pdf.immediateobj("stream",
         zugferdcontents,
         string.format([[/Params <</ModDate (%s)>> /Subtype /%s /Type /EmbeddedFile ]],
