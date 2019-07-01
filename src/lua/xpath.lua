@@ -533,14 +533,27 @@ function M.eval_comparison(first,second,operator)
     end
 end
 
+local function xml_to_string( self )
+    local ret = {}
+    for i=1,#self do
+      ret[#ret + 1] = tostring(self[i])
+    end
+    return table.concat(ret)
+end
+
+local mt = {
+    __tostring = xml_to_string
+}
+
+
 function M.eval_addition(first,second,operator)
     if type(first)=='table' then
-        err("The first operand of +/- is a table. Evaluating to 0")
-        return 0
+        setmetatable(first, mt)
+        first = tostring(first)
     end
     if type(second)=='table' then
-        err("The second operand of +/- is a table. Evaluating to 0")
-        return 0
+        setmetatable(second, mt)
+        second = tostring(second)
     end
     if type(first)=='string' then
         if is_dim then
@@ -879,7 +892,6 @@ M.default_functions.abs = function(dataxml,arg)
     return tmp
 end
 
-
 M.default_functions.position = function()
     local pos = publisher.xpath.get_variable("__position")
     return pos
@@ -997,7 +1009,31 @@ M.default_functions["string"] = function(dataxml,arg)
     return ret
 end
 
--- Tokenize is the first function we ask 'sp' for help
+M.default_functions["number"] = function(dataxml,arg)
+    local ret
+    if type(arg)=="table" then
+        if #arg > 1 then
+            err("A sequence of more than one item is not allowed as the first argument of fn:number()")
+            return
+        end
+        setmetatable(arg, mt)
+        ret = tostring(arg)
+    elseif arg == "\1" then -- nil value
+        ret = ""
+    elseif type(arg) == "string" then
+        ret = arg
+    elseif type(arg) == "boolean" then
+        if arg then ret = 1 else ret = 0 end
+    elseif arg == nil then
+        ret = ""
+    else
+        warning("Unknown type in XPath-function 'number()': %s",type(arg))
+        ret = tostring(arg)
+    end
+    return tonumber(ret)
+end
+
+-- Tokenize is the first function we ask 'splib' for help
 M.default_functions["tokenize"] = function(dataxml,arg)
     if arg[1] == nil or arg[2] == nil then
         err("tokenize: one of the arguments is empty")
@@ -1032,8 +1068,6 @@ M.default_functions["contains"] = function(dataxml,arg)
     local ret = publisher.splib.contains(arg[1],arg[2])
     return ret == "true"
 end
-
-
 
 M.default_functions["upper-case"] = function(dataxml,arg)
     local str = arg and arg[1]
@@ -1105,3 +1139,7 @@ return {
    pop_state         = M.pop_state,
 }
 
+-- Todo:
+-- boolean()
+-- round(), ceiling(), floor(), and round-half-to-even()
+-- sum(), avg(),
