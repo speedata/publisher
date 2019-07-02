@@ -3784,6 +3784,7 @@ function xml_to_string( xml_element, level )
 end
 
 function xml_stringvalue( self )
+    if type(self) == "string" then return self end
     local ret = {}
     for i=1,#self do
         local val = self[i]

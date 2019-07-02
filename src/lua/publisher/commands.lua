@@ -1714,6 +1714,7 @@ function commands.message( layoutxml, dataxml )
                 end
             elseif eltname == "Element" then
                 ignore_message = true
+                ret[#ret + 1] = publisher.xml_stringvalue(contents)
                 publisher.messages[#publisher.messages + 1] = { contents, "element" }
             else
                 err("Unknown element name in <Message> %q",tostring(eltname))
@@ -1721,17 +1722,17 @@ function commands.message( layoutxml, dataxml )
         end
         contents = table.concat(ret)
     end
-    if not ignore_message then
-        if errcond then
-            err(errorcode,"%s", tostring(contents) or "?")
-        else
+    if errcond then
+        err(errorcode,"%s", tostring(contents) or "?")
+    else
+        if not ignore_message then
             publisher.messages[#publisher.messages + 1] = { contents, "message" }
-            log("Message: %q", tostring(contents) or "?")
         end
-        if exitnow then
-            err(-1,"Exiting on user request.")
-            quit()
-        end
+        log("Message: %q", tostring(contents) or "?")
+    end
+    if exitnow then
+        err(-1,"Exiting on user request.")
+        quit()
     end
 end
 
