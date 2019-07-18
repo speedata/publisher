@@ -114,7 +114,7 @@ TIP: Sollten die Daten nicht als wohlgeformtes XML sondern beispielsweise im HTM
 == OpenType Features
 
 Das OpenType Format kennt sogenannte OpenType Features, wie z. B. Mediävalziffern oder Kapitälchen.
-Manche dieser Features können bei `LoadFontfile` aktiviert werden.
+Manche dieser Features können bei `<LoadFontfile>` aktiviert werden.
 
 
 [source,xml]
@@ -269,6 +269,35 @@ $ sp list-fonts --xml
 TIP: Wenn keine Schriftart für einen Absatz oder einen Textblock (etc.) angegeben wird, nutzt das System die Schriftfamilie `text`, die im Publisher auch vordefiniert ist und überschrieben werden kann. Sie den Anhang <<app-voreinstellungenimpublisher,Voreinstellungen im Publisher>>.
 
 
+== Fehlende Zeichen und Ersatzschriftarten
+
+Die Zeichenvorräte in den Schriftdateien sind meist sehr begrenzt.
+Beispielsweise wird der speedata Publisher mit der freien Schriftart »TeXGyreHeros« (einem sehr guten Helvetica-Klon) ausgeliefert.
+In der Schriftdatei sind aber nur Zeichen enthalten, die westliche Sprachen abdecken, aber z.B. nicht Griechisch, Arabisch, Chinesisch etc.
+Auch die den ganzen Unicode-Sonderzeichen wie U+2685 DIE FACE-6 (⚅) sind nicht enthalten.
+Wird ein Zeichen angefordert, das in der Schriftart nicht enthalten ist, gibt es eine Fehlermeldung.
+
+-------
+Error: Glyph f1c7 (hex) is missing from the font "TeXGyreHeros-Regular"
+-------
+
+Diesen Fehler kann man mit dem Befehl <<cmd-options,`<Options>`>> unterdrücken:
+
+-------
+<Options reportmissingglyphs="no"/>
+-------
+
+Alternativ dazu kann man auch bei  <<cmd-loadfontfile,`<LoadFontfile>`>> eine Ersatzschriftart angeben, die durchsucht wird, sobald ein Zeichen nicht gefunden wird:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<LoadFontfile name="helvetica" filename="texgyreheros-regular.otf">
+  <Fallback filename="fontawesome-webfont.ttf" />
+  <Fallback filename="line-awesome.ttf" />
+</LoadFontfile>
+-------------------------------------------------------------------------------
+
+So wird erst die Schriftart `texgyreheros-regular.otf` durchsucht, anschließend `fontawesome-webfont.ttf` und zum Schluss  `line-awesome.ttf`.
 
 
 == Aliasnamen

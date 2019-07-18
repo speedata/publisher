@@ -281,6 +281,21 @@ function define_font(name, size,extra_parameter)
         end
     end
 
+    local fallback_fontdefinitions = {}
+    if extra_parameter.fallbacks then
+        for i=#extra_parameter.fallbacks,1,-1 do
+            local fnt = extra_parameter.fallbacks[i]
+            local tmp, newfont = define_font(fnt,size)
+            if tmp then
+                local num = font.define(newfont)
+                newfont.fontnum = num
+                fallback_fontdefinitions[#fallback_fontdefinitions + 1] = newfont
+            else
+                return nil, newfont
+            end
+        end
+    end
+
     -- create a virtual font to fake a feature
     local needs_virtual_font = false
     local new_f
@@ -308,12 +323,20 @@ function define_font(name, size,extra_parameter)
             break
         end
     end
+
+    if #fallback_fontdefinitions > 0 then
+        needs_virtual_font = true
+    end
+
     -- first define a virtual font
     if needs_virtual_font then
         local num = font.define(f)
         new_f = {
             fonts = {{ id = num }},
         }
+        for _,fnt in ipairs(fallback_fontdefinitions) do
+            new_f.fonts[#new_f.fonts + 1] = { id = fnt.fontnum }
+        end
         new_f.name          = f.name
         new_f.fullname      = f.fullname
         new_f.designsize    = f.designsize
@@ -330,6 +353,21 @@ function define_font(name, size,extra_parameter)
         new_f.characters = {}
         new_f.otfeatures = f.otfeatures
         new_f.fontloader = f.fontloader
+
+        for _fntnum,fnt in ipairs(fallback_fontdefinitions) do
+            for i,v in pairs(fnt.characters) do
+                new_f.characters[i] = {
+                    index = v.index,
+                    width = v.width,
+                    height = v.height,
+                    depth = v.depth,
+                    commands =  { { 'font',_fntnum + 1 }, {'char',i} },
+                    lookups = v.lookups,
+                    kerns = v.kerns,
+                }
+            end
+        end
+
         for i,v in pairs(f.characters) do
             new_f.characters[i] = {
                 index = v.index,
@@ -338,7 +376,7 @@ function define_font(name, size,extra_parameter)
                 depth = v.depth,
                 commands =  { {'char',i} },
                 lookups = v.lookups,
-                kers = v.kerns,
+                kerns = v.kerns,
             }
         end
 

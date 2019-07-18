@@ -1335,6 +1335,15 @@
          </interleave>
       </element>
    </define>
+   <define name="e_Fallback">
+      <element name="Fallback">
+         <a:documentation>Define a fallback for LoadFontfile</a:documentation>
+         <attribute name="filename">
+            <a:documentation>The filename of the font to be used as a fallback.</a:documentation>
+         </attribute>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Fontface">
       <element name="Fontface">
          <a:documentation>Switch to another font family.</a:documentation>
@@ -2076,46 +2085,55 @@
    </define>
    <define name="e_LoadFontfile">
       <element name="LoadFontfile">
-         <a:documentation>Load a font file (.otf, .ttf, .pfb) and associate it with an internal name.</a:documentation>
-         <attribute name="name">
-            <a:documentation>The internal name of the font file. To be used within DefineFontfamily.</a:documentation>
-         </attribute>
-         <attribute name="filename">
-            <a:documentation>The name (with extension) of the font file.</a:documentation>
-         </attribute>
-         <optional>
-            <attribute name="marginprotrusion">
-               <a:documentation>The amount of protrusion glyphs like -, . and - stick into the right margin. Highly font dependent. Defaults to 0.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="oldstylefigures">
-               <a:documentation>Use oldstyle figures if the font includes them. (OpenType feature »onum«)</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Use oldstyle figures.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Use lining figures.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="smallcaps">
-               <a:documentation>Use small caps glyphs when the font supplies them.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Use small caps for this font.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Don&#39;t switch to small caps (default).</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="space">
-               <a:documentation>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size.</a:documentation>
-            </attribute>
-         </optional>
-         <empty></empty>
+         <a:documentation>Load a font file (.otf, .ttf, .pfb) and associate it with an internal name. If a glyph is not found in the font file, an error will be raised (this can be configured via the Options command). You can specify fallbacks as a child element of Loadfontfile.</a:documentation>
+         <interleave>
+            <group>
+               <attribute name="name">
+                  <a:documentation>The internal name of the font file. To be used within DefineFontfamily.</a:documentation>
+               </attribute>
+               <attribute name="filename">
+                  <a:documentation>The name (with extension) of the font file.</a:documentation>
+               </attribute>
+               <optional>
+                  <attribute name="marginprotrusion">
+                     <a:documentation>The amount of protrusion glyphs like -, . and - stick into the right margin. Highly font dependent. Defaults to 0.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="oldstylefigures">
+                     <a:documentation>Use oldstyle figures if the font includes them. (OpenType feature »onum«)</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Use oldstyle figures.</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Use lining figures.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="smallcaps">
+                     <a:documentation>Use small caps glyphs when the font supplies them.</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Use small caps for this font.</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Don&#39;t switch to small caps (default).</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="space">
+                     <a:documentation>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <oneOrMore>
+                     <ref name="e_Fallback"></ref>
+                  </oneOrMore>
+               </optional>
+            </group>
+            <ref name="foreign-nodes"></ref>
+         </interleave>
       </element>
    </define>
    <define name="e_Layout">

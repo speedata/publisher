@@ -2644,6 +2644,38 @@
       <cmd name="SaveDataset"/>
     </seealso>
   </command>
+  <command en="Fallback" since="3.7.7">
+    <description xml:lang="en">
+      <para>Define a fallback for <cmd name="LoadFontfile"/></para>
+    </description>
+    <description xml:lang="de">
+      <para>Definiere ein Fallback für <cmd name="LoadFontfile"/></para>
+    </description>
+    <childelements></childelements>
+    <attribute en="filename" optional="no" type="text">
+      <description xml:lang="en">
+        <para>The filename of the font to be used as a fallback.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Dateiname der Schriftart, die als Fallback benutzt werden soll.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<LoadFontfile name="zh" filename="Microsoft JhengHei.ttf" >
+  <Fallback filename="texgyreheros-regular.otf" />
+  <Fallback filename="ZapfDingbats.ttf" />
+</LoadFontfile>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<LoadFontfile name="zh" filename="Microsoft JhengHei.ttf" >
+  <Fallback filename="texgyreheros-regular.otf" />
+  <Fallback filename="ZapfDingbats.ttf" />
+</LoadFontfile>
+]]></listing>
+    </example>
+    <seealso><cmd name="LoadFontfile"/></seealso>
+  </command>
   <command en="Fontface">
     <description xml:lang="en">
       <para>Switch to another font family.</para>
@@ -3845,12 +3877,18 @@
   </command>
   <command en="LoadFontfile">
     <description xml:lang="en">
-      <para>Load a font file (.otf, .ttf, .pfb) and associate it with an internal name.</para>
+      <para>Load a font file (.otf, .ttf, .pfb) and associate it with an internal name. If a glyph is not found in the font file, an error will be raised (this can be configured via the <cmd name="Options"/> command). You can specify fallbacks as a child element of Loadfontfile.</para>
     </description>
     <description xml:lang="de">
-      <para>Der Befehl LoadFontfile weist einer physikalischen Schriftdatei einen internen Namen zu.</para>
+      <para>Der Befehl LoadFontfile weist einer physikalischen Schriftdatei einen internen Namen zu. Wird ein Zeichen in der Schriftart nicht gefunden, erzeugt das Programm eine Fehlermeldung, die mit <cmd name="Options"/> ausgeschaltet werden kann. Alternativ dazu können auch Ersatzschriftarten (mit <cmd name="Fallback"/>) angegeben werden, die nach den fehlenden Zeichen abgesucht werden. </para>
     </description>
-    <childelements/>
+    <childelements>
+      <optional>
+        <oneOrMore>
+          <cmd name="Fallback"/>
+        </oneOrMore>
+      </optional>
+    </childelements>
     <attribute en="name" type="text" optional="no">
       <description xml:lang="en">
         <para>The internal name of the font file. To be used within <cmd name="DefineFontfamily"/>.</para>
@@ -3944,7 +3982,7 @@
       <para>Die Schriftdateien werden aus dem lokalen Suchpfad geladen. Unter Windows wird der Pfad <tt>%WINDIR%\Fonts</tt> (normalerweise <tt>C:\Windows\Fonts</tt>) und auf Mac OS X die Pfade <tt>/Library/Fonts</tt> und <tt>/System/Library/Fonts</tt> können als Ergänzung des lokalen Suchpfads dienen. Das kann mit der Option <tt>fontpath</tt> in der Konfigurationsdatei gesetzt werden.</para>
     </info>
     <seealso>
-      <cmd name="DefineFontfamily"/>, <ref name="fonts"/></seealso>
+      <cmd name="DefineFontfamily"/>, <cmd name="Fallback"/> <ref name="fonts"/></seealso>
   </command>
   <command en="Layout">
     <description xml:lang="en">

@@ -1489,10 +1489,21 @@ function commands.load_fontfile( layoutxml,dataxml )
     local osf              = publisher.read_attribute(layoutxml,dataxml,"oldstylefigures", "boolean")
     local features         = publisher.read_attribute(layoutxml,dataxml,"features",        "rawstring")
 
+    local fallbacks = {}
+    for _,v in ipairs(layoutxml) do
+        if type(v) == "table" then
+            if v[".__name"] == "Fallback" then
+               fallbacks[#fallbacks + 1] = v.filename
+            end
+        end
+    end
+
+
     local extra_parameter = {
-        space            = space      or 25,
+        space            = space or 25,
         marginprotrusion = marginprotrusion or 0,
-        otfeatures    = {
+        fallbacks        = fallbacks,
+        otfeatures       = {
             smcp = smcp == "yes",
             onum = osf == true,
         },
@@ -1500,9 +1511,8 @@ function commands.load_fontfile( layoutxml,dataxml )
     if features then
         for i,v in ipairs(string.explode(features,",")) do
             extra_parameter.otfeatures[v] = true
-         end
-     end
-
+        end
+    end
 
     if publisher.lowercase then filename = unicode.utf8.lower(filename) end
     log("Load Fontfile %q",filename or "?")

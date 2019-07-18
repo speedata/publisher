@@ -33,6 +33,7 @@ ifndef::backend-docbook5[]
 <<cmd-definefontfamily,DefineFontfamily>>  +
 <<cmd-definetextformat,DefineTextformat>>  +
 <<cmd-element,Element>>  +
+<<cmd-fallback,Fallback>>  +
 <<cmd-fontface,Fontface>>  +
 <<cmd-forall,ForAll>>  +
 <<cmd-frame,Frame>>  +
@@ -276,6 +277,12 @@ include::ref/element.adoc[]
 == Siehe auch
 
 Befehle <<cmd-attribute,`Attribute`>>, <<cmd-loaddataset,`LoadDataset`>> und <<cmd-savedataset,`SaveDataset`>> sowie den Abschnitt <<ch-xmlstrukturen,Erzeugen von XML-Strukturen>>.
+
+include::ref/fallback.adoc[]
+
+== Siehe auch
+
+Befehl <<cmd-loadfontfile,`LoadFontfile`>>, Kapitel <<ch-einbindungschriftarten>>.
 
 
 include::ref/fontface.adoc[]

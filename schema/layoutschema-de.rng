@@ -1335,6 +1335,15 @@
          </interleave>
       </element>
    </define>
+   <define name="e_Fallback">
+      <element name="Fallback">
+         <a:documentation>Definiere ein Fallback für LoadFontfile</a:documentation>
+         <attribute name="filename">
+            <a:documentation>Der Dateiname der Schriftart, die als Fallback benutzt werden soll.</a:documentation>
+         </attribute>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Fontface">
       <element name="Fontface">
          <a:documentation>Schaltet vorübergehend auf eine andere Schriftfamilie um.</a:documentation>
@@ -2077,45 +2086,54 @@
    <define name="e_LoadFontfile">
       <element name="LoadFontfile">
          <a:documentation>Der Befehl LoadFontfile weist einer physikalischen Schriftdatei einen internen Namen zu.</a:documentation>
-         <attribute name="name">
-            <a:documentation>Der interne Name, unter dem die Schriftart im Element DefineFontfamily angesprochen wird.</a:documentation>
-         </attribute>
-         <attribute name="filename">
-            <a:documentation>Der Dateiname mit Endung, ohne Pfad.</a:documentation>
-         </attribute>
-         <optional>
-            <attribute name="marginprotrusion">
-               <a:documentation>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark abhängig von der benutzten Schriftart.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="oldstylefigures">
-               <a:documentation>Schalter, ob auf Mediävalziffern umgeschaltet wird (OpenType Feature »onum«).</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Mediävalziffern benutzen.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Normale Ziffern benutzen.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="smallcaps">
-               <a:documentation>Schalter, ob die Schriftart als Kapitälchen dargestellt werden soll.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Kapitälchen benutzen.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Nicht auf Kapitälchen umschalten (Voreinstellung).</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="space">
-               <a:documentation>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße.</a:documentation>
-            </attribute>
-         </optional>
-         <empty></empty>
+         <interleave>
+            <group>
+               <attribute name="name">
+                  <a:documentation>Der interne Name, unter dem die Schriftart im Element DefineFontfamily angesprochen wird.</a:documentation>
+               </attribute>
+               <attribute name="filename">
+                  <a:documentation>Der Dateiname mit Endung, ohne Pfad.</a:documentation>
+               </attribute>
+               <optional>
+                  <attribute name="marginprotrusion">
+                     <a:documentation>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark abhängig von der benutzten Schriftart.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="oldstylefigures">
+                     <a:documentation>Schalter, ob auf Mediävalziffern umgeschaltet wird (OpenType Feature »onum«).</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Mediävalziffern benutzen.</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Normale Ziffern benutzen.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="smallcaps">
+                     <a:documentation>Schalter, ob die Schriftart als Kapitälchen dargestellt werden soll.</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Kapitälchen benutzen.</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Nicht auf Kapitälchen umschalten (Voreinstellung).</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="space">
+                     <a:documentation>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <oneOrMore>
+                     <ref name="e_Fallback"></ref>
+                  </oneOrMore>
+               </optional>
+            </group>
+            <ref name="foreign-nodes"></ref>
+         </interleave>
       </element>
    </define>
    <define name="e_Layout">
