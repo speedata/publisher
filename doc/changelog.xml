@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.7" date="2019-07-18">
+      <en>Fallback for LoadFontfile.</en>
+      <de>Ersatzfonts für LoadFontfile.</de>
+    </entry>
     <entry version="3.7.6" date="2019-07-01">
       <en>Allow elements in Message.</en>
       <de>Elemente in Message erlauben.</de>
