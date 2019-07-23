@@ -2085,7 +2085,7 @@
    </define>
    <define name="e_LoadFontfile">
       <element name="LoadFontfile">
-         <a:documentation>Der Befehl LoadFontfile weist einer physikalischen Schriftdatei einen internen Namen zu.</a:documentation>
+         <a:documentation>Der Befehl LoadFontfile weist einer physikalischen Schriftdatei einen internen Namen zu. Wird ein Zeichen in der Schriftart nicht gefunden, erzeugt das Programm eine Fehlermeldung, die mit Options ausgeschaltet werden kann. Alternativ dazu können auch Ersatzschriftarten (mit Fallback) angegeben werden, die nach den fehlenden Zeichen abgesucht werden.</a:documentation>
          <interleave>
             <group>
                <attribute name="name">
@@ -2190,6 +2190,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Pagetype"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_PlaceObject"></ref>
                   </optional>
                   <optional>
                      <ref name="e_PDFOptions"></ref>
@@ -4647,6 +4650,9 @@
                      <optional>
                         <ref name="e_Switch"></ref>
                      </optional>
+                     <optional>
+                        <ref name="e_ForAll"></ref>
+                     </optional>
                   </interleave>
                </oneOrMore>
             </group>
@@ -5191,6 +5197,9 @@
                         <a:documentation>Die Objekte dieser Zeile werden auf der Mittelachse ausgerichtet.</a:documentation>
                         <value>bottom</value>
                         <a:documentation>Die Objekte dieser Zeile werden am unteren Rand ausgerichtet.</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
                      </choice>
                   </attribute>
                </optional>

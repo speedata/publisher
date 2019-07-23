@@ -2192,6 +2192,9 @@
                      <ref name="e_Pagetype"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_PlaceObject"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_PDFOptions"></ref>
                   </optional>
                   <optional>
@@ -4647,6 +4650,9 @@
                      <optional>
                         <ref name="e_Switch"></ref>
                      </optional>
+                     <optional>
+                        <ref name="e_ForAll"></ref>
+                     </optional>
                   </interleave>
                </oneOrMore>
             </group>
@@ -5191,6 +5197,9 @@
                         <a:documentation>The objects in this row are aligned at the middle axis.</a:documentation>
                         <value>bottom</value>
                         <a:documentation>The objects in this row are aligned at the bottom.</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
                      </choice>
                   </attribute>
                </optional>

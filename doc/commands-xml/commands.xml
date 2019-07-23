@@ -145,6 +145,7 @@
     <optional><cmd name="Options"/></optional>
     <optional><cmd name="Pageformat"/></optional>
     <optional><cmd name="Pagetype"/></optional>
+    <optional><cmd name="PlaceObject"/></optional>
     <optional><cmd name="PDFOptions"></cmd></optional>
     <optional><cmd name="Record"/></optional>
     <optional><cmd name="SetGrid"/></optional>
@@ -7685,6 +7686,7 @@
           <optional><cmd name="Copy-of"/></optional>
           <optional><cmd name="Tr"/></optional>
           <optional><cmd name="Switch"/></optional>
+          <optional><cmd name="ForAll"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>
@@ -8829,7 +8831,7 @@
         <para>Der Leerraum über dieser Zeile, wenn sie nicht die erste Zeile auf einer Seite/Bereich ist</para>
       </description>
     </attribute>
-    <attribute en="valign" optional="yes">
+    <attribute en="valign" optional="yes" allowxpath="yes">
       <description xml:lang="en">
         <para>Vertical alignment of the table cells in this row.</para>
       </description>
