@@ -121,14 +121,17 @@ att_role  = 1000
 origin_table = 1
 origin_vspace = 2
 origin_align_top = 3
-origin_image = 4
+origin_align_bottom = 4
+origin_align_left = 5
+origin_align_right = 6
+origin_image = 7
 
-origin_finishpar = 6
-origin_text = 7
-origin_setcolor = 8
-origin_setcolorifnecessary = 9
-origin_paragraph = 10
-origin_initial = 11
+origin_finishpar = 20
+origin_text = 21
+origin_setcolor = 22
+origin_setcolorifnecessary = 23
+origin_paragraph = 24
+origin_initial = 25
 
 user_defined_addtolist = 1
 user_defined_bookmark  = 2
@@ -3660,15 +3663,20 @@ end
 --- Rotate a table cell clockwise with a given angle (in degrees).
 -- This is a simple and very basic implementation which needs to be extended in the future.
 function rotateTd( nodelist,angle, width_sp)
+    if angle % 360 == 0 then return nodelist end
+
     -- positive would be counter clockwise, but CSS is clockwise. So we multiply by -1
     local angle_rad = -1 * math.rad(angle)
 
+    -- With multi paragraph table cells it is easier if we have only one node to deal with.
+    if nodelist.next then
+        nodelist = node.vpack(nodelist)
+    end
+
     -- When text is rotated, it needs to get shifted to the right and to the bottom
-    local shift_x, shift_y = 0,0
     local _wd,_ht,_dp = nodelist.width, nodelist.height,nodelist.depth
     local ht = _ht + _dp
 
-    shift_y = -1 * sp_to_bp(ht - ht * math.cos(angle_rad)  )
     nodelist.width = 0
     nodelist.height = 0
     nodelist.depth = 0
@@ -3678,8 +3686,23 @@ function rotateTd( nodelist,angle, width_sp)
 
     local q = node.new("whatsit","pdf_literal")
     q.mode = 0
-    q.data = string.format("q %g %g %g %g %g %g cm ",cos,sin, -1 * sin,cos,shift_x,shift_y)
 
+    local shift_x, shift_y
+
+    local shift_x_wd = cos * _wd
+    local shift_x_ht = sin * ht
+    if shift_x_wd > 0 then shift_x_wd = 0 end
+    if shift_x_ht > 0 then shift_x_ht = 0 end
+
+    local shift_y_wd = -1 * sin * _wd
+    local shift_y_ht = cos * ht
+    if shift_y_wd > 0 then shift_y_wd = 0 end
+    if shift_y_ht > 0 then shift_y_ht = 0 end
+
+    shift_x =  sp_to_bp( shift_x_ht + shift_x_wd) * -1
+    shift_y =  sp_to_bp( shift_y_ht + shift_y_wd)
+
+    q.data = string.format("q %g %g %g %g %g %g cm ",cos,sin, -1 * sin,cos,shift_x,shift_y)
     local Q = node.new("whatsit","pdf_literal")
     Q.data = "Q"
 
@@ -3687,9 +3710,10 @@ function rotateTd( nodelist,angle, width_sp)
     _,Q = node.insert_after(q,nodelist,Q)
     q = node.vpack(q)
 
-    q.width  = _wd
-    q.height = _ht
+    q.width  = math.abs(_wd * cos) + math.abs(_ht * sin)
+    q.height = math.abs(_ht * cos) + math.abs(_wd * sin)
     q.depth  = _dp
+
     return q
 end
 
