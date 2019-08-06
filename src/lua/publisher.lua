@@ -947,7 +947,7 @@ function initialize_luatex_and_generate_pdf()
     -- Subject  The subject of the document.
     -- Keywords  Keywords associated with the document.
     local creator = getcreator()
-    local infos = { string.format("/Creator (%s)",creator) }
+    local infos = { string.format("/Creator (%s) /Producer (LuaTeX %d - %s)",creator, status.luatex_version or -1, status.development_id or "-") }
 
     if options.documenttitle and options.documenttitle ~= "" then
         infos[#infos + 1] = string.format("/Title %s",utf8_to_utf16_string_pdf(options.documenttitle))
