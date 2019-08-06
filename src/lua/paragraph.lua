@@ -117,28 +117,25 @@ function Paragraph:min_width(textfomat_name)
     return max
 end
 
+-- To get the maximum width of a paragraph we format the nodelist
+-- with the maximum paragraph width (maxdimen) and find out how large
+-- the resulting nodelist is.
+--
+-- Before that we just used node.dimensions, which seems to be inaccurate.
 function Paragraph:max_width()
-    assert(self)
-    local objects = {}
-    local head = self.nodelist
-    local firstglyph = head
-    while head do
-        if node.has_attribute(head,publisher.att_newline,1) then
-            if firstglyph ~= head then
-                objects[#objects + 1] = node.copy_list(firstglyph,head)
-            end
-            firstglyph = head.next
-        end
-        head = head.next
-    end
-    objects[#objects + 1] = node.copy_list(firstglyph,head)
+    local cp_nodelist = node.copy_list(self.nodelist)
+    local cp_textformat = self.textformat
+    self.textformat = "__leftaligned"
+    local nl = self:format(publisher.maxdimen)
+    self.textformat = cp_textformat
+    self.nodelist = cp_nodelist
     local maxwd = 0
-    local wd
-    for i,v in ipairs(objects) do
-        local wd = node.dimensions(v)
+    local hlist = nl.head
+    while hlist do
+        wd,_,_ = node.dimensions(hlist.head, node.tail(hlist.head))
         maxwd = math.max(maxwd,wd)
+        hlist = hlist.next
     end
-
     return maxwd
 end
 

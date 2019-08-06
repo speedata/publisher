@@ -601,12 +601,15 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
                             end
                         end
                         publisher.set_fontfamily_if_necessary(inlineobject.nodelist,self.fontfamily)
+                        local angle_rad = -1 * math.rad(blockobjects.rotate or 0)
+                        local sin_angle = math.sin( angle_rad )
                         local format_width = width
-                        if rotate and rotate ~= 0 then
-                            -- FIXME: calculate correct width
-                            local angle_rad = -1 * math.rad(blockobjects.rotate or 0)
-                            format_width = math.max(math.min(inlineobject:max_width(),width), inlineobject:max_width() * math.sin( angle_rad ))
+                        if sin_angle ~= 0 then
+                            -- The width is not 100% accurate yet. Multi-line paragraphs for example
+                            -- are not yet taken into account.
+                            format_width = math.max(format_width, inlineobject:max_width() * sin_angle )
                         end
+
                         local v = inlineobject:format(format_width,default_textformat_name)
                         cell = node.insert_after(cell,node.tail(cell),v)
                     else
