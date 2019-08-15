@@ -260,24 +260,6 @@ local function even(dataxml, arg )
   return math.fmod(arg[1],2) == 0
 end
 
-local function groupwidth(dataxml, arg )
-  publisher.setup_page(nil,"layout_functions#groupwidth")
-  local groupname=arg[1]
-  if not publisher.groups[groupname] then
-    err("Can't find group with the name %q",groupname)
-    return 0
-  end
-  local groupcontents=publisher.groups[groupname].contents
-
-  if not groupcontents then
-    err("Can't find group with the name %q",groupname)
-    return 0
-  end
-
-  local width = publisher.current_grid:width_in_gridcells_sp(groupcontents.width)
-  return width
-end
-
 local function current_frame_number(dataxml,arg)
   publisher.setup_page(nil,"layout_functions#current_framenumber")
   local framename = arg[1]
@@ -315,12 +297,47 @@ local function groupheight(dataxml, arg )
         end
         return math.round(ret, 4)
     else
-
         local grid = publisher.current_grid
         height = grid:height_in_gridcells_sp(groupcontents.height)
         return height
     end
 end
+
+local function groupwidth(dataxml, arg )
+  publisher.setup_page(nil,"layout_functions#groupwidth")
+  local groupname=arg[1]
+  if not publisher.groups[groupname] then
+    err("Can't find group with the name %q",groupname)
+    return 0
+  end
+  local groupcontents=publisher.groups[groupname].contents
+
+  if not groupcontents then
+    err("Can't find group with the name %q",groupname)
+    return 0
+  end
+  local unit = arg[2]
+  local width
+  if unit then
+      width = groupcontents.width
+      local ret
+      if unit == "cm" then
+          ret = width / publisher.tenmm_sp
+      elseif unit == "mm" then
+          ret = width / publisher.onemm_sp
+      elseif unit == "in" then
+          ret = width / publisher.onein_sp
+      else
+          err("unsupported unit: %q",unit)
+      end
+      return math.round(ret, 4)
+  else
+      local grid = publisher.current_grid
+      width = grid:width_in_gridcells_sp(groupcontents.width)
+      return width
+  end
+end
+
 
 local function odd(dataxml, arg )
     local num = arg[1]

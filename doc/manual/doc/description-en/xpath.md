@@ -89,7 +89,7 @@ sd:format-number(Number or string, thousands separator, comma separator) | Forma
 sd:format-string(object, object, ... ,formatting instructions) | Return a text string with the objects formatted as given by the formatting instructions. These instructions are the same as the instructions by the C function `printf()`.
 sd:even(\<number\>) | True if number is even. Example: `sd:even(sd:current-page())`
 sd:odd(\<number\>) | True if number is odd.
-sd:group-width(\<string\>) | Return the number of gridcells of the given group’s width. The argument must be the name of an existing group. Example: `sd:group-width('My group')`
+sd:group-width(\<string\>[, \<unit\>]) | Return the number of gridcells of the given group’s width. The argument must be the name of an existing group. Example: `sd:group-width('My group')`. See `sd:group-height()` for description of the second parameter.
 sd:group-height(\<string\>[, \<unit\>]) | Return the given group’s height (in gridcells). See `sd:group-width(...)` If provided with an optional second argument, it returns the height of the group in multiples of this unit. For example `sd:group-height('mygroup', 'in')` returns the group height in inches.
 sd:pagenumber(\<string\>) | Get the number of the page where the given mark is placed on. See the command [Mark](../commands-en/mark.html).
 sd:randomitem(\<Value\>,\<Value\>, …) | Return one of the values.

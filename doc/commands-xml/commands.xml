@@ -92,6 +92,7 @@
     <optional><cmd name="Options"/></optional>
     <optional><cmd name="Output"/></optional>
     <optional><cmd name="Pagetype"/></optional>
+    <optional><cmd name="Pageformat"/></optional>
     <optional><cmd name="PDFOptions"/></optional>
     <optional><cmd name="PlaceObject"/></optional>
     <optional><cmd name="ProcessNode"/></optional>

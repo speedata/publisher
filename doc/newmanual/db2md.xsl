@@ -338,9 +338,9 @@
   </xsl:template>
 
   <xsl:template match="varlistentry/listitem">
-    <xsl:text><![CDATA[<dd>{{% markdownify %}}]]></xsl:text>
+    <xsl:text><![CDATA[<dd><p>{{% markdownify %}}]]></xsl:text>
     <xsl:apply-templates />
-    <xsl:text><![CDATA[{{% /markdownify %}}</dd>]]></xsl:text>
+    <xsl:text><![CDATA[{{% /markdownify %}}</p></dd>]]></xsl:text>
   </xsl:template>
 
 
