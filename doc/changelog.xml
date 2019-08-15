@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.8" date="2019-08-15">
+      <en>sd:group-width() now has a second parameter for get the exact width, just as sd:group-height().</en>
+      <de>sd:group-width() hat einen zweiten Parameter um die exakte Breite zu erhalten, genau wie sd:group-height().</de>
+    </entry>
+    <entry version="3.7.8" date="2019-08-15">
+      <en>Allow re-setting the page dimensions.</en>
+      <de>Papierformat kann erneut gesetzt werden.</de>
+    </entry>
+    <entry version="3.7.8" date="2019-08-15">
+      <en>Better rotation in table cells.</en>
+      <de>Drehung in Tabellenzellen verbessert.</de>
+    </entry>
     <entry version="3.7.7" date="2019-07-18">
       <en>Fallback for LoadFontfile.</en>
       <de>Ersatzfonts für LoadFontfile.</de>
