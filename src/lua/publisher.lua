@@ -4019,15 +4019,8 @@ end
 function set_pageformat( wd,ht )
     options.pagewidth    = wd
     options.pageheight  = ht
-    tex.pdfpagewidth =  wd
-    tex.pdfpageheight = ht
-    -- why the + 2cm? is this for the trim-/art-/bleed box? FIXME: document
-    tex.pdfpagewidth  = tex.pdfpagewidth   + 2 * tenmm_sp
-    tex.pdfpageheight = tex.pdfpageheight  + 2 * tenmm_sp
-
-    -- necessary? FIXME: check if necessary.
-    tex.hsize = wd
-    tex.vsize = ht
+    tex.pagewidth =  wd
+    tex.pageheight = ht
 end
 
 -- Return remaining height (sp), first row, last row

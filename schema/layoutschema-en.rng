@@ -123,6 +123,9 @@
                      <ref name="e_Pagetype"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Pageformat"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_PDFOptions"></ref>
                   </optional>
                   <optional>
@@ -229,6 +232,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Pagetype"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Pageformat"></ref>
                   </optional>
                   <optional>
                      <ref name="e_PDFOptions"></ref>
@@ -964,6 +970,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Pagetype"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Pageformat"></ref>
                   </optional>
                   <optional>
                      <ref name="e_PDFOptions"></ref>
@@ -3991,6 +4000,9 @@
                      <ref name="e_Pagetype"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Pageformat"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_PDFOptions"></ref>
                   </optional>
                   <optional>
@@ -4195,6 +4207,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Pagetype"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Pageformat"></ref>
                      </optional>
                      <optional>
                         <ref name="e_PDFOptions"></ref>
