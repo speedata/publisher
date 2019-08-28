@@ -160,6 +160,10 @@
         </xsl:result-document>
         <xsl:apply-templates select="." mode="toc"/>
       </xsl:when>
+      <xsl:when test="@role = 'epub'">
+        <xsl:text>{{% epub %}}</xsl:text>
+        <xsl:apply-templates/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates/>
       </xsl:otherwise>

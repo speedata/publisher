@@ -20,6 +20,12 @@ ifdef::backend-docbook5[]
 [preface]
 = speedata Publisher: Anwendung und Referenz
 
+ifdef::epub[]
+Diese Anleitung beschreibt den speedata Publisher in der Version {version}. Das aktuelle ebook gibt es immer unter https://doc.speedata.de/publisher/de/ zu finden.
+endif::[]
+
+
+[.epub]
 
 == Einführung und Grundlagen
 
@@ -45,7 +51,9 @@ ifdef::backend-docbook5[]
 - <<app-massangaben,Längenangaben und Maßeinheiten>>
 - <<ch-xpathfunktionen,XPath- und Layoutfunktionen>>
 - <<ch-internevariablen,Interne Variablen>>
+ifndef::epub[]
 - <<ch-changelog,Liste der Änderungen>>
+endif::[]
 - <<app-glossar,Glossar>>
 - <<ch-befehlsreferenz,Befehlsreferenz>>
 
@@ -73,7 +81,9 @@ include::konfigurationsdatei.adoc[]
 include::massangaben.adoc[]
 include::xpathfunktionen.adoc[]
 include::variablen.adoc[]
+ifndef::epub[]
 include::changelog.adoc[]
+endif::[]
 include::glossar.adoc[]
 
 [appendix]

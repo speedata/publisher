@@ -205,7 +205,6 @@ func builddoc(c *commandsxml.Commands, v *commandsxml.Command, version string, l
 	f, err := os.OpenFile(fullpath, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
 	if err != nil {
 		panic(err)
-		return
 	}
 	err = templates.ExecuteTemplate(f, "command.html", sdata{Commands: c, Command: v, Lang: lang, Publisherversion: version})
 	if err != nil {

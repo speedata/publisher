@@ -105,9 +105,8 @@ Das Verzeichnis mit der PDF-Datei wird nach diesem Request gelöscht, es sei den
 
 == `/v0/pdf/<id>`
 
-Ein GET-Request mit der id aus dem POST-Request von `/v0/publish`. Es wird im Erfolgsfall die PDF-Datei mit dem Statuscode 200 und dem Dateinamen `publisher.pdf` zurückgegeben. Der Request wartet auf die Fertigstellung des Publishing Prozesses. Im Fehlerfall wird nur ein Fehlercode zurück gegeben:
+Ein GET-Request mit der id aus dem POST-Request von `/v0/publish`. Es wird im Erfolgsfall die PDF-Datei mit dem Statuscode 200 und dem Dateinamen `publisher.pdf` zurückgegeben. Der Request wartet auf die Fertigstellung des Publishing Prozesses. Im Fehlerfall wird nur ein Fehlercode zurück gegeben (Rückgabewert und Beschreibung):
 
-.Rückgabewert und Beschreibung
 200 OK::
    PDF wurde fehlerfrei generiert
 

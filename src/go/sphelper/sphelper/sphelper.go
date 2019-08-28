@@ -16,6 +16,7 @@ import (
 	"sphelper/buildsp"
 	"sphelper/config"
 	"sphelper/dirstructure"
+	"sphelper/epub"
 	"sphelper/genschema"
 	"sphelper/gomddoc"
 	"sphelper/htmldoc"
@@ -32,15 +33,24 @@ var (
 // sitedoc: make hugo without ugly URLs
 func makedoc(cfg *config.Config, sitedoc bool) error {
 	os.RemoveAll(filepath.Join(cfg.Builddir, "manual"))
-	err := gomddoc.DoThings(cfg)
+	var err error
+	// English markdown to html
+	err = gomddoc.DoThings(cfg)
 	if err != nil {
 		return err
 	}
+	// command reference from commands.xml
 	err = htmldoc.DoThings(cfg)
 	if err != nil {
 		return err
 	}
+	// The hugo documentation (currently German only)
 	err = newdoc.DoThings(cfg, sitedoc)
+	if err != nil {
+		return err
+	}
+	// Let's try to generate an EPUB
+	err = epub.DoThings(cfg)
 	if err != nil {
 		return err
 	}
@@ -57,6 +67,7 @@ func main() {
 	op.Command("buildlib", "Build sp library")
 	op.Command("builddeb", "Build sp binary for debian (/usr/)")
 	op.Command("doc", "Generate speedata Publisher documentation")
+	op.Command("epub", "Generate EPUB documentation (German only)")
 	op.Command("sitedoc", "Generate speedata Publisher documentation without ugly URLs for Hugo")
 	op.Command("dist", "Generate zip files and windows installers")
 	op.Command("genschema", "Generate schema (layoutschema-en.xml)")
@@ -106,7 +117,11 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-
+	case "epub":
+		err = epub.DoThings(cfg)
+		if err != nil {
+			log.Fatal(err)
+		}
 	case "sitedoc":
 		err = makedoc(cfg, true)
 		if err != nil {

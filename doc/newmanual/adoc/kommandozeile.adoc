@@ -86,7 +86,7 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
 `--timeout=SEC`::
    Beendet den Lauf nach SEC Sekunden mit Statuscode 1, sofern er nicht vorher fertig ist.
 `-v`, `--var=value`::
-   Übergibt zusätzliche Variablen an den Publisher-Lauf. Diese können wie üblich mit `select="$variable"` benutzt werden.
+   Übergibt zusätzliche Variablen an den Publisher-Lauf. Diese können wie üblich mit `select="$variable"` benutzt werden. Beispiel: `sp --var myvar=hello` setzt `$myvar` auf `hello`.
 `--varsfile=NAME` ::
    Liest eine Datei ein, in der in jeder Zeile in der Form `variable=wert` Variablen definiert werden.
 `--verbose`::

@@ -744,12 +744,12 @@ image::21-overlay.png[width=50%,scaledwidth=100%]
 
 In der Regel benutzt eine Tabelle erst den ersten Positionierungsrahmen eines Bereichs, dann den nächsten etc.
 
-image::ch-tab-tables-notbalanced.svg[width=50%,scaledwidth=100%]
+image::ch-tab-tables-notbalanced.png[width=50%,scaledwidth=100%]
 
 
 Schaltet man nun bei `<Table balance="yes">`, so wird die Tabelle wie folgt ausgegeben:
 
-image::ch-tab-tables-balanced.svg[width=50%,scaledwidth=100%]
+image::ch-tab-tables-balanced.png[width=50%,scaledwidth=100%]
 
 
 Damit das funktioniert, muss die Tabelle in einem Platzierungsbereich ausgegeben werden, nicht auf einer Seite. Die Anzahl der Spalten, auf die ausgeglichen werden soll, bestimmt sich durch die Anzahl der Platzierungsrahmen, die der Bereich enthält. Hier ein konkretes Beispiel:

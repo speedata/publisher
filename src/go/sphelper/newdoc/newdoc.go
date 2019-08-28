@@ -145,7 +145,18 @@ func atttypeinfo(att *commandsxml.Attribute, lang string) string {
 	return string(strings.Join(ret, ", "))
 }
 
-func DoThings(cfg *config.Config, sitedoc bool) error {
+// Read the commands.xml file and create the files in the ref directory. The result of this function
+// is the file commands.xml
+func GenerateAdocFiles(cfg *config.Config, mode ...string) error {
+	var err error
+	srcpath := filepath.Join(cfg.Basedir(), "doc", "newmanual")
+	destpath := filepath.Join(cfg.Builddir, "newdoc", "newmanual", "adoc")
+
+	err = os.RemoveAll(destpath)
+	if err != nil {
+		return err
+	}
+
 	r, err := os.Open(filepath.Join(cfg.Basedir(), "doc", "commands-xml", "commands.xml"))
 	if err != nil {
 		return err
@@ -158,14 +169,8 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 	for _, cmd := range c.CommandsEn {
 		cmd.Childelements("en")
 	}
-	newmanualsourcepath := filepath.Join(cfg.Basedir(), "doc", "newmanual")
-	newmanualdestpath := filepath.Join(cfg.Builddir, "newdoc", "newmanual")
-	newmanualadocpath := filepath.Join(newmanualdestpath, "adoc")
-	newmanualhugopath := filepath.Join(newmanualdestpath, "hugo")
 
-	os.RemoveAll(newmanualdestpath)
-
-	refdir := filepath.Join(newmanualsourcepath, "adoc", "ref")
+	refdir := filepath.Join(srcpath, "adoc", "ref")
 	err = os.MkdirAll(refdir, 0755)
 	if err != nil {
 		return err
@@ -179,7 +184,7 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 		"sortedcommands": sortedcommands,
 		"atttypeinfo":    atttypeinfo,
 	}
-	templates, err = template.New("").Funcs(funcMap).ParseFiles(filepath.Join(newmanualsourcepath, "templates", "command.txt"))
+	templates, err = template.New("").Funcs(funcMap).ParseFiles(filepath.Join(srcpath, "templates", "command.txt"))
 	if err != nil {
 		return err
 	}
@@ -191,26 +196,50 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 	}
 	wg.Wait()
 
-	// Copy the adoc and hugo files from the main dir into the build dir.
-	// In the adoc path we add the reference files from commands.xml (subdir ref),
-	// then build the docbook file and finally create the hugo site from the docbook file.
-	fileutils.CpR(filepath.Join(newmanualsourcepath, "adoc"), newmanualadocpath)
-	fileutils.CpR(filepath.Join(newmanualsourcepath, "hugo"), newmanualhugopath)
-	fileutils.CpR(filepath.Join(newmanualadocpath, "img"), filepath.Join(newmanualhugopath, "static", "img"))
-
-	adocfile, err := filepath.Abs(filepath.Join(newmanualadocpath, "publisherhandbuch.adoc"))
+	fileutils.CpR(filepath.Join(srcpath, "adoc"), destpath)
+	adocfile, err := filepath.Abs(filepath.Join(destpath, "publisherhandbuch.adoc"))
 	if err != nil {
 		return err
 	}
 	var cmd *exec.Cmd
-
-	cmd = exec.Command("asciidoctor", "-b", "docbook", adocfile, "-D", cfg.Builddir)
+	cmdline := []string{"-b", "docbook", adocfile, "-D", cfg.Builddir}
+	for len(mode) > 0 {
+		cmdline = append(cmdline, "-a", mode[0])
+		mode = mode[1:]
+	}
+	cmd = exec.Command("asciidoctor", cmdline...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func DoThings(cfg *config.Config, sitedoc bool) error {
+	var err error
+	newmanualsourcepath := filepath.Join(cfg.Basedir(), "doc", "newmanual")
+	newmanualdestpath := filepath.Join(cfg.Builddir, "newdoc", "newmanual")
+	newmanualadocpath := filepath.Join(newmanualdestpath, "adoc")
+
+	err = os.RemoveAll(newmanualdestpath)
+	if err != nil {
+		return err
+	}
+
+	err = GenerateAdocFiles(cfg)
+	if err != nil {
+		return err
+	}
+
+	// Copy the adoc and hugo files from the main dir into the build dir.
+	// In the adoc path we add the reference files from commands.xml (subdir ref),
+	// then build the docbook file and finally create the hugo site from the docbook file.
+	newmanualhugopath := filepath.Join(newmanualdestpath, "hugo")
+	fileutils.CpR(filepath.Join(newmanualsourcepath, "hugo"), newmanualhugopath)
+	fileutils.CpR(filepath.Join(newmanualadocpath, "img"), filepath.Join(newmanualhugopath, "static", "img"))
+
 	newmanualhugopath, err = filepath.Abs(newmanualhugopath)
 	if err != nil {
 		return err
@@ -224,7 +253,7 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 		return err
 	}
 
-	cmd = exec.Command("java", "-jar", filepath.Join(cfg.Basedir(), "lib", "saxon9804he.jar"), fmt.Sprintf("-xsl:%s", xsltfile), "-o:publisherhandbuch.txt", docbookfile, fmt.Sprintf("outputdir=file:%s", newmanualhugopath), fmt.Sprintf("version=%s", cfg.Publisherversion))
+	cmd := exec.Command("java", "-jar", filepath.Join(cfg.Basedir(), "lib", "saxon9804he.jar"), fmt.Sprintf("-xsl:%s", xsltfile), "-o:publisherhandbuch.txt", docbookfile, fmt.Sprintf("outputdir=file:%s", newmanualhugopath), fmt.Sprintf("version=%s", cfg.Publisherversion))
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()
@@ -245,7 +274,8 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 		return err
 	}
 	defer clw.Close()
-	fmt.Fprintln(clw, "+++\ntitle = \"Changelog\"\n+++\n")
+	fmt.Fprintln(clw, "+++\ntitle = \"Changelog\"\n+++")
+	fmt.Fprintln(clw)
 	fmt.Fprintln(clw, "\n#", translate("de", "Changelog"))
 
 	type release struct {
@@ -283,7 +313,8 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 			}
 			fmt.Fprintln(clw, "</ul>")
 		}
-		fmt.Fprintln(clw, "</dl>\n")
+		fmt.Fprintln(clw, "</dl>")
+		fmt.Fprintln(clw)
 	}
 	fmt.Println("generating doc")
 	cmd = exec.Command("hugo")
@@ -316,7 +347,6 @@ func builddoc(c *commandsxml.Commands, v *commandsxml.Command, lang string, full
 	f, err := os.Create(fullpath)
 	if err != nil {
 		panic(err)
-		return
 	}
 	err = templates.ExecuteTemplate(f, "command.txt", sdata{Commands: c, Command: v, Lang: lang})
 	if err != nil {

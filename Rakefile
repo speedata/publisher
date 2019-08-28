@@ -62,6 +62,12 @@ task :buildlib => [:sphelper] do
 	FileUtils.cp_r("#{builddir}/dylib/.","#{installdir}/lib/")
 end
 
+desc "Generate EPUB only"
+task :epub => [:sphelper] do
+	sh "#{installdir}/bin/sphelper epub"
+	puts "done"
+end
+
 desc "Generate documentation"
 task :doc => [:sphelper] do
 	sh "#{installdir}/bin/sphelper doc"
