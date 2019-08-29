@@ -1,5 +1,5 @@
 <div class="quoteblock">
-<blockquote>{{ .Inner}}</blockquote>
+<blockquote>{{ .Inner | markdownify}}</blockquote>
 <div class="attribution">
 — {{ .Get "attribution"}}
 </div>

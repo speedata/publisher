@@ -8874,7 +8874,7 @@
 </Tr>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Tr minheight"8mm" backgroundcolor="yellow">
+      <listing><![CDATA[<Tr minheight="8mm" backgroundcolor="yellow">
   <Td align="center"><Paragraph><Value>4</Value></Paragraph></Td>
   <Td><Paragraph><Value>Borussia Dortmund</Value></Paragraph></Td>
   <Td align="center"><Paragraph><Value>45</Value></Paragraph></Td>
