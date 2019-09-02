@@ -29,9 +29,9 @@ erkannt. Folgende Optionen werden unterstützt:
 `cache`::
   Caching-Strategie für http(s) Dateien. Entweder `fast`, dann wird nur geschaut, ob die Datei im Dateisystem vorhanden ist oder `optimal`, dann wird bei jedem Zugriff auf die Datei geprüft, ob sie aktualisiert werden muss.
 `data`::
-  Name der XML-Daten. Wenn nicht vorhanden, wird die Datei `daten.xml` geladen.
+  Name der XML-Daten. Wenn nicht vorhanden, wird die Datei `data.xml` geladen.
 `dummy`::
-  Wenn `true`, dann wird die Datendatei nicht eingelesen. Anstatt dessen wird wird der folgende Inhalt angenommen: `<data />`. Das dient zum einfachen Testen von Layoutregelwerken.
+  Wenn `true`, dann wird die Datendatei nicht eingelesen. Anstatt dessen wird wird der folgende Inhalt angenommen: `<data />`. Das dient zum einfachen Testen von Layoutregelwerken. Es muss also ein `<Record element="data">` im Layout vorhanden sein.
 `extra-dir`::
   Ein Verzeichnis im Dateisystem, das Dateien für den Publisherlauf enthält. Dazu gehören die Schriftdateien, die XML-Dateien (Daten und Layoutregelwerk) sowie die einzubindenden Bilddateien. Sollen mehrere Verzeichnisse hinzugefügt werden, müssen diese mit `:` oder `;` getrennt werden, je nach Betriebssystem (Windows: `;`, alle anderen: `:`). Das aktuelle Verzeichnis wird automatisch eingebunden. Beispiel unter Windows: `extra-dir=c:\myfonts`.
 `extraxml`::
@@ -65,7 +65,7 @@ erkannt. Folgende Optionen werden unterstützt:
 `tempdir` ::
   Name des temporären Verzeichnisses. Voreinstellung ist die des Systems.
 `timeout`::
-  Maximale Dauer des Publishing-Laufs. Wenn dieser Wert überschritten wird, bricht der Lauf mit Fehler 1 ab.
+  Maximale Dauer des Publishing-Laufs. Wenn dieser Wert überschritten wird, bricht der Lauf mit Fehler 1 ab. Angabe in Sekunden.
 `vars`::
   Kommaseparierte Liste der Form `var=wert` um Variablen in der Konfigurationsdatei festzulegen.
 

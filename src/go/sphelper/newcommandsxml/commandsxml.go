@@ -1029,7 +1029,7 @@ func (c *Command) ExampleAdoc(lang string) string {
 					panic(err)
 				}
 				ret = append(ret, "\n")
-				ret = append(ret, p.HTML(lang))
+				ret = append(ret, p.Adoc(lang))
 				ret = append(ret, "\n")
 			}
 		case xml.CharData:

@@ -8940,7 +8940,7 @@
     <Transformation matrix="1 0 0 1 72 -72">
       <Transformation matrix="1 0 0 0.5 0 0" origin-x="100">
         <Transformation matrix="1 1 -1 1 0 0">
-          <Image file="_samplea.pdf" maxwidth="4" maxheight"4"></Bild>
+          <Image file="_samplea.pdf" maxwidth="4" maxheight="4" />
         </Transformation>
       </Transformation>
     </Transformation>

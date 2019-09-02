@@ -5,59 +5,39 @@
 Längenangaben im Layoutregelwerk können in den Folgenden Einheiten angegeben werden: `pp`, `pc`, `in`, `pt`, `cm`, `mm`, `dd`, `cc`.
 Ist die Zahl ohne Einheit, so wird in der Regel die Anzahl an Rasterzellen genommen.
 
-pp::
-  Pica Punkt
 
-pc::
-  Pica (12 pp)
+[options="header"]
+|=======
+| Einheit | Beschreibung
+| pp |  Pica Punkt
+| pc |  Pica (12 pp)
+| in |  Zoll / Inch (72.27 pp)
+| pt |  DTP-Punkt (72 pt = 1 in)
+| cm |  Zentimeter
+| mm |  Millimeter
+| dd |  Didot Punkte
+| cc | Cicero (12 dd)
+|=======
 
-in::
-  Zoll / Inch (72.27 pp)
-
-pt::
-  DTP-Punkt (72 pt = 1 in)
-
-cm::
-  Zentimeter
-
-mm::
-  Millimeter
-
-dd::
-  Didot Punkte
-
-cc::
- Cicero (12 dd)
+// Ende
 
 [discrete]
 == Umrechnungen
 
+Die Punkt-Größe orientiert sich an den PDF-Einheiten (1 DTP-Punkt ist 1/72 Zoll).
 
-1 Pica-Punkt::
-  0,35147 mm
-
-1 Pica-Punkt::
-  1/72,27 Zoll
-
-1 Pica-Punkt::
-  0.013837 Zoll
-
-1 Pica-Punkt::
-  0,93457 Didot-Punkt
-
-1 Pica::
-  4,2176 mm
-
-1 Pica::
-  1/6 inch
-
-1 Pica::
-  12 Pica Punkt
-
-1 DTP-Punkt::
-  1,00375001 Pica Point (Pica-Punkt) = 1pt
-
-1 mm::
-  0,237 Pica = 2,845 Pica-Punkt
+[options="header"]
+|=======
+| Einheit | Beschreibung
+| 1 Pica-Punkt |  0,35147 mm
+| 1 Pica-Punkt |  1/72,27 Zoll
+| 1 Pica-Punkt |  0.013837 Zoll
+| 1 Pica-Punkt |  0,93457 Didot-Punkt
+| 1 Pica |  4,2176 mm
+| 1 Pica |  1/6 inch
+| 1 Pica |  12 Pica Punkt
+| 1 DTP-Punkt |  1,00375001 Pica Point (Pica-Punkt) = 1pt
+| 1 mm |  0,237 Pica = 2,845 Pica-Punkt
+|=======
 
 // Ende

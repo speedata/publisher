@@ -11,6 +11,11 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/alecthomas/chroma"
+	"github.com/alecthomas/chroma/formatters/html"
+	"github.com/alecthomas/chroma/lexers"
+	"github.com/alecthomas/chroma/styles"
 )
 
 type titleSubtitles struct {
@@ -29,10 +34,12 @@ var (
 	enc         *xml.Encoder
 	fileEnc     *xml.Encoder
 	extension   = "xhtml"
+	removeTags  *strings.Replacer
 )
 
 func init() {
 	coReplace = regexp.MustCompile(`CO\d+-(\d+)`)
+	removeTags = strings.NewReplacer("<kbd>", "", "</kbd>", "")
 }
 
 const (
@@ -204,7 +211,7 @@ func secondPass(r io.Reader, outdir string) error {
 	var listitem = xml.StartElement{Name: xml.Name{Local: "li"}}
 	var itemize = xml.StartElement{Name: xml.Name{Local: "ul"}}
 	var orderedlist = xml.StartElement{Name: xml.Name{Local: "ol"}, Attr: []xml.Attr{{Name: xml.Name{Local: "class"}, Value: "orderedlist"}}}
-	var programlisting = xml.StartElement{Name: xml.Name{Local: "pre"}}
+	var programlisting = xml.StartElement{Name: xml.Name{Local: "pre"}, Attr: []xml.Attr{{Name: xml.Name{Local: "class"}, Value: "chroma"}}}
 	var subscript = xml.StartElement{Name: xml.Name{Local: "sub"}}
 	var varlistitem = xml.StartElement{Name: xml.Name{Local: "dd"}}
 	var varlistterm = xml.StartElement{Name: xml.Name{Local: "dt"}}
@@ -219,10 +226,13 @@ func secondPass(r io.Reader, outdir string) error {
 	var inLiteral bool
 	var inFigure bool
 	var inFormalPara bool
+	var inTd bool
 
 	var filename string
+	var programListingLang string
 	var subsections []string
 
+	repl := strings.NewReplacer("&lt;", "<", "&gt;", ">", "&#34;", `"`, "&#39;", `'`, "&amp;", "&", "&#x9;", "    ")
 	listtype := []int{}
 	dec := xml.NewDecoder(r)
 
@@ -302,6 +312,7 @@ func secondPass(r io.Reader, outdir string) error {
 				enc.EncodeToken(emphasis)
 			case "entry":
 				writeCharData = true
+				inTd = true
 				elementStart(entry)
 			case "figure":
 				inFigure = true
@@ -372,13 +383,15 @@ func secondPass(r io.Reader, outdir string) error {
 			case "programlisting", "screen":
 				newline()
 				enc.EncodeToken(programlisting)
+				programListingLang = attr(elt, "language")
+				enc = newBytesEncoder(&b)
 				writeCharData = true
 			case "row":
 				elementStart(row)
 			case "tbody":
 				elementStart(tbody)
-			case "tgroup":
-				dec.Skip()
+			case "tgroup", "colspec":
+				// ignore
 			case "thead":
 				elementStart(thead)
 			case "tip", "warning":
@@ -398,7 +411,7 @@ func secondPass(r io.Reader, outdir string) error {
 				saveid = attr(elt, "id")
 				headerlevel += 1
 			case "simpara", "para":
-				if !inFormalPara {
+				if !inFormalPara && !inTd {
 					enc.EncodeToken(p)
 					writeCharData = true
 				}
@@ -490,6 +503,7 @@ func secondPass(r io.Reader, outdir string) error {
 			case "emphasis":
 				enc.EncodeToken(emphasis.End())
 			case "entry":
+				inTd = false
 				writeCharData = false
 				elementEnd(entry)
 			case "figure":
@@ -532,13 +546,45 @@ func secondPass(r io.Reader, outdir string) error {
 				enc.EncodeToken(orderedlist.End())
 				newline()
 			case "programlisting", "screen":
+				enc.Flush()
+				enc = fileEnc
+
+				style := styles.Get("borland")
+				if style == nil {
+					style = styles.Fallback
+				}
+				formatter := html.New(html.PreventSurroundingPre(), html.WithClasses())
+
+				var lexer chroma.Lexer
+				switch programListingLang {
+				case "sh", "shell":
+					lexer = lexers.Get("bash")
+				case "xml":
+					lexer = lexers.Get("xml")
+				case "json":
+					lexer = lexers.Get("json")
+				case "lua":
+					lexer = lexers.Get("lua")
+				default:
+					lexer = lexers.Fallback
+				}
+
+				source := repl.Replace(b.String())
+				iterator, err := lexer.Tokenise(nil, source)
+				if err != nil {
+					return err
+				}
+
+				var str strings.Builder
+				err = formatter.Format(&str, style, iterator)
+				writeString(str.String(), wc)
 				enc.EncodeToken(programlisting.End())
 				enc.EncodeToken(xml.CharData("\n\n"))
 				writeCharData = false
 			case "row":
 				elementEnd(row)
 			case "simpara", "para":
-				if !inFormalPara {
+				if !inFormalPara && !inTd {
 					if err = enc.EncodeToken(p.End()); err != nil {
 						return err
 					}
@@ -574,7 +620,7 @@ func secondPass(r io.Reader, outdir string) error {
 				}
 				title = chardata
 				if headerlevel == 2 && !inFigure {
-					subsections = append(subsections, title)
+					subsections = append(subsections, removeTag(title))
 					subsections = append(subsections, saveid)
 				}
 				if !inFigure {
@@ -592,6 +638,10 @@ func secondPass(r io.Reader, outdir string) error {
 			}
 		}
 	}
+}
+
+func removeTag(title string) string {
+	return removeTags.Replace(title)
 }
 
 func splitDocBookChapters(r io.ReadSeeker, outdir string, conf *ebpubconf) error {
