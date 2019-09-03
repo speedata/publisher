@@ -226,7 +226,7 @@ func secondPass(r io.Reader, outdir string) error {
 	var inLiteral bool
 	var inFigure bool
 	var inFormalPara bool
-	var inTd bool
+	var omitPara bool
 
 	var filename string
 	var programListingLang string
@@ -312,7 +312,7 @@ func secondPass(r io.Reader, outdir string) error {
 				enc.EncodeToken(emphasis)
 			case "entry":
 				writeCharData = true
-				inTd = true
+				omitPara = true
 				elementStart(entry)
 			case "figure":
 				inFigure = true
@@ -376,6 +376,8 @@ func secondPass(r io.Reader, outdir string) error {
 					enc.EncodeToken(varlistitem)
 				} else {
 					enc.EncodeToken(listitem)
+					omitPara = true
+					writeCharData = true
 				}
 			case "orderedlist":
 				listtype = append(listtype, ORDEREDLIST)
@@ -411,7 +413,7 @@ func secondPass(r io.Reader, outdir string) error {
 				saveid = attr(elt, "id")
 				headerlevel += 1
 			case "simpara", "para":
-				if !inFormalPara && !inTd {
+				if !inFormalPara && !omitPara {
 					enc.EncodeToken(p)
 					writeCharData = true
 				}
@@ -503,7 +505,7 @@ func secondPass(r io.Reader, outdir string) error {
 			case "emphasis":
 				enc.EncodeToken(emphasis.End())
 			case "entry":
-				inTd = false
+				omitPara = false
 				writeCharData = false
 				elementEnd(entry)
 			case "figure":
@@ -584,7 +586,7 @@ func secondPass(r io.Reader, outdir string) error {
 			case "row":
 				elementEnd(row)
 			case "simpara", "para":
-				if !inFormalPara && !inTd {
+				if !inFormalPara && !omitPara {
 					if err = enc.EncodeToken(p.End()); err != nil {
 						return err
 					}
@@ -598,8 +600,9 @@ func secondPass(r io.Reader, outdir string) error {
 					enc.EncodeToken(varlistitem.End())
 				} else {
 					enc.EncodeToken(listitem.End())
+					writeCharData = false
+					omitPara = false
 				}
-				enc.EncodeToken(listitem.End())
 				newline()
 			case "tip", "warning":
 				divEnd()
