@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.9" date="2019-09-03">
+      <en>Allow Options to appear more than once in the layout file.</en>
+      <de>Options kann mehrfach in der Layoutdatei vorkommen.</de>
+    </entry>
     <entry version="3.7.8" date="2019-08-15">
       <en>sd:group-width() now has a second parameter for get the exact width, just as sd:group-height().</en>
       <de>sd:group-width() hat einen zweiten Parameter um die exakte Breite zu erhalten, genau wie sd:group-height().</de>
