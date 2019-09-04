@@ -36,6 +36,7 @@ const (
 	cmdClearcache = "clearcache"
 	cmdDoc        = "doc"
 	cmdListFonts  = "list-fonts"
+	cmdNew        = "new"
 	cmdWatch      = "watch"
 
 	osWindows = "windows"
@@ -616,6 +617,64 @@ func runPublisher() (exitstatus int) {
 	return
 }
 
+func scaffold(extra ...string) error {
+	var err error
+	fmt.Print("Creating layout.xml and data.xml in ")
+	if len(extra) > 0 {
+		dir := extra[0]
+		fmt.Println("a new directory", dir)
+		err = os.MkdirAll(dir, 0755)
+		if err != nil {
+			return err
+		}
+		err = os.Chdir(dir)
+		if err != nil {
+			return err
+		}
+	} else {
+		fmt.Println("current directory")
+	}
+
+	// Let's not overwrite existing files
+	_, err = os.Stat("data.xml")
+	if err == nil {
+		return fmt.Errorf("data.xml already exists.")
+	}
+	_, err = os.Stat("layout.xml")
+	if err == nil {
+		return fmt.Errorf("layout.xml already exists.")
+	}
+
+	dataTxt := `<data>Hello, world!</data>`
+	layoutTxt := `<Layout
+	xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+	<Record element="data">
+	  <PlaceObject>
+		<Textblock>
+		  <Paragraph>
+			<Value select="."/>
+		  </Paragraph>
+		</Textblock>
+	  </PlaceObject>
+	</Record>
+  </Layout>
+`
+
+	err = ioutil.WriteFile("data.xml", []byte(dataTxt), 0644)
+	if err != nil {
+		return err
+	}
+
+	err = ioutil.WriteFile("layout.xml", []byte(layoutTxt), 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func showCredits() {
 	fmt.Println("This is the speedata Publisher, version", version)
 	fmt.Println(`
@@ -684,6 +743,7 @@ func main() {
 	op.Command(cmdClearcache, "Clear image cache")
 	op.Command(cmdDoc, "Open documentation")
 	op.Command(cmdListFonts, "List installed fonts (use together with --xml for copy/paste)")
+	op.Command(cmdNew, "Create simple layout and data file to start. Provide optional directory")
 	op.Command(cmdRun, "Start publishing (default)")
 	op.Command(cmdServer, "Run as http-api server on localhost port 5266 (configure with --address and --port)")
 	op.Command(cmdWatch, "Start watchdog / hotfolder")
@@ -936,6 +996,12 @@ func main() {
 		}
 		cmdline := []string{"--luaonly", filepath.Join(srcdir, "lua", "sdscripts.lua"), inifile, "list-fonts", xml}
 		run(getExecutablePath(), cmdline, []string{"LC_ALL=C"})
+	case cmdNew:
+		err = scaffold(op.Extra[1:]...)
+		if err != nil {
+			fmt.Println(err)
+		}
+		os.Exit(0)
 	case cmdWatch:
 		watchDir := getOptionSection("hotfolder", "hotfolder")
 		events := getOptionSection("events", "hotfolder")
