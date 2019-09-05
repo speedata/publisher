@@ -45,11 +45,11 @@ Auf der Kommandozeile wechselt man nun in dieses Verzeichnis (mit `cd <Verzeichn
 
 [source,shell,subs="verbatim,quotes"]
 -------------------------------------------------------------------------------
-*$* sp
+$ sp
 -------------------------------------------------------------------------------
 
 auf.
-Das `$`-Zeichen soll den Prompt **darstellen** und wird _nicht_ mit eingegeben.
+Das `$`-Zeichen soll den Prompt darstellen und wird _nicht_ mit eingegeben.
 Wenn alles glatt läuft, ist das Ergebnis eine PDF-Datei mit dem Namen `publisher.pdf` im gleichen Verzeichnis.
 
 TIP: Für Windows-Benutzer: wenn der Publisher das PDF nicht erzeugen kann, liegt das manchmal daran, dass dieselbe Datei noch in einem Fenster geöffnet ist.

@@ -1,5 +1,5 @@
 /*
- dummy stylesheet for ebook generation
+ stylesheet for ebook generation
 */
 
 
@@ -75,6 +75,10 @@ td {
 tr {
   vertical-align: top;
 }
+
+pre.chroma {
+  font-weight: 300;
+  background-color: #f0f3f3; }
 
 /* chroma / style: "Borland" */
 /* Background */ .chroma { background-color: #ffffff }

@@ -678,7 +678,7 @@ func scaffold(extra ...string) error {
 func showCredits() {
 	fmt.Println("This is the speedata Publisher, version", version)
 	fmt.Println(`
-Copyright 2018 speedata GmbH, Berlin. Licensed under
+Copyright 2019 speedata GmbH, Berlin. Licensed under
 the GNU Affero GPL License, see
   https://raw.githubusercontent.com/speedata/publisher/develop/COPYING
 for details.
@@ -690,7 +690,7 @@ goconfig (https://github.com/Unknwon/goconfig)
 TeX Gyre Heros fonts (http://www.gust.org.pl/projects/e-foundry/tex-gyre/heros)
 Parts of the Go library (https://golang.org/)
 Blackfriday (https://github.com/russross/blackfriday)
-GopherLua (github.com/yuin/gopher-lua)
+GopherLua (https://github.com/yuin/gopher-lua)
 
 Contact:
    gundlach@speedata.de
@@ -712,16 +712,16 @@ func main() {
 	op.On("--dummy", "Don't read a data file, use '<data />' as input", options)
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
 	op.On("--extra-xml NAME", "Add this file to the layout file", extraXML)
-	op.On("--prepend-xml NAME", "Add this file in front of the layout file", prependXML)
 	op.On("--filter FILTER", "Run Lua filter before publishing starts", options)
 	op.On("--grid", "Display background grid. Disable with --no-grid", options)
-	op.On("--inkscape PATH", "Set the path to the inkscape program", options)
 	op.On("--ignore-case", "Ignore case when accessing files (on a case-insensitive file system)", options)
+	op.On("--inkscape PATH", "Set the path to the inkscape program", options)
+	op.On("--jobname NAME", "The name of the resulting PDF file (without extension), default is 'publisher'", options)
 	op.On("--no-local", "Add local directory to the search path. Default is true", &addLocalPath)
 	op.On("--layout NAME", "Name of the layout file. Defaults to 'layout.xml'", options)
-	op.On("--jobname NAME", "The name of the resulting PDF file (without extension), default is 'publisher'", options)
 	op.On("--mainlanguage NAME", "The document's main language in locale format, for example 'en' or 'en_US'.", &mainlanguage)
 	op.On("--outputdir=DIR", "Copy PDF and protocol to this directory", options)
+	op.On("--prepend-xml NAME", "Add this file in front of the layout file", prependXML)
 	op.On("--port PORT", "Port to be used for the server mode. Defaults to 5266", options)
 	op.On("--quiet", "Run publisher in silent mode", options)
 	op.On("--runs NUM", "Number of publishing runs ", options)

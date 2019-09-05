@@ -43,7 +43,7 @@ Parameter können über die Kommandozeile  oder über eine Konfigurationsdatei a
 
 [source,shell,subs="verbatim,quotes"]
 -------------------------------------------------------------------------------
-*$* sp
+$ sp
 -------------------------------------------------------------------------------
 
 Erläuterungen zum Starten des Publishers gibt es im Abschnitt über die <<ch-kommandozeile,Kommandozeile>>.

@@ -34,7 +34,7 @@ There are extra installer packages for windows, if you don't want to set the PAT
 
   1. Now you can run `sudo apt update` and `apt get install speedata-publisher` and have a working installation. You can find the documentation in `/usr/share/doc/speedata-publisher/index.html` which should open with `sp doc` on a desktop system.
 
-3. **Build from source**: For developers interested in contributing to speedata Publisher, the program and documentation can be built directly from source in the git repository using [rake](https://github.com/ruby/rake), if you have the [Go language](https://golang.org/) version 1.11 or later installed. For example, on Debian or Ubuntu GNU/Linux, where Go is packaged as 'golang', you can use the commands:
+3. **Build from source**: For developers interested in contributing to speedata Publisher, the program and documentation can be built directly from source. You can choose between a [prebuilt docker image on dockerhub](https://hub.docker.com/r/speedata/development) or build the software from the git repository using [rake](https://github.com/ruby/rake). You need to have the [Go language](https://golang.org/) version 1.11 or later installed. For example, on Debian or Ubuntu GNU/Linux, where Go is packaged as 'golang', you can use the commands:
  
 ```
 sudo apt install build-essential git rake golang

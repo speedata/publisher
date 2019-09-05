@@ -49,7 +49,7 @@ sudo apt-key add gpgkey-speedata.txt
 .. Nun kann man mit  `sudo apt update` und `sudo apt install speedata-publisher` den Publisher installieren.
 Die Dokumentation befindet sich in `/usr/share/doc/speedata-publisher/index.html`, die mit `sp doc` auf einem Desktop-System geöffnet werden kann.
 
-. **Aus den Quellen installieren**: Für die Entwickler, die am Publisher selbst Änderungen vornehmen möchten: Die Software und die Dokumentation kann aus dem Quellcode gebaut werden mithilfe des Befehls `rake`.
+. **Aus den Quellen installieren**: Für die Entwickler, die am Publisher selbst Änderungen vornehmen möchten. Hierzu gibt es ein https://hub.docker.com/r/speedata/development[fertiges Docker-Image auf dockerhub]. Alternativ kann man die Software auch lokal bauen: sie aus dem Quellcode gebaut werden mithilfe des Befehls `rake` erstellt werden.
 Notwendig dafür sind die üblichen Entwicklungswerkzeuge und die Programmiersprache Go (https://golang.org/) in Version 1.11 oder höher.
 Auf einem Debian oder Ubuntu GNU/Linux System kann man folgende Befehle nutzen:
 +
@@ -61,7 +61,7 @@ rake build
 rake buildlib
 -------------------------------------------------------------------------------
 +
-Um auch dieses Handbuch zu erstellen, werden https://asciidoctor.org/[asciidoctor], Java und https://gohugo.io/[Hugo] benötigt.
+Um auch dieses Handbuch bzw. das ebook zu erstellen, werden https://asciidoctor.org/[asciidoctor], Java und https://gohugo.io/[Hugo] benötigt.
 Damit werden auch etliche Abhängigkeiten installiert.
 +
 -------------------------------------------------------------------------------
