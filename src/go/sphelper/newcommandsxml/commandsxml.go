@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/url"
 	"os"
+	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
@@ -416,6 +417,39 @@ func (d *description) Adoc() string {
 					panic(err)
 				}
 				ret = append(ret, p.Adoc(d.Lang))
+
+			}
+		}
+	}
+	return strings.Join(ret, "")
+}
+
+func (d *description) String() string {
+	if d == nil {
+		return ""
+	}
+	r := bytes.NewReader(d.Text)
+	dec := xml.NewDecoder(r)
+	var ret []string
+	for {
+		tok, err := dec.Token()
+		if err != nil && err == io.EOF {
+			break
+		}
+		if err != nil {
+			panic(err)
+		}
+		switch v := tok.(type) {
+		case xml.StartElement:
+			switch v.Name.Local {
+			case "para":
+				p := &para{}
+				p.commands = d.commands
+				err = dec.DecodeElement(p, &v)
+				if err != nil {
+					panic(err)
+				}
+				ret = append(ret, p.String(d.Lang))
 
 			}
 		}
@@ -1277,4 +1311,12 @@ func ReadCommandsFile(r io.Reader) (*Commands, error) {
 	}
 	sort.Sort(commandsbyen{commands.CommandsSortedEn})
 	return commands, nil
+}
+
+func LoadCommandsFile(basedir string) (*Commands, error) {
+	r, err := os.Open(filepath.Join(basedir, "doc", "commands-xml", "commands.xml"))
+	if err != nil {
+		return nil, err
+	}
+	return ReadCommandsFile(r)
 }

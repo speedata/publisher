@@ -128,7 +128,7 @@ func main() {
 			log.Fatal(err)
 		}
 	case "genschema":
-		err = genschema.DoThings(basedir)
+		err = genschema.DoThings(cfg)
 		if err != nil {
 			log.Fatal(err)
 		}

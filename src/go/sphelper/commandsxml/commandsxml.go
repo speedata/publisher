@@ -61,7 +61,6 @@ func (desc *DescriptionXML) UnmarshalXML(d *xml.Decoder, start xml.StartElement)
 			txt = append(txt, string(v.Copy()))
 		}
 	}
-	return nil
 }
 
 type ChildelementsXML struct {

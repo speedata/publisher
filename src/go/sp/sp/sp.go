@@ -691,6 +691,7 @@ TeX Gyre Heros fonts (http://www.gust.org.pl/projects/e-foundry/tex-gyre/heros)
 Parts of the Go library (https://golang.org/)
 Blackfriday (https://github.com/russross/blackfriday)
 GopherLua (https://github.com/yuin/gopher-lua)
+jing/trang (https://github.com/relaxng/jing-trang)
 
 Contact:
    gundlach@speedata.de
