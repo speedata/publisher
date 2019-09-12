@@ -26,8 +26,8 @@ func MkBuilddir(cfg *config.Config, srcbindir string) error {
 	}{
 		{src: srcbindir, dest: filepath.Join(destdir, "sdluatex")},
 		{src: filepath.Join(cfg.Builddir, "manual"), dest: filepath.Join(destdir, "share", "doc")},
-		{src: filepath.Join(cfg.Basedir(), "lib"), dest: filepath.Join(destdir, "share", "lib"), reject: []string{".gitignore", "libsplib.h", "libsplib.dll", "libsplib.so", "libsplib.dylib"}},
-		{src: filepath.Join(cfg.Basedir(), "schema"), dest: filepath.Join(destdir, "share", "schema"), reject: []string{"changelog.rng", "readme.txt", "trang.jar"}},
+		{src: filepath.Join(cfg.Basedir(), "lib"), dest: filepath.Join(destdir, "share", "lib"), reject: []string{".gitignore", "libsplib.h", "libsplib.dll", "libsplib.so", "libsplib.dylib", "trang.jar"}},
+		{src: filepath.Join(cfg.Basedir(), "schema"), dest: filepath.Join(destdir, "share", "schema"), reject: []string{"changelog.rng", "readme.txt"}},
 		{src: filepath.Join(cfg.Basedir(), "fonts"), dest: filepath.Join(destdir, "sw", "fonts")},
 		{src: filepath.Join(cfg.Basedir(), "img"), dest: filepath.Join(destdir, "sw", "img")},
 		{src: filepath.Join(srcdir, "tex"), dest: filepath.Join(destdir, "sw", "tex")},
