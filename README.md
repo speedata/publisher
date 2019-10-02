@@ -14,12 +14,12 @@ The speedata Publisher is a full featured and mature database publishing softwar
 
 Its built-in layout description language allows you to create almost arbitrary layouts, while keeping the job as simple as possible.
 
-Think of it as »XSL-FO on stereoids« or »server side InDesign«.
+Think of it as »XSL-FO on steroids« or »server side InDesign«.
 
 Examples
 --------
 
-There are some examples in the [example repository on github](https://github.com/speedata/examples). Also, there are lots of small examples in the `qa` subdirectory that is used for quality assurance.
+There are some examples in the [example repository on github](https://github.com/speedata/examples). Also, there are lots of small examples in the `qa` subdirectory that is used for quality assurance. See also our [showcase](https://showcase.speedata.de/) which is currently only available in German.
 
 
 Can I use this in production?
