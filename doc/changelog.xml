@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.11" date="2019-10-09">
+      <en>Page number on errors and warnings</en>
+      <de>Seitenzahl bei Fehlern und Warnungen</de>
+    </entry>
     <entry version="3.7.10" date="2019-09-11">
       <en>New command 'sp new' for scaffolding.</en>
       <de>Neuer Befehl 'sp new' für Beispieldateien.</de>
