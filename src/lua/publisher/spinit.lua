@@ -18,9 +18,10 @@ unpack = unpack or table.unpack
 
 function warning(...)
     local text = { ... }
-    publisher.messages[#publisher.messages + 1] = { string.format(unpack(text)) , "warning" }
-    errorlog:write("Warning: " .. string.format(unpack(text)) .. "\n")
-    texio.write("Warning: " .. string.format(unpack(text)) .. "\n")
+    local unpacked = string.format( "[page %d] ",publisher.current_pagenumber ) .. string.format(unpack(text))
+    publisher.messages[#publisher.messages + 1] = { unpacked , "warning" }
+    errorlog:write("Warning: " .. unpacked .. "\n")
+    texio.write("Warning: " .. unpacked .. "\n")
 end
 
 local errcount=0
@@ -31,10 +32,11 @@ function err(...)
     if type(text[1]) == "number" then
         errorcode = table.remove(text,1)
     end
-    publisher.messages[#publisher.messages + 1] = { string.format(unpack(text)) , "error", errorcode }
+    local unpacked = string.format( "[page %d] ",publisher.current_pagenumber ) .. string.format(unpack(text))
+    publisher.messages[#publisher.messages + 1] = { unpacked , "error", errorcode }
     errcount =  errcount + 1
-    errorlog:write("Error: " .. string.format(unpack(text)) .. "\n")
-    texio.write("Error: " .. string.format(unpack(text)) .. "\n")
+    errorlog:write("Error: " .. unpacked .. "\n")
+    texio.write("Error: " .. unpacked .. "\n")
 end
 
 function call(...)
