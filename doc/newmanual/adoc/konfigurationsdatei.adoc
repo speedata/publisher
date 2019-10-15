@@ -54,6 +54,8 @@ erkannt. Folgende Optionen werden unterstützt:
   Name der Ausgabedatei ohne Dateiendung. Voreinstellung ist `publisher`.
 `layout`::
   Name des Layoutregelwerks. `layout.xml` ist der voreingestellte Name.
+`mode`::
+  Setzt einen Modus für die Verabeitung. Kann im Layout mit <<ch-xpathfunktionen,`sd:mode()`>> abgefragt werden. Mehrere Modi werden durch Komma getrennt angegeben.
 `opencommand`::
   Kommando für das automatische Öffnen der Dokumentation bzw. PDF-Datei. Für MacOS X sollte das `open` sein, für Linux `xdg-open` oder `exo-open` (xfce).
 `pathrewrite`::

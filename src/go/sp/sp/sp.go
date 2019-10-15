@@ -546,7 +546,10 @@ func runPublisher() (exitstatus int) {
 	if layoutoptions["reportmissingglyphs"] != "" {
 		layoutoptionsSlice = append(layoutoptionsSlice, `reportmissingglyphs=`+layoutoptions["reportmissingglyphs"])
 	}
-	layoutoptionsCommandline := strings.Join(layoutoptionsSlice, ",")
+	if mode := getOption("mode"); mode != "" {
+		layoutoptionsSlice = append(layoutoptionsSlice, `mode=`+mode)
+	}
+
 	layoutname := getOption("layout")
 	dataname := getOption("data")
 
@@ -561,7 +564,8 @@ func runPublisher() (exitstatus int) {
 
 	cmdline = append(cmdline, "--shell-escape", "--interaction", "nonstopmode", fmt.Sprintf("--jobname=%s", jobname))
 	cmdline = append(cmdline, "--ini", fmt.Sprintf("--lua=%s", inifile), "publisher.tex")
-	cmdline = append(cmdline, layoutname, dataname, layoutoptionsCommandline)
+	cmdline = append(cmdline, layoutname, dataname)
+	cmdline = append(cmdline, layoutoptionsSlice...)
 	env := []string{"LC_ALL=C", "SP_JOBNAME=%s" + jobname}
 	for i := 1; i <= runs; i++ {
 		if run(getExecutablePath(), cmdline, env) < 0 {
@@ -721,6 +725,7 @@ func main() {
 	op.On("--no-local", "Add local directory to the search path. Default is true", &addLocalPath)
 	op.On("--layout NAME", "Name of the layout file. Defaults to 'layout.xml'", options)
 	op.On("--mainlanguage NAME", "The document's main language in locale format, for example 'en' or 'en_US'.", &mainlanguage)
+	op.On("--mode NAME", "Set mode. Multiple modes given in a comma separated list.", options)
 	op.On("--outputdir=DIR", "Copy PDF and protocol to this directory", options)
 	op.On("--prepend-xml NAME", "Add this file in front of the layout file", prependXML)
 	op.On("--port PORT", "Port to be used for the server mode. Defaults to 5266", options)

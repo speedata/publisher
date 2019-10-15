@@ -96,6 +96,14 @@ local function filecontents( dataxml,arg )
       return path
 end
 
+local function mode( dataxml,arg )
+  local entry
+  for _,v in pairs(arg) do
+    entry = publisher.modes[v]
+    if entry == true then return true end
+  end
+  return false
+end
 
 local function keepalternating(dataxml, arg )
   local alt_type = arg[1]
@@ -489,6 +497,8 @@ register("urn:speedata:2009/publisher/functions/en","groupwidth",groupwidth)
 register("urn:speedata:2009/publisher/functions/en","imagewidth",imagewidth)
 
 register("urn:speedata:2009/publisher/functions/en","imageheight",imageheight)
+
+register("urn:speedata:2009/publisher/functions/en","mode",mode)
 
 register("urn:speedata:2009/publisher/functions/en","allocated",allocated)
 

@@ -169,6 +169,8 @@ end
 alternating = {}
 alternating_value = {}
 
+-- sp --mode foo sets modes.foo = true
+modes = {}
 
 default_areaname = "_page"
 default_area     = "_page"
@@ -735,6 +737,16 @@ function initialize_luatex_and_generate_pdf()
     for k,v in pairs(vars) do
         xpath.set_variable(k,v)
     end
+    for i=4,#arg do
+        local k,v = arg[i]:match("^(.+)=(.+)$")
+        if k == "mode" then -- everything else handled after loading layout
+            v = v:gsub("^\"(.*)\"$","%1")
+            local _modes = string.explode(v,",")
+            for _,m in ipairs(_modes) do
+                modes[m] = true
+            end
+        end
+    end
 
 
     --- Both the data and the layout instructions are written in XML.
@@ -803,13 +815,11 @@ function initialize_luatex_and_generate_pdf()
     GS_State_OP_Off = pdf.immediateobj([[<< /Type/ExtGState /OP false >>]])
 
     --- override options set in the `<Options>` element
-    if arg[4] then
-        for _,extopt in ipairs(string.explode(arg[4],",")) do
-            if string.len(extopt) > 0 then
-                local k,v = extopt:match("^(.+)=(.+)$")
-                v = v:gsub("^\"(.*)\"$","%1")
-                options[k]=v
-            end
+    for i=4,#arg do
+        local k,v = arg[i]:match("^(.+)=(.+)$")
+        if k ~= "mode" then -- mode handled before loading layout
+            v = v:gsub("^\"(.*)\"$","%1")
+            options[k]=v
         end
     end
     if os.getenv("SP_VERBOSITY") == nil then

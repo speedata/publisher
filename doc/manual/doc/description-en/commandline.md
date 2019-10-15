@@ -24,6 +24,7 @@ Running the speedata publisher on the command line
                                  extension), default is 'publisher'
         --mainlanguage=NAME      The document's main language in locale format,
                                  for example 'en' or 'en_US'.
+        --mode=NAME              Set mode. Multiple modes given in a comma separated list.
         --outputdir=DIR          Copy PDF and protocol to this directory
         --prepend-xml=NAME       Add this file in front of the layout file
         --profile                Run publisher with profiling on (internal use)

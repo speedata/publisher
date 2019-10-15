@@ -91,6 +91,7 @@ sd:even(\<number\>) | True if number is even. Example: `sd:even(sd:current-page(
 sd:odd(\<number\>) | True if number is odd.
 sd:group-width(\<string\>[, \<unit\>]) | Return the number of gridcells of the given group’s width. The argument must be the name of an existing group. Example: `sd:group-width('My group')`. See `sd:group-height()` for description of the second parameter.
 sd:group-height(\<string\>[, \<unit\>]) | Return the given group’s height (in gridcells). See `sd:group-width(...)` If provided with an optional second argument, it returns the height of the group in multiples of this unit. For example `sd:group-height('mygroup', 'in')` returns the group height in inches.
+sd:group(\<string\>[,\<string>...]) | Evaluates to `true()` if one of the modes is given on the command line or set in the options.
 sd:pagenumber(\<string\>) | Get the number of the page where the given mark is placed on. See the command [Mark](../commands-en/mark.html).
 sd:randomitem(\<Value\>,\<Value\>, …) | Return one of the values.
 sd:variable(\<name\>, ...) | The same as `$name`. This function allows variable names to be constructed dynamically. Example: `sd:variable('myvar',$num)` – if `$num` contains the number 3, the resulting variable name is `myvar3`.
