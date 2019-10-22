@@ -1925,10 +1925,16 @@
    </define>
    <define name="e_InsertPages">
       <element name="InsertPages">
-         <a:documentation>Insert previously saved pages.</a:documentation>
+         <a:documentation>Insert previously saved pages or reserve space for pages to be generted in the future.
+      There are two modes: the first mode is to first save some pages with SavePages and then insert the pages here. The second mode reserves some pages in the PDF (has to be known in advace) that are created in the future (“future mode”) with SavePages.</a:documentation>
          <attribute name="name">
             <a:documentation>The name of the saved pages.</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="pages">
+               <a:documentation>Number of pages to be inserted in “future mode”.</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
@@ -2627,6 +2633,11 @@
          <optional>
             <attribute name="skippagetype">
                <a:documentation>The pagetype of the blank page if inserted (see the attribute openon).</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="insertafter">
+               <a:documentation>Insert this page after the given page.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>
@@ -4134,11 +4145,13 @@
    </define>
    <define name="e_SavePages">
       <element name="SavePages">
-         <a:documentation>Everything enclosed in SavePages is saved internally and not placed into the PDF. Useful if the output might be discarded.</a:documentation>
+         <a:documentation>This command is used for two different but similar purposes.
+      1: Everything enclosed in SavePages is saved internally and not placed into the PDF. Useful if the output might be discarded.
+      2: “Future mode”: Create pages that have been previously reserved by InsertPages.</a:documentation>
          <interleave>
             <group>
                <attribute name="name">
-                  <a:documentation>The name of the discarded output. For later retrieval with InsertPages.</a:documentation>
+                  <a:documentation>The name of the discarded output (1) or for the reserved pages (2). For later/earlier retrieval with InsertPages.</a:documentation>
                </attribute>
                <oneOrMore>
                   <interleave>

@@ -172,6 +172,8 @@ alternating_value = {}
 -- sp --mode foo sets modes.foo = true
 modes = {}
 
+page_insert_after = {}
+
 default_areaname = "_page"
 default_area     = "_page"
 

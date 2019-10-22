@@ -85,6 +85,27 @@ local function read_xxx_file(name)
   return true,"",0
 end
 
+local list
+local reverse = {}
+callback.register("page_objnum_provider",function(objnum)
+    if not list then
+        list = { }
+        local pr
+        for i=1,publisher.current_pagenumber do
+            pr = pdf.getpageref(i)
+            list[i] = pr
+            reverse[pr] = i
+        end
+        local entry
+        table.sort(publisher.page_insert_after,function( a,b ) return a[1] < b[1] end)
+        for _,v in ipairs(publisher.page_insert_after) do
+          entry = table.remove(list,v[2])
+          table.insert(list,v[1] + 1,entry)
+        end
+      end
+      return list[reverse[objnum]]
+end)
+
 callback.register('open_read_file',reader)
 
 callback.register('find_opentype_file',return_asked_name)

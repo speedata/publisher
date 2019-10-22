@@ -3427,10 +3427,12 @@
   </command>
   <command en="InsertPages">
     <description xml:lang="en">
-      <para>Insert previously saved pages.</para>
+      <para>Insert previously saved pages or reserve space for pages to be generted in the future.</para>
+      <para>There are two modes: the first mode is to first save some pages with <cmd name="SavePages"/> and then insert the pages here. The second mode reserves some pages in the PDF (has to be known in advace) that are created in the future (“future mode”) with <cmd name="SavePages" />.</para>
     </description>
     <description xml:lang="de">
-      <para>Fügt zuvor gespeicherte Seiten ein.</para>
+      <para>Fügt zuvor gespeicherte Seiten ein oder reserviert Raum für zukünftig erzeugte Seiten.</para>
+      <para>Es gibt zwei Modi für diesen Befehl. Der erste Modus ist, dass zuvor mit <cmd name="SavePages"/> erzeugte Seiten eingefügt werden. Der zweite Modus (»zukünftige Seiten«) reserviert Seiten im PDF, die später mit <cmd name="SavePages"/> erzeugt werden.</para>
     </description>
     <childelements/>
     <attribute en="name" type="text" optional="no">
@@ -3441,11 +3443,21 @@
         <para>Der Name der gespeicherten Seiten.</para>
       </description>
     </attribute>
+    <attribute en="pages" optional="yes" type="number" since="3.7.12">
+      <description xml:lang="en">
+        <para>Number of pages to be inserted in “future mode”.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Anzahl der Seiten die freigehalten werden sollen. Funktioniert im »Modus zukünftige Seiten«.</para>
+      </description>
+    </attribute>
     <remark xml:lang="en">
       <para>Useful if you require a certain amount of pages and you need to try out how many pages you get by typesetting onto virtual pages.</para>
+      <para>Also useful to create a table of contents after you have collected all the information and make it appear at the beginning of the document.</para>
     </remark>
     <remark xml:lang="de">
       <para>Hilfreich um Seiten erst einmal virtuell zu erzeugen und dann einzufügen, z.B. um eine Höchstzahl an Seiten zu garantieren.</para>
+      <para>Ebenfalls hilfreich, um ein Inhaltsverzeichnis am Ende des Durchlaufs zu erzeugen das aber am Anfang des Dokuments erscheinen soll.</para>
     </remark>
     <example xml:lang="en">
       <listing><![CDATA[<Record element="data">
@@ -4608,6 +4620,14 @@
       </description>
       <description xml:lang="de">
         <para>Der Seitentyp der leeren Seite, falls sie eingefügt wird.</para>
+      </description>
+    </attribute>
+    <attribute en="insertafter" optional="yes" type="number" since="3.7.12">
+      <description xml:lang="en">
+        <para>Insert this page after the given page.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Füge diese Seite nach der angegebenen Seite in das PDF ein.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -6710,10 +6730,14 @@
   </command>
   <command en="SavePages">
     <description xml:lang="en">
-      <para>Everything enclosed in <cmd name="SavePages"/> is saved internally and not placed into the PDF. Useful if the output might be discarded.</para>
+      <para>This command is used for two different but similar purposes.</para>
+      <para>1: Everything enclosed in <cmd name="SavePages"/> is saved internally and not placed into the PDF. Useful if the output might be discarded.</para>
+      <para>2: “Future mode”: Create pages that have been previously reserved by <cmd name="InsertPages"/>.</para>
     </description>
     <description xml:lang="de">
-      <para>Alle Ausgaben innerhalb von <cmd name="SavePages"/> werden intern gespeichert und nicht ins PDF ausgegeben. Hilfreich wenn die Ausgabe ggf. verworfen werden soll.</para>
+      <para>Dieser Befehl ist für zwei unterschiedliche Szenarien gedacht:</para>
+      <para>1: Alle Ausgaben innerhalb von <cmd name="SavePages"/> werden intern gespeichert und nicht ins PDF ausgegeben. Sie können später mit <cmd name="InsertPages"/> eingefügt werden. Hilfreich wenn die Ausgabe ggf. verworfen werden soll.</para>
+      <para>2: Im Modus »Zukünftige Seiten« wurde schon Platz für diese Seiten mit <cmd name="InsertPages"/> reserviert.</para>
     </description>
     <childelements>
       <oneOrMore>
@@ -6724,13 +6748,20 @@
     </childelements>
     <attribute en="name" type="text" optional="no">
       <description xml:lang="en">
-        <para>The name of the discarded output. For later retrieval with <cmd name="InsertPages"/>.</para>
+        <para>The name of the discarded output (1) or for the reserved pages (2). For later/earlier retrieval with <cmd name="InsertPages"/>.</para>
       </description>
       <description xml:lang="de">
-        <para>Der Name der Ausgabe, die verworfen wird. Kann später mit <cmd name="InsertPages"/> wiedergeholt werden.</para>
+        <para>Der Name der Ausgabe, die verworfen (1) oder eingefügt (2) wird. Kann später oder früher mit <cmd name="InsertPages"/> eingefügt werden.</para>
       </description>
     </attribute>
+    <remark xml:lang="en">
+      <para>The second mode has been introduced in version 3.7.12.</para>
+    </remark>
+    <remark xml:lang="de">
+      <para>Der zweite Modus besteht seit Version 3.7.12.</para>
+    </remark>
     <example xml:lang="en">
+      <para>First mode:</para>
       <listing><![CDATA[<Record element="data">
   <SavePages name="foo">
     <Loop select="100">
@@ -6741,12 +6772,41 @@
       </PlaceObject>
     </Loop>
   </SavePages>
-  <Message select="sd:count-saved-pages('foo')"></Message>
+  <Message select="sd:count-saved-pages('foo')"/>
   <InsertPages name="foo"/>
 </Record>
 ]]></listing>
+      <para>“Future mode”</para>
+      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="5cm" width="5cm"/>
+
+    <Record element="data">
+        <InsertPages name="firstpage" pages="1"/>
+        <Loop select="4" variable="n">
+            <PlaceObject>
+                <Textblock>
+                    <Paragraph>
+                        <Value select="$n" />
+                    </Paragraph>
+                </Textblock>
+            </PlaceObject>
+            <NewPage/>
+        </Loop>
+        <SavePages name="firstpage">
+            <PlaceObject>
+                <Textblock>
+                    <Paragraph>
+                        <Value>This will be the first page</Value>
+                    </Paragraph>
+                </Textblock>
+            </PlaceObject>
+        </SavePages>
+    </Record>
+</Layout>]]></listing>
     </example>
     <example xml:lang="de">
+      <para>Erste Variante</para>
       <listing><![CDATA[<Record element="data">
   <SavePages name="foo">
     <Loop select="100">
@@ -6761,6 +6821,34 @@
   <InsertPages name="foo"/>
 </Record>
 ]]></listing>
+      <para>Zweite Variante (»Zukünftige Seiten«)</para>
+      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="5cm" width="5cm"/>
+
+    <Record element="data">
+        <InsertPages name="firstpage" pages="1"/>
+        <Loop select="4" variable="n">
+            <PlaceObject>
+                <Textblock>
+                    <Paragraph>
+                        <Value select="$n" />
+                    </Paragraph>
+                </Textblock>
+            </PlaceObject>
+            <NewPage/>
+        </Loop>
+        <SavePages name="firstpage">
+            <PlaceObject>
+                <Textblock>
+                    <Paragraph>
+                        <Value>Das wird die erste Seite sein.</Value>
+                    </Paragraph>
+                </Textblock>
+            </PlaceObject>
+        </SavePages>
+    </Record>
+</Layout>]]></listing>
     </example>
     <seealso><cmd name="InsertPages"/></seealso>
   </command>

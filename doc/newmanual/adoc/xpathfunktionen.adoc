@@ -8,6 +8,7 @@
 
 Der Publisher akzeptiert in den den entsprechend markierten Attributen (zumeist `select` und `test`) XPath Ausdrücke.
 In allen anderen Attributen kann durch die geschweiften Klammern (`{` und `}`) ein XPath Ausdruck erzwungen werden.
+Siehe https://github.com/speedata/examples/blob/master/technical/fontshrinking/layout.xml#L16[z.B. das Layout im examples-Repository für Optimierung mit Gruppen].
 In diesem Beispiel werden im Attribut `width` und im Element `Value` die Werte dynamisch erzeugt, d. h. für die
 Angabe der Breite wird auf den Inhalt der Variablen `breite` zurückgegriffen, der Inhalt des Absatzes ist der Inhalt (Textwert) des gerade aktuellen Datenknotens.
 

@@ -1925,10 +1925,16 @@
    </define>
    <define name="e_InsertPages">
       <element name="InsertPages">
-         <a:documentation>Fügt zuvor gespeicherte Seiten ein.</a:documentation>
+         <a:documentation>Fügt zuvor gespeicherte Seiten ein oder reserviert Raum für zukünftig erzeugte Seiten.
+      Es gibt zwei Modi für diesen Befehl. Der erste Modus ist, dass zuvor mit SavePages erzeugte Seiten eingefügt werden. Der zweite Modus (»zukünftige Seiten«) reserviert Seiten im PDF, die später mit SavePages erzeugt werden.</a:documentation>
          <attribute name="name">
             <a:documentation>Der Name der gespeicherten Seiten.</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="pages">
+               <a:documentation>Anzahl der Seiten die freigehalten werden sollen. Funktioniert im »Modus zukünftige Seiten«.</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
@@ -2627,6 +2633,11 @@
          <optional>
             <attribute name="skippagetype">
                <a:documentation>Der Seitentyp der leeren Seite, falls sie eingefügt wird.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="insertafter">
+               <a:documentation>Füge diese Seite nach der angegebenen Seite in das PDF ein.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>
@@ -4134,11 +4145,13 @@
    </define>
    <define name="e_SavePages">
       <element name="SavePages">
-         <a:documentation>Alle Ausgaben innerhalb von SavePages werden intern gespeichert und nicht ins PDF ausgegeben. Hilfreich wenn die Ausgabe ggf. verworfen werden soll.</a:documentation>
+         <a:documentation>Dieser Befehl ist für zwei unterschiedliche Szenarien gedacht:
+      1: Alle Ausgaben innerhalb von SavePages werden intern gespeichert und nicht ins PDF ausgegeben. Sie können später mit InsertPages eingefügt werden. Hilfreich wenn die Ausgabe ggf. verworfen werden soll.
+      2: Im Modus »Zukünftige Seiten« wurde schon Platz für diese Seiten mit InsertPages reserviert.</a:documentation>
          <interleave>
             <group>
                <attribute name="name">
-                  <a:documentation>Der Name der Ausgabe, die verworfen wird. Kann später mit InsertPages wiedergeholt werden.</a:documentation>
+                  <a:documentation>Der Name der Ausgabe, die verworfen (1) oder eingefügt (2) wird. Kann später oder früher mit InsertPages eingefügt werden.</a:documentation>
                </attribute>
                <oneOrMore>
                   <interleave>

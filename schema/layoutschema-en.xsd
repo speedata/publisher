@@ -1594,12 +1594,18 @@
   </xs:element>
   <xs:element name="InsertPages">
     <xs:annotation>
-      <xs:documentation>Insert previously saved pages.</xs:documentation>
+      <xs:documentation>Insert previously saved pages or reserve space for pages to be generted in the future.
+      There are two modes: the first mode is to first save some pages with SavePages and then insert the pages here. The second mode reserves some pages in the PDF (has to be known in advace) that are created in the future (“future mode”) with SavePages.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:attribute name="name" use="required">
         <xs:annotation>
           <xs:documentation>The name of the saved pages.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="pages">
+        <xs:annotation>
+          <xs:documentation>Number of pages to be inserted in “future mode”.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
@@ -2211,6 +2217,11 @@
       <xs:attribute name="skippagetype">
         <xs:annotation>
           <xs:documentation>The pagetype of the blank page if inserted (see the attribute openon).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="insertafter">
+        <xs:annotation>
+          <xs:documentation>Insert this page after the given page.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
@@ -4162,7 +4173,9 @@
   </xs:element>
   <xs:element name="SavePages">
     <xs:annotation>
-      <xs:documentation>Everything enclosed in SavePages is saved internally and not placed into the PDF. Useful if the output might be discarded.</xs:documentation>
+      <xs:documentation>This command is used for two different but similar purposes.
+      1: Everything enclosed in SavePages is saved internally and not placed into the PDF. Useful if the output might be discarded.
+      2: “Future mode”: Create pages that have been previously reserved by InsertPages.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -4202,7 +4215,7 @@
       </xs:choice>
       <xs:attribute name="name" use="required">
         <xs:annotation>
-          <xs:documentation>The name of the discarded output. For later retrieval with InsertPages.</xs:documentation>
+          <xs:documentation>The name of the discarded output (1) or for the reserved pages (2). For later/earlier retrieval with InsertPages.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
