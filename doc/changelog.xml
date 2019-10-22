@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.12" date="2019-10-22">
+      <en>New command line switch <tt>mode</tt> for alternative code execution.</en>
+      <de>Neuer Kommandozeilenbefehl <tt>mode</tt> für alternative Code-Ausführung.</de>
+    </entry>
+    <entry version="3.7.12" date="2019-10-22">
+      <en>Re-order pages with <tt>SavePages</tt> and <tt>InsertPages</tt>.</en>
+      <de>Seiten umordnen mit <tt>SavePages</tt> und <tt>InsertPages</tt>.</de>
+    </entry>
     <entry version="3.7.11" date="2019-10-09">
       <en>Page number on errors and warnings</en>
       <de>Seitenzahl bei Fehlern und Warnungen</de>
