@@ -167,7 +167,7 @@ function M.is_variable(str,pos)
     start,stop,var = string.find(str,"^%$([%w_%-]+)%s*",pos)
     if var then
         M.nextpos = stop + 1
-        M.tok = M.variables[var]
+        M.tok = M.get_variable(var)
         if M.tok == nil then
             M.err = true
             M.errmsg = string.format("Variable %q undefined",var)
@@ -869,7 +869,16 @@ function M.set_variable(var,value)
 end
 
 function M.get_variable(var)
-    local v = M.variables[var]
+    local v
+    if var == "_mode" then
+        local tmp = {}
+        for k,_ in pairs(publisher.modes) do
+            tmp[#tmp + 1] = k
+        end
+        v = table.concat( tmp, "," )
+    else
+        v = M.variables[var]
+    end
     return v
 end
 

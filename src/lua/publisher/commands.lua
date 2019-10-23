@@ -3177,6 +3177,13 @@ function commands.setvariable( layoutxml,dataxml )
             printtable("SetVariable",contents)
         end
     end
+    if varname == "_mode" then
+        publisher.modes = {}
+        local _modes = string.explode(tostring(contents),",")
+        for _,m in ipairs(_modes) do
+            publisher.modes[m] = true
+        end
+    end
     publisher.flush_variable(varname)
     publisher.xpath.set_variable(varname,contents)
 end

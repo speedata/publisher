@@ -18,6 +18,8 @@ Sonst könnten Kollisionen bei der Namensvergabe entstehen.
 `_loopcounter`::
   Der Durchlauf in einer `<Loop>`-Schleife.
 
+`_mode`::
+  Der Modus für den Durchlauf. Kommasepariert.
 
 `_pagewidth` und `_pageheight`::
   Die Breite und Höhe der Seite. Vorgabe ist 210mm und 297mm.
