@@ -2219,11 +2219,6 @@
           <xs:documentation>Der Seitentyp der leeren Seite, falls sie eingefügt wird.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="insertafter">
-        <xs:annotation>
-          <xs:documentation>Füge diese Seite nach der angegebenen Seite in das PDF ein.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="NextFrame">

@@ -2635,11 +2635,6 @@
                <a:documentation>Der Seitentyp der leeren Seite, falls sie eingefügt wird.</a:documentation>
             </attribute>
          </optional>
-         <optional>
-            <attribute name="insertafter">
-               <a:documentation>Füge diese Seite nach der angegebenen Seite in das PDF ein.</a:documentation>
-            </attribute>
-         </optional>
          <empty></empty>
       </element>
    </define>

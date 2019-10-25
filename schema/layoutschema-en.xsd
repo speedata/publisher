@@ -2219,11 +2219,6 @@
           <xs:documentation>The pagetype of the blank page if inserted (see the attribute openon).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="insertafter">
-        <xs:annotation>
-          <xs:documentation>Insert this page after the given page.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="NextFrame">

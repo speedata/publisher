@@ -1433,17 +1433,24 @@ function commands.insert_pages( layoutxml,dataxml )
         end
         local current_pagenumber = publisher.current_pagenumber
         local thispage = publisher.pages[current_pagenumber]
-        if publisher.page_initialized_p(current_pagenumber)  then
+        --- If we insert before the first page, we don't need to to anything.
+        --- Otherwise finish the current page.
+        --- This duplicates code in publisher#initialize_luatex_and_generate_pdf
+        if publisher.page_initialized_p(current_pagenumber) then
             publisher.dothingsbeforeoutput(thispage)
             local n = node.vpack(publisher.pages[current_pagenumber].pagebox)
             publisher.shipout(n,current_pagenumber)
-        else
-            current_pagenumber = current_pagenumber - 1
+            current_pagenumber = current_pagenumber + 1
         end
 
-        publisher.current_pagenumber = current_pagenumber + pages + 1
-        local x = {pages,current_pagenumber}
-        publisher.pagestore[pagestore_name] = x
+        -- Increase the page number and remember where we want to insert
+        -- the reserved pages (publisher.pagestore)
+        -- the pagenum_tbl is used in the callback
+        publisher.total_inserted_pages = publisher.total_inserted_pages + pages
+        local new_pagenumber = current_pagenumber + pages
+        publisher.current_pagenumber = new_pagenumber
+        publisher.pagenum_tbl[current_pagenumber] = new_pagenumber
+        publisher.pagestore[pagestore_name] = {pages,current_pagenumber}
         return
     end
 
@@ -1818,7 +1825,6 @@ function commands.new_page( layoutxml,dataxml )
     local pagetype     = publisher.read_attribute(layoutxml,dataxml,"pagetype","rawstring")
     local skippagetype = publisher.read_attribute(layoutxml,dataxml,"skippagetype","rawstring")
     local openon   = publisher.read_attribute(layoutxml,dataxml,"openon","rawstring")
-    local insertafter = publisher.read_attribute(layoutxml,dataxml,"insertafter","rawstring")
 
     if openon == "right" and math.fmod(publisher.current_pagenumber,2) == 1 then
         publisher.new_page()
@@ -1833,9 +1839,6 @@ function commands.new_page( layoutxml,dataxml )
     else
         publisher.nextpage = pagetype
         publisher.new_page()
-    end
-    if insertafter then
-        publisher.page_insert_after[#publisher.page_insert_after + 1] = {insertafter, publisher.current_pagenumber}
     end
 end
 
@@ -3019,36 +3022,47 @@ end
 --- ---------
 --- Save pages for later restore
 function commands.save_pages( layoutxml,dataxml )
-    local thispage = publisher.current_pagenumber
+    -- w("save_pages")
+    local save_current_pagenumber = publisher.current_pagenumber
     local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
     if publisher.pagestore[pagestore_name] == nil then
+        -- backwards mode. First save_pages, then insert_pages
         publisher.current_pagestore_name = pagestore_name
         publisher.pagestore[pagestore_name] = {}
         local tab = publisher.dispatch(layoutxml,dataxml)
         publisher.new_page()
-        for i=thispage,publisher.current_pagenumber - 1 do
+        for i=save_current_pagenumber,publisher.current_pagenumber - 1 do
             publisher.pages[i] = nil
         end
         publisher.current_pagestore_name = nil
-        publisher.current_pagenumber = thispage
+        publisher.current_pagenumber = save_current_pagenumber
 
         return tab
     else
+        -- forward mode. First insert pages then save pages
         local ps = publisher.pagestore[pagestore_name]
-        local location = ps[2]
         local number_of_pages = ps[1]
-        publisher.current_pagenumber = location + 1
+        local location = ps[2]
+        publisher.current_pagenumber = location
+
+        -- We need to set the destination before the pages are created
+        -- since the callback for page ordering is called after
+        -- each shipout.
+        local ppt = publisher.pagenum_tbl
+
+        for i=1,number_of_pages do
+            ppt[save_current_pagenumber + i - publisher.total_inserted_pages - 1] = location + i - 1
+        end
         local tab = publisher.dispatch(layoutxml,dataxml)
-        if publisher.current_pagenumber - location ~= number_of_pages then
+        if publisher.current_pagenumber - location + 1 ~= number_of_pages then
             err("SavePages: incorrect number of pages. Expected %d, got %d", number_of_pages,publisher.current_pagenumber - location)
             return tab
         end
-        local pia = publisher.page_insert_after
-        for i=1,number_of_pages do
-            pia[#pia + 1] = {location + i - 1, thispage - number_of_pages + i - 1 }
-        end
+
+        -- for next pages, if any:
+        ppt[save_current_pagenumber] = save_current_pagenumber
         publisher.new_page()
-        publisher.current_pagenumber = thispage
+        publisher.current_pagenumber = save_current_pagenumber
         return tab
 
     end

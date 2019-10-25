@@ -172,7 +172,13 @@ alternating_value = {}
 -- sp --mode foo sets modes.foo = true
 modes = {}
 
-page_insert_after = {}
+-- page numbers go from 1 to n. If reordering is necessary, we insert
+-- a different index into the pagenum_tbl.
+-- The value of a key is usually the successor of the previous entry
+-- 1,2,3,4 but can be changed by setting a single entry. E.g. setting
+-- entry 3 to 5 gives the array 1,2,5,6,7,8...
+pagenum_tbl = setmetatable({1}, {__index = function(tbl,idx) return tbl[idx - 1] + 1 end})
+total_inserted_pages = 0
 
 default_areaname = "_page"
 default_area     = "_page"
@@ -920,6 +926,7 @@ function initialize_luatex_and_generate_pdf()
         exit()
     end
 
+    --- We are not at the end of the processing. Let's write the PDF information and status files.
     local pdfcatalog = {}
 
     -- For now only one file can be attached

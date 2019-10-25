@@ -4622,14 +4622,6 @@
         <para>Der Seitentyp der leeren Seite, falls sie eingefügt wird.</para>
       </description>
     </attribute>
-    <attribute en="insertafter" optional="yes" type="number" since="3.7.12">
-      <description xml:lang="en">
-        <para>Insert this page after the given page.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Füge diese Seite nach der angegebenen Seite in das PDF ein.</para>
-      </description>
-    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Record element="data">
   <PlaceObject>
