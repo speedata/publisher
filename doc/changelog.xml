@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.13" date="2019-10-28">
+      <en>Update to LuaTeX version 1.11.1 for the new <tt>page_order_index</tt> callback.</en>
+      <de>Update auf LuaTeX version 1.11.1 für den neuen <tt>page_order_index</tt> callback.</de>
+    </entry>
+    <entry version="3.7.13" date="2019-10-28">
+      <en>Allow mode access via <tt>$_mode</tt> variable.</en>
+      <de>Zugriff auf Modi via <tt>$_mode</tt> Variable.</de>
+    </entry>
+    <entry version="3.7.13" date="2019-10-28">
+      <en>Remove feature “insert after” on NewPage.</en>
+      <de>Entferne feature »insert after« bei NewPage.</de>
+    </entry>
     <entry version="3.7.12" date="2019-10-22">
       <en>New command line switch <tt>mode</tt> for alternative code execution.</en>
       <de>Neuer Kommandozeilenbefehl <tt>mode</tt> für alternative Code-Ausführung.</de>
