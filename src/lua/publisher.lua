@@ -178,6 +178,7 @@ modes = {}
 -- 1,2,3,4 but can be changed by setting a single entry. E.g. setting
 -- entry 3 to 5 gives the array 1,2,5,6,7,8...
 pagenum_tbl = setmetatable({1}, {__index = function(tbl,idx) return tbl[idx - 1] + 1 end})
+forward_pagestore = {}
 total_inserted_pages = 0
 
 default_areaname = "_page"

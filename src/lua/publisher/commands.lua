@@ -1451,6 +1451,7 @@ function commands.insert_pages( layoutxml,dataxml )
         publisher.current_pagenumber = new_pagenumber
         publisher.pagenum_tbl[current_pagenumber] = new_pagenumber
         publisher.pagestore[pagestore_name] = {pages,current_pagenumber}
+        publisher.forward_pagestore[pagestore_name] = true
         return
     end
 
@@ -3025,7 +3026,7 @@ function commands.save_pages( layoutxml,dataxml )
     -- w("save_pages")
     local save_current_pagenumber = publisher.current_pagenumber
     local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
-    if publisher.pagestore[pagestore_name] == nil then
+    if publisher.forward_pagestore[pagestore_name] == nil then
         -- backwards mode. First save_pages, then insert_pages
         publisher.current_pagestore_name = pagestore_name
         publisher.pagestore[pagestore_name] = {}
