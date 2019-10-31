@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.14" date="2019-10-31">
+      <en>Halloween release. (Bugfix for SavePages in backward mode).</en>
+      <de>Halloween release. (Fehlerkorrektur für SavePages in Rückwärts-Modus).</de>
+    </entry>
     <entry version="3.7.13" date="2019-10-28">
       <en>Update to LuaTeX version 1.11.1 for the new <tt>page_order_index</tt> callback.</en>
       <de>Update auf LuaTeX version 1.11.1 für den neuen <tt>page_order_index</tt> callback.</de>
