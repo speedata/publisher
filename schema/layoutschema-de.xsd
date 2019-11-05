@@ -1892,6 +1892,7 @@
         <xs:element minOccurs="0" ref="en:DefineTextformat"/>
         <xs:element minOccurs="0" ref="en:Hyphenation"/>
         <xs:element minOccurs="0" ref="en:LoadFontfile"/>
+        <xs:element minOccurs="0" ref="en:Loop"/>
         <xs:element minOccurs="0" ref="en:Options"/>
         <xs:element minOccurs="0" ref="en:Pageformat"/>
         <xs:element minOccurs="0" ref="en:Pagetype"/>
@@ -1901,9 +1902,9 @@
         <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:Stylesheet"/>
-        <xs:element minOccurs="0" ref="en:Loop"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
         <xs:element minOccurs="0" ref="en:Trace"/>
+        <xs:element minOccurs="0" ref="en:While"/>
         <xs:element minOccurs="0" ref="en:Layout"/>
         <xs:element minOccurs="0" ref="en:Include"/>
       </xs:sequence>
@@ -4269,6 +4270,7 @@
         <xs:element ref="en:Tr"/>
         <xs:element ref="en:Td"/>
         <xs:element ref="en:Columns"/>
+        <xs:element ref="en:Table"/>
         <xs:element ref="en:TableNewPage"/>
         <xs:element ref="en:Tablerule"/>
         <xs:element ref="en:Tablehead"/>

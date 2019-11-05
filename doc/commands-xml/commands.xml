@@ -143,6 +143,7 @@
     <optional><cmd name="DefineTextformat"/></optional>
     <optional><cmd name="Hyphenation"/></optional>
     <optional><cmd name="LoadFontfile"/></optional>
+    <optional><cmd name="Loop"/></optional>
     <optional><cmd name="Options"/></optional>
     <optional><cmd name="Pageformat"/></optional>
     <optional><cmd name="Pagetype"/></optional>
@@ -152,9 +153,9 @@
     <optional><cmd name="SetGrid"/></optional>
     <optional><cmd name="SetVariable"/></optional>
     <optional><cmd name="Stylesheet"/></optional>
-    <optional><cmd name="Loop"/></optional>
     <optional><cmd name="Switch"/></optional>
     <optional><cmd name="Trace"/></optional>
+    <optional><cmd name="While"/></optional>
   </define>
 
   <define name="Include">
@@ -6929,6 +6930,7 @@
           <optional><cmd name="Tr"/></optional>
           <optional><cmd name="Td"/></optional>
           <optional><cmd name="Columns"/></optional>
+          <optional><cmd name="Table"/></optional>
           <optional><cmd name="TableNewPage"/></optional>
           <optional><cmd name="Tablerule"/></optional>
           <optional><cmd name="Tablehead"/></optional>

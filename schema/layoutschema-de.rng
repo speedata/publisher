@@ -2198,6 +2198,9 @@
                      <ref name="e_LoadFontfile"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Loop"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Options"></ref>
                   </optional>
                   <optional>
@@ -2225,13 +2228,13 @@
                      <ref name="e_Stylesheet"></ref>
                   </optional>
                   <optional>
-                     <ref name="e_Loop"></ref>
-                  </optional>
-                  <optional>
                      <ref name="e_Switch"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Trace"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_While"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Layout"></ref>
@@ -4356,6 +4359,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Columns"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Table"></ref>
                      </optional>
                      <optional>
                         <ref name="e_TableNewPage"></ref>

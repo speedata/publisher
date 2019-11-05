@@ -70,6 +70,8 @@ erkannt. Folgende Optionen werden unterstützt:
   Maximale Dauer des Publishing-Laufs. Wenn dieser Wert überschritten wird, bricht der Lauf mit Fehler 1 ab. Angabe in Sekunden.
 `vars`::
   Kommaseparierte Liste der Form `var=wert` um Variablen in der Konfigurationsdatei festzulegen.
+`wd`::
+  Setzt das Basis-Verzeichnis. Der speedata Publisher nimmt dies als Startverzeichnis.
 
 In der Konfigurationsdatei kann mit `%(projectdir)s` auf das Verzeichnis
 zugegriffen werden, in dem die Datei `publisher.cfg` liegt.
