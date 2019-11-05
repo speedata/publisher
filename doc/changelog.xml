@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.15" date="2019-11-05">
+      <en>Bugfix for table balancing (#240).</en>
+      <de>Fehlerkorrektur für Tabellenausgleich (#240).</de>
+    </entry>
     <entry version="3.7.14" date="2019-10-31">
       <en>Halloween release. (Bugfix for SavePages in backward mode).</en>
       <de>Halloween release. (Fehlerkorrektur für SavePages in Rückwärts-Modus).</de>
