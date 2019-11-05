@@ -1541,7 +1541,6 @@ function typeset_table(self)
     local last_possible_split_is_after_line = 0
 
     local current_page = 1
-
     for i=1,#rows do
         -- We can mark a row as "use_as_head" to turn the row into a dynamic head
         local use_as_head = node.has_attribute(rows[i],publisher.att_use_as_head)
@@ -1612,7 +1611,6 @@ function typeset_table(self)
     -- This is the last split
     splits[#splits + 1] = #rows
 
-
     --- Table balancing
     --- ===============
     --- When the user has requested table balancing, we need to find out how many frames
@@ -1624,7 +1622,6 @@ function typeset_table(self)
 
     -- used_frames is the number of frames used by the table w/o split.
     local used_frames = ( #splits - 1 ) % tosplit
-
     -- This can be 0 (all columns used).
     -- So the number is set to the amount of tosplit in order to balance all columns.
     if used_frames == 0 then used_frames = tosplit end
@@ -1639,7 +1636,7 @@ function typeset_table(self)
     -- Where 44 is the total number of rows. This has to be the last entry in the splits table.
     -- Each entry means that there is a split after that line. So in the example above,
     -- line 26 is in the first frame, 27 to 44 in the last frame.
-
+    local last_possible_split_is_after_line_t = {}
     -- tosplit > 1 ==> needs balancing (otherwise only one frame or no splitting)
     if tosplit > 1 then
         -- first, we remove the split marks for the used frames.
@@ -1660,19 +1657,29 @@ function typeset_table(self)
 
         -- percolumn_goal is the optimum height for each column
         local percolumn_goal =  math.ceil( sum_ht / tosplit )
+
         local sum_frame = 0
         local break_below_allowed
         for i = first_row_in_new_table, #rows do
             break_below_allowed = ( node.has_attribute(rows[i],publisher.att_break_below_forbidden) ~= 1)
             if break_below_allowed then
-                last_possible_split_is_after_line = i
+                last_possible_split_is_after_line_t[#last_possible_split_is_after_line_t + 1] = i
             end
             sum_frame = sum_frame + rows[i].height + rows[i].depth
+            -- ht_current should be replaced with ht_max on following pages
+            if sum_frame > ht_current then
+                splits[#splits + 1] = last_possible_split_is_after_line_t[#last_possible_split_is_after_line_t - 1]
+                tosplit = tosplit - 1
 
+                -- When there is more than one column left, we should adjust the percolumn_goal. (should we?)
+                if tosplit > 0 then
+                    percolumn_goal = percolumn_goal - math.ceil( (sum_frame - percolumn_goal )  / tosplit )
+                end
+                sum_frame = 0
             -- When stepped over the goal, move this line to the next frame.
             -- See #232 for a situation where the second test is necessary.
-            if sum_frame > percolumn_goal and last_possible_split_is_after_line ~= splits[#splits] then
-                splits[#splits + 1] = last_possible_split_is_after_line
+            elseif sum_frame > percolumn_goal and last_possible_split_is_after_line_t[#last_possible_split_is_after_line_t] ~= splits[#splits] then
+                splits[#splits + 1] = last_possible_split_is_after_line_t[#last_possible_split_is_after_line_t]
                 tosplit = tosplit - 1
 
                 -- When there is more than one column left, we should adjust the percolumn_goal. (should we?)

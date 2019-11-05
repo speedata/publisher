@@ -1,0 +1,62 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+        xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+
+    <SetGrid nx="12" dx="3.8mm" height="13pt"/>
+
+    <Pagetype name="standardseite" test="true()">
+        <Margin left="15mm" right="9.2mm" top="43.6mm" bottom="20mm"/>
+        <PositioningArea name="a">
+            <PositioningFrame width="6" height="26" row="1" column="1"/>
+            <PositioningFrame width="6" height="26" row="1" column="7"/>
+        </PositioningArea>
+    </Pagetype>
+
+    <Record element="Table">
+        <PlaceObject area="a">
+            <Table stretch="max" padding="1pt" width="6" balance="yes">
+                <ForAll select="tr">
+                    <SetVariable variable="pos" select="position()"/>
+                    <Switch>
+                        <Case test="th">
+                            <SetVariable variable="drawRule" select="false()"/>
+                            <Tr sethead="yes" break-below="yes" minheight="4.5mm">
+                                <ForAll select="th">
+                                    <Td backgroundcolor="gray">
+                                        <Paragraph><Value select="$pos"/><Value select="."/></Paragraph>
+                                    </Td>
+                                </ForAll>
+                            </Tr>
+                        </Case>
+                        <Otherwise>
+                            <Switch>
+                                <Case test="position() != 1 and $drawRule">
+                                    <Tablerule color="gray" rulewidth="0.5pt" start="1" break-below="yes"/>
+                                </Case>
+                                <Otherwise>
+                                    <SetVariable variable="drawRule" select="true()"/>
+                                </Otherwise>
+                            </Switch>
+                            <Tr>
+                                <ForAll select="td">
+                                    <Td>
+                                        <Paragraph>
+                                            <Value select="$pos"/>
+                                            <Value select="."/>
+                                        </Paragraph>
+                                    </Td>
+                                </ForAll>
+                            </Tr>
+                        </Otherwise>
+                    </Switch>
+                </ForAll>
+            </Table>
+        </PlaceObject>
+    </Record>
+
+
+    <DefineFontfamily name="text" fontsize="8" leading="10">
+        <Regular fontface="sans"/>
+    </DefineFontfamily>
+
+</Layout>
