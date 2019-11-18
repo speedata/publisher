@@ -1660,14 +1660,19 @@ function typeset_table(self)
 
         local sum_frame = 0
         local break_below_allowed
+        local maxht = ht_current
         for i = first_row_in_new_table, #rows do
             break_below_allowed = ( node.has_attribute(rows[i],publisher.att_break_below_forbidden) ~= 1)
             if break_below_allowed then
                 last_possible_split_is_after_line_t[#last_possible_split_is_after_line_t + 1] = i
             end
             sum_frame = sum_frame + rows[i].height + rows[i].depth
-            -- ht_current should be replaced with ht_max on following pages
-            if sum_frame > ht_current then
+
+            if #splits > tosplit then
+                -- ht_current must be replaced with ht_max on following pages
+                maxht = ht_max
+            end
+            if sum_frame > maxht then
                 splits[#splits + 1] = last_possible_split_is_after_line_t[#last_possible_split_is_after_line_t - 1]
                 tosplit = tosplit - 1
 
