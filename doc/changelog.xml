@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.16" date="2019-11-18">
+      <en>Bugfix 2 for table balancing (#240).</en>
+      <de>Fehlerkorrektur 2 für Tabellenausgleich (#240).</de>
+    </entry>
     <entry version="3.7.15" date="2019-11-05">
       <en>Bugfix for table balancing (#240).</en>
       <de>Fehlerkorrektur für Tabellenausgleich (#240).</de>
