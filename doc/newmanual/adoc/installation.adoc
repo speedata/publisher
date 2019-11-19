@@ -22,8 +22,19 @@ Es gibt drei Methoden, den Publisher zu installieren.
 Dafür sind keine Adminstratorrechte notwendig.
 Für Windows gibt es zusätzlich Installationspakete, die den Suchpfad korrekt setzen.
 Damit ist in der Windows-Shell das Programm `sp` überall aufrufbar.
-+
+ +
+ +
 Die aus dem ZIP extrahierte Struktur darf nicht verändert werden (z.B. verschieben des Binaries), der speedata Publisher erwartet das vorgegebene Dateilayout.
+ +
+Unter macOS 10.15 (Catalina) kommt es vor, dass das Sicherheitsfeature »Gatekeeper« für Ausführung des speedata Publishers eine spezielle Berechtigung anfordert. Das passiert, wenn die ZIP-Datei über einen Browser heruntergeladen wird. Um das zu umgehen, kann über die Kommandozeile mit `curl` der Publisher heruntergeladen werden:
++
+-------------------------------------------------------------------------------
+curl -O https://download.speedata.de/dl/speedata-publisher-darwin-amd64-latest.zip
+-------------------------------------------------------------------------------
++
+Das lädt die ZIP-Datei in das aktuelle Verzeichnis.
+
+
 
 . **APT Repository**: Falls Administratorrechte auf einem Debian oder Ubuntu GNU/Linux System vorhanden sind, kann man einfach die `.deb`-Datei installieren. Hinweis: es wird bis auf weiteres nur die 64-Bit Plattform unterstützt.
 
