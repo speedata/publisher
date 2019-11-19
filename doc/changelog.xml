@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.17" date="2019-11-19">
+      <en>Better error messages for external files loading (#241).</en>
+      <de>Bessere Fehlermeldungen beim Laden externer Dateien (#241).</de>
+    </entry>
+    <entry version="3.7.16" date="2019-11-18">
+      <en>Bugfix 2 for table balancing (#240).</en>
+      <de>Fehlerkorrektur 2 für Tabellenausgleich (#240).</de>
+    </entry>
+    <entry version="3.7.16" date="2019-11-18">
+      <en>Bugfix 2 for table balancing (#240).</en>
+      <de>Fehlerkorrektur 2 für Tabellenausgleich (#240).</de>
+    </entry>
     <entry version="3.7.16" date="2019-11-18">
       <en>Bugfix 2 for table balancing (#240).</en>
       <de>Fehlerkorrektur 2 für Tabellenausgleich (#240).</de>
