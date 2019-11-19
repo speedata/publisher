@@ -49,7 +49,10 @@ func saveFileFromUrl(parsedURL *url.URL, rawURL string) (string, error) {
 			return "", fmt.Errorf("Image cache %q exists but is not a directory", rawimgcache)
 		}
 	} else {
-		os.MkdirAll(rawimgcache, 0755)
+		err = os.MkdirAll(rawimgcache, 0755)
+		if err != nil {
+			return "", err
+		}
 	}
 
 	destfile := parsedURL.Hostname() + parsedURL.Path

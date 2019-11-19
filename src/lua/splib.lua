@@ -53,6 +53,7 @@ extern char* convertSVGImage(GoString p0);
 ]]
 
 ld = ffi.load("libsplib")
+errorpattern = "^%*%*err"
 
 local function c(str)
     return ffi.new("GoString",str,#str)
@@ -104,9 +105,13 @@ end
 local function lookupfile(filename)
     local ret = ld.lookupFile(c(filename))
     local _ret = ffi.string(ret)
+    if string.match( _ret,errorpattern ) then
+        err(string.gsub( _ret,errorpattern ,"" ))
+        return
+    end
     if _ret == "" then return nil end
 
-    return ffi.string(ret)
+    return _ret
 end
 
 local function listfonts()
@@ -123,9 +128,15 @@ end
 local function convertSVGImage(filename)
     local ret = ld.convertSVGImage(c(filename))
     local _ret = ffi.string(ret)
+
+    if string.match( _ret,errorpattern ) then
+        err(string.gsub( _ret,errorpattern ,"" ))
+        return
+    end
+
     if _ret == "" then return nil end
 
-    return ffi.string(ret)
+    return _ret
 end
 
 

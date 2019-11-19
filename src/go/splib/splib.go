@@ -16,6 +16,10 @@ import (
 	"splibaux"
 )
 
+var (
+	errorpattern = `**err`
+)
+
 // Convert a string slice to a C char* array and add a NULL pointer.
 func toCharArray(s []string) **C.char {
 	cArray := C.malloc(C.size_t(len(s)+1) * C.size_t(unsafe.Sizeof(uintptr(0))))
@@ -138,7 +142,7 @@ func addDir(p string) {
 func lookupFile(path string) *C.char {
 	ret, err := splibaux.GetFullPath(path)
 	if err != nil {
-		fmt.Println(err)
+		return s2c(errorpattern + err.Error())
 	}
 	return s2c(ret)
 }
@@ -153,7 +157,7 @@ func listFonts() **C.char {
 func convertSVGImage(path string) *C.char {
 	ret, err := splibaux.ConvertSVGImage(path)
 	if err != nil {
-		fmt.Println(err)
+		return s2c(errorpattern + err.Error())
 	}
 	return s2c(ret)
 }
