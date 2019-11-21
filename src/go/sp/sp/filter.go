@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -13,10 +14,15 @@ import (
 	"sp/sp/luaxlsx"
 	"sp/sp/luaxml"
 
-	"github.com/yuin/gopher-lua"
+	"github.com/cjoudrey/gluahttp"
+	lua "github.com/yuin/gopher-lua"
 )
 
-func lerr(l *lua.LState, errormessage string) int {
+var (
+	l *lua.LState
+)
+
+func lerr(errormessage string) int {
 	l.SetTop(0)
 	l.Push(lua.LFalse)
 	l.Push(lua.LString(errormessage))
@@ -31,19 +37,19 @@ func validateRelaxNG(l *lua.LState) int {
 
 	stdoutPipe, err := cmd.StdoutPipe()
 	if err != nil {
-		return lerr(l, err.Error())
+		return lerr(err.Error())
 	}
 	var b bytes.Buffer
 
 	err = cmd.Start()
 	if err != nil {
-		return lerr(l, err.Error())
+		return lerr(err.Error())
 	}
 
 	go io.Copy(&b, stdoutPipe)
 	err = cmd.Wait()
 	if err != nil {
-		return lerr(l, b.String())
+		return lerr(b.String())
 	}
 
 	l.Push(lua.LTrue)
@@ -52,7 +58,7 @@ func validateRelaxNG(l *lua.LState) int {
 
 func runSaxon(l *lua.LState) int {
 	if l.GetTop() < 3 {
-		return lerr(l, "command requires 3 or 4 arguments")
+		return lerr("command requires 3 or 4 arguments")
 	}
 	xsl := l.CheckString(1)
 	src := l.CheckString(2)
@@ -83,14 +89,14 @@ var exports = map[string]lua.LGFunction{
 
 func runtimeLoader(l *lua.LState) int {
 	mod := l.SetFuncs(l.NewTable(), exports)
-	fillRuntimeModule(l, mod)
+	fillRuntimeModule(mod)
 	l.Push(mod)
 	return 1
 
 }
 
 // set projectdir and variables table
-func fillRuntimeModule(l *lua.LState, mod lua.LValue) {
+func fillRuntimeModule(mod lua.LValue) {
 	lvars := l.NewTable()
 	for k, v := range variables {
 		lvars.RawSetString(k, lua.LString(v))
@@ -101,14 +107,35 @@ func fillRuntimeModule(l *lua.LState, mod lua.LValue) {
 	l.SetField(mod, "projectdir", lua.LString(wd))
 }
 
+// When runtime.finalizer is set, call that function after
+// the publishing run
+func runFinalizerCallback() {
+	val := l.GetGlobal("runtime")
+	if val == nil {
+		return
+	}
+	if tbl, ok := val.(*lua.LTable); !ok {
+		return
+	} else {
+		fun := tbl.RawGetString("finalizer")
+		if fn, ok := fun.(*lua.LFunction); ok {
+			l.Push(fn)
+			l.Call(0, 0)
+		}
+	}
+	return
+}
+
 func runLuaScript(filename string) bool {
-	l := lua.NewState()
-	defer l.Close()
+	if l == nil {
+		l = lua.NewState()
+	}
 
 	l.PreloadModule("runtime", runtimeLoader)
 	l.PreloadModule("csv", luacsv.Open)
 	l.PreloadModule("xml", luaxml.Open)
 	l.PreloadModule("xlsx", luaxlsx.Open)
+	l.PreloadModule("http", gluahttp.NewHttpModule(&http.Client{}).Loader)
 
 	if err := l.DoFile(filename); err != nil {
 		fmt.Println(err)

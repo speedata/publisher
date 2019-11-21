@@ -910,7 +910,7 @@ func main() {
 		jobname := getOption("jobname")
 		finishedfilename := fmt.Sprintf("%s.finished", jobname)
 		os.Remove(finishedfilename)
-
+		var filterfile string
 		if filter := getOption("filter"); filter != "" {
 			filterext := filepath.Ext(filter)
 			switch filterext {
@@ -919,6 +919,7 @@ func main() {
 					fmt.Printf("Lua file %q not found\n", filter)
 					exitstatus = 1
 				} else {
+					filterfile = filter
 					if !runLuaScript(filter) {
 						exitstatus = 1
 					}
@@ -928,6 +929,7 @@ func main() {
 				exitstatus = 1
 			default:
 				if fileExists(filter + ".lua") {
+					filterfile = filter
 					if !runLuaScript(filter + ".lua") {
 						exitstatus = 1
 					}
@@ -941,6 +943,9 @@ func main() {
 			os.Exit(exitstatus)
 		}
 		exitstatus = runPublisher()
+		if filterfile != "" {
+			runFinalizerCallback()
+		}
 		writeFinishedfile(finishedfilename)
 
 		// open PDF if necessary

@@ -5,7 +5,7 @@ Manchmal möchte man vor der eigentlichen PDF-Erstellung die Daten in ein andere
 Dafür gibt es die Möglichkeit (seit Version 3.1.9), ein Lua-Skript vor dem eigentlichen Publishing-Lauf auszuführen.
 Lua ist eine einfache, aber mächtige Programmiersprache, die dafür vorgesehen ist, in andere Programme als Skriptsprache einzubauen.
 
-Im https://github.com/speedata/examples/tree/master/technical[Beispiele-Repository] gibt es zwei Anwendungsfälle zum anschauen.
+Im https://github.com/speedata/examples/tree/master/technical[Beispiele-Repository] sind zwei Anwendungsfälle zu finden.
 
 == Aufruf des Lua-Skripts
 
@@ -225,9 +225,24 @@ In diesem Modul werden alle Funktionen und Einstellungen gesammelt, die eher all
 
 Eine Zeichenkette, die das aktuelle Projektverzeichnis enthält (das Verzeichnis mit der `layout.xml` bzw. `publisher.cfg`-Datei)
 
-`projectdir`::
+`variables`::
 
-Eine Tabelle mit alle Variablen, die per `-v` auf der Kommandozeile oder `vars=...` in der Konfigurationsdatei angegeben wurden.
+Eine Tabelle mit alle Variablen, die per `-v` auf der Kommandozeile oder in der Konfigurationsdatei mit `vars=...` angegeben wurden.
+
+`finalizer`::
+
+Ist dieser Variablen eine Funktion zugewiesen, so wird sie nach der PDF-Erzeugung aufgerufen (callback). Die Funktion hat keine Parameter und keinen Rückgabewert.
++
+[source, lua]
+-------------------------------------------------------------------------------
+runtime = require("runtime")
+
+function finished()
+    print("PDF is finished now.")
+end
+
+runtime.finalizer = finished
+-------------------------------------------------------------------------------
 
 `validate_relaxng(‹xmldatei›,‹schemadatei›)`::
 
@@ -328,3 +343,6 @@ Rückgabe ist eine Tabelle mit den Schlüsseln `day`, `month`, `year`, `hour`, `
 }
 -------------------------------------------------------------------------------
 
+=== `http`
+
+Die HTTP-Bibiliothek ist unter https://github.com/cjoudrey/gluahttp beschrieben.
