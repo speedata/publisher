@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.18" date="2019-11-22">
+      <en>New finalizer callback and new http module in Lua filter.</en>
+      <de>Neuer Finalizer-callback und HTTP-Modul im Lua-Filter.</de>
+    </entry>
     <entry version="3.7.17" date="2019-11-19">
       <en>Better error messages for external files loading (#241).</en>
       <de>Bessere Fehlermeldungen beim Laden externer Dateien (#241).</de>
