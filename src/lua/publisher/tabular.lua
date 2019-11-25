@@ -1620,25 +1620,25 @@ function typeset_table(self)
     -- tosplit is the total number of frames on the last page (used or unused)
     local tosplit = self.split
 
-    -- used_frames is the number of frames used by the table w/o split.
-    local used_frames = ( #splits - 1 ) % tosplit
-    -- This can be 0 (all columns used).
-    -- So the number is set to the amount of tosplit in order to balance all columns.
-    if used_frames == 0 then used_frames = tosplit end
-
-    -- Now that we know the #frames to be split, we can count the lines.
-    -- Remember: the split table looks like this:
-    --     splits = {
-    --       [1] = "0"
-    --       [2] = "26"
-    --       [3] = "44"
-    --     }
-    -- Where 44 is the total number of rows. This has to be the last entry in the splits table.
-    -- Each entry means that there is a split after that line. So in the example above,
-    -- line 26 is in the first frame, 27 to 44 in the last frame.
-    local last_possible_split_is_after_line_t = {}
     -- tosplit > 1 ==> needs balancing (otherwise only one frame or no splitting)
     if tosplit > 1 then
+        -- used_frames is the number of frames used by the table w/o split.
+        local used_frames = ( #splits - 1 ) % tosplit
+        -- This can be 0 (all columns used).
+        -- So the number is set to the amount of tosplit in order to balance all columns.
+        if used_frames == 0 then used_frames = tosplit end
+
+        -- Now that we know the #frames to be split, we can count the lines.
+        -- Remember: the split table looks like this:
+        --     splits = {
+        --       [1] = "0"
+        --       [2] = "26"
+        --       [3] = "44"
+        --     }
+        -- Where 44 is the total number of rows. This has to be the last entry in the splits table.
+        -- Each entry means that there is a split after that line. So in the example above,
+        -- line 26 is in the first frame, 27 to 44 in the last frame.
+        local last_possible_split_is_after_line_t = {}
         -- first, we remove the split marks for the used frames.
         -- (If we omitted the rest of the balance routine, the resulting table would be empty for that page.)
         for i=1,used_frames  do
