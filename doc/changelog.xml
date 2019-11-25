@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.19" date="2019-11-25">
+      <en>Bugfix for table balancing (#243).</en>
+      <de>Bugfix für Tabellenausgleich (#243).</de>
+    </entry>
     <entry version="3.7.18" date="2019-11-22">
       <en>New finalizer callback and new http module in Lua filter.</en>
       <de>Neuer Finalizer-callback und HTTP-Modul im Lua-Filter.</de>
