@@ -1,0 +1,51 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <SetGrid nx="12" height="13pt"/>
+    <Pagetype name="t" test="true()">
+        <Margin left="15mm" right="9.2mm" top="43.6mm" bottom="20mm"/>
+        <PositioningArea name="area">
+            <PositioningFrame width="6" height="{sd:number-of-rows()}" row="1" column="1"/>
+            <PositioningFrame width="6" height="{sd:number-of-rows()}" row="1" column="7"/>
+        </PositioningArea>
+    </Pagetype>
+
+    <Record element="Table">
+        <NextRow row="25" area="area"/>
+
+        <PlaceObject area="area">
+            <Table stretch="max" padding="1pt" balance="yes">
+                <ForAll select="tr">
+                    <Switch>
+                        <Case test="th">
+                            <Tr sethead="yes" break-below="no" minheight="4.5mm">
+                                <ForAll select="th">
+                                    <Td colspan="{@colspan}">
+                                        <Paragraph>
+                                            <Value select="."/>
+                                        </Paragraph>
+                                    </Td>
+                                </ForAll>
+                            </Tr>
+                        </Case>
+                        <Otherwise>
+                            <Tr>
+                                <ForAll select="td">
+                                    <Td>
+                                        <Paragraph>
+                                            <Value select="."/>
+                                        </Paragraph>
+                                    </Td>
+                                </ForAll>
+                            </Tr>
+                        </Otherwise>
+                    </Switch>
+                </ForAll>
+            </Table>
+        </PlaceObject>
+    </Record>
+
+
+    <DefineFontfamily name="text" fontsize="8" leading="10">
+        <Regular fontface="sans"/>
+    </DefineFontfamily>
+
+</Layout>

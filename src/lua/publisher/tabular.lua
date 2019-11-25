@@ -1642,6 +1642,8 @@ function typeset_table(self)
         -- first, we remove the split marks for the used frames.
         -- (If we omitted the rest of the balance routine, the resulting table would be empty for that page.)
         for i=1,used_frames  do
+            -- the entry in omit_head_on_pages for this split is not valid anymore
+            omit_head_on_pages[#splits] = nil
             table.remove(splits)
         end
 

@@ -1,0 +1,33 @@
+<Table>
+    <tr><th colspan="2">heading1</th></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><th colspan="2">heading2</th></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><th colspan="2">heading3</th></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><th colspan="2">heading 4</th></tr>
+    <tr><td>a</td><td>b</td></tr>
+    <tr><td>a</td><td>b</td></tr>
+ </Table>
