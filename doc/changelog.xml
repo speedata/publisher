@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.20" date="2019-11-27">
+      <en>New command line parameter: set image cache.</en>
+      <de>Neuer Kommandozeilenparameter: setze Image cache.</de>
+    </entry>
     <entry version="3.7.19" date="2019-11-25">
       <en>Bugfix for table balancing (#243).</en>
       <de>Bugfix für Tabellenausgleich (#243).</de>
