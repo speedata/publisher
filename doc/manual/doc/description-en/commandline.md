@@ -17,6 +17,7 @@ Running the speedata publisher on the command line
         --filter=FILTER          Run Lua filter before publishing starts
         --grid                   Display background grid. Disable with --no-grid
         --ignore-case            Ignore case when accessing files (on a case-insensitive file system)
+        --imagecache=PATH        Set the image cache
         --inkscape=PATH          Set the path to the inkscape program
         --[no-]local             Add local directory to the search path. Default is true
         --layout=NAME            Name of the layout file. Defaults to 'layout.xml'

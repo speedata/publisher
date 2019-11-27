@@ -38,6 +38,7 @@ const (
 	cmdListFonts  = "list-fonts"
 	cmdNew        = "new"
 	cmdWatch      = "watch"
+	cmdHelp       = "help"
 
 	osWindows = "windows"
 	osLinux   = "linux"
@@ -720,6 +721,7 @@ func main() {
 	op.On("--filter FILTER", "Run Lua filter before publishing starts", options)
 	op.On("--grid", "Display background grid. Disable with --no-grid", options)
 	op.On("--ignore-case", "Ignore case when accessing files (on a case-insensitive file system)", options)
+	op.On("--imagecache PATH", "Set the image cache", options)
 	op.On("--inkscape PATH", "Set the path to the inkscape program", options)
 	op.On("--jobname NAME", "The name of the resulting PDF file (without extension), default is 'publisher'", options)
 	op.On("--no-local", "Add local directory to the search path. Default is true", &addLocalPath)
@@ -744,6 +746,7 @@ func main() {
 	op.On("--wd DIR", "Change working directory", options)
 	op.On("--xml", "Output as (pseudo-)XML (for list-fonts)", options)
 
+	op.Command(cmdHelp, "Show usage help")
 	op.Command(cmdClean, "Remove publisher generated files")
 	op.Command(cmdCompare, "Compare files for quality assurance")
 	op.Command(cmdClearcache, "Clear image cache")
@@ -906,6 +909,8 @@ func main() {
 	readVariables()
 
 	switch command {
+	case cmdHelp:
+		op.Help()
 	case cmdRun:
 		jobname := getOption("jobname")
 		finishedfilename := fmt.Sprintf("%s.finished", jobname)

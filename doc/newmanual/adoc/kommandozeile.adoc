@@ -87,6 +87,8 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
    Zeichnet das Raster. Mit `--no-grid` wird es ausgeschaltet. Konfigurierbar auch im <<cmd-trace,Layout>> über den Befehl `<Trace>`.
 `--ignore-case`::
     Ignoriere die Groß- und Kleinschreibung für Dateizugriff.
+`--imagecache=PATH`::
+   Setzt das Verzeichnis für den Bildzwischenspeicher (image cache). Das Verzeichnis wird bei Bedarf erstellt.
 `--inkscape=PATH`::
    Set the path to the inkscape program.
 `--layout=NAME`::
