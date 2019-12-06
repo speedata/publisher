@@ -161,7 +161,7 @@
         <xsl:apply-templates select="." mode="toc"/>
       </xsl:when>
       <xsl:when test="@role = 'epub'">
-        <xsl:text>{{% epub %}}</xsl:text>
+        <xsl:text>{{% epub %}}&#x0a;</xsl:text>
         <xsl:apply-templates/>
       </xsl:when>
       <xsl:otherwise>

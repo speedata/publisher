@@ -84,7 +84,7 @@ var (
 type statuserror struct {
 	XMLName xml.Name `xml:"Error"`
 	Code    int      `xml:"code,attr"`
-	Error   string   `xml:",innerxml"`
+	Error   string   `xml:",chardata"`
 }
 
 type status struct {

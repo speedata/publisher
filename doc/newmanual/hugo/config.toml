@@ -19,3 +19,7 @@ title = "speedata Handbuch"
 
 [params]
   type = "handbuch"
+
+
+[markup.goldmark.renderer]
+unsafe = true

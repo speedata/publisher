@@ -1162,7 +1162,7 @@ end
 function load_xml(filename,filetype,options)
     local path = kpse.find_file(filename)
     if not path then
-        err("Can't find XML file %q. Abort.\n",filename or "?")
+        err("Can't find XML file %q. Abort.",filename or "?")
         return
     end
     log("Loading %s %q",filetype or "file",path)
@@ -1914,17 +1914,11 @@ function setpageresources()
     local gstateresource = string.format(" /ExtGState << /GS0 %d 0 R /GS1 %d 0 R >>", GS_State_OP_On, GS_State_OP_Off)
     local cropbox = ""
 
-    if status.luatex_version < 79 then
-        if #used_spotcolors > 0 then
-            pdf.pageresources = "/ColorSpace << " .. spotcolors.getresource(used_spotcolors) .. " >>" .. gstateresource
-        end
+    -- LuaTeX has setpageresources
+    if #used_spotcolors > 0 then
+        pdf.setpageresources("/ColorSpace << " .. spotcolors.getresource(used_spotcolors) .. " >>" .. gstateresource )
     else
-        -- LuaTeX has setpageresources
-        if #used_spotcolors > 0 then
-            pdf.setpageresources("/ColorSpace << " .. spotcolors.getresource(used_spotcolors) .. " >>" .. gstateresource )
-        else
-            pdf.setpageresources(gstateresource)
-        end
+        pdf.setpageresources(gstateresource)
     end
 end
 
@@ -3475,13 +3469,8 @@ function set_color_if_necessary( nodelist,color )
         colstop  = node.new("whatsit","pdf_colorstack")
         colstart.data = colors[colorname].pdfstring
         colstop.data  = ""
-        if status.luatex_version < 79 then
-            colstart.cmd = 1
-            colstop.cmd  = 2
-        else
-            colstart.command = 1
-            colstop.command  = 2
-        end
+        colstart.command = 1
+        colstop.command  = 2
         colstart.stack = 0
         colstop.stack  = 0
     end

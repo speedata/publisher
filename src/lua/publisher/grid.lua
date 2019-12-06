@@ -901,11 +901,7 @@ function trimbox( self, crop, extrapageattributes )
         attrstring[#attrstring + 1] = string.format("/CropBox [%g %g %g %g]", sp_to_bp(self.dimensions[1] - 2*crop), sp_to_bp(tex.pageheight - self.dimensions[2] + 2* crop), sp_to_bp(self.dimensions[3] + 2*crop), sp_to_bp(tex.pageheight - self.dimensions[4] - 2*crop))
     end
 
-    if status.luatex_version < 79 then
-        pdf.pageattributes = table.concat(attrstring, " ")
-    else
-        pdf.setpageattributes(table.concat(attrstring, " "))
-    end
+    pdf.setpageattributes(table.concat(attrstring, " "))
 end
 
 function cutmarks( self, length, distance, width )

@@ -60,11 +60,7 @@ function Paragraph:set_color( color )
     end
     local colstart = node.new("whatsit","pdf_colorstack")
     colstart.data  = publisher.colors[colorname].pdfstring
-    if status.luatex_version < 79 then
-        colstart.cmd = 1
-    else
-        colstart.command = 1
-    end
+    colstart.command = 1
     colstart.stack = 0
     colstart.next = self.nodelist
     self.nodelist.prev = colstart
@@ -77,11 +73,7 @@ function Paragraph:set_color( color )
 
     local colstop  = node.new("whatsit","pdf_colorstack")
     colstop.data  = ""
-    if status.luatex_version < 79 then
-        colstop.cmd = 2
-    else
-        colstop.command = 2
-    end
+    colstop.command = 2
     colstop.stack = 0
     node.set_attribute(colstart,publisher.att_origin,publisher.origin_setcolor)
     node.set_attribute(colstop,publisher.att_origin,publisher.origin_setcolor)
@@ -484,13 +476,8 @@ function Paragraph:format(width_sp, default_textformat_name,options)
             parameter.tolerance     = 5000
             parameter.hyphenpenalty = 200
 
-            -- tex.pdf... is LuaTeX < 1
             local adjspace
-            if status.luatex_version >= 100 then
-                adjspace = tex.adjustspacing
-            else
-                adjspace = tex.pdfadjustspacing
-            end
+            adjspace = tex.adjustspacing
             tex.pdfadjustspacing = 0
             tex.adjustspacing = 0
             nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
