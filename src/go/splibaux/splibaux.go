@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -25,9 +26,9 @@ func init() {
 
 }
 
-func downloadFile(resourceUrl string, outfile io.Writer) error {
+func downloadFile(resourceURL string, outfile io.Writer) error {
 	// get HTTP file
-	res, err := http.Get(resourceUrl)
+	res, err := http.Get(resourceURL)
 	if err != nil {
 		return err
 	}
@@ -36,7 +37,7 @@ func downloadFile(resourceUrl string, outfile io.Writer) error {
 	return err
 }
 
-func saveFileFromUrl(parsedURL *url.URL, rawURL string) (string, error) {
+func saveFileFromURL(parsedURL *url.URL, rawURL string) (string, error) {
 	rawimgcache := os.Getenv("IMGCACHE")
 	if rawimgcache == "" {
 		rawimgcache = filepath.Join(os.TempDir(), "imagecache")
@@ -60,7 +61,10 @@ func saveFileFromUrl(parsedURL *url.URL, rawURL string) (string, error) {
 		destfile += "?" + parsedURL.RawQuery
 	}
 
-	resultingFilename, err := DoCaching(rawimgcache, destfile, rawURL)
+	// docaching does not do anything if the cache method is not "optimal".
+	// So the resultingFilename may not exist. But at least we now know the
+	// filename (it is basically a md5 sum of the URL, but this is not guaranteed).
+	resultingFilename, err := docaching(rawimgcache, destfile, rawURL)
 	if err != nil {
 		return "", err
 	}
@@ -72,17 +76,23 @@ func saveFileFromUrl(parsedURL *url.URL, rawURL string) (string, error) {
 			return "", err
 		}
 	}
-	f, err := os.Create(resultingFilename)
+	// We create a temporary file and use that for downloading.
+	// After that (the process can take some time) we create the file we need.
+	f, err := ioutil.TempFile(rawimgcache, "download")
 	if err != nil {
 		return "", err
 	}
 	defer f.Close()
 	err = downloadFile(rawURL, f)
+	if err != nil {
+		return "", err
+	}
+	err = os.Rename(f.Name(), resultingFilename)
 	return resultingFilename, err
 }
 
-// Return the real path of a file
-// filename can be a short file, an absolute path to a file,
+// GetFullPath returns the real path of a file.
+// filename can be a filename (w/o path), an absolute path to a file,
 // a file:// or a http(s):// URL.
 func GetFullPath(filename string) (string, error) {
 	u, err := url.Parse(filename)
@@ -90,7 +100,7 @@ func GetFullPath(filename string) (string, error) {
 		return "", err
 	}
 	if u.Scheme == "http" || u.Scheme == "https" {
-		return saveFileFromUrl(u, filename)
+		return saveFileFromURL(u, filename)
 	} else if u.Scheme == "file" {
 		fn := u.Path
 		if hn := u.Hostname(); hn != "" {
@@ -100,9 +110,10 @@ func GetFullPath(filename string) (string, error) {
 	} else {
 		return LookupFile(filename), nil
 	}
-	return "", nil
 }
 
+// LookupFile returns the full path of the given file name. The file name can be a
+// simple name, a path, a URL etc.
 func LookupFile(path string) string {
 	// TODO: lowercase
 	// local lowercase = os.getenv("SP_IGNORECASE") == "1"
@@ -127,10 +138,13 @@ func addFileToList(path string, info os.FileInfo, err error) error {
 	return nil
 }
 
+// AddDir adds a directory to the list of search paths.
 func AddDir(p string) {
 	filepath.Walk(p, addFileToList)
 }
 
+// BuildFilelist walks through every given path and adds all found
+// files to the global file search list.
 func BuildFilelist(paths []string) {
 	var err error
 	for _, p := range paths {
@@ -158,6 +172,7 @@ func isFont(filename string) bool {
 	return strings.HasSuffix(lc, ".pfb") || strings.HasSuffix(lc, ".ttf") || strings.HasSuffix(lc, ".otf")
 }
 
+// ListFonts returns a string of all font files found in the paths.
 func ListFonts() []string {
 	var res []string
 	for _, f := range files {
@@ -169,6 +184,8 @@ func ListFonts() []string {
 
 }
 
+// ConvertSVGImage runs inkscape to convert an SVG image to PDF.
+// It returns the PDF file and an error.
 func ConvertSVGImage(filename string) (string, error) {
 	svgfile, err := GetFullPath(filename)
 	if err != nil {

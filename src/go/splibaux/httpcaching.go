@@ -21,7 +21,7 @@ func init() {
 	cachemethod = os.Getenv("CACHEMETHOD")
 }
 
-func DoCaching(cachedir, outfilename, url string) (string, error) {
+func docaching(cachedir, outfilename, url string) (string, error) {
 	// Let's assume cachedir already exists
 	var err error
 	hashedFilename := fmt.Sprintf("%x", md5.Sum([]byte(outfilename)))
