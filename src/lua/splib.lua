@@ -2,6 +2,8 @@ local ffi = require("ffi")
 
 module(...,package.seeall)
 
+fileslookup = {}
+
 if os.name == "windows" then
     ffi.cdef[[
 typedef char _check_for_32_bit_pointer_matching_GoInt[sizeof(void*)==32/8 ? 1:-1];
@@ -103,6 +105,11 @@ local function add_dir(dirname)
 end
 
 local function lookupfile(filename)
+    local found = fileslookup[filename]
+    if found then
+        return found
+    end
+
     local ret = ld.lookupFile(c(filename))
     local _ret = ffi.string(ret)
     if string.match( _ret,errorpattern ) then
@@ -110,7 +117,7 @@ local function lookupfile(filename)
         return
     end
     if _ret == "" then return nil end
-
+    fileslookup[filename] = _ret
     return _ret
 end
 
