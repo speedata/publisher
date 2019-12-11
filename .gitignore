@@ -8,3 +8,4 @@ publisher.protocol
 /atom-schema-speedata
 compare-report.html
 /.vscode
+/publisher.code-workspace
