@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -47,12 +48,23 @@ func docaching(cachedir, outfilename, url string) (string, error) {
 			os.Remove(outpath)
 			return "", fmt.Errorf("Resource not found (404): %q", url)
 		}
-		outf, err := os.Create(outpath)
+		outf, err := ioutil.TempFile(cachedir, "download")
 		if err != nil {
 			return "", err
 		}
-		defer outf.Close()
-		io.Copy(outf, resp.Body)
+
+		if _, err = io.Copy(outf, resp.Body); err != nil {
+			return "", err
+		}
+		resp.Body.Close()
+
+		temfilename := outf.Name()
+		if err = outf.Close(); err != nil {
+			return "", err
+		}
+		err = os.Rename(temfilename, outpath)
+		return outpath, err
+
 	}
 	return outpath, nil
 }
