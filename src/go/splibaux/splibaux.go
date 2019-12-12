@@ -37,6 +37,11 @@ func downloadFile(resourceURL string, outfile io.Writer) error {
 	return err
 }
 
+// Download a file via http / https and save it into a file in the imagecache folder.
+// If the environment variable CACHEMETHOD is set to 'optimal', the method docaching()
+// will perform a query to the server even if the image file exists in the IMGCACHE directory
+// to check if the local file is up to date.
+// The return value is the file name for the LuaTeX process
 func saveFileFromURL(parsedURL *url.URL, rawURL string) (string, error) {
 	rawimgcache := os.Getenv("IMGCACHE")
 	if rawimgcache == "" {
@@ -69,13 +74,16 @@ func saveFileFromURL(parsedURL *url.URL, rawURL string) (string, error) {
 		return "", err
 	}
 
-	if _, err := os.Stat(resultingFilename); err == nil {
+	// docaching has downloaded the file, so we can pass it back
+	// to the lua process
+	if _, err = os.Stat(resultingFilename); err == nil {
 		return resultingFilename, nil
-	} else {
-		if !os.IsNotExist(err) {
-			return "", err
-		}
 	}
+	// only keep on going if the error of stat is a "file not found" error.
+	if !os.IsNotExist(err) {
+		return "", err
+	}
+
 	// We create a temporary file and use that for downloading.
 	// After that (the process can take some time) we create the file we need.
 	f, err := ioutil.TempFile(rawimgcache, "download")
