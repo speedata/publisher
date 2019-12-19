@@ -10,9 +10,10 @@ replace splib v0.0.0 => ./src/go/splib
 
 replace splibaux v0.0.0 => ./src/go/splibaux
 
-go 1.12
 
 require (
 	sp/sp v0.0.0 // indirect
 	sphelper v0.0.0 // indirect
+	splib v0.0.0 // indirect
+	splibaux v0.0.0 // indirect
 )
