@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.7">
+    <entry version="3.7.23" date="2019-12-19">
+      <en>Add cache option "none".</en>
+      <de>Neue cache-Option "none".</de>
+    </entry>
     <entry version="3.7.22" date="2019-12-11">
       <en>Improvements for caching external media files.</en>
       <de>Verbesserung beim caching von externen Medien.</de>
