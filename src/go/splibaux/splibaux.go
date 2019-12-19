@@ -69,19 +69,20 @@ func saveFileFromURL(parsedURL *url.URL, rawURL string) (string, error) {
 	// docaching does not do anything if the cache method is not "optimal".
 	// So the resultingFilename may not exist. But at least we now know the
 	// filename (it is basically a md5 sum of the URL, but this is not guaranteed).
-	resultingFilename, err := docaching(rawimgcache, destfile, rawURL)
+	resultingFilename, err := getFilenameAndDoCaching(rawimgcache, destfile, rawURL)
 	if err != nil {
 		return "", err
 	}
-
-	// docaching has downloaded the file, so we can pass it back
-	// to the lua process
-	if _, err = os.Stat(resultingFilename); err == nil {
-		return resultingFilename, nil
-	}
-	// only keep on going if the error of stat is a "file not found" error.
-	if !os.IsNotExist(err) {
-		return "", err
+	if cachemethod != "none" {
+		// docaching has downloaded the file, so we can pass it back
+		// to the lua process
+		if _, err = os.Stat(resultingFilename); err == nil {
+			return resultingFilename, nil
+		}
+		// only keep on going if the error of stat is a "file not found" error.
+		if !os.IsNotExist(err) {
+			return "", err
+		}
 	}
 
 	// We create a temporary file and use that for downloading.

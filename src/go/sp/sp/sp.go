@@ -501,7 +501,7 @@ func writeFinishedfile(path string) {
 	ioutil.WriteFile(path, []byte("finished\n"), 0600)
 }
 
-func runPublisher() (exitstatus int) {
+func runPublisher(cachemethod string) (exitstatus int) {
 	log.Print("Run speedata publisher")
 	defer removeLogfile()
 
@@ -586,7 +586,9 @@ func runPublisher() (exitstatus int) {
 			os.Exit(-1)
 			break
 		}
-		os.Setenv("CACHEMETHOD", "fast")
+		if cachemethod != "none" {
+			os.Setenv("CACHEMETHOD", "fast")
+		}
 	}
 	// todo: DRY code -> server/status
 	data, err := ioutil.ReadFile(fmt.Sprintf("%s.status", jobname))
@@ -710,7 +712,7 @@ func main() {
 	op := optionparser.NewOptionParser()
 	op.On("--address IPADDRESS", "Address to be used for the server mode. Defaults to 127.0.0.1", options)
 	op.On("--autoopen", "Open the PDF file (MacOS X and Linux only)", options)
-	op.On("--cache METHOD", "Use cache method. One of 'fast' or 'optimal'. Default is 'optimal'", options)
+	op.On("--cache METHOD", "Use cache method. One of 'none', 'fast' or 'optimal'. Default is 'optimal'", options)
 	op.On("-c NAME", "--config", "Read the config file with the given NAME. Default: 'publisher.cfg'", &configfilename)
 	op.On("--credits", "Show credits and exit", showCredits)
 	op.On("--no-cutmarks", "Display cutmarks in the document", layoutoptions)
@@ -854,7 +856,8 @@ func main() {
 	}
 
 	os.Setenv("IMGCACHE", ic)
-	os.Setenv("CACHEMETHOD", getOption("cache"))
+	cachemethod := getOption("cache")
+	os.Setenv("CACHEMETHOD", cachemethod)
 
 	if ed := cfg.String("DEFAULT", "extra-dir"); ed != "" {
 		abspath, err := filepath.Abs(ed)
@@ -947,7 +950,7 @@ func main() {
 		if exitstatus == 1 {
 			os.Exit(exitstatus)
 		}
-		exitstatus = runPublisher()
+		exitstatus = runPublisher(cachemethod)
 		if filterfile != "" {
 			runFinalizerCallback()
 		}

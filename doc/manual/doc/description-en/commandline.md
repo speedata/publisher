@@ -8,7 +8,7 @@ Running the speedata publisher on the command line
     -h, --help                   Show this help
         --autoopen               Open the PDF file (MacOS X and Linux only)
         --data=NAME              Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN
-        --cache=METHOD           Use cache method. One of 'fast' or 'optimal'. Default is 'optimal'
+        --cache=METHOD           Use cache method. One of 'none', 'fast' or 'optimal'. Default is 'optimal'
         --dummy                  Don't read a data file, use '<data />' as input
     -c, --config=NAME            Read the config file with the given NAME. Default: 'publisher.cfg'
         --[no-]cutmarks          Display cutmarks in the document
