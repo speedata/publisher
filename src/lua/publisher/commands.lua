@@ -3405,6 +3405,7 @@ function commands.table( layoutxml,dataxml,options )
     local eval           = publisher.read_attribute(layoutxml,dataxml,"eval",          "xpath")
     local collapse       = publisher.read_attribute(layoutxml,dataxml,"border-collapse",  "string", "separate")
     local balance        = publisher.read_attribute(layoutxml,dataxml,"balance",       "boolean", false)
+    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",    "rawstring", "__leftaligned")
 
     -- FIXME: leading -> row distance or so
     padding        = tex.sp(padding        or "0pt")
@@ -3480,6 +3481,7 @@ function commands.table( layoutxml,dataxml,options )
     else
         tabular.split = 1
     end
+    tabular.textformat = textformat
 
     xpath.set_variable("_last_tr_data","")
 

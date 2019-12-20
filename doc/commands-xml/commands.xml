@@ -7631,6 +7631,14 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="textformat" optional="yes" since="3.7.23" type="text" allowxpath="yes">
+      <description xml:lang="en">
+        <para>The text format for the table. Defaults to <tt>__leftaligned</tt> if no align attribute is given.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Textformat für die Tabelle. Voreinstellung ist <tt>__leftaligned</tt>, wenn keine Ausrichtung (align) angegeben wird.</para>
+      </description>
+    </attribute>
     <attribute en="width" type="numberorlength" optional="yes">
       <description xml:lang="en">
         <para>The maximum width of the table (in grid cells or absolute values). Defaults to the available space.</para>

@@ -4569,6 +4569,11 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="textformat">
+        <xs:annotation>
+          <xs:documentation>Textformat für die Tabelle. Voreinstellung ist __leftaligned, wenn keine Ausrichtung (align) angegeben wird.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="width">
         <xs:annotation>
           <xs:documentation>Der Bereich, den die Tabelle (maximal) im Raster belegt. Angabe in Rasterzellen oder absoluten Längenangaben. Voreinstellung ist der verfügbare Platz.</xs:documentation>

@@ -24,10 +24,10 @@ function new( self )
         tablefoot_last_contents,
         tablefoot_contents,
         tablewidth_target,
-        columncolors  = {},
-        -- The distance between column i and i+1, currently not used
+        backgroundcolumncolors  = {},
+        -- The distance between column i and i+1
         column_distances = {},
-        -- number of frames the table is split across, initialise to a sane default value
+        -- number of frames the table is split across, initialize to a sane default value
         split = 1,
     }
 
@@ -82,7 +82,7 @@ function attach_objects_row( self, tab )
                     end
                     block[#block + 1] = {eltcontents}
                 elseif eltname == "Paragraph" or eltname == "Box" then
-                    local default_textformat_name
+                    local default_textformat_name = self.textformat
                     local alignment = td_contents.align or tab.align or self.align[current_column]
                     if     alignment=="center"  then  default_textformat_name = "__centered"
                     elseif alignment=="left"    then  default_textformat_name = "__leftaligned"
@@ -357,7 +357,7 @@ function calculate_columnwidth( self )
                         end
                     end
                     if column_contents.backgroundcolor then
-                        self.columncolors[i] = column_contents.backgroundcolor
+                        self.backgroundcolumncolors[i] = column_contents.backgroundcolor
                     end
                 end
                 count_columns = i
@@ -581,7 +581,7 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
             cellrow = node.insert_after(cellrow,node.tail(cellrow),blockobject)
         else
             for i=1,#blockobject do
-                local default_textformat_name
+                local default_textformat_name = self.textformat
                 local inlineobject = blockobject[i]
                 if type(inlineobject) == "table" then
                     if width then
@@ -743,7 +743,6 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
     local current_column = 0
 
     for _,td in ipairs(tr_contents) do
-        local default_textformat_name
         local td_contents = publisher.element_contents(td)
         if td_contents == nil then
             err("No contents in Td")
@@ -905,8 +904,6 @@ function typeset_row(self, tr_contents, current_row )
     local td_contents
     current_column = 0
     for _,td in ipairs(tr_contents) do
-        local default_textformat_name
-
         current_column = current_column + 1
 
         td_contents = publisher.element_contents(td)
@@ -1041,9 +1038,9 @@ function typeset_row(self, tr_contents, current_row )
         --- The cell is now almost complete. We can set the background color and add the top and bottom rule.
         ---
         --- ![Table cell vertical](../img/tablecell2.svg)
-        if tr_contents.backgroundcolor or td_contents.backgroundcolor or self.columncolors[current_column] then
+        if tr_contents.backgroundcolor or td_contents.backgroundcolor or self.backgroundcolumncolors[current_column] then
             -- prio: Td.backgroundcolor, then Tr.backgroundcolor, then Column.backgroundcolor
-            local color = self.columncolors[current_column]
+            local color = self.backgroundcolumncolors[current_column]
             if tr_contents.backgroundcolor and tr_contents.backgroundcolor ~= "-" then
                 color = tr_contents.backgroundcolor
             end

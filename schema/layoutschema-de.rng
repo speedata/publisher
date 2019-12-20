@@ -4603,6 +4603,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="textformat">
+                     <a:documentation>Textformat für die Tabelle. Voreinstellung ist __leftaligned, wenn keine Ausrichtung (align) angegeben wird.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="width">
                      <a:documentation>Der Bereich, den die Tabelle (maximal) im Raster belegt. Angabe in Rasterzellen oder absoluten Längenangaben. Voreinstellung ist der verfügbare Platz.</a:documentation>
                   </attribute>

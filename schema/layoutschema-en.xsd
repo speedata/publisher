@@ -4569,6 +4569,11 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="textformat">
+        <xs:annotation>
+          <xs:documentation>The text format for the table. Defaults to __leftaligned if no align attribute is given.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="width">
         <xs:annotation>
           <xs:documentation>The maximum width of the table (in grid cells or absolute values). Defaults to the available space.</xs:documentation>

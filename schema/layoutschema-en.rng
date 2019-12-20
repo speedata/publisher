@@ -4603,6 +4603,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="textformat">
+                     <a:documentation>The text format for the table. Defaults to __leftaligned if no align attribute is given.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="width">
                      <a:documentation>The maximum width of the table (in grid cells or absolute values). Defaults to the available space.</a:documentation>
                   </attribute>
