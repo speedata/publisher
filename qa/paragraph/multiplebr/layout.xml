@@ -1,0 +1,16 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Options crop="0mm"/>
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="5">
+        <Paragraph>
+          <Value>Lorem<br/><br/>ipsum</Value>
+          <Br/><Br/>
+          <Value>consectetur adipisicing elit</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
