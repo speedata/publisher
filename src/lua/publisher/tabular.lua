@@ -50,7 +50,7 @@ end
 ---
 --- ![Objects in a table](../img/objectsintable.svg)
 --- The table is stored in the objects
-function attach_objects_row( self, tab )
+function attach_objects_row( self, tab, current_row )
     -- For each block object (container) there is one row in block
     local td_elementname
     local td_contents
@@ -62,6 +62,12 @@ function attach_objects_row( self, tab )
         if td_elementname == "Td" then
             local block = {}
             local inline = {}
+            local colspan = tonumber(td_contents.colspan) or 1
+            current_column = current_column + colspan - 1
+
+            while self.skip[current_row] and self.skip[current_row][current_column] do
+                current_column = current_column + 1
+            end
             for i,j in ipairs(td_contents) do
                 local eltname     = publisher.elementname(j)
                 local eltcontents = publisher.element_contents(j)
@@ -122,7 +128,7 @@ function attach_objects_row( self, tab )
             td_contents.objects = block
             td_contents.objects.rotate = td_contents.rotate
         elseif td_elementname == "Tr" then -- probably from tablefoot/head
-            attach_objects_row(self,td_contents)
+            attach_objects_row(self,td_contents,current_row)
         elseif td_elementname == "Column" or td_elementname == "Tablerule" or td_elementname == "TableNewPage" then
             -- ignore, they don't have objects
         else
@@ -131,9 +137,14 @@ function attach_objects_row( self, tab )
     end
 end
 
-function attach_objects( self, tab )
+function attach_objects( self, tab, row )
+    row = row or 1
     for _,tr in ipairs(tab) do
-        attach_objects_row(self, publisher.element_contents(tr))
+        local eltname = publisher.elementname(tr)
+        if eltname == "Tr" or eltname == "Tablehead" or eltname == "Tablefoot" then
+            attach_objects_row(self, publisher.element_contents(tr), row)
+            row = row + 1
+        end
     end
 end
 
@@ -201,17 +212,10 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
         -- fill skip, colspan and colmax-tables for this cell
         current_column = current_column + 1
         min_wd,max_wd = nil,nil
-        local rowspan = tonumber(td_contents.rowspan) or 1
         local colspan = tonumber(td_contents.colspan) or 1
 
         -- When I am on a skip column (because of a row span), we jump over to the next column
         while self.skip[current_row] and self.skip[current_row][current_column] do current_column = current_column + 1 end
-        -- rowspan?
-        for z = current_row + 1, current_row + rowspan - 1 do
-            for y = current_column, current_column + colspan - 1 do
-                self.skip[z] = self.skip[z] or {}  self.skip[z][y] = true
-            end
-        end
 
         local td_borderleft  = tex.sp(td_contents["border-left"]  or 0)
         local td_borderright = tex.sp(td_contents["border-right"] or 0)
@@ -581,25 +585,9 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
             cellrow = node.insert_after(cellrow,node.tail(cellrow),blockobject)
         else
             for i=1,#blockobject do
-                local default_textformat_name = self.textformat
                 local inlineobject = blockobject[i]
                 if type(inlineobject) == "table" then
                     if width then
-                        -- ok, a paragraph with a certain width, that we can typeset
-                        if     horizontal_alignment=="center"  then  default_textformat_name = "__centered"
-                        elseif horizontal_alignment=="left"    then  default_textformat_name = "__leftaligned"
-                        elseif horizontal_alignment=="right"   then  default_textformat_name = "__rightaligned"
-                        elseif horizontal_alignment=="justify" then  default_textformat_name = "__justified"
-                        end
-                        if not default_textformat_name then
-                            if inlineobject.textformat then
-                                default_textformat_name = inlineobject.textformat
-                            elseif self.textformat then
-                                default_textformat_name = self.textformat
-                            else
-                                default_textformat_name = "__leftaligned"
-                            end
-                        end
                         publisher.set_fontfamily_if_necessary(inlineobject.nodelist,self.fontfamily)
                         local angle_rad = -1 * math.rad(blockobjects.rotate or 0)
                         local sin_angle = math.sin( angle_rad )
@@ -610,7 +598,7 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
                             format_width = math.max(format_width, inlineobject:max_width() * sin_angle )
                         end
 
-                        local v = inlineobject:format(format_width,default_textformat_name)
+                        local v = inlineobject:format(format_width,inlineobject.textformat)
                         cell = node.insert_after(cell,node.tail(cell),v)
                     else
                         w("no width given in paragraph")
@@ -765,12 +753,6 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
 
         -- There might be a rowspan in the row above, so we need to find the correct
         -- column width
-        -- rowspan? - this is not DRY: we did the same already in calculate_columnwidth
-        for z = current_row + 1, current_row + rowspan - 1 do
-            for y = current_column, current_column + colspan - 1 do
-                self.skip[z] = self.skip[z] or {}  self.skip[z][y] = true
-            end
-        end
 
         while self.skip[current_row] and self.skip[current_row][current_column] do
             current_column = current_column + 1
@@ -933,13 +915,6 @@ function typeset_row(self, tr_contents, current_row )
             current_column = current_column + 1
         end
 
-        -- rowspan? - this is not DRY: we did the same already in calculate_columnwidth
-        for z = current_row + 1, current_row + rowspan - 1 do
-            for y = current_column, current_column + colspan - 1 do
-                self.skip[z] = self.skip[z] or {}  self.skip[z][y] = true
-            end
-        end
-
         current_column_width = 0
         for s = current_column,current_column + colspan - 1 do
             if self.colwidths[s] == nil then
@@ -1008,7 +983,7 @@ function typeset_row(self, tr_contents, current_row )
 
         cell_start = g
         local ht_border = 0
-        local rowspan = td_contents.rowspan or 1
+        rowspan = td_contents.rowspan or 1
         for i=1,rowspan do
             ht_border = ht_border + self.rowheights[current_row + i - 1] + self.rowsep
         end
@@ -1830,8 +1805,44 @@ function reformat_head( self,pagenumber)
 end
 
 
+function set_skip_table( self )
+    local rowspan
+    local colspan
+    local current_row = 0
+    for _,tr in ipairs(self.tab) do
+        local current_column = 0
+        local tr_contents = publisher.element_contents(tr)
+        local eltname = publisher.elementname(tr)
+
+        if eltname == "Tr" then
+            current_row = current_row + 1
+            for _,td in ipairs(tr_contents) do
+                current_column = current_column + 1
+                local td_contents = publisher.element_contents(td)
+                rowspan = tonumber(td_contents.rowspan) or 1
+                colspan = tonumber(td_contents.colspan) or 1
+                -- There might be a rowspan in the row above, so we need to find the correct
+                -- column width
+                for z = current_row + 1, current_row + rowspan - 1 do
+                    for y = current_column, current_column + colspan - 1 do
+                        self.skip[z] = self.skip[z] or {}
+                        self.skip[z][y] = true
+                    end
+                end
+
+                while self.skip[current_row] and self.skip[current_row][current_column] do
+                    current_column = current_column + 1
+                end
+
+            end
+        end
+    end
+    -- body
+end
+
 function make_table( self )
     setmetatable(self.column_distances,{ __index = function() return self.colsep or 0 end })
+    set_skip_table(self)
     collect_alignments(self)
     attach_objects(self, self.tab)
     if calculate_columnwidth(self) ~= nil then

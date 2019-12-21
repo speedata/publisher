@@ -1,0 +1,51 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options crop="1cm" />
+
+  <Record element="data">
+    <PlaceObject>
+      <Table stretch="max">
+        <Columns>
+          <Column width="1*"/>
+          <Column width="1*"/>
+          <Column width="1*" align="center" backgroundcolor="gray"/>
+          <Column width="1*"/>
+        </Columns>
+        <Tr>
+          <Td><Paragraph><Value>1/1</Value></Paragraph></Td>
+          <Td rowspan="2"><Paragraph><Value>rowspan</Value></Paragraph></Td>
+          <Td><Paragraph><Value>center</Value></Paragraph></Td>
+          <Td><Paragraph><Value>left</Value></Paragraph></Td>
+        </Tr>
+        <Tr>
+          <Td><Paragraph><Value>2/1</Value></Paragraph></Td>
+          <Td><Paragraph><Value>center</Value></Paragraph></Td>
+          <Td><Paragraph><Value>left</Value></Paragraph></Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+    <PlaceObject>
+      <Table stretch="max">
+        <Columns>
+          <Column width="1*"/>
+          <Column width="1*"/>
+          <Column width="1*" align="center" backgroundcolor="gray"/>
+          <Column width="1*"/>
+        </Columns>
+        <Tr>
+          <Td colspan="2"><Paragraph><Value>colspan</Value></Paragraph></Td>
+          <Td><Paragraph><Value>center</Value></Paragraph></Td>
+          <Td><Paragraph><Value>left</Value></Paragraph></Td>
+        </Tr>
+        <Tr>
+          <Td><Paragraph><Value>2/1</Value></Paragraph></Td>
+          <Td><Paragraph><Value>2/2</Value></Paragraph></Td>
+          <Td><Paragraph><Value>center</Value></Paragraph></Td>
+          <Td><Paragraph><Value>left</Value></Paragraph></Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
