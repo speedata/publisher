@@ -8,3 +8,5 @@ require (
 	github.com/speedata/go-epub v0.5.5
 	github.com/speedata/optionparser v1.0.0
 )
+
+go 1.11
