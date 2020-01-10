@@ -1,5 +1,4 @@
-[![Join the chat at https://gitter.im/speedata/publisher](https://badges.gitter.im/speedata/publisher.svg)](https://gitter.im/speedata/publisher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
+[![Join the chat at https://gitter.im/speedata/publisher](https://img.shields.io/gitter/room/speedata/publisher?color=yellow)](https://gitter.im/speedata/publisher)&nbsp;[![Buy me a coffee at ko-fi](https://img.shields.io/badge/Donate-Buy%20me%20a%20coffee-brightgreen)](https://ko-fi.com/D1D11C3OA)&nbsp;![Platforms](https://img.shields.io/badge/Platform-Mac%2FLinux%2FWindows-lightgrey)
 
 speedata Publisher
 ==================
@@ -60,4 +59,5 @@ We offer commercial support for the speedata Publisher. You can find the contact
 --------
 Source: <https://github.com/speedata/publisher/> <br>
 Blog (German): <https://blog.speedata.de/> <br>
-Webpage: <https://www.speedata.de/>
+Webpage: <https://www.speedata.de/> <br>
+Chat: <https://gitter.im/speedata/publisher>
