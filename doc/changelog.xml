@@ -1,5 +1,11 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="3.7">
+  <chapter version="3.8">
+    <entry version="3.8.0" date="2020-01-14">
+      <en>Release stable version 3.8.0.</en>
+      <de>Veröffentliche stabile Version 3.8.0.</de>
+    </entry>
+  </chapter>
+  <chapter version="3.7" date="2020-01-14">
     <entry version="3.7.24" date="2020-01-06">
       <en>A few bugfixes (#242, #174, #239). Prepare for 3.8.</en>
       <de>Fehlerkorrekturen (#242, #174, #239). Vorbereitung für 3.8.</de>
