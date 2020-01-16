@@ -1,4 +1,10 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
+  <chapter version="3.9">
+    <entry version="3.9.1" date="2020-01-16">
+      <en>External image processors and converter.</en>
+      <de>Externe Bild-Konvertierungstools.</de>
+    </entry>
+  </chapter>
   <chapter version="3.8">
     <entry version="3.8.0" date="2020-01-14">
       <en>Release stable version 3.8.0.</en>
