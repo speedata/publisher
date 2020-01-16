@@ -153,6 +153,24 @@ func listFonts() **C.char {
 	return toCharArray(res)
 }
 
+//export convertContents
+func convertContents(contents, handler string) *C.char {
+	ret, err := splibaux.ConvertContents(contents, handler)
+	if err != nil {
+		return s2c(errorpattern + err.Error())
+	}
+	return s2c(ret)
+}
+
+//export convertImage
+func convertImage(filename, handler string) *C.char {
+	ret, err := splibaux.ConvertImage(filename, handler)
+	if err != nil {
+		return s2c(errorpattern + err.Error())
+	}
+	return s2c(ret)
+}
+
 //export convertSVGImage
 func convertSVGImage(path string) *C.char {
 	ret, err := splibaux.ConvertSVGImage(path)

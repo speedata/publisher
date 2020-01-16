@@ -243,6 +243,94 @@ Er dient dazu, die Seite auszuwählen, wenn eine PDF-Datei eingebunden wird.
 Mit `sd:number-of-pages(‹Dateiname›)` kann ermittelt werden, wie viele Seiten eine PDF-Datei enthält.
 
 
+== Externe Konvertierungstools
+
+Der Publisher verabeitet in der Regel nur PDF, PNG und JPEG Dateien.
+Um andere Formate nutzen zu können, muss man sie in eines der drei Formate umwandeln.
+Das kann im Vorfeld gemacht werden, aber auch zur Laufzeit des Publishers.
+
+// .Dieses Layout wird im Normalfall eine Fehlermeldung geben, da TIFF-Dateien nicht eingebunden werden können. Mit einem externen Konvertierungsprogramm ist das aber möglich.
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="data">
+    <PlaceObject>
+      <!-- tiff can only be used with an external converter -->
+      <Image file="rhslogo.tiff"/>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+
+Um die Konvertierung zu nutzen, muss man die Programmaufrufe in der Konfigurationsdatei eintragen. Hier wird das Programm `convert` von ImageMagick genutzt:
+
+[source, ini]
+-------------------------------------------------------------------------------
+imagehandler="tiffimage:(convert %%input%% %%output%%.pdf)"
+extensionhandler="tiff:tiffimage"
+-------------------------------------------------------------------------------
+
+Der Dateinamenendung `.tiff` wird der Handler `tiffimage` zugeordnet (Zeile 2). In der ersten Zeile wird dem Handler `tiffimage` dem Programm `convert  %%input%% %%output%%.pdf`, wobei die Dateinamen zur Laufzeit ersetzt werden.
+
+== Bilder aus textuellen Beschreibungen
+
+Es gibt unzählige Bildbeschreibungssprachen, in denen Bilder nicht mit einem externen Programm gezeichnet oder gemalt werden, sondern textuell beschrieben werden. Z.B. »zeichne ein Quadrat mit der Kantenlänge 4cm« oder »erstelle ein Tortendiagramm mit den folgenden Werten: ....«.
+Diese Grafiken werden dann aus der Beschreibungssprache in verschiedene Formate umgewandelt, meist als PNG oder PDF.
+Mit dem Publisher ist es seit Version 3.9.1 möglich, solche Beschreibungen einzubetten:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+   xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+   <Record element="data">
+      <PlaceObject>
+        <!-- we need to specify the imagetype -->
+        <Image width="7cm" imagetype="mermaid" >
+          <Value>sequenceDiagram
+            participant Alice
+            participant Bob
+            Alice->>John: Hello John, how are you?
+            loop Healthcheck
+                John->>John: Fight against hypochondria
+            end
+            Note right of John: Rational thoughts &lt;br/>prevail!
+            John-->>Alice: Great!
+            John->>Bob: How about you?
+            Bob-->>John: Jolly good!
+          </Value>
+        </Image>
+      </PlaceObject>
+    </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+Notwendig ist natürlich die Konfiguration, wie der externe Konverter aufgerufen wird. Das funktioniert analog zu dem TIFF-Beispiel im vorherigen Abschnitt:
+
+[source, ini]
+-------------------------------------------------------------------------------
+imagehandler="mermaid:(/usr/bin/mmdc -i %%input%% -o %%output%%.pdf)"
+-------------------------------------------------------------------------------
+
+Das Ergebnis ist Ein Sequenzdiagramm, von `mermaid` erzeugt und nach PDF konvertiert.
+
+image::mermaid.png[]
+
+Natürlich ist es auch möglich, die Bildbeschreibung aus den Daten zu entnehmen. Dazu muss der Image-Befehl wie folgt aufgebaut werden.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject>
+  <Image width="7cm" imagetype="mermaid" >
+     <Value select="imagedata" />
+  </Image>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+
 == Weitere Parameter
 
 * Man kann über die `{padding}`-Angaben festlegen, wie viel Abstand das Bild vom entsprechenden Rand haben soll.

@@ -1615,6 +1615,9 @@
       <xs:documentation>Bindet eine externe Grafik ein. Erlaubte Grafikformate sind PDF (.pdf), PNG (.png) und JPEG (.jpg). Siehe unten für die Einschränkung eingebundener PDF-Dateien.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="en:Value"/>
+      </xs:sequence>
       <xs:attribute name="class">
         <xs:annotation>
           <xs:documentation>CSS Klasse für dieses Element.</xs:documentation>
@@ -1775,6 +1778,11 @@
       <xs:attribute name="width">
         <xs:annotation>
           <xs:documentation>Bildbreite. Angabe in der Form 'auto' (Voreinstellung, natürliche Bildbreite), '100%' (Breite des aktuellen Platzierungsbereichs), Längenangabe wie '4cm' oder Zahl (Anzahl von Rasterspalten)</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="imagetype">
+        <xs:annotation>
+          <xs:documentation>Setze den Konverter, der für das eingebettete Bild notwendig ist (sofern vorhanden).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>

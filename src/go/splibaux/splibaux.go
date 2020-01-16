@@ -11,19 +11,23 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 )
 
 var (
 	files      map[string]string
 	ignorefile string
+	verbosity  int
 )
 
 func init() {
 	wd, _ := os.Getwd()
 	ignorefile = filepath.Join(wd, os.Getenv("SP_JOBNAME")+".pdf")
 	files = make(map[string]string)
-
+	if v := os.Getenv("SP_VERBOSITY"); v != "" {
+		verbosity, _ = strconv.Atoi(v)
+	}
 }
 
 func downloadFile(resourceURL string, outfile io.Writer) error {
@@ -191,6 +195,75 @@ func ListFonts() []string {
 	}
 	return res
 
+}
+
+func writeContentsToTempfile(contents string) (string, error) {
+	var filename string
+	f, err := ioutil.TempFile("", "speedata")
+	if err != nil {
+		return "", err
+	}
+
+	stringReader := strings.NewReader(contents)
+	_, err = io.Copy(f, stringReader)
+	if err != nil {
+		return "", err
+	}
+	filename = f.Name()
+	f.Close()
+	return filename, nil
+}
+
+func convertFile(inputfilename, baseoutputfilename, handler string) (string, error) {
+	var err error
+	rawimgcache := os.Getenv("IMGCACHE")
+	if rawimgcache == "" {
+		rawimgcache = filepath.Join(os.TempDir(), "imagecache")
+	}
+	err = os.MkdirAll(rawimgcache, 0755)
+	if err != nil {
+		return "", err
+	}
+
+	outfile := filepath.Join(rawimgcache, baseoutputfilename)
+	replacer := strings.NewReplacer("%%input%%", inputfilename, "%%output%%", outfile)
+	replacedHandler := strings.Fields(replacer.Replace(handler))
+	executableFile := replacedHandler[0]
+	replacedHandler = replacedHandler[1:]
+	for _, itm := range replacedHandler {
+		if strings.HasPrefix(itm, outfile) {
+			outfile = itm
+		}
+	}
+	cmd := exec.Command(executableFile, replacedHandler...)
+	if verbosity > 0 {
+		fmt.Println("command for image conversion:", cmd)
+	}
+	err = cmd.Run()
+	return outfile, err
+}
+
+// ConvertContents runs an external program to convert the image into a file
+// format suitable for the speedata Publisher.
+func ConvertContents(contents, handler string) (string, error) {
+	inputfilename, err := writeContentsToTempfile(contents)
+	if err != nil {
+		return "", err
+	}
+	hashedFilename := fmt.Sprintf("%x", md5.Sum([]byte(contents)))
+
+	if verbosity == 0 {
+		defer func() {
+			os.RemoveAll(inputfilename)
+		}()
+	}
+	return convertFile(inputfilename, hashedFilename, handler)
+}
+
+// ConvertImage runs an external program to convert the image into a file
+// format suitable for the speedata Publisher.
+func ConvertImage(filename, handler string) (string, error) {
+	return convertFile(filename, "outfilename", handler)
 }
 
 // ConvertSVGImage runs inkscape to convert an SVG image to PDF.

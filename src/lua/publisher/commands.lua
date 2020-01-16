@@ -1154,6 +1154,7 @@ function commands.image( layoutxml,dataxml )
     local dpiwarn   = publisher.read_attribute(layoutxml,dataxml,"dpiwarn",    "number")
     local rotate    = publisher.read_attribute(layoutxml,dataxml,"rotate",     "number")
     local fallback  = publisher.read_attribute(layoutxml,dataxml,"fallback",   "rawstring")
+    local imagetype = publisher.read_attribute(layoutxml,dataxml,"imagetype",  "rawstring")
     local class = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
     local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
     local css_rules = publisher.css:matches({element = 'img', class=class,id=id}) or {}
@@ -1196,6 +1197,29 @@ function commands.image( layoutxml,dataxml )
 
     -- width = 100%  => take width from surrounding area
     -- auto on any value ({max,min}?{width,height}) is default
+
+    local children = publisher.dispatch(layoutxml,dataxml)
+    if #children > 0 then
+        if not imagetype then
+            err("Cannot handle image without imagetype")
+            filename = nil
+        else
+            log("Image: found %q contents",imagetype or "?")
+
+            local elt = children[1]
+            local contents = publisher.element_contents(elt)
+            if publisher.elementname(elt) == "Value" and type(contents) == "table" then
+                contents = publisher.xml_stringvalue(contents)
+            end
+            local ih = publisher.imagehandler[imagetype]
+            if not ih then
+                err("No imagehandler for image type %s found.",imagetype)
+            else
+                filename = splib.convertcontents(contents,ih)
+            end
+        end
+    end
+
 
     local imageinfo
     filename = filename or url

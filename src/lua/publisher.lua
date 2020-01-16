@@ -224,6 +224,9 @@ compatibility = {
     movecursoronrightedge = true,
 }
 
+-- for external image conversion software
+imagehandler = {}
+
 viewerpreferences = {}
 
 -- The spot colors used in the document (even when discarded)
@@ -733,6 +736,33 @@ function dothings()
     end
 end
 
+function get_extension(fn)
+    return fn:match("^.+%.(.+)$")
+end
+
+function define_image_callback( extensionhandler )
+    local extensions = {}
+    local ext,handler
+    for _,v in ipairs(string.explode(extensionhandler,";")) do
+        _,_,ext,handler = string.find(v,"^(.*):(.*)$")
+        extensions[ext] = handler
+    end
+    local function find_image_file( asked_name )
+        local file = kpse.find_file(asked_name)
+        local ext = get_extension(asked_name)
+        local handlername = extensions[ext]
+        local handler = imagehandler[handlername]
+
+        if handler then
+            log("Convert image (extension: %q) with handler %s",ext,handlername)
+            file = splib.convertimage(file,handler)
+        end
+        return file
+    end
+    callback.register('find_image_file',find_image_file)
+
+end
+
 -- When not in server mode, we initialize LuaTeX in such a way that
 -- it has defaults, loads a layout file and a data file and
 -- executes them both
@@ -865,6 +895,16 @@ function initialize_luatex_and_generate_pdf()
         options.reportmissingglyphs = false
     elseif options.reportmissingglyphs == "true" then
         options.reportmissingglyphs = true
+    end
+
+    if options.imagehandler then
+        string.gsub(options.imagehandler,"(%w+):%((.-)%);?", function( imagetype,cmdline )
+            imagehandler[imagetype] = cmdline
+        end)
+    end
+
+    if options.extensionhandler then
+        define_image_callback(options.extensionhandler)
     end
 
     --- Set the starting page (which must be a number)

@@ -1615,6 +1615,9 @@
       <xs:documentation>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg). See below for a limitation on the number of included PDF files.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="en:Value"/>
+      </xs:sequence>
       <xs:attribute name="class">
         <xs:annotation>
           <xs:documentation>CSS class for this element.</xs:documentation>
@@ -1775,6 +1778,11 @@
       <xs:attribute name="width">
         <xs:annotation>
           <xs:documentation>Image width. One of 'auto' (default, take image width), '100%' (whole area width), length (such as '3cm') or number (in grid cells).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="imagetype">
+        <xs:annotation>
+          <xs:documentation>Set the converter to be used for the enclosed image (if any).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>

@@ -3501,7 +3501,11 @@
     <description xml:lang="de">
       <para>Bindet eine externe Grafik ein. Erlaubte Grafikformate sind PDF (.pdf), PNG (.png) und JPEG (.jpg). Siehe unten für die Einschränkung eingebundener PDF-Dateien.</para>
     </description>
-    <childelements/>
+    <childelements>
+      <optional>
+        <cmd name="Value"/>
+      </optional>
+    </childelements>
     <attribute en="class" optional="yes" type="text" since="2.5.11">
       <description xml:lang="en">
         <para>CSS class for this element.</para>
@@ -3740,6 +3744,14 @@
       </description>
       <description xml:lang="de">
         <para>Bildbreite. Angabe in der Form 'auto' (Voreinstellung, natürliche Bildbreite), '100%' (Breite des aktuellen Platzierungsbereichs), Längenangabe wie '4cm' oder Zahl (Anzahl von Rasterspalten)</para>
+      </description>
+    </attribute>
+    <attribute en="imagetype" optional="yes" since="3.9.1">
+      <description xml:lang="en">
+        <para>Set the converter to be used for the enclosed image (if any).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze den Konverter, der für das eingebettete Bild notwendig ist (sofern vorhanden).</para>
       </description>
     </attribute>
     <remark xml:lang="en">

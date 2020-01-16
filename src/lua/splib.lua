@@ -51,6 +51,8 @@ extern void buildFilelist();
 extern char* lookupFile(GoString p0);
 extern char** listFonts();
 extern char* convertSVGImage(GoString p0);
+extern char* convertContents(GoString p0, GoString p1);
+extern char* convertImage(GoString p0, GoString p1);
 
 ]]
 
@@ -132,6 +134,39 @@ local function listfonts()
     return tbl
 end
 
+local function convertcontents(contents,imagehandler)
+    local ret = ld.convertContents(c(contents),c(imagehandler))
+    local _ret = ffi.string(ret)
+
+    if string.match( _ret,errorpattern ) then
+        err(string.gsub( _ret,errorpattern ,"" ))
+        err("Something went wrong converting the image. Ignore the next error about the missing file name.")
+        if publisher.options.verbosity > 0 then
+            log("Contents %q",tostring(contents))
+        end
+        return
+    end
+
+    if _ret == "" then return nil end
+
+    return _ret
+end
+
+local function convertimage(filename,imagehandler)
+    local ret = ld.convertImage(c(filename),c(imagehandler))
+    local _ret = ffi.string(ret)
+
+    if string.match( _ret,errorpattern ) then
+        err(string.gsub( _ret,errorpattern ,"" ))
+        return
+    end
+
+    if _ret == "" then return nil end
+
+    return _ret
+end
+
+
 local function convertSVGImage(filename)
     local ret = ld.convertSVGImage(c(filename))
     local _ret = ffi.string(ret)
@@ -156,6 +191,8 @@ return {
     buildfilelist = buildfilelist,
     lookupfile    = lookupfile,
     listfonts     = listfonts,
+    convertcontents = convertcontents,
+    convertimage    = convertimage,
     convert_svg_image = convertSVGImage,
 }
 

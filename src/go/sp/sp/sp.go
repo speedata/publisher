@@ -550,6 +550,12 @@ func runPublisher(cachemethod string) (exitstatus int) {
 	if mode := getOption("mode"); mode != "" {
 		layoutoptionsSlice = append(layoutoptionsSlice, `mode=`+mode)
 	}
+	if imagehandler := getOption("imagehandler"); imagehandler != "" {
+		layoutoptionsSlice = append(layoutoptionsSlice, `imagehandler=`+imagehandler)
+	}
+	if extensionhandler := getOption("extensionhandler"); extensionhandler != "" {
+		layoutoptionsSlice = append(layoutoptionsSlice, `extensionhandler=`+extensionhandler)
+	}
 
 	layoutname := getOption("layout")
 	dataname := getOption("data")

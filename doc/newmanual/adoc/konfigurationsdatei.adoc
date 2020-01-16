@@ -34,6 +34,8 @@ erkannt. Folgende Optionen werden unterstützt:
   Wenn `true`, dann wird die Datendatei nicht eingelesen. Anstatt dessen wird wird der folgende Inhalt angenommen: `<data />`. Das dient zum einfachen Testen von Layoutregelwerken. Es muss also ein `<Record element="data">` im Layout vorhanden sein.
 `extra-dir`::
   Ein Verzeichnis im Dateisystem, das Dateien für den Publisherlauf enthält. Dazu gehören die Schriftdateien, die XML-Dateien (Daten und Layoutregelwerk) sowie die einzubindenden Bilddateien. Sollen mehrere Verzeichnisse hinzugefügt werden, müssen diese mit `:` oder `;` getrennt werden, je nach Betriebssystem (Windows: `;`, alle anderen: `:`). Das aktuelle Verzeichnis wird automatisch eingebunden. Beispiel unter Windows: `extra-dir=c:\myfonts`.
+`extensionhandler`::
+  Zuordnung von Dateiendungen zu in `imagehandler` definierten Konvertern. Um Grafiken on-the-fly zu konvertieren. Beispiel: `extensionhandler="mmd:mermaid"`. Mehrere Einträge werden mit Semikolon getrennt. Siehe auch `imagehandler`. (Seit Version 3.9.1, experimentell.)
 `extraxml`::
   Diese XML-Dateien zu den Layoutanweisungen hinzufügen. Kommaseparierte Liste (`extraxml=datei1.xml,datei2.xml`).
 `prependxml`::
@@ -46,6 +48,8 @@ erkannt. Folgende Optionen werden unterstützt:
   Bestimmt, ob das Raster angezeigt wird.
 `imagecache`::
   Ordner für zwischengespeicherte Dateien (nur `file="http://..."`). Voreinstellung: `$TMPDIR/sp/images`.
+`imagehandler`::
+  Zuordnungen von Bildtyp zu externen Konvertern. Z.B. `imagehandler="mermaid:(/usr/bin/mmdc -i %%input%% -o %%output%%.pdf)"`. Der Bildtyp _mermaid_ wird mit dem Programm `/usr/bin/mmdc` konvertiert und erhält als Eingabeparameter `-i`, die Eingabedatei, `-o` und die Ausgabedatei mit angehängter Dateiendung `.pdf`. Die Dateinamen werden zur Laufzeit ersetzt und zufällig generiert. Mehrere Einträge werden mit Semikolon getrennt.
 `ignore-case`::
   Ignoriere die Groß- und Kleinschreibung für Dateizugriff.
 `inkscape`::

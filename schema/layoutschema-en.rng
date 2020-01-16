@@ -1941,136 +1941,148 @@
    <define name="e_Image">
       <element name="Image">
          <a:documentation>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg). See below for a limitation on the number of included PDF files.</a:documentation>
-         <optional>
-            <attribute name="class">
-               <a:documentation>CSS class for this element.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="id">
-               <a:documentation>CSS id for this element.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="bleed">
-               <a:documentation>Should the image size increase by the amount of bleed setting (Options)?</a:documentation>
-               <choice>
-                  <value>auto</value>
-                  <a:documentation>If the image touches a paper edge, extend the image in that direction.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Do not extend the image.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="clip">
-               <a:documentation>When yes, the image keeps its aspect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Keep the aspect ratio and cut off left/right or top/bottom edges.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Distort the image to make it fit in the given area.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="dpiwarn">
-               <a:documentation>Warn if the image gets lower resolution than given.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="fallback">
-               <a:documentation>The filename of the replacement image if the file is not found. If none given, a red &#39;file not found&#39; image will gets displayed.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="file">
-               <a:documentation>Filename of the image. Can be a file in the search path, an absolute file name, a file-URI for absolute paths (e.g. file:///path/to/image.pdf) or a location on the web (http, https).</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="height">
-               <a:documentation>Image height. One of &#39;auto&#39; (default, take image width), length (such as &#39;3cm&#39;) or number (in grid cells).</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="page">
-               <a:documentation>The page number from the PDF. Default is 1 (include the first page).</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="maxwidth">
-               <a:documentation>The maximum width of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells), a length or the value »100%« for full width image.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="maxheight">
-               <a:documentation>The maximum height of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells) or a length.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="minwidth">
-               <a:documentation>The minimum width of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells), a length or the value »100%« for full width image.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="minheight">
-               <a:documentation>The minimum height of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells) or a length.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="padding">
-               <a:documentation>Set padding for all four sides.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="padding-top">
-               <a:documentation>Set the inner distance (width between contents and the border) to the top edge.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="padding-bottom">
-               <a:documentation>Set the inner distance (width between contents and the border) to the bottom edge.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="padding-left">
-               <a:documentation>Set the inner distance (width between contents and the border) to the left edge.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="padding-right">
-               <a:documentation>Set the inner distance (width between contents and the border) to the right edge.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="rotate">
-               <a:documentation>Rotate the image in steps of 90°. The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="visiblebox">
-               <a:documentation>The PDF box that represents the visible area of the included image. Default is “cropbox”.</a:documentation>
-               <choice>
-                  <value>artbox</value>
-                  <a:documentation>Use the artbox as the visible area. The artbox is usually not contained in a PDF.</a:documentation>
-                  <value>bleedbox</value>
-                  <a:documentation>Use the bleedbox of the included PDF.</a:documentation>
-                  <value>cropbox</value>
-                  <a:documentation>Use the cropbox of the included PDF (default).</a:documentation>
-                  <value>mediabox</value>
-                  <a:documentation>Use the mediabox of the included PDF. This is the largest box.</a:documentation>
-                  <value>trimbox</value>
-                  <a:documentation>Use the trimbox of the includes PDF. The trimbox is the final paper size. For example, the trim box of an A4 PDF is 210mm x 297mm.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="width">
-               <a:documentation>Image width. One of &#39;auto&#39; (default, take image width), &#39;100%&#39; (whole area width), length (such as &#39;3cm&#39;) or number (in grid cells).</a:documentation>
-            </attribute>
-         </optional>
-         <empty></empty>
+         <interleave>
+            <group>
+               <optional>
+                  <attribute name="class">
+                     <a:documentation>CSS class for this element.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="id">
+                     <a:documentation>CSS id for this element.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="bleed">
+                     <a:documentation>Should the image size increase by the amount of bleed setting (Options)?</a:documentation>
+                     <choice>
+                        <value>auto</value>
+                        <a:documentation>If the image touches a paper edge, extend the image in that direction.</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Do not extend the image.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="clip">
+                     <a:documentation>When yes, the image keeps its aspect ratio if both width and hight is given. To be able to fit the image into the given dimensions, the image gets clipped.</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Keep the aspect ratio and cut off left/right or top/bottom edges.</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Distort the image to make it fit in the given area.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="dpiwarn">
+                     <a:documentation>Warn if the image gets lower resolution than given.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="fallback">
+                     <a:documentation>The filename of the replacement image if the file is not found. If none given, a red &#39;file not found&#39; image will gets displayed.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="file">
+                     <a:documentation>Filename of the image. Can be a file in the search path, an absolute file name, a file-URI for absolute paths (e.g. file:///path/to/image.pdf) or a location on the web (http, https).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="height">
+                     <a:documentation>Image height. One of &#39;auto&#39; (default, take image width), length (such as &#39;3cm&#39;) or number (in grid cells).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="page">
+                     <a:documentation>The page number from the PDF. Default is 1 (include the first page).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="maxwidth">
+                     <a:documentation>The maximum width of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells), a length or the value »100%« for full width image.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="maxheight">
+                     <a:documentation>The maximum height of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells) or a length.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="minwidth">
+                     <a:documentation>The minimum width of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells), a length or the value »100%« for full width image.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="minheight">
+                     <a:documentation>The minimum height of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells) or a length.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding">
+                     <a:documentation>Set padding for all four sides.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-top">
+                     <a:documentation>Set the inner distance (width between contents and the border) to the top edge.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-bottom">
+                     <a:documentation>Set the inner distance (width between contents and the border) to the bottom edge.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-left">
+                     <a:documentation>Set the inner distance (width between contents and the border) to the left edge.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-right">
+                     <a:documentation>Set the inner distance (width between contents and the border) to the right edge.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="rotate">
+                     <a:documentation>Rotate the image in steps of 90°. The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="visiblebox">
+                     <a:documentation>The PDF box that represents the visible area of the included image. Default is “cropbox”.</a:documentation>
+                     <choice>
+                        <value>artbox</value>
+                        <a:documentation>Use the artbox as the visible area. The artbox is usually not contained in a PDF.</a:documentation>
+                        <value>bleedbox</value>
+                        <a:documentation>Use the bleedbox of the included PDF.</a:documentation>
+                        <value>cropbox</value>
+                        <a:documentation>Use the cropbox of the included PDF (default).</a:documentation>
+                        <value>mediabox</value>
+                        <a:documentation>Use the mediabox of the included PDF. This is the largest box.</a:documentation>
+                        <value>trimbox</value>
+                        <a:documentation>Use the trimbox of the includes PDF. The trimbox is the final paper size. For example, the trim box of an A4 PDF is 210mm x 297mm.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="width">
+                     <a:documentation>Image width. One of &#39;auto&#39; (default, take image width), &#39;100%&#39; (whole area width), length (such as &#39;3cm&#39;) or number (in grid cells).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="imagetype">
+                     <a:documentation>Set the converter to be used for the enclosed image (if any).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <ref name="e_Value"></ref>
+               </optional>
+            </group>
+            <ref name="foreign-nodes"></ref>
+         </interleave>
       </element>
    </define>
    <define name="e_Italic">
