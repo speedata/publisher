@@ -5021,6 +5021,14 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="interaction" optional="yes" since="3.9.2" type="boolean">
+      <description xml:lang="en">
+        <para>If no, switch off all interaction (hyperlinks).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn »no«, werden alle Hyperlinks deaktiviert.</para>
+      </description>
+    </attribute>
     <attribute en="mainlanguage" optional="yes" allowxpath="yes">
       <description xml:lang="en">
         <para>The default language for text (hyphenation). You can also set the default language on the command line and locally set it at <cmd name="Paragraph"/>.</para>
@@ -6303,6 +6311,7 @@
         <interleave>
           <optional><cmd name="PositioningFrame"/></optional>
           <optional><cmd name="Loop"/></optional>
+          <optional><cmd name="Switch"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>

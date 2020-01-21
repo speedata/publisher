@@ -2443,6 +2443,17 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="interaction">
+        <xs:annotation>
+          <xs:documentation>Wenn »no«, werden alle Hyperlinks deaktiviert.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="mainlanguage">
         <xs:annotation>
           <xs:documentation>Die Sprache (Silbentrennung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist. Sie kann global über die Kommandozeile gesteuert werden oder für jeden Paragraph einzeln.</xs:documentation>
@@ -3954,6 +3965,7 @@
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:PositioningFrame"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Switch"/>
       </xs:choice>
       <xs:attribute name="name" use="required">
         <xs:annotation>

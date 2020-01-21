@@ -2826,6 +2826,15 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="interaction">
+               <a:documentation>Wenn »no«, werden alle Hyperlinks deaktiviert.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="mainlanguage">
                <a:documentation>Die Sprache (Silbentrennung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist. Sie kann global über die Kommandozeile gesteuert werden oder für jeden Paragraph einzeln.</a:documentation>
                <choice>
@@ -3895,6 +3904,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Loop"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Switch"></ref>
                      </optional>
                   </interleave>
                </oneOrMore>

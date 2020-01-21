@@ -2826,6 +2826,15 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="interaction">
+               <a:documentation>If no, switch off all interaction (hyperlinks).</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="mainlanguage">
                <a:documentation>The default language for text (hyphenation). You can also set the default language on the command line and locally set it at Paragraph.</a:documentation>
                <choice>
@@ -3895,6 +3904,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Loop"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Switch"></ref>
                      </optional>
                   </interleave>
                </oneOrMore>

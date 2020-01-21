@@ -22,21 +22,25 @@ commands = {}
 --- Insert a hyperlink into the PDF.
 function commands.a( layoutxml,dataxml )
     trace("A")
-    local href = publisher.read_attribute(layoutxml,dataxml,"href","rawstring")
-    local link = publisher.read_attribute(layoutxml,dataxml,"link","rawstring")
-    local an = publisher.get_action_node(3)
-    if link then
-        an.data = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/GoTo/D(mark%s)>>",link)
-    else
-        an.data = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",href)
-    end
-    local stl = node.new("whatsit","pdf_start_link")
-    stl.action = an
-    stl.width = -1073741824
-    stl.height = -1073741824
-    stl.depth = -1073741824
+    local interaction = publisher.options.interaction
     p = paragraph:new()
-    p:append(stl)
+
+    if interaction then
+        local href = publisher.read_attribute(layoutxml,dataxml,"href","rawstring")
+        local link = publisher.read_attribute(layoutxml,dataxml,"link","rawstring")
+        local an = publisher.get_action_node(3)
+        if link then
+            an.data = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/GoTo/D(mark%s)>>",link)
+        else
+            an.data = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",href)
+        end
+        local stl = node.new("whatsit","pdf_start_link")
+        stl.action = an
+        stl.width = -1073741824
+        stl.height = -1073741824
+        stl.depth = -1073741824
+        p:append(stl)
+    end
 
     local tab = publisher.dispatch(layoutxml,dataxml)
     local objects = {}
@@ -50,8 +54,10 @@ function commands.a( layoutxml,dataxml )
     for _,j in ipairs(objects) do
         p:append(j,{})
     end
-    local enl = node.new("whatsit","pdf_end_link")
-    p:append(enl)
+    if interaction then
+        local enl = node.new("whatsit","pdf_end_link")
+        p:append(enl)
+    end
 
 
     return p
@@ -1994,6 +2000,10 @@ function commands.options( layoutxml,dataxml )
     local showgridallocation             = publisher.read_attribute(layoutxml,dataxml,"show-gridallocation","boolean")
     local trace                          = publisher.read_attribute(layoutxml,dataxml,"trace",       "boolean")
 
+    if publisher.options.interaction == nil then
+        publisher.options.interaction = true
+    end
+
     if showgrid ~= nil then
         publisher.options.showgrid = showgrid
     end
@@ -2003,7 +2013,7 @@ function commands.options( layoutxml,dataxml )
     if trace ~= nil then
         publisher.options.trace = trace
     end
-    --  ----
+
     publisher.options.cutmarks            = publisher.read_attribute(layoutxml,dataxml,"cutmarks",    "boolean",publisher.options.cutmarks)
     publisher.options.trimmarks           = publisher.read_attribute(layoutxml,dataxml,"trimmarks",   "boolean",publisher.options.trimmarks)
     publisher.options.trimmarks           = publisher.read_attribute(layoutxml,dataxml,"bleedmarks",  "boolean",publisher.options.trimmarks)
@@ -2015,6 +2025,7 @@ function commands.options( layoutxml,dataxml )
     publisher.options.colorprofile        = publisher.read_attribute(layoutxml,dataxml,"colorprofile","rawstring",publisher.options.colorprofile)
     publisher.options.crop                = publisher.read_attribute(layoutxml,dataxml,"crop",        "booleanorlength",publisher.options.crop or false)
     publisher.options.reportmissingglyphs = publisher.read_attribute(layoutxml,dataxml,"reportmissingglyphs", "boolean",publisher.options.reportmissingglyphs or true)
+    publisher.options.interaction         = publisher.read_attribute(layoutxml,dataxml,"interaction", "boolean", publisher.options.interaction)
     local imagenotfound                   = publisher.read_attribute(layoutxml,dataxml,"imagenotfound", "string","error")
     local mainlanguage                    = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","")
     local default_area                    = publisher.read_attribute(layoutxml,dataxml,"defaultarea","rawstring")

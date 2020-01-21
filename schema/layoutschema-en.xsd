@@ -2443,6 +2443,17 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="interaction">
+        <xs:annotation>
+          <xs:documentation>If no, switch off all interaction (hyperlinks).</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="mainlanguage">
         <xs:annotation>
           <xs:documentation>The default language for text (hyphenation). You can also set the default language on the command line and locally set it at Paragraph.</xs:documentation>
@@ -3954,6 +3965,7 @@
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:PositioningFrame"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Switch"/>
       </xs:choice>
       <xs:attribute name="name" use="required">
         <xs:annotation>
