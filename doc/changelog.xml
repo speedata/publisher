@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.2" date="2020-01-27">
+      <en>New option interaction to remove hyperlinks, handle U+2011 correctly.</en>
+      <de>Neue Option interaction, um hyperlinks im Dokument zu deaktivieren, U+2011 wird nun beachtet.</de>
+    </entry>
     <entry version="3.9.1" date="2020-01-16">
       <en>External image processors and converter.</en>
       <de>Externe Bild-Konvertierungstools.</de>
