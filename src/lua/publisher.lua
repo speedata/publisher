@@ -3003,8 +3003,11 @@ function mknodes(str,fontfamily,parameter)
 
             -- Some characters must be treated in a special way.
             -- Hyphens must be separated from words:
-            if n.char == 8209 then -- non breaking hyphen
+            if n.char == 8209 then -- non breaking hyphen U+2011
                 n.char = 45
+                local pen = node.new("penalty")
+                pen.penalty = 10000
+                head,last = node.insert_after(head,last,pen)
             elseif ( n.char == 45 or n.char == 8211) and lastitemwasglyph and string.find(allowbreak, "-",1,true) then
                 -- only break if allowbreak contains the hyphen char
                 local pen = node.new("penalty")
