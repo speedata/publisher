@@ -1,0 +1,17 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+   xmlns:sd="urn:speedata:2009/publisher/functions/en">
+   <Options crop="1mm" />
+
+   <Record element="data">
+     <ForAll select="c">
+      <PlaceObject column="1">
+        <Textblock width="2">
+            <Paragraph>
+              <Value select="."/>
+            </Paragraph>
+          </Textblock>
+        </PlaceObject>
+      </ForAll>
+    </Record>
+</Layout>
+

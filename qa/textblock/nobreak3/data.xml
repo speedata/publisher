@@ -1,0 +1,7 @@
+<data>
+    <c>text 12345&#x2011;6789 no break</c>
+    <c>text 12345&nbsp;6789 no break</c>
+    <c>text 12345&#xa0;6789 no break</c>
+    <c>text 12345-6789 text break</c>
+    <c>text 12345 6789 text break</c>
+</data>
