@@ -3,8 +3,10 @@ package sp
 import (
 	"bufio"
 	"bytes"
+	"crypto/sha256"
 	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"math"
 	"os"
@@ -15,6 +17,8 @@ import (
 	"strings"
 	"sync"
 	"syscall"
+
+	"github.com/gammazero/workerpool"
 )
 
 type compareStatus struct {
@@ -24,11 +28,11 @@ type compareStatus struct {
 }
 
 var (
-	wg        sync.WaitGroup
 	finished  chan bool
 	exeSuffix string
 	cs        []compareStatus
 	mutex     *sync.Mutex
+	wp        *workerpool.WorkerPool
 )
 
 func init() {
@@ -54,11 +58,14 @@ func DoCompare(absdir string, withHTML bool) {
 	default:
 		exeSuffix = ""
 	}
+	wp = workerpool.New(runtime.NumCPU())
+
 	statuschan := make(chan compareStatus, 0)
 	compareFunc := mkCompare(statuschan)
 	filepath.Walk(absdir, compareFunc)
 	go getCompareStatus(statuschan)
-	wg.Wait()
+	wp.StopWait()
+
 	finished <- true
 	if withHTML {
 		mkWebPage()
@@ -115,16 +122,31 @@ func compareTwoPages(sourcefile, referencefile, dummyfile, path string) float64 
 	return 0.0
 }
 
-func newer(src, dest string) bool {
-	destFi, err := os.Stat(dest)
+func newer(pdf, png string) bool {
+	pngFi, err := os.Stat(png)
 	if err != nil {
 		return true
 	}
-	srcFi, err := os.Stat(src)
+	pdfFi, err := os.Stat(pdf)
 	if err != nil {
-		panic(fmt.Sprintf("Source %s does not exist!", src))
+		panic(fmt.Sprintf("Source %s does not exist!", pdf))
 	}
-	return destFi.ModTime().Before(srcFi.ModTime())
+	return pngFi.ModTime().Before(pdfFi.ModTime())
+}
+
+func calculateHash(filename string) []byte {
+	fh, err := os.Open(filename)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer fh.Close()
+
+	h := sha256.New()
+	_, err = io.Copy(h, fh)
+	if err != nil {
+		panic(err.Error())
+	}
+	return h.Sum(nil)
 }
 
 func runComparison(path string, statuschan chan compareStatus) {
@@ -146,13 +168,22 @@ func runComparison(path string, statuschan chan compareStatus) {
 		}
 	}
 
-	cmd := exec.Command("sp" + exeSuffix)
+	cmd := exec.Command("sp"+exeSuffix, "--suppressinfo")
 	cmd.Dir = path
 	err = cmd.Run()
 	if err != nil {
 		log.Println(path)
 		log.Fatal("Error running command 'sp': ", err)
 	}
+
+	p := calculateHash(filepath.Join(path, "publisher.pdf"))
+	r := calculateHash(filepath.Join(path, "reference.pdf"))
+	if bytes.Equal(p, r) {
+		cs.Delta = 0
+		statuschan <- cs
+		return
+	}
+
 	cmd = exec.Command("convert"+exeSuffix, "publisher.pdf", "source-%02d.png")
 	cmd.Dir = path
 	cmd.Run()
@@ -190,7 +221,6 @@ func runComparison(path string, statuschan chan compareStatus) {
 	}
 
 	statuschan <- cs
-	wg.Done()
 }
 
 func mkWebPage() error {
@@ -279,8 +309,7 @@ func mkCompare(statuschan chan compareStatus) filepath.WalkFunc {
 			return nil
 		}
 		if _, err := os.Stat(filepath.Join(path, "reference.pdf")); err == nil {
-			wg.Add(1)
-			go runComparison(path, statuschan)
+			wp.Submit(func() { runComparison(path, statuschan) })
 		} else if _, err := os.Stat(filepath.Join(path, "layout.xml")); err == nil {
 			fmt.Println("Warning: directory", path, "has layout.xml but not reference.pdf")
 		}

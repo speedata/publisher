@@ -132,6 +132,7 @@ task :cleanqa do
 	FileUtils.rm Dir.glob("qa/**/source-*.png")
 	FileUtils.rm Dir.glob("qa/**/publisher.vars")
 	FileUtils.rm Dir.glob("qa/**/publisher.status")
+	FileUtils.rm Dir.glob("qa/**/publisher.finished")
 	FileUtils.rm Dir.glob("qa/**/publisher.protocol")
 	FileUtils.rm Dir.glob("qa/**/publisher.pdf")
 end
@@ -141,7 +142,7 @@ task :regenerateqa do
 	Dir.glob("qa/**/") do |d|
 		Dir.chdir(d) do
 			if test(?f,"layout.xml") then
-				sh "sp --jobname reference"
+				sh "sp -s --jobname reference"
 				sh "sp --jobname reference clean"
 			end
 		end
