@@ -969,7 +969,9 @@ function initialize_luatex_and_generate_pdf()
 
     --- We are not at the end of the processing. Let's write the PDF information and status files.
     local pdfcatalog = {}
-
+    if sp_suppressinfo then
+        pdf.settrailerid(" [ <FA052949448907805BA83C1E78896398> <FA052949448907805BA83C1E78896398> ]")
+    end
     -- For now only one file can be attached
     if #filespecnumbers > 0 then
       pdfcatalog[#pdfcatalog + 1] = string.format([[ /Names << /EmbeddedFiles <<  /Names [(ZUGFeRD-invoice.xml) %d 0 R ] >> >> /Metadata %d 0 R ]],filespecnumbers[1][1],filespecnumbers[1][2])

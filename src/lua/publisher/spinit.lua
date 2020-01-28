@@ -266,20 +266,20 @@ function quit()
 end
 
 local function setup()
-    if status.luatex_version >= 100 then
-        tex.pdfhorigin = 0
-        tex.pdfvorigin = 0
-        pdf.setminorversion(6)
-        pdf.setsuppressoptionalinfo(143)
-        pdf.setcompresslevel(9)
-        pdf.setobjcompresslevel(9)
+    tex.pdfhorigin = 0
+    tex.pdfvorigin = 0
+    pdf.setminorversion(6)
+    -- 10 00 11 11 == 143
+    -- PTEX.FullBanner, PTEX.FileName, PTEX.PageNumber, PTEX.InfoDict, Producer
+    if os.getenv("SP_SUPPRESSINFO") == "TRUE" then
+        sp_suppressinfo = true
+        -- also remove info about mod-/creationdate
+        pdf.setsuppressoptionalinfo(239)
     else
-        tex.hoffset       = tex.sp("-1in")
-        tex.voffset       = tex.hoffset
-        tex.pdfcompresslevel    = 5
-        tex.pdfobjcompresslevel = 2
-        tex.pdfminorversion = 6
+        pdf.setsuppressoptionalinfo(143)
     end
+    pdf.setcompresslevel(9)
+    pdf.setobjcompresslevel(9)
     tex.pdfadjustspacing = 2
     tex.adjustspacing = 2
     tex.pdfpageheight = tex.sp("29.7cm")

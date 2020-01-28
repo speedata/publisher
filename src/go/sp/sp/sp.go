@@ -743,6 +743,7 @@ func main() {
 	op.On("--runs NUM", "Number of publishing runs ", options)
 	op.On("--startpage NUM", "The first page number", layoutoptions)
 	op.On("--show-gridallocation", "Show the allocated grid cells", layoutoptions)
+	op.On("-s", "--suppressinfo", "Suppress optional information (timestamp) and use a fixed document ID", options)
 	op.On("--systemfonts", "Use system fonts (not Win XP)", &useSystemFonts)
 	op.On("--tempdir=DIR", "Use this directory instead of the system temporary directory", options)
 	op.On("--trace", "Show debug messages and some tracing PDF output", layoutoptions)
@@ -842,10 +843,10 @@ func main() {
 		}
 		defaults["fontpath"] = ff
 	}
-
-	if getOption("imagecache") == "" {
-		options["imagecache"] = filepath.Join(getOption("tempdir"), "sp", "images")
+	if getOption("suppressinfo") == "true" {
+		os.Setenv("SP_SUPPRESSINFO", "TRUE")
 	}
+
 	os.Setenv("SP_TEMPDIR", getOption("tempdir"))
 	os.Setenv("SP_MAINLANGUAGE", mainlanguage)
 	os.Setenv("SP_FONT_PATH", getOption("fontpath"))
@@ -853,6 +854,9 @@ func main() {
 	os.Setenv("SP_INKSCAPE", getOption("inkscape"))
 
 	ic := getOption("imagecache")
+	if ic == "" {
+		options["imagecache"] = filepath.Join(getOption("tempdir"), "sp", "images")
+	}
 	if finfo, err := os.Stat(ic); err == nil {
 		if !finfo.IsDir() {
 			fmt.Println("Image cache is not a directory. Please remove it before running sp")
