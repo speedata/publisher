@@ -683,7 +683,11 @@ function get_action_node( action_type )
 end
 
 local function getcreator()
-    return string.format("speedata Publisher %s, www.speedata.de",env_publisherversion)
+    if sp_suppressinfo then
+        return "speedata Publisher, www.speedata.de"
+    else
+        return string.format("speedata Publisher %s, www.speedata.de",env_publisherversion)
+    end
 end
 
 local roles = { H1 = 1, H2 = 2, H3 = 3, H4 = 4, H5 = 5, H6 = 6, P = 7  }

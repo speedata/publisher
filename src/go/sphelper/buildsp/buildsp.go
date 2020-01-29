@@ -32,7 +32,7 @@ func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype, location str
 		location = filepath.Join(destbin, binaryname)
 	}
 	// Now compile the go executable
-	arguments := []string{"build", "-ldflags", fmt.Sprintf("-X main.dest=%s -X main.version=%s -s", targettype, publisher_version), "-o", location, "sp/sp"}
+	arguments := []string{"build", "-ldflags", fmt.Sprintf("-X main.dest=%s -X main.version=%s -s -w", targettype, publisher_version), "-o", location, "sp/sp"}
 	cmd := exec.Command("go", arguments...)
 	outbuf, err := cmd.CombinedOutput()
 	if err != nil {
