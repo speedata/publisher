@@ -734,6 +734,7 @@ func main() {
 	op.On("--jobname NAME", "The name of the resulting PDF file (without extension), default is 'publisher'", options)
 	op.On("--no-local", "Add local directory to the search path. Default is true", &addLocalPath)
 	op.On("--layout NAME", "Name of the layout file. Defaults to 'layout.xml'", options)
+	op.On("--logfile NAME", "Logfile for server mode. Default 'publisher.protocol'. Use STDOUT for standard output and STDERR for standard error.", options)
 	op.On("--mainlanguage NAME", "The document's main language in locale format, for example 'en' or 'en_US'.", &mainlanguage)
 	op.On("--mode NAME", "Set mode. Multiple modes given in a comma separated list.", options)
 	op.On("--outputdir=DIR", "Copy PDF and protocol to this directory", options)

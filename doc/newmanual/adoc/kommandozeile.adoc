@@ -95,6 +95,8 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
    Gibt den Namen des Layoutregelwerks an. Voreinstellung ist `layout.xml`. Es kann auch eine externe Ressource angegeben werden (`http://`).
 `--[no]-local`::
    Das aktuelle Verzeichnis wird (nicht) rekursiv dem Suchpfad hinzugefügt. Voreingestellt ist, dass das aktuelle Verzeichnis und seine Unterverzeichnisse beachtet werden.
+`--logfile=NAME`::
+   Logdatei im Server-Modus. Voreinstellung ist 'publisher.protocol'. Benutze STDOUT für Standardausgabe und STDERR für Standardfehlerausgabe.
 `--jobname=NAME`::
    Bestimmt den Ausgabenamen. Voreinstellung ist `publisher`.
 `--mainlanguage=NAME`::

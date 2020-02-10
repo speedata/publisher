@@ -752,10 +752,19 @@ func available(w http.ResponseWriter, r *http.Request) {
 func runServer(port string, address string, tempdir string) {
 	var err error
 	serverTemp = filepath.Join(tempdir, "publisher-server")
-
-	protocolFile, err = os.Create("publisher.protocol")
-	if err != nil {
-		log.Fatal(err)
+	logfilename := "publisher.protocol"
+	if fn := getOption("logfile"); fn != "" {
+		logfilename = fn
+	}
+	if logfilename == "STDOUT" {
+		protocolFile = os.Stdout
+	} else if logfilename == "STDERR" {
+		protocolFile = os.Stderr
+	} else {
+		protocolFile, err = os.Create(logfilename)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	fmt.Fprintf(protocolFile, "Protocol file for speedata Publisher (%s) - server mode\n", version)
 	fmt.Fprintln(protocolFile, "Time:", starttime.Format(time.ANSIC))
@@ -778,7 +787,7 @@ func runServer(port string, address string, tempdir string) {
 	v0.HandleFunc("/layout/{id}", v0LayoutHandler).Methods("GET")
 	v0.HandleFunc("/statusfile/{id}", v0StatusfileHandler).Methods("GET")
 	http.Handle("/", r)
-	fmt.Printf("Listen on http://%s:%s\n", address, port)
+	fmt.Fprintf(protocolFile, "Listen on http://%s:%s\n", address, port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", address, port), nil))
 	os.Exit(0)
 }
