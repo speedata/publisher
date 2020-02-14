@@ -57,28 +57,50 @@ func validateRelaxNG(l *lua.LState) int {
 }
 
 func runSaxon(l *lua.LState) int {
-	if l.GetTop() < 3 {
+	numberArguments := l.GetTop()
+	var command []string
+	if numberArguments == 1 {
+		// hopefully a table
+		command = []string{"-jar", filepath.Join(libdir, "saxon9804he.jar")}
+		lv := l.Get(-1)
+		if tbl, ok := lv.(*lua.LTable); ok {
+			m := map[string]string{
+				"initialtemplate": "-it:%s",
+				"source":          "-s:%s",
+				"stylesheet":      "-xsl:%s",
+				"out":             "-o:%s",
+			}
+			for k, val := range m {
+				if str := tbl.RawGetString(k); str.Type() == lua.LTString {
+					command = append(command, fmt.Sprintf(val, str.String()))
+				}
+			}
+		} else {
+			return lerr("The single argument must be a table (run_saxon)")
+		}
+	} else if numberArguments < 3 {
 		return lerr("command requires 3 or 4 arguments")
-	}
-	xsl := l.CheckString(1)
-	src := l.CheckString(2)
-	out := l.CheckString(3)
+	} else {
+		xsl := l.CheckString(1)
+		src := l.CheckString(2)
+		out := l.CheckString(3)
 
-	cmd := []string{"-jar", filepath.Join(libdir, "saxon9804he.jar"), fmt.Sprintf("-xsl:%s", xsl), fmt.Sprintf("-s:%s", src), fmt.Sprintf("-o:%s", out)}
+		command = append(command, fmt.Sprintf("-xsl:%s", xsl), fmt.Sprintf("-s:%s", src), fmt.Sprintf("-o:%s", out))
 
-	// fourth argument param is optional
-	if l.GetTop() > 3 {
-		cmd = append(cmd, l.CheckString(4))
+		// fourth argument param is optional
+		if numberArguments > 3 {
+			command = append(command, l.CheckString(4))
+		}
 	}
 	env := []string{}
-	exitcode := run("java", cmd, env)
+	exitcode := run("java", command, env)
 
 	if exitcode == 0 {
 		l.Push(lua.LTrue)
 	} else {
 		l.Push(lua.LFalse)
 	}
-	l.Push(lua.LString("java " + strings.Join(cmd, " ")))
+	l.Push(lua.LString("java " + strings.Join(command, " ")))
 	return 2
 }
 
