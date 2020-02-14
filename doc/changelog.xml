@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.4" date="2020-02-14">
+      <en>New way to call run_saxon in the preprocessing filter.</en>
+      <de>Neuer Weg, um run_saxon in der Vorverarbeitung zu starten.</de>
+    </entry>
     <entry version="3.9.3" date="2020-02-10">
       <en>Set log file for server mode.</en>
       <de>Setze Logdatei für Servermodus.</de>
