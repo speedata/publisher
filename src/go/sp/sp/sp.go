@@ -651,11 +651,11 @@ func scaffold(extra ...string) error {
 	// Let's not overwrite existing files
 	_, err = os.Stat("data.xml")
 	if err == nil {
-		return fmt.Errorf("data.xml already exists.")
+		return fmt.Errorf("data.xml already exists")
 	}
 	_, err = os.Stat("layout.xml")
 	if err == nil {
-		return fmt.Errorf("layout.xml already exists.")
+		return fmt.Errorf("layout.xml already exists")
 	}
 
 	dataTxt := `<data>Hello, world!</data>`

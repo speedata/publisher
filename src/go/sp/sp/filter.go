@@ -75,6 +75,11 @@ func runSaxon(l *lua.LState) int {
 					command = append(command, fmt.Sprintf(val, str.String()))
 				}
 			}
+			// parameters at the end
+			if str := tbl.RawGetString("params"); str.Type() == lua.LTString {
+				command = append(command, str.String())
+			}
+
 		} else {
 			return lerr("The single argument must be a table (run_saxon)")
 		}
@@ -136,16 +141,16 @@ func runFinalizerCallback() {
 	if val == nil {
 		return
 	}
-	if tbl, ok := val.(*lua.LTable); !ok {
+
+	tbl, ok := val.(*lua.LTable)
+	if !ok {
 		return
-	} else {
-		fun := tbl.RawGetString("finalizer")
-		if fn, ok := fun.(*lua.LFunction); ok {
-			l.Push(fn)
-			l.Call(0, 0)
-		}
 	}
-	return
+	fun := tbl.RawGetString("finalizer")
+	if fn, ok := fun.(*lua.LFunction); ok {
+		l.Push(fn)
+		l.Call(0, 0)
+	}
 }
 
 func runLuaScript(filename string) bool {
