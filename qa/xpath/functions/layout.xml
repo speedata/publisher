@@ -24,6 +24,23 @@
         <!-- foo does not exist -->
         <Paragraph><Value select="foo = ''"/></Paragraph>
         <Paragraph><Value select="count(foo)"/></Paragraph>
+        <Paragraph>
+          <Value>|</Value>
+          <Value select="normalize-space(string(bar))"></Value>
+          <Value>|</Value>
+          <Value select="normalize-space(bar)"></Value>
+          <Value>|</Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>|</Value>
+          <Value select="upper-case(upper)"></Value>
+          <Value>|</Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>|</Value>
+          <Value select="lower-case(lower)"></Value>
+          <Value>|</Value>
+        </Paragraph>
       </Textblock>
     </PlaceObject>
   </Record>
