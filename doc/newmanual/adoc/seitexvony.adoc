@@ -10,26 +10,25 @@ nutzen kann.
 Das folgende Beispiel erzeugt einige Seiten mit Ausgaben in der Form `Seite 1 von ??`.
 Das dient als Basis für die Ergänzungen.
 
-
 [source, xml]
 -------------------------------------------------------------------------------
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
   <Record element="data">
-    <!-- ?? ist zunächst ein Platzhalter, der später überschrieben wird -->
-    <SetVariable variable="maxseiten" select="'??'"/>
+    <!-- ?? is a placeholder that gets overridden -->
+    <SetVariable variable="maxpages" select="'??'"/>
 
     <Loop select="10" variable="i">
       <PlaceObject>
         <Textblock>
           <Paragraph>
             <Value
-              select="concat('Seite ', sd:current-page(), ' von ', $maxseiten )"/>
+              select="concat('Page ', sd:current-page(), ' of ', $maxpages )"/>
           </Paragraph>
         </Textblock>
       </PlaceObject>
-      <SetVariable variable="letzteseite" select="sd:current-page()"/>
+      <SetVariable variable="lastpage" select="sd:current-page()"/>
       <NewPage/>
     </Loop>
   </Record>
@@ -40,13 +39,13 @@ Am Ende der letzte Seite kann die Information mithilfe von `<SaveDataset>` für 
 
 [source, xml]
 -------------------------------------------------------------------------------
-<SetVariable variable="attSeitenzahl">
-  <Attribute name="anzahlseiten" select="$letzteseite"/>
+<SetVariable variable="attrPagenumber">
+  <Attribute name="numberofpages" select="$lastpage"/>
 </SetVariable>
 <SaveDataset
-  filename="seitenzahl"
-  elementname="seiteninfo"
-  attributes="$attSeitenzahl"/>
+  name="pagecount"
+  elementname="pageinfo"
+  attributes="$attrPagenumber"/>
 -------------------------------------------------------------------------------
 
 `<SaveDataset>` erwartet eine XML-Struktur  bei der
@@ -55,7 +54,7 @@ Diese Struktur wird als XML auf die Festplatte gespeichert und hat in diesem Bei
 
 [source, xml]
 -------------------------------------------------------------------------------
-<seiteninfo anzahlseiten="10" />
+<pageinfo numberofpages="10" />
 -------------------------------------------------------------------------------
 
 
@@ -64,8 +63,8 @@ Zu Beginn des Laufs kann nun die Datei eingelesen werden, falls sie existiert (d
 [source, xml]
 -------------------------------------------------------------------------------
 <Record element="data">
-  <SetVariable variable="maxseiten" select="'??'"/>
-  <LoadDataset name="seitenzahl"/>
+  <SetVariable variable="maxpages" select="'??'"/>
+  <LoadDataset name="pagecount"/>
   ...
 -------------------------------------------------------------------------------
 
@@ -73,13 +72,13 @@ und dazu
 
 [source, xml]
 -------------------------------------------------------------------------------
-<Record element="seiteninfo">
-  <SetVariable variable="maxseiten" select="@anzahlseiten"/>
+<Record element="pageinfo">
+  <SetVariable variable="maxpages" select="@numberofpages"/>
 </Record>
 -------------------------------------------------------------------------------
 
-Der Datensatz `seiteninfo` wird dann aufgerufen, wenn die XML-Datei `seitenzahl` eingelesen wird.
-Es wird nichts anderes gemacht, als die kurz vorher definierte Variable `maxseiten` mit dem korrekten Inhalt zu überschreiben.
+Der Datensatz `pageinfo` wird dann aufgerufen, wenn die XML-Datei `pagecount` eingelesen wird.
+Es wird nichts anderes gemacht, als die kurz vorher definierte Variable `maxpages` mit dem korrekten Inhalt zu überschreiben.
 
 Das vollständige Beispiel sieht nun so aus:
 
@@ -89,36 +88,35 @@ Das vollständige Beispiel sieht nun so aus:
   xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <!-- wird erst ausgeführt, wenn die XML-Datei 'seitenzahl'
-       existiert, d. h. erst ab dem zweiten Durchlauf -->
-  <Record element="seiteninfo">
-    <SetVariable variable="maxseiten" select="@anzahlseiten"/>
+  <!-- only evaluated if the file `pagecount` is found (second run) -->
+  <Record element="pageinfo">
+    <SetVariable variable="maxpages" select="@numberofpages"/>
   </Record>
 
-  <!-- start der Datenverarbeitung -->
+  <!-- start of data processing -->
   <Record element="data">
-    <SetVariable variable="maxseiten" select="'??'"/>
-    <LoadDataset name="seitenzahl"/>
+    <SetVariable variable="maxpages" select="'??'"/>
+    <LoadDataset name="pagecount"/>
     <Loop select="10" variable="i">
       <PlaceObject>
         <Textblock>
           <Paragraph>
             <Value
-              select="concat('Seite ', sd:current-page(), ' von ', $maxseiten )"/>
+              select="concat('Page ', sd:current-page(), ' of ', $maxpages )"/>
           </Paragraph>
         </Textblock>
       </PlaceObject>
-      <SetVariable variable="letzteseite" select="sd:current-page()"/>
+      <SetVariable variable="lastpage" select="sd:current-page()"/>
       <NewPage/>
     </Loop>
-    <!--  Nun steht die Anzahl der Seiten zur Verfügung  -->
-    <SetVariable variable="attSeitenzahl">
-      <Attribute name="anzahlseiten" select="$letzteseite"/>
+    <!--  Now we know the total number of pages  -->
+    <SetVariable variable="attrPagenumber">
+      <Attribute name="numberofpages" select="$lastpage"/>
     </SetVariable>
     <SaveDataset
-      filename="seitenzahl"
-      elementname="seiteninfo"
-      attributes="$attSeitenzahl"/>
+      name="pagecount"
+      elementname="pageinfo"
+      attributes="$attrPagenumber"/>
   </Record>
 </Layout>
 -------------------------------------------------------------------------------
