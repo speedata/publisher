@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+        xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat height="15cm" width="6cm" />
+  <SetGrid ny="28" nx="4" />
+
+  <Pagetype test="true()" name="page">
+    <PositioningArea name="text">
+      <PositioningFrame width="4" height="26" row="2" column="1" />
+    </PositioningArea>
+    <PositioningArea name="footer">
+      <PositioningFrame width="4" height="1" row="28" column="1" />
+    </PositioningArea>
+    <AtPageCreation>
+      <PlaceObject area="footer" allocate="yes">
+        <Box height="1" width="4" backgroundcolor="-" />
+      </PlaceObject>
+    </AtPageCreation>
+  </Pagetype>
+
+  <Record element="data">
+    <PlaceObject area="text">
+      <Table>
+        <Tr valign="top" minheight="26">
+          <Td>
+            <Paragraph>
+              <Value>table</Value>
+            </Paragraph>
+          </Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
