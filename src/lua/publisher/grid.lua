@@ -521,13 +521,15 @@ function find_suitable_row( self,column, width,height,areaname, framenumber)
         end
     end
     for z = self:current_row(areaname,framenumber) + frame_margin_top, self:number_of_rows(areaname) + frame_margin_top do
+        local row = z - frame_margin_top - 1
         if self:fits_in_row(column + frame_margin_left,width,z) then
-
-            if self:number_of_rows(areaname) < z - frame_margin_top + height  - 1 then
+            local maxrows = self:number_of_rows(areaname)
+            -- when the object is too high, it can't fit, even if the page is empty
+            if maxrows - row - height < 0 then
                 return nil
             else
                 local fits = true
-                for current_row = z, z + height do
+                for current_row = z, z + height - 1 do
                     if not self:fits_in_row(column + frame_margin_left,width,current_row) then
                         fits = false
                     end

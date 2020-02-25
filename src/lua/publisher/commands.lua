@@ -2704,9 +2704,8 @@ function commands.place_object( layoutxml,dataxml )
             if not node.has_field(object,"width") then
                 warning("Can't calculate with object's width!")
             end
-            trace("PlaceObject: finished calculating width: wd=%d,ht=%d",width_in_gridcells,height_in_gridcells)
-
-            trace("PlaceObject: find suitable row for object, current_row = %d",row or current_grid:current_row(area) or "-1")
+            -- w("PlaceObject: finished calculating width: wd=%d,ht=%d",width_in_gridcells,height_in_gridcells)
+            -- w("PlaceObject: find suitable row for object, current_row = %d",row or current_grid:current_row(area) or "-1")
             if row then
                 if vreference == "bottom" then
                     current_row = row - height_in_gridcells + 1
@@ -2745,8 +2744,7 @@ function commands.place_object( layoutxml,dataxml )
             end
             -- if the object has no height (for example an Action node), we don't move the cursor
             if height_in_gridcells == 0  then allocate = "no" end
-            log("PlaceObject: %s in row %d and column %d, width=%d, height=%d (page %d)", objecttype, current_row, current_column_start,width_in_gridcells,height_in_gridcells,onpage or publisher.current_pagenumber)
-            trace("PlaceObject: object placed at (%d,%d)",current_column_start,current_row)
+            log("PlaceObject: %s in (%d,%d) wd/ht: %d/%d in %q (p. %d)", objecttype, current_row, current_column_start,width_in_gridcells,height_in_gridcells,area or "(default)", onpage or publisher.current_pagenumber)
             if hreference == "right" then
                 current_column_start = current_column_start - width_in_gridcells + 1
             end
