@@ -1271,7 +1271,12 @@ function output_absolute_position(param)
             _y = 1
         end
 
-        current_grid:allocate_cells(_x,_y,_wd,_ht,param.allocate_matrix)
+        current_grid:allocate_cells({
+            posx = _x,
+            posy = _y,
+            width_gridcells = _wd,
+            height_gridcells = _ht,
+            allocate_matrix = param.allocate_matrix})
     end
 
 
@@ -1451,12 +1456,28 @@ function output_at( param )
             group.contents = n
         end
         if allocate then
-            r:allocate_cells(x - shift_left,y - shift_up,width_gridcells,height_gridcells,allocate_matrix)
+            r:allocate_cells({
+                posx = x - shift_left,
+                posy = y - shift_up,
+                width_gridcells = width_gridcells,
+                height_gridcells = height_gridcells,
+                allocate_matrix = allocate_matrix,
+            })
         end
     else
         -- Put it on the current page
         if allocate then
-            r:allocate_cells(x - shift_left,y - shift_up,width_gridcells,height_gridcells,allocate_matrix,area,keepposition)
+            r:allocate_cells({
+                posx = x - shift_left,
+                posy = y - shift_up,
+                width_gridcells = width_gridcells,
+                height_gridcells = height_gridcells,
+                allocate_matrix = allocate_matrix,
+                area = area,
+                keepposition = keepposition,
+                objectwidth = _wd,
+                objectheight = _ht + _dp
+            })
         end
         if param.rotate then
             nodelist = rotate(nodelist,param.rotate, param.origin_x or 0, param.origin_y or 0)

@@ -318,7 +318,15 @@ end
 
 -- Mark the rectangular area given by x and y (top left corner)
 -- and the width wd and height ht as "not free" (allocated)
-function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname,keepposition)
+function allocate_cells(self,options)
+    local x = options.posx
+    local y = options.posy
+    local wd = options.width_gridcells
+    local ht = options.height_gridcells
+    local allocate_matrix = options.allocate_matrix
+    local areaname = options.area
+    local keepposition = options.keepposition
+
     if not x then return false end
     local show_right  = false
     local show_bottom = false
@@ -369,6 +377,10 @@ function allocate_cells(self,x,y,wd,ht,allocate_matrix,areaname,keepposition)
         frame_margin_top = block.row - 1
     end
     if allocate_matrix then
+        -- We have to take into account the real dimensions of the object
+        -- See bug #244 WIP
+        -- local htobj = options.objectheight
+        -- local wdobj = options.objectwidth
         -- used in output/text when allocate="auto"
         -- special handling for the non rectangular shape
         local grid_step_x = math.floor(100 * wd / allocate_matrix.max_x) / 100
