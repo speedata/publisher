@@ -1019,8 +1019,14 @@ function typeset_row(self, tr_contents, current_row )
             if tr_contents.backgroundcolor and tr_contents.backgroundcolor ~= "-" then
                 color = tr_contents.backgroundcolor
             end
+            if tr_contents.backgroundcolor == "-" then
+                color = nil
+            end
             if td_contents.backgroundcolor and td_contents.backgroundcolor ~= "-" then
                 color = td_contents.backgroundcolor
+            end
+            if td_contents.backgroundcolor == "-" then
+                color = nil
             end
             if color and color ~= "-" then
                 hlist = publisher.background(hlist,color)
