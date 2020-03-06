@@ -76,6 +76,8 @@ var (
 	starttime           time.Time
 	cfg                 *configurator.ConfigData
 	runningProcess      []*os.Process
+
+	verbose bool
 )
 
 // The LuaTeX process writes out a file called "publisher.status"
@@ -893,7 +895,7 @@ func main() {
 
 	os.Setenv("SD_EXTRA_XML", strings.Join(extraxml, ","))
 	os.Setenv("SD_PREPEND_XML", strings.Join(prependxml, ","))
-	verbose := false
+
 	if getOption("verbose") != "" {
 		verbose = true
 		os.Setenv("SP_VERBOSITY", "1")
