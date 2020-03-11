@@ -1,0 +1,13 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Options crop="1cm" />
+
+   <Record element="data">
+     <PlaceObject>
+       <Textblock width="3cm">
+         <Paragraph>
+           <Value select="."/>
+         </Paragraph>
+       </Textblock>
+     </PlaceObject>
+   </Record>
+ </Layout>

@@ -2639,6 +2639,11 @@ function parse_html_tr(tr)
                     end
                     local par = { elementname = "Paragraph" , contents = a }
                     tmp[#tmp + 1] = { elementname = "Paragraph" , contents = a }
+                elseif type(td[i]) == "string" then
+                    local a = paragraph:new()
+                    a:append(td[i])
+                    local par = { elementname = "Paragraph" , contents = a }
+                    tmp[#tmp + 1] = { elementname = "Paragraph" , contents = a }
                 end
             end
             ret[#ret + 1] = { elementname = "Td", contents = tmp}
