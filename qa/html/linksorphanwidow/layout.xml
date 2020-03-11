@@ -1,0 +1,18 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Options crop="1cm" />
+   <Pagetype name="page" test="true()">
+     <PositioningArea name="text">
+       <PositioningFrame height="66" width="1" column="1" row="1"/>
+     </PositioningArea>
+   </Pagetype>
+
+   <Record element="data">
+     <Output area="text">
+       <Text>
+         <Paragraph>
+           <Value select="."/>
+         </Paragraph>
+       </Text>
+     </Output>
+   </Record>
+ </Layout>

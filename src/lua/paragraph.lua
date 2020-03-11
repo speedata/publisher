@@ -24,7 +24,6 @@ end
 
 -- Add italic/bold/underline/... attribtes to node
 function Paragraph:add_italic_bold( nodelist,parameter )
-    -- FIXME(?): recurse, node.traverse() stops at hlists
     for i in node.traverse_id(publisher.glyph_node,nodelist) do
         if parameter.bold == 1 then
             node.set_attribute(i,publisher.att_bold,1)
@@ -576,6 +575,8 @@ function Paragraph:format(width_sp, default_textformat_name,options)
     end
 
     nodelist = node.vpack(objects[1])
+    node.set_attribute(nodelist,publisher.att_origin,publisher.origin_vsplit)
+
     if self.initial then
         local initial_hlist = self.initial
         local ht = initial_hlist.height
@@ -625,6 +626,7 @@ function join_table_to_box(objects)
     node.slide(objects[1])
 
     local vbox = node.vpack(objects[1])
+    node.set_attribute(vbox,publisher.att_origin,publisher.origin_join_table_box)
     return vbox
 end
 
@@ -646,7 +648,7 @@ end
 ---
 --- Output
 --- ------
---- The return value is  a vbox that should be placed in the PDF and has a height <= frameheight. If there
+--- The return value is a vbox that should be placed in the PDF and has a height <= frameheight. If there
 --- is material left over for a next area, the `objects_t` table is changed and vsplit gets called again.
 --- Making `objects_t` empty is a signal for the function calling vsplit (commands/text) that all
 --- text has been put into the PDF.

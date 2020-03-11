@@ -67,6 +67,7 @@ att_rows           = 7 -- see text formats for details
 att_bgcolor        = 8 -- similar to underline
 att_bgpaddingtop   = 9
 att_bgpaddingbottom   = 10
+att_hyperlink      = 11
 
 -- for debugging purpose
 att_origin         = 98
@@ -132,6 +133,9 @@ origin_setcolor = 22
 origin_setcolorifnecessary = 23
 origin_paragraph = 24
 origin_initial = 25
+origin_text = 26
+origin_join_table_box = 27
+origin_dolinebreak = 28
 
 user_defined_addtolist = 1
 user_defined_bookmark  = 2
@@ -228,6 +232,10 @@ compatibility = {
 imagehandler = {}
 
 viewerpreferences = {}
+
+-- All hyperlinks from HTML data are stored here in this array
+-- to be inserted later on in pre shipout filter
+hyperlinks = {}
 
 -- The spot colors used in the document (even when discarded)
 used_spotcolors = {}
@@ -2495,14 +2503,8 @@ function parse_html( elt, parameter )
                     end
                 end
             else
-                local ai = get_action_node(3)
-                ai.data = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",elt.href)
-                local stl = node.new("whatsit","pdf_start_link")
-                stl.action = ai
-                stl.width = -1073741824
-                stl.height = -1073741824
-                stl.depth = -1073741824
-                a:append(stl)
+                hyperlinks[#hyperlinks + 1] = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",elt.href)
+                options.add_attributes = { att_hyperlink, #hyperlinks }
                 for i=1,#elt do
                     if type(elt[i]) == "string" then
                         a:append(elt[i],options)
@@ -2510,8 +2512,7 @@ function parse_html( elt, parameter )
                         a:append(parse_html(elt[i]),options)
                     end
                 end
-                local enl = node.new("whatsit","pdf_end_link")
-                a:append(enl)
+                options.add_attributes = nil
             end
             return a
         elseif eltname=="br" then
@@ -2648,61 +2649,101 @@ end
 
 
 --- Look for `user_defined` at end of page (ship-out) and runs actions encoded in them.
-function find_user_defined_whatsits( head )
+function find_user_defined_whatsits( head, parent )
     local fun
+    local prev_hyperlink = nil
+    local savehead = head
     while head do
         if head.id == vlist_node or head.id==hlist_node then
-            -- We need to recurse into the boxes. The colors used there must be kept.
-            -- Todo: use a variable that is global for this function. (do local x ; function ... end end)
-            find_user_defined_whatsits(head.list)
-        elseif head.id==whatsit_node then
-            if head.subtype == user_defined_whatsit then
-                -- action
-                if head.user_id == user_defined_addtolist then
-                    -- this part is obsolete (2.9.3)
-                    -- the value is the index of the hash of user_defined_functions
-                    fun = user_defined_functions[head.value]
-                    fun()
-                    -- use and forget
-                    user_defined_functions[head.value] = nil
+            find_user_defined_whatsits(head.list,head)
+        else
+            -- First, let's look at hyperlinks from HTML <a href="...">
+            -- Hyperlinks are inserted as attributes
+            local hl = node.has_attribute(head,att_hyperlink)
+            local insert_startlink = false
+            local insert_endlink = false
+            -- case 1: link ends at the end of the list
+            --         this is due to a (line-) broken link
+            --         => end link
+            --  case 2: hyperlink value of the node changes
+            --         either insert a start link or an end link marker
+            if hl and head.next == nil then
+                insert_endlink = true
+                prev_hyperlink = nil
+            elseif hl ~= prev_hyperlink then
+                if hl ~= nil then
+                    insert_startlink = true
+                    prev_hyperlink = hl
+                else
+                    insert_endlink = true
+                    prev_hyperlink = nil
+                end
+            end
+            if insert_startlink then
+                local ai = get_action_node(3)
+                ai.data = hyperlinks[hl]
+                local stl = node.new("whatsit","pdf_start_link")
+                stl.action = ai
+                stl.width = -1073741824
+                stl.height = -1073741824
+                stl.depth = -1073741824
+                parent.head = node.insert_before(savehead,parent.head,stl)
+            end
+            if insert_endlink then
+                local enl = node.new("whatsit","pdf_end_link")
+                head = node.insert_after(head,head,enl)
+            end
+            -- Now let's look at user defined whatsits, that are ment
+            -- for markers, bookmarks etc.
+            if head.id==whatsit_node then
+                if head.subtype == user_defined_whatsit then
+                    -- action
+                    if head.user_id == user_defined_addtolist then
+                        -- this part is obsolete (2.9.3)
+                        -- the value is the index of the hash of user_defined_functions
+                        fun = user_defined_functions[head.value]
+                        fun()
+                        -- use and forget
+                        user_defined_functions[head.value] = nil
                     -- bookmark
-                elseif head.user_id == user_defined_bookmark then
-                    local level,openclose,dest,str =  string.match(head.value,"([^+]*)+([^+]*)+([^+]*)+(.*)")
-                    level = tonumber(level)
-                    local open_p
-                    if openclose == "1" then
-                        open_p = true
-                    else
-                        open_p = false
-                    end
-                    local i = 1
-                    local current_bookmark_table = bookmarks -- level 1 == top level
-                    -- create levels if necessary
-                    while i < level do
-                        if #current_bookmark_table == 0 then
-                            current_bookmark_table[1] = {}
-                            err("No bookmark given for this level (%d)!",level)
+                    elseif head.user_id == user_defined_bookmark then
+                        local level,openclose,dest,str =  string.match(head.value,"([^+]*)+([^+]*)+([^+]*)+(.*)")
+                        level = tonumber(level)
+                        local open_p
+                        if openclose == "1" then
+                            open_p = true
+                        else
+                            open_p = false
                         end
-                        current_bookmark_table = current_bookmark_table[#current_bookmark_table]
-                        i = i + 1
-                    end
-                    current_bookmark_table[#current_bookmark_table + 1] = {name = str, destination = dest, open = open_p}
-                elseif head.user_id == user_defined_mark then
-                    local marker = head.value
-                    markers[marker] = { page = current_pagenumber }
-                elseif head.user_id == user_defined_mark_append then
-                    local marker = head.value
-                    if markers[marker] == nil then
-                        markers[marker] = { page = tostring(current_pagenumber) }
-                    else
-                        markers[marker]["page"] = tostring(markers[marker]["page"]) .. "," ..  tostring(current_pagenumber)
+                        local i = 1
+                        local current_bookmark_table = bookmarks -- level 1 == top level
+                        -- create levels if necessary
+                        while i < level do
+                            if #current_bookmark_table == 0 then
+                                current_bookmark_table[1] = {}
+                                err("No bookmark given for this level (%d)!",level)
+                            end
+                            current_bookmark_table = current_bookmark_table[#current_bookmark_table]
+                            i = i + 1
+                        end
+                        current_bookmark_table[#current_bookmark_table + 1] = {name = str, destination = dest, open = open_p}
+                    elseif head.user_id == user_defined_mark then
+                        local marker = head.value
+                        markers[marker] = { page = current_pagenumber }
+                    elseif head.user_id == user_defined_mark_append then
+                        local marker = head.value
+                        if markers[marker] == nil then
+                            markers[marker] = { page = tostring(current_pagenumber) }
+                        else
+                            markers[marker]["page"] = tostring(markers[marker]["page"]) .. "," ..  tostring(current_pagenumber)
+                        end
                     end
                 end
             end
         end
         head = head.next
     end
-    return colors_used
+    return
 end
 
 --- Node(list) creation
@@ -3058,6 +3099,11 @@ function mknodes(str,fontfamily,parameter)
         warning("No head found")
         return node.new("hlist")
     end
+    local aa = parameter.add_attributes
+    if aa then
+        set_attribute_recurse(head,aa[1],aa[2])
+    end
+
     return head
 end
 
@@ -3392,8 +3438,9 @@ function do_linebreak( nodelist,hsize,parameters )
         end
         head = head.next
     end
-
-    return node.vpack(j)
+    local ret = node.vpack(j)
+    node.set_attribute(ret,att_origin,origin_dolinebreak)
+    return ret
 end
 
 function create_empty_hbox_with_width( wd )
@@ -3556,6 +3603,18 @@ function set_color_if_necessary( nodelist,color )
     node.set_attribute(colstart,att_origin,origin_setcolorifnecessary)
     node.set_attribute(colstop,att_origin,origin_setcolorifnecessary)
     return nodelist
+end
+
+-- Set an attribute to the list and all sublists.
+function set_attribute_recurse(nodelist,attribute,value)
+    while nodelist do
+        if nodelist.id==vlist_node or nodelist.id==hlist_node  then
+            set_attribute_recurse(nodelist.list,attribute,value)
+        else
+            node.set_attribute(nodelist,attribute,value)
+        end
+        nodelist=nodelist.next
+    end
 end
 
 function set_fontfamily_if_necessary(nodelist,fontfamily)
