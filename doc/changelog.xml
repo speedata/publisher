@@ -1,5 +1,25 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.6" date="2020-03-12">
+      <en>Table balancing: single tablerule in last frame gets into previous frame. (#250)</en>
+      <de>Tabellenausgleich: einzelne Tabellenlinie in der letzten Spalte geht in die vorherige Spalte. (#250)</de>
+    </entry>
+    <entry version="3.9.6" date="2020-03-12">
+      <en>Bugfix: simple HTML table (#249).</en>
+      <de>Korrektur: Einfache HTML-Tabelle (#249).</de>
+    </entry>
+    <entry version="3.9.6" date="2020-03-12">
+      <en>Bugfix: html hyperlinks with widows/orphan (#248).</en>
+      <de>Korrektur: html Hyperlinks mit widow/orphan Kontrolle (#248).</de>
+    </entry>
+    <entry version="3.9.6" date="2020-03-12">
+      <en>Bugfix: run_saxon() fails.</en>
+      <de>Korrektur: run_saxon() schlägt fehl.</de>
+    </entry>
+    <entry version="3.9.6" date="2020-03-12">
+      <en>Bugfix: backgroundcolor of table cells with defaults in <tt>Column</tt> (#247).</en>
+      <de>Korrektur: backgroundcolor in Tabellenzellen, wenn es Voreinstellungen in <tt>Column</tt> gibt (#247).</de>
+    </entry>
     <entry version="3.9.5" date="2020-02-25">
       <en>Fix height calculation for cell allocation.</en>
       <de>Korrigiere Höhenberechnung für Zellbelegung.</de>
