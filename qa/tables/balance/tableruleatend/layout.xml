@@ -1,0 +1,21 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+        xmlns:sd="urn:speedata:2009/publisher/functions/en"
+        version="3.9.5">
+        <Options crop="1cm" />
+   <Pagetype name="x" test="true()">
+      <PositioningArea name="balance">
+         <PositioningFrame width="5" height="5" row="1" column="1" />
+         <PositioningFrame width="5" height="5" row="1" column="7" />
+      </PositioningArea>
+   </Pagetype>
+   <Record element="data">
+      <PlaceObject area="balance">
+         <Table balance="yes">
+            <Tr>
+               <Td><Paragraph><Value>Some</Value><Br /><Value>Text</Value></Paragraph></Td>
+            </Tr>
+            <Tablerule color="green" rulewidth="10pt" />
+         </Table>
+      </PlaceObject>
+   </Record>
+</Layout>

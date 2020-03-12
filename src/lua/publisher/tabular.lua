@@ -1129,7 +1129,7 @@ local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current
             current_row = current_row + 1
             current_tablehead_type[#current_tablehead_type + 1] = self:typeset_row(row_contents,current_row)
         elseif row_elementname == "Tablerule" then
-            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color)
+            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,publisher.origin_tablerule)
             current_tablehead_type[#current_tablehead_type + 1] = node.hpack(tmp)
         end
     end
@@ -1160,7 +1160,7 @@ local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_
             current_row = current_row + 1
             current_tablefoot_type[#current_tablefoot_type + 1] = self:typeset_row(row_contents,current_row)
         elseif row_elementname == "Tablerule" then
-            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color)
+            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,origin_tablerule)
             current_tablefoot_type[#current_tablefoot_type + 1] = node.hpack(tmp)
         end
     end
@@ -1266,9 +1266,11 @@ function typeset_table(self)
                 end
                 offset = sum
             end
-            tmp = publisher.colorbar(self.tablewidth_target - offset,tex.sp(tr_contents.rulewidth or "0.25pt"),0,tr_contents.color)
+            tmp = publisher.colorbar(self.tablewidth_target - offset,tex.sp(tr_contents.rulewidth or "0.25pt"),0,tr_contents.color,publisher.origin_tablerule)
             tmp = publisher.add_glue(tmp,"head",{width = offset})
-            rows[#rows + 1] = node.hpack(tmp)
+            tmp = node.hpack(tmp)
+            node.set_attribute(tmp,publisher.att_origin,publisher.origin_tablerule)
+            rows[#rows + 1] = tmp
             if break_above == false then
                 if publisher.options.showobjects then
                     rows[#rows] = publisher.addhrule(rows[#rows])
@@ -1679,6 +1681,16 @@ function typeset_table(self)
         -- split has already done that.
         if splits[#splits] ~= #rows then
             splits[#splits + 1] = #rows
+        end
+
+        -- When the last column has exacly one table rule, this rule
+        -- gets moved to the previous column
+        if #splits > 1 and splits[#splits] - splits[#splits - 1] == 1 then
+            local istablerule = node.has_attribute(rows[#rows],publisher.att_origin) == publisher.origin_tablerule
+            if istablerule then
+                splits[#splits - 1] = splits[#splits]
+                table.remove(splits)
+            end
         end
     end
 

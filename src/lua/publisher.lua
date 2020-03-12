@@ -136,6 +136,9 @@ origin_initial = 25
 origin_text = 26
 origin_join_table_box = 27
 origin_dolinebreak = 28
+origin_colorbar = 40
+
+origin_tablerule = 50
 
 user_defined_addtolist = 1
 user_defined_bookmark  = 2
@@ -3670,7 +3673,7 @@ function break_url( nodelist )
     return nodelist
 end
 
-function colorbar( wd,ht,dp,color )
+function colorbar( wd,ht,dp,color,origin )
     local colorname = color
     if not colorname or colorname == "" then
         colorname = "black"
@@ -3688,6 +3691,8 @@ function colorbar( wd,ht,dp,color )
     h.width = wd
     h.depth = dp
     h.height = ht
+    origin = origin or origin_colorbar
+    node.set_attribute(h,att_origin,origin)
     return h
 end
 
