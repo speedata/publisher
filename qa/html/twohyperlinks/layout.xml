@@ -1,0 +1,12 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+   <Trace grid="no" />
+   <Record element="data">
+      <Output>
+         <Text>
+            <Paragraph>
+               <Value select="p"/>
+            </Paragraph>
+         </Text>
+      </Output>
+   </Record>
+</Layout>

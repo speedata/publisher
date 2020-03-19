@@ -2695,7 +2695,7 @@ function find_user_defined_whatsits( head, parent )
                 stl.width = -1073741824
                 stl.height = -1073741824
                 stl.depth = -1073741824
-                parent.head = node.insert_before(savehead,parent.head,stl)
+                parent.head = node.insert_before(parent.head,head,stl)
             end
             if insert_endlink then
                 local enl = node.new("whatsit","pdf_end_link")
