@@ -2583,6 +2583,13 @@ function parse_html_table(elt)
     end
     local tabular = publisher.tabular:new()
     tabular.width = xpath.get_variable("__maxwidth")
+
+    local css_rules = publisher.css:matches({element = "table", class=class,id=id}) or {}
+    local tab = {}
+    if css_rules and css_rules.width == "100%" then
+        tabular.autostretch = "max"
+    end
+
     tabular.tab = tbl
     local fontname = "text"
     local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
