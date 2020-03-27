@@ -2582,11 +2582,13 @@ function parse_html_table(elt)
             end
         end
     end
+
     local tabular = publisher.tabular:new()
     tabular.width = xpath.get_variable("__maxwidth")
-
+    local class = elt.class
+    local id = elt.id
     local css_rules = publisher.css:matches({element = "table", class=class,id=id}) or {}
-    local tab = {}
+
     if css_rules and css_rules.width == "100%" then
         tabular.autostretch = "max"
     end
@@ -2641,17 +2643,28 @@ function parse_html_tr(tr)
             end
             local tmp = {}
             for i=1,#td do
+                local class = td.class
+                local id = td.id
+                local css_rules = publisher.css:matches({element = "td", class=class,id=id}) or {}
+                local textalign
+                if css_rules then
+                    textalign = css_rules["text-align"]
+                end
+
                 if type(td[i]) == "table" then
                     local a = parse_html(td[i])
                     set_fontfamily_if_necessary(a.nodelist,current_fontfamily)
                     if td[".__local_name"] == "th" then
                         a.textformat = "__centered"
                         a:add_italic_bold(a.nodelist, {bold = 1})
+                    else
+                        if textalign == "right" then a.textformat = "__rightaligned" end
                     end
                     local par = { elementname = "Paragraph" , contents = a }
                     tmp[#tmp + 1] = { elementname = "Paragraph" , contents = a }
                 elseif type(td[i]) == "string" then
                     local a = paragraph:new()
+                    if textalign == "right" then a.textformat = "__rightaligned" end
                     a:append(td[i])
                     local par = { elementname = "Paragraph" , contents = a }
                     tmp[#tmp + 1] = { elementname = "Paragraph" , contents = a }
