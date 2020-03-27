@@ -1,4 +1,4 @@
-[![Join the chat at https://gitter.im/speedata/publisher](https://img.shields.io/gitter/room/speedata/publisher?color=yellow)](https://gitter.im/speedata/publisher)&nbsp;[![Buy me a coffee at ko-fi](https://img.shields.io/badge/Donate-Buy%20me%20a%20coffee-brightgreen)](https://ko-fi.com/D1D11C3OA)&nbsp;![Platforms](https://img.shields.io/badge/Platform-Mac%2FLinux%2FWindows-lightgrey)
+[![Join the chat at https://gitter.im/speedata/publisher](https://img.shields.io/gitter/room/speedata/publisher?color=yellow)](https://gitter.im/speedata/publisher)&nbsp;[![Fund the development](https://img.shields.io/badge/Sponsor-Fund%20development-yellow)](https://github.com/sponsors/speedata)&nbsp;[![Platforms](https://img.shields.io/badge/Platform-Mac%2FLinux%2FWindows-lightgrey)](https://doc.speedata.de/publisher/en/description-en/installation.html)
 
 speedata Publisher
 ==================
