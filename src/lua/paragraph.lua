@@ -534,6 +534,7 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         end
         if current_textformat.margintop and current_textformat.margintop ~= 0 then
             nodelist.list = publisher.add_glue(nodelist.list,"head",{width = current_textformat.margintop})
+            node.set_attribute(nodelist.list,publisher.att_margin_top_boxstart,current_textformat.margintopboxstart)
             node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,6)
         end
         if current_textformat.breakbelow == false then
@@ -791,6 +792,18 @@ function Paragraph.vsplit( objects_t, parameter )
     while not area_filled do
         for i=1,#hlist do
             local hbox = table.remove(hlist,1)
+            if #thisarea == 0 then
+                -- This is for a different margin-top at the beginning of a new column.
+                if hbox.id == publisher.vlist_node then
+                    local vbox = hbox
+                    if vbox.list and vbox.list.id == publisher.glue_node then
+                        local margin_top_boxstart = node.has_attribute(vbox.list, publisher.att_margin_top_boxstart)
+                        vbox.list.width = margin_top_boxstart
+                        hbox = node.vpack(vbox.list)
+                    end
+                end
+            end
+
             if #thisarea == 0 and node.has_attribute(hbox, publisher.att_omit_at_top) then
                 -- When the margin-below appears at the top of the new frame, we just ignore
                 -- it. Too bad Lua doesn't have a 'next' in for-loops

@@ -92,6 +92,7 @@ att_use_as_head           = 403
 -- HTML tables should not be paragraph:format()ted
 att_dont_format           = 404
 att_margin_newcolumn      = 405
+att_margin_top_boxstart   = 406
 
 --- `att_is_table_row` is used in `tabular.lua` and if set to 1, it denotes
 --- a regular table row, and not a spacer. Spacers must not appear

@@ -2424,10 +2424,10 @@
     </attribute>
     <attribute en="column-padding-top" optional="yes" since="3.2.1">
       <description xml:lang="en">
-        <para>The height of the padding that is inserted in a column (at the top) with Output/Text</para>
+        <para>The height of the padding that is inserted in a column (at the top) with Output/Text.</para>
       </description>
       <description xml:lang="de">
-        <para>Die Höhe des Innenabstands in einer Spalte (oben) mit Output/Text</para>
+        <para>Die Höhe des Innenabstands in einer Spalte (oben) mit Output/Text.</para>
       </description>
     </attribute>
     <attribute en="fill-last-line" optional="yes" since="3.3.11" type="zerotohundred">
@@ -2492,6 +2492,14 @@
       </description>
       <description xml:lang="de">
         <para>Abstand zwischen der Linie oben und dem vorhergehenden Text.</para>
+      </description>
+    </attribute>
+    <attribute en="margin-top-box-start" optional="yes" since="3.9.7">
+      <description xml:lang="en">
+        <para>The top margin at the beginning of a page or column with <cmd name="Output"/>. Defaults to the value of <tt>margin-top</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der obere Rand am Start einer Seite. Voreinstellung ist der Wert bei <tt>margin-top</tt>.</para>
       </description>
     </attribute>
     <attribute en="name" type="text" optional="no">

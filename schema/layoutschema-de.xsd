@@ -1069,7 +1069,7 @@
       </xs:attribute>
       <xs:attribute name="column-padding-top">
         <xs:annotation>
-          <xs:documentation>Die Höhe des Innenabstands in einer Spalte (oben) mit Output/Text</xs:documentation>
+          <xs:documentation>Die Höhe des Innenabstands in einer Spalte (oben) mit Output/Text.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="fill-last-line">
@@ -1114,6 +1114,11 @@
       <xs:attribute name="margin-top">
         <xs:annotation>
           <xs:documentation>Abstand zwischen der Linie oben und dem vorhergehenden Text.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="margin-top-box-start">
+        <xs:annotation>
+          <xs:documentation>Der obere Rand am Start einer Seite. Voreinstellung ist der Wert bei margin-top.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="name" use="required">

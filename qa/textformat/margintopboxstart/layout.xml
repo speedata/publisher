@@ -1,0 +1,16 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <DefineTextformat name="h1" margin-top="12pt" margin-top-box-start="0pt" />
+  <Pageformat height="4cm" width="6cm" />
+  <Record element="data">
+    <Output>
+      <Text>
+        <Paragraph textformat="h1">
+          <Value>A title</Value>
+        </Paragraph>
+        <Paragraph textformat="h1">
+          <Value>Another title</Value>
+        </Paragraph>
+      </Text>
+    </Output>
+  </Record>
+</Layout>

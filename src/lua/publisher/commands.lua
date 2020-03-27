@@ -641,6 +641,7 @@ function commands.define_textformat(layoutxml)
     local hyphenchar    = publisher.read_attribute(layoutxml,dataxml,"hyphenchar",    "rawstring")
     local tab           = publisher.read_attribute(layoutxml,dataxml,"tab",           "rawstring")
     local filllastline  = publisher.read_attribute(layoutxml,dataxml,"fill-last-line","number")
+    local margintopboxstart  = publisher.read_attribute(layoutxml,dataxml,"margin-top-box-start","length_sp")
     local fmt = {
         colpaddingtop = colpaddingtop,
     }
@@ -697,6 +698,12 @@ function commands.define_textformat(layoutxml)
     end
 
     fmt.breakbelow = breakbelow
+    if margintopboxstart then
+        fmt.margintopboxstart = margintopboxstart
+    else
+        fmt.margintopboxstart = fmt.margintop
+    end
+
     fmt.tab = tab
 
     if filllastline then

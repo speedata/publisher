@@ -1218,7 +1218,7 @@
          </optional>
          <optional>
             <attribute name="column-padding-top">
-               <a:documentation>The height of the padding that is inserted in a column (at the top) with Output/Text</a:documentation>
+               <a:documentation>The height of the padding that is inserted in a column (at the top) with Output/Text.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1255,6 +1255,11 @@
          <optional>
             <attribute name="margin-top">
                <a:documentation>Distance between the top rule and the text of the previous paragraph.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="margin-top-box-start">
+               <a:documentation>The top margin at the beginning of a page or column with Output. Defaults to the value of margin-top.</a:documentation>
             </attribute>
          </optional>
          <attribute name="name">

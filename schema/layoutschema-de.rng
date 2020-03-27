@@ -1218,7 +1218,7 @@
          </optional>
          <optional>
             <attribute name="column-padding-top">
-               <a:documentation>Die Höhe des Innenabstands in einer Spalte (oben) mit Output/Text</a:documentation>
+               <a:documentation>Die Höhe des Innenabstands in einer Spalte (oben) mit Output/Text.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1255,6 +1255,11 @@
          <optional>
             <attribute name="margin-top">
                <a:documentation>Abstand zwischen der Linie oben und dem vorhergehenden Text.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="margin-top-box-start">
+               <a:documentation>Der obere Rand am Start einer Seite. Voreinstellung ist der Wert bei margin-top.</a:documentation>
             </attribute>
          </optional>
          <attribute name="name">
