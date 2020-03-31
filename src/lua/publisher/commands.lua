@@ -728,18 +728,16 @@ end
 --- Define a font family. A font family must consist of a `Regular` shape, optional are `Bold`,
 --- `BoldItalic` and `Italic`.
 function commands.define_fontfamily( layoutxml,dataxml )
-    local fonts = publisher.fonts
-    local fam={}
     -- fontsize and baselineskip are in dtp points (bp, 1 bp ≈ 65782 sp)
     -- Concrete font instances are created here. fontsize and baselineskip are known
     local name         = publisher.read_attribute(layoutxml,dataxml,"name",    "rawstring" )
     local size         = publisher.read_attribute(layoutxml,dataxml,"fontsize","rawstring")
     local baselineskip = publisher.read_attribute(layoutxml,dataxml,"leading", "rawstring")
-    fam.name = name
     if size == nil then
-      err("DefineFontfamily: no size given.")
-      return
+        err("DefineFontfamily: no size given.")
+        return
     end
+
     -- warning: this is not the same! See bug #99.
     if tonumber(size) == nil then
         size = tex.sp(size)
@@ -757,12 +755,8 @@ function commands.define_fontfamily( layoutxml,dataxml )
         baselineskip = tex.sp(tostring(baselineskip) .."pt")
     end
 
-    fam.size         = size
-    fam.baselineskip = baselineskip
-    fam.scriptsize   = fam.size * 0.8 -- subscript / superscript
-    fam.scriptshift  = fam.size * 0.3
-
-    local ok,tmp,elementname,fontface
+    local elementname,fontface
+    local regular, bold, italic, bolditalic
     for i,v in ipairs(layoutxml) do
         elementname = v[".__local_name"]
         fontface    = publisher.read_attribute(v,dataxml,"fontface","rawstring")
@@ -770,53 +764,16 @@ function commands.define_fontfamily( layoutxml,dataxml )
         if type(v) ~= "table" then
             -- ignore
         elseif elementname=="Regular" then
-            ok,tmp=fonts.make_font_instance(fontface,fam.size)
-            if ok then
-                fam.normal = tmp
-            else
-                fam.normal = 1
-                err("Fontinstance 'normal' could not be created for %q.",tostring(fontface))
-            end
-            fam.fontfaceregular = fontface
-            ok,tmp=fonts.make_font_instance(fontface,fam.scriptsize)
-            if ok then
-                fam.normalscript = tmp
-            end
+            regular = fontface
         elseif elementname=="Bold" then
-            ok,tmp=fonts.make_font_instance(fontface,fam.size)
-            if ok then
-                fam.bold = tmp
-            end
-            ok,tmp=fonts.make_font_instance(fontface,fam.scriptsize)
-            if ok then
-                fam.boldscript = tmp
-            end
+            bold = fontface
         elseif elementname =="Italic" then
-            ok,tmp=fonts.make_font_instance(fontface,fam.size)
-            if ok then
-                fam.italic = tmp
-            end
-            ok,tmp=fonts.make_font_instance(fontface,fam.scriptsize)
-            if ok then
-                fam.italicscript = tmp
-            end
+            italic = fontface
         elseif elementname =="BoldItalic" then
-            ok,tmp=fonts.make_font_instance(fontface,fam.size)
-            if ok then
-                fam.bolditalic = tmp
-            end
-            ok,tmp=fonts.make_font_instance(fontface,fam.scriptsize)
-            if ok then
-                fam.bolditalicscript = tmp
-            end
-        end
-        if type(v) == "table" and not ok then
-            err("Error creating font instance %q: %s", elementname or "??", tmp or "??")
+            bolditalic = fontface
         end
     end
-    fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
-    fonts.lookup_fontfamily_name_number[name]=#fonts.lookup_fontfamily_number_instance
-    log("DefineFontfamily, family=%d, name=%q",#fonts.lookup_fontfamily_number_instance,name)
+    local fam = publisher.define_fontfamily(regular,bold,italic,bolditalic,name,size,baselineskip)
 end
 
 --- Element

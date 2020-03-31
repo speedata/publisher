@@ -1,0 +1,7 @@
+bar(moo) #hash 4.2 .42 42 42% .42% 4.2% 42px
+url(http://jerf.org)
+U+0042-U+0045
+<!-- -->
+/*comment*/
+~= |= ^= $= *= { } @atword \26 B
+

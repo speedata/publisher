@@ -36,6 +36,24 @@ func s2c(input string) *C.char {
 	return C.CString(input)
 }
 
+//export parseHTMLText
+func parseHTMLText(htmltext string, csstext string) *C.char {
+	str, err := splibaux.ParseHTMLText(htmltext, csstext)
+	if err != nil {
+		return s2c(errorpattern + err.Error())
+	}
+	return C.CString(str)
+}
+
+//export parseHTML
+func parseHTML(filename string) *C.char {
+	str, err := splibaux.ParseHTML(filename)
+	if err != nil {
+		return s2c(errorpattern + err.Error())
+	}
+	return C.CString(str)
+}
+
 //export contains
 func contains(haystack string, needle string) *C.char {
 	var ret string

@@ -172,6 +172,8 @@ function Paragraph:append( whatever,parameter )
                 self:add_to_nodelist(whatever[i])
             end
         end
+    elseif type(whatever) == "userdata" then
+        self:add_to_nodelist(img.node(whatever))
     else
         if type(whatever)=="table" then printtable("Paragraph:append",whatever) end
         assert(false,string.format("Interner Fehler bei Paragraph:append, type(arg)=%s",type(whatever)))
@@ -600,7 +602,7 @@ function Paragraph:format(width_sp, default_textformat_name,options)
     return nodelist
 end
 
--- Return true iff the paragraph has at lines ore less text
+-- Return true iff the paragraph has at lines or less text
 -- lines left over and is not at the last line.
 function less_or_equal_than_n_lines( nodelist, lines )
     if lines == 0 then return false end

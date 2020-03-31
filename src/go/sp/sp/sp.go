@@ -701,12 +701,15 @@ for details.
 This software is built upon and contains third party libraries including:
 
 LuaTeX (http://www.luatex.org/)
-goconfig (https://github.com/Unknwon/goconfig)
-TeX Gyre Heros fonts (http://www.gust.org.pl/projects/e-foundry/tex-gyre/heros)
-Parts of the Go library (https://golang.org/)
 Blackfriday (https://github.com/russross/blackfriday)
+Camingo Code font (https://www.janfromm.de/typefaces/camingomono/camingocode/, CC BY-ND 3.0)
+Crimson text (https://fonts.google.com/specimen/Crimson+Text, SIL Open font license)
+goconfig (https://github.com/Unknwon/goconfig)
 GopherLua (https://github.com/yuin/gopher-lua)
 jing/trang (https://github.com/relaxng/jing-trang)
+Parts of the Go library (https://golang.org/)
+Saxon (http://saxon.sourceforge.net)
+TeX Gyre Heros fonts (http://www.gust.org.pl/projects/e-foundry/tex-gyre/heros)
 
 Contact:
    gundlach@speedata.de

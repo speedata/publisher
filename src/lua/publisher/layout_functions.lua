@@ -380,6 +380,21 @@ local function shaone(dataxml,arg)
     return ret
 end
 
+
+-- Turn escaped HTML into table. Uses Go XML parser + CSS
+local function html( dataxml, arg )
+  if arg == nil then
+      arg = dataxml
+  end
+  arg = table_textvalue(arg)
+  local tab = splib.parse_html_text(arg,publisher.css:gettext())
+  if type(tab) == "string" then
+      local a,b = load(tab)
+      if a then a() else err(b) return end
+      return { csshtmltree }
+  end
+end
+
 -- Turn &lt;b&gt;Hello&lt;b /&gt; into an HTML table and then into XML structure.
 local function decode_html( dataxml, arg )
     if arg == nil then
@@ -469,6 +484,7 @@ register("urn:speedata:2009/publisher/functions/en","current-framenumber",curren
 
 register("urn:speedata:2009/publisher/functions/en","current-column",current_column)
 
+register("urn:speedata:2009/publisher/functions/en","html",html)
 register("urn:speedata:2009/publisher/functions/en","decode-html",decode_html)
 
 register("urn:speedata:2009/publisher/functions/en","decode-base64",decode_base64)

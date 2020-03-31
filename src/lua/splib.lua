@@ -42,6 +42,8 @@ typedef void *GoChan;
 typedef struct { void *t; void *v; } GoInterface;
 typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 
+extern char* parseHTMLText(GoString p0,GoString p1);
+extern char* parseHTML(GoString p0);
 extern void addDir(GoString p0);
 extern char* contains(GoString p0, GoString p1);
 extern char** tokenize(GoString p0, GoString p1);
@@ -63,6 +65,21 @@ local function c(str)
     return ffi.new("GoString",str,#str)
 end
 
+local function parse_html_text(htmltext,csstext)
+    local ret = ld.parseHTMLText(c(htmltext),c(csstext))
+    local _ret = ffi.string(ret)
+
+    if string.match( _ret,errorpattern ) then
+        err(string.gsub( _ret,errorpattern ,"" ))
+        return ""
+    end
+    return ffi.string(ret)
+end
+
+local function parse_html(filename)
+    local ret = ld.parseHTML(c(filename))
+    return ffi.string(ret)
+end
 
 local function tokenize(dataxml,arg)
     local ret = ld.tokenize(c(arg[1]),c(arg[2]))
@@ -183,6 +200,8 @@ end
 
 
 return {
+    parse_html    = parse_html,
+    parse_html_text = parse_html_text,
     add_dir       = add_dir,
     contains      = contains,
     htmltoxml     = htmltoxml,

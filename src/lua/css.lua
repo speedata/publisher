@@ -14,6 +14,7 @@ local function new(self)
   c = {
      rules = {},
      priorities = {},
+     text = {}
   }
   setmetatable(c,self)
   self.__index = self
@@ -36,7 +37,14 @@ local function get_priority( selector )
   return sel,prio
 end
 
+local function gettext(self)
+    return table.concat(self.text)
+end
+
 local function parsetxt(self,csstext)
+  -- save it for later to pass to the Go routine
+  self.text[#self.text + 1] = csstext
+
   csstext = string.gsub(csstext,"%s+"," ")
   -- remove comments:
   csstext = string.gsub(csstext,"/%*.-%*/"," ")
@@ -171,4 +179,5 @@ return {
   parse     = parse,
   parsetxt  = parsetxt,
   matches   = matches,
+  gettext   = gettext,
 }

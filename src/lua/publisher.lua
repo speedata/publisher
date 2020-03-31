@@ -22,9 +22,10 @@ xpath = do_luafile("xpath.lua")
 local commands     = require("publisher.commands")
 local page         = require("publisher.page")
 local fontloader   = require("fonts.fontloader")
-local paragraph    = require("paragraph")
+local html         = require("publisher.html")
 local fonts        = require("publisher.fonts")
 local uuid         = require("uuid")
+paragraph    = require("paragraph")
 uuid.randomseed(tex.randomseed)
 
 splib        = require("splib")
@@ -36,6 +37,7 @@ module(...,package.seeall)
 
 do_luafile("layout_functions.lua")
 
+processmode = "XML"
 
 --- One big point (DTP point, PostScript point) is approx. 65781 scaled points.
 factor = 65781
@@ -398,7 +400,7 @@ colors  = {
 colortable = {"black","aliceblue", "orange", "rebeccapurple", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "blanchedalmond", "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkgrey", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange", "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkslategrey", "darkturquoise", "darkviolet", "deeppink", "deepskyblue", "dimgray", "dimgrey", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold", "goldenrod", "gray", "green", "greenyellow", "grey", "honeydew", "hotpink", "indianred", "indigo", "ivory", "khaki", "lavender", "lavenderblush", "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgray", "lightgreen", "lightgrey", "lightpink", "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightslategrey", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", "mediumslateblue", "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", "navy", "oldlace", "olive", "olivedrab", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred", "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon", "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "slategrey", "snow", "springgreen", "steelblue", "tan", "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen"}
 
 setmetatable(colors,{  __index = function (tbl,key)
-    if string.sub(key,1,1) ~= "#" then
+    if string.sub(key,1,1) ~= "#" and string.sub(key,1,3) ~= "rgb" then
         return nil
     end
     log("Defining color %q",key)
@@ -430,6 +432,13 @@ current_grid = nil
 current_fontfamily = 0
 
 fontaliases = {}
+
+-- for HTML / CSS fontfamilies
+fontgroup = {
+     ["sans-serif"] = { regular={["local"] = "sans"}, bold={["local"]="sans-bold"}, italic={["local"]="sans-italic"}, bolditalic={["local"]="sans-bolditalic"} },
+     ["serif"] = { regular={["local"] = "serif"}, bold={["local"]="serif-bold"}, italic={["local"]="serif-italic"}, bolditalic={["local"]="serif-bolditalic"} },
+     ["monospace"] = { regular={["local"] = "monospace"}, bold={["local"]="monospace-bold"}, italic={["local"]="monospace-italic"}, bolditalic={["local"]="monospace-bolditalic"} },
+}
 
 -- Used when bookmarks are inserted in a non-text context
 intextblockcontext = 0
@@ -737,7 +746,23 @@ function dothings()
     fonts.load_fontfile("TeXGyreHeros-Bold",      "texgyreheros-bold.otf")
     fonts.load_fontfile("TeXGyreHeros-Italic",    "texgyreheros-italic.otf")
     fonts.load_fontfile("TeXGyreHeros-BoldItalic","texgyreheros-bolditalic.otf")
-    --- Define a basic font family with name `text`:
+
+    fonts.load_fontfile("CrimsonText-Regular","CrimsonText-Regular.ttf")
+    fonts.load_fontfile("CrimsonText-Bold","CrimsonText-Bold.ttf")
+    fonts.load_fontfile("CrimsonText-Italic","CrimsonText-Italic.ttf")
+    fonts.load_fontfile("CrimsonText-BoldItalic","CrimsonText-BoldItalic.ttf")
+
+    fonts.load_fontfile("CamingoCode-Regular","CamingoCode-Regular.ttf")
+    fonts.load_fontfile("CamingoCode-Bold","CamingoCode-Bold.ttf")
+    fonts.load_fontfile("CamingoCode-Italic","CamingoCode-Italic.ttf")
+    fonts.load_fontfile("CamingoCode-BoldItalic","CamingoCode-BoldItalic.ttf")
+    -- CrimsonText-Bold.ttf                     CrimsonText-Bold
+    -- CrimsonText-BoldItalic.ttf               CrimsonText-BoldItalic
+    -- CrimsonText-Italic.ttf                   CrimsonText-Italic
+    -- CrimsonText-Regular.ttf                  CrimsonText-Regular
+    -- CrimsonText-SemiBold.ttf                 CrimsonText-SemiBold
+    -- CrimsonText-SemiBoldItalic.ttf           CrimsonText-SemiBoldItalic
+        --- Define a basic font family with name `text`:
     define_default_fontfamily()
 
     --- The server mode is quite interesting: we don't generate a PDF, but wait for requests and try to answer
@@ -953,18 +978,64 @@ function initialize_luatex_and_generate_pdf()
 
     -- We allow the use of a dummy xml file for testing purpose
     local dataxml
-    if arg[3] == "-dummy" then
+    local datafilename = arg[3]
+    if datafilename == "-dummy" then
         dataxml = luxor.parse_xml("<data />")
-    elseif arg[3] == "-" then
+    elseif string.match(datafilename,".html$") then
+        local input = splib.parse_html(datafilename)
+        if string.match( input,"^%-%-" ) then
+            err(string.gsub( input,"^%-%-(.*)","%1"))
+            exit()
+        end
+        local a,b = load(input)
+        if a == nil then err(b) end
+        local foo = a()
+        dataxml = html.html_to_speedata()
+        processmode = "HTML"
+    elseif datafilename == "-" then
         log("Reading from stdin")
         dataxml = luxor.parse_xml(io.stdin:read("*a"),{htmlentities = true})
     else
-        dataxml = load_xml(arg[3],"data file",{ htmlentities = true, ignoreeol = ( options.ignoreeol or false ) })
+        dataxml = load_xml(datafilename,"data file",{ htmlentities = true, ignoreeol = ( options.ignoreeol or false ) })
     end
     if type(dataxml) ~= "table" then
         err("Something is wrong with the data: dataxml is not a table")
         exit()
     end
+    -- The xml now looks like
+    -- dataxml = {
+    --     [1] = "\
+    --       "
+    --     [2] = {
+    --       [1] = "mixed"
+    --       [2] = {
+    --         [".__ns"] = {
+    --         },
+    --         [".__parent"] = <foo>
+    --         [".__name"] = "br"
+    --         [".__type"] = "element"
+    --         [".__local_name"] = "br"
+    --       },
+    --       [3] = "content"
+    --       [".__ns"] = {
+    --       },
+    --       ["attr1"] = "value1"
+    --       [".__parent"] = <data>
+    --       [".__name"] = "foo"
+    --       [".__type"] = "element"
+    --       [".__local_name"] = "foo"
+    --     },
+    --     [3] = "\
+    --   "
+    --     [".__name"] = "data"
+    --     [".__ns"] = {
+    --     },
+    --     [".__type"] = "element"
+    --     [".__local_name"] = "data"
+    --   },
+    --
+    -- That means the table entries are either strings or child elements.
+    -- Attributes are table keys and metadata is stored as ".__" plus the metadata.
 
     --- Start data processing in the default mode (`""`)
     local tmp
@@ -979,7 +1050,7 @@ function initialize_luatex_and_generate_pdf()
     if tmp then
         dispatch(tmp,dataxml)
     else
-        err("Can't find »Record« command for the root node.")
+        err("Can't find “Record” command for the root node %q.",name or "")
         exit()
     end
 
@@ -1122,6 +1193,7 @@ function initialize_luatex_and_generate_pdf()
         file:close()
     end
 end
+
 
 -- format: { pagenumber = 1, page_structelem_array = objnum, structelementobjects = {}}
 -- where objnum is an array such as [5 0 R 6 0 R]
@@ -2349,7 +2421,11 @@ marker.type = 100  -- type 100: "value is a number"
 marker.value = 1
 
 --- Convert `<b>`, `<u>` and `<i>` in text to publisher recognized elements.
+-- The 'new' HTML parse is in the file html.lua
 function parse_html( elt, parameter )
+    if elt.typ == "csshtmltree" then
+        return html.parse_html_new(elt,parameter)
+    end
     local a = paragraph:new()
     parameter = parameter or {}
     local bold,italic,underline,allowbreak
@@ -2360,7 +2436,7 @@ function parse_html( elt, parameter )
     if parameter.underline then
         underline = 1
     end
-    if parameter.bold then
+    if parameter.bold or elt["font-weight"] == "bold" then
         bold = 1
     end
     if parameter.italic then
@@ -2902,7 +2978,9 @@ function mknodes(str,fontfamily,parameter)
     else
         instancename = "normal"
     end
-
+    if parameter.monospace then
+        fontfamily = fonts.lookup_fontfamily_name_number.monospace
+    end
     if fontfamily and fontfamily > 0 then
         instance = fonts.lookup_fontfamily_number_instance[fontfamily][instancename]
     else
@@ -2930,6 +3008,7 @@ function mknodes(str,fontfamily,parameter)
     if not string.find(allowbreak, " ") then
         breakatspace = false
     end
+    local preserve_whitespace = parameter.whitespace == "pre"
     -- There is a string with UTF-8 chars
     for s in string.utfvalues(str) do
         local char = unicode.utf8.char(s)
@@ -2965,6 +3044,9 @@ function mknodes(str,fontfamily,parameter)
             head,last = node.insert_after(head,last,p1)
             head,last = node.insert_after(head,last,g)
             head,last = node.insert_after(head,last,p2)
+        elseif preserve_whitespace and match(char,"^%s$") then
+            local strut = add_rule(nil,"head",{height = 0 * factor, depth = 0, width = space })
+            head,last = node.insert_after(head,last,strut)
         elseif match(char,"^%s$") and last and last.id == glue_node and not node.has_attribute(last,att_tie_glue,1) then
             -- double space, use the bigger glue
             local tmp = set_glue(nil, {width = space, shrink = shrink, stretch = stretch})
@@ -3577,7 +3659,12 @@ end
 function getrgb( colorvalue )
     local r,g,b
     local model = "rgb"
-    if #colorvalue == 7 then
+    if string.sub(colorvalue,1,3) == "rgb" then
+        r,g,b = string.match(colorvalue, "^rgb%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*%)$")
+        r = math.round(r / 255 , 3)
+        g = math.round(g / 255 , 3)
+        b = math.round(b / 255 , 3)
+    elseif #colorvalue == 7 then
         r,g,b = string.match(colorvalue,"#?(%x%x)(%x%x)(%x%x)")
         r = math.round(tonumber(r,16) / 255, 3)
         g = math.round(tonumber(g,16) / 255, 3)
@@ -4332,40 +4419,83 @@ end
 --- a family with regular, bold, italic and bolditalic font with size 10pt (we always
 --- measure font size in dtp points)
 function define_default_fontfamily()
-    local fam={
-        size         = tenpoint_sp,
-        baselineskip = twelvepoint_sp,
-        scriptsize   = tenpoint_sp * 0.8,
-        scriptshift  = tenpoint_sp * 0.3,
-        name = "text"
-    }
-    local ok,tmp
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Regular",fam.size)
-    fam.normal = tmp
-    fam.fontfaceregular = "TeXGyreHeros-Regular"
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Regular",fam.scriptsize)
-    fam.normalscript = tmp
+    define_fontfamily(
+        "TeXGyreHeros-Regular",
+        "TeXGyreHeros-Bold",
+        "TeXGyreHeros-Italic",
+        "TeXGyreHeros-BoldItalic",
+        "text",
+        tenpoint_sp,
+        twelvepoint_sp
+    )
 
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Bold",fam.size)
-    fam.bold = tmp
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Bold",fam.scriptsize)
-    fam.boldscript = tmp
-
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Italic",fam.size)
-    fam.italic = tmp
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Italic",fam.scriptsize)
-    fam.italicscript = tmp
-
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-BoldItalic",fam.size)
-    fam.bolditalic = tmp
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-BoldItalic",fam.scriptsize)
-    fam.bolditalicscript = tmp
-    fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
-    fonts.lookup_fontfamily_name_number["text"]=#fonts.lookup_fontfamily_number_instance
     fontaliases["sans"] = "TeXGyreHeros-Regular"
     fontaliases["sans-bold"] = "TeXGyreHeros-Bold"
     fontaliases["sans-italic"] = "TeXGyreHeros-Italic"
     fontaliases["sans-bolditalic"] = "TeXGyreHeros-BoldItalic"
+
+    fontaliases["serif"] = "CrimsonText-Regular"
+    fontaliases["serif-bold"] = "CrimsonText-Bold"
+    fontaliases["serif-italic"] = "CrimsonText-Italic"
+    fontaliases["serif-bolditalic"] = "CrimsonText-BoldItalic"
+
+    fontaliases["monospace"] = "CamingoCode-Regular"
+    fontaliases["monospace-bold"] = "CamingoCode-Bold"
+    fontaliases["monospace-italic"] = "CamingoCode-Italic"
+    fontaliases["monospace-bolditalic"] = "CamingoCode-BoldItalic"
+end
+
+function define_fontfamily( regular,bold,italic,bolditalic, name, size, baselineskip )
+    local fam={
+        size         = size,
+        baselineskip = baselineskip,
+        scriptsize   = size * 0.8,
+        scriptshift  = size * 0.3,
+        name = name
+    }
+    local ok,tmp
+    if regular then
+        ok,tmp = fonts.make_font_instance(regular,fam.size)
+        if not ok then return false, tmp end
+        fam.normal = tmp
+        fam.fontfaceregular = regular
+        ok,tmp = fonts.make_font_instance(regular,fam.scriptsize)
+        if not ok then return false, tmp end
+        fam.normalscript = tmp
+    end
+
+    if bold then
+        ok,tmp = fonts.make_font_instance(bold,fam.size)
+        if not ok then return false, tmp end
+        fam.bold = tmp
+        ok,tmp = fonts.make_font_instance(bold,fam.scriptsize)
+        if not ok then return false, tmp end
+        fam.boldscript = tmp
+    end
+
+    if italic then
+        ok,tmp = fonts.make_font_instance(italic,fam.size)
+        if not ok then return false, tmp end
+        fam.italic = tmp
+        ok,tmp = fonts.make_font_instance(italic,fam.scriptsize)
+        if not ok then return false, tmp end
+        fam.italicscript = tmp
+    end
+
+    if bolditalic then
+        ok,tmp = fonts.make_font_instance(bolditalic,fam.size)
+        if not ok then return false, tmp end
+        fam.bolditalic = tmp
+        ok,tmp = fonts.make_font_instance(bolditalic,fam.scriptsize)
+        if not ok then return false, tmp end
+        fam.bolditalicscript = tmp
+    end
+
+    fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
+    local fontnumber = #fonts.lookup_fontfamily_number_instance
+    fonts.lookup_fontfamily_name_number[name] = fontnumber
+    log("DefineFontfamily %q size %.03gpt/%.03gpt id: %d",name,size / factor,baselineskip / factor,fontnumber)
+    return fontnumber
 end
 
 function define_small_fontfamily()

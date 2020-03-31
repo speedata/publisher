@@ -91,6 +91,17 @@ function table.find(tab,key)
     return nil
 end
 
+function get_fontname( localname, url )
+    localname = publisher.get_fontname(localname)
+    -- w("get_fontname, localname %q",tostring(localname))
+    if localname and lookup_fontname_filename[localname] then
+        return localname
+    elseif url then
+        load_fontfile(url,url)
+        return url
+    end
+    return nil
+end
 
 -- Return false, error message in case of failure, true, number otherwise. number
 -- is the internal font number. After calling this method, the font can be used
