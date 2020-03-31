@@ -1,5 +1,21 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.7" date="2020-03-31">
+      <en>Bugfix: double hypherlink in one line (#251)</en>
+      <de>Fehlerkorrektur: doppelter hyperlink in einer Zeile (#251)</de>
+    </entry>
+    <entry version="3.9.7" date="2020-03-31">
+      <en>CSS: table 100% width, td: align</en>
+      <de>CSS: Tabelle mit 100% breite, td: Ausrichtung</de>
+    </entry>
+    <entry version="3.9.7" date="2020-03-31">
+      <en>Textformat: set margin at the top of the surrounding box.</en>
+      <de>Textformat: setze margin am oberen Ende der umgebenden Box.</de>
+    </entry>
+    <entry version="3.9.7" date="2020-03-31">
+      <en>First (preliminary) version of the new HTML parser.</en>
+      <de>Erste (Vorab-) Version des neuen HTML-Parsers.</de>
+    </entry>
     <entry version="3.9.6" date="2020-03-12">
       <en>Table balancing: single tablerule in last frame gets into previous frame. (#250)</en>
       <de>Tabellenausgleich: einzelne Tabellenlinie in der letzten Spalte geht in die vorherige Spalte. (#250)</de>
