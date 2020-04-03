@@ -1,7 +1,11 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.8" date="2020-04-03">
+      <en>New option PDFOptions/showbookmarks for Adobe Acrobat.</en>
+      <de>Neue Option PDFOptions/showbookmarks für Adobe Acrobat.</de>
+    </entry>
     <entry version="3.9.7" date="2020-03-31">
-      <en>Bugfix: double hypherlink in one line (#251)</en>
+      <en>Bugfix: double hyperlink in one line (#251)</en>
       <de>Fehlerkorrektur: doppelter hyperlink in einer Zeile (#251)</de>
     </entry>
     <entry version="3.9.7" date="2020-03-31">
