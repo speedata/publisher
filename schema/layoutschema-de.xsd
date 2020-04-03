@@ -3572,6 +3572,17 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="showbookmarks">
+        <xs:annotation>
+          <xs:documentation>Zeige Lesezeichen im Adobe Acrobat beim Öffnen des Dokuments.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="subject">
         <xs:annotation>
           <xs:documentation>Legt den Betreff (subject) des Dokuments fest</xs:documentation>

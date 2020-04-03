@@ -1089,7 +1089,11 @@ function initialize_luatex_and_generate_pdf()
         vp[#vp + 1] = string.format("/Duplex /%s", viewerpreferences.duplex)
     end
 
-    pdfcatalog[#pdfcatalog + 1] = "/PageMode /UseOutlines"
+    if viewerpreferences.showbookmarks then
+        pdfcatalog[#pdfcatalog + 1] = "/PageMode /UseOutlines"
+    else
+        pdfcatalog[#pdfcatalog + 1] = "/PageMode /UseNone"
+    end
 
     -- Title   The document’s title.
     -- Author  The name of the person who created the document.

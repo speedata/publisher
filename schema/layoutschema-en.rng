@@ -3573,6 +3573,15 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="showbookmarks">
+               <a:documentation>Show bookmarks in Adobe Acrobat when opening the document.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="subject">
                <a:documentation>Set the subject of the document</a:documentation>
             </attribute>

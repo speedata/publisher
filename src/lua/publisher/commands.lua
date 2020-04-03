@@ -2347,6 +2347,7 @@ function commands.pdfoptions( layoutxml, dataxml )
     local format       = publisher.read_attribute(layoutxml,dataxml,"format",    "rawstring")
     local nc           = publisher.read_attribute(layoutxml,dataxml,"numcopies", "number")
     local printscaling = publisher.read_attribute(layoutxml,dataxml,"printscaling", "string")
+    local showbookmarks = publisher.read_attribute(layoutxml,dataxml,"showbookmarks", "boolean",true)
     local picktray     = publisher.read_attribute(layoutxml,dataxml,"picktraybypdfsize", "boolean")
     local duplex       = publisher.read_attribute(layoutxml,dataxml,"duplex",   "string")
     local title        = publisher.read_attribute(layoutxml,dataxml,"title",    "string")
@@ -2361,6 +2362,8 @@ function commands.pdfoptions( layoutxml, dataxml )
     publisher.options.documentkeywords = keywords
 
     publisher.viewerpreferences.numcopies = nc or 1
+    publisher.viewerpreferences.showbookmarks = showbookmarks
+
     if printscaling == "appdefault" then
         publisher.viewerpreferences.printscaling = "AppDefault"
     elseif printscaling == "none" then

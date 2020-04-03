@@ -5759,6 +5759,14 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="showbookmarks" optional="yes" since="3.9.8" type="boolean">
+      <description xml:lang="en">
+        <para>Show bookmarks in Adobe Acrobat when opening the document.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Zeige Lesezeichen im Adobe Acrobat beim Öffnen des Dokuments.</para>
+     </description>
+    </attribute>
     <attribute en="subject" optional="yes" type="text" since="3.1.24">
       <description xml:lang="en">
         <para>Set the subject of the document</para>

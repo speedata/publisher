@@ -3573,6 +3573,15 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="showbookmarks">
+               <a:documentation>Zeige Lesezeichen im Adobe Acrobat beim Öffnen des Dokuments.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="subject">
                <a:documentation>Legt den Betreff (subject) des Dokuments fest</a:documentation>
             </attribute>
