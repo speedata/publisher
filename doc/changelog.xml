@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.9" date="2020-04-21">
+      <en>Enhanced HTML support.</en>
+      <de>Verbesserte HTML Unterstützung.</de>
+    </entry>
     <entry version="3.9.8" date="2020-04-03">
       <en>New option PDFOptions/showbookmarks for Adobe Acrobat.</en>
       <de>Neue Option PDFOptions/showbookmarks für Adobe Acrobat.</de>
