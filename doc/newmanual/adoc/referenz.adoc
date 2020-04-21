@@ -41,6 +41,7 @@ ifndef::backend-docbook5[]
 <<cmd-group,Group>>  +
 <<cmd-groupcontents,Groupcontents>>  +
 <<cmd-hspace,HSpace>>  +
+<<cmd-html,HTML>>  +
 <<cmd-hyphenation,Hyphenation>>  +
 <<cmd-i,I>>  +
 <<cmd-image,Image>>  +
@@ -329,6 +330,10 @@ include::ref/hspace.adoc[]
 == Siehe auch
 
 Das Kapitel <<ch-textformatierung,Textformatierung>>.
+
+include::ref/html.adoc[]
+
+== Siehe auch das Beispiele-Repository unter https://github.com/speedata/examples/tree/master/technical/html
 
 include::ref/hyphenation.adoc[]
 
