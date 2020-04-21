@@ -67,7 +67,8 @@ type FontFamily struct {
 	BoldItalic FontSource
 }
 
-var cssdefaults = `	li              { display: list-item }
+var cssdefaults = `
+li              { display: list-item; padding-inline-start: 40pt; }
 head            { display: none }
 table           { display: table }
 tr              { display: table-row }
@@ -103,7 +104,7 @@ big             { font-size: 1.17em }
 small, sub, sup { font-size: .83em }
 sub             { vertical-align: sub }
 sup             { vertical-align: super }
-table           { border-spacing: 2px; }
+table           { border-spacing: 2pt; }
 thead, tbody,
 tfoot           { vertical-align: middle }
 td, th, tr      { vertical-align: inherit }

@@ -3238,6 +3238,42 @@
     </example>
     <seealso><cmd name="Paragraph"/></seealso>
   </command>
+  <command en="HTML">
+    <description xml:lang="en">
+      <para>Collect HTML from data.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Verarbeite HTML aus den Daten.</para>
+    </description>
+    <childelements>
+      <cmd name="Value"/>
+    </childelements>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="data">
+    <Output>
+       <Text>
+          <HTML>
+             <Value select="sd:html(.)"/>
+          </HTML>
+       </Text>
+    </Output>
+</Record>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Record element="data">
+    <Output>
+       <Text>
+          <HTML>
+             <Value select="sd:html(.)"/>
+          </HTML>
+       </Text>
+    </Output>
+</Record>
+]]></listing>
+    </example>
+    <seealso></seealso>
+  </command>
   <command en="I">
     <description xml:lang="en">
       <para>Switch to italic text.</para>
@@ -8549,6 +8585,7 @@
           <cmd name="Bookmark"/>
           <cmd name="Copy-of"/>
           <cmd name="ForAll"/>
+          <cmd name="HTML"/>
           <cmd name="Loop"/>
           <cmd name="Ol"/>
           <cmd name="Paragraph"/>

@@ -33,6 +33,13 @@ if not log then
   end
 end
 
+local function cmpkeys( a,b )
+  if type(a) == type(b) then
+      return a < b
+  end
+  if type(a) == "number" then return false end
+  return true
+end
 
 do
   tables_printed = {}
@@ -55,8 +62,14 @@ do
     end
     log(string.rep("  ",level) .. tostring(key) .. " = {")
     level=level+1
-
-    for k,l in pairs(tbl_to_print) do
+    local keys = {}
+    for k,_ in pairs(tbl_to_print) do
+      keys[#keys + 1] = k
+    end
+    table.sort(keys,cmpkeys)
+    for i=1,#keys do
+        local k = keys[i]
+        local l = tbl_to_print[k]
         if type(l) == "userdata" and node.is_node(l) then
             l = nodelist_tostring(l)
         end
@@ -80,12 +93,12 @@ do
 end
 
 
-function trace( ... )
-  if publisher.options.trace then
-    texio.write_nl("   |" .. string.format(...))
-    io.stdout:flush()
-  end
-end
+-- function trace( ... )
+--   if publisher.options.trace then
+--     texio.write_nl("   |" .. string.format(...))
+--     io.stdout:flush()
+--   end
+-- end
 function tracetable( name,tbl )
   if publisher.options and publisher.options.trace and type(tbl)=="table" then
     printtable(name,tbl)
@@ -126,6 +139,180 @@ function nodelist_tostring( head )
     end
     return table.concat(ret,"")
 end
+
+local function xml_escape( str )
+    if type(str) == "table" then
+        str = table.concat(str)
+    end
+    if not str then return "" end
+    local replace = {
+        [">"] = "&gt;",
+        ["<"] = "&lt;",
+        ["\""] = "&quot;",
+        ["&"] = "&amp;",
+    }
+    -- FIXME, str can be bool
+    local ret = string.gsub(str,".",replace)
+    return ret
+end
+
+-- function show_table_internalx( tbl,lvl )
+--     local i = 0
+--     local other_tables = {}
+--     local ret = { string.format([=[struct%s [label=< <Table BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">]=],lvl) }
+--     ret[#ret + 1] = "\n"
+--     local tblcollect = {}
+--     for k,v in pairs(tbl) do
+--         i = i + 1
+--         local portname = k
+--         if i == 1 then portname = "first" end
+--         local port = string.format([=[ PORT="%s"]=],portname)
+--         if type(v) == "table" then
+--             local nexttable = string.format( "%s%d",lvl,i )
+--             local othertable = show_table_internal(v,nexttable)
+--             if othertable == "" then
+--                 tblcollect[#tblcollect +1] = string.format([=[<Tr><Td align="left"%s>%s</Td><Td align="right">{ }</Td></Tr>]=],port,tostring(k))
+--             else
+--                 tblcollect[#tblcollect +1] = string.format([=[<Tr><Td align="left"%s>%s</Td></Tr>]=],port,tostring(k))
+--                 other_tables[#other_tables + 1] = othertable
+--                 other_tables[#other_tables + 1] = string.format("struct%s:%s:e -> struct%s:first",lvl,portname,nexttable)
+--             end
+--         else
+--             tblcollect[#tblcollect +1] = string.format([=[<Tr><Td align="left"%s>%s</Td><Td align="left">%q</Td></Tr>]=],port,tostring(k),xml_escape(v))
+--         end
+--         tblcollect[#tblcollect + 1] = "\n"
+--     end
+--     if #tblcollect > 0 then
+--         ret[#ret + 1] = table.concat(tblcollect,"")
+--         ret[#ret +1] = "</Table> >]\n\n"
+--         ret[#ret + 1] = table.concat(other_tables,"\n\n")
+--         return table.concat(ret,"")
+--     end
+--     -- empty table
+--      return ""
+-- end
+
+-- local function cmp( a,b )
+--     if type(a) == type(b) then
+--         if a == "elementname" then return true end
+--         if b == "elementname" then return false end
+--         return a < b
+--     end
+--     if type(a) == "number" then return false end
+--     return true
+-- end
+
+-- function show_table_as_table( tbl,lvl )
+--     local i = 0
+--     local other_tables = {}
+--     local ret = { [=[<Table BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">]=] }
+--     ret[#ret + 1] = "\n"
+--     local tblcollect = {}
+--     local keys = {}
+--     for k,_ in pairs(tbl) do
+--         keys[#keys + 1] = k
+--     end
+--     table.sort(keys,cmp)
+--     for i=1,#keys do
+--         local k = keys[i]
+--         local v = tbl[k]
+--         i = i + 1
+--         local toprint = "{}"
+--         local bgcolor=""
+--         if k=="elementname" then bgcolor=" bgcolor=\"lightgreen\"" end
+--         if type(v) == "table" then
+--             local nexttable = string.format( "%s%d",lvl,i )
+--             local othertable = show_table_as_table(v,nexttable)
+--             if othertable ~= "" then
+--                 toprint = othertable
+--             end
+--         else
+--             toprint = xml_escape(v)
+--         end
+--         tblcollect[#tblcollect +1] = string.format([=[<Tr><Td valign="top" align="left"%s>%s</Td><Td align="left"%s>%s</Td></Tr>]=],bgcolor,tostring(k),bgcolor,toprint)
+--         tblcollect[#tblcollect + 1] = "<HR />\n"
+--     end
+--     table.remove(tblcollect)
+--     if #tblcollect > 0 then
+--         ret[#ret + 1] = table.concat(tblcollect,"")
+--         ret[#ret +1] = "</Table>\n\n"
+--         return table.concat(ret,"")
+--     end
+--     -- empty table
+--      return ""
+-- end
+
+-- -- # http://www.graphviz.org/content/cluster
+-- --
+-- -- digraph G {
+-- --   rankdir=LR
+-- 	-- subgraph cluster_1 {
+-- 		-- style=filled;
+-- 		-- color=gray40;
+-- 		-- node [style=filled,color=white];
+-- 		-- label = "body";
+-- --
+--     --   subgraph cluster_9 { header -> a1 -> a2 -> a3;  label = ""; }
+-- --
+-- --
+-- --
+-- 	-- subgraph cluster_2 {
+-- 		-- node [style=filled];
+-- 		-- color=gray60
+-- 		-- label = "h1";
+-- 		-- subgraph cluster_22 { 		bla -> em -> b2 -> b3; label=""; }
+-- --
+-- 	-- subgraph cluster_3 {
+-- 		-- node [style=filled];
+-- 		-- x0 -> x1 -> x2 -> x3;
+-- 		-- label = "process #3";
+-- 		-- color=gray80 	}
+-- --
+-- 	-- }
+-- 		-- subgraph cluster_4 {
+-- 		-- z0 -> z1 ;
+-- 		-- label = "process #4";
+-- 		-- color=gray60 ; }
+-- -- }
+-- -- }
+
+
+-- function show_htmltable( tbl,lvl )
+--     local ret = {}
+--     if tbl.elementname then
+--         ret[#ret + 1] = tbl.elementname
+--     end
+--     for i=1,#tbl do
+--         local thiselt = tbl[i]
+--         w("type %s",type(thiselt))
+--         if type(thiselt) == "table" then
+--             ret[#ret + 1] = "{ "
+--             ret[#ret + 1] = show_htmltable(thiselt,string.format( "%s%d",lvl,i ))
+--             ret[#ret + 1] = " } "
+--         elseif type(thiselt) == "string" then
+--             ret[#ret + 1] = thiselt
+--         else
+--             w("?? %s",type(thiselt))
+--         end
+--         ret[#ret + 1] = "\n"
+--     end
+--     return table.concat(ret,"")
+-- end
+
+-- function showtable(filename,tblname,tbl)
+--   local outfile = io.open(filename,"wb")
+--   local gv = [=[digraph structs {
+--     rankdir=LR
+--     graph [ label="%s" labelloc="t" ]
+--     node [shape=record]
+--   ]=]
+--   outfile:write(string.format(gv,tblname or "-"))
+--   local b = show_htmltable(tbl,"1")
+--   outfile:write(b)
+--   outfile:write(" }\n")
+--   outfile:close()
+-- end
+
 
 
 --- Debugging (end)

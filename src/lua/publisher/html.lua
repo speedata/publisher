@@ -68,197 +68,7 @@ local levelmt = {
     end
 }
 local styles = setmetatable({}, levelmt)
-styles.color = "black"
-styles["font-family"] = "text"
-styles["font-size"] = "10pt"
-styles["fontsize_sp"] = tex.sp("10pt")
-styles["font-weight"] = "normal"
-styles["font-style"] = "normal"
-styles["line-height"] = "normal"
-
 stylesstack[#stylesstack + 1] = styles
-
-
--- function set_calculated_width(styles)
---     if type(styles.calculated_width) == "number" then
---     end
---     local sw = styles.width or "auto"
---     local cw = styles.calculated_width
---     w("cw %q",tostring(cw))
---     if string.match(sw, "%d+%%$") then
---         -- xx percent
---         local amount = string.match(sw, "(%d+)%%$")
---         cw = math.round(cw * tonumber(amount) / 100, 0)
---     elseif sw == "auto" then
---         cw = styles.calculated_width
---         if styles.height and styles.height ~= "auto" then
---             styles.height = tex.sp(styles.height)
---         else
---             styles.height = nil
---         end
---         local padding_left = styles["padding-left"]
---         local padding_right = styles["padding-right"]
---         local margin_left = styles["margin-left"]
---         local margin_right = styles["margin-right"]
---         local border_left = styles["border-left-width"]
---         local border_right = styles["border-right-width"]
---         if padding_left then
---             cw = cw - tex.sp(padding_left)
---         end
---         if padding_right then
---             cw = cw - tex.sp(padding_right)
---         end
---         if margin_left then
---             cw = cw - tex.sp(margin_left)
---         end
---         if margin_right then
---             cw = cw - tex.sp(margin_right)
---         end
---         if border_left then
---             cw = cw - tex.sp(border_left)
---         end
---         if border_right then
---             cw = cw - tex.sp(border_right)
---         end
---     elseif tex.sp(sw) then
---         -- a length
---         cw = tex.sp(sw)
---     end
---     styles.calculated_width = cw
--- end
-
-
--- function flatten_nodelist(tbl)
---     for i = 1, #tbl - 1 do
---         local tail = node.tail(tbl[i])
---         tail.next = tbl[i + 1]
---         tbl[i + 1].prev = tail
---     end
---     return tbl[1]
--- end
-
--- function create_horizontal_nodelists(elt)
---     local styles = setmetatable({}, levelmt)
---     stylesstack[#stylesstack + 1] = styles
-
---     if type(elt) == "string" then
---         local nodes = publisher.mknodes(elt, 1)
---         -- local nodes = publisher.mknodes(elt, styles)
---         table.remove(stylesstack)
---         return nodes
---     end
-
---     if elt.attributes then
---         for k, v in pairs(elt.attributes) do
---             if k == "font-size" and string.match(v, "em$") then
---                 local amount = string.gsub(v, "^(.*)r?em$", "%1")
---                 local fontsize = tex.sp(styles["font-size"])
---                 v = fontsize * amount
---             end
---             styles[k] = v
---         end
---     end
-
---     -- set_calculated_width(styles)
-
---     if elt.elementname == "img" then
---         local rule = node.new(rule_node)
---         rule = img.node({width = styles.calculated_width, filename = styles.src})
---         table.remove(stylesstack)
---         return rule
---     end
-
---     elt.nodelist = {}
-
---     -- we collect all the nodes in the horizontal list
---     for _, v in ipairs(elt) do
---         elt.nodelist[#elt.nodelist + 1] = create_horizontal_nodelists(v)
---     end
---     elt.nodelist = flatten_nodelist(elt.nodelist)
---     if elt.direction == "↓" then
---         elt.nodes = elt.nodelist
---         elt.nodelist = nil
---     end
---     for i = 1, #elt do
---         if type(elt[i]) == "table" then
---             elt[i].nodelist = nil
---         end
---     end
-
---     table.remove(stylesstack)
---     return elt.nodelist
--- end
-
-
--- function do_output(elt)
---     local styles = setmetatable({}, levelmt)
---     stylesstack[#stylesstack + 1] = styles
-
---     if elt.attributes then
---         for i, v in pairs(elt.attributes) do
---             styles[i] = v
---         end
---     end
---     set_calculated_width(styles)
---     if type(elt) == "table" then
---         if elt.nodes then
---             output_block(elt, styles.calculated_width, styles.height)
---             table.remove(stylesstack)
---             return
---         end
---     end
-
---     local curelement
---     for i = 1, #elt do
---         curelement = elt[i]
---         if curelement then
---             do_output(curelement)
---         end
---     end
---     table.remove(stylesstack)
--- end
-
-
--- -- --------------------------------------------------------------------------------
--- -- --------------------------------------------------------------------------------
-
-
--- local function html_to_elt(element)
---     local dataxml = {}
---     for i=1,#element do
---         local elt = element[i]
---         if type(elt) == "string" then
---             dataxml[#dataxml + 1] = elt
---         elseif type(elt) == "table" then
---             dataxml[#dataxml + 1] = html_to_elt(elt)
---             local data = dataxml[#dataxml]
---             data[".__type"] = "element"
---             data[".__name"] = elt.elementname
---             data[".__local_name"] = elt.elementname
---             data[".__parent"] = dataxml
---             for i,v in pairs(elt.attributes) do
---                 data[i] = v
---             end
---         end
---     end
---     return dataxml
--- end
-
--- function html_to_speedata()
-
-
-
---     dataxml = {}
---     local body = csshtmltree
-
---     create_horizontal_nodelists(body)
---     printtable("body",body)
---     dataxml = html_to_elt(csshtmltree)
---     local body = dataxml[1]
---     body[".__parent"] = nil
---     printtable("dataxml",dataxml)
---     return body
--- end
 
 local function familyname( fontfamily )
     if fontfamilies[fontfamily] then
@@ -289,13 +99,86 @@ local function get_fontfamily( family, size_sp , name )
     return fam
 end
 
-local function parse_html_inner( elt , parameter )
-    parameter = parameter or {}
-    local elementname = elt.elementname and string.lower( elt.elementname )
-    local a = paragraph:new()
-    for i=1,#elt do
-        local thiselt = elt[i]
+-- <h1>  Header 1</h1>
+-- atext<em>in em</em>texttext<b><i>bolditalic</i> justbold </b>
+-- <h2>Header 2</h2>
 
+-- is transformed into
+
+-- elt = {
+--     ["direction"] = "↓",
+--     ["elementname"] = "body",
+--     [1] = {
+--         ["direction"] = "↓",
+--         ["elementname"] = "h1",
+--         [1] = {
+--             mode = horizontal,
+--             [1] = " Header 1"
+--         }
+--     },
+--     [2] = {
+--         mode = horizontal,
+--         [1] = " atext",
+--         [2] = {
+--             ["direction"] = "→",
+--             ["elementname"] = "em",
+--             [1] = "in em"
+--         },
+--         [3] = "texttext",
+--         [4] = {
+--             ["direction"] = "→",
+--             ["elementname"] = "b",
+--             [1] = {
+--                 ["direction"] = "→",
+--                 ["elementname"] = "i",
+--                 [1] = "bolditalic"
+--             },
+--             [2] = " justbold "
+--         },
+--         [5] = " "
+--     },
+--     [3] = {
+--         ["direction"] = "↓",
+--         ["elementname"] = "h2",
+--         [1] = {
+--             mode = horizontal,
+--             [1] = " Header 2"
+--         }
+--     }
+-- }
+-- (attributes not shown)
+
+function parse_html_inner( elt )
+    local lasthorizontal
+    local delete = {}
+    for i=1, #elt do
+        local thiselt = elt[i]
+        local typ = type(thiselt)
+        if typ == "table" and thiselt.direction == "↓" then
+            parse_html_inner(thiselt)
+            lasthorizontal = nil
+        end
+        if typ == "string" or ( typ == "table" and thiselt.direction == "→" ) then
+            if lasthorizontal then
+                local lasthorizontalelt = elt[lasthorizontal]
+                lasthorizontalelt[#lasthorizontalelt + 1] = thiselt
+                delete[#delete + 1] = i
+            else
+                elt[i] = {mode = "horizontal",thiselt}
+                lasthorizontal = i
+            end
+        end
+    end
+    for i=#delete,1,-1 do
+        table.remove(elt,delete[i])
+    end
+end
+
+function collect_horizontal_nodes( elt,parameter )
+    parameter = parameter or {}
+
+    local ret = {}
+    for i=1,#elt do
         local styles = setmetatable({}, levelmt)
         stylesstack[#stylesstack + 1] = styles
 
@@ -303,102 +186,291 @@ local function parse_html_inner( elt , parameter )
         for k,v in pairs(parameter) do
             options[k] = v
         end
-        if type(thiselt) == "string" then
-            a:append(thiselt,options)
-        elseif type(thiselt) == "table" then
-            local elementname = thiselt.elementname
-            -- w("elementname %s",elementname)
-            local attributes = thiselt.attributes or {}
-            for k, v in pairs(attributes) do
-                if k == "font-size" then
-                    local fontsize
-                    if string.match(v, "em$") then
-                        local amount = string.gsub(v, "^(.*)r?em$", "%1")
-                        local fontsize = math.round(styles.fontsize_sp * amount)
-                        styles.fontsize_sp = fontsize
-                    else
-                        styles.fontsize_sp = tex.sp(v)
-                    end
+        local thiselt = elt[i]
+        local typ = type(thiselt)
+
+        local attributes = thiselt.attributes or {}
+        for k, v in pairs(attributes) do
+            if k == "font-size" then
+                local fontsize
+                if string.match(v, "em$") then
+                    local amount = string.gsub(v, "^(.*)r?em$", "%1")
+                    local fontsize = math.round(styles.fontsize_sp * amount)
+                    styles.fontsize_sp = fontsize
+                else
+                    styles.fontsize_sp = tex.sp(v)
                 end
-                styles[k] = v
             end
-            local b = paragraph:new()
+            styles[k] = v
+        end
 
-            local backgroundcolor = styles["background-color"]
-            local fontfamily = styles["font-family"]
-            local fontsize = styles["font-size"]
-            local fontstyle = styles["font-style"]
-            local fontweight = styles["font-weight"]
-            local textalign = styles["text-align"]
-            local textdecoration = styles["text-decoration"]
-            local verticalalign = styles["vertical-align"]
-            local whitespace = styles["white-space"]
+        local fontfamily = styles["font-family"]
+        local fontsize = styles["font-size"]
+        local fontname = fontsize
+        options.fontfamily = get_fontfamily(fontfamily,styles.fontsize_sp, fontname)
+        local fontstyle = styles["font-style"]
+        local fontweight = styles["font-weight"]
+        local fg_colorindex, bg_colorindex
+        local backgroundcolor = styles["background-color"]
+        if attributes.color then
+            fg_colorindex = publisher.colors[attributes.color].index
+            options.add_attributes = { { publisher.att_fgcolor, fg_colorindex }}
+        end
+        if backgroundcolor then
+            bg_colorindex = publisher.colors[backgroundcolor].index
+            options.backgroundcolor = bg_colorindex
+        end
 
-            if elementname == "a" then
+        local textdecoration = styles["text-decoration"]
+        local verticalalign = styles["vertical-align"]
+        local whitespace = styles["white-space"]
+
+        if fontweight == "bold" then options.bold = 1 end
+        if fontstyle == "italic" then options.italic = 1 end
+        if whitespace == "pre" then options.whitespace = "pre" end
+        if textdecoration == "underline" then options.underline = 1 end
+        if verticalalign == "super" then
+            options.script = 2
+        elseif verticalalign == "sub" then
+            options.script = 1
+        end
+
+        if typ == "string" then
+            ret[#ret + 1] = publisher.mknodes(thiselt,options.fontfamily,options)
+        elseif typ == "table" then
+            local attributes = thiselt.attributes or {}
+            local eltname = thiselt.elementname
+            if eltname == "a" then
                 local href = attributes["href"]
                 publisher.hyperlinks[#publisher.hyperlinks + 1] = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",href)
-                options.add_attributes = { publisher.att_hyperlink, #publisher.hyperlinks }
-            elseif elementname == "img" then
+                options.add_attributes = { { publisher.att_hyperlink, #publisher.hyperlinks } }
+            elseif eltname == "img" then
                 local source = attributes.src
                 local it = publisher.new_image(source,1,nil,nil)
+                local imagewidth, imageheight = it.img.width, it.img.height
                 if attributes.width then
-                    it.img.width = tex.sp(attributes.width)
+                    imagewidth = tex.sp(attributes.width)
                 end
                 if attributes.height then
-                    it.img.height = tex.sp(attributes.height)
+                    imageheight = tex.sp(attributes.height)
                 end
-                b:append(it.img)
+                local calc_width, calc_height = publisher.calculate_image_width_height(it.img,imagewidth,imageheight,0,0,publisher.maxdimen,publisher.maxdimen)
+                it.img.width = calc_width
+                it.img.height = calc_height
+                local box = publisher.box(calc_width,calc_height,"-")
+                node.set_attribute(box,publisher.att_lineheight,calc_height)
+                box.head = node.insert_before(box.head,box.head,img.node(it.img))
+                ret[#ret + 1] = box
             end
-            local fontname = fontsize
-            if elementname == "body" then
-                -- otherwise the font name would be "12pt" or something like that
-                fontname = "1em"
+            local n = collect_horizontal_nodes(thiselt,options)
+            for i=1,#n do
+                ret[#ret + 1] = n[i]
             end
-            options.fontfamily = get_fontfamily(fontfamily,styles.fontsize_sp, fontname)
-            if fontstyle == "italic" then
-                options.italic = 1
-            end
-            if fontweight == "bold" then
-                options.bold = 1
-            end
-            if textdecoration == "underline" then
-                options.underline = 1
-            end
-            if whitespace == "pre" then
-                options.whitespace = "pre"
-            end
-            local fg_colorindex, bg_colorindex
-            if attributes.color then
-                fg_colorindex = publisher.colors[attributes.color].index
-            end
-            if backgroundcolor then
-                bg_colorindex = publisher.colors[backgroundcolor].index
-                options.backgroundcolor = bg_colorindex
-            end
-            -- does nothing yet
-            if verticalalign == "super" then
-                options.script = 2
-            elseif verticalalign == "sub" then
-                options.script = 1
-            end
-
-            local tmp = parse_html_inner(elt[i],options)
-            b:append(tmp,options)
-            b:set_color(fg_colorindex)
-            a:append(b,options)
-            if thiselt.direction == "↓" then
-                a:append("\n")
-            end
-        else
-            w("unknown type %s",type(thiselt))
         end
         table.remove(stylesstack)
     end
-    return a
+    return ret
+end
+
+function trim_space_end( nodelist )
+    local t = node.tail(nodelist)
+    if t.id == publisher.glue_node then
+        if t.prev then t.prev.next = nil end
+    end
+    return nodelist
+end
+
+function trim_space_beginning( nodelist )
+    if nodelist.id == publisher.glue_node then
+        nodelist=nodelist.next
+    end
+    return nodelist
+end
+
+function build_html_table_tbody(elt)
+    local trtab = {}
+    for i=1,#elt do
+        local tdtab = {}
+        local tr = elt[i]
+        local typtr = type(tr)
+        if typtr=="table" then
+            for j=1,#tr do
+                local td = tr[j]
+                local r = collect_horizontal_nodes(td)
+                local a = paragraph:new()
+                a:append(r)
+                local newtd = { elementname = "Paragraph" , contents = a }
+                tdtab[#tdtab + 1] = { elementname = "Td", contents = { newtd } }
+            end
+            trtab[#trtab + 1] = { elementname = "Tr", contents =  tdtab  }
+        else
+            -- ignore
+        end
+    end
+    local tabular = publisher.tabular:new()
+    tabular.width = xpath.get_variable("__maxwidth")
+
+    tabular.tab = trtab
+    local fontname = "text"
+    local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+    local save_fontfamily = publisher.current_fontfamily
+    publisher.current_fontfamily = fontfamily
+
+    if fontfamily == nil then
+        err("Fontfamily %q not found.",fontname or "???")
+        fontfamily = 1
+    end
+
+    tabular.fontfamily = fontfamily
+    tabular.options ={ ht_max=99999*2^16 }
+    tabular.padding_left   = 0
+    tabular.padding_top    = 0
+    tabular.padding_right  = 0
+    tabular.padding_bottom = 0
+    tabular.colsep         = tex.sp("2pt")
+    tabular.rowsep         = 0
+
+    local n = tabular:make_table()
+    return n[1]
+end
+
+function build_html_table( elt )
+    local tablecontents = elt[1]
+    for i=1,#tablecontents do
+        local thiselt = tablecontents[i]
+        local typ = type(thiselt)
+        if typ == "table" and thiselt.elementname == "tbody" then
+            local ret = build_html_table_tbody(thiselt)
+            return ret
+        else
+            -- err("Unknown element in HTML table %q",tostring(thiselt.elementname))
+        end
+    end
+end
+
+
+function build_nodelist( elt )
+    local ret = {}
+    local olcounter = 0
+    for i=1,#elt do
+        local thiselt = elt[i]
+        local thiseltname = thiselt.elementname
+        local typ = type(thiselt)
+
+        local styles = setmetatable({}, levelmt)
+        stylesstack[#stylesstack + 1] = styles
+
+        local attributes = thiselt.attributes or {}
+        for k, v in pairs(attributes) do
+            if k == "font-size" then
+                local fontsize
+                if string.match(v, "em$") then
+                    local amount = string.gsub(v, "^(.*)r?em$", "%1")
+                    local fontsize = math.round(styles.fontsize_sp * amount)
+                    styles.fontsize_sp = fontsize
+                else
+                    styles.fontsize_sp = tex.sp(v)
+                end
+            end
+            styles[k] = v
+        end
+
+        local textalign = styles["text-align"]
+
+        local tf = "left"
+        if textalign == "right" then
+            tf = "right"
+        elseif textalign == "center" then
+            tf = "centered"
+        elseif textalign == "justify" then
+            tf = "__justified"
+        end
+
+        if thiselt.mode == "horizontal" then
+            local n = collect_horizontal_nodes(thiselt)
+            local a = paragraph:new(tf)
+
+            for i=1,#n do
+                local thisn = n[i]
+                if i == 1 then
+                    thisn = trim_space_beginning(thisn)
+                elseif i == #n then
+                    thisn = trim_space_end(thisn)
+                end
+
+                if thisn then
+                    a:append(thisn)
+                end
+            end
+            if a.nodelist then
+                ret[#ret + 1] = a
+            end
+        else
+            if thiseltname == "table" then
+                local nl = build_html_table(thiselt)
+                local tabpar = paragraph:new()
+                node.set_attribute(nl,publisher.att_lineheight,nl.height)
+                tabpar:append(nl)
+                ret[#ret + 1] = tabpar
+            elseif thiseltname == "ol" or thiseltname == "ul" then
+                local n = build_nodelist(thiselt)
+                for i=1,#n do
+                    n[i]:indent(tex.sp("20pt"))
+                    ret[#ret + 1] = n[i]
+                end
+            elseif thiseltname == "li" then
+                olcounter = olcounter + 1
+                local str = resolve_list_style_type(styles["list-style-type"],olcounter)
+                local n = build_nodelist(thiselt)
+                for i=1,#n do
+                    local a = n[i]
+                    if i == 1 then
+                        local x = publisher.whatever_hbox(str,tex.sp("20pt"))
+                        a:prepend(x)
+                    end
+                    ret[#ret + 1] = a
+                end
+            else
+                local n = build_nodelist(thiselt)
+                for i=1,#n do
+                    ret[#ret + 1] = n[i]
+                end
+            end
+        end
+        table.remove(stylesstack)
+    end
+    return ret
+end
+
+function resolve_list_style_type( liststyletype, counter )
+    local str
+    if liststyletype == "decimal" then
+        str = tostring(counter)
+    elseif liststyletype == "lower-roman" then
+        str = tex.romannumeral(counter)
+    elseif liststyletype == "upper-roman" then
+        str = string.upper( tex.romannumeral(counter) )
+    else
+        str = "•"
+    end
+    return str
+end
+
+function clearattributes( elt )
+    elt.attributes = nil
+    for i=1,#elt do
+        if type(elt[i]) == "table" then
+            clearattributes(elt[i])
+        end
+    end
 end
 
 function parse_html_new( elt )
     fontfamilies = elt.fontfamilies
-    -- printtable("elt",elt)
-    return parse_html_inner(elt)
+    elt.fontfamilies = nil
+    elt.pages = nil
+    parse_html_inner(elt[1])
+    -- printtable("elt[1]",elt[1])
+    local block = build_nodelist(elt)
+    return block
 end

@@ -226,7 +226,6 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
             for i=1,#blockobject do
                 local inlineobject = blockobject[i]
                 if type(inlineobject)=="table" then
-                    trace("table: check for nodelist (%s)",tostring(inlineobject.nodelist ~= nil))
 
                     if inlineobject.nodelist then
                         local fam = publisher.set_fontfamily_if_necessary(inlineobject.nodelist,self.fontfamily)
@@ -242,7 +241,6 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
                     if inlineobject.max_width then
                         max_wd = math.max(inlineobject:max_width() + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
                     end
-                    trace("table: min_wd, max_wd set (%gpt,%gpt)",min_wd / 2^16, max_wd / 2^16)
                 elseif node.is_node(inlineobject) and node.has_field(inlineobject,"width") then
                     min_wd = math.max(inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
                     max_wd = math.max(inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
@@ -255,12 +253,10 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
                 end
             end
             if not ( min_wd and max_wd) then
-                trace("min_wd and max_wd not set yet. Type(inlineobject)==%s",type(inlineobject))
                 if node.has_field(inlineobject,"width") then
                     if inlineobject.width then
                         min_wd = inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright
                         max_wd = inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright
-                        trace("table: width (image) = %gpt",min_wd / 2^16)
                     else
                         warning("Could not determine min_wd and max_wd")
                         assert(false)
@@ -271,7 +267,6 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
                 end
             end
         end
-        trace("table: Colspan=%d",colspan)
         -- colspan?
         min_wd = min_wd or 0
         max_wd = max_wd or 0
@@ -310,7 +305,6 @@ end
 --- Calculate the widths of the columns for the table.
 --- -------------------------------------------------
 function calculate_columnwidth( self )
-    trace("table: calculate columnwidth")
     local colspans = {}
     local colmax,colmin = {},{}
 
@@ -377,7 +371,6 @@ function calculate_columnwidth( self )
             if columnwidths_given and count_stars == 0 then return end
 
             if count_stars > 0 then
-                trace("table: distribute space in *-columns (sum = %d)",count_stars)
 
                 -- now we know the number of *-columns and the sum of the fix colums, so that
                 -- we can distribute the remaining space
@@ -456,9 +449,7 @@ function calculate_columnwidth( self )
     ---
     --- Phase II: include colspan
     --- -------------------------
-    trace("table: adjust colmin/colmax")
     for i,colspan in pairs(colspans) do
-        trace("table: colspan #%d",i)
         local sum_min,sum_max = 0,0
         local r -- stretch factor = wd(colspan)/wd(sum_start_end)
 
@@ -793,7 +784,6 @@ end
 
 
 function calculate_rowheights(self)
-    trace("table: calculate row height")
     local current_row = 0
     local rowspans = {}
     local _rowspans
@@ -844,18 +834,13 @@ function calculate_rowheights(self)
     -- Adjust row heights. We have to do calculations on all row heights, before the rows can get their
     -- final heights
     for i,rowspan in pairs(rowspans) do
-        trace("table: adjust row heights")
         local sum_ht = 0
-        trace("table: rowspan.start = %d, rowspan.stop = %d. self.rowsep = %gpt",rowspan.start,rowspan.stop,self.rowsep)
         for j=rowspan.start,rowspan.stop do
-            trace("table: add %gpt (row %d)",self.rowheights[j] / 2^16,j)
             sum_ht = sum_ht + self.rowheights[j]
         end
         sum_ht = sum_ht + self.rowsep * ( rowspan.stop - rowspan.start )
-        trace("table: Rowspan (%d) > row heights %gpt > %gpt?",rowspan.stop - rowspan.start + 1 ,rowspan.ht / 2^16 ,sum_ht / 2^16)
         if rowspan.ht > sum_ht then
             local excess_per_row = (rowspan.ht - sum_ht) / (rowspan.stop - rowspan.start + 1)
-            trace("table: excess per row = %gpt",excess_per_row / 2^16)
             for j=rowspan.start,rowspan.stop do
                 self.rowheights[j] = self.rowheights[j] + excess_per_row
             end
@@ -876,7 +861,6 @@ end
 --- First, we create a complete table with all rows. Splitting into pages is done later on
 -- Return one row (an hlist)
 function typeset_row(self, tr_contents, current_row )
-    trace("table: typeset row")
     local current_column
     local current_column_width, ht
     local row = {}
@@ -1074,9 +1058,7 @@ function typeset_row(self, tr_contents, current_row )
     end -- stop td
 
     if current_column == 0 then
-        trace("table: no td-cells found in this column")
         v = publisher.create_empty_hbox_with_width(self.tablewidth_target)
-        trace("table: create empty hbox")
         v = publisher.add_glue(v,"head",fill) -- otherwise we get an underfull vbox
         row[1] = node.vpack(v,self.rowheights[current_row],"exactly")
     end
@@ -1106,8 +1088,6 @@ end
 
 -- Gets called for each <Tablehead> element
 local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current_row,second_run)
-    trace("make_tablehead, page = %s",tr_contents.page or "not defined")
-
     local current_tablehead_type
 
     if tr_contents.page == "first" then
@@ -1232,7 +1212,6 @@ function remove_bookmark_nodes( nodelist )
 end
 
 function typeset_table(self)
-    trace("table: typeset table")
     local current_row
     local tablehead_first = {}
     local tablehead = {}
@@ -1248,7 +1227,6 @@ function typeset_table(self)
 
     current_row = 0
     for _,tr in ipairs(self.tab) do
-        trace("table: Tr")
         local tr_contents = publisher.element_contents(tr)
         local eltname   = publisher.elementname(tr)
         local tmp
@@ -1296,7 +1274,6 @@ function typeset_table(self)
             current_row = make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_row)
 
         elseif eltname == "Tr" then
-            trace("table: found Tr")
             current_row = current_row + 1
             rows[#rows + 1] = self:typeset_row(tr_contents,current_row)
             -- We allow data to be attached to a table row.
@@ -1788,12 +1765,10 @@ function typeset_table(self)
         end
         final_split_tables[i] = node.vpack(final_split_tables[i][1])
     end
-    trace("table: done with typeset_table")
     return final_split_tables
 end -- typeset table
 
 function reformat_foot( self,pagenumber,max_splits)
-    trace("reformat_foot")
     local rownumber,y
     if pagenumber == max_splits and self.tablefoot_last_contents then
         y         = self.tablefoot_last_contents[1]
@@ -1811,7 +1786,6 @@ function reformat_foot( self,pagenumber,max_splits)
 end
 
 function reformat_head( self,pagenumber)
-    trace("reformat_head")
     local y = self.tablehead_contents[1]
     local rownumber = self.tablehead_contents[2]
     local x = publisher.dispatch(y._layoutxml,y._dataxml)

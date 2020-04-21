@@ -258,11 +258,7 @@ func dumpElement(thisNode *html.Node, level int, direction mode) {
 			txt := thisNode.Data
 			if !ws {
 				if isSpace.MatchString(txt) {
-					if direction == modeHorizontal {
-						txt = " "
-					} else {
-						txt = ""
-					}
+					txt = " "
 				}
 			}
 			if !isSpace.MatchString(txt) {

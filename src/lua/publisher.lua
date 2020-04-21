@@ -67,9 +67,10 @@ att_underline      = 5
 att_indent         = 6 -- see text formats for details
 att_rows           = 7 -- see text formats for details
 att_bgcolor        = 8 -- similar to underline
-att_bgpaddingtop   = 9
-att_bgpaddingbottom   = 10
-att_hyperlink      = 11
+att_fgcolor        = 9 -- similar to underline
+att_bgpaddingtop   = 10
+att_bgpaddingbottom  = 11
+att_hyperlink      = 12
 
 -- for debugging purpose
 att_origin         = 98
@@ -541,6 +542,7 @@ local dispatch_table = {
     Grid                    = commands.grid,
     Group                   = commands.group,
     Groupcontents           = commands.groupcontents,
+    HTML                    = commands.html,
     HSpace                  = commands.hspace,
     Hyphenation             = commands.hyphenation,
     I                       = commands.italic,
@@ -646,7 +648,7 @@ function dispatch(layoutxml,dataxml,options)
                         end
                     end
                 else
-                    ret[#ret + 1] =   { elementname = eltname, contents = tmp }
+                    ret[#ret + 1] = { elementname = eltname, contents = tmp }
                 end
             else
                 local prefix, localname = table.unpack( string.explode(j[".__name"],":"))
@@ -1775,7 +1777,6 @@ end
 --- Switch to a new page and ship out the current page.
 --- This new page is only created if something is typeset on it.
 function new_page()
-    trace("publisher new_page")
     if pagebreak_impossible then
         return
     end
@@ -1800,7 +1801,6 @@ function new_page()
         pages[current_pagenumber] = nil
         setup_page(current_pagenumber)
     end
-    trace("page finished (new_page), setting current_pagenumber to %d",current_pagenumber)
 end
 
 -- a,b are both arrays of 6 numbers
@@ -2588,7 +2588,7 @@ function parse_html( elt, parameter )
                 end
             else
                 hyperlinks[#hyperlinks + 1] = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",elt.href)
-                options.add_attributes = { att_hyperlink, #hyperlinks }
+                options.add_attributes = { { att_hyperlink, #hyperlinks } }
                 for i=1,#elt do
                     if type(elt[i]) == "string" then
                         a:append(elt[i],options)
@@ -2740,13 +2740,11 @@ function parse_html_tr(tr)
                     else
                         if textalign == "right" then a.textformat = "__rightaligned" end
                     end
-                    local par = { elementname = "Paragraph" , contents = a }
                     tmp[#tmp + 1] = { elementname = "Paragraph" , contents = a }
                 elseif type(td[i]) == "string" then
                     local a = paragraph:new()
                     if textalign == "right" then a.textformat = "__rightaligned" end
                     a:append(td[i])
-                    local par = { elementname = "Paragraph" , contents = a }
                     tmp[#tmp + 1] = { elementname = "Paragraph" , contents = a }
                 end
             end
@@ -2760,12 +2758,52 @@ end
 --- Look for `user_defined` at end of page (ship-out) and runs actions encoded in them.
 function find_user_defined_whatsits( head, parent )
     local fun
-    local prev_hyperlink = nil
+    local prev_hyperlink, prev_fgcolor
     local savehead = head
     while head do
         if head.id == vlist_node or head.id==hlist_node then
             find_user_defined_whatsits(head.list,head)
         else
+            local fgcolor = node.has_attribute(head,att_fgcolor)
+            local insert_startcolor = false
+            local insert_endcolor = false
+            if fgcolor and head.next == nil then
+                insert_endcolor = true
+                prev_fgcolor = nil
+            elseif fgcolor ~= prev_fgcolor then
+                if fgcolor ~= nil then
+                    insert_startcolor = true
+                    prev_fgcolor = fgcolor
+                else
+                    insert_endcolor = true
+                    prev_fgcolor = nil
+                end
+            end
+            if insert_startcolor then
+                local colstart = node.new("whatsit","pdf_colorstack")
+                local colorname = colortable[fgcolor]
+                local col = colors[colorname].pdfstring
+                colstart.data  = col
+                colstart.command = 1
+                colstart.stack = 0
+
+                local dontformat = node.has_attribute(head,att_dont_format)
+                if dontformat then
+                    node.set_attribute(colstart,att_dont_format,dontformat)
+                end
+                node.set_attribute(colstart,att_origin,origin_setcolor)
+                parent.head = node.insert_before(parent.head,head,colstart)
+            end
+            if insert_endcolor then
+                local colstop  = node.new("whatsit","pdf_colorstack")
+                colstop.data  = ""
+                colstop.command = 2
+                colstop.stack = 0
+                node.set_attribute(colstop,att_origin,origin_setcolor)
+                head = node.insert_after(head,head,colstop)
+            end
+
+
             -- First, let's look at hyperlinks from HTML <a href="...">
             -- Hyperlinks are inserted as attributes
             local hl = node.has_attribute(head,att_hyperlink)
@@ -3214,9 +3252,9 @@ function mknodes(str,fontfamily,parameter)
         warning("No head found")
         return node.new("hlist")
     end
-    local aa = parameter.add_attributes
-    if aa then
-        set_attribute_recurse(head,aa[1],aa[2])
+    local aa = parameter.add_attributes or {}
+    for i=1,#aa do
+        set_attribute_recurse(head,aa[i][1],aa[i][2])
     end
 
     return head
@@ -3282,6 +3320,15 @@ function number_hbox( num, labelwidth )
     node.set_attribute(digit_hbox,att_indent,labelwidth)
     node.set_attribute(digit_hbox,att_rows,-1)
     return digit_hbox
+end
+
+function whatever_hbox( str, labelwidth )
+    local label, pre_glue
+    label = mknodes(str .. " ",nil,{})
+    pre_glue = set_glue(nil,{stretch = 2^16, stretch_order = 3,width= - labelwidth})
+    pre_glue.next = label
+    local label_hbox = node.hpack(pre_glue,0,"exactly")
+    return label_hbox
 end
 
 -- just the plain size, not included the stretch or shrink
@@ -4385,7 +4432,6 @@ function empty_block()
     r.height = 0
     r.depth = 0
     local v = node.vpack(r)
-    trace("empty_block")
     return v
 end
 
@@ -4396,7 +4442,6 @@ function emergency_block()
     r.height = 5 * 2^16
     r.depth = 0
     local v = node.vpack(r)
-    trace("emergency_block")
     return v
 end
 
@@ -4627,7 +4672,7 @@ function set_image_length(len,width_or_height)
 end
 
 
-function calculate_image_width_height( image, width,height,minwidth,minheight,maxwidth, maxheight )
+function calculate_image_width_height( image, width, height, minwidth, minheight, maxwidth, maxheight )
     -- from http://www.w3.org/TR/CSS2/visudet.html#min-max-widths:
     --
     -- Constraint Violation                                                           Resolved Width                      Resolved Height

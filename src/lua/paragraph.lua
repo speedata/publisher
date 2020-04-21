@@ -145,6 +145,12 @@ function Paragraph:script( whatever,scr,parameter )
     self:add_to_nodelist(nl)
 end
 
+function Paragraph:prepend( whatever,parameter )
+    if type(whatever) == "userdata" then
+        self.nodelist = node.insert_before(self.nodelist,self.nodelist,whatever)
+    end
+end
+
 function Paragraph:append( whatever,parameter )
     -- w("Paragraph:append, type(whatever) = %s",type(whatever))
     parameter = parameter or {}
@@ -180,11 +186,34 @@ function Paragraph:append( whatever,parameter )
     end
 end
 
+local function indent_nodelist(nl,wd)
+    local glue = publisher.make_glue({ width = wd })
+    local hbox = nl.head
+    local prevhead = nil
+    while hbox do
+        if hbox.id == publisher.hlist_node then
+            hbox.head = node.insert_before(hbox.head,hbox.head,node.copy(glue))
+        end
+        hbox = hbox.next
+
+    end
+    return nl
+end
+
+function Paragraph:indent(width_sp)
+    self.padding_left = self.padding_left or 0
+    self.padding_left = self.padding_left + width_sp
+end
+
 --- Turn a node list into a shaped block of text.
 -- FIXME: document why splitting is needed (ul/li in data)
 function Paragraph:format(width_sp, default_textformat_name,options)
     options = options or {}
     local parameter = {}
+
+    if self.padding_left and self.padding_left > 0 then
+        width_sp = width_sp - self.padding_left
+    end
 
     local current_textformat_name,current_textformat
     current_textformat_name = self.textformat or default_textformat_name
@@ -209,7 +238,7 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         end
         local indent = current_textformat.indent
         local indent_this_row = function(row)
-            if not indent  or indent == 0 then return false end
+            if not indent or indent == 0 then return false end
             local r = current_textformat.rows
             if r == 0 then return false end
             if  r < 0 then
@@ -367,6 +396,7 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         head = head.next
     end
 
+    -- question: describe how the objects relate to typesetting
     for i=1,#objects do
         nodelist = objects[i]
 
@@ -491,6 +521,9 @@ function Paragraph:format(width_sp, default_textformat_name,options)
             publisher.fix_justification(nodelist,current_textformat.alignment)
         else
             nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
+        end
+        if self.padding_left and self.padding_left > 0 then
+            indent_nodelist(nodelist,self.padding_left)
         end
 
         for _,v in ipairs(langs) do

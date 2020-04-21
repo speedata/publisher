@@ -21,7 +21,6 @@ commands = {}
 --- -----
 --- Insert a hyperlink into the PDF.
 function commands.a( layoutxml,dataxml )
-    trace("A")
     local interaction = publisher.options.interaction
     p = paragraph:new()
 
@@ -215,7 +214,6 @@ end
 --- Create a EAN 13 barcode. The width of the barcode depends on the font
 --- given in `fontface` (or the default `text`).
 function commands.barcode( layoutxml,dataxml )
-    trace("Command: Barcode")
     local width     = publisher.read_attribute(layoutxml,dataxml,"width"    ,"length_sp"     )
     local height    = publisher.read_attribute(layoutxml,dataxml,"height"   ,"height_sp"     )
     local typ       = publisher.read_attribute(layoutxml,dataxml,"type"     ,"rawstring"     )
@@ -388,7 +386,6 @@ end
 --- --------
 --- PDF bookmarks (for the PDF viewer)
 function commands.bookmark( layoutxml,dataxml )
-    trace("Command: Bookmark")
     --- For bookmarks, we need two things:
     ---
     --- 1) a destination and
@@ -622,7 +619,6 @@ end
 --- * if the textblock has a textformat then use it, end
 --- * use the textformat `text` end
 function commands.define_textformat(layoutxml)
-    trace("Command: DefineTextformat")
     local alignment    = publisher.read_attribute(layoutxml,dataxml,"alignment",   "string")
     local indentation  = publisher.read_attribute(layoutxml,dataxml,"indentation", "length")
     local name         = publisher.read_attribute(layoutxml,dataxml,"name",        "rawstring")
@@ -845,7 +841,6 @@ end
 --- --------
 --- Execute the child elements for all elements given by the `select` attribute.
 function commands.forall( layoutxml,dataxml )
-    trace("ForAll")
     local limit = publisher.read_attribute(layoutxml,dataxml,"limit","number")
     local start = publisher.read_attribute(layoutxml,dataxml,"start","number")
     local tab = {}
@@ -1026,6 +1021,24 @@ function commands.groupcontents( layoutxml,dataxml )
     end
     return {node.copy(g.contents)}
 end
+
+--- HTML
+--- ------
+--- Collect paragraphs to insert into the text stream (Textblock/Text)
+function commands.html( layoutxml,dataxml)
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    local ret = {}
+    for i=1,#tab do
+        local contents = publisher.element_contents(tab[i])
+        local blocks = publisher.parse_html(contents[1]) or {}
+        for b=1,#blocks do
+            local thisblock = blocks[b]
+            ret[#ret + 1] = thisblock
+        end
+    end
+    return ret
+end
+
 
 --- HSpace
 --- ------
@@ -1464,7 +1477,6 @@ end
 --- -------------------
 --- Set the contents of this element in italic text
 function commands.italic( layoutxml,dataxml )
-    trace("Italic")
     local a = paragraph:new()
     local objects = {}
     local tab = publisher.dispatch(layoutxml,dataxml)
@@ -1606,7 +1618,6 @@ end
 --- Create an empty row in the layout. Set the cursor to the next free line and
 --- let an empty row between.
 function commands.emptyline( layoutxml,dataxml )
-    trace("EmptyLine, current row is %d",publisher.current_grid:current_row())
     warning("EmptyLine is deprecated since 2.7.4. Use NextRow instead.")
     local areaname = publisher.read_attribute(layoutxml,dataxml,"area","rawstring")
     areaname = areaname or publisher.default_area or publisher.default_areaname
@@ -1866,7 +1877,6 @@ function commands.nobreak( layoutxml, dataxml )
     local objects = {}
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
-        trace("Paragraph Elementname = %q",tostring(publisher.elementname(j)))
         local contents = publisher.element_contents(j)
         if publisher.elementname(j) == "Value" and type(contents) == "table" and #contents == 1 and type(contents[1]) == "string"  then
             objects[#objects + 1] = contents[1]
@@ -2165,7 +2175,6 @@ end
 --- ----------
 --- Set the dimensions of the page
 function commands.page_format(layoutxml,dataxml)
-    trace("Pageformat")
     local width  = publisher.read_attribute(layoutxml,dataxml,"width","length")
     local height = publisher.read_attribute(layoutxml,dataxml,"height","length")
     xpath.set_variable("_pageheight",height)
@@ -2178,7 +2187,6 @@ end
 --- --------
 --- This command should be probably called master page or something similar.
 function commands.pagetype(layoutxml,dataxml)
-    trace("Command: Pagetype")
     local tmp_tab = {
         layoutxml = layoutxml
     }
@@ -2206,7 +2214,6 @@ end
 --- It can have a font face, color,... but these can be also given
 --- On the surrounding element (`Textblock`).
 function commands.paragraph( layoutxml,dataxml )
-    trace("Paragraph")
     local class = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
     local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
 
@@ -2405,7 +2412,6 @@ end
 --- Emit a rectangular object. The object can be
 --- one of `Textblock`, `Table`, `Image`, `Box` or `Rule`.
 function commands.place_object( layoutxml,dataxml )
-    trace("Command: PlaceObject")
     local absolute_positioning = false
     local column           = publisher.read_attribute(layoutxml,dataxml,"column",         "rawstring")
     local row              = publisher.read_attribute(layoutxml,dataxml,"row",            "rawstring")
@@ -2538,9 +2544,6 @@ function commands.place_object( layoutxml,dataxml )
     end
     xpath.set_variable("__maxwidth", mw)
 
-    trace("Column = %q",tostring(column))
-    trace("Row = %q",tostring(row))
-
     local current_row_start  = current_grid:current_row(area)
     if not current_row_start then
         return nil
@@ -2667,7 +2670,6 @@ function commands.place_object( layoutxml,dataxml )
         else
             -- Look for a place for the object
             -- local current_row = current_grid:current_row(area)
-            trace("PlaceObject: calculate object width")
             if not node.has_field(object,"width") then
                 warning("Can't calculate with object's width!")
             end
@@ -2737,7 +2739,6 @@ function commands.place_object( layoutxml,dataxml )
                 allocate_bottom = allocate_bottom,
                 vreference = vreference,
                 })
-            trace("object placed")
             row = nil -- the current rows is not valid anymore because an object is already rendered
         end -- no absolute positioning
         if i < #objects then
@@ -2764,8 +2765,6 @@ function commands.place_object( layoutxml,dataxml )
         current_grid = publisher.pages[publisher.current_pagenumber].grid
     end
     xpath.set_variable("__currentarea",save_current_area)
-
-    trace("objects placed")
 end
 
 --- ProcessRecord
@@ -2779,7 +2778,6 @@ end
 --- string, this function is rather stupid but nevertheless currently the main
 --- function for processing data.
 function commands.process_node(layoutxml,dataxml)
-    trace("process_node")
     local dataxml_selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     local mode              = publisher.read_attribute(layoutxml,dataxml,"mode","rawstring") or ""
     local limit             = publisher.read_attribute(layoutxml,dataxml,"limit","number")
@@ -3075,7 +3073,6 @@ end
 --- -------
 --- Set the grid to the given values.
 function commands.set_grid(layoutxml)
-    trace("Command: SetGrid")
     local wd = publisher.read_attribute(layoutxml,dataxml,"width", "rawstring")
     local ht = publisher.read_attribute(layoutxml,dataxml,"height","rawstring")
     local nx = publisher.read_attribute(layoutxml,dataxml,"nx",    "rawstring")
@@ -3132,7 +3129,6 @@ function commands.setvariable( layoutxml,dataxml )
     local varname   = publisher.read_attribute(layoutxml,dataxml,"variable","rawstring")
     -- FIXME: if the variable contains nodes, the must be freed:
 
-    trace("SetVariable, Variable = %q",varname or "???")
     if not varname then
         err("Variable name in »SetVariable« not recognized")
         return
@@ -3219,7 +3215,6 @@ function commands.sort_sequence( layoutxml,dataxml )
     -- spelling error in schema
     local sortkey = criterion or criterium
     local sequence = xpath.parse(dataxml,selection,layoutxml[".__ns"])
-    trace("SortSequence: Record = %q, criterion = %q",selection,sortkey or "???")
     local tmp = {}
     if #sequence == 0 then
         tmp[1] = sequence
@@ -3493,7 +3488,6 @@ function commands.table( layoutxml,dataxml,options )
     -- for i=1,#n do
     --     node.set_attribute(n[i],publisher.att_origin,publisher.origin_table)
     -- end
-    trace("Done with table()")
     return n
 end
 
@@ -3849,19 +3843,25 @@ function commands.text(layoutxml,dataxml)
     local objects = {}
     for i,j in ipairs(tab) do
         local eltname = publisher.elementname(j)
-        trace("Text: Element = %q",tostring(eltname))
+        local contents = publisher.element_contents(j)
         if eltname == "Paragraph" then
-            objects[#objects + 1] = publisher.element_contents(j)
+            objects[#objects + 1] = contents
         elseif eltname == "Ul" or eltname == "Ol" then
-            for j,w in ipairs(publisher.element_contents(j)) do
+            for j,w in ipairs(contents) do
                 objects[#objects + 1] = w
             end
         elseif eltname == "Text" then
             assert(false)
         elseif eltname == "Action" then
-            objects[#objects + 1] = publisher.element_contents(j)
+            objects[#objects + 1] = contents
         elseif eltname == "Bookmark" then
-            objects[#objects + 1] = publisher.element_contents(j)
+            objects[#objects + 1] = contents
+        elseif eltname == "HTML" then
+            for i=1,#contents do
+                objects[#objects + 1] = contents[i]
+            end
+        else
+            err("Unknown element %s",eltname or "?")
         end
     end
     tab = objects
@@ -3933,7 +3933,6 @@ end
 --- ---------
 --- A rectangular block of text. Return a vertical nodelist.
 function commands.textblock( layoutxml,dataxml )
-    trace("Textblock")
     local fontfamily
     local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface","rawstring")
     local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",   "rawstring", "black")
@@ -3994,22 +3993,29 @@ function commands.textblock( layoutxml,dataxml )
 
     for i,j in ipairs(tab) do
         local eltname = publisher.elementname(j)
+        local contents = publisher.element_contents(j)
         if eltname == "Paragraph" then
-            objects[#objects + 1] = publisher.element_contents(j)
+            objects[#objects + 1] = contents
         elseif eltname == "Ul" or eltname == "Ol" then
-            for j,w in ipairs(publisher.element_contents(j)) do
+            for j,w in ipairs(contents) do
                 objects[#objects + 1] = w
             end
         elseif eltname == "Action" then
-            objects[#objects + 1] = publisher.element_contents(j)
+            objects[#objects + 1] = contents
         elseif eltname == "Bookmark" then
-            objects[#objects + 1] = publisher.element_contents(j)
+            objects[#objects + 1] = contents
+        elseif eltname == "HTML" then
+            for c=1,#contents do
+                local par = contents[c]
+                objects[#objects + 1]  = par
+            end
         end
     end
 
     if columns > 1 then
         width_sp = math.floor(  (width_sp - columndistance * ( columns - 1 ) )   / columns)
     end
+
     for _,paragraph in ipairs(objects) do
         if paragraph.id == publisher.whatsit_node then
             -- todo: document how this can be!
@@ -4076,7 +4082,6 @@ function commands.textblock( layoutxml,dataxml )
         nodes[i].prev = tail
     end
 
-    trace("Textblock: vpack()")
     nodelist = node.vpack(nodes[1])
     if angle then
         nodelist = publisher.rotate_textblock(nodelist,angle)
@@ -4084,7 +4089,6 @@ function commands.textblock( layoutxml,dataxml )
 
     publisher.current_fontfamily = save_fontfamily
     xpath.set_variable("__maxwidth", save_width)
-    trace("Textblock: end")
     publisher.intextblockcontext = publisher.intextblockcontext - 1
     if minheight then
         nodelist.height = math.max(nodelist.height + nodelist.depth, minheight )
@@ -4098,7 +4102,6 @@ end
 --- Underline text. This is done by setting the `att_underline` attribute and in the "finalizer"
 --- drawing a line underneath the text.
 function commands.underline( layoutxml,dataxml )
-    trace("Underline")
     local dashed = publisher.read_attribute(layoutxml,dataxml,"dashed", "boolean")
     local class  = publisher.read_attribute(layoutxml,dataxml,"class",  "rawstring")
     local id     = publisher.read_attribute(layoutxml,dataxml,"id",     "rawstring")
