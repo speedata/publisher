@@ -3846,6 +3846,12 @@ function commands.text(layoutxml,dataxml)
         local contents = publisher.element_contents(j)
         if eltname == "Paragraph" then
             objects[#objects + 1] = contents
+        elseif eltname == "Image" then
+            local a = paragraph:new()
+            local c = contents[1]
+            node.set_attribute(c,publisher.att_dontadjustlineheight,1)
+            a:append(c)
+            objects[#objects + 1] = a
         elseif eltname == "Ul" or eltname == "Ol" then
             for j,w in ipairs(contents) do
                 objects[#objects + 1] = w
@@ -3861,7 +3867,7 @@ function commands.text(layoutxml,dataxml)
                 objects[#objects + 1] = contents[i]
             end
         else
-            err("Unknown element %s",eltname or "?")
+            err("Unknown element in Text: %q",eltname or "?")
         end
     end
     tab = objects

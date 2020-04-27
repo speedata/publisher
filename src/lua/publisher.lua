@@ -108,6 +108,7 @@ att_tr_shift_up     = 550
 
 -- Force a hbox line height
 att_lineheight = 600
+att_dontadjustlineheight = 601
 
 -- server-mode / line breaking (not used anymore?)
 att_keep = 700
@@ -3572,8 +3573,12 @@ function do_linebreak( nodelist,hsize,parameters )
             local lineheight
             maxlineheight = 0
             local head_list = head.list
+            local adjustlineheight = true
             while head_list do
                 lineheight = lineheight or node.has_attribute(head_list,att_lineheight)
+                if node.has_attribute(head_list,att_dontadjustlineheight) then
+                    adjustlineheight = false
+                end
                 -- There could be a hlist (HTML table for example) in the line
                 if head_list.id == hlist_node or head_list.id == vlist_node then
                     if head_list.head then
@@ -3590,12 +3595,14 @@ function do_linebreak( nodelist,hsize,parameters )
                 end
                 head_list = head_list.next
             end
-            if lineheight and lineheight > 0.75 * maxlineheight then
-                head.height = lineheight
-                head.depth  = 0.25 * maxlineheight
-            else
-                head.height = 0.75 * maxlineheight
-                head.depth  = 0.25 * maxlineheight
+            if adjustlineheight then
+                if lineheight and lineheight > 0.75 * maxlineheight then
+                    head.height = lineheight
+                    head.depth  = 0.25 * maxlineheight
+                else
+                    head.height = 0.75 * maxlineheight
+                    head.depth  = 0.25 * maxlineheight
+                end
             end
         end
         head = head.next

@@ -8586,6 +8586,7 @@
           <cmd name="Copy-of"/>
           <cmd name="ForAll"/>
           <cmd name="HTML"/>
+          <cmd name="Image"/>
           <cmd name="Loop"/>
           <cmd name="Ol"/>
           <cmd name="Paragraph"/>

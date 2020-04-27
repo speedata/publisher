@@ -5064,6 +5064,7 @@
         <xs:element ref="en:Copy-of"/>
         <xs:element ref="en:ForAll"/>
         <xs:element ref="en:HTML"/>
+        <xs:element ref="en:Image"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Ol"/>
         <xs:element ref="en:Paragraph"/>
