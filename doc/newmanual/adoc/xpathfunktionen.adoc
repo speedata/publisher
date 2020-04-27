@@ -107,11 +107,11 @@ Beispiel: die Funktion `sd:current-row()`  kann auch mit Parameter `sd:current-r
 `sd:group-width(<string>[,<string>])`::
    Gibt die Breite in Rasterzellen für die Gruppe im ersten Argument an. Beispiel: `sd:group-width('Beispielgruppe')`. Für das zweite Argument siehe die Beschreibung von `sd:group-height()` oben.
 
-`sd:imageheight(<Dateiname oder URI-Schema>)`::
-   Höhe des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Höhe des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert.
+`sd:imageheight(<Dateiname oder URI-Schema>[,<string>])`::
+   Höhe des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Höhe des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert. Das zweite Argument ist eine Einheit. Wenn angegeben, ist die Bildbreite ein Vielfaches dieser Einheit.
 
-`sd:imagewidth(<Dateiname oder URI-Schema>)`::
-   Breite des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Breite des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert.
+`sd:imagewidth(<Dateiname oder URI-Schema>[,<string>])`::
+   Breite des Bildes in Rasterzellen. Vorsicht: sollte das Bild nicht gefunden werden, wird die Breite des Platzhalters für nicht gefundene Bilder zurückgegeben. Daher muss vorher überprüft werden, ob das Bild existiert. Das zweite Argument ist eine Einheit. Wenn angegeben, ist die Bildbreite ein Vielfaches dieser Einheit.
 
 `sd:keep-alternating(<typ>)`::
    Benutzt den aktuellen Wert von `sd:alternating(<typ>)`, ohne diesen zu verändern.

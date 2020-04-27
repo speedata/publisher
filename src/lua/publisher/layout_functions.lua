@@ -211,15 +211,50 @@ local function imagewidth(dataxml, arg )
   local filename = arg[1]
   local img = publisher.imageinfo(filename)
   publisher.setup_page(nil,"layout_functions#imagewidth")
-  local tmp = publisher.current_grid:width_in_gridcells_sp(img.img.width)
-  return tmp
+  local unit = arg[2]
+  local width
+  if unit then
+      width = img.img.width
+      local ret
+      if unit == "cm" then
+          ret = width / publisher.tenmm_sp
+      elseif unit == "mm" then
+          ret = width / publisher.onemm_sp
+      elseif unit == "in" then
+          ret = width / publisher.onein_sp
+      else
+          err("unsupported unit: %q, please use 'cm', 'mm' or 'in'",unit)
+      end
+      return math.round(ret, 4)
+  else
+      width = publisher.current_grid:width_in_gridcells_sp(img.img.width)
+      return width
+  end
 end
 
 local function imageheight(dataxml, arg )
   local filename = arg[1]
   local img = publisher.imageinfo(filename)
   publisher.setup_page(nil,"layout_functions#imageheight")
-  return publisher.current_grid:height_in_gridcells_sp(img.img.height)
+  local unit = arg[2]
+  local height
+  if unit then
+      height = img.img.height
+      local ret
+      if unit == "cm" then
+          ret = height / publisher.tenmm_sp
+      elseif unit == "mm" then
+          ret = height / publisher.onemm_sp
+      elseif unit == "in" then
+          ret = height / publisher.onein_sp
+      else
+          err("unsupported unit: %q, please use 'cm', 'mm' or 'in'",unit)
+      end
+      return math.round(ret, 4)
+  else
+      height = publisher.current_grid:height_in_gridcells_sp(img.img.height)
+      return height
+  end
 end
 
 local function file_exists(dataxml, arg )
@@ -301,7 +336,7 @@ local function groupheight(dataxml, arg )
         elseif unit == "in" then
             ret = height / publisher.onein_sp
         else
-            err("unsupported unit: %q",unit)
+            err("unsupported unit: %q, please use 'cm', 'mm' or 'in'",unit)
         end
         return math.round(ret, 4)
     else
@@ -336,7 +371,7 @@ local function groupwidth(dataxml, arg )
       elseif unit == "in" then
           ret = width / publisher.onein_sp
       else
-          err("unsupported unit: %q",unit)
+          err("unsupported unit: %q, please use 'cm', 'mm' or 'in'",unit)
       end
       return math.round(ret, 4)
   else
