@@ -9,7 +9,7 @@
 -- This is for the new HTML parser
 
 module(...,package.seeall)
-
+require("Box")
 local fontfamilies = {}
 
 local stylesstackmetatable = {
@@ -23,6 +23,8 @@ inherited = {
     width = false,
     fontsize_sp = true,
     calculated_width = true,
+    ollevel = true,
+    ullevel = true,
     ["border-collapse"] = true,
     ["border-spacing"] = true,
     ["caption-side"] = true,
@@ -348,10 +350,9 @@ function build_html_table( elt )
     end
 end
 
-
+local olcounter = {}
 function build_nodelist( elt )
     local ret = {}
-    local olcounter = 0
     for i=1,#elt do
         local thiselt = elt[i]
         local thiseltname = thiselt.elementname
@@ -359,6 +360,10 @@ function build_nodelist( elt )
 
         local styles = setmetatable({}, levelmt)
         stylesstack[#stylesstack + 1] = styles
+        if thiseltname == "body" then
+            styles.ollevel = 0
+            styles.ullevel = 0
+        end
 
         local attributes = thiselt.attributes or {}
         for k, v in pairs(attributes) do
@@ -374,6 +379,11 @@ function build_nodelist( elt )
             end
             styles[k] = v
         end
+
+        local fontfamily = styles["font-family"]
+        local fontsize = styles["font-size"]
+        local fontname = fontsize
+        local fam = get_fontfamily(fontfamily,styles.fontsize_sp,fontname)
 
         local textalign = styles["text-align"]
 
@@ -413,19 +423,32 @@ function build_nodelist( elt )
                 tabpar:append(nl)
                 ret[#ret + 1] = tabpar
             elseif thiseltname == "ol" or thiseltname == "ul" then
-                local n = build_nodelist(thiselt)
-                for i=1,#n do
-                    n[i]:indent(tex.sp("20pt"))
-                    ret[#ret + 1] = n[i]
+                if thiseltname == "ol" then
+                    styles.ollevel = styles.ollevel + 1
+                else
+                    styles.ullevel = styles.ullevel + 1
                 end
+                olcounter[styles.ollevel] = 0
+                local n = build_nodelist(thiselt)
+                if thiseltname == "ol" then
+                    styles.ollevel = styles.ollevel - 1
+                else
+                    styles.ullevel = styles.ullevel - 1
+                end
+                local box = Box:new()
+                for i=1,#n do
+                    box[#box + 1] = n[i]
+                end
+                box.indent = tex.sp("20pt")
+                ret[#ret + 1] = box
             elseif thiseltname == "li" then
-                olcounter = olcounter + 1
-                local str = resolve_list_style_type(styles["list-style-type"],olcounter)
+                olcounter[styles.ollevel] = olcounter[styles.ollevel] + 1
+                local str = resolve_list_style_type(styles,olcounter)
                 local n = build_nodelist(thiselt)
                 for i=1,#n do
                     local a = n[i]
                     if i == 1 then
-                        local x = publisher.whatever_hbox(str,tex.sp("20pt"))
+                        local x = publisher.whatever_hbox(str,tex.sp("20pt"),fam)
                         a:prepend(x)
                     end
                     ret[#ret + 1] = a
@@ -442,16 +465,25 @@ function build_nodelist( elt )
     return ret
 end
 
-function resolve_list_style_type( liststyletype, counter )
+function resolve_list_style_type(styles, olcounter)
+    local liststyletype = styles["list-style-type"]
+    local counter  = olcounter[styles.ollevel]
+    local ullevel = styles.ullevel
     local str
     if liststyletype == "decimal" then
-        str = tostring(counter)
+        str = tostring(counter) .. "."
     elseif liststyletype == "lower-roman" then
-        str = tex.romannumeral(counter)
+        str = tex.romannumeral(counter) .. "."
     elseif liststyletype == "upper-roman" then
-        str = string.upper( tex.romannumeral(counter) )
+        str = string.upper( tex.romannumeral(counter) ) .. "."
     else
-        str = "•"
+        if ullevel == 1 then
+            str = "•"
+        elseif ullevel == 2 then
+            str = "◦"
+        else
+            str = ""
+        end
     end
     return str
 end
@@ -470,7 +502,6 @@ function parse_html_new( elt )
     elt.fontfamilies = nil
     elt.pages = nil
     parse_html_inner(elt[1])
-    -- printtable("elt[1]",elt[1])
     local block = build_nodelist(elt)
     return block
 end

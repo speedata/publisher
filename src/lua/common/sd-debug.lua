@@ -35,6 +35,8 @@ end
 
 local function cmpkeys( a,b )
   if type(a) == type(b) then
+      if a == "elementname" then return true end
+      if b == "elementname" then return false end
       return a < b
   end
   if type(a) == "number" then return false end
@@ -43,6 +45,9 @@ end
 
 do
   tables_printed = {}
+  local function indent(level)
+    return string.rep( "    ", level )
+  end
   function printtable (ind,tbl_to_print,level)
     if type(tbl_to_print) ~= "table" then
       log("printtable: %q is not a table, it is a %s (%q)",tostring(ind),type(tbl_to_print),tostring(tbl_to_print))
@@ -60,7 +65,7 @@ do
     else
       key = ind
     end
-    log(string.rep("  ",level) .. tostring(key) .. " = {")
+    log(indent(level) .. tostring(key) .. " = {")
     level=level+1
     local keys = {}
     for k,_ in pairs(tbl_to_print) do
@@ -77,7 +82,7 @@ do
         if k ~= ".__parent" then
           printtable(k,l,level)
         else
-          log("%s[\".__parent\"] = <%s>", string.rep("  ",level),l[".__local_name"])
+          log("%s[\".__parent\"] = <%s>", indent(level),l[".__local_name"])
         end
       else
         if type(k) == "number" then
@@ -85,10 +90,10 @@ do
         else
           key = string.format("[%q]",tostring(k))
         end
-        log("%s%s = %q", string.rep("  ",level), key,tostring(l))
+        log("%s%s = %q", indent(level), key,tostring(l))
       end
     end
-    log(string.rep("  ",level-1) .. "},")
+    log(indent(level-1) .. "},")
   end
 end
 

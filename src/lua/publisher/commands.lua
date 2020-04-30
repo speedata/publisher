@@ -3871,7 +3871,7 @@ function commands.text(layoutxml,dataxml)
         end
     end
     tab = objects
-
+    tab = publisher.flatten_boxes(tab)
 
     -- pull returns 'obj', 'state', 'more_to_follow'
 

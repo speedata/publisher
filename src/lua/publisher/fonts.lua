@@ -264,7 +264,7 @@ function pre_linebreak( head )
                         gluespec.stretch=f.parameters.space_stretch
                         gluespec.shrink=f.parameters.space_shrink
                     else
-                        w("gluespec: %s, subtype: %s",tostring(gluespec),tostring(head.subtype))
+                        -- w("gluespec: %s, subtype: %s",tostring(gluespec),tostring(head.subtype))
                     end
                 end
             else

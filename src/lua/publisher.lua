@@ -807,6 +807,44 @@ function define_image_callback( extensionhandler )
 
 end
 
+do
+    function flatten_boxes(box,parameter,ret)
+        ret = ret or {}
+        parameter = parameter or {}
+        local indent = box.indent or 0
+        -- w("fb: indent %gpt",indent / factor)
+        if indent and parameter.indent then
+            indent = parameter.indent + indent
+        end
+        local new_parameter = {
+            indent = indent
+        }
+        if box.prependbox then
+            for i=1,#box.prependbox do
+                local pp = box.prependbox[i]
+                local a = paragraph:new()
+                a:indent(parameter.indent or 0)
+                a:append(pp)
+                ret[#ret + 1] = a
+            end
+        end
+        for i=1,#box do
+            if box[i].nodelist then
+                -- a regular paragraph
+                if parameter.indent then
+                    box[i]:indent(indent)
+                end
+
+                ret[#ret + 1] = box[i]
+            else
+                -- a box with paragraphs inside
+                flatten_boxes(box[i],new_parameter,ret)
+            end
+        end
+        return ret
+    end
+end
+
 -- When not in server mode, we initialize LuaTeX in such a way that
 -- it has defaults, loads a layout file and a data file and
 -- executes them both
@@ -2951,7 +2989,6 @@ function addstrut(nodelist,where)
     else
         fontfamily = node.has_attribute(head, att_fontfamily)
     end
-
     if fontfamily == nil or fontfamily == 0 then
         fontfamily = fonts.lookup_fontfamily_name_number["text"]
     end
@@ -3323,12 +3360,14 @@ function number_hbox( num, labelwidth )
     return digit_hbox
 end
 
-function whatever_hbox( str, labelwidth )
+function whatever_hbox( str, labelwidth,fam )
     local label, pre_glue
-    label = mknodes(str .. " ",nil,{})
+    label = mknodes(str .. " ",fam,{})
     pre_glue = set_glue(nil,{stretch = 2^16, stretch_order = 3,width= - labelwidth})
     pre_glue.next = label
     local label_hbox = node.hpack(pre_glue,0,"exactly")
+    node.set_attribute(label_hbox.head,att_fontfamily,fam)
+    label_hbox.head = addstrut(label_hbox.head,"head")
     return label_hbox
 end
 
