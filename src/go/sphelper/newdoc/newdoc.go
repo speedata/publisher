@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"sync"
 	"text/template"
@@ -18,9 +19,14 @@ import (
 )
 
 var (
-	wg        sync.WaitGroup
-	templates *template.Template
+	wg            sync.WaitGroup
+	templates     *template.Template
+	ghIssueRegexp *regexp.Regexp
 )
+
+func init() {
+	ghIssueRegexp = regexp.MustCompile(`#(\d+)`)
+}
 
 func translate(lang, text string) string {
 	if lang == "en" {
@@ -252,8 +258,8 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 	if err != nil {
 		return err
 	}
-
-	cmd := exec.Command("java", "-jar", filepath.Join(cfg.Basedir(), "lib", "saxon9804he.jar"), fmt.Sprintf("-xsl:%s", xsltfile), "-o:publisherhandbuch.txt", docbookfile, fmt.Sprintf("outputdir=file:%s", newmanualhugopath), fmt.Sprintf("version=%s", cfg.Publisherversion))
+	var cmd *exec.Cmd
+	cmd = exec.Command("java", "-jar", filepath.Join(cfg.Basedir(), "lib", "saxon9804he.jar"), fmt.Sprintf("-xsl:%s", xsltfile), "-o:publisherhandbuch.txt", docbookfile, fmt.Sprintf("outputdir=file:%s", newmanualhugopath), fmt.Sprintf("version=%s", cfg.Publisherversion))
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()
@@ -301,7 +307,9 @@ func DoThings(cfg *config.Config, sitedoc bool) error {
 				r = release{date: d, version: entry.Version}
 				version = entry.Version
 			}
-			r.entries = append(r.entries, entry.De.Text)
+			e := ghIssueRegexp.ReplaceAllString(entry.De.Text, `<a href="https://github.com/speedata/publisher/issues/$1">#$1</a>`)
+			r.entries = append(r.entries, e)
+
 		}
 		rr = append(rr, r)
 

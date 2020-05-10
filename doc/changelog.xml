@@ -11,7 +11,6 @@
     <entry version="3.9.10" date="2020-05-10">
       <en><tt>Image</tt> as a child of <tt>Output</tt>.</en>
       <de><tt>Image</tt> als Kind von <tt>Output</tt> möglich.</de>
-      <de></de>
     </entry>
     <entry version="3.9.9" date="2020-04-21">
       <en>Enhanced HTML support.</en>
