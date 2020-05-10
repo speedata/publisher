@@ -96,6 +96,11 @@ att_use_as_head           = 403
 att_dont_format           = 404
 att_margin_newcolumn      = 405
 att_margin_top_boxstart   = 406
+att_ignore_orphan_widowsetting = 407
+
+att_margin_top = 450
+att_margin_bottom = 451
+
 
 --- `att_is_table_row` is used in `tabular.lua` and if set to 1, it denotes
 --- a regular table row, and not a spacer. Spacers must not appear
@@ -834,6 +839,9 @@ do
                 if parameter.indent then
                     box[i]:indent(indent)
                 end
+                if i == 1 then
+                    box[i].margin_top = box.margintop
+                end
 
                 ret[#ret + 1] = box[i]
             else
@@ -866,9 +874,22 @@ function initialize_luatex_and_generate_pdf()
             for _,m in ipairs(_modes) do
                 modes[m] = true
             end
+        elseif k == "html" then
+            htmlfilename = v
+            htmlblocks = {}
+            options.ignoreeol = false
+            local tmp = splib.parse_html(publisher.htmlfilename)
+            if type(tmp) == "string" then
+                local a,b = load(tmp)
+                if a then a() else err(b) return end
+                local blocks = publisher.parse_html(csshtmltree) or {}
+                for b=1,#blocks do
+                    local thisblock = blocks[b]
+                    htmlblocks[#htmlblocks + 1] = thisblock
+                end
+            end
         end
     end
-
 
     --- Both the data and the layout instructions are written in XML.
     local layoutxml = load_xml(arg[2],"layout instructions")
@@ -1022,17 +1043,6 @@ function initialize_luatex_and_generate_pdf()
     local datafilename = arg[3]
     if datafilename == "-dummy" then
         dataxml = luxor.parse_xml("<data />")
-    elseif string.match(datafilename,".html$") then
-        local input = splib.parse_html(datafilename)
-        if string.match( input,"^%-%-" ) then
-            err(string.gsub( input,"^%-%-(.*)","%1"))
-            exit()
-        end
-        local a,b = load(input)
-        if a == nil then err(b) end
-        local foo = a()
-        dataxml = html.html_to_speedata()
-        processmode = "HTML"
     elseif datafilename == "-" then
         log("Reading from stdin")
         dataxml = luxor.parse_xml(io.stdin:read("*a"),{htmlentities = true})
@@ -1335,13 +1345,30 @@ end
 ---       [".__local_name"] = "data"
 ---     },
 function load_xml(filename,filetype,options)
-    local path = kpse.find_file(filename)
-    if not path then
-        err("Can't find XML file %q. Abort.",filename or "?")
-        return
+    if filename == "_internallayouthtml.xml" then
+        local src = [[<Layout xmlns="urn:speedata.de:2009/publisher/en"
+        xmlns:sd="urn:speedata:2009/publisher/functions/en">
+   <Record element="data">
+      <Output>
+         <Text>
+            <HTML>
+               <Value select="sd:html(.)"/>
+            </HTML>
+         </Text>
+      </Output>
+   </Record>
+</Layout>]]
+        log("Loading internal HTML layoutfile")
+        return luxor.parse_xml(src,options)
+    else
+        local path = kpse.find_file(filename)
+        if not path then
+            err("Can't find XML file %q. Abort.",filename or "?")
+            return
+        end
+        log("Loading %s %q",filetype or "file",path)
+        return luxor.parse_xml_file(path, options,kpse.find_file)
     end
-    log("Loading %s %q",filetype or "file",path)
-    return luxor.parse_xml_file(path, options,kpse.find_file)
 end
 
 --- Place an object at a position given in scaled points (_x_ and _y_).
@@ -3066,6 +3093,10 @@ function mknodes(str,fontfamily,parameter)
     else
         instance = 1
     end
+    local allow_newline = true
+    if options.ignoreeol then
+        allow_newline = false
+    end
 
     local tbl = font.getfont(instance)
     local space   = tbl.parameters.space
@@ -3093,7 +3124,7 @@ function mknodes(str,fontfamily,parameter)
     for s in string.utfvalues(str) do
         local char = unicode.utf8.char(s)
         -- If the next char is a newline (&#x0A;) a \\ is inserted
-        if s == newline then
+        if s == newline and allow_newline then
             -- This is to enable hyphenation again. When we add a rule right after a word
             -- hyphenation is disabled. So we insert a penalty of 10k which should not do
             -- harm. Perhaps there is a better solution, but this seems to work OK.
@@ -4719,7 +4750,7 @@ end
 
 
 function calculate_image_width_height( image, width, height, minwidth, minheight, maxwidth, maxheight )
-    -- from http://www.w3.org/TR/CSS2/visudet.html#min-max-widths:
+    -- from https://www.w3.org/TR/CSS2/visudet.html#min-max-widths:
     --
     -- Constraint Violation                                                           Resolved Width                      Resolved Height
     -- ===================================================================================================================================================
@@ -4745,8 +4776,8 @@ function calculate_image_width_height( image, width, height, minwidth, minheight
         height = minheight
     elseif width > maxwidth and height > maxheight and maxwidth / width <= maxheight / height then
         -- w("6")
-        width = maxwidth
         height = math.max(minheight, maxwidth * height/width)
+        width = maxwidth
     elseif width > maxwidth and height > maxheight and maxwidth / width > maxheight / height then
         -- w("7")
         width = math.max(minwidth,maxheight * width / height)
@@ -4761,12 +4792,12 @@ function calculate_image_width_height( image, width, height, minwidth, minheight
         height = math.min(maxheight,minwidth * height / width)
     elseif width > maxwidth then
         -- w("2")
-        width = maxwidth
         height = math.max(maxwidth * height / width, minheight )
+        width = maxwidth
     elseif width < minwidth then
         -- w("3")
-        width = minwidth
         height = math.min(minwidth * height / width, maxheight)
+        width = minwidth
     elseif height > maxheight then
         -- w("4")
         width = math.max(maxheight * width / height, minwidth)

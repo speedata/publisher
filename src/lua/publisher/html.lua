@@ -176,6 +176,85 @@ function parse_html_inner( elt )
     end
 end
 
+function calculate_height( attribute_height, original_size )
+    if string.match(attribute_height, "%d+%%$") then
+        -- xx percent
+        local amount = string.match(attribute_height, "(%d+)%%$")
+        original_size = math.round(original_size * tonumber(amount) / 100, 0)
+        return original_size
+    else
+        err("not implemented yet, calculate_height")
+        return original_size
+    end
+
+end
+
+function set_calculated_width(styles)
+    if type(styles.calculated_width) == "number" then
+    end
+    local sw = styles.width or "auto"
+    local cw = styles.calculated_width
+    if string.match(sw, "%d+%%$") then
+        -- xx percent
+        local amount = string.match(sw, "(%d+)%%$")
+        cw = math.round(cw * tonumber(amount) / 100, 0)
+    elseif sw == "auto" then
+        cw = styles.calculated_width
+        if styles.height and styles.height ~= "auto" then
+            styles.height = tex.sp(styles.height)
+        else
+            styles.height = nil
+        end
+        local padding_left = styles["padding-left"]
+        local padding_right = styles["padding-right"]
+        local margin_left = styles["margin-left"]
+        local margin_right = styles["margin-right"]
+        local border_left = styles["border-left-width"]
+        local border_right = styles["border-right-width"]
+        if padding_left then
+            cw = cw - tex.sp(padding_left)
+        end
+        if padding_right then
+            cw = cw - tex.sp(padding_right)
+        end
+        if margin_left then
+            cw = cw - tex.sp(margin_left)
+        end
+        if margin_right then
+            cw = cw - tex.sp(margin_right)
+        end
+        if border_left then
+            cw = cw - tex.sp(border_left)
+        end
+        if border_right then
+            cw = cw - tex.sp(border_right)
+        end
+    elseif tex.sp(sw) then
+        -- a length
+        cw = tex.sp(sw)
+    end
+    styles.calculated_width = cw
+end
+
+function copy_attributes( styles,attributes )
+    for k, v in pairs(attributes) do
+        if k == "font-size" then
+            local fontsize
+            if string.match(v, "em$") then
+                local amount = string.gsub(v, "^(.*)r?em$", "%1")
+                local fontsize = math.round(styles.fontsize_sp * amount)
+                styles.fontsize_sp = fontsize
+            else
+                styles.fontsize_sp = tex.sp(v)
+            end
+        elseif k == "width" then
+            styles.width = v
+            set_calculated_width(styles)
+        end
+        styles[k] = v
+    end
+end
+
 function collect_horizontal_nodes( elt,parameter )
     parameter = parameter or {}
 
@@ -192,20 +271,7 @@ function collect_horizontal_nodes( elt,parameter )
         local typ = type(thiselt)
 
         local attributes = thiselt.attributes or {}
-        for k, v in pairs(attributes) do
-            if k == "font-size" then
-                local fontsize
-                if string.match(v, "em$") then
-                    local amount = string.gsub(v, "^(.*)r?em$", "%1")
-                    local fontsize = math.round(styles.fontsize_sp * amount)
-                    styles.fontsize_sp = fontsize
-                else
-                    styles.fontsize_sp = tex.sp(v)
-                end
-            end
-            styles[k] = v
-        end
-
+        copy_attributes(styles,attributes)
         local fontfamily = styles["font-family"]
         local fontsize = styles["font-size"]
         local fontname = fontsize
@@ -214,8 +280,8 @@ function collect_horizontal_nodes( elt,parameter )
         local fontweight = styles["font-weight"]
         local fg_colorindex, bg_colorindex
         local backgroundcolor = styles["background-color"]
-        if attributes.color then
-            fg_colorindex = publisher.colors[attributes.color].index
+        if styles.color then
+            fg_colorindex = publisher.colors[styles.color].index
             options.add_attributes = { { publisher.att_fgcolor, fg_colorindex }}
         end
         if backgroundcolor then
@@ -249,19 +315,37 @@ function collect_horizontal_nodes( elt,parameter )
             elseif eltname == "img" then
                 local source = attributes.src
                 local it = publisher.new_image(source,1,nil,nil)
-                local imagewidth, imageheight = it.img.width, it.img.height
+                -- if we don#t copy the image, the changed size settings would
+                -- affect future images with the same name
+                it = img.copy(it.img)
+                local orig_imagewidth, orig_imageheight = it.width, it.height
+                local imagewidth, imageheight = orig_imagewidth, orig_imageheight
+                -- Todo: check if width _and_ height are set
+                local factor = 1
                 if attributes.width then
-                    imagewidth = tex.sp(attributes.width)
+                    imagewidth = tex.sp(styles.calculated_width)
+                    factor = orig_imagewidth / imagewidth
                 end
                 if attributes.height then
-                    imageheight = tex.sp(attributes.height)
+                    imageheight = tex.sp(imageheight)
+                    imageheight = calculate_height(attributes.height,orig_imageheight)
+                    factor = orig_imageheight / imageheight
                 end
-                local calc_width, calc_height = publisher.calculate_image_width_height(it.img,imagewidth,imageheight,0,0,publisher.maxdimen,publisher.maxdimen)
-                it.img.width = calc_width
-                it.img.height = calc_height
+                if factor ~= 1 then
+                    imagewidth = orig_imagewidth / factor
+                    imageheight = orig_imageheight / factor
+                end
+
+                local maxwd = xpath.get_variable("__maxwidth")
+                local maxht = xpath.get_variable("__maxheight")
+                maxht = maxht - styles.fontsize_sp * 0.25
+                local calc_width, calc_height = publisher.calculate_image_width_height(it,imagewidth,imageheight,0,0,maxwd,maxht)
+                it.width = calc_width
+                it.height = calc_height
                 local box = publisher.box(calc_width,calc_height,"-")
-                node.set_attribute(box,publisher.att_lineheight,calc_height)
-                box.head = node.insert_before(box.head,box.head,img.node(it.img))
+                node.set_attribute(box,publisher.att_dontadjustlineheight,1)
+                node.set_attribute(box,publisher.att_ignore_orphan_widowsetting,1)
+                box.head = node.insert_before(box.head,box.head,img.node(it))
                 ret[#ret + 1] = box
             end
             local n = collect_horizontal_nodes(thiselt,options)
@@ -350,6 +434,19 @@ function build_html_table( elt )
     end
 end
 
+local function getsize(size,fontsize)
+    if size == nil then return 0 end
+    size = size or 0
+    local ret
+    if string.match(size, "em$") then
+        local amount = string.gsub(size, "^(.*)r?em$", "%1")
+        ret = math.round(fontsize * amount)
+    else
+        ret = tex.sp(size)
+    end
+    return ret
+end
+
 local olcounter = {}
 function build_nodelist( elt )
     local ret = {}
@@ -366,39 +463,28 @@ function build_nodelist( elt )
         end
 
         local attributes = thiselt.attributes or {}
-        for k, v in pairs(attributes) do
-            if k == "font-size" then
-                local fontsize
-                if string.match(v, "em$") then
-                    local amount = string.gsub(v, "^(.*)r?em$", "%1")
-                    local fontsize = math.round(styles.fontsize_sp * amount)
-                    styles.fontsize_sp = fontsize
-                else
-                    styles.fontsize_sp = tex.sp(v)
-                end
-            end
-            styles[k] = v
-        end
+        copy_attributes(styles,attributes)
 
         local fontfamily = styles["font-family"]
         local fontsize = styles["font-size"]
         local fontname = fontsize
         local fam = get_fontfamily(fontfamily,styles.fontsize_sp,fontname)
 
+
+        local margintop = getsize(styles["margin-top"],styles.fontsize_sp)
+
         local textalign = styles["text-align"]
-
-        local tf = "left"
+        local textformat = "left"
         if textalign == "right" then
-            tf = "right"
+            textformat = "right"
         elseif textalign == "center" then
-            tf = "centered"
+            textformat = "centered"
         elseif textalign == "justify" then
-            tf = "__justified"
+            textformat = "justified"
         end
-
         if thiselt.mode == "horizontal" then
             local n = collect_horizontal_nodes(thiselt)
-            local a = paragraph:new(tf)
+            local a = paragraph:new(textformat)
 
             for i=1,#n do
                 local thisn = n[i]
@@ -418,10 +504,13 @@ function build_nodelist( elt )
         else
             if thiseltname == "table" then
                 local nl = build_html_table(thiselt)
+                local box = Box:new()
                 local tabpar = paragraph:new()
+                box[#box + 1] = tabpar
                 node.set_attribute(nl,publisher.att_lineheight,nl.height)
                 tabpar:append(nl)
-                ret[#ret + 1] = tabpar
+                box.margintop = margintop
+                ret[#ret + 1] = box
             elseif thiseltname == "ol" or thiseltname == "ul" then
                 if thiseltname == "ol" then
                     styles.ollevel = styles.ollevel + 1
@@ -455,9 +544,13 @@ function build_nodelist( elt )
                 end
             else
                 local n = build_nodelist(thiselt)
+                local box = Box:new()
                 for i=1,#n do
-                    ret[#ret + 1] = n[i]
+                    box[#box + 1] = n[i]
                 end
+
+                box.margintop = margintop
+                ret[#ret + 1] = box
             end
         end
         table.remove(stylesstack)
@@ -497,10 +590,40 @@ function clearattributes( elt )
     end
 end
 
+function handle_pages( pages )
+    -- defaults:
+    xpath.set_variable("__maxwidth",tex.pagewidth)
+    xpath.set_variable("__maxheight",tex.pageheight)
+
+    local masterpage = pages["*"]
+    if masterpage then
+        if masterpage.width then
+            local wd = tex.sp(masterpage.width)
+            xpath.set_variable("_pagewidth",masterpage.width)
+            if masterpage.height then
+                xpath.set_variable("_pageheight",masterpage.height)
+                local ht = tex.sp(masterpage.height)
+                publisher.set_pageformat(wd,ht)
+                xpath.set_variable("__maxwidth",wd)
+                xpath.set_variable("__maxheight",ht)
+            end
+        end
+        local margin_left, margin_right, margin_bottom, margin_top = publisher.tenmm_sp, publisher.tenmm_sp, publisher.tenmm_sp, publisher.tenmm_sp
+        local mt, mr, mb, ml = masterpage["margin-top"], masterpage["margin-right"], masterpage["margin-bottom"], masterpage["margin-left"]
+        if mt then margin_top = tex.sp(mt) end
+        if mr then margin_right = tex.sp(mr) end
+        if mb then margin_bottom = tex.sp(mb) end
+        if ml then margin_left = tex.sp(ml) end
+        publisher.masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(margin_left,margin_top,margin_right,margin_bottom) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
+
+    end
+end
+
 function parse_html_new( elt )
+    handle_pages(elt.pages)
     fontfamilies = elt.fontfamilies
     elt.fontfamilies = nil
-    elt.pages = nil
+    elt[1].attributes.calculated_width = xpath.get_variable("__maxwidth")
     parse_html_inner(elt[1])
     local block = build_nodelist(elt)
     return block

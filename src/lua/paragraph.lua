@@ -549,16 +549,23 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         while line do
             c = c + 1
             if c < current_textformat.orphan and line.next then
-                node.set_attribute(line,publisher.att_break_below_forbidden,1)
+                if line.head and not node.has_attribute(line.head,publisher.att_ignore_orphan_widowsetting) then
+                    node.set_attribute(line,publisher.att_break_below_forbidden,1)
+                end
             end
             if less_or_equal_than_n_lines(line, current_textformat.widow) then
-               node.set_attribute(line,publisher.att_break_below_forbidden,2)
+                if line.head and not node.has_attribute(line.head,publisher.att_ignore_orphan_widowsetting) then
+                    node.set_attribute(line,publisher.att_break_below_forbidden,2)
+                end
             end
             line = line.next
         end
 
         publisher.fonts.post_linebreak(nodelist)
 
+        if self.margin_top then
+            nodelist.list = publisher.add_glue(nodelist.list,"head",{width = self.margin_top})
+        end
         if current_textformat.paddingtop and current_textformat.paddingtop ~= 0 then
             nodelist.list = publisher.add_glue(nodelist.list,"head",{width = current_textformat.paddingtop})
             node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,3)

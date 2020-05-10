@@ -79,7 +79,7 @@ td, th          { display: table-cell }
 caption         { display: table-caption }
 th              { font-weight: bold; text-align: center }
 caption         { text-align: center }
-body            { margin: 0pt }
+body            { margin: 0pt; font-family: sans-serif; font-size: 10pt; }
 h1              { font-size: 2em; margin: .67em 0 }
 h2              { font-size: 1.5em; margin: .75em 0 }
 h3              { font-size: 1.17em; margin: .83em 0 }
@@ -140,6 +140,7 @@ func findClosingBrace(toks tokenstream) int {
 
 // fixupComponentValues changes DELIM[.] + IDENT[foo] to IDENT[.foo]
 func fixupComponentValues(toks tokenstream) tokenstream {
+	toks = trimSpace(toks)
 	var combineNext bool
 	for i := 0; i < len(toks)-1; i++ {
 		combineNext = false
@@ -158,10 +159,29 @@ func fixupComponentValues(toks tokenstream) tokenstream {
 	return toks
 }
 
+func trimSpace(toks tokenstream) tokenstream {
+	i := 0
+	for {
+		if i == len(toks) {
+			break
+		}
+		if t := toks[i]; t.Type == scanner.S {
+			i++
+		} else {
+			break
+		}
+	}
+	toks = toks[i:]
+	return toks
+}
+
 // Get the contents of a block. The name (in case of an at-rule)
 // and the selector will be added later on
 func consumeBlock(toks tokenstream, inblock bool) sBlock {
 	// This is the whole block between the opening { and closing }
+	if len(toks) <= 1 {
+		return sBlock{}
+	}
 	b := sBlock{}
 	if len(toks) == 0 {
 		return b
@@ -187,7 +207,10 @@ func consumeBlock(toks tokenstream, inblock bool) sBlock {
 					colon = i
 				}
 			case ";":
-				b.Rules = append(b.Rules, qrule{Key: toks[start:colon], Value: toks[colon+1 : i]})
+				key := trimSpace(toks[start:colon])
+				value := trimSpace(toks[colon+1 : i])
+				q := qrule{Key: key, Value: value}
+				b.Rules = append(b.Rules, q)
 				colon = 0
 				start = i + 1
 			case "{":
@@ -331,7 +354,11 @@ func Run(tmpdir string, arguments []string) (string, error) {
 	htmlfilename := arguments[0]
 	// read additional stylesheets given on the command line
 	for i := 1; i < len(arguments); i++ {
-		c.Stylesheet = append(c.Stylesheet, consumeBlock(parseCSSFile(arguments[i]), false))
+		block, err := parseCSSFile(arguments[i])
+		if err != nil {
+			return "", err
+		}
+		c.Stylesheet = append(c.Stylesheet, consumeBlock(block, false))
 	}
 
 	fn := filepath.Base(htmlfilename)

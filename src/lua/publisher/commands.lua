@@ -1028,6 +1028,9 @@ end
 function commands.html( layoutxml,dataxml)
     local tab = publisher.dispatch(layoutxml,dataxml)
     local ret = {}
+    if publisher.htmlfilename then
+        return publisher.htmlblocks
+    end
     for i=1,#tab do
         local contents = publisher.element_contents(tab[i])
         local blocks = publisher.parse_html(contents[1]) or {}
@@ -2050,9 +2053,11 @@ function commands.output( layoutxml,dataxml )
     local lastpaddingbottommax = publisher.read_attribute(layoutxml,dataxml,"last-padding-bottom-max","length_sp")
 
     local maxwidth = publisher.current_grid:width_sp(publisher.current_grid:number_of_columns(area))
+    local maxheight = publisher.current_grid:height_sp(publisher.current_grid:number_of_rows(area))
 
     local current_maxwidth = xpath.get_variable("__maxwidth")
     xpath.set_variable("__maxwidth", maxwidth)
+    xpath.set_variable("__maxheight", maxheight)
 
     local tab  = publisher.dispatch(layoutxml,dataxml)
     area = area or publisher.default_area or publisher.default_areaname
@@ -2526,6 +2531,7 @@ function commands.place_object( layoutxml,dataxml )
     -- remember the current maximum width for later
     local current_maxwidth = xpath.get_variable("__maxwidth")
     local mw = current_grid:number_of_columns(area)
+    local mh = current_grid:number_of_rows(area)
     if not mw then
         err("Something is wrong with the current page, expect strange results")
         return
@@ -2537,12 +2543,16 @@ function commands.place_object( layoutxml,dataxml )
         else
             mw = current_grid:width_sp(mw)
         end
+        mh = current_grid:height_sp(mh)
         if not allocate then allocate = "yes" end
     else
         mw = tex.pdfpagewidth
+        mh = tex.pdfpageheight
         if not allocate then allocate = "no" end
     end
+
     xpath.set_variable("__maxwidth", mw)
+    xpath.set_variable("__maxwheight", mh)
 
     local current_row_start  = current_grid:current_row(area)
     if not current_row_start then
@@ -3920,12 +3930,19 @@ function commands.text(layoutxml,dataxml)
                     end
                 end
             end
+
             if #state.objects > 0 then
                 local obj1, obj2 = paragraph.vsplit(state.objects,parameter)
+                if state.prevobj1 == obj1 then
+                    err("Internal error vsplit / objects too high. Some objects are discarded from the output.")
+                    state.objects = {}
+                    return obj1,state,false
+                end
                 if obj2 then
                     state.split = obj2
                     return obj1, state, false
                 else
+                    state.prevobj1 = obj1
                     return obj1,state, #state.objects > 0
                 end
             else
@@ -3949,7 +3966,7 @@ function commands.textblock( layoutxml,dataxml )
     local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","rawstring")
     local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
     local save_width = xpath.get_variable("__maxwidth")
-    width = width or xpath.get_variable("__maxwidth")
+    width = width or save_width
     xpath.set_variable("__maxwidth", width)
     if not width then
         err("Can't evaluate width in textblock")

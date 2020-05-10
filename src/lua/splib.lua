@@ -78,6 +78,12 @@ end
 
 local function parse_html(filename)
     local ret = ld.parseHTML(c(filename))
+    local _ret = ffi.string(ret)
+
+    if string.match( _ret,errorpattern ) then
+        err(string.gsub( _ret,errorpattern ,"" ))
+        return ""
+    end
     return ffi.string(ret)
 end
 

@@ -39,6 +39,7 @@ const (
 	cmdNew        = "new"
 	cmdWatch      = "watch"
 	cmdHelp       = "help"
+	cmdHTML       = "html"
 
 	osWindows = "windows"
 	osLinux   = "linux"
@@ -503,7 +504,7 @@ func writeFinishedfile(path string) {
 	ioutil.WriteFile(path, []byte("finished\n"), 0600)
 }
 
-func runPublisher(cachemethod string) (exitstatus int) {
+func runPublisher(cachemethod string, runmode string, filename string) (exitstatus int) {
 	log.Print("Run speedata publisher")
 	defer removeLogfile()
 
@@ -565,7 +566,10 @@ func runPublisher(cachemethod string) (exitstatus int) {
 	if dummyData := getOption("dummy"); dummyData == stringTrue {
 		dataname = "-dummy"
 	}
-
+	if runmode == cmdHTML {
+		dataname = "-dummy"
+		layoutoptionsSlice = append(layoutoptionsSlice, `html=`+filename)
+	}
 	runs, err := strconv.Atoi(getOption("runs"))
 	if err != nil {
 		log.Fatal(err)
@@ -767,6 +771,7 @@ func main() {
 	op.Command(cmdClearcache, "Clear image cache")
 	op.Command(cmdDoc, "Open documentation")
 	op.Command(cmdListFonts, "List installed fonts (use together with --xml for copy/paste)")
+	op.Command(cmdHTML, "Run in HTML mode")
 	op.Command(cmdNew, "Create simple layout and data file to start. Provide optional directory")
 	op.Command(cmdRun, "Start publishing (default)")
 	op.Command(cmdServer, "Run as http-api server on localhost port 5266 (configure with --address and --port)")
@@ -788,7 +793,9 @@ func main() {
 		// more than one command given, what should I do?
 		command = op.Extra[0]
 	}
-
+	if command == cmdHTML {
+		defaults["layout"] = "_internallayouthtml.xml"
+	}
 	switch runtime.GOOS {
 	case osWindows:
 		cfg, err = configurator.ReadFiles(filepath.Join(os.Getenv("APPDATA"), "speedata", "publisher.cfg"))
@@ -966,7 +973,7 @@ func main() {
 		if exitstatus == 1 {
 			os.Exit(exitstatus)
 		}
-		exitstatus = runPublisher(cachemethod)
+		exitstatus = runPublisher(cachemethod, cmdRun, "")
 		if filterfile != "" {
 			runFinalizerCallback()
 		}
@@ -1031,6 +1038,13 @@ func main() {
 		}
 		cmdline := []string{"--luaonly", filepath.Join(srcdir, "lua", "sdscripts.lua"), inifile, "list-fonts", xml}
 		run(getExecutablePath(), cmdline, []string{"LC_ALL=C"})
+	case cmdHTML:
+		if len(op.Extra) < 2 {
+			fmt.Println("command html must have one: the HTML file")
+			os.Exit(1)
+		}
+		htmlfile := op.Extra[1]
+		runPublisher(cachemethod, cmdHTML, htmlfile)
 	case cmdNew:
 		err = scaffold(op.Extra[1:]...)
 		if err != nil {

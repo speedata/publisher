@@ -46,7 +46,7 @@ func init() {
 	dimen = regexp.MustCompile(`px|mm|cm|in|pt|pc|ch|em|ex|lh|rem|0`)
 	style = regexp.MustCompile(`none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset`)
 	reLeadcloseWhtsp = regexp.MustCompile(`^[\s\p{Zs}]+|[\s\p{Zs}]+$`)
-	reInsideWS = regexp.MustCompile(`[\s\p{Zs}]{2,}`) //to match 2 or more whitespace symbols inside a string
+	reInsideWS = regexp.MustCompile(`\n|[\s\p{Zs}]{2,}`) //to match 2 or more whitespace symbols inside a string or NL
 	isSpace = regexp.MustCompile(`^\s*$`)
 }
 
@@ -56,10 +56,20 @@ func normalizespace(input string) string {
 
 func stringValue(toks tokenstream) string {
 	ret := []string{}
+	negative := false
+	prevNegative := false
 	for _, tok := range toks {
+		prevNegative = negative
+		negative = false
 		switch tok.Type {
-		case scanner.Ident, scanner.Dimension, scanner.String, scanner.Number:
+		case scanner.Ident, scanner.String:
 			ret = append(ret, tok.Value)
+		case scanner.Number, scanner.Dimension:
+			if prevNegative {
+				ret = append(ret, "-"+tok.Value)
+			} else {
+				ret = append(ret, tok.Value)
+			}
 		case scanner.Percentage:
 			ret = append(ret, tok.Value+"%")
 		case scanner.Hash:
@@ -74,6 +84,8 @@ func stringValue(toks tokenstream) string {
 				// ignore
 			case ",", ")":
 				ret = append(ret, tok.Value)
+			case "-":
+				negative = true
 			default:
 				w("unhandled delimiter", tok)
 			}
@@ -409,13 +421,18 @@ func (c *CSS) readHTMLChunk(htmltext string) error {
 	if err != nil {
 		return err
 	}
+	var errcond error
 	c.document.Find(":root > head link").Each(func(i int, sel *goquery.Selection) {
 		if stylesheetfile, attExists := sel.Attr("href"); attExists {
-			parsedStyles := consumeBlock(parseCSSFile(stylesheetfile), false)
+			block, err := parseCSSFile(stylesheetfile)
+			if err != nil {
+				errcond = err
+			}
+			parsedStyles := consumeBlock(block, false)
 			c.Stylesheet = append(c.Stylesheet, parsedStyles)
 		}
 	})
-	return nil
+	return errcond
 }
 
 func (c *CSS) openHTMLFile(filename string) error {
@@ -427,11 +444,16 @@ func (c *CSS) openHTMLFile(filename string) error {
 	if err != nil {
 		return err
 	}
+	var errcond error
 	c.document.Find(":root > head link").Each(func(i int, sel *goquery.Selection) {
 		if stylesheetfile, attExists := sel.Attr("href"); attExists {
-			parsedStyles := consumeBlock(parseCSSFile(stylesheetfile), false)
+			block, err := parseCSSFile(stylesheetfile)
+			if err != nil {
+				errcond = err
+			}
+			parsedStyles := consumeBlock(block, false)
 			c.Stylesheet = append(c.Stylesheet, parsedStyles)
 		}
 	})
-	return nil
+	return errcond
 }

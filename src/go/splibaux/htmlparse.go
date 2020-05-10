@@ -15,7 +15,6 @@ func ParseHTMLText(htmltext string, csstext string) (string, error) {
 
 // ParseHTML reads a file and returns a table to be used for Lua
 func ParseHTML(filename string) (string, error) {
-	fmt.Println("Hello from ParseHTML")
 	p, err := GetFullPath(filename)
 	if err != nil {
 		return "", err

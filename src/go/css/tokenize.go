@@ -3,41 +3,60 @@ package css
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 
 	"internal/github-css/scanner"
 )
 
-func parseCSSFile(filename string) tokenstream {
+func parseCSSFile(filename string) (tokenstream, error) {
+	if filename == "" {
+		return nil, fmt.Errorf("parseCSSFile: no filename given")
+	}
 	curwd, err := os.Getwd()
 	if err != nil {
-		fmt.Println(err)
-		return nil
+		return nil, err
 	}
 	p, err := filepath.Abs(filepath.Dir(filename))
 	if err != nil {
-		fmt.Println(err)
-		return nil
+		return nil, err
 	}
 	rel := filepath.Base(filename)
 	err = os.Chdir(p)
 	if err != nil {
-		fmt.Println(err)
-		return nil
+		return nil, err
 	}
 	defer os.Chdir(curwd)
-	tokens := parseCSSBody(rel)
+	tokens, err := parseCSSBody(rel)
+	if err != nil {
+		return nil, err
+	}
 
 	var finalTokens []*scanner.Token
 
 	for i := 0; i < len(tokens); i++ {
 		tok := tokens[i]
 		if tok.Type == scanner.AtKeyword && tok.Value == "import" {
-			importvalue := tokens[i+1]
-			toks := parseCSSFile(importvalue.Value)
-			finalTokens = append(toks, finalTokens...)
+			i++
+			for {
+				if tokens[i].Type == scanner.S {
+					i++
+				} else {
+					break
+				}
+			}
+			importvalue := tokens[i]
+			toks, err := parseCSSFile(importvalue.Value)
+			if err != nil {
+				return nil, err
+			}
+			// if the last token of the imported file is a space, remove it.
+			lasttoc := toks[len(toks)-1]
+			if lasttoc.Type == scanner.S {
+				finalTokens = append(toks[:len(toks)-1], finalTokens...)
+			} else {
+				finalTokens = append(toks, finalTokens...)
+			}
 			// hopefully there is no keyword before the semicolon
 			for {
 				i++
@@ -52,13 +71,13 @@ func parseCSSFile(filename string) tokenstream {
 			finalTokens = append(finalTokens, tok)
 		}
 	}
-	return finalTokens
+	return finalTokens, nil
 }
 
-func parseCSSBody(filename string) tokenstream {
+func parseCSSBody(filename string) (tokenstream, error) {
 	b, err := ioutil.ReadFile(filename)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	var tokens tokenstream
@@ -75,7 +94,7 @@ func parseCSSBody(filename string) tokenstream {
 			tokens = append(tokens, token)
 		}
 	}
-	return tokens
+	return tokens, nil
 }
 
 func parseCSSString(contents string) tokenstream {
