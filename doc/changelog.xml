@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.11" date="2020-05-12">
+      <en>New HTML mode: better table support.</en>
+      <de>Neuer HTML Modus: bessere Tabellendarstellung.</de>
+    </entry>
     <entry version="3.9.10" date="2020-05-10">
       <en>New HTML mode: <tt>sp html myfile.html</tt>.</en>
       <de>Neuer HTML Modus: <tt>sp html meinedatei.html</tt>.</de>
