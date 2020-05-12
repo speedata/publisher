@@ -839,6 +839,9 @@ do
                 if parameter.indent then
                     box[i]:indent(indent)
                 end
+                if box.width then
+                    box[i].width = box.width
+                end
                 if i == 1 then
                     box[i].margin_top = box.margintop
                 end

@@ -1044,6 +1044,8 @@ func main() {
 			os.Exit(1)
 		}
 		htmlfile := op.Extra[1]
+		jobname := strings.TrimSuffix(htmlfile, filepath.Ext(htmlfile))
+		options["jobname"] = jobname
 		runPublisher(cachemethod, cmdHTML, htmlfile)
 	case cmdNew:
 		err = scaffold(op.Extra[1:]...)

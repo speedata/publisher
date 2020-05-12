@@ -257,7 +257,6 @@ end
 
 function collect_horizontal_nodes( elt,parameter )
     parameter = parameter or {}
-
     local ret = {}
     for i=1,#elt do
         local styles = setmetatable({}, levelmt)
@@ -373,30 +372,84 @@ function trim_space_beginning( nodelist )
     return nodelist
 end
 
-function build_html_table_tbody(elt)
+function build_html_table_tbody(tbody)
     local trtab = {}
-    for i=1,#elt do
-        local tdtab = {}
-        local tr = elt[i]
-        local typtr = type(tr)
-        if typtr=="table" then
-            for j=1,#tr do
-                local td = tr[j]
-                local r = collect_horizontal_nodes(td)
-                local a = paragraph:new()
-                a:append(r)
-                local newtd = { elementname = "Paragraph" , contents = a }
-                tdtab[#tdtab + 1] = { elementname = "Td", contents = { newtd } }
-            end
-            trtab[#trtab + 1] = { elementname = "Tr", contents =  tdtab  }
-        else
-            -- ignore
-        end
-    end
-    local tabular = publisher.tabular:new()
-    tabular.width = xpath.get_variable("__maxwidth")
+    for row=1,#tbody do
+            local tr = tbody[row]
+            local tdtab = {}
+            if type(tr) == "table" and tr.elementname then
+                for cell=1,#tr do
+                    local td = tr[cell]
+                    if type(td) == "table" and td.elementname then
+                        local styles = setmetatable({}, levelmt)
+                        stylesstack[#stylesstack + 1] = styles
+                        local attributes = td.attributes or {}
+                        copy_attributes(styles,attributes)
+                        local r = build_nodelist(td)
+                        table.remove(stylesstack)
 
-    tabular.tab = trtab
+                        local newtd = { elementname = "Paragraph" , contents = r[1] }
+                        local newcontents = { newtd }
+                        local att = td.attributes
+                        if att then
+                            local bbw = att["border-bottom-width"]
+                            local btw = att["border-top-width"]
+                            local brw = att["border-right-width"]
+                            local blw = att["border-left-width"]
+                            if bbw then newcontents["border-bottom"] = bbw end
+                            if btw then newcontents["border-top"] = btw end
+                            if blw then newcontents["border-left"] = blw end
+                            if brw then newcontents["border-right"] = brw end
+                        end
+                        tdtab[#tdtab + 1] = { elementname = "Td", contents = newcontents }
+                    end
+                end
+                trtab[#trtab + 1] = { elementname = "Tr", contents =  tdtab  }
+            end
+        end
+    return trtab
+end
+
+function build_html_table( elt )
+    local tablecontents = elt
+    local head, foot, body = {},{},{}
+    local styles = setmetatable({}, levelmt)
+    for i=1,#tablecontents do
+        stylesstack[#stylesstack + 1] = styles
+
+        local thiselt = tablecontents[i]
+        local typ = type(thiselt)
+        if typ == "table" then
+            local eltname = thiselt.elementname
+            if eltname == "tbody" then
+                body = build_html_table_tbody(thiselt)
+            elseif eltname == "tfoot" then
+                foot = build_html_table_tbody(thiselt)
+            elseif eltname == "thead" then
+                head = build_html_table_tbody(thiselt)
+            else
+                -- err("Unknown element in HTML table %q",tostring(thiselt.elementname))
+            end
+        end
+        table.remove(stylesstack)
+    end
+
+    local tabular = publisher.tabular:new()
+    tabular.width = styles.calculated_width
+    if elt.attributes.width then
+        tabular.autostretch = "max"
+    end
+    local tab = {}
+    for i=1,#head do
+        tab[#tab + 1] = head[i]
+    end
+    for i=1,#body do
+        tab[#tab + 1] = body[i]
+    end
+    for i=1,#foot do
+        tab[#tab + 1] = foot[i]
+    end
+    tabular.tab = tab
     local fontname = "text"
     local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
     local save_fontfamily = publisher.current_fontfamily
@@ -413,25 +466,13 @@ function build_html_table_tbody(elt)
     tabular.padding_top    = 0
     tabular.padding_right  = 0
     tabular.padding_bottom = 0
-    tabular.colsep         = tex.sp("2pt")
+    tabular.colsep         = 0
     tabular.rowsep         = 0
+    tabular.bordercollapse_horizontal = true
+    tabular.bordercollapse_vertical = true
 
     local n = tabular:make_table()
     return n[1]
-end
-
-function build_html_table( elt )
-    local tablecontents = elt[1]
-    for i=1,#tablecontents do
-        local thiselt = tablecontents[i]
-        local typ = type(thiselt)
-        if typ == "table" and thiselt.elementname == "tbody" then
-            local ret = build_html_table_tbody(thiselt)
-            return ret
-        else
-            -- err("Unknown element in HTML table %q",tostring(thiselt.elementname))
-        end
-    end
 end
 
 local function getsize(size,fontsize)
@@ -545,6 +586,7 @@ function build_nodelist( elt )
             else
                 local n = build_nodelist(thiselt)
                 local box = Box:new()
+                box.width = styles.calculated_width
                 for i=1,#n do
                     box[#box + 1] = n[i]
                 end
@@ -581,25 +623,18 @@ function resolve_list_style_type(styles, olcounter)
     return str
 end
 
-function clearattributes( elt )
-    elt.attributes = nil
-    for i=1,#elt do
-        if type(elt[i]) == "table" then
-            clearattributes(elt[i])
-        end
-    end
-end
-
 function handle_pages( pages )
     -- defaults:
     xpath.set_variable("__maxwidth",tex.pagewidth)
     xpath.set_variable("__maxheight",tex.pageheight)
 
+    local pagewd = tex.pagewidth
     local masterpage = pages["*"]
     if masterpage then
         if masterpage.width then
             local wd = tex.sp(masterpage.width)
             xpath.set_variable("_pagewidth",masterpage.width)
+            pagewd = wd
             if masterpage.height then
                 xpath.set_variable("_pageheight",masterpage.height)
                 local ht = tex.sp(masterpage.height)
@@ -614,15 +649,38 @@ function handle_pages( pages )
         if mr then margin_right = tex.sp(mr) end
         if mb then margin_bottom = tex.sp(mb) end
         if ml then margin_left = tex.sp(ml) end
+        pagewd = pagewd - margin_left - margin_right
+        xpath.set_variable("__maxwidth",pagewd)
         publisher.masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(margin_left,margin_top,margin_right,margin_bottom) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
 
     end
 end
 
+-- Only used for debugging. Remove all attributes.
+function clearattributes( elt )
+    elt.attributes = nil
+    for i=1,#elt do
+        if type(elt[i]) == "table" then
+            clearattributes(elt[i])
+        end
+    end
+end
+
+-- Entry point for HTML parsing
 function parse_html_new( elt )
     handle_pages(elt.pages)
     fontfamilies = elt.fontfamilies
     elt.fontfamilies = nil
+    local att = elt[1].attributes
+    if att and type(att) == "table" then
+        local trace = att["-sp-trace"] or ""
+        if string.match(trace,"objects") then publisher.options.showobjects = true end
+        if string.match(trace,"grid") then publisher.options.showgrid = true end
+        if string.match(trace,"gridallocation") then publisher.options.showgridallocation = true end
+        if string.match(trace,"hyphenation") then publisher.options.showhyphenation = true end
+        if string.match(trace,"textformat") then publisher.options.showtextformat = true end
+    end
+
     elt[1].attributes.calculated_width = xpath.get_variable("__maxwidth")
     parse_html_inner(elt[1])
     local block = build_nodelist(elt)

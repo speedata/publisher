@@ -215,6 +215,9 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         width_sp = width_sp - self.padding_left
     end
 
+    if self.width then
+        width_sp = self.width
+    end
     local current_textformat_name,current_textformat
     current_textformat_name = self.textformat or default_textformat_name
 
