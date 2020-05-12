@@ -283,7 +283,8 @@ func dumpElement(thisNode *html.Node, level int, direction mode) {
 					txt = reLeadcloseWhtsp.ReplaceAllString(txt, " ")
 					txt = reInsideWS.ReplaceAllString(txt, " ")
 				}
-				fmt.Fprintf(out, "%s  %q,\n", indent, txt)
+				fmt.Fprintf(out, `%s "%s",`, indent, txt)
+				fmt.Fprintf(out, "\n")
 			}
 
 		case html.ElementNode:
