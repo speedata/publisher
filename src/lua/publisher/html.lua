@@ -9,7 +9,7 @@
 -- This is for the new HTML parser
 
 module(...,package.seeall)
-require("Box")
+require("box")
 local fontfamilies = {}
 
 local stylesstackmetatable = {
