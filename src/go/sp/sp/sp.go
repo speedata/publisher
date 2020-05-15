@@ -124,9 +124,23 @@ func init() {
 		"inkscape":   "inkscape",
 	}
 
+	switch runtime.GOOS {
+	case osWindows:
+		exeSuffix = ".exe"
+	}
 	// Let's try to find out the installation dir
 	if execlocation, err := os.Executable(); err != nil {
-		log.Fatal(err)
+		if strings.Contains(os.Args[0], "/") {
+			if bindir, err = filepath.Abs(filepath.Dir(os.Args[0])); err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			// if that fails (see for example #254), we try exec.LookPath
+			if execlocation, err = exec.LookPath("sp" + exeSuffix); err != nil {
+				log.Fatal(err)
+			}
+			bindir = filepath.Dir(execlocation)
+		}
 	} else {
 		bindir = filepath.Dir(execlocation)
 	}
@@ -140,15 +154,12 @@ func init() {
 	switch runtime.GOOS {
 	case osDarwin:
 		defaults["opencommand"] = "open"
-		exeSuffix = ""
 		homedir = os.Getenv("HOME")
 	case osLinux:
 		defaults["opencommand"] = "xdg-open"
 		homedir = os.Getenv("HOME")
-		exeSuffix = ""
 	case osWindows:
 		defaults["opencommand"] = "cmd /C start"
-		exeSuffix = ".exe"
 
 		me, err := user.Current()
 		if err != nil {
