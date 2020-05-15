@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.13" date="2020-05-15">
+      <en>Bugfixes related finding the executable (#254).</en>
+      <de>Fehlerkorrektur zum Finden der ausführbaren Datei (#254).</de>
+    </entry>
     <entry version="3.9.12" date="2020-05-12">
       <en>Two bugfixes related to HTML mode (#252 and #253).</en>
       <de>Zwei Fehlerkorrekturen im HTML-Modus (#252 und #253).</de>
