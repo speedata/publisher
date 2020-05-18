@@ -10,6 +10,8 @@
 
 module(...,package.seeall)
 require("box")
+
+
 local fontfamilies = {}
 
 local stylesstackmetatable = {
@@ -80,6 +82,11 @@ local function familyname( fontfamily )
     else
         return publisher.fontgroup["sans-serif"]
     end
+end
+
+local function color_pdf_string( colorname )
+    local colorstring = publisher.colors[colorname].pdfstring
+    return colorstring
 end
 
 local function get_fontfamily( family, size_sp , name )
@@ -186,8 +193,109 @@ function calculate_height( attribute_height, original_size )
         err("not implemented yet, calculate_height")
         return original_size
     end
-
 end
+
+function draw_border(nodelist, attributes, lineheight)
+    if not attributes then
+        return nodelist
+    end
+
+    local factor = publisher.factor
+
+    local padding_top = attributes["padding-top"] or 0
+    local padding_right = attributes["padding-right"] or 0
+    local padding_bottom = attributes["padding-bottom"] or 0
+    local padding_left = attributes["padding-left"] or 0
+
+    local margin_top = attributes["margin-top"] or 0
+    local margin_right = attributes["margin-right"] or 0
+    local margin_bottom = attributes["margin-bottom"] or 0
+    local margin_left = attributes["margin-left"] or 0
+
+    padding_top = tex.sp(padding_top)
+    padding_right = tex.sp(padding_right)
+    padding_bottom = tex.sp(padding_bottom)
+    padding_left = tex.sp(padding_left)
+
+    margin_top = tex.sp(margin_top)
+    margin_right = tex.sp(margin_right)
+    margin_bottom = tex.sp(margin_bottom)
+    margin_left = tex.sp(margin_left)
+
+    local border_top_style = attributes["border-top-style"] or "none"
+    local border_right_style = attributes["border-right-style"] or "none"
+    local border_bottom_style = attributes["border-bottom-style"] or "none"
+    local border_left_style = attributes["border-left-style"] or "none"
+
+    local border_top_width = attributes["border-top-width"] or 0
+    local border_right_width = attributes["border-right-width"] or 0
+    local border_bottom_width = attributes["border-bottom-width"] or 0
+    local border_left_width = attributes["border-left-width"] or 0
+
+    local border_top_color = attributes["border-top-color"]
+    local border_right_color = attributes["border-right-color"]
+    local border_bottom_color = attributes["border-bottom-color"]
+    local border_left_color = attributes["border-left-color"]
+
+    local rule_width_top, rule_width_right, rule_width_bottom, rule_width_left = 0, 0, 0, 0
+    if border_top_style ~= "none" then
+        rule_width_top = tex.sp(border_top_width)
+    end
+    if border_right_style ~= "none" then
+        rule_width_right = tex.sp(border_right_width)
+    end
+    if border_left_style ~= "none" then
+        rule_width_left = tex.sp(border_left_width)
+    end
+    if border_bottom_style ~= "none" then
+        rule_width_bottom = tex.sp(border_bottom_width)
+    end
+
+    local wd, wd_bp = nodelist.width, nodelist.width / factor
+    local ht, ht_bp = nodelist.height, ( nodelist.height or 0 ) / factor
+    local dp, dp_bp = nodelist.depth, ( nodelist.depth or 0 ) / factor
+
+    local kernleft = node.new(publisher.kern_node)
+    local kernright = node.new(publisher.kern_node)
+    kernleft.kern = rule_width_left + padding_left + margin_left
+    kernright.kern = rule_width_right + padding_right + margin_right + padding_left
+
+    nodelist = node.insert_before(nodelist,nodelist,kernleft)
+    local tail = node.tail(nodelist)
+    node.insert_after(nodelist,tail,kernright)
+
+    node.setproperty(nodelist,{
+        borderstart = true,
+        border_top_style = border_top_style,
+        border_right_style = border_right_style,
+        border_bottom_style = border_bottom_style,
+        border_left_style = border_left_style,
+        padding_top = padding_top,
+        padding_right = padding_right,
+        padding_bottom = padding_bottom,
+        padding_left = padding_left,
+        rule_width_top = rule_width_top,
+        rule_width_right = rule_width_right,
+        rule_width_bottom = rule_width_bottom,
+        rule_width_left = rule_width_left,
+        border_top_color = border_top_color,
+        border_right_color = border_right_color,
+        border_bottom_color = border_bottom_color,
+        border_left_color = border_left_color,
+        margin_top = margin_top,
+        margin_right = margin_right,
+        margin_bottom = margin_bottom,
+        margin_left = margin_left,
+        height = lineheight * 0.75,
+        depth = lineheight * 0.25,
+    })
+
+    node.setproperty(kernright,{
+        borderend = true,
+    })
+    return nodelist
+end
+
 
 function set_calculated_width(styles)
     if type(styles.calculated_width) == "number" then
@@ -349,7 +457,7 @@ function collect_horizontal_nodes( elt,parameter )
             end
             local n = collect_horizontal_nodes(thiselt,options)
             for i=1,#n do
-                ret[#ret + 1] = n[i]
+                ret[#ret + 1] = draw_border(n[i],attributes,styles.fontsize_sp)
             end
         end
         table.remove(stylesstack)
@@ -652,7 +760,11 @@ function handle_pages( pages )
         pagewd = pagewd - margin_left - margin_right
         xpath.set_variable("__maxwidth",pagewd)
         publisher.masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(margin_left,margin_top,margin_right,margin_bottom) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
-
+    else
+        local margin_right = publisher.tenmm_sp
+        local margin_left = publisher.tenmm_sp
+        pagewd = pagewd - margin_left - margin_right
+        xpath.set_variable("__maxwidth",pagewd)
     end
 end
 
@@ -680,9 +792,9 @@ function parse_html_new( elt )
         if string.match(trace,"hyphenation") then publisher.options.showhyphenation = true end
         if string.match(trace,"textformat") then publisher.options.showtextformat = true end
     end
-
     elt[1].attributes.calculated_width = xpath.get_variable("__maxwidth")
     parse_html_inner(elt[1])
+    -- printtable("elt[1]",elt[1])
     local block = build_nodelist(elt)
     return block
 end

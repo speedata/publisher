@@ -39,6 +39,9 @@ do_luafile("layout_functions.lua")
 
 processmode = "XML"
 
+-- so that node.copy_list copies the node properties
+node.set_properties_mode(true)
+
 --- One big point (DTP point, PostScript point) is approx. 65781 scaled points.
 factor = 65781
 -- factor = 65781.7
@@ -157,16 +160,17 @@ user_defined_marker    = 4
 user_defined_mark_append = 5
 
 
-glue_spec_node = node.id("glue_spec")
-glue_node      = node.id("glue")
-glyph_node     = node.id("glyph")
-disc_node      = node.id("disc")
-rule_node      = node.id("rule")
-penalty_node   = node.id("penalty")
-whatsit_node   = node.id("whatsit")
-hlist_node     = node.id("hlist")
-vlist_node     = node.id("vlist")
 action_node    = node.id("action")
+disc_node      = node.id("disc")
+glue_node      = node.id("glue")
+glue_spec_node = node.id("glue_spec")
+glyph_node     = node.id("glyph")
+hlist_node     = node.id("hlist")
+kern_node      = node.id("kern")
+penalty_node   = node.id("penalty")
+rule_node      = node.id("rule")
+vlist_node     = node.id("vlist")
+whatsit_node   = node.id("whatsit")
 
 
 for k,v in pairs(node.whatsits()) do
@@ -2255,6 +2259,83 @@ function box( width_sp,height_sp,colorname )
     return v
 end
 
+-- Draw a box with HTML properties given at head
+function htmlbox( head, tail, width_sp, height_sp, depth_sp)
+    local properties = node.getproperty(head)
+    if not properties then
+        err("Internal error: htmlbox() - no properties given")
+        return
+    end
+    local rules = {}
+    rules[#rules + 1] = "q"
+    --- 4 trapezoids (1 for each border)
+    ---
+    ---      4    4------------------------------3   3  y0
+    ---      |\    \                            /   /|
+    ---      | \    \                          /   / |
+    ---      |  \    \                        /   /  |
+    ---      |   \    \                      /   /   |
+    ---      |    \    \                    /   /    |
+    ---      |     3    1------------------2   4     |  y1
+    ---      |     |                           |     |
+    ---      |     |                           |     |
+    ---      |     |                           |     |
+    ---      |     |                           |     |
+    ---      |     |                           |     |
+    ---      |    2    4--------------------3   1    |  y2
+    ---      |   /    /                      \   \   |
+    ---      |  /    /                        \   \  |
+    ---      | /    /                          \   \ |
+    ---      |/    /                            \   \|
+    ---      1    /                              \   2  y3
+    ---          1--------------------------------2
+    ---      x0      x1                       x2     x3
+    local colorstring
+
+    local function get_rule(x1, y1, x2, y2, x3, y3, x4, y4)
+        local _x1, _y1 = sp_to_bp(x1), sp_to_bp(y1)
+        local _x2, _y2 = sp_to_bp(x2), sp_to_bp(y2)
+        local _x3, _y3 = sp_to_bp(x3), sp_to_bp(y3)
+        local _x4, _y4 = sp_to_bp(x4), sp_to_bp(y4)
+        local ret = string.format("%s 0 w %g %g m %g %g l %g %g l %g %g l h f", colorstring, _x1, _y1, _x2, _y2, _x3, _y3, _x4, _y4)
+        return ret
+    end
+
+    local shift_down = properties.rule_width_bottom + depth_sp + properties.padding_bottom
+    local y1 = height_sp + properties.padding_bottom + properties.padding_top + properties.margin_bottom
+    local y0 = y1 + properties.rule_width_top
+    local y3 = properties.margin_bottom - shift_down
+    local y2 = y3 + properties.rule_width_bottom
+    local x0 = properties.margin_left
+    local x1 = x0 + properties.rule_width_left
+    local x2 = width_sp + properties.padding_left + properties.padding_right
+    local x3 = x2 + properties.rule_width_right
+
+    if properties.rule_width_top > 0 then
+        colorstring = colors[properties.border_top_color].pdfstring
+        rules[#rules + 1] = get_rule(x1, y1, x2, y1, x3, y0, x0, y0)
+    end
+    if properties.border_right_style ~= "none" then
+        colorstring = colors[properties.border_right_color].pdfstring
+        rules[#rules + 1] = get_rule(x2, y2, x3, y3, x3, y0, x2, y1)
+    end
+    if properties.border_bottom_style ~= "none" then
+        colorstring = colors[properties.border_bottom_color].pdfstring
+        rules[#rules + 1] = get_rule(x0, y3, x3, y3, x2, y2, x1, y2)
+    end
+    if properties.border_left_style ~= "none" then
+        colorstring = colors[properties.border_left_color].pdfstring
+        rules[#rules + 1] = get_rule(x0, y3, x1, y2, x1, y1, x0, y0)
+    end
+    -- debug:
+    -- rules[#rules + 1] = "0 g 1 w -1 -1 m -1 1 l 1 1 l 1 -1 l h f"
+    rules[#rules + 1] = "Q"
+
+    local borderbox = node.new("whatsit","pdf_literal")
+    borderbox.data = table.concat(rules," ")
+    return borderbox
+end
+
 --- After everything is ready for page ship-out, we add debug output and crop marks if necessary
 function dothingsbeforeoutput( thispage )
 
@@ -2908,6 +2989,23 @@ function find_user_defined_whatsits( head, parent )
             if insert_endlink then
                 local enl = node.new("whatsit","pdf_end_link")
                 head = node.insert_after(head,head,enl)
+            end
+            -- HTML inline border
+            local properties = node.getproperty(head)
+            if properties then
+                if properties.borderstart then
+                    local cur = head
+                    while cur do
+                        local cur_properties = node.getproperty(cur)
+                        if cur_properties and cur_properties.borderend then
+                            break
+                        end
+                        cur = cur.next
+                    end
+                    local wd,hd,dp = node.dimensions(head,cur)
+                    local boxnode = htmlbox(head,cur,wd,hd,dp)
+                    node.insert_before(parent.head,head,boxnode)
+                end
             end
             -- Now let's look at user defined whatsits, that are ment
             -- for markers, bookmarks etc.

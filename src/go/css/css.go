@@ -189,6 +189,9 @@ func consumeBlock(toks tokenstream, inblock bool) sBlock {
 	i := 0
 	// we might start with whitespace, skip it
 	for {
+		if i == len(toks) {
+			break
+		}
 		if t := toks[i]; t.Type == scanner.S {
 			i++
 		} else {
@@ -198,6 +201,9 @@ func consumeBlock(toks tokenstream, inblock bool) sBlock {
 	start := i
 	colon := 0
 	for {
+		if i == len(toks) {
+			break
+		}
 		// There are only two cases: a key-value rule or something with
 		// curly braces
 		if t := toks[i]; t.Type == scanner.Delim {
@@ -216,6 +222,9 @@ func consumeBlock(toks tokenstream, inblock bool) sBlock {
 			case "{":
 				var nb sBlock
 				l := findClosingBrace(toks[i+1:])
+				if i+1 == l {
+					break
+				}
 				nb = consumeBlock(toks[i+1:i+l], true)
 				if toks[start].Type == scanner.AtKeyword {
 					nb.Name = toks[start].Value
@@ -228,7 +237,7 @@ func consumeBlock(toks tokenstream, inblock bool) sBlock {
 				i = i + l
 				start = i + 1
 				// skip over whitespace
-				if toks[start].Type == scanner.S && start < len(toks) {
+				if start < len(toks) && toks[start].Type == scanner.S {
 					start++
 					i++
 				}
