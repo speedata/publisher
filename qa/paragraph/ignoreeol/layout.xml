@@ -1,0 +1,21 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+
+   <Options ignoreeol="yes" crop="2mm" />
+
+   <Record element="data">
+      <PlaceObject>
+         <Table>
+            <Tr>
+               <Td>
+                  <Paragraph>
+                     <Value>foo</Value>
+                     <Br />
+                     <Value>bar</Value>
+                  </Paragraph>
+               </Td>
+            </Tr>
+         </Table>
+      </PlaceObject>
+   </Record>
+
+</Layout>

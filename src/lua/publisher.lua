@@ -884,7 +884,7 @@ function initialize_luatex_and_generate_pdf()
         elseif k == "html" then
             htmlfilename = v
             htmlblocks = {}
-            options.ignoreeol = false
+            options.htmlignoreeol = false
             local tmp = splib.parse_html(publisher.htmlfilename)
             if type(tmp) == "string" then
                 local a,b = load(tmp)
@@ -3195,7 +3195,7 @@ function mknodes(str,fontfamily,parameter)
         instance = 1
     end
     local allow_newline = true
-    if options.ignoreeol then
+    if options.htmlignoreeol then
         allow_newline = false
     end
 
