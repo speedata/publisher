@@ -3933,11 +3933,11 @@ function commands.text(layoutxml,dataxml)
 
             if #state.objects > 0 then
                 local obj1, obj2 = paragraph.vsplit(state.objects,parameter)
-                if state.prevobj1 == obj1 then
-                    err("Internal error vsplit / objects too high. Some objects are discarded from the output.")
-                    state.objects = {}
-                    return obj1,state,false
-                end
+                -- if state.prevobj1 == obj1 then
+                --     err("Internal error vsplit / objects too high. Some objects are discarded from the output.")
+                --     state.objects = {}
+                --     return obj1,state,false
+                -- end
                 if obj2 then
                     state.split = obj2
                     return obj1, state, false
