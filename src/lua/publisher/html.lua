@@ -195,10 +195,12 @@ function calculate_height( attribute_height, original_size )
     end
 end
 
-function draw_border(nodelist, attributes, lineheight)
+function draw_border(nodelists, attributes, lineheight)
     if not attributes then
-        return nodelist
+        return nodelists
     end
+    if not attributes.has_border then return nodelists end
+    local ret = {}
 
     local factor = publisher.factor
 
@@ -250,21 +252,22 @@ function draw_border(nodelist, attributes, lineheight)
     if border_bottom_style ~= "none" then
         rule_width_bottom = tex.sp(border_bottom_width)
     end
-
-    local wd, wd_bp = nodelist.width, nodelist.width / factor
-    local ht, ht_bp = nodelist.height, ( nodelist.height or 0 ) / factor
-    local dp, dp_bp = nodelist.depth, ( nodelist.depth or 0 ) / factor
+    local firstlist = nodelists[1]
+    local lastlist = nodelists[#nodelists]
+    local wd, wd_bp = firstlist.width, firstlist.width / factor
+    local ht, ht_bp = firstlist.height, ( firstlist.height or 0 ) / factor
+    local dp, dp_bp = firstlist.depth, ( firstlist.depth or 0 ) / factor
 
     local kernleft = node.new(publisher.kern_node)
     local kernright = node.new(publisher.kern_node)
     kernleft.kern = rule_width_left + padding_left + margin_left
     kernright.kern = rule_width_right + padding_right + margin_right + padding_left
 
-    nodelist = node.insert_before(nodelist,nodelist,kernleft)
-    local tail = node.tail(nodelist)
-    node.insert_after(nodelist,tail,kernright)
+    firstlist = node.insert_before(firstlist,firstlist,kernleft)
+    local tail = node.tail(lastlist)
+    node.insert_after(lastlist,tail,kernright)
 
-    node.setproperty(nodelist,{
+    node.setproperty(firstlist,{
         borderstart = true,
         border_top_style = border_top_style,
         border_right_style = border_right_style,
@@ -293,7 +296,10 @@ function draw_border(nodelist, attributes, lineheight)
     node.setproperty(kernright,{
         borderend = true,
     })
-    return nodelist
+
+    nodelists[1] = firstlist
+    nodelists[#nodelists] = lastlist
+    return nodelists
 end
 
 
@@ -410,8 +416,9 @@ function collect_horizontal_nodes( elt,parameter )
             options.script = 1
         end
 
+        local thisret = {}
         if typ == "string" then
-            ret[#ret + 1] = publisher.mknodes(thiselt,options.fontfamily,options)
+            thisret[#thisret + 1] = publisher.mknodes(thiselt,options.fontfamily,options)
         elseif typ == "table" then
             local attributes = thiselt.attributes or {}
             local eltname = thiselt.elementname
@@ -453,12 +460,22 @@ function collect_horizontal_nodes( elt,parameter )
                 node.set_attribute(box,publisher.att_dontadjustlineheight,1)
                 node.set_attribute(box,publisher.att_ignore_orphan_widowsetting,1)
                 box.head = node.insert_before(box.head,box.head,img.node(it))
-                ret[#ret + 1] = box
+                thisret[#thisret + 1] = box
             end
             local n = collect_horizontal_nodes(thiselt,options)
             for i=1,#n do
-                ret[#ret + 1] = draw_border(n[i],attributes,styles.fontsize_sp)
+                thisret[#thisret + 1] = n[i]
             end
+        end
+        if attributes.has_border then
+            local tmp = draw_border(thisret,attributes,styles.fontsize_sp)
+            thisret = {}
+            for i=1,#tmp do
+                thisret[#thisret + 1] = tmp[i]
+            end
+        end
+        for i=1,#thisret do
+            ret[#ret + 1] = thisret[i]
         end
         table.remove(stylesstack)
     end
@@ -794,7 +811,6 @@ function parse_html_new( elt )
     end
     elt[1].attributes.calculated_width = xpath.get_variable("__maxwidth")
     parse_html_inner(elt[1])
-    -- printtable("elt[1]",elt[1])
     local block = build_nodelist(elt)
     return block
 end

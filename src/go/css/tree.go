@@ -20,11 +20,13 @@ var (
 	level              int
 	out                io.Writer
 	dimen              *regexp.Regexp
+	zeroDimen          *regexp.Regexp
 	style              *regexp.Regexp
 	reInsideWS         *regexp.Regexp
 	reLeadcloseWhtsp   *regexp.Regexp
 	toprightbottomleft [4]string
 	isSpace            *regexp.Regexp
+	quoteString        *strings.Replacer
 )
 
 type mode int
@@ -44,10 +46,13 @@ const (
 func init() {
 	toprightbottomleft = [...]string{"top", "right", "bottom", "left"}
 	dimen = regexp.MustCompile(`px|mm|cm|in|pt|pc|ch|em|ex|lh|rem|0`)
+	zeroDimen = regexp.MustCompile(`^0+(px|mm|cm|in|pt|pc|ch|em|ex|lh|rem)?`)
 	style = regexp.MustCompile(`none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset`)
 	reLeadcloseWhtsp = regexp.MustCompile(`^[\s\p{Zs}]+|[\s\p{Zs}]+$`)
 	reInsideWS = regexp.MustCompile(`\n|[\s\p{Zs}]{2,}`) //to match 2 or more whitespace symbols inside a string or NL
 	isSpace = regexp.MustCompile(`^\s*$`)
+	// go %s must escape quotes and newlines for Lua
+	quoteString = strings.NewReplacer(`"`, `\"`, "\n", `\n`)
 }
 
 func normalizespace(input string) string {
@@ -254,6 +259,24 @@ func resolveAttributes(attrs []html.Attribute) map[string]string {
 
 var preserveWhitespace = []bool{false}
 
+func hasBorder(attrs map[string]string) bool {
+	var borderwidthKey, borderstyleKey string
+	for _, loc := range []string{"top", "right", "bottom", "left"} {
+		borderwidthKey = "border-" + loc + "-width"
+		borderstyleKey = "border-" + loc + "-style"
+		if wd, ok := attrs[borderwidthKey]; ok {
+			if st, ok := attrs[borderstyleKey]; ok {
+				if st != "none" {
+					if !zeroDimen.MatchString(wd) {
+						return true
+					}
+				}
+			}
+		}
+	}
+	return false
+}
+
 func dumpElement(thisNode *html.Node, level int, direction mode) {
 	indent := strings.Repeat("  ", level)
 	newDir := direction
@@ -283,7 +306,7 @@ func dumpElement(thisNode *html.Node, level int, direction mode) {
 					txt = reLeadcloseWhtsp.ReplaceAllString(txt, " ")
 					txt = reInsideWS.ReplaceAllString(txt, " ")
 				}
-				fmt.Fprintf(out, `%s "%s",`, indent, txt)
+				fmt.Fprintf(out, `%s "%s",`, indent, quoteString.Replace(txt))
 				fmt.Fprintf(out, "\n")
 			}
 
@@ -300,7 +323,9 @@ func dumpElement(thisNode *html.Node, level int, direction mode) {
 			attributes := thisNode.Attr
 			if len(attributes) > 0 {
 				fmt.Fprintf(out, "%s   attributes = {", indent)
-				for key, value := range resolveAttributes(attributes) {
+				resolvedAttributes := resolveAttributes(attributes)
+				for key, value := range resolvedAttributes {
+
 					if key == "white-space" {
 						if value == "pre" {
 							ws = true
@@ -310,6 +335,7 @@ func dumpElement(thisNode *html.Node, level int, direction mode) {
 					}
 					fmt.Fprintf(out, "[%q] = %q ,", key, value)
 				}
+				fmt.Fprintf(out, "has_border = %t ,", hasBorder(resolvedAttributes))
 				fmt.Fprintln(out, "},")
 			}
 			preserveWhitespace = append(preserveWhitespace, ws)
