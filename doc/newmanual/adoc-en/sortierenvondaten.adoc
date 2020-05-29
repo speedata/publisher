@@ -1,0 +1,48 @@
+[[ch-sortierenvondaten]]
+= Sortieren von Daten
+
+Der speedata Publisher bietet eine einfache Möglichkeit, Daten zu sortieren.
+Sollte diese Methode nicht ausreichen, muss die Sortierung über ein externes Programm wie XSLT durchgeführt werden.
+
+Unter der Annahme, dass die Datendatei (`data.xml`) wie folgt aussieht:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<data>
+  <item value="one"/>
+  <item value="two"/>
+  <item value="three"/>
+</data>
+-------------------------------------------------------------------------------
+
+Kann nun mit `<SortSequence>` sortiert werden. Die ursprünglichen Daten werden dabei nicht verändert:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="data">
+    <SetVariable variable="unsorted" select="*"/>
+    <SetVariable variable="sorted">
+      <SortSequence select="$unsorted" criterion="value"/>
+    </SetVariable>
+    <PlaceObject>
+      <Textblock>
+        <ForAll select="$sorted">
+          <Paragraph><Value select="@value"/></Paragraph>
+        </ForAll>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+
+Neben dem Befehl `<SortSequence>` gibt es noch die Möglichkeit per `<MakeIndex>` zu sortieren und zu gruppieren.
+Dieser Befehl ist im Kapitel <<ch-indexerstellen>> beschrieben.
+
+
+// Ende

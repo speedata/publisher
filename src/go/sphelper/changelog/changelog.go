@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"io/ioutil"
 	"path/filepath"
+
 	"sphelper/config"
 )
 
@@ -41,6 +42,7 @@ func parseChangelog(filename string) (*changelog, error) {
 	return cl, nil
 }
 
+// ReadChangelog reads the file in doc/changelog.xml and returns the parsed file as an object.
 func ReadChangelog(cfg *config.Config) (*changelog, error) {
 	cl, err := parseChangelog(filepath.Join(cfg.Basedir(), "doc", "changelog.xml"))
 	return cl, err

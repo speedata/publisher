@@ -1,0 +1,84 @@
+= speedata Publisher: The manual
+Patrick Gundlach <gundlach@speedata.de>
+v1.0, 2018-03-19
+:toc: left
+:source-highlighter: highlight.js
+:sectnums:
+:imagesdir: img
+:doctype: book
+:lang: en
+:figure-caption: Figure
+:last-update-label: Last change
+:toc-title: Inhalt
+:appendix-caption: Appendix
+:docinfo: private
+:icons: font
+:subs: none
+:leveloffset: +1
+
+ifdef::backend-docbook5[]
+[preface]
+= speedata Publisher: The manual
+
+== Introduction and basics
+
+-  <<ch-introduction,Introduction>>
+-  <<ch-helloworld,Hello world!>>
+-  <<ch-basics,Basics>>
+
+== In depth descriptions
+
+// -  <<ch-programmierung,Programmierung>>
+// -  <<ch-bildereinbinden,Bilder einbinden>>
+// -  <<ch-tabellen2,Tabellen>>
+-  <<ch-advancedtopics,Advanced topics>>
+-  <<ch-cookbook,Cookbook>>
+
+== Reference
+
+- <<ch-installation,Installation instructions>>
+// - <<ch-dateinamen,Dateinamen im Publisher>>
+- <<app-defaults,speedata Publisher defaults>>
+- <<ch-commandline,Running the speedata publisher on the command line>>
+- <<ch-configuration,How to configure the speedata publisher>>
+- <<app-lengthsunits,Lenghts and units>>
+- <<ch-xpathfunctions,XPath- and layoutfunctions>>
+// - <<ch-internevariablen,Interne Variablen>>
+- <<ch-changelog,Changelog>>
+// - <<app-glossar,Glossar>>
+- <<ch-commandreference,Command reference>>
+
+
+endif::[]
+
+include::introduction.adoc[]
+include::helloworld.adoc[]
+include::basics.adoc[]
+// include::programmierung.adoc[]
+// include::images.adoc[]
+// include::tabellen.adoc[]
+include::advancedtopics.adoc[]
+include::cookbook.adoc[]
+
+
+// // Anhang
+
+// :sectnums!:
+include::installation.adoc[]
+// include::filenames.adoc[]
+include::defaults.adoc[]
+include::commandline.adoc[]
+include::configuration.adoc[]
+include::lengthsunits.adoc[]
+include::xpath.adoc[]
+// include::variablen.adoc[]
+include::changelog.adoc[]
+// include::glossar.adoc[]
+
+[appendix]
+[.split]
+[[ch-commandreference]]
+= Command reference
+include::reference.adoc[]
+
+

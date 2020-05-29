@@ -4,9 +4,9 @@ import (
 	"io/ioutil"
 	"os/exec"
 	"path/filepath"
-	"sphelper/config"
 
 	"sphelper/commandsxml"
+	"sphelper/config"
 )
 
 const (

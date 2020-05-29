@@ -1,0 +1,79 @@
+[[ch-fakelists]]
+= Aufzählungslisten nachahmen
+
+Der Publisher hat (derzeit) noch keine besonderen Fähigkeiten, Aufzählungslisten zu erstellen.
+Das liegt auch daran, dass sie sich recht leicht über Textformate nachahmen lassen.
+
+Dafür definiert man ein Textformat mit hängendem Einzug und benutzt das mit dem Text mit den Aufzählungszeichen:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <DefineTextformat name="li" indentation="6pt" rows="-1"/>
+  <Record element="data">
+    <PlaceObject>
+      <Textblock textformat="li">
+        <Paragraph><Value>• </Value><Value select="sd:dummytext()"></Value></Paragraph>
+        <Paragraph><Value>• Two</Value></Paragraph>
+        <Paragraph><Value>• Three</Value></Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+
+</Layout>
+-------------------------------------------------------------------------------
+
+
+image::olulwithtext.png[width=50%]
+
+Das funktioniert in der Praxis hervorragend. Der offensichtliche Nachteil ist, dass man ausmessen muss, wie breit der linke Rand sein soll.
+
+Verschachtelte Listen können über Tabellen realisiert werden, wobei man beachten muss, dass innerhalb der Tabellenzellen ja nicht umbrochen werden kann.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Record element="data">
+  <PlaceObject>
+    <Table stretch="max">
+      <Columns>
+        <Column width="5mm"/>
+        <Column width="5mm"/>
+        <Column width="1*"/>
+      </Columns>
+      <Loop select="3" variable="i">
+        <Tr valign="top">
+          <Td>
+            <Paragraph>
+              <Value select="$i"/><Value>. </Value>
+            </Paragraph>
+          </Td>
+          <Td colspan="2">
+            <Paragraph textformat="justified">
+              <Value select="sd:dummytext()"/>
+            </Paragraph>
+          </Td>
+        </Tr>
+        <Loop select="3">
+          <Tr valign="top">
+            <Td></Td>
+            <Td><Paragraph><Value>•</Value></Paragraph></Td>
+            <Td><Paragraph textformat="justified">
+                  <Value select="sd:dummytext()"/>
+                </Paragraph>
+            </Td>
+          </Tr>
+        </Loop>
+      </Loop>
+    </Table>
+  </PlaceObject>
+</Record>
+-------------------------------------------------------------------------------
+
+
+image::olulwithtables.png[width=90%]
+
+// {{< figurefromhere src="olulwithtables.png" title="Aufzählungen können über Tabellen simuliert werden." >}}
+

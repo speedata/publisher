@@ -1295,8 +1295,8 @@
   </chapter>
   <chapter version="2.2" date="2015-01-19">
     <entry version="2.1.36" date="2015-01-15">
-      <en>Add all CSS level 3 colors (see http://www.w3.org/TR/css3-color/ for a list)</en>
-      <de>Alle CSS Level 3 Farben hinzugefügt (siehe http://www.w3.org/TR/css3-color/ für eine Liste)</de>
+      <en>Add all CSS level 3 colors (see https://www.w3.org/TR/css-color-3/ for a list)</en>
+      <de>Alle CSS Level 3 Farben hinzugefügt (siehe https://www.w3.org/TR/css-color-3/ für eine Liste)</de>
     </entry>
     <entry version="2.1.35" date="2014-12-19">
       <en>Allow bookmarks on any level (experimental)</en>
@@ -1423,8 +1423,8 @@
       <de>Neue Implementierung des Textumbruchs in Spalten. Vollständig abwärtskompatibel.</de>
     </entry>
     <entry version="2.1.0" date="2014-05-15">
-      <en>New behaviour of contents in table cells (Td). The rules of HTML (see <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements">HTML block elements</a>) are followed as far as possible.</en>
-      <de>Neues Verhalten von Elementen in Tabellenzellen (Td). Nun wird, soweit sinnvoll, die Logik von HTML angewandt (siehe <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements">HTML Blockelemente</a>).</de>
+      <en>New behaviour of contents in table cells (Td). The rules of HTML (see https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements - HTML block elements) are followed as far as possible.</en>
+      <de>Neues Verhalten von Elementen in Tabellenzellen (Td). Nun wird, soweit sinnvoll, die Logik von HTML angewandt (siehe https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements -HTML Blockelemente).</de>
     </entry>
   </chapter>
 </changelog>

@@ -1,0 +1,346 @@
+:samplea: _samplea.pdf
+:sampleb: _sampleb.pdf
+:padding: padding-*
+
+[[ch-bildereinbinden]]
+= Bilder einbinden
+
+Bilder in das PDF einfügen ist sehr einfach, es reicht ein kurzer Befehl:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Record element="data">
+  <PlaceObject>
+    <Image file="_samplea.pdf" width="5cm"/>
+  </PlaceObject>
+</Record>
+-------------------------------------------------------------------------------
+
+Das Bild  `{samplea}` ist (wie `{sampleb}`) Bestandteil des Publishers und für Testzwecke gut nutzbar.
+Als Bildformate sind PDF, PNG und JPEG möglich.
+Andere Formate müssen vor der Verarbeitung in eines dieser Formate konvertiert werden.
+Wenn das Programm inkscape installiert ist, wird das genutzt um Dateien im SVG-Format automatisch nach PDF zu konviertieren.
+Das Format, das in der Praxis am wenigsten Probleme
+bereitet ist PDF. Hier können auch Farbprofile eingebettet werden.
+
+Die Bilder werden bei der Verarbeitung im Publisher nicht verändert, das heißt, sie behalten unter anderem ihre ursprüngliche (Datei-)Größe bei.
+Bei sehr großen Bildern ist die Verarbeitungsgeschwindigkeit geringer und die Größe der resultierenden PDF-Datei nimmt natürlich zu.
+Daher kann es sich lohnen, für die Verarbeitung spezielle Versionen mit kleineren Dateigrößen bereit zu halten.
+
+[[ch-breite-hoehe-bilder]]
+== Breite und Höhe der Bilder
+
+Wenn man Bilder einbindet, dann ist es immer sinnvoll, eine Größenangabe mitzugeben.
+Ansonsten wird die _natürliche Größe_ des Bildes genommen.
+Was die  natürliche Größe ist, ist nicht immer eindeutig zu sagen.
+In der Regel gibt es in der Bilddatei eine DPI-Angabe.
+Die ist oftmals willkürlich vom Bildbearbeitungsprogramm gesetzt.
+Wenn dort beispielsweise 72 DPI steht, ist ein 720 Pixel breites Bild 10 Zoll breit;
+bei 300 DPI nur 2,4 Zoll.
+
+Da man sich auf die Angabe nicht verlassen kann, werden Größenangaben für die Ausgabe benötigt.
+Das kann entweder die gewünschte Höhe oder die gewünschte Breite des Bildes sein, oder beide Angaben zusammen.
+Im Beispiel oben hat das Bild eine Breite von fünf Zentimeter.
+Die Angabe kann auch als Anzahl von Rasterzellen gemacht werden.
+Die Angabe von `width="100%"` bedeutet, dass die gesamte verfügbare Breite genutzt werden soll (derzeit werden andere Prozentangaben noch nicht unterstützt).
+Die Angabe `auto` ist wie das Weglassen der Angabe und ist nur wegen der Kompatibilität zu CSS vorhanden.
+
+Wenn beide Proportionen angegeben sind (Breite und Höhe) gibt es zwei Modi:
+Beibehalten des Seitenverhältnisses (`clip="yes"`) oder Strecken bzw. Stauchen (`clip="no"`) der Ausgabe.
+
+.Das Bild wird horizontal gestreckt.
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject>
+    <Image file="ocean.pdf" width="10" height="3" clip="no"/>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+.Ist clip auf 'no' gesetzt, wird das Bild verzerrt.
+image::18-clip-no.png[]
+
+
+
+Mit `clip="yes"` ist das Bild so ausgeschnitten, dass auf einer Seite die maximalen Ausmaße genommen werden
+
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject>
+    <Image file="ocean.pdf" width="10" height="3" clip="yes"/>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+
+.Ist clip auf 'yes' gesetzt, wird nur ein Ausschnitt gezeigt.
+image::18-clip-yes.png[]
+
+Die Größe von Bildern kann man mit den beiden XPath-Funktionen
+`sd:imagewidth(<Dateiname>)` und `sd:imageheight(<Dateiname>)` ermitteln. Das
+Ergebnis ist in Rasterzellen. Vorsicht, hier wird die natürliche Größe
+genommen, die gegebenenfalls ohne Aussagekraft ist (s.o.).
+
+
+[[ch-bilder-maxheight]]
+== Maximale Höhe und Breite, minimale Höhe und Breite
+
+Um die natürliche Größe zu benutzen, aber Einschränkungen anzugeben, gibt es die vier Kombination aus min/max und width/height. Das Bild in dem folgenden Beispiel wird nicht breiter als 10 Rasterzellen und nicht höher als 3. Das Seitenverhältnis bleibt erhalten:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject>
+    <Image file="forest.jpg" maxwidth="10" maxheight="3" />
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+
+.Das Bild ist auf die Höhe von drei Rasterzellen beschränkt.
+image::18-maxheight.png[width=50%,scaledwidth=100%]
+
+== Drehen von Bildern
+
+Mit dem Attribut `rotate` kann man Bilder in 90 Grad Schritten drehen (positive Werte: im Uhrzeigersinn).
+Das nachfolgende Beispiel dreht ein Bild um 90 Grad gegen den Uhrzeigersinn, wenn es sich um ein Hochformat-Bild handelt.
+Mit dem XPath-Befehl `sd:aspectratio(<Dateiname>)` kann man das Seitenverhältnis eines Bildes ermitteln.
+Wenn es größer als 1 ist, dann handelt es sich um ein Bild im Querformat.
+
+ifdef::backend-docbook99[]
+Mit der Datensatzdatei in Listing <<lst-samplea-sampleb-data>>  und der Layoutdatei in <<lst-samplea-sampleb-layout>> wird das zweite Bild um 90° gegen den Uhrzeigersinn gedreht.
+endif::[]
+
+[[lst-samplea-sampleb-data]]
+.Datensatzdatei
+[source, xml]
+-------------------------------------------------------------------------------
+<data>
+  <img file="_samplea.pdf" />
+  <img file="_sampleb.pdf" />
+</data>
+-------------------------------------------------------------------------------
+
+
+[[lst-samplea-sampleb-layout]]
+.Das Bild wird um 90 Grad gedreht, wenn es ein hochformatiges Bild ist.
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en">
+
+  <Record element="data">
+    <ForAll select="img">
+      <PlaceObject>
+        <Image file="{@file}" width="5"
+          rotate="{if ( sd:aspectratio(@file) &lt; 1 ) then '-90' else '0'}"/>
+      </PlaceObject>
+    </ForAll>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+.Das zweite Bild wird um 90° gedreht, weil es im Hochformat ist.
+image::drehungaspectratio.png[width=50%,scaledwidth=100%]
+
+TIP: Die geschweiften Klammern bei `file` und `rotate` bedeuten, dass in den XPath-Modus gesprungen wird, um die XPath-Ausdrücke (Zugriff auf das Attribut `file` und die Wenn-Dann-Abfrage) auszuwerten. Mehr dazu im Abschnitt <<ch-xpathfunktionen,XPath- und Layoutfunktionen>>.
+
+_Achtung: ist das Bild im Argument von `sd:aspectratio()` nicht im Dateisystem vorhanden, wird der Wert von dem Platzhalterbild (Kapitel <<ch-filenotfound>>) genommen. Um zu überprüfen, ob ein Bild überhaupt vorhanden ist, kann man den Befehl `sd:file-exists(<Dateiname>)` benutzen._
+
+
+== Speicherort der Bilddateien
+
+Meist liegen die Bilder im Dateisystem oder in einem DAM (digital asset management).
+Im Dateisystem können sie entweder mit einem absoluten Pfad angesprochen werden:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Image file="file:///path/to/the/image.pdf"  />
+-------------------------------------------------------------------------------
+
+oder als Datei in einem der Unterverzeichnisse des Suchpfads, wie in den Beispielen oben.
+Beispielweise können die Bilder in dem Unterverzeichnis `images` liegen.
+Siehe dazu den Abschnitt über <<ch-organisationdaten,Dateiorganisation>>.
+
+
+Die Bilder können auch mittels http(s)-Protokoll von einem Webserver geladen werden.
+Die Syntax ist analog zum Beispiel mit dem absoluten Pfad:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en" >
+
+  <Record element="data">
+    <PlaceObject>
+      <Image file="http://placekitten.com/g/400/300" width="5"/>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+[discrete]
+== Caching
+
+Die Bilder, die über http und https geladen werden, werden auf der Festplatte zwischengespeichert.
+Bei jedem Request wird überprüft, ob das Bild noch aktuell ist und ggf. nicht herunter geladen.
+Ist das Bild auf dem Server gelöscht, wird es auch im lokalen System gelöscht.
+
+Mit `sp --cache=fast` kann man auf die schnelle Caching-Methode zurückgreifen, die das Bild nur einmal vom Server herunter lädt und dann nicht wieder auf Aktualität prüft.
+
+Mit dem Befehl `sp clearcache` wird der Zwischenspeicher gelöscht.
+
+Der Ort, wo der ((Bildercache)) liegt, kann entweder über `tempdir` (Kommandozeile und Konfigurationsdatei) gesteuert werden oder über den Schlüssel ((`imagecache`)) in der Konfigurationsdatei (nicht auf der Kommandozeile).
+
+[[ch-filenotfound]]
+== Bild nicht gefunden?
+
+Was passiert, wenn ein Bild nicht gefunden wird? Das normale Verhalten ist die Ausgabe einer Fehlermeldung und einem ((Platzhalterbild)), das das Fehlen anzeigt:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject>
+    <Image file="doesnotexist" width="5"/>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+
+.Dass die Bilddatei nicht gefunden wurde, sollte sofort zu erkennen sein.
+image::18-fnf.png[width=20%,scaledwidth=50%]
+
+
+Eine andere Möglichkeit besteht darin, mit `fallback` ein Platzhalterbild selber zu bestimmen:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject>
+    <Image file="doesnotexist" fallback="......" width="5"/>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+Man kann auch noch einstellen, ob es ein Fehler ist, wenn ein Platzhalterbild ausgewählt wird, oder nur eine Warnung.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Options imagenotfound="error"/>
+-------------------------------------------------------------------------------
+
+bzw. `warning` für eine Warnung.
+
+
+== Besonderheiten bei PDF-Dateien
+
+PDF-Dateien haben einige Besonderheiten:
+sie können mehrere Seiten enthalten und die einzelnen Seiten haben verschiedene Boxen, die den sichtbaren Bereich und andere Bereiche markieren.
+Manche der Boxen sind für den Ausdruck wichtig, manche für die Ansicht im PDF-Anzeigeprogramm.
+Die Box, die mit den angegebenen Größen angezeigt werden soll, wird mit dem Attribut `visiblebox` bestimmt:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Image file="seite.pdf" visiblebox="artbox" width="210mm" height="297mm" />
+-------------------------------------------------------------------------------
+
+bedeutet, dass die »artbox« in der Größe 210mm × 297mm dargestellt wird.
+
+
+Das Attribut `page` wird auch im Abschnitt <<ch-mehrseitigepdf>> beschrieben.
+Er dient dazu, die Seite auszuwählen, wenn eine PDF-Datei eingebunden wird.
+Mit `sd:number-of-pages(‹Dateiname›)` kann ermittelt werden, wie viele Seiten eine PDF-Datei enthält.
+
+
+== Externe Konvertierungstools
+
+Der Publisher verabeitet in der Regel nur PDF, PNG und JPEG Dateien.
+Um andere Formate nutzen zu können, muss man sie in eines der drei Formate umwandeln.
+Das kann im Vorfeld gemacht werden, aber auch zur Laufzeit des Publishers.
+
+// .Dieses Layout wird im Normalfall eine Fehlermeldung geben, da TIFF-Dateien nicht eingebunden werden können. Mit einem externen Konvertierungsprogramm ist das aber möglich.
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="data">
+    <PlaceObject>
+      <!-- tiff can only be used with an external converter -->
+      <Image file="rhslogo.tiff"/>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+
+Um die Konvertierung zu nutzen, muss man die Programmaufrufe in der Konfigurationsdatei eintragen. Hier wird das Programm `convert` von ImageMagick genutzt:
+
+[source, ini]
+-------------------------------------------------------------------------------
+imagehandler="tiffimage:(convert %%input%% %%output%%.pdf)"
+extensionhandler="tiff:tiffimage"
+-------------------------------------------------------------------------------
+
+Der Dateinamenendung `.tiff` wird der Handler `tiffimage` zugeordnet (Zeile 2). In der ersten Zeile wird dem Handler `tiffimage` dem Programm `convert  %%input%% %%output%%.pdf`, wobei die Dateinamen zur Laufzeit ersetzt werden.
+
+== Bilder aus textuellen Beschreibungen
+
+Es gibt unzählige Bildbeschreibungssprachen, in denen Bilder nicht mit einem externen Programm gezeichnet oder gemalt werden, sondern textuell beschrieben werden. Z.B. »zeichne ein Quadrat mit der Kantenlänge 4cm« oder »erstelle ein Tortendiagramm mit den folgenden Werten: ....«.
+Diese Grafiken werden dann aus der Beschreibungssprache in verschiedene Formate umgewandelt, meist als PNG oder PDF.
+Mit dem Publisher ist es seit Version 3.9.1 möglich, solche Beschreibungen einzubetten:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+   xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+   <Record element="data">
+      <PlaceObject>
+        <!-- we need to specify the imagetype -->
+        <Image width="7cm" imagetype="mermaid" >
+          <Value>sequenceDiagram
+            participant Alice
+            participant Bob
+            Alice->>John: Hello John, how are you?
+            loop Healthcheck
+                John->>John: Fight against hypochondria
+            end
+            Note right of John: Rational thoughts &lt;br/>prevail!
+            John-->>Alice: Great!
+            John->>Bob: How about you?
+            Bob-->>John: Jolly good!
+          </Value>
+        </Image>
+      </PlaceObject>
+    </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+Notwendig ist natürlich die Konfiguration, wie der externe Konverter aufgerufen wird. Das funktioniert analog zu dem TIFF-Beispiel im vorherigen Abschnitt:
+
+[source, ini]
+-------------------------------------------------------------------------------
+imagehandler="mermaid:(/usr/bin/mmdc -i %%input%% -o %%output%%.pdf)"
+-------------------------------------------------------------------------------
+
+Das Ergebnis ist Ein Sequenzdiagramm, von `mermaid` erzeugt und nach PDF konvertiert.
+
+image::mermaid.png[]
+
+Natürlich ist es auch möglich, die Bildbeschreibung aus den Daten zu entnehmen. Dazu muss der Image-Befehl wie folgt aufgebaut werden.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject>
+  <Image width="7cm" imagetype="mermaid" >
+     <Value select="imagedata" />
+  </Image>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+
+== Weitere Parameter
+
+* Man kann über die `{padding}`-Angaben festlegen, wie viel Abstand das Bild vom entsprechenden Rand haben soll.
+
+* Mit `dpiwarn` kann eine Warnung herausgegeben werden, wenn die tatsächliche Anzahl der Pixel je Zoll geringer ist, als die Vorgabe.
+
+
+
+// NOTE: Bildumrisse erzeugen?
+
+
+
+// Ende

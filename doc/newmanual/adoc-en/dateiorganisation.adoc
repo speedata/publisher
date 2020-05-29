@@ -1,0 +1,100 @@
+[[ch-organisationdaten]]
+= Dateiorganisation
+
+
+In diesem Abschnitt wird beschrieben, in welcher Art und Weise die notwendigen Dateien (Layout, Daten, Bilder und Schriftdateien) organisiert werden müssen, wo sie gespeichert werden, wie sie heißen müssen und so weiter.
+
+Wenn der Publisher startet, wird das aktuelle (Arbeits-)Verzeichnis und alle Kindverzeichnisse eingelesen und die Dateinamen in einer Liste gespeichert.
+Sobald eine Ressource geladen wird, wird in dieser Liste nachgeschaut, ob eine entsprechende Datei existiert.
+Dabei wird nicht unterschieden, in welchem Verzeichnis die Datei liegt.
+Daraus folgt:
+
+. Wenn sich während des Laufs etwas im Dateisystem ändert, bekommt der Publisher davon nichts mit.
+. Es ist egal, wie die Verzeichnisse heißen. Die Bilder können, müssen aber nicht, im Verzeichnis mit dem Namen »bilder« gespeichert sein.
+. Wenn das Arbeitsverzeichnis zu groß ist, ist der Startvorgang langsam. Einige Tausend Dateien im Arbeitsverzeichnis sind  in der Regel kein Problem.
+
+Es gibt Ausnahmen von der Regel:
+
+. Man kann mit `sp --no-local` den Publisher anweisen, das Arbeitsverzeichnis _nicht_ rekursiv zu durchsuchen.
+. Mit `--extra-dir` kann man ein Verzeichnis hinzufügen, das rekursiv durchsucht wird.
+. Mit `sp --systemfonts` wird für Schriftdateien auch in Verzeichnissen gesucht, die vom System vorgegeben sind.
+. Mit `sp --wd DIR` wechselt der Publisher vor dem Start in dieses Verzeichnis.
+
+Für eine Beschreibung der Parameter siehe den Anhang <<ch-kommandozeile>>.
+
+[[ch-name-der-dateien]]
+== Welche Namen müssen die Daten- und die Layoutdatei haben?
+
+
+Der speedata Publisher sucht das Layout mit dem Namen `layout.xml` und die Datendatei mit dem Namen `data.xml`.
+Beide lassen sich auf der Kommandozeile (`--layout=XYZ` und `--data=XYZ`) und in der Konfigurationsdatei anpassen (`layout=XYZ` und `data=XYZ`).
+Siehe dazu die Anhänge <<ch-kommandozeile,Starten des Publishers über Kommandozeile>> und <<ch-konfiguration,Konfigurieren des Publishers>>.
+
+
+ifdef::backend-docbook99[]
+Siehe Abbildung <<abb-19-dateisystem>> für eine mögliche Anordnung der Dateien.
+endif::[]
+
+[[abb-19-dateisystem]]
+.Mögliche Dateiorganisation in einem Verzeichnis. Der Name der Unterverzeichnisse (Ordner) ist beliebig.
+image::18-dateisystem.png[width=100%]
+
+[[ch-include]]
+== Layoutregelwerke in einzelne Dateien teilen
+
+Man kann das Layoutregelwerk in mehrere Dateien aufteilen.
+Es gibt zwei Möglichkeiten, die Dateien zusammenzuführen.
+Auf der Kommandozeile kann man mit `--extra-xml` ein oder mehrere Layoutregelwerke angeben, die zusätzlich eingelesen werden.
+Alternativ dazu kann man den Mechanismus über XInclude(((`Include`))) benutzen, hier im Fall einer Fontdefinition:
+
+// und  Fontdefinitionen kann man dann in eine eigene Datei auslagern (z. B. `dejavu.xml`) und so quasi »kapseln«:
+
+[source,xml]
+-------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en">
+
+  <LoadFontfile name="DejaVuSerif" filename="DejaVuSerif.ttf" />
+  ...
+
+</Layout>
+-------
+
+
+Anschließend kann diese Datei eingebunden werden mit
+
+
+[source,xml]
+-------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  >
+
+  <xi:include href="dejavu.xml"/>
+  ...
+
+</Layout>
+-------
+
+Der Namensraum für XInclude muss wie oben deklariert werden, sonst gibt es einen Syntaxfehler in der XML-Datei.
+
+[[ch-include_data]]
+== Daten in einzelne Dateien aufteilen
+Auch die Datendatei kann in mehrere Dateien aufgeteilt werden.
+Hierzu wird XInclude(((`Include`))) genutzt. 
+
+[source,xml]
+-------
+<catalog xmlns:xi="http://www.w3.org/2001/XInclude">
+  <xi:include href="globalsettings.xml"/>
+  <xi:include href="article0001.xml"/>
+  <xi:include href="article0002.xml"/>
+  ...
+</catalog>
+-------
+
+Im Wurzelknoten (im obigen Beispiel 'catalog') muss der Namensraum für XInclude deklariert werden. 
+
+
+// Ende

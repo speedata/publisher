@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="{{.Language}}">
+
+<head>
+	<meta name="generator" content="speedata docbook2html" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>speedata Publisher {{ translate .Language "manual"}}</title>
+
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<meta name="robots" content="index,follow" />
+	<meta name="googlebot" content="index,follow" />
+	<link rel="icon" href="{{ linkTo "/static/favicon.png" .Section }}" type="image/png">
+
+	<link rel="stylesheet" href="{{ linkTo "/static/css/style.css" .Section }}" />
+	<link rel="stylesheet" href="{{ linkTo "/static/font-awesome-4.7.0/css/font-awesome.min.css" .Section }}" />
+	<link rel="stylesheet" href="{{ linkTo "/static/css/roboto.css" .Section }}" />
+	<!--endofhead-->
+</head>
+<body class="handbuch">
+	<div id="pageWrapper" class="clearfix">
+		<div id="sitemap">
+			<form role="search" method="get" class="search-form" action="{{ linkTo $.Searchpage.Link .Section}}">
+				<label><span class="screen-reader-text">{{translate .Language "Search manual"}}:</span><input class="search-field"
+						placeholder="{{translate .Language "Search"}}&nbsp;…" value="" name="q" type="search">
+				</label>
+				<input class="search-submit" value="{{translate .Language "Search"}}" type="submit">
+			</form>
+				{{ $prevseclevel := 0 -}}
+				{{ range .Chain -}}
+				{{- if lt .Sectionlevel $prevseclevel}}</li></ul>{{end -}}
+				{{ if gt .Sectionlevel $prevseclevel  }}<ul>{{else}}</li>{{end -}}
+				<li><a href="{{ linkTo ( printf "/%s/%s" $.Language .Pagename ) $.Section}}">{{.Title}}</a>
+				{{ $prevseclevel = .Sectionlevel -}}
+				{{end}}
+			</li></ul></li></ul>
+			<br />
+		</div>
+		<div id="page" class="inhalt">
+			<div id="header">
+				<div class="boxatthetop">
+					<div id="version">Version {{.Version}}</div>
+				</div>
+				<div id="pullContainer" class="hideDesktop">
+					<a href="#" id="pull"><i class="fa fa-bars fa-2x" aria-hidden="true"></i></a>
+				</div>
+				<div id="navi">
+					<div id="searchmobil">
+						<form role="search" method="get" class="search-form" action="{{ linkTo $.Searchpage.Link .Section}}">
+							<label><span class="screen-reader-text">{{translate .Language "Search manual"}}</span><input
+									class="search-field" placeholder="{{translate .Language "Search"}}&nbsp;…" value="" name="q" type="search">
+							</label>
+							<input class="search-submit" value="{{translate .Language "Search"}}" type="submit">
+						</form>
+						<ul id="navi2mobile">
+						{{ $prevseclevel := 1 -}}
+							{{ range .Chain -}}
+							{{ if lt .Sectionlevel $prevseclevel}}</li></ul>{{end -}}
+							{{ if gt .Sectionlevel $prevseclevel}}<ul>{{end -}}
+							<li><a href="{{ linkTo ( printf "/%s/%s" $.Language .Pagename ) $.Section}}">{{.Title}}</a>
+							{{ $prevseclevel = .Sectionlevel -}}
+							{{- end}}
+						</li></ul></li></ul>
+					<ul><li>{{ if eq .Language "en"}}<a href="{{linkTo "/de/index.html" .Section}}">This manual in German</a>{{else}}<a href="{{linkTo "/en/index.html" .Section}}">Dieses Handbuch auf Englisch</a>{{end}}</li></ul>
+					</div>
+				</div>
+				<div id="logo">
+					<img src="{{ linkTo (printf "/static/images/logo-%s.png" $.Language)  .Section}}"
+						alt="speedata – {{translate .Language "let's surpass the mainstream"}}" />
+				</div>
+			</div>
+			<div id="main">
+				{{if .Section.IsSearch -}}
+				<script src="{{ linkTo "/static/js/lunr.js" .Section}}"></script>
+				<script src="{{ linkTo "/static/js/lunr.stemmer.support.js" .Section}}"></script>
+				<script src="{{ linkTo "/static/js/lunr.de.js" .Section}}"></script>
+				{{- end -}}
+				<div class="wrapper">
+					{{- with .Breadcrumbs -}}
+					<ul id="breadcrumb">
+						{{ range . -}}
+						<li><a href="{{linkTo .Link $.Section}}">{{.Title}}</a></li>
+						{{- end -}}
+					</ul>
+					{{- end -}}
+					{{- if .Section.IsSearch -}}
+					<p>{{translate .Language "Search"}}: <input id="search" type="text" /></p>
+					<p>{{translate .Language "Results"}}:</p>
+					<ul id="results"></ul>
+					<script>
+function getSource() {
+	var pages = {{ .SearchContent }};
+	 return pages
+}
+
+         function initLunr(pages) {
+            var idx = lunr(function () {
+                this.use(lunr.de);
+                this.ref('href');
+                this.field('content');
+                this.field('title',{boost: 10});
+
+                pages.forEach(function (page) {
+                   this.add(page)
+                }, this)
+              })
+             return idx
+         }
+         function search(idx, term, pages) {
+             return idx.search(term).map(function(result) {
+                 return pages.filter(function(page) {
+                     return page.href === result.ref;
+                 })[0];
+             });
+         }
+
+         function updateFromSearch(results, dest) {
+             dest.innerHTML = results.reduce(
+                 function(acc, page) {
+                     return acc + "<li><a href=\""+page.href+"\">"+page.title+"</a></li>"
+                 },
+                 ""
+             )
+         }
+
+         function doSearch(idx, term, pages, dest) {
+             var results = search(idx, term, pages);
+
+             if (results.length === 0) {
+                 dest.innerHTML = {{translate .Language "No results"}};
+                 return
+             }
+
+             updateFromSearch(results, dest)
+         }
+
+         function initUI(pages, idx) {
+             var results = document.getElementById("results"),
+                 search = document.getElementById("search");
+
+             search.addEventListener("input", function(e) {
+                 doSearch(idx, e.target.value, pages, results)
+             });
+         }
+
+         function getQueryStringValue (key) {
+            key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&");
+            var match = location.search.match(new RegExp("[?&]" + key + "=([^&]+)(&|$)"));
+            return match && decodeURIComponent(match[1].replace(/\+/g, " "));
+        }
+
+         (function (pages) {
+             var lunr = initLunr(pages);
+
+             initUI(pages, lunr);
+
+
+             var search = document.getElementById("search"),
+                 results = document.getElementById("results"),
+                 term = getQueryStringValue("q");
+
+             search.value = term;
+             doSearch(lunr, term, pages, results);
+         })(getSource())
+        </script>
+					{{- else -}}
+					{{- .Contents -}}
+					{{end -}}
+					{{- with .Section.Split -}}
+					<ul>
+						{{range $.Children -}}
+						{{ $linkSection :=  ( index $.Chain .)}}
+						<li><a href="{{ linkTo $linkSection.Link $.Section}} ">{{ $linkSection.Title}}</a></li>
+						{{end}}</ul>
+					{{- end}}
+					<ul class="prevnext">
+						{{ with .Prev }}<li class="prev"><a href="{{linkTo .Link $.Section }}">{{.Title}}</a></li>{{end}}
+						{{ with .Next }}<li class="next"><a href="{{linkTo .Link $.Section }}">{{.Title}}</a></li>{{end}}
+					</ul>
+				</div>
+			</div>
+			<div id="footer">
+				<div class="boxattheend"></div>
+				<div id="navi2">
+					<ul><li>{{ if eq .Language "en"}}<a href="{{linkTo "/de/index.html" .Section}}">This manual in German</a>{{else}}<a href="{{linkTo "/en/index.html" .Section}}">Dieses Handbuch auf Englisch</a>{{end}}</li></ul>
+				</div>
+					<div id="navi3">
+					<p>{{ translate .Language "More information"}}:</p>
+					<ul>
+					{{if eq .Language "de"}}<li><a href="https://blog.speedata.de">Blog</a></li>{{ end}}
+						<li><a href="https://www.speedata.de">{{translate .Language "Website"}}</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="{{linkTo "/static/js/jquery.min.js" .Section}}"></script>
+	<script type="text/javascript" src="{{linkTo "/static/js/handbuch.js" .Section}}"></script>
+
+	<div id="topButton"></div>
+</body>
+
+</html>

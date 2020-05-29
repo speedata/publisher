@@ -1,0 +1,27 @@
+[appendix]
+[[ch-dateinamen,Dateinamen im Publisher]]
+= Dateinamen im Publisher
+(((Dateinamen)))
+
+An verschiedenen Stellen im Layout, hauptsächlich bei den Bildern, werden externe Dateien referenziert.
+Diese können folgende Formate haben:
+
+* Absoluter Pfad im Dateisystem: `/pfad/zur/datei.png`.
+* Relativer Pfad im Dateisystem: `../verzeichnis/datei.png`.
+* Datei innerhalb des Suchbaums `datei.png`. Vor dem Start wird das aktuelle Verzeichnis rekursiv durchsucht (siehe <<ch-organisationdaten>>).
+* Absolute Pfade unter Windows wie `c:\Users\....\datei.png`.
+* file-Schema: `file://c/Users/Joe%20User/datei.png` oder `file:///home/user/datei.png`.
+* http-Schema: `http://placekitten.com/g/400/300` oder https: `https://placekitten.com/g/400/300`
+
+Diese Dateinamen können bei <<cmd-image,Bildern>>, bei <<ch-xpathfunktionen,XPath- und Layoutfunktionen>> sowie auf der Kommandozeile benutzt werden.
+So ist es möglich, den Publisher mit
+
+
+[source, sh]
+-------------------------------------------------------------------------------
+sp --dummy --data https://raw.githubusercontent.com/speedata/examples/master/technical/rotating/layout.xml
+-------------------------------------------------------------------------------
+
+aufzurufen.
+Erst wird die Ressource auf dem lokalen Rechner zwischengespeichert und dann von dort aus geladen.
+

@@ -50,6 +50,9 @@ func CopyFile(source string, dest string) (err error) {
 	return
 }
 
+// CpR copies every file in sourcedir into destdir
+// while rejecting anything that is in reject. reject must contain file names, not full paths.
+// Beware: this function behaves a bit weird.
 func CpR(srcdir, destdir string, reject ...string) error {
 	a := func(path string, info os.FileInfo, err error) error {
 		rel, err := filepath.Rel(srcdir, path)

@@ -1,0 +1,63 @@
+[[ch-optimierung-mit-gruppen]]
+= Layoutoptimierung mithilfe von Gruppen
+
+
+
+Ein typischer Fall beim Database Publishing ist, dass man nicht weiß, welche Daten zu erwarten sind.
+Texte sind unterschiedlich lang, Bilder haben andere Seitenverhältnisse, die Anzahl der Daten im Datensatz sind variabel und so fort.
+Um trotzdem eine Darstellung zu erzeugen, die ansprechend ist (also gewissen Regeln folgt), kann man Abfragen stellen.
+Neben statischen Fragen wie »Wie viele Artikel sind in der Artikelgruppe enthalten?« können dynamische Fragen beantwortet werden.
+
+* Wie breit ist die Überschrift?
+* Wie hoch ist das Bild?
+* Passt die Tabelle noch auf die Seite?
+
+sind typische Fragen, die für ein anspruchsvolles Layout notwendig sind.
+
+Die Idee ist folgende: Man erzeugt eine virtuelle Fläche, die nicht in das PDF ausgegeben wird.
+Dort werden dann die Elemente platziert, die man ausmessen möchte.
+Anschließend kann man fragen, wie groß (Breite und Höhe) diese virtuelle Fläche ist und daraufhin unterschiedlich reagieren.
+
+Virtuelle Flächen werden in `<Group><Contents>...</Contents></Group>` eingeklammert (siehe den Abschnitt <<ch-gruppen>>).
+
+Das Gerüst ist folgendes:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Record element="data">
+  <Group name="img">
+    <Contents>
+      <!--1-->
+      <PlaceObject>
+        <Image file="_samplea.pdf" width="4"/>
+      </PlaceObject>
+    </Contents>
+  </Group>
+  <!--2-->
+  <Switch>
+    <Case test="sd:group-height('img') > 5">
+      ...
+    </Case>
+    <Otherwise>
+      ...
+    </Otherwise>
+  </Switch>
+</Record>
+-------------------------------------------------------------------------------
+<1> Zu Beginn hat die Gruppe eine Breite und Höhe von 0. Alle Objekte vergrößern die Fläche.
+<2> Die Gruppe hat nun eine Breite von 4 und eine unbekannte Höhe (abhängig vom Bild). Nun kann mit `sd:group-height()` die Höhe und `sd:group-width()` die Breite abgefragt werden. Was in der Fallunterscheidung passiert, ist natürlich vom konkreten Layout abhängig.
+
+Das Prinzip ist immer dasselbe: die fraglichen Inhalte werden auf einen virtuellen Bereich gesetzt und ausgemessen.
+Aufgrund der ermittelten Höhe oder Breite kann man z. B.
+
+* die Gruppe einfach ausgeben
+* einen Seitenumbruch einfügen, wenn die Gruppe nicht mehr auf die Seite passt
+* die Gruppe in einer Schleife mit veränderten Parametern erneut erzeugen, bis eine Bedingung erfüllt ist (ein Beispiel für dieses Verfahren ist im Abschnitt über Virtuelle Seiten, Nr. <<ch-savepages>> gezeigt.)
+* ...
+
+
+// Ende
+
+
+

@@ -1,0 +1,172 @@
+[[ch-seitentypen]]
+= Seitentypen
+(((`<PageType>`)))
+
+
+Seitentypen (oder auch Masterseiten, Seitenvorlagen) dienen dazu, Ränder für Seiten zu definieren, Platzierungsrahmen zu erstellen und Aktionen auszuführen, wenn eine Seite erzeugt oder in die PDF Datei geschrieben wird.
+Klassischerweise gibt es eine Seitenvorlage für linke Seiten und für rechte Seiten.
+Im einfachsten Fall sieht eine Vorlage so aus:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Pagetype name="page" test="sd:even(sd:current-page())">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+</Pagetype>
+-------------------------------------------------------------------------------
+
+Ein Rand muss angegeben werden.
+Die Bedingung im Attribut `test` kann beliebig komplex sein. Das Attribut muss immer angegeben werden.
+Eine Seite wird ausgewählt, sobald ein Test eines Seitentyps _wahr_ ergibt.
+Beispiele:
+
+
+* `true()`: Diese Seite wird immer ausgewählt, da `true()` immer *wahr* ergibt.
+* `sd:current-page() > 1`: Hier wird die Seitenvorlage für alle Seiten ausgewählt, die nach der ersten Seite folgen.
+* `sd:even(sd:current-page())`: Wenn die Seitenzahl gerade ist, kommt dieser Seitentyp zu tragen. Das ist in der Regel dann, wenn es sich um eine linke Seite handelt.
+* Es kann auch komplexer werden: `sd:even(sd:current-page()) and $abschnitt = 'innenteil'`. Solange die Bedingung zu _wahr_ oder _falsch_ ausgewertet werden kann, ist dies ein gültiger Ausdruck.
+
+
+Was passiert, wenn es mehrere Bedingungen gibt, die gleichzeitig _wahr_ sind?
+Seitentypen werden von »unten nach oben« ausgewertet.
+Das heißt, dass spezielle Seitenvorlagen später definiert werden müssen als die allgemeinen.
+Die voreingestellte Vorlage wird zuerst definiert und hat als Bedingung `true()`.
+Also wird sie nach dieser Logik zuletzt ausgewertet und wird immer dann benutzt, wenn kein anderer Seitentyp im Test _wahr_ ergibt (Fallback).
+
+.Hier muss der Seitentyp für die erste Seite nach dem Seitentyp für rechte Seiten definiert werden, weil er sonst nicht in Betracht gezogen würde (sd:odd(1) ergibt wahr).
+[source, xml]
+-------------------------------------------------------------------------------
+<Pagetype name="linke Seiten" test="sd:even(sd:current-page())">
+  ...
+</Pagetype>
+<Pagetype name="rechte Seiten" test="sd:odd(sd:current-page())">
+  ...
+</Pagetype>
+<Pagetype name="erste Seite" test="sd:current-page() = 1">
+  ...
+</Pagetype>
+-------------------------------------------------------------------------------
+
+
+== Textrahmen
+
+In der Seitentyp-Definition können Textrahmen angelegt werden.
+Diese werden ausführlich im Abschnitt <<ch-positioningarea,»Bereiche auf der Seite«>> beschrieben.
+
+== AtPageCreation, AtPageShipout
+
+Die beiden Befehle `<AtPageCreation>` und `<AtPageShipout>` sind dafür zuständig, Code auszuführen, wenn eine Seite erzeugt und wenn eine Seite in die PDF Datei geschrieben wird.
+Diese können für vielfältige Zwecke benutzt werden.
+Üblich ist, in `<AtPageCreation>` den Seitenkopf zu erzeugen und in `<AtPageShipout>` den Seitenfuß.
+
+Es folgt ein Beispiel für einen Seitenfuß.
+ifdef::backend-docbook99[]
+Das Ergebnis ist in Abbildung~<<abb-fusszeileseitentyp>> zu sehen.
+endif::[]
+
+// ~
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Pagetype name="page" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+
+    <AtPageShipout>
+      <PlaceObject column="1" row="{sd:number-of-rows() - 1}">
+        <Table stretch="max">
+          <Tablerule/>
+          <Tr>
+            <Td align="left">
+              <Paragraph>
+                <Value select="sd:current-page()"/>
+              </Paragraph>
+            </Td>
+            <Td align="right">
+              <Paragraph>
+                <Value>Firmenname</Value>
+              </Paragraph>
+            </Td>
+          </Tr>
+        </Table>
+      </PlaceObject>
+    </AtPageShipout>
+  </Pagetype>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>Inhalt</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+[[abb-fusszeileseitentyp]]
+.Seite mit Fußzeile
+image::fusszeileseitentyp.png[width=100%]
+
+== NewPage
+
+Bei dem Befehl `<NewPage>` kann angegeben werden, welcher Seitentyp für die nächste Seite ausgewählt werden soll, auch wenn die Bedingung (`test`) bei `<Pagetype>` nicht _wahr_ ergibt.
+
+Im folgenden Beispiel werden zwei Seitentypen definiert, eine Vorlage »Standard«, die immer genommen wird und eine Vorlage »Spezial«, die explizit mit `<NewPage>` ausgewählt wird.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Pageformat width="210mm" height="50mm"/>
+
+  <Pagetype name="Spezial" test="false()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+  </Pagetype>
+
+  <Pagetype name="Standard" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+  </Pagetype>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>Seite 1</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <NewPage pagetype="Spezial" openon="right" />
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>Seite 3</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+In der ((Logdatei)) (`publisher.log`) sieht man, welche Seitentypen gewählt werden:
+
+--------
+...
+Page of type "Standard" created (1)
+Anzahl Zeilen: 3, Anzahl Spalten = 19
+PlaceObject: Textblock in row 1 and column 1, width=19, height=1 (page 1)
+> Shipout page 1
+Page of type "Standard" created (2)
+Anzahl Zeilen: 3, Anzahl Spalten = 19
+> Shipout page 2
+Page of type "Spezial" created (3) - pagetype requested
+...
+--------
+
+// .Verschiedene Seitentypen
+// image::nextpage.png[width=80%]
+
+// Ende

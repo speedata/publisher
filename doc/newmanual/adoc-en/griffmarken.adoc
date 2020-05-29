@@ -1,0 +1,71 @@
+[[ch-griffmarken]]
+= Griffmarken
+
+[[abb-25-marke]]
+.Links: Griffmarken im Telefonbuch (das gibt es noch!). Rechts: Linien sind weniger aufdringlich, trotzdem praktisch.
+image::25-griffmarken.jpg[width=100%]
+
+
+Griffmarken sind Markierungen an der Außenkante eines Katalogs oder eines Nachschlagewerks, die das aktuelle Kapitel anzeigen.
+ifdef::backend-docbook99[]
+Beispiele finden sich in der Abbildung <<abb-25-marke>>.
+endif::[]
+Eine Eigenschaft der Griffmarke ist, dass sie über den rechten oder über den linken Rand des Papiers hinaus geht.
+Das heißt, die Schnittkante des Papiers ist im farbigen Bereich, so dass die Farbe auch im zugeklappten Zustand zu erkennen ist.
+
+
+An Griffmarken ist erst einmal nichts besonders, sie werden entweder mit Boxen oder Linien in einer bestimmten Farbe erzeugt.
+Es folgt ein Beispiel für Kapitelnummern in einer quadratischen Box.
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options bleed="3mm"/> <!--1-->
+
+  <DefineFontfamily name="Griffmarke" fontsize="15" leading="15">
+    <Regular fontface="sans-bold"/>
+  </DefineFontfamily>
+  <Record element="data">
+    <Loop select="4" variable="kapitelnr">
+      <PlaceObject column="200mm"
+          row="{20 + 20 * $kapitelnr}mm"> <!--2-->
+
+        <Box width="1cm" height="1cm" backgroundcolor="black"
+             bleed="right"/> <!--3-->
+      </PlaceObject>
+
+      <!--4-->
+      <PlaceObject column="200mm" row="{20 + 20 * $kapitelnr}mm">
+        <Table width="1cm" stretch="max">
+          <Tr valign="middle" minheight="1">
+            <Td align="center">
+              <Paragraph fontface="Griffmarke" color="white">
+                <Value select="$kapitelnr"/>
+              </Paragraph>
+            </Td>
+          </Tr>
+        </Table>
+      </PlaceObject>
+    </Loop>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+<1> Der Anschnitt ist auf 3mm festgelegt.
+<2> Vertikaler Versatz. Die Box ist 10mm hoch, dadurch beträgt der Abstand zwischen jeder Box ebenfalls 10mm.
+<3> Die Box liegt am rechten Rand und ragt in den Anschnitt hinein. Dafür ist der Parameter `bleed="right"` gesetzt. Hiermit erstreckt sich die Box um die Beschnittzugabe nach rechts.
+<4> Anschließend wird die Kapitelnummer eingedruckt.
+
+
+Im Beispiel wird die Kapitelnummer in der Variablen `kapitelnr` gespeichert und in einer Schleife ausgegeben.
+In der Praxis würde man das natürlich in den Seitentyp (`AtPageShipout`) einfügen und immer nur eine Griffmarke ausgeben.
+
+
+
+.Die grüne Linie zeigt das Endformat, die blaue Linie die Außenkante des unbeschnittenen Papiers
+image::25-publisher.png[width=10%,scaledwidth=30%]
+
+// End

@@ -81,6 +81,13 @@ task :sitedoc => [:sphelper] do
 	puts "done"
 end
 
+desc "Generate new docbook based manual"
+task :dbmanual => [:sphelper] do
+	sh "#{installdir}/bin/sphelper db2html"
+	puts "done"
+end
+
+
 desc "Update the examples in the documentation"
 task :updateexamples do
 	Dir.chdir(installdir.join("doc","manual")) do

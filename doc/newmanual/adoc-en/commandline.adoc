@@ -1,0 +1,154 @@
+[appendix]
+[[ch-commandline,Command line]]
+= Running the speedata publisher on the command line
+
+// Der speedata Publisher wird über die Kommandozeile (auch: Terminal, Befehlsfenster) gestartet.
+// Einerseits gibt es _Befehle_, anderseits lassen sich die Befehle über _Parameter_ steuern.
+
+// [source,shell,subs="verbatim,quotes"]
+// -------------------------------------------------------------------------------
+// $ sp <Befehl>  <Parameter> <Parameter> ...
+// -------------------------------------------------------------------------------
+
+
+// Der Standardbefehl ist `run`. So ist der Aufruf von
+
+// [source,shell,subs="verbatim,quotes"]
+// -------------------------------------------------------------------------------
+// $ sp
+// -------------------------------------------------------------------------------
+
+// dasselbe wie
+
+
+// [source,shell,subs="verbatim,quotes"]
+// -------------------------------------------------------------------------------
+// $ sp run
+// -------------------------------------------------------------------------------
+
+// Neben dem Befehl `run` gibt es noch weitere Befehle (s.u.).
+
+// Mit
+
+// [source, shell]
+// -------------------------------------------------------------------------------
+// $ sp --help
+// -------------------------------------------------------------------------------
+
+// kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
+
+[[ch-cmd-description]]
+== Description of the commands
+
+`clean`::
+  Remove publisher generated files Löscht alle generierten Zwischendateien und behält die PDF-Datei.
+`clearcache`::
+  Removes files from the image cache.
+`compare`::
+   Recursively check a directory for layout changes. See the topic about quality assurance.
+`doc`::
+  Open documentation Öffnet das Referenzhandbuch im Browser (lokale HTML-Dateien).
+`list-fonts`::
+  List installed fonts (use together with --xml for copy/paste)  Listet alle Schriftdateien auf, die in den Publisher-Verzeichnissen gefunden werden. Zusammen mit `--xml` erlaubt dieses Kommando die Ausgabe per Copy&Paste in das Layoutregelwerk zu übernehmen. Siehe
+// <<ch-einbindungschriftarten>>.
+`new [DIRECTORY]`::
+   Create simple layout and data file to start. Provide optional directory
+   Erstellt ein einfaches Gerüst (`layout.xml` und `data.xml`) für einen Publishing-Lauf im aktuellen Verzeichnis, sofern kein anderes angegeben ist.
+`run`::
+  Start publishing (default)
+  Startet den Publisher Lauf. Das ist die Voreinstellung, so dass das Kommando `sp` reicht, um den Publikationsprozess zu starten.
+`server`::
+  Run as http-api server on localhost port 5266 (configure with --address and --port)
+  Startet im Servermodus. Siehe <<ch-servermodus,den Abschnitt Servermodus>>.
+`watch`::
+  Start watchdog / hotfolder Startet den internen Hotfolder. Siehe
+//   <<ch-hotfolder>>.
+
+
+[[ch-cmd-description-parameter]]
+== Description of the commandline parameters
+
+
+`-h`, `--help`::
+   Show this help
+`--address=IPADDRESS`::
+   Address to be used for the server mode. Defaults to 127.0.0.1.
+`--autoopen`::
+   Open the PDF file (MacOS X and Linux only
+`--cache=METHOD`::
+   Use cache method. One of 'none', 'fast' or 'optimal'. Default is 'optimal'.
+`-c`, `--config=NAME`::
+   Read the config file with the given NAME. Default: 'publisher.cfg'
+`--credits`::
+   Show credits and exit
+`--[no-]cutmarks`::
+   Display cutmarks in the document
+`--data=NAME`::
+   Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN (only 1 run possible).
+`--dummy`::
+   Don't read a data file, use '<data />' as input
+`-x`, `--extra-dir=DIR`::
+   Additional directory for file search.
+`--extra-xml=NAME`::
+   Add this file to the layout file
+`--filter=FILTER`::
+   Run Lua filter before publishing starts
+`--grid`::
+   Display background grid. Disable with `--no-grid
+`--ignore-case`::
+   Ignore case when accessing files (on a case-insensitive file system)
+`--imagecache=PATH`::
+   Set the image cache
+`--inkscape=PATH`::
+   Set the path to the inkscape program
+`--jobname=NAME`::
+   The name of the resulting PDF file (without extension), default is 'publisher'
+`--[no-]local`::
+   Add local directory to the search path. Default is true
+`--layout=NAME`::
+   Name of the layout file. Defaults to 'layout.xml'
+`--logfile=NAME`::
+   Logfile for server mode. Default 'publisher.protocol'. Use STDOUT for standard output and STDERR for standard error.
+`--mainlanguage=NAME`::
+   The document's main language in locale format, for example 'en' or 'en_US'.
+`--mode=NAME`::
+   Set mode. Multiple modes given in a comma separated list.
+`--outputdir=DIR`::
+   Copy PDF and protocol to this directory
+`--prepend-xml=NAME`::
+   Add this file in front of the layout file
+`--port=PORT`::
+   Port to be used for the server mode. Defaults to 5266
+`--quiet`::
+   Run publisher in silent mode
+`--runs=NUM`::
+   Number of publishing runs
+`--startpage=NUM`::
+   The first page number
+`--show-gridallocation`::
+   Show the allocated grid cells
+`-s`, `--suppressinfo`::
+   Suppress optional information (timestamp) and use a fixed document ID
+`--systemfonts`::
+   Use system fonts (not Win XP)
+`--tempdir=DIR`::
+   Use this directory instead of the system temporary directory
+`--trace`::
+   Show debug messages and some tracing PDF output
+`--timeout=SEC`::
+   Exit after SEC seconds
+`-v`, `--var=VAR=VALUE`::
+   Set a variable for the publishing run
+`--varsfile=NAME`::
+   Set variables for the publishing run from key=value... file
+`--verbose`::
+   Print a bit of debugging output
+`--version`::
+   Show version information
+`--wd=DIR`::
+   Change working directory
+`--xml`::
+   Output as (pseudo-)XML (for list-fonts)
+
+
+// EOF

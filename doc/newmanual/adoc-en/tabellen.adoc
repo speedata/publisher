@@ -1,0 +1,808 @@
+:lasttrdata: _last_tr_data
+:loopcounter: _loopcounter
+:samplea: _samplea
+:leftaligned: __leftaligned
+:rightaligned: __rightaligned
+:centered: __centered
+:justified: __justified
+
+[[ch-tabellen2]]
+= Tabellen
+(((Tabellen)))
+Das im Publisher verwendete Tabellenmodell entspricht in den Grundzügen dem von HTML.
+
+
+[[ch-tab-grundlagen]]
+== Grundlegender Aufbau einer Tabelle
+
+Die Struktur einer Tabelle sieht wie folgt aus:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject>
+  <Table>
+    <Tr>
+      <Td>...</Td>
+      <Td>...</Td>
+    </Tr>
+    <Tr>
+      <Td>...</Td>
+      <Td>...</Td>
+    </Tr>
+  </Table>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+`<Tr>` steht für tablerow und `<Td>` für tabledata.
+Tabellen sind immer zeilenweise aufgebaut.
+Jede Zeile muss dieselbe Zahl an Spalten enthalten, ansonsten gibt der Publisher eine Fehlermeldung aus.
+Die Zahl der Zeilen hingegen ist beliebig.
+
+Die Breite der Tabelle wird durch die Inhalte bestimmt.
+Bei Angabe von `stretch="no"` (Voreinstellung) beim Befehl `<Table>` nimmt die Tabelle nur die minimale Breite ein, bei `stretch="max"` wird die volle angegebene Breite (bzw. der maximal verfügbare Platz) genutzt.
+
+.Ein vollständiges Layout für eine Tabelle.
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Trace grid="no" objects="yes"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Table padding="2mm" stretch="no" >
+        <Tr>
+          <Td>
+            <Paragraph><Value>Row 1 / Column 1</Value></Paragraph>
+          </Td>
+          <Td>
+            <Paragraph><Value>Row 1 / Column 2</Value></Paragraph>
+          </Td>
+        </Tr>
+        <Tr>
+          <Td>
+            <Paragraph><Value>Row 2 / Column 1</Value></Paragraph>
+          </Td>
+          <Td>
+            <Paragraph><Value>Row 2 / Column 2</Value></Paragraph>
+          </Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+
+.Bei stretch="no" (bzw. weglassen des Attributs stretch) ist die Tabelle nur so breit, wie nötig (oben). Die Angabe von stretch="max" bei der Tabelle hat zur Folge, dass die gesamte angegebene Breite genutzt wird. Die Voreinstellung für die Breite ist die Seitenbreite (unten).
+image::tablestretchmaxno.png[width=100%]
+
+
+Es gibt einige für die gesamte Tabelle gültige Einstellungen, wie die Schriftart, Innenabstand, Zeilen- und Spaltenabstand.
+Diese sind im Anhang in der  <<cmd-table,Referenz für den Befehl `<Table>`>> beschrieben.
+
+[[ch-tab-zellen-und-zeilen]]
+== Tabellenzellen und Tabellenzeilen, Linien in Tabellen
+
+[discrete]
+=== Tabellenzeilen
+
+Anweisungen in Tabellenzeilen (`<Tr>`) bestimmen Eigenschaften für alle Zellen in dieser Zeile, sofern sie nicht in der Zelle selber überschreiben werden. Z. B.  legen `align` und `valign` die horizontale und vertikale Ausrichtung der Zellen fest.
+Dh. in der Zeile
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Tr align="left">
+  <Td>...</Td>
+  <Td>...</Td>
+  <Td align="right">...</Td>
+</Tr>
+-------------------------------------------------------------------------------
+
+haben alle Spalten bis auf die letzte die Ausrichtung »linksbündig«.
+
+In der Zeile kann auch die Hintergrundfarbe für die einzelnen Spalten festgelegt werden (`backgroundcolor`).
+Ebenso kann die minimale Höhe (`minheight`, Angabe in Rasterzellen bzw. einer Maßangabe) und der Abstand oberhalb der Zelle, sofern sie nicht auf einen Seitenumbruch folgt, festgelegt werden.
+
+[discrete]
+=== Zellen
+
+Die Tabellenzellen (`<Td>`) haben umfangreiche Formatierungsmöglichkeiten. So kann der Innenabstand (`padding`) für jede der vier Seiten individuell festgelegt werden.
+Ebenso kann sich die Zellenumrandung (`border`) auf jeder Seite in Dicke und Farbe unterscheiden.
+Die Zellenumrandung liegt immer innerhalb einer Tabelle, mit der Ausnahme, dass bei benachbarten Zellen und der bei `<Table>` aktivierten Option `border-collapse` die Rahmen »überlappen«.
+Die Ausrichtung des Tabelleninhalts lässt sich über die Parameter `valign` (vertikal) und `align` (horizontal) festlegen.
+
+Zellen können verschiedene Inhalte haben, auch gemischt:
+
+* Absätze (`Paragraph`, Block-Element)
+* Tabellen (`Table`, Block-Element)
+* Bilder (`Image`, Inline-Element)
+* Barcodes (`Barcode`, Inline-Element)
+* Kästchen (`Box`, Block-Element)
+* Mehrfachobjekte (`Overlay`, s.u., Inline-Element)
+* Vertikale Abstände (`Vspace`, s.u., Block-Element)
+* Rahmen (`Frame`, Block-Element)
+
+In Tabellenzellen gibt es horizontale Objekte (Inline-Elemente) und vertikale Objekte (Block-Elemente).
+Das bezieht sich auf die Anordnung innerhalb der Tabellenzelle:
+
+.Eine Tabelle mit Inline- und Block-Elementen.
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject>
+  <Table width="8" stretch="max">
+    <Tr align="center">
+      <Td>
+        <Image file="ocean.pdf" width="2"/>
+        <Paragraph textformat="justified">
+          <Value select="sd:dummytext()"/>
+        </Paragraph>
+        <Box width="2" height="1" backgroundcolor="green"/>
+      </Td>
+    </Tr>
+  </Table>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+.Block-Elemente in einer Tabellenzelle werden untereinander dargestellt.
+image::tab-inline-block.png[width=50%,scaledwidth=100%]
+
+// Diese Objekte sind inline-Elemente: Barcodes, Bilder, Overlays, alle anderen Objekte sind Block-Objekte und werden untereinander ausgerichtet.
+
+Steht die Zeilenhöhe beispielsweise durch eine andere Zelle oder durch die Angabe von `minheight` im Zeilenanfang fest, so kann man mit `VSpace` einen vertikalen Leerraum einfügen.
+Damit wird der Teil oberhalb des Leerraums soweit wie möglich nach oben geschoben und der unter Teil nach unten, eine Angabe von `valign` in dieser Zelle hat dann keine Auswirkung mehr.
+
+
+[discrete]
+=== Linien
+(((Tabellenlinien)))
+Zwischen einzelnen Zeilen können Linien gezeichnet werden.
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Table>
+  <Tr>
+     ...
+  </Tr>
+  <Tablerule rulewidth="3pt" color="green" />
+</Table>
+-------------------------------------------------------------------------------
+
+Die Angabe der Startspalte (`startcolumn`) ist möglich.
+
+[[ch-tab-textformats]]
+== Textformate in Tabellen
+
+Im Gegensatz zu den Textformaten in Texten (siehe den Abschnitt über <<ch-textformate,Textformate>>), ist das voreingestellte Textformat (und damit die Textausrichtung) von der Ausrichtung der Tabellenzelle abhängig.
+
+[options="header"]
+|=======
+|Ausrichtung bei `<Td>` | Textformat | Beschreibung
+|`left` |`{leftaligned}`| Linksbündig, Flattersatz rechts
+|`right` |`{rightaligned}`| Rechtsbündig, Flattersatz links
+|`center` |`{centered}` | Zentriert, Flattersatz auf beiden Seiten
+|`justify` |`{justified}` | Blocksatz, rechts- und linksbündig
+|=======
+
+Das bedeutet, dass die beiden Beispiele identisch sind:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Td align="left">
+  <Paragraph>
+    <Value>....</Value>
+  </Paragraph>
+</Td>
+
+<Td align="left">
+  <Paragraph textformat="__leftaligned">
+    <Value>....</Value>
+  </Paragraph>
+</Td>
+
+-------------------------------------------------------------------------------
+
+Damit können z.B. durch die Veränderung des Textformats `{leftaligned}` alle Tabellenzellen mit linksbündiger Ausrichtung formatiert werden.
+
+[[ch-tab-colspan-rwospan]]
+== Colspan und Rowspan
+
+Die natürliche Eigenschaft einer Tabelle ist, dass alle Zellen einer Zeile gleich hoch und alle Zellen in einer Spalte gleich breit sind.
+Zellen können sich aber über mehrere Spalten und Zeilen erstrecken.
+Die Anzahl der überdeckten Spalten wird mit `colspan` angegeben, die Voreinstellung ist hier 1.
+Die Anzahl der Zeilen wird mit `rowspan` angegeben, auch hier ist die Voreinstellung 1.
+Hier muss beachtet werden, dass die Summe der Spalten in einer Zeile der Gesamtzahl entspricht.
+Im nachfolgenden Beispiel enthält die zweite Zeile zwar nur zwei Zellen, diese erstreckt sich aber über zwei Spalten.
+Die dritte Zeile hat sogar nur eine Zelldefinition, der Rest der Zeile wird durch das zwei Zellen breite Bild aus der Zeile darüber belegt (`rowspan="2"`).
+ifdef::backend-docbook99[]
+Das Ergebnis ist in Abbildung~<<abb-colspan-rowspan>> zu sehen.
+endif::[]
+
+// ~
+
+.Ein etwas komplexeres Beispiel. Die Hintergrundfarbe des Bildes bestimmt sich aus der zweiten Zeile.
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+    <PlaceObject>
+      <Table width="10"
+        columndistance="3mm"
+        leading="2mm">
+        <Tr>
+          <Td padding-bottom="2mm">
+            <Paragraph><Value>1/1</Value></Paragraph>
+          </Td>
+          <Td padding-left="1mm">
+            <Paragraph><Value>1/2</Value></Paragraph>
+          </Td>
+          <Td align="center">
+            <Paragraph><Value>1/3</Value></Paragraph>
+          </Td>
+        </Tr>
+        <Tr backgroundcolor="yellow">
+          <Td>
+            <Paragraph><Value>2/1</Value></Paragraph>
+          </Td>
+          <Td rowspan="2" colspan="2" >
+            <Image width="5" file="ocean.pdf"/>
+          </Td>
+        </Tr>
+        <Tr align="center">
+          <Td>
+            <Paragraph><Value>3/1</Value></Paragraph>
+          </Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+-------------------------------------------------------------------------------
+
+[[abb-colspan-rowspan]]
+.Auswirkung von rowspan und colspan
+image::tab-colspan-rowspan.png[width=50%,scaledwidth=100%]
+
+[[ch-tab-spaltenbreiten]]
+== Angabe der Spaltenbreiten
+
+In den bisherigen Beispiele werden die Breiten der Zellen automatisch durch den Inhalt bestimmt.
+Man kann auch die Spaltenbreiten fest vorgeben.
+Der Befehl dazu lautet `Columns` und wird direkt als erster Befehl innerhalb von `Table` angeführt:
+
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+      <Table stretch="max">
+        <Columns>
+          <Column width="2mm"/>
+          <Column width="1*"/>
+          <Column width="3*"/>
+        </Columns>
+        <Tr>
+          ...
+        </Tr>
+      </Table>
+-------------------------------------------------------------------------------
+
+Hier wird festgelegt, dass die Tabelle drei Spalten hat.
+Die erste Spalte hat eine Breite von 2mm, die zweite und die dritte Spalte teilen sich die übrige Breite im Verhältnis von 1 zu 3 auf.
+Im Befehl `Column` kann man noch weitere Angaben für die Spalte festlegen: die horizontale und vertikale Ausrichtung und die Hintergrundfarbe können vorgegeben werden.
+Eine Angabe bei einer Zelle überschreibt die Vorgabe.
+
+
+[[ch-tab-umbrueche]]
+== Umbrüche in Tabellen
+
+Ist die Tabelle zu hoch für die Seite, so umbricht sie und wird auf der nächsten Seite fortgesetzt.
+Dabei wird der noch zur Verfügung stehende Platz auf der aktuellen Seite und auf den Folgeseiten beachtet.
+Der Umbruch kann nach jeder Zeile eingefügt werden, sofern in der Zeile `break-below` nicht auf `yes` gesetzt ist.
+Einzelne Tabellenzellen werden nicht getrennt.
+
+Bei dem Tabellenumbruch kann man eigene Kopf- und Fußzeilen einfügen, die auf jeder Seite wiederholt werden.
+Diese werden in den nächsten drei Abschnitten detailliert behandelt.
+
+
+[[ch-tab-kopf_fuss_statisch]]
+== Kopf- und Fußzeilen (statisch)
+
+Es gibt zwei Arten, in Tabellen Tabellenköpfe zu definieren.
+Die erste Variante wird in diesem Abschnitt vorgestellt.
+Sie eignet sich besonders, wenn der Tabellenkopf zu Beginn bekannt ist (statisch).
+Die zweite Variante eignet sich, wenn bestimmte Tabellenzellen als Kopfzeile dienen sollen (Abschnitte in Tabellen).
+Beide Varianten kann man auch kombinieren.
+
+Ausgangspunkt ist eine einfache Tabelle:
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="data">
+    <PlaceObject>
+      <Table>
+        <Loop select="200">
+          <Tr>
+            <Td>
+              <Paragraph>
+                <Value>Tablecontents</Value>
+              </Paragraph>
+            </Td>
+          </Tr>
+        </Loop>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+Die Kopfzeile definiert man in der Tabelle wie folgt (als Kindelement des Elements `<Table>`):
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+<Tablehead>
+  <Tr backgroundcolor="gray">
+    <Td>
+      <Paragraph>
+        <Value>Head</Value>
+      </Paragraph>
+    </Td>
+  </Tr>
+</Tablehead>
+-------------------------------------------------------------------------------
+
+Man kann die Kopfzeile für die erste Seite separat definieren, in dem man das Attribut `page` spezifiziert (Voreinstellung ist `all`):
+
+.Schema für unterschiedliche Tabellenköpfe auf der ersten bzw. allen anderen Seiten. Die Reihenfolge der Deklaration ist nicht wichtig.
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+<Tablehead page="all">
+  <!--1-->
+</Tablehead>
+
+<Tablehead page="first">
+  <!--2-->
+</Tablehead>
+-------------------------------------------------------------------------------
+<1> Tabellenkopf für alle Seiten
+<2> Wenn `page="first"` wie hier definiert wird, gilt die obige Definition (1) für alle Seiten, jedoch nicht für die erste Seite, denn hier gilt (2).
+
+Mit dieser Variante kann man nicht nur den (sich wiederholenden) Tabellenkopf bestimmen, sondern auch den Tabellenfuß.
+Das geht analog zu `<Tablehead>`, nur dass die Seitenauswahl anstelle von `first` `last` erlaubt.
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+<Tablefoot page="last">
+  <Tr backgroundcolor="gray">
+    <Td>
+      <Paragraph>
+        <Value>Table foot last page</Value>
+      </Paragraph>
+    </Td>
+  </Tr>
+</Tablefoot>
+<Tablefoot page="all">
+  <Tr backgroundcolor="gray">
+    <Td>
+      <Paragraph>
+        <Value>Table foot for all pages</Value>
+      </Paragraph>
+    </Td>
+  </Tr>
+</Tablefoot>
+-------------------------------------------------------------------------------
+
+Tabellenköpfe und -füße müssen nicht nur aus einer Zeile bestehen.
+Sie können auch Linien und mehrere Zeilen enthalten.
+
+[[ch-tab-kopf_fuss_dynamisch]]
+== Kopf- und Fußzeilen (dynamisch)
+
+
+Im vorherigen Abschnitt wird der Tabellenkopf über `<Tablehead>` (und dem Gegenstück `<Tablefoot>`) erzeugt.
+Im Gegensatz dazu wird hier gezeigt, wie ein dynamischer Tabllenkopf erzeugt wird.
+Beide Varianten können kombiniert werden.
+
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+<Tr sethead="yes" backgroundcolor="lightgray">
+  <Td>
+    <Paragraph>
+      <Value>New head</Value>
+    </Paragraph>
+  </Td>
+</Tr>
+-------------------------------------------------------------------------------
+
+Die »Magie« steckt in `sethead="yes"` in der Tabellenzeile.
+Dadurch wird diese Zeile auf der nächsten Seite ganz oben automatisch wiederholt, direkt unterhalb eines eventuell vorhandenen statischen Tabellenkopfs.
+Das eignet sich sehr gut für Zwischenüberschriften oder Abschnitte in Tabellen.
+
+[discrete]
+== Beispiel
+
+Ein etwas konstruiertes Beispiel.
+Es gibt zwei Abschnitte in der Tabelle mit zwei und acht Zeilen. Die Datei `data.xml`:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<data>
+  <section name="section 1" rows="2"/>
+  <section name="section 2" rows="8"/>
+</data>
+-------------------------------------------------------------------------------
+
+Das Layout gibt eine Tabelle aus, für jeden Abschnitt wird die Überschrift als Zeile ausgegeben, in der das Attribut `sethead` auf `yes` gesetzt ist.
+In einer Schleife werden die gewünschten Zeilen ausgegeben.
+
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+  <Pageformat width="100mm" height="60mm"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Table padding="1mm" stretch="max">
+        <ForAll select="section">
+          <Tr sethead="yes" backgroundcolor="lightgray">
+            <Td>
+              <Paragraph>
+                <Value select="@name"/>
+              </Paragraph>
+            </Td>
+          </Tr>
+          <Loop select="@rows" variable="i">
+            <Tr>
+              <Td>
+                <Paragraph>
+                  <Value select="concat('Row ', $i)"/>
+                </Paragraph>
+              </Td>
+            </Tr>
+          </Loop>
+        </ForAll>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+ifdef::backend-docbook99[]
+Das Ergebnis ist in Abbildung~<<abb-03-dyntabellenkopf>> zu sehen.
+endif::[]
+
+// ~
+
+[[abb-03-dyntabellenkopf]]
+.Die Abschnitte werden mit `sethead="yes" markiert und werden im Tabellenkopf wiederholt`.
+image::03-dyntabellenkopf.png[width=80%,scaledwidth=100%]
+
+
+[[ch-tab-kopf_fuss_uebertrag]]
+== Kopf- und Fußzeilen mit Übertrag
+
+Manchmal möchte man in Tabellen in Kopf- bzw. Fußzeilen eine Zwischensumme bzw. Übertrag (engl. etwa »running sum«) ausgeben.
+Hier ist das Problem, dass das eine dynamische Information ist, die sich aus dem zur Verfügung stehenden Platz ergibt.
+Ist die Seite kürzer, so ist die Summe eine andere.
+Das heißt, dass man die Zahl nicht im Vorfeld als Kopf- oder Fußzeile definieren kann.
+
+Dafür gibt es die Möglichkeit, Daten in einer Tabellenzeile zu speichern:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Tr data="..." >
+-------------------------------------------------------------------------------
+
+Diese Daten können später in Kopf- und Fußzeilen mit der speziellen Variablen `${lasttrdata}` abgefragt werden.
+Die Variable wird bei jeder Benutzung von `data="..."` überschrieben.
+Um dies zu illustrieren, gibt es ein vollständiges Layoutregelwerk, das diesen Mechanismus nutzt:
+
+// ___
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="80mm" height="80mm" />
+
+  <Record element="data">
+    <!-- Wert für die erste Kopfzeile initialisieren -->
+    <SetVariable variable="_last_tr_data" select="0"/>
+    <SetVariable variable="sum" select="0"/>
+
+    <PlaceObject>
+      <Table stretch="max">
+        <Tablehead>
+          <Tr backgroundcolor="#eee">
+            <Td>
+              <Paragraph>
+                <Value>Wert von $_last_tr_data: </Value>
+                <Value select="$_last_tr_data"/>
+              </Paragraph>
+            </Td>
+          </Tr>
+        </Tablehead>
+        <Loop select="100" variable="i">
+          <SetVariable variable="sum" select="$sum + $i"/>
+          <Tr data="$sum">
+            <Td>
+              <Paragraph>
+                <Value select="concat('i = ',$i)"/>
+              </Paragraph>
+            </Td>
+          </Tr>
+        </Loop>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+.Die berechneten Zwischensummen
+image::22-runningsum.png[width=70%,scaledwidth=100%]
+
+
+
+Hier wird erst die Kopfzeile definiert, dann 100 Zeilen erzeugt (`<Loop select="100">`), die Schleifenzahl gespeichert und anschließend in jeder Zeile mit `data="$sum"` den errechneten Wert gespeichert, der später in der Kopfzeile ausgegeben wird.
+
+TIP: Die Breite der dynamischen Kopf- und Fußzeile wird ohne `${lasttrdata}` berechnet. Das kann zu Problemen führen, wenn die neu errechnete Kopf- oder Fußzeile ein anderes Format hat.
+
+
+[[ch-tab-zusammenbau-tabellen]]
+== Zusammenbauen von Tabellen
+
+Tabellen werden manchmal nicht an einem Stück erzeugt.
+Ein gängiges Muster bei der Erstellung von Tabellen ist die Probe, ob eine Tabelle noch an einen bestimmten Platz passt.
+Dazu fügt man Zeile für Zeile an eine Tabelle an und platziert sie in eine Gruppe (eine virtuelle Fläche), um diese anschließend auszumessen.
+Das Vorgehen hierfür ist folgendes:
+
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+<SetVariable variable="tabellenzeilenneu">
+  <Copy-of select="$tabellenzeilen"/>
+  <Copy-of select="$diesezeile"/>
+</SetVariable>
+-------------------------------------------------------------------------------
+
+Wobei `$diesezeile` jeweils eine Tabellenzeile mit Start- und Endetag `<Tr> .. </Tr>` enthält und `$tabellenzeilen` leer ist oder mehrere Zeilen derselben Form enthält.
+
+Geprüft wird nun, in dem die Tabelle in einer Gruppe erzeugt wird und anschließend z. B die Höhe der Gruppe überprüft wird:
+
+.Mit diesem Muster kann man eine Tabelle zeilenweise vergrößern und ausmessen
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+    <Group name="tbl">
+      <Contents>
+        <PlaceObject>
+          <Table width="...">
+            <Copy-of select="$tabellenzeilenneu"/>
+          </Table>
+        </PlaceObject>
+      </Contents>
+    </Group>
+
+    <Switch>
+      <Case test="sd:group-height('tbl') > ...">
+        <!-- zu groß, Tabelle ohne die letzte Zeile ausgeben -->
+        <PlaceObject>
+          <Table width="...">
+            <Copy-of select="$tabellenzeilen"/>
+          </Table>
+        </PlaceObject>
+        <!-- letzte Zeile ist nun als Übertrag für die nächste Tabelle -->
+        <SetVariable variable="tabellenzeilen">
+          <Copy-of select="$diesezeile"/>
+        </SetVariable>
+      </Case>
+      <Otherwise>
+        <!-- passt, Tabelle ausgeben, Variable setzen -->
+        <PlaceObject groupname="tbl"/>
+        <SetVariable variable="tabellenzeilen">
+            <Copy-of select="$tabellenzeilenneu"/>
+        </SetVariable>
+      </Otherwise>
+    </Switch>
+-------------------------------------------------------------------------------
+
+Eine etwas ausführlichere Beschreibung findet sich im Abschnitt <<ch-optimierung-mit-gruppen>>.
+
+
+[[ch-wechselnde-zeilenfarben]]
+== Abwechselnde Zeilenfarben
+
+Wechselnde Zeilenfarben werden häufig in Tabellen mit vielen Spalten benutzt, um eine Hilfe für das Auge beim Lesen der Tabelle zu geben.
+Die Zeilenfarbe kann man durch `backgroundcolor="..."` bei `<Tr>` angeben.
+
+
+.Wechselnde Zeilenfarben. Das erste Argument der Funktion  sd:alternating() ist eine Kennung, um verschiedene Alternierungen in einem Dokument zu unterscheiden.
+[source, xml, indent=0]
+-------------------------------------------------------------------------------
+<Table>
+  <Loop select="5" variable="i">
+    <Tr backgroundcolor="{sd:alternating('tab', 'white', 'gray')}">
+      <Td>
+        <Paragraph>
+          <Value>Zeile </Value>
+          <Value select="$i"/>
+        </Paragraph>
+      </Td>
+    </Tr>
+  </Loop>
+</Table>
+-------------------------------------------------------------------------------
+
+
+.Abwechselnde Hintergrundfarben
+[[abb-wechselnde-zeilenfarben]]
+image::tab-wechselnde-zeilenfarben.png[width=20%,scaledwidth=50%]
+
+Der Trick ist hier die Anwendung der Layoutfunktion `sd:alternating()`, die zwischen den Argumenten wechselt.
+Da das Attribut `backgroundcolor` einen festen Wert erwartet, muss mit den geschweiften Klammern in den »XPath-Modus« gesprungen werden.
+
+Nach der Ausgabe der Tabelle ist nicht sichergestellt, dass beim nächsten Aufruf von `sd:alternating()` mit der Kennung `tab` wieder mit dem ersten Wert angefangen wird.
+Das kommt darauf an, welcher Wert zuletzt benutzt wurde.
+Um sicherzustellen, dass wieder bei dem ersten Wert angefangen wird, kann man bei `Table` das Attribut `eval="..."` nutzen:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Table eval="sd:reset-alternating('tab')">
+  ...
+</Table>
+-------------------------------------------------------------------------------
+
+Damit wird der Zähler für die angegebene Kennung (`tab`) zurückgesetzt.
+
+
+[[ch-tab-hintergrund]]
+== Hintergrund in Tabellenzeilen
+
+=== Text im Hintergrund
+
+Mit den Attributen `background-...` kann man Text in den Hintergrund legen.
+ifdef::backend-docbook99[]
+(S. Abbildung~<<abb-tab-bgtext>>.)
+endif::[]
+
+// ~
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Table width="7">
+  <Tr>
+    <Td background-text="Neu"
+      background-size="contain"
+      background-textcolor="gray"
+      background-transform="rotate(-40deg)">
+      <Paragraph>
+        <Value select="sd:loremipsum()"/>
+      </Paragraph>
+    </Td>
+  </Tr>
+</Table>
+-------------------------------------------------------------------------------
+
+
+[[abb-tab-bgtext]]
+.Text im Hintergrund einer Zelle
+image::21-bgtext.png[width=50%,scaledwidth=100%]
+
+
+[[ch-bildhintertext]]
+=== Bild hinter dem Text
+
+Mit dem Befehl `<Overlay>` kann man Elemente übereinander legen.
+In Tabellenzellen kann man das nutzen, um Text (wie Hinweise auf den Autor eines
+Bildes) über ein Bild zu legen. Man kann aber auch ganze Texte hinterlegen. Ob
+es sinnvoll ist, oder nicht, mag mal dahin gestellt sein.
+ifdef::backend-docbook99[]
+(S. Abbildung~<<abb-tab-overlay>>.)
+endif::[]
+// ~
+
+[source, xml]
+-------------------------------------------------------------------------------
+<DefineFontfamily name="mini" fontsize="6" leading="8">
+  <Regular fontface="TeXGyreHeros-Regular"/>
+</DefineFontfamily>
+
+<Record element="data">
+  <PlaceObject>
+    <Table width="7">
+      <Tr>
+        <Td>
+          <Overlay>
+            <Image width="4.5cm" file="_samplea.pdf"/>
+            <Position x="100" y="10">
+              <!-- Drehung um 90 Grad -->
+                <Transformation matrix="0 1 -1 0 0 0"
+                  origin-x="0" origin-y="100">
+                  <Textblock width="4" fontface="mini">
+                    <Paragraph textformat="left">
+                      <Value>Foto: Reinhard M.</Value>
+                    </Paragraph>
+                  </Textblock>
+                </Transformation>
+            </Position>
+          </Overlay>
+        </Td>
+      </Tr>
+    </Table>
+  </PlaceObject>
+</Record>
+-------------------------------------------------------------------------------
+
+[[abb-tab-overlay]]
+.Tabellenzelle mit Text und einem Bild im Hintergrund
+image::21-overlay.png[width=50%,scaledwidth=100%]
+
+[[ch-tab-balance]]
+== Ausgleichen von Spalten
+
+In der Regel benutzt eine Tabelle erst den ersten Positionierungsrahmen eines Bereichs, dann den nächsten etc.
+
+image::ch-tab-tables-notbalanced.png[width=50%,scaledwidth=100%]
+
+
+Schaltet man nun bei `<Table balance="yes">`, so wird die Tabelle wie folgt ausgegeben:
+
+image::ch-tab-tables-balanced.png[width=50%,scaledwidth=100%]
+
+
+Damit das funktioniert, muss die Tabelle in einem Platzierungsbereich ausgegeben werden, nicht auf einer Seite. Die Anzahl der Spalten, auf die ausgeglichen werden soll, bestimmt sich durch die Anzahl der Platzierungsrahmen, die der Bereich enthält. Hier ein konkretes Beispiel:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  version="3.1.24">
+  <Trace grid="yes"/>
+  <SetGrid nx="2" dx="5mm" height="12pt"/>
+  <Pageformat width="140mm" height="100mm"/>
+  <Pagetype name="Seite" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+    <PositioningArea name="zweispalten">
+      <PositioningFrame width="1" height="{sd:number-of-rows()}" row="1" column="1"/>
+      <PositioningFrame width="1" height="{sd:number-of-rows()}" row="1" column="2"/>
+    </PositioningArea>
+  </Pagetype>
+
+  <Record element="data">
+    <PlaceObject area="zweispalten">
+      <Table balance="no">
+        <Loop select="20" variable="i">
+          <Tr>
+            <Td><Paragraph><Value>Row </Value><Value select="$i"/></Paragraph></Td>
+          </Tr>
+        </Loop>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+
+Mit `balance="no"` wie im Beispiel gibt es eine volle erste Spalte:
+
+image::ch-tab-balanceno.png[width=50%,scaledwidth=100%]
+
+Setzt man hingegen `balance="yes"`, so wird daraus:
+
+image::ch-tab-balanceyes.png[width=50%,scaledwidth=100%]
+
+Die Angabe wird immer auf der letzte Seite einer Tabelle beachtet, da die vorherigen Seiten den Platz sowieso vollständig ausfüllen.
+
+
+[[ch-tab-seitenwechsel]]
+== Seitenwechsel in Tabellen
+
+Ist eine Tabelle größer als der zur Verfügung stehende Platz auf der Seite, so wird die Tabelle auf der nächsten Seite bzw. im nächsten Platzierungsrahmen fortgeführt. Um solch einen Seitenwechsel zu erzwingen, gibt es <<cmd-tablenewpage,den Befehl `<TableNewPage>`>>.
+
+
+
+
+// Ende

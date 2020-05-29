@@ -1,0 +1,17 @@
+[[ch-writelayoutfile]]
+
+= How to edit the layout file
+
+The layout file is encoded in standard XML (UTF-8) and therefore it can be edited with any text editor (notepad++ for example). We provide a full RelaxNG grammar which makes editing the layout XML with a good XML editor a breeze. We know of the following editors that allow XML editing with the support of RelaxNG. If you know of any other XML editors with RelaxNG support, please drop us a note at info@speedata.de.
+
+ * OxygenXML (Mac, Windows, Linux)
+ * XMLSpy (Windows)
+ * XML Blueprint (Windows only)
+ * GNU Emacs with nxml-mode (all operating systems, free)
+ * jEdit (Mac, Windows, Linux, free)
+
+The schema for editing the layout XML can be found in the directory share/schema in the file layoutschema-en.rng.
+
+
+
+// EOF

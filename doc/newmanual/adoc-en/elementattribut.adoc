@@ -1,0 +1,36 @@
+[[ch-xmlstrukturen,Erzeugen von XML-Strukturen]]
+= Erzeugen von XML-Strukturen
+
+Der speedata Publisher kann XML-Dateien erzeugen, speichern und wieder einlesen.
+Damit kann man Inhaltsverzeichnisse, Querverweise und weitere andere Anwendungen realisieren.
+
+Die XML-Struktur wird nicht direkt, sondern indirekt über die beiden Befehle `<Element>` und `<Attribute>` erzeugt.
+So kann die folgende XML-Datei
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Wurzel>
+   <Gruß inhalt="Hallo Welt!" />
+</Wurzel>
+-------------------------------------------------------------------------------
+
+aus dieser Struktur im Layoutregelwerk erzeugt werden:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Element name="Wurzel">
+  <Element name="Gruß">
+    <Attribute name="inhalt" select="'Hallo Welt!'"/>
+  </Element>
+</Element>
+-------------------------------------------------------------------------------
+
+erzeugt werden.
+Textinhalte außerhalb von Attributen, wie z. B. mixed content, können mit dem Publisher nicht ausgegeben werden.
+
+
+Ein ausführliches Beispiel ist in <<ch-verzeichnisseerstellen,Verzeichnisse erstellen (XML-Struktur)>> gezeigt.
+
+

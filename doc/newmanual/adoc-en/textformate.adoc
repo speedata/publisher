@@ -1,0 +1,103 @@
+[[ch-textformate]]
+= Textformate
+
+Textformate dienen zur Steuerung der Absätze.
+Hierüber lassen sich verschiedene Dinge wie Texteinzug, Textausrichtung, Hurenkinder und Schusterjungen, Umbruchverhalten und mehr steuern.
+
+Die einzelnen Parameter werden in der Referenz unter <<cmd-definetextformat,`<DefineTextformat>`>> beschrieben.
+
+Das Textformat mit dem Namen `text` ist im Publisher vorgegeben und wird an allen Stellen benutzt, wo kein anderes Textformat angegeben wird.
+Es ist wie folgt definiert:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<DefineTextformat name="text" alignment="justified"/>
+-------------------------------------------------------------------------------
+
+Damit werden alle Texte in Blocksatz und mit Silbentrennung, ohne Einzug und ohne Abstände oben und unten ausgegeben, solange
+
+. das Format `text` nicht neu definiert wird oder
+. ein anderes Textformat bei  `<Paragraph>` oder `<Textblock>` angegeben wird (das Attribut dazu heißt `textformat`).
+
+// Man kann das Textformat sowohl bei dem Befehl `<Paragraph>` als auch bei `<Textblock>` (bzw. bei manchen anderen Objekten) angeben.
+// Das Attribut hat immer die Form `textformat="..."`.
+
+== Umbruch zwischen Texten
+
+Seitenumbrüche beispielsweise nach einer Überschrift sind unerwünscht.
+Um Umbrüche an diesen Stellen zu unterbinden, kann die Textformat-Eigenschaft `break-below` ausgeschaltet werden:
+
+.Um zu verhindern, dass zwischen der Überschrift und dem Text ein Seitenumbruch eingefügt wird, muss man das Textformat der Überschrift anpassen.
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="100mm" height="70mm"/>
+  <Trace textformat="yes"/>
+
+  <DefineTextformat name="keeptogether" break-below="no"/>
+
+  <DefineFontfamily name="h1" fontsize="18" leading="20">
+    <Regular fontface="sans-bold"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <Output>
+      <Text>
+        <Paragraph fontface="h1" textformat="keeptogether">
+          <Value>A Title</Value>
+        </Paragraph>
+        <Paragraph>
+          <Value select="sd:dummytext()"/>
+        </Paragraph>
+      </Text>
+    </Output>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+.Ausgabe einer Überschrift. Das Textformat mit der Eigenschaft break-below verhindert einen Umbruch unter der Überschrift.
+image::textmitueberschrift.png[width=50%,scaledwidth=100%]
+
+Die Eigenschaft `break-below="no"` wird allerdings nur innerhalb einer Textausgabe (`<Output>`) berücksichtigt.
+Zwischen zwei Textausgaben kann sehr wohl ein Seitenumbruch eingefügt werden, das lässt sich nicht verhindern.
+Um dennoch einen Text an einem Stück auszugeben, der erst aus den Daten zusammengesetzt werden muss, speichert man die einzelnen Inhalte in Variablen und gibt sie dann an einem Stück aus.
+
+.Mit Variablen und <Copy-of> kann man Texte zusammensetzen und an einem Stück ausgeben.
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+  <Record element="data">
+    <SetVariable variable="mytitle">
+      <Paragraph fontface="h1" textformat="keeptogether">
+        <Value>A Title</Value>
+      </Paragraph>
+    </SetVariable>
+
+    <SetVariable variable="mytext">
+      <Paragraph>
+        <Value select="sd:dummytext()"/>
+      </Paragraph>
+    </SetVariable>
+
+    <Output>
+      <Text>
+        <Copy-of select="$mytitle"/>
+        <Copy-of select="$mytext"/>
+      </Text>
+    </Output>
+  </Record>
+-------------------------------------------------------------------------------
+
+[[ch-textformate-tracing]]
+== Tracing
+
+
+Der Befehl `<Trace textformat="yes"/>` aktiviert »tooltips« im PDF über den Texten, die das dort verwendete Textformat ausgeben.
+
+[[abb-tracetextformat]]
+.Tooltip mit dem Textformat
+image::tracetextformat.png[width=100%]
+
+
+// ENDE

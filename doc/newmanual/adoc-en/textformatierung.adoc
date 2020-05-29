@@ -1,0 +1,208 @@
+[[ch-textformatierung]]
+= Textformatierung
+
+`<Textblock>` und `<Text>` enthalten einen oder mehrere Absätze (Befehl `<Paragraph>`).
+Die eigentlichen Texte werden dort innerhalb von `<Value>` gekapselt.
+Es gibt zahlreiche Möglichkeiten, die Formatierung der Texte zu beeinflussen.
+Die Schalter für die Schriftschnitte wurden in <<ch-einbindungschriftarten,Einbinden von Schriftarten>> vorgestellt.
+Mit einer ähnlichen Funktionalität gibt es die folgenden Befehle:
+
+`<Sub>` und `<Sup>`::
+   Tiefgestellter und hochgestellter Text.
+
+`<Fontface>`::
+   Schaltet vorübergehend auf eine andere Schriftart um.
+
+`<Color>`::
+   Gibt den eingeschlossenen Text in einer anderen Farbe aus.
+
+`<A>`::
+   Erzeugt ein Hyperlink.
+
+`<HSpace>`::
+   Fügt einen dehnbaren Leerraum (mit oder ohne Punkte) ein.
+
+`<U>`::
+   Unterstreichen.
+
+
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+    <PlaceObject>
+      <Textblock width="11">
+        <Paragraph>
+          <Value>Text</Value>
+          <Sub><Value>sub</Value></Sub>
+          <Value> </Value>
+          <Sup><Value>sup</Value></Sup>
+          <Value> </Value>
+          <U><Value>underline</Value></U>
+          <Value> </Value>
+          <Color name="green"><Value>green</Value></Color>
+          <Value> </Value>
+          <A href="https://www.speedata.de">
+            <Value>link to the homepage</Value>
+          </A>
+          <HSpace leader=" . "/>
+          <Value>right margin.</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+-------------------------------------------------------------------------------
+
+
+.Verschiedene Textauszeichnungen
+image::textauszeichnungen.png[width=100%]
+
+[[ch-aufzaehlungslisten,Aufzählungslisten]]
+== Aufzählungslisten
+
+Anstelle eines Absatzes kann auch eine Aufzählungsliste erscheinen.
+Diese wird mit `<Ol>`  bzw. `<Ul>` für eine Liste mit Nummerierung (ordered list) und eine Liste mit Punkten (unordered list) angegeben.
+Die einzelnen Punkte müssen mit `<Li>` ausgezeichnet werden.
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+    <PlaceObject>
+      <Textblock>
+        <Ol>
+          <Li><Value>One</Value></Li>
+          <Li><Value>Two</Value></Li>
+        </Ol>
+        <Ul>
+          <Li><Value>One</Value></Li>
+          <Li><Value>Two</Value></Li>
+        </Ul>
+      </Textblock>
+    </PlaceObject>
+-------------------------------------------------------------------------------
+
+image::olul.png[width=20%,scaledwidth=30%]
+
+
+TIP: Dieses Feature ist noch nicht wirklich robust. Die Listen können (derzeit) nicht geschachtelt werden. Es empfiehlt sich zu schauen, ob die Listen auch korrekt ausgegeben werden.
+
+[[ch-nobreak]]
+== Verhindern von Textumbruch
+
+Manche Überschriften und Eigennamen sollen nicht umbrochen werden. Dafür gibt es den Befehl `<NoBreak>`, der auf verschiedene Weisen einen Umbruch unterdrückt.
+Ein etwas übertriebenes Beispiel ist:
+
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+    <PlaceObject>
+      <Textblock width="10cm">
+        <Paragraph>
+          <Value>A wonderful serenity has taken possession </Value>
+          <NoBreak><Value>of my entire soul, like these sweet mornings...</Value></NoBreak>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+-------------------------------------------------------------------------------
+
+
+////
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Trace grid="yes"/>
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="10cm">
+        <Paragraph>
+          <Value>A wonderful serenity has taken possession </Value>
+          <NoBreak><Value>of my entire soul, like these sweet mornings...</Value></NoBreak>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+////
+
+.Die Voreinstellung bei NoBreak ist, dass der Teil zusammen hängen muss.
+image::nobreak1.png[width=100%]
+
+Alternativ kann man durch eine Vorgabe der maximalen Breite die Schriftgröße verringern oder den Text mit Auslassungspunkten kürzen.
+ifdef::backend-docbook99[]
+Siehe die Abbildung~<<abb-nobreak2>>.
+endif::[]
+// ~
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+      <Textblock width="10cm">
+        <Paragraph>
+          <NoBreak maxwidth="10" reduce="cut" text="...">
+            <Value>A wonderful serenity has taken possession of my entire soul, like these sweet mornings...</Value>
+          </NoBreak>
+        </Paragraph>
+      </Textblock>
+-------------------------------------------------------------------------------
+
+[[abb-nobreak2]]
+.Hier wird per cut der Text abgeschnitten und mit dem angegebenen Text aufgefüllt.
+image::nobreak2.png[width=100%]
+
+[[ch-umbrechenurl]]
+== Umbrechen von URLs
+
+Der Befehl `<URL>` dient zum leichteren Umbrechen von URLs.
+Es darf vornehmlich an Schrägstrichen (/) umbrochen werden, außerdem werden keine Trennstriche eingefügt.
+Es wird kein Hyperlink erzeugt, dafür ist der Befehl `<A>` zuständig.
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <SetGrid nx="40" ny="10"/>
+  <Trace grid="yes"/>
+  <Pageformat width="90mm" height="5cm"/>
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="35">
+        <Paragraph>
+          <URL><Value>https://github.com/speedata/publisher/issues</Value></URL>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+
+ergibt
+
+
+image::url.png[width=70%]
+
+(Siehe auch https://github.com/speedata/publisher/issues/173)
+
+
+////
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Pageformat width="150mm" height="10cm"/>
+  <Trace grid="yes"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>Ein langer Text, der nur zur Illustration dient </Value>
+          <NoBreak maxwidth="6" reduce="cut" text="..."><Value>während dies nicht umbrochen werden darf.</Value></NoBreak>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+////
+
+
+// Ende
+

@@ -1,0 +1,123 @@
+[[ch-silbentrennung-sprache]]
+= Silbentrennung / Spracheinstellungen
+
+Silbentrennung ist in den meisten westlichen Sprachen notwendig, um ein akzeptables Erscheinungsbild für schmale Texte zu haben.
+Silbentrennung ist ein integraler Bestandteil des Umbruchalgorithmus, beispielsweise weil vermieden werden soll, dass mehrere Trennungen in aufeinanderfolgenden Zeilen auftreten.
+
+Die Silbentrennung wird im Publisher über die Sprache gesteuert und musterbasiert vorgenommen.
+Die Sprache kann man global einstellen über `<Options mainlanguage="...">` oder Absatzweise.
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Options mainlanguage="German" />
+-------------------------------------------------------------------------------
+
+
+stellt das gesamte Dokument auf deutsche Trennmuster um, während
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph language="German">
+    <Value>Autobahn</Value>
+</Paragraph>
+-------------------------------------------------------------------------------
+
+
+nur für einen Absatz die Sprache umstellt.
+Die verfügbaren Sprachen sind in der Befehlsreferenz unter <<cmd-options,`<Options>`>> beschrieben.
+
+Möchte man testen, ob die Wörter richtig getrennt werden, kann man mit `<Trace hyphenation="yes" />` kleine Markierungen erzeugen lassen.
+ifdef::backend-docbook99[]
+Siehe die Abbildung~<<abb-trennstellenimtext>>.
+endif::[]
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options mainlanguage="German" />
+  <Trace hyphenation="yes" />
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="3">
+        <Paragraph>
+          <Value>Autobahn</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+ifndef::backend-docbook99[]
+ergibt folgendes:
+endif::[]
+//~
+
+
+[[abb-trennstellenimtext]]
+.Trennstellen anzeigen im Text
+image::13-autobahn.png[width=50%]
+
+Mittels(((`Hyphenation`)))
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Hyphenation>er-go-no-mic</Hyphenation>
+-------------------------------------------------------------------------------
+
+
+kann man für einzelne Wörter Trennvorschläge bzw. -ausnahmen definieren. So werden die Wörter dann nur an den mit Bindestrich angegebenen Stellen getrennt.
+
+TIP: Mit optischem Randausgleich, der im Abschnitt <<ch-optischerrandausgleich>> beschrieben ist, kann man die Anzahl der Silbentrennungen im Dokument etwas verringern.
+
+
+[[ch-trennung-ausschalten]]
+== Trennungen für Absätze ausschalten
+
+
+Für einzelne Absätze kann man die automatische Silbentrennung ausschalten, in dem man ein Textformat definiert mit `hyphenate="no"`
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<DefineTextformat name="nohyphen" hyphenate="no"/>
+-------------------------------------------------------------------------------
+
+In so markierten Absätze werden keine Wörter getrennt.
+Die Anwendung von Textformaten ist in einem <<ch-textformate,eigenen Abschnitt>> beschrieben.
+
+Das Zeichen für die Silbentrennung kann man ebenfalls über ein Textformat verändern:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<DefineTextformat name="dothyphen" hyphenchar="•"/>
+-------------------------------------------------------------------------------
+
+.Anderes Zeichen für Worttrennungen
+image::13-dothyphen.png[width=50%]
+
+== Trennungen nur an bestimmten Zeichen zulassen
+
+Eine Eigenschaft von `<Paragraph>` erlaubt die Zeichen einzugrenzen, an denen ein Zeilenumbruch  eingefügt werden darf.
+Das ist bei technischen Daten oft wichtig, wo z. B. Typbezeichnungen in der Form `12-345/AB` vorkommen, und nicht getrennt werden sollen.
+Im folgenden Beispiel darf nur hinter einem Schrägstrich umbrochen werden:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph allowbreak="/">
+  <Value>https://download.speedata.de/publisher/development/</Value>
+</Paragraph>
+-------------------------------------------------------------------------------
+
+Die Voreinstellung für `allowbreak` ist `" -"`, also ein Umbruch an einem Leerzeichen oder einem Trennstrich.
+
+
+
+TIP: Das ist ein experimentelles Feature im Publisher. Wahrscheinlich wird dies in einer zukünftigen Version einem Textformat zugeordnet werden.
+

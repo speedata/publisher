@@ -1,0 +1,110 @@
+= Marker
+
+Marker sind unsichtbare Zeichen, die in den Text eingefügt werden.
+Diesen Zeichen wird immer ein Name zugeordnet.
+Nach Ausgabe des Zeichens auf einer Seite kann man den Publisher nach der Seitenzahl fragen.
+Der Aufbau ist folgendermaßen:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject>
+  <Textblock>
+    <Action>
+      <Mark select="'Textanfang'"/>
+    </Action>
+    <Paragraph>
+      <Value>
+        Zeile
+        Zeile
+        Zeile
+      </Value>
+    </Paragraph>
+  </Textblock>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+Nach Ausgabe der Seite ist nun mit `sd:pagenumber('Textanfang')` die Seitennummer ermittelbar.
+
+Die Marker werden automatisch in einer internen Hilfsdatei `publisher.aux` gespeichert, so dass bei einem weiteren Durchlauf auf die Seitenzahlen über `sd:pagenumber()` bereits vor dem Platzieren der Seite verfügbar sind.
+Als Beispiel wird eine einfache Textstruktur genommen (es ist dasselbe Beispiel wie im nächsten Abschnitt):
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<data>
+  <kapitel titel="Vorwort">
+    <text>...</text>
+  </kapitel>
+  <kapitel titel="Einleitung">
+    <text>...</text>
+  </kapitel>
+  <kapitel titel="Schlusswort">
+    <text>...</text>
+  </kapitel>
+</data>
+-------------------------------------------------------------------------------
+
+Die mit dem folgenden Layout ausgegeben wird:
+
+.Das Grundgerüst für die Marker. Die Stelle für das Inhaltsverzeichnis wird später erweitert (siehe Kommentar).
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <DefineFontfamily name="Überschrift" fontsize="18" leading="20">
+    <Regular fontface="sans"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <!-- Diese Stelle wird weiter unten ergänzt -->
+    <ProcessNode select="kapitel"/>
+  </Record>
+
+  <Record element="kapitel">
+    <PlaceObject>
+      <Textblock>
+        <Action>
+          <Mark select="@titel"/>
+        </Action>
+        <Paragraph fontface="Überschrift">
+          <Value select="@titel"/>
+        </Paragraph>
+        <Paragraph>
+          <Value select="text"/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <NewPage/>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+
+Der Publisher ordnet nun die Kapitel der Seitenzahl zu. Man kann nun das Verzeichnis im nächsten Durchlauf ausgeben:
+
+.Dieser Teil wird in das Layout oben eingefügt, um das Inhaltsverzeichnis auszugeben.
+[source, xml]
+-------------------------------------------------------------------------------
+  <PlaceObject>
+    <Table padding="5pt">
+      <ForAll select="kapitel">
+        <Tr>
+          <Td><Paragraph><Value select="@titel"/></Paragraph></Td>
+          <Td><Paragraph>
+               <Value select="sd:pagenumber(@titel)"/> <!--1-->
+          </Paragraph></Td>
+        </Tr>
+      </ForAll>
+    </Table>
+  </PlaceObject>
+  <NewPage/>
+-------------------------------------------------------------------------------
+<1> In einem weiteren Durchlauf stehen die Seitenzahlen zur Verfügung, bevor die eigentlichen Kapitel auf die Folgeseiten geschrieben werden.
+
+
+
+
+

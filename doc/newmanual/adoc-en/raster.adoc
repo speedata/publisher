@@ -1,0 +1,337 @@
+[[ch-raster,Raster]]
+=  Raster
+
+
+// Die https://de.wikipedia.org/wiki/Gestaltungsraster[Wikipedia enthält zum Thema Gestaltungsraster] den folgenden Text:
+
+// [quote,Wikipedia]
+// »Der Gestaltungsraster (in der Praxis oft das Gestaltungsraster), auch der typografische Raster, Rastersystem oder auf Englisch auch Grid genannt, ist  ein Ordnungssystem in der visuellen Kommunikation, das als Hilfskonstruktion die Organisation von grafischen Elementen auf einer Fläche oder in einem Raum erleichtert.
+// Gestaltungsaufgaben, in denen der Raster Anwendung findet, sind meist typografischer Art – es wird dann von Rastertypografie gesprochen.«
+
+Beim Raster handelt es sich um nicht sichtbare Linien oder Kästchen, an dem Objekte ausgerichtet sind.
+Man kennt es beispielsweise vom Zeitungsdruck, wo es oftmals fünf oder sechs Spalten gibt.
+Alle Bilder oder Anzeigen füllen dann eine oder mehrere Spalten aus.
+Ebenso gibt es in Katalogen häufig Rasterzeilen, die ähnlich funktionieren.
+Dadurch erreicht man ein klares Layout.
+
+Der speedata Publisher arbeitet immer mit einem solchen Raster.
+Da jede Publikation anders ist, gibt es keine Möglichkeit, eine sinnvolle Vorgabe dafür zu finden.
+In der Voreinstellung ist das Raster auf eine Größe von 1cm × 1cm gesetzt.
+Es gilt für die Seite sowie alle Positionierungsrahmen und Gruppen.
+Anzeigen kann man das Raster mit `sp --grid` oder `<Trace grid="yes"/>` im Layout.
+
+
+[source, xml]
+----
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <SetGrid height="12pt" nx="10"/>
+  <Trace grid="yes"/>
+  <Pageformat width="8cm" height="4cm"/>
+
+  <Record element="data">
+    <PlaceObject column="3" row="2">
+      <Textblock>
+        <Paragraph>
+          <Value>Hello world!</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+
+</Layout>
+----
+
+ifdef::backend-docbook99[]
+Das Ergebnis ist in Abbildung~<<abb-08-raster>> zu sehen.
+endif::[]
+ifndef::backend-docbook99[]
+ergibt
+endif::[]
+
+
+[[abb-08-raster]]
+.Einfaches Raster
+image::08-raster.png[width=50%,scaledwidth=100%]
+
+// ~
+
+
+
+Wenn man genau hinschaut, sieht man, dass der erste und dann jeder fünfte Strich etwas dunkler gezeichnet wird.
+Das hilft dabei, Rasterzellen zu zählen, falls das notwendig sein sollte.
+Die rote Linie zeigt die Begrenzung der Seite, in der Voreinstellung sind die Ränder jeweils 1cm.
+
+== Positionierung der Objekte im Raster
+
+In dem Beispiel oben sieht man, dass die Angaben bei `row` und `column` sich auf das Raster beziehen, der Ursprung oben links hat die Koordinate 1,1.
+Neben dem Platzieren in Rasterkoordinaten gibt es noch die absolute Platzierung: hier lässt sich das Objekt immer exakt an einer ganz bestimmten Stelle im PDF positionieren.
+Das eignet sich beispielsweise für Logos oder Hintergrundbilder, die an einer festen Position dargestellt werden sollen.
+Diese beiden Varianten sind innerhalb einer Ausgabe mit `<PlaceObject>` nicht kombinierbar: man muss sich für eine der beiden Varianten entscheiden.
+
+[source, xml]
+.Rasterbasierte Ausgabe (oben) und absolute Ausgabe (unten). Bei der rasterbasierten Ausgabe sind die Angaben Koordinaten im Seitenraster, wobei die linke obere Ecke die Position 1,1 ist. Bei der absoluten Positionierung ist die Angabe gemessen von der linken oberen Ecke. Sobald eine der beiden Angaben eine Längenangabe ist, wird die absolute Positionierung genommen.
+-------------------------------------------------------------------------------
+<!-- grid -->
+<PlaceObject row="4" column="5">
+    <Image file="_samplea.pdf" width="5"/>
+</PlaceObject>
+
+<!-- absolute  -->
+<PlaceObject row="12mm" column="5cm">
+    <Image file="_samplea.pdf" width="5"/>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+
+
+Die Angabe von Zeile und Spalte beziehen sich immer auf die linke, obere Ecke des Objekts, sofern nicht mit `hreference`  oder `vreference` festgelegt wird, dass sich die Angabe auf die rechte oder untere Ecke beziehen soll.
+ifdef::backend-docbook99[]
+Siehe dazu die Abbildung~<<abb-hreferenz-halign>>.
+endif::[]
+Die Objekte richten sich an der oberen und linken Kante der ersten Rasterzelle aus.
+Mittels `halign` und `valign` kann man das Objekt auch rechts bzw. unten ausrichten:
+// ~
+
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject column="{sd:number-of-columns()}" row="1" hreference="right">
+  <Image file="logo.pdf" width="2.5"/>
+</PlaceObject>
+
+<PlaceObject column="{sd:number-of-columns()}" row="4" hreference="right" halign="right">
+  <Image file="logo.pdf" width="2.5"/>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+////
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Trace grid="yes" gridallocation="no"/>
+  <Pageformat width="100mm" height="8cm"/>
+
+  <Record element="data">
+    <PlaceObject column="{sd:number-of-columns()}" row="1" hreference="right">
+      <Image file="logo.pdf" width="2.5"/>
+    </PlaceObject>
+
+    <PlaceObject column="{sd:number-of-columns()}" row="4" hreference="right" halign="right">
+      <Image file="logo.pdf" width="2.5"/>
+    </PlaceObject>
+  </Record>
+
+</Layout>
+////
+
+// ifdef::backend-docbook99[]
+// Das Ergebnis ist in Abbildung <<abb-hreferenz-halign>> zu sehen.
+// endif::[]
+ifndef::backend-docbook99[]
+ergibt
+endif::[]
+
+[[abb-hreferenz-halign]]
+.Durch die Angabe von hreference="right" wird die Spaltenangabe nicht für den linken Rand des Bildes benutzt, sondern für den rechten Rand. Wenn die Breite des Bildes nicht einem Vielfachen der Rasterbreite entspricht, wie in diesem Beispiel, muss zusätzlich mit halign="right" noch die Ausrichtung innerhalb der Rasterzelle korrigiert werden (rechtes Logo).
+image::hreferenz.png[width=100%]
+
+
+
+
+
+
+== Festlegen des Rasters
+
+Das Raster wird mit dem Befehl `<SetGrid>` global eingestellt. Z. B.
+
+[source, xml]
+----
+<SetGrid height="12pt" width="5mm"/>
+----
+
+setzt die Rasterhöhe auf 12 Punkt und die -breite auf 5 Millimeter.
+Neben den festen Werten gibt es die Möglichkeit die Anzahl der Rasterzellen horizontal und vertikal festzulegen:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<SetGrid nx="9" ny="9" />
+-------------------------------------------------------------------------------
+
+Dies erzeugt eine sogenannte Neunerteilung, die häufig in der Buchgestaltung benutzt wird.
+Man kann auch noch Abstände zwischen den Rasterzellen festlegen, wie es z. B. im Zeitungssatz üblich ist:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<SetGrid width="45mm" dx="3mm" height="12pt" />
+-------------------------------------------------------------------------------
+
+Wenn das Raster nicht vollständig in den Satzspiegel passt, z. B. bei einer Rasterbreite von 3 Zentimeter und einer Seitenbreite von 10 Zentimeter, führt das zu einem Konflikt im Seitenlayout.
+Dadurch wird der rechte bzw. der untere Rand verschoben und passt nicht mit den im Seitentyp angegebenen Werten überein.
+
+[[ch-wofuer-raster]]
+== Wofür wird das Raster benötigt?
+
+
+Ruft man `sp` mit der Option `--show-gridallocation` auf, so sieht man sofort, wofür das Raster auch gut ist.
+Belegte Zellen werden intern markiert, so dass kein weiteres Objekt in diesem Bereich platziert werden kann.
+Zumindest nicht ohne Fehlermeldung oder dem Hinweis, dass kein Bereich dafür freigehalten werden soll (`allocate="no"` in `<PlaceObject>`).
+
+[source, xml]
+----
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <SetGrid height="12pt" nx="10"/>
+  <Trace grid="yes" gridallocation="yes"/>
+  <Pageformat width="8cm" height="4cm"/>
+
+  <Record element="data">
+    <PlaceObject column="3" row="2">
+      <Textblock>
+        <Paragraph>
+          <Value>Hello world!</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+
+</Layout>
+----
+
+ifdef::backend-docbook99[]
+Das Ergebnis ist in Abbildung~<<abb-08-raster2>> zu sehen.
+endif::[]
+ifndef::backend-docbook99[]
+ergibt
+endif::[]
+
+[[abb-08-raster2]]
+.Raster mit Rasterbelegungsanzeige eingeschaltet. Der gelbe Bereich wird intern als »belegt« markiert.
+image::08-raster2.png[width=80%,scaledwidth=100%]
+
+//~
+
+Der Versuch, ein Objekt in einen schon belegten Bereich zu platzieren, gibt eine Warnung.
+
+Fügt man dem Layout oben noch die Zeilen
+
+[source, xml]
+----
+<PlaceObject column="1" row="1">
+  <Image file="ocean.pdf" height="4"/>
+</PlaceObject>
+----
+
+ifdef::backend-docbook99[]
+hinzu, ergibt sich die Rasterbelegung, wie in Abbildung~<<abb-08-raster3>> zu sehen und folgende Warnung:
+endif::[]
+ifndef::backend-docbook99[]
+hinzu, ergibt sich folgende Rasterbelegung:
+endif::[]
+
+
+[[abb-08-raster3]]
+.Doppelt belegtes Raster. Rot markiert sind die Flächen, die sich mehrere Objekte teilen (überlappen)
+image::08-raster3.png[width=50%,scaledwidth=100%]
+
+// ~
+
+ifndef::backend-docbook99[]
+und eine Warnung:
+endif::[]
+
+
+-------------------------------------------------------------------------------
+...
+PlaceObject: Image in row 1 and column 1, width=4, height=4 (page 1)
+Warning: Conflict in grid
+...
+-------------------------------------------------------------------------------
+
+Lässt man die Angaben für Spalte und Zeile weg, sucht sich der Publisher die nächste freie Position selbsttätig.
+ifdef::backend-docbook99[]
+Das Ergebnis ist in Abbildung <<abb-twoimages>> zu sehen.
+endif::[]
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Trace grid="yes"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Image width="4" file="_samplea.pdf"/>
+    </PlaceObject>
+    <PlaceObject>
+      <Image width="4" file="_sampleb.pdf"/>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+
+[[abb-twoimages]]
+.Objekte suchen sich automatisch den nächsten freien Platz, sofern nichts anderes angegeben wird.
+image::twoimages.png[width=50%,scaledwidth=100%]
+
+TIP: Absolut platzierte Objekte belegen in der Voreinstellung keine Flächen im Raster. In dem Fall ist `allocate="no"` gesetzt. Mit `allocate="yes"` kann das Verhalten den im Rater platzierten Objekten gleich gesetzt werden.
+
+== Eigene Raster in Gruppen
+
+Es folgt ein Beispiel für ein vom globalen Raster abweichendes Raster innerhalb einer Gruppe.
+Ohne die explizite `<Grid ... />`-Angabe wird das Raster der Seite genommen.
+
+
+.Die Gruppe hat ein eigenes Raster, das vom Seitenraster unabhängig ist.
+[source, xml]
+----
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <SetGrid nx="4" ny="4"/>
+  <Trace grid="yes" gridallocation="yes" objects="yes"/>
+
+  <Record element="data">
+    <Group name="table">
+      <Grid width="1cm" height="12pt"/>
+      <Contents>
+        <PlaceObject>
+          <Table width="4" stretch="max">
+            <Tr>
+              <Td><Paragraph><Value>Cell 1/1</Value></Paragraph></Td>
+              <Td><Paragraph><Value>Cell 2/1</Value></Paragraph></Td>
+            </Tr>
+            <Tr>
+              <Td><Paragraph><Value>Cell 1/2</Value></Paragraph></Td>
+              <Td><Paragraph><Value>Cell 2/2</Value></Paragraph></Td>
+            </Tr>
+          </Table>
+        </PlaceObject>
+        <PlaceObject row="4" column="2">
+          <Image file="ocean.pdf" width="3"/>
+        </PlaceObject>
+      </Contents>
+    </Group>
+
+    <PlaceObject groupname="table"/>
+  </Record>
+</Layout>
+----
+
+ifdef::backend-docbook99[]
+Das Ergebnis ist in Abbildung~<<abb-08-raster4>> dargestellt.
+endif::[]
+
+
+[[abb-08-raster4]]
+.Ausschnitt aus einer Seite. Das Raster innerhalb der Gruppe ist deutlich feiner als das grobe Seitenraster.
+image::08-raster4.png[width=50%,scaledwidth=100%]
+
+
+// Ende
+

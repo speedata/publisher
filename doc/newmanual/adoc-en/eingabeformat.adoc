@@ -1,0 +1,222 @@
+[[ch-datenstrukturierung,Aufbau der XML-Dateien]]
+= Aufbau der Datendatei und des Layoutregelwerks
+
+[quote, Frei nach Henry Ford]
+Sie können jedes Datenformat benutzen, solange es XML ist.
+
+== Datenquelle: XML – wohlgeformt und strukturiert
+
+
+Die erste Voraussetzung ist, dass die Datenquelle im XML-Format (Extensible Markup Language) vorliegt.
+Andere Formate werden mit dem Publisher nicht verarbeitet (mithilfe des <<luafilter,Lua Filters>> können auch CSV- und Excel-Dateien  verarbeitet werden).
+In der Praxis spielt das keine Rolle, weil alle (strukturierten) Daten in das XML-Format  konvertiert werden können.
+
+Häufig wird gefragt, wie denn das Daten-XML aufgebaut sein muss.
+Die Antwort darauf ist einfach: es gibt keine Vorgaben, außer dass das XML den üblichen Regeln entsprechen muss (Wohlgeformtheit).
+Diese Regeln dafür stehen im <<app-glossar,Glossar>>.
+
+Daneben gibt es sinnvolle Strukturierungsempfehlungen:
+
+// . Das XML sollte in der Leserichtung angeordnet sein.
+// D. h. die Daten für die ersten Seiten »oben«, die Daten für die letzten Seiten »unten« im XML-Baum.
+
+. Die Daten sollen dann im XML-Baum vorkommen, wenn sie benötigt werden.
+Datenverarbeitung im Publisher kostet Zeit und Speicher, so dass die
+Informationen dort vorhanden sein sollten, wo sie benötigt werden. Es gibt
+natürlich Ausnahmen. Beispielsweise können globale Einstellungen (Farben, zu
+übersetzende Texte und so weiter) am Anfang der Datei definiert werden.
+
+. Unterschiedliche Darstellungen (Varianten) müssen anhand der Daten ablesbar
+sein. Wenn z. B. ein Seitenwechsel bei einer neuen Artikelgruppe (im
+Produktkatalog) passieren soll, muss in den Daten ein Wechsel der
+Artikelgruppe erkennbar sein.
+
+. Die Daten sollten möglichst strukturiert sein.
+Ein Produktkatalog könnte z. B. Artikelnummer der Form 123-12345 enthalten.
+Wenn dabei die ersten drei Ziffern die Artikelgruppe darstellen, könnte dies gegebenenfalls mit Regulären Ausdrücken erkannt werden.
+Einfacher ist es, wenn die Artikelgruppe bereits in der Datenstruktur angelegt ist, so dass es keiner Erkennung bedarf.
+
+Ein einfaches Beispiel für die Anordnung:
+
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<productdata>
+  <globalsettings>
+    ...
+  </globalsettings>
+  <articlegroup name="interior lights" number="123">
+    <article number="123-12345">
+      <property1>...</property1>
+      <property2>...</property2>
+    </article>
+    <article number="123-12346">
+      <property1>...</property1>
+      <property2>...</property2>
+    </article>
+  </articlegroup>
+  <articlegroup name="exterior lights" number="124">
+    <article number="124-23456">
+      <property1>...</property1>
+      <property2>...</property2>
+    </article>
+    <article number="124-54321">
+      <property1>...</property1>
+      <property2>...</property2>
+    </article>
+  </articlegroup>
+</productdata>
+-------------------------------------------------------------------------------
+
+Redundanz schadet hier nicht, im Gegenteil.
+Da im Beispiel die Artikelgruppe eine eindeutige Ziffernfolge (123 bzw. 124) hat, würde bei den Artikeln die letzten fünf Ziffern ausreichen.
+Man kann ja die Zahl aus `articlegroup/@number`, `-` und `article/@number` selbst zusammenbauen.
+Um sich den Schritt zu sparen, speichert man am Artikel einfach die vollständige Nummer.
+
+Um es zusammenzufassen: Wenn Sie die Möglichkeit haben, auf die Strukturierung der Daten Einfluss zu nehmen: speichern Sie lieber zu viele Informationen, als zu wenige.
+Experimentieren Sie mit der Reihenfolge der Daten, manchmal erleichtert einem die richtige Struktur die Layouterstellung enorm.
+
+== Wie greift man vom Layout auf die Daten zu?
+
+
+Da die Datendatei beliebig strukturiert sein kann, bedarf es spezieller Befehle, um auf die Daten zugreifen zu können. Diese werden weiter unten und im Anhang bei den <<ch-xpathfunktionen,XPath-Funktionen>> beschrieben.
+Im Folgenden wird von dieser einfachen Datendatei ausgegangen:
+
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<catalog>
+  <article nr="12345" price="99,95" quantity="1">
+    <description>Text for atricle 12345</description>
+    <image mainimage="yes">art12345.pdf</image>
+  </article>
+  <article nr="56789" price="45,95" quantity="5">
+    <description>Text for atricle 56789</description>
+    <image>art56789.pdf</image>
+  </article>
+</catalog>
+-------------------------------------------------------------------------------
+
+Diese Datendatei wird unter dem Namen `data.xml` gespeichert, damit der Publisher sie finden kann.
+
+
+Die Layout-Datei (Name: `layout.xml`) wird beim Einlesen ausgeführt: alle Befehle mit dem Namen `<Record>` werden für die spätere Verarbeitung gespeichert, alle anderen Befehle haben sofortige Wirkung.
+D. h. wenn ein Befehl wie `<DefineColor>` auf der obersten Ebene im Layoutregelwerk enthalten ist, wird er ausgeführt, bevor die eigentliche Datenverarbeitung beginnt.
+
+Eine minimale Layoutdatei für oben gezeigte Datenstrukturierung ist:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="catalog">
+
+  </Record>
+
+</Layout>
+-------------------------------------------------------------------------------
+
+Nach dem Aufruf von `sp` passiert nichts: es wird keine Seite erzeugt, kein Fehler ausgegeben, der Publisher beendet sich einfach:
+
+
+-------------------------------------------------------------------------------
+...
+Loading layout instructions "/home/example/layout-en.xml"
+Loading data file "/home/example/data.xml"
+Stop processing data
+0 errors occurred
+Duration: 0.158941 seconds
+node_mem_usage=1 glue, 3 glue_spec, 1 dir, 1 user_defined
+luastate_bytes=0
+
+No pages of output.
+Transcript written on publisher.log.
+Total run time: 209.499431ms
+-------------------------------------------------------------------------------
+
+Es wird deswegen keine Seite erzeugt, weil innerhalb des Elements `<Record>` keine weiteren Befehle angegeben wurden, die eine Ausgabe bewirken.
+
+
+
+Die für die Verarbeitung notwendige Struktur ist folgende:(((`Record`)))(((`ProcessNode`)))
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="catalog">
+    <!--1-->
+    <ProcessNode select="*"/> <!--2-->
+    <!--3-->
+  </Record>
+
+  <Record element="artikel">
+    <!--4-->
+  </Record>
+
+</Layout>
+-------------------------------------------------------------------------------
+<1> Befehle, die vor den ersten Kindelementen ausgeführt werden sollen, z. B. Titelseite oder Inhaltsverzeichnis erzeugen (die Bezeichnung Kindelement bezieht sich auf die Datendatei).
+<2> Hier werden alle Kindelemente einzeln aufgerufen.
+<3> Befehle für den Abschluss der PDF-Datei
+<4> Für jedes Kindelement `artikel` werden diese Befehle ausgeführt. Der »Fokus« ist jetzt bei einem Artikel, so dass man auf die Attribute und Kindelemente von Artikel zugreifen kann.
+
+
+Innerhalb des unteren `<Record>`-Befehls kann man nun auf Kindelemente und Attribute zugreifen.
+Beispiele:
+
+* `@nr` ergibt im ersten Aufruf die Zeichenkette `12345`, im zweiten Durchlauf `56789`.
+* `description` ergibt eine Sequenz mit einem Element, dem Inhalt `Text` (erster Artikel).
+* `image/@mainimage` ist im ersten Fall die Zeichenkette `"ja"` (der Inhalt des Attributs `mainimage`), im zweiten Fall die leere Zeichenkette `""`, weil das Attribut dort nicht vorhanden ist.
+
+Die Details hierzu finden sich im Abschnitt über die <<ch-xpathfunktionen,XPath-Funktionen>>.
+
+Alternativ zur Vorgehensweise mit `<ProcessNode>` und dem Gegenstück `<Record>` kann auch mit ((`<ForAll>`)) auf Kindelemente zugegriffen werden.
+Das nachfolgende Beispiel erzeugt für jedes Kindelement mit dem Namen `article` eine Tabellenzeile:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="catalog">
+    <PlaceObject>
+      <Table stretch="max"> <!--1-->
+        <Tablehead> <!--2-->
+          <Tr backgroundcolor="gray">
+            <Td>
+              <Paragraph><Value>Article number</Value></Paragraph>
+            </Td>
+            </Td>
+              <Paragraph><Value>Description</Value></Paragraph>
+            </Td>
+          </Tr>
+        </Tablehead>
+        <ForAll select="article"> <!--3-->
+          <Tr>
+            <Td>
+              <Paragraph><Value select="@nr"/></Paragraph>
+            </Td>
+            <Td>
+              <Paragraph><Value select="description"/></Paragraph>
+            </Td>
+          </Tr>
+        </ForAll>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+<1> Es wird eine Tabelle ausgegeben, die sich über die gesamte Breite erstreckt.
+<2> Ein Tabellenkopf hat die Eigenschaft, dass er auf jeder Seite wiederholt wird.
+<3> Innerhalb des `<ForAll>` kann auf die Attribute und Kindelemente von jedem Artikel zugegriffen werden, genau wie im oberen Beispiel.
+
+
+
+Tabellen werden in den Grundlagen (Kapitel <<ch-tabellen1>>) und ausführlicher <<ch-tabellen2,in Kapitel 6>> behandelt.
+
+

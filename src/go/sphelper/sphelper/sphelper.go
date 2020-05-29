@@ -15,12 +15,11 @@ import (
 	"sphelper/buildlib"
 	"sphelper/buildsp"
 	"sphelper/config"
+	"sphelper/db2html"
 	"sphelper/dirstructure"
 	"sphelper/epub"
+	"sphelper/genadoc"
 	"sphelper/genschema"
-	"sphelper/gomddoc"
-	"sphelper/htmldoc"
-	"sphelper/newdoc"
 	"sphelper/sourcedoc"
 
 	"github.com/speedata/optionparser"
@@ -30,27 +29,34 @@ var (
 	basedir string
 )
 
-// sitedoc: make hugo without ugly URLs
+// sitedoc: true: needs webserver, false: standalone HTML files
 func makedoc(cfg *config.Config, sitedoc bool) error {
-	os.RemoveAll(filepath.Join(cfg.Builddir, "manual"))
 	var err error
-	// English markdown to html
-	err = gomddoc.DoThings(cfg)
+	err = os.RemoveAll(filepath.Join(cfg.Builddir, "manual"))
 	if err != nil {
 		return err
 	}
-	// command reference from commands.xml
-	err = htmldoc.DoThings(cfg)
-	if err != nil {
-		return err
+
+	for _, lang := range []string{"en", "de"} {
+		err = genadoc.DoThings(cfg, lang, sitedoc)
+		if err != nil {
+			return err
+		}
+		var manualfile string
+		switch lang {
+		case "en":
+			manualfile = "publishermanual"
+		case "de":
+			manualfile = "publisherhandbuch"
+		}
+		err = db2html.DoThings(cfg, manualfile, sitedoc)
+		if err != nil {
+			return err
+		}
 	}
-	// The hugo documentation (currently German only)
-	err = newdoc.DoThings(cfg, sitedoc)
-	if err != nil {
-		return err
-	}
+
 	// Let's try to generate an EPUB
-	err = epub.DoThings(cfg)
+	err = epub.GenerateEpub(cfg)
 	if err != nil {
 		return err
 	}
@@ -66,13 +72,14 @@ func main() {
 	op.Command("build", "Build go binary")
 	op.Command("buildlib", "Build sp library")
 	op.Command("builddeb", "Build sp binary for debian (/usr/)")
-	op.Command("doc", "Generate speedata Publisher documentation")
+	op.Command("doc", "Generate speedata Publisher documentation (standalone)")
 	op.Command("epub", "Generate EPUB documentation (German only)")
-	op.Command("sitedoc", "Generate speedata Publisher documentation without ugly URLs for Hugo")
+	op.Command("sitedoc", "Generate speedata Publisher documentation to be used with a web server")
 	op.Command("dist", "Generate zip files and windows installers")
 	op.Command("genschema", "Generate schema (layoutschema-en.xml)")
 	op.Command("mkreadme", "Make readme for installation/distribution")
 	op.Command("sourcedoc", "Generate the source documentation")
+	op.Command("dbmanual", "Generate docbook based documentation")
 	err := op.Parse()
 	if err != nil {
 		log.Fatal(err)
@@ -92,17 +99,20 @@ func main() {
 
 	switch command {
 	case "build":
+		// build the sp executable
 		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local", "")
 		if err != nil {
 			os.Exit(-1)
 		}
 	case "buildlib":
+		// build the library
 		err := buildlib.BuildLib(cfg, runtime.GOOS, runtime.GOARCH)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(-1)
 		}
 	case "builddeb":
+		// build debian package
 		if len(op.Extra) != 4 {
 			fmt.Println("Need three arguments: sphelper builddeb <platform> <arch> <dest>")
 			os.Exit(-1)
@@ -118,12 +128,17 @@ func main() {
 			log.Fatal(err)
 		}
 	case "epub":
-		err = epub.DoThings(cfg)
+		err = epub.GenerateEpub(cfg)
 		if err != nil {
 			log.Fatal(err)
 		}
 	case "sitedoc":
 		err = makedoc(cfg, true)
+		if err != nil {
+			log.Fatal(err)
+		}
+	case "db2html":
+		err = db2html.DoThings(cfg, "publisherhandbuch", false)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -145,9 +160,9 @@ func main() {
 		t := texttemplate.Must(texttemplate.ParseFiles(filepath.Join(cfg.Srcdir, "other", "nsitemplate.txt")))
 
 		for i := 1; i < len(op.Extra); i++ {
-			os_arch := strings.Split(op.Extra[i], "/")
-			platform := os_arch[0]
-			arch := os_arch[1]
+			osArch := strings.Split(op.Extra[i], "/")
+			platform := osArch[0]
+			arch := osArch[1]
 			fmt.Println(platform, arch)
 			d := filepath.Join(srcbindir, platform, arch, "default")
 			if !fileutils.IsDir(d) {
@@ -215,9 +230,6 @@ func main() {
 					f.Close()
 				}
 			}
-		}
-		if false {
-
 		}
 	case "mkreadme":
 		if len(op.Extra) < 3 {

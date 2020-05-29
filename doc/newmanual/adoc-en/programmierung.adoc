@@ -1,0 +1,294 @@
+:loopcounter: _loopcounter
+[[ch-programmierung]]
+= Programmierung
+
+// Record == Daten getriebener Funktionsaufruf TODO
+
+Die sicherlich bedeutendste Eigenschaft des Publishers ist die Fähigkeit, sehr flexible Layoutanforderungen umzusetzen.
+Das wird hauptsächlich durch die eingebaute Programmiersprache in Zusammenhang mit den Abfragemöglichkeiten des Publishers erreicht.
+
+TIP: Die Programmausführung läuft gleichzeitig mit der Erzeugung des PDFs.
+Daher kann der speedata Publisher sehr flexibel auf die Eingabedaten reagieren.
+Abfragen wie »Ist noch genügend Platz für dieses Objekt vorhanden?« sind damit möglich.
+Das unterscheidet den Publisher von anderer Software zur Erstellung von PDF-Dateien.
+
+Es sind grundlegende Programmierkenntnisse vonnöten, um die volle Funktionalität des Publishers auszureizen.
+Die Programmiersprache wurde so einfach wie möglich gehalten, um die Lesbarkeit des Layouts zu erhalten.
+
+== Variablen
+
+Alle Variablen sind global sichtbar.
+Das heißt, dass eine Variable nie ungültig wird.
+Ein Beispiel:
+
+
+.Datendatei (`data.xml`)
+[source, xml]
+-------------------------------------------------------------------------------
+<data>
+  <article number="1" />
+  <article number="2" />
+  <article number="3" />
+</data>
+-------------------------------------------------------------------------------
+
+.Und die dazugehörige Layout-Datei (`layout.xml`). Die Ausgabe des Befehls `<Message>` ist 3. Wäre die Variable `nr` mit lokaler Sichtbarkeit deklariert, dann  könnte sie im Element `data` nicht ausgelesen werden.
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="data">
+    <ProcessNode select="article"/>
+    <Message select="$nr"/>
+  </Record>
+
+  <Record element="article">
+    <SetVariable variable="nr" select="@number"/>
+  </Record>
+
+</Layout>
+-------------------------------------------------------------------------------
+
+
+Die globale Sichtbarkeit ist nötig, weil die Programmausführung im Layout manchmal »hin und her springt«.
+Am Seitenende wird der Inhalt von `<AtPageShipout>` im aktuellen Seitentyp ausgeführt.
+Dort muss auch auf die Variablen zugegriffen werden können.
+// Ein Beispiel dafür ist im Kapitel <<ch-griffmarken>> zu finden.
+
+In Variablen können nicht nur einfache Werte gespeichert werden, sondern auch komplexe XML-Abschnitte:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Record element="data">
+  <SetVariable variable="foo">
+    <Paragraph>
+      <Value>Hello world!</Value>
+    </Paragraph>
+  </SetVariable>
+
+  <PlaceObject>
+    <Textblock>
+      <Copy-of select="$foo"/>
+    </Textblock>
+  </PlaceObject>
+</Record>
+-------------------------------------------------------------------------------
+
+Ergibt die erwartete Ausgabe von »Hello world!«. Ein Anwendungsfall ist, Tabellenbreitendeklarationen zu speichern:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<SetVariable variable="tablecolumns">
+  <Columns>
+    <Column width="1cm"/>
+    <Column width="4mm"/>
+    <Column width="1cm"/>
+  </Columns>
+</SetVariable>
+-------------------------------------------------------------------------------
+
+um diese dann anschließend in mehreren Tabellen zu benutzen:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject>
+  <Table>
+    <Copy-of select="$tablecolumns"/>
+    <Tr>
+      ..
+    </Tr>
+  </Table>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+Durch die einmalige Definition und Wiederverwendung spart man sich Tipparbeit und verringert die Fehlerquellen.
+
+[[ch-copyof]]
+== Copy-of
+
+`<Copy-of>` wurde oben schon benutzt.
+Damit werden Inhalte der Variablen an die aktuelle Stelle kopiert.
+Der Inhalt der Variablen bleibt beim Kopieren unverändert.
+
+.Pseudocode. Mit Copy-of fügt man den Inhalt der Variablen an diese Stelle ein. Der Inhalt können auch komplexe XML-Strukturen wie Absätze sein.
+-------------------------------------------------------------------------------
+variable =
+   Copy-of variable
+   neuer Wert
+-------------------------------------------------------------------------------
+
+damit wird der neue Wert an die vorherigen angehängt.
+
+
+.Ein Beispiel für Copy-of in der Praxis ist das Zusammenbauen von XML-Strukturen, mit denen Informationen gespeichert werden können. Ausführlich beschreiben wird dieses Beispiel im Kochbuch (Kaptiel 8), dort im Abschnitt Verzeichnisse erstellen (XML-Struktur).
+[source, xml]
+-------------------------------------------------------------------------------
+<SetVariable variable="chapter">
+  <Copy-of select="$chapter"/>
+  <Element name="entry">
+    <Attribute name="chaptername" select="@name"/>
+    <Attribute name="page" select="sd:current-page()"/>
+  </Element>
+</SetVariable>
+-------------------------------------------------------------------------------
+
+
+[[ch-ifthenelse]]
+== If-then-else
+
+In XPath kann man einfache Wenn-Dann Abfragen durchführen.
+Die Syntax hierfür ist `if (Bedingung) then ... else ...`.
+
+.In XPath können einfache Wenn-Dann Abfragen benutzt werden.
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject>
+  <Textblock>
+    <Paragraph>
+      <Value select="if (sd:odd(sd:current-page())) then 'recto' else 'verso'"/>
+    </Paragraph>
+  </Textblock>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+
+
+
+
+[[ch-fallunterscheidungen]]
+== Fallunterscheidungen
+
+Fallunterscheidungen entsprechen der Konstruktion  `switch/case` aus C-ähnlichen Programmiersprachen.
+Sie werden wie folgt im Publisher angewendet:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Switch>
+  <Case test="$i = 1">
+    ...
+  </Case>
+  <Case test="$i = 2">
+    ...
+  </Case>
+   ...
+  <Otherwise>
+    ...
+  </Otherwise>
+</Switch>
+-------------------------------------------------------------------------------
+
+Alle Befehle innerhalb des ersten möglichen `<Case>`-Falls werden abgearbeitet, wenn die Bedingung in `test` dort zutrifft.
+In `test` wird ein XPath-Ausdruck erwartet, der `true()` oder `false()` ergibt, etwa `$i = 1`.
+Wenn kein Fall eintritt, so wird der Inhalt des optionalen `<Otherwise>`-Abschnittes ausgeführt.
+
+
+
+
+[[ch-programmierung-schleifen]]
+== Schleifen
+
+Es gibt verschiedene Schleifen im speedata Publisher.
+Die einfache Variante ist `<Loop>`:
+
+
+.Diese Schleife wird 10 Mal durchlaufen.
+[source, xml]
+-------------------------------------------------------------------------------
+<Loop select="10">
+  ...
+</Loop>
+-------------------------------------------------------------------------------
+
+Dieser Befehl führt die eingeschlossenen Befehle so oft aus, wie der Ausdruck in `select` ergibt.
+Der Schleifenzähler ist, sofern nicht per `variable="..."` anders eingestellt, in der Variablen `{loopcounter}` gespeichert.
+Neben der einfachen Schleife gibt es noch Schleifen mit Bedingungen:
+
+
+.Die while-Schleife führt die eingeschlossenen Befehle aus, solange die Bedingung »wahr« ergibt. Es werden die Zahlen 1 bis 4 ausgegeben.
+[source, xml]
+-------------------------------------------------------------------------------
+<Record element="data">
+  <SetVariable variable="i" select="1"/>
+  <While test="$i &lt;= 4">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value select="$i"/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <SetVariable variable="i" select="$i + 1"/>
+  </While>
+</Record>
+-------------------------------------------------------------------------------
+
+Den Ausdruck `$i \&lt;= 4` muss man als `$i \<= 4` lesen, da die öffnende spitze Klammer an dieser Stelle im XML ein Syntaxfehler ist.
+Die Schleife oben wird so oft ausgeführt, solange der Inhalt der Variablen i kleiner oder gleich 4 ist.
+Nicht vergessen, die Variable auch zu erhöhen, sonst entsteht eine Endlosschleife.
+
+Neben der while-Schleife gibt es noch die until-Schleife, die analog funktioniert:
+
+
+.Da die until-Schleife so lange ausgeführt wird, bis die Bedingung wahr ist, wird nur die Zahl 1 ausgegeben.
+[source, xml]
+-------------------------------------------------------------------------------
+<Record element="data">
+  <SetVariable variable="i" select="1"/>
+  <Until test="$i &lt;= 4">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value select="$i"/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <SetVariable variable="i" select="$i + 1"/>
+  </Until>
+</Record>
+-------------------------------------------------------------------------------
+
+
+
+== Datenstrukturen
+
+Der speedata Publisher bietet keine direkte Unterstützung für Datenstrukturen wie Arrays (Felder) oder Dictionaries (Hashes oder Wörterbücher).
+Diese können über Variablen simuliert werden.
+Das Feld a1, a2, ..., ai könnte wie folgt belegt werden:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<SetVariable variable="{ concat('a',1) }" select="'Value for a1'"/>
+<SetVariable variable="{ concat('a',2) }" select="'Value for a2'"/>
+...
+-------------------------------------------------------------------------------
+
+Natürlich könnte hier auch direkt `a1` als Variablenname angegeben werden.
+In diesem Beispiel könnte sowohl der Präfix als auch der Suffix dynamisch erzeugt werden:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<SetVariable variable="prefix" select="'a'" />
+<SetVariable variable="{ concat($prefix,1) }" select="'Value for a1'"/>
+<SetVariable variable="{ concat($prefix,2) }" select="'Value for a2'"/>
+...
+-------------------------------------------------------------------------------
+
+
+Der lesende Zugriff geht über `sd:variable(...):`
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<SetVariable variable="prefix" select="'a'" />
+<Message select="sd:variable($prefix,1)"/>
+<Message select="sd:variable($prefix,2)"/>
+...
+-------------------------------------------------------------------------------
+
+Die Funktion `sd:variable()` konkateniert alle Argumente als Zeichenkette und nimmt das Ergebnis als Variablennamen.
+
+

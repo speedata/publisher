@@ -1,11 +1,11 @@
-// package is for generating an EPUB file
+// Package epub is for generating an EPUB file
 package epub
 
 import (
 	"os"
 	"path/filepath"
 	"sphelper/config"
-	"sphelper/newdoc"
+	"sphelper/genadoc"
 )
 
 type ebpubconf struct {
@@ -20,10 +20,11 @@ type ebpubconf struct {
 	Sections [][]string
 }
 
-func DoThings(cfg *config.Config) error {
+// GenerateEpub creates an epub file
+func GenerateEpub(cfg *config.Config) error {
 	var err error
 	// make sure we have the docbook file
-	if err = newdoc.GenerateAdocFiles(cfg, "epub", "version="+cfg.Publisherversion.String()); err != nil {
+	if err = genadoc.GenerateAdocFiles(cfg, "de", "epub", "version="+cfg.Publisherversion.String()); err != nil {
 		return err
 	}
 
@@ -40,7 +41,7 @@ func DoThings(cfg *config.Config) error {
 		Title:    "speedata Publisher: Anwendung und Referenz",
 		Language: "de",
 		Filename: filepath.Join(cfg.Builddir, "publisherhandbuch.epub"),
-		Images:   []string{filepath.Join(cfg.Builddir, "newdoc", "newmanual", "adoc", "img"), filepath.Join(cfg.Basedir(), "doc", "epub", "img")},
+		Images:   []string{filepath.Join(cfg.Builddir, "newdoc", "newmanual", "adoc-de", "img"), filepath.Join(cfg.Basedir(), "doc", "epub", "img")},
 		Cover:    "../images/ebook-cover-de.png",
 		Fonts:    []string{filepath.Join(cfg.Basedir(), "doc", "epub", "fonts")},
 		CSS:      filepath.Join(cfg.Basedir(), "doc", "epub", "style.css"),

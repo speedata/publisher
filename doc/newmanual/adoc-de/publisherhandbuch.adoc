@@ -1,0 +1,91 @@
+= Der speedata Publisher: Anwendung und Referenz
+Patrick Gundlach <gundlach@speedata.de>
+v1.0, 2018-03-19
+:toc: left
+// :source-highlighter: highlight.js
+:sectnums:
+:imagesdir: img
+:doctype: book
+:lang: de
+:figure-caption: Abbildung
+:last-update-label: Letzte Aktualisierung
+:toc-title: Inhalt
+:appendix-caption: Anhang
+:docinfo: private
+:icons: font
+:subs: none
+:leveloffset: +1
+
+ifdef::backend-docbook5[]
+[preface]
+= speedata Publisher: Anwendung und Referenz
+
+ifdef::epub[]
+Diese Anleitung beschreibt den speedata Publisher in der Version {version}. Das aktuelle ebook gibt es immer unter https://doc.speedata.de/publisher/de/ zu finden.
+endif::[]
+
+
+[.epub]
+
+== Einführung und Grundlagen
+
+-  <<ch-einleitung,Einleitung>>
+-  <<ch-hallowelt,Hallo Welt!>>
+-  <<ch-grundlagen,Grundlagen>>
+
+== Weiterführende Themen
+
+-  <<ch-programmierung,Programmierung>>
+-  <<ch-bildereinbinden,Bilder einbinden>>
+-  <<ch-tabellen2,Tabellen>>
+-  <<ch-fortgeschrittenethemen,Fortgeschrittene Themen>>
+-  <<ch-kochbuch,Kochbuch>>
+
+== Referenz
+
+- <<ch-installation,Installationsanleitung>>
+- <<ch-dateinamen,Dateinamen im Publisher>>
+- <<app-voreinstellungenimpublisher,Voreinstellungen im speedata Publisher>>
+- <<ch-kommandozeile,Starten des Publishers über die Kommandozeile>>
+- <<ch-konfiguration,Konfiguration des Publishers>>
+- <<app-massangaben,Längenangaben und Maßeinheiten>>
+- <<ch-xpathfunktionen,XPath- und Layoutfunktionen>>
+- <<ch-internevariablen,Interne Variablen>>
+- <<ch-changelog,Liste der Änderungen>>
+- <<app-glossar,Glossar>>
+- <<ch-befehlsreferenz,Befehlsreferenz>>
+
+
+endif::[]
+
+include::einleitung.adoc[]
+include::helloworld.adoc[]
+include::grundlagen.adoc[]
+include::programmierung.adoc[]
+include::bilder.adoc[]
+include::tabellen.adoc[]
+include::fortgeschrittenethemen.adoc[]
+include::kochbuch.adoc[]
+
+
+// Anhang
+
+:sectnums!:
+include::installation.adoc[]
+include::filenames.adoc[]
+include::voreinstellungen.adoc[]
+include::kommandozeile.adoc[]
+include::konfigurationsdatei.adoc[]
+include::massangaben.adoc[]
+include::xpathfunktionen.adoc[]
+include::variablen.adoc[]
+include::changelog.adoc[]
+include::glossar.adoc[]
+
+[appendix]
+[.split]
+[[ch-befehlsreferenz]]
+= Befehlsreferenz
+include::referenz.adoc[]
+
+

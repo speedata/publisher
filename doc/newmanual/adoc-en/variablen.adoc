@@ -1,0 +1,37 @@
+[appendix]
+[[ch-internevariablen]]
+= Interne Variablen
+
+Der Publisher setzt interne Variablen, die man im Layoutregelwerk nutzen kann.
+Diese Variablen beginnen immer mit einem Unterstrich, daher sollten eigene Variablen den Unterstrich nicht als erstes Zeichen haben.
+Sonst könnten Kollisionen bei der Namensvergabe entstehen.
+
+`_bleed`::
+  Der Wert der Beschnittzugabe.
+
+`_jobname`::
+  Der Wert der auf der Kommandozeile angegeben ist.
+
+`_last_tr_data`::
+  Der letzte Wert (`data="..."`) in einer Tabellenzeile.  Siehe Abschnitt <<ch-tab-kopf_fuss_uebertrag,Kopf- und Fußzeilen mit Übertrag>>.
+
+`_loopcounter`::
+  Der Durchlauf in einer `<Loop>`-Schleife.
+
+`_mode`::
+  Der Modus für den Durchlauf. Kommasepariert.
+
+`_pagewidth` und `_pageheight`::
+  Die Breite und Höhe der Seite. Vorgabe ist 210mm und 297mm.
+
+`_page`::
+   Der Name des Textbereichs der ganzen Seite.
+
+Erwähnenswert sind noch:
+
+`_samplea.pdf` und `_sampleb.pdf`::
+   Bilddateien, die im Publisher enthalten sind. Können zu Testzwecken genutzt werden.
+
+
+// Ende
+

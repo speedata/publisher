@@ -1,0 +1,81 @@
+[[ch-introduction]]
+= Introduction
+
+// Der speedata Publisher ist eine Software, um vollautomatisch aus XML-Daten heraus PDF-Dateien zu erstellen.
+// Die Daten können beispielsweise Produktdaten, strukturierte Texte oder andere Inhalte sein.
+
+// image::xmltopdf.png[width=50%,scaledwidth=100%]
+
+
+// Die Anweisungen, wie etwas dargestellt werden soll, liegen getrennt von den Daten vor.
+// Sie sind in einer speziell für diesen Zweck entwickelten Programmiersprache formuliert.
+
+
+// [[ch-wofuer_das_ganze]]
+// == Wofür das Ganze?
+
+// Mit dem speedata Publisher lassen sich viele verschiedene Dokumente erstellen.
+// Klassische Anwendungsfälle sind
+
+// * Produktkataloge
+// * Reiseführer
+// * Preislisten
+// * Datenblätter
+
+// und viele andere Dokumente, bei denen es darauf ankommt, reproduzierbar, schnell und zuverlässig ein Ergebnis zu erhalten, das auch noch »schön« ist.
+
+// == Schön und vollautomatisch
+
+// Der speedata Publisher ist eine nicht-interaktive Publishing-Software.
+// Das heißt, es gibt keine graphische Oberfläche (GUI).
+// Alle Anweisungen müssen vor dem Publikationsprozess feststehen und legen fest, wie die Daten im PDF angeordnet werden.
+// Durch die einzigartige Kombination von ausgefeilten Algorithmen und Programmierbarkeit lassen sich äußerst flexible Layouts realisieren, die bisher nur interaktiven Desktop-Publishing (DTP) Programmen wie InDesign von Adobe vorbehalten war.
+
+
+
+== Wo bekommt man die Software und wie wird sie gestartet?
+
+The speedata Publisher is a program without a graphical user interface. That means it runs on the command line or in the background if called from a server process.
+
+To run it on the command line, you have to open a terminal window. On Mac OS X run Terminal.app which is located in Applications/Utilities. On Windows you click on the windows button and type in cmd.exe in the search box. On Linux, it depends on the distribution you use, but there is usually a menu entry called “Terminal”.
+
+
+To run the software open the terminal and run
+
+[source,shell,subs="verbatim,quotes"]
+-------------------------------------------------------------------------------
+$ sp
+-------------------------------------------------------------------------------
+
+
+The description of the command is written in the section <<ch-commandline,about the command line>>.
+
+The speedata Publisher expects the data XML file with the name data.xml and the layout XML with the name layout.xml (this can be changed on the command and set in the configuration file) in the current directory or any of its subdirectories. This search path can be extended by configuring the publisher (see the section on how to configure the speedata publisher).
+
+
+
+// Die Software kann kostenlos heruntergeladen werden (siehe Kapitel <<ch-installation,Installation>>) und wird über die Konsole bzw. Shell gestartet.
+// Der Befehl, um den Publisher zu starten, heißt `sp`.
+// Damit lässt sich alle Funktionalität nutzen.
+// Parameter können über die Kommandozeile  oder über eine Konfigurationsdatei angegeben werden.
+
+
+// [source,shell,subs="verbatim,quotes"]
+// -------------------------------------------------------------------------------
+// $ sp
+// -------------------------------------------------------------------------------
+
+// Erläuterungen zum Starten des Publishers gibt es im Abschnitt über die <<ch-kommandozeile,Kommandozeile>>.
+
+
+// == Beispiele
+
+// Auf Github gibt es ein eigenes Repository mit Beispielen (https://github.com/speedata/examples).
+// Dort sind vollständige Dokumente hinterlegt, anhand derer man verschiedene Funktionen ausprobieren kann.
+
+// .Beispiele aus dem Repository
+// image::beispiele.png[width=100%]
+
+
+
+// EOF
