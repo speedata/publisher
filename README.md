@@ -20,7 +20,7 @@ Examples
 
 There are some examples in the [example repository on github](https://github.com/speedata/examples). Also, there are lots of small examples in the `qa` subdirectory that is used for quality assurance. See also our [showcase](https://showcase.speedata.de/).
 
-<img src="https://doc.speedata.de/publisher/de/img/beispiele.png">
+<img src="https://doc.speedata.de/publisher/static/img/beispiele.png">
 
 Can I use this in production?
 -----------------------------
