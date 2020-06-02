@@ -1,44 +1,292 @@
 [[ch-fonts,Using fonts]]
 = Using fonts
 
-The speedata Publisher can use fonts in the followig formats:
+_This page was automatically translated. Stay tuned for a manual translation..._
 
-* PostScript Type1 (.afm, .pfb)
-* OpenType (.otf)
-* TrueType (.ttf)
+Embedding fonts in the common formats is very easy. The formats Type1 (files .pfb and .afm) as well as TrueType and OpenType (files .ttf and .otf) are supported.
 
-== How to include a font
-
-In the layout rules the name of the font file must be connected to an internal name. This internal name is then used in the command DefineFontfamily which groups up to four fonts in a family (regular, bold, italic and bolditalic). The first step is accomplished with LoadFontfile:
+To make fonts known and used by the publisher, two steps are necessary. The first step is to load a font file:
 
 [source, xml]
--------------------------------------------------------------------------------
-<LoadFontfile name="Helvetica" filename="helvetica-regular.otf" />
-<LoadFontfile name="Helvetica Bold" filename="helvetica-bold.otf" />
-<LoadFontfile name="Helvetica Italic" filename="helvetica-italic.otf" />
-<LoadFontfile name="Helvetica BoldItalic" filename="helvetica-bolditalic.otf" />
--------------------------------------------------------------------------------
+----
+<LoadFontfile name="MinionRegular" filename="MinionPro-Regular.otf" />
+----
 
-After executing these commands, the font files are known as Helvetica, Helvetica Bold etc. In the second step they are used by the command DefineFontfamily:
+This assigns the file name MinionPro-Regular.otf the internal name MinionRegular. In the second step, these internal names are then used to define families:
 
-[source, xml]
--------------------------------------------------------------------------------
-<DefineFontfamily name="heading" fontsize="12" leading="14">
-  <Regular fontface="Helvetica"/>
-  <Bold fontface="Helvetica Bold"/>
-  <Italic fontface="Helvetica Italic"/>
-  <BoldItalic fontface="Helvetica BoldItalic"/>
+[source,xml]
+-------
+<DefineFontfamily name="textfont" fontsize="9" leading="11">
+  <Regular fontface="MinionRegular"/>
+  <Bold fontface="MinionBold"/>
+  <Italic fontface="MinionItalic"/>
+  <BoldItalic fontface="MinionBoldItalic"/>
 </DefineFontfamily>
+-------
+
+The last three cuts (bold, italic and bold italic) do not have to be specified if they are not used in the layout. fontsize is the font height in points, leading is the distance between two baselines.
+
+.Font size and line spacing
+image::14-fontsize-leading.png[width=100%]
+
+The font is used in different ways: in the commands <Text Block>, <Text>, <Paragraph>, <Table>, <NoBreak> and <Barcode>, a font can be specified with the attribute fontface, e.g. <Paragraph fontface="text font">. Temporarily you can switch to another family with the command <Fontface fontfamily="...">:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph>
+  <Fontface fontfamily="title">
+    <Value>Preface</Value>
+  </Fontface>
+  <Value> more text</Value>
+</Paragraph>
 -------------------------------------------------------------------------------
 
-The font family heading is composed by the four given font files. Now you can use the font family in commands such as Textblock or Table.
+== Text labeling in the layout rules
 
-== Note
+There are several ways to switch to the cuts fat, italic and fat-italic. The most direct one is to switch with the commands B and I, these can also be nested within each other:
 
-The LoadFontfile instructions can be auto generated on the command line. You need to run the sp program with the command list-fonts, such as
+[source,xml]
+-------
+<PlaceObject>
+  <Textblock fontface="textfont">
+    <Paragraph>
+      <Value>A wonderful </Value>
+      <B><Value>serenity</Value></B>
+      <Value> has taken possession </Value>
+      <I><Value>of my</Value>
+        <Value> </Value>
+        <B><Value>entire soul,</Value></B>
+      </I>
+      <Value> like these sweet mornings.</Value>
+    </Paragraph>
+  </Textblock>
+</PlaceObject>
+-------
 
-    sp --xml [--extra-dir=...] list-fonts
+.Text markup in layout. Underline (not shown) is possible with the command <U>.
+image::14-fonts.png[width=100%]
 
-The output contains all font files that are found in the current directory (and its subdirectories). Additional directories can be supplied by the shown command line option `--extra-dir=<dirname>`. The value for the name attribute in the LoadFontfile command defaults to the postscript name of the font but can be changed to any other value.
+== Text markup in the data
+
+If there are markups in the data (e.g. as HTML tags), then this works in principle in exactly the same way:
+
+[source,xml]
+-------
+<PlaceObject>
+  <Textblock fontface="textschrift">
+    <Paragraph>
+      <Value select="."/>
+    </Paragraph>
+  </Textblock>
+</PlaceObject>
+-------
+
+with the corresponding data:
+
+[source,xml]
+-------
+<data>A wonderful <b>serenity</b> has taken possession
+  <i>of my <b>entire soul,</b></i> like these sweet
+  mornings.</data>
+-------
+
+The result is the same as above. The tags can also be written in capital letters in the data: <B> instead of <b>. Nesting is also allowed and again <u> is underlined.
+
+TIP: If the data is not in well-formed XML but in HTML format for example, you can use the layout function sd:decode-html() to interpret it.
+
+== OpenType Features
+
+The OpenType format knows so-called OpenType features, such as old style figures or small caps. Some of these features can be activated at <LoadFontfile>.
+
+[source,xml]
+-------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <!-- Oldstyle figures / text figures -->
+  <LoadFontfile
+    name="MinionRegular-osf"
+    filename="MinionPro-Regular.otf"
+    oldstylefigures="yes" />
+
+  <!-- Small caps -->
+  <LoadFontfile
+    name="MinionRegular-smcp"
+    filename="MinionPro-Regular.otf"
+    smallcaps="yes" />
+
+  <DefineFontfamily name="osftext" fontsize="10" leading="12">
+    <Regular fontface="MinionRegular-osf"/>
+  </DefineFontfamily>
+
+  <DefineFontfamily name="smcptext" fontsize="10" leading="12">
+    <Regular fontface="MinionRegular-smcp"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph fontface="osftext">
+          <Value>Text with oldstyle figures 1234567890</Value>
+        </Paragraph>
+        <Paragraph fontface="smcptext">
+          <Value>Text with small caps 1234567890</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------
+
+.Text figures (above) often make reading the numbers more pleasant. Real small caps (below) differ significantly from mathematically reduced capital letters. The line width and proportions must be adjusted. Depending on the font used, smallcaps also switches to "old style figures".
+image::osfsmcp.png[width=100%]
+
+== Optical margin alignment
+
+With the parameter marginprotrusion (percentage) at the command <LoadFontfile> you can determine how far certain characters (comma, dot and hyphen) protrude into the right margin. This can be used to achieve an optically smoother margin in justified text:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options mainlanguage="German" />
+  <LoadFontfile name="main"
+                filename="MinionPro-Regular.otf"
+                marginprotrusion="100" />
+
+  <DefineFontfamily name="text" fontsize="10" leading="12">
+    <Regular fontface="main"/>
+  </DefineFontfamily>
+
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="4">
+        <Paragraph>
+          <Value select="."/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+The associated data file (`data.xml`) is as follows:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<data>A wonderful serenity has taken possession of my entire
+  soul, like these sweet mornings of spring which I enjoy
+  with my whole heart. I am alone, and feel the charm of
+  existence in this spot, which was created for the bliss of
+  souls like mine. I am so happy, my dear friend, so
+  absorbed in the exquisite sense of mere tranquil
+  existence, that I neglect my talents.</data>
+-------------------------------------------------------------------------------
+
+.Left: Comma, period and hyphen protrude into the right margin. Right: without optical margin alignment.
+image::marginprotrusion.png[width=100%]
+
+== In which directory must the font files be located?
+
+The organization of the files, and thus the fonts, is described in the directory File Organization. With `sp --systemfonts` when calling the publisher, you can access the system-wide font files.
+
+== Tips and tricks
+
+In order to save yourself work in defining fonts, you can use the command
+
+-------
+$ sp list-fonts --xml
+-------
+
+use. This will then list all font files found, together with a line that can be used directly in the layout.
+
+-------
+$ sp list-fonts --xml
+<LoadFontfile name="DejaVuSans-Bold"
+              filename="DejaVuSans-Bold.ttf" />
+<LoadFontfile name="DejaVuSans-BoldOblique"
+              filename="DejaVuSans-BoldOblique.ttf" />
+<LoadFontfile name="DejaVuSans-ExtraLight"
+              filename="DejaVuSans-ExtraLight.ttf" />
+...
+-------
+
+
+TIP: If no font is specified for a paragraph or text block (etc.), the system uses the text font family, which is also predefined in the Publisher and can be overwritten. See the Preferences in the Publisher appendix.
+
+== Missing characters and replacement fonts
+
+
+The character sets in the font files are usually very limited. For example, the speedata Publisher is delivered with the free font "TeXGyreHeros" (a very good Helvetica clone). However, the font file only contains characters that cover western languages, but not, for example, Greek, Arabic, Chinese etc. Also the whole Unicode special characters like U+2685 DIE FACE-6 (⚅) are not included. If a character is requested that is not contained in the font, an error message is displayed.
+
+-------
+Error: Glyph f1c7 (hex) is missing from the font "TeXGyreHeros-Regular"
+-------
+
+This error can be suppressed with the command <Options>:
+
+-------
+<Options reportmissingglyphs="no"/>
+-------
+
+Alternatively, you can also specify a replacement font at <LoadFontfile>, which will be searched as soon as a character is not found:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<LoadFontfile name="helvetica" filename="texgyreheros-regular.otf">
+  <Fallback filename="fontawesome-webfont.ttf" />
+  <Fallback filename="line-awesome.ttf" />
+</LoadFontfile>
+-------------------------------------------------------------------------------
+
+First the font texgyreheros-regular.otf is searched, then fontawesome-webfont.ttf and finally line-awesome.ttf.
+
+== Aliases
+
+There is a command to add an alternate name for an existing font name to the list of known font names:
+
+[source,xml]
+-------
+<DefineFontalias existing="..." alias="..."/>
+-------
+
+The commands
+
+[source,xml]
+-------
+<LoadFontfile name="DejaVuSerif"
+        filename="DejaVuSerif.ttf" />
+<LoadFontfile name="DejaVuSerif-Bold"
+        filename="DejaVuSerif-Bold.ttf" />
+<LoadFontfile name="DejaVuSerif-BoldItalic"
+        filename="DejaVuSerif-BoldItalic.ttf" />
+<LoadFontfile name="DejaVuSerif-Italic"
+        filename="DejaVuSerif-Italic.ttf" />
+
+<DefineFontalias existing="DejaVuSerif" alias="serif"/>
+<DefineFontalias existing="DejaVuSerif-Bold" alias="serif-bold"/>
+<DefineFontalias existing="DejaVuSerif-Italic" alias="serif-italic"/>
+<DefineFontalias existing="DejaVuSerif-BoldItalic"
+         alias="serif-bolditalic"/>
+-------
+
+now allow to define font families in general as follows:
+
+[source,xml]
+-------
+<DefineFontfamily name="title" fontsize="15" leading="17">
+  <Regular fontface="serif"/>
+  <Bold fontface="serif-bold"/>
+  <BoldItalic fontface="serif-bolditalic"/>
+  <Italic fontface="serif-italic"/>
+</DefineFontfamily>
+-------
+
+i.e. independent of the font actually used. With the options described in the section Splitting Layout Rules into Separate Files, you can now swap the font definition into a separate file and, if necessary, quickly choose between different fonts by including the desired files.
+
 
 // EOF

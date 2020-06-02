@@ -1,9 +1,11 @@
 :page: _page
 [[ch-positioningarea]]
-= Bereiche auf der Seite (PositioningArea)
+= Areas on the page (PositioningArea)
 
-Die Seiten kann man in virtuelle Bereiche unterteilen. Dazu gibt man im Seitentyp (Pagetype) Rahmen an:
+_This page was automatically translated. Stay tuned for a manual translation..._
 
+
+The pages can be divided into virtual areas. To do this, you specify frames in the page type:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -21,8 +23,8 @@ Die Seiten kann man in virtuelle Bereiche unterteilen. Dazu gibt man im Seitenty
 </Pagetype>
 -------------------------------------------------------------------------------
 
-Hier werden drei Bereiche definiert, die man mit dem Attribut `area="..."` ansprechen kann, wenn es um die Ausgabe von Objekten oder um die Verschiebung des Cursors geht:
 
+Three areas are defined here, which can be addressed with the attribute area="..." when it comes to the output of objects or the movement of the cursor:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -54,21 +56,16 @@ Hier werden drei Bereiche definiert, die man mit dem Attribut `area="..."` anspr
 </Record>
 -------------------------------------------------------------------------------
 
-.Die Bereiche der Seite werden mit area="..." angesprochen. Manche Layoutfunktionen erlauben die Angabe eines Bereichs.
+
+.The areas of the page are addressed with area="...". Some layout functions allow you to specify an area.
 image::positioningareas.png[width=40%,scaledwidth=100%]
 
 [[ch-cursor]]
 == Cursor
 
-Der Cursor ist eine virtuelle Markierung, die nach jeder Ausgabe im Raster verschoben wird, sofern es nicht explizit unterbunden wird (`keepposition="yes"` bei `<PlaceObject>`).
-Die Markierung ist für jeden Bereich separat gesteuert. D. h. eine Ausgabe in einem Bereich hat keine Änderung des Cursors in einem anderen Bereich zur Folge.
-Wird ein Objekt ausgegeben, das bis zum rechten Rand reicht, springt der Cursor automatisch in die nächste freie Zeile.
-Der Cursor kann zeilenweise mit `<NextRow>` verschoben werden.
-Bei der Angabe von `rows="n"` wird der Cursor um n Zeilen tiefer gesetzt.
-Bei der Angabe von `row="n"`  wird der Cursor in Zeile n gesetzt.
+The cursor is a virtual marker that is moved in the grid after each output, unless it is explicitly prohibited (keepposition="yes" at <PlaceObject>). The selection is controlled separately for each area. I.e. an output in one area does not result in a change of the cursor in another area. If an object is output that extends to the right margin, the cursor automatically jumps to the next free line. The cursor can be moved line by line with <NextRow>. If you specify rows="n", the cursor is placed n rows lower. If you specify row="n", the cursor is placed in row n.
 
-Folgendes Beispiel illustriert das Verhalten des Cursors.
-
+The following example illustrates the behavior of the cursor.
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -102,26 +99,18 @@ Folgendes Beispiel illustriert das Verhalten des Cursors.
   </Record>
 </Layout>
 -------------------------------------------------------------------------------
-<1> Die beiden Objekte gehen über die gesamte Breite. Der Cursor springt automatisch in die nächste Zeile, sobald er hinter dem rechten Rand ist. Durch das `<NextRow>` entsteht die freie Zeile.
-<2> Der Cursor ist nun in Zeile 6 und Spalte 5. Der folgende Zeilenvorschub setzt den Cursor in Zeile 7 und Spalte 1.
-
-ifdef::backend-docbook99[]
-Das Ergebnis ist in Abbildung <<abb-cursor>> zu sehen.
-endif::[]
+<1> The two objects cover the entire width. The cursor automatically jumps to the next line as soon as it is behind the right edge. The <NextRow> creates the free row.
+<2> The cursor is now in row 6 and column 5. The following row feed sets the cursor in row 7 and column 1.
 
 [[abb-cursor]]
-.Das Verhalten von NextRow
+.The behavior of NextRow
 image::cursor.png[width=100%]
 
+== Overflow of texts into the next frame
 
-[[ch-naechster-rahmen]]
-== Überlauf von Texten in den nächsten Rahmen
+When outputting texts using the commands <Output>/<Text>, page breaks can occur in texts, as described in the section Texts with Page Break. This works not only for page boundaries, but also for areas on the pages, provided that they have the same name.
 
-Mit der Ausgabe von Texten über die Befehle `<Output>`/`<Text>` können Seitenumbrüche in Texten vorkommen, wie im Abschnitt <<ch-objekteausgebentext>> beschrieben.
-Das funktioniert nicht nur über Seitengrenzen, sondern auch über Bereiche auf den Seiten, sofern diese denselben Namen haben.
-
-
-Als Beispiel dient diese Seitendefinition:
+This page definition serves as an example:
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
@@ -135,8 +124,8 @@ Als Beispiel dient diese Seitendefinition:
   </Pagetype>
 -------------------------------------------------------------------------------
 
-Die Ausgabe wird über `<Output>` erzeugt:
 
+The output is generated via <Output>:
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
@@ -149,32 +138,9 @@ Die Ausgabe wird über `<Output>` erzeugt:
     </Output>
 -------------------------------------------------------------------------------
 
-
-
-
-.Der Text fließt automatisch in den nächsten freien Bereich. Falls notwendig, wird ein Seitenumbruch eingefügt.
+.The text automatically flows into the next free area. If necessary, a page break is inserted.
 image::textoverflow.png[width=100%]
 
-Man kann auch den Wechsel eines Rahmens erzwingen. Mit `<NextFrame>` und der Angabe eines Bereiches (`area="..."`) wird der Cursor oben links in den nächsten Rahmen gesetzt, ggf. wird ein Seitenumbruch eingefügt.
-
-
-
-// == Der Default-Bereich
-
-// Wird die Angabe des Bereichs (`area="..."`) bei den Ausgabebefehlen weggelassen, so wird die ganze Seite genommen (innerhalb des Seitenrands natürlich).
-// Über die Optionen kann man steuern, dass standardmäßig ein anderer Bereich genommen wird.
-
-
-// [source, xml]
-// -------------------------------------------------------------------------------
-// <Options defaultarea="text"/>
-// -------------------------------------------------------------------------------
-
-// Nun wird bei den Ausgaben immer dieser Bereich genommen, sofern nichts anderes angegeben ist.
-// Die Seite kann unter dem Namen `{page}` angesprochen werden.
-// Das ist der Bereich, der normalerweise benutzt wird, wenn keine Angabe bei `area` gemacht wird.
-
-
-
+You can also force a frame to change. With <NextFrame> and the specification of an area (area="...") the cursor is placed in the top left corner of the next frame, if necessary a page break is inserted.
 
 // ENDE

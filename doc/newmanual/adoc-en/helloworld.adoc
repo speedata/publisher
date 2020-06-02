@@ -1,43 +1,23 @@
+
 [[ch-helloworld]]
-= First steps with the speedata Publisher (hello world)
+= Hello, world!
 
-The speedata Publisher is a so-called "database publishing system". That means that the source of the publishing process is a data set. The output of the software is PDF. The layout of data in the PDF is controlled via an XML file, the layout file. The data also has to be in the XML format, therefore it might be necessary to convert other formats (Excel spreadsheet, database) into XML before starting the publishing process.
 
-This introduction coves the classical "hello world" example.
+_This page was automatically translated. Stay tuned for a manual translation..._
 
-== Data file
-There are no special requirements for the structure of the data XML source. As long as it is well-formed, the speedata Publisher will handle it. For our example the following data file is perfect:
 
-[source, xml]
--------------------------------------------------------------------------------
-<root greeting="Hello world"/>
--------------------------------------------------------------------------------
+The classic: "Hello, world!" Or: what does a simple document look like? As already described, the input for the Publisher consists of two files: the data file and the layout file. Both must be in XML format and must always be available. The data file is saved under the name data.xml and the layout file under layout.xml. These two files are best created with an XML editor, a simple text editor like  https://atom.io/[Atom] or https://macromates.com/[Textmate] is sufficient for the first steps.
 
-Save this with the file name `data.xml` in an empty directory on your harddrive.
+TIP: If you want to try the "Hello World" example yourself, you can simply call `sp new helloworld`. This creates a directory with the two necessary files. So you can start immediately and create a PDF in this directory with the `sp` command.
 
-== Layout file
-The layout file (file name layout.xml) contains the instructions for how the data should be laid out. The root element is the element with the name Layout with the namespace urn:speedata.de:2009/publisher/en. A minimal (and pointless) layout file is:
+The data file for the "Hello World" example is named `data.xml`:
 
 [source, xml]
 -------------------------------------------------------------------------------
-<Layout xmlns="urn:speedata.de:2009/publisher/en" />
--------------------------------------------------------------------------------
-The XML file contains a declarative part (master pages, color definitions and similar) and a data processing part (read child elements and attributes and act upon the data). Both parts can be mixed.
-
-Data processing starts with the command Record:
-
-[source, xml]
--------------------------------------------------------------------------------
-<Record element="(name of the root element)">
-     ... instructions for the root element ...
-</Record>
+<data>Hello world!</data>
 -------------------------------------------------------------------------------
 
-
-The instruction to place an object in the PDF is called (surprise!) PlaceObject. It expects the kind of object as its child element (Image, Box, Rule, Frame, Barcode, Table, Textblock, Transformation). Textblock (a rectangular shaped text with a fixed width) expects one or more paragraphs as its child elements. The content of the paragraph is encapsulated in the element `<Value>text that appears in the PDF</Value>`.
-Instead of giving the text within the element Value, it is possible to use a subset of XPath expressions to select data from the data source. For example the familiar @ notation for attribute access.
-
-The complete hello world example is simple:
+That is enough for the simple example. The layout file is a bit more extensive (save as `layout.xml`):
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -45,46 +25,62 @@ The complete hello world example is simple:
   xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <Record element="root">
+  <Record element="data">
     <PlaceObject>
       <Textblock>
         <Paragraph>
-          <Value select="@greeting"/>
+          <Value select="."/>
         </Paragraph>
       </Textblock>
     </PlaceObject>
   </Record>
 </Layout>
 -------------------------------------------------------------------------------
-More examples can be found in the folder manual/examples-en in the distribution.
 
-Running the speedata Publisher
-If both files are saved in the same directory, the PDF file can be generated with the commmand:
+These two files are stored in an otherwise empty directory. On the command line, change to this directory (with cd <directory name>) and call the Publisher with the command
 
 [source,shell,subs="verbatim,quotes"]
 -------------------------------------------------------------------------------
 $ sp
 -------------------------------------------------------------------------------
 
-The result is written to the file `publisher.pdf`.
+on. The $ character is intended to represent the prompt and is not entered. If everything goes smoothly, the result is a PDF file named publisher.pdf in the same directory.
 
+TIP: For Windows users: if the publisher cannot create the PDF, this is sometimes because the same file is still open in a window. This can be Adobe Reader, but also Windows Explorer.
 
+[[ch-helloworld-explained]]
+== The "Hello World!" example explained
 
-The names of the data source and the layout rules can be set on the command line:
+Here follows a short explanation of the two files. The data file can be structured as you wish, as long as the content is well-formed XML (see glossary).
 
+[source, xml]
 -------------------------------------------------------------------------------
-sp --data <name of the data file.xml> --layout <name of the layout file.xml>
--------------------------------------------------------------------------------
-
-or you can fix the file names in the file publisher.cfg:
-
--------------------------------------------------------------------------------
-data=<datafile.xml>
-layout=<layoutfile.xml>
+<data>Hello world!</data>
 -------------------------------------------------------------------------------
 
-More information on the subject in Using the speedata Publisher and Running the speedata publisher on the command line.
+The layout file is a bit more complicated, at least at first sight.
 
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout  <!--1-->
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
+  <Record element="data">  <!--2-->
+    <PlaceObject>  <!--3-->
+      <Textblock>
+        <Paragraph>
+          <Value select="."/> <!--4-->
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
 
-// EOF
+<1> The root element is called layout and has the `namespace urn:speedata.de:2009/publisher/en`. The second namespace is necessary for the built-in functions, but is not used in the example. (Tip: nevertheless always specify it in the layout, so that there are no surprises later).
+<2> Here the data processing starts. The root element of the data file is specified in the attribute element.
+<3> `<PlaceObject>` is the command to output things (texts, images, boxes, ...) into the PDF.
+<4> The dot at the select attribute means "the current element", in this case the root element. The text value of the element is output here, i.e. the string `Hello world!`
+
+We will not discuss more at this point. Rather, there is a reference to the corresponding chapters in this manual: Under Organization of Data for Data Processing is described how the data file and the layout file are to be structured, and under Output of Objects the command PlaceObject is described.

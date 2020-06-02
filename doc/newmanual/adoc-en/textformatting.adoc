@@ -1,30 +1,28 @@
 [[ch-textformatierung]]
-= Textformatierung
+= Text formatting
 
-`<Textblock>` und `<Text>` enthalten einen oder mehrere Absätze (Befehl `<Paragraph>`).
-Die eigentlichen Texte werden dort innerhalb von `<Value>` gekapselt.
-Es gibt zahlreiche Möglichkeiten, die Formatierung der Texte zu beeinflussen.
-Die Schalter für die Schriftschnitte wurden in <<ch-einbindungschriftarten,Einbinden von Schriftarten>> vorgestellt.
-Mit einer ähnlichen Funktionalität gibt es die folgenden Befehle:
+_This page was automatically translated. Stay tuned for a manual translation..._
 
-`<Sub>` und `<Sup>`::
-   Tiefgestellter und hochgestellter Text.
 
-`<Fontface>`::
-   Schaltet vorübergehend auf eine andere Schriftart um.
+<Text Block> and <Text> contain one or more paragraphs (command <Paragraph>). The actual texts are encapsulated there within <Value>. There are numerous possibilities to influence the formatting of the texts. The switches for the font styles were introduced in Include Fonts. With a similar functionality there are the following commands:
 
-`<Color>`::
-   Gibt den eingeschlossenen Text in einer anderen Farbe aus.
+<Sub> and <Sup>::
+  Subscript and superscript text.
 
-`<A>`::
-   Erzeugt ein Hyperlink.
+<Fontface>::
+  Temporarily switches to a different font.
 
-`<HSpace>`::
-   Fügt einen dehnbaren Leerraum (mit oder ohne Punkte) ein.
+<Color>::
+  Outputs the enclosed text in a different color.
 
-`<U>`::
-   Unterstreichen.
+<A>::
+  Creates a hyperlink.
 
+<HSpace>::
+  Inserts an expandable blank space (with or without dots).
+
+<U>::
+  Underline.
 
 
 [source, xml,indent=0]
@@ -52,15 +50,12 @@ Mit einer ähnlichen Funktionalität gibt es die folgenden Befehle:
 -------------------------------------------------------------------------------
 
 
-.Verschiedene Textauszeichnungen
+.Various text markups
 image::textauszeichnungen.png[width=100%]
 
-[[ch-aufzaehlungslisten,Aufzählungslisten]]
-== Aufzählungslisten
+== Enumeration lists
 
-Anstelle eines Absatzes kann auch eine Aufzählungsliste erscheinen.
-Diese wird mit `<Ol>`  bzw. `<Ul>` für eine Liste mit Nummerierung (ordered list) und eine Liste mit Punkten (unordered list) angegeben.
-Die einzelnen Punkte müssen mit `<Li>` ausgezeichnet werden.
+Instead of a paragraph, an enumeration list can also appear. This is specified with <Ol> or <Ul> for an ordered list and an unordered list. The individual points must be marked with <Li>.
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
@@ -80,15 +75,12 @@ Die einzelnen Punkte müssen mit `<Li>` ausgezeichnet werden.
 
 image::olul.png[width=20%,scaledwidth=30%]
 
+TIP: This feature is not really robust yet. The lists cannot (currently) be nested. It is recommended to check if the lists are output correctly.
 
-TIP: Dieses Feature ist noch nicht wirklich robust. Die Listen können (derzeit) nicht geschachtelt werden. Es empfiehlt sich zu schauen, ob die Listen auch korrekt ausgegeben werden.
 
-[[ch-nobreak]]
-== Verhindern von Textumbruch
+== Prevent text wrapping
 
-Manche Überschriften und Eigennamen sollen nicht umbrochen werden. Dafür gibt es den Befehl `<NoBreak>`, der auf verschiedene Weisen einen Umbruch unterdrückt.
-Ein etwas übertriebenes Beispiel ist:
-
+Some headings and proper names should not be broken. There is a command <NoBreak> for this purpose, which suppresses wrapping in various ways. A somewhat exaggerated example is:
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
@@ -102,14 +94,10 @@ Ein etwas übertriebenes Beispiel ist:
     </PlaceObject>
 -------------------------------------------------------------------------------
 
-.Die Voreinstellung bei NoBreak ist, dass der Teil zusammen hängen muss.
+.The default setting for NoBreak is that the part must be connected.
 image::nobreak1.png[width=100%]
 
-Alternativ kann man durch eine Vorgabe der maximalen Breite die Schriftgröße verringern oder den Text mit Auslassungspunkten kürzen.
-ifdef::backend-docbook99[]
-Siehe die Abbildung~<<abb-nobreak2>>.
-endif::[]
-// ~
+Alternatively, you can reduce the font size by specifying the maximum width or shorten the text with omission points.
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
@@ -122,17 +110,13 @@ endif::[]
       </Textblock>
 -------------------------------------------------------------------------------
 
-[[abb-nobreak2]]
-.Hier wird per cut der Text abgeschnitten und mit dem angegebenen Text aufgefüllt.
+
+.Here the text is cut off and filled with the specified text.
 image::nobreak2.png[width=100%]
 
-[[ch-umbrechenurl]]
-== Umbrechen von URLs
+== Break URLs
 
-Der Befehl `<URL>` dient zum leichteren Umbrechen von URLs.
-Es darf vornehmlich an Schrägstrichen (/) umbrochen werden, außerdem werden keine Trennstriche eingefügt.
-Es wird kein Hyperlink erzeugt, dafür ist der Befehl `<A>` zuständig.
-
+The command <URL> is used to make it easier to break URLs. You may wrap mainly at slashes (/), in addition no hyphens are inserted. No hyperlink is created, the command <A> is responsible for this.
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -155,36 +139,10 @@ Es wird kein Hyperlink erzeugt, dafür ist der Befehl `<A>` zuständig.
 </Layout>
 -------------------------------------------------------------------------------
 
-
-ergibt
-
+results in
 
 image::url.png[width=70%]
 
-(Siehe auch https://github.com/speedata/publisher/issues/173)
+(See also https://github.com/speedata/publisher/issues/173)
 
-
-////
-<Layout
-  xmlns="urn:speedata.de:2009/publisher/en"
-  xmlns:sd="urn:speedata:2009/publisher/functions/en">
-
-  <Pageformat width="150mm" height="10cm"/>
-  <Trace grid="yes"/>
-
-  <Record element="data">
-    <PlaceObject>
-      <Textblock>
-        <Paragraph>
-          <Value>Ein langer Text, der nur zur Illustration dient </Value>
-          <NoBreak maxwidth="6" reduce="cut" text="..."><Value>während dies nicht umbrochen werden darf.</Value></NoBreak>
-        </Paragraph>
-      </Textblock>
-    </PlaceObject>
-  </Record>
-</Layout>
-////
-
-
-// Ende
-
+// EOF

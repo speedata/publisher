@@ -1,0 +1,92 @@
+[[ch-textformate]]
+= Text formats
+
+_This page was automatically translated. Stay tuned for a manual translation..._
+
+Text formats are used to control the paragraphs. You can use them to control various things like text indents, text alignment, whore children and cobbler boys, pagination and more.
+
+The individual parameters are described in the reference under <DefineTextformat>.
+
+The text format called text is predefined in the Publisher and is used in all places where no other text format is specified. It is defined as follows:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<DefineTextformat name="text" alignment="justified"/>
+-------------------------------------------------------------------------------
+
+This will output all texts in justified text and with hyphenation, without indentation and without spaces at the top and bottom, as long as
+
+. the format text is not redefined or
+. another text format is specified at `<Paragraph>` or `<Textblock>` (the attribute for this is called text format).
+
+== Page breaks between texts
+
+Page breaks, for example after a heading, are undesirable. To prevent page breaks at these points, the text format property break-below can be switched off:
+
+.To prevent a page break from being inserted between the heading and the text, you need to adjust the text format of the heading.
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="100mm" height="70mm"/>
+  <Trace textformat="yes"/>
+
+  <DefineTextformat name="keeptogether" break-below="no"/>
+
+  <DefineFontfamily name="h1" fontsize="18" leading="20">
+    <Regular fontface="sans-bold"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <Output>
+      <Text>
+        <Paragraph fontface="h1" textformat="keeptogether">
+          <Value>A Title</Value>
+        </Paragraph>
+        <Paragraph>
+          <Value select="sd:dummytext()"/>
+        </Paragraph>
+      </Text>
+    </Output>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+.Output of a heading. The text format with the break-below property prevents wrapping under the heading.
+image::textmitueberschrift.png[width=50%,scaledwidth=100%]
+
+
+However, the break-below="no" property is only taken into account within a text output (<Output>). You can insert a page break between two text outputs, but this cannot be prevented. In order to output a text in one piece nevertheless, which first has to be assembled from the data, one stores the individual contents in variables and then outputs them in one piece.
+
+.With variables and `<Copy-of>` you can compose texts and output them in one piece.
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+  <Record element="data">
+    <SetVariable variable="mytitle">
+      <Paragraph fontface="h1" textformat="keeptogether">
+        <Value>A Title</Value>
+      </Paragraph>
+    </SetVariable>
+
+    <SetVariable variable="mytext">
+      <Paragraph>
+        <Value select="sd:dummytext()"/>
+      </Paragraph>
+    </SetVariable>
+
+    <Output>
+      <Text>
+        <Copy-of select="$mytitle"/>
+        <Copy-of select="$mytext"/>
+      </Text>
+    </Output>
+  </Record>
+-------------------------------------------------------------------------------
+
+== Tracing
+
+The command `<Trace textformat="yes"/>` activates "tooltips" in the PDF above the texts that output the text format used there.
+
+.Tooltip with the text format
+image::tracetextformat.png[width=100%]
+
+// EOF

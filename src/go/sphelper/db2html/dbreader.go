@@ -26,6 +26,7 @@ var (
 	sanitizer  = strings.NewReplacer("<", "&lt;", ">", "&gt;")
 	sectH      = strings.NewReplacer("sect", "h")
 	coReplace  *regexp.Regexp
+	assetsTrim *regexp.Regexp
 	tagRemover *regexp.Regexp
 	redirects  = map[string]string{
 		"changelog":        "changelog",
@@ -52,6 +53,7 @@ var (
 func init() {
 	coReplace = regexp.MustCompile(`CO\d+-(\d+)`)
 	tagRemover = regexp.MustCompile(`<[^>]*>`)
+	assetsTrim = regexp.MustCompile(`^(\.\./)*dbmanual/assets(.*)$`)
 }
 
 func formatSource(source, lang string) (string, error) {
@@ -652,6 +654,7 @@ getContents:
 				if phrase != "" {
 					alt = fmt.Sprintf(` alt="%s"`, phrase)
 				}
+				imagedata = assetsTrim.ReplaceAllString(imagedata, "$2")
 				src := d.linkToPage("/static/"+imagedata, *curpage)
 
 				curpage.writeString(fmt.Sprintf(`<div id="%s" class="imageblock">
@@ -674,6 +677,7 @@ getContents:
 				if phrase != "" {
 					alt = fmt.Sprintf(` alt="%s"`, phrase)
 				}
+				imagedata = assetsTrim.ReplaceAllString(imagedata, "$2")
 				src := d.linkToPage("/static/"+imagedata, *curpage)
 				curpage.writeString(fmt.Sprintf("\n<img src='%s'%s%s>", src, wd, alt))
 			case "itemizedlist":

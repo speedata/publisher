@@ -65,4 +65,5 @@ Im PDF wird diese Farbe unter dem Namen `speedatagreen` geführt und in der Ausg
 image::speedatagruen.png[width=90%,scaledwidth=100%]
 
 * Überdrucken
+* Farben mit rgb(r,g,b)
 

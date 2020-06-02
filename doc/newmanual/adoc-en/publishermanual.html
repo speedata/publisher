@@ -452,20 +452,30 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#ch-introduction">1. Introduction</a>
 <ul class="sectlevel2">
-<li><a href="#_wo_bekommt_man_die_software_und_wie_wird_sie_gestartet">1.1. Wo bekommt man die Software und wie wird sie gestartet?</a></li>
+<li><a href="#ch-whatisitallfor">1.1. What is it all for?</a></li>
+<li><a href="#_beautiful_and_fully_automatic">1.2. Beautiful and fully automatic</a></li>
+<li><a href="#_where_can_i_get_the_software_and_how_is_it_run">1.3. Where can I get the software and how is it run?</a></li>
+<li><a href="#_examples">1.4. Examples</a></li>
 </ul>
 </li>
-<li><a href="#ch-helloworld">2. First steps with the speedata Publisher (hello world)</a>
+<li><a href="#ch-helloworld">2. Hello, world!</a>
 <ul class="sectlevel2">
-<li><a href="#_data_file">2.1. Data file</a></li>
-<li><a href="#_layout_file">2.2. Layout file</a></li>
+<li><a href="#ch-helloworld-explained">2.1. The "Hello World!" example explained</a></li>
 </ul>
 </li>
 <li><a href="#ch-basics">3. Basics</a>
 <ul class="sectlevel2">
-<li><a href="#ch-writelayoutfile">3.1. How to edit the layout file</a></li>
-<li><a href="#ch-fonts">3.2. Using fonts</a></li>
-<li><a href="#ch-colors">3.3. Colors</a></li>
+<li><a href="#ch-writelayoutfile">3.1. Creation of a set of layout rules</a></li>
+<li><a href="#ch-structuredatafile">3.2. Structure of the data file and the layout rules</a></li>
+<li><a href="#ch-outputtingobjects">3.3. Outputting objects</a></li>
+<li><a href="#ch-raster">3.4. Grid</a></li>
+<li><a href="#ch-positioningarea">3.5. Areas on the page (PositioningArea)</a></li>
+<li><a href="#ch-organisationdaten">3.6. File organization</a></li>
+<li><a href="#_hyphenation_language_settings">3.7. Hyphenation / language settings</a></li>
+<li><a href="#ch-fonts">3.8. Using fonts</a></li>
+<li><a href="#ch-textformate">3.9. Text formats</a></li>
+<li><a href="#ch-textformatierung">3.10. Text formatting</a></li>
+<li><a href="#ch-colors">3.11. Colors</a></li>
 </ul>
 </li>
 <li><a href="#ch-advancedtopics">4. Advanced topcis</a>
@@ -625,16 +635,55 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="ch-introduction">1. Introduction</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p><em>This page was automatically translated. Stay tuned for a manual translation&#8230;&#8203;</em></p>
+</div>
+<div class="paragraph">
+<p>The speedata Publisher is software for creating PDF files fully automatically from XML data. The data can be product data, structured texts or other content, for example.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/xmltopdf.png" alt="xmltopdf" width="50%">
+</div>
+</div>
+<div class="paragraph">
+<p>The instructions on how something is to be displayed are available separately from the data. They are formulated in a programming language specially developed for this purpose.</p>
+</div>
 <div class="sect2">
-<h3 id="_wo_bekommt_man_die_software_und_wie_wird_sie_gestartet">1.1. Wo bekommt man die Software und wie wird sie gestartet?</h3>
+<h3 id="ch-whatisitallfor">1.1. What is it all for?</h3>
 <div class="paragraph">
-<p>The speedata Publisher is a program without a graphical user interface. That means it runs on the command line or in the background if called from a server process.</p>
+<p>Many different documents can be created with the speedata Publisher. Classical use cases are</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Product catalogues</p>
+</li>
+<li>
+<p>Travel guides</p>
+</li>
+<li>
+<p>Price lists</p>
+</li>
+<li>
+<p>Data sheets</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>To run it on the command line, you have to open a terminal window. On Mac OS X run Terminal.app which is located in Applications/Utilities. On Windows you click on the windows button and type in cmd.exe in the search box. On Linux, it depends on the distribution you use, but there is usually a menu entry called “Terminal”.</p>
+<p>and many other documents, where it is important to obtain a result that is reproducible, fast and reliable and also "beautiful".</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_beautiful_and_fully_automatic">1.2. Beautiful and fully automatic</h3>
 <div class="paragraph">
-<p>To run the software open the terminal and run</p>
+<p>The speedata Publisher is a non-interactive publishing software. This means there is no graphical user interface (GUI). All instructions must be established before the publishing process and determine how the data is arranged in the PDF. The unique combination of sophisticated algorithms and programmability allows extremely flexible layouts to be created that were previously reserved for interactive desktop publishing (DTP) programs such as Adobe&#8217;s InDesign.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_where_can_i_get_the_software_and_how_is_it_run">1.3. Where can I get the software and how is it run?</h3>
+<div class="paragraph">
+<p>The software can be downloaded for free (see chapter <a href="#ch-installation">Installation</a>) and is started via the console or shell. The command to start the Publisher is called sp. Therewith, all functionality can be used. Parameters can be specified via the command line or a configuration file.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -642,66 +691,54 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="paragraph">
-<p>The description of the command is written in the section <a href="#ch-commandline">about the command line</a>.</p>
+<p>See the command line section for explanations on how to start the Publisher.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_examples">1.4. Examples</h3>
 <div class="paragraph">
-<p>The speedata Publisher expects the data XML file with the name data.xml and the layout XML with the name layout.xml (this can be changed on the command and set in the configuration file) in the current directory or any of its subdirectories. This search path can be extended by configuring the publisher (see the section on how to configure the speedata publisher).</p>
+<p>There is a separate repository with examples on Github (<a href="https://github.com/speedata/examples" class="bare">https://github.com/speedata/examples</a>). There you can find complete documents, which you can use to try out different functions.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/beispiele.png" alt="beispiele" width="100%">
+</div>
+<div class="title">Figure 1. Examples from the repository</div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="ch-helloworld">2. First steps with the speedata Publisher (hello world)</h2>
+<h2 id="ch-helloworld">2. Hello, world!</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The speedata Publisher is a so-called "database publishing system". That means that the source of the publishing process is a data set. The output of the software is PDF. The layout of data in the PDF is controlled via an XML file, the layout file. The data also has to be in the XML format, therefore it might be necessary to convert other formats (Excel spreadsheet, database) into XML before starting the publishing process.</p>
+<p><em>This page was automatically translated. Stay tuned for a manual translation&#8230;&#8203;</em></p>
 </div>
 <div class="paragraph">
-<p>This introduction coves the classical "hello world" example.</p>
+<p>The classic: "Hello, world!" Or: what does a simple document look like? As already described, the input for the Publisher consists of two files: the data file and the layout file. Both must be in XML format and must always be available. The data file is saved under the name data.xml and the layout file under layout.xml. These two files are best created with an XML editor, a simple text editor like  <a href="https://atom.io/">Atom</a> or <a href="https://macromates.com/">Textmate</a> is sufficient for the first steps.</p>
 </div>
-<div class="sect2">
-<h3 id="_data_file">2.1. Data file</h3>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If you want to try the "Hello World" example yourself, you can simply call <code>sp new helloworld</code>. This creates a directory with the two necessary files. So you can start immediately and create a PDF in this directory with the <code>sp</code> command.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>There are no special requirements for the structure of the data XML source. As long as it is well-formed, the speedata Publisher will handle it. For our example the following data file is perfect:</p>
+<p>The data file for the "Hello World" example is named <code>data.xml</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;root greeting="Hello world"/&gt;</code></pre>
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;data&gt;Hello world!&lt;/data&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Save this with the file name <code>data.xml</code> in an empty directory on your harddrive.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_layout_file">2.2. Layout file</h3>
-<div class="paragraph">
-<p>The layout file (file name layout.xml) contains the instructions for how the data should be laid out. The root element is the element with the name Layout with the namespace urn:speedata.de:2009/publisher/en. A minimal (and pointless) layout file is:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout xmlns="urn:speedata.de:2009/publisher/en" /&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The XML file contains a declarative part (master pages, color definitions and similar) and a data processing part (read child elements and attributes and act upon the data). Both parts can be mixed.</p>
-</div>
-<div class="paragraph">
-<p>Data processing starts with the command Record:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Record element="(name of the root element)"&gt;
-     ... instructions for the root element ...
-&lt;/Record&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The instruction to place an object in the PDF is called (surprise!) PlaceObject. It expects the kind of object as its child element (Image, Box, Rule, Frame, Barcode, Table, Textblock, Transformation). Textblock (a rectangular shaped text with a fixed width) expects one or more paragraphs as its child elements. The content of the paragraph is encapsulated in the element <code>&lt;Value&gt;text that appears in the PDF&lt;/Value&gt;</code>.
-Instead of giving the text within the element Value, it is possible to use a subset of XPath expressions to select data from the data source. For example the familiar @ notation for attribute access.</p>
-</div>
-<div class="paragraph">
-<p>The complete hello world example is simple:</p>
+<p>That is enough for the simple example. The layout file is a bit more extensive (save as <code>layout.xml</code>):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -709,11 +746,11 @@ Instead of giving the text within the element Value, it is possible to use a sub
   xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
 
-  &lt;Record element="root"&gt;
+  &lt;Record element="data"&gt;
     &lt;PlaceObject&gt;
       &lt;Textblock&gt;
         &lt;Paragraph&gt;
-          &lt;Value select="@greeting"/&gt;
+          &lt;Value select="."/&gt;
         &lt;/Paragraph&gt;
       &lt;/Textblock&gt;
     &lt;/PlaceObject&gt;
@@ -722,11 +759,7 @@ Instead of giving the text within the element Value, it is possible to use a sub
 </div>
 </div>
 <div class="paragraph">
-<p>More examples can be found in the folder manual/examples-en in the distribution.</p>
-</div>
-<div class="paragraph">
-<p>Running the speedata Publisher
-If both files are saved in the same directory, the PDF file can be generated with the commmand:</p>
+<p>These two files are stored in an otherwise empty directory. On the command line, change to this directory (with cd &lt;directory name&gt;) and call the Publisher with the command</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -734,27 +767,73 @@ If both files are saved in the same directory, the PDF file can be generated wit
 </div>
 </div>
 <div class="paragraph">
-<p>The result is written to the file <code>publisher.pdf</code>.</p>
+<p>on. The $ character is intended to represent the prompt and is not entered. If everything goes smoothly, the result is a PDF file named publisher.pdf in the same directory.</p>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+For Windows users: if the publisher cannot create the PDF, this is sometimes because the same file is still open in a window. This can be Adobe Reader, but also Windows Explorer.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="ch-helloworld-explained">2.1. The "Hello World!" example explained</h3>
 <div class="paragraph">
-<p>The names of the data source and the layout rules can be set on the command line:</p>
+<p>Here follows a short explanation of the two files. The data file can be structured as you wish, as long as the content is well-formed XML (see glossary).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>sp --data &lt;name of the data file.xml&gt; --layout &lt;name of the layout file.xml&gt;</pre>
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;data&gt;Hello world!&lt;/data&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>or you can fix the file names in the file publisher.cfg:</p>
+<p>The layout file is a bit more complicated, at least at first sight.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>data=&lt;datafile.xml&gt;
-layout=&lt;layoutfile.xml&gt;</pre>
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout  <i class="conum" data-value="1"></i><b>(1)</b>
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+
+  &lt;Record element="data"&gt;  <i class="conum" data-value="2"></i><b>(2)</b>
+    &lt;PlaceObject&gt;  <i class="conum" data-value="3"></i><b>(3)</b>
+      &lt;Textblock&gt;
+        &lt;Paragraph&gt;
+          &lt;Value select="."/&gt; <i class="conum" data-value="4"></i><b>(4)</b>
+        &lt;/Paragraph&gt;
+      &lt;/Textblock&gt;
+    &lt;/PlaceObject&gt;
+  &lt;/Record&gt;
+&lt;/Layout&gt;</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The root element is called layout and has the <code>namespace urn:speedata.de:2009/publisher/en</code>. The second namespace is necessary for the built-in functions, but is not used in the example. (Tip: nevertheless always specify it in the layout, so that there are no surprises later).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Here the data processing starts. The root element of the data file is specified in the attribute element.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>&lt;PlaceObject&gt;</code> is the command to output things (texts, images, boxes, &#8230;&#8203;) into the PDF.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The dot at the select attribute means "the current element", in this case the root element. The text value of the element is output here, i.e. the string <code>Hello world!</code></td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>More information on the subject in Using the speedata Publisher and Running the speedata publisher on the command line.</p>
+<p>We will not discuss more at this point. Rather, there is a reference to the corresponding chapters in this manual: Under Organization of Data for Data Processing is described how the data file and the layout file are to be structured, and under Output of Objects the command PlaceObject is described.</p>
 </div>
 </div>
 </div>
@@ -762,205 +841,2188 @@ layout=&lt;layoutfile.xml&gt;</pre>
 <div class="sect1 split">
 <h2 id="ch-basics">3. Basics</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="ch-writelayoutfile">3.1. How to edit the layout file</h3>
 <div class="paragraph">
-<p>The layout file is encoded in standard XML (UTF-8) and therefore it can be edited with any text editor (notepad++ for example). We provide a full RelaxNG grammar which makes editing the layout XML with a good XML editor a breeze. We know of the following editors that allow XML editing with the support of RelaxNG. If you know of any other XML editors with RelaxNG support, please drop us a note at <a href="mailto:info@speedata.de">info@speedata.de</a>.</p>
+<p><em>This page was automatically translated. Stay tuned for a manual translation&#8230;&#8203;</em></p>
+</div>
+<div class="paragraph">
+<p>The study of this chapter should be sufficient to create layout rules independently. Occasionally, more detailed topics will be covered in more detail in a later chapter. For example, only the most important formatting for tables is dealt with; a separate chapter (chapter Tables) describes tables in detail. In such cases there is of course a cross-reference.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Another note for the manual. Many examples only show the layout file and not the corresponding data. In the data file the simple structure <code>&lt;data /&gt;</code> is always assumed. This can be recognized by the fact that the layout contains <code>&lt;Record element="data"&gt;</code>. The easiest way to start the Publisher is to use <code>sp --dummy</code>, which simulates this data file.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="ch-writelayoutfile">3.1. Creation of a set of layout rules</h3>
+<div class="paragraph">
+<p><em>This page was automatically translated. Stay tuned for a manual translation&#8230;&#8203;</em></p>
+</div>
+<div class="sect3">
+<h4 id="_xml_editor">3.1.1. XML Editor</h4>
+<div class="paragraph">
+<p>By using standard XML (UTF-8), the layout rules can be edited with any text editor.</p>
+</div>
+<div class="paragraph">
+<p>The supplied XML schemas (RELAX NG and XML Schema (XSD)) make it easy to enter the layout ruleset. Such a schema can be thought of as a computer-readable instruction as to which commands may appear at which position in the layout. The instructions also contain information about the parameters that are permitted in each case. In addition, the scheme also provides help by briefly explaining each command and parameter. In short: if the editor can integrate this schema and also "understands" it, it is an input help that should not be underestimated. You reduce the number of errors and the input time significantly, editing the layout rules starts to be really fun (believe me).</p>
+</div>
+<div class="paragraph">
+<p>To include this schema, you need to use a suitable XML editor that can process RELAX NG or XML schemas, e.g:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>OxygenXML (Mac, Windows, Linux)</p>
+<p><a href="https://www.oxygenxml.com">OxygenXML</a> (Mac, Windows, Linux)</p>
 </li>
 <li>
-<p>XMLSpy (Windows)</p>
-</li>
-<li>
-<p>XML Blueprint (Windows only)</p>
-</li>
-<li>
-<p>GNU Emacs with nxml-mode (all operating systems, free)</p>
-</li>
-<li>
-<p>jEdit (Mac, Windows, Linux, free)</p>
+<p><a href="https://code.visualstudio.com">Visual Studio Code</a> (Mac, Windows, Linux, free)</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>The schema for editing the layout XML can be found in the directory share/schema in the file layoutschema-en.rng.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="ch-fonts">3.2. Using fonts</h3>
-<div class="paragraph">
-<p>The speedata Publisher can use fonts in the followig formats:</p>
+<p>The first two editors provide excellent cross-platform support for the schema.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>PostScript Type1 (.afm, .pfb)</p>
+<p><a href="https://atom.io/">Atom</a> (Mac, Windows, Linux, free)</p>
 </li>
 <li>
-<p>OpenType (.otf)</p>
+<p><a href="https://www.altova.com/xml-editor/">XMLSpy</a> (Windows)</p>
 </li>
 <li>
-<p>TrueType (.ttf)</p>
+<p><a href="https://www.xmlblueprint.com/">XML Blueprint</a> (Windows)</p>
+</li>
+<li>
+<p><a href="https://www.gnu.org/software/emacs/">GNU Emacs</a> mit <a href="http://www.thaiopensource.com/nxml-mode/">nxml-mode</a> (cross platform, free)</p>
+</li>
+<li>
+<p><a href="http://www.jedit.org">jEdit</a> (Mac, Windows, Linux, free)</p>
 </li>
 </ul>
 </div>
-<div class="sect3">
-<h4 id="_how_to_include_a_font">3.2.1. How to include a font</h4>
 <div class="paragraph">
-<p>In the layout rules the name of the font file must be connected to an internal name. This internal name is then used in the command DefineFontfamily which groups up to four fonts in a family (regular, bold, italic and bolditalic). The first step is accomplished with LoadFontfile:</p>
+<p>The schema files for the layout rules are located in the ZIP file in the <code>share/schema/</code> directory under the file names</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;LoadFontfile name="Helvetica" filename="helvetica-regular.otf" /&gt;
-&lt;LoadFontfile name="Helvetica Bold" filename="helvetica-bold.otf" /&gt;
-&lt;LoadFontfile name="Helvetica Italic" filename="helvetica-italic.otf" /&gt;
-&lt;LoadFontfile name="Helvetica BoldItalic" filename="helvetica-bolditalic.otf" /&gt;</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">layoutschema-de.rng
+layoutschema-en.rng</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>After executing these commands, the font files are known as Helvetica, Helvetica Bold etc. In the second step they are used by the command DefineFontfamily:</p>
+<p>for RELAX NG and</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;DefineFontfamily name="heading" fontsize="12" leading="14"&gt;
-  &lt;Regular fontface="Helvetica"/&gt;
-  &lt;Bold fontface="Helvetica Bold"/&gt;
-  &lt;Italic fontface="Helvetica Italic"/&gt;
-  &lt;BoldItalic fontface="Helvetica BoldItalic"/&gt;
-&lt;/DefineFontfamily&gt;</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">layoutschema-de.xsd
+layoutschema-en.xsd</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The font family heading is composed by the four given font files. Now you can use the font family in commands such as Textblock or Table.</p>
+<p>for XSD, depending on the desired language of the documentation.</p>
+</div>
+<div class="paragraph">
+<p>For Visual Studio code, the required package is XML (Red Hat), installation instructions are available at <a href="https://blog.speedata.de/2019/09/11/xsd-schema/" class="bare">https://blog.speedata.de/2019/09/11/xsd-schema/</a>. For the Atom editor, the package is called language-speedata-publisher. The installation instructions can be found on the github page at <a href="https://github.com/speedata/atom-schema-speedata" class="bare">https://github.com/speedata/atom-schema-speedata</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_note">3.2.2. Note</h4>
+<h4 id="_namespace_of_the_layout_ruleset">3.1.2. Namespace of the layout ruleset</h4>
 <div class="paragraph">
-<p>The LoadFontfile instructions can be auto generated on the command line. You need to run the sp program with the command list-fonts, such as</p>
+<p>The XML namespace of the layout ruleset is urn:speedata.de:2009/publisher/s. The additional XPath functions are in the namespace urn:speedata:2009/publisher/functions/en. A layout set should therefore always have this frame:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>sp --xml [--extra-dir=...] list-fonts</pre>
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout xmlns="urn:speedata.de:2009/publisher/en"
+        xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+ ...
+&lt;/Layout&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The output contains all font files that are found in the current directory (and its subdirectories). Additional directories can be supplied by the shown command line option <code>--extra-dir=&lt;dirname&gt;</code>. The value for the name attribute in the LoadFontfile command defaults to the postscript name of the font but can be changed to any other value.</p>
+<p>Then you can call speedata&#8217;s own functions with the prefix sd:, for example: <code>sd:current-page()</code> to determine the current page number.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="ch-colors">3.3. Colors</h3>
+<h3 id="ch-structuredatafile">3.2. Structure of the data file and the layout rules</h3>
 <div class="paragraph">
-<p>Almost all objects that can be output with the publisher can take a color. The color is declared at the object that gets rendered or within a CSS stylesheet. Here is an example for a direct color declaration at the object:</p>
+<p><em>This page was automatically translated. Stay tuned for a manual translation&#8230;&#8203;</em></p>
+</div>
+<div class="quoteblock">
+<blockquote>
+You can use any data format as long as it is XML.
+</blockquote>
+<div class="attribution">
+&#8212; Freely adapted from Henry Ford
+</div>
+</div>
+<div class="sect3">
+<h4 id="_data_source_xml_well_formed_and_structured">3.2.1. Data source: XML - well-formed and structured</h4>
+<div class="paragraph">
+<p>The first prerequisite is that the data source is in XML (Extensible Markup Language) format. Other formats are not processed with the Publisher (using the Lua filter, CSV and Excel files can also be processed). In practice, this does not matter because all (structured) data can be converted into XML format.</p>
+</div>
+<div class="paragraph">
+<p>Often people ask how the data XML must be structured. The answer is simple: there are no specifications, except that the XML must comply with the usual rules (well-formedness). These rules are listed in the glossary.</p>
+</div>
+<div class="paragraph">
+<p>In addition, there are useful structuring recommendations:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The data should appear in the XML tree when it is needed. Data processing in the Publisher costs time and memory, so the information should be available where it is needed. There are of course exceptions. For example, global settings (colors, texts to be translated and so on) can be defined at the beginning of the file.</p>
+</li>
+<li>
+<p>Different representations (variants) must be readable from the data. If, for example, a page change is to occur for a new article group (in the product catalog), a change of article group must be recognizable in the data.</p>
+</li>
+<li>
+<p>The data should be as structured as possible. For example, a product catalog could contain article numbers in the form 123-12345. If the first three digits represent the article group, this could be recognized with regular expressions. It is simpler if the article group is already created in the data structure, so that no recognition is required.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>A simple example for the arrangement:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject&gt;
-  &lt;Box width="5" height="2" backgroundcolor="background"/&gt;
-&lt;/PlaceObject&gt;</code></pre>
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;productdata&gt;
+  &lt;globalsettings&gt;
+    ...
+  &lt;/globalsettings&gt;
+  &lt;articlegroup name="interior lights" number="123"&gt;
+    &lt;article number="123-12345"&gt;
+      &lt;property1&gt;...&lt;/property1&gt;
+      &lt;property2&gt;...&lt;/property2&gt;
+    &lt;/article&gt;
+    &lt;article number="123-12346"&gt;
+      &lt;property1&gt;...&lt;/property1&gt;
+      &lt;property2&gt;...&lt;/property2&gt;
+    &lt;/article&gt;
+  &lt;/articlegroup&gt;
+  &lt;articlegroup name="exterior lights" number="124"&gt;
+    &lt;article number="124-23456"&gt;
+      &lt;property1&gt;...&lt;/property1&gt;
+      &lt;property2&gt;...&lt;/property2&gt;
+    &lt;/article&gt;
+    &lt;article number="124-54321"&gt;
+      &lt;property1&gt;...&lt;/property1&gt;
+      &lt;property2&gt;...&lt;/property2&gt;
+    &lt;/article&gt;
+  &lt;/articlegroup&gt;
+&lt;/productdata&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Here it is defined indirectly via CSS:</p>
+<p>Redundancy does not hurt here, on the contrary. Since the article group in the example has a clear sequence of digits (123 or 124), the last five digits would be sufficient for the articles. You can assemble the number from articlegroup/@number, - and article/@number yourself. To save yourself the step, simply save the complete number on the article.</p>
+</div>
+<div class="paragraph">
+<p>To summarize it: If you have the possibility to influence the structure of the data: better save too much information than too little. Experiment with the order of the data, sometimes the right structure makes layout creation much easier.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_how_do_you_access_the_data_from_the_layout">3.2.2. How do you access the data from the layout?</h4>
+<div class="paragraph">
+<p>Since the data file can be structured as you like, special commands are needed to access the data. These are described below and in the appendix under XPath functions. In the following we will start from this simple data file:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Stylesheet&gt;
-  box {
-    background-color: background;
-  }
-&lt;/Stylesheet&gt;
-...
-&lt;Record element="data"&gt;
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;catalog&gt;
+  &lt;article nr="12345" price="99,95" quantity="1"&gt;
+    &lt;description&gt;Text for atricle 12345&lt;/description&gt;
+    &lt;image mainimage="yes"&gt;art12345.pdf&lt;/image&gt;
+  &lt;/article&gt;
+  &lt;article nr="56789" price="45,95" quantity="5"&gt;
+    &lt;description&gt;Text for atricle 56789&lt;/description&gt;
+    &lt;image&gt;art56789.pdf&lt;/image&gt;
+  &lt;/article&gt;
+&lt;/catalog&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This data file is stored under the name <code>data.xml</code> so that the Publisher can find it.</p>
+</div>
+<div class="paragraph">
+<p>The layout file (name: layout.xml) is executed during the import: all commands with the name &lt;Record&gt; are saved for later processing, all other commands have immediate effect. This means that if a command like &lt;DefineColor&gt; is included at the top level in the layout rules, it will be executed before the actual data processing starts.</p>
+</div>
+<div class="paragraph">
+<p>A minimum layout file for the data structuring shown above is</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+
+  &lt;Record element="catalog"&gt;
+
+  &lt;/Record&gt;
+
+&lt;/Layout&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After calling <code>sp</code> nothing happens: no page is created, no error is output, the publisher simply quits:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>...
+Loading layout instructions "/home/example/layout-en.xml"
+Loading data file "/home/example/data.xml"
+Stop processing data
+0 errors occurred
+Duration: 0.158941 seconds
+node_mem_usage=1 glue, 3 glue_spec, 1 dir, 1 user_defined
+luastate_bytes=0
+
+No pages of output.
+Transcript written on publisher.log.
+Total run time: 209.499431ms</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>No page is created because no further commands have been specified within the element <code>&lt;Record&gt;</code> that cause output.</p>
+</div>
+<div class="paragraph">
+<p>The structure required for processing is as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+
+  &lt;Record element="catalog"&gt;
+    <i class="conum" data-value="1"></i><b>(1)</b>
+    &lt;ProcessNode select="*"/&gt; <i class="conum" data-value="2"></i><b>(2)</b>
+    <i class="conum" data-value="3"></i><b>(3)</b>
+  &lt;/Record&gt;
+
+  &lt;Record element="artikel"&gt;
+    <i class="conum" data-value="4"></i><b>(4)</b>
+  &lt;/Record&gt;
+
+&lt;/Layout&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Commands to be executed before the first child elements, e.g. create title page or table of contents (the term child element refers to the data file).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Here, all child elements are called individually.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Commands for closing the PDF file</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>For each child item these commands are executed. The "focus" is now on an article, so you can access the attributes and child elements of articles.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Within the lower <code>&lt;Record&gt;</code> command you can now access child elements and attributes. Examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>@nr</code> results in the string 12345 in the first call and 56789 in the second pass.</p>
+</li>
+<li>
+<p><code>description</code> results in a sequence with one element, the content text (first article).</p>
+</li>
+<li>
+<p><code>image/@mainimage</code> is in the first case the string "yes" (the content of the attribute mainimage), in the second case the empty string "", because the attribute does not exist there.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For details, see the section on XPath functions.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively to the procedure with <code>&lt;ProcessNode&gt;</code> and its counterpart <code>&lt;Record&gt;</code>, child elements can also be accessed with &lt;ForAll&gt;. The following example creates a table line for each child element named article:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+
+  &lt;Record element="catalog"&gt;
+    &lt;PlaceObject&gt;
+      &lt;Table stretch="max"&gt; <i class="conum" data-value="1"></i><b>(1)</b>
+        &lt;Tablehead&gt; <i class="conum" data-value="2"></i><b>(2)</b>
+          &lt;Tr backgroundcolor="gray"&gt;
+            &lt;Td&gt;
+              &lt;Paragraph&gt;&lt;Value&gt;Article number&lt;/Value&gt;&lt;/Paragraph&gt;
+            &lt;/Td&gt;
+            &lt;/Td&gt;
+              &lt;Paragraph&gt;&lt;Value&gt;Description&lt;/Value&gt;&lt;/Paragraph&gt;
+            &lt;/Td&gt;
+          &lt;/Tr&gt;
+        &lt;/Tablehead&gt;
+        &lt;ForAll select="article"&gt; <i class="conum" data-value="3"></i><b>(3)</b>
+          &lt;Tr&gt;
+            &lt;Td&gt;
+              &lt;Paragraph&gt;&lt;Value select="@nr"/&gt;&lt;/Paragraph&gt;
+            &lt;/Td&gt;
+            &lt;Td&gt;
+              &lt;Paragraph&gt;&lt;Value select="description"/&gt;&lt;/Paragraph&gt;
+            &lt;/Td&gt;
+          &lt;/Tr&gt;
+        &lt;/ForAll&gt;
+      &lt;/Table&gt;
+    &lt;/PlaceObject&gt;
+  &lt;/Record&gt;
+&lt;/Layout&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A table is output that covers the entire width.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>A table header has the property that it is repeated on every page.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Within the &lt;ForAll&gt;, the attributes and child elements of each article can be accessed, just like in the example above.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Tables are covered in the basics (chapter Introduction to Tables) and in more detail in chapter 6.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ch-outputtingobjects">3.3. Outputting objects</h3>
+<div class="paragraph">
+<p><em>This page was automatically translated. Stay tuned for a manual translation&#8230;&#8203;</em></p>
+</div>
+<div class="paragraph">
+<p>There are two commands to output objects. One is called &lt;Output&gt; and is only used for text that is to wrap to multiple pages. All other objects (images, tables, barcodes, &#8230;&#8203;) are output using the command &lt;PlaceObject&gt;. The parameters are listed in detail in the command reference (see command &lt;PlaceObject&gt;). Here are some examples and possible applications.</p>
+</div>
+<div class="paragraph">
+<p>In the simplest case, the command can be used as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Record element="data"&gt;
   &lt;PlaceObject&gt;
-    &lt;Box width="5" height="2" /&gt;
+    &lt;Image file="_samplea.pdf" width="5"/&gt;
   &lt;/PlaceObject&gt;
 &lt;/Record&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>In both cases the color “background” has to be defined previously, for example with:</p>
+<p>Here an image is integrated with the specified file name and a specified width. The image _samplea.pdf (with underscore at the beginning) is included in the distribution and can be used as a placeholder.</p>
+</div>
+<h4 id="_raster_based_placement_of_objects" class="discrete">Raster based placement of objects</h4>
+<div class="paragraph">
+<p>The Raster section provides a detailed description of the design grid. Only so much should be mentioned here: The grid helps on the one hand to position the objects (easy arrangement of the objects) and on the other hand to find the right place. Raster cells are not occupied by two objects at the same time, unless you explicitly allow this.</p>
+</div>
+<div class="paragraph">
+<p>This is an example of raster-based output. The specifications for row and column are coordinates in the page grid, where the upper left corner is position 1,1.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;DefineColor name="background" model="cmyk" c="97" m="77" y="0" k="3"/&gt;</code></pre>
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject row="4" column="5"&gt;
+    &lt;Image file="_samplea.pdf" width="5"/&gt;
+&lt;/PlaceObject&gt;</code></pre>
+</div>
+</div>
+<h4 id="_order_of_the_objects" class="discrete">Order of the objects</h4>
+<div class="paragraph">
+<p>The order in which the individual objects are output is important: the objects are drawn on top of each other. This means that objects that are output later overlap the previous objects. This can be useful for background images. In &lt;AtPageCreation&gt; you can output a stationery or page header, which is then overwritten with real content in the actual data processing. Or you can include a ready-made page and provide it with the correct page number:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+
+  &lt;Record element="data"&gt;
+    &lt;PlaceObject row="1" column="1"&gt;
+      &lt;Image file="agb.pdf" width="180mm" height="280mm"/&gt;
+    &lt;/PlaceObject&gt;
+    &lt;PlaceObject
+      column="1"
+      row="{sd:number-of-rows()}"&gt;
+      &lt;Textblock textformat="right"&gt;
+        &lt;Paragraph&gt;
+          &lt;Value select="sd:current-page()"/&gt;
+        &lt;/Paragraph&gt;
+      &lt;/Textblock&gt;
+    &lt;/PlaceObject&gt;
+  &lt;/Record&gt;
+&lt;/Layout&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>There are other methods for color selection. See the following sections.</p>
+<p>Here the page is first integrated and then the current page number is "printed" right-justified in the last line.</p>
+</div>
+<h4 id="_height_and_width_of_the_objects" class="discrete">Height and width of the objects</h4>
+<div class="paragraph">
+<p>Images, barcodes, boxes etc. have fixed widths and heights. Texts and tables use the remaining width. That is, the width is the difference between the number of grid cells and the start column plus 1. For an example width of 15 grid boxes and a start column of 6, the text width is 10, unless otherwise specified.</p>
+</div>
+<div class="paragraph">
+<p>If an object (such as images) requires a width or height specification, this can be given either as an absolute value (e.g. 5cm) or in grid cells.</p>
+</div>
+<div class="paragraph">
+<p>Text block
+This is a rectangular text area that is not wrapped over multiple pages. Text blocks are ideal for page numbers, short descriptions, column titles and all other units where page breaks are not desired.</p>
+</div>
+<div class="paragraph">
+<p>A &lt;text block&gt; can contain one or more paragraphs (&lt;paragraph&gt;). Both the text block itself and paragraphs can contain information about the font, colors and text formats used. If these are declared in the paragraphs, they take precedence over those specified in the text block.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Textblock color="blue"&gt;
+  &lt;Paragraph color="green"&gt;
+    &lt;Value&gt;green text&lt;/Value&gt;
+  &lt;/Paragraph&gt;
+  &lt;Paragraph&gt;
+    &lt;Value&gt;this text is in blue (given by Textblock)&lt;/Value&gt;
+  &lt;/Paragraph&gt;
+&lt;/Textblock&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Further formatting options are described in the section Including Fonts and Text Formatting.</p>
+</div>
+<div id="abb-buntertextblock" class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/textblock-paragraph.png" alt="textblock paragraph">
+</div>
+<div class="title">Figure 2. Specifications in the paragraphs overwrite the values in the text block</div>
+</div>
+<div class="paragraph">
+<p>The complete description of <code>&lt;Textblock&gt;</code> can be found in the reference (section Text block). For texts that may wrap across page boundaries, there is the command &lt;Text&gt; as a child element of &lt;Output&gt;, described in the next section.</p>
 </div>
 <div class="sect3">
-<h4 id="_direct_usage_of_css_level_3_colors">3.3.1. Direct usage of CSS-level-3 colors</h4>
+<h4 id="_texts_with_page_break">3.3.1. Texts with page break</h4>
 <div class="paragraph">
-<p>The standard CSS colors (see the command DefineColor) are predefined, although in the RGB color space. This color space only suited for on screen presentation. With the predefined colors you can use a command like this without further color declarations:</p>
+<p>Texts with a page break are not output with &lt;PlaceObject&gt; like the other objects, but with &lt;Output&gt;. The syntax for this is</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Output&gt;
+  &lt;Text&gt;
+    &lt;Paragraph&gt;
+      &lt;Value&gt;...&lt;/Value&gt;
+    &lt;/Paragraph&gt;
+    &lt;Paragraph&gt;
+      &lt;Value&gt;...&lt;/Value&gt;
+    &lt;/Paragraph&gt;
+  &lt;/Text&gt;
+&lt;/Output&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Besides the special feature that this text can wrap around several pages, it is also able to wrap around objects. A detailed description of this property is given in the section Flowing around images.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_introduction_to_tables">3.3.2. Introduction to tables</h4>
+<div class="paragraph">
+<p>The table model used in the Publisher corresponds approximately to the model known from HTML.
+The rows are specified with <code>&lt;Tr&gt;</code> and the individual columns with <code>&lt;Td&gt;</code>.</p>
+</div>
+<div class="paragraph">
+<p>The structure of a simple table without column declaration, header and footer looks as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject&gt;
-  &lt;Box width="5" height="2" backgroundcolor="goldenrod" /&gt;
+  &lt;Table&gt;
+    &lt;Tr&gt;
+      &lt;Td&gt;...&lt;/Td&gt;
+      &lt;Td&gt;...&lt;/Td&gt;
+    &lt;/Tr&gt;
+    &lt;Tr&gt;
+      &lt;Td&gt;...&lt;/Td&gt;
+      &lt;Td&gt;...&lt;/Td&gt;
+    &lt;/Tr&gt;
+  &lt;/Table&gt;
 &lt;/PlaceObject&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Direct usage of CSS RGB values
-The color values can be given with the HTML/CSS hash values:</p>
+<p>The contents of the table cells can be paragraphs, pictures and other objects.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Td&gt;
+  &lt;Paragraph&gt;
+    &lt;Value&gt;...&lt;/Value&gt;
+  &lt;/Paragraph&gt;
+&lt;/Td&gt;
+
+&lt;Td&gt;
+  &lt;Image file="ocean.pdf" width="4"/&gt;
+&lt;/Td&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A practical feature of tables is that they can run over several pages, even with repeating headers and footers.
+The table cells can contain text, images, barcodes, etc.; in other words, anything that can also be contained in `&lt;PlaceObject&gt;'.
+Individual cells are never wrapped to multiple pages, i.e. they are set as a rectangular box, even if the contents would allow wrapping (e.g. texts or tables).</p>
+</div>
+<div class="paragraph">
+<p>A separate chapter is devoted to the topic of tables <a href="#ch-tabellen2">a separate chapter</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_images">3.3.3. Images</h4>
+<div class="paragraph">
+<p>Including images is, as already shown at the beginning, very easy. The command for this is `&lt;Image&gt;':</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject&gt;
-  &lt;Box width="5" height="2" backgroundcolor="#DAA520" /&gt;
+    &lt;Image file="_samplea.pdf" width="5cm"/&gt;
 &lt;/PlaceObject&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Indirect color definition
-The indirect color definition is shown in the first example above. It is useful when the color should have a symbolic name.</p>
+<p>Images can be in the formats PDF, JPEG and PNG and can be integrated. All other formats such as Tiff or SVG must be converted first.</p>
+</div>
+<div class="paragraph">
+<p>The command for embedding images is very powerful and is described in detail in a separate section (chapter Embedding Images). The reference contains a short description of all possibilities.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_rectangular_areas_box">3.3.4. Rectangular areas (<code>&lt;Box&gt;`</code>)</h4>
+<div class="paragraph">
+<p>Rectangular surfaces are created with the command &lt;Box&gt;.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;DefineColor name="background" model="cmyk" c="97" m="77" y="0" k="3"/&gt;
-&lt;DefineColor name="foreground" model="cmyk" c="2" m="12" y="59" k="1"/&gt;</code></pre>
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject&gt;
+  &lt;Box width="4" height="3" backgroundcolor="limegreen"/&gt;
+&lt;/PlaceObject&gt;</code></pre>
+</div>
+</div>
+<div id="abb-buntebox" class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/zitronengruen.png" alt="zitronengruen" width="30%">
+</div>
+<div class="title">Figure 3. A colored box, output with <code>&lt;Box&gt;</code></div>
+</div>
+<div class="paragraph">
+<p>Boxes are often used for colored areas behind a text or table. In this case the allocation of the raster cells must be switched off (allocate="no" at &lt;PlaceObject&gt;), otherwise a warning will be issued because of the double allocation of the area in the PDF (see section Raster). An example for the use of boxes as background can be found in the section about grip marks. There, the parameter bleed is also explained, which is used to enlarge the box in one or more directions, if they are located at the page margin.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_circle">3.3.5. Circle</h4>
+<div class="paragraph">
+<p>Circles are output with the command &lt;Circle&gt;:</p>
+</div>
+<div class="paragraph">
+<p>Kreise werden mit dem Befehl <code>&lt;Circle&gt;</code> ausgegeben:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Record element="data"&gt;
+  &lt;PlaceObject column="5" row="5"&gt;
+    &lt;Circle radiusx="3" backgroundcolor="goldenrod"/&gt;
+  &lt;/PlaceObject&gt;
+  &lt;PlaceObject column="5" row="5"&gt;
+    &lt;Circle radiusx="1pt" backgroundcolor="black"/&gt;
+  &lt;/PlaceObject&gt;
+&lt;/Record&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example the radius of the large circle is 3 grid boxes and the center of the circle is in the upper left corner of the box (5.5). So it starts in the second column and the second row and extends to the seventh column and row. Circles have the special property that no grid cells are marked as allocated.</p>
+</div>
+<div id="abb-kreismitmittelpunkt" class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/kreismitmittelpunkt.png" alt="kreismitmittelpunkt" width="30%">
+</div>
+<div class="title">Figure 4. Circle with radius 3 and center at (5,5)</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_rules">3.3.6. Rules</h4>
+<div class="paragraph">
+<p>There are horizontal and vertical rules. These can have a thickness, a color and a length. Rules can be solid and dashed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject column="2" row="2"&gt;
+  &lt;Rule direction="horizontal" length="4" dashed="yes"/&gt;
+&lt;/PlaceObject&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Rules are always aligned in the upper left corner of the box.</p>
+</div>
+<div id="abb-gestricheltelinie" class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/gestricheltelinie.png" alt="gestricheltelinie" width="80%">
+</div>
+<div class="title">Figure 5. A dotted line.</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_frame">3.3.7. Frame</h4>
+<div class="paragraph">
+<p>The frame (like the transformation below) is a special object that you place over another object. A frame (<code>&lt;Frame&gt;</code>) always contains another object, for example a picture.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject&gt;
+  &lt;Frame
+    border-bottom-left-radius="8pt"
+    border-bottom-right-radius="8pt"
+    border-top-left-radius="8pt"
+    border-top-right-radius="8pt"
+    framecolor="darkseagreen"
+    rulewidth="2pt"&gt;
+    &lt;Image file="_samplea.pdf" width="4"/&gt;
+  &lt;/Frame&gt;
+&lt;/PlaceObject&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can see that the frame works as a clipping path, the parts outside are hidden. You can also set the rulewidth to zero and make it invisible, then only the content will be clipped.</p>
+</div>
+<div id="abb-eagleframe" class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/eagle-frame.png" alt="eagle frame" width="50%">
+</div>
+<div class="title">Figure 6. Frame with radius 8pt and line width of 2 points.</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_transformation">3.3.8. Transformation</h4>
+<div id="abb-transformationen" class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/transformation.png" alt="transformation" width="100%">
+</div>
+<div class="title">Figure 7. The four basic transformations (from the PDF specification)</div>
+</div>
+<div class="paragraph">
+<p>Like the frame, the transformation is an enclosing element. This means that the element must still have a content, such as an image.</p>
+</div>
+<div class="paragraph">
+<p>In the transformation, you specify a matrix consisting of six numbers in the form "a b c d e f". The transformation from one coordinate system to another is mapped using the following 3x3 matrix:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/formel1.png" alt="formel1" width="50%">
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to calculate the new coordinates x' and y' from the coordinates x and y, you can also do this using the following formulas:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/formel2.png" alt="formel2" width="30%">
+</div>
+</div>
+<div class="paragraph">
+<p>There are the following basic transformation types (see figure The four basic transformations (from the PDF specification))</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Displacements (translation) are described with the values 1 0 0 1 t<sub>x</sub> t<sub>y</sub> . Scaling is specified with s<sub>x</sub> 0 0 0 s<sub>y</sub> 0 0 0</p>
+</li>
+<li>
+<p>Rotation can be achieved with cos θ sin θ -sin θ cos θ 0 0</p>
+</li>
+<li>
+<p>Displacements (skew) are described with 1 tan α tan β 1 0 0</p>
+</li>
+<li>
+<p>The unchanging transformation is 1 0 0 1 0 0 (identical figure).</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject&gt;
+  &lt;Transformation matrix="1.8 0.2 0.2 0.8 0 0 "&gt;
+    &lt;Image file="ocean.pdf" width="4"/&gt;
+  &lt;/Transformation&gt;
+&lt;/PlaceObject&gt;</code></pre>
+</div>
+</div>
+<div id="abb-eagletransformation" class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/eagle-transform.png" alt="eagle transform" width="50%">
+</div>
+<div class="title">Figure 8. Shifting and scaling by the transformation matrix.</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_barcodes_qr_codes">3.3.9. Barcodes, QR Codes</h4>
+<div class="paragraph">
+<p>Barcodes or QR codes are integrated via the command &lt;Barcode&gt;:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject&gt;
+  &lt;Barcode select="'Hello world'" type="QRCode" width="5"/&gt;
+&lt;/PlaceObject&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The output is as expected</p>
+</div>
+<div id="abb-qrhallowelt" class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/qrcode-hallowelt.png" alt="qrcode hallowelt" width="20%">
+</div>
+<div class="title">Figure 9. Hello World in pixels</div>
+</div>
+<div class="paragraph">
+<p>Barcodes in the coding "EAN13" and "Code 128" can be output.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ch-raster">3.4. Grid</h3>
+<div class="paragraph">
+<p><em>This page was automatically translated. Stay tuned for a manual translation&#8230;&#8203;</em></p>
+</div>
+<div class="paragraph">
+<p>The grid is a set of invisible lines or boxes to which objects are aligned. It is familiar from newspaper printing, for example, where there are often five or six columns. All pictures or advertisements then fill one or more columns. Likewise, there are often grid lines in catalogues that work in a similar way. In this way a clear layout is achieved.</p>
+</div>
+<div class="paragraph">
+<p>The speedata Publisher always works with such a grid. Since every publication is different, there is no way to find a sensible default for it. By default the grid is set to a size of 1cm × 1cm. It applies to the page as well as all positioning frames and groups. You can display the grid with sp --grid or &lt;Trace grid="yes"/&gt; in the layout.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+
+  &lt;SetGrid height="12pt" nx="10"/&gt;
+  &lt;Trace grid="yes"/&gt;
+  &lt;Pageformat width="8cm" height="4cm"/&gt;
+
+  &lt;Record element="data"&gt;
+    &lt;PlaceObject column="3" row="2"&gt;
+      &lt;Textblock&gt;
+        &lt;Paragraph&gt;
+          &lt;Value&gt;Hello world!&lt;/Value&gt;
+        &lt;/Paragraph&gt;
+      &lt;/Textblock&gt;
+    &lt;/PlaceObject&gt;
+  &lt;/Record&gt;
+
+&lt;/Layout&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>results in</p>
+</div>
+<div id="abb-08-raster" class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/08-raster.png" alt="08 raster" width="50%">
+</div>
+<div class="title">Figure 10. Simple grid</div>
+</div>
+<div class="paragraph">
+<p>If you look closely, you will see that the first and then every fifth stroke is drawn a little darker. This helps to count raster cells if necessary. The red line shows the border of the page, in the default setting the borders are 1cm each.</p>
+</div>
+<div class="sect3">
+<h4 id="_positioning_objects_in_the_grid">3.4.1. Positioning objects in the grid</h4>
+<div class="paragraph">
+<p>In the example above, you can see that the entries for row and column refer to the grid, the origin in the upper left corner has the coordinate 1,1. Besides the placement in grid coordinates, there is also the absolute placement: here, the object can always be positioned exactly at a certain position in the PDF. This is suitable, for example, for logos or background images that are to be displayed at a fixed position. These two variants cannot be combined within one output with &lt;PlaceObject&gt;: you have to choose one of the two variants.</p>
+</div>
+<div class="listingblock">
+<div class="title">Raster-based output (top) and absolute output (bottom). For raster-based output, the specifications are coordinates in the page grid, where the upper left corner is position 1,1. For absolute positioning, the specification is measured from the upper left corner. As soon as one of the two specifications is a length specification, the absolute positioning is taken.</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;!-- grid --&gt;
+&lt;PlaceObject row="4" column="5"&gt;
+    &lt;Image file="_samplea.pdf" width="5"/&gt;
+&lt;/PlaceObject&gt;
+
+&lt;!-- absolute --&gt;
+&lt;PlaceObject row="12mm" column="5cm"&gt;
+    &lt;Image file="_samplea.pdf" width="5"/&gt;
+&lt;/PlaceObject&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The line and column specifications always refer to the upper left-hand corner of the object, unless you specify with hreference or vreference that the specification should refer to the lower or right-hand corner. The objects align themselves to the upper and left edge of the first grid cell. Using halign and valign you can also align the object to the right or bottom:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject column="{sd:number-of-columns()}" row="1" hreference="right"&gt;
+  &lt;Image file="logo.pdf" width="2.5"/&gt;
+&lt;/PlaceObject&gt;
+
+&lt;PlaceObject column="{sd:number-of-columns()}" row="4" hreference="right" halign="right"&gt;
+  &lt;Image file="logo.pdf" width="2.5"/&gt;
+&lt;/PlaceObject&gt;</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/hreferenz.png" alt="hreferenz" width="100%">
+</div>
+<div class="title">Figure 11. By specifying hreference="right", the column specification is not used for the left edge of the image, but for the right edge. If the width of the image does not correspond to a multiple of the raster width, as in this example, the alignment within the raster cell must also be corrected with halign="right" (right logo).</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_defining_the_grid">3.4.2. Defining the grid</h4>
+<div class="paragraph">
+<p>The grid is set globally with the command &lt;SetGrid&gt;. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;SetGrid height="12pt" width="5mm"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>sets the grid height to 12 points and the width to 5 millimetres. In addition to the fixed values, there is also the possibility to set the number of grid cells horizontally and vertically:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;SetGrid nx="9" ny="9" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This creates a so-called nine-division, which is often used in book design. It is also possible to define distances between the grid cells, as is common in newspaper typesetting, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;SetGrid width="45mm" dx="3mm" height="12pt" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the grid does not fit completely into the type area, e.g. with a grid width of 3 centimeters and a page width of 10 centimeters, this leads to a conflict in the page layout. This causes the right or bottom margin to be shifted and does not match the values specified in the page type.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_what_is_the_grid_needed_for">3.4.3. What is the grid needed for?</h4>
+<div class="paragraph">
+<p>If you call <code>sp</code> with the <code>--show-gridallocation</code> option, you can see immediately what the grid is for. Occupied cells are marked internally, so that no other object can be placed in this area.  At least not without an error message or the hint that no area should be kept free for it (allocate="no" in &lt;PlaceObject&gt;).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+
+  &lt;SetGrid height="12pt" nx="10"/&gt;
+  &lt;Trace grid="yes" gridallocation="yes"/&gt;
+  &lt;Pageformat width="8cm" height="4cm"/&gt;
+
+  &lt;Record element="data"&gt;
+    &lt;PlaceObject column="3" row="2"&gt;
+      &lt;Textblock&gt;
+        &lt;Paragraph&gt;
+          &lt;Value&gt;Hello world!&lt;/Value&gt;
+        &lt;/Paragraph&gt;
+      &lt;/Textblock&gt;
+    &lt;/PlaceObject&gt;
+  &lt;/Record&gt;
+
+&lt;/Layout&gt;</code></pre>
+</div>
+</div>
+<div id="abb-08-raster2" class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/08-raster2.png" alt="08 raster2" width="80%">
+</div>
+<div class="title">Figure 12. Grid with grid occupancy display switched on. The yellow area is internally marked as "allocated".</div>
+</div>
+<div class="paragraph">
+<p>Attempting to place an object in an already occupied area gives a warning.</p>
+</div>
+<div class="paragraph">
+<p>If you add the lines</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject column="1" row="1"&gt;
+  &lt;Image file="ocean.pdf" height="4"/&gt;
+&lt;/PlaceObject&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>the following grid assignment results:</p>
+</div>
+<div id="abb-08-raster3" class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/08-raster3.png" alt="08 raster3" width="50%">
+</div>
+<div class="title">Figure 13. Double occupied grid. Areas that share (overlap) several objects are marked red.</div>
+</div>
+<div class="paragraph">
+<p>and a warning:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>...
+PlaceObject: Image in row 1 and column 1, width=4, height=4 (page 1)
+Warning: Conflict in grid
+...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you omit the specifications for column and row, the publisher will automatically look for the next free position.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>&lt;Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+
+  &lt;Trace grid="yes"/&gt;
+
+  &lt;Record element="data"&gt;
+    &lt;PlaceObject&gt;
+      &lt;Image width="4" file="_samplea.pdf"/&gt;
+    &lt;/PlaceObject&gt;
+    &lt;PlaceObject&gt;
+      &lt;Image width="4" file="_sampleb.pdf"/&gt;
+    &lt;/PlaceObject&gt;
+  &lt;/Record&gt;
+&lt;/Layout&gt;</pre>
+</div>
+</div>
+<div id="abb-twoimages" class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/twoimages.png" alt="twoimages" width="50%">
+</div>
+<div class="title">Figure 14. Objects automatically search for the next free space, unless otherwise specified.</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Absolutely placed objects do not occupy areas in the grid by default. In this case allocate="no" is set. With allocate="yes" the behaviour can be set to the same as for objects placed in the rater.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_separate_grids_in_groups">3.4.4. Separate grids in groups</h4>
+<div class="paragraph">
+<p>The following is an example of a grid within a group that differs from the global grid.
+Without the explicit <code>&lt;Grid &#8230;&#8203; /&gt;</code> specification, the grid is taken from the page.</p>
+</div>
+<div class="listingblock">
+<div class="title">The group has its own grid that is independent of the page grid.</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+
+  &lt;SetGrid nx="4" ny="4"/&gt;
+  &lt;Trace grid="yes" gridallocation="yes" objects="yes"/&gt;
+
+  &lt;Record element="data"&gt;
+    &lt;Group name="table"&gt;
+      &lt;Grid width="1cm" height="12pt"/&gt;
+      &lt;Contents&gt;
+        &lt;PlaceObject&gt;
+          &lt;Table width="4" stretch="max"&gt;
+            &lt;Tr&gt;
+              &lt;Td&gt;&lt;Paragraph&gt;&lt;Value&gt;Cell 1/1&lt;/Value&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+              &lt;Td&gt;&lt;Paragraph&gt;&lt;Value&gt;Cell 2/1&lt;/Value&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+            &lt;/Tr&gt;
+            &lt;Tr&gt;
+              &lt;Td&gt;&lt;Paragraph&gt;&lt;Value&gt;Cell 1/2&lt;/Value&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+              &lt;Td&gt;&lt;Paragraph&gt;&lt;Value&gt;Cell 2/2&lt;/Value&gt;&lt;/Paragraph&gt;&lt;/Td&gt;
+            &lt;/Tr&gt;
+          &lt;/Table&gt;
+        &lt;/PlaceObject&gt;
+        &lt;PlaceObject row="4" column="2"&gt;
+          &lt;Image file="ocean.pdf" width="3"/&gt;
+        &lt;/PlaceObject&gt;
+      &lt;/Contents&gt;
+    &lt;/Group&gt;
+
+    &lt;PlaceObject groupname="table"/&gt;
+  &lt;/Record&gt;
+&lt;/Layout&gt;</code></pre>
+</div>
+</div>
+<div id="abb-08-raster4" class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/08-raster4.png" alt="08 raster4" width="50%">
+</div>
+<div class="title">Figure 15. Section of a page. The grid within the group is much finer than the rough page grid.</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ch-positioningarea">3.5. Areas on the page (PositioningArea)</h3>
+<div class="paragraph">
+<p><em>This page was automatically translated. Stay tuned for a manual translation&#8230;&#8203;</em></p>
+</div>
+<div class="paragraph">
+<p>The pages can be divided into virtual areas. To do this, you specify frames in the page type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Pagetype name="seite" test="true()"&gt;
+  &lt;Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/&gt;
+  &lt;PositioningArea name="pagehead"&gt;
+    &lt;PositioningFrame width="19" height="2" row="1" column="1"/&gt;
+  &lt;/PositioningArea&gt;
+  &lt;PositioningArea name="left"&gt;
+    &lt;PositioningFrame width="4" height="{sd:number-of-rows() - 3}" row="4" column="2"/&gt;
+  &lt;/PositioningArea&gt;
+  &lt;PositioningArea name="text"&gt;
+    &lt;PositioningFrame width="10" height="{sd:number-of-rows() - 3}" row="4" column="8"/&gt;
+  &lt;/PositioningArea&gt;
+&lt;/Pagetype&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Three areas are defined here, which can be addressed with the attribute area="&#8230;&#8203;" when it comes to the output of objects or the movement of the cursor:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Record element="data"&gt;
+  &lt;PlaceObject area="pagehead"&gt;
+    &lt;Textblock&gt;
+      &lt;Paragraph&gt;
+        &lt;Value&gt;pagehead, height of the area: &lt;/Value&gt;
+        &lt;Value select="sd:number-of-rows('pagehead')"&gt;&lt;/Value&gt;
+      &lt;/Paragraph&gt;
+    &lt;/Textblock&gt;
+  &lt;/PlaceObject&gt;
+  &lt;PlaceObject area="left"&gt;
+    &lt;Textblock&gt;
+      &lt;Paragraph&gt;
+        &lt;Value&gt;left, height: &lt;/Value&gt;
+        &lt;Value select="sd:number-of-rows('left')"&gt;&lt;/Value&gt;
+      &lt;/Paragraph&gt;
+    &lt;/Textblock&gt;
+  &lt;/PlaceObject&gt;
+  &lt;PlaceObject area="text"&gt;
+    &lt;Textblock&gt;
+      &lt;Paragraph&gt;
+        &lt;Value&gt;text, width: &lt;/Value&gt;
+        &lt;Value select="sd:number-of-columns('text')"&gt;&lt;/Value&gt;
+      &lt;/Paragraph&gt;
+    &lt;/Textblock&gt;
+  &lt;/PlaceObject&gt;
+&lt;/Record&gt;</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/positioningareas.png" alt="positioningareas" width="40%">
+</div>
+<div class="title">Figure 16. The areas of the page are addressed with area="&#8230;&#8203;". Some layout functions allow you to specify an area.</div>
+</div>
+<div class="sect3">
+<h4 id="ch-cursor">3.5.1. Cursor</h4>
+<div class="paragraph">
+<p>The cursor is a virtual marker that is moved in the grid after each output, unless it is explicitly prohibited (keepposition="yes" at &lt;PlaceObject&gt;). The selection is controlled separately for each area. I.e. an output in one area does not result in a change of the cursor in another area. If an object is output that extends to the right margin, the cursor automatically jumps to the next free line. The cursor can be moved line by line with &lt;NextRow&gt;. If you specify rows="n", the cursor is placed n rows lower. If you specify row="n", the cursor is placed in row n.</p>
+</div>
+<div class="paragraph">
+<p>The following example illustrates the behavior of the cursor.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+
+  &lt;Trace grid="yes"/&gt;
+
+  &lt;Record element="data"&gt;
+    <i class="conum" data-value="1"></i><b>(1)</b>
+    &lt;PlaceObject&gt;
+      &lt;Box width="{sd:number-of-columns()}" height="1"/&gt;
+    &lt;/PlaceObject&gt;
+    &lt;NextRow rows="1" /&gt;
+    &lt;PlaceObject&gt;
+      &lt;Box width="{sd:number-of-columns()}" height="1"/&gt;
+    &lt;/PlaceObject&gt;
+
+    &lt;NextRow rows="2" /&gt;
+
+    &lt;PlaceObject&gt;
+      &lt;Box width="4" height="1"/&gt;
+    &lt;/PlaceObject&gt;
+    <i class="conum" data-value="2"></i><b>(2)</b>
+    &lt;NextRow rows="1" /&gt;
+    &lt;PlaceObject&gt;
+      &lt;Box width="4" height="1"/&gt;
+    &lt;/PlaceObject&gt;
+
+  &lt;/Record&gt;
+&lt;/Layout&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The two objects cover the entire width. The cursor automatically jumps to the next line as soon as it is behind the right edge. The &lt;NextRow&gt; creates the free row.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The cursor is now in row 6 and column 5. The following row feed sets the cursor in row 7 and column 1.</td>
+</tr>
+</table>
+</div>
+<div id="abb-cursor" class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/cursor.png" alt="cursor" width="100%">
+</div>
+<div class="title">Figure 17. The behavior of NextRow</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_overflow_of_texts_into_the_next_frame">3.5.2. Overflow of texts into the next frame</h4>
+<div class="paragraph">
+<p>When outputting texts using the commands &lt;Output&gt;/&lt;Text&gt;, page breaks can occur in texts, as described in the section Texts with Page Break. This works not only for page boundaries, but also for areas on the pages, provided that they have the same name.</p>
+</div>
+<div class="paragraph">
+<p>This page definition serves as an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Pagetype name="page" test="true()"&gt;
+  &lt;Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/&gt;
+  &lt;PositioningArea name="text"&gt;
+    &lt;PositioningFrame width="4" height="17" row="2" column="1"/&gt;
+    &lt;PositioningFrame width="4" height="10" row="3" column="6"/&gt;
+    &lt;PositioningFrame width="4" height="24" row="1" column="11"/&gt;
+  &lt;/PositioningArea&gt;
+&lt;/Pagetype&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The output is generated via &lt;Output&gt;:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Output area="text"&gt;
+  &lt;Text&gt;
+    &lt;Paragraph&gt;
+      &lt;Value select="sd:dummytext(3)"/&gt;
+    &lt;/Paragraph&gt;
+  &lt;/Text&gt;
+&lt;/Output&gt;</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/textoverflow.png" alt="textoverflow" width="100%">
+</div>
+<div class="title">Figure 18. The text automatically flows into the next free area. If necessary, a page break is inserted.</div>
+</div>
+<div class="paragraph">
+<p>You can also force a frame to change. With &lt;NextFrame&gt; and the specification of an area (area="&#8230;&#8203;") the cursor is placed in the top left corner of the next frame, if necessary a page break is inserted.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ch-organisationdaten">3.6. File organization</h3>
+<div class="paragraph">
+<p><em>This page was automatically translated. Stay tuned for a manual translation&#8230;&#8203;</em></p>
+</div>
+<div class="paragraph">
+<p>This section describes how the necessary files (layout, data, images and font files) must be organized, where they are stored, what they must be called, and so on.</p>
+</div>
+<div class="paragraph">
+<p>When the Publisher starts, it reads the current (working) directory and all child directories and saves the file names in a list. As soon as a resource is loaded, this list is used to check whether a corresponding file exists. No distinction is made as to which directory the file is located in.</p>
+</div>
+<div class="paragraph">
+<p>It follows from this:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If something changes in the file system during the run, the Publisher will not notice this.</p>
+</li>
+<li>
+<p>It does not matter what the directories are called. The images can, but do not have to be stored in the directory with the name "images".</p>
+</li>
+<li>
+<p>If the working directory is too large, the startup process is slow. A few thousand files in the working directory are usually no problem.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>There are exceptions to the rule:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>You can use <code>sp --no-local</code> to instruct the publisher not to search the working directory recursively.</p>
+</li>
+<li>
+<p>With <code>--extra-dir</code> you can add a directory to be searched recursively.</p>
+</li>
+<li>
+<p>With <code>sp --systemfonts</code>, font files are also searched in directories that are predefined by the system.</p>
+</li>
+<li>
+<p>With <code>sp --wd DIR</code> the publisher changes to this directory before starting.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>For a description of the parameters see the appendix Starting the Publisher from the Command Line.</p>
+</div>
+<div class="sect3">
+<h4 id="_what_names_must_the_data_file_and_the_layout_file_have">3.6.1. What names must the data file and the layout file have?</h4>
+<div class="paragraph">
+<p>The speedata Publisher looks for the layout with the name layout.xml and the data file with the name data.xml. Both can be adjusted on the command line (--layout=XYZ and --data=XYZ) and in the configuration file (layout=XYZ and data=XYZ). See the appendices Starting the Publisher from the Command Line and Configuring the Publisher.</p>
+</div>
+<div id="abb-19-dateisystem" class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/18-dateisystem.png" alt="18 dateisystem" width="100%">
+</div>
+<div class="title">Figure 19. Possible file organization in a directory. The name of the subdirectories (folders) is arbitrary.</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_splitting_layout_sets_of_rules_into_individual_files">3.6.2. Splitting layout sets of rules into individual files</h4>
+<div class="paragraph">
+<p>You can split the layout ruleset into several files. There are two ways to merge the files. On the command line, you can use --extra-xml to specify one or more layout rulesets, which are also read in. Alternatively, you can use the mechanism via XInclude, here in the case of a font definition:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout
+  xmlns="urn:speedata.de:2009/publisher/en"&gt;
+
+  &lt;LoadFontfile name="DejaVuSerif" filename="DejaVuSerif.ttf" /&gt;
+  ...
+
+&lt;/Layout&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This file can then be included with</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  &gt;
+
+  &lt;xi:include href="dejavu.xml"/&gt;
+  ...
+
+&lt;/Layout&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The namespace for XInclude must be declared as above, otherwise there will be a syntax error in the XML file.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_splitting_data_into_individual_files">3.6.3. Splitting data into individual files</h4>
+<div class="paragraph">
+<p>The data file can also be split into several files. XInclude is used for this.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;catalog xmlns:xi="http://www.w3.org/2001/XInclude"&gt;
+  &lt;xi:include href="globalsettings.xml"/&gt;
+  &lt;xi:include href="article0001.xml"/&gt;
+  &lt;xi:include href="article0002.xml"/&gt;
+  ...
+&lt;/catalog&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The namespace for XInclude must be declared in the root node (in the above example, 'catalog').</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_hyphenation_language_settings">3.7. Hyphenation / language settings</h3>
+<div class="paragraph">
+<p><em>This page was automatically translated. Stay tuned for a manual translation&#8230;&#8203;</em></p>
+</div>
+<div class="paragraph">
+<p>Hyphenation is necessary in most Western languages to have an acceptable appearance for narrow texts. Hyphenation is an integral part of the pagination algorithm, for example to avoid multiple hyphenations in consecutive lines.</p>
+</div>
+<div class="paragraph">
+<p>Hyphenation is controlled by language in the Publisher and is pattern-based. The language can be set globally via &lt;Options mainlanguage="&#8230;&#8203;"&gt; or paragraphwise.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Options mainlanguage="German" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>switches the entire document to German hyphenation patterns, while</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Paragraph language="German"&gt;
+    &lt;Value&gt;Autobahn&lt;/Value&gt;
+&lt;/Paragraph&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>changes the language for only one paragraph. The available languages are described in the command reference under &lt;Options&gt;.</p>
+</div>
+<div class="paragraph">
+<p>If you want to test if the words are hyphenated correctly, you can create small marks with &lt;Trace hyphenation="yes" /&gt;.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+
+  &lt;Options mainlanguage="German" /&gt;
+  &lt;Trace hyphenation="yes" /&gt;
+
+  &lt;Record element="data"&gt;
+    &lt;PlaceObject&gt;
+      &lt;Textblock width="3"&gt;
+        &lt;Paragraph&gt;
+          &lt;Value&gt;Autobahn&lt;/Value&gt;
+        &lt;/Paragraph&gt;
+      &lt;/Textblock&gt;
+    &lt;/PlaceObject&gt;
+  &lt;/Record&gt;
+&lt;/Layout&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>results in the following:</p>
+</div>
+<div id="abb-trennstellenimtext" class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/13-autobahn.png" alt="13 autobahn" width="50%">
+</div>
+<div class="title">Figure 20. Show hyphenation points in text</div>
+</div>
+<div class="paragraph">
+<p>Via</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Hyphenation&gt;er-go-no-mic&lt;/Hyphenation&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>you can define hyphenation suggestions or exceptions for individual words. In this way, the words are then only hyphenated at the positions indicated by a hyphen.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+With optical margin alignment, which is described in the section Optical Margin Adjustment, you can reduce the number of hyphenations in the document somewhat.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="ch-trennung-ausschalten">3.7.1. Turn off paragraph hyphenations</h4>
+<div class="paragraph">
+<p>For single paragraphs you can switch off the automatic hyphenation by defining a text format with hyphenate="no".</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;DefineTextformat name="nohyphen" hyphenate="no"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>No words are hyphenated in paragraphs marked in this way. The use of text formats is described in a separate section.</p>
+</div>
+<div class="paragraph">
+<p>The hyphenation character can also be changed using a text format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;DefineTextformat name="dothyphen" hyphenchar="•"/&gt;</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/13-dothyphen.png" alt="13 dothyphen" width="50%">
+</div>
+<div class="title">Figure 21. Other character for word hyphenations</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_allow_hyphenations_only_on_certain_characters">3.7.2. Allow hyphenations only on certain characters</h4>
+<div class="paragraph">
+<p>A property of &lt;Paragraph&gt; allows to limit the characters where a line break may be inserted. This is often important for technical data where, for example, type designations in the form 12-345/AB occur and should not be hyphenated. In the following example, a line break may only be inserted after a slash:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Paragraph allowbreak="/"&gt;
+  &lt;Value&gt;https://download.speedata.de/publisher/development/&lt;/Value&gt;
+&lt;/Paragraph&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The default setting for allowbreak is " -", i.e. a break at a space or hyphen.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+This is an experimental feature in the Publisher. It is likely to be associated with a text format in a future version.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ch-fonts">3.8. Using fonts</h3>
+<div class="paragraph">
+<p><em>This page was automatically translated. Stay tuned for a manual translation&#8230;&#8203;</em></p>
+</div>
+<div class="paragraph">
+<p>Embedding fonts in the common formats is very easy. The formats Type1 (files .pfb and .afm) as well as TrueType and OpenType (files .ttf and .otf) are supported.</p>
+</div>
+<div class="paragraph">
+<p>To make fonts known and used by the publisher, two steps are necessary. The first step is to load a font file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;LoadFontfile name="MinionRegular" filename="MinionPro-Regular.otf" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This assigns the file name MinionPro-Regular.otf the internal name MinionRegular. In the second step, these internal names are then used to define families:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;DefineFontfamily name="textfont" fontsize="9" leading="11"&gt;
+  &lt;Regular fontface="MinionRegular"/&gt;
+  &lt;Bold fontface="MinionBold"/&gt;
+  &lt;Italic fontface="MinionItalic"/&gt;
+  &lt;BoldItalic fontface="MinionBoldItalic"/&gt;
+&lt;/DefineFontfamily&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The last three cuts (bold, italic and bold italic) do not have to be specified if they are not used in the layout. fontsize is the font height in points, leading is the distance between two baselines.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/14-fontsize-leading.png" alt="14 fontsize leading" width="100%">
+</div>
+<div class="title">Figure 22. Font size and line spacing</div>
+</div>
+<div class="paragraph">
+<p>The font is used in different ways: in the commands &lt;Text Block&gt;, &lt;Text&gt;, &lt;Paragraph&gt;, &lt;Table&gt;, &lt;NoBreak&gt; and &lt;Barcode&gt;, a font can be specified with the attribute fontface, e.g. &lt;Paragraph fontface="text font"&gt;. Temporarily you can switch to another family with the command &lt;Fontface fontfamily="&#8230;&#8203;"&gt;:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Paragraph&gt;
+  &lt;Fontface fontfamily="title"&gt;
+    &lt;Value&gt;Preface&lt;/Value&gt;
+  &lt;/Fontface&gt;
+  &lt;Value&gt; more text&lt;/Value&gt;
+&lt;/Paragraph&gt;</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_text_labeling_in_the_layout_rules">3.8.1. Text labeling in the layout rules</h4>
+<div class="paragraph">
+<p>There are several ways to switch to the cuts fat, italic and fat-italic. The most direct one is to switch with the commands B and I, these can also be nested within each other:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject&gt;
+  &lt;Textblock fontface="textfont"&gt;
+    &lt;Paragraph&gt;
+      &lt;Value&gt;A wonderful &lt;/Value&gt;
+      &lt;B&gt;&lt;Value&gt;serenity&lt;/Value&gt;&lt;/B&gt;
+      &lt;Value&gt; has taken possession &lt;/Value&gt;
+      &lt;I&gt;&lt;Value&gt;of my&lt;/Value&gt;
+        &lt;Value&gt; &lt;/Value&gt;
+        &lt;B&gt;&lt;Value&gt;entire soul,&lt;/Value&gt;&lt;/B&gt;
+      &lt;/I&gt;
+      &lt;Value&gt; like these sweet mornings.&lt;/Value&gt;
+    &lt;/Paragraph&gt;
+  &lt;/Textblock&gt;
+&lt;/PlaceObject&gt;</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/14-fonts.png" alt="14 fonts" width="100%">
+</div>
+<div class="title">Figure 23. Text markup in layout. Underline (not shown) is possible with the command &lt;U&gt;.</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_text_markup_in_the_data">3.8.2. Text markup in the data</h4>
+<div class="paragraph">
+<p>If there are markups in the data (e.g. as HTML tags), then this works in principle in exactly the same way:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject&gt;
+  &lt;Textblock fontface="textschrift"&gt;
+    &lt;Paragraph&gt;
+      &lt;Value select="."/&gt;
+    &lt;/Paragraph&gt;
+  &lt;/Textblock&gt;
+&lt;/PlaceObject&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>with the corresponding data:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;data&gt;A wonderful &lt;b&gt;serenity&lt;/b&gt; has taken possession
+  &lt;i&gt;of my &lt;b&gt;entire soul,&lt;/b&gt;&lt;/i&gt; like these sweet
+  mornings.&lt;/data&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The result is the same as above. The tags can also be written in capital letters in the data: &lt;B&gt; instead of &lt;b&gt;. Nesting is also allowed and again &lt;u&gt; is underlined.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If the data is not in well-formed XML but in HTML format for example, you can use the layout function sd:decode-html() to interpret it.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_opentype_features">3.8.3. OpenType Features</h4>
+<div class="paragraph">
+<p>The OpenType format knows so-called OpenType features, such as old style figures or small caps. Some of these features can be activated at &lt;LoadFontfile&gt;.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+
+  &lt;!-- Oldstyle figures / text figures --&gt;
+  &lt;LoadFontfile
+    name="MinionRegular-osf"
+    filename="MinionPro-Regular.otf"
+    oldstylefigures="yes" /&gt;
+
+  &lt;!-- Small caps --&gt;
+  &lt;LoadFontfile
+    name="MinionRegular-smcp"
+    filename="MinionPro-Regular.otf"
+    smallcaps="yes" /&gt;
+
+  &lt;DefineFontfamily name="osftext" fontsize="10" leading="12"&gt;
+    &lt;Regular fontface="MinionRegular-osf"/&gt;
+  &lt;/DefineFontfamily&gt;
+
+  &lt;DefineFontfamily name="smcptext" fontsize="10" leading="12"&gt;
+    &lt;Regular fontface="MinionRegular-smcp"/&gt;
+  &lt;/DefineFontfamily&gt;
+
+  &lt;Record element="data"&gt;
+    &lt;PlaceObject&gt;
+      &lt;Textblock&gt;
+        &lt;Paragraph fontface="osftext"&gt;
+          &lt;Value&gt;Text with oldstyle figures 1234567890&lt;/Value&gt;
+        &lt;/Paragraph&gt;
+        &lt;Paragraph fontface="smcptext"&gt;
+          &lt;Value&gt;Text with small caps 1234567890&lt;/Value&gt;
+        &lt;/Paragraph&gt;
+      &lt;/Textblock&gt;
+    &lt;/PlaceObject&gt;
+  &lt;/Record&gt;
+&lt;/Layout&gt;</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/osfsmcp.png" alt="osfsmcp" width="100%">
+</div>
+<div class="title">Figure 24. Text figures (above) often make reading the numbers more pleasant. Real small caps (below) differ significantly from mathematically reduced capital letters. The line width and proportions must be adjusted. Depending on the font used, smallcaps also switches to "old style figures".</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_optical_margin_alignment">3.8.4. Optical margin alignment</h4>
+<div class="paragraph">
+<p>With the parameter marginprotrusion (percentage) at the command &lt;LoadFontfile&gt; you can determine how far certain characters (comma, dot and hyphen) protrude into the right margin. This can be used to achieve an optically smoother margin in justified text:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+
+  &lt;Options mainlanguage="German" /&gt;
+  &lt;LoadFontfile name="main"
+                filename="MinionPro-Regular.otf"
+                marginprotrusion="100" /&gt;
+
+  &lt;DefineFontfamily name="text" fontsize="10" leading="12"&gt;
+    &lt;Regular fontface="main"/&gt;
+  &lt;/DefineFontfamily&gt;
+
+
+  &lt;Record element="data"&gt;
+    &lt;PlaceObject&gt;
+      &lt;Textblock width="4"&gt;
+        &lt;Paragraph&gt;
+          &lt;Value select="."/&gt;
+        &lt;/Paragraph&gt;
+      &lt;/Textblock&gt;
+    &lt;/PlaceObject&gt;
+  &lt;/Record&gt;
+&lt;/Layout&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The associated data file (<code>data.xml</code>) is as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;data&gt;A wonderful serenity has taken possession of my entire
+  soul, like these sweet mornings of spring which I enjoy
+  with my whole heart. I am alone, and feel the charm of
+  existence in this spot, which was created for the bliss of
+  souls like mine. I am so happy, my dear friend, so
+  absorbed in the exquisite sense of mere tranquil
+  existence, that I neglect my talents.&lt;/data&gt;</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/marginprotrusion.png" alt="marginprotrusion" width="100%">
+</div>
+<div class="title">Figure 25. Left: Comma, period and hyphen protrude into the right margin. Right: without optical margin alignment.</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_in_which_directory_must_the_font_files_be_located">3.8.5. In which directory must the font files be located?</h4>
+<div class="paragraph">
+<p>The organization of the files, and thus the fonts, is described in the directory File Organization. With <code>sp --systemfonts</code> when calling the publisher, you can access the system-wide font files.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_tips_and_tricks">3.8.6. Tips and tricks</h4>
+<div class="paragraph">
+<p>In order to save yourself work in defining fonts, you can use the command</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ sp list-fonts --xml</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>use. This will then list all font files found, together with a line that can be used directly in the layout.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ sp list-fonts --xml
+&lt;LoadFontfile name="DejaVuSans-Bold"
+              filename="DejaVuSans-Bold.ttf" /&gt;
+&lt;LoadFontfile name="DejaVuSans-BoldOblique"
+              filename="DejaVuSans-BoldOblique.ttf" /&gt;
+&lt;LoadFontfile name="DejaVuSans-ExtraLight"
+              filename="DejaVuSans-ExtraLight.ttf" /&gt;
+...</pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If no font is specified for a paragraph or text block (etc.), the system uses the text font family, which is also predefined in the Publisher and can be overwritten. See the Preferences in the Publisher appendix.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_missing_characters_and_replacement_fonts">3.8.7. Missing characters and replacement fonts</h4>
+<div class="paragraph">
+<p>The character sets in the font files are usually very limited. For example, the speedata Publisher is delivered with the free font "TeXGyreHeros" (a very good Helvetica clone). However, the font file only contains characters that cover western languages, but not, for example, Greek, Arabic, Chinese etc. Also the whole Unicode special characters like U+2685 DIE FACE-6 (⚅) are not included. If a character is requested that is not contained in the font, an error message is displayed.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Error: Glyph f1c7 (hex) is missing from the font "TeXGyreHeros-Regular"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This error can be suppressed with the command &lt;Options&gt;:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>&lt;Options reportmissingglyphs="no"/&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can also specify a replacement font at &lt;LoadFontfile&gt;, which will be searched as soon as a character is not found:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;LoadFontfile name="helvetica" filename="texgyreheros-regular.otf"&gt;
+  &lt;Fallback filename="fontawesome-webfont.ttf" /&gt;
+  &lt;Fallback filename="line-awesome.ttf" /&gt;
+&lt;/LoadFontfile&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>First the font texgyreheros-regular.otf is searched, then fontawesome-webfont.ttf and finally line-awesome.ttf.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_aliases">3.8.8. Aliases</h4>
+<div class="paragraph">
+<p>There is a command to add an alternate name for an existing font name to the list of known font names:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;DefineFontalias existing="..." alias="..."/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The commands</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;LoadFontfile name="DejaVuSerif"
+        filename="DejaVuSerif.ttf" /&gt;
+&lt;LoadFontfile name="DejaVuSerif-Bold"
+        filename="DejaVuSerif-Bold.ttf" /&gt;
+&lt;LoadFontfile name="DejaVuSerif-BoldItalic"
+        filename="DejaVuSerif-BoldItalic.ttf" /&gt;
+&lt;LoadFontfile name="DejaVuSerif-Italic"
+        filename="DejaVuSerif-Italic.ttf" /&gt;
+
+&lt;DefineFontalias existing="DejaVuSerif" alias="serif"/&gt;
+&lt;DefineFontalias existing="DejaVuSerif-Bold" alias="serif-bold"/&gt;
+&lt;DefineFontalias existing="DejaVuSerif-Italic" alias="serif-italic"/&gt;
+&lt;DefineFontalias existing="DejaVuSerif-BoldItalic"
+         alias="serif-bolditalic"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>now allow to define font families in general as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;DefineFontfamily name="title" fontsize="15" leading="17"&gt;
+  &lt;Regular fontface="serif"/&gt;
+  &lt;Bold fontface="serif-bold"/&gt;
+  &lt;BoldItalic fontface="serif-bolditalic"/&gt;
+  &lt;Italic fontface="serif-italic"/&gt;
+&lt;/DefineFontfamily&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>i.e. independent of the font actually used. With the options described in the section Splitting Layout Rules into Separate Files, you can now swap the font definition into a separate file and, if necessary, quickly choose between different fonts by including the desired files.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ch-textformate">3.9. Text formats</h3>
+<div class="paragraph">
+<p><em>This page was automatically translated. Stay tuned for a manual translation&#8230;&#8203;</em></p>
+</div>
+<div class="paragraph">
+<p>Text formats are used to control the paragraphs. You can use them to control various things like text indents, text alignment, whore children and cobbler boys, pagination and more.</p>
+</div>
+<div class="paragraph">
+<p>The individual parameters are described in the reference under &lt;DefineTextformat&gt;.</p>
+</div>
+<div class="paragraph">
+<p>The text format called text is predefined in the Publisher and is used in all places where no other text format is specified. It is defined as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;DefineTextformat name="text" alignment="justified"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will output all texts in justified text and with hyphenation, without indentation and without spaces at the top and bottom, as long as</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>the format text is not redefined or</p>
+</li>
+<li>
+<p>another text format is specified at <code>&lt;Paragraph&gt;</code> or <code>&lt;Textblock&gt;</code> (the attribute for this is called text format).</p>
+</li>
+</ol>
+</div>
+<div class="sect3">
+<h4 id="_page_breaks_between_texts">3.9.1. Page breaks between texts</h4>
+<div class="paragraph">
+<p>Page breaks, for example after a heading, are undesirable. To prevent page breaks at these points, the text format property break-below can be switched off:</p>
+</div>
+<div class="listingblock">
+<div class="title">To prevent a page break from being inserted between the heading and the text, you need to adjust the text format of the heading.</div>
+<div class="content">
+<pre>&lt;Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+  &lt;Pageformat width="100mm" height="70mm"/&gt;
+  &lt;Trace textformat="yes"/&gt;
+
+  &lt;DefineTextformat name="keeptogether" break-below="no"/&gt;
+
+  &lt;DefineFontfamily name="h1" fontsize="18" leading="20"&gt;
+    &lt;Regular fontface="sans-bold"/&gt;
+  &lt;/DefineFontfamily&gt;
+
+  &lt;Record element="data"&gt;
+    &lt;Output&gt;
+      &lt;Text&gt;
+        &lt;Paragraph fontface="h1" textformat="keeptogether"&gt;
+          &lt;Value&gt;A Title&lt;/Value&gt;
+        &lt;/Paragraph&gt;
+        &lt;Paragraph&gt;
+          &lt;Value select="sd:dummytext()"/&gt;
+        &lt;/Paragraph&gt;
+      &lt;/Text&gt;
+    &lt;/Output&gt;
+  &lt;/Record&gt;
+&lt;/Layout&gt;</pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/textmitueberschrift.png" alt="textmitueberschrift" width="50%">
+</div>
+<div class="title">Figure 26. Output of a heading. The text format with the break-below property prevents wrapping under the heading.</div>
+</div>
+<div class="paragraph">
+<p>However, the break-below="no" property is only taken into account within a text output (&lt;Output&gt;). You can insert a page break between two text outputs, but this cannot be prevented. In order to output a text in one piece nevertheless, which first has to be assembled from the data, one stores the individual contents in variables and then outputs them in one piece.</p>
+</div>
+<div class="listingblock">
+<div class="title">With variables and <code>&lt;Copy-of&gt;</code> you can compose texts and output them in one piece.</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Record element="data"&gt;
+  &lt;SetVariable variable="mytitle"&gt;
+    &lt;Paragraph fontface="h1" textformat="keeptogether"&gt;
+      &lt;Value&gt;A Title&lt;/Value&gt;
+    &lt;/Paragraph&gt;
+  &lt;/SetVariable&gt;
+
+  &lt;SetVariable variable="mytext"&gt;
+    &lt;Paragraph&gt;
+      &lt;Value select="sd:dummytext()"/&gt;
+    &lt;/Paragraph&gt;
+  &lt;/SetVariable&gt;
+
+  &lt;Output&gt;
+    &lt;Text&gt;
+      &lt;Copy-of select="$mytitle"/&gt;
+      &lt;Copy-of select="$mytext"/&gt;
+    &lt;/Text&gt;
+  &lt;/Output&gt;
+&lt;/Record&gt;</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_color_spaces">3.3.2. Color spaces</h4>
+<h4 id="_tracing">3.9.2. Tracing</h4>
 <div class="paragraph">
-<p>There are different color spaces in which colors can be defined. For screen presentation the RGB color space is usually used, as it maps to the red, green and blue pixels of the screen. It is not suitable for print, as the printing colors are normally placed on white paper where the light is subtracted by the colors cyan, magenta, yellow and black. For print you use the color space CMYK. In theory it is easily possible to convert RGB colors to CMYK colors, but in practice it highly depends on the material that is used in the printing process. Other commonly used color spaces are gray values and spot colors such as HKS and Pantone.</p>
+<p>The command <code>&lt;Trace textformat="yes"/&gt;</code> activates "tooltips" in the PDF above the texts that output the text format used there.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/tracetextformat.png" alt="tracetextformat" width="100%">
+</div>
+<div class="title">Figure 27. Tooltip with the text format</div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_spot_colors">3.3.3. Spot colors</h4>
+</div>
+<div class="sect2">
+<h3 id="ch-textformatierung">3.10. Text formatting</h3>
 <div class="paragraph">
-<p>In contrast to colors from the RGB colorspace, the spot colors (such as Pantone or HKS) can only be used indirectly with the speedata Publisher. One of the problems that occur with spot colors is, that it is impossible to show a spot color on screen. Every such color has a CMYK substitute which is used when the spot color is not available (screen or 4 color print).</p>
+<p><em>This page was automatically translated. Stay tuned for a manual translation&#8230;&#8203;</em></p>
 </div>
 <div class="paragraph">
-<p>For the common Pantone colors the substitutions are predefined. The following color definition is sufficient to use Pantone 115 C for printing and on screen rendering.</p>
+<p>&lt;Text Block&gt; and &lt;Text&gt; contain one or more paragraphs (command &lt;Paragraph&gt;). The actual texts are encapsulated there within &lt;Value&gt;. There are numerous possibilities to influence the formatting of the texts. The switches for the font styles were introduced in Include Fonts. With a similar functionality there are the following commands:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">&lt;Sub&gt; and &lt;Sup&gt;</dt>
+<dd>
+<p>Subscript and superscript text.</p>
+</dd>
+<dt class="hdlist1">&lt;Fontface&gt;</dt>
+<dd>
+<p>Temporarily switches to a different font.</p>
+</dd>
+<dt class="hdlist1">&lt;Color&gt;</dt>
+<dd>
+<p>Outputs the enclosed text in a different color.</p>
+</dd>
+<dt class="hdlist1">&lt;A&gt;</dt>
+<dd>
+<p>Creates a hyperlink.</p>
+</dd>
+<dt class="hdlist1">&lt;HSpace&gt;</dt>
+<dd>
+<p>Inserts an expandable blank space (with or without dots).</p>
+</dd>
+<dt class="hdlist1">&lt;U&gt;</dt>
+<dd>
+<p>Underline.</p>
+</dd>
+</dl>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;DefineColor name="background" model="spotcolor" colorname="PANTONE 115 C"/&gt;</code></pre>
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject&gt;
+  &lt;Textblock width="11"&gt;
+    &lt;Paragraph&gt;
+      &lt;Value&gt;Text&lt;/Value&gt;
+      &lt;Sub&gt;&lt;Value&gt;sub&lt;/Value&gt;&lt;/Sub&gt;
+      &lt;Value&gt; &lt;/Value&gt;
+      &lt;Sup&gt;&lt;Value&gt;sup&lt;/Value&gt;&lt;/Sup&gt;
+      &lt;Value&gt; &lt;/Value&gt;
+      &lt;U&gt;&lt;Value&gt;underline&lt;/Value&gt;&lt;/U&gt;
+      &lt;Value&gt; &lt;/Value&gt;
+      &lt;Color name="green"&gt;&lt;Value&gt;green&lt;/Value&gt;&lt;/Color&gt;
+      &lt;Value&gt; &lt;/Value&gt;
+      &lt;A href="https://www.speedata.de"&gt;
+        &lt;Value&gt;link to the homepage&lt;/Value&gt;
+      &lt;/A&gt;
+      &lt;HSpace leader=" . "/&gt;
+      &lt;Value&gt;right margin.&lt;/Value&gt;
+    &lt;/Paragraph&gt;
+  &lt;/Textblock&gt;
+&lt;/PlaceObject&gt;</code></pre>
 </div>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/textauszeichnungen.png" alt="textauszeichnungen" width="100%">
+</div>
+<div class="title">Figure 28. Various text markups</div>
+</div>
+<div class="sect3">
+<h4 id="_enumeration_lists">3.10.1. Enumeration lists</h4>
 <div class="paragraph">
-<p>Own colors have to be defined as follows:</p>
+<p>Instead of a paragraph, an enumeration list can also appear. This is specified with &lt;Ol&gt; or &lt;Ul&gt; for an ordered list and an unordered list. The individual points must be marked with &lt;Li&gt;.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;DefineColor name="background" model="spotcolor" colorname="Coat" c="12" m="8" y="20" k="0" /&gt;</code></pre>
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject&gt;
+  &lt;Textblock&gt;
+    &lt;Ol&gt;
+      &lt;Li&gt;&lt;Value&gt;One&lt;/Value&gt;&lt;/Li&gt;
+      &lt;Li&gt;&lt;Value&gt;Two&lt;/Value&gt;&lt;/Li&gt;
+    &lt;/Ol&gt;
+    &lt;Ul&gt;
+      &lt;Li&gt;&lt;Value&gt;One&lt;/Value&gt;&lt;/Li&gt;
+      &lt;Li&gt;&lt;Value&gt;Two&lt;/Value&gt;&lt;/Li&gt;
+    &lt;/Ul&gt;
+  &lt;/Textblock&gt;
+&lt;/PlaceObject&gt;</code></pre>
 </div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/olul.png" alt="olul" width="20%">
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+This feature is not really robust yet. The lists cannot (currently) be nested. It is recommended to check if the lists are output correctly.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_overprinting">3.3.4. Overprinting</h4>
+<h4 id="_prevent_text_wrapping">3.10.2. Prevent text wrapping</h4>
 <div class="paragraph">
-<p>Indirectly defined colors can have the property “overprint”. This is in instruction to the raster image processor (RIP) (not) to erase the underlying colors. If enabled (overprint="yes"), objects with this color are printed on top of the colors of the objects “below” that object. The default is “no”, which means that the visible color is always from the top most object. This is only available on supported output devices.</p>
+<p>Some headings and proper names should not be broken. There is a command &lt;NoBreak&gt; for this purpose, which suppresses wrapping in various ways. A somewhat exaggerated example is:</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject&gt;
+  &lt;Textblock width="10cm"&gt;
+    &lt;Paragraph&gt;
+      &lt;Value&gt;A wonderful serenity has taken possession &lt;/Value&gt;
+      &lt;NoBreak&gt;&lt;Value&gt;of my entire soul, like these sweet mornings...&lt;/Value&gt;&lt;/NoBreak&gt;
+    &lt;/Paragraph&gt;
+  &lt;/Textblock&gt;
+&lt;/PlaceObject&gt;</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/nobreak1.png" alt="nobreak1" width="100%">
+</div>
+<div class="title">Figure 29. The default setting for NoBreak is that the part must be connected.</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can reduce the font size by specifying the maximum width or shorten the text with omission points.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Textblock width="10cm"&gt;
+  &lt;Paragraph&gt;
+    &lt;NoBreak maxwidth="10" reduce="cut" text="..."&gt;
+      &lt;Value&gt;A wonderful serenity has taken possession of my entire soul, like these sweet mornings...&lt;/Value&gt;
+    &lt;/NoBreak&gt;
+  &lt;/Paragraph&gt;
+&lt;/Textblock&gt;</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/nobreak2.png" alt="nobreak2" width="100%">
+</div>
+<div class="title">Figure 30. Here the text is cut off and filled with the specified text.</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_break_urls">3.10.3. Break URLs</h4>
+<div class="paragraph">
+<p>The command &lt;URL&gt; is used to make it easier to break URLs. You may wrap mainly at slashes (/), in addition no hyphens are inserted. No hyperlink is created, the command &lt;A&gt; is responsible for this.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"&gt;
+
+  &lt;SetGrid nx="40" ny="10"/&gt;
+  &lt;Trace grid="yes"/&gt;
+  &lt;Pageformat width="90mm" height="5cm"/&gt;
+  &lt;Record element="data"&gt;
+    &lt;PlaceObject&gt;
+      &lt;Textblock width="35"&gt;
+        &lt;Paragraph&gt;
+          &lt;URL&gt;&lt;Value&gt;https://github.com/speedata/publisher/issues&lt;/Value&gt;&lt;/URL&gt;
+        &lt;/Paragraph&gt;
+      &lt;/Textblock&gt;
+    &lt;/PlaceObject&gt;
+  &lt;/Record&gt;
+&lt;/Layout&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>results in</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/url.png" alt="url" width="70%">
+</div>
+</div>
+<div class="paragraph">
+<p>(See also <a href="https://github.com/speedata/publisher/issues/173" class="bare">https://github.com/speedata/publisher/issues/173</a>)</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ch-colors">3.11. Colors</h3>
+<div class="paragraph">
+<p><em>This page was automatically translated. Stay tuned for a manual translation&#8230;&#8203;</em></p>
+</div>
+<div class="paragraph">
+<p>The output of colors in speedata Publisher is very simple. Usually one specification for the object to be output is sufficient:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;PlaceObject column="4" row="4"&gt;
+  &lt;Circle
+     radiusx="2"
+     backgroundcolor="deeppink"
+     framecolor="mediumaquamarine"
+     rulewidth="8pt"/&gt;
+&lt;/PlaceObject&gt;</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/kreismitfarbe.png" alt="kreismitfarbe" width="20%">
+</div>
+<div class="title">Figure 31. Not every colour combination is beautiful</div>
+</div>
+<div class="paragraph">
+<p>The colors can also be specified as hexadecimal values, as with HTML. The three or six digit value must be preceded by a double cross, for example: &#8230;&#8203;color="#FF1393".</p>
+</div>
+<div class="paragraph">
+<p>If you want to output colors in a different color space (CMYK, gray, spot colors), they must be defined first:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;DefineColor name="logocolor" model="spotcolor"
+             colorname="PANTONE 116 C" /&gt;
+
+&lt;Record element="data"&gt;
+  &lt;PlaceObject&gt;
+    &lt;Box width="5" height="2" backgroundcolor="logocolor"/&gt;
+  &lt;/PlaceObject&gt;
+&lt;/Record&gt;</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/box116c.png" alt="box116c">
+</div>
+<div class="title">Figure 32. Various spot colors are predefined in the Publisher, such as the Pantone 116 color.</div>
+</div>
+<div class="paragraph">
+<p>If a separate spot color is defined that is not yet included in the Publisher, CMYK values must be specified so that a replacement can be displayed in the PDF. Spot colors are unknown in the PDF and are only available as instructions for the printer. Therefore, the PDF must also contain instructions on how to output this color on screen or on printers that do not contain this spot color.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;DefineColor
+    name="mycolor"
+    model="spotcolor"
+    colorname="speedatagreen"
+    c="56" m="7" y="98" k="21" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here a color is defined which is addressed in the Publisher with the output commands under the name mycolor. In the PDF this colour is called speedatagreen and in the output it appears in a dark green.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../dbmanual/assets/img/speedatagruen.png" alt="speedatagruen" width="90%">
+</div>
+<div class="title">Figure 33. The new color appears in the PDF as a separate color channel</div>
+</div>
+<div class="paragraph">
+<p>Todo: document overprint</p>
 </div>
 </div>
 </div>
@@ -994,9 +3056,9 @@ the crop marks go to the blue line, that has the dimensions of the trim length. 
 </div>
 <div id="abb-cropmarks" class="imageblock">
 <div class="content">
-<img src="img/schnittmarken.png" alt="schnittmarken" width="40%">
+<img src="../../dbmanual/assets/img/schnittmarken.png" alt="schnittmarken" width="40%">
 </div>
-<div class="title">Figure 1. Cutmarks and bleed in Adobe Acrobat</div>
+<div class="title">Figure 34. Cutmarks and bleed in Adobe Acrobat</div>
 </div>
 </div>
 </div>
@@ -3544,7 +5606,7 @@ You can access the base directory of the project with %(projectdir)s. This is th
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="img/ref-code128-speedata-publisher.png" alt="ref code128 speedata publisher" width="auto">
+<img src="../../dbmanual/assets/img/ref-code128-speedata-publisher.png" alt="ref code128 speedata publisher" width="auto">
 </div>
 </div>
 <div class="listingblock">
@@ -3559,7 +5621,7 @@ You can access the base directory of the project with %(projectdir)s. This is th
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="img/ref-ean13-supertex.png" alt="ref ean13 supertex" width="300">
+<img src="../../dbmanual/assets/img/ref-ean13-supertex.png" alt="ref ean13 supertex" width="300">
 </div>
 </div>
 <div class="paragraph">
@@ -3577,7 +5639,7 @@ You can access the base directory of the project with %(projectdir)s. This is th
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="img/ref-speedata-publisher-qrcode.png" alt="ref speedata publisher qrcode" width="300">
+<img src="../../dbmanual/assets/img/ref-speedata-publisher-qrcode.png" alt="ref speedata publisher qrcode" width="300">
 </div>
 </div>
 </div>
@@ -3867,7 +5929,7 @@ You can access the base directory of the project with %(projectdir)s. This is th
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="img/ref-greenbox.png" alt="ref greenbox" width="auto">
+<img src="../../dbmanual/assets/img/ref-greenbox.png" alt="ref greenbox" width="auto">
 </div>
 </div>
 </div>
@@ -4026,7 +6088,7 @@ You can access the base directory of the project with %(projectdir)s. This is th
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="img/ref-circlewithborder.png" alt="ref circlewithborder" width="auto">
+<img src="../../dbmanual/assets/img/ref-circlewithborder.png" alt="ref circlewithborder" width="auto">
 </div>
 </div>
 </div>
@@ -5931,7 +7993,7 @@ You can access the base directory of the project with %(projectdir)s. This is th
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="img/ref-initial-en.png" alt="ref initial en" width="50%">
+<img src="../../dbmanual/assets/img/ref-initial-en.png" alt="ref initial en" width="50%">
 </div>
 </div>
 </div>
@@ -7342,7 +9404,7 @@ You can access the base directory of the project with %(projectdir)s. This is th
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="img/overlay.png" alt="overlay" width="auto">
+<img src="../../dbmanual/assets/img/overlay.png" alt="overlay" width="auto">
 </div>
 </div>
 </div>
@@ -9283,7 +11345,7 @@ You can access the base directory of the project with %(projectdir)s. This is th
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="img/ref-table-en.png" alt="ref table en" width="auto">
+<img src="../../dbmanual/assets/img/ref-table-en.png" alt="ref table en" width="auto">
 </div>
 </div>
 </div>
@@ -10618,7 +12680,7 @@ Message: "$i is: 3"</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last change 2020-05-28 20:12:08 +0200
+Last change 2020-06-01 16:48:01 +0200
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

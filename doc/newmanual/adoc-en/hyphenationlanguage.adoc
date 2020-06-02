@@ -1,0 +1,100 @@
+= Hyphenation / language settings
+
+_This page was automatically translated. Stay tuned for a manual translation..._
+
+Hyphenation is necessary in most Western languages to have an acceptable appearance for narrow texts. Hyphenation is an integral part of the pagination algorithm, for example to avoid multiple hyphenations in consecutive lines.
+
+Hyphenation is controlled by language in the Publisher and is pattern-based. The language can be set globally via <Options mainlanguage="..."> or paragraphwise.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Options mainlanguage="German" />
+-------------------------------------------------------------------------------
+
+switches the entire document to German hyphenation patterns, while
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph language="German">
+    <Value>Autobahn</Value>
+</Paragraph>
+-------------------------------------------------------------------------------
+
+changes the language for only one paragraph. The available languages are described in the command reference under <Options>.
+
+If you want to test if the words are hyphenated correctly, you can create small marks with <Trace hyphenation="yes" />.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options mainlanguage="German" />
+  <Trace hyphenation="yes" />
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="3">
+        <Paragraph>
+          <Value>Autobahn</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+results in the following:
+
+[[abb-trennstellenimtext]]
+.Show hyphenation points in text
+image::13-autobahn.png[width=50%]
+
+Via
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Hyphenation>er-go-no-mic</Hyphenation>
+-------------------------------------------------------------------------------
+
+you can define hyphenation suggestions or exceptions for individual words. In this way, the words are then only hyphenated at the positions indicated by a hyphen.
+
+TIP: With optical margin alignment, which is described in the section Optical Margin Adjustment, you can reduce the number of hyphenations in the document somewhat.
+
+[[ch-trennung-ausschalten]]
+== Turn off paragraph hyphenations
+
+For single paragraphs you can switch off the automatic hyphenation by defining a text format with hyphenate="no".
+
+[source, xml]
+-------------------------------------------------------------------------------
+<DefineTextformat name="nohyphen" hyphenate="no"/>
+-------------------------------------------------------------------------------
+
+No words are hyphenated in paragraphs marked in this way. The use of text formats is described in a separate section.
+
+The hyphenation character can also be changed using a text format:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<DefineTextformat name="dothyphen" hyphenchar="•"/>
+-------------------------------------------------------------------------------
+
+.Other character for word hyphenations
+image::13-dothyphen.png[width=50%]
+
+== Allow hyphenations only on certain characters
+
+A property of <Paragraph> allows to limit the characters where a line break may be inserted. This is often important for technical data where, for example, type designations in the form 12-345/AB occur and should not be hyphenated. In the following example, a line break may only be inserted after a slash:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph allowbreak="/">
+  <Value>https://download.speedata.de/publisher/development/</Value>
+</Paragraph>
+-------------------------------------------------------------------------------
+
+The default setting for allowbreak is " -", i.e. a break at a space or hyphen.
+
+TIP: This is an experimental feature in the Publisher. It is likely to be associated with a text format in a future version.

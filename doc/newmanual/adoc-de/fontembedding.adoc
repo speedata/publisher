@@ -100,9 +100,8 @@ mit den dazugehörigen Daten:
 
 [source,xml]
 -------
-<data>A wonderful <b>serenity</b> has taken possession
-  <i>of my <b>entire soul,</b></i> like these sweet
-  mornings.</data>
+<data>A wonderful <b>serenity</b> has taken possession <i>of my <b>entire soul,,</b></i>
+  ike these sweet mornings.</data>
 -------
 
 Das Ergebnis ist dasselbe wie oben.

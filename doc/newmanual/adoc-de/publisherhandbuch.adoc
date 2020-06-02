@@ -4,7 +4,7 @@ v1.0, 2018-03-19
 :toc: left
 // :source-highlighter: highlight.js
 :sectnums:
-:imagesdir: img
+:imagesdir: ../../dbmanual/assets/img
 :doctype: book
 :lang: de
 :figure-caption: Abbildung

@@ -1,0 +1,191 @@
+[[ch-structuredatafile,Structure of the data file]]
+= Structure of the data file and the layout rules
+
+
+_This page was automatically translated. Stay tuned for a manual translation..._
+
+[quote, Freely adapted from Henry Ford]
+You can use any data format as long as it is XML.
+
+== Data source: XML - well-formed and structured
+
+The first prerequisite is that the data source is in XML (Extensible Markup Language) format. Other formats are not processed with the Publisher (using the Lua filter, CSV and Excel files can also be processed). In practice, this does not matter because all (structured) data can be converted into XML format.
+
+Often people ask how the data XML must be structured. The answer is simple: there are no specifications, except that the XML must comply with the usual rules (well-formedness). These rules are listed in the glossary.
+
+In addition, there are useful structuring recommendations:
+
+. The data should appear in the XML tree when it is needed. Data processing in the Publisher costs time and memory, so the information should be available where it is needed. There are of course exceptions. For example, global settings (colors, texts to be translated and so on) can be defined at the beginning of the file.
+
+. Different representations (variants) must be readable from the data. If, for example, a page change is to occur for a new article group (in the product catalog), a change of article group must be recognizable in the data.
+
+. The data should be as structured as possible. For example, a product catalog could contain article numbers in the form 123-12345. If the first three digits represent the article group, this could be recognized with regular expressions. It is simpler if the article group is already created in the data structure, so that no recognition is required.
+
+A simple example for the arrangement:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<productdata>
+  <globalsettings>
+    ...
+  </globalsettings>
+  <articlegroup name="interior lights" number="123">
+    <article number="123-12345">
+      <property1>...</property1>
+      <property2>...</property2>
+    </article>
+    <article number="123-12346">
+      <property1>...</property1>
+      <property2>...</property2>
+    </article>
+  </articlegroup>
+  <articlegroup name="exterior lights" number="124">
+    <article number="124-23456">
+      <property1>...</property1>
+      <property2>...</property2>
+    </article>
+    <article number="124-54321">
+      <property1>...</property1>
+      <property2>...</property2>
+    </article>
+  </articlegroup>
+</productdata>
+-------------------------------------------------------------------------------
+
+Redundancy does not hurt here, on the contrary. Since the article group in the example has a clear sequence of digits (123 or 124), the last five digits would be sufficient for the articles. You can assemble the number from articlegroup/@number, - and article/@number yourself. To save yourself the step, simply save the complete number on the article.
+
+To summarize it: If you have the possibility to influence the structure of the data: better save too much information than too little. Experiment with the order of the data, sometimes the right structure makes layout creation much easier.
+
+== How do you access the data from the layout?
+
+Since the data file can be structured as you like, special commands are needed to access the data. These are described below and in the appendix under XPath functions. In the following we will start from this simple data file:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<catalog>
+  <article nr="12345" price="99,95" quantity="1">
+    <description>Text for atricle 12345</description>
+    <image mainimage="yes">art12345.pdf</image>
+  </article>
+  <article nr="56789" price="45,95" quantity="5">
+    <description>Text for atricle 56789</description>
+    <image>art56789.pdf</image>
+  </article>
+</catalog>
+-------------------------------------------------------------------------------
+
+
+This data file is stored under the name `data.xml` so that the Publisher can find it.
+
+The layout file (name: layout.xml) is executed during the import: all commands with the name <Record> are saved for later processing, all other commands have immediate effect. This means that if a command like <DefineColor> is included at the top level in the layout rules, it will be executed before the actual data processing starts.
+
+A minimum layout file for the data structuring shown above is
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="catalog">
+
+  </Record>
+
+</Layout>
+-------------------------------------------------------------------------------
+
+
+After calling `sp` nothing happens: no page is created, no error is output, the publisher simply quits:
+
+-------------------------------------------------------------------------------
+...
+Loading layout instructions "/home/example/layout-en.xml"
+Loading data file "/home/example/data.xml"
+Stop processing data
+0 errors occurred
+Duration: 0.158941 seconds
+node_mem_usage=1 glue, 3 glue_spec, 1 dir, 1 user_defined
+luastate_bytes=0
+
+No pages of output.
+Transcript written on publisher.log.
+Total run time: 209.499431ms
+-------------------------------------------------------------------------------
+
+
+No page is created because no further commands have been specified within the element `<Record>` that cause output.
+
+The structure required for processing is as follows:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="catalog">
+    <!--1-->
+    <ProcessNode select="*"/> <!--2-->
+    <!--3-->
+  </Record>
+
+  <Record element="artikel">
+    <!--4-->
+  </Record>
+
+</Layout>
+-------------------------------------------------------------------------------
+<1> Commands to be executed before the first child elements, e.g. create title page or table of contents (the term child element refers to the data file).
+<2> Here, all child elements are called individually.
+<3> Commands for closing the PDF file
+<4> For each child item these commands are executed. The "focus" is now on an article, so you can access the attributes and child elements of articles.
+
+Within the lower `<Record>` command you can now access child elements and attributes. Examples:
+
+* `@nr` results in the string 12345 in the first call and 56789 in the second pass.
+* `description` results in a sequence with one element, the content text (first article).
+* `image/@mainimage` is in the first case the string "yes" (the content of the attribute mainimage), in the second case the empty string "", because the attribute does not exist there.
+
+For details, see the section on XPath functions.
+
+Alternatively to the procedure with `<ProcessNode>` and its counterpart `<Record>`, child elements can also be accessed with <ForAll>. The following example creates a table line for each child element named article:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="catalog">
+    <PlaceObject>
+      <Table stretch="max"> <!--1-->
+        <Tablehead> <!--2-->
+          <Tr backgroundcolor="gray">
+            <Td>
+              <Paragraph><Value>Article number</Value></Paragraph>
+            </Td>
+            </Td>
+              <Paragraph><Value>Description</Value></Paragraph>
+            </Td>
+          </Tr>
+        </Tablehead>
+        <ForAll select="article"> <!--3-->
+          <Tr>
+            <Td>
+              <Paragraph><Value select="@nr"/></Paragraph>
+            </Td>
+            <Td>
+              <Paragraph><Value select="description"/></Paragraph>
+            </Td>
+          </Tr>
+        </ForAll>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+<1> A table is output that covers the entire width.
+<2> A table header has the property that it is repeated on every page.
+<3> Within the <ForAll>, the attributes and child elements of each article can be accessed, just like in the example above.
+
+Tables are covered in the basics (chapter Introduction to Tables) and in more detail in chapter 6.
+
+
+// EOF
