@@ -2,37 +2,39 @@
 [[ch-cookbook]]
 = Cookbook
 
-// In diesem Abschnitt werden konkrete Anwendungen gezeigt, zwar mit konstruierten Daten, aber mit in der Praxis auftretende Anforderungen.
-// Die letzten drei Kapitel (Inhaltsverzeichnis, Index und Seite X von Y) werden über denselben Mechanismus mit der XML-Elementstruktur (Kapitel <<ch-xmlstrukturen>>) realisiert.
+_This page was automatically translated. Stay tuned for a manual translation..._
 
-// include::griffmarken.adoc[leveloffset=+1]
+In this section concrete applications are shown, with designed data, but with requirements occurring in practice. The last three chapters (Table of Contents, Index, and Page X of Y) are implemented using the same mechanism with the XML element structure (chapter Creating XML Structures).
+
+
+include::thumbindex.adoc[leveloffset=+1]
 
 // include::initialien.adoc[leveloffset=+1]
 
-// include::mehrseitigepdf.adoc[leveloffset=+1]
+include::multipagepdf.adoc[leveloffset=+1]
 
-// include::optimierungmitgruppen.adoc[leveloffset=+1]
+include::optimizingwithgroups.adoc[leveloffset=+1]
 
 
-[[ch-automaticdirectories-marker]]
-
+[[ch-directories-marker]]
 == Automatically generated directories
 
-// Dieses Kapitel widmet sich der Erstellung von Verzeichnissen.
-// Es gibt prinzipiell zwei Varianten, ein Verzeichnis zu erzeugen.
-// Daher handelt der nächste Abschnitt von dem eingebauten Mechanismus der Marker (`<Mark>`), die  darauf folgenden Abschnitte von den Weg per `<Element>` und `<Attribute>` und dem manuellen Speichern der Daten für einen weiteren Durchlauf.
+This chapter is dedicated to the creation of directories.
+There are basically two ways to create a directory.
+Therefore, the next section is about the built-in mechanism of markers (`<Mark>`), the following sections are about the way via `<Element>` and `<Attributes>` and manually saving the data for another pass.
 
-// TIP: Damit der Publisher mehrfach durchläuft, muss der Parameter `runs` auf der Kommandozeile bzw. in der Konfigurationsdatei gesetzt werden, beispielsweise mit `sp --runs=2` (Kommandozeile) bzw. `runs = 2` (Konfigurationsdatei).
+TIP: In order for the Publisher to run through several times, the `runs` parameter must be set on the command line or in the configuration file, for example with `sp --runs=2` (command line) or `runs = 2` (configuration file).
 
 
-// include::verzeichnisseerstellenmarker.adoc[leveloffset=+2]
+
+include::directoriesmarker.adoc[leveloffset=+2]
 
 include::directoriesxml.adoc[leveloffset=+2]
 
-// include::indexerstellen.adoc[leveloffset=+2]
+include::indexcreation.adoc[leveloffset=+2]
 
-// include::seitexvony.adoc[leveloffset=+1]
+include::pagexofy.adoc[leveloffset=+1]
 
-// include::fakinglists.adoc[leveloffset=+1]
+include::fakinglists.adoc[leveloffset=+1]
 
 

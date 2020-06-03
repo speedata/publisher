@@ -1,0 +1,66 @@
+[[ch-thumbindex]]
+= Thumb index
+
+_This page was automatically translated. Stay tuned for a manual translation..._
+
+[[abb-25-marke]]
+.Left: thumb indexes in the phone book (that still exists!). Right: Lines are less obtrusive, yet practical..
+image::25-griffmarken.jpg[width=100%]
+
+Thumb indexes are marks on the outer edge of a catalog or reference book that indicate the current chapter. A characteristic of the thumb index is that it extends beyond the right or left edge of the paper. This means that the cut edge of the paper is in the colored area, so that the color can be seen even when the paper is closed.
+
+There is nothing special about thumb indexes at first, they are either created with boxes or lines in a certain colour. An example of chapter numbers in a square box follows.
+
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options bleed="3mm"/> <!--1-->
+
+  <DefineFontfamily name="thumbindex" fontsize="15" leading="15">
+    <Regular fontface="sans-bold"/>
+  </DefineFontfamily>
+  <Record element="data">
+    <Loop select="4" variable="chapter">
+      <PlaceObject column="200mm"
+          row="{20 + 20 * $chapter}mm"> <!--2-->
+
+        <Box width="1cm" height="1cm" backgroundcolor="black"
+             bleed="right"/> <!--3-->
+      </PlaceObject>
+
+      <!--4-->
+      <PlaceObject column="200mm" row="{20 + 20 * $chapter}mm">
+        <Table width="1cm" stretch="max">
+          <Tr valign="middle" minheight="1">
+            <Td align="center">
+              <Paragraph fontface="thumbindex" color="white">
+                <Value select="$chapter"/>
+              </Paragraph>
+            </Td>
+          </Tr>
+        </Table>
+      </PlaceObject>
+    </Loop>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+<1> The bleed is fixed at 3mm.
+<2> Vertical offset. The box is 10mm high, so the distance between each box is also 10mm.
+<3> The box is on the right edge and protrudes into the bleed. The parameter `bleed="right"` is set for this. With this the box extends to the right around the bleed.
+<4> The chapter number is then printed.
+
+
+In the example, the chapter number is stored in the variable 'chapter no.' and output in a loop.
+In practice, this would of course be inserted into the page type (`AtPageShipout') and only one handle marker would be output at a time.
+
+
+
+.The green line shows the final format, the blue line the outer edge of the untrimmed paper.
+image::25-publisher.png[width=10%,scaledwidth=30%]
+
+// End

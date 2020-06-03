@@ -1,10 +1,11 @@
-[[ch-sortierenvondaten]]
-= Sortieren von Daten
+[[ch-sortingdata]]
+= Sorting data
 
-Der speedata Publisher bietet eine einfache Möglichkeit, Daten zu sortieren.
-Sollte diese Methode nicht ausreichen, muss die Sortierung über ein externes Programm wie XSLT durchgeführt werden.
+_This page was automatically translated. Stay tuned for a manual translation..._
 
-Unter der Annahme, dass die Datendatei (`data.xml`) wie folgt aussieht:
+The speedata Publisher offers an easy way to sort data. If this method is not sufficient, the sorting must be performed by an external program such as XSLT.
+
+Assuming that the data file (data.xml) looks like this:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -15,8 +16,7 @@ Unter der Annahme, dass die Datendatei (`data.xml`) wie folgt aussieht:
 </data>
 -------------------------------------------------------------------------------
 
-Kann nun mit `<SortSequence>` sortiert werden. Die ursprünglichen Daten werden dabei nicht verändert:
-
+Kann nun mit <SortSequence> sortiert werden. Die ursprünglichen Daten werden dabei nicht verändert:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -41,8 +41,6 @@ Kann nun mit `<SortSequence>` sortiert werden. Die ursprünglichen Daten werden 
 -------------------------------------------------------------------------------
 
 
-Neben dem Befehl `<SortSequence>` gibt es noch die Möglichkeit per `<MakeIndex>` zu sortieren und zu gruppieren.
-Dieser Befehl ist im Kapitel <<ch-indexerstellen>> beschrieben.
-
+In addition to the command `<SortSequence>` there is also the possibility to sort and group by `<MakeIndex>`. This command is described in the chapter sorting keyword indexes.
 
 // Ende

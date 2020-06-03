@@ -1,14 +1,9 @@
 [[ch-seitexvony]]
-= Seitenzahlen: Seite x von y
+= Page numbers: Page x of y
 
-Um die Länge des Dokuments in Seiten anzugeben, ist ein zweiter Durchlauf des Publishers
-notwendig:
-Am Ende des ersten Durchlaufs wird die aktuelle (= letzte)
-Seitennummer gespeichert, die man anschließend in den folgenden Durchläufen
-nutzen kann.
+To specify the length of the document in pages, a second pass of the Publisher is necessary: At the end of the first pass, the current (= last) page number is stored, which can then be used in subsequent passes.
 
-Das folgende Beispiel erzeugt einige Seiten mit Ausgaben in der Form `Seite 1 von ??`.
-Das dient als Basis für die Ergänzungen.
+The following example creates some pages with output in the form Page 1 of ??. This serves as a basis for the additions.
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -35,7 +30,7 @@ Das dient als Basis für die Ergänzungen.
 </Layout>
 -------------------------------------------------------------------------------
 
-Am Ende der letzte Seite kann die Information mithilfe von `<SaveDataset>` für den nächsten Lauf zwischengespeichert werden:
+At the end of the last page the information can be cached for the next run using `<SaveDataset>`:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -48,17 +43,16 @@ Am Ende der letzte Seite kann die Information mithilfe von `<SaveDataset>` für 
   attributes="$attrPagenumber"/>
 -------------------------------------------------------------------------------
 
-`<SaveDataset>` erwartet eine XML-Struktur  bei der
-Attribute im Element `<Attribute>` und, Elemente in `<Element>` gespeichert werden, wobei dieser Befehl wiederum `<Attribute>` als Kindelemente haben kann.
-Diese Struktur wird als XML auf die Festplatte gespeichert und hat in diesem Beispiel die folgende Form:
+`<SaveDataset>` expects an XML structure at
+attributes can be stored in the element `<Attributes>' and, elements in `<Element>', whereby this command can in turn have `<Attributes>' as child elements.
+This structure is saved to disk as XML and has the following form in this example:
 
 [source, xml]
 -------------------------------------------------------------------------------
 <pageinfo numberofpages="10" />
 -------------------------------------------------------------------------------
 
-
-Zu Beginn des Laufs kann nun die Datei eingelesen werden, falls sie existiert (d.h. im ersten Lauf wird kein Fehler erzeugt, weil die Datei noch nicht erzeugt wurde):
+At the beginning of the run, the file can now be read in if it exists (i.e. no error is generated in the first run because the file has not yet been created):
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -68,7 +62,7 @@ Zu Beginn des Laufs kann nun die Datei eingelesen werden, falls sie existiert (d
   ...
 -------------------------------------------------------------------------------
 
-und dazu
+and in addition
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -77,10 +71,10 @@ und dazu
 </Record>
 -------------------------------------------------------------------------------
 
-Der Datensatz `pageinfo` wird dann aufgerufen, wenn die XML-Datei `pagecount` eingelesen wird.
-Es wird nichts anderes gemacht, als die kurz vorher definierte Variable `maxpages` mit dem korrekten Inhalt zu überschreiben.
+The record 'pageinfo' is called when the XML file 'pagecount' is read.
+Nothing else is done than overwriting the recently defined variable `maxpages` with the correct content.
 
-Das vollständige Beispiel sieht nun so aus:
+The complete example now looks like this:
 
 [source, xml]
 -------------------------------------------------------------------------------

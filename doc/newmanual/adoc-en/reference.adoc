@@ -150,7 +150,7 @@ include::ref/attribute.adoc[]
 
 == See also
 
-// Befehle <<cmd-element,`Element`>>, <<cmd-loaddataset,`LoadDataset`>> und <<cmd-savedataset,`SaveDataset`>> sowie den Abschnitt <<ch-xmlstrukturen,Erzeugen von XML-Strukturen>>.
+// Befehle <<cmd-element,`Element`>>, <<cmd-loaddataset,`LoadDataset`>> und <<cmd-savedataset,`SaveDataset`>> sowie den Abschnitt <<ch-elementattribute,Erzeugen von XML-Strukturen>>.
 
 
 include::ref/b.adoc[]
@@ -277,7 +277,7 @@ include::ref/element.adoc[]
 
 == See also
 
-// Befehle <<cmd-attribute,`Attribute`>>, <<cmd-loaddataset,`LoadDataset`>> und <<cmd-savedataset,`SaveDataset`>> sowie den Abschnitt <<ch-xmlstrukturen,Erzeugen von XML-Strukturen>>.
+// Befehle <<cmd-attribute,`Attribute`>>, <<cmd-loaddataset,`LoadDataset`>> und <<cmd-savedataset,`SaveDataset`>> sowie den Abschnitt <<ch-elementattribute,Erzeugen von XML-Strukturen>>.
 
 include::ref/fallback.adoc[]
 
@@ -396,7 +396,7 @@ include::ref/loaddataset.adoc[]
 
 == See also
 
-// Befehle <<cmd-element,`Element`>>, <<cmd-attribute,`Attribute`>> und <<cmd-savedataset,`SaveDataset`>> sowie den Abschnitt <<ch-xmlstrukturen,Erzeugen von XML-Strukturen>>.
+// Befehle <<cmd-element,`Element`>>, <<cmd-attribute,`Attribute`>> und <<cmd-savedataset,`SaveDataset`>> sowie den Abschnitt <<ch-elementattribute,Erzeugen von XML-Strukturen>>.
 
 include::ref/loadfontfile.adoc[]
 
@@ -578,7 +578,7 @@ include::ref/savedataset.adoc[]
 
 == See also
 
-// Befehle <<cmd-attribute,`<Attribute>`>>, <<cmd-element,`<Element>`>> und <<cmd-loaddataset,`<LoadDataset>`>> sowie den Abschnitt <<ch-xmlstrukturen,Erzeugen von XML-Strukturen>>.
+// Befehle <<cmd-attribute,`<Attribute>`>>, <<cmd-element,`<Element>`>> und <<cmd-loaddataset,`<LoadDataset>`>> sowie den Abschnitt <<ch-elementattribute,Erzeugen von XML-Strukturen>>.
 
 
 include::ref/savepages.adoc[]
@@ -640,33 +640,33 @@ include::ref/table.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-tabellen2,Tabellen>>.
+// Das Kapitel <<ch-tables2,Tabellen>>.
 
 include::ref/tablenewpage.adoc[]
 == See also
 
-// Befehl <<cmd-table,`<Table>`>>, <<ch-tabellen2, Kapitel über Tabellen>>.
+// Befehl <<cmd-table,`<Table>`>>, <<ch-tables2, Kapitel über Tabellen>>.
 
 
 include::ref/tablefoot.adoc[]
 == See also
 
-// Befehl <<cmd-table,`<Table>`>>, <<ch-tabellen2, Kapitel über Tabellen>>.
+// Befehl <<cmd-table,`<Table>`>>, <<ch-tables2, Kapitel über Tabellen>>.
 
 include::ref/tablehead.adoc[]
 == See also
 
-// Befehl <<cmd-table,`<Table>`>>, <<ch-tabellen2, Kapitel über Tabellen>>.
+// Befehl <<cmd-table,`<Table>`>>, <<ch-tables2, Kapitel über Tabellen>>.
 
 include::ref/tablerule.adoc[]
 == See also
 
-// Befehl <<cmd-table,`<Table>`>>, <<ch-tabellen2, Kapitel über Tabellen>>.
+// Befehl <<cmd-table,`<Table>`>>, <<ch-tables2, Kapitel über Tabellen>>.
 
 include::ref/td.adoc[]
 == See also
 
-// Befehl <<cmd-table,`<Table>`>>, <<ch-tabellen2, Kapitel über Tabellen>>.
+// Befehl <<cmd-table,`<Table>`>>, <<ch-tables2, Kapitel über Tabellen>>.
 
 include::ref/text.adoc[]
 

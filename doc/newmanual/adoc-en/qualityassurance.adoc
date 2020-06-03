@@ -1,6 +1,4 @@
 [[ch-qa,Quality assurance]]
-
-
 = Quality assurance and PDF comparison
 
 To assure that new versions of the speedata Publisher produce the exact the same results as before, it has a built in functionality to check for unwanted changes of behavior.

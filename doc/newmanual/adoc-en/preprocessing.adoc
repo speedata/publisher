@@ -1,73 +1,56 @@
 [[luafilter]]
 = Lua-Filter / pre-processing
 
-The ability to run a Lua script before the publishing run is available since version 3.1.9.
+_This page was automatically translated. Stay tuned for a manual translation..._
 
-The command line/configuration interface is:
 
-    sp --filter myfile.lua
+Sometimes you may want to convert the data into another format or check for correctness before the actual PDF creation.
+For this purpose there is the possibility (since version 3.1.9) to execute a Lua script before the actual publishing run.
+Lua is a simple but powerful programming language that is intended to be built into other programs as a scripting language.
 
-or
+Three use cases can be found in https://github.com/speedata/examples/tree/master/technical[examples repository].
 
-    filter=myfile.lua
+== Calling the Lua script
 
-The Lua script is run before any rendering gets done, so the main application is probably the transformation of input data into a format that is suitable for the speedata Publisher.
+The filter is started either via the command line
 
-You can use anything that is allowed in Lua. Additionally the publisher provides the modules csv,runtimeandxml` which contain the following entries:
+```sh
+sp --filter myfile.lua
+```
 
-== csv
+or via the configuration file, which must contain the following entry
 
-csv.decode(filename,parameter)::
- load a CSV (comma separated values) file and returns (first argument) the boolean success. If true, the second return value contains the table, if false, the second return value contains an error message (string). The value parameter is an optional table which controls the CSV input and output. You can provide the following values:
-+
-charset::
-    If the CSV file is encoded in Latin-1, you have to set this to the value ISO-8859-1. Ask us for more character sets.
-separator::
-    The value of the field separator. Defaults to a comma, but can be any character.
-columns::
-    A table that has the required columns in the given order. For example {3,2,1} limits the output to the first three columns in reverse order.
+```sh
+filter=myfile.lua
+```
 
-Example:
+The specified Lua script will be executed before the PDF file generation starts.
+Therefore the main application of this pre-processing is the transformation of data into a format suitable for the speedata Publisher. This way CSV or Excel files can be converted to XML and then the PDF generation can be started. It is also possible to validate data.
 
-[source, lua]
--------------------------------------------------------------------------------
-csv = require("csv")
-result, msg = csv.decode("myfile.csv", { charset = "ISO-8859-1", separator = ";", columns = {1,2,5} })
-if not result then
-    print(msg)
-    os.exit(-1)
-end
--------------------------------------------------------------------------------
+The application options are described below, and at the very end there is another overview of the built-in functions and methods.
 
-The table has at index 1..n the rows of the CSV file and each rows is a table in which the index 1..m is each table cell.
 
-== runtime
 
-projectdir::
-    A value that contains the current working directory (the one with the layout.xml and publisher.cfg)
-variables::
-	A table that contains all the variables given on the command line (-v) or in the configuration file (vars=...).
-run_saxon::
-	A function that calls the external Java-program saxon. It accepts three mandatory arguments (the transformation stylesheet, the input file and the output file) and an optional argument that is passed as the parameter string to saxon. The function returns a boolean value (success) and optionally a string in case of a false success value.
-validate_relaxng::
-	A function that validates an XML file against a RelaxNG schema. The first argument is the XML file, the second argument the RelaxNG schema. You can use relative paths for both.
+== Validate input data
+
+There are several ways to validate RELAX NG files. Beside a variant to validate the schema directly in the XML editor (see the corresponding <<ch-schema validation, section in the manual>>) there is the possibility to use an external program for this.
+One of these is Jing. It is delivered with the Publisher.
+
+In the Lua preprocessing there is a function that does the validation:
+
 
 [source, lua]
 -------------------------------------------------------------------------------
 runtime = require("runtime")
-ok, err = runtime.run_saxon("transformation.xsl","source.xml","data.xml","param1=value1 param2=value2")
-
--- stop the publishing process if an error occurs
-if not ok then
-    print(err)
-    os.exit(-1)
-end
+runtime.validate_relaxng(`xmlfile`, `schemafile`)
 -------------------------------------------------------------------------------
 
-== Validation:
+The function returns `false` and the error message in case of an error. Example:
 
 [source, lua]
 -------------------------------------------------------------------------------
+-- adjust the paths, of course
+runtime = require("runtime")
 ok, msg = runtime.validate_relaxng("layout.xml","../schema/layoutschema-en.rng")
 if not ok then
     print(msg)
@@ -75,63 +58,132 @@ if not ok then
 end
 -------------------------------------------------------------------------------
 
+This is saved in a file, e.g. `valididate.lua` and then the publisher is called with
 
-== xml
+```sh
+sp --filter validate.lua
+```
 
-`xml.encode_table(table)`::
-   Create an XML file from a table. It returns (first argument) the boolean “success”. If false, the second return value contains an error message (string).
+on. Before each run, the system checks whether the layout file corresponds to the schema and only then does processing continue.
 
-The table has the following structure
 
-A comment has the form
+
+TIP: You can check not only the layout file for correctness, but also all other XML files.
+But for this you have to create your own RELAX NG schema.
+Instructions are available at https://speedata.github.io/relaxngtutorial-de/.
+Depending on the data file this is also quite easy.
+Especially if you get data from external sources again and again, you can be sure that the desired structure is kept.
+
+== Executing a transformation
+
+An XSLT transformation processes an XML file with an XSLT script and generates an output file.
+XSLT is a programming language designed for processing XML data.
+Often data from PIM systems or databases is not in the form that is optimal for the publisher.
+With XSLT you can process and modify such output data.
+
+The program `Saxon` (supplied with the speedata Publisher) can execute an XSLT script.
+The call is the following:
 
 [source, lua]
 -------------------------------------------------------------------------------
-comment = {
-         _type = "comment",
-         _value = "This is a comment!"
-   }
+runtime = require("runtime")
+runtime.run_saxon(`XSL`, `source`, `outfile`, `parameter`)
 -------------------------------------------------------------------------------
-and an element:
+
+The parameters have the form `keyword=value` and are separated by spaces.
+
+
 
 [source, lua]
 -------------------------------------------------------------------------------
-element = {
-    ["_type"] = "element",
-    ["_name"] = "root",
-    attribute1 = "value1",
-    attribute2 = "value2",
-    child1,
-    child2,
-    child3,
-    ...
-}
+runtime = require("runtime")
+ok, msg = runtime.run_saxon("transformation.xsl", "sourcefile.xml", "data.xml")
+
+-- quit the publishing process if the trainsformation fails
+if not ok then
+    print(msg)
+    os.exit(-1)
+end
 -------------------------------------------------------------------------------
 
-child1, ... are strings, elements or comments.
+Alternatively, the call to Saxon can be done as follows:
 
-The XML file gets written with the name data.xml
+[source, lua]
+-------------------------------------------------------------------------------
+runtime = require("runtime")
+ok, msg = runtime.run_saxon({ key = value, key = value, ... }
+-------------------------------------------------------------------------------
+
+Allowed key/value pairs are:
+
+[options="header"]
+|=======
+| Key | Value
+| `source` | source file (XML)
+| `stylesheet` | stylesheet file (XSL)
+| `out` | Result
+| `initialtemplate` | name of the template to be called
+|=======
 
 Example:
+
+
+[source,lua]
+----
+runtime = require("runtime")
+ok, msg = runtime.run_saxon({stylesheet = `json2xml.xsl`,
+                             out = `data.xml`,
+                             initialtemplate = `main`})
+----
+
+See also the example in https://github.com/speedata/examples/tree/master/technical/jsonreader[examples repository].
+
+
+== Creating XML files
+
+You can also create the data file to be processed with the Lua script.
+For this purpose there is the function `encode_table()` in the module `xml`, which creates an XML file from a Lua table.
+
+The script
 
 [source, lua]
 -------------------------------------------------------------------------------
 xml = require("xml")
+tbl = {
+    ["_type"] = "element",
+    ["_name"] = "data",
+    {
+       ["_type"] = "element",
+       ["_name"] = "child",
+       "Hello, world",
+    }
+}
+
+
 ok, msg = xml.encode_table(tbl)
 if not ok then
     print(msg)
     os.exit(-1)
 end
-[source, lua]
 -------------------------------------------------------------------------------
 
+generates the XML file
 
-== xlsx
 
-`open(filename)`::
-   loads the given Excel file (file extension .xlsx) and in case of success returns an object which can be used to access the contents of the spreadsheet. In case of an error it returns two arguments. The first argument is false and the second argument contains the error message.
+[source, xml]
+-------------------------------------------------------------------------------
+<data><child>Hello, world</child></data>
+-------------------------------------------------------------------------------
 
-Usage:
+which is available for the next publisher run.
+This is particularly useful if the data source is not in XML.
+
+
+== Processing of Excel files
+
+A common use case is that the data is to be read from Excel files for processing.
+For this purpose, the module `xlsx` contains the function `open()` which opens an existing file:
+
 
 [source, lua]
 -------------------------------------------------------------------------------
@@ -143,8 +195,9 @@ if not spreadsheet then
 end
 -------------------------------------------------------------------------------
 
+The object `spreadsheet` contains the individual worksheets.
+The number of worksheets can be determined using the length operator and the individual worksheets can be determined using the index (1 is the first worksheet).
 
-The object spreadsheet contains the worksheets. The number of worksheets can be obtained by the length operator (#) and each worksheet is indexed stating from one:
 
 [source, lua]
 -------------------------------------------------------------------------------
@@ -152,7 +205,9 @@ numWorksheets = #spreadsheet
 ws = spreadsheet[1]
 -------------------------------------------------------------------------------
 
-The object ws can be used to get the contents of each cell. Use the object as a function call with the coordinates as the arguments. It returns the cell contents as a string. The top left cell has the coordinate (1,1), the first cell in the second row (1,2) and so on.
+The object `ws` can be used to access the cell contents directly.
+To do this, it is called as a function and returns a character string.
+The first cell in the upper left corner has the coordinates 1,1, the first cell in the second row 1,2 and so on.
 
 [source, lua]
 -------------------------------------------------------------------------------
@@ -160,17 +215,169 @@ cell1 = ws(1,1)
 cell2 = ws(1,2)
 -------------------------------------------------------------------------------
 
-Some properties can be queried in the worksheet object:
+The name of the worksheet can be determined by the value `name`:
 
-minrow::
-	First row that contains data
-maxrow::
-    Last row that contains data
-mincol::
-    First column that contains data
-maxcol::
-    Last column that contains data
-name::
-    Name of the worksheet
 
+[source, lua]
+-------------------------------------------------------------------------------
+name = ws.name
+-------------------------------------------------------------------------------
+
+
+
+== Read CSV files
+
+Similar to Excel files, CSV files can also be read in directly.
+However, the structure is simpler because there is only one "worksheet".
+
+
+[source, lua]
+-------------------------------------------------------------------------------
+csv = require("csv")
+csvtab, msg = csv.decode("myfile.csv",{columns = {1,2,3}})
+if not csvtab then
+    print(msg)
+    os.exit(-1)
+end
+-------------------------------------------------------------------------------
+
+The second parameter at `csv.deocde()` is optional.
+In this example only columns 1, 2 and 3 are output.
+The result is a table of rows.
+Each row is in turn a table containing the individual values of the row.
+
+The example repository shows how to create an XML file from the CSV file.
+
+== Function reference
+
+=== `Runtime`
+
+In this module all functions and settings are collected, which are of a more general nature.
+
+
+`projectdir`::
+
+A string containing the current project directory (the directory with the `layout.xml` or `publisher.cfg` file)
+
+`variables`::
+
+A table with all variables specified by `-v` on the command line or in the configuration file with `vars=...`.
+
+`finalizer`::
+
+If a function is assigned to this variable, it will be called after PDF creation (callback). The function has no parameters and no return value.
++
+[source, lua]
+-------------------------------------------------------------------------------
+runtime = require("runtime")
+
+function finished()
+    print("PDF is finished now.")
+end
+
+runtime.finalizer = finished
+-------------------------------------------------------------------------------
+
+`validate_relaxng(`xml file`, `schema file`)`::
+
+This function validates the specified XML file with the RELAX NG (XML syntax) schema specified in the second parameter.
+The return is a boolean value that is true if the command was executed without errors. Otherwise a second return value (string) is returned, which contains the error message.
+
+`run_saxon(`XSL`, `Source file`, `Output file`, `Parameters`)`::
+This function calls the `saxon` program supplied with the Publisher. It expects three string arguments (the stylesheet, the input file and the output file) and an optional argument that is passed as a parameter to saxon. The return is a boolean value which is true if the command was executed without errors. Otherwise a second return value (string) is returned, which contains the error message. The parameters have the form `keyword1=value1 keyword2=value2` (separated by spaces).
+
+
+=== `xml`
+
+The XML module is used to generate XML files.
+First the XML structure must be created in a Lua table, then it is saved with `encode_table()` under the name `data.xml`.
+
+
+`xml.encode_table(‹table›,[filename])`::
+
+Creates an XML file (`data.xml` or the optionally given filename) of the passed table.
+Return value 1 is a bool (success), value 2 is the error message if the first value is `false`.
+The table has the following structure:
++
+[source, lua]
+-------------------------------------------------------------------------------
+element = {
+    ["_type"] = "element",
+    ["_name"] = "element name"
+    attribute1 = "value1",
+    attribute2 = "value2",
+    child1,
+    child2,
+    child3,
+    ...
+}
+-------------------------------------------------------------------------------
++
+`child1`, `...` are either strings, elements or comments. Comments have the following form:
++
+[source, lua]
+-------------------------------------------------------------------------------
+comment = {
+         _type = "comment",
+         _value = " This is a comment! "
+   }
+-------------------------------------------------------------------------------
+
+
+=== `CSV`
+
+CSV files
+
+`decode(‹filename›, ‹parameter›)`::
+
+Reads a CSV file. The return value is a table or, in case of an error, `false` and an error message.
++
+The `parameters` are encoded in a table:
++
+`charset`:::
+If the CSV file is Latin-1 encoded, this value must be ISO-8859-1. Other encodings on request.
+`separator`:::
+Either a comma (default), a semicolon or the appropriate separator.
+
+`columns`:::
+
+A table containing the desired columns in their order.
+For example, `{3,2,1}` for the first three columns in reverse order.
+
+=== `xlsx`
+
+Reads an Excel file.
+
+`open(‹filename›)`::
+
+Opens the specified file. The return value is a `spreadsheet` object or, in case of an error, `false` and an error message.
++
+The `spreadsheet` object contains the individual worksheets. The number of worksheets can be determined with the `#` operator. The individual worksheets can be accessed with the index operator `[]`, where the first worksheet has index 1.
++
+The individual worksheets can be used as functions with two parameters (see example above).
+The parameters are the x and y coordinates of the cell to be read, the first cell in the upper left corner has the coordinate 1,1.
+The dimensions of the content can be determined using the parameters `minrow`, `maxrow`, `mincol` and and `maxxcol`.
+The name is contained in the parameter `name`.
+
+
+`string_to_date(‹string›)`::
+
+Converts a number (encoded as a string) into a date.
+Returned is a table with the keys `day`, `month`, `year`, `hour`, `minute` and `second`. Example: `xlsx.string_to_date("43458")` results in
++
+[source, lua]
+-------------------------------------------------------------------------------
+{
+  ["day"] = "24"
+  ["month"] = "12"
+  ["year"] = "2018"
+  ["hour"] = "0"
+  ["minute"] = "0"
+  ["second"] = "0"
+}
+-------------------------------------------------------------------------------
+
+=== `http`
+
+The HTTP library is described at https://github.com/cjoudrey/gluahttp.
 

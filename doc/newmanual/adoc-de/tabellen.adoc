@@ -508,7 +508,7 @@ Um dies zu illustrieren, gibt es ein vollständiges Layoutregelwerk, das diesen 
   <Pageformat width="80mm" height="80mm" />
 
   <Record element="data">
-    <!-- Wert für die erste Kopfzeile initialisieren -->
+    <!-- Initialize value for the first header line -->
     <SetVariable variable="_last_tr_data" select="0"/>
     <SetVariable variable="sum" select="0"/>
 
@@ -518,7 +518,7 @@ Um dies zu illustrieren, gibt es ein vollständiges Layoutregelwerk, das diesen 
           <Tr backgroundcolor="#eee">
             <Td>
               <Paragraph>
-                <Value>Wert von $_last_tr_data: </Value>
+                <Value>Value of $_last_tr_data: </Value>
                 <Value select="$_last_tr_data"/>
               </Paragraph>
             </Td>
@@ -758,21 +758,20 @@ Damit das funktioniert, muss die Tabelle in einem Platzierungsbereich ausgegeben
 [source, xml]
 -------------------------------------------------------------------------------
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
-  xmlns:sd="urn:speedata:2009/publisher/functions/en"
-  version="3.1.24">
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
   <Trace grid="yes"/>
   <SetGrid nx="2" dx="5mm" height="12pt"/>
   <Pageformat width="140mm" height="100mm"/>
-  <Pagetype name="Seite" test="true()">
+  <Pagetype name="page" test="true()">
     <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
-    <PositioningArea name="zweispalten">
+    <PositioningArea name="twocolumns">
       <PositioningFrame width="1" height="{sd:number-of-rows()}" row="1" column="1"/>
       <PositioningFrame width="1" height="{sd:number-of-rows()}" row="1" column="2"/>
     </PositioningArea>
   </Pagetype>
 
   <Record element="data">
-    <PlaceObject area="zweispalten">
+    <PlaceObject area="twocolumns">
       <Table balance="no">
         <Loop select="20" variable="i">
           <Tr>

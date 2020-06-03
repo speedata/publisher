@@ -14,7 +14,6 @@ Im einfachsten Fall sieht eine Vorlage so aus:
 </Pagetype>
 -------------------------------------------------------------------------------
 
-Ein Rand muss angegeben werden.
 Die Bedingung im Attribut `test` kann beliebig komplex sein. Das Attribut muss immer angegeben werden.
 Eine Seite wird ausgewählt, sobald ein Test eines Seitentyps _wahr_ ergibt.
 Beispiele:
@@ -35,13 +34,13 @@ Also wird sie nach dieser Logik zuletzt ausgewertet und wird immer dann benutzt,
 .Hier muss der Seitentyp für die erste Seite nach dem Seitentyp für rechte Seiten definiert werden, weil er sonst nicht in Betracht gezogen würde (sd:odd(1) ergibt wahr).
 [source, xml]
 -------------------------------------------------------------------------------
-<Pagetype name="linke Seiten" test="sd:even(sd:current-page())">
+<Pagetype name="left pages" test="sd:even(sd:current-page())">
   ...
 </Pagetype>
-<Pagetype name="rechte Seiten" test="sd:odd(sd:current-page())">
+<Pagetype name="right pages" test="sd:odd(sd:current-page())">
   ...
 </Pagetype>
-<Pagetype name="erste Seite" test="sd:current-page() = 1">
+<Pagetype name="first page" test="sd:current-page() = 1">
   ...
 </Pagetype>
 -------------------------------------------------------------------------------

@@ -1,11 +1,11 @@
-[[ch-umfliessenvonbildern,Umfließen von Bildern]]
-= Umfließen von Bildern
+[[ch-wraparoundimages,Wrap around images]]
+= Wrap around images
 
-Text, der über den Befehl `<Output allocate="auto">` ausgegeben wird, umfließt zuvor platzierte Objekte. Es bietet sich daher an, Objekte, die umflossen werden sollen, zuerst auch auf zukünftige Seiten zu platzieren. Die Erreicht man mit dem Attribut `page` im Befehl `<PlaceObject>`.
-In dem Attribut muss man entweder eine konkrete Seitenzahl oder `next` für die nächste Seite angeben.
-Damit der Cursor bei der Ausgabe nicht verändert wird, empfiehlt es sich, das Attribut `keepposition` auf `yes` zu setzen.
+_This page was automatically translated. Stay tuned for a manual translation..._
 
-Das vollständige Beispiel ist unter https://github.com/speedata/examples/tree/master/technical/wraparoundobjects zu finden.
+Text that is output using the `<Output allocate="auto">` command flows around previously placed objects. It is therefore useful to place objects that are to be flowed around on future pages first. This can be achieved with the page attribute in the command <PlaceObject>. In the attribute you must specify either a concrete page number or next for the next page. To avoid the cursor being changed during output, it is recommended to set the attribute keepposition to yes.
+
+The complete example can be found at https://github.com/speedata/examples/tree/master/technical/wraparoundobjects.
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -51,14 +51,14 @@ Das vollständige Beispiel ist unter https://github.com/speedata/examples/tree/m
 
 
 
+
 [[abb-umfliessenvonbildern]]
-.Automatisches umfließen von Objekten, die vorher ausgegeben wurden.
+.Automatic flow around objects that were previously output.
 image::umfliessenvonbildern.png[width=80%,scaledwidth=100%]
 
-== Komplexe Formen
+== Complex shapes
 
-Es ist möglich, Umrisse von Bildern mit nicht-rechteckigen Formen zu erstellen.
-Dazu gibt man einer Bilddatei eine in XML formulierte Umrissdatei mit.
+It is possible to create outlines of images with non-rectangular shapes. For this purpose, an image file is provided with an outline file formulated in XML.
 
 
 [source, xml]
@@ -96,10 +96,9 @@ Dazu gibt man einer Bilddatei eine in XML formulierte Umrissdatei mit.
 ifdef::backend-docbook99[]
 Das Ergebnis ist in Abbildung <<abb-taschenuhr>> zu sehen.
 endif::[]
-Die Datei `taschenuhr.pdf` kann eine Umrissdatei mit demselben Namen und der Endung `xml` haben, die wie folgt aufgebaut ist:
+The pocketwatch.pdf file can have an outline file with the same name and the extension xml, which is structured as follows
 
-
-.Die Segmente bestimmen den belegten Bereich. Die Angaben beziehen sich auf die (willkürliche) Maßeinheit von 75x100 Einheiten.
+.The segments determine the occupied area. The specifications refer to the (arbitrary) unit of 75x100 units.
 [source, xml]
 -------------------------------------------------------------------------------
 <imageinfo>
@@ -116,13 +115,10 @@ Die Datei `taschenuhr.pdf` kann eine Umrissdatei mit demselben Namen und der End
 -------------------------------------------------------------------------------
 
 [[abb-taschenuhr]]
-.Die Form der Uhr muss in einem vorbereitenden Schritt ermittelt werden.
+.The shape of the watch must be determined in a preparatory step.
 image::taschenuhr.png[width=50%,scaledwidth=100%]
 
+TIP: This functionality is still experimental. The next versions of the Publisher will probably have improvements to this feature. The outline of an image can be created with the program imageshaper at https://github.com/speedata/imageshaper.
+A complete example can be found at https://github.com/speedata/examples/tree/master/imageshape.
 
-TIP: Diese Funktionalität ist noch experimentell. Die nächsten Versionen des Publishers haben wahrscheinlich Verbesserungen bei diesem Feature. Der Umriss eines Bildes kann mit dem Programm `imageshaper` unter <https://github.com/speedata/imageshaper> erzeugt werden.
-
-Ein vollständige Beispiel ist unter https://github.com/speedata/examples/tree/master/imageshape zu finden.
-
-
-// Ende
+// EOF

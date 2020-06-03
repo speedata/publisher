@@ -1,0 +1,54 @@
+[[ch-layoutoptimizationusinggroups]]
+= Layout optimization using groups
+
+_This page was automatically translated. Stay tuned for a manual translation..._
+
+A typical case with database publishing is that you don't know what data to expect. Text varies in length, images have different aspect ratios, the amount of data in the record varies, and so on. In order to still create a presentation that is appealing (i.e. follows certain rules), you can make queries. Besides static questions like "How many articles are in the article group?", dynamic questions can be answered.
+
+* How wide is the headline?
+* How high is the image?
+* Does the table still fit on the page?
+
+are typical questions that are necessary for a sophisticated layout.
+
+The idea is as follows: You create a virtual area that is not output to the PDF. The elements that you want to measure are then placed there. Then you can ask how large (width and height) this virtual area is and react differently to it.
+
+Virtual areas are bracketed in `<Group><Contents>...</Contents></Group>` (see the section <<ch-groups>>).
+
+The framework is as follows:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Record element="data">
+  <Group name="img">
+    <Contents>
+      <!--1-->
+      <PlaceObject>
+        <Image file="_samplea.pdf" width="4"/>
+      </PlaceObject>
+    </Contents>
+  </Group>
+  <!--2-->
+  <Switch>
+    <Case test="sd:group-height('img') > 5">
+      ...
+    </Case>
+    <Otherwise>
+      ...
+    </Otherwise>
+  </Switch>
+</Record>
+-------------------------------------------------------------------------------
+<1> At the beginning the group has a width and height of 0. All objects increase the area.
+<2> The group now has a width of 4 and an unknown height (depending on the image). Now the height can be queried with sd:group-height() and the width with sd:group-width(). What happens in the case distinction depends on the concrete layout, of course.
+
+
+The principle is always the same: the content in question is placed on a virtual area and measured. On the basis of the determined height or width, you can, for example
+
+* simply output the group
+* insert a page break if the group no longer fits on the page
+* recreate the group in a loop with modified parameters until a condition is met (an example of this procedure is shown in the section on Virtual Pages, No. Virtual Pages)
+* ...
+
+// EOF

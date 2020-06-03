@@ -2,66 +2,64 @@
 [[ch-commandline,Command line]]
 = Running the speedata publisher on the command line
 
-// Der speedata Publisher wird über die Kommandozeile (auch: Terminal, Befehlsfenster) gestartet.
-// Einerseits gibt es _Befehle_, anderseits lassen sich die Befehle über _Parameter_ steuern.
+The speedata Publisher is started via the command line (also: terminal, command window).
+On the one hand there are _commands_, on the other hand the commands can be controlled via _parameters_.
 
-// [source,shell,subs="verbatim,quotes"]
-// -------------------------------------------------------------------------------
-// $ sp <Befehl>  <Parameter> <Parameter> ...
-// -------------------------------------------------------------------------------
-
-
-// Der Standardbefehl ist `run`. So ist der Aufruf von
-
-// [source,shell,subs="verbatim,quotes"]
-// -------------------------------------------------------------------------------
-// $ sp
-// -------------------------------------------------------------------------------
-
-// dasselbe wie
+[source,shell,subs="verbatim,quotes"]
+-------------------------------------------------------------------------------
+$ sp <Command> <Parameter> <Parameter> ...
+-------------------------------------------------------------------------------
 
 
-// [source,shell,subs="verbatim,quotes"]
-// -------------------------------------------------------------------------------
-// $ sp run
-// -------------------------------------------------------------------------------
+The default command is 'run'. So the call of
 
-// Neben dem Befehl `run` gibt es noch weitere Befehle (s.u.).
+[source,shell,subs="verbatim,quotes"]
+-------------------------------------------------------------------------------
+$ sp
+-------------------------------------------------------------------------------
 
-// Mit
+the same as
 
-// [source, shell]
-// -------------------------------------------------------------------------------
-// $ sp --help
-// -------------------------------------------------------------------------------
 
-// kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
+[source,shell,subs="verbatim,quotes"]
+-------------------------------------------------------------------------------
+$ sp run
+-------------------------------------------------------------------------------
+
+Besides the command 'run' there are other commands (see below).
+
+With
+
+[source, shell]
+-------------------------------------------------------------------------------
+$ sp --help
+-------------------------------------------------------------------------------
+
+you can display a list of the allowed commands and parameters.
+
 
 [[ch-cmd-description]]
 == Description of the commands
 
 `clean`::
-  Remove publisher generated files Löscht alle generierten Zwischendateien und behält die PDF-Datei.
+   Deletes all generated intermediate files and keeps the PDF file.
 `clearcache`::
   Removes files from the image cache.
 `compare`::
-   Recursively check a directory for layout changes. See the topic about quality assurance.
+   Recursively check a directory for layout changes. See the topic about <<ch-qa,quality assurance>>.
 `doc`::
-  Open documentation Öffnet das Referenzhandbuch im Browser (lokale HTML-Dateien).
+  Opens the reference manual in the browser (local HTML files).
 `list-fonts`::
-  List installed fonts (use together with --xml for copy/paste)  Listet alle Schriftdateien auf, die in den Publisher-Verzeichnissen gefunden werden. Zusammen mit `--xml` erlaubt dieses Kommando die Ausgabe per Copy&Paste in das Layoutregelwerk zu übernehmen. Siehe
+  Lists all font files found in the Publisher directories. Together with `--xml` this command allows to copy&paste the output into the layout rules. See <<ch-fonts>>.
 // <<ch-einbindungschriftarten>>.
 `new [DIRECTORY]`::
-   Create simple layout and data file to start. Provide optional directory
-   Erstellt ein einfaches Gerüst (`layout.xml` und `data.xml`) für einen Publishing-Lauf im aktuellen Verzeichnis, sofern kein anderes angegeben ist.
+   Create simple layout and data file to start. Provide optional directory.
 `run`::
-  Start publishing (default)
-  Startet den Publisher Lauf. Das ist die Voreinstellung, so dass das Kommando `sp` reicht, um den Publikationsprozess zu starten.
+  Start publishing (default).
 `server`::
-  Run as http-api server on localhost port 5266 (configure with --address and --port)
-  Startet im Servermodus. Siehe <<ch-servermodus,den Abschnitt Servermodus>>.
+  Run as http-api server on localhost port 5266 (configure with `--address` and `--port`). See the chapter <<ch-servermode>>.
 `watch`::
-  Start watchdog / hotfolder Startet den internen Hotfolder. Siehe
+  Start watchdog / hotfolder. See <<ch-hotfolder>>.
 //   <<ch-hotfolder>>.
 
 
@@ -74,7 +72,7 @@
 `--address=IPADDRESS`::
    Address to be used for the server mode. Defaults to 127.0.0.1.
 `--autoopen`::
-   Open the PDF file (MacOS X and Linux only
+   Open the PDF file (MacOS X and Linux only). Can be set in the <<ch-configuration>>.
 `--cache=METHOD`::
    Use cache method. One of 'none', 'fast' or 'optimal'. Default is 'optimal'.
 `-c`, `--config=NAME`::

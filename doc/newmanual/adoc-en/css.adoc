@@ -2,50 +2,105 @@
 
 = Using CSS with the speedata Publisher
 
-Remark: The support of CSS was introduced in version 2.2. At that time, it is more a proof-of-concept than a full implementation. The interface might change in the future. When in doubt, just ask.
+_This page was automatically translated. Stay tuned for a manual translation..._
 
-== Loading a stylesheet and declaring CSS rules
+CSS (Cascading Stylesheets) is a language mainly used on the web to determine the appearance of objects.
+The idea is to separate formatting from content.
+On the web - so the pure teaching - the content is described in HTML, while the appearance is determined by CSS.
+With the speedata Publisher the separation is even clearer.
+The data usually contains no information about the appearance, while the layout rules have no information about the data.
 
-CSS stylesheets are defined with the command Stylesheet:
+The speedata Publisher relies exclusively on the built-in language when formatting the objects.
+Some elements can be designed using CSS.
+In the Publisher this is only rudimentary:
+Currently the commands `<Box>`, `<Circle>`, `<Frame>`, `<Paragraph>`, `<Rule>`, `<Td>`, `<Tablerule>` and `<U>` can be formatted via CSS.
+<<ch-command reference,The Command Reference>> lists the commands with the associated attributes that can be accessed via CSS functionality.
 
-[source, xml]
--------------------------------------------------------------------------------
-<Stylesheet filename="rules.css"/>
--------------------------------------------------------------------------------
 
-or
+TIP: The CSS implementation in the speedata Publisher has more the character of a "proof of concept" or prototype. The commands and properties that can be controlled via CSS are very limited.
 
-[source, xml]
--------------------------------------------------------------------------------
-<Stylesheet>
-  td {
-    vertical-align: top ;
-  }
-</Stylesheet>
--------------------------------------------------------------------------------
-
-With these rules, some of the XML elements in the layout stylesheet (currently Box, Frame, Rule, Paragraph, Tablerule, Td) can be styled. As it is common with CSS, you can set the properties with the class name, the id and the command name.
-
-For this table
+A CSS stylesheet can be available and integrated as an external file.
+Alternatively, one can write CSS instructions directly into the layout rules.
+`<Stylesheet>` is the command for both variants:
 
 [source, xml]
 -------------------------------------------------------------------------------
-<PlaceObject>
-  <Table>
-    <Tr minheight="4">
-      <Td class="myclass" id="myid"><Paragraph><Value>Hello world</Value></Paragraph></Td>
-    </Tr>
-  </Table>
-</PlaceObject>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Stylesheet filename="style.css"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>Test</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+
+</Layout>
 -------------------------------------------------------------------------------
 
-each of the following CSS declarations have the same effect:
+
+with the following CSS file:
+
+
+[source, css]
+-------------------------------------------------------------------------------
+
+p {
+	color: red;
+}
+-------------------------------------------------------------------------------
+
+results in the word "Test" in the PDF in the color red.
+
+If the CSS statements are inserted directly, the syntax is as follows:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+  <Stylesheet>
+    p {
+      color: red;
+    }
+  </Stylesheet>
+-------------------------------------------------------------------------------
+
+
+[discrete]
+== Selectors
+
+As known from HTML, the CSS instructions are assigned to certain elements with so-called selectors.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Table>
+  <Tr minheight="4">
+    <Td class="myclass" id="myid">
+      <Paragraph>
+        <Value>Hallo Welt</Value>
+      </Paragraph>
+    </Td>
+  </Tr>
+</Table>
+-------------------------------------------------------------------------------
+
+
+The table cell in the example above could be accessed via the following selectors:
+
 
 [source, css]
 -------------------------------------------------------------------------------
 #myid {
   vertical-align: top ;
 }
+-------------------------------------------------------------------------------
+
+[source, css]
+-------------------------------------------------------------------------------
 .myclass {
   vertical-align: top ;
 }
@@ -60,30 +115,64 @@ td {
 }
 -------------------------------------------------------------------------------
 
-The mapping of the command names for the CSS rules and the layout rules are documented in the reference manual.
+The first case is via the 'id' attribute, which must be unique in the layout rules.
+The second case is addressed via the class `class="..."`.
+The class can be the same for several elements in the layout set of rules.
+The third case refers to all elements 'Td' in the layout set of rules.
+Here the usual specificity rules for CSS apply, but `!important' is not supported.
 
 
-== Accessing the data with CSS
-If the data is in the following format:
+== CSS and and elements in data
+
+Text markup in the data works as follows:
+
 
 [source, xml]
 -------------------------------------------------------------------------------
-<data>hello <green>green</green> world <br/>with a <span class="blue">span</span>.</data>
+<p>Text, Text, Text <b>bold</b>, Text Text</p>
 -------------------------------------------------------------------------------
 
-you can get the desired colors with the following stylesheet:
+
+The Publisher will ensure that the text within the 'b' element appears in bold.
+
+You can also add CSS styles to your own elements.
+For example, if you have the following data
 
 [source, xml]
 -------------------------------------------------------------------------------
-<Stylesheet>
-  green {
-    color: green;
-  }
-  .blue {
-    color: blue;
-  }
-</Stylesheet>
+<data>hello <green>green</green> world</data>
 -------------------------------------------------------------------------------
 
+
+you can use CSS to color the element:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Stylesheet>
+    green {
+      color: green;
+    }
+  </Stylesheet>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value select="."/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+.Elements in data can now be colored
+image::32-hellogreenworld.png[]
+
+Currently, only the attributes underline and color (text-decoration: underline; and color: ...) can be set via CSS.
 
 // EOF

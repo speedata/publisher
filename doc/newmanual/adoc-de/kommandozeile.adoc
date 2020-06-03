@@ -67,13 +67,13 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
    Adresse des Servers für den Servermodus. Voreingestellt ist 127.0.0.1
 `--autoopen`::
    Öffnet die PDF-Datei nach dem Publisher-Durchlauf. Kann auch in der <<ch-konfiguration,Konfigurationsdatei>> eingestellt werden.
-`--cache=METHOD` ::
+`--cache=METHOD`::
    Caching-Strategie für http(s) Bilddateien. Entweder `fast`, dann wird nur geschaut, ob die Bilddatei im Dateisystem vorhanden ist oder `optimal` (Voreinstellung), dann wird bei jedem Zugriff auf das Bild geprüft, ob das Bild aktualisiert werden muss. Bei `none` werden die Bilder immer herunter geladen.
-`-c, --config=NAME` ::
+`-c, --config=NAME`::
    Liest die angegebene Konfigurationsdatei ein. Voreinstllung ist `publisher.cfg`.
-`--credits` ::
+`--credits`::
    Zeigt credits an und beendet das Programm.
-`--[no]-cutmarks` ::
+`--[no]-cutmarks`::
    Zeigt die Schnittmarken an. Einstellbar im <<cmd-options,Layout (Befehl Options)>>.
 `--data=NAME`::
    Gibt den Namen der XML-Daten an. Voreinstellung ist `data.xml`. Wird als Dateiname ein Strich (`-`) angegeben, liest der Publisher die XML-Daten aus der Standard-Eingabe (STDIN). Es kann auch eine externe Ressource angegeben werden (`http://`).

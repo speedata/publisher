@@ -77,7 +77,7 @@ Dazu gibt man einer Bilddatei eine in XML formulierte Umrissdatei mit.
 
   <Record element="data">
     <PlaceObject column="16" row="1" keepposition="yes">
-      <Image file="taschenuhr.pdf"/>
+      <Image file="pocketwatch.pdf"/>
     </PlaceObject>
 
     <Output allocate="auto" row="1" area="text">

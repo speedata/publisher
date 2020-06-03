@@ -1,20 +1,21 @@
 [appendix]
-[[ch-dateinamen,Dateinamen im Publisher]]
-= Dateinamen im Publisher
-(((Dateinamen)))
+[[ch-filenames,File names with speedata]]
+= File name in the Publisher
 
-An verschiedenen Stellen im Layout, hauptsächlich bei den Bildern, werden externe Dateien referenziert.
-Diese können folgende Formate haben:
+_This page was automatically translated. Stay tuned for a manual translation..._
 
-* Absoluter Pfad im Dateisystem: `/pfad/zur/datei.png`.
-* Relativer Pfad im Dateisystem: `../verzeichnis/datei.png`.
-* Datei innerhalb des Suchbaums `datei.png`. Vor dem Start wird das aktuelle Verzeichnis rekursiv durchsucht (siehe <<ch-organisationdaten>>).
-* Absolute Pfade unter Windows wie `c:\Users\....\datei.png`.
-* file-Schema: `file://c/Users/Joe%20User/datei.png` oder `file:///home/user/datei.png`.
-* http-Schema: `http://placekitten.com/g/400/300` oder https: `https://placekitten.com/g/400/300`
+External files are referenced at various points in the layout, mainly in the images.
+These can have the following formats:
 
-Diese Dateinamen können bei <<cmd-image,Bildern>>, bei <<ch-xpathfunktionen,XPath- und Layoutfunktionen>> sowie auf der Kommandozeile benutzt werden.
-So ist es möglich, den Publisher mit
+* Absolute path in the file system: `/path/to/file.png`.
+* Relative path in the file system: `../directory/file.png`.
+* File within the search tree: `file.png`. Before starting, the current directory is searched recursively (see <<ch-organisation data>>).
+* Absolute paths under Windows like `c:\Users\...\file.png`.
+* file scheme: `file://c/Users/Joe%20User/file.png` or `file:///home/user/file.png`.
+* http-scheme: `http://placekitten.com/g/400/300` or https: `https://placekitten.com/g/400/300`.
+
+These file names can be used for <<cmd-image,Images>>, for <<ch-xpathfunctions,XPath- and layoutfunctions>> as well as on the command line.
+So it is possible to start the Publisher with
 
 
 [source, sh]
@@ -22,6 +23,5 @@ So ist es möglich, den Publisher mit
 sp --dummy --data https://raw.githubusercontent.com/speedata/examples/master/technical/rotating/layout.xml
 -------------------------------------------------------------------------------
 
-aufzurufen.
-Erst wird die Ressource auf dem lokalen Rechner zwischengespeichert und dann von dort aus geladen.
+First the resource is cached on the local computer and then loaded from there.
 

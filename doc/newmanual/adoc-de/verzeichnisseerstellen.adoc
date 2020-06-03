@@ -19,11 +19,11 @@ Folgende Struktur könnte für eine Artikelliste sinnvoll sein:
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
-<Artikelverzeichnis>
-  <Artikel nummer="1" seite="10"/>
-  <Artikel nummer="2" seite="12"/>
-  <Artikel nummer="3" seite="14"/>
-</Artikelverzeichnis>
+<articlelist>
+  <article number="1" page="10"/>
+  <article number="2" page="12"/>
+  <article number="3" page="14"/>
+</articlelist>
 -------------------------------------------------------------------------------
 
 
@@ -31,18 +31,18 @@ Um diese Struktur im Layoutregelwerk zu erstellen, muss sie aus den Befehlen `<E
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
-<Element name="Artikelverzeichnis">
-  <Element name="Artikel">
-    <Attribute name="nummer" select="1"/>
-    <Attribute name="seite" select="10"/>
+<Element name="articlelist">
+  <Element name="article">
+    <Attribute name="number" select="1"/>
+    <Attribute name="page" select="10"/>
   </Element>
-  <Element name="Artikel">
-    <Attribute name="nummer" select="2"/>
-    <Attribute name="seite" select="12"/>
+  <Element name="article">
+    <Attribute name="number" select="2"/>
+    <Attribute name="page" select="12"/>
   </Element>
-  <Element name="Artikel">
-    <Attribute name="nummer" select="3"/>
-    <Attribute name="seite" select="14"/>
+  <Element name="article">
+    <Attribute name="number" select="3"/>
+    <Attribute name="page" select="14"/>
   </Element>
 </Element>
 -------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ Direkt nach dem Laden wird die XML-Verarbeitung mit dem ersten Element der gerad
 
 [source, xml]
 -------------------------------------------------------------------------------
-<Record element="Artikelverzeichnis">
+<Record element="articlelist">
   ...
 </Record>
 -------------------------------------------------------------------------------
@@ -76,15 +76,15 @@ Das ist dasselbe Beispiel wie aus dem vorherigen Abschnitt (<<ch-verzeichnisseer
 [source, xml]
 -------------------------------------------------------------------------------
 <data>
-  <kapitel titel="Vorwort">
+  <chapter title="Foreword">
     <text>...</text>
-  </kapitel>
-  <kapitel titel="Einleitung">
+  </chapter>
+  <chapter title="Introduction">
     <text>...</text>
-  </kapitel>
-  <kapitel titel="Schlusswort">
+  </chapter>
+  <chapter title="Conclusion">
     <text>...</text>
-  </kapitel>
+  </chapter>
 </data>
 -------------------------------------------------------------------------------
 
@@ -97,7 +97,7 @@ Die mit dem folgenden Layout ausgegeben wird:
   xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <DefineFontfamily name="Überschrift" fontsize="18" leading="20">
+  <DefineFontfamily name="title" fontsize="18" leading="20">
     <Regular fontface="sans"/>
   </DefineFontfamily>
 
@@ -105,15 +105,15 @@ Die mit dem folgenden Layout ausgegeben wird:
 
   <!--2-->
   <Record element="data">
-    <ProcessNode select="kapitel"/>
+    <ProcessNode select="chapter"/>
   </Record>
 
-  <Record element="kapitel">
+  <Record element="chapter">
     <!--3-->
     <PlaceObject>
       <Textblock>
-        <Paragraph fontface="Überschrift">
-          <Value select="@titel"/>
+        <Paragraph fontface="title">
+          <Value select="@title"/>
         </Paragraph>
         <Paragraph>
           <Value select="text"/>
@@ -134,23 +134,22 @@ Die Zielstruktur soll folgende sein:
 [source, xml]
 -------------------------------------------------------------------------------
 <tableofcontent>
-  <entry chaptername="Vorwort" page="2"/>
-  <entry chaptername="Einleitung" page="3"/>
-  <entry chaptername="Schlusswort" page="4"/>
+  <entry chaptername="Foreword" page="2"/>
+  <entry chaptername="Introduction" page="3"/>
+  <entry chaptername="Conclusion" page="4"/>
 </tableofcontent>
 -------------------------------------------------------------------------------
 
-// A beginn
 
-Im Abschnitt `kapitel` (Punkt 3 im Layout oben) wird oben der Code eingefügt, um die Variable `entries` mit den Inhalten zu füllen:
+Im Abschnitt `chapter` (Punkt 3 im Layout oben) wird oben der Code eingefügt, um die Variable `entries` mit den Inhalten zu füllen:
 
 [source, xml]
 -------------------------------------------------------------------------------
-  <Record element="kapitel">
+  <Record element="chapter">
     <SetVariable variable="entries">
       <Copy-of select="$entries"/>
       <Element name="entry">
-        <Attribute name="chaptername" select="@titel"/>
+        <Attribute name="chaptername" select="@title"/>
         <Attribute name="page" select="sd:current-page()"/>
       </Element>
     </SetVariable>
@@ -176,8 +175,8 @@ Der neue Abschnitt `data` sieht nun so aus und wird an die Stelle 2 im Layout ob
   <Record element="data">
     <LoadDataset name="toc"/>
     <SetVariable variable="entries"/>
-    <ProcessNode select="kapitel"/>
-    <SaveDataset filename="toc" elementname="tableofcontent"
+    <ProcessNode select="chapter"/>
+    <SaveDataset filename="toc" elementname="tableofcontents"
                  select="$entries"/>
   </Record>
 -------------------------------------------------------------------------------
@@ -187,12 +186,12 @@ Der neue Abschnitt `data` sieht nun so aus und wird an die Stelle 2 im Layout ob
 // C Beginn
 
 Beim nächsten Durchlauf greift der Befehl `<LoadDataset>` und öffnet die zuvor gespeicherte XML-Datei.
-Im Layoutregelwerk wird ein Abschnitt für das Element `tableofcontent` gesucht, das ja das Wurzelelement der gespeicherten Datei ist.
+Im Layoutregelwerk wird ein Abschnitt für das Element `tableofcontents` gesucht, das ja das Wurzelelement der gespeicherten Datei ist.
 Das muss noch in das Layoutregelwerk eingefügt werden (Stelle 1 im Layout oben):
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
-  <Record element="tableofcontent">
+  <Record element="tableofcontents">
     <PlaceObject>
       <Table padding="5pt">
         <ForAll select="entry">

@@ -1,11 +1,11 @@
 [[ch-fakelists]]
-= Aufzählungslisten nachahmen
+= Imitate bulleted lists
 
-Der Publisher hat (derzeit) noch keine besonderen Fähigkeiten, Aufzählungslisten zu erstellen.
-Das liegt auch daran, dass sie sich recht leicht über Textformate nachahmen lassen.
+_This page was automatically translated. Stay tuned for a manual translation..._
 
-Dafür definiert man ein Textformat mit hängendem Einzug und benutzt das mit dem Text mit den Aufzählungszeichen:
+The Publisher does not (currently) have any special skills to create bulleted lists. This is also because they can be imitated quite easily via text formats.
 
+To do this, you define a text format with a hanging indent and use the one with the bulleted text:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -29,9 +29,9 @@ Dafür definiert man ein Textformat mit hängendem Einzug und benutzt das mit de
 
 image::olulwithtext.png[width=50%]
 
-Das funktioniert in der Praxis hervorragend. Der offensichtliche Nachteil ist, dass man ausmessen muss, wie breit der linke Rand sein soll.
+This works very well in practice. The obvious disadvantage is that you have to measure how wide the left edge should be.
 
-Verschachtelte Listen können über Tabellen realisiert werden, wobei man beachten muss, dass innerhalb der Tabellenzellen ja nicht umbrochen werden kann.
+Nested lists can be realized by using tables, but you have to keep in mind that it is not possible to wrap within the table cells.
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -75,5 +75,4 @@ Verschachtelte Listen können über Tabellen realisiert werden, wobei man beacht
 
 image::olulwithtables.png[width=90%]
 
-// {{< figurefromhere src="olulwithtables.png" title="Aufzählungen können über Tabellen simuliert werden." >}}
-
+// EOF

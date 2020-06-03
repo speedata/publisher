@@ -1,21 +1,22 @@
 [[ch-savepages]]
-= Virtuelle Seiten
+= Virtual pages
 
+_This page was automatically translated. Stay tuned for a manual translation..._
 
-Mit den Virtuellen Seiten kann man, ähnlich wie bei den Virtuellen Bereichen (Gruppen), Seiten erzeugen und wieder verwerfen.
-Dazu gibt es die Befehle `<SavePages>` und `<InsertPages>` und die Layoutfunktion `sd:count-saved-pages()`.
-Der erste Befehl bewirkt, dass die Ausgaben innerhalb des Befehls nicht in das PDF geschrieben werden.
-Mit dem zweiten Befehl kann man diese gespeicherten Seiten ausgeben.
-Die Layoutfunktion ermittelt die Anzahl der gespeicherten Seiten.
+With the Virtual Pages you can create and discard pages, similar to the Virtual Areas (Groups).
+For this purpose there are the commands `<SavePages>` and `<InsertPages>` and the layout function `sd:count-saved-pages()`.
+The first command has the effect that the output within the command is not written to the PDF.
+With the second command you can output these saved pages.
+The layout function determines the number of saved pages.
 
 
 [discrete]
-== Beispiel
+== Example
 
-Es sollen Text und ein Bild auf genau einer Seite angezeigt werden, wobei das Bild möglichst groß und am besten im Textfluss angezeigt werden soll.
-Es soll nun so lange mit verschiedenen Parametern der Text gesetzt werden, bis Text und Bild genau auf eine Seite passen, also die Seitenzahl aus `sd:count-saved-pages()` den Wert 1 ergibt.
+Text and an image should be displayed on exactly one page, with the image displayed as large as possible and preferably in the text flow.
+Now the text is to be set with different parameters until the text and image fit exactly on one page, i.e. the page number from `sd:count-saved-pages()` gives the value 1.
 
-Die Datendatei `data.xml` ist wie folgt aufgebaut:
+The data file `data.xml` is structured as follows:
 
 
 [source, xml]
@@ -37,7 +38,8 @@ Die Datendatei `data.xml` ist wie folgt aufgebaut:
 </journal>
 -------------------------------------------------------------------------------
 
-Die Layoutdatei ist etwas umfangreicher und wird in mehreren Etappen erläutert:
+
+The layout file is somewhat more extensive and is explained in several stages:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -65,17 +67,17 @@ Die Layoutdatei ist etwas umfangreicher und wird in mehreren Etappen erläutert:
     </PositioningArea>
   </Pagetype>
 -------------------------------------------------------------------------------
-<1> Der Kopf ist wieder wie üblich. Die Option `ignoreeol`(((ignoreeol))) besagt, dass die Zeilenumbrüche in den Daten ignoriert werden sollen.
-<2> Anschließend wird die Schriftgröße für die Überschrift eingestellt. Der Fließtext nutzt die voreingestellte Schriftart mit der Größe 10/12 Punkt.
-<3> Wenn man die Rasterhöhe gleich dem normalen Zeilenabstand setzt, kann man leicht registerhaltigen Satz erreichen. Der Seitentyp definiert zwei Seitenbereiche (siehe Abschnitt <<ch-positioningarea>>).
-<4> Der Bereich für die Überschrift umfasst die ersten 8 Zeilen und ist unabhängig vom Textbereich.
-<5> Der Bereich für den Text besteht aus zwei Spalten.
+<1> The head is back to normal. The `ignoreeol`(((ignoreeol)) option says that the line breaks in the data should be ignored.
+<2> Then the font size for the header is set. The body text will use the default font size of 10/12 point.
+<3> If you set the grid height equal to the normal line spacing, you can easily achieve register-true typesetting. The page type defines two page areas (see section <<ch-positioningarea>>)
+<4> The header area covers the first 8 lines and is independent of the text area.
+<5> The area for the text consists of two columns.
 
 
 
-Es folgt die eigentliche Datenverarbeitung.
-Anfangs werden die Vorgaben zur Bildposition und Bildgröße festgelegt.
-Die Variable `i` wählt dann die Vorgabe 1, 2 oder 3 aus.
+The actual data processing follows.
+In the beginning the specifications for the image position and image size are defined.
+The variable 'i' then selects the default 1, 2 or 3.
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -94,7 +96,8 @@ Die Variable `i` wählt dann die Vorgabe 1, 2 oder 3 aus.
     <SetVariable variable="imagecolumn3" select="29"/>
 -------------------------------------------------------------------------------
 
-Nun folgt die Entscheidung über virtuelle Seiten.
+
+Now follows the decision about virtual pages.
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -135,18 +138,18 @@ Nun folgt die Entscheidung über virtuelle Seiten.
     <InsertPages name="pagewithimage"/> <!--7-->
   </Record>
 -------------------------------------------------------------------------------
-<1> Die Schleife wird für die Werte i = 1, i = 2 und i = 3 durchlaufen.
-<2> Ab hier werden die Inhalte zwischengespeichert.
-<3> Hier wird das Bild mit den Vorgaben ausgegeben.
-<4> Hier die Bildunterschrift.
-<5> Nun wird der Text ausgegeben.
-<6> Falls die gewünschte Seitenzahl (1) erreicht ist, wird i auf 3 gesetzt, um die Schleife vorzeitig abzubrechen.
-<7> Jetzt werden die gespeicherten Seiten ausgegeben.
+<1> The loop is run through for the values i = 1, i = 2 and i = 3
+<2> From here on, the contents are stored temporarily.
+<3> Here the image with the specifications is output.
+<4> Here the caption.
+<5> Now the text is output.
+<6> If the desired page number (1) is reached, i is set to 3 to abort the loop prematurely.
+<7> Now the saved pages are output.
 
 
-Was jetzt noch fehlt ist ist die Ausgabe des Textes.
-Die wird oben in `<ProcessNode select="article"/>` angestoßen.
-Da dies ein Beispiel ist, erzeugen wir einen Absatz in einer Schleife.
+What is still missing is the output of the text.
+This is triggered in `<ProcessNode select="Article"/>` above.
+Since this is an example, we create a paragraph in a loop.
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -174,6 +177,7 @@ Da dies ein Beispiel ist, erzeugen wir einen Absatz in einer Schleife.
 </Layout>
 -------------------------------------------------------------------------------
 
-.Seitenaufbau mit 7 bzw. 12 Absätzen. Im ersten Fall wird die Vorgabe »2« angewendet, im zweiten Fall die Vorgabe »3«
+
+.Side construction with 7 or 12 paragraphs. In the first case the default "2" is used, in the second case the default "3" is used.
 image::07-savepages.png[width=70%,scaledwidth=100%]
 

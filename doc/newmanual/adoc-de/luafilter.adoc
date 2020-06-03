@@ -152,7 +152,7 @@ tbl = {
     {
        ["_type"] = "element",
        ["_name"] = "child",
-       "Hallo Welt",
+       "Hello, world",
     }
 }
 
@@ -166,10 +166,9 @@ end
 
 erzeugt die XML-Datei
 
-
 [source, xml]
 -------------------------------------------------------------------------------
-<data><child>Hallo Welt</child></data>
+<data><child>Hello, world</child></data>
 -------------------------------------------------------------------------------
 
 die für den folgenden Publisher-Lauf zur Verfügung steht.

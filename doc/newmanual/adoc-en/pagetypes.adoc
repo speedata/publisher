@@ -1,0 +1,166 @@
+[[ch-pagetypes]]
+= Page types
+
+_This page was automatically translated. Stay tuned for a manual translation..._
+
+Page types (or master pages, page templates) are used to define margins for pages, create page frames and perform actions when a page is created or written to the PDF file.
+Classically, there is a page template for left pages and for right pages.
+In the simplest case, a template looks like this:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Pagetype name="page" test="sd:even(sd:current-page())">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+</Pagetype>
+-------------------------------------------------------------------------------
+
+The condition in the attribute 'test' can be arbitrarily complex. This attribute must always be specified.
+A page is selected as soon as a test of a page type yields _true_.
+Examples:
+
+
+* `true()`: This page is always selected, since `true()` always results in *true*.
+* `sd:current-page() > 1`: Here the page template is selected for all pages following the first page.
+* `sd:even(sd:current-page())`: If the page number is even, this page type is used. This is usually when the page is a left page.
+* It can also be more complex: `sd:even(sd:current-page()) and $part = 'main'`. As long as the condition can be evaluated to _true_ or _false_, this is a valid expression.
+
+
+What happens if there are multiple conditions that are _true_ at the same time?
+Page types are evaluated from 'bottom to top'.
+This means that special page templates must be defined later than the general ones.
+The default template is defined first and has as condition 'true()`.
+So it is evaluated last according to this logic and is always used if no other page type in the test returns _true_ (fallback).
+
+.Here, the page type for the first page after the page type for right pages must be defined, otherwise it would not be considered (sd:odd(1) returns true).
+[source, xml]
+-------------------------------------------------------------------------------
+<Pagetype name="left pages" test="sd:even(sd:current-page())">
+  ...
+</Pagetype>
+<Pagetype name="right pages" test="sd:odd(sd:current-page())">
+  ...
+</Pagetype>
+<Pagetype name="first page" test="sd:current-page() = 1">
+  ...
+</Pagetype>
+-------------------------------------------------------------------------------
+
+
+
+== Text frame
+
+Text frames can be created in the page type definition.
+These are described in detail in the section <<ch-positioningarea, "Areas on the page">>.
+
+== AtPageCreation, AtPageShipout
+
+The two commands `<AtPageCreation>` and `<AtPageShipout>` are responsible for executing code when a page is created and when a page is written to the PDF file.
+They can be used for many purposes.
+The most common is to create the page header in `<AtPageCreation>` and the page footer in `<AtPageShipout>`.
+
+The following is an example of a page footer.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Pagetype name="page" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+
+    <AtPageShipout>
+      <PlaceObject column="1" row="{sd:number-of-rows() - 1}">
+        <Table stretch="max">
+          <Tablerule/>
+          <Tr>
+            <Td align="left">
+              <Paragraph>
+                <Value select="sd:current-page()"/>
+              </Paragraph>
+            </Td>
+            <Td align="right">
+              <Paragraph>
+                <Value>Name</Value>
+              </Paragraph>
+            </Td>
+          </Tr>
+        </Table>
+      </PlaceObject>
+    </AtPageShipout>
+  </Pagetype>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>Content</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+
+[[fig-footerpagetype]]
+.Page with footer
+image::fusszeileseitentyp.png[width=100%]
+
+== NewPage
+
+With the command `<NewPage>' you can specify which page type should be selected for the next page, even if the condition (`test') for `<Pagetype>' does not return _true_.
+
+The following example defines two page types, a template "Standard", which is always used and a template "Special", which is explicitly selected with `<NewPage>`.
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Pageformat width="210mm" height="50mm"/>
+
+  <Pagetype name="Special" test="false()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+  </Pagetype>
+
+  <Pagetype name="Standard" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+  </Pagetype>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>Seite 1</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <NewPage pagetype="Special" openon="right" />
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>Seite 3</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+In the ((log file)) (`publisher.log') you can see which page types are selected:
+
+--------
+...
+Page of type "Standard" created (1)
+Number of rows: 3, number of columns = 19
+PlaceObject: Text block in row 1 and column 1, width=19, height=1 (page 1)
+> Shipout page 1
+Page of type "Standard" created (2)
+Number of rows: 3, number of columns = 19
+> Shipout page 2
+Page of type "Special" created (3) - pagetype requested
+...
+--------
+
+// EOF

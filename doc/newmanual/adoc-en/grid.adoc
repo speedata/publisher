@@ -1,4 +1,4 @@
-[[ch-raster,Grid]]
+[[ch-grid,Grid]]
 =  Grid
 
 _This page was automatically translated. Stay tuned for a manual translation..._

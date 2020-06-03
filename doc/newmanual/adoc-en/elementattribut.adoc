@@ -1,36 +1,40 @@
-[[ch-xmlstrukturen,Erzeugen von XML-Strukturen]]
-= Erzeugen von XML-Strukturen
+[[ch-elementattribute,Creation of XML structures]]
+= Creation of XML structures
 
-Der speedata Publisher kann XML-Dateien erzeugen, speichern und wieder einlesen.
-Damit kann man Inhaltsverzeichnisse, Querverweise und weitere andere Anwendungen realisieren.
+_This page was automatically translated. Stay tuned for a manual translation..._
 
-Die XML-Struktur wird nicht direkt, sondern indirekt über die beiden Befehle `<Element>` und `<Attribute>` erzeugt.
-So kann die folgende XML-Datei
+The speedata Publisher can create, save and read in XML files.
+This allows you to create tables of contents, cross-references and other applications.
 
-
-[source, xml]
--------------------------------------------------------------------------------
-<Wurzel>
-   <Gruß inhalt="Hallo Welt!" />
-</Wurzel>
--------------------------------------------------------------------------------
-
-aus dieser Struktur im Layoutregelwerk erzeugt werden:
+The XML structure is not created directly, but indirectly via the two commands `<Element>` and `<Attributes>`.
+So the following XML file
 
 
 [source, xml]
 -------------------------------------------------------------------------------
-<Element name="Wurzel">
-  <Element name="Gruß">
-    <Attribute name="inhalt" select="'Hallo Welt!'"/>
-  </Element>
-</Element>
+<Root>
+   <Greeting content="Hello, world!" />
+</Root>
 -------------------------------------------------------------------------------
 
-erzeugt werden.
-Textinhalte außerhalb von Attributen, wie z. B. mixed content, können mit dem Publisher nicht ausgegeben werden.
+are generated from this structure in the layout rules:
 
 
-Ein ausführliches Beispiel ist in <<ch-verzeichnisseerstellen,Verzeichnisse erstellen (XML-Struktur)>> gezeigt.
+[source, xml]
+-------------------------------------------------------------------------------
+<Element name="Root">
+  <Element name="Greeting">
+    <Attributes name="content" select="'Hello, world!'"/>
+  </element>
+</element>
+-------------------------------------------------------------------------------
+
+can be generated.
+Text content outside of attributes, such as mixed content, cannot be output with the Publisher.
 
 
+// A detailed example is shown in <<ch-directory creation,directory creation (XML structure)>>.
+
+
+
+// EOF

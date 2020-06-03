@@ -1,0 +1,103 @@
+[[ch-troubleshooting]]
+= Troubleshooting / Debugging
+
+_This page was automatically translated. Stay tuned for a manual translation..._
+
+The output does not always work as it should. Sometimes objects are too wide, sometimes the wrong text format is used and sometimes the table does not look as it should. In order to prevent troubleshooting from becoming too difficult, the speedata Publisher provides various aids. For this there is the command <Trace>, which offers different switches. These are (by default):
+
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Trace
+    assignments="no"
+    objects="no"
+    verbose="no"
+    grid="no"
+    gridallocation="no"
+    hyphenation="no"
+    textformat="no"
+    />
+-------------------------------------------------------------------------------
+
+`assignments`::
+  Displays the value of the assignment (<SetVariable>) on the console.
+
+`objects`::
+  Draws a line around individual objects.
+
+`verbose`::
+  Increases the output on the console (log file).
+
+`grid`::
+  Draws the grid. See section <<ch-grid>>.
+
+`gridallocation`::
+  Draws the grid allocation. See section <<ch-grid>>.
+
+`hyphenation`::
+  Marks the places where the words may be hyphenated.
+
+`text format`::
+  Creates a tooltip above each line of text, showing the text format used. See the example in the Text Formats section.
+
+== Messages
+
+Besides the possibilities provided by the command `<Trace>`, there is also the possibility to output messages in the log file:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Message select="'Hello, world!'"/>
+<Message select="sd:current-page()"/>
+-------------------------------------------------------------------------------
+
+The output appears in the log file (`publisher.protocol`)
+
+-------------------------------------------------------------------------------
+Message: "Hello, world!"
+Message: "1"
+-------------------------------------------------------------------------------
+
+The command `<Message>` can be instructed with `error="yes"` to output an error message (instead of a message). You can also specify the error code that will be returned when you exit the Publisher. See <<cmd-message,the command `<Message>` in the reference>> command in the reference.
+
+== Status File and Log File
+
+At the end of the run, two files are written to the hard disk that can be helpful for troubleshooting. The publisher.status file is an XML file that contains the error messages and other messages (via the <Message> command). The example above with the two messages results in the following file:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Status>
+  <Errors>0</Errors>
+  <Message>Hello, world!</Message>
+  <Message>1</Message>
+  <DurationSeconds>1</DurationSeconds>
+</Status>
+-------------------------------------------------------------------------------
+
+A more detailed log file (publisher.protocol) is also written, which contains various information.
+
+-------------------------------------------------------------------------------
+Protocol file for speedata Publisher (2.9.2)
+Time: Mon Feb 20 11:03:25 2017
+---------------------------------------------
+Start processing
+Talking to server on port 56486
+LuaTeX version 79.1
+Loading hyphenation patterns "hyph-en-gb.pat.txt".
+Language id: 0
+Loading layout instructions "/tmp/layout.xml"
+DefineFontfamily, family=2, name="Überschrift"
+Loading aux file "/tmp/publisher-aux.xml"
+Loading data file "/tmp/data.xml"
+Page of type "Default Page" created (1)
+Number of rows: 28, number of columns = 19
+PlaceObject: Textblock in row 1 and column 1, width=19, height=1 (page 1)
+Message: "Hello, world!"
+Message: "1"
+Stop processing data
+0 errors occurred
+Duration: 0.223866 seconds
+-------------------------------------------------------------------------------
+
+
+// EOF

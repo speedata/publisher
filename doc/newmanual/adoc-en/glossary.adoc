@@ -1,0 +1,43 @@
+:page: _page
+
+[appendix,glossary]
+[[app-glossary]]
+= Glossary
+
+_This page was automatically translated. Stay tuned for a manual translation..._
+
+Area::
+  See Placement Area.
+
+Database Publishing::
+  General term that describes a set of techniques for bringing (XML) data into an output format (such as PDF), often using Adobe InDesign.
+
+Group::
+  Virtual areas that start with a size of (0.0) and grow as the content grows.
+
+Layout function::
+  Functions that are structured like XPath functions and are related to layout issues. For example, these functions can be used to determine the width of groups or output the current page number.
+
+Layout set of rules::
+  An XML file with the root element `<Layout>' that contains layout instructions. Set of rules because this is where the rules are defined according to which the data is arranged in the PDF.
+
+Placement area::
+  Also `<PositioningArea>`. Contains one or more rectangular areas (text frames) that are addressed under the same name. Will be redefined for each page. The whole page has the name `{page}`.
+
+Text frame::
+  Also called positioning frame or `<PositioningFrame>`. Parts of a placement area.
+
+
+Well-formed::
+  An XML file is well-formed if at least the following conditions are met (from https://de.wikipedia.org/wiki/Extensible_Markup_Language#Wohlgeformtheit[Wikipedia]):
++
+  * The document contains only properly encoded legal Unicode characters.
+  * None of the special syntax characters such as < and & appear except when performing their markup-delineation roles.
+  * The start-tag, end-tag, and empty-element tag that delimit elements are correctly nested, with none missing and none overlapping.
+  * Tag names are case-sensitive; the start-tag and end-tag must match exactly.
+  * Tag names cannot contain any of the characters `!"#$%&'()*+,/;<=>?@[\]^{|}~`, nor a space character, and cannot begin with "`-`", "`.`", or a numeric digit.
+  * A single root element contains all the other elements.
+
+XPath::
+   Computer language that is specialized for data queries in XML trees. Typical questions are "What is the content of the 'name' attribute?" or "Is there a child element named 'chapter'? The language is often used together with XSLT (XSL Transformation). A subset of the XPath language is built into the Publisher.
+

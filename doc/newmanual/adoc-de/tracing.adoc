@@ -53,7 +53,7 @@ Neben den Möglichkeiten, die der Befehl `<Trace>` liefert, gibt es noch die Mö
 
 [source, xml]
 -------------------------------------------------------------------------------
-<Message select="'Hallo Welt!'"/>
+<Message select="'Hello, world!'"/>
 <Message select="sd:current-page()"/>
 -------------------------------------------------------------------------------
 
@@ -61,11 +61,10 @@ Die Ausgaben erscheinen in der Logdatei (`publisher.protocol`) (((Protokolldatei
 
 
 -------------------------------------------------------------------------------
-Message: "Hallo Welt!"
+Message: "Hello, world!"
 Message: "1"
 -------------------------------------------------------------------------------
 
-// Die dritte Nachricht wird nur so ausgegeben, wenn die Gruppe nicht existiert.
 Den Befehl `<Message>` kann man mit `error="yes"` anweisen, eine Fehlermeldung auszugeben (anstelle einer Nachricht).
 Ebenso kann man den Fehlercode bestimmen, der beim Beenden des Publishers zurückgegeben wird.
 Siehe <<cmd-message,den Befehl `<Message>` in der Referenz>>.

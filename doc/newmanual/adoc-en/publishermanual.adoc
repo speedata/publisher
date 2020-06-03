@@ -28,24 +28,24 @@ ifdef::backend-docbook5[]
 
 == In depth descriptions
 
-// -  <<ch-programmierung,Programmierung>>
-// -  <<ch-bildereinbinden,Bilder einbinden>>
-// -  <<ch-tabellen2,Tabellen>>
+-  <<ch-programmierung,Programmierung>>
+-  <<ch-bildereinbinden,Bilder einbinden>>
+-  <<ch-tables2,Tabellen>>
 -  <<ch-advancedtopics,Advanced topics>>
 -  <<ch-cookbook,Cookbook>>
 
 == Reference
 
 - <<ch-installation,Installation instructions>>
-// - <<ch-dateinamen,Dateinamen im Publisher>>
+- <<ch-dateinamen,Dateinamen im Publisher>>
 - <<app-defaults,speedata Publisher defaults>>
 - <<ch-commandline,Running the speedata publisher on the command line>>
 - <<ch-configuration,How to configure the speedata publisher>>
 - <<app-lengthsunits,Lenghts and units>>
 - <<ch-xpathfunctions,XPath- and layoutfunctions>>
-// - <<ch-internevariablen,Interne Variablen>>
+- <<ch-internevariablen,Interne Variablen>>
 - <<ch-changelog,Changelog>>
-// - <<app-glossar,Glossar>>
+- <<app-glossar,Glossar>>
 - <<ch-commandreference,Command reference>>
 
 
@@ -54,9 +54,9 @@ endif::[]
 include::introduction.adoc[]
 include::helloworld.adoc[]
 include::basics.adoc[]
-// include::programmierung.adoc[]
-// include::images.adoc[]
-// include::tabellen.adoc[]
+include::programming.adoc[]
+include::images.adoc[]
+include::tables.adoc[]
 include::advancedtopics.adoc[]
 include::cookbook.adoc[]
 
@@ -71,9 +71,9 @@ include::commandline.adoc[]
 include::configuration.adoc[]
 include::lengthsunits.adoc[]
 include::xpath.adoc[]
-// include::variablen.adoc[]
+include::internalvariables.adoc[]
 include::changelog.adoc[]
-// include::glossar.adoc[]
+include::glossary.adoc[]
 
 [appendix]
 [.split]

@@ -13,9 +13,9 @@ Lesezeichen werden in Texten oder auf der Ebene von `<Record>` ausgegeben.
 [source, xml]
 -------------------------------------------------------------------------------
 <PlaceObject>
-  <Bookmark select="'Inhalt'" level="1"/>
+  <Bookmark select="'Content'" level="1"/>
   <Textblock>
-    <Bookmark select="'Einleitung'" level="1" open="yes"/>
+    <Bookmark select="'Introduction'" level="1" open="yes"/>
     <Paragraph>
       <Value>...</Value>
     </Paragraph>
@@ -23,7 +23,7 @@ Lesezeichen werden in Texten oder auf der Ebene von `<Record>` ausgegeben.
 </PlaceObject>
 <PlaceObject>
   <Textblock>
-    <Bookmark select="'Eins'" level="2" open="yes"/>
+    <Bookmark select="'One'" level="2" open="yes"/>
     <Paragraph>
       <Value>...</Value>
     </Paragraph>

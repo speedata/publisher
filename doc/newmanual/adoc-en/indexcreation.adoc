@@ -1,15 +1,15 @@
-[[ch-indexerstellen,Stichwortverzeichnisse]]
-= Sortierung von Stichwortverzeichnissen
+[[ch-indexcreation,Index]]
+= Sorting of keyword indexes
 
-In der Regel sind Stichwortverzeichnisse am Ende eines Dokuments zu finden, um in gedruckten Werken relevante Seiten schnell aufzufinden.
-Bei diesen Stichworten kann es sich um Wörter oder auch um Artikelnummern oder andere Bezeichnungen handeln.
+As a rule, keyword indexes can be found at the end of a document in order to quickly locate relevant pages in printed works.
+These keywords can be words or even article numbers or other designations.
 
-Im Gegensatz zum Inhaltsverzeichnis (das meist vorne in einer Publikation ist), müssen die Daten nur zusammengestellt werden, ein Zwischenspeichern für den nächsten Lauf entfällt in der Regel.
+In contrast to the table of contents (which is usually at the front of a publication), the data only has to be compiled; there is usually no need to save the data temporarily for the next run.
 
 [discrete]
-== Beispiel
+== Example
 
-.Stichwortverzeichnis aus dem Beispiel
+.Keyword index from the example
 image::stichwortverzeichnis.png[width=30%,scaledwidth=50%]
 
 Die Beispiele sind naturgemäß immer etwas konstruiert, das ist hier ganz besonders der Fall.
@@ -26,10 +26,10 @@ Da hier nur die Sortierung gezeigt werden soll, wird das Stichwort und die Seite
 </data>
 -------------------------------------------------------------------------------
 
-Die Layoutdatei besteht aus drei Abschnitten, die einzeln erläutert werden.
+The layout file consists of three sections, which are explained individually.
 
 [[lst-stichwort-geruest]]
-.Das Gerüst für die Sortierung und Ausgabe des Stichwortverzeichnisses
+.The framework for sorting and output of the keyword index
 [source, xml]
 -------------------------------------------------------------------------------
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
@@ -48,11 +48,11 @@ Die Layoutdatei besteht aus drei Abschnitten, die einzeln erläutert werden.
   </Record>
 </Layout>
 -------------------------------------------------------------------------------
-<1> Der Rahmen, der erst die Einträge zusammenbaut, sortiert und anschließend ausgibt.
-<2> Hier werden die Einträge einzeln in der Variablen `indexeinträge` gespeichert.
-<3> Die sortierten Einträge werden in einer Tabelle ausgegeben.
+<1> The frame that first assembles the entries, sorts and then outputs them.
+<2> Here the entries are stored individually in the variable `indexeinträge`.
+<3> The sorted entries are output in a table.
 
-Der Abschnitt `data` ist der erste Teil aus dem vorherigen Listing:.
+The section 'data' is the first part from the previous listing:.
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
@@ -70,13 +70,12 @@ Der Abschnitt `data` ist der erste Teil aus dem vorherigen Listing:.
     <ProcessNode select="$index"/>  <!--3-->
   </Record>
 -------------------------------------------------------------------------------
-<1> Eine leere Variable `indexentries` wird deklariert. Diese wird im Record `entry` mit den einzelnen Elementen gefüllt (s.u.).
-<2> Die nun gefüllte Variable `indexentries` wird um das Eltern-Element `Index` ergänzt, sortiert und in `$index` gespeichert.
-<3> Hier wird der Inhalt der Variablen `$index` als Datenstruktur interpretiert und ausgeführt (siehe die Ergänzung unten).
+<1> An empty variable 'index entries' is declared. This is filled with the individual elements in the record 'keyword' (see below).
+<2> The now filled variable 'index entries' is supplemented by the parent element 'index', sorted and stored in '$index'.
+<3> Here the content of the variable '$index' is interpreted and executed as a data structure (see the addition below).
 
 
-Der Befehl `<Makeindex>` sortiert und gruppiert die Daten, die im Attribut `select` übergeben werden. Die Sortierung erfolgt anhand des Attributs, der bei `sortkey` angegeben ist. Die Gruppierung erfolgt anhand des ersten Buchstabens des Sortierschlüssels. Die Elementstruktur, die mit dem Befehl `<Makeindex>` aufgebaut wird, ist folgende:
-
+The command `<Makeindex>` sorts and groups the data passed in the attribute `select`. Sorting is done using the attribute specified in 'sortkey'. The grouping is based on the first letter of the sort key. The element structure, which is created with the command `<Makeindex>', is as follows:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -94,8 +93,7 @@ Der Befehl `<Makeindex>` sortiert und gruppiert die Daten, die im Attribut `sele
 
 
 
-Der Abschnitt zum Element `keyword` (einfügen an Stelle 1 im Listing <<lst-stichwort-geruest>>) ist einfach gehalten, und entspricht dem »Copy-of« Muster (siehe <<ch-copyof>>). Hier wird die Variable `indexeinträge` um jeweils einen Eintrag ergänzt.
-
+The section on the 'keyword' element (insert at position 1 in the listing <<<lst-stichwort-geruest>>) is kept simple, and corresponds to the "copy of" pattern (see <<<ch-copyof>>). Here the variable 'index entries' is supplemented by one entry each.
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
@@ -109,12 +107,12 @@ Der Abschnitt zum Element `keyword` (einfügen an Stelle 1 im Listing <<lst-stic
     </SetVariable>
   </Record>
 -------------------------------------------------------------------------------
-<1> In der aktuellen Publisher-Version muss der Eintrag, der sortiert wird, in einem Attribut mit dem Namen `name` gespeichert werden.
+<1> In the current publisher version, the entry that is sorted must be saved in an attribute called 'name'.
 
 
-Im letzten Teil wird die Tabelle ausgegeben (einfügen an Stelle 3 im Listing <<lst-stichwort-geruest>>).
-Für jeden Abschnitt (Element `section` in `<Makeindex>`) wird eine Zeile in Hellgrau ausgegeben mit dem Sortierschlüssel.
-Anschließend wird für jeden Eintrag innerhalb dieses Abschnittes eine Zeile mit dem Namen des Eintrags und der Seitenzahl ausgegeben.
+In the last part the table is output (insert at position 3 in the listing <<<lst-stichwort-geruest>>).
+For each section (element `section` in `<Makeindex>`) a line in light grey is output with the sort key.
+Then, for each entry within this section, a line is output with the name of the entry and the page number.
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
@@ -144,4 +142,4 @@ Anschließend wird für jeden Eintrag innerhalb dieses Abschnittes eine Zeile mi
 -------------------------------------------------------------------------------
 
 
-// Ende
+// EOF

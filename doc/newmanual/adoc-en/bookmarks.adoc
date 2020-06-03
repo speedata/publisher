@@ -1,21 +1,18 @@
-[[ch-bookmarks,Lesezeichen (Bookmarks)]]
-= Lesezeichen (Bookmarks)
+[[ch-bookmarks,Bookmarks]]
+= Bookmarks
 
-PDF-Lesezeichen kann man als alternatives Inhaltsverzeichnis für das PDF-Anzeigeprogramm (z. B. Adobe Reader) nutzen.
-Fast alle dieser Programme können Lesezeichen anzeigen.
-Mit ihnen kann man direkt an bestimmte Stellen im Dokument springen.
-Eine Besonderheit der Lesezeichen ist, dass sie hierarchisch angeordnet werden (level).
-Für jedes Lesezeichen kann man mit dem Attribut `open` bestimmen, ob es »geöffnet« oder »geschlossen« dargestellt werden soll.
+_This page was automatically translated. Stay tuned for a manual translation..._
 
-Lesezeichen werden in Texten oder auf der Ebene von `<Record>` ausgegeben.
+PDF Bookmarks can be used as an alternative table of contents for the PDF viewer (e.g. Adobe Reader). Almost all of these programs can display bookmarks. You can use them to jump directly to certain places in the document. A special feature of bookmarks is that they are arranged hierarchically (level). For each bookmark you can use the attribute open to determine whether it should be displayed "open" or "closed".
 
+Bookmarks are displayed in texts or on the level of <Record>.
 
 [source, xml]
 -------------------------------------------------------------------------------
 <PlaceObject>
-  <Bookmark select="'Inhalt'" level="1"/>
+  <Bookmark select="'Content'" level="1"/>
   <Textblock>
-    <Bookmark select="'Einleitung'" level="1" open="yes"/>
+    <Bookmark select="'Introduction'" level="1" open="yes"/>
     <Paragraph>
       <Value>...</Value>
     </Paragraph>
@@ -23,7 +20,7 @@ Lesezeichen werden in Texten oder auf der Ebene von `<Record>` ausgegeben.
 </PlaceObject>
 <PlaceObject>
   <Textblock>
-    <Bookmark select="'Eins'" level="2" open="yes"/>
+    <Bookmark select="'One'" level="2" open="yes"/>
     <Paragraph>
       <Value>...</Value>
     </Paragraph>
@@ -31,9 +28,11 @@ Lesezeichen werden in Texten oder auf der Ebene von `<Record>` ausgegeben.
 </PlaceObject>
 -------------------------------------------------------------------------------
 
-.Lesezeichen dienen als schnelle Navigation in einem PDF-Dokument. Links ein Ausschnitt aus dem PDF-Viewer Skim und rechts Adobe Acrobat Reader.
+
+.Bookmarks are used for quick navigation in a PDF document. On the left is an excerpt from the PDF viewer Skim and on the right Adobe Acrobat Reader.
 image::bookmarks.png[width=80%,scaledwidth=100%]
 
-Wichtig: Die Ebenen müssen aufeinanderfolgend sein. Auf ein Level 1 Bookmark darf nur ein weiteres Level 1 Bookmark folgen (für den nächsten Abschnitt) oder eines auf Level 2 (Unterabschnitt).
 
-// ENDE
+Important: The layers must be consecutive. A Level 1 bookmark may only be followed by another Level 1 bookmark (for the next section) or one on Level 2 (subsection).
+
+// EOF

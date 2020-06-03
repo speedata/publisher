@@ -10,9 +10,9 @@ So kann die folgende XML-Datei
 
 [source, xml]
 -------------------------------------------------------------------------------
-<Wurzel>
-   <Gruß inhalt="Hallo Welt!" />
-</Wurzel>
+<Root>
+   <Greeting content="Hello, world!" />
+</Root>
 -------------------------------------------------------------------------------
 
 aus dieser Struktur im Layoutregelwerk erzeugt werden:
@@ -20,9 +20,9 @@ aus dieser Struktur im Layoutregelwerk erzeugt werden:
 
 [source, xml]
 -------------------------------------------------------------------------------
-<Element name="Wurzel">
-  <Element name="Gruß">
-    <Attribute name="inhalt" select="'Hallo Welt!'"/>
+<Element name="Root">
+  <Element name="Greeting">
+    <Attribute name="content" select="'Hello, world!'"/>
   </Element>
 </Element>
 -------------------------------------------------------------------------------

@@ -164,7 +164,7 @@ A practical feature of tables is that they can run over several pages, even with
 The table cells can contain text, images, barcodes, etc.; in other words, anything that can also be contained in `<PlaceObject>'.
 Individual cells are never wrapped to multiple pages, i.e. they are set as a rectangular box, even if the contents would allow wrapping (e.g. texts or tables).
 
-A separate chapter is devoted to the topic of tables <<ch-tabellen2,a separate chapter>>.
+A separate chapter is devoted to the topic of tables <<ch-tables2,a separate chapter>>.
 
 
 == Images
@@ -286,6 +286,7 @@ image::eagle-frame.png[width=50%]
 
 
 
+[[ch-output-transformation]]
 == Transformation
 
 [[abb-transformationen]]

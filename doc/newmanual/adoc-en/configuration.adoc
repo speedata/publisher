@@ -14,6 +14,7 @@ The speedata publisher can be configured in several ways:
 The file publisher.cfg (/etc/speedata/publisher.cfg, $HOME/.publisher.cfg and in the current working directory) is a text file, that is read at the beginning of the publisher run. The default file looks like this:
 
 ------------------------------
+# This is a comment
 data      = data.xml
 layout    = layout.xml
 autoopen  = false

@@ -219,6 +219,8 @@ gatherid:
 					Pagename:     curFilename,
 					id:           curID,
 				}
+				curFilenameStack = append(curFilenameStack, curFilename)
+
 				d.chain = append(d.chain, newSec)
 			case "chapter", "appendix":
 				curID = attr(elt, "id")
@@ -226,6 +228,9 @@ gatherid:
 				chaptername := strings.TrimPrefix(curID, "ch-")
 				chaptername = strings.TrimPrefix(chaptername, "app-")
 				chaptername = strings.TrimPrefix(chaptername, "ch-")
+				// basics, advanced topics, cookbook and reference are split chapters/appendices
+				// Those should get their own prefix, such as basics/writelayoutfile.html or
+				// basics/writelayoutfile/index.html
 				splitChapter = (attr(elt, "role") == "split")
 				if splitChapter || !d.staticmode {
 					dirPrefix = append(dirPrefix, chaptername)
@@ -252,7 +257,8 @@ gatherid:
 				sectionlevel++
 				id := attr(elt, "id")
 				idStack = append(idStack, id)
-				// only the first section determines the name
+				// if there is a split chapter (such as basics), the first section within this chapter
+				// determines the name of the current file
 				if splitChapter && sectionlevel == 1 {
 					sectionName := strings.TrimPrefix(id, "ch-")
 					sectionName = strings.TrimPrefix(sectionName, "cmd-")
@@ -264,9 +270,10 @@ gatherid:
 						curFilename = filepath.Join(dirPrefix...)
 						curFilename = filepath.Join(curFilename, sectionName, "index.html")
 					}
+					curFilenameStack = append(curFilenameStack, curFilename)
 				}
+				curFilename = curFilenameStack[len(curFilenameStack)-1]
 				d.idfilemapping[id] = curFilename
-				curFilenameStack = append(curFilenameStack, curFilename)
 			case "title":
 				oStartRecording()
 			}
@@ -320,7 +327,6 @@ gatherid:
 				thisid := idStack[len(idStack)-1]
 				idStack = idStack[:len(idStack)-1]
 				d.idTitlemapping[thisid] = thistitle
-
 				tmp := curFilenameStack[len(curFilenameStack)-1]
 
 				if sectionlevel == 1 && splitChapter {
@@ -332,9 +338,9 @@ gatherid:
 						id:           thisid,
 					}
 					sectionChain = append(sectionChain, newSec)
+					curFilenameStack = curFilenameStack[:len(curFilenameStack)-1]
 				}
 				sectionlevel--
-				curFilenameStack = curFilenameStack[:len(curFilenameStack)-1]
 			case "title":
 				thistitle := chardata.String()
 				titleStack = append(titleStack, thistitle)

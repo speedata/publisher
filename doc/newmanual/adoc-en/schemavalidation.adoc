@@ -1,10 +1,9 @@
 [[ch-schemavalidierung]]
-= Schemavalidierung
+= Schema validation
 
-Eine Besonderheit beim speedata Publisher ist, dass die Eingabesprache in XML formuliert ist.
-Im Vergleich zu anderen Programmiersprachen ist XML »geschwätzig«:
-Man muss für die Start-Tags auch immer Ende-Tags schreiben:
+_This page was automatically translated. Stay tuned for a manual translation..._
 
+A special feature of the speedata Publisher is that the input language is formulated in XML. Compared to other programming languages, XML is "chatty": You always have to write end tags for the start tags:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -13,80 +12,60 @@ Man muss für die Start-Tags auch immer Ende-Tags schreiben:
 </PlaceObject>
 -------------------------------------------------------------------------------
 
-Im Vergleich zu einer C-ähnlichen Schreibweise wie
+Compared to a C-like syntax like
 
 -------------------------------------------------------------------------------
 placeObject(...)
 -------------------------------------------------------------------------------
 
-ist das mehr Tipparbeit. Die Lösung für dieses »Problem« ist die Verwendung eines Texteditors, der gut mit XML umgehen kann.
-Die Eingabe eines Start-Tags würde beispielsweise sofort auch das Ende-Tag einfügen.
-Oder bei einer Änderung im Tagnamen würden sowohl Start-Tag als auch das Ende-Tag gleichzeitig geändert werden.
-Gute XML-Editoren bewirken noch viel mehr, als nur die erleichterte Eingabe von Tags, z.B. die Validierung des Codes gegen ein Schema.
+this is more typing. The solution to this "problem" is to use a text editor that is good with XML. For example, entering a start tag would immediately insert the end tag. Or, if the tag name was changed, both the start tag and the end tag would be changed at the same time. Good XML editors do much more than just make it easier to enter tags, for example, to validate code against a schema.
 
-== Was ist ein Schema?
+== What is a schema?
 
-In einem Schema (z. B. https://de.wikipedia.org/wiki/XML_Schema[XML-Schema] oder https://de.wikipedia.org/wiki/RELAX_NG[RELAX NG]) stehen Informationen über den erlaubten Aufbau einer XML-Datei.
-So steht im Schema, das mit dem speedata Publisher mitgeliefert wird, beispielsweise:
+A schema (e.g. https://de.wikipedia.org/wiki/XML_Schema[XML-Schema] orhttps://de.wikipedia.org/wiki/RELAX_NG[RELAX NG]) contains information about the permitted structure of an XML file. For example, the schema that is supplied with the speedata Publisher contains the following
 
-* Das Wurzelelement muss `<Layout>` heißen
-* Das Kindelement von `<PlaceObject>` muss entweder `<Barcode>`, `<Box>`, `<Circle>`, `<Frame>`, `<Image>`, `<Rule>`, `<Table>`, `<Textblock>` oder `<Transformation>` sein.
-* Das Attribut `valign` in der Tabellenzeile darf eines der Werte `top`, `middle` oder `bottom` sein
-* u.v.m.
+* The root element must be called `<Layout>`
+* The child element of `<PlaceObject>` must be either `<Barcode>`, `<Box>`, `<Circle>`, `<Frame>`, `<Image>`, `<Rule>`, `<Table>`, `<Textblock>` or `<Transformation>`.
+* The attribute valign in the table row can be one of the values top, middle, or bottom
+* and many more
 
-Ebenso steht in dem mitgelieferten Schema die Dokumentation der einzelnen Befehle sowie die der Auwahlmöglichkeiten.
-Ein guter XML-Editor kann ein solches Schema einlesen und dem Anwender die Eingabe des Quelltextes *erheblich* erleichtern.
-Die Eingabe mit einem guten Schema mach viel Spaß und hat einige Vorteile gegenüber dem klassischen Texteditor:
+The documentation of the individual commands and the selection options is also included in the supplied schematic. A good XML editor can import such a schema and make it *much easier* for the user to enter the source code. The input with a good schema is a lot of fun and has some advantages over the classic text editor:
 
-* Syntaxfehler werden sofort angezeigt
-* Befehle (Tags) müssen nicht vollständig eingegeben werden, weil der Editor eine Autovervollständigung bietet
-* Die Attribute werden sofort auf sinnvolle Werte überprüft
-* Dokumentation steht direkt im Editor bereit
+* Syntax errors are displayed immediately
+* Commands (tags) do not have to be entered completely, because the editor offers an auto-complete function
+* The attributes are immediately checked for meaningful values
+* Documentation is available directly in the editor
 
-\... im Prinzip das, was man von einer integrierten Entwicklungsumgebung  (IDE) erwartet.
+\... basically what you expect from an integrated development environment (IDE).
 
-.Auswahl an erlaubten Kindelementen
+.Selection of allowed child elements
 image::29-autocomplete1.png[width=90%,scaledwidth=100%]
 
-
-.Erlaubte Attribute bei Textblock
+.Allowed attributes for text block
 image::29-autocomplete2.png[width=90%,scaledwidth=100%]
 
+== Integration of the RELAX NG schema
 
+How the schema is included depends on the editor. For oXygen XML, for example, you can create a new document type assignment in the settings. You have to define for which namespace the schema should be used.
 
-== Einbinden des RELAX NG-Schemas
-
-Wie das Schema eingebunden wird, ist abhängig vom Editor.
-Für oXygen XML kann z. B. man in den Einstellungen eine neue Dokumenttypen-Zuordnung erstellen.
-Es muss festgelegt werden, für welchem Namensraum das Schema benutzt werden soll.
-
-.Verknüpfungsregeln in der oXygen XML-Konfiguration
+.Link rules in the oXygen XML configuration
 image::29-doczuordnung1.png[width=80%,scaledwidth=100%]
 
-Dann muss man noch definieren, welches Schema für diese Verknüpfungsregeln geladen werden soll.
-Das wird im zweiten Reiter der Einstellung festgelegt.
-ifdef::backend-docbook99[]
-Siehe Abbildung <<abb-29-doczuordnung2>>.
-endif::[]
+Then you have to define which schema should be loaded for these link rules. This is defined in the second tab of the setting.
 
-
-[[abb-29-doczuordnung2]]
-.Als Schema RELAX NG + Schematron einstellen in der oXygen XML-Konfiguration
+.Set RELAX NG + Schematron as schema in the oXygen XML configuration
 image::29-doczuordnung2.png[width=80%,scaledwidth=100%]
 
-
-Ab sofort sollte zu jedem Layout im Namensraum
+From now on, for every layout in the namespace
 
 [source, xml]
 -------------------------------------------------------------------------------
 xmlns="urn:speedata.de:2009/publisher/en"
 -------------------------------------------------------------------------------
 
+the schema should be associated. This can be recognized by the fact that a selection of commands now appears when you enter an opening angle bracket (<).
 
-das Schema hinterlegt sein.
-Das erkennt man daran, dass nun bei Eingabe einer öffnenden spitzen Klammer (<) eine Auswahl der Befehle erscheint.
-
-.Ist das Schema richtig eingebunden, dann erscheint eine Auswahlliste sobald man einen Befehl eingibt.
+.If the schema is correctly integrated, a selection list appears as soon as you enter a command.
 image::29-liste.png[width=90%,scaledwidth=100%]
 
-
+// EOF

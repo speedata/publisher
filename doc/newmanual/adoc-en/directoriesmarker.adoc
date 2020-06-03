@@ -1,9 +1,9 @@
-= Marker
+= Markers
 
-Marker sind unsichtbare Zeichen, die in den Text eingefügt werden.
-Diesen Zeichen wird immer ein Name zugeordnet.
-Nach Ausgabe des Zeichens auf einer Seite kann man den Publisher nach der Seitenzahl fragen.
-Der Aufbau ist folgendermaßen:
+Markers are invisible characters that are inserted into the text.
+A name is always assigned to these characters.
+After the character is output on a page, you can ask the Publisher for the page number.
+The structure is as follows:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -24,30 +24,30 @@ Der Aufbau ist folgendermaßen:
 </PlaceObject>
 -------------------------------------------------------------------------------
 
-Nach Ausgabe der Seite ist nun mit `sd:pagenumber('textstart')` die Seitennummer ermittelbar.
+After outputting the page, the page number can now be determined with `sd:pagenumber('textstart')`.
 
-Die Marker werden automatisch in einer internen Hilfsdatei `publisher.aux` gespeichert, so dass bei einem weiteren Durchlauf auf die Seitenzahlen über `sd:pagenumber()` bereits vor dem Platzieren der Seite verfügbar sind.
-Als Beispiel wird eine einfache Textstruktur genommen (es ist dasselbe Beispiel wie im nächsten Abschnitt):
+The markers are automatically stored in an internal auxiliary file `publisher.aux' so that when the page numbers are scanned again with `sd:pagenumber()`, they are available before the page is placed.
+A simple text structure is used as an example (it is the same example as in the next section):
 
 
 [source, xml]
 -------------------------------------------------------------------------------
 <data>
-  <chapter title="Foreword">
+  <chapter titel="Foreword">
     <text>...</text>
   </chapter>
-  <chapter title="Introduction">
+  <chapter titel="Introduction">
     <text>...</text>
   </chapter>
-  <chapter title="Conclusion">
+  <chapter titel="Conclusion">
     <text>...</text>
   </chapter>
 </data>
 -------------------------------------------------------------------------------
 
-Die mit dem folgenden Layout ausgegeben wird:
+Which is output with the following layout:
 
-.Das Grundgerüst für die Marker. Die Stelle für das Inhaltsverzeichnis wird später erweitert (siehe Kommentar).
+.The basic framework for the markers. The place for the table of contents will be extended later (see comment).
 [source, xml]
 -------------------------------------------------------------------------------
 <Layout
@@ -82,10 +82,9 @@ Die mit dem folgenden Layout ausgegeben wird:
 </Layout>
 -------------------------------------------------------------------------------
 
+The Publisher now assigns the chapters to the page number. You can now output the directory in the next pass:
 
-Der Publisher ordnet nun die Kapitel der Seitenzahl zu. Man kann nun das Verzeichnis im nächsten Durchlauf ausgeben:
-
-.Dieser Teil wird in das Layout oben eingefügt, um das Inhaltsverzeichnis auszugeben.
+.This part is inserted into the layout above to output the table of contents.
 [source, xml]
 -------------------------------------------------------------------------------
   <PlaceObject>
@@ -102,7 +101,7 @@ Der Publisher ordnet nun die Kapitel der Seitenzahl zu. Man kann nun das Verzeic
   </PlaceObject>
   <NewPage/>
 -------------------------------------------------------------------------------
-<1> In einem weiteren Durchlauf stehen die Seitenzahlen zur Verfügung, bevor die eigentlichen Kapitel auf die Folgeseiten geschrieben werden.
+<1> In a further pass, the page numbers are available before the actual chapters are written to the following pages.
 
 
 

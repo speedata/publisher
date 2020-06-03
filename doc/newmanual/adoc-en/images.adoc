@@ -3,9 +3,12 @@
 :padding: padding-*
 
 [[ch-bildereinbinden]]
-= Bilder einbinden
+= Image inclusion
 
-Bilder in das PDF einfügen ist sehr einfach, es reicht ein kurzer Befehl:
+_This page was automatically translated. Stay tuned for a manual translation..._
+
+
+Inserting images into the PDF is very easy, a short command is enough:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -16,39 +19,19 @@ Bilder in das PDF einfügen ist sehr einfach, es reicht ein kurzer Befehl:
 </Record>
 -------------------------------------------------------------------------------
 
-Das Bild  `{samplea}` ist (wie `{sampleb}`) Bestandteil des Publishers und für Testzwecke gut nutzbar.
-Als Bildformate sind PDF, PNG und JPEG möglich.
-Andere Formate müssen vor der Verarbeitung in eines dieser Formate konvertiert werden.
-Wenn das Programm inkscape installiert ist, wird das genutzt um Dateien im SVG-Format automatisch nach PDF zu konviertieren.
-Das Format, das in der Praxis am wenigsten Probleme
-bereitet ist PDF. Hier können auch Farbprofile eingebettet werden.
+The image `{samplea}` is (like `{sampleb}`) part of the Publisher and can be used for testing purposes. As image formats PDF, PNG and JPEG are possible. Other formats must be converted into one of these formats before processing. If the program inkscape is installed, it is used to automatically convert SVG files to PDF. The format that causes the least problems in practice is PDF. Here, color profiles can also be embedded.
 
-Die Bilder werden bei der Verarbeitung im Publisher nicht verändert, das heißt, sie behalten unter anderem ihre ursprüngliche (Datei-)Größe bei.
-Bei sehr großen Bildern ist die Verarbeitungsgeschwindigkeit geringer und die Größe der resultierenden PDF-Datei nimmt natürlich zu.
-Daher kann es sich lohnen, für die Verarbeitung spezielle Versionen mit kleineren Dateigrößen bereit zu halten.
+The images are not changed during processing in the Publisher, i.e. they retain their original (file) size, among other things. With very large images, the processing speed is lower and the size of the resulting PDF file naturally increases. Therefore it may be worthwhile to have special versions with smaller file sizes available for processing.
 
-[[ch-breite-hoehe-bilder]]
-== Breite und Höhe der Bilder
+== Width and height of the images
 
-Wenn man Bilder einbindet, dann ist es immer sinnvoll, eine Größenangabe mitzugeben.
-Ansonsten wird die _natürliche Größe_ des Bildes genommen.
-Was die  natürliche Größe ist, ist nicht immer eindeutig zu sagen.
-In der Regel gibt es in der Bilddatei eine DPI-Angabe.
-Die ist oftmals willkürlich vom Bildbearbeitungsprogramm gesetzt.
-Wenn dort beispielsweise 72 DPI steht, ist ein 720 Pixel breites Bild 10 Zoll breit;
-bei 300 DPI nur 2,4 Zoll.
+If you include images, it is always useful to include a size specification. Otherwise the natural size of the image is taken. What the natural size is, is not always clear. Usually there is a DPI specification in the image file. This is often set arbitrarily by the image processing program. For example, if it says 72 DPI, a 720 pixel wide image is 10 inches wide; at 300 DPI, it is only 2.4 inches wide.
 
-Da man sich auf die Angabe nicht verlassen kann, werden Größenangaben für die Ausgabe benötigt.
-Das kann entweder die gewünschte Höhe oder die gewünschte Breite des Bildes sein, oder beide Angaben zusammen.
-Im Beispiel oben hat das Bild eine Breite von fünf Zentimeter.
-Die Angabe kann auch als Anzahl von Rasterzellen gemacht werden.
-Die Angabe von `width="100%"` bedeutet, dass die gesamte verfügbare Breite genutzt werden soll (derzeit werden andere Prozentangaben noch nicht unterstützt).
-Die Angabe `auto` ist wie das Weglassen der Angabe und ist nur wegen der Kompatibilität zu CSS vorhanden.
+Since the specification cannot be relied upon, size specifications are required for the output. This can be either the desired height or width of the image, or both together. In the example above, the image has a width of five centimeters. The specification can also be made as a number of raster cells. Specifying width="100%" means that the entire available width should be used (currently other percentages are not supported). The specification auto is like omitting the specification and is only available for CSS compatibility.
 
-Wenn beide Proportionen angegeben sind (Breite und Höhe) gibt es zwei Modi:
-Beibehalten des Seitenverhältnisses (`clip="yes"`) oder Strecken bzw. Stauchen (`clip="no"`) der Ausgabe.
+If both proportions are specified (width and height), there are two modes: keep aspect ratio (clip="yes") or stretch or compress (clip="no") the output.
 
-.Das Bild wird horizontal gestreckt.
+.The image is stretched horizontally.
 [source, xml]
 -------------------------------------------------------------------------------
 <PlaceObject>
@@ -56,12 +39,10 @@ Beibehalten des Seitenverhältnisses (`clip="yes"`) oder Strecken bzw. Stauchen 
 </PlaceObject>
 -------------------------------------------------------------------------------
 
-.Ist clip auf 'no' gesetzt, wird das Bild verzerrt.
+.If clip is set to 'no', the image is distorted.
 image::18-clip-no.png[]
 
-
-
-Mit `clip="yes"` ist das Bild so ausgeschnitten, dass auf einer Seite die maximalen Ausmaße genommen werden
+With clip="yes" the image is cropped so that the maximum dimensions are taken on one side
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -71,19 +52,16 @@ Mit `clip="yes"` ist das Bild so ausgeschnitten, dass auf einer Seite die maxima
 -------------------------------------------------------------------------------
 
 
-.Ist clip auf 'yes' gesetzt, wird nur ein Ausschnitt gezeigt.
+.If clip is set to 'yes', only a section is shown.
 image::18-clip-yes.png[]
 
-Die Größe von Bildern kann man mit den beiden XPath-Funktionen
-`sd:imagewidth(<Dateiname>)` und `sd:imageheight(<Dateiname>)` ermitteln. Das
-Ergebnis ist in Rasterzellen. Vorsicht, hier wird die natürliche Größe
-genommen, die gegebenenfalls ohne Aussagekraft ist (s.o.).
 
+The size of images can be determined with the two XPath functions sd:imagewidth(<filename>) and sd:imageheight(<filename>). The result is in raster cells. Caution, here the natural size is taken, which may be without significance (see above).
 
-[[ch-bilder-maxheight]]
-== Maximale Höhe und Breite, minimale Höhe und Breite
+== Maximum height and width, minimum height and width
 
-Um die natürliche Größe zu benutzen, aber Einschränkungen anzugeben, gibt es die vier Kombination aus min/max und width/height. Das Bild in dem folgenden Beispiel wird nicht breiter als 10 Rasterzellen und nicht höher als 3. Das Seitenverhältnis bleibt erhalten:
+To use the natural size, but specify restrictions, there are four combinations of min/max and width/height. The image in the following example will be no wider than 10 raster cells and no higher than 3. The aspect ratio is preserved:
+
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -93,22 +71,16 @@ Um die natürliche Größe zu benutzen, aber Einschränkungen anzugeben, gibt es
 -------------------------------------------------------------------------------
 
 
-.Das Bild ist auf die Höhe von drei Rasterzellen beschränkt.
+.The image is limited to the height of three grid cells.
 image::18-maxheight.png[width=50%,scaledwidth=100%]
 
-== Drehen von Bildern
+==  Rotating images
 
-Mit dem Attribut `rotate` kann man Bilder in 90 Grad Schritten drehen (positive Werte: im Uhrzeigersinn).
-Das nachfolgende Beispiel dreht ein Bild um 90 Grad gegen den Uhrzeigersinn, wenn es sich um ein Hochformat-Bild handelt.
-Mit dem XPath-Befehl `sd:aspectratio(<Dateiname>)` kann man das Seitenverhältnis eines Bildes ermitteln.
-Wenn es größer als 1 ist, dann handelt es sich um ein Bild im Querformat.
+With the rotate attribute you can rotate images in 90 degree steps (positive values: clockwise). The following example rotates an image 90 degrees counterclockwise if it is a portrait image. With the XPath command sd:aspectratio(<filename>) you can determine the aspect ratio of an image. If it is greater than 1, then it is a landscape image.
 
-ifdef::backend-docbook99[]
-Mit der Datensatzdatei in Listing <<lst-samplea-sampleb-data>>  und der Layoutdatei in <<lst-samplea-sampleb-layout>> wird das zweite Bild um 90° gegen den Uhrzeigersinn gedreht.
-endif::[]
 
 [[lst-samplea-sampleb-data]]
-.Datensatzdatei
+.Data
 [source, xml]
 -------------------------------------------------------------------------------
 <data>
@@ -117,9 +89,7 @@ endif::[]
 </data>
 -------------------------------------------------------------------------------
 
-
-[[lst-samplea-sampleb-layout]]
-.Das Bild wird um 90 Grad gedreht, wenn es ein hochformatiges Bild ist.
+.The image is rotated 90 degrees if it is a portrait image.
 [source, xml]
 -------------------------------------------------------------------------------
 <Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
@@ -136,31 +106,27 @@ endif::[]
 </Layout>
 -------------------------------------------------------------------------------
 
-.Das zweite Bild wird um 90° gedreht, weil es im Hochformat ist.
+.The second image is rotated by 90° because it is in portrait format.
 image::drehungaspectratio.png[width=50%,scaledwidth=100%]
 
-TIP: Die geschweiften Klammern bei `file` und `rotate` bedeuten, dass in den XPath-Modus gesprungen wird, um die XPath-Ausdrücke (Zugriff auf das Attribut `file` und die Wenn-Dann-Abfrage) auszuwerten. Mehr dazu im Abschnitt <<ch-xpathfunktionen,XPath- und Layoutfunktionen>>.
 
-_Achtung: ist das Bild im Argument von `sd:aspectratio()` nicht im Dateisystem vorhanden, wird der Wert von dem Platzhalterbild (Kapitel <<ch-filenotfound>>) genommen. Um zu überprüfen, ob ein Bild überhaupt vorhanden ist, kann man den Befehl `sd:file-exists(<Dateiname>)` benutzen._
+TIP: The curly brackets at file and rotate mean that the system jumps to XPath mode to evaluate the XPath expressions (access to the file attribute and the if-then query). See the XPath and layout functions section for more information.
 
+_Note: if the image in the argument of sd:aspectratio() is not available in the filesystem, the value is taken from the placeholder image (chapter Image not found?). To check if an image is available at all, you can use the command sd:file-exists(<filename>)._
 
-== Speicherort der Bilddateien
+== Location of the image files
 
-Meist liegen die Bilder im Dateisystem oder in einem DAM (digital asset management).
-Im Dateisystem können sie entweder mit einem absoluten Pfad angesprochen werden:
+Usually the images are stored in the file system or in a DAM (digital asset management). In the file system they can be addressed either with an absolute path:
 
 [source, xml]
 -------------------------------------------------------------------------------
 <Image file="file:///path/to/the/image.pdf"  />
 -------------------------------------------------------------------------------
 
-oder als Datei in einem der Unterverzeichnisse des Suchpfads, wie in den Beispielen oben.
-Beispielweise können die Bilder in dem Unterverzeichnis `images` liegen.
-Siehe dazu den Abschnitt über <<ch-organisationdaten,Dateiorganisation>>.
 
+or as a file in one of the subdirectories of the search path, as in the examples above. For example, the images can be located in the subdirectory images. See the section on file organization.
 
-Die Bilder können auch mittels http(s)-Protokoll von einem Webserver geladen werden.
-Die Syntax ist analog zum Beispiel mit dem absoluten Pfad:
+The images can also be loaded from a web server using http(s) protocol. The syntax is analogous to the absolute path, for example:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -177,20 +143,17 @@ Die Syntax ist analog zum Beispiel mit dem absoluten Pfad:
 [discrete]
 == Caching
 
-Die Bilder, die über http und https geladen werden, werden auf der Festplatte zwischengespeichert.
-Bei jedem Request wird überprüft, ob das Bild noch aktuell ist und ggf. nicht herunter geladen.
-Ist das Bild auf dem Server gelöscht, wird es auch im lokalen System gelöscht.
+The images that are loaded via http and https are cached on the hard disk. With each request, the system checks whether the image is still current and, if necessary, does not download it. If the image is deleted on the server, it is also deleted in the local system.
 
-Mit `sp --cache=fast` kann man auf die schnelle Caching-Methode zurückgreifen, die das Bild nur einmal vom Server herunter lädt und dann nicht wieder auf Aktualität prüft.
+With sp --cache=fast you can use the fast caching method, which downloads the image from the server only once and then does not check if it is still up-to-date.
 
-Mit dem Befehl `sp clearcache` wird der Zwischenspeicher gelöscht.
+The sp clearcache command deletes the cache.
 
-Der Ort, wo der ((Bildercache)) liegt, kann entweder über `tempdir` (Kommandozeile und Konfigurationsdatei) gesteuert werden oder über den Schlüssel ((`imagecache`)) in der Konfigurationsdatei (nicht auf der Kommandozeile).
+The location of the image cache can be controlled either by tempdir (command line and configuration file) or by the imagecache key in the configuration file (not on the command line).
 
-[[ch-filenotfound]]
-== Bild nicht gefunden?
+== Image not found?
 
-Was passiert, wenn ein Bild nicht gefunden wird? Das normale Verhalten ist die Ausgabe einer Fehlermeldung und einem ((Platzhalterbild)), das das Fehlen anzeigt:
+What happens if an image is not found? The normal behavior is to output an error message and a placeholder image indicating the missing image:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -199,12 +162,10 @@ Was passiert, wenn ein Bild nicht gefunden wird? Das normale Verhalten ist die A
 </PlaceObject>
 -------------------------------------------------------------------------------
 
-
-.Dass die Bilddatei nicht gefunden wurde, sollte sofort zu erkennen sein.
+.It should be immediately obvious that the image file was not found.
 image::18-fnf.png[width=20%,scaledwidth=50%]
 
-
-Eine andere Möglichkeit besteht darin, mit `fallback` ein Platzhalterbild selber zu bestimmen:
+Another possibility is to use fallback to determine a placeholder image yourself:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -213,43 +174,32 @@ Eine andere Möglichkeit besteht darin, mit `fallback` ein Platzhalterbild selbe
 </PlaceObject>
 -------------------------------------------------------------------------------
 
-Man kann auch noch einstellen, ob es ein Fehler ist, wenn ein Platzhalterbild ausgewählt wird, oder nur eine Warnung.
+You can also set whether it is an error when a placeholder image is selected or only a warning.
 
 [source, xml]
 -------------------------------------------------------------------------------
 <Options imagenotfound="error"/>
 -------------------------------------------------------------------------------
 
-bzw. `warning` für eine Warnung.
+or `warning` for a warning.
 
+== Special features for PDF files
 
-== Besonderheiten bei PDF-Dateien
-
-PDF-Dateien haben einige Besonderheiten:
-sie können mehrere Seiten enthalten und die einzelnen Seiten haben verschiedene Boxen, die den sichtbaren Bereich und andere Bereiche markieren.
-Manche der Boxen sind für den Ausdruck wichtig, manche für die Ansicht im PDF-Anzeigeprogramm.
-Die Box, die mit den angegebenen Größen angezeigt werden soll, wird mit dem Attribut `visiblebox` bestimmt:
+PDF files have some peculiarities: they can contain several pages and the individual pages have different boxes that mark the visible area and other areas. Some of the boxes are important for printing, some for viewing in the PDF viewer. The box that is to be displayed with the specified sizes is determined with the visiblebox attribute:
 
 [source, xml]
 -------------------------------------------------------------------------------
 <Image file="seite.pdf" visiblebox="artbox" width="210mm" height="297mm" />
 -------------------------------------------------------------------------------
 
-bedeutet, dass die »artbox« in der Größe 210mm × 297mm dargestellt wird.
+means that the "artbox" is displayed in the size 210mm × 297mm
 
+The page attribute is also described in the section Including Multipage PDF Files. It is used to select the page when a PDF file is embedded. With sd:number-of-pages('filename') it can be determined how many pages a PDF file contains.
 
-Das Attribut `page` wird auch im Abschnitt <<ch-mehrseitigepdf>> beschrieben.
-Er dient dazu, die Seite auszuwählen, wenn eine PDF-Datei eingebunden wird.
-Mit `sd:number-of-pages(‹Dateiname›)` kann ermittelt werden, wie viele Seiten eine PDF-Datei enthält.
+== External Conversion Tools
 
+The Publisher usually only processes PDF, PNG and JPEG files. In order to use other formats, you have to convert them into one of the three formats. This can be done in advance, but also during the runtime of the Publisher.
 
-== Externe Konvertierungstools
-
-Der Publisher verabeitet in der Regel nur PDF, PNG und JPEG Dateien.
-Um andere Formate nutzen zu können, muss man sie in eines der drei Formate umwandeln.
-Das kann im Vorfeld gemacht werden, aber auch zur Laufzeit des Publishers.
-
-// .Dieses Layout wird im Normalfall eine Fehlermeldung geben, da TIFF-Dateien nicht eingebunden werden können. Mit einem externen Konvertierungsprogramm ist das aber möglich.
 [source, xml]
 -------------------------------------------------------------------------------
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
@@ -264,8 +214,7 @@ Das kann im Vorfeld gemacht werden, aber auch zur Laufzeit des Publishers.
 </Layout>
 -------------------------------------------------------------------------------
 
-
-Um die Konvertierung zu nutzen, muss man die Programmaufrufe in der Konfigurationsdatei eintragen. Hier wird das Programm `convert` von ImageMagick genutzt:
+To use the conversion, you have to enter the program calls in the configuration file. Here the program convert from ImageMagick is used:
 
 [source, ini]
 -------------------------------------------------------------------------------
@@ -273,13 +222,11 @@ imagehandler="tiffimage:(convert %%input%% %%output%%.pdf)"
 extensionhandler="tiff:tiffimage"
 -------------------------------------------------------------------------------
 
-Der Dateinamenendung `.tiff` wird der Handler `tiffimage` zugeordnet (Zeile 2). In der ersten Zeile wird dem Handler `tiffimage` dem Programm `convert  %%input%% %%output%%.pdf`, wobei die Dateinamen zur Laufzeit ersetzt werden.
+The file name extension `.tiff` is assigned to the handler tiffimage (line 2). In the first line, the handler tiffimage is assigned to the program convert %%input%% %%output%%%.pdf, whereby the file names are replaced at runtime.
 
-== Bilder aus textuellen Beschreibungen
+== Images from textual descriptions
 
-Es gibt unzählige Bildbeschreibungssprachen, in denen Bilder nicht mit einem externen Programm gezeichnet oder gemalt werden, sondern textuell beschrieben werden. Z.B. »zeichne ein Quadrat mit der Kantenlänge 4cm« oder »erstelle ein Tortendiagramm mit den folgenden Werten: ....«.
-Diese Grafiken werden dann aus der Beschreibungssprache in verschiedene Formate umgewandelt, meist als PNG oder PDF.
-Mit dem Publisher ist es seit Version 3.9.1 möglich, solche Beschreibungen einzubetten:
+There are countless picture description languages in which pictures are not drawn or painted with an external program, but are described textually. For example "draw a square with an edge length of 4cm" or "create a pie chart with the following values: ...". These graphics are then converted from the description language into various formats, usually as PNG or PDF. With the Publisher it is possible to embed such descriptions since version 3.9.1:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -308,18 +255,20 @@ Mit dem Publisher ist es seit Version 3.9.1 möglich, solche Beschreibungen einz
 </Layout>
 -------------------------------------------------------------------------------
 
-Notwendig ist natürlich die Konfiguration, wie der externe Konverter aufgerufen wird. Das funktioniert analog zu dem TIFF-Beispiel im vorherigen Abschnitt:
+Necessary is of course the configuration how the external converter is called. This works similar to the TIFF example in the previous section:
 
 [source, ini]
 -------------------------------------------------------------------------------
 imagehandler="mermaid:(/usr/bin/mmdc -i %%input%% -o %%output%%.pdf)"
 -------------------------------------------------------------------------------
 
-Das Ergebnis ist Ein Sequenzdiagramm, von `mermaid` erzeugt und nach PDF konvertiert.
+The result is a sequence diagram, created by mermaid and converted to PDF.
+
 
 image::mermaid.png[]
 
-Natürlich ist es auch möglich, die Bildbeschreibung aus den Daten zu entnehmen. Dazu muss der Image-Befehl wie folgt aufgebaut werden.
+
+Of course it is also possible to extract the image description from the data. For this purpose the image command must be structured as follows.
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -331,16 +280,12 @@ Natürlich ist es auch möglich, die Bildbeschreibung aus den Daten zu entnehmen
 -------------------------------------------------------------------------------
 
 
-== Weitere Parameter
+== Other parameters
 
-* Man kann über die `{padding}`-Angaben festlegen, wie viel Abstand das Bild vom entsprechenden Rand haben soll.
+* You can use the padding-* specifications to define how much distance the image should have from the corresponding border.
 
-* Mit `dpiwarn` kann eine Warnung herausgegeben werden, wenn die tatsächliche Anzahl der Pixel je Zoll geringer ist, als die Vorgabe.
-
-
-
-// NOTE: Bildumrisse erzeugen?
+* With dpiwarn you can issue a warning if the actual number of pixels per inch is less than the default.
 
 
 
-// Ende
+// EOF

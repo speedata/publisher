@@ -1,20 +1,20 @@
 [[ch-griffmarken]]
-= Griffmarken
+= Daumenregister
 
 [[abb-25-marke]]
-.Links: Griffmarken im Telefonbuch (das gibt es noch!). Rechts: Linien sind weniger aufdringlich, trotzdem praktisch.
+.Links: Daumenregister im Telefonbuch (das gibt es noch!). Rechts: Linien sind weniger aufdringlich, trotzdem praktisch.
 image::25-griffmarken.jpg[width=100%]
 
 
-Griffmarken sind Markierungen an der Außenkante eines Katalogs oder eines Nachschlagewerks, die das aktuelle Kapitel anzeigen.
+Daumenregister sind Markierungen an der Außenkante eines Katalogs oder eines Nachschlagewerks, die das aktuelle Kapitel anzeigen.
 ifdef::backend-docbook99[]
 Beispiele finden sich in der Abbildung <<abb-25-marke>>.
 endif::[]
-Eine Eigenschaft der Griffmarke ist, dass sie über den rechten oder über den linken Rand des Papiers hinaus geht.
+Eine Eigenschaft des Daumenregisters ist, dass es über den rechten oder über den linken Rand des Papiers hinaus geht.
 Das heißt, die Schnittkante des Papiers ist im farbigen Bereich, so dass die Farbe auch im zugeklappten Zustand zu erkennen ist.
 
 
-An Griffmarken ist erst einmal nichts besonders, sie werden entweder mit Boxen oder Linien in einer bestimmten Farbe erzeugt.
+An Daumenregistern ist erst einmal nichts besonders, sie werden entweder mit Boxen oder Linien in einer bestimmten Farbe erzeugt.
 Es folgt ein Beispiel für Kapitelnummern in einer quadratischen Box.
 
 
@@ -26,25 +26,25 @@ Es folgt ein Beispiel für Kapitelnummern in einer quadratischen Box.
 
   <Options bleed="3mm"/> <!--1-->
 
-  <DefineFontfamily name="Griffmarke" fontsize="15" leading="15">
+  <DefineFontfamily name="thumbindex" fontsize="15" leading="15">
     <Regular fontface="sans-bold"/>
   </DefineFontfamily>
   <Record element="data">
-    <Loop select="4" variable="kapitelnr">
+    <Loop select="4" variable="chapter">
       <PlaceObject column="200mm"
-          row="{20 + 20 * $kapitelnr}mm"> <!--2-->
+          row="{20 + 20 * $chapter}mm"> <!--2-->
 
         <Box width="1cm" height="1cm" backgroundcolor="black"
              bleed="right"/> <!--3-->
       </PlaceObject>
 
       <!--4-->
-      <PlaceObject column="200mm" row="{20 + 20 * $kapitelnr}mm">
+      <PlaceObject column="200mm" row="{20 + 20 * $chapter}mm">
         <Table width="1cm" stretch="max">
           <Tr valign="middle" minheight="1">
             <Td align="center">
-              <Paragraph fontface="Griffmarke" color="white">
-                <Value select="$kapitelnr"/>
+              <Paragraph fontface="thumbindex" color="white">
+                <Value select="$chapter"/>
               </Paragraph>
             </Td>
           </Tr>

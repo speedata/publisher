@@ -1,28 +1,17 @@
 :loopcounter: _loopcounter
 [[ch-programmierung]]
-= Programmierung
+= Programming
 
-// Record == Daten getriebener Funktionsaufruf TODO
+Certainly the most important feature of the Publisher is the ability to implement very flexible layout requirements. This is mainly achieved by the built-in programming language in connection with the query options of the Publisher.
 
-Die sicherlich bedeutendste Eigenschaft des Publishers ist die Fähigkeit, sehr flexible Layoutanforderungen umzusetzen.
-Das wird hauptsächlich durch die eingebaute Programmiersprache in Zusammenhang mit den Abfragemöglichkeiten des Publishers erreicht.
+The program execution runs simultaneously with the creation of the PDF. Therefore, the speedata Publisher can react very flexibly to the input data. Queries such as "Is there still enough space for this object?" are thus possible. This distinguishes the Publisher from other software for creating PDF files.
+Basic programming knowledge is required to use the full functionality of the Publisher. The programming language has been kept as simple as possible to maintain the readability of the layout.
 
-TIP: Die Programmausführung läuft gleichzeitig mit der Erzeugung des PDFs.
-Daher kann der speedata Publisher sehr flexibel auf die Eingabedaten reagieren.
-Abfragen wie »Ist noch genügend Platz für dieses Objekt vorhanden?« sind damit möglich.
-Das unterscheidet den Publisher von anderer Software zur Erstellung von PDF-Dateien.
+== Variables
 
-Es sind grundlegende Programmierkenntnisse vonnöten, um die volle Funktionalität des Publishers auszureizen.
-Die Programmiersprache wurde so einfach wie möglich gehalten, um die Lesbarkeit des Layouts zu erhalten.
+All variables are globally visible. This means that a variable never becomes invalid. Here's an example:
 
-== Variablen
-
-Alle Variablen sind global sichtbar.
-Das heißt, dass eine Variable nie ungültig wird.
-Ein Beispiel:
-
-
-.Datendatei (`data.xml`)
+.Data file (`data.xml`)
 [source, xml]
 -------------------------------------------------------------------------------
 <data>
@@ -32,7 +21,8 @@ Ein Beispiel:
 </data>
 -------------------------------------------------------------------------------
 
-.Und die dazugehörige Layout-Datei (`layout.xml`). Die Ausgabe des Befehls `<Message>` ist 3. Wäre die Variable `nr` mit lokaler Sichtbarkeit deklariert, dann  könnte sie im Element `data` nicht ausgelesen werden.
+
+.And the corresponding layout file (layout.xml). The output of the command <Message> is 3. If the variable nr was declared with local visibility, it could not be read in the data element.
 [source, xml]
 -------------------------------------------------------------------------------
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
@@ -51,12 +41,9 @@ Ein Beispiel:
 -------------------------------------------------------------------------------
 
 
-Die globale Sichtbarkeit ist nötig, weil die Programmausführung im Layout manchmal »hin und her springt«.
-Am Seitenende wird der Inhalt von `<AtPageShipout>` im aktuellen Seitentyp ausgeführt.
-Dort muss auch auf die Variablen zugegriffen werden können.
-// Ein Beispiel dafür ist im Kapitel <<ch-griffmarken>> zu finden.
+The global visibility is necessary because the program execution in the layout sometimes "jumps back and forth". At the end of the page the content of <AtPageShipout> is executed in the current page type. It must also be possible to access the variables there.
 
-In Variablen können nicht nur einfache Werte gespeichert werden, sondern auch komplexe XML-Abschnitte:
+In variables not only simple values can be stored, but also complex XML sections:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -75,8 +62,7 @@ In Variablen können nicht nur einfache Werte gespeichert werden, sondern auch k
 </Record>
 -------------------------------------------------------------------------------
 
-Ergibt die erwartete Ausgabe von »Hello world!«. Ein Anwendungsfall ist, Tabellenbreitendeklarationen zu speichern:
-
+Results in the expected issue of "Hello world!". A use case is to store table width declarations:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -89,7 +75,8 @@ Ergibt die erwartete Ausgabe von »Hello world!«. Ein Anwendungsfall ist, Tabel
 </SetVariable>
 -------------------------------------------------------------------------------
 
-um diese dann anschließend in mehreren Tabellen zu benutzen:
+
+and then use them in several tables:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -103,26 +90,22 @@ um diese dann anschließend in mehreren Tabellen zu benutzen:
 </PlaceObject>
 -------------------------------------------------------------------------------
 
-Durch die einmalige Definition und Wiederverwendung spart man sich Tipparbeit und verringert die Fehlerquellen.
+The one-time definition and reuse saves typing work and reduces the sources of error.
 
 [[ch-copyof]]
-== Copy-of
+== Copy of
+<Copy-of> was already used upstairs. This copies the contents of the variable to the current position. The contents of the variables remain unchanged during copying.
 
-`<Copy-of>` wurde oben schon benutzt.
-Damit werden Inhalte der Variablen an die aktuelle Stelle kopiert.
-Der Inhalt der Variablen bleibt beim Kopieren unverändert.
-
-.Pseudocode. Mit Copy-of fügt man den Inhalt der Variablen an diese Stelle ein. Der Inhalt können auch komplexe XML-Strukturen wie Absätze sein.
+.Pseudo code. With Copy-of you insert the content of the variable at this position. The content can also be complex XML structures like paragraphs.
 -------------------------------------------------------------------------------
 variable =
    Copy-of variable
-   neuer Wert
+   new value
 -------------------------------------------------------------------------------
 
-damit wird der neue Wert an die vorherigen angehängt.
+This appends the new value to the previous ones.
 
-
-.Ein Beispiel für Copy-of in der Praxis ist das Zusammenbauen von XML-Strukturen, mit denen Informationen gespeichert werden können. Ausführlich beschreiben wird dieses Beispiel im Kochbuch (Kaptiel 8), dort im Abschnitt Verzeichnisse erstellen (XML-Struktur).
+.An example of copy of in practice is the assembly of XML structures with which information can be stored. This example is described in detail in the cookbook (chapter 8), there in the section Creating directories (XML structure).
 [source, xml]
 -------------------------------------------------------------------------------
 <SetVariable variable="chapter">
@@ -134,14 +117,10 @@ damit wird der neue Wert an die vorherigen angehängt.
 </SetVariable>
 -------------------------------------------------------------------------------
 
-
-[[ch-ifthenelse]]
 == If-then-else
+In XPath you can perform simple if-then queries. The syntax for this is if (condition) then ... else ...
 
-In XPath kann man einfache Wenn-Dann Abfragen durchführen.
-Die Syntax hierfür ist `if (Bedingung) then ... else ...`.
-
-.In XPath können einfache Wenn-Dann Abfragen benutzt werden.
+.In XPath simple if-then queries can be used.
 [source, xml]
 -------------------------------------------------------------------------------
 <PlaceObject>
@@ -153,15 +132,9 @@ Die Syntax hierfür ist `if (Bedingung) then ... else ...`.
 </PlaceObject>
 -------------------------------------------------------------------------------
 
+== Case distinctions
 
-
-
-
-[[ch-fallunterscheidungen]]
-== Fallunterscheidungen
-
-Fallunterscheidungen entsprechen der Konstruktion  `switch/case` aus C-ähnlichen Programmiersprachen.
-Sie werden wie folgt im Publisher angewendet:
+Case distinctions correspond to the construction switch/case from C-like programming languages. They are applied in the Publisher as follows:
 
 
 [source, xml]
@@ -180,21 +153,13 @@ Sie werden wie folgt im Publisher angewendet:
 </Switch>
 -------------------------------------------------------------------------------
 
-Alle Befehle innerhalb des ersten möglichen `<Case>`-Falls werden abgearbeitet, wenn die Bedingung in `test` dort zutrifft.
-In `test` wird ein XPath-Ausdruck erwartet, der `true()` oder `false()` ergibt, etwa `$i = 1`.
-Wenn kein Fall eintritt, so wird der Inhalt des optionalen `<Otherwise>`-Abschnittes ausgeführt.
+All commands within the first possible <Case> case are processed if the condition in test applies there. In test, an XPath expression is expected that returns true() or false(), like $i = 1, and if no case occurs, the contents of the optional <Otherwise> section will be executed.
+
+== Loops
+There are various loops in the speedata Publisher. The simple variant is <Loop>:
 
 
-
-
-[[ch-programmierung-schleifen]]
-== Schleifen
-
-Es gibt verschiedene Schleifen im speedata Publisher.
-Die einfache Variante ist `<Loop>`:
-
-
-.Diese Schleife wird 10 Mal durchlaufen.
+.This loop is run through 10 times.
 [source, xml]
 -------------------------------------------------------------------------------
 <Loop select="10">
@@ -202,12 +167,11 @@ Die einfache Variante ist `<Loop>`:
 </Loop>
 -------------------------------------------------------------------------------
 
-Dieser Befehl führt die eingeschlossenen Befehle so oft aus, wie der Ausdruck in `select` ergibt.
-Der Schleifenzähler ist, sofern nicht per `variable="..."` anders eingestellt, in der Variablen `{loopcounter}` gespeichert.
-Neben der einfachen Schleife gibt es noch Schleifen mit Bedingungen:
+This command executes the enclosed commands as many times as the expression in select results in. The loop counter is stored in the variable _loopcounter, unless otherwise set by variable="...".
 
+Besides the simple loop there are also loops with conditions:
 
-.Die while-Schleife führt die eingeschlossenen Befehle aus, solange die Bedingung »wahr« ergibt. Es werden die Zahlen 1 bis 4 ausgegeben.
+.The while loop executes the enclosed commands as long as the condition is "true". The numbers 1 to 4 are output.
 [source, xml]
 -------------------------------------------------------------------------------
 <Record element="data">
@@ -225,14 +189,12 @@ Neben der einfachen Schleife gibt es noch Schleifen mit Bedingungen:
 </Record>
 -------------------------------------------------------------------------------
 
-Den Ausdruck `$i \&lt;= 4` muss man als `$i \<= 4` lesen, da die öffnende spitze Klammer an dieser Stelle im XML ein Syntaxfehler ist.
-Die Schleife oben wird so oft ausgeführt, solange der Inhalt der Variablen i kleiner oder gleich 4 ist.
-Nicht vergessen, die Variable auch zu erhöhen, sonst entsteht eine Endlosschleife.
 
-Neben der while-Schleife gibt es noch die until-Schleife, die analog funktioniert:
+The expression `$i \&lt;= 4` must be read as `$i \<= 4`, because the opening angle bracket at this point in the XML is a syntax error. The loop above is executed as often as the content of the variable i is less than or equal to 4. Don't forget to increase the variable as well, otherwise an endless loop is created.
 
+In addition to the while loop, there is also the until loop, which works in the same way:
 
-.Da die until-Schleife so lange ausgeführt wird, bis die Bedingung wahr ist, wird nur die Zahl 1 ausgegeben.
+.Since the until loop is executed until the condition is true, only the number 1 is output.
 [source, xml]
 -------------------------------------------------------------------------------
 <Record element="data">
@@ -250,14 +212,9 @@ Neben der while-Schleife gibt es noch die until-Schleife, die analog funktionier
 </Record>
 -------------------------------------------------------------------------------
 
+== Data Structures
 
-
-== Datenstrukturen
-
-Der speedata Publisher bietet keine direkte Unterstützung für Datenstrukturen wie Arrays (Felder) oder Dictionaries (Hashes oder Wörterbücher).
-Diese können über Variablen simuliert werden.
-Das Feld a1, a2, ..., ai könnte wie folgt belegt werden:
-
+The speedata Publisher does not offer direct support for data structures such as arrays (fields) or dictionaries (hashes or dictionaries). These can be simulated using variables. The field a1, a2, ..., ai could be filled as follows:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -266,8 +223,7 @@ Das Feld a1, a2, ..., ai könnte wie folgt belegt werden:
 ...
 -------------------------------------------------------------------------------
 
-Natürlich könnte hier auch direkt `a1` als Variablenname angegeben werden.
-In diesem Beispiel könnte sowohl der Präfix als auch der Suffix dynamisch erzeugt werden:
+Of course, a1 could also be specified directly as the variable name. In this example, both the prefix and the suffix could be created dynamically:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -277,9 +233,7 @@ In diesem Beispiel könnte sowohl der Präfix als auch der Suffix dynamisch erze
 ...
 -------------------------------------------------------------------------------
 
-
-Der lesende Zugriff geht über `sd:variable(...):`
-
+The read access goes via sd:variable(...):
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -289,6 +243,6 @@ Der lesende Zugriff geht über `sd:variable(...):`
 ...
 -------------------------------------------------------------------------------
 
-Die Funktion `sd:variable()` konkateniert alle Argumente als Zeichenkette und nimmt das Ergebnis als Variablennamen.
+The function `sd:variable()` concatenates all arguments as a string and takes the result as variable name.
 
-
+// EOF

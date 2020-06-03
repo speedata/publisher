@@ -1,0 +1,37 @@
+[appendix]
+[[ch-internalvariables]]
+= Internal variables
+
+The Publisher sets internal variables that can be used in the layout rules.
+These variables always begin with an underscore, so your own variables should not have the underscore as the first character.
+Otherwise there could be collisions when assigning names.
+
+`_bleed`::
+  The value of the bleed.
+
+`_jobname`::
+  The value specified on the command line.
+
+`_last_tr_data`::
+  The last value (`data="..."`) in a table line.  See section <<ch-tab-runningsum,Headers and footers with running sum>>.
+
+`_loopcounter`::
+  The pass in a `<Loop>' loop.
+
+`_mode`::
+  The mode for the pass. Separated by commas.
+
+`_pagewidth` und `_pageheight`::
+  The width and height of the page. Default is 210mm and 297mm.
+
+`_page`::
+   The name of the text area of the whole page.
+
+Also worth mentioning:
+
+`_samplea.pdf` und `_sampleb.pdf`::
+   Image files included in the Publisher. Can be used for testing purposes.
+
+// EOF
+
+
